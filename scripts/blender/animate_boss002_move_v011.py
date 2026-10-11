@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector,Quaternion,Matrix
@@ -6,7 +11,7 @@ R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_mo
 source=(R/'scripts/blender/animate_boss002_idle_v010.py').read_text(encoding='utf-8');helpers=source[source.index('def axis('):source.index('animated=[')]
 signatures=[]
 for kind in ['model','animation']:
- bpy.ops.wm.open_mainfile(filepath=str(B/f'source/enm_boss_monitor002_{kind}_v010.blend'))
+ bpy.ops.wm.open_mainfile(filepath=str(source_path(B/f'source/enm_boss_monitor002_{kind}_v010.blend')))
  s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;rig=bpy.data.objects['Boss002_Rig'];arm=rig.data
  if rig.animation_data:rig.animation_data.action=None
  for pb in rig.pose.bones:pb.location=(0,0,0);pb.rotation_mode='QUATERNION';pb.rotation_quaternion=(1,0,0,0);pb.scale=(1,1,1)
@@ -19,7 +24,7 @@ for kind in ['model','animation']:
  rig['skeleton_id']='SKEL-MONITOR002-005';arm.name=rig['skeleton_id'];s['skeleton_id']=rig['skeleton_id'];s['asset_version']='v011'
  sig=hashlib.sha256(json.dumps([(b.name,b.parent.name if b.parent else None,list(b.head_local),list(b.tail_local),b.use_deform) for b in arm.bones],sort_keys=True).encode()).hexdigest();signatures.append(sig)
  if kind=='model':
-  bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v011.blend'));continue
+  bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v011.blend')));continue
  # Keep the existing idle available on the upgraded rig.
  exec(helpers)
  idle=bpy.data.actions.get('idle');rig.animation_data.action=idle
@@ -58,9 +63,9 @@ for kind in ['model','animation']:
   mod=fc.modifiers.new('CYCLES')
   if 'code_scroll' in fc.data_path:mod.mode_before='REPEAT_OFFSET';mod.mode_after='REPEAT_OFFSET'
  for sc in bpy.data.scenes:sc.render.fps=30;sc.frame_start=1;sc.frame_end=48
- s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v011.blend'))
+ s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v011.blend')))
 assert len(set(signatures))==1
-c=json.loads((B/'source/rig_contract_v010.json').read_text());c.update(version='v011',skeleton_id=rig['skeleton_id'],skeleton_signature=sig,bone_count=len(arm.bones),formal_animations_authored=['idle','move'],move={'fps':30,'start':1,'end':48,'closure':49,'duration_seconds':1.6,'root_motion':False,'pedestal_roll_degrees':23,'pedestal_lateral_range':.46});(B/'source/rig_contract_v011.json').write_text(json.dumps(c,indent=2),encoding='utf-8')
+c=json.loads((source_path(B/'source/rig_contract_v010.json')).read_text());c.update(version='v011',skeleton_id=rig['skeleton_id'],skeleton_signature=sig,bone_count=len(arm.bones),formal_animations_authored=['idle','move'],move={'fps':30,'start':1,'end':48,'closure':49,'duration_seconds':1.6,'root_motion':False,'pedestal_roll_degrees':23,'pedestal_lateral_range':.46});(source_path(B/'source/rig_contract_v011.json')).write_text(json.dumps(c,indent=2),encoding='utf-8')
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;cam=scene.camera;cam.location=(3,12,4.4);cam.rotation_euler=(Vector((0,0,1.9))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=9.4;scene.cycles.samples=12;scene.render.resolution_x=960;scene.render.resolution_y=800
 for f in [1,13,25,37]:
  scene.frame_set(f);scene.render.filepath=str(P/('pose_%03d.png'%f));bpy.ops.render.render(write_still=True)

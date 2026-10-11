@@ -2,6 +2,10 @@
 name: 04-character-state-binding
 description: 角色类表现资产链路第 4 段。把已包装的表现资产接到运行时状态机上，建立「状态机输出状态与进度 → 表现层选择并采样动作」的适配层，并处理缺动作兜底、程序姿势退役与挂点对齐。不用于制模（用 01-character-contract-authoring）、导出（用 02-character-export-transfer）、Godot 包装（用 03-character-godot-import）、专项验收（用 05-character-verification）、台账推进（用 06-character-ledger）。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # S4 · 运行时接入与状态映射
 

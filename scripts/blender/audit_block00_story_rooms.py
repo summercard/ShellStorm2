@@ -1,7 +1,7 @@
 import bpy,json,hashlib,sys,importlib.util
 from pathlib import Path
 from mathutils import Vector
-R=Path(__file__).resolve().parents[2];O=R/'assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001';P=json.loads((O/'component_plan.json').read_text(encoding='utf8'));C=json.loads((O/'component_catalog.json').read_text(encoding='utf8'));I=json.loads((O/'component_instances.json').read_text(encoding='utf8'))['instances'];errors=[]
+R=Path(__file__).resolve().parents[2];O=R/'art_source/environments/master_office_3d/source/env_block00_story_rooms/v001';P=json.loads((O/'component_plan.json').read_text(encoding='utf8'));C=json.loads((O/'component_catalog.json').read_text(encoding='utf8'));I=json.loads((O/'component_instances.json').read_text(encoding='utf8'))['instances'];errors=[]
 def overlap(a,b,box):return all(b[k]>box[k][0] and a[k]<box[k][1] for k in range(3))
 tris={};roomtris={};floors=[];sculptures=[];bound_records=[]
 for d in C:

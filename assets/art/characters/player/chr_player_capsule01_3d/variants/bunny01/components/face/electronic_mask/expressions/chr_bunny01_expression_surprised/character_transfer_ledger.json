@@ -16,8 +16,8 @@
     "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_surprised/runtime/chr_bunny01_expression_surprised_root_top3d.tscn",
     "source_object": "SRC_Face_Expression_surprised"
   },
-  "source_model": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
-  "source_animation": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+  "source_model": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
+  "source_animation": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
   "shared_source": true,
   "emission_strength": 1.25,
   "pixel_cell_size_m": 0.0118,
@@ -43,14 +43,14 @@
       "role": "runtime_wrapper"
     },
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
-      "sha256": "4d70a9e65658a8e8617ad042b42a475b28dc12ec196d4b5fdb8443b93e98a288",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
+      "sha256": "070bbc1939dc58076f8883cfff6a5fc4b6d0e095df25b7cdaac0981d98e2a0e2",
       "bytes": 12045588,
       "role": "dependency"
     },
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
-      "sha256": "3862ecf93b49e6722b70f55446c5737b5fd9492c9f652945438884a5c022b8ca",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+      "sha256": "4b4132bdb24661e79a54bbe77eeb392c7d471801bb09c24ad81e28c0e7a83546",
       "bytes": 12086869,
       "role": "dependency"
     }

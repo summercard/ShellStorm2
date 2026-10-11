@@ -2,7 +2,7 @@ import bpy,json,math,random,hashlib
 from pathlib import Path
 from mathutils import Vector,Matrix
 from math import pi,sin,cos
-R=Path(__file__).resolve().parents[2];O=R/'assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001';P=json.loads((O/'component_plan.json').read_text(encoding='utf8'))
+R=Path(__file__).resolve().parents[2];O=R/'art_source/environments/master_office_3d/source/env_block00_story_rooms/v001';P=json.loads((O/'component_plan.json').read_text(encoding='utf8'))
 assert P['component_plan_frozen'];random.seed(981234)
 bpy.ops.wm.read_factory_settings(use_empty=True);S=bpy.context.scene;S.name='98F_四房美术总览';S.unit_settings.system='METRIC'
 def coll(n,parent=None):

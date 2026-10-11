@@ -3,10 +3,10 @@ import json, hashlib, shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'assets/art/environments/master_office_3d/source/env_father_office/v001'
+OUT = ROOT / 'art_source/environments/master_office_3d/source/env_father_office/v001'
 OUT.mkdir(parents=True, exist_ok=True)
 (OUT.parent / '.gdignore').touch()
-src = ROOT / 'source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json'
+src = ROOT / 'art_source/design/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json'
 layout = json.loads(src.read_text(encoding='utf-8-sig'))
 room = next(r for r in layout['rooms'] if r['room_id']=='master_office')
 assert room['size_m']==[15,20] and room['doors']=={'east':2.5}

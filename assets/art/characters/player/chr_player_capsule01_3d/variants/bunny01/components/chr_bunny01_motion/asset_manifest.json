@@ -3,7 +3,7 @@
   "asset_version": "v037",
   "assembly_version": "v021",
   "status": "active",
-  "source": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend",
+  "source": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend",
   "transfer": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/character_transfer_ledger.json",
   "prefab": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
   "skeleton_id": "SKEL-BUNNY01-004",
@@ -558,13 +558,13 @@
   },
   "files": [
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
       "sha256": "0164fa024715d7b7020094b8e1d2719fd6fde717deba5280f4e5ad4fb9f7f711",
       "bytes": 10282728
     },
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend",
-      "sha256": "65723230d26c8bce2ec06f63d4a35b66f0984582316953492d275069d635d38e",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend",
+      "sha256": "39722be44c2099a550bd957bb0c3b65bf611d7f4f899d7bf348f80ef49a6d0a8",
       "bytes": 303643546
     },
     {

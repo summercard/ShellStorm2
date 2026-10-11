@@ -1,6 +1,6 @@
 extends Node
 
-const LEDGER_PATH := "res://assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
+const LEDGER_PATH := "res://art_source/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
 const LAYOUT_PATH := "res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d.tscn"
 const PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 

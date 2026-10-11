@@ -1,4 +1,9 @@
 """Validate hashed transfer records and run character regressions before acceptance."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 import argparse
 import hashlib
 import json
@@ -56,7 +61,7 @@ def main():
         report=json.loads(source_report.read_text())
         assert report['skeleton_sha256']==ledger['skeleton_sha256']
         for role in ['model','animation']:
-            source=package/f'source/{role}/chr_bunny01_{role}_v011.blend'
+            source=source_path(package/f'source/{role}/chr_bunny01_{role}_v011.blend')
             assert report[role+'_sha256']==hashlib.sha256(source.read_bytes()).hexdigest(),'Stale source validation'
         ledger['source_validation']=report
         ledger['forward_contract']={'blender':'+Y','godot':'-Z','additional_yaw_degrees':0}

@@ -13,7 +13,7 @@
 
 ## 交付
 
-源文件：`assets/art/environments/open_world/source/logistics_07/v004/env_logistics_07_source_v004.blend`。v001–v003保留为过程回滚源，独立目录的 `.gdignore` 阻止制作源进入Godot导入。
+源文件：`art_source/environments/open_world/source/logistics_07/v004/env_logistics_07_source_v004.blend`。v001–v003保留为过程回滚源，独立目录的 `.gdignore` 阻止制作源进入Godot导入。
 
 334个末级资产包与334份磁盘manifest一一对应，25类组件制作计划；345个输出网格、345个隐藏制作网格，输出51,368多边形。每包记录局部原点、世界位置、朝向、尺寸、材质、碰撞与导出状态。文字保留可编辑字体源及网格输出。地砖和自身标记归同一独立地砖包，车辆、叉车、箱堆与花池为独立静态展示资产包，不具备物理或交互逻辑。
 

@@ -12,7 +12,7 @@ FeatureID：PLAYER-STATE / ASSET-PIPELINE / SAVE-PROFILE。工程0.1.0；现有�
 
 ## 产物与证据
 
-动作母版：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v032.blend`。
+动作母版：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v032.blend`。
 稳定采样库、GLB、中转和Prefab路径不变；JSON共88条，GLB74条（旧14条保留JSON采样）。GLB按动作声明时长统一60fps时间基准，不依赖混合场景fps。
 
 证据目录：`outputs/character_pipeline/switch_v032/`。源文件重开16条专项通过，收取枪子帧掌心偏差小于0.4mm、缩放保持单位；Godot收取枪专项96检查通过（headless及真实渲染），方向270、开火373及动画/待机/姿势碰撞/换装/包围盒/下身挂点/状态画廊回归通过。装备事务、武器实例契约及归属回归通过。用户存档在autoload前隔离。

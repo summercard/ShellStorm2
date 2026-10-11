@@ -8,7 +8,7 @@ other whitebox asset yet, so ASSETS holds exactly one entry; the list is kept
 so later expedition rooms can be appended without touching the framework.
 
 The arena is a size derivative of the battle arena
-(source/art/whitebox/tower_zones/battle_level01/v003, 190x90m). It is NOT
+(art_source/design/whitebox/tower_zones/battle_level01/v003, 190x90m). It is NOT
 produced by scaling that .blend: v003 forbids scaling and joining, so every
 wall must stay a fixed 5m slot and every door wall must keep independent left
 and right piers plus a lintel. The arena is therefore rebuilt procedurally on
@@ -31,7 +31,7 @@ from mathutils import Vector
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT_ROOT = ROOT / "source/art/whitebox/tower_zones/expedition_01/v001"
+OUTPUT_ROOT = ROOT / "art_source/design/whitebox/tower_zones/expedition_01/v001"
 BLEND_DIR = OUTPUT_ROOT / "blender"
 PACKAGE_DIR = OUTPUT_ROOT / "data/component_packages"
 VALIDATION_DIR = OUTPUT_ROOT / "data/validation"
@@ -55,7 +55,7 @@ DOOR_TOP = DOOR_BOTTOM + DOOR_HEIGHT
 # 来源竞技场（只作追溯，不在本脚本里读取）：内关卡01 v003 的 190x90m Boss 竞技场。
 SOURCE_ARENA_ASSET_ID = "ENV-BATTLE-L01-BOSS-ARENA"
 SOURCE_ARENA_BLEND = (
-    "source/art/whitebox/tower_zones/battle_level01/v003/blender/"
+    "art_source/design/whitebox/tower_zones/battle_level01/v003/blender/"
     "局内关卡01_白模_Boss竞技场_190x90m_v003.blend"
 )
 SOURCE_ARENA_SIZE_M = (190.0, 90.0)
@@ -896,7 +896,7 @@ def build_asset(asset: dict[str, object]) -> dict[str, object]:
         "collision_status": "not authored",
         "runtime_status": "not connected",
         "notes": (
-            "远征关卡01 设计源（source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json）"
+            "远征关卡01 设计源（art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json）"
             "目前没有 BOSS 房席位，也没有 50×40 的房型模板；本白模是美术侧先行的独立资产，"
             "接入运行时需要 A 段（09-level-plan-authoring）先补 Boss 房与模板。"
         ),

@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,math
 from pathlib import Path
 from mathutils import Vector
 R=Path.cwd();B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/cable_v025';F=P/'frames';F.mkdir(exist_ok=True)
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v025.blend'));s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;r=bpy.data.objects['Boss002_Rig'];r.animation_data.action=bpy.data.actions['melee_cable']
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v025.blend')));s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;r=bpy.data.objects['Boss002_Rig'];r.animation_data.action=bpy.data.actions['melee_cable']
 mins={n:1e6 for n in ['Long data cable whip','Data connector body','Keyboard outer shell','Portrait display']};maxerr=0;gap=0;tip=[];ends=[];worst={}
 for i in range(241):
  f=1+i*.25;s.frame_set(int(f),subframe=f-int(f));dg=bpy.context.evaluated_depsgraph_get()

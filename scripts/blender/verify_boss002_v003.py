@@ -1,7 +1,12 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json
 from pathlib import Path
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002'
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_source_v003.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_source_v003.blend')))
 s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;dg=bpy.context.evaluated_depsgraph_get();n=0
 for o in s.objects:
     if o.type=='MESH':

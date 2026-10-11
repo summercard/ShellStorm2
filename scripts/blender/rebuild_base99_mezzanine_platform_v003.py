@@ -7,6 +7,11 @@ the frame and above the visible grid beams so no exterior coplanar faces remain.
 
 from __future__ import annotations
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 import json
 import hashlib
 from pathlib import Path
@@ -18,11 +23,11 @@ from mathutils import Vector
 
 PROJECT_ROOT = Path("/Users/summercards/ShellStorm2")
 ASSET_ROOT = PROJECT_ROOT / "assets/art/environments/base_facility_3d"
-INPUT_BLEND = ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v004.blend"
-OUTPUT_BLEND = ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v005.blend"
+INPUT_BLEND = source_path(ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v004.blend")
+OUTPUT_BLEND = source_path(ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v005.blend")
 OUTPUT_GLB = ASSET_ROOT / "components/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_visual_top3d_v003.glb"
-PREVIEW = ASSET_ROOT / "source/env_base99_modular_room/previews/env_base99_mezzanine_20x10_z5_preview_v003.png"
-MANIFEST = ASSET_ROOT / "source/env_base99_modular_room/env_base99_mezzanine_20x10_z5_v003_manifest.json"
+PREVIEW = source_path(ASSET_ROOT / "source/env_base99_modular_room/previews/env_base99_mezzanine_20x10_z5_preview_v003.png")
+MANIFEST = source_path(ASSET_ROOT / "source/env_base99_modular_room/env_base99_mezzanine_20x10_z5_v003_manifest.json")
 
 ASSET_ID = "ENV-BASE99-MEZZANINE-20X10-Z5"
 VERSION = "v003"

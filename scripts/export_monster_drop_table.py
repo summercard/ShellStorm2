@@ -17,7 +17,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 CSV_PATH = ROOT / "docs/v0.1/data/怪物掉落表_地图x怪物.csv"
-LEVEL_ROOT = ROOT / "source/art/whitebox/tower_zones"
+LEVEL_ROOT = ROOT / "art_source/design/whitebox/tower_zones"
 TABLE_SCHEMA = "shellstorm2.monster_drop_table"
 TABLE_VERSION = 1
 SOURCE_PATH = "docs/v0.1/data/怪物掉落表_地图x怪物.csv"

@@ -1,9 +1,9 @@
 # 98F 父亲办公室 Blender 源
 
 - 功能：ASSET-PIPELINE / WORLD-BLOCKS；工程版本0.1.0。
-- 来源：用户参考图与后续更正“98F最里面的房间”；原布局 `source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json`。
+- 来源：用户参考图与后续更正“98F最里面的房间”；原布局 `art_source/design/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json`。
 - 资产：`ENV-BATTLE-FATHER-OFFICE-SOURCE` v002，场景分账本资产主表第836行，Blender源已完成；未接入Godot。
-- 源：`assets/art/environments/master_office_3d/source/env_father_office/v002/env_father_office_source_v002.blend`。
+- 源：`art_source/environments/master_office_3d/source/env_father_office/v002/env_father_office_source_v002.blend`。
 - 范围：15×20m、可见墙11.9m，入口保留东侧Y=2.5m。24组件/270实例；保留制作源、独立输出、完整围护与剖视视图层、24独立组件Blend。
 - 表现：软包长沙发、织毯、枯植、奖杯/标本陈列、散落纸张、倒柜、碎石与不规则破墙。按公共色盘四材质角色制作。
 

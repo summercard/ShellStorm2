@@ -1,4 +1,9 @@
 """Author eight real cell meshes from a frozen pixel-art plan; keep prior masters."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,sys,shutil
 from pathlib import Path
 from mathutils import Vector,Matrix
@@ -33,14 +38,14 @@ def main():
     for name in ['asset_manifest.json','character_transfer_ledger.json','verification_report.json','source_validation.json','README.md','previews/expressions_overview.png']:
         if not (archive/name).exists():
             (archive/name).parent.mkdir(parents=True,exist_ok=True); shutil.copy2(ASSET/name,archive/name)
-    previous=ASSET/'source/chr_bunny01_electronic_mask_model_v002.blend'
-    model=ASSET/'source/chr_bunny01_electronic_mask_model_v005.blend'
-    animation=ASSET/'source/chr_bunny01_electronic_mask_animation_v005.blend'
+    previous=source_path(ASSET/'source/chr_bunny01_electronic_mask_model_v002.blend')
+    model=source_path(ASSET/'source/chr_bunny01_electronic_mask_model_v005.blend')
+    animation=source_path(ASSET/'source/chr_bunny01_electronic_mask_animation_v005.blend')
     if model.exists() or animation.exists():
         pending=json.loads((ASSET/'asset_manifest.json').read_text('utf-8'))
         assert pending['version']=='v005' and pending['status']=='exported_pending_godot_validation','Keep released source versions immutable'
     bpy.context.preferences.filepaths.save_version=0
-    before={str(p):sha(p) for p in [MODEL,ANIMATION,*sorted(p for p in (ASSET/'source').glob('*.blend') if p not in [model,animation])]}
+    before={str(p):sha(p) for p in [MODEL,ANIMATION,*sorted(p for p in (source_path(ASSET/'source')).glob('*.blend') if p not in [model,animation])]}
     bpy.ops.wm.open_mainfile(filepath=str(previous))
     rig=bpy.data.objects['RIG_bunny01']; sig=signature(rig); scene=bpy.context.scene
     shell=bpy.data.objects['SRC_Face_ElectronicMask_Shell']; variant=bpy.data.collections['眼镜__electronic_mask']

@@ -4,7 +4,7 @@ from pathlib import Path
 from mathutils import Vector
 from math import sin, cos, pi
 R=Path(__file__).resolve().parents[2]
-O=R/'assets/art/environments/master_office_3d/source/env_father_office/v002'
+O=R/'art_source/environments/master_office_3d/source/env_father_office/v002'
 P=json.loads((O/'component_plan.json').read_text(encoding='utf8'))
 assert P['component_plan_frozen'] and P['unique_component_count']<=50
 random.seed(98109)

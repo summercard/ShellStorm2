@@ -15,11 +15,11 @@ from pathlib import Path
 from mathutils import Matrix, Vector
 
 ROOT = Path(__file__).resolve().parents[2]
-BATTLE = ROOT / "assets/art/environments/tower_zones/battle/source/common_components/v006"
+BATTLE = ROOT / "art_source/environments/tower_zones/battle/source/common_components/v006"
 BATTLE_BLEND = BATTLE / "env_battle_common_components_source_v006.blend"
-CORNER_BLEND = ROOT / "source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend"
+CORNER_BLEND = ROOT / "art_source/design/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend"
 PALETTE = ROOT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
-OUT_DIR = ROOT / "assets/art/environments/tower_zones/shared/source/common_components/v001"
+OUT_DIR = ROOT / "art_source/environments/tower_zones/shared/source/common_components/v001"
 OUT_BLEND = OUT_DIR / "generic_scene_components_source_v001.blend"
 OUT_CATALOG = OUT_DIR / "component_catalog.json"
 OUT_QA = OUT_DIR / "QA_REPORT.md"
@@ -227,7 +227,7 @@ def main():
             "slug": slug,
             "category": meta["category"],
             "source_package_id": meta["source_package_id"],
-            "source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+            "source_blend": "art_source/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
             "source_collection": src.name,
             "collection": output.name,
             "editable_collection": edit.name,
@@ -267,7 +267,7 @@ def main():
         "slug": "base_corner_l_5m",
         "category": "L型转角",
         "source_package_id": "ENV-TOWER-CORNER-L-5M",
-        "source_blend": "source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend",
+        "source_blend": "art_source/design/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend",
         "source_collection": corner_src.name,
         "collection": corner_output.name,
         "editable_collection": corner_edit.name,

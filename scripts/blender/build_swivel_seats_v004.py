@@ -4,6 +4,11 @@ Run with Blender --background <v003.blend> --python this_file -- --kind stool|ch
 The v003 source and existing GLBs remain untouched.
 """
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 import argparse
 from collections import defaultdict
 from pathlib import Path
@@ -95,7 +100,7 @@ def main():
     name = "赛博维修圆凳" if kind == "stool" else "战术指挥椅"
     assert bpy.data.filepath.endswith(f"prp_base_{expected}_source_v003.blend"), bpy.data.filepath
     root = Path(bpy.data.filepath).parents[2]
-    source_dir = root / "source" / expected
+    source_dir = source_path(root / "source" / expected)
     component_dir = root / "components" / expected
     combined = bpy.data.objects[f"{name}_主体_金属哑光反光"]
     base, upper = split_output(combined, 0.54 if kind == "stool" else 0.60)

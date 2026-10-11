@@ -9,9 +9,9 @@ from pathlib import Path
 import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
 REPORT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v017/north_door_wall_frame_package_validation.json"
-ASSEMBLY = PROJECT / "source/art/blender/base_facility_layout/component_packages_v017/component_sets/east_door_wall_set/assembly_manifest.json"
+ASSEMBLY = PROJECT / "art_source/design/blender/base_facility_layout/component_packages_v017/component_sets/east_door_wall_set/assembly_manifest.json"
 if Path(bpy.data.filepath).resolve() != BLEND.resolve():
     raise RuntimeError("must run with v017 open")
 

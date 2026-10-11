@@ -8,9 +8,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 GLB = "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb"
 RUNTIME = "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn"
-SOURCE = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend"
-DERIVED = "source/art/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend"
-EXPORT = "source/art/blender/base_facility_layout/export/v025/door_wall_palette_export_manifest.json"
+SOURCE = "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend"
+DERIVED = "art_source/design/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend"
+EXPORT = "art_source/design/blender/base_facility_layout/export/v025/door_wall_palette_export_manifest.json"
 
 
 def write(path: Path, data: dict) -> None:
@@ -20,7 +20,7 @@ def write(path: Path, data: dict) -> None:
 def main() -> None:
     glb_sha = hashlib.sha256((ROOT / GLB).read_bytes()).hexdigest()
     export = json.loads((ROOT / EXPORT).read_text(encoding="utf-8"))
-    ledger_path = ROOT / "assets/art/environments/base_facility_3d/source/env_base99_door_wall_palette_v025_import_manifest.json"
+    ledger_path = ROOT / "art_source/environments/base_facility_3d/source/env_base99_door_wall_palette_v025_import_manifest.json"
     ledger = {
         "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
         "version": "v025",
@@ -37,8 +37,8 @@ def main() -> None:
     }
     write(ledger_path, ledger)
     for relative in (
-        "source/art/blender/base_facility_layout/component_packages/architecture/west_door_wall_module/asset_manifest.json",
-        "source/art/blender/base_facility_layout/component_packages/architecture/east_door_wall_module/asset_manifest.json",
+        "art_source/design/blender/base_facility_layout/component_packages/architecture/west_door_wall_module/asset_manifest.json",
+        "art_source/design/blender/base_facility_layout/component_packages/architecture/east_door_wall_module/asset_manifest.json",
     ):
         path = ROOT / relative
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -48,8 +48,8 @@ def main() -> None:
                      "visual_revision": "v025_plain_wall_panel_palette"})
         write(path, data)
     for relative in (
-        "source/art/blender/base_facility_layout/component_packages/component_sets/west_door_wall_set/assembly_manifest.json",
-        "source/art/blender/base_facility_layout/component_packages/component_sets/east_door_wall_set/assembly_manifest.json",
+        "art_source/design/blender/base_facility_layout/component_packages/component_sets/west_door_wall_set/assembly_manifest.json",
+        "art_source/design/blender/base_facility_layout/component_packages/component_sets/east_door_wall_set/assembly_manifest.json",
     ):
         path = ROOT / relative
         data = json.loads(path.read_text(encoding="utf-8"))

@@ -4,6 +4,11 @@ The GLB is presentation-only. Enemy3D continues to own collision, AI, damage,
 health, spawning and persistence.
 """
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 from pathlib import Path
 import math
 
@@ -12,7 +17,7 @@ import bpy
 
 ROOT = Path("/Users/summercards/ShellStorm2")
 ASSET_ROOT = ROOT / "assets/art/enemies/elite_3d/rift_boar_armed"
-SOURCE_PATH = ASSET_ROOT / "source/enm_elite_rift_boar_armed_source_v001.blend"
+SOURCE_PATH = source_path(ASSET_ROOT / "source/enm_elite_rift_boar_armed_source_v001.blend")
 GLB_PATH = ASSET_ROOT / "components/enm_elite_rift_boar_armed_visual_top3d_v001.glb"
 
 

@@ -1,7 +1,7 @@
 # 局内关卡01 白模墙体模块修复 v003
 
 日期：2026-09-16  
-范围：`source/art/whitebox/tower_zones/battle_level01/v003/`
+范围：`art_source/design/whitebox/tower_zones/battle_level01/v003/`
 
 ## 问题
 
@@ -24,4 +24,4 @@ v002 的地板资产符合 5m 网格规范，但房间侧墙以整段长方体�
 - 材质/网格校验 19/19 通过，共 3520 个源/输出网格、68920 个多边形。
 - 未导出 GLB，未接入 Godot。
 
-验收总表见 `source/art/whitebox/tower_zones/battle_level01/v003/QA_REPORT.md`。
+验收总表见 `art_source/design/whitebox/tower_zones/battle_level01/v003/QA_REPORT.md`。

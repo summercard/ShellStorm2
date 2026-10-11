@@ -20,7 +20,7 @@ from mathutils import Matrix, Vector
 
 
 PROJECT = Path(__file__).resolve().parents[2]
-OUTPUT_BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_v002.blend"
+OUTPUT_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_v002.blend"
 OUTPUT_PREVIEW = PROJECT / "outputs/verification/base_facility_runtime_layout_blender_v002.png"
 
 PROPS = PROJECT / "assets/art/props/base_world_3d/components"

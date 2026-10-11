@@ -5,6 +5,11 @@ thickness where practical, shortens structural spans, and creates a true 4 m
 exterior stair by extending the authored 2 m module with a second flight.
 """
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 import bpy
 import json
 from pathlib import Path
@@ -13,10 +18,10 @@ from mathutils import Vector
 
 PROJECT_ROOT = Path("/Users/summercards/ShellStorm2")
 ASSET_ROOT = PROJECT_ROOT / "assets/art/environments/base_facility_3d"
-SOURCE_PATH = ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend"
-OUTPUT_PATH = ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v002.blend"
-MANIFEST_PATH = ASSET_ROOT / "source/env_base99_modular_room/env_base99_height5_assets_v002_manifest.json"
-PREVIEW_PATH = ASSET_ROOT / "source/env_base99_modular_room/previews/env_base99_height5_assets_v002_overview.png"
+SOURCE_PATH = source_path(ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend")
+OUTPUT_PATH = source_path(ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v002.blend")
+MANIFEST_PATH = source_path(ASSET_ROOT / "source/env_base99_modular_room/env_base99_height5_assets_v002_manifest.json")
+PREVIEW_PATH = source_path(ASSET_ROOT / "source/env_base99_modular_room/previews/env_base99_height5_assets_v002_overview.png")
 
 HEIGHT_RATIO = 5.0 / 7.0
 

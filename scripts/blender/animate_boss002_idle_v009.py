@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector,Quaternion,Matrix
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/idle_v009';P.mkdir(exist_ok=True)
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v006.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v006.blend')))
 s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;rig=bpy.data.objects['Boss002_Rig'];arm=rig.data
 # Align the keyboard width with the finger row. The thumb and curled fingertips
 # oppose across its thickness, rather than hanging the keyboard below a flat hand.
@@ -33,7 +38,7 @@ for j in range(len(samples)-1):
  for k in range(segments):a=j*segments+k;b=j*segments+(k+1)%segments;faces.append((a,b,b+segments,a+segments))
 faces.extend([tuple(range(segments-1,-1,-1)),tuple((len(samples)-1)*segments+k for k in range(segments))])
 me=bpy.data.meshes.new('Gravity loop topology');me.from_pydata(verts,[],faces);me.update();o=bpy.data.objects.new('Long data cable whip',me);col.objects.link(o);me.materials.append(mat)
-palette=json.loads((B/'source/textures_v006/body_palette.json').read_text());idx=palette['material_swatches'].get('Rubber cables',0);uv=me.uv_layers.new(name='PaletteUV')
+palette=json.loads((source_path(B/'source/textures_v006/body_palette.json')).read_text());idx=palette['material_swatches'].get('Rubber cables',0);uv=me.uv_layers.new(name='PaletteUV')
 for p in me.polygons:
  p.use_smooth=True
  for li in p.loop_indices:uv.data[li].uv=((idx%8+.5)/8,(idx//8+.5)/8)
@@ -80,7 +85,7 @@ tri=0
 for ob in s.objects:
  if ob.type=='MESH':ob.data.calc_loop_triangles();tri+=len(ob.data.loop_triangles)
 assert tri<20000,tri
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v009.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v009.blend')))
 rig.animation_data_create();act=bpy.data.actions.new('idle');rig.animation_data.action=act;act.use_fake_user=True
 def axis(pb,v,a):return Quaternion(pb.bone.matrix_local.to_3x3().inverted()@Vector(v),a)
 def pose(frame):
@@ -110,8 +115,8 @@ for f in range(1,98,4):
 for fc in act.fcurves:
  for k in fc.keyframe_points:k.interpolation='BEZIER';k.handle_left_type='AUTO_CLAMPED';k.handle_right_type='AUTO_CLAMPED'
  fc.modifiers.new('CYCLES')
-s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v009.blend'))
-c=json.loads((B/'source/rig_contract_v008.json').read_text());c.update(version='v009',skeleton_id=rig['skeleton_id'],bone_count=len(arm.bones),skeleton_signature=signature,triangles=tri,grip='keyboard top edge opposed thumb/fingers; doubled hanging cable with downward plug',cable_bones=16);(B/'source/rig_contract_v009.json').write_text(json.dumps(c,indent=2),encoding='utf-8')
+s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v009.blend')))
+c=json.loads((source_path(B/'source/rig_contract_v008.json')).read_text());c.update(version='v009',skeleton_id=rig['skeleton_id'],bone_count=len(arm.bones),skeleton_signature=signature,triangles=tri,grip='keyboard top edge opposed thumb/fingers; doubled hanging cable with downward plug',cable_bones=16);(source_path(B/'source/rig_contract_v009.json')).write_text(json.dumps(c,indent=2),encoding='utf-8')
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;cam=scene.camera;scene.cycles.samples=16;scene.render.resolution_x=1000;scene.render.resolution_y=800;scene.frame_set(1)
 def render(name,loc,target,scale):
  cam.location=loc;cam.rotation_euler=(Vector(target)-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=scale;scene.render.filepath=str(P/(name+'.png'));bpy.ops.render.render(write_still=True)

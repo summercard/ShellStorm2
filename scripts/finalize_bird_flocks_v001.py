@@ -24,7 +24,7 @@ assert sheet_digest(before['3D-特效'])==sheet_digest(w['3D-特效'])
 old=json.loads((out/'baseline_before.json').read_text(encoding='utf-8'))
 assert all(baseline['assets'][k]==v for k,v in old['assets'].items())
 for kind in ('flyby','ground'):
-    folder=R/f'assets/art/vfx/environment_3d/bird_flocks/source/{kind}/v001'; qa=folder/'qa'; qa.mkdir(exist_ok=True)
+    folder=R/f'art_source/vfx/environment_3d/bird_flocks/source/{kind}/v001'; qa=folder/'qa'; qa.mkdir(exist_ok=True)
     for name in (f'{kind}_motion_qa.json',f'{kind}_palette_qa.json'):shutil.copy2(out/name,qa/name)
     path=folder/'asset_manifest.json'; m=json.loads(path.read_text(encoding='utf-8')); m['source_sha256']=hashlib.sha256((R/m['source_blend']).read_bytes()).hexdigest(); path.write_text(json.dumps(m,ensure_ascii=False,indent=2),encoding='utf-8')
 log=R/'docs/v0.1/development/CHANGELOG.md'; content=log.read_text(encoding='utf-8')

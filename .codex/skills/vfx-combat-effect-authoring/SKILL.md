@@ -3,6 +3,10 @@ name: vfx-combat-effect-authoring
 description: 制作、重做、修复或验收 ShellStorm2 的 3D 战斗特效（VFX）——枪口花火、命中爆点、飞行子弹视觉、近战挥砍弧光、弹壳抛出与落地、受击/治疗飘字、爆炸。用于「做特效 / 重做特效 / 特效不好看 / 要卡通风 / 枪口火光 / 命中爆点 / 子弹要带灯光 / 特效残留 / 特效不跟着枪口走 / 特效留在原地 / 特效没进池 / AssetID 路由 / VfxPool3D / VfxEffectBase3D / 弹壳 / 抛壳 / 弹壳不落地 / 弹壳穿地 / 弹壳太整齐 / 弹壳随机 / 抛壳随机 / 弹壳停留时长 / 弹壳消失太快 / 特效 PBR 材质 / 特效验收 / 特效账本登记 / 14.6」这类问题。不用于场景美术模块、角色/敌人/武器建模与 Blender 导出链路（那些走各自的模型管线 skill）。
 agent_created: true
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 战斗 3D 特效（VFX）制作与验收
 

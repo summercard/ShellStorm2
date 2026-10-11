@@ -19,7 +19,7 @@ def check():
     if presets.is_file():
         import re
         for index,filters in enumerate(re.findall(r'^exclude_filter="([^"]*)"',presets.read_text(encoding='utf-8'),re.M)):
-            for required in ['tests/*','tools/*','scripts/*','docs/*','assets/registry/*']:
+            for required in ['art_source/*','tests/*','tools/*','scripts/*','docs/*','assets/registry/*']:
                 if required not in filters.split(','):issues.append('Export preset %d missing %s'%(index,required))
     else:issues.append('Missing local export_presets.cfg; restore export configuration before building')
     return issues

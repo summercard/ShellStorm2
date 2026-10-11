@@ -1,7 +1,12 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,math,sys
 from pathlib import Path
 from mathutils import Vector
-B=Path('assets/art/enemies/bosses/enm_boss_monitor002').resolve();P=B/'previews/remaining_v026';bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v026.blend'));s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;r=bpy.data.objects['Boss002_Rig'];spec=json.loads((P/'clips.json').read_text());tip_local=Vector(json.loads((P/'old_actions.json').read_text())['tip_local']);report={};poses={}
+B=Path('assets/art/enemies/bosses/enm_boss_monitor002').resolve();P=B/'previews/remaining_v026';bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v026.blend')));s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;r=bpy.data.objects['Boss002_Rig'];spec=json.loads((P/'clips.json').read_text());tip_local=Vector(json.loads((P/'old_actions.json').read_text())['tip_local']);report={};poses={}
 for name,n in spec.items():
  r.animation_data.action=bpy.data.actions[name];mins={x:1e6 for x in ['Portrait display','Keyboard outer shell','Long data cable whip','Luminous data plug']};worst={};tip=[];gap=0
  for i in range(n*2+1):

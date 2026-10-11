@@ -6,10 +6,10 @@
 
 ## 交付事实
 
-- 当前 Blender 美术源为 `assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v019/env_tower_stairwell_art_source_v019.blend`。
+- 当前 Blender 美术源为 `art_source/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v019/env_tower_stairwell_art_source_v019.blend`。
 - 同级 `asset_manifest.json` 登记资产 ID、版本、基线、组件目录、验收图、QA、输出网格数和运行时状态。
 - `component_packages/` 保存 10 个末级组件包的 manifest、catalog 和 tree；`renders/` 保存总览及开口近景；`qa/` 保存范围锁定脚本和报告。
-- 原 `tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v019/` 改为工作台快照，仅保留回滚用途并写明迁移位置。
+- 原 `art_source/legacy_design/blocks/stairs/whitebox_tower_stairs_v019/` 改为工作台快照，仅保留回滚用途并写明迁移位置。
 - `stairs_12m/README.md` 区分 v001 几何基线源与 v019 当前美术源；Godot 仍使用既有 GLB，未触发重新导入。
 
 ## 验收

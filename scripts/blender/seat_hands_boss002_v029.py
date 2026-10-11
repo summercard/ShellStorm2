@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector,Matrix,Quaternion
@@ -69,5 +74,5 @@ for kind,duration in spec.items():
  print('Done',kind,flush=True)
 assert all(digest(bpy.data.actions[n])==h for n,h in hashes.items())
 for sc in bpy.data.scenes:sc['asset_version']='v029'
-r.animation_data.action=bpy.data.actions['stun_loop'];s.frame_start=1;s.frame_end=49;s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v029.blend'))
+r.animation_data.action=bpy.data.actions['stun_loop'];s.frame_start=1;s.frame_end=49;s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v029.blend')))
 (P/'clips.json').write_text(json.dumps(spec,indent=2));(P/'preservation.json').write_text(json.dumps(hashes,indent=2));(P/'contact_height.json').write_text(json.dumps(floorz));print('V029 COMPLETE')

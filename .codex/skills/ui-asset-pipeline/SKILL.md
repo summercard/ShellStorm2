@@ -2,6 +2,10 @@
 name: ui-asset-pipeline
 description: 为 ShellStorm2 制作、接入或验收 UI 页面、面板、图标与交互表现资产。用于 HUD、背包、基地菜单、弹窗、手柄焦点和跨分辨率界面；不处理音效、音乐、3D模型或玩法规则。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+可编辑 PSD、分层稿与 UI 设计源放在 `art_source/ui/<AssetID>/source/`；正式图标与场景路径保持不变。 制作前读工程 `docs/ART_SOURCE_LAYOUT.md`；制作源参与 Git、由 `.gdignore` 和导出过滤隔离，临时输出走工程外 `ShellStorm2-work`。保留最新母版，旧源进入上层备份；现有版本号不变。
+
 
 # UI Asset Pipeline
 

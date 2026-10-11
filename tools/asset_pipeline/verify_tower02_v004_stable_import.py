@@ -1,6 +1,11 @@
 """Validate Tower02 v004 stable-path promotion after Godot reimport."""
 from __future__ import annotations
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
+
 import hashlib
 import json
 import re
@@ -8,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "assets/art/environments/open_world"
-MANIFEST_PATH = BASE / "source/tower_02/export/v004/export_manifest.json"
+MANIFEST_PATH = source_path(BASE / "source/tower_02/export/v004/export_manifest.json")
 STABLE_MANIFEST_PATH = BASE / "runtime/tower_02/asset_manifest.json"
 ROOT_SCENE = BASE / "runtime/tower_02/env_tower_02_root_top3d.tscn"
 REPORT = ROOT / "outputs/tower02_v004_stable_import_static.json"

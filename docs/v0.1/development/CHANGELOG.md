@@ -1,3 +1,7 @@
+## 2026-10-11 美术制作源分离
+
+当前制作源统一移入 `art_source/`，Git/LFS 管理且不入包；保留 1,095 份 Blend 与必要优化母版/清单，原位资源 5,011 文件及版本不变，旧过程资产移出约2.49GiB。制作脚本、九分账本、约束文档与34个相关skill同步；39份运行JSON投影、Blender外链与实际PCK检查通过。源目录2.79GiB，运行美术目录0.54GiB；既有门禁债务保留。详见[独立记录](2026-10-11_art_source_split.md)及[目录规范](../../ART_SOURCE_LAYOUT.md)。
+
 ## 2026-10-11 运行贴图去重与尺寸优化
 
 按用户要求设置玩家1024、怪物512、其他1024上限，221份旧导出贴图引用收敛为40份共享图；104个GLB只外置图片，5,039个几何/骨架/动作数据块保真。正式PCK502.73→267.12MiB，玩家272.70→63.44MiB，重复CTEX为0。尺寸、原生包加载、角色与怪物专项、Forward+握枪渲染通过；运行贴图导入契约进入Git白名单，过期缓存迁入上层备份。旧截图脚本改为工程外输出。资产原有514项哈希红项保留，详见[独立记录](2026-10-11_runtime_texture_optimization.md)。
@@ -225,7 +229,7 @@ PLAYER-STATE / ASSET-PIPELINE：[v030交付记录](2026-10-07_player_motion_firi
 - 账本两次独立白名单事务：主表826–834 J/Y共18格，Prefab718–726 M/P共18格；仅刷新对应资产行及专表基线指纹，其他行/表/公式/样式/DV及总目录保留。validated状态不变，runtime_integrated=true，用户授权投放=true，reference_art_approved=false（不将投放授权伪造成逐项美术验收）。历史登记报告保留，不改写原阶段证据。
 - 门禁：structure/baseline退出0；full scenes/naming/refs历史红项保留且账本事务新增错误0。文档/命名收尾与正确基线对照见`outputs/skyline20_placement/gates_final.json`，不更新债务白名单、不批量洗白历史SHA。初版通用runner误用full_scenes的--json导致退出2，已改为--json-output重新运行；错误日志保留，不作有效基线。
 - 同步调整：在共享摆位场景修改`Skyline20`子节点即可影响正式与编辑引用；外层编辑场景覆写不自动回填正式。未来保存后本次坐标证据成为历史快照，需复验。回退仅撤两处引用并按新账本事务差异撤销接入备注，不覆盖其他并发改动。
-- 证据：`assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration.json`及同目录`open_world_integration/`；交付截图/报告在`outputs/skyline20_placement/`。逐项美术最终确认、移动端/LOD与全项目验收仍未执行。
+- 证据：`art_source/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration.json`及同目录`open_world_integration/`；交付截图/报告在`outputs/skyline20_placement/`。逐项美术最终确认、移动端/LOD与全项目验收仍未执行。
 
 ## SKYLINE20 v007 景观建筑技术交付
 
@@ -233,7 +237,7 @@ PLAYER-STATE / ASSET-PIPELINE：[v030交付记录](2026-10-07_player_motion_firi
 - 用户范围：主体约50×50m、20层、屋顶重点、简化重复楼身；不制作底层结构、室内、碰撞、导航或交互。3.8m层距为本次美术取值，不借用战斗楼层12m契约。实测主体50×50m，附属装饰完整包络53.23×50.93×86.16m。
 - 实际产物：v007可编辑源及独立优化Blend；8个活跃组件母版、37个实例；整栋累计7720三角，预算10000，屋顶结构/设备4572三角占59.22%。中央机房、四台屋顶空调、独立实心碟、两座桁架塔、黄色护栏及两幅竖广告；旧v005/v006保留。公共色盘PaletteUV、共享角色材质，8个GLB均无内嵌图片/纹理。独立优化合并8个重复顶点，三角减面率0，不将三角化称为减面。
 - 所有权：Blender拥有几何/材质，组件PackedScene拥有包装，Godot TSCN拥有实例布局。稳定入口为`assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_root_top3d.tscn`；未重生成正式房间，未修改玩法/tests。正式关卡摆放未指定，runtime_integrated=false。
-- 证据：[组件catalog](../../../assets/art/environments/open_world/source/landscape_skyline20/v007/component_catalog.json)、[专项QA](../../../assets/art/environments/open_world/source/landscape_skyline20/v007/qa/qa_report.json)、[账本事务](../../../assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_registration.json)。制作源与优化源严格检查通过；Godot专项1430通过/0失败；53个保护文件未变；屋顶水平AABB净空28对通过，最小3.10552m（不等于逐三角碰撞检测）。原生整栋/屋顶截图位于QA的`godot_runtime_full.png`/`godot_runtime_roof.png`；源/优化/活跃GLB哈希匹配catalog。
+- 证据：[组件catalog](../../../art_source/environments/open_world/source/landscape_skyline20/v007/component_catalog.json)、[专项QA](../../../../ShellStorm2-backup/2026-10-11_art_source_split/original_tree/assets/art/environments/open_world/source/landscape_skyline20/v007/qa/qa_report.json)、[账本事务](../../../../ShellStorm2-backup/2026-10-11_art_source_split/original_tree/assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_registration.json)。制作源与优化源严格检查通过；Godot专项1430通过/0失败；53个保护文件未变；屋顶水平AABB净空28对通过，最小3.10552m（不等于逐三角碰撞检测）。原生整栋/屋顶截图位于QA的`godot_runtime_full.png`/`godot_runtime_roof.png`；源/优化/活跃GLB哈希匹配catalog。
 - 首轮Godot导入曾出现get_multiple_md5的f.is_null错误，原日志保留；正式复查导入无ERROR。技术专项通过不代表用户美术批准：reference_art_approved=false；账本父资产主表826、组件827–834，Prefab718–726已登记validated（技术通过、美术待审），未转为正式可用。
 - 登记事务门禁：structure/baseline退出0；full scenes/naming/refs分别退出1；465条历史SHA、1项历史命名及22项历史引用问题保留，登记新增错误0。收尾文档基线退出1：4个范围外验收脚本未注册；命名基线退出1：其他角色/椅子等14个带版本文件、3个带版本目录及tscn引用93→98。未更新债务白名单、未批量回填历史SHA；最终复测见`outputs/skyline20_v007_delivery/gates_final.json`。
 - 收尾修复：同步QA与runtime manifest的ledger_modified=true及登记报告链接，保留美术待审/未接入。验收运行使用托管Python隔离环境；初轮依赖/参数探测失败保留日志，正式基线使用-I隔离上级inspect.py同名模块，并将子进程python3映射为同一解释器，未修改项目门禁脚本。
@@ -843,7 +847,7 @@ VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_de
 **口径修正（本轮的关键判断）**：**精确 1/3 无法落地** —— 来源竞技场 190×90m 的线性 1/3 为 **63.33×30m**，而 63.33 不是 5m 的整数倍。两条硬约束同时被踩：① 墙件契约要求「非整模数边缘只用 2.5m 收边」⇒ 63.33m 的边会长出 3.33m 非标件；② `create_floor_grid` 用 `round(width/5)` 铺砖 ⇒ 非整模数时地砖网格溢出包络，包络校验 `FAIL`。且上一版组件策略明令禁止缩放与合并（`no scaling or joining`）⇒「缩小 copy」本身无效。**故本资产是「1/3 意图」的合规解，不是精确 1/3**：经业主裁决取 **50×40m**（10×8 整槽，`FIXED_TRIM` 归零），实际轴比 X `0.2632` / Y `0.4444`。
 
 **改动**：
-- 新增资产 `ENV-EXPEDITION-L01-BOSS-ARENA`：`source/art/whitebox/tower_zones/expedition_01/v001/blender/远征关卡01_白模_Boss竞技场_50x40m_v001.blend`，**50×40×11.9m / 121 网格**（80 地砖 + 1 整板 + 38 实墙 + 2 门墙）。
+- 新增资产 `ENV-EXPEDITION-L01-BOSS-ARENA`：`art_source/design/whitebox/tower_zones/expedition_01/v001/blender/远征关卡01_白模_Boss竞技场_50x40m_v001.blend`，**50×40×11.9m / 121 网格**（80 地砖 + 1 整板 + 38 实墙 + 2 门墙）。
 - 新增 `scripts/blender/build_expedition01_whitebox_v001.py`（构建；`derivation.method = procedural_rebuild_on_5m_grid`，`scaled_in_blender = False`）、`scripts/blender/audit_expedition01_whitebox_v001.py`（**只读**探针）、`scripts/register_expedition01_boss_arena_ledger.py`（台账定点登记）。
 - 台账 `ShellStorm2_场景账本_v001.xlsx`（改前已备份 `…bak_expedition01_boss_arena`）：**资产主表第 241 行**（状态 `Blender源已完成`）、**3D-场景通用第 147 行**（`白模源已完成；QA PASS`，与既有 17 行白模条目同口径）、**域变更日志第 18 行**（`v0.1.12`）、**总览 10 处统计区间 `$240 → $241`**（A6/C6/E6/G6/B10/C10/B11/C11/B12/C12）。第 18/19 列查重公式为行自引用，区间末端须覆盖新末行，故第 6–241 行整体重算（235 行，属范围扩张的必然结果）。
 - 门：南 → `boss_prep`（净门心 +2.5m）+ 西 → `boss_exit`（−2.5m）；门位由来源门位**按墙面比例投影后吸附到净门心集合 `{±(2.5+5k)}`**。吸附到 2.5m 奇数倍是刻意的 —— 只有净门心落在该集合，门槽两侧才各剩整数个 5m 模数，`FIXED_TRIM` 才能归零。
@@ -859,9 +863,9 @@ VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_de
 
 **未变更**：未导 GLB、未建 PackedScene、未制作碰撞、未改任何 `.gd` / `.tscn` / 设计源 JSON；塔楼 `BOSS_ARENA = 90×90` 与来源 190×90 的尺寸分歧（`docs/v0.1/05.2` 决策项 D2）**仍待裁决**，本资产不依赖该常量，未加剧分歧。
 
-**回滚**：`restore …xlsx.bak_expedition01_boss_arena`；删除 `source/art/whitebox/tower_zones/expedition_01/v001/` 与三个新增脚本。
+**回滚**：`restore …xlsx.bak_expedition01_boss_arena`；删除 `art_source/design/whitebox/tower_zones/expedition_01/v001/` 与三个新增脚本。
 
-- 详见[交付记录](2026-09-22_远征01竞技场白盒.md)、[QA 报告](../../../source/art/whitebox/tower_zones/expedition_01/v001/QA_REPORT.md)。
+- 详见[交付记录](2026-09-22_远征01竞技场白盒.md)、[QA 报告](../../../art_source/design/whitebox/tower_zones/expedition_01/v001/QA_REPORT.md)。
 
 ## 2026-09-22｜弹壳停留时长再缩短 1 秒（4.7s → 3.7s）
 
@@ -1177,7 +1181,7 @@ VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_de
 
 ## 2026-09-19｜删除旧聚落天台资产（ENV-ROOFTOP-SHELTER-90X80 整体移除）
 
-- 按用户要求「先把旧的那套删除」，把旧聚落天台整条链路从仓库移除：`assets/art/environments/rooftop_shelter_3d/`（609 MB / 329 文件）、`rooftop_shelter_diorama_3d/`（83 MB / 45 文件，**全项目零引用**）、`source/art/blender/environments_v01/rooftop_shelter_50m/`（57 MB / 15 文件），**合计 749 MB / 389 文件**。前序 [天台运行设施清空](2026-09-17_rooftop_facilities_removed.md) 只摘了运行引用，本次把资产本体一并删除。
+- 按用户要求「先把旧的那套删除」，把旧聚落天台整条链路从仓库移除：`assets/art/environments/rooftop_shelter_3d/`（609 MB / 329 文件）、`rooftop_shelter_diorama_3d/`（83 MB / 45 文件，**全项目零引用**）、`art_source/design/blender/environments_v01/rooftop_shelter_50m/`（57 MB / 15 文件），**合计 749 MB / 389 文件**。前序 [天台运行设施清空](2026-09-17_rooftop_facilities_removed.md) 只摘了运行引用，本次把资产本体一并删除。
 - 同步删除专用件：`zone_rooftop.tscn`（唯一运行时 PackedScene 入口）、`src/world3d/RooftopAmbience3D.gd`（删入口后成孤儿）、`verify_rooftop_shelter_asset_contract.gd/.tscn`、`tools/asset_pipeline/` 下 3 个天台专用脚本。
 - **两个工具刻意保留**：`export_godot_rooftop_reference.gd`（导出 Godot 原生 100F 对照，与旧资产无关，输出路径改到新建的 `tower_zones/rooftop/references/`）；`build_rooftop_shelter.py`（`build_british_corner_bookshop.py` 靠 `exec` 复用其通用构建函数，英伦街角书店仍活跃，24 文件）。
 - 清理引用：`.gitignore` 3 条 `!*.glb.import` 例外、`verify_tower_level_blocks.gd` 的 `zone_rooftop` 存在性断言、`classify_asset_repository.py` 的 50M 分支、`tower_zones/rooftop/README.md`（重写）、`05.1_关卡区块设计.md`（目录树 + 区块表 + 正文两处）。历史记录（既有批次文档 / CHANGELOG 旧条目 / `audits/evidence/` 取证 / `outputs/` 日志）与参考组件库 `qa/` 里登记 v021 源 SHA-256 的验收证据**一律不改**——源移除后不再可复算，保留原样用于回溯。
@@ -1341,7 +1345,7 @@ VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_de
 ## 2026-09-16｜局内关卡01与楼梯间白盒目录归类
 
 - 依据资产台账 `3D-场景通用` 的 `ENV-BATTLE-L01-*` 条目，确认 `battle_level01/v002` 的19个 Blender 白盒属于局内关卡01；保留 v001 与旧程序化 v011 JSON 作为回溯资料。
-- 将原本无区块归属的 `v011` 至 `v015` 全部迁入 `source/art/whitebox/tower_zones/stairs/`；v011 的历史文件名虽包含 `battle`，但其 Blend 和数据均为楼梯间回滚内容。
+- 将原本无区块归属的 `v011` 至 `v015` 全部迁入 `art_source/design/whitebox/tower_zones/stairs/`；v011 的历史文件名虽包含 `battle`，但其 Blend 和数据均为楼梯间回滚内容。
 - 同步区块设计、台账根条目、工具/校验路径与目录 README；未修改 Blender 几何、未导出 GLB、未改变 Godot 接入。
 
 ## 2026-09-15｜楼梯间复制、反向装配与99→98层对应摆放 v021
@@ -1360,7 +1364,7 @@ VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_de
 
 ## 2026-09-14｜楼梯间 Blender 美术源目录规范化 v019
 
-- v019 当前美术源整理为 `assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v019/`：唯一 Blend、源单元 manifest、组件清单、验收图和 QA 分目录存放。
+- v019 当前美术源整理为 `art_source/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v019/`：唯一 Blend、源单元 manifest、组件清单、验收图和 QA 分目录存放。
 - 原工具目录只保留工作台回滚快照；v001 保留为 Godot 现有 GLB 的几何基线。未改动运行时 GLB、碰撞、LOD、PackedScene 或 Godot 引用。
 - 新路径下的范围锁定、组件清单和 Blender 材质/PaletteUV 专项均通过。
 

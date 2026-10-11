@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json
 from pathlib import Path
 from mathutils import Vector
@@ -11,4 +16,4 @@ for name,n in {'stun_enter':42,'stun_loop':48,'stun_exit':30}.items():
   for j,m in enumerate(mats,1):
    m.translation.z+=.09*w;p=r.pose.bones['cable_%02d'%j];p.matrix=m;bpy.context.view_layer.update()
    for attr in ['location','rotation_quaternion','scale']:p.keyframe_insert(attr,frame=f,group=p.name)
-s.frame_set(1);r.animation_data.action=bpy.data.actions['stun_loop'];s.frame_end=49;bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v029.blend'));print('Cable floor clearance corrected')
+s.frame_set(1);r.animation_data.action=bpy.data.actions['stun_loop'];s.frame_end=49;bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v029.blend')));print('Cable floor clearance corrected')

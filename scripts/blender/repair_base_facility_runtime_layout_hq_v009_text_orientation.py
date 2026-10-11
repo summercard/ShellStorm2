@@ -5,7 +5,7 @@ import bpy
 
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend"
 VERIFY = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v009"
 
 

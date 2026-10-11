@@ -1,7 +1,7 @@
 """Create version-matched, optimized Base Facility exports for Godot.
 
 Usage (Blender 4.2+):
-  blender --background source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend \\
+  blender --background art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend \\
     --python scripts/blender/export_base_facility_latest.py -- --stage all --kind all
 
 The script resolves the highest source version unless --source is supplied.  It
@@ -11,6 +11,11 @@ the asset ledger consume export_manifest.json in a later explicit import step.
 """
 
 from __future__ import annotations
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 
 import argparse
 import hashlib
@@ -25,8 +30,8 @@ from mathutils import Vector
 
 
 PROJECT = Path(__file__).resolve().parents[2]
-LAYOUT_ROOT = PROJECT / "source/art/blender/base_facility_layout"
-SOURCE_ROOT = LAYOUT_ROOT / "source"
+LAYOUT_ROOT = PROJECT / "art_source/design/blender/base_facility_layout"
+SOURCE_ROOT = source_path(LAYOUT_ROOT / "source")
 EXPORT_ROOT = LAYOUT_ROOT / "export"
 COMPONENT_ROOT = PROJECT / "assets/art/environments/base_facility_3d/components"
 PALETTE_PATH = PROJECT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"

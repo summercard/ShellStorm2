@@ -20,8 +20,8 @@
   "runtime_base_scale": 0.7,
   "runtime_prefab": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
   "presentation_script": "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/ranged_caster_formal_visual.gd",
-  "model_source": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend",
-  "animation_source": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend",
+  "model_source": "art_source/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend",
+  "animation_source": "art_source/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend",
   "component_glb": "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d.glb",
   "clips": {
     "idle": {
@@ -100,13 +100,13 @@
   },
   "files": [
     {
-      "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend",
+      "path": "art_source/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend",
       "sha256": "f3cfee9626df557dc32fe58ce40f698daa2c6a1abb9f9378b39b6f9f66cb5e7e",
       "bytes": 1910010,
       "role": "model"
     },
     {
-      "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend",
+      "path": "art_source/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend",
       "sha256": "5ceda79ebcef191c081011a048d8f2d4f4a5cd3543eefc7de3afb1f32738f15e",
       "bytes": 8367802,
       "role": "animation"

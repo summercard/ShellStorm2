@@ -6,7 +6,7 @@ import sys
 import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
 
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 if len(args) != 2:

@@ -15,9 +15,9 @@
 
 ## 交付与整理
 
-- [最终Blend源](../../../assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend)。
-- [组件计划](../../../assets/art/environments/open_world/source/skyline_08/v004/component_plan.json)：28类定义，实例另计。
-- [catalog与252包清单](../../../assets/art/environments/open_world/source/skyline_08/v004/catalog.json)：17建筑包、192地砖包、18招牌包、23设施包、2支持包；每包具有Collection与对应磁盘manifest。
+- [最终Blend源](../../../art_source/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend)。
+- [组件计划](../../../art_source/environments/open_world/source/skyline_08/v004/component_plan.json)：28类定义，实例另计。
+- [catalog与252包清单](../../../art_source/environments/open_world/source/skyline_08/v004/catalog.json)：17建筑包、192地砖包、18招牌包、23设施包、2支持包；每包具有Collection与对应磁盘manifest。
 - [天台参考镜头](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/environments/open_world/source/skyline_08/v004/previews/01_天台参考镜头.png)、[8层全景](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/environments/open_world/source/skyline_08/v004/previews/02_8层完整楼体.png)、[俯视](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/environments/open_world/source/skyline_08/v004/previews/03_天台俯视结构.png)及三个设备/广告牌/背面镜头。
 - `01_制作组件`默认隐藏，`02_游戏输出`默认可见，展示镜头和灯光归`90_展示与验收`。
 - v001/v002/v003保留作本次迭代回滚；v004为本批次正式源。制作代码位于`tools/blender/build_skyline_08_source_v003.py`。
@@ -26,10 +26,10 @@
 
 Blender 4.5后台重开源文件，Cycles真实渲染6张图，人工检查参考构图、设备、广告牌、顶视与背面。几何为风格化还原，未宣称参考图像素级一致。
 
-- [逐面色盘验收](../../../assets/art/environments/open_world/source/skyline_08/v004/qa/palette_validation.json)：退出0；源与输出全部536网格，83,708/83,708面UV岛位于单一色格安全区，活动/渲染层均`PaletteUV`；只有4角色材质，公共512色盘外链、Closest，无私有色盘副本或材质残留。
-- [独立结构与目录验收](../../../assets/art/environments/open_world/source/skyline_08/v004/qa/source_audit.json)：退出0；8层高度、Z=0基准、252包与252清单一致，192地砖，高度与包络匹配，无空包/多包归属/未登记输出/未应用修改器；268输出网格、41,854面、71,262顶点。
-- [账本登记](../../../assets/art/environments/open_world/source/skyline_08/v004/qa/ledger_registration.json)：场景分账本第563行，制作状态为Blender源已完成；复制写前快照并确认历史内容列及全部历史资产指纹不变。
-- 工程级门禁基线与最终结果记录于[交付QA](../../../assets/art/environments/open_world/source/skyline_08/v004/qa/QA_REPORT.md)。工程历史债务不以本资产验收通过替代。
+- [逐面色盘验收](../../../../ShellStorm2-backup/2026-10-11_art_source_split/original_tree/assets/art/environments/open_world/source/skyline_08/v004/qa/palette_validation.json)：退出0；源与输出全部536网格，83,708/83,708面UV岛位于单一色格安全区，活动/渲染层均`PaletteUV`；只有4角色材质，公共512色盘外链、Closest，无私有色盘副本或材质残留。
+- [独立结构与目录验收](../../../../ShellStorm2-backup/2026-10-11_art_source_split/original_tree/assets/art/environments/open_world/source/skyline_08/v004/qa/source_audit.json)：退出0；8层高度、Z=0基准、252包与252清单一致，192地砖，高度与包络匹配，无空包/多包归属/未登记输出/未应用修改器；268输出网格、41,854面、71,262顶点。
+- [账本登记](../../../../ShellStorm2-backup/2026-10-11_art_source_split/original_tree/assets/art/environments/open_world/source/skyline_08/v004/qa/ledger_registration.json)：场景分账本第563行，制作状态为Blender源已完成；复制写前快照并确认历史内容列及全部历史资产指纹不变。
+- 工程级门禁基线与最终结果记录于[交付QA](../../../../ShellStorm2-backup/2026-10-11_art_source_split/original_tree/assets/art/environments/open_world/source/skyline_08/v004/qa/QA_REPORT.md)。工程历史债务不以本资产验收通过替代。
 
 上述Blender制作阶段没有执行GLB、Godot PackedScene、碰撞、LOD或正式场景接入；后续景观运行接入单独记录如下，不回写历史验收口径。
 

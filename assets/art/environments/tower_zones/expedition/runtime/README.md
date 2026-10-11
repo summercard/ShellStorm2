@@ -117,7 +117,7 @@ python source/common_components/v001/qa/build_boss_component_prefabs.py
 
 # 5) 契约探针（96 项断言：可加载 / 元数据 / 尺寸 / 原点 / 无阻挡 / 色盘）
 Godot_v4.6.3-stable_win64_console.exe --headless --path <项目根> --script \
-    res://assets/art/environments/tower_zones/expedition/source/common_components/v001/qa/probe_boss_component_prefabs.gd
+    res://art_source/environments/tower_zones/expedition/source/common_components/v001/qa/probe_boss_component_prefabs.gd
 ```
 
 `.import` 必须保持 LF（`.gitattributes` 已声明 `*.import text eol=lf`），且

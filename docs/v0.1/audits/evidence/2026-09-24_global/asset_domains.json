@@ -59,37 +59,37 @@
       {
         "asset_id": "ENV-BASE99-FLOOR-DETAILS-V017",
         "cell": "P32",
-        "path": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+        "path": "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
       },
       {
         "asset_id": "ENV-BASE99-LOFT-FLOOR-FINISH-V017",
         "cell": "P33",
-        "path": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+        "path": "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
       },
       {
         "asset_id": "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017",
         "cell": "P34",
-        "path": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+        "path": "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
       },
       {
         "asset_id": "ENV-TOWER-STAIR-FLOOR-LOWER",
         "cell": "P233",
-        "path": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
+        "path": "art_source/design/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
       },
       {
         "asset_id": "ENV-TOWER-STAIR-FLOOR-MID",
         "cell": "P234",
-        "path": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
+        "path": "art_source/design/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
       },
       {
         "asset_id": "ENV-TOWER-STAIR-FLOOR-UPPER",
         "cell": "P235",
-        "path": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
+        "path": "art_source/design/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
       },
       {
         "asset_id": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
         "cell": "P236",
-        "path": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
+        "path": "art_source/design/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
       }
     ]
   },

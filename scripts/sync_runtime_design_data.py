@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 def mappings():
-    level_root=ROOT/'source/art/whitebox/tower_zones'
+    level_root=ROOT/'art_source/design/whitebox/tower_zones'
     for level in sorted(level_root.iterdir()):
         if not level.is_dir():continue
         version='v004' if level.name=='battle_level01' else 'v001'
@@ -17,15 +17,15 @@ def mappings():
         if not (source/'level_plan.json').is_file():continue
         for path in sorted(source.rglob('*.json')):
             yield path,ROOT/'data/level_plans'/level.name/path.relative_to(source)
-    yield (ROOT/'source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json',
+    yield (ROOT/'art_source/design/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json',
            ROOT/'data/layouts/block_00_master_office_layout.json')
-    expedition=ROOT/'assets/art/environments/tower_zones/expedition/source'
+    expedition=ROOT/'art_source/environments/tower_zones/expedition/source'
     yield expedition/'room_types/boss_room/v002/boss_room_50x40_v002.layout.json',ROOT/'data/layouts/expedition/boss_room.json'
     for version in ['v009','v010','v014','v012','v011']:
         yield expedition/'common_components'/version/'component_instances.json',ROOT/'data/layouts/expedition'/version/'component_instances.json'
     for room in ['f00_room_03','f00_room_04']:
         yield expedition/'room_instances'/room/'v001/room_layout.json',ROOT/'data/layouts/expedition'/room/'room_layout.json'
-    yield ROOT/'assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json',ROOT/'data/layouts/rooftop_100f_decorated_layout.json'
+    yield ROOT/'art_source/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json',ROOT/'data/layouts/rooftop_100f_decorated_layout.json'
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args()

@@ -143,7 +143,7 @@ def main() -> None:
     root = args.project.resolve()
     deleted_dirs = []
     target_dirs = [
-        root / "source/art/blender/base_facility_layout/component_packages/support" / TARGET_SLUG,
+        root / "art_source/design/blender/base_facility_layout/component_packages/support" / TARGET_SLUG,
         root / "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021" / TARGET_SLUG,
         root / "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021" / TARGET_SLUG,
     ]
@@ -158,7 +158,7 @@ def main() -> None:
     json_files = [
         root / "assets/art/asset_import_manifest_v001.json",
         *sorted((root / "assets/art/environments/base_facility_3d").rglob("*.json")),
-        *sorted((root / "source/art/blender/base_facility_layout/export").rglob("*.json")),
+        *sorted((root / "art_source/design/blender/base_facility_layout/export").rglob("*.json")),
     ]
     for path in json_files:
         before = path.read_text(encoding="utf-8")
@@ -174,10 +174,10 @@ def main() -> None:
         global_path = root / "assets/art/asset_import_manifest_v001.json"
         global_data = json.loads(global_path.read_text(encoding="utf-8"))
         palette = global_data.get("shared_scene_facility_palette", {})
-        palette["managed_blend_sources"] = len(list((root / "source/art/blender/base_facility_layout/source").glob("base_facility_runtime_layout_hq_v*.blend")))
+        palette["managed_blend_sources"] = len(list((root / "art_source/design/blender/base_facility_layout/source").glob("base_facility_runtime_layout_hq_v*.blend")))
         palette["managed_glbs"] = len(list((root / "assets/art/environments/base_facility_3d/components").rglob("*.glb")))
         palette["source_controlled_glb_import_contracts"] = palette["managed_glbs"]
-        global_data["base99_source_policy"]["current_master_source"] = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
+        global_data["base99_source_policy"]["current_master_source"] = "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
         global_path.write_text(json.dumps(global_data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     godot_changed = [] if args.dry_run else remove_godot_references(root)

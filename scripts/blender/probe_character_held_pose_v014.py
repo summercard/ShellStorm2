@@ -4,7 +4,7 @@ import bpy, math
 from mathutils import Vector, Matrix, Euler
 from mathutils.bvhtree import BVHTree
 root=Path(__file__).resolve().parents[2]
-bpy.ops.wm.open_mainfile(filepath=str(root/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v014/source/animation/chr_bunny01_animation_v014.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(root/'art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v014/source/animation/chr_bunny01_animation_v014.blend'))
 s=bpy.data.scenes['05_单手持枪_小跑']; bpy.context.window.scene=s; s.frame_set(1)
 r=next(o for o in s.objects if o.type=='ARMATURE'); r.animation_data_clear()
 rest={b.name:b.matrix_local.copy() for b in r.data.bones}

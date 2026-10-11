@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/rig_v005';P.mkdir(exist_ok=True)
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_source_v004.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_source_v004.blend')))
 s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;s.frame_set(1)
 ctrl=bpy.data.objects['ExpressionController'];ctrl.animation_data_clear();ctrl['expression_index']=0;ctrl['usage']='Persistent expression state 0..5; no timeline cycling. default/suspicious/angry/sleepy/taunting/glitched'
 for a in list(bpy.data.actions):bpy.data.actions.remove(a)
@@ -113,10 +118,10 @@ for ob in s.objects:
     if ob.type=='MESH':ob.data.calc_loop_triangles();tri+=len(ob.data.loop_triangles)
 assert tri<20000,tri
 contract={'asset_id':'ENM-BOSS-MONITOR002-3D','version':'v005','skeleton_id':'SKEL-MONITOR002-001','skeleton_signature':sig,'bone_count':len(arm.bones),'deform_bones':[b.name for b in arm.bones if b.use_deform],'triangles':tri,'expression_states':{'default':0,'suspicious':1,'angry':2,'sleepy':3,'taunting':4,'glitched':5},'expression_mode':'persistent selectable visual state, no automatic cycling, no gameplay-state mapping assigned','spring':'STRETCH_TO hand_ctrl, NO_VOLUME; axial pitch changes, radius preserved','face':'anchors move with monitor_spin; face deform bones copy anchor world location but root world rotation','support':'3 FK joints, smooth normalized weights; geometry rebuilt with axial loops','keyboard':'bone-parented prop_socket.L, detachable unskinned prop','model_source':'source/enm_boss_monitor002_model_v005.blend','animation_source':'source/enm_boss_monitor002_animation_v005.blend','runtime_integration':False,'export_note':'Blender constraints must be baked on deform bones; material states require runtime UV adapter. This is source rig validation only.'}
-(B/'source/rig_contract_v005.json').write_text(json.dumps(contract,indent=2),encoding='utf-8')
+(source_path(B/'source/rig_contract_v005.json')).write_text(json.dumps(contract,indent=2),encoding='utf-8')
 # Static model master, no preview actions or auto-playing expression.
 bpy.ops.object.select_all(action='DESELECT');rig.select_set(True);bpy.context.view_layer.objects.active=rig
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v005.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v005.blend')))
 # Separate animation master contains proof poses only, clearly named non-gameplay tests.
 rig.animation_data_create()
 tests=[('QA_spring_extend','spring'),('QA_monitor_spin','spin'),('QA_forward_slam','forward'),('QA_down_slam','down'),('QA_finger_curl','fingers')]
@@ -132,7 +137,7 @@ for aname,kind in tests:
     for bn,path,value in channels:
         pb=rig.pose.bones[bn];setattr(pb,path,(0,0,0));pb.keyframe_insert(path,frame=1);setattr(pb,path,value);pb.keyframe_insert(path,frame=36);setattr(pb,path,(0,0,0));pb.keyframe_insert(path,frame=72)
 rig.animation_data.action=bpy.data.actions['QA_spring_extend'];s.frame_set(1)
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v005.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v005.blend')))
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;scene.cycles.samples=24;cam=scene.camera;cam.location=(4,11,5);cam.rotation_euler=(Vector((0,0,1.8))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=9.2
 for aname,kind in tests[:4]:
     for pb in rig.pose.bones:pb.location=(0,0,0);pb.rotation_euler=(0,0,0);pb.scale=(1,1,1)

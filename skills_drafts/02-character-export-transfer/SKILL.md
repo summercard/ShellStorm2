@@ -2,6 +2,10 @@
 name: 02-character-export-transfer
 description: 角色类表现资产链路第 2 段。把 Blender 双母版导出为纯视觉 GLB，覆盖稳定路径，并生成机器可校验的严格中转台账；覆盖只导出目标 AssetID、重算骨架签名、SHA-256 登记、动作时长/循环/轨道核对、过期机制与状态推进到 exported_pending_godot_validation。不用于制模与契约反推（用 01-character-contract-authoring）、Godot 场景包装（用 03-character-godot-import）、运行时映射（用 04-character-state-binding）、验收（用 05-character-verification）、台账推进（用 06-character-ledger）。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # S2 · 导出与严格中转
 

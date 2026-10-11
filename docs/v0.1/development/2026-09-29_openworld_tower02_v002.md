@@ -4,7 +4,7 @@ FeatureID：ASSET-PIPELINE；工程版本0.1.0；资产ENV-OPENWORLD-TOWER02，v
 
 用户要求屋顶结构层次、高低不同立柱，并以第二张塔吊参考图深化机械细节。范围为v001屋顶施工包与三台塔吊；下部楼体、灰色屋顶板、70×50m主体、既有摄像机与灯光保持原状。
 
-源位于 `assets/art/environments/open_world/source/tower_02/v002/塔2_施工高楼_70x50m_v002.blend`。v001保留回滚。制作脚本为 `tools/blender/deepen_tower02_v002.py`，读取v001，只替换授权包。
+源位于 `art_source/environments/open_world/source/tower_02/v002/塔2_施工高楼_70x50m_v002.blend`。v001保留回滚。制作脚本为 `tools/blender/deepen_tower02_v002.py`，读取v001，只替换授权包。
 
 - 15根立柱分别高3.5、7.5、11.5、5.5、8.7、10.2、8、4.2、12.2、4.5、9.8、7、6.5、5、10.8米；混凝土高度另分0.7–4.6米，突出裸露钢筋笼、半包模板与已浇柱段差异。
 - 3个多层作业岛：敞口核心模板、环向加固背楞、拉杆螺栓、斜撑底座、中层踏板、顶层栏杆及竖向梯。

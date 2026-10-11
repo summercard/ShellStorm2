@@ -1,6 +1,6 @@
 # 东面维修与收纳深化 v021
 
-从 v020 续作，源文件 `source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend`；原版本保留。
+从 v020 续作，源文件 `art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend`；原版本保留。
 
 仅修改78维修工作台、80低矮储物及83植物三个原名资产包。资产包键、源场景资产ID及原父集合不变，更新版本目录和清单。制作组件隐藏，整合输出显示，所有新增对象均在相应包内。
 

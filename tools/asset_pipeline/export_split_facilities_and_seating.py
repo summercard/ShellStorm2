@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
+
 import bmesh
 import json
 import math
@@ -99,9 +104,9 @@ def calculate_bounds(objects: list[bpy.types.Object]) -> tuple[list[float], list
 
 
 def export_facility(data: dict, manifest: dict) -> None:
-    source_file = LIBRARY / data["source"]
+    source_file = source_path(LIBRARY / data["source"])
     copies = prepare_export(source_file)
-    source_dir = PROP_ROOT / "source" / data["slug"]
+    source_dir = source_path(PROP_ROOT / "source" / data["slug"])
     component_dir = PROP_ROOT / "components" / data["slug"]
     source_dir.mkdir(parents=True, exist_ok=True)
     component_dir.mkdir(parents=True, exist_ok=True)
@@ -148,9 +153,9 @@ def write_decor_scene(data: dict, record: dict) -> None:
 
 
 def export_seating(data: dict, manifest: dict) -> None:
-    source_file = LIBRARY / data["source"]
+    source_file = source_path(LIBRARY / data["source"])
     copies = prepare_export(source_file)
-    source_dir = PROP_ROOT / "source" / data["slug"]
+    source_dir = source_path(PROP_ROOT / "source" / data["slug"])
     component_dir = PROP_ROOT / "components" / data["slug"]
     source_dir.mkdir(parents=True, exist_ok=True)
     component_dir.mkdir(parents=True, exist_ok=True)

@@ -14,3 +14,7 @@
 # 另注：若将来要让 Godot 重写的 .gd/.tscn 也不再产生幻影脏，
 #      需要先做一次全库 renormalize（工作区 CRLF→LF）再声明 eol=lf，属独立任务。
 *.import text eol=lf
+
+# Editable art masters are versioned via Git LFS; runtime resources keep existing attributes.
+art_source/**/*.blend filter=lfs diff=lfs merge=lfs -text
+art_source/**/*.psd filter=lfs diff=lfs merge=lfs -text

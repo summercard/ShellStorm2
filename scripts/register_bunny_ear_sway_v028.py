@@ -11,7 +11,7 @@ from split_asset_ledger import read_source_rows,_row_digest,sheet_digest,col_dig
 INDEX=LedgerIndex.load(ROOT);PATH=INDEX.path_for_category('角色');BASELINE=ROOT/'assets/registry/ledger_split_baseline.json'
 OUT=ROOT/'outputs/character_pipeline/directional_v028';BACKUP=ROOT/'_scratch/bunny_ear_sway_v028_ledger_before'
 ASSET='CHR-PLY-CAPSULE01-3D-BUNNY01'
-SOURCE='assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v028.blend'
+SOURCE='art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v028.blend'
 TRANSFER=SOURCE.replace('chr_bunny01_animation_v028.blend','chr_bunny01_directional_v028.json')
 tree=ast.parse((ROOT/'scripts/register_bunny_weapon_idles_v025.py').read_text(encoding='utf-8'))
 exec(compile(ast.Module(body=[n for n in tree.body if isinstance(n,ast.FunctionDef)],type_ignores=[]),'<ledger-helpers>','exec'))

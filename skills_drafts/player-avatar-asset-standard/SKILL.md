@@ -2,6 +2,10 @@
 name: player-avatar-asset-standard
 description: 为 ShellStorm2 制作、拆分、验收或导入玩家角色与可换装配件。用户提到角色Blender母版、1.5米尺寸、身体/头/手/脚/帽子/眼镜/下身附件、挂点、角色GLB、换装Prefab、角色方向比例或外观入库时使用。本Skill保存在项目草稿目录，当前不安装到Codex全局技能目录。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 玩家角色资产制作与带入规范
 
@@ -10,7 +14,7 @@ description: 为 ShellStorm2 制作、拆分、验收或导入玩家角色与可
 ## 开始前
 
 1. 完整读取 [references/shellstorm-player-avatar-contract.md](references/shellstorm-player-avatar-contract.md)。
-2. 打开 `assets/art/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend`，不得从截图或旧场景缩放反推尺寸。
+2. 打开 `art_source/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend`，不得从截图或旧场景缩放反推尺寸。
 3. 阅读目标角色现有PackedScene、`PlayerAvatar3D.CUSTOMIZATION_OPTIONS`、资产台账和命名规范。
 
 ## Blender制作

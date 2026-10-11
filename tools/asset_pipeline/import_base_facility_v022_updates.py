@@ -2,7 +2,7 @@ from pathlib import Path
 import json, re, hashlib
 
 ROOT=Path(__file__).resolve().parents[2]
-MANIFEST=ROOT/'source/art/blender/base_facility_layout/export/v022/export_manifest.json'
+MANIFEST=ROOT/'art_source/design/blender/base_facility_layout/export/v022/export_manifest.json'
 DATA=json.loads(MANIFEST.read_text())
 RUNTIME=ROOT/'assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021'
 WALL=ROOT/'assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021'
@@ -69,7 +69,7 @@ text=text.replace('metadata/optimized_package_count = 5','metadata/optimized_pac
 # Stair v005 preserves the functional collision script and only replaces visuals.
 stair=DATA['packages']['northwest_l_stair']; oldp=ROOT/'assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v004.tscn'
 st=oldp.read_text().replace('env_base99_stair_l_z5_visual_top3d_v004.glb','env_base99_stair_l_z5_visual_top3d_v005.glb').replace('metadata/asset_version = "v004"','metadata/asset_version = "v005"').replace('env_base99_modular_room_assets_clean_v004.blend','../../../../../source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v022.blend')
-st=st.replace('metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/../../../../../source/', 'metadata/source_blend = "res://source/')
+st=st.replace('metadata/source_blend = "res://art_source/environments/base_facility_3d/source/../../../../../source/', 'metadata/source_blend = "res://source/')
 st=st.replace('layout/source/base_facility_runtime_layout_hq_v022.blend"','layout/source/base_facility_runtime_layout_hq_v022.blend"\nmetadata/derived_blend = "res://source/art/blender/base_facility_layout/export/v022/base_facility_runtime_layout_hq-v022-updated_packages.blend"')
 oldp.with_name('env_base99_stair_l_z5_root_top3d_v005.tscn').write_text(st)
 
@@ -80,6 +80,6 @@ layout=ROOT/'assets/art/environments/base_facility_3d/runtime/env_base_facility_
 vfx={'asset_id':'VFX-BASE99-SCENE-DUST-V001','version':'v001','category':'scene_vfx','scene':'assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn','replaces':'64_光束尘埃动效组_资产包','implementation':'Godot GPUParticles3D','managed_separately':True}
 (ROOT/'assets/art/vfx/environment_3d/base_facility_scene_vfx_manifest_v001.json').write_text(json.dumps({'scene_vfx':[vfx]},ensure_ascii=False,indent=2)+'\n')
 ledger={'asset_id':'ENV-BASE99-V022-UPDATES','version':'v022','source_blend':DATA['source_blend'],'source_sha256':hashlib.sha256((ROOT/DATA['source_blend']).read_bytes()).hexdigest(),'derived_blend':DATA['derived_blend'],'packages':DATA['packages'],'runtime':{'remaining':str((RUNTIME/'env_base99_remaining_facilities_root_top3d_v003.tscn').relative_to(ROOT)),'wall':str((WALL/'env_base99_wall_contents_root_top3d_v003.tscn').relative_to(ROOT)),'stair':'assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v005.tscn'},'scene_vfx':vfx}
-(ROOT/'assets/art/environments/base_facility_3d/source/env_base99_updates_v022_import_manifest.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2)+'\n')
-globalp=ROOT/'assets/art/asset_import_manifest_v001.json'; gd=json.loads(globalp.read_text()); gd['base_facility_updates_v022']={'asset_id':ledger['asset_id'],'version':'v022','package_count':14,'import_manifest':'assets/art/environments/base_facility_3d/source/env_base99_updates_v022_import_manifest.json','runtime':ledger['runtime']}; gd['base_facility_scene_vfx']=vfx; globalp.write_text(json.dumps(gd,ensure_ascii=False,indent=2)+'\n')
+(ROOT/'art_source/environments/base_facility_3d/source/env_base99_updates_v022_import_manifest.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2)+'\n')
+globalp=ROOT/'assets/art/asset_import_manifest_v001.json'; gd=json.loads(globalp.read_text()); gd['base_facility_updates_v022']={'asset_id':ledger['asset_id'],'version':'v022','package_count':14,'import_manifest':'art_source/environments/base_facility_3d/source/env_base99_updates_v022_import_manifest.json','runtime':ledger['runtime']}; gd['base_facility_scene_vfx']=vfx; globalp.write_text(json.dumps(gd,ensure_ascii=False,indent=2)+'\n')
 print('BASE99_V022_IMPORTED packages=14 scene_vfx=1')

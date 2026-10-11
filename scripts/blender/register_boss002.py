@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys, json, copy, re, hashlib, shutil
 from datetime import datetime
@@ -43,7 +48,7 @@ if not found:
     ws.auto_filter.ref=f'A5:Y{row}'
     wb['域变更日志'].append(['v0.1.新增Boss002',datetime(2026,10,3),'Codex',ID,'新增002显示器Boss，仅T Pose无骨骼模型，独立制作明细账；尚无运行时映射'])
 else: row=found[0]
-source=BASE/'source'/f'{SLUG}_source_v001.blend'
+source=source_path(BASE/'source'/f'{SLUG}_source_v001.blend')
 if finish:
     assert source.exists()
     ws.cell(row,11,'Blender源已完成'); ws.cell(row,15,source.relative_to(ROOT).as_posix())
@@ -73,6 +78,6 @@ for c in s[10]:c.fill=PatternFill('solid',fgColor='DCE8DE');c.font=Font(name='Mi
 for col,width in [('A',23),('B',44),('C',53),('D',15)]:s.column_dimensions[col].width=width
 for r in range(1,s.max_row+1):s.row_dimensions[r].height=32
 s.sheet_view.showGridLines=False;s.freeze_panes='B11';s.auto_filter.ref='A10:D17'
-book.save(BASE/'source/boss002_production_ledger.xlsx')
+book.save(source_path(BASE/'source/boss002_production_ledger.xlsx'))
 print('REGISTERED',ID,'row',row,'finish',finish)
 

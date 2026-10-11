@@ -1,4 +1,9 @@
 """Static roundtrip/export guard complementary to real Godot renderer acceptance."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 import hashlib
 import json
 import struct
@@ -66,7 +71,7 @@ def glb_triangle_count(data: dict[str, Any], path: Path) -> int:
 def check_tower(slug: str) -> dict[str, Any]:
     runtime_manifest = read_json(BASE / "runtime" / slug / "asset_manifest.json")
     version = str(runtime_manifest["version"])
-    manifest_path = BASE / "source" / slug / "export" / version / "export_manifest.json"
+    manifest_path = source_path(BASE / "source" / slug / "export" / version / "export_manifest.json")
     manifest = read_json(manifest_path)
     assert manifest.get("version") == version, f"export version mismatch: {slug}"
     export_source = str(manifest["source"])
@@ -81,7 +86,7 @@ def check_tower(slug: str) -> dict[str, Any]:
         assert derived_sha256, f"derived SHA-256 missing: {slug}"
         assert sha256(ROOT / derived) == derived_sha256, f"derived SHA-256 mismatch: {slug}"
 
-    catalog = read_json(BASE / "source" / slug / version / "catalog.json")
+    catalog = read_json(source_path(BASE / "source" / slug / version / "catalog.json"))
     frozen = {str(record["slug"]): record for record in catalog["packages"]}
     component_evidence: list[dict[str, Any]] = []
     actual_total = 0

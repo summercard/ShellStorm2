@@ -1,4 +1,9 @@
 """Original shoulder-driven jog, explicit palm grip, preview-only pistol."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys, math, json, hashlib, shutil
 sys.dont_write_bytecode=True
@@ -9,8 +14,8 @@ from export_character_bundle import signature
 ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production'
 PACKAGE=BASE/'v015'; OUT=ROOT/'outputs/character_pipeline/v015'
-MODEL=PACKAGE/'source/model/chr_bunny01_model_v015.blend'
-TARGET=PACKAGE/'source/animation/chr_bunny01_animation_v015.blend'
+MODEL=source_path(PACKAGE/'source/model/chr_bunny01_model_v015.blend')
+TARGET=source_path(PACKAGE/'source/animation/chr_bunny01_animation_v015.blend')
 assert not TARGET.exists() or '--replace-generated' in sys.argv,'Preserve existing artist work'
 bpy.ops.wm.open_mainfile(filepath=str(BASE/'v014/source/animation/chr_bunny01_animation_v014.blend'))
 if bpy.context.object and bpy.context.object.mode!='OBJECT': bpy.ops.object.mode_set(mode='OBJECT')

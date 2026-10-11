@@ -8,7 +8,7 @@
 
 ## 结果与验收
 
-- Blender源：`assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend`
+- Blender源：`art_source/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend`
 - 组件包：23；分类：9；输出网格：39。
 - 材质：4个共享材质；78个制作源与输出网格、70,268面通过逐面PaletteUV与外链共享色盘检查。
 - 专项验证：组件清单、统一朝向、底面锚点、唯一标准墙、墙体尺寸及两块地板均通过，退出码0。

@@ -1,10 +1,15 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector,Quaternion,Matrix
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/keyboard_v013';P.mkdir(exist_ok=True)
 helpers=(R/'scripts/blender/animate_boss002_idle_v010.py').read_text(encoding='utf-8');helpers=helpers[helpers.index('def axis('):helpers.index('animated=[')]
 for kind in ['model','animation']:
- bpy.ops.wm.open_mainfile(filepath=str(B/f'source/enm_boss_monitor002_{kind}_v011.blend'));s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;rig=bpy.data.objects['Boss002_Rig'];arm=rig.data;ctrl=bpy.data.objects['ExpressionController']
+ bpy.ops.wm.open_mainfile(filepath=str(source_path(B/f'source/enm_boss_monitor002_{kind}_v011.blend')));s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;rig=bpy.data.objects['Boss002_Rig'];arm=rig.data;ctrl=bpy.data.objects['ExpressionController']
  rig['expression_state']=0;fc=ctrl.driver_add('["expression_index"]');v=fc.driver.variables.new();v.name='state';v.targets[0].id=rig;v.targets[0].data_path='["expression_state"]';fc.driver.expression='int(state)'
  s['asset_version']='v013'
  for ob in s.objects:
@@ -22,7 +27,7 @@ for kind in ['model','animation']:
     weights=[(g.group,g.weight) for g in vert.groups]
     for group,w in weights:o.vertex_groups[group].add([vert.index],w*(1-t),'REPLACE')
     hand.add([vert.index],t,'REPLACE')
- if kind=='model':bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v013.blend'));continue
+ if kind=='model':bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v013.blend')));continue
  for act in list(bpy.data.actions):
   rig.animation_data.action=act;rig['expression_state']=0;rig.keyframe_insert(data_path='["expression_state"]',frame=1,group='Expression state')
  rig.animation_data.action=None;exec(helpers);pose(1);bpy.context.view_layer.update()
@@ -98,8 +103,8 @@ for kind in ['model','animation']:
  for sc in bpy.data.scenes:sc.frame_start=1;sc.frame_end=55;sc.render.fps=30
  exec((R/'scripts/blender/boss002_flat_grip_v013.py').read_text(encoding='utf-8'))
  exec((R/'scripts/blender/boss002_impact_preview_v013.py').read_text(encoding='utf-8'))
- s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v013.blend'))
-c=json.loads((B/'source/rig_contract_v011.json').read_text());c.update(version='v013',formal_animations_authored=['idle','move','melee_keyboard'],melee_keyboard={'fps':30,'start':1,'end':55,'duration_seconds':1.8,'impact_frame':33,'state_property':'Boss002_Rig.expression_state','gameplay_damage':False,'flat_ground_contact':True,'expression_scale':1.22,'impact_vfx':'BOSS002_IMPACT_PREVIEW collection; source preview only'});(B/'source/rig_contract_v013.json').write_text(json.dumps(c,indent=2),encoding='utf-8')
+ s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v013.blend')))
+c=json.loads((source_path(B/'source/rig_contract_v011.json')).read_text());c.update(version='v013',formal_animations_authored=['idle','move','melee_keyboard'],melee_keyboard={'fps':30,'start':1,'end':55,'duration_seconds':1.8,'impact_frame':33,'state_property':'Boss002_Rig.expression_state','gameplay_damage':False,'flat_ground_contact':True,'expression_scale':1.22,'impact_vfx':'BOSS002_IMPACT_PREVIEW collection; source preview only'});(source_path(B/'source/rig_contract_v013.json')).write_text(json.dumps(c,indent=2),encoding='utf-8')
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;cam=scene.camera;cam.location=(5,12,5.5);cam.rotation_euler=(Vector((0,.3,2))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=9;scene.cycles.samples=12;scene.render.resolution_x=960;scene.render.resolution_y=800
 for f in [1,13,23,33,41,55]:
  scene.frame_set(f);scene.render.filepath=str(P/('pose_%03d.png'%f));bpy.ops.render.render(write_still=True)

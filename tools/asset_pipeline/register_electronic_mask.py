@@ -2,6 +2,11 @@
 
 Separate transactions: asset main row first, then component/Prefab tables.
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 from pathlib import Path
 from copy import copy,deepcopy
 from collections import Counter
@@ -17,7 +22,7 @@ ASSET=ROOT/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny0
 ID='CHR-PLY-BUNNY01-FACE-ELECTRONIC-MASK'
 PREFAB=ASSET/'runtime/chr_bunny01_electronic_mask_root.tscn'
 GLB=ASSET/'components/chr_bunny01_electronic_mask_visual.glb'
-BLEND=ASSET/'source/chr_bunny01_electronic_mask_model_v001.blend'
+BLEND=source_path(ASSET/'source/chr_bunny01_electronic_mask_model_v001.blend')
 BASE=ROOT/'assets/registry/ledger_split_baseline.json'
 OUT=ROOT/'outputs/electronic_mask/ledger'
 def rel(p): return p.relative_to(ROOT).as_posix()

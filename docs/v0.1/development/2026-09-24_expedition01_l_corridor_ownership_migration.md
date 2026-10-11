@@ -8,7 +8,7 @@
 
 | 项 | 迁移前 | 迁移后 |
 |---|---|---|
-| 目录 | `assets/art/environments/tower_zones/battle/source/room_types/l_corridor/` | `assets/art/environments/tower_zones/expedition/source/room_types/l_corridor/` |
+| 目录 | `art_source/environments/tower_zones/battle/source/room_types/l_corridor/` | `art_source/environments/tower_zones/expedition/source/room_types/l_corridor/` |
 | `block_id` | `battle` | `expedition` |
 | 资产 ID | `ENV-BATTLE-L-CORRIDOR-TYPE` | `ENV-EXPEDITION-L01-L-CORRIDOR` |
 | `floor_range` | `battle level 01 / unassigned instance` | `expedition 01 / unassigned instance` |
@@ -53,6 +53,6 @@ battle 侧不留副本，`tower_zones/battle/source/room_types/` 随迁后为空
 ## 未执行
 
 - 未修改走廊几何、材质、PaletteUV、门位与设施布置；未导出 GLB、未生成碰撞或 PackedScene、未接入 Godot 运行场景。
-- 远征01 版图（`source/art/whitebox/tower_zones/expedition_01/v001/data/level_plan.json`）与白盒目录**仍无走廊席位与走廊白模**，尺寸和门位沿用参考图推定值。接入前需远征白盒补走廊白模，届时需重新核对门连接。
+- 远征01 版图（`art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json`）与白盒目录**仍无走廊席位与走廊白模**，尺寸和门位沿用参考图推定值。接入前需远征白盒补走廊白模，届时需重新核对门连接。
 - 未改 Skill 内的房间种类清单；`L_CORRIDOR` 是否登记为正式房间种类由业主决定。
 - 未动 `_scratch/entry_cinematic_project/` 下的整份镜像副本（非仓库正本）。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "S6 账本登记与状态推进"
+  short_description: "以账本为核心登记资产并推进制作状态"
+  default_prompt: "使用 $06-character-ledger 把当前角色类资产登记到所属分账本并推进制作状态。"

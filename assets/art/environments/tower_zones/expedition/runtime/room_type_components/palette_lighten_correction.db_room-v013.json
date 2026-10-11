@@ -278,7 +278,7 @@
   },
   "records": [
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/expedition_db_room_components_source_v013.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/expedition_db_room_components_source_v013.blend",
       "applied": true,
       "meshes": 296,
       "meshes_missing_uv": 0,
@@ -330,7 +330,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/cable_coil_wall/cable_coil_wall.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/cable_coil_wall/cable_coil_wall.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -359,7 +359,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/center_double_sided_repair_island/center_double_sided_repair_island.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/center_double_sided_repair_island/center_double_sided_repair_island.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -396,7 +396,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/equipment_rack_ne/equipment_rack_ne.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/equipment_rack_ne/equipment_rack_ne.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -433,7 +433,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_east/island_cart_east.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_east/island_cart_east.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -464,7 +464,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_west/island_cart_west.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_west/island_cart_west.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -495,7 +495,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_gantry/raised_service_gantry.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_gantry/raised_service_gantry.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -525,7 +525,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_platform/raised_service_platform.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_platform/raised_service_platform.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -560,7 +560,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_00/rear_server_00.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_00/rear_server_00.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -593,7 +593,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_01/rear_server_01.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_01/rear_server_01.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -626,7 +626,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_02/rear_server_02.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_02/rear_server_02.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -659,7 +659,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_03/rear_server_03.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_03/rear_server_03.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -692,7 +692,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_04/rear_server_04.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_04/rear_server_04.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -725,7 +725,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_05/rear_server_05.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_05/rear_server_05.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -758,7 +758,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_00/rear_service_cart_00.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_00/rear_service_cart_00.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -789,7 +789,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_01/rear_service_cart_01.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_01/rear_service_cart_01.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -820,7 +820,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_02/rear_service_cart_02.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_02/rear_service_cart_02.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -851,7 +851,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_00/right_front_cable_reel_00.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_00/right_front_cable_reel_00.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -878,7 +878,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_01/right_front_cable_reel_01.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_01/right_front_cable_reel_01.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -905,7 +905,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_service_terminal/right_front_service_terminal.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_service_terminal/right_front_service_terminal.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -930,7 +930,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_00/right_front_shelf_00.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_00/right_front_shelf_00.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -959,7 +959,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_01/right_front_shelf_01.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_01/right_front_shelf_01.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -988,7 +988,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_02/right_front_shelf_02.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_02/right_front_shelf_02.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -1017,7 +1017,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/shelving_heavy_north/shelving_heavy_north.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/shelving_heavy_north/shelving_heavy_north.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1054,7 +1054,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_light_pylon/wall_light_pylon.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_light_pylon/wall_light_pylon.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1079,7 +1079,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_screen_bank/wall_screen_bank.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_screen_bank/wall_screen_bank.blend",
       "applied": false,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1107,7 +1107,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_service_run/wall_service_run.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_service_run/wall_service_run.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -1132,7 +1132,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_l_east/workbench_l_east.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_l_east/workbench_l_east.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1169,7 +1169,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_west/workbench_west.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_west/workbench_west.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1209,7 +1209,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-1/derived_tile_-1_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-1/derived_tile_-1_-1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1242,7 +1242,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-2/derived_tile_-1_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-2/derived_tile_-1_-2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1273,7 +1273,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-3/derived_tile_-1_-3.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-3/derived_tile_-1_-3.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1304,7 +1304,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_0/derived_tile_-1_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_0/derived_tile_-1_0.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1335,7 +1335,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_1/derived_tile_-1_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_1/derived_tile_-1_1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1366,7 +1366,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_2/derived_tile_-1_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_2/derived_tile_-1_2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1397,7 +1397,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-1/derived_tile_-2_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-1/derived_tile_-2_-1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1428,7 +1428,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-2/derived_tile_-2_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-2/derived_tile_-2_-2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1459,7 +1459,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_0/derived_tile_-2_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_0/derived_tile_-2_0.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1490,7 +1490,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_1/derived_tile_-2_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_1/derived_tile_-2_1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1521,7 +1521,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_2/derived_tile_-2_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_2/derived_tile_-2_2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1552,7 +1552,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-1/derived_tile_-3_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-1/derived_tile_-3_-1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1583,7 +1583,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-2/derived_tile_-3_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-2/derived_tile_-3_-2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1614,7 +1614,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_0/derived_tile_-3_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_0/derived_tile_-3_0.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1645,7 +1645,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_1/derived_tile_-3_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_1/derived_tile_-3_1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1676,7 +1676,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_2/derived_tile_-3_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_2/derived_tile_-3_2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1707,7 +1707,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-1/derived_tile_-4_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-1/derived_tile_-4_-1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1738,7 +1738,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-2/derived_tile_-4_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-2/derived_tile_-4_-2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1769,7 +1769,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_0/derived_tile_-4_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_0/derived_tile_-4_0.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1800,7 +1800,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_1/derived_tile_-4_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_1/derived_tile_-4_1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1831,7 +1831,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_2/derived_tile_-4_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_2/derived_tile_-4_2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1862,7 +1862,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-1/derived_tile_0_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-1/derived_tile_0_-1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1893,7 +1893,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-2/derived_tile_0_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-2/derived_tile_0_-2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1924,7 +1924,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-3/derived_tile_0_-3.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-3/derived_tile_0_-3.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1955,7 +1955,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_0/derived_tile_0_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_0/derived_tile_0_0.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -1986,7 +1986,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_1/derived_tile_0_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_1/derived_tile_0_1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2017,7 +2017,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_2/derived_tile_0_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_2/derived_tile_0_2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2050,7 +2050,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-1/derived_tile_1_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-1/derived_tile_1_-1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2081,7 +2081,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-2/derived_tile_1_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-2/derived_tile_1_-2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2112,7 +2112,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_0/derived_tile_1_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_0/derived_tile_1_0.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2143,7 +2143,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_1/derived_tile_1_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_1/derived_tile_1_1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2174,7 +2174,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_2/derived_tile_1_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_2/derived_tile_1_2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2205,7 +2205,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-1/derived_tile_2_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-1/derived_tile_2_-1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2236,7 +2236,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-2/derived_tile_2_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-2/derived_tile_2_-2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2267,7 +2267,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_0/derived_tile_2_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_0/derived_tile_2_0.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2298,7 +2298,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_1/derived_tile_2_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_1/derived_tile_2_1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2329,7 +2329,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_2/derived_tile_2_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_2/derived_tile_2_2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2360,7 +2360,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-1/derived_tile_3_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-1/derived_tile_3_-1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2391,7 +2391,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-2/derived_tile_3_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-2/derived_tile_3_-2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2422,7 +2422,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_0/derived_tile_3_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_0/derived_tile_3_0.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2453,7 +2453,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_1/derived_tile_3_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_1/derived_tile_3_1.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2484,7 +2484,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_2/derived_tile_3_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_2/derived_tile_3_2.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2515,7 +2515,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_conduit_run/floor_conduit_run.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_conduit_run/floor_conduit_run.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2538,7 +2538,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_hazard_edging/floor_hazard_edging.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_hazard_edging/floor_hazard_edging.blend",
       "applied": false,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2562,7 +2562,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-1/ceiling_deck_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-1/ceiling_deck_-1.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2587,7 +2587,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-2/ceiling_deck_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-2/ceiling_deck_-2.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2612,7 +2612,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-3/ceiling_deck_-3.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-3/ceiling_deck_-3.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2637,7 +2637,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_0/ceiling_deck_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_0/ceiling_deck_0.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2662,7 +2662,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_1/ceiling_deck_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_1/ceiling_deck_1.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2687,7 +2687,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_2/ceiling_deck_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_2/ceiling_deck_2.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2712,7 +2712,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_lighting/ceiling_lighting.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_lighting/ceiling_lighting.blend",
       "applied": true,
       "meshes": 4,
       "meshes_missing_uv": 0,
@@ -2739,7 +2739,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2760,7 +2760,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2791,7 +2791,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2818,7 +2818,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2841,7 +2841,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/corner_guard/corner_guard.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/corner_guard/corner_guard.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2866,7 +2866,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_bus/rear_server_bus.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_bus/rear_server_bus.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,
@@ -2889,7 +2889,7 @@
       "version": "v013"
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_top_service/wall_top_service.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_top_service/wall_top_service.blend",
       "applied": true,
       "meshes": 2,
       "meshes_missing_uv": 0,

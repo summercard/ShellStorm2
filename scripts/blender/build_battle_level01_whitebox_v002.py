@@ -19,7 +19,7 @@ from mathutils import Vector
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT_ROOT = ROOT / "source/art/whitebox/tower_zones/battle_level01/v002"
+OUTPUT_ROOT = ROOT / "art_source/design/whitebox/tower_zones/battle_level01/v002"
 BLEND_DIR = OUTPUT_ROOT / "blender"
 PACKAGE_DIR = OUTPUT_ROOT / "data/component_packages"
 VALIDATION_DIR = OUTPUT_ROOT / "data/validation"

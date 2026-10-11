@@ -11,10 +11,10 @@ import bpy
 
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-V007 = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend"
-V008 = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend"
+V007 = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend"
+V008 = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend"
 CATALOG = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v008/base_facility_component_catalog_v008.json"
-PACKAGE_ROOT = PROJECT / "source/art/blender/base_facility_layout/component_packages_v008"
+PACKAGE_ROOT = PROJECT / "art_source/design/blender/base_facility_layout/component_packages_v008"
 
 LOCKED = (
     "11_四向保留墙体系统_资产包",

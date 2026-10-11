@@ -3,6 +3,11 @@
 Blender --background --python scripts/blender/export_character_bundle.py -- <production/vNNN>
 Exports evaluated bone animation for the legacy Node3D adapter plus skinned GLB.
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import sys
 import json
 import hashlib
@@ -21,8 +26,8 @@ def signature(rig):
 def main():
     root=Path(__file__).resolve().parents[2]
     package=Path(sys.argv[sys.argv.index('--')+1]).resolve()
-    models=list((package/'source/model').glob('*.blend'))
-    motions=list((package/'source/animation').glob('*.blend'))
+    models=list((source_path(package/'source/model')).glob('*.blend'))
+    motions=list((source_path(package/'source/animation')).glob('*.blend'))
     assert len(models)==len(motions)==1, 'One model master and one animation master required'
     version=package.name
     output=package/'exports'

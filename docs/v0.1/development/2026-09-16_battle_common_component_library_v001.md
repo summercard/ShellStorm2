@@ -5,7 +5,7 @@
 
 ## 变更与原因
 
-用户要求新增区块用 Blender 组件文件并排列组件。以已验收的主路内容房02数据机房 v003 为来源，不修改原房间，复制43个设施/环境支持包到 `assets/art/environments/tower_zones/battle/source/common_components/v001/战局区块_通用组件库_v001.blend`。组件按服务器、工作终端、中央设备岛、维修与机箱、门框与标识、环境陈设、环境支持7类排列。
+用户要求新增区块用 Blender 组件文件并排列组件。以已验收的主路内容房02数据机房 v003 为来源，不修改原房间，复制43个设施/环境支持包到 `art_source/environments/tower_zones/battle/source/common_components/v001/战局区块_通用组件库_v001.blend`。组件按服务器、工作终端、中央设备岛、维修与机箱、门框与标识、环境陈设、环境支持7类排列。
 
 每包建立独立 Empty 根节点，网格转换为根节点局部坐标，XY居中、底面Z=0；主体和自发光保持分离。制作源默认隐藏、输出默认显示；Collection、磁盘manifest和catalog一一对应。房间专属墙与地砖不进入通用库，长管线/地面电缆保留为需要目标房间重排的环境支持件。
 

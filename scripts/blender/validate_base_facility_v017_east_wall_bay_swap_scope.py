@@ -9,7 +9,7 @@ from pathlib import Path
 import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
 PALETTE = PROJECT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 REPORT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v017/east_wall_bay_swap_scope_palette_validation.json"
 VALIDATOR = PROJECT / ".codex/skills/blender-game-prop-standard/scripts/validate_game_prop.py"

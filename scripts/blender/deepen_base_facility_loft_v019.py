@@ -1,7 +1,7 @@
 import bpy, bmesh, math, json, hashlib, random, importlib.util
 from pathlib import Path
 from mathutils import Vector, Matrix
-P=Path('/Users/summercards/ShellStorm2');R=P/'outputs/verification/base_facility_loft_v019';OUT=P/'source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend';rng=random.Random(1909)
+P=Path('/Users/summercards/ShellStorm2');R=P/'outputs/verification/base_facility_loft_v019';OUT=P/'art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend';rng=random.Random(1909)
 prev=json.loads((P/'outputs/verification/base_facility_loft_v018/catalog.json').read_text());C=[bpy.data.collections[x['collection']] for x in prev]+[bpy.data.collections['116_二楼地板色彩深化_资产包']]
 allowed=set(o for c in C for o in c.all_objects)
 spec=importlib.util.spec_from_file_location('old',P/'scripts/blender/reorganize_base_facility_component_packages_v017.py');old=importlib.util.module_from_spec(spec);spec.loader.exec_module(old)
@@ -350,7 +350,7 @@ for c,src in zip(C,S):
   o['fixed_display_attachment']=key not in ['主体','柔和自发光'] and c!=C[17]
  src.hide_render=True;src.hide_viewport=True
  c['组织版本']='v019';c['当前状态']='参考重点深化_待验收';c['正面方向']='-Y';c['楼面标高']=6.09
- center,dims=old.bbox([o for o in out.objects if o.type=='MESH']);slug=c['资产包键'];folder=P/'source/art/blender/base_facility_layout/component_packages/v019'/slug;folder.mkdir(parents=True,exist_ok=True)
+ center,dims=old.bbox([o for o in out.objects if o.type=='MESH']);slug=c['资产包键'];folder=P/'art_source/design/blender/base_facility_layout/component_packages/v019'/slug;folder.mkdir(parents=True,exist_ok=True)
  rec={'package_id':slug,'collection':c.name,'version':'v019','source_blend':str(OUT.relative_to(P)),'source_collection':src.name,'output_collection':out.name,'objects':[o.name for o in out.objects],'triangles':count(out.objects),'center':center,'dimensions':dims,'local_origin':[center[0],center[1],center[2]-dims[2]/2],'front':'-Y','exported':False,'runtime_integrated':False,'collision':'unchanged','floor_height':6.09,'material_roles':[m.name for m in M]}
  (folder/'asset_manifest.json').write_text(json.dumps(rec,ensure_ascii=False,indent=2));catalog.append(rec)
 bpy.context.view_layer.update();after={n:sig(bpy.data.objects[n]) for n in locked};diff=[n for n in locked if locked[n]!=after[n]];(R/'locked_after.json').write_text(json.dumps(after,ensure_ascii=False));assert not diff,diff[:20]

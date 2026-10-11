@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,math
 from pathlib import Path
 from mathutils import Vector
 B=Path('assets/art/enemies/bosses/enm_boss_monitor002').resolve();P=B/'previews/cable_v025'
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v025.blend'));s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;r=bpy.data.objects['Boss002_Rig']
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v025.blend')));s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;r=bpy.data.objects['Boss002_Rig']
 records=[];offsets={x:[] for x in ['L','R']};body=[];maxgap=0;scales=[]
 for f in range(1,62):
  s.frame_set(f);body.append(r.pose.bones['rear_axle'].matrix.translation.copy());row={'frame':f}

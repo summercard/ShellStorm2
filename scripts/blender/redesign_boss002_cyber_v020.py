@@ -1,14 +1,19 @@
 """Boss002: designed cyber pulse FX, flat fills, no outlines or sketch textures."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib,random
 from pathlib import Path
 from mathutils import Vector
 R=Path.cwd();B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/heavy_v020';P.mkdir(exist_ok=True)
 def snapshot():
  return hashlib.sha256(repr([(a.name,[(f.data_path,f.array_index,[tuple(k.co) for k in f.keyframe_points]) for f in a.fcurves]) for a in bpy.data.actions if a.name in ['idle','move','melee_keyboard','heavy_spin_slam']]).encode()).hexdigest()
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v019.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v019.blend')))
 for sc in bpy.data.scenes:sc['asset_version']='v020'
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v020.blend'))
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v019.blend'));before=snapshot()
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v020.blend')))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v019.blend')));before=snapshot()
 s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;rig=bpy.data.objects['Boss002_Rig'];fx=bpy.data.collections['BOSS002_IMPACT_PREVIEW']
 s.frame_set(69);origin=next(o.location.copy() for o in fx.objects if 'ground shock ring' in o.name);origin.z=.045
 for ob in list(fx.objects):bpy.data.objects.remove(ob,do_unlink=True)
@@ -73,7 +78,7 @@ for j in range(24):
 for sc in bpy.data.scenes:sc['asset_version']='v020'
 fx['style']='cyber pulse: unoutlined cool cyan/teal solid shapes, muted magenta data accents, segmented expanding rings';fx['palette']='cool desaturated blue/cyan, restrained magenta, ice highlights'
 assert before==snapshot();s.frame_set(1)
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v020.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v020.blend')))
 (P/'style_audit.json').write_text(json.dumps({'character_actions_unchanged':True,'fx_objects':len(fx.objects),'style':fx['style'],'no_outlines':True,'no_texture_nodes':all(not any(n.type=='TEX_IMAGE' for n in m.node_tree.nodes) for m in mats),'first_last_hidden':all((s.frame_set(f) is None and all(o.hide_render for o in fx.objects)) for f in [1,97])},indent=2))
 s.cycles.samples=12;s.render.resolution_x=960;s.render.resolution_y=800
 for f in [29,67,70]:s.frame_set(f);s.render.filepath=str(P/('pose_%03d.png'%f));bpy.ops.render.render(write_still=True)

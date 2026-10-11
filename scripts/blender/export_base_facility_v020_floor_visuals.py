@@ -19,7 +19,7 @@ import export_base_facility_v017_floor_visuals as base
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SOURCE_BLEND = PROJECT_ROOT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+SOURCE_BLEND = PROJECT_ROOT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
 COMPONENT_ROOT = PROJECT_ROOT / "assets/art/environments/base_facility_3d/components"
 GROUND_OUTPUT = COMPONENT_ROOT / "env_base99_floor_details_v020" / "env_base99_floor_details_v020_visual_top3d_v002.glb"
 LOFT_OUTPUT = COMPONENT_ROOT / "env_base99_loft_floor_finish_v020" / "env_base99_loft_floor_finish_v020_visual_top3d_v002.glb"

@@ -2,6 +2,10 @@
 name: music-asset-pipeline
 description: 为 ShellStorm2 制作、导入、编排或验收BGM与场景配乐资产。用于曲目A/B版本、循环、场景触发、Music总线与授权登记；不处理短时SFX、UI图像、3D模型或玩法规则。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+新增 MP3/WAV 制作母版放在 `art_source/music/<music_id>/source/`；正式 OGG 和 MusicCatalog 路径保持不变。 制作前读工程 `docs/ART_SOURCE_LAYOUT.md`；制作源参与 Git、由 `.gdignore` 和导出过滤隔离，临时输出走工程外 `ShellStorm2-work`。保留最新母版，旧源进入上层备份；现有版本号不变。
+
 
 # Music Asset Pipeline
 

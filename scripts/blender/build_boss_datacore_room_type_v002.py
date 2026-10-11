@@ -3,8 +3,8 @@ import bpy, math, json, hashlib, random, importlib.util, sys
 from pathlib import Path
 from mathutils import Vector
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002'
-WHITE = ROOT / 'source/art/whitebox/tower_zones/expedition_01/v001/blender/远征关卡01_白模_Boss竞技场_50x40m_v001.blend'
+OUT = ROOT / 'art_source/environments/tower_zones/expedition/source/room_types/boss_room/v002'
+WHITE = ROOT / 'art_source/design/whitebox/tower_zones/expedition_01/v001/blender/远征关卡01_白模_Boss竞技场_50x40m_v001.blend'
 PAL = ROOT / 'assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'
 BLEND = OUT / 'Boss房种类_故障数据库_50x40m_v002.blend'
 random.seed(90222)

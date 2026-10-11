@@ -614,6 +614,14 @@ func set_room_light_on(enabled: bool) -> bool:
 	return light_switch.set_light_on(enabled)
 
 
+## 仅供主线开场 2.5 使用：把灯光状态写进现有待恢复状态，
+## 保留同一份状态里的容器等其它字段，不提前构建 RuntimeDetail。
+func apply_narrative_light_state(enabled: bool) -> bool:
+	if not _pending_detail_runtime_state.is_empty():
+		_pending_detail_runtime_state["room_light_on"] = enabled
+	return set_room_light_on(enabled)
+
+
 ## 返回供剧情相机使用的稳定灯光开关锚点，不暴露节点路径。
 ## 新主线从 98F 东侧进入 99F，因此默认优先东侧开关。
 func get_narrative_light_switch_anchor(preferred_entry := "east") -> Variant:

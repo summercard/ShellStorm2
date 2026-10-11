@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "source": "source/art/whitebox/tower_zones/stairs/v013/blender/whitebox_tower_stairs_v013.blend",
+  "source": "art_source/design/whitebox/tower_zones/stairs/v013/blender/whitebox_tower_stairs_v013.blend",
   "origin": "upper_endpoint",
   "runLength": 15,
   "riseHeight": 6,

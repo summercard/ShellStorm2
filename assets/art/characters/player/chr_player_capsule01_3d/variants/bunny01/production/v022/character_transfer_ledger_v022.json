@@ -74,7 +74,7 @@
   },
   "files": [
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/source/animation/chr_bunny01_animation_v022.blend",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/source/animation/chr_bunny01_animation_v022.blend",
       "sha256": "f4a58ce316ee2f44e4224a884c157f28443d3bfca8fc349ae2f106bc27e1d6e2",
       "bytes": 38001822
     },

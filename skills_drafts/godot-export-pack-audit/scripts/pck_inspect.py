@@ -43,10 +43,10 @@ def main():
     print(f"包内总字节: {total/1048576:.1f} MB")
     print()
     keys = [
-        "assets/art/environments/tower_zones/expedition/source",
-        "assets/art/environments/tower_zones/battle/source",
-        "assets/art/environments/tower_zones/rooftop/source",
-        "assets/art/environments/tower_zones/shared/source",
+        "art_source/environments/tower_zones/expedition/source",
+        "art_source/environments/tower_zones/battle/source",
+        "art_source/environments/tower_zones/rooftop/source",
+        "art_source/environments/tower_zones/shared/source",
         "assets/art/environments/tower_zones/expedition",
         "assets/art/environments/tower_zones",
         "assets/art/",

@@ -21,7 +21,7 @@ COMPONENT_ROOT = Path(
     "assets/art/environments/tower_zones/expedition/components/room_type_components"
 )
 SOURCE_ROOT = Path(
-    "assets/art/environments/tower_zones/expedition/source/common_components"
+    "art_source/environments/tower_zones/expedition/source/common_components"
 )
 IMPORT_SCRIPT = (
     "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"

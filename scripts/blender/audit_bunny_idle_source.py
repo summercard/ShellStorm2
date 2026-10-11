@@ -2,7 +2,7 @@
 import bpy, json
 from pathlib import Path
 root = Path(__file__).resolve().parents[2]
-source = root / 'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v024/source/animation/chr_bunny01_animation_v024.blend'
+source = root / 'art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v024/source/animation/chr_bunny01_animation_v024.blend'
 bpy.ops.wm.open_mainfile(filepath=str(source))
 s = next(s for s in bpy.data.scenes if s.get('preview_clip') == 'idle')
 bpy.context.window.scene = s

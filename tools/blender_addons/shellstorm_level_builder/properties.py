@@ -57,7 +57,7 @@ class SSLB_SceneSettings(PropertyGroup):
     project_root: StringProperty(name="项目根目录", subtype="DIR_PATH")
     render_root: StringProperty(
         name="验收图目录",
-        default="source/art/blender/level_builder/renders",
+        default="art_source/design/blender/level_builder/renders",
         description="相对项目根目录，或绝对路径",
     )
     block_id: EnumProperty(name="关卡区块", items=BLOCK_ITEMS, default="stairs")
@@ -65,7 +65,7 @@ class SSLB_SceneSettings(PropertyGroup):
     package_version: StringProperty(name="资产包版本", default="v001")
     package_root: StringProperty(
         name="清单目录",
-        default="source/art/blender/level_builder/component_packages_v001",
+        default="art_source/design/blender/level_builder/component_packages_v001",
         description="相对项目根目录，或绝对路径",
     )
     search: StringProperty(name="搜索组件", default="")

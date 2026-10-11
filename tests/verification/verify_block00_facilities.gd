@@ -1,7 +1,7 @@
 extends Node3D
 ## 98F设施独立加载、真实房间装配、通道碰撞与渲染验收。
 const OUT := "res://outputs/block00_story_rooms_20261009/"
-const MANIFEST := "res://assets/art/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json"
+const MANIFEST := "res://art_source/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json"
 var errors: Array[String] = []
 var checks := 0
 

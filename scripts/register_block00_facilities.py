@@ -8,7 +8,7 @@ R=Path(__file__).resolve().parents[1];sys.path.insert(0,str(R/'tools/asset_pipel
 from split_asset_ledger import FIRST_DATA_ROW,read_source_rows,_row_digest,col_digest,CONTENT_COLUMNS,dedupe_key_formula,dedupe_result_formula,sheet_digest
 from ledger_registry import LedgerIndex
 I=LedgerIndex.load(R);D=next(d for d in I.domains if d.key=='scenes')
-P=R/'assets/art/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json';m=json.loads(P.read_text('utf8'))
+P=R/'art_source/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json';m=json.loads(P.read_text('utf8'))
 qa=json.loads((R/'outputs/block00_story_rooms_20261009/facility_verification.json').read_text('utf8'));assert qa['passed'] and qa['checks']>=253
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 assert all(sha(Path(p))==h for p,h in m['protected_sources'].items())
@@ -21,7 +21,7 @@ names={'master_office':'父亲办公室','meeting_room':'会议室','corridor':'
 for d in m['rooms']:
  rid='ENV-BLOCK00-'+d['room_id'].replace('_','-').upper()+'-FACILITY-LAYOUT'
  p=R/d['scene_path'];text=p.read_text('utf8');text=text.replace('metadata/room_id =',f'metadata/asset_id = "{rid}"\nmetadata/asset_version = "v001"\nmetadata/room_id =',1);p.write_text(text,encoding='utf8')
- entries.append({'asset_id':rid,'slug':d['room_id']+'_facility_layout','name_zh':names[d['room_id']]+'设施布局','version':'v001','prefab_path':d['scene_path'],'source_path':'assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001/env_block00_story_rooms_source_v001.blend','bounds_size_m':None,'collision_policy':'referenced_prefabs','glb_path':'','layout':True,'instances':d['instances']})
+ entries.append({'asset_id':rid,'slug':d['room_id']+'_facility_layout','name_zh':names[d['room_id']]+'设施布局','version':'v001','prefab_path':d['scene_path'],'source_path':'art_source/environments/master_office_3d/source/env_block00_story_rooms/v001/env_block00_story_rooms_source_v001.blend','bounds_size_m':None,'collision_policy':'referenced_prefabs','glb_path':'','layout':True,'instances':d['instances']})
 assert not existing.intersection(d['asset_id'] for d in entries),'Already registered; do not rerun initialization.'
 updates={}
 for d in entries:

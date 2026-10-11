@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 import json
 import math
 import random
@@ -13,7 +18,7 @@ exec(compile(BASE_SCRIPT.read_bytes(), str(BASE_SCRIPT), "exec"), globals())
 
 
 ASSET_ROOT = PROJECT_ROOT / "assets" / "art" / "environments" / "british_corner_bookshop_3d"
-SOURCE_DIR = ASSET_ROOT / "source" / "british_corner_bookshop"
+SOURCE_DIR = source_path(ASSET_ROOT / "source" / "british_corner_bookshop")
 GAME_DIR = ASSET_ROOT / "game_output" / "british_corner_bookshop"
 PREVIEW_DIR = ASSET_ROOT / "previews"
 SHARED_DIR = ASSET_ROOT / "shared"

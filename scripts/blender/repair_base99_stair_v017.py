@@ -9,7 +9,7 @@ from pathlib import Path
 from mathutils import Vector, Matrix
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend'
+SOURCE = ROOT / 'art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend'
 REPORT = ROOT / 'outputs/verification/base99_stair_repair'
 
 
@@ -91,7 +91,7 @@ def merge_walk_surfaces():
 
 def sync_source_manifest():
     coll=next(c for c in bpy.data.collections if c.get('资产包键')=='northwest_l_stair')
-    path=ROOT/'source/art/blender/base_facility_layout/component_packages_v017/architecture/northwest_l_stair/asset_manifest.json'
+    path=ROOT/'art_source/design/blender/base_facility_layout/component_packages_v017/architecture/northwest_l_stair/asset_manifest.json'
     data=json.loads(path.read_text())
     objects=list(coll.all_objects)
     ps=[o.matrix_world@Vector(v) for o in objects if o.type=='MESH' and not o.name.startswith('COLLISION_') for v in o.bound_box]

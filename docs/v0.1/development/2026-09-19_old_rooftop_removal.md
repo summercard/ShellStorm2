@@ -10,7 +10,7 @@
 | --- | ---: | ---: | --- |
 | `assets/art/environments/rooftop_shelter_3d/` | 329 | 609 MB | 旧聚落天台：Blender 源 v021 + 68 个 layout 组件 GLB + 包装场景 + 预览图 / 报告 / 对比参考 |
 | `assets/art/environments/rooftop_shelter_diorama_3d/` | 45 | 83 MB | 微缩景观 v001–v003，**全项目零引用** |
-| `source/art/blender/environments_v01/rooftop_shelter_50m/` | 15 | 57 MB | 最早 50m 制作源 + 空组件骨架（4 个分类目录下只有 README） |
+| `art_source/design/blender/environments_v01/rooftop_shelter_50m/` | 15 | 57 MB | 最早 50m 制作源 + 空组件骨架（4 个分类目录下只有 README） |
 | **合计** | **389** | **749 MB** | |
 
 同时删除的专用件：

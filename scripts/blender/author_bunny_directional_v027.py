@@ -1,4 +1,9 @@
 """18 independently authored lateral/backward carry loops from v026 poses."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys,math,json,hashlib
 import bpy
@@ -7,10 +12,10 @@ sys.dont_write_bytecode=True
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import author_bunny_weapon_idles_v025 as h
 
-SOURCE=h.BASE/'source/animation/chr_bunny01_animation_v026.blend'
-TARGET=h.BASE/'source/animation/chr_bunny01_animation_v027.blend'
+SOURCE=source_path(h.BASE/'source/animation/chr_bunny01_animation_v026.blend')
+TARGET=source_path(h.BASE/'source/animation/chr_bunny01_animation_v027.blend')
 OUT=h.ROOT/'outputs/character_pipeline/directional_v027'
-TRANSFER=h.BASE/'source/animation/chr_bunny01_directional_v027.json'
+TRANSFER=source_path(h.BASE/'source/animation/chr_bunny01_directional_v027.json')
 DIRECTIONS={'strafe_left':(-1,0,0),'strafe_right':(1,0,0),'backward':(0,-1,0)}
 SPEEDS={'walking':(60,.55,.05),'moving':(48,.50,.075)}
 SPECS={}

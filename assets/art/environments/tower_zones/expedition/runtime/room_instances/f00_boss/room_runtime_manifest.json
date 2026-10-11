@@ -23,7 +23,7 @@
   "room_template": "res://source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/boss_50x40.json",
   "template_id": "boss_50x40",
   "template_variant": "",
-  "component_instances": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_instances.json",
+  "component_instances": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_instances.json",
   "component_library_version": "v011",
   "component_library_room_type": "BOSS_ROOM",
   "component_library_source_blend_sha256": "5047d566a33dbb13a2f0be6e6ee4a7445da13cb27745a5df6a10bdabfb99bf09",
@@ -42,7 +42,7 @@
    "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/archive_shelf/archive_shelf_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/archive_shelf/archive_shelf_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/archive_shelf/archive_shelf.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/archive_shelf/archive_shelf.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -54,7 +54,7 @@
    "ENV-EXPEDITION-L01-BOSS-CHAIR": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/chair/chair_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/chair/chair_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/chair/chair.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/chair/chair.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -66,7 +66,7 @@
    "ENV-EXPEDITION-L01-BOSS-DEBRIS_LARGE": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/debris_large/debris_large_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/debris_large/debris_large_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/debris_large/debris_large.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/debris_large/debris_large.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -78,7 +78,7 @@
    "ENV-EXPEDITION-L01-BOSS-DEBRIS_MEDIUM": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/debris_medium/debris_medium_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/debris_medium/debris_medium_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/debris_medium/debris_medium.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/debris_medium/debris_medium.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -90,7 +90,7 @@
    "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/debris_small/debris_small_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/debris_small/debris_small_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/debris_small/debris_small.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/debris_small/debris_small.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -102,7 +102,7 @@
    "ENV-EXPEDITION-L01-BOSS-FLOOR_BASE": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_base/floor_base_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/floor_base/floor_base_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_base/floor_base.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_base/floor_base.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -114,7 +114,7 @@
    "ENV-EXPEDITION-L01-BOSS-FLOOR_MARKING": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_marking/floor_marking_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/floor_marking/floor_marking_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_marking/floor_marking.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_marking/floor_marking.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -126,7 +126,7 @@
    "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_tile_5m_a/floor_tile_5m_a_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/floor_tile_5m_a/floor_tile_5m_a_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_tile_5m_a/floor_tile_5m_a.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_tile_5m_a/floor_tile_5m_a.blend",
     "collision_owner": "floor_support",
     "collision_policy": "external_floor_support",
     "bounds_size_m_godot": [
@@ -138,7 +138,7 @@
    "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_tile_5m_b/floor_tile_5m_b_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/floor_tile_5m_b/floor_tile_5m_b_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_tile_5m_b/floor_tile_5m_b.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_tile_5m_b/floor_tile_5m_b.blend",
     "collision_owner": "floor_support",
     "collision_policy": "external_floor_support",
     "bounds_size_m_godot": [
@@ -150,7 +150,7 @@
    "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_tile_5m_c/floor_tile_5m_c_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/floor_tile_5m_c/floor_tile_5m_c_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_tile_5m_c/floor_tile_5m_c.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_tile_5m_c/floor_tile_5m_c.blend",
     "collision_owner": "floor_support",
     "collision_policy": "external_floor_support",
     "bounds_size_m_godot": [
@@ -162,7 +162,7 @@
    "ENV-EXPEDITION-L01-BOSS-HEAVY_CONDUITS": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/heavy_conduits/heavy_conduits_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/heavy_conduits/heavy_conduits_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/heavy_conduits/heavy_conduits.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/heavy_conduits/heavy_conduits.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -174,7 +174,7 @@
    "ENV-EXPEDITION-L01-BOSS-MAIN_FAULT_SCREEN": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/main_fault_screen/main_fault_screen_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/main_fault_screen/main_fault_screen_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/main_fault_screen/main_fault_screen.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/main_fault_screen/main_fault_screen.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -186,7 +186,7 @@
    "ENV-EXPEDITION-L01-BOSS-PLANT_A": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_a/plant_a_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/plant_a/plant_a_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_a/plant_a.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_a/plant_a.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -198,7 +198,7 @@
    "ENV-EXPEDITION-L01-BOSS-PLANT_B": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_b/plant_b_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/plant_b/plant_b_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_b/plant_b.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_b/plant_b.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -210,7 +210,7 @@
    "ENV-EXPEDITION-L01-BOSS-PLANT_C": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_c/plant_c_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/plant_c/plant_c_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_c/plant_c.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_c/plant_c.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -222,7 +222,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack/server_rack_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack/server_rack_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack/server_rack.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack/server_rack.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -234,7 +234,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_compact/server_rack_compact_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_compact/server_rack_compact_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_compact/server_rack_compact.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_compact/server_rack_compact.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -246,7 +246,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT_DAMAGED": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_compact_damaged/server_rack_compact_damaged_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_compact_damaged/server_rack_compact_damaged_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_compact_damaged/server_rack_compact_damaged.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_compact_damaged/server_rack_compact_damaged.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -258,7 +258,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_damaged/server_rack_damaged_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_damaged/server_rack_damaged_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_damaged/server_rack_damaged.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_damaged/server_rack_damaged.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -270,7 +270,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED_TALL": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_damaged_tall/server_rack_damaged_tall_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_damaged_tall/server_rack_damaged_tall_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_damaged_tall/server_rack_damaged_tall.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_damaged_tall/server_rack_damaged_tall.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -282,7 +282,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_MID": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_mid/server_rack_mid_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_mid/server_rack_mid_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_mid/server_rack_mid.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_mid/server_rack_mid.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -294,7 +294,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_TALL": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_tall/server_rack_tall_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_tall/server_rack_tall_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_tall/server_rack_tall.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_tall/server_rack_tall.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -306,7 +306,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_under_screen/server_rack_under_screen_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_under_screen/server_rack_under_screen_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_under_screen/server_rack_under_screen.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_under_screen/server_rack_under_screen.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -318,7 +318,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN_DAMAGED": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_under_screen_damaged/server_rack_under_screen_damaged_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_under_screen_damaged/server_rack_under_screen_damaged_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_under_screen_damaged/server_rack_under_screen_damaged.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_under_screen_damaged/server_rack_under_screen_damaged.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -330,7 +330,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide/server_rack_wide_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_wide/server_rack_wide_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_wide/server_rack_wide.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_wide/server_rack_wide.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -342,7 +342,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide_damaged/server_rack_wide_damaged_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_wide_damaged/server_rack_wide_damaged_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_wide_damaged/server_rack_wide_damaged.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_wide_damaged/server_rack_wide_damaged.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -354,7 +354,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED_TALL": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide_damaged_tall/server_rack_wide_damaged_tall_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_wide_damaged_tall/server_rack_wide_damaged_tall_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_wide_damaged_tall/server_rack_wide_damaged_tall.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_wide_damaged_tall/server_rack_wide_damaged_tall.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -366,7 +366,7 @@
    "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_TALL": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide_tall/server_rack_wide_tall_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_wide_tall/server_rack_wide_tall_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_wide_tall/server_rack_wide_tall.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_wide_tall/server_rack_wide_tall.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -378,7 +378,7 @@
    "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_armored_5m/wall_skin_armored_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_skin_armored_5m/wall_skin_armored_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_armored_5m/wall_skin_armored_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_armored_5m/wall_skin_armored_5m.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -390,7 +390,7 @@
    "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -402,7 +402,7 @@
    "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_BEVELED_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_beveled_5m/wall_skin_beveled_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_skin_beveled_5m/wall_skin_beveled_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_beveled_5m/wall_skin_beveled_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_beveled_5m/wall_skin_beveled_5m.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -414,7 +414,7 @@
    "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_medium_5m/wall_skin_medium_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_skin_medium_5m/wall_skin_medium_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_medium_5m/wall_skin_medium_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_medium_5m/wall_skin_medium_5m.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -426,7 +426,7 @@
    "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_thin_5m/wall_skin_thin_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_skin_thin_5m/wall_skin_thin_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_thin_5m/wall_skin_thin_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_thin_5m/wall_skin_thin_5m.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -438,7 +438,7 @@
    "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_solid_5m/wall_solid_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_solid_5m/wall_solid_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_solid_5m/wall_solid_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_solid_5m/wall_solid_5m.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -450,7 +450,7 @@
    "ENV-EXPEDITION-L01-BOSS-WALL_TYPOGRAPHY": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_typography/wall_typography_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_typography/wall_typography_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_typography/wall_typography.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_typography/wall_typography.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -462,7 +462,7 @@
    "ENV-EXPEDITION-L01-BOSS-WORKSTATION_A": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_a/workstation_a_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/workstation_a/workstation_a_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/workstation_a/workstation_a.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/workstation_a/workstation_a.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -474,7 +474,7 @@
    "ENV-EXPEDITION-L01-BOSS-WORKSTATION_B": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_b/workstation_b_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/workstation_b/workstation_b_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/workstation_b/workstation_b.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/workstation_b/workstation_b.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -486,7 +486,7 @@
    "ENV-EXPEDITION-L01-BOSS-WORKSTATION_C": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_c/workstation_c_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/workstation_c/workstation_c_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/workstation_c/workstation_c.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v011/component_packages/workstation_c/workstation_c.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [

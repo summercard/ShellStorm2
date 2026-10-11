@@ -2,6 +2,10 @@
 name: game-weapon-model-pipeline
 description: 制作并导入枪械和近战武器模型到 Godot，处理手持锚点、枪口/瞄具/命中挂点、武器局部动画、GLB 与 PackedScene。用于手枪、步枪、霰弹枪、刀剑、棍棒和斧类；不用于场景设施或普通可拾取道具。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 枪械与近战武器模型制作、导出和 Godot 导入
 
@@ -24,7 +28,7 @@ description: 制作并导入枪械和近战武器模型到 Godot，处理手持�
 6. 颜色、UV、材质、法线和贴图遵从项目契约。可复用色盘时，颜色通过色盘 UV 而不是新增颜色材质；主体与发光面保持独立，并避免无意义的材质复制后缀。
 7. 动画仅包含武器自身可动件，例如枪机、扳机、弹匣、折叠托、旋转部件或近战可折叠机构。需要骨骼时只包含这些局部骨骼；不为手持姿势制作人形骨骼或手部动画。
 8. 每个局部动画有稳定名称和项目要求的事件接口。常用事件为 `fire`, `reload_eject`, `reload_insert`, `reload_chamber`, `melee_damage_begin` 和 `melee_damage_end`；运行时状态和伤害权威由项目逻辑决定，不能由视觉帧单独决定。
-9. 使用二进制 `.glb`。仅对导出副本应用变换、轴向转换与三角化；源 `.blend` 保留可编辑。建议目录为 `assets/art/weapons/source/`、`components/` 和 `runtime/`。
+9. 使用二进制 `.glb`。仅对导出副本应用变换、轴向转换与三角化；源 `.blend` 保留可编辑。建议目录为 `art_source/weapons/source/`、`components/` 和 `runtime/`。
 
 ## Godot 包装与验收
 

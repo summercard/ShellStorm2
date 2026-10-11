@@ -1,7 +1,7 @@
 {
   "asset_id": "CHR-PLAYER-AVATAR-TEMPLATE-001",
   "version": "v001",
-  "blend": "/Users/summercards/ShellStorm2/assets/art/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend",
+  "blend": "/Users/summercards/ShellStorm2/art_source/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend",
   "preview": "/Users/summercards/ShellStorm2/assets/art/characters/player/chr_player_avatar_template_3d/previews/chr_player_avatar_template_overview_v001.png",
   "unit": "meter",
   "height_m": 1.5,

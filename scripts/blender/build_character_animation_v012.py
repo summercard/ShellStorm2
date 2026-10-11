@@ -1,4 +1,9 @@
 """One-time v012 animation authoring; refuses to overwrite artist work."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys, math, json, hashlib
 sys.dont_write_bytecode=True
@@ -8,8 +13,8 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 from export_character_bundle import signature
 ROOT=Path(__file__).resolve().parents[2]
 PACKAGE=ROOT/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v012'
-MODEL=PACKAGE/'source/model/chr_bunny01_model_v012.blend'
-TARGET=PACKAGE/'source/animation/chr_bunny01_animation_v012.blend'
+MODEL=source_path(PACKAGE/'source/model/chr_bunny01_model_v012.blend')
+TARGET=source_path(PACKAGE/'source/animation/chr_bunny01_animation_v012.blend')
 OUT=ROOT/'outputs/character_pipeline/v012/animation'
 assert not TARGET.exists(),'Existing animation must not be overwritten'
 model_hash=hashlib.sha256(MODEL.read_bytes()).hexdigest()

@@ -1,6 +1,0 @@
-{
-  "passed": true,
-  "compared": 49,
-  "differences": [],
-  "scope": "all unchanged package meshes; original cameras and lights; independent reload"
-}

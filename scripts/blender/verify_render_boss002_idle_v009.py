@@ -1,11 +1,16 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,hashlib,sys
 from pathlib import Path
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/idle_v009';F=P/'frames';F.mkdir(exist_ok=True)
 def sig(r):return hashlib.sha256(json.dumps([(b.name,b.parent.name if b.parent else None,list(b.head_local),list(b.tail_local),b.use_deform) for b in r.data.bones],sort_keys=True).encode()).hexdigest()
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v009.blend'));signature=sig(bpy.data.objects['Boss002_Rig']);checks={'static_model_no_action':len(bpy.data.actions)==0,'face_restored':all(abs(bpy.data.objects['Texture '+n].location.z-z)<1e-5 for n,z in {'large_eye':3.055,'round_eye':2.91,'mouth':2.015}.items())}
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v009.blend'));rig=bpy.data.objects['Boss002_Rig'];checks['dual_master_signature']=signature==sig(rig);checks['formal_idle_active']=rig.animation_data.action.name=='idle';checks['3_materials']=len(bpy.data.materials)==3
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v009.blend')));signature=sig(bpy.data.objects['Boss002_Rig']);checks={'static_model_no_action':len(bpy.data.actions)==0,'face_restored':all(abs(bpy.data.objects['Texture '+n].location.z-z)<1e-5 for n,z in {'large_eye':3.055,'round_eye':2.91,'mouth':2.015}.items())}
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v009.blend')));rig=bpy.data.objects['Boss002_Rig'];checks['dual_master_signature']=signature==sig(rig);checks['formal_idle_active']=rig.animation_data.action.name=='idle';checks['3_materials']=len(bpy.data.materials)==3
 s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;cam=s.camera;cam.location=(3,12,4.5);cam.rotation_euler=(Vector((-.4,0,1.8))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=8.0;s.cycles.samples=8;s.render.resolution_x=752;s.render.resolution_y=600;s.render.resolution_percentage=100
 mins={};first={};last={};motion=0;tri=0
 contact={};cable_contact={};plug_down=[];grip_drift=0;local_grip=None

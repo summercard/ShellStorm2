@@ -274,9 +274,9 @@ func _check_plan_record(room_id: String, record: Dictionary, expected: Dictionar
 
 ## 独立读取源规划（含 remove 覆写），不从正式 TSCN 倒推规划数量。
 func _check_source_plan_contract(room_id: String, instances: Array, expected: Dictionary) -> void:
-	var path := "res://assets/art/environments/tower_zones/expedition/source/common_components/%s/component_instances.json" % str(expected["expected_version"])
+	var path := "res://art_source/environments/tower_zones/expedition/source/common_components/%s/component_instances.json" % str(expected["expected_version"])
 	if room_id in ["room_03", "room_04"]:
-		path = "res://assets/art/environments/tower_zones/expedition/source/room_instances/f00_%s/v001/room_layout.json" % room_id
+		path = "res://art_source/environments/tower_zones/expedition/source/room_instances/f00_%s/v001/room_layout.json" % room_id
 	var source := _read_json(path)
 	_check(not source.is_empty(), "%s 源规划契约必须可读：%s" % [room_id, path])
 	if source.is_empty():

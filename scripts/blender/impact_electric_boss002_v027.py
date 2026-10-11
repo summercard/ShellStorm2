@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json
 from pathlib import Path
 from mathutils import Vector,Matrix
@@ -96,6 +101,6 @@ for name in ['idle','move','melee_keyboard','melee_cable','heavy_spin_slam','spe
    for k in fc.keyframe_points:k.interpolation='CONSTANT'
 for sc in bpy.data.scenes:sc['asset_version']='v027'
 r.animation_data.action=new;s.frame_start=1;s.frame_end=43;s.frame_set(1)
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v027.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v027.blend')))
 (P/'build.json').write_text(json.dumps({'stun_enter_frames':43,'first_contact':19,'bounce_peak':25,'second_contact':31,'dizzy_expression':5,'electric_contact_on':15,'electric_release_off':9},indent=2))
 print('V027 saved, current scene ready')

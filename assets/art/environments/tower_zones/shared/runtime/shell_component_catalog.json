@@ -2,8 +2,8 @@
   "schema": "shellstorm2.runtime_shell_component_catalog.v001",
   "purpose": "运行时壳体组件注册表：摆位源 layout.json 里的 component_id -> 运行时 PackedScene。含通用件（多房间/多关卡复用）与专属件（只属某一房间种类）。",
   "scope": "shell",
-  "single_source": "assets/art/environments/tower_zones/shared/source/common_components/v001/component_catalog.json",
-  "exclusive_single_source": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_catalog.json",
+  "single_source": "art_source/environments/tower_zones/shared/source/common_components/v001/component_catalog.json",
+  "exclusive_single_source": "art_source/environments/tower_zones/expedition/source/common_components/v001/component_catalog.json",
   "consumers": [
     "src/world3d/DungeonRoom3D.gd::_authored_component_prefab()",
     "src/map/FloorPlanGenerator.gd::_load_boss_layout_instances()"
@@ -3443,10 +3443,10 @@
     }
   ],
   "room_type_sources": [
-    "assets/art/environments/tower_zones/expedition/source/common_components/v009/component_catalog.json",
-    "assets/art/environments/tower_zones/expedition/source/common_components/v010/component_catalog.json",
-    "assets/art/environments/tower_zones/expedition/source/common_components/v011/component_catalog.json",
-    "assets/art/environments/tower_zones/expedition/source/common_components/v014/component_catalog.json",
-    "assets/art/environments/tower_zones/expedition/source/common_components/v012/component_catalog.json"
+    "art_source/environments/tower_zones/expedition/source/common_components/v009/component_catalog.json",
+    "art_source/environments/tower_zones/expedition/source/common_components/v010/component_catalog.json",
+    "art_source/environments/tower_zones/expedition/source/common_components/v011/component_catalog.json",
+    "art_source/environments/tower_zones/expedition/source/common_components/v014/component_catalog.json",
+    "art_source/environments/tower_zones/expedition/source/common_components/v012/component_catalog.json"
   ]
 }

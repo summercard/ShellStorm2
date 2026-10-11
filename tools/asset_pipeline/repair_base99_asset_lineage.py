@@ -21,16 +21,16 @@ SHA_TARGETS = {
 def normalize_path(value: str) -> str:
     old = value
     value = value.replace(
-        "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_",
-        "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_",
+        "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_",
+        "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_",
     )
     replacements = {
-        "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend":
-            "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
-        "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_wall_contents.blend":
-            "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
-        "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend":
-            "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-remaining_facilities.blend",
+        "art_source/design/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend":
+            "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+        "art_source/design/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_wall_contents.blend":
+            "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+        "art_source/design/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend":
+            "art_source/design/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-remaining_facilities.blend",
         "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/volumetric_dust_fx/volumetric_dust_fx_visual_top3d_v001.glb":
             "assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn",
         "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/volumetric_dust_fx/volumetric_dust_fx_root_top3d_v001.tscn":
@@ -108,7 +108,7 @@ def main() -> None:
     json_files = {
         root / "assets/art/asset_import_manifest_v001.json",
         *sorted((root / "assets/art/environments/base_facility_3d").rglob("*.json")),
-        *sorted((root / "source/art/blender/base_facility_layout/export").rglob("*.json")),
+        *sorted((root / "art_source/design/blender/base_facility_layout/export").rglob("*.json")),
     }
     total_paths = total_hashes = 0
     for path in sorted(json_files):

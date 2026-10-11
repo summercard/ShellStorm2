@@ -1047,6 +1047,8 @@ func _scene_instruction(action: String, params: Dictionary) -> Dictionary:
 			return _scene_door(params)
 		"light":
 			return _scene_light(params)
+		"opening_02_5_blackout":
+			return _scene_opening_02_5_blackout(params)
 		"spawn":
 			return _scene_spawn(params)
 		"spawn_item":
@@ -1081,6 +1083,20 @@ func _restore_doors(argument: Dictionary) -> void:
 ## 房间灯光。缺省是**临时策略**：收口按占用清单强制归还（08 文档 §6.1）。
 ## `persist: true` = 这条是**世界状态变更**（如「开场把基地设成关灯，等玩家自己按开关」），
 ## 收口**不还原**。作者显式写才生效，缺省仍走强制归还 —— 免得把"演到一半就恢复"的效果吞掉。
+func _scene_opening_02_5_blackout(params: Dictionary) -> Dictionary:
+	var room_id := str(params.get("room_id", ""))
+	if room_id != "facility":
+		return _degraded(
+			"scene.opening_02_5_blackout：只允许作用于 facility，收到『%s』。" % room_id
+		)
+	var dungeon := dungeon_node()
+	if dungeon == null or not dungeon.has_method("apply_narrative_light_state"):
+		return _degraded("scene.opening_02_5_blackout：地牢没有主线灯光状态接口。")
+	if not bool(dungeon.call("apply_narrative_light_state", room_id, false)):
+		return _degraded("scene.opening_02_5_blackout：99F 基地灯光状态更新失败。")
+	return _ok()
+
+
 func _scene_light(params: Dictionary) -> Dictionary:
 	var room := room_node(str(params.get("room_id", "")))
 	if room == null:

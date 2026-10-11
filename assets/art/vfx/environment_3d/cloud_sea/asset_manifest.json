@@ -5,7 +5,7 @@
   "prefab": "assets/art/vfx/environment_3d/cloud_sea/vfx_env_cloud_sea_root_top3d.tscn",
   "script": "src/vfx/VfxCloudSea3D.gd",
   "shader": "assets/art/vfx/environment_3d/cloud_sea/stylized_cloud.gdshader",
-  "source": "assets/art/vfx/environment_3d/cloud_sea/source/v002/build_outdoor_clouds.py",
+  "source": "art_source/vfx/environment_3d/cloud_sea/source/v002/build_outdoor_clouds.py",
   "layout": "assets/art/vfx/environment_3d/cloud_sea/cloud_layout.json",
   "sea_count": 1,
   "air_wisp_count": 24,

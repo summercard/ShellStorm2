@@ -16,7 +16,7 @@ import bpy
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SOURCE_BLEND = PROJECT_ROOT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+SOURCE_BLEND = PROJECT_ROOT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
 COMPONENT_ROOT = PROJECT_ROOT / "assets/art/environments/base_facility_3d/components"
 OUTPUT = COMPONENT_ROOT / "env_base99_floor_full_replacement_v021" / "env_base99_floor_full_replacement_v021_visual_top3d_v003.glb"
 MANIFEST_OUTPUT = COMPONENT_ROOT / "env_base99_floor_full_replacement_v021" / "env_base99_floor_full_replacement_v021_runtime_manifest_v003.json"

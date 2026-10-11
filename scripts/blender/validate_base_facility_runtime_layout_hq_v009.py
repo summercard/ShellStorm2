@@ -11,9 +11,9 @@ import bpy
 
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-V008 = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend"
-V009 = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend"
-PACKAGE_ROOT = PROJECT / "source/art/blender/base_facility_layout/component_packages_v009"
+V008 = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend"
+V009 = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend"
+PACKAGE_ROOT = PROJECT / "art_source/design/blender/base_facility_layout/component_packages_v009"
 REPORT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v009/base_facility_runtime_layout_hq_v009_validation.json"
 OUT8 = "02_游戏输出_独立资产包_v008"
 OUT9 = "02_游戏输出_独立资产包_v009"

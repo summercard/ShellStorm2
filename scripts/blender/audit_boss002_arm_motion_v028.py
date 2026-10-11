@@ -1,6 +1,11 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,math,hashlib
 from pathlib import Path
-B=Path('assets/art/enemies/bosses/enm_boss_monitor002').resolve();P=B/'previews/arms_v028';bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v028.blend'));r=bpy.data.objects['Boss002_Rig'];s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;spec=json.loads((P/'clips.json').read_text());report={}
+B=Path('assets/art/enemies/bosses/enm_boss_monitor002').resolve();P=B/'previews/arms_v028';bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v028.blend')));r=bpy.data.objects['Boss002_Rig'];s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;spec=json.loads((P/'clips.json').read_text());report={}
 for name,n in spec.items():
  r.animation_data.action=bpy.data.actions[name];pts={side:[] for side in ['L','R']};scales=[]
  for step in range(n*4+1):

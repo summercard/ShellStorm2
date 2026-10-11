@@ -64,8 +64,8 @@
     "v004按用户要求删除手指独立变形，固定自然弯曲轮廓；近景存在减面造成的局部轮廓简化。"
   ],
   "source_sha256": {
-    "assets/art/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v003.blend": "3bc447b046c45e9e5b499b6ee3bd6f7b65d1525d91fe991ac4c0add384b5a2aa",
-    "assets/art/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v004.blend": "bb95bcc3e60b9b0e458934adc3107179097df2dc71a07f67a22f780d372020b7"
+    "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v003.blend": "3bc447b046c45e9e5b499b6ee3bd6f7b65d1525d91fe991ac4c0add384b5a2aa",
+    "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v004.blend": "bb95bcc3e60b9b0e458934adc3107179097df2dc71a07f67a22f780d372020b7"
   },
   "asset_version": "v004",
   "presentation_only": true,
@@ -82,17 +82,17 @@
   "runtime_base_scale": 0.7,
   "files": [
     {
-      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v003.blend",
-      "sha256": "3bc447b046c45e9e5b499b6ee3bd6f7b65d1525d91fe991ac4c0add384b5a2aa",
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v003.blend",
+      "sha256": "9780a740e8c3a101b21d5d9f15b6c9e054f9f699d552b37ebebcc35d2c9823bb",
       "bytes": 980208
     },
     {
-      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v004.blend",
-      "sha256": "bb95bcc3e60b9b0e458934adc3107179097df2dc71a07f67a22f780d372020b7",
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v004.blend",
+      "sha256": "34ee453fa730596c8060a57082dcb0267d8ceaa288ed9c28035f0f0c2651b821",
       "bytes": 2991693
     },
     {
-      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/model/textures/enm_melee_fungboar01_basecolor_v002.png",
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/textures/enm_melee_fungboar01_basecolor_v002.png",
       "sha256": "068b6ab85d834a203ef371976ae83197e4c352a70a5b7758245a24814305d49c",
       "bytes": 295265
     },

@@ -1,10 +1,15 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,math,sys
 from pathlib import Path
 from mathutils import Vector
 ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/'assets/art/enemies/bosses/enm_boss_monitor002'
 version='v002' if '--v002' in sys.argv else 'v001'
-bpy.ops.wm.open_mainfile(filepath=str(BASE/f'source/enm_boss_monitor002_source_{version}.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(BASE/f'source/enm_boss_monitor002_source_{version}.blend')))
 s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s
 obs=list(s.objects);dg=bpy.context.evaluated_depsgraph_get();verts=[];tri=0
 for o in obs:

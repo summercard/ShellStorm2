@@ -5,6 +5,10 @@ agent_created: true
 metadata:
   display_name_zh: 09 新关卡生成
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 09 新关卡生成
 
@@ -29,7 +33,7 @@ metadata:
 三层，缺一层都跑不起来：
 
 ```text
-source/art/whitebox/tower_zones/<level_id>/<版本>/data/
+art_source/design/whitebox/tower_zones/<level_id>/<版本>/data/
   ├─ level_plan.json                  L1  关卡级：层清单 + 模板池 + 生成策略
   ├─ floors/floor_<NN>.json           L2  层级：房间表 + 主路 + 例外（核心）
   └─ room_templates/<template_id>.json L3  房间模板：尺寸 + 可开门墙 + 合法门槽表
@@ -67,8 +71,8 @@ L2 每个房间还有两个**可选**字段：
 1. `docs/v0.1/design/新关卡设计表.md` —— 要用户填哪些、哪些有默认值、哪些是固定的、哪些是派生的
 2. `docs/v0.1/05.2_关卡版图白盒与生成规范.md` §3 —— 三层 schema 与门槽公式
 3. 一个已通过的现存设计源，作为格式基线：
-   - `source/art/whitebox/tower_zones/expedition_01/v001/data/`（单层独立关卡，推荐抄这个）
-   - `source/art/whitebox/tower_zones/battle_level01/v004/data/`（塔楼多层，字段更全）
+   - `art_source/design/whitebox/tower_zones/expedition_01/v001/data/`（单层独立关卡，推荐抄这个）
+   - `art_source/design/whitebox/tower_zones/battle_level01/v004/data/`（塔楼多层，字段更全）
 
 **不要凭记忆写 schema。** 现存文件里有的字段名以现存文件为准。
 
@@ -438,7 +442,7 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
 
 ### 第 5 步 · 登记与报告
 
-- 新关卡放在 `source/art/whitebox/tower_zones/<level_id>/v001/data/` 即被自动发现；
+- 新关卡放在 `art_source/design/whitebox/tower_zones/<level_id>/v001/data/` 即被自动发现；
   非默认版本目录才需要加进 `LevelPlanLoader.DATA_ROOT_OVERRIDES`。
 - 若该关卡需要进默认校验集，把 id 加进
   `tests/verification/verify_level_plan_design_source.gd` 的 `TARGET_LEVELS`。

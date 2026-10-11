@@ -6082,6 +6082,23 @@ func _capture_room_runtime_state(room_id: String) -> void:
 	}
 
 
+## 主线开场 2.5 的窄灯光边界：只同步目标房间的灯光布尔值，
+## 不触发整房捕获/恢复，不触碰敌人、掉落物或容器状态。
+func apply_narrative_light_state(room_id: String, enabled: bool) -> bool:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(room):
+		return false
+	if not room.has_method("apply_narrative_light_state"):
+		return false
+	if not bool(room.call("apply_narrative_light_state", enabled)):
+		return false
+	if _segment_runtime_state.has(room_id):
+		var state := _segment_runtime_state[room_id] as Dictionary
+		state["room_light_on"] = enabled
+		_segment_runtime_state[room_id] = state
+	return true
+
+
 func _restore_room_runtime_state(room_id: String) -> void:
 	if not _segment_runtime_state.has(room_id):
 		return

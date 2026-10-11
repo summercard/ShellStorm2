@@ -1,11 +1,16 @@
 """Protect authoring sources, optimize independent meshes, reopen, export each facility."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,bmesh,json,hashlib,math,struct
 from pathlib import Path
 from mathutils import Vector
 R=Path(__file__).resolve().parents[2]
 B=R/'assets/art/environments/master_office_3d'
-OUT=B/'source/env_block00_story_rooms/export/v001';OUT.mkdir(parents=True,exist_ok=True)
-sources=[B/'source/env_father_office/v002/env_father_office_source_v002.blend',B/'source/env_block00_story_rooms/v001/env_block00_story_rooms_source_v001.blend']
+OUT=source_path(B/'source/env_block00_story_rooms/export/v001');OUT.mkdir(parents=True,exist_ok=True)
+sources=[source_path(B/'source/env_father_office/v002/env_father_office_source_v002.blend'),source_path(B/'source/env_block00_story_rooms/v001/env_block00_story_rooms_source_v001.blend')]
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 protected={str(p):sha(p) for p in sources}
 exclude={'wall_panel','wall_door','floor_panel','floor_fractured'}

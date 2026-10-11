@@ -1,7 +1,7 @@
 from pathlib import Path
 import json
 ROOT=Path(__file__).resolve().parents[2]
-data=json.loads((ROOT/'source/art/blender/base_facility_layout/export/v022/export_manifest.json').read_text())
+data=json.loads((ROOT/'art_source/design/blender/base_facility_layout/export/v022/export_manifest.json').read_text())
 for p in data['packages'].values():
  glb=ROOT/p['glb']; imp=Path(str(glb)+'.import')
  if not imp.exists(): raise RuntimeError(f'missing import contract: {imp}')

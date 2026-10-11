@@ -34,12 +34,12 @@ Blender rotation_z -> Godot rotation_y（符号按已验收转换器固化）
   "block_id": "battle",
   "layout_version": "v004",
   "coordinate_system": "godot-y-up-room-local",
-  "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v004/main_room_02_source_v004.blend",
+  "source_blend": "art_source/environments/tower_zones/battle/source/main_room_02/v004/main_room_02_source_v004.blend",
   "source_blend_sha256": "...",
-  "whitebox_source": "source/art/whitebox/tower_zones/battle_level01/v001/data/unit_plan.json",
+  "whitebox_source": "art_source/design/whitebox/tower_zones/battle_level01/v001/data/unit_plan.json",
   "component_library": {
-    "source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v006/战局区块_通用组件库_v006.blend",
-    "catalog": "assets/art/environments/tower_zones/battle/source/common_components/v006/component_catalog.json",
+    "source_blend": "art_source/environments/tower_zones/battle/source/common_components/v006/战局区块_通用组件库_v006.blend",
+    "catalog": "art_source/environments/tower_zones/battle/source/common_components/v006/component_catalog.json",
     "catalog_sha256": "..."
   },
   "room_bounds_m": {

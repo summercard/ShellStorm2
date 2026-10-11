@@ -3,6 +3,10 @@ name: shellstorm2-asset-ledger-row-authoring
 description: 在 ShellStorm2 的分账本（敌人/角色/场景/道具/武器/特效/UI/音乐/音效）里新增、修改或核对一行资产登记——改《资产主表》、同步所有写死的公式区间、补录无损基线、跑门禁。当用户说「把 XXX 登记进账本 / 加个新资产 / 给这个模型编号 / 台账表格加一行」时使用。不用于制作资产本身，也不用于 3D Prefab 分页表的随意改动。
 agent_created: true
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # ShellStorm2 分账本 · 资产行登记
 

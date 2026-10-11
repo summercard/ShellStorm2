@@ -2,6 +2,10 @@
 name: scene-full-pipeline
 description: 场景全流程制作编排：从效果图到读取白模，到 Blender 正式美术资产制作，再到资产导入 Godot 并登记正式可用。负责全程定位信息贯穿、阶段门禁、目录与命名约束、各阶段 skill 路由与交接验收；不替代各阶段专用 skill，不制作枪械、近战武器或可拾取道具。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 场景全流程制作编排
 
@@ -51,23 +55,23 @@ description: 场景全流程制作编排：从效果图到读取白模，到 Ble
 本契约在阶段 1 起约束文件落位，阶段 3 结束时全部满足：
 
 ```text
-source/art/whitebox/<scene_id>/v###/          ← 白模（JSON + Blender + 顶视图渲染）
+art_source/design/whitebox/<scene_id>/v###/          ← 白模（JSON + Blender + 顶视图渲染）
+art_source/<大类>/<资产套件>/source/        ← 可编辑母版
 assets/art/<大类>/<资产套件>/
-├─ source/<资产逻辑名>/<资产逻辑名>_source_v###.blend      ← Blender 母版（可维护，版本历史只在这里）
 ├─ components/<资产逻辑名>/<资产逻辑名>_visual_top3d.glb    ← 视觉 GLB（只视觉，稳定路径）
 └─ runtime/<资产逻辑名>/<资产逻辑名>_root_top3d.tscn        ← PackedScene（持元数据/碰撞/挂点，稳定路径）
 ```
 
-- 白模与正式美术源分目录：白模一律 `source/art/whitebox/`，正式 Blender 母版一律 `assets/art/<大类>/.../source/`。二者不得混放。
+- 白模与正式美术源分目录：白模一律 `art_source/design/whitebox/`，正式 Blender 母版一律 `art_source/<大类>/.../source/`。二者不得混放。
 - 前缀：环境 `env_`、道具与设施 `prp_`、角色 `chr_`、敌人 `enm_`、武器 `wpn_`。
 - `source/` 文件名小写 `snake_case` 且以 `_vNNN` 结尾；`components/` 与 `runtime/` 文件名同样小写 `snake_case` 但**不带版本号**。AssetID 用稳定大写连字符格式，版本变化不改变 AssetID。
 - 组件 `components/`、`runtime/` 路径是稳定契约：升级只定点更新同路径同名组件，不派生版本目录；Godot 侧稳定引用与房间实例覆写保留，不重生成正式房间。房间变体可建立明确的场景/资源路径，这不是为组件升级派生副本。
 - `source/**/*.blend` 由 `.gdignore` 排除，不参与 Godot 导入与打包。
 
-**例外——基地设施布局**（`source/art/blender/base_facility_layout/`）是「单源多次导出」型，不走上面三件套：
+**例外——基地设施布局**（`art_source/design/blender/base_facility_layout/`）是「单源多次导出」型，不走上面三件套：
 - 源：`source/v<NNN>/<名>_v<NNN>.blend`（**下划线**连版本号）。
 - 导出：`export/v<NNN>/<名>-v<NNN>-<类型>.blend`（**连字符**，版本号必须等于源版本号；类型白名单 `structural / wall_contents / remaining_facilities`）。
-- 源升级建新 `v<NNN>` 目录，旧导出随源替代废弃；仅重做导出则覆盖同名文件、不升版本号、不建新目录。
+- 源升级只保留新的 `v<NNN>` 制作版本，旧版进入工程外备份，临时 GLB 导出写工程外工作目录；当前优化 Blend 保留为必要制作源；仅重做导出则覆盖同名文件、不升版本号、不建新目录。
 
 ## 阶段细则
 
@@ -84,7 +88,7 @@ assets/art/<大类>/<资产套件>/
 - **规范：** 只从当前游戏设计与工程契约提取尺寸，不从旧模型或效果图猜数值。每项数据记录来源文档、章节与读取日期。
 - **数据：** 平面网格、场景长宽高、层高、墙高/墙厚、地板厚度、门洞、楼梯起终点、平台高度、玩家/镜头净空、碰撞、导航、拼接插槽、坐标轴与单位。
 - **白模 JSON 格式：** 关卡结构按 `05.2_关卡版图白盒与生成规范.md` 的L1/L2/L3读取；旧 `tools/3Dgame-design` v3（`coordinateSystem=blender-z-up`、`groups[]/components[]`、`projectMetadata`）只作历史白盒兼容输入，不强制将远征设计源改成该格式。各格式明确来源、单位与坐标转换，不另造平行几何真源。
-- **目录：** `source/art/whitebox/<scene_id>/v###/` 固定分 `data/`（可编辑 JSON）、`blender/`（同版本白盒 Blend）、`renders/`（顶视图、无文字图、立面、剖面）。
+- **目录：** `art_source/design/whitebox/<scene_id>/v###/` 固定分 `data/`（可编辑 JSON）、`blender/`（同版本白盒 Blend）、`renders/`（顶视图、无文字图、立面、剖面）。
 - **交付：** `whitebox_<scene_id>_v###.json` + 白盒 Blend + 至少一张带标注顶视图、一张同机位无文字顶视图。
 - **Blender 入口：** 新场景优先 `tools/blender_addons/shellstorm_level_builder/` 在 Blender 原生视口完成组件添加、吸附摆放、参数冻结、Collection 归类与资产包清单同步。此处 `.blend` 仅拥有该白盒原型的编辑事实，网页工具只做旧白盒迁移与兼容读取；正式房间 TSCN 的模块实例布局不由白盒自动回灌。
 - **Skill：** 无专用 skill；由对应场景的白盒验证入口检查。

@@ -1,14 +1,19 @@
 """Read-only source audit; append verified handoff evidence to the v019 ledger."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import json
 import bpy
 ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production'
 PACKAGE=BASE/'v019'
-bpy.ops.wm.open_mainfile(filepath=str(PACKAGE/'source/animation/chr_bunny01_animation_v019.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(PACKAGE/'source/animation/chr_bunny01_animation_v019.blend')))
 report_path=ROOT/'outputs/character_pipeline/v019/validation.json'
 report=json.loads(report_path.read_text())
-assert (PACKAGE/'source/model/chr_bunny01_model_v019.blend').read_bytes()==(BASE/'v018/source/model/chr_bunny01_model_v018.blend').read_bytes()
+assert (source_path(PACKAGE/'source/model/chr_bunny01_model_v019.blend')).read_bytes()==(BASE/'v018/source/model/chr_bunny01_model_v018.blend').read_bytes()
 report['model_byte_identical_to_v018']=True
 poses={}; root_error=0
 for scene in bpy.data.scenes:

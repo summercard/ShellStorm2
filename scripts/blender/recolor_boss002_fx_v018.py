@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json
 from pathlib import Path
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/heavy_v018';P.mkdir(exist_ok=True)
 for kind in ['model','animation']:
- bpy.ops.wm.open_mainfile(filepath=str(B/f'source/enm_boss_monitor002_{kind}_v017.blend'))
+ bpy.ops.wm.open_mainfile(filepath=str(source_path(B/f'source/enm_boss_monitor002_{kind}_v017.blend')))
  for sc in bpy.data.scenes:sc['asset_version']='v018'
  if kind=='animation':
   fx=bpy.data.collections['BOSS002_IMPACT_PREVIEW']
@@ -26,6 +31,6 @@ for kind in ['model','animation']:
    palette=ns.new('ShaderNodeMixRGB');ls.new(isred,palette.inputs[0]);palette.inputs[1].default_value=(0,.005,.8,1);palette.inputs[2].default_value=(.8,0,0,1)
    mix=ns.new('ShaderNodeMixRGB');ls.new(colored,mix.inputs[0]);ls.new(tex.outputs['Color'],mix.inputs[1]);ls.new(palette.outputs[0],mix.inputs[2]);ls.new(mix.outputs[0],em.inputs[0]);em.inputs[1].default_value=.8
   fx['palette']='saturated red and blue; reduced emission to avoid pale highlights'
- bpy.ops.wm.save_as_mainfile(filepath=str(B/f'source/enm_boss_monitor002_{kind}_v018.blend'))
+ bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/f'source/enm_boss_monitor002_{kind}_v018.blend')))
 s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;s.cycles.samples=8;s.render.resolution_x=960;s.render.resolution_y=800
 for f in [29,69]:s.frame_set(f);s.render.filepath=str(P/('pose_%03d.png'%f));bpy.ops.render.render(write_still=True)

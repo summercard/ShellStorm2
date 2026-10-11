@@ -51,46 +51,22 @@ index.rewrite_ref("<旧引用>")                     # 幂等改写
 
 ---
 
-## 2. 三种路径形态
+## 2. 制作源与运行路径分离
 
-### 形态 A — 规范三段式（**新增资产默认形态**）
-
-```text
-<域根>/<slug>/
-├─ source/<slug>_source_v<NNN>.blend          ← 唯一允许带版本号的位置
-├─ components/<slug>_visual_top3d.glb         ← 稳定路径，替换=覆盖
-└─ runtime/<slug>_root_top3d.tscn             ← 稳定路径，替换=覆盖
-```
-
-已按此形态成立：`assets/art/enemies/elite_3d/rift_boar_armed/`（**怪物侧唯一样板，新怪照抄它**）。
-
-### 形态 B — 角色 production 版本形态（玩家专用，**存量冻结**）
+三种族群关系保持不变，制作目录统一使用独立根：
 
 ```text
-assets/art/characters/player/chr_player_capsule01_3d/variants/<变体>/
-├─ production/v<NNN>/
-│  ├─ source/model/<slug>_model_v<NNN>.blend
-│   ├─ source/animation/<slug>_animation_v<NNN>.blend     ← 双母版：模型 / 动作分离
-│  ├─ exports/<slug>_<部件>_v<NNN>.glb
-│  ├─ runtime/<slug>_root_v<NNN>.tscn
-│  └─ character_transfer_ledger_v<NNN>.json               ← 逐文件中转台账
-├─ source/  components/  previews/                        ← 早期形态，冻结
-└─ accessories/<槽>/<件>_v<NNN>/{source,runtime,previews}/
+art_source/<域>/<族根>/<slug>/source/              当前模型/动画母版、必要源清单
+art_source/characters/player/.../production/vNNN/source/  已登记玩家制作源，沿用现有编号
+assets/art/<域>/<族根>/<slug>/components/          正式视觉 GLB，原路径稳定
+assets/art/<域>/<族根>/<slug>/runtime/             正式 Godot 包装，原路径稳定
 ```
 
-**该形态仅玩家使用，且已由 D3 冻结。** 新增 NPC 与怪物**不套用** production/vNNN，一律形态 A。玩家侧继续演进时在既有 `production/v<NNN>/` 内迭代，不另开形态。
-
-### 形态 C — 共享套件 + 变体（怪物族）
-
-怪物的「共享根 / 独立表现」关系**由账本「变体父ID」列表达，不由目录嵌套表达**：
-
-```text
-assets/art/enemies/<族根>/<套件 slug>/{source,components,runtime}/    ← 父，AssetID ENM-ECOSYSTEM-KIT-3D
-assets/art/enemies/<族根>/<怪 slug>/{source,components,runtime}/      ← 子，变体父ID = ENM-ECOSYSTEM-KIT-3D
-```
-
-- 父子关系写进账本，**不为子怪建 `variants/` 子目录**（那是玩家形态 B 的写法，别混用）。
-- 共享套件承担 `core / shell / appendages` 等模块化出件；子怪只提供差异件与自己那套动作。
+- 形态 A（NPC、怪物）：模型/动作源在 `art_source` 对应套件内；组件与包装仍在 `assets/art` 的稳定路径。
+- 形态 B（玩家）：既有运行 `production/`、`variants/`、`accessories/` 路径冻结；母版已迁至 `art_source/characters/player/`，具体位置由当前源索引与账本给出。不得为了源升级再创建运行版本目录。
+- 形态 C（共享套件与变体）：父子身份继续由账本的变体父ID拥有；父、子各自的可编辑源进入 `art_source/enemies/`，运行目录不变。
+- 内部 `source/`、`production/vNNN/source/` 仅是制作分组。每个独立角色保留最新母版及必要外链；源文件现有版本号不变，旧版移至工程外备份。
+- 优化后的可编辑 Blend 与独立组件 Blend 是必要源；GLB 的临时导出、QA 与预览走工程外工作目录。完整规则以工程 `docs/ART_SOURCE_LAYOUT.md` 为准。
 
 ---
 

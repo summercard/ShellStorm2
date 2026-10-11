@@ -58,7 +58,7 @@ LIBRARIES = (
     ("db_room", "v013"),
 )
 LIBRARY_ROOT = Path(
-    "assets/art/environments/tower_zones/expedition/source/common_components"
+    "art_source/environments/tower_zones/expedition/source/common_components"
 )
 SHARED_PALETTE = Path("assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png")
 REPORT_REL = Path(

@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-EXPORT_MANIFEST = ROOT / 'source/art/blender/base_facility_layout/export/v023/export_manifest.json'
+EXPORT_MANIFEST = ROOT / 'art_source/design/blender/base_facility_layout/export/v023/export_manifest.json'
 RUNTIME = ROOT / 'assets/art/environments/base_facility_3d/runtime'
 ZONE_RUNTIME = ROOT / 'assets/art/environments/tower_zones/base/runtime'
 REMAINING = RUNTIME / 'env_base99_remaining_facilities_v021'
@@ -113,7 +113,7 @@ ledger = {
     },
     'lock_signature': data['lock_signature'],
 }
-ledger_path = ROOT / 'assets/art/environments/base_facility_3d/source/env_base99_stair_bed_v023_import_manifest.json'
+ledger_path = ROOT / 'art_source/environments/base_facility_3d/source/env_base99_stair_bed_v023_import_manifest.json'
 ledger_path.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + '\n')
 
 global_path = ROOT / 'assets/art/asset_import_manifest_v001.json'

@@ -1,7 +1,12 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,math
 from pathlib import Path
 from mathutils import Vector
-B=Path('assets/art/enemies/bosses/enm_boss_monitor002').resolve();P=B/'previews/impact_electric_v027';bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v027.blend'));r=bpy.data.objects['Boss002_Rig'];s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s
+B=Path('assets/art/enemies/bosses/enm_boss_monitor002').resolve();P=B/'previews/impact_electric_v027';bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v027.blend')));r=bpy.data.objects['Boss002_Rig'];s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s
 checks={};states=[]
 for name,f,exp,el,dz,hit in [('stun_enter',1,2,0,0,0),('stun_enter',4,2,0,0,1),('stun_enter',5,5,0,1,0),('stun_loop',20,5,0,1,0),('stun_exit',20,0,0,0,0),('special_insert',14,2,0,0,0),('special_insert',15,2,1,0,0),('special_channel',12,2,1,0,0),('special_recover',9,2,0,0,0)]:
  r.animation_data.action=bpy.data.actions[name];s.frame_set(f);actual=[round(r[k]) for k in ['expression_state','electric_active','dizzy_active','stun_hit_flash']];checks[name+'_'+str(f)]=actual==[exp,el,dz,hit];states.append([name,f,actual])

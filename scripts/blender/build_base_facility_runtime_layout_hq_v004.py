@@ -28,7 +28,7 @@ base = importlib.util.module_from_spec(spec)
 assert spec and spec.loader
 spec.loader.exec_module(base)
 
-base.OUTPUT_BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v004.blend"
+base.OUTPUT_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v004.blend"
 base.OUTPUT_HERO = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v004.png"
 base.OUTPUT_TOP = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v004_top.png"
 base.OUTPUT_DETAIL = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v004_facilities.png"

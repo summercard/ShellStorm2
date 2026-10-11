@@ -17,10 +17,8 @@
   "cues": [
     {
       "at": 0.0,
-      "do": "scene.light",
-      "room_id": "facility",
-      "on": false,
-      "persist": true
+      "do": "scene.opening_02_5_blackout",
+      "room_id": "facility"
     },
     {
       "at": 0.3,

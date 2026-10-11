@@ -7,7 +7,7 @@
 ## 2026-09-09 生产链更新
 
 当前双文件生产规则见 `docs/v0.1/16.1_角色美术制作与动作导入流程.md`。
-模型：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend`。
+模型：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend`。
 动作：同包 `source/animation/chr_bunny01_animation_v021.blend`。
 运行包装：同包 `runtime/chr_bunny01_root_v021.tscn`；动作适配：`src/player3d/CharacterMotionLibrary3D.gd`。
 中转账本：同包 `character_transfer_ledger_v021.json`。
@@ -40,9 +40,9 @@ v008 为迁移回滚。以下旧 v006 路径及“节点驱动”描述仅用于
 
 当前玩家相关 Blender 入口：
 
-- 母版：`assets/art/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend`
-- 当前 Bunny 变体源：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v006.blend`
-- 旧猫形版本：`assets/art/characters/player/chr_player_capsule01_3d/source/`
+- 母版：`art_source/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend`
+- 当前 Bunny 变体源：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v006.blend`
+- 旧猫形版本：`art_source/characters/player/chr_player_capsule01_3d/source/`
 - 只读审计：`scripts/blender/audit_player_avatar_source.py`
 - 母版验证：`scripts/blender/validate_player_avatar_asset_template.py`
 
@@ -50,7 +50,7 @@ v008 为迁移回滚。以下旧 v006 路径及“节点驱动”描述仅用于
 
 ```powershell
 blender --background "<角色源文件>.blend" --python "scripts/blender/audit_player_avatar_source.py"
-blender --background "assets/art/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend" --python "scripts/blender/validate_player_avatar_asset_template.py"
+blender --background "art_source/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend" --python "scripts/blender/validate_player_avatar_asset_template.py"
 ```
 
 审计输出必须至少确认单位、可见网格包围盒、集合、对象父级、位置、旋转、缩放和隐藏状态。Blender 缺失时可以继续反推 Godot 消费者，但不能声称源 Blend 已验证。

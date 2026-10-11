@@ -14,11 +14,11 @@ from pathlib import Path
 
 
 PROJECT = Path(__file__).resolve().parents[2]
-EXPORT = PROJECT / "source/art/blender/base_facility_layout/export/v021/door_visuals_export_manifest.json"
+EXPORT = PROJECT / "art_source/design/blender/base_facility_layout/export/v021/door_visuals_export_manifest.json"
 RUNTIME = PROJECT / "assets/art/environments/base_facility_3d/runtime"
 COMPONENTS = PROJECT / "assets/art/environments/base_facility_3d/components"
-SOURCE = PROJECT / "source/art/blender/base_facility_layout/component_packages"
-LEDGER = PROJECT / "assets/art/environments/base_facility_3d/source/env_base99_door_visuals_v021_import_manifest.json"
+SOURCE = PROJECT / "art_source/design/blender/base_facility_layout/component_packages"
+LEDGER = PROJECT / "art_source/environments/base_facility_3d/source/env_base99_door_visuals_v021_import_manifest.json"
 GLOBAL_LEDGER = PROJECT / "assets/art/asset_import_manifest_v001.json"
 POST_IMPORT = "res://tools/asset_pipeline/scene_facility_door_visual_post_import.gd"
 
@@ -81,7 +81,7 @@ def write_visual_root(spec: dict) -> None:
         raise RuntimeError(f"Unexpected root contract: {spec['old_root']}")
     text = text.replace(old_glb, "_v002.glb")
     text = text.replace(
-        'metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend"',
+        'metadata/source_blend = "res://art_source/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend"',
         'metadata/source_blend = "res://source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend"\n'
         'metadata/derived_blend = "res://source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-door_visuals.blend"\n'
         'metadata/visual_revision = "v021_shared_east_west_door_visuals"',
@@ -111,7 +111,7 @@ def update_package_manifest(relative_dir: str, collection: str, visual_key: str)
     data.update({
         "asset_id": spec["asset_id"],
         "version": "v021",
-        "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+        "source_blend": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
         "expected_export": rel(spec["glb"]),
         "export_status": "exported_v021_shared_visual",
         "runtime_prefab": rel(spec["new_root"]),
@@ -132,8 +132,8 @@ def update_assembly(relative_path: str) -> None:
     path = SOURCE / relative_path
     data = json.loads(path.read_text(encoding="utf-8"))
     data["version"] = "v021"
-    data["source_blend"] = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend"
-    data["derived_blend"] = "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-door_visuals.blend"
+    data["source_blend"] = "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend"
+    data["derived_blend"] = "art_source/design/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-door_visuals.blend"
     data["visual_revision"] = "v021_shared_east_west_door_visuals"
     for member in data.get("members", []):
         if member.get("asset_id") == VISUALS["wall_door"]["asset_id"]:

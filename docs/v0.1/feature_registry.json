@@ -1017,7 +1017,7 @@
       "verification": [
         {
           "kind": "command",
-          "path": "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/validate_rooftop.py",
+          "path": "art_source/environments/tower_zones/rooftop/source/reference_components/v002/qa/validate_rooftop.py",
           "args": []
         },
         {

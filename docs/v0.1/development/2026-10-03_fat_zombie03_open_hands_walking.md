@@ -8,6 +8,6 @@
 
 模型和动作母版保持66骨签名一致；512贴图、2.2米站立游戏高度标准不变。连续两轮半帧采样：待机385点、行走241点，循环误差0；行走最低脚底约-0.08毫米，支撑轨迹误差约0.08毫米，双脚无同时腾空。所有指骨附加局部旋转为0。Godot实际导入idle/walking，分别3.2/2.0秒，均LOOP_LINEAR，66骨；Prefab默认idle。
 
-交付路径：`assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v002.blend`；稳定GLB与Prefab原位更新。预览在`previews/idle_walk_v002/`，含双手近景、GIF、Blender及Godot报告。账本主表、敌人专项页、动作状态页、中转记录与无损基线同步；2段已验收，余11段待制作。没有登记完整AI接入或投放完成。
+交付路径：`art_source/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v002.blend`；稳定GLB与Prefab原位更新。预览在`previews/idle_walk_v002/`，含双手近景、GIF、Blender及Godot报告。账本主表、敌人专项页、动作状态页、中转记录与无损基线同步；2段已验收，余11段待制作。没有登记完整AI接入或投放完成。
 
 全局已有的其他资产SHA、命名和文档契约问题单独保留，具体退出码见本资产预览目录gates.json。

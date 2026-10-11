@@ -2,6 +2,10 @@
 name: audio-sfx-asset-pipeline
 description: 为 ShellStorm2 制作、转码、接入或验收短时游戏音效。用于武器、近战、受击、UI、门、容器、波次、Boss与交互事件；不处理BGM、配乐编排、UI图像或3D模型。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+新增可编辑音效母版放在 `art_source/audio/sfx/<AssetID>/source/`；正式 OGG 与 AudioManager 事件映射路径保持不变。 制作前读工程 `docs/ART_SOURCE_LAYOUT.md`；制作源参与 Git、由 `.gdignore` 和导出过滤隔离，临时输出走工程外 `ShellStorm2-work`。保留最新母版，旧源进入上层备份；现有版本号不变。
+
 
 # Audio SFX Asset Pipeline
 

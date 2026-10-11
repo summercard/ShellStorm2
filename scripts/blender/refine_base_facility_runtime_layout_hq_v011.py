@@ -10,7 +10,7 @@ import bpy
 from mathutils import Vector
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend"
 VERIFY = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v011"
 
 spec = importlib.util.spec_from_file_location("base_v011", PROJECT / "scripts/blender/build_base_facility_runtime_layout_hq_v011.py")

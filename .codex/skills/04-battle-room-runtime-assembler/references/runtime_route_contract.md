@@ -66,7 +66,7 @@ all component PackedScenes resolve
 
 实际资产任务授权范围内允许修改（`block_id` 取 `battle/expedition`；仅修订 Skill 时不修改下列项目文件）：
 
-- `assets/art/environments/tower_zones/<block_id>/source/**`
+- `art_source/environments/tower_zones/<block_id>/source/**`
 - `assets/art/environments/tower_zones/<block_id>/components/**`
 - `assets/art/environments/tower_zones/<block_id>/runtime/**`
 - 已授权的视觉探针和验收场景；通用装配器/注册表缺口先报告，代码实现须独立授权

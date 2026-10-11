@@ -4,7 +4,7 @@
 
 ## 修改范围
 
-新源：`assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend`。v001保留；本批修改门包、新增7个带藤蔓变体、更新参考拼装。门边两盆展示植物外移避免与厚门柱相交。其余36个既有组件源/输出网格保持。
+新源：`art_source/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend`。v001保留；本批修改门包、新增7个带藤蔓变体、更新参考拼装。门边两盆展示植物外移避免与厚门柱相交。其余36个既有组件源/输出网格保持。
 
 新增女儿墙外角/内角挂藤、房间实墙/窗墙/门洞墙挂藤、外墙实墙/窗墙挂藤；原直段挂藤墙、独立藤蔓继续保留。44个独立包对应44目录/manifest、45输出网格与211制作网格。门柱实测深1.10m、门楣1.16m、门槛1.55m，3.68×0.18×6.8m门扇保持内凹。门灯移至门楣前沿。
 

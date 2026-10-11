@@ -4,7 +4,7 @@
 
 - 以当前 Godot 使用的楼顶专用、通用两份12米楼梯间 GLB 为几何真值。
 - 新增 v012 反推白盒合同，记录15×30米外廓、12米层高、11.9米可见围护、两跑各20级及上下门槽。
-- 生成正式源 `assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend`。
+- 生成正式源 `art_source/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend`。
 - 正式源只含 `Stair_A` 与 `Stair_B` 两个楼梯间资产包；不含战斗区、基地、天台、展示地面、相机或灯光。
 - 旧 v011 混合白盒保留为回滚。本轮不导出新 GLB、不触发 Godot 重新导入、不替换运行时引用。
 

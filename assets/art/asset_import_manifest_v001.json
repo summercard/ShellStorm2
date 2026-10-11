@@ -33,8 +33,8 @@
   "base99_corner_l_5m_height12": {
     "asset_id": "ENV-TOWER-CORNER-L-5M",
     "package": "117_基地5米L型转角墙_资产包",
-    "source": "assets/art/environments/base_facility_3d/source/wall_height12/env_base99_corner_l_5m_source_v002.blend",
-    "derived_export": "assets/art/environments/base_facility_3d/source/wall_height12/env_base99_corner_l_5m_source_v002.blend",
+    "source": "art_source/environments/base_facility_3d/source/wall_height12/env_base99_corner_l_5m_source_v002.blend",
+    "derived_export": "art_source/environments/base_facility_3d/source/wall_height12/env_base99_corner_l_5m_source_v002.blend",
     "glb": "assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v002.glb",
     "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v005.tscn",
     "scope": "TowerFloorStage3D facility 160m outer shell and active Base99 art layout; DungeonRoom3D keeps only the collision nodes",
@@ -45,7 +45,7 @@
     "locker_station": {
       "name_cn": "赛博储物站",
       "glb": "assets/art/props/base_world_3d/components/locker_station/prp_base_locker_station_visual_top3d_v004.glb",
-      "source": "assets/art/props/base_world_3d/source/locker_station/prp_base_locker_station_source_v004.blend",
+      "source": "art_source/props/base_world_3d/source/locker_station/prp_base_locker_station_source_v004.blend",
       "bounds_min": [
         -2.5,
         0.0,
@@ -65,7 +65,7 @@
     "weapon_workshop": {
       "name_cn": "赛博维修工作台",
       "glb": "assets/art/props/base_world_3d/components/weapon_workshop/prp_base_weapon_workshop_visual_top3d_v005.glb",
-      "source": "assets/art/props/base_world_3d/source/weapon_workshop/prp_base_weapon_workshop_source_v005.blend",
+      "source": "art_source/props/base_world_3d/source/weapon_workshop/prp_base_weapon_workshop_source_v005.blend",
       "bounds_min": [
         -2.4825191497802734,
         0.0,
@@ -84,7 +84,7 @@
     "retro_tv_station": {
       "name_cn": "复古游戏电视站",
       "glb": "assets/art/props/base_world_3d/components/retro_tv_station/prp_base_retro_tv_station_visual_top3d_v004.glb",
-      "source": "assets/art/props/base_world_3d/source/retro_tv_station/prp_base_retro_tv_station_source_v004.blend",
+      "source": "art_source/props/base_world_3d/source/retro_tv_station/prp_base_retro_tv_station_source_v004.blend",
       "bounds_min": [
         -2.485461950302124,
         0.0,
@@ -104,7 +104,7 @@
     "mission_operations": {
       "name_cn": "战术情报指挥桌",
       "glb": "assets/art/props/base_world_3d/components/mission_operations/prp_base_mission_operations_visual_top3d_v005.glb",
-      "source": "assets/art/props/base_world_3d/source/mission_operations/prp_base_mission_operations_source_v005.blend",
+      "source": "art_source/props/base_world_3d/source/mission_operations/prp_base_mission_operations_source_v005.blend",
       "bounds_min": [
         -2.499999761581421,
         0.0,
@@ -123,7 +123,7 @@
     "vending_machine": {
       "name_cn": "科幻自动贩卖机",
       "glb": "assets/art/props/base_world_3d/components/vending_machine/prp_base_vending_machine_visual_top3d_v003.glb",
-      "source": "assets/art/props/base_world_3d/source/vending_machine/prp_base_vending_machine_source_v003.blend",
+      "source": "art_source/props/base_world_3d/source/vending_machine/prp_base_vending_machine_source_v003.blend",
       "bounds_min": [
         -2.169503927230835,
         0.0,
@@ -143,7 +143,7 @@
       "name_cn": "塔楼通用12米U形楼梯间",
       "category": "environment_module",
       "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v002.glb",
-      "source": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
+      "source": "art_source/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
       "production_stage": "runtime_integrated",
       "runtime": "assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_generic_12m/env_tower_stairwell_generic_12m_root_top3d_v002.tscn",
       "footprint_size_m": [
@@ -163,7 +163,7 @@
       "name_cn": "塔楼楼顶专用12米U形楼梯间",
       "category": "environment_module",
       "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v002.glb",
-      "source": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
+      "source": "art_source/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
       "production_stage": "runtime_integrated",
       "runtime": "assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_rooftop_12m/env_tower_stairwell_rooftop_12m_root_top3d_v002.tscn",
       "footprint_size_m": [
@@ -183,7 +183,7 @@
       "name_cn": "基地99层二层楼中楼楼板20x10米Z5",
       "category": "environment_module",
       "glb": "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_visual_top3d_v004.glb",
-      "source": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend",
+      "source": "art_source/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend",
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_root_top3d_v004.tscn",
       "bounds_min": [
         -10.12375,
@@ -214,8 +214,8 @@
       "name_cn": "基地99层非门墙面内容资产包",
       "category": "environment_wall_content",
       "glb_root": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021",
-      "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
-      "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
+      "source": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+      "derived_from_blend": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
       "derived_from_version": "v017",
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
       "version": "v021",
@@ -231,8 +231,8 @@
       "name_cn": "基地99层剩余非门非墙独立设施资产包",
       "category": "environment_facility_bundle",
       "glb_root": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021",
-      "source": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-remaining_facilities.blend",
-      "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
+      "source": "art_source/design/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-remaining_facilities.blend",
+      "derived_from_blend": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
       "derived_from_version": "v017",
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "version": "v021",
@@ -247,8 +247,8 @@
       "asset_id": "ENV-BASE99-STRUCTURAL-V021",
       "name_cn": "基地99层阁楼、楼梯与阁楼下铁皮结构资产包",
       "glb_root": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021",
-      "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
-      "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
+      "source": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+      "derived_from_blend": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
       "derived_from_version": "v017",
       "version": "v021",
       "package_count": 4,
@@ -263,7 +263,7 @@
       "name_cn": "基地99层楼中楼下方工业仓库挡板",
       "category": "environment_module",
       "glb": "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_visual_top3d_v003.glb",
-      "source": "assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v003.blend",
+      "source": "art_source/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v003.blend",
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_root_top3d_v003.tscn",
       "bounds_min": [
         -9.66,
@@ -294,7 +294,7 @@
     "water_tank_blaster": {
       "name_cn": "水箱爆能枪",
       "glb": "assets/art/weapons/weapon_3d/components/water_tank_blaster/wpn_water_tank_blaster_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/water_tank_blaster/wpn_water_tank_blaster_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/water_tank_blaster/wpn_water_tank_blaster_source_v003.blend",
       "bounds_min": [
         -0.3408644199371338,
         -0.32526931166648865,
@@ -357,7 +357,7 @@
     "megaphone_cannon": {
       "name_cn": "扩音器加农炮",
       "glb": "assets/art/weapons/weapon_3d/components/megaphone_cannon/wpn_megaphone_cannon_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/megaphone_cannon/wpn_megaphone_cannon_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/megaphone_cannon/wpn_megaphone_cannon_source_v003.blend",
       "bounds_min": [
         -0.409406453371048,
         0.014394395984709263,
@@ -420,7 +420,7 @@
     "guitar_blaster": {
       "name_cn": "吉他爆能枪",
       "glb": "assets/art/weapons/weapon_3d/components/guitar_blaster/wpn_guitar_blaster_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/guitar_blaster/wpn_guitar_blaster_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/guitar_blaster/wpn_guitar_blaster_source_v003.blend",
       "bounds_min": [
         -0.16078202426433563,
         -0.034300170838832855,
@@ -483,7 +483,7 @@
     "spatula_rifle": {
       "name_cn": "锅铲步枪",
       "glb": "assets/art/weapons/weapon_3d/components/spatula_rifle/wpn_spatula_rifle_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/spatula_rifle/wpn_spatula_rifle_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/spatula_rifle/wpn_spatula_rifle_source_v003.blend",
       "bounds_min": [
         -0.2554520070552826,
         -0.15596015751361847,
@@ -546,7 +546,7 @@
     "frying_pan_cannon": {
       "name_cn": "平底锅加农炮",
       "glb": "assets/art/weapons/weapon_3d/components/frying_pan_cannon/wpn_frying_pan_cannon_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/frying_pan_cannon/wpn_frying_pan_cannon_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/frying_pan_cannon/wpn_frying_pan_cannon_source_v003.blend",
       "bounds_min": [
         -0.44260698556900024,
         0.018968872725963593,
@@ -609,7 +609,7 @@
     "toaster_launcher": {
       "name_cn": "烤面包机发射器",
       "glb": "assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/toaster_launcher/wpn_toaster_launcher_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/toaster_launcher/wpn_toaster_launcher_source_v003.blend",
       "bounds_min": [
         -0.31130358576774597,
         -0.0656546801328659,
@@ -672,7 +672,7 @@
     "scope_cannon": {
       "name_cn": "瞄准镜加农炮",
       "glb": "assets/art/weapons/weapon_3d/components/scope_cannon/wpn_scope_cannon_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/scope_cannon/wpn_scope_cannon_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/scope_cannon/wpn_scope_cannon_source_v003.blend",
       "bounds_min": [
         -0.3186517655849457,
         -0.3962721526622772,
@@ -735,7 +735,7 @@
     "popcorn_blaster": {
       "name_cn": "爆米花爆能枪",
       "glb": "assets/art/weapons/weapon_3d/components/popcorn_blaster/wpn_popcorn_blaster_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/popcorn_blaster/wpn_popcorn_blaster_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/popcorn_blaster/wpn_popcorn_blaster_source_v003.blend",
       "bounds_min": [
         -0.3074952960014343,
         0.06454860419034958,
@@ -798,7 +798,7 @@
     "gumball_cannon": {
       "name_cn": "口香糖机加农炮",
       "glb": "assets/art/weapons/weapon_3d/components/gumball_cannon/wpn_gumball_cannon_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/gumball_cannon/wpn_gumball_cannon_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/gumball_cannon/wpn_gumball_cannon_source_v003.blend",
       "bounds_min": [
         -0.536898672580719,
         -0.13167794048786163,
@@ -861,7 +861,7 @@
     "double_barrel_cannon": {
       "name_cn": "双管炮",
       "glb": "assets/art/weapons/weapon_3d/components/double_barrel_cannon/wpn_double_barrel_cannon_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/double_barrel_cannon/wpn_double_barrel_cannon_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/double_barrel_cannon/wpn_double_barrel_cannon_source_v003.blend",
       "bounds_min": [
         -0.2316478043794632,
         -0.08093897998332977,
@@ -924,7 +924,7 @@
     "soda_straw_blaster": {
       "name_cn": "饮料管爆能枪",
       "glb": "assets/art/weapons/weapon_3d/components/soda_straw_blaster/wpn_soda_straw_blaster_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/soda_straw_blaster/wpn_soda_straw_blaster_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/soda_straw_blaster/wpn_soda_straw_blaster_source_v003.blend",
       "bounds_min": [
         -0.30909669399261475,
         -0.15044178068637848,
@@ -987,7 +987,7 @@
     "crocodile_cannon": {
       "name_cn": "鳄鱼加农炮",
       "glb": "assets/art/weapons/weapon_3d/components/crocodile_cannon/wpn_crocodile_cannon_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/crocodile_cannon/wpn_crocodile_cannon_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/crocodile_cannon/wpn_crocodile_cannon_source_v003.blend",
       "bounds_min": [
         -0.2439606785774231,
         0.08584239333868027,
@@ -1050,7 +1050,7 @@
     "candy_sniper": {
       "name_cn": "糖果狙击枪",
       "glb": "assets/art/weapons/weapon_3d/components/candy_sniper/wpn_candy_sniper_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/candy_sniper/wpn_candy_sniper_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/candy_sniper/wpn_candy_sniper_source_v003.blend",
       "bounds_min": [
         -0.16394062340259552,
         -0.37620335817337036,
@@ -1113,7 +1113,7 @@
     "camera_blaster": {
       "name_cn": "相机爆能枪",
       "glb": "assets/art/weapons/weapon_3d/components/camera_blaster/wpn_camera_blaster_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/camera_blaster/wpn_camera_blaster_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/camera_blaster/wpn_camera_blaster_source_v003.blend",
       "bounds_min": [
         -0.39459553360939026,
         0.016466666013002396,
@@ -1176,7 +1176,7 @@
     "tissue_box_cannon": {
       "name_cn": "纸巾盒加农炮",
       "glb": "assets/art/weapons/weapon_3d/components/tissue_box_cannon/wpn_tissue_box_cannon_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/tissue_box_cannon/wpn_tissue_box_cannon_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/tissue_box_cannon/wpn_tissue_box_cannon_source_v003.blend",
       "bounds_min": [
         -0.26584187150001526,
         -0.05423745512962341,
@@ -1239,7 +1239,7 @@
     "broom_rifle": {
       "name_cn": "扫帚步枪",
       "glb": "assets/art/weapons/weapon_3d/components/broom_rifle/wpn_broom_rifle_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/broom_rifle/wpn_broom_rifle_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/broom_rifle/wpn_broom_rifle_source_v003.blend",
       "bounds_min": [
         -0.17655611038208008,
         -0.25830820202827454,
@@ -1302,7 +1302,7 @@
     "fan_blaster": {
       "name_cn": "风扇爆能枪",
       "glb": "assets/art/weapons/weapon_3d/components/fan_blaster/wpn_fan_blaster_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/fan_blaster/wpn_fan_blaster_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/fan_blaster/wpn_fan_blaster_source_v003.blend",
       "bounds_min": [
         -0.20515626668930054,
         0.03046875260770321,
@@ -1365,7 +1365,7 @@
     "hair_dryer": {
       "name_cn": "吹风机",
       "glb": "assets/art/weapons/weapon_3d/components/hair_dryer/wpn_hair_dryer_visual_top3d_v003.glb",
-      "source": "assets/art/weapons/weapon_3d/source/hair_dryer/wpn_hair_dryer_source_v003.blend",
+      "source": "art_source/weapons/weapon_3d/source/hair_dryer/wpn_hair_dryer_source_v003.blend",
       "bounds_min": [
         -0.24742408096790314,
         -0.14651910960674286,
@@ -1431,7 +1431,7 @@
       "name_cn": "赛博维修圆凳",
       "category": "decor_prop",
       "glb": "assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_visual_top3d_v003.glb",
-      "source": "assets/art/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v003.blend",
+      "source": "art_source/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v003.blend",
       "runtime": "assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn",
       "bounds_min": [
         -0.6376745700836182,
@@ -1451,7 +1451,7 @@
       "name_cn": "战术指挥椅",
       "category": "decor_prop",
       "glb": "assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_visual_top3d_v003.glb",
-      "source": "assets/art/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v003.blend",
+      "source": "art_source/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v003.blend",
       "runtime": "assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn",
       "bounds_min": [
         -0.6272826194763184,
@@ -1472,8 +1472,8 @@
     "asset_id": "ENV-BASE99-OPTIMIZED-PACKAGES-V021",
     "version": "v021",
     "package_count": 30,
-    "import_ledger": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json",
-    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+    "import_ledger": "art_source/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json",
+    "source_blend": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
     "runtime_roots": {
       "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
@@ -1485,8 +1485,8 @@
     "asset_id": "ENV-BASE99-DOOR-VISUALS-V021",
     "version": "v021",
     "package_count": 4,
-    "import_ledger": "assets/art/environments/base_facility_3d/source/env_base99_door_visuals_v021_import_manifest.json",
-    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+    "import_ledger": "art_source/environments/base_facility_3d/source/env_base99_door_visuals_v021_import_manifest.json",
+    "source_blend": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
     "runtime_roots": {
       "wall_door": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x12/env_base99_wall_door_5x12_root_top3d_v004.tscn",
       "door_lift": "assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
@@ -1497,7 +1497,7 @@
     "version": "v021",
     "revision": "v021_loft_layout_adjustment_001",
     "package_count": 3,
-    "layout_ledger": "assets/art/environments/base_facility_3d/source/env_base99_loft_layout_v021_manifest.json",
+    "layout_ledger": "art_source/environments/base_facility_3d/source/env_base99_loft_layout_v021_manifest.json",
     "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
     "export_policy": "layout_only_no_glb_reexport"
   },
@@ -1505,7 +1505,7 @@
     "asset_id": "ENV-BASE99-V022-UPDATES",
     "version": "v022",
     "package_count": 14,
-    "import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_updates_v022_import_manifest.json",
+    "import_manifest": "art_source/environments/base_facility_3d/source/env_base99_updates_v022_import_manifest.json",
     "runtime": {
       "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
@@ -1525,7 +1525,7 @@
     "asset_id": "ENV-BASE99-V023-STAIR-BED",
     "version": "v023",
     "package_count": 2,
-    "import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_stair_bed_v023_import_manifest.json",
+    "import_manifest": "art_source/environments/base_facility_3d/source/env_base99_stair_bed_v023_import_manifest.json",
     "runtime": {
       "bed_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v004.tscn",
       "stair_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn",
@@ -1535,9 +1535,9 @@
   },
   "base_rollup_reimport_v024": {
     "package": "42_BASE_CAMP大型卷帘主门_资产包",
-    "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
+    "source": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
     "source_sha256": "611e7015c8a8225dd19f7f9c8bdf33eec808c12f7a78f27f7fb8cc2ebf30d174",
-    "derived": "source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-rollup_main_door.blend",
+    "derived": "art_source/design/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-rollup_main_door.blend",
     "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d_v002.glb",
     "glb_sha256": "896ca6d605c5f5e6c494ae7790cc5e463523eb639f866f712442d3ec197bf9af",
     "triangles_before": 17760,
@@ -1565,11 +1565,11 @@
   },
   "base99_door_wall_height12": {
     "asset_id": "ENV-BASE99-WALL-DOOR-5X12",
-    "source": "assets/art/environments/base_facility_3d/source/wall_height12/env_base99_wall_door_5x12_source_v004.blend",
-    "derived_export": "assets/art/environments/base_facility_3d/source/wall_height12/env_base99_wall_door_5x12_source_v004.blend",
+    "source": "art_source/environments/base_facility_3d/source/wall_height12/env_base99_wall_door_5x12_source_v004.blend",
+    "derived_export": "art_source/environments/base_facility_3d/source/wall_height12/env_base99_wall_door_5x12_source_v004.blend",
     "glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d_v004.glb",
     "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x12/env_base99_wall_door_5x12_root_top3d_v004.tscn",
-    "import_ledger": "assets/art/environments/base_facility_3d/source/env_base99_door_wall_palette_v025_import_manifest.json",
+    "import_ledger": "art_source/environments/base_facility_3d/source/env_base99_door_wall_palette_v025_import_manifest.json",
     "scope": "Shared east/west Base99 door-wall visual; PaletteUV only."
   },
   "base99_facility_gameplay_bindings_v001": {
@@ -1644,7 +1644,7 @@
     "effective_date": "2026-09-12",
     "authority": "current Blender source files on disk",
     "selection_rule": "use the current source file; after a source update use the highest numeric v### as the formal source",
-    "current_master_source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "current_master_source": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
     "current_runtime_strategy": "incremental runtime asset versions remain valid; ledger records both current master source and actual runtime version",
     "material_roles": [
       "01_精工金属_紫色骨架",

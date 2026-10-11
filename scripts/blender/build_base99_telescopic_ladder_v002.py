@@ -5,14 +5,19 @@ Geometry is authored in metres, Z up. The lower carriage has an explicit
 Deploy_LowerSection action (2.5 m downward); Godot drives the same named part.
 """
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 from pathlib import Path
 import bpy
 
 PROJECT = Path(__file__).resolve().parents[2]
 ROOT = PROJECT / "assets/art/props/base_world_3d"
-SOURCE = ROOT / "source/base99_telescopic_ladder/prp_base99_telescopic_ladder_source_v002.blend"
+SOURCE = source_path(ROOT / "source/base99_telescopic_ladder/prp_base99_telescopic_ladder_source_v002.blend")
 COMPONENT = ROOT / "components/base99_telescopic_ladder"
-MATERIAL_MASTER = PROJECT / "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
+MATERIAL_MASTER = PROJECT / "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
 
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)

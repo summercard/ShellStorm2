@@ -7,7 +7,7 @@
 
 沿用v027三枪型×慢走/正常移动×左移/右移/后退18条循环，仅修改`ear_l/ear_r`旋转曲线。左移向角色右侧、右移向左侧、后退向前；耳根保持原位，头、持枪与脚步不改。慢走平均偏转10°，正常移动16°，按步态双频叠加3°/4.5°摆幅和小幅单频回弹；两耳相差0.32弧度相位，避免同步机械摆动。
 
-动作母版：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v028.blend`，场景17–34。继续关联v021模型、SKEL-BUNNY01-004；保留v027文件及全部旧Action，新18个Action以v028命名。源级中转同目录`chr_bunny01_directional_v028.json`。
+动作母版：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v028.blend`，场景17–34。继续关联v021模型、SKEL-BUNNY01-004；保留v027文件及全部旧Action，新18个Action以v028命名。源级中转同目录`chr_bunny01_directional_v028.json`。
 
 仅authored/待导入，不改Godot运行版本或状态机。持续移动循环保持方向偏转，开始/停止/转向的过渡由后续运行混合处理，本次不声称完成惯性模拟。前进循环仍待制作；规则已规定前进向后飘。回退选用保留的v027。
 

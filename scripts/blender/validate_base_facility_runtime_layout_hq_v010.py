@@ -5,9 +5,9 @@ from pathlib import Path
 import bpy
 
 PROJECT=Path("/Users/summercards/ShellStorm2")
-V009=PROJECT/"source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend"
-V010=PROJECT/"source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend"
-ROOT=PROJECT/"source/art/blender/base_facility_layout/component_packages_v010"
+V009=PROJECT/"art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend"
+V010=PROJECT/"art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend"
+ROOT=PROJECT/"art_source/design/blender/base_facility_layout/component_packages_v010"
 REPORT=PROJECT/"outputs/verification/base_facility_runtime_layout_hq_v010/base_facility_runtime_layout_hq_v010_validation.json"
 OUT9="02_游戏输出_独立资产包_v009"; OUT10="02_游戏输出_独立资产包_v010"
 OLD={"metal_bed_storage","bed_privacy_curtain","loft_bar_table","loft_bar_stool_01","loft_bar_stool_02","loft_workbench","loft_computer_terminal","loft_radio","loft_first_aid_kit","loft_fire_extinguisher","loft_supply_cabinet"}

@@ -2,8 +2,8 @@
 
 - 功能：ASSET-PIPELINE / WORLD-BLOCKS；工程0.1.0；仅Blender制作。
 - 来源：用户要求沿用父亲办公室风格，会议室中间不阻挡、南北两边排列大型低面苏联工业雕塑，第三第四房增加碎石断线、门厅背墙壁画，并拆除两房之间门墙与门扇。
-- 空间依据：`source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json`；会议室40×15m、走廊5×20m、门厅15×15m；墙高11.9m。原布局与办公室源SHA保持。
-- 当前源：`assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001/env_block00_story_rooms_source_v001.blend`。
+- 空间依据：`art_source/design/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json`；会议室40×15m、走廊5×20m、门厅15×15m；墙高11.9m。原布局与办公室源SHA保持。
+- 当前源：`art_source/environments/master_office_3d/source/env_block00_story_rooms/v001/env_block00_story_rooms_source_v001.blend`。
 - 资产：`ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE`，v001，场景账本《资产主表》第838行，状态“Blender源已完成”。9新组件为源内部组成部分，不登记不存在的Prefab。
 
 ## 实际交付

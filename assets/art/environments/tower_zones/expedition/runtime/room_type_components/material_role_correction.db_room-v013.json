@@ -13,7 +13,7 @@
   ],
   "records": [
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/expedition_db_room_components_source_v013.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/expedition_db_room_components_source_v013.blend",
       "groups": {
         "东北设备机架_制作源": {
           "metal_area_m2": 64.217,
@@ -3296,7 +3296,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/cable_coil_wall/cable_coil_wall.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/cable_coil_wall/cable_coil_wall.blend",
       "groups": {
         "壁挂电缆线圈_制作源": {
           "metal_area_m2": 10.143,
@@ -3349,7 +3349,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/center_double_sided_repair_island/center_double_sided_repair_island.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/center_double_sided_repair_island/center_double_sided_repair_island.blend",
       "groups": {
         "中央双面维修工作岛_制作源": {
           "metal_area_m2": 107.564,
@@ -3402,7 +3402,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/equipment_rack_ne/equipment_rack_ne.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/equipment_rack_ne/equipment_rack_ne.blend",
       "groups": {
         "东北设备机架_制作源": {
           "metal_area_m2": 64.217,
@@ -3455,7 +3455,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_east/island_cart_east.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_east/island_cart_east.blend",
       "groups": {
         "维修岛服务车_东_制作源": {
           "metal_area_m2": 8.262,
@@ -3508,7 +3508,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_west/island_cart_west.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_west/island_cart_west.blend",
       "groups": {
         "维修岛服务车_西_制作源": {
           "metal_area_m2": 8.262,
@@ -3561,7 +3561,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_gantry/raised_service_gantry.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_gantry/raised_service_gantry.blend",
       "groups": {
         "抬升平台检修门架_制作源": {
           "metal_area_m2": 16.174,
@@ -3614,7 +3614,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_platform/raised_service_platform.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_platform/raised_service_platform.blend",
       "groups": {
         "右前抬升检修平台_制作源": {
           "metal_area_m2": 110.841,
@@ -3667,7 +3667,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_00/rear_server_00.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_00/rear_server_00.blend",
       "groups": {
         "后左服务器柜_00_制作源": {
           "metal_area_m2": 94.727,
@@ -3720,7 +3720,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_01/rear_server_01.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_01/rear_server_01.blend",
       "groups": {
         "后左服务器柜_01_制作源": {
           "metal_area_m2": 94.727,
@@ -3773,7 +3773,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_02/rear_server_02.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_02/rear_server_02.blend",
       "groups": {
         "后左服务器柜_02_制作源": {
           "metal_area_m2": 94.727,
@@ -3826,7 +3826,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_03/rear_server_03.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_03/rear_server_03.blend",
       "groups": {
         "后左服务器柜_03_制作源": {
           "metal_area_m2": 94.727,
@@ -3879,7 +3879,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_04/rear_server_04.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_04/rear_server_04.blend",
       "groups": {
         "后左服务器柜_04_制作源": {
           "metal_area_m2": 94.727,
@@ -3932,7 +3932,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_05/rear_server_05.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_05/rear_server_05.blend",
       "groups": {
         "后左服务器柜_05_制作源": {
           "metal_area_m2": 94.727,
@@ -3985,7 +3985,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_00/rear_service_cart_00.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_00/rear_service_cart_00.blend",
       "groups": {
         "机柜服务推车_00_制作源": {
           "metal_area_m2": 9.014,
@@ -4038,7 +4038,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_01/rear_service_cart_01.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_01/rear_service_cart_01.blend",
       "groups": {
         "机柜服务推车_01_制作源": {
           "metal_area_m2": 9.014,
@@ -4091,7 +4091,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_02/rear_service_cart_02.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_02/rear_service_cart_02.blend",
       "groups": {
         "机柜服务推车_02_制作源": {
           "metal_area_m2": 9.014,
@@ -4144,7 +4144,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_00/right_front_cable_reel_00.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_00/right_front_cable_reel_00.blend",
       "groups": {
         "右前服务缆盘_00_制作源": {
           "metal_area_m2": 5.99,
@@ -4197,7 +4197,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_01/right_front_cable_reel_01.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_01/right_front_cable_reel_01.blend",
       "groups": {
         "右前服务缆盘_01_制作源": {
           "metal_area_m2": 5.99,
@@ -4250,7 +4250,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_service_terminal/right_front_service_terminal.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_service_terminal/right_front_service_terminal.blend",
       "groups": {
         "右前服务终端_制作源": {
           "metal_area_m2": 7.035,
@@ -4303,7 +4303,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_00/right_front_shelf_00.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_00/right_front_shelf_00.blend",
       "groups": {
         "右前货架_00_制作源": {
           "metal_area_m2": 20.334,
@@ -4356,7 +4356,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_01/right_front_shelf_01.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_01/right_front_shelf_01.blend",
       "groups": {
         "右前货架_01_制作源": {
           "metal_area_m2": 20.334,
@@ -4409,7 +4409,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_02/right_front_shelf_02.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_02/right_front_shelf_02.blend",
       "groups": {
         "右前货架_02_制作源": {
           "metal_area_m2": 20.334,
@@ -4462,7 +4462,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/shelving_heavy_north/shelving_heavy_north.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/shelving_heavy_north/shelving_heavy_north.blend",
       "groups": {
         "北墙重型货架_制作源": {
           "metal_area_m2": 86.583,
@@ -4515,7 +4515,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_light_pylon/wall_light_pylon.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_light_pylon/wall_light_pylon.blend",
       "groups": {
         "墙面竖向冷光灯柱_制作源": {
           "metal_area_m2": 55.901,
@@ -4568,7 +4568,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_screen_bank/wall_screen_bank.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_screen_bank/wall_screen_bank.blend",
       "groups": {
         "壁挂大屏组_制作源": {
           "metal_area_m2": 29.353,
@@ -4621,7 +4621,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_service_run/wall_service_run.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_service_run/wall_service_run.blend",
       "groups": {
         "墙面管道与线束_制作源": {
           "metal_area_m2": 169.943,
@@ -4674,7 +4674,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_l_east/workbench_l_east.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_l_east/workbench_l_east.blend",
       "groups": {
         "后右连续L形维修台_制作源": {
           "metal_area_m2": 270.118,
@@ -4727,7 +4727,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_west/workbench_west.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_west/workbench_west.blend",
       "groups": {
         "西墙检修工作台_制作源": {
           "metal_area_m2": 36.07,
@@ -4780,7 +4780,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-1/derived_tile_-1_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-1/derived_tile_-1_-1.blend",
       "groups": {
         "受控派生地砖_-1_-1_v002_制作源": {
           "metal_area_m2": 110.693,
@@ -4833,7 +4833,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-2/derived_tile_-1_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-2/derived_tile_-1_-2.blend",
       "groups": {
         "受控派生地砖_-1_-2_v002_制作源": {
           "metal_area_m2": 112.562,
@@ -4886,7 +4886,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-3/derived_tile_-1_-3.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-3/derived_tile_-1_-3.blend",
       "groups": {
         "受控派生地砖_-1_-3_v002_制作源": {
           "metal_area_m2": 106.713,
@@ -4939,7 +4939,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_0/derived_tile_-1_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_0/derived_tile_-1_0.blend",
       "groups": {
         "受控派生地砖_-1_0_v002_制作源": {
           "metal_area_m2": 107.178,
@@ -4992,7 +4992,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_1/derived_tile_-1_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_1/derived_tile_-1_1.blend",
       "groups": {
         "受控派生地砖_-1_1_v002_制作源": {
           "metal_area_m2": 106.666,
@@ -5045,7 +5045,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_2/derived_tile_-1_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_2/derived_tile_-1_2.blend",
       "groups": {
         "受控派生地砖_-1_2_v002_制作源": {
           "metal_area_m2": 106.905,
@@ -5098,7 +5098,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-1/derived_tile_-2_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-1/derived_tile_-2_-1.blend",
       "groups": {
         "受控派生地砖_-2_-1_v002_制作源": {
           "metal_area_m2": 107.327,
@@ -5151,7 +5151,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-2/derived_tile_-2_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-2/derived_tile_-2_-2.blend",
       "groups": {
         "受控派生地砖_-2_-2_v002_制作源": {
           "metal_area_m2": 106.777,
@@ -5204,7 +5204,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_0/derived_tile_-2_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_0/derived_tile_-2_0.blend",
       "groups": {
         "受控派生地砖_-2_0_v002_制作源": {
           "metal_area_m2": 106.221,
@@ -5257,7 +5257,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_1/derived_tile_-2_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_1/derived_tile_-2_1.blend",
       "groups": {
         "受控派生地砖_-2_1_v002_制作源": {
           "metal_area_m2": 112.713,
@@ -5310,7 +5310,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_2/derived_tile_-2_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_2/derived_tile_-2_2.blend",
       "groups": {
         "受控派生地砖_-2_2_v002_制作源": {
           "metal_area_m2": 106.689,
@@ -5363,7 +5363,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-1/derived_tile_-3_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-1/derived_tile_-3_-1.blend",
       "groups": {
         "受控派生地砖_-3_-1_v002_制作源": {
           "metal_area_m2": 113.154,
@@ -5416,7 +5416,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-2/derived_tile_-3_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-2/derived_tile_-3_-2.blend",
       "groups": {
         "受控派生地砖_-3_-2_v002_制作源": {
           "metal_area_m2": 106.523,
@@ -5469,7 +5469,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_0/derived_tile_-3_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_0/derived_tile_-3_0.blend",
       "groups": {
         "受控派生地砖_-3_0_v002_制作源": {
           "metal_area_m2": 107.342,
@@ -5522,7 +5522,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_1/derived_tile_-3_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_1/derived_tile_-3_1.blend",
       "groups": {
         "受控派生地砖_-3_1_v002_制作源": {
           "metal_area_m2": 106.674,
@@ -5575,7 +5575,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_2/derived_tile_-3_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_2/derived_tile_-3_2.blend",
       "groups": {
         "受控派生地砖_-3_2_v002_制作源": {
           "metal_area_m2": 107.146,
@@ -5628,7 +5628,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-1/derived_tile_-4_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-1/derived_tile_-4_-1.blend",
       "groups": {
         "受控派生地砖_-4_-1_v002_制作源": {
           "metal_area_m2": 112.312,
@@ -5681,7 +5681,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-2/derived_tile_-4_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-2/derived_tile_-4_-2.blend",
       "groups": {
         "受控派生地砖_-4_-2_v002_制作源": {
           "metal_area_m2": 106.609,
@@ -5734,7 +5734,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_0/derived_tile_-4_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_0/derived_tile_-4_0.blend",
       "groups": {
         "受控派生地砖_-4_0_v002_制作源": {
           "metal_area_m2": 106.865,
@@ -5787,7 +5787,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_1/derived_tile_-4_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_1/derived_tile_-4_1.blend",
       "groups": {
         "受控派生地砖_-4_1_v002_制作源": {
           "metal_area_m2": 106.897,
@@ -5840,7 +5840,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_2/derived_tile_-4_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_2/derived_tile_-4_2.blend",
       "groups": {
         "受控派生地砖_-4_2_v002_制作源": {
           "metal_area_m2": 106.705,
@@ -5893,7 +5893,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-1/derived_tile_0_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-1/derived_tile_0_-1.blend",
       "groups": {
         "受控派生地砖_0_-1_v002_制作源": {
           "metal_area_m2": 106.437,
@@ -5946,7 +5946,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-2/derived_tile_0_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-2/derived_tile_0_-2.blend",
       "groups": {
         "受控派生地砖_0_-2_v002_制作源": {
           "metal_area_m2": 106.38,
@@ -5999,7 +5999,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-3/derived_tile_0_-3.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-3/derived_tile_0_-3.blend",
       "groups": {
         "受控派生地砖_0_-3_v002_制作源": {
           "metal_area_m2": 107.395,
@@ -6052,7 +6052,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_0/derived_tile_0_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_0/derived_tile_0_0.blend",
       "groups": {
         "受控派生地砖_0_0_v002_制作源": {
           "metal_area_m2": 112.991,
@@ -6105,7 +6105,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_1/derived_tile_0_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_1/derived_tile_0_1.blend",
       "groups": {
         "受控派生地砖_0_1_v002_制作源": {
           "metal_area_m2": 107.059,
@@ -6158,7 +6158,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_2/derived_tile_0_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_2/derived_tile_0_2.blend",
       "groups": {
         "受控派生地砖_0_2_v002_制作源": {
           "metal_area_m2": 110.704,
@@ -6211,7 +6211,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-1/derived_tile_1_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-1/derived_tile_1_-1.blend",
       "groups": {
         "受控派生地砖_1_-1_v002_制作源": {
           "metal_area_m2": 106.849,
@@ -6264,7 +6264,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-2/derived_tile_1_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-2/derived_tile_1_-2.blend",
       "groups": {
         "受控派生地砖_1_-2_v002_制作源": {
           "metal_area_m2": 107.227,
@@ -6317,7 +6317,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_0/derived_tile_1_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_0/derived_tile_1_0.blend",
       "groups": {
         "受控派生地砖_1_0_v002_制作源": {
           "metal_area_m2": 107.144,
@@ -6370,7 +6370,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_1/derived_tile_1_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_1/derived_tile_1_1.blend",
       "groups": {
         "受控派生地砖_1_1_v002_制作源": {
           "metal_area_m2": 106.528,
@@ -6423,7 +6423,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_2/derived_tile_1_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_2/derived_tile_1_2.blend",
       "groups": {
         "受控派生地砖_1_2_v002_制作源": {
           "metal_area_m2": 112.644,
@@ -6476,7 +6476,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-1/derived_tile_2_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-1/derived_tile_2_-1.blend",
       "groups": {
         "受控派生地砖_2_-1_v002_制作源": {
           "metal_area_m2": 112.312,
@@ -6529,7 +6529,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-2/derived_tile_2_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-2/derived_tile_2_-2.blend",
       "groups": {
         "受控派生地砖_2_-2_v002_制作源": {
           "metal_area_m2": 106.609,
@@ -6582,7 +6582,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_0/derived_tile_2_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_0/derived_tile_2_0.blend",
       "groups": {
         "受控派生地砖_2_0_v002_制作源": {
           "metal_area_m2": 106.865,
@@ -6635,7 +6635,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_1/derived_tile_2_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_1/derived_tile_2_1.blend",
       "groups": {
         "受控派生地砖_2_1_v002_制作源": {
           "metal_area_m2": 106.897,
@@ -6688,7 +6688,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_2/derived_tile_2_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_2/derived_tile_2_2.blend",
       "groups": {
         "受控派生地砖_2_2_v002_制作源": {
           "metal_area_m2": 106.705,
@@ -6741,7 +6741,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-1/derived_tile_3_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-1/derived_tile_3_-1.blend",
       "groups": {
         "受控派生地砖_3_-1_v002_制作源": {
           "metal_area_m2": 113.154,
@@ -6794,7 +6794,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-2/derived_tile_3_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-2/derived_tile_3_-2.blend",
       "groups": {
         "受控派生地砖_3_-2_v002_制作源": {
           "metal_area_m2": 106.523,
@@ -6847,7 +6847,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_0/derived_tile_3_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_0/derived_tile_3_0.blend",
       "groups": {
         "受控派生地砖_3_0_v002_制作源": {
           "metal_area_m2": 107.342,
@@ -6900,7 +6900,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_1/derived_tile_3_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_1/derived_tile_3_1.blend",
       "groups": {
         "受控派生地砖_3_1_v002_制作源": {
           "metal_area_m2": 106.674,
@@ -6953,7 +6953,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_2/derived_tile_3_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_2/derived_tile_3_2.blend",
       "groups": {
         "受控派生地砖_3_2_v002_制作源": {
           "metal_area_m2": 107.146,
@@ -7006,7 +7006,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_conduit_run/floor_conduit_run.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_conduit_run/floor_conduit_run.blend",
       "groups": {
         "地面线槽与检修盖板_制作源": {
           "metal_area_m2": 80.545,
@@ -7059,7 +7059,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_hazard_edging/floor_hazard_edging.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_hazard_edging/floor_hazard_edging.blend",
       "groups": {
         "沿墙黄黑警示边带_制作源": {
           "metal_area_m2": 206.798,
@@ -7112,7 +7112,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-1/ceiling_deck_-1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-1/ceiling_deck_-1.blend",
       "groups": {
         "吊顶结构_-1_制作源": {
           "metal_area_m2": 458.806,
@@ -7165,7 +7165,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-2/ceiling_deck_-2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-2/ceiling_deck_-2.blend",
       "groups": {
         "吊顶结构_-2_制作源": {
           "metal_area_m2": 458.806,
@@ -7218,7 +7218,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-3/ceiling_deck_-3.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-3/ceiling_deck_-3.blend",
       "groups": {
         "吊顶结构_-3_制作源": {
           "metal_area_m2": 114.702,
@@ -7271,7 +7271,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_0/ceiling_deck_0.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_0/ceiling_deck_0.blend",
       "groups": {
         "吊顶结构_0_制作源": {
           "metal_area_m2": 458.806,
@@ -7324,7 +7324,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_1/ceiling_deck_1.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_1/ceiling_deck_1.blend",
       "groups": {
         "吊顶结构_1_制作源": {
           "metal_area_m2": 458.806,
@@ -7377,7 +7377,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_2/ceiling_deck_2.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_2/ceiling_deck_2.blend",
       "groups": {
         "吊顶结构_2_制作源": {
           "metal_area_m2": 458.806,
@@ -7430,7 +7430,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_lighting/ceiling_lighting.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_lighting/ceiling_lighting.blend",
       "groups": {
         "顶部灯具_制作源": {
           "metal_area_m2": 112.714,
@@ -7483,7 +7483,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
       "groups": {
         "吊顶周圈圈梁_制作源": {
           "metal_area_m2": 400.399,
@@ -7536,7 +7536,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
       "groups": {
         "顶部电缆桥架与线缆_制作源": {
           "metal_area_m2": 247.879,
@@ -7589,7 +7589,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
       "groups": {
         "顶部通风管与风口_制作源": {
           "metal_area_m2": 116.458,
@@ -7642,7 +7642,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
       "groups": {
         "顶部管道与法兰_制作源": {
           "metal_area_m2": 101.133,
@@ -7695,7 +7695,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/corner_guard/corner_guard.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/corner_guard/corner_guard.blend",
       "groups": {
         "转角护柱_制作源": {
           "metal_area_m2": 29.052,
@@ -7748,7 +7748,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_bus/rear_server_bus.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_bus/rear_server_bus.blend",
       "groups": {
         "后左机柜公共理线槽_制作源": {
           "metal_area_m2": 66.582,
@@ -7801,7 +7801,7 @@
       ]
     },
     {
-      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_top_service/wall_top_service.blend",
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/art_source/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_top_service/wall_top_service.blend",
       "groups": {
         "墙顶管线收口_制作源": {
           "metal_area_m2": 249.777,

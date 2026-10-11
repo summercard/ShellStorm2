@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys,json,hashlib
 from collections import Counter
@@ -5,7 +10,7 @@ from openpyxl import load_workbook
 R=Path(__file__).resolve().parents[2];sys.path[:0]=[str(R/'scripts'),str(R/'tools/asset_pipeline')]
 from ledger_registry import LedgerIndex
 from split_asset_ledger import read_source_rows,_row_digest,CONTENT_COLUMNS,col_digest
-B=R/'assets/art/enemies/bosses/enm_boss_monitor002';ID='ENM-BOSS-MONITOR002-3D';src=B/'source/enm_boss_monitor002_source_v004.blend';audit=json.loads((B/'previews/expressions_v004/audit.json').read_text());assert audit['passed']
+B=R/'assets/art/enemies/bosses/enm_boss_monitor002';ID='ENM-BOSS-MONITOR002-3D';src=source_path(B/'source/enm_boss_monitor002_source_v004.blend');audit=json.loads((B/'previews/expressions_v004/audit.json').read_text());assert audit['passed']
 ix=LedgerIndex.load(R);p=ix.path_for_category('敌人');w=load_workbook(p);s=w['资产主表'];row=next(r for r,v in read_source_rows(s) if v[0]==ID)
 s.cell(row,13,'v004');s.cell(row,15,src.relative_to(R).as_posix());s.cell(row,20,hashlib.sha256(src.read_bytes()).hexdigest());s.cell(row,14,'18144三角面；六表情图集；无骨骼');s.cell(row,9,'T Pose / default,suspicious,angry,sleepy,taunting,glitched');s.cell(row,25,'v004：按参考图修正默认并补齐6种表情；ExpressionController.expression_index切换，24帧恒定插值预览；图片已内嵌。JSON记录各部件裁切与UV规则。身体不变，未接入Godot。')
 w['域变更日志'].append(['v004','2026-10-03','Codex',ID,'六表情图集与可切换预览，保持18144面']);w.save(p)
@@ -13,7 +18,7 @@ blp=R/'assets/registry/ledger_split_baseline.json';bl=json.loads(blp.read_text(e
 rows=[]
 for d in ix.domains:rows.extend(read_source_rows(load_workbook(R/'assets/registry/ledgers'/d.file)['资产主表']))
 bl['column_digests']={str(c):col_digest(rows,c) for c in CONTENT_COLUMNS};bl['category_counts']=dict(Counter(v[2] for r,v in rows));blp.write_text(json.dumps(bl,ensure_ascii=False,indent=1)+'\n',encoding='utf-8')
-p=B/'source/boss002_production_ledger.xlsx';w=load_workbook(p);s=w.active;s['C12']='六表情透明图集；三个平面6三角面；属性切换';s['D12']='v004已制作'
+p=source_path(B/'source/boss002_production_ledger.xlsx');w=load_workbook(p);s=w.active;s['C12']='六表情透明图集；三个平面6三角面；属性切换';s['D12']='v004已制作'
 for rr in range(1,s.max_row+1):
     if s.cell(rr,1).value=='当前源版本':s.cell(rr,2,'v004');s.cell(rr,3,'source/enm_boss_monitor002_source_v004.blend')
     if s.cell(rr,1).value=='面数统计':s.cell(rr,2,'previews/expressions_v004/audit.json')

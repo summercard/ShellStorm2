@@ -4,7 +4,7 @@
 
 ## 交付
 
-源：`assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend`。
+源：`art_source/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend`。
 
 37包、10类：地面5、女儿墙4、房间墙3、房顶3、空调与设备6、管线5、门/雨棚2、固定绿化4、细节3、外墙2。房间前后左右由3种墙包与独立门/植物/设备装配。4个共享材质、166个制作网格、38个整合输出网格；灯芯独立。保存37份manifest、catalog、目录树及249个实例的参考装配JSON。完整源与输出保存在同一Blend的不同Collection；拼装预览是独立Scene。
 

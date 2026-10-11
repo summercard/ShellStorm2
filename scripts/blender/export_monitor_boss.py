@@ -1,4 +1,9 @@
 """Export isolated Boss002 visual and evaluated pose motion; never edit v030 sources."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, json, hashlib, math, shutil, datetime, subprocess
 from pathlib import Path
 from mathutils import Matrix
@@ -16,14 +21,14 @@ def signature(r):
     data=[{'name':b.name,'parent':b.parent.name if b.parent else None,'rest':[round(v,8) for row in b.matrix_local for v in row]} for b in r.data.bones]
     return hashlib.sha256(json.dumps(data,sort_keys=True).encode()).hexdigest()
 def load(kind):
-    bpy.ops.wm.open_mainfile(filepath=str(B/f'source/enm_boss_monitor002_{kind}_v030.blend'))
+    bpy.ops.wm.open_mainfile(filepath=str(source_path(B/f'source/enm_boss_monitor002_{kind}_v030.blend')))
     bpy.context.window.scene=bpy.data.scenes['BOSS002_STUDIO']
     return bpy.data.objects['Boss002_Rig']
 
 rig=load('animation'); sig=signature(rig)
 def legacy_signature(r):return hashlib.sha256(json.dumps([(b.name,b.parent.name if b.parent else None,list(b.head_local),list(b.tail_local),b.use_deform) for b in r.data.bones],sort_keys=True).encode()).hexdigest()
 legacy_sig=legacy_signature(rig)
-assert legacy_sig==json.loads((B/'source/rig_contract_v030.json').read_text())['skeleton_signature']
+assert legacy_sig==json.loads((source_path(B/'source/rig_contract_v030.json')).read_text())['skeleton_signature']
 # A death-specific source clip reuses authored collapse, then settles and holds.
 dead=bpy.data.actions['stun_enter'].copy();dead.name='dead';dead.use_fake_user=True
 for fc in dead.fcurves:
@@ -31,7 +36,7 @@ for fc in dead.fcurves:
         k.co.x=1+(k.co.x-1)*1.25;k.handle_left.x=1+(k.handle_left.x-1)*1.25;k.handle_right.x=1+(k.handle_right.x-1)*1.25
     fc.keyframe_points.insert(61,fc.evaluate(53.5))
 for s in bpy.data.scenes:s['asset_version']='v031'
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v031.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v031.blend')))
 bone_names=[b.name for b in rig.data.bones]
 motion={};probes={};bounds={}
 for name,n in COUNTS.items():
@@ -58,7 +63,7 @@ for name,n in COUNTS.items():
 rig=load('model');assert signature(rig)==sig,'Dual source rest mismatch'
 assert legacy_signature(rig)==legacy_sig
 for s in bpy.data.scenes:s['asset_version']='v031'
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v031.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v031.blend')))
 rig.animation_data_clear()
 for p in rig.pose.bones:
     for c in list(p.constraints):p.constraints.remove(c)
@@ -91,9 +96,9 @@ bpy.context.view_layer.update()
 for o in bpy.context.scene.objects:o.hide_set(False);o.hide_viewport=False;o.select_set(True)
 out=C/'enm_boss_monitor002_visual_top3d.glb'
 bpy.ops.export_scene.gltf(filepath=str(out),export_format='GLB',export_animations=False,export_yup=True,export_skins=True,use_selection=True,export_cameras=False,export_lights=False)
-contract=json.loads((B/'source/rig_contract_v030.json').read_text());contract.update(version='v031',formal_animations_authored=list(COUNTS),export_signature=sig,export_signature_schema='ordered bone names, parents and 8-decimal rest matrices')
-(B/'source/rig_contract_v031.json').write_text(json.dumps(contract,ensure_ascii=False,indent=2),encoding='utf-8')
-sources=[B/f'source/enm_boss_monitor002_{k}_v031.blend' for k in ['model','animation']]
+contract=json.loads((source_path(B/'source/rig_contract_v030.json')).read_text());contract.update(version='v031',formal_animations_authored=list(COUNTS),export_signature=sig,export_signature_schema='ordered bone names, parents and 8-decimal rest matrices')
+(source_path(B/'source/rig_contract_v031.json')).write_text(json.dumps(contract,ensure_ascii=False,indent=2),encoding='utf-8')
+sources=[source_path(B/f'source/enm_boss_monitor002_{k}_v031.blend') for k in ['model','animation']]
 transfer={'asset_id':'ENM-BOSS-MONITOR002-3D','version':'v031','status':'exported_pending_godot_validation','classification':'version_increment','skeleton_id':'SKEL-MONITOR002-005','model_signature':sig,'animation_signature':sig,'legacy_signature':legacy_sig,'source_sha256':{p.relative_to(R).as_posix():sha(p) for p in sources},'files':[{'path':p.relative_to(R).as_posix(),'sha256':sha(p)} for p in C.iterdir() if p.is_file() and p.suffix!='.import'], 'clips':{k:{'duration':n/30,'loop':k in LOOPS,'tracks':len(bone_names),'root_motion':False} for k,n in COUNTS.items()},'pose_sampling':'Evaluated C @ global matrices at 30Hz; preserve nonuniform stretch/shear and all constraints via Skeleton3D overrides, indexed by AnimationPlayer. No extra local-axis conversion.','textures':textures,'consumer':'src/enemy3d/MonitorBossPresentation.gd','collision_owner':'Enemy3D','rollback':'Retained v030 dual masters; runtime restore from Git baseline','git_baseline':None}
 transfer['generated_at']=datetime.datetime.now().astimezone().isoformat(timespec='seconds');transfer['generated_by']='Codex / Blender evaluated exporter'
 transfer['git_baseline']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()

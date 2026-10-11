@@ -8,7 +8,7 @@
 
 其他15剪辑数据逐值不变，其他Blender动作曲线哈希不变，v031双母版SHA不变。64骨架静止姿态签名一致，模型几何未改，复用现役纯视觉GLB；只重新采样move并更新稳定路径monitor_motion.json。Prefab元数据、manifest、中转、敌人账本、制作明细同步v032/active。没有修改控制器、碰撞、技能数值、其他动作或远征刷新规则。
 
-规范源位于assets/art/enemies/bosses/enm_boss_monitor002/source/，预览及源检查位于同资产previews/move_v032/；正式状态消费仍是MonitorBossPresentation。回滚保留v031源及Git基线。
+规范源位于art_source/enemies/bosses/enm_boss_monitor002/source/，预览及源检查位于同资产previews/move_v032/；正式状态消费仍是MonitorBossPresentation。回滚保留v031源及Git基线。
 
 ## 验收证据
 

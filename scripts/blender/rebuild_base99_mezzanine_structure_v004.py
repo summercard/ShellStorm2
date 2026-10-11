@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 import hashlib
 import json
 from pathlib import Path
@@ -11,10 +16,10 @@ import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
 ROOT = PROJECT / "assets/art/environments/base_facility_3d"
-INPUT = ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v005.blend"
-OUTPUT = ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend"
+INPUT = source_path(ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v005.blend")
+OUTPUT = source_path(ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend")
 GLB = ROOT / "components/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_visual_top3d_v004.glb"
-MANIFEST = ROOT / "source/env_base99_modular_room/env_base99_mezzanine_20x10_z5_v004_manifest.json"
+MANIFEST = source_path(ROOT / "source/env_base99_modular_room/env_base99_mezzanine_20x10_z5_v004_manifest.json")
 ASSET_ID = "ENV-BASE99-MEZZANINE-20X10-Z5"
 
 

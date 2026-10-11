@@ -1,4 +1,9 @@
 """Ear-only directional follow-through; retain all v027 limb/gun curves."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys, math, json, hashlib
 import bpy
@@ -7,10 +12,10 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import author_bunny_directional_v027 as d
 h = d.h
-SOURCE = h.BASE/'source/animation/chr_bunny01_animation_v027.blend'
-TARGET = h.BASE/'source/animation/chr_bunny01_animation_v028.blend'
+SOURCE = source_path(h.BASE/'source/animation/chr_bunny01_animation_v027.blend')
+TARGET = source_path(h.BASE/'source/animation/chr_bunny01_animation_v028.blend')
 OUT = h.ROOT/'outputs/character_pipeline/directional_v028'
-TRANSFER = h.BASE/'source/animation/chr_bunny01_directional_v028.json'
+TRANSFER = source_path(h.BASE/'source/animation/chr_bunny01_directional_v028.json')
 SPECS = json.loads((d.OUT/'specs.json').read_text())
 EARS = ('ear_l', 'ear_r')
 

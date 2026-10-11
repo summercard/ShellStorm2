@@ -7,7 +7,7 @@
 
 只修订三个站立持枪动作的手臂及枪体预览，保持呼吸节奏、头耳、脚和root表现。短枪由76°改为约55°向前上倾，位置移至角色右侧前方；长枪主握点沿Blender +Y由0.125移至0.30m；机枪由0.095移至0.47m，并将主握高度由0.21抬至0.245m。手掌与武器主握/支撑点同步，不改变枪模或运行Prefab。
 
-新源：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v026.blend`，场景14–16。保留v025文件以及其全部20个Action（含预览枪动作）；新动作名称以v026结尾。模型、静止骨架签名与单位缩放不改。沿用现有悬浮手角色的动作内肩点前伸，不声明适用于连续手臂网格；最大左右肩点位移记录在 `outputs/character_pipeline/weapon_idle_v026/reach.json`。
+新源：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v026.blend`，场景14–16。保留v025文件以及其全部20个Action（含预览枪动作）；新动作名称以v026结尾。模型、静止骨架签名与单位缩放不改。沿用现有悬浮手角色的动作内肩点前伸，不声明适用于连续手臂网格；最大左右肩点位移记录在 `outputs/character_pipeline/weapon_idle_v026/reach.json`。
 
 ## 验证与证据
 

@@ -1,6 +1,6 @@
 # 仓库与工作台深化 v020
 
-源文件：`source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend`。从 v019 续作，原版本保留。
+源文件：`art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend`。从 v019 续作，原版本保留。
 
 仅修改 49_武器工作台与弹药附件_资产包，以及 50_仓库与辅助设施下的8个组件资产包。49已原名归入50，账本资产包键不变。所有制作组件、游戏输出及检视相机均在授权包内。
 

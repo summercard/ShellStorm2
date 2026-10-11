@@ -4,7 +4,7 @@ FeatureID：PLAYER-STATE / ASSET-PIPELINE；工程0.1.0。按用户反馈增强�
 
 仅重制longgun_reload与machinegun_reload：明显抬枪前移和倾斜，操作中沉降、回弹，压紧后回位；双手跟随枪体。源尺寸长枪握点最大位移0.349m、转角34.19°；机枪0.251m、35.02°。保持原2秒创作时间，运行时仍按真实换弹进度整体缩放；短枪及其余89条JSON剪辑逐值相同。未改运行状态机、武器数值、碰撞和模型。
 
-新母版：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v034.blend`；稳定JSON91条、GLB77条。源重开3条检查含481子帧/条，最大右掌握点误差0.013mm，单位缩放与首末回位通过。
+新母版：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v034.blend`；稳定JSON91条、GLB77条。源重开3条检查含481子帧/条，最大右掌握点误差0.013mm，单位缩放与首末回位通过。
 
 验收证据：`outputs/character_pipeline/reload_v034/`，真实渲染预览`reload.gif`。三族0.4/1.5/4秒同步、取消/打断、四方向移动与新增枪体位移/旋转判据通过；相关换弹状态、收取枪、射击、方向、动画、握点碰撞、尺寸与换装回归通过。用户数据在autoload前隔离；预期错误无、非预期脚本错误无。全项目、移动端性能与完整续档未验。
 

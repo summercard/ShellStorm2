@@ -6,10 +6,10 @@ FeatureID：ASSET-PIPELINE。依据[设计契约](../design/tower04_ground_court
 
 | 资产 | 文件 | 实测 |
 |---|---|---|
-| ENV-OPENWORLD-TOWER04 | `assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend` | 2051独立包、47组件定义，圆形屋面30m、主平台25m |
-| ENV-OPENWORLD-TOWER04-2 | `assets/art/environments/open_world/source/tower_04_2/v002/塔4-2_近景庭院_v002.blend` | 23种组件、1027实例、1188174可见三角形 |
-| 同区域远景组件 | `assets/art/environments/open_world/source/tower_04_2/v002/塔4-2_远景组件_v002.blend` | 同布局，79435可见三角形 |
-| ENV-OPENWORLD-TOWER04-FAR | `assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend` | 合景583247三角，塔楼503812＋庭院79435；无隐藏高模 |
+| ENV-OPENWORLD-TOWER04 | `art_source/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend` | 2051独立包、47组件定义，圆形屋面30m、主平台25m |
+| ENV-OPENWORLD-TOWER04-2 | `art_source/environments/open_world/source/tower_04_2/v002/塔4-2_近景庭院_v002.blend` | 23种组件、1027实例、1188174可见三角形 |
+| 同区域远景组件 | `art_source/environments/open_world/source/tower_04_2/v002/塔4-2_远景组件_v002.blend` | 同布局，79435可见三角形 |
+| ENV-OPENWORLD-TOWER04-FAR | `art_source/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend` | 合景583247三角，塔楼503812＋庭院79435；无隐藏高模 |
 
 仅顶部圆形屋面与附着植物上移5m；补加层楼板、分开间窗墙、28级旋梯、独立支撑和平台。踏步实际顶面25.23357–30.055m，起点平台25.055m，级高0.17857m，净宽2.1m。接口复核后切开原连廊两段护栏，保留4m入口；3693个范围外对象的完整签名与v009相同。
 

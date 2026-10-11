@@ -6,7 +6,7 @@ from mathutils import Vector
 ROOT = Path('/Users/summercards/ShellStorm2')
 BOSS_DIR = ROOT / 'assets/art/enemies/bosses_v01'
 ARENA_DIR = ROOT / 'assets/art/environments/boss_arenas_v01'
-SOURCE_DIR = ROOT / 'source/art/blender/bosses_v01'
+SOURCE_DIR = ROOT / 'art_source/design/blender/bosses_v01'
 
 
 def reset():

@@ -1,4 +1,9 @@
 """Author raised firing variants without changing any delivered carry actions."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys,json,math
 import bpy
@@ -7,8 +12,8 @@ sys.dont_write_bytecode=True
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import author_bunny_directional_v027 as d
 h=d.h
-SOURCE=h.BASE/'source/animation/chr_bunny01_animation_v029.blend'
-TARGET=h.BASE/'source/animation/chr_bunny01_animation_v030.blend'
+SOURCE=source_path(h.BASE/'source/animation/chr_bunny01_animation_v029.blend')
+TARGET=source_path(h.BASE/'source/animation/chr_bunny01_animation_v030.blend')
 OUT=h.ROOT/'outputs/character_pipeline/firing_v030'
 
 def solve(rig,rest,posed,side,palm):

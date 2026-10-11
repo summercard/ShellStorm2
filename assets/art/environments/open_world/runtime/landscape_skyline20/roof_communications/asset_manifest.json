@@ -55,8 +55,8 @@
     "open_world_landscape"
   ],
   "version": "v006",
-  "source_blend": "assets/art/environments/open_world/source/landscape_skyline20/v006/env_landscape_skyline20_source_v006.blend",
-  "optimized_blend": "assets/art/environments/open_world/source/landscape_skyline20/v006/export/v006/env_landscape_skyline20_optimized_v006.blend",
+  "source_blend": "art_source/environments/open_world/source/landscape_skyline20/v006/env_landscape_skyline20_source_v006.blend",
+  "optimized_blend": "art_source/environments/open_world/source/landscape_skyline20/v006/export/v006/env_landscape_skyline20_optimized_v006.blend",
   "source_sha256_before": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92",
   "source_sha256_after": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92",
   "optimized_sha256": "67f09f7517c93e353df22b97c7d6e5d7f02da3ea1a137d00740c4389158c10f8",

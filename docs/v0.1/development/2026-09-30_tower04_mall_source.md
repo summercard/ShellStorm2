@@ -12,7 +12,7 @@ FeatureID：ASSET-PIPELINE；工程版本0.1.0；资产`ENV-OPENWORLD-TOWER04`�
 
 ## 源与验收
 
-源：`assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend`。复建脚本`tools/blender/build_tower04_mall_source.py`，独立审计`tools/blender/audit_tower04_mall_source.py`。
+源：`art_source/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend`。复建脚本`tools/blender/build_tower04_mall_source.py`，独立审计`tools/blender/audit_tower04_mall_source.py`。
 
 保存后重新打开源文件：包络、层数、材质来源、原资产锁定、112包唯一归属和清单对应全部通过，见源目录`qa/source_audit.json`。使用技能提供的严格`validate_game_prop.py --all-meshes --max-materials 4 --shared-palette ...`验收输出及隐藏源全部网格，逐面UV安全色格、有面积UV岛、活动/渲染层、Closest和唯一外链贴图全部通过，见`qa/palette_validation.json`。
 

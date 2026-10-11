@@ -1,11 +1,16 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,hashlib,sys,math
 from pathlib import Path
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/keyboard_v015';F=P/'frames';F.mkdir(exist_ok=True)
 def sig(r):return hashlib.sha256(json.dumps([(b.name,b.parent.name if b.parent else None,list(b.head_local),list(b.tail_local),b.use_deform) for b in r.data.bones],sort_keys=True).encode()).hexdigest()
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v015.blend'));signature=sig(bpy.data.objects['Boss002_Rig']);checks={'static_model_no_actions':len(bpy.data.actions)==0}
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v015.blend'));rig=bpy.data.objects['Boss002_Rig'];s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v015.blend')));signature=sig(bpy.data.objects['Boss002_Rig']);checks={'static_model_no_actions':len(bpy.data.actions)==0}
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v015.blend')));rig=bpy.data.objects['Boss002_Rig'];s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s
 checks['dual_master_signature']=signature==sig(rig);checks['all_three_actions']=all(bpy.data.actions.get(n) for n in ['idle','move','melee_keyboard']);checks['single_attack_no_cycles']=not any(fc.modifiers for fc in bpy.data.actions['melee_keyboard'].fcurves);checks['three_materials']=len({m.name for o in bpy.data.scenes['BOSS002_SOURCE_TPOSE'].objects if o.type=='MESH' for m in o.data.materials if m})==3
 checks['normalized_weights']=all(abs(sum(g.weight for g in v.groups)-1)<1e-5 for o in bpy.data.scenes['BOSS002_SOURCE_TPOSE'].objects if o.type=='MESH' and o.vertex_groups for v in o.data.vertices)
 tri=0

@@ -1,4 +1,9 @@
 """Boss002 source-only authoring. Run with Blender 4.5 --background --factory-startup."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, math, json
 from pathlib import Path
 from mathutils import Vector
@@ -245,7 +250,7 @@ for screen_ui in bpy.data.screens:
         if ar.type=='VIEW_3D':
             ar.spaces.active.region_3d.view_distance=7.5;ar.spaces.active.region_3d.view_location=(0,0,1.7);ar.spaces.active.region_3d.view_rotation=cam.rotation_euler.to_quaternion();ar.spaces.active.shading.type='MATERIAL'
 bpy.ops.object.select_all(action='DESELECT')
-source=BASE/'source/enm_boss_monitor002_source_v001.blend'
+source=source_path(BASE/'source/enm_boss_monitor002_source_v001.blend')
 bpy.ops.wm.save_as_mainfile(filepath=str(source))
 bpy.context.window.scene=preview
 for name,loc,scale in [('overview',(3.5,11,4.8),7.4),('front',(-.3,12,1.72),7.4),('back',(3,-11,4.5),7.4),('side',(12,0,2.8),5.0)]:

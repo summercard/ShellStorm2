@@ -1,10 +1,15 @@
 """MCP authoring: revise only move; grounded pedestal and delayed upper-body twist."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,math,hashlib,shutil
 from pathlib import Path
 from mathutils import Vector,Quaternion,Matrix
 R=Path('I:/工作项目/shellstrom2/ShellStorm2');B=R/'assets/art/enemies/bosses/enm_boss_monitor002'
 Q=B/'previews/move_v032';Q.mkdir(exist_ok=True);D=R/'_scratch/monitor_move_v032';D.mkdir(exist_ok=True)
-C=B/'components/enm_boss_monitor002';oldfile=B/'source/enm_boss_monitor002_animation_v031.blend'
+C=B/'components/enm_boss_monitor002';oldfile=source_path(B/'source/enm_boss_monitor002_animation_v031.blend')
 assert Path(bpy.data.filepath).resolve()==oldfile.resolve(),bpy.data.filepath
 bpy.context.preferences.filepaths.save_version=0
 bpy.ops.wm.save_as_mainfile(filepath=str(D/'session_before.blend'),copy=True)
@@ -16,7 +21,7 @@ def signature(r):
  return hashlib.sha256(json.dumps([{'name':b.name,'parent':b.parent.name if b.parent else None,'rest':[round(v,8) for row in b.matrix_local for v in row]} for b in r.data.bones],sort_keys=True).encode()).hexdigest()
 def axis(p,v,a):return Quaternion(p.bone.matrix_local.to_3x3().inverted()@Vector(v),a)
 old_hashes={a.name:action_hash(a) for a in bpy.data.actions if a.name!='move'}
-old_sources={k:sha(B/f'source/enm_boss_monitor002_{k}_v031.blend') for k in ['model','animation']}
+old_sources={k:sha(source_path(B/f'source/enm_boss_monitor002_{k}_v031.blend')) for k in ['model','animation']}
 sig=signature(rig);act=bpy.data.actions['move'];rig.animation_data.action=act
 cached=[]
 for f in range(1,50):
@@ -44,7 +49,7 @@ for fc in act.fcurves:
 act['description']='Grounded lateral pedestal translation; delayed screen/body yaw through support; flexible arm follow-through. No pedestal tilt or lift.'
 for scene in bpy.data.scenes:scene['asset_version']='v032'
 s.frame_start=1;s.frame_end=48;s.frame_set(1)
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v032.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v032.blend')))
 assert old_hashes=={a.name:action_hash(a) for a in bpy.data.actions if a.name!='move'}
 # Independently evaluate rigid pedestal vertices at full and half frames.
 ground=[];top=[];xs=[];yaw=[];hands={k:[] for k in ['hand.L','hand.R']};first=None;last=None
@@ -79,14 +84,14 @@ assert all(motion['clips'][k]==original['clips'][k] for k in motion['clips'] if 
 for name,data in [('source_pose_probes.json',probes),('source_mesh_bounds.json',bounds)]:
  p=B/'previews/runtime'/name;shutil.copy2(p,D/name);out=json.loads(p.read_text());out['move']=data;p.write_text(json.dumps(out))
 # New model master is the same geometry/rest/rig; no static GLB rebuild is needed.
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v031.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v031.blend')))
 assert signature(bpy.data.objects['Boss002_Rig'])==sig
 for scene in bpy.data.scenes:scene['asset_version']='v032'
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v032.blend'))
-assert all(sha(B/f'source/enm_boss_monitor002_{k}_v031.blend')==v for k,v in old_sources.items())
-contract=json.loads((B/'source/rig_contract_v031.json').read_text());contract.update(version='v032',export_signature=sig,move={'fps':30,'start':1,'end':48,'closure':49,'duration_seconds':1.6,'root_motion':False,'pedestal_roll_degrees':0,'pedestal_lateral_range':.46,'pedestal_bottom_z':.005,'body_twist_degrees':21,'revision':'r26 grounded shuffle'})
-(B/'source/rig_contract_v032.json').write_text(json.dumps(contract,ensure_ascii=False,indent=2),encoding='utf-8')
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v032.blend')))
+assert all(sha(source_path(B/f'source/enm_boss_monitor002_{k}_v031.blend'))==v for k,v in old_sources.items())
+contract=json.loads((source_path(B/'source/rig_contract_v031.json')).read_text());contract.update(version='v032',export_signature=sig,move={'fps':30,'start':1,'end':48,'closure':49,'duration_seconds':1.6,'root_motion':False,'pedestal_roll_degrees':0,'pedestal_lateral_range':.46,'pedestal_bottom_z':.005,'body_twist_degrees':21,'revision':'r26 grounded shuffle'})
+(source_path(B/'source/rig_contract_v032.json')).write_text(json.dumps(contract,ensure_ascii=False,indent=2),encoding='utf-8')
 audit['dual_signature_equal']=True;audit['static_glb_reused']=sha(C/'enm_boss_monitor002_visual_top3d.glb')
 (Q/'source_audit.json').write_text(json.dumps(audit,indent=2));print(json.dumps(audit))
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v032.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v032.blend')))
 bpy.context.window_manager.windows[0].scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.data.scenes['BOSS002_STUDIO'].frame_set(13)

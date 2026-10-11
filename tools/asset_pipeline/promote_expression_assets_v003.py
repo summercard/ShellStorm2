@@ -1,4 +1,9 @@
 """Verified eight-expression promotion: main rows and locked sheets separately."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 import sys,json,shutil,openpyxl
 from pathlib import Path
 from copy import deepcopy
@@ -36,7 +41,7 @@ def main():
         baseline['column_digests']={str(c):col_digest(union,c) for c in CONTENT_COLUMNS}
         baseline['category_counts']=dict(sorted(Counter(v[2] for _,v in union).items()))
     else:
-        model=ASSET/'source/chr_bunny01_electronic_mask_model_v003.blend'
+        model=source_path(ASSET/'source/chr_bunny01_electronic_mask_model_v003.blend')
         w=wb['角色组件']; r=find(w,2,'glasses/electronic_mask')
         change(w,r,10,'继承head姿态；局部Blink/闪烁；独立CharacterExpressionSystem选择8种网格，状态事件适配器调用')
         change(w,r,13,f'{ID} v003；8个表达子组件，生气红色，?和!为符号；无玩法/碰撞权威。')

@@ -1,5 +1,7 @@
 # v0.1 模块、功能与工程契约索引
 
+ASSET-PIPELINE / WORLD-BLOCKS / PLAYER-STATE / ENEMY-AI：[美术制作源分离](development/2026-10-11_art_source_split.md)。当前源统一 `art_source/`，Git/LFS 管理且不入包；保留 1,095 份 Blend，原位资源 5,011 文件保真，39 份运行 JSON 投影通过，正式资源路径与版本不变。目录规则见 [制作源规范](../ART_SOURCE_LAYOUT.md)。
+
 ASSET-PIPELINE / PLAYER-STATE / ENEMY-AI：[贴图去重与尺寸优化](development/2026-10-11_runtime_texture_optimization.md)，依据[运行贴图预算](design/runtime_texture_budget.md)。玩家≤1024、怪物（含Boss）≤512、其他≤1024；正式PCK502.73→267.12MiB，玩家272.70→63.44MiB，完全重复CTEX已清零。104模型几何/骨架/动画保真、资源包加载及角色/怪物专项通过，真实玩家握枪渲染通过；完整流程及APK未执行，历史门禁红项保留。
 
 ASSET-PIPELINE / WORLD-BLOCKS：[工程瘦身执行记录](development/2026-10-11_workspace_slimming.md)。两阶段已实施：工程59.48→约12.69GiB（冷目录约12.06GiB），Windows PCK 1973.90→502.73MiB；保留1,102份当前源、完整Git、文档及正式运行资产，旧源/预览/历史产物在上层备份。39份运行JSON投影、账本与运行资源保真验证通过，全量游戏历史红项及旧缓存保留见记录。原[计划](audits/2026-10-11_development_workspace_slimming_plan.md)保留作实施前估算。

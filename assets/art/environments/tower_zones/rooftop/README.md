@@ -10,7 +10,7 @@
 - Godot 包装：`runtime/zone_rooftop_v021.tscn`
 - Blender 源：`assets/art/environments/rooftop_shelter_3d/`（整体目录）
 - 微缩景观：`assets/art/environments/rooftop_shelter_diorama_3d/`
-- 50m 制作源：`source/art/blender/environments_v01/rooftop_shelter_50m/`
+- 50m 制作源：`art_source/design/blender/environments_v01/rooftop_shelter_50m/`
 - 连带清理：`verify_rooftop_shelter_asset_contract`、`src/world3d/RooftopAmbience3D.gd`、`tools/asset_pipeline/` 下 3 个天台专用脚本
 
 回滚锚点：`git tag pre-old-rooftop-removal`（HEAD `73e3fac6`）。

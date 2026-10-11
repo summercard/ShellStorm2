@@ -1,4 +1,9 @@
 """Restore only Boss002's runtime move clip from the verified v031 source."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy
 import json
 from pathlib import Path
@@ -7,7 +12,7 @@ from mathutils import Matrix
 ROOT = Path("I:/工作项目/shellstrom2/ShellStorm2")
 BOSS = ROOT / "assets/art/enemies/bosses/enm_boss_monitor002"
 COMPONENTS = BOSS / "components/enm_boss_monitor002"
-SOURCE = BOSS / "source/enm_boss_monitor002_animation_v031.blend"
+SOURCE = source_path(BOSS / "source/enm_boss_monitor002_animation_v031.blend")
 CONVERSION = Matrix(((1, 0, 0, 0), (0, 0, 1, 0), (0, -1, 0, 0), (0, 0, 0, 1)))
 
 bpy.ops.wm.open_mainfile(filepath=str(SOURCE))

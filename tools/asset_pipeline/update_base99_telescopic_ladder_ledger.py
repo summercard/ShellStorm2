@@ -73,7 +73,7 @@ def main():
     for col in range(1, 26):
         sheet.cell(row, col)._style = copy(sheet.cell(template, col)._style)
     sheet.row_dimensions[row].height = sheet.row_dimensions[template].height
-    source = "assets/art/props/base_world_3d/source/base99_telescopic_ladder/prp_base99_telescopic_ladder_source_v001.blend"
+    source = "art_source/props/base_world_3d/source/base99_telescopic_ladder/prp_base99_telescopic_ladder_source_v001.blend"
     upper = "assets/art/props/base_world_3d/components/base99_telescopic_ladder/prp_base99_telescopic_ladder_upper_visual_top3d.glb"
     lower = "assets/art/props/base_world_3d/components/base99_telescopic_ladder/prp_base99_telescopic_ladder_lower_visual_top3d.glb"
     runtime = "assets/art/props/base_world_3d/runtime/base99_telescopic_ladder/prp_base99_telescopic_ladder_root_top3d.tscn"
@@ -123,7 +123,7 @@ def main():
     append_log(scene, "东侧旧斜梯退役", "场景 / 基地结构", "BPK-BASE99-EAST-UPPER-TRANSITION-STAIR从运行时移除并标记弃用，保留历史源。")
 
     cs = char["资产主表"]
-    animation = "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v024/source/animation/chr_bunny01_animation_v024.blend"
+    animation = "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v024/source/animation/chr_bunny01_animation_v024.blend"
     transfer = "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v024/character_transfer_ledger_v024.json"
     assert (ROOT / animation).is_file() and (ROOT / transfer).is_file()
     cs.cell(bunny_row, 9).value = "default / seated / climbing"

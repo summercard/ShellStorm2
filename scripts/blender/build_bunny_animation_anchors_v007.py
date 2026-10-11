@@ -7,9 +7,9 @@ from mathutils import Matrix, Vector
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SOURCE_BLEND = PROJECT_ROOT / "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v006.blend"
-OUTPUT_BLEND = PROJECT_ROOT / "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v007.blend"
-ACCESSORY_BLEND = PROJECT_ROOT / "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/accessories/head/chibi_anime_head_v001/source/chr_player_bunny01_head_chibi_anime_source_v001.blend"
+SOURCE_BLEND = PROJECT_ROOT / "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v006.blend"
+OUTPUT_BLEND = PROJECT_ROOT / "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v007.blend"
+ACCESSORY_BLEND = PROJECT_ROOT / "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/accessories/head/chibi_anime_head_v001/source/chr_player_bunny01_head_chibi_anime_source_v001.blend"
 ACCESSORY_COLLECTION = "二次元头部配件_中文管理"
 
 

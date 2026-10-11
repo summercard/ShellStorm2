@@ -13,7 +13,7 @@
 | `15_长枪_站立待机_胸前斜持` | `anim_bunny01_longgun_idle_v025` / 3.6s | 双手斜持身体前方，枪口约12°上倾，不贴腮 |
 | `16_机枪_站立待机_低位承重` | `anim_bunny01_machinegun_idle_v025` / 4s | 双手低位承重，枪口约10°下倾，降低枪体避免挡住面部 |
 
-动作母版：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v025.blend`。沿用相对路径链接的 `production/v021/source/model/chr_bunny01_model_v021.blend`，模型与静止绑定未修改。骨架 `SKEL-BUNNY01-004`，签名 `203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8`。
+动作母版：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v025.blend`。沿用相对路径链接的 `production/v021/source/model/chr_bunny01_model_v021.blend`，模型与静止绑定未修改。骨架 `SKEL-BUNNY01-004`，签名 `203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8`。
 
 三条动作分别制作呼吸、头耳轻微跟随和手臂承重曲线；root不移，双脚固定，肩肘腕两段求解保持骨长与单位缩放。长枪、机枪左手跟随实际Prefab的SupportHandSocket，右掌跟随主握点。预览复用吹风机、扫帚步枪、水箱爆能枪的真实GLB及Prefab偏移，比例沿用现有作者空间1.5/2.475。枪模、相机和枪体预览曲线标记 `preview_only`，禁止作为角色骨骼动作导出。
 

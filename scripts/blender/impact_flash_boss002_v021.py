@@ -1,9 +1,14 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib,shutil
 from pathlib import Path
 from mathutils import Vector
 R=Path.cwd();B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/heavy_v021';P.mkdir(exist_ok=True);F=P/'frames';F.mkdir(exist_ok=True)
 for kind in ['model','animation']:
- bpy.ops.wm.open_mainfile(filepath=str(B/f'source/enm_boss_monitor002_{kind}_v020.blend'))
+ bpy.ops.wm.open_mainfile(filepath=str(source_path(B/f'source/enm_boss_monitor002_{kind}_v020.blend')))
  for sc in bpy.data.scenes:sc['asset_version']='v021'
  if kind=='animation':
   s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;fx=bpy.data.collections['BOSS002_IMPACT_PREVIEW'];s.frame_set(65);origin=next(o.location.copy() for o in fx.objects if o.name.startswith('Ground pulse 0 sector'));origin.z=.065
@@ -21,7 +26,7 @@ for kind in ['model','animation']:
    for fc in a.fcurves:
     for k in fc.keyframe_points:k.interpolation='CONSTANT'
   s.frame_set(1)
- bpy.ops.wm.save_as_mainfile(filepath=str(B/f'source/enm_boss_monitor002_{kind}_v021.blend'))
+ bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/f'source/enm_boss_monitor002_{kind}_v021.blend')))
 a=[]
 for f in range(1,98):
  s.frame_set(f)

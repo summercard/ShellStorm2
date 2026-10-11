@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,hashlib,math
 from pathlib import Path
 from mathutils import Vector
@@ -5,9 +10,9 @@ R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_mo
 def verts(o):
     e=o.evaluated_get(bpy.context.evaluated_depsgraph_get());m=e.to_mesh();v=[e.matrix_world@v.co for v in m.vertices];e.to_mesh_clear();return v
 def sign(rig):return hashlib.sha256(json.dumps([(b.name,b.parent.name if b.parent else None,list(b.head_local),list(b.tail_local),b.use_deform) for b in rig.data.bones],sort_keys=True).encode()).hexdigest()
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_source_v004.blend'));bpy.context.window.scene=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.scene.frame_set(1)
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_source_v004.blend')));bpy.context.window.scene=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.scene.frame_set(1)
 old={o.name:verts(o) for o in bpy.context.scene.objects if o.type=='MESH' and o.name not in ['Stand column','Portrait rotation hinge','Hinge cap','Texture large_eye','Texture round_eye','Texture mouth']}
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v007.blend'));s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;rig=bpy.data.objects['Boss002_Rig'];ctrl=bpy.data.objects['ExpressionController'];signature=sign(rig)
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v007.blend')));s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;rig=bpy.data.objects['Boss002_Rig'];ctrl=bpy.data.objects['ExpressionController'];signature=sign(rig)
 def update():rig.update_tag();bpy.context.view_layer.update()
 def reset():
     for p in rig.pose.bones:p.location=(0,0,0);p.rotation_euler=(0,0,0);p.scale=(1,1,1)
@@ -69,5 +74,5 @@ for o in s.objects:
     if o.type=='MESH':
         e=o.evaluated_get(bpy.context.evaluated_depsgraph_get());me=e.to_mesh();me.calc_loop_triangles();tri+=len(me.loop_triangles);e.to_mesh_clear()
 checks['under_20k_triangles']=tri<20000;results['evaluated_triangles']=tri
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v007.blend'));checks['dual_master_signature_matches']=sign(bpy.data.objects['Boss002_Rig'])==signature;checks['qa_actions_exist']=len([a for a in bpy.data.actions if a.name.startswith('QA_')])==5
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v007.blend')));checks['dual_master_signature_matches']=sign(bpy.data.objects['Boss002_Rig'])==signature;checks['qa_actions_exist']=len([a for a in bpy.data.actions if a.name.startswith('QA_')])==5
 report={'checks':checks,'passed':all(checks.values()),'results':results,'skeleton_signature':signature,'exit_code':0 if all(checks.values()) else 1,'expected_faults':[],'not_executed':['Godot import','runtime state mapping','GLB constraint baking','final gameplay animations']};(P/'audit.json').write_text(json.dumps(report,indent=2),encoding='utf-8');print(json.dumps(report,indent=2));assert report['passed']

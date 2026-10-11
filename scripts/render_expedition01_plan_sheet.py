@@ -7,7 +7,7 @@
 真源（版图一改就要重跑本脚本）—— **文档即数据源**，房间尺寸 / 定位 / 坐标 / 父房直接解析设计页表格：
   docs/v0.1/design/远征关卡01设计.md            §3.1 总表（编号/中文名/定位/房型/尺寸/面积）
                                                 §4.2 坐标草案（中心 x,y / 父房）
-  source/art/whitebox/tower_zones/expedition_01/v001/data/level_plan.json
+  art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json
       site 250x250 居中 (2.5, 2.5) / grid_unit_m 5 / floor_height_m 12
 
 输出（图纸是示意稿，几何真源始终是 floor_00.json）：
@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTDIR = ROOT / "docs/v0.1/design/refs/expedition01"
 PLANDIR = OUTDIR / "plans"
 DESIGN_MD = ROOT / "docs/v0.1/design/远征关卡01设计.md"
-LEVEL_PLAN = ROOT / "source/art/whitebox/tower_zones/expedition_01/v001/data/level_plan.json"
+LEVEL_PLAN = ROOT / "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json"
 
 # ---------------------------------------------------------------- 基础工具
 
@@ -1014,7 +1014,7 @@ def build_html():
 
 <div class="foot">
 来源：<code>docs/v0.1/design/远征关卡01设计.md</code>（房型库 §3 / 坐标草案 §4）·
-<code>source/art/whitebox/tower_zones/expedition_01/v001/data/level_plan.json</code> ·
+<code>art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json</code> ·
 <code>floor_00.json</code>。参考图见 <code>refs/expedition01/</code>。<br>
 生成于 2026-09-25 · 示意图集（画的是<b>示例版图</b>；实跑版图由 <code>FloorPlanGenerator</code> 按种子现算）。本版：四房缩尺 + 桥房改工字型 + 主路加深到 13 房 + 支线取消（图纸只画主路）。
 </div>

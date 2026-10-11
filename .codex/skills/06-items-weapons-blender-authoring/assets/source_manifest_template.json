@@ -11,9 +11,9 @@
   "created_at": "YYYY-MM-DD",
 
   "blender": {
-    "source_path": "assets/art/items_weapons/props/room_key/source/prp_room_key_source_v001.blend",
+    "source_path": "art_source/items_weapons/props/room_key/source/prp_room_key_source_v001.blend",
     "source_sha256": null,
-    "template_used": "assets/art/items_weapons/_templates/prp/prp_template_source_v001.blend",
+    "template_used": "art_source/items_weapons/_templates/prp/prp_template_source_v001.blend",
     "unit_system": "METRIC",
     "root_scale": [1.0, 1.0, 1.0],
     "blender_version": "4.5"

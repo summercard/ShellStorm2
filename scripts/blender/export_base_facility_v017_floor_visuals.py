@@ -7,7 +7,7 @@ Blender-authored surface treatment and the separate second-floor finish.
 
 Run from the repository root:
   /Applications/Blender.app/Contents/MacOS/Blender --background \\
-    source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend \\
+    art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend \\
     --python scripts/blender/export_base_facility_v017_floor_visuals.py
 """
 
@@ -22,7 +22,7 @@ import bpy
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SOURCE_BLEND = PROJECT_ROOT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+SOURCE_BLEND = PROJECT_ROOT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
 COMPONENT_ROOT = PROJECT_ROOT / "assets/art/environments/base_facility_3d/components"
 GROUND_OUTPUT = (
     COMPONENT_ROOT

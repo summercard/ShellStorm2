@@ -1,13 +1,18 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector,Matrix,Quaternion
 R=Path.cwd();B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/cable_v023';P.mkdir(exist_ok=True)
 def signatures():
  return {a.name:hashlib.sha256(repr([(f.data_path,f.array_index,[tuple(k.co) for k in f.keyframe_points]) for f in a.fcurves]).encode()).hexdigest() for a in bpy.data.actions if a.name in ['idle','move','melee_keyboard','heavy_spin_slam']}
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v022.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v022.blend')))
 for sc in bpy.data.scenes:sc['asset_version']='v023'
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v023.blend'))
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v022.blend'));old=signatures()
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v023.blend')))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v022.blend')));old=signatures()
 oldscene=bpy.data.scenes['BOSS002_STUDIO'];oldscene.name='BOSS002_HEAVY_PREVIEW';s=oldscene.copy();s.name='BOSS002_STUDIO';s.use_fake_user=True;s.collection.children.unlink(bpy.data.collections['BOSS002_IMPACT_PREVIEW']);bpy.context.window.scene=s
 rig=bpy.data.objects['Boss002_Rig'];arm=rig.data;rig.animation_data.action=bpy.data.actions['melee_keyboard'];s.frame_set(1)
 base={p.name:(p.location.copy(),p.rotation_quaternion.copy(),p.scale.copy()) for p in rig.pose.bones};neutral={side:rig.pose.bones['hand.'+side].matrix.copy() for side in ['L','R']};stretch={side:rig['stretch_'+side] for side in ['L','R']}
@@ -74,7 +79,7 @@ for fr in range(25,39):
    for k in fc.keyframe_points:k.interpolation='CONSTANT'
 for sc in [s,bpy.data.scenes['BOSS002_SOURCE_TPOSE']]:sc.frame_start=1;sc.frame_end=61;sc.render.fps=30;sc['asset_version']='v023'
 s.camera=s.camera.copy();s.collection.objects.link(s.camera);s.camera.data=s.camera.data.copy();s.camera.location=(6,13,8);s.camera.rotation_euler=(Vector((0,.5,1.65))-s.camera.location).to_track_quat('-Z','Y').to_euler();s.camera.data.ortho_scale=14
-assert signatures()==old;s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v023.blend'))
+assert signatures()==old;s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v023.blend')))
 (P/'trajectory.json').write_text(json.dumps(traj,indent=2));(P/'initial_audit.json').write_text(json.dumps({'old_actions_unchanged':True,'action':'melee_cable','duration_seconds':2,'held_cable_hand':'hand.R (existing cable hand)','total_cable_length':sum(lengths),'palette':'keyboard cyan / magenta / white','hold_frames':[17,21],'active_frames':[25,34]},indent=2))
 s.cycles.samples=8;s.render.resolution_x=960;s.render.resolution_y=800
 for f in [17,29,33,37]:s.frame_set(f);s.render.filepath=str(P/('pose_%03d.png'%f));bpy.ops.render.render(write_still=True)

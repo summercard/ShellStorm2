@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,math,hashlib
 from pathlib import Path
 from mathutils import Vector
-R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';T=B/'source/textures_v004';P=B/'previews/expressions_v004';P.mkdir(exist_ok=True)
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_source_v003.blend'))
+R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';T=source_path(B/'source/textures_v004');P=B/'previews/expressions_v004';P.mkdir(exist_ok=True)
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_source_v003.blend')))
 src=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=src
 names=['default','suspicious','angry','sleepy','taunting','glitched']
 face=bpy.data.collections['02_FACE_default']
@@ -63,9 +68,9 @@ for o in src.objects:
 assert tri==18144
 manifest={'asset_id':'ENM-BOSS-MONITOR002-3D','version':'v004','atlas':'source/textures_v004/expressions_atlas.png','atlas_size':[1536,1024],'grid':[3,2],'expression_property':'ExpressionController[expression_index]','expressions':[{'index':i,'id':n,'preview_frame':1+24*i,'atlas_cell':[i%3,i//3]} for i,n in enumerate(names)],'regions_pixels_within_cell':regions,'sampling':'constant / discrete, no crossfade','preview_action':action.name,'runtime_binding':'not integrated; JSON gives row/column and UV contract for future material animation','triangles':tri,'rigged':False,'body_mesh_digests':body}
 manifest['per_expression_slot_boxes_pixels']=per_boxes
-(B/'source/expression_library_v004.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
+(source_path(B/'source/expression_library_v004.json')).write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
 bpy.ops.object.select_all(action='DESELECT');ctrl.select_set(True);bpy.context.view_layer.objects.active=ctrl
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_source_v004.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_source_v004.blend')))
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;scene.cycles.samples=24;cam=scene.camera
 cam.location=(0,12,2.5);cam.rotation_euler=(Vector((0,0,2.5))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=3.15
 scene.render.resolution_x=900;scene.render.resolution_y=900

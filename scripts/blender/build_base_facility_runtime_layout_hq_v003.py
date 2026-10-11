@@ -19,7 +19,7 @@ from mathutils import Vector
 
 
 PROJECT = Path(__file__).resolve().parents[2]
-OUTPUT_BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v003.blend"
+OUTPUT_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v003.blend"
 OUTPUT_HERO = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v003.png"
 OUTPUT_TOP = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v003_top.png"
 OUTPUT_DETAIL = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v003_underloft.png"

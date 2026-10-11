@@ -6,6 +6,11 @@ source objects: only the four long handrails and their four corner-end posts are
 replaced, while every stair tread, beam, landing and guide light is preserved.
 """
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 import bpy
 import json
 from pathlib import Path
@@ -14,10 +19,10 @@ from mathutils import Matrix, Vector
 
 PROJECT_ROOT = Path("/Users/summercards/ShellStorm2")
 ASSET_ROOT = PROJECT_ROOT / "assets/art/environments/base_facility_3d"
-INPUT_BLEND = ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v002.blend"
-OUTPUT_BLEND = ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v004.blend"
+INPUT_BLEND = source_path(ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v002.blend")
+OUTPUT_BLEND = source_path(ASSET_ROOT / "source/env_base99_modular_room/env_base99_modular_room_assets_clean_v004.blend")
 OUTPUT_GLB = ASSET_ROOT / "components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d_v004.glb"
-MANIFEST = ASSET_ROOT / "source/env_base99_modular_room/env_base99_stair_l_z5_v004_manifest.json"
+MANIFEST = source_path(ASSET_ROOT / "source/env_base99_modular_room/env_base99_stair_l_z5_v004_manifest.json")
 
 ASSET_ID = "ENV-BASE99-STAIR-L-Z5"
 VERSION = "v004"

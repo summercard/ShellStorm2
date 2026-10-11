@@ -24,7 +24,7 @@ COMPONENT_ROOTS = (
     PROJECT_ROOT / "assets/art/environments/base_facility_3d/components",
     PROJECT_ROOT / "assets/art/props/base_world_3d/components",
 )
-LEGACY_SOURCE_TEXTURE_ROOT = PROJECT_ROOT / "assets/art/environments/base_facility_3d/source/env_base99_modular_room/textures"
+LEGACY_SOURCE_TEXTURE_ROOT = PROJECT_ROOT / "art_source/environments/base_facility_3d/source/env_base99_modular_room/textures"
 POST_IMPORT = "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
 DOOR_POST_IMPORT = "res://tools/asset_pipeline/scene_facility_door_visual_post_import.gd"
 ALLOWED_POST_IMPORTS = (POST_IMPORT, DOOR_POST_IMPORT)

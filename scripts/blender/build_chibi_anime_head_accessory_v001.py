@@ -1,5 +1,10 @@
 """Build the chibi anime head as a HeadJoint-aligned Bunny accessory."""
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 from pathlib import Path
 import json
 import math
@@ -14,7 +19,7 @@ ASSET_ROOT = (
     / "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01"
     / "accessories/head/chibi_anime_head_v001"
 )
-SOURCE_DIR = ASSET_ROOT / "source"
+SOURCE_DIR = source_path(ASSET_ROOT / "source")
 RUNTIME_DIR = ASSET_ROOT / "runtime"
 PREVIEW_DIR = ASSET_ROOT / "previews"
 RAW_FBX = SOURCE_DIR / "chr_player_bunny01_head_chibi_anime_raw_v001.fbx"

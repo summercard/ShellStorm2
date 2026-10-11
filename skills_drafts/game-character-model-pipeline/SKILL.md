@@ -2,6 +2,10 @@
 name: game-character-model-pipeline
 description: 从 Godot 项目代码、场景、测试与 Blender 源文件反推角色契约，再制作、重制、导出和验收玩家、NPC、敌人或 Boss 角色。处理角色层级、模块化换装、骨骼或节点动画、挂点、GLB 与 PackedScene；不用于武器、普通道具或场景设施。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 角色模型制作、反推与 Godot 导入
 

@@ -2,6 +2,11 @@
 
 blender --factory-startup --background --python scripts/blender/export_openworld_towers.py -- --project-root PATH
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import argparse
 import hashlib
 import json
@@ -24,7 +29,7 @@ def write_json(path, value):
 
 def export_tower(root, slug, version):
     base = root / 'assets/art/environments/open_world'
-    source_dir = base / 'source' / slug / version
+    source_dir = source_path(base / 'source' / slug / version)
     catalog = json.loads((source_dir / 'catalog.json').read_text(encoding='utf-8-sig'))
     source = next(source_dir.glob('*.blend'))
     source_hash = digest(source)
@@ -86,7 +91,7 @@ def export_tower(root, slug, version):
     for collection in bpy.data.collections:
         collection.hide_viewport = False
         collection.hide_render = False
-    derived = base / 'source' / slug / 'export' / version / f'env_{slug}-{version}-runtime.blend'
+    derived = source_path(base / 'source' / slug / 'export' / version / f'env_{slug}-{version}-runtime.blend')
     derived.parent.mkdir(parents=True, exist_ok=True)
     (derived.parent / '.gdignore').touch()
     bpy.ops.wm.save_as_mainfile(filepath=str(derived))

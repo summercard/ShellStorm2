@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib,sys
 from pathlib import Path
 from mathutils import Vector
@@ -5,9 +10,9 @@ R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_mo
 def digest():
  return {name:hashlib.sha256(repr([(fc.data_path,fc.array_index,[(tuple(k.co),k.interpolation) for k in fc.keyframe_points]) for fc in bpy.data.actions[name].fcurves]).encode()).hexdigest() for name in ['idle','move','melee_keyboard']}
 def signature(r):return hashlib.sha256(repr([(b.name,b.parent.name if b.parent else None,tuple(b.head_local),tuple(b.tail_local)) for b in r.data.bones]).encode()).hexdigest()
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v015.blend'));old=digest()
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v016.blend'));sig=signature(bpy.data.objects['Boss002_Rig'])
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v016.blend'));r=bpy.data.objects['Boss002_Rig'];s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v015.blend')));old=digest()
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v016.blend')));sig=signature(bpy.data.objects['Boss002_Rig'])
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v016.blend')));r=bpy.data.objects['Boss002_Rig'];s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s
 checks={'previous_three_actions_unchanged':old==digest(),'dual_master_signature':sig==signature(r),'four_actions':all(bpy.data.actions.get(n) for n in ['idle','move','melee_keyboard','heavy_spin_slam']),'single_no_cycles':not any(fc.modifiers for fc in bpy.data.actions['heavy_spin_slam'].fcurves)}
 def verts(name):
  ev=bpy.data.objects[name].evaluated_get(bpy.context.evaluated_depsgraph_get());me=ev.to_mesh();vs=[ev.matrix_world@v.co for v in me.vertices];ev.to_mesh_clear();return vs

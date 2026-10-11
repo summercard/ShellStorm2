@@ -1,11 +1,16 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,sys
 from pathlib import Path
 from mathutils import Vector,Matrix,Quaternion
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/heavy_v016';P.mkdir(exist_ok=True)
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v015.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v015.blend')))
 for s in bpy.data.scenes:s['asset_version']='v016'
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v016.blend'))
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v015.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v016.blend')))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v015.blend')))
 # Keyboard remains preserved in v015 with its preview; retain all three character Actions.
 fx=bpy.data.collections.get('BOSS002_IMPACT_PREVIEW')
 if fx:
@@ -89,7 +94,7 @@ for frame in range(1,98):
 for fc in act.fcurves:
  for k in fc.keyframe_points:k.interpolation='CONSTANT' if 'expression_state' in fc.data_path else 'LINEAR'
 for sc in bpy.data.scenes:sc.frame_start=1;sc.frame_end=97;sc.render.fps=30;sc['asset_version']='v016'
-s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v016.blend'))
+s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v016.blend')))
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;cam=scene.camera;cam.location=(5,12,6);cam.rotation_euler=(Vector((0,.3,1.8))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=10;scene.cycles.samples=8;scene.render.resolution_x=960;scene.render.resolution_y=800
 if '--no-render' not in sys.argv:
  for f in [1,19,29,39,49,55,65,69,81,89,97]:

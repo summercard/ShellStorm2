@@ -15,10 +15,10 @@ from pathlib import Path
 
 
 PROJECT = Path(__file__).resolve().parents[2]
-EXPORT_MANIFEST = PROJECT / "source/art/blender/base_facility_layout/export/v021/export_manifest.json"
+EXPORT_MANIFEST = PROJECT / "art_source/design/blender/base_facility_layout/export/v021/export_manifest.json"
 COMPONENTS = PROJECT / "assets/art/environments/base_facility_3d/components"
 RUNTIME = PROJECT / "assets/art/environments/base_facility_3d/runtime"
-SOURCE_LEDGER = PROJECT / "assets/art/environments/base_facility_3d/source"
+SOURCE_LEDGER = PROJECT / "art_source/environments/base_facility_3d/source"
 GLOBAL_LEDGER = PROJECT / "assets/art/asset_import_manifest_v001.json"
 
 WALL_SLUGS = {
@@ -276,7 +276,7 @@ def update_blender_catalogs(packages: list[dict], dry_run: bool) -> None:
     catalog_versions = {"v019", "v020", "v021"}
     wanted = {package["slug"] for package in packages}
     for version in catalog_versions:
-        path = PROJECT / f"source/art/blender/base_facility_layout/component_packages/{version}/catalog.json"
+        path = PROJECT / f"art_source/design/blender/base_facility_layout/component_packages/{version}/catalog.json"
         data = json.loads(path.read_text(encoding="utf-8"))
         for row in data:
             if row["package_id"] in wanted:
@@ -306,7 +306,7 @@ def write_ledgers(export_data: dict, packages: list[dict], glbs: dict[str, Path]
     ledger = {
         "asset_id": "ENV-BASE99-OPTIMIZED-PACKAGES-V021",
         "version": "v021",
-        "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+        "source_blend": "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
         "source_blend_sha256": source_sha,
         "blender_export_manifest": project_path(EXPORT_MANIFEST),
         "derived_blends": {scope: section["derived_blend"] for scope, section in export_data["scopes"].items()},

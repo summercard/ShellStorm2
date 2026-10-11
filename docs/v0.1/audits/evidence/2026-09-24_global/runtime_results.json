@@ -5,9 +5,9 @@
     "complete": false,
     "import_errors": [
       "UNEXPECTED_ENGINE_ERROR ERROR: Resource file not found: res:// (expected type: Texture2D)",
-      "UNEXPECTED_ENGINE_ERROR ERROR: Can't open file from path 'res://assets/art/enemies/normal_enemy_3d/security_zombie/source/model/enm_ranged_sporeshooter01_basecolor_v003.jpeg'.",
+      "UNEXPECTED_ENGINE_ERROR ERROR: Can't open file from path 'res://art_source/enemies/normal_enemy_3d/security_zombie/source/model/enm_ranged_sporeshooter01_basecolor_v003.jpeg'.",
       "ERROR: Resource file not found: res:// (expected type: Texture2D)",
-      "ERROR: Can't open file from path 'res://assets/art/enemies/normal_enemy_3d/security_zombie/source/model/enm_ranged_sporeshooter01_basecolor_v003.jpeg'.",
+      "ERROR: Can't open file from path 'res://art_source/enemies/normal_enemy_3d/security_zombie/source/model/enm_ranged_sporeshooter01_basecolor_v003.jpeg'.",
       "VERIFICATION_IMPORT_LOG_FAILED"
     ],
     "terminal_lines": [

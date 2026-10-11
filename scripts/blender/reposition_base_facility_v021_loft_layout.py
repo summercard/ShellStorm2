@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 PROJECT = Path(__file__).resolve().parents[2]
-SOURCE = PROJECT / "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend"
+SOURCE = PROJECT / "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend"
 
 # Blender XY layout coordinates.  The bed's pillow vector rotates from -X to
 # +Y (clockwise); the paired cabinet drawers rotate outward to the south rail.

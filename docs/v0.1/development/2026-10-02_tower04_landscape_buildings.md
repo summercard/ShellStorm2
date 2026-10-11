@@ -6,7 +6,7 @@ FeatureID：ASSET-PIPELINE。依据：[3D场景美术生产流程](../10.1_3D场
 
 ## 范围与文件
 
-新建 `assets/art/environments/open_world/source/landscape_tower04/v001/景观建筑_塔4周边五组废墟藤蔓_v001.blend`。与塔4、塔4-2母版分开保存，未修改其模型或大地图布局。资产与SKYLINE同级：`场景 / environment_kit_3d`，用途为塔4周边远景景观建筑。
+新建 `art_source/environments/open_world/source/landscape_tower04/v001/景观建筑_塔4周边五组废墟藤蔓_v001.blend`。与塔4、塔4-2母版分开保存，未修改其模型或大地图布局。资产与SKYLINE同级：`场景 / environment_kit_3d`，用途为塔4周边远景景观建筑。
 
 文件内有五组总览和五个独立原点场景；每组可见几何包络XY居中，底部Z=0。总览间距仅供审阅，不是大地图坐标。隐藏制作集合保留九种模块网格，实例共享网格数据。五个AssetID有意共用同一母版及SHA，Collection/场景定位分别登记。
 

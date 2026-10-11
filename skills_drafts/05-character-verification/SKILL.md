@@ -2,6 +2,10 @@
 name: 05-character-verification
 description: 角色类表现资产链路第 5 段。为玩家、NPC、怪物、Boss 的表现资产跑专项验收，覆盖加载、节点/骨架契约、根缩放与朝向、包围盒、碰撞不变、挂点、动画时序、换装与真实渲染截图；要求分别记录退出码、预期故障、非预期脚本错误与未执行项。不用于制模（用 01-character-contract-authoring）、导出（用 02-character-export-transfer）、Godot 包装（用 03-character-godot-import）、状态接线（用 04-character-state-binding）、台账推进（用 06-character-ledger）。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # S5 · 专项验收
 

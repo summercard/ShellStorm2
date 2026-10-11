@@ -1,11 +1,16 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,json,hashlib
 from pathlib import Path
 from mathutils import Vector
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002'
 def actions():
  return {name:hashlib.sha256(repr([(fc.data_path,fc.array_index,[(tuple(k.co),k.interpolation) for k in fc.keyframe_points]) for fc in bpy.data.actions[name].fcurves]).encode()).hexdigest() for name in ['idle','move']}
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v012.blend'));old=actions()
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v014.blend'));checks={'idle_move_curves_preserved':old==actions()}
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v012.blend')));old=actions()
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v014.blend')));checks={'idle_move_curves_preserved':old==actions()}
 s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;fx=bpy.data.collections['BOSS002_IMPACT_PREVIEW'];minz=999
 for i in range(217):
  frame=1+i/4;s.frame_set(int(frame),subframe=frame%1)
@@ -22,4 +27,4 @@ report={'passed':all(checks.values()),'checks':checks,'quarter_frame_min_z':minz
 (B/'previews/keyboard_v014/presentation_audit.json').write_text(json.dumps(report,indent=2));print(json.dumps(report,indent=2));assert report['passed']
 s.camera.location=(5,12,5.5);s.camera.rotation_euler=(Vector((0,.3,2))-s.camera.location).to_track_quat('-Z','Y').to_euler();s.camera.data.ortho_scale=9
 s.frame_set(1);s['preview_instructions']='Play frames 1-55: melee_keyboard + 2D VFX. Source character scene excludes VFX. Switch rig Action to idle/move with their respective frame ranges.'
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v014.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v014.blend')))

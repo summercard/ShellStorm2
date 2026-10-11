@@ -3,6 +3,10 @@ name: godot-export-pack-audit
 description: 实测 Godot 游戏导出包（PCK）里到底装了什么 —— 回答「这些东西会被打包进游戏吗 / 包为什么这么大 / 哪些开发期文件混进了发行包」。做法是真跑一次 `--export-pack` 导出 PCK，再用脚本解析 PCK 索引逐条统计（按目录分组、按扩展名分组、按 glob 命中）。当问题涉及「会不会打包」「包体为什么这么大」「临时/测试/文档/源码目录进包了吗」「某个 json 运行时读得到吗」，且必须用真实打包结果而不是看 `.gitignore` 或猜 Godot 语义时使用。不修改产品代码。
 agent_created: true
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # Godot 导出包（PCK）内容审计
 
@@ -18,7 +22,7 @@ agent_created: true
 3. **`.import`、`tests/`、`docs/`、`tools/`、`_scratch/`、`skills_drafts/` 一律进包** —— 只要 `exclude_filter` 是空的。`.import` 实测 2073 个；`_scratch/` 1412 个 / 13.5 MB。
 4. **🆕 `.gdignore` 会连导出包一起丢**（2026-09-27 对照实测）：`outputs/`（**有** `.gdignore`）进包 **0** 个；`output/`（**无** `.gdignore`，仅差一个字母）进包 **41** 个。⇒ `.gdignore` 是**目录级整体跳过**，编辑器扫描 / 导入 / **导出打包**全跳过。
    - 推论：**任何被 `FileAccess` 在 `res://` 下读取的 JSON，其所在目录绝不能加 `.gdignore`**，否则开发期（编辑器运行直读磁盘）一切正常、**导出后才炸**。
-   - ShellStorm2 已经踩着的实例：顶层 `source/` 有 `.gdignore`（进包 0 个），但 `src/map/LevelPlanLoader.gd` 与 `src/world3d/Block00MasterOfficeLayout3D.gd` 运行时在读它下面的数据 ⇒ **导出包内读不到**。属既有隐患，发现即报主人，别顺手改。
+   - 历史审计实例（2026-10-11 前；现已由运行 JSON 投影解决）：顶层 `source/` 有 `.gdignore`（进包 0 个），但 `src/map/LevelPlanLoader.gd` 与 `src/world3d/Block00MasterOfficeLayout3D.gd` 运行时在读它下面的数据 ⇒ **导出包内读不到**。属既有隐患，发现即报主人，别顺手改。
 5. **🆕 `.gd` 会被编译成 `.gdc` 进包**：`_scratch/probe_*.gd` 在包里是 `probe_*.gdc`。所以「临时探针脚本」也会进发行包，`_scratch/` 想不进包只能靠 `.gdignore` 或 `exclude_filter`。
 
 ⇒ 结论：**必须实测，不能推理**。
@@ -120,7 +124,7 @@ u32 file_count
 
 - **体积永远给绝对值 + 占比**：`3.07 MB / 913 MB = 0.34%`，别只说「很多」。
 - **区分「进包了」与「有问题」**：进包 ≠ 有害。判有害要看①体积占比②运行时是否被读③是否属于开发期内容。
-- **运行时硬依赖要单列**：任何被 `FileAccess` / `load()` 在 `res://` 下引用的路径，若打算用 `exclude_filter` 裁掉，**逐条验证过再裁**。ShellStorm2 的实例：`FloorPlanGenerator.gd` 用 `FileAccess.get_file_as_string()` 读 `…/expedition/source/room_types/boss_room/v002/boss_room_50x40_v002.layout.json` —— 它就在 `source/` 里，所以对 `source/**` 做一刀切排除会**打断 Boss 房装配**。
+- **运行时硬依赖要单列**：任何被 `FileAccess` / `load()` 在 `res://` 下引用的路径，若打算用 `exclude_filter` 裁掉，**逐条验证过再裁**。ShellStorm2 的实例：`历史 `FloorPlanGenerator.gd` 曾用 `FileAccess.get_file_as_string()` 读 `…/expedition/source/room_types/boss_room/v002/boss_room_50x40_v002.layout.json` —— 它就在 `source/` 里，所以对 `source/**` 做一刀切排除会**打断 Boss 房装配**。
 - **🆕 想用 `.gdignore` 排除 DCC 源目录前，先查该目录有没有运行时读的 JSON**：`.gdignore` 比 `exclude_filter` 更狠（整个目录连导出一起丢，见事实 4）。实测 ShellStorm2 的 `assets/**/source/` **31 个目录里绝大多数混着运行时 JSON/PNG**（`expedition/source` 一个就 3906 个、`battle/source` 434、`rooftop/source` 207），只有角色/道具那几个（约 20 个目录、60 个 `.blend`）是纯 DCC ⇒ **一刀切给 `assets/**/source/` 加 `.gdignore` 会打断 Boss 房装配与天台装饰**。
   - 一票否决式的替代解法：**全局关导入器** `project.godot` → `[filesystem] import/blender/enabled=false`（**全工程级**，未来在任何目录 —— 含角色/道具 —— 新增 `.blend` 都自动不导入，比逐目录 `.gdignore` 更强且零副作用），再按事实 1 用实测确认 `.blend` 本来就不进包。
   - 查法：`for d in $(find ./assets -type d -name source); do find "$d" -type f \( -name '*.json' -o -name '*.png' -o -name '*.gd' \) | wc -l; done` —— 非 0 就说明该目录**不能**加 `.gdignore`。

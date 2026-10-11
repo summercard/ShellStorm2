@@ -121,7 +121,7 @@ def main() -> None:
     root = Path(args.project_root).resolve()
     records: list[dict[str, object]] = []
     for room_slug, version in LIBRARIES:
-        source_root = root / "assets/art/environments/tower_zones/expedition/source/common_components" / version
+        source_root = root / "art_source/environments/tower_zones/expedition/source/common_components" / version
         catalog = json.loads((source_root / "component_catalog.json").read_text(encoding="utf-8"))
         for package in catalog["packages"]:
             slug = package["slug"]

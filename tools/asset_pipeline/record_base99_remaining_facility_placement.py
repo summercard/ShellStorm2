@@ -49,7 +49,7 @@ from pathlib import Path
 PROJECT_DEFAULT = Path(__file__).resolve().parents[2]
 SCENE_REL = ("assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/"
              "env_base99_remaining_facilities_root_top3d.tscn")
-MANIFEST_REL = "assets/art/environments/base_facility_3d/source/env_base99_remaining_facilities_v021_manifest.json"
+MANIFEST_REL = "art_source/environments/base_facility_3d/source/env_base99_remaining_facilities_v021_manifest.json"
 OUT_BASENAME = "env_base99_remaining_facilities_v021_placement"
 
 # 本批资产的已知机制说明，写进记录里给下一个改 .blend 的人看。
@@ -415,8 +415,8 @@ def main() -> int:
         "items": items,
     }
 
-    out_json = root / "assets/art/environments/base_facility_3d/source" / (OUT_BASENAME + ".json")
-    out_md = root / "assets/art/environments/base_facility_3d/source" / (OUT_BASENAME + ".md")
+    out_json = root / "art_source/environments/base_facility_3d/source" / (OUT_BASENAME + ".json")
+    out_md = root / "art_source/environments/base_facility_3d/source" / (OUT_BASENAME + ".md")
 
     text = json.dumps(payload, ensure_ascii=False, indent=1).replace("\n", "\r\n") + "\r\n"
     out_json.write_bytes(text.encode("utf-8"))

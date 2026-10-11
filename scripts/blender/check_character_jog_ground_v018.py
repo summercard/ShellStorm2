@@ -1,11 +1,16 @@
 """Verify evaluated soles and flight in the saved v018 authoring bundle."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = ROOT / 'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v018'
-bpy.ops.wm.open_mainfile(filepath=str(PACKAGE / 'source/animation/chr_bunny01_animation_v018.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(PACKAGE / 'source/animation/chr_bunny01_animation_v018.blend')))
 results = {}
 for scene in bpy.data.scenes:
     state = scene.get('preview_clip')

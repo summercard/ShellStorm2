@@ -8,7 +8,7 @@ def run(item):
  with (O/('runtime_'+name+'.log')).open('w',encoding='utf8') as f:r=subprocess.run(cmd,cwd=R,env=env,stdout=f,stderr=subprocess.STDOUT,timeout=180)
  return name,{'exit_code':r.returncode,'log':str(O/('runtime_'+name+'.log'))}
 with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:results=dict(pool.map(run,commands.items()))
-P=R/'assets/art/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json';m=json.loads(P.read_text('utf8'));sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+P=R/'art_source/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json';m=json.loads(P.read_text('utf8'));sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 assert all(sha(Path(p))==h for p,h in m['protected_sources'].items())
 for d in m['components']:
  for key,h in [('glb_path','glb_sha256'),('optimized_path','optimized_sha256'),('prefab_path','prefab_sha256')]:assert sha(R/d[key])==d[h],(d['slug'],key)

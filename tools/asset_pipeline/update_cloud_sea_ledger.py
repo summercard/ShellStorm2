@@ -42,7 +42,7 @@ def main():
   bl['category_counts']=dict(sorted(Counter(v[2] for _,v in rows).items()))
  else:
   w=wb['3D-特效'];r=next(c.row for row in w for c in row if c.column==2 and c.value==ID)
-  updates={3:'主塔柔软体积云海与漂浮小云',7:'室外常驻连续云海、下沉雾层、柔软漂浮小云',12:SPEC,13:ORIGIN,15:'正式美术已接入',16:'v002',17:'源：assets/art/vfx/environment_3d/cloud_sea/source/v002；Manifest：assets/art/vfx/environment_3d/cloud_sea/asset_manifest.json；'+NOTE}
+  updates={3:'主塔柔软体积云海与漂浮小云',7:'室外常驻连续云海、下沉雾层、柔软漂浮小云',12:SPEC,13:ORIGIN,15:'正式美术已接入',16:'v002',17:'源：art_source/vfx/environment_3d/cloud_sea/source/v002；Manifest：assets/art/vfx/environment_3d/cloud_sea/asset_manifest.json；'+NOTE}
   for c,v in updates.items():w.cell(r,c).value=v;allowed.add((w.title,w.cell(r,c).coordinate))
   bl['sheet_digests']['3D-特效']=sheet_digest(w)
  for key,v in old['assets'].items():

@@ -18,9 +18,9 @@ import bpy
 
 
 PROJECT_ROOT = Path("/Users/summercards/ShellStorm2")
-SOURCE_BLEND = PROJECT_ROOT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v006.blend"
-OUTPUT_BLEND = PROJECT_ROOT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend"
-PACKAGE_ROOT = PROJECT_ROOT / "source/art/blender/base_facility_layout/component_packages"
+SOURCE_BLEND = PROJECT_ROOT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v006.blend"
+OUTPUT_BLEND = PROJECT_ROOT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend"
+PACKAGE_ROOT = PROJECT_ROOT / "art_source/design/blender/base_facility_layout/component_packages"
 VERIFY_ROOT = PROJECT_ROOT / "outputs/verification/base_facility_runtime_layout_hq_v007"
 CATALOG_JSON = VERIFY_ROOT / "base_facility_component_catalog_v007.json"
 TREE_TXT = VERIFY_ROOT / "base_facility_component_tree_v007.txt"

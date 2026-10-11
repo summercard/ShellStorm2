@@ -1,4 +1,9 @@
 """初始化SKYLINE稳定组件及整楼场景；保留已有布局，不回灌源文件。"""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 import hashlib
 import json
 from pathlib import Path
@@ -8,8 +13,8 @@ ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / 'assets/art/environments/open_world'
 
 def main():
-    manifest = json.loads((BASE / 'source/skyline_08/export/v004/export_manifest.json').read_text(encoding='utf8'))
-    catalog = json.loads((BASE / 'source/skyline_08/v004/catalog.json').read_text(encoding='utf8'))
+    manifest = json.loads((source_path(BASE / 'source/skyline_08/export/v004/export_manifest.json')).read_text(encoding='utf8'))
+    catalog = json.loads((source_path(BASE / 'source/skyline_08/v004/catalog.json')).read_text(encoding='utf8'))
     old = json.loads((ROOT / 'outputs/skyline08_import_20260930/before_runtime.json').read_text(encoding='utf8'))
     template_path = BASE / 'components/tower_02/roof_column_04/env_tower_02_roof_column_04_visual_top3d.glb.import'
     template = template_path.read_text(encoding='utf8')

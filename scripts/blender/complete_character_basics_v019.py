@@ -1,4 +1,9 @@
 """Author six remaining basic clips on the approved v018 rest rig; no runtime edits."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys, math, json, hashlib, shutil
 sys.dont_write_bytecode = True
@@ -9,8 +14,8 @@ from export_character_bundle import signature
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production'
 PACKAGE = BASE/'v019'
-MODEL = PACKAGE/'source/model/chr_bunny01_model_v019.blend'
-TARGET = PACKAGE/'source/animation/chr_bunny01_animation_v019.blend'
+MODEL = source_path(PACKAGE/'source/model/chr_bunny01_model_v019.blend')
+TARGET = source_path(PACKAGE/'source/animation/chr_bunny01_animation_v019.blend')
 OUT = ROOT/'outputs/character_pipeline/v019'
 assert not TARGET.exists() or '--replace-generated' in sys.argv
 bpy.ops.wm.open_mainfile(filepath=str(BASE/'v018/source/animation/chr_bunny01_animation_v018.blend'))

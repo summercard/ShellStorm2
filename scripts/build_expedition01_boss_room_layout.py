@@ -49,17 +49,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 ROOM_TYPE_DIR = (
-    ROOT / "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002"
+    ROOT / "art_source/environments/tower_zones/expedition/source/room_types/boss_room/v002"
 )
 MANIFEST_PATH = ROOM_TYPE_DIR / "room_type_manifest.json"
 OUTPUT_PATH = ROOM_TYPE_DIR / "boss_room_50x40_v002.layout.json"
 CATALOG_PATH = (
     ROOT
-    / "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_catalog.json"
+    / "art_source/environments/tower_zones/expedition/source/common_components/v001/component_catalog.json"
 )
 SUMMARY_PATH = (
     ROOT
-    / "assets/art/environments/tower_zones/expedition/source/common_components/v001/qa"
+    / "art_source/environments/tower_zones/expedition/source/common_components/v001/qa"
     / "export_boss_shell_components_summary.json"
 )
 COMPONENTS_DIR = ROOT / "assets/art/environments/tower_zones/expedition/components/common_components"

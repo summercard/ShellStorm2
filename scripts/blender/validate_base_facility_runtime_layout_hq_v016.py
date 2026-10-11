@@ -8,11 +8,11 @@ from pathlib import Path
 import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-V015 = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v015.blend"
-V016 = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend"
+V015 = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v015.blend"
+V016 = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend"
 VERIFY = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v016"
 REPORT = VERIFY / "base_facility_runtime_layout_hq_v016_validation.json"
-PACKAGE_ROOT = PROJECT / "source/art/blender/base_facility_layout/component_packages_v016"
+PACKAGE_ROOT = PROJECT / "art_source/design/blender/base_facility_layout/component_packages_v016"
 
 
 def signature(obj):

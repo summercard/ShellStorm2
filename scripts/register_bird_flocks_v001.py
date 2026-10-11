@@ -17,7 +17,7 @@ w=load_workbook(path); s=w['资产主表']; old=s.max_row; old_rows=read_source_
 bl=json.loads(baseline.read_text(encoding='utf-8')); old_assets=dict(bl['assets'])
 newids=[]
 for kind,name,action,seconds in [('flyby','鸟群空中掠过','flyby',12),('ground','鸟群落地停留再起飞','land_walk_peck_takeoff',24)]:
-    folder=R/f'assets/art/vfx/environment_3d/bird_flocks/source/{kind}/v001'; m=json.loads((folder/'asset_manifest.json').read_text(encoding='utf-8')); aid=m['asset_id']
+    folder=R/f'art_source/vfx/environment_3d/bird_flocks/source/{kind}/v001'; m=json.loads((folder/'asset_manifest.json').read_text(encoding='utf-8')); aid=m['asset_id']
     assert aid not in bl['assets']; newids.append(aid); p=R/m['source_blend']; row=s.max_row+1
     values=[aid,name,'特效','environment','env_birds_'+kind,'flock_root',None,'3D',action,'室外场景环境氛围','Blender源已完成','P1','v001',f'7只；{seconds}秒；30fps；每鸟296三角面/11骨骼；独立错峰关键帧；共享场景哑光材质/PaletteUV R10C10冷白；无碰撞',p.relative_to(R).as_posix(),'docs/v0.1/development/2026-10-09_bird_flock_blender_sources.md','鸟群;场景特效;低模;白色;拍翼;落地;啄地',dedupe_key_formula(row),None,hashlib.sha256(p.read_bytes()).hexdigest(),'Codex',datetime(2026,10,9),'原创程序建模与人工动作编排；项目共享材质','02_游戏输出_鸟群资产包','仅Blender源；单次演出不循环；未生成Prefab/未接入Godot；90展示集合不导出']
     for col,val in enumerate(values,1):

@@ -1,4 +1,9 @@
 """Export evaluated active scenes, not stale/fake-user duplicate actions."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys,json,hashlib,subprocess,struct
 import bpy
@@ -10,7 +15,7 @@ B=R/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01'
 MODEL=B/'production/v021/source/model/chr_bunny01_model_v021.blend'
 VERSION=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--source-version=')), 'v030' if '--firing-v030' in sys.argv else 'v029')
 assert VERSION in ('v029','v030','v031','v032','v033','v034','v035','v036','v037')
-SOURCE=B/f'source/animation/chr_bunny01_animation_{VERSION}.blend'
+SOURCE=source_path(B/f'source/animation/chr_bunny01_animation_{VERSION}.blend')
 OUT=B/'components/chr_bunny01_motion';OUT.mkdir(parents=True,exist_ok=True)
 bpy.ops.wm.open_mainfile(filepath=str(MODEL))
 rig=next(o for o in bpy.context.scene.objects if o.type=='ARMATURE');expected=signature(rig)

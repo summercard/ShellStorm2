@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, math, json
 from pathlib import Path
 from mathutils import Vector
 R=Path(__file__).resolve().parents[2]; B=R/'assets/art/enemies/bosses/enm_boss_monitor002'
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_source_v001.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_source_v001.blend')))
 src=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=src
 coll=bpy.data.collections['04_GLOVES_default'];white=bpy.data.materials['Warm ivory gloves']
 def stats():
@@ -48,7 +53,7 @@ report={'before':{k:v for k,v in before.items() if k!='objects'},'after':{k:v fo
 out=B/'previews/hands_v002';out.mkdir(exist_ok=True)
 (out/'audit.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 bpy.ops.object.select_all(action='DESELECT')
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_source_v002.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_source_v002.blend')))
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;cam=scene.camera;scene.cycles.samples=32
 def render(name,loc,target,scale):
     cam.location=loc;cam.rotation_euler=(Vector(target)-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=scale

@@ -6,6 +6,11 @@ modified; a rollback backup is created before any stable asset is replaced.
 """
 from __future__ import annotations
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
+
 import hashlib
 import json
 import re
@@ -15,10 +20,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "assets/art/environments/open_world"
-SRC_V003 = BASE / "source/tower_02/export/v003/env_tower_02-v003-runtime.blend"
-OPT_BLEND = BASE / "source/tower_02/export/v004/tower02_game_output_optimized_v004.blend"
-V004_MANIFEST = BASE / "source/tower_02/export/v004/export_manifest.json"
-V004_CATALOG = BASE / "source/tower_02/v004/catalog.json"
+SRC_V003 = source_path(BASE / "source/tower_02/export/v003/env_tower_02-v003-runtime.blend")
+OPT_BLEND = source_path(BASE / "source/tower_02/export/v004/tower02_game_output_optimized_v004.blend")
+V004_MANIFEST = source_path(BASE / "source/tower_02/export/v004/export_manifest.json")
+V004_CATALOG = source_path(BASE / "source/tower_02/v004/catalog.json")
 STABLE_COMPONENTS = BASE / "components/tower_02"
 STABLE_RUNTIME = BASE / "runtime/tower_02"
 STABLE_ROOT = STABLE_RUNTIME / "env_tower_02_root_top3d.tscn"
@@ -110,7 +115,7 @@ def main() -> None:
         text = replace_metadata(
             text,
             "source_blend",
-            "assets/art/environments/open_world/source/tower_02/export/v004/tower02_game_output_optimized_v004.blend",
+            "art_source/environments/open_world/source/tower_02/export/v004/tower02_game_output_optimized_v004.blend",
         )
         prefab.write_text(text, encoding="utf-8")
         promoted.append({
@@ -129,16 +134,16 @@ def main() -> None:
     root_text = replace_metadata(
         root_text,
         "source_blend",
-        "assets/art/environments/open_world/source/tower_02/export/v004/tower02_game_output_optimized_v004.blend",
+        "art_source/environments/open_world/source/tower_02/export/v004/tower02_game_output_optimized_v004.blend",
     )
     STABLE_ROOT.write_text(root_text, encoding="utf-8")
 
     stable_manifest = json.loads(STABLE_MANIFEST.read_text(encoding="utf-8"))
     stable_manifest.update({
         "version": "v004",
-        "source": "assets/art/environments/open_world/source/tower_02/export/v004/tower02_game_output_optimized_v004.blend",
+        "source": "art_source/environments/open_world/source/tower_02/export/v004/tower02_game_output_optimized_v004.blend",
         "source_sha256": sha(OPT_BLEND),
-        "source_original": "assets/art/environments/open_world/source/tower_02/export/v003/env_tower_02-v003-runtime.blend",
+        "source_original": "art_source/environments/open_world/source/tower_02/export/v003/env_tower_02-v003-runtime.blend",
         "source_original_sha256": sha(SRC_V003),
         "prefab": "assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn",
         "component_count": 92,

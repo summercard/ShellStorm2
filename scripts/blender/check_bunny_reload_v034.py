@@ -1,10 +1,15 @@
 """Reopen the saved source; check subframes and distinct service-hand paths."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys,json
 import bpy
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import author_bunny_weapon_idles_v025 as h
-bpy.ops.wm.open_mainfile(filepath=str(h.BASE/'source/animation/chr_bunny01_animation_v034.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(h.BASE/'source/animation/chr_bunny01_animation_v034.blend')))
 report={}
 for scene in bpy.data.scenes:
     name=scene.get('preview_clip','')

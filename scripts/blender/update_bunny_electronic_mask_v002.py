@@ -3,6 +3,11 @@
 GLTF carries the closed-eye morph. Blender-authored scalar curves are transferred
 losslessly to a Godot AnimationLibrary (glTF does not carry emissive strength).
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, json, hashlib, shutil, sys
 from pathlib import Path
 from mathutils import Vector, Matrix
@@ -60,8 +65,8 @@ def main():
     for name in ['asset_manifest.json','character_transfer_ledger.json','source_validation.json','verification_report.json']:
         p=ASSET/name
         if p.exists() and not (archive/name).exists(): shutil.copy2(p,archive/name)
-    original_hashes={str(p):sha(p) for p in [MODEL,ANIMATION,ASSET/'source/chr_bunny01_electronic_mask_model_v001.blend']}
-    bpy.ops.wm.open_mainfile(filepath=str(ASSET/'source/chr_bunny01_electronic_mask_model_v001.blend'))
+    original_hashes={str(p):sha(p) for p in [MODEL,ANIMATION,source_path(ASSET/'source/chr_bunny01_electronic_mask_model_v001.blend')]}
+    bpy.ops.wm.open_mainfile(filepath=str(source_path(ASSET/'source/chr_bunny01_electronic_mask_model_v001.blend')))
     rig=bpy.data.objects['RIG_bunny01']; sig=signature(rig)
     shell=bpy.data.objects['SRC_Face_ElectronicMask_Shell']
     variant=bpy.data.collections['眼镜__electronic_mask']
@@ -98,7 +103,7 @@ def main():
         vertex.co=inverse@Vector((world.x,newhit.y+(world.y-oldhit.y),newz))
     scene=bpy.context.scene
     scene['electronic_mask_contract']='v002: 2x5x14 enlarged square cells; Blink surface morph; authored scalar AnimationLibrary; HeadJoint cosmetic component only.'
-    model=ASSET/'source/chr_bunny01_electronic_mask_model_v002.blend'
+    model=source_path(ASSET/'source/chr_bunny01_electronic_mask_model_v002.blend')
     bpy.ops.wm.save_as_mainfile(filepath=str(model))
     clips=author_curves(scene)
     # The animation master previews exactly the authored channels.
@@ -107,7 +112,7 @@ def main():
         variable=curve.driver.variables.new(); variable.name='value'; variable.type='SINGLE_PROP'
         variable.targets[0].id_type='SCENE'; variable.targets[0].id=scene; variable.targets[0].data_path=f'["{prop}"]'
         curve.driver.expression='value' if channel==blink else '5 * value'
-    animation=ASSET/'source/chr_bunny01_electronic_mask_animation_v002.blend'
+    animation=source_path(ASSET/'source/chr_bunny01_electronic_mask_animation_v002.blend')
     bpy.ops.wm.save_as_mainfile(filepath=str(animation))
     # Model export excludes the preview drivers/actions and the shared skeleton.
     blink.driver_remove('value'); blue.node_tree.nodes['Principled BSDF'].inputs['Emission Strength'].driver_remove('default_value')

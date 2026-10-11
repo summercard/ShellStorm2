@@ -20,7 +20,7 @@ from mathutils import Matrix
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_BLEND = (
-    PROJECT_ROOT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v018.blend"
+    PROJECT_ROOT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v018.blend"
 )
 REPORT_OUTPUT = PROJECT_ROOT / "outputs/verification/base99_floor_v018_repair_report.json"
 FLOOR_COLLECTION_SUFFIX = "_原砖与深化内容_资产包"
@@ -127,7 +127,7 @@ def main() -> None:
     OUTPUT_BLEND.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=str(OUTPUT_BLEND), check_existing=False)
     report = {
-        "input_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+        "input_blend": "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
         "output_blend": str(OUTPUT_BLEND.relative_to(PROJECT_ROOT)),
         "version": "v018",
         "repair_scope": "Blender-authored ground detail overlays and loft floor finish only; reused base slabs excluded",

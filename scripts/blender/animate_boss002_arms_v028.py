@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector,Matrix,Quaternion
@@ -5,7 +10,7 @@ B=Path('I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_bo
 r=bpy.data.objects['Boss002_Rig'];s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s
 assert 'ARCHIVE_hurt_v027' not in bpy.data.actions,'v028 already applied; restore v027 before rebuild'
 if bpy.context.screen.is_animation_playing:bpy.ops.screen.animation_cancel(restore_frame=False)
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_before_arms_v027.blend'),copy=True)
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_before_arms_v027.blend')),copy=True)
 spec={'special_prepare':36,'special_insert':18,'special_channel':24,'special_recover':27,'hurt':15,'stun_enter':42,'stun_loop':48,'stun_exit':30,'turn_left':24,'turn_right':24}
 preserve=['idle','move','melee_keyboard','melee_cable','heavy_spin_slam']
 def digest(a):return hashlib.sha256(repr([(f.data_path,f.array_index,[tuple(k.co) for k in f.keyframe_points]) for f in a.fcurves]).encode()).hexdigest()
@@ -108,5 +113,5 @@ for kind,duration in spec.items():
 assert all(digest(bpy.data.actions[n])==h for n,h in hashes.items())
 for sc in bpy.data.scenes:sc['asset_version']='v028'
 r.animation_data.action=bpy.data.actions['hurt'];s.frame_start=1;s.frame_end=16;s.frame_set(1)
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v028.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v028.blend')))
 (P/'clips.json').write_text(json.dumps(spec,indent=2));(P/'preservation.json').write_text(json.dumps(hashes,indent=2));print('V028 COMPLETE')

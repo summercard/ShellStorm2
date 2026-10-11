@@ -2,6 +2,11 @@
 
 Preserve v025 on disk and every old action; source-only, no runtime writes.
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys, math, json, hashlib, os
 import bpy
@@ -13,9 +18,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import author_bunny_weapon_idles_v025 as base
 
 SOURCE = base.TARGET
-base.TARGET = base.BASE / 'source/animation/chr_bunny01_animation_v026.blend'
+base.TARGET = source_path(base.BASE / 'source/animation/chr_bunny01_animation_v026.blend')
 base.OUT = base.ROOT / 'outputs/character_pipeline/weapon_idle_v026'
-base.TRANSFER = base.BASE / 'source/animation/chr_bunny01_weapon_idles_v026.json'
+base.TRANSFER = source_path(base.BASE / 'source/animation/chr_bunny01_weapon_idles_v026.json')
 base.SPECS['sidearm'].update(palm=(.48, .53, .43), yaw=-12, pitch=55)
 base.SPECS['longgun'].update(palm=(.17, .30, .32))
 base.SPECS['machinegun'].update(palm=(.18, .47, .245))

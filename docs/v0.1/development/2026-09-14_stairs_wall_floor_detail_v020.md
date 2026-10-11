@@ -5,7 +5,7 @@
 - 功能：ASSET-PIPELINE，工程版本0.1.0。
 - 主设计：[资产与内容规范](../10_资产与内容规范.md)、[3D场景美术生产流程](../10.1_3D场景美术生产流程.md)。
 - 输入：用户当前 v019 模型与工业楼梯间参考图；最新要求重新设计墙面配件。
-- 当前源：`assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v020/env_tower_stairwell_art_source_v020.blend`。
+- 当前源：`art_source/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v020/env_tower_stairwell_art_source_v020.blend`。
 - 回退：v019 保留不覆盖；运行时 GLB 与 Godot 引用不改。
 
 ## 已完成的范围

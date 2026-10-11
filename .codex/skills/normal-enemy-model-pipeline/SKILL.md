@@ -3,6 +3,10 @@ name: normal-enemy-model-pipeline
 description: 为 ShellStorm2 制作、替换或验收「普通怪」（normal_melee / normal_ranged / normal_summoner / normal_tank / normal_bomber / normal_ambusher 等已预登记的 7 类原型）的 3D 表现资产——从既有 AssetID 取契约、按 0.70 展示倍率归一尺寸、做 Blender 六段动作母版、导出视觉 GLB、组装 runtime PackedScene 与表现脚本、把 12 态 AI 映射到 6 段剪辑、接上玩法侧 6 处挂载点、跑验收场景并完成账本转正。不用于精英与 Boss（走 game-character-model-pipeline），也不用于武器、道具或场景设施。
 agent_created: true
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 普通怪模型制作与导入（ShellStorm2）
 

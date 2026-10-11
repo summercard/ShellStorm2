@@ -4,7 +4,7 @@ FeatureID：ASSET-PIPELINE。延续[初版景观建筑](2026-10-02_tower04_lands
 
 ## 当前交付
 
-当前源：`assets/art/environments/open_world/source/landscape_tower04/v003/景观建筑_塔4周边五组_倾斜断柱与塌板_v003.blend`。v001、v002保留追溯。仍是独立景观建筑母版，与SKYLINE同级，未改塔4或塔4-2源。
+当前源：`art_source/environments/open_world/source/landscape_tower04/v003/景观建筑_塔4周边五组_倾斜断柱与塌板_v003.blend`。v001、v002保留追溯。仍是独立景观建筑母版，与SKYLINE同级，未改塔4或塔4-2源。
 
 | 组 | 当前表现 | 三角面（v001→v003） |
 |---|---|---:|

@@ -8,9 +8,9 @@ from pathlib import Path
 import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-V010 = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend"
-V011 = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend"
-ROOT = PROJECT / "source/art/blender/base_facility_layout/component_packages_v011"
+V010 = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend"
+V011 = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend"
+ROOT = PROJECT / "art_source/design/blender/base_facility_layout/component_packages_v011"
 REPORT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v011/base_facility_runtime_layout_hq_v011_validation.json"
 OUT10 = "02_游戏输出_独立资产包_v010"
 OUT11 = "02_游戏输出_独立资产包_v011"

@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 """Editable environment VFX source. Blender 4.5, no runtime handlers/drivers."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, math, json, sys
 from pathlib import Path
 from mathutils import Vector
@@ -9,7 +14,7 @@ ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/'assets/art/vfx/environment_3d/bird_flocks'
 OUT=ROOT/'outputs/bird_flocks_v001'
 PAL=ROOT/'assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'
-MAT_SOURCE=ROOT/'assets/art/environments/tower_zones/shared/source/common_components/v001/generic_scene_components_source_v001.blend'
+MAT_SOURCE=ROOT/'art_source/environments/tower_zones/shared/source/common_components/v001/generic_scene_components_source_v001.blend'
 ROLE='02_细腻哑光_青绿大面'
 FPS=30
 def sat(x): return max(0,min(1,x))
@@ -245,7 +250,7 @@ def build(kind):
     txt=bpy.data.texts.new('使用说明_请先阅读'); txt.write('场景特效 / 7只白色低模鸟\n空格播放时间轴。所有动作已烘焙，不需要运行脚本。\n选鸟的动作控制骨架，Pose Mode 可编辑；动作编辑器按骨骼分组。\n整体移动请操作 鸟群_整体移动缩放控制。\n90_展示与验收 集合仅相机灯光，不导出。\n地面 Z=0，+Y为鸟前方，+Z为上。\n单次演出：首尾不连接，不应循环中途瞬移。\n材质直接继承场景共享哑光材质；PaletteUV位于R10C10冷白区。\n源文件已完成，未导出GLB/未接入Godot。\n')
     scene.frame_set(150 if kind=='flyby' else 285)
     bpy.ops.object.select_all(action='DESELECT'); group.select_set(True); bpy.context.view_layer.objects.active=group
-    folder=BASE/'source'/kind/'v001'; folder.mkdir(parents=True,exist_ok=True); OUT.mkdir(parents=True,exist_ok=True)
+    folder=source_path(BASE/'source'/kind/'v001'); folder.mkdir(parents=True,exist_ok=True); OUT.mkdir(parents=True,exist_ok=True)
     path=folder/f'vfx_env_birds_{kind}_source_v001.blend'
     bpy.ops.wm.save_as_mainfile(filepath=str(path))
     # Relative external palette dependency, no private texture copy.

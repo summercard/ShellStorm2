@@ -1,4 +1,9 @@
 """Run through Blender MCP. Add activate only; preserve all sixteen v031 actions."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, math, json, hashlib, shutil, traceback, struct
 from pathlib import Path
 from mathutils import Vector, Matrix, Quaternion
@@ -7,7 +12,7 @@ C=B/'components/enm_boss_monitor002';Q=B/'previews/activate_v034';Q.mkdir(exist_
 D=R/'_scratch/monitor_activate_v034';D.mkdir(exist_ok=True)
 def run():
  bpy.context.preferences.filepaths.save_version=0
- bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v031.blend'))
+ bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v031.blend')))
  s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window_manager.windows[0].scene=s
  rig=bpy.data.objects['Boss002_Rig'];arm=rig.data
  def ah(a):return hashlib.sha256(json.dumps([(c.data_path,c.array_index,[(list(k.co),list(k.handle_left),list(k.handle_right),k.interpolation) for k in c.keyframe_points]) for c in a.fcurves]).encode()).hexdigest()
@@ -117,7 +122,7 @@ def run():
  assert all(ah(bpy.data.actions[n])==h for n,h in originals.items())
  for sc in bpy.data.scenes:sc['asset_version']='v034';sc.render.fps=30
  s.frame_start=1;s.frame_end=193;s.frame_set(1)
- bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v034.blend'))
+ bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v034.blend')))
  conv=Matrix(((1,0,0,0),(0,0,1,0),(0,-1,0,0),(0,0,0,1)))
  motion=json.loads((C/'monitor_motion.json').read_text());shutil.copy2(C/'monitor_motion.json',D/'monitor_motion_before.json')
  frames=[];probes=[];bounds={};keyboard_samples=[]
@@ -150,11 +155,11 @@ def run():
    all_bounds[name][idx]['Keyboard outer shell']=[[min(v[i] for v in pts) for i in range(3)],[max(v[i] for v in pts) for i in range(3)]]
  p.write_text(json.dumps(all_bounds))
  rig.animation_data.action=act;s.frame_set(1)
- bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v034.blend'))
- bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v031.blend'))
+ bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v034.blend')))
+ bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v031.blend')))
  r=bpy.data.objects['Boss002_Rig'];bpy.context.view_layer.update();correct_keyboard(r)
  for sc in bpy.data.scenes:sc['asset_version']='v034'
- bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v034.blend'))
+ bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v034.blend')))
  # Patch the matching static node transforms without touching geometry, UVs, skins or materials.
  glb=C/'enm_boss_monitor002_visual_top3d.glb';backup=D/'visual_before_grip.glb'
  if not backup.exists():shutil.copy2(glb,backup)
@@ -168,9 +173,9 @@ def run():
  encoded=json.dumps(doc,separators=(',',':')).encode();encoded+=b' '*((-len(encoded))%4);tail=raw[20+length:]
  glb.write_bytes(struct.pack('<III',0x46546c67,2,20+len(encoded)+len(tail))+struct.pack('<II',len(encoded),0x4e4f534a)+encoded+tail)
  (Q/'keyboard_grip_correction.json').write_text(json.dumps({'matrix':[list(row) for row in grip_fix],'reason':'Original static keyboard missed glove; corrected attachment only, all legacy bone animations retained.'},indent=2))
- contract=json.loads((B/'source/rig_contract_v031.json').read_text());contract.update(version='v034',export_signature=sig,activate={'fps':30,'start':1,'end':193,'duration_seconds':6.4,'root_motion':False})
- (B/'source/rig_contract_v034.json').write_text(json.dumps(contract,ensure_ascii=False,indent=2),encoding='utf-8')
- bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v034.blend'))
+ contract=json.loads((source_path(B/'source/rig_contract_v031.json')).read_text());contract.update(version='v034',export_signature=sig,activate={'fps':30,'start':1,'end':193,'duration_seconds':6.4,'root_motion':False})
+ (source_path(B/'source/rig_contract_v034.json')).write_text(json.dumps(contract,ensure_ascii=False,indent=2),encoding='utf-8')
+ bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v034.blend')))
  print('ACTIVATE_SOURCE_OK',json.dumps({k:v for k,v in audit.items() if k not in ['source_bounds','old_actions_unchanged']}))
 try:run()
 except Exception:traceback.print_exc()

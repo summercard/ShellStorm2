@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CHECKER = ROOT / "scripts/check_expedition_room_footprints.py"
-TEMPLATES = ROOT / "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates"
+TEMPLATES = ROOT / "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates"
 
 DB = "db_70x50.json"
 CORRIDOR = "corridor_45x40.json"

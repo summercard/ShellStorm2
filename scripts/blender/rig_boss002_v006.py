@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/rig_v006';P.mkdir(exist_ok=True)
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v005.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v005.blend')))
 s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s
 rig=bpy.data.objects['Boss002_Rig'];arm=rig.data;ctrl=bpy.data.objects['ExpressionController']
 support=[(0,-.08,.18),(0,-.52,.65),(0,-.55,1.32),(0,-.52,2.02)]
@@ -64,7 +69,7 @@ for o in objects:
   if color not in colors:colors.append(color)
   indices[mat.name]=colors.index(color)
 assert len(colors)<=64,len(colors)
-T=B/'source/textures_v006';T.mkdir(exist_ok=True);size=256;grid=8
+T=source_path(B/'source/textures_v006');T.mkdir(exist_ok=True);size=256;grid=8
 im=bpy.data.images.new('Boss002 body palette',width=size,height=size);im.colorspace_settings.name='Non-Color'
 pixels=[]
 for y in range(size):
@@ -81,7 +86,7 @@ for o in objects:
 # One expression shader; a mesh attribute identifies eye/mouth UV registration.
 face=bpy.data.materials.new('BOSS002_02_ExpressionAtlas');face.use_nodes=True;face.surface_render_method='DITHERED';nt=face.node_tree;nt.nodes.clear();ns=nt.nodes;ls=nt.links
 uv=ns.new('ShaderNodeTexCoord');attr=ns.new('ShaderNodeAttribute');attr.attribute_name='expression_slot_id'
-boxes=json.loads((B/'source/expression_library_v004.json').read_text())['per_expression_slot_boxes_pixels'];last=None
+boxes=json.loads((source_path(B/'source/expression_library_v004.json')).read_text())['per_expression_slot_boxes_pixels'];last=None
 def driver(socket,vals):
  f=socket.driver_add('default_value');v=f.driver.variables.new();v.name='e';v.targets[0].id=ctrl;v.targets[0].data_path='["expression_index"]';f.driver.expression=str(tuple(vals))+'[min(5,max(0,int(e)))]'
 for slot,name in enumerate(['large_eye','round_eye','mouth']):
@@ -94,7 +99,7 @@ for slot,name in enumerate(['large_eye','round_eye','mouth']):
  if last:
   acc=ns.new('ShaderNodeVectorMath');acc.operation='ADD';ls.new(last,acc.inputs[0]);ls.new(weighted.outputs[0],acc.inputs[1]);last=acc.outputs[0]
  else:last=weighted.outputs[0]
-tex=ns.new('ShaderNodeTexImage');tex.image=bpy.data.images.load(str(B/'source/textures_v004/expressions_atlas.png'),check_existing=True);tex.image.pack();tex.extension='CLIP';ls.new(last,tex.inputs[0]);em=ns.new('ShaderNodeEmission');em.inputs[1].default_value=.85;ls.new(tex.outputs['Color'],em.inputs[0]);tr=ns.new('ShaderNodeBsdfTransparent');mix=ns.new('ShaderNodeMixShader');alpha=ns.new('ShaderNodeMath');alpha.operation='GREATER_THAN';alpha.inputs[1].default_value=.65;ls.new(tex.outputs['Alpha'],alpha.inputs[0]);ls.new(alpha.outputs[0],mix.inputs[0]);ls.new(tr.outputs[0],mix.inputs[1]);ls.new(em.outputs[0],mix.inputs[2]);out=ns.new('ShaderNodeOutputMaterial');ls.new(mix.outputs[0],out.inputs[0])
+tex=ns.new('ShaderNodeTexImage');tex.image=bpy.data.images.load(str(source_path(B/'source/textures_v004/expressions_atlas.png')),check_existing=True);tex.image.pack();tex.extension='CLIP';ls.new(last,tex.inputs[0]);em=ns.new('ShaderNodeEmission');em.inputs[1].default_value=.85;ls.new(tex.outputs['Color'],em.inputs[0]);tr=ns.new('ShaderNodeBsdfTransparent');mix=ns.new('ShaderNodeMixShader');alpha=ns.new('ShaderNodeMath');alpha.operation='GREATER_THAN';alpha.inputs[1].default_value=.65;ls.new(tex.outputs['Alpha'],alpha.inputs[0]);ls.new(alpha.outputs[0],mix.inputs[0]);ls.new(tr.outputs[0],mix.inputs[1]);ls.new(em.outputs[0],mix.inputs[2]);out=ns.new('ShaderNodeOutputMaterial');ls.new(mix.outputs[0],out.inputs[0])
 # Negative sampling offset makes the visible terminal text travel upward.
 screen=bpy.data.objects['Screen code texture'].data.materials[0];screen.name='BOSS002_03_ScrollingCode';nt=screen.node_tree;ns=nt.nodes;ls=nt.links;tex=next(n for n in ns if n.type=='TEX_IMAGE');tex.extension='REPEAT';uv=ns.new('ShaderNodeTexCoord');off=ns.new('ShaderNodeCombineXYZ');off.name='Code scroll offset';add=ns.new('ShaderNodeVectorMath');add.operation='ADD';ls.new(uv.outputs['UV'],add.inputs[0]);ls.new(off.outputs[0],add.inputs[1]);ls.new(add.outputs[0],tex.inputs[0])
 rig['code_scroll']=0.0;rig.id_properties_ui('code_scroll').update(description='Positive value moves visible code upward; animate linearly. 1 = one texture height')
@@ -109,9 +114,9 @@ for o in s.objects:
 assert tri<20000
 sig=hashlib.sha256(json.dumps([(b.name,b.parent.name if b.parent else None,list(b.head_local),list(b.tail_local),b.use_deform) for b in arm.bones],sort_keys=True).encode()).hexdigest()
 contract={'asset_id':'ENM-BOSS-MONITOR002-3D','version':'v006','skeleton_id':rig['skeleton_id'],'skeleton_signature':sig,'bone_count':len(arm.bones),'triangles':tri,'materials':[m.name for m in [body,face,screen]],'pivot':support[-1],'arm_segments_per_side':6,'runtime_integration':False,'expression_states':dict(zip(['default','suspicious','angry','sleepy','taunting','glitched'],range(6))),'controls':rig['controls'],'export_note':'Bake bone drivers/constraints for GLB. Shared expression attribute and scrolling UV require runtime shader adapter; not yet integrated.'}
-(B/'source/rig_contract_v006.json').write_text(json.dumps(contract,indent=2),encoding='utf-8')
+(source_path(B/'source/rig_contract_v006.json')).write_text(json.dumps(contract,indent=2),encoding='utf-8')
 bpy.ops.object.select_all(action='DESELECT');rig.select_set(True);bpy.context.view_layer.objects.active=rig
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v006.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v006.blend')))
 rig.animation_data_create()
 tests={'QA_arm_bend':[('arm_02.L',(0,0,.45)),('arm_04.L',(0,0,.45)),('arm_03.R',(.4,0,0))],'QA_monitor_spin':[('monitor_spin',(0,1.1,0))],'QA_forward_slam':[('support_01',(-.35,0,0)),('support_02',(-.4,0,0)),('monitor_tilt',(-.4,0,0))]}
 for name,channels in tests.items():
@@ -124,7 +129,7 @@ for name,prop,val in [('QA_spring_extend','stretch_L',1.7),('QA_code_scroll','co
  for frame,value in [(1,1.0 if prop.startswith('stretch') else 0.0),(72,val)]:rig[prop]=value;rig.keyframe_insert(data_path='["'+prop+'"]',frame=frame)
  rig[prop]=1.0 if prop.startswith('stretch') else 0.0
 rig.animation_data.action=None;s.frame_set(1)
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v006.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v006.blend')))
 print('V006_BUILT',json.dumps(contract))
 
 

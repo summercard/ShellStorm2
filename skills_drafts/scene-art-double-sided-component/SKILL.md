@@ -3,6 +3,10 @@ name: scene-art-double-sided-component
 description: 把「单面装饰」的竖直构件（墙、门墙、隔断等两侧都会被玩家看到的件）改成双面装饰 —— 在 Blender 派生脚本里把装饰面绕基准面镜像一份到背面，重导 GLB 并同步 prefab 声明、探针判据与台账。用于走廊两侧墙、门墙双面、镜像派生与 float32 对称性验证；不用于新建资产、不用于角色/武器/道具。
 agent_created: true
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 竖直构件做双面装饰（镜像派生）
 

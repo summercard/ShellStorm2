@@ -587,8 +587,8 @@
     "open_world_landscape"
   ],
   "version": "v007",
-  "source_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend",
-  "optimized_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/export/v007/env_landscape_skyline20_optimized_v007.blend",
+  "source_blend": "art_source/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend",
+  "optimized_blend": "art_source/environments/open_world/source/landscape_skyline20/v007/export/v007/env_landscape_skyline20_optimized_v007.blend",
   "source_sha256_before": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
   "source_sha256_after": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
   "optimized_sha256": "047822810b1abac363102f3d9577a617a9b32ada0107de2c9ffc56a9e5845c63",

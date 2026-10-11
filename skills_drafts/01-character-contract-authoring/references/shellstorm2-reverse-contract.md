@@ -21,7 +21,7 @@
 | 状态集 | `Player3D` 八态 + 四变体 | `idle` / `talk` | `ENEMY_AI_12_STATES` 12 态 |
 | 现役 AssetID | `CHR-PLY-CAPSULE01-3D-BUNNY01`（v021） | 无 | `ENM-ELITE-RIFT-BOAR-ARMED-3D` |
 | 逻辑消费脚本 | `src/player3d/Player3D.gd` · `src/player3d/PlayerAvatar3D.gd` | `src/world3d/ThemedNPC3D.gd` | `src/enemy3d/Enemy3D.gd` · `src/enemy3d/EnemyAvatar3D.gd` |
-| 母版路径 | `assets/art/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend` | 待建 | `assets/art/enemies/elite_3d/rift_boar_armed/source/` |
+| 母版路径 | `art_source/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend` | 待建 | `art_source/enemies/elite_3d/rift_boar_armed/source/` |
 
 **玩家母版基准**：参考高 1.50 m、脚底中心原点、Blender 前向 `-Y`、Godot 前向 `-Z`、根缩放 `1`。七制作槽与九挂点的稳定名称见 `player-avatar-asset-standard`。
 

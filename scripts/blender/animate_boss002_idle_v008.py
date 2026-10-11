@@ -1,11 +1,16 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector,Quaternion
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/idle_v008';P.mkdir(exist_ok=True)
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v006.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v006.blend')))
 s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;rig=bpy.data.objects['Boss002_Rig'];ctrl=bpy.data.objects['ExpressionController'];s['asset_version']='v008'
 for sc in bpy.data.scenes:sc.render.fps=30;sc.frame_start=1;sc.frame_end=96
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v008.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v008.blend')))
 rig.animation_data_create();act=bpy.data.actions.new('idle');rig.animation_data.action=act;act.use_fake_user=True;act['loop_seconds']=3.2;act['usage']='Formal idle loop; frames 1..96, closure at 97. Root fixed.'
 def set_world_axis(pb,axis,angle):
  local=pb.bone.matrix_local.to_3x3().inverted()@Vector(axis);pb.rotation_mode='QUATERNION';pb.rotation_quaternion=Quaternion(local,angle)
@@ -29,8 +34,8 @@ for f in range(1,98,4):
 for fc in act.fcurves:
  for k in fc.keyframe_points:k.interpolation='BEZIER';k.handle_left_type='AUTO_CLAMPED';k.handle_right_type='AUTO_CLAMPED'
  fc.modifiers.new('CYCLES')
-s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v008.blend'))
-c=json.loads((B/'source/rig_contract_v006.json').read_text());c.update(version='v008',formal_animations_authored=['idle'],idle={'fps':30,'start':1,'end':96,'closure':97,'duration_seconds':3.2},face_layout='restored exactly to v006');(B/'source/rig_contract_v008.json').write_text(json.dumps(c,indent=2),encoding='utf-8')
+s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v008.blend')))
+c=json.loads((source_path(B/'source/rig_contract_v006.json')).read_text());c.update(version='v008',formal_animations_authored=['idle'],idle={'fps':30,'start':1,'end':96,'closure':97,'duration_seconds':3.2},face_layout='restored exactly to v006');(source_path(B/'source/rig_contract_v008.json')).write_text(json.dumps(c,indent=2),encoding='utf-8')
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;cam=scene.camera;cam.location=(3,12,4.5);cam.rotation_euler=(Vector((0,0,1.8))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=9.0;scene.cycles.samples=16;scene.render.resolution_x=960;scene.render.resolution_y=760;scene.frame_set(1);scene.render.filepath=str(P/'idle.png');bpy.ops.render.render(write_still=True)
 # Sample actual evaluated geometry, including the held props, through the loop.
 mins={};maxloop=0;rest={}

@@ -85,7 +85,7 @@
   "glb": "assets/art/environments/open_world/components/skyline_08/billboard_canvas/env_skyline_08_billboard_canvas_visual_top3d.glb",
   "glb_sha256": "84c8bc392bf435382bf99fc04a7d0fece0d99b05f4871b1033e5db3ea9d12e6e",
   "prefab": "assets/art/environments/open_world/runtime/skyline_08/billboard_canvas/env_skyline_08_billboard_canvas_root_top3d.tscn",
-  "source": "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+  "source": "art_source/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
   "collision": "none_visual_only",
   "existing_material_resources": {
     "01_精工金属_紫色骨架": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_orugq",

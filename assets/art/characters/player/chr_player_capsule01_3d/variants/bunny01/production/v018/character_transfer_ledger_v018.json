@@ -7,11 +7,11 @@
   "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
   "files": [
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v018/source/model/chr_bunny01_model_v018.blend",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v018/source/model/chr_bunny01_model_v018.blend",
       "sha256": "0164fa024715d7b7020094b8e1d2719fd6fde717deba5280f4e5ad4fb9f7f711"
     },
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v018/source/animation/chr_bunny01_animation_v018.blend",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v018/source/animation/chr_bunny01_animation_v018.blend",
       "sha256": "3b6dae59d689a92498d126602e6089bca8d2c04b64c5cf3f38741619cd174a12"
     }
   ],

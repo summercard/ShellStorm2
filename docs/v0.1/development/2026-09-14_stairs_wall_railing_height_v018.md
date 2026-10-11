@@ -6,7 +6,7 @@
 
 ## 交付事实
 
-- 新版本保存为 `tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v018/whitebox_tower_stairs_v018.blend`，v017 未覆盖。
+- 新版本保存为 `art_source/legacy_design/blocks/stairs/whitebox_tower_stairs_v018/whitebox_tower_stairs_v018.blend`，v017 未覆盖。
 - `WORK TOGETHER` 海报的 6 个网格迁到二楼主墙；标注位置的一二楼墙段、对应装甲板和中间竖向骨架不进入 v018 输出，相邻横向骨架收口到新开口。
 - 新增 14 个楼板边缘栏杆网格并归入通用地板组件；底脚与 `Z=-9.00m` 楼板顶面形成 0.02m 咬合，楼梯口保持净空。
 - 二楼剩余 14 块装甲墙板统一为 `Z=-9.00–2.30m`。
@@ -19,4 +19,4 @@
 - 输出主墙、栏杆贴边、二楼墙高和双层删墙开口四张验收图。
 - 未执行 GLB、碰撞、LOD、PackedScene 或 Godot 运行时替换。
 
-详细对象、坐标、组件数量与过程异常见 `tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v018/QA_REPORT.md`。
+详细对象、坐标、组件数量与过程异常见 `art_source/legacy_design/blocks/stairs/whitebox_tower_stairs_v018/QA_REPORT.md`。

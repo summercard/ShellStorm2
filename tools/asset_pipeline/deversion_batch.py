@@ -121,7 +121,7 @@ BATCHES: dict[str, dict] = {
             "runtime": {"mode": "collapse"},
         },
         "excluded": [
-            "assets/art/environments/base_facility_3d/source/**（Blender 源，整体豁免）",
+            "art_source/environments/base_facility_3d/source/**（Blender 源，整体豁免）",
             "components/** 的 3 个 *_runtime_manifest_vNNN.json：不属门禁口径（"
             "RUN_ASSET 只认 .glb/.tscn），随所在分组目录的重命名单独处理",
             "assets/art/asset_import_manifest_v001.json：B1/B2 均未回填，"
@@ -257,7 +257,7 @@ BATCHES: dict[str, dict] = {
                 "env_rooftop_shelter_90x80m_facilities_gen019.glb",
         },
         "excluded": [
-            "assets/art/environments/rooftop_shelter_3d/source/**（Blender 源，整体豁免）",
+            "art_source/environments/rooftop_shelter_3d/source/**（Blender 源，整体豁免）",
             "assets/art/environments/rooftop_shelter_3d/previews/*.png（+.import）、"
             "docs/*.json、game_output/**/*.blend（+.import）：`_vNNN` 在 `.png`/`.json`/`.blend` 上"
             "全仓系统性存在（门禁 RUN_ASSET_SUFFIX 只认 .glb/.tscn，刻意收窄），不属本批",

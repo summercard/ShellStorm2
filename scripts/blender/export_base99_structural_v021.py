@@ -9,11 +9,11 @@ from pathlib import Path
 
 
 PROJECT = Path(__file__).resolve().parents[2]
-SOURCE_BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
-OUTPUT_BLEND = PROJECT / "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend"
+SOURCE_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+OUTPUT_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend"
 COMPONENT_ROOT = PROJECT / "assets/art/environments/base_facility_3d/components/env_base99_structural_v021"
 RUNTIME_ROOT = PROJECT / "assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021"
-MANIFEST_PATH = PROJECT / "assets/art/environments/base_facility_3d/source/env_base99_structural_v021_manifest.json"
+MANIFEST_PATH = PROJECT / "art_source/environments/base_facility_3d/source/env_base99_structural_v021_manifest.json"
 
 PACKAGE_SLUGS = [
     "east_mezzanine_structure",

@@ -43,7 +43,7 @@ def rel(root: Path, path: Path) -> str:
 
 def manifests_by_slug(root: Path) -> dict[str, tuple[int, Path, dict]]:
     result: dict[str, tuple[int, Path, dict]] = {}
-    for path in (root / "source/art/blender/base_facility_layout/component_packages").rglob("asset_manifest.json"):
+    for path in (root / "art_source/design/blender/base_facility_layout/component_packages").rglob("asset_manifest.json"):
         data = json.loads(path.read_text(encoding="utf-8"))
         slug = str(data.get("asset_slug", "")).strip()
         if not slug:
@@ -72,7 +72,7 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
     main = workbook["资产主表"]
     overview = workbook["总览"]
     manifest_map = manifests_by_slug(root)
-    master = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
+    master = "art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
     updated = defaultdict(int)
     updated["ledger"] = target.relative_path
 
@@ -81,7 +81,7 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
             "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn",
             "v003",
             "已完成",
-            master + "; source/art/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend; assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb",
+            master + "; art_source/design/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend; assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb",
         ),
         "ENV-BASE99-ART-LAYOUT-3D": (
             "assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn",
@@ -93,19 +93,19 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
             "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v005.tscn",
             "v005",
             "正式美术已接入",
-            master + "; source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend; assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v002.glb",
+            master + "; art_source/design/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend; assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v002.glb",
         ),
         "ENV-BASE99-WALL-CONTENTS-V021": (
             "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
             "v003",
             "已导入；优化完成",
-            master + "; assets/art/environments/base_facility_3d/source/env_base99_wall_contents_v021_manifest.json",
+            master + "; art_source/environments/base_facility_3d/source/env_base99_wall_contents_v021_manifest.json",
         ),
         "ENV-BASE99-REMAINING-FACILITIES-V021": (
             "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
             "v004",
             "已导入；优化完成",
-            master + "; assets/art/environments/base_facility_3d/source/env_base99_remaining_facilities_v021_manifest.json",
+            master + "; art_source/environments/base_facility_3d/source/env_base99_remaining_facilities_v021_manifest.json",
         ),
     }
 

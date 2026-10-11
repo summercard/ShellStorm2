@@ -1,4 +1,9 @@
 """Export the v022 seated action and the complete motion library from its Blender source."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import hashlib
 import json
 import sys
@@ -15,7 +20,7 @@ OLD = ROOT / 'assets/art/characters/player/chr_player_capsule01_3d/variants/bunn
 VERSION = Path(bpy.data.filepath).resolve().parents[2].name
 assert VERSION in {'v022', 'v023', 'v024'}, VERSION
 PACKAGE = OLD.parent / VERSION
-SOURCE = PACKAGE / f'source/animation/chr_bunny01_animation_{VERSION}.blend'
+SOURCE = source_path(PACKAGE / f'source/animation/chr_bunny01_animation_{VERSION}.blend')
 OUTPUT = PACKAGE / 'exports'
 OUTPUT.mkdir(parents=True, exist_ok=True)
 assert Path(bpy.data.filepath).resolve() == SOURCE.resolve(), bpy.data.filepath

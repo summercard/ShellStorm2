@@ -5,7 +5,7 @@ from pathlib import Path
 from mathutils import Vector
 
 
-OUTPUT_DIR = Path("/Users/summercards/ShellStorm2/assets/art/environments/base_facility_3d/source/env_base99_modular_room/previews")
+OUTPUT_DIR = Path("/Users/summercards/ShellStorm2/art_source/environments/base_facility_3d/source/env_base99_modular_room/previews")
 TARGET_IDS = {
     "ENV-BASE99-MEZZANINE-20X10-Z5",
     "ENV-BASE99-STAIR-L-Z5",

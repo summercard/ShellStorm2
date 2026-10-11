@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math
 from pathlib import Path
 from mathutils import Vector
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/heavy_v017'
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v017.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v017.blend')))
 s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];rig=bpy.data.objects['Boss002_Rig'];rig['heavy_spin_turns']=float(rig['heavy_spin_turns'])
 for fc in rig.animation_data.action.fcurves:
  if 'heavy_spin_turns' in fc.data_path:fc.update_autoflags(rig)
@@ -42,7 +47,7 @@ for j in range(6):
   for k in fc.keyframe_points:k.interpolation='CONSTANT' if fc.data_path=='hide_render' else 'LINEAR'
 studio.camera.location=(5,12,6);studio.camera.rotation_euler=(Vector((0,1,1.5))-studio.camera.location).to_track_quat('-Z','Y').to_euler();studio.camera.data.ortho_scale=11.5
 studio.frame_set(1);studio['preview_instructions']='heavy_spin_slam 1-97: screen spins 3 turns, backlean49-55 hold55-59, impact65, low65-81, recover97. VFX only in studio.'
-bpy.context.window.scene=studio;bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v017.blend'))
+bpy.context.window.scene=studio;bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v017.blend')))
 studio.cycles.samples=8;studio.render.resolution_x=960;studio.render.resolution_y=800
 for f in [29,49,55,59,63,65,69,73,81,89,97]:
  studio.frame_set(f);studio.render.filepath=str(P/('pose_%03d.png'%f));bpy.ops.render.render(write_still=True)

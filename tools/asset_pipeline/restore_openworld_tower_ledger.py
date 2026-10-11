@@ -21,8 +21,8 @@ from split_asset_ledger import CONTENT_COLUMNS, _row_digest, col_digest, dedupe_
 LEDGER = ROOT / "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx"
 BASELINE = ROOT / "assets/registry/ledger_split_baseline.json"
 MASTER = ROOT / "assets/registry/ShellStorm2_美术资产台账_v001.xlsx"
-TOWER02 = ROOT / "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend"
-TOWER03 = ROOT / "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend"
+TOWER02 = ROOT / "art_source/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend"
+TOWER03 = ROOT / "art_source/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend"
 
 
 def sha(path: Path) -> str:
@@ -72,7 +72,7 @@ def main() -> None:
         13: "v001",
         14: "主体70×44m；屋顶高40m、机房高8m；217独立资产包；天台双层机房、风机、风管、通信桅杆和卫星天线",
         15: src03,
-        16: "用户参考图1（天台布局）及图2（整体结构）；assets/art/environments/open_world/source/tower_03/v001/catalog.json",
+        16: "用户参考图1（天台布局）及图2（整体结构）；art_source/environments/open_world/source/tower_03/v001/catalog.json",
         17: "塔楼03;设备天台;办公楼;风机;风管;通信桅杆;卫星天线;70×44m",
         20: sha(TOWER03),
         21: "Codex",

@@ -23,7 +23,7 @@ assert spec and spec.loader
 spec.loader.exec_module(v005)
 base = v005.base
 
-base.OUTPUT_BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v006.blend"
+base.OUTPUT_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v006.blend"
 base.OUTPUT_HERO = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v006.png"
 base.OUTPUT_TOP = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v006_top.png"
 base.OUTPUT_DETAIL = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v006_floor_close.png"

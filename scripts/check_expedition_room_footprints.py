@@ -3,7 +3,7 @@
 """远征关卡01 房型模板「外轮廓 + 多层几何」门禁（纯几何，不需要 Godot）。
 
 真源：
-  source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/*.json
+  art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/*.json
 
 坐标系（由 scripts/render_expedition01_plan_sheet.py 的 door_marker() 反推钉死）：
   frame = "bbox_nw_x_east_y_south"
@@ -49,7 +49,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATES_DIR = (
     ROOT
-    / "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates"
+    / "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates"
 )
 
 FRAME_ID = "bbox_nw_x_east_y_south"

@@ -7,7 +7,7 @@ const RUN_SEED := 77001199
 const PLAN_SEED_COUNT := 64
 # 测试关卡99在 L1 设计源中登记的真实 ID，不是显示名 test_level_99。
 const OTHER_LEVEL_ID := "99"
-const OTHER_LEVEL_SOURCE := "res://source/art/whitebox/tower_zones/99/v001/data/level_plan.json"
+const OTHER_LEVEL_SOURCE := "res://art_source/design/whitebox/tower_zones/99/v001/data/level_plan.json"
 const POSITION_EPSILON := 0.01
 
 

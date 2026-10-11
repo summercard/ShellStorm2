@@ -17,7 +17,7 @@ extends Node
 ## 直接把运行时坐标抄进 JSON，盒子会转到别处去。本探针两帧都打，并自带一致性断言。
 
 const SCENE: PackedScene = preload("res://scenes/ExpeditionLevel01_3D.tscn")
-const FLOOR_JSON := "res://source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json"
+const FLOOR_JSON := "res://art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json"
 const SEED_VALUE := 77001199
 const GRID_UNIT_M := 5.0
 const MAP_OUT := "res://_scratch/expedition_spawn_boxes/room_box_fit_map.json"

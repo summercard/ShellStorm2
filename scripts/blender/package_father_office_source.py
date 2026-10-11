@@ -1,9 +1,9 @@
 import bpy,json,math,sys
 from pathlib import Path
 from mathutils import Vector
-R=Path(__file__).resolve().parents[2];O=R/'assets/art/environments/master_office_3d/source/env_father_office/v002'
+R=Path(__file__).resolve().parents[2];O=R/'art_source/environments/master_office_3d/source/env_father_office/v002'
 story='--story' in sys.argv
-if story:O=R/'assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001'
+if story:O=R/'art_source/environments/master_office_3d/source/env_block00_story_rooms/v001'
 version='v001' if story else 'v002';prefix='env_block00_' if story else 'env_father_office_';asset='ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE' if story else 'ENV-BATTLE-FATHER-OFFICE-SOURCE'
 main=bpy.context.scene;catalog=json.loads((O/'component_catalog.json').read_text(encoding='utf8'));report=[]
 for d in catalog:

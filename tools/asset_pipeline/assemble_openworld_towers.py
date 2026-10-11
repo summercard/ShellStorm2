@@ -2,6 +2,11 @@
 
 Existing hand-edited layouts are never overwritten unless --replace-layout is explicit.
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 import argparse
 import hashlib
 import json
@@ -52,8 +57,8 @@ def main():
     args = parser.parse_args()
     template = (ROOT / 'assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/door_wall/door_wall_visual_top3d.glb.import').read_text(encoding='utf-8')
     for slug, version in [('tower_02','v003'),('tower_03','v001')]:
-        manifest = json.loads((BASE / 'source' / slug / 'export' / version / 'export_manifest.json').read_text(encoding='utf-8'))
-        catalog = json.loads((BASE / 'source' / slug / version / 'catalog.json').read_text(encoding='utf-8'))
+        manifest = json.loads((source_path(BASE / 'source' / slug / 'export' / version / 'export_manifest.json')).read_text(encoding='utf-8'))
+        catalog = json.loads((source_path(BASE / 'source' / slug / version / 'catalog.json')).read_text(encoding='utf-8'))
         records = manifest['records']
         for record in records:
             path = ROOT / record['prefab']

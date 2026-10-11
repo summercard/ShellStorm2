@@ -20,7 +20,7 @@ from mathutils import Vector
 ROOT = Path(__file__).resolve().parents[2]
 BLEND = (
     ROOT
-    / "source/art/whitebox/tower_zones/expedition_01/v001/blender"
+    / "art_source/design/whitebox/tower_zones/expedition_01/v001/blender"
     / "远征关卡01_白模_Boss竞技场_50x40m_v001.blend"
 )
 

@@ -23,8 +23,8 @@ manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 manifest["version"] = "v031"
 manifest["stage"] = "active"
 manifest["source"] = "source/enm_boss_monitor002_model_v031.blend"
-manifest["model_source"] = "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v031.blend"
-manifest["animation_source"] = "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v031.blend"
+manifest["model_source"] = "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v031.blend"
+manifest["animation_source"] = "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v031.blend"
 manifest["rig_contract"] = "source/rig_contract_v031.json"
 manifest["runtime_verification"] = v031_ledger["verification"]
 for item in v031_ledger["files"]:
@@ -41,8 +41,8 @@ manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\
 enemy_book = ROOT / "assets/registry/ledgers/ShellStorm2_敌人账本_v001.xlsx"
 workbook = load_workbook(enemy_book)
 sources = "; ".join([
-    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v031.blend",
-    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v031.blend",
+    "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v031.blend",
+    "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v031.blend",
 ])
 note = "恢复v031老版走路；底座23°侧翘、原横移与手臂节奏。其余15剪辑、四技能、三阶段与远征01投放不变。"
 

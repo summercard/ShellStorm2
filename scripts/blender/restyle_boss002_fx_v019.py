@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 R=Path.cwd();B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/heavy_v019';P.mkdir(exist_ok=True)
@@ -6,7 +11,7 @@ def snapshot():
 def material(name,col):
  m=bpy.data.materials.new(name);m.use_nodes=True;n=m.node_tree.nodes;n.clear();e=n.new('ShaderNodeEmission');e.inputs[0].default_value=col;e.inputs[1].default_value=.8;o=n.new('ShaderNodeOutputMaterial');m.node_tree.links.new(e.outputs[0],o.inputs[0]);return m
 for kind in ['model','animation']:
- bpy.ops.wm.open_mainfile(filepath=str(B/f'source/enm_boss_monitor002_{kind}_v018.blend'));before=snapshot()
+ bpy.ops.wm.open_mainfile(filepath=str(source_path(B/f'source/enm_boss_monitor002_{kind}_v018.blend')));before=snapshot()
  for s in bpy.data.scenes:s['asset_version']='v019'
  if kind=='animation':
   fx=bpy.data.collections['BOSS002_IMPACT_PREVIEW'];red=material('FX_Flat_Red',(.9,0,0,1));blue=material('FX_Flat_Blue',(0,.012,.95,1));ink=material('FX_Clean_Outline',(.003,.005,.012,1))
@@ -45,7 +50,7 @@ for kind in ['model','animation']:
    ob.data=mesh;ob['vfx_style']='solid color blocks with clean outline; no texture';ob.visible_shadow=False
   fx['style']='clean flat red/blue color shapes with dark outlines; no sketch marks';fx['palette']='saturated red and blue'
  assert snapshot()==before
- bpy.ops.wm.save_as_mainfile(filepath=str(B/f'source/enm_boss_monitor002_{kind}_v019.blend'))
+ bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/f'source/enm_boss_monitor002_{kind}_v019.blend')))
 (P/'style_audit.json').write_text(json.dumps({'character_actions_unchanged':True,'style':'opaque solid red/blue blocks with clean dark outline','texture_nodes_used_by_fx':0,'timing':'inherited v018'},indent=2))
 s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s;s.cycles.samples=8;s.render.resolution_x=960;s.render.resolution_y=800
 for f in [29,69]:s.frame_set(f);s.render.filepath=str(P/('pose_%03d.png'%f));bpy.ops.render.render(write_still=True)

@@ -1,6 +1,6 @@
 # 基地二楼重点深化 v019
 
-源文件：`source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend`。以v018为输入，v017和v018均保留。
+源文件：`art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend`。以v018为输入，v017和v018均保留。
 
 授权范围为原17个完整名称资产包和 `116_二楼地板色彩深化_资产包`。18包内保留隐藏的可编辑制作组件、默认显示的游戏输出。新增物件均归入相应包内部。未修改游戏代码、碰撞、楼梯、栏杆、墙体或楼层接口。
 

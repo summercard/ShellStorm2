@@ -1,11 +1,16 @@
 """Reopen source: grip endpoints, scale, loops and untouched clips."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys,json,math
 import bpy
 from mathutils import Vector
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import author_bunny_weapon_idles_v025 as h
-SOURCE=h.BASE/'source/animation/chr_bunny01_animation_v032.blend'
+SOURCE=source_path(h.BASE/'source/animation/chr_bunny01_animation_v032.blend')
 OUT=h.ROOT/'outputs/character_pipeline/switch_v032'
 bpy.ops.wm.open_mainfile(filepath=str(SOURCE))
 result={}

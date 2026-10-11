@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector,Quaternion,Matrix
 R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/idle_v010';P.mkdir(exist_ok=True)
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v009.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v009.blend')))
 s=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=s;rig=bpy.data.objects['Boss002_Rig'];arm=rig.data
 # Rotate the keyboard's long axis about its center so the hand holds the middle
 # of its long side, with the same thickness and opposing finger contact.
@@ -12,7 +17,7 @@ for o in s.objects:
  if o.get('asset_role')=='hand_prop_keyboard':o.matrix_world=transform@o.matrix_world
 s['asset_version']='v010';bpy.context.view_layer.update()
 signature=hashlib.sha256(json.dumps([(b.name,b.parent.name if b.parent else None,list(b.head_local),list(b.tail_local),b.use_deform) for b in arm.bones],sort_keys=True).encode()).hexdigest();tri=18684
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v010.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v010.blend')))
 rig.animation_data_create();act=bpy.data.actions.new('idle');rig.animation_data.action=act;act.use_fake_user=True
 def axis(pb,v,a):return Quaternion(pb.bone.matrix_local.to_3x3().inverted()@Vector(v),a)
 def pose(frame):
@@ -53,8 +58,8 @@ for fc in act.fcurves:
  if 'code_scroll' in fc.data_path:
   mod.mode_before='REPEAT_OFFSET';mod.mode_after='REPEAT_OFFSET'
   for k in fc.keyframe_points:k.interpolation='LINEAR'
-s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v010.blend'))
-c=json.loads((B/'source/rig_contract_v008.json').read_text());c.update(version='v010',skeleton_id=rig['skeleton_id'],bone_count=len(arm.bones),skeleton_signature=signature,triangles=tri,grip='keyboard center grip; doubled hanging cable with downward plug',cable_bones=16);(B/'source/rig_contract_v010.json').write_text(json.dumps(c,indent=2),encoding='utf-8')
+s.frame_set(1);bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v010.blend')))
+c=json.loads((source_path(B/'source/rig_contract_v008.json')).read_text());c.update(version='v010',skeleton_id=rig['skeleton_id'],bone_count=len(arm.bones),skeleton_signature=signature,triangles=tri,grip='keyboard center grip; doubled hanging cable with downward plug',cable_bones=16);(source_path(B/'source/rig_contract_v010.json')).write_text(json.dumps(c,indent=2),encoding='utf-8')
 
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;cam=scene.camera;scene.cycles.samples=12;scene.render.resolution_x=960;scene.render.resolution_y=800
 cam.location=(3,12,4.4);cam.rotation_euler=(Vector((0,0,1.85))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=8.6

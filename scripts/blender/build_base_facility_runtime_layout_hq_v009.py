@@ -20,9 +20,9 @@ from mathutils import Vector
 
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-INPUT_BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend"
-OUTPUT_BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend"
-PACKAGE_ROOT = PROJECT / "source/art/blender/base_facility_layout/component_packages_v009"
+INPUT_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend"
+OUTPUT_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend"
+PACKAGE_ROOT = PROJECT / "art_source/design/blender/base_facility_layout/component_packages_v009"
 VERIFY_ROOT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v009"
 HERO_RENDER = VERIFY_ROOT / "base_facility_runtime_layout_hq_v009.png"
 TOP_RENDER = VERIFY_ROOT / "base_facility_runtime_layout_hq_v009_top.png"

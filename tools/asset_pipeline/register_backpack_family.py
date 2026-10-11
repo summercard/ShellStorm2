@@ -1,4 +1,9 @@
 """三款背包的显式登记事务；不吸收其他资产的历史漂移。"""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 from pathlib import Path
 from copy import copy, deepcopy
 from collections import Counter
@@ -54,15 +59,15 @@ def contract(spec, index):
             'source_collection': 'PRP_' + name + '_中文资产管理', 'anchor_contract': ['ItemRoot'],
             'material_roles': ROLES, 'material_override_reason': '用户明确要求场景四材质标准名；不使用道具专属别名',
             'palette': 'assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png',
-            'source_dir': rel(folder / 'source'), 'source_blend': rel(folder / 'source' / (logic + '_source_v001.blend')),
-            'optimized_blend': rel(folder / 'source/export/v001' / (logic + '_optimized_v001.blend')),
+            'source_dir': rel(source_path(folder / 'source')), 'source_blend': rel(source_path(folder / 'source' / (logic + '_source_v001.blend'))),
+            'optimized_blend': rel(source_path(folder / 'source/export/v001' / (logic + '_optimized_v001.blend'))),
             'stable_glb': rel(folder / 'components' / (logic + '_visual_top3d.glb')),
             'stable_prefab': rel(folder / 'runtime' / (logic + '_root_top3d.tscn')),
             'max_triangles': 500, 'shoulder_straps': False, 'front_clasp_straps': size != 'small', 'top_handle': True,
             'source_version': 'v001', 'reference_image': 'C:/Users/zhuangmenghong/.workbuddy/clipboard-images/clipboard-2026-10-08T09-16-34-177Z-40fdd968.jpg',
-            'template_resolution': {'requested_missing': 'assets/art/items_weapons/_templates/prp/prp_template_source_v001.blend',
+            'template_resolution': {'requested_missing': 'art_source/items_weapons/_templates/prp/prp_template_source_v001.blend',
                 'search_result': '仅找到角色模板，与静态道具契约不符，不挪用角色骨架',
-                'replacement': 'assets/art/items_weapons/_templates/prp/prp_template_source_v001.blend',
+                'replacement': 'art_source/items_weapons/_templates/prp/prp_template_source_v001.blend',
                 'action': '按06五集合、公共色盘、PaletteUV及ItemRoot补建静态分支模板；不覆盖历史文件；tier_0删除示例骨架'}}
 
 def main():

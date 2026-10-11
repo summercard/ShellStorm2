@@ -4,7 +4,7 @@
   "slug": "crane_01_jib",
   "category": "facilities",
   "version": "v003",
-  "source_blend": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "source_blend": "art_source/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
   "collection": "塔吊2_工作臂_双弦桁架检修走道_资产包",
   "objects": [
     "塔吊2_工作臂_双弦桁架检修走道"
@@ -79,7 +79,7 @@
   "glb": "assets/art/environments/open_world/components/tower_02/crane_01_jib/env_tower_02_crane_01_jib_visual_top3d.glb",
   "glb_sha256": "c9dc348ee653364b65d7e1d804025edf96842b340d71c0b3f1f272fa1c949bea",
   "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_jib/env_tower_02_crane_01_jib_root_top3d.tscn",
-  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "source": "art_source/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
   "collision": "none_visual_only",
   "restore_history": [
     {
@@ -165,17 +165,17 @@
         "glb": "assets/art/environments/open_world/components/tower_02/crane_01_jib/env_tower_02_crane_01_jib_visual_top3d.glb",
         "glb_sha256": "c9dc348ee653364b65d7e1d804025edf96842b340d71c0b3f1f272fa1c949bea",
         "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_jib/env_tower_02_crane_01_jib_root_top3d.tscn",
-        "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+        "source": "art_source/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
         "collision": "none_visual_only"
       }
     }
   ],
-  "source_sha256": "9c56a7e489416230c460063c3b5a84b2cfed8d9c43cec05a20638e5e3d84b4c8",
-  "source_original": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
-  "source_original_sha256": "9c56a7e489416230c460063c3b5a84b2cfed8d9c43cec05a20638e5e3d84b4c8",
-  "export_source": "assets/art/environments/open_world/source/tower_02/export/v003/env_tower_02-v003-runtime.blend",
+  "source_sha256": "b54178bc80f1ff7b90f917621aa3bc98f480972eb94ddf1b462298677f660121",
+  "source_original": "art_source/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "source_original_sha256": "b54178bc80f1ff7b90f917621aa3bc98f480972eb94ddf1b462298677f660121",
+  "export_source": "art_source/environments/open_world/source/tower_02/export/v003/env_tower_02-v003-runtime.blend",
   "export_source_sha256": "3ff5ab637a9868a03b7bd1579a6ce5ce132eeeb82328307c7fb08751b8c31bc6",
-  "export_manifest": "assets/art/environments/open_world/source/tower_02/export/v003/export_manifest.json",
+  "export_manifest": "art_source/environments/open_world/source/tower_02/export/v003/export_manifest.json",
   "active_geometry": "full_detail_unreduced",
   "runtime_integrated": false,
   "runtime_verified": true,

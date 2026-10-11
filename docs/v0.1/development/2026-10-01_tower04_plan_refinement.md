@@ -26,7 +26,7 @@ FeatureID：ASSET-PIPELINE；工程0.1.0；设计r2；源v002。日期2026-10-01
 | 运行资产命名 | exit1；既有带版本目录/引用债务，TSCN引用93→97。塔4仅source新增，没有本次新增运行资产 |
 | Git whitespace | exit0；仅现有CRLF提示 |
 
-证据位于`assets/art/environments/open_world/source/tower_04/v002/qa/`。真实图片位于同版本`previews/`。
+证据位于`art_source/environments/open_world/source/tower_04/v002/qa/`。真实图片位于同版本`previews/`。
 
 场景账本第816行只升级塔4的M/N/O/P/Q/T/V/Y八格，保留原AssetID及状态。末次动线修复只刷新T816；其他资产内容、公式、样式、分页及所有其它资产基线指纹逐项不变。初次及末次哈希事务备份均位于项目外`_scratch/tower04_v002_ledger_backup`、`_scratch/tower04_v002_ledger_sha_backup`。
 

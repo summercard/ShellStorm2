@@ -55,7 +55,7 @@ LIBRARIES = (
     ("db_room", "v013"),
 )
 LIBRARY_ROOT = Path(
-    "assets/art/environments/tower_zones/expedition/source/common_components"
+    "art_source/environments/tower_zones/expedition/source/common_components"
 )
 REPORT_REL = Path(
     "assets/art/environments/tower_zones/expedition/runtime/room_type_components"

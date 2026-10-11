@@ -1,7 +1,7 @@
 import bpy,bmesh,math,json,ast,hashlib,importlib.util,random
 from pathlib import Path
 from mathutils import Vector,Matrix
-P=Path('/Users/summercards/ShellStorm2');R=P/'outputs/verification/base_facility_east_v021';OUT=P/'source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend'
+P=Path('/Users/summercards/ShellStorm2');R=P/'outputs/verification/base_facility_east_v021';OUT=P/'art_source/design/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend'
 names=['78_维修工作台与工具墙_资产包','80_低矮储物收纳区_资产包','83_东面植物点缀组_资产包']
 C=[bpy.data.collections[n] for n in names];A=C[0];allowed=set(o for c in C for o in c.all_objects)
 spec=importlib.util.spec_from_file_location('old',P/'scripts/blender/reorganize_base_facility_component_packages_v017.py');old=importlib.util.module_from_spec(spec);spec.loader.exec_module(old)
@@ -136,7 +136,7 @@ for c,sc in zip(C,S):
    p.material_index=idx;p.use_smooth=smooth
    for li,t in zip(p.loop_indices,uu):u.data[li].uv=t
   me.normals_split_custom_set(ns);o=bpy.data.objects.new(c.name[:2]+'_'+key+'_v021',me);out.objects.link(o);o['fixed_display_attachment']=key not in ['主体','柔和自发光']
- sc.hide_viewport=True;sc.hide_render=True;c['资产类别']='east_facilities';c['组织版本']='v021';c['当前状态']='东面设施参考深化_待验收';slug=c['资产包键'];folder=P/'source/art/blender/base_facility_layout/component_packages/v021/east_facilities'/slug;folder.mkdir(parents=True,exist_ok=True);c['未来导出目录']=str(folder.relative_to(P));center,dims=old.bbox([o for o in out.objects if o.type=='MESH'])
+ sc.hide_viewport=True;sc.hide_render=True;c['资产类别']='east_facilities';c['组织版本']='v021';c['当前状态']='东面设施参考深化_待验收';slug=c['资产包键'];folder=P/'art_source/design/blender/base_facility_layout/component_packages/v021/east_facilities'/slug;folder.mkdir(parents=True,exist_ok=True);c['未来导出目录']=str(folder.relative_to(P));center,dims=old.bbox([o for o in out.objects if o.type=='MESH'])
  rec={'package_id':slug,'collection':c.name,'parent_collection':next(p.name for p in bpy.data.collections if c.name in p.children),'source_collection':sc.name,'output_collection':out.name,'source_blend':str(OUT.relative_to(P)),'version':'v021','objects':[o.name for o in out.objects],'triangles_before':before[c.name]['triangles'],'triangles_after':triangles(out.objects),'center':center,'dimensions':dims,'local_origin':[center[0],center[1],center[2]-dims[2]/2],'world_placement':placements[C.index(c)],'material_roles':[m.name for m in M],'exported':False,'runtime_integrated':False,'collision':'not_modified','fixed_display_attachments':True}
  (folder/'asset_manifest.json').write_text(json.dumps(rec,ensure_ascii=False,indent=2));catalog.append(rec)
 bpy.context.view_layer.update();after=json.loads(json.dumps({n:sig(bpy.data.objects[n]) for n in locked}));diff=[n for n in locked if locked[n]!=after[n]];assert not diff,diff[:20];assert [c.name for c in C]==names

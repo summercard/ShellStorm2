@@ -1,6 +1,11 @@
 """将塔楼组件候选导入稳定路径，保持正式布局不变。"""
 from __future__ import annotations
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
+
 import argparse
 import hashlib
 import json
@@ -163,7 +168,7 @@ def main() -> None:
     args = parse_args()
     root = args.root
     base = root / "assets/art/environments/open_world"
-    source_root = base / "source/tower_03"
+    source_root = source_path(base / "source/tower_03")
     from_export = source_root / "export" / args.from_version
     to_export = source_root / "export" / args.to_version
     source_manifest_path = from_export / "export_manifest.json"
@@ -226,7 +231,7 @@ def main() -> None:
     assert len(export_manifest["records"]) == COMPONENT_COUNT
     assert catalog["asset_id"] == ASSET_ID and catalog["version"] == args.to_version
     assert len(catalog["packages"]) == COMPONENT_COUNT
-    assert sha256(root / export_manifest["source"]) == export_manifest["source_sha256"]
+    assert sha256(source_path(root / export_manifest["source"])) == export_manifest["source_sha256"]
     assert sha256(root / export_manifest["reference_source"]) == export_manifest["reference_source_sha256"]
     assert sha256(root / export_manifest["derived"]) == export_manifest["derived_sha256"]
 

@@ -2,6 +2,11 @@
 
 Uses the project's ledger-specific openpyxl contract; preserves unrelated hashes.
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 import hashlib
 import json
 import re
@@ -45,10 +50,10 @@ def main():
     changed=set()
     registrations=[]
     for slug,version in [('tower_02','v003'),('tower_03','v001')]:
-        manifest=json.loads((base/'source'/slug/'export'/version/'export_manifest.json').read_text(encoding='utf8'))
-        catalog_path=base/'source'/slug/version/'catalog.json'
+        manifest=json.loads((source_path(base/'source'/slug/'export'/version/'export_manifest.json')).read_text(encoding='utf8'))
+        catalog_path=source_path(base/'source'/slug/version/'catalog.json')
         catalog=json.loads(catalog_path.read_text(encoding='utf8'))
-        assert sha(ROOT/manifest['source'])==manifest['source_sha256']
+        assert sha(source_path(ROOT/manifest['source']))==manifest['source_sha256']
         tower_path=f'assets/art/environments/open_world/runtime/{slug}/env_{slug}_root_top3d.tscn'
         registrations.append(dict(asset_id=catalog['asset_id'],name=ws.cell(known[catalog['asset_id']],2).value,
                                   path=tower_path,glb='',source=manifest['source'],version=version,

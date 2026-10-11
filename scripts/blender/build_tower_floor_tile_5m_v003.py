@@ -25,12 +25,17 @@ v003 修法：只改 z 高度，不改 XY、材质、PaletteUV、三角面拓扑
   细槽改负空间后，槽底露出的正是低 2mm 的金属盖框，层级天生分离，不必再往盖板上
   叠第四层凸起。槽的足迹与 v002 完全一致（28x260mm x 5），只是从"凸起"变成"凹槽"。
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, math, json, hashlib
 from pathlib import Path
 from mathutils import Vector
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'assets/art/environments/tower_descent_3d'
-SRC=OUT/'source/floor_tile_5m'
+SRC=source_path(OUT/'source/floor_tile_5m')
 COMP=OUT/'components/floor_tile_5m'
 PRE=ROOT/'outputs/verification/floor_tile_5m'
 for p in (SRC,COMP,PRE):p.mkdir(parents=True,exist_ok=True)

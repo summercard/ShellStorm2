@@ -2,7 +2,7 @@ import bpy
 from mathutils.bvhtree import BVHTree
 from pathlib import Path
 root=Path(__file__).resolve().parents[2]
-bpy.ops.wm.open_mainfile(filepath=str(root/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v014/source/animation/chr_bunny01_animation_v014.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(root/'art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v014/source/animation/chr_bunny01_animation_v014.blend'))
 def tree(obj,dg):
     e=obj.evaluated_get(dg); m=e.to_mesh()
     result=BVHTree.FromPolygons([e.matrix_world@v.co for v in m.vertices],[list(p.vertices) for p in m.polygons])

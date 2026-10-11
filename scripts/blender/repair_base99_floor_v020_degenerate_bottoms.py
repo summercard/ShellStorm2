@@ -19,7 +19,7 @@ import bpy
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-OUTPUT_BLEND = PROJECT_ROOT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+OUTPUT_BLEND = PROJECT_ROOT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
 REPORT_OUTPUT = PROJECT_ROOT / "outputs/verification/base99_floor_v020_repair_report.json"
 FLOOR_COLLECTION_SUFFIX = "_原砖与深化内容_资产包"
 LOFT_COLLECTION_NAME = "116_二楼地板色彩深化_资产包"
@@ -95,7 +95,7 @@ def main() -> None:
     REPORT_OUTPUT.write_text(
         json.dumps(
             {
-                "input_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v019.blend",
+                "input_blend": "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v019.blend",
                 "output_blend": str(OUTPUT_BLEND.relative_to(PROJECT_ROOT)),
                 "version": "v020",
                 "triangulated_editable_ngons": triangulated,

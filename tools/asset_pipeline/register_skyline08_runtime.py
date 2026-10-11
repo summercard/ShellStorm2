@@ -1,4 +1,9 @@
 """仅登记本批SKYLINE及授权路线修改；保全无关资产内容与基线指纹。"""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 import hashlib
 import json
 import re
@@ -30,14 +35,14 @@ def main():
     assert acceptance['existing_material_resources'] == json.loads((OUT / 'before_runtime.json').read_text(encoding='utf8'))['old_material_resources']
     route = 'assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn'
     assert acceptance['route_sha256'] == sha(ROOT / route)
-    manifest = json.loads((BASE / 'source/skyline_08/export/v004/export_manifest.json').read_text(encoding='utf8'))
-    assert sha(ROOT / manifest['source']) == manifest['source_sha256']
+    manifest = json.loads((source_path(BASE / 'source/skyline_08/export/v004/export_manifest.json')).read_text(encoding='utf8'))
+    assert sha(source_path(ROOT / manifest['source'])) == manifest['source_sha256']
     index = LedgerIndex.load(ROOT)
     domain = next(d for d in index.domains if d.key == 'scenes')
     baseline_path = ROOT / 'assets/registry/ledger_split_baseline.json'
     runtime_manifest_path = BASE / 'runtime/skyline_08/asset_manifest.json'
     runtime_manifest = json.loads(runtime_manifest_path.read_text(encoding='utf8'))
-    runtime_manifest.update(export_manifest='assets/art/environments/open_world/source/skyline_08/export/v004/export_manifest.json', acceptance='outputs/skyline08_import_20260930/acceptance.json', runtime_integrated=True, runtime_status='已导入；优化完成', material_policy='无新材质缓存；实例入树直接绑定塔2既有四角色材质资源', ledger=domain.path.relative_to(ROOT).as_posix(), ledger_sheet='3D-场景通用')
+    runtime_manifest.update(export_manifest='art_source/environments/open_world/source/skyline_08/export/v004/export_manifest.json', acceptance='outputs/skyline08_import_20260930/acceptance.json', runtime_integrated=True, runtime_status='已导入；优化完成', material_policy='无新材质缓存；实例入树直接绑定塔2既有四角色材质资源', ledger=domain.path.relative_to(ROOT).as_posix(), ledger_sheet='3D-场景通用')
     write_json(runtime_manifest_path, runtime_manifest)
     assert sha(domain.path) == sha(OUT / 'before' / domain.path.name), '账本出现并发修改，停止写入'
     assert sha(baseline_path) == sha(OUT / 'before' / baseline_path.name), '基线出现并发修改'
@@ -140,7 +145,7 @@ def main():
             rows=[v for v in page.values if isinstance(v[0],str) and re.fullmatch(r'[A-Z0-9]+(?:-[A-Z0-9]+)+',v[0])]
             line[2].value=len(rows);line[3].value=sum(bool(v[3]) for v in rows);line[4].value=sum(bool(v[6]) for v in rows);line[5].value=sum(v[7]=='开' for v in rows)
     master.save(index.master_path)
-    catalog_path=BASE/'source/skyline_08/v004/catalog.json'
+    catalog_path=source_path(BASE/'source/skyline_08/v004/catalog.json')
     catalog=json.loads(catalog_path.read_text(encoding='utf8'))
     catalog.update(runtime_status='已导入；优化完成',runtime_integrated=True,runtime_prefab=root_prefab,category='大地图场景景观')
     lookup={r['slug']:r for r in manifest['records']}

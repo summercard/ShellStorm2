@@ -14,8 +14,8 @@ import bpy
 PROJECT = Path("/Users/summercards/ShellStorm2")
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 VERSION = args[0] if args else "v016"
-BLEND = PROJECT / f"source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_{VERSION}.blend"
-PACKAGE_ROOT = PROJECT / f"source/art/blender/base_facility_layout/component_packages_{VERSION}"
+BLEND = PROJECT / f"art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_{VERSION}.blend"
+PACKAGE_ROOT = PROJECT / f"art_source/design/blender/base_facility_layout/component_packages_{VERSION}"
 VERIFY = PROJECT / f"outputs/verification/base_facility_runtime_layout_hq_{VERSION}"
 REPORT = VERIFY / f"base_facility_component_organization_audit_{VERSION}.json"
 MARKDOWN = VERIFY / f"base_facility_component_organization_audit_{VERSION}.md"

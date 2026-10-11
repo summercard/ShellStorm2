@@ -5,6 +5,10 @@ agent_created: true
 metadata:
   display_name_zh: 02b Godot 场景与设施导入规范
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 02b Godot 场景、关卡组件与设施导入规范
 
@@ -73,7 +77,7 @@ metadata:
 
 ## ShellStorm2 基地母版的版本化导出
 
-`source/art/blender/base_facility_layout/` 的基地母版必须按“当前文件即正式来源、后续最高版本优先”的规则导出。2026-09-12 的当前正式母版为 v026；后续创建 v027 或更高版本后，最高数值源自动成为新的正式来源。禁止将 v017、v021 或任何历史版本写死为后续导入的输入。当前运行资产可以是 v021-v025 的增量组合，但运行资产路径不再携带版本号，账本与导出清单必须记录每件资产实际采用的源版本与当前母版来源。
+`art_source/design/blender/base_facility_layout/` 的基地母版必须按“当前文件即正式来源、后续最高版本优先”的规则导出。2026-09-12 的当前正式母版为 v026；后续创建 v027 或更高版本后，最高数值源自动成为新的正式来源。禁止将 v017、v021 或任何历史版本写死为后续导入的输入。当前运行资产可以是 v021-v025 的增量组合，但运行资产路径不再携带版本号，账本与导出清单必须记录每件资产实际采用的源版本与当前母版来源。
 
 1. 在 `source/` 中解析 `base_facility_runtime_layout_hq_v###.blend`，默认选择数值最高的版本；只有用户明确指定历史版本时才允许覆盖此选择。
 2. 为选中的源版本建立 `export/v###/`。派生文件必须与源版本一致，例如 v021 的派生文件只能落在 `export/v021/`，并采用 `base_facility_runtime_layout_hq-v021-<scope>.blend` 命名。

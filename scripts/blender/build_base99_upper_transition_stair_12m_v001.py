@@ -3,7 +3,7 @@ import math
 import os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-SOURCE_DIR = os.path.join(ROOT, "assets/art/environments/base_facility_3d/source/wall_height12")
+SOURCE_DIR = os.path.join(ROOT, "art_source/environments/base_facility_3d/source/wall_height12")
 COMPONENT_DIR = os.path.join(ROOT, "assets/art/environments/base_facility_3d/components/env_base99_structural_v021/east_upper_transition_stair")
 BLEND_PATH = os.path.join(SOURCE_DIR, "env_base99_east_upper_transition_stair_12m_source_v001.blend")
 GLB_PATH = os.path.join(COMPONENT_DIR, "east_upper_transition_stair_visual_top3d_v003.glb")

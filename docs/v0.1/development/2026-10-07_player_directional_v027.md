@@ -7,7 +7,7 @@
 
 三枪型 `sidearm / longgun / machinegun`，两个速度档 `walking / moving`，三个方向 `strafe_left / strafe_right / backward`，共18条独立循环。慢走1秒、正常移动0.8秒；前进不在本批。短枪按本轮明确要求保留v026前上倾，长枪斜持、机枪低持；不套用较早通用低枪口规则。
 
-源文件：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v027.blend`，场景17–34，名称直接含类型/速度/方向。模型继续链接v021，v026文件及全部旧Action保留。运行源仍未切换。
+源文件：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v027.blend`，场景17–34，名称直接含类型/速度/方向。模型继续链接v021，v026文件及全部旧Action保留。运行源仍未切换。
 
 左/右按角色自身坐标：Blender -X/+X；朝向+Y，后退-Y。分别控制先迈脚、支撑相位、横向张脚或纵向撤步轨迹。支撑段匀速反向滑动用于原地动画抵消未来玩法位移，恢复段为匹配端点速度的Hermite曲线与抬脚；不是旋转或倒放前进动画。机枪步幅为同档88%、抬脚85%，上身摆幅更小。保持v026的枪体相对躯干/头/双手矩阵，整个上身随步态轻微起伏。
 

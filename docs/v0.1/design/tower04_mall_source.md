@@ -50,7 +50,7 @@ FeatureID：ASSET-PIPELINE；工程版本0.1.0；设计修订r8；下部结构�
 
 ## 所有权与生产
 
-当前几何源为`assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend`；v001–v008完整保留。制作入口为`tools/blender/refine_tower04_lower_structure_v009.py`，从v008读入，仅重建当前范围内的下部结构与附着植被。原694地板、54件营地设施及顶层结构/流线保持原样。`route_centerlines.json`逐字节保留。每个末级包有唯一输出Collection、磁盘manifest、世界摆位与局部原点；制作源独立隐藏。保留固定验收灯光/镜头，附加下部结构近景镜头。
+当前几何源为`art_source/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend`；v001–v008完整保留。制作入口为`tools/blender/refine_tower04_lower_structure_v009.py`，从v008读入，仅重建当前范围内的下部结构与附着植被。原694地板、54件营地设施及顶层结构/流线保持原样。`route_centerlines.json`逐字节保留。每个末级包有唯一输出Collection、磁盘manifest、世界摆位与局部原点；制作源独立隐藏。保留固定验收灯光/镜头，附加下部结构近景镜头。
 
 v005历史中间阶段由`tools/blender/refine_tower04_apocalypse_v005.py`从v004读入，平台长件按10m切分，输出1109独立包，其中1091个平台包XY≤10m；仅54设施与12局部藤蔓的覆盖量不足，不作为当前视觉目标。
 

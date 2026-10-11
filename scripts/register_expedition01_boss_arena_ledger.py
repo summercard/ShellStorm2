@@ -32,11 +32,11 @@ LEDGER = ROOT / "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx"
 ASSET_ID = "ENV-EXPEDITION-L01-BOSS-ARENA"
 FIRST_DATA_ROW = 6
 BLEND_PATH = (
-    "source/art/whitebox/tower_zones/expedition_01/v001/blender/"
+    "art_source/design/whitebox/tower_zones/expedition_01/v001/blender/"
     "远征关卡01_白模_Boss竞技场_50x40m_v001.blend"
 )
 SOURCE_BLEND = (
-    "source/art/whitebox/tower_zones/battle_level01/v003/blender/"
+    "art_source/design/whitebox/tower_zones/battle_level01/v003/blender/"
     "局内关卡01_白模_Boss竞技场_190x90m_v003.blend"
 )
 

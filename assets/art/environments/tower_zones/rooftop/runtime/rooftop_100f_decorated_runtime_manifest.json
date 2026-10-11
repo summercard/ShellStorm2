@@ -6,7 +6,7 @@
   "floor": "100F",
   "block_id": "rooftop",
   "assembly_route": "blender_layout_replay",
-  "layout_source": "res://assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json",
+  "layout_source": "res://art_source/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json",
   "runtime_owner": "res://src/world3d/TowerFloorStage3D.gd",
   "stable_component_scene_root": "res://assets/art/environments/tower_zones/rooftop/runtime",
   "visual_instance_count": 120,

@@ -1,5 +1,10 @@
 """Build the formal 1.5 m ShellStorm2 player/avatar authoring template."""
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 import bpy
 import json
 from pathlib import Path
@@ -8,7 +13,7 @@ from mathutils import Vector
 
 PROJECT_ROOT = Path("/Users/summercards/ShellStorm2")
 ASSET_ROOT = PROJECT_ROOT / "assets/art/characters/player/chr_player_avatar_template_3d"
-OUTPUT_BLEND = ASSET_ROOT / "source/chr_player_avatar_template_source_v001.blend"
+OUTPUT_BLEND = source_path(ASSET_ROOT / "source/chr_player_avatar_template_source_v001.blend")
 OUTPUT_PREVIEW = ASSET_ROOT / "previews/chr_player_avatar_template_overview_v001.png"
 OUTPUT_MANIFEST = ASSET_ROOT / "chr_player_avatar_template_manifest_v001.json"
 

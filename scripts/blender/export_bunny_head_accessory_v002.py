@@ -10,7 +10,7 @@ from mathutils import Vector
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CHARACTER_BLEND = (
     PROJECT_ROOT
-    / "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source"
+    / "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source"
     / "chr_player_capsule01_bunny01_top3d_v008.blend"
 )
 ASSET_ROOT = (

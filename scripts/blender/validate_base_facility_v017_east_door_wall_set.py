@@ -8,8 +8,8 @@ import bpy
 from mathutils import Vector
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
-ASSEMBLY = PROJECT / "source/art/blender/base_facility_layout/component_packages_v017/component_sets/east_door_wall_set/assembly_manifest.json"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+ASSEMBLY = PROJECT / "art_source/design/blender/base_facility_layout/component_packages_v017/component_sets/east_door_wall_set/assembly_manifest.json"
 REPORT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v017/east_door_wall_set_acceptance.json"
 if Path(bpy.data.filepath).resolve() != BLEND.resolve():
     raise RuntimeError("must run with v017 open")

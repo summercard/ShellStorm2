@@ -38,7 +38,7 @@ def main() -> None:
     for asset_id, (slug, label) in targets.items():
         row = rows[asset_id]
         runtime = ROOT / str(sheet.cell(row, 15).value)
-        source = f"assets/art/props/base_world_3d/source/{slug}/prp_base_{slug}_source_v004.blend"
+        source = f"art_source/props/base_world_3d/source/{slug}/prp_base_{slug}_source_v004.blend"
         base = f"assets/art/props/base_world_3d/components/{slug}/prp_base_{slug}_base_visual_v004.glb"
         swivel = f"assets/art/props/base_world_3d/components/{slug}/prp_base_{slug}_swivel_visual_v004.glb"
         assert runtime.is_file() and all((ROOT / path).is_file() for path in [source, base, swivel])

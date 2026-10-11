@@ -8,7 +8,7 @@ import { readProjectBlocks, requireProjectBlock } from './project-blocks.mjs';
 import { validateFixedModules } from './component-policy.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-const saveRoot = path.join(root, 'save');
+const saveRoot = path.resolve(root, '../../art_source/legacy_design');
 const activePreviewPath = path.join(saveRoot, 'active-preview.json');
 const blockSaveRoot = path.join(saveRoot, 'blocks');
 const port = Number(process.env.PORT || 4173);
@@ -307,6 +307,17 @@ await ensureSaveRoot();
 const vite = await createViteServer({ root, server: { middlewareMode: true, host: '0.0.0.0', port } });
 const server = (await import('node:http')).createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
+  // Keep saved-design URLs stable while editable files live outside the tool root.
+  if (req.method === 'GET' && url.pathname.startsWith('/save/')) {
+    try {
+      const filePath = path.resolve(saveRoot, decodeURIComponent(url.pathname.slice('/save/'.length)));
+      const relative = path.relative(saveRoot, filePath);
+      if (path.isAbsolute(relative) || relative === '..' || relative.startsWith(`..${path.sep}`)) return json(res, 403, { error: '路径越界' });
+      const types = { '.glb': 'model/gltf-binary', '.json': 'application/json; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg' };
+      res.setHeader('Content-Type', types[path.extname(filePath).toLowerCase()] || 'application/octet-stream');
+      res.end(await fs.readFile(filePath)); return;
+    } catch { return json(res, 404, { error: '制作源文件不存在' }); }
+  }
   if (url.pathname.startsWith('/api/')) { try { const handled = await api(req, res, url); if (handled !== false) return; } catch { return json(res, 500, { error: '服务异常' }); } }
   vite.middlewares(req, res, () => { res.statusCode = 404; res.end('Not found'); });
 });

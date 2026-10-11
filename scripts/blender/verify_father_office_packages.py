@@ -1,7 +1,7 @@
 import bpy,json,importlib.util,sys
 from pathlib import Path
-R=Path(__file__).resolve().parents[2];O=R/'assets/art/environments/master_office_3d/source/env_father_office/v002'
-if '--story' in sys.argv:O=R/'assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001'
+R=Path(__file__).resolve().parents[2];O=R/'art_source/environments/master_office_3d/source/env_father_office/v002'
+if '--story' in sys.argv:O=R/'art_source/environments/master_office_3d/source/env_block00_story_rooms/v001'
 files=json.loads((O/'package_delivery.json').read_text(encoding='utf8'))
 spec=importlib.util.spec_from_file_location('standard','C:/Users/zhuangmenghong/.agents/skills/blender-game-prop-standard/scripts/validate_game_prop.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 report=[]

@@ -5,6 +5,10 @@ agent_created: true
 metadata:
   display_name_zh: 01 战局房间种类美术源制作
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 战局房间种类美术源制作
 
@@ -33,7 +37,7 @@ metadata:
 
 ## 输入解析顺序
 
-1. 读取战局白模 `source/art/whitebox/tower_zones/<level>/` 的 `unit_plan.json`、房间 manifest、尺寸、门洞和连接数据。
+1. 读取战局白模 `art_source/design/whitebox/tower_zones/<level>/` 的 `unit_plan.json`、房间 manifest、尺寸、门洞和连接数据。
 2. 读取房间种类对应的设计文档、参考图和既有房间源；不得从旧 Blender 场景猜尺寸。
 3. 读取项目资产规范与 `blender-game-prop-standard`，沿用公共色盘、四类材质、PaletteUV、坐标和版本规则。
 4. 确认 `block_id` 使用白盒与资产目标所属的真实区块（局内战局通常为 `battle`；远征白盒必须为 `expedition`），并确认 `design_scope=scene_art`、`asset_ledger`。这三项贯穿后续源、组件、导入和验收。
@@ -74,7 +78,7 @@ metadata:
 9. 保存新版本，不覆盖历史源；房间种类源统一放置于：
 
 ```text
-assets/art/environments/tower_zones/<block_id>/source/room_types/<room_type>/v###/
+art_source/environments/tower_zones/<block_id>/source/room_types/<room_type>/v###/
 ```
 
 该目录只保存房间种类过程源、预览和验收；不放组件 GLB、Godot PackedScene 或具体房间编号布局。历史 `source/entry_safe_room/`、`source/main_room_02/` 等目录只作为兼容读取，不作为新任务落位。

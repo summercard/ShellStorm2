@@ -12,7 +12,7 @@ FeatureID：ASSET-PIPELINE；工程0.1.0；设计r3；源v003；日期2026-10-01
 
 ## 源与验证
 
-正式源：`assets/art/environments/open_world/source/tower_04/v003/塔4_曲线天台商场_150x50m_v003.blend`。场景90包、96输出网格，104268输出面；全部192网格含隐藏制作源共208536面，逐面PaletteUV有效岛208536/208536。
+正式源：`art_source/environments/open_world/source/tower_04/v003/塔4_曲线天台商场_150x50m_v003.blend`。场景90包、96输出网格，104268输出面；全部192网格含隐藏制作源共208536面，逐面PaletteUV有效岛208536/208536。
 
 - 保存后重开路线审计退出0：实际跑道连续、两个回环、与冻结设施占地无相交。
 - 锁区118个对象名称/类型/父级/世界变换/尺寸/网格/材质/UV/修改器/动画/可见性签名一致。旧、新签名见`qa/reference_plan_audit.json`。

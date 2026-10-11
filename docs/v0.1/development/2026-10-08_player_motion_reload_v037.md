@@ -4,7 +4,7 @@ FeatureID：PLAYER-STATE / ASSET-PIPELINE；工程0.1.0。用户图示纠正45°
 
 只修订machinegun_reload的操作朝向，保持近身握点及全程无前伸。Blender操作位偏航左50°、仰角25°，在游戏俯视角投影为约45°左前斜线；保留约1.4°小幅操作摆动。源v037，模型装配v021，源+Y前向经既有转换映射Godot -Z，骨架SKEL-BUNNY01-004与创作1.5m/运行0.8倍率保持。其余90条JSON剪辑逐值不变；稳定JSON91条、GLB77条，换弹仍由WeaponModel3D真实进度控制。
 
-按角色S1/S2/S3/S5/S6与资产行登记技能执行，旧母版保留、稳定路径覆盖，不改状态机或碰撞。源：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend`。回退重导v036并只恢复本批元数据及账本差异。
+按角色S1/S2/S3/S5/S6与资产行登记技能执行，旧母版保留、稳定路径覆盖，不改状态机或碰撞。源：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend`。回退重导v036并只恢复本批元数据及账本差异。
 
 验收目录：`outputs/character_pipeline/reload_v037/`。源3条换弹各481子帧通过；操作阶段投影左前约45°、枪口仰角为正、全程不前伸，握点误差小于0.024mm。已亲看真实渲染联系表：枪身由横持转向画面左上斜线，枪口抬高，取弹装入后回位。预览`reload.gif`为正式游戏俯视角的正交放大。
 

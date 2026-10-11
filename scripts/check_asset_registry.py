@@ -77,7 +77,7 @@ CANONICAL_FILENAME_EXCEPTIONS = {
     # 47 个天台组件包、运行时元数据与制作脚本共同追溯到这份既有 Blender
     # 母版。它不进入 Godot 运行时加载路径；为避免仅为改名制造大范围来源链漂移，
     # 将其作为历史源文件例外保留，后续升版时再迁移为英文规范名。
-    "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend",
+    "art_source/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend",
 }
 LEDGER_SHEETS = ("总览", ASSET_SHEET, "账本说明", "域变更日志")
 

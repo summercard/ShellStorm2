@@ -59,7 +59,7 @@ def main() -> None:
         shutil.copy2(BOOKS / name, BACKUP / name)
     shutil.copy2(BASELINE, BACKUP / BASELINE.name)
 
-    animation = "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/source/animation/chr_bunny01_animation_v022.blend"
+    animation = "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/source/animation/chr_bunny01_animation_v022.blend"
     transfer = "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/character_transfer_ledger_v022.json"
     character_book = "ShellStorm2_角色账本_v001.xlsx"
     character = openpyxl.load_workbook(BOOKS / character_book)
@@ -96,7 +96,7 @@ def main() -> None:
         prop_changes[asset_id] = {
             9: "default / pushable / seated / driveable",
             14: "独立GLB/PackedScene；实体刚体与场景共用碰撞层；E乘坐/离开；轻微滚轮滑行",
-            16: f"assets/art/props/base_world_3d/source/{source}/prp_base_{source}_source_v003.blend",
+            16: f"art_source/props/base_world_3d/source/{source}/prp_base_{source}_source_v003.blend",
             20: sha256(ROOT / runtime),
             25: old_note + "\n2026-09-29：99F 基地座椅接入 PushableSeat3D，角色碰撞可推动；E 上下座，方向输入通过刚体受力滑行；场景墙/地面碰撞保留，安全下座查询；verify_pushable_base_chairs 通过。",
         }

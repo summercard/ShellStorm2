@@ -4,7 +4,7 @@ FeatureID：PLAYER-STATE / ASSET-PIPELINE。工程版本0.1.0；来源为用户�
 
 ## 实现
 
-新增sidearm_reload、longgun_reload、machinegun_reload三条Blender非循环动作，分别设计转枪操作、下方换弹、低位侧下供弹与压紧；原88条运行剪辑逐值保留。新源`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v033.blend`；JSON91条、GLB77条，骨架与模型未改。
+新增sidearm_reload、longgun_reload、machinegun_reload三条Blender非循环动作，分别设计转枪操作、下方换弹、低位侧下供弹与压紧；原88条运行剪辑逐值保留。新源`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v033.blend`；JSON91条、GLB77条，骨架与模型未改。
 
 CharacterMotionLibrary3D直接采样Player3D转发的WeaponModel3D换弹progress，不积累第二套计时。每条源动作2秒只是创作基准，运行时0–1采样覆盖实际完整换弹周期。换弹时只覆盖左右手与枪挂点，四方向脚步、身体和耳朵继续基础动作。收取枪优先；取消换弹后平滑回到基础姿态，不用动画事件装填。高优先级角色状态不被覆盖。
 

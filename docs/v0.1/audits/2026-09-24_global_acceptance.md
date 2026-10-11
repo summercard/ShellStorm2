@@ -174,7 +174,7 @@
 
 ## 7. 文件目录、命名和磁盘整理
 
-中心入口已存在：代码与设计见[模块索引](../MODULE_INDEX.md)，资产见[账本入口](../../../assets/registry/README.md)，3D目录见[目录命名规范](../../../assets/art/3D模型资产目录与命名规范.md)，源布局见`source/art/blender/base_facility_layout/README.md`，临时输出见[docs入口](../../README.md)。问题是规则执行和跨入口同步，而非完全没有体系。
+中心入口已存在：代码与设计见[模块索引](../MODULE_INDEX.md)，资产见[账本入口](../../../assets/registry/README.md)，3D目录见[目录命名规范](../../../assets/art/3D模型资产目录与命名规范.md)，源布局见`art_source/design/blender/base_facility_layout/README.md`，临时输出见[docs入口](../../README.md)。问题是规则执行和跨入口同步，而非完全没有体系。
 
 | 文件集合 | 本轮文件数/内容字节 | 处理结论 |
 |---|---:|---|

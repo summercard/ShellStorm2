@@ -1,5 +1,7 @@
 # 项目开发约定
 
+美术制作源统一位于 `art_source/`；动手前另读 `docs/ART_SOURCE_LAYOUT.md`。源参与 Git/LFS，但由 `.gdignore` 与导出排除隔离；正式导入资源原路径保持稳定。当前独立组件源、模型/动画母版、优化母版及必要清单保留最新版本，临时导出与 QA 走工程外工作目录。
+
 适用本仓库。用户的最新明确要求优先于历史文档。开发前必须阅读 `docs/README.md`、`docs/DOCUMENTATION_STANDARD.md`，并在 `docs/v0.1/MODULE_INDEX.md` 找到本次功能及其主设计；没有完整契约时先补设计，再实施改变规则的代码。
 
 - 当前游戏版本由 `project.godot` 决定，不因整理文档自动升级版本。
@@ -10,6 +12,6 @@
 - 验收分别记录退出码、预期故障、非预期脚本错误、未执行项；真实渲染用例使用真实渲染器。不要为了全绿删除目标设计或直接放宽旧阈值。
 - 涉及内容/资产时同步相应表格与运行时映射；哈希漂移先核对变更来源，不批量接受当前文件掩盖差异。
 - 交付前运行 `python3 scripts/check_documentation_contracts.py` 和变更所需的相关验证，并更新独立开发记录及受影响功能状态。文档检查不代替语义审查和运行验收。
-- Godot 运行资产（`components/`、`runtime/`）的路径不含版本号：替换一律覆盖同路径同名文件，版本号只写 `source/`、`asset_manifest.json`、台账版本列与 Prefab 根节点 `metadata/asset_version`。交付前运行 `python3 scripts/check_asset_runtime_naming.py`（`core`/`aggregate`/`full` 套件已内置该门禁）；新增带版本资产会被拒。存量去版本化按 `docs/v0.1/development/2026-09-17_godot_asset_deversioning_plan.md` 的套件原子批推进，每批完成后重跑 `--update-debt` 缩表。
+- Godot 运行资产（`components/`、`runtime/`）的路径不含版本号：替换一律覆盖同路径同名文件，版本号只写 `art_source/`、`asset_manifest.json`、台账版本列与 Prefab 根节点 `metadata/asset_version`。交付前运行 `python3 scripts/check_asset_runtime_naming.py`（`core`/`aggregate`/`full` 套件已内置该门禁）；新增带版本资产会被拒。存量去版本化按 `docs/v0.1/development/2026-09-17_godot_asset_deversioning_plan.md` 的套件原子批推进，每批完成后重跑 `--update-debt` 缩表。
 
 当前风险见 `docs/v0.1/audits/2026-09-12_engineering_audit.md`。不因本约定额外要求重复审批；在已授权范围内持续完成工作。

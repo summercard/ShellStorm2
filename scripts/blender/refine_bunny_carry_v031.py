@@ -1,4 +1,9 @@
 """Subtle angled longgun/machinegun carry; preserve all firing/sidearm actions."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys,json,math,ast
 import bpy
@@ -10,8 +15,8 @@ import author_bunny_directional_v027 as d
 h=d.h
 tree=ast.parse((Path(__file__).parent/'author_bunny_firing_v030.py').read_text(encoding='utf-8'))
 exec(compile(ast.Module(body=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='solve'],type_ignores=[]),'<arm-solver>','exec'))
-SOURCE=h.BASE/'source/animation/chr_bunny01_animation_v030.blend'
-TARGET=h.BASE/'source/animation/chr_bunny01_animation_v031.blend'
+SOURCE=source_path(h.BASE/'source/animation/chr_bunny01_animation_v030.blend')
+TARGET=source_path(h.BASE/'source/animation/chr_bunny01_animation_v031.blend')
 OUT=h.ROOT/'outputs/character_pipeline/carry_v031'
 
 def geometry(obj,dg):

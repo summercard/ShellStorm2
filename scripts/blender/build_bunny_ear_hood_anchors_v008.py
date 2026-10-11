@@ -8,8 +8,8 @@ from mathutils.bvhtree import BVHTree
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SOURCE_BLEND = PROJECT_ROOT / "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v007.blend"
-OUTPUT_BLEND = PROJECT_ROOT / "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v008.blend"
+SOURCE_BLEND = PROJECT_ROOT / "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v007.blend"
+OUTPUT_BLEND = PROJECT_ROOT / "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v008.blend"
 
 
 def _world_vertices(obj: bpy.types.Object) -> list[Vector]:

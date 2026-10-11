@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Asset Pipeline"
+  short_description: "制作、接入并验收 ShellStorm2 UI 表现资产"
+  default_prompt: "Use $ui-asset-pipeline to create or update a ShellStorm2 UI asset."

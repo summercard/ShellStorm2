@@ -2,6 +2,11 @@
 
 One-time authoring only. Subsequent artist edits use export_character_bundle.py.
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import math
 import json
@@ -22,8 +27,8 @@ def transform(p, r=(0, 0, 0)):
     return Matrix.Translation(Vector(p)) @ Euler(r).to_matrix().to_4x4()
 
 def main():
-    model = PACKAGE/'source/model/chr_bunny01_model_v011.blend'
-    animation = PACKAGE/'source/animation/chr_bunny01_animation_v011.blend'
+    model = source_path(PACKAGE/'source/model/chr_bunny01_model_v011.blend')
+    animation = source_path(PACKAGE/'source/animation/chr_bunny01_animation_v011.blend')
     if (model.exists() or animation.exists()) and '--replace-generated' not in sys.argv:
         raise RuntimeError('Authoring version already exists; preserve artist edits')
     bpy.ops.wm.open_mainfile(filepath=str(BASE/'v009/source/model/chr_bunny01_model_v009.blend'))

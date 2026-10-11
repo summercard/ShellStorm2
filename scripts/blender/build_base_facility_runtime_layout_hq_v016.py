@@ -13,9 +13,9 @@ import bpy
 from mathutils import Vector
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-INPUT_BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v015.blend"
-OUTPUT_BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend"
-PACKAGE_ROOT = PROJECT / "source/art/blender/base_facility_layout/component_packages_v016"
+INPUT_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v015.blend"
+OUTPUT_BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend"
+PACKAGE_ROOT = PROJECT / "art_source/design/blender/base_facility_layout/component_packages_v016"
 VERIFY = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v016"
 CATALOG = VERIFY / "base_facility_component_catalog_v016.json"
 TREE = VERIFY / "base_facility_component_tree_v016.txt"

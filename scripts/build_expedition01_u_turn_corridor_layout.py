@@ -8,9 +8,9 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE_REL = "assets/art/environments/tower_zones/expedition/source/common_components/v012/component_instances.json"
-CATALOG_REL = "assets/art/environments/tower_zones/expedition/source/common_components/v012/component_catalog.json"
-OUT_REL = "assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json"
+BASE_REL = "art_source/environments/tower_zones/expedition/source/common_components/v012/component_instances.json"
+CATALOG_REL = "art_source/environments/tower_zones/expedition/source/common_components/v012/component_catalog.json"
+OUT_REL = "art_source/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json"
 OUT = ROOT / OUT_REL
 
 FLOOR = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
@@ -127,7 +127,7 @@ def build() -> dict:
         "template_variant": "u_turn",
         "layout_version": "v001",
         "dimensions_m": [45.0, 40.0],
-        "whitebox_source": "source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
+        "whitebox_source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
         "component_source": CATALOG_REL,
         "component_source_version": "v012",
         "base_layout": BASE_REL,

@@ -13,9 +13,9 @@
 
 ## 源保护与导入证据
 
-优化清单：[import_manifest.json](../../../assets/art/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json)。
+优化清单：[import_manifest.json](../../../art_source/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json)。
 
-原始办公室v002与四房v001均保持SHA不变。持久优化文件位于 `assets/art/environments/master_office_3d/source/env_block00_story_rooms/export/v001/block00_facilities_optimized_v001.blend`；独立化输出网格与材质，逐件执行无效几何清理和按UV/硬边/材质边界限定的共面溶解，保存、重开后才逐件导出。组件总三角数 71,541 → 71,411，减少130（0.182%）；没有对全库固定比例减面，也没有以三角化冒充减面。未命中安全简化的组件记录零变化并保留底面、背面与可复用表面。
+原始办公室v002与四房v001均保持SHA不变。持久优化文件位于 `art_source/environments/master_office_3d/source/env_block00_story_rooms/export/v001/block00_facilities_optimized_v001.blend`；独立化输出网格与材质，逐件执行无效几何清理和按UV/硬边/材质边界限定的共面溶解，保存、重开后才逐件导出。组件总三角数 71,541 → 71,411，减少130（0.182%）；没有对全库固定比例减面，也没有以三角化冒充减面。未命中安全简化的组件记录零变化并保留底面、背面与可复用表面。
 
 正面、背面、侧面、游戏角度8张优化前后对照已检查，29件包围盒保持。非平面石块端面三角化后呈棱角分面，保留要求的低模风格。GLB均不含图片与纹理，Godot正式导入后由公共色盘后处理脚本绑定材质。公共色盘导入改为无损、禁用MipMap；29份 `.glb.import` 与公共色盘 `.png.import` 纳入可复现导入规则。
 

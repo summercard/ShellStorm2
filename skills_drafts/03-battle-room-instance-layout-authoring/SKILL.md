@@ -5,6 +5,10 @@ agent_created: true
 metadata:
   display_name_zh: 03 战局具体房间布局制作
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 战局房间变体与具体房间布局制作
 
@@ -41,7 +45,7 @@ metadata:
 
 先定位已登记正式 TSCN、房间变体资源及组件引用；没有正式场景时才选择初始化来源。核查以下约束/可选来源：
 
-1. 具体房间白模：`source/art/whitebox/tower_zones/<level>/...`，包含房间编号、尺寸、门方向、连接目标和可走面。
+1. 具体房间白模：`art_source/design/whitebox/tower_zones/<level>/...`，包含房间编号、尺寸、门方向、连接目标和可走面。
 2. 房间种类组件源（`component_catalog.json`）：由 `02-battle-room-component-decomposer` 产出；不得拿另一种房间的组件源冒充。
 3. **组件计划与可选实例清单**（`component_plan.json` / `component_instances.json`）：同由 02 产出。计划约束组件预算；实例清单记录房型参考摆放，仅作初始化起点和追溯。正式房间与其不同不要求回写 JSON，更不得以其覆盖正式 TSCN；新造型须回到 02 规划，不能在布局任务中临时造组件。
    🔴 实例的 `rotation_y_deg` **语义是绕 Blender Z 轴**（世界垂直轴；房间平面为 XY）；字段名是历史命名，源自 v005 的 `allowed_rotations_blender_z_deg`。摆位时写入 `rotation_euler.z`，**写成 `.y` 会让墙体直接躺倒**。摆放完成后必须过包围盒判据：拼装总 bbox 等于房间边界（含墙厚）、越界实例数为 0。
@@ -102,7 +106,7 @@ pickup: false
 可选初始化清单保存到：
 
 ```text
-assets/art/environments/tower_zones/<block_id>/source/room_instances/<room_id>/v###/room_layout.json
+art_source/environments/tower_zones/<block_id>/source/room_instances/<room_id>/v###/room_layout.json
 ```
 
 最小结构：

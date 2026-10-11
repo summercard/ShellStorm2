@@ -1,7 +1,7 @@
 import bpy,json,hashlib,sys,importlib.util
 from pathlib import Path
 from mathutils import Vector
-R=Path(__file__).resolve().parents[2];O=R/'assets/art/environments/master_office_3d/source/env_father_office/v002'
+R=Path(__file__).resolve().parents[2];O=R/'art_source/environments/master_office_3d/source/env_father_office/v002'
 P=json.loads((O/'component_plan.json').read_text(encoding='utf8'))
 cat=json.loads((O/'component_catalog.json').read_text(encoding='utf8'))
 instances=json.loads((O/'component_instances.json').read_text(encoding='utf8'))['instances']

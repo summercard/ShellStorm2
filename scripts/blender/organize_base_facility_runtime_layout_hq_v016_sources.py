@@ -8,7 +8,7 @@ from pathlib import Path
 import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend"
 
 spec = importlib.util.spec_from_file_location(
     "base_v016", PROJECT / "scripts/blender/build_base_facility_runtime_layout_hq_v016.py"

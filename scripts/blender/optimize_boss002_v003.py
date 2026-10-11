@@ -1,8 +1,13 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, math,json
 from mathutils import Vector
 from pathlib import Path
-R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';T=B/'source/textures_v003'
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_source_v002.blend'))
+R=Path(__file__).resolve().parents[2];B=R/'assets/art/enemies/bosses/enm_boss_monitor002';T=source_path(B/'source/textures_v003')
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_source_v002.blend')))
 src=bpy.data.scenes['BOSS002_SOURCE_TPOSE'];bpy.context.window.scene=src
 def signature(o):return [list(o.matrix_world[i]) for i in range(4)]
 for o in list(src.objects):
@@ -92,7 +97,7 @@ src['asset_version']='v003';src['total_triangles']=total;src['texture_model']='g
 out=B/'previews/optimized_v003';out.mkdir(exist_ok=True)
 report={'triangles':total,'group_triangles':counts,'limit':20000,'under_limit':total<20000,'armatures':len(bpy.data.armatures),'actions':len(bpy.data.actions),'text_objects':sum(o.type=='FONT' for o in src.objects),'unapplied_modifiers':sum(len(o.modifiers) for o in src.objects),'texture_model':'gpt-image-2','face_triangles':6,'gloves':{o.name:triangles(o) for o in src.objects if o.name.startswith('Sculpted glove')}}
 (out/'audit.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
-bpy.ops.object.select_all(action='DESELECT');bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_source_v003.blend'))
+bpy.ops.object.select_all(action='DESELECT');bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_source_v003.blend')))
 scene=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=scene;cam=scene.camera;scene.cycles.samples=32
 def render(name,loc,target,scale):
     cam.location=loc;cam.rotation_euler=(Vector(target)-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=scale;scene.render.filepath=str(out/(name+'.png'));bpy.ops.render.render(write_still=True)

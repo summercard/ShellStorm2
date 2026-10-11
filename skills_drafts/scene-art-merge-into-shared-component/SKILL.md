@@ -3,6 +3,10 @@ name: scene-art-merge-into-shared-component
 description: 把房间/场景自持的方位化美术（墙面装甲、门禁、地砖压边等装饰）剥离并并入通用组件库，再让房间侧槽位改为引用组件，使任意 5m 网格槽位与朝向自动对齐、无需按方位区分资产。用于装饰并库、冗余方位包清理、房间版本升版与全链路复验；不用于新建设施资产、不用于角色/武器/道具。
 agent_created: true
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 把房间美术并入通用组件
 

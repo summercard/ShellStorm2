@@ -68,7 +68,7 @@
 
   "paths": {
     "source_dir": "assets/art/items_weapons/props/room_key/",
-    "source_blend": "assets/art/items_weapons/props/room_key/source/prp_room_key_source_v001.blend",
+    "source_blend": "art_source/items_weapons/props/room_key/source/prp_room_key_source_v001.blend",
     "stable_glb": "assets/art/items_weapons/props/room_key/components/prp_room_key_visual_top3d.glb",
     "stable_rig_glb": null,
     "stable_prefab": "assets/art/items_weapons/props/room_key/runtime/prp_room_key_root_top3d.tscn"

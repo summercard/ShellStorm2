@@ -17,7 +17,7 @@ BASELINE=ROOT/'assets/registry/ledger_split_baseline.json'
 OUT=ROOT/'outputs/character_pipeline/weapon_idle_v026'
 BACKUP=ROOT/'_scratch/bunny_weapon_idles_v026_ledger_before'
 ASSET='CHR-PLY-CAPSULE01-3D-BUNNY01'
-SOURCE='assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v026.blend'
+SOURCE='art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v026.blend'
 TRANSFER=SOURCE.replace('chr_bunny01_animation_v026.blend','chr_bunny01_weapon_idles_v026.json')
 tree=ast.parse((ROOT/'scripts/register_bunny_weapon_idles_v025.py').read_text(encoding='utf-8'))
 nodes=[n for n in tree.body if isinstance(n,ast.FunctionDef)]

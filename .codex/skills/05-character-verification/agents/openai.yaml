@@ -1,0 +1,4 @@
+interface:
+  display_name: "S5 专项验收"
+  short_description: "跑角色资产专项验收并分别记录四类结果"
+  default_prompt: "使用 $05-character-verification 对当前角色类资产跑专项验收并输出可复现记录。"

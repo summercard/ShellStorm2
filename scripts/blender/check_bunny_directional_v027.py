@@ -4,7 +4,7 @@ import bpy,json,math
 from mathutils import Vector
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'outputs/character_pipeline/directional_v027'
-BASE=ROOT/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation'
+BASE=ROOT/'art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation'
 bpy.ops.wm.open_mainfile(filepath=str(BASE/'chr_bunny01_animation_v026.blend'))
 reference={}
 for family in ('sidearm','longgun','machinegun'):

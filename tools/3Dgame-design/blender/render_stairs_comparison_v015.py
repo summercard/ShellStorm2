@@ -4,10 +4,10 @@ from pathlib import Path
 from mathutils import Vector
 
 ROOT=Path(__file__).resolve().parents[3]
-out=ROOT/'source/art/whitebox/tower_zones/stairs/v015/renders'
+out=ROOT/'art_source/design/whitebox/tower_zones/stairs/v015/renders'
 out.mkdir(parents=True,exist_ok=True)
 for version,path in [('before','v013/blender/whitebox_tower_stairs_v013.blend'),('after','v015/blender/whitebox_tower_stairs_v015.blend')]:
-    bpy.ops.wm.open_mainfile(filepath=str(ROOT/'source/art/whitebox/tower_zones'/path))
+    bpy.ops.wm.open_mainfile(filepath=str(ROOT/'art_source/design/whitebox/tower_zones'/path))
     scene=bpy.context.scene
     scene.render.engine='BLENDER_WORKBENCH'
     scene.display.shading.light='STUDIO'; scene.display.shading.studiolight_rotate_z=.4

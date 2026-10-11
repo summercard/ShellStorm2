@@ -20,4 +20,4 @@
 - Blender 全场景严格验证退出码 0：629 个网格、21,188 个面，`PaletteUV` 有效面 21,188/21,188，17 项材质和 UV 检查全部通过。
 - 参考全景、栏杆近景和俯视图均已输出。GLB、碰撞、LOD、PackedScene 与运行时替换未执行。
 
-详细组件数量、栏杆坐标、异常收口和文件清单见 `tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v017/QA_REPORT.md`。
+详细组件数量、栏杆坐标、异常收口和文件清单见 `art_source/legacy_design/blocks/stairs/whitebox_tower_stairs_v017/QA_REPORT.md`。

@@ -2,6 +2,11 @@
 
 Run with Blender --background --python this_file. Never used to export edited masters.
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import json
 import hashlib
@@ -34,12 +39,12 @@ def collection(name, parent):
     return result
 
 def main():
-    model_path = PACKAGE / 'source/model/chr_bunny01_model_v009.blend'
-    animation_path = PACKAGE / 'source/animation/chr_bunny01_animation_v009.blend'
+    model_path = source_path(PACKAGE / 'source/model/chr_bunny01_model_v009.blend')
+    animation_path = source_path(PACKAGE / 'source/animation/chr_bunny01_animation_v009.blend')
     if model_path.exists() or animation_path.exists():
         raise RuntimeError('Version exists; increment version, do not overwrite edited masters')
     capture = json.loads((ROOT/'outputs/character_pipeline/legacy_motion_capture.json').read_text())
-    bpy.ops.wm.open_mainfile(filepath=str(BASE/'source/chr_player_capsule01_bunny01_top3d_v008.blend'))
+    bpy.ops.wm.open_mainfile(filepath=str(source_path(BASE/'source/chr_player_capsule01_bunny01_top3d_v008.blend')))
     bpy.context.preferences.filepaths.save_version = 0
     scene = bpy.context.scene
     source_meshes = {name: bpy.data.objects[name] for _,_,names in PARTS.values() for name in names}

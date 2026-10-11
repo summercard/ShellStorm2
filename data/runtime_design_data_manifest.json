@@ -2,197 +2,197 @@
   "schema": "shellstorm2.runtime_design_data_projection",
   "files": [
     {
-      "source": "source/art/whitebox/tower_zones/99/v001/data/floors/floor_00.json",
+      "source": "art_source/design/whitebox/tower_zones/99/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/99/floors/floor_00.json",
       "sha256": "e64f1dd1f94310f8e8bddb854772327504c7a5b656cba6e70b640d7d75d79648"
     },
     {
-      "source": "source/art/whitebox/tower_zones/99/v001/data/level_plan.json",
+      "source": "art_source/design/whitebox/tower_zones/99/v001/data/level_plan.json",
       "runtime": "data/level_plans/99/level_plan.json",
       "sha256": "128e87be4d70dbd6666fe963ba0c69e71b1295b58d30689a854b99753593b3a6"
     },
     {
-      "source": "source/art/whitebox/tower_zones/99/v001/data/room_templates/boss_45x45.json",
+      "source": "art_source/design/whitebox/tower_zones/99/v001/data/room_templates/boss_45x45.json",
       "runtime": "data/level_plans/99/room_templates/boss_45x45.json",
       "sha256": "bbffac007ff6dc2a0e10195ed392853d6f2b132b2af3a8a91da224beab9451d7"
     },
     {
-      "source": "source/art/whitebox/tower_zones/99/v001/data/room_templates/extraction_25x25.json",
+      "source": "art_source/design/whitebox/tower_zones/99/v001/data/room_templates/extraction_25x25.json",
       "runtime": "data/level_plans/99/room_templates/extraction_25x25.json",
       "sha256": "2b5e18e6949a292ac17df6ca0718ea5ba4208ce1f4eb2c491c2b8932a246452f"
     },
     {
-      "source": "source/art/whitebox/tower_zones/99/v001/data/room_templates/safe_15x15.json",
+      "source": "art_source/design/whitebox/tower_zones/99/v001/data/room_templates/safe_15x15.json",
       "runtime": "data/level_plans/99/room_templates/safe_15x15.json",
       "sha256": "e8bee8ca0a11306d3169e717176b6049801728144578ab641d09d003364ffc15"
     },
     {
-      "source": "source/art/whitebox/tower_zones/99/v001/data/room_templates/std_25x25.json",
+      "source": "art_source/design/whitebox/tower_zones/99/v001/data/room_templates/std_25x25.json",
       "runtime": "data/level_plans/99/room_templates/std_25x25.json",
       "sha256": "36cad0e7fe7ddc3974ff1cb9c0562b3c1354510724d46ae63c49de3a8bac9c76"
     },
     {
-      "source": "source/art/whitebox/tower_zones/battle_level01/v004/data/export_report.json",
+      "source": "art_source/design/whitebox/tower_zones/battle_level01/v004/data/export_report.json",
       "runtime": "data/level_plans/battle_level01/export_report.json",
       "sha256": "944429aa8e6c83bf03a000bd6d74fe830853672a2f93c5aff917a2900566385c"
     },
     {
-      "source": "source/art/whitebox/tower_zones/battle_level01/v004/data/floors/floor_98.json",
+      "source": "art_source/design/whitebox/tower_zones/battle_level01/v004/data/floors/floor_98.json",
       "runtime": "data/level_plans/battle_level01/floors/floor_98.json",
       "sha256": "8ed7de2d3ab03a6967854c4dd83608bde1cf46de5ec9947d64837085af4c75eb"
     },
     {
-      "source": "source/art/whitebox/tower_zones/battle_level01/v004/data/level_plan.json",
+      "source": "art_source/design/whitebox/tower_zones/battle_level01/v004/data/level_plan.json",
       "runtime": "data/level_plans/battle_level01/level_plan.json",
       "sha256": "54811c1f04c76dd8a70fa5915e89b943a66a48ee99f2d36cdb67428f6f86d40b"
     },
     {
-      "source": "source/art/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_30x25.json",
+      "source": "art_source/design/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_30x25.json",
       "runtime": "data/level_plans/battle_level01/room_templates/common_30x25.json",
       "sha256": "62ccedef886c1bbbc5eb69dabd18e40a4ce3994eb5a1b01f04b4bbceb64af96d"
     },
     {
-      "source": "source/art/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_30x40.json",
+      "source": "art_source/design/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_30x40.json",
       "runtime": "data/level_plans/battle_level01/room_templates/common_30x40.json",
       "sha256": "1f504f211824c62c380c6168be87a3d6d046e36fd703616b1b51988d9d2d9076"
     },
     {
-      "source": "source/art/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_35x30.json",
+      "source": "art_source/design/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_35x30.json",
       "runtime": "data/level_plans/battle_level01/room_templates/common_35x30.json",
       "sha256": "31546c3906ef47932dbfe52f2bb45779181b9e5846aadb48495b757cbb4c9060"
     },
     {
-      "source": "source/art/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_40x25.json",
+      "source": "art_source/design/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_40x25.json",
       "runtime": "data/level_plans/battle_level01/room_templates/common_40x25.json",
       "sha256": "70464b7df2448f84d111ce6b1a90f7317ce8fa5ea5c9d9c6e6bbaa240d8290bd"
     },
     {
-      "source": "source/art/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_40x35.json",
+      "source": "art_source/design/whitebox/tower_zones/battle_level01/v004/data/room_templates/common_40x35.json",
       "runtime": "data/level_plans/battle_level01/room_templates/common_40x35.json",
       "sha256": "43678e7f10a3d5cca20d635c078ba721452190da788202f7fd0bd5f56aa7bce6"
     },
     {
-      "source": "source/art/whitebox/tower_zones/battle_level01/v004/data/room_templates/safe_15x15.json",
+      "source": "art_source/design/whitebox/tower_zones/battle_level01/v004/data/room_templates/safe_15x15.json",
       "runtime": "data/level_plans/battle_level01/room_templates/safe_15x15.json",
       "sha256": "46317a2e0fd5e8f2e1bede0787618a3fb36c7fb94ee6f66b14ddce734b569c24"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/component_packages/boss_arena/远征关卡01_白模_boss竞技场_50x40m/asset_manifest.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/component_packages/boss_arena/远征关卡01_白模_boss竞技场_50x40m/asset_manifest.json",
       "runtime": "data/level_plans/expedition_01/component_packages/boss_arena/远征关卡01_白模_boss竞技场_50x40m/asset_manifest.json",
       "sha256": "f2fb6be7ab726c485411962935feba74448d99ab576abcc813119321482b5ce2"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/component_packages/catalog.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/component_packages/catalog.json",
       "runtime": "data/level_plans/expedition_01/component_packages/catalog.json",
       "sha256": "adae35b589d013687f4483880a0f2148acf2244250f7599b27137f72dbb296f4"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/expedition_01/floors/floor_00.json",
       "sha256": "61f591dcd261cd4d8b537ac585072b223503179dbb4761c743ed83020f361eb5"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
       "runtime": "data/level_plans/expedition_01/level_plan.json",
       "sha256": "9819c570d470b0506a826967c6ab27e6f111042e88633e281b87e47d918014a9"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/boss_50x40.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/boss_50x40.json",
       "runtime": "data/level_plans/expedition_01/room_templates/boss_50x40.json",
       "sha256": "e3d99f857bdd6bd08de0c2d15ae583acd719ab269334b1483c400b27241fa316"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/bridge_60x50.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/bridge_60x50.json",
       "runtime": "data/level_plans/expedition_01/room_templates/bridge_60x50.json",
       "sha256": "5213b571fdb7065cf2c8579395d5b991b624ac9e97db8a6684d3b92a77339aa7"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/corridor_45x40.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/corridor_45x40.json",
       "runtime": "data/level_plans/expedition_01/room_templates/corridor_45x40.json",
       "sha256": "b5eb6993d1e002f61581fc2af386cb0d9bcf16c30630aaafb21cf581424b20c7"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/db_70x50.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/db_70x50.json",
       "runtime": "data/level_plans/expedition_01/room_templates/db_70x50.json",
       "sha256": "239729b1f901720a05a5f758e021b3afe36174b7d9659ee311ddde3667593a69"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/extraction_25x25.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/extraction_25x25.json",
       "runtime": "data/level_plans/expedition_01/room_templates/extraction_25x25.json",
       "sha256": "fbfa41cec8afa8ce12347a9c916fef07d4da2b86c62e2022938a6683ece64112"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/office_60x70.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/office_60x70.json",
       "runtime": "data/level_plans/expedition_01/room_templates/office_60x70.json",
       "sha256": "d5265ade60c32e112e5a30e34441ab1cae6d537ffab13f6c3e4123c8b4478643"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/safe_15x15.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/safe_15x15.json",
       "runtime": "data/level_plans/expedition_01/room_templates/safe_15x15.json",
       "sha256": "b72f7f6a5876d2017a8b8c83ccb0b06b22bd97d681d8805cd1663e20cff8c1dd"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/std_25x25.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/std_25x25.json",
       "runtime": "data/level_plans/expedition_01/room_templates/std_25x25.json",
       "sha256": "4fc6ba4c9a3e2ae8b461faae77abf3645d58d0ab33d80a516234f406b1bc8ff8"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/validation/task_level_validation.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/validation/task_level_validation.json",
       "runtime": "data/level_plans/expedition_01/validation/task_level_validation.json",
       "sha256": "083c65f4c6901207d2a9f1fa54369dc84646ef126f2e54380a38050e220d942b"
     },
     {
-      "source": "source/art/whitebox/tower_zones/expedition_01/v001/data/validation/远征关卡01_白模_boss竞技场_50x40m_v001_validation.json",
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/validation/远征关卡01_白模_boss竞技场_50x40m_v001_validation.json",
       "runtime": "data/level_plans/expedition_01/validation/远征关卡01_白模_boss竞技场_50x40m_v001_validation.json",
       "sha256": "eef1f6b5eeb97e3545aa18c8c744af24d4b7d68932766b003e54c9cddb2c98c0"
     },
     {
-      "source": "source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json",
+      "source": "art_source/design/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json",
       "runtime": "data/layouts/block_00_master_office_layout.json",
       "sha256": "48277c4872793f40b6483b4c43690c79b0e644cda5dea9a579dafadc19a2df8f"
     },
     {
-      "source": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/boss_room_50x40_v002.layout.json",
+      "source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room/v002/boss_room_50x40_v002.layout.json",
       "runtime": "data/layouts/expedition/boss_room.json",
       "sha256": "481a9483ef9754129d6b3eb6e2e79eceeb323a211af3bb0010bbc8e0c8a74456"
     },
     {
-      "source": "assets/art/environments/tower_zones/expedition/source/common_components/v009/component_instances.json",
+      "source": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_instances.json",
       "runtime": "data/layouts/expedition/v009/component_instances.json",
       "sha256": "fa5b68cd75de04732a5447d2d0b22de5ede444921290a879d259c5110a3d0baa"
     },
     {
-      "source": "assets/art/environments/tower_zones/expedition/source/common_components/v010/component_instances.json",
+      "source": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_instances.json",
       "runtime": "data/layouts/expedition/v010/component_instances.json",
       "sha256": "19ccd967486d86b68b53d27981616d897d309bc12d6eb41ada27958a5e456d06"
     },
     {
-      "source": "assets/art/environments/tower_zones/expedition/source/common_components/v014/component_instances.json",
+      "source": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_instances.json",
       "runtime": "data/layouts/expedition/v014/component_instances.json",
       "sha256": "9d327bbc06014317e5493f0e7e19529b493a68fd78e742e396b106ce0c688671"
     },
     {
-      "source": "assets/art/environments/tower_zones/expedition/source/common_components/v012/component_instances.json",
+      "source": "art_source/environments/tower_zones/expedition/source/common_components/v012/component_instances.json",
       "runtime": "data/layouts/expedition/v012/component_instances.json",
       "sha256": "db96af3f21eb37a11fec16500aff2c09bb4a3a89cb2c55d237ce2a625d4274f3"
     },
     {
-      "source": "assets/art/environments/tower_zones/expedition/source/common_components/v011/component_instances.json",
+      "source": "art_source/environments/tower_zones/expedition/source/common_components/v011/component_instances.json",
       "runtime": "data/layouts/expedition/v011/component_instances.json",
       "sha256": "a32cb09b3fc2d828ce47b030c9e900c1f0acb899dc93d6e1866d297888a94927"
     },
     {
-      "source": "assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_03/v001/room_layout.json",
+      "source": "art_source/environments/tower_zones/expedition/source/room_instances/f00_room_03/v001/room_layout.json",
       "runtime": "data/layouts/expedition/f00_room_03/room_layout.json",
       "sha256": "2d6fd0726e7ffdab387282dd7280456511070848ec6308fce0cd479dfdc53e1b"
     },
     {
-      "source": "assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json",
+      "source": "art_source/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json",
       "runtime": "data/layouts/expedition/f00_room_04/room_layout.json",
       "sha256": "50006f2889fc52f37a7442d2a80d484f8534bb88e2f42266fe332644f4f037e7"
     },
     {
-      "source": "assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json",
+      "source": "art_source/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json",
       "runtime": "data/layouts/rooftop_100f_decorated_layout.json",
       "sha256": "850c4ece1d243c4a967a5ba8287578edfce9694c759302b5764cb028e55c7c5d"
     }

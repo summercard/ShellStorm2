@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 
 PROJECT = Path(__file__).resolve().parents[2]
-LAYOUT = PROJECT / "source/art/blender/base_facility_layout"
+LAYOUT = PROJECT / "art_source/design/blender/base_facility_layout"
 sources = sorted(LAYOUT.joinpath("source").glob("base_facility_runtime_layout_hq_v*.blend"))
 SOURCE = max(sources, key=lambda p: int(re.search(r"v(\d{3})", p.name).group(1)))
 VERSION = "v" + re.search(r"v(\d{3})", SOURCE.name).group(1)

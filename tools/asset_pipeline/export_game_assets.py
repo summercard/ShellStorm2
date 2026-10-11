@@ -7,6 +7,11 @@ muzzle points down Godot local -Z.
 
 from __future__ import annotations
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
+
 import math
 import json
 import struct
@@ -255,7 +260,7 @@ def duplicate_mesh(source: bpy.types.Object, name: str, force_emissive: bool = F
 
 def export_facilities() -> None:
     for data in FACILITIES:
-        bpy.ops.wm.open_mainfile(filepath=str(LIBRARY / data["source"]))
+        bpy.ops.wm.open_mainfile(filepath=str(source_path(LIBRARY / data["source"])))
         output = bpy.data.collections.get("02_游戏输出_整合模型")
         if output is None:
             raise RuntimeError(f"Missing output collection in {data['source']}")
@@ -273,7 +278,7 @@ def export_facilities() -> None:
             copy.data.transform(transform)
             copies.append(copy)
         reset_to(copies)
-        asset_dir = PROP_ROOT / "source" / data["slug"]
+        asset_dir = source_path(PROP_ROOT / "source" / data["slug"])
         component_dir = PROP_ROOT / "components" / data["slug"]
         ensure_dir(asset_dir)
         source_path = asset_dir / f"prp_base_{data['slug']}_source_v001.blend"
@@ -323,7 +328,7 @@ def export_weapons() -> None:
         copy = duplicate_mesh(source, "Body")
         copy.data.transform(transform)
         reset_to([copy])
-        asset_dir = WEAPON_ROOT / "source" / slug
+        asset_dir = source_path(WEAPON_ROOT / "source" / slug)
         component_dir = WEAPON_ROOT / "components" / slug
         ensure_dir(asset_dir)
         source_path = asset_dir / f"wpn_{slug}_source_v001.blend"

@@ -17,13 +17,13 @@ ROOT = Path(__file__).resolve().parents[2]
 VERSION = "v002"
 PACKAGE_DIR = (
     ROOT
-    / "source/art/whitebox/tower_zones/battle_level01"
+    / "art_source/design/whitebox/tower_zones/battle_level01"
     / VERSION
     / "data/component_packages"
 )
 REPORT_PATH = (
     ROOT
-    / "source/art/whitebox/tower_zones/battle_level01"
+    / "art_source/design/whitebox/tower_zones/battle_level01"
     / VERSION
     / "data/validation/blender_file_audit.json"
 )

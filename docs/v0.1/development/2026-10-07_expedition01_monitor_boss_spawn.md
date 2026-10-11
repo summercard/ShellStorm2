@@ -6,7 +6,7 @@
 
 ## 接入与修正
 
-现有设计源 `source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json` 已指派 `boss_content_id=boss_monitor002`。本次追踪并实跑：LevelPlanLoader/FloorPlanGenerator → TowerDescent3D房间元数据 → Dungeon3D进房 → box_boss_arena → MonsterInjector → Enemy3D与正式显示器Prefab。无需平行生成器或直接往场景树塞Boss。
+现有设计源 `art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json` 已指派 `boss_content_id=boss_monitor002`。本次追踪并实跑：LevelPlanLoader/FloorPlanGenerator → TowerDescent3D房间元数据 → Dungeon3D进房 → box_boss_arena → MonsterInjector → Enemy3D与正式显示器Prefab。无需平行生成器或直接往场景树塞Boss。
 
 保留三波encounter：第一波盒子有一个Boss，随从由盒子延迟及精英可投放规则决定；后续波次仍按原设计。Boss受击跨66%/33%阈值进入三阶段，死亡走正式killed信号、存活账与清房奖励。三波全清后，拾取正式钥匙并按原门策略开启撤离方向门；终点仍为STANDARD信标。
 

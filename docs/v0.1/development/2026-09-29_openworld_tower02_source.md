@@ -4,7 +4,7 @@
 - 来源：用户提供施工高楼参考图，指定塔2、与主塔平级、平面70×50米；后续明确顶面灰色。
 - 独立资产：ENV-OPENWORLD-TOWER02；不归入主塔内部房间或远征房型库。
 - 主体楼板平面70×50米，底面Z=0，X/Y居中；20层×4.2米为参考图推定美术尺度，不构成玩法层高契约。塔吊和外架单独计算总包络。
-- 源：`assets/art/environments/open_world/source/tower_02/v001/塔2_施工高楼_70x50m_v001.blend`。
+- 源：`art_source/environments/open_world/source/tower_02/v001/塔2_施工高楼_70x50m_v001.blend`。
 - 62个独立包：21层结构、2核心筒、8立面脚手架、8爬架屏、1施工电梯、15屋顶柱、1固定材料堆、3屋顶模板、3塔吊。制作源隐藏，游戏输出默认显示；每包有磁盘清单。
 - 屋顶平台与模板顶面使用公共色盘冷灰色，四共享材质，逐面有面积PaletteUV；贴图外链且未打包。
 - 验收：`qa/palette_validation.json`记录逐面UV/材质检查；`qa/source_audit.json`记录独立包、尺寸、网格预算与唯一归属；`previews/`保存全景、俯视、屋顶、立面、背面五图。

@@ -10,9 +10,9 @@ import bpy
 
 
 PROJECT_ROOT = Path("/Users/summercards/ShellStorm2")
-BLEND_PATH = PROJECT_ROOT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend"
+BLEND_PATH = PROJECT_ROOT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend"
 CATALOG_PATH = PROJECT_ROOT / "outputs/verification/base_facility_runtime_layout_hq_v007/base_facility_component_catalog_v007.json"
-PACKAGE_ROOT = PROJECT_ROOT / "source/art/blender/base_facility_layout/component_packages"
+PACKAGE_ROOT = PROJECT_ROOT / "art_source/design/blender/base_facility_layout/component_packages"
 OUTPUT_NAME = "02_游戏输出_独立资产包_v007"
 OLD_NAMES = {
     "10_保留墙体与地板",

@@ -12,10 +12,10 @@ from pathlib import Path
 from mathutils import Vector, Matrix
 
 ROOT = Path(__file__).resolve().parents[2]
-ROOM_DIR = ROOT / "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002"
+ROOM_DIR = ROOT / "art_source/environments/tower_zones/expedition/source/room_types/boss_room/v002"
 SOURCE_BLEND = ROOM_DIR / "Boss房种类_故障数据库_50x40m_v002.blend"
 SOURCE_CATALOG = ROOM_DIR / "component_packages/catalog.json"
-DEST = ROOT / "assets/art/environments/tower_zones/expedition/source/common_components/v001"
+DEST = ROOT / "art_source/environments/tower_zones/expedition/source/common_components/v001"
 DEST_BLEND = DEST / "expedition_boss_room_components_source_v001.blend"
 PALETTE = ROOT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 RENDER_DIR = DEST / "renders"

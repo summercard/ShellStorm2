@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "version": "v005",
-  "source_animation": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+  "source_animation": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
   "fps": 100,
   "interpolation": "LINEAR",
   "clips": {

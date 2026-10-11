@@ -61,7 +61,7 @@ def main() -> None:
     root = args.project.resolve()
     errors: list[str] = []
 
-    source_root = root / "source/art/blender/base_facility_layout/source"
+    source_root = root / "art_source/design/blender/base_facility_layout/source"
     sources = sorted(source_root.glob("base_facility_runtime_layout_hq_v*.blend"))
     latest = max(sources, key=lambda p: int(re.search(r"v(\d{3})\.blend$", p.name).group(1)))
     if latest.name != "base_facility_runtime_layout_hq_v026.blend":
@@ -119,7 +119,7 @@ def main() -> None:
     json_files = {
         root / "assets/art/asset_import_manifest_v001.json",
         *sorted((root / "assets/art/environments/base_facility_3d").rglob("*.json")),
-        *sorted((root / "source/art/blender/base_facility_layout/export").rglob("*.json")),
+        *sorted((root / "art_source/design/blender/base_facility_layout/export").rglob("*.json")),
     }
     for path in json_files:
         data = json.loads(path.read_text(encoding="utf-8"))

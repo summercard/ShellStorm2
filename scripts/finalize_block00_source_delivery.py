@@ -5,7 +5,7 @@ from collections import Counter
 R=Path(__file__).resolve().parents[1];sys.path.insert(0,str(R/'tools/asset_pipeline'))
 from split_asset_ledger import read_source_rows,_row_digest,col_digest,CONTENT_COLUMNS
 from ledger_registry import LedgerIndex
-I=LedgerIndex.load(R);D=next(d for d in I.domains if d.key=='scenes');A='ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE';O=R/'assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001'
+I=LedgerIndex.load(R);D=next(d for d in I.domains if d.key=='scenes');A='ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE';O=R/'art_source/environments/master_office_3d/source/env_block00_story_rooms/v001'
 # Only camera framing changed after registration; reconcile this exact source row.
 w=load_workbook(D.path);s=w['资产主表'];row,values=next((r,v) for r,v in read_source_rows(s) if v[0]==A)
 sha=hashlib.sha256((O/'env_block00_story_rooms_source_v001.blend').read_bytes()).hexdigest();s.cell(row,20,sha);w.save(D.path)

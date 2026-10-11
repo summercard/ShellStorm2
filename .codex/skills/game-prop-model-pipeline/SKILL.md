@@ -2,6 +2,10 @@
 name: game-prop-model-pipeline
 description: 制作并导入独立道具模型到 Godot，处理静态摆放、拾取、掉落、手持、物理碰撞、可选自身动画、GLB 与 PackedScene。用于消耗品、钥匙、容器、工具、战利品和投掷物；不用于枪械、近战武器、场景模块或固定设施。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 道具模型制作、导出和 Godot 导入
 
@@ -21,7 +25,7 @@ description: 制作并导入独立道具模型到 Godot，处理静态摆放、�
 4. 手持道具的 `HoldAnchor` 明确标出掌心/握点与朝向，默认右、上、前为 `+X`、`+Y`、`-Z`。角色手与 `HoldAnchor` 的最终对齐由项目装备系统完成；无需手持时不创建伪锚点。
 5. GLB 只包含视觉、贴图、必要的道具自身局部动画和导出用锚点。碰撞、拾取触发器、物理刚体、库存脚本、交互脚本和标签在 Godot 包装场景中维护。
 6. 只为道具自身可动结构创建动画，例如盖子、折页、按钮、旋转显示件或机械机关。拾取、放入库存、拿起、投掷、角色手势和角色 IK 是角色/玩法系统的职责；不要烘焙角色动作。
-7. 使用二进制 `.glb`，对导出副本而非源文件应用变换和三角化。建议目录为 `assets/art/props/source/`、`components/` 和 `runtime/`；版本号进入 GLB、PackedScene 和台账。
+7. 使用二进制 `.glb`，对导出副本而非源文件应用变换和三角化。建议目录为 `art_source/props/source/`、`components/` 和 `runtime/`；版本号进入 GLB、PackedScene 和台账。
 
 ## Godot 包装与验收
 

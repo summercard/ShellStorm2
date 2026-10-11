@@ -4,7 +4,7 @@ FeatureID：PLAYER-STATE / ASSET-PIPELINE；工程0.1.0。用户确认枪口向�
 
 只修改machinegun_reload：主握点前后坐标保持原持枪值，操作位抬高0.24m（创作尺寸），枪口俯角45°并仅保留约1.4°操作摆动；服务手随新位置取弹、装入、压紧及复位。模型、状态机、碰撞和真实换弹进度所有权不变。其余90条JSON剪辑逐值保持；JSON共91条、GLB77条。
 
-源母版：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v036.blend`。沿用角色动作制作/导出/导入/验收/台账技能与分账本登记技能，运行路径稳定覆盖、旧母版保留。回退应重导v035并只恢复本批元数据和登记差异。
+源母版：`art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v036.blend`。沿用角色动作制作/导出/导入/验收/台账技能与分账本登记技能，运行路径稳定覆盖、旧母版保留。回退应重导v035并只恢复本批元数据和登记差异。
 
 验收目录：`outputs/character_pipeline/reload_v036/`。源重开481子帧/条，检查握点、尺度、首末回位、45°倾角及全程不前伸。机枪主握点最大位移0.276m（主要为上抬）、误差小于0.024mm；操作位采样俯角约46.3°，前后位移小于0.1mm。运行专项新增41帧无前伸检查；正交放大预览沿用正式游戏俯视角，产物`reload.gif`。
 

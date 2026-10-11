@@ -1,10 +1,15 @@
 """Authored industrial floor replacement. Run in Blender background from project root."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, math, json, hashlib
 from pathlib import Path
 from mathutils import Vector
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'assets/art/environments/tower_descent_3d'
-SRC=OUT/'source/floor_tile_5m'
+SRC=source_path(OUT/'source/floor_tile_5m')
 COMP=OUT/'components/floor_tile_5m'
 PRE=ROOT/'outputs/verification/floor_tile_5m'
 for p in (SRC,COMP,PRE):p.mkdir(parents=True,exist_ok=True)

@@ -4,8 +4,8 @@ from pathlib import Path
 from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parents[2]
-BLEND = ROOT / 'assets/art/environments/tower_zones/expedition/source/common_components/v001/expedition_boss_room_components_source_v001.blend'
-OUT = ROOT / 'assets/art/environments/tower_zones/expedition/source/common_components/v001/renders/component_library_overview_workbench.png'
+BLEND = ROOT / 'art_source/environments/tower_zones/expedition/source/common_components/v001/expedition_boss_room_components_source_v001.blend'
+OUT = ROOT / 'art_source/environments/tower_zones/expedition/source/common_components/v001/renders/component_library_overview_workbench.png'
 
 bpy.ops.wm.open_mainfile(filepath=str(BLEND))
 scene = bpy.context.scene

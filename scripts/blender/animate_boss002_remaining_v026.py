@@ -1,11 +1,16 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math,json,hashlib
 from pathlib import Path
 from mathutils import Vector,Matrix,Quaternion
 R=Path.cwd();B=R/'assets/art/enemies/bosses/enm_boss_monitor002';P=B/'previews/remaining_v026';P.mkdir(exist_ok=True)
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v025.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v025.blend')))
 for sc in bpy.data.scenes:sc['asset_version']='v026'
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_model_v026.blend'))
-bpy.ops.wm.open_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v025.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_model_v026.blend')))
+bpy.ops.wm.open_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v025.blend')))
 s=bpy.data.scenes['BOSS002_STUDIO'];bpy.context.window.scene=s
 for c in list(s.collection.children):
  if c.name.startswith('BOSS002_CABLE_PREVIEW'):s.collection.children.unlink(c)
@@ -140,7 +145,7 @@ for kind,duration in spec.items():
 assert hashes()==old
 for sc in bpy.data.scenes:sc['asset_version']='v026'
 s.camera.location=(5,12,6);s.camera.rotation_euler=(Vector((0,.4,1.7))-s.camera.location).to_track_quat('-Z','Y').to_euler();s.camera.data.ortho_scale=10.5;s.render.fps=30;s.frame_start=1;s.frame_end=37;rig.animation_data.action=bpy.data.actions['special_prepare'];s.frame_set(1)
-bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v026.blend'))
+bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v026.blend')))
 (P/'clips.json').write_text(json.dumps(spec,indent=2));(P/'old_actions.json').write_text(json.dumps({'unchanged':old,'tip_local':list(tip_local)},indent=2))
 s.cycles.samples=8;s.render.resolution_x=800;s.render.resolution_y=660
 for kind,duration in spec.items():

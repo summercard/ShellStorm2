@@ -1,4 +1,9 @@
 """Three distinct reload overlays. Preserve all previous source actions."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 from pathlib import Path
 import sys,ast,math,json
 import bpy
@@ -9,8 +14,8 @@ import author_bunny_directional_v027 as d
 h=d.h
 tree=ast.parse((Path(__file__).parent/'author_bunny_firing_v030.py').read_text(encoding='utf-8'))
 exec(compile(ast.Module(body=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='solve'],type_ignores=[]),'<solver>','exec'))
-SOURCE=h.BASE/'source/animation/chr_bunny01_animation_v036.blend'
-TARGET=h.BASE/'source/animation/chr_bunny01_animation_v037.blend'
+SOURCE=source_path(h.BASE/'source/animation/chr_bunny01_animation_v036.blend')
+TARGET=source_path(h.BASE/'source/animation/chr_bunny01_animation_v037.blend')
 OUT=h.ROOT/'outputs/character_pipeline/reload_v037'
 assert not TARGET.exists() or '--replace-generated' in sys.argv
 bpy.ops.wm.open_mainfile(filepath=str(SOURCE))

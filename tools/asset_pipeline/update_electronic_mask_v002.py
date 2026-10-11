@@ -1,4 +1,9 @@
 """Targeted same-ID version promotion; main and locked-sheet transactions separate."""
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 import json,sys,shutil,openpyxl
 from copy import deepcopy
 from collections import Counter
@@ -46,7 +51,7 @@ def main():
         setcell(w,r,13,f'{ID}；v002；140颗10.8mm方块；Blink形态键；每实例独立发光材质；纯局部表现，不增加玩家状态或碰撞。')
         rows_changed['component']=r; baseline['sheet_digests'][w.title]=sheet_digest(w)
         w=wb['3D-角色']; r=row_for(w,1,ID)
-        setcell(w,r,5,rel(ASSET/'source/chr_bunny01_electronic_mask_model_v002.blend'))
+        setcell(w,r,5,rel(source_path(ASSET/'source/chr_bunny01_electronic_mask_model_v002.blend')))
         setcell(w,r,7,'src/player3d/PlayerAvatar3D.gd；src/player3d/customization/ElectronicMaskExpression3D.gd')
         setcell(w,r,15,'v002')
         setcell(w,r,16,'v002模型/动作双母版，共享原骨架且保留原角色。GLB内2网格及Blink形态键，曲线中转JSON→AnimationLibrary→局部AnimationPlayer；默认12s循环两次眨眼、两段闪烁。实际渲染及换装读档通过。')

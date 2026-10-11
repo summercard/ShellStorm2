@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[2] / "scripts"))
+from art_source_paths import source_path
 # 旧聚落天台资产（ENV-ROOFTOP-SHELTER-90X80）已于 2026-09-19 整体移除，
 # 本文件顶部的 ASSET_ROOT 构建目标不再存在，不再用于重建该天台。
 # 保留原因：tools/asset_pipeline/build_british_corner_bookshop.py 通过 exec
@@ -16,7 +21,7 @@ from mathutils import Vector
 
 PROJECT_ROOT = Path(r"I:\工作项目\shellstrom2\ShellStorm2")
 ASSET_ROOT = PROJECT_ROOT / "assets" / "art" / "environments" / "rooftop_shelter_3d"
-SOURCE_DIR = ASSET_ROOT / "source" / "rooftop_shelter"
+SOURCE_DIR = source_path(ASSET_ROOT / "source" / "rooftop_shelter")
 GAME_DIR = ASSET_ROOT / "game_output" / "rooftop_shelter"
 PREVIEW_DIR = ASSET_ROOT / "previews"
 SHARED_DIR = ASSET_ROOT / "shared"

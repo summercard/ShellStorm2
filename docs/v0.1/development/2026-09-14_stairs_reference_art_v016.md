@@ -19,4 +19,4 @@
 - 文档契约检查退出码 0，`issues=[]`。
 - 未执行 GLB、碰撞、LOD、Godot PackedScene 或正式运行时替换，因此不把本次结果登记为引擎接入完成。
 
-完整数值、修复记录与渲染文件见 `tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v016/QA_REPORT.md`。
+完整数值、修复记录与渲染文件见 `art_source/legacy_design/blocks/stairs/whitebox_tower_stairs_v016/QA_REPORT.md`。

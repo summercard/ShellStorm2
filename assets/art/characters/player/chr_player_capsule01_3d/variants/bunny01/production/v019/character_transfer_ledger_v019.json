@@ -77,11 +77,11 @@
   },
   "files": [
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v019/source/model/chr_bunny01_model_v019.blend",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v019/source/model/chr_bunny01_model_v019.blend",
       "sha256": "0164fa024715d7b7020094b8e1d2719fd6fde717deba5280f4e5ad4fb9f7f711"
     },
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v019/source/animation/chr_bunny01_animation_v019.blend",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v019/source/animation/chr_bunny01_animation_v019.blend",
       "sha256": "a46aa28ad7100fb4ddc8368d36d387aba5d261cec0a3c31cf92d7cad48be308a"
     }
   ],

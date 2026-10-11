@@ -1,7 +1,7 @@
 import bpy,json,math
 from pathlib import Path
 from mathutils import Vector
-R=Path(__file__).resolve().parents[2];O=R/'assets/art/environments/master_office_3d/source/env_block00_story_rooms/export/v001'
+R=Path(__file__).resolve().parents[2];O=R/'art_source/environments/master_office_3d/source/env_block00_story_rooms/export/v001'
 m=json.loads((O/'import_manifest.json').read_text('utf8'));bpy.ops.wm.open_mainfile(filepath=str(R/m['components'][0]['optimized_path']))
 scene=bpy.context.scene
 for col in list(scene.collection.children):scene.collection.children.unlink(col)

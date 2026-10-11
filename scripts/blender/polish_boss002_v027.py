@@ -1,3 +1,8 @@
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy,math
 from mathutils import Quaternion
 from pathlib import Path
@@ -42,4 +47,4 @@ for name in ['idle','move','melee_keyboard','melee_cable','heavy_spin_slam','spe
  for fc in r.animation_data.action.fcurves:
   if fc.data_path=='["stun_hit_flash"]':
    for k in fc.keyframe_points:k.interpolation='CONSTANT'
-r.animation_data.action=bpy.data.actions['stun_enter'];s.frame_set(1);s.frame_end=43;bpy.ops.wm.save_as_mainfile(filepath=str(B/'source/enm_boss_monitor002_animation_v027.blend'));print('polish saved')
+r.animation_data.action=bpy.data.actions['stun_enter'];s.frame_set(1);s.frame_end=43;bpy.ops.wm.save_as_mainfile(filepath=str(source_path(B/'source/enm_boss_monitor002_animation_v027.blend')));print('polish saved')

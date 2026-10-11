@@ -8,7 +8,7 @@ from pathlib import Path
 import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
 REPORT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v017/east_door_supply_swap_acceptance.json"
 
 if Path(bpy.data.filepath).resolve() != BLEND.resolve():

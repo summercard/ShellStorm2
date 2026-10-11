@@ -2,6 +2,10 @@
 name: 01-character-contract-authoring
 description: 角色类表现资产链路第 1 段。制作玩家、NPC、怪物、Boss 的表现资产前，先从项目代码、场景、测试与 Blender 源反推运行时契约，再在 Blender 建立模型/动作双母版；覆盖账本先行登记、骨架 ID 与签名、槽位与挂点、部件 Collection、动画消费方式判定。不用于导出与中转（用 02-character-export-transfer）、Godot 包装（用 03-character-godot-import）、运行时状态映射（用 04-character-state-binding）、验收（用 05-character-verification）、台账推进（用 06-character-ledger）；不用于武器、道具与场景设施。
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # S1 · 契约反推与母版制作
 

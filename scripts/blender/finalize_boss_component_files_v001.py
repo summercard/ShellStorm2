@@ -5,9 +5,9 @@ import bpy, json, hashlib, math, importlib.util, sys
 from pathlib import Path
 from mathutils import Vector, Matrix
 ROOT=Path(__file__).resolve().parents[2]
-BASE=ROOT/'assets/art/environments/tower_zones/expedition/source/common_components/v001'
+BASE=ROOT/'art_source/environments/tower_zones/expedition/source/common_components/v001'
 MASTER=BASE/'expedition_boss_room_components_source_v001.blend'
-SOURCE=ROOT/'assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend'
+SOURCE=ROOT/'art_source/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend'
 PAL=ROOT/'assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'
 VALIDATOR=Path.home()/'.workbuddy/skills/blender-game-prop-standard/scripts/validate_game_prop.py'
 

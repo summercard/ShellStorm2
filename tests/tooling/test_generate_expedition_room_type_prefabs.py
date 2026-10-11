@@ -16,7 +16,7 @@ CATALOG_PATH = Path(
     "assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json"
 )
 SOURCE_ROOT = Path(
-    "assets/art/environments/tower_zones/expedition/source/common_components"
+    "art_source/environments/tower_zones/expedition/source/common_components"
 )
 COMPONENT_ROOT = Path(
     "assets/art/environments/tower_zones/expedition/components/room_type_components"

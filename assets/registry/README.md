@@ -1,5 +1,7 @@
 # 美术资产账本（registry）入口
 
+当前制作源位于工程根 `art_source/`，正式导入文件仍在 `assets/art/` 原路径。[制作源目录规范](../../docs/ART_SOURCE_LAYOUT.md)定义分离、Git/LFS 和不入包规则；`current_source_index.json` 是当前母版入口，`art_source_migration.json` 记录旧位置、新位置与工程外归档。资产ID、版本和运行路径不随整理改变。
+
 本目录是项目美术资产的**唯一登记入口**。
 
 自 2026-09-23 起，登记结构为「**总目录 + 9 个分账本**」：角色、敌人、场景、道具、武器、特效、UI、音效、音乐九条生产线可以**并行编辑各自的账本**。
@@ -89,7 +91,7 @@ python scripts/ledger_registry.py --asset-id VFX-COMBAT-KIT-3D
 
 ### 3.2 批次 QA 脚本：重放前必须重定向 + 重定行号
 
-`assets/art/**/qa/` 与 `source/art/**/qa/` 下还有 **21 个会读写账本的脚本**
+`assets/art/**/qa/` 与 `art_source/design/**/qa/` 下还有 **21 个会读写账本的脚本**
 （`update_registry.mjs` / `verify_registry.py` / `update_ledger_rows_v00N.py` / `register_*_ledger_rows.py`…），
 它们仍直接打开总目录，并且用的是**单体账本的《资产主表》行号坐标** —— 一部分直接按 `sheet10` 的
 `<x:row r="N">` 做 XML 补丁。

@@ -10,7 +10,7 @@
   "asset_version": "v001",
 
   "source": {
-    "blend_path": "assets/art/items_weapons/weapons/pea_pistol/source/wpn_pea_pistol_source_v001.blend",
+    "blend_path": "art_source/items_weapons/weapons/pea_pistol/source/wpn_pea_pistol_source_v001.blend",
     "blend_sha256": null,
     "template_used": "assets/art/items_weapons/_templates/wpn/wpn_template_source_v001.blend"
   },

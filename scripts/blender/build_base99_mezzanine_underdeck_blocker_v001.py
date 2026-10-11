@@ -6,6 +6,11 @@ Godot owns its solid collision volume so the visual asset remains replaceable.
 
 from __future__ import annotations
 
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
+
 import json
 from pathlib import Path
 
@@ -18,7 +23,7 @@ ASSET_ROOT = PROJECT_ROOT / "assets/art/environments/base_facility_3d"
 ASSET_SLUG = "env_base99_mezzanine_underdeck_blocker"
 ASSET_ID = "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER"
 VERSION = "v001"
-SOURCE_DIR = ASSET_ROOT / "source" / ASSET_SLUG
+SOURCE_DIR = source_path(ASSET_ROOT / "source" / ASSET_SLUG)
 OUTPUT_BLEND = SOURCE_DIR / f"{ASSET_SLUG}_source_{VERSION}.blend"
 OUTPUT_GLB = (
     ASSET_ROOT / "components" / ASSET_SLUG

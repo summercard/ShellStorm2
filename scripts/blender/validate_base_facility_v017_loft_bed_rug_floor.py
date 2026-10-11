@@ -9,7 +9,7 @@ from pathlib import Path
 import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
 REPORT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v017/loft_bed_rug_floor_refinement_acceptance.json"
 CATALOG = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v017/base_facility_component_catalog_v017.json"
 

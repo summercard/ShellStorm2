@@ -6,10 +6,10 @@
 
 所有Godot进程启动前使用独立APPDATA；不要写入正式用户存档。
 
-1. Godot `--headless --path . --script assets/art/vfx/environment_3d/cloud_sea/source/v002/measure_buildings.gd`：按正式场景更新building_snapshot.json（隐藏网格也参与）。
+1. Godot `--headless --path . --script art_source/vfx/environment_3d/cloud_sea/source/v002/measure_buildings.gd`：按正式场景更新building_snapshot.json（隐藏网格也参与）。
 2. Python `source/v002/build_outdoor_clouds.py --boundaries source/v002/building_snapshot.json`：更新静态Prefab、布局与保守建筑距离数据。相对路径以资产目录为基准。
 3. Python `source/v002/build_billow_volume.py`：从保留的image-2原图生成运行灰度数据，构建128³RGB周期结构。
-4. Godot `--path . --rendering-method forward_plus --script assets/art/vfx/environment_3d/cloud_sea/source/v002/bake_cloud_textures.gd`：生成native Texture3D；不能用headless/Compatibility烘焙。
+4. Godot `--path . --rendering-method forward_plus --script art_source/vfx/environment_3d/cloud_sea/source/v002/bake_cloud_textures.gd`：生成native Texture3D；不能用headless/Compatibility烘焙。
 5. 运行真实Forward+专项 `tests/verification/verify_outdoor_clouds.tscn`，检查正式玩家视角。运行 `tools/asset_pipeline/render_outdoor_clouds.gd -- --motion` 保存性能、截图和12秒实时帧。
 6. 通过后更新Manifest与既有账本行；`tools/asset_pipeline/update_cloud_sea_ledger.py main`、`... prefab`为两个独立事务，只更新本AssetID。
 

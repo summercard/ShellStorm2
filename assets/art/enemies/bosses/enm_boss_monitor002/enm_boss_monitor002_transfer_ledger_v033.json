@@ -8,8 +8,8 @@
   "animation_signature": "e97e2d7536565a6eb61e35997595969bab57359dbef1921b8e62d4d959a7834f",
   "legacy_signature": "696f6dc701f5ddccd3eb7324f534ba5fa96580daead8e4873fdf923d078b3539",
   "source_sha256": {
-    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend": "49b5892bd6725dadbe2e0263f3748e3de3f8d8b02e1ae4b54049bed9bb7608fc",
-    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend": "e6d50fff30d235fe0cca45946477ed2f9451f309fb3cbf023bd7c6642b04cc8b"
+    "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend": "49b5892bd6725dadbe2e0263f3748e3de3f8d8b02e1ae4b54049bed9bb7608fc",
+    "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend": "e6d50fff30d235fe0cca45946477ed2f9451f309fb3cbf023bd7c6642b04cc8b"
   },
   "files": [
     {
@@ -73,12 +73,12 @@
       "bytes": 515
     },
     {
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/boss002_production_ledger.xlsx",
+      "path": "art_source/enemies/bosses/enm_boss_monitor002/source/boss002_production_ledger.xlsx",
       "sha256": "9f42918b198d1841f2eabf3099ff6dff83ab9b3eb9f6c0e46142e4ccf1764de5",
       "bytes": 7979
     },
     {
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/rig_contract_v033.json",
+      "path": "art_source/enemies/bosses/enm_boss_monitor002/source/rig_contract_v033.json",
       "sha256": "028ac4580282f3c35176cd19566aecb09ea95af1e2040047074a5ef4d6acc69b",
       "bytes": 6406
     },
@@ -523,14 +523,14 @@
         "sha256": "eac956c0fb298d1c1d0f1c29ab299085611b015146e44ef50e8608537b497d62"
       },
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/source/boss002_production_ledger.xlsx",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/source/boss002_production_ledger.xlsx",
+        "current": "art_source/enemies/bosses/enm_boss_monitor002/source/boss002_production_ledger.xlsx",
+        "existing": "art_source/enemies/bosses/enm_boss_monitor002/source/boss002_production_ledger.xlsx",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v033.json",
         "sha256": "9f42918b198d1841f2eabf3099ff6dff83ab9b3eb9f6c0e46142e4ccf1764de5"
       },
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/source/rig_contract_v033.json",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/source/rig_contract_v033.json",
+        "current": "art_source/enemies/bosses/enm_boss_monitor002/source/rig_contract_v033.json",
+        "existing": "art_source/enemies/bosses/enm_boss_monitor002/source/rig_contract_v033.json",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v033.json",
         "sha256": "028ac4580282f3c35176cd19566aecb09ea95af1e2040047074a5ef4d6acc69b"
       },
@@ -565,14 +565,14 @@
         "sha256": "4e10490f03c234dd12e424fa93de7accddd4008ff0455ea54954f40cea116f9c"
       },
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend",
+        "current": "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend",
+        "existing": "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v033.json",
         "sha256": "49b5892bd6725dadbe2e0263f3748e3de3f8d8b02e1ae4b54049bed9bb7608fc"
       },
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "current": "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "existing": "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v033.json",
         "sha256": "e6d50fff30d235fe0cca45946477ed2f9451f309fb3cbf023bd7c6642b04cc8b"
       }
@@ -584,7 +584,7 @@
   "sources": [
     {
       "kind": "model",
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend",
+      "path": "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend",
       "sha256": "49b5892bd6725dadbe2e0263f3748e3de3f8d8b02e1ae4b54049bed9bb7608fc",
       "bytes": 6657756,
       "skeleton_id": "SKEL-MONITOR002-005",
@@ -592,7 +592,7 @@
     },
     {
       "kind": "animation",
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+      "path": "art_source/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
       "sha256": "e6d50fff30d235fe0cca45946477ed2f9451f309fb3cbf023bd7c6642b04cc8b",
       "bytes": 174598250,
       "skeleton_id": "SKEL-MONITOR002-005",

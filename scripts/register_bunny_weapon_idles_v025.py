@@ -28,7 +28,7 @@ INDEX = LedgerIndex.load(ROOT)
 PATH = INDEX.path_for_category('角色')
 BASELINE = ROOT / 'assets/registry/ledger_split_baseline.json'
 ASSET = 'CHR-PLY-CAPSULE01-3D-BUNNY01'
-SOURCE = 'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v025.blend'
+SOURCE = 'art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v025.blend'
 TRANSFER = SOURCE.replace('chr_bunny01_animation_v025.blend', 'chr_bunny01_weapon_idles_v025.json')
 
 

@@ -8,7 +8,7 @@ import bpy
 from mathutils import Vector
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
 OUTPUT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v017/east_door_wall_copied_from_west.png"
 if Path(bpy.data.filepath).resolve() != BLEND.resolve():
     raise RuntimeError("must run with v017 open")

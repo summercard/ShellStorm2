@@ -3,7 +3,7 @@
 ## 定位
 
 - 功能：ASSET-PIPELINE，工程版本0.1.0。
-- 源：`assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend`。
+- 源：`art_source/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend`。
 - 目标：将100→99与99→98两套正式美术替换运行时临时楼梯，同时保留既有区块变换、接口和组件归类。
 - 回滚：旧GLB v001保留，运行引用可回切；v020源保留为美术回滚版本。
 

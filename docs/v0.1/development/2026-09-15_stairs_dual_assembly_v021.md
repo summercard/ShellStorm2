@@ -5,7 +5,7 @@
 - 功能：ASSET-PIPELINE，工程版本0.1.0。
 - 主设计：[资产与内容规范](../10_资产与内容规范.md)、[3D场景美术生产流程](../10.1_3D场景美术生产流程.md)、[关卡区块设计](../05.1_关卡区块设计.md)。
 - 输入：v020 完整楼梯间；用户要求整体复制一份、旋转180°并作为99→98层楼梯间放到对应位置。
-- 当前源：`assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend`。
+- 当前源：`art_source/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend`。
 - 回退：v020 原源保留；运行时 GLB 与 Godot 引用不改。
 
 ## 已完成的范围

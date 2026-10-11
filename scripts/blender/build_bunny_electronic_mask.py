@@ -3,6 +3,11 @@
 Run Blender --background --factory-startup --python this_file.py.
 The incremental static accessory lists v021 model/animation as dependencies.
 """
+
+import sys as _art_source_sys
+from pathlib import Path as _ArtSourcePath
+_art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
+from art_source_paths import source_path
 import bpy, bmesh, json, hashlib, shutil
 from pathlib import Path
 from mathutils import Vector, Matrix
@@ -115,7 +120,7 @@ def main():
     assert original_mesh==([tuple(v.co) for v in head.data.vertices],[tuple(p.vertices) for p in head.data.polygons])
     assert signature(rig)==sig
     bpy.context.scene['electronic_mask_contract']='Copied front dome, +Y 9mm; glasses slot; original v021 geometry, rig and animation unchanged.'
-    source=ASSET/'source/chr_bunny01_electronic_mask_model_v001.blend'
+    source=source_path(ASSET/'source/chr_bunny01_electronic_mask_model_v001.blend')
     bpy.ops.wm.save_as_mainfile(filepath=str(source))
 
     bpy.ops.object.select_all(action='DESELECT'); copies=[]

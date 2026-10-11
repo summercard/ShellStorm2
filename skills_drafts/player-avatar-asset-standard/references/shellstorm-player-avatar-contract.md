@@ -2,7 +2,7 @@
 
 ## 母版
 
-- 路径：`assets/art/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend`
+- 路径：`art_source/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend`
 - 资产ID：`CHR-PLAYER-AVATAR-TEMPLATE-001`
 - 单位：1 Blender Unit = 1米
 - 总高：1.50m

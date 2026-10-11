@@ -4,7 +4,7 @@ FeatureID：ASSET-PIPELINE；设计修订r4；源版本v004。用户要求修复
 
 ## 本次交付
 
-源：`assets/art/environments/open_world/source/tower_04/v004/塔4_曲线天台商场_150x50m_v004.blend`。150×50m，五层×5m，天台25m。784独立包、790输出网格、161712输出面；隐藏制作源另存。仅Blender源，未导出GLB、未组装PackedScene，未制作碰撞/LOD/导航。
+源：`art_source/environments/open_world/source/tower_04/v004/塔4_曲线天台商场_150x50m_v004.blend`。150×50m，五层×5m，天台25m。784独立包、790输出网格、161712输出面；隐藏制作源另存。仅Blender源，未导出GLB、未组装PackedScene，未制作碰撞/LOD/导航。
 
 地面使用694块独立编号3×1.5m错缝板，裁边板沿真实平台与花池/跑道轮廓切割，36mm沉缝、8mm上沿倒角，贴边灰色收口与底层分离。各板本体及倒角同包；不合成不透明的地面装饰总包。完成面25.055m、跑道25.059m、压边顶25.064m。
 

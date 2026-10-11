@@ -3,7 +3,7 @@ from pathlib import Path
 import json,shutil,subprocess,os
 R=Path(__file__).resolve().parents[1];O=R/'outputs/block00_story_rooms_20261009';P=O/'import_project';P.mkdir(exist_ok=True)
 (P/'project.godot').write_text('config_version=5\n[application]\nconfig/name="Block00ImportVerification"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n',encoding='utf8')
-m=json.loads((R/'assets/art/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json').read_text('utf8'))
+m=json.loads((R/'art_source/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json').read_text('utf8'))
 files=['tools/asset_pipeline/scene_facility_shared_palette_post_import.gd','assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png','assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import']
 for d in m['components']:files.extend([d['glb_path'],d['glb_path']+'.import'])
 for rel in files:

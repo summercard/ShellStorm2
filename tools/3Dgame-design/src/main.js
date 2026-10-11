@@ -962,7 +962,7 @@ $('#discardSceneBtn').onclick=()=>{continueSceneTransition(pendingSceneAction);}
 $('#confirmLoadBtn').onclick=async()=>{const id=$('#savedSceneSelect').value,block=selectedBlock();if(!id||!block)return;try{const response=await fetch(`/api/blocks/${encodeURIComponent(block.id)}/scenes/${encodeURIComponent(id)}`);if(!response.ok)throw new Error('load');const payload=await response.json();captureHistory();restoreScene(payload);activeSceneId=payload.id||id;activeBlockId=block.id;currentSceneName=payload.name||id;activeSceneSavedAt=payload.savedAt||null;void setActivePreview(activeSceneId,activeBlockId);updateSceneTitle();closeModal();showToast(`已从${block.name}读取“${currentSceneName}”`);}catch{showToast('场景文件读取失败');}};
 $('#blockSelect').onchange=()=>{activeBlockId=$('#blockSelect').value||null;renderAssets($('#searchInput').value.trim());requestSceneTransition(createNewScene);updateSceneTitle();};
 $('#applyAiCommandBtn').onclick=applyAiCommands;
-if ($('#chooseSaveDirBtn')) $('#chooseSaveDirBtn').onclick=()=>showToast('Blender 场景保存在 tools/3Dgame-design/save/blocks/区块/场景/');
+if ($('#chooseSaveDirBtn')) $('#chooseSaveDirBtn').onclick=()=>showToast('Blender 场景保存在 art_source/legacy_design/blocks/区块/场景/');
 document.querySelectorAll('[data-modal-close]').forEach(button=>button.onclick=()=>{pendingSceneAction=null;closeModal();});
 $('#modalBackdrop').onclick=e=>{if(e.target===e.currentTarget){pendingSceneAction=null;closeModal();}};
 $('#undoBtn').onclick=undoScene; $('#redoBtn').onclick=redoScene;

@@ -5,6 +5,10 @@ agent_created: true
 metadata:
   display_name_zh: 00 战局房间美术拼装总入口
 ---
+## ShellStorm2 制作源目录（2026-10-11）
+
+制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+
 
 # 战局房间拼装（兼容总入口）
 
@@ -63,7 +67,7 @@ metadata:
 
 按以下优先级解析房间：
 
-1. 精确匹配当前战局白模目录 `ShellStorm2/source/art/whitebox/**` 中的 `scene_id`、房间 `id` 或 `room_id`。
+1. 精确匹配当前战局白模目录 `ShellStorm2/art_source/design/whitebox/**` 中的 `scene_id`、房间 `id` 或 `room_id`。
 2. 精确匹配 `ShellStorm2/assets/art/environments/tower_zones/<block_id>/` 中的正式房间/变体 TSCN、房间目录、`room_manifest.json`、`room_layout.json` 或可选 Blender 参考源；`block_id` 兼容 `battle/expedition`，先确认已登记运行引用。
 3. 按已确认分支读取白盒：battle可反查 `battle_level01/**/data/unit_plan.json`；expedition读取自身 `level_id` 的L1/L2/L3，不回落塔楼房表。用房间 `id`、`key`、中文名和布局记录反查正式房间源。
 4. 读取房间自己的 README、manifest、QA 报告和布局清单，确认真实 `block_id=battle/expedition`、楼层范围、设计文档和 AssetID 挂钩。
@@ -87,7 +91,7 @@ metadata:
 优先解析当前战局组件库中数值最高且已通过导入门禁的版本，例如：
 
 ```text
-assets/art/environments/tower_zones/battle/source/common_components/v###/
+art_source/environments/tower_zones/battle/source/common_components/v###/
 ```
 
 以该目录的 `component_catalog.json`、各包 `asset_manifest.json` 和 Godot 稳定运行路径为依据。不要只因为 Blender 目录版本较新就认为 Godot 已经使用该版本；必须检查 manifest 的 `exported`、`runtime_integrated`、GLB 哈希、PackedScene 元数据和正式运行引用是否一致。
@@ -226,7 +230,7 @@ Blender 房间应使用 Library Link 或 Collection Instance 引用通用组件�
 正式布局保存为已登记的房间/变体 TSCN；仅选择清单初始化路径时，将追溯布局写入房间源版本目录：
 
 ```text
-assets/art/environments/tower_zones/<block_id>/source/room_instances/<room_id>/v###/room_layout.json
+art_source/environments/tower_zones/<block_id>/source/room_instances/<room_id>/v###/room_layout.json
 ```
 
 若项目已有房间源目录约定，保持其目录，不为迁移强行改名。布局文件至少包含：

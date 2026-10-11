@@ -22,6 +22,6 @@ for rec in cat:
 bpy.context.view_layer.update()
 for rec in cat:
  out=bpy.data.collections[rec['output_collection']];pts=[o.matrix_world@Vector(p) for o in out.objects if o.type=='MESH' for p in o.bound_box];lo=[min(p[i] for p in pts) for i in range(3)];hi=[max(p[i] for p in pts) for i in range(3)];rec['center']=[(a+b)/2 for a,b in zip(lo,hi)];rec['dimensions']=[b-a for a,b in zip(lo,hi)];rec['local_origin']=[rec['center'][0],rec['center'][1],lo[2]]
- folder=P/'source/art/blender/base_facility_layout/component_packages/v019'/rec['package_id'];(folder/'asset_manifest.json').write_text(json.dumps(rec,ensure_ascii=False,indent=2))
+ folder=P/'art_source/design/blender/base_facility_layout/component_packages/v019'/rec['package_id'];(folder/'asset_manifest.json').write_text(json.dumps(rec,ensure_ascii=False,indent=2))
 (R/'catalog.json').write_text(json.dumps(cat,ensure_ascii=False,indent=2))
 bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)

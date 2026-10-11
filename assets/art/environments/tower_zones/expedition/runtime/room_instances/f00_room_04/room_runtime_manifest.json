@@ -23,7 +23,7 @@
   "room_template": "res://source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/corridor_45x40.json",
   "template_id": "corridor_45x40",
   "template_variant": "u_turn",
-  "component_instances": "res://assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json",
+  "component_instances": "res://art_source/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json",
   "component_library_version": "v012",
   "component_library_room_type": "CORRIDOR",
   "component_library_source_blend_sha256": "shared-v012-component-library",
@@ -42,7 +42,7 @@
    "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_deck_5m/ceiling_deck_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_deck_5m/ceiling_deck_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_deck_5m/ceiling_deck_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_deck_5m/ceiling_deck_5m.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -54,7 +54,7 @@
    "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_lighting/ceiling_lighting_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_lighting/ceiling_lighting_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_lighting/ceiling_lighting.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_lighting/ceiling_lighting.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -66,7 +66,7 @@
    "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_ring_beam/ceiling_ring_beam_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_ring_beam/ceiling_ring_beam_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -78,7 +78,7 @@
    "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_cable_tray/ceiling_service_cable_tray_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_service_cable_tray/ceiling_service_cable_tray_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -90,7 +90,7 @@
    "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_duct/ceiling_service_duct_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_service_duct/ceiling_service_duct_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -102,7 +102,7 @@
    "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_pipe_run/ceiling_service_pipe_run_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_service_pipe_run/ceiling_service_pipe_run_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -114,7 +114,7 @@
    "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/corner_guard/corner_guard_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/corner_guard/corner_guard_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/corner_guard/corner_guard.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/corner_guard/corner_guard.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -126,7 +126,7 @@
    "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/door_wall/door_wall_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/door_wall/door_wall_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/door_wall/door_wall.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/door_wall/door_wall.blend",
     "collision_owner": "room_door_owned",
     "collision_policy": "split_door_wall_proxy",
     "bounds_size_m_godot": [
@@ -138,7 +138,7 @@
    "ENV-EXPEDITION-L01-OFFICE-FILING_RUN": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/filing_run/filing_run_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/filing_run/filing_run_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/filing_run/filing_run.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/filing_run/filing_run.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -150,7 +150,7 @@
    "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_service/floor_service_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/floor_service/floor_service_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/floor_service/floor_service.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/floor_service/floor_service.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -162,7 +162,7 @@
    "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_tile_5m/floor_tile_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/floor_tile_5m/floor_tile_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/floor_tile_5m/floor_tile_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/floor_tile_5m/floor_tile_5m.blend",
     "collision_owner": "floor_support",
     "collision_policy": "external_floor_support",
     "bounds_size_m_godot": [
@@ -174,7 +174,7 @@
    "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_zone_mark/floor_zone_mark_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/floor_zone_mark/floor_zone_mark_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/floor_zone_mark/floor_zone_mark.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/floor_zone_mark/floor_zone_mark.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -186,7 +186,7 @@
    "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/locker_bank/locker_bank_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/locker_bank/locker_bank_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/locker_bank/locker_bank.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/locker_bank/locker_bank.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -198,7 +198,7 @@
    "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/planting_perimeter/planting_perimeter_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/planting_perimeter/planting_perimeter_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/planting_perimeter/planting_perimeter.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/planting_perimeter/planting_perimeter.blend",
     "collision_owner": "none",
     "collision_policy": "visual_only",
     "bounds_size_m_godot": [
@@ -210,7 +210,7 @@
    "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/power_cabinet_bank/power_cabinet_bank_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/power_cabinet_bank/power_cabinet_bank_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/power_cabinet_bank/power_cabinet_bank.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/power_cabinet_bank/power_cabinet_bank.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -222,7 +222,7 @@
    "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/prep_bench/prep_bench_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/prep_bench/prep_bench_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/prep_bench/prep_bench.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/prep_bench/prep_bench.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -234,7 +234,7 @@
    "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/printer_station/printer_station_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/printer_station/printer_station_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/printer_station/printer_station.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/printer_station/printer_station.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -246,7 +246,7 @@
    "ENV-EXPEDITION-L01-OFFICE-SHELVING": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/shelving/shelving_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/shelving/shelving_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/shelving/shelving.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/shelving/shelving.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -258,7 +258,7 @@
    "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/totem_column/totem_column_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/totem_column/totem_column_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/totem_column/totem_column.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/totem_column/totem_column.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -270,7 +270,7 @@
    "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t1110_5m/wall_t1110_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t1110_5m/wall_t1110_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t1110_5m/wall_t1110_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t1110_5m/wall_t1110_5m.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -282,7 +282,7 @@
    "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t615_5m/wall_t615_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t615_5m/wall_t615_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -294,7 +294,7 @@
    "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t970_5m/wall_t970_5m_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t970_5m/wall_t970_5m_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t970_5m/wall_t970_5m.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t970_5m/wall_t970_5m.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -306,7 +306,7 @@
    "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_top_service/wall_top_service_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_top_service/wall_top_service_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_top_service/wall_top_service.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_top_service/wall_top_service.blend",
     "collision_owner": "self",
     "collision_policy": "structural_box_proxy",
     "bounds_size_m_godot": [
@@ -318,7 +318,7 @@
    "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/water_and_supply_corner/water_and_supply_corner_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/water_and_supply_corner/water_and_supply_corner_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/water_and_supply_corner/water_and_supply_corner.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/water_and_supply_corner/water_and_supply_corner.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [
@@ -330,7 +330,7 @@
    "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER": {
     "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/work_cluster/work_cluster_root_top3d.tscn",
     "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/work_cluster/work_cluster_visual_top3d.glb",
-    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/work_cluster/work_cluster.blend",
+    "source_blend": "res://art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/work_cluster/work_cluster.blend",
     "collision_owner": "self",
     "collision_policy": "safe_box_proxy",
     "bounds_size_m_godot": [

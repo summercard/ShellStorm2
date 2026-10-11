@@ -8,18 +8,18 @@
   "variant_id": "electronic_mask",
   "skeleton_id": "SKEL-BUNNY01-004",
   "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
-  "source_model": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
+  "source_model": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
   "dependency_contract": "Shared original skeleton and head pose; eight independent mesh child components. Separate expression owner, event adapter, mesh display; authored local blink/flicker curves retained.",
   "files": [
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
-      "sha256": "4d70a9e65658a8e8617ad042b42a475b28dc12ec196d4b5fdb8443b93e98a288",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
+      "sha256": "070bbc1939dc58076f8883cfff6a5fc4b6d0e095df25b7cdaac0981d98e2a0e2",
       "bytes": 12045588,
       "role": "output"
     },
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
-      "sha256": "3862ecf93b49e6722b70f55446c5737b5fd9492c9f652945438884a5c022b8ca",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+      "sha256": "4b4132bdb24661e79a54bbe77eeb392c7d471801bb09c24ad81e28c0e7a83546",
       "bytes": 12086869,
       "role": "output"
     },
@@ -54,13 +54,13 @@
       "role": "runtime_catalog"
     },
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
       "sha256": "0164fa024715d7b7020094b8e1d2719fd6fde717deba5280f4e5ad4fb9f7f711",
       "bytes": 10282728,
       "role": "dependency"
     },
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
       "sha256": "ca60df8d5345ea8a995edd7c65949e08df11ff8b086f645eb7c09097e1f66147",
       "bytes": 37574256,
       "role": "dependency"
@@ -120,7 +120,7 @@
   "validation_status": "pass",
   "runtime_consumer": "src/player3d/PlayerAvatar3D.gd",
   "runtime_prefab": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/runtime/chr_bunny01_electronic_mask_root.tscn",
-  "source_animation": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+  "source_animation": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
   "pixel_cell_size_m": 0.0118,
   "pixel_pitch_m": 0.014,
   "eye_dimensions_m": [

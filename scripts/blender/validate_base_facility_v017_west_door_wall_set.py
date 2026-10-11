@@ -9,8 +9,8 @@ from pathlib import Path
 import bpy
 
 PROJECT = Path("/Users/summercards/ShellStorm2")
-BLEND = PROJECT / "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
-PACKAGES = PROJECT / "source/art/blender/base_facility_layout/component_packages_v017"
+BLEND = PROJECT / "art_source/design/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+PACKAGES = PROJECT / "art_source/design/blender/base_facility_layout/component_packages_v017"
 ASSEMBLY = PACKAGES / "component_sets/west_door_wall_set/assembly_manifest.json"
 REPORT = PROJECT / "outputs/verification/base_facility_runtime_layout_hq_v017/west_door_wall_set_package_validation.json"
 VALIDATOR = PROJECT / ".codex/skills/blender-game-prop-standard/scripts/validate_game_prop.py"
