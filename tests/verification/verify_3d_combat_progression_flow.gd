@@ -62,10 +62,15 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 		var key_snapshot := key.get_pickup_snapshot()
 		if not is_instance_valid(key) or not bool(key_snapshot.get("picked", false)) or key.is_queued_for_deletion():
 			failures.append("Room key disappears in the pickup frame instead of playing pop-spin feedback")
-		# 头顶名牌必须正对镜头（业主 2026-09-29：俯视镜头只看到纸片侧面，一个字读不到）。
-		# 反向对照：把 `_label.billboard` 改回默认（BILLBOARD_DISABLED）这条必红。
-		if not bool(key_snapshot.get("label_camera_billboard", false)):
-			failures.append("Room key label is not billboarded toward the camera")
+		# 钥匙名牌：是否挂由 RoomKeyPickup3D.SHOW_NAME_LABEL 决定
+		# （业主 2026-10-10「不要显示字」⇒ 当前 **不挂**）。
+		# 挂上时须正对镜头（反向对照：把 `_label.billboard` 改回 BILLBOARD_DISABLED 必红）；
+		# 不挂时须确实没有 Label3D 节点 —— 两侧都断言，翻策略不用改测试。
+		if RoomKeyPickup3D.SHOW_NAME_LABEL:
+			if not bool(key_snapshot.get("label_camera_billboard", false)):
+				failures.append("Room key label is not billboarded toward the camera")
+		elif bool(key_snapshot.get("label_shown", false)):
+			failures.append("Room key name label should be hidden by policy but is still attached")
 		await get_tree().create_timer(0.42).timeout
 		await get_tree().process_frame
 		if is_instance_valid(key):
@@ -105,13 +110,18 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 	)
 	if not (loot_size_snapshot.get("visual_scale", Vector3.ZERO) as Vector3).is_equal_approx(Vector3.ONE * expected_item_scale):
 		failures.append("Ground item did not migrate from the legacy visual scale to the current 70% baseline")
-	# 名牌朝向 + 不吃深度遮挡：俯视相机下这才读得到（与敌人血条同一口径）。
-	if not bool(loot_size_snapshot.get("label_camera_billboard", false)):
-		failures.append("Ground loot label is not billboarded toward the camera")
-	if not bool(loot_size_snapshot.get("label_no_depth_test", false)):
-		failures.append("Ground loot label still takes depth occlusion from furniture and walls")
-	if (loot_size_snapshot.get("label_text", "") as String).is_empty():
-		failures.append("Ground loot label lost its item name text")
+	# 名牌契约：是否挂名牌由 GroundLootPickup3D.should_show_name_label_for() 现算
+	# （业主 2026-10-10「不要显示字」⇒ 当前所有掉落都不挂）。
+	# 挂上时须正对镜头 + 不吃深度遮挡 + 有文本；不挂时须确实没有 Label3D 节点。
+	if GroundLootPickup3D.should_show_name_label_for(loot.item_data):
+		if not bool(loot_size_snapshot.get("label_camera_billboard", false)):
+			failures.append("Ground loot label is not billboarded toward the camera")
+		if not bool(loot_size_snapshot.get("label_no_depth_test", false)):
+			failures.append("Ground loot label still takes depth occlusion from furniture and walls")
+		if (loot_size_snapshot.get("label_text", "") as String).is_empty():
+			failures.append("Ground loot label lost its item name text")
+	elif bool(loot_size_snapshot.get("label_shown", false)):
+		failures.append("Ground loot name label should be hidden by policy but is still attached")
 	var weapon_loot := GroundLootPickup3D.new()
 	weapon_loot.configure({
 		"id": "weapon_pistol",

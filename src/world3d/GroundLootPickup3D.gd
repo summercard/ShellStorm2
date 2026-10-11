@@ -39,27 +39,32 @@ const COLLECTION_ARC_HEIGHT_M := 0.45
 ## 原来 Label3D 用的是默认朝向（不 billboard），文字躺在自己的 XY 平面上、
 ## 只朝世界 +Z。俯视镜头看到的是纸片侧面 ⇒ 一个字都读不出来。
 ## 现在与敌人血条 / 伤害数字同一口径：始终正对镜头，且不被家具与墙体遮掉。
-## 下面几个数就是「上面的文字」的可调旋钮，改这里，别在别处复刻一份：
-##   嫌小 → 抬 LABEL_FONT_SIZE（字号）或 LABEL_PIXEL_SIZE（世界尺寸/像素比）
-##   嫌高/嫌低 → 改 LABEL_HEIGHT_M（相对物品原点的米数）
-##   嫌糊 → 抬 LABEL_OUTLINE_SIZE（黑描边宽度）
+## ⚠️ 注意：下面这几个常量当前**不生效** —— `LABEL_DISPLAY_POLICY` 为 "none"，
+##    名牌根本不创建。它们只在把策略改回 "all"/"no_currency" 时才起作用。
+##    当年（2026-09-29）这几项是用来调「上面的文字」的：
+##      LABEL_FONT_SIZE / LABEL_PIXEL_SIZE（字号与世界像素比）、LABEL_HEIGHT_M（离地高度）、
+##      LABEL_OUTLINE_SIZE（黑描边宽度；结论：8 太粗会连成黑框，真要用给 2~3）
 ## ⚠️ 淡出硬约束（业主 2026-10-10）：Label3D 的描边不吃 modulate 的 alpha。
 ##    只把 `modulate.a` 归零，正文没了、**描边原地留下** —— 表现就是「物品被捡走后
 ##    地上还压着一块黑色字」。淡出必须走 `GeometryInstance3D.transparency`
 ##    （0=不透明 / 1=全透明）：它由渲染器统一相乘，正文与描边一起走，且可连续插值。
 ##    静态门禁：`scripts/check_label3d_fade.py`，违反会红。
 ##
-## —— 名牌显示策略（业主 2026-10-10「把掉落的金币上面的文字『魂』隐藏掉」）——
-## 货币是高频掉落 + 拾取后 HUD 已有「取得 N 魂」提示 ⇒ 地面再挂一个「魂」字既冗余又密集。
+## —— 名牌显示策略 ——
+## 业主 2026-10-10 两次收敛后的最终口径：
+##   ① 「把掉落的金币上面的文字『魂』隐藏掉」→ 先做成 no_currency
+##   ② 「我说的是上面的字也不要，不是不要黑边，不要显示字」→ 收成 **none**：
+##      **所有掉落物都不挂头顶名牌**。地上的道具靠模型本身 + 交互圆点识别，
+##      文字既遮挡画面又密集，业主明确不要。
 ## 改这一个常量即可切换，别去别处复刻判定：
-##   "all"         —— 所有掉落都显示名字（原行为）
-##   "no_currency" —— 只有货币不显示（当前）
-##   "none"        —— 所有掉落都不显示
-const LABEL_DISPLAY_POLICY := "no_currency"
+##   "all"         —— 所有掉落都显示名字
+##   "no_currency" —— 只有货币不显示（历史中间态）
+##   "none"        —— 所有掉落都不显示（当前）
 const LABEL_HEIGHT_M := 1.05
 const LABEL_FONT_SIZE := 30
 const LABEL_PIXEL_SIZE := 0.010
-const LABEL_OUTLINE_SIZE := 8
+const LABEL_OUTLINE_SIZE := 0
+const LABEL_DISPLAY_POLICY := "none"
 ## entity_size_baseline_v2：旧资产的 70% 定义为当前世界道具的 100%。
 ## 保留旧倍率用于迁移/回退，禁止把 0.70 直接烘进各物品类型的旧值。
 const CURRENT_BASE_SIZE_MULTIPLIER := 0.70

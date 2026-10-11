@@ -10,6 +10,9 @@ var _visual: Node3D
 var _label: Label3D
 
 const PICKUP_ANIMATION_DURATION := 0.32
+## 是否挂「房间钥匙」头顶名牌。业主 2026-10-10「不要显示字」⇒ false。
+## 与 `GroundLootPickup3D.LABEL_DISPLAY_POLICY = "none"` 同一口径：地上的掉落物一律不带文字。
+const SHOW_NAME_LABEL := false
 
 
 func configure(p_room_id: String) -> void:
@@ -100,20 +103,25 @@ func _build_visual() -> void:
 	collision.position.y = 0.72
 	collision.shape = shape
 	add_child(collision)
-	_label = Label3D.new()
-	_label.name = "KeyLabel"
-	_label.position = Vector3(0.35, 1.35, 0)
-	_label.text = "房间钥匙"
-	_label.font_size = 34
-	_label.pixel_size = 0.011
-	_label.outline_size = 8
-	_label.modulate = Color(1.0, 0.84, 0.32)
-	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	# 与掉落物名牌、敌人血条同一口径：正对镜头，俯视相机才读得到（业主 2026-09-29）。
-	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	_label.no_depth_test = true
-	add_child(_label)
+	# 业主 2026-10-10「不要显示字」：钥匙与掉落物同一口径 —— **不挂名牌**。
+	# 钥匙本身有独特造型（金色钥匙 + 自发光）与交互圆点，去掉文字不影响识别。
+	# 要恢复只需把这个开关改回 true（下面的设置原样保留，含"不画描边"的结论：
+	# outline_size 8 相对 font_size 34 太粗、相邻字黑边连成一片会看着像黑框）。
+	if SHOW_NAME_LABEL:
+		_label = Label3D.new()
+		_label.name = "KeyLabel"
+		_label.position = Vector3(0.35, 1.35, 0)
+		_label.text = "房间钥匙"
+		_label.font_size = 34
+		_label.pixel_size = 0.011
+		_label.outline_size = 0
+		_label.modulate = Color(1.0, 0.84, 0.32)
+		_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		# 与掉落物名牌、敌人血条同一口径：正对镜头，俯视相机才读得到（业主 2026-09-29）。
+		_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		_label.no_depth_test = true
+		add_child(_label)
 
 
 func get_pickup_snapshot() -> Dictionary:
@@ -122,6 +130,10 @@ func get_pickup_snapshot() -> Dictionary:
 		"picked": _picked,
 		"pickup_animation_duration": PICKUP_ANIMATION_DURATION,
 		"monitoring": monitoring,
+		# `label_shown == false` 时下面两项恒为 false —— 那是「根本没挂名牌」，
+		# 不是「挂了但没 billboard」；判据请先看 label_shown（口径同 GroundLootPickup3D）。
+		"name_label_policy": SHOW_NAME_LABEL,
+		"label_shown": _label != null,
 		"label_camera_billboard": _label != null and _label.billboard == BaseMaterial3D.BILLBOARD_ENABLED,
 		"label_no_depth_test": _label != null and _label.no_depth_test,
 	}
