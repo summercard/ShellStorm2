@@ -201,6 +201,7 @@ core_scenes=(
   verify_speech_bubble_3d
   verify_dialogue_ui_flow
   verify_narrative_timeline
+  verify_narrative_opening_02_05
   verify_opening_script_runtime
   verify_new_save_handoff
   verify_fate_resume_completion
@@ -265,6 +266,7 @@ core_scenes=(
   verify_tower_extraction_return_flow
   verify_expedition_extraction_carry_return
   verify_expedition_departure_carry
+  verify_tower03_expedition_entry
   verify_death_during_extraction_flow
   verify_game_entry_flow
   verify_base_world_flow

@@ -41,7 +41,6 @@ var _source_environment: Environment
 var _city_environment: Environment
 var _source_dof_blur_amount := 0.0
 var _dof_attributes: CameraAttributesPractical
-var _departure_provider: Node
 
 func set_player(value) -> void:
 	_player = value
@@ -321,22 +320,10 @@ func _commit_departure() -> void:
 	if _state != "entering" or _pending_level_id == "":
 		return
 	_state = "departing"
-	var departure: Dictionary = {}
-	if BaseManager != null:
-		_departure_provider = BaseManager.call("_get_runtime_checkpoint_provider")
-		if not BaseManager.flush_runtime_checkpoint("mission_operations_teleport_departure"):
-			_departure_failed("保存失败，请重试")
-			return
-		# Detach before writing the marker: tower unload must not overwrite it.
-		BaseManager.unregister_runtime_checkpoint_provider(get_parent(), false)
-		departure = BaseManager.get_active_run_checkpoint()
-		var carried := departure.duplicate(true)
-		carried[Dungeon3D.MISSION_OPERATIONS_DEPARTURE_CARRY_KEY] = true
-		if not BaseManager.set_active_run_checkpoint(carried, "mission_operations_departure_carry"):
-			if is_instance_valid(_departure_provider):
-				BaseManager.register_runtime_checkpoint_provider(_departure_provider)
-			_departure_failed("出发交接失败，请重试")
-			return
+	var ticket := ExpeditionDepartureService.prepare(get_parent(), ExpeditionEntryContext.BASE)
+	if not bool(ticket.get("success", false)):
+		_departure_failed(str(ticket.get("message", "出发失败，请重试")))
+		return
 	var request_id := GameEntryFlow.request_gameplay_entry(GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT, GameEntryFlow.SPAWN_SAVED_PROGRESS)
 	# 出发过场：黑圈往屏幕中心收拢，把整屏压到全黑之后再切读取界面。
 	# 读取界面的纯黑底正好接手（它在 _ready 里放开遮罩），视觉上无缝。
@@ -349,10 +336,7 @@ func _commit_departure() -> void:
 	if error != OK:
 		if request_id > 0:
 			GameEntryFlow.cancel_request(request_id)
-		if BaseManager != null:
-			BaseManager.set_active_run_checkpoint(departure, "mission_operations_departure_rollback")
-			if is_instance_valid(_departure_provider):
-				BaseManager.register_runtime_checkpoint_provider(_departure_provider)
+		ExpeditionDepartureService.rollback(ticket)
 		_departure_failed("读取界面加载失败，请重试")
 
 func _departure_failed(message: String) -> void:

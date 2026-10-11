@@ -1,6 +1,6 @@
 extends CanvasLayer
 class_name ExpeditionLoadingScreen
-## 远征情报室 →「远征关卡01」之间的读取界面。
+## 基地远征情报室或塔3门前 →「远征关卡01」之间的读取界面。
 ##
 ## 职责刻意保持单一：不提交运行态检查点、不消费入口意图、不改动任何存档。
 ## 基地落盘与入口登记由 RogueMapSelectMenu 在切场景前完成；本界面只负责
@@ -402,7 +402,7 @@ func _show_failure(kind: String, message: String) -> void:
 		IrisTransition.clear_now()
 	if _retry_button != null:
 		_retry_button.visible = true
-		_retry_button.text = "返回基地" if kind == "map_bootstrap" else "重试读取"
+		_retry_button.text = "返回入口" if kind == "map_bootstrap" else "重试读取"
 		_retry_button.grab_focus()
 		# 目标场景可能捕获了鼠标；失败页必须能实际点到按钮。
 		if not _should_skip_delay():
@@ -435,11 +435,12 @@ func _on_retry_pressed() -> void:
 func _return_to_base() -> void:
 	# 只登记内存入口意图；不结算、不改存档，避免基地按旧行动检查点再次跳回坏图。
 	GameEntryFlow.request_gameplay_entry(
-		GameEntryFlow.REASON_ABORT_RETURN_99F, GameEntryFlow.SPAWN_BASE_99F
+		GameEntryFlow.REASON_ABORT_RETURN_99F,
+		GameEntryFlow.SPAWN_TOWER03_ROOFTOP if str(BaseManager.get_active_run_checkpoint().get(ExpeditionEntryContext.SOURCE_KEY, "")) == ExpeditionEntryContext.TOWER03 else GameEntryFlow.SPAWN_BASE_99F
 	)
 	_failure_kind = ""
 	_target_scene = GameDesignConfig.MAIN_SCENE
-	_target_name = "基地"
+	_target_name = "塔3天台" if str(BaseManager.get_active_run_checkpoint().get(ExpeditionEntryContext.SOURCE_KEY, "")) == ExpeditionEntryContext.TOWER03 else "基地"
 	_set_loading_contract()
 	if _retry_button != null:
 		_retry_button.visible = false
@@ -543,7 +544,7 @@ func _build_legacy_readout(root: Control) -> void:
 
 	var breadcrumb := Label.new()
 	breadcrumb.name = "Breadcrumb"
-	breadcrumb.text = "远征情报室  →  %s" % _destination_display_name()
+	breadcrumb.text = "%s  →  %s" % ["塔3天台" if str(BaseManager.get_active_run_checkpoint().get(ExpeditionEntryContext.SOURCE_KEY, "")) == ExpeditionEntryContext.TOWER03 else "远征情报室", _destination_display_name()]
 	breadcrumb.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	center.add_child(breadcrumb)
 

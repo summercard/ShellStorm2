@@ -23,6 +23,7 @@ const REASON_SCENE_REENTRY := "scene_reentry"
 
 const SPAWN_SAVED_PROGRESS := "saved_progress"
 const SPAWN_BASE_99F := "base_99f"
+const SPAWN_TOWER03_ROOFTOP := "tower03_rooftop"
 
 var _startup_entry_consumed := false
 var _pending_context: Dictionary = {}

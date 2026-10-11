@@ -376,6 +376,7 @@ func _verify_expedition_level(failures: Array[String]) -> void:
 			failures.append("远征关卡出生点偏移退化到房间正中：%s" % spawn_offset)
 
 	_verify_hud_labels(tower, failures)
+	await _verify_background_music_disabled(tower, failures)
 
 	tower.queue_free()
 	await get_tree().process_frame
@@ -404,6 +405,38 @@ func _verify_hud_labels(tower: TowerDescent3D, failures: Array[String]) -> void:
 		failures.append("远征关卡房间标签残留塔楼楼层语义：%s" % room_text)
 	elif not room_text.contains(level_name):
 		failures.append("远征关卡房间标签未标明关卡名：%s" % room_text)
+
+
+## 远征关卡不播全局背景音乐（2026-10-12 主人指定）。
+##
+## 为什么必须单独守：楼层音乐由 `TowerAtmosphere3D._update_music_for_floor()` 按
+## `floor_number` 分派，而远征是**单层关卡**、floor_index 恒为 0 ⇒ 落进「楼顶」分支、
+## 整关播 `rooftop_relax`。这条错在几何 / 区块 / 包络断言里**全都看不见**
+## （数据全对，只有喇叭在响），只能靠「开关契约 + 真实驱动一次房间进入」来钉。
+func _verify_background_music_disabled(
+	tower: TowerDescent3D, failures: Array[String]
+) -> void:
+	var atmosphere := tower._atmosphere as Node3D
+	if atmosphere == null:
+		failures.append("远征关卡缺少 TowerAtmosphere3D，无法核对背景音乐开关")
+		return
+	if bool(atmosphere.get("background_music_enabled")):
+		failures.append("远征关卡未关闭 background_music_enabled（整关会误播 rooftop_relax）")
+	var mgr := get_node_or_null("/root/MusicManager")
+	if mgr == null:
+		failures.append("MusicManager autoload 未注册，背景音乐断言失去意义")
+		return
+	var start_room := tower._room_by_id.get("start") as DungeonRoom3D
+	if start_room == null:
+		failures.append("背景音乐检查缺少入口安全屋 start")
+		return
+	# 效果断言：先人为挂上「上一场景残留」的那一首，再真实驱动一次房间进入
+	# （内部走 set_floor_number），必须被清成「无当前曲目」。
+	mgr.play("rooftop_relax")
+	await get_tree().process_frame
+	tower.call("_on_room_entered", start_room)
+	if not str(mgr.get_current_music_id()).is_empty():
+		failures.append("远征关卡仍在播放背景音乐：%s" % str(mgr.get_current_music_id()))
 
 
 func _verify_expedition_block(tower: TowerDescent3D, failures: Array[String]) -> void:
@@ -1148,6 +1181,12 @@ func _verify_default_tower(failures: Array[String]) -> void:
 	var tower_area_text := str(tower.call("_hud_floor_label_text"))
 	if not tower_area_text.begins_with("高塔外层"):
 		failures.append("默认塔楼地图区域标签被改成非塔楼口径：%s" % tower_area_text)
+	# 同理：远征关掉的背景音乐开关不能跟着污染塔楼（塔楼必须继续有楼层背景音乐）。
+	var tower_atmosphere := tower._atmosphere as Node3D
+	if tower_atmosphere == null:
+		failures.append("默认塔楼缺少 TowerAtmosphere3D")
+	elif not bool(tower_atmosphere.get("background_music_enabled")):
+		failures.append("默认塔楼的 background_music_enabled 被远征口径关掉（塔楼应保持开启）")
 	var blocks := tower.get_node_or_null("Blocks") as Node3D
 	if blocks == null:
 		failures.append("默认塔楼缺少 Blocks 根节点")

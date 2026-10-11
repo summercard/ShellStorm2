@@ -73,6 +73,13 @@ var _base_interior_volumetric_fog_density := BASE_INTERIOR_VOLUMETRIC_FOG_DENSIT
 @export_range(0.0, 24.0, 0.1) var time_of_day := 17.0
 @export_range(0.0, 360.0, 0.1) var time_scale := 0.0
 
+## 是否允许本场景用 MusicManager 播全局背景音乐。
+## 远征关卡（单层独立行动）由 `TowerDescent3D._install_atmosphere()` 置 false：
+## 那一关 floor_index 恒为 0，楼层口径会把它当成「楼顶」而误播 rooftop_relax；
+## 置 false 后整关不播任何背景音乐，并把上一场景（基地/塔楼）残留的曲目停掉。
+## 它拦的是**本场景的全部 MusicManager 播放**，含 Boss 房的 push_and_play()。
+@export var background_music_enabled := true
+
 
 func configure(environment: Environment, sun: DirectionalLight3D) -> void:
 	_environment = environment
@@ -129,6 +136,13 @@ func set_floor_number(floor_number: int) -> void:
 func _update_music_for_floor(floor_number: int, rooftop: bool) -> void:
 	var mgr := get_node_or_null("/root/MusicManager")
 	if mgr == null:
+		return
+	if not background_music_enabled:
+		# 远征关卡：整关不播背景音乐。这里同时承担「清掉上一场景残留曲目」——
+		# MusicManager 是 autoload，跨场景不重置，从基地/塔楼进来时 base_passion /
+		# rooftop_relax 还挂着。stop() 自身幂等（当前无曲目时直接返回），
+		# 每次 set_floor_number 都走到这里也不会反复起 tween。
+		mgr.stop()
 		return
 	if rooftop:
 		mgr.play("rooftop_relax")

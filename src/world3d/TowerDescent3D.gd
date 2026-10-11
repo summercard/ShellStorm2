@@ -27,10 +27,6 @@ const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
 const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d.tscn")
 const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d.tscn")
 const SIMPLE_TRANSIT_DOOR_SCRIPT := preload("res://src/world3d/SimpleTransitDoor3D.gd")
-## 基地欢迎语的短句 ID（在 BarkCatalog 里有同名条目 system_base_welcome）。
-## 写成局部常量而不引用 `BarkCatalog.SYSTEM_BASE_WELCOME`：ID 是调用方与内容目录
-## 之间的契约，调用方持有即可；取值是否真的存在由验收断言兜底。
-const BARK_BASE_WELCOME := "system_base_welcome"
 const TOWER_WALL_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb"
 )
@@ -460,20 +456,32 @@ func get_runtime_resume_scene_path(snapshot: Dictionary) -> String:
 	return str(_runtime_map_scene_by_run_id().get(str(snapshot.get("runtime_map_id", "")), ""))
 
 
+var _expedition_entry_source := ExpeditionEntryContext.BASE
+var _returning_to_tower03 := false
+
+
 func _ready() -> void:
 	process_physics_priority = 100
 	_begin_expedition_loading_if_active()
 	if is_expedition():
-		# 远征的退出/结算落点 = 玩家出发点 = 塔楼 99F 基地主场景。
+		# 远征退出/结算返回同一塔楼主场景，由入口来源选择基地或塔3天台。
 		# 刻意在代码里钉死、不靠各关卡场景文件自己写：BaseWorld3D 是历史「兼容基地」，
 		# 不是玩家出发的地方；新增关卡漏写一处就会把玩家退回那个旧场景。
 		return_scene_path = GameDesignConfig.MAIN_SCENE
 	_entry_context = GameEntryFlow.consume_main_scene_entry()
+	var entry_checkpoint := BaseManager.get_active_run_checkpoint() if BaseManager != null else {}
+	if is_expedition():
+		_expedition_entry_source = ExpeditionEntryContext.normalize(str(entry_checkpoint.get(ExpeditionEntryContext.SOURCE_KEY, "")))
+	else:
+		_returning_to_tower03 = str(_entry_context.get("spawn_target", "")) == GameEntryFlow.SPAWN_TOWER03_ROOFTOP or (
+			str(_entry_context.get("spawn_target", "")) != GameEntryFlow.SPAWN_BASE_99F
+			and str(entry_checkpoint.get(ExpeditionEntryContext.RETURN_KEY, "")) == ExpeditionEntryContext.TOWER03
+		)
 	if not test_mode and not is_expedition() and BaseManager != null:
 		var checkpoint := BaseManager.get_active_run_checkpoint()
 		var explicit_base_return := (
 			str(_entry_context.get("reason", "")) == GameEntryFlow.REASON_ABORT_RETURN_99F
-			and str(_entry_context.get("spawn_target", "")) == GameEntryFlow.SPAWN_BASE_99F
+			and str(_entry_context.get("spawn_target", "")) in [GameEntryFlow.SPAWN_BASE_99F, GameEntryFlow.SPAWN_TOWER03_ROOFTOP]
 		)
 		# 失败场景返回不结算旧行动；只交接检查点的玩家所有权，不能再次跳回坏关卡。
 		if (
@@ -557,7 +565,12 @@ func _ready() -> void:
 			_current_room_id = ""
 			_on_room_entered(entry_room)
 	else:
-		if opening_ready and _place_player_at_new_game_opening():
+		if _returning_to_tower03:
+			player.global_position = ExpeditionEntryContext.TOWER03_SPAWN
+			player.velocity = Vector3.ZERO
+			_current_room_id = "start"
+			starts_on_rooftop = true
+		elif opening_ready and _place_player_at_new_game_opening():
 			starts_on_rooftop = false
 		elif starts_on_rooftop:
 			player.global_position = ROOFTOP_LOGOUT_SPAWN
@@ -926,6 +939,8 @@ func get_entry_context_snapshot() -> Dictionary:
 
 
 func _should_start_on_rooftop_for_entry() -> bool:
+	if _returning_to_tower03:
+		return true
 	# 死亡结算已明确承诺返回99F，不得再被新手出生条件改送天台。
 	if str(_entry_context.get("spawn_target", "")) == GameEntryFlow.SPAWN_BASE_99F:
 		return false
@@ -957,6 +972,8 @@ func _should_start_on_rooftop_for_entry() -> bool:
 ## 清空快照 ⇒ 复位后重新开始仍然看得到开场（与 1848 的归零需求一致）。
 ## 从此这两个函数**不再互为反面**：教程未完成但已有快照时，两者可以同时为假。
 func _should_open_new_game_in_master_office() -> bool:
+	if _returning_to_tower03:
+		return false
 	if is_expedition():
 		return false
 	# 死亡返城 / 撤离返航显式声明落 99F 基地，绝不改送 98F。
@@ -1071,7 +1088,7 @@ func _finish_run(success: bool) -> void:
 		"settlement": {"retained": true, "extracted_count": extracted_count},
 		"inventory_capacity": _inventory.get_capacity(),
 		"insurance_capacity": _insurance.get_max_slots(),
-		"return_room_id": "facility",
+		"return_room_id": "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility",
 	}
 	if not test_mode:
 		var transaction_id := _get_run_settlement_transaction_id(true)
@@ -1091,7 +1108,7 @@ func _finish_run(success: bool) -> void:
 			push_error("[TowerDescent3D] Successful extraction settlement failed: %s" % commit)
 			return
 	_hold_player_after_settlement()
-	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航99F基地" % _run_loot.size()
+	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
 	run_completed.emit(true, summary)
 	if not test_mode:
 		await get_tree().create_timer(0.8).timeout
@@ -1101,7 +1118,7 @@ func _finish_run(success: bool) -> void:
 ## 独立副本「撤离信号塔」的成功返航：背包、主副枪、装备背包、快捷栏、保险格
 ## 全部保留，且不得复制进 extraction_loot（文档 09 §5.1 离场语义表第 4 行）。
 ## 独立副本不生成 99F 基地房，因此不能像塔楼那样做场景内复位；改为把玩家所有权
-## 写成一条带标记的交接快照，由 return_scene_path（99F 塔楼主场景）启动时
+## 写成一条带标记的交接快照，由 return_scene_path（塔楼主场景）启动时
 ## 只恢复携带物、不恢复世界。带出物绝不能同时再复制到 extraction_loot。
 func _finish_expedition_successful_extraction() -> void:
 	if _completed:
@@ -1124,7 +1141,7 @@ func _finish_expedition_successful_extraction() -> void:
 		"settlement": {"retained": true, "extracted_count": extracted_count},
 		"inventory_capacity": _inventory.get_capacity(),
 		"insurance_capacity": _insurance.get_max_slots(),
-		"return_room_id": "facility",
+		"return_room_id": "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility",
 	}
 	if not test_mode or force_extraction_settlement_for_test:
 		var commit := BaseManager.commit_run_settlement({
@@ -1152,7 +1169,7 @@ func _finish_expedition_successful_extraction() -> void:
 			push_error("[TowerDescent3D] Expedition extraction carry handoff failed")
 			return
 	_hold_player_after_settlement()
-	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航99F基地" % _run_loot.size()
+	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
 	run_completed.emit(true, summary)
 	if test_mode:
 		return
@@ -1168,7 +1185,7 @@ func _return_to_scene_after_settlement(entry_request_id: int) -> void:
 		return
 	if IrisTransition != null:
 		IrisTransition.loading_destination_scene = return_scene_path
-		IrisTransition.loading_destination_name = "99F基地"
+		IrisTransition.loading_destination_name = _expedition_return_label()
 		if DisplayServer.get_name() != "headless":
 			await IrisTransition.iris_close(IrisTransition.CLOSE_SECONDS)
 	var change_error: Error = get_tree().change_scene_to_file(
@@ -1182,7 +1199,7 @@ func _return_to_scene_after_settlement(entry_request_id: int) -> void:
 		)
 
 
-## 把当前携带物写成返航交接快照。scope / 房间 / 楼层必须显式标成 99F 基地，
+## 把当前携带物写成非战局返航交接快照，房间/楼层按入口来源指定，
 ## runtime_map_id 必须清空 —— 否则主场景会把它当成可续局的独立副本行动，
 ## 把玩家再送回刚撤离的那张地图。world_state 与 edge_states 一并清空：
 ## 这次交接只认玩家所有权。
@@ -1193,8 +1210,9 @@ func _write_successful_extraction_carry_checkpoint() -> bool:
 	if snapshot.is_empty():
 		return false
 	snapshot["scope"] = "base"
-	snapshot["current_room_id"] = "facility"
-	snapshot["current_floor_index"] = 1
+	snapshot["current_room_id"] = "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility"
+	snapshot["current_floor_index"] = 0 if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else 1
+	snapshot[ExpeditionEntryContext.RETURN_KEY] = _expedition_entry_source
 	snapshot["runtime_map_id"] = ""
 	snapshot["player_position"] = []
 	snapshot["world_state"] = {}
@@ -1548,6 +1566,33 @@ func _has_camera_presentation_override() -> bool:
 		and _active_facility_menu.has_method("is_camera_override_active")
 		and bool(_active_facility_menu.call("is_camera_override_active"))
 	)
+
+
+## 剧情镜头也使用正式场景碰撞。以球形视点从焦点扫向机位，遇墙/楼板收近。
+func constrain_narrative_camera_pose(desired: Transform3D, focus: Vector3) -> Transform3D:
+	var sphere := SphereShape3D.new()
+	sphere.radius = .32
+	var start := focus + Vector3.UP * .9
+	var motion := desired.origin - start
+	if motion.length_squared() < .0001:
+		return desired
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = sphere
+	query.transform = Transform3D(Basis.IDENTITY, start)
+	query.motion = motion
+	query.collision_mask = CAMERA_WALL_COLLISION_MASK
+	query.collide_with_areas = false
+	if player != null:
+		query.exclude = [player.get_rid()]
+	var fractions := get_world_3d().direct_space_state.cast_motion(query)
+	if fractions[0] >= 1.0:
+		return desired
+	var fraction := maxf(0.0, fractions[0] - .06 / motion.length())
+	var safe := desired
+	safe.origin = start + motion * fraction
+	if safe.origin.distance_squared_to(start) > .0001:
+		safe = safe.looking_at(focus + Vector3.UP * .9, Vector3.UP)
+	return safe
 
 
 func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) -> void:
@@ -3573,6 +3618,48 @@ func _add_connector_box(
 	body.add_child(collision)
 
 
+## 剧情锚点只读查询；楼梯点沿实际承重中心线，吊桥口取正式路线元数据。
+func narrative_anchor(anchor_id: String) -> Variant:
+	if is_expedition():
+		return null
+	var stair_b := _corridor_by_edge.get(_edge_key("facility", "floor_01_entry")) as Node3D
+	var stair_a := _corridor_by_edge.get(_edge_key("start", "facility")) as Node3D
+	var connector := stair_b if anchor_id.begins_with("stair_b_") else stair_a
+	if anchor_id.begins_with("stair_b_") or anchor_id.begins_with("stair_a_") or anchor_id in ["base_west_exit", "rooftop_stair_exit"]:
+		if connector == null:
+			return null
+		var points: Array = connector.get_meta("path_points", [])
+		if points.size() < 11:
+			return null
+		match anchor_id:
+			"stair_b_entry": return (points[9] as Vector3) + Vector3.RIGHT * 1.6
+			"stair_b_bottom": return points[7]
+			"stair_b_up": return points[6]
+			"stair_b_middle", "stair_a_middle": return ((points[4] as Vector3) + (points[5] as Vector3)) * 0.5
+			"stair_a_bottom": return points[8]
+			"stair_a_upper": return ((points[2] as Vector3) + (points[3] as Vector3)) * 0.5
+			"base_west_exit": return (points[10] as Vector3) + Vector3.LEFT * 2.3
+			"rooftop_stair_exit": return (points[0] as Vector3) + Vector3.RIGHT * 2.0
+	var rooftop := _room_by_id.get("start") as DungeonRoom3D
+	var route := get_node_or_null("Blocks/Rooftop/CrossTowerRoute") as Node3D
+	if rooftop == null or route == null:
+		return null
+	var bridge_x := route.global_position.x + float(route.get_meta("north_bridge_opening_x", INF))
+	if not is_finite(bridge_x):
+		return null
+	# 桥面第一跨的承重盒南端就是吊桥入口；楼板外框与房心有偏移，不能相减猜位置。
+	var bridge_support := route.get_node_or_null("Collision/BridgeSupport_0") as CollisionShape3D
+	if bridge_support == null or not (bridge_support.shape is BoxShape3D):
+		return null
+	var bridge_shape := bridge_support.shape as BoxShape3D
+	var mouth := bridge_support.to_global(Vector3(0.0, bridge_shape.size.y * 0.5, bridge_shape.size.z * 0.5))
+	var north_z := mouth.z
+	match anchor_id:
+		"rooftop_bridge_approach": return Vector3(bridge_x, rooftop.global_position.y, north_z + 10.0)
+		"rooftop_bridge_guard": return Vector3(bridge_x, rooftop.global_position.y, north_z + 4.5)
+	return null
+
+
 func _is_player_on_connector(connector: Node3D) -> bool:
 	var points: Array = connector.get_meta("path_points", [])
 	if points.size() < 2:
@@ -3941,7 +4028,7 @@ func _show_expedition_exit_warning() -> void:
 	box.add_child(title)
 	var detail := _make_hud_label(
 		"确认后，背包内全部物品以及主武器、副武器都会永久丢失。\n"
-		+ "保险格按保险规则保留；你将立即返回基地，本次行动结束且不可撤销。",
+		+ "保险格按保险规则保留；你将立即返回%s，本次行动结束且不可撤销。" % _expedition_return_label(),
 		15,
 		Color(0.94, 0.88, 0.86)
 	)
@@ -3979,6 +4066,7 @@ func _cancel_expedition_exit() -> void:
 func _confirm_expedition_exit() -> void:
 	if _completed:
 		return
+	var carry_before := build_runtime_save_snapshot()
 	_completed = true
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
@@ -3988,11 +4076,21 @@ func _confirm_expedition_exit() -> void:
 		# 的战局再写回检查点，再清掉行动档，防止下次进图恢复一个已放弃的战局。
 		BaseManager.unregister_runtime_checkpoint_provider(self, false)
 		_runtime_persistence_active = false
-		BaseManager.clear_active_run_checkpoint("expedition_retreat")
-	status_label.text = "已退出独立副本 · 丢失物品%d格、装备武器%d把、背包%d个 · 正在返回基地" % [
+		var return_marker := _build_settlement_return_checkpoint()
+		var saved := BaseManager.clear_active_run_checkpoint("expedition_retreat") if return_marker.is_empty() else BaseManager.set_active_run_checkpoint(return_marker, "expedition_retreat")
+		if not saved:
+			_completed = false
+			_restore_carried_ownership(carry_before, false)
+			_runtime_persistence_active = true
+			BaseManager.register_runtime_checkpoint_provider(self)
+			status_label.text = "退出交接保存失败，请重试"
+			_sync_player_input_lock()
+			return
+	status_label.text = "已退出独立副本 · 丢失物品%d格、装备武器%d把、背包%d个 · 正在返回%s" % [
 		int(discarded.get("inventory_slots", 0)),
 		int(discarded.get("weapons", 0)),
 		int(discarded.get("backpack", 0)),
+		_expedition_return_label(),
 	]
 	run_completed.emit(false, {
 		"success": false,
@@ -4002,15 +4100,10 @@ func _confirm_expedition_exit() -> void:
 		"loot": [],
 		"seed": run_seed,
 		"theme_id": gameplay_theme.theme_id,
-		"return_room_id": "facility",
+		"return_room_id": "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility",
 	})
-	# 独立副本不生成 99F 基地房，回基地只能靠场景切换；必须登记 99F 出生契约，
-	# 否则入口场景无法区分“撤退回基地”和普通冷启动。自动化下不切场景，但契约
-	# 仍登记，供专项验收断言“回的是基地而不是停在场景内”。
-	var entry_request_id := GameEntryFlow.request_gameplay_entry(
-		GameEntryFlow.REASON_ABORT_RETURN_99F,
-		GameEntryFlow.SPAWN_BASE_99F
-	)
+	# 独立副本返回主场景并登记来源出生点；自动化不切场景，仍验证入口意图。
+	var entry_request_id := _request_expedition_return(GameEntryFlow.REASON_ABORT_RETURN_99F)
 	if test_mode:
 		return
 	await get_tree().create_timer(0.8).timeout
@@ -4371,7 +4464,6 @@ func _install_simple_transit_door_components() -> void:
 			var facility_door := facility.get_door_node(side)
 			if facility_door != null:
 				doors.append(facility_door)
-				_bind_facility_door_welcome(facility_door)
 	# 98↔99 楼梯间门的下端（区块00 门厅东门）：2026-09-21 主人指定按普通门办，
 	# 与 99F 基地门同一套组件（E 开 + 走远自动关）。这里**只挂组件**，不登记
 	# E 交互候选绑定：从 98F 侧开门走 `_try_open_room_door` 的普通交通门通道，
@@ -4401,36 +4493,6 @@ func _install_simple_transit_door_components() -> void:
 			door.add_child(component)
 		component.call("configure", door, player)
 		_simple_transit_door_components.append(component)
-
-
-## 基地两扇门（facility 的 west / east）**关上**时播报系统欢迎语。
-## 为什么挂在这里：门不是 Area3D，交互靠距离判定 —— "关上了"只有 RoomDoor3D.motion_finished
-## 能提供；而这两扇门的引用在本函数里已经拿到，就近订阅，不另引入跨模块耦合。
-func _bind_facility_door_welcome(door: RoomDoor3D) -> void:
-	if door == null or not is_instance_valid(door):
-		return
-	if door.motion_finished.is_connected(_on_facility_door_motion_finished):
-		return
-	door.motion_finished.connect(_on_facility_door_motion_finished)
-
-
-func _on_facility_door_motion_finished(is_open: bool) -> void:
-	if is_open:
-		return
-	# 只有"从外面进基地"才播报：门关的那一刻玩家必须在**基地内侧**。
-	# 否则出门时门同样会自动关上，会被误报成"欢迎回到基地"（2026-09-21 主人反馈）。
-	var facility := _room_by_id.get("facility") as DungeonRoom3D
-	if facility == null or player == null or not is_instance_valid(player):
-		return
-	# y 范围与 DungeonRoom3D._build_trigger 对 FACILITY 的口径保持一致。
-	if not facility.contains_world_position(
-		player.global_position, -1.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M + 0.8
-	):
-		return
-	# 对话 UI 是独立系统：不在时静默跳过，绝不因播报失败影响玩法。
-	if DialogueUI == null or not DialogueUI.has_method("announce"):
-		return
-	DialogueUI.announce(BarkCatalog.pick_at(BARK_BASE_WELCOME, 0))
 
 
 func _simple_transit_component_for(door: RoomDoor3D) -> Node:
@@ -5504,6 +5566,11 @@ func _install_atmosphere() -> void:
 	_atmosphere.name = "TowerAtmosphere3D"
 	# 远景楼只使用用户手工布局，禁止旧环带叠加或在布局为空时自动兜底。
 	_atmosphere.set("legacy_city_silhouette_enabled", false)
+	# 远征关卡是单层独立行动，不播全局背景音乐：本关 floor_index 恒为 0，
+	# 楼层口径会把它当成楼顶而误播 rooftop_relax。开关必须写在 add_child 之前——
+	# add_child 会立刻触发 atmosphere._ready()、进而走一次 set_floor_number(100)，
+	# 晚一步就漏掉第一次判定、残留上一场景的曲目。
+	_atmosphere.set("background_music_enabled", not is_expedition())
 	_atmosphere.call("configure", world_environment.environment, key_light)
 	add_child(_atmosphere)
 	_atmosphere.call("set_floor_number", _current_floor_number())
@@ -5581,7 +5648,7 @@ func _install_world_time_hud() -> void:
 	_anchor_control(panel, 1.0, 0.0, 1.0, 0.0, -292, 48, -18, 98)
 	parent_control.add_child(panel)
 	_world_time_label = _make_hud_label(
-		"2075-01-01  17:00", 14, Color(0.72, 0.94, 1.0)
+		"2075-01-01  09:00", 14, Color(0.72, 0.94, 1.0)
 	)
 	_world_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_world_time_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -5607,7 +5674,7 @@ func _refresh_world_time_hud(snapshot: Dictionary = {}) -> void:
 	var current := snapshot
 	if current.is_empty() and GameTimeManager != null:
 		current = GameTimeManager.get_time_snapshot()
-	_world_time_label.text = str(current.get("display_text", "2075-01-01  17:00"))
+	_world_time_label.text = str(current.get("display_text", "2075-01-01  09:00"))
 	_world_time_label.tooltip_text = "20个现实分钟推进一个游戏日"
 
 
@@ -6059,10 +6126,7 @@ func can_return_player_to_base_center() -> bool:
 
 func return_player_to_base_center_from_pause() -> Dictionary:
 	if _expedition_bootstrap_failed:
-		var request_id := GameEntryFlow.request_gameplay_entry(
-			GameEntryFlow.REASON_ABORT_RETURN_99F,
-			GameEntryFlow.SPAWN_BASE_99F
-		)
+		var request_id := _request_expedition_return(GameEntryFlow.REASON_ABORT_RETURN_99F)
 		if test_mode:
 			return {"success": true, "reason": "测试模式已允许离开失败场景"}
 		var change_error := get_tree().change_scene_to_file(return_scene_path)
@@ -6071,7 +6135,7 @@ func return_player_to_base_center_from_pause() -> Dictionary:
 				GameEntryFlow.cancel_request(request_id)
 			return {
 				"success": false,
-				"reason": "返回基地失败：%s" % error_string(change_error),
+				"reason": "返回入口失败：%s" % error_string(change_error),
 			}
 		return {"success": true, "reason": "已离开远征启动失败场景"}
 	if not can_return_player_to_base_center():
@@ -6660,3 +6724,56 @@ func get_tower_snapshot() -> Dictionary:
 			"floor_thickness": TOWER_GEOMETRY.FLOOR_THICKNESS_M,
 		},
 	}
+
+
+func _expedition_return_label() -> String:
+	return "塔3天台" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "99F基地"
+
+
+func _request_expedition_return(reason: String) -> int:
+	return GameEntryFlow.request_gameplay_entry(reason, GameEntryFlow.SPAWN_TOWER03_ROOFTOP if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else GameEntryFlow.SPAWN_BASE_99F)
+
+
+func _request_return_entry_context(success: bool) -> int:
+	if not is_expedition():
+		return super(success)
+	return _request_expedition_return(GameEntryFlow.REASON_SUCCESSFUL_RETURN_99F if success else GameEntryFlow.REASON_DEATH_RETURN_99F)
+
+
+func _build_settlement_return_checkpoint() -> Dictionary:
+	return ExpeditionEntryContext.return_marker(_expedition_entry_source) if is_expedition() else {}
+
+
+func build_runtime_save_snapshot() -> Dictionary:
+	var snapshot := super()
+	if snapshot.is_empty():
+		return snapshot
+	if is_expedition():
+		snapshot[ExpeditionEntryContext.SOURCE_KEY] = _expedition_entry_source
+	elif _returning_to_tower03 and player != null and ExpeditionEntryContext.is_on_tower03(player.position):
+		snapshot[ExpeditionEntryContext.RETURN_KEY] = ExpeditionEntryContext.TOWER03
+		snapshot["scope"] = "base"
+		snapshot["current_room_id"] = "start"
+		snapshot["current_floor_index"] = 0
+	return snapshot
+
+
+func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) -> void:
+	# 延迟恢复携带物不能覆盖已经选定的塔3出生点。
+	if not is_expedition() and _returning_to_tower03:
+		super(snapshot, false)
+		player.global_position = ExpeditionEntryContext.TOWER03_SPAWN
+		player.velocity = Vector3.ZERO
+		_current_room_id = "start"
+		_authoritative_floor_index = 0
+		_refresh_physical_location_authority(true)
+	else:
+		super(snapshot, restore_location)
+
+
+func _death_return_location_text() -> String:
+	return "塔3天台门前" if is_expedition() and _expedition_entry_source == ExpeditionEntryContext.TOWER03 else super()
+
+
+func _death_return_button_text() -> String:
+	return "确认结算并返回塔3天台" if is_expedition() and _expedition_entry_source == ExpeditionEntryContext.TOWER03 else super()

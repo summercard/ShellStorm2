@@ -1,13 +1,161 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/components/tower_03/left_service_stairs/env_tower_03_left_service_stairs_visual_top3d.glb" id="1"]
 
+[sub_resource type="BoxShape3D" id="Shape_Platform"]
+size = Vector3(13.400000, 0.200000, 2.650000)
+
+[sub_resource type="BoxShape3D" id="Shape_Ramp0"]
+size = Vector3(1.780000, 0.160000, 2.635299)
+
+[sub_resource type="BoxShape3D" id="Shape_StairRail0_0"]
+size = Vector3(0.160000, 1.100000, 2.635299)
+
+[sub_resource type="BoxShape3D" id="Shape_StairRail0_1"]
+size = Vector3(0.160000, 1.100000, 2.635299)
+
+[sub_resource type="BoxShape3D" id="Shape_Ramp1"]
+size = Vector3(1.780000, 0.160000, 2.635299)
+
+[sub_resource type="BoxShape3D" id="Shape_StairRail1_0"]
+size = Vector3(0.160000, 1.100000, 2.635299)
+
+[sub_resource type="BoxShape3D" id="Shape_StairRail1_1"]
+size = Vector3(0.160000, 1.100000, 2.635299)
+
+[sub_resource type="BoxShape3D" id="Shape_FrontRail0"]
+size = Vector3(4.050000, 1.250000, 0.160000)
+
+[sub_resource type="BoxShape3D" id="Shape_FrontRail1"]
+size = Vector3(4.900000, 1.250000, 0.160000)
+
+[sub_resource type="BoxShape3D" id="Shape_FrontRail2"]
+size = Vector3(0.370000, 1.250000, 0.160000)
+
+[sub_resource type="BoxShape3D" id="Shape_SideRail0"]
+size = Vector3(0.160000, 1.250000, 2.650000)
+
+[sub_resource type="BoxShape3D" id="Shape_SideRail1"]
+size = Vector3(0.160000, 1.250000, 2.650000)
+
+[sub_resource type="BoxShape3D" id="Shape_Leg0_0"]
+size = Vector3(0.200000, 1.300000, 0.200000)
+
+[sub_resource type="BoxShape3D" id="Shape_Leg0_1"]
+size = Vector3(0.200000, 1.300000, 0.200000)
+
+[sub_resource type="BoxShape3D" id="Shape_Leg1_0"]
+size = Vector3(0.200000, 1.300000, 0.200000)
+
+[sub_resource type="BoxShape3D" id="Shape_Leg1_1"]
+size = Vector3(0.200000, 1.300000, 0.200000)
+
+[sub_resource type="BoxShape3D" id="Shape_Leg2_0"]
+size = Vector3(0.200000, 1.300000, 0.200000)
+
+[sub_resource type="BoxShape3D" id="Shape_Leg2_1"]
+size = Vector3(0.200000, 1.300000, 0.200000)
+
 [node name="left_service_stairs" type="Node3D"]
 metadata/asset_id = "ENV-OPENWORLD-TOWER03-LEFT-SERVICE-STAIRS"
-metadata/asset_version = "v001"
-metadata/collision_status = "none_visual_only"
+metadata/asset_version = "v002"
+metadata/collision_status = "platform_slab_ramps_segmented_rails"
 metadata/source_blend = "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend"
 
 [node name="Visual" type="Node3D" parent="."]
 
 [node name="ImportedModel" parent="Visual" instance=ExtResource("1")]
+
+[node name="Collision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Platform" type="CollisionShape3D" parent="Collision"]
+position = Vector3(0.000000, 1.360001, -1.081200)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_Platform")
+
+[node name="Ramp0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-1.670000, 0.720001, 1.278800)
+rotation = Vector3(0.56905750, 0, 0)
+shape = SubResource("Shape_Ramp0")
+
+[node name="StairRail0_0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-2.660000, 1.390001, 1.298800)
+rotation = Vector3(0.56905750, 0, 0)
+shape = SubResource("Shape_StairRail0_0")
+
+[node name="StairRail0_1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-0.680000, 1.390001, 1.298800)
+rotation = Vector3(0.56905750, 0, 0)
+shape = SubResource("Shape_StairRail0_1")
+
+[node name="Ramp1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(5.330000, 0.720001, 1.278800)
+rotation = Vector3(0.56905750, 0, 0)
+shape = SubResource("Shape_Ramp1")
+
+[node name="StairRail1_0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(4.340000, 1.390001, 1.298800)
+rotation = Vector3(0.56905750, 0, 0)
+shape = SubResource("Shape_StairRail1_0")
+
+[node name="StairRail1_1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(6.320000, 1.390001, 1.298800)
+rotation = Vector3(0.56905750, 0, 0)
+shape = SubResource("Shape_StairRail1_1")
+
+[node name="FrontRail0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-4.745000, 2.080001, 0.378800)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_FrontRail0")
+
+[node name="FrontRail1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(1.830000, 2.080001, 0.378800)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_FrontRail1")
+
+[node name="FrontRail2" type="CollisionShape3D" parent="Collision"]
+position = Vector3(6.565000, 2.080001, 0.378800)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_FrontRail2")
+
+[node name="SideRail0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-6.690000, 2.080001, -0.971200)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_SideRail0")
+
+[node name="SideRail1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(6.690000, 2.080001, -0.971200)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_SideRail1")
+
+[node name="Leg0_0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-5.670000, 0.710001, -1.851200)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_Leg0_0")
+
+[node name="Leg0_1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-5.670000, 0.710001, 0.148800)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_Leg0_1")
+
+[node name="Leg1_0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-0.670000, 0.710001, -1.851200)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_Leg1_0")
+
+[node name="Leg1_1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-0.670000, 0.710001, 0.148800)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_Leg1_1")
+
+[node name="Leg2_0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(5.330000, 0.710001, -1.851200)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_Leg2_0")
+
+[node name="Leg2_1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(5.330000, 0.710001, 0.148800)
+rotation = Vector3(0.00000000, 0, 0)
+shape = SubResource("Shape_Leg2_1")
