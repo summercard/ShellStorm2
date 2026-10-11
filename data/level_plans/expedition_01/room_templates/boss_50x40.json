@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "boss_50x40",
+  "room_type": "BOSS_ROOM",
+  "size_m": [50.0, 40.0],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": ["north", "south", "east", "west"],
+  "wall_lane_table": {
+    "north": [-17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5],
+    "south": [-17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5],
+    "east": [-12.5, -7.5, -2.5, 2.5, 7.5, 12.5],
+    "west": [-12.5, -7.5, -2.5, 2.5, 7.5, 12.5]
+  },
+  "slots": [],
+  "variants": [],
+  "asset_ids": {
+    "room": "ENV-EXPEDITION-L01-BOSS-ARENA",
+    "components": []
+  },
+  "note": "远征关卡 Boss 竞技场（故障数据库主题：主屏 + 机柜成组 + 工作站）。白模门位记的是「南进西出」，与设计页 §4.2 坐标的西进东出冲突 ⇒ 落地前必须先裁决（见设计页 §4.4）。"
+}

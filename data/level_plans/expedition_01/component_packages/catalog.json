@@ -1,0 +1,32 @@
+{
+  "zone": "expedition_01",
+  "display_name": "远征关卡01 白盒资产",
+  "version": "v001",
+  "asset_count": 1,
+  "component_policy": "墙体严格按5m槽位拼装；实墙每槽单件，门墙每槽保留左右柱与门楣；禁止缩放与join",
+  "scope_note": "v001 只含 Boss 竞技场一件。远征01 的其余白盒（安全房/主路房/撤离房）尚未制作，制作时向本脚本 ASSETS 追加条目即可，不需改动框架。",
+  "category_counts": {
+    "boss_arena": 1
+  },
+  "assets": [
+    {
+      "asset_id": "ENV-EXPEDITION-L01-BOSS-ARENA",
+      "name_zh": "远征关卡01 Boss竞技场 50×40m 白模",
+      "category": "boss_arena",
+      "slug": "远征关卡01_白模_boss竞技场_50x40m",
+      "source_blend": "source/art/whitebox/tower_zones/expedition_01/v001/blender/远征关卡01_白模_Boss竞技场_50x40m_v001.blend",
+      "dimensions_m": [
+        50.0,
+        40.0,
+        11.9
+      ],
+      "component_count": 121,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 80,
+        "wall": 38
+      }
+    }
+  ]
+}

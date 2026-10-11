@@ -6,7 +6,7 @@ extends SceneTree
 const FOLDER := "res://scenes/open_world_layout_edit/"
 const SCENE := FOLDER + "open_world_chunk_layout_edit.tscn"
 const CONFIG := "res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/city_generation_parameters.json"
-const OUTPUT := "res://outputs/open_world_chunk_layout_20261004/chunk_handoff.json"
+const OUTPUT := "../ShellStorm2-work/sessions/open_world_chunk_layout/chunk_handoff.json"
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -66,7 +66,12 @@ func _run() -> void:
 	report["source_sha256"] = hashes
 	var output_path: String = OS.get_environment("CHUNK_HANDOFF_OUTPUT")
 	if output_path.is_empty():
-		output_path = OUTPUT
+		output_path = ProjectSettings.globalize_path("res://").path_join(OUTPUT).simplify_path()
+	var output_directory_error := DirAccess.make_dir_recursive_absolute(output_path.get_base_dir())
+	if output_directory_error != OK:
+		push_error("创建交接输出目录失败：" + output_path.get_base_dir())
+		quit(1)
+		return
 	var file: FileAccess = FileAccess.open(output_path, FileAccess.WRITE)
 	if file == null:
 		push_error("交接JSON写入失败，请先确认输出父目录存在：" + output_path)

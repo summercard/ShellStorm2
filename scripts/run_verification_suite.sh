@@ -6,13 +6,14 @@ project_root="$(cd "${script_dir}/.." && pwd)"
 godot_bin="${GODOT_BIN:-godot}"
 suite="${1:-smoke}"
 aggregate_mode=false
-# 临时工作区基址：默认落在**项目盘**的 _scratch/.verify_ws，不再用系统临时目录。
+# 临时工作区基址：默认落在工程外的 ShellStorm2-work/verification。
 # 每轮套件会在这里整份复制主工程的 .godot/imported 缓存（seed_isolated_import_cache），
 # 单轮约 5 GB。落在 %TEMP% 上时，被强杀留下的残留会把系统盘写满
 # （2026-09-29 实测：%LOCALAPPDATA%\Temp 堆了 9 个残留 = 32.7 GB，C: 只剩 1.55 GB）。
 # 可用 SHELLSTORM_VERIFY_TMP_BASE 覆盖；父目录不存在时 mktemp 会失败，故先 mkdir。
-verification_tmp_base="${SHELLSTORM_VERIFY_TMP_BASE:-${project_root}/_scratch/.verify_ws}"
+verification_tmp_base="${SHELLSTORM_VERIFY_TMP_BASE:-${project_root}/../ShellStorm2-work/verification}"
 mkdir -p "${verification_tmp_base}"
+export SHELLSTORM_VERIFICATION_OUTPUT="${SHELLSTORM_VERIFICATION_OUTPUT:-${project_root}/../ShellStorm2-work/verification/visual}"
 verification_tmp_root="$(mktemp -d "${verification_tmp_base}/shellstorm-verification.XXXXXX")"
 
 # Windows / Git Bash：Godot 是原生 exe，只认 Windows 路径。MSYS 的虚拟路径
@@ -50,7 +51,7 @@ purge_stale_verification_workspaces() {
   done
   echo "[verify] 未找到 python3/python，跳过陈旧工作区清理" >&2
 }
-purge_stale_verification_workspaces
+python3 "${script_dir}/verification_workspace.py" stale "${verification_tmp_base}"
 
 mkdir -p "${isolated_project_root}" "${verification_log_dir}"
 
@@ -72,18 +73,10 @@ seed_isolated_import_cache() {
   done
 }
 
-while IFS= read -r entry; do
-  ln -s "${entry}" "${isolated_project_root}/$(basename "${entry}")"
-done < <(
-  find "${project_root}" -mindepth 1 -maxdepth 1 \
-    ! -name project.godot \
-    ! -name .git \
-    ! -name .godot \
-    ! -name .codex-tmp \
-    ! -name _scratch \
-    ! -name Godot \
-    -print
-)
+# Early failures must also remove the workspace. Windows uses native junctions,
+# never Git Bash's directory-copy fallback; cleanup removes links without traversal.
+trap 'python3 "${script_dir}/verification_workspace.py" cleanup "${verification_tmp_root}"' EXIT
+python3 "${script_dir}/verification_workspace.py" create "${verification_tmp_root}"
 seed_isolated_import_cache
 if [[ "${SHELLSTORM_VERIFICATION_FORCE_COLD_CLASS_CACHE:-0}" == "1" ]]; then
   rm -f "${isolated_project_root}/.godot/global_script_class_cache.cfg"
@@ -106,8 +99,12 @@ if ! python3 "${project_root}/scripts/export_monster_drop_table.py" --check; the
   printf 'MONSTER_DROP_TABLE_DRIFT_FAILED\n' >&2
   exit 2
 fi
+if ! python3 "${project_root}/scripts/sync_runtime_design_data.py" --check; then
+  printf 'RUNTIME_DESIGN_DATA_PROJECTION_FAILED\n' >&2
+  exit 2
+fi
 verification_import_log="${verification_log_dir}/project_import.log"
-if ! "${godot_bin}" --headless --path "${isolated_project_root}" --import \
+if ! "${godot_bin}" --headless --path "${isolated_project_root}" --fixed-fps 1000 --max-fps 0 --import \
   >"${verification_import_log}" 2>&1; then
   cat "${verification_import_log}"
   printf 'VERIFICATION_IMPORT_FAILED\n' >&2
@@ -148,7 +145,7 @@ cleanup_active_test() {
 cleanup_verification_workspace() {
   cleanup_active_test
   # rm 失败不能中断清理流程（set -e 下裸 rm 会中止 trap）；失败由下面的断言兜住。
-  rm -rf "${verification_tmp_root}" || true
+  python3 "${script_dir}/verification_workspace.py" cleanup "${verification_tmp_root}" || true
   local isolated_name
   for isolated_name in "${verification_user_dir_names[@]}"; do
     rm -rf "${HOME}/Library/Application Support/Godot/app_userdata/${isolated_name}"

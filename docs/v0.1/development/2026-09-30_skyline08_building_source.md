@@ -18,7 +18,7 @@
 - [最终Blend源](../../../assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend)。
 - [组件计划](../../../assets/art/environments/open_world/source/skyline_08/v004/component_plan.json)：28类定义，实例另计。
 - [catalog与252包清单](../../../assets/art/environments/open_world/source/skyline_08/v004/catalog.json)：17建筑包、192地砖包、18招牌包、23设施包、2支持包；每包具有Collection与对应磁盘manifest。
-- [天台参考镜头](../../../assets/art/environments/open_world/source/skyline_08/v004/previews/01_天台参考镜头.png)、[8层全景](../../../assets/art/environments/open_world/source/skyline_08/v004/previews/02_8层完整楼体.png)、[俯视](../../../assets/art/environments/open_world/source/skyline_08/v004/previews/03_天台俯视结构.png)及三个设备/广告牌/背面镜头。
+- [天台参考镜头](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/environments/open_world/source/skyline_08/v004/previews/01_天台参考镜头.png)、[8层全景](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/environments/open_world/source/skyline_08/v004/previews/02_8层完整楼体.png)、[俯视](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/environments/open_world/source/skyline_08/v004/previews/03_天台俯视结构.png)及三个设备/广告牌/背面镜头。
 - `01_制作组件`默认隐藏，`02_游戏输出`默认可见，展示镜头和灯光归`90_展示与验收`。
 - v001/v002/v003保留作本次迭代回滚；v004为本批次正式源。制作代码位于`tools/blender/build_skyline_08_source_v003.py`。
 

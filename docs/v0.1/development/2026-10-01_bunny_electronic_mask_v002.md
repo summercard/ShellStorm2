@@ -6,7 +6,7 @@ FeatureID：ENTRY-AVATAR、ASSET-PIPELINE；工程版本0.1.0；日期2026-10-01
 
 ## 双母版与动画消费契约
 
-[模型母版](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v002.blend)与[动作母版](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v002.blend)共享 `SKEL-BUNNY01-004`，静止签名 `203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8`。保留原角色动作依赖，不新增玩法状态。
+[模型母版](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v002.blend)与[动作母版](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v002.blend)共享 `SKEL-BUNNY01-004`，静止签名 `203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8`。保留原角色动作依赖，不新增玩法状态。
 
 | 剪辑 | 时长 | 循环 | 内容 |
 | --- | --- | --- | --- |
@@ -26,6 +26,6 @@ FeatureID：ENTRY-AVATAR、ASSET-PIPELINE；工程版本0.1.0；日期2026-10-01
 
 ## 预览与范围
 
-[实际正面](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_front.png)、[大眼近景](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_face_closeup.png)、[闭眼](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_blink_closed.png)、[闪烁暗帧](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_flicker_dim.png)、[12秒真实渲染动画](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_expression.gif)。截图是专项舞台灯光，Blender旧front/three_quarter/face_closeup预览为历史v001。
+[实际正面](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_front.png)、[大眼近景](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_face_closeup.png)、[闭眼](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_blink_closed.png)、[闪烁暗帧](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_flicker_dim.png)、[12秒真实渲染动画](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/godot_expression.gif)。截图是专项舞台灯光，Blender旧front/three_quarter/face_closeup预览为历史v001。
 
 未运行整游戏full套件及移动设备性能检查；没有提交或推送。全局既有女仆头账本哈希、运行资产命名和三项未注册场景债务沿用[前版记录](2026-10-01_bunny_electronic_mask.md)，详细当前门禁结果见机器报告，未扩大接受债务。

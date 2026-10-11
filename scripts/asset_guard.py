@@ -130,18 +130,19 @@ def main() -> None:
         'identical_registered_files': same_hash,
         'passed': allowed,
     }
-    output = root / 'outputs/asset_guard' / f"{current.get('asset_id', 'unknown')}_{package.name}.json"
+    from workspace_paths import work_path
+    output = work_path('sessions/asset_guard') / f"{current.get('asset_id', 'unknown')}_{package.name}.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
     current['duplicate_gate'] = {
         'classification': args.classify,
         'passed': allowed,
-        'report': str(output.relative_to(root)),
+        'report': str(output),
         'same_asset_id_count': len(same_id),
         'identical_registered_file_count': len(same_hash),
     }
     current_path.write_text(json.dumps(current, ensure_ascii=False, indent=2), encoding='utf-8')
-    print('ASSET_GUARD_PASS' if allowed else 'ASSET_GUARD_BLOCK', output.relative_to(root))
+    print('ASSET_GUARD_PASS' if allowed else 'ASSET_GUARD_BLOCK', output)
     if not allowed:
         raise SystemExit(2)
 

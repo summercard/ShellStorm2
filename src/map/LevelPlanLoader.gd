@@ -8,24 +8,24 @@ extends RefCounted
 ##   **不生成** plan 字典（走 FloorPlanGenerator.generate_from_level_plan）。
 ##
 ## 目录约定：
-##   res://source/art/whitebox/tower_zones/<level_id>/v001/data/
+##   res://data/level_plans/<level_id>/
 ##     ├─ level_plan.json                    L1 关卡级
 ##     ├─ floors/floor_<NN>.json             L2 层级（房间表 + 主路 + 例外）
 ##     └─ room_templates/<template_id>.json  L3 房间模板
 ##
-## battle_level01 是 S1 反导出产物，版本目录固定 v004，见 DATA_ROOT_OVERRIDES。
+## 设计母版保留在 source/；scripts/sync_runtime_design_data.py 原样投影 JSON。
 ##
-## 新关卡只要把设计源放到上述目录，无需改任何代码即可被本读取器发现。
+## 更新设计源后先同步投影；--check 确保源与运行数据逐字节一致。
 
 const SCHEMA_LEVEL := "shellstorm2.battle.level_plan"
 const SCHEMA_FLOOR := "shellstorm2.battle.floor_plan_whitebox"
 const SCHEMA_TEMPLATE := "shellstorm2.battle.room_template_whitebox"
 
-const TOWER_ZONES_ROOT := "source/art/whitebox/tower_zones"
+const TOWER_ZONES_ROOT := "data/level_plans"
 const DEFAULT_VERSION_DIR := "v001"
 ## 版本目录覆盖：S1 反导出产物落在 v004，其余关卡默认 v001。
 const DATA_ROOT_OVERRIDES := {
-	"battle_level01": "res://source/art/whitebox/tower_zones/battle_level01/v004/data",
+	"battle_level01": "res://data/level_plans/battle_level01",
 }
 
 const VALID_ROOM_TYPES := ["SAFE_ROOM", "COMMON_ROOM", "BOSS_ROOM", "EXTRACTION_ROOM"]
@@ -33,11 +33,11 @@ const VALID_MODES := ["authored", "constrained"]
 const VALID_RULES := ["normal", "boss"]
 
 
-## 该关卡的设计源根目录。未登记覆盖时按 <level_id>/v001/data 推导。
+## 该关卡的运行数据根目录。未登记覆盖时按 <level_id> 推导。
 static func data_root_for(level_id: String) -> String:
 	if DATA_ROOT_OVERRIDES.has(level_id):
 		return str(DATA_ROOT_OVERRIDES[level_id])
-	return "res://%s/%s/%s/data" % [TOWER_ZONES_ROOT, level_id, DEFAULT_VERSION_DIR]
+	return "res://%s/%s" % [TOWER_ZONES_ROOT, level_id]
 
 
 ## 该关卡是否已提供设计源（决定运行时走数据驱动还是内置房表）。

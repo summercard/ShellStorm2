@@ -1,0 +1,42 @@
+{
+  "schema": "shellstorm2.battle.room_instance_layout",
+  "schema_version": 1,
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "room_id": "f00_room_03",
+  "room_key": "room_03",
+  "room_type": "COMMON_ROOM",
+  "template_id": "office_60x70",
+  "template_variant": "",
+  "layout_version": "v001",
+  "dimensions_m": [30.0, 40.0],
+  "whitebox_source": "source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
+  "component_source": "assets/art/environments/tower_zones/expedition/source/common_components/v009/component_catalog.json",
+  "component_source_version": "v009",
+  "base_layout": "assets/art/environments/tower_zones/expedition/source/common_components/v009/component_instances.json",
+  "source_blend": null,
+  "coordinate_contract": {
+    "source": "Blender room-local XY (Z up)",
+    "runtime": "Godot room-local XZ (Y up)",
+    "mapping": "(bx, by, bz) -> (bx, bz, -by)",
+    "rotation": "rotation_y_deg is Blender Z rotation and becomes Godot Y rotation"
+  },
+  "instance_overrides": [
+    {
+      "op": "remove",
+      "instance_id": "filing_run_west",
+      "reason": "room_03 的 A 端口与 room_02 的 B 端口连接；房间旋转后该默认沿墙文件柜横跨入口净空。"
+    }
+  ],
+  "instances": [],
+  "room_markers": [],
+  "validation": {
+    "room_owned_geometry": false,
+    "component_budget_limit": 50,
+    "base_instance_count": 106,
+    "resolved_instance_count": 105,
+    "removed_instance_ids": ["filing_run_west"],
+    "missing_components": [],
+    "non_unit_scale_count": 0
+  }
+}

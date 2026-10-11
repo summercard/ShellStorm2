@@ -7,7 +7,7 @@ FeatureID：ENTRY-AVATAR、ASSET-PIPELINE；ModuleID：CHARACTER-EXPRESSION；�
 ## 验证与账本
 
 - Blender独立重开源审计退出0：8种材质强度均为1.25，双母版闪烁曲线吻合；原11网格、UV、材质、权重、变换及骨架静止签名不变，1448壳体顶点保留；六种情绪闭眼形态与原网格计划通过。
-- 实际8个导出GLB的KHR_materials_emissive_strength均为1.25；Forward+实拍总览已亲眼检查，光晕明显减弱、方块边界清晰。[总览](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/expressions_overview.png)。
+- 实际8个导出GLB的KHR_materials_emissive_strength均为1.25；Forward+实拍总览已亲眼检查，光晕明显减弱、方块边界清晰。[总览](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/expressions_overview.png)。
 - `verify_character_expression_flow`：无头696项、Forward+706项，退出0；8种随机可达、独立系统与状态机调用、显示、颜色、无嘴部几何不变。
 - `verify_electronic_mask_flow`：无头73项、Forward+76项，退出0；眨眼、闪烁相对亮度及恢复、实际换装存档读回均通过。原亮度/颜色阈值未放宽。最终专项日志无非预期脚本或引擎错误；预期失败无。
 - 角色账本主表父行22升级v005、8子行23–30升级v003；组件45–52、3D分页10–17、表达记录53–60更新原行；中转追加79–105，域日志v0.1.9。主表与锁定专表分事务回读并校验；保留其他987个资产指纹。结构/拆分门禁和九个version_increment资产守卫通过。

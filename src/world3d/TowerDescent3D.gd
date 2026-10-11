@@ -305,6 +305,7 @@ var _expedition_loading_process_modes: Dictionary = {}
 var _expedition_loading_player_input_locked := false
 var _expedition_loading_player_combat_enabled := false
 var _expedition_loading_player_state_saved := false
+var _expedition_loading_previous_visible := true
 
 # 远征关卡01：独立单层关卡，复用 Dungeon3D 的战斗/命运/掉落/撤离管线，
 # 但不含 100F 天台与 99F 基地，也不生成任何楼梯与电梯。
@@ -605,6 +606,10 @@ func _begin_expedition_loading_if_active() -> void:
 	if not _is_expedition_loading_active():
 		return
 	_expedition_loading_active = true
+	_expedition_loading_previous_visible = visible
+	# 场景进入读取阶段时先隐藏整个目标世界，避免场景切换后在第一帧
+	# 地图未装配完成前把玩家和空场景暴露在屏幕上；黑圈/读取页负责唯一可见画面。
+	visible = false
 	set_meta("loading_previous_process_mode", process_mode)
 	set_meta("loading_scene_ready", false)
 	set_meta("loading_scene_failed", false)
@@ -670,8 +675,10 @@ func _complete_expedition_loading(failed: bool, status: String) -> void:
 	# 此处绝不恢复 process_mode；读取页开圈前释放根节点才会触发 NOTIFICATION_ENABLED。
 
 
-func _notification(what: int) -> void:
-	if what != NOTIFICATION_ENABLED or not _expedition_loading_active:
+func release_loading_scene() -> void:
+	# 在根节点仍禁用时恢复子节点；不要在 Godot 传播 ENABLED 通知的中途
+	# 重写后代 process_mode，否则其 process owner 尚未刷新，会触发引擎断言。
+	if not _expedition_loading_active:
 		return
 	if not _expedition_loading_completed or _expedition_bootstrap_failed:
 		return
@@ -684,7 +691,14 @@ func _notification(what: int) -> void:
 	for node in saved_process_modes:
 		if is_instance_valid(node):
 			node.process_mode = saved_process_modes[node]
-	process_mode = get_meta("loading_previous_process_mode", Node.PROCESS_MODE_INHERIT)
+	var previous_process_mode := int(
+		get_meta("loading_previous_process_mode", Node.PROCESS_MODE_INHERIT)
+	)
+	# 根节点已经因 release_loading_scene() 切回 INHERIT 时，不要再次写同值；
+	# Godot 4.6 会把这次重复写判成 _can_process 断言错误。
+	if process_mode != previous_process_mode:
+		process_mode = previous_process_mode
+	visible = _expedition_loading_previous_visible
 	if _expedition_loading_player_state_saved and player != null and is_instance_valid(player):
 		player.set_input_locked(_expedition_loading_player_input_locked)
 		player.set_combat_enabled(_expedition_loading_player_combat_enabled)

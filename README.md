@@ -34,3 +34,5 @@ Godot 4.6 顶视角 3D 搜打撤肉鸽。当前项目版本为 `0.1.0`。
 | `docs/v0.1/` | 当前唯一有效开发文档 |
 
 `outputs/`、`.dev-cycle/` 和 `.codex-tmp/` 都是可丢弃工作产物，不进入版本控制。
+
+开发临时产物放在上层 `ShellStorm2-work/`，历史制作源放在 `ShellStorm2-backup/`；见[管理与恢复记录](docs/v0.1/development/2026-10-11_workspace_slimming.md)。

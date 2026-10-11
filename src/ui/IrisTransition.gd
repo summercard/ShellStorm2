@@ -120,9 +120,11 @@ func complete_loading(failed: bool = false) -> void:
 func release_loading_scene(node: Node) -> void:
 	if not is_instance_valid(node):
 		return
-	# 改回继承模式时 Godot 会自动派发 NOTIFICATION_ENABLED；不要再次手动
-	# notification()，否则 4.6 会在节点已经可处理时触发 _can_process 断言。
-	node.process_mode = Node.PROCESS_MODE_INHERIT
+	# 显式交接先恢复子树、最后启用根，避开 ENABLED 通知传播中的 process owner 竞态。
+	if node.has_method("release_loading_scene"):
+		node.call("release_loading_scene")
+	elif node.process_mode != Node.PROCESS_MODE_INHERIT:
+		node.process_mode = Node.PROCESS_MODE_INHERIT
 	loading_target_scene = ""
 	loading_progress = 0.0
 	loading_status = ""

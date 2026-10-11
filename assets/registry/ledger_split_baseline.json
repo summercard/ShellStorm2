@@ -948,47 +948,47 @@
    "d": "characters"
   },
   "CHR-PLY-BUNNY01-HEAD-CHIBI-ANIME-3D": {
-   "v": "20639b786089747b5641e228f8e8ceee5ee27b25fd6ed505b4c29e2bf389b3e6",
+   "v": "9e13bcd7ff77c201514c3d582246ed26af133f72d3fd180c46943d2ed2abe140",
    "c": "角色",
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01": {
-   "v": "f76f86f5f3b9fd9aeb4254b67cb795a71c17b268d228047dcd4667cd20903d44",
+   "v": "7bdfa71d43f10a2da5104a5f08f3a18a2d488b8ade7da93a1647cb249a131ab4",
    "c": "角色",
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01": {
-   "v": "8a66d4990ac5c37da4820ddc3ea686744202ad1f80e393782668ecf9782ca3bc",
+   "v": "92dbc3bccdcb70e9860c203c53723910f64d18c6b2010ca7bcfa83db2ea1859e",
    "c": "角色",
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-BODY": {
-   "v": "6589623660cf2a088fec445d6a2c966894d3492f00d6b86cf2e7afec0dc2dbfd",
+   "v": "76a89468fb2f5ba1e3a0141db1e2a262ac4f3fd751f422a624364e844f4168c4",
    "c": "角色",
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-EARS": {
-   "v": "fa317a2b4b77f3c0b674dc30e0feed081417df046eae891f37f67b4554feca2c",
+   "v": "6f0ab47c554ad55444975f665c719037da8a5845ffaf1af92c7f14ddcc95ff2f",
    "c": "角色",
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-FOOT-L": {
-   "v": "b398f8d8d9bbeccd8b9763ee04e8577796153db349246fe719b7cc82903f069f",
+   "v": "0af38f9bec14a1a0162ba8f023103f5b12323c6ccd1c88aefce2f392be72a0ff",
    "c": "角色",
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-FOOT-R": {
-   "v": "f75c208489cc03a6138be002674afd6b54b4038e5ffab1c5b0a6b47f468dceb8",
+   "v": "3fe63a8a0e9917f188f7f53f084c5663889f64714a3078df43310efae3d845fe",
    "c": "角色",
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-HAND": {
-   "v": "b7459104e8e13cb03a93d7ff548216a8e18360a8399266232dd9363696ab19e9",
+   "v": "e6dad918ede31d289679c4f6007cd1b83e594a0c4df95fb8c2d40cff43b46a3c",
    "c": "角色",
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-HEAD": {
-   "v": "d9a3e9f58e8bad4e4367b0ab08306e4516a5116d096c60d1a26466bf63ab7ad6",
+   "v": "dee674ff26b9354d4a66d94530f6cbbb1c4b59db68cce821434d821cf83311c8",
    "c": "角色",
    "d": "characters"
   },
@@ -1078,7 +1078,7 @@
    "d": "enemies"
   },
   "ENM-RANGED-SPORESHOOTER01": {
-   "v": "41eea201642971224e0010b5698c24cf03ba8766767ae60f984f7d60481f3ce1",
+   "v": "f22b908427a0a36c357544d4be2d22676ffe40f953cbd2e6a5cc86c87aab0681",
    "c": "敌人",
    "d": "enemies"
   },
@@ -1128,7 +1128,7 @@
    "d": "scenes"
   },
   "ENV-BASE99-DOOR-LIFT-22X25": {
-   "v": "03756e977196c77ebf0b4accb61bbd97eeaa6fac3ede91e038ad992bcee58a90",
+   "v": "fd2d5bd5ad79eab040000ab7ee1c5a91093a11f1f8b3ecebfceea96c766a4a56",
    "c": "场景",
    "d": "scenes"
   },
@@ -1138,12 +1138,12 @@
    "d": "scenes"
   },
   "ENV-BASE99-FLOOR-PLAIN-5M": {
-   "v": "41aa08089c3491f0f6c67c3b6d8cf2109f2f0bf81aa5796def95666053c747b7",
+   "v": "bc13292c7e2b9cc64b413d041d36631fa20082b1508bfe3eca906c2a1cf3ddd2",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-BASE99-FLOOR-RIVET-5M": {
-   "v": "12d27a55ebfb7752bd3aed3e7d0a069b2016ca6172fd804cac159e0edc7fe739",
+   "v": "769f9cff87b0da23662ac0d7389b2b1148189bcf1159c1a3f8e81f01a6f82a4b",
    "c": "场景",
    "d": "scenes"
   },
@@ -1158,12 +1158,12 @@
    "d": "scenes"
   },
   "ENV-BASE99-MEZZANINE-20X10-Z5": {
-   "v": "8de3ec2db463464b031ed9d0c585f53dc8fd925a70ea6064b403569f76a646e3",
+   "v": "b97ebe9daf335e3c53f7a76cc29cfa9869dff7242a0a836330dc2032cb2ba538",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-BASE99-MEZZANINE-20X10-Z7": {
-   "v": "a8b8d7087c949a9b01406b66cfec96cb0291453fc8edac5aa6b5ab5d1b2f3f41",
+   "v": "b775455de4c4971e0f656fab04a85045bcd2a4fbeacc5d3007321ab87c1b76e1",
    "c": "场景",
    "d": "scenes"
   },
@@ -1183,22 +1183,22 @@
    "d": "scenes"
   },
   "ENV-BASE99-STAIR-EXTERIOR-H2": {
-   "v": "25dec80d09f38221c61987466dcaa47176de1781752871d85b4277fafac6991b",
+   "v": "4e05f3457ca0602befd44871e64327d898278ee8438d60f5f4dce20eb32602c6",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-BASE99-STAIR-EXTERIOR-H4": {
-   "v": "a7828656afc9eeb04b912ec1fbdee047e2863cac31572c5a4e1fffbb24385310",
+   "v": "4628e5b0dc101f491eeab0671ad4292a34e5d04b41bac7828597b943304e73af",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-BASE99-STAIR-L-Z5": {
-   "v": "633879400a793a36f53353b435051924c2ecee46dd26e2a6ebd27cd31386eaad",
+   "v": "d5ddeeafefe7a23ccf52504b2d2ce4629b63cea8259d8f1ca96a102fd404540c",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-BASE99-STAIR-L-Z7": {
-   "v": "562f204e6051908f8bd4ada7fb6a103820444c2fb02599ffc90c471e567e469f",
+   "v": "5fc52e0901809bcc17b53014c465b5b3f6a49f32f6d199e54027eea4da835968",
    "c": "场景",
    "d": "scenes"
   },
@@ -4633,7 +4633,7 @@
    "d": "scenes"
   },
   "PRP-BASE-BRIEFING": {
-   "v": "40266deaadcb7b301512cf626a552e4a68d2c4d83cf3b9e2bd393912a3c0e34a",
+   "v": "ed5669114de87cc63a7f78cebe942e9789a0674016ccdca35ba0ef70e177af6e",
    "c": "道具",
    "d": "props"
   },
@@ -4693,12 +4693,12 @@
    "d": "scenes"
   },
   "PRP-BASE-VENDING-MACHINE-3D": {
-   "v": "80948c72c5697455f20c59d83544a1df939044df1da6d404d84b829293266c35",
+   "v": "bf1f07d6146417cb9dc88bc3e5deb090dd19de823d927dd3a25b1febcb82a8b5",
    "c": "道具",
    "d": "props"
   },
   "PRP-BASE-WORKSHOP": {
-   "v": "62ca6b04120169fdd3a685a5892a3e05f676ab536b4a39931ffc71c352ac395b",
+   "v": "a67e35fee7de670608ebdd6174eb3e7ace5fb82fd9b61901cb173d685cad0c52",
    "c": "道具",
    "d": "props"
   },
@@ -5063,17 +5063,17 @@
    "d": "weapons"
   },
   "WPN-GUN-BP-CHARGE": {
-   "v": "f5f9efc6dac1aa3328e6377741529ae8fa465c4402e5bbdfa825f268b33b234d",
+   "v": "d68ed7e978341f33f8917dc46bc12da5d8ed41079683b1f31b37ed96f143fd09",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-BP-LAUNCHER": {
-   "v": "d47d7ccc0a98eafae052baa18f145b36763724518ac3452dfd4eaab8337898dd",
+   "v": "a8d3e5a920031a7e96d67c1cfdaf7def0dde9d89431664cf3c1edaf5f12af83e",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-BP-MACHINEGUN": {
-   "v": "295afc60524812a618ed51e2f0bbbd628032539dda685fd41369a00a5dea68d0",
+   "v": "986d5cedeb1256e54cd7fb3c61636b8872527f74cd8ee135693218d641a4d233",
    "c": "武器",
    "d": "weapons"
   },
@@ -5083,72 +5083,72 @@
    "d": "weapons"
   },
   "WPN-GUN-BP-RIFLE": {
-   "v": "7905280f6c764c98c467f0bd8c058c5d914c81c5bee8f57c37cbdcd613f31d9d",
+   "v": "6de2b79a4a83476f8d41718672e025a4b712765da9d8ce598e04ca908dafef07",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-BP-SHOTGUN": {
-   "v": "5cd5a7940a628172952523507f449d7b77a528fd2112d13c466bf9fe69c27aa7",
+   "v": "c8f8889dc1294c7f8eaf8425d34782127f48e7be0e5f9dfd1cc055e9e45666f2",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-BP-SNIPER": {
-   "v": "dd1e271a45dd25a9913cd5bed308ad11d9813236bbda5f0f1873ac4edf026bcc",
+   "v": "51034fb0c78d4c53618b8e4fdc235e3f4a8f457b6efd91927d3d3e1430d1f27f",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-CAMERA-BLASTER-3D": {
-   "v": "ab4c3e891ed6479558af0d8265be027eed3057fbe97176f1b1162daf618933f9",
+   "v": "e72492d3bad6ef997eebfd0b560ad4ee61e280e5f09ae8eebc50a3537abedcd9",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-CROCODILE-CANNON-3D": {
-   "v": "4bcc143de68c65ed92ee152cb01b33dbc04e6f1669889198e9c371a063cf74ed",
+   "v": "9a651c044eb1451728aef08533c9ba16cad045496305c62764c0e20314242d41",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-FAN-BLASTER-3D": {
-   "v": "57444b126dc14ae0815c5a7ea5a0073c3f48633756a9c7aa791edc41d1274099",
+   "v": "1669b24d244ef0d6058ee0047288a46a34128f3d5e6f4a5c1976816b72464bb4",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-FRYING-PAN-CANNON-3D": {
-   "v": "84d952a102802b5881c30677ee525ef2fc3e63cacd981e8fd7821bd37f70736c",
+   "v": "e0313add1d154d85cd848a68b085739f39bfdba4872641b74bd97e2bbbc34dc5",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-GUITAR-BLASTER-3D": {
-   "v": "580f7b1aa35acac271dfee56ff0b46b077fd1b213e1c570bc8dec59f3f2cd8b4",
+   "v": "5ade150527398811be1d5a583755bb0184baf7ae0af462309935bec157ff8833",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-MEGAPHONE-CANNON-3D": {
-   "v": "2972230049221d5efaf1f9bfb789e690adbae97839e7d78b888dd66d30adbc89",
+   "v": "70b1ee8f018b0f3a0931dcddeac9e19ca0bfc4d568434155dc4058d776c1df39",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-POPCORN-BLASTER-3D": {
-   "v": "75250c75b33f22be3cc818cf754a9d84ea1a65adc86b400ef71168fd69183543",
+   "v": "42d96f6c157a9aa801d9b0453ccf5ed946454ff3dafa7c5c22868d402f76190e",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-SCOPE-CANNON-3D": {
-   "v": "551e3eff90c8e094e42a8e0c09fd6ce12f1b2903e04a68873505e40b95f57bd0",
+   "v": "b01bcdcbac0d80b20100bb6f19d7fb037ce308acc85152f924bbd2582e0425d0",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-SODA-STRAW-BLASTER-3D": {
-   "v": "bd78a44b2e24ced3f80d520b3cdcf6aba85a75a42252d795c12c6bef844b6ebb",
+   "v": "88f73fce44b32571a10dc971eed7af8c95674872c196e4659b396659df202ed9",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-SPATULA-RIFLE-3D": {
-   "v": "c2a8168f5d51fd8d4a439281aaaa5f7f0a73a90f2cc8744a3a4158bbb69809d5",
+   "v": "13d6bc2a734eb8fb7a19b894dd3ace450f029caa794a830f1fed4d265f4384c7",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-GUN-FUTURE-TISSUE-BOX-CANNON-3D": {
-   "v": "e10a4c3fab40f0f24845ab7ee174d3ded7c143580f2ae690cea47dd29a976a5d",
+   "v": "08cbbfa644e62335a4b08db3e18febc8a2fc0133eb1f41ec479128771d60930d",
    "c": "武器",
    "d": "weapons"
   },
@@ -5364,7 +5364,7 @@
   "13": "2c151179fbfa4e7fe7129272023945bd1ba3a7791e0dd9e3e0dfe618d73a31df",
   "14": "a65c0dfed53c0020f4ebe812692113321a500a3e6f9608aa8f4b3c6b1186f1b0",
   "15": "c84456dd9a534c9147b92a71d9a92e552539af4b50167fcdab2994dadd586d94",
-  "16": "3bb917c130a56ae96d879974c703dedfe61342c26a7ddf62d6f41bba4fc39171",
+  "16": "a5c15fcb98542fbe7ae501560fc92a9101ab73d7a0b60ba003090ad5558a6691",
   "17": "42e5ea52994d08dc209341bcee27ec4f8191d16049e5a26a09b8ec1b2d010148",
   "20": "749d69c6988aaddf781add3272b2d4031f58317ded5628f44ab5aaa69381c650",
   "21": "30c5168ffc60196e26c8e2dd72b3a3e011b59cf031bc3405bd8061866c896cfb",
@@ -5377,14 +5377,14 @@
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
   "动画与状态": "e22d4882d9e9de8ac88c2b397f69cfa50e022c458b1b67ab3fd72030a7322280",
   "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
-  "角色中转记录": "30cbe9e736a86a372862080c5911448ec739914bfc3bfd1a2a747066118d4ddb",
+  "角色中转记录": "16ec45cc50d2af3e70e122383b5af445696d18e01b69f1585eb7e497cd276baf",
   "3D-角色": "189f9bd9b416af7628869554459659bbb1620ea22e6a91d12cf874bf55231ee3",
-  "敌人动画与状态": "dab43c43354a0b2340ceb8173b1e7bd0912da5e21fa023e8ff2faf15e3b05058",
-  "3D-敌人": "1674a0f11aab65ed2190fe25a5f5193a379b5b73112d4e0a893526e0c02d1a1b",
-  "3D-场景通用": "518b36f1841c2ae62ac55221f28eedad4ccec4633282ee85a7122492e8c9370b",
-  "3D-设施": "d0d052601647701ef2636455dac369601c5beee4ee3d789da1726a5951919394",
+  "敌人动画与状态": "bd8109fdccfb7c0dab1c93a2db10b36bd19928ef6a3d306fd583636c0df1c238",
+  "3D-敌人": "554727f03cd8a5bd7e477a3e09c53c8d5d5a858779fefb154dd72b97221c28e1",
+  "3D-场景通用": "2bfbe8373c31601f479a443d2c46ea00f05994a842959ecb7761cd6f5c6f2568",
+  "3D-设施": "82fe45700f338c8bdb88b011300a62f7080985ac188f874354aa9106c0fc1667",
   "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
-  "3D-道具": "6b6d9c96240c5eda9e49b05044c49411df6343fe4321313a95944d8f2e6580fe",
+  "3D-道具": "94d0f1caa358cdd7428e3a26231440a399074c6399d4756fc4e34443bb62b762",
   "3D-物品": "0452814d5cb92584234efa695b388cfcc4a42b0172d746981149bf4eca611390",
   "3D-武器": "0ed7c67c14253417622d401d958ac8a4ed51e9aba0db25935010ac3811fec21d",
   "3D-特效": "ffd3a855a5507fd131af823980e5b31163122b50b4fe1ce67c750694719060c0"
@@ -5476,6 +5476,18 @@
     "20",
     "25"
    ]
+  },
+  {
+   "date": "2026-10-11",
+   "operation": "archive source path relocation only",
+   "cells": 88,
+   "manifest": "../ShellStorm2-backup/2026-10-11_slimming/management/ledger_path_patches.json"
+  },
+  {
+   "date": "2026-10-11",
+   "operation": "archive source path relocation only",
+   "cells": 0,
+   "manifest": "../ShellStorm2-backup/2026-10-11_slimming/management/ledger_path_patches.json"
   }
  ]
 }

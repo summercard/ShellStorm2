@@ -39,10 +39,7 @@ extends RefCounted
 ## 与 98F 楼梯下端 z=2.5 差 5m。差的那一项就是本类的 planar_z_shift，
 ## 由「门厅东墙中心必须与 98F 入口房中心同 z」反解，不硬编码。
 
-const LAYOUT_MANIFEST_PATH := (
-	"res://source/art/blender/master_office_layout/source/"
-	+ "block_00_master_office_layout_v002.layout.json"
-)
+const LAYOUT_MANIFEST_PATH := "res://data/layouts/block_00_master_office_layout.json"
 const LAYOUT_SCHEMA := "shellstorm2.battle.room_instance_layout"
 const LAYOUT_ASSET_ID := "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D"
 const LAYOUT_VERSION := "v002"

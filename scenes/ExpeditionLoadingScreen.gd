@@ -25,8 +25,11 @@ class_name ExpeditionLoadingScreen
 ## 本常量只是**默认终点**（远征关卡01）；实际去向由选关菜单写入的待进入关卡 id 决定，
 ## 见 `_destination_level_id()`。
 const LEVEL_SCENE := GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D
-## 保留旧探针常量；真实进度与此时长无关。
+## 旧探针常量仍保留；真实进度不再由固定时长驱动。
 const TOTAL_DURATION_S := 1.35
+## 真实运行时读取页的最低可见时长。即使资源与地图装配提前完成，
+## 也要让黑底、兔子、进度条和完整开圈过场至少稳定展示 2 秒。
+const MIN_LOADING_SCREEN_SECONDS := 2.0
 const STEP_TEXTS: Array[String] = [
 	"正在同步远征情报…",
 	"正在规划房间序列…",
@@ -64,6 +67,7 @@ const PAPER := Color(1.0, 1.0, 1.0, 1.0)
 const BAR_TRACK_COLOR := Color(1.0, 1.0, 1.0, 0.16)
 
 var _elapsed := 0.0
+var _loading_started_msec: int = 0
 ## 兼容旧截图/探针；不再作为真实进度或切场景条件。
 var _advanced := false
 var _level_id := ""
@@ -106,6 +110,8 @@ func _ready() -> void:
 	if not _should_skip_delay() and not Engine.is_editor_hint():
 		_build_showcase()
 	_play_intro()
+	# UI/兔子舞台构建耗时不能挤占最低展示时长。
+	_loading_started_msec = Time.get_ticks_msec()
 	_start_resource_request()
 
 
@@ -338,6 +344,17 @@ func _finish_loaded_scene(target: Node) -> void:
 	_apply_progress(1.0)
 	_report_loading(1.0, "读取完成")
 	_set_status("读取完成")
+	# 最低时长必须发生在内容淡出之前；否则兔子/文字会提前消失，只剩黑底等待。
+	var elapsed_seconds := float(Time.get_ticks_msec() - _loading_started_msec) / 1000.0
+	var remaining_seconds := maxf(0.0, MIN_LOADING_SCREEN_SECONDS - elapsed_seconds)
+	if remaining_seconds > 0.0:
+		_set_status("地图已就绪，正在完成过场…")
+		await get_tree().create_timer(remaining_seconds).timeout
+		if tree.current_scene != target or not _target_is_ready(target):
+			_finalizing = false
+			if _content != null:
+				_content.modulate.a = 1.0
+			return
 	if _intro_tween != null and _intro_tween.is_valid():
 		_intro_tween.kill()
 	if _content != null and not _should_skip_delay():

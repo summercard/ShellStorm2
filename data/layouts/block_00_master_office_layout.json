@@ -1,0 +1,2825 @@
+{
+  "schema": "shellstorm2.battle.room_instance_layout",
+  "schema_version": 2,
+  "scene_id": "block_00_master_office",
+  "block_id": "master_office",
+  "display_name_zh": "区块00-主人的办公室",
+  "level_kind": "fixed_story_level",
+  "layout_version": "v002",
+  "floor_anchor": "98F（99F 下方，与原 98 层同高）",
+  "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.blend",
+  "component_library": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/battle/source/common_components/v007/env_battle_common_components_source_v007.blend",
+  "component_library_note": "本布局源链接 common_components/v007。v006 与 v007 的这 5 个组件包几何逐值相同（网格数/面数/局部包络一致），差别仅在 v007 把 door_5m 与 wall_door_5m 的库原点归零规范化（v006 分别为 (2.6,-69.3444,0) 与 (8.0,-58.3444,0)）。账本该 5 行的「版本/Blender源文件」仍写 v006，属版本字段滞后；塔楼 L 角件的派生清单已记录其源出 v007。摆位代码逐包实测库原点，故两版均安全。",
+  "corner_l_library": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_descent_3d/source/corner_l_5m/env_tower_corner_l_5m_source_v001.blend",
+  "asset_ids": {
+    "door_5m_通用包": "ENV-BATTLE-COMMON-DOOR-5M",
+    "floor_tile_r01_c01_通用包": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+    "floor_tile_r01_c02_通用包": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+    "runtime_v001": "ENV-TOWER-CORNER-L-5M",
+    "wall_door_5m_通用包": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+    "wall_standard_5m_通用包": "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
+  },
+  "component_library_origin_m": {
+    "door_5m_通用包": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "floor_tile_r01_c01_通用包": [
+      3.97,
+      -63.844406,
+      0.0
+    ],
+    "floor_tile_r01_c02_通用包": [
+      11.910001,
+      -63.844406,
+      0.0
+    ],
+    "runtime_v001": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "wall_door_5m_通用包": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "wall_standard_5m_通用包": [
+      4.0,
+      -58.344406,
+      0.0
+    ]
+  },
+  "component_decoration_side": {
+    "door_5m_通用包": null,
+    "floor_tile_r01_c01_通用包": null,
+    "floor_tile_r01_c02_通用包": null,
+    "runtime_v001": {
+      "armA_y": 1,
+      "armB_x": 1
+    },
+    "wall_door_5m_通用包": {
+      "wall_y": 1
+    },
+    "wall_standard_5m_通用包": {
+      "wall_y": 1
+    }
+  },
+  "grid_unit_m": 5.0,
+  "wall_structure_half_thickness_m": 0.15,
+  "visible_wall_height_m": 11.9,
+  "placement_model": "墙平面 lane 归属：关卡拆成 x/y 常数墙平面，按 5m 切 lane；房间声明所需 lane，L 角件臂各占 1 lane；同一 lane 全局只放一个实例，被 L 臂占用则不放墙。结构上排除共面重叠与漏墙。",
+  "coordinate_contract": {
+    "axis": "Blender Z-up；Blender (x, y) 对应 Godot (x, -z)，Blender X=东、Y=北",
+    "runtime_position": "position_m 直接取 Blender 世界坐标，无需再换算",
+    "rotation": "rotation_z_deg 为 Blender 绕 Z 旋转；与 Godot rotation.y 同值",
+    "origin": "墙/门墙/门扇原点=底面中心（位于墙结构中心平面）；L 角件原点=角点（两臂沿 +X/+Y 各 5m）"
+  },
+  "face_in_rotation_deg": {
+    "south": 0.0,
+    "north": 180.0,
+    "west": -90.0,
+    "east": 90.0
+  },
+  "corner_rotation_deg": {
+    "SW": 0.0,
+    "SE": 90.0,
+    "NE": 180.0,
+    "NW": -90.0
+  },
+  "rooms": [
+    {
+      "room_id": "corridor",
+      "name_zh": "走廊",
+      "bounds_x_m": [
+        15.0,
+        20.0
+      ],
+      "bounds_y_m": [
+        -10.0,
+        10.0
+      ],
+      "size_m": [
+        5.0,
+        20.0
+      ],
+      "plane_priority": 0,
+      "use_corner_l": false,
+      "doors": {
+        "west": 2.5,
+        "east": 2.5
+      },
+      "exits": {}
+    },
+    {
+      "room_id": "meeting_room",
+      "name_zh": "会议室",
+      "bounds_x_m": [
+        -25.0,
+        15.0
+      ],
+      "bounds_y_m": [
+        -5.0,
+        10.0
+      ],
+      "size_m": [
+        40.0,
+        15.0
+      ],
+      "plane_priority": 1,
+      "use_corner_l": true,
+      "doors": {
+        "west": 2.5,
+        "east": 2.5
+      },
+      "exits": {}
+    },
+    {
+      "room_id": "master_office",
+      "name_zh": "办公室",
+      "bounds_x_m": [
+        -40.0,
+        -25.0
+      ],
+      "bounds_y_m": [
+        -10.0,
+        10.0
+      ],
+      "size_m": [
+        15.0,
+        20.0
+      ],
+      "plane_priority": 2,
+      "use_corner_l": true,
+      "doors": {
+        "east": 2.5
+      },
+      "exits": {}
+    },
+    {
+      "room_id": "lobby",
+      "name_zh": "门厅",
+      "bounds_x_m": [
+        20.0,
+        35.0
+      ],
+      "bounds_y_m": [
+        -5.0,
+        10.0
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "plane_priority": 3,
+      "use_corner_l": true,
+      "doors": {
+        "west": 2.5
+      },
+      "exits": {
+        "east": 2.5
+      }
+    }
+  ],
+  "adjacency": [
+    {
+      "a": "lobby",
+      "b": "corridor",
+      "wall_axis": "x",
+      "wall_line_m": 20.0,
+      "door_at_m": 2.5
+    },
+    {
+      "a": "corridor",
+      "b": "meeting_room",
+      "wall_axis": "x",
+      "wall_line_m": 15.0,
+      "door_at_m": 2.5
+    },
+    {
+      "a": "meeting_room",
+      "b": "master_office",
+      "wall_axis": "x",
+      "wall_line_m": -25.0,
+      "door_at_m": 2.5
+    }
+  ],
+  "entry": {
+    "room_id": "lobby",
+    "side": "east",
+    "at": [
+      35.0,
+      2.5,
+      0.0
+    ],
+    "note": "东出口 = 原 99→98 楼梯间末端门位；只留门洞不挂门扇"
+  },
+  "corners": [
+    {
+      "room_id": "meeting_room",
+      "corner_id": "SW",
+      "point_m": [
+        -25.0,
+        -5.0
+      ],
+      "rotation_z_deg": 0.0
+    },
+    {
+      "room_id": "meeting_room",
+      "corner_id": "SE",
+      "point_m": [
+        15.0,
+        -5.0
+      ],
+      "rotation_z_deg": 90.0
+    },
+    {
+      "room_id": "meeting_room",
+      "corner_id": "NE",
+      "point_m": [
+        15.0,
+        10.0
+      ],
+      "rotation_z_deg": 180.0
+    },
+    {
+      "room_id": "meeting_room",
+      "corner_id": "NW",
+      "point_m": [
+        -25.0,
+        10.0
+      ],
+      "rotation_z_deg": -90.0
+    },
+    {
+      "room_id": "master_office",
+      "corner_id": "SW",
+      "point_m": [
+        -40.0,
+        -10.0
+      ],
+      "rotation_z_deg": 0.0
+    },
+    {
+      "room_id": "master_office",
+      "corner_id": "SE",
+      "point_m": [
+        -25.0,
+        -10.0
+      ],
+      "rotation_z_deg": 90.0
+    },
+    {
+      "room_id": "master_office",
+      "corner_id": "NW",
+      "point_m": [
+        -40.0,
+        10.0
+      ],
+      "rotation_z_deg": -90.0
+    },
+    {
+      "room_id": "lobby",
+      "corner_id": "SW",
+      "point_m": [
+        20.0,
+        -5.0
+      ],
+      "rotation_z_deg": 0.0
+    },
+    {
+      "room_id": "lobby",
+      "corner_id": "SE",
+      "point_m": [
+        35.0,
+        -5.0
+      ],
+      "rotation_z_deg": 90.0
+    },
+    {
+      "room_id": "lobby",
+      "corner_id": "NE",
+      "point_m": [
+        35.0,
+        10.0
+      ],
+      "rotation_z_deg": 180.0
+    },
+    {
+      "room_id": "lobby",
+      "corner_id": "NW",
+      "point_m": [
+        20.0,
+        10.0
+      ],
+      "rotation_z_deg": -90.0
+    }
+  ],
+  "corners_dropped": [
+    {
+      "room_id": "master_office",
+      "corner_id": "NE",
+      "point_m": [
+        -25.0,
+        10.0
+      ],
+      "provided_by": "meeting_room.NW"
+    }
+  ],
+  "wall_lanes": [
+    {
+      "axis": "x",
+      "line_m": -40.0,
+      "lane_key": -1,
+      "center_m": -2.5,
+      "role": "solid",
+      "owner_room": "master_office",
+      "rotation_z_deg": -90.0,
+      "claims": [
+        "master_office.west"
+      ]
+    },
+    {
+      "axis": "x",
+      "line_m": -40.0,
+      "lane_key": 0,
+      "center_m": 2.5,
+      "role": "solid",
+      "owner_room": "master_office",
+      "rotation_z_deg": -90.0,
+      "claims": [
+        "master_office.west"
+      ]
+    },
+    {
+      "axis": "x",
+      "line_m": -25.0,
+      "lane_key": 0,
+      "center_m": 2.5,
+      "role": "door",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": -90.0,
+      "claims": [
+        "meeting_room.west",
+        "master_office.east"
+      ]
+    },
+    {
+      "axis": "x",
+      "line_m": 15.0,
+      "lane_key": -2,
+      "center_m": -7.5,
+      "role": "solid",
+      "owner_room": "corridor",
+      "rotation_z_deg": -90.0,
+      "claims": [
+        "corridor.west"
+      ]
+    },
+    {
+      "axis": "x",
+      "line_m": 15.0,
+      "lane_key": 0,
+      "center_m": 2.5,
+      "role": "door",
+      "owner_room": "corridor",
+      "rotation_z_deg": -90.0,
+      "claims": [
+        "corridor.west",
+        "meeting_room.east"
+      ]
+    },
+    {
+      "axis": "x",
+      "line_m": 20.0,
+      "lane_key": -2,
+      "center_m": -7.5,
+      "role": "solid",
+      "owner_room": "corridor",
+      "rotation_z_deg": 90.0,
+      "claims": [
+        "corridor.east"
+      ]
+    },
+    {
+      "axis": "x",
+      "line_m": 20.0,
+      "lane_key": 0,
+      "center_m": 2.5,
+      "role": "door",
+      "owner_room": "corridor",
+      "rotation_z_deg": 90.0,
+      "claims": [
+        "corridor.east",
+        "lobby.west"
+      ]
+    },
+    {
+      "axis": "x",
+      "line_m": 35.0,
+      "lane_key": 0,
+      "center_m": 2.5,
+      "role": "exit",
+      "owner_room": "lobby",
+      "rotation_z_deg": 90.0,
+      "claims": [
+        "lobby.east"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": -10.0,
+      "lane_key": -7,
+      "center_m": -32.5,
+      "role": "solid",
+      "owner_room": "master_office",
+      "rotation_z_deg": 0.0,
+      "claims": [
+        "master_office.south"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": -10.0,
+      "lane_key": 3,
+      "center_m": 17.5,
+      "role": "solid",
+      "owner_room": "corridor",
+      "rotation_z_deg": 0.0,
+      "claims": [
+        "corridor.south"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": -5.0,
+      "lane_key": -4,
+      "center_m": -17.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 0.0,
+      "claims": [
+        "meeting_room.south"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": -5.0,
+      "lane_key": -3,
+      "center_m": -12.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 0.0,
+      "claims": [
+        "meeting_room.south"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": -5.0,
+      "lane_key": -2,
+      "center_m": -7.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 0.0,
+      "claims": [
+        "meeting_room.south"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": -5.0,
+      "lane_key": -1,
+      "center_m": -2.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 0.0,
+      "claims": [
+        "meeting_room.south"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": -5.0,
+      "lane_key": 0,
+      "center_m": 2.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 0.0,
+      "claims": [
+        "meeting_room.south"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": -5.0,
+      "lane_key": 1,
+      "center_m": 7.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 0.0,
+      "claims": [
+        "meeting_room.south"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": -5.0,
+      "lane_key": 5,
+      "center_m": 27.5,
+      "role": "solid",
+      "owner_room": "lobby",
+      "rotation_z_deg": 0.0,
+      "claims": [
+        "lobby.south"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": -7,
+      "center_m": -32.5,
+      "role": "solid",
+      "owner_room": "master_office",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "master_office.north"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": -6,
+      "center_m": -27.5,
+      "role": "solid",
+      "owner_room": "master_office",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "master_office.north"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": -4,
+      "center_m": -17.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "meeting_room.north"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": -3,
+      "center_m": -12.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "meeting_room.north"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": -2,
+      "center_m": -7.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "meeting_room.north"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": -1,
+      "center_m": -2.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "meeting_room.north"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": 0,
+      "center_m": 2.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "meeting_room.north"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": 1,
+      "center_m": 7.5,
+      "role": "solid",
+      "owner_room": "meeting_room",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "meeting_room.north"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": 3,
+      "center_m": 17.5,
+      "role": "solid",
+      "owner_room": "corridor",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "corridor.north"
+      ]
+    },
+    {
+      "axis": "y",
+      "line_m": 10.0,
+      "lane_key": 5,
+      "center_m": 27.5,
+      "role": "solid",
+      "owner_room": "lobby",
+      "rotation_z_deg": 180.0,
+      "claims": [
+        "lobby.north"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "instance_id": "CORNER_MEETING_ROOM_SW",
+      "package": "runtime_v001",
+      "position_m": [
+        -25.0,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "meeting_room",
+      "corner_id": "SW",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_MEETING_ROOM_SE",
+      "package": "runtime_v001",
+      "position_m": [
+        15.0,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "meeting_room",
+      "corner_id": "SE",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_MEETING_ROOM_NE",
+      "package": "runtime_v001",
+      "position_m": [
+        15.0,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "meeting_room",
+      "corner_id": "NE",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_MEETING_ROOM_NW",
+      "package": "runtime_v001",
+      "position_m": [
+        -25.0,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "meeting_room",
+      "corner_id": "NW",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_MASTER_OFFICE_SW",
+      "package": "runtime_v001",
+      "position_m": [
+        -40.0,
+        -10.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "master_office",
+      "corner_id": "SW",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_MASTER_OFFICE_SE",
+      "package": "runtime_v001",
+      "position_m": [
+        -25.0,
+        -10.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "master_office",
+      "corner_id": "SE",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_MASTER_OFFICE_NW",
+      "package": "runtime_v001",
+      "position_m": [
+        -40.0,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "master_office",
+      "corner_id": "NW",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_LOBBY_SW",
+      "package": "runtime_v001",
+      "position_m": [
+        20.0,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "lobby",
+      "corner_id": "SW",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_LOBBY_SE",
+      "package": "runtime_v001",
+      "position_m": [
+        35.0,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "lobby",
+      "corner_id": "SE",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_LOBBY_NE",
+      "package": "runtime_v001",
+      "position_m": [
+        35.0,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "lobby",
+      "corner_id": "NE",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "CORNER_LOBBY_NW",
+      "package": "runtime_v001",
+      "position_m": [
+        20.0,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-TOWER-CORNER-L-5M",
+      "slot_role": "corner_l",
+      "room_id": "lobby",
+      "corner_id": "NW",
+      "note": "原点=角点，两臂沿 +X/+Y 各 5m"
+    },
+    {
+      "instance_id": "WALL_west_xm40_m2.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -40.0,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "master_office",
+      "side": "west",
+      "lane_key": -1,
+      "claims": [
+        "master_office.west"
+      ],
+      "shared_with": "master_office"
+    },
+    {
+      "instance_id": "WALL_west_xm40_p2.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -40.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "master_office",
+      "side": "west",
+      "lane_key": 0,
+      "claims": [
+        "master_office.west"
+      ],
+      "shared_with": "master_office"
+    },
+    {
+      "instance_id": "DOORWALL_west_xm25_p2.5",
+      "package": "wall_door_5m_通用包",
+      "position_m": [
+        -25.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+      "slot_role": "door_wall",
+      "room_id": "meeting_room",
+      "side": "west",
+      "lane_key": 0,
+      "claims": [
+        "meeting_room.west",
+        "master_office.east"
+      ],
+      "shared_with": "master_office,meeting_room"
+    },
+    {
+      "instance_id": "DOORLEAF_west_xm25_p2.5",
+      "package": "door_5m_通用包",
+      "position_m": [
+        -25.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-DOOR-5M",
+      "slot_role": "door_leaf_preview",
+      "room_id": "meeting_room",
+      "side": "west",
+      "lane_key": 0,
+      "note": "editor-only 预览；运行时由 RoomDoor3D 生成唯一门扇"
+    },
+    {
+      "instance_id": "WALL_west_xp15_m7.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        15.0,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "corridor",
+      "side": "west",
+      "lane_key": -2,
+      "claims": [
+        "corridor.west"
+      ],
+      "shared_with": "corridor"
+    },
+    {
+      "instance_id": "DOORWALL_west_xp15_p2.5",
+      "package": "wall_door_5m_通用包",
+      "position_m": [
+        15.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+      "slot_role": "door_wall",
+      "room_id": "corridor",
+      "side": "west",
+      "lane_key": 0,
+      "claims": [
+        "corridor.west",
+        "meeting_room.east"
+      ],
+      "shared_with": "corridor,meeting_room"
+    },
+    {
+      "instance_id": "DOORLEAF_west_xp15_p2.5",
+      "package": "door_5m_通用包",
+      "position_m": [
+        15.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-DOOR-5M",
+      "slot_role": "door_leaf_preview",
+      "room_id": "corridor",
+      "side": "west",
+      "lane_key": 0,
+      "note": "editor-only 预览；运行时由 RoomDoor3D 生成唯一门扇"
+    },
+    {
+      "instance_id": "WALL_east_xp20_m7.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        20.0,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "corridor",
+      "side": "east",
+      "lane_key": -2,
+      "claims": [
+        "corridor.east"
+      ],
+      "shared_with": "corridor"
+    },
+    {
+      "instance_id": "DOORWALL_east_xp20_p2.5",
+      "package": "wall_door_5m_通用包",
+      "position_m": [
+        20.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+      "slot_role": "door_wall",
+      "room_id": "corridor",
+      "side": "east",
+      "lane_key": 0,
+      "claims": [
+        "corridor.east",
+        "lobby.west"
+      ],
+      "shared_with": "corridor,lobby"
+    },
+    {
+      "instance_id": "DOORLEAF_east_xp20_p2.5",
+      "package": "door_5m_通用包",
+      "position_m": [
+        20.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-DOOR-5M",
+      "slot_role": "door_leaf_preview",
+      "room_id": "corridor",
+      "side": "east",
+      "lane_key": 0,
+      "note": "editor-only 预览；运行时由 RoomDoor3D 生成唯一门扇"
+    },
+    {
+      "instance_id": "DOORWALL_east_xp35_p2.5",
+      "package": "wall_door_5m_通用包",
+      "position_m": [
+        35.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+      "slot_role": "door_wall",
+      "room_id": "lobby",
+      "side": "east",
+      "lane_key": 0,
+      "claims": [
+        "lobby.east"
+      ],
+      "shared_with": "lobby"
+    },
+    {
+      "instance_id": "WALL_south_ym10_m32.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -32.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "master_office",
+      "side": "south",
+      "lane_key": -7,
+      "claims": [
+        "master_office.south"
+      ],
+      "shared_with": "master_office"
+    },
+    {
+      "instance_id": "WALL_south_ym10_p17.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        17.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "corridor",
+      "side": "south",
+      "lane_key": 3,
+      "claims": [
+        "corridor.south"
+      ],
+      "shared_with": "corridor"
+    },
+    {
+      "instance_id": "WALL_south_ym5_m17.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -17.5,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "south",
+      "lane_key": -4,
+      "claims": [
+        "meeting_room.south"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_south_ym5_m12.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -12.5,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "south",
+      "lane_key": -3,
+      "claims": [
+        "meeting_room.south"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_south_ym5_m7.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -7.5,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "south",
+      "lane_key": -2,
+      "claims": [
+        "meeting_room.south"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_south_ym5_m2.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -2.5,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "south",
+      "lane_key": -1,
+      "claims": [
+        "meeting_room.south"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_south_ym5_p2.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        2.5,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "south",
+      "lane_key": 0,
+      "claims": [
+        "meeting_room.south"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_south_ym5_p7.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        7.5,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "south",
+      "lane_key": 1,
+      "claims": [
+        "meeting_room.south"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_south_ym5_p27.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        27.5,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "lobby",
+      "side": "south",
+      "lane_key": 5,
+      "claims": [
+        "lobby.south"
+      ],
+      "shared_with": "lobby"
+    },
+    {
+      "instance_id": "WALL_north_yp10_m32.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -32.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "master_office",
+      "side": "north",
+      "lane_key": -7,
+      "claims": [
+        "master_office.north"
+      ],
+      "shared_with": "master_office"
+    },
+    {
+      "instance_id": "WALL_north_yp10_m27.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -27.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "master_office",
+      "side": "north",
+      "lane_key": -6,
+      "claims": [
+        "master_office.north"
+      ],
+      "shared_with": "master_office"
+    },
+    {
+      "instance_id": "WALL_north_yp10_m17.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -17.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "north",
+      "lane_key": -4,
+      "claims": [
+        "meeting_room.north"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_north_yp10_m12.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -12.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "north",
+      "lane_key": -3,
+      "claims": [
+        "meeting_room.north"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_north_yp10_m7.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -7.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "north",
+      "lane_key": -2,
+      "claims": [
+        "meeting_room.north"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_north_yp10_m2.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        -2.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "north",
+      "lane_key": -1,
+      "claims": [
+        "meeting_room.north"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_north_yp10_p2.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        2.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "north",
+      "lane_key": 0,
+      "claims": [
+        "meeting_room.north"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_north_yp10_p7.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        7.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "meeting_room",
+      "side": "north",
+      "lane_key": 1,
+      "claims": [
+        "meeting_room.north"
+      ],
+      "shared_with": "meeting_room"
+    },
+    {
+      "instance_id": "WALL_north_yp10_p17.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        17.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "corridor",
+      "side": "north",
+      "lane_key": 3,
+      "claims": [
+        "corridor.north"
+      ],
+      "shared_with": "corridor"
+    },
+    {
+      "instance_id": "WALL_north_yp10_p27.5",
+      "package": "wall_standard_5m_通用包",
+      "position_m": [
+        27.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slot_role": "solid_wall",
+      "room_id": "lobby",
+      "side": "north",
+      "lane_key": 5,
+      "claims": [
+        "lobby.north"
+      ],
+      "shared_with": "lobby"
+    },
+    {
+      "instance_id": "FLOOR_CORRIDOR_R01_C01",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        17.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "corridor",
+      "grid": [
+        0,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_CORRIDOR_R02_C01",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        17.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "corridor",
+      "grid": [
+        0,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_CORRIDOR_R03_C01",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        17.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "corridor",
+      "grid": [
+        0,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_CORRIDOR_R04_C01",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        17.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "corridor",
+      "grid": [
+        0,
+        3
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R01_C01",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -22.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        0,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R02_C01",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -22.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        0,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R03_C01",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -22.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        0,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R01_C02",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -17.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        1,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R02_C02",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -17.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        1,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R03_C02",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -17.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        1,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R01_C03",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -12.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        2,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R02_C03",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -12.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        2,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R03_C03",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -12.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        2,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R01_C04",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -7.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        3,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R02_C04",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -7.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        3,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R03_C04",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -7.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        3,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R01_C05",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -2.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        4,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R02_C05",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -2.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        4,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R03_C05",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -2.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        4,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R01_C06",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        2.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        5,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R02_C06",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        2.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        5,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R03_C06",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        2.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        5,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R01_C07",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        7.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        6,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R02_C07",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        7.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        6,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R03_C07",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        7.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        6,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R01_C08",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        12.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        7,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R02_C08",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        12.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        7,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MEETING_ROOM_R03_C08",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        12.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "meeting_room",
+      "grid": [
+        7,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R01_C01",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -37.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        0,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R02_C01",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -37.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        0,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R03_C01",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -37.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        0,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R04_C01",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -37.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        0,
+        3
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R01_C02",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -32.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        1,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R02_C02",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -32.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        1,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R03_C02",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -32.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        1,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R04_C02",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -32.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        1,
+        3
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R01_C03",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -27.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        2,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R02_C03",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -27.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        2,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R03_C03",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        -27.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        2,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_MASTER_OFFICE_R04_C03",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        -27.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "master_office",
+      "grid": [
+        2,
+        3
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_LOBBY_R01_C01",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        22.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "lobby",
+      "grid": [
+        0,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_LOBBY_R02_C01",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        22.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "lobby",
+      "grid": [
+        0,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_LOBBY_R03_C01",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        22.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "lobby",
+      "grid": [
+        0,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_LOBBY_R01_C02",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        27.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "lobby",
+      "grid": [
+        1,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_LOBBY_R02_C02",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        27.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "lobby",
+      "grid": [
+        1,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_LOBBY_R03_C02",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        27.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "lobby",
+      "grid": [
+        1,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_LOBBY_R01_C03",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        32.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "lobby",
+      "grid": [
+        2,
+        0
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_LOBBY_R02_C03",
+      "package": "floor_tile_r01_c02_通用包",
+      "position_m": [
+        32.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "slot_role": "floor_tile",
+      "room_id": "lobby",
+      "grid": [
+        2,
+        1
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    },
+    {
+      "instance_id": "FLOOR_LOBBY_R03_C03",
+      "package": "floor_tile_r01_c01_通用包",
+      "position_m": [
+        32.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "component_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "slot_role": "floor_tile",
+      "room_id": "lobby",
+      "grid": [
+        2,
+        2
+      ],
+      "note": "相邻砖用两种砖面交替，避免大面积同花纹"
+    }
+  ],
+  "validation": {
+    "room_owned_geometry": false,
+    "non_unit_scale_count": 0,
+    "illegal_rotation_count": 0,
+    "missing_components": [],
+    "slot_role_counts": {
+      "corner_l": 11,
+      "solid_wall": 23,
+      "door_wall": 4,
+      "door_leaf_preview": 3,
+      "floor_tile": 49
+    }
+  }
+}

@@ -27,7 +27,7 @@ FeatureID：ENTRY-AVATAR、ASSET-PIPELINE；ModuleID：CHARACTER-EXPRESSION；�
 
 - 源独立重开：8网格数量与计划逐项一致，原11网格/UV/材质/变换/权重不变；原骨架签名、1448壳体顶点与双母版局部曲线通过。
 - `verify_character_expression_flow`独立与正式玩家调用：无头690项，Forward+700项；300次抽取无连续重复，8种全部可达；未知ID/负数/非有限保持值原子拒绝；保持结束恢复随机；独立实例；实际StateMachine转换触发表情，重复进度事件不触发；角色状态/HP/碰撞/武器不变；卸下面饰不会被表情命令重新装备；符号不闭合。
-- Forward+逐种捕捉实际网格，8张不同图像；红色生气颜色专项通过。[实际总览](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/expressions_overview.png)。
+- Forward+逐种捕捉实际网格，8张不同图像；红色生气颜色专项通过。[实际总览](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/expressions_overview.png)。
 - 既有电子面具专项无头73项、Forward+76项；眨眼/闪烁、保存/读档/换装通过。5项角色回归均退出0：边界、动画、衣柜、返回持久化、母版契约。
 - 8个子资产先行登记《资产主表》23–30行；父行22升级v003。随后主行与组件/3D/动画/中转专表分事务推进，其他资产指纹保留；每种表达各有独立资产、组件、3D分页和表达记录，不伪造玩家状态。
 - 最终退出码、预期失败、非预期错误、未执行项及当前门禁限制见[机器报告](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/verification_report.json)。最终专项无预期失败或非预期脚本错误；原色盘UID回退警告保留。未运行整游戏full及移动设备性能。未提交或推送。

@@ -16,14 +16,13 @@ const ROOM_SHELL_LAYOUT_BUILDER := preload("res://src/world3d/RoomShellLayoutBui
 ## Boss 房 6 件专属件的摆位源（真源）。通用壳体件由组合器按每局现算的几何产出，
 ## 这 6 件是**设计死件**：在源竞技场里相对房间中心定死、与版图无关，只有坐标搬运。
 const BOSS_LAYOUT_SOURCE_PATH := (
-	"res://assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/"
-	+ "boss_room_50x40_v002.layout.json"
+	"res://data/layouts/expedition/boss_room.json"
 )
 ## 房型默认组件布局（02 产物）直接重放。这里只登记稳定房型模板到真源的映射；
 ## 实例数量、位置、旋转全部读取 component_instances.json，不在 Godot 维护第二套摆位。
 const ROOM_TYPE_LAYOUT_SOURCES := {
 	"office_60x70": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_instances.json",
+		"path": "res://data/layouts/expedition/v009/component_instances.json",
 		"version": "v009",
 		"asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(30.0, 40.0),
@@ -36,14 +35,14 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"door_wall_component_id": "",
 	},
 	"bridge_60x50": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_instances.json",
+		"path": "res://data/layouts/expedition/v010/component_instances.json",
 		"version": "v010",
 		"asset_id": "ENV-EXPEDITION-L01-BRIDGE-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(30.0, 60.0),
 		"door_wall_component_id": "",
 	},
 	"db_70x50": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v014/component_instances.json",
+		"path": "res://data/layouts/expedition/v014/component_instances.json",
 		"version": "v014",
 		"asset_id": "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(40.0, 30.0),
@@ -54,7 +53,7 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"door_wall_component_id": "",
 	},
 	"corridor_45x40": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_instances.json",
+		"path": "res://data/layouts/expedition/v012/component_instances.json",
 		"version": "v012",
 		"asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(45.0, 40.0),
@@ -65,7 +64,7 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"room_keys": ["room_01", "room_08"],
 	},
 	"boss_50x40": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_instances.json",
+		"path": "res://data/layouts/expedition/v011/component_instances.json",
 		"version": "v011",
 		"asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(50.0, 40.0),
@@ -82,7 +81,7 @@ const ROOM_INSTANCE_LAYOUT_SOURCES := {
 	# room_03 继承 office 默认布局；其 A 端口在旋转后正对默认西侧文件柜。
 	# 专属覆写只移除这一件沿墙陈设，保证 room_02 -> room_03 的门洞净空。
 	"room_03": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_03/v001/room_layout.json",
+		"path": "res://data/layouts/expedition/f00_room_03/room_layout.json",
 		"version": "v001",
 		"component_version": "v009",
 		"asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM03-PORT-CLEARANCE-LAYOUT",
@@ -92,7 +91,7 @@ const ROOM_INSTANCE_LAYOUT_SOURCES := {
 		"door_wall_component_id": "",
 	},
 	"room_04": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json",
+		"path": "res://data/layouts/expedition/f00_room_04/room_layout.json",
 		"version": "v001",
 		"component_version": "v012",
 		"asset_id": "ENV-EXPEDITION-L01-CORRIDOR-U-TURN-ROOM04-LAYOUT",

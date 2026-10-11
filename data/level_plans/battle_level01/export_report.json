@@ -1,0 +1,40 @@
+{
+  "schema": "shellstorm2.battle.floor_plan_whitebox_export_report",
+  "schema_version": 1,
+  "source": "src/map/FloorPlanGenerator.gd",
+  "authored_run_seed": 2,
+  "authored_variant": "north_ring",
+  "floor_number": 98,
+  "room_count": 16,
+  "lane_checks": 30,
+  "templates": [
+    "common_30x25",
+    "common_30x40",
+    "common_35x30",
+    "common_40x25",
+    "common_40x35",
+    "safe_15x15"
+  ],
+  "area_budget": {
+    "total_floor_area_m2": 62500.0,
+    "outer_wall_area_m2": 300.0,
+    "core_area_m2": 4225.0,
+    "stair_corridor_utility_reserve_m2": 6500.0,
+    "available_area_m2": 51475.0,
+    "target_occupancy_ratio": 0.42,
+    "target_usable_area_m2": 21619.5,
+    "reference_content_room_cost_m2": 1450.0,
+    "calculated_content_room_target": 14,
+    "room_area_m2": 12600.0,
+    "interior_wall_area_m2": 531.0,
+    "corridor_area_m2": 960.0,
+    "estimated_used_area_m2": 14091.0
+  },
+  "contract_source": "res://source/art/whitebox/tower_zones/battle_level01/v003/data/component_packages/corridors/corridor_wall_5x0p3x11p9m/asset_manifest.json",
+  "legacy_layouts_registered": [
+    "floor_01_hub",
+    "floor_01_main_02",
+    "floor_01_main_03",
+    "floor_01_main_04"
+  ]
+}

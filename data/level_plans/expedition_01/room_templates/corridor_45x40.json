@@ -1,0 +1,44 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "corridor_45x40",
+  "room_type": "COMMON_ROOM",
+  "size_m": [45.0, 40.0],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": ["north", "south", "east", "west"],
+  "wall_lane_table": {
+    "north": [-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0],
+    "south": [-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0],
+    "east": [-12.5, -7.5, -2.5, 2.5, 7.5, 12.5],
+    "west": [-12.5, -7.5, -2.5, 2.5, 7.5, 12.5]
+  },
+  "slots": [],
+  "variants": ["l_turn", "u_turn"],
+  "variant_footprints": {
+    "l_turn": {
+      "kind": "polygon",
+      "frame": "bbox_nw_x_east_y_south",
+      "vertices_m": [[0, 0], [45, 0], [45, 15], [15, 15], [15, 40], [0, 40]],
+      "note": "L 形：北侧横臂 45×15 全宽 + 西南竖臂 15×25。外轮廓缺东南角（东南 30×15 不属于房间）。"
+    },
+    "u_turn": {
+      "kind": "polygon",
+      "frame": "bbox_nw_x_east_y_south",
+      "vertices_m": [[0, 0], [45, 0], [45, 40], [0, 40], [0, 25], [30, 25], [30, 15], [0, 15]],
+      "note": "凹字形：上横臂 45×15 + 右竖 15×10 + 下横臂 45×15；西侧中部 30×10 是实体（内墙岛，不属于房间）。"
+    }
+  },
+  "asset_ids": {
+    "room": "ENV-EXPEDITION-L01-L-CORRIDOR",
+    "components": []
+  },
+  "note": "远征关卡拐角走廊。45×40 足印由两种内部造型复用同一白盒契约：`l_turn` = 拐角走廊01（单折 L 形，横臂 45×15 + 竖臂 15×25）、`u_turn` = 拐角走廊02（三折凹字形）。⚠️ 两者的**外轮廓都不是矩形**（见 `variant_footprints`），故 `variant_footprints` 是外轮廓真源、`wall_lane_table` 只是包围盒口径的候选槽；实际可开门的槽必须同时落在轮廓边界上（由 `scripts/check_expedition_room_footprints.py` 校验）。`door_contract` 在变体间一致。"
+}

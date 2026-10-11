@@ -116,7 +116,7 @@ const FACADE_OUTER_WINDOW_SCENE: PackedScene = preload(
 )
 # 100F 天台 Blender 布局重放：只接入房屋与装饰层；地砖、女儿墙、外立面和碰撞
 # 继续由本脚本的程序化壳体拥有，避免重复承重和重复边界碰撞。
-const ROOFTOP_DECOR_LAYOUT_PATH := "res://assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json"
+const ROOFTOP_DECOR_LAYOUT_PATH := "res://data/layouts/rooftop_100f_decorated_layout.json"
 const ROOFTOP_GROUND_BIRD_SCENE: PackedScene = preload(
 	"res://assets/art/vfx/environment_3d/bird_flocks/runtime/ground/vfx_env_birds_ground_root_top3d.tscn"
 )

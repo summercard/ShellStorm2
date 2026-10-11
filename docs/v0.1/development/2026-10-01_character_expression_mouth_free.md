@@ -16,7 +16,7 @@ FeatureID：ENTRY-AVATAR、ASSET-PIPELINE；ModuleID：CHARACTER-EXPRESSION；�
 ## 验收与登记
 
 - Blender独立重开通过：原11网格的几何/UV/材质/变换/权重不变，1448壳体顶点仍来自原头前侧+9mm，骨架静止签名不变；8种实际方块中心与无嘴部计划一致；六种情绪全部Blink形态高度压缩至原来的6%，完整眼部闭合；双母版曲线及文件哈希通过。
-- `verify_character_expression_flow`：无头696项、Forward+706项，退出0；六种情绪实际GLB顶点均没有中心嘴部几何，8种全部随机可达且无连续重复，真实状态机调用、拒绝、保持、实例隔离和符号不闭合通过。8种Forward+实拍面部互不相同，红色生气专项通过。[总览](../../../assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/expressions_overview.png)已亲眼检查嘴部移除及图案饱满效果。
+- `verify_character_expression_flow`：无头696项、Forward+706项，退出0；六种情绪实际GLB顶点均没有中心嘴部几何，8种全部随机可达且无连续重复，真实状态机调用、拒绝、保持、实例隔离和符号不闭合通过。8种Forward+实拍面部互不相同，红色生气专项通过。[总览](../../../../ShellStorm2-backup/2026-10-11_slimming/original_tree/assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/previews/expressions_overview.png)已亲眼检查嘴部移除及图案饱满效果。
 - `verify_electronic_mask_flow`：无头73项、Forward+76项，退出0；放大的默认眼睛实际闭合/重新张开、间歇闪烁、换装、实际存档读回、碰撞/武器不变通过。
 - 5项角色回归退出0：`verify_player3d_avatar_bounds`、`verify_player3d_animation_flow`、`verify_wardrobe_preview_fill_flow`、`verify_avatar_return_persistence_flow`、`verify_character_authoring_bundle`。最终日志无非预期脚本/引擎错误，原公共色盘UID回退警告保留。
 - 角色账本：父主行22升级v004、子主行23–30升级v002，组件45–52、3D分页10–17、表达记录53–60更新原行；中转追加52–78，域日志v0.1.8。主表和摘要锁定专表分事务写入并回读；保留其他987个资产指纹。结构/拆分门禁通过，九个资产version_increment守卫通过。

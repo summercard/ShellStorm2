@@ -1,0 +1,33 @@
+{
+  "asset_id": "ENV-EXPEDITION-L01-BOSS-ARENA",
+  "source_blend": "source/art/whitebox/tower_zones/expedition_01/v001/blender/远征关卡01_白模_Boss竞技场_50x40m_v001.blend",
+  "status": "PASS",
+  "failures": [],
+  "warnings": [],
+  "object_count": 121,
+  "mesh_count": 121,
+  "component_counts": {
+    "door_wall": 2,
+    "floor_slab": 1,
+    "floor_tile": 80,
+    "wall": 38
+  },
+  "fixed_trim_count": 0,
+  "bounds_world_m": {
+    "min": [
+      -25.0,
+      -20.0,
+      0.0
+    ],
+    "max": [
+      25.0,
+      20.0,
+      11.9
+    ]
+  },
+  "measured_dimensions_m": [
+    50.0,
+    40.0,
+    11.9
+  ]
+}

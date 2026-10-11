@@ -1,5 +1,9 @@
 # v0.1 模块、功能与工程契约索引
 
+ASSET-PIPELINE / WORLD-BLOCKS：[工程瘦身执行记录](development/2026-10-11_workspace_slimming.md)。两阶段已实施：工程59.48→约12.69GiB（冷目录约12.06GiB），Windows PCK 1973.90→502.73MiB；保留1,102份当前源、完整Git、文档及正式运行资产，旧源/预览/历史产物在上层备份。39份运行JSON投影、账本与运行资源保真验证通过，全量游戏历史红项及旧缓存保留见记录。原[计划](audits/2026-10-11_development_workspace_slimming_plan.md)保留作实施前估算。
+
+PERFORMANCE-RUNTIME / ENTRY-AVATAR / WORLD-BLOCKS / SAVE-PROFILE：[启动与进房刷怪卡顿诊断](development/2026-10-11_startup_room_stutter_diagnosis.md)。当前存档副本真实启动8～12秒；同步怪物首用加载259/327毫秒、无重复物理进房通知的受控进房318毫秒、同步保存30～60毫秒。已定位加载、波次/碰撞扫描、存档热点，未实施正式性能修复。
+
 ASSET-PIPELINE / WORLD-BLOCKS：[98F父亲办公室原始源v002](development/2026-10-09_father_office_blender_source.md)。24组件/270实例，四材质、尺寸与PaletteUV专项通过，已登记Blender源，未接入Godot。
 
 ASSET-PIPELINE / WORLD-BLOCKS：[98F会议室与走廊门厅源v001](development/2026-10-09_block00_story_rooms_blender_source.md)。12尊低面雕塑、中央6m净空，源内三四房5m贯通、废墟断线及壁画；9新组件/24外链组件，已登记Blender源，未接入Godot。
