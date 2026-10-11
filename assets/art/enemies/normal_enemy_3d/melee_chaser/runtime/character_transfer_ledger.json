@@ -56,7 +56,7 @@
     }
   ],
   "outputs": {
-    "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb": "6a55fc2f737b528efe53b604ad17f31a7ac173cddc8313c2f53a49361efdc0fe"
+    "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb": "0d07ca9435d04b1a26028d2f84be88c19ce64fcfef578eba58805d8a873fb397"
   },
   "limitations": [
     "源跑步亚帧约1.3mm穿地；未完成全程自穿插/支撑脚滑移质量审查",
@@ -98,8 +98,8 @@
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb",
-      "sha256": "6a55fc2f737b528efe53b604ad17f31a7ac173cddc8313c2f53a49361efdc0fe",
-      "bytes": 537872
+      "sha256": "0d07ca9435d04b1a26028d2f84be88c19ce64fcfef578eba58805d8a873fb397",
+      "bytes": 242572
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb.import",

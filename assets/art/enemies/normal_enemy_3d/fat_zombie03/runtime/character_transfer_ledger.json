@@ -189,8 +189,8 @@
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d.glb",
-      "sha256": "a0f0e6a94caa1cd0be3bf2575453221257b0006f6122dbe173b9cda92bae73fc",
-      "bytes": 1509672
+      "sha256": "b035ea4df5213e38eba108519e0e1aba556837c192d666af8a053537529563ad",
+      "bytes": 1028476
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn",

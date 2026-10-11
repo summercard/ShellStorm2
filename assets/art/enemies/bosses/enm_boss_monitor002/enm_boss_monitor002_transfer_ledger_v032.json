@@ -13,9 +13,9 @@
   },
   "files": [
     {
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/body_palette.png",
-      "sha256": "27c962974739391fd56938c54f2680ccd7740c4093371eca8b8277dbd5204d4e",
-      "bytes": 1568
+      "path": "assets/art/shared/textures/enemies/tex_color_668b65aa4014f464e84a.png",
+      "sha256": "034a432815eaa24d6ca69723bd1ad3ea11b7368d4457d7497d41567d06a05844",
+      "bytes": 628
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d.glb",
@@ -28,14 +28,14 @@
       "bytes": 1568
     },
     {
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_expressions_atlas.png",
-      "sha256": "16ddc68d8bbaae781d58f0146a69745b04ada5fc77d9c5db1b884de05fd9369f",
-      "bytes": 1553802
+      "path": "assets/art/shared/textures/enemies/tex_color_c14ee1655185e4bc8ac2.png",
+      "sha256": "b1a2355416bc34f843707f8ba3aa2665b9b629525592ed6ffa4aa618ab77a156",
+      "bytes": 120570
     },
     {
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_screen_code.png",
-      "sha256": "a35cdee023a7d68b9b05148b1a1dc4da711dce63135319ee827cd78bf248ba70",
-      "bytes": 1529094
+      "path": "assets/art/shared/textures/enemies/tex_color_b441069ac9ac4cd33171.png",
+      "sha256": "2355110563f5dc7a0c1ebf1cba7553cdc2380b7ad9f01f30bb92b896f3d16fc2",
+      "bytes": 187826
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/expression_regions.json",
@@ -44,8 +44,8 @@
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/expressions_atlas.png",
-      "sha256": "deefa7c03bd854174de22465862a2f49c4904962838e0bd7d9b20e5fa3b6610a",
-      "bytes": 1917997
+      "sha256": "ab8e6e4197f3bff5d59b5cbca7308a4a2f2b7c280ea31e181af9645b233d106d",
+      "bytes": 122508
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/face_rest_scale.json",
@@ -59,8 +59,8 @@
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/screen_code.png",
-      "sha256": "7a986dc18ebadfeb459253fc2076186a0aec73426c16fc1f13a3618e307bea0b",
-      "bytes": 1507107
+      "sha256": "f487a5ad920a6cfb04beacd4ab31ac1c29ab017d173cc43ceec5576ab585b343",
+      "bytes": 194012
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/README.md",
@@ -208,7 +208,7 @@
   },
   "pose_sampling": "Evaluated C @ global matrices at 30Hz; preserve nonuniform stretch/shear and all constraints via Skeleton3D overrides, indexed by AnimationPlayer. No extra local-axis conversion.",
   "textures": {
-    "body_palette": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/body_palette.png",
+    "body_palette": "assets/art/shared/textures/enemies/tex_color_668b65aa4014f464e84a.png",
     "expressions_atlas": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/expressions_atlas.png",
     "screen_code": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/screen_code.png"
   },
@@ -298,8 +298,8 @@
     ],
     "identical_registered_files": [
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/body_palette.png",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/body_palette.png",
+        "current": "assets/art/shared/textures/enemies/tex_color_668b65aa4014f464e84a.png",
+        "existing": "assets/art/shared/textures/enemies/tex_color_668b65aa4014f464e84a.png",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v031.json",
         "sha256": "27c962974739391fd56938c54f2680ccd7740c4093371eca8b8277dbd5204d4e"
       },
@@ -310,14 +310,14 @@
         "sha256": "64cdcc1410624c14714b6c730037ebea1da68025c4d338ba68ee48cc638664ba"
       },
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_expressions_atlas.png",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_expressions_atlas.png",
+        "current": "assets/art/shared/textures/enemies/tex_color_c14ee1655185e4bc8ac2.png",
+        "existing": "assets/art/shared/textures/enemies/tex_color_c14ee1655185e4bc8ac2.png",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v031.json",
         "sha256": "16ddc68d8bbaae781d58f0146a69745b04ada5fc77d9c5db1b884de05fd9369f"
       },
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_screen_code.png",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_screen_code.png",
+        "current": "assets/art/shared/textures/enemies/tex_color_b441069ac9ac4cd33171.png",
+        "existing": "assets/art/shared/textures/enemies/tex_color_b441069ac9ac4cd33171.png",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v031.json",
         "sha256": "a35cdee023a7d68b9b05148b1a1dc4da711dce63135319ee827cd78bf248ba70"
       },
@@ -376,8 +376,8 @@
         "sha256": "4e10490f03c234dd12e424fa93de7accddd4008ff0455ea54954f40cea116f9c"
       },
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/body_palette.png",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/body_palette.png",
+        "current": "assets/art/shared/textures/enemies/tex_color_668b65aa4014f464e84a.png",
+        "existing": "assets/art/shared/textures/enemies/tex_color_668b65aa4014f464e84a.png",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v032.json",
         "sha256": "27c962974739391fd56938c54f2680ccd7740c4093371eca8b8277dbd5204d4e"
       },
@@ -388,14 +388,14 @@
         "sha256": "64cdcc1410624c14714b6c730037ebea1da68025c4d338ba68ee48cc638664ba"
       },
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_expressions_atlas.png",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_expressions_atlas.png",
+        "current": "assets/art/shared/textures/enemies/tex_color_c14ee1655185e4bc8ac2.png",
+        "existing": "assets/art/shared/textures/enemies/tex_color_c14ee1655185e4bc8ac2.png",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v032.json",
         "sha256": "16ddc68d8bbaae781d58f0146a69745b04ada5fc77d9c5db1b884de05fd9369f"
       },
       {
-        "current": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_screen_code.png",
-        "existing": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_screen_code.png",
+        "current": "assets/art/shared/textures/enemies/tex_color_b441069ac9ac4cd33171.png",
+        "existing": "assets/art/shared/textures/enemies/tex_color_b441069ac9ac4cd33171.png",
         "ledger": "assets\\art\\enemies\\bosses\\enm_boss_monitor002\\enm_boss_monitor002_transfer_ledger_v032.json",
         "sha256": "a35cdee023a7d68b9b05148b1a1dc4da711dce63135319ee827cd78bf248ba70"
       },

@@ -1,0 +1,42 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://dy03pueex34aa"
+path.s3tc="res://.godot/imported/tex_normal_ede311db25d948e31a75.jpg-4ed9cd7b50610f788cb61f8d4816adb5.s3tc.ctex"
+path.etc2="res://.godot/imported/tex_normal_ede311db25d948e31a75.jpg-4ed9cd7b50610f788cb61f8d4816adb5.etc2.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://assets/art/shared/textures/player/tex_normal_ede311db25d948e31a75.jpg"
+dest_files=["res://.godot/imported/tex_normal_ede311db25d948e31a75.jpg-4ed9cd7b50610f788cb61f8d4816adb5.s3tc.ctex", "res://.godot/imported/tex_normal_ede311db25d948e31a75.jpg-4ed9cd7b50610f788cb61f8d4816adb5.etc2.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v007_Normal.jpg"
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=1024
+detect_3d/compress_to=0

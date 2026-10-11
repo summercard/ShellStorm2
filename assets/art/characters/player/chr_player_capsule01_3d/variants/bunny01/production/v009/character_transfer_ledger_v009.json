@@ -129,8 +129,8 @@
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009.glb",
-      "sha256": "3470d3bde394dbf0a57ab40f52ffdcbc3a3407e7c0df14d35c8c247bb4740e12",
-      "bytes": 8171680
+      "sha256": "c809062dcbe93c081d57f6612ca67e428959b6eb1314bd926304065d4c46aa3d",
+      "bytes": 2408600
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/anim_bunny01_library_v009.json",
@@ -144,18 +144,18 @@
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_body_v009.glb",
-      "sha256": "2c4b0db406906bd6daa93f30c659acdffaee6e2be5a33aa9b179cebf7ab88afb",
-      "bytes": 2437308
+      "sha256": "24f355a2ef8998d30ec9b62e949a9b86caeeeedba840f83ea76c139c1e10d55c",
+      "bytes": 107628
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_head_v009.glb",
-      "sha256": "3cfb435e18af08c3942f748c0ed8cd817f33f2304df2cdbf1a09d29f2a33725c",
-      "bytes": 1356048
+      "sha256": "45f4a2259379ea06ea58072fc166c2fdf01671f35a785b0031ce7259c2a5e550",
+      "bytes": 317652
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_chibi_anime_v009.glb",
-      "sha256": "c5186295fd2ab1c515cd2821389fd0316d8d92170946de929e612175e8b7bae1",
-      "bytes": 2524432
+      "sha256": "52244904530ac3185fcc242c621445ba0124a7638ed5b221f512fd08ba084198",
+      "bytes": 230176
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_hand_l_v009.glb",
@@ -169,23 +169,23 @@
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_l_v009.glb",
-      "sha256": "60617a88b9659d9c4dba5884ed68314ff1e503a80df0ff5b35d63f8578b6b60a",
-      "bytes": 1833688
+      "sha256": "dcf4c2e55851eef9687c731ff64f8b881cad2714589401a5e9213e325e852585",
+      "bytes": 328380
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_r_v009.glb",
-      "sha256": "8509a8e959a7d427b4ee168d8585fb2d09ca01cbbf8c83601d8d5c46fe22e7a7",
-      "bytes": 1833692
+      "sha256": "88d7bb941e9c2cb8f759740c396bd75049fd322831a3eb4817a9b350a55b447c",
+      "bytes": 328380
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_l_v009.glb",
-      "sha256": "9676707a9993f1028eee267e63ec68ec70dd396b561a4aa69fc7002df0d7760b",
-      "bytes": 979280
+      "sha256": "8dc0cea331f0f08f44c9d8ee7c9fa0ff29c2a8a66a87af5ff3a89d481eb1e539",
+      "bytes": 89648
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_r_v009.glb",
-      "sha256": "3f8040803960ccb0ec44728cdaf95e7d9a8e5bf946e85b8b313c2c6a24c54f2e",
-      "bytes": 979268
+      "sha256": "08ee55b8f8d3e6770766bc981d88625f109801b27f51fc7f99e458132447d6b8",
+      "bytes": 89640
     }
   ],
   "collision_owner": "scenes/Player3D.tscn",

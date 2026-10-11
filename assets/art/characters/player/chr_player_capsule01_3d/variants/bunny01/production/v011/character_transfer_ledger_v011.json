@@ -109,8 +109,8 @@
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011.glb",
-      "sha256": "353c1d901101a93452da7cf100883b55a52d74de17a047335c948f3e178505bd",
-      "bytes": 8178188
+      "sha256": "6d2fb5f56cd82d29d35cff504b9ca1be5dc78bef9df20b40f837490907163736",
+      "bytes": 2415108
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/anim_bunny01_library_v011.json",
@@ -124,18 +124,18 @@
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_body_v011.glb",
-      "sha256": "861c7d454e510d7d50c0459dc9fa5b052af56c473896333a68ab6940ae981b49",
-      "bytes": 2437308
+      "sha256": "a5083c5821c16aca4811eb9683eeec5a67c19e13843132ab990f11b6ef6ef1a6",
+      "bytes": 107628
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_head_v011.glb",
-      "sha256": "f654754b8a52cbd173597bd5f1e390a900bd0c2b0ed4ba357a8060542d51fda5",
-      "bytes": 1356048
+      "sha256": "94ac83155ecbc16c20a0ce3b4f0d8d3c71ca365e2b7af84e3939ac5b9f57e5cf",
+      "bytes": 317652
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_chibi_anime_v011.glb",
-      "sha256": "d83d016304df67eeff0f1222e3f4be19baef05437e7cbdca6f60a4842b26f5ec",
-      "bytes": 2524432
+      "sha256": "a7c6274c0f6b1fec582081e3bce91e8d06133987f29d0f0f58d6be906b14dee1",
+      "bytes": 230176
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_hand_l_v011.glb",
@@ -149,23 +149,23 @@
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_l_v011.glb",
-      "sha256": "60617a88b9659d9c4dba5884ed68314ff1e503a80df0ff5b35d63f8578b6b60a",
-      "bytes": 1833688
+      "sha256": "dcf4c2e55851eef9687c731ff64f8b881cad2714589401a5e9213e325e852585",
+      "bytes": 328380
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_r_v011.glb",
-      "sha256": "8509a8e959a7d427b4ee168d8585fb2d09ca01cbbf8c83601d8d5c46fe22e7a7",
-      "bytes": 1833692
+      "sha256": "88d7bb941e9c2cb8f759740c396bd75049fd322831a3eb4817a9b350a55b447c",
+      "bytes": 328380
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_l_v011.glb",
-      "sha256": "0936a7e3212554eddf48af62704649b6a6c98a67b56b180ed2e802bc97a1fc7c",
-      "bytes": 979276
+      "sha256": "b48d49270cece02603e694c91c83da8ffd7206aee0ab44d845f7a748764ee715",
+      "bytes": 89644
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_r_v011.glb",
-      "sha256": "7719ba73dec977951da3edf997752ba5afcf4a1c9f8b2bc8dd5ad8a78381b208",
-      "bytes": 979268
+      "sha256": "c73b4a46aa8380ee9e5c193319206cf0d43eb66ce76af1d14d74f2bae7b10281",
+      "bytes": 89640
     }
   ],
   "collision_owner": "scenes/Player3D.tscn",
@@ -328,8 +328,15 @@
   "visual_validation": {
     "reviewed": true,
     "renderer": "gl_compatibility",
-    "tests": ["verify_player3d_weapon_grip_visual", "verify_player3d_state_gallery_visual"],
-    "images": ["outputs/verification/player3d_sidearm_idle_closeup.png", "outputs/verification/player3d_state_gallery.png", "outputs/character_pipeline/v011/rest_bone_overlay.png"],
+    "tests": [
+      "verify_player3d_weapon_grip_visual",
+      "verify_player3d_state_gallery_visual"
+    ],
+    "images": [
+      "outputs/verification/player3d_sidearm_idle_closeup.png",
+      "outputs/verification/player3d_state_gallery.png",
+      "outputs/character_pipeline/v011/rest_bone_overlay.png"
+    ],
     "limitation": "Compatibility renderer does not exercise depth-of-field or screen-space antialiasing."
   },
   "runtime_wrapper": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/runtime/chr_bunny01_root_v011.tscn",
