@@ -1,0 +1,1572 @@
+{
+  "schema_version": 1,
+  "player_max": 1024,
+  "enemy_max": 512,
+  "global_max": 1024,
+  "source_mapping": {
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/accessories/head/chibi_anime_head_v001/runtime/chr_player_bunny01_head_chibi_anime_top3d_v001_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg": "assets/art/shared/textures/player/tex_color_404fbb8f30dd8ae518ed.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_chibi_anime_v009_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg": "assets/art/shared/textures/player/tex_color_404fbb8f30dd8ae518ed.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_chibi_anime_v010_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg": "assets/art/shared/textures/player/tex_color_404fbb8f30dd8ae518ed.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_chibi_anime_v011_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg": "assets/art/shared/textures/player/tex_color_404fbb8f30dd8ae518ed.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/accessories/head/chibi_anime_head_v002/runtime/chr_player_bunny01_head_chibi_anime_top3d_v002_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg": "assets/art/shared/textures/player/tex_color_ce1c1c357badffa6d87e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_chibi_anime_v021_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg": "assets/art/shared/textures/player/tex_color_ce1c1c357badffa6d87e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v006_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_eefb84f6147351107d29.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_body_v009_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_eefb84f6147351107d29.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_eefb84f6147351107d29.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_body_v010_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_eefb84f6147351107d29.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_eefb84f6147351107d29.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_body_v011_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_eefb84f6147351107d29.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_eefb84f6147351107d29.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_eefb84f6147351107d29.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v006_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_61fdfd6da549bc41ebda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_body_v009_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_61fdfd6da549bc41ebda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_61fdfd6da549bc41ebda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_body_v010_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_61fdfd6da549bc41ebda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_61fdfd6da549bc41ebda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_body_v011_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_61fdfd6da549bc41ebda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_61fdfd6da549bc41ebda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_61fdfd6da549bc41ebda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v006_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_6ecd8c4084f2c06f8091.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_body_v009_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_6ecd8c4084f2c06f8091.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_6ecd8c4084f2c06f8091.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_body_v010_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_6ecd8c4084f2c06f8091.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_6ecd8c4084f2c06f8091.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_body_v011_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_6ecd8c4084f2c06f8091.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_6ecd8c4084f2c06f8091.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_6ecd8c4084f2c06f8091.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v007_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_48687b150d0668f10824.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_body_v021_tripo_model_metallic-tripo_model_roughness.png": "assets/art/shared/textures/player/tex_color_48687b150d0668f10824.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v007_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_7cb8de76c4d38c37b096.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_body_v021_tripo_node_2550ecce_BaseColor.jpg": "assets/art/shared/textures/player/tex_color_7cb8de76c4d38c37b096.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v006_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_l_v009_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_r_v009_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_l_v010_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_r_v010_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_l_v011_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_r_v011_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Color.jpg": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v006_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_l_v009_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_r_v009_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_l_v010_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_r_v010_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_l_v011_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_r_v011_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Normal.jpg": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v006_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_l_v009_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_r_v009_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_l_v010_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_r_v010_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_l_v011_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_r_v011_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v007_Color.jpg": "assets/art/shared/textures/player/tex_color_876006dcd7e00f51cee3.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_l_v021_Color.jpg": "assets/art/shared/textures/player/tex_color_876006dcd7e00f51cee3.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_r_v021_Color.jpg": "assets/art/shared/textures/player/tex_color_876006dcd7e00f51cee3.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v007_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_50272d7428332d813e05.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_l_v021_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_50272d7428332d813e05.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_r_v021_tripo_image_694681c1_2-tripo_image_694681c1_1.png": "assets/art/shared/textures/player/tex_color_50272d7428332d813e05.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v006_Color.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v006_Color.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_l_v009_Color.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_r_v009_Color.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Color_7.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_l_v010_Color.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_r_v010_Color.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Color_7.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_l_v011_Color.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_r_v011_Color.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Color_7.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Color_7.jpg": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v006_Normal.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v006_Normal.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_l_v009_Normal.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_r_v009_Normal.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Normal_6.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_l_v010_Normal.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_r_v010_Normal.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Normal_6.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_l_v011_Normal.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_r_v011_Normal.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Normal_6.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Normal_6.jpg": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v006_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v006_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_l_v009_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_r_v009_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_l_v010_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_r_v010_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_l_v011_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_r_v011_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v007_Color.jpg": "assets/art/shared/textures/player/tex_color_6b99083e13cbcc1ac6ad.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v007_Color.jpg": "assets/art/shared/textures/player/tex_color_6b99083e13cbcc1ac6ad.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_l_v021_Color.jpg": "assets/art/shared/textures/player/tex_color_6b99083e13cbcc1ac6ad.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_r_v021_Color.jpg": "assets/art/shared/textures/player/tex_color_6b99083e13cbcc1ac6ad.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v007_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_1c86824227ff0baf2264.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v007_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_1c86824227ff0baf2264.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_l_v021_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_1c86824227ff0baf2264.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_r_v021_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png": "assets/art/shared/textures/player/tex_color_1c86824227ff0baf2264.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v006_Color.jpg": "assets/art/shared/textures/player/tex_color_ccc5a8c2ab58dc97000b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_head_v009_Color.jpg": "assets/art/shared/textures/player/tex_color_ccc5a8c2ab58dc97000b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Color_10.jpg": "assets/art/shared/textures/player/tex_color_ccc5a8c2ab58dc97000b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_head_v010_Color.jpg": "assets/art/shared/textures/player/tex_color_ccc5a8c2ab58dc97000b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Color_10.jpg": "assets/art/shared/textures/player/tex_color_ccc5a8c2ab58dc97000b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_head_v011_Color.jpg": "assets/art/shared/textures/player/tex_color_ccc5a8c2ab58dc97000b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Color_10.jpg": "assets/art/shared/textures/player/tex_color_ccc5a8c2ab58dc97000b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Color_10.jpg": "assets/art/shared/textures/player/tex_color_ccc5a8c2ab58dc97000b.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v006_Normal.jpg": "assets/art/shared/textures/player/tex_normal_7c6a9b3eb43056a3afda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_head_v009_Normal.jpg": "assets/art/shared/textures/player/tex_normal_7c6a9b3eb43056a3afda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Normal_9.jpg": "assets/art/shared/textures/player/tex_normal_7c6a9b3eb43056a3afda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_head_v010_Normal.jpg": "assets/art/shared/textures/player/tex_normal_7c6a9b3eb43056a3afda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Normal_9.jpg": "assets/art/shared/textures/player/tex_normal_7c6a9b3eb43056a3afda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_head_v011_Normal.jpg": "assets/art/shared/textures/player/tex_normal_7c6a9b3eb43056a3afda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Normal_9.jpg": "assets/art/shared/textures/player/tex_normal_7c6a9b3eb43056a3afda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Normal_9.jpg": "assets/art/shared/textures/player/tex_normal_7c6a9b3eb43056a3afda.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v006_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_cffdaf91f6c10ac2727e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_head_v009_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_cffdaf91f6c10ac2727e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_cffdaf91f6c10ac2727e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_head_v010_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_cffdaf91f6c10ac2727e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_cffdaf91f6c10ac2727e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_head_v011_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_cffdaf91f6c10ac2727e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_cffdaf91f6c10ac2727e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_cffdaf91f6c10ac2727e.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v007_Color.jpg": "assets/art/shared/textures/player/tex_color_f7c1bef04759a88234bf.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_head_v021_Color.jpg": "assets/art/shared/textures/player/tex_color_f7c1bef04759a88234bf.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v007_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_f656b9ca998633576771.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_head_v021_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png": "assets/art/shared/textures/player/tex_color_f656b9ca998633576771.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_body_v021_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_80946086353db8996e9d.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_l_v021_Normal.jpg": "assets/art/shared/textures/player/tex_normal_9c105271f9685f4ebbe7.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_l_v021_Normal.jpg": "assets/art/shared/textures/player/tex_normal_bcd514e36a8e90346ca8.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_head_v021_Normal.jpg": "assets/art/shared/textures/player/tex_normal_0b562806c82a379a6073.png",
+    "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/body_palette.png": "assets/art/shared/textures/enemies/tex_color_668b65aa4014f464e84a.png",
+    "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_expressions_atlas.png": "assets/art/shared/textures/enemies/tex_color_c14ee1655185e4bc8ac2.png",
+    "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_screen_code.png": "assets/art/shared/textures/enemies/tex_color_b441069ac9ac4cd33171.png",
+    "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d_enm_normal_fat_zombie03_basecolor_v002.png": "assets/art/shared/textures/enemies/tex_normal_fa20394fbaf52f6d81c7.png",
+    "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d_enm_melee_fungboar01_basecolor_v002.png": "assets/art/shared/textures/enemies/tex_color_0fcad02b82d254f23eab.png",
+    "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d_enm_ranged_sporeshooter01_basecolor_v001.jpg": "assets/art/shared/textures/enemies/tex_color_d48b3270b03c78c3e1c5.png",
+    "assets/art/environments/british_corner_bookshop_3d/game_output/british_corner_bookshop/textures/多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_cd32c74d35cf14a0bc9f.png",
+    "assets/art/environments/british_corner_bookshop_3d/shared/多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_cd32c74d35cf14a0bc9f.png",
+    "assets/art/environments/soviet_snow_street_corner_3d/game_output/soviet_snow_street_corner/textures/苏联雪夜色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_cd32c74d35cf14a0bc9f.png",
+    "assets/art/environments/soviet_snow_street_corner_3d/shared/苏联雪夜色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_cd32c74d35cf14a0bc9f.png",
+    "assets/art/shared/palette/palette_dopamine_10x10_512_v001.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/broom_rifle/wpn_broom_rifle_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/camera_blaster/wpn_camera_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/candy_sniper/wpn_candy_sniper_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/double_barrel_cannon/wpn_double_barrel_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/fan_blaster/wpn_fan_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/frying_pan_cannon/wpn_frying_pan_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/guitar_blaster/wpn_guitar_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/gumball_cannon/wpn_gumball_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/hair_dryer/wpn_hair_dryer_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/megaphone_cannon/wpn_megaphone_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/popcorn_blaster/wpn_popcorn_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/scope_cannon/wpn_scope_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/soda_straw_blaster/wpn_soda_straw_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/spatula_rifle/wpn_spatula_rifle_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/tissue_box_cannon/wpn_tissue_box_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/weapons/weapon_3d/components/water_tank_blaster/wpn_water_tank_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+    "assets/art/vfx/environment_3d/bird_flocks/components/flyby/vfx_env_birds_flyby_visual_设施低亮多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_c50b94e4fdb7e0fa5a5b.png",
+    "assets/art/vfx/environment_3d/bird_flocks/components/ground/vfx_env_birds_ground_visual_设施低亮多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_c50b94e4fdb7e0fa5a5b.png",
+    "assets/art/weapons/weapon_3d/components/broom_rifle/wpn_broom_rifle_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/camera_blaster/wpn_camera_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/candy_sniper/wpn_candy_sniper_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/crocodile_cannon/wpn_crocodile_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/double_barrel_cannon/wpn_double_barrel_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/fan_blaster/wpn_fan_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/frying_pan_cannon/wpn_frying_pan_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/guitar_blaster/wpn_guitar_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/gumball_cannon/wpn_gumball_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/hair_dryer/wpn_hair_dryer_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/megaphone_cannon/wpn_megaphone_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/popcorn_blaster/wpn_popcorn_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/scope_cannon/wpn_scope_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/soda_straw_blaster/wpn_soda_straw_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/spatula_rifle/wpn_spatula_rifle_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/tissue_box_cannon/wpn_tissue_box_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/water_tank_blaster/wpn_water_tank_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+    "assets/art/weapons/weapon_3d/components/broom_rifle/wpn_broom_rifle_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_66b1416a4a77d8faecde.png",
+    "assets/art/weapons/weapon_3d/components/candy_sniper/wpn_candy_sniper_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_66b1416a4a77d8faecde.png",
+    "assets/art/weapons/weapon_3d/components/double_barrel_cannon/wpn_double_barrel_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_66b1416a4a77d8faecde.png",
+    "assets/art/weapons/weapon_3d/components/gumball_cannon/wpn_gumball_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_66b1416a4a77d8faecde.png",
+    "assets/art/weapons/weapon_3d/components/hair_dryer/wpn_hair_dryer_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_66b1416a4a77d8faecde.png",
+    "assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_66b1416a4a77d8faecde.png",
+    "assets/art/weapons/weapon_3d/components/water_tank_blaster/wpn_water_tank_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_66b1416a4a77d8faecde.png",
+    "assets/art/weapons/weapon_3d/components/camera_blaster/wpn_camera_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/crocodile_cannon/wpn_crocodile_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/fan_blaster/wpn_fan_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/frying_pan_cannon/wpn_frying_pan_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/guitar_blaster/wpn_guitar_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/megaphone_cannon/wpn_megaphone_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/popcorn_blaster/wpn_popcorn_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/scope_cannon/wpn_scope_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/soda_straw_blaster/wpn_soda_straw_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/spatula_rifle/wpn_spatula_rifle_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/weapons/weapon_3d/components/tissue_box_cannon/wpn_tissue_box_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v007_tripo_node_2550ecce_Normal_Bake.jpg": "assets/art/shared/textures/player/tex_normal_80946086353db8996e9d.png",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v007_Normal.jpg": "assets/art/shared/textures/player/tex_normal_ede311db25d948e31a75.jpg",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_r_v021_Normal.jpg": "assets/art/shared/textures/player/tex_normal_ede311db25d948e31a75.jpg",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v007_Normal.jpg": "assets/art/shared/textures/player/tex_normal_448086ed1e4dc20860a1.jpg",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v007_Normal.jpg": "assets/art/shared/textures/player/tex_normal_448086ed1e4dc20860a1.jpg",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_r_v021_Normal.jpg": "assets/art/shared/textures/player/tex_normal_448086ed1e4dc20860a1.jpg"
+  },
+  "textures": [
+    {
+      "path": "assets/art/shared/textures/player/tex_color_404fbb8f30dd8ae518ed.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/accessories/head/chibi_anime_head_v001/runtime/chr_player_bunny01_head_chibi_anime_top3d_v001_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_chibi_anime_v009_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_chibi_anime_v010_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_chibi_anime_v011_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_ce1c1c357badffa6d87e.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/accessories/head/chibi_anime_head_v002/runtime/chr_player_bunny01_head_chibi_anime_top3d_v002_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_chibi_anime_v021_chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_eefb84f6147351107d29.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v006_tripo_model_metallic-tripo_model_roughness.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_body_v009_tripo_model_metallic-tripo_model_roughness.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_model_metallic-tripo_model_roughness.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_body_v010_tripo_model_metallic-tripo_model_roughness.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_model_metallic-tripo_model_roughness.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_body_v011_tripo_model_metallic-tripo_model_roughness.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_model_metallic-tripo_model_roughness.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_model_metallic-tripo_model_roughness.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_61fdfd6da549bc41ebda.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v006_tripo_node_2550ecce_BaseColor.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_body_v009_tripo_node_2550ecce_BaseColor.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_node_2550ecce_BaseColor.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_body_v010_tripo_node_2550ecce_BaseColor.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_node_2550ecce_BaseColor.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_body_v011_tripo_node_2550ecce_BaseColor.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_node_2550ecce_BaseColor.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_node_2550ecce_BaseColor.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_6ecd8c4084f2c06f8091.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v006_tripo_node_2550ecce_Normal_Bake.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_body_v009_tripo_node_2550ecce_Normal_Bake.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_node_2550ecce_Normal_Bake.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_body_v010_tripo_node_2550ecce_Normal_Bake.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_node_2550ecce_Normal_Bake.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_body_v011_tripo_node_2550ecce_Normal_Bake.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_node_2550ecce_Normal_Bake.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_node_2550ecce_Normal_Bake.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_48687b150d0668f10824.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v007_tripo_model_metallic-tripo_model_roughness.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_body_v021_tripo_model_metallic-tripo_model_roughness.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_7cb8de76c4d38c37b096.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v007_tripo_node_2550ecce_BaseColor.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_body_v021_tripo_node_2550ecce_BaseColor.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_281800b30b888b34aa7c.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v006_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_l_v009_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_r_v009_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_l_v010_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_r_v010_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_l_v011_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_r_v011_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Color.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_81f07b6c751519c7645f.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v006_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_l_v009_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_r_v009_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_l_v010_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_r_v010_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_l_v011_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_r_v011_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Normal.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_6512cb0350251a94e99f.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v006_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_l_v009_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_ear_r_v009_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_l_v010_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_ear_r_v010_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_l_v011_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_r_v011_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_image_694681c1_2-tripo_image_694681c1_1.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_876006dcd7e00f51cee3.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v007_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_l_v021_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_r_v021_Color.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_50272d7428332d813e05.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v007_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_l_v021_tripo_image_694681c1_2-tripo_image_694681c1_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_r_v021_tripo_image_694681c1_2-tripo_image_694681c1_1.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_5926c154c2eaee29c40b.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v006_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v006_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_l_v009_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_r_v009_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Color_7.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_l_v010_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_r_v010_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Color_7.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_l_v011_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_r_v011_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Color_7.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Color_7.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_5315a1117c80d3a1c27a.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v006_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v006_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_l_v009_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_r_v009_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Normal_6.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_l_v010_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_r_v010_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Normal_6.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_l_v011_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_r_v011_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Normal_6.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Normal_6.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_191a61b5b6ac4849ac52.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v006_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v006_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_l_v009_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_foot_r_v009_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_l_v010_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_foot_r_v010_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_l_v011_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_r_v011_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_6b99083e13cbcc1ac6ad.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v007_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v007_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_l_v021_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_r_v021_Color.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_1c86824227ff0baf2264.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v007_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v007_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_l_v021_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_r_v021_tripo_image_9dafe42b_2-tripo_image_9dafe42b_1.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_ccc5a8c2ab58dc97000b.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v006_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_head_v009_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Color_10.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_head_v010_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Color_10.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_head_v011_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Color_10.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Color_10.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_7c6a9b3eb43056a3afda.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v006_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_head_v009_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_Normal_9.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_head_v010_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_Normal_9.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_head_v011_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_Normal_9.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_Normal_9.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_cffdaf91f6c10ac2727e.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v006_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_head_v009_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/chr_bunny01_model_v009_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_head_v010_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/exports/chr_bunny01_model_v010_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_head_v011_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_model_v021_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_f7c1bef04759a88234bf.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v007_Color.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_head_v021_Color.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v007_Normal.jpg",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v007_Normal.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_color_f656b9ca998633576771.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v007_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_head_v021_tripo_image_0a574e5f_2-tripo_image_0a574e5f_1.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_80946086353db8996e9d.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_body_v021_tripo_node_2550ecce_Normal_Bake.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v007_tripo_node_2550ecce_Normal_Bake.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_9c105271f9685f4ebbe7.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_l_v021_Normal.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_bcd514e36a8e90346ca8.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_l_v021_Normal.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_0b562806c82a379a6073.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_head_v021_Normal.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/enemies/tex_color_668b65aa4014f464e84a.png",
+      "size": [
+        256,
+        256
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/body_palette.png"
+      ]
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_body_palette.png",
+      "size": [
+        256,
+        256
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_body_palette.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/enemies/tex_color_c14ee1655185e4bc8ac2.png",
+      "size": [
+        512,
+        341
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_expressions_atlas.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/enemies/tex_color_b441069ac9ac4cd33171.png",
+      "size": [
+        341,
+        512
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_screen_code.png"
+      ]
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/expressions_atlas.png",
+      "size": [
+        512,
+        341
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/expressions_atlas.png"
+      ]
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/screen_code.png",
+      "size": [
+        341,
+        512
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/screen_code.png"
+      ]
+    },
+    {
+      "path": "assets/art/enemies/bosses/enm_boss_monitor002/textures/impact_v014/impact_atlas.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/bosses/enm_boss_monitor002/textures/impact_v014/impact_atlas.png"
+      ]
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d_enm_normal_fat_zombie03_basecolor_v001.jpg",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d_enm_normal_fat_zombie03_basecolor_v001.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/enemies/tex_normal_fa20394fbaf52f6d81c7.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d_enm_normal_fat_zombie03_basecolor_v002.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/enemies/tex_color_0fcad02b82d254f23eab.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d_enm_melee_fungboar01_basecolor_v002.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/enemies/tex_color_d48b3270b03c78c3e1c5.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 512,
+      "sources": [
+        "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d_enm_ranged_sporeshooter01_basecolor_v001.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/environments/base_world_3d/env_base_world_preview_top3d_v001.png",
+      "size": [
+        1024,
+        576
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/environments/base_world_3d/env_base_world_preview_top3d_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/general/tex_color_cd32c74d35cf14a0bc9f.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/environments/british_corner_bookshop_3d/game_output/british_corner_bookshop/textures/多巴胺色盘_10x10_512.png",
+        "assets/art/environments/british_corner_bookshop_3d/shared/多巴胺色盘_10x10_512.png",
+        "assets/art/environments/soviet_snow_street_corner_3d/game_output/soviet_snow_street_corner/textures/苏联雪夜色盘_10x10_512.png",
+        "assets/art/environments/soviet_snow_street_corner_3d/shared/苏联雪夜色盘_10x10_512.png"
+      ]
+    },
+    {
+      "path": "assets/art/environments/open_world/runtime/cross_tower_route/qa_main_exit.png",
+      "size": [
+        1024,
+        711
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/environments/open_world/runtime/cross_tower_route/qa_main_exit.png"
+      ]
+    },
+    {
+      "path": "assets/art/environments/open_world/runtime/cross_tower_route/qa_overview.png",
+      "size": [
+        1024,
+        711
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/environments/open_world/runtime/cross_tower_route/qa_overview.png"
+      ]
+    },
+    {
+      "path": "assets/art/environments/training_range_3d/env_training_range_preview_top3d_v001.png",
+      "size": [
+        1024,
+        576
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/environments/training_range_3d/env_training_range_preview_top3d_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/general/tex_color_a74ffac22a59ad844a3b.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/shared/palette/palette_dopamine_10x10_512_v001.png",
+        "assets/art/weapons/weapon_3d/components/broom_rifle/wpn_broom_rifle_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/camera_blaster/wpn_camera_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/candy_sniper/wpn_candy_sniper_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/double_barrel_cannon/wpn_double_barrel_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/fan_blaster/wpn_fan_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/frying_pan_cannon/wpn_frying_pan_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/guitar_blaster/wpn_guitar_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/gumball_cannon/wpn_gumball_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/hair_dryer/wpn_hair_dryer_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/megaphone_cannon/wpn_megaphone_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/popcorn_blaster/wpn_popcorn_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/scope_cannon/wpn_scope_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/soda_straw_blaster/wpn_soda_straw_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/spatula_rifle/wpn_spatula_rifle_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/tissue_box_cannon/wpn_tissue_box_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/water_tank_blaster/wpn_water_tank_blaster_visual_top3d_v002_多巴胺色盘_10x10_512.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_armor_pierce_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_armor_pierce_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_attachment_parasite_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_attachment_parasite_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_back_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_back_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_barrage_copy_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_barrage_copy_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_bless_dead_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_bless_dead_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_bounce_bullet_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_bounce_bullet_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_bullet_carry_gun_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_bullet_carry_gun_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_bullet_return_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_bullet_return_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_chain_lightning_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_chain_lightning_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_crit_kill_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_crit_kill_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_curse_map_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_curse_map_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_every_seventh_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_every_seventh_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_explode_reload_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_explode_reload_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_extra_loot_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_extra_loot_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_fuse_fire_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_fuse_fire_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_fuse_frost_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_fuse_frost_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_fuse_poison_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_fuse_poison_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_gluttony_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_gluttony_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_gun_on_gun_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_gun_on_gun_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_home_on_land_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_home_on_land_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_huge_scale_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_huge_scale_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_living_bullet_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_living_bullet_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_lucky_chest_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_lucky_chest_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_mark_enemy_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_mark_enemy_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_ammo_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_ammo_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_dash_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_dash_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_elite_heal_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_elite_heal_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_first_hit_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_first_hit_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_guard_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_guard_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_last_stand_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_last_stand_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_power_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_power_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_room_heal_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_room_heal_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_stride_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_stride_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_moon_vitality_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_moon_vitality_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_out_of_control_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_out_of_control_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_overclock_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_overclock_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_reinforce_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_reinforce_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_scale_node_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_scale_node_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_bounty_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_bounty_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_currency_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_currency_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_extra_loot_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_extra_loot_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_extraction_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_extraction_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_key_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_key_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_quality_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_quality_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_reinforce_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_reinforce_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_reveal_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_reveal_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_scorch_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_scorch_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_sun_trial_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_sun_trial_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/fate_cards/ui_fate_card_turret_on_land_v001.png",
+      "size": [
+        640,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/fate_cards/ui_fate_card_turret_on_land_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/ui/inventory_3d/ui_inventory_item_model_preview_v001.png",
+      "size": [
+        1024,
+        576
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/ui/inventory_3d/ui_inventory_item_model_preview_v001.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/general/tex_color_c50b94e4fdb7e0fa5a5b.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/vfx/environment_3d/bird_flocks/components/flyby/vfx_env_birds_flyby_visual_设施低亮多巴胺色盘_10x10_512.png",
+        "assets/art/vfx/environment_3d/bird_flocks/components/ground/vfx_env_birds_ground_visual_设施低亮多巴胺色盘_10x10_512.png"
+      ]
+    },
+    {
+      "path": "assets/art/vfx/environment_3d/cloud_sea/cloud_billow_density.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/vfx/environment_3d/cloud_sea/cloud_billow_density.png"
+      ]
+    },
+    {
+      "path": "assets/art/vfx/textures/glow_32.png",
+      "size": [
+        32,
+        32
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/vfx/textures/glow_32.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/general/tex_color_e26d3998ec43ecf832f1.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/weapons/weapon_3d/components/broom_rifle/wpn_broom_rifle_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/camera_blaster/wpn_camera_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/candy_sniper/wpn_candy_sniper_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/crocodile_cannon/wpn_crocodile_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/double_barrel_cannon/wpn_double_barrel_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/fan_blaster/wpn_fan_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/frying_pan_cannon/wpn_frying_pan_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/guitar_blaster/wpn_guitar_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/gumball_cannon/wpn_gumball_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/hair_dryer/wpn_hair_dryer_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/megaphone_cannon/wpn_megaphone_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/popcorn_blaster/wpn_popcorn_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/scope_cannon/wpn_scope_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/soda_straw_blaster/wpn_soda_straw_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/spatula_rifle/wpn_spatula_rifle_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/tissue_box_cannon/wpn_tissue_box_cannon_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v001_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/water_tank_blaster/wpn_water_tank_blaster_visual_top3d_v001_多巴胺色盘_10x10_512.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/general/tex_color_66b1416a4a77d8faecde.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/weapons/weapon_3d/components/broom_rifle/wpn_broom_rifle_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/candy_sniper/wpn_candy_sniper_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/double_barrel_cannon/wpn_double_barrel_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/gumball_cannon/wpn_gumball_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/hair_dryer/wpn_hair_dryer_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/water_tank_blaster/wpn_water_tank_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/general/tex_color_7a98392f0419cf48f920.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/weapons/weapon_3d/components/camera_blaster/wpn_camera_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/crocodile_cannon/wpn_crocodile_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/fan_blaster/wpn_fan_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/frying_pan_cannon/wpn_frying_pan_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/guitar_blaster/wpn_guitar_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/megaphone_cannon/wpn_megaphone_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/popcorn_blaster/wpn_popcorn_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/scope_cannon/wpn_scope_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/soda_straw_blaster/wpn_soda_straw_blaster_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/spatula_rifle/wpn_spatula_rifle_visual_top3d_v003_多巴胺色盘_10x10_512.png",
+        "assets/art/weapons/weapon_3d/components/tissue_box_cannon/wpn_tissue_box_cannon_visual_top3d_v003_多巴胺色盘_10x10_512.png"
+      ]
+    },
+    {
+      "path": "assets/art/weapons/weapon_3d/components/crocodile_cannon/wpn_crocodile_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png",
+      "size": [
+        512,
+        512
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/weapons/weapon_3d/components/crocodile_cannon/wpn_crocodile_cannon_visual_top3d_v002_多巴胺色盘_10x10_512.png"
+      ]
+    },
+    {
+      "path": "scenes/StartupLoadingSplash.png",
+      "size": [
+        1024,
+        576
+      ],
+      "limit": 1024,
+      "sources": [
+        "scenes/StartupLoadingSplash.png"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_ede311db25d948e31a75.jpg",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v007_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_ear_r_v021_Normal.jpg"
+      ]
+    },
+    {
+      "path": "assets/art/shared/textures/player/tex_normal_448086ed1e4dc20860a1.jpg",
+      "size": [
+        1024,
+        1024
+      ],
+      "limit": 1024,
+      "sources": [
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v007_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v007_Normal.jpg",
+        "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/exports/chr_bunny01_foot_r_v021_Normal.jpg"
+      ]
+    }
+  ],
+  "source_dependencies": [
+    "assets/art/shared/textures/general/tex_color_cd32c74d35cf14a0bc9f.png",
+    "assets/art/shared/textures/general/tex_color_cd32c74d35cf14a0bc9f.png"
+  ],
+  "geometry_preserved_views": 5039
+}

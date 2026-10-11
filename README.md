@@ -36,3 +36,5 @@ Godot 4.6 顶视角 3D 搜打撤肉鸽。当前项目版本为 `0.1.0`。
 `outputs/`、`.dev-cycle/` 和 `.codex-tmp/` 都是可丢弃工作产物，不进入版本控制。
 
 开发临时产物放在上层 `ShellStorm2-work/`，历史制作源放在 `ShellStorm2-backup/`；见[管理与恢复记录](docs/v0.1/development/2026-10-11_workspace_slimming.md)。
+
+运行贴图遵循[尺寸与共享规则](docs/v0.1/design/runtime_texture_budget.md)：玩家最长边1024、怪物512、全部不超过1024；共享图在`assets/art/shared/textures/`。导出或重导入模型后运行`python scripts/check_runtime_texture_policy.py`，检查贴图超限、丢引用及内嵌图片回归。本次[优化记录](docs/v0.1/development/2026-10-11_runtime_texture_optimization.md)保留实际包体和验收证据。

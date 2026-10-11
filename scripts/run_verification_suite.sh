@@ -610,4 +610,11 @@ case "${suite}" in
     ;;
 esac
 
+# Runtime texture budgets and external shared image references are export contracts.
+case "${suite}" in
+  core|aggregate|full)
+    python3 "${project_root}/scripts/check_runtime_texture_policy.py" || exit 1
+    ;;
+esac
+
 printf '\nVERIFICATION_SUITE_OK suite=%s count=%d\n' "${suite}" "${#scenes[@]}"

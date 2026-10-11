@@ -963,7 +963,7 @@
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-BODY": {
-   "v": "76a89468fb2f5ba1e3a0141db1e2a262ac4f3fd751f422a624364e844f4168c4",
+   "v": "c3353909b8f61a31cfe09c25bfb25ff218a568b005c945ecf87dc6fdad4602b4",
    "c": "角色",
    "d": "characters"
   },
@@ -973,12 +973,12 @@
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-FOOT-L": {
-   "v": "0af38f9bec14a1a0162ba8f023103f5b12323c6ccd1c88aefce2f392be72a0ff",
+   "v": "474ae0b5d494d05d638bdf6ac7ac863789cb622aa067124e45e56ea706f9f207",
    "c": "角色",
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-FOOT-R": {
-   "v": "3fe63a8a0e9917f188f7f53f084c5663889f64714a3078df43310efae3d845fe",
+   "v": "7003f65b59d7acec92b8b05a51dcaed89840abe7dcd6f3b3d7247cad88fa6c52",
    "c": "角色",
    "d": "characters"
   },
@@ -988,7 +988,7 @@
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01-HEAD": {
-   "v": "dee674ff26b9354d4a66d94530f6cbbb1c4b59db68cce821434d821cf83311c8",
+   "v": "28f92fd31eb84da3b81d6875f0b3b3f015678eb1f3e8c5dcb1c6ad328bdaa48d",
    "c": "角色",
    "d": "characters"
   },
@@ -1103,7 +1103,7 @@
    "d": "scenes"
   },
   "ENV-BASE-WORLD-3D-PREVIEW": {
-   "v": "40a9bbef20debd215df0f22e2344aa254a8d8a5435224a99a0f1f57bf92c708c",
+   "v": "68a6facf6cfd91d1546c2927106ffafa32bc793fe6f955776e220fc719ff02e5",
    "c": "场景",
    "d": "scenes"
   },
@@ -4563,7 +4563,7 @@
    "d": "scenes"
   },
   "ENV-TRAINING-RANGE-3D-PREVIEW": {
-   "v": "b28fda2b0235b8a9743aba1d4ae00869e859c138cec3bc1a5c1cf218623b0482",
+   "v": "2c22b9b7223770e89ad07f8950f869d71b7cff69fa33645440e40561285f837d",
    "c": "场景",
    "d": "scenes"
   },
@@ -5366,7 +5366,7 @@
   "15": "c84456dd9a534c9147b92a71d9a92e552539af4b50167fcdab2994dadd586d94",
   "16": "a5c15fcb98542fbe7ae501560fc92a9101ab73d7a0b60ba003090ad5558a6691",
   "17": "42e5ea52994d08dc209341bcee27ec4f8191d16049e5a26a09b8ec1b2d010148",
-  "20": "749d69c6988aaddf781add3272b2d4031f58317ded5628f44ab5aaa69381c650",
+  "20": "59cf8fda616624f6bf347867164f5604ba382196de85264ae1b303e05003be6b",
   "21": "30c5168ffc60196e26c8e2dd72b3a3e011b59cf031bc3405bd8061866c896cfb",
   "22": "93c7fdfd1e9009e8e127f2967ee49f003a517c2e1e03f4c3f753b7cb47f227bf",
   "23": "d0340be1e87dd0c4c2c2ce00cf8fe4766b67a291c17ce7c0a175fe71ef715bfb",
@@ -5377,7 +5377,7 @@
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
   "动画与状态": "e22d4882d9e9de8ac88c2b397f69cfa50e022c458b1b67ab3fd72030a7322280",
   "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
-  "角色中转记录": "16ec45cc50d2af3e70e122383b5af445696d18e01b69f1585eb7e497cd276baf",
+  "角色中转记录": "4925f2b61d3344797e59bd5390caf69075c3d0fa6fec5a6836b52c010c70bb61",
   "3D-角色": "189f9bd9b416af7628869554459659bbb1620ea22e6a91d12cf874bf55231ee3",
   "敌人动画与状态": "bd8109fdccfb7c0dab1c93a2db10b36bd19928ef6a3d306fd583636c0df1c238",
   "3D-敌人": "554727f03cd8a5bd7e477a3e09c53c8d5d5a858779fefb154dd72b97221c28e1",

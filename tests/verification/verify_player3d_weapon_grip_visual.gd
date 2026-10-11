@@ -2,14 +2,14 @@ extends Node
 
 const PLAYER := preload("res://scenes/Player3D.tscn")
 const WEAPON_MODEL := preload("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn")
-const OUTPUT := "res://outputs/verification/player3d_weapon_grip.png"
-const SIDEARM_CLOSEUP_OUTPUT := "res://outputs/verification/player3d_sidearm_idle_closeup.png"
-const RIGHT_HAND_RIG_OUTPUT := "res://outputs/verification/player3d_right_hand_grip_rig.png"
-const SIDEARM_MUZZLE_ALIGNMENT_OUTPUT := "res://outputs/verification/player3d_sidearm_muzzle_aim_alignment.png"
-const BACK_SOCKETS_OUTPUT := "res://outputs/verification/player3d_back_weapon_sockets.png"
-const BACK_SOCKETS_TOP_OUTPUT := "res://outputs/verification/player3d_back_weapon_sockets_top.png"
-const DUAL_NO_BACKPACK_OUTPUT := "res://outputs/verification/player3d_dual_back_weapons_no_backpack.png"
-const DUAL_NO_BACKPACK_TOP_OUTPUT := "res://outputs/verification/player3d_dual_back_weapons_no_backpack_top.png"
+var OUTPUT := VerificationOutput.path("player3d_weapon_grip.png")
+var SIDEARM_CLOSEUP_OUTPUT := VerificationOutput.path("player3d_sidearm_idle_closeup.png")
+var RIGHT_HAND_RIG_OUTPUT := VerificationOutput.path("player3d_right_hand_grip_rig.png")
+var SIDEARM_MUZZLE_ALIGNMENT_OUTPUT := VerificationOutput.path("player3d_sidearm_muzzle_aim_alignment.png")
+var BACK_SOCKETS_OUTPUT := VerificationOutput.path("player3d_back_weapon_sockets.png")
+var BACK_SOCKETS_TOP_OUTPUT := VerificationOutput.path("player3d_back_weapon_sockets_top.png")
+var DUAL_NO_BACKPACK_OUTPUT := VerificationOutput.path("player3d_dual_back_weapons_no_backpack.png")
+var DUAL_NO_BACKPACK_TOP_OUTPUT := VerificationOutput.path("player3d_dual_back_weapons_no_backpack_top.png")
 
 
 func _ready() -> void:
