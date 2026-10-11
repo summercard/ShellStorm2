@@ -19,7 +19,7 @@ const ENTRIES := {
 	"nar_tower_opening_01_wake": ROOT + "nar_tower_opening_01_wake.json",
 	# 开场第二段：走进会议室（区块00 的下一间）时触发。
 	"nar_tower_opening_02_zombies": ROOT + "nar_tower_opening_02_zombies.json",
-	# 开场 2.5 段：98F→99F 楼梯间（中段折角平台）经过时触发。
+	# 开场 2.5 段：经过 99F 基地东门外、靠近东门时触发。
 	# 只做一件事：把基地的灯**提前关掉**。99F 基地默认是点亮的，若不提前关，
 	# 玩家会在剧本03 起播那一刻看到「基地先亮 → 突然变暗」的割裂感。
 	"nar_tower_opening_02_5_stairwell_blackout": ROOT + "nar_tower_opening_02_5_stairwell_blackout.json",

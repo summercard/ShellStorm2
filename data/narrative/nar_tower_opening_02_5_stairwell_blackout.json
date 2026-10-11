@@ -4,10 +4,11 @@
   "priority": 0,
   "trigger": {
     "kind": "point",
-    "point": [
-      42.501,
-      -18.0,
-      -17.0637
+    "point_room": "facility",
+    "point_offset": [
+      17.0,
+      0.0,
+      -2.5
     ],
     "radius": 2.5,
     "once": "run"

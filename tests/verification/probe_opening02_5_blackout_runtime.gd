@@ -4,9 +4,9 @@ extends Node
 ##
 ## 要钉死的事实：
 ##   1. 初始：99F 基地灯是亮的（默认契约）。
-##   2. 玩家经过 98F→99F 楼梯间中段折角平台时，剧本 2.5 起播、基地灯立即转暗。
+##   2. 玩家经过 99F 基地东门外时，剧本 2.5 起播、基地灯立即转暗。
 ##   3. 从那一刻起（含剧本 03 起播与收口），逐帧采样灯态**从未回到亮**。
-##   4. 剧本 2.5 不锁输入（玩家正在上楼，不能被定住）。
+##   4. 剧本 2.5 不锁输入（玩家经过门外，不能被定住）。
 ##
 ## 运行：
 ##   godot --headless --path . res://tests/verification/probe_opening02_5_blackout_runtime.tscn
@@ -14,8 +14,8 @@ extends Node
 const SEED := 990099
 const BLACKOUT_ID := "nar_tower_opening_02_5_stairwell_blackout"
 const DARK_ID := "nar_tower_opening_03_base_dark"
-## 楼梯间中段折角平台**几何中心**（与剧本 trigger.point 同一口径）。
-const STAIR_MID := Vector3(42.501, -18.0, -17.0637)
+## 99F 基地东门外触发点（与剧本 point_room + point_offset 同一口径）。
+const FACILITY_DOOR_OUTSIDE := Vector3(17.0, -12.0, 2.5)
 ## 剧本03 触发点：facility 房局部 (10, 0, -2.5)。
 const DARK_TRIGGER_LOCAL := Vector3(10.0, 0.0, -2.5)
 
@@ -50,28 +50,28 @@ func _ready() -> void:
 	print("-- light_on = %s" % str(_facility.call("is_room_light_on")))
 	_check(_facility.call("is_room_light_on"), "初始：99F 基地灯是亮的（默认契约）")
 
-	# —— 第一步：站上楼梯间中段平台，等位置轮询命中剧本 2.5 ——
-	var stair_world := STAIR_MID + Vector3.UP * 0.05
-	player.global_position = stair_world
+	# —— 第一步：站到 99F 基地东门外，等位置轮询命中剧本 2.5 ——
+	var door_outside_world := FACILITY_DOOR_OUTSIDE + Vector3.UP * 0.05
+	player.global_position = door_outside_world
 	await _settle()
 	var fired_blackout := false
 	for i in 20:
-		player.global_position = stair_world
+		player.global_position = door_outside_world
 		player.velocity = Vector3.ZERO
 		await get_tree().process_frame
-		if NarrativeDirector.active_id() == BLACKOUT_ID:
+		if NarrativeDirector.active_id() == BLACKOUT_ID or NarrativeDirector.dispatch_log().has("start:" + BLACKOUT_ID):
 			fired_blackout = true
 			break
 
-	print("\n########## 楼梯间中段 ##########")
+	print("\n########## 99F 基地东门外 ##########")
 	print("-- director active = '%s'" % str(NarrativeDirector.active_id()))
-	print("-- input locked = %s  (期望 false：不能定住正在上楼的玩家)" % str(
+	print("-- input locked = %s  (期望 false：门外经过时不能定住玩家)" % str(
 		NarrativeDirector.is_player_input_locked()
 	))
-	_check(fired_blackout, "经过楼梯间中段触发了剧本 2.5")
+	_check(fired_blackout, "经过99F基地东门外触发了剧本 2.5")
 	_check(
 		not NarrativeDirector.is_player_input_locked(),
-		"剧本 2.5 不锁输入（玩家在楼梯上不受干扰）"
+		"剧本 2.5 不锁输入（玩家经过门外不受干扰）"
 	)
 	# 触发那一帧 cue 还没派发（导演在下一帧 _process 才派发），所以给几帧观察窗；
 	# 「立即转暗」的口径 = 0.2s 内完成，而不是同一帧。

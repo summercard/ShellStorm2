@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tests/verification/probe_opening02_5_full_transition_diagnostic.gd" id="1_diag"]
+
+[node name="Probe" type="Node"]
+script = ExtResource("1_diag")
