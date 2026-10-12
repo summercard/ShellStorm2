@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-10-09T16:12:00",
+ "captured_at": "2026-10-12",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1062,
+ "asset_count": 1063,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -4543,7 +4543,7 @@
    "d": "scenes"
   },
   "ENV-TOWER-WALL-DOOR-5M": {
-   "v": "d415c6286ae491ef5a914e7c80d571f5bcb15e6f4b921f862a4a559a5b82a0c9",
+   "v": "2e921d9dd062e58b74755e60fc87e6985680a13525db30516b864dd95163c853",
    "c": "场景",
    "d": "scenes"
   },
@@ -4558,7 +4558,7 @@
    "d": "scenes"
   },
   "ENV-TOWER-WALL-SOLID-5M": {
-   "v": "59d0b459c04e75b4a209336d18ca48d309a1bbb5146ce6edf8a1add20e3acb9f",
+   "v": "c35779554497822ef612c8e55d2f4b9bea65b78abfd6042b4a03f5b61f2309f1",
    "c": "场景",
    "d": "scenes"
   },
@@ -5346,32 +5346,37 @@
    "v": "6de6e52e64432065ac2896454d963370913b1012cb113cf3e56856d0beb124e0",
    "c": "UI",
    "d": "ui"
+  },
+  "ENV-BATTLE-EXIT-NEON-SIGN": {
+   "v": "d0d331af4b6a97fca578e3d7ba895acfe23890d851d9a4a1907342483d8f6e7f",
+   "c": "场景",
+   "d": "scenes"
   }
  },
  "column_digests": {
-  "1": "ef1256f31a84d8eae6523b42ecff06b5174134ac2830b85022167ad2b171a75c",
-  "2": "081e66fa1de4365b62fdf994fd1bee49ed15bbbfa2e75aa62a3bfb919d15c064",
-  "3": "6fccdd0290eb7526009722157daea6822d2b7385ffd2ed0877fdecf490a40fbb",
-  "4": "0927520cb895f658338dc1e6dd68854ec9fcfba013e5f8e1883becc27d4f6e9a",
-  "5": "b638b6f977ea69e1f1ff9e9bbeb400113aaf7d6f048d2c814b38246441609074",
-  "6": "98f2c2b68924e979a83f262bfa9f7e34c873c25748b1111bb46ec1d75c7bea2b",
-  "7": "87d6cb15df01e9e030cc88a7e197a5e34d078c994c66711abe1e3c4f61b44b73",
-  "8": "c08bbb825daba6f2093123228763604da575ff0a7f78eb58fbe27138906af1cc",
-  "9": "8ce4c3ad223cadb38e03a50ea9db0bfe6b465c02e3686f8f6da14b9702ed4782",
-  "10": "2abe7a57485ddd6ae0073c71a6ea895a12f363d694fd296807b8b9221f010c67",
-  "11": "7991a1831eaf4800e23cc9b32a59bb8cec5b274036a20dc5c683b9d2054a001b",
-  "12": "a71c3c719c533ebc3692d9e04576edda17d03fe3ef69a21b1285bddd2bd086b1",
-  "13": "76a2ec6fa64eb11de3ba0e968326b02a08c8b206121763f2b1a5b935038f1a29",
-  "14": "3de7c591ada072aac62a187c259ea454058e9c476b02ab502e3d0a41d01b6262",
-  "15": "b8201bb1b5188f832b8ee6c3d174fdd537b6b6d5131f45138b090be6eaf7fa28",
-  "16": "a6e51449d3e40bfe3a43a5f5c113be132c524185fa880ae05e29bde1ff0d6ba5",
-  "17": "42e5ea52994d08dc209341bcee27ec4f8191d16049e5a26a09b8ec1b2d010148",
-  "20": "ca17e537949e16c3b87c19882dec8ed16ae309abe817624e918801c1fbfaa835",
-  "21": "30c5168ffc60196e26c8e2dd72b3a3e011b59cf031bc3405bd8061866c896cfb",
-  "22": "d30ec3e80b7c27257a4b9c4f447e8fe8308c531f4b2b8ed1fe3057a9419e0fd7",
-  "23": "d0340be1e87dd0c4c2c2ce00cf8fe4766b67a291c17ce7c0a175fe71ef715bfb",
-  "24": "14eeb37d70f46855733077e8fc94bef229ae554d373b6cee0ab2dc1c51156a23",
-  "25": "26cd614f7868255304f31a3332df158b37119911d32e833da31aa3fe96c9fc5c"
+  "1": "b8d8c069c414138ff32a3b936e6e2a828ba3c9aaf7993a63075cea1b0fd5de7f",
+  "2": "b2be82220059a60bc5a7c6843aa8327943ac6407c0fd0a931a84b62da6584db9",
+  "3": "9c33a1b6b6fc2408c55b6d050e63a5fc75a4a70a932046cdfcf8ae9adaa00588",
+  "4": "fbfb6a9234384b2b7b3ee2fd5230ee54abd3e51bd10f6c4f0e3f77959ed26a5e",
+  "5": "904cc20926d424aafe29f40d9fc1770dc2d6ca2de6f3f204070e6d8547160ea6",
+  "6": "b88ba5c6d14b01f525b0d3a3eab17acb847e1062fe9dc6d3f1e68b324e20cb03",
+  "7": "67800303c9b4eaa2b3cceb81703763e7835fc347b5cf27f3033915e91be34a3e",
+  "8": "2ed1a513fe57aca89e1c6848b7adb772bd1df52da96c097c1f03108c56a5586d",
+  "9": "11bd7d9dd40560b960fa6de47518bf68f39b8df6aabfd93c4ca8b02c7ba73b28",
+  "10": "e224b48826e782675c3fc421ee97f025bbf3db6752ab2e89cabe8f7efb0353db",
+  "11": "d3c2d69b79f76b212ef828778137a17fdb1766e851d1d56812a5a377d03f626b",
+  "12": "b298f552ba20c4e4b5f77c2f4e8c293191078367bf25fffeda3126ad9e03f54a",
+  "13": "452ce32bd712309b5b3750938974eadff14e9fceaeb4897d5812927c1ab85f6f",
+  "14": "cd7cd143aed36176bf95bf35d65b3c5cd093e51df5b4d52646d07bd870726bb6",
+  "15": "209128959b5eab5bff3a27b63b97323acaad7da382433f3f2559a8097400d19a",
+  "16": "96ee5c8e23237d670e018845510a1ada73865d17a94fa8e1bf7cd8630fb44616",
+  "17": "e2ce8c9db6e7718cde7610fb568adef308b58fe5ba430d3c219d4fce8032657f",
+  "20": "a1baaca26b338622e0363d2cb3e148ac8d06ffea98f2b8b744c58171a084b794",
+  "21": "370d40b6a3d202ba6a6d28b4a67f1e5e29e85983975e7af018e867d9c495929d",
+  "22": "d9a0ac5913c05bed38c527f9f5b6754ca775ed685ed4702ba5bff072ca094a60",
+  "23": "c6f00e486113c2b1ce464a3b7fe27ec48466aeb8f661453fdad12e6b98995cab",
+  "24": "9544b82a2f844f5a195b604db6b44d179c8ad915e31704755ddcfb263d1e34f4",
+  "25": "8b62ad3a8d9e0a3881eb76a709936e1a6554f110bb2c39d00e7bcae81430dff3"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -5381,8 +5386,8 @@
   "3D-角色": "37e8efad1547ef2177176a717435e25e6b04d4d35cbd0f83860a75f5eec6eb00",
   "敌人动画与状态": "355dbe8381157a3eabee0cd4630992c79f807677bc35230711adc402d50d1a86",
   "3D-敌人": "b3851d07c27edfb6fed4c01e87814bb8b1675b8b235e6558601925a866cb240b",
-  "3D-场景通用": "8bd122f7f2eb38b393a8529bcc45b9f8f45c000fa0a0098c44c4b7e5061c5c57",
-  "3D-设施": "afddd0eb7da5b1879c2838db16fb2263a176f3fab2abb001742a94e71303d993",
+  "3D-场景通用": "f1e745282cc37c899a67af9395ad4b5f53279d9be313feb83953c6598b6d504c",
+  "3D-设施": "1446d8b53e99a875cd42eb0f4acc9a25420b031803e9465579eae2fb7cc4cbe1",
   "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
   "3D-物品": "9d9b453ed3a92cf13c4de5fe797715bdc9a1c8135bc1a0449b1c2f6ca4799b4b",
@@ -5391,7 +5396,7 @@
  },
  "category_counts": {
   "UI": 18,
-  "场景": 703,
+  "场景": 704,
   "场景道具": 49,
   "基地资产包": 114,
   "敌人": 15,
@@ -5488,6 +5493,13 @@
    "operation": "archive source path relocation only",
    "cells": 0,
    "manifest": "../ShellStorm2-backup/2026-10-11_slimming/management/ledger_path_patches.json"
+  },
+  {
+   "date": "2026-10-12",
+   "asset_id": "ENV-BATTLE-EXIT-NEON-SIGN",
+   "version": "v001",
+   "status": "正式美术已接入",
+   "scope": "One scene-ledger asset row plus 3D-设施 sparse edit and domain log; union column digests / category counts / 3D-设施 sheet digest refreshed only after every unrelated row fingerprint matched the prior baseline."
   }
  ],
  "controlled_updates": [

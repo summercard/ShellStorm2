@@ -89,7 +89,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/expedition_01/floors/floor_00.json",
-      "sha256": "61f591dcd261cd4d8b537ac585072b223503179dbb4761c743ed83020f361eb5"
+      "sha256": "96eb2a46df2d3c7441d7f71670efd13c2fc8754006c272b22d5ff1cd01540d00"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
@@ -179,7 +179,7 @@
     {
       "source": "art_source/environments/tower_zones/expedition/source/common_components/v011/component_instances.json",
       "runtime": "data/layouts/expedition/v011/component_instances.json",
-      "sha256": "a32cb09b3fc2d828ce47b030c9e900c1f0acb899dc93d6e1866d297888a94927"
+      "sha256": "2035863753f97c70e0acda1c503a2092f948d61f8623596fb8a81ad24062b51d"
     },
     {
       "source": "art_source/environments/tower_zones/expedition/source/room_instances/f00_room_03/v001/room_layout.json",

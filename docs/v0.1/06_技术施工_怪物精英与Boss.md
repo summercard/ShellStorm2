@@ -174,6 +174,46 @@ SelectEligibleElite(seed, floor, history)
 
 可投射视觉阴影但没有物理碰撞的纯装饰网格，无法成为可靠玩法遮挡物。进入正式关卡的屋顶、墙、楼板、遮阳棚和大型实体遮挡物必须同时具备与轮廓匹配的静态物理碰撞；资产验收需要同时检查视觉阴影与玩法射线遮挡。
 
+#### 7.3.1 封顶件（顶盖遮光）硬契约 — 2026-10-12 定
+
+**「画面上有阴影」与「玩法判为投影」是两件事。** 前者是渲染层（`cast_shadow`），
+后者只认 `occlusion_mask = 1`（关卡静态世界层）上带 `CollisionShape3D` 的静态刚体。
+**只有阴影、没有碰撞的顶盖＝僵尸照样晒太阳。** 远征 01 的 `room_02/06/10` 与
+Boss 房就是这条病症的实例：天花板视觉齐全、遮出了阴影，实测仍有 81%~100% 的身体采样点
+直达太阳并每秒掉 2% 最大生命。
+
+因此「房间已封顶」的判定**只能**取以下三项全真（缺一即视为未封顶）：
+
+1. **有顶盖件**：房型布局实例清单里存在覆盖整片屋顶的构件；
+2. **该 prefab 带 `layer = 1` 碰撞盒**：`metadata/collision_policy = "structural_box_proxy"`、
+   `metadata/collision_shape_count = 1`，盒尺寸=组件全包络、位置 `y = +高/2`；
+3. **静态场景里真落成同名节点**，且 `authored_layout_room_type_component_count` 计入它。
+
+配套口径（两条都别改）：
+
+- **`slot_role` 必须是 `room_type_component`，不得是 `solid_wall`。** 水平顶盖不是墙：
+  写成 `solid_wall` 会被门槽判据（`classify_door_lane`）当墙统计、并挂上语义为四向墙的
+  `tower_wall_direction`，污染墙/门槽 lane 台账。
+- **顶盖用全包络盒，不照几何切段。** 顶盖全在 `y ≈ 11.15~11.87`，远高于玩家与子弹常用
+  高度，包络盒不造成空阻挡；而房型顶盖件（`wall_top_service` / `ceiling_ring_beam`）
+  本身是中空周圈，包络盒恰好把周圈内侧封成整片顶盖。
+
+规范落点与守卫：
+
+| 环节 | 位置 | 守卫 |
+| --- | --- | --- |
+| 顶盖 slug 名单与分类 | `scripts/generate_expedition_room_type_prefabs.py` 的 `TOP_COVER_OCCLUDER_SLUGS` | 生成器内 `assert_top_cover_contract()` 三道门禁：登记了却查无此件 / 命中却没拿到碰撞 / 叫 `ceiling_*` 却没登记，**全部硬失败** |
+| 组件 prefab 碰撞 | `assets/art/.../expedition/runtime/room_type_components/*/ceiling_*`、`*/wall_top_service` | `tests/tooling/test_generate_expedition_room_type_prefabs.py` |
+| 房间静态场景实例 | `assets/art/.../room_instances/expedition_01/f00_*_static_layout.tscn` | `tests/tooling/test_expedition_boss_ceiling_contract.py` |
+| 实测遮光结果 | — | `tests/verification/probe_expedition_room_sun_occlusion.tscn`（逐房沿太阳方向打射线，打印直接见太阳比例） |
+
+⚠ **远征 01 现况（2026-10-12 实测）**：`room_02/03/06/09/10` 与 `boss` 已 0/75 全遮；
+`start` 13%、`room_04` 40%、`room_01/05/07/08/extraction` 80% 仍见光 —— 这些房型本来
+就不带顶盖件（走廊 / 桥房 / 标准房），仍按 7.3 由 12m 墙高承担部分遮挡，**尚未封顶**。
+Boss 房封顶是复用 DB 房已验收的 `ENV-EXPEDITION-L01-DB-CEILING_DECK_40M`，属人工审计加入
+（`component_instances.json` 的 `audited_additions`），重跑组件归并工具前必须先并进 Blender 源。
+
+
 ### 7.4 运行时接口
 
 统一受光组件至少提供：
