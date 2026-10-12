@@ -24,6 +24,7 @@ class_name ExpeditionLoadingScreen
 ## 到达关卡路径**不在此处硬编码**：终点真源统一为 GameDesignConfig 的远征关卡清单。
 ## 本常量只是**默认终点**（远征关卡01）；实际去向由选关菜单写入的待进入关卡 id 决定，
 ## 见 `_destination_level_id()`。
+const RESOURCE_WARMUP := preload("res://src/world3d/LoadingResourceWarmup.gd")
 const LEVEL_SCENE := GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D
 ## 旧探针常量仍保留；真实进度不再由固定时长驱动。
 const TOTAL_DURATION_S := 1.35
@@ -44,7 +45,7 @@ const BUNNY_SCENE := "res://assets/art/characters/player/chr_player_capsule01_3d
 ## 侧视跑动直接取动作库剪辑：`_state = "moving"` 且"未持械"时解析为
 ## `unarmed_moving_forward`（0.8s / 49 帧循环）。不改剪辑数据、不新增美术资产。
 const BUNNY_RUN_STATE := "moving"
-const SHOWCASE_SIZE := Vector2i(360, 400)
+const SHOWCASE_SIZE := Vector2i(180, 200)
 ## 正交相机：站在兔子 +X 侧看向 -X（正侧面），视锥竖直刚好从地面 y=0 起算。
 ## 留约 23% 顶部余量，保证耳朵尖与脚都在画面内、剪影完整可读。
 const ORTHO_SIZE := 1.95
@@ -66,6 +67,8 @@ const INK := Color(0.0, 0.0, 0.0, 1.0)
 const PAPER := Color(1.0, 1.0, 1.0, 1.0)
 const BAR_TRACK_COLOR := Color(1.0, 1.0, 1.0, 0.16)
 
+var _world_render_was_disabled := false
+var _owns_world_render_gate := false
 var _elapsed := 0.0
 var _loading_started_msec: int = 0
 ## 兼容旧截图/探针；不再作为真实进度或切场景条件。
@@ -74,6 +77,9 @@ var _level_id := ""
 var _target_scene := ""
 var _target_name := ""
 var _resource_request_active := false
+var _resource_warmup_active := false
+var _warm_resources: Array[Resource] = []
+var _resource_poll_after_frame := 0
 var _scene_change_started: bool = false
 var _scene_changed_seen: bool = false
 var _requires_loading_scene_ready_contract: bool = true
@@ -101,6 +107,9 @@ var _bunny_motion: CharacterMotionLibrary3D
 func _ready() -> void:
 	layer = 220
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_world_render_was_disabled = get_viewport().disable_3d
+	get_viewport().disable_3d = true
+	_owns_world_render_gate = true
 	_capture_destination()
 	if _root == null:
 		_build_ui()
@@ -112,6 +121,12 @@ func _ready() -> void:
 	_play_intro()
 	# UI/兔子舞台构建耗时不能挤占最低展示时长。
 	_loading_started_msec = Time.get_ticks_msec()
+	_start_after_intro()
+
+
+func _start_after_intro() -> void:
+	if _intro_tween != null and _intro_tween.is_valid():
+		await _intro_tween.finished
 	_start_resource_request()
 
 
@@ -202,10 +217,20 @@ func _report_loading(progress: float, status: String) -> void:
 
 
 func _start_resource_request() -> void:
+	if _resource_warmup_active:
+		return
 	if _target_scene.is_empty():
 		_show_failure("resource", "目标场景为空，无法读取")
 		return
+	_resource_warmup_active = true
+	_set_status("正在读取 %s" % _destination_display_name())
+	var warm_error := await RESOURCE_WARMUP.warm(_target_scene, get_tree(), _warm_resources, _report_resource_warmup, _requires_loading_scene_ready_contract)
+	_resource_warmup_active = false
+	if warm_error != OK:
+		_show_failure("resource", "资源预读取失败：%s" % error_string(warm_error))
+		return
 	_resource_request_active = true
+	_resource_poll_after_frame = Engine.get_process_frames()
 	_failure_kind = ""
 	_set_status("正在读取 %s" % _destination_display_name())
 	var error := ResourceLoader.load_threaded_request(_target_scene, "PackedScene")
@@ -214,13 +239,21 @@ func _start_resource_request() -> void:
 		_show_failure("resource", "资源读取失败：%s" % error_string(error))
 
 
+func _report_resource_warmup(ratio: float) -> void:
+	var mapped := ratio * 0.50
+	_apply_progress(mapped)
+	_report_loading(mapped, "正在读取 %s" % _destination_display_name())
+
+
 func _poll_resource_request() -> void:
+	if Engine.get_process_frames() <= _resource_poll_after_frame:
+		return
 	var load_progress: Array = []
 	var status := ResourceLoader.load_threaded_get_status(_target_scene, load_progress)
 	var actual := 0.0
 	if not load_progress.is_empty():
 		actual = clampf(float(load_progress[0]), 0.0, 1.0)
-	var mapped := actual * 0.70
+	var mapped := 0.50 + actual * 0.20
 	_apply_progress(mapped)
 	_report_loading(mapped, "正在读取 %s" % _destination_display_name())
 	match status:
@@ -279,6 +312,8 @@ func _poll_target_scene() -> void:
 	var status := str(_iris_value("loading_status", "正在生成关卡"))
 	_set_status(status)
 	var target := get_tree().current_scene
+	if target != null and target.has_method("hold_loading_render"):
+		target.call("hold_loading_render")
 	if bool(_iris_value("loading_scene_failed", false)):
 		_scene_change_started = false
 		_disconnect_scene_changed()
@@ -305,7 +340,8 @@ func _target_is_ready(target: Node) -> bool:
 	if bool(_iris_value("loading_scene_failed", false)):
 		return false
 	if not _requires_loading_scene_ready_contract:
-		return true
+		# 基地分帧装配时 Node.ready 先到；等待其持久化与出生点交接完成。
+		return not bool(target.get_meta("loading_bootstrap_pending", false))
 	return (
 		bool(_iris_value("loading_scene_ready", false))
 		# 父类 generation_completed/Node.ready 都早于 Tower 装配末尾，不能作为完成依据。
@@ -368,6 +404,17 @@ func _finish_loaded_scene(target: Node) -> void:
 		return
 	if IrisTransition != null:
 		IrisTransition.cover_now()
+	# 首次世界渲染可能初始化 SDFGI/着色器。先结束读取页动画，再在全黑覆盖下
+	# 预热目标的真实画面；玩家处理仍锁住，开圈时不再现建渲染管线。
+	if target is Node3D:
+		(target as Node3D).visible = bool(target.get_meta("loading_previous_visible", true))
+	if target.has_method("prepare_loading_render"):
+		target.call("prepare_loading_render")
+	_restore_world_render()
+	await _wait_for_basic_scene_ready(target)
+	if tree.current_scene != target or not _target_is_ready(target):
+		_finalizing = false
+		return
 	_disconnect_scene_changed()
 	# 通过统一交接点恢复目标处理并清理读取契约；通知会让 Tower 恢复输入/子树。
 	if IrisTransition != null:
@@ -580,9 +627,9 @@ func _build_status_controls(content: Control) -> void:
 	_status_label.add_theme_color_override("font_color", PAPER)
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_status_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	_status_label.offset_left = -520.0
+	_status_label.offset_left = -WAVE_RIGHT_MARGIN - 320.0
 	_status_label.offset_top = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 42.0)
-	_status_label.offset_right = -SHOWCASE_RIGHT_MARGIN
+	_status_label.offset_right = -WAVE_RIGHT_MARGIN
 	_status_label.offset_bottom = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 12.0)
 	_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content.add_child(_status_label)
@@ -593,9 +640,9 @@ func _build_status_controls(content: Control) -> void:
 	_retry_button.visible = false
 	_retry_button.add_theme_font_size_override("font_size", 18)
 	_retry_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	_retry_button.offset_left = -250.0
+	_retry_button.offset_left = -WAVE_RIGHT_MARGIN - 220.0
 	_retry_button.offset_top = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 96.0)
-	_retry_button.offset_right = -SHOWCASE_RIGHT_MARGIN
+	_retry_button.offset_right = -WAVE_RIGHT_MARGIN
 	_retry_button.offset_bottom = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 52.0)
 	_retry_button.pressed.connect(_on_retry_pressed)
 	content.add_child(_retry_button)
@@ -766,3 +813,13 @@ func _drive_bunny(delta: float) -> void:
 	if _bunny == null or _bunny_motion == null:
 		return
 	_bunny_motion.apply(_bunny, delta)
+
+
+func _restore_world_render() -> void:
+	if _owns_world_render_gate and get_viewport() != null:
+		get_viewport().disable_3d = _world_render_was_disabled
+		_owns_world_render_gate = false
+
+
+func _exit_tree() -> void:
+	_restore_world_render()

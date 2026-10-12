@@ -17,6 +17,7 @@ from pathlib import Path
 import re
 import shutil
 import struct
+from urllib.parse import unquote
 
 from PIL import Image
 import numpy as np
@@ -55,6 +56,87 @@ def read_glb(path):
     assert kind == 0x004e4942 and pos+8+m == len(data)
     assert len(doc.get('buffers', [])) == 1 and 'uri' not in doc['buffers'][0]
     return doc, data[pos+8:pos+8+m]
+
+
+_EXPLICIT_NORMAL_SUFFIX = re.compile(r'(?:_normal|_normalmap|_nrm)$', re.IGNORECASE)
+
+
+def _material_texture_roles(material):
+    roles = collections.defaultdict(set)
+
+    def visit(value, role='color', texture_info=False):
+        if isinstance(value, dict):
+            if texture_info and isinstance(value.get('index'), int):
+                roles[value['index']].add(role)
+            for key, child in value.items():
+                if key == 'normalTexture':
+                    visit(child, 'normal', True)
+                elif key.endswith('Texture'):
+                    visit(child, 'color', True)
+                else:
+                    visit(child, role, False)
+        elif isinstance(value, list):
+            for child in value:
+                visit(child, role, False)
+
+    visit(material)
+    return roles
+
+
+def _external_image_rel(glb_path, uri, root):
+    if not uri or uri.startswith('data:'):
+        return None
+    uri = unquote(uri.split('#', 1)[0])
+    root = root.resolve()
+    if uri.startswith('res://'):
+        candidate = (root / uri[6:]).resolve()
+    else:
+        candidate = (glb_path.parent / uri).resolve()
+    if not candidate.is_relative_to(root):
+        return None
+    return candidate.relative_to(root).as_posix()
+
+
+def texture_roles_for_glb(glb_path, doc, embedded_matches, root):
+    roles = collections.defaultdict(set)
+    textures = doc.get('textures', [])
+    images = doc.get('images', [])
+    image_roles = collections.defaultdict(set)
+    for material in doc.get('materials', []):
+        for texture_index, texture_roles in _material_texture_roles(material).items():
+            if not 0 <= texture_index < len(textures):
+                continue
+            source = textures[texture_index].get('source')
+            if not isinstance(source, int) or not 0 <= source < len(images):
+                continue
+            image_roles[source].update(texture_roles)
+    for image_index, image in enumerate(images):
+        rel = embedded_matches.get(image_index)
+        if rel is None:
+            rel = _external_image_rel(glb_path, image.get('uri'), root)
+        if rel is not None:
+            roles[rel].update(image_roles.get(image_index, ()))
+    return roles
+
+
+def assert_no_texture_role_conflicts(texture_roles):
+    conflicts = sorted(rel for rel, roles in texture_roles.items()
+                       if {'normal', 'color'} <= set(roles))
+    if conflicts:
+        raise ValueError('texture used as both color and normal: ' + ', '.join(conflicts))
+
+
+def normal_role_for_texture(rel, roles, manual_normal):
+    roles = set(roles)
+    assert_no_texture_role_conflicts({rel: roles})
+    if roles:
+        return 'normal' in roles
+    return bool(manual_normal or _EXPLICIT_NORMAL_SUFFIX.search(Path(rel).stem))
+
+
+def normal_map_params(params, normal):
+    return re.sub(r'compress/normal_map=\d+',
+                  f'compress/normal_map={1 if normal else 2}', params)
 
 
 def write_glb(doc, binary):
@@ -161,6 +243,7 @@ def main():
 
     # Match embedded images to the exact extracted files, never just their names.
     models, generated = [], set()
+    texture_roles = collections.defaultdict(set)
     for path in (ROOT/'assets').rglob('*.glb'):
         if not active(path):
             continue
@@ -178,8 +261,13 @@ def main():
             rel = sorted(preferred or candidates)[0]
             matches[i] = rel
             generated.add(rel)
+        model_roles = texture_roles_for_glb(path, doc, matches, ROOT)
+        for rel, roles in model_roles.items():
+            texture_roles[rel].update(roles)
+            generated.add(rel)
         if doc.get('images'):
             models.append((path, doc, binary, matches))
+    assert_no_texture_role_conflicts(texture_roles)
 
     # Pixel identity + import semantics + size budget define safe sharing.
     groups = collections.defaultdict(list)
@@ -189,14 +277,15 @@ def main():
         params = text.split('[params]', 1)[1].strip()
         bucket, limit = domain(rel)
         params = re.sub(r'process/size_limit=\d+', f'process/size_limit={limit}', params)
-        normal = 'normal' in Path(rel).stem.lower()
+        manual_normal = bool(re.search(r'compress/normal_map=1(?:\s|$)', params))
+        normal = normal_role_for_texture(rel, texture_roles.get(rel, ()), manual_normal)
+        params = normal_map_params(params, normal)
         if rel in generated or '/characters/player/' in rel or '/enemies/' in rel:
             params = re.sub(r'compress/mode=\d+', 'compress/mode=2', params)
-            params = re.sub(r'compress/normal_map=\d+', f'compress/normal_map={1 if normal else 0}', params)
             params = re.sub(r'detect_3d/compress_to=\d+', 'detect_3d/compress_to=0', params)
         # UI and 3D remain separate; filtering/color/alpha settings must match.
         pixel = digest(str(image.size).encode() + image.convert('RGBA').tobytes())
-        key = digest((bucket+pixel+params).encode())
+        key = digest((bucket+pixel+params+str(normal)).encode())
         groups[key].append(rel)
         settings[key] = (params, limit, normal, bucket)
         keys[rel] = key

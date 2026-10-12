@@ -309,7 +309,11 @@ func configure(
 	additional_visual_holes.assign(extra_visual_holes)
 
 
+var loading_frame_budget_enabled := false
+
+
 func _ready() -> void:
+	set_meta("loading_stage_ready", false)
 	name = "Floor_%d" % (100 - floor_index)
 	set_meta("floor_index", floor_index)
 	set_meta("floor_number", 100 - floor_index)
@@ -325,11 +329,16 @@ func _ready() -> void:
 	)
 	add_to_group("tower_floor_stage_3d")
 	_build_floor()
+	if loading_frame_budget_enabled:
+		await get_tree().process_frame
 	_build_outer_shell()
+	if loading_frame_budget_enabled:
+		await get_tree().process_frame
 	_build_support()
 	if _uses_rooftop_profile():
-		_build_rooftop_authored_layout()
+		await _build_rooftop_authored_layout()
 		_build_rooftop_ground_birds()
+	set_meta("loading_stage_ready", true)
 
 
 func _build_rooftop_ground_birds() -> void:
@@ -396,6 +405,10 @@ func _build_rooftop_authored_layout() -> void:
 	candidate.set_meta("visual_only", false)
 	candidate.set_meta("collision_policy", "per_instance")
 	_rooftop_blocking_collision_count = 0
+	if loading_frame_budget_enabled:
+		# 无脚本容器先挂到隐藏目标，逐件触发 ready，避免整套天台集中初始化。
+		add_child(candidate)
+	var slice_started := Time.get_ticks_usec()
 	var instances := layout.get("instances", []) as Array
 	for item_variant in instances:
 		if not (item_variant is Dictionary):
@@ -465,13 +478,17 @@ func _build_rooftop_authored_layout() -> void:
 			_rooftop_blocking_collision_count += 1
 		candidate.add_child(instance)
 		_rooftop_art_instance_count += 1
+		if loading_frame_budget_enabled and Time.get_ticks_usec() - slice_started >= 3000:
+			await get_tree().process_frame
+			slice_started = Time.get_ticks_usec()
 	if _rooftop_art_blocker_count > 0:
 		candidate.free()
 		push_error("Rooftop decorated layout replay blocked=%d" % _rooftop_art_blocker_count)
 		return
 	candidate.set_meta("instance_count", _rooftop_art_instance_count)
 	candidate.set_meta("blocking_collision_count", _rooftop_blocking_collision_count)
-	add_child(candidate)
+	if candidate.get_parent() == null:
+		add_child(candidate)
 	_rooftop_art_instance = candidate
 
 

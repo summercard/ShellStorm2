@@ -32,6 +32,7 @@ LIBRARIES = (
     ("l_corridor", "v012"),
 )
 TARGET_ID = "ENV-EXPEDITION-L01-DB-WORKBENCH_A"
+TARGET_SLUG = ("db_room", "workbench_a")
 
 
 def load_module(path: Path, name: str):
@@ -61,14 +62,39 @@ def packages():
             yield room_slug, version, package
 
 
+## 常量取自**当前**生成器（不是 HEAD）——门禁与合法变更集必须跟着现行契约走。
+CONTRACT = load_module(GENERATOR, "generator_contract")
+TOP_COVER_OCCLUDER_SLUGS = CONTRACT.TOP_COVER_OCCLUDER_SLUGS
+
+
+def expected_changed_slugs() -> set[tuple[str, str]]:
+    """本生成器相对 HEAD **合法**发生文本变更的组件集合。
+
+    · `db_room/workbench_a` —— 分段碰撞盒（`SEGMENTED_COLLISION_BOXES`）；
+    · 顶盖遮光件 —— 从 `visual_only` 改成 `structural_box_proxy`，补出 `layer=1` 的碰撞盒
+      （封顶挡太阳射线的唯一手段，见生成器 `TOP_COVER_OCCLUDER_SLUGS`）。
+
+    除这两类之外任何组件发生漂移都是回归，必须失败。
+    """
+    changed = {TARGET_SLUG}
+    for room_slug, slugs in TOP_COVER_OCCLUDER_SLUGS.items():
+        for slug in slugs:
+            changed.add((room_slug, slug))
+    return changed
+
+
 def test_target_and_non_targets() -> None:
     generator = load_module(GENERATOR, "generator_current")
+    changed = expected_changed_slugs()
+    seen: set[tuple[str, str]] = set()
     with tempfile.TemporaryDirectory() as temp_dir:
         head = load_head_module(Path(temp_dir))
         for room_slug, version, package in packages():
-            classification = generator.classify(room_slug, str(package["slug"]))
+            slug = str(package["slug"])
+            seen.add((room_slug, slug))
+            classification = generator.classify(room_slug, slug)
             current = generator.tscn_text(room_slug, version, package, *classification)
-            baseline_classification = head.classify(room_slug, str(package["slug"]))
+            baseline_classification = head.classify(room_slug, slug)
             baseline = head.tscn_text(
                 room_slug, version, package, *baseline_classification
             )
@@ -81,10 +107,22 @@ def test_target_and_non_targets() -> None:
                 assert 'size = Vector3(1.85, 3.565, 5.5)' in current
                 assert 'position = Vector3(6.125, 1.7825, 0.875)' in current
                 assert 'shape = SubResource("BoxShape3D_proxy")' not in current
+            elif (room_slug, slug) in changed:
+                assert current != baseline, (
+                    f"顶盖件 {room_slug}/{slug} 相对 HEAD 没有任何变更 —— 碰撞没补上"
+                )
+                assert 'metadata/collision_policy = "structural_box_proxy"' in current
+                assert "metadata/collision_shape_count = 1" in current
+                assert 'metadata/slot_role = "room_type_component"' in current
+                assert 'shape = SubResource("BoxShape3D_proxy")' in current
             else:
                 assert current == baseline, (
                     f"非目标组件生成文本发生漂移: {room_slug}/{package['slug']}"
                 )
+
+        # 顶盖契约登记的名字必须全部真实存在（改名不能静默让契约失效）。
+        missing = sorted(changed - seen)
+        assert not missing, f"顶盖遮光契约登记了源库里不存在的组件: {missing}"
 
         same_slug_other_identity = next(
             package
@@ -100,6 +138,56 @@ def test_target_and_non_targets() -> None:
         assert 'load_steps=3' in output
         assert 'metadata/collision_shape_count = 1' in output
         assert 'shape = SubResource("BoxShape3D_proxy")' in output
+
+
+def test_top_cover_guard_fails_loudly() -> None:
+    """顶盖遮光契约的三道门禁都必须**会失败**，不能静默降级。"""
+    generator = load_module(GENERATOR, "generator_guard")
+    declared = {
+        (room_slug, slug)
+        for room_slug, slugs in generator.TOP_COVER_OCCLUDER_SLUGS.items()
+        for slug in slugs
+    }
+    # 正常情况：全部命中且按规范下发。
+    hits = {
+        key: generator.TOP_COVER_CLASSIFICATION for key in declared
+    }
+    seen = {room_slug: set(slugs) for room_slug, slugs in generator.TOP_COVER_OCCLUDER_SLUGS.items()}
+    generator.assert_top_cover_contract(seen, hits)
+
+    # 门禁 1：登记了却查无此件（组件被改名/删除）⇒ 契约静默失效，必须炸。
+    renamed = {room: set(slugs) for room, slugs in seen.items()}
+    renamed["db_room"].discard("ceiling_deck_40m")
+    try:
+        generator.assert_top_cover_contract(renamed, hits)
+    except RuntimeError as error:
+        assert "不存在" in str(error), str(error)
+    else:
+        raise AssertionError("顶盖件被改名后门禁没有失败")
+
+    # 门禁 2：命中却没拿到碰撞（退回 visual_only）⇒ 封顶只投阴影、挡不住射线，必须炸。
+    no_collision = dict(hits)
+    no_collision[("db_room", "ceiling_deck_40m")] = (
+        "room_type_component",
+        "none",
+        "visual_only",
+    )
+    try:
+        generator.assert_top_cover_contract(seen, no_collision)
+    except RuntimeError as error:
+        assert "未按规范下发碰撞" in str(error), str(error)
+    else:
+        raise AssertionError("顶盖退回 visual_only 后门禁没有失败")
+
+    # 门禁 3：叫 ceiling_* 却没登记 ⇒ 新增吊顶件不会自动继承规范，必须炸。
+    with_unknown = {room: set(slugs) for room, slugs in seen.items()}
+    with_unknown["office_room"].add("ceiling_deck_9m")
+    try:
+        generator.assert_top_cover_contract(with_unknown, hits)
+    except RuntimeError as error:
+        assert "漏光" in str(error), str(error)
+    else:
+        raise AssertionError("未登记的 ceiling_* 组件没有让门禁失败")
 
 
 def make_isolated_project(temp_dir: Path) -> Path:
@@ -174,4 +262,5 @@ def test_isolated_generation_is_idempotent_and_changes_only_target_prefab() -> N
 if __name__ == "__main__":
     test_target_and_non_targets()
     test_isolated_generation_is_idempotent_and_changes_only_target_prefab()
+    test_top_cover_guard_fails_loudly()
     print("GENERATE_EXPEDITION_ROOM_TYPE_PREFABS_OK")

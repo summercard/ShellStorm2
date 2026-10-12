@@ -318,6 +318,12 @@ var _narrative_spawned_keys: Dictionary = {}
 var _room_graph_runtime: RoomGraphRuntime = ROOM_GRAPH_RUNTIME_SCRIPT.new()
 
 
+const LOADING_RESOURCE_WARMUP := preload("res://src/world3d/LoadingResourceWarmup.gd")
+const DEFAULT_VISUAL_THEME_PATH := "res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres"
+
+var _loading_scene_resources: Array[Resource] = []
+
+
 func _ready() -> void:
 	if not _hud_presenter.weapon_hud_command_ready.is_connected(_apply_weapon_hud_command):
 		_hud_presenter.weapon_hud_command_ready.connect(_apply_weapon_hud_command)
@@ -358,9 +364,18 @@ func _ready() -> void:
 				# run_id：远征是新行动，身份由目的地场景自己派生。
 				_runtime_departure_carry_snapshot = candidate
 	if gameplay_theme == null:
-		gameplay_theme = load("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
+		if _uses_loading_frame_budget():
+			gameplay_theme = await _load_bootstrap_resource("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
+		else:
+			gameplay_theme = load("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
 	if visual_theme == null:
-		visual_theme = load("res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres") as DungeonTheme3D
+		if _uses_loading_frame_budget():
+			visual_theme = await _load_bootstrap_resource(DEFAULT_VISUAL_THEME_PATH) as DungeonTheme3D
+		else:
+			visual_theme = load(DEFAULT_VISUAL_THEME_PATH) as DungeonTheme3D
+	if gameplay_theme == null or visual_theme == null:
+		_on_loading_resource_failed("地图主题")
+		return
 	run_seed = run_seed_override
 	if run_seed < 0:
 		run_seed = LevelSelect.selected_seed if LevelSelect != null and LevelSelect.selected_seed >= 0 else int(Time.get_unix_time_from_system()) ^ randi()
@@ -368,6 +383,8 @@ func _ready() -> void:
 		_run_id = RUN_PERSISTENCE_SERVICE.generate_run_id(run_seed)
 	_rng.seed = run_seed
 	_setup_run_modules()
+	if _uses_loading_frame_budget():
+		await get_tree().process_frame
 	# 热返城不会重新创建主入口界面，因此玩法场景自身必须恢复已保存外观。
 	# test_mode 禁止读取开发者真实档案，专项测试可显式调用持久化服务。
 	if not test_mode:
@@ -379,7 +396,13 @@ func _ready() -> void:
 	_configure_environment()
 	if RuntimePerformanceManager != null:
 		RuntimePerformanceManager.register_atmosphere(self)
-	_generate_layout()
+	if _uses_loading_frame_budget():
+		if has_method("hold_loading_render"):
+			call("hold_loading_render")
+		await get_tree().process_frame
+		await _generate_layout_for_loading()
+	else:
+		_generate_layout()
 	if not _can_finish_layout_bootstrap():
 		return
 	player.set_combat_enabled(true)
@@ -1246,6 +1269,7 @@ func _setup_run_modules() -> void:
 ## 与白送手枪同一条生命周期（每次装配战局/基地场景都会重新给），因此续档恢复
 ## 会在 `_restore_runtime_save_snapshot()` 里被存档快照整格覆盖，不会重复累计。
 ## 返回实际入包发数；背包格位被占满时可能少于 `GUARANTEED_LOADOUT_AMMO_ROUNDS`。
+
 func _grant_guaranteed_loadout_ammo() -> int:
 	if _inventory == null or GUARANTEED_LOADOUT_AMMO_ROUNDS <= 0:
 		return 0
@@ -2008,7 +2032,74 @@ func apply_performance_quality(profile: String) -> void:
 	key_light.directional_shadow_max_distance = 96.0 if profile == "high" else 64.0 if profile == "balanced" else 36.0
 
 
+## 读取页活动时让装配按房间交还主线程；普通入口与专项仍同步完成。
+func _uses_loading_frame_budget() -> bool:
+	return not test_mode and IrisTransition != null and IrisTransition.is_loading_scene(self)
+
+
+func _load_bootstrap_resource(path: String, type_hint := "") -> Resource:
+	if type_hint == "PackedScene":
+		var warm_error := await LOADING_RESOURCE_WARMUP.warm(path, get_tree(), _loading_scene_resources)
+		if warm_error != OK:
+			return null
+	var error := ResourceLoader.load_threaded_request(path, type_hint)
+	if error != OK:
+		push_error("后台读取失败：%s (%s)" % [path, error_string(error)])
+		return null
+	# 请求与轮询分在不同帧；只在 LOADED 后取资源，避免 get 等待后台线程。
+	await get_tree().process_frame
+	var status := ResourceLoader.load_threaded_get_status(path)
+	while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		await get_tree().process_frame
+		status = ResourceLoader.load_threaded_get_status(path)
+	if status != ResourceLoader.THREAD_LOAD_LOADED:
+		push_error("后台资源读取失败：%s" % path)
+		return null
+	var resource := ResourceLoader.load_threaded_get(path)
+	# 保持强引用，确保房间内的 load 只命中缓存。
+	_loading_scene_resources.append(resource)
+	return resource
+
+
+func _load_room_visual_for_loading(room: DungeonRoom3D) -> bool:
+	var path := room.static_layout_scene_path
+	if path.is_empty() or not DungeonRoom3D.use_expedition_static_layout_scenes or not ResourceLoader.exists(path):
+		return true
+	return await _load_bootstrap_resource(path, "PackedScene") != null
+
+
+func _build_room_shell_for_loading(room: DungeonRoom3D) -> bool:
+	if not await _load_room_visual_for_loading(room):
+		_on_loading_resource_failed(room.static_layout_scene_path)
+		return false
+	room.ensure_shell_built()
+	room.visible = true
+	await get_tree().process_frame
+	return true
+
+
+func _on_loading_resource_failed(path: String) -> void:
+	push_error("地图装配资源不可用：%s" % path)
+
+
 func _generate_layout() -> void:
+	_prepare_layout_rooms()
+	_plan_room_layout()
+	_ensure_structural_shells_resident()
+	_finish_layout_connections()
+
+
+func _generate_layout_for_loading() -> void:
+	_prepare_layout_rooms()
+	_plan_room_layout()
+	await get_tree().process_frame
+	for room in _rooms:
+		if not await _build_room_shell_for_loading(room):
+			return
+	_finish_layout_connections()
+
+
+func _prepare_layout_rooms() -> void:
 	_build_records()
 	_build_topology()
 	minimap.configure(_records, _open_edges)
@@ -2052,8 +2143,9 @@ func _generate_layout() -> void:
 		room.prop_searched.connect(_on_prop_searched)
 		room.service_activated.connect(_on_service_activated)
 		room.light_toggled.connect(_on_room_light_toggled)
-	_plan_room_layout()
-	_ensure_structural_shells_resident()
+
+
+func _finish_layout_connections() -> void:
 	_bind_shared_edge_doors()
 	for record in _records:
 		if str(record.get("parent", "")).is_empty():
@@ -2420,6 +2512,7 @@ func _plan_room_layout() -> void:
 
 ## 房间门 world 位置（基类实现，默认门位于房间中心偏门所在墙中点）。
 ## TowerDescent3D 会重写以支持楼梯特殊情况。
+
 func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
 	var outward := {
 		"north": Vector3(0, 0, -1),
@@ -5137,7 +5230,16 @@ func _room_produces_room_key(room: DungeonRoom3D) -> bool:
 	if room.authored_layout_peaceful:
 		return false
 	var declared: Dictionary = room.door_policies
+	var targets: Dictionary = room.door_targets
 	for direction in declared.keys():
+		# ⛔ 只认「有实际去向」的门。`door_targets[direction]` 为空 = 该侧是安全房壳体的
+		# 「封闭抵达门 / [E] 退出战局门」：它不经 `_try_open_room_door()`、从不消耗钥匙
+		# （`verify_expedition_level01_flow._verify_safe_room` 按这个口径断言「唯一封闭抵达门」）。
+		# 旧实现把它连同 `_door_policies_for_record()` 给的 `requires_key: true` 一起算进来，
+		# 于是整间入口安全房被判成产钥匙房 —— 进房即刻白掉一把**永远用不掉**的钥匙
+		# （前门 → room_01 是免费通行，退出门又不吃钥匙）。2026-10-12 人报「安全房默认刷钥匙」。
+		if str(targets.get(direction, "")).is_empty():
+			continue
 		if bool((declared[direction] as Dictionary).get("requires_key", true)):
 			return true
 	return declared.is_empty()

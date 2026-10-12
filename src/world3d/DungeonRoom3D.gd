@@ -197,6 +197,19 @@ const SAFE_ROOM_DOOR_SIDES: Array[String] = ["south", "east"]
 # 地砖不下沉固定值，改读每个组件自己的 snap_to_walk_plane_offset_m（c01 −0.056 / c02 −0.081）。
 const SAFE_ROOM_WALK_LIFT_M := 0.30
 const SAFE_ROOM_FLOOR_GRID_M := 5.0
+# —— 退出门内侧地面的 EXIT 霓虹灯标牌（ENV-BATTLE-EXIT-NEON-SIGN v001）——
+# 独立通用场景组件：竖立门头姿态（正面 = 本地 +Y），平铺时绕 X 轴 +90° 使发光面朝上。
+# 摆位按**世界门向**算（与门扇 _build_door 同一口径，挂房间根而不是会整房旋转的 art_root）。
+# 局部原点在「底面中心」，旋转后底边落在原点 ⇒ 需抬高半个厚度才能让背面贴地。
+const SAFE_ROOM_EXIT_SIGN_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/tower_zones/battle/runtime/exit_neon_sign/exit_neon_sign_root_top3d.tscn"
+)
+const SAFE_ROOM_EXIT_SIGN_ASSET_ID := "ENV-BATTLE-EXIT-NEON-SIGN"
+# 标牌沿门法向的占地深度（= 组件包络的高度 0.76m）与半厚度（0.09 / 2）。
+const SAFE_ROOM_EXIT_SIGN_DEPTH_M := 0.76
+const SAFE_ROOM_EXIT_SIGN_HALF_THICKNESS_M := 0.045
+# 牌顶边离房间边界（门洞所在网格线）的水平退让，避免与门垛/门扇穿插。
+const SAFE_ROOM_EXIT_SIGN_INSET_M := 0.45
 # 四角 L 型墙角（仅远征入口安全房开启，见 safe_room_corner_l）。
 # 直接引用塔楼 A 套 prp_corner_l_5m.tscn —— 它的正式美术就是「通用房通用墙组件」两份
 # 刚性拼成的 L（来源 tower_zones/battle/source/common_components/v007 的
@@ -2191,6 +2204,7 @@ func _build_safe_room_shell(dimensions: Vector2) -> void:
 	var corner_count := _spawn_safe_room_corners(dimensions, art_root) if use_corner_l else 0
 	var tile_count := _build_safe_room_floor_tiles(art_root)
 	var package_count := _build_safe_room_packages(art_root)
+	var exit_sign := _build_safe_room_exit_sign(dimensions)
 	# 门扇仍走通用 _build_door：v007 门洞切向中心就是 5m 网格中段（偏移 0），
 	# 与 _build_door 读取的 tower_wall_door_offset_* 默认值一致，门扇正好落在门垛之间。
 	for direction in doors:
@@ -2205,6 +2219,8 @@ func _build_safe_room_shell(dimensions: Vector2) -> void:
 	set_meta("safe_room_wall_expected_count", expected_wall_count)
 	set_meta("safe_room_floor_tile_count", tile_count)
 	set_meta("safe_room_package_count", package_count)
+	set_meta("safe_room_exit_sign", exit_sign != null)
+	set_meta("safe_room_exit_sign_direction", exit_sign.get_meta("exit_sign_direction", "") if exit_sign != null else "")
 	if wall_count != expected_wall_count:
 		push_warning("DungeonRoom3D: 安全房 %s 墙组件缺失 (%d/%d)" % [
 			room_id, wall_count, expected_wall_count
@@ -2433,6 +2449,67 @@ func _build_safe_room_packages(art_root: Node3D) -> int:
 		art_root.add_child(package)
 		placed += 1
 	return placed
+
+
+## 退出门（door_targets 该侧为空串 = 封闭抵达门 /「[E] 退出战局」门）内侧地面，
+## 平铺一枚 EXIT 霓虹灯标牌：发光面朝上、长边平行门洞，提示玩家这扇门是出去用的。
+## 为什么挂房间根而不是 art_root：位置与朝向全部按**世界门向**推导（与 _build_door 同口径），
+## 挂到会整房旋转 0/90/180/270° 的 art_root 下反而要反算回原生方位。
+## 局部原点在「底面中心」⇒ 绕 X +90° 放平后底边落在原点，必须抬高半个厚度才能让背面贴地。
+func _build_safe_room_exit_sign(dimensions: Vector2) -> Node3D:
+	var direction := _safe_room_retreat_direction()
+	if direction.is_empty():
+		push_warning("DungeonRoom3D: 安全房 %s 找不到退出门，跳过 EXIT 标牌" % room_id)
+		return null
+	var node := SAFE_ROOM_EXIT_SIGN_PREFAB.instantiate() as Node3D
+	if node == null:
+		push_error("DungeonRoom3D: EXIT 标牌根节点必须是 Node3D")
+		return null
+	var normal := _direction_normal(direction)
+	var half := minf(dimensions.x, dimensions.y) * 0.5
+	var offset := half - SAFE_ROOM_EXIT_SIGN_INSET_M - SAFE_ROOM_EXIT_SIGN_DEPTH_M
+	node.name = "SafeRoomExitSign"
+	node.position = normal * offset + Vector3(0.0, SAFE_ROOM_EXIT_SIGN_HALF_THICKNESS_M, 0.0)
+	# YXZ 欧拉序：Rx(90°) 把竖立门头姿态放平、发光面朝上；Ry(yaw) 再把深度方向对准门法向。
+	node.rotation = Vector3(PI * 0.5, _direction_yaw(direction), 0.0)
+	node.set_meta("exit_sign_direction", direction)
+	node.set_meta("exit_sign_asset_id", SAFE_ROOM_EXIT_SIGN_ASSET_ID)
+	add_child(node)
+	return node
+
+
+## 退出门 = door_targets 该侧为空串的那扇（口径见 2026-10-12「入口安全房不再默认掉钥匙」）。
+func _safe_room_retreat_direction() -> String:
+	for direction in doors:
+		if str(door_targets.get(direction, "")).is_empty():
+			return str(direction)
+	return ""
+
+
+## 世界方位 → 门外法向单位向量（水平）。
+func _direction_normal(direction: String) -> Vector3:
+	match direction:
+		"north":
+			return Vector3(0.0, 0.0, -1.0)
+		"south":
+			return Vector3(0.0, 0.0, 1.0)
+		"east":
+			return Vector3(1.0, 0.0, 0.0)
+		"west":
+			return Vector3(-1.0, 0.0, 0.0)
+	return Vector3.ZERO
+
+
+## 世界方位 → 让标牌深度方向（Rx 90° 后的本地 +Y）对准该门法向所需的 Ry 偏航角。
+func _direction_yaw(direction: String) -> float:
+	match direction:
+		"north":
+			return PI
+		"east":
+			return PI * 0.5
+		"west":
+			return -PI * 0.5
+	return 0.0
 
 
 ## 关掉一件美术包自带的静态碰撞。用于两类去重：地砖（楼板承重归 TowerFloorStage3D）

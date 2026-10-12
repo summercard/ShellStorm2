@@ -48,6 +48,53 @@ SEGMENTED_COLLISION_BOXES = {
     ),
 }
 
+## —— 顶盖遮光件（TOP COVER）——
+##
+## 玩法口径（唯一消费方 `EnemyIllumination3D._evaluate_sunlight`）：不读画面、不读材质，
+## 只从怪物身体采样点沿主太阳方向打一条 `occlusion_mask = 1`（关卡静态世界层）的物理射线。
+## 命中 ⇒ 该采样点在投影里；未命中 ⇒ 判 `sunlight`。**能投阴影 ≠ 能挡住这条射线**：
+## 阴影是渲染层的事，射线只认同层带 `CollisionShape3D` 的静态刚体。所以
+## 「封顶天花板画面上有影、僵尸照样受阳光」的根因永远是「这件顶盖的 prefab 里没有碰撞体」。
+##
+## 本表按**稳定房型 + slug**冻结「哪几件是顶盖」。命中即统一按顶盖规范下发：
+##   slot_role        = room_type_component —— 水平顶盖不是墙：不进墙/门槽 lane 台账
+##                      （`classify_door_lane`），也不写 `tower_wall_direction`
+##                      （那条 meta 是四向墙的语义）。
+##   collision_owner  = self
+##   collision_policy = structural_box_proxy
+##   ⇒ prefab 内嵌 1 个 `layer = 1` 的 BoxShape3D，尺寸 = 组件全包络，位于 y = +高/2。
+##
+## 为什么用「全包络盒」而不是照几何切段：顶盖全在 y ≈ 11.15~11.87，远高于玩家与子弹的
+## 常用高度，包络盒不会造成空阻挡；而房型顶盖件（`wall_top_service` / `ceiling_ring_beam`）
+## 本身是**中空周圈**，包络盒恰好把周圈内侧封成整片顶盖 —— 这正是封顶想要的结果。
+##
+## 🔴 本条规范的前身是 `office_room` 的 `slug.startswith("wall_t")`：`wall_top_service`
+## 因为**前缀撞上墙族**而恰好拿到了碰撞。靠命名巧合生效的契约必须消灭，所以现在两件事
+## 分开登记：墙族走显式名单 `*_SOLID_WALL_SLUGS`，顶盖走本表。
+## 守卫：`main()` 会断言本表每个 slug 在对应库里真实存在，且最终确实产出碰撞体。
+TOP_COVER_OCCLUDER_SLUGS = {
+    "office_room": {
+        "wall_top_service",
+        "ceiling_deck_5m",
+        "ceiling_ring_beam",
+        "ceiling_lighting",
+        "ceiling_service_cable_tray",
+        "ceiling_service_duct",
+        "ceiling_service_pipe_run",
+    },
+    "db_room": {
+        "wall_top_service",
+        "ceiling_deck_40m",
+        "ceiling_deck_10m",
+        "ceiling_ring_beam",
+        "ceiling_lighting",
+        "ceiling_service_a",
+        "ceiling_service_b",
+        "ceiling_service_c",
+    },
+}
+TOP_COVER_CLASSIFICATION = ("room_type_component", "self", "structural_box_proxy")
+
 OFFICE_BOX_COLLISION = {
     "filing_run",
     "locker_bank",
@@ -59,6 +106,10 @@ OFFICE_BOX_COLLISION = {
     "water_and_supply_corner",
     "work_cluster",
 }
+## 办公室**墙族**的显式名单。原实现是 `slug.startswith("wall_t")`，会把 `wall_top_service`
+## （顶盖，非墙）一起吞进来并当成实墙 —— 顶盖因此被写进墙/门槽 lane 台账、还挂上一条
+## 无意义的 `tower_wall_direction`。这里逐个列出真正是墙的三件，不再按前缀猜。
+OFFICE_SOLID_WALL_SLUGS = {"wall_t1110_5m", "wall_t615_5m", "wall_t970_5m"}
 BRIDGE_BOX_COLLISION = {
     "bank_crate",
     "bridge_guardrail",
@@ -137,6 +188,10 @@ def godot_bounds(bounds: list[float]) -> list[float]:
 
 
 def classify(room_slug: str, slug: str) -> tuple[str, str, str]:
+    # 顶盖遮光件优先于所有房型分支：office / db 都有同名 `wall_top_service`，
+    # 且它必须在两个库里拿到同一条规范，不能被各自的房型分支各判一次。
+    if slug in TOP_COVER_OCCLUDER_SLUGS.get(room_slug, ()):
+        return TOP_COVER_CLASSIFICATION
     if room_slug == "boss_room":
         # Boss 房主层地砖 = floor_tile（进刷怪格）；墙/装甲墙 = solid_wall（参与门槽判定）。
         if slug.startswith("floor_tile_5m"):
@@ -175,7 +230,7 @@ def classify(room_slug: str, slug: str) -> tuple[str, str, str]:
             return "door_wall", "room_door_owned", "split_door_wall_proxy"
         if slug == "floor_tile_5m":
             return "floor_tile", "floor_support", "external_floor_support"
-        if slug.startswith("wall_t"):
+        if slug in OFFICE_SOLID_WALL_SLUGS:
             return "solid_wall", "self", "structural_box_proxy"
         if slug in OFFICE_BOX_COLLISION:
             return "room_type_component", "self", "safe_box_proxy"
@@ -355,6 +410,63 @@ def patch_import(path: Path) -> None:
     write_text_crlf(path, text)
 
 
+## 故意**不**承担遮光的 `ceiling_*` 组件（留空 = 所有顶盖件都必须遮光）。
+## 门禁 3 会拦住每一个未登记的 `ceiling_*`；确有不遮光意图的（纯装饰吊顶）写在这里，
+## 而不是靠「不写就默认不遮光」—— 那种默认值正是封顶漏光的成因。
+TOP_COVER_OPT_OUT: set[tuple[str, str]] = set()
+
+
+def assert_top_cover_contract(
+    seen_slugs: dict[str, set[str]],
+    top_cover_hits: dict[tuple[str, str], tuple[str, str, str]],
+) -> None:
+    """顶盖遮光契约的三道门禁，全部硬失败（`RuntimeError`），不静默降级。
+
+    1. **声明了却查无此件** —— 组件被改名/删除后契约会静默失效：房间照样装配成功，
+       僵尸又开始晒太阳，没有任何一处报错。这是「看不见的退化」，必须断言。
+    2. **命中却没拿到碰撞** —— 顶盖只投阴影、挡不住太阳射线，正是本契约要消灭的病症；
+       同时钉住 `slot_role` 不能退回 `solid_wall`（水平顶盖不是墙，不该进墙/门槽 lane 台账）。
+    3. **叫 `ceiling_*` 却没登记** —— 将来新增吊顶件不会自动继承规范。默认值必须是
+       「必须表态」，而不是「默认不遮光」；确有不遮光意图的写进 `TOP_COVER_OPT_OUT`。
+    """
+    declared = {
+        (room_slug, slug)
+        for room_slug, slugs in TOP_COVER_OCCLUDER_SLUGS.items()
+        for slug in slugs
+    }
+    missing = sorted(
+        (room_slug, slug)
+        for room_slug, slug in declared
+        if slug not in seen_slugs.get(room_slug, set())
+    )
+    if missing:
+        raise RuntimeError(f"顶盖遮光契约登记的组件在源库里不存在: {missing}")
+    expected_role, expected_owner, expected_policy = TOP_COVER_CLASSIFICATION
+    for (room_slug, slug), classification in sorted(top_cover_hits.items()):
+        slot_role, collision_owner, collision_policy = classification
+        if (collision_owner, collision_policy) != (expected_owner, expected_policy):
+            raise RuntimeError(
+                f"顶盖 {room_slug}/{slug} 未按规范下发碰撞: {classification}"
+            )
+        if slot_role != expected_role:
+            raise RuntimeError(
+                f"顶盖 {room_slug}/{slug} 的 slot_role 必须是 {expected_role}"
+                f"（水平顶盖不是墙）: 实得 {slot_role}"
+            )
+    unregistered = sorted(
+        (room_slug, slug)
+        for room_slug, slugs in seen_slugs.items()
+        for slug in slugs
+        if slug.startswith("ceiling_")
+        and (room_slug, slug) not in declared
+        and (room_slug, slug) not in TOP_COVER_OPT_OUT
+    )
+    if unregistered:
+        raise RuntimeError(
+            f"这些 ceiling_* 组件没登记进顶盖遮光契约，封顶会漏光: {unregistered}"
+        )
+
+
 def main(root: Path | None = None) -> None:
     root = root or Path(__file__).resolve().parents[1]
     runtime_catalog_path = root / CATALOG_PATH
@@ -374,13 +486,19 @@ def main(root: Path | None = None) -> None:
     ]
     generated: list[dict] = []
     manifest_records: list[dict] = []
+    seen_slugs: dict[str, set[str]] = {}
+    top_cover_hits: dict[tuple[str, str], tuple[str, str, str]] = {}
     for room_slug, version in LIBRARIES:
         catalog_path = root / SOURCE_ROOT / version / "component_catalog.json"
         catalog = read_json(catalog_path)
+        seen_slugs.setdefault(room_slug, set())
         for package in catalog["packages"]:
             slug = str(package["slug"])
+            seen_slugs[room_slug].add(slug)
             component_id = str(package["component_id"])
             slot_role, collision_owner, collision_policy = classify(room_slug, slug)
+            if slug in TOP_COVER_OCCLUDER_SLUGS.get(room_slug, ()):
+                top_cover_hits[(room_slug, slug)] = (slot_role, collision_owner, collision_policy)
             runtime_rel = RUNTIME_ROOT / room_slug / slug / f"{slug}_root_top3d.tscn"
             component_rel = COMPONENT_ROOT / room_slug / slug / f"{slug}_visual_top3d.glb"
             import_rel = Path(f"{component_rel.as_posix()}.import")
@@ -434,6 +552,8 @@ def main(root: Path | None = None) -> None:
                     ),
                 }
             )
+    assert_top_cover_contract(seen_slugs, top_cover_hits)
+
     ids = [str(entry["component_id"]) for entry in existing + generated]
     if len(ids) != len(set(ids)):
         raise RuntimeError("duplicate component_id after catalog merge")

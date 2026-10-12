@@ -61,8 +61,10 @@ const TARGETS := {
 		"expected_instances": 105,
 		"expected_floor_tiles": 48,
 		"expected_common_floor_tiles": 48,
-		"expected_room_type_components": 28,
-		"expected_solid_walls": 28,
+		# 2026-10-12 顶盖规范：office 的 `wall_top_service` 从 solid_wall 改判
+		# room_type_component（水平顶盖不是墙，不进墙/门槽 lane 台账）。+1 / -1。
+		"expected_room_type_components": 29,
+		"expected_solid_walls": 27,
 		"expected_door_walls": 1,
 		"expected_version": "v001",
 		"expected_asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM03-PORT-CLEARANCE-LAYOUT",
@@ -83,18 +85,22 @@ const TARGETS := {
 		"expected_instances": 106,
 		"expected_floor_tiles": 48,
 		"expected_common_floor_tiles": 48,
-		"expected_room_type_components": 29,
-		"expected_solid_walls": 28,
+		# 同 room_03：office 顶盖件改判 room_type_component。
+		"expected_room_type_components": 30,
+		"expected_solid_walls": 27,
 		"expected_door_walls": 1,
 		"expected_version": "v009",
 		"expected_asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT",
 	},
 	"boss": {
 		"template_id": "boss_50x40",
-		"expected_instances": 210,
+		# 2026-10-12 Boss 房全封顶：+10 条天花承板（ENV-EXPEDITION-L01-DB-CEILING_DECK_40M，
+		# 转 90° 铺满 50×40）。封顶前实测 75/75 采样点直达太阳；封顶后 0/75。
+		# 真源＝data/layouts/expedition/v011/component_instances.json 的 audited_additions。
+		"expected_instances": 220,
 		"expected_floor_tiles": 80,
 		"expected_common_floor_tiles": 80,
-		"expected_room_type_components": 58,
+		"expected_room_type_components": 68,
 		"expected_solid_walls": 72,
 		"expected_door_walls": 0,
 		"expected_version": "v011",

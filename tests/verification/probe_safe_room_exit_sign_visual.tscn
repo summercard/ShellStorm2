@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/probe_safe_room_exit_sign_visual.gd" id="1_probe"]
+
+[node name="ProbeSafeRoomExitSignVisual" type="Node3D"]
+script = ExtResource("1_probe")

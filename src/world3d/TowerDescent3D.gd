@@ -296,6 +296,9 @@ var _initial_loop_retreat_overlay: Control = null
 var _expedition_exit_overlay: Control = null
 var _expedition_bootstrap_failed: bool = false
 var _expedition_loading_active: bool = false
+var _loading_persistence_waiting := false
+var _loading_viewport_modes: Dictionary = {}
+var _loading_render_gate_released := false
 var _expedition_loading_completed: bool = false
 var _expedition_loading_process_modes: Dictionary = {}
 var _expedition_loading_player_input_locked := false
@@ -505,8 +508,10 @@ func _ready() -> void:
 			_remove_tower_base_art(base_art)
 		else:
 			base_art.visible = false
-	super()
-	if is_expedition() and _expedition_bootstrap_failed:
+	if _expedition_loading_active:
+		await get_tree().process_frame
+	await super._ready()
+	if _expedition_bootstrap_failed:
 		_fail_expedition_bootstrap("远征规划无效，拒绝启动")
 		return
 	_report_expedition_loading(0.75, "远征资源与规划已完成")
@@ -517,7 +522,12 @@ func _ready() -> void:
 	# 否则玩家虽然出生在安全房门口，前门后方却只有尚未实例化的目标房。
 	if is_expedition():
 		_ensure_expedition_block()
-		if not _commit_floor_bundle(EXPEDITION_LAYER_INDEX, "expedition_bootstrap"):
+		var committed: bool
+		if _expedition_loading_active:
+			committed = await _commit_floor_bundle_for_loading(EXPEDITION_LAYER_INDEX, "expedition_bootstrap")
+		else:
+			committed = _commit_floor_bundle(EXPEDITION_LAYER_INDEX, "expedition_bootstrap")
+		if not committed:
 			_fail_expedition_bootstrap("远征楼层提交失败，拒绝启动")
 			return
 	elif new_game_opening:
@@ -530,7 +540,10 @@ func _ready() -> void:
 		EXPEDITION_LAYER_INDEX if is_expedition() else 0,
 		"expedition_bootstrap" if is_expedition() else "rooftop_bootstrap"
 	)
-	_build_floor_stages()
+	if _expedition_loading_active:
+		await _build_floor_stages_for_loading()
+	else:
+		_build_floor_stages()
 	_report_expedition_loading(0.88, "远征房间与碰撞装配已完成")
 	# 镜头固定在12m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
 	_apply_indoor_camera_pose()
@@ -610,26 +623,32 @@ func _ready() -> void:
 	if _expedition_loading_active:
 		_freeze_expedition_loading_subtree(self)
 		_lock_expedition_loading_player()
-		# 父类已延迟调用 _activate_runtime_persistence；就绪通知必须等该初始化完成。
+		# 分帧期间父类的 deferred 可能先到；完成装配后再执行持久化与就绪交接。
+		set_meta("loading_bootstrap_pending", false)
+		if _loading_persistence_waiting:
+			_loading_persistence_waiting = false
+			call_deferred("_activate_runtime_persistence")
 
 
 func _begin_expedition_loading_if_active() -> void:
-	if test_mode or not is_expedition() or IrisTransition == null:
+	if test_mode or IrisTransition == null:
 		return
-	if not _is_expedition_loading_active():
+	if not _is_expedition_loading_active() or not IrisTransition.is_loading_scene(self):
 		return
 	_expedition_loading_active = true
+	set_meta("loading_bootstrap_pending", true)
 	_expedition_loading_previous_visible = visible
+	set_meta("loading_previous_visible", visible)
 	# 场景进入读取阶段时先隐藏整个目标世界，避免场景切换后在第一帧
 	# 地图未装配完成前把玩家和空场景暴露在屏幕上；黑圈/读取页负责唯一可见画面。
 	visible = false
 	set_meta("loading_previous_process_mode", process_mode)
 	set_meta("loading_scene_ready", false)
 	set_meta("loading_scene_failed", false)
-	set_meta("loading_status", "正在生成远征地图…")
+	set_meta("loading_status", "正在装配地图…")
 	IrisTransition.set("loading_scene_ready", false)
 	IrisTransition.set("loading_scene_failed", false)
-	IrisTransition.set("loading_status", "正在生成远征地图…")
+	IrisTransition.set("loading_status", "正在装配地图…")
 	if player != null and is_instance_valid(player):
 		_expedition_loading_player_input_locked = player.input_locked
 		_expedition_loading_player_combat_enabled = player.combat_enabled
@@ -640,6 +659,38 @@ func _begin_expedition_loading_if_active() -> void:
 	# 同时冻结玩家输入状态，完成后由读取页释放时恢复原值。
 	process_mode = Node.PROCESS_MODE_DISABLED
 	_freeze_expedition_loading_subtree(self)
+	for viewport in find_children("*", "SubViewport", true, false):
+		_loading_viewport_modes[viewport] = viewport.render_target_update_mode
+	hold_loading_render()
+	get_tree().node_added.connect(_on_loading_node_added)
+
+
+func _on_loading_node_added(node: Node) -> void:
+	if node is SubViewport and is_ancestor_of(node) and not _loading_render_gate_released:
+		_loading_viewport_modes[node] = (node as SubViewport).render_target_update_mode
+
+
+func hold_loading_render() -> void:
+	if _loading_render_gate_released:
+		return
+	for node in _loading_viewport_modes.keys():
+		if not is_instance_valid(node):
+			_loading_viewport_modes.erase(node)
+			continue
+		var viewport := node as SubViewport
+		if viewport.render_target_update_mode != SubViewport.UPDATE_DISABLED:
+			_loading_viewport_modes[node] = viewport.render_target_update_mode
+			viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+
+
+func prepare_loading_render() -> void:
+	_loading_render_gate_released = true
+	if get_tree().node_added.is_connected(_on_loading_node_added):
+		get_tree().node_added.disconnect(_on_loading_node_added)
+	for node in _loading_viewport_modes:
+		if is_instance_valid(node):
+			(node as SubViewport).render_target_update_mode = _loading_viewport_modes[node]
+	_loading_viewport_modes.clear()
 
 
 func _is_expedition_loading_active() -> bool:
@@ -751,19 +802,28 @@ func _show_expedition_failure_label(label: Label) -> void:
 		ancestor = ancestor.get_parent()
 
 
+func _on_loading_resource_failed(path: String) -> void:
+	_mark_expedition_bootstrap_failed("地图装配资源不可用：%s" % path)
+
+
 func _can_finish_layout_bootstrap() -> bool:
 	return not _expedition_bootstrap_failed
 
 
 func _activate_runtime_persistence() -> void:
+	if bool(get_meta("loading_bootstrap_pending", false)):
+		_loading_persistence_waiting = true
+		return
 	if _expedition_bootstrap_failed:
 		return
 	super()
 	if _expedition_loading_active:
+		hold_loading_render()
 		_freeze_expedition_loading_subtree(self)
 		_lock_expedition_loading_player()
 		_report_expedition_loading(0.96, "远征灯光、敌人与撤离信标初始化已完成")
-		_complete_expedition_loading(false, "远征地图已就绪")
+		_complete_expedition_loading(false, "远征地图已就绪" if is_expedition() else "基地场景已就绪")
+	_loading_scene_resources.clear()
 
 
 func _sync_player_input_lock() -> void:
@@ -1267,7 +1327,17 @@ func _build_floor_stages() -> void:
 		_rebuild_floor_stage(int(floor_value))
 
 
-func _rebuild_floor_stage(floor_index: int) -> void:
+func _build_floor_stages_for_loading() -> void:
+	for floor_value in _floor_room_ids.keys():
+		var floor_index := int(floor_value)
+		_rebuild_floor_stage(floor_index, true)
+		var stage: Node = _floor_stages.get(floor_index)
+		while is_instance_valid(stage) and not bool(stage.get_meta("loading_stage_ready", false)):
+			await get_tree().process_frame
+		await get_tree().process_frame
+
+
+func _rebuild_floor_stage(floor_index: int, loading_frame_budget := false) -> void:
 	var hole_sides: Array[String] = []
 	for declaration in _declared_edges:
 		if str(declaration.get("kind", "")) != "vertical":
@@ -1291,6 +1361,7 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 		else "combat"
 	)
 	var stage = FLOOR_STAGE_SCRIPT.new()
+	stage.set("loading_frame_budget_enabled", loading_frame_budget)
 	stage.call(
 		"configure",
 		floor_index,
@@ -4840,12 +4911,67 @@ func _ensure_floor_generated(floor_index: int, reason := "runtime") -> void:
 func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 	if floor_index in _generated_floor_indices:
 		return true
+	var context := _prepare_floor_bundle(floor_index)
+	if context.is_empty():
+		return false
+	context["before_rooms"] = _rooms.size()
+	context["before_corridors"] = _corridor_by_edge.size()
+	# 记录、拓扑全部有效后才实例化，避免半层节点留在场景树中。
+	for record in _records:
+		var room_id := str(record.get("id", ""))
+		if not _room_by_id.has(room_id):
+			_instantiate_dynamic_room(record)
+	_plan_room_layout()
+	_ensure_structural_shells_resident()
+	_bind_shared_edge_doors()
+	for declaration in _declared_edges:
+		var edge := _edge_key(str(declaration["a"]), str(declaration["b"]))
+		if _corridor_by_edge.has(edge):
+			continue
+		var parent := _room_by_id.get(str(declaration["a"])) as DungeonRoom3D
+		var child := _room_by_id.get(str(declaration["b"])) as DungeonRoom3D
+		if parent != null and child != null:
+			_build_corridor(parent, child, _corridor_by_edge.size())
+	return _finish_floor_bundle(floor_index, reason, context)
+
+
+func _commit_floor_bundle_for_loading(floor_index: int, reason: String) -> bool:
+	if floor_index in _generated_floor_indices:
+		return true
+	var context := _prepare_floor_bundle(floor_index)
+	if context.is_empty():
+		return false
+	context["before_rooms"] = _rooms.size()
+	context["before_corridors"] = _corridor_by_edge.size()
+	# 记录、拓扑全部有效后才实例化，避免半层节点留在场景树中。
+	for record in _records:
+		var room_id := str(record.get("id", ""))
+		if not _room_by_id.has(room_id):
+			_instantiate_dynamic_room(record)
+	_plan_room_layout()
+	await get_tree().process_frame
+	for room in _rooms:
+		if not await _build_room_shell_for_loading(room):
+			return false
+		_report_expedition_loading(0.75 + 0.10 * float(_rooms.find(room) + 1) / float(_rooms.size()), "正在装配地图 · %d/%d" % [_rooms.find(room) + 1, _rooms.size()])
+	_bind_shared_edge_doors()
+	for declaration in _declared_edges:
+		var edge := _edge_key(str(declaration["a"]), str(declaration["b"]))
+		if _corridor_by_edge.has(edge):
+			continue
+		var parent := _room_by_id.get(str(declaration["a"])) as DungeonRoom3D
+		var child := _room_by_id.get(str(declaration["b"])) as DungeonRoom3D
+		if parent != null and child != null:
+			_build_corridor(parent, child, _corridor_by_edge.size())
+			await get_tree().process_frame
+	return _finish_floor_bundle(floor_index, reason, context)
+
+
+func _prepare_floor_bundle(floor_index: int) -> Dictionary:
 	var plan := _floor_plan_snapshots.get(floor_index, {}) as Dictionary
 	if plan.is_empty() or not bool(plan.get("valid", false)):
 		status_label.text = "楼层规划校验失败，入口门保持关闭"
-		return false
-	var before_rooms := _rooms.size()
-	var before_corridors := _corridor_by_edge.size()
+		return {}
 	var ids_by_key: Dictionary = {}
 	for value in plan.get("rooms", []):
 		var spec := value as Dictionary
@@ -4872,29 +4998,21 @@ func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 	if not next_plan.is_empty():
 		_append_next_arrival_shell(plan, current_exit_id, next_plan)
 
-	# 记录、拓扑全部有效后才实例化，避免半层节点留在场景树中。
-	for record in _records:
-		var room_id := str(record.get("id", ""))
-		if not _room_by_id.has(room_id):
-			_instantiate_dynamic_room(record)
-	_plan_room_layout()
-	_ensure_structural_shells_resident()
-	_bind_shared_edge_doors()
-	for declaration in _declared_edges:
-		var edge := _edge_key(str(declaration["a"]), str(declaration["b"]))
-		if _corridor_by_edge.has(edge):
-			continue
-		var parent := _room_by_id.get(str(declaration["a"])) as DungeonRoom3D
-		var child := _room_by_id.get(str(declaration["b"])) as DungeonRoom3D
-		if parent != null and child != null:
-			_build_corridor(parent, child, _corridor_by_edge.size())
+	return {"plan": plan, "ids_by_key": ids_by_key, "current_exit_id": current_exit_id, "next_floor_index": next_floor_index}
+
+
+func _finish_floor_bundle(floor_index: int, reason: String, context: Dictionary) -> bool:
+	var plan: Dictionary = context["plan"]
+	var ids_by_key: Dictionary = context["ids_by_key"]
+	var current_exit_id: String = context["current_exit_id"]
+	var next_floor_index: int = context["next_floor_index"]
 	minimap.configure(_records, _open_edges)
 	_rebuild_floor_stage(floor_index)
 	if _floor_room_ids.has(next_floor_index):
 		_rebuild_floor_stage(next_floor_index)
 	_ensure_floor_generated(floor_index, reason)
-	_last_bundle_room_count = _rooms.size() - before_rooms
-	_last_bundle_corridor_count = _corridor_by_edge.size() - before_corridors
+	_last_bundle_room_count = _rooms.size() - int(context["before_rooms"])
+	_last_bundle_corridor_count = _corridor_by_edge.size() - int(context["before_corridors"])
 	# ⚠️ 远征豁免：远征关卡的设计源里也有一间 role=="boss" 的房（13 房版主路含 Boss），
 	# 于是 `plan.boss_floor` 会是 true。但远征的终点契约是**撤离房里的 STANDARD 信标**，
 	# 不是塔楼的「Boss 层打完开撤离」。若这里不排除远征，BOSS_KILL 信标会先把

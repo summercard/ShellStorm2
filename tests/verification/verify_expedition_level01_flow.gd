@@ -978,6 +978,13 @@ func _verify_safe_room(tower: TowerDescent3D, failures: Array[String]) -> Dungeo
 			front_targets.append(str(target_value))
 	if front_targets != ["room_01"]:
 		failures.append("安全房前门目标不是 01 号房：%s" % [front_targets])
+	# 入口安全房不得产出房间钥匙：它唯一的正常前门（→ room_01）是免费通行，
+	# 另一扇是 [E] 退出战局门（`door_targets` 该侧为空，从不走 `_try_open_room_door`）——
+	# 钥匙在这间房里永远用不掉，属于纯垃圾掉落（2026-10-12 人报「安全房默认刷钥匙」）。
+	# 反例盯法：删掉 `Dungeon3D._room_produces_room_key` 里「跳过 target 为空的门」那一段，
+	# 本断言必红。
+	if bool(tower.call("_room_produces_room_key", start_room)):
+		failures.append("入口安全房不得产出房间钥匙（其两扇门均不消耗钥匙）")
 	return start_room
 
 
