@@ -32,7 +32,8 @@
 - 新增6份JSON并登记NarrativeCatalog：`02_lobby`、`02_1_find_owner`、`02_2_outside_boom`、`04_stair_zombies`、`05_rooftop_crowd`、`05_bridge_fat`，统一前缀`nar_tower_opening_`；修改既有02，稳定ID不变。
 - 楼梯位置从连接器真实`path_points`查询；吊桥口从正式桥面承重盒南端取值。`point_anchor`支持触发/刷怪，`to_anchor`支持转向/行走，`pivot_anchor`支持镜头；远征场景拒绝塔楼锚点。
 - `player.walk_to`在玩家锁定态中执行地面碰撞步行，完成或中断停止；`camera.shake`独立占用恢复镜头偏移，不接管输入。
-- 剧情刷怪使用既有世界幂等键，各实体具有稳定批次/序号ID。怪物数值、模型、掉落规则和存档schema未改。原地怪策略保留在enemy_data，受光、近身或受击均不转为追击。
+- 剧情刷怪使用既有世界幂等键，各实体具有稳定批次/序号ID。怪物数值、模型、掉落规则和存档schema未改。剧情02靠第三房间的三只怪改为普通AI：原地警戒巡逻、受击按普通怪处理；剧情不额外强制它们扑向玩家。
+- 为兼容旧快照，Dungeon3D仅按三只稳定persistent_id定向清除旧`narrative_stationary`标记，保留血量、位置、持久ID与幂等账，不重刷、不复活；旧`narrative_placement`缺失时补回`room_floor`。
 - 修复和平/已清房场景不恢复存活剧情怪的遗漏，仅恢复带剧情标记的实体；恢复时补回元数据，已击杀怪不补刷。
 - 新专项已注册core；原时间轴替身接口与新增批次期望同步更新，原五只怪的运镜目标保持不变。
 

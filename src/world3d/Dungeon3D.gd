@@ -6246,6 +6246,25 @@ func apply_narrative_light_state(room_id: String, enabled: bool) -> bool:
 	return true
 
 
+func _normalize_narrative_02_stationary_data(enemy_data: Dictionary, room_id: String) -> void:
+	# 剧情02旧快照曾把98F会议室后三只怪标成冻结策略；内容已改为普通AI。
+	# 只迁移稳定ID对应的三只，保留血量、位置、持久ID与幂等账，不重刷也不复活。
+	if room_id != "floor_01_main_02":
+		return
+	var persistent_id := str(enemy_data.get("persistent_id", ""))
+	if not persistent_id.begins_with("nar_tower_opening_02_zombies:stationary_"):
+		return
+	if persistent_id not in [
+		"nar_tower_opening_02_zombies:stationary_0:0",
+		"nar_tower_opening_02_zombies:stationary_1:0",
+		"nar_tower_opening_02_zombies:stationary_2:0",
+	]:
+		return
+	enemy_data["narrative_stationary"] = false
+	if not enemy_data.has("narrative_placement"):
+		enemy_data["narrative_placement"] = "room_floor"
+
+
 func _restore_room_runtime_state(room_id: String) -> void:
 	if not _segment_runtime_state.has(room_id):
 		return
@@ -6296,12 +6315,14 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			for runtime_value in state.get("enemies", []):
 				var enemy_state := runtime_value as Dictionary
 				if str(enemy_state.get("persistent_id", "")) == persistent_id:
+					_normalize_narrative_02_stationary_data((value as Enemy3D).enemy_data, room_id)
 					(value as Enemy3D).import_runtime_state(enemy_state)
 					break
 	if live_enemies.is_empty():
 		for runtime_value in state.get("enemies", []):
 			var enemy_state := runtime_value as Dictionary
 			var enemy_data := (enemy_state.get("enemy_data", {}) as Dictionary).duplicate(true)
+			_normalize_narrative_02_stationary_data(enemy_data, room_id)
 			if room.cleared and not bool(enemy_data.get("narrative_spawned", false)):
 				continue
 			if enemy_data.is_empty():

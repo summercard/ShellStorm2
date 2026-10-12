@@ -8,6 +8,8 @@ const CURRENT_LIBRARY_PATH := "res://assets/art/characters/player/chr_player_cap
 ## 跑步剪辑（moving / armed_moving）的播放倍率。只缩放采样相位的推进速度，
 ## 不写玩家状态、不改移动速度、不改剪辑数据。走路剪辑（walking）保持 1.0。
 const RUN_CLIP_RATE_SCALE := 1.3
+## 最后一发真实射击后继续保持开火剪辑的时间；不拉长后坐/枪口火光脉冲。
+const FIRE_HOLD_DURATION_S := 2.0
 static var _libraries: Dictionary = {}
 var _cache: Dictionary = {}
 var _fallback: Dictionary = {}
@@ -88,7 +90,8 @@ func apply(avatar: Node3D, delta: float) -> void:
 		_fire_hold_remaining = 0.0
 	_fire_weapon_id = weapon_id
 	if armed and state in ["idle", "moving"] and not bool(avatar.get("_reload_animation_active")):
-		_fire_hold_remaining = 0.16 if firing else maxf(0.0, _fire_hold_remaining - delta)
+		# firing 只是短暂的真实开火脉冲；开火剪辑保持时间从最后一发重新计时。
+		_fire_hold_remaining = FIRE_HOLD_DURATION_S if firing else maxf(0.0, _fire_hold_remaining - delta)
 	if clips.has("sidearm_moving_forward") and state in ["idle", "moving"]:
 		var pose_family := family if armed else "unarmed"
 		if state == "moving":

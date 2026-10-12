@@ -359,6 +359,13 @@ func _ready() -> void:
 		],
 		failures
 	)
+	# 主动丢弃物品即使完成弹跳，也不能在玩家原地不动时自动回包。
+	await get_tree().create_timer(1.0).timeout
+	_check(not inventory.has_item("test_tactical_drop_unique"), "Dropped item was immediately returned to backpack", failures)
+	_check(
+		room.find_children("*", "GroundLootPickup3D", true, false).size() == pickups_after,
+		"Dropped item disappeared while player stayed in pickup range", failures
+	)
 
 	var minimap := dungeon.get_node("HUD/DungeonMinimap3D") as DungeonMinimap3D
 	minimap.set_current_room("start")

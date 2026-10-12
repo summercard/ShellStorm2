@@ -181,6 +181,7 @@ smoke_scenes=(
 )
 
 core_scenes=(
+  verify_hologram_unlock
   verify_player3d_directional_motion
   verify_player3d_firing_motion
   verify_player3d_weapon_switch
@@ -213,6 +214,7 @@ core_scenes=(
   verify_central_expedition_hologram_facility
   verify_expedition_level01_flow
   verify_expedition_room_static_scenes
+  verify_expedition_camera_door_proxies
   verify_expedition_room_type_component_replay
   verify_test_level_99_flow
   verify_unified_player_interaction_flow

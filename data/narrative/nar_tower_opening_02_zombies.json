@@ -44,7 +44,7 @@
       "kind": "melee_chaser",
       "count": 1,
       "spawn_key": "nar_tower_opening_02_zombies:stationary_0",
-      "stationary": true,
+      "stationary": false,
       "camera_target": false,
       "point_room": "floor_01_main_02",
       "point_offset": [
@@ -62,7 +62,7 @@
       "kind": "melee_chaser",
       "count": 1,
       "spawn_key": "nar_tower_opening_02_zombies:stationary_1",
-      "stationary": true,
+      "stationary": false,
       "camera_target": false,
       "point_room": "floor_01_main_02",
       "point_offset": [
@@ -80,7 +80,7 @@
       "kind": "melee_chaser",
       "count": 1,
       "spawn_key": "nar_tower_opening_02_zombies:stationary_2",
-      "stationary": true,
+      "stationary": false,
       "camera_target": false,
       "point_room": "floor_01_main_02",
       "point_offset": [

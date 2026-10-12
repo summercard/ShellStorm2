@@ -1,0 +1,12 @@
+{
+  "level_id": "expedition_02",
+  "version": "v001",
+  "asset_count": 1,
+  "status": "PASS",
+  "assets": [
+    {
+      "asset_id": "ENV-EXPEDITION-L02-HOTEL-FLOOR-01",
+      "status": "PASS"
+    }
+  ]
+}

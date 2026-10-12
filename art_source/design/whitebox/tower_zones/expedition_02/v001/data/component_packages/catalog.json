@@ -1,0 +1,14 @@
+{
+  "schema": "shellstorm2.whitebox.component_packages",
+  "level_id": "expedition_02",
+  "version": "v001",
+  "packages": [
+    {
+      "category": "hotel_floor_01",
+      "package": "远征关卡02_白模_第1层_长廊与客房",
+      "asset_id": "ENV-EXPEDITION-L02-HOTEL-FLOOR-01",
+      "object_count": 598,
+      "path": "hotel_floor_01/远征关卡02_白模_第1层_长廊与客房/asset_manifest.json"
+    }
+  ]
+}

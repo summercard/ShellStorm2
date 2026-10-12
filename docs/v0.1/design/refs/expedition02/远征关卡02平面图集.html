@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><meta charset="utf-8">
+<title>远征关卡02 平面图集</title>
+<style>
+ body{margin:0;padding:28px 32px 56px;background:#f6f8fb;color:#0f172a;
+      font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif}
+ h1{font-size:22px;margin:0 0 6px}
+ h2{font-size:16px;margin:34px 0 10px;border-left:4px solid #185FA5;padding-left:10px}
+ p.note{color:#64748b;font-size:13px;margin:4px 0 0;line-height:1.7}
+ .card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin-top:14px;overflow:auto}
+ svg{display:block;max-width:100%;height:auto}
+ table{border-collapse:collapse;font-size:13px;width:100%}
+ th,td{border:1px solid #e2e8f0;padding:6px 9px;text-align:left}
+ th{background:#eef3f9} code{background:#eef3f9;padding:1px 5px;border-radius:4px}
+</style>
+<h1>远征关卡02 · 破败旅馆 — 平面图集</h1>
+<p class="note">五层垂直下行。单层 = 阳台安全屋 → 挑高前厅（横置 30×15）→ 坍塌门洞 → 旅馆长廊（10×75，独立房间、贯通）
+→ 东西两侧各 5 间客房 → 北端 T 字路口（40 m 横廊，两端各向北折 15 m）→ 支廊外侧各 1 间客房。</p>
+<p class="note"><b>房间表来自设计页 §4.2、层叠关系来自 §4.3、<u>门位读自白盒 manifest</u></b>；
+由 <code>scripts/render_expedition02_plan_sheet.py</code> 生成，改表就重跑。</p>
+
+<h2>一 · 单层平面图（第 1 层）</h2>
+<div class="card"><svg xmlns="http://www.w3.org/2000/svg" width="882" height="1012" viewBox="0 0 882 1012" role="img" aria-label="远征关卡02 单层平面图">
+<defs><style>
+text{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif}
+.ttl{font-size:17px;font-weight:700;fill:#0f172a}
+.sub{font-size:12px;fill:#64748b}
+.rn{font-size:11.5px;font-weight:700}
+.rd{font-size:10px;fill:#64748b}
+.tag{font-size:10px;font-weight:700}
+.dim{font-size:9.5px;fill:#64748b}
+.lay{font-size:12px;font-weight:700;fill:#0f172a}
+.mono{font-family:Consolas,"Cascadia Mono",ui-monospace,monospace;font-size:10px}
+</style>
+<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#FDE8E8"/><line x1="0" y1="0" x2="0" y2="6" stroke="#B4342A" stroke-width="1.4" opacity="0.55"/></pattern>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1L9 5L0 9" fill="none" stroke="#185FA5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="ard" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1L9 5L0 9" fill="none" stroke="#B4342A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<rect width="882" height="1012" fill="#ffffff"/>
+<text class="ttl" x="60.0" y="32">远征关卡02 · 破败旅馆 — 单层平面图（第 1 层）</text>
+<text class="sub" x="60.0" y="52">五层结构相同。本图为第 1 层；纵向上方为北。由南向北：图下方 = 南端入口，图上方 = 北端。</text>
+<text class="sub" x="60.0" y="70">1 m = 5 px ｜ 单层包络 80 × 160 m ｜ 净高：挑高前厅 11.9 m ／ 其余 3.0 m ／ 坍塌洞 2.5 m</text>
+<text class="sub" x="60.0" y="88">按地砖 5×5 m 规格；两轴均为 5 m 整数倍，FIXED_TRIM 收边 0 件。门位读自白盒 manifest，非手抄。</text>
+<line x1="60.0" y1="916.0" x2="60.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="85.0" y1="916.0" x2="85.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="110.0" y1="916.0" x2="110.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="135.0" y1="916.0" x2="135.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="160.0" y1="916.0" x2="160.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="185.0" y1="916.0" x2="185.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="210.0" y1="916.0" x2="210.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="235.0" y1="916.0" x2="235.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="260.0" y1="916.0" x2="260.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="285.0" y1="916.0" x2="285.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="310.0" y1="916.0" x2="310.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="335.0" y1="916.0" x2="335.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="360.0" y1="916.0" x2="360.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="385.0" y1="916.0" x2="385.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="410.0" y1="916.0" x2="410.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="435.0" y1="916.0" x2="435.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="460.0" y1="916.0" x2="460.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="116.0" x2="460.0" y2="116.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="141.0" x2="460.0" y2="141.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="166.0" x2="460.0" y2="166.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="191.0" x2="460.0" y2="191.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="216.0" x2="460.0" y2="216.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="241.0" x2="460.0" y2="241.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="266.0" x2="460.0" y2="266.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="291.0" x2="460.0" y2="291.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="316.0" x2="460.0" y2="316.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="341.0" x2="460.0" y2="341.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="366.0" x2="460.0" y2="366.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="391.0" x2="460.0" y2="391.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="416.0" x2="460.0" y2="416.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="441.0" x2="460.0" y2="441.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="466.0" x2="460.0" y2="466.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="491.0" x2="460.0" y2="491.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="516.0" x2="460.0" y2="516.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="541.0" x2="460.0" y2="541.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="566.0" x2="460.0" y2="566.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="591.0" x2="460.0" y2="591.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="616.0" x2="460.0" y2="616.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="641.0" x2="460.0" y2="641.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="666.0" x2="460.0" y2="666.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="691.0" x2="460.0" y2="691.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="716.0" x2="460.0" y2="716.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="741.0" x2="460.0" y2="741.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="766.0" x2="460.0" y2="766.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="791.0" x2="460.0" y2="791.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="816.0" x2="460.0" y2="816.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="841.0" x2="460.0" y2="841.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="866.0" x2="460.0" y2="866.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="891.0" x2="460.0" y2="891.0" stroke="#e6ebf2" stroke-width="1"/>
+<line x1="60.0" y1="916.0" x2="460.0" y2="916.0" stroke="#e6ebf2" stroke-width="1"/>
+<rect x="210.0" y="841.0" width="75.0" height="75.0" fill="#EAF3DE" stroke="#639922" stroke-width="1.6" rx="3"/>
+<text class="rn" x="247.5" y="880.5" fill="#27500A" text-anchor="middle">阳台安全屋</text>
+<circle cx="223.0" cy="854.0" r="9" fill="#639922"/>
+<text x="223.0" y="857.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">1</text>
+<rect x="185.0" y="766.0" width="150.0" height="75.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="260.0" y="805.5" fill="#0C447C" text-anchor="middle">挑高前厅</text>
+<circle cx="198.0" cy="779.0" r="9" fill="#378ADD"/>
+<text x="198.0" y="782.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">2</text>
+<rect x="235.0" y="391.0" width="50.0" height="375.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="260.0" y="580.5" fill="#0C447C" text-anchor="middle">旅馆长廊</text>
+<circle cx="248.0" cy="404.0" r="9" fill="#378ADD"/>
+<text x="248.0" y="407.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">3</text>
+<rect x="160.0" y="691.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="197.5" y="730.5" fill="#3C3489" text-anchor="middle">客房W1</text>
+<circle cx="173.0" cy="704.0" r="9" fill="#7F77DD"/>
+<text x="173.0" y="707.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">4</text>
+<rect x="160.0" y="616.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="197.5" y="655.5" fill="#3C3489" text-anchor="middle">客房W2</text>
+<circle cx="173.0" cy="629.0" r="9" fill="#7F77DD"/>
+<text x="173.0" y="632.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">5</text>
+<rect x="160.0" y="541.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="197.5" y="580.5" fill="#3C3489" text-anchor="middle">客房W3</text>
+<circle cx="173.0" cy="554.0" r="9" fill="#7F77DD"/>
+<text x="173.0" y="557.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">6</text>
+<rect x="160.0" y="466.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="197.5" y="505.5" fill="#3C3489" text-anchor="middle">客房W4</text>
+<circle cx="173.0" cy="479.0" r="9" fill="#7F77DD"/>
+<text x="173.0" y="482.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">7</text>
+<rect x="160.0" y="391.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="197.5" y="430.5" fill="#3C3489" text-anchor="middle">客房W5</text>
+<circle cx="173.0" cy="404.0" r="9" fill="#7F77DD"/>
+<text x="173.0" y="407.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">8</text>
+<rect x="285.0" y="691.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="322.5" y="730.5" fill="#3C3489" text-anchor="middle">客房E1</text>
+<circle cx="298.0" cy="704.0" r="9" fill="#7F77DD"/>
+<text x="298.0" y="707.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">9</text>
+<rect x="285.0" y="616.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="322.5" y="655.5" fill="#3C3489" text-anchor="middle">客房E2</text>
+<circle cx="298.0" cy="629.0" r="9" fill="#7F77DD"/>
+<text x="298.0" y="632.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">10</text>
+<rect x="285.0" y="541.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="322.5" y="580.5" fill="#3C3489" text-anchor="middle">客房E3</text>
+<circle cx="298.0" cy="554.0" r="9" fill="#7F77DD"/>
+<text x="298.0" y="557.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">11</text>
+<rect x="285.0" y="466.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="322.5" y="505.5" fill="#3C3489" text-anchor="middle">客房E4</text>
+<circle cx="298.0" cy="479.0" r="9" fill="#7F77DD"/>
+<text x="298.0" y="482.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">12</text>
+<rect x="285.0" y="391.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="322.5" y="430.5" fill="#3C3489" text-anchor="middle">客房E5</text>
+<circle cx="298.0" cy="404.0" r="9" fill="#7F77DD"/>
+<text x="298.0" y="407.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">13</text>
+<rect x="110.0" y="341.0" width="300.0" height="50.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="166.0" y="368.0" fill="#0C447C" text-anchor="start">T 字横廊</text>
+<circle cx="123.0" cy="354.0" r="9" fill="#378ADD"/>
+<text x="123.0" y="357.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">14</text>
+<rect x="135.0" y="116.0" width="50.0" height="225.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="160.0" y="230.5" fill="#0C447C" text-anchor="middle">西支廊</text>
+<circle cx="148.0" cy="129.0" r="9" fill="#378ADD"/>
+<text x="148.0" y="132.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">15</text>
+<rect x="335.0" y="116.0" width="50.0" height="225.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="360.0" y="230.5" fill="#0C447C" text-anchor="middle">东支廊</text>
+<circle cx="348.0" cy="129.0" r="9" fill="#378ADD"/>
+<text x="348.0" y="132.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">16</text>
+<rect x="60.0" y="266.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="97.5" y="305.5" fill="#3C3489" text-anchor="middle">客房W6</text>
+<circle cx="73.0" cy="279.0" r="9" fill="#7F77DD"/>
+<text x="73.0" y="282.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">17</text>
+<rect x="60.0" y="191.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="97.5" y="230.5" fill="#3C3489" text-anchor="middle">客房W8</text>
+<circle cx="73.0" cy="204.0" r="9" fill="#7F77DD"/>
+<text x="73.0" y="207.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">18</text>
+<rect x="60.0" y="116.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="97.5" y="155.5" fill="#3C3489" text-anchor="middle">客房W10</text>
+<circle cx="73.0" cy="129.0" r="9" fill="#7F77DD"/>
+<text x="73.0" y="132.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">19</text>
+<rect x="185.0" y="266.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="222.5" y="305.5" fill="#3C3489" text-anchor="middle">客房W7</text>
+<circle cx="198.0" cy="279.0" r="9" fill="#7F77DD"/>
+<text x="198.0" y="282.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">20</text>
+<rect x="185.0" y="191.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="222.5" y="230.5" fill="#3C3489" text-anchor="middle">客房W9</text>
+<circle cx="198.0" cy="204.0" r="9" fill="#7F77DD"/>
+<text x="198.0" y="207.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">21</text>
+<rect x="385.0" y="266.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="422.5" y="305.5" fill="#3C3489" text-anchor="middle">客房E6</text>
+<circle cx="398.0" cy="279.0" r="9" fill="#7F77DD"/>
+<text x="398.0" y="282.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">22</text>
+<rect x="385.0" y="191.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="422.5" y="230.5" fill="#3C3489" text-anchor="middle">客房E8</text>
+<circle cx="398.0" cy="204.0" r="9" fill="#7F77DD"/>
+<text x="398.0" y="207.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">23</text>
+<rect x="385.0" y="116.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="422.5" y="155.5" fill="#3C3489" text-anchor="middle">客房E10</text>
+<circle cx="398.0" cy="129.0" r="9" fill="#7F77DD"/>
+<text x="398.0" y="132.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">24</text>
+<rect x="260.0" y="266.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="297.5" y="305.5" fill="#3C3489" text-anchor="middle">客房E7</text>
+<circle cx="273.0" cy="279.0" r="9" fill="#7F77DD"/>
+<text x="273.0" y="282.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">25</text>
+<rect x="260.0" y="191.0" width="75.0" height="75.0" fill="#F3EEFB" stroke="#7F77DD" stroke-width="1.6" rx="3"/>
+<text class="rn" x="297.5" y="230.5" fill="#3C3489" text-anchor="middle">客房E9</text>
+<circle cx="273.0" cy="204.0" r="9" fill="#7F77DD"/>
+<text x="273.0" y="207.5" text-anchor="middle" font-size="10.5" font-weight="700" fill="#ffffff">26</text>
+<rect x="242.0" y="837.6" width="11.0" height="6.8" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="260.0" y="762.1" width="25.0" height="7.8" fill="#ffffff" stroke="#B4342A" stroke-width="3.0"/>
+<rect x="231.6" y="723.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="231.6" y="648.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="231.6" y="573.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="231.6" y="498.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="231.6" y="423.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="281.6" y="723.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="281.6" y="648.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="281.6" y="573.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="281.6" y="498.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="281.6" y="423.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="235.0" y="386.8" width="25.0" height="8.3" fill="#ffffff" stroke="#0F6E56" stroke-width="3.2"/>
+<rect x="260.0" y="386.8" width="25.0" height="8.3" fill="#ffffff" stroke="#0F6E56" stroke-width="3.2"/>
+<rect x="135.0" y="336.8" width="25.0" height="8.3" fill="#ffffff" stroke="#0F6E56" stroke-width="3.2"/>
+<rect x="160.0" y="336.8" width="25.0" height="8.3" fill="#ffffff" stroke="#0F6E56" stroke-width="3.2"/>
+<rect x="335.0" y="336.8" width="25.0" height="8.3" fill="#ffffff" stroke="#0F6E56" stroke-width="3.2"/>
+<rect x="360.0" y="336.8" width="25.0" height="8.3" fill="#ffffff" stroke="#0F6E56" stroke-width="3.2"/>
+<rect x="131.6" y="298.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="131.6" y="223.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="131.6" y="148.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="181.6" y="298.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="181.6" y="223.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="381.6" y="298.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="381.6" y="223.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="381.6" y="148.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="331.6" y="298.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<rect x="331.6" y="223.0" width="6.8" height="11.0" fill="#ffffff" stroke="#185FA5" stroke-width="2.6"/>
+<text class="tag" x="278.5" y="782.0" fill="#7B241C">↑ 坍塌门洞 5.0 宽 × 2.5 高</text>
+<path d="M 247.5 878.5 L 260.0 803.5 L 260.0 578.5 L 260.0 366.0" fill="none" stroke="#185FA5" stroke-width="2.4" stroke-dasharray="8 5" opacity="0.7" marker-end="url(#ar)"/>
+<rect x="235.0" y="391.0" width="50.0" height="50.0" fill="url(#hatch)" stroke="#B4342A" stroke-width="2.2" stroke-dasharray="6 4"/>
+<text class="tag" x="297.0" y="360.0" fill="#7B241C">破碎空洞</text>
+<text class="dim" x="297.0" y="375.0" fill="#7B241C">位置 / 尺寸待定</text>
+<text class="dim" x="297.0" y="389.0" fill="#7B241C">↓ 落 −12 m 到第 2 层</text>
+<line x1="482.0" y1="168.0" x2="482.0" y2="130.0" stroke="#0f172a" stroke-width="2"/>
+<path d="M482.0 122.0 L476.0 136.0 L488.0 136.0 Z" fill="#0f172a"/>
+<text class="lay" x="482.0" y="184.0" text-anchor="middle">北</text>
+<text class="lay" x="524.0" y="122.0">房间清单（26 间）</text>
+<line x1="524.0" y1="132.0" x2="860.0" y2="132.0" stroke="#94A3B8" stroke-width="1"/>
+<text class="dim" x="524.0" y="146.0">#</text>
+<text class="dim" x="548.0" y="146.0">key</text>
+<text class="dim" x="642.0" y="146.0">尺寸</text>
+<text class="dim" x="700.0" y="146.0">中心</text>
+<text class="dim" x="796.0" y="146.0">净高</text>
+<line x1="524.0" y1="151.0" x2="860.0" y2="151.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="162.0" font-weight="700" fill="#27500A">1</text>
+<text class="rd" x="548.0" y="162.0" fill="#0f172a">阳台安全屋</text>
+<text class="dim" x="642.0" y="162.0">15×15</text>
+<text class="dim" x="700.0" y="162.0">(-2.5, 52.5)</text>
+<text class="dim" x="796.0" y="162.0">3</text>
+<line x1="524.0" y1="181.0" x2="860.0" y2="181.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="192.0" font-weight="700" fill="#0C447C">2</text>
+<text class="rd" x="548.0" y="192.0" fill="#0f172a">挑高前厅</text>
+<text class="dim" x="642.0" y="192.0">30×15</text>
+<text class="dim" x="700.0" y="192.0">(0, 37.5)</text>
+<text class="dim" x="796.0" y="192.0">11.9</text>
+<line x1="524.0" y1="211.0" x2="860.0" y2="211.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="222.0" font-weight="700" fill="#0C447C">3</text>
+<text class="rd" x="548.0" y="222.0" fill="#0f172a">旅馆长廊</text>
+<text class="dim" x="642.0" y="222.0">10×75</text>
+<text class="dim" x="700.0" y="222.0">(0, -7.5)</text>
+<text class="dim" x="796.0" y="222.0">3</text>
+<line x1="524.0" y1="241.0" x2="860.0" y2="241.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="252.0" font-weight="700" fill="#3C3489">4</text>
+<text class="rd" x="548.0" y="252.0" fill="#0f172a">客房W1</text>
+<text class="dim" x="642.0" y="252.0">15×15</text>
+<text class="dim" x="700.0" y="252.0">(-12.5, 22.5)</text>
+<text class="dim" x="796.0" y="252.0">3</text>
+<line x1="524.0" y1="271.0" x2="860.0" y2="271.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="282.0" font-weight="700" fill="#3C3489">5</text>
+<text class="rd" x="548.0" y="282.0" fill="#0f172a">客房W2</text>
+<text class="dim" x="642.0" y="282.0">15×15</text>
+<text class="dim" x="700.0" y="282.0">(-12.5, 7.5)</text>
+<text class="dim" x="796.0" y="282.0">3</text>
+<line x1="524.0" y1="301.0" x2="860.0" y2="301.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="312.0" font-weight="700" fill="#3C3489">6</text>
+<text class="rd" x="548.0" y="312.0" fill="#0f172a">客房W3</text>
+<text class="dim" x="642.0" y="312.0">15×15</text>
+<text class="dim" x="700.0" y="312.0">(-12.5, -7.5)</text>
+<text class="dim" x="796.0" y="312.0">3</text>
+<line x1="524.0" y1="331.0" x2="860.0" y2="331.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="342.0" font-weight="700" fill="#3C3489">7</text>
+<text class="rd" x="548.0" y="342.0" fill="#0f172a">客房W4</text>
+<text class="dim" x="642.0" y="342.0">15×15</text>
+<text class="dim" x="700.0" y="342.0">(-12.5, -22.5)</text>
+<text class="dim" x="796.0" y="342.0">3</text>
+<line x1="524.0" y1="361.0" x2="860.0" y2="361.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="372.0" font-weight="700" fill="#3C3489">8</text>
+<text class="rd" x="548.0" y="372.0" fill="#0f172a">客房W5</text>
+<text class="dim" x="642.0" y="372.0">15×15</text>
+<text class="dim" x="700.0" y="372.0">(-12.5, -37.5)</text>
+<text class="dim" x="796.0" y="372.0">3</text>
+<line x1="524.0" y1="391.0" x2="860.0" y2="391.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="402.0" font-weight="700" fill="#3C3489">9</text>
+<text class="rd" x="548.0" y="402.0" fill="#0f172a">客房E1</text>
+<text class="dim" x="642.0" y="402.0">15×15</text>
+<text class="dim" x="700.0" y="402.0">(12.5, 22.5)</text>
+<text class="dim" x="796.0" y="402.0">3</text>
+<line x1="524.0" y1="421.0" x2="860.0" y2="421.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="432.0" font-weight="700" fill="#3C3489">10</text>
+<text class="rd" x="548.0" y="432.0" fill="#0f172a">客房E2</text>
+<text class="dim" x="642.0" y="432.0">15×15</text>
+<text class="dim" x="700.0" y="432.0">(12.5, 7.5)</text>
+<text class="dim" x="796.0" y="432.0">3</text>
+<line x1="524.0" y1="451.0" x2="860.0" y2="451.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="462.0" font-weight="700" fill="#3C3489">11</text>
+<text class="rd" x="548.0" y="462.0" fill="#0f172a">客房E3</text>
+<text class="dim" x="642.0" y="462.0">15×15</text>
+<text class="dim" x="700.0" y="462.0">(12.5, -7.5)</text>
+<text class="dim" x="796.0" y="462.0">3</text>
+<line x1="524.0" y1="481.0" x2="860.0" y2="481.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="492.0" font-weight="700" fill="#3C3489">12</text>
+<text class="rd" x="548.0" y="492.0" fill="#0f172a">客房E4</text>
+<text class="dim" x="642.0" y="492.0">15×15</text>
+<text class="dim" x="700.0" y="492.0">(12.5, -22.5)</text>
+<text class="dim" x="796.0" y="492.0">3</text>
+<line x1="524.0" y1="511.0" x2="860.0" y2="511.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="522.0" font-weight="700" fill="#3C3489">13</text>
+<text class="rd" x="548.0" y="522.0" fill="#0f172a">客房E5</text>
+<text class="dim" x="642.0" y="522.0">15×15</text>
+<text class="dim" x="700.0" y="522.0">(12.5, -37.5)</text>
+<text class="dim" x="796.0" y="522.0">3</text>
+<line x1="524.0" y1="541.0" x2="860.0" y2="541.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="552.0" font-weight="700" fill="#0C447C">14</text>
+<text class="rd" x="548.0" y="552.0" fill="#0f172a">T 字横廊</text>
+<text class="dim" x="642.0" y="552.0">60×10</text>
+<text class="dim" x="700.0" y="552.0">(0, -50)</text>
+<text class="dim" x="796.0" y="552.0">3</text>
+<line x1="524.0" y1="571.0" x2="860.0" y2="571.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="582.0" font-weight="700" fill="#0C447C">15</text>
+<text class="rd" x="548.0" y="582.0" fill="#0f172a">西支廊</text>
+<text class="dim" x="642.0" y="582.0">10×45</text>
+<text class="dim" x="700.0" y="582.0">(-20, -77.5)</text>
+<text class="dim" x="796.0" y="582.0">3</text>
+<line x1="524.0" y1="601.0" x2="860.0" y2="601.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="612.0" font-weight="700" fill="#0C447C">16</text>
+<text class="rd" x="548.0" y="612.0" fill="#0f172a">东支廊</text>
+<text class="dim" x="642.0" y="612.0">10×45</text>
+<text class="dim" x="700.0" y="612.0">(20, -77.5)</text>
+<text class="dim" x="796.0" y="612.0">3</text>
+<line x1="524.0" y1="631.0" x2="860.0" y2="631.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="642.0" font-weight="700" fill="#3C3489">17</text>
+<text class="rd" x="548.0" y="642.0" fill="#0f172a">客房W6（西·外侧）</text>
+<text class="dim" x="642.0" y="642.0">15×15</text>
+<text class="dim" x="700.0" y="642.0">(-32.5, -62.5)</text>
+<text class="dim" x="796.0" y="642.0">3</text>
+<line x1="524.0" y1="661.0" x2="860.0" y2="661.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="672.0" font-weight="700" fill="#3C3489">18</text>
+<text class="rd" x="548.0" y="672.0" fill="#0f172a">客房W8（西·外侧）</text>
+<text class="dim" x="642.0" y="672.0">15×15</text>
+<text class="dim" x="700.0" y="672.0">(-32.5, -77.5)</text>
+<text class="dim" x="796.0" y="672.0">3</text>
+<line x1="524.0" y1="691.0" x2="860.0" y2="691.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="702.0" font-weight="700" fill="#3C3489">19</text>
+<text class="rd" x="548.0" y="702.0" fill="#0f172a">客房W10（西·外侧）</text>
+<text class="dim" x="642.0" y="702.0">15×15</text>
+<text class="dim" x="700.0" y="702.0">(-32.5, -92.5)</text>
+<text class="dim" x="796.0" y="702.0">3</text>
+<line x1="524.0" y1="721.0" x2="860.0" y2="721.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="732.0" font-weight="700" fill="#3C3489">20</text>
+<text class="rd" x="548.0" y="732.0" fill="#0f172a">客房W7（西·内侧）</text>
+<text class="dim" x="642.0" y="732.0">15×15</text>
+<text class="dim" x="700.0" y="732.0">(-7.5, -62.5)</text>
+<text class="dim" x="796.0" y="732.0">3</text>
+<line x1="524.0" y1="751.0" x2="860.0" y2="751.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="762.0" font-weight="700" fill="#3C3489">21</text>
+<text class="rd" x="548.0" y="762.0" fill="#0f172a">客房W9（西·内侧）</text>
+<text class="dim" x="642.0" y="762.0">15×15</text>
+<text class="dim" x="700.0" y="762.0">(-7.5, -77.5)</text>
+<text class="dim" x="796.0" y="762.0">3</text>
+<line x1="524.0" y1="781.0" x2="860.0" y2="781.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="792.0" font-weight="700" fill="#3C3489">22</text>
+<text class="rd" x="548.0" y="792.0" fill="#0f172a">客房E6（东·外侧）</text>
+<text class="dim" x="642.0" y="792.0">15×15</text>
+<text class="dim" x="700.0" y="792.0">(32.5, -62.5)</text>
+<text class="dim" x="796.0" y="792.0">3</text>
+<line x1="524.0" y1="811.0" x2="860.0" y2="811.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="822.0" font-weight="700" fill="#3C3489">23</text>
+<text class="rd" x="548.0" y="822.0" fill="#0f172a">客房E8（东·外侧）</text>
+<text class="dim" x="642.0" y="822.0">15×15</text>
+<text class="dim" x="700.0" y="822.0">(32.5, -77.5)</text>
+<text class="dim" x="796.0" y="822.0">3</text>
+<line x1="524.0" y1="841.0" x2="860.0" y2="841.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="852.0" font-weight="700" fill="#3C3489">24</text>
+<text class="rd" x="548.0" y="852.0" fill="#0f172a">客房E10（东·外侧）</text>
+<text class="dim" x="642.0" y="852.0">15×15</text>
+<text class="dim" x="700.0" y="852.0">(32.5, -92.5)</text>
+<text class="dim" x="796.0" y="852.0">3</text>
+<line x1="524.0" y1="871.0" x2="860.0" y2="871.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="882.0" font-weight="700" fill="#3C3489">25</text>
+<text class="rd" x="548.0" y="882.0" fill="#0f172a">客房E7（东·内侧）</text>
+<text class="dim" x="642.0" y="882.0">15×15</text>
+<text class="dim" x="700.0" y="882.0">(7.5, -62.5)</text>
+<text class="dim" x="796.0" y="882.0">3</text>
+<line x1="524.0" y1="901.0" x2="860.0" y2="901.0" stroke="#e6ebf2" stroke-width="1"/>
+<text class="rd" x="524.0" y="912.0" font-weight="700" fill="#3C3489">26</text>
+<text class="rd" x="548.0" y="912.0" fill="#0f172a">客房E9（东·内侧）</text>
+<text class="dim" x="642.0" y="912.0">15×15</text>
+<text class="dim" x="700.0" y="912.0">(7.5, -77.5)</text>
+<text class="dim" x="796.0" y="912.0">3</text>
+<text class="dim" x="60.0" y="944.0">图例：绿 = 阳台安全屋 ｜ 蓝 = 主路（前厅 / 长廊 / 横廊 / 支廊） ｜ 紫 = 客房（支线） ｜ 斜纹 = 破碎空洞（层间通道）</text>
+<text class="dim" x="60.0" y="960.0">门：蓝框 = 标准门 2.2×2.5（21 处） ｜ 红框 = 坍塌门洞 5.0 宽 × 2.5 高（1 处） ｜ 绿框 = 5m 通洞、顶到墙顶（6 处，用于长廊↔横廊、横廊↔两条支廊）</text>
+<text class="dim" x="60.0" y="976.0">门槽取自 RoomDoorLane.lane_offsets()：10 m → ±2.5；15 m → 0；30 m → ±2.5/±7.5；45 m → ±15/±10/±5/0；60 m → ±22.5…±2.5；75 m → ±30…±5。画面上方为北（平面 +y = 世界 +z = 南）。</text>
+</svg></div>
+
+<h2>二 · 五层纵剖图（沿 x = 0）</h2>
+<div class="card"><svg xmlns="http://www.w3.org/2000/svg" width="1078" height="566" viewBox="0 0 1078 566" role="img" aria-label="远征关卡02 五层纵剖图">
+<defs><style>
+text{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif}
+.ttl{font-size:17px;font-weight:700;fill:#0f172a}
+.sub{font-size:12px;fill:#64748b}
+.rn{font-size:11.5px;font-weight:700}
+.rd{font-size:10px;fill:#64748b}
+.tag{font-size:10px;font-weight:700}
+.dim{font-size:9.5px;fill:#64748b}
+.lay{font-size:12px;font-weight:700;fill:#0f172a}
+.mono{font-family:Consolas,"Cascadia Mono",ui-monospace,monospace;font-size:10px}
+</style>
+<pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#FDE8E8"/><line x1="0" y1="0" x2="0" y2="6" stroke="#B4342A" stroke-width="1.4" opacity="0.55"/></pattern>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1L9 5L0 9" fill="none" stroke="#185FA5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="ard" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1L9 5L0 9" fill="none" stroke="#B4342A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<rect width="1078" height="566" fill="#ffffff"/>
+<text class="ttl" x="128.0" y="32">远征关卡02 · 破败旅馆 — 五层纵剖图（沿 x = 0，向东看）</text>
+<text class="sub" x="128.0" y="52">整关是一个空间，五层上下叠放、层间隔 12 m，像 98F 与 99F 的关系；层间靠地板破洞贯通，不用楼梯。走廊沿南→北。</text>
+<text class="sub" x="128.0" y="70">横轴 = 平面南北向（160 m，左南右北），切过「阳台 → 挑高前厅 → 长廊 → T 字横廊」这条主轴。</text>
+<text class="sub" x="128.0" y="88">第 1 层挑高前厅通高 11.9 m；第 2–5 层没有挑高前厅，全层 3.0 m。</text>
+<text class="sub" x="128.0" y="106">长廊两侧 10 间 + 两条支廊两侧 10 间，共 20 间客房垂直于本剖面（见单层平面图）。横轴最右段（y = −55…−100）只有两条 45 m 支廊，它们位于 x = ±20、垂直于本剖面，故此处留白。</text>
+<rect x="112.0" y="166.0" width="832.0" height="60.0" fill="#f8fafc"/>
+<rect x="128.0" y="211.0" width="75.0" height="15.0" fill="#EAF3DE" stroke="#639922" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="133.0" y="223.0">阳台安全屋 3 m</text>
+<rect x="203.0" y="166.5" width="75.0" height="59.5" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="208.0" y="178.5">挑高前厅 11.9 m</text>
+<rect x="278.0" y="211.0" width="375.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="283.0" y="223.0">旅馆长廊 3 m</text>
+<rect x="653.0" y="211.0" width="50.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="658.0" y="223.0">T 字横廊 3 m</text>
+<rect x="128.0" y="226.0" width="800.0" height="5.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="1.2"/>
+<rect x="653.0" y="225.0" width="50.0" height="6.8" fill="#FDE8E8" stroke="#B4342A" stroke-width="1.8" stroke-dasharray="5 3"/>
+<line x1="678.0" y1="233.0" x2="678.0" y2="274.0" stroke="#B4342A" stroke-width="2.6" marker-end="url(#ard)"/>
+<text class="tag" x="685.0" y="246.0" fill="#7B241C">破洞 落 −12 m</text>
+<text class="lay" x="10.0" y="186.0">1（顶）</text>
+<text class="dim" x="10.0" y="201.0">floor_number 1 / index 0</text>
+<text class="dim" x="10.0" y="215.0">世界 Y = 0 m</text>
+<text class="dim" x="10.0" y="229.0">有挑高 11.9 m</text>
+<rect x="128.0" y="271.0" width="75.0" height="15.0" fill="#EAF3DE" stroke="#639922" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="133.0" y="283.0">阳台安全屋 3 m</text>
+<rect x="203.0" y="271.0" width="75.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" stroke-dasharray="4 3" opacity="0.5"/>
+<text class="rd" x="208.0" y="283.0">挑高前厅 3 m</text>
+<rect x="278.0" y="271.0" width="375.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="283.0" y="283.0">旅馆长廊 3 m</text>
+<rect x="653.0" y="271.0" width="50.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="658.0" y="283.0">T 字横廊 3 m</text>
+<rect x="128.0" y="286.0" width="800.0" height="5.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="1.2"/>
+<rect x="653.0" y="285.0" width="50.0" height="6.8" fill="#FDE8E8" stroke="#B4342A" stroke-width="1.8" stroke-dasharray="5 3"/>
+<line x1="678.0" y1="293.0" x2="678.0" y2="334.0" stroke="#B4342A" stroke-width="2.6" marker-end="url(#ard)"/>
+<text class="tag" x="685.0" y="306.0" fill="#7B241C">破洞 落 −12 m</text>
+<text class="lay" x="10.0" y="246.0">2</text>
+<text class="dim" x="10.0" y="261.0">floor_number 2 / index 1</text>
+<text class="dim" x="10.0" y="275.0">世界 Y = -12 m</text>
+<text class="dim" x="10.0" y="289.0">全层 3.0 m</text>
+<rect x="112.0" y="286.0" width="832.0" height="60.0" fill="#f8fafc"/>
+<rect x="128.0" y="331.0" width="75.0" height="15.0" fill="#EAF3DE" stroke="#639922" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="133.0" y="343.0">阳台安全屋 3 m</text>
+<rect x="203.0" y="331.0" width="75.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" stroke-dasharray="4 3" opacity="0.5"/>
+<text class="rd" x="208.0" y="343.0">挑高前厅 3 m</text>
+<rect x="278.0" y="331.0" width="375.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="283.0" y="343.0">旅馆长廊 3 m</text>
+<rect x="653.0" y="331.0" width="50.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="658.0" y="343.0">T 字横廊 3 m</text>
+<rect x="128.0" y="346.0" width="800.0" height="5.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="1.2"/>
+<rect x="653.0" y="345.0" width="50.0" height="6.8" fill="#FDE8E8" stroke="#B4342A" stroke-width="1.8" stroke-dasharray="5 3"/>
+<line x1="678.0" y1="353.0" x2="678.0" y2="394.0" stroke="#B4342A" stroke-width="2.6" marker-end="url(#ard)"/>
+<text class="tag" x="685.0" y="366.0" fill="#7B241C">破洞 落 −12 m</text>
+<text class="lay" x="10.0" y="306.0">3</text>
+<text class="dim" x="10.0" y="321.0">floor_number 3 / index 2</text>
+<text class="dim" x="10.0" y="335.0">世界 Y = -24 m</text>
+<text class="dim" x="10.0" y="349.0">全层 3.0 m</text>
+<rect x="128.0" y="391.0" width="75.0" height="15.0" fill="#EAF3DE" stroke="#639922" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="133.0" y="403.0">阳台安全屋 3 m</text>
+<rect x="203.0" y="391.0" width="75.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" stroke-dasharray="4 3" opacity="0.5"/>
+<text class="rd" x="208.0" y="403.0">挑高前厅 3 m</text>
+<rect x="278.0" y="391.0" width="375.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="283.0" y="403.0">旅馆长廊 3 m</text>
+<rect x="653.0" y="391.0" width="50.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="658.0" y="403.0">T 字横廊 3 m</text>
+<rect x="128.0" y="406.0" width="800.0" height="5.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="1.2"/>
+<rect x="653.0" y="405.0" width="50.0" height="6.8" fill="#FDE8E8" stroke="#B4342A" stroke-width="1.8" stroke-dasharray="5 3"/>
+<line x1="678.0" y1="413.0" x2="678.0" y2="454.0" stroke="#B4342A" stroke-width="2.6" marker-end="url(#ard)"/>
+<text class="tag" x="685.0" y="426.0" fill="#7B241C">破洞 落 −12 m</text>
+<text class="lay" x="10.0" y="366.0">4</text>
+<text class="dim" x="10.0" y="381.0">floor_number 4 / index 3</text>
+<text class="dim" x="10.0" y="395.0">世界 Y = -36 m</text>
+<text class="dim" x="10.0" y="409.0">全层 3.0 m</text>
+<rect x="112.0" y="406.0" width="832.0" height="60.0" fill="#f8fafc"/>
+<rect x="128.0" y="451.0" width="75.0" height="15.0" fill="#EAF3DE" stroke="#639922" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="133.0" y="463.0">阳台安全屋 3 m</text>
+<rect x="203.0" y="451.0" width="75.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" stroke-dasharray="4 3" opacity="0.5"/>
+<text class="rd" x="208.0" y="463.0">挑高前厅 3 m</text>
+<rect x="278.0" y="451.0" width="375.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="283.0" y="463.0">旅馆长廊 3 m</text>
+<rect x="653.0" y="451.0" width="50.0" height="15.0" fill="#E6F1FB" stroke="#378ADD" stroke-width="1.4" opacity="0.96"/>
+<text class="rd" x="658.0" y="463.0">T 字横廊 3 m</text>
+<rect x="128.0" y="466.0" width="800.0" height="5.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="1.2"/>
+<rect x="653.0" y="465.0" width="50.0" height="6.8" fill="#FDE8E8" stroke="#B4342A" stroke-width="1.8" stroke-dasharray="5 3"/>
+<text class="lay" x="10.0" y="426.0">5（底）</text>
+<text class="dim" x="10.0" y="441.0">floor_number 5 / index 4</text>
+<text class="dim" x="10.0" y="455.0">世界 Y = -48 m</text>
+<text class="dim" x="10.0" y="469.0">全层 3.0 m</text>
+<text class="tag" x="128.0" y="494.0" fill="#7B241C">第 5 层（底层）：主轴之后接 Boss 房 → 撤离点（位置待裁决 L02-10）。</text>
+<text class="dim" x="128.0" y="512.0">用户 2026-10-12：「下面的层级不会有挑高层，都是 3 米高的房间和走廊」。</text>
+<text class="dim" x="128.0" y="528.0">每层封顶；楼顶封板与破洞挡光是「全楼不受日照」的前置条件（见设计页 §5.2）。</text>
+</svg></div>
+
+<h2>三 · 单层房表</h2>
+<div class="card"><table>
+<tr><th>#</th><th>key</th><th>中文名</th><th>角色</th><th>尺寸 宽×深 (m)</th>
+<th>中心 (x, y)</th><th>面积 (m²)</th><th>净高 (m)</th><th>父房</th></tr>
+<tr><td>1</td><td><code>entry</code></td><td>阳台安全屋</td><td><code>stair_entry</code></td><td>15 × 15</td><td>(-2.5, 52.5)</td><td>225</td><td>3</td><td>—</td></tr><tr><td>2</td><td><code>room_01</code></td><td>挑高前厅</td><td><code>main</code></td><td>30 × 15</td><td>(0, 37.5)</td><td>450</td><td>11.9</td><td>entry</td></tr><tr><td>3</td><td><code>room_02</code></td><td>旅馆长廊</td><td><code>main</code></td><td>10 × 75</td><td>(0, -7.5)</td><td>750</td><td>3</td><td>room_01</td></tr><tr><td>4</td><td><code>room_03</code></td><td>客房W1</td><td><code>branch</code></td><td>15 × 15</td><td>(-12.5, 22.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>5</td><td><code>room_04</code></td><td>客房W2</td><td><code>branch</code></td><td>15 × 15</td><td>(-12.5, 7.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>6</td><td><code>room_05</code></td><td>客房W3</td><td><code>branch</code></td><td>15 × 15</td><td>(-12.5, -7.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>7</td><td><code>room_06</code></td><td>客房W4</td><td><code>branch</code></td><td>15 × 15</td><td>(-12.5, -22.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>8</td><td><code>room_07</code></td><td>客房W5</td><td><code>branch</code></td><td>15 × 15</td><td>(-12.5, -37.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>9</td><td><code>room_08</code></td><td>客房E1</td><td><code>branch</code></td><td>15 × 15</td><td>(12.5, 22.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>10</td><td><code>room_09</code></td><td>客房E2</td><td><code>branch</code></td><td>15 × 15</td><td>(12.5, 7.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>11</td><td><code>room_10</code></td><td>客房E3</td><td><code>branch</code></td><td>15 × 15</td><td>(12.5, -7.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>12</td><td><code>room_11</code></td><td>客房E4</td><td><code>branch</code></td><td>15 × 15</td><td>(12.5, -22.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>13</td><td><code>room_12</code></td><td>客房E5</td><td><code>branch</code></td><td>15 × 15</td><td>(12.5, -37.5)</td><td>225</td><td>3</td><td>room_02</td></tr><tr><td>14</td><td><code>room_13</code></td><td>T 字横廊</td><td><code>main</code></td><td>60 × 10</td><td>(0, -50)</td><td>600</td><td>3</td><td>room_02</td></tr><tr><td>15</td><td><code>room_14</code></td><td>西支廊</td><td><code>main</code></td><td>10 × 45</td><td>(-20, -77.5)</td><td>450</td><td>3</td><td>room_13</td></tr><tr><td>16</td><td><code>room_15</code></td><td>东支廊</td><td><code>main</code></td><td>10 × 45</td><td>(20, -77.5)</td><td>450</td><td>3</td><td>room_13</td></tr><tr><td>17</td><td><code>room_16</code></td><td>客房W6（西·外侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(-32.5, -62.5)</td><td>225</td><td>3</td><td>room_14</td></tr><tr><td>18</td><td><code>room_17</code></td><td>客房W8（西·外侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(-32.5, -77.5)</td><td>225</td><td>3</td><td>room_14</td></tr><tr><td>19</td><td><code>room_18</code></td><td>客房W10（西·外侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(-32.5, -92.5)</td><td>225</td><td>3</td><td>room_14</td></tr><tr><td>20</td><td><code>room_19</code></td><td>客房W7（西·内侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(-7.5, -62.5)</td><td>225</td><td>3</td><td>room_14</td></tr><tr><td>21</td><td><code>room_20</code></td><td>客房W9（西·内侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(-7.5, -77.5)</td><td>225</td><td>3</td><td>room_14</td></tr><tr><td>22</td><td><code>room_21</code></td><td>客房E6（东·外侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(32.5, -62.5)</td><td>225</td><td>3</td><td>room_15</td></tr><tr><td>23</td><td><code>room_22</code></td><td>客房E8（东·外侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(32.5, -77.5)</td><td>225</td><td>3</td><td>room_15</td></tr><tr><td>24</td><td><code>room_23</code></td><td>客房E10（东·外侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(32.5, -92.5)</td><td>225</td><td>3</td><td>room_15</td></tr><tr><td>25</td><td><code>room_24</code></td><td>客房E7（东·内侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(7.5, -62.5)</td><td>225</td><td>3</td><td>room_15</td></tr><tr><td>26</td><td><code>room_25</code></td><td>客房E9（东·内侧）</td><td><code>branch</code></td><td>15 × 15</td><td>(7.5, -77.5)</td><td>225</td><td>3</td><td>room_15</td></tr></table></div>
+
+<h2>四 · 五层叠放</h2>
+<div class="card"><table>
+<tr><th>层</th><th>floor_number</th><th>floor_index</th><th>世界 Y</th><th>挑高前厅</th></tr>
+<tr><td>1（顶）</td><td>1</td><td>0</td><td>0</td><td>有（11.9 m）</td></tr><tr><td>2</td><td>2</td><td>1</td><td>-12</td><td>无（全 3.0 m）</td></tr><tr><td>3</td><td>3</td><td>2</td><td>-24</td><td>无（全 3.0 m）</td></tr><tr><td>4</td><td>4</td><td>3</td><td>-36</td><td>无（全 3.0 m）</td></tr><tr><td>5（底）</td><td>5</td><td>4</td><td>-48</td><td>无（全 3.0 m）</td></tr></table></div>
+
+<h2>五 · 绘制口径</h2>
+<div class="card"><p class="note">
+① 坐标单位米，平面 <code>+y</code> = 南、<code>−y</code> = 北；画面上方为北。<br>
+② 尺寸比例 1 m = 5 px；房间按外轮廓矩形绘制，未画内墙与陈设。<br>
+③ 破洞位置与尺寸<b>待定</b>，图中为示意占位。<br>
+④ 门槽取自 <code>RoomDoorLane.lane_offsets()</code>；<b>门位数值读自白盒 manifest</b>，不在本脚本里手抄。<br>
+⑤ 楼层世界 Y = −12 × <code>floor_index</code>（层高为全局常量）。<br>
+⑥ 剖面横轴切过主轴 4 间房；长廊两侧 10 间 + 支廊两侧 10 间，共 20 间客房垂直于剖面。
+</p></div>
+</html>

@@ -184,9 +184,14 @@
         "docs/v0.1/05.1_关卡区块设计.md"
       ],
       "development_records": [
-        "docs/v0.1/development/2026-09-13_world_level_blocks.md"
+        "docs/v0.1/development/2026-09-13_world_level_blocks.md",
+        "docs/v0.1/development/CHANGELOG.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_expedition_camera_door_proxies"
+        },
         {
           "kind": "scene",
           "id": "verify_floor_plan_generator"
@@ -231,6 +236,10 @@
         {
           "kind": "scene",
           "id": "verify_expedition_departure_carry"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_hologram_unlock"
         },
         {
           "kind": "scene",

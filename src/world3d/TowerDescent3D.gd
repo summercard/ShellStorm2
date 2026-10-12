@@ -1206,6 +1206,7 @@ func _finish_expedition_successful_extraction() -> void:
 	if not test_mode or force_extraction_settlement_for_test:
 		var commit := BaseManager.commit_run_settlement({
 			"transaction_id": _get_run_settlement_transaction_id(true),
+			"expedition_level_id": get_expedition_level_id(),
 			"success": true,
 			"kills": _kills,
 			"extraction_points": _run_value,

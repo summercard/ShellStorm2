@@ -110,6 +110,97 @@ facing(local -Z -> world) = (0.000, 1.000, -0.000)      ← 发光面朝上
 即：世界 Z 向 1.84 m（长边平行门洞）、X 向 0.76 m（门的法向占地）、Y 向 0.09 m（厚度）；
 无 `StaticBody3D`。
 
+### 5.1 补：远征01 入口房走的是**另一条**壳体路径（同日追加）
+
+业主追加：
+
+> 「还有这个出口的提示，在远征关卡01的入口安全屋也要放一个」
+
+**这句话点出了首版的一个真漏洞。** 入口安全房有**两条**壳体路径：
+
+| 路径 | 触发 | 是否生成 EXIT 牌 |
+| --- | --- | --- |
+| 塔楼 / 程序化 | `_build_tower_module_shell()` → `_build_safe_room_shell()` | ✅ 首版已覆盖 |
+| **远征01 start 房** | `_build_shell()` 命中 `static_layout_scene_path` 后**提前 `return`** | ❌ **首版漏了** |
+
+关键代码（`DungeonRoom3D._build_shell()`）：
+
+```gdscript
+var expedition_static_path := _expedition_static_layout_path()
+if not expedition_static_path.is_empty():
+    ... 实例化 f00_start_static_layout.tscn，重命名为 SafeRoomArtRoot ...
+    _build_runtime_doors_only()
+    return                      # ← 这里就返回了，压根不经过 _build_safe_room_shell()
+```
+
+`f00_start_static_layout.tscn` 的 `metadata/static_layout_only = true`、13 房之一、
+`room_id = "start"`、`room_type = "STAIR_LOBBY"` ⇒ 它就是业主说的「远征关卡01的入口安全屋」。
+
+**改法**（两处，都不改视觉资产）：
+
+1. `_build_shell()` 静态分支的 `_build_runtime_doors_only()` 之后补一次调用，
+   条件 `room_type == "STAIR_LOBBY"`；
+2. `_build_safe_room_exit_sign()` 开头加**幂等守卫**（按节点名 `SafeRoomExitSign` 去重）
+   —— 两条路径将来若同时命中，只会有一块牌。
+
+**为什么不能把牌固化进静态 TSCN**：`_align_static_layout_to_room()` 会把静态布局按本局
+门向整体转 Δ（Δ 由几何匹配定序），**门向每局随种子变** ⇒ 牌的位置也必须每局算。
+所以它只能运行时按**世界门向**生成（与门扇 `_build_runtime_doors_only()` 同口径）。
+这也是它进 `dynamic_runtime_owned` 的原因（见下）。
+
+实测（真实远征01，`run_seed_override = 77001199`，探针 `probe_expedition_start_exit_sign`）：
+
+```
+room_id=start  room_type=STAIR_LOBBY
+doors=["east", "north"]  door_targets={ "east": "", "north": "room_01" }
+static_layout_scene_path=.../expedition_01/f00_start_static_layout.tscn
+static_layout_scene_loaded=true
+retreat_direction=east                                  ← 退出门（与 2026-10-12 钥匙文档实测一致）
+SafeRoomExitSign 节点数=1                                ← 幂等成立
+房间局部 AABB x[6.290,7.050] y[-0.000,0.090] z[-0.920,0.920]  半边长=7.50
+facing = (0.000, 1.000, -0.000)                          ← 发光面朝上
+门法向=(1.000, 0.000, 0.000)  沿门法向占地=0.760  平行门洞长边=1.840
+切向：标牌中心=0.000  门扇=0.000（差 0.000）              ← 与门完全同轴
+径向：门扇=7.500  标牌中心=6.670（应更靠房内）            ← 落在门内侧
+PROBE_EXPEDITION_START_EXIT_SIGN_OK
+```
+
+**声明同步（契约诚实）**：静态 TSCN 的 `metadata/dynamic_runtime_owned` 原本是
+`["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]` —— 漏了 EXIT 牌。
+已把 `SafeRoomExitSign` 补进去，并**同步生成器** `scripts/generate_expedition01_room_static_scenes.gd`
+（项目纪律：生成器与产物不同步 ⇒ 重跑覆盖）。TSCN 是二进制级外科替换，**CRLF 行尾原样保留**、
+只动那 1 行。
+
+**门禁断言**：`verify_expedition_level01_flow._verify_safe_room_exit_sign()` —— 盯
+AssetID / 退出门一致性 / `visual_only` / 无 `StaticBody3D` / 发光面朝上 / 贴地 /
+不超房界 / 长边平行门洞（尺寸由资产包络推出，不写死）。反向对照：删掉静态分支那次调用，必红。
+
+### 5.2 ⚠️ 过程事故：我用 Python 改 `.gd` 时把行尾从 CRLF 翻成了 LF
+
+做反向对照时，我用 `python -c` 读写 `src/world3d/DungeonRoom3D.gd` 来注入/还原那行调用。
+`open(p, encoding="utf8")` 默认走**通用换行**（CRLF→LF），写回时就成了 LF。
+
+**判据**（`git ls-files --eol`）：
+
+| 文件 | 我改之前/后 | 同目录未碰的对照 |
+| --- | --- | --- |
+| `src/world3d/DungeonRoom3D.gd` | **w/lf** ← 被我翻了 | `Dungeon3D.gd` = w/crlf |
+| `scripts/check_runtime_texture_policy.py` | **w/lf** | `check_asset_registry.py` = w/crlf |
+
+`.gitattributes` 对 `.gd` / `.py` **没有规则** ⇒ 按 `core.autocrlf=true`，工作区应为 **CRLF**；
+且 `.gitattributes` 自己写着「**不要**给 `*.gd` / `*.tscn` / `*.md` 加 `eol=lf`」。
+`git diff --stat` 看不出这件事（autocrlf 会把两侧都规范化成 LF），**只有 `git ls-files --eol` 看得见**。
+
+**已修**：8 个我碰过的 `.gd` / `.py` 全部转回 CRLF（`verify_expedition_level01_flow.gd`、
+4 个新探针、`check_runtime_texture_policy.py` 一并按约定落成 CRLF）。修完复核：
+`w/crlf`、`git diff --stat` 仍只有预期行数（21 / 72 / 11 行，**不是整文件**）。
+`.import` 保持 `w/lf`（`attr/text eol=lf`）、`f00_start_static_layout.tscn` 保持 `w/crlf` 且只改 1 行。
+
+**纪律（新增）**：🔴 **改 `.gd` / `.tscn` / `.md` 这类没有 `.gitattributes` 规则的文件时，
+别用 Python 文本模式读写**（`open(..., "r"/"w")` 会做通用换行转换）。
+要外科式改就用二进制模式（`"rb"/"wb"`，如本次改 TSCN 那样），或直接用编辑器工具。
+事后自查用 `git ls-files --eol <path>`，**别信 `git diff`**。
+
 ## 六、🔴 真实渲染暴露并修掉的一个真问题：镜像字
 
 几何探针全绿（朝向 / 贴地 / 区间），但**真实渲染截图一眼看出字是反的** —— 画面里读到的是

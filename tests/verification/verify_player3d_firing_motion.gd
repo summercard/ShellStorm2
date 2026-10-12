@@ -66,11 +66,14 @@ func _ready() -> void:
 							player.avatar.call("_process",0.8/1.3/16.0)
 							await get_tree().process_frame; await RenderingServer.frame_post_draw
 							get_viewport().get_texture().get_image().save_png(OUT+family+"_"+direction+"/%03d.png"%frame)
+		# 停止射击后，开火剪辑仍保持 2 秒；只是后坐脉冲本身已经结束。
 		player.set("_fire_animation_remaining",0.0)
 		player.avatar.call("_process",0.08)
 		check("_fire_" in player.avatar.get_component_snapshot().authored_motion_clip,"short shot gap keeps raised")
-		player.avatar.call("_process",0.3)
-		check(not "_fire_" in player.avatar.get_component_snapshot().authored_motion_clip,"stop returns to carry")
+		player.avatar.call("_process",1.70)
+		check("_fire_" in player.avatar.get_component_snapshot().authored_motion_clip,"raised pose remains within 2 seconds")
+		player.avatar.call("_process",0.35)
+		check(not "_fire_" in player.avatar.get_component_snapshot().authored_motion_clip,"stop returns to carry after 2 seconds")
 		player.weapon.emit_signal("shot_fired",1); player.set("_presentation_state","hurt")
 		player.avatar.call("_process",0.3)
 		check(player.avatar.get_component_snapshot().authored_motion_clip=="hurt","hurt wins over firing")

@@ -46,7 +46,7 @@ metadata/room_id = "start"
 metadata/room_type = "STAIR_LOBBY"
 metadata/source_mode = "live_expedition_runtime_static_extract"
 metadata/static_layout_only = true
-metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
+metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D", "SafeRoomExitSign"]
 metadata/connection_port_count = 2
 metadata/authored_room_devices = true
 

@@ -1,3 +1,32 @@
+## 2026-10-12 远征01开门摄像机门墙代理
+
+- FeatureID：`WORLD-PLAN`（关联 `WORLD-GATE`）；工程0.1.0，依据[关卡几何与门槽契约§8](../05_技术施工_关卡生成与爬楼.md)。运行时代理由 `DungeonRoom3D` 拥有；真实 `RoomDoor3D` 是定位事实源，正式房间TSCN仍拥有作者布局。
+- 修改：补 `_sync_expedition_static_camera_door_proxies()`，在真实owner门建好后，将门完整世界transform转换到静态艺术根局部。复用已有5×12×0.08m盒构建函数，layer16/mask0，独立于门板；删除旧空/重复/非owner代理，稳定命名与运行标记保证幂等；`camera_lower_wall` 按世界几何。修复交接时静态分支缩进错误，保留已有EXIT标牌等其他工作。门FSM、正式静态TSCN、生成器、玩法与存档规则均未修改，未提交Git。
+- 时序核实：`TowerDescent3D._plan_room_layout()`先写本局端口lane，`_build_door()`读lane完成定位；`_bind_shared_edge_doors()`只登记同一门引用，不再重定位。静态艺术根对齐与门墙换位先于代理同步。
+- 专项：新增 `verify_expedition_camera_door_proxies.gd/.tscn`，唯一登记core并关联功能注册。新局180°和旧快照0°各13房、13代理、12共享边、1586项检查；包含真实门板动画进行中/完成、低中高三高度射线、mask17/16命中与mask1/5/8排除、启用Box、最终门位/朝向、唯一owner、空/重复代理清理、幂等及艺术根/整房旋转恢复。
+- 环境：Godot `4.6.3.stable.official.7d41c59c4`。工程外原生junction资源、独立`.godot`副本、独立project设置与分测试APPDATA，在Autoload前隔离正式存档。临时入口与日志位于 `ShellStorm2-work/probes/2026-10-12_expedition_camera_door/`（通过`workspace_paths`生成路径）；修改前副本位于上层`ShellStorm2-backup/2026-10-12_expedition_camera_door/before_edits/`。
+
+| 验收 | 场景/命令退出码 | 日志门禁退出码 | 结果 |
+|---|---:|---:|---|
+| 摄像机门代理新局 | 0 | 0 | 1586项通过 |
+| 摄像机门代理旧快照 | 0 | 0 | 1586项通过 |
+| `verify_expedition_level01_flow` | 0 | 0 | 当前工作区完整远征流程通过，不等于全工程全绿 |
+| `verify_expedition_room_static_scenes` | 1 | 0 | 6项红：room02/03/06/09/10房型件计数元数据，room07规划缺墙；代理与相机墙断言未报错 |
+| 静态房无本次同步的隔离对照 | 1 | 0 | 仅修交接缩进、去掉本次同步调用，仍是逐字相同6项失败，确认非本次引入 |
+| `probe_expedition_door_lane_alignment` | 124 | 0 | 240秒超时，未完成，不签通过 |
+| `check_feature_traceability.py` | 0 | — | 37功能追溯通过 |
+| `git diff --check`（本次文件） | 0 | — | 无空白错误 |
+| 文档契约 / 验收注册 / 运行资产命名 / 工作区规范 | 各1 | — | 既有红项保留，见下述 |
+
+- 既有门禁问题：CHANGELOG旧Boss记录断链；6个其他专项未注册；UI分账本期望16行实际18；14个带版本运行文件、3个目录及TSCN版本引用计数债务；工程内历史`outputs`与`_scratch`。未通过改账本基线、删输出或扩大本任务范围来消红。本次专项已唯一注册且无新增运行资产。
+- 预期故障/注入：专项故意插入旧空代理与重复代理，均被清理，不产生引擎错误。完成的场景测试非预期脚本错误0；既有色盘UID无效回退路径WARNING仍存在。交接基线`--check-only`退出1、日志门禁3（Expected statement, found Indent）；另一次直接`--check-only`诊断因不初始化Autoload而报告未定义单例，退出0不作为运行验收证据，正式隔离场景无这些错误。
+- 清理：本轮两个隔离缓存按原生junction安全清理工具退出，但系统在累计50项删除时返回`SAFE_DELETE_BULK_CONFIRM_REQUIRED`，已停止、不绕过确认；部分缓存保留，后续用户确认后清理。日志、结果与隔离APPDATA保留，正式工程不受影响。
+- 未执行：真实渲染人工走门、多种子门洞探针完整结果、全量smoke/core/full、移动端。状态仅签署本次camera-only代理物理专项，不提升整个关卡/资产链路完成状态。
+
+## 2026-10-12 98F 第四间门厅壁画补碰撞
+
+主人反馈「98F 第四个房间掉下来的那个壁画没有阻挡」。该壁画 2026-10-09 从悬挂改成斜靠地面后仍被当纯装饰（`visual_only`），Prefab 里连 `Collision` 节点都没有，玩家能直接穿过画板。改法：稳定 Prefab 补 `BoxShape3D`(10.3×6.28×0.37m) 与 layer 1 `StaticBody3D`，盒体随实例倾斜、底面即实测最低点 0.091m；导入清单哈希与碰撞字段、来源装配脚本 `solid` 集合、验收断言（新增"从盒外打射线必须被挡住"）与场景账本/无损基线同步。Blender 源、GLB、布局与实例姿态未动。详见[独立记录](2026-10-12_block00_mural_collision.md)。
+
 ## 2026-10-12 过图读取动画与布局
 
 读取地图文字移到兔子左侧，剪影高宽缩小 50%。增加后台分批资源预热、逐房间/楼层装配、持久化就绪门禁及全黑阶段首次渲染预热；进入远征的秒级整段停顿未再复现。首次返基地仍有单次顿帧，完整无卡顿未验收。专项、帧统计和既有门禁债务见[独立记录](2026-10-12_loading_animation_budget.md)。
@@ -20,9 +49,9 @@
 
 塔楼不受影响：`is_expedition()` 为 false ⇒ 开关保持默认 true，楼层音乐行为一字不变。验收加在 `verify_expedition_level01_flow`：远征关卡断言开关为 false、且真实驱动一次房间进入后 `get_current_music_id()` 为空；默认塔楼断言开关仍为 true。套件单场景通过（`EXPEDITION_LEVEL01_FLOW_OK` / `VERIFICATION_SUITE_OK suite=scene count=1`）。触发点表与实现约束同步进[音乐系统文档](../14.8_音乐系统与配乐资产.md) §3.1。
 
-## 2026-10-12 基地设施黄色提示再放大一倍
+## 2026-10-12 基地设施黄色提示字号定稿 50
 
-`BaseFacility3D` 的 `PROMPT_LABEL_FONT_SIZE` 由 34 提到 68（业主「放大一倍」），描边 8px 与抬升 0.6 米不变；99F 八个设施、旧主基地九个设施与全息平台子类一起生效。同脚本的呈现探针与框架门禁下界同步到 68，改回去必红。范围、描边取舍与未执行项见[独立记录](2026-10-12_base_facility_prompt_label_double_size.md)。
+`BaseFacility3D` 的 `PROMPT_LABEL_FONT_SIZE` 由 34 先按「放大一倍」取 68，业主当日看过画面后回调为 **50**（终值）；描边 8px 与抬升 0.6 米不变，99F 八个设施、旧主基地九个设施与全息平台子类一起生效。同脚本的呈现探针与框架门禁下界同步到 50，改回去必红。范围、描边取舍与未执行项见[独立记录](2026-10-12_base_facility_prompt_label_font_size.md)。
 
 ## 2026-10-12 鸟群放大与减速
 
@@ -2419,3 +2448,7 @@ VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_de
 **① 2.5 触发点修正**（业主真机反馈「好像用不了」）：折角平台是 8m × **2.887m** 的矩形，「真人抄近道走内缘」(z=−15.6203) 与「作者路径绕外缘」(z=−18.5071) 相距 2.887m。初版触发点放**外缘** ⇒ 抄近道者最近只有 **2.887m > 半径 2.5**，差 0.387m 永不触发（症状：走到基地灯还是亮的）；当时的验收是**瞬移**到触发点正中测的，必然命中（假绿）。改取**几何中心** `(42.501,−18,−17.0637)`，两条走法各距 1.443m，都在半径内。探针 `probe_stairwell_walk_blackout` 绿。
 
 **② 剧本 02 按 F 后一并关闭系统对话框**（业主原话）：「剧本2，按完 F 后，系统对话框也需要一起关闭。」根因：`ui.hint`/`ui.subtitle`/`ui.dialogue` 三条都返回 `_ok()`、**没登记归还项**，而 §5.2 早就写明 `ui.hint` 的 `auto=0` 是「保持到显式交互**或剧情收口**」——后半句一直没实现。改法：`DialogueUI` 新增只读查询 `current_run_id()`；适配器三条 `ui.*` 登记改还，`_restore_dialogue()` **只关自己摆的那条**（不误关别的系统播报）。`verify_opening_script_runtime` 新增 4 条断言（等待期在播 / 文本含「手电」/ 收口后 `is_active=false` / `current_run_id` 为空）**全过**（该验收另带既有红项 1 条：开场01 的 `auto_equip` 在途改动，与本次无关）。见[交付记录](2026-10-09_opening03_base_dark.md)追加二/三。
+
+## 2026-10-12 远征情报室入口时序与02解锁
+
+WORLD-ENTRY：入口楼最后阶段展开，标记和交互同步；01成功撤离持久解锁后方02大楼。锁定/解锁真实渲染与输入专项通过，02实际关卡待制作。见[开发记录](2026-10-12_hologram02.md)。

@@ -103,13 +103,14 @@ func test_two() -> void:
 	NarrativeDirector.evaluate_point_for_test()
 	await frames(4)
 	check(living("floor_01_main_02").size() == 8, "剧情02真实生成8只小僵尸")
-	var stationary: Array[Enemy3D] = []
+	var narrative_three: Array[Enemy3D] = []
 	for enemy in living("floor_01_main_02"):
-		if bool(enemy.enemy_data.get("narrative_stationary", false)): stationary.append(enemy)
-	check(stationary.size() == 3, "其中3只不追击")
-	for enemy in stationary:
-		check(body_clear(enemy.global_position), "02原地怪出生避开实体设施:" + enemy.get_persistent_id())
-		check(absf(enemy.global_position.y - room("floor_01_main_02").global_position.y) < .12, "02原地怪未被设施顶离地面:" + enemy.get_persistent_id())
+		if enemy.get_persistent_id().begins_with("nar_tower_opening_02_zombies:stationary_"): narrative_three.append(enemy)
+	check(narrative_three.size() == 3, "剧情02第三房间三只怪已生成")
+	for enemy in narrative_three:
+		check(not bool(enemy.enemy_data.get("narrative_stationary", false)), "02三只怪不再使用冻结策略:" + enemy.get_persistent_id())
+		check(body_clear(enemy.global_position), "02三只怪出生避开实体设施:" + enemy.get_persistent_id())
+		check(absf(enemy.global_position.y - room("floor_01_main_02").global_position.y) < .12, "02三只怪未被设施顶离地面:" + enemy.get_persistent_id())
 		print("SPAWN02 ", enemy.get_persistent_id(), " ", enemy.global_position)
 	while not NarrativeDirector.is_waiting_for_flashlight(): await get_tree().process_frame
 	(actor.get_node("PlayerFlashlight3D") as PlayerFlashlight3D).set_light_enabled(true)
@@ -117,12 +118,17 @@ func test_two() -> void:
 	await frames(3)
 	disarm_all()
 	check(not actor.input_locked, "剧情02手电完成归还操作")
-	for enemy in stationary:
+	for enemy in narrative_three:
 		var initial := enemy.global_position
 		actor.global_position = initial + Vector3(1.2, 0, 0)
 		enemy.notify_attacked_by(actor)
-		await seconds(.5)
-		check(Vector2(enemy.global_position.x - initial.x, enemy.global_position.z - initial.z).length() < .15, "原地怪近身/受击不移动")
+		var max_displacement := 0.0
+		var saw_normal_ai_state := false
+		for _frame in range(90):
+			await get_tree().process_frame
+			max_displacement = maxf(max_displacement, Vector2(enemy.global_position.x - initial.x, enemy.global_position.z - initial.z).length())
+			saw_normal_ai_state = saw_normal_ai_state or enemy.ai_state in ["idle", "patrol", "alert", "search", "chase", "telegraph", "attack", "recovery", "stagger"]
+		check(saw_normal_ai_state and (max_displacement > .01 or enemy.ai_state in ["alert", "telegraph", "attack", "recovery", "stagger"]), "02三只怪受刺激后进入普通AI")
 	var before := living("floor_01_main_02").size()
 	NarrativeDirector.play("nar_tower_opening_02_zombies")
 	await frames(4)
@@ -306,7 +312,8 @@ func test_restore() -> void:
 	for value in (states[id] as Dictionary).get("enemies", []):
 		var saved := value as Dictionary
 		var data := saved.get("enemy_data", {}) as Dictionary
-		if bool(data.get("narrative_stationary", false)):
+		if str(saved.get("persistent_id", "")).begins_with("nar_tower_opening_02_zombies:stationary_"):
+			data["narrative_stationary"] = true # 注入旧版剧情02快照，验证定向迁移。
 			data.erase("narrative_placement") # 修复前旧快照没有此字段。
 			var invalid := room(id).to_global(Vector3(8.5, .7, -5))
 			saved["position"] = [invalid.x, invalid.y, invalid.z]
@@ -317,14 +324,15 @@ func test_restore() -> void:
 	await frames(4)
 	tower.call("_restore_room_runtime_state", id)
 	check(living(id).size() == expected and expected == 7, "和平区存活剧情怪恢复；死怪不恢复")
-	var stationary := 0
+	var narrative_three := 0
 	for enemy in living(id):
 		check(bool(enemy.get_meta("narrative_spawned", false)), "恢复实体保留剧情归属")
-		stationary += 1 if bool(enemy.enemy_data.get("narrative_stationary", false)) else 0
-		if bool(enemy.enemy_data.get("narrative_stationary", false)):
-			check(body_clear(enemy.global_position) and absf(enemy.global_position.y - room(id).global_position.y) < .12, "02旧档卡设施的原地怪修复落点")
+		if enemy.get_persistent_id().begins_with("nar_tower_opening_02_zombies:stationary_"):
+			narrative_three += 1
+			check(not bool(enemy.enemy_data.get("narrative_stationary", false)), "旧档三只怪恢复为普通AI")
+			check(body_clear(enemy.global_position) and absf(enemy.global_position.y - room(id).global_position.y) < .12, "02旧档三只怪落点合法")
 			check(enemy.current_hp == 7, "修复旧档落点保留血量")
-	check(stationary == 3, "恢复后原地怪策略保留")
+	check(narrative_three == 3, "恢复后剧情02三只怪仍存在")
 	tower.call("_restore_narrative_spawned_keys", snap)
 	NarrativeDirector.play("nar_tower_opening_02_zombies")
 	await frames(5)

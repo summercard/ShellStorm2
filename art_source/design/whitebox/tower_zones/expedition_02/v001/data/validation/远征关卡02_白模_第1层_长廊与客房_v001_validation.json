@@ -1,0 +1,36 @@
+{
+  "asset_id": "ENV-EXPEDITION-L02-HOTEL-FLOOR-01",
+  "version": "v001",
+  "source_blend": "art_source/design/whitebox/tower_zones/expedition_02/v001/blender/远征关卡02_白模_第1层_长廊与客房_v001.blend",
+  "validation": {
+    "status": "PASS",
+    "failures": [],
+    "warnings": [],
+    "object_count": 598,
+    "mesh_count": 598,
+    "component_counts": {
+      "door_wall": 64,
+      "floor_slab": 26,
+      "floor_tile": 297,
+      "wall": 211
+    },
+    "fixed_trim_count": 0,
+    "bounds_world_m": {
+      "min": [
+        -40.0,
+        -100.0,
+        0.0
+      ],
+      "max": [
+        40.0,
+        60.0,
+        11.9
+      ]
+    },
+    "measured_dimensions_m": [
+      80.0,
+      160.0,
+      11.9
+    ]
+  }
+}

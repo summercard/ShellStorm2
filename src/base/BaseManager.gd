@@ -714,6 +714,7 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	var extraction_loot := request.get("extraction_loot", []) as Array
 	var insurance_saved := request.get("insurance_saved", []) as Array
 	var transaction_data := data
+	var old_expedition_02_unlocked := data.expedition_02_unlocked
 	var old_total_runs := data.total_runs
 	var old_successful_extractions := data.successful_extractions
 	var old_total_kills := data.total_kills
@@ -723,6 +724,8 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	var old_checkpoint := data.active_run_snapshot.duplicate(true)
 	var old_transactions := data.completed_transaction_ids.duplicate()
 
+	if success and str(request.get("expedition_level_id", "")) == "expedition_01":
+		data.expedition_02_unlocked = true
 	data.record_run(success, kills)
 	data.extraction_points += extraction_points
 	if success:
@@ -762,6 +765,7 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 		}
 	# 并发冲突会让 save_base 重载权威档；只回滚仍是本次旧对象的情况。
 	if data == transaction_data:
+		data.expedition_02_unlocked = old_expedition_02_unlocked
 		data.total_runs = old_total_runs
 		data.successful_extractions = old_successful_extractions
 		data.total_kills = old_total_kills
@@ -1607,3 +1611,10 @@ func discard_extraction_loot_item(index: int) -> void:
 func clear_extraction_loot() -> void:
 	data.extraction_loot.clear()
 	save_base()
+
+
+func is_expedition_level_unlocked(level_id: String) -> bool:
+	_ensure_data()
+	if level_id == "expedition_02":
+		return data.expedition_02_unlocked
+	return level_id in ["expedition_01", "99"]

@@ -3085,8 +3085,8 @@
       "optimized_reopened_before_export": true,
       "role": "optimized",
       "fidelity_acceptance": "passed: front/back/side/game paired render reviewed; bounds unchanged; triangulated rock caps retain angular style",
-      "collision_policy": "visual_only",
-      "prefab_sha256": "5f02a05b2e72007ac90d084aaef7095aba817f6f6d4bc98bb04fe7f7ccd49a20"
+      "collision_policy": "fitted_box",
+      "prefab_sha256": "98c8bcefba5b3a83548c928cfffe4487b1f7725ee10ccec846b18e899cda5352"
     }
   ],
   "source_unchanged": true,

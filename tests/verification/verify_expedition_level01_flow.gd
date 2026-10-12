@@ -957,10 +957,12 @@ func _verify_safe_room(tower: TowerDescent3D, failures: Array[String]) -> Dungeo
 	var open_target_count := 0
 	var closed_target_count := 0
 	var retreat_door_count := 0
+	var retreat_side := ""
 	for side_value in start_room.door_targets.keys():
 		var side := str(side_value)
 		if str(start_room.door_targets[side_value]).is_empty():
 			closed_target_count += 1
+			retreat_side = side
 			var retreat_door := start_room.get_door_node(side)
 			if retreat_door != null and retreat_door.get_interaction_prompt_text() == "[E] 退出战局":
 				retreat_door_count += 1
@@ -985,7 +987,77 @@ func _verify_safe_room(tower: TowerDescent3D, failures: Array[String]) -> Dungeo
 	# 本断言必红。
 	if bool(tower.call("_room_produces_room_key", start_room)):
 		failures.append("入口安全房不得产出房间钥匙（其两扇门均不消耗钥匙）")
+	_verify_safe_room_exit_sign(start_room, retreat_side, failures)
 	return start_room
+
+
+## 出口提示牌（`ENV-BATTLE-EXIT-NEON-SIGN`）：退出门内侧地面必须平铺一块 EXIT 霓虹标牌。
+##
+## 🔴 为什么必须由门禁盯着：入口房有**两条**壳体路径 —— 塔楼/程序化走
+## `_build_safe_room_shell()`，而远征01 的 start 房走**静态布局 TSCN**
+## （`_build_shell()` 静态分支提前 `return`，压根不经过 `_build_safe_room_shell`）。
+## 2026-10-12 首版只补了前者 ⇒ 远征入口房静默无牌（业主反馈「远征入口安全屋也要放一个」）。
+## 反向对照：删掉 `_build_shell()` 静态分支里那次 `_build_safe_room_exit_sign()` 调用，本断言必红。
+func _verify_safe_room_exit_sign(
+	start_room: DungeonRoom3D, retreat_side: String, failures: Array[String]
+) -> void:
+	var sign_node := start_room.get_node_or_null(
+		DungeonRoom3D.SAFE_ROOM_EXIT_SIGN_NODE_NAME
+	) as Node3D
+	if sign_node == null:
+		failures.append("入口安全房缺少 EXIT 出口提示牌（退出门=%s）" % retreat_side)
+		return
+	if str(sign_node.get_meta("exit_sign_asset_id", "")) != DungeonRoom3D.SAFE_ROOM_EXIT_SIGN_ASSET_ID:
+		failures.append("EXIT 标牌 AssetID 不符：%s" % sign_node.get_meta("exit_sign_asset_id", ""))
+	if str(sign_node.get_meta("exit_sign_direction", "")) != retreat_side:
+		failures.append("EXIT 标牌没摆在退出门：牌=%s 门=%s" % [
+			sign_node.get_meta("exit_sign_direction", ""), retreat_side,
+		])
+	if not bool(sign_node.get_meta("visual_only", false)):
+		failures.append("EXIT 标牌未声明 visual_only（地面装饰不得阻挡）")
+	if not sign_node.find_children("*", "StaticBody3D", true, false).is_empty():
+		failures.append("EXIT 标牌带 StaticBody3D（会在走行面制造隐形台阶）")
+	# 发光面必须朝上：本地 -Z 经运行时旋转后应指向世界 +Y。
+	var facing := -(sign_node.global_transform.basis.z).normalized()
+	if absf(facing.y - 1.0) > 0.02:
+		failures.append("EXIT 标牌未面朝上：%s" % str(facing))
+	# 世界 AABB：背面贴走行面 + 整块落在房间里（不穿墙）。
+	var mn := Vector3.INF
+	var mx := -Vector3.INF
+	var mesh_count := 0
+	for value in sign_node.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := value as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		mesh_count += 1
+		var box := mesh_instance.mesh.get_aabb()
+		for corner in range(8):
+			var world: Vector3 = sign_node.global_transform * box.get_endpoint(corner)
+			mn = mn.min(world)
+			mx = mx.max(world)
+	if mesh_count == 0:
+		failures.append("EXIT 标牌内没有网格")
+		return
+	var room_origin := start_room.global_position
+	var half := minf(start_room.get_dimensions().x, start_room.get_dimensions().y) * 0.5
+	var local_min := mn - room_origin
+	var local_max := mx - room_origin
+	if absf(local_min.y) > 0.02:
+		failures.append("EXIT 标牌背面未贴走行面：底面 y=%.4f" % local_min.y)
+	if local_min.x < -half or local_max.x > half or local_min.z < -half or local_max.z > half:
+		failures.append("EXIT 标牌超出房间边界（可能穿墙）：%s ~ %s" % [str(local_min), str(local_max)])
+	# 长边平行门洞：门法向那一轴的占地是牌深，另一轴是牌宽（尺寸由资产包络推出，不写死）。
+	var normal := start_room.call("_direction_normal", retreat_side) as Vector3
+	var normal_along_x := absf(normal.x) > 0.99
+	var depth_extent := absf(local_max.x - local_min.x) if normal_along_x else absf(local_max.z - local_min.z)
+	var width_extent := absf(local_max.z - local_min.z) if normal_along_x else absf(local_max.x - local_min.x)
+	var declared := sign_node.get_meta("bounds_size_m", Vector3.ZERO) as Vector3
+	var expect_depth := declared.y if declared.y > 0.0 else 0.76
+	var expect_width := declared.x if declared.x > 0.0 else 1.84
+	if absf(depth_extent - expect_depth) > 0.05:
+		failures.append("EXIT 标牌沿门法向占地 %.3f 不符 %.2f" % [depth_extent, expect_depth])
+	if absf(width_extent - expect_width) > 0.05:
+		failures.append("EXIT 标牌平行门洞长边 %.3f 不符 %.2f" % [width_extent, expect_width])
 
 
 ## 2026-09-20：安全房房间包补齐了「内嵌玩法阻挡」（范例 B：模型 + 碰撞同包）。

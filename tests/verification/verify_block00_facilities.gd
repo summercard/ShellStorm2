@@ -92,6 +92,25 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	# Doorway free across full 5m slot; meeting central strip tested by physical rays.
 	var space := get_world_3d().direct_space_state
+	# 用户反馈（2026-10-12）：第四间掉下来的壁画原本是 visual_only，玩家可以直接穿过去。
+	var mural_shape := mural.get_node_or_null("Collision/Shape") as CollisionShape3D
+	check(mural_shape != null, "mural_collision_shape_present")
+	if mural_shape != null:
+		var mural_box := mural_shape.shape as BoxShape3D
+		check(mural_box != null, "mural_collision_is_box")
+		check(mural_box.size.distance_to(Vector3(10.3,6.28,.37)) < .01, "mural_box_matches_visual_bounds")
+		var inward := mural_shape.global_transform.basis.x.normalized()
+		var box_center := mural_shape.global_transform.origin
+		var probe := box_center + inward * (mural_box.size.x * .5 + .6)
+		check(not space.intersect_ray(PhysicsRayQueryParameters3D.create(probe, box_center, 1)).is_empty(), "mural_blocks_ray")
+		var box_lowest := INF
+		for sx in [-1.0,1.0]:
+			for sy in [-1.0,1.0]:
+				for sz in [-1.0,1.0]:
+					box_lowest = minf(box_lowest,(mural_shape.global_transform * (Vector3(sx,sy,sz) * mural_box.size * .5)).y)
+		print("MURAL_BOX_LOWEST=",box_lowest)
+		check(box_lowest > -0.001, "mural_collision_box_not_sunk_into_floor")
+		check(absf(box_lowest - mural_min) < .05, "mural_collision_box_ground_contact_matches_visual")
 	for z in [0.5,1.5,2.5,3.5,4.5]:
 		var q := PhysicsRayQueryParameters3D.create(Vector3(19,1,z),Vector3(21,1,z),1)
 		check(space.intersect_ray(q).is_empty(),"passage_ray:"+str(z))
@@ -145,6 +164,12 @@ func _ready() -> void:
 		check(bool(edges.get("floor_01_entry|floor_01_hub",false)),"old_save_cannot_close_passage")
 		var live_space:=third.get_world_3d().direct_space_state
 		check(live_space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(19,-23,2.5),Vector3(21,-23,2.5),1)).is_empty(),"tower_passage_physics")
-	var f:=FileAccess.open(OUT+("facility_verification.json" if DisplayServer.get_name()=="headless" else "facility_render_verification.json"),FileAccess.WRITE);f.store_string(JSON.stringify({"checks":checks,"errors":errors,"passed":errors.is_empty(),"renderer":RenderingServer.get_current_rendering_method()},"  "));f.close()
 	print("BLOCK00_FACILITIES_OK" if errors.is_empty() else "BLOCK00_FACILITIES_FAILED", " checks=",checks," errors=",errors)
+	# 结果先落 stdout；产物目录可能不在（主工程裁掉了历史 outputs），不能因此吞掉结论。
+	var report := {"checks":checks,"errors":errors,"passed":errors.is_empty(),"renderer":RenderingServer.get_current_rendering_method()}
+	var f:=FileAccess.open(OUT+("facility_verification.json" if DisplayServer.get_name()=="headless" else "facility_render_verification.json"),FileAccess.WRITE)
+	if f==null:
+		push_warning("BLOCK00 验收产物目录不可写，结论以上方 stdout 为准："+OUT)
+	else:
+		f.store_string(JSON.stringify(report,"  "));f.close()
 	get_tree().quit(0 if errors.is_empty() else 1)

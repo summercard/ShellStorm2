@@ -4,7 +4,7 @@ extends Node
 ##
 ## 回答一个问题：设施进树跑完 `_ready()` 之后，头顶两个 Label3D 的真实状态。
 ##   - NameLabel（常驻名字牌）必须**不显示**，但快照文字仍要维护；
-##   - PromptLabel（黄色交互提示）必须**放大到 68**并**比素材锚点抬高 0.6 米**，
+##   - PromptLabel（黄色交互提示）必须**放大到 50**并**比素材锚点抬高 0.6 米**，
 ##     且只在「玩家在范围内 + 被聚焦」时可见。
 ##
 ## 校验基线来自**不进树**的同场景实例（不跑 _ready，读到的就是素材原值）。
@@ -20,9 +20,10 @@ const WEAPON_WORKSHOP := (
 )
 
 const EXPECTED_FACILITY_COUNT := 8
-## 字号基线的两轮口径：2026-09-29 定 34（资产原值 24 / 26），
-## 2026-10-12 业主「放大一倍」后定 68。改 `PROMPT_LABEL_FONT_SIZE` 必须同步改这里。
-const EXPECTED_PROMPT_FONT_SIZE := 68
+## 字号基线的三轮口径：2026-09-29 定 34（资产原值 24 / 26），
+## 2026-10-12「放大一倍」到 68、同日「有点太大了」回调到 50（终值）。
+## 改 `PROMPT_LABEL_FONT_SIZE` 必须同步改这里。
+const EXPECTED_PROMPT_FONT_SIZE := 50
 const EXPECTED_HEIGHT_LIFT_M := 0.6
 
 

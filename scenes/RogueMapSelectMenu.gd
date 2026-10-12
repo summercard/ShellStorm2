@@ -5,7 +5,9 @@ const LOADING_SCENE := "res://scenes/ExpeditionLoadingScreen.tscn"
 const LEVEL_SCENE := GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D
 const CITY_SCENE = preload("res://assets/art/ui/expedition_city/hologram_city.tscn")
 const CITY_LAYER := 1 << 18
-const LEVEL_IDS := ["expedition_01", "99"]
+var LEVEL_IDS: Array[String] = ["expedition_01", "99"]
+const RETURN_PICK := -2
+var _close_entry_from := 0.0
 const OPENING_SECONDS := 4.4
 const CLOSING_SECONDS := 3.6
 # 关闭曲线：q 是"关闭自身归一化进度"（按下瞬间 1 → 完成 0）。指数 > 1 为起步快、收尾慢，
@@ -71,7 +73,10 @@ func _ready() -> void:
 	if _player != null:
 		_previous_input_lock = bool(_player.get("input_locked"))
 		_player.call("set_input_locked", true)
+	if BaseManager.is_expedition_level_unlocked("expedition_02"):
+		LEVEL_IDS.append("expedition_02")
 	_city = CITY_SCENE.instantiate()
+	_city.expedition_02_unlocked = "expedition_02" in LEVEL_IDS
 	get_parent().add_child(_city)
 	var anchor := _facility.global_position + Vector3.UP * 1.7
 	if _facility.has_method("get_hologram_anchor"):
@@ -142,6 +147,7 @@ func _process(delta: float) -> void:
 		_depart_countdown = maxf(0.0, _depart_countdown - delta)
 		if _depart_countdown <= 0.0:
 			_commit_departure()
+	_city.entries_ready = _state in ["active", "entering", "departing"]
 	_city.focus = _focus
 	_city.face_markers(_camera)
 	_facility.name_label.hide()
@@ -160,6 +166,7 @@ func _apply_transition() -> void:
 	_camera.fov = lerpf(_initial_fov, 48.0, eased)
 	_animate_depth_of_field(eased)
 	_city.deployment = deployed
+	_city.entry_deployment = _close_entry_from * pow(clampf(_progress / _close_from_progress, 0.0, 1.0), CLOSE_DEPLOY_FALLOFF) if _state == "closing" else smoothstep(0.8, 1.0, _progress)
 	var fade := smoothstep(0.44, 0.72, _progress)
 	_blend_environment(fade)
 	for item in _world_fades:
@@ -199,15 +206,15 @@ func _input(event: InputEvent) -> void:
 		request_close()
 	elif _state == "active":
 		if event is InputEventMouseMotion:
-			# _pick 返回 0/1 = 入口、2 = 返回标识、-1 = 什么都没命中。
+			# _pick 返回可见关卡索引、RETURN_PICK = 返回、-1 = 未命中。
 			# 焦点必须如实反映"当前指着谁"，包括指向空白；只有选中项才在移开时保留。
 			var hovered := _pick(event.position)
-			_focus = hovered if hovered >= 0 and hovered < 2 else -1
-			if hovered >= 0 and hovered < 2:
+			_focus = hovered if hovered >= 0 and hovered < LEVEL_IDS.size() else -1
+			if hovered >= 0 and hovered < LEVEL_IDS.size():
 				_selection = hovered
 		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			var picked := _pick(event.position)
-			if picked == 2:
+			if picked == RETURN_PICK:
 				request_close()
 			elif picked >= 0:
 				_selection = picked
@@ -216,18 +223,18 @@ func _input(event: InputEvent) -> void:
 		elif event.is_action_pressed("ui_accept"):
 			confirm_selection()
 		elif event.is_action_pressed("ui_left") or event.is_action_pressed("ui_up"):
-			_shift_selection(posmod(_selection - 1, 2))
+			_shift_selection(posmod(_selection - 1, LEVEL_IDS.size()))
 		elif event.is_action_pressed("ui_right") or event.is_action_pressed("ui_down"):
-			_shift_selection(posmod(_selection + 1, 2))
+			_shift_selection(posmod(_selection + 1, LEVEL_IDS.size()))
 		elif event is InputEventKey and event.pressed and not event.echo:
 			if event.physical_keycode in [KEY_A, KEY_W, KEY_D, KEY_S]:
-				_shift_selection(1 - _selection)
+				_shift_selection(posmod(_selection + (-1 if event.physical_keycode in [KEY_A, KEY_W] else 1), LEVEL_IDS.size()))
 		elif event is InputEventJoypadMotion and event.axis in [JOY_AXIS_LEFT_X, JOY_AXIS_LEFT_Y]:
 			if absf(event.axis_value) < 0.3:
 				_axis_latched = false
 			elif absf(event.axis_value) > 0.65 and not _axis_latched:
 				_axis_latched = true
-				_shift_selection(1 - _selection)
+				_shift_selection(posmod(_selection + (-1 if event.axis_value < 0.0 else 1), LEVEL_IDS.size()))
 
 func _shift_selection(index: int) -> void:
 	# 键盘/手柄切换时把焦点一起带过去，否则光标停在空白后按键看不出选中了谁。
@@ -235,9 +242,11 @@ func _shift_selection(index: int) -> void:
 	_focus = index
 
 func _pick(screen: Vector2) -> int:
+	if _state != "active":
+		return -1
 	var origin := _camera.project_ray_origin(screen)
 	var direction := _camera.project_ray_normal(screen)
-	for i in 2:
+	for i in LEVEL_IDS.size():
 		var marker: Node3D = _city.markers[i]
 		var local_origin := marker.to_local(origin)
 		var local_dir := marker.global_basis.inverse() * direction
@@ -253,7 +262,7 @@ func _pick(screen: Vector2) -> int:
 			return i
 	var back: Node3D = _city.return_marker
 	if not _camera.is_position_behind(back.global_position) and _camera.unproject_position(back.global_position).distance_to(screen) < 45:
-		return 2
+		return RETURN_PICK
 	return -1
 
 func request_close() -> void:
@@ -263,6 +272,7 @@ func request_close() -> void:
 	_close_from_progress = maxf(_progress, 0.0001)
 	_close_deploy_from = _city.deployment if is_instance_valid(_city) else 1.0
 	_close_eased_from = smoothstep(0.0, 0.55, _progress)
+	_close_entry_from = _city.entry_deployment if is_instance_valid(_city) else 0.0
 	_state = "closing"
 
 func _on_close_pressed() -> void:
@@ -282,6 +292,16 @@ func confirm_selection() -> void:
 
 func _enter_level(level_id: String) -> void:
 	if _departing or _state == "closing":
+		return
+	if not BaseManager.is_expedition_level_unlocked(level_id):
+		return
+	var entry := GameDesignConfig.expedition_level(level_id)
+	if entry.is_empty() or not ResourceLoader.exists(str(entry.get("scene_3d", ""))):
+		if is_instance_valid(_city):
+			_city.status.text = "远征关卡02尚未开放 · ESC 返回"
+			var index := LEVEL_IDS.find(level_id)
+			if index >= 0:
+				_city.entry_hints[index].text = "尚未开放"
 		return
 	if not GameDesignConfig.select_expedition_level(level_id):
 		return

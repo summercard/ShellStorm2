@@ -11,6 +11,7 @@ func _ready() -> void:
 	if "--tower" in OS.get_cmdline_user_args():
 		await _verify_tower()
 		return
+	BaseManager.data.expedition_02_unlocked = "--unlocked" in OS.get_cmdline_user_args()
 	var environment := WorldEnvironment.new()
 	var env := Environment.new()
 	env.background_mode = Environment.BG_COLOR
@@ -47,7 +48,14 @@ func _ready() -> void:
 	_expect(menu._city.site_reveal(1) == 0.0, "99 appeared before its stage")
 	await _shot("main_rising")
 	await get_tree().create_timer(0.7).timeout
-	_expect(menu._city.site_reveal(0) > menu._city.site_reveal(1), "entry stages not staggered")
+	_expect(menu._city.site_reveal(0) == 0.0 and menu._city.site_reveal(1) == 0.0, "entries appeared before final phase")
+	_expect(not menu._city.markers[0].is_visible_in_tree(), "noninteractive marker visible")
+	menu._progress = 0.9
+	menu._apply_transition()
+	menu._city._process(0.0)
+	_expect(menu._city.site_reveal(0) > 0.0, "final phase missing buildings")
+	_expect(not menu._city.markers[0].is_visible_in_tree(), "marker visible before input ready")
+	_expect(menu._pick(Vector2.ZERO) == -1, "opening accepts picking")
 	await _shot("entries_rising")
 	await get_tree().create_timer(2.8).timeout
 	_expect(menu._state == "active", "opening did not complete")
@@ -55,7 +63,7 @@ func _ready() -> void:
 	_expect(menu._city.block_count > 120, "box city missing")
 	_expect(menu._city.global_position.distance_to(anchor) < 0.01, "city not on actual facility at nonzero floor")
 	_expect(not hud.visible, "HUD not hidden")
-	for i in 2:
+	for i in menu.LEVEL_IDS.size():
 		var marker: Node3D = menu._city.markers[i]
 		var screen: Vector2 = menu._camera.unproject_position(marker.global_position)
 		_expect(get_viewport().get_visible_rect().grow(-30).has_point(screen), "entry outside viewport")
@@ -63,40 +71,50 @@ func _ready() -> void:
 		var motion := InputEventMouseMotion.new()
 		motion.position = screen
 		Input.parse_input_event(motion)
-		await get_tree().process_frame
+		Input.flush_buffered_events()
 		_expect(menu._selection == i, "hover input failed")
 		var click := InputEventMouseButton.new()
 		click.position = screen
 		click.button_index = MOUSE_BUTTON_LEFT
 		click.pressed = true
 		Input.parse_input_event(click)
-		await get_tree().process_frame
-	_expect(menu.requests == ["expedition_01", "99"], "mouse clicks routed to wrong levels")
+		Input.flush_buffered_events()
+	_expect(menu.requests == menu.LEVEL_IDS, "mouse clicks routed to wrong levels")
 	_expect(menu._city.site_reveal(0) == 1.0 and menu._city.site_reveal(1) == 1.0, "staged sites incomplete")
+	if "--unlocked" in OS.get_cmdline_user_args():
+		_expect(menu._city.sites.size() == 3, "unlocked 02 missing")
+		var front: Vector2 = menu._camera.unproject_position(menu._city.markers[0].global_position)
+		var rear: Vector2 = menu._camera.unproject_position(menu._city.markers[2].global_position)
+		_expect(rear.y < front.y and rear.x > front.x, "02 not behind 01 in reference region")
+	else:
+		_expect(menu._city.sites.size() == 2, "locked 02 still present")
+	menu._focus = -1
+	await get_tree().create_timer(0.6).timeout
 	await _shot("active")
+	menu._shift_selection(menu.LEVEL_IDS.size() - 1)
 	var right := InputEventAction.new()
 	right.action = "ui_right"
 	right.pressed = true
 	Input.parse_input_event(right)
-	await get_tree().process_frame
+	Input.flush_buffered_events()
 	_expect(menu._selection == 0, "keyboard selection failed")
 	var accept := InputEventKey.new()
 	accept.physical_keycode = KEY_ENTER
 	accept.pressed = true
 	Input.parse_input_event(accept)
-	await get_tree().process_frame
-	_expect(menu.requests == ["expedition_01", "99", "expedition_01"], "Enter did not confirm selected building")
+	Input.flush_buffered_events()
+	_expect(menu.requests.back() == "expedition_01", "Enter did not confirm selected building")
 	var pad := InputEventJoypadButton.new()
 	pad.button_index = JOY_BUTTON_DPAD_RIGHT
 	pad.pressed = true
 	Input.parse_input_event(pad)
-	await get_tree().process_frame
+	Input.flush_buffered_events()
 	_expect(menu._selection == 1, "gamepad direction failed")
 	pad = InputEventJoypadButton.new()
 	pad.button_index = JOY_BUTTON_A
 	pad.pressed = true
 	Input.parse_input_event(pad)
-	await get_tree().process_frame
+	Input.flush_buffered_events()
 	_expect(menu.requests.back() == "99", "gamepad confirmation failed")
 	var cancel := InputEventAction.new()
 	cancel.action = "ui_cancel"
@@ -127,7 +145,7 @@ func _shot(stage: String) -> void:
 	if DisplayServer.get_name() == "headless":
 		return
 	await RenderingServer.frame_post_draw
-	get_viewport().get_texture().get_image().save_png("res://_scratch/hologram_city_%s.png" % stage)
+	get_viewport().get_texture().get_image().save_png(OS.get_environment("HOLOGRAM_QA_DIR").path_join("hologram_city_%s.png" % stage))
 
 func _expect(condition: bool, message: String) -> void:
 	if not condition:

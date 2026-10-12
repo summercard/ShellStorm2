@@ -205,6 +205,9 @@ const SAFE_ROOM_EXIT_SIGN_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/tower_zones/battle/runtime/exit_neon_sign/exit_neon_sign_root_top3d.tscn"
 )
 const SAFE_ROOM_EXIT_SIGN_ASSET_ID := "ENV-BATTLE-EXIT-NEON-SIGN"
+# 节点名兼**幂等键**：动态壳体（`_build_safe_room_shell`）与远征静态布局
+# （`_build_shell` 的静态分支）两条路径都会生成 EXIT 标牌，靠这个名字去重。
+const SAFE_ROOM_EXIT_SIGN_NODE_NAME := "SafeRoomExitSign"
 # 标牌沿门法向的占地深度（= 组件包络的高度 0.76m）与半厚度（0.09 / 2）。
 const SAFE_ROOM_EXIT_SIGN_DEPTH_M := 0.76
 const SAFE_ROOM_EXIT_SIGN_HALF_THICKNESS_M := 0.045
@@ -1962,6 +1965,15 @@ func _build_shell() -> void:
 						if static_meta_key.begins_with("safe_room_"):
 							set_meta(static_meta_key, static_layout.get_meta(static_meta_key))
 					_build_runtime_doors_only()
+					_sync_expedition_static_camera_door_proxies(static_layout)
+					_restore_static_layout_camera_wall_contract(static_layout)
+					# 远征01 入口安全房（room_id="start"，STAIR_LOBBY）走本静态布局分支，
+					# **不经过** `_build_safe_room_shell()` ⇒ EXIT 标牌必须在此单独补一次，
+					# 否则只有塔楼/程序化安全房有、远征入口房没有（2026-10-12 业主反馈）。
+					# 位置/朝向仍按本局**世界门向**推导，与 `_build_runtime_doors_only()` 的门扇同口径；
+					# 静态布局的烘焙朝向由 `_align_static_layout_to_room()` 负责，标牌挂房间根、不受其影响。
+					if room_type == "STAIR_LOBBY":
+						_build_safe_room_exit_sign(get_dimensions())
 					return
 	var dimensions := get_dimensions()
 	_floor_material = _material(theme.floor_color, 0.08, 0.90)
@@ -2456,7 +2468,16 @@ func _build_safe_room_packages(art_root: Node3D) -> int:
 ## 为什么挂房间根而不是 art_root：位置与朝向全部按**世界门向**推导（与 _build_door 同口径），
 ## 挂到会整房旋转 0/90/180/270° 的 art_root 下反而要反算回原生方位。
 ## 局部原点在「底面中心」⇒ 绕 X +90° 放平后底边落在原点，必须抬高半个厚度才能让背面贴地。
+##
+## 两条调用路径（**都走世界门向，与静态布局的烘焙朝向无关**，所以位置天然一致）：
+##   ① 塔楼/程序化安全房 → `_build_safe_room_shell()`
+##   ② 远征01 入口房（`room_id == "start"`）→ 走静态布局 TSCN，`_build_shell()` 静态分支提前
+##      return、**不经过** `_build_safe_room_shell()` ⇒ 必须在那里单独补一次。
+## 幂等：已存在同名节点即复用，两条路径不会各摆一块。
 func _build_safe_room_exit_sign(dimensions: Vector2) -> Node3D:
+	var existing := get_node_or_null(SAFE_ROOM_EXIT_SIGN_NODE_NAME) as Node3D
+	if existing != null:
+		return existing
 	var direction := _safe_room_retreat_direction()
 	if direction.is_empty():
 		push_warning("DungeonRoom3D: 安全房 %s 找不到退出门，跳过 EXIT 标牌" % room_id)
@@ -2468,7 +2489,7 @@ func _build_safe_room_exit_sign(dimensions: Vector2) -> Node3D:
 	var normal := _direction_normal(direction)
 	var half := minf(dimensions.x, dimensions.y) * 0.5
 	var offset := half - SAFE_ROOM_EXIT_SIGN_INSET_M - SAFE_ROOM_EXIT_SIGN_DEPTH_M
-	node.name = "SafeRoomExitSign"
+	node.name = SAFE_ROOM_EXIT_SIGN_NODE_NAME
 	node.position = normal * offset + Vector3(0.0, SAFE_ROOM_EXIT_SIGN_HALF_THICKNESS_M, 0.0)
 	# YXZ 欧拉序：Rx(90°) 把竖立门头姿态放平、发光面朝上；Ry(yaw) 再把深度方向对准门法向。
 	node.rotation = Vector3(PI * 0.5, _direction_yaw(direction), 0.0)
@@ -4342,6 +4363,53 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 	_door_nodes[direction] = door
 
 
+func _sync_expedition_static_camera_door_proxies(static_layout: Node3D) -> void:
+	# 门槽在建壳前完成规划；这里只认已建好的唯一 owner 门，不使用烘焙门墙位置。
+	# 代理挂艺术根而非 DoorPanel，开门后仍覆盖原来的完整墙段。
+	var proxies: Dictionary = {}
+	for value in static_layout.find_children("*", "StaticBody3D", true, false):
+		var body := value as StaticBody3D
+		if not (
+			bool(body.get_meta("camera_only_door_wall", false))
+			or str(body.name).begins_with("CameraOnlyDoorWall_")
+		):
+			continue
+		var direction := str(body.get_meta("tower_wall_direction", ""))
+		var expected_name := "CameraOnlyDoorWall_%s_I00" % direction.capitalize()
+		if (
+			bool(body.get_meta("expedition_runtime_camera_door_proxy", false))
+			and body.get_parent() == static_layout
+			and str(body.name) == expected_name
+			and owns_door_endpoint(direction)
+			and _door_nodes.has(direction)
+			and not proxies.has(direction)
+		):
+			proxies[direction] = body
+			continue
+		# 旧烘焙空代理、非 owner 与重复代理立即退碰撞并离树，重复调用不会再认领。
+		body.collision_layer = 0
+		body.collision_mask = 0
+		_disable_static_collision_descendants(body)
+		body.get_parent().remove_child(body)
+		body.queue_free()
+	for direction_value in _door_nodes:
+		var direction := str(direction_value)
+		if not owns_door_endpoint(direction):
+			continue
+		var door := get_door_node(direction)
+		var proxy := proxies.get(direction) as StaticBody3D
+		if proxy == null:
+			_add_camera_only_door_wall_proxy(direction, Vector3.ZERO, 0.0, 0, static_layout)
+			proxy = static_layout.get_node("CameraOnlyDoorWall_%s_I00" % direction.capitalize()) as StaticBody3D
+			proxy.set_meta("expedition_runtime_camera_door_proxy", true)
+		proxy.transform = static_layout.global_transform.affine_inverse() * door.global_transform
+		proxy.collision_layer = GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
+		proxy.collision_mask = 0
+		proxy.set_meta("camera_only_door_wall", true)
+		proxy.set_meta("tower_wall_direction", direction)
+		proxy.set_meta("camera_lower_wall", _wall_runs_along_world_x(proxy))
+
+
 func _restore_static_layout_camera_wall_contract(static_layout: Node) -> void:
 	# 静态房间 TSCN 保留顶层 PackedScene 边界；生成时写入 prefab 内部
 	# StaticBody3D 的运行时 metadata 不会被固化。加载后重放该契约，
@@ -4375,7 +4443,7 @@ func _restore_static_layout_camera_wall_contract(static_layout: Node) -> void:
 
 
 ## 静态场景里的一件「墙」：只认**组件来源**，不认节点名。
-## `CameraOnlyDoorWall_*` 这类相机代理名字里带 DoorWall、却没有几何与碰撞；
+## 旧烘焙 `CameraOnlyDoorWall_*` 没有形状；运行时修复的代理以 `tower_wall_direction` 参与几何判定；
 ## L 型房型的墙件名里编码的是烘焙时的世界坐标（`WALL_west_xm150_p87_5`），也不可靠。
 ## 手工补墙生成的 `_SolidFill` 是 `duplicate()` 出来的独立节点，退回看生成器给墙件
 ## 写的 `tower_wall_direction`（该 meta 只写给墙件）。

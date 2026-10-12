@@ -1,11 +1,15 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-FILING_RUN
 ; 房型组件 office_room / v009 / filing_run
+; 碰撞按西/东两端实体柜带分段；中段是空腔，不再用整条 AABB 阻挡。
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/filing_run/filing_run_visual_top3d.glb" id="1_visual"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
-size = Vector3(0.765, 3.05, 39.38)
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy_west"]
+size = Vector3(0.765, 2.832, 4.53)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy_east"]
+size = Vector3(0.765, 2.832, 4.53)
 
 [node name="RoomTypeComponentFilingRun" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-FILING_RUN"
@@ -21,7 +25,7 @@ metadata/bounds_size_m = Vector3(0.765, 3.05, 39.38)
 metadata/slot_role = "room_type_component"
 metadata/collision_owner = "self"
 metadata/collision_policy = "safe_box_proxy"
-metadata/collision_shape_count = 1
+metadata/collision_shape_count = 2
 metadata/runtime_instantiation = "per_instance_prefab"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
@@ -30,6 +34,10 @@ metadata/runtime_instantiation = "per_instance_prefab"
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
-position = Vector3(0, 1.525, 0)
-shape = SubResource("BoxShape3D_proxy")
+[node name="CollisionShapeWest" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.416, -17.425)
+shape = SubResource("BoxShape3D_proxy_west")
+
+[node name="CollisionShapeEast" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.416, 17.425)
+shape = SubResource("BoxShape3D_proxy_east")

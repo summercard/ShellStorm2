@@ -5,7 +5,9 @@ R=Path(__file__).resolve().parents[1];B=R/'assets/art/environments/master_office
 M=B/'source/env_block00_story_rooms/export/v001/import_manifest.json'
 m=json.loads(M.read_text('utf8'));by={d['slug']:d for d in m['components']}
 v=lambda p:'Vector3('+', '.join(f'{x:.7f}' for x in p)+')'
-solid={'sofa','display_case','display_console','side_table','bookcase_fallen','sculpture_foundry','sculpture_turbine','sculpture_pylon'}
+# constructivist_mural 于 2026-10-12 补入（用户反馈：第四间掉下来的壁画没有阻挡）。
+# 画板 10.3×6.28×0.37m 斜靠地面，正面 AABB 贴合实体，玩家不应穿过。
+solid={'sofa','display_case','display_console','side_table','bookcase_fallen','sculpture_foundry','sculpture_turbine','sculpture_pylon','constructivist_mural'}
 for d in m['components']:
  p=R/d['prefab_path'];p.parent.mkdir(parents=True,exist_ok=True)
  s=d['slug'];a=d['bounds_min'];b=d['bounds_max'];size=[b[i]-a[i] for i in range(3)]

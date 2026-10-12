@@ -12,6 +12,9 @@ var _label: Label3D
 var _pickup_grace_until_msec := 0
 var _spawn_animating := false
 var _pickup_unlocked := true
+## 主动丢弃的物品需要玩家先离开拾取范围，避免“丢下就立刻回包”。
+var _pickup_requires_player_exit := false
+var _player_exit_observed := false
 var _pickup_request_cooldown_until_msec := 0
 var _collecting := false
 var _collection_target: Node3D
@@ -90,6 +93,9 @@ func _ready() -> void:
 ## 否则玩家胶囊与新掉落物同帧重叠时会立即自动拾回背包。
 func set_pickup_grace_seconds(seconds: float) -> void:
 	_pickup_grace_until_msec = Time.get_ticks_msec() + int(maxf(0.0, seconds) * 1000.0)
+	# 只有主动丢弃才传入保护时间；自然掉落继续沿用原有自动拾取规则。
+	_pickup_requires_player_exit = seconds > 0.0
+	_player_exit_observed = false
 
 
 ## 动态调节地面物获取距离。范围同步更新到 Area3D 的碰撞球，
@@ -227,7 +233,9 @@ func is_pickup_accepted() -> bool:
 
 ## 发放前的统一前置条件，Dungeon3D 同样校验，避免其他请求路径绕过弹跳和保护期。
 func is_pickup_available() -> bool:
-	return not _accepted and _pickup_unlocked and not _spawn_animating and Time.get_ticks_msec() >= _pickup_grace_until_msec
+	return not _accepted and _pickup_unlocked and not _spawn_animating \
+		and (not _pickup_requires_player_exit or _player_exit_observed) \
+		and Time.get_ticks_msec() >= _pickup_grace_until_msec
 
 
 func _update_player_distance() -> void:
@@ -239,6 +247,8 @@ func _update_player_distance() -> void:
 	var offset := _nearby_player.global_position - global_position
 	offset.y = 0.0
 	_player_in_range = offset.length() <= pickup_distance_m
+	if _pickup_requires_player_exit and not _player_in_range:
+		_player_exit_observed = true
 
 
 var _player_in_range := false

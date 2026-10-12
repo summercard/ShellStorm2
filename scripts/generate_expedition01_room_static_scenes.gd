@@ -152,7 +152,14 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 	root_owner.set_meta("room_type", dungeon_room.room_type)
 	root_owner.set_meta("source_mode", "live_expedition_runtime_static_extract")
 	root_owner.set_meta("static_layout_only", true)
-	root_owner.set_meta("dynamic_runtime_owned", ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"])
+	# 运行时拥有的节点清单（声明性契约：这些不进静态 TSCN，由 DungeonRoom3D 按本局算定）。
+	# 出口提示牌 `ENV-BATTLE-EXIT-NEON-SIGN` 由 `_build_safe_room_exit_sign()` 按本局
+	# **世界门向**生成 —— 门向每局变，所以它**不能**固化进静态布局；只有安全房会有一块。
+	# 2026-10-12：漏声明过，导致后人读 TSCN 以为「漏摆了 EXIT 牌」。
+	var dynamic_owned: Array[String] = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
+	if dungeon_room.room_type == "STAIR_LOBBY":
+		dynamic_owned.append("SafeRoomExitSign")
+	root_owner.set_meta("dynamic_runtime_owned", dynamic_owned)
 	var move: Array[Node] = []
 	for child in static_root.get_children():
 		move.append(child)

@@ -17,6 +17,11 @@ const PUNCH_DECAY := 5.0
 const BORDER_FLOW_SPEED := 0.42
 # 边框线宽：0.032 在近景下只有一两像素，流光跑起来看不出光带，故加粗到 0.05。
 const BORDER_WIDTH := 0.05
+var expedition_02_unlocked := false
+var entry_deployment := 0.0
+var entries_ready := false
+var level_ids: Array[String] = ["expedition_01", "99"]
+const SITE_POSITIONS := [Vector3(-5, 2.7, 2), Vector3(5, 2.9, 1), Vector3(-4, 2.7, -5)]
 var deployment := 0.0
 var elapsed := 0.0
 # 视觉焦点（-1 = 无）。必须与"选中项"分开：选中项是 Enter 的确认目标，光标移开时故意保留；
@@ -25,6 +30,7 @@ var focus := -1
 var sites: Array[Node3D] = []
 var markers: Array[Node3D] = []
 var labels: Array[Label3D] = []
+var entry_hints: Array[Label3D] = []
 var materials: Array[ShaderMaterial] = []
 var border_materials: Array[Array] = []
 var _hover: Array[float] = []
@@ -38,6 +44,8 @@ var _transition_blocks: Array[Dictionary] = []
 var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
+	if expedition_02_unlocked:
+		level_ids.append("expedition_02")
 	_rng.seed = 990129
 	_build()
 
@@ -83,6 +91,13 @@ func _build() -> void:
 	for side in [-1, 1]:
 		for tier in 5:
 			batches[0].append([Vector3(side * 2.6, tier * 0.9 + 0.45, -5.3), Vector3(0.8, 0.86, 0.9), 0.04 + tier * 0.009])
+	# Filter after generation so unlocking never changes the deterministic skyline.
+	if expedition_02_unlocked:
+		for batch in batches:
+			for j in range(batch.size() - 1, -1, -1):
+				var pos: Vector3 = batch[j][0]
+				if Vector2(pos.x + 4.0, pos.z + 5.0).length() < 2.5:
+					batch.remove_at(j)
 	for index in 4:
 		var mat := ShaderMaterial.new()
 		mat.shader = BLOCK_SHADER if index < 2 else WIRE_SHADER
@@ -127,17 +142,17 @@ func _build() -> void:
 		var extent := sqrt(maxf(0.0, 1.0 - pow(float(z) / 10.0, 2.0))) * 12.0
 		_stage_delay = 0.35 + absf(float(z)) * 0.03
 		_line(self, Vector3(-extent, 0, z), Vector3(extent, 0, z), CYAN * 0.12, 0.012)
-	for i in 2:
+	for i in level_ids.size():
 		_stage_delay = -1.0
 		_hover.append(0.0)
 		_punch.append(0.0)
 		border_materials.append([])
 		var site := Node3D.new()
-		site.name = "Expedition01" if i == 0 else "Test99"
-		site.position = Vector3(-5, 2.7, 2) if i == 0 else Vector3(5, 2.9, 1)
+		site.name = ["Expedition01", "Test99", "Expedition02"][i]
+		site.position = SITE_POSITIONS[i]
 		add_child(site)
 		sites.append(site)
-		var color := CYAN if i == 0 else PINK
+		var color := PINK if i == 1 else CYAN
 		_box(site, Vector3(0, -1.5, 0), Vector3(3.1, 2.8, 3.1), color * 0.045, 0.4)
 		for floor_index in 5:
 			_octagon(site, -0.7 - floor_index * 0.4, 1.65, color * 0.45, 0.035)
@@ -145,6 +160,7 @@ func _build() -> void:
 			_octagon(site, float(y), 1.85 + float(y) * 0.22, color, 0.055)
 		var marker := Node3D.new()
 		marker.position.y = 1.3
+		marker.position.x = -0.6 if i == 2 else 0.0
 		site.add_child(marker)
 		markers.append(marker)
 		_box(marker, Vector3.ZERO, Vector3(3.2, 2.2, 0.12), Color(0.006, 0.015, 0.04), 0.1)
@@ -169,11 +185,11 @@ func _build() -> void:
 			border.material_override = flow
 			border_materials[i].append(flow)
 			running += segment
-		var id := "expedition_01" if i == 0 else "99"
+		var id := level_ids[i]
 		var entry: Dictionary = GameDesignConfig.expedition_level(id)
-		labels.append(_label(marker, str(entry.get("display_name", id)), Vector3(0, 0.22, 0.11), 65, 0.0065, Color.WHITE))
-		_label(marker, "01  /  EXPEDITION" if i == 0 else "99  /  TEST SECTOR", Vector3(0, 0.75, 0.11), 30, 0.0065, color)
-		_label(marker, "点击进入  ·  ENTER", Vector3(0, -0.48, 0.11), 30, 0.0065, color)
+		labels.append(_label(marker, str(entry.get("display_name", "远征关卡02" if id == "expedition_02" else id)), Vector3(0, 0.22, 0.11), 65, 0.0065, Color.WHITE))
+		_label(marker, ["01  /  EXPEDITION", "99  /  TEST SECTOR", "02  /  EXPEDITION"][i], Vector3(0, 0.75, 0.11), 30, 0.0065, color)
+		entry_hints.append(_label(marker, "点击进入  ·  ENTER", Vector3(0, -0.48, 0.11), 30, 0.0065, color))
 	_stage_delay = 0.68
 	var points := [Vector3(-5, 2.75, 2), Vector3(-2.5, 2.75, 2), Vector3(0, 2.75, -0.5), Vector3(3, 2.75, -0.5), Vector3(5, 2.75, 1)]
 	for i in range(points.size() - 1):
@@ -209,7 +225,7 @@ func _build() -> void:
 	add_child(particles)
 	_staged.append({"node": particles, "position": particles.position, "delay": 0.32})
 	_build_transition_particles()
-	_update_staging()
+	_process(0.0)
 
 func _append_stepped_building(batch: Array, base: Vector3, width: float, height: float, delay: float) -> void:
 	# Four substantial, grid-aligned feet replace the straight lower silhouette.
@@ -235,7 +251,8 @@ func _process(delta: float) -> void:
 		var rise := site_reveal(i)
 		sites[i].visible = rise > 0.001
 		sites[i].scale.y = maxf(0.001, rise)
-		sites[i].position.y = (2.7 if i == 0 else 2.9) * rise
+		sites[i].position.y = SITE_POSITIONS[i].y * rise
+		markers[i].visible = entries_ready
 		markers[i].position.y = 1.3 + sin(elapsed * 1.6 + i) * 0.09
 		labels[i].modulate = Color.WHITE if i == focus else Color(0.65, 0.78, 0.9)
 		# 悬停强度平滑收敛到焦点：焦点为 -1 时全部回落到静止尺寸，即"光标移开就复原"。
@@ -248,7 +265,7 @@ func _process(delta: float) -> void:
 func face_markers(camera: Camera3D) -> void:
 	for i in markers.size():
 		var emphasis := 1.0 + (HOVER_SCALE - 1.0) * _hover[i] + PUNCH_SCALE * pow(_punch[i], 0.7)
-		markers[i].global_basis = camera.global_basis.scaled(Vector3.ONE * MARKER_SCALE * maxf(0.001, site_reveal(i)) * emphasis)
+		markers[i].global_basis = camera.global_basis.scaled(Vector3.ONE * MARKER_SCALE * (0.78 if i == 2 else 1.0) * maxf(0.001, site_reveal(i)) * emphasis)
 
 func punch_marker(index: int) -> void:
 	# 点击弹性反馈：脉冲置满后由 _process 逐帧衰减回落，形成放大再回弹的手感。
@@ -256,7 +273,7 @@ func punch_marker(index: int) -> void:
 		_punch[index] = 1.0
 
 func site_reveal(index: int) -> float:
-	return smoothstep(0.24 + index * 0.22, 0.46 + index * 0.22, deployment)
+	return entry_deployment if index >= 0 and index < sites.size() else 0.0
 
 func _update_staging() -> void:
 	for item in _staged:
@@ -279,8 +296,6 @@ func _update_staging() -> void:
 
 func _build_transition_particles() -> void:
 	# Small instanced cubes follow each building's construction/retraction front.
-	for index in 2:
-		_transition_blocks.append({"position": sites[index].position, "height": 3.0, "delay": 0.24 + index * 0.22, "color": CYAN if index == 0 else PINK})
 	for item in _transition_blocks:
 		var mm := MultiMesh.new()
 		mm.transform_format = MultiMesh.TRANSFORM_3D
