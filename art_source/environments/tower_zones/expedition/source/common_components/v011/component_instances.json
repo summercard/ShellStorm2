@@ -3575,6 +3575,176 @@
         1.0
       ],
       "source_package_id": "workstation_04"
+    },
+    {
+      "instance_id": "ceiling_deck_00",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        -22.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_01",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        -17.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_02",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        -12.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_03",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        -7.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_04",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        -2.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_05",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        2.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_06",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        7.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_07",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        12.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_08",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        17.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_09",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        22.5,
+        0.0,
+        11.38
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
     }
   ],
   "validation": {
@@ -3588,8 +3758,20 @@
       "90": 31,
       "180": 22,
       "270": 10
-    }
+    },
+    "resolved_instance_count": 220
   },
   "rotation_axis": "Z_blender (世界垂直轴；房间平面为 XY)",
-  "rotation_inferred_from": "代表件与成员包输出网格顶点的 Z 轴 0/90/180/270 旋转不变等价（Blender 侧实测）"
+  "rotation_inferred_from": "代表件与成员包输出网格顶点的 Z 轴 0/90/180/270 旋转不变等价（Blender 侧实测）",
+  "audited_additions": [
+    {
+      "what": "Boss 房全封顶：10 条 5m 宽天花承板铺满 50×40 屋顶",
+      "why": "v011 原布局一件顶盖都没有，太阳射线直达室内 —— 实测 75/75 采样点全部暴露、判 sunlight（每秒掉 2% 最大生命）。封顶必须由**带碰撞体**的顶盖件承担，只投阴影的网格挡不住 EnemyIllumination3D 的物理射线。",
+      "component_reuse": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_reuse_note": "复用 DB 房已验收的 40×5m 天花承板（同属远征废土数据中心族、同一条顶盖碰撞规范），不新增 Blender 源 —— 同一件资产不出现两份真源。",
+      "geometry": "板局部 40(长)×5(宽)，rotation_y_deg=90 后长轴沿房间 z 跨越整个 40m 纵深，10 条沿 x 每 5m 一条严丝合缝铺满 50m；顶部标高 11.38m，落在 11.9m 墙内。",
+      "provenance": "manual_audit",
+      "regen_warning": "本条由人工审计加入，不是 scripts/blender/regroup_room_type_components.py 的产物。重跑该归并工具前必须先把封顶件并进 Blender 源，否则这里会被整段覆盖。守卫：tests/tooling/test_expedition_boss_ceiling_contract.py 会断言它存在。"
+    }
+  ]
 }

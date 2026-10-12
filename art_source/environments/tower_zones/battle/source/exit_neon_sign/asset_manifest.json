@@ -1,0 +1,64 @@
+{
+  "package_id": "exit_neon_sign",
+  "asset_id": "ENV-BATTLE-EXIT-NEON-SIGN",
+  "name": "EXIT 霓虹灯标牌",
+  "slug": "exit_neon_sign",
+  "category": "environment_component",
+  "version": "v001",
+  "block_id": "battle",
+  "floor_range": "通用",
+  "design_scope": "战局区块通用组件（门头 / 地面出口标识）",
+  "scene_design_docs": [
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#3D-设施",
+  "source_blend": "art_source/environments/tower_zones/battle/source/exit_neon_sign/exit_neon_sign_source_v001.blend",
+  "build_script": "art_source/environments/tower_zones/battle/source/exit_neon_sign/qa/build_exit_neon_sign.py",
+  "blender_collection": "EXIT霓虹灯标牌_中文资产管理",
+  "objects": [
+    "EXIT霓虹灯_整合主体",
+    "EXIT霓虹灯_UI灯光_柔和自发光"
+  ],
+  "root_objects": [
+    "EXIT霓虹灯_整合主体",
+    "EXIT霓虹灯_UI灯光_柔和自发光"
+  ],
+  "local_origin": "package bounds bottom-centre in blender world space",
+  "forward": "Blender +Y (emissive face) / Godot -Z",
+  "bounds_blender_m": [
+    [-0.92, -0.045, 0.0],
+    [0.92, 0.045, 0.76]
+  ],
+  "dimensions_blender_m": [1.84, 0.09, 0.76],
+  "dimensions_godot_m": [1.84, 0.76, 0.09],
+  "polygon_count": 134,
+  "vertex_count": 200,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "palette_cells": {
+    "01_精工金属_紫色骨架": [9, 4],
+    "02_细腻哑光_青绿大面": [0, 0],
+    "04_柔和自发光_UI灯光": [4, 1]
+  },
+  "palette_uv_layer": "PaletteUV",
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "emission": true,
+  "emissive_strength": 1.5,
+  "animation": false,
+  "dependencies": [],
+  "geometry_ownership": "shared_component",
+  "structural_geometry": "none: decoration only, no collision shape",
+  "replacement_contract": "decoration only; must not change room size, 5m grid, collision layer or navigation",
+  "exported": true,
+  "expected_export": "exit_neon_sign_visual_top3d.glb",
+  "collision_status": "按设计不阻挡：地面门头标识，平铺厚度 0.09m，加碰撞会在走行面制造隐形台阶",
+  "validation": {
+    "blender": "validate_game_prop.py passed=True（17/17；134/134 面 UV 岛在单一色格安全内区）",
+    "uv_cells_in_glb": "哑光(0,0) / 金属(9,4) / 自发光(4,1)",
+    "images_embedded": 0
+  }
+}

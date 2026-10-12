@@ -37,12 +37,12 @@ metadata/authored_layout_asset_id = "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT"
 metadata/authored_layout_version = "v009"
 metadata/authored_layout_room_id = "room_09"
 metadata/authored_layout_corner_count = 0
-metadata/authored_layout_solid_wall_count = 27
+metadata/authored_layout_solid_wall_count = 26
 metadata/authored_layout_door_wall_count = 1
 metadata/authored_layout_floor_tile_count = 48
 metadata/authored_layout_exclusive_count = 0
 metadata/authored_layout_multi_level_count = 0
-metadata/authored_layout_room_type_component_count = 29
+metadata/authored_layout_room_type_component_count = 30
 metadata/authored_layout_promoted_walls = Array[String](["wall_east_0@east"])
 metadata/snapshot_tower_wall_door_offset_east = -2.5
 metadata/snapshot_tower_wall_door_offset_west = -2.5
@@ -709,11 +709,9 @@ metadata/authored_slot_role = "room_type_component"
 
 [node name="wall_top_service" parent="." unique_id=1742398711 instance=ExtResource("27_b3o5f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.2, 0)
-metadata/tower_wall_direction = "south"
-metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
-metadata/shadow_policy = "cast_and_receive"
+metadata/authored_slot_role = "room_type_component"
 
 [node name="ConnectionPorts" type="Node3D" parent="." unique_id=1328787450]
 metadata/connection_port_count = 2

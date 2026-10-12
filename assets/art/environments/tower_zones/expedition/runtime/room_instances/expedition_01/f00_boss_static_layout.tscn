@@ -38,6 +38,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_a/workstation_a_root_top3d.tscn" id="36_a3xon"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_b/workstation_b_root_top3d.tscn" id="37_jl63s"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_c/workstation_c_root_top3d.tscn" id="38_frftv"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_deck_40m/ceiling_deck_40m_root_top3d.tscn" id="39_cdeck"]
 [ext_resource type="Script" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
 [ext_resource type="Script" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
@@ -46,7 +47,7 @@ metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-ROOM-TYPE-LAYOUT"
 metadata/asset_version = "v011"
 metadata/authored_room_id = "boss"
 metadata/authored_layout_shell = true
-metadata/layout_instance_total = 210
+metadata/layout_instance_total = 220
 metadata/authored_layout_asset_id = "ENV-EXPEDITION-L01-BOSS-ROOM-TYPE-LAYOUT"
 metadata/authored_layout_version = "v011"
 metadata/authored_layout_room_id = "boss"
@@ -56,7 +57,7 @@ metadata/authored_layout_door_wall_count = 1
 metadata/authored_layout_floor_tile_count = 80
 metadata/authored_layout_exclusive_count = 0
 metadata/authored_layout_multi_level_count = 0
-metadata/authored_layout_room_type_component_count = 58
+metadata/authored_layout_room_type_component_count = 68
 metadata/authored_layout_promoted_walls = Array[String](["base_wall_east_slot_05_solid@east"])
 metadata/snapshot_tower_wall_door_offset_east = -2.5
 metadata/snapshot_tower_wall_door_offset_west = -2.5
@@ -879,6 +880,60 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M"
 metadata/shadow_policy = "cast_and_receive"
 
+; Boss 房全封顶：10 条 5m 宽天花承板沿 x 铺满 50×40 屋顶（2026-10-12 审计加入）。
+; 板 40m 长轴转 90° 后沿 z 跨越整个房间纵深；底面标高 11.38m，顶面 11.87m 落在 11.9m 墙内。
+; 复用 DB 房已验收的 ENV-EXPEDITION-L01-DB-CEILING_DECK_40M（同属废土数据中心族、同一条顶盖遮光规范：
+; prefab 内嵌 layer=1 全包络碰撞盒 —— 只投阴影不挡碰撞的顶盖挡不住 EnemyIllumination3D 的太阳射线）。
+; 真源＝data/layouts/expedition/v011/component_instances.json 的 audited_additions。
+[node name="ceiling_deck_00" parent="." unique_id=1900000001 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -22.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ceiling_deck_01" parent="." unique_id=1900000008 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ceiling_deck_02" parent="." unique_id=1900000015 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -12.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ceiling_deck_03" parent="." unique_id=1900000022 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -7.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ceiling_deck_04" parent="." unique_id=1900000029 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ceiling_deck_05" parent="." unique_id=1900000036 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ceiling_deck_06" parent="." unique_id=1900000043 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ceiling_deck_07" parent="." unique_id=1900000050 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ceiling_deck_08" parent="." unique_id=1900000057 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ceiling_deck_09" parent="." unique_id=1900000064 instance=ExtResource("39_cdeck")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 22.5, 11.38, 0)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/authored_slot_role = "room_type_component"
 [node name="chair_00" parent="." unique_id=1504816082 instance=ExtResource("7_7fifb")]
 transform = Transform3D(0.8533143, 0, -0.52139693, 0, 1, 0, 0.52139693, 0, 0.8533143, -18.563585, -0.0129, -13.27)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-CHAIR"

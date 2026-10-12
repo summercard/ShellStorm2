@@ -7,9 +7,20 @@
 ; 本版把 entry_safe_room v006 的墙/地/门美术并进组件；不按方位区分，任意槽位自动对齐。
 ; 墙体由左门垛、右门垛、门楣三块组成，中间正好让出 2.2×2.5 门洞。
 ; 门洞尺寸取自 TowerGeometry3D.DOOR_CLEAR_WIDTH_M / DOOR_CLEAR_HEIGHT_M，与 door_5m 门扇严格配对。
-; 美术已并进房内同款「装甲门禁」（门框立柱 + 门楣装甲 + 门扇面 + 状态灯 + 门禁屏），12 件装饰随组件走；门洞处不产生碰撞，通行由门扇或宿主门逻辑负责。
+;
+; ⚠ 2026-10-12 美术来源替换（结构/碰撞未动，仅可视 GLB 换源）：
+;   可视 GLB 换为「塔楼 A 套重装甲门墙」env_tower_wall_door_5m_top3d.glb（ENV-TOWER-WALL-DOOR-5M, v005）。
+;   理由：业主指定远征关卡01 全部门墙统一为塔楼 A 套重装甲外观。
+;   - 装饰面朝向：该件 v005 起为**双面装饰**，关于自身 z=0 基准面对称（实测可视 Z 范围 ±0.3415），
+;     故不施加额外旋转 —— 恒等变换下两面都读作装饰，无朝向冲突。
+;   - 可视包络由 5×11.9×0.365 变为 5×11.9×0.683（源件双面，两侧各凸 0.3415）。
+;   - 门洞：实测净空区正投影覆盖率 0.0%（真通透），与门洞契约 2.2×2.5 相容。
+;   - 碰撞三盒逐值未改（0.3m 结构阻挡）；逻辑阻挡仍由本组件 3×BoxShape3D 独占，
+;     不采用源件的 DungeonRoom3D 脚本代理口径（房间场景依赖本组件内嵌碰撞）。
+;   回退：.workbuddy/backup/20261012_door_wall_art_swap/wall_door_5m_root_top3d.tscn.bak
+;         （原文件 sha256 3e636c19c65fef4bf156c93385c32fa56669dbd05b0bd6dbc47f9c278ab53935）
 
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/common_components/wall_door_5m/wall_door_5m_visual_top3d.glb" id="1_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wall_door_5m_pier_l"]
 size = Vector3(1.4, 11.9, 0.3)
@@ -37,7 +48,7 @@ metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "-Z"
 metadata/up_axis = "+Y"
 metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
-metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.365)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.683)
 metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
 metadata/preserve_authored_palette = true
 metadata/collision_owner = "self"
@@ -58,6 +69,14 @@ metadata/pier_width_m = 1.4
 metadata/lintel_height_m = 9.4
 metadata/snap_to_ground_offset_m = 0
 metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
+metadata/visual_art_source = "ENV-TOWER-WALL-DOOR-5M"
+metadata/visual_art_source_path = "res://assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d.glb"
+metadata/visual_art_source_blend = "res://art_source/environments/tower_descent_3d/source/wall_height12/env_tower_wall_door_5m_source_v005.blend"
+metadata/visual_art_source_version = "v005"
+metadata/visual_art_double_sided = true
+metadata/visual_art_revision = "2026-10-12 美术来源替换（battle 自绘白亮件 → 塔楼 A 套重装甲件），结构/碰撞/门洞契约未变"
+metadata/visual_art_rotation_note = "源件 v005 双面装饰、关于 z=0 基准面对称（实测 ±0.3415），故 ImportedModel 保持恒等变换，无需转正。"
+metadata/visual_art_door_aperture_note = "源件门洞区正投影覆盖率实测 0.0%（真通透），与门洞契约 2.2×2.5 相容。"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
 

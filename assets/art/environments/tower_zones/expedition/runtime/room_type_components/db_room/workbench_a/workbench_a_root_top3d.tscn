@@ -1,13 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-DB-WORKBENCH_A
-; 房型组件 db_room / v014 / workbench_a（源包 ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST）
-; L 形维修台的阻挡按几何分段，不再用整块 AABB 代理 —— 整块 AABB 14.1 x 7.25 会把 L 的凹口
-; x[-7.05, 5.20] * z[-1.875, 3.625]（约 67.4 m^2）也挡成实心，玩家与子弹在空地上被无故阻挡。
-;   后臂 BackArm: x[-7.05, 7.05] * z[-3.625, -1.875]，贴 z- 侧墙、含转角
-;   侧臂 SideArm: x[ 5.20, 7.05] * z[-1.875,  3.625]，贴 x+ 侧墙
-; 两盒并集 == 本组件几何的 XZ 投影（Runtime Geometry Probe: 12060 个三角面重心 100% 落在并集内，
-; 并集内无 >0.3m 空腔）；竖直区间与拆分前一致（0..3.565），故除足印外的行为零变化。
+; 房型组件 db_room / v014 / workbench_a
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/workbench_a/workbench_a_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_back_arm"]
@@ -22,7 +16,7 @@ metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
 metadata/component_slug = "workbench_a"
 metadata/display_name_zh = "workbench_a"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v014/component_packages/workbench_a/workbench_a.blend"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/workbench_a/workbench_a.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "+Y"
 metadata/up_axis = "+Y"

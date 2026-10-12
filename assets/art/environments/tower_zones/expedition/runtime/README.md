@@ -71,6 +71,36 @@ room_instances/<room_id>/
 ⚠ 本目录**只放清单与验收证据**，不放过程源、白盒源或整屋 GLB。过程源仍在
 `source/room_instances/<room_id>/v###/`。
 
+## 顶盖遮光件（TOP COVER）—— 封顶必须带碰撞
+
+**有阴影 ≠ 能挡太阳。** 玩法侧的太阳判定（`EnemyIllumination3D._evaluate_sunlight`）
+不读画面、不读材质，只从怪物身体采样点沿主太阳方向打一条
+`occlusion_mask = 1`（关卡静态世界层）的物理射线：命中 ⇒ 采样点在投影里，
+未命中 ⇒ 判 `sunlight`（每秒掉 2% 最大生命）。所以「封顶天花板画面上有影、
+僵尸照样受阳光」的根因**永远是这件顶盖的 prefab 里没有碰撞体**。
+
+本目录冻结的顶盖规范（`slot_role = room_type_component`、`collision_owner = self`、
+`collision_policy = structural_box_proxy`、1 个全包络 `BoxShape3D` @ `y = +高/2`）：
+
+| 房型 | 顶盖件 |
+| --- | --- |
+| `office_room` | `wall_top_service`、`ceiling_deck_5m`、`ceiling_ring_beam`、`ceiling_lighting`、`ceiling_service_cable_tray`、`ceiling_service_duct`、`ceiling_service_pipe_run` |
+| `db_room` | `wall_top_service`、`ceiling_deck_40m`、`ceiling_deck_10m`、`ceiling_ring_beam`、`ceiling_lighting`、`ceiling_service_a`、`ceiling_service_b`、`ceiling_service_c` |
+
+约定与守卫见设计文档 `docs/v0.1/06_技术施工_怪物精英与Boss.md` §7.3.1；
+名单真源是 `scripts/generate_expedition_room_type_prefabs.py` 的 `TOP_COVER_OCCLUDER_SLUGS`，
+生成器内有会硬失败的门禁，测试在 `tests/tooling/`。
+
+⚠ **历史坑（已修）**：`office_room` 的顶盖件曾因 `slug.startswith("wall_t")` **前缀撞上墙族**
+而恰好拿到碰撞 —— 靠命名巧合生效的契约已改为显式名单，`wall_top_service` 不再被当成实墙。
+
+⚠ **`boss_room` 自身组件库里没有顶盖件。** 2026-10-12 over全封顶时复用本目录外的
+`ENV-EXPEDITION-L01-DB-CEILING_DECK_40M`（DB 房天花承板，同族、同一条顶盖规范），
+10 条 5m 宽板转 90° 铺满 50×40，由人工审计加入
+`art_source/.../common_components/v011/component_instances.json` 的 `audited_additions`。
+**重跑 `scripts/blender/regroup_room_type_components.py` 前必须先把封顶件并进 Blender 源**，
+否则会被整段覆盖；守卫在 `tests/tooling/test_expedition_boss_ceiling_contract.py`。
+
 ## 壳体 5 类：复用，不在本目录复制
 
 房间壳体的墙 / 门墙 / 门扇 / 地砖 / L 转角**复用既有组件**，本目录不另建副本，

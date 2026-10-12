@@ -7,8 +7,21 @@
 ; 本版把 entry_safe_room v006 的墙/地/门美术并进组件；不按方位区分，任意槽位自动对齐。
 ; 静态实墙，与网格 5m 同宽，可直接沿网格平铺。
 ; 美术已并进房内同款「内嵌装甲壁板」（2.4m 壁板 ×2 + 板缝压条），在组件局部 +Y（朝房内那面）离面约 15mm；任何 5m 槽位/朝向都自动对齐。
+;
+; ⚠ 2026-10-12 美术来源替换（结构/碰撞未动，仅可视 GLB 换源）：
+;   可视 GLB 换为「塔楼 A 套重装甲实墙」env_tower_wall_solid_5m_top3d.glb（ENV-TOWER-WALL-SOLID-5M, v004）。
+;   理由：业主指定远征关卡01 的通用实墙统一为塔楼 A 套重装甲外观（与 99 关 room_01/boss/extraction 同款）。
+;   - 装饰面朝向：源件装饰面在 Godot +Z，与本组件契约 forward_axis=-Z 相反，
+;     故 ImportedModel 绕竖轴旋转 180°，使装饰面落于 -Z（与替换前白亮件同侧）。
+;   - 可视包络由 5×11.9×0.303 变为 5×11.9×0.4675（源件装甲向 +Z 前凸 0.3175、结构背 -0.15）。
+;   - 🔴 碰撞刻意保留本组件自持的 WallStandardCollision（1×BoxShape3D 5×11.9×0.3，layer=1）：
+;     源件 prp_tower_wall_solid_5m.tscn 声明 visual_only=true、包内 0 碰撞，其阻挡靠
+;     DungeonRoom3D 的脚本代理；而远征01 的房间静态场景走「直接实例化本 prefab」路径，
+;     该路径不调用脚本代理。若照搬源件的碰撞口径，7 个房间的实墙会全部失去阻挡。
+;   回退：.workbuddy/backup/20261012_wall_art_swap/wall_standard_5m_root_top3d.tscn.bak
+;         （原文件 sha256 3a0fcdf151471e5c784b6813203345c1c61d9410b9ec94fa20670ab7d4e555cf）
 
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/common_components/wall_standard_5m/wall_standard_5m_visual_top3d.glb" id="1_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wall_standard_5m_1"]
 size = Vector3(5, 11.9, 0.3)
@@ -30,7 +43,7 @@ metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "-Z"
 metadata/up_axis = "+Y"
 metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
-metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.303)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.4675)
 metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
 metadata/preserve_authored_palette = true
 metadata/collision_owner = "self"
@@ -48,8 +61,17 @@ metadata/visual_top_clearance_m = 0.1
 metadata/grid_unit_m = 5
 metadata/snap_to_ground_offset_m = 0
 metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
+metadata/visual_art_source = "ENV-TOWER-WALL-SOLID-5M"
+metadata/visual_art_source_path = "res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb"
+metadata/visual_art_source_prefab = "res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m.tscn"
+metadata/visual_art_source_blend = "res://art_source/environments/tower_descent_3d/source/wall_height12/env_tower_wall_solid_5m_source_v004.blend"
+metadata/visual_art_source_version = "v004"
+metadata/visual_art_revision = "2026-10-12 美术来源替换（battle 自绘白亮壁板 → 塔楼 A 套重装甲），结构/碰撞/尺寸契约未变"
+metadata/visual_art_rotation_note = "源件装饰面在 Godot +Z，与本组件 forward_axis=-Z 相反；ImportedModel 绕竖轴 180° 后装饰面落于 -Z。"
+metadata/visual_art_collision_note = "碰撞仍由本组件自持（WallStandardCollision，1×BoxShape3D 5×11.9×0.3，layer=1）；未照搬源件 visual_only 口径。"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 
 [node name="WallStandardCollision" type="StaticBody3D" parent="."]
 collision_layer = 1

@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-BATTLE-EXIT-NEON-SIGN · package exit_neon_sign v001
+; 战局区块通用场景组件：门头 / 地面「EXIT」霓虹灯标牌（红色自发光）。
+; 范式 B：视觉 GLB + 稳定根；摆位与契约写在 metadata，宿主按 metadata 实例化。
+; 坐标契约：Blender 正面（发光面）= 本地 +Y → Godot -Z；原点 = 底面中心。
+; 视觉包络 1.84 × 0.76 × 0.09 m（宽 × 高 × 厚）。
+; 按设计不含玩法阻挡（visual_only）：平铺在走行面上，不得制造隐形台阶。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/exit_neon_sign/exit_neon_sign_visual_top3d.glb" id="1_visual"]
+
+[node name="ExitNeonSign" type="Node3D"]
+metadata/asset_id = "ENV-BATTLE-EXIT-NEON-SIGN"
+metadata/package_id = "exit_neon_sign"
+metadata/asset_version = "v001"
+metadata/block_id = "battle"
+metadata/category = "environment_component"
+metadata/slug = "exit_neon_sign"
+metadata/logic_id = "exit_neon_sign"
+metadata/display_name_zh = "EXIT 霓虹灯标牌"
+metadata/source_blend = "art_source/environments/tower_zones/battle/source/exit_neon_sign/exit_neon_sign_source_v001.blend"
+metadata/source_collection = "EXIT霓虹灯标牌_中文资产管理"
+metadata/source_manifest = "art_source/environments/tower_zones/battle/source/exit_neon_sign/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/orientation_contract = "正面(发光面) = 本地 +Y；实例化时 rotation 由宿主决定，identity 即竖立门头姿态"
+metadata/bounds_size_m = Vector3(1.84, 0.76, 0.09)
+metadata/natural_mount = "门楣悬挂（吊耳在顶边）"
+metadata/reuse_scope = "任意门洞上方；平铺地面时绕 X 轴 +90° 使正面朝上"
+metadata/preserve_authored_palette = true
+metadata/visual_only = true
+metadata/geometry_ownership = "shared_component"
+metadata/replacement_contract = "decoration only; must not change room size, 5m grid, collision layer or navigation"
+metadata/collision_owner = "none"
+metadata/collision_policy = "no_blocking_by_design"
+metadata/collision_shape_count = 0
+metadata/collision_exclusion_reason = "地面门头标识，平铺厚度 0.09m；加碰撞会在走行面上制造隐形台阶，与地面装饰同口径不阻挡"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/emission = true
+metadata/animation = false
+metadata/design_scope = "战局区块通用组件"
+metadata/asset_ledger = "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#3D-设施"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
