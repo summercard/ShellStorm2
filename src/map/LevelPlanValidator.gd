@@ -224,6 +224,10 @@ static func validate_normalized(
 				continue
 			var parent_port := explicit_pair[0] as Dictionary
 			var child_port := explicit_pair[1] as Dictionary
+			var parent_height := float(parent_room.get("floor_offset_m", 0.0)) + float(parent_port.get("height_m", 0.0))
+			var child_height := float(room.get("floor_offset_m", 0.0)) + float(child_port.get("height_m", 0.0))
+			if absf(parent_height - child_height) > EPS:
+				errors.append("connection_port_height_gap:%s:%s" % [parent_key, key])
 			var parent_anchor := (
 				center_by_key[parent_key] as Vector2
 			) + _connection_port_position(parent_port)
@@ -494,7 +498,12 @@ static func _validate_room(room: Dictionary, templates: Dictionary) -> Array[Str
 		errors.append("room_size_not_grid_multiple:%s:%s" % [key, str(size)])
 	var snapped_x := _snap_component_axis(center.x, size.x)
 	var snapped_y := _snap_component_axis(center.y, size.y)
-	if absf(snapped_x - center.x) > EPS or absf(snapped_y - center.y) > EPS:
+	# Authored multi-height shells align by their frozen connection ports, rather
+	# than changing the preceding grid room to fit the shell's even-sized bounds.
+	var port_anchored := str(room.get("anchor_policy", "grid")) == "static_port_layout" and (bool(room.get("authored_layout_shell", false)) or not is_zero_approx(float(room.get("floor_offset_m", 0.0)))) and not (room.get("connection_ports", []) as Array).is_empty()
+	if str(room.get("anchor_policy", "grid")) != "grid" and not port_anchored:
+		errors.append("room_anchor_policy_invalid:%s" % key)
+	if not port_anchored and (absf(snapped_x - center.x) > EPS or absf(snapped_y - center.y) > EPS):
 		errors.append(
 			"room_center_not_snapped:%s:(%.3f,%.3f)->(%.3f,%.3f)"
 			% [key, center.x, center.y, snapped_x, snapped_y]

@@ -346,6 +346,8 @@ const BATTLE_LEVEL_ID := "battle_level01"
 ## 设计源 id（`source/art/whitebox/tower_zones/<id>/`）。留空则跟随 expedition_run_id。
 ## 单独留一个出口是为了让「同一份设计源、两个不同 run_id」这种对照实验不必复制目录。
 @export var expedition_plan_id: String = ""
+@export var atmosphere_fog_density_override := -1.0
+@export var atmosphere_volumetric_fog_density_override := -1.0
 ## 测试接缝：强制 98F 回落到生成器房表，跳过区块00 授权布局接管。
 ## 生成器的结构契约（5m 网格 / 走廊计数 / 门墙归属）由 verify_tower_grid_component_alignment
 ## 在「纯净生成器」下验收；98F 被区块00 接管后的装配另由 verify_block00_floor98_assembly 验收。
@@ -979,14 +981,20 @@ func _organize_existing_rooms_by_block() -> void:
 		room.set_meta("block_id", _block_id_for_floor(floor_index))
 
 
-## 远征关卡出生点：安全房中心朝前门方向偏 4m，永远落在房间内部，
-## 又比正中更靠近即将前往的 01 号房，避免开局先撞传送抵达门。
+## 远征关卡出生点（房间局部偏移；房间原点 = 规划中心，Y = 该层楼面）。
+## 远征关卡01（2026-10-13 业主指定）：**落在房间正中**（四块地砖交汇处）。
+## 旧口径是「朝前门方向偏 4 m」，玩家一睁眼就贴在通往 01 号房的门洞上（距门 3.5 m），
+## 业主已明确改为正中。实测该点地面承重正常、无实体阻挡（0 命中）。
+## 其它远征关卡沿用旧口径「朝前门方向偏 4 m」（业主未裁定，勿擅动）。
 func _expedition_entry_spawn_offset(entry_room: DungeonRoom3D) -> Vector3:
 	var front := ""
 	for side_value in entry_room.door_targets.keys():
 		if not str(entry_room.door_targets[side_value]).is_empty():
 			front = str(side_value)
 			break
+	if get_expedition_level_id() == "expedition_01":
+		return Vector3(0.0, 0.05, 0.0)
+	# 其它远征关卡（现仅关02）沿用旧口径：朝前门方向偏 4 m。
 	return {
 		"north": Vector3(0.0, 0.05, -4.0),
 		"south": Vector3(0.0, 0.05, 4.0),
@@ -1392,6 +1400,8 @@ func _rebuild_floor_stage(floor_index: int, loading_frame_budget := false) -> vo
 	# （见 TowerFloorStage3D.support_keep_out_rects）。必须在 add_child 之前写入 ——
 	# stage 的 _build_support() 在它自己的 _ready() 里跑。
 	stage.set("support_keep_out_rects", _authored_layout_keep_out_rects(floor_index))
+	stage.set("authored_support_holes", _component_owned_support_rects(floor_index))
+	stage.set("offset_floor_patches", _offset_floor_patches(floor_index))
 	var rooftop_route := get_node_or_null("Blocks/Rooftop/CrossTowerRoute")
 	if floor_index == 0 and not is_expedition() and rooftop_route != null:
 		stage.set("north_bridge_opening_x", float(rooftop_route.get_meta("north_bridge_opening_x", INF)))
@@ -1412,6 +1422,7 @@ func _rebuild_floor_stage(floor_index: int, loading_frame_budget := false) -> vo
 ## 一律按 custom_dimensions 精确挖，且不再叠加通用的 15×15 方格洞。
 func _stair_lobby_visual_holes(floor_index: int) -> Array[Rect2]:
 	var holes := _authored_layout_keep_out_rects(floor_index)
+	holes.append_array(_component_owned_support_rects(floor_index))
 	var size := TowerGeometry3D.COMBAT_STAIR_LOBBY_SIZE_M
 	var half := size * 0.5
 	for room_id_value in _floor_room_ids.get(floor_index, []):
@@ -1448,6 +1459,57 @@ func _authored_layout_keep_out_rects(floor_index: int) -> Array[Rect2]:
 			dimensions.y
 		))
 	return rects
+
+
+## Static scene metadata declares floor ownership; no level-specific geometry arrays.
+func _component_owned_support_rects(floor_index: int) -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	for room_id_value in _floor_room_ids.get(floor_index, []):
+		var record := _find_record(str(room_id_value))
+		var record_position := record.get("position", Vector3.ZERO) as Vector3
+		if absf(record_position.y + FLOOR_HEIGHT * floor_index) > 0.001:
+			var size := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+			rects.append(Rect2(Vector2(record_position.x, record_position.z) - size * 0.5, size))
+			continue
+		var path := str(record.get("static_layout_scene_path", ""))
+		if path.is_empty() or not ResourceLoader.exists(path):
+			continue
+		var packed := load(path) as PackedScene
+		if packed == null:
+			continue
+		var state := packed.get_state()
+		var owns_support := false
+		for property_index in state.get_node_property_count(0):
+			if state.get_node_property_name(0, property_index) == &"metadata/component_owned_support":
+				owns_support = bool(state.get_node_property_value(0, property_index))
+		if not owns_support:
+			continue
+		var size := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+		var position := record.get("position", Vector3.ZERO) as Vector3
+		rects.append(Rect2(Vector2(position.x, position.z) - size * 0.5, size))
+	return rects
+
+
+func _offset_floor_patches(floor_index: int) -> Array[Dictionary]:
+	var patches: Array[Dictionary] = []
+	for room_id_value in _floor_room_ids.get(floor_index, []):
+		var record := _find_record(str(room_id_value))
+		var position := record.get("position", Vector3.ZERO) as Vector3
+		var height := position.y + FLOOR_HEIGHT * floor_index
+		if absf(height) < 0.001:
+			continue
+		var own_support := false
+		var path := str(record.get("static_layout_scene_path", ""))
+		if not path.is_empty() and ResourceLoader.exists(path):
+			var state := (load(path) as PackedScene).get_state()
+			for index in state.get_node_property_count(0):
+				if state.get_node_property_name(0,index) == &"metadata/component_owned_support":
+					own_support = bool(state.get_node_property_value(0,index))
+		if own_support:
+			continue
+		var size := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+		patches.append({"rect":Rect2(Vector2(position.x,position.z)-size*0.5,size),"height_m":height})
+	return patches
 
 
 func _update_floor_visibility_state() -> void:
@@ -1579,6 +1641,9 @@ func _update_base_fog_transition(delta: float, immediate := false) -> void:
 	if _atmosphere == null or not _atmosphere.has_method("update_base_interior_fog"):
 		return
 	_atmosphere.call("update_base_interior_fog", is_player_inside_facility(), delta, immediate)
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	var profile := room.get_meta("fog_profile", {}) as Dictionary if room != null else {}
+	_atmosphere.call("set_room_fog_profile", profile, immediate)
 
 
 func _uses_expedition_camera_profiles() -> bool:
@@ -2405,7 +2470,47 @@ func _plan_spec(plan: Dictionary, key: String) -> Dictionary:
 
 func _plan_world_position(plan: Dictionary, spec: Dictionary) -> Vector3:
 	var planar := spec.get("position", Vector2.ZERO) as Vector2
-	return Vector3(planar.x, -FLOOR_HEIGHT * float(int(plan.get("floor_index", 2))), planar.y)
+	return Vector3(planar.x, -FLOOR_HEIGHT * float(int(plan.get("floor_index", 2))) + float(spec.get("floor_offset_m", 0.0)), planar.y)
+
+
+func _expedition_02_camera_profile_for_spec(spec: Dictionary) -> Dictionary:
+	if get_expedition_level_id() != "expedition_02":
+		return {}
+	var key := str(spec.get("key", ""))
+	var profile_id := ""
+	var world_yaw := 0.0
+	var trailing := 3.10
+	if key == "entry":
+		profile_id = "balcony_entry"
+		trailing = 3.20
+	elif key in ["room_03", "room_04", "room_05", "room_06", "room_07"]:
+		profile_id = "guest_west_main"
+		world_yaw = 90.0
+	elif key in ["room_08", "room_09", "room_10", "room_11", "room_12"]:
+		profile_id = "guest_east_main"
+		world_yaw = -90.0
+	elif key in ["room_14"]:
+		profile_id = "branch_west"
+	elif key in ["room_15"]:
+		profile_id = "branch_east"
+	elif key in ["room_16", "room_17", "room_18", "room_19", "room_20"]:
+		profile_id = "guest_west_branch"
+		world_yaw = 90.0
+	elif key in ["room_21", "room_22", "room_23", "room_24", "room_25"]:
+		profile_id = "guest_east_branch"
+		world_yaw = -90.0
+	if profile_id.is_empty():
+		return {}
+	return {
+		"id": profile_id,
+		"height_m": 1.55,
+		"trailing_m": trailing,
+		"world_yaw_deg": world_yaw,
+		"look_height_m": 0.88,
+		"look_ahead_m": 0.75,
+		"transition_seconds": 1.0,
+		"source": "expedition_02_authored_camera_coverage",
+	}
 
 
 ## 远征房间静态布局场景（`f00_<runtime_room_id>_static_layout.tscn`）的路径。
@@ -2435,6 +2540,9 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		spec.get("open_wall_directions", []) as Array
 	)
 	var record := _records.back() as Dictionary
+	if str(spec.get("anchor_policy", "grid")) == "static_port_layout":
+		record["position"] = _plan_world_position(plan, spec)
+		record["grid_position_adjusted"] = false
 	var runtime_ports: Array = []
 	for value in spec.get("connection_ports", []) as Array:
 		var port := (value as Dictionary).duplicate(true)
@@ -2444,9 +2552,12 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		runtime_ports.append(port)
 	record["connection_ports"] = runtime_ports
 	record["door_endpoint_owners"] = {}
-	record["camera_profile"] = (
+	var authored_camera_profile := (
 		spec.get("camera_profile", {}) as Dictionary
 	).duplicate(true)
+	if authored_camera_profile.is_empty():
+		authored_camera_profile = _expedition_02_camera_profile_for_spec(spec)
+	record["camera_profile"] = authored_camera_profile
 	record["rotation_deg"] = float(spec.get("rotation_deg", 0.0))
 	record["floor_layout_id"] = str(plan.get("layout_id", ""))
 	record["floor_number"] = int(plan.get("floor_number", 0))
@@ -3246,7 +3357,7 @@ func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
 	if not explicit_port.is_empty():
 		var raw_position := explicit_port.get("position_m", []) as Array
 		if raw_position.size() >= 2:
-			return room.to_global(Vector3(float(raw_position[0]), 0.0, float(raw_position[1])))
+			return room.to_global(Vector3(float(raw_position[0]), float(explicit_port.get("height_m", 0.0)), float(raw_position[1])))
 	var outward := {
 		"north": Vector3(0, 0, -1),
 		"south": Vector3(0, 0, 1),
@@ -3935,6 +4046,23 @@ func _add_connector_box(
 	body.add_child(collision)
 
 
+## 05·吊桥前（胖子展示）的位置触发原点：机房北侧通道上的固定世界点。
+##
+## 沿革（2026-10-13 业主红框指定改位）：原口径是「桥口正南 10m」
+## （`Vector3(bridge_x, y, north_z + 10.0)` = 世界 (20, 0, −22.5)），玩家要横穿整块
+## 天台、走到桥口正下方才触发 —— 既**太晚**、又**贴着桥与刷怪点**（`rooftop_bridge_guard`
+## 只在它南面 5.5m）。现改为机房北侧通道上的定点，玩家从 99F 上行楼梯口（−28, 0, 2.5）
+## 过来、还在通道西段时就触发，离桥口还有 17.2m。
+##
+## ⚠️ 触发判定是「水平半径 + 垂直带」（`NarrativeDirector3D._evaluate_point`），
+## 半径写在剧本 JSON 的 `trigger.radius` 里。半径必须够大才能覆盖这条通道的南北走向：
+## 业主红框 7.4m(x) × 23.8m(z)、中心即本点，外接圆半径 12.46；玩家可贴机房北墙
+## 走到 z≈−10.4，到本点 13.1。当前取 13.5。**半径调小会在玩家贴着机房或女儿墙走时
+## 静默漏触发**（症状：胖子剧情永不触发、日志干净）。
+const ROOFTOP_BRIDGE_APPROACH_X := 5.4
+const ROOFTOP_BRIDGE_APPROACH_Z := -23.5
+
+
 ## 剧情锚点只读查询；楼梯点沿实际承重中心线，吊桥口取正式路线元数据。
 func narrative_anchor(anchor_id: String) -> Variant:
 	if is_expedition():
@@ -3972,7 +4100,13 @@ func narrative_anchor(anchor_id: String) -> Variant:
 	var mouth := bridge_support.to_global(Vector3(0.0, bridge_shape.size.y * 0.5, bridge_shape.size.z * 0.5))
 	var north_z := mouth.z
 	match anchor_id:
-		"rooftop_bridge_approach": return Vector3(bridge_x, rooftop.global_position.y, north_z + 10.0)
+		"rooftop_bridge_approach":
+			# 见 ROOFTOP_BRIDGE_APPROACH_* 的注释：机房北侧通道定点，不再随桥口取点。
+			return Vector3(
+				ROOFTOP_BRIDGE_APPROACH_X,
+				rooftop.global_position.y,
+				ROOFTOP_BRIDGE_APPROACH_Z
+			)
 		"rooftop_bridge_guard": return Vector3(bridge_x, rooftop.global_position.y, north_z + 4.5)
 	return null
 
@@ -4697,7 +4831,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	super(room)
 	if room == null:
 		return
-	var depth := maxi(0, -int(round(room.global_position.y / FLOOR_HEIGHT)))
+	var depth := int(_room_floor_index.get(room.room_id, maxi(0, -int(round(room.global_position.y / FLOOR_HEIGHT)))))
 	if is_expedition():
 		# 远征是单层独立关卡：既没有 100F 天台也没有 99F 基地，
 		# 房间标签必须走远征自己的口径，不能落进塔楼的楼层分支。
@@ -5433,6 +5567,13 @@ func _bind_shared_edge_doors() -> void:
 		var peer := _room_by_id.get(peer_id) as DungeonRoom3D
 		if owner == null or peer == null:
 			continue
+		# 远征02当前阶段普通连接门不生成实体门扇；端口仍保留用于房间
+		# 触发、路线和静态门洞对账。不要在这里把“无门”重新报成缺门。
+		if (
+			owner.static_layout_scene_path.contains("/expedition_02/")
+			and peer.static_layout_scene_path.contains("/expedition_02/")
+		):
+			continue
 		if owner.authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D" and Block00MasterOfficeLayout3D.is_removed_door_pair(owner_id, peer_id):
 			continue
 		var edge := _edge_key(owner_id, peer_id)
@@ -5463,6 +5604,10 @@ func _bind_shared_edge_doors() -> void:
 		shared_door.set_meta("shared_edge_key", edge)
 		shared_door.set_meta("shared_door_owner_room_id", owner_id)
 		shared_door.set_meta("shared_door_peer_room_id", peer_id)
+		for endpoint in [owner, peer]:
+			var art := endpoint.get_node_or_null("AuthoredLayoutArtRoot") as Node3D
+			if art != null:
+				endpoint._adopt_static_port_door_visuals(art)
 
 
 func _instantiate_dynamic_room(record: Dictionary) -> void:
@@ -5964,6 +6109,7 @@ func _install_atmosphere() -> void:
 	# 晚一步就漏掉第一次判定、残留上一场景的曲目。
 	_atmosphere.set("background_music_enabled", not is_expedition())
 	_atmosphere.call("configure", world_environment.environment, key_light)
+	_atmosphere.call("set_fog_profile_override", atmosphere_fog_density_override, atmosphere_volumetric_fog_density_override)
 	add_child(_atmosphere)
 	_atmosphere.call("set_floor_number", _current_floor_number())
 	if get_expedition_level_id() == "expedition_02":
@@ -6360,6 +6506,10 @@ func _floor_number_from_index(floor_index: int) -> int:
 
 
 func _physical_floor_index() -> int:
+	# Expeditions are independent single-layer plans. Internal stairs change room
+	# elevation, not the logical floor or room-key lifetime.
+	if is_expedition():
+		return int(_room_floor_index.get(_current_room_id, 0))
 	if player == null:
 		return maxi(0, int(_room_floor_index.get(_current_room_id, 0)))
 	var position := player.global_position if player.is_inside_tree() else player.position
@@ -6393,15 +6543,16 @@ func _refresh_physical_location_authority(force := false) -> void:
 	# 收音机楼层权限直接跟随物理位置权威，不能依赖房间 Area 是否已经切换；
 	# 也不能放在下面的早退之后，否则同层强制刷新不会修正初始状态。
 	_set_base99_radio_floor_active(floor_index)
+	var current_room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	# 雷达楼层直接跟随物理位置权威，不能依赖房间Area是否已经切换。
 	# set_current_floor_height内部会忽略未变化值，不会增加重复重绘。
 	if minimap != null:
-		minimap.set_current_floor_height(-FLOOR_HEIGHT * float(floor_index))
+		var display_height := current_room.global_position.y if is_expedition() and current_room != null else -FLOOR_HEIGHT * float(floor_index)
+		minimap.set_current_floor_height(display_height)
 	var floor_changed := floor_index != _authoritative_floor_index
 	# 楼层未变化时也必须复核房间归属。角色可能先从100F进入99F基地阁楼：
 	# 此时物理楼层已经是1，但旧房间仍可能是start；若只按楼层变化刷新，
 	# 后续走到99F地面也永远不会把小地图、房间标签和存档房间同步为facility。
-	var current_room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	if (
 		not force
 		and not floor_changed
@@ -6471,6 +6622,26 @@ func _room_owns_world_position(
 			FLOOR_HEIGHT + 0.8
 		)
 	return room.contains_world_position(world_position)
+
+
+func _is_runtime_restore_position_valid(room: DungeonRoom3D, world_position: Vector3) -> bool:
+	if room != null and not (room.get_meta("walkable_navigation_polygons", []) as Array).is_empty():
+		return world_position.is_finite() and room.contains_world_position(world_position)
+	return super(room, world_position)
+
+
+func _runtime_restore_fallback_position(room: DungeonRoom3D) -> Vector3:
+	if room != null:
+		var polygons := room.get_meta("walkable_navigation_polygons", []) as Array
+		if not polygons.is_empty():
+			var polygon := polygons[0] as Array
+			var center := Vector3.ZERO
+			for point_value in polygon:
+				var point := point_value as Array
+				center += Vector3(float(point[0]), float(point[1]), float(point[2]))
+			if not polygon.is_empty():
+				return room.to_global(center / float(polygon.size()) + Vector3.UP * 0.05)
+	return super(room)
 
 
 func get_physical_location_snapshot() -> Dictionary:

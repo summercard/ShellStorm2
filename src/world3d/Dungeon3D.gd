@@ -802,7 +802,7 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 			_current_room_id = ""
 			_on_room_entered(room)
 		var saved_position: Variant = snapshot.get("player_position", [])
-		var restore_position := room.global_position + Vector3.UP * 0.05 if room != null else Vector3.ZERO
+		var restore_position := _runtime_restore_fallback_position(room)
 		if saved_position is Array and (saved_position as Array).size() >= 3:
 			var candidate_position := Vector3(
 				float((saved_position as Array)[0]),
@@ -847,6 +847,10 @@ func _restore_narrative_spawned_keys(snapshot: Dictionary) -> void:
 
 func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
 	return _room_by_id.get(str(snapshot.get("current_room_id", ""))) as DungeonRoom3D
+
+
+func _runtime_restore_fallback_position(room: DungeonRoom3D) -> Vector3:
+	return room.global_position + Vector3.UP * 0.05 if room != null else Vector3.ZERO
 
 
 func _is_runtime_restore_position_valid(room: DungeonRoom3D, world_position: Vector3) -> bool:

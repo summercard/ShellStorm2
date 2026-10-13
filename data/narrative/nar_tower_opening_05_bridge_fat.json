@@ -5,7 +5,7 @@
   "trigger": {
     "kind": "point",
     "point_anchor": "rooftop_bridge_approach",
-    "radius": 3,
+    "radius": 13.5,
     "height_tolerance": 1.2,
     "once": "run"
   },

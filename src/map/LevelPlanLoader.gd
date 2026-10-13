@@ -191,6 +191,10 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		var raw_authored_instances: Variant = raw.get("authored_layout_instances", [])
 		if raw_authored_instances is Array:
 			authored_instances = (raw_authored_instances as Array).duplicate(true)
+			for instance in authored_instances:
+				var position_value: Variant = (instance as Dictionary).get("position", null)
+				if position_value is Array and (position_value as Array).size() >= 3:
+					instance["position"] = Vector3(float(position_value[0]), float(position_value[1]), float(position_value[2]))
 		var camera_profile: Dictionary = {}
 		var raw_camera_profile: Variant = raw.get("camera_profile", {})
 		if raw_camera_profile is Dictionary:
@@ -233,6 +237,7 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 					# 本层同样只透传不解释 —— 但**必须登记**，否则消费方读到 0，
 					# 会把 21 个门洞全部当成通洞、一扇门扇都不建（实测踩过）。
 					"door_width_m": float(port.get("door_width_m", 0.0)),
+						"height_m": float(port.get("height_m", 0.0)),
 					"door_axis": str(port.get("door_axis", "")),
 					"door_line_m": float(port.get("door_line_m", 0.0)),
 					"door_center_m": float(port.get("door_center_m", 0.0)),
@@ -249,6 +254,8 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"center": _vec2(raw.get("center_m", [])),
 			"size": _vec2(raw.get("size_m", [])),
 			"rotation_deg": float(raw.get("template_rotation_deg", 0.0)),
+			"floor_offset_m": float(raw.get("floor_offset_m", 0.0)),
+			"anchor_policy": str(raw.get("anchor_policy", "grid")),
 			"content_type": str(raw.get("content_type", "")),
 			"boss_content_id": str(raw.get("boss_content_id", "")),
 			"boss_reinforcement_plan": boss_reinforcement_plan,

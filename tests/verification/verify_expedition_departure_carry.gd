@@ -29,8 +29,9 @@ const CARRY_HP := 42
 const CARRY_FLASHLIGHT_CHARGE := 0.37
 const CARRY_CURRENCY := 777
 const CARRY_KEYS := 4
-## 远征出生点：安全房中心朝前门方向偏 4m（`_expedition_entry_spawn_offset()`）。
-const ENTRY_SPAWN_OFFSET_M := 4.0
+## 远征出生点 = 入口安全屋**正中**（`_expedition_entry_spawn_offset()`，
+## 2026-10-13 业主指定由「朝前门偏 4m」改为正中）⇒ 水平偏移应为 0。
+const ENTRY_SPAWN_OFFSET_M := 0.0
 
 var _probe_completed := false
 
@@ -196,7 +197,7 @@ func _verify_marked_departure(failures: Array[String]) -> void:
 	if int(tower._room_key_count) != CARRY_KEYS:
 		failures.append("房间钥匙数没有带过来：%d，期望 %d" % [int(tower._room_key_count), CARRY_KEYS])
 
-	# 出生点契约：出发交接不得恢复基地坐标，否则远征刻意的 4m 偏移会被
+	# 出生点契约：出发交接不得恢复基地坐标，否则远征刻意的偏移会被
 	# `_resolve_runtime_restore_room()` 的基地房 id 兜底改写成安全房中心。
 	var entry_room := tower._room_by_id.get("start") as DungeonRoom3D
 	if entry_room == null:

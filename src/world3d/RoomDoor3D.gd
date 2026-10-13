@@ -29,6 +29,17 @@ var _prompt_override := ""
 var _motion_tween: Tween
 var _transitioning := false
 var _target_open := false
+var _presentation_clear_height_m := TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M
+
+## Geometry-only adaptation; access policy and motion state stay owned by the map edge.
+func set_presentation_opening(width_m: float, height_m: float) -> void:
+	_presentation_clear_height_m = height_m
+	if _collision != null and _collision.shape is BoxShape3D:
+		var shape := (_collision.shape as BoxShape3D).duplicate() as BoxShape3D
+		shape.size = Vector3(width_m, height_m, COLLISION_DEPTH_M)
+		_collision.shape = shape
+		_collision.position.y = height_m * 0.5
+	set_open(is_open, true)
 
 
 func configure(
@@ -87,8 +98,8 @@ func set_open(opened: bool, immediate := false) -> void:
 		_transitioning = false
 		_refresh_prompt()
 		return
-	var closed_y := TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M * 0.5
-	var open_y := TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M * 1.5 + OPEN_LIFT_CLEARANCE_M
+	var closed_y := _presentation_clear_height_m * 0.5
+	var open_y := _presentation_clear_height_m * 1.5 + OPEN_LIFT_CLEARANCE_M
 	var target_y := (
 		open_y
 		if opened

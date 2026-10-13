@@ -8,24 +8,38 @@ extends Node
 ## 手跑（headless 即可）：
 ##   godot --headless --path . --scene res://tests/verification/probe_expedition_start_exit_sign.tscn
 
-const EXPEDITION_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
+const DEFAULT_EXPEDITION_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
+const EXPEDITION_02_SCENE := "res://scenes/ExpeditionLevel02_3D.tscn"
 const RUN_SEED := 77001199
 const SIGN_NODE_NAME := "SafeRoomExitSign"
 const EXPECTED_ASSET_ID := "ENV-BATTLE-EXIT-NEON-SIGN"
+const EXPECTED_STAIR_ASSET_ID := "ENV-BASE99-STAIR-EXTERIOR-H4"
 
+var expedition_scene := DEFAULT_EXPEDITION_SCENE
 var failures: Array[String] = []
 
 
+func _read_args() -> void:
+	for raw in OS.get_cmdline_user_args():
+		var value := str(raw)
+		if value == EXPEDITION_02_SCENE:
+			expedition_scene = value
+
+
 func _ready() -> void:
-	print("=== 探针：远征01 入口安全房 EXIT 标牌（静态布局路径）===")
-	var scene := load(EXPEDITION_SCENE) as PackedScene
+	_read_args()
+	var is_expedition_02 := expedition_scene == EXPEDITION_02_SCENE
+	print("=== 探针：%s 入口安全房 EXIT 标牌（静态布局路径）===" % (
+		"远征02 + H4楼梯" if is_expedition_02 else "远征01"
+	))
+	var scene := load(expedition_scene) as PackedScene
 	if scene == null:
-		failures.append("ExpeditionLevel01_3D.tscn 加载失败")
+		failures.append("入口远征场景加载失败：%s" % expedition_scene)
 		_finish(null)
 		return
 	var tower := scene.instantiate() as TowerDescent3D
 	if tower == null:
-		failures.append("ExpeditionLevel01_3D 实例化失败")
+		failures.append("入口远征场景实例化失败：%s" % expedition_scene)
 		_finish(null)
 		return
 	tower.test_mode = true
@@ -104,14 +118,17 @@ func _ready() -> void:
 		failures.append("发光面未朝上：%s" % _v(facing))
 	# 房间局部坐标 = 房间世界坐标 − 房间原点（探针里 tower 在原点）
 	var room_origin := start_room.global_position
+	var expected_walk_surface_y := float(start_room.get_meta("walk_surface_y_m", 0.0))
 	var half := minf(start_room.get_dimensions().x, start_room.get_dimensions().y) * 0.5
 	var local_min := mn - room_origin
 	var local_max := mx - room_origin
 	print("房间局部 AABB x[%.3f,%.3f] y[%.3f,%.3f] z[%.3f,%.3f]  半边长=%.2f" % [
 		local_min.x, local_max.x, local_min.y, local_max.y, local_min.z, local_max.z, half,
 	])
-	if absf(mn.y - room_origin.y) > 0.02:
-		failures.append("牌背面未贴走行面：底面 y=%.4f" % (mn.y - room_origin.y))
+	if absf((mn.y - room_origin.y) - expected_walk_surface_y) > 0.02:
+		failures.append("牌背面未贴走行面：底面 y=%.4f，预期 %.4f" % [
+			mn.y - room_origin.y, expected_walk_surface_y
+		])
 	# 牌必须整体落在房间内（不穿墙）
 	if local_min.x < -half or local_max.x > half or local_min.z < -half or local_max.z > half:
 		failures.append("标牌超出房间边界，可能穿墙：%s ~ %s" % [_v(local_min), _v(local_max)])
@@ -155,7 +172,72 @@ func _ready() -> void:
 		if float(radial_sign) * float(normal.x + normal.z) >= float(radial_door) * float(normal.x + normal.z):
 			failures.append("标牌未落在门内侧：门径向=%.3f 牌径向=%.3f" % [radial_door, radial_sign])
 
+	if is_expedition_02:
+		await _verify_expedition_02_stair_exit(tower, start_room, retreat_direction)
+
 	_finish(tower)
+
+
+func _verify_expedition_02_stair_exit(
+	tower: TowerDescent3D,
+	start_room: DungeonRoom3D,
+	retreat_direction: String
+) -> void:
+	var stair: Node3D = null
+	for value in start_room.find_children("*", "Node3D", true, false):
+		var candidate := value as Node3D
+		if candidate != null and str(candidate.get_meta("asset_id", "")) == EXPECTED_STAIR_ASSET_ID:
+			stair = candidate
+			break
+	if stair == null:
+		failures.append("远征02 start 缺少 H4 外部退出楼梯")
+		return
+	if not bool(stair.get_meta("walkable", false)):
+		failures.append("H4 外部退出楼梯未声明 walkable=true")
+	if str(stair.get_meta("exit_port", "")) != "east_retreat":
+		failures.append("H4 楼梯 exit_port 不是 east_retreat：%s" % stair.get_meta("exit_port", ""))
+	var stair_bodies := stair.find_children("*", "StaticBody3D", true, false)
+	var stair_shapes := stair.find_children("*", "CollisionShape3D", true, false)
+	if stair_bodies.is_empty() or stair_shapes.is_empty():
+		failures.append("H4 外部退出楼梯缺少真实碰撞：bodies=%d shapes=%d" % [
+			stair_bodies.size(), stair_shapes.size()
+		])
+	else:
+		var enabled_shapes := 0
+		for shape_value in stair_shapes:
+			var shape := shape_value as CollisionShape3D
+			if shape != null and not shape.disabled and shape.shape != null:
+				enabled_shapes += 1
+		if enabled_shapes == 0:
+			failures.append("H4 外部退出楼梯碰撞形状全部禁用或为空")
+
+	var exit_door := start_room.get_door_node(retreat_direction)
+	if exit_door == null:
+		failures.append("远征02 无法用退出门校验楼梯低端")
+	else:
+		# H4 prefab 的 root contract 是 center_bottom；实测本地 -X 端为低端，
+		# 不依赖静态布局根的 metadata 复制，直接从真实实例反算世界端点。
+		var low_endpoint := stair.to_global(Vector3(-4.22, -0.04, 0.0))
+		var high_endpoint := stair.to_global(Vector3(4.22, 4.0, 0.0))
+		var door_planar := Vector2(exit_door.global_position.x, exit_door.global_position.z)
+		var low_planar := Vector2(low_endpoint.x, low_endpoint.z)
+		if low_planar.distance_to(door_planar) > 0.75:
+			failures.append("楼梯低端未与退出门同位：low=%s door=%s" % [
+				str(low_endpoint), str(exit_door.global_position)
+			])
+		if high_endpoint.y <= low_endpoint.y + 2.0:
+			failures.append("H4 楼梯没有向上爬升到约4m：low=%s high=%s" % [
+				str(low_endpoint), str(high_endpoint)
+			])
+
+	# 真实退出交互候选必须仍然来自这扇门，而不是只存在视觉楼梯。
+	if exit_door != null:
+		var player := tower.player
+		player.global_position = exit_door.global_position + Vector3(0.0, 0.05, 0.0)
+		await get_tree().physics_frame
+		var candidate := tower.get_interaction_candidate(player)
+		if str(candidate.get("mode", "")) != "configured_expedition_retreat":
+			failures.append("远征02楼梯出口未绑定 expedition_retreat：%s" % candidate)
 
 
 func _v(v: Vector3) -> String:

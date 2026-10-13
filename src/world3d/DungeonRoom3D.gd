@@ -1211,6 +1211,11 @@ func contains_world_position(
 	var dimensions := get_dimensions()
 	var half_x := maxf(0.0, dimensions.x * 0.5 - ROOM_OWNERSHIP_BOUNDARY_INSET_M)
 	var half_z := maxf(0.0, dimensions.y * 0.5 - ROOM_OWNERSHIP_BOUNDARY_INSET_M)
+	if absf(local_position.x) >= half_x or absf(local_position.z) >= half_z:
+		return false
+	var walk_polygons := get_meta("walkable_navigation_polygons", []) as Array
+	if not walk_polygons.is_empty() and min_local_y == ROOM_OWNERSHIP_MIN_LOCAL_Y_M and max_local_y == ROOM_OWNERSHIP_MAX_LOCAL_Y_M:
+		return _inside_authored_walk_volume(local_position, walk_polygons)
 	if (
 		not (absf(local_position.x) < half_x and absf(local_position.z) < half_z)
 		or local_position.y < min_local_y
@@ -1220,6 +1225,30 @@ func contains_world_position(
 	# 非矩形房：包围盒矩形会连凹口一起判成「房内」，而凹口是房外。额外要求点落在
 	# 某个**真砖格**上。没有地砖清单的房（矩形房 / 程序化房 / v007 安全房）跳过本判据。
 	return _inside_authored_footprint(local_position)
+
+
+## Multi-height authored rooms own their actual walk surfaces, including ramps.
+## The empty shaft is excluded, and ordinary tile-based rooms keep their contract.
+func _inside_authored_walk_volume(local_position: Vector3, polygons: Array) -> bool:
+	for polygon_value in polygons:
+		var polygon := polygon_value as Array
+		if polygon.size() < 3:
+			continue
+		var footprint := PackedVector2Array()
+		var vertices := PackedVector3Array()
+		for point_value in polygon:
+			var point := point_value as Array
+			vertices.append(Vector3(float(point[0]), float(point[1]), float(point[2])))
+			footprint.append(Vector2(float(point[0]), float(point[2])))
+		if not Geometry2D.is_point_in_polygon(Vector2(local_position.x, local_position.z), footprint):
+			continue
+		var normal := (vertices[1] - vertices[0]).cross(vertices[2] - vertices[0])
+		if absf(normal.y) < 0.001:
+			continue
+		var walk_y := vertices[0].y - (normal.x * (local_position.x - vertices[0].x) + normal.z * (local_position.z - vertices[0].z)) / normal.y
+		if local_position.y >= walk_y + ROOM_OWNERSHIP_MIN_LOCAL_Y_M and local_position.y <= walk_y + ROOM_OWNERSHIP_MAX_LOCAL_Y_M:
+			return true
+	return false
 
 
 ## 非矩形房的「真在房内」判据：点必须落在某个已铺地砖的 5m 格内（凹口没有砖）。
@@ -1643,6 +1672,69 @@ static func _is_door_wall_piece(node: Node3D) -> bool:
 	return source.contains("wall_door") or source.contains("door_wall")
 
 
+func _raise_expedition_02_static_walls_to_ceiling(static_layout: Node3D) -> void:
+	if not _is_expedition_02_static_layout() or static_layout == null:
+		return
+	const CEILING_BOTTOM_Y_M := 4.0
+	const EXISTING_WALL_TOP_Y_M := 3.0
+	const EXTENSION_HEIGHT_M := CEILING_BOTTOM_Y_M - EXISTING_WALL_TOP_Y_M
+	if EXTENSION_HEIGHT_M <= 0.001:
+		return
+	var added := 0
+	for child in static_layout.get_children():
+		var wall := child as Node3D
+		if wall == null:
+			continue
+		var source := wall.scene_file_path
+		if not (
+			source.contains("wall_standard_5m_h3")
+			or source.contains("wall_door_5m_h3")
+		):
+			continue
+		var extension_name := "%s_CeilingExtensionH4" % wall.name
+		if static_layout.get_node_or_null(extension_name) != null:
+			continue
+		var mesh_instance := MeshInstance3D.new()
+		mesh_instance.name = extension_name
+		var box := BoxMesh.new()
+		box.size = Vector3(5.0, EXTENSION_HEIGHT_M, 0.3)
+		mesh_instance.mesh = box
+		mesh_instance.transform = Transform3D(
+			wall.transform.basis,
+			wall.transform.origin + Vector3.UP * (EXISTING_WALL_TOP_Y_M + EXTENSION_HEIGHT_M * 0.5)
+		)
+		mesh_instance.set_meta("expedition_02_wall_height_extension", true)
+		mesh_instance.set_meta("wall_height_m", CEILING_BOTTOM_Y_M)
+		var source_mesh := wall.find_child("ImportedModel", true, false)
+		var source_visual: MeshInstance3D = null
+		if source_mesh != null:
+			var source_visuals := source_mesh.find_children("*", "MeshInstance3D", true, false)
+			if not source_visuals.is_empty():
+				source_visual = source_visuals[0] as MeshInstance3D
+		if source_visual != null:
+			var source_material := source_visual.get_active_material(0)
+			if source_material != null:
+				mesh_instance.material_override = source_material
+		static_layout.add_child(mesh_instance)
+		var body := StaticBody3D.new()
+		body.name = "%s_Collision" % extension_name
+		body.collision_layer = 1
+		body.collision_mask = 0
+		body.set_meta("camera_lower_wall", true)
+		body.set_meta("expedition_02_wall_height_extension", true)
+		var collision := CollisionShape3D.new()
+		var shape := BoxShape3D.new()
+		shape.size = box.size
+		collision.shape = shape
+		body.transform = mesh_instance.transform
+		body.add_child(collision)
+		static_layout.add_child(body)
+		added += 1
+	if added > 0:
+		static_layout.set_meta("expedition_02_runtime_wall_height_m", CEILING_BOTTOM_Y_M)
+		static_layout.set_meta("expedition_02_runtime_wall_height_extension_count", added)
+
+
 ## 废门洞：门墙件落在本局**没有门**的侧上 ⇒ 补一段同侧实墙。
 ##
 ## 这一类洞是**烘焙时就留下的**，不是随机拼接造成的：办公室房型的源清单把自有的那扇门
@@ -1715,7 +1807,7 @@ func _sync_static_layout_connection_ports(static_layout: Node3D) -> void:
 			container.set_meta("connection_port_count", connection_ports.size())
 		return
 	if container != null:
-		static_layout.remove_child(container)
+		container.get_parent().remove_child(container)
 		container.free()
 	_build_connection_port_markers(static_layout)
 	static_layout.set_meta("connection_port_count", connection_ports.size())
@@ -1821,8 +1913,22 @@ func _expedition_static_layout_path() -> String:
 	return static_layout_scene_path if ResourceLoader.exists(static_layout_scene_path) else ""
 
 
+func _is_expedition_02_static_layout() -> bool:
+	return static_layout_scene_path.contains("/expedition_02/")
+
+
 func _build_runtime_doors_only() -> void:
 	var dimensions := get_dimensions()
+	# 远征02当前阶段先移除普通连接门：connection_ports 仍保留给路线、房间触发
+	# 和共享边校验，但不再生成 RoomDoor3D 门扇或门扇碰撞。入口安全房的
+	# 空目标方向是唯一例外，它仍生成无拓扑边的弃局门，供 expedition_retreat
+	# 绑定使用；这让“去掉门”和“安全房必须可退出”不互相冲突。
+	if _is_expedition_02_static_layout():
+		for direction in doors:
+			if str(door_targets.get(direction, "")).is_empty():
+				_build_door(direction, "", dimensions)
+		_apply_authored_runtime_door_contract(dimensions)
+		return
 	# 端口是设计源的**权威门位声明**（位置、所在墙、门宽都在里面），一墙多门也表达得了。
 	# 判据是「端口**带门位声明**」而不是「有 connection_ports」—— 理由见
 	# `_has_authoritative_door_ports()`：塔楼房间没有该字段，constrained 关卡的端口
@@ -1933,7 +2039,7 @@ func _build_door_for_port(port: Dictionary, dimensions: Vector2) -> bool:
 	var door_leaf := door.get_node_or_null("DoorPanel/ImportedDoorVisual")
 	if door_leaf != null:
 		_disable_static_collision_descendants(door_leaf)
-	door.position = Vector3(float(raw_position[0]), 0.0, float(raw_position[1]))
+	door.position = Vector3(float(raw_position[0]), float(port.get("height_m", 0.0)), float(raw_position[1]))
 	if side in ["west", "east"]:
 		door.rotation.y = PI * 0.5
 	add_child(door)
@@ -2071,6 +2177,7 @@ func _build_shell() -> void:
 				# 两者都是刚体级操作（转 + 挪一件），**其余实例一件不动**。
 				_align_static_layout_to_room(static_layout)
 				if static_layout != null:
+					_raise_expedition_02_static_walls_to_ceiling(static_layout)
 					static_layout.name = (
 						"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
 					)
@@ -2088,6 +2195,8 @@ func _build_shell() -> void:
 						"authored_layout_exclusive_count", "authored_layout_multi_level_count",
 						"authored_layout_room_type_component_count", "authored_layout_promoted_walls",
 						"walk_surface_y_m",
+						"walkable_navigation_polygons",
+						"fog_profile",
 					]:
 						if static_layout.has_meta(key):
 							set_meta(key, static_layout.get_meta(key))
@@ -2098,6 +2207,7 @@ func _build_shell() -> void:
 						if static_meta_key.begins_with("safe_room_"):
 							set_meta(static_meta_key, static_layout.get_meta(static_meta_key))
 					_build_runtime_doors_only()
+					_adopt_static_port_door_visuals(static_layout)
 					_sync_expedition_static_camera_door_proxies(static_layout)
 					_restore_static_layout_camera_wall_contract(static_layout)
 					# 远征01 入口安全房（room_id="start"，STAIR_LOBBY）走本静态布局分支，
@@ -4450,6 +4560,12 @@ func _hide_replaced_block00_wall_visuals(node: Node) -> void:
 
 
 func _build_door(direction: String, target_room_id: String, dimensions: Vector2) -> void:
+	if _has_authoritative_door_ports():
+		for value in connection_ports:
+			var port := value as Dictionary
+			if str(port.get("side", "")) == direction and str(port.get("target_room_id", port.get("target", ""))) == target_room_id:
+				_build_door_for_port(port, dimensions)
+				return
 	if authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D" and Block00MasterOfficeLayout3D.is_removed_door_pair(room_id, target_room_id):
 		return
 	if not owns_door_endpoint(direction):
@@ -4830,6 +4946,23 @@ func _build_content() -> void:
 
 
 func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
+	var authored_polygons := get_meta("walkable_navigation_polygons", []) as Array
+	if not authored_polygons.is_empty():
+		var authored_mesh := NavigationMesh.new()
+		var vertices := PackedVector3Array()
+		for polygon_value in authored_polygons:
+			var polygon := PackedInt32Array()
+			for point in polygon_value as Array:
+				polygon.append(vertices.size())
+				vertices.append(Vector3(point[0], point[1], point[2]))
+			authored_mesh.vertices = vertices
+			authored_mesh.add_polygon(polygon)
+		var authored_region := NavigationRegion3D.new()
+		authored_region.name = "RuntimeNavigationRegion3D"
+		authored_region.use_edge_connections = false
+		authored_region.navigation_mesh = authored_mesh
+		_add_runtime_detail_child(authored_region)
+		return
 	# 每个 ACTIVE 房只保留一块轻量导航面；正式门/跨房授权仍由房间系统拥有。
 	# 家具的短距避障交给 Enemy3D 射线兜底，避免运行时烘焙造成主线程尖峰。
 	var inset := 1.45
@@ -4848,6 +4981,46 @@ func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
 	region.use_edge_connections = false
 	region.navigation_mesh = navigation_mesh
 	_add_runtime_detail_child(region)
+
+
+## Reuse the existing RoomDoor3D for each connected endpoint. Imported preview leaves
+## become that door's visual children; closed preview collisions never remain stacked.
+func _adopt_static_port_door_visuals(static_layout: Node3D) -> void:
+	var contract := static_layout.get_meta("port_door_visuals", {}) as Dictionary
+	if contract.is_empty():
+		return
+	for source_name in contract.get("open_inner_previews", []) as Array:
+		var preview := static_layout.find_child(str(source_name), true, false) as Node3D
+		if preview != null and not preview.has_meta("connected_inner_preview_open"):
+			preview.position.y += 6.6
+			preview.set_meta("connected_inner_preview_open", true)
+			for body in preview.find_children("*", "StaticBody3D", true, false):
+				(body as StaticBody3D).collision_layer = 0
+	for side in ["west", "east", "north", "south"]:
+		if not contract.has(side):
+			continue
+		var door := get_door_node(side)
+		if door == null:
+			continue
+		if bool(door.get_meta("authored_port_visual", false)):
+			continue
+		door.set_presentation_opening(5.02, 6.225)
+		var panel := door.get_node("DoorPanel") as Node3D
+		var old_visual := panel.get_node_or_null("ImportedDoorVisual")
+		if old_visual != null:
+			old_visual.free()
+		var imported := Node3D.new()
+		imported.name = "ImportedDoorVisual"
+		panel.add_child(imported)
+		for source_name in contract[side] as Array:
+			var leaf := static_layout.find_child(str(source_name), true, false) as Node3D
+			if leaf == null:
+				push_error("Authored port door leaf missing: %s" % source_name)
+				continue
+			leaf.reparent(imported, true)
+			for body in leaf.find_children("*", "StaticBody3D", true, false):
+				(body as StaticBody3D).collision_layer = 0
+		door.set_meta("authored_port_visual", true)
 
 
 func _build_boss_arena_dressing() -> void:
@@ -5114,6 +5287,10 @@ func _build_trigger() -> void:
 		else ROOM_OWNERSHIP_MAX_LOCAL_Y_M
 	)
 	var trigger_height := max_local_y - min_local_y
+	for polygon_value in get_meta("walkable_navigation_polygons", []):
+		for point_value in polygon_value:
+			max_local_y = maxf(max_local_y, float(point_value[1]) + ROOM_OWNERSHIP_MAX_LOCAL_Y_M)
+	trigger_height = max_local_y - min_local_y
 	shape.size = Vector3(
 		maxf(0.01, dimensions.x - ROOM_OWNERSHIP_BOUNDARY_INSET_M * 2.0),
 		trigger_height,

@@ -1,12 +1,12 @@
 extends Node
-## 只读探查：远征02「每个门洞是否都有可开的物理门扇」。
+## 远征02门契约探针：普通连接门保持为开放门洞，安全房退出门保留。
 ##
-## 背景：静态布局把门墙**逐扇烘进各房 tscn**（长廊 room_02 一间就有 10 面
-## `wall_door_5m_h3`），但 `DungeonRoom3D` 的门扇是**按 `room.doors` 的方向**建的，
-## 而 `RoomDoor3D` 一个方向只能有一个节点（`_door_nodes[direction]`）。
-## ⇒ 同一面墙上有 N 扇门时，只有 1 扇有门扇、其余 N-1 扇只是门洞。
+## 远征02当前施工口径不是「每个 wall_door 都必须有 RoomDoor3D」：
+## - 普通连接端口只保留 authored 开口、路线和触发，不生成门扇/门扇碰撞；
+## - start 安全房唯一的空目标 east retreat 门必须保留，并绑定退出交互；
+## - 静态 wall_door 实例只是门洞几何，不能再拿它要求动态门扇覆盖。
 ##
-## 本探针把缺口量化：逐房列出**门洞数 / 门扇数 / 没配到门扇的洞**。
+## 本探针同时保留门洞统计，防止误删静态布局；验收重点改为「普通门扇为 0、退出门为 1」。
 ##
 ## 跑法：
 ##   "<godot_console>" --headless --path "<project>" --scene res://tests/verification/probe_expedition02_door_coverage.tscn
@@ -19,6 +19,7 @@ const MATCH_R := 2.5
 
 var _scene_path := LEVEL_SCENE
 var _targets: Array[String] = TARGETS.duplicate()
+var failures: Array[String] = []
 
 
 ## 支持 `-- <scene_path> [room_id...]`，便于对远征01 跑同一套判据做回归对照。
@@ -53,7 +54,8 @@ func _ready() -> void:
 
 	var room_by_id: Dictionary = tower.get("_room_by_id")
 	print("=== %s 门洞 / 门扇 覆盖对账 ===" % _scene_path)
-	print("匹配半径 %.1fm；『门洞』= 静态布局里的 wall_door 实例；『门扇』= RoomDoor3D 节点" % MATCH_R)
+	print("『门洞』= 静态布局里的 wall_door 实例；『门扇』= RoomDoor3D 节点")
+	print("远征02预期：普通连接门扇=0；start 退出门扇=1；connection_ports 保留")
 	print("房间字典共 %d 房" % room_by_id.size())
 	print()
 
@@ -81,7 +83,7 @@ func _ready() -> void:
 
 		var holes := _door_holes(room)
 		var doors := _door_leafs(room)
-		# 只有 2.2m 标准门洞才需要门扇；坍塌门洞天然是通洞。
+		# 远征02普通连接门是开放门洞，不再要求动态门扇覆盖。
 		var door_holes: Array = []
 		for h_v in holes:
 			if str((h_v as Dictionary)["kind"]) == "door":
@@ -89,30 +91,23 @@ func _ready() -> void:
 		total_holes += door_holes.size()
 		total_doors += doors.size()
 
-		# 逐洞找最近门扇
 		var unmatched: Array = []
-		for h in door_holes:
-			var hp := h["pos"] as Vector3
-			var best := 999.0
-			var best_name := ""
-			for d in doors:
-				var dist := hp.distance_to(d["pos"] as Vector3)
-				if dist < best:
-					best = dist
-					best_name = str(d["name"])
-			if best > MATCH_R:
-				unmatched.append({ "hole": h, "nearest": best, "nearest_name": best_name })
-		total_unmatched += unmatched.size()
-
-		# 反向：有没有门扇落在没有门洞的地方（通洞里插门扇）
 		var stray: Array = []
-		for d in doors:
-			var dp := d["pos"] as Vector3
-			var best2 := 999.0
-			for h in holes:
-				best2 = minf(best2, dp.distance_to(h["pos"] as Vector3))
-			if best2 > MATCH_R:
-				stray.append({ "door": d, "nearest": best2 })
+		var is_start := target == "start"
+		var expected_doors := 1 if is_start else 0
+		if doors.size() != expected_doors:
+			failures.append("%s 普通/退出门扇数量=%d，预期=%d" % [target, doors.size(), expected_doors])
+		if room.connection_ports.is_empty():
+			failures.append("%s connection_ports 被错误删除" % target)
+		if is_start:
+			var retreat_side := str(room.call("_safe_room_retreat_direction"))
+			if retreat_side != "east":
+				failures.append("start 退出侧=%s，预期 east" % retreat_side)
+			var retreat_door := room.get_door_node(retreat_side)
+			if retreat_door == null:
+				failures.append("start 缺少 east 退出门")
+			elif retreat_door.get_interaction_prompt_text() != "[E] 退出战局":
+				failures.append("start 退出门提示错误：%s" % retreat_door.get_interaction_prompt_text())
 
 		rows.append({
 			"key": target, "holes": door_holes.size(), "doors": doors.size(),
@@ -122,27 +117,16 @@ func _ready() -> void:
 		})
 
 	for r in rows:
-		var mark := "OK " if int(r["unmatched"]) == 0 else "缺口"
-		print("### %-9s %s  门洞=%2d  门扇=%2d  缺门扇=%2d  doors=%s  端口=%d" % [
-			str(r["key"]), mark, int(r["holes"]), int(r["doors"]), int(r["unmatched"]),
+		var is_start := str(r["key"]) == "start"
+		var expected_doors := 1 if is_start else 0
+		var mark := "OK " if int(r["doors"]) == expected_doors else "失败"
+		print("### %-9s %s  静态门洞=%2d  动态门扇=%2d  预期=%d  doors=%s  端口=%d" % [
+			str(r["key"]), mark, int(r["holes"]), int(r["doors"]), expected_doors,
 			str(r["room_doors"]), int(r["ports"])])
-		for d_v in r["detail"] as Array:
-			var d: Dictionary = d_v
-			var h: Dictionary = d["hole"]
-			print("      ✗ 缺门扇 洞@(%7.2f,%6.2f,%7.2f) 最近门扇 %s 在 %.2fm 外" % [
-				(h["pos"] as Vector3).x, (h["pos"] as Vector3).y, (h["pos"] as Vector3).z,
-				str(d["nearest_name"]), float(d["nearest"])])
-		for s_v in r["stray"] as Array:
-			var s: Dictionary = s_v
-			var dd: Dictionary = s["door"]
-			print("      ✗ 多余门扇 %s dir=%s @(%7.2f,%6.2f,%7.2f) 附近 %.2fm 内无门洞" % [
-				str(dd["name"]), str(dd["direction"]),
-				(dd["pos"] as Vector3).x, (dd["pos"] as Vector3).y, (dd["pos"] as Vector3).z,
-				float(s["nearest"])])
 
 	print()
 	print("=== 合计 ===")
-	print("  门洞 %d  门扇 %d  缺门扇的洞 %d" % [total_holes, total_doors, total_unmatched])
+	print("  静态门洞 %d  动态门扇 %d  普通连接门预期为0" % [total_holes, total_doors])
 
 	# 全房总账
 	var all_holes := 0
@@ -159,11 +143,17 @@ func _ready() -> void:
 			if str((h_v as Dictionary)["kind"]) == "door":
 				all_holes += 1
 		all_doors += _door_leafs(room).size()
-	print("  全房汇总：标准门洞 %d  门扇 %d  缺口 %d" % [all_holes, all_doors, all_holes - all_doors])
+	print("  全房汇总：静态门洞 %d  动态门扇 %d" % [all_holes, all_doors])
 
 	print()
-	print("EXP02_DOOR_COVERAGE_DONE")
-	get_tree().quit(0)
+	if failures.is_empty():
+		print("EXP02_DOOR_COVERAGE_OK")
+		get_tree().quit(0)
+	else:
+		for failure in failures:
+			printerr("DOOR_COVERAGE_FAIL %s" % failure)
+		print("EXP02_DOOR_COVERAGE_FAIL count=%d" % failures.size())
+		get_tree().quit(1)
 
 
 ## 静态布局里的门墙实例（= 门洞）。返回 [{pos, size, name, kind}]

@@ -8,7 +8,7 @@
     15.0
   ],
   "grid_unit_m": 5.0,
-  "wall_height_m": 3.0,
+  "wall_height_m": 4.0,
   "door_contract": {
     "width_m": 2.2,
     "height_m": 2.5,

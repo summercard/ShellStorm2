@@ -69,6 +69,56 @@ var _distance_fog_quality_multiplier := 1.0
 var _base_interior_fog_density := BASE_INTERIOR_FOG_DENSITY
 var _base_interior_volumetric_fog_density := BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY
 var _expedition_dark_distant_enabled := false
+var _authored_distance_fog_override := -1.0
+var _authored_volumetric_fog_override := -1.0
+var _room_fog_profile_key := ""
+var _room_fog_tween: Tween
+var _room_fog_color := FOG_LIGHT_COLOR
+
+## Empty profile restores ordinary scene fog; room parameters remain editable in TSCN.
+func set_room_fog_profile(profile: Dictionary, immediate := false) -> void:
+	var key := str(profile)
+	if key == _room_fog_profile_key:
+		return
+	_room_fog_profile_key = key
+	if _environment == null:
+		return
+	if _room_fog_tween != null and _room_fog_tween.is_valid():
+		_room_fog_tween.kill()
+	var normal_distance := lerpf(FOG_DENSITY, _base_interior_fog_density, _base_interior_fog_blend)
+	var normal_volume := lerpf(VOLUMETRIC_FOG_DENSITY, _base_interior_volumetric_fog_density, _base_interior_fog_blend)
+	var distance_target := float(profile.get("distance_density", normal_distance))
+	var volume_target := float(profile.get("volumetric_density", normal_volume))
+	var color_target: Color = profile.get("fog_color", FOG_LIGHT_COLOR)
+	_room_fog_color = color_target
+	_authored_distance_fog_override = _environment.fog_density / maxf(_distance_fog_quality_multiplier, 0.001)
+	_authored_volumetric_fog_override = float(_environment.get_meta("presentation_volumetric_fog_density", normal_volume))
+	if immediate:
+		_authored_distance_fog_override = distance_target
+		_authored_volumetric_fog_override = volume_target
+		_environment.fog_light_color = color_target
+		_apply_base_fog_density()
+		if profile.is_empty():
+			_authored_distance_fog_override = -1.0
+			_authored_volumetric_fog_override = -1.0
+		return
+	var duration := maxf(0.1, float(profile.get("transition_seconds", 2.0)))
+	_room_fog_tween = create_tween().set_parallel(true)
+	_room_fog_tween.tween_property(self, "_authored_distance_fog_override", distance_target, duration)
+	_room_fog_tween.tween_property(self, "_authored_volumetric_fog_override", volume_target, duration)
+	_room_fog_tween.tween_property(_environment, "fog_light_color", color_target, duration)
+	_room_fog_tween.tween_method(func(_value: float): _apply_base_fog_density(), 0.0, 1.0, duration)
+	if profile.is_empty():
+		_room_fog_tween.chain().tween_callback(func():
+			_authored_distance_fog_override = -1.0
+			_authored_volumetric_fog_override = -1.0
+			_apply_base_fog_density())
+
+## Optional authored scene parameter; negative keeps the existing tower atmosphere.
+func set_fog_profile_override(density: float, volumetric_density: float) -> void:
+	_authored_distance_fog_override = density
+	_authored_volumetric_fog_override = volumetric_density
+	_apply_base_fog_density()
 
 ## 仅在没有全局 GameTimeManager 的孤立验收场景里使用。
 @export_range(0.0, 24.0, 0.1) var time_of_day := 17.0
@@ -168,7 +218,7 @@ func _apply_fixed_lighting() -> void:
 		_sun.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
 	if _environment != null:
 		_environment.fog_enabled = GraphicsSettingsManager == null or GraphicsSettingsManager.is_enabled("distance_fog")
-		_environment.fog_light_color = FOG_LIGHT_COLOR
+		_environment.fog_light_color = _room_fog_color
 		_apply_base_fog_density()
 	_apply_time_of_day()
 	_apply_expedition_dark_distant()
@@ -368,7 +418,12 @@ func _apply_base_fog_density() -> void:
 		_base_interior_volumetric_fog_density,
 		_base_interior_fog_blend
 	)
-	_environment.fog_density = distance_density
+	if _authored_volumetric_fog_override >= 0.0:
+		volumetric_density = _authored_volumetric_fog_override
+	_environment.fog_density = (
+		_authored_distance_fog_override * _distance_fog_quality_multiplier
+		if _authored_distance_fog_override >= 0.0 else distance_density
+	)
 	# GraphicsSettingsManager 会从该 meta 重放体积雾值；同步更新可避免切画质时闪回室外浓度。
 	_environment.set_meta("presentation_volumetric_fog_density", volumetric_density)
 	_environment.set("volumetric_fog_density", volumetric_density)

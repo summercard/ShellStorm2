@@ -913,8 +913,9 @@ func _check_runtime_records(
 	var rear := "east" if rotation == 180 else "west"
 	_check(start.doors.size() == 2 and front in start.doors and rear in start.doors, "%s 安全屋实体门向必须匹配0/180" % label)
 	_check(str(start.door_targets.get(front, "")) == "room_01", "%s 安全屋前门必须通room01" % label)
-	var spawn_offset := Vector3(0.0, 0.05, -4.0 if rotation == 180 else 4.0)
-	_check(born.distance_to(start.global_position + spawn_offset) <= POSITION_EPSILON, "%s 玩家首帧出生必须在安全屋朝前门4m" % label)
+	# 2026-10-13 业主指定：出生点 = 入口安全屋**正中**（不再朝前门偏 4 m）。
+	var spawn_offset := Vector3(0.0, 0.05, 0.0)
+	_check(born.distance_to(start.global_position + spawn_offset) <= POSITION_EPSILON, "%s 玩家首帧出生必须在安全屋正中" % label)
 	_check(tower.player != null and start.contains_world_position(tower.player.global_position), "%s 物理稳定后玩家仍须在安全屋" % label)
 	_check(str(tower.get("_current_room_id")) == "start", "%s 开局房间归属必须是start" % label)
 	var art := start.get_node_or_null("SafeRoomArtRoot") as Node3D

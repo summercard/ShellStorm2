@@ -221,6 +221,10 @@ var stair_hole_sides: Array[String] = []
 # 房间自带正式地砖的区域（当前仅入口安全房 3×3 格）。只从通用可视地砖里挖掉，
 # 承重碰撞不受影响，仍由 _build_support() 用 _hole_rects() 铺满整个房间地面。
 var additional_visual_holes: Array[Rect2] = []
+## Self-supporting authored rooms (deep shafts) own their floor collisions.
+## Remove the underlying stage slab as well as its visual tiles in these footprints.
+var authored_support_holes: Array[Rect2] = []
+var offset_floor_patches: Array[Dictionary] = []
 ## —— 承重保底：授权房间足迹 ——
 ## 楼梯井洞口的平面矩形是**固定塔楼常量**（_stair_hole_world_rect），按「楼梯出口房的墙
 ## 落在 5m 核心边」的标准塔楼模式定的。授权布局的房间足迹由摆位源给，可能与固定洞口
@@ -976,6 +980,17 @@ func _build_floor() -> void:
 				light_transforms.append(transform)
 			else:
 				dark_transforms.append(transform)
+	for patch in offset_floor_patches:
+		var patch_rect := patch["rect"] as Rect2
+		var nx := roundi(patch_rect.size.x / GRID_UNIT)
+		var nz := roundi(patch_rect.size.y / GRID_UNIT)
+		for zi in range(nz):
+			for xi in range(nx):
+				var transform := Transform3D(Basis.IDENTITY, Vector3(patch_rect.position.x + (xi + 0.5) * GRID_UNIT, floor_visual_y + float(patch.height_m), patch_rect.position.y + (zi + 0.5) * GRID_UNIT))
+				if (xi + zi) % 2 == 0:
+					light_transforms.append(transform)
+				else:
+					dark_transforms.append(transform)
 	_floor_visual_light = _create_floor_multimesh(
 		"ImportedFloorTileGrid5M_A", mesh, light_transforms, null if uses_authored_palette else FLOOR_TILE_MATERIAL_A
 	)
@@ -1671,9 +1686,27 @@ func _build_support() -> void:
 		_support_root.add_child(collision)
 		_support_rect_count += 1
 
+	for patch in offset_floor_patches:
+		var patch_rect := patch["rect"] as Rect2
+		var shape := BoxShape3D.new()
+		shape.size = Vector3(patch_rect.size.x, FLOOR_THICKNESS, patch_rect.size.y)
+		var collision := CollisionShape3D.new()
+		collision.name = "OffsetSupport_%02d" % _support_rect_count
+		collision.shape = shape
+		collision.position = Vector3(patch_rect.get_center().x, float(patch.height_m) - FLOOR_THICKNESS * 0.5, patch_rect.get_center().y)
+		_support_root.add_child(collision)
+		_support_rect_count += 1
+
 
 func _hole_rects() -> Array[Rect2i]:
 	var holes: Array[Rect2i] = []
+	for rect in authored_support_holes:
+		# Cover the complete authored footprint, including half-grid port anchors.
+		# Rounding the origin leaves a strip of the old slab inside the shaft.
+		var floor_rect := _floor_world_rect()
+		var minimum := Vector2i(floori((rect.position.x - floor_rect.position.x) / GRID_UNIT), floori((rect.position.y - floor_rect.position.y) / GRID_UNIT))
+		var maximum := Vector2i(ceili((rect.end.x - floor_rect.position.x) / GRID_UNIT), ceili((rect.end.y - floor_rect.position.y) / GRID_UNIT))
+		holes.append(Rect2i(minimum, maximum - minimum))
 	# 100层与99层基地打通：只从100层(stage 0)移除基地上方6×6地砖，
 	# 99层自身的36块地面仍由基地房间保留。
 	# 远征单层关卡没有「下方 99F 基地」，挖洞只会让入口安全房悬空。

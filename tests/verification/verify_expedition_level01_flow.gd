@@ -370,10 +370,12 @@ func _verify_expedition_level(failures: Array[String]) -> void:
 		failures.append("远征关卡行动快照缺少 expedition_01 隔离标记")
 
 	if start_room != null:
-		# 出生点必须落在入口安全屋内部，且不是房间正中（避免开局顶着抵达门）。
+		# 2026-10-13 业主指定：入口安全屋出生点 = **房间正中**。
+		# 旧口径是「朝前门方向偏 4 m」，玩家一睁眼就贴着通往 01 号房的门洞。
 		var spawn_offset := tower._expedition_entry_spawn_offset(start_room)
-		if spawn_offset.length() < 1.0:
-			failures.append("远征关卡出生点偏移退化到房间正中：%s" % spawn_offset)
+		var spawn_horizontal := Vector2(spawn_offset.x, spawn_offset.z).length()
+		if spawn_horizontal > 0.05:
+			failures.append("远征关卡出生点未落在入口安全屋正中：%s" % spawn_offset)
 
 	_verify_hud_labels(tower, failures)
 	await _verify_background_music_disabled(tower, failures)

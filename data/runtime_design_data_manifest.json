@@ -4,17 +4,22 @@
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/99/floors/floor_00.json",
-      "sha256": "e64f1dd1f94310f8e8bddb854772327504c7a5b656cba6e70b640d7d75d79648"
+      "sha256": "196b1c0899d55833991b224cea0ea131a6b9eeca890f2d259b1e33d70d4628e1"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/level_plan.json",
       "runtime": "data/level_plans/99/level_plan.json",
-      "sha256": "128e87be4d70dbd6666fe963ba0c69e71b1295b58d30689a854b99753593b3a6"
+      "sha256": "da2fa7a1e553b45e6216302b87b40f743d7d7a6a249118551496b9122e3c45cc"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/room_templates/boss_45x45.json",
       "runtime": "data/level_plans/99/room_templates/boss_45x45.json",
       "sha256": "bbffac007ff6dc2a0e10195ed392853d6f2b132b2af3a8a91da224beab9451d7"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/99/v001/data/room_templates/boss_deep_shaft_80x100.json",
+      "runtime": "data/level_plans/99/room_templates/boss_deep_shaft_80x100.json",
+      "sha256": "a7172d2824f5c16c686894ddf559db689a0ddbd19583ea1f669af475f7dd93ce"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/room_templates/extraction_25x25.json",

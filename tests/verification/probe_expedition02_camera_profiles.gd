@@ -29,6 +29,8 @@ func _ready() -> void:
 	var foyer := rooms.get("room_01") as DungeonRoom3D
 	var corridor := rooms.get("room_02") as DungeonRoom3D
 	var tee := rooms.get("room_13") as DungeonRoom3D
+	var branch_west := rooms.get("room_14") as DungeonRoom3D
+	var branch_east := rooms.get("room_15") as DungeonRoom3D
 	_check(foyer != null and corridor != null and tee != null, "真实房间字典缺少 room_01/room_02/room_13")
 	if foyer == null or corridor == null or tee == null:
 		_finish()
@@ -37,11 +39,20 @@ func _ready() -> void:
 	_check(str(foyer.camera_profile.get("id", "")) == "foyer_high", "room_01 未接入 foyer_high")
 	_check(str(corridor.camera_profile.get("id", "")) == "corridor_north", "room_02 未接入 corridor_north")
 	_check(str(tee.camera_profile.get("id", "")) == "tee_west", "room_13 未接入 tee_west")
+	_check(branch_west != null and str(branch_west.camera_profile.get("id", "")) == "branch_west", "room_14 未接入 branch_west")
+	_check(branch_east != null and str(branch_east.camera_profile.get("id", "")) == "branch_east", "room_15 未接入 branch_east")
+	for room_id in ["room_03", "room_04", "room_05", "room_06", "room_07", "room_08", "room_09", "room_10", "room_11", "room_12", "room_16", "room_17", "room_18", "room_19", "room_20", "room_21", "room_22", "room_23", "room_24", "room_25"]:
+		var covered := rooms.get(room_id) as DungeonRoom3D
+		_check(covered != null and not covered.camera_profile.is_empty(), "%s 分叉后/支廊房 camera_profile 为空" % room_id)
 	_check(not (rooms.get("room_01") as DungeonRoom3D).camera_profile.is_empty(), "room_01 camera_profile 为空")
 
 	_prepare_render_room(foyer)
 	_prepare_render_room(corridor)
 	_prepare_render_room(tee)
+	if branch_west != null:
+		_prepare_render_room(branch_west)
+	if branch_east != null:
+		_prepare_render_room(branch_east)
 	_prepare_probe_camera_for_render(tower.player.camera)
 	await _sample_room(tower, foyer, "room_01_start")
 	var yaw_before := tower.player.global_rotation.y
@@ -104,20 +115,28 @@ func _ready() -> void:
 	var tee_sample := _sample(tower, "room_13_settled")
 	_check(absf(float(tee_sample.get("camera_yaw_deg", 999.0)) - 18.0) < 1.0, "room_13 未收敛到18°固定方向")
 
-	var snapshot := tower.get_tower_snapshot()
-	_check(bool(snapshot.get("camera_collision_enabled", false)), "相机碰撞开关未保持开启")
-	_check(str(snapshot.get("camera_collision_mode", "")).contains("lower_wall"), "墙体碰撞模式未保持")
-	_check(str(snapshot.get("camera_stair_slab_mode", "")).contains("vertical_clamp"), "顶盖/楼板夹镜模式未保持")
-	_write_reports()
 	if DisplayServer.get_name() != "headless":
-		# 运行时实测 18° 是 room_13 的正后方背面姿态；
-		# 角色姿态仅用于验收截图，镜头目标方向仍由 room_13 profile 固定为18°。
 		tower.player.set_physics_process(false)
 		tower.player.aim_yaw = deg_to_rad(18.0)
 		await _settle(12)
 		await _save_render(tower, "expedition02_camera_room13.png")
 		tower.player.set_physics_process(true)
-	else:
+
+	# 分叉后的真实房间切换：不是只查 Dictionary，而是进入两条支廊，确认运行时
+	# 当前房间确实持续消费新的 profile，而不是回退到默认相机。
+	if branch_west != null:
+		await _sample_room(tower, branch_west, "room_14_branch_west")
+		_check(str(tower.get_tower_snapshot().get("camera_profile_id", "")) == "branch_west", "room_13→room_14 后镜头 profile 丢失")
+	if branch_east != null:
+		await _sample_room(tower, branch_east, "room_15_branch_east")
+		_check(str(tower.get_tower_snapshot().get("camera_profile_id", "")) == "branch_east", "room_13→room_15 后镜头 profile 丢失")
+
+	var snapshot := tower.get_tower_snapshot()
+	_check(bool(snapshot.get("camera_collision_enabled", false)), "相机碰撞开关未保持开启")
+	_check(str(snapshot.get("camera_collision_mode", "")).contains("lower_wall"), "墙体碰撞模式未保持")
+	_check(str(snapshot.get("camera_stair_slab_mode", "")).contains("vertical_clamp"), "顶盖/楼板夹镜模式未保持")
+	_write_reports()
+	if DisplayServer.get_name() == "headless":
 		print("EXPEDITION02_CAMERA_RENDER_SKIPPED=headless")
 	print("EXPEDITION02_CAMERA_PROFILE_SAMPLES=%d" % samples.size())
 	_finish()

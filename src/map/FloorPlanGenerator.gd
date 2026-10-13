@@ -243,6 +243,8 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		"role": role,
 		"position": src.get("center", Vector2.ZERO) as Vector2,
 		"dimensions": src.get("size", Vector2.ZERO) as Vector2,
+		"floor_offset_m": float(src.get("floor_offset_m", 0.0)),
+		"anchor_policy": str(src.get("anchor_policy", "grid")),
 		"rotation_deg": float(src.get("rotation_deg", 0.0)),
 		"parent_key": str(src.get("parent_key", "")),
 		# 房间级刷怪计划（设计源覆盖）。空字典 = 该房走全局公式。
@@ -501,6 +503,15 @@ static func _data_driven_layout_id(
 			"rotation_deg": snappedf(float(room.get("rotation_deg", 0.0)), 0.001),
 			"ports": port_rows,
 		})
+		if not is_zero_approx(float(room.get("floor_offset_m", 0.0))):
+			rows.back()["floor_offset_m"] = snappedf(float(room["floor_offset_m"]), 0.001)
+		var elevated_ports: Array = []
+		for port_value in room.get("connection_ports", []):
+			var port := port_value as Dictionary
+			if not is_zero_approx(float(port.get("height_m", 0.0))):
+				elevated_ports.append([str(port.get("port_id", "")), snappedf(float(port["height_m"]), 0.001)])
+		if not elevated_ports.is_empty():
+			rows.back()["elevated_ports"] = elevated_ports
 	rows.sort_custom(func(a, b): return str(a["key"]) < str(b["key"]))
 	var canonical := {
 		"level_id": level_id,
