@@ -301,3 +301,7 @@ NVIDIA Corporation/
 !art_source/**/*.psd
 art_source/**/__pycache__/
 art_source/**/*.blend1
+
+# Boss room02 reproducible imports
+!assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/**/*.glb.import
+!assets/art/shared/textures/general/env_boss_room02_*.png.import

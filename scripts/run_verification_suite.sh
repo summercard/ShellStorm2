@@ -237,6 +237,7 @@ core_scenes=(
   verify_three_segment_tower_generation_flow
   verify_3d_melee_combat_flow
   verify_3d_melee_feedback_flow
+  verify_audio_library_flow
   verify_training_range_3d_flow
   verify_3d_fate_weapon_flow
   verify_fate_weapon_completion
