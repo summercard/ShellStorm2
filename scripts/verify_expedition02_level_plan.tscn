@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/verify_expedition02_level_plan.gd" id="1_verify"]
+
+[node name="VerifyExpedition02LevelPlan" type="Node"]
+script = ExtResource("1_verify")

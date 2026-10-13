@@ -31,6 +31,9 @@ const DATA_ROOT_OVERRIDES := {
 const VALID_ROOM_TYPES := ["SAFE_ROOM", "COMMON_ROOM", "BOSS_ROOM", "EXTRACTION_ROOM"]
 const VALID_MODES := ["authored", "constrained"]
 const VALID_RULES := ["normal", "boss"]
+## 端口落在房间边界上的判定容差（米）。设计源按 5m 网格书写，1cm 足够吸收浮点误差，
+## 又不会把"离边界 0.3m 的偏心门"误判成贴边门。
+const PORT_BOUNDARY_EPS := 0.01
 
 
 ## 该关卡的运行数据根目录。未登记覆盖时按 <level_id> 推导。
@@ -188,9 +191,25 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		var raw_authored_instances: Variant = raw.get("authored_layout_instances", [])
 		if raw_authored_instances is Array:
 			authored_instances = (raw_authored_instances as Array).duplicate(true)
+		var camera_profile: Dictionary = {}
+		var raw_camera_profile: Variant = raw.get("camera_profile", {})
+		if raw_camera_profile is Dictionary:
+			camera_profile = (raw_camera_profile as Dictionary).duplicate(true)
 		# 房间连接端口是房间美术局部空间里的稳定接口。位置与朝外法线随整房
 		# rotation_deg 一起旋转；target 只声明本端口接哪一个房间 key。
 		# 未连接候选端口保留 target=""，装配时必须由实墙封回，不能留下镂空。
+		#
+		# `side`（端口开在哪面墙上）**必须在本层派生**，不能指望设计源写、也不能读 outward：
+		#   · 白盒端口只写 `position_m` + `outward`，从不写 `side`；本层此前把它静默丢掉，
+		#     于是 `TowerDescent3D._declare_and_register_edge()` 取到空 side，两门坐标
+		#     退化成房间中心 ⇒ 相邻房之间凭空长出 5m×N 的通用走廊（地板 + 双侧墙 + 挡人碰撞）。
+		#     远征02 实测 23/25 条边中招，多出 286 段墙 / 143 块地板 / 46 个挡人碰撞体。
+		#   · `outward` **不可**作为依据：白盒门表的 outward 只编码「谁排 side_a」，
+		#     同一面竖墙上东西两侧的门都可能是 (+1,0)（实测 d_w1 与 d_e1 都是），
+		#     拿它判方向会得到与几何相反的 side。
+		# 唯一可靠依据是**端口压在房间哪条边界上**，与
+		# `FloorPlanGenerator._connection_port_is_on_room_boundary()` 的 side 定义同源。
+		var room_size := _vec2(raw.get("size_m", []))
 		var connection_ports: Array = []
 		var raw_connection_ports: Variant = raw.get("connection_ports", [])
 		if raw_connection_ports is Array:
@@ -198,11 +217,25 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 				if not (port_value is Dictionary):
 					continue
 				var port := port_value as Dictionary
+				var port_position := _vec2(port.get("position_m", []))
+				var port_side := _side_from_room_boundary(port_position, room_size)
 				connection_ports.append({
 					"port_id": str(port.get("port_id", "")),
 					"target": str(port.get("target", "")),
 					"position_m": (port.get("position_m", []) as Array).duplicate(),
 					"outward": (port.get("outward", []) as Array).duplicate(),
+					"side": port_side,
+					# lane_m 与 side 必须同源产出：南北墙的门沿墙坐标在 x 轴，东西墙在 y 轴。
+					"lane_m": (
+						port_position.x if port_side in ["north", "south"] else port_position.y
+					),
+					# 门宽是**建不建实体门扇**的唯一判据（≤3m = 标准门，5m = 通洞 / 坍塌）。
+					# 本层同样只透传不解释 —— 但**必须登记**，否则消费方读到 0，
+					# 会把 21 个门洞全部当成通洞、一扇门扇都不建（实测踩过）。
+					"door_width_m": float(port.get("door_width_m", 0.0)),
+					"door_axis": str(port.get("door_axis", "")),
+					"door_line_m": float(port.get("door_line_m", 0.0)),
+					"door_center_m": float(port.get("door_center_m", 0.0)),
 				})
 		var room := {
 			"key": str(raw.get("key", "")),
@@ -234,6 +267,7 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"authored_layout_room_id": str(raw.get("authored_layout_room_id", "")),
 			"authored_layout_peaceful": bool(raw.get("authored_layout_peaceful", false)),
 			"authored_layout_instances": authored_instances,
+			"camera_profile": camera_profile,
 			"connection_ports": connection_ports,
 		}
 		if str(room["key"]).is_empty():
@@ -363,6 +397,36 @@ static func _vec2(value: Variant) -> Vector2:
 		if arr.size() >= 2:
 			return Vector2(float(arr[0]), float(arr[1]))
 	return Vector2.ZERO
+
+
+## 端口所在墙面的方向 —— 由端口在**房间局部坐标**中压在哪条边界上判定。
+##
+## 与 `FloorPlanGenerator._connection_port_is_on_room_boundary()` 的 `side` 定义同源：
+##   north → position.y ≈ −half.y     south → position.y ≈ +half.y
+##   west  → position.x ≈ −half.x     east  → position.x ≈ +half.x
+##
+## 为什么先比「离哪条边界更近」而不是直接取绝对值最大的那个分量：
+## 长条房（如 10×75 的旅馆长廊）的侧墙门会离房间中心很远
+## （local x=−5、y=−30 ⇒ |y| = 30 ≫ |x| = 5），按分量最大会判成南北门，
+## 而它其实开在西墙上。实测 56/56 个远征02 端口两种判法一致、配对 0 冲突。
+static func _side_from_room_boundary(position: Vector2, room_size: Vector2) -> String:
+	if room_size.x <= 0.0 or room_size.y <= 0.0:
+		return ""
+	var half := room_size * 0.5
+	var gap_x := absf(absf(position.x) - half.x)
+	var gap_y := absf(absf(position.y) - half.y)
+	# 平局（角上端口）时优先 x 轴，与 `_connection_port_is_on_room_boundary` 的书写序一致。
+	if gap_x <= PORT_BOUNDARY_EPS and gap_x <= gap_y:
+		return "east" if position.x > 0.0 else "west"
+	if gap_y <= PORT_BOUNDARY_EPS:
+		return "south" if position.y > 0.0 else "north"
+	# 既不贴边也没有房间尺寸 ⇒ 派生不出 side。调用方会退回旧的「按房间中心猜向」，
+	# 那种猜法对长廊侧房是错的，所以这里明确告警，不让它再静默发生。
+	push_warning(
+		"[LevelPlanLoader] 端口位置 %s 不在房间尺寸 %s 的任何边界上，side 无法派生"
+		% [str(position), str(room_size)]
+	)
+	return ""
 
 
 static func _string_array(value: Variant) -> Array[String]:

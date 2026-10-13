@@ -1,0 +1,47 @@
+{
+  "slug": "hanging_power_bundle",
+  "name_zh": "悬垂交错动力电缆",
+  "component_id": "ENV-EXPEDITION-BOSS-B-HANGING-POWER-BUNDLE",
+  "component_family": "hanging_cable",
+  "category": "support",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "variant_axis": null,
+  "version": "v027",
+  "collection": "输出资产包_hanging_power_bundle",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\hanging_power_bundle\\hanging_power_bundle.blend",
+  "objects": [
+    "悬垂交错动力电缆_主体"
+  ],
+  "bounds_min": [
+    -4.832467079162598,
+    -1.4849854707717896,
+    0.0
+  ],
+  "bounds_max": [
+    4.832467079162598,
+    1.4849854707717896,
+    34.9111328125
+  ],
+  "bounds_size_m": [
+    9.664934158325195,
+    2.969970941543579,
+    34.9111328125
+  ],
+  "instance_count": 4,
+  "triangle_count": 10800,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "runtime_connected": false
+}

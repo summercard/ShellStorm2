@@ -1,0 +1,49 @@
+{
+  "slug": "door_support_pier",
+  "component_id": "ENV-EXPEDITION-BOSS-B-DOOR-SUPPORT-PIER",
+  "name_zh": "门侧方形承力巨柱",
+  "component_family": "door_support",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "variant_axis": null,
+  "version": "v027",
+  "collection": "输出资产包_door_support_pier",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\door_support_pier\\door_support_pier.blend",
+  "objects": [
+    "门侧方形承力巨柱_自发光",
+    "门侧方形承力巨柱_主体"
+  ],
+  "bounds_min": [
+    -1.899999976158142,
+    -2.8495001792907715,
+    0.0
+  ],
+  "bounds_max": [
+    1.899999976158142,
+    2.8495001792907715,
+    68.13999938964844
+  ],
+  "bounds_size_m": [
+    3.799999952316284,
+    5.699000358581543,
+    68.13999938964844
+  ],
+  "instance_count": 4,
+  "triangle_count": 2088,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "runtime_connected": false
+}

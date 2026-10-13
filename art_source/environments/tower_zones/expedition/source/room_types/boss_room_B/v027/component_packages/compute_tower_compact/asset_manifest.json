@@ -1,0 +1,68 @@
+{
+  "slug": "compute_tower_compact",
+  "component_id": "ENV-EXPEDITION-BOSS-B-COMPUTE-TOWER-COMPACT",
+  "name_zh": "短层计算机塔",
+  "component_family": "compute_tower",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "compute_tower_compact",
+  "variant_reason": "Reference silhouette / content or cable routing variation",
+  "version": "v027",
+  "collection": "输出资产包_compute_tower_compact",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\compute_tower_compact\\compute_tower_compact.blend",
+  "objects": [
+    "短层计算机塔_自发光",
+    "短层计算机塔_主体"
+  ],
+  "bounds_size_m": [
+    4.199999809265137,
+    5.0,
+    51.63999938964844
+  ],
+  "bounds_min": [
+    -2.0999999046325684,
+    -2.5,
+    0.0
+  ],
+  "bounds_max": [
+    2.0999999046325684,
+    2.5,
+    51.63999938964844
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 6,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": false,
+  "palette_uv_layer": "PaletteUV",
+  "animation": null,
+  "geometry_fingerprint": "f1a0c7898effe9c92b03b03e95662265cf25302f3d3fd539abc487f690a82101",
+  "triangle_count": 2088
+}

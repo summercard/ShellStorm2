@@ -11,3 +11,14 @@ metadata/collision_policy = "visual_only_no_collision"
 metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+; ⚠️ 本覆盖**只在编辑器与项目内运行有效**：灯罩是「导入 GLB 场景的内部节点」，
+;    对这类节点写的属性覆盖在**导出转换时会被静默丢弃**（2026-10-12 实测：
+;    源读 0、导出后 .scn 读 1，删 .godot/exported 缓存重转亦然）。
+;    **发行包的不投影由 src/world3d/BaseFixtureGlow3D.gd 的 _disable_fixture_shadow() 兜底**，
+;    门禁 scripts/check_fixture_shadow_casting.py 盯着这层兜底。改这里不影响打包结果。
+; 灯具外壳不投影。理由：99F 中央玩法主灯挂在 11.62m（DungeonRoom3D 按层高推算），
+; 而本吊灯挂在 ~2.5m —— 灯在灯罩正上方，灯罩轮廓会被放大投到地板形成悬空暗斑。
+; 主灯自身投影是玩法信息（见 WastelandLight3D.apply_performance_quality），不可关闭。
+[node name="ENV_BASE99_REMAINING_EAST_ROUND_PENDANT_LIGHT_V021" parent="ImportedModel" index="0"]
+cast_shadow = 0

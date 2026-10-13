@@ -1,0 +1,6 @@
+{
+  "schema": "shellstorm2.expedition.task_level_validation",
+  "level_id": "expedition_02",
+  "status": "PENDING",
+  "note": "由 check_expedition_room_asset_status.py 与本生成器共同维护；运行时门禁以 Godot 侧校验器为准。"
+}

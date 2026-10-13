@@ -1,0 +1,47 @@
+{
+  "slug": "stair_pillar_light",
+  "name_zh": "独立栏杆竖向灯",
+  "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-PILLAR-LIGHT",
+  "component_family": "pillar_light",
+  "category": "facilities",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "version": "v027",
+  "collection": "输出资产包_stair_pillar_light",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\stair_pillar_light\\stair_pillar_light.blend",
+  "objects": [
+    "独立栏杆竖向灯_主体",
+    "独立栏杆竖向灯_自发光"
+  ],
+  "bounds_min": [
+    -0.07500000298023224,
+    -0.05000000074505806,
+    0.0
+  ],
+  "bounds_max": [
+    0.07500000298023224,
+    0.05000000074505806,
+    0.8600000143051147
+  ],
+  "bounds_size_m": [
+    0.15000000596046448,
+    0.10000000149011612,
+    0.8600000143051147
+  ],
+  "instance_count": 80,
+  "triangle_count": 88,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "04_柔和自发光_UI灯光"
+  ],
+  "runtime_connected": false
+}

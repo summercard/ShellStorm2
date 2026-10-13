@@ -1,0 +1,46 @@
+{
+  "slug": "stair_landing_5m",
+  "name_zh": "入口钢格栅平台",
+  "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-LANDING-5M",
+  "component_family": "landing",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "variant_axis": null,
+  "version": "v027",
+  "collection": "输出资产包_stair_landing_5m",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\stair_landing_5m\\stair_landing_5m.blend",
+  "objects": [
+    "入口钢格栅平台_主体"
+  ],
+  "bounds_min": [
+    -2.569999933242798,
+    -2.5,
+    0.0
+  ],
+  "bounds_max": [
+    2.569999933242798,
+    2.5,
+    1.409999966621399
+  ],
+  "bounds_size_m": [
+    5.139999866485596,
+    5.0,
+    1.409999966621399
+  ],
+  "instance_count": 2,
+  "triangle_count": 856,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架"
+  ],
+  "runtime_connected": false
+}

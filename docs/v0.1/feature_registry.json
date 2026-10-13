@@ -857,10 +857,13 @@
       "feature_id": "AUDIO-MUSIC",
       "owner": "AudioManager / MusicManager",
       "design_docs": [
+        "docs/v0.1/design/音乐播放清单.md",
+        "docs/v0.1/design/音效系统与资产设计.md",
         "docs/v0.1/10_资产与内容规范.md",
         "docs/v0.1/14.8_音乐系统与配乐资产.md"
       ],
       "development_records": [
+        "docs/v0.1/development/CHANGELOG.md",
         "docs/v0.1/development/history/14.8_音乐系统与配乐资产_历史记录.md",
         "docs/v0.1/development/2026-09-23_p2_media_and_traceability_repair.md"
       ],

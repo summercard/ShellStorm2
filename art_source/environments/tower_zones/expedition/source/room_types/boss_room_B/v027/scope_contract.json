@@ -1,0 +1,15 @@
+{
+  "version": "v027",
+  "authorized": [
+    "low-poly lower extension below floor for 54 facility instances",
+    "21 wall matrix foundations",
+    "32 side matrix instances face inward"
+  ],
+  "locked": [
+    "existing upper detailed geometry world positions",
+    "screen transforms",
+    "platform bridges stairs and lights"
+  ],
+  "runtime_changed": false,
+  "scope_signature_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\boss_depth_v027\\scope_lock.json"
+}

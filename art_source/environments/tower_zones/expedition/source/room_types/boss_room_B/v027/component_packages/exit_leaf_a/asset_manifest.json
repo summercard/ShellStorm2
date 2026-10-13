@@ -1,0 +1,68 @@
+{
+  "slug": "exit_leaf_a",
+  "component_id": "ENV-EXPEDITION-BOSS-B-EXIT-LEAF-A",
+  "name_zh": "装甲门扇A",
+  "component_family": "door_leaf",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "exit_leaf_a",
+  "variant_reason": "Reference silhouette / content or cable routing variation",
+  "version": "v027",
+  "collection": "输出资产包_exit_leaf_a",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\exit_leaf_a\\exit_leaf_a.blend",
+  "objects": [
+    "装甲门扇A_主体",
+    "装甲门扇A_自发光"
+  ],
+  "bounds_size_m": [
+    2.4800000190734863,
+    0.7170000374317169,
+    5.71999979019165
+  ],
+  "bounds_min": [
+    -1.2400000095367432,
+    -0.35850003361701965,
+    0.0
+  ],
+  "bounds_max": [
+    1.2400000095367432,
+    0.35850000381469727,
+    5.71999979019165
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 5,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": false,
+  "palette_uv_layer": "PaletteUV",
+  "animation": null,
+  "geometry_fingerprint": "8e92e7333a3e3fec226f94dc0d6d51e44bb552df7b03136a2e455912837e9a10",
+  "triangle_count": 1040
+}

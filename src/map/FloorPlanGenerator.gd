@@ -281,6 +281,9 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		"authored_layout_instances": (
 			src.get("authored_layout_instances", []) as Array
 		).duplicate(true),
+		"camera_profile": (
+			src.get("camera_profile", {}) as Dictionary
+		).duplicate(true),
 		# 房间局部连接端口。几何由端口节点拥有，关卡只引用稳定 port_id；
 		# 运行时不再从房间包围盒中心猜门洞。
 		"connection_ports": (
@@ -890,6 +893,9 @@ static func _constrained_slot(
 		"spawn_boxes_only": bool(raw.get("spawn_boxes_only", false)),
 		"connection_ports": (
 			raw.get("connection_ports", []) as Array
+		).duplicate(true),
+		"camera_profile": (
+			raw.get("camera_profile", {}) as Dictionary
 		).duplicate(true),
 	}
 

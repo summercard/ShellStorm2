@@ -1,0 +1,46 @@
+{
+  "slug": "door_seal_frame",
+  "name_zh": "门框密封边组件",
+  "component_id": "ENV-EXPEDITION-BOSS-B-DOOR-SEAL-FRAME",
+  "component_family": "door_seal",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "version": "v027",
+  "collection": "输出资产包_door_seal_frame",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\door_seal_frame\\door_seal_frame.blend",
+  "objects": [
+    "门框密封边组件_主体"
+  ],
+  "bounds_min": [
+    -2.549999952316284,
+    -0.25,
+    0.0
+  ],
+  "bounds_max": [
+    2.549999952316284,
+    0.25,
+    6.0
+  ],
+  "bounds_size_m": [
+    5.099999904632568,
+    0.5,
+    6.0
+  ],
+  "instance_count": 3,
+  "triangle_count": 48,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "runtime_connected": false
+}

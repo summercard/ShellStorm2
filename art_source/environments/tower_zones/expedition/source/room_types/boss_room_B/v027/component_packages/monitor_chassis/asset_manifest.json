@@ -1,0 +1,68 @@
+{
+  "slug": "monitor_chassis",
+  "component_id": "ENV-EXPEDITION-BOSS-B-MONITOR-CHASSIS",
+  "name_zh": "大型悬挂显示器机壳",
+  "component_family": "monitor",
+  "category": "facilities",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "monitor_chassis",
+  "variant_reason": "Reference silhouette / content or cable routing variation",
+  "version": "v027",
+  "collection": "输出资产包_monitor_chassis",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\monitor_chassis\\monitor_chassis.blend",
+  "objects": [
+    "大型悬挂显示器机壳_主体",
+    "大型悬挂显示器机壳_自发光"
+  ],
+  "bounds_size_m": [
+    11.0,
+    1.6800000667572021,
+    7.0
+  ],
+  "bounds_min": [
+    -5.5,
+    -0.8400000333786011,
+    0.0
+  ],
+  "bounds_max": [
+    5.5,
+    0.8400000333786011,
+    7.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 3,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": false,
+  "palette_uv_layer": "PaletteUV",
+  "animation": null,
+  "geometry_fingerprint": "7783b8bdf79af98f205ffadb2cc0eaef123673059400771ae309e9fe410fd22a",
+  "triangle_count": 7900
+}

@@ -1,0 +1,68 @@
+{
+  "slug": "compute_tower_stepped",
+  "component_id": "ENV-EXPEDITION-BOSS-B-COMPUTE-TOWER-STEPPED",
+  "name_zh": "阶梯计算机塔",
+  "component_family": "compute_tower",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "compute_tower_stepped",
+  "variant_reason": "Reference silhouette / content or cable routing variation",
+  "version": "v027",
+  "collection": "输出资产包_compute_tower_stepped",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\compute_tower_stepped\\compute_tower_stepped.blend",
+  "objects": [
+    "阶梯计算机塔_自发光",
+    "阶梯计算机塔_主体"
+  ],
+  "bounds_size_m": [
+    5.599999904632568,
+    5.932000160217285,
+    55.63999938964844
+  ],
+  "bounds_min": [
+    -2.799999952316284,
+    -2.9660000801086426,
+    0.0
+  ],
+  "bounds_max": [
+    2.799999952316284,
+    2.9660000801086426,
+    55.63999938964844
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 10,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": false,
+  "palette_uv_layer": "PaletteUV",
+  "animation": null,
+  "geometry_fingerprint": "66873daeaeb2f73d8354e78b27431aafad4b22d8676643638948165a8364a55c",
+  "triangle_count": 2088
+}

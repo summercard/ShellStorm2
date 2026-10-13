@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-COMMON-CEILING-DECK-5M
+; 远征关卡02 通用组件库 v015 · 09_顶面组件 · ceiling_deck_5m
+; 范式 B（自包含可替换组件）：视觉 GLB + 碰撞同包，逐实例化。
+; 原点契约 = 底面中心（Blender 底面 Z=0 → Godot 底面 Y=0），与全库一致。
+; Godot 朝向 = -Z（墙长沿 X、墙厚沿 Z），与战局通用组件同口径。
+; 封顶模块：5.00×5.00×0.26m。按 06 §7.3.1 封顶件硬契约，碰撞盒 layer=1 —— 挡住朝太阳的采样射线，房间才判为「不受日照」。
+;
+; 共享色盘：res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+; 导入后处理：res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd
+; GLB 内嵌图片数 = 0（导出时 export_image_format=NONE）
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/common_components/ceiling_deck_5m/ceiling_deck_5m_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ceiling_deck_5m"]
+size = Vector3(5, 0.26, 5)
+
+[node name="ExpeditionCommonCeilingDeck5m" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-COMMON-CEILING-DECK-5M"
+metadata/asset_version = "v015"
+metadata/library_id = "ENV-EXPEDITION-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/expedition"
+metadata/level_id = "expedition_02"
+metadata/category = "09_顶面组件"
+metadata/component = "ceiling_deck_5m"
+metadata/logic_id = "ceiling_deck"
+metadata/display_name_zh = "封顶模块 5.00×5.00×0.26m（层间楼板 / 房间天花板）"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v015/expedition_common_components_source_v015.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/expedition/source/common_components/v015/component_packages_v015/ceiling_deck_5m/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5, 0.26, 5)
+metadata/visual_bounds_size_m = Vector3(5, 0.26, 5)
+metadata/slot_size_m = Vector3(5, 0.26, 5)
+metadata/preserve_authored_palette = true
+metadata/shared_palette = "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+metadata/palette_post_import = "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/grid_unit_m = 5
+metadata/slot_role = "top_cover"
+metadata/top_cover_occluder = true
+metadata/assembly_bottom_y_m = 4.0
+metadata/assembly_plenum_m = 1.0
+metadata/headroom_above_walk_plane_m = 3.7
+metadata/assembly_note = "装配高度契约（2026-10-12 业主裁定）：顶盖底面放在世界 Y = 4.0，不贴墙顶(3.0)，让出 1.0m 管线空腔。走面(0.30)到顶盖底净高 = 3.70m；3.70 > 楣底 2.80 ⇒ 门能过；> 刷怪净空假设 2.60 ⇒ 安全。"
+metadata/assembly_height_owner = "房间 tscn 装配时施加；本组件自身原点仍是底面中心（放在目标 Y 上即可）。"
+metadata/sun_occlusion_contract = "06 §7.3.1：顶盖必须带 layer=1 碰撞。CollisionBody.collision_layer=1 是本件成立「封顶=不受日照」的硬条件，不得改成 0。"
+metadata/top_cover_note = "水平顶盖不是墙：不写 wall_kind、不进墙/门槽 lane 台账。口径对齐 generate_expedition_room_type_prefabs.TOP_COVER_OCCLUDER_SLUGS（那份表只扫 room_type_components，本件在 common_components，故在本脚本里另有对等断言）。"
+metadata/sun_occlusion_verified_by = "src/enemy3d/EnemyIllumination3D._evaluate_sunlight（向太阳打射线，被本碰撞盒挡住即判为非日照）"
+metadata/snap_to_ground_offset_m = 0
+metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+metadata/camera_ceiling_occluder = true
+metadata/camera_ceiling_occluder_role = "room_ceiling"
+metadata/camera_ceiling_occluder_note = "TowerDescent3D._find_stair_slab_camera_clearance_height 向上打射线，命中本碰撞体即把镜头竖直压到顶盖下方（clearance 0.28m、下限 1.25m）。缺这个标记，默认相机会停在顶盖之上，画面被顶盖挡住。"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 0.13, 0)
+shape = SubResource("BoxShape3D_ceiling_deck_5m")

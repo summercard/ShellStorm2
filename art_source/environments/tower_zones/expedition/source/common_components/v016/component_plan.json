@@ -1,0 +1,779 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "status": "frozen_before_geometry",
+  "version": "boss_room_B_hq_v004",
+  "block_id": "expedition",
+  "level_id": "expedition_01",
+  "room_type": "BOSS_ROOM",
+  "variant": "B",
+  "design_scope": "scene_art",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+  "registration_status": "有源方案制作中；未登记；不替代正式资产",
+  "component_budget": {
+    "limit": 50,
+    "planned": 24,
+    "remaining": 26
+  },
+  "components": [
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-DECK-TILE-5M",
+      "slug": "deck_tile_5m",
+      "name_zh": "装甲走行地砖",
+      "component_family": "deck",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-STAIR-TREAD-5M",
+      "slug": "stair_tread_5m",
+      "name_zh": "五米踏步",
+      "component_family": "stair_tread",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-STAIR-STRINGER-5M",
+      "slug": "stair_stringer_5m",
+      "name_zh": "阶梯承力侧梁",
+      "component_family": "stair_stringer",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-STAIR-RAIL-5M",
+      "slug": "stair_rail_5m",
+      "name_zh": "斜坡护栏灯",
+      "component_family": "stair_rail",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-RAIL-5M",
+      "slug": "rail_5m",
+      "name_zh": "平台护栏灯",
+      "component_family": "rail",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-WALL-PANEL-5M",
+      "slug": "wall_panel_5m",
+      "name_zh": "深井装甲墙",
+      "component_family": "wall",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-WALL-PORTAL-5M",
+      "slug": "wall_portal_5m",
+      "name_zh": "通行门洞墙",
+      "component_family": "wall",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-CEILING-TILE-5M",
+      "slug": "ceiling_tile_5m",
+      "name_zh": "密封顶板",
+      "component_family": "ceiling",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-PIT-BED-5M",
+      "slug": "pit_bed_5m",
+      "name_zh": "井底机械底床",
+      "component_family": "pit_bed",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-GIRDER-5M",
+      "slug": "girder_5m",
+      "name_zh": "桁架承力梁",
+      "component_family": "girder",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-THRESHOLD-5M",
+      "slug": "threshold_5m",
+      "name_zh": "齐平门槛",
+      "component_family": "threshold",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-COMPUTE-COLUMN-5M",
+      "slug": "compute_column_5m",
+      "name_zh": "超级计算矩阵列",
+      "component_family": "compute_column",
+      "category": "facility",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-MONITOR-18M",
+      "slug": "monitor_18m",
+      "name_zh": "主控矩阵巨屏",
+      "component_family": "monitor",
+      "category": "facility",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-MONITOR-12M",
+      "slug": "monitor_12m",
+      "name_zh": "侧翼监测巨屏",
+      "component_family": "monitor",
+      "category": "facility",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-TERMINAL-2M",
+      "slug": "terminal_2m",
+      "name_zh": "平台控制台",
+      "component_family": "terminal",
+      "category": "facility",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-COOLANT-TOWER-4M",
+      "slug": "coolant_tower_4m",
+      "name_zh": "深井冷却塔",
+      "component_family": "coolant_tower",
+      "category": "facility",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-CAPACITOR-BANK-5M",
+      "slug": "capacitor_bank_5m",
+      "name_zh": "低层电容阵列",
+      "component_family": "capacitor_bank",
+      "category": "facility",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-DOOR-FRAME-5M",
+      "slug": "door_frame_5m",
+      "name_zh": "工业门框",
+      "component_family": "door_frame",
+      "category": "facility",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-SEALED-BULKHEAD-5M",
+      "slug": "sealed_bulkhead_5m",
+      "name_zh": "侧廊封闭舱壁",
+      "component_family": "bulkhead",
+      "category": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-CABLE-BUNDLE-35M",
+      "slug": "cable_bundle_35m",
+      "name_zh": "粗缆垂悬束及卡箍",
+      "component_family": "cable_bundle",
+      "category": "support",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-PIPE-RISER-12M",
+      "slug": "pipe_riser_12m",
+      "name_zh": "冷却立管与支架",
+      "component_family": "pipe_riser",
+      "category": "support",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-HANGING-TRUSS-5M",
+      "slug": "hanging_truss_5m",
+      "name_zh": "顶端电缆桥架",
+      "component_family": "hanging_truss",
+      "category": "support",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-REACTOR-SPINE-12M",
+      "slug": "reactor_spine_12m",
+      "name_zh": "深井红光反应柱",
+      "component_family": "reactor_spine",
+      "category": "support",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSB-PLATFORM-EMBLEM-6M",
+      "slug": "platform_emblem_6m",
+      "name_zh": "中心计算节点徽记",
+      "component_family": "platform_emblem",
+      "category": "decoration",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "collision_owner": "not_created_source_only"
+    }
+  ],
+  "whitebox_source": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\whitebox\\tower_zones\\expedition_01\\boss_deep_chamber\\layout_contract.json",
+  "whitebox_sha256": "7cd79f00b538739213386df2b9f6ba3f92bc7f982f7fdbb361da3db2afc7cf84",
+  "reference_image": "C:\\Users\\zhuangmenghong\\.workbuddy\\clipboard-images\\clipboard-2026-10-12T16-52-25-607Z-2cbd3230.jpg",
+  "reference_sha256": "17dcc7c42360b7927a675f0ec26794bdd8d509478894549c8916b74a3e238967",
+  "geometry_contract": {
+    "entry": [
+      0.0,
+      0.0,
+      -50.0
+    ],
+    "platform_bounds": {
+      "x": [
+        -12.5,
+        12.5
+      ],
+      "z": [
+        0.0,
+        25.0
+      ],
+      "walk_y": -12.0
+    },
+    "stairs": {
+      "horizontal_run_m": 50.0,
+      "width_m": 5.0,
+      "vertical_drop_m": 12.0,
+      "slope_length_m": 51.419841,
+      "slope_deg": 13.495733,
+      "visual_steps": 100,
+      "step_run_m": 0.5,
+      "step_drop_m": 0.12
+    },
+    "left_corridor": {
+      "x": [
+        -27.5,
+        -12.5
+      ],
+      "z": [
+        10.0,
+        15.0
+      ],
+      "length_m": 15.0,
+      "width_m": 5.0,
+      "end": "sealed"
+    },
+    "right_corridor": {
+      "x": [
+        12.5,
+        27.5
+      ],
+      "z": [
+        10.0,
+        15.0
+      ],
+      "length_m": 15.0,
+      "width_m": 5.0,
+      "end": "exit"
+    },
+    "rear_isolation_gap": {
+      "z": [
+        25.0,
+        30.0
+      ],
+      "reachable": false
+    },
+    "outer_shell": {
+      "x": [
+        -27.5,
+        27.5
+      ],
+      "z": [
+        -50.0,
+        30.0
+      ],
+      "bottom_y": -36.0,
+      "top_y": 23.5,
+      "wall_layers": 5,
+      "wall_height_m": 11.9,
+      "top_deck_instances": 176
+    },
+    "activity_projected_area_m2": 1025.0
+  },
+  "coordinate_contract": {
+    "blender_plane": "XY",
+    "blender_up": "+Z",
+    "forward": "+Y",
+    "godot_mapping": "(bx,by,bz)->(bx,bz,by)",
+    "note": "保留正确白盒的前进轴；本轮不转换或接入Godot"
+  },
+  "scope": {
+    "new_geometry_only": true,
+    "existing_assets_locked": true,
+    "runtime_connected": false,
+    "roof_real_geometry": true,
+    "legacy_failed_art_reused": false
+  },
+  "repairs": [
+    "入口门槛顶面z=0直接连接首阶，不悬空",
+    "出口走廊到x=27.5，门槛顶面z=-12直接连接门洞",
+    "后侧5m空隙及其他不可走区域无z=-12景观平板，底床z=-36",
+    "外壳按正确工程55x80m，不采用错误目录70x100m悬空门位"
+  ],
+  "style": {
+    "reference": "红黑机房，方正核心，三面巨屏，粗缆前景",
+    "shape": "饱满倒角、清晰轮廓、三级机械细节",
+    "palette": "唯一外链设施公共色盘，四标准角色，每面有面积PaletteUV"
+  },
+  "excluded": [
+    "Godot导出、碰撞、玩法修改",
+    "正式资产替代",
+    "账本转正"
+  ]
+}

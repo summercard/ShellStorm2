@@ -1,0 +1,66 @@
+{
+  "slug": "abutment_bracket",
+  "component_id": "ENV-EXPEDITION-BOSS-B-ABUTMENT-BRACKET",
+  "name_zh": "桥接头斜撑牛腿",
+  "component_family": "bracket",
+  "category": "architecture",
+  "estimated_instances": 4,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "version": "v027",
+  "collection": "输出资产包_abutment_bracket",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\abutment_bracket\\abutment_bracket.blend",
+  "objects": [
+    "桥接头斜撑牛腿_主体"
+  ],
+  "bounds_size_m": [
+    1.6649999618530273,
+    1.4500000476837158,
+    3.0900001525878906
+  ],
+  "bounds_min": [
+    -0.8324999809265137,
+    -0.7250000238418579,
+    0.0
+  ],
+  "bounds_max": [
+    0.8324999809265137,
+    0.7250000238418579,
+    3.0900001525878906
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 4,
+  "materials": [
+    "01_精工金属_紫色骨架"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": false,
+  "palette_uv_layer": "PaletteUV",
+  "animation": null,
+  "geometry_fingerprint": "1a159323b40d82a95e5082c94484e9d03615100a9e01b288513213f9083aede2",
+  "triangle_count": 756
+}

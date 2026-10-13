@@ -204,6 +204,7 @@ const SAFE_ROOM_FLOOR_GRID_M := 5.0
 const SAFE_ROOM_EXIT_SIGN_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/tower_zones/battle/runtime/exit_neon_sign/exit_neon_sign_root_top3d.tscn"
 )
+const EXPEDITION_02_WALK_SURFACE_Y_M := 0.30
 const SAFE_ROOM_EXIT_SIGN_ASSET_ID := "ENV-BATTLE-EXIT-NEON-SIGN"
 # 节点名兼**幂等键**：动态壳体（`_build_safe_room_shell`）与远征静态布局
 # （`_build_shell` 的静态分支）两条路径都会生成 EXIT 标牌，靠这个名字去重。
@@ -427,6 +428,10 @@ var _stream_state := -1
 var _stream_transition_count := 0
 var _last_stream_transition_msec := 0
 var _door_nodes: Dictionary = {}
+## 端口粒度的门扇：`port_id -> RoomDoor3D`。
+## `_door_nodes[direction]` 一面墙只能存一扇（兼容所有按方向取门的旧逻辑），
+## 一墙多门时全量存在这里；单门房两者内容等价。
+var _door_nodes_by_port: Dictionary = {}
 var _central_light: WastelandLight3D
 var _room_lights: Array[WastelandLight3D] = []
 var _light_switch: RoomLightSwitch3D
@@ -499,6 +504,8 @@ var static_layout_scene_path := ""
 ## 房间局部连接端口：每项含稳定 port_id、目标房间、局部位置、朝外法线和最终 side/lane。
 ## 未连接端口 target_room_id=""，其墙槽必须保持实墙。
 var connection_ports: Array = []
+## 仅由 expedition_02 的关卡数据提供；空字典表示沿用默认镜头。
+var camera_profile: Dictionary = {}
 ## side -> bool。显式端口关卡中一条边只有父端为 true；子端绑定同一扇共享门。
 ## 空字典表示旧关卡，仍保持每房自持门的兼容行为。
 var door_endpoint_owners: Dictionary = {}
@@ -537,6 +544,7 @@ func configure(config: Dictionary) -> void:
 	authored_room_light_on = bool(config.get("authored_room_light_on", authored_room_light_on))
 	static_layout_scene_path = str(config.get("static_layout_scene_path", static_layout_scene_path))
 	connection_ports = (config.get("connection_ports", connection_ports) as Array).duplicate(true)
+	camera_profile = (config.get("camera_profile", camera_profile) as Dictionary).duplicate(true)
 	door_endpoint_owners = (
 		config.get("door_endpoint_owners", door_endpoint_owners) as Dictionary
 	).duplicate(true)
@@ -1815,9 +1823,133 @@ func _expedition_static_layout_path() -> String:
 
 func _build_runtime_doors_only() -> void:
 	var dimensions := get_dimensions()
-	for direction in doors:
-		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+	# 端口是设计源的**权威门位声明**（位置、所在墙、门宽都在里面），一墙多门也表达得了。
+	# 判据是「端口**带门位声明**」而不是「有 connection_ports」—— 理由见
+	# `_has_authoritative_door_ports()`：塔楼房间没有该字段，constrained 关卡的端口
+	# 只有拓扑信息，两者都得走下面的方向粒度路径，行为逐字不变。
+	# 为什么必须分叉：`RoomDoor3D` 一个方向只能有一个节点（`_door_nodes[direction]`），
+	# 按方向建门会让同一面墙的 N 扇门只建出 1 扇、其余门洞永远是洞
+	# （远征02 实测：21 个门洞只建出 11 扇门扇，另有 3 扇门扇悬在没有洞的地方）。
+	if _has_authoritative_door_ports():
+		var sides_with_ports: Dictionary = {}
+		for port_value in connection_ports:
+			var port := port_value as Dictionary
+			if _build_door_for_port(port, dimensions):
+				sides_with_ports[str(port.get("side", ""))] = true
+		# 没有端口的门位仍按方向补建。
+		#
+		# 为什么需要：设计源可以只声明"这个方向有一扇门"而不给端口 —— 远征入口安全房的
+		# 「封闭气闸门」正是这种（`target` 为空、不挂地图边、不参与拓扑、也不伪造可走路线，
+		# 只负责补齐安全房造型与"退出战局"交互位）。端口里查不到它，
+		# 不补建就会把它连同安全房门位造型一起静默丢掉。
+		# 反过来，**有端口的方向一律以端口为准**：那些端口若是 5m 通洞，
+		# 就说明该方向本来就没有门扇，补建才是错的（旧行为曾在通洞里插门）。
+		for direction in doors:
+			if sides_with_ports.has(direction):
+				continue
+			if not str(door_targets.get(direction, "")).is_empty():
+				continue
+			_build_door(direction, "", dimensions)
+	else:
+		for direction in doors:
+			_build_door(direction, str(door_targets.get(direction, "")), dimensions)
 	_apply_authored_runtime_door_contract(dimensions)
+
+
+## 端口的**门位声明**是否权威 —— 只有设计源明确写了门宽或门轴，端口才能当门位用。
+##
+## 为什么必须区分：`mode = constrained` 的关卡（远征01）几何由生成器按种子现算，
+## 它的端口只带 `position_m` + `outward`（拓扑用），**门位由生成器算**。
+## 拿这种端口当门位会把门扇全过滤掉（门宽读到 0 ⇒ 判成通洞）——
+## 实测远征01 从 13 扇门掉到 1 扇。塔楼房间则连 `connection_ports` 都没有。
+## 两者都必须保留按方向建门的旧行为，本判据把它们一起挡在端口粒度之外。
+func _has_authoritative_door_ports() -> bool:
+	for port_value in connection_ports:
+		var port := port_value as Dictionary
+		if float(port.get("door_width_m", 0.0)) > 0.0:
+			return true
+		if not str(port.get("door_axis", "")).is_empty():
+			return true
+	return false
+
+
+## 该门宽是否要建**实体门扇**。
+## 2.2m 标准门要；5m 通洞 / 坍塌门洞是纯开口，白盒里本来就没有墙件，不建。
+## 与白盒门表同源：远征02 门宽 ≤3m 的端口 21 个 = 静态布局里 21 个 `wall_door` 件。
+func _port_creates_door_leaf(width_m: float) -> bool:
+	if width_m <= 0.0:
+		return false
+	return width_m <= 3.0
+
+
+## 门扇视觉二选一，两条都是正式美术，区别在语义而不是画质：
+##   FACILITY（99F 基地）/ 和平区（区块00）—— 滑升门，自带独立 logic_id 与状态灯，
+##   不随楼层主题换材质；
+##   其余（普通战斗房 / BOSS 房 / 入口安全房）—— 塔楼 A 套门扇，与门墙共用 +Z 约定。
+func _door_panel_visual(target_room_id: String) -> PackedScene:
+	if (
+		room_type == "FACILITY"
+		or (room_id == "start" and target_room_id == "facility")
+		or authored_layout_peaceful
+	):
+		return BASE99_DOOR_LIFT_PREFAB
+	return TOWER_DOOR_LEAF_PREFAB
+
+
+## 按**连接端口**建一扇门扇。返回是否真的建成了。
+##
+## 位置直接取端口的房间局部坐标（= 白盒门洞中心），不再用「方向 + 房间半宽」推算：
+## 同一面墙有多扇门时后者只能算出一个位置（房间半宽那个点），
+## 其余门洞会永远缺门扇 —— 远征02 的长廊 `room_02` 西墙 5 扇、东墙 5 扇，
+## 按方向只建出 2 扇，偏移最远 60m。
+func _build_door_for_port(port: Dictionary, dimensions: Vector2) -> bool:
+	var port_id := str(port.get("port_id", ""))
+	var side := str(port.get("side", ""))
+	var target_id := str(port.get("target_room_id", port.get("target", "")))
+	var width := float(port.get("door_width_m", 0.0))
+	if port_id.is_empty() or side.is_empty():
+		# side 派生不出来时 `LevelPlanLoader` 已告警；这里不再静默补一扇位置不明的门。
+		return false
+	if not _port_creates_door_leaf(width):
+		return false
+	if authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D" and Block00MasterOfficeLayout3D.is_removed_door_pair(room_id, target_id):
+		return false
+	if not owns_door_endpoint(side):
+		return false
+	var raw_position := port.get("position_m", []) as Array
+	if raw_position.size() < 2:
+		return false
+	var door := DOOR_SCENE.instantiate() as RoomDoor3D
+	if door == null:
+		push_error("通用RoomDoor3D Prefab实例化失败")
+		return false
+	door.configure(side, target_id, theme.accent_color, _door_panel_visual(target_id))
+	door.set_access_policy(door_policies.get(side, {}) as Dictionary)
+	door.set_meta("camera_lower_wall", side in ["north", "south"])
+	door.set_meta("connection_port_id", port_id)
+	# A 套门扇声明 visual_only 且不自带碰撞，本段对它是空跑。
+	# 保留为廉价保险：门扇包一旦又带上静态碰撞（B 套那个包就带），它不会随升降门
+	# 逻辑启用/禁用，必须让位给 RoomDoor3D 自己的升降碰撞，否则门永远开不了。
+	var door_leaf := door.get_node_or_null("DoorPanel/ImportedDoorVisual")
+	if door_leaf != null:
+		_disable_static_collision_descendants(door_leaf)
+	door.position = Vector3(float(raw_position[0]), 0.0, float(raw_position[1]))
+	if side in ["west", "east"]:
+		door.rotation.y = PI * 0.5
+	add_child(door)
+	# 门扇自身按 `Door_<方向>` 命名，同方向多门会重名（Godot 会加 @ 尾号），
+	# 这里补上 port_id 让节点名可读、也便于探针按端口定位。
+	door.name = "Door_%s_%s" % [side.capitalize(), port_id]
+	if not _door_nodes.has(side):
+		_door_nodes[side] = door
+	_door_nodes_by_port[port_id] = door
+	return true
+
+
+## 按端口取门扇。一墙多门时 `get_door_node(方向)` 只能返回该方向第一扇，
+## 共享门配对必须用它才能拿到"通向指定那一间"的那扇。
+func get_door_node_by_port(port_id: String) -> RoomDoor3D:
+	return _door_nodes_by_port.get(port_id) as RoomDoor3D
 
 
 ## 静态 TSCN 只接管视觉与固定碰撞；门槽 lane 归属仍必须按本局拓扑重新计算。
@@ -1955,6 +2087,7 @@ func _build_shell() -> void:
 						"authored_layout_door_wall_count", "authored_layout_floor_tile_count",
 						"authored_layout_exclusive_count", "authored_layout_multi_level_count",
 						"authored_layout_room_type_component_count", "authored_layout_promoted_walls",
+						"walk_surface_y_m",
 					]:
 						if static_layout.has_meta(key):
 							set_meta(key, static_layout.get_meta(key))
@@ -2490,7 +2623,11 @@ func _build_safe_room_exit_sign(dimensions: Vector2) -> Node3D:
 	var half := minf(dimensions.x, dimensions.y) * 0.5
 	var offset := half - SAFE_ROOM_EXIT_SIGN_INSET_M - SAFE_ROOM_EXIT_SIGN_DEPTH_M
 	node.name = SAFE_ROOM_EXIT_SIGN_NODE_NAME
-	node.position = normal * offset + Vector3(0.0, SAFE_ROOM_EXIT_SIGN_HALF_THICKNESS_M, 0.0)
+	var walk_surface_y := float(get_meta("walk_surface_y_m", 0.0))
+	# 远征02 静态砖面的真实走行面是 Y=0.30；其它安全房保持历史 Y=0 口径。
+	node.position = normal * offset + Vector3(
+		0.0, walk_surface_y + SAFE_ROOM_EXIT_SIGN_HALF_THICKNESS_M, 0.0
+	)
 	# YXZ 欧拉序：Rx(90°) 把竖立门头姿态放平、发光面朝上；Ry(yaw) 再把深度方向对准门法向。
 	node.rotation = Vector3(PI * 0.5, _direction_yaw(direction), 0.0)
 	node.set_meta("exit_sign_direction", direction)
@@ -4327,12 +4464,7 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 	#   其余（普通战斗房 / BOSS 房 / 入口安全房）—— 塔楼 A 套门扇，与门墙共用 +Z 约定。
 	# 原先战斗房传 null 走程序化深色方块门板；2026-09-19 起统一换成正式门扇。
 	door.configure(
-		direction,
-		target_room_id,
-		theme.accent_color,
-		BASE99_DOOR_LIFT_PREFAB
-		if room_type == "FACILITY" or (room_id == "start" and target_room_id == "facility") or authored_layout_peaceful
-		else TOWER_DOOR_LEAF_PREFAB
+		direction, target_room_id, theme.accent_color, _door_panel_visual(target_room_id)
 	)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
 	door.set_meta("camera_lower_wall", direction in ["north", "south"])

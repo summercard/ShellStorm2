@@ -1,0 +1,46 @@
+{
+  "slug": "matrix_foundation_5m",
+  "name_zh": "矩阵低面数井底延伸",
+  "component_id": "ENV-EXPEDITION-BOSS-B-MATRIX-FOUNDATION-5M",
+  "component_family": "matrix_foundation",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "version": "v027",
+  "collection": "输出资产包_matrix_foundation_5m",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\matrix_foundation_5m\\matrix_foundation_5m.blend",
+  "objects": [
+    "矩阵低面数井底延伸_主体"
+  ],
+  "bounds_min": [
+    -2.5,
+    -0.6949999928474426,
+    0.0
+  ],
+  "bounds_max": [
+    2.5,
+    0.6949999928474426,
+    22.0
+  ],
+  "bounds_size_m": [
+    5.0,
+    1.3899999856948853,
+    22.0
+  ],
+  "instance_count": 21,
+  "triangle_count": 36,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "runtime_connected": false
+}

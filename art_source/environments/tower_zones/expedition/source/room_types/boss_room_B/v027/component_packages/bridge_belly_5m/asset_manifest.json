@@ -1,0 +1,46 @@
+{
+  "slug": "bridge_belly_5m",
+  "name_zh": "桥下设备与曲管托架",
+  "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-BELLY-5M",
+  "component_family": "bridge_belly",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "version": "v027",
+  "collection": "输出资产包_bridge_belly_5m",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\bridge_belly_5m\\bridge_belly_5m.blend",
+  "objects": [
+    "桥下设备与曲管托架_主体"
+  ],
+  "bounds_min": [
+    -2.5626606941223145,
+    -2.299999952316284,
+    0.0
+  ],
+  "bounds_max": [
+    2.5626606941223145,
+    2.299999952316284,
+    1.7397687435150146
+  ],
+  "bounds_size_m": [
+    5.125321388244629,
+    4.599999904632568,
+    1.7397687435150146
+  ],
+  "instance_count": 8,
+  "triangle_count": 1668,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "runtime_connected": false
+}

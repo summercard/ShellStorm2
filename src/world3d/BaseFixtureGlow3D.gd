@@ -57,6 +57,7 @@ func _ready() -> void:
 			push_error("BASE_GLOW_FIXTURE_MISSING: %s" % profile.name)
 			continue
 		_strong_fixtures += 1
+		_disable_fixture_shadow(fixture)
 		_enhance_fixture(fixture, palette_image, profile)
 	# Screens, status strips and utility emitters share the same HDR target. Their
 	# authored palette cells stay unchanged and they do not create extra lights.
@@ -315,6 +316,30 @@ func _enhance_mesh(
 		_processed_surfaces[key] = true
 		_enhanced_surfaces += 1
 	return result
+
+
+## 灯具外壳一律不投影。
+##
+## 为什么这条必须写在代码里，而不能靠预置件 .tscn 里写 `cast_shadow = 0`：
+## 灯具网格是「**导入 GLB 场景**实例的内部节点」。对导入场景的内部节点写属性覆盖
+## （`[node name="<网格名>" parent="ImportedModel" index="0"]` + `cast_shadow = 0`）
+## 在编辑器里与**项目内运行**都生效，但**导出转换会静默丢弃**：
+## 2026-10-12 实测 —— 源 .tscn 读 0，导出后的 .scn 读 1；删掉 `.godot/exported`
+## 缓存强制重新转换，产物仍为 1（文件字节数与旧版一致）。而对照组正常保留：
+## 普通 `.tscn` 实例的内部节点覆盖（玩家换装件的 `visible`）、实例根节点覆盖
+## （基座顶灯阵列的 `cast_shadow`）导出后逐值不变。
+## ⇒ 工程规约：**不要指望对导入 GLB 内部节点的属性覆盖能活到发行包**。
+##
+## 主灯自身的投影是玩法信息（见 WastelandLight3D.apply_performance_quality），不可关闭；
+## 能关的只有灯罩 —— 99F 中央主灯挂在 11.62m，而灯具挂在 ~2.5m，灯在灯罩正上方，
+## 灯罩轮廓会被放大投到地板形成悬空暗斑。
+func _disable_fixture_shadow(fixture: Node) -> void:
+	if fixture is GeometryInstance3D:
+		(fixture as GeometryInstance3D).cast_shadow = (
+			GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		)
+	for child in fixture.get_children():
+		_disable_fixture_shadow(child)
 
 
 func _register_controlled_emission_material(material: BaseMaterial3D) -> void:

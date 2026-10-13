@@ -1,0 +1,85 @@
+{
+  "schema": "shellstorm2.battle.level_plan",
+  "schema_version": 1,
+  "level_id": "expedition_02",
+  "level_name_zh": "远征关卡02",
+  "block_id": "expedition",
+  "floor_rule_version": 2,
+  "grid_unit_m": 5.0,
+  "wall_thickness_m": 0.3,
+  "floor_height_m": 12.0,
+  "visible_wall_height_m": 11.9,
+  "hotel_wall_height_m": 3.0,
+  "hotel_ceiling_bottom_m": 4.0,
+  "site": {
+    "size_m": [
+      250.0,
+      250.0
+    ],
+    "center_m": [
+      2.5,
+      2.5
+    ]
+  },
+  "core": {
+    "size_m": [
+      65.0,
+      65.0
+    ],
+    "center_m": [
+      2.5,
+      2.5
+    ]
+  },
+  "floors": [
+    {
+      "floor_number": 0,
+      "floor_index": 0,
+      "sequence_index": 0,
+      "rule": "normal",
+      "plan": "floors/floor_00.json"
+    }
+  ],
+  "room_templates": [
+    "hotel_safe_15x15",
+    "hotel_foyer_30x15",
+    "hotel_corridor_10x75",
+    "hotel_guest_15x15",
+    "hotel_tee_60x10",
+    "hotel_branch_10x45"
+  ],
+  "generation_policy": {
+    "min_main_content_rooms": 3,
+    "branch_count_range": [
+      0,
+      40
+    ],
+    "max_attempts": 1,
+    "target_occupancy_ratio": 0.42,
+    "reference_room_cost_m2": 1450.0,
+    "enforce_core_exclusion": false,
+    "enforce_area_budget": false,
+    "content_type_pool": [
+      "COMBAT",
+      "SCAVENGE",
+      "STORAGE",
+      "EVENT"
+    ],
+    "content_template_pool": [
+      "hotel_safe_15x15",
+      "hotel_foyer_30x15",
+      "hotel_corridor_10x75",
+      "hotel_guest_15x15",
+      "hotel_tee_60x10",
+      "hotel_branch_10x45"
+    ],
+    "authored_layout_shell": false,
+    "pin_content_templates": true,
+    "runtime_enabled": true
+  },
+  "provenance": {
+    "mode": "authored",
+    "extracted_from": "scripts/build_expedition02_level_plan.py",
+    "note": "远征关卡02「破败旅馆」设计源。**mode=authored ⇒ 几何写死、与种子无关**（对比远征01 的 mode=constrained：那条每局现算几何）。runtime_enabled=true 是让运行时消费本设计源的必要条件；为 false 时会回退到内置的 7 房硬编码房表（塔楼口径），与本关几何无关。房表由白盒 asset_manifest.json 派生 —— 房间矩形来自 rooms、门位与端口来自 doors，门位已过 RoomDoorLane.lane_offsets() 校验。26 间房：1 阳台 + 1 挑高前厅 + 1 长廊 + 20 客房 + 1 T字横廊 + 2 支廊；主路 entry→room_01→room_02→room_13→room_14，东支廊 room_15 作支线（Boss/撤离将来挂其中一条，见设计页 L02-10）。房间模板 6 档均属新增（不在 2026-09-25 锁定的 8 个模板内），见设计页 §13 L02-5。"
+  }
+}

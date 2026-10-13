@@ -53,6 +53,7 @@ func _ready() -> void:
 		if bool(connector.get_meta("is_vertical_connector", false)):
 			vertical_count += 1
 			_validate_stair_approach_wall_modules(connector, failures)
+			_validate_stair_approach_wall_facings(connector, failures)
 			_validate_stairwell_5m_contract(connector, failures)
 			continue
 		horizontal_count += 1
@@ -322,6 +323,61 @@ func _validate_stair_approach_wall_modules(
 		failures.append("%s stair approach lost its continuous 12m side-wall colliders" % connector.name)
 
 
+## 楼梯接驳走廊两侧墙的**朝向**验收。
+## 墙件（塔楼 A 套 ENV-TOWER-WALL-SOLID-5M）装饰面朝局部 +Z，而走廊是通道 ⇒
+## 两侧墙必须「装饰面各自朝走廊内」。此前两侧共用同一个 rotation_y，世界南（东）侧
+## 那面把结构背板朝向通道 —— 2026-10-12 主人报「99F 基地东西两条走廊的南面墙反面
+## 朝走廊」。包络 / 面数 / 高度三类断言对「一面朝反」全都全绿，所以必须单独盯朝向。
+func _validate_stair_approach_wall_facings(
+	connector: Node3D,
+	failures: Array[String]
+) -> void:
+	# 中线真源 = 同 module 序号的接驳地砖（墙就摆在它的垂直 ±半宽处）。
+	var centers := {}
+	for value in connector.find_children("StairApproachFloor_*", "Node3D", true, false):
+		var floor_tile := value as Node3D
+		if floor_tile == null:
+			continue
+		centers[_trailing_module_key(floor_tile.name)] = floor_tile.global_position
+	var checked := 0
+	for value in connector.find_children("StairApproachWall_*", "Node3D", true, false):
+		var wall := value as Node3D
+		if wall == null or wall is StaticBody3D:
+			continue
+		if str(wall.get_meta("asset_id", "")) != "ENV-TOWER-WALL-SOLID-5M":
+			continue
+		var module_key := _trailing_module_key(wall.name)
+		if not centers.has(module_key):
+			continue
+		var inward := (centers[module_key] as Vector3) - wall.global_position
+		inward.y = 0.0
+		if inward.length() < 0.01:
+			continue
+		var facing := wall.global_transform.basis * Vector3(0.0, 0.0, 1.0)
+		facing.y = 0.0
+		var alignment := facing.normalized().dot(inward.normalized())
+		checked += 1
+		if alignment < 0.9:
+			failures.append(
+				"%s 装饰面没有朝走廊内（对齐 %.3f，应≈1）" % [wall.name, alignment]
+			)
+	if _has_stair_approach_wall_visual(connector) and checked <= 0:
+		failures.append("%s stair approach walls produced no facing samples" % connector.name)
+
+
+## 只用于「有没有可采样墙」的守卫：与 _validate_stair_approach_wall_modules 同判据。
+func _has_stair_approach_wall_visual(connector: Node3D) -> bool:
+	for value in connector.find_children("*", "Node3D", true, false):
+		var node := value as Node3D
+		if node != null and bool(node.get_meta("stair_approach_corridor", false)):
+			return true
+	return false
+
+
+func _trailing_module_key(node_name: String) -> String:
+	return node_name.get_slice("_", node_name.get_slice_count("_") - 1)
+
+
 func _find_first_mesh_instance(root: Node) -> MeshInstance3D:
 	if root is MeshInstance3D and (root as MeshInstance3D).mesh != null:
 		return root as MeshInstance3D
@@ -457,6 +513,31 @@ func _validate_horizontal_corridor_modules(
 		)
 		if not is_equal_approx(collision_length, length):
 			failures.append("%s visible modules and collision length differ" % connector.name)
+	# 水平走廊两侧墙同样必须「装饰面各自朝走廊内」（与楼梯接驳走廊同一口径）。
+	# MultiMesh 的 transform 在 headless dummy 渲染器下读不回来，所以读生成期
+	# 记下的 corridor_wall_facings（局部 +Z 经实例 basis 变换后的世界水平法向）。
+	var wall_facings := (
+		wall_batch.get_meta("corridor_wall_facings", PackedVector3Array())
+		if wall_batch != null
+		else PackedVector3Array()
+	) as PackedVector3Array
+	if wall_facings.size() != wall_origins.size():
+		failures.append("%s lost its corridor wall facing samples" % connector.name)
+	else:
+		for index in range(wall_facings.size()):
+			var wall_origin := wall_origins[index]
+			var lane_point := (
+				Vector3(wall_origin.x, 0.0, start.z)
+				if along_x
+				else Vector3(start.x, 0.0, wall_origin.z)
+			)
+			var inward := lane_point - Vector3(wall_origin.x, 0.0, wall_origin.z)
+			if inward.length() < 0.01:
+				continue
+			if wall_facings[index].dot(inward.normalized()) < 0.9:
+				failures.append(
+					"%s corridor wall module #%d 装饰面未朝走廊内" % [connector.name, index]
+				)
 
 
 func _validate_room_door(room: DungeonRoom3D, side: String, failures: Array[String]) -> void:

@@ -11,3 +11,9 @@ metadata/collision_policy = "visual_only_no_collision"
 metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+; ⚠️ 本覆盖只在编辑器/项目内有效，**导出转换会丢弃**（导入 GLB 内部节点的属性覆盖）。
+; 发行包靠 src/world3d/BaseFixtureGlow3D.gd 的 _disable_fixture_shadow() 兜底。
+; 灯具外壳不投影；理由见 east_round_pendant_light_root_top3d.tscn。
+[node name="ENV_BASE99_REMAINING_LOFT_LIGHTING_SUPPORT_V021" parent="ImportedModel" index="0"]
+cast_shadow = 0

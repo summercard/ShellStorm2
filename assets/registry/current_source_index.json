@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-11",
+  "date": "2026-10-13",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -9974,6 +9974,429 @@
       ],
       "origin": "outputs/elevator_hopper_v003/双笼施工电梯_导轨附墙架_v003_extract.blend",
       "sha256": "450a657f39bdd08f1d7306f859fc6d51d224784d62bd79a4377270d7e3470dee"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "bytes": 29759203,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/Boss房B_设施延伸井底与矩阵转向.blend",
+      "version": [
+        27
+      ],
+      "sha256": "1b44e7cf2ec145f94c03f70d1b10486420293783894a2afcd7bf15b17265dfed"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/abutment_bracket/abutment_bracket.blend",
+      "bytes": 237689,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/abutment_bracket/abutment_bracket.blend",
+      "version": [
+        27
+      ],
+      "sha256": "f3254a7c778fc7820e4247e77878880410fafb0b178cdc5b3101df53f5dbe2cf"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_belly_5m/bridge_belly_5m.blend",
+      "bytes": 316701,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/bridge_belly_5m/bridge_belly_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "7ffaf41405c264ec3a3ce130b68d2dfde6d47ca2957d57ed3b157fbae9d8c206"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_deck_5m/bridge_deck_5m.blend",
+      "bytes": 490849,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/bridge_deck_5m/bridge_deck_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "33893f2aa2e6164114605a99b27eb4c330ab6dfe492c78da4ede50b244e0b02a"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_rail_5m/bridge_rail_5m.blend",
+      "bytes": 296936,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/bridge_rail_5m/bridge_rail_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "a665a2fcd08cfb85a4cea3fe7b0aa7afad776b5725653423361d21f343fcddec"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_threshold/bridge_threshold.blend",
+      "bytes": 218137,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/bridge_threshold/bridge_threshold.blend",
+      "version": [
+        27
+      ],
+      "sha256": "4b9e15b2fa0a4a32fe60f4c1bdb2b50dec6add3ed4b68b09f54e8788031be592"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_truss_5m/bridge_truss_5m.blend",
+      "bytes": 272012,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/bridge_truss_5m/bridge_truss_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "4e58e11213b237e3036941459949695d30c412855f5fb40b4e10fc46b3e7ff7b"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_crown/cables_crown.blend",
+      "bytes": 1236934,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/cables_crown/cables_crown.blend",
+      "version": [
+        27
+      ],
+      "sha256": "a31c147dde80ff47703a7e789b9e7a372f7c182d0ac91f6f9ccb59e5fc90ef8e"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_mirrored/cables_mirrored.blend",
+      "bytes": 1236937,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/cables_mirrored/cables_mirrored.blend",
+      "version": [
+        27
+      ],
+      "sha256": "3bd954ec4795cc421b158620d50dd6c80b92230ae8dd12f8e95524de879feb07"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_swept/cables_swept.blend",
+      "bytes": 1236934,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/cables_swept/cables_swept.blend",
+      "version": [
+        27
+      ],
+      "sha256": "5f87ee6b0d77907533923aa53b73e6abb11b860c1e69bdf21cf8272d617568ab"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/compute_tower_compact/compute_tower_compact.blend",
+      "bytes": 375108,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/compute_tower_compact/compute_tower_compact.blend",
+      "version": [
+        27
+      ],
+      "sha256": "d7569b3b13895eb0a6a01be0e2901834eaf1264f5ddaaefe4607e9c50db71339"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/compute_tower_stepped/compute_tower_stepped.blend",
+      "bytes": 375108,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/compute_tower_stepped/compute_tower_stepped.blend",
+      "version": [
+        27
+      ],
+      "sha256": "195c0467b2cf13509675f2a64c96fa13b9fd7e2853889700ed42721d9e46c772"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/compute_tower_tall/compute_tower_tall.blend",
+      "bytes": 375105,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/compute_tower_tall/compute_tower_tall.blend",
+      "version": [
+        27
+      ],
+      "sha256": "df80180c43425d14bec2de73ed8889a6cddf1b05c5ae1e467bd35c36df5e7ddf"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/corner_pylon/corner_pylon.blend",
+      "bytes": 340639,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/corner_pylon/corner_pylon.blend",
+      "version": [
+        27
+      ],
+      "sha256": "7c1bce150b2bc96991b01e97cfc21b46e4ef5d237ea34ab0b679bf5275f4c075"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_crushed/damaged_cabinet_crushed.blend",
+      "bytes": 256065,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/damaged_cabinet_crushed/damaged_cabinet_crushed.blend",
+      "version": [
+        27
+      ],
+      "sha256": "07118a139aa033926a461729030b990696ba619b83a63fd355a9631f39e4b4b3"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_open/damaged_cabinet_open.blend",
+      "bytes": 256062,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/damaged_cabinet_open/damaged_cabinet_open.blend",
+      "version": [
+        27
+      ],
+      "sha256": "04fed28870139ff29effd58351ea4070dc27de568b3baeff01da8c67a098826c"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_armor_5m/deck_armor_5m.blend",
+      "bytes": 446979,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/deck_armor_5m/deck_armor_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "751c556a7da273bbfd594c297f1ba9785961790b5875c4c0aab72d870cd95cd6"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_barrier_5m/deck_barrier_5m.blend",
+      "bytes": 300813,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/deck_barrier_5m/deck_barrier_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "1648523eff8fec9be52f9922695a5e2df7b0847e901704cdde7646fed5b0af1b"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_emblem_5m/deck_emblem_5m.blend",
+      "bytes": 365944,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/deck_emblem_5m/deck_emblem_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "816938fb9aec1eac371b3319d1328e62cf512f1a110593ac35d28b7319c735e5"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_seal_frame/door_seal_frame.blend",
+      "bytes": 228201,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/door_seal_frame/door_seal_frame.blend",
+      "version": [
+        27
+      ],
+      "sha256": "ef0a26f11c4e1e3eee8b12063b2dcb6d6f42b61452803604e0177a479b3c20e0"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_support_pier/door_support_pier.blend",
+      "bytes": 375104,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/door_support_pier/door_support_pier.blend",
+      "version": [
+        27
+      ],
+      "sha256": "9d9c7a180d22571f0a7860b2e23adee2ed688da18b0d776338e0a3c5c87094dd"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_undersupport/door_undersupport.blend",
+      "bytes": 315803,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/door_undersupport/door_undersupport.blend",
+      "version": [
+        27
+      ],
+      "sha256": "5f48376857e28fef91cb3a01117ef37cf8f74cf0341cd5fec1c73011a27238cc"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/equipment_cluster/equipment_cluster.blend",
+      "bytes": 608253,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/equipment_cluster/equipment_cluster.blend",
+      "version": [
+        27
+      ],
+      "sha256": "03897c744862d2153d14fdc76d81f0abff9bd99c8886bfc46aa2684e8f43e292"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_leaf_a/exit_leaf_a.blend",
+      "bytes": 312666,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/exit_leaf_a/exit_leaf_a.blend",
+      "version": [
+        27
+      ],
+      "sha256": "44d60d20297e78b693d336c96e90384dd2daedba66f14ad381da971a54e66250"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_leaf_b/exit_leaf_b.blend",
+      "bytes": 312666,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/exit_leaf_b/exit_leaf_b.blend",
+      "version": [
+        27
+      ],
+      "sha256": "b1cca1c3ffae7c9bbeaf0f1cdaab7b4b505be34f5ba06c353e722d982f47928c"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_passage/exit_passage.blend",
+      "bytes": 366387,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/exit_passage/exit_passage.blend",
+      "version": [
+        27
+      ],
+      "sha256": "f372733ecb686a1c85f95d9ec7d6d6d28d72174d418d092d13a2a22e52fcb712"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_portal/exit_portal.blend",
+      "bytes": 622978,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/exit_portal/exit_portal.blend",
+      "version": [
+        27
+      ],
+      "sha256": "4c5c2b11f54f710d274329f582ce6849bc68095c50ef834559a5f1223ce44d9e"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/hanging_power_bundle/hanging_power_bundle.blend",
+      "bytes": 785582,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/hanging_power_bundle/hanging_power_bundle.blend",
+      "version": [
+        27
+      ],
+      "sha256": "11a764b333ec0625690186179bb6383642563d0fadcfff5b80dcf831085102e0"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_bay_5m/matrix_bay_5m.blend",
+      "bytes": 1875828,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/matrix_bay_5m/matrix_bay_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "9dc060d128fd8464ab3c1208d3b0675441fcbe4cfa8afa7d93c596471f0d9cd9"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_bus_5m/matrix_bus_5m.blend",
+      "bytes": 242516,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/matrix_bus_5m/matrix_bus_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "f6646dbbbb250c4e053e5a91a09b7edee75534e73930eae0af40e00277c6c8ae"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_foundation_5m/matrix_foundation_5m.blend",
+      "bytes": 227550,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/matrix_foundation_5m/matrix_foundation_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "e94ea92ec1ca0a880c62a0e9898c46b9250a1d5bfcb744aa9c0b4491d4aa6ea7"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/monitor_chassis/monitor_chassis.blend",
+      "bytes": 667474,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/monitor_chassis/monitor_chassis.blend",
+      "version": [
+        27
+      ],
+      "sha256": "0c20178ca2dcf7371f4c1e34258368f5301c14164d0cccf48b0fe74fdaa6ee60"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/portal_backing_5m/portal_backing_5m.blend",
+      "bytes": 209210,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/portal_backing_5m/portal_backing_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "6b8b03783bed3f7df7f76420fae15bae961c2546dc2810e5c356960f4e6a11a1"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/rim_girder_5m/rim_girder_5m.blend",
+      "bytes": 349087,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/rim_girder_5m/rim_girder_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "9606b212154f880180f1e40fe8305314d36e45870b215c1bb368b6394ddf54c1"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/screen_center/screen_center.blend",
+      "bytes": 215693,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/screen_center/screen_center.blend",
+      "version": [
+        27
+      ],
+      "sha256": "8d61e39b0ef88a2d6c86682c8d9d79bcd0f990823d6a17e33d54cb677a42cb17"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/screen_left/screen_left.blend",
+      "bytes": 215691,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/screen_left/screen_left.blend",
+      "version": [
+        27
+      ],
+      "sha256": "ab941d12a5efb39371311aaad961e1e2d907a269e64ebad964a2c8736aebd822"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/screen_right/screen_right.blend",
+      "bytes": 215692,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/screen_right/screen_right.blend",
+      "version": [
+        27
+      ],
+      "sha256": "5b78afd191498b78ba45b25e83351bbbb66d24d51d3168c9584caece764736c6"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_horizontal_80x100m/shell_horizontal_80x100m.blend",
+      "bytes": 198481,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/shell_horizontal_80x100m/shell_horizontal_80x100m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "87fe510ed685ba62909abba51a4c991e66bf501a42f1d5e2e4e324e255de69bf"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_wall_gate_100m/shell_wall_gate_100m.blend",
+      "bytes": 234190,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/shell_wall_gate_100m/shell_wall_gate_100m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "428232dffff5088cd6092cbc52635162cb270cce8c39e0d9e706cf031be0068d"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_wall_gate_80m/shell_wall_gate_80m.blend",
+      "bytes": 232877,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/shell_wall_gate_80m/shell_wall_gate_80m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "a02d76e49b5633c18ef415769f60cbb624b8f2073cef4667a5a3dbb491a651e3"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_wall_solid_80m/shell_wall_solid_80m.blend",
+      "bytes": 231486,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/shell_wall_solid_80m/shell_wall_solid_80m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "51067b41cd752ccbdbef8b38e7ef473c6f301228298295cf4551a1390e5b60b6"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_chase_light/stair_chase_light.blend",
+      "bytes": 240567,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/stair_chase_light/stair_chase_light.blend",
+      "version": [
+        27
+      ],
+      "sha256": "3fdd1b0ea96d33d7b0ac7ecba1856690acb9538db92b061d7cc379ff9c57c7af"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_flight_5m/stair_flight_5m.blend",
+      "bytes": 561857,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/stair_flight_5m/stair_flight_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "7b4f13c001851a78630db50fa2368eda168b49df1d28801f1a80d1c2d714dd9f"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_landing_5m/stair_landing_5m.blend",
+      "bytes": 246093,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/stair_landing_5m/stair_landing_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "7759b14b5bf36f61fca6d5d26ac2224d1c3239c15b63eade4b538e9aabbff05f"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_pillar_light/stair_pillar_light.blend",
+      "bytes": 235488,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/stair_pillar_light/stair_pillar_light.blend",
+      "version": [
+        27
+      ],
+      "sha256": "0814fe2ea5330ae066a381ecb1f80cfe94ca8880b16f01e7227fe3691a8b7023"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/suspended_server_5m/suspended_server_5m.blend",
+      "bytes": 375106,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/suspended_server_5m/suspended_server_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "3156150c2830a68806a291f5671828002a5e9ca06e070d594532a78b85313056"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/underframe_beam_5m/underframe_beam_5m.blend",
+      "bytes": 243387,
+      "family": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/current/component_packages/underframe_beam_5m/underframe_beam_5m.blend",
+      "version": [
+        27
+      ],
+      "sha256": "977b1e524bd52aa3e14bcac5672c4784727eb1b2e0c373aee046ea6da1a44ded"
     }
   ],
   "authoring_root": "art_source",

@@ -68,6 +68,7 @@ var _base_interior_fog_blend := 0.0
 var _distance_fog_quality_multiplier := 1.0
 var _base_interior_fog_density := BASE_INTERIOR_FOG_DENSITY
 var _base_interior_volumetric_fog_density := BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY
+var _expedition_dark_distant_enabled := false
 
 ## 仅在没有全局 GameTimeManager 的孤立验收场景里使用。
 @export_range(0.0, 24.0, 0.1) var time_of_day := 17.0
@@ -170,7 +171,32 @@ func _apply_fixed_lighting() -> void:
 		_environment.fog_light_color = FOG_LIGHT_COLOR
 		_apply_base_fog_density()
 	_apply_time_of_day()
+	_apply_expedition_dark_distant()
 	set_process(_time_source == null and time_scale > 0.0)
+
+
+## 远征02专属：远景是封闭建筑外的纯黑，不使用全塔的灰蓝背景、环境抬光或屋顶无影补光。
+## 方向光仍保留给近景真实遮挡；因此不会把近景材质和房间局部灯一起压黑。
+func set_expedition_dark_distant(enabled: bool) -> void:
+	_expedition_dark_distant_enabled = enabled
+	_apply_expedition_dark_distant()
+
+
+func _apply_expedition_dark_distant() -> void:
+	if not _expedition_dark_distant_enabled:
+		return
+	if _environment != null:
+		_environment.background_mode = Environment.BG_COLOR
+		_environment.background_color = Color.BLACK
+		_environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+		_environment.ambient_light_color = Color.BLACK
+		_environment.ambient_light_energy = 0.0
+		_environment.fog_light_color = Color.BLACK
+		_environment.fog_light_energy = 0.0
+		_environment.fog_enabled = true
+	if _rooftop_sky_bounce != null:
+		_rooftop_sky_bounce.visible = false
+		_rooftop_sky_bounce.light_energy = 0.0
 
 
 func _apply_time_of_day() -> void:
@@ -270,6 +296,7 @@ func _apply_solar_snapshot(solar: Dictionary) -> void:
 		_rooftop_sky_bounce.light_energy = lerpf(
 			0.06, peak_energy, float(solar.get("daylight_factor", 0.0))
 		)
+	_apply_expedition_dark_distant()
 
 
 func get_snapshot() -> Dictionary:

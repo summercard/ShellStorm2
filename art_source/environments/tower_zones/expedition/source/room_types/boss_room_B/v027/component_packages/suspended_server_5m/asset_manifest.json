@@ -1,0 +1,69 @@
+{
+  "slug": "suspended_server_5m",
+  "component_id": "ENV-EXPEDITION-BOSS-B-SUSPENDED-SERVER-5M",
+  "name_zh": "下挂机柜承力塔",
+  "component_family": "server_tower",
+  "category": "architecture",
+  "estimated_instances": 20,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "version": "v027",
+  "collection": "输出资产包_suspended_server_5m",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\suspended_server_5m\\suspended_server_5m.blend",
+  "objects": [
+    "下挂机柜承力塔_自发光",
+    "下挂机柜承力塔_主体"
+  ],
+  "bounds_size_m": [
+    4.900000095367432,
+    3.8350000381469727,
+    55.939998626708984
+  ],
+  "bounds_min": [
+    -2.450000047683716,
+    -1.9175000190734863,
+    0.0
+  ],
+  "bounds_max": [
+    2.450000047683716,
+    1.9175000190734863,
+    55.939998626708984
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 10,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": false,
+  "palette_uv_layer": "PaletteUV",
+  "animation": null,
+  "geometry_fingerprint": "222ac01c51c3c80444c1c473dc89835541172ad26db94ed0a1d30e8f9fd4b55f",
+  "triangle_count": 2088
+}

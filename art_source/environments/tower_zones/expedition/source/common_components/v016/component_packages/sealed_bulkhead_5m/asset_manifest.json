@@ -1,0 +1,21 @@
+{
+  "component_id": "ENV-EXPEDITION-BOSSB-SEALED-BULKHEAD-5M",
+  "slug": "sealed_bulkhead_5m",
+  "component_family": "bulkhead",
+  "collection": "母版_sealed_bulkhead_5m",
+  "root_object": "封闭舱壁_主体",
+  "object_count": 3,
+  "instance_count": 1,
+  "bounds_source": "local master; measured after save",
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "not registered; source-only",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v004\\Boss房B深井机房_HQ_v004.blend",
+  "runtime_connected": false
+}

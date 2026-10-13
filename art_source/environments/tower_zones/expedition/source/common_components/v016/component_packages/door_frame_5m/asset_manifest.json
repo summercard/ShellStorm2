@@ -1,0 +1,21 @@
+{
+  "component_id": "ENV-EXPEDITION-BOSSB-DOOR-FRAME-5M",
+  "slug": "door_frame_5m",
+  "component_family": "door_frame",
+  "collection": "母版_door_frame_5m",
+  "root_object": "门框_左柱",
+  "object_count": 4,
+  "instance_count": 2,
+  "bounds_source": "local master; measured after save",
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "not registered; source-only",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v004\\Boss房B深井机房_HQ_v004.blend",
+  "runtime_connected": false
+}

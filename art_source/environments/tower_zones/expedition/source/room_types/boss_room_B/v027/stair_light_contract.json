@@ -1,0 +1,1835 @@
+{
+  "schema": "boss.step_lights.v1",
+  "asset_id": "ENV-EXPEDITION-BOSS-B-STAIR-CHASE-LIGHT",
+  "component_source": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v026\\component_packages\\stair_chase_light\\stair_chase_light.blend",
+  "independent_instances": [
+    {
+      "instance_id": "逐级灯_000",
+      "sequence_index": 0,
+      "position_m": [
+        0,
+        -62.25,
+        12.035
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_001",
+      "sequence_index": 1,
+      "position_m": [
+        0,
+        -61.75,
+        11.915
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_002",
+      "sequence_index": 2,
+      "position_m": [
+        0,
+        -61.25,
+        11.795
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_003",
+      "sequence_index": 3,
+      "position_m": [
+        0,
+        -60.75,
+        11.674999999999999
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_004",
+      "sequence_index": 4,
+      "position_m": [
+        0,
+        -60.25,
+        11.555
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_005",
+      "sequence_index": 5,
+      "position_m": [
+        0,
+        -59.75,
+        11.435
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_006",
+      "sequence_index": 6,
+      "position_m": [
+        0,
+        -59.25,
+        11.315
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_007",
+      "sequence_index": 7,
+      "position_m": [
+        0,
+        -58.75,
+        11.195
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_008",
+      "sequence_index": 8,
+      "position_m": [
+        0,
+        -58.25,
+        11.075
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_009",
+      "sequence_index": 9,
+      "position_m": [
+        0,
+        -57.75,
+        10.955
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_010",
+      "sequence_index": 10,
+      "position_m": [
+        0,
+        -57.25,
+        10.834999999999999
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_011",
+      "sequence_index": 11,
+      "position_m": [
+        0,
+        -56.75,
+        10.715
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_012",
+      "sequence_index": 12,
+      "position_m": [
+        0,
+        -56.25,
+        10.594999999999999
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_013",
+      "sequence_index": 13,
+      "position_m": [
+        0,
+        -55.75,
+        10.475
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_014",
+      "sequence_index": 14,
+      "position_m": [
+        0,
+        -55.25,
+        10.355
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_015",
+      "sequence_index": 15,
+      "position_m": [
+        0,
+        -54.75,
+        10.235
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_016",
+      "sequence_index": 16,
+      "position_m": [
+        0,
+        -54.25,
+        10.115
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_017",
+      "sequence_index": 17,
+      "position_m": [
+        0,
+        -53.75,
+        9.995
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_018",
+      "sequence_index": 18,
+      "position_m": [
+        0,
+        -53.25,
+        9.875
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_019",
+      "sequence_index": 19,
+      "position_m": [
+        0,
+        -52.75,
+        9.754999999999999
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_020",
+      "sequence_index": 20,
+      "position_m": [
+        0,
+        -52.25,
+        9.635
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_021",
+      "sequence_index": 21,
+      "position_m": [
+        0,
+        -51.75,
+        9.515
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_022",
+      "sequence_index": 22,
+      "position_m": [
+        0,
+        -51.25,
+        9.395
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_023",
+      "sequence_index": 23,
+      "position_m": [
+        0,
+        -50.75,
+        9.275
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_024",
+      "sequence_index": 24,
+      "position_m": [
+        0,
+        -50.25,
+        9.155
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_025",
+      "sequence_index": 25,
+      "position_m": [
+        0,
+        -49.75,
+        9.035
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_026",
+      "sequence_index": 26,
+      "position_m": [
+        0,
+        -49.25,
+        8.915
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_027",
+      "sequence_index": 27,
+      "position_m": [
+        0,
+        -48.75,
+        8.795
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_028",
+      "sequence_index": 28,
+      "position_m": [
+        0,
+        -48.25,
+        8.675
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_029",
+      "sequence_index": 29,
+      "position_m": [
+        0,
+        -47.75,
+        8.555
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_030",
+      "sequence_index": 30,
+      "position_m": [
+        0,
+        -47.25,
+        8.435
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_031",
+      "sequence_index": 31,
+      "position_m": [
+        0,
+        -46.75,
+        8.315
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_032",
+      "sequence_index": 32,
+      "position_m": [
+        0,
+        -46.25,
+        8.195
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_033",
+      "sequence_index": 33,
+      "position_m": [
+        0,
+        -45.75,
+        8.075
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_034",
+      "sequence_index": 34,
+      "position_m": [
+        0,
+        -45.25,
+        7.955
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_035",
+      "sequence_index": 35,
+      "position_m": [
+        0,
+        -44.75,
+        7.835
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_036",
+      "sequence_index": 36,
+      "position_m": [
+        0,
+        -44.25,
+        7.715
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_037",
+      "sequence_index": 37,
+      "position_m": [
+        0,
+        -43.75,
+        7.595
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_038",
+      "sequence_index": 38,
+      "position_m": [
+        0,
+        -43.25,
+        7.475
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_039",
+      "sequence_index": 39,
+      "position_m": [
+        0,
+        -42.75,
+        7.3549999999999995
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_040",
+      "sequence_index": 40,
+      "position_m": [
+        0,
+        -42.25,
+        7.234999999999999
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_041",
+      "sequence_index": 41,
+      "position_m": [
+        0,
+        -41.75,
+        7.115
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_042",
+      "sequence_index": 42,
+      "position_m": [
+        0,
+        -41.25,
+        6.995
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_043",
+      "sequence_index": 43,
+      "position_m": [
+        0,
+        -40.75,
+        6.875
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_044",
+      "sequence_index": 44,
+      "position_m": [
+        0,
+        -40.25,
+        6.755
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_045",
+      "sequence_index": 45,
+      "position_m": [
+        0,
+        -39.75,
+        6.635
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_046",
+      "sequence_index": 46,
+      "position_m": [
+        0,
+        -39.25,
+        6.515
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_047",
+      "sequence_index": 47,
+      "position_m": [
+        0,
+        -38.75,
+        6.395
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_048",
+      "sequence_index": 48,
+      "position_m": [
+        0,
+        -38.25,
+        6.275
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_049",
+      "sequence_index": 49,
+      "position_m": [
+        0,
+        -37.75,
+        6.155
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_050",
+      "sequence_index": 50,
+      "position_m": [
+        0,
+        -37.25,
+        6.035
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_051",
+      "sequence_index": 51,
+      "position_m": [
+        0,
+        -36.75,
+        5.915
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_052",
+      "sequence_index": 52,
+      "position_m": [
+        0,
+        -36.25,
+        5.795
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_053",
+      "sequence_index": 53,
+      "position_m": [
+        0,
+        -35.75,
+        5.675
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_054",
+      "sequence_index": 54,
+      "position_m": [
+        0,
+        -35.25,
+        5.555
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_055",
+      "sequence_index": 55,
+      "position_m": [
+        0,
+        -34.75,
+        5.435
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_056",
+      "sequence_index": 56,
+      "position_m": [
+        0,
+        -34.25,
+        5.3149999999999995
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_057",
+      "sequence_index": 57,
+      "position_m": [
+        0,
+        -33.75,
+        5.195
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_058",
+      "sequence_index": 58,
+      "position_m": [
+        0,
+        -33.25,
+        5.075
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_059",
+      "sequence_index": 59,
+      "position_m": [
+        0,
+        -32.75,
+        4.955
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_060",
+      "sequence_index": 60,
+      "position_m": [
+        0,
+        -32.25,
+        4.835
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_061",
+      "sequence_index": 61,
+      "position_m": [
+        0,
+        -31.75,
+        4.715
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_062",
+      "sequence_index": 62,
+      "position_m": [
+        0,
+        -31.25,
+        4.595
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_063",
+      "sequence_index": 63,
+      "position_m": [
+        0,
+        -30.75,
+        4.475
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_064",
+      "sequence_index": 64,
+      "position_m": [
+        0,
+        -30.25,
+        4.355
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_065",
+      "sequence_index": 65,
+      "position_m": [
+        0,
+        -29.75,
+        4.235
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_066",
+      "sequence_index": 66,
+      "position_m": [
+        0,
+        -29.25,
+        4.115
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_067",
+      "sequence_index": 67,
+      "position_m": [
+        0,
+        -28.75,
+        3.995
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_068",
+      "sequence_index": 68,
+      "position_m": [
+        0,
+        -28.25,
+        3.875
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_069",
+      "sequence_index": 69,
+      "position_m": [
+        0,
+        -27.75,
+        3.755
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_070",
+      "sequence_index": 70,
+      "position_m": [
+        0,
+        -27.25,
+        3.635
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_071",
+      "sequence_index": 71,
+      "position_m": [
+        0,
+        -26.75,
+        3.515
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_072",
+      "sequence_index": 72,
+      "position_m": [
+        0,
+        -26.25,
+        3.395
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_073",
+      "sequence_index": 73,
+      "position_m": [
+        0,
+        -25.75,
+        3.275
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_074",
+      "sequence_index": 74,
+      "position_m": [
+        0,
+        -25.25,
+        3.1550000000000002
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_075",
+      "sequence_index": 75,
+      "position_m": [
+        0,
+        -24.75,
+        3.035
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_076",
+      "sequence_index": 76,
+      "position_m": [
+        0,
+        -24.25,
+        2.915
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_077",
+      "sequence_index": 77,
+      "position_m": [
+        0,
+        -23.75,
+        2.795
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_078",
+      "sequence_index": 78,
+      "position_m": [
+        0,
+        -23.25,
+        2.675
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_079",
+      "sequence_index": 79,
+      "position_m": [
+        0,
+        -22.75,
+        2.555
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_080",
+      "sequence_index": 80,
+      "position_m": [
+        0,
+        -22.25,
+        2.435
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_081",
+      "sequence_index": 81,
+      "position_m": [
+        0,
+        -21.75,
+        2.315
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_082",
+      "sequence_index": 82,
+      "position_m": [
+        0,
+        -21.25,
+        2.1950000000000003
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_083",
+      "sequence_index": 83,
+      "position_m": [
+        0,
+        -20.75,
+        2.075
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_084",
+      "sequence_index": 84,
+      "position_m": [
+        0,
+        -20.25,
+        1.9549999999999998
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_085",
+      "sequence_index": 85,
+      "position_m": [
+        0,
+        -19.75,
+        1.8349999999999997
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_086",
+      "sequence_index": 86,
+      "position_m": [
+        0,
+        -19.25,
+        1.7149999999999999
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_087",
+      "sequence_index": 87,
+      "position_m": [
+        0,
+        -18.75,
+        1.595
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_088",
+      "sequence_index": 88,
+      "position_m": [
+        0,
+        -18.25,
+        1.4749999999999999
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_089",
+      "sequence_index": 89,
+      "position_m": [
+        0,
+        -17.75,
+        1.3549999999999998
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_090",
+      "sequence_index": 90,
+      "position_m": [
+        0,
+        -17.25,
+        1.2349999999999999
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_091",
+      "sequence_index": 91,
+      "position_m": [
+        0,
+        -16.75,
+        1.115
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_092",
+      "sequence_index": 92,
+      "position_m": [
+        0,
+        -16.25,
+        0.995
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_093",
+      "sequence_index": 93,
+      "position_m": [
+        0,
+        -15.75,
+        0.875
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_094",
+      "sequence_index": 94,
+      "position_m": [
+        0,
+        -15.25,
+        0.755
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_095",
+      "sequence_index": 95,
+      "position_m": [
+        0,
+        -14.75,
+        0.635
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_096",
+      "sequence_index": 96,
+      "position_m": [
+        0,
+        -14.25,
+        0.515
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_097",
+      "sequence_index": 97,
+      "position_m": [
+        0,
+        -13.75,
+        0.395
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_098",
+      "sequence_index": 98,
+      "position_m": [
+        0,
+        -13.25,
+        0.275
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    },
+    {
+      "instance_id": "逐级灯_099",
+      "sequence_index": 99,
+      "position_m": [
+        0,
+        -12.75,
+        0.155
+      ],
+      "trigger_owner": "room_runtime",
+      "per_instance_emission_required": true
+    }
+  ],
+  "default_game_state": "off",
+  "preview_state": "all_on",
+  "activation": "Room owner projects player onto stair descent path; activate reached sequence indices in order; per-instance material override, never mutate shared emission material",
+  "trigger_collision": "Not authored; wrapper owns trigger and walking ramp",
+  "animation_status": "contract only; no Godot gameplay integration",
+  "pillar_lamps": [
+    {
+      "instance_id": "独立栏杆竖向灯_0530",
+      "sequence_index": 90,
+      "position_m": [
+        -2.3949999809265137,
+        -17.25,
+        1.2899999618530273
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0531",
+      "sequence_index": 90,
+      "position_m": [
+        2.3949999809265137,
+        -17.25,
+        1.2899999618530273
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0532",
+      "sequence_index": 93,
+      "position_m": [
+        -2.3949999809265137,
+        -15.75,
+        0.9300000071525574
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0533",
+      "sequence_index": 93,
+      "position_m": [
+        2.3949999809265137,
+        -15.75,
+        0.9300000071525574
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0534",
+      "sequence_index": 96,
+      "position_m": [
+        -2.3949999809265137,
+        -14.25,
+        0.5699999928474426
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0535",
+      "sequence_index": 96,
+      "position_m": [
+        2.3949999809265137,
+        -14.25,
+        0.5699999928474426
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0536",
+      "sequence_index": 99,
+      "position_m": [
+        -2.3949999809265137,
+        -12.75,
+        0.20999999344348907
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0537",
+      "sequence_index": 99,
+      "position_m": [
+        2.3949999809265137,
+        -12.75,
+        0.20999999344348907
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0538",
+      "sequence_index": 80,
+      "position_m": [
+        -2.3949999809265137,
+        -22.25,
+        2.490000009536743
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0539",
+      "sequence_index": 80,
+      "position_m": [
+        2.3949999809265137,
+        -22.25,
+        2.490000009536743
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0540",
+      "sequence_index": 83,
+      "position_m": [
+        -2.3949999809265137,
+        -20.75,
+        2.130000114440918
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0541",
+      "sequence_index": 83,
+      "position_m": [
+        2.3949999809265137,
+        -20.75,
+        2.130000114440918
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0542",
+      "sequence_index": 86,
+      "position_m": [
+        -2.3949999809265137,
+        -19.25,
+        1.7699999809265137
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0543",
+      "sequence_index": 86,
+      "position_m": [
+        2.3949999809265137,
+        -19.25,
+        1.7699999809265137
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0544",
+      "sequence_index": 89,
+      "position_m": [
+        -2.3949999809265137,
+        -17.75,
+        1.409999966621399
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0545",
+      "sequence_index": 89,
+      "position_m": [
+        2.3949999809265137,
+        -17.75,
+        1.409999966621399
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0546",
+      "sequence_index": 70,
+      "position_m": [
+        -2.3949999809265137,
+        -27.25,
+        3.690000057220459
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0547",
+      "sequence_index": 70,
+      "position_m": [
+        2.3949999809265137,
+        -27.25,
+        3.690000057220459
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0548",
+      "sequence_index": 73,
+      "position_m": [
+        -2.3949999809265137,
+        -25.75,
+        3.3299999237060547
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0549",
+      "sequence_index": 73,
+      "position_m": [
+        2.3949999809265137,
+        -25.75,
+        3.3299999237060547
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0550",
+      "sequence_index": 76,
+      "position_m": [
+        -2.3949999809265137,
+        -24.25,
+        2.9700000286102295
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0551",
+      "sequence_index": 76,
+      "position_m": [
+        2.3949999809265137,
+        -24.25,
+        2.9700000286102295
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0552",
+      "sequence_index": 79,
+      "position_m": [
+        -2.3949999809265137,
+        -22.75,
+        2.609999895095825
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0553",
+      "sequence_index": 79,
+      "position_m": [
+        2.3949999809265137,
+        -22.75,
+        2.609999895095825
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0554",
+      "sequence_index": 60,
+      "position_m": [
+        -2.3949999809265137,
+        -32.25,
+        4.889999866485596
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0555",
+      "sequence_index": 60,
+      "position_m": [
+        2.3949999809265137,
+        -32.25,
+        4.889999866485596
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0556",
+      "sequence_index": 63,
+      "position_m": [
+        -2.3949999809265137,
+        -30.75,
+        4.53000020980835
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0557",
+      "sequence_index": 63,
+      "position_m": [
+        2.3949999809265137,
+        -30.75,
+        4.53000020980835
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0558",
+      "sequence_index": 66,
+      "position_m": [
+        -2.3949999809265137,
+        -29.25,
+        4.170000076293945
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0559",
+      "sequence_index": 66,
+      "position_m": [
+        2.3949999809265137,
+        -29.25,
+        4.170000076293945
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0560",
+      "sequence_index": 69,
+      "position_m": [
+        -2.3949999809265137,
+        -27.75,
+        3.809999942779541
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0561",
+      "sequence_index": 69,
+      "position_m": [
+        2.3949999809265137,
+        -27.75,
+        3.809999942779541
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0562",
+      "sequence_index": 50,
+      "position_m": [
+        -2.3949999809265137,
+        -37.25,
+        6.090000152587891
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0563",
+      "sequence_index": 50,
+      "position_m": [
+        2.3949999809265137,
+        -37.25,
+        6.090000152587891
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0564",
+      "sequence_index": 53,
+      "position_m": [
+        -2.3949999809265137,
+        -35.75,
+        5.730000019073486
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0565",
+      "sequence_index": 53,
+      "position_m": [
+        2.3949999809265137,
+        -35.75,
+        5.730000019073486
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0566",
+      "sequence_index": 56,
+      "position_m": [
+        -2.3949999809265137,
+        -34.25,
+        5.369999885559082
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0567",
+      "sequence_index": 56,
+      "position_m": [
+        2.3949999809265137,
+        -34.25,
+        5.369999885559082
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0568",
+      "sequence_index": 59,
+      "position_m": [
+        -2.3949999809265137,
+        -32.75,
+        5.010000228881836
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0569",
+      "sequence_index": 59,
+      "position_m": [
+        2.3949999809265137,
+        -32.75,
+        5.010000228881836
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0570",
+      "sequence_index": 40,
+      "position_m": [
+        -2.3949999809265137,
+        -42.25,
+        7.289999961853027
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0571",
+      "sequence_index": 40,
+      "position_m": [
+        2.3949999809265137,
+        -42.25,
+        7.289999961853027
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0572",
+      "sequence_index": 43,
+      "position_m": [
+        -2.3949999809265137,
+        -40.75,
+        6.929999828338623
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0573",
+      "sequence_index": 43,
+      "position_m": [
+        2.3949999809265137,
+        -40.75,
+        6.929999828338623
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0574",
+      "sequence_index": 46,
+      "position_m": [
+        -2.3949999809265137,
+        -39.25,
+        6.570000171661377
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0575",
+      "sequence_index": 46,
+      "position_m": [
+        2.3949999809265137,
+        -39.25,
+        6.570000171661377
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0576",
+      "sequence_index": 49,
+      "position_m": [
+        -2.3949999809265137,
+        -37.75,
+        6.210000038146973
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0577",
+      "sequence_index": 49,
+      "position_m": [
+        2.3949999809265137,
+        -37.75,
+        6.210000038146973
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0578",
+      "sequence_index": 30,
+      "position_m": [
+        -2.3949999809265137,
+        -47.25,
+        8.489999771118164
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0579",
+      "sequence_index": 30,
+      "position_m": [
+        2.3949999809265137,
+        -47.25,
+        8.489999771118164
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0580",
+      "sequence_index": 33,
+      "position_m": [
+        -2.3949999809265137,
+        -45.75,
+        8.130000114440918
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0581",
+      "sequence_index": 33,
+      "position_m": [
+        2.3949999809265137,
+        -45.75,
+        8.130000114440918
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0582",
+      "sequence_index": 36,
+      "position_m": [
+        -2.3949999809265137,
+        -44.25,
+        7.769999980926514
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0583",
+      "sequence_index": 36,
+      "position_m": [
+        2.3949999809265137,
+        -44.25,
+        7.769999980926514
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0584",
+      "sequence_index": 39,
+      "position_m": [
+        -2.3949999809265137,
+        -42.75,
+        7.409999847412109
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0585",
+      "sequence_index": 39,
+      "position_m": [
+        2.3949999809265137,
+        -42.75,
+        7.409999847412109
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0586",
+      "sequence_index": 20,
+      "position_m": [
+        -2.3949999809265137,
+        -52.25,
+        9.6899995803833
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0587",
+      "sequence_index": 20,
+      "position_m": [
+        2.3949999809265137,
+        -52.25,
+        9.6899995803833
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0588",
+      "sequence_index": 23,
+      "position_m": [
+        -2.3949999809265137,
+        -50.75,
+        9.329999923706055
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0589",
+      "sequence_index": 23,
+      "position_m": [
+        2.3949999809265137,
+        -50.75,
+        9.329999923706055
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0590",
+      "sequence_index": 26,
+      "position_m": [
+        -2.3949999809265137,
+        -49.25,
+        8.970000267028809
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0591",
+      "sequence_index": 26,
+      "position_m": [
+        2.3949999809265137,
+        -49.25,
+        8.970000267028809
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0592",
+      "sequence_index": 29,
+      "position_m": [
+        -2.3949999809265137,
+        -47.75,
+        8.609999656677246
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0593",
+      "sequence_index": 29,
+      "position_m": [
+        2.3949999809265137,
+        -47.75,
+        8.609999656677246
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0594",
+      "sequence_index": 10,
+      "position_m": [
+        -2.3949999809265137,
+        -57.25,
+        10.890000343322754
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0595",
+      "sequence_index": 10,
+      "position_m": [
+        2.3949999809265137,
+        -57.25,
+        10.890000343322754
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0596",
+      "sequence_index": 13,
+      "position_m": [
+        -2.3949999809265137,
+        -55.75,
+        10.529999732971191
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0597",
+      "sequence_index": 13,
+      "position_m": [
+        2.3949999809265137,
+        -55.75,
+        10.529999732971191
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0598",
+      "sequence_index": 16,
+      "position_m": [
+        -2.3949999809265137,
+        -54.25,
+        10.170000076293945
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0599",
+      "sequence_index": 16,
+      "position_m": [
+        2.3949999809265137,
+        -54.25,
+        10.170000076293945
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0600",
+      "sequence_index": 19,
+      "position_m": [
+        -2.3949999809265137,
+        -52.75,
+        9.8100004196167
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0601",
+      "sequence_index": 19,
+      "position_m": [
+        2.3949999809265137,
+        -52.75,
+        9.8100004196167
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0602",
+      "sequence_index": 0,
+      "position_m": [
+        -2.3949999809265137,
+        -62.25,
+        12.09000015258789
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0603",
+      "sequence_index": 0,
+      "position_m": [
+        2.3949999809265137,
+        -62.25,
+        12.09000015258789
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0604",
+      "sequence_index": 3,
+      "position_m": [
+        -2.3949999809265137,
+        -60.75,
+        11.729999542236328
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0605",
+      "sequence_index": 3,
+      "position_m": [
+        2.3949999809265137,
+        -60.75,
+        11.729999542236328
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0606",
+      "sequence_index": 6,
+      "position_m": [
+        -2.3949999809265137,
+        -59.25,
+        11.369999885559082
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0607",
+      "sequence_index": 6,
+      "position_m": [
+        2.3949999809265137,
+        -59.25,
+        11.369999885559082
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0608",
+      "sequence_index": 9,
+      "position_m": [
+        -2.3949999809265137,
+        -57.75,
+        11.010000228881836
+      ]
+    },
+    {
+      "instance_id": "独立栏杆竖向灯_0609",
+      "sequence_index": 9,
+      "position_m": [
+        2.3949999809265137,
+        -57.75,
+        11.010000228881836
+      ]
+    }
+  ],
+  "pillar_component": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v026\\component_packages\\stair_pillar_light\\stair_pillar_light.blend"
+}

@@ -973,8 +973,17 @@ def build() -> dict:
         "export_status": "blend_only; GLB and Godot integration not requested",
         "collision_status": "not authored",
         "runtime_status": "not connected",
+        "ceiling_contract": {
+            "present_in_blender_whitebox": False,
+            "runtime_component": "ceiling_deck_5m",
+            "runtime_bottom_y_m": 4.0,
+            "walk_plane_z_m": WALK_PLANE_Z,
+            "runtime_clear_height_m": 3.7,
+            "excluded_room_keys": ["balcony", "tall_hall"],
+            "note": "白盒不包含顶盖几何；普通封顶房的顶盖实例由房间静态 TSCN 在 4.0m 定点装配，阳台与挑高前厅保持露天。",
+        },
         "not_included": [
-            "顶盖 / 房间天花板（按房型件阶段处理，见 06 §7.3.1 封顶件硬契约）",
+            "顶盖 / 房间天花板（Blender 白盒不含几何；运行时由 ceiling_deck_5m 在 4.0m 装配，阳台与挑高前厅不封顶）", 
             "破碎空洞（层间通道）—— 待第 2 层一起定",
             "第 2..5 层（结构与本层相同、无挑高，另轮制作）",
             "门扇（door_5m）、窗、陈设、灯光、碰撞",

@@ -14,3 +14,12 @@ metadata/downward_triangles_removed = 114
 metadata/collision_policy = "visual_only_no_collision"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+; ⚠️ 本覆盖只在编辑器/项目内有效，**导出转换会丢弃**（导入 GLB 内部节点的属性覆盖）。
+; 发行包靠 src/world3d/BaseFixtureGlow3D.gd 的 _disable_fixture_shadow() 兜底。
+; 灯具外壳不投影；理由见 east_round_pendant_light_root_top3d.tscn。
+[node name="33_主体_v019" parent="ImportedModel" index="0"]
+cast_shadow = 0
+
+[node name="33_柔和自发光_v019" parent="ImportedModel" index="1"]
+cast_shadow = 0

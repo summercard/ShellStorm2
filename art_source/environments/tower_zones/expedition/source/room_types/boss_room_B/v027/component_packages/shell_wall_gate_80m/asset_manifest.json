@@ -1,0 +1,46 @@
+{
+  "slug": "shell_wall_gate_80m",
+  "name_zh": "整面高位入口墙",
+  "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-WALL-GATE-80M",
+  "component_family": "shell_wall",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "version": "v027",
+  "collection": "输出资产包_shell_wall_gate_80m",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\shell_wall_gate_80m\\shell_wall_gate_80m.blend",
+  "objects": [
+    "整面高位入口墙_主体"
+  ],
+  "bounds_min": [
+    -40.0,
+    -0.4000000059604645,
+    0.0
+  ],
+  "bounds_max": [
+    40.0,
+    0.4000000059604645,
+    72.0
+  ],
+  "bounds_size_m": [
+    80.0,
+    0.800000011920929,
+    72.0
+  ],
+  "instance_count": 1,
+  "triangle_count": 136,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "runtime_connected": false
+}

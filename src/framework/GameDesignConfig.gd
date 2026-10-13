@@ -29,6 +29,15 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"scene_3d": "res://scenes/ExpeditionLevel01_3D.tscn",
 	},
 	{
+		"level_id": "expedition_02",
+		"run_id": "expedition_02",
+		"display_name": "远征关卡02",
+		"setting_name": "破败旅馆",
+		"subtitle": "单层独立行动 · 阳台安全屋 → 挑高前厅 → 旅馆长廊 → T 字路口 → 两条支廊（第 1 层）",
+		"objective_line": "穿过坍塌门洞进入旅馆长廊，沿主轴北进，在 T 字路口选择一条支廊深入。",
+		"scene_3d": "res://scenes/ExpeditionLevel02_3D.tscn",
+	},
+	{
 		"level_id": "99",
 		"run_id": "99",
 		"display_name": "测试关卡99",

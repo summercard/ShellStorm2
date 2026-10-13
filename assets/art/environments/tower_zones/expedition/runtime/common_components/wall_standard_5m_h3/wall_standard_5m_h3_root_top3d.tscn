@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-COMMON-WALL-STANDARD-5M-H3
+; 远征关卡02 通用组件库 v015 · 08_墙壁组件 · wall_standard_5m_h3
+; 范式 B（自包含可替换组件）：视觉 GLB + 碰撞同包，逐实例化。
+; 原点契约 = 底面中心（Blender 底面 Z=0 → Godot 底面 Y=0），与全库一致。
+; Godot 朝向 = -Z（墙长沿 X、墙厚沿 Z），与战局通用组件同口径。
+; 低矮层实墙：5.00×0.30×3.00m，一槽一件，可直接沿 5m 网格平铺。
+;
+; 共享色盘：res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+; 导入后处理：res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd
+; GLB 内嵌图片数 = 0（导出时 export_image_format=NONE）
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/common_components/wall_standard_5m_h3/wall_standard_5m_h3_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_standard_5m_h3"]
+size = Vector3(5, 3, 0.3)
+
+[node name="ExpeditionCommonWallStandard5mH3" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-COMMON-WALL-STANDARD-5M-H3"
+metadata/asset_version = "v015"
+metadata/library_id = "ENV-EXPEDITION-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/expedition"
+metadata/level_id = "expedition_02"
+metadata/category = "08_墙壁组件"
+metadata/component = "wall_standard_5m_h3"
+metadata/logic_id = "wall_standard_5m"
+metadata/display_name_zh = "通用标准墙 5.00×0.30×3.00m（低矮层）"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v015/expedition_common_components_source_v015.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/expedition/source/common_components/v015/component_packages_v015/wall_standard_5m_h3/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5, 3, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 3, 0.3)
+metadata/slot_size_m = Vector3(5, 3, 0.3)
+metadata/preserve_authored_palette = true
+metadata/shared_palette = "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+metadata/palette_post_import = "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/grid_unit_m = 5
+metadata/wall_kind = "solid"
+metadata/wall_thickness_m = 0.3
+metadata/snap_to_ground_offset_m = 0
+metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+metadata/camera_lower_wall = true
+metadata/camera_lower_wall_note = "TowerDescent3D._find_lower_camera_wall_distance 水平打射线（高度 1.09m、长 7.47m），命中本碰撞体的 cam 变体即抬高并收镜。远征02 自由朝向 ⇒ 所有墙件都标，不做南北筛选。"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.5, 0)
+shape = SubResource("BoxShape3D_wall_standard_5m_h3")

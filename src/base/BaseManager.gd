@@ -1616,5 +1616,102 @@ func clear_extraction_loot() -> void:
 func is_expedition_level_unlocked(level_id: String) -> bool:
 	_ensure_data()
 	if level_id == "expedition_02":
-		return data.expedition_02_unlocked
+		# 正式标志存存档；调试覆盖存独立文件。两者取或 —— 理由见
+		# DEBUG_UNLOCK_OVERRIDE_PATH 的注释（存档会被同项目的别的实例回写）。
+		return data.expedition_02_unlocked or _is_debug_unlock_override(level_id)
 	return level_id in ["expedition_01", "99"]
+
+
+## 调试直通用：远征关卡解锁的「覆盖」落点。
+##
+## 为什么正式标志之外还要一份覆盖：正式标志写在 `user://base_save.json` 里，
+## 而那是**全项目共享**的存档 —— 只要还有第二个 Godot 实例（编辑器 / 无头探针 /
+## 导出进程）活着，它就会按自己内存里的档周期性回写，把刚解锁的标志冲掉。
+## 覆盖文件独立于存档，不受那些实例影响；读的时候与正式标志取或。
+##
+## 只由 P 键调试面板「预留」页写入；`debug_relock_*` 会把它清掉。
+const DEBUG_UNLOCK_OVERRIDE_PATH := "user://expedition_debug_unlock.json"
+
+var _debug_unlock_overrides: Dictionary = {}
+var _debug_unlock_overrides_loaded := false
+
+
+func _load_debug_unlock_overrides() -> void:
+	if _debug_unlock_overrides_loaded:
+		return
+	_debug_unlock_overrides_loaded = true
+	_debug_unlock_overrides.clear()
+	if not FileAccess.file_exists(DEBUG_UNLOCK_OVERRIDE_PATH):
+		return
+	var file := FileAccess.open(DEBUG_UNLOCK_OVERRIDE_PATH, FileAccess.READ)
+	if file == null:
+		return
+	var text := file.get_as_text()
+	file.close()
+	var parsed: Variant = JSON.parse_string(text)
+	if parsed is Dictionary:
+		_debug_unlock_overrides = parsed as Dictionary
+
+
+func _write_debug_unlock_overrides() -> bool:
+	var file := FileAccess.open(DEBUG_UNLOCK_OVERRIDE_PATH, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(JSON.stringify(_debug_unlock_overrides) + "\n")
+	file.close()
+	return true
+
+
+func _is_debug_unlock_override(level_id: String) -> bool:
+	_load_debug_unlock_overrides()
+	return bool(_debug_unlock_overrides.get(level_id, false))
+
+
+## 调试直通：把某个远征关卡直接标记为已解锁，跳过正式前置条件。
+##
+## 正式解锁路径只有一条 —— `commit_run_settlement()` 里
+## 「`success == true` 且 `expedition_level_id == "expedition_01"`」那一支，
+## 也就是必须先通关远征关卡01；本方法供 P 键调试面板「预留」页使用，
+## 不参与任何正式结算流程，也不改 `total_runs` / `successful_extractions`。
+##
+## 同时写正式标志与调试覆盖：正式标志负责「存档干净时是对的」，
+## 覆盖负责「存档被别的实例回写时仍然生效」。
+func debug_unlock_expedition_level(level_id: String) -> bool:
+	_ensure_data()
+	match level_id:
+		"expedition_02":
+			_set_debug_unlock_override(level_id, true)
+			if data.expedition_02_unlocked:
+				return true
+			data.expedition_02_unlocked = true
+			if save_base("debug_unlock_expedition:%s" % level_id):
+				return true
+			# 存档写失败不算失败 —— 覆盖已经生效；内存态保持与覆盖一致。
+			return _is_debug_unlock_override(level_id)
+	return false
+
+
+## 调试直通的反向操作：把关卡退回未解锁，方便重新走一遍真实解锁流程。
+## 只对走存档标志的关卡有意义；`expedition_01` / `99` 是常量放行，无法退回。
+func debug_relock_expedition_level(level_id: String) -> bool:
+	_ensure_data()
+	match level_id:
+		"expedition_02":
+			_set_debug_unlock_override(level_id, false)
+			if not data.expedition_02_unlocked:
+				return true
+			data.expedition_02_unlocked = false
+			if save_base("debug_relock_expedition:%s" % level_id):
+				return true
+			return not _is_debug_unlock_override(level_id)
+	return false
+
+
+func _set_debug_unlock_override(level_id: String, enabled: bool) -> void:
+	_load_debug_unlock_overrides()
+	if enabled:
+		_debug_unlock_overrides[level_id] = true
+	else:
+		_debug_unlock_overrides.erase(level_id)
+	if not _write_debug_unlock_overrides():
+		push_error("[BaseManager] 调试解锁覆盖写入失败：%s" % DEBUG_UNLOCK_OVERRIDE_PATH)

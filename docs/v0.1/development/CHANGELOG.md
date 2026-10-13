@@ -1,3 +1,54 @@
+## 2026-10-13 Boss 设施延伸井底与矩阵转向 v027
+
+- FeatureID：`ASSET-PIPELINE`；54 个设施低面数下延、21 个矩阵下延底座，32 个侧墙数据库朝向修复。46 组件、652 实例。
+- 见[制作与验收记录](2026-10-13_boss_depth_v027.md)。
+
+## 2026-10-13 音乐播放清单与全游戏音效系统设计
+
+- FeatureID：`AUDIO-MUSIC`；新增[音乐播放清单](../design/音乐播放清单.md)，将音乐使用收敛为歌曲、播放位置、播放条件、是否循环和A/B选曲；明确远征关卡不播放全局BGM，99F收音机由独立3D播放器持有且不与全局基地BGM叠加。
+- 新增[音效系统与资产设计](../design/音效系统与资产设计.md)，从玩家、武器、近战、敌人、Boss、世界交互、远征、剧情、UI和环境声景重新建立目标事件目录；36个既有SFX仅作为兼容资产基线，不作为设计容量上限。
+- 冻结音效管理原则：领域事实→语义事件→SoundSet/CueProfile→播放、空间化和混音；玩家听觉与AI声音刺激分开；一个事实只有一个主播放所有者；资产复用必须登记语义、层、变体、版本、哈希、来源和验收关系。
+- 同步设计索引、模块索引、功能注册表和功能关系矩阵。此次仅完成设计与追溯入口，未实现 `AudioManager.emit_event()`、未制作或替换音频资产、未把音效目标标记为已完成；真实设备、空间遮挡和听感验收仍待后续施工。
+
+## 2026-10-13 Boss 外壳减面、竖灯与桥门修复 v026
+
+- FeatureID：`ASSET-PIPELINE`；六个整面外壳，外壳三角面 366808 → 588；修机箱顶盖闪面，补独立竖灯、桥门接板与下部承力管线，关闭东门。45 组件、631 实例。
+- 详见[制作与验收记录](2026-10-13_boss_fixes_v026.md)。源制作，不包含运行时灯光触发。
+
+## 2026-10-13 Boss 深井楼梯、独立灯组件、弧缆与密封围护 v025
+
+- FeatureID：`ASSET-PIPELINE`；40 组件、1650 实例，正式楼梯和 100 独立灯实例，圆滑交错缆束、倾倒机箱、顶底/墙/门完整围护。屏幕手调矩阵保留。
+- 详见[制作与验收记录](2026-10-13_boss_enclosure_v025.md)。逐级点亮交付后续控制契约，未接入游戏。
+
+## 2026-10-13 Boss 深井三屏深化、方形塔体与底灯 v024
+
+- FeatureID：`ASSET-PIPELINE`；保留手调三屏，补屏幕贴图与扫描、弯管、出口和矩阵；下方结构改为低面数大型方形壳体，增加 8 盏底部上射灯。32 组件、424 实例，制作源验收通过。
+- 详见[制作与验收记录](2026-10-13_boss_silhouette_v024.md)。有源未登记、未导出、未接入。
+
+## 2026-10-13 Boss 深井平台与双桥 Blender 源 v022
+
+- FeatureID：`ASSET-PIPELINE`；按参考图制作 25×25m 平台、下方承力结构和两座 5×20m 桥；其余只保留构图草稿。17 母版组件、288 实例，源独立另存 v022。
+- 逐面色盘、尺寸、接口与独立组件原生加载验收见[独立记录](2026-10-13_boss_structure_v022.md)。未登记账本、未导出 GLB、未修改 Godot 正式房间。
+
+## 2026-10-12 远征02 门扇覆盖：21 个门洞补齐到 21 扇物理门
+
+- FeatureID：`WORLD-EXPEDITION`；承接同日「相邻房之间凭空生成通用走廊」的续段。主人要求「只要按照规范进行拼接可以开门即可，都是物理门」。
+- 症状：上一轮修完走廊几何后清点发现，**21 个标准门洞只建出 11 扇门扇**，另有 4 扇门扇悬在没有洞的地方（最远离最近门洞 999m）。长廊 `room_02` 西墙 5 扇客房门、东墙 5 扇，**只有 2 扇有门扇**。
+- 根因：`DungeonRoom3D._build_runtime_doors_only()` 遍历的是 `room.doors`（**方向**），而 `_door_nodes[direction]` 一个方向只能存一扇 ⇒ 一间房 11 扇门被塌成 1 扇，偏移最远 60m。附带发现 `LevelPlanLoader` 重建端口字典时**只保留 4 个字段**，`door_width_m` / `door_axis` / `door_line_m` / `door_center_m` 全部被静默丢弃。
+- 修改：① 端口登记补全上述 4 字段；② `DungeonRoom3D` 门扇改**端口粒度**（新增 `_has_authoritative_door_ports()` 判据 —— 塔楼房间无该字段、`mode=constrained` 的远征01 端口只有拓扑信息，两者都保留按方向建门的旧行为；不做这条区分远征01 会从 13 扇门掉到 1 扇）；位置直接取端口局部坐标，`door_width_m ≤ 3m` 才建实体扇（5m 通洞/坍塌是纯开口，与「门宽 ≤3m 端口 21 个 = 静态布局 21 个 `wall_door` 件」逐数吻合）；新增 `_door_nodes_by_port` 与 `get_door_node_by_port()`；抽取 `_door_panel_visual()` 与 `_build_door` 共用；③ `TowerDescent3D._bind_shared_edge_doors()` 改按端口配对（一墙多门时按方向取门会张冠李戴），配套 `_edge_expects_door_leaf()` 区分"通洞边无门扇"与"门扇该有却没建出来"。
+- 结果：门洞 **21** / 门扇 **22**（21 洞 + 1 扇设计内的入口气闸门）/ 缺口 **0** / `ERROR` **0**；远征01 保持 13 扇逐数不变。
+- 新增门禁 `verify_expedition02_doors`（放在 `scripts/`，与同批远征02 验收同址）；**反向对照**退出码 1、`FAILED count=15`，精确复现 21 洞 / 11 扇 / 4 扇悬空。新增只读探针 `probe_expedition02_door_coverage`（支持 `-- <scene>` 对远征01 跑同一套判据）。
+- 详见[独立记录](2026-10-12_expedition02_corridor_wall_leak_fix.md)。
+
+## 2026-10-12 远征02 相邻房之间凭空生成通用走廊
+
+- FeatureID：`WORLD-EXPEDITION`；工程0.1.0，依据[远征关卡02设计](../design/远征关卡02设计.md)。主人反馈「开阳台→room_01 的门后刷出一堆通用墙、排列很糟糕、很多空阻挡」。
+- 症状与根因：与开门无关，关卡一加载 25 条房间连接件里 **23 条**就在错误位置铺了几何。`LevelPlanLoader.normalize_floor()` 重建端口字典时**没登记 `side`**（白盒端口只写 `position_m`+`outward`），`TowerDescent3D._declare_and_register_edge()` 取到空串后走兜底 `_direction_between(两房中心)` ⇒ 门位退化成房间中心，门间距离变成两房中心距。阳台与前厅本**共墙**（实测贴合 0.00m），却被算成 **25.74m** 并据此生成走廊。长廊 `room_02` 一间房有 11 扇门，塔楼模型「一面墙只认一扇门」把 10 扇侧墙门塌成 2 扇，最远偏 75.17m。实测修复前：**286 段墙 / 143 块地板 / 46 个挡人碰撞体（全空阻挡）/ 15 条 `off the 5m lane` ERROR**。
+- 修改：① `LevelPlanLoader` 新增 `_side_from_room_boundary()`，按端口压在**房间哪条边界**派生 `side` 与 `lane_m`（先比离哪条边界更近再取符号；不能用 `outward` —— 白盒门表的 outward 只编码「谁排 side_a」，同面墙上东西两侧的门都可能写 `(+1,0)`）；判据与 `FloorPlanGenerator._connection_port_is_on_room_boundary()` 的 side 定义同源，实测 56/56 端口两种独立判法一致。② `TowerDescent3D._build_tower_horizontal_corridor()` 在**静态布局已自持墙体**时不生成走廊几何（判据取 `static_layout_scene_loaded`+非空 `static_layout_scene_path`，不是 `is_expedition()`，故 `mode=constrained` 的远征01 逐字不变）；`start/end` 统一退回两房中心连线中点，不让错误坐标流进 `GameplaySpatialRegistry3D`。未改任何设计源代码、Blender 源、GLB 与门数量。
+- 修复后：门间距离 >0.05m 的连接件 **0/25**，走廊墙/地板实例 **0/0**，挡人碰撞 **0**，ERROR **0**；26 房 / 1097 实例白盒逐件对账保持全绿。
+- 新增防复发门禁：`verify_expedition02_level_plan` 增加「每个连接端口必须带可用的 `side` 且与几何一致」断言；**反向对照**（临时把派生换成空串）退出码 1、`FAILED count=56`，证明该断言真的会红。
+- 详见[独立记录](2026-10-12_expedition02_corridor_wall_leak_fix.md)。
+
 ## 2026-10-12 远征01开门摄像机门墙代理
 
 - FeatureID：`WORLD-PLAN`（关联 `WORLD-GATE`）；工程0.1.0，依据[关卡几何与门槽契约§8](../05_技术施工_关卡生成与爬楼.md)。运行时代理由 `DungeonRoom3D` 拥有；真实 `RoomDoor3D` 是定位事实源，正式房间TSCN仍拥有作者布局。

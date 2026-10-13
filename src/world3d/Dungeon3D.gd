@@ -2133,6 +2133,7 @@ func _prepare_layout_rooms() -> void:
 			"authored_layout_instances": record.get("authored_layout_instances", []),
 			"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),
 			"connection_ports": record.get("connection_ports", []),
+			"camera_profile": record.get("camera_profile", {}),
 			"door_endpoint_owners": record.get("door_endpoint_owners", {}),
 		})
 		room.position = record["position"]

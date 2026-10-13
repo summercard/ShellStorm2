@@ -1,0 +1,141 @@
+{
+  "schema": "screen_dynamic_v1",
+  "scope": "Blender animated preview and future engine handoff, no runtime integration claimed",
+  "frames": [
+    1,
+    240
+  ],
+  "fps": 24,
+  "phase_loop_frames": 120,
+  "screens": [
+    {
+      "screen_anchor": "草稿巨屏_246",
+      "content_instance": "诊断遥测屏幕_内容实例",
+      "texture": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v026\\textures\\screen_left.png",
+      "texture_sha256": "3d4126eb0f10001df3b9ced6714dc45ace3c041ff56262205f09c951d64a3175",
+      "material": "05_动态屏幕_left_自发光",
+      "uv_layer": "ScreenUV",
+      "local_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.800000011920929
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.3400000035762787
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "scan_phase_node": "ScanPhase",
+      "loop_frames": 120,
+      "fps": 24,
+      "generated_by": "gpt-image-2 via sofunny-image skill"
+    },
+    {
+      "screen_anchor": "草稿巨屏_247",
+      "content_instance": "数据核心屏幕_内容实例",
+      "texture": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v026\\textures\\screen_center.png",
+      "texture_sha256": "fd90387202b9ab5e8a9befd2ca36d2d7307bd1bd89c0e8ed6f85aa2178ee05ec",
+      "material": "06_动态屏幕_center_自发光",
+      "uv_layer": "ScreenUV",
+      "local_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.800000011920929
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.3400000035762787
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "scan_phase_node": "ScanPhase",
+      "loop_frames": 120,
+      "fps": 24,
+      "generated_by": "gpt-image-2 via sofunny-image skill"
+    },
+    {
+      "screen_anchor": "草稿巨屏_248",
+      "content_instance": "波形监测屏幕_内容实例",
+      "texture": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v026\\textures\\screen_right.png",
+      "texture_sha256": "54021bf893449470e34603aab75ade5f17168f46ca2436d582db119908931626",
+      "material": "07_动态屏幕_right_自发光",
+      "uv_layer": "ScreenUV",
+      "local_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.800000011920929
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.3400000035762787
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "scan_phase_node": "ScanPhase",
+      "loop_frames": 120,
+      "fps": 24,
+      "generated_by": "gpt-image-2 via sofunny-image skill"
+    }
+  ],
+  "controls": [
+    "base_texture",
+    "scan_phase_0_1",
+    "scan_width_uv_0_008",
+    "scan_emission_boost_0_35",
+    "raster_lines",
+    "alarm_tint_future"
+  ],
+  "future_animation_options": [
+    "replace Image Texture with movie or image sequence",
+    "recreate procedural scan with runtime shader",
+    "add separate cube/orbit overlay without rebuilding chassis"
+  ],
+  "door_leaf_contract": "independent leaf collections, local sliding axis and open/closed positions stored on instances; no gameplay door state machine authored",
+  "material_policy_exception": "Only three screen surfaces use the three image materials and ScreenUV; all structural meshes retain original four shared palette roles."
+}

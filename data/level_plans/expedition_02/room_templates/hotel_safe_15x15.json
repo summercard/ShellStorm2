@@ -1,0 +1,33 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "hotel_safe_15x15",
+  "room_type": "SAFE_ROOM",
+  "size_m": [
+    15.0,
+    15.0
+  ],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 3.0,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": [
+    "north",
+    "south",
+    "east",
+    "west"
+  ],
+  "wall_lane_table": {},
+  "slots": [],
+  "variants": [],
+  "asset_ids": {
+    "room": "",
+    "components": []
+  },
+  "note": "远征关卡02 破败旅馆专用房型（阳台安全屋）。尺寸不在 2026-09-25 锁定的 8 个模板集合里，按 05.2 §3.6 第 6 条属新增模板，已由设计页 §13 L02-5 登记。本关普通房墙高 3.0m，顶盖底 4.0m（走面到顶盖底净高 3.70m；挑高前厅 11.9m 另算）。"
+}

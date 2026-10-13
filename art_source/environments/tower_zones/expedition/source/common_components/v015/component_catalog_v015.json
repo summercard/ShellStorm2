@@ -1,0 +1,138 @@
+{
+  "schema": "shellstorm2.common_component_library",
+  "library_id": "ENV-EXPEDITION-COMMON-COMPONENT-LIBRARY",
+  "version": "v015",
+  "level_id": "expedition_02",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v015\\expedition_common_components_source_v015.blend",
+  "optimized_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v015\\export\\v015\\expedition_common_components_source_v015_optimized.blend",
+  "components": [
+    {
+      "asset_id": "ENV-EXPEDITION-COMMON-WALL-STANDARD-5M-H3",
+      "slug": "wall_standard_5m_h3",
+      "category": "08_墙壁组件",
+      "bounds_size_m": [
+        5.0,
+        0.3,
+        3.0
+      ],
+      "slot_size_m": [
+        5.0,
+        0.3,
+        3.0
+      ],
+      "path": "wall_standard_5m_h3/asset_manifest.json"
+    },
+    {
+      "asset_id": "ENV-EXPEDITION-COMMON-WALL-DOOR-5M-H3",
+      "slug": "wall_door_5m_h3",
+      "category": "08_墙壁组件",
+      "bounds_size_m": [
+        5.0,
+        0.3,
+        3.0
+      ],
+      "slot_size_m": [
+        5.0,
+        0.3,
+        3.0
+      ],
+      "path": "wall_door_5m_h3/asset_manifest.json"
+    },
+    {
+      "asset_id": "ENV-EXPEDITION-COMMON-WALL-COLLAPSE-5M-H12",
+      "slug": "wall_collapse_5m_h12",
+      "category": "08_墙壁组件",
+      "bounds_size_m": [
+        5.0,
+        0.3,
+        9.1
+      ],
+      "slot_size_m": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "path": "wall_collapse_5m_h12/asset_manifest.json"
+    },
+    {
+      "asset_id": "ENV-EXPEDITION-COMMON-WALL-STANDARD-5M-H12",
+      "slug": "wall_standard_5m_h12",
+      "category": "08_墙壁组件",
+      "bounds_size_m": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "slot_size_m": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "path": "wall_standard_5m_h12/asset_manifest.json"
+    },
+    {
+      "asset_id": "ENV-EXPEDITION-COMMON-WALL-DOOR-5M-H12",
+      "slug": "wall_door_5m_h12",
+      "category": "08_墙壁组件",
+      "bounds_size_m": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "slot_size_m": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "path": "wall_door_5m_h12/asset_manifest.json"
+    },
+    {
+      "asset_id": "ENV-EXPEDITION-COMMON-FLOOR-TILE-5M",
+      "slug": "floor_tile_5m",
+      "category": "09_顶面组件",
+      "bounds_size_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "slot_size_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "path": "floor_tile_5m/asset_manifest.json"
+    },
+    {
+      "asset_id": "ENV-EXPEDITION-COMMON-CEILING-DECK-5M",
+      "slug": "ceiling_deck_5m",
+      "category": "09_顶面组件",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "slot_size_m": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "path": "ceiling_deck_5m/asset_manifest.json"
+    },
+    {
+      "asset_id": "ENV-EXPEDITION-COMMON-FLOOR-BASE-5M",
+      "slug": "floor_base_5m",
+      "category": "09_顶面组件",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "slot_size_m": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "path": "floor_base_5m/asset_manifest.json"
+    }
+  ]
+}

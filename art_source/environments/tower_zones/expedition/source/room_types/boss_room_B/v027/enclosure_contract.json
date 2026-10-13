@@ -1,0 +1,71 @@
+{
+  "bounds_m": {
+    "x": [
+      -40,
+      40
+    ],
+    "y": [
+      -72.5,
+      27.5
+    ],
+    "z": [
+      -36,
+      36
+    ]
+  },
+  "shell_instances": [
+    "外壳_后墙",
+    "外壳_入口墙",
+    "外壳_西墙",
+    "外壳_东墙",
+    "外壳_底面",
+    "外壳_顶面"
+  ],
+  "closed_outer_doors": [
+    {
+      "position": [
+        0,
+        -72.5,
+        12
+      ],
+      "rotation_z_deg": 180
+    },
+    {
+      "position": [
+        -40,
+        0,
+        0
+      ],
+      "rotation_z_deg": 90
+    },
+    {
+      "position": [
+        40,
+        0,
+        0
+      ],
+      "rotation_z_deg": 270
+    }
+  ],
+  "side_inner_doors": "preserved user scene; outer vestibule door seals enclosure",
+  "stairs": {
+    "width": 5,
+    "run": 50,
+    "rise": 12,
+    "step_run": 0.5,
+    "step_rise": 0.12,
+    "count": 100,
+    "low_end": [
+      0,
+      -12.5,
+      0
+    ],
+    "high_end": [
+      0,
+      -62.5,
+      12
+    ]
+  },
+  "runtime_collision": "pending",
+  "geometry": "six whole-face low-poly meshes"
+}

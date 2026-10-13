@@ -158,6 +158,7 @@ const CAMERA_DEFAULT_TRAILING_M := 3.699625
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0
+const CAMERA_EXPEDITION_PROFILE_SMOOTH_RATE := 4.0
 const CAMERA_LOWER_WALL_PROBE_HEIGHT_M := 1.09
 # 探针从角色前侧开始并向镜头后方穿过角色。若从角色身后0.42m起射，
 # 角色贴墙时起点会落入0.30m厚的墙体，射线便可能漏掉“从内部出发”的墙。
@@ -287,6 +288,18 @@ var _camera_stair_slab_detected := false
 var _camera_stair_slab_clearance_height_m := -1.0
 var _camera_stair_slab_drop_target_m := 0.0
 var _camera_stair_slab_drop_current_m := 0.0
+var _camera_profile_active := false
+var _camera_profile_height_target_m := CAMERA_HEIGHT_M
+var _camera_profile_height_current_m := CAMERA_HEIGHT_M
+var _camera_profile_trailing_target_m := CAMERA_DEFAULT_TRAILING_M
+var _camera_profile_trailing_current_m := CAMERA_DEFAULT_TRAILING_M
+var _camera_profile_yaw_target_deg := 0.0
+var _camera_profile_yaw_current_deg := 0.0
+var _camera_profile_look_height_target_m := CAMERA_LOOK_HEIGHT_M
+var _camera_profile_look_height_current_m := CAMERA_LOOK_HEIGHT_M
+var _camera_profile_look_ahead_target_m := CAMERA_LOOK_AHEAD_M
+var _camera_profile_look_ahead_current_m := CAMERA_LOOK_AHEAD_M
+var _camera_profile_transition_rate := CAMERA_EXPEDITION_PROFILE_SMOOTH_RATE
 var _vertical_arrival_open: Dictionary = {}
 var _corridor_floor_module_mesh: Mesh
 var _corridor_wall_module_mesh: Mesh
@@ -1551,6 +1564,7 @@ func _physics_process(delta: float) -> void:
 		)
 		_camera_probe_refresh_count += 1
 	# v0.1：只允许画面下方墙体驱动固定后方轴上的抬升收拢；禁止侧移与旋转。
+	_update_camera_profile(delta)
 	_update_camera_lower_wall_lift(delta, refresh_camera_probes)
 	_update_camera_stair_slab_drop(delta, refresh_camera_probes)
 	_apply_indoor_camera_pose()
@@ -1567,41 +1581,176 @@ func _update_base_fog_transition(delta: float, immediate := false) -> void:
 	_atmosphere.call("update_base_interior_fog", is_player_inside_facility(), delta, immediate)
 
 
+func _uses_expedition_camera_profiles() -> bool:
+	return is_expedition() and get_expedition_level_id() == "expedition_02"
+
+
+func _camera_profile_number(
+	profile: Dictionary,
+	key: String,
+	fallback: float,
+	minimum: float,
+	maximum: float
+) -> float:
+	var raw: Variant = profile.get(key, fallback)
+	if not (raw is int or raw is float):
+		return fallback
+	var value := float(raw)
+	if not is_finite(value):
+		return fallback
+	return clampf(value, minimum, maximum)
+
+
+func _update_camera_profile(delta: float) -> void:
+	if not _uses_expedition_camera_profiles():
+		_camera_profile_active = false
+		_camera_profile_height_target_m = CAMERA_HEIGHT_M
+		_camera_profile_trailing_target_m = CAMERA_DEFAULT_TRAILING_M
+		_camera_profile_yaw_target_deg = 0.0
+		_camera_profile_look_height_target_m = CAMERA_LOOK_HEIGHT_M
+		_camera_profile_look_ahead_target_m = CAMERA_LOOK_AHEAD_M
+		return
+	var profile: Dictionary = {}
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room != null:
+		profile = room.camera_profile
+	_camera_profile_active = not profile.is_empty()
+	_camera_profile_height_target_m = _camera_profile_number(
+		profile, "height_m", CAMERA_HEIGHT_M, 1.05, 30.0
+	) if _camera_profile_active else CAMERA_HEIGHT_M
+	_camera_profile_trailing_target_m = _camera_profile_number(
+		profile, "trailing_m", CAMERA_DEFAULT_TRAILING_M, 0.20, 12.0
+	) if _camera_profile_active else CAMERA_DEFAULT_TRAILING_M
+	_camera_profile_yaw_target_deg = _camera_profile_number(
+		profile, "world_yaw_deg", 0.0, -360.0, 360.0
+	) if _camera_profile_active else 0.0
+	_camera_profile_look_height_target_m = _camera_profile_number(
+		profile, "look_height_m", CAMERA_LOOK_HEIGHT_M, 0.20, 3.0
+	) if _camera_profile_active else CAMERA_LOOK_HEIGHT_M
+	_camera_profile_look_ahead_target_m = _camera_profile_number(
+		profile, "look_ahead_m", CAMERA_LOOK_AHEAD_M, 0.0, 6.0
+	) if _camera_profile_active else CAMERA_LOOK_AHEAD_M
+	var transition_seconds := _camera_profile_number(
+		profile, "transition_seconds", 1.2, 0.05, 10.0
+	) if _camera_profile_active else 0.25
+	_camera_profile_transition_rate = maxf(CAMERA_EXPEDITION_PROFILE_SMOOTH_RATE, 5.0 / transition_seconds)
+	var blend := 1.0 - exp(-_camera_profile_transition_rate * maxf(delta, 0.0))
+	_camera_profile_height_current_m = lerpf(_camera_profile_height_current_m, _camera_profile_height_target_m, blend)
+	_camera_profile_trailing_current_m = lerpf(_camera_profile_trailing_current_m, _camera_profile_trailing_target_m, blend)
+	_camera_profile_yaw_current_deg = rad_to_deg(lerp_angle(
+		deg_to_rad(_camera_profile_yaw_current_deg),
+		deg_to_rad(_camera_profile_yaw_target_deg), blend
+	))
+	_camera_profile_look_height_current_m = lerpf(_camera_profile_look_height_current_m, _camera_profile_look_height_target_m, blend)
+	_camera_profile_look_ahead_current_m = lerpf(_camera_profile_look_ahead_current_m, _camera_profile_look_ahead_target_m, blend)
+	if absf(_camera_profile_height_current_m - _camera_profile_height_target_m) <= 0.001:
+		_camera_profile_height_current_m = _camera_profile_height_target_m
+	if absf(_camera_profile_trailing_current_m - _camera_profile_trailing_target_m) <= 0.001:
+		_camera_profile_trailing_current_m = _camera_profile_trailing_target_m
+	if absf(_camera_profile_yaw_current_deg - _camera_profile_yaw_target_deg) <= 0.01:
+		_camera_profile_yaw_current_deg = _camera_profile_yaw_target_deg
+
+
+func _camera_profile_trailing_direction() -> Vector3:
+	if not _uses_expedition_camera_profiles() and player != null:
+		var trailing := player.global_basis.z
+		trailing.y = 0.0
+		return trailing.normalized() if trailing.length_squared() > 0.0001 else Vector3.BACK
+	var yaw := deg_to_rad(_camera_profile_yaw_current_deg)
+	return Basis(Vector3.UP, yaw) * Vector3.BACK
+
+
+func _camera_profile_right_direction() -> Vector3:
+	var trailing := _camera_profile_trailing_direction()
+	var right := Vector3.UP.cross(trailing)
+	return right.normalized() if right.length_squared() > 0.0001 else Vector3.RIGHT
+
+
+func _camera_profile_planar_position() -> Vector3:
+	if player == null:
+		return Vector3.ZERO
+	return player.global_position + _camera_profile_trailing_direction() * _camera_trailing_current_m
+
+
+func _current_camera_profile_id() -> String:
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null:
+		return ""
+	return str(room.camera_profile.get("id", ""))
+
+
 func _apply_indoor_camera_pose() -> void:
 	if player == null or player.camera == null:
 		return
-	# 玩家局部坐标系下：相机焦点位于 (0, look_height, -look_ahead)。
-	# 调试快捷键产生的偏移只修改“相机→焦点”这条向量，再绕焦点竖轴
-	# 旋转 yaw；玩家自身 yaw 与移动控制完全不受影响，下墙探针/楼梯
-	# 探测以及所有 read_*.global_basis.* 都读真实玩家朝向。
+	if not _uses_expedition_camera_profiles():
+		# 非远征02保持版本库原始相机：玩家局部坐标、坐姿下沉、debug trailing/yaw
+		# 均不改变；远征02专属 profile 不得污染远征01、塔楼和全局默认镜头。
+		var seat_drop_m := player.get_seated_camera_drop_m()
+		var focal_local := Vector3(
+			0.0,
+			CAMERA_LOOK_HEIGHT_M - seat_drop_m,
+			-CAMERA_LOOK_AHEAD_M
+		)
+		var default_relative := Vector3(
+			0.0,
+			CAMERA_HEIGHT_M + _camera_lift_current_m
+				- _camera_stair_slab_drop_current_m
+			- CAMERA_LOOK_HEIGHT_M,
+			_camera_trailing_current_m + CAMERA_LOOK_AHEAD_M
+		)
+		var default_magnitude := default_relative.length()
+		if default_magnitude <= 0.0001:
+			default_magnitude = 1.0
+		var relative_length := maxf(
+			default_magnitude + _read_debug_camera_trailing_offset_m(),
+			0.20
+		)
+		var relative_local := (default_relative / default_magnitude) * relative_length
+		var yaw_offset_rad := deg_to_rad(_read_debug_camera_yaw_offset_deg())
+		if not is_zero_approx(yaw_offset_rad):
+			relative_local = Basis(Vector3.UP, yaw_offset_rad) * relative_local
+		player.camera.position = focal_local + relative_local
+		var look_target := player.global_position + Vector3(
+			0.0,
+			CAMERA_LOOK_HEIGHT_M - seat_drop_m,
+			-CAMERA_LOOK_AHEAD_M
+		)
+		player.camera.look_at(look_target, Vector3.UP)
+		return
+
+	# 远征02：profile 提供世界空间后方轴和高度，镜头不读取玩家 yaw。
 	var seat_drop_m := player.get_seated_camera_drop_m()
-	var focal_local := Vector3(0.0, CAMERA_LOOK_HEIGHT_M - seat_drop_m, -CAMERA_LOOK_AHEAD_M)
-	var default_relative := Vector3(
-		0.0,
-		CAMERA_HEIGHT_M + _camera_lift_current_m - _camera_stair_slab_drop_current_m - CAMERA_LOOK_HEIGHT_M,
-		_camera_trailing_current_m + CAMERA_LOOK_AHEAD_M
+	var look_height_m := _camera_profile_look_height_current_m - seat_drop_m
+	var look_ahead_m := _camera_profile_look_ahead_current_m
+	var camera_height_m := (
+		_camera_profile_height_current_m
+		+ _camera_lift_current_m
+		- _camera_stair_slab_drop_current_m
 	)
-	# trailing 调试偏移：沿“相机→焦点”这条视线轴的总距离增减，保持镜头
-	# 上下倾角不变；玩家高度上的上升/下降由这条轴的默认倾角自然负责。
-	var default_magnitude := default_relative.length()
-	if default_magnitude <= 0.0001:
-		default_magnitude = 1.0
-	var relative_length := maxf(
-		default_magnitude + _read_debug_camera_trailing_offset_m(),
-		0.20
+	var trailing_m := maxf(_camera_trailing_current_m, 0.20)
+	var trailing_direction := _camera_profile_trailing_direction()
+	var look_direction := -trailing_direction
+	var look_target := (
+		player.global_position
+		+ Vector3.UP * look_height_m
+		+ look_direction * look_ahead_m
 	)
-	var unit_relative := default_relative / default_magnitude
-	var relative_local := unit_relative * relative_length
-	var yaw_offset_rad := deg_to_rad(_read_debug_camera_yaw_offset_deg())
-	if not is_zero_approx(yaw_offset_rad):
-		relative_local = Basis(Vector3.UP, yaw_offset_rad) * relative_local
-	player.camera.position = focal_local + relative_local
-	var look_target := player.global_position + Vector3(
-		0.0,
-		CAMERA_LOOK_HEIGHT_M - seat_drop_m,
-		-CAMERA_LOOK_AHEAD_M
+	var camera_position := (
+		player.global_position
+		+ Vector3.UP * camera_height_m
+		+ trailing_direction * trailing_m
 	)
+	var debug_trailing_offset_m := _read_debug_camera_trailing_offset_m()
+	if not is_zero_approx(debug_trailing_offset_m):
+		camera_position = look_target + (camera_position - look_target).normalized() * maxf(
+			(camera_position - look_target).length() + debug_trailing_offset_m,
+			0.20
+		)
+	player.camera.global_position = camera_position
 	player.camera.look_at(look_target, Vector3.UP)
+	var desired := Transform3D(player.camera.global_basis, player.camera.global_position)
+	var constrained := constrain_narrative_camera_pose(desired, player.global_position)
+	player.camera.global_transform = constrained
 
 
 func _read_debug_camera_trailing_offset_m() -> float:
@@ -1674,7 +1823,7 @@ func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) ->
 		_camera_lower_wall_distance_m = _find_lower_camera_wall_distance()
 		_camera_lower_wall_detected = _camera_lower_wall_distance_m >= 0.0
 	_camera_lift_target_m = 0.0
-	_camera_trailing_target_m = CAMERA_DEFAULT_TRAILING_M
+	_camera_trailing_target_m = _camera_profile_trailing_current_m
 	if _camera_lower_wall_detected:
 		var lift_ratio := clampf(
 			(
@@ -1724,12 +1873,8 @@ func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) ->
 func _find_lower_camera_wall_distance() -> float:
 	if player == null or not player.is_inside_tree():
 		return -1.0
-	var trailing := player.global_basis.z
-	trailing.y = 0.0
-	if trailing.length_squared() <= 0.0001:
-		trailing = Vector3.BACK
-	trailing = trailing.normalized()
-	var lateral := Vector3.UP.cross(trailing).normalized()
+	var trailing := _camera_profile_trailing_direction()
+	var lateral := _camera_profile_right_direction()
 	var space_state := get_world_3d().direct_space_state
 	var nearest_distance := INF
 	for lateral_offset_value in CAMERA_LOWER_WALL_PROBE_LATERAL_OFFSETS_M:
@@ -1785,7 +1930,7 @@ func _update_camera_stair_slab_drop(
 	delta: float,
 	refresh_probe: bool = true
 ) -> void:
-	var desired_height_m := CAMERA_HEIGHT_M + _camera_lift_current_m
+	var desired_height_m := _camera_profile_height_current_m + _camera_lift_current_m
 	if refresh_probe:
 		_camera_stair_slab_clearance_height_m = (
 			_find_stair_slab_camera_clearance_height(desired_height_m)
@@ -1832,14 +1977,8 @@ func _find_stair_slab_camera_clearance_height(
 	var probe_end_y := player.global_position.y + desired_height_m
 	if probe_end_y <= probe_start_y + 0.01:
 		return -1.0
-	var camera_planar_position := player.to_global(
-		Vector3(0.0, 0.0, _camera_trailing_current_m)
-	)
-	var camera_right := player.global_basis.x
-	camera_right.y = 0.0
-	if camera_right.length_squared() <= 0.0001:
-		camera_right = Vector3.RIGHT
-	camera_right = camera_right.normalized()
+	var camera_planar_position := _camera_profile_planar_position()
+	var camera_right := _camera_profile_right_direction()
 	var space_state := get_world_3d().direct_space_state
 	var allowed_height_m := INF
 	for offset_value in CAMERA_STAIR_SLAB_LATERAL_OFFSETS_M:
@@ -1873,9 +2012,7 @@ func _find_stair_slab_camera_clearance_height(
 				break
 			var collider := hit.get("collider") as Node
 			var hit_position := hit.get("position", ray_from) as Vector3
-			if collider != null and bool(
-				collider.get_meta("camera_stair_slab", false)
-			):
+			if _is_camera_overhead_slab(collider):
 				# 玩家站在代理顶面时，身后的上坡梯面可能在角色上方形成
 				# 假天花板。只有玩家确实位于楼梯代理下方时才垂直夹镜。
 				if _is_player_on_or_above_camera_stair_slab(collider):
@@ -1904,6 +2041,20 @@ func _find_stair_slab_camera_clearance_height(
 				break
 			ray_from = hit_position + remaining_direction * 0.03
 	return allowed_height_m if is_finite(allowed_height_m) else -1.0
+
+
+func _is_camera_overhead_slab(collider: Node) -> bool:
+	if collider == null:
+		return false
+	# 竖直夹镜的两种来源，共用同一套逻辑：
+	#   ① `camera_stair_slab`  —— 楼梯的上下两跑斜楼板（原有）
+	#   ② `camera_ceiling_occluder` —— 房间顶盖（远征关卡02 的 3m 矮层）
+	# 顶盖不是楼梯件，不该借①的名字；两者都必须由**生成组件显式标记**，
+	# 不得按节点名猜（历史教训：泛化名字会把护栏、走廊端面一起卷进来）。
+	return (
+		bool(collider.get_meta("camera_stair_slab", false))
+		or bool(collider.get_meta("camera_ceiling_occluder", false))
+	)
 
 
 func _is_player_on_or_above_camera_stair_slab(collider: Node) -> bool:
@@ -2257,6 +2408,24 @@ func _plan_world_position(plan: Dictionary, spec: Dictionary) -> Vector3:
 	return Vector3(planar.x, -FLOOR_HEIGHT * float(int(plan.get("floor_index", 2))), planar.y)
 
 
+## 远征房间静态布局场景（`f00_<runtime_room_id>_static_layout.tscn`）的路径。
+##
+## 目录按**关卡 id**派生，不写死。写死过一次（`EXPEDITION_PLAN_KEY` ⇒ `expedition_01`）：
+## 远征02 从此拿不到自己的路径，静默回退到程序化生成，用 01 的组件库拼出了 02
+## —— 画面上就是「进了 01 的素材」。
+##
+## 抽成**公开静态函数**是为了让验证探针直接调它，而不是各自复刻一遍拼接规则
+## （复刻的探针测不到真身，这正是那条 bug 溜过去的原因）。
+static func expedition_static_layout_path(
+	level_id: String, runtime_room_id: String
+) -> String:
+	return (
+		"res://assets/art/environments/tower_zones/expedition/runtime/"
+		+ "room_instances/%s/" % level_id
+		+ "f00_%s_static_layout.tscn" % runtime_room_id
+	)
+
+
 func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: String) -> void:
 	_append_tower_record(
 		str(spec.get("id", "")), str(spec.get("type", "COMBAT")), "tower_cell",
@@ -2275,19 +2444,29 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		runtime_ports.append(port)
 	record["connection_ports"] = runtime_ports
 	record["door_endpoint_owners"] = {}
+	record["camera_profile"] = (
+		spec.get("camera_profile", {}) as Dictionary
+	).duplicate(true)
 	record["rotation_deg"] = float(spec.get("rotation_deg", 0.0))
 	record["floor_layout_id"] = str(plan.get("layout_id", ""))
 	record["floor_number"] = int(plan.get("floor_number", 0))
 	record["floor_plan_key"] = str(spec.get("key", ""))
 	record["floor_plan_main_path"] = str(spec.get("key", "")) in (plan.get("main_path_keys", []) as Array)
-	# 远征关卡 01 的静态视觉由每个具体房间自己的 TSCN 唯一持有。
+	# 远征关卡的静态视觉由每个具体房间自己的 TSCN 唯一持有。
 	# 路径随 record 显式下发，禁止按 AssetID 或同名房间猜测，避免塔楼房间误用。
-	if is_expedition() and get_expedition_level_id() == EXPEDITION_PLAN_KEY:
-		record["static_layout_scene_path"] = (
-			"res://assets/art/environments/tower_zones/expedition/runtime/"
-			+ "room_instances/expedition_01/"
-			+ "f00_%s_static_layout.tscn" % str(spec.get("id", ""))
+	# 路径不存在时仍由 `DungeonRoom3D._expedition_static_layout_path()` 检查后回退，
+	# 但这里先告警一次，避免再次无声降级到程序化生成。
+	if is_expedition():
+		var runtime_room_id := str(spec.get("id", ""))
+		var layout_path := expedition_static_layout_path(
+			get_expedition_level_id(), runtime_room_id
 		)
+		if not ResourceLoader.exists(layout_path):
+			push_warning(
+				"[TowerDescent3D] 远征房间 `%s` 缺静态布局 %s —— 将回退到程序化生成（不是本关的美术）"
+				% [runtime_room_id, layout_path]
+			)
+		record["static_layout_scene_path"] = layout_path
 	# 授权布局壳体（区块00）：把整房组件清单随记录带到 DungeonRoom3D.configure。
 	# 只在房表写了 authored_layout_shell 时才落字段，未接管的房间一个字段都不多。
 	if bool(spec.get("authored_layout_shell", false)):
@@ -3084,6 +3263,20 @@ func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
 	return room.global_position + outward * half_extent + along_axis * door_offset_along
 
 
+## 本房的墙体是否已由设计源的**静态布局场景**接管（远征 authored 房间）。
+##
+## 判据取自 `DungeonRoom3D._build_shell()` 的静态分支所落的房间 meta，
+## 不是"关卡是不是远征"——`mode = constrained` 的远征关卡几何由种子现算，
+## 走廊仍是它的一部分，不能一并跳过。
+func _room_walls_owned_by_static_layout(room: DungeonRoom3D) -> bool:
+	if room == null:
+		return false
+	return (
+		bool(room.get_meta("static_layout_scene_loaded", false))
+		and not str(room.get_meta("static_layout_scene_path", "")).is_empty()
+	)
+
+
 func _build_tower_horizontal_corridor(
 	from_room: DungeonRoom3D,
 	to_room: DungeonRoom3D,
@@ -3102,12 +3295,40 @@ func _build_tower_horizontal_corridor(
 		from_side = str(declared_sides[from_room.room_id])
 		to_side = str(declared_sides[to_room.room_id])
 		horizontal_x = from_side in ["east", "west"]
+	# 两端房都由设计源静态布局自持墙体（远征 authored 关卡）时，**不生成走廊几何**：
+	#
+	# 设计源已把相邻两房**逐房共墙**排死（远征02 实测 25/25 对父子房贴合到 0.00m），
+	# 门墙也逐扇烘进各自的静态布局（长廊 room_02 一间就有 10 面 `wall_door_5m_h3`），
+	# 所以根本不存在"门厅与门厅之间要补一段走廊"这回事。
+	#
+	# 而塔楼这套走廊模型表达不了这种拓扑：它**一面墙只认一扇门** ——
+	# `RoomDoor3D` 按 `room.doors` 里最多 4 个方向各建一个节点，
+	# `_room_door_world_position(room, side)` 每面墙只返回那一扇。
+	# 远征02 的长廊一间房有 11 扇门（5 西 + 5 东 + 1 南 + 1 北），
+	# 10 扇侧墙门被塌成 2 扇 ⇒ 门间距离被算成 15~60m ⇒ 在**错误位置**
+	# 凭空铺出地板与双侧墙（修复前实测 286 段墙 / 143 块地板 / 46 个挡人碰撞体，
+	# 就是业主看到的"刷出一堆通用墙、排列很糟糕、很多空阻挡"）。
+	#
+	# 判据用「静态布局是否已接管本房墙体」，而不是 `is_expedition()`：
+	# `mode = constrained` 的远征01 几何由种子现算、走廊本来就是它的一部分，
+	# 判据不成立 ⇒ 行为逐字不变。
+	var static_layout_owns_walls := (
+		_room_walls_owned_by_static_layout(from_room)
+		and _room_walls_owned_by_static_layout(to_room)
+	)
 	# 走廊端点必须取真实门组件坐标；房间中心不能代替门位。
 	var start := _room_door_world_position(from_room, from_side)
 	var end := _room_door_world_position(to_room, to_side)
+	if static_layout_owns_walls:
+		# 一墙多门时这两个坐标本就无意义（取到的是同侧第一扇门），
+		# 且其间距会被下面当成"走廊长度"。统一退回两房房间中心的连线中点，
+		# 让 meta 自洽（长度 0、无几何），不再让错误坐标流进 registry。
+		var contact_mid := (from_room.global_position + to_room.global_position) * 0.5
+		start = contact_mid
+		end = contact_mid
 	# 只检查垂直于走廊轴线的偏差，门间距离是走廊长度，不是错位量。
 	var tangent_error := absf(start.z - end.z) if horizontal_x else absf(start.x - end.x)
-	if tangent_error > 0.01:
+	if tangent_error > 0.01 and not static_layout_owns_walls:
 		push_error(
 			"Tower corridor %s door modules are off the 5m lane by %.3fm" % [
 				edge, tangent_error,
@@ -3147,11 +3368,15 @@ func _build_tower_horizontal_corridor(
 		GameplaySpatialRegistry3D.register_node(connector, GameplaySpatialRegistry3D.KIND_CONNECTOR)
 	# Boss竞技场与下行大厅共墙，两个门洞重合即构成通道；保留连接器状态节点，
 	# 但不生成零长度地板或墙碰撞，避免透明阻挡。
-	if length <= 0.05:
+	# 同一分支也覆盖「静态布局自持墙体」的远征房间：连接器只留拓扑与开门判定，
+	# 地板/墙/碰撞一件都不生成 —— 那些几何全部由各房静态布局自带。
+	if length <= 0.05 or static_layout_owns_walls:
 		connector.set_meta("module_count", 0)
 		connector.set_meta("floor_module_count", 0)
 		connector.set_meta("wall_module_count", 0)
 		connector.set_meta("module_coverage_length_m", 0.0)
+		if static_layout_owns_walls:
+			connector.set_meta("corridor_geometry_owned_by_static_layout", true)
 		return
 
 	# 门到门距离始终是5m网格的整数倍。地面与双侧墙按实际长度逐格排布，
@@ -3183,9 +3408,15 @@ func _build_tower_horizontal_corridor(
 			Transform3D(Basis.IDENTITY, module_center)
 		)
 		for side_sign in [-1.0, 1.0]:
+			# 与楼梯接驳走廊同一口径：墙件装饰面朝局部 +Z，走廊两侧墙必须相向
+			# （各自朝走廊内）⇒ 世界南（东）侧那面比北（西）侧多转 180°，
+			# 否则那一侧会把结构背板朝向通道（2026-10-12 主人报的就是这个）。
+			var side_basis := (
+				wall_basis * Basis(Vector3.UP, PI) if side_sign > 0.0 else wall_basis
+			)
 			wall_transforms.append(
 				Transform3D(
-					wall_basis,
+					side_basis,
 					module_center
 					+ perpendicular * side_sign
 					* (TOWER_GEOMETRY.GRID_UNIT_M * 0.5)
@@ -3264,11 +3495,18 @@ func _add_horizontal_corridor_multimesh(
 		visual.set_meta("visual_top_clearance_m", TOWER_GEOMETRY.WALL_VISUAL_TOP_CLEARANCE_M)
 		visual.set_meta("uses_native_wall_visual_height", true)
 	var module_origins := PackedVector3Array()
+	var module_facings := PackedVector3Array()
 	for module_transform in transforms:
 		module_origins.append(module_transform.origin)
+		# 墙件装饰面 = 局部 +Z。记下世界水平法向，供门禁断言「走廊两侧相向」。
+		var facing := module_transform.basis * Vector3(0.0, 0.0, 1.0)
+		facing.y = 0.0
+		module_facings.append(facing.normalized())
 	# Dummy/headless 渲染器不会回读 MultiMesh transform buffer；保留生成坐标清单，
 	# 让网格、覆盖范围和随机种子回归仍可精确验证。
 	visual.set_meta("corridor_module_origins", module_origins)
+	if module_kind == "wall":
+		visual.set_meta("corridor_wall_facings", module_facings)
 	connector.add_child(visual)
 
 
@@ -3348,9 +3586,16 @@ func _build_stair_approach_corridor(
 				+ perpendicular * side_sign
 				* (TOWER_GEOMETRY.PASSAGE_WIDTH_M * 0.5)
 			)
-			wall.rotation.y = wall_rotation_y
+			# 墙件（塔楼 A 套）装饰面朝局部 +Z —— 见
+			# art_source/environments/tower_descent_3d/source/wall_height12/
+			# export_env_tower_wall_solid_5m_v004.py（forward_axis="+Z"）。
+			# 走廊是通道，两侧墙必须「装饰面各自朝走廊内」⇒ 两面朝向相差 180°。
+			# 2026-10-12 主人报「99F 基地东/西两条走廊的南面墙反面朝走廊」：
+			# 此前两侧共用 wall_rotation_y，世界南（东）侧那面把结构背板朝了通道。
+			wall.rotation.y = wall_rotation_y + (PI if side_sign > 0.0 else 0.0)
 			wall.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
 			wall.set_meta("stair_approach_corridor", true)
+			wall.set_meta("wall_facing_sign", 1.0 if side_sign > 0.0 else -1.0)
 			wall.set_meta("logical_height_m", TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M)
 			wall.set_meta("visual_height_m", TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M)
 			wall.set_meta("visual_top_clearance_m", TOWER_GEOMETRY.WALL_VISUAL_TOP_CLEARANCE_M)
@@ -5162,6 +5407,21 @@ func _record_connection_port_towards(record: Dictionary, target_room_id: String)
 ## 显式端口关卡的一条水平边只生成一套门墙、门扇和门功能。父端（edge.a）
 ## 是唯一实体所有者；子端房间只把同一 RoomDoor3D 引用登记到自己的门槽，
 ## 因而从任一侧交互都命中同一个状态机，不会再出现两扇门重叠。
+## 该房间的这个方向上，是否存在**本该建出实体门扇**的端口（门宽 ≤3m 的标准门）。
+## 用来区分「通洞边本来就没有门扇」与「门扇该有却没建出来」两种 shared_door == null。
+func _edge_expects_door_leaf(room: DungeonRoom3D, side: String) -> bool:
+	if room == null:
+		return false
+	for port_value in room.connection_ports:
+		var port := port_value as Dictionary
+		if str(port.get("side", "")) != side:
+			continue
+		var width := float(port.get("door_width_m", 0.0))
+		if width > 0.0 and width <= 3.0:
+			return true
+	return false
+
+
 func _bind_shared_edge_doors() -> void:
 	for declaration_value in _declared_edges:
 		var declaration := declaration_value as Dictionary
@@ -5183,9 +5443,21 @@ func _bind_shared_edge_doors() -> void:
 			continue
 		if not owner.owns_door_endpoint(owner_side) or peer.owns_door_endpoint(peer_side):
 			continue
-		var shared_door := owner.get_door_node(owner_side)
+		# 一墙多门时 `get_door_node(方向)` 只给该方向第一扇，会张冠李戴
+		# （room_04 的门会被指向"通向 room_03 的那扇"）。按端口取才精确 ——
+		# 端口的 target 就是"这扇门通向哪一间"。
+		var shared_door: RoomDoor3D = null
+		var owner_port := owner.get_connection_port_towards(peer_id)
+		var owner_port_id := str(owner_port.get("port_id", ""))
+		if not owner_port_id.is_empty():
+			shared_door = owner.get_door_node_by_port(owner_port_id)
+		else:
+			shared_door = owner.get_door_node(owner_side)
 		if shared_door == null:
-			push_error("TowerDescent3D: 边 %s 的唯一门实体缺失" % edge)
+			# 该边是 5m 通洞 / 坍塌（白盒里本来就没有墙件）⇒ 本来就没有门扇可共享。
+			# 只有"按端口本该有门扇、却没建出来"才是真错误。
+			if _edge_expects_door_leaf(owner, owner_side):
+				push_error("TowerDescent3D: 边 %s 的唯一门实体缺失" % edge)
 			continue
 		peer.bind_shared_door(peer_side, shared_door)
 		shared_door.set_meta("shared_edge_key", edge)
@@ -5220,6 +5492,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"authored_layout_instances": record.get("authored_layout_instances", []),
 		"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),
 		"connection_ports": record.get("connection_ports", []),
+		"camera_profile": record.get("camera_profile", {}),
 		"door_endpoint_owners": record.get("door_endpoint_owners", {}),
 	})
 	room.position = record["position"]
@@ -5693,6 +5966,8 @@ func _install_atmosphere() -> void:
 	_atmosphere.call("configure", world_environment.environment, key_light)
 	add_child(_atmosphere)
 	_atmosphere.call("set_floor_number", _current_floor_number())
+	if get_expedition_level_id() == "expedition_02":
+		_atmosphere.call("set_expedition_dark_distant", true)
 
 
 func _install_tower_hud() -> void:
@@ -6660,11 +6935,12 @@ func get_tower_snapshot() -> Dictionary:
 		for door_snapshot in room.get_room_snapshot().get("door_snapshots", []):
 			if bool(door_snapshot.get("blocks_passage", false)):
 				closed_door_count += 1
+	var facility_room := _room_by_id.get("facility") as DungeonRoom3D
 	return {
 		"mode": "tower_descent",
 		"rooftop_dimensions": TowerFloorStage3D.ROOFTOP_MAP_DIMENSIONS,
 		"rooftop_grid_dimensions": TowerFloorStage3D.ROOFTOP_GRID_DIMENSIONS,
-		"facility_dimensions": (_room_by_id["facility"] as DungeonRoom3D).get_dimensions(),
+		"facility_dimensions": facility_room.get_dimensions() if facility_room != null else Vector2.ZERO,
 		"combat_floor_count": combat_floor_records.size(),
 		"combat_floors": combat_floor_records,
 		"floor_layout_templates": _floor_layout_templates.duplicate(),
@@ -6752,11 +7028,17 @@ func get_tower_snapshot() -> Dictionary:
 		"stair_support_surface_count": _stair_support_surface_count,
 		"stair_support_mode": "imported_walkable_mesh_colliders",
 		"camera_height_m": (
-			CAMERA_HEIGHT_M
+			_camera_profile_height_current_m
 			+ _camera_lift_current_m
 			- _camera_stair_slab_drop_current_m
 		),
-		"camera_base_height_m": CAMERA_HEIGHT_M,
+		"camera_base_height_m": _camera_profile_height_current_m,
+		"camera_profile_active": _camera_profile_active,
+		"camera_profile_id": _current_camera_profile_id(),
+		"camera_profile_height_target_m": _camera_profile_height_target_m,
+		"camera_profile_trailing_target_m": _camera_profile_trailing_target_m,
+		"camera_profile_yaw_current_deg": _camera_profile_yaw_current_deg,
+		"camera_profile_yaw_target_deg": _camera_profile_yaw_target_deg,
 		"camera_lift_current_m": _camera_lift_current_m,
 		"camera_lift_target_m": _camera_lift_target_m,
 		"camera_lift_max_m": CAMERA_LOWER_WALL_LIFT_MAX_M,

@@ -1,0 +1,70 @@
+{
+  "slug": "equipment_cluster",
+  "component_id": "ENV-EXPEDITION-BOSS-B-EQUIPMENT-CLUSTER",
+  "name_zh": "平台阶梯设备组",
+  "component_family": "equipment",
+  "category": "facilities",
+  "estimated_instances": 4,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "version": "v027",
+  "collection": "输出资产包_equipment_cluster",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\equipment_cluster\\equipment_cluster.blend",
+  "objects": [
+    "平台阶梯设备组_主体",
+    "平台阶梯设备组_自发光"
+  ],
+  "bounds_size_m": [
+    3.299999952316284,
+    2.5999999046325684,
+    3.5369999408721924
+  ],
+  "bounds_min": [
+    -1.649999976158142,
+    -1.2999999523162842,
+    0.0
+  ],
+  "bounds_max": [
+    1.649999976158142,
+    1.2999999523162842,
+    3.5369999408721924
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 4,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": false,
+  "palette_uv_layer": "PaletteUV",
+  "animation": null,
+  "geometry_fingerprint": "7c9e7c4548194bb218e6fce7c3b5fe34264d47b9e95e46dd84a4bb1b1cb54d80",
+  "triangle_count": 6136
+}

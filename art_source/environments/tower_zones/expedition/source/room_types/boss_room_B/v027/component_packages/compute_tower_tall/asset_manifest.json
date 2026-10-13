@@ -1,0 +1,68 @@
+{
+  "slug": "compute_tower_tall",
+  "component_id": "ENV-EXPEDITION-BOSS-B-COMPUTE-TOWER-TALL",
+  "name_zh": "高层计算机塔",
+  "component_family": "compute_tower",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "compute_tower_tall",
+  "variant_reason": "Reference silhouette / content or cable routing variation",
+  "version": "v027",
+  "collection": "输出资产包_compute_tower_tall",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\compute_tower_tall\\compute_tower_tall.blend",
+  "objects": [
+    "高层计算机塔_自发光",
+    "高层计算机塔_主体"
+  ],
+  "bounds_size_m": [
+    4.800000190734863,
+    5.232999801635742,
+    60.13999938964844
+  ],
+  "bounds_min": [
+    -2.4000000953674316,
+    -2.616499900817871,
+    0.0
+  ],
+  "bounds_max": [
+    2.4000000953674316,
+    2.616499900817871,
+    60.13999938964844
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 20,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": false,
+  "palette_uv_layer": "PaletteUV",
+  "animation": null,
+  "geometry_fingerprint": "4a93fe881b9c11841f52d18bd1a6ea94a098d207186bb0332a8a682f4c1a5ddf",
+  "triangle_count": 2088
+}

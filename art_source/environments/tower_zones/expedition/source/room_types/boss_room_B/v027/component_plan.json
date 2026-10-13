@@ -1,0 +1,878 @@
+{
+  "schema": "shellstorm2.room_component_plan",
+  "version": "v027",
+  "room_type": "BOSS_ROOM",
+  "block_id": "expedition",
+  "level_id": "expedition_01",
+  "status": "frozen_before_geometry",
+  "design_scope": "scene_art",
+  "reference_sha256": "f9834a3de3307fe70aaa6f503bd86713197c4e3cd24f5ac28470d2f13164ff0d",
+  "whitebox_source": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\whitebox\\tower_zones\\expedition_01\\boss_deep_chamber\\layout_contract.json",
+  "whitebox_sha256": "7cd79f00b538739213386df2b9f6ba3f92bc7f982f7fdbb361da3db2afc7cf84",
+  "user_overrides": {
+    "bridge_length_m": 20,
+    "bridge_width_m": 5,
+    "platform_m": [
+      25,
+      25
+    ],
+    "other_geometry": "draft only"
+  },
+  "component_budget": {
+    "limit": 50,
+    "planned": 46,
+    "remaining": 4
+  },
+  "components": [
+    {
+      "slug": "deck_armor_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+      "name_zh": "精加工甲板",
+      "component_family": "deck",
+      "category": "floor",
+      "estimated_instances": 24,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "deck_armor_5m",
+      "variant_reason": "Central emblem panel versus repeat armor plate"
+    },
+    {
+      "slug": "deck_emblem_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DECK-EMBLEM-5M",
+      "name_zh": "中心菱形徽记甲板",
+      "component_family": "deck",
+      "category": "floor",
+      "estimated_instances": 1,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "deck_emblem_5m",
+      "variant_reason": "Central emblem panel versus repeat armor plate"
+    },
+    {
+      "slug": "rim_girder_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-RIM-GIRDER-5M",
+      "name_zh": "分层装甲边梁",
+      "component_family": "rim",
+      "category": "architecture",
+      "estimated_instances": 20,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "suspended_server_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SUSPENDED-SERVER-5M",
+      "name_zh": "下挂机柜承力塔",
+      "component_family": "server_tower",
+      "category": "architecture",
+      "estimated_instances": 20,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "corner_pylon",
+      "component_id": "ENV-EXPEDITION-BOSS-B-CORNER-PYLON",
+      "name_zh": "转角竖向承力灯柱",
+      "component_family": "pylon",
+      "category": "architecture",
+      "estimated_instances": 4,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "underframe_beam_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-UNDERFRAME-BEAM-5M",
+      "name_zh": "平台底部承重梁",
+      "component_family": "underframe",
+      "category": "architecture",
+      "estimated_instances": 100,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "deck_barrier_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DECK-BARRIER-5M",
+      "name_zh": "平台低护栏灯柱",
+      "component_family": "barrier",
+      "category": "architecture",
+      "estimated_instances": 17,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "bridge_deck_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-DECK-5M",
+      "name_zh": "桥面格栅节段",
+      "component_family": "bridge_deck",
+      "category": "architecture",
+      "estimated_instances": 8,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "bridge_truss_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-TRUSS-5M",
+      "name_zh": "桥侧箱梁桁架",
+      "component_family": "bridge_truss",
+      "category": "architecture",
+      "estimated_instances": 16,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "bridge_rail_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-RAIL-5M",
+      "name_zh": "桥缘低位灯柱护栏",
+      "component_family": "bridge_rail",
+      "category": "architecture",
+      "estimated_instances": 16,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "abutment_bracket",
+      "component_id": "ENV-EXPEDITION-BOSS-B-ABUTMENT-BRACKET",
+      "name_zh": "桥接头斜撑牛腿",
+      "component_family": "bracket",
+      "category": "architecture",
+      "estimated_instances": 4,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "equipment_cluster",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EQUIPMENT-CLUSTER",
+      "name_zh": "平台阶梯设备组",
+      "component_family": "equipment",
+      "category": "facilities",
+      "estimated_instances": 4,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "monitor_chassis",
+      "component_id": "ENV-EXPEDITION-BOSS-B-MONITOR-CHASSIS",
+      "name_zh": "大型悬挂显示器机壳",
+      "component_family": "monitor",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "monitor_chassis",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "screen_left",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SCREEN-LEFT",
+      "name_zh": "诊断遥测屏幕",
+      "component_family": "screen_content",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "screen_left",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "screen_center",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SCREEN-CENTER",
+      "name_zh": "数据核心屏幕",
+      "component_family": "screen_content",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "screen_center",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "screen_right",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SCREEN-RIGHT",
+      "name_zh": "波形监测屏幕",
+      "component_family": "screen_content",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "screen_right",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "cables_swept",
+      "component_id": "ENV-EXPEDITION-BOSS-B-CABLES-SWEPT",
+      "name_zh": "侧翼下垂重缆束",
+      "component_family": "cable_bundle",
+      "category": "support",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "cables_swept",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "cables_mirrored",
+      "component_id": "ENV-EXPEDITION-BOSS-B-CABLES-MIRRORED",
+      "name_zh": "侧翼反向重缆束",
+      "component_family": "cable_bundle",
+      "category": "support",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "cables_mirrored",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "cables_crown",
+      "component_id": "ENV-EXPEDITION-BOSS-B-CABLES-CROWN",
+      "name_zh": "中央供电与数据缆束",
+      "component_family": "cable_bundle",
+      "category": "support",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "cables_crown",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "compute_tower_tall",
+      "component_id": "ENV-EXPEDITION-BOSS-B-COMPUTE-TOWER-TALL",
+      "name_zh": "高层计算机塔",
+      "component_family": "compute_tower",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "compute_tower_tall",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "compute_tower_stepped",
+      "component_id": "ENV-EXPEDITION-BOSS-B-COMPUTE-TOWER-STEPPED",
+      "name_zh": "阶梯计算机塔",
+      "component_family": "compute_tower",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "compute_tower_stepped",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "compute_tower_compact",
+      "component_id": "ENV-EXPEDITION-BOSS-B-COMPUTE-TOWER-COMPACT",
+      "name_zh": "短层计算机塔",
+      "component_family": "compute_tower",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "compute_tower_compact",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "exit_portal",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EXIT-PORTAL",
+      "name_zh": "出口装甲门框",
+      "component_family": "portal",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "exit_portal",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "exit_leaf_a",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EXIT-LEAF-A",
+      "name_zh": "装甲门扇A",
+      "component_family": "door_leaf",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "exit_leaf_a",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "exit_leaf_b",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EXIT-LEAF-B",
+      "name_zh": "装甲门扇B",
+      "component_family": "door_leaf",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "exit_leaf_b",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "exit_passage",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EXIT-PASSAGE",
+      "name_zh": "出口内廊",
+      "component_family": "passage",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "exit_passage",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "matrix_bay_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-MATRIX-BAY-5M",
+      "name_zh": "后方矩阵模块",
+      "component_family": "matrix",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "matrix_bay_5m",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "matrix_bus_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-MATRIX-BUS-5M",
+      "name_zh": "矩阵横向连接桥架",
+      "component_family": "matrix_bus",
+      "category": "support",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "matrix_bus_5m",
+      "variant_reason": "Reference silhouette / content or cable routing variation"
+    },
+    {
+      "slug": "portal_backing_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-PORTAL-BACKING-5M",
+      "name_zh": "出口井壁贯通背板",
+      "component_family": "portal_backing",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null
+    },
+    {
+      "slug": "door_support_pier",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DOOR-SUPPORT-PIER",
+      "name_zh": "门侧方形承力巨柱",
+      "component_family": "door_support",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "variant_axis": null
+    },
+    {
+      "slug": "stair_flight_5m",
+      "name_zh": "精工格栅楼梯节段",
+      "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-FLIGHT-5M",
+      "component_family": "stair",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": null
+    },
+    {
+      "slug": "stair_chase_light",
+      "name_zh": "逐级感应灯组件",
+      "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-CHASE-LIGHT",
+      "component_family": "step_light",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": null
+    },
+    {
+      "slug": "stair_landing_5m",
+      "name_zh": "入口钢格栅平台",
+      "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-LANDING-5M",
+      "component_family": "landing",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": null
+    },
+    {
+      "slug": "hanging_power_bundle",
+      "name_zh": "悬垂交错动力电缆",
+      "component_id": "ENV-EXPEDITION-BOSS-B-HANGING-POWER-BUNDLE",
+      "component_family": "hanging_cable",
+      "category": "support",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": null
+    },
+    {
+      "slug": "damaged_cabinet_open",
+      "name_zh": "破损敞口机箱",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DAMAGED-CABINET-OPEN",
+      "component_family": "debris",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": "damage_state"
+    },
+    {
+      "slug": "damaged_cabinet_crushed",
+      "name_zh": "凹陷破损机箱",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DAMAGED-CABINET-CRUSHED",
+      "component_family": "debris",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": "damage_state"
+    },
+    {
+      "slug": "door_seal_frame",
+      "name_zh": "门框密封边组件",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DOOR-SEAL-FRAME",
+      "component_family": "door_seal",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    },
+    {
+      "slug": "shell_wall_solid_80m",
+      "name_zh": "整面封闭装甲墙",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-WALL-SOLID-80M",
+      "component_family": "shell_wall",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    },
+    {
+      "slug": "shell_wall_gate_80m",
+      "name_zh": "整面高位入口墙",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-WALL-GATE-80M",
+      "component_family": "shell_wall",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    },
+    {
+      "slug": "shell_wall_gate_100m",
+      "name_zh": "整面侧门长墙",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-WALL-GATE-100M",
+      "component_family": "shell_wall",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    },
+    {
+      "slug": "shell_horizontal_80x100m",
+      "name_zh": "整面顶底围护板",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-HORIZONTAL-80X100M",
+      "component_family": "shell_horizontal",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    },
+    {
+      "slug": "stair_pillar_light",
+      "name_zh": "独立栏杆竖向灯",
+      "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-PILLAR-LIGHT",
+      "component_family": "pillar_light",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    },
+    {
+      "slug": "bridge_threshold",
+      "name_zh": "桥门衔接平台",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-THRESHOLD",
+      "component_family": "threshold",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    },
+    {
+      "slug": "bridge_belly_5m",
+      "name_zh": "桥下设备与曲管托架",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-BELLY-5M",
+      "component_family": "bridge_belly",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    },
+    {
+      "slug": "door_undersupport",
+      "name_zh": "门下层叠承力机座",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DOOR-UNDERSUPPORT",
+      "component_family": "door_support_base",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    },
+    {
+      "slug": "matrix_foundation_5m",
+      "name_zh": "矩阵低面数井底延伸",
+      "component_id": "ENV-EXPEDITION-BOSS-B-MATRIX-FOUNDATION-5M",
+      "component_family": "matrix_foundation",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ]
+    }
+  ],
+  "reference_image": "reference_detail.png",
+  "based_on_user_snapshot": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\boss_detail_v023\\user_adjusted_before.blend",
+  "texture_exception": {
+    "authorized_by": "user explicitly permits image-2 screen texture",
+    "surfaces": [
+      "screen_left",
+      "screen_center",
+      "screen_right"
+    ],
+    "uv": "ScreenUV",
+    "material_roles": "3 screen emission materials in addition to 4 shared palette roles",
+    "animation": "independent screen surface + scan phase / line contrast / signal pulse; no game logic baked"
+  },
+  "refinement": {
+    "tower_extension": "Extend plain lower shell by 40m; preserve existing detailed geometry in world space; may penetrate floor",
+    "matrix_extension": "Lowest wall-matrix rows receive a 22m low-poly continuation",
+    "side_facing": "Rotate 32 side database modules 180 degrees at unchanged instance origins; face room interior"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "slug": "corner_pylon",
+  "component_id": "ENV-EXPEDITION-BOSS-B-CORNER-PYLON",
+  "name_zh": "转角竖向承力灯柱",
+  "component_family": "pylon",
+  "category": "architecture",
+  "estimated_instances": 4,
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "version": "v027",
+  "collection": "输出资产包_corner_pylon",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\corner_pylon\\corner_pylon.blend",
+  "objects": [
+    "转角竖向承力灯柱_自发光",
+    "转角竖向承力灯柱_主体"
+  ],
+  "bounds_size_m": [
+    1.5499999523162842,
+    1.5499999523162842,
+    58.0
+  ],
+  "bounds_min": [
+    -0.7749999761581421,
+    -0.7749999761581421,
+    0.0
+  ],
+  "bounds_max": [
+    0.7749999761581421,
+    0.7749999761581421,
+    58.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 4,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": false,
+  "palette_uv_layer": "PaletteUV",
+  "animation": null,
+  "geometry_fingerprint": "03776fcb46d60f2627831c20a283f02f32ca7197e90fc4548aae0712981fe5c3",
+  "triangle_count": 1580
+}

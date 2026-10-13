@@ -11,6 +11,9 @@ from assemble_openworld_towers import assembly, quote, write
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / 'assets/art/environments/open_world'
+# 运行时材质绑定脚本必须位于 src/ 下：export_presets.cfg 的 exclude_filter 排除了 tools/*，
+# 放在 tools/ 会导致导出包内该脚本缺失、252 个 skyline_08 组件加载失败、主场景无法进入。
+BIND_SCRIPT_PATH = 'res://src/open_world/skyline08_existing_material_bind.gd'
 
 def main():
     manifest = json.loads((source_path(BASE / 'source/skyline_08/export/v004/export_manifest.json')).read_text(encoding='utf8'))
@@ -23,7 +26,7 @@ def main():
         assert not path.exists(), '拒绝覆盖已有组件：' + str(path)
         write(path, '[gd_scene load_steps=3 format=3]\n\n'
               f'[ext_resource type="PackedScene" path="res://{record["glb"]}" id="1"]\n\n'
-              '[ext_resource type="Script" path="res://tools/asset_pipeline/skyline08_existing_material_bind.gd" id="bind"]\n\n'
+              f'[ext_resource type="Script" path="{BIND_SCRIPT_PATH}" id="bind"]\n\n'
               f'[node name="{record["slug"]}" type="Node3D"]\n'
               'script = ExtResource("bind")\n'
               f'metadata/asset_id = {quote(record["asset_id"])}\n'

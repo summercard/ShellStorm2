@@ -1,0 +1,63 @@
+{
+  "slug": "portal_backing_5m",
+  "component_id": "ENV-EXPEDITION-BOSS-B-PORTAL-BACKING-5M",
+  "name_zh": "出口井壁贯通背板",
+  "component_family": "portal_backing",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "version": "v027",
+  "collection": "输出资产包_portal_backing_5m",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\portal_backing_5m\\portal_backing_5m.blend",
+  "objects": [
+    "出口井壁贯通背板_主体"
+  ],
+  "bounds_size_m": [
+    5.0,
+    0.800000011920929,
+    50.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "texture_exception": false,
+  "collision_owner": "godot_wrapper_pending",
+  "runtime_connected": false,
+  "registration_status": "未登记",
+  "bounds_min": [
+    -2.5,
+    -0.4000000059604645,
+    0.0
+  ],
+  "bounds_max": [
+    2.5,
+    0.4000000059604645,
+    50.0
+  ],
+  "instance_count": 2,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "geometry_fingerprint": "e7b473494a7ee5490411949208f93e88aa3d1f104d42a636a78391f7fe1355c7",
+  "triangle_count": 216
+}

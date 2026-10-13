@@ -1,0 +1,45 @@
+{
+  "slug": "shell_horizontal_80x100m",
+  "name_zh": "整面顶底围护板",
+  "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-HORIZONTAL-80X100M",
+  "component_family": "shell_horizontal",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "version": "v027",
+  "collection": "输出资产包_shell_horizontal_80x100m",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\shell_horizontal_80x100m\\shell_horizontal_80x100m.blend",
+  "objects": [
+    "整面顶底围护板_主体"
+  ],
+  "bounds_min": [
+    -40.0,
+    -50.0,
+    0.0
+  ],
+  "bounds_max": [
+    40.0,
+    50.0,
+    0.4000000059604645
+  ],
+  "bounds_size_m": [
+    80.0,
+    100.0,
+    0.4000000059604645
+  ],
+  "instance_count": 2,
+  "triangle_count": 12,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "runtime_connected": false
+}

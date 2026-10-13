@@ -1,7 +1,7 @@
 class_name FlashlightColorTweaker
 extends PanelContainer
-## 实时调参面板：顶部 tab 菜单在「调整灯光」「后处理」「基地雾气」之间切换，
-## 留 1 个预留位。P 键整体切显隐。
+## 实时调参面板：顶部 tab 菜单在「调整灯光」「后处理」「基地雾气」「预留」之间切换。
+## P 键整体切显隐。
 ##
 ## 灯光 tab：ForwardBeam / EnvironmentSpill / AvatarFrontFill 三盏灯
 ##   的 color + energy，通过 PlayerFlashlight3D 的公开 setter 同时写
@@ -12,6 +12,9 @@ extends PanelContainer
 ##   调整（adjustment_enabled + brightness/contrast/saturation）。所有
 ##   写入经 GraphicsSettingsManager.set_debug_postfx() 落到 in-memory
 ##   调试覆盖层，不污染玩家画质档和持久化 cfg。
+##
+## 预留 tab：测试工具位。目前放「一键解锁远征关卡02」——
+##   正式解锁路径是通关远征关卡01，这里直接改存档跳过前置，仅供调试。
 
 const ENERGY_SLIDER_MIN := 0.0
 const ENERGY_SLIDER_MAX := 16.0
@@ -137,6 +140,9 @@ var _tab_buttons: Dictionary = {}
 var _tab_pages: Dictionary = {}
 var _active_tab: TabId = TabId.LIGHT
 
+# 预留 tab（测试工具）控件引用
+var _reserved_expedition_status: Label
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	z_index = 2100
@@ -190,6 +196,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_resolve_flashlight()
 		_sync_from_flashlight()
 		_sync_postfx_from_manager()
+		_refresh_reserved_status()
 	get_viewport().set_input_as_handled()
 
 func _sync_from_flashlight() -> void:
@@ -373,6 +380,7 @@ func _build_ui() -> void:
 	_build_light_page(root)
 	_build_postfx_page(root)
 	_build_base_fog_page(root)
+	_build_reserved_page(root)
 	root.add_child(HSeparator.new())
 
 	var reset_btn := Button.new()
@@ -410,7 +418,6 @@ func _build_tab_bar(parent: Container) -> void:
 		btn.toggle_mode = true
 		btn.focus_mode = Control.FOCUS_NONE
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		btn.disabled = tab_id == TabId.RESERVED_3
 		btn.pressed.connect(_on_tab_button_pressed.bind(tab_id))
 		bar.add_child(btn)
 		_tab_buttons[tab_id] = btn
@@ -593,6 +600,69 @@ func _build_base_fog_page(parent: Container) -> void:
 	)
 	_base_volumetric_fog_density_label = _find_value_label_for(_base_volumetric_fog_density_slider)
 	_base_volumetric_fog_density_slider.value_changed.connect(_on_base_volumetric_fog_density_changed)
+
+
+# ---------- 预留 tab：测试工具 ----------
+
+func _build_reserved_page(parent: Container) -> void:
+	var page := VBoxContainer.new()
+	page.name = "ReservedPage"
+	page.add_theme_constant_override("separation", 8)
+	parent.add_child(page)
+	_tab_pages[TabId.RESERVED_3] = page
+
+	var title := Label.new()
+	title.text = "测试工具"
+	page.add_child(title)
+
+	var hint := Label.new()
+	hint.text = "正式解锁路径：在远征关卡01 中成功撤离（走到撤离房按 E 读条完成）。下方按钮直接改存档跳过该前置，仅供调试。"
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	page.add_child(hint)
+
+	page.add_child(HSeparator.new())
+
+	_reserved_expedition_status = Label.new()
+	_reserved_expedition_status.name = "ExpeditionUnlockStatus"
+	_reserved_expedition_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	page.add_child(_reserved_expedition_status)
+	_refresh_reserved_status()
+
+	var unlock_btn := Button.new()
+	unlock_btn.name = "UnlockExpedition02Button"
+	unlock_btn.text = "一键解锁远征关卡02"
+	unlock_btn.pressed.connect(_on_unlock_expedition02_pressed)
+	page.add_child(unlock_btn)
+
+	var relock_btn := Button.new()
+	relock_btn.name = "RelockExpedition02Button"
+	relock_btn.text = "恢复远征关卡02为未解锁"
+	relock_btn.pressed.connect(_on_relock_expedition02_pressed)
+	page.add_child(relock_btn)
+
+
+func _refresh_reserved_status() -> void:
+	if _reserved_expedition_status == null:
+		return
+	var unlocked := BaseManager.is_expedition_level_unlocked("expedition_02")
+	_reserved_expedition_status.text = "当前状态：远征关卡02 %s" % (
+		"✔ 已解锁（情报室里可见）" if unlocked else "✘ 未解锁（情报室里看不到）"
+	)
+
+
+func _on_unlock_expedition02_pressed() -> void:
+	var ok := BaseManager.debug_unlock_expedition_level("expedition_02")
+	_refresh_reserved_status()
+	if not ok:
+		_reserved_expedition_status.text = "✘ 解锁写入失败，见控制台错误"
+
+
+func _on_relock_expedition02_pressed() -> void:
+	var ok := BaseManager.debug_relock_expedition_level("expedition_02")
+	_refresh_reserved_status()
+	if not ok:
+		_reserved_expedition_status.text = "✘ 回退写入失败，见控制台错误"
+
 
 # 生成一行：[标签] [HSlider] [数值]，返回 HSlider 引用；
 # 数值 Label 用唯一名挂在 row 内，便于 _find_value_label_for 反查。

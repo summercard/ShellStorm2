@@ -1,0 +1,48 @@
+{
+  "slug": "stair_chase_light",
+  "name_zh": "逐级感应灯组件",
+  "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-CHASE-LIGHT",
+  "component_family": "step_light",
+  "category": "facilities",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "variant_axis": null,
+  "version": "v027",
+  "collection": "输出资产包_stair_chase_light",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\stair_chase_light\\stair_chase_light.blend",
+  "objects": [
+    "逐级感应灯组件_主体",
+    "逐级感应灯组件_自发光"
+  ],
+  "bounds_min": [
+    -2.444999933242798,
+    -0.16500000655651093,
+    0.0
+  ],
+  "bounds_max": [
+    2.444999933242798,
+    0.16500000655651093,
+    0.0755000039935112
+  ],
+  "bounds_size_m": [
+    4.889999866485596,
+    0.33000001311302185,
+    0.0755000039935112
+  ],
+  "instance_count": 100,
+  "triangle_count": 176,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "04_柔和自发光_UI灯光"
+  ],
+  "runtime_connected": false
+}

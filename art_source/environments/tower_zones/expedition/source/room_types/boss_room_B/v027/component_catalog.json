@@ -1,0 +1,2740 @@
+{
+  "component_count": 46,
+  "components": [
+    {
+      "slug": "deck_armor_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+      "name_zh": "精加工甲板",
+      "component_family": "deck",
+      "category": "floor",
+      "estimated_instances": 24,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "deck_armor_5m",
+      "variant_reason": "Central emblem panel versus repeat armor plate",
+      "version": "v027",
+      "collection": "输出资产包_deck_armor_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\deck_armor_5m\\deck_armor_5m.blend",
+      "objects": [
+        "精加工甲板_主体"
+      ],
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.4494999945163727
+      ],
+      "bounds_min": [
+        -2.5,
+        -2.5,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        2.5,
+        0.4494999945163727
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 24,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "13f71314211b56ddd276e57aca03694ab1511f64d42ce01ded8c470fbd4453a1",
+      "triangle_count": 4240
+    },
+    {
+      "slug": "deck_emblem_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DECK-EMBLEM-5M",
+      "name_zh": "中心菱形徽记甲板",
+      "component_family": "deck",
+      "category": "floor",
+      "estimated_instances": 1,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "deck_emblem_5m",
+      "variant_reason": "Central emblem panel versus repeat armor plate",
+      "version": "v027",
+      "collection": "输出资产包_deck_emblem_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\deck_emblem_5m\\deck_emblem_5m.blend",
+      "objects": [
+        "中心菱形徽记甲板_主体"
+      ],
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.4490000605583191
+      ],
+      "bounds_min": [
+        -2.5,
+        -2.5,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        2.5,
+        0.4490000605583191
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 1,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "b33636379980c7a8efbc4e719c8314087f8033a95ac0ef223245032fb2937643",
+      "triangle_count": 2700
+    },
+    {
+      "slug": "rim_girder_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-RIM-GIRDER-5M",
+      "name_zh": "分层装甲边梁",
+      "component_family": "rim",
+      "category": "architecture",
+      "estimated_instances": 20,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_rim_girder_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\rim_girder_5m\\rim_girder_5m.blend",
+      "objects": [
+        "分层装甲边梁_主体"
+      ],
+      "bounds_size_m": [
+        5.0,
+        1.4620000123977661,
+        1.9500000476837158
+      ],
+      "bounds_min": [
+        -2.5,
+        -0.7310000061988831,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.7310000061988831,
+        1.9500000476837158
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 20,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "036846c094e34ebc0cdba0c07c8cc71981da1fda2470315d7773b40b7486b405",
+      "triangle_count": 2348
+    },
+    {
+      "slug": "suspended_server_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SUSPENDED-SERVER-5M",
+      "name_zh": "下挂机柜承力塔",
+      "component_family": "server_tower",
+      "category": "architecture",
+      "estimated_instances": 20,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_suspended_server_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\suspended_server_5m\\suspended_server_5m.blend",
+      "objects": [
+        "下挂机柜承力塔_自发光",
+        "下挂机柜承力塔_主体"
+      ],
+      "bounds_size_m": [
+        4.900000095367432,
+        3.8350000381469727,
+        55.939998626708984
+      ],
+      "bounds_min": [
+        -2.450000047683716,
+        -1.9175000190734863,
+        0.0
+      ],
+      "bounds_max": [
+        2.450000047683716,
+        1.9175000190734863,
+        55.939998626708984
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 10,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "222ac01c51c3c80444c1c473dc89835541172ad26db94ed0a1d30e8f9fd4b55f",
+      "triangle_count": 2088
+    },
+    {
+      "slug": "corner_pylon",
+      "component_id": "ENV-EXPEDITION-BOSS-B-CORNER-PYLON",
+      "name_zh": "转角竖向承力灯柱",
+      "component_family": "pylon",
+      "category": "architecture",
+      "estimated_instances": 4,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_corner_pylon",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\corner_pylon\\corner_pylon.blend",
+      "objects": [
+        "转角竖向承力灯柱_自发光",
+        "转角竖向承力灯柱_主体"
+      ],
+      "bounds_size_m": [
+        1.5499999523162842,
+        1.5499999523162842,
+        58.0
+      ],
+      "bounds_min": [
+        -0.7749999761581421,
+        -0.7749999761581421,
+        0.0
+      ],
+      "bounds_max": [
+        0.7749999761581421,
+        0.7749999761581421,
+        58.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 4,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "03776fcb46d60f2627831c20a283f02f32ca7197e90fc4548aae0712981fe5c3",
+      "triangle_count": 1580
+    },
+    {
+      "slug": "underframe_beam_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-UNDERFRAME-BEAM-5M",
+      "name_zh": "平台底部承重梁",
+      "component_family": "underframe",
+      "category": "architecture",
+      "estimated_instances": 100,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_underframe_beam_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\underframe_beam_5m\\underframe_beam_5m.blend",
+      "objects": [
+        "平台底部承重梁_主体"
+      ],
+      "bounds_size_m": [
+        5.0,
+        0.7200000286102295,
+        1.1200000047683716
+      ],
+      "bounds_min": [
+        -2.5,
+        -0.36000001430511475,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.36000001430511475,
+        1.1200000047683716
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 100,
+      "materials": [
+        "01_精工金属_紫色骨架"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "7fa2d2cbb93b2b8adb5e9107b74f6a2d1ea4c6e1af1a03aaaad1b335fd7feecf",
+      "triangle_count": 864
+    },
+    {
+      "slug": "deck_barrier_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DECK-BARRIER-5M",
+      "name_zh": "平台低护栏灯柱",
+      "component_family": "barrier",
+      "category": "architecture",
+      "estimated_instances": 17,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_deck_barrier_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\deck_barrier_5m\\deck_barrier_5m.blend",
+      "objects": [
+        "平台低护栏灯柱_主体",
+        "平台低护栏灯柱_自发光"
+      ],
+      "bounds_size_m": [
+        5.0,
+        0.5199999809265137,
+        1.119999885559082
+      ],
+      "bounds_min": [
+        -2.5,
+        -0.25999999046325684,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.25999999046325684,
+        1.119999885559082
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 17,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "b99cf5fea589d67ad5b4f282c2fca46102da6d5c7bc40160892059b17e02be10",
+      "triangle_count": 1356
+    },
+    {
+      "slug": "bridge_deck_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-DECK-5M",
+      "name_zh": "桥面格栅节段",
+      "component_family": "bridge_deck",
+      "category": "architecture",
+      "estimated_instances": 8,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_bridge_deck_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\bridge_deck_5m\\bridge_deck_5m.blend",
+      "objects": [
+        "桥面格栅节段_主体",
+        "桥面格栅节段_自发光"
+      ],
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.4415000081062317
+      ],
+      "bounds_min": [
+        -2.5,
+        -2.5,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        2.5,
+        0.4415000081062317
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 8,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "f8de64309ea11fa54352c4982fa21bed553a94ba99c1a3113d885452e8c31ad3",
+      "triangle_count": 4400
+    },
+    {
+      "slug": "bridge_truss_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-TRUSS-5M",
+      "name_zh": "桥侧箱梁桁架",
+      "component_family": "bridge_truss",
+      "category": "architecture",
+      "estimated_instances": 16,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_bridge_truss_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\bridge_truss_5m\\bridge_truss_5m.blend",
+      "objects": [
+        "桥侧箱梁桁架_主体"
+      ],
+      "bounds_size_m": [
+        5.0,
+        0.5019999742507935,
+        1.25
+      ],
+      "bounds_min": [
+        -2.5,
+        -0.25099998712539673,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.25099998712539673,
+        1.25
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 16,
+      "materials": [
+        "01_精工金属_紫色骨架"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "b3eac50c65a166d92c9f11fa4a86e159c38d1908a7418396d322e4d3083d1e36",
+      "triangle_count": 1416
+    },
+    {
+      "slug": "bridge_rail_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-RAIL-5M",
+      "name_zh": "桥缘低位灯柱护栏",
+      "component_family": "bridge_rail",
+      "category": "architecture",
+      "estimated_instances": 16,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_bridge_rail_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\bridge_rail_5m\\bridge_rail_5m.blend",
+      "objects": [
+        "桥缘低位灯柱护栏_主体",
+        "桥缘低位灯柱护栏_自发光"
+      ],
+      "bounds_size_m": [
+        5.0,
+        0.36000001430511475,
+        0.8500000238418579
+      ],
+      "bounds_min": [
+        -2.5,
+        -0.18000000715255737,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.18000000715255737,
+        0.8500000238418579
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 16,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "01aa0a5588716473a45fcb5ce248bf14f00fc054a001a2c6f81cbd5bd98c3ead",
+      "triangle_count": 1272
+    },
+    {
+      "slug": "abutment_bracket",
+      "component_id": "ENV-EXPEDITION-BOSS-B-ABUTMENT-BRACKET",
+      "name_zh": "桥接头斜撑牛腿",
+      "component_family": "bracket",
+      "category": "architecture",
+      "estimated_instances": 4,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_abutment_bracket",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\abutment_bracket\\abutment_bracket.blend",
+      "objects": [
+        "桥接头斜撑牛腿_主体"
+      ],
+      "bounds_size_m": [
+        1.6649999618530273,
+        1.4500000476837158,
+        3.0900001525878906
+      ],
+      "bounds_min": [
+        -0.8324999809265137,
+        -0.7250000238418579,
+        0.0
+      ],
+      "bounds_max": [
+        0.8324999809265137,
+        0.7250000238418579,
+        3.0900001525878906
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 4,
+      "materials": [
+        "01_精工金属_紫色骨架"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "1a159323b40d82a95e5082c94484e9d03615100a9e01b288513213f9083aede2",
+      "triangle_count": 756
+    },
+    {
+      "slug": "equipment_cluster",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EQUIPMENT-CLUSTER",
+      "name_zh": "平台阶梯设备组",
+      "component_family": "equipment",
+      "category": "facilities",
+      "estimated_instances": 4,
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_equipment_cluster",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\equipment_cluster\\equipment_cluster.blend",
+      "objects": [
+        "平台阶梯设备组_主体",
+        "平台阶梯设备组_自发光"
+      ],
+      "bounds_size_m": [
+        3.299999952316284,
+        2.5999999046325684,
+        3.5369999408721924
+      ],
+      "bounds_min": [
+        -1.649999976158142,
+        -1.2999999523162842,
+        0.0
+      ],
+      "bounds_max": [
+        1.649999976158142,
+        1.2999999523162842,
+        3.5369999408721924
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 4,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "7c9e7c4548194bb218e6fce7c3b5fe34264d47b9e95e46dd84a4bb1b1cb54d80",
+      "triangle_count": 6136
+    },
+    {
+      "slug": "monitor_chassis",
+      "component_id": "ENV-EXPEDITION-BOSS-B-MONITOR-CHASSIS",
+      "name_zh": "大型悬挂显示器机壳",
+      "component_family": "monitor",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "monitor_chassis",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_monitor_chassis",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\monitor_chassis\\monitor_chassis.blend",
+      "objects": [
+        "大型悬挂显示器机壳_主体",
+        "大型悬挂显示器机壳_自发光"
+      ],
+      "bounds_size_m": [
+        11.0,
+        1.6800000667572021,
+        7.0
+      ],
+      "bounds_min": [
+        -5.5,
+        -0.8400000333786011,
+        0.0
+      ],
+      "bounds_max": [
+        5.5,
+        0.8400000333786011,
+        7.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 3,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "7783b8bdf79af98f205ffadb2cc0eaef123673059400771ae309e9fe410fd22a",
+      "triangle_count": 7900
+    },
+    {
+      "slug": "cables_swept",
+      "component_id": "ENV-EXPEDITION-BOSS-B-CABLES-SWEPT",
+      "name_zh": "侧翼下垂重缆束",
+      "component_family": "cable_bundle",
+      "category": "support",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "cables_swept",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_cables_swept",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\cables_swept\\cables_swept.blend",
+      "objects": [
+        "侧翼下垂重缆束_主体"
+      ],
+      "bounds_size_m": [
+        18.23322868347168,
+        18.616411209106445,
+        35.88380432128906
+      ],
+      "bounds_min": [
+        -9.11661434173584,
+        -9.308205604553223,
+        0.0
+      ],
+      "bounds_max": [
+        9.11661434173584,
+        9.308205604553223,
+        35.88380432128906
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 1,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "ad4f58192cb23f794441cbf8318d339e92a9e938be80da0fbc743e1f2819b24b",
+      "triangle_count": 19456
+    },
+    {
+      "slug": "cables_mirrored",
+      "component_id": "ENV-EXPEDITION-BOSS-B-CABLES-MIRRORED",
+      "name_zh": "侧翼反向重缆束",
+      "component_family": "cable_bundle",
+      "category": "support",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "cables_mirrored",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_cables_mirrored",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\cables_mirrored\\cables_mirrored.blend",
+      "objects": [
+        "侧翼反向重缆束_主体"
+      ],
+      "bounds_size_m": [
+        18.211925506591797,
+        16.67635440826416,
+        36.40887451171875
+      ],
+      "bounds_min": [
+        -9.105962753295898,
+        -8.338177680969238,
+        0.0
+      ],
+      "bounds_max": [
+        9.105962753295898,
+        8.338176727294922,
+        36.40887451171875
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 1,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "a5148259da4912f5d68b5af89addc5cfa37dd9cccf31097246b8ffed83d38580",
+      "triangle_count": 19456
+    },
+    {
+      "slug": "cables_crown",
+      "component_id": "ENV-EXPEDITION-BOSS-B-CABLES-CROWN",
+      "name_zh": "中央供电与数据缆束",
+      "component_family": "cable_bundle",
+      "category": "support",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "cables_crown",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_cables_crown",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\cables_crown\\cables_crown.blend",
+      "objects": [
+        "中央供电与数据缆束_主体"
+      ],
+      "bounds_size_m": [
+        20.44287109375,
+        11.682308673858643,
+        35.88018798828125
+      ],
+      "bounds_min": [
+        -10.221435546875,
+        -5.8411545753479,
+        0.0
+      ],
+      "bounds_max": [
+        10.221435546875,
+        5.841154098510742,
+        35.88018798828125
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 1,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "83fe1267ed305ac9a6bb8cd92640b7d6874bbafefa12cc18a57437aaed5c51b9",
+      "triangle_count": 19456
+    },
+    {
+      "slug": "compute_tower_tall",
+      "component_id": "ENV-EXPEDITION-BOSS-B-COMPUTE-TOWER-TALL",
+      "name_zh": "高层计算机塔",
+      "component_family": "compute_tower",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "compute_tower_tall",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_compute_tower_tall",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\compute_tower_tall\\compute_tower_tall.blend",
+      "objects": [
+        "高层计算机塔_自发光",
+        "高层计算机塔_主体"
+      ],
+      "bounds_size_m": [
+        4.800000190734863,
+        5.232999801635742,
+        60.13999938964844
+      ],
+      "bounds_min": [
+        -2.4000000953674316,
+        -2.616499900817871,
+        0.0
+      ],
+      "bounds_max": [
+        2.4000000953674316,
+        2.616499900817871,
+        60.13999938964844
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 20,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "4a93fe881b9c11841f52d18bd1a6ea94a098d207186bb0332a8a682f4c1a5ddf",
+      "triangle_count": 2088
+    },
+    {
+      "slug": "compute_tower_stepped",
+      "component_id": "ENV-EXPEDITION-BOSS-B-COMPUTE-TOWER-STEPPED",
+      "name_zh": "阶梯计算机塔",
+      "component_family": "compute_tower",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "compute_tower_stepped",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_compute_tower_stepped",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\compute_tower_stepped\\compute_tower_stepped.blend",
+      "objects": [
+        "阶梯计算机塔_自发光",
+        "阶梯计算机塔_主体"
+      ],
+      "bounds_size_m": [
+        5.599999904632568,
+        5.932000160217285,
+        55.63999938964844
+      ],
+      "bounds_min": [
+        -2.799999952316284,
+        -2.9660000801086426,
+        0.0
+      ],
+      "bounds_max": [
+        2.799999952316284,
+        2.9660000801086426,
+        55.63999938964844
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 10,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "66873daeaeb2f73d8354e78b27431aafad4b22d8676643638948165a8364a55c",
+      "triangle_count": 2088
+    },
+    {
+      "slug": "compute_tower_compact",
+      "component_id": "ENV-EXPEDITION-BOSS-B-COMPUTE-TOWER-COMPACT",
+      "name_zh": "短层计算机塔",
+      "component_family": "compute_tower",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "compute_tower_compact",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_compute_tower_compact",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\compute_tower_compact\\compute_tower_compact.blend",
+      "objects": [
+        "短层计算机塔_自发光",
+        "短层计算机塔_主体"
+      ],
+      "bounds_size_m": [
+        4.199999809265137,
+        5.0,
+        51.63999938964844
+      ],
+      "bounds_min": [
+        -2.0999999046325684,
+        -2.5,
+        0.0
+      ],
+      "bounds_max": [
+        2.0999999046325684,
+        2.5,
+        51.63999938964844
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 6,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "f1a0c7898effe9c92b03b03e95662265cf25302f3d3fd539abc487f690a82101",
+      "triangle_count": 2088
+    },
+    {
+      "slug": "matrix_bay_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-MATRIX-BAY-5M",
+      "name_zh": "后方矩阵模块",
+      "component_family": "matrix",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "matrix_bay_5m",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_matrix_bay_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\matrix_bay_5m\\matrix_bay_5m.blend",
+      "objects": [
+        "后方矩阵模块_主体",
+        "后方矩阵模块_自发光"
+      ],
+      "bounds_size_m": [
+        5.0,
+        1.8950001001358032,
+        11.899999618530273
+      ],
+      "bounds_min": [
+        -2.5,
+        -0.9475000500679016,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.9475000500679016,
+        11.899999618530273
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 84,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "7165b1b4524dfecacab94daaaccda7f34c260dc3679965ce80233faa602a60a9",
+      "triangle_count": 30672
+    },
+    {
+      "slug": "matrix_bus_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-MATRIX-BUS-5M",
+      "name_zh": "矩阵横向连接桥架",
+      "component_family": "matrix_bus",
+      "category": "support",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "matrix_bus_5m",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_matrix_bus_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\matrix_bus_5m\\matrix_bus_5m.blend",
+      "objects": [
+        "矩阵横向连接桥架_主体"
+      ],
+      "bounds_size_m": [
+        5.0,
+        0.800000011920929,
+        0.6600000262260437
+      ],
+      "bounds_min": [
+        -2.5,
+        -0.4000000059604645,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.4000000059604645,
+        0.6600000262260437
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 26,
+      "materials": [
+        "01_精工金属_紫色骨架"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "bddde74c11d36618a0651db2d349ed642c2cce73f0c58ae75bc5a7784eef65d1",
+      "triangle_count": 864
+    },
+    {
+      "slug": "exit_portal",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EXIT-PORTAL",
+      "name_zh": "出口装甲门框",
+      "component_family": "portal",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "exit_portal",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_exit_portal",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\exit_portal\\exit_portal.blend",
+      "objects": [
+        "出口装甲门框_主体",
+        "出口装甲门框_自发光"
+      ],
+      "bounds_size_m": [
+        8.300000190734863,
+        2.111999988555908,
+        7.5
+      ],
+      "bounds_min": [
+        -4.150000095367432,
+        -1.055999994277954,
+        0.0
+      ],
+      "bounds_max": [
+        4.150000095367432,
+        1.055999994277954,
+        7.5
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 5,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "00b23e656e7437190c537b02b4560a7c89098bbf4eba5c421652fbffd5963d53",
+      "triangle_count": 6925
+    },
+    {
+      "slug": "exit_leaf_a",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EXIT-LEAF-A",
+      "name_zh": "装甲门扇A",
+      "component_family": "door_leaf",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "exit_leaf_a",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_exit_leaf_a",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\exit_leaf_a\\exit_leaf_a.blend",
+      "objects": [
+        "装甲门扇A_主体",
+        "装甲门扇A_自发光"
+      ],
+      "bounds_size_m": [
+        2.4800000190734863,
+        0.7170000374317169,
+        5.71999979019165
+      ],
+      "bounds_min": [
+        -1.2400000095367432,
+        -0.35850003361701965,
+        0.0
+      ],
+      "bounds_max": [
+        1.2400000095367432,
+        0.35850000381469727,
+        5.71999979019165
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 5,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "8e92e7333a3e3fec226f94dc0d6d51e44bb552df7b03136a2e455912837e9a10",
+      "triangle_count": 1040
+    },
+    {
+      "slug": "exit_leaf_b",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EXIT-LEAF-B",
+      "name_zh": "装甲门扇B",
+      "component_family": "door_leaf",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "exit_leaf_b",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_exit_leaf_b",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\exit_leaf_b\\exit_leaf_b.blend",
+      "objects": [
+        "装甲门扇B_主体",
+        "装甲门扇B_自发光"
+      ],
+      "bounds_size_m": [
+        2.4800000190734863,
+        0.7170000374317169,
+        5.71999979019165
+      ],
+      "bounds_min": [
+        -1.2400000095367432,
+        -0.35850003361701965,
+        0.0
+      ],
+      "bounds_max": [
+        1.2400000095367432,
+        0.35850000381469727,
+        5.71999979019165
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 5,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "16942b6165dfd1841843c392d146af10f2ccfe480580c4c1b1d5f6015edaad23",
+      "triangle_count": 1040
+    },
+    {
+      "slug": "exit_passage",
+      "component_id": "ENV-EXPEDITION-BOSS-B-EXIT-PASSAGE",
+      "name_zh": "出口内廊",
+      "component_family": "passage",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "exit_passage",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_exit_passage",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\exit_passage\\exit_passage.blend",
+      "objects": [
+        "出口内廊_主体",
+        "出口内廊_自发光"
+      ],
+      "bounds_size_m": [
+        5.800000190734863,
+        6.0,
+        6.0
+      ],
+      "bounds_min": [
+        -2.9000000953674316,
+        -3.0,
+        0.0
+      ],
+      "bounds_max": [
+        2.9000000953674316,
+        3.0,
+        6.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 2,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": false,
+      "palette_uv_layer": "PaletteUV",
+      "animation": null,
+      "geometry_fingerprint": "9f155d1127271ff70782e7bc744ef709485c235cd0d3f4e0fac57aec50d32c1a",
+      "triangle_count": 2052
+    },
+    {
+      "slug": "screen_left",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SCREEN-LEFT",
+      "name_zh": "诊断遥测屏幕",
+      "component_family": "screen_content",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "screen_left",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_screen_left",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\screen_left\\screen_left.blend",
+      "objects": [
+        "诊断遥测屏幕_自发光_贴图输出"
+      ],
+      "bounds_size_m": [
+        10.34000015258789,
+        0.0,
+        6.320000171661377
+      ],
+      "bounds_min": [
+        -5.170000076293945,
+        0.0,
+        0.0
+      ],
+      "bounds_max": [
+        5.170000076293945,
+        0.0,
+        6.320000171661377
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 1,
+      "materials": [
+        "05_动态屏幕_left_自发光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": true,
+      "palette_uv_layer": null,
+      "animation": "shader_scan_preview",
+      "geometry_fingerprint": "f34b5f951d0bcbde2141bfd8fb8ab5d9c1d3903630217a51c814a7387591943e",
+      "triangle_count": 2
+    },
+    {
+      "slug": "screen_center",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SCREEN-CENTER",
+      "name_zh": "数据核心屏幕",
+      "component_family": "screen_content",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "screen_center",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_screen_center",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\screen_center\\screen_center.blend",
+      "objects": [
+        "数据核心屏幕_自发光_贴图输出"
+      ],
+      "bounds_size_m": [
+        10.34000015258789,
+        0.0,
+        6.320000171661377
+      ],
+      "bounds_min": [
+        -5.170000076293945,
+        0.0,
+        0.0
+      ],
+      "bounds_max": [
+        5.170000076293945,
+        0.0,
+        6.320000171661377
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 1,
+      "materials": [
+        "06_动态屏幕_center_自发光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": true,
+      "palette_uv_layer": null,
+      "animation": "shader_scan_preview",
+      "geometry_fingerprint": "a39d8840d596df2e23a1bc990183c383938a0915b65ac21561d6c8042c274385",
+      "triangle_count": 2
+    },
+    {
+      "slug": "screen_right",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SCREEN-RIGHT",
+      "name_zh": "波形监测屏幕",
+      "component_family": "screen_content",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "screen_right",
+      "variant_reason": "Reference silhouette / content or cable routing variation",
+      "version": "v027",
+      "collection": "输出资产包_screen_right",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\screen_right\\screen_right.blend",
+      "objects": [
+        "波形监测屏幕_自发光_贴图输出"
+      ],
+      "bounds_size_m": [
+        10.34000015258789,
+        0.0,
+        6.320000171661377
+      ],
+      "bounds_min": [
+        -5.170000076293945,
+        0.0,
+        0.0
+      ],
+      "bounds_max": [
+        5.170000076293945,
+        0.0,
+        6.320000171661377
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "instance_count": 1,
+      "materials": [
+        "07_动态屏幕_right_自发光"
+      ],
+      "collision_owner": "godot_wrapper_pending",
+      "registration_status": "未登记",
+      "runtime_connected": false,
+      "texture_exception": true,
+      "palette_uv_layer": null,
+      "animation": "shader_scan_preview",
+      "geometry_fingerprint": "b64c60ddf39a50c6392dba06682151c750d66f16e945482ae2cc307bc4ccc8c6",
+      "triangle_count": 2
+    },
+    {
+      "slug": "portal_backing_5m",
+      "component_id": "ENV-EXPEDITION-BOSS-B-PORTAL-BACKING-5M",
+      "name_zh": "出口井壁贯通背板",
+      "component_family": "portal_backing",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "version": "v027",
+      "collection": "输出资产包_portal_backing_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\portal_backing_5m\\portal_backing_5m.blend",
+      "objects": [
+        "出口井壁贯通背板_主体"
+      ],
+      "bounds_size_m": [
+        5.0,
+        0.800000011920929,
+        50.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "texture_exception": false,
+      "collision_owner": "godot_wrapper_pending",
+      "runtime_connected": false,
+      "registration_status": "未登记",
+      "bounds_min": [
+        -2.5,
+        -0.4000000059604645,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.4000000059604645,
+        50.0
+      ],
+      "instance_count": 2,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "geometry_fingerprint": "e7b473494a7ee5490411949208f93e88aa3d1f104d42a636a78391f7fe1355c7",
+      "triangle_count": 216
+    },
+    {
+      "slug": "door_support_pier",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DOOR-SUPPORT-PIER",
+      "name_zh": "门侧方形承力巨柱",
+      "component_family": "door_support",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "front_axis": "-Y",
+      "variant_axis": null,
+      "version": "v027",
+      "collection": "输出资产包_door_support_pier",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\door_support_pier\\door_support_pier.blend",
+      "objects": [
+        "门侧方形承力巨柱_自发光",
+        "门侧方形承力巨柱_主体"
+      ],
+      "bounds_min": [
+        -1.899999976158142,
+        -2.8495001792907715,
+        0.0
+      ],
+      "bounds_max": [
+        1.899999976158142,
+        2.8495001792907715,
+        68.13999938964844
+      ],
+      "bounds_size_m": [
+        3.799999952316284,
+        5.699000358581543,
+        68.13999938964844
+      ],
+      "instance_count": 4,
+      "triangle_count": 2088,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "stair_flight_5m",
+      "name_zh": "精工格栅楼梯节段",
+      "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-FLIGHT-5M",
+      "component_family": "stair",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": null,
+      "version": "v027",
+      "collection": "输出资产包_stair_flight_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\stair_flight_5m\\stair_flight_5m.blend",
+      "objects": [
+        "精工格栅楼梯节段_主体"
+      ],
+      "bounds_min": [
+        -2.6449999809265137,
+        -2.729419708251953,
+        0.0
+      ],
+      "bounds_max": [
+        2.6449999809265137,
+        2.729419708251953,
+        2.7332417964935303
+      ],
+      "bounds_size_m": [
+        5.289999961853027,
+        5.458839416503906,
+        2.7332417964935303
+      ],
+      "instance_count": 10,
+      "triangle_count": 6048,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "stair_chase_light",
+      "name_zh": "逐级感应灯组件",
+      "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-CHASE-LIGHT",
+      "component_family": "step_light",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": null,
+      "version": "v027",
+      "collection": "输出资产包_stair_chase_light",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\stair_chase_light\\stair_chase_light.blend",
+      "objects": [
+        "逐级感应灯组件_主体",
+        "逐级感应灯组件_自发光"
+      ],
+      "bounds_min": [
+        -2.444999933242798,
+        -0.16500000655651093,
+        0.0
+      ],
+      "bounds_max": [
+        2.444999933242798,
+        0.16500000655651093,
+        0.0755000039935112
+      ],
+      "bounds_size_m": [
+        4.889999866485596,
+        0.33000001311302185,
+        0.0755000039935112
+      ],
+      "instance_count": 100,
+      "triangle_count": 176,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "04_柔和自发光_UI灯光"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "stair_landing_5m",
+      "name_zh": "入口钢格栅平台",
+      "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-LANDING-5M",
+      "component_family": "landing",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": null,
+      "version": "v027",
+      "collection": "输出资产包_stair_landing_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\stair_landing_5m\\stair_landing_5m.blend",
+      "objects": [
+        "入口钢格栅平台_主体"
+      ],
+      "bounds_min": [
+        -2.569999933242798,
+        -2.5,
+        0.0
+      ],
+      "bounds_max": [
+        2.569999933242798,
+        2.5,
+        1.409999966621399
+      ],
+      "bounds_size_m": [
+        5.139999866485596,
+        5.0,
+        1.409999966621399
+      ],
+      "instance_count": 2,
+      "triangle_count": 856,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "hanging_power_bundle",
+      "name_zh": "悬垂交错动力电缆",
+      "component_id": "ENV-EXPEDITION-BOSS-B-HANGING-POWER-BUNDLE",
+      "component_family": "hanging_cable",
+      "category": "support",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": null,
+      "version": "v027",
+      "collection": "输出资产包_hanging_power_bundle",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\hanging_power_bundle\\hanging_power_bundle.blend",
+      "objects": [
+        "悬垂交错动力电缆_主体"
+      ],
+      "bounds_min": [
+        -4.832467079162598,
+        -1.4849854707717896,
+        0.0
+      ],
+      "bounds_max": [
+        4.832467079162598,
+        1.4849854707717896,
+        34.9111328125
+      ],
+      "bounds_size_m": [
+        9.664934158325195,
+        2.969970941543579,
+        34.9111328125
+      ],
+      "instance_count": 4,
+      "triangle_count": 10800,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "damaged_cabinet_open",
+      "name_zh": "破损敞口机箱",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DAMAGED-CABINET-OPEN",
+      "component_family": "debris",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": "damage_state",
+      "version": "v027",
+      "collection": "输出资产包_damaged_cabinet_open",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\damaged_cabinet_open\\damaged_cabinet_open.blend",
+      "objects": [
+        "破损敞口机箱_主体"
+      ],
+      "bounds_min": [
+        -0.5795706510543823,
+        -0.949999988079071,
+        0.0
+      ],
+      "bounds_max": [
+        0.5795706510543823,
+        0.949999988079071,
+        1.2205524444580078
+      ],
+      "bounds_size_m": [
+        1.1591413021087646,
+        1.899999976158142,
+        1.2205524444580078
+      ],
+      "instance_count": 3,
+      "triangle_count": 528,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "damaged_cabinet_crushed",
+      "name_zh": "凹陷破损机箱",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DAMAGED-CABINET-CRUSHED",
+      "component_family": "debris",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "variant_axis": "damage_state",
+      "version": "v027",
+      "collection": "输出资产包_damaged_cabinet_crushed",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\damaged_cabinet_crushed\\damaged_cabinet_crushed.blend",
+      "objects": [
+        "凹陷破损机箱_主体"
+      ],
+      "bounds_min": [
+        -0.6343683004379272,
+        -0.949999988079071,
+        0.0
+      ],
+      "bounds_max": [
+        0.6343683004379272,
+        0.949999988079071,
+        1.0978885889053345
+      ],
+      "bounds_size_m": [
+        1.2687366008758545,
+        1.899999976158142,
+        1.0978885889053345
+      ],
+      "instance_count": 2,
+      "triangle_count": 528,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "door_seal_frame",
+      "name_zh": "门框密封边组件",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DOOR-SEAL-FRAME",
+      "component_family": "door_seal",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_door_seal_frame",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\door_seal_frame\\door_seal_frame.blend",
+      "objects": [
+        "门框密封边组件_主体"
+      ],
+      "bounds_min": [
+        -2.549999952316284,
+        -0.25,
+        0.0
+      ],
+      "bounds_max": [
+        2.549999952316284,
+        0.25,
+        6.0
+      ],
+      "bounds_size_m": [
+        5.099999904632568,
+        0.5,
+        6.0
+      ],
+      "instance_count": 3,
+      "triangle_count": 48,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "shell_wall_solid_80m",
+      "name_zh": "整面封闭装甲墙",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-WALL-SOLID-80M",
+      "component_family": "shell_wall",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_shell_wall_solid_80m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\shell_wall_solid_80m\\shell_wall_solid_80m.blend",
+      "objects": [
+        "整面封闭装甲墙_主体"
+      ],
+      "bounds_min": [
+        -40.0,
+        -0.4000000059604645,
+        0.0
+      ],
+      "bounds_max": [
+        40.0,
+        0.4000000059604645,
+        72.0
+      ],
+      "bounds_size_m": [
+        80.0,
+        0.800000011920929,
+        72.0
+      ],
+      "instance_count": 1,
+      "triangle_count": 108,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "shell_wall_gate_80m",
+      "name_zh": "整面高位入口墙",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-WALL-GATE-80M",
+      "component_family": "shell_wall",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_shell_wall_gate_80m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\shell_wall_gate_80m\\shell_wall_gate_80m.blend",
+      "objects": [
+        "整面高位入口墙_主体"
+      ],
+      "bounds_min": [
+        -40.0,
+        -0.4000000059604645,
+        0.0
+      ],
+      "bounds_max": [
+        40.0,
+        0.4000000059604645,
+        72.0
+      ],
+      "bounds_size_m": [
+        80.0,
+        0.800000011920929,
+        72.0
+      ],
+      "instance_count": 1,
+      "triangle_count": 136,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "shell_wall_gate_100m",
+      "name_zh": "整面侧门长墙",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-WALL-GATE-100M",
+      "component_family": "shell_wall",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_shell_wall_gate_100m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\shell_wall_gate_100m\\shell_wall_gate_100m.blend",
+      "objects": [
+        "整面侧门长墙_主体"
+      ],
+      "bounds_min": [
+        -50.0,
+        -0.4000000059604645,
+        0.0
+      ],
+      "bounds_max": [
+        50.0,
+        0.4000000059604645,
+        72.0
+      ],
+      "bounds_size_m": [
+        100.0,
+        0.800000011920929,
+        72.0
+      ],
+      "instance_count": 2,
+      "triangle_count": 160,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "shell_horizontal_80x100m",
+      "name_zh": "整面顶底围护板",
+      "component_id": "ENV-EXPEDITION-BOSS-B-SHELL-HORIZONTAL-80X100M",
+      "component_family": "shell_horizontal",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_shell_horizontal_80x100m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\shell_horizontal_80x100m\\shell_horizontal_80x100m.blend",
+      "objects": [
+        "整面顶底围护板_主体"
+      ],
+      "bounds_min": [
+        -40.0,
+        -50.0,
+        0.0
+      ],
+      "bounds_max": [
+        40.0,
+        50.0,
+        0.4000000059604645
+      ],
+      "bounds_size_m": [
+        80.0,
+        100.0,
+        0.4000000059604645
+      ],
+      "instance_count": 2,
+      "triangle_count": 12,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "stair_pillar_light",
+      "name_zh": "独立栏杆竖向灯",
+      "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-PILLAR-LIGHT",
+      "component_family": "pillar_light",
+      "category": "facilities",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_stair_pillar_light",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\stair_pillar_light\\stair_pillar_light.blend",
+      "objects": [
+        "独立栏杆竖向灯_主体",
+        "独立栏杆竖向灯_自发光"
+      ],
+      "bounds_min": [
+        -0.07500000298023224,
+        -0.05000000074505806,
+        0.0
+      ],
+      "bounds_max": [
+        0.07500000298023224,
+        0.05000000074505806,
+        0.8600000143051147
+      ],
+      "bounds_size_m": [
+        0.15000000596046448,
+        0.10000000149011612,
+        0.8600000143051147
+      ],
+      "instance_count": 80,
+      "triangle_count": 88,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "04_柔和自发光_UI灯光"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "bridge_threshold",
+      "name_zh": "桥门衔接平台",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-THRESHOLD",
+      "component_family": "threshold",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_bridge_threshold",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\bridge_threshold\\bridge_threshold.blend",
+      "objects": [
+        "桥门衔接平台_主体"
+      ],
+      "bounds_min": [
+        -2.5,
+        -0.75,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.75,
+        0.26500001549720764
+      ],
+      "bounds_size_m": [
+        5.0,
+        1.5,
+        0.26500001549720764
+      ],
+      "instance_count": 6,
+      "triangle_count": 352,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "bridge_belly_5m",
+      "name_zh": "桥下设备与曲管托架",
+      "component_id": "ENV-EXPEDITION-BOSS-B-BRIDGE-BELLY-5M",
+      "component_family": "bridge_belly",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_bridge_belly_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\bridge_belly_5m\\bridge_belly_5m.blend",
+      "objects": [
+        "桥下设备与曲管托架_主体"
+      ],
+      "bounds_min": [
+        -2.5626606941223145,
+        -2.299999952316284,
+        0.0
+      ],
+      "bounds_max": [
+        2.5626606941223145,
+        2.299999952316284,
+        1.7397687435150146
+      ],
+      "bounds_size_m": [
+        5.125321388244629,
+        4.599999904632568,
+        1.7397687435150146
+      ],
+      "instance_count": 8,
+      "triangle_count": 1668,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "door_undersupport",
+      "name_zh": "门下层叠承力机座",
+      "component_id": "ENV-EXPEDITION-BOSS-B-DOOR-UNDERSUPPORT",
+      "component_family": "door_support_base",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_door_undersupport",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\door_undersupport\\door_undersupport.blend",
+      "objects": [
+        "门下层叠承力机座_主体"
+      ],
+      "bounds_min": [
+        -3.200000047683716,
+        -1.5,
+        0.0
+      ],
+      "bounds_max": [
+        3.200000047683716,
+        1.5,
+        5.0
+      ],
+      "bounds_size_m": [
+        6.400000095367432,
+        3.0,
+        5.0
+      ],
+      "instance_count": 5,
+      "triangle_count": 1664,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    },
+    {
+      "slug": "matrix_foundation_5m",
+      "name_zh": "矩阵低面数井底延伸",
+      "component_id": "ENV-EXPEDITION-BOSS-B-MATRIX-FOUNDATION-5M",
+      "component_family": "matrix_foundation",
+      "category": "architecture",
+      "scope": "room_type_local",
+      "front_axis": "-Y",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "version": "v027",
+      "collection": "输出资产包_matrix_foundation_5m",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+      "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\matrix_foundation_5m\\matrix_foundation_5m.blend",
+      "objects": [
+        "矩阵低面数井底延伸_主体"
+      ],
+      "bounds_min": [
+        -2.5,
+        -0.6949999928474426,
+        0.0
+      ],
+      "bounds_max": [
+        2.5,
+        0.6949999928474426,
+        22.0
+      ],
+      "bounds_size_m": [
+        5.0,
+        1.3899999856948853,
+        22.0
+      ],
+      "instance_count": 21,
+      "triangle_count": 36,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "runtime_connected": false
+    }
+  ]
+}

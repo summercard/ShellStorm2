@@ -1,0 +1,468 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/ceiling_deck_5m/ceiling_deck_5m_root_top3d.tscn" id="1_ceiling_deck_5m"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_base_5m/floor_base_5m_root_top3d.tscn" id="2_floor_base_5m"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_tile_5m/floor_tile_5m_root_top3d.tscn" id="3_floor_tile_5m"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/wall_door_5m_h3/wall_door_5m_h3_root_top3d.tscn" id="4_wall_door_5m_h3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/wall_standard_5m_h12/wall_standard_5m_h12_root_top3d.tscn" id="5_wall_standard_5m_h12"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/wall_standard_5m_h3/wall_standard_5m_h3_root_top3d.tscn" id="6_wall_standard_5m_h3"]
+
+[node name="ExpeditionRoomStaticLayout" type="Node3D"]
+metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
+metadata/room_id = "room_02"
+metadata/runtime_room_id = "room_02"
+metadata/room_key = "room_02"
+metadata/level_id = "expedition_02"
+metadata/room_type = "COMMON_ROOM"
+metadata/source_mode = "whitebox_manifest_direct_extract"
+metadata/static_layout_only = true
+metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
+metadata/layout_instance_total = 111
+metadata/authoring_geometry_source = "art_source/design/whitebox/tower_zones/expedition_02/v001"
+metadata/authoring_generator = "scripts/build_expedition02_room_scenes.py"
+metadata/room_size_m = Vector2(10, 75)
+metadata/ceiling_bottom_y_m = 4
+
+[node name="FLOOR_BASE_5M_000" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -35)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_001" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, -35)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_002" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -30)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_003" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, -30)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_004" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -25)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_005" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, -25)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_006" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -20)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_007" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, -20)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_008" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -15)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_009" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, -15)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_010" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -10)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_011" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, -10)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_012" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_013" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, -5)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_014" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_015" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, 0)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_016" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_017" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, 5)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_018" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 10)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_019" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, 10)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_020" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 15)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_021" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, 15)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_022" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 20)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_023" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, 20)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_024" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 25)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_025" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, 25)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_026" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 30)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_027" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, 30)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_028" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 35)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_029" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.26, 35)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_030" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -35)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_031" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, -35)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_032" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -30)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_033" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, -30)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_034" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -25)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_035" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, -25)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_036" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -20)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_037" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, -20)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_038" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -15)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_039" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, -15)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_040" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -10)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_041" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, -10)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_042" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_043" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, -5)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_044" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_045" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, 0)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_046" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_047" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, 5)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_048" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 10)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_049" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, 10)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_050" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 15)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_051" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, 15)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_052" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 20)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_053" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, 20)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_054" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 25)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_055" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, 25)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_056" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 30)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_057" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, 30)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_058" parent="." instance=ExtResource("2_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 35)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_059" parent="." instance=ExtResource("3_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.26, 35)
+metadata/placement_note = "地砖"
+
+[node name="WALL_STANDARD_5M_H12_060" parent="." instance=ExtResource("5_wall_standard_5m_h12")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 37.5)
+metadata/placement_note = "WALL_Hp030_S04_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_061" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, -35)
+metadata/placement_note = "WALL_Vp005_S01_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_062" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, -25)
+metadata/placement_note = "WALL_Vp005_S03_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_063" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, -20)
+metadata/placement_note = "WALL_Vp005_S04_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_064" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, -10)
+metadata/placement_note = "WALL_Vp005_S06_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_065" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, -5)
+metadata/placement_note = "WALL_Vp005_S07_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_066" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, 5)
+metadata/placement_note = "WALL_Vp005_S09_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_067" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, 10)
+metadata/placement_note = "WALL_Vp005_S10_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_068" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, 20)
+metadata/placement_note = "WALL_Vp005_S12_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_069" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, 25)
+metadata/placement_note = "WALL_Vp005_S13_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_070" parent="." instance=ExtResource("6_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, 35)
+metadata/placement_note = "WALL_Vp005_S15_SOLID"
+
+[node name="WALL_DOOR_5M_H3_071" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -5, 0, 30)
+metadata/placement_note = "门墙 客房W1门"
+
+[node name="WALL_DOOR_5M_H3_072" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -5, 0, 15)
+metadata/placement_note = "门墙 客房W2门"
+
+[node name="WALL_DOOR_5M_H3_073" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -5, 0, 0)
+metadata/placement_note = "门墙 客房W3门"
+
+[node name="WALL_DOOR_5M_H3_074" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -5, 0, -15)
+metadata/placement_note = "门墙 客房W4门"
+
+[node name="WALL_DOOR_5M_H3_075" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -5, 0, -30)
+metadata/placement_note = "门墙 客房W5门"
+
+[node name="WALL_DOOR_5M_H3_076" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, 30)
+metadata/placement_note = "门墙 客房E1门"
+
+[node name="WALL_DOOR_5M_H3_077" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, 15)
+metadata/placement_note = "门墙 客房E2门"
+
+[node name="WALL_DOOR_5M_H3_078" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, 0)
+metadata/placement_note = "门墙 客房E3门"
+
+[node name="WALL_DOOR_5M_H3_079" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, -15)
+metadata/placement_note = "门墙 客房E4门"
+
+[node name="WALL_DOOR_5M_H3_080" parent="." instance=ExtResource("4_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5, 0, -30)
+metadata/placement_note = "门墙 客房E5门"
+
+[node name="CEILING_DECK_5M_081" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, -35)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_082" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, -30)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_083" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, -25)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_084" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, -20)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_085" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, -15)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_086" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, -10)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_087" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, -5)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_088" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, 0)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_089" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, 5)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_090" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, 10)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_091" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, 15)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_092" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, 20)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_093" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, 25)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_094" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, 30)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_095" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 4, 35)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_096" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, -35)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_097" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, -30)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_098" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, -25)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_099" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, -20)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_100" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, -15)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_101" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, -10)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_102" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, -5)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_103" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, 0)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_104" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, 5)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_105" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, 10)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_106" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, 15)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_107" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, 20)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_108" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, 25)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_109" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, 30)
+metadata/placement_note = "封顶"
+
+[node name="CEILING_DECK_5M_110" parent="." instance=ExtResource("1_ceiling_deck_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4, 35)
+metadata/placement_note = "封顶"

@@ -1,0 +1,1883 @@
+{
+  "schema": "shellstorm2.battle.floor_plan_whitebox",
+  "schema_version": 1,
+  "level_id": "expedition_02",
+  "mode": "authored",
+  "floor_number": 0,
+  "floor_index": 0,
+  "sequence_index": 0,
+  "entry_side": "south",
+  "exit_side": "north",
+  "reservations": [],
+  "spawn_boxes_only": true,
+  "geometry_authoritative": true,
+  "rooms": [
+    {
+      "key": "entry",
+      "room_id": "f00_entry",
+      "legacy_room_id": "start",
+      "room_type": "SAFE_ROOM",
+      "role": "stair_entry",
+      "parent_key": "",
+      "template_id": "hotel_safe_15x15",
+      "template_variant": "",
+      "center_m": [
+        -2.5,
+        52.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_01",
+          "position_m": [
+            0.0,
+            -7.5
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": 45.0,
+          "door_center_m": -2.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_01",
+      "room_id": "f00_room_01",
+      "legacy_room_id": "room_01",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "entry",
+      "template_id": "hotel_foyer_30x15",
+      "template_variant": "",
+      "center_m": [
+        0.0,
+        37.5
+      ],
+      "size_m": [
+        30.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT",
+      "camera_profile": {
+        "id": "foyer_high",
+        "height_m": 9.99394,
+        "trailing_m": 3.699625,
+        "world_yaw_deg": 0.0,
+        "look_height_m": 0.45,
+        "look_ahead_m": 0.75,
+        "transition_seconds": 1.2
+      },
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            2.5,
+            -7.5
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": 30.0,
+          "door_center_m": 2.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "B",
+          "target": "entry",
+          "position_m": [
+            -2.5,
+            7.5
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": 45.0,
+          "door_center_m": -2.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            -8.0,
+            0.0
+          ],
+          "slot": 0
+        },
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            8.0,
+            0.0
+          ],
+          "slot": 1
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_02",
+      "room_id": "f00_room_02",
+      "legacy_room_id": "room_02",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "room_01",
+      "template_id": "hotel_corridor_10x75",
+      "template_variant": "",
+      "center_m": [
+        0.0,
+        -7.5
+      ],
+      "size_m": [
+        10.0,
+        75.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT",
+      "camera_profile": {
+        "id": "corridor_north",
+        "height_m": 1.55,
+        "trailing_m": 3.40,
+        "world_yaw_deg": 0.0,
+        "look_height_m": 0.88,
+        "look_ahead_m": 0.75,
+        "transition_seconds": 1.2
+      },
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_13",
+          "position_m": [
+            -2.5,
+            -37.5
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -45.0,
+          "door_center_m": -2.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "B",
+          "target": "room_13",
+          "position_m": [
+            2.5,
+            -37.5
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -45.0,
+          "door_center_m": 2.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "C",
+          "target": "room_01",
+          "position_m": [
+            2.5,
+            37.5
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": 30.0,
+          "door_center_m": 2.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "D",
+          "target": "room_07",
+          "position_m": [
+            -5.0,
+            -30.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": -37.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "E",
+          "target": "room_06",
+          "position_m": [
+            -5.0,
+            -15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": -22.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "F",
+          "target": "room_05",
+          "position_m": [
+            -5.0,
+            0.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": -7.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "G",
+          "target": "room_04",
+          "position_m": [
+            -5.0,
+            15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": 7.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "H",
+          "target": "room_03",
+          "position_m": [
+            -5.0,
+            30.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": 22.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "I",
+          "target": "room_12",
+          "position_m": [
+            5.0,
+            -30.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": -37.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "J",
+          "target": "room_11",
+          "position_m": [
+            5.0,
+            -15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": -22.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "K",
+          "target": "room_10",
+          "position_m": [
+            5.0,
+            0.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": -7.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "L",
+          "target": "room_09",
+          "position_m": [
+            5.0,
+            15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": 7.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "M",
+          "target": "room_08",
+          "position_m": [
+            5.0,
+            30.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": 22.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [],
+      "authored_layout_peaceful": true
+    },
+    {
+      "key": "room_03",
+      "room_id": "f00_room_03",
+      "legacy_room_id": "room_03",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -12.5,
+        22.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "SCAVENGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": 22.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_04",
+      "room_id": "f00_room_04",
+      "legacy_room_id": "room_04",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -12.5,
+        7.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "SCAVENGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": 7.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_05",
+      "room_id": "f00_room_05",
+      "legacy_room_id": "room_05",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -12.5,
+        -7.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": -7.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_06",
+      "room_id": "f00_room_06",
+      "legacy_room_id": "room_06",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -12.5,
+        -22.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": -22.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_07",
+      "room_id": "f00_room_07",
+      "legacy_room_id": "room_07",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -12.5,
+        -37.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "EVENT",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -5.0,
+          "door_center_m": -37.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [],
+      "authored_layout_peaceful": true
+    },
+    {
+      "key": "room_08",
+      "room_id": "f00_room_08",
+      "legacy_room_id": "room_08",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        12.5,
+        22.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "SCAVENGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": 22.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_09",
+      "room_id": "f00_room_09",
+      "legacy_room_id": "room_09",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        12.5,
+        7.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "SCAVENGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": 7.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_10",
+      "room_id": "f00_room_10",
+      "legacy_room_id": "room_10",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        12.5,
+        -7.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": -7.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_11",
+      "room_id": "f00_room_11",
+      "legacy_room_id": "room_11",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        12.5,
+        -22.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": -22.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_12",
+      "room_id": "f00_room_12",
+      "legacy_room_id": "room_12",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        12.5,
+        -37.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "EVENT",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 5.0,
+          "door_center_m": -37.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [],
+      "authored_layout_peaceful": true
+    },
+    {
+      "key": "room_13",
+      "room_id": "f00_room_13",
+      "legacy_room_id": "room_13",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "room_02",
+      "template_id": "hotel_tee_60x10",
+      "template_variant": "",
+      "center_m": [
+        0.0,
+        -50.0
+      ],
+      "size_m": [
+        60.0,
+        10.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT",
+      "camera_profile": {
+        "id": "tee_west",
+        "height_m": 1.55,
+        "trailing_m": 2.80,
+        "world_yaw_deg": 18.0,
+        "look_height_m": 0.88,
+        "look_ahead_m": 0.75,
+        "transition_seconds": 1.0
+      },
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_14",
+          "position_m": [
+            -22.5,
+            -5.0
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -55.0,
+          "door_center_m": -22.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "B",
+          "target": "room_14",
+          "position_m": [
+            -17.5,
+            -5.0
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -55.0,
+          "door_center_m": -17.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "C",
+          "target": "room_15",
+          "position_m": [
+            17.5,
+            -5.0
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -55.0,
+          "door_center_m": 17.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "D",
+          "target": "room_15",
+          "position_m": [
+            22.5,
+            -5.0
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -55.0,
+          "door_center_m": 22.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "E",
+          "target": "room_02",
+          "position_m": [
+            -2.5,
+            5.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -45.0,
+          "door_center_m": -2.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "F",
+          "target": "room_02",
+          "position_m": [
+            2.5,
+            5.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -45.0,
+          "door_center_m": 2.5,
+          "door_width_m": 5.0
+        }
+      ],
+      "spawn_placements": [],
+      "authored_layout_peaceful": true
+    },
+    {
+      "key": "room_14",
+      "room_id": "f00_room_14",
+      "legacy_room_id": "room_14",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "room_13",
+      "template_id": "hotel_branch_10x45",
+      "template_variant": "",
+      "center_m": [
+        -20.0,
+        -77.5
+      ],
+      "size_m": [
+        10.0,
+        45.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_13",
+          "position_m": [
+            -2.5,
+            22.5
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -55.0,
+          "door_center_m": -22.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "B",
+          "target": "room_13",
+          "position_m": [
+            2.5,
+            22.5
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -55.0,
+          "door_center_m": -17.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "C",
+          "target": "room_18",
+          "position_m": [
+            -5.0,
+            -15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -25.0,
+          "door_center_m": -92.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "D",
+          "target": "room_17",
+          "position_m": [
+            -5.0,
+            0.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -25.0,
+          "door_center_m": -77.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "E",
+          "target": "room_16",
+          "position_m": [
+            -5.0,
+            15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -25.0,
+          "door_center_m": -62.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "F",
+          "target": "room_20",
+          "position_m": [
+            5.0,
+            0.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -15.0,
+          "door_center_m": -77.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "G",
+          "target": "room_19",
+          "position_m": [
+            5.0,
+            15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -15.0,
+          "door_center_m": -62.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [],
+      "authored_layout_peaceful": true
+    },
+    {
+      "key": "room_15",
+      "room_id": "f00_room_15",
+      "legacy_room_id": "room_15",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_13",
+      "template_id": "hotel_branch_10x45",
+      "template_variant": "",
+      "center_m": [
+        20.0,
+        -77.5
+      ],
+      "size_m": [
+        10.0,
+        45.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_13",
+          "position_m": [
+            -2.5,
+            22.5
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -55.0,
+          "door_center_m": 17.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "B",
+          "target": "room_13",
+          "position_m": [
+            2.5,
+            22.5
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ],
+          "door_axis": "h",
+          "door_line_m": -55.0,
+          "door_center_m": 22.5,
+          "door_width_m": 5.0
+        },
+        {
+          "port_id": "C",
+          "target": "room_25",
+          "position_m": [
+            -5.0,
+            0.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 15.0,
+          "door_center_m": -77.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "D",
+          "target": "room_24",
+          "position_m": [
+            -5.0,
+            15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 15.0,
+          "door_center_m": -62.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "E",
+          "target": "room_23",
+          "position_m": [
+            5.0,
+            -15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 25.0,
+          "door_center_m": -92.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "F",
+          "target": "room_22",
+          "position_m": [
+            5.0,
+            0.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 25.0,
+          "door_center_m": -77.5,
+          "door_width_m": 2.2
+        },
+        {
+          "port_id": "G",
+          "target": "room_21",
+          "position_m": [
+            5.0,
+            15.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 25.0,
+          "door_center_m": -62.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [],
+      "authored_layout_peaceful": true
+    },
+    {
+      "key": "room_16",
+      "room_id": "f00_room_16",
+      "legacy_room_id": "room_16",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_14",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -32.5,
+        -62.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "SCAVENGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_14",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -25.0,
+          "door_center_m": -62.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_17",
+      "room_id": "f00_room_17",
+      "legacy_room_id": "room_17",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_14",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -32.5,
+        -77.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_14",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -25.0,
+          "door_center_m": -77.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_18",
+      "room_id": "f00_room_18",
+      "legacy_room_id": "room_18",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_14",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -32.5,
+        -92.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "EVENT",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_14",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -25.0,
+          "door_center_m": -92.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [],
+      "authored_layout_peaceful": true
+    },
+    {
+      "key": "room_19",
+      "room_id": "f00_room_19",
+      "legacy_room_id": "room_19",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_14",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -7.5,
+        -62.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "SCAVENGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_14",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -15.0,
+          "door_center_m": -62.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_20",
+      "room_id": "f00_room_20",
+      "legacy_room_id": "room_20",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_14",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        -7.5,
+        -77.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_14",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": -15.0,
+          "door_center_m": -77.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_21",
+      "room_id": "f00_room_21",
+      "legacy_room_id": "room_21",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_15",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        32.5,
+        -62.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "SCAVENGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_15",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 25.0,
+          "door_center_m": -62.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_22",
+      "room_id": "f00_room_22",
+      "legacy_room_id": "room_22",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_15",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        32.5,
+        -77.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_15",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 25.0,
+          "door_center_m": -77.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_23",
+      "room_id": "f00_room_23",
+      "legacy_room_id": "room_23",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_15",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        32.5,
+        -92.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "EVENT",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_15",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 25.0,
+          "door_center_m": -92.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [],
+      "authored_layout_peaceful": true
+    },
+    {
+      "key": "room_24",
+      "room_id": "f00_room_24",
+      "legacy_room_id": "room_24",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_15",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        7.5,
+        -62.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "SCAVENGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_15",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 15.0,
+          "door_center_m": -62.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    },
+    {
+      "key": "room_25",
+      "room_id": "f00_room_25",
+      "legacy_room_id": "room_25",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_15",
+      "template_id": "hotel_guest_15x15",
+      "template_variant": "",
+      "center_m": [
+        7.5,
+        -77.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE",
+      "connection_ports": [
+        {
+          "port_id": "A",
+          "target": "room_15",
+          "position_m": [
+            7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "door_axis": "v",
+          "door_line_m": 15.0,
+          "door_center_m": -77.5,
+          "door_width_m": 2.2
+        }
+      ],
+      "spawn_placements": [
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "slot": 0
+        }
+      ],
+      "authored_layout_peaceful": false
+    }
+  ],
+  "main_path": [
+    "entry",
+    "room_01",
+    "room_02",
+    "room_13",
+    "room_14"
+  ],
+  "edge_policy": [
+    {
+      "a": "entry",
+      "b": "room_01",
+      "allow_zero_length": true,
+      "note": "父房 entry → room_01（main）"
+    },
+    {
+      "a": "room_01",
+      "b": "room_02",
+      "allow_zero_length": true,
+      "note": "父房 room_01 → room_02（main）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_03",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_03（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_04",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_04（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_05",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_05（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_06",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_06（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_07",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_07（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_08",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_08（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_09",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_09（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_10",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_10（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_11",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_11（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_12",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_12（branch）"
+    },
+    {
+      "a": "room_02",
+      "b": "room_13",
+      "allow_zero_length": true,
+      "note": "父房 room_02 → room_13（main）"
+    },
+    {
+      "a": "room_13",
+      "b": "room_14",
+      "allow_zero_length": true,
+      "note": "父房 room_13 → room_14（main）"
+    },
+    {
+      "a": "room_13",
+      "b": "room_15",
+      "allow_zero_length": true,
+      "note": "父房 room_13 → room_15（branch）"
+    },
+    {
+      "a": "room_14",
+      "b": "room_16",
+      "allow_zero_length": true,
+      "note": "父房 room_14 → room_16（branch）"
+    },
+    {
+      "a": "room_14",
+      "b": "room_17",
+      "allow_zero_length": true,
+      "note": "父房 room_14 → room_17（branch）"
+    },
+    {
+      "a": "room_14",
+      "b": "room_18",
+      "allow_zero_length": true,
+      "note": "父房 room_14 → room_18（branch）"
+    },
+    {
+      "a": "room_14",
+      "b": "room_19",
+      "allow_zero_length": true,
+      "note": "父房 room_14 → room_19（branch）"
+    },
+    {
+      "a": "room_14",
+      "b": "room_20",
+      "allow_zero_length": true,
+      "note": "父房 room_14 → room_20（branch）"
+    },
+    {
+      "a": "room_15",
+      "b": "room_21",
+      "allow_zero_length": true,
+      "note": "父房 room_15 → room_21（branch）"
+    },
+    {
+      "a": "room_15",
+      "b": "room_22",
+      "allow_zero_length": true,
+      "note": "父房 room_15 → room_22（branch）"
+    },
+    {
+      "a": "room_15",
+      "b": "room_23",
+      "allow_zero_length": true,
+      "note": "父房 room_15 → room_23（branch）"
+    },
+    {
+      "a": "room_15",
+      "b": "room_24",
+      "allow_zero_length": true,
+      "note": "父房 room_15 → room_24（branch）"
+    },
+    {
+      "a": "room_15",
+      "b": "room_25",
+      "allow_zero_length": true,
+      "note": "父房 room_15 → room_25（branch）"
+    }
+  ]
+}

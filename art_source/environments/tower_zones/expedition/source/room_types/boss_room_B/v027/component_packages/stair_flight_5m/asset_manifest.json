@@ -1,0 +1,47 @@
+{
+  "slug": "stair_flight_5m",
+  "name_zh": "精工格栅楼梯节段",
+  "component_id": "ENV-EXPEDITION-BOSS-B-STAIR-FLIGHT-5M",
+  "component_family": "stair",
+  "category": "architecture",
+  "scope": "room_type_local",
+  "front_axis": "-Y",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "variant_axis": null,
+  "version": "v027",
+  "collection": "输出资产包_stair_flight_5m",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\stair_flight_5m\\stair_flight_5m.blend",
+  "objects": [
+    "精工格栅楼梯节段_主体"
+  ],
+  "bounds_min": [
+    -2.6449999809265137,
+    -2.729419708251953,
+    0.0
+  ],
+  "bounds_max": [
+    2.6449999809265137,
+    2.729419708251953,
+    2.7332417964935303
+  ],
+  "bounds_size_m": [
+    5.289999961853027,
+    5.458839416503906,
+    2.7332417964935303
+  ],
+  "instance_count": 10,
+  "triangle_count": 6048,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "runtime_connected": false
+}

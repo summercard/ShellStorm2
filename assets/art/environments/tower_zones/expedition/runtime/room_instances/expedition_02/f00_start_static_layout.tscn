@@ -1,0 +1,158 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_base_5m/floor_base_5m_root_top3d.tscn" id="1_floor_base_5m"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/floor_tile_5m/floor_tile_5m_root_top3d.tscn" id="2_floor_tile_5m"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/wall_door_5m_h12/wall_door_5m_h12_root_top3d.tscn" id="3_wall_door_5m_h12"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/wall_standard_5m_h3/wall_standard_5m_h3_root_top3d.tscn" id="4_wall_standard_5m_h3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/wall_door_5m_h3/wall_door_5m_h3_root_top3d.tscn" id="5_wall_door_5m_h3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h4/env_base99_stair_exterior_h4_root_top3d.tscn" id="6_stair_exterior_h4"]
+
+[node name="ExpeditionRoomStaticLayout" type="Node3D"]
+metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
+metadata/room_id = "start"
+metadata/runtime_room_id = "start"
+metadata/room_key = "entry"
+metadata/level_id = "expedition_02"
+metadata/room_type = "SAFE_ROOM"
+metadata/source_mode = "whitebox_manifest_direct_extract"
+metadata/static_layout_only = true
+metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
+metadata/layout_instance_total = 29
+metadata/authoring_geometry_source = "art_source/design/whitebox/tower_zones/expedition_02/v001"
+metadata/authoring_generator = "scripts/build_expedition02_room_scenes.py"
+metadata/room_size_m = Vector2(15, 15)
+metadata/walk_surface_y_m = 0.3
+metadata/exit_stair_asset_id = "ENV-BASE99-STAIR-EXTERIOR-H4"
+metadata/exit_stair_root_contract = "center_bottom; local -X low end; local +X rises to 4m"
+metadata/exit_stair_root_position = Vector3(11.72, 0.34, 0)
+metadata/exit_stair_low_endpoint_room_local = Vector3(7.5, 0.3, 0)
+metadata/exit_stair_high_endpoint_room_local = Vector3(15.94, 4.36, 0)
+metadata/exit_sign_asset_id = "ENV-BATTLE-EXIT-NEON-SIGN"
+metadata/exit_semantics = "east retreat door; no topology edge; expedition_retreat binding"
+metadata/ceiling_bottom_y_m = null
+metadata/ceiling_note = "本房不封顶（阳台安全屋按业主要求；挑高前厅是通高空间）。"
+metadata/layout_repair = "east middle solid wall replaced by low exit portal; exterior H4 stair is outside-facing and walkable"
+
+[node name="FLOOR_BASE_5M_000" parent="." instance=ExtResource("1_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_001" parent="." instance=ExtResource("2_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.26, -5)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_002" parent="." instance=ExtResource("1_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_003" parent="." instance=ExtResource("2_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.26, 0)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_004" parent="." instance=ExtResource("1_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_005" parent="." instance=ExtResource("2_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.26, 5)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_006" parent="." instance=ExtResource("1_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_007" parent="." instance=ExtResource("2_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, -5)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_008" parent="." instance=ExtResource("1_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_009" parent="." instance=ExtResource("2_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_010" parent="." instance=ExtResource("1_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_011" parent="." instance=ExtResource("2_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 5)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_012" parent="." instance=ExtResource("1_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_013" parent="." instance=ExtResource("2_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.26, -5)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_014" parent="." instance=ExtResource("1_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_015" parent="." instance=ExtResource("2_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.26, 0)
+metadata/placement_note = "地砖"
+
+[node name="FLOOR_BASE_5M_016" parent="." instance=ExtResource("1_floor_base_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
+metadata/placement_note = "地板底层"
+
+[node name="FLOOR_TILE_5M_017" parent="." instance=ExtResource("2_floor_tile_5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.26, 5)
+metadata/placement_note = "地砖"
+
+[node name="WALL_STANDARD_5M_H3_018" parent="." instance=ExtResource("4_wall_standard_5m_h3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 7.35)
+metadata/placement_note = "WALL_Hp060_S01_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_019" parent="." instance=ExtResource("4_wall_standard_5m_h3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.35)
+metadata/placement_note = "WALL_Hp060_S02_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_020" parent="." instance=ExtResource("4_wall_standard_5m_h3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 7.35)
+metadata/placement_note = "WALL_Hp060_S03_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_021" parent="." instance=ExtResource("4_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -7.35, 0, -5)
+metadata/placement_note = "WALL_Vn010_S01_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_022" parent="." instance=ExtResource("4_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -7.35, 0, 0)
+metadata/placement_note = "WALL_Vn010_S02_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_023" parent="." instance=ExtResource("4_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -7.35, 0, 5)
+metadata/placement_note = "WALL_Vn010_S03_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_024" parent="." instance=ExtResource("4_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 7.35, 0, -5)
+metadata/placement_note = "WALL_Vp005_S16_SOLID"
+
+[node name="WALL_STANDARD_5M_H3_025" parent="." instance=ExtResource("4_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 7.35, 0, -5)
+metadata/placement_note = "WALL_Vp005_S16_SOLID"
+
+[node name="WALL_DOOR_5M_H3_EXIT_026" parent="." instance=ExtResource("5_wall_door_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 7.35, 0, 0)
+metadata/placement_note = "出口门墙 阳台→外梯；东侧中段；不新增拓扑边"
+metadata/exit_port = "east_retreat"
+
+[node name="WALL_STANDARD_5M_H3_027" parent="." instance=ExtResource("4_wall_standard_5m_h3")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 7.35, 0, 5)
+metadata/placement_note = "WALL_Vp005_S18_SOLID"
+
+[node name="WALL_DOOR_5M_H12_028" parent="." instance=ExtResource("3_wall_door_5m_h12")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+metadata/placement_note = "门墙 阳台→挑高前厅"
+
+[node name="EXIT_STAIR_EXTERIOR_H4_029" parent="." instance=ExtResource("6_stair_exterior_h4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.72, 0.34, 0)
+metadata/asset_id = "ENV-BASE99-STAIR-EXTERIOR-H4"
+metadata/placement_note = "退出楼梯；低端位于东侧出口门外；本地 +X 向东上升"
+metadata/exit_port = "east_retreat"
+metadata/walkable = true

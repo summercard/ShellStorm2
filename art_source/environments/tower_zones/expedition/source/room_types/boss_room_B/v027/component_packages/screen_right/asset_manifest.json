@@ -1,0 +1,65 @@
+{
+  "slug": "screen_right",
+  "component_id": "ENV-EXPEDITION-BOSS-B-SCREEN-RIGHT",
+  "name_zh": "波形监测屏幕",
+  "component_family": "screen_content",
+  "category": "facilities",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_ROOM"
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "screen_right",
+  "variant_reason": "Reference silhouette / content or cable routing variation",
+  "version": "v027",
+  "collection": "输出资产包_screen_right",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "component_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\component_packages\\screen_right\\screen_right.blend",
+  "objects": [
+    "波形监测屏幕_自发光_贴图输出"
+  ],
+  "bounds_size_m": [
+    10.34000015258789,
+    0.0,
+    6.320000171661377
+  ],
+  "bounds_min": [
+    -5.170000076293945,
+    0.0,
+    0.0
+  ],
+  "bounds_max": [
+    5.170000076293945,
+    0.0,
+    6.320000171661377
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "instance_count": 1,
+  "materials": [
+    "07_动态屏幕_right_自发光"
+  ],
+  "collision_owner": "godot_wrapper_pending",
+  "registration_status": "未登记",
+  "runtime_connected": false,
+  "texture_exception": true,
+  "palette_uv_layer": null,
+  "animation": "shader_scan_preview",
+  "geometry_fingerprint": "b64c60ddf39a50c6392dba06682151c750d66f16e945482ae2cc307bc4ccc8c6",
+  "triangle_count": 2
+}

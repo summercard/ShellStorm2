@@ -1,0 +1,80 @@
+{
+  "asset_id": "ENV-EXPEDITION-COMMON-WALL-DOOR-5M-H12",
+  "slug": "wall_door_5m_h12",
+  "name_zh": "通用门墙 5.00×0.30×11.90m（门洞 2.2×2.5，通高层）",
+  "category": "08_墙壁组件",
+  "library_id": "ENV-EXPEDITION-COMMON-COMPONENT-LIBRARY",
+  "version": "v015",
+  "level_id": "expedition_02",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v015\\expedition_common_components_source_v015.blend",
+  "optimized_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v015\\export\\v015\\expedition_common_components_source_v015_optimized.blend",
+  "source_sha256_before": "f0ca5cacff9f9462d9dbd9fdd0ed47197b63419c51362503e7a79ab74a6d6151",
+  "source_sha256_after": "f0ca5cacff9f9462d9dbd9fdd0ed47197b63419c51362503e7a79ab74a6d6151",
+  "source_unchanged": true,
+  "blender_collection": "wall_door_5m_h12_输出",
+  "editable_collection": "wall_door_5m_h12_制作源",
+  "root_object": "wall_door_5m_h12_视觉",
+  "object_count": 1,
+  "blender_forward_axis": "+Y",
+  "blender_up_axis": "+Z",
+  "origin_contract": "bottom_center",
+  "godot_forward_axis": "-Z",
+  "bounds_lo_m": [
+    -2.5,
+    -0.15,
+    0.0
+  ],
+  "bounds_hi_m": [
+    2.5,
+    0.15,
+    11.9
+  ],
+  "bounds_size_m": [
+    5.0,
+    0.3,
+    11.9
+  ],
+  "visual_bounds_size_m": [
+    5.0,
+    0.3,
+    11.9
+  ],
+  "slot_size_m": [
+    5.0,
+    0.3,
+    11.9
+  ],
+  "bounds_note": "bounds_size_m / visual_bounds_size_m 是可视几何包围盒；slot_size_m 是 5m 网格占位（洞口也计入）。两者仅在坍塌门洞上不同。",
+  "grid_unit_m": 5.0,
+  "wall_thickness_m": 0.3,
+  "material_roles": [
+    "01_哑光结构面"
+  ],
+  "material_count": 1,
+  "palette_uv_channel": "PaletteUV",
+  "shared_palette": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+  "optimization": {
+    "polygons_before": 18,
+    "triangles_before": 36,
+    "polygons_after": 36,
+    "triangles_after": 36,
+    "reduction_ratio": 0.0,
+    "operations": [
+      "delete_loose(verts,edges)",
+      "dissolve_degenerate(1e-5)",
+      "normals_make_consistent(outside)",
+      "remove_doubles(1e-5)",
+      "triangulate",
+      "assign_palette_uv"
+    ],
+    "note": "纯轴对齐方块几何：无重复面、无零面积面、无冗余细分 ⇒ 清理零处理量，三角化把 N 个四边形变成 2N 个三角形。减面率 0 是本件的正确结果，不是跳过优化。"
+  },
+  "export": {
+    "glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\components\\common_components\\wall_door_5m_h12\\wall_door_5m_h12_visual_top3d.glb",
+    "glb_sha256": "109d3a99d1bebd35f320e412ebbacec997167775533629bb53bef22cad5be919",
+    "glb_bytes": 4596,
+    "embedded_images": 0
+  },
+  "collision": "owned by runtime prefab (layer=1 StaticBody3D)",
+  "note": "11.9m 墙上的门墙：门垛与墙同高 11.90、门楣 9.10（11.90 − 2.80）。白盒里只有 1 扇（阳台安全屋 → 挑高前厅）。"
+}

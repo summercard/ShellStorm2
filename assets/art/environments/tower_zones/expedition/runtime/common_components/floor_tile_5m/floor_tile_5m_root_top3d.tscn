@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-COMMON-FLOOR-TILE-5M
+; 远征关卡02 通用组件库 v015 · 09_顶面组件 · floor_tile_5m
+; 范式 B（自包含可替换组件）：视觉 GLB + 碰撞同包，逐实例化。
+; 原点契约 = 底面中心（Blender 底面 Z=0 → Godot 底面 Y=0），与全库一致。
+; Godot 朝向 = -Z（墙长沿 X、墙厚沿 Z），与战局通用组件同口径。
+; 通用地砖：4.94×4.94×0.04m，铺在 floor_base_5m 顶面（0.26）到走面 0.30。四面留 0.03 缝。
+;
+; 共享色盘：res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+; 导入后处理：res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd
+; GLB 内嵌图片数 = 0（导出时 export_image_format=NONE）
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/common_components/floor_tile_5m/floor_tile_5m_visual_top3d.glb" id="1_visual"]
+
+[node name="ExpeditionCommonFloorTile5m" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-COMMON-FLOOR-TILE-5M"
+metadata/asset_version = "v015"
+metadata/library_id = "ENV-EXPEDITION-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/expedition"
+metadata/level_id = "expedition_02"
+metadata/category = "09_顶面组件"
+metadata/component = "floor_tile_5m"
+metadata/logic_id = "floor_tile"
+metadata/display_name_zh = "通用地砖 4.94×4.94×0.04m（5m 格内可替换面砖）"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v015/expedition_common_components_source_v015.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/expedition/source/common_components/v015/component_packages_v015/floor_tile_5m/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.04, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.04, 4.94)
+metadata/slot_size_m = Vector3(4.94, 0.04, 4.94)
+metadata/preserve_authored_palette = true
+metadata/shared_palette = "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+metadata/palette_post_import = "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+metadata/collision_owner = "none"
+metadata/collision_policy = "visual_only_no_collision"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/grid_unit_m = 5
+metadata/no_collision_reason = "纯视觉面砖：底面由 floor_base_5m 承重，本件不参与阻挡，也不参与遮光判定。"
+metadata/snap_to_ground_offset_m = 0
+metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

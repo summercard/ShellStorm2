@@ -1,0 +1,38 @@
+{
+  "room_type": "BOSS_ROOM",
+  "variant": "B",
+  "version": "v027",
+  "block_id": "expedition",
+  "level_id": "expedition_01",
+  "design_scope": "scene_art",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+  "registration_status": "未登记",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\room_types\\boss_room_B\\v027\\Boss房B_设施延伸井底与矩阵转向_v027.blend",
+  "whitebox_source": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\whitebox\\tower_zones\\expedition_01\\boss_deep_chamber\\layout_contract.json",
+  "user_pose_source": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\boss_detail_v023\\user_adjusted_before.blend",
+  "dimensions_m": {
+    "platform": [
+      25,
+      25
+    ],
+    "bridges_each": [
+      20,
+      5
+    ]
+  },
+  "component_budget": {
+    "limit": 50,
+    "planned": 46,
+    "remaining": 4
+  },
+  "scope": "monitor housings, content and cables; staggered compute towers; side exit doors; rear matrix",
+  "source_status": "awaiting final visual and technical verification",
+  "runtime_connected": false,
+  "formal_godot_scene_modified": false,
+  "material_roles": 7,
+  "texture_exception": "3 user-authorized Image-2 electronic display surfaces with ScreenUV",
+  "remaining_draft": [
+    "entrance long stair",
+    "plain shaft wall backing"
+  ]
+}
