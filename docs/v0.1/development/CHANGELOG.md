@@ -1,3 +1,10 @@
+## 2026-10-14 调试相机「复位镜头」改键：R → F12
+
+- FeatureID：`PLAYER-3D`（调试快捷键，不进存档、不属玩法）；业主口径「R 键会复位镜头这个功能给我去掉，或者改成 F12 键」→ **保留功能、改键为 F12**。
+- 改动只落一处判定：`Player3D._is_debug_camera_reset_key()` 的 `KEY_R` → `KEY_F12`（physical_keycode 与 keycode 两条都换）。复位行为本体 `reset_debug_camera_adjustments()` 不变（仍清空 trailing / yaw / pitch / pan 四项偏移），调试面板上的「复位镜头偏移」按钮也照旧走同一函数。
+- 其余四条调试键 `; ' [ ]` 未动；`src/` 与 `scripts/` 全量扫描确认 **F12 此前无任何占用**，无冲突。
+- 断言同步：`tests/verification/verify_debug_camera_hotkeys.gd` 的 `must_hit` 由 `KEY_R` 改 `KEY_F12`，并把 `KEY_R` 移入 `must_skip`（**改键后旧键必须失效**，否则等于两个键都能复位）、echo 早退用例改到 F12。用例 headless 实跑退出码 0，输出 `DEBUG_CAMERA_HOTKEYS_OK: ; zoom in / ' zoom out / [ yaw left / ] yaw right / F12 reset`。
+
 ## 2026-10-13 主线 2.3：99F 楼梯平台进走廊处再现一次轰声
 
 - FeatureID：`NARRATIVE-TRIGGER`；主人要求「在 2.1（楼梯有个震动、然后说外面发生什么事情了）和 2.5（关灯）中间加个 2.3，触发位置在从楼梯间上来后到 99 层的楼梯平台到走廊的位置，这里再加一次震动和 2.1 一致，然后角色说『啊！』」。

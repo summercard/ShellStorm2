@@ -46,12 +46,32 @@ func _ready() -> void:
 					failures.append("Base clip deforms mesh: " + clip_name + "/" + joint.name)
 			if armed and current.bunny_hand_r.global_position.distance_to(current.weapon_socket.global_position) > 0.001:
 				failures.append("Authored hand detached from weapon socket")
+	# 有枪的 locked 不得播无枪剪辑。`locked` 的握把停在头部平面、枪口指向角色正前方，
+	# 手里有枪时在近景里读成「举枪指向正前方」（2026-10-14 开场页实测）；必须换成
+	# 该族站立持枪待机。无枪的 locked 必须保留警觉循环（反向对照）。
+	for gun_family in ["sidearm", "longgun", "machinegun"]:
+		current.set("_state", "locked")
+		current.set("_weapon_grip_pose_active", true)
+		current.set("_weapon_class", gun_family)
+		var armed_locked_driver := CharacterMotionLibrary3D.new()
+		armed_locked_driver.bind(current)
+		armed_locked_driver.apply(current, 1.0 / 60.0)
+		if armed_locked_driver.active_clip != gun_family + "_idle":
+			failures.append("Armed locked does not use the carry idle: %s -> %s" % [gun_family, armed_locked_driver.active_clip])
+	current.set("_state", "locked")
+	current.set("_weapon_grip_pose_active", false)
+	current.set("_weapon_class", "unarmed")
+	var unarmed_locked_driver := CharacterMotionLibrary3D.new()
+	unarmed_locked_driver.bind(current)
+	unarmed_locked_driver.apply(current, 1.0 / 60.0)
+	if unarmed_locked_driver.active_clip != "locked":
+		failures.append("Unarmed locked lost the alert loop: " + unarmed_locked_driver.active_clip)
 	if library.clips.size() != required.size(): failures.append("Unexpected clip count")
 	print("CHARACTER_REST_BOUNDS old=", old_bounds, " new=", new_bounds)
 	old.queue_free()
 	current.queue_free()
 	if failures.is_empty():
-		print("CHARACTER_AUTHORING_BUNDLE_OK: bounds, no physics, twelve Blender clips, moving and palm-grip playback")
+		print("CHARACTER_AUTHORING_BUNDLE_OK: bounds, no physics, twelve Blender clips, moving and palm-grip playback, armed locked carry idle")
 		get_tree().quit()
 	else:
 		for failure in failures: push_error(failure)

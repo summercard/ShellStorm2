@@ -374,8 +374,10 @@ func _is_debug_camera_yaw_right_key(event: InputEventKey) -> bool:
 	return event.physical_keycode == KEY_BRACKETRIGHT or event.keycode == KEY_BRACKETRIGHT
 
 
+## 调试快捷键：清空全部镜头偏移（拉近/拉远、左右偏航、俯仰、平移），回到默认机位。
+## 触发键为 F12 —— 原先占用 R，2026-10-14 改键，避免与游戏内按键混淆。
 func _is_debug_camera_reset_key(event: InputEventKey) -> bool:
-	return event.physical_keycode == KEY_R or event.keycode == KEY_R
+	return event.physical_keycode == KEY_F12 or event.keycode == KEY_F12
 
 
 func adjust_debug_camera_trailing(step_m: float) -> void:

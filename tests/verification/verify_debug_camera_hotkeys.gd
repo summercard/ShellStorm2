@@ -1,5 +1,5 @@
 extends Node
-## 调试快捷键烟雾验证：只确认 ; / ' / [ / ] / R 五条路径让 Player3D 偏移
+## 调试快捷键烟雾验证：只确认 ; / ' / [ / ] / F12 五条路径让 Player3D 偏移
 ## 变量正确变化、边界生效、玩家朝向与运动控制不被污染。相机姿态合成
 ## 通过单独算子独立验证（不在本测试里实例化完整的 TowerDescent3D 以避免
 ## 触发场景生成的全部 _process 副作用）。
@@ -15,7 +15,7 @@ func _ready() -> void:
 	_run_offset_function_checks(failures)
 	_run_camera_formula_checks(failures)
 	if failures.is_empty():
-		print("DEBUG_CAMERA_HOTKEYS_OK: ; zoom in / ' zoom out / [ yaw left / ] yaw right / R reset")
+		print("DEBUG_CAMERA_HOTKEYS_OK: ; zoom in / ' zoom out / [ yaw left / ] yaw right / F12 reset")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -23,8 +23,8 @@ func _ready() -> void:
 	get_tree().quit(1)
 
 
-## 验证 ; / ' / [ / ] / R 的按键分类器返回 true，以及 9 / 0 / KEY_KP_ADD / SUBTRACT
-## / 移动键 / 原 ASCII 路径不命中调试相机键。
+## 验证 ; / ' / [ / ] / F12 的按键分类器返回 true，以及 9 / 0 / KEY_KP_ADD / SUBTRACT
+## / 移动键 / 原 ASCII 路径 / 已改键的旧 R 不命中调试相机键。
 func _run_key_classification_checks(failures: Array[String]) -> void:
 	var stub_scene := load("res://scenes/Player3D.tscn") as PackedScene
 	var stub := (stub_scene.instantiate() if stub_scene != null else null) as Player3D
@@ -39,7 +39,7 @@ func _run_key_classification_checks(failures: Array[String]) -> void:
 		_make_key(KEY_APOSTROPHE),
 		_make_key(KEY_BRACKETLEFT),
 		_make_key(KEY_BRACKETRIGHT),
-		_make_key(KEY_R),
+		_make_key(KEY_F12),
 	]
 	for key_event in must_hit:
 		var kind := _classify_debug_camera_key(stub, key_event)
@@ -64,7 +64,8 @@ func _run_key_classification_checks(failures: Array[String]) -> void:
 		_make_key(KEY_D),
 		_make_key(KEY_SPACE),
 		_make_key(KEY_E),
-		_make_key(KEY_R, true), # echo=true 应被早退
+		_make_key(KEY_R), # 2026-10-14 改键：R 已不再触发镜头复位
+		_make_key(KEY_F12, true), # echo=true 应被早退
 	]
 	for key_event in must_skip:
 		var kind := _classify_debug_camera_key(stub, key_event)

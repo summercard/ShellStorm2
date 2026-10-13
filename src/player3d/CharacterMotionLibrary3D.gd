@@ -92,13 +92,21 @@ func apply(avatar: Node3D, delta: float) -> void:
 	if armed and state in ["idle", "moving"] and not bool(avatar.get("_reload_animation_active")):
 		# firing 只是短暂的真实开火脉冲；开火剪辑保持时间从最后一发重新计时。
 		_fire_hold_remaining = FIRE_HOLD_DURATION_S if firing else maxf(0.0, _fire_hold_remaining - delta)
-	if clips.has("sidearm_moving_forward") and state in ["idle", "moving"]:
+	if clips.has("sidearm_moving_forward") and state in ["idle", "moving", "locked"]:
 		var pose_family := family if armed else "unarmed"
 		if state == "moving":
 			var local_velocity: Vector3 = avatar.visual_root.global_basis.orthonormalized().inverse() * world_velocity
 			movement_direction = select_direction(local_velocity, movement_direction)
 			clip_name = "%s_%s_%s" % [pose_family, locomotion_name, movement_direction]
+		elif state == "locked" and not armed:
+			# 无枪的锁定仍播 locked 警觉循环本身。
+			clip_name = "locked"
 		else:
+			# 站立待机（idle）与**有枪的锁定**（locked）共用该族站立持枪待机。
+			# `locked` 是唯一带枪械族分支缺口的基础状态：它的剪辑语义是「无枪警觉
+			# 循环」（16.1 09_锁定_警觉循环），握把停在头部平面、枪口直指角色正前方，
+			# 手里一旦有枪就会读成「举枪指向正前方」，在开场页近景里最明显。
+			# 有枪的基础姿态必须是持枪，因此这里按族换成 `<family>_idle`。
 			clip_name = "%s_idle" % family if armed else "idle"
 		if armed and _fire_hold_remaining > 0.0:
 			var fire_clip := "%s_fire_%s_%s" % [family, locomotion_name, movement_direction] if state == "moving" else family + "_fire_idle"
