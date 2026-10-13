@@ -1,0 +1,56 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "player_land",
+    "name": "player_land",
+    "events": [
+      "player.land"
+    ],
+    "preset": "land",
+    "duration": 0.34,
+    "variants": 3,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "player domain",
+    "trigger_fact": "player.land confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 85,
+    "weight": 1.3
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-PLAYER-LAND-VAR03",
+    "key": "player_land",
+    "variant": 2,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-LAND-VAR03/source/player_land_alt03_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/player_land_alt03_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.34,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "669dac62e2c11795c2666a032506d280c066df1e47c5b3fd4de5f8e691feaa1e",
+    "source_sha256": "6beb1f4d262d997f2ba5b835d8f322249243bf39b17039cc07f8cbb0f66cc1ee",
+    "seed": 3416065551,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "player.land"
+    ],
+    "sound_set_id": "SFXSET-PLAYER-LAND"
+  },
+  "stems": [
+    "mass",
+    "contact",
+    "fracture"
+  ]
+}

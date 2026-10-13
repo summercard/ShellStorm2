@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "melee_target_hit",
+    "name": "melee_target_hit",
+    "events": [
+      "combat.melee.target_hit"
+    ],
+    "preset": "hurt",
+    "duration": 0.19,
+    "variants": 3,
+    "peak_db": -8,
+    "priority": "P0",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "combat domain",
+    "trigger_fact": "combat.melee.target_hit confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 190,
+    "weight": 0.7
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-MELEE-TARGET-HIT-VAR02",
+    "key": "melee_target_hit",
+    "variant": 1,
+    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-TARGET-HIT-VAR02/source/melee_target_hit_alt02_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/melee_target_hit_alt02_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.19,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "ea773762e35780f1ad7ac541de8f46fb640a67d4b69f1f5b2e7a67b6edf2ca13",
+    "source_sha256": "5bed7785e6678044cbfedd0594e5f31635234fbf758ce9cb76a058c4451b7e14",
+    "seed": 3939507417,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -8,
+    "event_ids": [
+      "combat.melee.target_hit"
+    ],
+    "sound_set_id": "SFXSET-MELEE-TARGET-HIT"
+  },
+  "stems": [
+    "mass",
+    "contact",
+    "fracture",
+    "body_pressure"
+  ]
+}

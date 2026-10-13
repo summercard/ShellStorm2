@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "player_down",
+    "name": "player_down",
+    "events": [
+      "player.down"
+    ],
+    "preset": "hurt",
+    "duration": 0.68,
+    "variants": 1,
+    "peak_db": -8,
+    "priority": "P0",
+    "spatial_mode": "listener_follow",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "player domain",
+    "trigger_fact": "player.down confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 58,
+    "weight": 2.5
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-PLAYER-DOWN",
+    "key": "player_down",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-DOWN/source/player_down_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/player_down_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.68,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "e4aa1520fa462f6cb23d0eabee97dcabf96ab8c551d18ef165137cbc6db05319",
+    "source_sha256": "0964640c2f135bd1118912eff276a6f93432765f5ed03af2efa2879534d172dc",
+    "seed": 3924731677,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "listener_follow",
+    "loop": false,
+    "peak_target_db": -8,
+    "event_ids": [
+      "player.down"
+    ],
+    "sound_set_id": "SFXSET-PLAYER-DOWN"
+  },
+  "stems": [
+    "mass",
+    "contact",
+    "fracture",
+    "body_pressure"
+  ]
+}

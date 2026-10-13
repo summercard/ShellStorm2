@@ -25,7 +25,8 @@ EXPECTED = {
         "file": "ShellStorm2_音效账本_v001.xlsx",
         "category": "音效",
         "skill": "audio-sfx-asset-pipeline",
-        "count": 48,
+        "count": 152,
+        "initial_count": 48,
         "tests": ["verify_requested_experience_upgrade_flow", "verify_3d_melee_feedback_flow"],
     },
     "music": {
@@ -134,7 +135,7 @@ def main() -> int:
         issues.append(f"Legacy combined ledger still exists: {legacy.relative_to(root)}")
     routes = {item.get("target_domain"): item.get("expected_count") for item in manifest.get("routes", [])}
     for key, expected in EXPECTED.items():
-        if routes.get(key) != expected["count"]:
+        if routes.get(key) != expected.get("initial_count", expected["count"]):
             issues.append(f"Migration manifest count mismatch for {key}: {routes.get(key)!r}")
 
     result = {
@@ -148,7 +149,7 @@ def main() -> int:
     if issues:
         print(f"MEDIA_ASSET_DOMAINS_FAILED issues={len(issues)}")
         return 1
-    print("MEDIA_ASSET_DOMAINS_OK domains=3 assets=73")
+    print(f"MEDIA_ASSET_DOMAINS_OK domains=3 assets={sum(totals.values())}")
     return 0
 
 

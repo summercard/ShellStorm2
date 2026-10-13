@@ -1,0 +1,62 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "loading_failed",
+    "name": "loading_failed",
+    "events": [
+      "run.loading.failed",
+      "ui.loading.failed"
+    ],
+    "preset": "signal",
+    "duration": 0.68,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P0",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "run domain",
+    "trigger_fact": "run.loading.failed|ui.loading.failed confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "notes": [
+      523,
+      493,
+      392
+    ],
+    "step": 0.15,
+    "decay": 0.075
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-LOADING-FAILED",
+    "key": "loading_failed",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-LOADING-FAILED/source/loading_failed_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/loading_failed_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.68,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "5277aca52c7c5812b7c2e0d770bca0b00aae2aff77e063f886f60d822434b98f",
+    "source_sha256": "112e4b8183182a9ec536f2a1bf464dfa15317ea8ebf31df79129b47b48e48104",
+    "seed": 3461837621,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "run.loading.failed",
+      "ui.loading.failed"
+    ],
+    "sound_set_id": "SFXSET-LOADING-FAILED"
+  },
+  "stems": [
+    "electronic_identity",
+    "relay"
+  ]
+}

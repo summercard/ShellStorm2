@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "ui_loading_step",
+    "name": "ui_loading_step",
+    "events": [
+      "ui.loading.step"
+    ],
+    "preset": "ui",
+    "duration": 0.1,
+    "variants": 1,
+    "peak_db": -21,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "UIStyleFactory",
+    "trigger_fact": "ui.loading.step confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "notes": [
+      1320
+    ],
+    "decay": 0.018
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-UI-LOADING-STEP",
+    "key": "ui_loading_step",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-UI-LOADING-STEP/source/ui_loading_step_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/ui_loading_step_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.1,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "f351545c8ac4ff54a2162c70b179cbf70b07be0335c44ea2470dec74935447bf",
+    "source_sha256": "a9e1f0dabfcca7e8afa14ef161a4f022c70bff3c8b50f961f3be4c9d337fe53d",
+    "seed": 2260964674,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -21,
+    "event_ids": [
+      "ui.loading.step"
+    ],
+    "sound_set_id": "SFXSET-UI-LOADING-STEP"
+  },
+  "stems": [
+    "electronic_identity",
+    "mechanism"
+  ]
+}

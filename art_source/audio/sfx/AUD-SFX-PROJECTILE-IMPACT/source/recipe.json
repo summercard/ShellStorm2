@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "projectile_impact",
+    "name": "projectile_impact",
+    "events": [
+      "combat.projectile.impact"
+    ],
+    "preset": "impact",
+    "duration": 0.19,
+    "variants": 3,
+    "peak_db": -8,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 5,
+    "owner": "combat domain",
+    "trigger_fact": "combat.projectile.impact confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 560,
+    "weight": 0.5
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-PROJECTILE-IMPACT",
+    "key": "projectile_impact",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PROJECTILE-IMPACT/source/projectile_impact_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/projectile_impact_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.19,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "54b94e9a64d0d0d6345028574b0356282575ab426c087f581f93dc1765eb07ca",
+    "source_sha256": "0f2c89663a3f4212efe5e03e316d960b279af89d322ed4ed920473129ec31f4c",
+    "seed": 4171779196,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -8,
+    "event_ids": [
+      "combat.projectile.impact"
+    ],
+    "sound_set_id": "SFXSET-PROJECTILE-IMPACT"
+  },
+  "stems": [
+    "mass",
+    "contact",
+    "fracture",
+    "contact_ring"
+  ]
+}

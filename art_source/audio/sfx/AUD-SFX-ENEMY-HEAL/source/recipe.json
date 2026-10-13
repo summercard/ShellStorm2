@@ -1,0 +1,62 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "enemy_heal",
+    "name": "enemy_heal",
+    "events": [
+      "enemy.heal"
+    ],
+    "preset": "enemy",
+    "duration": 0.72,
+    "variants": 1,
+    "peak_db": -12,
+    "priority": "P1",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 5,
+    "owner": "enemy domain",
+    "trigger_fact": "enemy.heal confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 180,
+    "notes": [
+      659,
+      880,
+      1318
+    ],
+    "decay": 0.06,
+    "step": 0.07
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-ENEMY-HEAL",
+    "key": "enemy_heal",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-HEAL/source/enemy_heal_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_heal_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.72,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "1b1a58ea4ae3ef034607eb515b03c66ea131494cb0915abf9841f7c8b3d2584e",
+    "source_sha256": "ed7cabc20de99eacd782d61708448fcbb1165c85426ca81bd672eac62a56ca04",
+    "seed": 3729700827,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -12,
+    "event_ids": [
+      "enemy.heal"
+    ],
+    "sound_set_id": "SFXSET-ENEMY-HEAL"
+  },
+  "stems": [
+    "electronic_identity",
+    "vocal_resonator",
+    "breath_grit"
+  ]
+}

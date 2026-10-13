@@ -1,0 +1,60 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "wave_clear",
+    "name": "波次完成",
+    "events": [
+      "run.wave.cleared"
+    ],
+    "preset": "signal",
+    "duration": 0.71,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "run.wave.cleared confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "notes": [
+      523,
+      659,
+      784
+    ],
+    "step": 0.12,
+    "decay": 0.12
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-WAVE-CLEAR",
+    "key": "wave_clear",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-WAVE-CLEAR/source/wave_clear_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/wave_clear_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.71,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "dc92511b8486a0532733c87122b1bbb1f5f60c388de6c1697704598f8b82d3c0",
+    "source_sha256": "aff30de0f376d5a905e962eaaec47e21b32e61143a20dca1b41cce2a958dd124",
+    "seed": 85312339,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "run.wave.cleared"
+    ],
+    "sound_set_id": "SFXSET-WAVE-CLEAR"
+  },
+  "stems": [
+    "electronic_identity",
+    "relay"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "melee_swing",
+    "name": "近战挥砍空气层",
+    "events": [
+      "combat.melee.swing"
+    ],
+    "preset": "swing",
+    "duration": 0.31,
+    "variants": 3,
+    "peak_db": -10,
+    "priority": "P2",
+    "spatial_mode": "listener_follow",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "combat.melee.swing confirmed edge; only the domain owner may emit",
+    "legacy": true
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-MELEE-SWING-VAR02",
+    "key": "melee_swing",
+    "variant": 1,
+    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-SWING-VAR02/source/melee_swing_alt02_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/melee_swing_alt02_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.31,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "883398bbd4322c07c3e07c2e9398d134ab21fd87fd2c7ff727c25d17ba947a11",
+    "source_sha256": "2ca60822581c740194058cff20d1b17f1cbd17994762d86edaea42dc04e3fb2d",
+    "seed": 202200554,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "listener_follow",
+    "loop": false,
+    "peak_target_db": -10,
+    "event_ids": [
+      "combat.melee.swing"
+    ],
+    "sound_set_id": "SFXSET-MELEE-SWING"
+  },
+  "stems": [
+    "air",
+    "weight",
+    "cloth",
+    "blade"
+  ]
+}

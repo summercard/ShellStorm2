@@ -1,0 +1,60 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "sniper_fire",
+    "name": "狙击枪射击",
+    "events": [
+      "combat.weapon.fire.sniper"
+    ],
+    "preset": "gun",
+    "duration": 0.68,
+    "variants": 3,
+    "peak_db": -8,
+    "priority": "P1",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 8,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "combat.weapon.fire.sniper confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "frequency": 63,
+    "weight": 2.8,
+    "tail": 0.24
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-SNIPER-FIRE",
+    "key": "sniper_fire",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-SNIPER-FIRE/source/sniper_fire_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/sniper_fire_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.68,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "f1c8696772bdc07b63066b49d6baa5b972f6d44c7f5d9efe7cc8d9288de2baa3",
+    "source_sha256": "42236473826679a265531278ab76b057deab36e360215757be17b32ba03cdded",
+    "seed": 21629453,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -8,
+    "event_ids": [
+      "combat.weapon.fire.sniper"
+    ],
+    "sound_set_id": "SFXSET-SNIPER-FIRE"
+  },
+  "stems": [
+    "muzzle_crack",
+    "combustion",
+    "body",
+    "mechanism",
+    "room_tail",
+    "receiver"
+  ]
+}

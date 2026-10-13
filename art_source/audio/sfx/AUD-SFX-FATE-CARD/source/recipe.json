@@ -1,0 +1,60 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "fate_card",
+    "name": "命运卡生效",
+    "events": [
+      "run.fate.revealed"
+    ],
+    "preset": "signal",
+    "duration": 0.66,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "run.fate.revealed confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "notes": [
+      523,
+      784,
+      1175
+    ],
+    "step": 0.09,
+    "decay": 0.11
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-FATE-CARD",
+    "key": "fate_card",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FATE-CARD/source/fate_card_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/fate_card_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.66,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "033341ed92ed32763400ade5761c0c038a8da4d6538ea95e8a14e67be8ce47be",
+    "source_sha256": "362d4615ca4b2aff460735da65b234b15a23f7353ef878afaeaa817a06695c03",
+    "seed": 1683764097,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "run.fate.revealed"
+    ],
+    "sound_set_id": "SFXSET-FATE-CARD"
+  },
+  "stems": [
+    "electronic_identity",
+    "relay"
+  ]
+}

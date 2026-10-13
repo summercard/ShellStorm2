@@ -1,0 +1,59 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "facility_confirm",
+    "name": "facility_confirm",
+    "events": [
+      "world.facility.confirm"
+    ],
+    "preset": "signal",
+    "duration": 0.39,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "world domain",
+    "trigger_fact": "world.facility.confirm confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "notes": [
+      880,
+      1320
+    ],
+    "step": 0.09,
+    "decay": 0.07
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-FACILITY-CONFIRM",
+    "key": "facility_confirm",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FACILITY-CONFIRM/source/facility_confirm_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/facility_confirm_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.39,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "4af6ac13678a2016d89cb9e70fae431447d3c8b65aca5099b6dfcbe95b201bb9",
+    "source_sha256": "c682cf0880abf512d725ea8b41f51f00f3f66310a2b30e7cfa0c8e4e83db0f5f",
+    "seed": 534511847,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "world.facility.confirm"
+    ],
+    "sound_set_id": "SFXSET-FACILITY-CONFIRM"
+  },
+  "stems": [
+    "electronic_identity",
+    "relay"
+  ]
+}

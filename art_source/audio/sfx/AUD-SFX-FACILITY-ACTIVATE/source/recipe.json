@@ -1,0 +1,54 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "facility_activate",
+    "name": "facility_activate",
+    "events": [
+      "world.facility.activate"
+    ],
+    "preset": "power",
+    "duration": 0.9,
+    "variants": 1,
+    "peak_db": -13,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "world domain",
+    "trigger_fact": "world.facility.activate confirmed edge; only the domain owner may emit",
+    "legacy": false
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-FACILITY-ACTIVATE",
+    "key": "facility_activate",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FACILITY-ACTIVATE/source/facility_activate_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/facility_activate_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.9,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "b4cd44d3fe42d9811becf068f8ee42326fdf2054a22b12fe7492f862214a1da1",
+    "source_sha256": "b0157b41a26489c048e1311c01bf79ba01db18b10cf2552a2e2a8261dad0e594",
+    "seed": 3354329260,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -13,
+    "event_ids": [
+      "world.facility.activate"
+    ],
+    "sound_set_id": "SFXSET-FACILITY-ACTIVATE"
+  },
+  "stems": [
+    "mechanism",
+    "coil",
+    "electronic_identity"
+  ]
+}

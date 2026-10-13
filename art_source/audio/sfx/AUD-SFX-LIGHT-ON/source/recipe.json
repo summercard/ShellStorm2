@@ -1,0 +1,54 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "light_on",
+    "name": "light_on",
+    "events": [
+      "world.light.switch_on"
+    ],
+    "preset": "power",
+    "duration": 0.31,
+    "variants": 1,
+    "peak_db": -15,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "world domain",
+    "trigger_fact": "world.light.switch_on confirmed edge; only the domain owner may emit",
+    "legacy": false
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-LIGHT-ON",
+    "key": "light_on",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-LIGHT-ON/source/light_on_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/light_on_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.31,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "eab594b84f8d4ba884208c3aba478c6a97eeda2d4c9c64ee71b71eaa4bdac328",
+    "source_sha256": "e1db3fd2015e1f22f9247cb0389c6edcc0247b7e87153e135fc706c93dec844d",
+    "seed": 4204048662,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -15,
+    "event_ids": [
+      "world.light.switch_on"
+    ],
+    "sound_set_id": "SFXSET-LIGHT-ON"
+  },
+  "stems": [
+    "mechanism",
+    "coil",
+    "electronic_identity"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "boss_intro",
+    "name": "Boss入场",
+    "events": [
+      "boss.intro"
+    ],
+    "preset": "stinger",
+    "duration": 1.9,
+    "variants": 1,
+    "peak_db": -7,
+    "priority": "P1",
+    "spatial_mode": "ui_2d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "boss.intro confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "frequency": 49,
+    "notes": [
+      98,
+      103.83,
+      146.83
+    ],
+    "step": 0.21,
+    "decay": 0.29
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-BOSS-INTRO",
+    "key": "boss_intro",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-BOSS-INTRO/source/boss_intro_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/boss_intro_v002.ogg",
+    "version": 2,
+    "duration_sec": 1.9,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "acf8bc4b1181bece760040e4fe2322ae11028bb1db849158d247176099cf7453",
+    "source_sha256": "cf5bdc0be8b1fbfed43737892c3a308bbd9046568f272f03c33fa49332d62b59",
+    "seed": 255725361,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -7,
+    "event_ids": [
+      "boss.intro"
+    ],
+    "sound_set_id": "SFXSET-BOSS-INTRO"
+  },
+  "stems": [
+    "electronic_identity",
+    "industrial_weight",
+    "impact_air",
+    "steel_resonance"
+  ]
+}

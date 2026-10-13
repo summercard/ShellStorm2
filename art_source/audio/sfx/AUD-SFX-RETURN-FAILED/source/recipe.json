@@ -1,0 +1,60 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "return_failed",
+    "name": "return_failed",
+    "events": [
+      "run.return.failed"
+    ],
+    "preset": "signal",
+    "duration": 0.73,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P0",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "run domain",
+    "trigger_fact": "run.return.failed confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "notes": [
+      392,
+      370,
+      261
+    ],
+    "step": 0.17,
+    "decay": 0.07
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-RETURN-FAILED",
+    "key": "return_failed",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-RETURN-FAILED/source/return_failed_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/return_failed_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.73,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "247308f3b454ab729c86ca2126570a4245ca99c16e955c65fcbac6df5f620947",
+    "source_sha256": "c98cb7ada0037c9e5679b56cf986ff878be5a53081b766c8a0349afbf8791df3",
+    "seed": 1500765009,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "run.return.failed"
+    ],
+    "sound_set_id": "SFXSET-RETURN-FAILED"
+  },
+  "stems": [
+    "electronic_identity",
+    "relay"
+  ]
+}

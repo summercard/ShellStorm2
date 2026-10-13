@@ -1,0 +1,63 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "wave_start",
+    "name": "波次开始",
+    "events": [
+      "run.wave.started"
+    ],
+    "preset": "stinger",
+    "duration": 0.79,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P1",
+    "spatial_mode": "ui_2d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "run.wave.started confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "frequency": 82,
+    "notes": [
+      196,
+      294,
+      392
+    ],
+    "step": 0.1,
+    "decay": 0.11
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-WAVE-START",
+    "key": "wave_start",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-WAVE-START/source/wave_start_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/wave_start_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.79,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "4e34d2c5444b4e47f4146d0e69dfcffe249e2daa6d5bce04c426320dbdaf1edd",
+    "source_sha256": "aaf6cd155bdf925ba7e1dac45aecaa61fe10c08208f41548263c5b6759776810",
+    "seed": 1428904655,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "run.wave.started"
+    ],
+    "sound_set_id": "SFXSET-WAVE-START"
+  },
+  "stems": [
+    "electronic_identity",
+    "industrial_weight",
+    "impact_air",
+    "steel_resonance"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "item_pickup",
+    "name": "普通物品拾取",
+    "events": [
+      "world.pickup.item"
+    ],
+    "preset": "mechanical",
+    "duration": 0.22,
+    "variants": 1,
+    "peak_db": -15,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "world.pickup.item confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "frequency": 810,
+    "clicks": [
+      0.044,
+      0.079
+    ]
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-ITEM-PICKUP",
+    "key": "item_pickup",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ITEM-PICKUP/source/item_pickup_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/item_pickup_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.22,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "c5032d872e605bda349ca2972e95a63dc7ed0e04858cbbd3c76ee95cca6b6870",
+    "source_sha256": "04d6c3d53ddc564205e1dac751c841b716edf1953ebb4a7d1cc12ecce9e5483b",
+    "seed": 3198892376,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -15,
+    "event_ids": [
+      "world.pickup.item"
+    ],
+    "sound_set_id": "SFXSET-ITEM-PICKUP"
+  },
+  "stems": [
+    "mechanism"
+  ]
+}

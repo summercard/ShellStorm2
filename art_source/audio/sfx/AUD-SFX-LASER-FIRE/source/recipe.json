@@ -1,0 +1,54 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "laser_fire",
+    "name": "能量武器射击",
+    "events": [
+      "combat.weapon.fire_energy"
+    ],
+    "preset": "laser",
+    "duration": 0.32,
+    "variants": 3,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "combat.weapon.fire_energy confirmed edge; only the domain owner may emit",
+    "legacy": true
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-LASER-FIRE",
+    "key": "laser_fire",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-LASER-FIRE/source/laser_fire_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/laser_fire_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.32,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "02c5e3b8fd4ca16ccc72a1500d180d43b940cf5958fd828781bb8aac1ec480ee",
+    "source_sha256": "cf9fd7212410d8ae4f82eb9f3e6c799a1adf69e0b8d1cdae02d93c1cc7df37cb",
+    "seed": 2200813567,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "combat.weapon.fire_energy"
+    ],
+    "sound_set_id": "SFXSET-LASER-FIRE"
+  },
+  "stems": [
+    "energy_core",
+    "ion_snap",
+    "capacitor"
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "enemy_search",
+    "name": "enemy_search",
+    "events": [
+      "enemy.search"
+    ],
+    "preset": "enemy",
+    "duration": 0.47,
+    "variants": 1,
+    "peak_db": -12,
+    "priority": "P1",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 5,
+    "owner": "enemy domain",
+    "trigger_fact": "enemy.search confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 120,
+    "notes": [
+      220
+    ],
+    "decay": 0.06,
+    "step": 0.07
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-ENEMY-SEARCH",
+    "key": "enemy_search",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-SEARCH/source/enemy_search_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_search_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.47,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "71861f3534ba5e95271502e18003135ad7e501d42f13a189dacca23db358b4cf",
+    "source_sha256": "125654bb78b569aee5bbeb0b3ad7a5b229293230f0f6a248898ed84e4ce82145",
+    "seed": 712737788,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -12,
+    "event_ids": [
+      "enemy.search"
+    ],
+    "sound_set_id": "SFXSET-ENEMY-SEARCH"
+  },
+  "stems": [
+    "electronic_identity",
+    "vocal_resonator",
+    "breath_grit"
+  ]
+}

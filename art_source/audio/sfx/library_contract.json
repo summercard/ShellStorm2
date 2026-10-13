@@ -1,0 +1,2007 @@
+{
+  "schema_version": 1,
+  "design_revision": "AUDIO-SFX r1",
+  "production_revision": "industrial-r2",
+  "source_method": "Original offline layered DSP sound design; no external samples or AI-generation claims",
+  "mix_policy": "44.1kHz PCM24 mono point sources; fixed asset peak headroom; per-family variations; no runtime synthesis fallback",
+  "unbound_policy": "New document sounds are an authored library; domain hooks require separate verified facts. narrative.fx_sfx dispatches an existing event; amb.radio_local remains owned by MusicManager/Base99Radio3D.",
+  "sounds": [
+    {
+      "key": "pistol_fire",
+      "name": "手枪射击",
+      "events": [
+        "combat.weapon.fire.pistol"
+      ],
+      "preset": "gun",
+      "duration": 0.25,
+      "variants": 3,
+      "peak_db": -8,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 8,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.weapon.fire.pistol confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 155,
+      "weight": 1,
+      "tail": 0.1
+    },
+    {
+      "key": "rifle_fire",
+      "name": "步枪射击",
+      "events": [
+        "combat.weapon.fire.rifle"
+      ],
+      "preset": "gun",
+      "duration": 0.24,
+      "variants": 3,
+      "peak_db": -8,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 8,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.weapon.fire.rifle confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 125,
+      "weight": 1.3,
+      "tail": 0.105
+    },
+    {
+      "key": "shotgun_fire",
+      "name": "霰弹枪射击",
+      "events": [
+        "combat.weapon.fire.shotgun"
+      ],
+      "preset": "gun",
+      "duration": 0.46,
+      "variants": 3,
+      "peak_db": -8,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 8,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.weapon.fire.shotgun confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 76,
+      "weight": 2.4,
+      "tail": 0.19
+    },
+    {
+      "key": "smg_fire",
+      "name": "冲锋枪射击",
+      "events": [
+        "combat.weapon.fire.smg"
+      ],
+      "preset": "gun",
+      "duration": 0.15,
+      "variants": 3,
+      "peak_db": -8,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 8,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.weapon.fire.smg confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 200,
+      "weight": 0.7,
+      "tail": 0.055
+    },
+    {
+      "key": "sniper_fire",
+      "name": "狙击枪射击",
+      "events": [
+        "combat.weapon.fire.sniper"
+      ],
+      "preset": "gun",
+      "duration": 0.68,
+      "variants": 3,
+      "peak_db": -8,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 8,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.weapon.fire.sniper confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 63,
+      "weight": 2.8,
+      "tail": 0.24
+    },
+    {
+      "key": "laser_fire",
+      "name": "能量武器射击",
+      "events": [
+        "combat.weapon.fire_energy"
+      ],
+      "preset": "laser",
+      "duration": 0.32,
+      "variants": 3,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.weapon.fire_energy confirmed edge; only the domain owner may emit",
+      "legacy": true
+    },
+    {
+      "key": "enemy_hit",
+      "name": "敌人受击",
+      "events": [
+        "enemy.hit"
+      ],
+      "preset": "impact",
+      "duration": 0.18,
+      "variants": 3,
+      "peak_db": -8,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "enemy.hit confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 145,
+      "weight": 0.7
+    },
+    {
+      "key": "enemy_die",
+      "name": "敌人死亡",
+      "events": [
+        "enemy.death"
+      ],
+      "preset": "death",
+      "duration": 0.63,
+      "variants": 3,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "enemy.death confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 72,
+      "weight": 1.4
+    },
+    {
+      "key": "player_hit",
+      "name": "玩家受伤",
+      "events": [
+        "player.hurt"
+      ],
+      "preset": "hurt",
+      "duration": 0.29,
+      "variants": 3,
+      "peak_db": -7,
+      "priority": "P0",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "player.hurt confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 105,
+      "weight": 1.3
+    },
+    {
+      "key": "player_dash",
+      "name": "玩家闪避",
+      "events": [
+        "player.dash"
+      ],
+      "preset": "dash",
+      "duration": 0.29,
+      "variants": 3,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "player.dash confirmed edge; only the domain owner may emit",
+      "legacy": true
+    },
+    {
+      "key": "reload",
+      "name": "换弹",
+      "events": [
+        "combat.weapon.reload_start"
+      ],
+      "preset": "mechanical",
+      "duration": 0.55,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.weapon.reload_start confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 480,
+      "clicks": [
+        0.12,
+        0.24,
+        0.38
+      ]
+    },
+    {
+      "key": "crit_hit",
+      "name": "暴击",
+      "events": [
+        "enemy.crit"
+      ],
+      "preset": "impact",
+      "duration": 0.25,
+      "variants": 3,
+      "peak_db": -12,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "enemy.crit confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 460,
+      "weight": 0.6
+    },
+    {
+      "key": "melee_swing",
+      "name": "近战挥砍空气层",
+      "events": [
+        "combat.melee.swing"
+      ],
+      "preset": "swing",
+      "duration": 0.31,
+      "variants": 3,
+      "peak_db": -10,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.melee.swing confirmed edge; only the domain owner may emit",
+      "legacy": true
+    },
+    {
+      "key": "melee_impact",
+      "name": "近战命中主层",
+      "events": [
+        "combat.melee.impact"
+      ],
+      "preset": "impact",
+      "duration": 0.37,
+      "variants": 3,
+      "peak_db": -10,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.melee.impact confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 87,
+      "weight": 1.8
+    },
+    {
+      "key": "fate_card",
+      "name": "命运卡生效",
+      "events": [
+        "run.fate.revealed"
+      ],
+      "preset": "signal",
+      "duration": 0.66,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "run.fate.revealed confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        523,
+        784,
+        1175
+      ],
+      "step": 0.09,
+      "decay": 0.11
+    },
+    {
+      "key": "extraction_start",
+      "name": "撤离开始",
+      "events": [
+        "run.extraction.started"
+      ],
+      "preset": "signal",
+      "duration": 1.05,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "run.extraction.started confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        392,
+        392,
+        523,
+        784
+      ],
+      "step": 0.18,
+      "decay": 0.11
+    },
+    {
+      "key": "extraction_done",
+      "name": "撤离成功",
+      "events": [
+        "run.extraction.completed"
+      ],
+      "preset": "stinger",
+      "duration": 1.4,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P1",
+      "spatial_mode": "ui_2d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "run.extraction.completed confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 98,
+      "notes": [
+        523,
+        659,
+        784,
+        1046
+      ],
+      "step": 0.15,
+      "decay": 0.2
+    },
+    {
+      "key": "extraction_abort",
+      "name": "撤离中断",
+      "events": [
+        "run.extraction.interrupted"
+      ],
+      "preset": "signal",
+      "duration": 0.58,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "run.extraction.interrupted confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        784,
+        523,
+        349
+      ],
+      "step": 0.1,
+      "decay": 0.08
+    },
+    {
+      "key": "ui_hover",
+      "name": "重要按钮悬停",
+      "events": [
+        "ui.action.hover",
+        "ui.action.focus"
+      ],
+      "preset": "ui",
+      "duration": 0.09,
+      "variants": 1,
+      "peak_db": -20,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "UIStyleFactory",
+      "trigger_fact": "ui.action.hover|ui.action.focus confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        1760
+      ],
+      "decay": 0.013
+    },
+    {
+      "key": "ui_click",
+      "name": "按钮确认",
+      "events": [
+        "ui.action.confirm"
+      ],
+      "preset": "ui",
+      "duration": 0.14,
+      "variants": 1,
+      "peak_db": -16,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "UIStyleFactory",
+      "trigger_fact": "ui.action.confirm confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        1175,
+        1760
+      ],
+      "step": 0.024,
+      "decay": 0.022
+    },
+    {
+      "key": "ui_error",
+      "name": "操作失败",
+      "events": [
+        "ui.action.denied"
+      ],
+      "preset": "ui",
+      "duration": 0.28,
+      "variants": 1,
+      "peak_db": -15,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "UIStyleFactory",
+      "trigger_fact": "ui.action.denied confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        440,
+        415
+      ],
+      "step": 0.09,
+      "decay": 0.035
+    },
+    {
+      "key": "ammo_empty",
+      "name": "空仓扳机",
+      "events": [
+        "combat.weapon.empty"
+      ],
+      "preset": "mechanical",
+      "duration": 0.14,
+      "variants": 1,
+      "peak_db": -13,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "combat.weapon.empty confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 960,
+      "clicks": [
+        0.027
+      ]
+    },
+    {
+      "key": "item_pickup",
+      "name": "普通物品拾取",
+      "events": [
+        "world.pickup.item"
+      ],
+      "preset": "mechanical",
+      "duration": 0.22,
+      "variants": 1,
+      "peak_db": -15,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "world.pickup.item confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 810,
+      "clicks": [
+        0.044,
+        0.079
+      ]
+    },
+    {
+      "key": "soul_pickup",
+      "name": "魂球拾取",
+      "events": [
+        "world.pickup.soul"
+      ],
+      "preset": "signal",
+      "duration": 0.29,
+      "variants": 3,
+      "peak_db": -17,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "world.pickup.soul confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        1175,
+        1568
+      ],
+      "step": 0.05,
+      "decay": 0.045
+    },
+    {
+      "key": "door_open",
+      "name": "门开启",
+      "events": [
+        "world.door.open"
+      ],
+      "preset": "door",
+      "duration": 0.92,
+      "variants": 1,
+      "peak_db": -10,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "world.door.open confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 230,
+      "clicks": [
+        0.055,
+        0.59
+      ]
+    },
+    {
+      "key": "door_locked",
+      "name": "门锁定或条件不足",
+      "events": [
+        "world.door.denied"
+      ],
+      "preset": "mechanical",
+      "duration": 0.29,
+      "variants": 1,
+      "peak_db": -12,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "world.door.denied confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 320,
+      "clicks": [
+        0.055,
+        0.085,
+        0.16
+      ]
+    },
+    {
+      "key": "container_open",
+      "name": "计时搜索完成",
+      "events": [
+        "world.container.search_finish"
+      ],
+      "preset": "container",
+      "duration": 0.52,
+      "variants": 1,
+      "peak_db": -12,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "world.container.search_finish confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 510,
+      "clicks": [
+        0.08,
+        0.24
+      ]
+    },
+    {
+      "key": "wave_start",
+      "name": "波次开始",
+      "events": [
+        "run.wave.started"
+      ],
+      "preset": "stinger",
+      "duration": 0.79,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P1",
+      "spatial_mode": "ui_2d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "run.wave.started confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 82,
+      "notes": [
+        196,
+        294,
+        392
+      ],
+      "step": 0.1,
+      "decay": 0.11
+    },
+    {
+      "key": "wave_clear",
+      "name": "波次完成",
+      "events": [
+        "run.wave.cleared"
+      ],
+      "preset": "signal",
+      "duration": 0.71,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "run.wave.cleared confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        523,
+        659,
+        784
+      ],
+      "step": 0.12,
+      "decay": 0.12
+    },
+    {
+      "key": "boss_intro",
+      "name": "Boss入场",
+      "events": [
+        "boss.intro"
+      ],
+      "preset": "stinger",
+      "duration": 1.9,
+      "variants": 1,
+      "peak_db": -7,
+      "priority": "P1",
+      "spatial_mode": "ui_2d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "boss.intro confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 49,
+      "notes": [
+        98,
+        103.83,
+        146.83
+      ],
+      "step": 0.21,
+      "decay": 0.29
+    },
+    {
+      "key": "boss_phase",
+      "name": "Boss阶段切换",
+      "events": [
+        "boss.phase_changed"
+      ],
+      "preset": "stinger",
+      "duration": 1.05,
+      "variants": 1,
+      "peak_db": -8,
+      "priority": "P1",
+      "spatial_mode": "ui_2d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "boss.phase_changed confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 65.4,
+      "notes": [
+        196,
+        207.65,
+        392
+      ],
+      "step": 0.12,
+      "decay": 0.19
+    },
+    {
+      "key": "boss_defeat",
+      "name": "Boss击败",
+      "events": [
+        "boss.defeated"
+      ],
+      "preset": "stinger",
+      "duration": 1.8,
+      "variants": 1,
+      "peak_db": -8,
+      "priority": "P1",
+      "spatial_mode": "ui_2d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "boss.defeated confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "frequency": 65.4,
+      "notes": [
+        261.63,
+        392,
+        523,
+        659
+      ],
+      "step": 0.19,
+      "decay": 0.25
+    },
+    {
+      "key": "merchant_purchase",
+      "name": "购买成功",
+      "events": [
+        "ui.action.purchase"
+      ],
+      "preset": "signal",
+      "duration": 0.43,
+      "variants": 1,
+      "peak_db": -14,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "ui.action.purchase confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        784,
+        1046,
+        1568
+      ],
+      "step": 0.07,
+      "decay": 0.06
+    },
+    {
+      "key": "flashlight_charge_up",
+      "name": "手电筒充能完成",
+      "events": [
+        "player.flashlight_charge"
+      ],
+      "preset": "power",
+      "duration": 0.76,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "player.flashlight_charge confirmed edge; only the domain owner may emit",
+      "legacy": true
+    },
+    {
+      "key": "flashlight_low_battery",
+      "name": "手电筒低电量警告",
+      "events": [
+        "player.flashlight_low"
+      ],
+      "preset": "signal",
+      "duration": 0.65,
+      "variants": 1,
+      "peak_db": -13,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "player.flashlight_low confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "notes": [
+        1046,
+        784
+      ],
+      "step": 0.24,
+      "decay": 0.06
+    },
+    {
+      "key": "flashlight_depleted",
+      "name": "手电筒电量耗尽",
+      "events": [
+        "player.flashlight_depleted"
+      ],
+      "preset": "power",
+      "duration": 0.6,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "AudioManager compatibility caller",
+      "trigger_fact": "player.flashlight_depleted confirmed edge; only the domain owner may emit",
+      "legacy": true,
+      "rising": false
+    },
+    {
+      "key": "footstep_concrete",
+      "name": "footstep_concrete",
+      "events": [
+        "player.footstep"
+      ],
+      "preset": "footstep",
+      "duration": 0.22,
+      "variants": 4,
+      "peak_db": -15,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "player domain",
+      "trigger_fact": "player.footstep confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "material": "concrete",
+      "frequency": 160
+    },
+    {
+      "key": "footstep_metal",
+      "name": "footstep_metal",
+      "events": [
+        "player.footstep.metal"
+      ],
+      "preset": "footstep",
+      "duration": 0.22,
+      "variants": 4,
+      "peak_db": -15,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "player domain",
+      "trigger_fact": "player.footstep.metal confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "material": "metal",
+      "frequency": 135
+    },
+    {
+      "key": "footstep_debris",
+      "name": "footstep_debris",
+      "events": [
+        "player.footstep.debris"
+      ],
+      "preset": "footstep",
+      "duration": 0.22,
+      "variants": 4,
+      "peak_db": -15,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "player domain",
+      "trigger_fact": "player.footstep.debris confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "material": "debris",
+      "frequency": 200
+    },
+    {
+      "key": "player_land",
+      "name": "player_land",
+      "events": [
+        "player.land"
+      ],
+      "preset": "land",
+      "duration": 0.34,
+      "variants": 3,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "player domain",
+      "trigger_fact": "player.land confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 85,
+      "weight": 1.3
+    },
+    {
+      "key": "player_down",
+      "name": "player_down",
+      "events": [
+        "player.down"
+      ],
+      "preset": "hurt",
+      "duration": 0.68,
+      "variants": 1,
+      "peak_db": -8,
+      "priority": "P0",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "player domain",
+      "trigger_fact": "player.down confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 58,
+      "weight": 2.5
+    },
+    {
+      "key": "player_death",
+      "name": "player_death",
+      "events": [
+        "player.death_confirmed"
+      ],
+      "preset": "stinger",
+      "duration": 1.35,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P1",
+      "spatial_mode": "ui_2d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "player domain",
+      "trigger_fact": "player.death_confirmed confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 55,
+      "notes": [
+        220,
+        164.81,
+        110
+      ],
+      "step": 0.2,
+      "decay": 0.21
+    },
+    {
+      "key": "flashlight_on",
+      "name": "flashlight_on",
+      "events": [
+        "player.flashlight_on"
+      ],
+      "preset": "mechanical",
+      "duration": 0.15,
+      "variants": 1,
+      "peak_db": -17,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "player domain",
+      "trigger_fact": "player.flashlight_on confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 1700,
+      "clicks": [
+        0.035
+      ]
+    },
+    {
+      "key": "flashlight_off",
+      "name": "flashlight_off",
+      "events": [
+        "player.flashlight_off"
+      ],
+      "preset": "mechanical",
+      "duration": 0.12,
+      "variants": 1,
+      "peak_db": -17,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "player domain",
+      "trigger_fact": "player.flashlight_off confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 1250,
+      "clicks": [
+        0.023
+      ]
+    },
+    {
+      "key": "reload_action",
+      "name": "reload_action",
+      "events": [
+        "combat.weapon.reload_action"
+      ],
+      "preset": "mechanical",
+      "duration": 0.3,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "combat domain",
+      "trigger_fact": "combat.weapon.reload_action confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 650,
+      "clicks": [
+        0.06,
+        0.15
+      ]
+    },
+    {
+      "key": "reload_end",
+      "name": "reload_end",
+      "events": [
+        "combat.weapon.reload_end"
+      ],
+      "preset": "mechanical",
+      "duration": 0.19,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "combat domain",
+      "trigger_fact": "combat.weapon.reload_end confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 800,
+      "clicks": [
+        0.028,
+        0.06
+      ]
+    },
+    {
+      "key": "weapon_swap",
+      "name": "weapon_swap",
+      "events": [
+        "combat.weapon.swap"
+      ],
+      "preset": "mechanical",
+      "duration": 0.29,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "combat domain",
+      "trigger_fact": "combat.weapon.swap confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 350,
+      "clicks": [
+        0.06,
+        0.13
+      ]
+    },
+    {
+      "key": "weapon_attach",
+      "name": "weapon_attach",
+      "events": [
+        "combat.weapon.attach"
+      ],
+      "preset": "mechanical",
+      "duration": 0.26,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "combat domain",
+      "trigger_fact": "combat.weapon.attach confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 1100,
+      "clicks": [
+        0.035,
+        0.11
+      ]
+    },
+    {
+      "key": "weapon_attach_denied",
+      "name": "weapon_attach_denied",
+      "events": [
+        "combat.weapon.attach_denied"
+      ],
+      "preset": "signal",
+      "duration": 0.27,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "combat domain",
+      "trigger_fact": "combat.weapon.attach_denied confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        622,
+        587
+      ],
+      "step": 0.085,
+      "decay": 0.035
+    },
+    {
+      "key": "projectile_impact",
+      "name": "projectile_impact",
+      "events": [
+        "combat.projectile.impact"
+      ],
+      "preset": "impact",
+      "duration": 0.19,
+      "variants": 3,
+      "peak_db": -8,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "combat domain",
+      "trigger_fact": "combat.projectile.impact confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 560,
+      "weight": 0.5
+    },
+    {
+      "key": "melee_target_hit",
+      "name": "melee_target_hit",
+      "events": [
+        "combat.melee.target_hit"
+      ],
+      "preset": "hurt",
+      "duration": 0.19,
+      "variants": 3,
+      "peak_db": -8,
+      "priority": "P0",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "combat domain",
+      "trigger_fact": "combat.melee.target_hit confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 190,
+      "weight": 0.7
+    },
+    {
+      "key": "melee_heavy_impact",
+      "name": "melee_heavy_impact",
+      "events": [
+        "combat.melee.heavy_impact"
+      ],
+      "preset": "impact",
+      "duration": 0.48,
+      "variants": 3,
+      "peak_db": -8,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "combat domain",
+      "trigger_fact": "combat.melee.heavy_impact confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 61,
+      "weight": 2.5
+    },
+    {
+      "key": "melee_cancel",
+      "name": "melee_cancel",
+      "events": [
+        "combat.melee.cancel"
+      ],
+      "preset": "mechanical",
+      "duration": 0.19,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "listener_follow",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "combat domain",
+      "trigger_fact": "combat.melee.cancel confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 490,
+      "clicks": [
+        0.035
+      ]
+    },
+    {
+      "key": "enemy_alert",
+      "name": "enemy_alert",
+      "events": [
+        "enemy.alert"
+      ],
+      "preset": "enemy",
+      "duration": 0.42,
+      "variants": 1,
+      "peak_db": -12,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.alert confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 160,
+      "notes": [
+        330,
+        440
+      ],
+      "decay": 0.06,
+      "step": 0.07
+    },
+    {
+      "key": "enemy_search",
+      "name": "enemy_search",
+      "events": [
+        "enemy.search"
+      ],
+      "preset": "enemy",
+      "duration": 0.47,
+      "variants": 1,
+      "peak_db": -12,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.search confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 120,
+      "notes": [
+        220
+      ],
+      "decay": 0.06,
+      "step": 0.07
+    },
+    {
+      "key": "enemy_telegraph",
+      "name": "enemy_telegraph",
+      "events": [
+        "enemy.telegraph"
+      ],
+      "preset": "enemy",
+      "duration": 0.38,
+      "variants": 3,
+      "peak_db": -12,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.telegraph confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 210,
+      "notes": [
+        523,
+        740
+      ],
+      "decay": 0.06,
+      "step": 0.07
+    },
+    {
+      "key": "enemy_attack",
+      "name": "enemy_attack",
+      "events": [
+        "enemy.attack"
+      ],
+      "preset": "enemy",
+      "duration": 0.24,
+      "variants": 3,
+      "peak_db": -12,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.attack confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 140,
+      "notes": [
+        280
+      ],
+      "decay": 0.06,
+      "step": 0.07
+    },
+    {
+      "key": "enemy_summon",
+      "name": "enemy_summon",
+      "events": [
+        "enemy.summon"
+      ],
+      "preset": "enemy",
+      "duration": 0.76,
+      "variants": 1,
+      "peak_db": -12,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.summon confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 130,
+      "notes": [
+        261,
+        392,
+        523
+      ],
+      "decay": 0.06,
+      "step": 0.07
+    },
+    {
+      "key": "enemy_heal",
+      "name": "enemy_heal",
+      "events": [
+        "enemy.heal"
+      ],
+      "preset": "enemy",
+      "duration": 0.72,
+      "variants": 1,
+      "peak_db": -12,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.heal confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 180,
+      "notes": [
+        659,
+        880,
+        1318
+      ],
+      "decay": 0.06,
+      "step": 0.07
+    },
+    {
+      "key": "enemy_avoid_light",
+      "name": "enemy_avoid_light",
+      "events": [
+        "enemy.avoid_light"
+      ],
+      "preset": "enemy",
+      "duration": 0.29,
+      "variants": 1,
+      "peak_db": -12,
+      "priority": "P1",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 5,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.avoid_light confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 310,
+      "notes": [
+        740,
+        587
+      ],
+      "decay": 0.06,
+      "step": 0.07
+    },
+    {
+      "key": "enemy_charge",
+      "name": "enemy_charge",
+      "events": [
+        "enemy.ranged_charge"
+      ],
+      "preset": "power",
+      "duration": 0.85,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.ranged_charge confirmed edge; only the domain owner may emit",
+      "legacy": false
+    },
+    {
+      "key": "enemy_shield",
+      "name": "enemy_shield",
+      "events": [
+        "enemy.shield_raise"
+      ],
+      "preset": "power",
+      "duration": 0.49,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.shield_raise confirmed edge; only the domain owner may emit",
+      "legacy": false
+    },
+    {
+      "key": "enemy_explosion",
+      "name": "enemy_explosion",
+      "events": [
+        "enemy.explosion"
+      ],
+      "preset": "explosion",
+      "duration": 1.05,
+      "variants": 3,
+      "peak_db": -7,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "enemy domain",
+      "trigger_fact": "enemy.explosion confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 47,
+      "weight": 3
+    },
+    {
+      "key": "door_close",
+      "name": "door_close",
+      "events": [
+        "world.door.close"
+      ],
+      "preset": "door",
+      "duration": 0.77,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.door.close confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 180,
+      "clicks": [
+        0.04,
+        0.45
+      ]
+    },
+    {
+      "key": "container_search",
+      "name": "container_search",
+      "events": [
+        "world.container.search_start"
+      ],
+      "preset": "mechanical",
+      "duration": 0.37,
+      "variants": 1,
+      "peak_db": -16,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.container.search_start confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 780,
+      "clicks": [
+        0.075,
+        0.16,
+        0.23
+      ]
+    },
+    {
+      "key": "container_cancel",
+      "name": "container_cancel",
+      "events": [
+        "world.container.search_cancel"
+      ],
+      "preset": "mechanical",
+      "duration": 0.19,
+      "variants": 1,
+      "peak_db": -17,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.container.search_cancel confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 590,
+      "clicks": [
+        0.048
+      ]
+    },
+    {
+      "key": "light_on",
+      "name": "light_on",
+      "events": [
+        "world.light.switch_on"
+      ],
+      "preset": "power",
+      "duration": 0.31,
+      "variants": 1,
+      "peak_db": -15,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.light.switch_on confirmed edge; only the domain owner may emit",
+      "legacy": false
+    },
+    {
+      "key": "light_off",
+      "name": "light_off",
+      "events": [
+        "world.light.switch_off"
+      ],
+      "preset": "power",
+      "duration": 0.24,
+      "variants": 1,
+      "peak_db": -15,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.light.switch_off confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "rising": false
+    },
+    {
+      "key": "facility_activate",
+      "name": "facility_activate",
+      "events": [
+        "world.facility.activate"
+      ],
+      "preset": "power",
+      "duration": 0.9,
+      "variants": 1,
+      "peak_db": -13,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.facility.activate confirmed edge; only the domain owner may emit",
+      "legacy": false
+    },
+    {
+      "key": "facility_confirm",
+      "name": "facility_confirm",
+      "events": [
+        "world.facility.confirm"
+      ],
+      "preset": "signal",
+      "duration": 0.39,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.facility.confirm confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        880,
+        1320
+      ],
+      "step": 0.09,
+      "decay": 0.07
+    },
+    {
+      "key": "facility_denied",
+      "name": "facility_denied",
+      "events": [
+        "world.facility.denied"
+      ],
+      "preset": "signal",
+      "duration": 0.34,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.facility.denied confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        311,
+        293
+      ],
+      "step": 0.12,
+      "decay": 0.04
+    },
+    {
+      "key": "radio_on",
+      "name": "radio_on",
+      "events": [
+        "world.radio.on"
+      ],
+      "preset": "mechanical",
+      "duration": 0.18,
+      "variants": 1,
+      "peak_db": -17,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.radio.on confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 1800,
+      "clicks": [
+        0.04
+      ]
+    },
+    {
+      "key": "radio_off",
+      "name": "radio_off",
+      "events": [
+        "world.radio.off"
+      ],
+      "preset": "mechanical",
+      "duration": 0.14,
+      "variants": 1,
+      "peak_db": -17,
+      "priority": "P2",
+      "spatial_mode": "world_3d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "world domain",
+      "trigger_fact": "world.radio.off confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 1200,
+      "clicks": [
+        0.025
+      ]
+    },
+    {
+      "key": "fate_applied",
+      "name": "fate_applied",
+      "events": [
+        "run.fate.applied"
+      ],
+      "preset": "signal",
+      "duration": 0.44,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "run domain",
+      "trigger_fact": "run.fate.applied confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        659,
+        988,
+        1318
+      ],
+      "step": 0.055,
+      "decay": 0.07
+    },
+    {
+      "key": "retreat_confirmed",
+      "name": "retreat_confirmed",
+      "events": [
+        "run.retreat.confirmed"
+      ],
+      "preset": "signal",
+      "duration": 0.62,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "run domain",
+      "trigger_fact": "run.retreat.confirmed confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        659,
+        523,
+        392
+      ],
+      "step": 0.14,
+      "decay": 0.085
+    },
+    {
+      "key": "settlement_failed",
+      "name": "settlement_failed",
+      "events": [
+        "run.settlement.failed"
+      ],
+      "preset": "signal",
+      "duration": 0.81,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P0",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "run domain",
+      "trigger_fact": "run.settlement.failed confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        349,
+        329,
+        349,
+        261
+      ],
+      "step": 0.16,
+      "decay": 0.06
+    },
+    {
+      "key": "loading_failed",
+      "name": "loading_failed",
+      "events": [
+        "run.loading.failed",
+        "ui.loading.failed"
+      ],
+      "preset": "signal",
+      "duration": 0.68,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P0",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "run domain",
+      "trigger_fact": "run.loading.failed|ui.loading.failed confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        523,
+        493,
+        392
+      ],
+      "step": 0.15,
+      "decay": 0.075
+    },
+    {
+      "key": "generation_fallback",
+      "name": "generation_fallback",
+      "events": [
+        "run.generation.fallback"
+      ],
+      "preset": "signal",
+      "duration": 0.36,
+      "variants": 1,
+      "peak_db": -17,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "run domain",
+      "trigger_fact": "run.generation.fallback confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        523,
+        659
+      ],
+      "step": 0.11,
+      "decay": 0.04
+    },
+    {
+      "key": "return_failed",
+      "name": "return_failed",
+      "events": [
+        "run.return.failed"
+      ],
+      "preset": "signal",
+      "duration": 0.73,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P0",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "run domain",
+      "trigger_fact": "run.return.failed confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        392,
+        370,
+        261
+      ],
+      "step": 0.17,
+      "decay": 0.07
+    },
+    {
+      "key": "ui_back",
+      "name": "ui_back",
+      "events": [
+        "ui.action.back"
+      ],
+      "preset": "ui",
+      "duration": 0.17,
+      "variants": 1,
+      "peak_db": -16,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "UIStyleFactory",
+      "trigger_fact": "ui.action.back confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        1568,
+        1046
+      ],
+      "step": 0.04,
+      "decay": 0.026
+    },
+    {
+      "key": "ui_loading_step",
+      "name": "ui_loading_step",
+      "events": [
+        "ui.loading.step"
+      ],
+      "preset": "ui",
+      "duration": 0.1,
+      "variants": 1,
+      "peak_db": -21,
+      "priority": "P2",
+      "spatial_mode": "ui_2d",
+      "bus": "UI",
+      "max_voices": 2,
+      "owner": "UIStyleFactory",
+      "trigger_fact": "ui.loading.step confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "notes": [
+        1320
+      ],
+      "decay": 0.018
+    },
+    {
+      "key": "narrative_stinger",
+      "name": "narrative_stinger",
+      "events": [
+        "narrative.stinger"
+      ],
+      "preset": "stinger",
+      "duration": 1.2,
+      "variants": 1,
+      "peak_db": -11,
+      "priority": "P1",
+      "spatial_mode": "ui_2d",
+      "bus": "SFX",
+      "max_voices": 2,
+      "owner": "narrative domain",
+      "trigger_fact": "narrative.stinger confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 82,
+      "notes": [
+        164,
+        246,
+        330
+      ],
+      "step": 0.14,
+      "decay": 0.2
+    },
+    {
+      "key": "amb_base_facility",
+      "name": "amb_base_facility",
+      "events": [
+        "amb.base_facility"
+      ],
+      "preset": "ambience",
+      "duration": 6,
+      "variants": 1,
+      "peak_db": -26,
+      "priority": "P2",
+      "spatial_mode": "world_bed",
+      "bus": "Ambience",
+      "max_voices": 2,
+      "owner": "amb domain",
+      "trigger_fact": "amb.base_facility confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 60,
+      "cutoff": 1700,
+      "pulse": false
+    },
+    {
+      "key": "amb_workshop",
+      "name": "amb_workshop",
+      "events": [
+        "amb.workshop"
+      ],
+      "preset": "ambience",
+      "duration": 6,
+      "variants": 1,
+      "peak_db": -26,
+      "priority": "P2",
+      "spatial_mode": "world_bed",
+      "bus": "Ambience",
+      "max_voices": 2,
+      "owner": "amb domain",
+      "trigger_fact": "amb.workshop confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 90,
+      "cutoff": 3500,
+      "pulse": false
+    },
+    {
+      "key": "amb_recovery",
+      "name": "amb_recovery",
+      "events": [
+        "amb.recovery"
+      ],
+      "preset": "ambience",
+      "duration": 6,
+      "variants": 1,
+      "peak_db": -26,
+      "priority": "P2",
+      "spatial_mode": "world_bed",
+      "bus": "Ambience",
+      "max_voices": 2,
+      "owner": "amb domain",
+      "trigger_fact": "amb.recovery confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 120,
+      "cutoff": 1600,
+      "pulse": true
+    },
+    {
+      "key": "amb_expedition_room",
+      "name": "amb_expedition_room",
+      "events": [
+        "amb.expedition_room"
+      ],
+      "preset": "ambience",
+      "duration": 6,
+      "variants": 1,
+      "peak_db": -26,
+      "priority": "P2",
+      "spatial_mode": "world_bed",
+      "bus": "Ambience",
+      "max_voices": 2,
+      "owner": "amb domain",
+      "trigger_fact": "amb.expedition_room confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 48,
+      "cutoff": 1400,
+      "pulse": false
+    },
+    {
+      "key": "amb_expedition_open",
+      "name": "amb_expedition_open",
+      "events": [
+        "amb.expedition_open"
+      ],
+      "preset": "ambience",
+      "duration": 6,
+      "variants": 1,
+      "peak_db": -26,
+      "priority": "P2",
+      "spatial_mode": "world_bed",
+      "bus": "Ambience",
+      "max_voices": 2,
+      "owner": "amb domain",
+      "trigger_fact": "amb.expedition_open confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 39,
+      "cutoff": 3800,
+      "pulse": false
+    },
+    {
+      "key": "amb_extraction_beacon",
+      "name": "amb_extraction_beacon",
+      "events": [
+        "amb.extraction_beacon"
+      ],
+      "preset": "ambience",
+      "duration": 6,
+      "variants": 1,
+      "peak_db": -26,
+      "priority": "P2",
+      "spatial_mode": "world_bed",
+      "bus": "Ambience",
+      "max_voices": 2,
+      "owner": "amb domain",
+      "trigger_fact": "amb.extraction_beacon confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 80,
+      "cutoff": 1800,
+      "pulse": true
+    },
+    {
+      "key": "amb_boss_arena",
+      "name": "amb_boss_arena",
+      "events": [
+        "amb.boss_arena"
+      ],
+      "preset": "ambience",
+      "duration": 6,
+      "variants": 1,
+      "peak_db": -26,
+      "priority": "P2",
+      "spatial_mode": "world_bed",
+      "bus": "Ambience",
+      "max_voices": 2,
+      "owner": "amb domain",
+      "trigger_fact": "amb.boss_arena confirmed edge; only the domain owner may emit",
+      "legacy": false,
+      "frequency": 41,
+      "cutoff": 1200,
+      "pulse": true
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "footstep_metal",
+    "name": "footstep_metal",
+    "events": [
+      "player.footstep.metal"
+    ],
+    "preset": "footstep",
+    "duration": 0.22,
+    "variants": 4,
+    "peak_db": -15,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "player domain",
+    "trigger_fact": "player.footstep.metal confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "material": "metal",
+    "frequency": 135
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-FOOTSTEP-METAL",
+    "key": "footstep_metal",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-METAL/source/footstep_metal_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/footstep_metal_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.22,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "3e73a98e32dff3bc2decf5882bf63311cea711d82a2ca4b6ac9e36166855be10",
+    "source_sha256": "e9a6a5e5b3413a2a58fe593e070a632c723c5aba85ada708024d4922e67b6221",
+    "seed": 2015719462,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -15,
+    "event_ids": [
+      "player.footstep.metal"
+    ],
+    "sound_set_id": "SFXSET-FOOTSTEP-METAL"
+  },
+  "stems": [
+    "sole",
+    "heel",
+    "toe_grit",
+    "floor"
+  ]
+}

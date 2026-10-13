@@ -1,0 +1,59 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "facility_denied",
+    "name": "facility_denied",
+    "events": [
+      "world.facility.denied"
+    ],
+    "preset": "signal",
+    "duration": 0.34,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "world domain",
+    "trigger_fact": "world.facility.denied confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "notes": [
+      311,
+      293
+    ],
+    "step": 0.12,
+    "decay": 0.04
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-FACILITY-DENIED",
+    "key": "facility_denied",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FACILITY-DENIED/source/facility_denied_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/facility_denied_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.34,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "7d3431c8d8891b6bfdbae310f769ba68235b3bbc7dccab86c2fe8dc3a6977b71",
+    "source_sha256": "21d162b60ab150027dcedb39cf5ed344d6b2cccbdcd8abac501ebd37ac3d5ef3",
+    "seed": 681003343,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "world.facility.denied"
+    ],
+    "sound_set_id": "SFXSET-FACILITY-DENIED"
+  },
+  "stems": [
+    "electronic_identity",
+    "relay"
+  ]
+}

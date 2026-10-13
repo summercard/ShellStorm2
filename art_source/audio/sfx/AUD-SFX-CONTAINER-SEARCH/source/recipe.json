@@ -1,0 +1,58 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "container_search",
+    "name": "container_search",
+    "events": [
+      "world.container.search_start"
+    ],
+    "preset": "mechanical",
+    "duration": 0.37,
+    "variants": 1,
+    "peak_db": -16,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "world domain",
+    "trigger_fact": "world.container.search_start confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 780,
+    "clicks": [
+      0.075,
+      0.16,
+      0.23
+    ]
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-CONTAINER-SEARCH",
+    "key": "container_search",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-CONTAINER-SEARCH/source/container_search_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/container_search_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.37,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "1cffc763f951a525a70310d5966d09f8f534ca8e3a5af5408fa6b6bedd64c89b",
+    "source_sha256": "94973045901c955248f6448d02dafce629a62ad4ae9639a4a8b019c0115f8db1",
+    "seed": 744790538,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -16,
+    "event_ids": [
+      "world.container.search_start"
+    ],
+    "sound_set_id": "SFXSET-CONTAINER-SEARCH"
+  },
+  "stems": [
+    "mechanism"
+  ]
+}

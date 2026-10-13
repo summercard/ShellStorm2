@@ -1,0 +1,61 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "enemy_avoid_light",
+    "name": "enemy_avoid_light",
+    "events": [
+      "enemy.avoid_light"
+    ],
+    "preset": "enemy",
+    "duration": 0.29,
+    "variants": 1,
+    "peak_db": -12,
+    "priority": "P1",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 5,
+    "owner": "enemy domain",
+    "trigger_fact": "enemy.avoid_light confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 310,
+    "notes": [
+      740,
+      587
+    ],
+    "decay": 0.06,
+    "step": 0.07
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-ENEMY-AVOID-LIGHT",
+    "key": "enemy_avoid_light",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-AVOID-LIGHT/source/enemy_avoid_light_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_avoid_light_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.29,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "a4e76b3402f6ff4502cdb0827b2b10a539157a64255e63d9906b33c3f66d55e0",
+    "source_sha256": "d77050accc4b32c32eb80b45f921d5713f78c6b31555a922f6d1328a20cd632e",
+    "seed": 2211206520,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -12,
+    "event_ids": [
+      "enemy.avoid_light"
+    ],
+    "sound_set_id": "SFXSET-ENEMY-AVOID-LIGHT"
+  },
+  "stems": [
+    "electronic_identity",
+    "vocal_resonator",
+    "breath_grit"
+  ]
+}

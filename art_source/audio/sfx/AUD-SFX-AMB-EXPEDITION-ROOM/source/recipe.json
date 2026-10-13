@@ -1,0 +1,56 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "amb_expedition_room",
+    "name": "amb_expedition_room",
+    "events": [
+      "amb.expedition_room"
+    ],
+    "preset": "ambience",
+    "duration": 6,
+    "variants": 1,
+    "peak_db": -26,
+    "priority": "P2",
+    "spatial_mode": "world_bed",
+    "bus": "Ambience",
+    "max_voices": 2,
+    "owner": "amb domain",
+    "trigger_fact": "amb.expedition_room confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 48,
+    "cutoff": 1400,
+    "pulse": false
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-AMB-EXPEDITION-ROOM",
+    "key": "amb_expedition_room",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-EXPEDITION-ROOM/source/amb_expedition_room_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/amb_expedition_room_v001.ogg",
+    "version": 1,
+    "duration_sec": 6,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "74b9927ce5f27e64fb05c1a4715acd024ac35c3aa571ef9b816cf04f127169a7",
+    "source_sha256": "3933723907964e7ffc298d817be044fb14853cdee63cda7433df0f34e77f534d",
+    "seed": 2507382854,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_bed",
+    "loop": true,
+    "peak_target_db": -26,
+    "event_ids": [
+      "amb.expedition_room"
+    ],
+    "sound_set_id": "SFXSET-AMB-EXPEDITION-ROOM"
+  },
+  "stems": [
+    "room_air",
+    "machinery"
+  ]
+}

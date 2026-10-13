@@ -1,0 +1,61 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "door_close",
+    "name": "door_close",
+    "events": [
+      "world.door.close"
+    ],
+    "preset": "door",
+    "duration": 0.77,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "world domain",
+    "trigger_fact": "world.door.close confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 180,
+    "clicks": [
+      0.04,
+      0.45
+    ]
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-DOOR-CLOSE",
+    "key": "door_close",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-DOOR-CLOSE/source/door_close_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/door_close_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.77,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "d36697e08246fb37a936b5b4f3dc7f461220d2a37a15205eaa440e46a6c4d0bb",
+    "source_sha256": "d28e7e152d95654a06421e0b19c66ce3878e74d5f4cc4bc7efeddd2e3058b6c3",
+    "seed": 151921394,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "world.door.close"
+    ],
+    "sound_set_id": "SFXSET-DOOR-CLOSE"
+  },
+  "stems": [
+    "mechanism",
+    "rail_friction",
+    "motor",
+    "end_stop",
+    "panel"
+  ]
+}

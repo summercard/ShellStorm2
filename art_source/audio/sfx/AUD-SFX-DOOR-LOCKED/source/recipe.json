@@ -1,0 +1,58 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "door_locked",
+    "name": "门锁定或条件不足",
+    "events": [
+      "world.door.denied"
+    ],
+    "preset": "mechanical",
+    "duration": 0.29,
+    "variants": 1,
+    "peak_db": -12,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "world.door.denied confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "frequency": 320,
+    "clicks": [
+      0.055,
+      0.085,
+      0.16
+    ]
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-DOOR-LOCKED",
+    "key": "door_locked",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-DOOR-LOCKED/source/door_locked_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/door_locked_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.29,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "624901b5f635a8ab2a350c689b029c32ced064e7d99076efdeb48862494a280a",
+    "source_sha256": "1db4923329eb4e801f12752d80976687c00ede00ac62638fd936cfb147727b13",
+    "seed": 3368016873,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -12,
+    "event_ids": [
+      "world.door.denied"
+    ],
+    "sound_set_id": "SFXSET-DOOR-LOCKED"
+  },
+  "stems": [
+    "mechanism"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "ui_back",
+    "name": "ui_back",
+    "events": [
+      "ui.action.back"
+    ],
+    "preset": "ui",
+    "duration": 0.17,
+    "variants": 1,
+    "peak_db": -16,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "UIStyleFactory",
+    "trigger_fact": "ui.action.back confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "notes": [
+      1568,
+      1046
+    ],
+    "step": 0.04,
+    "decay": 0.026
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-UI-BACK",
+    "key": "ui_back",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-UI-BACK/source/ui_back_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/ui_back_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.17,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "454caf944a12541748572983b77d4442964fc8bb3d570e50eef52eec0f7f7e40",
+    "source_sha256": "859b1c648adf305fa28943d4e9f8866528b5a209a8d5e2c074705e63ebb786b1",
+    "seed": 3627316798,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -16,
+    "event_ids": [
+      "ui.action.back"
+    ],
+    "sound_set_id": "SFXSET-UI-BACK"
+  },
+  "stems": [
+    "electronic_identity",
+    "mechanism"
+  ]
+}

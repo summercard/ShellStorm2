@@ -1,0 +1,63 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "player_death",
+    "name": "player_death",
+    "events": [
+      "player.death_confirmed"
+    ],
+    "preset": "stinger",
+    "duration": 1.35,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P1",
+    "spatial_mode": "ui_2d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "player domain",
+    "trigger_fact": "player.death_confirmed confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 55,
+    "notes": [
+      220,
+      164.81,
+      110
+    ],
+    "step": 0.2,
+    "decay": 0.21
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-PLAYER-DEATH",
+    "key": "player_death",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-DEATH/source/player_death_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/player_death_v001.ogg",
+    "version": 1,
+    "duration_sec": 1.35,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "6a065d6b4cdae9fcd6d6e7ff1c94d0d47cf118b388b8498a04fe53533c63ec3b",
+    "source_sha256": "def0961e8a9275230919df72355a39a989d8025e44d1c72dd2b5992e8280d544",
+    "seed": 2164665274,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "player.death_confirmed"
+    ],
+    "sound_set_id": "SFXSET-PLAYER-DEATH"
+  },
+  "stems": [
+    "electronic_identity",
+    "industrial_weight",
+    "impact_air",
+    "steel_resonance"
+  ]
+}

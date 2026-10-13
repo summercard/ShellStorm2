@@ -1,0 +1,59 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "ui_error",
+    "name": "操作失败",
+    "events": [
+      "ui.action.denied"
+    ],
+    "preset": "ui",
+    "duration": 0.28,
+    "variants": 1,
+    "peak_db": -15,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "UIStyleFactory",
+    "trigger_fact": "ui.action.denied confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "notes": [
+      440,
+      415
+    ],
+    "step": 0.09,
+    "decay": 0.035
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-UI-ERROR",
+    "key": "ui_error",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-UI-ERROR/source/ui_error_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/ui_error_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.28,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "3bb876ba30dfd92d4a6cb49c004d040bd66027fbdab4f1157a21a39c1e3e13bb",
+    "source_sha256": "e8dd1a096853f7ba29f9b0baeadab13b4b014826cfeb5246d459010aa5e54f7e",
+    "seed": 3205746258,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -15,
+    "event_ids": [
+      "ui.action.denied"
+    ],
+    "sound_set_id": "SFXSET-UI-ERROR"
+  },
+  "stems": [
+    "electronic_identity",
+    "mechanism"
+  ]
+}

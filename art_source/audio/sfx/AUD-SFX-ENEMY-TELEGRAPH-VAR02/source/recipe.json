@@ -1,0 +1,61 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "enemy_telegraph",
+    "name": "enemy_telegraph",
+    "events": [
+      "enemy.telegraph"
+    ],
+    "preset": "enemy",
+    "duration": 0.38,
+    "variants": 3,
+    "peak_db": -12,
+    "priority": "P1",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 5,
+    "owner": "enemy domain",
+    "trigger_fact": "enemy.telegraph confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 210,
+    "notes": [
+      523,
+      740
+    ],
+    "decay": 0.06,
+    "step": 0.07
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-ENEMY-TELEGRAPH-VAR02",
+    "key": "enemy_telegraph",
+    "variant": 1,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-TELEGRAPH-VAR02/source/enemy_telegraph_alt02_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_telegraph_alt02_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.38,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "68952c1abb02bba8740bda4d07bf5431b3e92c3f845fd98503caf35e4d250a0d",
+    "source_sha256": "a08baa9938f9b2ca2155db2eaf2043de4293504c032f69924b697381e4556e2d",
+    "seed": 2724096315,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -12,
+    "event_ids": [
+      "enemy.telegraph"
+    ],
+    "sound_set_id": "SFXSET-ENEMY-TELEGRAPH"
+  },
+  "stems": [
+    "electronic_identity",
+    "vocal_resonator",
+    "breath_grit"
+  ]
+}

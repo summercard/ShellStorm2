@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "weapon_swap",
+    "name": "weapon_swap",
+    "events": [
+      "combat.weapon.swap"
+    ],
+    "preset": "mechanical",
+    "duration": 0.29,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "listener_follow",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "combat domain",
+    "trigger_fact": "combat.weapon.swap confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 350,
+    "clicks": [
+      0.06,
+      0.13
+    ]
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-WEAPON-SWAP",
+    "key": "weapon_swap",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-WEAPON-SWAP/source/weapon_swap_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/weapon_swap_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.29,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "3bc56e7c6a05414de479016b979fdd7a33d32845d8392a69098968cd037dbd8a",
+    "source_sha256": "b8453ac966f340c8d08b51bc382a3d6dd62766b04c58efb8148695d4c7ab80fb",
+    "seed": 4185423034,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "listener_follow",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "combat.weapon.swap"
+    ],
+    "sound_set_id": "SFXSET-WEAPON-SWAP"
+  },
+  "stems": [
+    "mechanism"
+  ]
+}

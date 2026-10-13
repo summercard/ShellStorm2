@@ -1,0 +1,54 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "enemy_charge",
+    "name": "enemy_charge",
+    "events": [
+      "enemy.ranged_charge"
+    ],
+    "preset": "power",
+    "duration": 0.85,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "enemy domain",
+    "trigger_fact": "enemy.ranged_charge confirmed edge; only the domain owner may emit",
+    "legacy": false
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-ENEMY-CHARGE",
+    "key": "enemy_charge",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-CHARGE/source/enemy_charge_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_charge_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.85,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "992a2dccf14b5fe92c3552a6ae5be78634eb9774f42a57e5d124fc857f947ae9",
+    "source_sha256": "007c055fc7780c76115e48f9b8a95911d7f8dd5d6e337a4b00aefb675845c3e8",
+    "seed": 3396941486,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "enemy.ranged_charge"
+    ],
+    "sound_set_id": "SFXSET-ENEMY-CHARGE"
+  },
+  "stems": [
+    "mechanism",
+    "coil",
+    "electronic_identity"
+  ]
+}

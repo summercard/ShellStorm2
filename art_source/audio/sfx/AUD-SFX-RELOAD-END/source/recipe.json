@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "reload_end",
+    "name": "reload_end",
+    "events": [
+      "combat.weapon.reload_end"
+    ],
+    "preset": "mechanical",
+    "duration": 0.19,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "listener_follow",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "combat domain",
+    "trigger_fact": "combat.weapon.reload_end confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 800,
+    "clicks": [
+      0.028,
+      0.06
+    ]
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-RELOAD-END",
+    "key": "reload_end",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-RELOAD-END/source/reload_end_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/reload_end_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.19,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "6f0d56583f17be2ed2cd361d0139ea5fd6bb3c9f36eb8402c4bf0b06d69cc052",
+    "source_sha256": "33a87efec3702a3b398765e225af736350dc1350a57ffbde593e723cdf5e73f6",
+    "seed": 3055227763,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "listener_follow",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "combat.weapon.reload_end"
+    ],
+    "sound_set_id": "SFXSET-RELOAD-END"
+  },
+  "stems": [
+    "mechanism"
+  ]
+}

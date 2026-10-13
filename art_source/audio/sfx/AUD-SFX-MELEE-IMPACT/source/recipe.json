@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "melee_impact",
+    "name": "近战命中主层",
+    "events": [
+      "combat.melee.impact"
+    ],
+    "preset": "impact",
+    "duration": 0.37,
+    "variants": 3,
+    "peak_db": -10,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 5,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "combat.melee.impact confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "frequency": 87,
+    "weight": 1.8
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-MELEE-IMPACT",
+    "key": "melee_impact",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-IMPACT/source/melee_impact_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/melee_impact_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.37,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "d29068de4fcf64faaa414cd5bf0f822cba0c3d4a5109b8f68365483f1c611f62",
+    "source_sha256": "5ae0c5bc6ff3d614114ef7deaf00c6820a4c728ae8e08b11315c108fdf327d00",
+    "seed": 3943394919,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -10,
+    "event_ids": [
+      "combat.melee.impact"
+    ],
+    "sound_set_id": "SFXSET-MELEE-IMPACT"
+  },
+  "stems": [
+    "mass",
+    "contact",
+    "fracture",
+    "contact_ring"
+  ]
+}

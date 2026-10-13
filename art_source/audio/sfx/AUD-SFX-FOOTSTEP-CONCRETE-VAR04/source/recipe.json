@@ -1,0 +1,56 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "footstep_concrete",
+    "name": "footstep_concrete",
+    "events": [
+      "player.footstep"
+    ],
+    "preset": "footstep",
+    "duration": 0.22,
+    "variants": 4,
+    "peak_db": -15,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "player domain",
+    "trigger_fact": "player.footstep confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "material": "concrete",
+    "frequency": 160
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-FOOTSTEP-CONCRETE-VAR04",
+    "key": "footstep_concrete",
+    "variant": 3,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-CONCRETE-VAR04/source/footstep_concrete_alt04_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/footstep_concrete_alt04_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.22,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "ebe80fea76ad7a2ab44a0bf949de0666d87713c9b7bf4a5755837833db383a18",
+    "source_sha256": "8aedfa746dc571af87428c3d9b288d31710ef04e076007ca30c82e32c8b5d63b",
+    "seed": 4270575732,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -15,
+    "event_ids": [
+      "player.footstep"
+    ],
+    "sound_set_id": "SFXSET-FOOTSTEP-CONCRETE"
+  },
+  "stems": [
+    "sole",
+    "heel",
+    "toe_grit"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "enemy_shield",
+    "name": "enemy_shield",
+    "events": [
+      "enemy.shield_raise"
+    ],
+    "preset": "power",
+    "duration": 0.49,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "enemy domain",
+    "trigger_fact": "enemy.shield_raise confirmed edge; only the domain owner may emit",
+    "legacy": false
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-ENEMY-SHIELD",
+    "key": "enemy_shield",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-SHIELD/source/enemy_shield_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_shield_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.49,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "11c45b76905fa8348c95626f33c1e15b0d02c92ff40266a08096379b172c56ad",
+    "source_sha256": "9bbc1b39c68672fd33436c937d55e3d6624e397ccf3e7a6c2358e67d6d4e20ae",
+    "seed": 2297910454,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "enemy.shield_raise"
+    ],
+    "sound_set_id": "SFXSET-ENEMY-SHIELD"
+  },
+  "stems": [
+    "mechanism",
+    "coil",
+    "electronic_identity"
+  ]
+}

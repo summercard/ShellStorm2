@@ -1,0 +1,59 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "ui_click",
+    "name": "按钮确认",
+    "events": [
+      "ui.action.confirm"
+    ],
+    "preset": "ui",
+    "duration": 0.14,
+    "variants": 1,
+    "peak_db": -16,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "UIStyleFactory",
+    "trigger_fact": "ui.action.confirm confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "notes": [
+      1175,
+      1760
+    ],
+    "step": 0.024,
+    "decay": 0.022
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-UI-CLICK",
+    "key": "ui_click",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-UI-CLICK/source/ui_click_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/ui_click_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.14,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "48807664a48f6cc543d6b9e495d3b48c6767ae0d6c70d1f1dde5c06b8ad4e042",
+    "source_sha256": "d1cd5d343c1c411e236f26c205337ea0f937666480d87021eaa57d336e06b6c0",
+    "seed": 2420758781,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -16,
+    "event_ids": [
+      "ui.action.confirm"
+    ],
+    "sound_set_id": "SFXSET-UI-CLICK"
+  },
+  "stems": [
+    "electronic_identity",
+    "mechanism"
+  ]
+}

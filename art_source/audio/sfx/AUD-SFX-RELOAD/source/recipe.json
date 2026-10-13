@@ -1,0 +1,58 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "reload",
+    "name": "换弹",
+    "events": [
+      "combat.weapon.reload_start"
+    ],
+    "preset": "mechanical",
+    "duration": 0.55,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "listener_follow",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "combat.weapon.reload_start confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "frequency": 480,
+    "clicks": [
+      0.12,
+      0.24,
+      0.38
+    ]
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-RELOAD",
+    "key": "reload",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-RELOAD/source/reload_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/reload_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.55,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "6d911ea18214ac787383c6fee3d7bc42013b7c36c9fa1786a9f309bc5ea83b74",
+    "source_sha256": "d98fc58ddadbc559ae4c9bb1631fcd2faad31a92d5aaf086d8977caee03fe718",
+    "seed": 3252393959,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "listener_follow",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "combat.weapon.reload_start"
+    ],
+    "sound_set_id": "SFXSET-RELOAD"
+  },
+  "stems": [
+    "mechanism"
+  ]
+}

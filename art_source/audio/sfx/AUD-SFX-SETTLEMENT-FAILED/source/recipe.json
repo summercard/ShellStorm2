@@ -1,0 +1,61 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "settlement_failed",
+    "name": "settlement_failed",
+    "events": [
+      "run.settlement.failed"
+    ],
+    "preset": "signal",
+    "duration": 0.81,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P0",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "run domain",
+    "trigger_fact": "run.settlement.failed confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "notes": [
+      349,
+      329,
+      349,
+      261
+    ],
+    "step": 0.16,
+    "decay": 0.06
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-SETTLEMENT-FAILED",
+    "key": "settlement_failed",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-SETTLEMENT-FAILED/source/settlement_failed_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/settlement_failed_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.81,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "a9bf75e6fc8db27342df7bbd98a8ac0b9fd5eb63592742f30a7bd7410f78bfc0",
+    "source_sha256": "e3dc9f1762396e7773fbb3dd9c30b3e9bdafbaa80f7437f081bde076de8d430f",
+    "seed": 430167134,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "run.settlement.failed"
+    ],
+    "sound_set_id": "SFXSET-SETTLEMENT-FAILED"
+  },
+  "stems": [
+    "electronic_identity",
+    "relay"
+  ]
+}

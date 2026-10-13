@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "footstep_debris",
+    "name": "footstep_debris",
+    "events": [
+      "player.footstep.debris"
+    ],
+    "preset": "footstep",
+    "duration": 0.22,
+    "variants": 4,
+    "peak_db": -15,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "player domain",
+    "trigger_fact": "player.footstep.debris confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "material": "debris",
+    "frequency": 200
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-FOOTSTEP-DEBRIS-VAR04",
+    "key": "footstep_debris",
+    "variant": 3,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-DEBRIS-VAR04/source/footstep_debris_alt04_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/footstep_debris_alt04_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.22,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "7c026061f030bbb53df13fe89959c41bf0429ec28bfb7a60ad65d8ded230ad3b",
+    "source_sha256": "61d575a9ecf485ae614db7b440db66d42d6fb42ec9bf48abaa10aaf444636dfd",
+    "seed": 972447883,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -15,
+    "event_ids": [
+      "player.footstep.debris"
+    ],
+    "sound_set_id": "SFXSET-FOOTSTEP-DEBRIS"
+  },
+  "stems": [
+    "sole",
+    "heel",
+    "toe_grit",
+    "grit"
+  ]
+}

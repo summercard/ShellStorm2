@@ -1,0 +1,54 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "player_dash",
+    "name": "玩家闪避",
+    "events": [
+      "player.dash"
+    ],
+    "preset": "dash",
+    "duration": 0.29,
+    "variants": 3,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "listener_follow",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "player.dash confirmed edge; only the domain owner may emit",
+    "legacy": true
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-PLAYER-DASH",
+    "key": "player_dash",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-DASH/source/player_dash_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/player_dash_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.29,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "bcf6291e287a6bc5e1c65e96e70f402efa04f63b48080306cb651968422e8e16",
+    "source_sha256": "e54cd470fe345a2b371c409bcdbd9533d09696113e51d42904dcb0c964fb8371",
+    "seed": 540329866,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "listener_follow",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "player.dash"
+    ],
+    "sound_set_id": "SFXSET-PLAYER-DASH"
+  },
+  "stems": [
+    "air",
+    "weight",
+    "cloth"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "amb_boss_arena",
+    "name": "amb_boss_arena",
+    "events": [
+      "amb.boss_arena"
+    ],
+    "preset": "ambience",
+    "duration": 6,
+    "variants": 1,
+    "peak_db": -26,
+    "priority": "P2",
+    "spatial_mode": "world_bed",
+    "bus": "Ambience",
+    "max_voices": 2,
+    "owner": "amb domain",
+    "trigger_fact": "amb.boss_arena confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 41,
+    "cutoff": 1200,
+    "pulse": true
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-AMB-BOSS-ARENA",
+    "key": "amb_boss_arena",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-BOSS-ARENA/source/amb_boss_arena_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/amb_boss_arena_v001.ogg",
+    "version": 1,
+    "duration_sec": 6,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "881915488b164267ad44681d47ad82e47b22c6479cd78d10ff23df1f7b6a6106",
+    "source_sha256": "3e8ce8e38a2125617821723ac46cbe9a12166381e966276428eadbc691a9ca0c",
+    "seed": 3152737480,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_bed",
+    "loop": true,
+    "peak_target_db": -26,
+    "event_ids": [
+      "amb.boss_arena"
+    ],
+    "sound_set_id": "SFXSET-AMB-BOSS-ARENA"
+  },
+  "stems": [
+    "room_air",
+    "machinery",
+    "beacon"
+  ]
+}

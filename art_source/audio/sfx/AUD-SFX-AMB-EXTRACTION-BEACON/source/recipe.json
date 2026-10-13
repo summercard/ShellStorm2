@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "amb_extraction_beacon",
+    "name": "amb_extraction_beacon",
+    "events": [
+      "amb.extraction_beacon"
+    ],
+    "preset": "ambience",
+    "duration": 6,
+    "variants": 1,
+    "peak_db": -26,
+    "priority": "P2",
+    "spatial_mode": "world_bed",
+    "bus": "Ambience",
+    "max_voices": 2,
+    "owner": "amb domain",
+    "trigger_fact": "amb.extraction_beacon confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 80,
+    "cutoff": 1800,
+    "pulse": true
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-AMB-EXTRACTION-BEACON",
+    "key": "amb_extraction_beacon",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-EXTRACTION-BEACON/source/amb_extraction_beacon_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/amb_extraction_beacon_v001.ogg",
+    "version": 1,
+    "duration_sec": 6,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "1ebcf0191c2321ffe9d0c55d1930831f123d3f8b4ee8cd4b5e0110374a6df565",
+    "source_sha256": "4cbb6e9a83180bbf00cc82a02fa0ff01a935c9363002fc528a04cde451df5d42",
+    "seed": 95498813,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_bed",
+    "loop": true,
+    "peak_target_db": -26,
+    "event_ids": [
+      "amb.extraction_beacon"
+    ],
+    "sound_set_id": "SFXSET-AMB-EXTRACTION-BEACON"
+  },
+  "stems": [
+    "room_air",
+    "machinery",
+    "beacon"
+  ]
+}

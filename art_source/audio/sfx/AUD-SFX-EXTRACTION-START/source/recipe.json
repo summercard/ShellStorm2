@@ -1,0 +1,61 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "extraction_start",
+    "name": "撤离开始",
+    "events": [
+      "run.extraction.started"
+    ],
+    "preset": "signal",
+    "duration": 1.05,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "run.extraction.started confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "notes": [
+      392,
+      392,
+      523,
+      784
+    ],
+    "step": 0.18,
+    "decay": 0.11
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-EXTRACTION-START",
+    "key": "extraction_start",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-EXTRACTION-START/source/extraction_start_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/extraction_start_v002.ogg",
+    "version": 2,
+    "duration_sec": 1.05,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "449fcee06e0f4cc6a0740fe9ad3c1e1e4a53f8a95818dd5b29d2c366b3457036",
+    "source_sha256": "377f4b490ecdc84d62f642b2fe17f9da8d0a0d350672aab35a6cf69a365203e4",
+    "seed": 3530083348,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "run.extraction.started"
+    ],
+    "sound_set_id": "SFXSET-EXTRACTION-START"
+  },
+  "stems": [
+    "electronic_identity",
+    "relay"
+  ]
+}

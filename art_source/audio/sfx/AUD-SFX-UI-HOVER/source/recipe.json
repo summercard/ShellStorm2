@@ -1,0 +1,59 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "ui_hover",
+    "name": "重要按钮悬停",
+    "events": [
+      "ui.action.hover",
+      "ui.action.focus"
+    ],
+    "preset": "ui",
+    "duration": 0.09,
+    "variants": 1,
+    "peak_db": -20,
+    "priority": "P2",
+    "spatial_mode": "ui_2d",
+    "bus": "UI",
+    "max_voices": 2,
+    "owner": "UIStyleFactory",
+    "trigger_fact": "ui.action.hover|ui.action.focus confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "notes": [
+      1760
+    ],
+    "decay": 0.013
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-UI-HOVER",
+    "key": "ui_hover",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-UI-HOVER/source/ui_hover_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/ui_hover_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.09,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "2772ac905f02bc0a152ca70a3c000c44cfadb570c1fef11bad8cb4ef11c3723a",
+    "source_sha256": "d057faf3a79b94205de333c0c74a18b22e87f61af4cf1894dc4d192621e62c1d",
+    "seed": 2750093430,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -20,
+    "event_ids": [
+      "ui.action.hover",
+      "ui.action.focus"
+    ],
+    "sound_set_id": "SFXSET-UI-HOVER"
+  },
+  "stems": [
+    "electronic_identity",
+    "mechanism"
+  ]
+}

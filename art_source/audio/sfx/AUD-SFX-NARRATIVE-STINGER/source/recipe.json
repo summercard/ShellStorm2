@@ -1,0 +1,63 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "narrative_stinger",
+    "name": "narrative_stinger",
+    "events": [
+      "narrative.stinger"
+    ],
+    "preset": "stinger",
+    "duration": 1.2,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P1",
+    "spatial_mode": "ui_2d",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "narrative domain",
+    "trigger_fact": "narrative.stinger confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 82,
+    "notes": [
+      164,
+      246,
+      330
+    ],
+    "step": 0.14,
+    "decay": 0.2
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-NARRATIVE-STINGER",
+    "key": "narrative_stinger",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-NARRATIVE-STINGER/source/narrative_stinger_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/narrative_stinger_v001.ogg",
+    "version": 1,
+    "duration_sec": 1.2,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "c1cf6dedd98dfbb5ccc360f8d7d9c88c5191f7d24163aed65b5892c1f6d0c04a",
+    "source_sha256": "65614ff68fc69c49330b1bc1c0848a2a4ddc6e7781de56221da0647191c4e982",
+    "seed": 302601691,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "ui_2d",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "narrative.stinger"
+    ],
+    "sound_set_id": "SFXSET-NARRATIVE-STINGER"
+  },
+  "stems": [
+    "electronic_identity",
+    "industrial_weight",
+    "impact_air",
+    "steel_resonance"
+  ]
+}

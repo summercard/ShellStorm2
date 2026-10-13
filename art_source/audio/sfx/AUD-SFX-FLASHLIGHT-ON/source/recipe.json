@@ -1,0 +1,56 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "flashlight_on",
+    "name": "flashlight_on",
+    "events": [
+      "player.flashlight_on"
+    ],
+    "preset": "mechanical",
+    "duration": 0.15,
+    "variants": 1,
+    "peak_db": -17,
+    "priority": "P2",
+    "spatial_mode": "listener_follow",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "player domain",
+    "trigger_fact": "player.flashlight_on confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "frequency": 1700,
+    "clicks": [
+      0.035
+    ]
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-FLASHLIGHT-ON",
+    "key": "flashlight_on",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FLASHLIGHT-ON/source/flashlight_on_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/flashlight_on_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.15,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "f53207af8601b61fc5caed026d0b8e619c814a609a2bd71eff7a26efa4c42369",
+    "source_sha256": "9903b7c11aaf105d0dc1c72816d812d6fc9e7df31df4eec5a91358315463f3f2",
+    "seed": 4197204637,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "listener_follow",
+    "loop": false,
+    "peak_target_db": -17,
+    "event_ids": [
+      "player.flashlight_on"
+    ],
+    "sound_set_id": "SFXSET-FLASHLIGHT-ON"
+  },
+  "stems": [
+    "mechanism"
+  ]
+}

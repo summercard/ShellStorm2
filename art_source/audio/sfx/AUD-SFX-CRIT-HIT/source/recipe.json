@@ -1,0 +1,57 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "crit_hit",
+    "name": "暴击",
+    "events": [
+      "enemy.crit"
+    ],
+    "preset": "impact",
+    "duration": 0.25,
+    "variants": 3,
+    "peak_db": -12,
+    "priority": "P2",
+    "spatial_mode": "world_3d",
+    "bus": "SFX",
+    "max_voices": 5,
+    "owner": "AudioManager compatibility caller",
+    "trigger_fact": "enemy.crit confirmed edge; only the domain owner may emit",
+    "legacy": true,
+    "frequency": 460,
+    "weight": 0.6
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-CRIT-HIT",
+    "key": "crit_hit",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-CRIT-HIT/source/crit_hit_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/crit_hit_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.25,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "8d0d6fdeca0163f0a75bfad2f8a2093f8497c3ef8d5134ffc899b07f5031390f",
+    "source_sha256": "4789629f47414aa5c9eb38032734ae67790f2e30e3532f44ba8cbbeff0a6eac0",
+    "seed": 4226101798,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -12,
+    "event_ids": [
+      "enemy.crit"
+    ],
+    "sound_set_id": "SFXSET-CRIT-HIT"
+  },
+  "stems": [
+    "mass",
+    "contact",
+    "fracture",
+    "contact_ring"
+  ]
+}

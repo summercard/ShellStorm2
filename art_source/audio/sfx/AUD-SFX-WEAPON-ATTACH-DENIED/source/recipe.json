@@ -1,0 +1,59 @@
+{
+  "renderer": "tools/asset_pipeline/build_sfx_library.py",
+  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
+  "spec": {
+    "key": "weapon_attach_denied",
+    "name": "weapon_attach_denied",
+    "events": [
+      "combat.weapon.attach_denied"
+    ],
+    "preset": "signal",
+    "duration": 0.27,
+    "variants": 1,
+    "peak_db": -11,
+    "priority": "P2",
+    "spatial_mode": "listener_follow",
+    "bus": "SFX",
+    "max_voices": 2,
+    "owner": "combat domain",
+    "trigger_fact": "combat.weapon.attach_denied confirmed edge; only the domain owner may emit",
+    "legacy": false,
+    "notes": [
+      622,
+      587
+    ],
+    "step": 0.085,
+    "decay": 0.035
+  },
+  "asset": {
+    "asset_id": "AUD-SFX-WEAPON-ATTACH-DENIED",
+    "key": "weapon_attach_denied",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-WEAPON-ATTACH-DENIED/source/weapon_attach_denied_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/weapon_attach_denied_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.27,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "5cdbbf2b668b0e954670023ed03e78ed3ce9cbcef49966f141011cb34e506cc2",
+    "source_sha256": "3c3d2ef8038681ac1e4fe80d3ba5d8a9c94e69b17081784e194d6175f6b30ed9",
+    "seed": 3510672846,
+    "license_source": "Original deterministic DSP synthesis; no external samples",
+    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "status": "imported_pending_listening",
+    "spatial_mode": "listener_follow",
+    "loop": false,
+    "peak_target_db": -11,
+    "event_ids": [
+      "combat.weapon.attach_denied"
+    ],
+    "sound_set_id": "SFXSET-WEAPON-ATTACH-DENIED"
+  },
+  "stems": [
+    "electronic_identity",
+    "relay"
+  ]
+}
