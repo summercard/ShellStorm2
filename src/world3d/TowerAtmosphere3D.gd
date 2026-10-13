@@ -71,6 +71,11 @@ var _base_interior_volumetric_fog_density := BASE_INTERIOR_VOLUMETRIC_FOG_DENSIT
 var _expedition_dark_distant_enabled := false
 var _authored_distance_fog_override := -1.0
 var _authored_volumetric_fog_override := -1.0
+## 调试面板「当前场景雾气」的临时覆盖（-1 = 未启用）。最终优先级最高，
+## 且只活在本场景节点上 —— 离开场景/退出游戏节点销毁即自动复原，
+## 不写存档、不写 cfg，与 `_authored_*`（房型自带值）互不干涉。
+var _debug_distance_fog_override := -1.0
+var _debug_volumetric_fog_override := -1.0
 var _room_fog_profile_key := ""
 var _room_fog_tween: Tween
 var _room_fog_color := FOG_LIGHT_COLOR
@@ -119,6 +124,36 @@ func set_fog_profile_override(density: float, volumetric_density: float) -> void
 	_authored_distance_fog_override = density
 	_authored_volumetric_fog_override = volumetric_density
 	_apply_base_fog_density()
+
+
+## 调试面板「当前场景雾气」：临时覆盖距离雾 / 体积雾两套值。
+## 只改本场景运行期的 Environment，不做任何持久化；节点随场景销毁即复原。
+func set_debug_scene_fog_override(distance_density: float, volumetric_density: float) -> void:
+	_debug_distance_fog_override = maxf(distance_density, 0.0)
+	_debug_volumetric_fog_override = maxf(volumetric_density, 0.0)
+	_apply_base_fog_density()
+
+
+func clear_debug_scene_fog_override() -> void:
+	if not has_debug_scene_fog_override():
+		return
+	_debug_distance_fog_override = -1.0
+	_debug_volumetric_fog_override = -1.0
+	_apply_base_fog_density()
+
+
+func has_debug_scene_fog_override() -> bool:
+	return _debug_distance_fog_override >= 0.0 or _debug_volumetric_fog_override >= 0.0
+
+
+## 读取本场景 Environment 上「此刻实际生效」的两套雾值（面板打开时回填滑条）。
+func get_scene_fog_snapshot() -> Dictionary:
+	return {
+		"distance": _environment.fog_density if _environment != null else 0.0,
+		"volumetric": (
+			float(_environment.get("volumetric_fog_density")) if _environment != null else 0.0
+		),
+	}
 
 ## 仅在没有全局 GameTimeManager 的孤立验收场景里使用。
 @export_range(0.0, 24.0, 0.1) var time_of_day := 17.0
@@ -424,6 +459,11 @@ func _apply_base_fog_density() -> void:
 		_authored_distance_fog_override * _distance_fog_quality_multiplier
 		if _authored_distance_fog_override >= 0.0 else distance_density
 	)
+	# 调试覆盖最后落地、且不乘画质倍率：面板滑条显示值必须逐字等于画面值。
+	if _debug_distance_fog_override >= 0.0:
+		_environment.fog_density = _debug_distance_fog_override
+	if _debug_volumetric_fog_override >= 0.0:
+		volumetric_density = _debug_volumetric_fog_override
 	# GraphicsSettingsManager 会从该 meta 重放体积雾值；同步更新可避免切画质时闪回室外浓度。
 	_environment.set_meta("presentation_volumetric_fog_density", volumetric_density)
 	_environment.set("volumetric_fog_density", volumetric_density)

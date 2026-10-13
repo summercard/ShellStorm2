@@ -494,6 +494,16 @@ var search_facilities_enabled := true
 ## 本房**初始灯就亮**（不经玩家按开关、不播启动序列）。给「开局第一间房」用 ——
 ## 玩家一睁眼不该是黑的。默认 false = 老行为（只有 STAIR_LOBBY / BOSS 默认亮）。
 var authored_room_light_on := false
+## 本房**是否持有可交互的墙面灯开关**。false = 常亮房：既有静态开关会被摘掉、
+## 运行时也不再自建，灯组一律点亮（玩家没有关灯入口）。
+##
+## 声明落在房间静态布局的 `metadata/authored_room_light_switch`，
+## 缺省 true = 保持旧行为（按钮房型默认自建开关）。
+## 先例：98F 区块00 第三间（`ENV-BATTLE-BLOCK00-ART-LAYOUT-3D` / corridor）。
+##
+## 🔴 只做「摘开关 + 亮灯」，**不动** `_room_lights` 的构成与数值：
+##    灯型、能量、范围、阴影仍由房型公式或静态布局决定。
+var authored_room_light_switch := true
 ## 主通行层地砖格心（房间局部 Y=0，与装配吸附规则一致），不含多层坑底砖。
 ## 房间归属仍兼容无清单的旧矩形房；刷怪对 authored_layout_shell 空地板则拒绝回退。
 var _authored_tile_cells: Array[Vector3] = []
@@ -1048,6 +1058,22 @@ func _authored_static_layout_root() -> Node3D:
 	return null
 
 
+## 在**尚未 rename、尚未入树**的静态布局实例里按「根优先、命中即止」找一条房间级 meta。
+##
+## 用途：`f00_boss_room_02_static_layout.tscn` 这类**共享房**被各关卡用薄绑定壳实例化
+## （99 的绑定壳只是 `[node name="BossRoom02" instance=...]`）。房间级声明写在共享房根上
+## 时，只读绑定壳根会漏掉 —— 同一张房图在不同关卡里就会表现不一致。
+## 找到返回原值（可能是 `false`，所以**不能**用 `false` 当「没找到」），没找到返回 `null`。
+func _find_static_layout_meta(node: Node, key: String) -> Variant:
+	if node.has_meta(key):
+		return node.get_meta(key)
+	for child in node.get_children():
+		var found: Variant = _find_static_layout_meta(child, key)
+		if found != null:
+			return found
+	return null
+
+
 ## 收集节点自身与全部后代里的墙面灯开关（前序、顺序稳定）。
 func _collect_room_light_switches(root: Node) -> Array[RoomLightSwitch3D]:
 	var found: Array[RoomLightSwitch3D] = []
@@ -1056,6 +1082,23 @@ func _collect_room_light_switches(root: Node) -> Array[RoomLightSwitch3D]:
 	for child in root.get_children():
 		found.append_array(_collect_room_light_switches(child))
 	return found
+
+
+## 常亮房：把本房所有已认领的墙面开关摘掉并清空登记，且**不**再自建。
+##
+## 与 `_build_facility_light_switches()` 的差别：那个是「重建」，这个是「废止」——
+## 静态布局自持的开关节点随壳体常驻，`queue_free()` 才是真的让它从场景消失；
+## 只把 `_light_switch` 置空会在下一帧被 `_adopt_authored_room_devices()` 重新认领回来。
+func _release_light_switches() -> void:
+	var released := 0
+	for light_switch in _all_room_light_switches():
+		if light_switch != null and is_instance_valid(light_switch):
+			light_switch.queue_free()
+			released += 1
+	_light_switches.clear()
+	_light_switch = null
+	if released > 0:
+		print("[DungeonRoom3D] %s 常亮房：摘除 %d 个墙面开关" % [room_id, released])
 
 
 ## 建齐基地成对开关（西墙→100F、东墙→98F），全部直挂房间根、不走出现流程。
@@ -2197,9 +2240,22 @@ func _build_shell() -> void:
 						"walk_surface_y_m",
 						"walkable_navigation_polygons",
 						"fog_profile",
+						"authored_room_light_switch",
+						"walk_surface_owner",
+						"walk_surface_scene",
 					]:
 						if static_layout.has_meta(key):
 							set_meta(key, static_layout.get_meta(key))
+					# 墙体开关声明比 `fog_profile` 多一步回退：绑定壳（如测试关卡 99 的
+					# `f00_boss_static_layout.tscn`）里房间是**实例进来的子场景**，声明通常
+					# 只写在共享房自己的根上。只读根会把这种结构漏掉 ⇒ 这里按「根优先，
+					# 命中即止」向下找一次，保证同一份共享房被任意关卡绑定时行为一致。
+					var declared_light_switch: Variant = _find_static_layout_meta(
+						static_layout, "authored_room_light_switch"
+					)
+					if declared_light_switch != null:
+						authored_room_light_switch = bool(declared_light_switch)
+						set_meta("authored_room_light_switch", authored_room_light_switch)
 					# 安全房 v007 的房间级事实（版本/旋转步/四角 L/房间包数）随静态布局
 					# 保存，加载后回填到房间节点：快照与入口房验收按房间 meta 读取它们。
 					for meta_name in static_layout.get_meta_list():
@@ -4862,16 +4918,24 @@ func _build_content() -> void:
 	elif size_class != "rooftop":
 		# 房间声明的「初始灯亮」优先（开局第一间房），其次才是按房型的默认。
 		var starts_on := authored_room_light_on or room_type in ["STAIR_LOBBY", "BOSS"]
-		if _light_switch == null:
-			# 静态布局没有开关（程序化房 / 尚未迁移的旧静态布局）：沿用运行时自建
-			# 与包围盒落位。静态布局带开关时 `_adopt_authored_room_devices()` 已认领，
-			# 开关随壳体常驻，这里不再重复实例化、也不重复 add_child。
-			_light_switch = LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
-			_light_switch.name = "RoomLightSwitch3D"
-			_place_light_switch(_light_switch, dimensions)
-			_add_runtime_detail_child(_light_switch)
-		_light_switch.configure_group(_room_lights, starts_on)
-		_bind_light_switch_signal()
+		if not authored_room_light_switch:
+			# 常亮房（静态布局声明 `metadata/authored_room_light_switch = false`）：
+			# 既要**拆掉**已认领的静态开关（不拆就是「开关还在、只是不让点」），
+			# 也不走下面的自建分支；灯组一律点亮，灯型/数值一概不动。
+			_release_light_switches()
+			for light in _room_lights:
+				light.set_light_enabled(true)
+		else:
+			if _light_switch == null:
+				# 静态布局没有开关（程序化房 / 尚未迁移的旧静态布局）：沿用运行时自建
+				# 与包围盒落位。静态布局带开关时 `_adopt_authored_room_devices()` 已认领，
+				# 开关随壳体常驻，这里不再重复实例化、也不重复 add_child。
+				_light_switch = LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
+				_light_switch.name = "RoomLightSwitch3D"
+				_place_light_switch(_light_switch, dimensions)
+				_add_runtime_detail_child(_light_switch)
+			_light_switch.configure_group(_room_lights, starts_on)
+			_bind_light_switch_signal()
 	# 安全房原先还有程序画的地面标线 `_build_stair_lobby_markings()`：
 	# 正中一条 StairLobbyRouteGuide（13.00×0.035×1.20m）+ 两侧门内各一条
 	# StairLobbyThresholdGuide（0.26×0.045×4.2m），都是青色自发光、离地几厘米。

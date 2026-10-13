@@ -1,11 +1,17 @@
 {
   "schema": "shellstorm2.reference_item_kit.source_manifest",
-  "schema_version": 2,
+  "schema_version": 3,
   "source_blend": "art_source/items_weapons/props/reference_kit/source/prp_reference_item_kit_source_v001.blend",
   "reference_image": "C:/Users/zhuangmenghong/.workbuddy/clipboard-images/clipboard-2026-10-13T10-34-36-193Z-1dc7482b.jpg",
   "asset_count": 31,
   "triangle_budget_per_asset": 100,
   "max_triangles_used": 96,
+  "style_rule": {
+    "decal_geometry": "removed",
+    "thin_edges": "forbidden",
+    "min_geometry_thickness_m": 0.025,
+    "note": "无兔标/星形/闪电/心形挂件等细小图案几何；三角面投入到倒角体块、多边圆柱与粗拱件等大轮廓。"
+  },
   "array_layout": {
     "columns": 9,
     "rows": 4,
@@ -42,7 +48,7 @@
         "height": 0.44
       },
       "triangles": 96,
-      "mesh_parts": 6,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
@@ -80,12 +86,11 @@
         "depth": 0.22,
         "height": 0.28
       },
-      "triangles": 96,
-      "mesh_parts": 7,
+      "triangles": 92,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
-        "02_细腻哑光_道具大面",
-        "03_清漆反光_道具点缀"
+        "02_细腻哑光_道具大面"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -119,13 +124,12 @@
         "depth": 0.18,
         "height": 0.34
       },
-      "triangles": 92,
-      "mesh_parts": 5,
+      "triangles": 96,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
-        "03_清漆反光_道具点缀",
-        "04_柔和自发光_道具UI"
+        "03_清漆反光_道具点缀"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -160,11 +164,10 @@
         "height": 0.42
       },
       "triangles": 96,
-      "mesh_parts": 6,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
-        "02_细腻哑光_道具大面",
-        "04_柔和自发光_道具UI"
+        "02_细腻哑光_道具大面"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -198,12 +201,11 @@
         "depth": 0.22,
         "height": 0.28
       },
-      "triangles": 96,
-      "mesh_parts": 7,
+      "triangles": 92,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
-        "02_细腻哑光_道具大面",
-        "03_清漆反光_道具点缀"
+        "02_细腻哑光_道具大面"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -237,12 +239,11 @@
         "depth": 0.3,
         "height": 0.34
       },
-      "triangles": 92,
-      "mesh_parts": 5,
+      "triangles": 96,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
-        "03_清漆反光_道具点缀",
         "04_柔和自发光_道具UI"
       ],
       "animation_tier": "tier_0_static",
@@ -277,11 +278,10 @@
         "depth": 0.14,
         "height": 0.1
       },
-      "triangles": 92,
+      "triangles": 80,
       "mesh_parts": 5,
       "material_roles_used": [
-        "01_精工金属_道具骨架",
-        "03_清漆反光_道具点缀"
+        "01_精工金属_道具骨架"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -315,10 +315,9 @@
         "depth": 0.28,
         "height": 0.6
       },
-      "triangles": 84,
-      "mesh_parts": 6,
+      "triangles": 96,
+      "mesh_parts": 4,
       "material_roles_used": [
-        "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面",
         "03_清漆反光_紫粉点缀"
       ],
@@ -354,8 +353,8 @@
         "depth": 0.33,
         "height": 0.74
       },
-      "triangles": 92,
-      "mesh_parts": 6,
+      "triangles": 84,
+      "mesh_parts": 3,
       "material_roles_used": [
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面",
@@ -393,10 +392,9 @@
         "depth": 0.38,
         "height": 0.88
       },
-      "triangles": 84,
-      "mesh_parts": 6,
+      "triangles": 92,
+      "mesh_parts": 3,
       "material_roles_used": [
-        "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面",
         "03_清漆反光_紫粉点缀"
       ],
@@ -432,11 +430,10 @@
         "depth": 0.17,
         "height": 0.17
       },
-      "triangles": 96,
-      "mesh_parts": 6,
+      "triangles": 92,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
-        "03_清漆反光_道具点缀",
         "04_柔和自发光_道具UI"
       ],
       "animation_tier": "tier_0_static",
@@ -472,7 +469,7 @@
         "height": 0.17
       },
       "triangles": 92,
-      "mesh_parts": 5,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "04_柔和自发光_道具UI"
@@ -509,11 +506,10 @@
         "depth": 0.17,
         "height": 0.17
       },
-      "triangles": 96,
-      "mesh_parts": 5,
+      "triangles": 92,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
-        "03_清漆反光_道具点缀",
         "04_柔和自发光_道具UI"
       ],
       "animation_tier": "tier_0_static",
@@ -548,8 +544,8 @@
         "depth": 0.13,
         "height": 0.13
       },
-      "triangles": 88,
-      "mesh_parts": 5,
+      "triangles": 96,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
@@ -587,13 +583,12 @@
         "depth": 0.14,
         "height": 0.16
       },
-      "triangles": 96,
-      "mesh_parts": 6,
+      "triangles": 92,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
-        "03_清漆反光_道具点缀",
-        "04_柔和自发光_道具UI"
+        "03_清漆反光_道具点缀"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -627,12 +622,12 @@
         "depth": 0.16,
         "height": 0.16
       },
-      "triangles": 96,
-      "mesh_parts": 6,
+      "triangles": 92,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
-        "04_柔和自发光_道具UI"
+        "03_清漆反光_道具点缀"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -666,12 +661,11 @@
         "depth": 0.13,
         "height": 0.13
       },
-      "triangles": 88,
-      "mesh_parts": 5,
+      "triangles": 96,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
-        "02_细腻哑光_道具大面",
-        "03_清漆反光_道具点缀"
+        "02_细腻哑光_道具大面"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -705,12 +699,11 @@
         "depth": 0.15,
         "height": 0.15
       },
-      "triangles": 88,
+      "triangles": 96,
       "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
-        "02_细腻哑光_道具大面",
-        "04_柔和自发光_道具UI"
+        "02_细腻哑光_道具大面"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -745,11 +738,10 @@
         "height": 0.16
       },
       "triangles": 88,
-      "mesh_parts": 5,
+      "mesh_parts": 4,
       "material_roles_used": [
         "01_精工金属_道具骨架",
-        "02_细腻哑光_道具大面",
-        "03_清漆反光_道具点缀"
+        "02_细腻哑光_道具大面"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -783,8 +775,8 @@
         "depth": 0.21,
         "height": 0.19
       },
-      "triangles": 92,
-      "mesh_parts": 7,
+      "triangles": 96,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "03_清漆反光_道具点缀"
@@ -821,10 +813,9 @@
         "depth": 0.17,
         "height": 0.19
       },
-      "triangles": 72,
-      "mesh_parts": 5,
+      "triangles": 84,
+      "mesh_parts": 3,
       "material_roles_used": [
-        "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
         "03_清漆反光_道具点缀"
       ],
@@ -860,12 +851,10 @@
         "depth": 0.15,
         "height": 0.19
       },
-      "triangles": 88,
-      "mesh_parts": 6,
+      "triangles": 96,
+      "mesh_parts": 4,
       "material_roles_used": [
-        "01_精工金属_道具骨架",
-        "03_清漆反光_道具点缀",
-        "04_柔和自发光_道具UI"
+        "01_精工金属_道具骨架"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -900,11 +889,10 @@
         "height": 0.32
       },
       "triangles": 84,
-      "mesh_parts": 6,
+      "mesh_parts": 3,
       "material_roles_used": [
         "01_精工金属_道具骨架",
-        "02_细腻哑光_道具大面",
-        "03_清漆反光_道具点缀"
+        "02_细腻哑光_道具大面"
       ],
       "animation_tier": "tier_0_static",
       "front_axis": "+Z",
@@ -938,7 +926,7 @@
         "depth": 0.13,
         "height": 0.23
       },
-      "triangles": 80,
+      "triangles": 92,
       "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
@@ -976,10 +964,9 @@
         "depth": 0.07,
         "height": 0.25
       },
-      "triangles": 92,
-      "mesh_parts": 6,
+      "triangles": 88,
+      "mesh_parts": 2,
       "material_roles_used": [
-        "01_精工金属_道具骨架",
         "03_清漆反光_道具点缀"
       ],
       "animation_tier": "tier_0_static",
@@ -1011,11 +998,11 @@
       "asset_id": "WPN-GUN-BP-PISTOL",
       "dimensions_m": {
         "width": 0.34,
-        "depth": 0.05,
+        "depth": 0.13,
         "height": 0.28
       },
-      "triangles": 96,
-      "mesh_parts": 6,
+      "triangles": 76,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
@@ -1050,11 +1037,11 @@
       "asset_id": "WPN-GUN-BP-SHOTGUN",
       "dimensions_m": {
         "width": 0.34,
-        "depth": 0.05,
+        "depth": 0.13,
         "height": 0.28
       },
-      "triangles": 96,
-      "mesh_parts": 6,
+      "triangles": 76,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
@@ -1089,11 +1076,11 @@
       "asset_id": "WPN-GUN-BP-RIFLE",
       "dimensions_m": {
         "width": 0.34,
-        "depth": 0.05,
+        "depth": 0.13,
         "height": 0.28
       },
-      "triangles": 96,
-      "mesh_parts": 6,
+      "triangles": 76,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
@@ -1128,11 +1115,11 @@
       "asset_id": "WPN-GUN-BP-MACHINEGUN",
       "dimensions_m": {
         "width": 0.34,
-        "depth": 0.05,
+        "depth": 0.13,
         "height": 0.28
       },
-      "triangles": 96,
-      "mesh_parts": 6,
+      "triangles": 76,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
@@ -1167,11 +1154,11 @@
       "asset_id": "WPN-GUN-BP-SNIPER",
       "dimensions_m": {
         "width": 0.34,
-        "depth": 0.05,
+        "depth": 0.13,
         "height": 0.28
       },
-      "triangles": 96,
-      "mesh_parts": 6,
+      "triangles": 76,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",
@@ -1206,11 +1193,11 @@
       "asset_id": "WPN-GUN-BP-LAUNCHER",
       "dimensions_m": {
         "width": 0.34,
-        "depth": 0.05,
+        "depth": 0.13,
         "height": 0.28
       },
-      "triangles": 96,
-      "mesh_parts": 6,
+      "triangles": 76,
+      "mesh_parts": 5,
       "material_roles_used": [
         "01_精工金属_道具骨架",
         "02_细腻哑光_道具大面",

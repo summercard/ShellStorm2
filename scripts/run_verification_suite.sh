@@ -305,6 +305,7 @@ core_scenes=(
   verify_base_overhaul_flow
   verify_block00_floor98_assembly
   verify_character_authoring_bundle
+  verify_debug_camera_fog_panel
   verify_door_function_check
   verify_enemy_stimulus_activation
   verify_first_elite_deployment_flow

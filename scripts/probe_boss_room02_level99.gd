@@ -1,6 +1,15 @@
 extends Node
 var root:Window
 const WORK := "../ShellStorm2-work/outputs/boss_room02_import/"
+## Boss 房动态雾气档 —— **唯一权威数值在这里**（房间 TSCN 的 `metadata/fog_profile` 是真源，
+## 本常量只用于断言）。改浓度只改这两处 + 下面 manifest/文档：
+##   assets/art/.../room_instances/99/f00_boss_static_layout.tscn
+##   assets/art/.../room_instances/99/boss_room_manifest.json
+## 业主 2026-10-13 定值：距离雾 0.015、体积雾 0.01（2 秒过渡与暗红色未动）。
+## 体积雾 0.01 **高于**主塔室外档 0.009 —— 这是业主明确指定，不是笔误：
+## Boss 房要的就是比塔外更「浑」的体积感（灯一打空气层次很重）。
+const BOSS_FOG_DISTANCE_DENSITY := 0.015
+const BOSS_FOG_VOLUMETRIC_DENSITY := 0.01
 var failures:Array[String]=[]
 var checks:=0
 func _ready() -> void:
@@ -27,6 +36,18 @@ func probe() -> void:
 	check(room.get_meta("static_layout_scene_loaded",false),"99 loads shared room02 static scene")
 	check(room.get_dimensions()==Vector2(80,100),"99 room footprint")
 	check(str(room.get_meta("boss_content_id",""))=="boss_monitor002","Boss identity retained")
+	# 常亮房契约（业主 2026-10-13 指定）：Boss 房不留可交互墙面开关，灯组一律点亮。
+	# 声明真源＝`metadata/authored_room_light_switch = false`（共享房根 + 99 绑定壳各写一份）。
+	check(bool(room.get("authored_room_light_switch"))==false,"Boss room declares no light switch")
+	check(room.get("_light_switch")==null,"Boss room registers no light switch")
+	var boss_lights:Array=room.get("_room_lights")
+	check(boss_lights.size()>0,"Boss room still registers controlled lights")
+	for value in boss_lights:
+		var light:WastelandLight3D=value as WastelandLight3D
+		if light!=null:
+			check(light.light_enabled,"Boss room light stays on without a switch: "+light.name)
+	await get_tree().process_frame
+	check(room.find_children("*","RoomLightSwitch3D",true,false).is_empty(),"No RoomLightSwitch3D node remains in Boss room")
 	await get_tree().physics_frame;await get_tree().physics_frame
 	var space:=root.get_world_3d().direct_space_state
 	for local in [Vector3(0,0,-22.5),Vector3(-20,0,-22.5),Vector3(20,0,-22.5),Vector3(-38,0,-22.5),Vector3(38,0,-22.5)]:
@@ -76,8 +97,8 @@ func probe() -> void:
 	check(room.contains_world_position(tower._runtime_restore_fallback_position(room)),"Outdated saved position falls back onto real platform")
 	tower._update_base_fog_transition(0.0,false)
 	await get_tree().create_timer(2.3).timeout
-	check(env.fog_density<ordinary_fog and is_equal_approx(env.fog_density,0.003),"Independent boss fog transition")
-	check(is_equal_approx(float(env.get_meta("presentation_volumetric_fog_density",-1)),0.0002),"Boss volumetric profile retained on headless renderer")
+	check(env.fog_density<ordinary_fog and is_equal_approx(env.fog_density,BOSS_FOG_DISTANCE_DENSITY),"Independent boss fog transition")
+	check(is_equal_approx(float(env.get_meta("presentation_volumetric_fog_density",-1)),BOSS_FOG_VOLUMETRIC_DENSITY),"Boss volumetric profile retained on headless renderer")
 	var boss_fog:=env.fog_density
 	tower.player.global_position=start.global_position+Vector3.UP*0.1
 	tower._on_room_entered(start)

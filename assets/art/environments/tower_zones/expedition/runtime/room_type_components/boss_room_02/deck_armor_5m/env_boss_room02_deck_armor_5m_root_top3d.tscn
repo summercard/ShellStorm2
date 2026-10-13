@@ -22,6 +22,9 @@ metadata/front_axis_godot = "+Z"
 metadata/bounds_size_m = Vector3(5, 0.4495, 5)
 metadata/display_name_zh = "精加工甲板"
 metadata/collision_shape_count = 1
+; 承重面改由房间的一体地面碰撞持有（`boss_room_02_walk_surface.tscn`），本件只留外观。
+; 节点保留、仅停用 ⇒ collision_shape_count 与实测节点数不变（验收口径照旧）。
+metadata/walk_surface_owner = "room"
 
 [node name="ImportedModel" type="Node3D" parent="." unique_id=1415585404 instance=ExtResource("1_w7d3s")]
 
@@ -31,3 +34,4 @@ collision_mask = 0
 [node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=1941000009]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22475, 0)
 shape = SubResource("BoxShape3D_xuo54")
+disabled = true

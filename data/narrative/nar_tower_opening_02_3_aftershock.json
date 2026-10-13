@@ -1,0 +1,50 @@
+{
+  "narrative_id": "nar_tower_opening_02_3_aftershock",
+  "schema_version": 1,
+  "priority": -10,
+  "trigger": {
+    "kind": "point",
+    "point_room": "facility",
+    "point_offset": [
+      34.0,
+      0.0,
+      -2.5
+    ],
+    "radius": 2.5,
+    "height_tolerance": 1.5,
+    "once": "run"
+  },
+  "duration": 3.6,
+  "cues": [
+    {
+      "at": 0.0,
+      "do": "fx.sfx",
+      "name": "boss_phase",
+      "pitch": 0.65,
+      "volume_db": 0
+    },
+    {
+      "at": 0.0,
+      "do": "ui.subtitle",
+      "speaker": "系统",
+      "text": "轰！",
+      "auto": 0.8
+    },
+    {
+      "at": 0.0,
+      "do": "camera.shake",
+      "duration": 0.65,
+      "amplitude": 0.12
+    },
+    {
+      "at": 0.8,
+      "do": "actor.say",
+      "text": "啊！",
+      "hold": 2.6
+    },
+    {
+      "at": 3.6,
+      "do": "flow.end"
+    }
+  ]
+}

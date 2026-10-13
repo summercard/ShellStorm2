@@ -64,13 +64,30 @@ const BASE_FOG_DENSITY_MIN := 0.0
 const BASE_FOG_DENSITY_MAX := 0.05
 const BASE_FOG_DENSITY_STEP := 0.0005
 
-enum TabId { LIGHT, POSTFX, BASE_FOG, RESERVED_3 }
+# 镜头雾气 tab：当前场景雾气的滑条范围。距离雾沿用基地雾档位；
+# 体积雾跨度更小（Boss 房量级 0.0002），步进取细一档。
+const SCENE_FOG_DENSITY_MIN := 0.0
+const SCENE_FOG_DENSITY_MAX := 0.05
+const SCENE_FOG_DENSITY_STEP := 0.0005
+const SCENE_VOLUMETRIC_FOG_DENSITY_STEP := 0.0001
+## 镜头雾气页开着时，读数按这个间隔跟一次场景实际值 —— 走位换房会让雾变，
+## 只刷「读数」不刷滑条，避免跟用户正在拖的手抢。
+const CAMERA_FOG_READOUT_REFRESH_SECONDS := 0.25
+
+# 镜头平移的四个世界方向（左右按镜头当时的水平右向解算）。
+const CAMERA_PAN_UP := 0
+const CAMERA_PAN_DOWN := 1
+const CAMERA_PAN_LEFT := 2
+const CAMERA_PAN_RIGHT := 3
+
+enum TabId { LIGHT, POSTFX, BASE_FOG, RESERVED_3, CAMERA_FOG }
 
 const TAB_LABELS := {
 	TabId.LIGHT: "调整灯光",
 	TabId.POSTFX: "后处理",
 	TabId.BASE_FOG: "基地雾气",
 	TabId.RESERVED_3: "预留",
+	TabId.CAMERA_FOG: "镜头雾气",
 }
 
 var _flashlight: PlayerFlashlight3D
@@ -143,6 +160,22 @@ var _active_tab: TabId = TabId.LIGHT
 # 预留 tab（测试工具）控件引用
 var _reserved_expedition_status: Label
 
+# 镜头雾气 tab 控件引用
+var _camera_pitch_value_label: Label
+var _camera_dolly_value_label: Label
+var _camera_pan_value_label: Label
+var _scene_fog_status: Label
+var _scene_fog_density_slider: HSlider
+var _scene_fog_density_label: Label
+var _scene_volumetric_fog_density_slider: HSlider
+var _scene_volumetric_fog_density_label: Label
+
+# 镜头雾气 tab 的两个外部依赖：玩家（姿态偏移真源）与当前场景大气节点
+# （雾气临时覆盖的宿主）。两者都在用到的当帧惰性解析，不缓存跨场景的悬垂引用。
+var _player3d: Player3D
+var _atmosphere: Node
+var _readout_refresh_accumulator := 0.0
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	z_index = 2100
@@ -154,9 +187,9 @@ func _ready() -> void:
 	anchor_bottom = 0.0
 	offset_left = 18.0
 	offset_top = 18.0
-	offset_right = 380.0
+	offset_right = 468.0
 	offset_bottom = 820.0
-	custom_minimum_size = Vector2(360, 0)
+	custom_minimum_size = Vector2(430, 0)
 	_build_ui()
 	UIStyleFactory.apply_tactical_tree(self)
 	_resolve_flashlight()
@@ -170,6 +203,7 @@ func _resolve_flashlight() -> void:
 	var node := get_parent()
 	while node != null:
 		if node is Player3D:
+			_player3d = node as Player3D
 			_flashlight = node.get_node_or_null("PlayerFlashlight3D") as PlayerFlashlight3D
 			if _flashlight != null and not _has_initial:
 				_initial_beam_color = _flashlight.get_beam_color()
@@ -197,7 +231,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		_sync_from_flashlight()
 		_sync_postfx_from_manager()
 		_refresh_reserved_status()
+		if _active_tab == TabId.CAMERA_FOG:
+			_refresh_camera_value_labels()
+			_sync_scene_fog_from_scene()
 	get_viewport().set_input_as_handled()
+
+
+## 镜头雾气页的活读数：只在「面板可见 + 该页激活」时按固定间隔跑，
+## 页面没开时一帧都不多花。
+func _process(delta: float) -> void:
+	if not visible or _active_tab != TabId.CAMERA_FOG:
+		return
+	_readout_refresh_accumulator += delta
+	if _readout_refresh_accumulator < CAMERA_FOG_READOUT_REFRESH_SECONDS:
+		return
+	_readout_refresh_accumulator = 0.0
+	_refresh_camera_value_labels()
+	_refresh_scene_fog_status()
+
 
 func _sync_from_flashlight() -> void:
 	if _flashlight == null:
@@ -381,6 +432,7 @@ func _build_ui() -> void:
 	_build_postfx_page(root)
 	_build_base_fog_page(root)
 	_build_reserved_page(root)
+	_build_camera_fog_page(root)
 	root.add_child(HSeparator.new())
 
 	var reset_btn := Button.new()
@@ -403,7 +455,8 @@ func _build_ui() -> void:
 
 	var persist_hint := Label.new()
 	persist_hint.name = "PersistHint"
-	persist_hint.text = "当前参数会自动记住，下次进游戏自动恢复"
+	persist_hint.text = "「后处理 / 基地雾气」参数会自动记住，下次进游戏自动恢复；「镜头雾气」页为临时值，不记录"
+	persist_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(persist_hint)
 
 func _build_tab_bar(parent: Container) -> void:
@@ -411,7 +464,7 @@ func _build_tab_bar(parent: Container) -> void:
 	bar.name = "TabBar"
 	bar.add_theme_constant_override("separation", 6)
 	parent.add_child(bar)
-	for tab_id in [TabId.LIGHT, TabId.POSTFX, TabId.BASE_FOG, TabId.RESERVED_3]:
+	for tab_id in [TabId.LIGHT, TabId.POSTFX, TabId.BASE_FOG, TabId.RESERVED_3, TabId.CAMERA_FOG]:
 		var btn := Button.new()
 		btn.name = "TabButton_%d" % int(tab_id)
 		btn.text = TAB_LABELS[tab_id]
@@ -435,6 +488,10 @@ func _select_tab(tab_id: TabId) -> void:
 		var page := _tab_pages[key] as Control
 		if page != null:
 			page.visible = (key == tab_id)
+	# 镜头雾气页「打开即显示当前值」：切到该页时回填镜头偏移与场景雾气读数。
+	if tab_id == TabId.CAMERA_FOG:
+		_refresh_camera_value_labels()
+		_sync_scene_fog_from_scene()
 
 func _build_light_page(parent: Container) -> void:
 	var page := VBoxContainer.new()
@@ -662,6 +719,316 @@ func _on_relock_expedition02_pressed() -> void:
 	_refresh_reserved_status()
 	if not ok:
 		_reserved_expedition_status.text = "✘ 回退写入失败，见控制台错误"
+
+
+# ---------- 镜头雾气 tab ----------
+# 两块内容，共同点：都只在「本次运行 + 本场景」内有效，一律不落盘。
+#
+# ① 镜头（临时）：以角色为轴的姿态偏移，三套 —— 俯仰圆轴 / 前后推拉 / 上下左右平移。
+#    角度 5°/次、位移 0.2 m/次，每次点击把当前累计值打在行尾。
+#    真源在 Player3D（`_debug_camera_*`），本页只负责按钮与读数。
+# ② 当前场景雾气（临时）：打开本页即读本场景 Environment 的两套实际雾值
+#    （距离雾 + 体积雾），可在本场景内改。覆盖挂在本场景的 TowerAtmosphere3D 上，
+#    随场景节点销毁自动复原 —— 不写存档、不写 cfg，也不进本面板的持久化文件。
+
+func _build_camera_fog_page(parent: Container) -> void:
+	var page := VBoxContainer.new()
+	page.name = "CameraFogPage"
+	page.add_theme_constant_override("separation", 6)
+	parent.add_child(page)
+	_tab_pages[TabId.CAMERA_FOG] = page
+
+	var cam_title := Label.new()
+	cam_title.text = "镜头（临时 · 只改姿态，不记录）"
+	page.add_child(cam_title)
+
+	var cam_hint := Label.new()
+	cam_hint.text = "以角色为轴：俯仰 / 前后 / 上下左右。角度 5°/次，位移 0.2 m/次，仅本次运行有效。"
+	cam_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	page.add_child(cam_hint)
+
+	_camera_pitch_value_label = _add_button_row(
+		page,
+		"俯仰",
+		[
+			{"text": "压低", "action": _on_camera_pitch.bind(-Player3D.DEBUG_CAMERA_PITCH_STEP_DEG)},
+			{"text": "抬高", "action": _on_camera_pitch.bind(Player3D.DEBUG_CAMERA_PITCH_STEP_DEG)},
+		]
+	)
+	_camera_dolly_value_label = _add_button_row(
+		page,
+		"前后",
+		[
+			{"text": "前进", "action": _on_camera_dolly.bind(-Player3D.DEBUG_CAMERA_TRAILING_STEP_M)},
+			{"text": "后退", "action": _on_camera_dolly.bind(Player3D.DEBUG_CAMERA_TRAILING_STEP_M)},
+		]
+	)
+	_camera_pan_value_label = _add_button_row(
+		page,
+		"平移",
+		[
+			{"text": "上", "action": _on_camera_pan.bind(CAMERA_PAN_UP)},
+			{"text": "下", "action": _on_camera_pan.bind(CAMERA_PAN_DOWN)},
+			{"text": "左", "action": _on_camera_pan.bind(CAMERA_PAN_LEFT)},
+			{"text": "右", "action": _on_camera_pan.bind(CAMERA_PAN_RIGHT)},
+		]
+	)
+
+	var reset_camera_btn := Button.new()
+	reset_camera_btn.name = "ResetCameraButton"
+	reset_camera_btn.text = "复位镜头偏移（俯仰 / 前后 / 平移 / 偏航）"
+	reset_camera_btn.pressed.connect(_on_reset_camera_pressed)
+	page.add_child(reset_camera_btn)
+
+	page.add_child(HSeparator.new())
+
+	var fog_title := Label.new()
+	fog_title.text = "当前场景雾气（临时 · 离开场景即复原）"
+	page.add_child(fog_title)
+
+	var fog_hint := Label.new()
+	fog_hint.text = "打开本页读取当前场景实际值；改动只作用于本场景运行期，不写存档、不记录。"
+	fog_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	page.add_child(fog_hint)
+
+	var read_row := HBoxContainer.new()
+	read_row.name = "SceneFogReadRow"
+	read_row.add_theme_constant_override("separation", 6)
+	page.add_child(read_row)
+
+	var read_btn := Button.new()
+	read_btn.name = "ReadSceneFogButton"
+	read_btn.text = "读取当前值"
+	read_btn.focus_mode = Control.FOCUS_NONE
+	read_btn.pressed.connect(_on_read_scene_fog_pressed)
+	read_row.add_child(read_btn)
+
+	_scene_fog_status = Label.new()
+	_scene_fog_status.name = "SceneFogStatus"
+	_scene_fog_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_scene_fog_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	read_row.add_child(_scene_fog_status)
+
+	_scene_fog_density_slider = _add_slider_row(
+		page, "场景雾", SCENE_FOG_DENSITY_MIN, SCENE_FOG_DENSITY_MAX, SCENE_FOG_DENSITY_STEP
+	)
+	_scene_fog_density_label = _find_value_label_for(_scene_fog_density_slider)
+	_scene_fog_density_slider.value_changed.connect(_on_scene_fog_density_changed)
+
+	_scene_volumetric_fog_density_slider = _add_slider_row(
+		page, "体积雾", SCENE_FOG_DENSITY_MIN, SCENE_FOG_DENSITY_MAX, SCENE_VOLUMETRIC_FOG_DENSITY_STEP
+	)
+	_scene_volumetric_fog_density_label = _find_value_label_for(_scene_volumetric_fog_density_slider)
+	_scene_volumetric_fog_density_slider.value_changed.connect(_on_scene_volumetric_fog_density_changed)
+
+	var clear_fog_btn := Button.new()
+	clear_fog_btn.name = "ClearSceneFogButton"
+	clear_fog_btn.text = "清除雾气覆盖（还原本场景原值）"
+	clear_fog_btn.pressed.connect(_on_clear_scene_fog_pressed)
+	page.add_child(clear_fog_btn)
+
+	_refresh_camera_value_labels()
+	_refresh_scene_fog_status()
+
+
+## 生成一行：[行标签] [按钮...] [数值]。返回该行的数值 Label（右侧对齐）。
+## buttons 每项形如 {"text": String, "action": Callable}。
+func _add_button_row(parent: Container, label_text: String, buttons: Array) -> Label:
+	var row := HBoxContainer.new()
+	row.name = "ButtonRow_" + label_text
+	row.add_theme_constant_override("separation", 6)
+	parent.add_child(row)
+
+	var lbl := Label.new()
+	lbl.text = label_text
+	lbl.custom_minimum_size = Vector2(40, 0)
+	row.add_child(lbl)
+
+	for entry in buttons:
+		var spec: Dictionary = entry
+		var btn := Button.new()
+		btn.text = str(spec.get("text", "?"))
+		btn.focus_mode = Control.FOCUS_NONE
+		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var action: Callable = spec.get("action", Callable())
+		if action.is_valid():
+			btn.pressed.connect(action)
+		row.add_child(btn)
+
+	var value_lbl := Label.new()
+	value_lbl.name = "Value"
+	value_lbl.text = "-"
+	value_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	# 要放得下极限值 "(-6.0, -6.0, -6.0) m"，否则平移读数会被截断。
+	value_lbl.custom_minimum_size = Vector2(126, 0)
+	row.add_child(value_lbl)
+	return value_lbl
+
+
+func _refresh_camera_value_labels() -> void:
+	if _camera_pitch_value_label == null:
+		return
+	if _player3d == null:
+		_resolve_flashlight()
+	var pitch := 0.0
+	var dolly := 0.0
+	var pan := Vector3.ZERO
+	if _player3d != null:
+		pitch = _player3d.get_debug_camera_pitch_offset_deg()
+		dolly = _player3d.get_debug_camera_trailing_offset_m()
+		pan = _player3d.get_debug_camera_pan_offset()
+	_camera_pitch_value_label.text = "%+.0f°" % pitch
+	_camera_dolly_value_label.text = "%+.1f m" % dolly
+	_camera_pan_value_label.text = "(%.1f, %.1f, %.1f) m" % [pan.x, pan.y, pan.z]
+
+
+func _on_camera_pitch(step_deg: float) -> void:
+	if _player3d != null:
+		_player3d.adjust_debug_camera_pitch(step_deg)
+	_refresh_camera_value_labels()
+
+
+func _on_camera_dolly(step_m: float) -> void:
+	if _player3d != null:
+		_player3d.adjust_debug_camera_trailing(step_m)
+	_refresh_camera_value_labels()
+
+
+func _on_camera_pan(direction: int) -> void:
+	if _player3d == null:
+		_resolve_flashlight()
+	if _player3d == null:
+		return
+	var amount := Player3D.DEBUG_CAMERA_PAN_STEP_M
+	var right := _camera_right_direction()
+	if direction == CAMERA_PAN_UP:
+		_player3d.adjust_debug_camera_pan(Vector3.UP * amount)
+	elif direction == CAMERA_PAN_DOWN:
+		_player3d.adjust_debug_camera_pan(Vector3.DOWN * amount)
+	elif direction == CAMERA_PAN_LEFT:
+		_player3d.adjust_debug_camera_pan(-right * amount)
+	elif direction == CAMERA_PAN_RIGHT:
+		_player3d.adjust_debug_camera_pan(right * amount)
+	_refresh_camera_value_labels()
+
+
+func _on_reset_camera_pressed() -> void:
+	if _player3d != null:
+		_player3d.reset_debug_camera_adjustments()
+	_refresh_camera_value_labels()
+
+
+## 镜头当时的水平右向 = 屏幕「右」。相机退化成竖直俯视时回退到世界 +X。
+func _camera_right_direction() -> Vector3:
+	if _player3d == null or _player3d.camera == null:
+		return Vector3.RIGHT
+	var right := _player3d.camera.global_basis.x
+	right.y = 0.0
+	if right.length_squared() <= 0.0001:
+		return Vector3.RIGHT
+	return right.normalized()
+
+
+## 当前场景大气节点（TowerAtmosphere3D）。它自己注册进 "time_system" 组；
+## 每帧重新校验有效性，避免跨场景留下悬垂引用。
+func _resolve_atmosphere() -> Node:
+	if _atmosphere != null and is_instance_valid(_atmosphere) and _atmosphere.is_inside_tree():
+		return _atmosphere
+	_atmosphere = null
+	var tree := get_tree()
+	if tree == null:
+		return null
+	_atmosphere = tree.get_first_node_in_group("time_system")
+	return _atmosphere
+
+
+func _scene_fog_snapshot() -> Dictionary:
+	var atmosphere := _resolve_atmosphere()
+	if atmosphere == null or not atmosphere.has_method("get_scene_fog_snapshot"):
+		return {}
+	var snapshot: Dictionary = atmosphere.call("get_scene_fog_snapshot")
+	return snapshot
+
+
+## 用本场景实际生效的雾值回填滑条（阻断信号，避免「只是读数」被当成一次改动）。
+func _sync_scene_fog_from_scene() -> void:
+	if _scene_fog_density_slider == null:
+		return
+	var snapshot := _scene_fog_snapshot()
+	if not snapshot.is_empty():
+		_block_scene_fog_signals(true)
+		_scene_fog_density_slider.value = clampf(
+			float(snapshot.get("distance", _scene_fog_density_slider.value)),
+			SCENE_FOG_DENSITY_MIN,
+			SCENE_FOG_DENSITY_MAX
+		)
+		_scene_volumetric_fog_density_slider.value = clampf(
+			float(snapshot.get("volumetric", _scene_volumetric_fog_density_slider.value)),
+			SCENE_FOG_DENSITY_MIN,
+			SCENE_FOG_DENSITY_MAX
+		)
+		_block_scene_fog_signals(false)
+	_refresh_scene_fog_value_labels()
+	_refresh_scene_fog_status()
+
+
+func _block_scene_fog_signals(block: bool) -> void:
+	_scene_fog_density_slider.set_block_signals(block)
+	_scene_volumetric_fog_density_slider.set_block_signals(block)
+
+
+func _refresh_scene_fog_value_labels() -> void:
+	if _scene_fog_density_label == null:
+		return
+	_scene_fog_density_label.text = "%.4f" % _scene_fog_density_slider.value
+	_scene_volumetric_fog_density_label.text = "%.4f" % _scene_volumetric_fog_density_slider.value
+
+
+func _refresh_scene_fog_status() -> void:
+	if _scene_fog_status == null:
+		return
+	var atmosphere := _resolve_atmosphere()
+	if atmosphere == null or not atmosphere.has_method("get_scene_fog_snapshot"):
+		_scene_fog_status.text = "未找到当前场景雾气节点"
+		return
+	var snapshot := _scene_fog_snapshot()
+	_scene_fog_status.text = "当前：场景雾 %.4f · 体积雾 %.4f" % [
+		float(snapshot.get("distance", 0.0)),
+		float(snapshot.get("volumetric", 0.0)),
+	]
+
+
+func _on_scene_fog_density_changed(value: float) -> void:
+	_scene_fog_density_label.text = "%.4f" % value
+	_apply_scene_fog_override()
+
+
+func _on_scene_volumetric_fog_density_changed(value: float) -> void:
+	_scene_volumetric_fog_density_label.text = "%.4f" % value
+	_apply_scene_fog_override()
+
+
+func _apply_scene_fog_override() -> void:
+	var atmosphere := _resolve_atmosphere()
+	if atmosphere == null or not atmosphere.has_method("set_debug_scene_fog_override"):
+		return
+	atmosphere.call(
+		"set_debug_scene_fog_override",
+		_scene_fog_density_slider.value,
+		_scene_volumetric_fog_density_slider.value
+	)
+	_refresh_scene_fog_status()
+
+
+func _on_read_scene_fog_pressed() -> void:
+	_sync_scene_fog_from_scene()
+
+
+func _on_clear_scene_fog_pressed() -> void:
+	var atmosphere := _resolve_atmosphere()
+	if atmosphere != null and atmosphere.has_method("clear_debug_scene_fog_override"):
+		atmosphere.call("clear_debug_scene_fog_override")
+	_sync_scene_fog_from_scene()
 
 
 # 生成一行：[标签] [HSlider] [数值]，返回 HSlider 引用；

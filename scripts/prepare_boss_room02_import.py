@@ -23,7 +23,21 @@ def transform(m,recenter=True):
  p=g([m[0][3],m[1][3]+(22.5 if recenter else 0),m[2][3]])
  return [B[i][j] for j in range(3) for i in range(3)]+p
 def box(part):
- lo=part['bounds_min'];hi=part['bounds_max'];return {'kind':'box','position':g([(a+b)/2 for a,b in zip(lo,hi)]),'size':g([hi[i]-lo[i] for i in range(3)])[:2]+[hi[1]-lo[1]]}
+ lo=part['bounds_min'];hi=part['bounds_max'];return {'kind':'box','part':str(part.get('name','')),'position':g([(a+b)/2 for a,b in zip(lo,hi)]),'size':g([hi[i]-lo[i] for i in range(3)])[:2]+[hi[1]-lo[1]]}
+# 走面承重改由**房间的一体地面碰撞**持有（`room_instances/expedition_01/boss_room_02_walk_surface.tscn`，
+# 生成器 `scripts/build_boss_room02_walk_surface.py`）。业主 2026-10-13 裁定：
+# 楼梯每 5 m 的 0.12 m 竖面、走道到平台的 0.18 m 竖面都源自「逐件小碰撞」，合并成一个网格才不卡人。
+# 标在**形状**粒度上：楼梯只停 convex 坡、高台只停底板，扶手 / 栏杆柱照旧保留（它们挡的是侧向跌落）。
+# 停用方式 = CollisionShape3D.disabled（节点仍在 ⇒ collision_shape_count 与实测节点数不变）。
+WALK_SURFACE_OWNER='room'
+WALK_SURFACE_MARK={
+ 'deck_armor_5m':lambda c:True,
+ 'deck_emblem_5m':lambda c:True,
+ 'bridge_deck_5m':lambda c:c['part']=='桥面底盘',
+ 'bridge_threshold':lambda c:c['part']=='连续门槛承重板',
+ 'stair_flight_5m':lambda c:c['kind']=='convex',
+ 'stair_landing_5m':lambda c:c['part']=='平台底板',
+}
 allrecords=[]
 for d in M['components']:
  slug=d['slug'];p=R/d['glb_path'];imp=Path(str(p)+'.import')
@@ -51,6 +65,9 @@ for d in M['components']:
   cols=[{'kind':'mesh'}] # Exact static surface avoids blocking door openings or guardrail gaps.
  elif slug in ('equipment_cluster','damaged_cabinet_open','damaged_cabinet_crushed'):
   cols=[box({'bounds_min':d['bounds_min'],'bounds_max':d['bounds_max']})]
+ for c in cols:
+  if slug in WALK_SURFACE_MARK and WALK_SURFACE_MARK[slug](c):c['room_owned_walk_surface']=True
+ if slug in WALK_SURFACE_MARK:d['walk_surface_owner']=WALK_SURFACE_OWNER
  d['collisions']=cols;d['collision_policy']='continuous_ramp_and_rail' if slug=='stair_flight_5m' else ('segmented_structure' if cols and cols[0]['kind']=='box' else ('exact_static_mesh' if cols else 'visual_only'))
  d['collision_owner']='self' if cols else 'none'
  d['bounds_size_m_godot']=[d['bounds_size_m'][0],d['bounds_size_m'][2],d['bounds_size_m'][1]]

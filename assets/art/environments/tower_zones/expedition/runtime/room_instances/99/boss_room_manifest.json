@@ -5,7 +5,7 @@
   "asset_id": "ENV-EXPEDITION-L99-BOSS-ROOM-02",
   "version": "v027",
   "formal_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/99/f00_boss_static_layout.tscn",
-  "scene_sha256": "1dd364fc9e337eb54d936beb51c562346c065b38f21b6e6a4eb13dc83291c5ad",
+  "scene_sha256": "65143b7212cadc43be4fadcf0c15e40cddf179ce840e7abfb1f967c7617c0bb4",
   "shared_room_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_room_02_static_layout.tscn",
   "shared_asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-02",
   "components": 46,
@@ -48,8 +48,8 @@
     -95
   ],
   "fog_profile": {
-    "distance_density": 0.003,
-    "volumetric_density": 0.0002,
+    "distance_density": 0.015,
+    "volumetric_density": 0.01,
     "transition_seconds": 2,
     "ordinary_profile": "existing TowerAtmosphere; restores on exit"
   }

@@ -29,6 +29,11 @@ const ENTRIES := {
 	"nar_tower_opening_02_lobby": ROOT + "nar_tower_opening_02_lobby.json",
 	"nar_tower_opening_02_1_find_owner": ROOT + "nar_tower_opening_02_1_find_owner.json",
 	"nar_tower_opening_02_2_outside_boom": ROOT + "nar_tower_opening_02_2_outside_boom.json",
+	# 开场 2.3 段：从 98F 楼梯上到 99F、由楼梯平台跨进基地东门外走廊时触发。
+	# 与 2.2 同款「再一次轰声 + 震屏」，随后角色惊呼「啊！」。**同刻互斥的关键一条**：
+	# 2.3 是纯氛围段（priority=-10），必须让位给 2.5 的关灯（priority=0）——否则玩家
+	# 连跑时 2.3 还在播、2.5 被丢弃，基地灯不灭，「先亮后暗」的老缺陷会复现。
+	"nar_tower_opening_02_3_aftershock": ROOT + "nar_tower_opening_02_3_aftershock.json",
 	"nar_tower_opening_04_stair_zombies": ROOT + "nar_tower_opening_04_stair_zombies.json",
 	"nar_tower_opening_05_rooftop_crowd": ROOT + "nar_tower_opening_05_rooftop_crowd.json",
 	"nar_tower_opening_05_bridge_fat": ROOT + "nar_tower_opening_05_bridge_fat.json",

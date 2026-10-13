@@ -1,3 +1,33 @@
+## 2026-10-13 主线 2.3：99F 楼梯平台进走廊处再现一次轰声
+
+- FeatureID：`NARRATIVE-TRIGGER`；主人要求「在 2.1（楼梯有个震动、然后说外面发生什么事情了）和 2.5（关灯）中间加个 2.3，触发位置在从楼梯间上来后到 99 层的楼梯平台到走廊的位置，这里再加一次震动和 2.1 一致，然后角色说『啊！』」。
+- **口径校正（明说）**：主人所指的「2.1」实为 **2.2「外面的轰声」**（楼梯上的震动 + 那句台词）；2.1 是「我得找到主人」（锁输入步行），不含震动。本段按「与 2.2 一致」实现。
+- 剧本 `data/narrative/nar_tower_opening_02_3_aftershock.json`（已登记 `NarrativeCatalog`）：`point_room: facility` + `point_offset: [34, 0, −2.5]` = 世界 `(34,−12,2.5)`（99F 东门走廊**东端**，即楼梯平台跨进走廊处；实测 99F 侧楼梯平台在 `(46.501,−12,−0.6203)`）、`radius 2.5`、`height_tolerance 1.5`、`once: run`；与 2.2 同款 `fx.sfx boss_phase@0.65` + `ui.subtitle「轰！」` + `camera.shake 0.65/0.12`，0.8s 后角色气泡「啊！」（hold 2.6），3.6s 收口。**不锁输入、不运镜**。
+- **唯一实现决策 —— `priority: −10`**：2.3 与 2.5 的触发点只隔 15m，玩家连跑约 2s 即到；v0.2 的互斥是「`incoming <= current` 即丢弃」，两段同优先级时 **2.5 会被仍在播的 2.3 丢掉 ⇒ 基地灯不灭 ⇒ §13.10 修掉的「先亮后暗」复现**。压到负数 = 显式声明「关灯恒优先于氛围」，并有一条静态断言（`priority(2.5) > priority(2.3)`）盯着这条隐形契约。
+- 用**房间相对**而不新增锚点：2.5 与 03 都写在同一 `z = 2.5` 门轴上，三段同源 ⇒ 房间换位时一起平移、相对先后不变。
+- 专项 `verify_narrative_opening_02_05` **164 项全绿**（原 156，本段新增 8 项）、`verify_narrative_timeline` **113 项 OK**。⚠️ 过程中踩到并已修掉一个**会伪装成 05 缺陷**的用例陷阱（同帧上下搬 12m → 角色体掉血 → 玩家在天台被打死 → 「剧情05回镜解锁 / 中断…」三项误红），定位与修法见[技术文档 §13.13](../08_技术施工_剧情触发.md)。
+
+## 2026-10-13 Boss房02 雾气定值：距离雾 0.015 / 体积雾 0.01
+
+- FeatureID：`WORLD-BLOCKS`；业主分两次定值：距离雾 0.003 → **0.015**、体积雾 0.0002 → **0.01**。色彩 `Color(0.1,0.025,0.04)` 与 2 秒过渡未动。
+- **体积雾 0.01 高于主塔室外档 0.009**（1.11×）—— 业主明确指定：Boss房要「比塔外更浑」的空中体积感。距离雾则是外面的 50%。两者独立、不按同一比例。
+- 真源两处同步：`room_instances/99/f00_boss_static_layout.tscn` 的 `metadata/fog_profile`、`room_instances/99/boss_room_manifest.json`（并重算该清单的 `scene_sha256`）。断言常量收敛到 `scripts/probe_boss_room02_level99.gd` 的 `BOSS_FOG_DISTANCE_DENSITY` / `BOSS_FOG_VOLUMETRIC_DENSITY`，以后改浓度只动这几处。
+- 实测（`scripts/probe_fog_profiles.gd`，读 `Environment` 实际值 + 重放源 meta）：主塔 `0.030/0.009`、99F基地室内 `0.012/0.0035`、**Boss房 `0.015/0.01`**；99 专项 `BOSS_ROOM02_LEVEL99_OK checks=265` 全绿。
+
+## 2026-10-13 Boss房02 地面碰撞合成一体网格（修楼梯/走道卡人）
+
+- FeatureID：`WORLD-BLOCKS`；业主现场反馈「楼梯从下往上走因为台阶高度会卡人，两边走道到台子也会卡人」，裁定制法为「台阶、平台、两个走道用一个一体的地面阻挡模型，要一个网格，整块的」。
+- 实测病根（`scripts/probe_boss_room02_walk_surface.gd`）：楼梯碰撞是每 5m 一段的 convex 坡（每段只升 1.08m 而摆放间距 1.2m）⇒ 段间留 **0.12m 竖面**；走道碰撞只取了「桥面底盘」子件，盒顶 `-0.1815` 而格栅可见面 `-0.0315` ⇒ 到平台处 **0.18m 竖面**。探针逐点对照碰撞面与可见面（逐三角竖直求交，AABB 法对斜坡无效）。
+- 做法：新增房间自持的一体地面 `room_instances/expedition_01/boss_room_02_walk_surface.tscn`（单个 `ConcavePolygonShape3D`，102 三角面，顶面连续无竖直面）；走面组件承重形状 `disabled=true`（扶手/栏杆柱保留，节点保留 ⇒ 形状计数口径不变）。平台与走道同为 `y=0` 零台阶；楼梯 `y=0.24z+2.505` 对齐可见坡面；梯脚 0.44m、梯顶 1m 过渡。
+- 验证：通行实跑探针 `probe_boss_room02_walk_traverse`（真身 `move_and_slide`）三条线全通、下坠 0.000m；**反向对照**（回退到 HEAD 几何）复现业主症状——`stair_up` 只走 1.76m 就卡在梯脚、`bridge_to_platform` 卡在局部 x≈13.5。99 专项 265 项、Boss房02 运行时验收 3081 项均全绿。
+- ⚠️ 重跑导入会覆盖：`prepare_boss_room02_import.py` 与 `build_boss_room02_runtime.gd` 已同步（`room_owned_walk_surface` 标记），二者缺一即被冲掉。
+
+## 2026-10-13 Boss房02 改常亮（去掉墙面灯开关）
+
+- FeatureID：`WORLD-BLOCKS`；业主指定「把灯光开关去掉，灯光默认打开即可」。Boss房02 声明为房间级常亮房：`metadata/authored_room_light_switch = false`（共享房根 + 99 绑定壳各一份）。
+- `DungeonRoom3D` 新增该房间级声明：为 `false` 时摘除已认领的静态开关、**不再**自建运行时开关，灯组一律点亮；查找按「根优先、命中即止」并向下找一层，同一份共享房被任意关卡绑定行为一致。只动「有无开关」与「亮不亮」，灯型/能量/范围/阴影不变。
+- 99 专项 `probe_boss_room02_level99` **265 项全绿**（新增 4 项开关/点亮断言）；原 Boss房01 与远征01 既有行为未变。
+
 ## 2026-10-13 Boss房02独立导入与测试关卡99替换
 
 - FeatureID：ASSET-PIPELINE / WORLD-BLOCKS；46组件优化源、GLB与Prefab，652实例独立TSCN；01原Boss房01保留，新02用于后续接关卡；测试99 boss已引用02，空间承重、门视觉与平台刷怪适配；入口保留原东向到达与北向主路，前房北面接高处入口；普通雾保留，Boss房雾独立动态切换。

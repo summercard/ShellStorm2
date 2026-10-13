@@ -1781,6 +1781,7 @@ func _apply_indoor_camera_pose() -> void:
 			-CAMERA_LOOK_AHEAD_M
 		)
 		player.camera.look_at(look_target, Vector3.UP)
+		_apply_debug_camera_pose_adjustments(look_target)
 		return
 
 	# 远征02：profile 提供世界空间后方轴和高度，镜头不读取玩家 yaw。
@@ -1816,6 +1817,66 @@ func _apply_indoor_camera_pose() -> void:
 	var desired := Transform3D(player.camera.global_basis, player.camera.global_position)
 	var constrained := constrain_narrative_camera_pose(desired, player.global_position)
 	player.camera.global_transform = constrained
+	_apply_debug_camera_pose_adjustments(look_target)
+
+
+## 调试面板的镜头姿态偏移：俯仰圆轴（绕角色水平轴）+ 世界空间整体平移。
+## 两条镜头分支走完各自的基准姿态后统一调用，因此远征02 与其余场景行为一致。
+## 全部是运行期量：只写 camera 节点，不落盘、不改玩家朝向/移动。
+func _apply_debug_camera_pose_adjustments(look_target: Vector3) -> void:
+	if player == null or player.camera == null:
+		return
+	var pitch_deg := _read_debug_camera_pitch_offset_deg()
+	var pan := _read_debug_camera_pan_offset()
+	if is_zero_approx(pitch_deg) and pan.is_zero_approx():
+		return
+	var pivot := look_target
+	var camera_position := player.camera.global_position
+	if not is_zero_approx(pitch_deg):
+		camera_position = _orbit_point_about_pivot(camera_position, pivot, pitch_deg)
+	if not pan.is_zero_approx():
+		camera_position += pan
+		pivot += pan
+	player.camera.global_position = camera_position
+	player.camera.look_at(pivot, Vector3.UP)
+
+
+## 以 pivot 为圆心、保持半径不变，把 point 绕「水平轴」转过 pitch_delta_deg。
+## 正角 = 抬高（镜头变高、水平距离变近 = 更俯视），负角 = 压低（趋近平视）。
+## 极角夹在 3°~88°，避免正上方/正水平的退化姿态导致 look_at 抖动。
+func _orbit_point_about_pivot(point: Vector3, pivot: Vector3, pitch_delta_deg: float) -> Vector3:
+	var offset := point - pivot
+	var horizontal := Vector2(offset.x, offset.z)
+	var horizontal_distance := horizontal.length()
+	var radius := sqrt(offset.y * offset.y + horizontal_distance * horizontal_distance)
+	if radius <= 0.0001 or horizontal_distance <= 0.0001:
+		return point
+	var polar := clampf(
+		atan2(offset.y, horizontal_distance) + deg_to_rad(pitch_delta_deg),
+		deg_to_rad(3.0),
+		deg_to_rad(88.0)
+	)
+	var new_horizontal_distance := radius * cos(polar)
+	var new_height := radius * sin(polar)
+	var planar := horizontal.normalized()
+	return pivot + Vector3(
+		planar.x * new_horizontal_distance,
+		new_height,
+		planar.y * new_horizontal_distance
+	)
+
+
+func _read_debug_camera_pitch_offset_deg() -> float:
+	if player == null or not player.has_method("get_debug_camera_pitch_offset_deg"):
+		return 0.0
+	return float(player.call("get_debug_camera_pitch_offset_deg"))
+
+
+func _read_debug_camera_pan_offset() -> Vector3:
+	if player == null or not player.has_method("get_debug_camera_pan_offset"):
+		return Vector3.ZERO
+	var value: Vector3 = player.call("get_debug_camera_pan_offset")
+	return value
 
 
 func _read_debug_camera_trailing_offset_m() -> float:

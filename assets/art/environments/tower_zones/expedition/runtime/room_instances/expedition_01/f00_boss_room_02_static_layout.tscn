@@ -52,6 +52,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/door_undersupport/env_boss_room02_door_undersupport_root_top3d.tscn" id="50_lu0lr"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/matrix_foundation_5m/env_boss_room02_matrix_foundation_5m_root_top3d.tscn" id="51_bphd8"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/portal_backing_5m/env_boss_room02_portal_backing_5m_root_top3d.tscn" id="52_5qt1w"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/boss_room_02_walk_surface.tscn" id="60_walk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqu28"]
 render_priority = 0
@@ -76,6 +77,11 @@ metadata/component_definition_count = 46
 metadata/layout_owner = "formal Godot TSCN; Blender JSON initialization only"
 metadata/floor_plane_y = 0.0
 metadata/future_level_binding = "Use this new room when connecting the level. Existing room01 retained."
+metadata/authored_room_light_switch = false
+; 地面碰撞归属：房间自持一个一体网格（平台 + 东西走道 + 楼梯 + 高位平台）。
+; 走面组件只保留外观（Shape 停用、节点保留）。见 `boss_room_02_walk_surface.tscn`。
+metadata/walk_surface_owner = "room"
+metadata/walk_surface_scene = "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/boss_room_02_walk_surface.tscn"
 
 [node name="RoomLighting" type="Node3D" parent="." unique_id=1288996267]
 
@@ -14265,3 +14271,8 @@ metadata/connection_state = "unconnected_closed"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 50)
 metadata/port_id = "entrance"
 metadata/connection_state = "unconnected_closed"
+
+; 一体地面碰撞（平台 + 东西走道 + 楼梯 + 高位平台）。业主 2026-10-13 指定：
+; 走面合成一个网格，消除楼梯每 5 m 的 0.12 m 竖面与走道到平台的 0.18 m 竖面。
+; 与之配套：走面组件的承重形状已 `disabled = true`（见各组件 metadata/walk_surface_owner）。
+[node name="WalkSurfaceCollision" parent="." instance=ExtResource("60_walk")]

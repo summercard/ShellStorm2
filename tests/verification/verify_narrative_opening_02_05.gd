@@ -3,6 +3,8 @@ extends Node3D
 
 const FIND := "nar_tower_opening_02_1_find_owner"
 const BOOM := "nar_tower_opening_02_2_outside_boom"
+const AFTERSHOCK := "nar_tower_opening_02_3_aftershock"
+const BLACKOUT := "nar_tower_opening_02_5_stairwell_blackout"
 const FOUR := "nar_tower_opening_04_stair_zombies"
 const CROWD := "nar_tower_opening_05_rooftop_crowd"
 const FAT := "nar_tower_opening_05_bridge_fat"
@@ -43,6 +45,7 @@ func _ready() -> void:
 	await test_find()
 	await test_camera_angles()
 	await test_boom()
+	await test_aftershock()
 	await test_four()
 	await test_five()
 	await test_invalid_spawn_and_old_roof_snapshot()
@@ -211,6 +214,52 @@ func test_boom() -> void:
 	check(unlocked and max_shake > .025, "平台不锁操作且真实震屏")
 	check(int((AudioManager.get("_feedback_request_counts") as Dictionary).get("boss_phase", 0)) > sfx_before, "轰音效实际请求")
 	check(Vector2(actor.camera.h_offset, actor.camera.v_offset).distance_to(rest) < .001, "震屏偏移归还")
+	disarm_all()
+
+
+func test_aftershock() -> void:
+	# 2.3：99F 基地东门外走廊的**东端** —— 玩家从 98—99F 楼梯上来、由楼梯平台
+	# 跨进走廊处。触发点与 2.2/2.5 共用同一条东门轴线（房间局部 z=−2.5），
+	# 仍用**房间相对**写法，避免房间换位后静默失效。
+	var trigger: Vector3 = room("facility").to_global(Vector3(34.0, 0.0, -2.5))
+	# 跨层排除样本：98F 上与触发点**几乎同 x/z**的位置（水平 2.0m < 半径 2.5，垂直差 12m）
+	# ⇒ 没有垂直带判据这里就会误触发。样本点贴着已验证可走的 `stair_b_entry`(36.6,−24,2.5)。
+	# ⚠️ 这一步**必须让物理帧走几步**：同一帧内把玩家上下搬 12m，角色体会积累一次巨大
+	# 竖直位移并掉 10 点血，玩家随后在 test_five 天台怪围殴中被打死，连带
+	# 「剧情05回镜解锁」「中断…」三项误红（2026-10-13 实测踩过）。
+	var below := trigger + Vector3.DOWN * 12.0 + Vector3.RIGHT * 2.0
+	NarrativeDirector.arm(AFTERSHOCK)
+	actor.global_position = below
+	actor.velocity = Vector3.ZERO
+	await frames(3)
+	check(actor.is_on_floor(), "2.3 跨层样本点落在 98F 地面（判据样本有效）")
+	NarrativeDirector.evaluate_point_for_test()
+	check(not NarrativeDirector.is_playing(), "2.3 楼下同轴位置不误触发走廊")
+	# 到触发点后**不插入 await**（与 test_boom 同法）：导演自身每 0.1s 也会轮询位置，
+	# 一旦它抢先起播，下面「音效计数」和「震屏基准」的取样点就都取在起播之后了。
+	var sfx_before := int((AudioManager.get("_feedback_request_counts") as Dictionary).get("boss_phase", 0))
+	var max_shake := 0.0
+	var rest := Vector2(actor.camera.h_offset, actor.camera.v_offset)
+	actor.global_position = trigger + Vector3.UP * .05
+	actor.velocity = Vector3.ZERO
+	NarrativeDirector.evaluate_point_for_test()
+	check(NarrativeDirector.active_id() == AFTERSHOCK, "2.3 在 99F 走廊东端起播")
+	var unlocked := true
+	while NarrativeDirector.is_playing():
+		unlocked = unlocked and not actor.input_locked
+		max_shake = maxf(max_shake, Vector2(actor.camera.h_offset, actor.camera.v_offset).distance_to(rest))
+		await get_tree().process_frame
+	check(unlocked and max_shake > .025, "2.3 不锁操作且真实震屏")
+	check(int((AudioManager.get("_feedback_request_counts") as Dictionary).get("boss_phase", 0)) > sfx_before, "2.3 轰音效实际请求")
+	check(Vector2(actor.camera.h_offset, actor.camera.v_offset).distance_to(rest) < .001, "2.3 震屏偏移归还")
+	# 同刻互斥契约（隐形契约必须有一条会失败的断言盯着）：2.3 是纯氛围段，
+	# 必须低于 2.5 的关灯段。否则玩家连跑时 2.5 会被丢弃、基地灯不灭，
+	# §13.10 修掉的「先亮后暗」会复现。
+	check(
+		NarrativeScript3D.load_from_id(BLACKOUT).priority
+			> NarrativeScript3D.load_from_id(AFTERSHOCK).priority,
+		"2.3 优先级低于 2.5（关灯永不被氛围段顶掉）"
+	)
 	disarm_all()
 
 

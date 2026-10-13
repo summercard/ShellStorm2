@@ -55,8 +55,13 @@ func build() -> void:
 				for mesh in meshes(visual):
 					for v in mesh.mesh.get_faces():faces.append(mesh.transform*v)
 				var concave:=ConcavePolygonShape3D.new();concave.set_faces(faces);shape=concave
-			var cs:=CollisionShape3D.new();cs.name="Shape_%02d"%index;cs.shape=shape;cs.position=position;body.add_child(cs);cs.owner=wrapper;index+=1
+			var cs:=CollisionShape3D.new();cs.name="Shape_%02d"%index;cs.shape=shape;cs.position=position
+			# 走面承重交给房间的一体地面碰撞（见 prepare_boss_room02_import.py 的 WALK_SURFACE_MARK）。
+			# 只停用形状、保留节点：collision_shape_count 与实测节点数都不变，验收口径照旧。
+			cs.disabled=bool(c.get("room_owned_walk_surface",false))
+			body.add_child(cs);cs.owner=wrapper;index+=1
 		wrapper.set_meta("collision_shape_count",index)
+		if d.has("walk_surface_owner"):wrapper.set_meta("walk_surface_owner",d["walk_surface_owner"])
 		save_scene(wrapper,"res://"+str(d.prefab_path));components[d.slug]=load("res://"+str(d.prefab_path));wrapper.free()
 	print("BOSS_ROOM02_02B_WRAPPERS_SAVED ",components.size())
 	# New file only. Existing author-owned room01 stays protected by baseline hashes.
@@ -77,6 +82,17 @@ func build() -> void:
 	var ports:=Node3D.new();ports.name="ConnectionPorts";room.add_child(ports);ports.owner=room
 	for value in [["West",Vector3(-40,0,-22.5),Vector3.LEFT],["East",Vector3(40,0,-22.5),Vector3.RIGHT],["Entrance",Vector3(0,12,50),Vector3.BACK]]:
 		var marker:=Marker3D.new();marker.name="Port_"+str(value[0]);marker.position=value[1];marker.basis=Basis.looking_at(-value[2],Vector3.UP);marker.set_meta("port_id",str(value[0]).to_lower());marker.set_meta("connection_state","unconnected_closed");ports.add_child(marker);marker.owner=room
+	# 一体地面碰撞：平台 + 东西走道 + 楼梯 + 高位平台合成一个网格，房间自持。
+	# 几何与实测依据全在 `scripts/build_boss_room02_walk_surface.py`；这里只负责挂上它。
+	# 房间根上写入声明，供 `probe_boss_room02_walk_surface` 与文档追溯。
+	var walk_surface_path:="res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/boss_room_02_walk_surface.tscn"
+	if not FileAccess.file_exists(walk_surface_path):
+		push_error("缺一体地面碰撞场景，请先跑 scripts/build_boss_room02_walk_surface.py --write：%s"%walk_surface_path)
+	else:
+		var walk_surface:Node3D=(load(walk_surface_path) as PackedScene).instantiate()
+		walk_surface.name="WalkSurfaceCollision";room.add_child(walk_surface);walk_surface.owner=room
+		room.set_meta("walk_surface_owner","room")
+		room.set_meta("walk_surface_scene",walk_surface_path)
 	save_scene(room,spec.runtime_scene);room.free()
 	print("BOSS_ROOM02_SCENE_SAVED components=46 instances=652 independent_lamps=",chase)
 	quit(0)

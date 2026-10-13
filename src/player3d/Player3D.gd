@@ -67,6 +67,13 @@ const DEBUG_CAMERA_TRAILING_MAX_M := 8.0
 const DEBUG_CAMERA_YAW_STEP_DEG := 5.0
 const DEBUG_CAMERA_YAW_MIN_DEG := -75.0
 const DEBUG_CAMERA_YAW_MAX_DEG := 75.0
+## 调试面板新增的两套镜头量（俯仰圆轴 / 整体平移），与上面的快捷键量同属
+## 「临时姿态偏移」：只改镜头姿态，不进存档、不写 cfg，重进场景即归零。
+const DEBUG_CAMERA_PITCH_STEP_DEG := 5.0
+const DEBUG_CAMERA_PITCH_MIN_DEG := -80.0
+const DEBUG_CAMERA_PITCH_MAX_DEG := 60.0
+const DEBUG_CAMERA_PAN_STEP_M := 0.20
+const DEBUG_CAMERA_PAN_MAX_M := 6.0
 const INTERACTION_CONTROLLER_SCRIPT := preload(
 	"res://src/player3d/PlayerInteractionController3D.gd"
 )
@@ -188,6 +195,9 @@ var _debug_scale_initialized := false
 ## 仅作用于镜头姿态的临时偏移量；玩家朝向/移动方向/战斗数据完全不受影响。
 var _debug_camera_trailing_offset_m := 0.0
 var _debug_camera_yaw_offset_deg := 0.0
+## 俯仰圆轴偏移（度，绕角色水平轴，正值=抬高镜头/更俯视）与世界空间整体平移（米）。
+var _debug_camera_pitch_offset_deg := 0.0
+var _debug_camera_pan_offset := Vector3.ZERO
 var _fate_damage_source: WeakRef
 var _fate_damage_source_frame := -1
 var _fate_weapon_trees: Dictionary = {}
@@ -391,6 +401,8 @@ func adjust_debug_camera_yaw(step_deg: float) -> void:
 func reset_debug_camera_adjustments() -> void:
 	_debug_camera_trailing_offset_m = 0.0
 	_debug_camera_yaw_offset_deg = 0.0
+	_debug_camera_pitch_offset_deg = 0.0
+	_debug_camera_pan_offset = Vector3.ZERO
 
 
 func get_debug_camera_trailing_offset_m() -> float:
@@ -399,6 +411,36 @@ func get_debug_camera_trailing_offset_m() -> float:
 
 func get_debug_camera_yaw_offset_deg() -> float:
 	return _debug_camera_yaw_offset_deg
+
+
+## 俯仰：绕角色水平轴抬高/压低镜头。step_deg 为正 = 抬高（更俯视），负 = 压低。
+func adjust_debug_camera_pitch(step_deg: float) -> void:
+	var next := clampf(
+		_debug_camera_pitch_offset_deg + step_deg,
+		DEBUG_CAMERA_PITCH_MIN_DEG,
+		DEBUG_CAMERA_PITCH_MAX_DEG
+	)
+	if is_equal_approx(next, _debug_camera_pitch_offset_deg):
+		return
+	_debug_camera_pitch_offset_deg = next
+
+
+## 平移：本增量沿世界轴累加，总位移按长度上限收敛，避免一路推出场景。
+func adjust_debug_camera_pan(offset_m: Vector3) -> void:
+	var next := _debug_camera_pan_offset + offset_m
+	if next.length() > DEBUG_CAMERA_PAN_MAX_M:
+		next = next.normalized() * DEBUG_CAMERA_PAN_MAX_M
+	if next.is_equal_approx(_debug_camera_pan_offset):
+		return
+	_debug_camera_pan_offset = next
+
+
+func get_debug_camera_pitch_offset_deg() -> float:
+	return _debug_camera_pitch_offset_deg
+
+
+func get_debug_camera_pan_offset() -> Vector3:
+	return _debug_camera_pan_offset
 
 
 func _initialize_debug_scale_contract() -> void:
