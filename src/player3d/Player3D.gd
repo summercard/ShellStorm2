@@ -198,6 +198,8 @@ var _debug_camera_yaw_offset_deg := 0.0
 ## 俯仰圆轴偏移（度，绕角色水平轴，正值=抬高镜头/更俯视）与世界空间整体平移（米）。
 var _debug_camera_pitch_offset_deg := 0.0
 var _debug_camera_pan_offset := Vector3.ZERO
+## 剧本镜头姿态的过渡动画（见 `animate_camera_pose_offsets`）。同一时刻只允许一条。
+var _scripted_camera_tween: Tween
 var _fate_damage_source: WeakRef
 var _fate_damage_source_frame := -1
 var _fate_weapon_trees: Dictionary = {}
@@ -441,6 +443,78 @@ func get_debug_camera_pitch_offset_deg() -> float:
 
 func get_debug_camera_pan_offset() -> Vector3:
 	return _debug_camera_pan_offset
+
+
+# ── 剧本镜头姿态 ─────────────────────────────────────────────────────────────
+# 关卡剧本（Boss房过场等）用的一组接口：把镜头姿态平滑推到指定构图，再复位。
+#
+# 🔴 与调试面板**共用同一组偏移量**，这是刻意的：美术先用调试面板把构图对好
+#    （面板每档 5°/0.2m），再把最终数值写进关卡数据 ⇒ 剧本能 1:1 复现面板里那一帧。
+#    因此这几个量同时是「调参入口」和「剧本输出」，不要拆成两套，否则两边会漂。
+#
+# 只改镜头姿态：玩家朝向 / 移动方向 / 战斗数值一概不受影响，也不落盘。
+func animate_camera_pose_offsets(
+	pitch_deg: float, trailing_m: float, pan: Vector3, yaw_deg: float, duration: float
+) -> void:
+	_kill_scripted_camera_tween()
+	var pitch_target := clampf(
+		pitch_deg, DEBUG_CAMERA_PITCH_MIN_DEG, DEBUG_CAMERA_PITCH_MAX_DEG
+	)
+	var trailing_target := clampf(
+		trailing_m, DEBUG_CAMERA_TRAILING_MIN_M, DEBUG_CAMERA_TRAILING_MAX_M
+	)
+	var yaw_target := clampf(yaw_deg, DEBUG_CAMERA_YAW_MIN_DEG, DEBUG_CAMERA_YAW_MAX_DEG)
+	var pan_target := pan
+	if pan_target.length() > DEBUG_CAMERA_PAN_MAX_M:
+		pan_target = pan_target.normalized() * DEBUG_CAMERA_PAN_MAX_M
+	if duration <= 0.0:
+		_debug_camera_pitch_offset_deg = pitch_target
+		_debug_camera_trailing_offset_m = trailing_target
+		_debug_camera_yaw_offset_deg = yaw_target
+		_debug_camera_pan_offset = pan_target
+		return
+	_scripted_camera_tween = create_tween().set_parallel(true)
+	_scripted_camera_tween.tween_property(
+		self, "_debug_camera_pitch_offset_deg", pitch_target, duration
+	)
+	_scripted_camera_tween.tween_property(
+		self, "_debug_camera_trailing_offset_m", trailing_target, duration
+	)
+	_scripted_camera_tween.tween_property(
+		self, "_debug_camera_yaw_offset_deg", yaw_target, duration
+	)
+	_scripted_camera_tween.tween_property(self, "_debug_camera_pan_offset", pan_target, duration)
+
+
+## 平滑复位到默认机位（俯仰/前后/偏航归零、平移归零）。duration <= 0 时立即复位。
+func clear_camera_pose_offsets(duration := 0.0) -> void:
+	animate_camera_pose_offsets(0.0, 0.0, Vector3.ZERO, 0.0, duration)
+
+
+## 当前是否有任何镜头姿态偏移在生效（剧本或调试面板写入的）。
+func has_camera_pose_offset() -> bool:
+	return (
+		not is_zero_approx(_debug_camera_pitch_offset_deg)
+		or not is_zero_approx(_debug_camera_trailing_offset_m)
+		or not is_zero_approx(_debug_camera_yaw_offset_deg)
+		or not _debug_camera_pan_offset.is_zero_approx()
+	)
+
+
+## 供快照/探针读取的当前镜头姿态偏移。
+func get_camera_pose_offsets() -> Dictionary:
+	return {
+		"pitch_deg": _debug_camera_pitch_offset_deg,
+		"trailing_m": _debug_camera_trailing_offset_m,
+		"pan_m": _debug_camera_pan_offset,
+		"yaw_deg": _debug_camera_yaw_offset_deg,
+	}
+
+
+func _kill_scripted_camera_tween() -> void:
+	if _scripted_camera_tween != null and _scripted_camera_tween.is_valid():
+		_scripted_camera_tween.kill()
+	_scripted_camera_tween = null
 
 
 func _initialize_debug_scale_contract() -> void:
