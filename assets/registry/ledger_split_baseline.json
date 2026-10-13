@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-10-13",
+ "captured_at": "2026-10-14",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -5258,47 +5258,47 @@
    "d": "vfx"
   },
   "VFX-BULLET-VISUAL-3D": {
-   "v": "dead8fcc87e14e1158f4720c35414f4bec3238c99a77851fbe5babe5d8139cd1",
+   "v": "5721e7c41c4beadad24b992050f86fba98ec9e068d91ad5896f5fd2d06f4f40a",
    "c": "子弹特效",
    "d": "vfx"
   },
   "VFX-BULLET-STANDARD-3D": {
-   "v": "164e817fd627c4f694093a6a14458478f780ad41630f1e4622372224c6bc1f28",
+   "v": "7386b739e23ff965b0104bd323fce180d9ab4aea5bce6b0529e178a4a021fb40",
    "c": "子弹特效",
    "d": "vfx"
   },
   "VFX-BULLET-STICKY-3D": {
-   "v": "0e34553c205588873c597215cf251ef62d3307e85e34c1ac6b0b0325c74e60de",
+   "v": "5b0457c5f45b268cb5929456293a9b892a53995b4d798d9a39d78473ba478440",
    "c": "子弹特效",
    "d": "vfx"
   },
   "VFX-BULLET-BOUNCE-3D": {
-   "v": "f8d23258dcd2480de10bf2de98d7d07c71c51bc62f5e635c4b172f491ef7d40c",
+   "v": "1c1a355a7734585574a08ea8e79fd83ff425de7af209a0508a434d07ce86b142",
    "c": "子弹特效",
    "d": "vfx"
   },
   "VFX-BULLET-PIERCING-3D": {
-   "v": "cbf215e0433c8cdbbc0fb050676d2b31b155d55669f89b6baa7a51c24b8bae4a",
+   "v": "a0ba3c42c587350783c5798019c1d48603f3c9f64083b9b67eb8cf8507930aae",
    "c": "子弹特效",
    "d": "vfx"
   },
   "VFX-BULLET-EXPLOSIVE-3D": {
-   "v": "49585aa9271e13397a8be9aecb7dfe3606b66b13246c80d140588263f5e5f6a3",
+   "v": "fa7015c9495fec5420e2a839d6c8ad453e13a0f4abc322f71a21b07c5608bce6",
    "c": "子弹特效",
    "d": "vfx"
   },
   "VFX-BULLET-HOMING-3D": {
-   "v": "dfe73a5c9eef0d10197e987c611c98105c0ef9d32a4376e26fc37148f25f9d8b",
+   "v": "f105f07da6df1c040e42bc22bb2b1aad8be3386ad5cd7a89618aff00245f2f27",
    "c": "子弹特效",
    "d": "vfx"
   },
   "VFX-BULLET-BLACKHOLE-3D": {
-   "v": "1ded5657aaff10b4a43f758f63189823c114256e7f097ea3570ad9c4498db071",
+   "v": "347f461fb9ed1a110f2142f06a4c2de140d8b9595b7edaba76f0e3cfffdb2140",
    "c": "子弹特效",
    "d": "vfx"
   },
   "VFX-BULLET-BALLOON-3D": {
-   "v": "906933033ec92e57749032b3a3f9fe57c9dc2ca5896f9e6419afd9a180cd9ff9",
+   "v": "b69e3483871c8283d55cea39f2545565c2fd079b290b1910c43444c27b66f341",
    "c": "子弹特效",
    "d": "vfx"
   },
@@ -6209,19 +6209,19 @@
   "8": "efd672bfcdde2e81ac5dd3e06546075a11ed5bf088ca4f9ef875643ca7218076",
   "9": "c1c35ee71b4d45c9a26fecf3f008ba02405ba925cd9611b51ae63cbe61d3c31d",
   "10": "7c244922662c085637a23796bc17602f151c7e0aecd3ecb36819748120540a08",
-  "11": "9c7b79f6a286d6040a3d33e3b99b1eee8fa5a639efedb018c1baff532f5a53e3",
+  "11": "96e1265993951fd7613bf49554de6f2d870a4a99b1c6c12f69526bbb01a93163",
   "12": "344409134a4798673d9b95127f987c7b92732262eb1c6d9d71e1e9e90644c572",
   "13": "1480aef8f88a24e75d8a798de02af7e08d9c36e2d6eac9cbfc53c918b9ed34a9",
-  "14": "2b4787f73f37d55d9a2423d2c83e9a7ff8f76ccf257278c3d21b216e2812352c",
-  "15": "67de6cd7114a835fd78e1ca65cfd6234edc6673225d5c0f6ae96a2c54f69d354",
+  "14": "8798a47004119cf4742d1f2baa70eef2033ca1ce5201fca550d7989556bc750c",
+  "15": "24af18434f7e7f6e3123370dd9bb89503c3e709a4d8282e0dd1c5c9b30197d69",
   "16": "23476bd57a7f42c3bf7b31cce8c251e5512ded8d8fdccff659b4e3be81114afc",
   "17": "105ad6a1379c3a2d5dec4f89b786c2b27a94e359f0091f8b07eb068dcf089e33",
-  "20": "a2c26a797b2be43402c690e71c7e221d3daa22d6f2999adb61bbf3002f7a0f9e",
-  "21": "bcf0cef293f5c23eeb7e7f8056b94fee4066120360356a689a9168928e5f845a",
+  "20": "578df54fdf2ee7dfdf69cf5932a07509e356004d6db821530c937d28a4fa6042",
+  "21": "31fcef1c4dc4b2d40e23deee942276d893d19381fb877ef192123410dbaec8ad",
   "22": "75d6101d8930aea41e7270564c7bd314c7e106cc34da4d0e5915ee554d1a9317",
-  "23": "0ab7a866aec398ce860ee98e7d790b20da57e28a19fcbd636d260ad9d3abae9f",
+  "23": "6f49cad9a6c56989da8b032ba1d3a994856dbf06b01eb8f38724fab5a020cf97",
   "24": "6aa0070ee038f75961f189b08cb52f54b82ac4189189a1e849593ac1d9b98b61",
-  "25": "6fe240d086fd15e3f36835e60a6ca8bc767bc514126b29ca016dedc32603a947"
+  "25": "8bc7f1914e5087cb2a4724d04f25fb8025d26737552374d67d8ea0331f6b7857"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -6237,7 +6237,7 @@
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
   "3D-物品": "9d9b453ed3a92cf13c4de5fe797715bdc9a1c8135bc1a0449b1c2f6ca4799b4b",
   "3D-武器": "23d43f3508e17fd02fb8c9e66eda9fb07c394452082ef9707045ecf64c40f9b2",
-  "3D-特效": "3e081b7771a9782a9056fe5bd67571455f4d5c53fcb002420a088e410c2fcf92"
+  "3D-特效": "c493e5ebb04d8144f468bf536174b4b13af654d2ad7922682227549df676941c"
  },
  "category_counts": {
   "角色": 25,

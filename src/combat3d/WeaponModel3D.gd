@@ -497,6 +497,8 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			"hostile": false,
 			"tags": bullet_tags,
 			"color": bullet_color,
+			# 弹种专属弹体视觉路由（04 §6.2 visual_id）：Projectile3D 按此查表选 Prefab。
+			"visual_id": bullet_id,
 			"shooter": shooter,
 			"behavior": behavior,
 			# 默认子弹不位移；霰弹枪给轻微击退（0.8 m/s × 0.16s ≈ 0.064m）。
@@ -645,6 +647,8 @@ func _fire_secondary_gun(
 			"hostile": false,
 			"tags": secondary.get("tags", []),
 			"color": bullet_color.lightened(0.12),
+			# 副枪弹体沿用主枪弹种视觉（副枪 bullet_id 缺省回落本枪 bullet_id）。
+			"visual_id": String(secondary.get("bullet_id", bullet_id)),
 			"shooter": shooter,
 			"behavior": attached_behavior,
 		}, _muzzle.global_position if _muzzle != null else global_position)
@@ -670,7 +674,8 @@ func _fire_copy_wave(
 			"damage": maxi(1, int(damage * damage_scale * (_critical_damage_multiplier / 1.5 if is_critical else 1.0))),
 			"critical": is_critical,
 			"hostile": false, "tags": bullet_tags.duplicate(),
-			"color": bullet_color, "shooter": shooter, "behavior": behavior.duplicate(true),
+			"color": bullet_color, "visual_id": bullet_id,
+			"shooter": shooter, "behavior": behavior.duplicate(true),
 		})
 	var origin := _muzzle.global_position if _muzzle != null else global_position
 	var delay := float(behavior.get("copy_fire_delay", 0.1))

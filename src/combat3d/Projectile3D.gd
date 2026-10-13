@@ -7,6 +7,19 @@ signal retired(projectile: Projectile3D)
 
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 const BULLET_VISUAL_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_bullet_visual_root_top3d.tscn")
+## 弹种专属弹体视觉路由（落地 04 §6.2「子弹模块必填 visual_id」）。
+## 键 = 子弹模块 content_id（mod_bullet_*）；查不到即回落通用弹体 BULLET_VISUAL_SCENE。
+## 八个弹种一条 Prefab 一个类，见 src/vfx/VfxBullet<Type>3D.gd 与账本「子弹特效」大类。
+const BULLET_VISUAL_REGISTRY: Dictionary = {
+	"mod_bullet_standard": preload("res://assets/art/vfx/combat_3d/vfx_bullet_standard_root_top3d.tscn"),
+	"mod_bullet_sticky": preload("res://assets/art/vfx/combat_3d/vfx_bullet_sticky_root_top3d.tscn"),
+	"mod_bullet_bounce": preload("res://assets/art/vfx/combat_3d/vfx_bullet_bounce_root_top3d.tscn"),
+	"mod_bullet_piercing": preload("res://assets/art/vfx/combat_3d/vfx_bullet_piercing_root_top3d.tscn"),
+	"mod_bullet_explosive": preload("res://assets/art/vfx/combat_3d/vfx_bullet_explosive_root_top3d.tscn"),
+	"mod_bullet_homing": preload("res://assets/art/vfx/combat_3d/vfx_bullet_homing_root_top3d.tscn"),
+	"mod_bullet_blackhole": preload("res://assets/art/vfx/combat_3d/vfx_bullet_blackhole_root_top3d.tscn"),
+	"mod_bullet_balloon": preload("res://assets/art/vfx/combat_3d/vfx_bullet_balloon_root_top3d.tscn"),
+}
 ## 旧链（CombatEffectPool3D）图例：爆炸仍走旧链，待 14.6 §6 迁移完成后统一删除。
 const LEGACY_EFFECT_EXPLOSION := &"explosion"
 
@@ -17,6 +30,8 @@ var critical := false
 var hostile := false
 var bullet_tags: Array[String] = []
 var bullet_color := Color(0.45, 0.88, 1.0)
+## 当前已挂载的弹体视觉所用的 visual_id（"" = 通用弹体）。池化复借时按此判断要不要换视觉。
+var _visual_id := ""
 var shooter: Node3D = null
 var fate_behavior: Dictionary = {}
 # 命中击退强度（m/s）。默认 0 = 不让怪物位移；霰弹枪=0.8（轻微）。
@@ -84,6 +99,7 @@ func configure(config: Dictionary) -> void:
 	_turret_remaining = 0.0
 	_turret_shot_timer = 0.0
 	_attached_shot_timer = 0.12
+	_sync_visual_route(config)
 	if _built:
 		_apply_visual_configuration()
 		_sync_visual_orientation()
@@ -386,14 +402,41 @@ func _target_visible(target: Node3D) -> bool:
 
 func _build_visual() -> void:
 	# 独立子弹纯视觉 Prefab：由 ProjectilePool3D 宿主生命周期管理，不放 VfxPool 自动计时。
-	_visual = BULLET_VISUAL_SCENE.instantiate() as VfxEffectBase3D
-	add_child(_visual)
+	# ⚠️ 视觉可能已在未入树时由 configure() 按 visual_id 建好（回落路径 configure→add_child），
+	#    此处不得无条件覆盖成通用弹体，否则弹种视觉被悄悄换回默认。
+	if not is_instance_valid(_visual):
+		_ensure_visual(_visual_scene_for(_visual_id))
 	# 单独建立球碰撞（半径 0.12，与命运缩放公式保持一致）。
 	var shape := SphereShape3D.new()
 	shape.radius = 0.12
 	_collision_shape = CollisionShape3D.new()
 	_collision_shape.shape = shape
 	add_child(_collision_shape)
+
+
+## 挂载/替换弹体视觉实例：释放旧实例，按目标 Prefab 重建。
+## 池化复借时同种弹药（visual_id 不变）零成本——由 _sync_visual_route 拦在调用之前。
+func _ensure_visual(scene: PackedScene) -> void:
+	if _visual != null and is_instance_valid(_visual):
+		_visual.queue_free()
+	_visual = scene.instantiate() as VfxEffectBase3D
+	add_child(_visual)
+
+
+## visual_id → 弹体视觉 Prefab；未登记的 id 一律回落通用弹体（不报错、不中断开火）。
+func _visual_scene_for(visual_id: String) -> PackedScene:
+	if BULLET_VISUAL_REGISTRY.has(visual_id):
+		return BULLET_VISUAL_REGISTRY[visual_id] as PackedScene
+	return BULLET_VISUAL_SCENE
+
+
+## 按 config.visual_id 切换弹体视觉（缺省 "" = 通用弹体，与未接入弹种前的行为一致）。
+func _sync_visual_route(config: Dictionary) -> void:
+	var requested := String(config.get("visual_id", ""))
+	if requested == _visual_id and is_instance_valid(_visual):
+		return
+	_visual_id = requested
+	_ensure_visual(_visual_scene_for(_visual_id))
 
 
 func _visual_scale_factor() -> float:
@@ -543,6 +586,8 @@ func _spawn_child_projectile(shot_direction: Vector3, shot_damage: int, color: C
 		"hostile": hostile,
 		"tags": child_behavior.get("tags", []),
 		"color": color,
+		# 子投射物默认继承父弹当前弹种视觉（_visual_id）；child_behavior 显式带 visual_id 时以它为准。
+		"visual_id": String(child_behavior.get("visual_id", _visual_id)),
 		"shooter": shooter,
 		"behavior": child_behavior,
 	}
@@ -572,11 +617,15 @@ func get_orientation_snapshot() -> Dictionary:
 		"alignment": direction.normalized().dot((-global_basis.z).normalized()),
 		"trail_local_position": Vector3.ZERO,
 		"trail_is_behind": false,
+		"visual_asset_id": "",
+		"visual_profile": "",
 	}
 	if _visual != null and _visual.has_method("get_presentation_snapshot"):
 		var presentation := _visual.call("get_presentation_snapshot") as Dictionary
 		snapshot["trail_local_position"] = presentation.get("trail_local_position", Vector3.ZERO)
 		snapshot["trail_is_behind"] = presentation.get("trail_is_behind", false)
+		snapshot["visual_asset_id"] = presentation.get("asset_id", "")
+		snapshot["visual_profile"] = presentation.get("bullet_profile", "")
 	return snapshot
 
 

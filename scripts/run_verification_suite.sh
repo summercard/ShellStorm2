@@ -232,6 +232,7 @@ core_scenes=(
   verify_monster_ai_system_complete
   verify_vfx_pool_lifecycle
   verify_combat_vfx_toon_v002
+  verify_bullet_vfx_profiles
   verify_unique_elite_roster_flow
   verify_unique_boss_content_flow
   verify_three_segment_tower_generation_flow

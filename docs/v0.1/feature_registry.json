@@ -835,7 +835,8 @@
         "docs/v0.1/development/history/14.6_特效系统与制作规范_历史记录.md",
         "docs/v0.1/development/2026-09-30_outdoor_cloud_sea.md",
         "docs/v0.1/development/2026-09-30_outdoor_cloud_sea_v002.md",
-        "docs/v0.1/development/2026-09-30_outdoor_cloud_placement_fix.md"
+        "docs/v0.1/development/2026-09-30_outdoor_cloud_placement_fix.md",
+        "docs/v0.1/development/2026-10-13_bullet_vfx_production.md"
       ],
       "verification": [
         {
@@ -845,6 +846,10 @@
         {
           "kind": "scene",
           "id": "verify_combat_vfx_toon_v002"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_bullet_vfx_profiles"
         },
         {
           "kind": "scene",

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxBulletBalloon3D.gd" id="1_bulletballoon"]
+
+[node name="VfxBulletBalloon3D" type="Node3D"]
+script = ExtResource("1_bulletballoon")
+metadata/asset_id = "VFX-BULLET-BALLOON-3D"
+metadata/asset_version = "v001"

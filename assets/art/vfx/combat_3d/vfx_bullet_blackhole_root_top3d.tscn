@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxBulletBlackhole3D.gd" id="1_bulletblackhole"]
+
+[node name="VfxBulletBlackhole3D" type="Node3D"]
+script = ExtResource("1_bulletblackhole")
+metadata/asset_id = "VFX-BULLET-BLACKHOLE-3D"
+metadata/asset_version = "v001"
