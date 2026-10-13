@@ -1,6 +1,6 @@
 extends Node3D
 const PLAYER = preload("res://scenes/Player3D.tscn")
-const OUT = "res://outputs/character_pipeline/switch_v032/"
+var OUT: String = (OS.get_environment("BUNNY_VERIFICATION_OUTPUT") if not OS.get_environment("BUNNY_VERIFICATION_OUTPUT").is_empty() else ProjectSettings.globalize_path("res://../ShellStorm2-work/verification/bunny")) + "/"
 var failures: Array[String] = []
 var checks := 0
 var player: Player3D

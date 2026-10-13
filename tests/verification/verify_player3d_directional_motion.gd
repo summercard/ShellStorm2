@@ -1,7 +1,7 @@
 extends Node3D
 
 const PLAYER = preload("res://scenes/Player3D.tscn")
-var OUT: String = "res://outputs/character_pipeline/" + (OS.get_environment("BUNNY_VERIFICATION_BATCH") if not OS.get_environment("BUNNY_VERIFICATION_BATCH").is_empty() else "runtime_v029") + "/"
+var OUT: String = (OS.get_environment("BUNNY_VERIFICATION_OUTPUT") if not OS.get_environment("BUNNY_VERIFICATION_OUTPUT").is_empty() else ProjectSettings.globalize_path("res://../ShellStorm2-work/verification/bunny")) + "/"
 var failures: Array[String] = []
 var checks := 0
 
@@ -68,6 +68,33 @@ func _ready() -> void:
 					var ear_before := player.avatar.ear_socket_l.quaternion
 					player.avatar.call("_process",0.08)
 					check(ear_before.angle_to(player.avatar.ear_socket_l.quaternion)>0.002,"ear motion "+expected)
+					if yaw == 0.0:
+						var head_low := INF
+						var head_high := -INF
+						var yaw_low := INF
+						var yaw_high := -INF
+						var motion: CharacterMotionLibrary3D = player.avatar.get("_authored_motion")
+						var duration := 1.0 if speed < 3.2 else 0.8
+						if visual and speed == 5.0:
+							camera.position = Vector3(0, 10.269009, 4.787671) + Vector3(0, .55, -.10)
+							camera.look_at(Vector3(0, .55, -.10)); camera.size = 1.8
+							DirAccess.make_dir_recursive_absolute(OUT + "jog/" + expected)
+						for sample_id in range(25):
+							motion.set("_time", duration * float(sample_id) / 24.0)
+							player.avatar.call("_process", 0.0)
+							head_low = minf(head_low, player.avatar.head.position.y)
+							head_high = maxf(head_high, player.avatar.head.position.y)
+							yaw_low = minf(yaw_low, player.avatar.body.rotation.y)
+							yaw_high = maxf(yaw_high, player.avatar.body.rotation.y)
+							var sampled := player.avatar.get_component_snapshot()
+							check(sampled.right_hand_palm_to_socket_global_distance < .001, "cycle main grip " + expected)
+							check(sampled.weapon_support_error_m < .02, "cycle support " + expected)
+							if visual and speed == 5.0 and sample_id < 24:
+								await get_tree().process_frame
+								await RenderingServer.frame_post_draw
+								check(get_viewport().get_texture().get_image().save_png(OUT + "jog/" + expected + "/%03d.png" % sample_id) == OK, "jog game camera capture")
+						check(head_high-head_low > (.032 if speed >= 3.2 else .016), "readable head bounce " + expected)
+						check(rad_to_deg(yaw_high-yaw_low) > (10.0 if speed >= 3.2 else 5.8), "axial torso twist " + expected)
 					if visual and yaw==0.0 and speed==5.0:
 						camera.position=Vector3(3.6,1.2,0) if direction in ["forward","backward"] else Vector3(0,1.25,-3.6)
 						camera.look_at(Vector3(0,0.65,0))

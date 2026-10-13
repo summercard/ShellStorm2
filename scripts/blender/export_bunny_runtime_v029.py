@@ -4,6 +4,7 @@ import sys as _art_source_sys
 from pathlib import Path as _ArtSourcePath
 _art_source_sys.path.insert(0, str(_ArtSourcePath(__file__).resolve().parents[1]))
 from art_source_paths import source_path
+from workspace_paths import work_path
 from pathlib import Path
 import sys,json,hashlib,subprocess,struct
 import bpy
@@ -12,19 +13,20 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 from export_character_bundle import signature,C
 R=Path(__file__).resolve().parents[2]
 B=R/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01'
-MODEL=B/'production/v021/source/model/chr_bunny01_model_v021.blend'
+MODEL=source_path(B/'production/v021/source/model/chr_bunny01_model_v021.blend')
 VERSION=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--source-version=')), 'v030' if '--firing-v030' in sys.argv else 'v029')
-assert VERSION in ('v029','v030','v031','v032','v033','v034','v035','v036','v037')
+assert VERSION in ('v029','v030','v031','v032','v033','v034','v035','v036','v037','v038')
 SOURCE=source_path(B/f'source/animation/chr_bunny01_animation_{VERSION}.blend')
-OUT=B/'components/chr_bunny01_motion';OUT.mkdir(parents=True,exist_ok=True)
+OUT=work_path('sessions/2026-10-14_player_jog_v038/export/placeholder').parent if VERSION=='v038' else B/'components/chr_bunny01_motion'
+OUT.mkdir(parents=True,exist_ok=True)
+prior_library=json.loads((B/'components/chr_bunny01_motion/anim_bunny01_library.json').read_text(encoding='utf-8'))
 bpy.ops.wm.open_mainfile(filepath=str(MODEL))
 rig=next(o for o in bpy.context.scene.objects if o.type=='ARMATURE');expected=signature(rig)
 rest={k:Matrix(v) for k,v in json.loads(bpy.context.scene['runtime_component_rest']).items()}
 bpy.ops.wm.open_mainfile(filepath=str(SOURCE))
-old=json.loads((B/'production/v024/exports/anim_bunny01_library_v024.json').read_text())
+old=prior_library if VERSION=='v038' else json.loads((B/'production/v024/exports/anim_bunny01_library_v024.json').read_text())
 clips=old['clips'];new={};selected=[];anchors={};action_fps={}
-specs=json.loads((R/'outputs/character_pipeline/directional_v028/specs.json').read_text())
-specs.update(json.loads((R/'outputs/character_pipeline/runtime_v029/new_specs.json').read_text()))
+specs={n:dict(reference_speed_mps=c['reference_speed_mps']) for n,c in prior_library['clips'].items() if 'reference_speed_mps' in c}
 for s in list(bpy.data.scenes):
     state=s.get('preview_clip','')
     if not state.startswith(('sidearm_','longgun_','machinegun_','unarmed_')):continue
@@ -33,6 +35,9 @@ for s in list(bpy.data.scenes):
     anchors={side:list(C.to_3x3()@(rest['hand_'+side].inverted()@r.data.bones['hand_'+side].tail_local)) for side in ('l','r')}
     a=r.animation_data.action;selected.append(a);action_fps[a.name]=s.render.fps
     gun=next((o for o in s.objects if o.name.startswith('PREVIEW_GripSocket')),None)
+    if VERSION=='v038' and not ('_walking_' in state or '_moving_' in state):
+        new[state]=prior_library['clips'][state]
+        continue
     first,last=map(int,a.frame_range);frames=[]
     for frame in range(first,last+1):
         s.frame_set(frame);dg=bpy.context.evaluated_depsgraph_get();er=r.evaluated_get(dg)
@@ -50,10 +55,14 @@ for s in list(bpy.data.scenes):
     new[state]=dict(duration=float(a['duration']),loop=bool(a['loop']),frames=frames,source_action=a.name)
     spec_key=state.replace('_fire_','_')
     if spec_key in specs:new[state]['reference_speed_mps']=specs[spec_key]['reference_speed_mps']
-expected_count=35 if VERSION=='v029' else 77 if VERSION in ('v033','v034','v035','v036','v037') else 74 if VERSION=='v032' else 62
+expected_count=35 if VERSION=='v029' else 77 if VERSION in ('v033','v034','v035','v036','v037','v038') else 74 if VERSION=='v032' else 62
 assert len(new)==expected_count,len(new)
 clips.update(new)
 path=OUT/'anim_bunny01_library.json'
+if VERSION=='v038':
+    retained=[n for n in clips if not (n.startswith(('unarmed_','sidearm_','longgun_','machinegun_')) and ('_walking_' in n or '_moving_' in n))]
+    assert len(retained)==35
+    assert all(clips[n]==prior_library['clips'][n] for n in retained)
 if VERSION in ('v035','v036','v037'):
     previous=json.loads(path.read_text(encoding='utf-8'))['clips']
     retained=[n for n in previous if n!='machinegun_reload']
@@ -86,7 +95,8 @@ for action in selected:
     first_frame,last_frame=map(float,action.frame_range)
     factor=60*float(action['duration'])/(last_frame-first_frame)
     if factor!=1:
-        for curve in action.fcurves:
+        curves=action.fcurves if hasattr(action,'fcurves') else [c for layer in action.layers for strip in layer.strips for bag in strip.channelbags for c in bag.fcurves]
+        for curve in curves:
             for key in curve.keyframe_points:
                 key.co.x=1+(key.co.x-first_frame)*factor
                 key.handle_left.x=1+(key.handle_left.x-first_frame)*factor
@@ -111,14 +121,16 @@ durations={a.name:float(a['duration']) for a in selected}
 for animation in gltf['animations']:
     duration=max(gltf['accessors'][s['input']]['max'][0]-gltf['accessors'][s['input']]['min'][0] for s in animation['samplers'])
     assert abs(duration-durations[animation['name']])<1/60,(animation['name'],duration)
-def entry(p):return dict(path=p.relative_to(R).as_posix(),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
+def entry(p):return dict(path=(p.relative_to(R).as_posix() if p.is_relative_to(R) else (B/'components/chr_bunny01_motion'/p.name).relative_to(R).as_posix()),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
 ledger=dict(schema=1,asset_id='CHR-PLY-CAPSULE01-3D-BUNNY01',version='v029',status='exported_pending_godot_validation',classification='version_increment',skeleton_id='SKEL-BUNNY01-004',skeleton_sha256=expected,model_signature=expected,animation_signature=expected,files=[entry(p) for p in (MODEL,SOURCE,path,glb)],animation_adapter='anatomical_to_rigid_node_map',consumer='src/player3d/CharacterMotionLibrary3D.gd',state_owner='src/player3d/Player3D.gd',prefab='assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn',verification='verify_player3d_directional_motion',collision_owner='scenes/Player3D.tscn',authoring_height_m=1.5,blender_forward='+Y',godot_forward='-Z',preview_weapon_exported=False,clips={n:dict(duration=c['duration'],loop=c['loop'],frames=len(c['frames']),tracks=len(c['frames'][0])) for n,c in clips.items()},new_clip_count=35,retained_legacy_clip_count=14,glb_clip_count=35,missing_actions=['family_fire','family_reload','family_charge','heavy_melee'],rollback='Retained v028/v027 Blender sources and Git runtime baseline',git_baseline=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip())
 ledger.update(version=VERSION,new_clip_count=expected_count,glb_clip_count=expected_count)
 if VERSION in ('v030','v031','v032','v033'):
     ledger['missing_actions']=['family_reload','family_charge','heavy_melee']
     ledger['verification']='verify_player3d_firing_motion'
-if VERSION in ('v033','v034','v035','v036','v037'):
+if VERSION in ('v033','v034','v035','v036','v037','v038'):
     ledger['missing_actions']=['family_charge','heavy_melee']
     ledger['verification']='verify_player3d_reload_motion'
-(B/'character_transfer_ledger.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2),encoding='utf-8')
+if VERSION=='v038':
+    ledger.update(verification='verify_player3d_directional_motion',modified_directional_clips=56,retained_clips=35,rollback='ShellStorm2-backup/2026-10-14_player_jog_v038/before_edits',retained_clip_provenance=dict(version=prior_library['version'],clips=retained,sha256=hashlib.sha256((B/'components/chr_bunny01_motion/anim_bunny01_library.json').read_bytes()).hexdigest()))
+(OUT/'character_transfer_ledger.json' if VERSION=='v038' else B/'character_transfer_ledger.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2),encoding='utf-8')
 print('RUNTIME_EXPORTED',len(clips),'GLB',len(gltf['animations']))

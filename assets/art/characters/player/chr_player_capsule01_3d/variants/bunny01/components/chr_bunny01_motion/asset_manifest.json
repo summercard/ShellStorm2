@@ -1,9 +1,9 @@
 {
   "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
-  "asset_version": "v037",
+  "asset_version": "v038",
   "assembly_version": "v021",
-  "status": "active",
-  "source": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend",
+  "status": "exported_pending_godot_validation",
+  "source": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v038.blend",
   "transfer": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/character_transfer_ledger.json",
   "prefab": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
   "skeleton_id": "SKEL-BUNNY01-004",
@@ -563,44 +563,19 @@
       "bytes": 10282728
     },
     {
-      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend",
-      "sha256": "39722be44c2099a550bd957bb0c3b65bf611d7f4f899d7bf348f80ef49a6d0a8",
-      "bytes": 303643546
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v038.blend",
+      "sha256": "eb4cf334096315f2b71e51bb0bd4d5b70f66e148a3a31767793d985c4196972d",
+      "bytes": 381082712
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.json",
-      "sha256": "c82599925724f4fc48a3291f0a0da08b820bb8f364f67eb56ae47130a7b97470",
-      "bytes": 13795797
+      "sha256": "6d043257da0cff41480c5ff1f4bd10216ad84d0a0b68c6b0f45a5dc836dddd30",
+      "bytes": 13874804
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.glb",
-      "sha256": "867b083e10aab5401489609c90c8efbb7621b3de910ab1bd9240a91e55b2720c",
-      "bytes": 1769716
-    },
-    {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
-      "sha256": "6924b230d48d0e70404dedc91a23e2c21ea5074707d9a1690fa3c2242e6c348c",
-      "bytes": 5846
-    },
-    {
-      "path": "src/player3d/CharacterMotionLibrary3D.gd",
-      "sha256": "f549ebce994802c1176d9c3bb0e1469fbc666304fe53471f22e57f7e45accf12",
-      "bytes": 15740
-    },
-    {
-      "path": "src/player3d/PlayerAvatar3D.gd",
-      "sha256": "b1c34d63c6b60236d593ab6de13bb244d15b44e32c43a44c95342069025badcd",
-      "bytes": 102282
-    },
-    {
-      "path": "src/player3d/Player3D.gd",
-      "sha256": "40b578d5acee608a6fcf3eb4632dc69cdccfa8f2ceb2aecae781ff9918f04d1a",
-      "bytes": 112414
-    },
-    {
-      "path": "src/combat3d/WeaponModel3D.gd",
-      "sha256": "23a6f9fc99ece9b77b8d1372f6da5e2a68f2b69983d09d233ac78720f800d011",
-      "bytes": 53795
+      "sha256": "6b5f7c6c309e8075d73c3d0173f2a03fc96310380399d8b99fcbf4e2f4d2a67c",
+      "bytes": 2283432
     }
   ],
   "limits": [

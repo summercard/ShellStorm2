@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
-  "version": "v037",
-  "status": "active",
+  "version": "v038",
+  "status": "exported_pending_godot_validation",
   "classification": "version_increment",
   "skeleton_id": "SKEL-BUNNY01-004",
   "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
@@ -15,107 +15,26 @@
       "bytes": 10282728
     },
     {
-      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend",
-      "sha256": "39722be44c2099a550bd957bb0c3b65bf611d7f4f899d7bf348f80ef49a6d0a8",
-      "bytes": 303643546
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v038.blend",
+      "sha256": "eb4cf334096315f2b71e51bb0bd4d5b70f66e148a3a31767793d985c4196972d",
+      "bytes": 381082712
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.json",
-      "sha256": "c82599925724f4fc48a3291f0a0da08b820bb8f364f67eb56ae47130a7b97470",
-      "bytes": 13795797
+      "sha256": "6d043257da0cff41480c5ff1f4bd10216ad84d0a0b68c6b0f45a5dc836dddd30",
+      "bytes": 13874804
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.glb",
-      "sha256": "867b083e10aab5401489609c90c8efbb7621b3de910ab1bd9240a91e55b2720c",
-      "bytes": 1769716
-    },
-    {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
-      "sha256": "6924b230d48d0e70404dedc91a23e2c21ea5074707d9a1690fa3c2242e6c348c",
-      "bytes": 5846
-    },
-    {
-      "path": "src/player3d/CharacterMotionLibrary3D.gd",
-      "sha256": "f549ebce994802c1176d9c3bb0e1469fbc666304fe53471f22e57f7e45accf12",
-      "bytes": 15740
-    },
-    {
-      "path": "src/player3d/PlayerAvatar3D.gd",
-      "sha256": "b1c34d63c6b60236d593ab6de13bb244d15b44e32c43a44c95342069025badcd",
-      "bytes": 102282
-    },
-    {
-      "path": "src/player3d/Player3D.gd",
-      "sha256": "40b578d5acee608a6fcf3eb4632dc69cdccfa8f2ceb2aecae781ff9918f04d1a",
-      "bytes": 112414
-    },
-    {
-      "path": "src/combat3d/WeaponModel3D.gd",
-      "sha256": "23a6f9fc99ece9b77b8d1372f6da5e2a68f2b69983d09d233ac78720f800d011",
-      "bytes": 53795
+      "sha256": "6b5f7c6c309e8075d73c3d0173f2a03fc96310380399d8b99fcbf4e2f4d2a67c",
+      "bytes": 2283432
     }
   ],
   "animation_adapter": "anatomical_to_rigid_node_map",
   "consumer": "src/player3d/CharacterMotionLibrary3D.gd",
   "state_owner": "src/player3d/Player3D.gd",
   "prefab": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
-  "verification": {
-    "import": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_player3d_reload_motion": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_player3d_reload_motion_visual": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_3d_reload_state_flow": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_player3d_weapon_switch": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_player3d_directional_motion": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_player3d_firing_motion": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_player3d_animation_flow": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_player3d_weapon_pose_collision_flow": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_player3d_diy_flow": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    },
-    "verify_player3d_avatar_bounds": {
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "user_data_isolated_before_autoload": true
-    }
-  },
+  "verification": "verify_player3d_directional_motion",
   "collision_owner": "scenes/Player3D.tscn",
   "authoring_height_m": 1.5,
   "blender_forward": "+Y",
@@ -676,33 +595,56 @@
     "family_charge",
     "heavy_melee"
   ],
-  "rollback": "Retained v028/v027 Blender sources and Git runtime baseline",
-  "git_baseline": "345bca4897e60a716c7d2107ad9582c4a64bc899",
+  "rollback": "ShellStorm2-backup/2026-10-14_player_jog_v038/before_edits",
+  "git_baseline": "48390fcc9664a323f285d3c38eb33812d8fe51c4",
+  "modified_directional_clips": 56,
+  "retained_clips": 35,
+  "retained_clip_provenance": {
+    "version": "v037",
+    "clips": [
+      "armed_idle",
+      "armed_moving",
+      "armed_walking",
+      "climbing",
+      "dashing",
+      "dead",
+      "falling",
+      "hurt",
+      "idle",
+      "landing",
+      "locked",
+      "moving",
+      "seated",
+      "walking",
+      "longgun_reload",
+      "machinegun_reload",
+      "sidearm_reload",
+      "sidearm_idle",
+      "longgun_idle",
+      "machinegun_idle",
+      "sidearm_fire_idle",
+      "longgun_fire_idle",
+      "machinegun_fire_idle",
+      "sidearm_stow_slot0",
+      "sidearm_draw_slot0",
+      "sidearm_stow_slot1",
+      "sidearm_draw_slot1",
+      "longgun_stow_slot0",
+      "longgun_draw_slot0",
+      "longgun_stow_slot1",
+      "longgun_draw_slot1",
+      "machinegun_stow_slot0",
+      "machinegun_draw_slot0",
+      "machinegun_stow_slot1",
+      "machinegun_draw_slot1"
+    ],
+    "sha256": "c82599925724f4fc48a3291f0a0da08b820bb8f364f67eb56ae47130a7b97470"
+  },
   "duplicate_gate": {
     "classification": "version_increment",
     "passed": true,
-    "report": "outputs\\asset_guard\\CHR-PLY-CAPSULE01-3D-BUNNY01_bunny01.json",
+    "report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\asset_guard\\CHR-PLY-CAPSULE01-3D-BUNNY01_bunny01.json",
     "same_asset_id_count": 16,
     "identical_registered_file_count": 10
-  },
-  "validation_status": "targeted_pass_with_declared_limits",
-  "validated_at": "2026-10-08",
-  "stage_history": [
-    "authored",
-    "exported_pending_godot_validation",
-    "validated",
-    "active"
-  ],
-  "limits": [
-    "No detached magazine or gun mechanism animation authored",
-    "Held/back weapon display scales retain existing distinct contracts",
-    "Expedition resume scene skipped in headless; full save-resume not verified",
-    "No family charge or heavy-melee action authored",
-    "Other longguns support offsets differ: 0.029-0.108m at default scale",
-    "No exact world foot lock or 2D directional blend",
-    "No full project or mobile performance suite"
-  ],
-  "runtime_default_scale": 0.8,
-  "runtime_default_height_m": 1.2,
-  "weapon_grip_contract": "Exported palm offsets relative to existing cuff/wrist HandJoint; carry orientation from source; no hand IK"
+  }
 }

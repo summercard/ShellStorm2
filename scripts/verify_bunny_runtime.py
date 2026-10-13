@@ -1,10 +1,11 @@
 """Isolate user:// before Autoload and capture bounded Godot verification logs."""
 from pathlib import Path
 import os,sys,subprocess,json,time,re
-R=Path(__file__).resolve().parents[1];O=R/'outputs/character_pipeline'/os.environ.get('BUNNY_VERIFICATION_BATCH','runtime_v029');O.mkdir(parents=True,exist_ok=True)
+from workspace_paths import work_path
+R=Path(__file__).resolve().parents[1];O=work_path('sessions/'+os.environ.get('BUNNY_VERIFICATION_BATCH','runtime_v029')+'/placeholder').parent;O.mkdir(parents=True,exist_ok=True)
 G=os.environ.get('GODOT_BIN','I:/Godot_v4.6.3-stable_win64.exe/Godot_v4.6.3-stable_win64_console.exe')
 name=sys.argv[1];visual='--visual' in sys.argv
-env=dict(os.environ,APPDATA=str(R/'_scratch/bunny_runtime_userdata'/name),LOCALAPPDATA=str(R/'_scratch/bunny_runtime_localdata'/name))
+env=dict(os.environ,APPDATA=str(work_path('probes/bunny_runtime_userdata/'+name+'/placeholder').parent),LOCALAPPDATA=str(work_path('probes/bunny_runtime_localdata/'+name+'/placeholder').parent),BUNNY_VERIFICATION_OUTPUT=str(O).replace('\\','/'))
 args=[G,'--path',str(R),'--audio-driver','Dummy']
 args+=['--rendering-method','gl_compatibility','--resolution','720x720'] if visual else ['--headless']
 args+=['--editor','--import','--quit'] if name=='import' else ['--quit-after','900','res://tests/verification/'+name+'.tscn']
