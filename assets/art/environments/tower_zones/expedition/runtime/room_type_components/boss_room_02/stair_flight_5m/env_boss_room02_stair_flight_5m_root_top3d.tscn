@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/stair_flight_5m/env_boss_room02_stair_flight_5m_visual_top3d.glb" id="1_tllhm"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_xyh7s"]
+points = PackedVector3Array(-2.5, 0.47947198, -2.3044195, -2.5, 1.5594718, 2.6955805, -2.5, 0.17947198, -2.3044195, -2.5, 1.2594719, 2.6955805, 2.5, 0.47947198, -2.3044195, 2.5, 1.5594718, 2.6955805, 2.5, 0.17947198, -2.3044195, 2.5, 1.2594719, 2.6955805)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1lcfu"]
+size = Vector3(0.13999987, 1.3075395, 5.018857)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jvsrn"]
+size = Vector3(0.13999987, 1.3075395, 5.018857)
+
+[node name="BossRoom02_stair_flight_5m" type="Node3D" unique_id=393553310]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-STAIR-FLIGHT-5M"
+metadata/slug = "stair_flight_5m"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_flight_5m/stair_flight_5m.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_flight_5m/export/v027/env_boss_room02_stair_flight_5m_optimized_v027.blend"
+metadata/glb_sha256 = "4ad22918333957684fb943249768aa4d94ef22c3f6773db0599cccc675da433e"
+metadata/collision_policy = "continuous_ramp_and_rail"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "stair_flight_5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_flight_5m/stair_flight_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(5.29, 2.7332418, 5.4588394)
+metadata/display_name_zh = "精工格栅楼梯节段"
+metadata/collision_shape_count = 3
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=2138072325 instance=ExtResource("1_tllhm")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=1755754479]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=1868568838]
+shape = SubResource("ConvexPolygonShape3D_xyh7s")
+
+[node name="Shape_01" type="CollisionShape3D" parent="CollisionBody" unique_id=176618685]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.52, 2.079472, 0.19558048)
+shape = SubResource("BoxShape3D_1lcfu")
+
+[node name="Shape_02" type="CollisionShape3D" parent="CollisionBody" unique_id=312559731]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.52, 2.079472, 0.19558048)
+shape = SubResource("BoxShape3D_jvsrn")

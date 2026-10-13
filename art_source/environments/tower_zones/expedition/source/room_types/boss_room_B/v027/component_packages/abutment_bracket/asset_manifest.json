@@ -55,12 +55,16 @@
   "materials": [
     "01_精工金属_紫色骨架"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "none",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "1a159323b40d82a95e5082c94484e9d03615100a9e01b288513213f9083aede2",
-  "triangle_count": 756
+  "triangle_count": 756,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/abutment_bracket/env_boss_room02_abutment_bracket_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/abutment_bracket/env_boss_room02_abutment_bracket_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/abutment_bracket/export/v027/env_boss_room02_abutment_bracket_optimized_v027.blend",
+  "optimized_sha256": "fd3c8a6ccd1a8927a76d6e5f11d5ba45f7806981d3d0d31f24c9a9f874fb53e0"
 }

@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/exit_portal/env_boss_room02_exit_portal_visual_top3d.glb" id="1_finbd"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6vi1g"]
+size = Vector3(1.46, 6.65, 1.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cajdc"]
+size = Vector3(1.46, 6.65, 1.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s4c6b"]
+size = Vector3(8.3, 1.1499996, 1.9)
+
+[node name="BossRoom02_exit_portal" type="Node3D" unique_id=1821615443]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-EXIT-PORTAL"
+metadata/slug = "exit_portal"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_portal/exit_portal.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_portal/export/v027/env_boss_room02_exit_portal_optimized_v027.blend"
+metadata/glb_sha256 = "0cc01cbb4dafa0231f2cc4e78e2ef80f638d09171339c67ef2b37feb014da0be"
+metadata/collision_policy = "segmented_structure"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "exit_portal"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_portal/exit_portal.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(8.3, 7.5, 2.112)
+metadata/display_name_zh = "出口装甲门框"
+metadata/collision_shape_count = 3
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=867595395 instance=ExtResource("1_finbd")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=1819736657]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=226612861]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.24, 3.325, -0.10599995)
+shape = SubResource("BoxShape3D_6vi1g")
+
+[node name="Shape_01" type="CollisionShape3D" parent="CollisionBody" unique_id=298226763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.24, 3.325, -0.10599995)
+shape = SubResource("BoxShape3D_cajdc")
+
+[node name="Shape_02" type="CollisionShape3D" parent="CollisionBody" unique_id=886577391]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.8, -0.106000006)
+shape = SubResource("BoxShape3D_s4c6b")

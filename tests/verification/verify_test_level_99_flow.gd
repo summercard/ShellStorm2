@@ -32,7 +32,7 @@ const BUILTIN_EXPEDITION_CONTENT_ROOMS := 5
 
 const SAFE_ROOM_SIZE := Vector2(15.0, 15.0)
 const CONTENT_ROOM_SIZE := Vector2(25.0, 25.0)
-const BOSS_ROOM_SIZE := Vector2(45.0, 45.0)
+const BOSS_ROOM_SIZE := Vector2(80.0, 100.0)
 const EXPECTED_ROOM_IDS: Array[String] = ["start", "room_01", "boss", "extraction"]
 const EXPECTED_MAIN_KEYS: Array[String] = ["room_01"]
 ## 设计源里按房间钉死的内容类型（不是随机洗牌的），运行时必须逐值复现。
@@ -485,9 +485,11 @@ func _verify_content_bounds(tower: TowerDescent3D, failures: Array[String]) -> v
 		if room == null:
 			continue
 		var center := room.global_position
+		if room_id == "boss":
+			center += Vector3(0, 0, -22.5)
 		if _ray(space, center + Vector3(0, 3.0, 0), center + Vector3(0, -3.0, 0)).is_empty():
 			failures.append("%s 脚下没有承重楼面，玩家会掉出关卡" % room_id)
-		var reach := room.get_dimensions().x * 0.5 + 3.0
+		var reach := maxf(room.get_dimensions().x, room.get_dimensions().y) + 3.0
 		for side_value in side_directions.keys():
 			var side := str(side_value)
 			var from := center + Vector3(0, 1.5, 0)
@@ -774,11 +776,11 @@ func _verify_boss_reinforcements(
 		return
 	var expected_plan := {
 		"enabled": true,
-		"boss_spawn_local_m": [0.0, 0.0],
+		"boss_spawn_local_m": [0.0, -22.5],
 		"activation_delay_sec": 10.0,
 		"spawn_rows": [
-			{"side": "west", "x_m": -18.0, "z_m": [-14.0, -7.0, 0.0, 7.0, 14.0], "height_m": 3.0},
-			{"side": "east", "x_m": 18.0, "z_m": [-14.0, -7.0, 0.0, 7.0, 14.0], "height_m": 3.0},
+			{"side": "west", "x_m": -10.0, "z_m": [-32.5, -27.5, -22.5, -17.5, -12.5], "height_m": 3.0},
+			{"side": "east", "x_m": 10.0, "z_m": [-32.5, -27.5, -22.5, -17.5, -12.5], "height_m": 3.0},
 		],
 		"enemy_request_type": "ambush",
 		"initial_count": 3.0,
@@ -851,8 +853,8 @@ func _verify_boss_reinforcements(
 	var center := room.get_node_or_null("BossSpawnCenter") as Marker3D
 	if center == null:
 		failures.append("Boss房没有运行时 BossSpawnCenter")
-	elif center.position.distance_to(Vector3.ZERO) > 0.001:
-		failures.append("BossSpawnCenter 不在房间局部正中心：%s" % center.position)
+	elif center.position.distance_to(Vector3(0,0,-22.5)) > 0.001:
+		failures.append("BossSpawnCenter 不在中央平台中心：%s" % center.position)
 	var markers := room.boss_reinforcement_spawn_markers()
 	if markers.size() != 10:
 		failures.append("Boss增援挂点应为两侧各5个、共10个，实为 %d" % markers.size())
@@ -864,9 +866,9 @@ func _verify_boss_reinforcements(
 		east += 1 if side == "east" else 0
 		if not is_equal_approx(marker.position.y, 3.0):
 			failures.append("Boss增援挂点未离地3米：%s=%s" % [marker.name, marker.position])
-		if side == "west" and not is_equal_approx(marker.position.x, -18.0):
+		if side == "west" and not is_equal_approx(marker.position.x, -10.0):
 			failures.append("西侧挂点横坐标错误：%s=%s" % [marker.name, marker.position])
-		if side == "east" and not is_equal_approx(marker.position.x, 18.0):
+		if side == "east" and not is_equal_approx(marker.position.x, 10.0):
 			failures.append("东侧挂点横坐标错误：%s=%s" % [marker.name, marker.position])
 	if west != 5 or east != 5:
 		failures.append("Boss增援挂点分组错误：west=%d east=%d" % [west, east])
@@ -895,8 +897,8 @@ func _verify_boss_reinforcements(
 		failures.append("非Boss房写增援计划未被拦住：%s" % [non_boss_probe])
 	var broken_plan := expected_plan.duplicate(true)
 	broken_plan["spawn_rows"] = [
-		{"side": "west", "x_m": -40.0, "z_m": [], "height_m": 0.0},
-		{"side": "west", "x_m": 18.0, "z_m": [40.0], "height_m": 3.0},
+		{"side": "west", "x_m": -50.0, "z_m": [], "height_m": 0.0},
+		{"side": "west", "x_m": 50.0, "z_m": [60.0], "height_m": 3.0},
 	]
 	broken_plan["enemy_request_type"] = "minion"
 	broken_plan["initial_count"] = 3.5

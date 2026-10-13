@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/stair_landing_5m/env_boss_room02_stair_landing_5m_visual_top3d.glb" id="1_lrnck"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ybroo"]
+size = Vector3(5, 0.22, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8ytg8"]
+size = Vector3(0.17999983, 1.1, 0.17999983)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wepms"]
+size = Vector3(0.17999983, 1.1, 0.18)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5iyai"]
+size = Vector3(0.17999983, 1.1, 0.17999983)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_38ivp"]
+size = Vector3(0.119999886, 0.119999886, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xgxww"]
+size = Vector3(0.17999983, 1.1, 0.17999983)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yavr0"]
+size = Vector3(0.17999983, 1.1, 0.18)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t5s6f"]
+size = Vector3(0.17999983, 1.1, 0.17999983)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gkh38"]
+size = Vector3(0.119999886, 0.119999886, 5)
+
+[node name="BossRoom02_stair_landing_5m" type="Node3D" unique_id=2090111405]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-STAIR-LANDING-5M"
+metadata/slug = "stair_landing_5m"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_landing_5m/stair_landing_5m.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_landing_5m/export/v027/env_boss_room02_stair_landing_5m_optimized_v027.blend"
+metadata/glb_sha256 = "70e7374161b41b5d1d9a2e0658c426a6eeef13a3022f86246c4c664f7b71c357"
+metadata/collision_policy = "segmented_structure"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "stair_landing_5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_landing_5m/stair_landing_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(5.14, 1.41, 5)
+metadata/display_name_zh = "入口钢格栅平台"
+metadata/collision_shape_count = 9
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=1732414981 instance=ExtResource("1_lrnck")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=1878066202]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=1498649154]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)
+shape = SubResource("BoxShape3D_ybroo")
+
+[node name="Shape_01" type="CollisionShape3D" parent="CollisionBody" unique_id=1806995622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48, 0.79, 2.25)
+shape = SubResource("BoxShape3D_8ytg8")
+
+[node name="Shape_02" type="CollisionShape3D" parent="CollisionBody" unique_id=562309247]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48, 0.79, 0)
+shape = SubResource("BoxShape3D_wepms")
+
+[node name="Shape_03" type="CollisionShape3D" parent="CollisionBody" unique_id=1970479578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48, 0.79, -2.25)
+shape = SubResource("BoxShape3D_5iyai")
+
+[node name="Shape_04" type="CollisionShape3D" parent="CollisionBody" unique_id=1715364907]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48, 1.35, 0)
+shape = SubResource("BoxShape3D_38ivp")
+
+[node name="Shape_05" type="CollisionShape3D" parent="CollisionBody" unique_id=1510010688]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.48, 0.79, 2.25)
+shape = SubResource("BoxShape3D_xgxww")
+
+[node name="Shape_06" type="CollisionShape3D" parent="CollisionBody" unique_id=1481390461]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.48, 0.79, 0)
+shape = SubResource("BoxShape3D_yavr0")
+
+[node name="Shape_07" type="CollisionShape3D" parent="CollisionBody" unique_id=661042098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.48, 0.79, -2.25)
+shape = SubResource("BoxShape3D_t5s6f")
+
+[node name="Shape_08" type="CollisionShape3D" parent="CollisionBody" unique_id=348004959]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.48, 1.35, 0)
+shape = SubResource("BoxShape3D_gkh38")

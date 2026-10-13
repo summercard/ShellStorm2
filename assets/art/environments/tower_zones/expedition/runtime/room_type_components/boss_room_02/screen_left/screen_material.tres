@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/screen_scan.gdshader" id="1_o0amm"]
+[ext_resource type="Texture2D" path="res://assets/art/shared/textures/general/env_boss_room02_screen_left.png" id="2_xyv4i"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_o0amm")
+shader_parameter/screen_texture = ExtResource("2_xyv4i")
+shader_parameter/emission_strength = null
+shader_parameter/scan_speed = null
+shader_parameter/scan_phase = 0.0

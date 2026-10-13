@@ -36,9 +36,9 @@
     0
   ],
   "texture_exception": false,
-  "collision_owner": "godot_wrapper_pending",
-  "runtime_connected": false,
-  "registration_status": "未登记",
+  "collision_owner": "self",
+  "runtime_connected": true,
+  "registration_status": "已优化并正式接入",
   "bounds_min": [
     -2.5,
     -0.4000000059604645,
@@ -59,5 +59,9 @@
     "02_细腻哑光_青绿大面"
   ],
   "geometry_fingerprint": "e7b473494a7ee5490411949208f93e88aa3d1f104d42a636a78391f7fe1355c7",
-  "triangle_count": 216
+  "triangle_count": 216,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/portal_backing_5m/env_boss_room02_portal_backing_5m_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/portal_backing_5m/env_boss_room02_portal_backing_5m_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/portal_backing_5m/export/v027/env_boss_room02_portal_backing_5m_optimized_v027.blend",
+  "optimized_sha256": "f601caaadf48fa6d51cd21cb21bd7340a38d9d4f0e156263d9ae85b0ffd07bdb"
 }

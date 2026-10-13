@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/abutment_bracket/env_boss_room02_abutment_bracket_visual_top3d.glb" id="1_1v7vn"]
+
+[node name="BossRoom02_abutment_bracket" type="Node3D" unique_id=858960707]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-ABUTMENT-BRACKET"
+metadata/slug = "abutment_bracket"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/abutment_bracket/abutment_bracket.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/abutment_bracket/export/v027/env_boss_room02_abutment_bracket_optimized_v027.blend"
+metadata/glb_sha256 = "3e7809f57951853024a3ccc65b424f35a6b02ebc1ac7686115cd923ab12d8fe8"
+metadata/collision_policy = "visual_only"
+metadata/collision_owner = "none"
+metadata/asset_version = "v027"
+metadata/component_slug = "abutment_bracket"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/abutment_bracket/abutment_bracket.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(1.665, 3.0900002, 1.45)
+metadata/display_name_zh = "桥接头斜撑牛腿"
+metadata/collision_shape_count = 0
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=63478844 instance=ExtResource("1_1v7vn")]

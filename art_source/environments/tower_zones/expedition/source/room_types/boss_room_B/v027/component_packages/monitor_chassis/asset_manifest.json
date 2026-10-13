@@ -57,12 +57,16 @@
     "02_细腻哑光_青绿大面",
     "04_柔和自发光_UI灯光"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "none",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "7783b8bdf79af98f205ffadb2cc0eaef123673059400771ae309e9fe410fd22a",
-  "triangle_count": 7900
+  "triangle_count": 7900,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/monitor_chassis/env_boss_room02_monitor_chassis_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/monitor_chassis/env_boss_room02_monitor_chassis_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/monitor_chassis/export/v027/env_boss_room02_monitor_chassis_optimized_v027.blend",
+  "optimized_sha256": "a201bd9d524162483a2dda97dbfbb385222c2a9cba89093c7f4e935c740daf50"
 }

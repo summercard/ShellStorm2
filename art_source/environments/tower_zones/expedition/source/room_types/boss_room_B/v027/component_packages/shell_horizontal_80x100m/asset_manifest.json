@@ -41,5 +41,11 @@
   "materials": [
     "02_细腻哑光_青绿大面"
   ],
-  "runtime_connected": false
+  "runtime_connected": true,
+  "registration_status": "已优化并正式接入",
+  "collision_owner": "self",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/shell_horizontal_80x100m/env_boss_room02_shell_horizontal_80x100m_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/shell_horizontal_80x100m/env_boss_room02_shell_horizontal_80x100m_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_horizontal_80x100m/export/v027/env_boss_room02_shell_horizontal_80x100m_optimized_v027.blend",
+  "optimized_sha256": "d508493bcc7a249b18255704afa12ee1333dc75cf47c440fe2159eb7b1afd554"
 }

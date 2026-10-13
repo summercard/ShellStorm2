@@ -42,5 +42,11 @@
     "01_精工金属_紫色骨架",
     "02_细腻哑光_青绿大面"
   ],
-  "runtime_connected": false
+  "runtime_connected": true,
+  "registration_status": "已优化并正式接入",
+  "collision_owner": "self",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/door_seal_frame/env_boss_room02_door_seal_frame_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/door_seal_frame/env_boss_room02_door_seal_frame_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_seal_frame/export/v027/env_boss_room02_door_seal_frame_optimized_v027.blend",
+  "optimized_sha256": "f7b1ba2ed1ef5842a0ec609226f4272d1255082a8a47e0bb470427d3d0c4fb0d"
 }

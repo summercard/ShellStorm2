@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/damaged_cabinet_crushed/env_boss_room02_damaged_cabinet_crushed_visual_top3d.glb" id="1_exgmi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ugeld"]
+size = Vector3(1.2687366, 1.0978886, 1.9)
+
+[node name="BossRoom02_damaged_cabinet_crushed" type="Node3D" unique_id=1024597940]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-DAMAGED-CABINET-CRUSHED"
+metadata/slug = "damaged_cabinet_crushed"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_crushed/damaged_cabinet_crushed.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_crushed/export/v027/env_boss_room02_damaged_cabinet_crushed_optimized_v027.blend"
+metadata/glb_sha256 = "cf11648b0e33e34a3a09bdee7440459753b3a205737416b0731aba1a0640c997"
+metadata/collision_policy = "segmented_structure"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "damaged_cabinet_crushed"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_crushed/damaged_cabinet_crushed.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(1.2687366, 1.0978886, 1.9)
+metadata/display_name_zh = "凹陷破损机箱"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=230448109 instance=ExtResource("1_exgmi")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=1774699019]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=590120923]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5489443, 0)
+shape = SubResource("BoxShape3D_ugeld")

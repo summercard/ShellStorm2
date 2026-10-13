@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/bridge_threshold/env_boss_room02_bridge_threshold_visual_top3d.glb" id="1_irh0m"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k7s1t"]
+size = Vector3(5, 0.22, 1.5)
+
+[node name="BossRoom02_bridge_threshold" type="Node3D" unique_id=1351402074]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-BRIDGE-THRESHOLD"
+metadata/slug = "bridge_threshold"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_threshold/bridge_threshold.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_threshold/export/v027/env_boss_room02_bridge_threshold_optimized_v027.blend"
+metadata/glb_sha256 = "7e6efd7102a7aeda9699760f8a045d63cbf558f2b781f82e4f5b58ea7d608a38"
+metadata/collision_policy = "segmented_structure"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "bridge_threshold"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_threshold/bridge_threshold.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(5, 0.26500002, 1.5)
+metadata/display_name_zh = "桥门衔接平台"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=1278574607 instance=ExtResource("1_irh0m")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=1561588666]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=1482299295]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)
+shape = SubResource("BoxShape3D_k7s1t")

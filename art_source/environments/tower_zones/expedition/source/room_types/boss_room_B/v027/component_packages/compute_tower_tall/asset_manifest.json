@@ -57,12 +57,16 @@
     "02_细腻哑光_青绿大面",
     "04_柔和自发光_UI灯光"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "none",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "4a93fe881b9c11841f52d18bd1a6ea94a098d207186bb0332a8a682f4c1a5ddf",
-  "triangle_count": 2088
+  "triangle_count": 2088,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/compute_tower_tall/env_boss_room02_compute_tower_tall_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/compute_tower_tall/env_boss_room02_compute_tower_tall_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/compute_tower_tall/export/v027/env_boss_room02_compute_tower_tall_optimized_v027.blend",
+  "optimized_sha256": "f87c12f438255790ef9e2027b4306f1b0c12086125a915ba1f3364af1fb48f1b"
 }

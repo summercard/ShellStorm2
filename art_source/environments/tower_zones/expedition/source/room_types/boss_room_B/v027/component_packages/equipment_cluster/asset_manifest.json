@@ -59,12 +59,16 @@
     "03_清漆反光_紫粉点缀",
     "04_柔和自发光_UI灯光"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "self",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "7c9e7c4548194bb218e6fce7c3b5fe34264d47b9e95e46dd84a4bb1b1cb54d80",
-  "triangle_count": 6136
+  "triangle_count": 6136,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/equipment_cluster/env_boss_room02_equipment_cluster_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/equipment_cluster/env_boss_room02_equipment_cluster_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/equipment_cluster/export/v027/env_boss_room02_equipment_cluster_optimized_v027.blend",
+  "optimized_sha256": "7616d7d0dcfcd2cbdc75ae06f58e7f591a515237c0d8f09670fdaf8cf66f24df"
 }

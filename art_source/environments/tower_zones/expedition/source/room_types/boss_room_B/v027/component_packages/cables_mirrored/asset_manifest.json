@@ -55,12 +55,16 @@
     "01_精工金属_紫色骨架",
     "02_细腻哑光_青绿大面"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "none",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "a5148259da4912f5d68b5af89addc5cfa37dd9cccf31097246b8ffed83d38580",
-  "triangle_count": 19456
+  "triangle_count": 19456,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/cables_mirrored/env_boss_room02_cables_mirrored_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/cables_mirrored/env_boss_room02_cables_mirrored_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_mirrored/export/v027/env_boss_room02_cables_mirrored_optimized_v027.blend",
+  "optimized_sha256": "279c5f9a320159ee99d1ba649c496e404c37ba8773c4e232552cb7d88d5d35f6"
 }

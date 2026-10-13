@@ -54,12 +54,16 @@
   "materials": [
     "01_精工金属_紫色骨架"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "none",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "bddde74c11d36618a0651db2d349ed642c2cce73f0c58ae75bc5a7784eef65d1",
-  "triangle_count": 864
+  "triangle_count": 864,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/matrix_bus_5m/env_boss_room02_matrix_bus_5m_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/matrix_bus_5m/env_boss_room02_matrix_bus_5m_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_bus_5m/export/v027/env_boss_room02_matrix_bus_5m_optimized_v027.blend",
+  "optimized_sha256": "03b623d93f97130b58710f836115fc3e76252274d4d18c14c5815a92f5709a50"
 }

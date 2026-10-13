@@ -41,5 +41,11 @@
   "materials": [
     "01_精工金属_紫色骨架"
   ],
-  "runtime_connected": false
+  "runtime_connected": true,
+  "registration_status": "已优化并正式接入",
+  "collision_owner": "self",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_threshold/env_boss_room02_bridge_threshold_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/bridge_threshold/env_boss_room02_bridge_threshold_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_threshold/export/v027/env_boss_room02_bridge_threshold_optimized_v027.blend",
+  "optimized_sha256": "4cd89fc04a2b17a8dffbf557d7a0adc330d9edcc2115a424df827b3ec4bb99c1"
 }

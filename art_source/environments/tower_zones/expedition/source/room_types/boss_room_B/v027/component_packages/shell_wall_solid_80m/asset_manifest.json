@@ -42,5 +42,11 @@
     "01_精工金属_紫色骨架",
     "02_细腻哑光_青绿大面"
   ],
-  "runtime_connected": false
+  "runtime_connected": true,
+  "registration_status": "已优化并正式接入",
+  "collision_owner": "self",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/shell_wall_solid_80m/env_boss_room02_shell_wall_solid_80m_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/shell_wall_solid_80m/env_boss_room02_shell_wall_solid_80m_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_wall_solid_80m/export/v027/env_boss_room02_shell_wall_solid_80m_optimized_v027.blend",
+  "optimized_sha256": "649fc146dd922fc247fc3730f86002ed9b98630c3d12a80fea9a81f61b6dc5f2"
 }

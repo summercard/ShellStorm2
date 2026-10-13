@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/shell_horizontal_80x100m/env_boss_room02_shell_horizontal_80x100m_visual_top3d.glb" id="1_8g2vl"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_cub6j"]
+data = PackedVector3Array(-40, 0.39999998, 50, -40, 0, 50, -40, 0, -50, -40, 0.39999998, 50, -40, 0, -50, -40, 0.39999998, -50, -40, 0.39999998, -50, -40, 0, -50, 40, 0, -50, -40, 0.39999998, -50, 40, 0, -50, 40, 0.39999998, -50, 40, 0.39999998, -50, 40, 0, -50, 40, 0, 50, 40, 0.39999998, -50, 40, 0, 50, 40, 0.39999998, 50, 40, 0.39999998, 50, 40, 0, 50, -40, 0, 50, 40, 0.39999998, 50, -40, 0, 50, -40, 0.39999998, 50, 40, 0, -50, -40, 0, -50, -40, 0, 50, 40, 0, -50, -40, 0, 50, 40, 0, 50, -40, 0.39999998, -50, 40, 0.39999998, -50, 40, 0.39999998, 50, -40, 0.39999998, -50, 40, 0.39999998, 50, -40, 0.39999998, 50)
+
+[node name="BossRoom02_shell_horizontal_80x100m" type="Node3D" unique_id=2147331056]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-SHELL-HORIZONTAL-80X100M"
+metadata/slug = "shell_horizontal_80x100m"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_horizontal_80x100m/shell_horizontal_80x100m.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_horizontal_80x100m/export/v027/env_boss_room02_shell_horizontal_80x100m_optimized_v027.blend"
+metadata/glb_sha256 = "a696704f6ad882901d956e8c92ef0f87a9c35d90d28f89b02e9636bfe1062947"
+metadata/collision_policy = "exact_static_mesh"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "shell_horizontal_80x100m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_horizontal_80x100m/shell_horizontal_80x100m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(80, 0.4, 100)
+metadata/display_name_zh = "整面顶底围护板"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=408600895 instance=ExtResource("1_8g2vl")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=49398616]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=569964223]
+shape = SubResource("ConcavePolygonShape3D_cub6j")

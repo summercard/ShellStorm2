@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/deck_emblem_5m/env_boss_room02_deck_emblem_5m_visual_top3d.glb" id="1_nuiam"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fjsw4"]
+size = Vector3(5, 0.44900006, 5)
+
+[node name="BossRoom02_deck_emblem_5m" type="Node3D" unique_id=369839353]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-DECK-EMBLEM-5M"
+metadata/slug = "deck_emblem_5m"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_emblem_5m/deck_emblem_5m.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_emblem_5m/export/v027/env_boss_room02_deck_emblem_5m_optimized_v027.blend"
+metadata/glb_sha256 = "379f0889a0a284b40338c46bcc6e311adfef69a0efdfc0b2134456af8f8749ac"
+metadata/collision_policy = "segmented_structure"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "deck_emblem_5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_emblem_5m/deck_emblem_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(5, 0.44900006, 5)
+metadata/display_name_zh = "中心菱形徽记甲板"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=1695383367 instance=ExtResource("1_nuiam")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=1845358488]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=1640479500]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22450003, 0)
+shape = SubResource("BoxShape3D_fjsw4")

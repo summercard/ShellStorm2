@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_room_02_static_layout.tscn" id="1_vry44"]
+
+[sub_resource type="Environment" id="Environment_3tm0m"]
+background_mode = 1
+background_color = Color(0.012, 0.016, 0.025, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.35, 0.4, 0.5, 1)
+ambient_light_energy = 0.22
+tonemap_mode = 2
+ssao_enabled = true
+ssao_intensity = 1.5
+glow_enabled = true
+
+[node name="BossRoom02Standalone" type="Node3D" unique_id=978295610]
+
+[node name="BossRoom02" type="Node3D" parent="." unique_id=1734642322 instance=ExtResource("1_vry44")]
+metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-ROOM-02"
+metadata/asset_version = "v027"
+metadata/block_id = "expedition"
+metadata/level_id = "expedition_01"
+metadata/room_id = "boss_room_02"
+metadata/room_type = "BOSS_ROOM"
+metadata/room_variant = "deep_shaft_02"
+metadata/layout_instance_total = 652
+metadata/component_definition_count = 46
+metadata/layout_owner = "formal Godot TSCN; Blender JSON initialization only"
+metadata/floor_plane_y = 0.0
+metadata/future_level_binding = "Use this new room when connecting the level. Existing room01 retained."
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1342820376]
+environment = SubResource("Environment_3tm0m")
+
+[node name="InspectionCamera" type="Camera3D" parent="." unique_id=2099712139]
+transform = Transform3D(1, 0, 0, 0, 0.94272226, 0.33357865, 0, -0.33357865, 0.94272226, 0, 22, 42.5)
+current = true
+fov = 58.0
+far = 240.0

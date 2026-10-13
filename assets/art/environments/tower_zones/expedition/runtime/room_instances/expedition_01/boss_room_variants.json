@@ -1,0 +1,20 @@
+{
+  "level_id": "expedition_01",
+  "selection_owner": "Level assembly; explicit user choice 2026-10-13",
+  "variants": [
+    {
+      "room_number": "01",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_static_layout.tscn",
+      "current_level_binding": true,
+      "preserve": true
+    },
+    {
+      "room_number": "02",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_room_02_static_layout.tscn",
+      "asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-02",
+      "selected_for_next_level_connection": true,
+      "current_level_binding": false
+    }
+  ],
+  "note": "Catalog records the selection; current TowerDescent path resolver is unchanged. No claim of automatic variant switching."
+}

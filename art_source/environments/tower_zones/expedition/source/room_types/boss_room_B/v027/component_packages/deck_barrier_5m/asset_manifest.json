@@ -57,12 +57,16 @@
     "01_精工金属_紫色骨架",
     "04_柔和自发光_UI灯光"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "self",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "b99cf5fea589d67ad5b4f282c2fca46102da6d5c7bc40160892059b17e02be10",
-  "triangle_count": 1356
+  "triangle_count": 1356,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/deck_barrier_5m/env_boss_room02_deck_barrier_5m_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/deck_barrier_5m/env_boss_room02_deck_barrier_5m_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_barrier_5m/export/v027/env_boss_room02_deck_barrier_5m_optimized_v027.blend",
+  "optimized_sha256": "61e9ea37ce5cfa40672d10f50b355e7126f015a6d581c0a4f4790ad492804de2"
 }

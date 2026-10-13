@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/equipment_cluster/env_boss_room02_equipment_cluster_visual_top3d.glb" id="1_jgiwd"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j80wf"]
+size = Vector3(3.3, 3.537, 2.6)
+
+[node name="BossRoom02_equipment_cluster" type="Node3D" unique_id=1217110905]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-EQUIPMENT-CLUSTER"
+metadata/slug = "equipment_cluster"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/equipment_cluster/equipment_cluster.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/equipment_cluster/export/v027/env_boss_room02_equipment_cluster_optimized_v027.blend"
+metadata/glb_sha256 = "c9da5221c2afe3c9a4b8b87ecf4732911b3e87a702cd6d850846c79e434d2197"
+metadata/collision_policy = "segmented_structure"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "equipment_cluster"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/equipment_cluster/equipment_cluster.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(3.3, 3.537, 2.6)
+metadata/display_name_zh = "平台阶梯设备组"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=862275015 instance=ExtResource("1_jgiwd")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=32040959]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=371237934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7685, 0)
+shape = SubResource("BoxShape3D_j80wf")

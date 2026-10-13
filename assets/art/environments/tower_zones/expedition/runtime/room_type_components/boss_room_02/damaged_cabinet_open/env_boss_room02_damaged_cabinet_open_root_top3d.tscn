@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/damaged_cabinet_open/env_boss_room02_damaged_cabinet_open_visual_top3d.glb" id="1_6ow2l"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_47evp"]
+size = Vector3(1.1591413, 1.2205524, 1.9)
+
+[node name="BossRoom02_damaged_cabinet_open" type="Node3D" unique_id=823700891]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-DAMAGED-CABINET-OPEN"
+metadata/slug = "damaged_cabinet_open"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_open/damaged_cabinet_open.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_open/export/v027/env_boss_room02_damaged_cabinet_open_optimized_v027.blend"
+metadata/glb_sha256 = "2b75f1648d1b397c910a30da08e59d5c1c0d2ba9517de7f679caa530c2f0ea07"
+metadata/collision_policy = "segmented_structure"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "damaged_cabinet_open"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_open/damaged_cabinet_open.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(1.1591413, 1.2205524, 1.9)
+metadata/display_name_zh = "破损敞口机箱"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=208388177 instance=ExtResource("1_6ow2l")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=2054654694]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=664069609]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6102762, 0)
+shape = SubResource("BoxShape3D_47evp")

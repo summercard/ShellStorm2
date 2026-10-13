@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/corner_pylon/env_boss_room02_corner_pylon_visual_top3d.glb" id="1_he4sd"]
+
+[node name="BossRoom02_corner_pylon" type="Node3D" unique_id=1575235673]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-CORNER-PYLON"
+metadata/slug = "corner_pylon"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/corner_pylon/corner_pylon.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/corner_pylon/export/v027/env_boss_room02_corner_pylon_optimized_v027.blend"
+metadata/glb_sha256 = "d881b38e23f224c9c2410b4987e8708bb0d35dbb105acd26233b8df3221080ab"
+metadata/collision_policy = "visual_only"
+metadata/collision_owner = "none"
+metadata/asset_version = "v027"
+metadata/component_slug = "corner_pylon"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/corner_pylon/corner_pylon.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(1.55, 58, 1.55)
+metadata/display_name_zh = "转角竖向承力灯柱"
+metadata/collision_shape_count = 0
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=1767170869 instance=ExtResource("1_he4sd")]

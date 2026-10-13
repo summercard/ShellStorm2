@@ -28,16 +28,10 @@
         15.0
       ],
       "template_rotation_deg": 0,
-      "ports": [
-        {
-          "port_id": "P1",
-          "target": "room_01",
-          "side": "north",
-          "lane_m": 0.0,
-          "wall_length_m": 15.0
-        }
-      ],
-      "content_type": ""
+      "ports": [],
+      "content_type": "",
+      "connection_ports": [],
+      "floor_offset_m": 0
     },
     {
       "key": "room_01",
@@ -57,23 +51,28 @@
         25.0
       ],
       "template_rotation_deg": 0,
-      "ports": [
-        {
-          "port_id": "P1",
-          "target": "entry",
-          "side": "south",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        },
+      "ports": [],
+      "content_type": "COMBAT",
+      "connection_ports": [
         {
           "port_id": "P2",
           "target": "boss",
-          "side": "north",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
+          "position_m": [
+            0,
+            -12.5
+          ],
+          "outward": [
+            0,
+            -1
+          ],
+          "height_m": 0,
+          "door_width_m": 2.2,
+          "door_axis": "x",
+          "door_line_m": -12.5,
+          "door_center_m": 0
         }
       ],
-      "content_type": "COMBAT"
+      "floor_offset_m": 0
     },
     {
       "key": "boss",
@@ -82,33 +81,48 @@
       "room_type": "BOSS_ROOM",
       "role": "boss",
       "parent_key": "room_01",
-      "template_id": "boss_45x45",
-      "template_variant": "",
+      "template_id": "boss_deep_shaft_80x100",
+      "template_variant": "deep_shaft_02",
       "center_m": [
         2.5,
-        -87.5
+        -95
       ],
       "size_m": [
-        45.0,
-        45.0
+        80,
+        100
       ],
       "template_rotation_deg": 0,
       "boss_content_id": "boss_monitor002",
       "boss_reinforcement_plan": {
         "enabled": true,
-        "boss_spawn_local_m": [0.0, 0.0],
+        "boss_spawn_local_m": [
+          0,
+          -22.5
+        ],
         "activation_delay_sec": 10.0,
         "spawn_rows": [
           {
             "side": "west",
-            "x_m": -18.0,
-            "z_m": [-14.0, -7.0, 0.0, 7.0, 14.0],
+            "x_m": -10,
+            "z_m": [
+              -32.5,
+              -27.5,
+              -22.5,
+              -17.5,
+              -12.5
+            ],
             "height_m": 3.0
           },
           {
             "side": "east",
-            "x_m": 18.0,
-            "z_m": [-14.0, -7.0, 0.0, 7.0, 14.0],
+            "x_m": 10,
+            "z_m": [
+              -32.5,
+              -27.5,
+              -22.5,
+              -17.5,
+              -12.5
+            ],
             "height_m": 3.0
           }
         ],
@@ -123,23 +137,594 @@
         "launch_speed_mps": 8.5,
         "launch_duration_sec": 0.38
       },
-      "ports": [
+      "ports": [],
+      "content_type": "BOSS",
+      "authored_layout_shell": true,
+      "authored_layout_asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-02",
+      "authored_layout_version": "v027",
+      "authored_layout_room_id": "boss",
+      "authored_layout_instances": [
+        {
+          "instance_id": "精加工甲板_000",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -10.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "position": [
+            -10.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_001",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -10.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "position": [
+            -10.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_002",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -10.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "position": [
+            -10.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_003",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -10.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "position": [
+            -10.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_004",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -10.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "position": [
+            -10.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_005",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -5.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "position": [
+            -5.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_006",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -5.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "position": [
+            -5.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_007",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -5.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "position": [
+            -5.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_008",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -5.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "position": [
+            -5.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_009",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            -5.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "position": [
+            -5.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_010",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            0.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "position": [
+            0.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_011",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            0.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "position": [
+            0.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "中心菱形徽记甲板_012",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-EMBLEM-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            0.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "position": [
+            0.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_013",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            0.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "position": [
+            0.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_014",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            0.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "position": [
+            0.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_015",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            5.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "position": [
+            5.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_016",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            5.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "position": [
+            5.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_017",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            5.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "position": [
+            5.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_018",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            5.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "position": [
+            5.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_019",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            5.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "position": [
+            5.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_020",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            10.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "position": [
+            10.0,
+            -0.4494999945163727,
+            -12.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_021",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            10.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "position": [
+            10.0,
+            -0.4494999945163727,
+            -17.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_022",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            10.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "position": [
+            10.0,
+            -0.4494999945163727,
+            -22.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_023",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            10.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "position": [
+            10.0,
+            -0.4494999945163727,
+            -27.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "instance_id": "精加工甲板_024",
+          "component_id": "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M",
+          "slot_role": "floor_tile",
+          "position_m": [
+            10.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "position": [
+            10.0,
+            -0.4494999945163727,
+            -32.5
+          ],
+          "rotation_y_deg": 0,
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "connection_ports": [
         {
           "port_id": "P1",
           "target": "room_01",
-          "side": "south",
-          "lane_m": 0.0,
-          "wall_length_m": 45.0
+          "position_m": [
+            0,
+            50
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "height_m": 12,
+          "door_width_m": 2.2,
+          "door_axis": "x",
+          "door_line_m": 50,
+          "door_center_m": 0
         },
         {
           "port_id": "P2",
           "target": "extraction",
-          "side": "north",
-          "lane_m": 0.0,
-          "wall_length_m": 45.0
+          "position_m": [
+            40,
+            -22.5
+          ],
+          "outward": [
+            1,
+            0
+          ],
+          "height_m": 0,
+          "door_width_m": 2.2,
+          "door_axis": "z",
+          "door_line_m": 40,
+          "door_center_m": -22.5
+        },
+        {
+          "port_id": "P3",
+          "target": "",
+          "position_m": [
+            -40,
+            -22.5
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "height_m": 0,
+          "door_width_m": 2.2,
+          "door_axis": "z",
+          "door_line_m": -40,
+          "door_center_m": -22.5
         }
       ],
-      "content_type": "BOSS"
+      "floor_offset_m": -12,
+      "anchor_policy": "static_port_layout"
     },
     {
       "key": "extraction",
@@ -151,24 +736,37 @@
       "template_id": "extraction_25x25",
       "template_variant": "",
       "center_m": [
-        2.5,
-        -132.5
+        55,
+        -117.5
       ],
       "size_m": [
         25.0,
         25.0
       ],
       "template_rotation_deg": 0,
-      "ports": [
+      "ports": [],
+      "content_type": "",
+      "connection_ports": [
         {
           "port_id": "P1",
           "target": "boss",
-          "side": "south",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
+          "position_m": [
+            -12.5,
+            0
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "height_m": 0,
+          "door_width_m": 2.2,
+          "door_axis": "z",
+          "door_line_m": -12.5,
+          "door_center_m": 0
         }
       ],
-      "content_type": ""
+      "floor_offset_m": -12,
+      "anchor_policy": "static_port_layout"
     }
   ],
   "main_path": [

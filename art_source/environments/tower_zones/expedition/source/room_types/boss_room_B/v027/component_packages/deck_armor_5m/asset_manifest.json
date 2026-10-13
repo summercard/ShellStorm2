@@ -56,12 +56,16 @@
     "01_精工金属_紫色骨架",
     "02_细腻哑光_青绿大面"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "self",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "13f71314211b56ddd276e57aca03694ab1511f64d42ce01ded8c470fbd4453a1",
-  "triangle_count": 4240
+  "triangle_count": 4240,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/deck_armor_5m/env_boss_room02_deck_armor_5m_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/deck_armor_5m/env_boss_room02_deck_armor_5m_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_armor_5m/export/v027/env_boss_room02_deck_armor_5m_optimized_v027.blend",
+  "optimized_sha256": "e2a8e10898cfb91fa2f75f2d5029e69b30b8da5e957dd053233134cf11b38354"
 }

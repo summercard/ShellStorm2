@@ -59,14 +59,18 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "13f71314211b56ddd276e57aca03694ab1511f64d42ce01ded8c470fbd4453a1",
-      "triangle_count": 4240
+      "triangle_count": 4240,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/deck_armor_5m/env_boss_room02_deck_armor_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/deck_armor_5m/env_boss_room02_deck_armor_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_armor_5m/export/v027/env_boss_room02_deck_armor_5m_optimized_v027.blend",
+      "optimized_sha256": "e2a8e10898cfb91fa2f75f2d5029e69b30b8da5e957dd053233134cf11b38354"
     },
     {
       "slug": "deck_emblem_5m",
@@ -126,14 +130,18 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "b33636379980c7a8efbc4e719c8314087f8033a95ac0ef223245032fb2937643",
-      "triangle_count": 2700
+      "triangle_count": 2700,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/deck_emblem_5m/env_boss_room02_deck_emblem_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/deck_emblem_5m/env_boss_room02_deck_emblem_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_emblem_5m/export/v027/env_boss_room02_deck_emblem_5m_optimized_v027.blend",
+      "optimized_sha256": "0dd11fb307a39bffb7806594b8213221cfc412720de18b64ca7d2bc6d9aece6e"
     },
     {
       "slug": "rim_girder_5m",
@@ -193,14 +201,18 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "036846c094e34ebc0cdba0c07c8cc71981da1fda2470315d7773b40b7486b405",
-      "triangle_count": 2348
+      "triangle_count": 2348,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/rim_girder_5m/env_boss_room02_rim_girder_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/rim_girder_5m/env_boss_room02_rim_girder_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/rim_girder_5m/export/v027/env_boss_room02_rim_girder_5m_optimized_v027.blend",
+      "optimized_sha256": "89c1b3c1d42e7ec5871194ef72e5c3be505e6f9521c7dd39a8f433b22871a66f"
     },
     {
       "slug": "suspended_server_5m",
@@ -262,14 +274,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "222ac01c51c3c80444c1c473dc89835541172ad26db94ed0a1d30e8f9fd4b55f",
-      "triangle_count": 2088
+      "triangle_count": 2088,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/suspended_server_5m/env_boss_room02_suspended_server_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/suspended_server_5m/env_boss_room02_suspended_server_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/suspended_server_5m/export/v027/env_boss_room02_suspended_server_5m_optimized_v027.blend",
+      "optimized_sha256": "c03feb3d2e2c6a3eff523e412761ff6e8dc1f50c24d62a7c8d30741aa4e74f1f"
     },
     {
       "slug": "corner_pylon",
@@ -331,14 +347,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "03776fcb46d60f2627831c20a283f02f32ca7197e90fc4548aae0712981fe5c3",
-      "triangle_count": 1580
+      "triangle_count": 1580,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/corner_pylon/env_boss_room02_corner_pylon_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/corner_pylon/env_boss_room02_corner_pylon_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/corner_pylon/export/v027/env_boss_room02_corner_pylon_optimized_v027.blend",
+      "optimized_sha256": "f921ee2ee856fa910acc4f29e6a541b7d6b7f6d490cf967da0a299a712812cb3"
     },
     {
       "slug": "underframe_beam_5m",
@@ -397,14 +417,18 @@
       "materials": [
         "01_精工金属_紫色骨架"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "7fa2d2cbb93b2b8adb5e9107b74f6a2d1ea4c6e1af1a03aaaad1b335fd7feecf",
-      "triangle_count": 864
+      "triangle_count": 864,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/underframe_beam_5m/env_boss_room02_underframe_beam_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/underframe_beam_5m/env_boss_room02_underframe_beam_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/underframe_beam_5m/export/v027/env_boss_room02_underframe_beam_5m_optimized_v027.blend",
+      "optimized_sha256": "54a26d4105572f41833d756154e4949345de9837ee42fb5b96cdc417c087e184"
     },
     {
       "slug": "deck_barrier_5m",
@@ -465,14 +489,18 @@
         "01_精工金属_紫色骨架",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "b99cf5fea589d67ad5b4f282c2fca46102da6d5c7bc40160892059b17e02be10",
-      "triangle_count": 1356
+      "triangle_count": 1356,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/deck_barrier_5m/env_boss_room02_deck_barrier_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/deck_barrier_5m/env_boss_room02_deck_barrier_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_barrier_5m/export/v027/env_boss_room02_deck_barrier_5m_optimized_v027.blend",
+      "optimized_sha256": "61e9ea37ce5cfa40672d10f50b355e7126f015a6d581c0a4f4790ad492804de2"
     },
     {
       "slug": "bridge_deck_5m",
@@ -534,14 +562,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "f8de64309ea11fa54352c4982fa21bed553a94ba99c1a3113d885452e8c31ad3",
-      "triangle_count": 4400
+      "triangle_count": 4400,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_deck_5m/env_boss_room02_bridge_deck_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/bridge_deck_5m/env_boss_room02_bridge_deck_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_deck_5m/export/v027/env_boss_room02_bridge_deck_5m_optimized_v027.blend",
+      "optimized_sha256": "a0806c01ed61b307eadf29673def6c9f6392e8101cd9c7adf7eae4644fd192bd"
     },
     {
       "slug": "bridge_truss_5m",
@@ -600,14 +632,18 @@
       "materials": [
         "01_精工金属_紫色骨架"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "b3eac50c65a166d92c9f11fa4a86e159c38d1908a7418396d322e4d3083d1e36",
-      "triangle_count": 1416
+      "triangle_count": 1416,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_truss_5m/env_boss_room02_bridge_truss_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/bridge_truss_5m/env_boss_room02_bridge_truss_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_truss_5m/export/v027/env_boss_room02_bridge_truss_5m_optimized_v027.blend",
+      "optimized_sha256": "04edb10d755ad19f8cdd8b0553a567fc41b40de2096f81b3f8f6ee7c33b36784"
     },
     {
       "slug": "bridge_rail_5m",
@@ -668,14 +704,18 @@
         "01_精工金属_紫色骨架",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "01aa0a5588716473a45fcb5ce248bf14f00fc054a001a2c6f81cbd5bd98c3ead",
-      "triangle_count": 1272
+      "triangle_count": 1272,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_rail_5m/env_boss_room02_bridge_rail_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/bridge_rail_5m/env_boss_room02_bridge_rail_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_rail_5m/export/v027/env_boss_room02_bridge_rail_5m_optimized_v027.blend",
+      "optimized_sha256": "758a412341f19f53578caa3f294216edfff97092aa245dd7457c4f7c4d08fb90"
     },
     {
       "slug": "abutment_bracket",
@@ -734,14 +774,18 @@
       "materials": [
         "01_精工金属_紫色骨架"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "1a159323b40d82a95e5082c94484e9d03615100a9e01b288513213f9083aede2",
-      "triangle_count": 756
+      "triangle_count": 756,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/abutment_bracket/env_boss_room02_abutment_bracket_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/abutment_bracket/env_boss_room02_abutment_bracket_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/abutment_bracket/export/v027/env_boss_room02_abutment_bracket_optimized_v027.blend",
+      "optimized_sha256": "fd3c8a6ccd1a8927a76d6e5f11d5ba45f7806981d3d0d31f24c9a9f874fb53e0"
     },
     {
       "slug": "equipment_cluster",
@@ -804,14 +848,18 @@
         "03_清漆反光_紫粉点缀",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "7c9e7c4548194bb218e6fce7c3b5fe34264d47b9e95e46dd84a4bb1b1cb54d80",
-      "triangle_count": 6136
+      "triangle_count": 6136,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/equipment_cluster/env_boss_room02_equipment_cluster_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/equipment_cluster/env_boss_room02_equipment_cluster_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/equipment_cluster/export/v027/env_boss_room02_equipment_cluster_optimized_v027.blend",
+      "optimized_sha256": "7616d7d0dcfcd2cbdc75ae06f58e7f591a515237c0d8f09670fdaf8cf66f24df"
     },
     {
       "slug": "monitor_chassis",
@@ -872,14 +920,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "7783b8bdf79af98f205ffadb2cc0eaef123673059400771ae309e9fe410fd22a",
-      "triangle_count": 7900
+      "triangle_count": 7900,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/monitor_chassis/env_boss_room02_monitor_chassis_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/monitor_chassis/env_boss_room02_monitor_chassis_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/monitor_chassis/export/v027/env_boss_room02_monitor_chassis_optimized_v027.blend",
+      "optimized_sha256": "a201bd9d524162483a2dda97dbfbb385222c2a9cba89093c7f4e935c740daf50"
     },
     {
       "slug": "cables_swept",
@@ -938,14 +990,18 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "ad4f58192cb23f794441cbf8318d339e92a9e938be80da0fbc743e1f2819b24b",
-      "triangle_count": 19456
+      "triangle_count": 19456,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/cables_swept/env_boss_room02_cables_swept_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/cables_swept/env_boss_room02_cables_swept_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_swept/export/v027/env_boss_room02_cables_swept_optimized_v027.blend",
+      "optimized_sha256": "d5cf6b0ee4d1d691f6ed32924d617a428a6dd372b8c59d09fd8c7ac03e552b8c"
     },
     {
       "slug": "cables_mirrored",
@@ -1004,14 +1060,18 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "a5148259da4912f5d68b5af89addc5cfa37dd9cccf31097246b8ffed83d38580",
-      "triangle_count": 19456
+      "triangle_count": 19456,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/cables_mirrored/env_boss_room02_cables_mirrored_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/cables_mirrored/env_boss_room02_cables_mirrored_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_mirrored/export/v027/env_boss_room02_cables_mirrored_optimized_v027.blend",
+      "optimized_sha256": "279c5f9a320159ee99d1ba649c496e404c37ba8773c4e232552cb7d88d5d35f6"
     },
     {
       "slug": "cables_crown",
@@ -1070,14 +1130,18 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "83fe1267ed305ac9a6bb8cd92640b7d6874bbafefa12cc18a57437aaed5c51b9",
-      "triangle_count": 19456
+      "triangle_count": 19456,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/cables_crown/env_boss_room02_cables_crown_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/cables_crown/env_boss_room02_cables_crown_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_crown/export/v027/env_boss_room02_cables_crown_optimized_v027.blend",
+      "optimized_sha256": "98a8853612c32032d9875bde573e90411e414410600d6978fe0b53cb8c87a3df"
     },
     {
       "slug": "compute_tower_tall",
@@ -1138,14 +1202,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "4a93fe881b9c11841f52d18bd1a6ea94a098d207186bb0332a8a682f4c1a5ddf",
-      "triangle_count": 2088
+      "triangle_count": 2088,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/compute_tower_tall/env_boss_room02_compute_tower_tall_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/compute_tower_tall/env_boss_room02_compute_tower_tall_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/compute_tower_tall/export/v027/env_boss_room02_compute_tower_tall_optimized_v027.blend",
+      "optimized_sha256": "f87c12f438255790ef9e2027b4306f1b0c12086125a915ba1f3364af1fb48f1b"
     },
     {
       "slug": "compute_tower_stepped",
@@ -1206,14 +1274,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "66873daeaeb2f73d8354e78b27431aafad4b22d8676643638948165a8364a55c",
-      "triangle_count": 2088
+      "triangle_count": 2088,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/compute_tower_stepped/env_boss_room02_compute_tower_stepped_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/compute_tower_stepped/env_boss_room02_compute_tower_stepped_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/compute_tower_stepped/export/v027/env_boss_room02_compute_tower_stepped_optimized_v027.blend",
+      "optimized_sha256": "bd4537e85794b9d741e211bf67b7705b71e2d0880fb1e878548056f041ae934f"
     },
     {
       "slug": "compute_tower_compact",
@@ -1274,14 +1346,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "f1a0c7898effe9c92b03b03e95662265cf25302f3d3fd539abc487f690a82101",
-      "triangle_count": 2088
+      "triangle_count": 2088,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/compute_tower_compact/env_boss_room02_compute_tower_compact_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/compute_tower_compact/env_boss_room02_compute_tower_compact_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/compute_tower_compact/export/v027/env_boss_room02_compute_tower_compact_optimized_v027.blend",
+      "optimized_sha256": "9a44496d46eabbe877099f04451e5afd99fdfc59fc1b1fc2e2ef54deffbd3194"
     },
     {
       "slug": "matrix_bay_5m",
@@ -1342,14 +1418,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "7165b1b4524dfecacab94daaaccda7f34c260dc3679965ce80233faa602a60a9",
-      "triangle_count": 30672
+      "triangle_count": 30672,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/matrix_bay_5m/env_boss_room02_matrix_bay_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/matrix_bay_5m/env_boss_room02_matrix_bay_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_bay_5m/export/v027/env_boss_room02_matrix_bay_5m_optimized_v027.blend",
+      "optimized_sha256": "4c54b851d7217b95fe9a99f2b03dcb20c00006515dd5ac687f26baa624805a9f"
     },
     {
       "slug": "matrix_bus_5m",
@@ -1407,14 +1487,18 @@
       "materials": [
         "01_精工金属_紫色骨架"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "bddde74c11d36618a0651db2d349ed642c2cce73f0c58ae75bc5a7784eef65d1",
-      "triangle_count": 864
+      "triangle_count": 864,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/matrix_bus_5m/env_boss_room02_matrix_bus_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/matrix_bus_5m/env_boss_room02_matrix_bus_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_bus_5m/export/v027/env_boss_room02_matrix_bus_5m_optimized_v027.blend",
+      "optimized_sha256": "03b623d93f97130b58710f836115fc3e76252274d4d18c14c5815a92f5709a50"
     },
     {
       "slug": "exit_portal",
@@ -1475,14 +1559,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "00b23e656e7437190c537b02b4560a7c89098bbf4eba5c421652fbffd5963d53",
-      "triangle_count": 6925
+      "triangle_count": 6925,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/exit_portal/env_boss_room02_exit_portal_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/exit_portal/env_boss_room02_exit_portal_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_portal/export/v027/env_boss_room02_exit_portal_optimized_v027.blend",
+      "optimized_sha256": "4ce33f6b052ff81b23512048e9c49cd80e8bd0b07c992e25f91efab86a7ed124"
     },
     {
       "slug": "exit_leaf_a",
@@ -1543,14 +1631,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "8e92e7333a3e3fec226f94dc0d6d51e44bb552df7b03136a2e455912837e9a10",
-      "triangle_count": 1040
+      "triangle_count": 1040,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/exit_leaf_a/env_boss_room02_exit_leaf_a_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/exit_leaf_a/env_boss_room02_exit_leaf_a_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_leaf_a/export/v027/env_boss_room02_exit_leaf_a_optimized_v027.blend",
+      "optimized_sha256": "df6d8b99e63e0aaacc401d71b902248c521e7b30d9aca790c85523ebf642fbe1"
     },
     {
       "slug": "exit_leaf_b",
@@ -1611,14 +1703,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "16942b6165dfd1841843c392d146af10f2ccfe480580c4c1b1d5f6015edaad23",
-      "triangle_count": 1040
+      "triangle_count": 1040,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/exit_leaf_b/env_boss_room02_exit_leaf_b_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/exit_leaf_b/env_boss_room02_exit_leaf_b_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_leaf_b/export/v027/env_boss_room02_exit_leaf_b_optimized_v027.blend",
+      "optimized_sha256": "3aa8b68954e6b5d3fa2f5d81cc6f6b3b58afb458d7016cf94876f0304b24016d"
     },
     {
       "slug": "exit_passage",
@@ -1679,14 +1775,18 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "self",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": false,
       "palette_uv_layer": "PaletteUV",
       "animation": null,
       "geometry_fingerprint": "9f155d1127271ff70782e7bc744ef709485c235cd0d3f4e0fac57aec50d32c1a",
-      "triangle_count": 2052
+      "triangle_count": 2052,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/exit_passage/env_boss_room02_exit_passage_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/exit_passage/env_boss_room02_exit_passage_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_passage/export/v027/env_boss_room02_exit_passage_optimized_v027.blend",
+      "optimized_sha256": "0d04a5d2005c870c0c185cbde1314524844bce0050edfb195f76b40b789d5424"
     },
     {
       "slug": "screen_left",
@@ -1744,14 +1844,18 @@
       "materials": [
         "05_动态屏幕_left_自发光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": true,
       "palette_uv_layer": null,
       "animation": "shader_scan_preview",
       "geometry_fingerprint": "f34b5f951d0bcbde2141bfd8fb8ab5d9c1d3903630217a51c814a7387591943e",
-      "triangle_count": 2
+      "triangle_count": 2,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/screen_left/env_boss_room02_screen_left_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/screen_left/env_boss_room02_screen_left_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/screen_left/export/v027/env_boss_room02_screen_left_optimized_v027.blend",
+      "optimized_sha256": "db85a169c9c8e5b5064f28b47090b8c680f82d1b5d5fc2612b95997279c12499"
     },
     {
       "slug": "screen_center",
@@ -1809,14 +1913,18 @@
       "materials": [
         "06_动态屏幕_center_自发光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": true,
       "palette_uv_layer": null,
       "animation": "shader_scan_preview",
       "geometry_fingerprint": "a39d8840d596df2e23a1bc990183c383938a0915b65ac21561d6c8042c274385",
-      "triangle_count": 2
+      "triangle_count": 2,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/screen_center/env_boss_room02_screen_center_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/screen_center/env_boss_room02_screen_center_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/screen_center/export/v027/env_boss_room02_screen_center_optimized_v027.blend",
+      "optimized_sha256": "0833f86a9c6293ed21ed4562b7fa61fbc1ef36bf10cd23d003d14391569196e4"
     },
     {
       "slug": "screen_right",
@@ -1874,14 +1982,18 @@
       "materials": [
         "07_动态屏幕_right_自发光"
       ],
-      "collision_owner": "godot_wrapper_pending",
-      "registration_status": "未登记",
-      "runtime_connected": false,
+      "collision_owner": "none",
+      "registration_status": "已优化并正式接入",
+      "runtime_connected": true,
       "texture_exception": true,
       "palette_uv_layer": null,
       "animation": "shader_scan_preview",
       "geometry_fingerprint": "b64c60ddf39a50c6392dba06682151c750d66f16e945482ae2cc307bc4ccc8c6",
-      "triangle_count": 2
+      "triangle_count": 2,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/screen_right/env_boss_room02_screen_right_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/screen_right/env_boss_room02_screen_right_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/screen_right/export/v027/env_boss_room02_screen_right_optimized_v027.blend",
+      "optimized_sha256": "ad37e7e7df2428b2b24d68b8a9c7bbf62a1c90080bf8abc3baea098b707caef2"
     },
     {
       "slug": "portal_backing_5m",
@@ -1921,9 +2033,9 @@
         0
       ],
       "texture_exception": false,
-      "collision_owner": "godot_wrapper_pending",
-      "runtime_connected": false,
-      "registration_status": "未登记",
+      "collision_owner": "self",
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
       "bounds_min": [
         -2.5,
         -0.4000000059604645,
@@ -1944,7 +2056,11 @@
         "02_细腻哑光_青绿大面"
       ],
       "geometry_fingerprint": "e7b473494a7ee5490411949208f93e88aa3d1f104d42a636a78391f7fe1355c7",
-      "triangle_count": 216
+      "triangle_count": 216,
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/portal_backing_5m/env_boss_room02_portal_backing_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/portal_backing_5m/env_boss_room02_portal_backing_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/portal_backing_5m/export/v027/env_boss_room02_portal_backing_5m_optimized_v027.blend",
+      "optimized_sha256": "f601caaadf48fa6d51cd21cb21bd7340a38d9d4f0e156263d9ae85b0ffd07bdb"
     },
     {
       "slug": "door_support_pier",
@@ -1993,7 +2109,13 @@
         "02_细腻哑光_青绿大面",
         "04_柔和自发光_UI灯光"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "none",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/door_support_pier/env_boss_room02_door_support_pier_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/door_support_pier/env_boss_room02_door_support_pier_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_support_pier/export/v027/env_boss_room02_door_support_pier_optimized_v027.blend",
+      "optimized_sha256": "87e4b16383510455ba9bbeb7fdf8d02b2c802d4c473b914b78face445255304b"
     },
     {
       "slug": "stair_flight_5m",
@@ -2040,7 +2162,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/stair_flight_5m/env_boss_room02_stair_flight_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/stair_flight_5m/env_boss_room02_stair_flight_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_flight_5m/export/v027/env_boss_room02_stair_flight_5m_optimized_v027.blend",
+      "optimized_sha256": "d58d33e7e106889197128848e27e2e9cfccc2781d68b2fec550de28aced548e9"
     },
     {
       "slug": "stair_chase_light",
@@ -2088,7 +2216,13 @@
         "01_精工金属_紫色骨架",
         "04_柔和自发光_UI灯光"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "none",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/stair_chase_light/env_boss_room02_stair_chase_light_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/stair_chase_light/env_boss_room02_stair_chase_light_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_chase_light/export/v027/env_boss_room02_stair_chase_light_optimized_v027.blend",
+      "optimized_sha256": "fefe42e93b5e91b95c8dc0ba081ff00d212e46e410a0637c71bfe202c73b33c9"
     },
     {
       "slug": "stair_landing_5m",
@@ -2134,7 +2268,13 @@
       "materials": [
         "01_精工金属_紫色骨架"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/stair_landing_5m/env_boss_room02_stair_landing_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/stair_landing_5m/env_boss_room02_stair_landing_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_landing_5m/export/v027/env_boss_room02_stair_landing_5m_optimized_v027.blend",
+      "optimized_sha256": "c63c444e181b82624bb8be1bdc9442a37ddf6d30301b3c995110b6dff3a4d088"
     },
     {
       "slug": "hanging_power_bundle",
@@ -2181,7 +2321,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "none",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/hanging_power_bundle/env_boss_room02_hanging_power_bundle_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/hanging_power_bundle/env_boss_room02_hanging_power_bundle_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/hanging_power_bundle/export/v027/env_boss_room02_hanging_power_bundle_optimized_v027.blend",
+      "optimized_sha256": "62bebca53f39567fd9587d7f27f6f662c9d33b3ed9e61663534f8b8357c05e1d"
     },
     {
       "slug": "damaged_cabinet_open",
@@ -2228,7 +2374,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/damaged_cabinet_open/env_boss_room02_damaged_cabinet_open_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/damaged_cabinet_open/env_boss_room02_damaged_cabinet_open_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_open/export/v027/env_boss_room02_damaged_cabinet_open_optimized_v027.blend",
+      "optimized_sha256": "f28c32a628017099d00649e2d38b41c191766a4de54d0f08733dfe9e7caadd98"
     },
     {
       "slug": "damaged_cabinet_crushed",
@@ -2275,7 +2427,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/damaged_cabinet_crushed/env_boss_room02_damaged_cabinet_crushed_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/damaged_cabinet_crushed/env_boss_room02_damaged_cabinet_crushed_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/damaged_cabinet_crushed/export/v027/env_boss_room02_damaged_cabinet_crushed_optimized_v027.blend",
+      "optimized_sha256": "b2a914d765bf1cf150009378c8355f768d375dbcb7df6b73ab0da85bcf4023db"
     },
     {
       "slug": "door_seal_frame",
@@ -2321,7 +2479,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/door_seal_frame/env_boss_room02_door_seal_frame_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/door_seal_frame/env_boss_room02_door_seal_frame_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_seal_frame/export/v027/env_boss_room02_door_seal_frame_optimized_v027.blend",
+      "optimized_sha256": "f7b1ba2ed1ef5842a0ec609226f4272d1255082a8a47e0bb470427d3d0c4fb0d"
     },
     {
       "slug": "shell_wall_solid_80m",
@@ -2367,7 +2531,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/shell_wall_solid_80m/env_boss_room02_shell_wall_solid_80m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/shell_wall_solid_80m/env_boss_room02_shell_wall_solid_80m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_wall_solid_80m/export/v027/env_boss_room02_shell_wall_solid_80m_optimized_v027.blend",
+      "optimized_sha256": "649fc146dd922fc247fc3730f86002ed9b98630c3d12a80fea9a81f61b6dc5f2"
     },
     {
       "slug": "shell_wall_gate_80m",
@@ -2413,7 +2583,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/shell_wall_gate_80m/env_boss_room02_shell_wall_gate_80m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/shell_wall_gate_80m/env_boss_room02_shell_wall_gate_80m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_wall_gate_80m/export/v027/env_boss_room02_shell_wall_gate_80m_optimized_v027.blend",
+      "optimized_sha256": "f51234d370638d70cbe3799eb97c729e0dae2649f22f10eb9c73106ff9d75bfa"
     },
     {
       "slug": "shell_wall_gate_100m",
@@ -2459,7 +2635,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/shell_wall_gate_100m/env_boss_room02_shell_wall_gate_100m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/shell_wall_gate_100m/env_boss_room02_shell_wall_gate_100m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_wall_gate_100m/export/v027/env_boss_room02_shell_wall_gate_100m_optimized_v027.blend",
+      "optimized_sha256": "999762b838545566ae08bef166432068b3b516f2f023cce0ce935111ecbfa609"
     },
     {
       "slug": "shell_horizontal_80x100m",
@@ -2504,7 +2686,13 @@
       "materials": [
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/shell_horizontal_80x100m/env_boss_room02_shell_horizontal_80x100m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/shell_horizontal_80x100m/env_boss_room02_shell_horizontal_80x100m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/shell_horizontal_80x100m/export/v027/env_boss_room02_shell_horizontal_80x100m_optimized_v027.blend",
+      "optimized_sha256": "d508493bcc7a249b18255704afa12ee1333dc75cf47c440fe2159eb7b1afd554"
     },
     {
       "slug": "stair_pillar_light",
@@ -2551,7 +2739,13 @@
         "01_精工金属_紫色骨架",
         "04_柔和自发光_UI灯光"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "none",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/stair_pillar_light/env_boss_room02_stair_pillar_light_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/stair_pillar_light/env_boss_room02_stair_pillar_light_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_pillar_light/export/v027/env_boss_room02_stair_pillar_light_optimized_v027.blend",
+      "optimized_sha256": "6bb3fc1d1d387452afd0bf319d22b83b83fa8809a7e78179bff50b0ebee41392"
     },
     {
       "slug": "bridge_threshold",
@@ -2596,7 +2790,13 @@
       "materials": [
         "01_精工金属_紫色骨架"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "self",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_threshold/env_boss_room02_bridge_threshold_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/bridge_threshold/env_boss_room02_bridge_threshold_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_threshold/export/v027/env_boss_room02_bridge_threshold_optimized_v027.blend",
+      "optimized_sha256": "4cd89fc04a2b17a8dffbf557d7a0adc330d9edcc2115a424df827b3ec4bb99c1"
     },
     {
       "slug": "bridge_belly_5m",
@@ -2642,7 +2842,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "none",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_belly_5m/env_boss_room02_bridge_belly_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/bridge_belly_5m/env_boss_room02_bridge_belly_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_belly_5m/export/v027/env_boss_room02_bridge_belly_5m_optimized_v027.blend",
+      "optimized_sha256": "648ef7b84afee911c0a974b7668f14dc2a7a80f35b11747e8e68aa08de3956d2"
     },
     {
       "slug": "door_undersupport",
@@ -2688,7 +2894,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "none",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/door_undersupport/env_boss_room02_door_undersupport_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/door_undersupport/env_boss_room02_door_undersupport_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_undersupport/export/v027/env_boss_room02_door_undersupport_optimized_v027.blend",
+      "optimized_sha256": "4afca4079d5772f28514e17f84ebb76ac8e34791dc5b6fd9a2ecba9eda65fecc"
     },
     {
       "slug": "matrix_foundation_5m",
@@ -2734,7 +2946,13 @@
         "01_精工金属_紫色骨架",
         "02_细腻哑光_青绿大面"
       ],
-      "runtime_connected": false
+      "runtime_connected": true,
+      "registration_status": "已优化并正式接入",
+      "collision_owner": "none",
+      "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/matrix_foundation_5m/env_boss_room02_matrix_foundation_5m_root_top3d.tscn",
+      "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/matrix_foundation_5m/env_boss_room02_matrix_foundation_5m_visual_top3d.glb",
+      "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_foundation_5m/export/v027/env_boss_room02_matrix_foundation_5m_optimized_v027.blend",
+      "optimized_sha256": "9b5e8ec7ae29a8928fbd7870aee0ed7b4b09afb7e277232edd45838925ffecc2"
     }
   ]
 }

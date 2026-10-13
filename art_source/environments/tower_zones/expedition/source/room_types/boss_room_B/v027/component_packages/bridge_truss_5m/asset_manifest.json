@@ -55,12 +55,16 @@
   "materials": [
     "01_精工金属_紫色骨架"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "none",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "b3eac50c65a166d92c9f11fa4a86e159c38d1908a7418396d322e4d3083d1e36",
-  "triangle_count": 1416
+  "triangle_count": 1416,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/bridge_truss_5m/env_boss_room02_bridge_truss_5m_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/bridge_truss_5m/env_boss_room02_bridge_truss_5m_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_truss_5m/export/v027/env_boss_room02_bridge_truss_5m_optimized_v027.blend",
+  "optimized_sha256": "04edb10d755ad19f8cdd8b0553a567fc41b40de2096f81b3f8f6ee7c33b36784"
 }

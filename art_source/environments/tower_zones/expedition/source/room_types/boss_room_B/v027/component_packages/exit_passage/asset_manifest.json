@@ -57,12 +57,16 @@
     "02_细腻哑光_青绿大面",
     "04_柔和自发光_UI灯光"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "self",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": false,
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "9f155d1127271ff70782e7bc744ef709485c235cd0d3f4e0fac57aec50d32c1a",
-  "triangle_count": 2052
+  "triangle_count": 2052,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/exit_passage/env_boss_room02_exit_passage_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/exit_passage/env_boss_room02_exit_passage_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/exit_passage/export/v027/env_boss_room02_exit_passage_optimized_v027.blend",
+  "optimized_sha256": "0d04a5d2005c870c0c185cbde1314524844bce0050edfb195f76b40b789d5424"
 }

@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/deck_armor_5m/env_boss_room02_deck_armor_5m_visual_top3d.glb" id="1_w7d3s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xuo54"]
+size = Vector3(5, 0.4495, 5)
+
+[node name="BossRoom02_deck_armor_5m" type="Node3D" unique_id=1040716879]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-DECK-ARMOR-5M"
+metadata/slug = "deck_armor_5m"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_armor_5m/deck_armor_5m.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_armor_5m/export/v027/env_boss_room02_deck_armor_5m_optimized_v027.blend"
+metadata/glb_sha256 = "1428b7ebb8e353a061561e9cb2aeeac2312919b8303519e34dde854dfef14f25"
+metadata/collision_policy = "segmented_structure"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "deck_armor_5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/deck_armor_5m/deck_armor_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(5, 0.4495, 5)
+metadata/display_name_zh = "精加工甲板"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=1415585404 instance=ExtResource("1_w7d3s")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=775293204]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=1941000009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22475, 0)
+shape = SubResource("BoxShape3D_xuo54")

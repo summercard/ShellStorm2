@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/door_support_pier/env_boss_room02_door_support_pier_visual_top3d.glb" id="1_xol33"]
+
+[node name="BossRoom02_door_support_pier" type="Node3D" unique_id=795215206]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-DOOR-SUPPORT-PIER"
+metadata/slug = "door_support_pier"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_support_pier/door_support_pier.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_support_pier/export/v027/env_boss_room02_door_support_pier_optimized_v027.blend"
+metadata/glb_sha256 = "6c4e3fbda33443c907700ae2e46deb13f7297e86eeb528c7cb9e704f1fed0393"
+metadata/collision_policy = "visual_only"
+metadata/collision_owner = "none"
+metadata/asset_version = "v027"
+metadata/component_slug = "door_support_pier"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_support_pier/door_support_pier.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(3.8, 68.14, 5.6990004)
+metadata/display_name_zh = "门侧方形承力巨柱"
+metadata/collision_shape_count = 0
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=1246989207 instance=ExtResource("1_xol33")]

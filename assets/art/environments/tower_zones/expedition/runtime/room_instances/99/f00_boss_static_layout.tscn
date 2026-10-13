@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_room_02_static_layout.tscn" id="1_room02"]
+
+[node name="Test99BossRoom" type="Node3D"]
+metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
+metadata/room_id = "boss"
+metadata/level_id = "99"
+metadata/asset_id = "ENV-EXPEDITION-L99-BOSS-ROOM-02"
+metadata/asset_version = "v027"
+metadata/authored_layout_shell = true
+metadata/component_owned_support = true
+metadata/layout_instance_total = 652
+metadata/authored_layout_asset_id = "ENV-EXPEDITION-L01-BOSS-ROOM-02"
+metadata/authored_layout_version = "v027"
+metadata/fog_profile = {"distance_density": 0.003, "volumetric_density": 0.0002, "transition_seconds": 2.0, "fog_color": Color(0.1, 0.025, 0.04, 1)}
+metadata/walkable_navigation_polygons = [[[-12.5, 0.08, -35], [12.5, 0.08, -35], [12.5, 0.08, -25], [-12.5, 0.08, -25]], [[-12.5, 0.08, -25], [-10, 0.08, -25], [-10, 0.08, -20], [-12.5, 0.08, -20]], [[-10, 0.08, -25], [10, 0.08, -25], [10, 0.08, -20], [-10, 0.08, -20]], [[10, 0.08, -25], [12.5, 0.08, -25], [12.5, 0.08, -20], [10, 0.08, -20]], [[-12.5, 0.08, -20], [12.5, 0.08, -20], [12.5, 0.08, -10], [-12.5, 0.08, -10]], [[-40, 0.08, -25], [-12.5, 0.08, -25], [-12.5, 0.08, -20], [-40, 0.08, -20]], [[12.5, 0.08, -25], [40, 0.08, -25], [40, 0.08, -20], [12.5, 0.08, -20]], [[-2.5, 0.08, -10], [2.5, 0.08, -10], [2.5, 12.08, 40], [-2.5, 12.08, 40]], [[-2.5, 12.08, 40], [2.5, 12.08, 40], [2.5, 12.08, 50], [-2.5, 12.08, 50]]]
+metadata/port_door_visuals = {"south": ["外壳门扇_0_exit_leaf_a", "外壳门扇_0_exit_leaf_b"], "east": ["外壳门扇_2_exit_leaf_a", "外壳门扇_2_exit_leaf_b"], "open_inner_previews": ["装甲门扇A_158", "装甲门扇B_159"]}
+
+[node name="BossRoom02" parent="." instance=ExtResource("1_room02")]

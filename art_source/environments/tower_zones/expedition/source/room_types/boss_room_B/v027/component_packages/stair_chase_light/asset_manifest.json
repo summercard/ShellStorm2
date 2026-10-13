@@ -44,5 +44,11 @@
     "01_精工金属_紫色骨架",
     "04_柔和自发光_UI灯光"
   ],
-  "runtime_connected": false
+  "runtime_connected": true,
+  "registration_status": "已优化并正式接入",
+  "collision_owner": "none",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/stair_chase_light/env_boss_room02_stair_chase_light_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/stair_chase_light/env_boss_room02_stair_chase_light_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_chase_light/export/v027/env_boss_room02_stair_chase_light_optimized_v027.blend",
+  "optimized_sha256": "fefe42e93b5e91b95c8dc0ba081ff00d212e46e410a0637c71bfe202c73b33c9"
 }

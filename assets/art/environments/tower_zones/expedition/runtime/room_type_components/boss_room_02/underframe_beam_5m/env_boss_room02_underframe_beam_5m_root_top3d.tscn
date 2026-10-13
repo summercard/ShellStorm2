@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/underframe_beam_5m/env_boss_room02_underframe_beam_5m_visual_top3d.glb" id="1_p5eb4"]
+
+[node name="BossRoom02_underframe_beam_5m" type="Node3D" unique_id=720744055]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-UNDERFRAME-BEAM-5M"
+metadata/slug = "underframe_beam_5m"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/underframe_beam_5m/underframe_beam_5m.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/underframe_beam_5m/export/v027/env_boss_room02_underframe_beam_5m_optimized_v027.blend"
+metadata/glb_sha256 = "7ddd961b9d79d743917635e8c323f1fa0526e29807a31d34c4b6b29063bc0a8d"
+metadata/collision_policy = "visual_only"
+metadata/collision_owner = "none"
+metadata/asset_version = "v027"
+metadata/component_slug = "underframe_beam_5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/underframe_beam_5m/underframe_beam_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(5, 1.12, 0.72)
+metadata/display_name_zh = "平台底部承重梁"
+metadata/collision_shape_count = 0
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=574401001 instance=ExtResource("1_p5eb4")]

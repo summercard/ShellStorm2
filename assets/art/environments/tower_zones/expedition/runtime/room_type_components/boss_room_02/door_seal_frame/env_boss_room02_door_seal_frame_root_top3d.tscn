@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/door_seal_frame/env_boss_room02_door_seal_frame_visual_top3d.glb" id="1_dfoui"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h664g"]
+data = PackedVector3Array(-2.55, 6, 0.25, -2.55, 5.6, 0.25, -2.55, 5.6, -0.25, -2.55, 6, 0.25, -2.55, 5.6, -0.25, -2.55, 6, -0.25, -2.55, 6, -0.25, -2.55, 5.6, -0.25, 2.55, 5.6, -0.25, -2.55, 6, -0.25, 2.55, 5.6, -0.25, 2.55, 6, -0.25, 2.55, 6, -0.25, 2.55, 5.6, -0.25, 2.55, 5.6, 0.25, 2.55, 6, -0.25, 2.55, 5.6, 0.25, 2.55, 6, 0.25, 2.55, 6, 0.25, 2.55, 5.6, 0.25, -2.55, 5.6, 0.25, 2.55, 6, 0.25, -2.55, 5.6, 0.25, -2.55, 6, 0.25, 2.55, 5.6, -0.25, -2.55, 5.6, -0.25, -2.55, 5.6, 0.25, 2.55, 5.6, -0.25, -2.55, 5.6, 0.25, 2.55, 5.6, 0.25, -2.55, 6, -0.25, 2.55, 6, -0.25, 2.55, 6, 0.25, -2.55, 6, -0.25, 2.55, 6, 0.25, -2.55, 6, 0.25, -2.55, 0.099999994, 0.25, -2.55, 0, 0.25, -2.55, 0, -0.25, -2.55, 0.099999994, 0.25, -2.55, 0, -0.25, -2.55, 0.099999994, -0.25, -2.55, 0.099999994, -0.25, -2.55, 0, -0.25, 2.55, 0, -0.25, -2.55, 0.099999994, -0.25, 2.55, 0, -0.25, 2.55, 0.099999994, -0.25, 2.55, 0.099999994, -0.25, 2.55, 0, -0.25, 2.55, 0, 0.25, 2.55, 0.099999994, -0.25, 2.55, 0, 0.25, 2.55, 0.099999994, 0.25, 2.55, 0.099999994, 0.25, 2.55, 0, 0.25, -2.55, 0, 0.25, 2.55, 0.099999994, 0.25, -2.55, 0, 0.25, -2.55, 0.099999994, 0.25, 2.55, 0, -0.25, -2.55, 0, -0.25, -2.55, 0, 0.25, 2.55, 0, -0.25, -2.55, 0, 0.25, 2.55, 0, 0.25, -2.55, 0.099999994, -0.25, 2.55, 0.099999994, -0.25, 2.55, 0.099999994, 0.25, -2.55, 0.099999994, -0.25, 2.55, 0.099999994, 0.25, -2.55, 0.099999994, 0.25, -2.55, 6, 0.25, -2.55, 0, 0.25, -2.55, 0, -0.25, -2.55, 6, 0.25, -2.55, 0, -0.25, -2.55, 6, -0.25, -2.55, 6, -0.25, -2.55, 0, -0.25, -2.4301, 0, -0.25, -2.55, 6, -0.25, -2.4301, 0, -0.25, -2.4301, 6, -0.25, -2.4301, 6, -0.25, -2.4301, 0, -0.25, -2.4301, 0, 0.25, -2.4301, 6, -0.25, -2.4301, 0, 0.25, -2.4301, 6, 0.25, -2.4301, 6, 0.25, -2.4301, 0, 0.25, -2.55, 0, 0.25, -2.4301, 6, 0.25, -2.55, 0, 0.25, -2.55, 6, 0.25, -2.4301, 0, -0.25, -2.55, 0, -0.25, -2.55, 0, 0.25, -2.4301, 0, -0.25, -2.55, 0, 0.25, -2.4301, 0, 0.25, -2.55, 6, -0.25, -2.4301, 6, -0.25, -2.4301, 6, 0.25, -2.55, 6, -0.25, -2.4301, 6, 0.25, -2.55, 6, 0.25, 2.4299998, 6, 0.25, 2.4299998, 0, 0.25, 2.4299998, 0, -0.25, 2.4299998, 6, 0.25, 2.4299998, 0, -0.25, 2.4299998, 6, -0.25, 2.4299998, 6, -0.25, 2.4299998, 0, -0.25, 2.55, 0, -0.25, 2.4299998, 6, -0.25, 2.55, 0, -0.25, 2.55, 6, -0.25, 2.55, 6, -0.25, 2.55, 0, -0.25, 2.55, 0, 0.25, 2.55, 6, -0.25, 2.55, 0, 0.25, 2.55, 6, 0.25, 2.55, 6, 0.25, 2.55, 0, 0.25, 2.4299998, 0, 0.25, 2.55, 6, 0.25, 2.4299998, 0, 0.25, 2.4299998, 6, 0.25, 2.55, 0, -0.25, 2.4299998, 0, -0.25, 2.4299998, 0, 0.25, 2.55, 0, -0.25, 2.4299998, 0, 0.25, 2.55, 0, 0.25, 2.4299998, 6, -0.25, 2.55, 6, -0.25, 2.55, 6, 0.25, 2.4299998, 6, -0.25, 2.55, 6, 0.25, 2.4299998, 6, 0.25)
+
+[node name="BossRoom02_door_seal_frame" type="Node3D" unique_id=896661697]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-DOOR-SEAL-FRAME"
+metadata/slug = "door_seal_frame"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_seal_frame/door_seal_frame.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_seal_frame/export/v027/env_boss_room02_door_seal_frame_optimized_v027.blend"
+metadata/glb_sha256 = "ecb1fb8b59260eb1e6ad51d0959891e794c5b3f6ca222ce767d1a761a833320c"
+metadata/collision_policy = "exact_static_mesh"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "door_seal_frame"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_seal_frame/door_seal_frame.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(5.1, 6, 0.5)
+metadata/display_name_zh = "门框密封边组件"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=1233790316 instance=ExtResource("1_dfoui")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=439012753]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=1730255594]
+shape = SubResource("ConcavePolygonShape3D_h664g")

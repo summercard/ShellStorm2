@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/world3d/BossRoomDisplay3D.gd" id="1_iur7n"]
+[ext_resource type="Shader" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/lamp.gdshader" id="2_wysnp"]
+[ext_resource type="Texture2D" path="res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png" id="3_awueu"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/stair_chase_light/env_boss_room02_stair_chase_light_visual_top3d.glb" id="4_pjkki"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rqu28"]
+render_priority = 0
+shader = ExtResource("2_wysnp")
+shader_parameter/shared_palette = ExtResource("3_awueu")
+
+[node name="BossRoom02_stair_chase_light" type="Node3D" unique_id=418625823]
+script = ExtResource("1_iur7n")
+lamp_material = SubResource("ShaderMaterial_rqu28")
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-STAIR-CHASE-LIGHT"
+metadata/slug = "stair_chase_light"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_chase_light/stair_chase_light.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_chase_light/export/v027/env_boss_room02_stair_chase_light_optimized_v027.blend"
+metadata/glb_sha256 = "386e6e98bd25caf7ad8f36d42017724e5fe8cb8e7337eff818eb3c960e127bbf"
+metadata/collision_policy = "visual_only"
+metadata/collision_owner = "none"
+metadata/asset_version = "v027"
+metadata/component_slug = "stair_chase_light"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/stair_chase_light/stair_chase_light.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(4.89, 0.075500004, 0.33)
+metadata/display_name_zh = "逐级感应灯组件"
+metadata/control_api = "set_lit(bool); room instance metadata/chase_index; no character trigger embedded"
+metadata/collision_shape_count = 0
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=357612732 instance=ExtResource("4_pjkki")]

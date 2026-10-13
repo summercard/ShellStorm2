@@ -45,5 +45,11 @@
     "02_细腻哑光_青绿大面",
     "04_柔和自发光_UI灯光"
   ],
-  "runtime_connected": false
+  "runtime_connected": true,
+  "registration_status": "已优化并正式接入",
+  "collision_owner": "none",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/door_support_pier/env_boss_room02_door_support_pier_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/door_support_pier/env_boss_room02_door_support_pier_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/door_support_pier/export/v027/env_boss_room02_door_support_pier_optimized_v027.blend",
+  "optimized_sha256": "87e4b16383510455ba9bbeb7fdf8d02b2c802d4c473b914b78face445255304b"
 }

@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/bridge_deck_5m/env_boss_room02_bridge_deck_5m_visual_top3d.glb" id="1_gdwpi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fgjt6"]
+size = Vector3(5, 0.26, 5)
+
+[node name="BossRoom02_bridge_deck_5m" type="Node3D" unique_id=1352552760]
+metadata/asset_id = "ENV-EXPEDITION-BOSS-B-BRIDGE-DECK-5M"
+metadata/slug = "bridge_deck_5m"
+metadata/version = "v027"
+metadata/source_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_deck_5m/bridge_deck_5m.blend"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_deck_5m/export/v027/env_boss_room02_bridge_deck_5m_optimized_v027.blend"
+metadata/glb_sha256 = "1a788a6a198b0243ad4fca6462e19269831ebc69eacf513bd27b22c03a305845"
+metadata/collision_policy = "segmented_structure"
+metadata/collision_owner = "self"
+metadata/asset_version = "v027"
+metadata/component_slug = "bridge_deck_5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/bridge_deck_5m/bridge_deck_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_godot = "+Z"
+metadata/bounds_size_m = Vector3(5, 0.4415, 5)
+metadata/display_name_zh = "桥面格栅节段"
+metadata/collision_shape_count = 1
+
+[node name="ImportedModel" type="Node3D" parent="." unique_id=1002364193 instance=ExtResource("1_gdwpi")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="." unique_id=1758500542]
+collision_mask = 0
+
+[node name="Shape_00" type="CollisionShape3D" parent="CollisionBody" unique_id=466703172]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 0)
+shape = SubResource("BoxShape3D_fgjt6")

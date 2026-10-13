@@ -54,12 +54,16 @@
   "materials": [
     "06_动态屏幕_center_自发光"
   ],
-  "collision_owner": "godot_wrapper_pending",
-  "registration_status": "未登记",
-  "runtime_connected": false,
+  "collision_owner": "none",
+  "registration_status": "已优化并正式接入",
+  "runtime_connected": true,
   "texture_exception": true,
   "palette_uv_layer": null,
   "animation": "shader_scan_preview",
   "geometry_fingerprint": "a39d8840d596df2e23a1bc990183c383938a0915b65ac21561d6c8042c274385",
-  "triangle_count": 2
+  "triangle_count": 2,
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/screen_center/env_boss_room02_screen_center_root_top3d.tscn",
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/screen_center/env_boss_room02_screen_center_visual_top3d.glb",
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/screen_center/export/v027/env_boss_room02_screen_center_optimized_v027.blend",
+  "optimized_sha256": "0833f86a9c6293ed21ed4562b7fa61fbc1ef36bf10cd23d003d14391569196e4"
 }

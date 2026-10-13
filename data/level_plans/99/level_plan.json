@@ -10,12 +10,24 @@
   "floor_height_m": 12.0,
   "visible_wall_height_m": 11.9,
   "site": {
-    "size_m": [250.0, 250.0],
-    "center_m": [2.5, 2.5]
+    "size_m": [
+      250.0,
+      250.0
+    ],
+    "center_m": [
+      2.5,
+      2.5
+    ]
   },
   "core": {
-    "size_m": [65.0, 65.0],
-    "center_m": [2.5, 2.5]
+    "size_m": [
+      65.0,
+      65.0
+    ],
+    "center_m": [
+      2.5,
+      2.5
+    ]
   },
   "floors": [
     {
@@ -29,22 +41,27 @@
   "room_templates": [
     "safe_15x15",
     "std_25x25",
-    "boss_45x45",
+    "boss_deep_shaft_80x100",
     "extraction_25x25"
   ],
   "generation_policy": {
     "min_main_content_rooms": 1,
-    "branch_count_range": [0, 0],
+    "branch_count_range": [
+      0,
+      0
+    ],
     "max_attempts": 1,
     "target_occupancy_ratio": 0.42,
     "reference_room_cost_m2": 1450.0,
     "enforce_core_exclusion": false,
-    "content_type_pool": ["COMBAT"],
+    "content_type_pool": [
+      "COMBAT"
+    ],
     "runtime_enabled": true
   },
   "provenance": {
     "mode": "authored",
     "extracted_from": "docs/v0.1/design/新关卡设计表.md",
-    "note": "测试关卡99：1 入口安全房 + 1 普通战斗房 + 1 Boss 房（boss_monitor002）+ 1 撤离房，一条直线北向南排布。单层、无支线。主路只有 room_01 一间内容房，Boss 与撤离房由生成器自动追加到主链。runtime_enabled=true：本关卡的设计源已是运行时真源，FloorPlanGenerator.generate_from_level_plan 会替代内置远征房表。"
+    "note": "Original entry (2.5,2.5), east arrival and north route retained. Previous room north gate joins Boss02 high south entrance at world(2.5,0,-45). Boss root(2.5,-12,-95), east exit to extraction(55,-12,-117.5). Existing encounter and graph retained. Ordinary fog restored; Boss-local editable profile blends on entry/exit."
   }
 }
