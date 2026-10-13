@@ -2244,18 +2244,19 @@ func _build_shell() -> void:
 						"walk_surface_owner",
 						"walk_surface_scene",
 					]:
-						if static_layout.has_meta(key):
-							set_meta(key, static_layout.get_meta(key))
-					# 墙体开关声明比 `fog_profile` 多一步回退：绑定壳（如测试关卡 99 的
-					# `f00_boss_static_layout.tscn`）里房间是**实例进来的子场景**，声明通常
-					# 只写在共享房自己的根上。只读根会把这种结构漏掉 ⇒ 这里按「根优先，
-					# 命中即止」向下找一次，保证同一份共享房被任意关卡绑定时行为一致。
+						# 「根优先、命中即止」向下找一层，**不是**只读根：绑定壳
+						# （99 / 远征01 的 `f00_boss_static_layout.tscn`）里房间是
+						# **实例进来的子场景**，一半声明写在壳根上、另一半写在共享房自己的
+						# 根上（如 `walk_surface_owner`）。只读根会把后者漏掉，同一份共享房
+						# 在不同关卡里就会表现不一致。字段本身与共享值一致时行为逐字不变。
+						var declared: Variant = _find_static_layout_meta(static_layout, key)
+						if declared != null:
+							set_meta(key, declared)
 					var declared_light_switch: Variant = _find_static_layout_meta(
 						static_layout, "authored_room_light_switch"
 					)
 					if declared_light_switch != null:
 						authored_room_light_switch = bool(declared_light_switch)
-						set_meta("authored_room_light_switch", authored_room_light_switch)
 					# 安全房 v007 的房间级事实（版本/旋转步/四角 L/房间包数）随静态布局
 					# 保存，加载后回填到房间节点：快照与入口房验收按房间 meta 读取它们。
 					for meta_name in static_layout.get_meta_list():

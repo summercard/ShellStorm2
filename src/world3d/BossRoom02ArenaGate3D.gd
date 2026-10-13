@@ -96,7 +96,13 @@ func _physics_process(_delta: float) -> void:
 	var player := _resolve_player()
 	if player == null:
 		return
-	var local := _room.to_local(player.global_position)
+	# 判定一律在**本节点的局部帧（= 美术帧）**里做，不用房间帧。
+	# 本脚本的常量（楼梯 z∈[−10,40]、平台 z∈[−35,−10]、两处触发线）是照 Boss房02
+	# **烘焙坐标**写的；绑定壳可能把整房转过 180°（远征01 的全局北向修正就是这么做的），
+	# 此时房间帧与美术帧相差 180°，用房间帧会把触发线算到房间另一头 ——
+	# 症状是玩家还在楼梯上就被封场、或走到平台却不触发。
+	# 本节点与三个槽位都是美术的子节点，故 `affine_inverse() * 世界点` 恒得美术帧坐标。
+	var local := global_transform.affine_inverse() * player.global_position
 	var inside := _room.contains_world_position(player.global_position)
 	_tick_camera(player, local, inside)
 	_tick_arena(local, inside)

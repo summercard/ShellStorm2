@@ -908,6 +908,13 @@ static func _constrained_slot(
 		"camera_profile": (
 			raw.get("camera_profile", {}) as Dictionary
 		).duplicate(true),
+		# —— 多标高 / 授权锚定房（如 Boss 房下沉 12m 的深井）——
+		# 这两项必须从蓝图搬到槽位、再由 `_constrained_floor_from` 搬到房表，
+		# 最终由 `room_from_source`（白名单里已读它们）交给运行时。
+		# 漏带 = 设计源写了 −12m 也被静默当成 0 标高：房间浮在楼层地面之上/之下，
+		# 与 `content_type` 那批字段是同一类坑（写了没人搬，静默失效）。
+		"floor_offset_m": float(raw.get("floor_offset_m", 0.0)),
+		"anchor_policy": str(raw.get("anchor_policy", "grid")),
 	}
 
 
@@ -1149,18 +1156,45 @@ static func _side_from_outward(outward: Vector2) -> String:
 	return "south" if outward.y >= 0.0 else "north"
 
 
+## 🔴 除几何三件套外，端口上的**其余字段必须原样带过去**。
+##
+## 本函数原先是「只挑 6 个键重建一个新字典」，于是 `height_m` 被静默丢掉 ——
+## 而 `height_m` 正是多标高房的命根子（Boss 房：高位入口 +12、深井平台 0）。
+## 症状：`connection_port_height_gap:room_10:boss` 校验不过、整关拒启；
+## 即便过了校验，运行时也会把 12 m 高的入口当成同层门。`door_*`（门槽描述）同理，
+## 它们是 `DungeonRoom3D` 摆门扇的依据，丢了就退回按包围盒猜门位。
 static func _rotated_connection_port(port: Dictionary, rotation_deg: float) -> Dictionary:
+	var rotated := port.duplicate(true)
 	var position := _rotate_port_vector(_port_vec2(port, "position_m"), rotation_deg)
 	var outward := _rotate_port_vector(_port_vec2(port, "outward"), rotation_deg).normalized()
 	var side := _side_from_outward(outward)
-	return {
-		"port_id": str(port.get("port_id", "")),
-		"target": str(port.get("target", "")),
-		"position_m": [position.x, position.y],
-		"outward": [outward.x, outward.y],
-		"side": side,
-		"lane_m": position.x if side in ["north", "south"] else position.y,
-	}
+	rotated["position_m"] = [position.x, position.y]
+	rotated["outward"] = [outward.x, outward.y]
+	rotated["side"] = side
+	rotated["lane_m"] = position.x if side in ["north", "south"] else position.y
+	# 门槽描述随房一起转：180° 两个分量取反、轴不变；90°/270° 轴互换、两个分量对调。
+	# （当前只有 180° 在用；90/270 一并写全，避免将来有人把房转 90° 时门槽停在旧位置。）
+	if rotated.has("door_axis") or rotated.has("door_line_m") or rotated.has("door_center_m"):
+		var angle := fposmod(float(rotation_deg), 360.0)
+		var line := float(port.get("door_line_m", 0.0))
+		var center := float(port.get("door_center_m", 0.0))
+		var axis := str(port.get("door_axis", ""))
+		if absf(angle - 180.0) < 0.001:
+			line = -line
+			center = -center
+		elif absf(angle - 90.0) < 0.001 or absf(angle - 270.0) < 0.001:
+			var swapped := line
+			line = center
+			center = swapped
+			if axis == "x":
+				axis = "z"
+			elif axis == "z":
+				axis = "x"
+		rotated["door_line_m"] = line
+		rotated["door_center_m"] = center
+		if not axis.is_empty():
+			rotated["door_axis"] = axis
+	return rotated
 
 
 static func _rotated_connection_ports(ports: Array, rotation_deg: float) -> Array:
@@ -1392,7 +1426,10 @@ static func _explicit_port_candidates(
 				parent_room.get("center", Vector2.ZERO) as Vector2
 			) + parent_anchor - child_anchor
 			var child_size := _rotated_room_size(base_size, rotation_deg)
-			if _constrained_fits(center, child_size, rects):
+			if _constrained_fits(
+				center, child_size, rects,
+				str(slot.get("anchor_policy", "grid")) == "static_port_layout"
+			):
 				var candidate := _placement_candidate(center, child_size, slot, rotation_deg)
 				# 记录本连接**实际用到的**两端端口 id：房表声明的是「候选取法」，
 				# 落位结果才是合同；装配层据此把 room record 的 `connection_ports`
@@ -1420,6 +1457,13 @@ static func _explicit_port_candidates(
 ## 只清空不互换会让下游房间找不到成对端口，拼接直接失败。
 static func _entry_port_pool(slot: Dictionary, declared: Dictionary) -> Array:
 	var pool: Array = [declared]
+	# 🔴 授权端口锚定房（`anchor_policy = static_port_layout`）**不许换口**。
+	# 这类房是手工多标高结构（如 Boss 房深井 + 高位入口 + 双侧桥），两个后果都已实测：
+	#   ① 换口 = 拿「出口口」当入口 ⇒ 整房被刚体转 90°/180°，与静态场景的烘焙朝向不符；
+	#   ② 房表声明的每个口在静态场景里对应**唯一一个门洞**，换口等于把门开到实墙上。
+	# 池里只留房表声明的那个口，这一类的落位就成为确定性结果。
+	if str(slot.get("anchor_policy", "grid")) == "static_port_layout":
+		return pool
 	var declared_id := str(declared.get("port_id", ""))
 	for value in slot.get("connection_ports", []) as Array:
 		var port := value as Dictionary
@@ -1764,14 +1808,24 @@ static func _snapped_origin_for(size: Vector2) -> Vector2:
 ## （8 间主路房的半尺寸之和约 415 m）。折返职责**已迁到 `_placement_candidates` 的
 ## 锚点距离软引导**（按「候选位离入口锚点的距离」排方向），那里不设任何硬上限 ——
 ## 版图该多大就多大，只是自然会拐回来。
-static func _constrained_fits(center: Vector2, size: Vector2, rects: Array[Rect2]) -> bool:
+## `allow_off_grid`：授权端口锚定房（`anchor_policy = static_port_layout`）豁免 5 m 栅格对齐。
+##
+## 为什么可以豁免：栅格对齐是**通用壳体**的需要 —— 5×5m 模块墙/地砖必须落在格线上才拼得起来。
+## 而授权锚定房的墙地面是它自己的美术（这里是 Boss 房深井/坡道/双壳），
+## 位置由成对端口**定死**，运行时也早已把它标成 `grid_position_adjusted = false`。
+## 实测：Boss 房 80×100，room_10 北墙的门位车道是半格（±2.5/±7.5/±12.5），
+## 于是房心必然落在半格上（−52.5）⇒ 按 5 m 栅格一律判不合，布局倒退成「生成失败 → 整关拒启」。
+static func _constrained_fits(
+	center: Vector2, size: Vector2, rects: Array[Rect2], allow_off_grid := false
+) -> bool:
 	var rect := _rect_at(center, size)
-	var snapped := Vector2(
-		snappedf(center.x - size.x * 0.5, GRID_UNIT_M) + size.x * 0.5,
-		snappedf(center.y - size.y * 0.5, GRID_UNIT_M) + size.y * 0.5
-	)
-	if absf(snapped.x - center.x) > CONSTRAINED_EPS or absf(snapped.y - center.y) > CONSTRAINED_EPS:
-		return false
+	if not allow_off_grid:
+		var snapped := Vector2(
+			snappedf(center.x - size.x * 0.5, GRID_UNIT_M) + size.x * 0.5,
+			snappedf(center.y - size.y * 0.5, GRID_UNIT_M) + size.y * 0.5
+		)
+		if absf(snapped.x - center.x) > CONSTRAINED_EPS or absf(snapped.y - center.y) > CONSTRAINED_EPS:
+			return false
 	for other in rects:
 		if rect.intersection(other).get_area() > CONSTRAINED_EPS:
 			return false
@@ -1816,6 +1870,10 @@ static func _constrained_floor_from(
 			),
 			"center": placed_room["center"],
 			"size": placed_room["size"],
+			# 多标高 / 授权锚定房：随槽位透传（见 `_constrained_slot` 的同名字段注释）。
+			# `room_from_source` 会读这两项，缺了就等于「设计源声明被静默丢弃」。
+			"floor_offset_m": float(slot.get("floor_offset_m", 0.0)),
+			"anchor_policy": str(slot.get("anchor_policy", "grid")),
 			# 转置姿态（同一张模板旋转 90°）由落位阶段定，必须带回房间记录 ——
 			# 校验器 `expected_size_for_rotation` 靠它把转置尺寸认成合法。
 			"rotation_deg": float(placed_room.get("rotation_deg", 0.0)),
@@ -1933,6 +1991,15 @@ static func attach_authored_layout_shell(
 		var room := value as Dictionary
 		var key := str(room.get("key", ""))
 		if key.is_empty() or str(room.get("role", "")) == "stair_entry":
+			continue
+		# 🔴 授权端口锚定房（`anchor_policy = static_port_layout`）**整体跳过本函数**。
+		# 它的美术是手工多标高结构（Boss 房深井/坡道/双桥），摆位由蓝图逐口写死：
+		#   · 本函数产出的 `authored_layout_instances` 是「按每局现算的矩形几何拼通用壳体」，
+		#     对这类房既没用（壳体早被静态场景接管）又有害 —— `_static_layout_alignment_delta_deg`
+		#     会拿它去和静态场景做几何配准，配错就把整房转 90/180°；实测房型专属件
+		#     （`_boss_room_exclusive_instances` 读的是**另一个房型**的摆位源）也会被混进来。
+		# 跳过 ⇒ 保留蓝图声明的 `authored_layout_*`，朝向按烘焙值（delta=0），与 99 同口径。
+		if str(room.get("anchor_policy", "grid")) == "static_port_layout":
 			continue
 		var center := room.get("center", Vector2.ZERO) as Vector2
 		# 03 的具体房间差异布局优先；没有差异布局时才重放 02 的房型默认布局。
