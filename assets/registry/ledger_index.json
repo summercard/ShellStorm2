@@ -26,6 +26,7 @@
     ["PRP", "场景道具"],
     ["UI", "UI"],
     ["VFX", "特效"],
+    ["VFX", "子弹特效"],
     ["WPN", "武器"]
   ],
   "domains": [
@@ -103,7 +104,7 @@
       "key": "vfx",
       "name": "特效",
       "file": "ShellStorm2_特效账本_v001.xlsx",
-      "categories": ["特效"],
+      "categories": ["特效", "子弹特效"],
       "id_prefixes": ["VFX", "FX"],
       "sheet_scope": ["3D-特效"],
       "prefab_pages": ["3D-特效"],
@@ -111,7 +112,7 @@
       "primary_skill": "vfx-combat-effect-authoring",
       "supporting_skills": ["02b-godot-model-asset-import-standard"],
       "owner": "待分配",
-      "scope_note": "可独立实例化的3D战斗、环境与可见性特效。每个特效一个独立 Prefab，遵循 14.6 特效系统与制作规范；制作、修复与验收的流程标准见 skill `vfx-combat-effect-authoring`（2026-09-21 接管本域 primary_skill）。"
+      "scope_note": "可独立实例化的3D战斗、环境与可见性特效。每个特效一个独立 Prefab，遵循 14.6 特效系统与制作规范；制作、修复与验收的流程标准见 skill `vfx-combat-effect-authoring`（2026-09-21 接管本域 primary_skill）。域内设两个大类：「特效」为通用可实例化特效，「子弹特效」为逐弹种专属弹体/尾迹/命中特效的排产入口（2026-10-13 增设）。"
     },
     {
       "key": "ui",

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-10-12",
+  "updated_at": "2026-10-13",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -985,7 +985,8 @@
         "docs/v0.1/development/2026-10-03_fat_zombie03_runtime_binding.md",
         "docs/v0.1/development/2026-10-03_shielded_retirement.md",
         "docs/v0.1/development/2026-10-04_fat_zombie03_death_visibility.md",
-        "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md"
+        "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md",
+        "docs/v0.1/development/2026-10-13_bullet_vfx_category.md"
       ],
       "verification": [
         {
