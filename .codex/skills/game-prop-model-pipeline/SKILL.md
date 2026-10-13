@@ -1,57 +1,70 @@
 ---
 name: game-prop-model-pipeline
-description: 制作并导入独立道具模型到 Godot，处理静态摆放、拾取、掉落、手持、物理碰撞、可选自身动画、GLB 与 PackedScene。用于消耗品、钥匙、容器、工具、战利品和投掷物；不用于枪械、近战武器、场景模块或固定设施。
----
-## ShellStorm2 制作源目录（2026-10-11）
+ndescription: 为 ShellStorm2 制作独立道具与物品的可编辑 Blender 总母版、低模视觉输出及后续 GLB/Godot 包装契约。用于道具、背包、消耗品、钥匙、容器、工具、战利品和投掷物；按 ledger_index 真实分类将子弹与武器配件路由到 weapons；不用于枪械主体、近战武器、场景模块或固定设施。
+agent_created: true
+n---
+# ShellStorm2 道具专属美术规范
 
-制作母版统一位于工程根 `art_source/<分类>/<套件>/`；原 `source/art/` 改为 `art_source/design/`。开工先读工程 `docs/ART_SOURCE_LAYOUT.md`，存量文件查 `assets/registry/current_source_index.json` 与 `art_source_migration.json`。源目录参与 Git，大型 Blend/PSD 用 Git LFS；`.gdignore` 与 `art_source/*` 导出排除保证不入包。正式 GLB、贴图、`.import`、PackedScene 继续使用 `assets/art` 的原路径。每种制作角色只保留最新母版及必要外链库，现有版本号不变；旧版本进入上层备份，临时导出、预览、QA 写入工程外 `ShellStorm2-work`，通过 `scripts/workspace_paths.py` 定位。下文的局部 `source/` 表示 `art_source` 内部制作分组，不再是运行资产目录的子目录。
+本 Skill 只处理道具/物品的表现资产链路。玩法、库存容量、内容数据库、碰撞、交互、角色挂点和固定设施归各自系统；不得把文档计划写成已制作、已导出或已接入 Godot。
 
+## 触发范围与分类
 
-# 道具模型制作、导出和 Godot 导入
+- 适用：可独立摆放、拾取、掉落、进入库存或作为物品展示的道具与背包。
+- 先读取 `assets/registry/ledger_index.json`，按其中“大类”与域映射路由，不按前缀猜账本：
+  - 子弹、弹药模块、武器配件 → `weapons` 域 / 武器账本；
+  - 道具、物品、可装备背包 → `props` 域 / 道具账本；
+  - 固定设施、场景道具及其历史行 → `scenes` 域，不移动历史行，不由本 Skill 改写。
+- 已有 AssetID、内容ID、稳定运行路径、尺寸、背包容量与 `+Z` 前袋朝向属于既有契约；本 Skill 不新编、不迁移、不重命名。
+- 参考截图是造型依据与本轮视觉真值：`C:/Users/zhuangmenghong/.workbuddy/clipboard-images/clipboard-2026-10-13T10-34-36-193Z-1dc7482b.jpg`（图面为消耗品/钥匙与背包/手电配件/子弹模块/配件/蓝图碎片共 6 面板、31 件）。新造型覆盖旧“小包圆顶”“中包黄色”等历史描述；旧描述只作迁移线索，不得压过截图和本规范。
 
-制作可独立摆放、拾取、手持、掉落或进入库存的道具资产。项目资产规范、交互系统、物理层、角色挂点和目录契约优先于本规范。
+## 本轮 31 件物品生产边界
 
-## 边界与选择
+- 目标是替换图示的 31 件物品的原模型；本轮只制作 **一个** Blender 可编辑总母版：
+  `art_source/items_weapons/props/reference_kit/source/prp_reference_item_kit_source_v001.blend`
+- 总源允许多个 `asset_id` 各自拥有独立 Collection 与 `ItemRoot`，但禁止为单资产另建平行母版。Collection、root、对象和材质名字必须唯一；展示排布只用于审阅，不进入任一资产的局部尺寸、包围盒或导出集合。
+- **母版必须把 31 件排成阵列而不是叠在原点**：按参考图的 6 面板 ×（3 列 × 2 行）映射到 9 列 × 4 行，列距 1.35m，面板之间留可见间隔。
+  阵列坐标只由 `ItemRoot` 承担；每件资产的网格顶点必须在自己的 `ItemRoot` 局部居中。导出前把 `ItemRoot.location` 归零（或按局部变换导出），阵列坐标不属于资产契约。
+- 总源同目录两个机器可读交付物必须与 `.blend` 一起产出：
+  - `art_source/items_weapons/props/reference_kit/source/asset_contract.json`
+  - `art_source/items_weapons/props/reference_kit/source/reference_item_kit_source_manifest.json`（含 `array_layout` 与逐项 `array_position_m`）
+- 保持静态无骨架：不创建 Armature、骨骼、蒙皮或角色动画。道具自身可动结构本轮不因展示需要加入动画。
 
-- 适用：消耗品、钥匙、容器、工具、战利品、投掷物和需要独立移动/拾取的物体。
-- 不适用：承载房间结构、拼接接口或固定玩法功能的对象属于场景与设施；枪械和近战武器属于 `game-weapon-model-pipeline`。
-- 同一物件若既可固定陈列又可拾取，导出一个稳定道具视觉资产，由场景包装与道具包装分别实例化；不要把拾取逻辑烘进场景 GLB。
+## 几何与 100 triangle 硬门禁
 
-## 制作与导出
+- 每个独立资产的预算为 **最多 100 triangles**，统计对象为应用全部修改器后的最终可见导出网格，并包含装饰贴花几何；这是本轮唯一生产上限。
+- 旧背包 `<=500 triangles` 约束仍作为历史兼容上限记录，但被本轮 `<=100 triangles` 覆盖；不能把两个预算相加，也不能用旧 500 为超标理由。
+- 统计必须基于 evaluated mesh 的 `loop_triangles`，不能把一个 ngon 当成一面；所有多边形必须按真实三角化结果计数。隐藏、禁渲染、移出视口、背后遮挡或只在导出时重新显示的超标几何均算作弊并验收失败。
+- 总源中每个资产必须有清晰的 `ItemRoot`、游戏输出集合和审阅/展示集合；展示环境、相机、灯光、地面、参考图平面不进入资产网格和 GLB。
+- 所有修改器必须在预算审计中求值；导出 GLB 前对导出副本应用变换和三角化，源母版保留可编辑修改器。不得用根缩放掩盖尺寸或三角数问题。
 
-1. 先分类为 `static`、`pickup`、`physics`、`held` 或项目已有类型，确认它是否进入库存、可被手持、会掉落/投掷，以及是否有自身开合、旋转或屏幕动画。
-2. 保留可编辑源组件，导出独立游戏输出。展示地面、相机、灯光、角色手和场景装饰不进入 GLB。
-3. `ItemRoot` 是稳定根。普通静态/掉落道具默认以接地或物理平衡点为根；可手持道具另外提供 `HoldAnchor`，不要为迁就手持而破坏其世界摆放和物理原点。
-4. 手持道具的 `HoldAnchor` 明确标出掌心/握点与朝向，默认右、上、前为 `+X`、`+Y`、`-Z`。角色手与 `HoldAnchor` 的最终对齐由项目装备系统完成；无需手持时不创建伪锚点。
-5. GLB 只包含视觉、贴图、必要的道具自身局部动画和导出用锚点。碰撞、拾取触发器、物理刚体、库存脚本、交互脚本和标签在 Godot 包装场景中维护。
-6. 只为道具自身可动结构创建动画，例如盖子、折页、按钮、旋转显示件或机械机关。拾取、放入库存、拿起、投掷、角色手势和角色 IK 是角色/玩法系统的职责；不要烘焙角色动作。
-7. 使用二进制 `.glb`，对导出副本而非源文件应用变换和三角化。建议目录为 `art_source/props/source/`、`components/` 和 `runtime/`；版本号进入 GLB、PackedScene 和台账。
+## 造型、材质与 UV
 
-## Godot 包装与验收
+- 统一风格关键词：粉、蓝、紫的兔标；星星与闪电图形；低模、清晰轮廓、少量高对比装饰。兔标是识别核心，不因预算删除；蓝图类物品保留可读的蓝图线稿。
+- 公共固有色色盘必须外链并使用 `Closest` 采样：`assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png`。不得 Pack 图片、复制模型私有色盘或用 atlas 取代固有色盘。
+- 材质角色最多四类，且只保留实际使用的材质槽；未使用的第四角色不得为了“凑四材质”挂在网格上。每一资产的 `material_roles_used` 必须与实际面绑定一致。
+- 无贴花部分只允许 `PaletteUV`。兔标与蓝图线稿可共享 `detail_atlas.png` 外链，并声明 `DecalUV` 是唯一额外 UV 用途；禁止每个物件复制一份贴图、私有 atlas 或第二套固有色色盘。atlas 只承载图案/线稿，不承载新的基础色盘。
+- 额外 UV 层必须有明确用途名；除 `PaletteUV` 与必要的 `DecalUV` 外不得创建 UV 层。无贴花资产不得创建空的 `DecalUV`。
 
-1. 每件道具有独立 PackedScene，稳定根为 `ItemRoot`，视觉置于 `Visual`。按实际用途增加分离的 `PickupTrigger`、`WorldCollision`、`PhysicsCollision`、`HoldAnchor` 和交互节点。
-2. 触发拾取的范围不能同时充当实体阻挡碰撞；掉落/投掷物的物理碰撞不能替代拾取触发器。碰撞层、掩码和启用状态遵从项目规则。
-3. 根缩放保持 1。世界摆放、物理、库存展示和手持表现需要不同大小或朝向时，使用项目规定的表现节点或不同包装场景，不在共享根上临时缩放。
-4. 可手持道具在真实角色 `ItemSocket` 或项目指定挂点下验证 `HoldAnchor`；不要为每个道具在角色脚本中写补偿变换。没有手持需求的道具不得被强加武器握点契约。
-5. 正式重新导入后，分别验证独立加载、世界摆放、拾取范围、掉落物理、手持对齐、可选自身动画、材质与实际关卡截图。更新资产ID、类型、版本、源文件、GLB、PackedScene、包围盒、碰撞方式、使用场景和回滚位置。
+## 尺寸、根与背包契约
 
-详细的道具模式、锚点和动画职责见 [references/prop-contract.md](references/prop-contract.md)。
+- 每项沿用 ledger 与内容数据库的真实 AssetID、内容ID、尺寸和版本；从台账读取，不从展示排布、截图比例或旧模型反推，不在本轮改账本。
+- `ItemRoot` 是稳定根，静态道具以稳定摆放/接地基准为局部原点；资产局部包围盒不包含总源展示间距。
+- 背包继续使用既有 `BackpackSocket` 语义；背包正面前袋方向规则保持 Godot `+Z` 朝外、`+Y` 向上，Blender 制作坐标沿用现有转换约定。不得因为换兔标、星星或闪电而改变背负方向、容量、内容ID、AssetID 或尺寸。
+- `HoldAnchor` 仅在真实台账/玩法契约要求手持时建立；默认右、上、前为 `+X`、`+Y`、`-Z`。没有手持需求的物品不创建伪握点。
 
-## 账本落位（分册化后，2026-09-18 起）
+## 输出、碰撞与 Godot 分权
 
-资产条目按**大类**路由到 `assets/registry/ledgers/` 下的分账本；域 / 大类 / 文件 / 分页的映射只由
-`assets/registry/ledger_index.json` 声明（说明见 `assets/registry/README.md`）。
-**不得写死账本文件名，也不得假定 `3D-*` 分页还在总目录里。**
+1. 保存一个总源 `.blend`，按 `asset_id` 建立独立 Collection/root，并记录每项 `source_collection`、`item_root`、材质角色、UV 层、应用修改器后三角数、尺寸来源与导出恢复信息。
+2. 未来 GLB 只包含视觉网格、外链图像引用和契约要求的视觉锚点；不带 Armature、玩法碰撞、拾取触发器、刚体、库存脚本、交互脚本或隐藏超标网格。
+3. 碰撞、拾取范围、物理刚体、库存、内容映射和交互均由 Godot/玩法包装维护；视觉替换不得扩大角色碰撞、改变门洞或修改背包容量。
+4. 每个资产的导出清单必须保留“导出后如何恢复到 `ItemRoot`”的记录，避免从总源展示布局错误恢复世界坐标。
+5. 本轮只完成规范与总源计划时，状态写 `source_planned` / `待验证`；没有实际 Blender、GLB、Godot 加载、碰撞或真实渲染证据，不得写“正式美术已接入”“Godot 已验收”。
 
-```python
-from ledger_registry import LedgerIndex            # scripts/ledger_registry.py
-index = LedgerIndex.load(project_root)
-index.path_for_category("<大类>")                  # -> 该大类的分账本路径
-index.domain_for_sheet("3D-<分页>")                 # -> 拥有该分页的域
-index.rewrite_ref("<旧引用>")                       # 旧 master#分页 -> 分账本#分页（幂等）
-```
+## 推荐验证顺序
 
-- 本 skill 涉及的分账本：道具（`ledgers/ShellStorm2_道具账本_v001.xlsx`）。
-- 总目录 `assets/registry/ShellStorm2_美术资产台账_v001.xlsx` 只放跨域契约与索引，**不得写入资产行**。
-- 旧批次 `asset_manifest.json` / QA 脚本里的 `…美术资产台账_v001.xlsx#3D-<分页>` 是**产出记录**，不要批量重写；`resolve_ref()` 会解析到正确的分账本。
-- 写完必查：`python scripts/check_asset_registry.py --ledger <域>`（结构 + 跨文件契约：每个 AssetID 全库恰好出现一次）。
+- 先核对 `ledger_index.json` 分类、AssetID/内容ID/尺寸和历史固定设施边界。
+- 再检查总源 Collection/root 唯一性、静态无骨架、展示布局隔离、外链路径和材质实际使用情况。
+- 对每个资产复制导出视图并求值所有修改器，检查真实 `loop_triangles <= 100`、非零面积、无隐藏超标几何、UV 层和外链贴图。
+- 最后才允许进入 GLB、碰撞和 Godot 包装流程；各阶段单独记录状态、路径、哈希、退出码和未执行项。
+
+详细根、分类、材质、UV、预算和交接字段见 [references/prop-contract.md](references/prop-contract.md)。

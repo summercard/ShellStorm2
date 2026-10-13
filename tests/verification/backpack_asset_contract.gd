@@ -67,7 +67,7 @@ static func verify(model: Node3D, slots: int, failures: Array[String]) -> void:
 				var c := uv[indices[triangle + 2]]
 				_expect(absf((b-a).cross(c-a)) > 0.00000001, tag + "导出UV三角无面积", failures)
 				_expect(Vector2i((a*10).floor()) == Vector2i((b*10).floor()) and Vector2i((a*10).floor()) == Vector2i((c*10).floor()), tag + "导出UV跨格", failures)
-	_expect(count > 0 and count <= 500 and count == int(asset.get_meta("triangle_count", 0)), tag + "三角预算或清单不一致：%d" % count, failures)
+	_expect(count > 0 and count <= 100 and count == int(asset.get_meta("triangle_count", 0)), tag + "三角预算或清单不一致：%d" % count, failures)
 	_expect(front_pocket and clasps == (0 if slots == 2 else 1 if slots == 4 else 2) and bedroll == (slots == 8), tag + "款式结构不符", failures)
 	if not points.is_empty():
 		var low := points[0]

@@ -1,0 +1,1272 @@
+{
+  "schema": "shellstorm2.reference_item_kit.source_manifest",
+  "schema_version": 2,
+  "source_blend": "art_source/items_weapons/props/reference_kit/source/prp_reference_item_kit_source_v001.blend",
+  "reference_image": "C:/Users/zhuangmenghong/.workbuddy/clipboard-images/clipboard-2026-10-13T10-34-36-193Z-1dc7482b.jpg",
+  "asset_count": 31,
+  "triangle_budget_per_asset": 100,
+  "max_triangles_used": 96,
+  "array_layout": {
+    "columns": 9,
+    "rows": 4,
+    "column_pitch_m": 1.35,
+    "row_y_m": {
+      "0": 2.45,
+      "1": 1.15,
+      "2": -0.95,
+      "3": -2.25
+    },
+    "panel_shift_m": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "3": 0.62,
+      "4": 0.62,
+      "5": 0.62,
+      "6": 1.24,
+      "7": 1.24,
+      "8": 1.24
+    },
+    "pattern": "参考图 6 个面板按 3 列 x 2 行排布，每面板内含 3 列 x 2 行槽位",
+    "rule": "ItemRoot 承担阵列坐标；网格顶点在各自的 ItemRoot 局部居中，母版不叠在同一坐标"
+  },
+  "assets": [
+    {
+      "content_id": "item_health_potion",
+      "display_name_zh": "治疗药水",
+      "group": "消耗品",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.34,
+        "depth": 0.22,
+        "height": 0.44
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_health_potion_治疗药水_资产包",
+      "item_root": "item_health_potion__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 0,
+        "row": 0
+      },
+      "array_position_m": {
+        "x": -5.400000095367432,
+        "y": 2.450000047683716,
+        "z": 0.2199999988079071
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "item_ammo_pack",
+      "display_name_zh": "通用弹药",
+      "group": "消耗品",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.42,
+        "depth": 0.22,
+        "height": 0.28
+      },
+      "triangles": 96,
+      "mesh_parts": 7,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_ammo_pack_通用弹药_资产包",
+      "item_root": "item_ammo_pack__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 1,
+        "row": 0
+      },
+      "array_position_m": {
+        "x": -4.050000190734863,
+        "y": 2.450000047683716,
+        "z": 0.14000000059604645
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "item_battery_s",
+      "display_name_zh": "小型电池",
+      "group": "消耗品",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.18,
+        "depth": 0.18,
+        "height": 0.34
+      },
+      "triangles": 92,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_battery_s_小型电池_资产包",
+      "item_root": "item_battery_s__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 2,
+        "row": 0
+      },
+      "array_position_m": {
+        "x": -2.700000047683716,
+        "y": 2.450000047683716,
+        "z": 0.17000000178813934
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "item_battery_l",
+      "display_name_zh": "大型电池",
+      "group": "消耗品",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.26,
+        "depth": 0.24,
+        "height": 0.42
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_battery_l_大型电池_资产包",
+      "item_root": "item_battery_l__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 0,
+        "row": 1
+      },
+      "array_position_m": {
+        "x": -5.400000095367432,
+        "y": 1.149999976158142,
+        "z": 0.20999999344348907
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "item_cell_pack",
+      "display_name_zh": "电芯包",
+      "group": "消耗品",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.34,
+        "depth": 0.22,
+        "height": 0.28
+      },
+      "triangles": 96,
+      "mesh_parts": 7,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_cell_pack_电芯包_资产包",
+      "item_root": "item_cell_pack__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 1,
+        "row": 1
+      },
+      "array_position_m": {
+        "x": -4.050000190734863,
+        "y": 1.149999976158142,
+        "z": 0.14000000059604645
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "item_beacon",
+      "display_name_zh": "撤离信标",
+      "group": "消耗品",
+      "asset_id": "ITM-CONSUMABLE-ITEM-BEACON",
+      "dimensions_m": {
+        "width": 0.36,
+        "depth": 0.3,
+        "height": 0.34
+      },
+      "triangles": 92,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_beacon_撤离信标_资产包",
+      "item_root": "item_beacon__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 2,
+        "row": 1
+      },
+      "array_position_m": {
+        "x": -2.700000047683716,
+        "y": 1.149999976158142,
+        "z": 0.17000000178813934
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "item_room_key",
+      "display_name_zh": "房间钥匙",
+      "group": "钥匙与背包",
+      "asset_id": "ITM-KEY-ITEM-ROOM-KEY",
+      "dimensions_m": {
+        "width": 0.38,
+        "depth": 0.14,
+        "height": 0.1
+      },
+      "triangles": 92,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_room_key_房间钥匙_资产包",
+      "item_root": "item_room_key__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 3,
+        "row": 0
+      },
+      "array_position_m": {
+        "x": -0.7300000190734863,
+        "y": 2.450000047683716,
+        "z": 0.05000000074505806
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "equipment_backpack_2",
+      "display_name_zh": "轻型腰包(+2格)",
+      "group": "钥匙与背包",
+      "asset_id": "ITM-EQUIPMENT-BACKPACK-SMALL-3D",
+      "dimensions_m": {
+        "width": 0.56,
+        "depth": 0.28,
+        "height": 0.6
+      },
+      "triangles": 84,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "equipment_backpack_2_轻型腰包(+2格)_资产包",
+      "item_root": "equipment_backpack_2__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 4,
+        "row": 0
+      },
+      "array_position_m": {
+        "x": 0.6200000047683716,
+        "y": 2.450000047683716,
+        "z": 0.30000001192092896
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "equipment_backpack_4",
+      "display_name_zh": "战术背包(+4格)",
+      "group": "钥匙与背包",
+      "asset_id": "ITM-EQUIPMENT-BACKPACK-MEDIUM-3D",
+      "dimensions_m": {
+        "width": 0.66,
+        "depth": 0.33,
+        "height": 0.74
+      },
+      "triangles": 92,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "equipment_backpack_4_战术背包(+4格)_资产包",
+      "item_root": "equipment_backpack_4__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 5,
+        "row": 0
+      },
+      "array_position_m": {
+        "x": 1.9700000286102295,
+        "y": 2.450000047683716,
+        "z": 0.3700000047683716
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "equipment_backpack_8",
+      "display_name_zh": "远征背包(+8格)",
+      "group": "钥匙与背包",
+      "asset_id": "ITM-EQUIPMENT-BACKPACK-LARGE-3D",
+      "dimensions_m": {
+        "width": 0.76,
+        "depth": 0.38,
+        "height": 0.88
+      },
+      "triangles": 84,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "equipment_backpack_8_远征背包(+8格)_资产包",
+      "item_root": "equipment_backpack_8__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 4,
+        "row": 1
+      },
+      "array_position_m": {
+        "x": 0.6200000047683716,
+        "y": 1.149999976158142,
+        "z": 0.4399999976158142
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "item_flashlight_basic",
+      "display_name_zh": "基础手电模块",
+      "group": "手电配件",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.36,
+        "depth": 0.17,
+        "height": 0.17
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "03_清漆反光_道具点缀",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_flashlight_basic_基础手电模块_资产包",
+      "item_root": "item_flashlight_basic__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 6,
+        "row": 0
+      },
+      "array_position_m": {
+        "x": 3.940000057220459,
+        "y": 2.450000047683716,
+        "z": 0.08500000089406967
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "item_flashlight_efficient",
+      "display_name_zh": "节能手电模块",
+      "group": "手电配件",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.36,
+        "depth": 0.17,
+        "height": 0.17
+      },
+      "triangles": 92,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_flashlight_efficient_节能手电模块_资产包",
+      "item_root": "item_flashlight_efficient__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 7,
+        "row": 0
+      },
+      "array_position_m": {
+        "x": 5.289999961853027,
+        "y": 2.450000047683716,
+        "z": 0.08500000089406967
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "item_flashlight_advanced",
+      "display_name_zh": "加强模块",
+      "group": "手电配件",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.36,
+        "depth": 0.17,
+        "height": 0.17
+      },
+      "triangles": 96,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "03_清漆反光_道具点缀",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "item_flashlight_advanced_加强模块_资产包",
+      "item_root": "item_flashlight_advanced__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 8,
+        "row": 0
+      },
+      "array_position_m": {
+        "x": 6.639999866485596,
+        "y": 2.450000047683716,
+        "z": 0.08500000089406967
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "mod_bullet_standard",
+      "display_name_zh": "标准子弹模块",
+      "group": "子弹模块",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.3,
+        "depth": 0.13,
+        "height": 0.13
+      },
+      "triangles": 88,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "mod_bullet_standard_标准子弹模块_资产包",
+      "item_root": "mod_bullet_standard__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 0,
+        "row": 2
+      },
+      "array_position_m": {
+        "x": -5.400000095367432,
+        "y": -0.949999988079071,
+        "z": 0.06499999761581421
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "mod_bullet_sticky",
+      "display_name_zh": "黏黏弹模块",
+      "group": "子弹模块",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.3,
+        "depth": 0.14,
+        "height": 0.16
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "mod_bullet_sticky_黏黏弹模块_资产包",
+      "item_root": "mod_bullet_sticky__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 1,
+        "row": 2
+      },
+      "array_position_m": {
+        "x": -4.050000190734863,
+        "y": -0.949999988079071,
+        "z": 0.07999999821186066
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "mod_bullet_bounce",
+      "display_name_zh": "回旋镖弹模块",
+      "group": "子弹模块",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.3,
+        "depth": 0.16,
+        "height": 0.16
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "mod_bullet_bounce_回旋镖弹模块_资产包",
+      "item_root": "mod_bullet_bounce__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 2,
+        "row": 2
+      },
+      "array_position_m": {
+        "x": -2.700000047683716,
+        "y": -0.949999988079071,
+        "z": 0.07999999821186066
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "mod_bullet_piercing",
+      "display_name_zh": "穿甲弹模块",
+      "group": "子弹模块",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.3,
+        "depth": 0.13,
+        "height": 0.13
+      },
+      "triangles": 88,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "mod_bullet_piercing_穿甲弹模块_资产包",
+      "item_root": "mod_bullet_piercing__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 0,
+        "row": 3
+      },
+      "array_position_m": {
+        "x": -5.400000095367432,
+        "y": -2.25,
+        "z": 0.06499999761581421
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "mod_bullet_explosive",
+      "display_name_zh": "爆炸弹模块",
+      "group": "子弹模块",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.3,
+        "depth": 0.15,
+        "height": 0.15
+      },
+      "triangles": 88,
+      "mesh_parts": 4,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "mod_bullet_explosive_爆炸弹模块_资产包",
+      "item_root": "mod_bullet_explosive__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 1,
+        "row": 3
+      },
+      "array_position_m": {
+        "x": -4.050000190734863,
+        "y": -2.25,
+        "z": 0.07500000298023224
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "mod_bullet_balloon",
+      "display_name_zh": "气球弹模块",
+      "group": "子弹模块",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.28,
+        "depth": 0.16,
+        "height": 0.16
+      },
+      "triangles": 88,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "mod_bullet_balloon_气球弹模块_资产包",
+      "item_root": "mod_bullet_balloon__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 2,
+        "row": 3
+      },
+      "array_position_m": {
+        "x": -2.700000047683716,
+        "y": -2.25,
+        "z": 0.07999999821186066
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "attach_triple_muzzle",
+      "display_name_zh": "三叉枪口",
+      "group": "配件",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.28,
+        "depth": 0.21,
+        "height": 0.19
+      },
+      "triangles": 92,
+      "mesh_parts": 7,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "attach_triple_muzzle_三叉枪口_资产包",
+      "item_root": "attach_triple_muzzle__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 3,
+        "row": 2
+      },
+      "array_position_m": {
+        "x": -0.7300000190734863,
+        "y": -0.949999988079071,
+        "z": 0.0949999988079071
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "attach_rubber_stock",
+      "display_name_zh": "橡皮枪托",
+      "group": "配件",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.32,
+        "depth": 0.17,
+        "height": 0.19
+      },
+      "triangles": 72,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "attach_rubber_stock_橡皮枪托_资产包",
+      "item_root": "attach_rubber_stock__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 4,
+        "row": 2
+      },
+      "array_position_m": {
+        "x": 0.6200000047683716,
+        "y": -0.949999988079071,
+        "z": 0.0949999988079071
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "attach_scope",
+      "display_name_zh": "放大镜瞄具",
+      "group": "配件",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.24,
+        "depth": 0.15,
+        "height": 0.19
+      },
+      "triangles": 88,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "03_清漆反光_道具点缀",
+        "04_柔和自发光_道具UI"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "attach_scope_放大镜瞄具_资产包",
+      "item_root": "attach_scope__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 5,
+        "row": 2
+      },
+      "array_position_m": {
+        "x": 1.9700000286102295,
+        "y": -0.949999988079071,
+        "z": 0.0949999988079071
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "attach_big_mag",
+      "display_name_zh": "肉质弹匣",
+      "group": "配件",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.21,
+        "depth": 0.15,
+        "height": 0.32
+      },
+      "triangles": 84,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "attach_big_mag_肉质弹匣_资产包",
+      "item_root": "attach_big_mag__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 3,
+        "row": 3
+      },
+      "array_position_m": {
+        "x": -0.7300000190734863,
+        "y": -2.25,
+        "z": 0.1599999964237213
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "attach_fan",
+      "display_name_zh": "小风扇",
+      "group": "配件",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.23,
+        "depth": 0.13,
+        "height": 0.23
+      },
+      "triangles": 80,
+      "mesh_parts": 5,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "attach_fan_小风扇_资产包",
+      "item_root": "attach_fan__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 4,
+        "row": 3
+      },
+      "array_position_m": {
+        "x": 0.6200000047683716,
+        "y": -2.25,
+        "z": 0.11500000208616257
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "attach_copy_sticker",
+      "display_name_zh": "复制贴纸",
+      "group": "配件",
+      "asset_id": null,
+      "dimensions_m": {
+        "width": 0.22,
+        "depth": 0.07,
+        "height": 0.25
+      },
+      "triangles": 92,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "attach_copy_sticker_复制贴纸_资产包",
+      "item_root": "attach_copy_sticker__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 5,
+        "row": 3
+      },
+      "array_position_m": {
+        "x": 1.9700000286102295,
+        "y": -2.25,
+        "z": 0.125
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "bp_pistol",
+      "display_name_zh": "豌豆手枪蓝图碎片",
+      "group": "蓝图碎片",
+      "asset_id": "WPN-GUN-BP-PISTOL",
+      "dimensions_m": {
+        "width": 0.34,
+        "depth": 0.05,
+        "height": 0.28
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "bp_pistol_豌豆手枪蓝图碎片_资产包",
+      "item_root": "bp_pistol__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 6,
+        "row": 2
+      },
+      "array_position_m": {
+        "x": 3.940000057220459,
+        "y": -0.949999988079071,
+        "z": 0.14000000059604645
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "bp_shotgun",
+      "display_name_zh": "散射喷壶蓝图碎片",
+      "group": "蓝图碎片",
+      "asset_id": "WPN-GUN-BP-SHOTGUN",
+      "dimensions_m": {
+        "width": 0.34,
+        "depth": 0.05,
+        "height": 0.28
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "bp_shotgun_散射喷壶蓝图碎片_资产包",
+      "item_root": "bp_shotgun__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 7,
+        "row": 2
+      },
+      "array_position_m": {
+        "x": 5.289999961853027,
+        "y": -0.949999988079071,
+        "z": 0.14000000059604645
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "bp_rifle",
+      "display_name_zh": "步枪蓝图碎片",
+      "group": "蓝图碎片",
+      "asset_id": "WPN-GUN-BP-RIFLE",
+      "dimensions_m": {
+        "width": 0.34,
+        "depth": 0.05,
+        "height": 0.28
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "bp_rifle_步枪蓝图碎片_资产包",
+      "item_root": "bp_rifle__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 8,
+        "row": 2
+      },
+      "array_position_m": {
+        "x": 6.639999866485596,
+        "y": -0.949999988079071,
+        "z": 0.14000000059604645
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "bp_machinegun",
+      "display_name_zh": "蜂窝机枪蓝图碎片",
+      "group": "蓝图碎片",
+      "asset_id": "WPN-GUN-BP-MACHINEGUN",
+      "dimensions_m": {
+        "width": 0.34,
+        "depth": 0.05,
+        "height": 0.28
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "bp_machinegun_蜂窝机枪蓝图碎片_资产包",
+      "item_root": "bp_machinegun__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 6,
+        "row": 3
+      },
+      "array_position_m": {
+        "x": 3.940000057220459,
+        "y": -2.25,
+        "z": 0.14000000059604645
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "bp_sniper",
+      "display_name_zh": "弹弓狙击蓝图碎片",
+      "group": "蓝图碎片",
+      "asset_id": "WPN-GUN-BP-SNIPER",
+      "dimensions_m": {
+        "width": 0.34,
+        "depth": 0.05,
+        "height": 0.28
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "bp_sniper_弹弓狙击蓝图碎片_资产包",
+      "item_root": "bp_sniper__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 7,
+        "row": 3
+      },
+      "array_position_m": {
+        "x": 5.289999961853027,
+        "y": -2.25,
+        "z": 0.14000000059604645
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    },
+    {
+      "content_id": "bp_launcher",
+      "display_name_zh": "反胃榴弹筒蓝图碎片",
+      "group": "蓝图碎片",
+      "asset_id": "WPN-GUN-BP-LAUNCHER",
+      "dimensions_m": {
+        "width": 0.34,
+        "depth": 0.05,
+        "height": 0.28
+      },
+      "triangles": 96,
+      "mesh_parts": 6,
+      "material_roles_used": [
+        "01_精工金属_道具骨架",
+        "02_细腻哑光_道具大面",
+        "03_清漆反光_道具点缀"
+      ],
+      "animation_tier": "tier_0_static",
+      "front_axis": "+Z",
+      "source_collection": "bp_launcher_反胃榴弹筒蓝图碎片_资产包",
+      "item_root": "bp_launcher__ItemRoot",
+      "output_collection_role": "02_游戏输出_整合模型",
+      "authoring_collection_role": "01_制作组件_已统一材质",
+      "socket_collection_role": "80_挂点_交互接口",
+      "array_slot": {
+        "column": 8,
+        "row": 3
+      },
+      "array_position_m": {
+        "x": 6.639999866485596,
+        "y": -2.25,
+        "z": 0.14000000059604645
+      },
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "uv_layers": [
+        "PaletteUV"
+      ],
+      "source_version": "v001"
+    }
+  ],
+  "unregistered_content_only": [
+    "item_health_potion",
+    "item_ammo_pack",
+    "item_battery_s",
+    "item_battery_l",
+    "item_cell_pack",
+    "item_flashlight_basic",
+    "item_flashlight_efficient",
+    "item_flashlight_advanced",
+    "mod_bullet_standard",
+    "mod_bullet_sticky",
+    "mod_bullet_bounce",
+    "mod_bullet_piercing",
+    "mod_bullet_explosive",
+    "mod_bullet_balloon",
+    "attach_triple_muzzle",
+    "attach_rubber_stock",
+    "attach_scope",
+    "attach_big_mag",
+    "attach_fan",
+    "attach_copy_sticker"
+  ],
+  "errors": [],
+  "notes": [
+    "全部资产为 tier_0_static：无骨架、无动画、无碰撞、无玩法脚本。",
+    "缺失 AssetID 的内容不擅自编造；账本登记属于独立事务。",
+    "三款背包沿用既有稳定 AssetID 与尺寸；本总母版取代其旧单件源，等待导出与导入验收。",
+    "展示集合（地面/相机/灯光）只用于审阅，绝不参与导出。",
+    "导出前必须把 ItemRoot.location 归零或按局部变换导出，阵列坐标不属于资产契约。"
+  ]
+}

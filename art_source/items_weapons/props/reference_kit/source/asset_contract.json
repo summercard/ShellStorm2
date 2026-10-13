@@ -1,0 +1,47 @@
+{
+  "schema": "shellstorm2.reference_item_kit.asset_contract",
+  "schema_version": 2,
+  "display_name_zh": "参考图 31 件低模道具总母版",
+  "source_blend": "art_source/items_weapons/props/reference_kit/source/prp_reference_item_kit_source_v001.blend",
+  "source_manifest": "art_source/items_weapons/props/reference_kit/source/reference_item_kit_source_manifest.json",
+  "reference_image": "C:/Users/zhuangmenghong/.workbuddy/clipboard-images/clipboard-2026-10-13T10-34-36-193Z-1dc7482b.jpg",
+  "asset_count": 31,
+  "triangle_budget_per_asset": 100,
+  "animation_tier": "tier_0_static",
+  "array_layout": "9 columns x 4 rows; ItemRoot carries the array position; mesh vertices stay centered on their own ItemRoot",
+  "collision_and_gameplay_owner": "Godot runtime / gameplay pipeline",
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "palette_interpolation": "Closest",
+  "uv_layers": [
+    "PaletteUV"
+  ],
+  "collection_contract": [
+    "01_制作组件_已统一材质",
+    "02_游戏输出_整合模型",
+    "10_骨骼与动画",
+    "80_挂点_交互接口"
+  ],
+  "presentation_collection": "90_展示环境_灯光相机",
+  "material_role_sets": {
+    "prop": [
+      "01_精工金属_道具骨架",
+      "02_细腻哑光_道具大面",
+      "03_清漆反光_道具点缀",
+      "04_柔和自发光_道具UI"
+    ],
+    "backpack": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ]
+  },
+  "export_recovery": "Zero ItemRoot.location (or export local transforms) before GLB export; array position is presentation-only.",
+  "status": "source_verified_pending_glb_and_godot_import",
+  "notes": [
+    "既有三款背包稳定 AssetID 与尺寸已保留在总源内。",
+    "未登记 AssetID 的内容保持未登记，未编造稳定 ID。",
+    "展示集合不是导出源。",
+    "本契约不宣称任何运行时 GLB、PackedScene、碰撞、账本状态或 Godot 正式验收。"
+  ]
+}

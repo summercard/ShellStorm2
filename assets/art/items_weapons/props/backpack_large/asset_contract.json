@@ -41,7 +41,7 @@
   "optimized_blend": "art_source/items_weapons/props/backpack_large/source/export/v001/prp_backpack_large_optimized_v001.blend",
   "stable_glb": "assets/art/items_weapons/props/backpack_large/components/prp_backpack_large_visual_top3d.glb",
   "stable_prefab": "assets/art/items_weapons/props/backpack_large/runtime/prp_backpack_large_root_top3d.tscn",
-  "max_triangles": 500,
+  "max_triangles": 100,
   "shoulder_straps": false,
   "front_clasp_straps": true,
   "top_handle": true,
