@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://fx0118"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxBlastZone3D.gd" id="1_blast_zone"]
+
+[node name="VfxBlastZone3D" type="Node3D"]
+script = ExtResource("1_blast_zone")
+metadata/asset_id = "VFX-BLAST-ZONE-3D"
+metadata/asset_version = "v001"

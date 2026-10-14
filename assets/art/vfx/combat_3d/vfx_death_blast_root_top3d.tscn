@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://fx0117"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxDeathBlast3D.gd" id="1_death_blast"]
+
+[node name="VfxDeathBlast3D" type="Node3D"]
+script = ExtResource("1_death_blast")
+metadata/asset_id = "VFX-DEATH-BLAST-3D"
+metadata/asset_version = "v001"

@@ -12,6 +12,13 @@ const FX01_EXPLOSION := "VFX-EXPLOSION-3D"
 const FX01_MELEE_SLASH := "VFX-MELEE-SLASH-3D"
 const FX01_MELEE_IMPACT := "VFX-MELEE-IMPACT-3D"
 const FX01_SHELL_CASING := "VFX-SHELL-CASING-3D"
+## 胖子僵尸死亡自爆（FX01-17）——由 `Enemy3D._detonate_death_explosion()` 经本池借出。
+##
+## ⚠ 它的**地面残留伤害场**（FX01-18 `VFX-BLAST-ZONE-3D`）**刻意不进本注册表**：
+## 那片场地由 `DeathBlastZone3D` 作为**长期子实例**持有（时长 = 场地持续时长），
+## 池化的瞬时计时语义与它冲突；与 FX01-16 头顶吼叫图标、FX03-03 收音机音符同一口径。
+## 场地侧的 AssetID 常量见 `src/enemy3d/DeathBlastZone3D.gd` 的 `ZONE_VFX_ASSET_ID`。
+const FX01_DEATH_BLAST := "VFX-DEATH-BLAST-3D"
 const FX02_DAMAGE_NUMBER := "VFX-DAMAGE-NUMBER-3D"
 const FX02_HEAL_NUMBER := "VFX-HEAL-NUMBER-3D"
 
@@ -22,6 +29,7 @@ const _REGISTRY := {
 	FX01_MELEE_SLASH: preload("res://assets/art/vfx/combat_3d/vfx_melee_slash_root_top3d.tscn"),
 	FX01_MELEE_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_melee_impact_root_top3d.tscn"),
 	FX01_SHELL_CASING: preload("res://assets/art/vfx/combat_3d/vfx_shell_casing_root_top3d.tscn"),
+	FX01_DEATH_BLAST: preload("res://assets/art/vfx/combat_3d/vfx_death_blast_root_top3d.tscn"),
 	FX02_DAMAGE_NUMBER: preload("res://assets/art/vfx/combat_3d/vfx_damage_number_root_top3d.tscn"),
 	FX02_HEAL_NUMBER: preload("res://assets/art/vfx/combat_3d/vfx_heal_number_root_top3d.tscn"),
 }
