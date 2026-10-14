@@ -1,0 +1,28 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-RUBBER-STOCK",
+  "slug": "rubber_stock",
+  "preview_source": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
+  "preview_sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb",
+  "ground_source": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_ground_source_v001.blend",
+  "ground_sha256": "4e4a906492d9eb1f79bfd5e756991584422fd30664dd502a25cfe542436791d7",
+  "preview_triangles": 20732,
+  "ground_polygons": 145,
+  "ground_triangles": 145,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true,
+  "logical_id": "attach_rubber_stock",
+  "name": "橡皮枪托",
+  "glb": "assets/art/items_weapons/weapons/rubber_stock/components/wpn_rubber_stock_ground_visual_top3d.glb",
+  "prefab": "assets/art/items_weapons/weapons/rubber_stock/runtime/wpn_rubber_stock_ground_root_top3d.tscn",
+  "glb_sha256": "69f7add7e2012d3c4d70a07b445f4f59a5255242bec336d49b74568ed91b6cb3",
+  "prefab_sha256": "a4ccb5d3e2bf5bcf6bb921068be1de6e5c97db871024d0e8bdaa42bdb2dd19ce",
+  "source_hashes_unchanged": true,
+  "model_role": "ground",
+  "status": "exported_pending_godot_validation",
+  "consumer": "src/world3d/GroundLootPickup3D.gd via ItemModelFactory3D"
+}

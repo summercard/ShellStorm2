@@ -1,0 +1,28 @@
+{
+  "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-S",
+  "slug": "battery_small",
+  "preview_source": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
+  "preview_sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54",
+  "ground_source": "art_source/items_weapons/props/battery_small/source/itm_battery_small_ground_source_v001.blend",
+  "ground_sha256": "e7d916bff0cf1d2cab60d49595b38d8f22a5cf9f0d033d71b4e3fa053944f762",
+  "preview_triangles": 3616,
+  "ground_polygons": 120,
+  "ground_triangles": 120,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true,
+  "logical_id": "item_battery_s",
+  "name": "小型电池",
+  "glb": "assets/art/items_weapons/props/battery_small/components/itm_battery_small_ground_visual_top3d.glb",
+  "prefab": "assets/art/items_weapons/props/battery_small/runtime/itm_battery_small_ground_root_top3d.tscn",
+  "glb_sha256": "86b03dcf28d761f6431b74160d69eb4fa2726eea2c8d818b2059d82dc795998f",
+  "prefab_sha256": "609cb7a4a4f47ef8d813a16c2b443a954f1db5bd47a49bbbdb620bc4bad34035",
+  "source_hashes_unchanged": true,
+  "model_role": "ground",
+  "status": "exported_pending_godot_validation",
+  "consumer": "src/world3d/GroundLootPickup3D.gd via ItemModelFactory3D"
+}

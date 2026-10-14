@@ -1,0 +1,28 @@
+{
+  "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-L",
+  "slug": "battery_large",
+  "preview_source": "art_source/items_weapons/props/battery_large/source/itm_battery_large_source_v001.blend",
+  "preview_sha256": "7157aee1841ef81347a0d5b94a56e380366545b9a3aed0df5470e814eaa7b075",
+  "ground_source": "art_source/items_weapons/props/battery_large/source/itm_battery_large_ground_source_v001.blend",
+  "ground_sha256": "63560237834283a742563891778e69b2d634c66c08b47ce7db99bba1313eaa3d",
+  "preview_triangles": 12536,
+  "ground_polygons": 168,
+  "ground_triangles": 168,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true,
+  "logical_id": "item_battery_l",
+  "name": "大型电池",
+  "glb": "assets/art/items_weapons/props/battery_large/components/itm_battery_large_ground_visual_top3d.glb",
+  "prefab": "assets/art/items_weapons/props/battery_large/runtime/itm_battery_large_ground_root_top3d.tscn",
+  "glb_sha256": "ef818781be772647eeb7f28d65c10c87abf941eef28ee0269515772aa5103d92",
+  "prefab_sha256": "9a96e40eb5695a5c312cb72cd42c2ac18eb1e23c10cd6ea9161c8559caad564c",
+  "source_hashes_unchanged": true,
+  "model_role": "ground",
+  "status": "exported_pending_godot_validation",
+  "consumer": "src/world3d/GroundLootPickup3D.gd via ItemModelFactory3D"
+}

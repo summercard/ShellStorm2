@@ -94,8 +94,8 @@
   "source_blend": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_source_v001.blend",
   "stable_glb": "assets/art/items_weapons/weapons/big_mag/components/wpn_big_mag_visual_top3d.glb",
   "stable_prefab": "assets/art/items_weapons/weapons/big_mag/runtime/wpn_big_mag_root_top3d.tscn",
-  "function_note": "仅Blender原始源制作；后续导入保持现有物品使用/装配规则；当前运行时仍用原表现",
-  "status": "Blender源已完成",
+  "function_note": "ground仅视觉；拾取/弹跳/碰撞由GroundLootPickup3D持有，倍率0.504不烘入源",
+  "status": "exported_pending_godot_validation",
   "glass_note": "",
   "model_variants": {
     "preview": {
@@ -110,8 +110,13 @@
       "polygons": 192,
       "triangles": 192,
       "usage": "地面掉落/拾取显示",
-      "derived_from_sha256": "8513e3320fad3a4af8ee4562b5149b9a45f0e95d72df06accb96b0b7befe72f5"
+      "derived_from_sha256": "8513e3320fad3a4af8ee4562b5149b9a45f0e95d72df06accb96b0b7befe72f5",
+      "stable_glb": "assets/art/items_weapons/weapons/big_mag/components/wpn_big_mag_ground_visual_top3d.glb",
+      "stable_prefab": "assets/art/items_weapons/weapons/big_mag/runtime/wpn_big_mag_ground_root_top3d.tscn",
+      "glb_sha256": "1b7c12877a2116a10a661d5229b4b8627a77ce6ade2eae181facdedf465a1df1",
+      "prefab_sha256": "5de5c693bc21fb7f09a618ccab95c4830ca88902da8844dc1be885928072a775",
+      "status": "exported_pending_godot_validation"
     }
   },
-  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+  "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行"
 }

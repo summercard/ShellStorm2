@@ -13,3 +13,9 @@ FeatureID：ASSET-PIPELINE / WORLD-LOOT / INVENTORY-SLOTS。工程版本0.1.0。
 账本：道具新增3资产、武器复用5资产身份；同一行登记两份源、分别记录哈希与面数。物品道具导航和武器物品索引同步制作进度。非目标资产基线指纹与Prefab分页保持。全域结构与无损基线检查通过；完整路径/哈希检查存在既有其他资产漂移，未批量接受其当前值。
 
 规范skill：`item-prop-dual-model-authoring`，明确源尺寸实测、角色分流、100–200三角预算、减面后UV和轮廓检查、同AssetID登记及源/运行时状态分离。
+
+## 最终交付统计
+
+地面版按三角面统计：大型电池168、小型电池120、治疗药水178、标准子弹模块176、肉质弹匣192、三叉枪口198、橡皮枪托145、放大镜瞄具198。逐件源文件入口见 [交付清单](../../../art_source/items_weapons/reference_batch_20261014/DELIVERY.md)。
+
+已完成的检查记录：8件源专项通过；全域账本结构与无损基线检查通过（1244资产、9分账本）；skill格式检查通过。全项目文档检查仍报告既有CHANGELOG失效链接、6项未登记验收脚本及UI账本数量差异；美术源目录检查报告另一批次`props/reference_kit/source/prp_reference_item_kit_source_v001.blend1`被Git忽略。这些全局问题未在本次物品制作中修改。

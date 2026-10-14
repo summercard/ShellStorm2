@@ -1,0 +1,28 @@
+{
+  "asset_id": "ITM-CONSUMABLE-ITEM-AMMO-PACK",
+  "slug": "bullet_standard",
+  "preview_source": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
+  "preview_sha256": "a1302b8182d523834dc0af9741eb687044489f66cafa0cfbcbf79d1de1d565d3",
+  "ground_source": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_ground_source_v001.blend",
+  "ground_sha256": "3d7baf9637ba5bc14982366f0663af93102512c4c04335b77104983208c3f88c",
+  "preview_triangles": 3368,
+  "ground_polygons": 176,
+  "ground_triangles": 176,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true,
+  "logical_id": "item_ammo_pack",
+  "name": "通用弹药",
+  "glb": "assets/art/items_weapons/weapons/bullet_standard/components/wpn_bullet_standard_ground_visual_top3d.glb",
+  "prefab": "assets/art/items_weapons/weapons/bullet_standard/runtime/wpn_bullet_standard_ground_root_top3d.tscn",
+  "glb_sha256": "87b0e6c5779ab06db135c4c727379a6304aafb0863d37a5cda3d103ec953b08b",
+  "prefab_sha256": "0ad392c1dec49e5fb0d4d40debc651c85a0ba7580fdd750285ff2a3ff5b186f8",
+  "source_hashes_unchanged": true,
+  "model_role": "ground",
+  "status": "exported_pending_godot_validation",
+  "consumer": "src/world3d/GroundLootPickup3D.gd via ItemModelFactory3D"
+}

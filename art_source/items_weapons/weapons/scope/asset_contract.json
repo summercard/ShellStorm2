@@ -94,8 +94,8 @@
   "source_blend": "art_source/items_weapons/weapons/scope/source/wpn_scope_source_v001.blend",
   "stable_glb": "assets/art/items_weapons/weapons/scope/components/wpn_scope_visual_top3d.glb",
   "stable_prefab": "assets/art/items_weapons/weapons/scope/runtime/wpn_scope_root_top3d.tscn",
-  "function_note": "仅Blender原始源制作；后续导入保持现有物品使用/装配规则；当前运行时仍用原表现",
-  "status": "Blender源已完成",
+  "function_note": "ground仅视觉；拾取/弹跳/碰撞由GroundLootPickup3D持有，倍率0.504不烘入源",
+  "status": "exported_pending_godot_validation",
   "glass_note": "",
   "model_variants": {
     "preview": {
@@ -110,8 +110,13 @@
       "polygons": 198,
       "triangles": 198,
       "usage": "地面掉落/拾取显示",
-      "derived_from_sha256": "6c4244348bb117f35a862187503ab5577be801b5f1dd00e72bcb17c095274b95"
+      "derived_from_sha256": "6c4244348bb117f35a862187503ab5577be801b5f1dd00e72bcb17c095274b95",
+      "stable_glb": "assets/art/items_weapons/weapons/scope/components/wpn_scope_ground_visual_top3d.glb",
+      "stable_prefab": "assets/art/items_weapons/weapons/scope/runtime/wpn_scope_ground_root_top3d.tscn",
+      "glb_sha256": "2ef8fc0e7e766584f3708c0554edd0029de21d50a737d6b0e6f120128e1cf1ba",
+      "prefab_sha256": "d962c82f52ea48e01a84d91e781af87e55ee6936c8280c1b5a7242f4ea0beb1d",
+      "status": "exported_pending_godot_validation"
     }
   },
-  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+  "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行"
 }

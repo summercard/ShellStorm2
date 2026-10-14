@@ -1,0 +1,28 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-BIG-MAG",
+  "slug": "big_mag",
+  "preview_source": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_source_v001.blend",
+  "preview_sha256": "8513e3320fad3a4af8ee4562b5149b9a45f0e95d72df06accb96b0b7befe72f5",
+  "ground_source": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_ground_source_v001.blend",
+  "ground_sha256": "a67664acb24910e970b61d43ed1cf2e3395a876a6896a67853cd5648a19cafff",
+  "preview_triangles": 5856,
+  "ground_polygons": 192,
+  "ground_triangles": 192,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true,
+  "logical_id": "attach_big_mag",
+  "name": "肉质弹匣",
+  "glb": "assets/art/items_weapons/weapons/big_mag/components/wpn_big_mag_ground_visual_top3d.glb",
+  "prefab": "assets/art/items_weapons/weapons/big_mag/runtime/wpn_big_mag_ground_root_top3d.tscn",
+  "glb_sha256": "1b7c12877a2116a10a661d5229b4b8627a77ce6ade2eae181facdedf465a1df1",
+  "prefab_sha256": "5de5c693bc21fb7f09a618ccab95c4830ca88902da8844dc1be885928072a775",
+  "source_hashes_unchanged": true,
+  "model_role": "ground",
+  "status": "exported_pending_godot_validation",
+  "consumer": "src/world3d/GroundLootPickup3D.gd via ItemModelFactory3D"
+}

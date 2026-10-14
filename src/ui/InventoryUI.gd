@@ -1089,6 +1089,7 @@ func _is_equipped_weapon(item: Dictionary) -> bool:
 		"GunBody_Pistol": "bp_pistol", "GunBody_Shotgun": "bp_shotgun",
 		"GunBody_Rifle": "bp_rifle", "GunBody_Machinegun": "bp_machinegun",
 		"GunBody_Sprinkler": "bp_sprinkler",
+		"GunBody_StarterRifle": "bp_starter_rifle",
 		"GunBody_Sniper": "bp_sniper", "GunBody_Launcher": "bp_launcher",
 		"GunBody_Charge": "bp_charge",
 	}.get(root_name, ""))

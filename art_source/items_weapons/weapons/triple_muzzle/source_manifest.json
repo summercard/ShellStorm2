@@ -26,8 +26,15 @@
       "polygons": 198,
       "triangles": 198,
       "usage": "地面掉落/拾取显示",
-      "derived_from_sha256": "53871c61c511ac2ac41685bcc65e765b591b5cbcd7880d3685cacf545cdd94c5"
+      "derived_from_sha256": "53871c61c511ac2ac41685bcc65e765b591b5cbcd7880d3685cacf545cdd94c5",
+      "stable_glb": "assets/art/items_weapons/weapons/triple_muzzle/components/wpn_triple_muzzle_ground_visual_top3d.glb",
+      "stable_prefab": "assets/art/items_weapons/weapons/triple_muzzle/runtime/wpn_triple_muzzle_ground_root_top3d.tscn",
+      "glb_sha256": "bbf3ff78e51e66356081cb061697ca19c8a7574d651b20512179f75c25eb32f4",
+      "prefab_sha256": "dc29f696a3a6ba10438dd5bdb8ea0c0dfde55ded2bbb30dd8a1c45355286cef5",
+      "status": "exported_pending_godot_validation"
     }
   },
-  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+  "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行",
+  "status": "exported_pending_godot_validation",
+  "function_note": "ground仅视觉；拾取/弹跳/碰撞由GroundLootPickup3D持有，倍率0.504不烘入源"
 }

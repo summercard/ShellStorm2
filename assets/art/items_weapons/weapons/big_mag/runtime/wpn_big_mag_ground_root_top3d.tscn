@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/big_mag/components/wpn_big_mag_ground_visual_top3d.glb" id="1_visual"]
+
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-ATT-ATTACH-BIG-MAG"
+metadata/logical_id = "attach_big_mag"
+metadata/asset_version = "v001"
+metadata/model_role = "ground"
+metadata/triangle_count = 192
+metadata/dimensions_m = Vector3(0.110071, 0.24, 0.070468)
+metadata/front_axis = "+Z"
+metadata/collision_intent = "external_ground_loot_pickup"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

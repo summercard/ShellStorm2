@@ -1,0 +1,28 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-TRIPLE-MUZZLE",
+  "slug": "triple_muzzle",
+  "preview_source": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_source_v001.blend",
+  "preview_sha256": "53871c61c511ac2ac41685bcc65e765b591b5cbcd7880d3685cacf545cdd94c5",
+  "ground_source": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_ground_source_v001.blend",
+  "ground_sha256": "3fba4ba572c107b080cb05289d21f8d5f6ae778776f7587ffa998222bdf7c293",
+  "preview_triangles": 7820,
+  "ground_polygons": 198,
+  "ground_triangles": 198,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true,
+  "logical_id": "attach_triple_muzzle",
+  "name": "三叉枪口",
+  "glb": "assets/art/items_weapons/weapons/triple_muzzle/components/wpn_triple_muzzle_ground_visual_top3d.glb",
+  "prefab": "assets/art/items_weapons/weapons/triple_muzzle/runtime/wpn_triple_muzzle_ground_root_top3d.tscn",
+  "glb_sha256": "bbf3ff78e51e66356081cb061697ca19c8a7574d651b20512179f75c25eb32f4",
+  "prefab_sha256": "dc29f696a3a6ba10438dd5bdb8ea0c0dfde55ded2bbb30dd8a1c45355286cef5",
+  "source_hashes_unchanged": true,
+  "model_role": "ground",
+  "status": "exported_pending_godot_validation",
+  "consumer": "src/world3d/GroundLootPickup3D.gd via ItemModelFactory3D"
+}

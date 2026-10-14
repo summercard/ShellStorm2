@@ -1,6 +1,22 @@
 class_name ItemModelFactory3D
 extends RefCounted
-## 世界拾取与背包图标共用的 3D 道具模型工厂，避免维护两套外观。
+## 共用内容身份的模型工厂；地面与预览按用途显式选择表现角色。
+
+const MODEL_ROLE_PREVIEW := &"preview"
+const MODEL_ROLE_GROUND := &"ground"
+const MODEL_ROLE_ICON := &"icon"
+const GROUND_DISPLAY_SCALE := {"item_battery_l": 1.30, "item_health_potion": 1.30}
+## 同一AssetID的地面派生模型；预览高模另行导入，当前保留原预览表现。
+const GROUND_SCENES := {
+	"item_battery_l": preload("res://assets/art/items_weapons/props/battery_large/runtime/itm_battery_large_ground_root_top3d.tscn"),
+	"item_battery_s": preload("res://assets/art/items_weapons/props/battery_small/runtime/itm_battery_small_ground_root_top3d.tscn"),
+	"item_health_potion": preload("res://assets/art/items_weapons/props/health_potion/runtime/itm_health_potion_ground_root_top3d.tscn"),
+	"item_ammo_pack": preload("res://assets/art/items_weapons/weapons/bullet_standard/runtime/wpn_bullet_standard_ground_root_top3d.tscn"),
+	"attach_big_mag": preload("res://assets/art/items_weapons/weapons/big_mag/runtime/wpn_big_mag_ground_root_top3d.tscn"),
+	"attach_triple_muzzle": preload("res://assets/art/items_weapons/weapons/triple_muzzle/runtime/wpn_triple_muzzle_ground_root_top3d.tscn"),
+	"attach_rubber_stock": preload("res://assets/art/items_weapons/weapons/rubber_stock/runtime/wpn_rubber_stock_ground_root_top3d.tscn"),
+	"attach_scope": preload("res://assets/art/items_weapons/weapons/scope/runtime/wpn_scope_ground_root_top3d.tscn"),
+}
 
 const WEAPON_SCENE: PackedScene = preload("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn")
 const BACKPACK_SCENES := {
@@ -10,10 +26,30 @@ const BACKPACK_SCENES := {
 }
 
 
-static func create_model(item: Dictionary, _tint := Color(0.38, 0.88, 0.72)) -> Node3D:
+static func create_model(item: Dictionary, _tint := Color(0.38, 0.88, 0.72), model_role: StringName = MODEL_ROLE_PREVIEW) -> Node3D:
 	var root := Node3D.new()
 	root.name = "ItemModel3D"
 	var kind := get_model_kind(item)
+	root.set_meta("model_role", model_role)
+	var item_id := str(item.get("id", ""))
+	if model_role in [MODEL_ROLE_GROUND, MODEL_ROLE_ICON] and GROUND_SCENES.has(item_id):
+		var scene: PackedScene = GROUND_SCENES[item_id]
+		var visual := scene.instantiate() as Node3D
+		# 倾斜放在旋转根内部；外层绕世界Y旋转时，倾角保持不变。
+		var pivot := Node3D.new()
+		pivot.name = "TiltedPresentation"
+		var dimensions: Vector3 = visual.get_meta("dimensions_m", Vector3.ONE)
+		var tilt := deg_to_rad(45.0)
+		pivot.rotation.z = -tilt
+		pivot.position.y = (dimensions.y * cos(tilt) + dimensions.x * sin(tilt)) * 0.5
+		visual.position.y = -dimensions.y * 0.5
+		pivot.add_child(visual)
+		root.add_child(pivot)
+		if model_role == MODEL_ROLE_GROUND:
+			pivot.scale *= float(GROUND_DISPLAY_SCALE.get(item_id, 1.0))
+		root.set_meta("asset_id", visual.get_meta("asset_id"))
+		root.set_meta("model_kind", kind)
+		return root
 	var model_tint := get_item_color(item)
 	if item.has("display_color") and item["display_color"] is Color:
 		model_tint = item["display_color"] as Color

@@ -81,8 +81,8 @@
   "source_blend": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source_v001.blend",
   "stable_glb": "assets/art/items_weapons/props/health_potion/components/itm_health_potion_visual_top3d.glb",
   "stable_prefab": "assets/art/items_weapons/props/health_potion/runtime/itm_health_potion_root_top3d.tscn",
-  "function_note": "仅Blender原始源制作；后续导入保持现有物品使用/装配规则；当前运行时仍用原表现",
-  "status": "Blender源已完成",
+  "function_note": "ground仅视觉；拾取/弹跳/碰撞由GroundLootPickup3D持有，倍率0.504不烘入源",
+  "status": "exported_pending_godot_validation",
   "glass_note": "严格四材质公共色盘，药瓶采用不透明清漆与浅色肩部表现玻璃感；未新增透明材质。",
   "model_variants": {
     "preview": {
@@ -97,8 +97,13 @@
       "polygons": 178,
       "triangles": 178,
       "usage": "地面掉落/拾取显示",
-      "derived_from_sha256": "6d1d848e4cc37d91fc99d0609db46763ef916458e2a418aa621befb07781d5bb"
+      "derived_from_sha256": "6d1d848e4cc37d91fc99d0609db46763ef916458e2a418aa621befb07781d5bb",
+      "stable_glb": "assets/art/items_weapons/props/health_potion/components/itm_health_potion_ground_visual_top3d.glb",
+      "stable_prefab": "assets/art/items_weapons/props/health_potion/runtime/itm_health_potion_ground_root_top3d.tscn",
+      "glb_sha256": "11e19a43f715c463f0c01ee83e0d0c66eba0c843ff63011dee41aff3f229c045",
+      "prefab_sha256": "06f757f960b93bce2fd157edd102790a15d45f06819b9d922dc1545a9ceb8e7a",
+      "status": "exported_pending_godot_validation"
     }
   },
-  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+  "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行"
 }

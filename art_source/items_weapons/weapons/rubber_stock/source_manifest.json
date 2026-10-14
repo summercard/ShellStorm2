@@ -26,8 +26,15 @@
       "polygons": 145,
       "triangles": 145,
       "usage": "地面掉落/拾取显示",
-      "derived_from_sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb"
+      "derived_from_sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb",
+      "stable_glb": "assets/art/items_weapons/weapons/rubber_stock/components/wpn_rubber_stock_ground_visual_top3d.glb",
+      "stable_prefab": "assets/art/items_weapons/weapons/rubber_stock/runtime/wpn_rubber_stock_ground_root_top3d.tscn",
+      "glb_sha256": "69f7add7e2012d3c4d70a07b445f4f59a5255242bec336d49b74568ed91b6cb3",
+      "prefab_sha256": "a4ccb5d3e2bf5bcf6bb921068be1de6e5c97db871024d0e8bdaa42bdb2dd19ce",
+      "status": "exported_pending_godot_validation"
     }
   },
-  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+  "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行",
+  "status": "exported_pending_godot_validation",
+  "function_note": "ground仅视觉；拾取/弹跳/碰撞由GroundLootPickup3D持有，倍率0.504不烘入源"
 }

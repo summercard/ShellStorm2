@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/rubber_stock/components/wpn_rubber_stock_ground_visual_top3d.glb" id="1_visual"]
+
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-ATT-ATTACH-RUBBER-STOCK"
+metadata/logical_id = "attach_rubber_stock"
+metadata/asset_version = "v001"
+metadata/model_role = "ground"
+metadata/triangle_count = 145
+metadata/dimensions_m = Vector3(0.124603, 0.222154, 0.32)
+metadata/front_axis = "+Z"
+metadata/collision_intent = "external_ground_loot_pickup"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

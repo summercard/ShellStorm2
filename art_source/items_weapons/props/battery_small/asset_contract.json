@@ -81,8 +81,8 @@
   "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
   "stable_glb": "assets/art/items_weapons/props/battery_small/components/itm_battery_small_visual_top3d.glb",
   "stable_prefab": "assets/art/items_weapons/props/battery_small/runtime/itm_battery_small_root_top3d.tscn",
-  "function_note": "仅Blender原始源制作；后续导入保持现有物品使用/装配规则；当前运行时仍用原表现",
-  "status": "Blender源已完成",
+  "function_note": "ground仅视觉；拾取/弹跳/碰撞由GroundLootPickup3D持有，倍率0.504不烘入源",
+  "status": "exported_pending_godot_validation",
   "glass_note": "",
   "model_variants": {
     "preview": {
@@ -97,8 +97,13 @@
       "polygons": 120,
       "triangles": 120,
       "usage": "地面掉落/拾取显示",
-      "derived_from_sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54"
+      "derived_from_sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54",
+      "stable_glb": "assets/art/items_weapons/props/battery_small/components/itm_battery_small_ground_visual_top3d.glb",
+      "stable_prefab": "assets/art/items_weapons/props/battery_small/runtime/itm_battery_small_ground_root_top3d.tscn",
+      "glb_sha256": "86b03dcf28d761f6431b74160d69eb4fa2726eea2c8d818b2059d82dc795998f",
+      "prefab_sha256": "609cb7a4a4f47ef8d813a16c2b443a954f1db5bd47a49bbbdb620bc4bad34035",
+      "status": "exported_pending_godot_validation"
     }
   },
-  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+  "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行"
 }

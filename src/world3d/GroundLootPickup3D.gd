@@ -74,6 +74,18 @@ const CURRENT_BASE_SIZE_MULTIPLIER := 0.70
 const LEGACY_WEAPON_VISUAL_SCALE := 0.82
 const LEGACY_ITEM_VISUAL_SCALE := 0.72
 
+## —— 货币按**数量**放大模型（业主 2026-10-14：「越多的货币，模型越大」）——
+## 只对货币生效；其它物品一律 1.0（堆叠数量不改模型大小）。
+## 用分档而不是连续缩放：同档看起来一致、跨档有明确台阶，玩家一眼能读「这一堆值多少」。
+## 最小档略小于 1.0、最大档近 2 倍，跨度约 2.18×，在俯视机位下可辨但不夸张。
+## ⚠ 这张表是**唯一真源**：运行时与验收场景都调 `size_scale_for_stack()`，别在别处复刻。
+const CURRENCY_SCALE_TIERS := [
+	{ "min_count": 0, "scale": 0.85 },
+	{ "min_count": 10, "scale": 1.10 },
+	{ "min_count": 30, "scale": 1.45 },
+	{ "min_count": 80, "scale": 1.85 },
+]
+
 
 func configure(data: Dictionary, color := Color(0.38, 0.88, 0.72)) -> void:
 	item_data = WeaponInstance.ensure_weapon_item(data)
@@ -271,14 +283,16 @@ func _on_body_exited(body: Node3D) -> void:
 
 
 func _build_visual(color: Color) -> void:
-	_visual = ItemModelFactory3D.create_model(item_data, color)
+	_visual = ItemModelFactory3D.create_model(item_data, color, ItemModelFactory3D.MODEL_ROLE_GROUND)
 	_visual.name = "LootVisual"
 	var legacy_scale := (
 		LEGACY_WEAPON_VISUAL_SCALE
 		if str(item_data.get("type", "")) == "weapon"
 		else LEGACY_ITEM_VISUAL_SCALE
 	)
-	_visual.scale = Vector3.ONE * legacy_scale * CURRENT_BASE_SIZE_MULTIPLIER
+	_visual.scale = (
+		Vector3.ONE * legacy_scale * CURRENT_BASE_SIZE_MULTIPLIER * size_scale_for_stack(item_data)
+	)
 	add_child(_visual)
 	var shape := SphereShape3D.new()
 	shape.radius = pickup_distance_m
@@ -313,6 +327,23 @@ func _build_visual(color: Color) -> void:
 ## 做成 static：验收场景直接调它取期望值，不必把策略复刻到测试里。
 static func is_currency_item_data(data: Dictionary) -> bool:
 	return bool(data.get("is_currency", false)) or str(data.get("id", "")) == "__currency__"
+
+
+## 本堆的尺寸倍率。非货币恒 1.0；货币按 `count` 查 `CURRENCY_SCALE_TIERS`。
+## 做成 static + 公开：验收场景直接调它取期望值，别在测试里复刻分档表。
+static func size_scale_for_stack(data: Dictionary) -> float:
+	if not is_currency_item_data(data):
+		return 1.0
+	return currency_scale_for_count(maxi(1, int(data.get("count", 1))))
+
+
+## 货币数量 → 模型倍率（取「≤ 本数的最大档」）。分档表见 `CURRENCY_SCALE_TIERS`。
+static func currency_scale_for_count(count: int) -> float:
+	var scale := 1.0
+	for tier in CURRENCY_SCALE_TIERS:
+		if count >= int(tier["min_count"]):
+			scale = float(tier["scale"])
+	return scale
 
 
 ## 指定掉落是否挂头顶名牌。策略见 LABEL_DISPLAY_POLICY。
@@ -367,6 +398,9 @@ func get_model_snapshot() -> Dictionary:
 		"label_shown": _label != null,
 		"label_display_policy": LABEL_DISPLAY_POLICY,
 		"is_currency": _is_currency_item(),
+		# 货币按数量放大的实测值：探针据此断言「越多越大」，不必猜。
+		"stack_size_scale": size_scale_for_stack(item_data),
+		"stack_count": maxi(1, int(item_data.get("count", 1))),
 		"label_camera_billboard": _label != null and _label.billboard == BaseMaterial3D.BILLBOARD_ENABLED,
 		"label_no_depth_test": _label != null and _label.no_depth_test,
 		"label_height_m": LABEL_HEIGHT_M,

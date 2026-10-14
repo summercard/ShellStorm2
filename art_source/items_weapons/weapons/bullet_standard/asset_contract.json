@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "asset_id": "WPN-BUL-MOD-BULLET-STANDARD",
-  "display_name_zh": "标准子弹模块",
-  "logical_id": "mod_bullet_standard",
+  "asset_id": "ITM-CONSUMABLE-ITEM-AMMO-PACK",
+  "display_name_zh": "通用弹药",
+  "logical_id": "item_ammo_pack",
   "category": "武器",
   "subclass": "bullet_module",
-  "domain_ledger": "assets/registry/ledgers/ShellStorm2_武器账本_v001.xlsx",
+  "domain_ledger": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
   "dimensions_m": {
     "width": 0.376,
     "depth": 0.376,
@@ -81,24 +81,31 @@
   "source_blend": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
   "stable_glb": "assets/art/items_weapons/weapons/bullet_standard/components/wpn_bullet_standard_visual_top3d.glb",
   "stable_prefab": "assets/art/items_weapons/weapons/bullet_standard/runtime/wpn_bullet_standard_root_top3d.tscn",
-  "function_note": "仅Blender原始源制作；后续导入保持现有物品使用/装配规则；当前运行时仍用原表现",
-  "status": "Blender源已完成",
+  "function_note": "ground仅视觉；拾取/弹跳/碰撞由GroundLootPickup3D持有，倍率0.504不烘入源",
+  "status": "exported_pending_godot_validation",
   "glass_note": "",
   "model_variants": {
     "preview": {
       "source_blend": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
-      "sha256": "9c1f7ffa3a57dc6b2bfedbb10ccb1d023df98c7761ea42f9eb00aa729958bb5e",
+      "sha256": "a1302b8182d523834dc0af9741eb687044489f66cafa0cfbcbf79d1de1d565d3",
       "triangles": 3368,
       "usage": "近距离预览"
     },
     "ground": {
       "source_blend": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_ground_source_v001.blend",
-      "sha256": "183bdba5012c84457782d224b2cc6e871af09e3d126187f665497d98a8ca89cd",
+      "sha256": "3d7baf9637ba5bc14982366f0663af93102512c4c04335b77104983208c3f88c",
       "polygons": 176,
       "triangles": 176,
       "usage": "地面掉落/拾取显示",
-      "derived_from_sha256": "9c1f7ffa3a57dc6b2bfedbb10ccb1d023df98c7761ea42f9eb00aa729958bb5e"
+      "derived_from_sha256": "a1302b8182d523834dc0af9741eb687044489f66cafa0cfbcbf79d1de1d565d3",
+      "stable_glb": "assets/art/items_weapons/weapons/bullet_standard/components/wpn_bullet_standard_ground_visual_top3d.glb",
+      "stable_prefab": "assets/art/items_weapons/weapons/bullet_standard/runtime/wpn_bullet_standard_ground_root_top3d.tscn",
+      "glb_sha256": "87b0e6c5779ab06db135c4c727379a6304aafb0863d37a5cda3d103ec953b08b",
+      "prefab_sha256": "0ad392c1dec49e5fb0d4d40debc651c85a0ba7580fdd750285ff2a3ff5b186f8",
+      "status": "exported_pending_godot_validation"
     }
   },
-  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+  "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行",
+  "identity_correction": "用户2026-10-14明确指定为通用弹药；历史源/运行路径保持稳定",
+  "color_revision": "2026-10-14蓝色弹壳改为公共色盘黄色/金色格"
 }

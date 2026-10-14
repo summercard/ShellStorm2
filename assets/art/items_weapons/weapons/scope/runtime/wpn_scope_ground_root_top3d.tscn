@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/scope/components/wpn_scope_ground_visual_top3d.glb" id="1_visual"]
+
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-ATT-ATTACH-SCOPE"
+metadata/logical_id = "attach_scope"
+metadata/asset_version = "v001"
+metadata/model_role = "ground"
+metadata/triangle_count = 198
+metadata/dimensions_m = Vector3(0.134558, 0.180565, 0.28)
+metadata/front_axis = "+Z"
+metadata/collision_intent = "external_ground_loot_pickup"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

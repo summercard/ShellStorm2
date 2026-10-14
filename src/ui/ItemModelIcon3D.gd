@@ -169,7 +169,7 @@ func _rebuild_model() -> void:
 	if _custom_model_factory.is_valid():
 		_model = _custom_model_factory.call() as Node3D
 	else:
-		_model = ItemModelFactory3D.create_model(_item_data, _item_tint(_item_data))
+		_model = ItemModelFactory3D.create_model(_item_data, _item_tint(_item_data), ItemModelFactory3D.MODEL_ROLE_ICON)
 	if _model == null:
 		visible = false
 		return

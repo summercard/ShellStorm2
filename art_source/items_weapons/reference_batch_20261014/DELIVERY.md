@@ -1,6 +1,6 @@
 # 8件物品双模型源交付
 
-每件保留高精度preview与100–200三角ground；源均已完成，尚未导入游戏。
+每件保留高精度preview与100–200三角ground；源均已完成。ground已导入并接线到地面拾取，preview仍待导入；运行验收尚未执行。见[接入记录](../../../docs/v0.1/development/2026-10-14_item_ground_runtime_import.md)。
 
 | 物品 | 地面三角数 | 高精度预览源 | 地面源 |
 |---|---:|---|---|
