@@ -1,0 +1,69 @@
+{
+  "asset_id": "ITM-MODULE-FLASHLIGHT-ADVANCED",
+  "logical_id": "item_flashlight_advanced",
+  "name": "加强模块",
+  "slug": "flashlight_advanced",
+  "domain": "props",
+  "kind": "module_advanced",
+  "content_ids": [
+    "item_flashlight_advanced"
+  ],
+  "godot_dimensions_m": [
+    0.5909375548362732,
+    0.7625000476837158,
+    0.45988285541534424
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.379999995231628,
+      -0.330000013113022,
+      -0.402500003576279
+    ],
+    "xyz_size_m": [
+      0.759999990463257,
+      0.660000026226044,
+      0.762500047683716
+    ]
+  },
+  "principal_length_m": 0.762500047683716,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/props/flashlight_advanced/source/itm_flashlight_advanced_source_v001.blend",
+      "sha256": "efc9428956ac23a382dc7f4cc091ab0a2b247f279486f17e6b5d3ae59a1c4f28",
+      "triangles": 1504,
+      "glb": "assets/art/items_weapons/props/flashlight_advanced/components/itm_flashlight_advanced_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/flashlight_advanced/runtime/itm_flashlight_advanced_preview_root_top3d.tscn",
+      "glb_sha256": "be15f37d67aefb352ff952d9d4f3d0a7c2f4922b9f7987ec3740d25464a393d4",
+      "prefab_sha256": "930c1af04dcae1691397c9cf93b7f59d18116a078a1a702b8c885aeaafb7fa1f"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/props/flashlight_advanced/source/itm_flashlight_advanced_ground_source_v001.blend",
+      "sha256": "3483039ecea496c25418f1e197077b35a8b32414f15436b45f0fb430a3d6ae41",
+      "triangles": 128,
+      "glb": "assets/art/items_weapons/props/flashlight_advanced/components/itm_flashlight_advanced_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/flashlight_advanced/runtime/itm_flashlight_advanced_ground_root_top3d.tscn",
+      "glb_sha256": "f28043c6cd705bec0a002b4d57b0ef10b4f1634e1baa6297e56bf69bb099de8b",
+      "prefab_sha256": "ffc807de1601abc3d9b1b673961e440a0461dce699f26e35f4c2010e2885684c"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

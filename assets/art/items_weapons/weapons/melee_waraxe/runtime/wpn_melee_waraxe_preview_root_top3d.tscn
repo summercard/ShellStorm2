@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/melee_waraxe/components/wpn_melee_waraxe_preview_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-MELEE-BP-WARAXE"
+metadata/logical_id = "weapon_waraxe"
+metadata/model_role = "preview"
+metadata/asset_version = "v001"
+metadata/triangle_count = 1300
+metadata/dimensions_m = Vector3(1.6731491088867188, 0.45187240839004517, 2.8700003623962402)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

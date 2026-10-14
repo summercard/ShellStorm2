@@ -11,6 +11,17 @@ signal hit_resolved(result: Dictionary)
 
 const VALID_LOCOMOTION_STATES := ["idle", "moving"]
 
+## ── 僵尸受击件（FX01-20）的近战尺寸 ────────────────────────────────────────
+## 业主 2026-10-14 第四轮：「小僵尸和警察僵尸的受击特效太大了，使用击中其它物体的那个特效，
+## 然后改成绿色即可，放大大概 10%」。
+## ⚠ 近战命中件的 `size`（0.88 + 0.18 × 连段）是按 **FX01-05** 的内部基准定的；FX01-20 v002
+## 是 FX01-21 那套火星造型（方块基准 0.16），直接沿用会把方块放到糊住半个怪 —— 正是业主说的
+## 「太大」。僵尸分支因此改用与**枪击命中同一量级**的档位（枪击 0.34 × 1.10 ≈ 0.37，
+## 近战比子弹重一点 ⇒ 0.42），连段 / 暴击的放大倍率保持不变。
+## 想调「僵尸受击多大」就动这两个数，别去改特效内部的几何常量。
+const ZOMBIE_HIT_BASE_SIZE := 0.42
+const ZOMBIE_HIT_COMBO_STEP := 0.18
+
 var player: Player3D = null
 var _machine: StateMachine = null
 var _phase := "ready"
@@ -292,9 +303,48 @@ func _spawn_hit_feedback(target: Node3D, result: Dictionary) -> void:
 		"target_instance_id": target.get_instance_id(),
 		"attack_instance_id": _attack_instance_id,
 	}
-	_acquire_effect(VfxPool3D.FX01_MELEE_IMPACT, color, size, position, context)
+	# 命中特效分流（业主 2026-10-14「对击中特效进行区分」＋追问后明确「枪击 + 近战都用」）：
+	#   打中「僵尸三兄弟」（小僵尸 / 警察僵尸 / 胖子僵尸）⇒ FX01-20 `VFX-GOO-HIT-3D`
+	#   （v002 起 = 金属火星造型 + 僵尸绿，与枪击命中是**同一件**）；
+	#   打中其余怪种 ⇒ **仍是** FX01-05 `VFX-MELEE-IMPACT-3D`（近战专属命中件，逐字不变）。
+	# ⚠ 这里刻意**不**把非僵尸的替换成 FX01-21 金属火星：那件是「打墙/打金属」的读法，
+	# 用在肉身上不对，而且会把 FX01-05 变成无人引用的孤儿资产。
+	# 分流判据与 `Projectile3D._spawn_hit_effect` 共用同一个入口 `Enemy3D.uses_goo_hit_burst()`，
+	# 避免「同一只怪被枪打是一种读法、被刀砍又是另一种」。
+	var asset_id: StringName = VfxPool3D.FX01_MELEE_IMPACT
+	var effect_size := size
+	if target is Enemy3D and (target as Enemy3D).uses_goo_hit_burst():
+		asset_id = VfxPool3D.FX01_GOO_HIT
+		# ⚠ 尺寸换成僵尸受击件自己的档位（见 `ZOMBIE_HIT_BASE_SIZE`）——不能沿用近战件的 `size`，
+		# 那套数是按 FX01-05 的内部基准定的，喂给火星造型会把方块放大到糊住半个怪。
+		effect_size = (
+			ZOMBIE_HIT_BASE_SIZE
+			* (1.0 + float(combo_step - 1) * ZOMBIE_HIT_COMBO_STEP)
+			* (1.18 if critical else 1.0)
+		)
+		# 贴肉朝向：命中点在躯干中心，另给一条「从怪体中心指向玩家」的外法线，
+		# 火星才会擦着**朝向玩家那一面**飞出去，而不是绕一圈乱散。
+		context["normal"] = _hit_surface_normal(target)
+	_acquire_effect(asset_id, color, effect_size, position, context)
 	_impact_feedback_count += 1
-	_last_feedback = {"kind": "melee_impact", "combo_step": combo_step, "position": position, "critical": critical}
+	_last_feedback = {
+		"kind": "goo_hit" if asset_id == VfxPool3D.FX01_GOO_HIT else "melee_impact",
+		"combo_step": combo_step,
+		"position": position,
+		"critical": critical,
+	}
+
+
+## 近战命中点所在**表面**的外法线（从怪体中心指向玩家）—— 僵尸受击件（FX01-20）v002 起
+## 消费 `context.normal`，靠它把「擦出去的长条火星」对到朝向玩家那一面。
+## 退化情形返回 `Vector3.UP`（特效侧本来就把零向量当 UP）。
+func _hit_surface_normal(target: Node3D) -> Vector3:
+	if player == null:
+		return Vector3.UP
+	var outward := player.global_position - target.global_position
+	if outward.length_squared() < 0.0001:
+		return Vector3.UP
+	return outward.normalized()
 
 
 func _acquire_effect(

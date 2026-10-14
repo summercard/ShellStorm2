@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://fx0121"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxMetalSparkHit3D.gd" id="1_metal_spark_hit"]
+
+[node name="VfxMetalSparkHit3D" type="Node3D"]
+script = ExtResource("1_metal_spark_hit")
+metadata/asset_id = "VFX-METAL-SPARK-HIT-3D"
+metadata/asset_version = "v001"

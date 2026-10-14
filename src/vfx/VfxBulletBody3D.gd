@@ -13,23 +13,46 @@ extends VfxEffectBase3D
 ##
 ## 去版本化：运行资产路径不含 `_vNNN`；版本号只落 Prefab 根 meta + 账本版本列。
 
+# ---- 低面数档（2026-10-14 业主「减面，减到 100 个面以下先」）----
+# 分段参数取值依据 = 实测扫描 `_scratch/probe_mesh_lod_sweep`（不靠估算）：
+#
+#   CapsuleMesh : rings=0 → 24 面（= 圆柱 + 2 片平盖扇），rings=1 → 48 面
+#   CylinderMesh: rings=0 → 16 面     ← 同等轮廓下**严格省于** CapsuleMesh(rings=0)
+#   CylinderMesh(锥, top_radius=0) : → 20 面
+#   SphereMesh  : rings=1 → 16 面（最小有效值；rings=0 无效）
+#   BoxMesh     : → 12 面             ← 全表最省
+#
+# 关键发现：CapsuleMesh 的**圆头来自 rings**，而 rings=0 的「胶囊」就是平盖圆柱再贵 8 面。
+# 100 面预算下买不起圆头（rings=1 要 48 面/件，两件就吃掉全部预算），
+# ⇒ 弹芯与外壳一律改用**低面数棱柱**（4 边圆柱），轮廓与 rings=0 的胶囊一致但更省。
+#
+# 单弹总面数（每件：弹芯 + 外壳 + 尾迹…）：
+#   单锥 52 / 双锥 72 / 三锥 92 / 锥+3 滴珠 88 / 锥+3 火星 88   ⇒ 全部 < 100（改前 468~1020）
+const MESH_SEGMENTS := 4   # 弹芯/外壳/尾迹的径向分段（4 边棱柱）
+const MESH_RINGS := 0      # 圆柱高度分段（0 = 不细分）
+const SPHERE_SEGMENTS := 4 # 球体分段（黑洞/气球弹的球核）
+const SPHERE_RINGS := 1    # 球体最小有效 rings
+const BEAD_BOX_SIZE := 1.0 # 滴珠用立方体（BoxMesh，12 面）而非球（16 面）—— 尺寸按半径 ×2
+
 # ---- 共享 mesh 缓存：同一弹种几何跨实例复用（mesh 数据不可变，安全共享）----
 # 键 = 形状参数串；material 仍按实例持有，因为子弹色逐发可变。
-static var _capsule_cache: Dictionary = {}
+static var _prism_cache: Dictionary = {}
 static var _sphere_cache: Dictionary = {}
 static var _cone_cache: Dictionary = {}
 static var _bead_cache: Dictionary = {}
 
 
-static func _cached_capsule(key: String, radius: float, height: float) -> Mesh:
-	if not _capsule_cache.has(key):
-		var c := CapsuleMesh.new()
-		c.radius = radius
+## 弹芯/外壳的「低面数棱柱」：CylinderMesh（上下同半径），径向 4 段。
+static func _cached_prism(key: String, radius: float, height: float) -> Mesh:
+	if not _prism_cache.has(key):
+		var c := CylinderMesh.new()
+		c.top_radius = radius
+		c.bottom_radius = radius
 		c.height = height
-		c.radial_segments = 10
-		c.rings = 4
-		_capsule_cache[key] = c
-	return _capsule_cache[key]
+		c.radial_segments = MESH_SEGMENTS
+		c.rings = MESH_RINGS
+		_prism_cache[key] = c
+	return _prism_cache[key]
 
 
 static func _cached_sphere(key: String, radius: float) -> Mesh:
@@ -37,8 +60,8 @@ static func _cached_sphere(key: String, radius: float) -> Mesh:
 		var s := SphereMesh.new()
 		s.radius = radius
 		s.height = radius * 2.0
-		s.radial_segments = 12
-		s.rings = 6
+		s.radial_segments = SPHERE_SEGMENTS
+		s.rings = SPHERE_RINGS
 		_sphere_cache[key] = s
 	return _sphere_cache[key]
 
@@ -50,32 +73,32 @@ static func _cached_cone(key: String, bottom_radius: float, height: float) -> Me
 		c.top_radius = 0.0
 		c.bottom_radius = bottom_radius
 		c.height = height
-		c.radial_segments = 12
+		c.radial_segments = MESH_SEGMENTS
+		c.rings = MESH_RINGS
 		_cone_cache[key] = c
 	return _cone_cache[key]
 
 
+## 滴珠：低面数档下改用 BoxMesh 立方体（12 面 / 16 面），半径即半边长 ×2。
+## 滴珠世界尺寸只有 0.011~0.018m，球与立方体在实机上不可分辨，省下的 4 面用于保住尾迹锥。
 static func _cached_bead(key: String, radius: float) -> Mesh:
 	if not _bead_cache.has(key):
-		var s := SphereMesh.new()
-		s.radius = radius
-		s.height = radius * 2.0
-		s.radial_segments = 8
-		s.rings = 5
-		_bead_cache[key] = s
+		var b := BoxMesh.new()
+		b.size = Vector3.ONE * radius * 2.0 * BEAD_BOX_SIZE
+		_bead_cache[key] = b
 	return _bead_cache[key]
 
 
 # ---- 默认 profile：中性直弹（子类全部覆写）----
 const _DEFAULT_PROFILE := {
-	# 弹芯（亮芯，沿 local -Z 前向）
-	"core_shape": "capsule",
+	# 弹芯（亮芯，沿 local -Z 前向；低面数档 = 4 边棱柱）
+	"core_shape": "prism",
 	"core_radius": 0.045,
 	"core_height": 0.20,
 	"core_color": Color(0.92, 0.96, 1.0),
 	"core_emission": 2.2,
 	# 外壳（弹色半透明）
-	"shell_shape": "capsule",
+	"shell_shape": "prism",
 	"shell_radius": 0.075,
 	"shell_height": 0.18,
 	"shell_alpha": 1.0,
@@ -105,6 +128,16 @@ var _trail_material: StandardMaterial3D
 var _base_scale := 1.0
 var _pulse_phase := 0.0
 var _profile: Dictionary = {}
+## 枪身维度的弹体几何修饰（2026-10-14 业主：每把枪的子弹大小要做出区分）。
+## 由调用方经 `activate(..., context)` 下发；缺省一律中性（不改观感）。
+##   - `axial_scale`  ：沿飞行轴（local Z）拉长的倍率 —— 狙击枪用（弹体变长）。
+##   - `grow_from`    ：出生瞬间的尺寸比例，飞行中线性长到 1.0 —— 霰弹枪用（由小变大）。
+##   - `grow_duration`：长到 1.0 所需秒数；`0` 表示不启用生长包络。
+## 三条只作用于纯视觉几何：不改碰撞半径、伤害与射程（碰撞半径在调用方另行缩放）。
+var _axial_scale := 1.0
+var _grow_from := 1.0
+var _grow_duration := 0.0
+var _flight_time := 0.0
 
 
 ## 子类覆写点：返回本弹种的视觉 profile（缺省键由 _DEFAULT_PROFILE 补齐）。
@@ -118,6 +151,7 @@ func _ready() -> void:
 	for key in override.keys():
 		_profile[key] = override[key]
 	_build_visual()
+	_apply_geometry_scale()
 
 
 func _build_visual() -> void:
@@ -157,14 +191,17 @@ func _build_visual() -> void:
 ## 按 profile 的 shell_shape / core_shape 建弹体件（capsule / sphere）。
 func _make_body_piece(piece_name: String, material: StandardMaterial3D) -> MeshInstance3D:
 	var is_core := piece_name == "Core"
-	var shape := String(_profile.get("core_shape" if is_core else "shell_shape", "capsule"))
+	var shape := String(_profile.get("core_shape" if is_core else "shell_shape", "prism"))
 	var radius := float(_profile.get("core_radius" if is_core else "shell_radius", 0.045))
 	var height := float(_profile.get("core_height" if is_core else "shell_height", 0.20))
 	var mesh: Mesh
 	if shape == "sphere":
 		mesh = _cached_sphere("%s|%.4f" % [piece_name, radius], radius)
+	elif shape == "capsule":
+		# 兼容旧键：低面数档下按棱柱产出，避免误用高价 CapsuleMesh 冲破面数预算。
+		mesh = _cached_prism("%s|%.4f|%.4f" % [piece_name, radius, height], radius, height)
 	else:
-		mesh = _cached_capsule("%s|%.4f|%.4f" % [piece_name, radius, height], radius, height)
+		mesh = _cached_prism("%s|%.4f|%.4f" % [piece_name, radius, height], radius, height)
 	var node := MeshInstance3D.new()
 	node.name = piece_name
 	node.mesh = mesh
@@ -225,6 +262,8 @@ func _build_trail() -> void:
 		piece.rotation_degrees.x = 90.0
 		piece.position.z = offset_z
 		piece.set_meta("trail_alpha_mul", alpha_mul)
+		# 记录基准轴向偏移：枪身轴向拉伸要同步拉开段距，否则段与段会脱节。
+		piece.set_meta("trail_base_z", offset_z)
 		_trail_root.add_child(piece)
 		_trail_parts.append(piece)
 
@@ -238,6 +277,7 @@ func _build_trail() -> void:
 		piece.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		piece.position = Vector3(float(spec.get("x", 0.0)), float(spec.get("y", 0.0)), offset_z)
 		piece.set_meta("trail_alpha_mul", float(spec.get("alpha", 1.0)))
+		piece.set_meta("trail_base_z", offset_z)
 		_trail_root.add_child(piece)
 		_trail_parts.append(piece)
 
@@ -253,6 +293,7 @@ func _build_trail() -> void:
 		piece.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		piece.position = offset
 		piece.set_meta("trail_alpha_mul", float(spec.get("alpha", 0.8)))
+		piece.set_meta("trail_base_z", offset.z)
 		_trail_root.add_child(piece)
 		_trail_parts.append(piece)
 
@@ -275,6 +316,12 @@ func _trail_sparks() -> Array:
 func configure(color: Color, size: float = 1.0, context: Dictionary = {}) -> void:
 	super.configure(color, size, context)
 	_base_scale = size
+	# 枪身维度几何修饰：每次 configure 一律重算并回落中性缺省，
+	# 池化复借时不得残留上一发的枪身档位（拉伸 / 生长进度）。
+	_axial_scale = maxf(0.05, float(context.get("axial_scale", 1.0)))
+	_grow_from = clampf(float(context.get("grow_from", 1.0)), 0.05, 1.0)
+	_grow_duration = maxf(0.0, float(context.get("grow_duration", 0.0)))
+	_flight_time = 0.0
 	_apply_geometry_scale()
 	# 复借复色：外壳/尾迹/灯用子弹色；亮芯保持自身亮色。
 	if _shell_material != null:
@@ -309,6 +356,12 @@ func deactivate() -> void:
 	_active = false
 	visible = false
 	process_mode = Node.PROCESS_MODE_DISABLED
+	# 几何修饰一并复位：复借的下一发不得继承上一发的枪身档位。
+	_axial_scale = 1.0
+	_grow_from = 1.0
+	_grow_duration = 0.0
+	_flight_time = 0.0
+	_apply_geometry_scale()
 	# 隐藏灯与主体；灯能量归零（回收必须归零）。不 emit retired、不 queue_free，随宿主离树释放。
 	if _light != null:
 		_light.light_energy = 0.0
@@ -322,11 +375,12 @@ func _process(delta: float) -> void:
 		return
 	# 仅做轻微脉动与尾迹动画，不自动 retire（生命周期由宿主 Projectile3D 管理）。
 	_pulse_phase += delta
+	_flight_time += delta
 	var rate := float(_profile.get("pulse_rate", 8.5))
 	var ampl := float(_profile.get("pulse_amplitude", 0.05))
 	var pulse := 1.0 + sin(_pulse_phase * rate) * ampl
 	if _body_root != null:
-		_body_root.scale = Vector3.ONE * _base_scale * pulse
+		_body_root.scale = Vector3.ONE * _base_scale * pulse * _growth_factor()
 	_animate_trail()
 
 
@@ -364,9 +418,40 @@ func apply_growth(factor: float) -> void:
 	_apply_geometry_scale()
 
 
+## 生长包络：出生为 `grow_from`，到 `grow_duration` 线性长到 1.0（霰弹枪「由小变大」）。
+## 确定性：只读 `_flight_time`，不使用随机数（本类被逐帧断言驱动）。
+func _growth_factor() -> float:
+	if _grow_duration <= 0.0 or _grow_from >= 1.0:
+		return 1.0
+	var t: float = clampf(_flight_time / _grow_duration, 0.0, 1.0)
+	return lerpf(_grow_from, 1.0, t)
+
+
 func _apply_geometry_scale() -> void:
-	if _body_root != null:
-		_body_root.scale = Vector3.ONE * _base_scale
+	if _body_root == null:
+		return
+	# 各向同性部分落 _body_root；轴向拉伸落在各件自己的局部长轴上 —— 这样不会与
+	# 子节点的旋转（弹芯 -90° / 尾迹锥 +90° / 黑洞 spin）叠加出剪切变形。
+	_body_root.scale = Vector3.ONE * _base_scale * _growth_factor()
+	_apply_axial_scale()
+
+
+## 轴向拉伸：只改各件的局部长轴缩放与尾迹段距，绝不写父级 scale / rotation。
+## 父级非均匀缩放 × 子级旋转 = 剪切变形（同 skill §5.5.1 坑 3 的同源问题）。
+## 不提前 return：`_axial_scale` 回到 1.0 时也必须把上一次的拉伸收回。
+func _apply_axial_scale() -> void:
+	if _core != null:
+		_core.scale = Vector3(1.0, _axial_scale, 1.0)
+	if _shell != null:
+		_shell.scale = Vector3(1.0, _axial_scale, 1.0)
+	for piece in _trail_parts:
+		var base_z: float = float(piece.get_meta("trail_base_z", piece.position.z))
+		piece.position.z = base_z * _axial_scale
+		if piece.name.begins_with("TrailSpark"):
+			piece.scale = Vector3(1.0, 1.0, _axial_scale)
+		elif piece.name.begins_with("TrailSeg"):
+			piece.scale = Vector3(1.0, _axial_scale, 1.0)
+		# TrailBead 只挪位置：滴珠是球体，拉伸会变成怪椭球，不参与轴向变形。
 
 
 ## 呈现快照：供调用方/测试读取，不写入 res://。
@@ -403,5 +488,11 @@ func get_presentation_snapshot() -> Dictionary:
 		"core_radius": float(_profile.get("core_radius", 0.045)),
 		"base_scale": _base_scale,
 		"body_scale": body_scale,
+		"axial_scale": _axial_scale,
+		"core_axis_scale": _core.scale.y if _core != null else 0.0,
+		"grow_from": _grow_from,
+		"grow_duration": _grow_duration,
+		"flight_time": _flight_time,
+		"growth_factor": _growth_factor(),
 		"node_count": get_child_count(),
 	}

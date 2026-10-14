@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/bullet_module_piercing/components/wpn_bullet_module_piercing_preview_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-BUL-MOD-BULLET-PIERCING"
+metadata/logical_id = "mod_bullet_piercing"
+metadata/model_role = "preview"
+metadata/asset_version = "v001"
+metadata/triangle_count = 1224
+metadata/dimensions_m = Vector3(0.5293203592300415, 0.9399999976158142, 0.4563106894493103)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

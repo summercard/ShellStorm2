@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-MELEE-BP-BASEBALL-BAT",
+  "logical_id": "weapon_baseball_bat",
+  "name": "废土棒球棍",
+  "slug": "melee_baseball_bat",
+  "domain": "weapons",
+  "kind": "bat",
+  "content_ids": [
+    "weapon_baseball_bat"
+  ],
+  "godot_dimensions_m": [
+    0.46580973267555237,
+    0.46580973267555237,
+    1.7349998950958252
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.150999993085861,
+      -0.150999993085861,
+      -1.0699999332428
+    ],
+    "xyz_size_m": [
+      0.301999986171722,
+      0.301999986171722,
+      1.73499989509583
+    ]
+  },
+  "principal_length_m": 1.73499989509583,
+  "origin": "existing_grip",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/melee_baseball_bat/source/wpn_melee_baseball_bat_source_v001.blend",
+      "sha256": "4c4d9995b75ade164af85972a537d9a20b5928f50c19a1fd91caef98338bcc0e",
+      "triangles": 1604,
+      "glb": "assets/art/items_weapons/weapons/melee_baseball_bat/components/wpn_melee_baseball_bat_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/melee_baseball_bat/runtime/wpn_melee_baseball_bat_preview_root_top3d.tscn",
+      "glb_sha256": "a830b1195061660e7a8eb943050f48666e0ee2bc6c4be1c8b289f86c9d8bb278",
+      "prefab_sha256": "2c3c0252e606d3c2f3a0d52a9875bd6e36c9cca6ceda803c2b564d8d916789bc"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/melee_baseball_bat/source/wpn_melee_baseball_bat_ground_source_v001.blend",
+      "sha256": "47dc89d4bd6be5de1818bb655807cec8e99e180218da3dda3293aa32eb92526e",
+      "triangles": 194,
+      "glb": "assets/art/items_weapons/weapons/melee_baseball_bat/components/wpn_melee_baseball_bat_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/melee_baseball_bat/runtime/wpn_melee_baseball_bat_ground_root_top3d.tscn",
+      "glb_sha256": "4ff87373fcb22490683e04b485d2ade35710be2fb14539a588b27023a529d1e5",
+      "prefab_sha256": "de0fc3fad9fb694a52ad3304dde8c9e10275c7626e4d675caa584df1524637e8"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

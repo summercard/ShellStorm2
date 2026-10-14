@@ -17,18 +17,33 @@ const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_
 
 const BLAST_ASSET_ID := "VFX-DEATH-BLAST-3D"
 const ZONE_ASSET_ID := "VFX-BLAST-ZONE-3D"
-const EXPECTED_VERSION := "v001"
+## 两个资产各自定档（2026-10-14 v002 重做：FX01-17 换了造型语言 ⇒ 升版；FX01-18 未动）
+const EXPECTED_BLAST_VERSION := "v002"
+const EXPECTED_ZONE_VERSION := "v001"
 
 ## 期望值一律硬编码在验收侧（不引用被测脚本常量，防自印证）
-const EXPECTED_BLAST_LIFETIME := 0.62
-const EXPECTED_BLAST_NODE_MIN := 18
-const EXPECTED_SPIKE_COUNT := 9
-const EXPECTED_DEBRIS_COUNT := 8
-const EXPECTED_LIGHT_NAME_BLAST := "BlastLight"
+## FX01-17 v002（业主 2026-10-14 第二轮明确：「**把小僵尸的死亡特效放大两倍给胖子僵尸用**，
+## 然后带一个绿色冲击波的效果」）⇒ 本件与 FX01-19 共用 `VfxGooDeathBase3D` 的身体，
+## 形状就是「绿方块爆开 + 抛物线飞溅 + 地面液体」，只多出 3 层绿色冲击波。
+## 所以下面这些期望值 **与 `verify_zombie_goo_death_vfx` 里那一组同源**（同一段身体）。
+const EXPECTED_BLAST_LIFETIME := 1.35
+## 12 方块 + 14 飞溅 + 4 液体 + 3 冲击波 + 1 盏 GooLight
+const EXPECTED_BLAST_NODE_MIN := 34
+const EXPECTED_BLAST_CUBES := 12
+const EXPECTED_BLAST_SPLATS := 14
+const EXPECTED_BLAST_PUDDLES := 4
+const EXPECTED_BLAST_SHOCKWAVES := 3
+## 尺度变化倍率 = 过冲峰值 / 起点 = 1.15 / 0.25 = 4.6
+const EXPECTED_BLAST_CUBE_PEAK_RATIO := 4.6
+const EXPECTED_LIGHT_NAME_BLAST := "GooLight"
 const EXPECTED_LIGHT_NAME_ZONE := "ZoneLight"
-## 灯范围 = 常量 × effect_size（本件 blast 6.0 / zone 4.5）
-const EXPECTED_BLAST_LIGHT_RANGE_PER_SIZE := 6.0
+## 灯范围 = 常量 × effect_size（本件 blast 4.2 / zone 4.5）
+const EXPECTED_BLAST_LIGHT_RANGE_PER_SIZE := 4.2
 const EXPECTED_ZONE_LIGHT_RANGE_PER_SIZE := 4.5
+## 灯能量峰值（与 FX01-19 同一支灯）
+const EXPECTED_BLAST_LIGHT_ENERGY_PEAK := 6.0
+## 灯归零时刻（与 FX01-19 同一包络：0.34s 收干净，远早于地面液体的公共停留窗口）
+const EXPECTED_BLAST_LIGHT_DECAY_SEC := 0.34
 
 const ZONE_DEFAULT_SECONDS := 3.0
 const ZONE_NODE_MIN := 10
@@ -161,51 +176,86 @@ func _check_blast_prefab() -> void:
 	var snapshot: Dictionary = blast.call("get_presentation_snapshot")
 	_expect(String(snapshot.get("asset_id", "")) == BLAST_ASSET_ID,
 		"死亡自爆 AssetID 不正确：%s" % snapshot.get("asset_id", ""))
-	_expect(String(snapshot.get("asset_version", "")) == EXPECTED_VERSION,
-		"死亡自爆版本不是 %s：%s" % [EXPECTED_VERSION, snapshot.get("asset_version", "")])
+	_expect(String(snapshot.get("asset_version", "")) == EXPECTED_BLAST_VERSION,
+		"死亡自爆版本不是 %s：%s" % [EXPECTED_BLAST_VERSION, snapshot.get("asset_version", "")])
 	_expect(is_equal_approx(float(snapshot.get("lifetime", 0.0)), EXPECTED_BLAST_LIFETIME),
 		"死亡自爆寿命应为 %.2fs：%.3f" % [EXPECTED_BLAST_LIFETIME, float(snapshot.get("lifetime", 0.0))])
 	_expect(int(snapshot.get("node_count", 0)) >= EXPECTED_BLAST_NODE_MIN,
 		"死亡自爆子节点过少，几何未构建：%d" % int(snapshot.get("node_count", 0)))
-	_expect(int(snapshot.get("spike_count", 0)) == EXPECTED_SPIKE_COUNT,
-		"放射星芒数量应为 %d：%d" % [EXPECTED_SPIKE_COUNT, int(snapshot.get("spike_count", 0))])
-	_expect(int(snapshot.get("debris_count", 0)) == EXPECTED_DEBRIS_COUNT,
-		"飞散碎屑数量应为 %d：%d" % [EXPECTED_DEBRIS_COUNT, int(snapshot.get("debris_count", 0))])
+	_expect(int(snapshot.get("burst_count", 0)) == EXPECTED_BLAST_CUBES,
+		"爆炸粒子数应为 %d（与小僵尸死亡件同一段身体）：%d"
+		% [EXPECTED_BLAST_CUBES, int(snapshot.get("burst_count", 0))])
+	_expect(int(snapshot.get("splat_count", 0)) == EXPECTED_BLAST_SPLATS,
+		"飞溅粒子数应为 %d：%d" % [EXPECTED_BLAST_SPLATS, int(snapshot.get("splat_count", 0))])
+	_expect(int(snapshot.get("puddle_count", 0)) == EXPECTED_BLAST_PUDDLES,
+		"地面液体数应为 %d：%d" % [EXPECTED_BLAST_PUDDLES, int(snapshot.get("puddle_count", 0))])
+	_expect(int(snapshot.get("shockwave_count", 0)) == EXPECTED_BLAST_SHOCKWAVES,
+		"绿色冲击波层数应为 %d：%d" % [EXPECTED_BLAST_SHOCKWAVES, int(snapshot.get("shockwave_count", 0))])
+	for node_name in ["Burst0", "Burst11", "Splat0", "Puddle0", "Shockwave0", "Shockwave2", "GooLight"]:
+		_expect(blast.get_node_or_null(node_name) != null, "缺少节点：%s" % node_name)
+	# 业主指定「绿色 + 绿色冲击波」：方块与环都走僵尸绿
+	_expect(bool(snapshot.get("green_dominant", false)),
+		"自爆方块不是绿色主导：%s" % str(snapshot.get("goo_color", Color.BLACK)))
+	_expect(bool(snapshot.get("green_dominant", false)),
+		"自爆冲击波不是绿色主导：%s" % str(snapshot.get("shockwave_color", Color.BLACK)))
+	# 「有大小变化动画」：过冲峰值 / 起点
+	_expect(is_equal_approx(float(snapshot.get("burst_scale_peak_ratio", 0.0)), EXPECTED_BLAST_CUBE_PEAK_RATIO),
+		"方块尺度变化倍率应 ≈ %.1f：%.3f"
+		% [EXPECTED_BLAST_CUBE_PEAK_RATIO, float(snapshot.get("burst_scale_peak_ratio", 0.0))])
 
 	# 灯光真源：节点名 / 无阴影 / 范围随 size / 出生能量为正 / 末端归零
-	_expect(bool(snapshot.get("has_blast_light", false)), "死亡自爆缺少 OmniLight3D")
+	_expect(bool(snapshot.get("has_goo_light", false)), "死亡自爆缺少 OmniLight3D")
 	_expect(String(snapshot.get("light_name", "")) == EXPECTED_LIGHT_NAME_BLAST,
 		"自爆灯节点名不是 %s：%s" % [EXPECTED_LIGHT_NAME_BLAST, snapshot.get("light_name", "")])
 	_expect(not bool(snapshot.get("light_shadows", true)), "自爆灯不应投射阴影")
 	var birth_energy := float(snapshot.get("light_energy", 0.0))
-	_expect(birth_energy > 0.0, "激活瞬间自爆灯能量应为正：%.3f" % birth_energy)
+	_expect(absf(birth_energy - EXPECTED_BLAST_LIGHT_ENERGY_PEAK) < 0.001,
+		"激活瞬间自爆灯能量应为峰值 %.1f：%.3f" % [EXPECTED_BLAST_LIGHT_ENERGY_PEAK, birth_energy])
 	var light_range := float(snapshot.get("light_range", 0.0))
 	var expected_range := EXPECTED_BLAST_LIGHT_RANGE_PER_SIZE * BLAST_SIZE_FOR_5M
 	_expect(absf(light_range - expected_range) < 0.001,
-		"自爆灯范围应为 %.1fm（6.0 × size %.1f）：%.3f" % [expected_range, BLAST_SIZE_FOR_5M, light_range])
-	var lifetime := float(snapshot.get("lifetime", 0.0))
-	blast.call("_on_tick", lifetime * 0.5, lifetime)
+		"自爆灯范围应为 %.1fm（4.2 × size %.1f）：%.3f" % [expected_range, BLAST_SIZE_FOR_5M, light_range])
+	blast.call("_on_tick", EXPECTED_BLAST_LIGHT_DECAY_SEC * 0.5, EXPECTED_BLAST_LIFETIME)
 	var half_energy := float((blast.call("get_presentation_snapshot") as Dictionary).get("light_energy", 0.0))
 	_expect(half_energy < birth_energy, "自爆灯能量未随包络衰减：%.3f -> %.3f" % [birth_energy, half_energy])
-	_expect(half_energy > 0.0, "自爆灯在半程就归零，包络过陡：%.3f" % half_energy)
+	_expect(half_energy > 0.0, "自爆灯在归零时刻之前就灭，包络过陡：%.3f" % half_energy)
+	blast.call("_on_tick", EXPECTED_BLAST_LIGHT_DECAY_SEC, EXPECTED_BLAST_LIFETIME)
+	_expect(is_zero_approx(float((blast.call("get_presentation_snapshot") as Dictionary).get("light_energy", 1.0))),
+		"自爆灯在 %.2fs 未归零（与 FX01-19 同一包络）" % EXPECTED_BLAST_LIGHT_DECAY_SEC)
 	blast.call("_on_lifetime_expired")
 	var end_energy := float((blast.call("get_presentation_snapshot") as Dictionary).get("light_energy", 0.0))
 	_expect(is_zero_approx(end_energy), "寿命结束自爆灯能量必须归零：%.3f" % end_energy)
 
-	# 冲击环外缘要顶到规格半径附近（视觉体积与伤害半径对得上）
-	blast.call("_on_tick", EXPECTED_BLAST_LIFETIME, EXPECTED_BLAST_LIFETIME)
-	var ring_radius := float((blast.call("get_presentation_snapshot") as Dictionary).get("ring_outer_world_radius", 0.0))
+	# 冲击波外缘**峰值**：本件按业主口径尺寸固定（2.0），冲击波外缘 ≈ 1.548 × size。
+	# 这里仍按 size 3.0 采样 ⇒ 期望 ≈ 4.64m，落在 4.4~5.5 带内。
+	# ⚠ 必须扫完整个寿命取最大值：冲击波是循环相位，**在某一时刻单点采样**可能落在
+	# 相位低谷（实测 t=lifetime 时最大外缘只 4.08m，会被误判成「顶不到半径」）。
+	var ring_radius := 0.0
+	var probe := 0.0
+	while probe <= EXPECTED_BLAST_LIFETIME:
+		blast.call("_on_tick", probe, EXPECTED_BLAST_LIFETIME)
+		ring_radius = maxf(
+			ring_radius,
+			float((blast.call("get_presentation_snapshot") as Dictionary).get("shockwave_outer_world_radius", 0.0))
+		)
+		probe += 0.005
 	_expect(ring_radius >= BLAST_RING_RADIUS_MIN and ring_radius <= BLAST_RING_RADIUS_MAX,
-		"自爆冲击环外缘应落在 %.1f~%.1f m（规格半径 5.0）：%.3f"
+		"自爆冲击波峰值外缘应落在 %.1f~%.1f m（规格半径 5.0）：%.3f"
 		% [BLAST_RING_RADIUS_MIN, BLAST_RING_RADIUS_MAX, ring_radius])
 
-	# 全向对称：放射方向矢量和的模长应接近 0
-	var spread_length := float(snapshot.get("spread_sum_length", 999.0))
-	_expect(spread_length < 0.5, "放射方向不是全向对称（方向和的模长 %.3f）" % spread_length)
+	# 绕竖直轴全向对称：方块方向的**水平分量**之和应接近 0。
+	# ⚠ 只取水平分量：这套方向沿用了死亡件 v001 的「抬高式俯仰」（`pitch_center = 0.15`），
+	# 垂直分量天然不抵消（实测总模长 ~2.7）。业主的要求是「一圈炸开」= 绕 Y 轴均匀，
+	# 不是「连抬高都不许」；拿总模长去判会把这个**有意的设计**误判成缺陷。
+	var horizontal := Vector2(
+		float(snapshot.get("spread_sum_x", 0.0)), float(snapshot.get("spread_sum_z", 0.0))
+	)
+	var spread_length := horizontal.length()
+	_expect(spread_length < 0.5, "方块方向不是绕竖直轴全向对称（水平分量模长 %.3f）" % spread_length)
 	# 对照：同一判据用在「全挤在一侧的」方向集合上必须不成立 ⇒ 证明它有辨别力
-	var one_sided := Vector3.ZERO
-	for index in EXPECTED_SPIKE_COUNT:
-		one_sided += Vector3(1.0, 0.0, 0.05 * float(index)).normalized()
+	var one_sided := Vector2.ZERO
+	for index in EXPECTED_BLAST_CUBES:
+		one_sided += Vector2(1.0, 0.05 * float(index)).normalized()
 	_expect(one_sided.length() > 5.0,
 		"对照失效：全向对称判据对单侧方向集合也成立（%.3f）" % one_sided.length())
 
@@ -225,8 +275,8 @@ func _check_zone_prefab() -> void:
 	var snapshot: Dictionary = zone.call("get_presentation_snapshot")
 	_expect(String(snapshot.get("asset_id", "")) == ZONE_ASSET_ID,
 		"地面伤害场 AssetID 不正确：%s" % snapshot.get("asset_id", ""))
-	_expect(String(snapshot.get("asset_version", "")) == EXPECTED_VERSION,
-		"地面伤害场版本不是 %s：%s" % [EXPECTED_VERSION, snapshot.get("asset_version", "")])
+	_expect(String(snapshot.get("asset_version", "")) == EXPECTED_ZONE_VERSION,
+		"地面伤害场版本不是 %s：%s" % [EXPECTED_ZONE_VERSION, snapshot.get("asset_version", "")])
 	_expect(is_equal_approx(float(snapshot.get("lifetime", 0.0)), ZONE_DEFAULT_SECONDS),
 		"地面伤害场默认寿命应为 %.1fs：%.3f" % [ZONE_DEFAULT_SECONDS, float(snapshot.get("lifetime", 0.0))])
 	_expect(int(snapshot.get("node_count", 0)) >= ZONE_NODE_MIN,
@@ -319,8 +369,8 @@ func _check_size_linearity() -> void:
 	_samples += 1
 	blast_a.call("_on_tick", 0.0, EXPECTED_BLAST_LIFETIME)
 	blast_b.call("_on_tick", 0.0, EXPECTED_BLAST_LIFETIME)
-	var core_a := float((blast_a.call("get_presentation_snapshot") as Dictionary).get("core_scale_x", 0.0))
-	var core_b := float((blast_b.call("get_presentation_snapshot") as Dictionary).get("core_scale_x", 0.0))
+	var core_a := float((blast_a.call("get_presentation_snapshot") as Dictionary).get("burst_scale_max_x", 0.0))
+	var core_b := float((blast_b.call("get_presentation_snapshot") as Dictionary).get("burst_scale_max_x", 0.0))
 	var range_a := float((blast_a.call("get_presentation_snapshot") as Dictionary).get("light_range", 0.0))
 	var range_b := float((blast_b.call("get_presentation_snapshot") as Dictionary).get("light_range", 0.0))
 	blast_a.free()

@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-FAN",
+  "logical_id": "attach_fan",
+  "name": "小风扇",
+  "slug": "attachment_fan",
+  "domain": "weapons",
+  "kind": "fan",
+  "content_ids": [
+    "attach_fan"
+  ],
+  "godot_dimensions_m": [
+    0.4676923155784607,
+    0.6399999856948853,
+    0.20615386962890625
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.310000002384186,
+      -0.119999997317791,
+      -0.319999992847443
+    ],
+    "xyz_size_m": [
+      0.620000004768372,
+      0.490000009536743,
+      0.639999985694885
+    ]
+  },
+  "principal_length_m": 0.639999985694885,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/attachment_fan/source/wpn_attachment_fan_source_v001.blend",
+      "sha256": "40e6c928abbd3a9dc33c990728551a599d6c72c451c4e3bb2b32156a9004740d",
+      "triangles": 1512,
+      "glb": "assets/art/items_weapons/weapons/attachment_fan/components/wpn_attachment_fan_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/attachment_fan/runtime/wpn_attachment_fan_preview_root_top3d.tscn",
+      "glb_sha256": "1287902a1865c0449e9fedd3928dbef317d11c54143e13de4ff2a8b58dc1566c",
+      "prefab_sha256": "d22cafc888e8e2752ddd51330931629df568f08b15da67b2e1c88406bfeea227"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/attachment_fan/source/wpn_attachment_fan_ground_source_v001.blend",
+      "sha256": "c2823bb58a86fe9af407dde601f1fb0590a64446157dec7038eae5f640f3320c",
+      "triangles": 144,
+      "glb": "assets/art/items_weapons/weapons/attachment_fan/components/wpn_attachment_fan_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/attachment_fan/runtime/wpn_attachment_fan_ground_root_top3d.tscn",
+      "glb_sha256": "c4c54d78c2e5bc80c2ed98cdcf53412866e370a6999d9640f3e9d757809c8510",
+      "prefab_sha256": "53bc8cda8d205eb3e02eaf1544c008a39bba81ba327b2c49cbc913fd9640454b"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

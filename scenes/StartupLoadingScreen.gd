@@ -1,13 +1,21 @@
 extends CanvasLayer
 class_name StartupLoadingScreen
-## 启动外壳：先给玩家一个明确的启动画面，再进入原有 TowerDescent3D。
+## 启动外壳：先给玩家一个明确的启动画面，再把主场景推进去。
 ##
 ## 这里只负责视觉反馈与一次性切场景，不读取、不消费、不写入任何存档，
-## 不参与 GameEntryFlow，也不改变目的场景的出生、恢复和开始菜单逻辑。
+## 不参与 GameEntryFlow，也不改变目的场景的出生、恢复和开始菜单逻辑 ——
+## 包括「新档要不要放开场影片」那个判断，那是 TowerDescent3D 的事。
+##
+## ⚠️ 为什么必须后台预加载而不是 `change_scene_to_file()` 直接切：
+## 主场景在真实存档下的启动实测 8～12 秒（见 MODULE_INDEX 的启动卡顿诊断）。
+## 同步切换会让进度条停在 100% 冻住十几秒，然后画面硬跳 —— 而新档开场影片
+## 正是要接在这段之后，玩家会以为"卡死了、动画没了"。所以这里把加载搬到
+## 后台线程，进度条读真实进度，加载与最短展示时间都满足才切。
 
 const TARGET_SCENE := "res://scenes/TowerDescent3D.tscn"
 const MIN_DISPLAY_SECONDS := 1.10
-const STEP_DURATION_SECONDS := 0.55
+## 进度阶段文案：按**真实加载进度**分段，不再按时间分段 ——
+## 时间分段会让进度条与文案在慢盘上互相矛盾。
 const STEP_TEXTS: Array[String] = [
 	"正在启动行动系统…",
 	"正在连接运行环境…",
@@ -23,6 +31,12 @@ var _progress: ProgressBar
 var _step_label: Label
 var _status_label: Label
 
+var _load_requested := false
+var _load_done := false
+var _load_failed := false
+var _load_progress := 0.0
+var _target_scene: PackedScene
+
 
 func _ready() -> void:
 	layer = 128
@@ -30,19 +44,64 @@ func _ready() -> void:
 	_build_ui()
 	if _should_skip_delay():
 		_enter_game()
+		return
+	_request_target_load()
 
 
 func _process(delta: float) -> void:
 	if _advanced or _failed:
 		return
 	_elapsed += delta
+	_poll_target_load()
 	_update_ui()
-	if _elapsed >= MIN_DISPLAY_SECONDS:
+	if _load_failed:
+		# 预加载失败不等于游戏起不来：退回同步切换，让目的场景自己报错。
+		_transition_requested = true
+		call_deferred("_change_to_target_scene")
+		return
+	if _load_done and _elapsed >= MIN_DISPLAY_SECONDS:
 		_enter_game()
 
 
 func _should_skip_delay() -> bool:
 	return DisplayServer.get_name() == "headless" or Engine.is_editor_hint()
+
+
+## 后台预加载主场景。
+## ⚠️ `use_sub_threads` 必须为 **false**：传 true 时 `load_threaded_get` 拿到的
+## PackedScene 在 `change_scene_to_packed()` 实例化阶段会报
+## `Node './floor_01' was modified from inside an instance, but it has vanished`
+## （主场景内含 5 个 floor 实例化子场景），并伴随引擎段错误 —— 实测基线
+## 零警告零崩溃、开 sub-threads 后必崩，故这里只走「主线程后台加载」这一条安全路径。
+func _request_target_load() -> void:
+	var error: Error = ResourceLoader.load_threaded_request(TARGET_SCENE, "", false)
+	if error != OK:
+		push_warning(
+			"[StartupLoadingScreen] 后台预加载不可用（%s），退回同步切换" % error_string(error)
+		)
+		_load_failed = true
+		return
+	_load_requested = true
+
+
+func _poll_target_load() -> void:
+	if not _load_requested or _load_done or _load_failed:
+		return
+	var progress: Array = []
+	var status := ResourceLoader.load_threaded_get_status(TARGET_SCENE, progress)
+	match status:
+		ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			if not progress.is_empty():
+				_load_progress = clampf(float(progress[0]), 0.0, 1.0)
+		ResourceLoader.THREAD_LOAD_LOADED:
+			_target_scene = ResourceLoader.load_threaded_get(TARGET_SCENE) as PackedScene
+			if _target_scene == null:
+				_load_failed = true
+				return
+			_load_progress = 1.0
+			_load_done = true
+		ResourceLoader.THREAD_LOAD_FAILED, ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			_load_failed = true
 
 
 func _enter_game() -> void:
@@ -57,7 +116,11 @@ func _change_to_target_scene() -> void:
 	if not _transition_requested or _failed:
 		return
 	_transition_requested = false
-	var error: Error = get_tree().change_scene_to_file(TARGET_SCENE)
+	var error: Error = OK
+	if _target_scene != null:
+		error = get_tree().change_scene_to_packed(_target_scene)
+	else:
+		error = get_tree().change_scene_to_file(TARGET_SCENE)
 	if error != OK:
 		_failed = true
 		if _status_label != null:
@@ -66,12 +129,15 @@ func _change_to_target_scene() -> void:
 
 
 func _update_ui() -> void:
-	var ratio := clampf(_elapsed / MIN_DISPLAY_SECONDS, 0.0, 1.0)
+	var time_ratio := clampf(_elapsed / MIN_DISPLAY_SECONDS, 0.0, 1.0)
+	# 两个下限取大：加载慢时显示真实进度，加载快时按最短展示时间平滑推到 100%，
+	# 两者都单调不减，进度条不会回跳。
+	var ratio := maxf(_load_progress, time_ratio)
 	if _progress != null:
 		_progress.value = ratio * 100.0
 	if _step_label != null and not STEP_TEXTS.is_empty():
 		var step_index := clampi(
-			int(_elapsed / STEP_DURATION_SECONDS), 0, STEP_TEXTS.size() - 1
+			int(ratio * float(STEP_TEXTS.size())), 0, STEP_TEXTS.size() - 1
 		)
 		_step_label.text = STEP_TEXTS[step_index]
 

@@ -205,6 +205,7 @@ core_scenes=(
   verify_narrative_opening_02_05
   verify_opening_script_runtime
   verify_new_save_handoff
+  verify_opening_movie_entry_flow
   verify_fate_resume_completion
   verify_tower_journey_polish
   verify_arrival_gate_floor_bundle_flow
@@ -235,6 +236,8 @@ core_scenes=(
   verify_bullet_vfx_profiles
   verify_monster_startup_roar
   verify_death_blast_vfx
+  verify_zombie_goo_death_vfx
+  verify_hit_routing_vfx
   verify_unique_elite_roster_flow
   verify_unique_boss_content_flow
   verify_three_segment_tower_generation_flow

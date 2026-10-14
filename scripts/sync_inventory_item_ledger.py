@@ -72,7 +72,20 @@ def definitions():
 
 
 def weapon_owned(item_id, item):
-    return item['type'] in ('weapon', 'attachment') or item.get('subtype') == 'bullet' or item_id == 'item_ammo_pack'
+    return item['type'] in ('weapon', 'attachment') or item.get('subtype') == 'bullet'
+
+
+def authored_model_paths():
+    """Read the actual centralized preloads so regenerated navigation stays current."""
+    result = {}
+    for rel, names in [('src/world3d/ItemModelFactory3D.gd', ['GROUND_SCENES']),
+                       ('src/combat3d/WeaponModel3D.gd', ['GUN_VISUAL_SCENES', 'MELEE_VISUAL_SCENES'])]:
+        source = (ROOT / rel).read_text(encoding='utf8')
+        for name in names:
+            block = re.search(r'const\s+' + name + r'\s*:=\s*\{(.*?)\n\}', source, re.S)
+            if block:
+                result.update(re.findall(r'"([^"]+)"\s*:\s*preload\("res://([^"]+)"\)', block[1]))
+    return result
 
 
 def link(path, location=''):
@@ -91,11 +104,14 @@ def expected():
     if [(r['怪物ID'], r['物品ID']) for r in csv_rows] != [(r['monster_id'], r['item_id']) for r in plan]:
         raise ValueError('CSV/runtime plan item sequence differs')
     asset_refs = {}
+    asset_id_refs = {}
+    authored = authored_model_paths()
     for domain in index.domains:
         wb = openpyxl.load_workbook(domain.path, read_only=True)
         for n, row in enumerate(wb[index.asset_sheet].iter_rows(min_row=6, values_only=True), 6):
             if row[0] and row[4]:
                 asset_refs.setdefault(str(row[4]), []).append((str(row[0]), link(domain.relative_path, f'资产主表!A{n}')))
+                asset_id_refs[str(row[0])] = (str(row[0]), link(domain.relative_path, f'资产主表!A{n}'))
         wb.close()
     rows = {'物品道具': [], WEAPON_SHEET: [], '掉落归属导航': [], '非背包与待设计': []}
     for item_id, item in items.items():
@@ -126,6 +142,14 @@ def expected():
             model = {'heal': 'heal；程序罐体', 'refill_ammo': 'ammo；程序罐体',
                      'unlock_blueprint': 'blueprint；程序几何'}.get(action, 'crate；通用箱体，尚无专用外观')
         refs = [] if item['type'] == 'blueprint' else asset_refs.get(item_id, asset_refs.get(item.get('assembly_id', ''), []))
+        model_key = '__blueprint__' if item['type'] == 'blueprint' else item_id
+        authored_path = authored.get(model_key, authored.get(item.get('assembly_id', '')))
+        if authored_path:
+            prefab = (ROOT / authored_path).read_text(encoding='utf8')
+            identity = re.search(r'metadata/asset_id\s*=\s*"([^"]+)"', prefab)
+            if identity and identity[1] in asset_id_refs:
+                refs = [asset_id_refs[identity[1]]]
+            model = '已接入3D资产；地面/图标共用：' + authored_path
         occurrences = [f'{DROP_CSV}#CSV行{n} / {r["怪物ID"]}' for n, r in enumerate(csv_rows, 2) if r['物品ID'] == item_id]
         note = '已注册；本表只导航，堆叠/数值/掉落概率由原定义拥有'
         if not occurrences:
@@ -134,7 +158,7 @@ def expected():
             note += '；内容数据库缺行，运行注册表有此ID'
         if not refs:
             note += '；无对应资产主表登记，不新增AssetID'
-        if item_id in ('item_battery_s', 'item_battery_l', 'item_cell_pack'):
+        if item_id in ('item_battery_s', 'item_battery_l', 'item_cell_pack') and not authored_path:
             note += '；电池使用动作存在，模型仍落入crate兜底'
         if item.get('subtype') == 'flashlight_module':
             note += '；使用需设施上下文，入包不等于可在战局切换'
@@ -234,7 +258,7 @@ def main():
     target = ROOT / inventory['path']
     if args.write:
         wb = openpyxl.Workbook(); wb.remove(wb.active)
-        format_sheet(wb.create_sheet('物品道具'), '物品道具账本', '可掉落到地面、拾取进入背包的物品；内容ID唯一。子弹、通用弹药、配件及成品武器归武器账本。', HEADERS, rows['物品道具'], 'InventoryItems')
+        format_sheet(wb.create_sheet('物品道具'), '物品道具账本', '可掉落到地面、拾取进入背包的物品；内容ID唯一。子弹模块、配件及成品武器归武器账本；通用弹药归道具。', HEADERS, rows['物品道具'], 'InventoryItems')
         format_sheet(wb.create_sheet('掉落归属导航'), '怪物掉落归属导航', '每行对应原CSV一行，仅指向登记所有者与运行投影。概率、数量与权重仍以原作者表及运行配置为准。',
                      ['作者表行', '关卡ID', '怪物ID', '内容ID', '名称', '归属', '登记位置', '运行投影', '编译入口', '调度入口'], rows['掉落归属导航'], 'DropNavigation')
         format_sheet(wb.create_sheet('非背包与待设计'), '非背包产出与待设计', '货币与未注册设计条目显式排除，不冒充当前可入包物品。',
@@ -246,7 +270,7 @@ def main():
         wb = openpyxl.load_workbook(weapon_path)
         if WEAPON_SHEET in wb:
             del wb[WEAPON_SHEET]
-        format_sheet(wb.create_sheet(WEAPON_SHEET), '武器账本 · 背包物品调用索引', '成品武器、子弹模块、通用弹药、枪械配件唯一归属本账本；内容ID导航页，不新增资产主表行。', HEADERS, rows[WEAPON_SHEET], 'WeaponInventoryItems')
+        format_sheet(wb.create_sheet(WEAPON_SHEET), '武器账本 · 背包物品调用索引', '成品武器、子弹模块、枪械配件唯一归属本账本；内容ID导航页，不新增资产主表行。', HEADERS, rows[WEAPON_SHEET], 'WeaponInventoryItems')
         wb.save(weapon_path)
     # Compare saved source-derived values, uniqueness, ownership and unchanged source contracts.
     for path, sheets in [(target, ['物品道具', '掉落归属导航', '非背包与待设计', '功能调用链']), (index.domain_for_key('weapons').path, [WEAPON_SHEET])]:

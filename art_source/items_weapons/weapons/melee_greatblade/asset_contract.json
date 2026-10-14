@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-MELEE-BP-GREATBLADE",
+  "logical_id": "weapon_greatblade",
+  "name": "巨型工业断刃",
+  "slug": "melee_greatblade",
+  "domain": "weapons",
+  "kind": "blade",
+  "content_ids": [
+    "weapon_greatblade"
+  ],
+  "godot_dimensions_m": [
+    1.1473641395568848,
+    0.407951682806015,
+    2.9194042682647705
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.360000014305115,
+      -0.0925000011920929,
+      -2.43940424919128
+    ],
+    "xyz_size_m": [
+      0.720000028610229,
+      0.167500004172325,
+      2.91940426826477
+    ]
+  },
+  "principal_length_m": 2.91940426826477,
+  "origin": "existing_grip",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/melee_greatblade/source/wpn_melee_greatblade_source_v001.blend",
+      "sha256": "c1b3cc43107d00d5fbf11a25aa6f436c0ff48edaad459feacd9bb10b9c30ffce",
+      "triangles": 1708,
+      "glb": "assets/art/items_weapons/weapons/melee_greatblade/components/wpn_melee_greatblade_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/melee_greatblade/runtime/wpn_melee_greatblade_preview_root_top3d.tscn",
+      "glb_sha256": "d751a8a935bedf899ebb84b1559d9b39bf91665fbca2a2c46f4d72c27609ee9d",
+      "prefab_sha256": "a75c604a4987b7325f4fd830622a2599be18ea538a58d52c83dc6b94ca070217"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/melee_greatblade/source/wpn_melee_greatblade_ground_source_v001.blend",
+      "sha256": "0ffcef0f64b3fa10ebbb89028f0c2fcee808ad0b6b207bb7f30d60b41159e9e0",
+      "triangles": 168,
+      "glb": "assets/art/items_weapons/weapons/melee_greatblade/components/wpn_melee_greatblade_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/melee_greatblade/runtime/wpn_melee_greatblade_ground_root_top3d.tscn",
+      "glb_sha256": "f9cc2a9baa91a383978916f43b91eeea611fbffe84db820dbac473754f8ad189",
+      "prefab_sha256": "850065e0aec45baf4979bd3146e068fe7ee1d1f6f5cb24d4cc79f5ceae857093"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

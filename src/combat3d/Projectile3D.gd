@@ -23,6 +23,30 @@ const BULLET_VISUAL_REGISTRY: Dictionary = {
 ## 旧链（CombatEffectPool3D）图例：爆炸仍走旧链，待 14.6 §6 迁移完成后统一删除。
 const LEGACY_EFFECT_EXPLOSION := &"explosion"
 
+## ── 命中特效路由（2026-10-14 业主「对击中特效进行区分」）────────────────────
+## 打中「僵尸三兄弟」（`Enemy3D.ZOMBIE_KINDS` = 小僵尸 / 警察僵尸 / 胖子僵尸）
+## ⇒ FX01-20 `VFX-GOO-HIT-3D`；打中**其余一切**（墙面 / 掩体 / 地面 / 非僵尸怪种）
+## ⇒ FX01-21 `VFX-METAL-SPARK-HIT-3D`（5 颗白方块 + 2 根金色长条火星）。
+##
+## ⚠ 2026-10-14 第四轮（本版）业主：「小僵尸和警察僵尸的受击特效**太大了**，
+## **使用击中其它物体的那个特效**，然后**改成绿色**即可，放大大概 **10%**」
+## ⇒ FX01-20 升 v002：造型与 FX01-21 **逐字共用**（只换色板），尺寸改为**同档位 ×1.10**。
+## 所以僵尸那一组不再是独立定档值，而是**派生**自金属火星那一组 —— 以后调金属火星的档位，
+## 僵尸那条自动跟着走，不会又漂回「一个绿方块糊住半个怪」。
+##
+## ⚠ 本口径**取代**上一轮的「受击的特效也不要太大，我看到有点太大了，小一点」
+## （当时把首版的 0.85 / 1.00 压到 0.50 / 0.60）。
+## 要再调只动这里，别去改特效内部的几何常量（那会连死亡件一起带动）。
+const METAL_SPARK_SIZE_TARGET := 0.34
+const METAL_SPARK_SIZE_ABSORB := 0.42
+const METAL_SPARK_SIZE_SURFACE := 0.28
+const METAL_SPARK_SIZE_BOUNCE := 0.20
+const METAL_SPARK_SIZE_CHAIN := 0.26
+## 僵尸受击件（FX01-20）的同档位尺寸 = 金属火星 ×1.10。只在这里派生，别再手写定档值。
+const ZOMBIE_HIT_SIZE_RATIO := 1.10
+const GOO_HIT_SIZE_TARGET := METAL_SPARK_SIZE_TARGET * ZOMBIE_HIT_SIZE_RATIO
+const GOO_HIT_SIZE_ABSORB := METAL_SPARK_SIZE_ABSORB * ZOMBIE_HIT_SIZE_RATIO
+
 var direction := Vector3(0, 0, -1)
 var speed := 24.0
 var damage := 10
@@ -32,6 +56,10 @@ var bullet_tags: Array[String] = []
 var bullet_color := Color(0.45, 0.88, 1.0)
 ## 当前已挂载的弹体视觉所用的 visual_id（"" = 通用弹体）。池化复借时按此判断要不要换视觉。
 var _visual_id := ""
+## 枪身维度的弹体几何档位（2026-10-14）。由 WeaponModel3D 随 projectile_config 下发，
+## 键见 WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG；空字典 = 中性档（不改观感）。
+## 只影响弹体纯视觉的尺寸/拉伸/生长包络，不影响碰撞半径、伤害与射程。
+var _gun_bullet_geometry: Dictionary = {}
 var shooter: Node3D = null
 var fate_behavior: Dictionary = {}
 # 命中击退强度（m/s）。默认 0 = 不让怪物位移；霰弹枪=0.8（轻微）。
@@ -79,6 +107,8 @@ func configure(config: Dictionary) -> void:
 	bullet_color = config.get("color", bullet_color) as Color
 	shooter = config.get("shooter", shooter) as Node3D
 	fate_behavior = (config.get("behavior", {}) as Dictionary).duplicate(true)
+	# 每次 configure 一律重取（缺省空字典 ⇒ 中性档），池化复借不得残留上一发的枪身档位。
+	_gun_bullet_geometry = (config.get("gun_bullet_geometry", {}) as Dictionary).duplicate(true)
 	var source_tree_value: Variant = fate_behavior.get("source_weapon_tree")
 	var source_weapon_value: Variant = fate_behavior.get("source_weapon")
 	source_weapon_tree = source_tree_value as WeaponAssemblyTree if is_instance_valid(source_tree_value) else null
@@ -131,7 +161,7 @@ func activate(config: Dictionary, world_position: Vector3) -> void:
 	velocity = Vector3.ZERO
 	_sync_visual_orientation()
 	if _visual != null:
-		_visual.activate(global_position, bullet_color, _visual_scale_factor(), {})
+		_visual.activate(global_position, bullet_color, _visual_scale_factor(), _bullet_visual_context())
 	if _collision_shape != null:
 		_collision_shape.set_deferred("disabled", false)
 
@@ -224,7 +254,7 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 		if collider.has_method("can_absorb_projectile") and bool(collider.call("can_absorb_projectile", bullet_tags)):
 			if collider.has_method("on_projectile_absorbed"):
 				collider.call("on_projectile_absorbed", damage)
-			_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 1.25, hit_context)
+			_spawn_hit_effect(collider, GOO_HIT_SIZE_ABSORB, METAL_SPARK_SIZE_ABSORB, hit_context)
 			_retire()
 			return
 		if bool(fate_behavior.get("size_growth", false)) and is_instance_valid(source_weapon_tree):
@@ -243,7 +273,7 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 		_apply_secondary_effect(collider)
 		_apply_fate_on_hit(collider)
 		hit_confirmed.emit(collider, damage, critical)
-		_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 1.0, hit_context)
+		_spawn_hit_effect(collider, GOO_HIT_SIZE_TARGET, METAL_SPARK_SIZE_TARGET, hit_context)
 		if bool(fate_behavior.get("spawn_turret_on_land", false)):
 			_become_turret()
 			return
@@ -277,7 +307,11 @@ func _hit_surface(normal: Vector3, hit_context: Dictionary = {}) -> void:
 		damage = maxi(1, int(damage * float(fate_behavior.get("bounce_damage_scale", 0.85))))
 		_sync_visual_orientation()
 		_bounces_left -= 1
-		_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 0.55, hit_context)
+		# 反弹：打在**表面**上 ⇒ 金属火星（没有 collider，直接指定）
+		_spawn_effect(
+			VfxPool3D.FX01_METAL_SPARK_HIT, global_position, bullet_color,
+			METAL_SPARK_SIZE_BOUNCE, hit_context
+		)
 		return
 	if bool(fate_behavior.get("spawn_turret_on_land", false)):
 		_become_turret()
@@ -287,7 +321,11 @@ func _hit_surface(normal: Vector3, hit_context: Dictionary = {}) -> void:
 		return
 	if _is_explosive_payload():
 		_explode()
-	_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 0.7, hit_context)
+	# 落地：打在**表面**上 ⇒ 金属火星
+	_spawn_effect(
+		VfxPool3D.FX01_METAL_SPARK_HIT, global_position, bullet_color,
+		METAL_SPARK_SIZE_SURFACE, hit_context
+	)
 	_retire()
 
 
@@ -354,7 +392,12 @@ func _apply_chain_lightning(first_target: Node) -> void:
 			break
 		chain_damage = maxi(1, int(chain_damage * chain_scale))
 		nearest.take_projectile_damage(chain_damage, false, (nearest.global_position - current.global_position).normalized(), bullet_tags, fate_behavior, shooter)
-		_spawn_effect(VfxPool3D.FX01_IMPACT, nearest.global_position + Vector3(0, 0.6, 0), bullet_color, 0.72)
+		# 链电落到的那只怪仍是「命中目标」⇒ 与普通命中同一分流（打中僵尸给绿方块）。
+		# ⚠ 出生点取**那只怪**的位置，不是弹体自己的位置。
+		_spawn_hit_effect(
+			nearest, GOO_HIT_SIZE_TARGET, METAL_SPARK_SIZE_CHAIN, {},
+			nearest.global_position + Vector3(0, 0.6, 0)
+		)
 		visited[nearest.get_instance_id()] = true
 		current = nearest
 
@@ -471,17 +514,39 @@ func _sync_visual_route(config: Dictionary) -> void:
 	_ensure_visual(_visual_scene_for(_visual_id))
 
 
+## 弹体视觉总尺寸 = 弹种/命运倍率 × 枪身档位倍率（枪身维度：榴弹更大 / 霰弹更大等）。
 func _visual_scale_factor() -> float:
+	return _base_scale_factor() * float(_gun_bullet_geometry.get("scale", 1.0))
+
+
+## 碰撞半径倍率 = 弹种/命运倍率 —— **刻意不含枪身档位**。
+## 枪族档位是纯视觉契约（14.6 §3.7）：`0.12` 基准球本身已是为可玩性放大的判定体，
+## 再叠枪身倍率等于顺手改命中率（霰弹 ×2 会让 5 发弹丸的判定面膨胀到 4 倍）。
+## 与 `WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG` 的分离由验收的正面断言钉住。
+func _collision_scale_factor() -> float:
+	return _base_scale_factor()
+
+
+## 弹种 × 命运：视觉与碰撞共用的底座倍率。
+func _base_scale_factor() -> float:
 	var scale_factor := 1.55 if bullet_tags.has("balloon") else 1.0
 	scale_factor *= clampf(float(fate_behavior.get("fate_scale", 1.0)), 0.35, 4.0)
 	return scale_factor
 
+
+## 弹体几何 context：枪身档位决定的轴向拉伸与生长包络（纯视觉）。
+func _bullet_visual_context() -> Dictionary:
+	return {
+		"axial_scale": float(_gun_bullet_geometry.get("axial", 1.0)),
+		"grow_from": float(_gun_bullet_geometry.get("grow_from", 1.0)),
+		"grow_duration": float(_gun_bullet_geometry.get("grow_duration", 0.0)),
+	}
+
 func _apply_visual_configuration() -> void:
-	var scale_factor := _visual_scale_factor()
 	if _visual != null:
-		_visual.configure(bullet_color, scale_factor, {})
+		_visual.configure(bullet_color, _visual_scale_factor(), _bullet_visual_context())
 	if _collision_shape != null and _collision_shape.shape is SphereShape3D:
-		(_collision_shape.shape as SphereShape3D).radius = 0.12 * scale_factor
+		(_collision_shape.shape as SphereShape3D).radius = 0.12 * _collision_scale_factor()
 
 
 func _return_destination() -> Vector3:
@@ -523,7 +588,33 @@ func _become_turret() -> void:
 			_visual.call("set_trail_visible", false)
 		if _visual.has_method("apply_growth"):
 			_visual.call("apply_growth", 1.45)
-	_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 1.25)
+	_spawn_effect(VfxPool3D.FX01_METAL_SPARK_HIT, global_position, bullet_color, METAL_SPARK_SIZE_SURFACE)
+
+
+## 命中特效分流：打中「僵尸三兄弟」⇒ FX01-20（金属火星造型 + 僵尸绿，尺寸 ×1.10）；
+## 其余 ⇒ FX01-21 金属火星。
+## `goo_size` / `metal_size` 是**同一档位下两件各自的尺寸**（FX01-20 比 FX01-21 大 10%，
+## 见 `ZOMBIE_HIT_SIZE_RATIO`）。
+## `world_position` 缺省取弹体自身位置；链电那种「在别的怪身上炸」的场景要显式传。
+## ⚠ 命中点先经 `Enemy3D.hit_effect_anchor()` **收进模型 0.2m** —— 弹体是在碰撞壳表面判定
+## 命中的，而壳比模型大一圈，直接用交点会让特效悬在怪旁边（业主 2026-10-14：「受击的盒子
+## 没有贴着模型」）。只对怪收，墙面 / 掩体不收（那里收了会钻进墙里）。
+func _spawn_hit_effect(
+	collider: Node,
+	goo_size: float,
+	metal_size: float,
+	hit_context: Dictionary = {},
+	world_position: Variant = null
+) -> void:
+	var is_zombie := collider is Enemy3D and (collider as Enemy3D).uses_goo_hit_burst()
+	var asset_id: StringName = VfxPool3D.FX01_GOO_HIT if is_zombie else VfxPool3D.FX01_METAL_SPARK_HIT
+	var size: float = goo_size if is_zombie else metal_size
+	var spawn_position: Vector3 = global_position if world_position == null else world_position
+	if collider is Enemy3D:
+		spawn_position = (collider as Enemy3D).hit_effect_anchor(
+			spawn_position, hit_context.get("normal", Vector3.ZERO) as Vector3
+		)
+	_spawn_effect(asset_id, spawn_position, bullet_color, size, hit_context)
 
 
 func _tick_turret(delta: float) -> void:
@@ -620,6 +711,8 @@ func _spawn_child_projectile(shot_direction: Vector3, shot_damage: int, color: C
 		"color": color,
 		# 子投射物默认继承父弹当前弹种视觉（_visual_id）；child_behavior 显式带 visual_id 时以它为准。
 		"visual_id": String(child_behavior.get("visual_id", _visual_id)),
+		# 枪身几何档位一并继承：分裂/子母弹的子弹应与母弹同尺寸。
+		"gun_bullet_geometry": _gun_bullet_geometry,
 		"shooter": shooter,
 		"behavior": child_behavior,
 	}
@@ -651,13 +744,20 @@ func get_orientation_snapshot() -> Dictionary:
 		"trail_is_behind": false,
 		"visual_asset_id": "",
 		"visual_profile": "",
+		"collision_radius": 0.0,
 	}
+	if _collision_shape != null and _collision_shape.shape is SphereShape3D:
+		snapshot["collision_radius"] = (_collision_shape.shape as SphereShape3D).radius
 	if _visual != null and _visual.has_method("get_presentation_snapshot"):
 		var presentation := _visual.call("get_presentation_snapshot") as Dictionary
 		snapshot["trail_local_position"] = presentation.get("trail_local_position", Vector3.ZERO)
 		snapshot["trail_is_behind"] = presentation.get("trail_is_behind", false)
 		snapshot["visual_asset_id"] = presentation.get("asset_id", "")
 		snapshot["visual_profile"] = presentation.get("bullet_profile", "")
+		snapshot["visual_base_scale"] = presentation.get("base_scale", 0.0)
+		snapshot["visual_body_scale"] = presentation.get("body_scale", 0.0)
+		snapshot["visual_axial_scale"] = presentation.get("axial_scale", 1.0)
+		snapshot["visual_growth_factor"] = presentation.get("growth_factor", 1.0)
 	return snapshot
 
 

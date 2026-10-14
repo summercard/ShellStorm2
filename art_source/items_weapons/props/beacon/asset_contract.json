@@ -1,0 +1,69 @@
+{
+  "asset_id": "ITM-CONSUMABLE-ITEM-BEACON",
+  "logical_id": "item_beacon",
+  "name": "撤离信标",
+  "slug": "beacon",
+  "domain": "props",
+  "kind": "beacon",
+  "content_ids": [
+    "item_beacon"
+  ],
+  "godot_dimensions_m": [
+    1.0134782791137695,
+    1.1100001335144043,
+    1.0134782791137695
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.413619220256805,
+      -0.420000016689301,
+      -0.419999986886978
+    ],
+    "xyz_size_m": [
+      0.827238440513611,
+      1.1100001335144,
+      0.839999973773956
+    ]
+  },
+  "principal_length_m": 1.1100001335144,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/props/beacon/source/itm_beacon_source_v001.blend",
+      "sha256": "e90695ab56c3b2b659aab22426f339c77a5f8a6d1598f36e2727ac4eee1e0612",
+      "triangles": 1520,
+      "glb": "assets/art/items_weapons/props/beacon/components/itm_beacon_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/beacon/runtime/itm_beacon_preview_root_top3d.tscn",
+      "glb_sha256": "60bc262d32f82b3ee64f054214abf101afdcb66ca104a2e440c7e2d7b9e09558",
+      "prefab_sha256": "5a94a7efab71166a2ca2fd2e46f150f0a32a1f738b65c96363082b185134383b"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/props/beacon/source/itm_beacon_ground_source_v001.blend",
+      "sha256": "280fc46af24a99492ee3c40c4e484ddb57166a4226f6f685df7194c9c79eeb52",
+      "triangles": 196,
+      "glb": "assets/art/items_weapons/props/beacon/components/itm_beacon_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/beacon/runtime/itm_beacon_ground_root_top3d.tscn",
+      "glb_sha256": "11f7845254447206fbc668cb351bb0a4c9cf21fdf92191c76676ad642bfeceba",
+      "prefab_sha256": "9a762979bd12f38be7a1df5df67f93fd746e3d1c84621de766974f7728a922ba"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

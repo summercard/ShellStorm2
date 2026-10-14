@@ -90,10 +90,16 @@ static func measure_worn(player: Player3D, slots: int, failures: Array[String], 
 	var body_bounds := visible_bounds(avatar.body.get_node("Model"), avatar.body)
 	var max_follow_error := 0.0
 	var max_back_gap := -INF
+	var lowest_pack_y := INF
 	var worst := {}
 	var samples := 0
 	var intersections := 0
 	var envelopes: Array = []
+	var follow := player.get("_backpack_follow") as Node3D
+	if enforce:
+		# 隐形接线也要盯着：模型由 BackpackSocket 持有，位置由躯干下的跟随节点驱动。
+		_expect(model != null and model.get_parent() == socket, "%d格背包模型没有挂在 BackpackSocket 下" % slots, failures)
+		_expect(follow != null and follow.get_parent() == avatar.body, "%d格背包跟随节点没有挂在躯干下" % slots, failures)
 	var clip_names := clips.keys()
 	clip_names.sort()
 	for clip_name: String in clip_names:
@@ -104,13 +110,19 @@ static func measure_worn(player: Player3D, slots: int, failures: Array[String], 
 			# 完成过渡后采样同一正式驱动器，不在测试中复制动画变换。
 			motion.apply(avatar, 1.0)
 			avatar.body.force_update_transform()
-			var follow := player.get("_backpack_follow") as RemoteTransform3D
+			# 躯干动完必须调用运行时自己的同步函数，否则量到的是上一帧的陈旧全局变换，
+			# 包在躯干空间里的位置会随动作漂移、判据全是噪声。
+			# 也注意实现是普通 Node3D + 手工同步，不是 RemoteTransform3D：
+			# 早期这里按 RemoteTransform3D 取节点会拿到 null，把整条跟随判据静默短路。
 			if follow != null:
+				player.call("_sync_backpack_body_follow")
 				follow.force_update_transform()
+				model.force_update_transform()
 				max_follow_error = maxf(max_follow_error, model.global_position.distance_to(follow.global_position))
 			var head_bounds := visible_bounds(avatar.bunny_head_model, avatar.body)
 			var pack_bounds := visible_bounds(model, avatar.body)
 			max_back_gap = maxf(max_back_gap, pack_bounds.position.z - body_bounds.end.z)
+			lowest_pack_y = minf(lowest_pack_y, pack_bounds.position.y)
 			envelopes.append([motion.active_clip, motion.pose_lock_phase, head_bounds.position.y, head_bounds.end.z])
 			var gap := maxf(pack_bounds.position.z - head_bounds.end.z, head_bounds.position.y - pack_bounds.end.y)
 			maximum_head_z = maxf(maximum_head_z, head_bounds.end.z)
@@ -124,13 +136,14 @@ static func measure_worn(player: Player3D, slots: int, failures: Array[String], 
 		_expect(samples >= 41 * 14, "%d格动作采样不足" % slots, failures)
 		_expect(minimum >= 0.015, "%d格背包侵入头部动作包络：%.6fm %s" % [slots, minimum, str(worst)], failures)
 		_expect(max_follow_error < 0.0001, "%d格背包未跟随躯干" % slots, failures)
-		_expect(is_equal_approx(model.scale.x, 0.68), "%d格背负缩放契约错误" % slots, failures)
+		_expect(is_equal_approx(model.scale.x, Player3D.BACKPACK_WORN_SCALE), "%d格背负缩放契约错误" % slots, failures)
 		_expect(max_back_gap < 0.04, "%d格背包离背过远：%.6f" % [slots, max_back_gap], failures)
+		_expect(lowest_pack_y > Player3D.BACKPACK_WORN_FLOOR_Y + 0.02, "%d格背包沉到地面：包底 %.6f 低于 %.6f" % [slots, lowest_pack_y, Player3D.BACKPACK_WORN_FLOOR_Y + 0.02], failures)
 	avatar.set("_state", "idle")
 	motion.pose_lock_phase = 0.0
 	motion.apply(avatar, 1.0)
 	motion.pose_lock_enabled = false
-	return {"body_bounds": str(body_bounds), "max_back_gap": max_back_gap, "max_follow_error": max_follow_error, "envelopes": envelopes, "slots": slots, "samples": samples, "clips": clip_names, "minimum_socket_gap_m": minimum, "maximum_head_socket_z": maximum_head_z, "aabb_intersections": intersections, "worst": worst, "offset": str(model.position), "socket": str(socket.position), "avatar_scale": str(avatar.scale)}
+	return {"body_bounds": str(body_bounds), "max_back_gap": max_back_gap, "lowest_pack_y": lowest_pack_y, "max_follow_error": max_follow_error, "envelopes": envelopes, "slots": slots, "samples": samples, "clips": clip_names, "minimum_socket_gap_m": minimum, "maximum_head_socket_z": maximum_head_z, "aabb_intersections": intersections, "worst": worst, "offset": str(model.position), "socket": str(socket.position), "avatar_scale": str(avatar.scale)}
 
 static func visible_bounds(root: Node3D, space: Node3D) -> AABB:
 	var bounds := AABB()

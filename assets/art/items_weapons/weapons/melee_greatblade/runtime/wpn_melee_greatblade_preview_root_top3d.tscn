@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/melee_greatblade/components/wpn_melee_greatblade_preview_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-MELEE-BP-GREATBLADE"
+metadata/logical_id = "weapon_greatblade"
+metadata/model_role = "preview"
+metadata/asset_version = "v001"
+metadata/triangle_count = 1708
+metadata/dimensions_m = Vector3(1.1473641395568848, 0.407951682806015, 2.9194042682647705)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

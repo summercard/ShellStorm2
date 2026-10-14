@@ -172,7 +172,7 @@
       "source_owner": "src/base/ItemRegistry.gd",
       "weapon_owner": "weapons",
       "weapon_sheet": "背包物品调用索引",
-      "scope_note": "可进入背包的物品道具内容ID与调用导航；子弹、通用弹药、配件和成品武器归武器账本。无资产主表，不重复分配AssetID。"
+      "scope_note": "可进入背包的物品道具内容ID与调用导航；子弹模块、配件和成品武器归武器账本；通用弹药归道具。无资产主表，不重复分配AssetID。"
     }
   }
 }

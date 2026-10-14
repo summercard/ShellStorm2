@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/copy_sticker/components/wpn_copy_sticker_ground_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-ATT-ATTACH-COPY-STICKER"
+metadata/logical_id = "attach_copy_sticker"
+metadata/model_role = "ground"
+metadata/asset_version = "v001"
+metadata/triangle_count = 150
+metadata/dimensions_m = Vector3(0.7014707326889038, 0.6399999260902405, 0.25417670607566833)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

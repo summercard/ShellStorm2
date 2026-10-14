@@ -56,9 +56,13 @@ const SHELL_EJECT_SPIN_SPREAD := 0.50
 ## 初始姿态随机倾角上限（度）。> 45° 会像「被人乱扔」而不是「从抛壳窗崩出来」。
 const SHELL_INITIAL_TILT_DEG := 45.0
 const MELEE_VISUAL_SCENES := {
-	"bp_baseball_bat": preload("res://assets/art/weapons/melee_3d/wpn_melee_baseball_bat_root_top3d_v001.tscn"),
-	"bp_greatblade": preload("res://assets/art/weapons/melee_3d/wpn_melee_greatblade_root_top3d_v001.tscn"),
-	"bp_waraxe": preload("res://assets/art/weapons/melee_3d/wpn_melee_waraxe_root_top3d_v001.tscn"),
+	"bp_baseball_bat": preload("res://assets/art/items_weapons/weapons/melee_baseball_bat/runtime/wpn_melee_baseball_bat_ground_root_top3d.tscn"),
+	"bp_greatblade": preload("res://assets/art/items_weapons/weapons/melee_greatblade/runtime/wpn_melee_greatblade_ground_root_top3d.tscn"),
+	"bp_waraxe": preload("res://assets/art/items_weapons/weapons/melee_waraxe/runtime/wpn_melee_waraxe_ground_root_top3d.tscn"),
+}
+const AUTHORED_ATTACHMENT_SCENES := {
+	"Att_Fan": preload("res://assets/art/items_weapons/weapons/attachment_fan/runtime/wpn_attachment_fan_ground_root_top3d.tscn"),
+	"Att_CopySticker": preload("res://assets/art/items_weapons/weapons/copy_sticker/runtime/wpn_copy_sticker_ground_root_top3d.tscn"),
 }
 const GUN_VISUAL_SCENES := {
 	"bp_pistol": preload("res://assets/art/weapons/weapon_3d/runtime/hair_dryer/wpn_hair_dryer_root_top3d_v001.tscn"),
@@ -98,6 +102,33 @@ const BULLET_COLORS := {
 	"mod_bullet_balloon": Color(0.98, 0.35, 0.72),
 }
 
+## 枪族弹体几何档位（2026-10-14 业主：「每把枪的子弹大小要做出区分」）。
+## 键 = 枪身 tags 里的族标识（**不是 gun_id** —— 按族声明，新增同族枪自动继承，
+## 避免逐 id 硬编码随枪数增长而腐烂；同见 _apply_gun_behavior_tags 的历史包袱）。
+## 每条三档：
+##   scale          —— 各向同性尺寸倍率（1.0 = 与弹种 profile 基准一致）
+##   axial          —— 沿飞行轴拉长倍率（>1 变长；只拉长不增粗 ⇒ 细长观感）
+##   grow_from      —— 出生瞬间的尺寸比例（<1 才有「由小变大」的过程动画）
+##   grow_duration  —— 从 grow_from 线性长到 1.0 所需秒数（grow_from=1.0 时无意义）
+## 未命中任何族的枪回落 BULLET_GEOMETRY_NEUTRAL。取值理由见 14.6 §3.7。
+const BULLET_GEOMETRY_NEUTRAL := {
+	"scale": 1.0,
+	"axial": 1.0,
+	"grow_from": 1.0,
+	"grow_duration": 0.0,
+}
+
+const BULLET_GEOMETRY_BY_GUN_TAG := {
+	# 散射喷壶：一次 5 发散射，弹丸出生 42% 并在 0.30s 内长满 —— 打出「散开后铺开」的过程感。
+	# 2026-10-14 业主「子弹太小了，出生和结束都增加 2 倍」⇒ 整体 ×2。grow_from 是**比例**，
+	# 保持 0.42 即出生与长满两端同步翻倍（出生 0.42→0.84、长满 1.0→2.0），比例关系不变。
+	"shotgun": {"scale": 2.0, "axial": 1.0, "grow_from": 0.42, "grow_duration": 0.30},
+	# 反胃榴弹筒：重型弹药，整体放大到 1.55 倍（不拉长，保持圆钝的榴弹观感）。
+	"launcher": {"scale": 1.55, "axial": 1.0, "grow_from": 1.0, "grow_duration": 0.0},
+	# 弹弓狙击：轴向拉到 2.0 倍、横向收到 0.95 —— 细长锐利的狙击弹观感（净长度 1.90 倍）。
+	"sniper": {"scale": 0.95, "axial": 2.0, "grow_from": 1.0, "grow_duration": 0.0},
+}
+
 ## 命运体型是相对当前挂点基础尺寸的倍率，不是旧资产空间中的绝对 scale。
 ## 当前角色挂点随 entity_size_baseline_v2 继承旧资产 70%，所以命运 2.0
 ## 的最终尺寸等于“新版 100% × 2”，即旧资产的 140%。
@@ -123,6 +154,8 @@ var bullet_speed := 24.0
 ## `0` = 未声明，退回「按存活时间」的旧口径（敌弹与未升级内容不受影响）。
 var range_m := 0.0
 var bullet_tags: Array[String] = []
+## 当前枪身的弹体几何档位（由枪身 tags 解析，随每次开火下发到 Projectile3D）。
+var bullet_geometry: Dictionary = BULLET_GEOMETRY_NEUTRAL.duplicate()
 var bullet_color := Color(0.76, 0.86, 0.92)
 var damage_multiplier := 1.0
 var charge_time := 0.0
@@ -276,6 +309,7 @@ func configure(p_gun_id: String, p_bullet_id: String) -> bool:
 	_secondary_guns.clear()
 	_source_tree = null
 	_apply_gun_behavior_tags()
+	bullet_geometry = _resolve_bullet_geometry(gun_node.tags)
 	bullet_color = BULLET_COLORS.get(bullet_id, Color(0.20, 0.84, 0.92) if is_melee else Color(0.76, 0.86, 0.92))
 	gun_node.free()
 	if bullet_node != null:
@@ -339,6 +373,7 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 				if tag not in bullet_tags:
 					bullet_tags.append(tag)
 	_apply_gun_behavior_tags()
+	bullet_geometry = _resolve_bullet_geometry(root.tags)
 	bullet_color = BULLET_COLORS.get(bullet_id, Color(0.20, 0.84, 0.92) if root_is_melee else Color(0.76, 0.86, 0.92))
 	_rebuild_visual()
 	loadout_changed.emit(gun_id, bullet_id)
@@ -405,6 +440,7 @@ func clear_weapon() -> void:
 	cancel_charge()
 	gun_id = ""
 	bullet_id = ""
+	bullet_geometry = BULLET_GEOMETRY_NEUTRAL.duplicate()
 	current_ammo = 0
 	magazine_size = 0
 	weapon_kind = "ranged"
@@ -510,6 +546,8 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			"color": bullet_color,
 			# 弹种专属弹体视觉路由（04 §6.2 visual_id）：Projectile3D 按此查表选 Prefab。
 			"visual_id": bullet_id,
+			# 枪身弹体几何档位：同弹种在不同枪上有不同尺寸/拉伸/生长过程。
+			"gun_bullet_geometry": bullet_geometry,
 			"shooter": shooter,
 			"behavior": behavior,
 			# 枪身声明的射程上限（米）；0 = 不启用，退回旧的按存活时间口径。
@@ -570,6 +608,15 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 	if current_ammo <= 0:
 		request_reload()
 	return true
+
+
+## 按枪身 tags 解析弹体几何档位：先命中的族胜出；无命中回落中性档（不改观感）。
+func _resolve_bullet_geometry(gun_tags: Array) -> Dictionary:
+	for tag in gun_tags:
+		var key := String(tag)
+		if BULLET_GEOMETRY_BY_GUN_TAG.has(key):
+			return (BULLET_GEOMETRY_BY_GUN_TAG[key] as Dictionary).duplicate(true)
+	return BULLET_GEOMETRY_NEUTRAL.duplicate(true)
 
 
 func _apply_gun_behavior_tags() -> void:
@@ -666,6 +713,7 @@ func _fire_secondary_gun(
 			"color": bullet_color.lightened(0.12),
 			# 副枪弹体沿用主枪弹种视觉（副枪 bullet_id 缺省回落本枪 bullet_id）。
 			"visual_id": String(secondary.get("bullet_id", bullet_id)),
+			"gun_bullet_geometry": bullet_geometry,
 			"shooter": shooter,
 			"behavior": attached_behavior,
 			# 副枪用自己声明的射程；未声明则回落主枪。
@@ -694,6 +742,7 @@ func _fire_copy_wave(
 			"critical": is_critical,
 			"hostile": false, "tags": bullet_tags.duplicate(),
 			"color": bullet_color, "visual_id": bullet_id,
+			"gun_bullet_geometry": bullet_geometry,
 			"shooter": shooter, "behavior": behavior.duplicate(true),
 			"range": range_m,
 		})
@@ -949,6 +998,7 @@ func _rebuild_visual() -> void:
 		if melee_scene != null:
 			var melee_visual := melee_scene.instantiate() as Node3D
 			_visual_root.add_child(melee_visual)
+			_apply_render_layers_recursive(melee_visual)
 			if melee_visual.has_method("configure"):
 				melee_visual.call("configure", render_layers)
 		_muzzle = null
@@ -1036,6 +1086,24 @@ func _socket_position(asset: Node3D, socket_name: String, fallback: Vector3) -> 
 	return socket.position if socket != null else fallback
 
 
+func _add_authored_attachment(source: AssemblyNode, node_name: String, socket_position: Vector3, installed_extent: float) -> bool:
+	var scene := AUTHORED_ATTACHMENT_SCENES.get(source.node_name) as PackedScene
+	if scene == null:
+		return false
+	var wrapper := Node3D.new()
+	wrapper.name = node_name
+	wrapper.position = socket_position
+	var visual := scene.instantiate() as Node3D
+	var dimensions: Vector3 = visual.get_meta("dimensions_m", Vector3.ONE)
+	var factor := installed_extent / maxf(dimensions.x, maxf(dimensions.y, dimensions.z))
+	visual.scale = Vector3.ONE * factor
+	visual.position.y = -dimensions.y * factor * 0.5
+	wrapper.add_child(visual)
+	_visual_root.add_child(wrapper)
+	_apply_render_layers_recursive(wrapper)
+	return true
+
+
 func _add_imported_attachment_visuals(asset: Node3D, accent_material: StandardMaterial3D) -> void:
 	if _source_tree != null and _source_tree.get_root() != null:
 		var source_root := _source_tree.get_root()
@@ -1048,9 +1116,11 @@ func _add_imported_attachment_visuals(asset: Node3D, accent_material: StandardMa
 		if source_root.slots.get(AssemblyNode.SlotType.STOCK) != null:
 			_add_box("InstalledStock", _socket_position(asset, "StockSocket", Vector3(0, 0.05, 0.25)), Vector3(0.22, 0.22, 0.32), accent_material)
 		if source_root.slots.get(AssemblyNode.SlotType.TACTICAL) != null:
-			_add_box("InstalledTactical", _socket_position(asset, "TacticalSocket", Vector3(0.14, 0.02, -0.35)), Vector3(0.08, 0.08, 0.20), accent_material)
+			if not _add_authored_attachment(source_root.slots[AssemblyNode.SlotType.TACTICAL], "InstalledTactical", _socket_position(asset, "TacticalSocket", Vector3(0.14, 0.02, -0.35)), 0.20):
+				_add_box("InstalledTactical", _socket_position(asset, "TacticalSocket", Vector3(0.14, 0.02, -0.35)), Vector3(0.08, 0.08, 0.20), accent_material)
 		if source_root.slots.get(AssemblyNode.SlotType.MUTATOR) != null:
-			_add_box("InstalledMutator", _socket_position(asset, "MutatorSocket", Vector3(-0.14, 0.02, -0.30)), Vector3(0.06, 0.16, 0.16), accent_material)
+			if not _add_authored_attachment(source_root.slots[AssemblyNode.SlotType.MUTATOR], "InstalledMutator", _socket_position(asset, "MutatorSocket", Vector3(-0.14, 0.02, -0.30)), 0.16):
+				_add_box("InstalledMutator", _socket_position(asset, "MutatorSocket", Vector3(-0.14, 0.02, -0.30)), Vector3(0.06, 0.16, 0.16), accent_material)
 		if source_root.slots.get(AssemblyNode.SlotType.MOUNT) != null:
 			_add_box("InstalledMount", _socket_position(asset, "ScopeSocket", Vector3(0, 0.24, -0.30)), Vector3(0.18, 0.08, 0.18), accent_material)
 	var fate_used := maxi(0, int(get_meta("fate_slot_used", 0)))

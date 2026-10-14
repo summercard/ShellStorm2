@@ -19,6 +19,15 @@ const FX01_SHELL_CASING := "VFX-SHELL-CASING-3D"
 ## 池化的瞬时计时语义与它冲突；与 FX01-16 头顶吼叫图标、FX03-03 收音机音符同一口径。
 ## 场地侧的 AssetID 常量见 `src/enemy3d/DeathBlastZone3D.gd` 的 `ZONE_VFX_ASSET_ID`。
 const FX01_DEATH_BLAST := "VFX-DEATH-BLAST-3D"
+## 小僵尸 / 警察僵尸死亡「绿色方块爆开」特效（FX01-19）——由 `Enemy3D._die()`
+## 经 `_spawn_goo_death_burst()` 借出。一次性、1.35s、纯视觉、无朝向契约。
+const FX01_ZOMBIE_GOO_DEATH := "VFX-ZOMBIE-GOO-DEATH-3D"
+## 僵尸命中爆点（FX01-20）——打中「僵尸三兄弟」（小僵尸 / 警察僵尸 / 胖子僵尸）时的受击反馈。
+## 由 `Projectile3D._spawn_hit_effect()` 与 `PlayerMeleeCombat3D._spawn_hit_feedback()` 借出。
+const FX01_GOO_HIT := "VFX-GOO-HIT-3D"
+## 金属打击火星（FX01-21）——击中**非**僵尸目标（墙面 / 掩体 / 地面 / 其它怪种）时的反馈。
+## 与 FX01-02 `VFX-IMPACT-3D` 刻意是两件：后者保留了「非僵尸怪种死亡爆点 / 护盾弹开」等用途。
+const FX01_METAL_SPARK_HIT := "VFX-METAL-SPARK-HIT-3D"
 const FX02_DAMAGE_NUMBER := "VFX-DAMAGE-NUMBER-3D"
 const FX02_HEAL_NUMBER := "VFX-HEAL-NUMBER-3D"
 
@@ -30,6 +39,9 @@ const _REGISTRY := {
 	FX01_MELEE_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_melee_impact_root_top3d.tscn"),
 	FX01_SHELL_CASING: preload("res://assets/art/vfx/combat_3d/vfx_shell_casing_root_top3d.tscn"),
 	FX01_DEATH_BLAST: preload("res://assets/art/vfx/combat_3d/vfx_death_blast_root_top3d.tscn"),
+	FX01_ZOMBIE_GOO_DEATH: preload("res://assets/art/vfx/combat_3d/vfx_zombie_goo_death_root_top3d.tscn"),
+	FX01_GOO_HIT: preload("res://assets/art/vfx/combat_3d/vfx_goo_hit_root_top3d.tscn"),
+	FX01_METAL_SPARK_HIT: preload("res://assets/art/vfx/combat_3d/vfx_metal_spark_hit_root_top3d.tscn"),
 	FX02_DAMAGE_NUMBER: preload("res://assets/art/vfx/combat_3d/vfx_damage_number_root_top3d.tscn"),
 	FX02_HEAL_NUMBER: preload("res://assets/art/vfx/combat_3d/vfx_heal_number_root_top3d.tscn"),
 }

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/props/flashlight_advanced/components/itm_flashlight_advanced_preview_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "ITM-MODULE-FLASHLIGHT-ADVANCED"
+metadata/logical_id = "item_flashlight_advanced"
+metadata/model_role = "preview"
+metadata/asset_version = "v001"
+metadata/triangle_count = 1504
+metadata/dimensions_m = Vector3(0.5909375548362732, 0.7625000476837158, 0.45988285541534424)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

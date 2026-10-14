@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-BUL-MOD-BULLET-STICKY",
+  "logical_id": "mod_bullet_sticky",
+  "name": "黏黏弹模块",
+  "slug": "bullet_module_sticky",
+  "domain": "weapons",
+  "kind": "sticky",
+  "content_ids": [
+    "mod_bullet_sticky"
+  ],
+  "godot_dimensions_m": [
+    0.7113512754440308,
+    0.9399999380111694,
+    0.7113512754440308
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.157569229602814,
+      -0.269999980926514,
+      -0.159999996423721
+    ],
+    "xyz_size_m": [
+      0.315138459205627,
+      0.939999997615814,
+      0.319999992847443
+    ]
+  },
+  "principal_length_m": 0.939999997615814,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_sticky/source/wpn_bullet_module_sticky_source_v001.blend",
+      "sha256": "dc77daa21f86fb2fc1b6bfb74e7d2926fd8f0807e500989e60c0f20e9dbf0881",
+      "triangles": 2280,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_sticky/components/wpn_bullet_module_sticky_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_sticky/runtime/wpn_bullet_module_sticky_preview_root_top3d.tscn",
+      "glb_sha256": "a205ca324dd36d890602fb0a2a8a9e6a150b223885b1d29be5b5483fe4b04475",
+      "prefab_sha256": "d3fc6961ae10cb0bbf9f29dda793e37db3f6096aa61cbc26ab7a9aed3e628039"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_sticky/source/wpn_bullet_module_sticky_ground_source_v001.blend",
+      "sha256": "81b233c5a400fa2a4c266da0d8e9ca7571da26fc83bcd7abc86798a813dbcb28",
+      "triangles": 194,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_sticky/components/wpn_bullet_module_sticky_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_sticky/runtime/wpn_bullet_module_sticky_ground_root_top3d.tscn",
+      "glb_sha256": "ad8546657804c2d57dcccfc1b496bc0781916c828a818680c7e2528755f2c58d",
+      "prefab_sha256": "8804c79a0e38ef5644b6e5e13d159e2d850d2a692da5435cc2cafb8b30705590"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

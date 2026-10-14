@@ -79,8 +79,8 @@ func _run() -> void:
 		var socket := p.avatar.get_backpack_socket()
 		if model == null or model.get_parent() != socket:
 			failures.append("背负未挂到现有BackpackSocket")
-		if model != null and not is_equal_approx(model.scale.x, 0.68):
-			failures.append("背负显示缩放未使用已验收的0.68")
+		if model != null and not is_equal_approx(model.scale.x, Player3D.BACKPACK_WORN_SCALE):
+			failures.append("背负显示缩放未使用背包装备契约里的 %s" % str(Player3D.BACKPACK_WORN_SCALE))
 		var slots := int(model.get_meta("extra_slots"))
 		report["worn_measurements"].append(CONTRACT.measure_worn(p, slots, failures, not "--baseline" in OS.get_cmdline_user_args()))
 		if socket.global_transform.basis.z.normalized().dot((socket.global_position-p.global_position).normalized()) < 0:

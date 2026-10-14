@@ -48,7 +48,7 @@ func _ready() -> void:
 
 func _build_transform_button() -> void:
 	_transform_button = Button.new()
-	_transform_button.text = "🔮 命运改造 [T]"
+	_transform_button.text = GameText.text("workbench.transform_enter")
 	_transform_button.custom_minimum_size = Vector2(260, 36)
 	_transform_button.add_theme_font_size_override("font_size", 14)
 	# 命运按钮使用紫色 accent
@@ -116,14 +116,14 @@ func _show_blueprint_options() -> void:
 	_populate_gunbody_options(gunbody_tier)
 	_populate_bullet_options(bullet_tier)
 	if _transform_button:
-		_transform_button.text = "🔮 命运改造 [T]"
+		_transform_button.text = GameText.text("workbench.transform_enter")
 	_update_weapon_tree_display()
 
 
 ## 构建可选武器列表
 func _build_weapon_options() -> void:
 	if _player == null:
-		_update_status("玩家未就绪")
+		_update_status(GameText.text("workbench.player_not_ready"))
 		return
 
 	_update_weapon_tree_display()
@@ -136,23 +136,30 @@ func _update_weapon_tree_display() -> void:
 
 	if _player and _player.has_method("get_weapon_tree"):
 		var tree: Node = _player.get_weapon_tree()
-		if tree != null and tree.has_method("get_assembly_tree_string"):
-			weapon_tree_label.text = "当前武器:\n" + tree.get_assembly_tree_string()
+		if tree != null and tree.has_method("get_localized_assembly_tree_string"):
+			weapon_tree_label.text = (
+				GameText.text("workbench.current_weapon_prefix")
+				+ "\n"
+				+ str(tree.call("get_localized_assembly_tree_string"))
+			)
+		elif tree != null and tree.has_method("get_assembly_tree_string"):
+			weapon_tree_label.text = (
+				GameText.text("workbench.current_weapon_prefix")
+				+ "\n"
+				+ str(tree.call("get_assembly_tree_string"))
+			)
 		elif tree != null and tree.has_method("get_weapon_info"):
 			var info: Dictionary = tree.get_weapon_info()
-			weapon_tree_label.text = (
-				"当前武器:\n射速:%.1f 弹丸:%d 扩散:%.2f\n弹药:%s"
-				% [
-					info.get("fire_rate", 0),
-					info.get("projectile_count", 0),
-					info.get("spread", 0),
-					info.get("ammo", "?"),
-				]
-			)
+			weapon_tree_label.text = GameText.text("workbench.stats_line_format", [
+				info.get("fire_rate", 0),
+				info.get("projectile_count", 0),
+				info.get("spread", 0),
+				info.get("ammo", "?"),
+			])
 		else:
-			weapon_tree_label.text = "武器树未就绪"
+			weapon_tree_label.text = GameText.text("workbench.tree_unready")
 	else:
-		weapon_tree_label.text = "玩家引用无效"
+		weapon_tree_label.text = GameText.text("workbench.player_invalid")
 
 
 func _populate_gunbody_options(tier: int) -> void:
@@ -166,19 +173,19 @@ func _populate_gunbody_options(tier: int) -> void:
 	_ensure_transform_button_parent()
 
 	var header := Label.new()
-	header.text = "— 枪身选择 —"
+	header.text = GameText.text("workbench.gunbody_header")
 	header.add_theme_color_override("font_color", Color(0.8, 0.9, 1.0))
 	gunbody_options.add_child(header)
 
 	if available.is_empty():
 		var empty_lbl := Label.new()
-		empty_lbl.text = "无可用枪身"
+		empty_lbl.text = GameText.text("workbench.no_gunbody")
 		gunbody_options.add_child(empty_lbl)
 		return
 
 	for entry in available:
 		var btn := Button.new()
-		btn.text = "[Tier %d] %s" % [entry["tier"], entry["display_name"]]
+		btn.text = GameText.text("workbench.tier_option_format", [entry["tier"], entry["display_name"]])
 		btn.custom_minimum_size = Vector2(220, 32)
 		btn.pressed.connect(_on_gunbody_selected.bind(entry["item_id"]))
 		# 枪身选项用 BORDER_FOCUS 蓝
@@ -198,19 +205,19 @@ func _populate_bullet_options(tier: int) -> void:
 	var available := BlueprintRegistry.get_available_bullets(tier)
 
 	var header := Label.new()
-	header.text = "— 子弹选择 —"
+	header.text = GameText.text("workbench.bullet_header")
 	header.add_theme_color_override("font_color", Color(0.8, 1.0, 0.8))
 	bullet_options.add_child(header)
 
 	if available.is_empty():
 		var empty_lbl := Label.new()
-		empty_lbl.text = "无可用子弹"
+		empty_lbl.text = GameText.text("workbench.no_bullet")
 		bullet_options.add_child(empty_lbl)
 		return
 
 	for entry in available:
 		var btn := Button.new()
-		btn.text = "[Tier %d] %s" % [entry["tier"], entry["display_name"]]
+		btn.text = GameText.text("workbench.tier_option_format", [entry["tier"], entry["display_name"]])
 		btn.custom_minimum_size = Vector2(220, 32)
 		btn.pressed.connect(_on_bullet_selected.bind(entry["item_id"]))
 		# 子弹选项用 ITEM_BULLET 蓝色
@@ -222,13 +229,13 @@ func _populate_bullet_options(tier: int) -> void:
 func _on_gunbody_selected(item_id: String) -> void:
 	_current_selection["gunbody"] = item_id
 	_apply_selection()
-	_update_status("已选择枪身: %s" % item_id)
+	_update_status(GameText.text("workbench.selected_gunbody_format", [item_id]))
 
 
 func _on_bullet_selected(item_id: String) -> void:
 	_current_selection["bullet"] = item_id
 	_apply_selection()
-	_update_status("已选择子弹: %s" % item_id)
+	_update_status(GameText.text("workbench.selected_bullet_format", [item_id]))
 
 
 ## 在命运改造模式下显示随机抽取的命运卡片
@@ -243,11 +250,11 @@ func _show_fate_card_options() -> void:
 
 	# 更新标题
 	if _transform_button:
-		_transform_button.text = "⚙ 基础改造 [T]"
+		_transform_button.text = GameText.text("workbench.transform_exit")
 	_ensure_transform_button_parent()
 
 	var header := Label.new()
-	header.text = "— 命运卡片 —"
+	header.text = GameText.text("workbench.fate_header")
 	header.add_theme_color_override("font_color", Color(0.8, 0.5, 1.0, 1.0))
 	gunbody_options.add_child(header)
 
@@ -256,7 +263,7 @@ func _show_fate_card_options() -> void:
 
 	if choices.is_empty():
 		var empty_lbl := Label.new()
-		empty_lbl.text = "无可用命运卡片"
+		empty_lbl.text = GameText.text("workbench.no_fate_card")
 		gunbody_options.add_child(empty_lbl)
 		return
 
@@ -275,7 +282,7 @@ func _show_fate_card_options() -> void:
 
 	# 右侧显示说明
 	var desc := Label.new()
-	desc.text = "选择一张卡片\n效果会立即应用到当前武器装配"
+	desc.text = GameText.text("workbench.fate_desc")
 	desc.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7, 0.9))
 	desc.add_theme_font_size_override("font_size", 13)
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD
@@ -438,10 +445,12 @@ func _on_fate_card_selected(card: FateCard) -> void:
 	var result: Dictionary = await FateCardGameBridge.apply_card_with_source_selection(card, self)
 	_fate_selection_busy = false
 	if result.get("success", false):
-		_update_status("✓ %s 已应用！" % card.card_name)
+		_update_status(GameText.text("workbench.fate_applied_format", [card.card_name]))
 		_update_weapon_tree_display()
 	else:
-		_update_status("✗ %s 失败: %s" % [card.card_name, result.get("message", "未知错误")])
+		_update_status(GameText.text("workbench.fate_failed_format", [
+			card.card_name, result.get("message", GameText.text("workbench.unknown_error")),
+		]))
 
 
 func _update_status(msg: String) -> void:

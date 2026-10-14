@@ -233,6 +233,20 @@ func get_assembly_tree_string() -> String:
 	return _get_tree_string()
 
 
+## 本地化版装配树串（供工作台/工坊等玩家可见界面复用）。
+## 与 get_assembly_tree_string() 刻意分开：后者保持内部英文 ID，供调试/日志使用，
+## 不被语言切换影响；本函数经 GameText 把节点名换成显示名。
+func get_localized_assembly_tree_string() -> String:
+	if root == null:
+		return GameText.text("panel.empty_weapon")
+	var parts: Array[String] = []
+	var cursor: AssemblyNode = root
+	while cursor != null:
+		parts.push_front(GameText.node_name(cursor.node_name))
+		cursor = cursor.parent_node
+	return " / ".join(parts)
+
+
 ## 公开接口：消耗一次击杀必暴击堆栈（返回 true 表示本次射击强制暴击）
 ## 由 3D 武器命中敌人并击杀后调用。
 func consume_crit_on_kill_stack() -> bool:

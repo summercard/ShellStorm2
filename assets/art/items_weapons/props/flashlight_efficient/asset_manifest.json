@@ -1,0 +1,69 @@
+{
+  "asset_id": "ITM-MODULE-FLASHLIGHT-EFFICIENT",
+  "logical_id": "item_flashlight_efficient",
+  "name": "节能模块",
+  "slug": "flashlight_efficient",
+  "domain": "props",
+  "kind": "module_efficient",
+  "content_ids": [
+    "item_flashlight_efficient"
+  ],
+  "godot_dimensions_m": [
+    0.5909375548362732,
+    0.7625000476837158,
+    0.45988285541534424
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.379999995231628,
+      -0.330000013113022,
+      -0.402500003576279
+    ],
+    "xyz_size_m": [
+      0.759999990463257,
+      0.660000026226044,
+      0.762500047683716
+    ]
+  },
+  "principal_length_m": 0.762500047683716,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/props/flashlight_efficient/source/itm_flashlight_efficient_source_v001.blend",
+      "sha256": "06ac4964d85e9ddc1be6eef292b4b7ffe17f4907d6bd17852d423b4a1d1d89b1",
+      "triangles": 1316,
+      "glb": "assets/art/items_weapons/props/flashlight_efficient/components/itm_flashlight_efficient_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/flashlight_efficient/runtime/itm_flashlight_efficient_preview_root_top3d.tscn",
+      "glb_sha256": "c785956120deca81bf5c0c6dbf4fec42094b4bb6b1dff364e700fe7ee6dad1f2",
+      "prefab_sha256": "b5e4ed8d6e11d8b7b2004f7d90487176784bfe4b968ac04a2b21dd3cd0639798"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/props/flashlight_efficient/source/itm_flashlight_efficient_ground_source_v001.blend",
+      "sha256": "e59b7084923cddb354e004f159ccbddcf430eba002a46fbfd186688b565a2553",
+      "triangles": 116,
+      "glb": "assets/art/items_weapons/props/flashlight_efficient/components/itm_flashlight_efficient_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/flashlight_efficient/runtime/itm_flashlight_efficient_ground_root_top3d.tscn",
+      "glb_sha256": "43de5027212117aff568ff2ac4c1c4e00dbc48a9f36b1d49b3cf455cff330eaa",
+      "prefab_sha256": "81cd8836e23c0072578a16e4e27a80a0da14db57d076463012012542c4dba841"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

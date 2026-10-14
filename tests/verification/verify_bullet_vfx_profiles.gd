@@ -52,8 +52,46 @@ const EXPECTED_TRAIL_PARTS := {
 	"balloon": 1,
 }
 
-## 防假绿哨兵：用例样本数下限（8 Prefab + 8 profile 特征行 + 8 路由 + 8 尺寸 + 端到端）。
-const EXPECTED_MIN_SAMPLES := 30
+## 防假绿哨兵：用例样本数下限（8 Prefab + 8 profile 特征行 + 8 路由 + 8 尺寸 + 端到端
+##                  + 枪身差异化 + 面数预算）。
+const EXPECTED_MIN_SAMPLES := 65
+
+## 单弹三角面预算（业主 2026-10-14 口述：「减面，减到 100 个面以下先」）。
+## 上限 = 业主给定的外部需求；逐弹种实测值**硬编码**在此（值取自探针
+## `_scratch/probe_bullet_mesh_stats`），不引用被测代码的任何常量 —— 否则改坏分段参数时
+## 期望跟着变、断言永远绿（skill §6.9 的自印证反例）。
+const EXPECTED_MAX_TRIS_PER_BULLET := 100
+const EXPECTED_TRIS := {
+	"shared": 44,
+	"standard": 44,
+	"sticky": 80,
+	"bounce": 68,
+	"piercing": 56,
+	"explosive": 80,
+	"homing": 68,
+	"blackhole": 68,
+	"balloon": 44,
+}
+
+## 枪身弹体几何档位的期望值（2026-10-14 业主：「每把枪的子弹大小要做出区分」）。
+## 外部真源 = WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG；此处**硬编码**期望值，
+## 不引用被测常量 —— 否则常量改坏时期望跟着变，断言永远绿（同 skill §6.9 的自印证反例）。
+## 语义：scale = 各向同性尺寸倍率；axial = 沿飞行轴拉长倍率；
+##       grow_from / grow_duration = 出生尺寸比例与长满所需秒数。
+## 三条诉求：霰弹枪由小变大且整体 ×2（scale 2.00 / grow_from 0.42 / 0.30s）、
+##           榴弹枪更大（scale 1.55）、狙击枪更长（axial 2.0 且横向收到 0.95），其余枪一律中性。
+## 弹体视觉基准尺寸以手枪（中性档）为 1.00 标尺。
+const EXPECTED_GUN_GEOMETRY := {
+	"bp_shotgun": {"scale": 2.00, "axial": 1.0, "grow_from": 0.42, "grow_duration": 0.30},
+	"bp_launcher": {"scale": 1.55, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
+	"bp_sniper": {"scale": 0.95, "axial": 2.0, "grow_from": 1.00, "grow_duration": 0.00},
+	"bp_pistol": {"scale": 1.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
+	"bp_rifle": {"scale": 1.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
+	"bp_machinegun": {"scale": 1.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
+	"bp_starter_rifle": {"scale": 1.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
+	"bp_sprinkler": {"scale": 1.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
+	"bp_charge": {"scale": 1.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
+}
 
 var _failures: Array[String] = []
 var _samples := 0
@@ -65,6 +103,9 @@ func _ready() -> void:
 	_check_visual_id_routing()
 	_check_size_linear()
 	_check_end_to_end()
+	_check_gun_size_differentiation()
+	_check_shotgun_growth_envelope()
+	_check_face_budget()
 	_check_collision_free()
 	_purge_transients()
 	_expect(_samples >= EXPECTED_MIN_SAMPLES,
@@ -276,7 +317,184 @@ func _check_end_to_end() -> void:
 			tree.free()
 
 
-## ⑥ 纯视觉不得含碰撞体。
+## 走真实调用方路径开一枪，返回首颗投射物的视觉快照（空字典 = 没生成）。
+## 与 §6.8 端到端同一路径，不另抄一套配置 —— 否则只证明「测试会配枪」，证明不了实机行为。
+func _fire_once(gun_id: String) -> Dictionary:
+	var weapon := WEAPON_MODEL_SCENE.instantiate() as WeaponModel3D
+	if weapon == null:
+		return {}
+	add_child(weapon)
+	var tree := BlueprintRegistry.build_weapon_tree(gun_id, "mod_bullet_standard")
+	weapon.configure_from_tree(tree)
+	weapon.global_position = Vector3(3.0, 1.0, 5.0)
+	var spawned: Array = []
+	weapon.projectile_spawned.connect(func(projectile: Projectile3D) -> void: spawned.append(projectile))
+	weapon.call("_fire_now", Vector3(0.0, 0.0, -1.0), weapon, 1.0)
+	var snap := {}
+	if not spawned.is_empty():
+		snap = (spawned[0] as Projectile3D).get_orientation_snapshot()
+	for projectile in spawned:
+		(projectile as Node).free()
+	weapon.free()
+	if tree != null and is_instance_valid(tree):
+		tree.free()
+	return snap
+
+
+## ⑥ 枪身弹体尺寸差异化（2026-10-14 业主：「每把枪的子弹大小要做出区分」）。
+## 三条诉求：霰弹枪由小变大 / 榴弹枪大一点 / 狙击枪长一点，其余枪一律不变。
+func _check_gun_size_differentiation() -> void:
+	var measured := {}
+	for gun_id in EXPECTED_GUN_GEOMETRY.keys():
+		var spec: Dictionary = EXPECTED_GUN_GEOMETRY[gun_id]
+		var snap := _fire_once(String(gun_id))
+		_samples += 1
+		if snap.is_empty():
+			_failures.append("枪身差异化 " + String(gun_id) + "：开火后没有投射物")
+			continue
+		var base_scale := float(snap.get("visual_base_scale", 0.0))
+		var axial := float(snap.get("visual_axial_scale", 0.0))
+		var grow := float(snap.get("visual_growth_factor", 0.0))
+		measured[String(gun_id)] = base_scale
+		_expect(absf(base_scale - float(spec["scale"])) < 0.01,
+			"枪身 " + String(gun_id) + "：弹体尺寸倍率应为 " + str(spec["scale"]) + "，实测 " + str(base_scale))
+		_expect(absf(axial - float(spec["axial"])) < 0.01,
+			"枪身 " + String(gun_id) + "：轴向拉伸应为 " + str(spec["axial"]) + "，实测 " + str(axial))
+		_expect(absf(grow - float(spec["grow_from"])) < 0.01,
+			"枪身 " + String(gun_id) + "：出生生长系数应为 " + str(spec["grow_from"]) + "，实测 " + str(grow))
+
+	# 相对判据：三条诉求的方向必须成立。绝对判据看不出的「整表被等比改坏」由这里兜住。
+	var pistol := float(measured.get("bp_pistol", 0.0))
+	if pistol > 0.0:
+		var launcher_ratio := float(measured.get("bp_launcher", 0.0)) / pistol
+		_expect(launcher_ratio > 1.30,
+			"榴弹筒弹体应明显大于手枪基准（实测 " + str(launcher_ratio) + " 倍，门槛 >1.30）")
+		var shotgun_ratio := float(measured.get("bp_shotgun", 0.0)) / pistol
+		_expect(absf(shotgun_ratio - 2.0) < 0.02,
+			"霰弹枪弹体应为手枪基准的 2 倍（应 ≈2.00，实测 " + str(shotgun_ratio) + "）")
+		var sniper_ratio := float(measured.get("bp_sniper", 0.0)) / pistol
+		_expect(sniper_ratio < 1.0,
+			"狙击弹横向应细于手枪基准（实测 " + str(sniper_ratio) + "）")
+	else:
+		_failures.append("枪身差异化：手枪基准尺寸缺失，相对判据无法成立")
+
+	# 枪族档位是**纯视觉**：霰弹 ×2 不得把碰撞半径一起放大（18 发/秒级的命中率会被悄悄改掉）。
+	# 期望值硬编码 0.12（基准球半径）—— standard 弹无 balloon tag、无命运缩放 ⇒ 倍率恒为 1.0。
+	var shot_snap := _fire_once("bp_shotgun")
+	_samples += 1
+	if shot_snap.is_empty():
+		_failures.append("纯视觉边界：霰弹枪开火后没有投射物")
+	else:
+		var hit_radius := float(shot_snap.get("collision_radius", -1.0))
+		_expect(absf(hit_radius - 0.12) < 0.0001,
+			"枪族档位不得改碰撞半径（应恒为基准球 0.12，实测 " + str(hit_radius) + "）")
+		_expect(absf(float(shot_snap.get("visual_base_scale", 0.0)) - 2.0) < 0.01,
+			"纯视觉边界：同一发的视觉尺寸应仍为 2.0，实测 " + str(shot_snap.get("visual_base_scale", 0.0)))
+
+	# 轴向的几何真值：核心件的局部长轴真的被拉伸（不是只写了个字段）。
+	var effect := _instantiate(STANDARD_SCENE)
+	if effect == null:
+		_failures.append("枪身差异化：标准弹 Prefab 无法实例化")
+		return
+	add_child(effect)
+	effect.activate(Vector3.ZERO, Color.WHITE, 1.0, {"axial_scale": 2.0})
+	var axial_snap: Dictionary = effect.call("get_presentation_snapshot")
+	_samples += 1
+	_expect(absf(float(axial_snap.get("core_axis_scale", 0.0)) - 2.0) < 0.01,
+		"轴向拉伸未落到弹芯上，实测 " + str(axial_snap.get("core_axis_scale", 0.0)))
+	_expect(absf(float(axial_snap.get("body_scale", 0.0)) - 1.0) < 0.01,
+		"轴向拉伸不得改变横向 scale（应仍为 1.0，实测 " + str(axial_snap.get("body_scale", 0.0)) + "）")
+	effect.free()
+
+
+## ⑦ 霰弹枪「由小到大」的生长包络：线性、单调、0.30s 封顶、中性档不启用、复借复位。
+func _check_shotgun_growth_envelope() -> void:
+	var effect := _instantiate(STANDARD_SCENE)
+	if effect == null:
+		_failures.append("生长包络：标准弹 Prefab 无法实例化")
+		return
+	add_child(effect)
+	effect.activate(Vector3.ZERO, Color.WHITE, 1.0,
+		{"axial_scale": 1.0, "grow_from": 0.42, "grow_duration": 0.30})
+	var t0 := float(effect.call("get_presentation_snapshot").get("growth_factor", -1.0))
+	_samples += 1
+	_expect(absf(t0 - 0.42) < 0.005, "生长包络：出生应为 0.42，实测 " + str(t0))
+	effect.call("_process", 0.15)
+	var t1 := float(effect.call("get_presentation_snapshot").get("growth_factor", -1.0))
+	_expect(absf(t1 - 0.71) < 0.015, "生长包络：0.15s 半程应 ≈0.71，实测 " + str(t1))
+	effect.call("_process", 0.15)
+	var t2 := float(effect.call("get_presentation_snapshot").get("growth_factor", -1.0))
+	_expect(absf(t2 - 1.0) < 0.005, "生长包络：0.30s 后应长满，实测 " + str(t2))
+	effect.call("_process", 0.50)
+	var t3 := float(effect.call("get_presentation_snapshot").get("growth_factor", -1.0))
+	_expect(absf(t3 - 1.0) < 0.005, "生长包络：长满后不得继续放大，实测 " + str(t3))
+
+	# 非霰弹档（中性 context）出生即 100%，不得出现生长过程。
+	effect.activate(Vector3.ZERO, Color.WHITE, 1.0, {})
+	var neutral := float(effect.call("get_presentation_snapshot").get("growth_factor", -1.0))
+	_expect(absf(neutral - 1.0) < 0.005, "中性档不得有生长包络，实测 " + str(neutral))
+
+	# 复借复位：上一发的拉伸 / 生长进度 / 飞行计时都不得残留到下一发。
+	effect.activate(Vector3.ZERO, Color.WHITE, 1.0,
+		{"axial_scale": 2.0, "grow_from": 0.30, "grow_duration": 0.50})
+	effect.call("_process", 0.10)
+	effect.call("deactivate")
+	var reset: Dictionary = effect.call("get_presentation_snapshot")
+	_expect(absf(float(reset.get("axial_scale", 9.0)) - 1.0) < 0.001, "复借复位：轴向拉伸残留")
+	_expect(absf(float(reset.get("grow_from", 9.0)) - 1.0) < 0.001, "复借复位：生长起点残留")
+	_expect(absf(float(reset.get("flight_time", 9.0))) < 0.001, "复借复位：飞行计时残留")
+	effect.free()
+
+
+## 统计一棵子树里所有 MeshInstance3D 的三角面（PrimitiveMesh 用 get_faces() 展开后 ÷3）。
+func _count_mesh_tris(node: Node) -> int:
+	var total := 0
+	if node is MeshInstance3D:
+		var mi := node as MeshInstance3D
+		if mi.mesh != null:
+			total += int(mi.mesh.get_faces().size() / 3)
+	for child in node.get_children():
+		total += _count_mesh_tris(child)
+	return total
+
+
+## ⑧ 单弹面数预算（业主 2026-10-14：「减面，减到 100 个面以下先」）。
+## 两层判据：① 绝对上限 100（业主需求本身）；② 逐弹种实测值（钉住分段参数，防悄悄回涨）。
+func _check_face_budget() -> void:
+	for entry in PROFILES:
+		var label := String(entry["key"])
+		var effect := _instantiate(entry["scene"])
+		if effect == null:
+			_failures.append("面数预算 " + label + "：Prefab 无法实例化")
+			continue
+		add_child(effect)
+		effect.activate(Vector3.ZERO, Color.WHITE, 1.0, {})
+		_samples += 1
+		var tris := _count_mesh_tris(effect)
+		_expect(tris < EXPECTED_MAX_TRIS_PER_BULLET,
+			"面数预算 %s：实测 %d 面，超出上限 %d" % [label, tris, EXPECTED_MAX_TRIS_PER_BULLET])
+		_expect(tris == int(EXPECTED_TRIS.get(label, -1)),
+			"面数预算 %s：期望 %d 面，实测 %d（分段参数被改动？）" % [
+				label, int(EXPECTED_TRIS.get(label, -1)), tris])
+		effect.free()
+
+	# 通用弹体（回落档，敌人子弹在用）同预算、同实测值。
+	var shared := _instantiate(SHARED_SCENE)
+	if shared == null:
+		_failures.append("面数预算 shared：通用弹体 Prefab 无法实例化")
+		return
+	add_child(shared)
+	shared.activate(Vector3.ZERO, Color.WHITE, 1.0, {})
+	_samples += 1
+	var shared_tris := _count_mesh_tris(shared)
+	_expect(shared_tris < EXPECTED_MAX_TRIS_PER_BULLET,
+		"面数预算 shared：实测 %d 面，超出上限 %d" % [shared_tris, EXPECTED_MAX_TRIS_PER_BULLET])
+	_expect(shared_tris == int(EXPECTED_TRIS["shared"]),
+		"面数预算 shared：期望 %d 面，实测 %d" % [int(EXPECTED_TRIS["shared"]), shared_tris])
+	shared.free()
+
+
+## ⑨ 纯视觉不得含碰撞体。
 func _check_collision_free() -> void:
 	for entry in PROFILES:
 		var label := String(entry["key"])
@@ -300,7 +518,7 @@ func _purge_transients() -> void:
 
 func _report() -> void:
 	if _failures.is_empty():
-		print("BULLET_VFX_PROFILES_OK: 8 bullet profiles / routing / size / wiring pass (samples=%d)" % _samples)
+		print("BULLET_VFX_PROFILES_OK: 8 bullet profiles / routing / size / gun-size-differentiation / growth-envelope / face-budget / wiring pass (samples=%d)" % _samples)
 	else:
 		for failure in _failures:
 			push_error(failure)

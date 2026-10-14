@@ -1,0 +1,956 @@
+{
+  "attach_copy_sticker": {
+    "data": {
+      "base_buy_price": 200,
+      "base_sell_price": 100,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "boss_floor_1": 3.0,
+        "boss_floor_2": 4.0,
+        "combat_floor_3": 1.0,
+        "combat_floor_4": 1.5,
+        "combat_floor_5": 2.0,
+        "loot_abyss": 2.0,
+        "scavenge_floor_4": 2.0,
+        "scavenge_floor_5": 3.0
+      },
+      "id": "attach_copy_sticker",
+      "loot_table_tier": 2,
+      "merchant_tier": 3,
+      "name": "复制贴纸",
+      "price": 200,
+      "rarity": "epic",
+      "stack_max": 3,
+      "subtype": "mutator",
+      "tags": [
+        "attachment",
+        "mutator",
+        "copy"
+      ],
+      "type": "attachment"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.310000002384186,
+        -0.119999997317791,
+        -0.319999992847443
+      ],
+      "xyz_size_m": [
+        0.620000004768372,
+        0.490000009536743,
+        0.639999985694885
+      ]
+    },
+    "name": "复制贴纸"
+  },
+  "attach_fan": {
+    "data": {
+      "base_buy_price": 150,
+      "base_sell_price": 75,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "boss_floor_1": 3.0,
+        "combat_floor_3": 1.5,
+        "combat_floor_4": 2.0,
+        "combat_floor_5": 2.5,
+        "loot_abyss": 2.5,
+        "loot_floor_5": 2.0,
+        "scavenge_floor_4": 2.0,
+        "scavenge_floor_5": 2.5
+      },
+      "id": "attach_fan",
+      "loot_table_tier": 2,
+      "merchant_tier": 3,
+      "name": "小风扇",
+      "price": 150,
+      "rarity": "epic",
+      "stack_max": 3,
+      "subtype": "external",
+      "tags": [
+        "attachment",
+        "external",
+        "pull"
+      ],
+      "type": "attachment"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.310000002384186,
+        -0.119999997317791,
+        -0.319999992847443
+      ],
+      "xyz_size_m": [
+        0.620000004768372,
+        0.490000009536743,
+        0.639999985694885
+      ]
+    },
+    "name": "小风扇"
+  },
+  "bp_baseball_bat": {
+    "native": {
+      "xyz_min_m": [
+        -0.150999993085861,
+        -0.150999993085861,
+        -1.0699999332428
+      ],
+      "xyz_size_m": [
+        0.301999986171722,
+        0.301999986171722,
+        1.73499989509583
+      ]
+    }
+  },
+  "bp_greatblade": {
+    "native": {
+      "xyz_min_m": [
+        -0.360000014305115,
+        -0.0925000011920929,
+        -2.43940424919128
+      ],
+      "xyz_size_m": [
+        0.720000028610229,
+        0.167500004172325,
+        2.91940426826477
+      ]
+    }
+  },
+  "bp_pistol": {
+    "data": {
+      "base_buy_price": 50,
+      "base_sell_price": 25,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "blueprint_category": "gunbody",
+      "blueprint_loot_tier": 0,
+      "description": "使用后解锁豌豆手枪蓝图，并获得 20 资源点",
+      "extraction_points_reward": 20,
+      "floor_loot_weights": {
+        "combat_floor_1": 1.5,
+        "combat_floor_2": 1.0,
+        "loot_abyss": 1.5,
+        "loot_common": 1.0,
+        "loot_floor_1_2": 3.0,
+        "loot_floor_3_4": 2.5,
+        "loot_floor_5": 2.0,
+        "scavenge_floor_1": 2.5,
+        "scavenge_floor_2": 1.8,
+        "spawn_starter": 4.0
+      },
+      "id": "bp_pistol",
+      "loot_table_tier": 0,
+      "merchant_tier": 0,
+      "name": "豌豆手枪蓝图碎片",
+      "price": 50,
+      "rarity": "common",
+      "stack_max": 99,
+      "subtype": "gun_body",
+      "tags": [
+        "blueprint",
+        "gun_body"
+      ],
+      "type": "blueprint",
+      "use_action": "unlock_blueprint"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.382023513317108,
+        -0.389118760824203,
+        -0.838877558708191
+      ],
+      "xyz_size_m": [
+        1.01876258850098,
+        0.990666270256042,
+        1.27012503147125
+      ]
+    },
+    "name": "豌豆手枪蓝图碎片"
+  },
+  "bp_waraxe": {
+    "native": {
+      "xyz_min_m": [
+        -0.770667552947998,
+        -0.144999995827675,
+        -2.35000014305115
+      ],
+      "xyz_size_m": [
+        1.40547204017639,
+        0.268464893102646,
+        2.87000012397766
+      ]
+    }
+  },
+  "item_beacon": {
+    "data": {
+      "base_buy_price": 150,
+      "base_sell_price": 75,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "description": "消耗此道具召唤紧急撤离点。读条期间会刷出追击怪物。",
+      "floor_loot_weights": {
+        "boss_floor_1": 3.0,
+        "boss_floor_2": 4.0,
+        "combat_floor_4": 0.8,
+        "combat_floor_5": 1.2,
+        "elite_floor_1": 1.5,
+        "elite_floor_2": 1.5,
+        "loot_abyss": 2.5,
+        "loot_floor_1_2": 1.0,
+        "loot_floor_3_4": 1.5,
+        "loot_floor_5": 2.0,
+        "scavenge_floor_1": 0.8,
+        "scavenge_floor_2": 1.0,
+        "scavenge_floor_3": 1.2,
+        "scavenge_floor_4": 1.5,
+        "scavenge_floor_5": 1.8
+      },
+      "id": "item_beacon",
+      "merchant_tier": 2,
+      "name": "撤离信标",
+      "price": 150,
+      "rarity": "rare",
+      "stack_max": 3,
+      "tags": [
+        "extraction",
+        "consumable",
+        "beacon"
+      ],
+      "type": "consumable",
+      "use_action": "summon_beacon_extraction"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.413619220256805,
+        -0.420000016689301,
+        -0.419999986886978
+      ],
+      "xyz_size_m": [
+        0.827238440513611,
+        1.1100001335144,
+        0.839999973773956
+      ]
+    },
+    "name": "撤离信标"
+  },
+  "item_cell_pack": {
+    "data": {
+      "base_buy_price": 120,
+      "base_sell_price": 60,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "description": "完全充满手电筒。稀有掉落。",
+      "floor_loot_weights": {
+        "boss_floor_2": 1.5,
+        "loot_abyss": 1.0,
+        "loot_floor_5": 0.6
+      },
+      "id": "item_cell_pack",
+      "merchant_tier": 0,
+      "name": "电芯包",
+      "price": 120,
+      "rarity": "rare",
+      "restore_amount": 1.0,
+      "stack_max": 3,
+      "tags": [
+        "consumable",
+        "flashlight",
+        "battery"
+      ],
+      "type": "consumable",
+      "use_action": "restore_flashlight_charge"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.379999995231628,
+        -0.330000013113022,
+        -0.402500003576279
+      ],
+      "xyz_size_m": [
+        0.759999990463257,
+        0.660000026226044,
+        0.762500047683716
+      ]
+    },
+    "name": "电芯包"
+  },
+  "item_flashlight_advanced": {
+    "data": {
+      "base_buy_price": 0,
+      "base_sell_price": 0,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "blueprint_unlock_tier": 1,
+      "description": "耗电 0.7143×，揭示 1.20×。蓝图解锁后工坊可选。",
+      "floor_loot_weights": {
+        "blueprint_attachment_unlock": 1.0
+      },
+      "id": "item_flashlight_advanced",
+      "module_id": "advanced",
+      "name": "加强模块",
+      "price": 0,
+      "rarity": "uncommon",
+      "stack_max": 1,
+      "subtype": "flashlight_module",
+      "tags": [
+        "module",
+        "flashlight_module",
+        "advanced"
+      ],
+      "type": "module",
+      "use_action": "equip_flashlight_module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.379999995231628,
+        -0.330000013113022,
+        -0.402500003576279
+      ],
+      "xyz_size_m": [
+        0.759999990463257,
+        0.660000026226044,
+        0.762500047683716
+      ]
+    },
+    "name": "加强模块"
+  },
+  "item_flashlight_basic": {
+    "data": {
+      "base_buy_price": 0,
+      "base_sell_price": 0,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "description": "默认手电筒模块。耗电 1.00×，揭示 1.00×。",
+      "id": "item_flashlight_basic",
+      "module_id": "basic",
+      "name": "基础模块",
+      "price": 0,
+      "rarity": "common",
+      "stack_max": 1,
+      "subtype": "flashlight_module",
+      "tags": [
+        "module",
+        "flashlight_module",
+        "basic"
+      ],
+      "type": "module",
+      "use_action": "equip_flashlight_module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.379999995231628,
+        -0.330000013113022,
+        -0.402500003576279
+      ],
+      "xyz_size_m": [
+        0.759999990463257,
+        0.660000026226044,
+        0.762500047683716
+      ]
+    },
+    "name": "基础模块"
+  },
+  "item_flashlight_efficient": {
+    "data": {
+      "base_buy_price": 0,
+      "base_sell_price": 0,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "description": "耗电 0.50×，范围/揭示 0.85×。带回99F安装后永久解锁。",
+      "floor_loot_weights": {
+        "boss_floor_2": 1.0,
+        "elite_floor_1": 0.6,
+        "elite_floor_2": 0.8
+      },
+      "id": "item_flashlight_efficient",
+      "module_id": "efficient",
+      "name": "节能模块",
+      "price": 0,
+      "rarity": "rare",
+      "stack_max": 1,
+      "subtype": "flashlight_module",
+      "tags": [
+        "module",
+        "flashlight_module",
+        "efficient"
+      ],
+      "type": "module",
+      "use_action": "equip_flashlight_module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.379999995231628,
+        -0.330000013113022,
+        -0.402500003576279
+      ],
+      "xyz_size_m": [
+        0.759999990463257,
+        0.660000026226044,
+        0.762500047683716
+      ]
+    },
+    "name": "节能模块"
+  },
+  "item_room_key": {
+    "data": {
+      "base_buy_price": 40,
+      "base_sell_price": 20,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "description": "用于开启地图上的一扇房门。来自怪物掉落或房间搜索。",
+      "floor_loot_weights": {
+        "combat_floor_1": 1.2,
+        "elite_floor_1": 1.0,
+        "elite_floor_2": 1.0,
+        "loot_common": 1.0,
+        "loot_floor_1_2": 1.8,
+        "scavenge_floor_1": 2.4,
+        "scavenge_floor_2": 2.0
+      },
+      "id": "item_room_key",
+      "name": "房间钥匙",
+      "price": 40,
+      "rarity": "common",
+      "stack_max": 9,
+      "tags": [
+        "key",
+        "progression"
+      ],
+      "type": "key"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.300000011920929,
+        -0.405000001192093,
+        -0.0599999986588955
+      ],
+      "xyz_size_m": [
+        0.639999985694885,
+        1.06499993801117,
+        0.119999997317791
+      ]
+    },
+    "name": "房间钥匙"
+  },
+  "mod_bullet_balloon": {
+    "data": {
+      "base_buy_price": 90,
+      "base_sell_price": 45,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "combat_floor_3": 1.0,
+        "combat_floor_4": 1.5,
+        "loot_abyss": 2.0,
+        "loot_floor_3_4": 1.5,
+        "loot_floor_5": 2.0,
+        "scavenge_floor_3": 1.5,
+        "scavenge_floor_4": 2.0,
+        "scavenge_floor_5": 2.0
+      },
+      "id": "mod_bullet_balloon",
+      "loot_table_tier": 1,
+      "merchant_tier": 2,
+      "name": "气球弹模块",
+      "price": 90,
+      "rarity": "rare",
+      "stack_max": 10,
+      "subtype": "bullet",
+      "tags": [
+        "module",
+        "bullet",
+        "balloon",
+        "slow"
+      ],
+      "type": "module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.157569229602814,
+        -0.269999980926514,
+        -0.159999996423721
+      ],
+      "xyz_size_m": [
+        0.315138459205627,
+        0.939999997615814,
+        0.319999992847443
+      ]
+    },
+    "name": "气球弹模块"
+  },
+  "mod_bullet_blackhole": {
+    "data": {
+      "base_buy_price": 180,
+      "base_sell_price": 90,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "boss_floor_1": 3.0,
+        "boss_floor_2": 4.0,
+        "combat_floor_4": 2.0,
+        "combat_floor_5": 3.0,
+        "loot_abyss": 2.5,
+        "scavenge_floor_4": 2.5,
+        "scavenge_floor_5": 4.0
+      },
+      "id": "mod_bullet_blackhole",
+      "loot_table_tier": 2,
+      "merchant_tier": 3,
+      "name": "黑洞弹模块",
+      "price": 180,
+      "rarity": "epic",
+      "stack_max": 10,
+      "subtype": "bullet",
+      "tags": [
+        "module",
+        "bullet",
+        "blackhole",
+        "pull"
+      ],
+      "type": "module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.157569229602814,
+        -0.269999980926514,
+        -0.159999996423721
+      ],
+      "xyz_size_m": [
+        0.315138459205627,
+        0.939999997615814,
+        0.319999992847443
+      ]
+    },
+    "name": "黑洞弹模块"
+  },
+  "mod_bullet_bounce": {
+    "data": {
+      "base_buy_price": 60,
+      "base_sell_price": 30,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "combat_floor_1": 1.5,
+        "combat_floor_2": 2.0,
+        "loot_abyss": 2.0,
+        "loot_floor_1_2": 1.5,
+        "loot_floor_3_4": 2.0,
+        "loot_floor_5": 2.5,
+        "scavenge_floor_1": 1.5,
+        "scavenge_floor_2": 2.0,
+        "spawn_starter": 1.5
+      },
+      "id": "mod_bullet_bounce",
+      "loot_table_tier": 0,
+      "merchant_tier": 1,
+      "name": "回旋镖弹模块",
+      "price": 60,
+      "rarity": "uncommon",
+      "stack_max": 10,
+      "subtype": "bullet",
+      "tags": [
+        "module",
+        "bullet",
+        "bounce"
+      ],
+      "type": "module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.157569229602814,
+        -0.269999980926514,
+        -0.159999996423721
+      ],
+      "xyz_size_m": [
+        0.315138459205627,
+        0.939999997615814,
+        0.319999992847443
+      ]
+    },
+    "name": "回旋镖弹模块"
+  },
+  "mod_bullet_explosive": {
+    "data": {
+      "base_buy_price": 100,
+      "base_sell_price": 50,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "combat_floor_3": 1.0,
+        "loot_abyss": 2.5,
+        "loot_floor_3_4": 1.5,
+        "loot_floor_5": 2.0,
+        "scavenge_floor_3": 1.5,
+        "scavenge_floor_4": 2.0,
+        "scavenge_floor_5": 2.5
+      },
+      "id": "mod_bullet_explosive",
+      "loot_table_tier": 1,
+      "merchant_tier": 2,
+      "name": "爆炸弹模块",
+      "price": 100,
+      "rarity": "rare",
+      "stack_max": 10,
+      "subtype": "bullet",
+      "tags": [
+        "module",
+        "bullet",
+        "explosive"
+      ],
+      "type": "module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.157569229602814,
+        -0.269999980926514,
+        -0.159999996423721
+      ],
+      "xyz_size_m": [
+        0.315138459205627,
+        0.939999997615814,
+        0.319999992847443
+      ]
+    },
+    "name": "爆炸弹模块"
+  },
+  "mod_bullet_homing": {
+    "data": {
+      "base_buy_price": 150,
+      "base_sell_price": 75,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "boss_floor_1": 4.0,
+        "combat_floor_4": 1.5,
+        "combat_floor_5": 2.5,
+        "loot_abyss": 3.0,
+        "loot_floor_5": 2.0,
+        "scavenge_floor_4": 2.0,
+        "scavenge_floor_5": 3.0
+      },
+      "id": "mod_bullet_homing",
+      "loot_table_tier": 2,
+      "merchant_tier": 3,
+      "name": "蜂卵弹模块",
+      "price": 150,
+      "rarity": "epic",
+      "stack_max": 10,
+      "subtype": "bullet",
+      "tags": [
+        "module",
+        "bullet",
+        "homing",
+        "summon"
+      ],
+      "type": "module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.157569229602814,
+        -0.269999980926514,
+        -0.159999996423721
+      ],
+      "xyz_size_m": [
+        0.315138459205627,
+        0.939999997615814,
+        0.319999992847443
+      ]
+    },
+    "name": "蜂卵弹模块"
+  },
+  "mod_bullet_piercing": {
+    "data": {
+      "base_buy_price": 80,
+      "base_sell_price": 40,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "combat_floor_3": 1.5,
+        "loot_abyss": 3.0,
+        "loot_floor_3_4": 2.0,
+        "loot_floor_5": 2.5,
+        "scavenge_floor_3": 2.0,
+        "scavenge_floor_4": 2.5,
+        "scavenge_floor_5": 3.0
+      },
+      "id": "mod_bullet_piercing",
+      "loot_table_tier": 1,
+      "merchant_tier": 2,
+      "name": "穿甲弹模块",
+      "price": 80,
+      "rarity": "rare",
+      "stack_max": 10,
+      "subtype": "bullet",
+      "tags": [
+        "module",
+        "bullet",
+        "piercing"
+      ],
+      "type": "module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.157569229602814,
+        -0.269999980926514,
+        -0.159999996423721
+      ],
+      "xyz_size_m": [
+        0.315138459205627,
+        0.939999997615814,
+        0.319999992847443
+      ]
+    },
+    "name": "穿甲弹模块"
+  },
+  "mod_bullet_standard": {
+    "data": {
+      "base_buy_price": 30,
+      "base_sell_price": 15,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "combat_floor_1": 3.0,
+        "combat_floor_2": 2.5,
+        "loot_abyss": 1.5,
+        "loot_floor_1_2": 3.0,
+        "loot_floor_3_4": 2.5,
+        "loot_floor_5": 2.0,
+        "scavenge_floor_1": 3.0,
+        "scavenge_floor_2": 2.5,
+        "spawn_starter": 3.0
+      },
+      "id": "mod_bullet_standard",
+      "loot_table_tier": 0,
+      "merchant_tier": 0,
+      "name": "标准子弹模块",
+      "price": 30,
+      "rarity": "common",
+      "stack_max": 10,
+      "subtype": "bullet",
+      "tags": [
+        "module",
+        "bullet"
+      ],
+      "type": "module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.157569229602814,
+        -0.269999980926514,
+        -0.159999996423721
+      ],
+      "xyz_size_m": [
+        0.315138459205627,
+        0.939999997615814,
+        0.319999992847443
+      ]
+    },
+    "name": "标准子弹模块"
+  },
+  "mod_bullet_sticky": {
+    "data": {
+      "base_buy_price": 50,
+      "base_sell_price": 25,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "floor_loot_weights": {
+        "combat_floor_1": 2.0,
+        "combat_floor_2": 2.5,
+        "loot_abyss": 1.5,
+        "loot_floor_1_2": 2.0,
+        "loot_floor_3_4": 2.5,
+        "loot_floor_5": 2.0,
+        "scavenge_floor_1": 2.0,
+        "scavenge_floor_2": 2.5,
+        "spawn_starter": 2.0
+      },
+      "id": "mod_bullet_sticky",
+      "loot_table_tier": 0,
+      "merchant_tier": 1,
+      "name": "黏黏弹模块",
+      "price": 50,
+      "rarity": "uncommon",
+      "stack_max": 10,
+      "subtype": "bullet",
+      "tags": [
+        "module",
+        "bullet",
+        "sticky"
+      ],
+      "type": "module"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.157569229602814,
+        -0.269999980926514,
+        -0.159999996423721
+      ],
+      "xyz_size_m": [
+        0.315138459205627,
+        0.939999997615814,
+        0.319999992847443
+      ]
+    },
+    "name": "黏黏弹模块"
+  },
+  "weapon_baseball_bat": {
+    "data": {
+      "assembly_id": "bp_baseball_bat",
+      "base_buy_price": 45,
+      "base_sell_price": 23,
+      "base_shelf_order": 1,
+      "base_shop_enabled": true,
+      "base_shop_entry_id": "base_stock_baseball_bat",
+      "base_stock_rule": "unlimited",
+      "description": "基地贩卖机提供的初级近战武器。三段快速挥击，第三段重挥具有更强击退。",
+      "floor_loot_weights": {
+        "combat_floor_1": 1.0,
+        "loot_floor_1_2": 1.6,
+        "scavenge_floor_1": 1.8,
+        "scavenge_floor_2": 1.2,
+        "spawn_starter": 2.2
+      },
+      "id": "weapon_baseball_bat",
+      "loot_table_tier": 0,
+      "name": "废土棒球棍",
+      "price": 45,
+      "rarity": "common",
+      "stack_max": 1,
+      "subtype": "melee_weapon",
+      "tags": [
+        "weapon",
+        "melee",
+        "light_melee",
+        "baseball_bat",
+        "starter_melee"
+      ],
+      "type": "weapon"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.375007331371307,
+        -0.321629285812378,
+        -0.871188461780548
+      ],
+      "xyz_size_m": [
+        0.985345065593719,
+        0.516464591026306,
+        1.40944790840149
+      ]
+    },
+    "name": "废土棒球棍"
+  },
+  "weapon_greatblade": {
+    "data": {
+      "assembly_id": "bp_greatblade",
+      "base_buy_price": 165,
+      "base_sell_price": 83,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "description": "宽扇区三段重型挥砍。第三段过顶重劈伤害与击退显著提高。",
+      "floor_loot_weights": {
+        "combat_floor_1": 0.5,
+        "combat_floor_2": 0.9,
+        "loot_floor_1_2": 0.75,
+        "loot_floor_3_4": 1.2,
+        "scavenge_floor_1": 0.65,
+        "scavenge_floor_2": 1.1,
+        "spawn_starter": 1.2
+      },
+      "id": "weapon_greatblade",
+      "loot_table_tier": 0,
+      "name": "巨型工业断刃",
+      "price": 165,
+      "rarity": "uncommon",
+      "stack_max": 1,
+      "subtype": "melee_weapon",
+      "tags": [
+        "weapon",
+        "melee",
+        "heavy_melee",
+        "greatblade"
+      ],
+      "type": "weapon"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.292898774147034,
+        -0.50226902961731,
+        -1.84211587905884
+      ],
+      "xyz_size_m": [
+        1.60092270374298,
+        0.650344848632813,
+        2.24533438682556
+      ]
+    },
+    "name": "巨型工业断刃"
+  },
+  "weapon_waraxe": {
+    "data": {
+      "assembly_id": "bp_waraxe",
+      "base_buy_price": 240,
+      "base_sell_price": 120,
+      "base_shelf_order": 0,
+      "base_shop_enabled": false,
+      "base_stock_rule": "not_listed",
+      "description": "高伤高击退的三段攻城斧。终结砸地前摇很长，但能重创正面目标。",
+      "floor_loot_weights": {
+        "combat_floor_3": 0.72,
+        "elite_floor_1": 1.2,
+        "elite_floor_2": 1.8,
+        "loot_abyss": 1.8,
+        "loot_floor_1_2": 0.18,
+        "loot_floor_3_4": 0.95,
+        "loot_floor_5": 1.45,
+        "scavenge_floor_3": 0.8
+      },
+      "id": "weapon_waraxe",
+      "loot_table_tier": 1,
+      "name": "攻城裂甲斧",
+      "price": 240,
+      "rarity": "rare",
+      "stack_max": 1,
+      "subtype": "melee_weapon",
+      "tags": [
+        "weapon",
+        "melee",
+        "heavy_melee",
+        "waraxe"
+      ],
+      "type": "weapon"
+    },
+    "factory": {
+      "xyz_min_m": [
+        -0.32994818687439,
+        -0.525258541107178,
+        -2.07556009292603
+      ],
+      "xyz_size_m": [
+        1.66407811641693,
+        0.715083599090576,
+        2.52351045608521
+      ]
+    },
+    "name": "攻城裂甲斧"
+  }
+}

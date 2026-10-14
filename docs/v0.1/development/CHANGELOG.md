@@ -1,3 +1,38 @@
+## 2026-10-14 武器构建链路中文化（K 键武器表现页 ＋ 工作台/工坊）
+
+- FeatureID：`UI-LOCALE-TEXT`（**跨功能横切模块，不占 MODULE_INDEX 的 37 项 FeatureID**）；业主口径「把 k 键的枪械构建链路，用中文，后面的这个构建链路全部需要显示中文，可以切换语言，预留空间，这个要单独的一个模块，更新设计文档」。
+- **独立模块 `src/i18n/`**（三件，零依赖）：`GameText.gd`（静态类：语言状态 ＋ 查询 API ＋ 回退链）、`GameTextPackZhCN.gd`（中文实装包，9 分区）、`GameTextPackEn.gd`（英文**预留位**）。只做「内部稳定 ID → 本地化文本」纯查表，**不依赖任何 autoload / 玩法类 / 场景**；调用方不需知道语言是否切换过。
+- **回退链（唯一规则）**：当前语言包 → 默认语言包(zh_CN) → 原始键本身。未知键**绝不返回空串**；未知语言 id 被 `set_locale` 拒绝且不改状态。
+- **中文实装覆盖**：K 键武器表现页（标题/`GunBody_Pistol`→`豌豆手枪`/`MOUNT`→`挂载槽`/`GUN_BODY`→`枪身`/`damage`→`伤害`/`common`→`普通`/节点详情弹窗，含原先直接输出的裸属性键与 `[b]` 标签）、工作台（`get_localized_assembly_tree_string()` ＋ 分区标题/选择反馈）、枪械工坊（蓝图文案全量走键）。
+- **调试口径刻意不变**：`WeaponAssemblyTree.get_assembly_tree_string()` / `get_weapon_info()["tree_string"]` 继续输出内部英文 ID，**不被语言切换影响**；玩家可见串另走新方法 `get_localized_assembly_tree_string()`。
+- **语言切换与预留空间**：K 页顶部新增语言行，按钮由 `GameText.all_locales()` 驱动 —— 新增语言自动多一个按钮（行高固定 24、按钮定宽 52×22），不挤压下方内容；`en` 为禁用占位并挂 tooltip「预留语言（结构就绪，文案待实装）」。启用 `en` 只需 `meta.ready=true` ＋ 填表，**不改任何调用点**。
+- **验收**：新增单跑探针 `tests/verification/probe_localization_contract.tscn`（不占注册表名额），四组断言 —— ①内容节点名与 `ItemRegistry` 物品名逐字一致（漂移即红）②`NodeType`/`SlotType` 全键有中文 ＋ 未知键回退自身 ③武器表现页绑 `bp_rifle + mod_bullet_piercing` 后遍历全部 Label，不得含 `GunBody_`/`Bullet_`/`Att_`/`Melee_` 或 `MUZZLE`/`MAGAZINE`/`GUN_BODY` 等英文枚举键 ④`en` 必须仍 `ready=false`、切到 `en` 时 chrome 与节点名都回退中文、未知语言被拒、能切回 `zh_CN`。**实测 `rc=0`（`PROBE_LOCALIZATION_CONTRACT_OK`）**。
+- **反向对照（已做）**：把 `GunBody_Rifle` 中文改成「步枪X」→ 探针 `rc=1`，报 `文案漂移：GameText=步枪X / ItemRegistry=步枪`；还原后重跑 `rc=0`。断言真的会红，不是摆设。
+- **行尾纪律**：5 个新增文件（3×源 ＋ 探针 gd/tscn）全部 CRLF、零裸 LF；4 个既有 `.gd` 外科式改动后 `git ls-files --eol` 仍为 `w/crlf`，diff 为局部改动（无整文件行尾翻转）。
+- **未纳入本轮**：命运卡/HUD/背包/商店等其它系统文案；`en` 实际英文文案（预留）；面板节点行内属性标签仍是固定列宽位移（跨语言等宽变动由容器承载，未逐键做弹性排版）。
+- 文档：[武器构建链路文本本地化设计](../design/武器构建链路文本本地化设计.md)（目标规则主源）；[04 技术施工 · 武器表现页](../04_技术施工_战斗与局内成长.md) §13.9；[设计索引](../design/README.md) 跨功能横切条目；[功能索引](../MODULE_INDEX.md) 叙事条目。
+
+## 2026-10-14 背包挂到胸前的修复（背负方向反了 ＋ 验收量法失效）
+
+- FeatureID：`INVENTORY-SLOTS`；业主口径「背包的挂点怎么会在胸前？现在装备背包跑去胸前去了」。
+- **两根缺陷叠在一起，只修一根不够**：① `v021` 骨架背面是 **+Z**（`StowedWeaponSocket*` 在 `z=+0.54`、手部 `WeaponSocket` 在 `z=−0.218`），而背负跟随偏移写的是 `z = −0.20 − …`，**负号把包放到躯干前面**；② **真正的根因**：`backpack_asset_contract.measure_worn()` 每帧跑完动作驱动器后**没调用运行时自己的 `_sync_backpack_body_follow()`**（该同步由 `PlayerAvatar3D._process` 驱动、不在 `_physics_process`），量到的是**陈旧全局变换**，三项判据全成噪声；同处还有类型笔误——实现是 `Node3D` + 手工同步，契约却按 `RemoteTransform3D` 取节点，**取到 `null` 后把 `跟随躯干` 那条断言静默短路**（假绿 `0`）。
+- **`head_clearance` 判据本身是无效量**：`max(pack.min_z − head.max_z, head.min_y − pack.max_y)` 里 `head.max_z` 恒为 `+0.44`（头在背后的边界），包也在背后 ⇒ 该分量恒为大负数，**任何**背后位置都必然失败。这条判据从写下那天起就不可能通过。缺陷与负号从 `ed7c4da0`（10-08 背包首次入库）就在，**从未真正通过过自己的验收**。
+- **修复＝把背负贴合做成显式契约常量**（`BodyJoint` 局部空间，`v021` 实测）：`HEAD_BOTTOM_Y=0.272`（91 片段逐相位实测的头部动作包络最坏下沿，出自 `landing@0.425`）、`HEAD_CLEARANCE=0.020`、`TOP_Y=0.252`、`BODY_BACK_Z=0.20`、`BACK_GAP=0.012`、`SCALE=0.40`、`FLOOR_Y=−0.155`。摆放**顶对齐**：`follow.y = TOP_Y − size.y×k/2`、`follow.z = BODY_BACK_Z + size.z×k/2 + BACK_GAP`。`_sync_backpack_body_follow()` 里写死的 `0.68` 改为引用常量（原先两份独立数字，改一处必失同步）。
+- **倍率上限 0.40 有公式**：躯干仅 `0.323 m` 高，包顶被头部下沿 `0.272` 压住、包底要留在 `−0.135` 之上，可用竖向带宽 `0.252−(−0.135)=0.387 m`；8 格源高 `0.88 m` ⇒ `k ≤ 0.44`，取 `0.40` 留余量。**实测对照**：`k=0.40` 站立相交 `0` 帧、全动作最小头间距 `+0.020`；`k=0.49`（按常态直立包络放宽）落地帧 `−0.024` 穿头；`k=0.56` 站立即 `246` 帧相交且离背 `0.042` 超阈值。
+- **三档一致性**：共用同一倍率 ⇒ 宽 `1.000 : 1.179 : 1.357`、高 `1.000 : 1.233 : 1.467` 严格保持源比例。否掉「逐档各抬到 0.94/1.09/0.95」——那会把 4 档与 8 档挤成几乎同体积（`0.719 vs 0.722` 宽），大小档位不可读。
+- **判据加固**：每帧同步后量当帧真值；`follow` 改按 `Node3D` 取；新增「模型挂 `BackpackSocket` 下 + 跟随节点挂躯干下」两条显式接线断言；缩放判据改读 `Player3D.BACKPACK_WORN_SCALE`；新增「包底不沉到地面 `+0.02` 以下」。另实测确认**躯干动作包络 ≡ 静态包络**（`z` 最大 `0.2000`，出自 `walking@0.9`）⇒ `BODY_BACK_Z` 量一次即可。
+- **验收**：`verify_backpack_equipment_flow` 位置三项全绿 `BACKPACK_HEAD_FIT slots=2/4/8 gap=0.020018 samples=3731`；`verify_player3d_diy_flow` / `verify_wardrobe_preview_fill_flow` / `verify_player3d_avatar_bounds` 均 rc=0；真实渲染 `outputs/backpack_worn_fix_20261014/` 四机位确认背包在背面。**不改骨架**：抬高头部会连带改全身动作基线，收益只是「包能大一档」，风险远大于收益。
+- **后端约束（需产品确认）**：躯干 `1.5m × 0.462m × 0.323m`，任何「正常尺寸的背包」都不可能既贴背又不进头部包络；三档在背后机位只能靠**配色与外形细节**读（`2槽` 无扣带 / `4槽` 1 扣带 / `8槽` 2 扣带 + 顶卷铺盖），**几何尺寸差不可再放大**。
+- **同轮发现、未处理**：`99955a3b` 重生产背包后三角数升到 `322/334/424`，与 `ed7c4da0` 收紧的预算 `≤100` 冲突 ⇒ 该专项稳定报 6 条红（三角数与清单元数据自洽，属该轮资产重做有意变更，按「不擅自改契约预算」保留原值待裁定）。
+- 文档：[03 玩家与操作](../03_技术施工_玩家与操作.md) §3.3 补缺陷修复条目（含常量表与公式）；[开发记录](2026-10-14_backpack_worn_position_fix.md)。
+
+## 2026-10-14 剩余物品双模型正式接入
+
+- FeatureID：`ASSET-PIPELINE` / `WORLD-LOOT` / `INVENTORY-SLOTS` / `WEAPON-COMBAT`。
+- 20套高低模型覆盖28个内容ID，9种蓝图共用卷轴；低模用于地面与图标，替换3把近战及2件枪上配件。
+- 40份源、40份包装、28个内容ID、20个图标与拾取、配件及握点检查通过；账本与当前源索引同步。
+- [完整交付与全工程门禁边界](2026-10-14_remaining_item_models.md)。
+
 ## 2026-10-14 血条表现：延迟扣血白段 ＋ 小怪条 ×0.80 ＋ Boss 条上移
 
 - FeatureID：`ENEMY-AI`；业主口径「按照这个进行修改血条表现，还有现在的小怪血条整体缩小到80%，boss血条放在画面的在上面一些，现在还是会遮挡」。
@@ -2881,3 +2916,6 @@ WORLD-ENTRY：入口楼最后阶段展开，标记和交互同步；01成功撤�
 - 2026-10-14 ASSET-PIPELINE / WORLD-LOOT：[通用弹药用途、图标与倾角修正](2026-10-14_ammo_model_identity_icons.md)。按用户更正模型归属，图标复用导入模型，倾斜45度旋转。
 
 - 2026-10-14 AUDIO-MUSIC：[天台（100F）BGM 关闭](2026-10-14_rooftop_bgm_disabled.md)。新增 `TowerAtmosphere3D.rooftop_music_enabled`（默认 false）门控天台曲目——曲目条目、A/B 两版 OGG 资产与触发调用全保留，置 true 即恢复；关闭分支显式 `stop()` 清掉从基地/塔楼带上来的残留曲目；`verify_base99_radio` 断言随契约更新。
+- 2026-10-14 ENEMY-AI / BOSS-STAGES：[Boss002 显示器动画受击体积](2026-10-14_boss002_monitor_hit_volume.md)。根节点固定圆柱不随动画动，屏幕前倾/扑砸/自转时整块跑到盒外 ⇒ 子弹穿过可见模型、落在模型身后的空气里（业主「隔空击中」）。新增 8 个**跟骨走**的骨局部受击盒（屏幕总成 / 后轴 / 底座 / 三段弹簧支撑 / 两只手），挂在独立被动碰撞体 `EnemyHitVolume3D` 上（mask=0 ⇒ 不干扰本体移动：实测挂在本体上会把坐地的怪抬高 0.42 m）；原圆柱一格未动，伤害入口 9 条转发由 `verify_monitor_boss_flow` 逐条盯着。实测本体顶点覆盖率 **100%**（只靠圆柱时最差 34.77%）、同一发子弹落点**前移 1.87 m** 停在屏幕正面；`verify_monitor_boss_flow` 587 项 0 失败，`verify_3d_enemy_behavior_flow` / `verify_unique_boss_content_flow` 回归绿。数值可复算：`scripts/probe_monitor_boss_hit_volumes.gd`。另修复：该用例引用的两份源级参考数据被瘦身提交移出版本控制导致用例崩溃，已从瘦身备份取回（206 KB）。
+
+- 2026-10-14 ENTRY-AVATAR：[全新存档开场影片](2026-10-14_opening_movie_entry.md)。新档走 loading → 开场影片（20.06 s）→ 渐黑无缝进游戏，**不进主页菜单**，直接落 98F 主人办公室；已有存档照旧主页菜单。入口覆盖层改为二选一（`OpeningMovieScreen3D` / `MainEntryScreen3D`），判据**复用** `_should_open_new_game_in_master_office()` 零新增存档字段，故续档重进永不重播。顺带把 `StartupLoadingScreen` 由同步切场景改为后台预加载真实进度（原先真实档启动 8～12 秒会让进度条冻在 100% 再硬跳，而影片正接其后）。两条硬约束已钉进代码与设计文档：① **headless 下 `load()` 一个 `.ogv` 会让整个 Godot 进程挂死**，故影片层在 headless 下连播放器节点都不创建；② **Windows 上 gyan.dev 构建的 FFmpeg Theora 编码器是坏的**（ffmpeg 自解即报 `error in unpack_block_qpis`，Godot 里整屏彩虹噪点，与 `-q:v`/分辨率对齐均无关），必须用 BtbN 构建。真机渲染实测交接时序 21.81 s，与设计分段逐段吻合。见 [v0.2/PLAN](../../v0.2/PLAN.md) 的 0.2-ENTRY-001。

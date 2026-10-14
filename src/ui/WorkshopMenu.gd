@@ -40,18 +40,18 @@ func _ready() -> void:
 ## 每个类别有多个Tier，每个Tier解锁后增加该类别在局内的可用变体数量
 const BLUEPRINT_TIERS := {
 	"gunbody": {
-		"label": "枪身蓝图",
-		"desc": "解锁新枪身类型",
+		"label": "workshop.category.gunbody.label",
+		"desc": "workshop.category.gunbody.desc",
 		"max_tier": 3,
 	},
 	"bullet": {
-		"label": "弹药蓝图",
-		"desc": "解锁新子弹类型",
+		"label": "workshop.category.bullet.label",
+		"desc": "workshop.category.bullet.desc",
 		"max_tier": 3,
 	},
 	"attachment": {
-		"label": "配件蓝图",
-		"desc": "解锁新配件类型",
+		"label": "workshop.category.attachment.label",
+		"desc": "workshop.category.attachment.desc",
 		"max_tier": 3,
 	}
 }
@@ -65,7 +65,7 @@ func _build_blueprint_list() -> void:
 	
 	# 标题
 	var title := Label.new()
-	title.text = "枪械工坊 — 蓝图解锁"
+	title.text = GameText.text("workshop.title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(title)
 	
@@ -74,7 +74,7 @@ func _build_blueprint_list() -> void:
 	
 	# 说明
 	var info := Label.new()
-	info.text = "消耗资源解锁蓝图，提升局内装备池多样性"
+	info.text = GameText.text("workshop.intro")
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(info)
 	
@@ -97,10 +97,12 @@ func _make_category_panel(cat_id: String, cat: Dictionary, current_tier: int) ->
 	# 类别标题行
 	var title_row := HBoxContainer.new()
 	var lbl := Label.new()
-	lbl.text = "[ %s ]  %s" % [cat["label"], cat["desc"]]
+	lbl.text = GameText.text("workshop.category_format", [
+		GameText.text(str(cat["label"])), GameText.text(str(cat["desc"])),
+	])
 	title_row.add_child(lbl)
 	var tier_lbl := Label.new()
-	tier_lbl.text = " Tier %d / %d" % [current_tier, cat["max_tier"]]
+	tier_lbl.text = GameText.text("workshop.tier_format", [current_tier, cat["max_tier"]])
 	tier_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	title_row.add_child(tier_lbl)
 	vbox.add_child(title_row)
@@ -110,14 +112,14 @@ func _make_category_panel(cat_id: String, cat: Dictionary, current_tier: int) ->
 	var stars := ""
 	for i in range(1, cat["max_tier"] + 1):
 		stars += "★" if i <= current_tier else "☆"
-	progress_lbl.text = "进度: " + stars
+	progress_lbl.text = GameText.text("workshop.progress_format", [stars])
 	vbox.add_child(progress_lbl)
 	
 	# 解锁按钮（如果还有Tier可解锁）
 	if current_tier < cat["max_tier"]:
 		var next_cost: int = BaseManager.get_blueprint_upgrade_cost(cat_id, current_tier)
 		var btn := Button.new()
-		btn.text = "解锁下一Tier（消耗 %d 资源）" % next_cost
+		btn.text = GameText.text("workshop.unlock_format", [next_cost])
 		btn.pressed.connect(_on_unlock_pressed.bind(cat_id, current_tier, next_cost))
 		# 解锁按钮使用金色 accent（与蓝图/解锁主题一致）
 		var unlock_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.TEXT_GOLD)
@@ -127,12 +129,12 @@ func _make_category_panel(cat_id: String, cat: Dictionary, current_tier: int) ->
 		var player_points: int = BaseManager.get_extraction_points()
 		if player_points < next_cost:
 			btn.disabled = true
-			btn.text = "资源不足（需要 %d，当前 %d）" % [next_cost, player_points]
+			btn.text = GameText.text("workshop.insufficient_format", [next_cost, player_points])
 
 		vbox.add_child(btn)
 	else:
 		var done_lbl := Label.new()
-		done_lbl.text = "已满级！所有蓝图已解锁"
+		done_lbl.text = GameText.text("workshop.maxed")
 		done_lbl.add_theme_color_override("font_color", Color(0.6, 1.0, 0.5))
 		vbox.add_child(done_lbl)
 	
@@ -146,15 +148,19 @@ func _make_hsep() -> HSeparator:
 func _on_unlock_pressed(category_id: String, current_tier: int, cost: int) -> void:
 	var player_points: int = BaseManager.get_extraction_points()
 	if player_points < cost:
-		_update_status("资源不足！需要 %d，当前 %d" % [cost, player_points])
+		_update_status(GameText.text("workshop.insufficient_status_format", [cost, player_points]))
 		return
 	
 	var result := BaseManager.upgrade_blueprint(category_id, current_tier)
 	if not bool(result.get("success", false)):
-		_update_status("升级失败：%s" % str(result.get("code", "unknown")))
+		_update_status(GameText.text("workshop.upgrade_failed_format", [
+			str(result.get("code", "unknown")),
+		]))
 		_build_blueprint_list()
 		return
-	_update_status("解锁成功！%s 已升到 Tier %d" % [BLUEPRINT_TIERS[category_id]["label"], int(result.get("tier", current_tier + 1))])
+	_update_status(GameText.text("workshop.unlock_success_format", [
+		GameText.text(str(BLUEPRINT_TIERS[category_id]["label"])), int(result.get("tier", current_tier + 1)),
+	]))
 	
 	# 重建列表
 	_build_blueprint_list()

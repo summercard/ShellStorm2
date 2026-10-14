@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/bullet_module_sticky/components/wpn_bullet_module_sticky_preview_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-BUL-MOD-BULLET-STICKY"
+metadata/logical_id = "mod_bullet_sticky"
+metadata/model_role = "preview"
+metadata/asset_version = "v001"
+metadata/triangle_count = 2280
+metadata/dimensions_m = Vector3(0.7113512754440308, 0.9399999380111694, 0.7113512754440308)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

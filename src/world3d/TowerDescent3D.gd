@@ -19,6 +19,11 @@ const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 const MAIN_ENTRY_SCREEN_SCENE: PackedScene = preload(
 	"res://scenes/ui/MainEntryScreen3D.tscn"
 )
+## 全新存档的开场影片覆盖层。与 `MAIN_ENTRY_SCREEN_SCENE` **互斥**：
+## 同一个「冷启动/显式主页」入口只会装其中一个（见 `_install_main_entry_screen()`）。
+const OPENING_MOVIE_SCREEN_SCENE: PackedScene = preload(
+	"res://scenes/ui/OpeningMovieScreen3D.tscn"
+)
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const ROOM_DOOR_LANE := preload("res://src/map/RoomDoorLane.gd")
@@ -245,6 +250,11 @@ var _tower_target_label: Label
 var _tower_elevator_label: Label
 var _tower_base_currency_label: Label
 var _world_time_label: Label
+## 冷启动/显式主页这**一次**入口的覆盖层槽位，承载二者之一：
+## `MainEntryScreen3D`（已有存档 → 主页菜单）或 `OpeningMovieScreen3D`
+## （全新存档 → 开场影片）。类型是两者公共父类 `CanvasLayer`：塔楼只按
+## `prepare_gameplay_hud / is_camera_override_active / transition_finished`
+## 三个契约调用，不按具体类型分支。
 var _main_entry_screen: CanvasLayer
 var _entry_context: Dictionary = {}
 var _authoritative_floor_index := -999
@@ -6293,13 +6303,46 @@ func _install_main_entry_screen() -> void:
 		return
 	if test_mode or DisplayServer.get_name() == "headless" or _main_entry_screen != null:
 		return
-	_main_entry_screen = MAIN_ENTRY_SCREEN_SCENE.instantiate() as CanvasLayer
+	# 全新存档播开场影片（播完直接落 98F 主人办公室，不进主页菜单）；
+	# 已有存档照旧进主页菜单。二者互斥，共用同一个 `_main_entry_screen` 槽位。
+	# ⚠️ headless/test_mode 的早退在上一行 —— 判据函数刻意保持纯逻辑，
+	# 好让 headless 验收能直接调它验分流，不必真放视频
+	# （实测 headless 下 `load()` 一个 .ogv 会让整个进程挂死）。
+	var scene := _main_entry_overlay_scene()
+	_main_entry_screen = scene.instantiate() as CanvasLayer
 	if _main_entry_screen == null:
 		push_error("主页面实例化失败")
 		return
 	if _main_entry_screen.has_method("prepare_gameplay_hud"):
 		_main_entry_screen.call("prepare_gameplay_hud", $HUD)
 	add_child(_main_entry_screen)
+
+
+## 本次入口该装哪个覆盖层。抽成独立查询，让验收能在 headless 下比对分流结果，
+## 而不必真的实例化视频层（headless 一碰 .ogv 解码就挂死）。
+func _main_entry_overlay_scene() -> PackedScene:
+	return OPENING_MOVIE_SCREEN_SCENE if _should_play_opening_movie() else MAIN_ENTRY_SCREEN_SCENE
+
+
+## 本次入口是否走「新档开场影片」而不是主页菜单。
+##
+## 判据刻意复用 `_should_open_new_game_in_master_office()`：它同时定义了
+## 「新游戏 98F 办公室开局」，而影片正是要无缝接进那个开局 —— 两件事必须是
+## 同一个判据。若另立一套，就会出现「播了影片却落 99F 基地」这种只在真机复现的错位。
+##
+## 复用还自带三道否决：`is_expedition()`（远征没有 98F 办公室）、
+## `SPAWN_BASE_99F`（死亡返城/撤离返航显式落 99F）、`_returning_to_tower03`。
+## 另外「有 runtime 快照」也必然否决 —— 这与 `REASON_RUNTIME_RESTORE` 入口互斥，
+## 所以续档重进永远只走主页菜单，不会重播开场影片。
+func _should_play_opening_movie() -> bool:
+	if not _entry_context_requests_main_entry():
+		return false
+	return _should_open_new_game_in_master_office()
+
+
+## 本次是否真的在放开场影片（而非主页菜单）。约定：没装覆盖层时恒为 false。
+func is_opening_movie_active() -> bool:
+	return _main_entry_screen is OpeningMovieScreen3D
 
 
 func _entry_context_requests_main_entry() -> bool:

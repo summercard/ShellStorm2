@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/attachment_fan/components/wpn_attachment_fan_ground_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-ATT-ATTACH-FAN"
+metadata/logical_id = "attach_fan"
+metadata/model_role = "ground"
+metadata/asset_version = "v001"
+metadata/triangle_count = 144
+metadata/dimensions_m = Vector3(0.4676923155784607, 0.6399999856948853, 0.20615386962890625)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

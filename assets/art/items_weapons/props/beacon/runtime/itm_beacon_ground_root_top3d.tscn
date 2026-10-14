@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/props/beacon/components/itm_beacon_ground_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "ITM-CONSUMABLE-ITEM-BEACON"
+metadata/logical_id = "item_beacon"
+metadata/model_role = "ground"
+metadata/asset_version = "v001"
+metadata/triangle_count = 196
+metadata/dimensions_m = Vector3(1.0134782791137695, 1.1100001335144043, 1.0134782791137695)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

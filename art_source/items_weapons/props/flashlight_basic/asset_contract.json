@@ -1,0 +1,69 @@
+{
+  "asset_id": "ITM-MODULE-FLASHLIGHT-BASIC",
+  "logical_id": "item_flashlight_basic",
+  "name": "基础模块",
+  "slug": "flashlight_basic",
+  "domain": "props",
+  "kind": "module_basic",
+  "content_ids": [
+    "item_flashlight_basic"
+  ],
+  "godot_dimensions_m": [
+    0.5909375548362732,
+    0.7625000476837158,
+    0.45988285541534424
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.379999995231628,
+      -0.330000013113022,
+      -0.402500003576279
+    ],
+    "xyz_size_m": [
+      0.759999990463257,
+      0.660000026226044,
+      0.762500047683716
+    ]
+  },
+  "principal_length_m": 0.762500047683716,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_source_v001.blend",
+      "sha256": "4aa7aa704981fe728d589748597a81ab996b327b7f587abe2435b5187fd4405f",
+      "triangles": 1316,
+      "glb": "assets/art/items_weapons/props/flashlight_basic/components/itm_flashlight_basic_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/flashlight_basic/runtime/itm_flashlight_basic_preview_root_top3d.tscn",
+      "glb_sha256": "e0b9c9160e49c243818d4d79845e34bfec30ce7517bcdaa56e69cea99b2240a8",
+      "prefab_sha256": "be3e0326e429c082a01cf3aa9b93f3f8ff1f25e9ed738125ecb298fe43ee77e4"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_ground_source_v001.blend",
+      "sha256": "93648c0c7a26d90a312457fb3b0b17bab793d112850662cc548adb4f3854809d",
+      "triangles": 116,
+      "glb": "assets/art/items_weapons/props/flashlight_basic/components/itm_flashlight_basic_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/flashlight_basic/runtime/itm_flashlight_basic_ground_root_top3d.tscn",
+      "glb_sha256": "71823cb16fe813e92d6bd5d401729e553fe26387fbe0c98b71fa42ee65cbf439",
+      "prefab_sha256": "857d03929333b21c18fde2eba27a7ceb127aa40e9c117a096b9ae8187b2bd6ff"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-BUL-MOD-BULLET-BLACKHOLE",
+  "logical_id": "mod_bullet_blackhole",
+  "name": "黑洞弹模块",
+  "slug": "bullet_module_blackhole",
+  "domain": "weapons",
+  "kind": "blackhole",
+  "content_ids": [
+    "mod_bullet_blackhole"
+  ],
+  "godot_dimensions_m": [
+    0.7773077487945557,
+    0.9399999976158142,
+    0.5242307782173157
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.157569229602814,
+      -0.269999980926514,
+      -0.159999996423721
+    ],
+    "xyz_size_m": [
+      0.315138459205627,
+      0.939999997615814,
+      0.319999992847443
+    ]
+  },
+  "principal_length_m": 0.939999997615814,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_blackhole/source/wpn_bullet_module_blackhole_source_v001.blend",
+      "sha256": "2e491ee305f978f4e7ab6a565c337772372b508af7f307fdcf0f75917d5bb03d",
+      "triangles": 1424,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_blackhole/components/wpn_bullet_module_blackhole_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_blackhole/runtime/wpn_bullet_module_blackhole_preview_root_top3d.tscn",
+      "glb_sha256": "b201bfca119e133eb9140f829ff6ae530d5bff56f3f15ca0e97642f65aa1ebf2",
+      "prefab_sha256": "9e4de7b479dc94affd74de59cef1dc252341e8b7175005a2c26e327d592fafd4"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_blackhole/source/wpn_bullet_module_blackhole_ground_source_v001.blend",
+      "sha256": "81ba8153675a87def5a849fb6b9f398056c2bfa9046ccc1b48170a7572fcf23b",
+      "triangles": 194,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_blackhole/components/wpn_bullet_module_blackhole_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_blackhole/runtime/wpn_bullet_module_blackhole_ground_root_top3d.tscn",
+      "glb_sha256": "39bb626cb0724a37c661184b2400673bed8865d43f6f3c6ac6b8c84454cd5919",
+      "prefab_sha256": "142fa92b45d252d6738fda877f724672eebc6d9053281b75bea15aebcd1c2b07"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

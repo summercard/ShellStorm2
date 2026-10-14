@@ -167,7 +167,27 @@ var _mobile_shoot_was_active := false
 var _mobile_input_available := false
 var _backpack_model: Node3D = null
 var _backpack_follow: Node3D = null
-const BACKPACK_WORN_SCALE := 0.45
+## ── 背负贴合契约（全部在 BodyJoint 局部空间，v021 骨架实测值）─────────────────
+## 躯干可见包络：y [0.000, 0.323]、z [-0.200, +0.200]；角色总高 1.5 m，BodyJoint 离地 0.155 m。
+## 头部动作包络（91 个动作片段逐顶点求出的实际最坏值）：y_min = 0.272、z_max = 0.440。
+## 背面在 +Z（WeaponSocket 在 z = -0.218 是正面，StowedWeaponSocket 在 z = +0.54 是背面）。
+##
+## 摆放规则：包【顶】压在头部动作包络下沿之下留净空，包【前脸】贴在躯干背面之外；三档共用同一
+## 倍率，于是宽度 0.56/0.66/0.76 × k 始终保持 1 : 1.18 : 1.36，大小档位可读，越大的包只往
+## 下伸得越多，不会同时变宽变高把三档挤成同一体积。
+##
+## 为什么倍率只能取到 0.40：躯干只有 0.323 m 高，包顶被头部下沿（0.272）压住、包底又要留在
+## 地面（BACKPACK_WORN_FLOOR_Y + 0.02）之上，可用竖向带宽 = 0.252 - (-0.135) = 0.387 m；
+## 8 格源高 0.88 m ⇒ k <= 0.387 / 0.88 = 0.44，取 0.40 留余量。
+## 实测对照：k=0.40 站立 AABB 相交 0 帧；k=0.49 落地帧穿头 -0.024；k=0.56 站立相交 246 帧。
+const BACKPACK_WORN_SCALE := 0.40     # 背负显示倍率；只作用于角色背负表现，世界掉落与 UI 仍用源尺寸
+const BACKPACK_WORN_BODY_BACK_Z := 0.20       # 躯干可见包络背面（BodyJoint 局部 z）
+const BACKPACK_WORN_BACK_GAP := 0.012         # 包前脸与躯干背面之间留的缝
+const BACKPACK_WORN_HEAD_CLEARANCE := 0.020   # 包顶与头部动作包络下沿的净空（验收判据要求 ≥ 0.015）
+const BACKPACK_WORN_HEAD_BOTTOM_Y := 0.272    # 头部动作包络最坏 y_min（clip=landing phase=0.425）
+const BACKPACK_WORN_TOP_Y := BACKPACK_WORN_HEAD_BOTTOM_Y - BACKPACK_WORN_HEAD_CLEARANCE
+## BodyJoint 局部空间里的地面高度（BodyJoint 静止离地 0.155 m）。包底不得低于 地面 + 0.02。
+const BACKPACK_WORN_FLOOR_Y := -0.155
 var _silence_remaining := 0.0
 var _named_damage_multipliers: Dictionary = {}
 var _fire_animation_remaining := 0.0
@@ -2202,15 +2222,20 @@ func _refresh_backpack_model() -> void:
 	avatar.body.add_child(_backpack_follow)
 	# BodyJoint 是背包真正的动作父级；模型仍由BackpackSocket持有。
 	# 该缩放只属于角色背负表现，世界掉落和UI继续使用源尺寸。
-	const WORN_SCALE := 0.68
-	_backpack_model.scale = Vector3.ONE * WORN_SCALE
-	_backpack_follow.position = Vector3(0.0, 0.04, -0.20 - size.z * WORN_SCALE * 0.5 - 0.015)
+	_backpack_model.scale = Vector3.ONE * BACKPACK_WORN_SCALE
+	# 顶对齐：包顶落在 BACKPACK_WORN_TOP_Y，包前脸贴在躯干背面之外。三档共用同一倍率，
+	# 越大的包只向下延伸更多；背面是 +Z，不是 -Z。
+	_backpack_follow.position = Vector3(
+		0.0,
+		BACKPACK_WORN_TOP_Y - size.y * BACKPACK_WORN_SCALE * 0.5,
+		BACKPACK_WORN_BODY_BACK_Z + size.z * BACKPACK_WORN_SCALE * 0.5 + BACKPACK_WORN_BACK_GAP
+	)
 	_sync_backpack_body_follow()
 
 func _sync_backpack_body_follow() -> void:
 	if not is_instance_valid(_backpack_model) or not is_instance_valid(_backpack_follow):
 		return
-	_backpack_model.global_transform = _backpack_follow.global_transform * Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * 0.68), Vector3.ZERO)
+	_backpack_model.global_transform = _backpack_follow.global_transform * Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * BACKPACK_WORN_SCALE), Vector3.ZERO)
 
 
 func equip_weapon_item(item: Dictionary) -> Dictionary:

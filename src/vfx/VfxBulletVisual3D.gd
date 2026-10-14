@@ -23,24 +23,32 @@ static var _shared_shell_mesh_cache: Mesh = null
 static var _shared_trail_mesh_cache: Mesh = null
 
 
+## 低面数档（2026-10-14 业主「减面，减到 100 个面以下先」）：本体与 8 个弹种专属视觉
+## 同口径 —— 弹芯/外壳用 4 边棱柱（CylinderMesh，16 面），尾迹锥 4 段（20 面），
+## 单弹合计 52 面（改前 792 面）。取值依据见 `_scratch/probe_mesh_lod_sweep`。
+const _SEGMENTS := 4
+
+
 static func _shared_core_mesh() -> Mesh:
 	if _shared_core_mesh_cache == null:
-		var core := CapsuleMesh.new()
-		core.radius = 0.045
+		var core := CylinderMesh.new()
+		core.top_radius = 0.045
+		core.bottom_radius = 0.045
 		core.height = 0.20
-		core.radial_segments = 10
-		core.rings = 4
+		core.radial_segments = _SEGMENTS
+		core.rings = 0
 		_shared_core_mesh_cache = core
 	return _shared_core_mesh_cache
 
 
 static func _shared_shell_mesh() -> Mesh:
 	if _shared_shell_mesh_cache == null:
-		var shell := CapsuleMesh.new()
-		shell.radius = 0.075
+		var shell := CylinderMesh.new()
+		shell.top_radius = 0.075
+		shell.bottom_radius = 0.075
 		shell.height = 0.18
-		shell.radial_segments = 12
-		shell.rings = 4
+		shell.radial_segments = _SEGMENTS
+		shell.rings = 0
 		_shared_shell_mesh_cache = shell
 	return _shared_shell_mesh_cache
 
@@ -51,7 +59,8 @@ static func _shared_trail_mesh() -> Mesh:
 		trail.top_radius = 0.0
 		trail.bottom_radius = 0.06
 		trail.height = 0.5
-		trail.radial_segments = 12
+		trail.radial_segments = _SEGMENTS
+		trail.rings = 0
 		_shared_trail_mesh_cache = trail
 	return _shared_trail_mesh_cache
 

@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-BUL-MOD-BULLET-HOMING",
+  "logical_id": "mod_bullet_homing",
+  "name": "蜂卵弹模块",
+  "slug": "bullet_module_homing",
+  "domain": "weapons",
+  "kind": "homing",
+  "content_ids": [
+    "mod_bullet_homing"
+  ],
+  "godot_dimensions_m": [
+    0.7946391701698303,
+    0.9399999976158142,
+    0.5930721759796143
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.157569229602814,
+      -0.269999980926514,
+      -0.159999996423721
+    ],
+    "xyz_size_m": [
+      0.315138459205627,
+      0.939999997615814,
+      0.319999992847443
+    ]
+  },
+  "principal_length_m": 0.939999997615814,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_homing/source/wpn_bullet_module_homing_source_v001.blend",
+      "sha256": "d1191e171121973257f31849f1e737efd7ccd727e268b56e37be1462288a22c6",
+      "triangles": 1992,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_homing/components/wpn_bullet_module_homing_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_homing/runtime/wpn_bullet_module_homing_preview_root_top3d.tscn",
+      "glb_sha256": "2e0ed34935811c6925f9f1471f9ffcda638e4ec7d1ad5dfdb11bfc8fa2b99035",
+      "prefab_sha256": "6473472bc50cfd94633e436671b751e72c7f9daa5ffdd8b4381e28065493f6e3"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_homing/source/wpn_bullet_module_homing_ground_source_v001.blend",
+      "sha256": "b89fed273a5f6b761f02ddc7f1de48c99de91d67cd60745ee6e597a51b023e2c",
+      "triangles": 194,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_homing/components/wpn_bullet_module_homing_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_homing/runtime/wpn_bullet_module_homing_ground_root_top3d.tscn",
+      "glb_sha256": "78e4e122fdea03d045daaf0ea6afedac7fb025a753fc2e859ab0a679f959f858",
+      "prefab_sha256": "e84776963544adb2baa7da0b45f65d85f31925b3801ba230c89c3b4eebf29303"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

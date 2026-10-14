@@ -457,7 +457,8 @@
         "docs/v0.1/development/history/06_怪物精英与Boss_历史记录.md",
         "docs/v0.1/development/2026-10-06_boss002_runtime_import.md",
         "docs/v0.1/development/2026-10-08_boss002_reduced_lift.md",
-        "docs/v0.1/development/2026-10-08_boss002_activation.md"
+        "docs/v0.1/development/2026-10-08_boss002_activation.md",
+        "docs/v0.1/development/2026-10-14_boss002_monitor_hit_volume.md"
       ],
       "verification": [
         {
@@ -854,6 +855,18 @@
         {
           "kind": "scene",
           "id": "verify_bullet_vfx_profiles"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_death_blast_vfx"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_zombie_goo_death_vfx"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_hit_routing_vfx"
         },
         {
           "kind": "scene",

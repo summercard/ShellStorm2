@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://fx0120"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxGooHit3D.gd" id="1_goo_hit"]
+
+[node name="VfxGooHit3D" type="Node3D"]
+script = ExtResource("1_goo_hit")
+metadata/asset_id = "VFX-GOO-HIT-3D"
+metadata/asset_version = "v002"

@@ -36,3 +36,20 @@
 - 账本类门禁：`scripts/check_asset_registry.py`（只读《资产主表》）、
   `tools/asset_pipeline/verify_ledger_split.py`、`scripts/check_asset_runtime_naming.py`；
   基线 `ledger_split_baseline.json` 每次新增资产后需按 `refresh_current_baseline` 口径重建。
+## 引擎/玩法约定（踩出来的，别重犯）
+- **敌人的「受击体积」绝不能挂在敌人自己的 `CharacterBody3D` 上**。
+  受击盒要贴模型，就会伸进地面（坐地/倒地）和墙里（扑砸/甩击）；挂在本体上时
+  `move_and_slide` 会把它们当承重面，把怪**顶起来/推开**（2026-10-14 实测：显示器Boss 坐地被抬 0.417 m、
+  砸地被推开 0.26 m）。正确做法＝另起一个 `StaticBody3D` 被动体（`collision_layer` 与本体同层、
+  **`collision_mask = 0`**），逐帧跟骨姿态，命中的伤害转发回本体。参考 `src/enemy3d/EnemyHitVolume3D.gd`。
+  ⚠ 转发清单是**隐形契约**：子弹拿到的 `collider` 是代理，漏转发就会静默不掉血。
+  ⇒ 必须有一条断言逐条盯着转发面（见 `verify_monitor_boss_flow`）。
+- **用实测 AABB 当碰撞盒时，盒子不能切得刚刚好**：表面顶点恰好落在边界上，浮点舍入会把它们判到盒外
+  （2026-10-14 实测残余 1.85%）。每轴外扩 3 cm 后归零。
+- **求动画包络必须逐帧**，抽帧会漏极值（11 帧/剪辑 ⇒ 盒子偏小）；
+  且「单骨但权重未归一」的顶点会被蒙皮按权重缩放，不能当刚性顶点一次算完。
+- **层语义（3D）**：layer 1 = 静态世界/玩家；layer 3（值 4）= 敌人；layer 4（值 8）= 投射物。
+  玩家子弹 `collision_mask = 1|4 = 5`；**敌人/玩家/怪的移动掩码都是 1** ⇒ layer 3 的唯一消费者是玩家子弹。
+  所有视线/遮挡射线（`_has_line_of_sight` / `MonsterVisionSystem3D` / `EnemyIllumination3D`）掩码都是 1，
+  所以给敌人加受击形状**不会**影响任何视线判定。
+

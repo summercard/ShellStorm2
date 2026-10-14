@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-MELEE-BP-WARAXE",
+  "logical_id": "weapon_waraxe",
+  "name": "攻城裂甲斧",
+  "slug": "melee_waraxe",
+  "domain": "weapons",
+  "kind": "axe",
+  "content_ids": [
+    "weapon_waraxe"
+  ],
+  "godot_dimensions_m": [
+    1.6731491088867188,
+    0.45187240839004517,
+    2.8700003623962402
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.770667552947998,
+      -0.144999995827675,
+      -2.35000014305115
+    ],
+    "xyz_size_m": [
+      1.40547204017639,
+      0.268464893102646,
+      2.87000012397766
+    ]
+  },
+  "principal_length_m": 2.87000012397766,
+  "origin": "existing_grip",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_source_v001.blend",
+      "sha256": "c0b5e9dbb326e623e62d98bdebbeda1e6e49b001543ec6d3cde5bc36cd90895a",
+      "triangles": 1300,
+      "glb": "assets/art/items_weapons/weapons/melee_waraxe/components/wpn_melee_waraxe_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/melee_waraxe/runtime/wpn_melee_waraxe_preview_root_top3d.tscn",
+      "glb_sha256": "b4771e69b0d6b54e331e48c7f17b0c327f2812716737651eb8a54a3f11b367a6",
+      "prefab_sha256": "da8992b8ec6ec5b7b50714c80d94c250121a0e3102d129f38f4a3ea15a1b8351"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_ground_source_v001.blend",
+      "sha256": "5ef467748e8b139f6377ec3d019ee6c2c5a5008288112f3b1d88273c3b8c2e1e",
+      "triangles": 152,
+      "glb": "assets/art/items_weapons/weapons/melee_waraxe/components/wpn_melee_waraxe_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/melee_waraxe/runtime/wpn_melee_waraxe_ground_root_top3d.tscn",
+      "glb_sha256": "ebd4601dede84656d53aac828139a7a4d4adc247b66a5b487fb5af892f6d656e",
+      "prefab_sha256": "baa91469acf229a4a604fba6d8d4f0c98e17191503ddcd671196792d3d7535bc"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

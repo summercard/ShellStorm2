@@ -5,3 +5,7 @@
 | 12:35 | 远征01 第一处门堵：门位补墙与实墙无人清理 | [1235_expedition01_rehomefill_seals_live_doors.md](1235_expedition01_rehomefill_seals_live_doors.md) |
 | 13:55 | 远征01 第二处门堵：本局门槽上的实墙无人清理（room_09 → room_10） | [1355_expedition01_port_wall_clear.md](1355_expedition01_port_wall_clear.md) |
 | 17:20 | 血条表现：延迟扣血白段 ＋ 小怪条 ×0.80 ＋ Boss 条上移 | [1720_health_bar_delay_segment_and_layout.md](1720_health_bar_delay_segment_and_layout.md) |
+| 21:25 | 枪族弹体几何档位：霰弹由小变大 / 榴弹更大 / 狙击更长 | [2125_gun_family_bullet_size.md](2125_gun_family_bullet_size.md) |
+| 21:50 | 小僵尸/警察僵尸死亡特效：绿色方块爆开（FX01-19）＋ 去掉倒地动画 | [2150_zombie_goo_death_vfx.md](2150_zombie_goo_death_vfx.md) |
+| 23:40 | 命中特效分流（FX01-20/21）＋ 胖子僵尸死亡 = 小僵尸表现×2 + 绿冲击波（FX01-17 v002） | [2340_hit_routing_and_zombie_death.md](2340_hit_routing_and_zombie_death.md) |
+| 24:00 | 僵尸受击件 = 金属火星同形换绿 ×1.10（FX01-20 v002）＋ 命中点贴肉 0.2m | [2400_zombie_hit_vfx_green_and_inset.md](2400_zombie_hit_vfx_green_and_inset.md) |

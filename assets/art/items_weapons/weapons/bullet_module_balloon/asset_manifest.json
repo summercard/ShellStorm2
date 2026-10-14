@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-BUL-MOD-BULLET-BALLOON",
+  "logical_id": "mod_bullet_balloon",
+  "name": "气球弹模块",
+  "slug": "bullet_module_balloon",
+  "domain": "weapons",
+  "kind": "balloon",
+  "content_ids": [
+    "mod_bullet_balloon"
+  ],
+  "godot_dimensions_m": [
+    0.6207547187805176,
+    0.9399999976158142,
+    0.6207547187805176
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.157569229602814,
+      -0.269999980926514,
+      -0.159999996423721
+    ],
+    "xyz_size_m": [
+      0.315138459205627,
+      0.939999997615814,
+      0.319999992847443
+    ]
+  },
+  "principal_length_m": 0.939999997615814,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_balloon/source/wpn_bullet_module_balloon_source_v001.blend",
+      "sha256": "36fc0e9c52671865184b563500eda47a727894160a8fb16b61d6db3d37039005",
+      "triangles": 1324,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_balloon/components/wpn_bullet_module_balloon_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_balloon/runtime/wpn_bullet_module_balloon_preview_root_top3d.tscn",
+      "glb_sha256": "938ad93f9e50397cf483a3408748fcf562027464c6b7d96e7af1fe350efef0ad",
+      "prefab_sha256": "4b771ab0d8ed67aca97c79583e74a3b6b30edd4253b2875cd8b870e4bf6fd6b4"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_balloon/source/wpn_bullet_module_balloon_ground_source_v001.blend",
+      "sha256": "142d63635a710d3a1c53990109e18236a2d0f1794335c950be4893bd46a76a52",
+      "triangles": 168,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_balloon/components/wpn_bullet_module_balloon_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_balloon/runtime/wpn_bullet_module_balloon_ground_root_top3d.tscn",
+      "glb_sha256": "e148cf3e36ed5da36b2a086e73352d152e8ec54176c77eb1df9d7d210a608513",
+      "prefab_sha256": "e9a0d40db8d7783b720e26b554bd67e1b24d29c1a5200d3ce38b0bcdd98267d4"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

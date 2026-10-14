@@ -1,9 +1,10 @@
 extends RefCounted
-## 私有静态 mesh / material 工具（无 class_name；由 VfxMuzzleFlash3D / VfxImpact3D 通过 preload 调用）。
+## 私有静态 mesh / material 工具（无 class_name；由各 Vfx*3D 通过 preload 调用）。
 ## 设计约束：
 ##   - 所有 mesh 首次生成后缓存在静态变量中跨实例复用（mesh 数据不可变，安全共享）。
 ##   - material 由调用方在实例内首次创建并持有（实例级复用），本文件只负责生成。
 ##   - 不引用任何不存在的图元（如 ConeMesh）；楔形火焰用 CylinderMesh(top_radius=0) 实现。
+## 运动学（方块爆开 / 冲击波那套公式）不放这里，见 `src/vfx/ToonVfxBurst.gd`。
 
 # ---- 静态 mesh 缓存 ----
 static var _core_mesh: Mesh = null
@@ -13,6 +14,8 @@ static var _ring_mesh: Mesh = null
 static var _spark_mesh: Mesh = null
 static var _spike_mesh: Mesh = null
 static var _debris_mesh: Mesh = null
+static var _streak_mesh: Mesh = null
+static var _unit_cube_mesh: Mesh = null
 
 
 static func core_mesh() -> Mesh:
@@ -78,6 +81,26 @@ static func debris_mesh() -> Mesh:
 		b.size = Vector3(0.08, 0.08, 0.18)
 		_debris_mesh = b
 	return _debris_mesh
+
+
+static func streak_mesh() -> Mesh:
+	# 长条火星（金色飞溅）：细长条，**长轴沿本地 Z**，基准长 1.0m
+	# ⇒ 调用方按 `scale.z = 目标长度` 直接给米数，不必反除 mesh 长度。
+	# 截面 0.055m 见方：比 spark_mesh（0.05）略粗，远看才是一条「线」而不是断点。
+	if _streak_mesh == null:
+		var b := BoxMesh.new()
+		b.size = Vector3(0.055, 0.055, 1.0)
+		_streak_mesh = b
+	return _streak_mesh
+
+
+static func unit_cube_mesh() -> Mesh:
+	# 1×1×1 方块：所有「方块粒子」靠 `scale` 摊到各自边长（省 mesh，也保证方块读法统一）。
+	if _unit_cube_mesh == null:
+		var b := BoxMesh.new()
+		b.size = Vector3.ONE
+		_unit_cube_mesh = b
+	return _unit_cube_mesh
 
 
 ## 生成一份卡通无光照半透明材质（调用方持有并复用）。

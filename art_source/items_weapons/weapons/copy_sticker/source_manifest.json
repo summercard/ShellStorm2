@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-COPY-STICKER",
+  "logical_id": "attach_copy_sticker",
+  "name": "复制贴纸",
+  "slug": "copy_sticker",
+  "domain": "weapons",
+  "kind": "sticker",
+  "content_ids": [
+    "attach_copy_sticker"
+  ],
+  "godot_dimensions_m": [
+    0.7014707326889038,
+    0.6399999260902405,
+    0.25417670607566833
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.310000002384186,
+      -0.119999997317791,
+      -0.319999992847443
+    ],
+    "xyz_size_m": [
+      0.620000004768372,
+      0.490000009536743,
+      0.639999985694885
+    ]
+  },
+  "principal_length_m": 0.639999985694885,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/copy_sticker/source/wpn_copy_sticker_source_v001.blend",
+      "sha256": "410b0a0e4a4c40fd25348b937d814a93df893d422a852e58f35a39f70b1d1b99",
+      "triangles": 1316,
+      "glb": "assets/art/items_weapons/weapons/copy_sticker/components/wpn_copy_sticker_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/copy_sticker/runtime/wpn_copy_sticker_preview_root_top3d.tscn",
+      "glb_sha256": "32400ea7bc5deb135d3b52dd13fd049243eaa7a49e8723a1f221211fca08b074",
+      "prefab_sha256": "f75002290e085c30a14b9b82aed99f1380312e70aab23789a9655344942b0c2c"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/copy_sticker/source/wpn_copy_sticker_ground_source_v001.blend",
+      "sha256": "e1a405438dfa8591b7f5413f796d7b8c0eaf4af54abf7bc7a2be19b8c4752737",
+      "triangles": 150,
+      "glb": "assets/art/items_weapons/weapons/copy_sticker/components/wpn_copy_sticker_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/copy_sticker/runtime/wpn_copy_sticker_ground_root_top3d.tscn",
+      "glb_sha256": "d514e9dc626456daa62e57d016352e878e563a8d74a15748213d59e2aef757be",
+      "prefab_sha256": "f81d20391e0f0a608a426177d73fd91f0373137b12a7b4a04b7460992b21f93a"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

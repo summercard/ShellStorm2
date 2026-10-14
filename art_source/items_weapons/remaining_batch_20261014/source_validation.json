@@ -1,0 +1,205 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "slug": "beacon",
+      "role": "preview",
+      "triangles": 1520
+    },
+    {
+      "slug": "beacon",
+      "role": "ground",
+      "triangles": 196
+    },
+    {
+      "slug": "room_key",
+      "role": "preview",
+      "triangles": 1136
+    },
+    {
+      "slug": "room_key",
+      "role": "ground",
+      "triangles": 120
+    },
+    {
+      "slug": "cell_pack",
+      "role": "preview",
+      "triangles": 1692
+    },
+    {
+      "slug": "cell_pack",
+      "role": "ground",
+      "triangles": 156
+    },
+    {
+      "slug": "flashlight_basic",
+      "role": "preview",
+      "triangles": 1316
+    },
+    {
+      "slug": "flashlight_basic",
+      "role": "ground",
+      "triangles": 116
+    },
+    {
+      "slug": "flashlight_advanced",
+      "role": "preview",
+      "triangles": 1504
+    },
+    {
+      "slug": "flashlight_advanced",
+      "role": "ground",
+      "triangles": 128
+    },
+    {
+      "slug": "flashlight_efficient",
+      "role": "preview",
+      "triangles": 1316
+    },
+    {
+      "slug": "flashlight_efficient",
+      "role": "ground",
+      "triangles": 116
+    },
+    {
+      "slug": "blueprint_scroll",
+      "role": "preview",
+      "triangles": 1316
+    },
+    {
+      "slug": "blueprint_scroll",
+      "role": "ground",
+      "triangles": 116
+    },
+    {
+      "slug": "bullet_module_standard",
+      "role": "preview",
+      "triangles": 1132
+    },
+    {
+      "slug": "bullet_module_standard",
+      "role": "ground",
+      "triangles": 140
+    },
+    {
+      "slug": "bullet_module_sticky",
+      "role": "preview",
+      "triangles": 2280
+    },
+    {
+      "slug": "bullet_module_sticky",
+      "role": "ground",
+      "triangles": 194
+    },
+    {
+      "slug": "bullet_module_bounce",
+      "role": "preview",
+      "triangles": 1272
+    },
+    {
+      "slug": "bullet_module_bounce",
+      "role": "ground",
+      "triangles": 124
+    },
+    {
+      "slug": "bullet_module_piercing",
+      "role": "preview",
+      "triangles": 1224
+    },
+    {
+      "slug": "bullet_module_piercing",
+      "role": "ground",
+      "triangles": 144
+    },
+    {
+      "slug": "bullet_module_explosive",
+      "role": "preview",
+      "triangles": 1604
+    },
+    {
+      "slug": "bullet_module_explosive",
+      "role": "ground",
+      "triangles": 180
+    },
+    {
+      "slug": "bullet_module_homing",
+      "role": "preview",
+      "triangles": 1992
+    },
+    {
+      "slug": "bullet_module_homing",
+      "role": "ground",
+      "triangles": 194
+    },
+    {
+      "slug": "bullet_module_blackhole",
+      "role": "preview",
+      "triangles": 1424
+    },
+    {
+      "slug": "bullet_module_blackhole",
+      "role": "ground",
+      "triangles": 194
+    },
+    {
+      "slug": "bullet_module_balloon",
+      "role": "preview",
+      "triangles": 1324
+    },
+    {
+      "slug": "bullet_module_balloon",
+      "role": "ground",
+      "triangles": 168
+    },
+    {
+      "slug": "attachment_fan",
+      "role": "preview",
+      "triangles": 1512
+    },
+    {
+      "slug": "attachment_fan",
+      "role": "ground",
+      "triangles": 144
+    },
+    {
+      "slug": "copy_sticker",
+      "role": "preview",
+      "triangles": 1316
+    },
+    {
+      "slug": "copy_sticker",
+      "role": "ground",
+      "triangles": 150
+    },
+    {
+      "slug": "melee_baseball_bat",
+      "role": "preview",
+      "triangles": 1604
+    },
+    {
+      "slug": "melee_baseball_bat",
+      "role": "ground",
+      "triangles": 194
+    },
+    {
+      "slug": "melee_greatblade",
+      "role": "preview",
+      "triangles": 1708
+    },
+    {
+      "slug": "melee_greatblade",
+      "role": "ground",
+      "triangles": 168
+    },
+    {
+      "slug": "melee_waraxe",
+      "role": "preview",
+      "triangles": 1300
+    },
+    {
+      "slug": "melee_waraxe",
+      "role": "ground",
+      "triangles": 152
+    }
+  ]
+}

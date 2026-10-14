@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/bullet_module_standard/components/wpn_bullet_module_standard_preview_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-BUL-MOD-BULLET-STANDARD"
+metadata/logical_id = "mod_bullet_standard"
+metadata/model_role = "preview"
+metadata/asset_version = "v001"
+metadata/triangle_count = 1132
+metadata/dimensions_m = Vector3(0.544772744178772, 0.940000057220459, 0.5501136779785156)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

@@ -1,0 +1,69 @@
+{
+  "asset_id": "ITM-KEY-ITEM-ROOM-KEY",
+  "logical_id": "item_room_key",
+  "name": "房间钥匙",
+  "slug": "room_key",
+  "domain": "props",
+  "kind": "key",
+  "content_ids": [
+    "item_room_key"
+  ],
+  "godot_dimensions_m": [
+    0.6731603145599365,
+    1.0649999380111694,
+    0.20596696436405182
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.300000011920929,
+      -0.405000001192093,
+      -0.0599999986588955
+    ],
+    "xyz_size_m": [
+      0.639999985694885,
+      1.06499993801117,
+      0.119999997317791
+    ]
+  },
+  "principal_length_m": 1.06499993801117,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/props/room_key/source/itm_room_key_source_v001.blend",
+      "sha256": "c53175ebdbf1f0862da62ea4655b74509f8cda52e1d6611edb73073b04a154a9",
+      "triangles": 1136,
+      "glb": "assets/art/items_weapons/props/room_key/components/itm_room_key_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/room_key/runtime/itm_room_key_preview_root_top3d.tscn",
+      "glb_sha256": "0584f002b32c3f2bf32e074e8301ba7f9881ac6aa14008f0f6b1f67b7f74c538",
+      "prefab_sha256": "a86f208537236dd1d44aa34abd75fa95b3395be9f0606361c19b357610c0237a"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/props/room_key/source/itm_room_key_ground_source_v001.blend",
+      "sha256": "ad29b4246d67c9747cd8dce115e505a30b171213a2a0c8e3fdac26f2ba271c08",
+      "triangles": 120,
+      "glb": "assets/art/items_weapons/props/room_key/components/itm_room_key_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/room_key/runtime/itm_room_key_ground_root_top3d.tscn",
+      "glb_sha256": "91a2bf971a2d0fc14764c8f90fdec9b9dfc2fe2f36cab5b488f3cc3bfa9c84fa",
+      "prefab_sha256": "c0d7d83015c25810d686dc520ce710ba39cff415c67bde61413660f9e8a15452"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

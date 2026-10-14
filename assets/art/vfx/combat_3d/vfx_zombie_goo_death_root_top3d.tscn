@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://fx012a"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxZombieGooDeath3D.gd" id="1_zombie_goo_death"]
+
+[node name="VfxZombieGooDeath3D" type="Node3D"]
+script = ExtResource("1_zombie_goo_death")
+metadata/asset_id = "VFX-ZOMBIE-GOO-DEATH-3D"
+metadata/asset_version = "v001"

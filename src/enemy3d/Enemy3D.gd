@@ -24,6 +24,39 @@ const GROUP_ENEMY_3D := "enemy_3d"
 const GROUP_DAMAGEABLE_3D := "damageable_3d"
 ## 仅供视野管理死亡表现，不能作为战斗/寻路目标。
 const GROUP_DEATH_VISUAL_3D := "enemy_death_visual_3d"
+## 一次性战斗特效的出生高度：胸口 = 脚底 + 0.65m。
+## 特效侧（`VfxZombieGooDeath3D` / `VfxDeathBlast3D` 的 `SPAWN_CENTER_LIFT`）用同一个口径
+## 反推脚底 —— 两边必须一致，否则「地上的液体」/「地面冲击波」会浮在怪的腰上。
+const EFFECT_SPAWN_LIFT := 0.65
+## **命中特效的贴肉落点**：碰撞壳上的命中点沿**外法线的反向**再收进模型这么多米。
+## 业主 2026-10-14 第四轮：「受击的盒子**没有贴着模型**，碰撞盒里陷进去坐标大概 **0.2 米**」。
+##
+## 根因：弹体是在**碰撞壳表面**判定命中的，而碰撞壳比模型大一圈（胶囊留了余量）
+## ⇒ 特效出生点落在壳外，读作「悬空在怪旁边」。把出生点收进 0.2m 就长回模型上了。
+## 只对**怪**用（见 `hit_effect_anchor`）：墙面 / 掩体没有「模型比碰撞盒小」这个问题，
+## 收进去反而会钻进墙里。
+const HIT_EFFECT_INSET_M := 0.20
+## **僵尸三兄弟**：小僵尸（`melee_chaser`）/ 警察僵尸（`ranged_caster`）/ 胖子僵尸（`fat_zombie03`）。
+## 业主 2026-10-14 一次点名，**三条口径都挂在这一个名单上**（别拆成三份会漂的别名）：
+##   ① 被枪击 / 被近战打中 ⇒ FX01-20 `VFX-GOO-HIT-3D`（**v002 起 = 金属火星造型 + 僵尸绿**、
+##      比打其它物体的那件大 10%），见 `uses_goo_hit_burst()`；
+##   ② 死亡后**不再播倒地动画、不留尸体**（`_retire_goo_death_visual()`），见 `uses_no_corpse_death()`；
+##   ③ 死亡表现按体型分两支（见 `GOO_DEATH_KINDS` 与 `_spawn_fat_death_burst()`）。
+## 精英同族（如「巨大化 · 小僵尸」）一并适用 —— 它们本来就没有倒地动画（走压扁回收），
+## 统一成一套表现，避免「同一只怪换个词缀就换一种死法」。
+const ZOMBIE_KINDS: Array[String] = ["melee_chaser", "ranged_caster", "fat_zombie03"]
+## 死亡走 FX01-19 `VFX-ZOMBIE-GOO-DEATH-3D`（绿方块爆开 + 抛物线飞溅 + 地面液体 + 绿色冲击波）的怪种。
+## 胖子僵尸**不在**本名单：它走自己的重型自爆（FX01-17 橙红方块 + 绿色冲击波）。
+const GOO_DEATH_KINDS: Array[String] = ["melee_chaser", "ranged_caster"]
+## FX01-19 的尺寸基准。业主 2026-10-14 第二轮明确「**小僵尸的死亡特效不要改变**」
+## ⇒ 保持 1.0（规格尺寸，几何常量本身不动，验收仍有尺寸线性断言守着）。
+const GOO_DEATH_EFFECT_SIZE := 1.0
+## FX01-17（胖子僵尸死亡）的尺寸基准。业主 2026-10-14 第二轮：
+## 「把小僵尸的死亡特效**放大两倍**给胖子僵尸用」⇒ 由小僵尸的 1.0 提为 2.0。
+## ⚠ 这条替换了 v001 的「按伤害半径反推尺寸」（radius × 0.6）口径：
+##    现在的尺寸是**业主指定的固定倍率**，冲击波外缘（≈1.548 × 2.0 = 3.1m）
+##    不再等于远征01 的 5.0m 伤害半径 —— 它是一条风格元素，不再当半径指示。
+const FAT_DEATH_EFFECT_SIZE := 2.0
 const VALID_STATES := [
 	"dormant", "idle", "patrol", "alert", "chase", "search", "return",
 	"telegraph", "attack", "recovery", "stagger", "dead",
@@ -233,6 +266,13 @@ var _patrol_step := 0
 var _boss_skill_bag: Array[String] = []
 var _boss_skill_index := 0
 var monitor_combat: MonitorBossCombat
+## 显示器 Boss 的**动画受击盒**。根节点那个固定圆柱跟不上屏幕的前倾/扑砸/自转，
+## 单靠它会让子弹从可见模型里穿过、在模型后面的空气里结算命中。
+## 受击盒挂在**独立代理体** `EnemyHitVolume3D` 上，而不是挂在怪物自己身上 ——
+## 盒子会伸进地面与墙里，挂在身上 `move_and_slide` 会把怪顶起来（实测坐地抬高 0.42 m）。
+var _monitor_hit_body: EnemyHitVolume3D = null
+var _monitor_hit_shapes: Array[CollisionShape3D] = []
+var _monitor_hit_presentation: MonitorBossPresentation = null
 var _last_attack_result := "none"
 var _last_state_reason := "spawned"
 var _ambush_reburrow_cooldown := 0.0
@@ -308,6 +348,9 @@ func apply_profile(kind: String) -> void:
 func configure_from_enemy_data(data: Dictionary) -> void:
 	if monitor_combat != null:monitor_combat.cancel()
 	monitor_combat = null
+	# 重新配置等于换一只怪：上一任的动画受击盒必须一起走，
+	# 否则残留形状会在这个位置凭空挡子弹。
+	_clear_monitor_hit_volumes()
 	enemy_data = data.duplicate(true)
 	_death_explosion = (data.get("death_explosion", {}) as Dictionary).duplicate(true)
 	if not bool(data.get("is_elite", false)):
@@ -781,6 +824,10 @@ func _process(delta: float) -> void:
 	if avatar != null:
 		if monitor_combat != null:
 			avatar.sync_boss_presentation(monitor_combat.presentation_context())
+			# 受击盒必须与**本帧渲染出来的**姿态一致：紧跟表现层同步、用同一份骨姿态。
+			# 反过来说，盒子再也不会「停在上一帧该在的地方」而和画面错开。
+			if _ensure_monitor_hit_volumes():
+				_sync_monitor_hit_volumes()
 		else:
 			avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration())
 	_tick_overhead_health_bar_delay(delta)
@@ -789,6 +836,79 @@ func _process(delta: float) -> void:
 	if _runtime_ai_active or ai_state == "dead" or illumination_sensor == null:
 		return
 	illumination_sensor.tick(delta)
+
+
+## 显示器 Boss：按表现层给出的骨局部盒子建一组**跟骨走**的受击形状。
+## 形状挂在独立代理体上（`collision_layer` 与本体同层 ⇒ 玩家子弹打得中；
+## `collision_mask = 0` ⇒ 谁也不挡），因此子弹拿到的 `collider` 是代理，
+## 伤害由 `EnemyHitVolume3D` 转交本体。只在表现层就绪后建一次；
+## 非本 Boss（`monitor_combat == null`）永不建。
+func _ensure_monitor_hit_volumes() -> bool:
+	if monitor_combat == null or avatar == null:
+		return false
+	if _monitor_hit_body != null and is_instance_valid(_monitor_hit_body):
+		return true
+	var presentation := avatar.get_animated_boss_root() as MonitorBossPresentation
+	if presentation == null or presentation.skeleton == null:
+		return false
+	var spec := MonitorBossPresentation.get_hit_volume_spec()
+	if spec.is_empty():
+		return false
+	var body := EnemyHitVolume3D.new()
+	body.name = "MonitorHitVolumes"
+	body.collision_layer = 4
+	body.collision_mask = 0
+	body.bind(self)
+	add_child(body)
+	var shapes: Array[CollisionShape3D] = []
+	for entry in spec:
+		var box := BoxShape3D.new()
+		box.size = entry["size"] as Vector3
+		var shape := CollisionShape3D.new()
+		shape.name = "Volume_%s" % str(entry["bone"]).replace(".", "_")
+		shape.shape = box
+		body.add_child(shape)
+		shapes.append(shape)
+	_monitor_hit_body = body
+	_monitor_hit_shapes = shapes
+	_monitor_hit_presentation = presentation
+	_sync_monitor_hit_volumes()
+	return true
+
+
+## 把受击形状搬到本帧骨姿态上。必须在 `sync_boss_presentation` 之后调用 ——
+## 否则盒子会停在上一帧的位置，等于把「隔空命中」换个方向重演一遍。
+## 顺带把代理体的碰撞层与本体对齐：本体死掉变 layer 0 时，盒子必须一起失效，
+## 否则会留下一组「打得到、但怪已经死了」的幽灵体积。
+func _sync_monitor_hit_volumes() -> void:
+	if _monitor_hit_shapes.is_empty() or _monitor_hit_presentation == null:
+		return
+	if not is_instance_valid(_monitor_hit_presentation):
+		return
+	if _monitor_hit_body != null and is_instance_valid(_monitor_hit_body):
+		_monitor_hit_body.collision_layer = collision_layer
+	var transforms := _monitor_hit_presentation.hit_volume_transforms()
+	var count := mini(transforms.size(), _monitor_hit_shapes.size())
+	for index in range(count):
+		_monitor_hit_shapes[index].global_transform = transforms[index]
+
+
+## 供验收读取：本怪当前的动画受击盒容器（null = 非本 Boss 或表现层未就绪）。
+func get_monitor_hit_volume_body() -> EnemyHitVolume3D:
+	return _monitor_hit_body
+
+
+## 供验收读取：本怪当前的动画受击形状。
+func get_monitor_hit_volumes() -> Array[CollisionShape3D]:
+	return _monitor_hit_shapes
+
+
+func _clear_monitor_hit_volumes() -> void:
+	if _monitor_hit_body != null and is_instance_valid(_monitor_hit_body):
+		_monitor_hit_body.queue_free()
+	_monitor_hit_body = null
+	_monitor_hit_shapes.clear()
+	_monitor_hit_presentation = null
 
 
 func activate_from_player_proximity(player_node: Node3D, activation_range: float) -> bool:
@@ -1274,14 +1394,17 @@ func _explode() -> void:
 ## 仇恨不转移：怪物 AI 的目标只从 `player_3d` 组里取，故「怪炸怪」只掉血、不会互殴。
 func _detonate_death_explosion() -> void:
 	var damage := int(_death_explosion.get("damage", 0))
+	var radius := maxf(0.5, float(_death_explosion.get("radius_m", 0.0)))
+	var sfx_radius := float(_death_explosion.get("sfx_radius_m", 20.0))
+	# 视觉：胖子僵尸的死亡表现 = 小僵尸死亡表现 ×2 + 绿色冲击波（业主 2026-10-14 指定）。
+	# ⚠ **表现 ≠ 玩法**：视觉在这一行就出（不管伤害是多少），下面才是伤害结算。
+	# 规格里 damage<=0 表示「本关不自爆」—— 那只是不掉血，不是「连死亡表现都不给」。
+	# 分开是为了让去掉倒地动画后的胖子僵尸仍有死亡表现（见 `_die()`）。
+	_spawn_fat_death_burst(1.0)
 	if damage <= 0:
 		return
-	var radius := maxf(0.5, float(_death_explosion.get("radius_m", 5.0)))
-	var sfx_radius := float(_death_explosion.get("sfx_radius_m", 20.0))
-	# 视觉尺寸跟着规格半径走：环外缘 ≈ 0.72 × size × 2.20 ⇒ size ≈ radius × 0.6，
-	# 于是 5.0 m 的自爆画到 ≈4.75 m，观感上正好顶满伤害半径。
-	var blast_size: float = clampf(radius * 0.6, 1.2, 4.0)
-	_spawn_effect("VFX-DEATH-BLAST-3D", blast_size)
+	if radius <= 0.0:
+		return
 	if sfx_radius > 0.0 and MonsterAIManager != null:
 		MonsterAIManager.broadcast_sound_stimulus(global_position, sfx_radius, "explosion", self)
 	_damage_allies_in_blast(damage, radius)
@@ -2278,26 +2401,43 @@ func _die() -> void:
 			_spawn_death_fragments()
 	# 关卡级死亡自爆（远征01 胖子僵尸）。放在 `killed.emit` 之前 —— 自爆炸死的怪
 	# 也必须各自走完自己的 `_die()` + `killed`（掉落不能因为「死于自爆」而漏结算）。
-	# 空规格 = 不自爆，故未配置关卡走到这里是一行 no-op。
+	# 规格非空 ⇒ 表现 + 伤害结算一起走；规格为空但本怪是胖子僵尸 ⇒ 只留**表现**
+	# （见 `_detonate_death_explosion`：视觉那一行不受 damage 影响）。
 	if not _death_explosion.is_empty():
 		_detonate_death_explosion()
+	elif enemy_kind == "fat_zombie03":
+		_spawn_fat_death_burst(1.0)
 	collision_layer = 0
 	collision_mask = 0
-	add_to_group(GROUP_DEATH_VISUAL_3D)
+	# 死亡表现分两路：僵尸三兄弟**没有尸体** ⇒ 不进死亡显隐组
+	# （那个组是给 PlayerVision3D 管尸体显隐用的；没有尸体还留在组里只会留个空壳）。
+	var no_corpse := uses_no_corpse_death()
+	var goo_death := uses_goo_death_burst()
+	if not no_corpse:
+		add_to_group(GROUP_DEATH_VISUAL_3D)
 	_runtime_ai_active = false
 	process_mode = Node.PROCESS_MODE_INHERIT
 	set_physics_process(false)
 	set_process(true)
 	if _overhead_health_root != null:
 		_overhead_health_root.visible = false
-	_spawn_effect("VFX-EXPLOSION-3D" if enemy_kind == "boss" else "VFX-IMPACT-3D", 1.4 if enemy_kind == "boss" else 0.8)
+	if goo_death:
+		_spawn_goo_death_burst()
+	elif enemy_kind != "fat_zombie03":
+		# 胖子僵尸的死亡表现已在上面的自爆分支里出过（表现 ≠ 玩法：不管有没有伤害规格）
+		_spawn_effect("VFX-EXPLOSION-3D" if enemy_kind == "boss" else "VFX-IMPACT-3D", 1.4 if enemy_kind == "boss" else 0.8)
 	killed.emit(self, get_enemy_data())
 	if not elite_id.is_empty() and EliteRosterService != null:
 		EliteRosterService.settle(elite_id, elite_encounter_instance_id, "killed", {
 			"floor_number": int(enemy_data.get("floor_number", enemy_data.get("floor", 0))),
 			"room_id": room_id,
 		})
-	if avatar != null and (avatar.has_formal_normal() or monitor_combat != null):
+	if no_corpse:
+		# **去掉倒地动画**（业主 2026-10-14，两轮点名：先小僵尸/警察僵尸，再胖子僵尸）：
+		# 不再等 `get_formal_death_duration()` 把「dead」段（倒地）播完、也不再留尸体
+		# —— 模型本帧即收起、节点本帧回收，死亡表现完全交给各自的特效。
+		_retire_goo_death_visual()
+	elif avatar != null and (avatar.has_formal_normal() or monitor_combat != null):
 		if MonsterAIManager != null:
 			MonsterAIManager.unregister_enemy(self)
 		remove_from_group("enemy_3d")
@@ -2309,6 +2449,96 @@ func _die() -> void:
 		var tween := create_tween()
 		tween.tween_property(self, "scale", Vector3(1.25, 0.05, 1.25), 0.34)
 		tween.tween_callback(queue_free)
+
+
+## 本怪是否走「绿色方块爆开」死亡表现（小僵尸 / 警察僵尸，见 `GOO_DEATH_KINDS`）。
+func uses_goo_death_burst() -> bool:
+	return GOO_DEATH_KINDS.has(enemy_kind)
+
+
+## 本怪死亡后**没有尸体、也不播倒地动画**（僵尸三兄弟，见 `ZOMBIE_KINDS`）。
+## 与 `uses_goo_death_burst()` 是**两条不同的轴**，刻意分开命名：
+##   前者管「用哪个特效」，本函数管「要不要留一具躯干」。
+## 胖子僵尸两条都为真值之一（自爆表现 + 不留尸体）。
+func uses_no_corpse_death() -> bool:
+	return ZOMBIE_KINDS.has(enemy_kind)
+
+
+## 本怪是否为**战斗命中特效**的分流对象：打中它时用 FX01-20（`VFX-GOO-HIT-3D`，
+## v002 = 金属火星造型 + 僵尸绿）而不是 FX01-21（金色金属火星）。
+## 调用方是 `Projectile3D._spawn_hit_effect()` 与 `PlayerMeleeCombat3D._spawn_hit_feedback()`
+## —— 两边都读这一个入口，避免「枪击是一种读法、近战又是另一种」。
+func uses_goo_hit_burst() -> bool:
+	return ZOMBIE_KINDS.has(enemy_kind)
+
+
+## 把碰撞壳上的命中点**收进模型**：`hit_point` 是物理相交点（落在碰撞壳表面），
+## `surface_normal` 是被击面的**外**法线（`KinematicCollision3D.get_normal()` 口径）。
+## 返回沿外法线反向退 `HIT_EFFECT_INSET_M` 米之后的出生点 —— 特效因此贴在模型上而不是悬空。
+##
+## 退化情形（任一输入不可用）按「从怪体中心指向命中点」定外法线，效果一致；
+## 连怪体中心都与命中点重合时原样返回（不动比乱动安全）。
+## ⚠ 只对怪调用：墙面 / 掩体不存在「模型比碰撞盒小」的问题。
+func hit_effect_anchor(hit_point: Vector3, surface_normal: Vector3) -> Vector3:
+	var outward := surface_normal
+	if outward.length_squared() < 0.0001:
+		outward = hit_point - global_position
+	if outward.length_squared() < 0.0001:
+		return hit_point
+	return hit_point - outward.normalized() * HIT_EFFECT_INSET_M
+
+
+## 生成 FX01-19 `VFX-ZOMBIE-GOO-DEATH-3D`：出生点取**胸口**（与 `_spawn_effect` 同口径），
+## 并把 `floor_y = 脚底行走面` 交给特效 —— 它靠这个高度用解析式求飞溅粒子的落点、
+## 并把「地上的液体」与「绿色冲击波」铺在真正的地面上。
+## ⚠ 塔楼楼层向下建造（98F ≈ −1176 m），`floor_y` **必须**是真实高度，
+## 绝不能让特效自己兜底成 0（那就是 2026-09-22 弹壳「实机看不见」的同一类缺陷）。
+func _spawn_goo_death_burst() -> void:
+	_spawn_zombie_death_effect(VfxPool3D.FX01_ZOMBIE_GOO_DEATH, GOO_DEATH_EFFECT_SIZE)
+
+
+## 生成 FX01-17 `VFX-DEATH-BLAST-3D`（胖子僵尸死亡：小僵尸死亡表现 ×2 + 绿色冲击波）。
+## `radius` 只用于「有没有规格」的判断，**不再决定视觉尺寸** —— 尺寸走
+## `FAT_DEATH_EFFECT_SIZE`（业主指定的固定倍率）。伤害结算与视觉是两条独立的线，见
+## `_detonate_death_explosion`。
+func _spawn_fat_death_burst(radius: float) -> void:
+	if radius <= 0.0:
+		return
+	_spawn_zombie_death_effect(VfxPool3D.FX01_DEATH_BLAST, FAT_DEATH_EFFECT_SIZE)
+
+
+## 僵尸死亡特效的共用出口：胸口出生 + `floor_y = 脚底行走面`。
+## 两件（FX01-17 / FX01-19）走同一个函数，保证「地面高度真源」只有一处口径。
+func _spawn_zombie_death_effect(asset_id: StringName, size: float) -> void:
+	if get_tree().current_scene == null:
+		return
+	var world_position := global_position + Vector3(0, EFFECT_SPAWN_LIFT, 0)
+	var color: Color = EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE)
+	var context := {"floor_y": global_position.y}
+	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
+	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
+		(vfx_pools[0] as VfxPool3D).acquire(asset_id, world_position, color, size, context)
+		return
+	# 无池时独立实例化作后备（与 `_spawn_effect` 同口径）
+	var effect := VfxPool3D.create_unpooled(asset_id)
+	if effect != null:
+		get_tree().current_scene.add_child(effect)
+		effect.activate(world_position, color, size, context)
+
+
+## 收起模型并本帧回收：这条路**没有倒地动画、也没有尸体**。
+## 与旧路径的差别是「不再 `tween_interval(get_formal_death_duration())`」——
+## 小僵尸的倒地段实测 2.4s、胖子僵尸 2.6s，留着它就等于没去掉倒地动画。
+func _retire_goo_death_visual() -> void:
+	if MonsterAIManager != null:
+		MonsterAIManager.unregister_enemy(self)
+	remove_from_group("enemy_3d")
+	remove_from_group("damageable_3d")
+	remove_from_group(GROUP_DEATH_VISUAL_3D)
+	if avatar != null:
+		avatar.visible = false
+	set_process(false)
+	queue_free()
 
 
 func _should_begin_elite_escape() -> bool:
@@ -2473,7 +2703,7 @@ func _update_boss_phase() -> void:
 func _spawn_effect(asset_id: StringName, size: float) -> void:
 	if get_tree().current_scene == null:
 		return
-	var world_position := global_position + Vector3(0, 0.65, 0)
+	var world_position := global_position + Vector3(0, EFFECT_SPAWN_LIFT, 0)
 	var color: Color = EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE)
 	# FX01-* 战斗反馈特效：走 VfxPool3D 新体系
 	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")

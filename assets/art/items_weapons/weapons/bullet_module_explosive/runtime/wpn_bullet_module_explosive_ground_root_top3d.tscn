@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/weapons/bullet_module_explosive/components/wpn_bullet_module_explosive_ground_visual_top3d.glb" id="1"]
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "WPN-BUL-MOD-BULLET-EXPLOSIVE"
+metadata/logical_id = "mod_bullet_explosive"
+metadata/model_role = "ground"
+metadata/asset_version = "v001"
+metadata/triangle_count = 180
+metadata/dimensions_m = Vector3(0.6087619662284851, 0.940000057220459, 0.622190535068512)
+metadata/collision_intent = "external_gameplay_owner"
+[node name="Visual" parent="." instance=ExtResource("1")]

@@ -1,0 +1,69 @@
+{
+  "asset_id": "WPN-BUL-MOD-BULLET-EXPLOSIVE",
+  "logical_id": "mod_bullet_explosive",
+  "name": "爆炸弹模块",
+  "slug": "bullet_module_explosive",
+  "domain": "weapons",
+  "kind": "explosive",
+  "content_ids": [
+    "mod_bullet_explosive"
+  ],
+  "godot_dimensions_m": [
+    0.6087619662284851,
+    0.940000057220459,
+    0.622190535068512
+  ],
+  "measurement": {
+    "xyz_min_m": [
+      -0.157569229602814,
+      -0.269999980926514,
+      -0.159999996423721
+    ],
+    "xyz_size_m": [
+      0.315138459205627,
+      0.939999997615814,
+      0.319999992847443
+    ]
+  },
+  "principal_length_m": 0.939999997615814,
+  "origin": "bottom_center",
+  "animation_tier": "tier_0_static",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "budget_triangles": [
+    100,
+    200
+  ],
+  "status": "已优化并正式接入",
+  "geometry_design": "饱满可辨轮廓；源组件采样减面；无碰撞；公共色盘",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_explosive/source/wpn_bullet_module_explosive_source_v001.blend",
+      "sha256": "e0c875b5cd09d95c9e63150a85516a0d0d64aa8b734f281685e9d7adf9fba262",
+      "triangles": 1604,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_explosive/components/wpn_bullet_module_explosive_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_explosive/runtime/wpn_bullet_module_explosive_preview_root_top3d.tscn",
+      "glb_sha256": "7feda8bbe95418039627ad2a80d971d34450ff1f3f2f401201e17ad71854568e",
+      "prefab_sha256": "00a6462d84928663f290bf911a09dea3e4394f4cabd08f2212ef8b02eef4e771"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_module_explosive/source/wpn_bullet_module_explosive_ground_source_v001.blend",
+      "sha256": "46814d452d0769790d0bf925e8e63acc0ce0dea03de8adae81eb910a5db55364",
+      "triangles": 180,
+      "glb": "assets/art/items_weapons/weapons/bullet_module_explosive/components/wpn_bullet_module_explosive_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/weapons/bullet_module_explosive/runtime/wpn_bullet_module_explosive_ground_root_top3d.tscn",
+      "glb_sha256": "5f2cddd2331f77bb83b90e2830d9797560e3a995b2a0e92342423444a4ef2c56",
+      "prefab_sha256": "1d05f672d11fd878b108e941cde5530a4a13705402bc493dd84068e444ccf2b9"
+    }
+  },
+  "validation": {
+    "runtime_gallery": true,
+    "content_mapping": true,
+    "ground_budget": true,
+    "notes": "see development/2026-10-14_remaining_item_models.md"
+  }
+}

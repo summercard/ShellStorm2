@@ -6,8 +6,25 @@ const MODEL_ROLE_PREVIEW := &"preview"
 const MODEL_ROLE_GROUND := &"ground"
 const MODEL_ROLE_ICON := &"icon"
 const GROUND_DISPLAY_SCALE := {"item_battery_l": 1.30, "item_health_potion": 1.30}
-## 同一AssetID的地面派生模型；预览高模另行导入，当前保留原预览表现。
+## 同一AssetID的地面派生模型；新批次预览高模由PREVIEW_SCENES独立路由。
 const GROUND_SCENES := {
+	"item_beacon": preload("res://assets/art/items_weapons/props/beacon/runtime/itm_beacon_ground_root_top3d.tscn"),
+	"item_room_key": preload("res://assets/art/items_weapons/props/room_key/runtime/itm_room_key_ground_root_top3d.tscn"),
+	"item_cell_pack": preload("res://assets/art/items_weapons/props/cell_pack/runtime/itm_cell_pack_ground_root_top3d.tscn"),
+	"item_flashlight_basic": preload("res://assets/art/items_weapons/props/flashlight_basic/runtime/itm_flashlight_basic_ground_root_top3d.tscn"),
+	"item_flashlight_advanced": preload("res://assets/art/items_weapons/props/flashlight_advanced/runtime/itm_flashlight_advanced_ground_root_top3d.tscn"),
+	"item_flashlight_efficient": preload("res://assets/art/items_weapons/props/flashlight_efficient/runtime/itm_flashlight_efficient_ground_root_top3d.tscn"),
+	"__blueprint__": preload("res://assets/art/items_weapons/props/blueprint_scroll/runtime/itm_blueprint_scroll_ground_root_top3d.tscn"),
+	"mod_bullet_standard": preload("res://assets/art/items_weapons/weapons/bullet_module_standard/runtime/wpn_bullet_module_standard_ground_root_top3d.tscn"),
+	"mod_bullet_sticky": preload("res://assets/art/items_weapons/weapons/bullet_module_sticky/runtime/wpn_bullet_module_sticky_ground_root_top3d.tscn"),
+	"mod_bullet_bounce": preload("res://assets/art/items_weapons/weapons/bullet_module_bounce/runtime/wpn_bullet_module_bounce_ground_root_top3d.tscn"),
+	"mod_bullet_piercing": preload("res://assets/art/items_weapons/weapons/bullet_module_piercing/runtime/wpn_bullet_module_piercing_ground_root_top3d.tscn"),
+	"mod_bullet_explosive": preload("res://assets/art/items_weapons/weapons/bullet_module_explosive/runtime/wpn_bullet_module_explosive_ground_root_top3d.tscn"),
+	"mod_bullet_homing": preload("res://assets/art/items_weapons/weapons/bullet_module_homing/runtime/wpn_bullet_module_homing_ground_root_top3d.tscn"),
+	"mod_bullet_blackhole": preload("res://assets/art/items_weapons/weapons/bullet_module_blackhole/runtime/wpn_bullet_module_blackhole_ground_root_top3d.tscn"),
+	"mod_bullet_balloon": preload("res://assets/art/items_weapons/weapons/bullet_module_balloon/runtime/wpn_bullet_module_balloon_ground_root_top3d.tscn"),
+	"attach_fan": preload("res://assets/art/items_weapons/weapons/attachment_fan/runtime/wpn_attachment_fan_ground_root_top3d.tscn"),
+	"attach_copy_sticker": preload("res://assets/art/items_weapons/weapons/copy_sticker/runtime/wpn_copy_sticker_ground_root_top3d.tscn"),
 	"item_battery_l": preload("res://assets/art/items_weapons/props/battery_large/runtime/itm_battery_large_ground_root_top3d.tscn"),
 	"item_battery_s": preload("res://assets/art/items_weapons/props/battery_small/runtime/itm_battery_small_ground_root_top3d.tscn"),
 	"item_health_potion": preload("res://assets/art/items_weapons/props/health_potion/runtime/itm_health_potion_ground_root_top3d.tscn"),
@@ -16,6 +33,26 @@ const GROUND_SCENES := {
 	"attach_triple_muzzle": preload("res://assets/art/items_weapons/weapons/triple_muzzle/runtime/wpn_triple_muzzle_ground_root_top3d.tscn"),
 	"attach_rubber_stock": preload("res://assets/art/items_weapons/weapons/rubber_stock/runtime/wpn_rubber_stock_ground_root_top3d.tscn"),
 	"attach_scope": preload("res://assets/art/items_weapons/weapons/scope/runtime/wpn_scope_ground_root_top3d.tscn"),
+}
+
+const PREVIEW_SCENES := {
+	"item_beacon": preload("res://assets/art/items_weapons/props/beacon/runtime/itm_beacon_preview_root_top3d.tscn"),
+	"item_room_key": preload("res://assets/art/items_weapons/props/room_key/runtime/itm_room_key_preview_root_top3d.tscn"),
+	"item_cell_pack": preload("res://assets/art/items_weapons/props/cell_pack/runtime/itm_cell_pack_preview_root_top3d.tscn"),
+	"item_flashlight_basic": preload("res://assets/art/items_weapons/props/flashlight_basic/runtime/itm_flashlight_basic_preview_root_top3d.tscn"),
+	"item_flashlight_advanced": preload("res://assets/art/items_weapons/props/flashlight_advanced/runtime/itm_flashlight_advanced_preview_root_top3d.tscn"),
+	"item_flashlight_efficient": preload("res://assets/art/items_weapons/props/flashlight_efficient/runtime/itm_flashlight_efficient_preview_root_top3d.tscn"),
+	"__blueprint__": preload("res://assets/art/items_weapons/props/blueprint_scroll/runtime/itm_blueprint_scroll_preview_root_top3d.tscn"),
+	"mod_bullet_standard": preload("res://assets/art/items_weapons/weapons/bullet_module_standard/runtime/wpn_bullet_module_standard_preview_root_top3d.tscn"),
+	"mod_bullet_sticky": preload("res://assets/art/items_weapons/weapons/bullet_module_sticky/runtime/wpn_bullet_module_sticky_preview_root_top3d.tscn"),
+	"mod_bullet_bounce": preload("res://assets/art/items_weapons/weapons/bullet_module_bounce/runtime/wpn_bullet_module_bounce_preview_root_top3d.tscn"),
+	"mod_bullet_piercing": preload("res://assets/art/items_weapons/weapons/bullet_module_piercing/runtime/wpn_bullet_module_piercing_preview_root_top3d.tscn"),
+	"mod_bullet_explosive": preload("res://assets/art/items_weapons/weapons/bullet_module_explosive/runtime/wpn_bullet_module_explosive_preview_root_top3d.tscn"),
+	"mod_bullet_homing": preload("res://assets/art/items_weapons/weapons/bullet_module_homing/runtime/wpn_bullet_module_homing_preview_root_top3d.tscn"),
+	"mod_bullet_blackhole": preload("res://assets/art/items_weapons/weapons/bullet_module_blackhole/runtime/wpn_bullet_module_blackhole_preview_root_top3d.tscn"),
+	"mod_bullet_balloon": preload("res://assets/art/items_weapons/weapons/bullet_module_balloon/runtime/wpn_bullet_module_balloon_preview_root_top3d.tscn"),
+	"attach_fan": preload("res://assets/art/items_weapons/weapons/attachment_fan/runtime/wpn_attachment_fan_preview_root_top3d.tscn"),
+	"attach_copy_sticker": preload("res://assets/art/items_weapons/weapons/copy_sticker/runtime/wpn_copy_sticker_preview_root_top3d.tscn"),
 }
 
 const WEAPON_SCENE: PackedScene = preload("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn")
@@ -32,8 +69,10 @@ static func create_model(item: Dictionary, _tint := Color(0.38, 0.88, 0.72), mod
 	var kind := get_model_kind(item)
 	root.set_meta("model_role", model_role)
 	var item_id := str(item.get("id", ""))
-	if model_role in [MODEL_ROLE_GROUND, MODEL_ROLE_ICON] and GROUND_SCENES.has(item_id):
-		var scene: PackedScene = GROUND_SCENES[item_id]
+	var visual_key := "__blueprint__" if str(item.get("type", "")) == "blueprint" else item_id
+	var variants: Dictionary = GROUND_SCENES if model_role in [MODEL_ROLE_GROUND, MODEL_ROLE_ICON] else PREVIEW_SCENES
+	if variants.has(visual_key):
+		var scene: PackedScene = variants[visual_key]
 		var visual := scene.instantiate() as Node3D
 		# 倾斜放在旋转根内部；外层绕世界Y旋转时，倾角保持不变。
 		var pivot := Node3D.new()
@@ -112,6 +151,8 @@ static func get_model_kind(item: Dictionary) -> String:
 		return "currency"
 	if item_id == "item_room_key" or subtype == "key":
 		return "key"
+	if item_type == "blueprint":
+		return "blueprint"
 	if item_type == "weapon" or subtype == "gun_body":
 		return "weapon"
 	if item_type == "equipment" and subtype == "backpack":

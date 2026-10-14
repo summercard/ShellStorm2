@@ -5,4 +5,4 @@
 [node name="VfxDeathBlast3D" type="Node3D"]
 script = ExtResource("1_death_blast")
 metadata/asset_id = "VFX-DEATH-BLAST-3D"
-metadata/asset_version = "v001"
+metadata/asset_version = "v002"

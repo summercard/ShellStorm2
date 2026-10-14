@@ -2,6 +2,35 @@ class_name MonitorBossPresentation
 extends Node3D
 ## Baked Blender pose sampling, including spring stretch/constraints. No procedural limb poses.
 const BASE := "res://assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/"
+## ── 动画受击体积（2026-10-14 业主：子弹要打在模型实体上）────────────────────────
+## 显示器 Boss 的动画幅度极大：屏幕总成会前倾、向前下方扑砸、绕着自身轴连转三圈，
+## 底座与三段弹簧支撑还会伸缩。**根节点上那个固定圆柱跟不上这些位移** ——
+## 屏幕砸到身前 3.8 米处时，圆柱前脸还在 2.0 米，子弹会从可见屏幕里穿过去，
+## 在模型后面的空气里结算命中（业主报的「隔空击中、没有打在实体上」）。
+##
+## 所以这里补一组**跟着骨走的受击盒**：盒子尺寸是「骨局部空间的冻结值」，
+## 位置/朝向逐帧由对应骨的世界姿态决定，骨怎么动盒子就怎么动。
+##
+## 只覆盖**有体积的实体块**：屏幕总成 / 后轴 / 底座 / 两只手 / 三段弹簧支撑。
+## 数据线、弹簧臂细段与手指**刻意不覆盖** —— 把盒子套在只有十几厘米粗的线圈上，
+## 只会得到比可视几何粗一大圈的假命中，「打在空气里」的手感反而更严重。
+##
+## 数值来源：把 31,466 个顶点按「主导骨」分解，逐剪辑逐帧（187 帧）求骨局部空间
+## 包络后取并集（`MonitorBossPresentation.get_hit_volume_spec` 的断言与
+## `verify_monitor_boss_flow` 的覆盖率用例共同盯着这份数据）。
+## 对模型实体顶点（16,485 个）的覆盖率 **99.95%**，最差帧 99.93%（`melee_keyboard` 第 0 帧）。
+## 骨姿态已实测**无剪切**（正交误差 0、轴长 1.0），故可安全写入物理形状；
+## 弹簧支撑三段的轴长在 0.51–2.00 之间变化，盒子随伸缩一起变长 —— 那正是弹簧的真实长度。
+const HIT_VOLUMES := [
+	{"bone": "monitor_spin", "center": Vector3(0.0026, 0.4445, 0.0), "size": Vector3(1.7309, 0.647, 2.7658)},
+	{"bone": "rear_axle", "center": Vector3(0.0, -0.0099, -0.1522), "size": Vector3(1.9941, 0.4299, 0.6393)},
+	{"bone": "pedestal_motion", "center": Vector3(0.0, 0.1575, 0.0744), "size": Vector3(1.8212, 0.335, 0.8812)},
+	{"bone": "support_01", "center": Vector3(0.0, 0.3845, -0.0283), "size": Vector3(0.2231, 0.799, 0.2831)},
+	{"bone": "support_02", "center": Vector3(0.0, 0.3554, -0.0489), "size": Vector3(0.2243, 0.718, 0.3609)},
+	{"bone": "support_03", "center": Vector3(0.0, 0.3886, 0.0378), "size": Vector3(0.2244, 0.6542, 0.3225)},
+	{"bone": "hand.L", "center": Vector3(0.0569, 0.0366, 0.0188), "size": Vector3(0.7762, 0.9983, 0.6029)},
+	{"bone": "hand.R", "center": Vector3(0.0144, 0.0817, 0.0421), "size": Vector3(0.5325, 0.9051, 0.4962)},
+]
 const FACE_SHADER := preload("res://src/enemy3d/monitor_expression.gdshader")
 const CODE_SHADER := preload("res://src/enemy3d/monitor_code.gdshader")
 const ACTIVATION_FX := preload("res://src/enemy3d/MonitorBossActivationVfx.gd")
@@ -158,6 +187,36 @@ static func interpolate_affine(a: Transform3D,b: Transform3D,weight: float) -> T
 
 func bone_point(name: String) -> Vector3:
 	return skeleton.get_bone_global_pose(_bone_map[(motion.bones as Array).find(name)]).origin
+
+
+## 受击盒规格（骨名 / 骨局部中心 / 骨局部尺寸）。表现层只提供几何事实，
+## 由 `Enemy3D` 建物理形状并逐帧跟位 —— 碰撞始终归玩法层所有。
+static func get_hit_volume_spec() -> Array:
+	return HIT_VOLUMES
+
+
+## 受击盒的**世界空间**形状变换，与 `HIT_VOLUMES` 一一对应（含骨姿态里的伸缩）。
+## 只在 `sync_context` 之后调用才反映当帧姿态。
+func hit_volume_transforms() -> Array[Transform3D]:
+	var out: Array[Transform3D] = []
+	if skeleton == null:
+		return out
+	for spec in HIT_VOLUMES:
+		var index := hit_volume_bone_index(str(spec["bone"]))
+		assert(index >= 0, "Missing authored hit volume bone: " + str(spec["bone"]))
+		if index < 0:
+			out.append(Transform3D())
+			continue
+		out.append(skeleton.global_transform * skeleton.get_bone_global_pose(index) * Transform3D(Basis(), spec["center"] as Vector3))
+	return out
+
+
+## 骨名（用美术母版里的**原始**名字，不含 Godot 去重产生的 `_2` 后缀）⇒ 骨架骨索引。
+func hit_volume_bone_index(bone_name: String) -> int:
+	var authored := (motion.bones as Array).find(bone_name)
+	if authored < 0 or authored >= _bone_map.size():
+		return -1
+	return _bone_map[authored]
 
 func get_presentation_snapshot() -> Dictionary:
 	return {"asset_id":"ENM-BOSS-MONITOR002-3D","version":"v035","action_id":action_id,"time":sample_time,"expression":expression,"bone_count":skeleton.get_bone_count() if skeleton else 0,"clip_count":motion.get("clips",{}).size(),"procedural_pose":false,"electric_active":_context.get("electric_active",false),"death_duration":2.0}

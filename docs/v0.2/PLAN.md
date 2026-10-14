@@ -108,6 +108,7 @@
 | 0.2-PLAYER-001 | PLAYER | 换弹进度条由头顶横向线形改为半圆形 | 2026-09-24 | 待验收 |
 | 0.2-PRESENTATION-001 | PRESENTATION | 过门与可交互物体统一为一套「白点 + 圆环进度」交互 UI | 2026-09-24 | 待裁决 |
 | 0.2-PRESENTATION-002 | PRESENTATION | 物品与武器 3D 图标取景改为按模型投影自适应 | 2026-09-30 | 已验收 |
+| 0.2-ENTRY-001 | ENTRY | 全新存档：loading 后播开场影片并无缝进游戏，不进主页菜单 | 2026-10-14 | 已验收 |
 
 ---
 
@@ -263,7 +264,27 @@ _暂无登记。_
 
 ### ENTRY —— 启动分流、外观、衣柜、脱困
 
-_暂无登记。_
+#### 0.2-ENTRY-001 · 全新存档：loading 后播开场影片并无缝进游戏，不进主页菜单
+
+- 提出日期：2026-10-14
+- 原始诉求：
+  > C:\Users\zhuangmenghong\Downloads 下有个mv的文件，帮我做成游戏开场动画，如果是新存档，游戏loading后，将会播放这个动画，然后无缝衔接开场，就是进入游戏，不用进入主页菜单。 如果有存档的就照旧。更新到设计文档中。
+- 主责模块：ENTRY ｜ 受影响：PRESENTATION、ASSET
+- 关联 FeatureID：`ENTRY-AVATAR` ｜ 变更类型：新增玩法 + 表现 + 资产
+- 影响面：
+  - **入口覆盖层从单选变二选一**。`TowerDescent3D._install_main_entry_screen()` 原先把 `MainEntryScreen3D` 写死在 `_main_entry_screen` 槽位上；现在该槽位承载**互斥二者之一** —— 已有存档 → `MainEntryScreen3D`（主页菜单，照旧）、全新存档 → 新增 `OpeningMovieScreen3D`（开场影片）。塔楼只按 `prepare_gameplay_hud() / is_camera_override_active() / transition_finished` 三个契约调用，不按具体类型分支。`_main_entry_screen` 变量名与声明类型（`CanvasLayer`）**刻意不动** —— `tests/verification/verify_expedition_resume_entry.gd` 与 `verify_opening_script_runtime.gd` 直接 `get("_main_entry_screen")` 并 cast 成 `MainEntryScreen3D`，改名或改类型会连带弄红两个既有用例。
+  - **判据复用而非新立**：`_should_play_opening_movie()` 直接复用 `_should_open_new_game_in_master_office()`。「播影片」与「98F 办公室开局」必须是同一判据 —— 若另立一套，就会出现「播了影片却落 99F 基地」这种只在真机复现的错位。复用同时白送三道否决：`is_expedition()`（远征无 98F 办公室）、`spawn_target == base_99f`（死亡返城／撤离返航）、`_returning_to_tower03`；再加「已有 runtime 快照」必然否决 ⇒ 与 `REASON_RUNTIME_RESTORE` 入口天然互斥，**续档重进永不重播**（这条是主人「有存档的就照旧」的底线）。
+  - **「无缝」的验收口径要写清**：影片层不切场景、不复制角色、不读写存档，与主页同一套写法；播完按 `FADE_IN_BLACK(0.45s) → 交还 → FADE_OUT_BLACK(0.70s)` 两段渐黑收口，全黑时才归还输入与 HUD，结束后 `queue_free()` 自己并发一次 `transition_finished`，塔楼据此才发 `gameplay_started`（开场剧情 `nar_tower_opening_01_wake` 挂那一发）。跳过接受任意键／鼠标点击／手柄键。
+  - **ASSET：影片资产入包约 +10.9 MB**。源 `mv.mp4`（854×480 60fps 20.06s，H.264+AAC）→ 运行 `assets/movie/opening_mv.ogv`（Theora+Vorbis，30fps）。`assets/` 不在 `export_presets.cfg` 的 `exclude_filter` 内，会进包；源文件归档 `art_source/movie/opening/`（不入包）。
+  - **⚠️ Windows 转码陷阱（已踩，留档）**：Godot 4.x 的 `VideoStreamPlayer` 只吃 `.ogv`。**gyan.dev 构建的 FFmpeg Theora 编码器是坏的**，产出的视频是垃圾 —— ffmpeg 自己解码都报 `error in unpack_block_qpis`，Godot 里表现为整屏彩虹噪点（画面结构尚在、颜色全错）。该症状与 `-q:v` 质量、分辨率是否 16 倍数**均无关**，别往这两个方向排查；换 BtbN 构建即可。
+  - **⚠️ headless 铁律**：headless 下 `load()` 一个 `.ogv` 会让**整个 Godot 进程挂死**（不报错、不返回，只能超时杀掉；`ResourceLoader.exists()` 正常）。故影片层在 `test_mode / headless` 下**连 `VideoStreamPlayer` 节点都不创建**，直接自我交接。自动验收只允许验「资源存在／分流判定／headless 自我交接」，**真实播放必须走真实渲染**。
+  - **PRESENTATION：loading 页改为真实进度**。`StartupLoadingScreen` 由同步 `change_scene_to_file()` 改为后台 `load_threaded_request(..., true)` 预加载，进度条读真实进度、阶段文案由按时间分段改按进度分段。理由：主场景真实档启动实测 8～12 秒，同步切换会让进度条停在 100% 冻住十几秒再硬跳，而影片正接在这段之后 —— 玩家会误判成「卡死了、动画没了」。预加载失败则退回同步切换，不新增失败态。
+  - **存档隔离**：本条目不改任何存档字段。判据读 `tutorial_completed` 与「有无 runtime 快照」，均只读。
+- 登记人注：以上判据、行号、时序、体积均为 2026-10-14 实测值，来源是本仓库工作区，不是设计文档口径。正式规则已写入 [主页面与角色换装 §1.2](../v0.1/16_技术施工_主页面与角色换装.md)。
+- 状态：已验收
+- 追记：
+  - 2026-10-14 · 真机渲染实测交接时序：影片 20.06 s，`movie_ended` 起 +0.35 s 保留 → 渐黑 0.45 s 压黑 → 交还 → 淡出 0.70 s ⇒ 全程 **21.81 s** 完成 `transition_finished`，与设计值逐段吻合。
+  - 2026-10-14 · 遗留：影片实际观感（节奏、是否需要音量单独可调、跳过提示文案）待主人过目。`StartupLoadingScreen` 的后台预加载在**真实存档**下的收益（原先 8～12 秒冻结是否消除）待真机确认。
 
 ### PRESENTATION —— HUD、VFX、音频、音乐、对话 UI
 

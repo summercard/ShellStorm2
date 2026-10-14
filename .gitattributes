@@ -18,3 +18,7 @@
 # Editable art masters are versioned via Git LFS; runtime resources keep existing attributes.
 art_source/**/*.blend filter=lfs diff=lfs merge=lfs -text
 art_source/**/*.psd filter=lfs diff=lfs merge=lfs -text
+# 开场影片源（2026-10-14 加入）：24 MB 级视频源，走 LFS 避免进主仓对象库。
+# 只钉 art_source/ 下的 mp4；运行资产（assets/movie/*.ogv，7.7 MB）与既有大文件
+# （如根目录 7.9 MB 的 bgm_wasteland.wav）同口径，保持普通文件。
+art_source/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
