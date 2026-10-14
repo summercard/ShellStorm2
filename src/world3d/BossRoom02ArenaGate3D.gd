@@ -7,7 +7,11 @@ extends Node3D
 ##      （俯仰 −30° / 前后 +1.2 m / 平移 0，见 `CAMERA_TARGET_*`）；
 ##   ② **封场**：下到平台约 2 m 处有一条**横贯平台宽度**的激活线，越过它 → 三个出口
 ##      （北侧楼梯口、东桥口、西桥口）各升起一道护栏，玩家出不去；
-##   ③ **开闸**：房间肃清（Boss + 增援全清，即 `room.cleared`）→ 护栏降下；
+##   ③ **开闸**：**首领一死**即开闸（业主 2026-10-14 裁定）——
+##      判据是 `Dungeon3D.is_room_boss_defeated()`，**不是** `room.cleared`。
+##      二者刻意分开：`room.cleared` 还要等增援与波次全清，那样护栏会拖到
+##      「小怪也清光」才落，与业主口径不符。Boss 倒下即视为这场仗打完，
+##      **残留增援不拦人**。
 ##      玩家离开房间 → 镜头复位并重新武装（下次进来重演一遍）。
 ##
 ## 三处缺口是**实测**出来的，不是我摆的：平台周边原本就有 17 段 `deck_barrier_5m`
@@ -111,14 +115,20 @@ func _physics_process(_delta: float) -> void:
 # ── 过场镜头 ────────────────────────────────────────────────────────────────
 func _tick_camera(player: Player3D, local: Vector3, inside: bool) -> void:
 	if _camera_started:
-		# 离开房间 ⇒ 复位并重新武装。已肃清的房不再重演（没有仗要打）。
+		# 离开房间 ⇒ 复位并重新武装。**已了结的场**不再重演（没有仗要打）。
 		if not inside:
 			if player.has_camera_pose_offset():
 				player.clear_camera_pose_offsets(CAMERA_RESTORE_SECONDS)
 			_camera_started = false
-			_camera_armed = not _room.cleared
+			_camera_armed = not _arena_resolved()
 		return
 	if not _camera_armed:
+		return
+	# 场已了结（首领已阵亡）就不再起过场 —— 即便玩家上一次是**在 Boss 还活着时**
+	# 离开的（那一刻 `_camera_armed` 会被置真），重进楼梯也不重演。
+	# 只靠离开时那一次判定不够：Boss 可以在玩家离房之后才死。
+	if _arena_resolved():
+		_camera_armed = false
 		return
 	# 触发条件：人已在楼梯通道里（|x| ≤ 2.5）且越过「梯顶往下 3 m」那条线。
 	# 下界收到梯脚：走到平台上就不再算「在楼梯上」。
@@ -143,15 +153,26 @@ func _tick_camera(player: Player3D, local: Vector3, inside: bool) -> void:
 
 
 # ── 封场 / 开闸 ─────────────────────────────────────────────────────────────
+## 竞技场是否**已了结** = 本房首领已阵亡（业主 2026-10-14：「Boss 一死就开闸」）。
+##
+## 🔴 刻意**不**用 `room.cleared`：后者还要求增援与波次全清，护栏会一直拖到
+##    「残留小怪也清光」才落 —— 不是业主要的口径。Boss 倒下即视为这场仗打完，
+##    **残留增援不拦人**，玩家可以带着追兵走出去。
+##
+## 开闸与「离开后是否重演」都判这一条，两处**不许各写一份** ——
+## 否则会出现「闸已开、镜头却还在重演」这类自相矛盾。
+func _arena_resolved() -> bool:
+	if _room == null or _tower == null:
+		return false
+	return _tower.is_room_boss_defeated(_room.room_id)
+
+
 func _tick_arena(local: Vector3, inside: bool) -> void:
-	# 开闸：房间肃清（Boss + 增援全清）。增援在 Boss 死后即停止投放
-	# （`Dungeon3D._tick_boss_reinforcements` 找不到 Boss 就 stopped），
-	# 所以这一刻等价于「这场仗打完了」。
 	if _arena_sealed:
-		if _room.cleared:
+		if _arena_resolved():
 			_set_gates_raised(false, GATE_LOWER_SECONDS)
 		return
-	if _room.cleared or not inside:
+	if _arena_resolved() or not inside:
 		return
 	# 激活线：横贯平台宽度的一条带（只判 z，宽度天然覆盖整个平台 —— 业主明确要求
 	# 「横着覆盖平台，不然玩家会绕过去」）。收在平台远端之内，避免站在边缘外误触发。
@@ -183,7 +204,17 @@ func _animate_gate(gate: Node3D, raised: bool, duration: float) -> void:
 	var target_y := rest_y if raised else rest_y - GATE_HIDDEN_DEPTH_M
 	# 碰撞随门体一起抬落；收起时不参与碰撞，避免井里留一圈隐形阻挡。
 	_set_gate_collision(gate, raised)
+	# 🔴 必须先杀掉上一段补间：升、落各建一条 tween 都写 `position:y`，
+	#    两条并存时**后结束的那条赢**。若在升起动画（1.4 s）没走完时就开闸，
+	#    升到 y=0 的那条会更晚结束，把已经落下的护栏**又拽回去** ——
+	#    表现是「逻辑上闸已开（`sealed=false`）、护栏却还立着挡人」。
+	#    Boss 一死即开闸会让这个竞态更容易撞上（击杀可以发生在封场后任意时刻），
+	#    所以这里显式接管：同一道门永远只有一条在跑的补间。
+	var previous := gate.get_meta("gate_tween", null) as Tween
+	if previous != null and previous.is_valid():
+		previous.kill()
 	var tween := gate.create_tween()
+	gate.set_meta("gate_tween", tween)
 	tween.tween_property(gate, "position:y", target_y, maxf(duration, 0.01)).set_trans(
 		Tween.TRANS_CUBIC
 	).set_ease(Tween.EASE_OUT if raised else Tween.EASE_IN)
@@ -251,6 +282,7 @@ func arena_gate_snapshot() -> Dictionary:
 		"gate_count": _gates.size(),
 		"sealed": _arena_sealed,
 		"cleared": _room.cleared if _room != null else false,
+		"boss_defeated": _arena_resolved(),
 		"camera_armed": _camera_armed,
 		"camera_started": _camera_started,
 		"camera_zone_local_z": STAIR_HEAD_LOCAL_Z - CAMERA_TRIGGER_INTO_STAIR_M,

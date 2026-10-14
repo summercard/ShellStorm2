@@ -18,6 +18,9 @@ signal generation_completed(snapshot: Dictionary)
 signal run_completed(success: bool, summary: Dictionary)
 signal kill_recorded()
 signal room_cleared(room_data)
+## 本房**首领已阵亡**。与 `room_cleared` 刻意分开：后者还要求增援与波次全清。
+## 需要的场合（Boss房02 竞技场门控「Boss 一死就开闸」）只认这条。
+signal room_boss_defeated(room_id: String)
 signal room_entered(room_data)
 signal backpack_equipment_changed(snapshot: Dictionary)
 
@@ -142,6 +145,10 @@ var _rooms: Array[DungeonRoom3D] = []
 var _room_by_id: Dictionary = {}
 var _records: Array[Dictionary] = []
 var _alive_by_room: Dictionary = {}
+## 本房首领**已被击杀**的登记（房 id → true）。只由 `_on_enemy_killed` 里的
+## `enemy_kind == "boss"` 分支写入，且**只在真死时**写 —— 与 `room.cleared`
+## （还要求增援/波次全清）是两条独立事实，门控按需各取其一。
+var _boss_defeated_rooms: Dictionary = {}
 var _spawned_rooms: Dictionary = {}
 var _run_loot: Array[Dictionary] = []
 var _run_value := 0
@@ -3857,6 +3864,11 @@ func _flush_reserved_room_spawns(room_id: String) -> void:
 
 
 func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
+	# 首领阵亡登记**先于**离场记账：门控（Boss房02 竞技场）只认这条，
+	# 而离场记账可能要等增援全清才把 `room.cleared` 置真。
+	# `enemy_kind == "boss"` 是导出枚举，与血量/体型倍率同一判据，不会误判增援。
+	if enemy != null and is_instance_valid(enemy) and enemy.enemy_kind == "boss":
+		_mark_room_boss_defeated(enemy.room_id)
 	if not _claim_enemy_departure(enemy):
 		return
 	_kills += 1
@@ -5191,6 +5203,21 @@ func handle_esc() -> void:
 		_workbench_panel.queue_free()
 	_workbench_panel = null
 	_sync_player_input_lock()
+
+
+## 本房首领是否**已被击杀**。与 `room.cleared` 是两条独立事实：
+## Boss 倒下后增援可能还在跑，此时本函数为 true、`room.cleared` 仍为 false。
+func is_room_boss_defeated(room_id: String) -> bool:
+	return bool(_boss_defeated_rooms.get(room_id, false))
+
+
+## 登记首领阵亡。幂等 —— 重复登记不重复发信号（下游据此开闸，重放会让护栏
+## 在「已开」与「再开」之间抖动）。
+func _mark_room_boss_defeated(room_id: String) -> void:
+	if room_id.is_empty() or is_room_boss_defeated(room_id):
+		return
+	_boss_defeated_rooms[room_id] = true
+	room_boss_defeated.emit(room_id)
 
 
 func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
