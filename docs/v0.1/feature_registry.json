@@ -185,6 +185,7 @@
       ],
       "development_records": [
         "docs/v0.1/development/2026-09-13_world_level_blocks.md",
+        "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md",
         "docs/v0.1/development/CHANGELOG.md"
       ],
       "verification": [
@@ -307,7 +308,8 @@
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
         "docs/v0.1/development/2026-09-23_feature_relationship_pull_alignment.md",
         "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md",
-        "docs/v0.1/development/2026-09-24_combat_economy_handoff.md"
+        "docs/v0.1/development/2026-09-24_combat_economy_handoff.md",
+        "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md"
       ],
       "verification": [
         {
@@ -331,7 +333,8 @@
           "id": "verify_new_save_handoff"
         }
       ],
-      "status": "partial"
+      "status": "partial",
+      "updated_at": null
     },
     {
       "feature_id": "REWARD-SERVICE",
@@ -386,7 +389,8 @@
         "docs/v0.1/development/2026-10-03_fat_zombie03_belly_contact.md",
         "docs/v0.1/development/2026-10-03_fat_zombie03_runtime_binding.md",
         "docs/v0.1/development/2026-10-03_shielded_retirement.md",
-        "docs/v0.1/development/2026-10-04_fat_zombie03_death_visibility.md"
+        "docs/v0.1/development/2026-10-04_fat_zombie03_death_visibility.md",
+        "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md"
       ],
       "verification": [
         {
@@ -870,7 +874,8 @@
       "development_records": [
         "docs/v0.1/development/CHANGELOG.md",
         "docs/v0.1/development/history/14.8_音乐系统与配乐资产_历史记录.md",
-        "docs/v0.1/development/2026-09-23_p2_media_and_traceability_repair.md"
+        "docs/v0.1/development/2026-09-23_p2_media_and_traceability_repair.md",
+        "docs/v0.1/development/2026-10-14_rooftop_bgm_disabled.md"
       ],
       "verification": [
         {

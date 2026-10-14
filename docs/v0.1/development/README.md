@@ -1,5 +1,7 @@
 # v0.1 开发记录
 
+- [怪物启动过程与头顶吼叫图标](2026-10-14_monster_startup_roar.md)
+
 - [特效域新增「子弹特效」大类与 8 弹种专属弹体特效](2026-10-13_bullet_vfx_category.md)
 
 - [Boss房02组件导入、99高位入口与双雾参数](2026-10-13_boss_room02_godot_import.md)

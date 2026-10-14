@@ -22,6 +22,7 @@
 - <span style="color:#2E7D32">**[已实装｜2026-08-07战斗可读性]** 敌人每次实际扣血都会在头顶生成3D飘字：普通伤害为珊瑚红、重击为暖橙、暴击为金黄星标；使用 SF Mono 风格的粗等宽终端字体（系统回退 Menlo/monospace），字号为原方案150%，文字先弹出、上浮并淡出，使用深蓝描边且始终朝向镜头。格挡的零伤害不生成误导飘字。</span>
 - <span style="color:#2E7D32">**[已实装｜2026-08-11三态受光]** 所有 `Enemy3D`（六种普通怪、精英兼容实例与 Boss）统一拥有 `darkness / artificial_light / sunlight` 三态受光事实。主太阳、房间灯/路灯/信标、玩家手电主聚光与环境溢光显式登记；太阳与局部灯均通过真实范围、方向、衰减和静态世界物理射线确认投影。传感器为无场景节点的 `RefCounted` 组件，由敌人错峰驱动，避免增加每怪节点成本。地刺虫已移除“开手电扩大圆形半径”的旧逻辑，改由真实受光状态显形。</span>
 - <span style="color:#2E7D32">**[已实装｜2026-08-12光照战斗与AI感知]** 黑暗保持基线；人工灯光下移动速度和攻击频率均为40%；只有玩家前向探照灯参与怪物受光，随身环境泛光和角色柔光不参与；太阳每秒扣最大生命2%。同层怪物在38米范围内预激活，休眠怪物仍低频监听真实受光，受到探照灯或攻击刺激会立即唤醒。临时三态标识复用头顶生命条纹理。全局 `MonsterAIManager` 与独立 `MonsterVisionSystem3D` 已接管目标授权、120°/13.5m视野、遮挡、记忆、探照灯来源追踪、大灯搜索和避光策略。</span>
+- <span style="color:#2E7D32">**[已实装｜2026-10-14血条表现]** 头顶条新增**延迟扣血白段**：真实生命立即写入红条，落后一截的白色追赶层按 `L ← move_toward(L, H, Δt × 1.8)`（`HEALTH_BAR_DELAY_SPEED`）追到 `H = current_hp / max_hp`；**只有受伤时才留白** —— 初始化与治疗立即对齐，不留假白段。白段只存在于同一张条纹理的像素里，**不写入 `current_hp`、不参与伤害判定与存档**。**普通小怪头顶条整体 ×0.80**（`Enemy3D.NORMAL_HEALTH_BAR_SCALE`）；**Boss 与精英不缩** —— 精英条靠 2.05 m 宽表达"这只不一样"（`verify_first_elite_deployment_flow` 断言 `>= 2.0`），Boss 另有屏幕总血条契约。体型表 `HEALTH_BAR_SIZE_BY_KIND` 仍是唯一体型真源、未改动；实际生效倍率由快照字段 `overhead_health_bar_scale` 暴露，吼叫图标（`_fire_roar_icon` 读 `_overhead_health_size` 而非体型表）自动跟随缩放后的条宽。</span>
 
 ### 2.1 怪物体型参数版本记录（历史值不得覆盖）
 
@@ -59,6 +60,81 @@ acceptance_case
 **掉出可行走层直接判死。** 重力生效后，脚下真出现洞的怪会离开房间。掉落超过出生点下方 `15m`（`FALL_DEATH_DROP_M`）即判定已离开可行走层，直接走标准死亡流程（击杀结算、掉落、房间计数），否则房间会永远卡在「有怪但打不到」的未清状态。判死而不是拉回出生点：拉回会让一只已经掉下深渊的怪原地复活。**深度下界由塔楼层高锁定**——塔楼整层层高 `12m`，怪沿楼梯追玩家下一层是 12m 级落差，`15m` = 一层落差之上再留 3m 余量；真掉出世界是无限下坠，1.1s 即越过 15m。判死前先把怪落回出生点，避免击杀掉落生成在没有承重面的虚空里（`Dungeon3D` 的落点只做 `+3m/-4m` 支撑探测）。
 
 **刻意不做的部分。** 怪与怪的 `collision_mask` 仍为 `1`（只碰关卡静态世界），不加硬物理互撞：硬互撞会在窄门和房间入口造成堵死，且寻路器不知道彼此的路径点，容易死锁。同理，本地避障射线以及视野/受光遮挡射线都只探关卡静态世界，不把相邻怪当障碍物 —— 受光判定必须保持「相邻怪经过不会让整群怪状态闪烁」的既有口径。
+
+### 3.2 启动过程与头顶吼叫图标（2026-10-14）
+
+<span style="color:#1565C0">**[用户设计]**</span> 怪物从 `idle / patrol` 进攻击前有 **0.30–0.60s 的随机启动过程**：
+**转身朝玩家 → 大吼（暂不做动画）→ 头顶弹出卡通吼叫图标 → 才启动攻击**。目标设计、时长公式、
+打断矩阵与图标尺寸表见 [AI 设计 §6.1.1–§6.1.4](06A_怪物AI系统完整设计_评审稿.md#611-启动过程2026-10-14-用户设计)；
+本节只记施工口径。
+
+**数值唯一真源**：`src/enemy3d/MonsterStartupProfile.gd`（纯计算、不持节点）。文档、验收与运行时都读它，禁止各自写死数字。
+
+```text
+T_startup = clamp( |normalize(Δyaw)| / 520 + 0.16 + jitter , 0.30 , 0.60 )   jitter ∈ [0, 0.18]
+icon_edge_m  = clamp( health_bar_width × 0.42 , 0.45 , 1.20 )
+icon_offset_y = health_bar_height × 0.5 + 0.30 × icon_edge_m + icon_edge_m × 0.5
+```
+
+**三件必须守住的事：**
+
+1. **`Δyaw` 必须先归一化到 `[-180, 180]`。** 359° 在几何上是「朝左差 1°」，不是「转身 359°」。
+   不归一化就会拿 359/520 = 0.69s 去转一个实际只要 0.002s 的角度，转身段直接顶穿启动窗口
+   —— 这是实装时真实踩到的缺陷，`verify_monster_startup_roar` 留了断言钉住。
+2. **图标尺寸不是常量，按体型算。** 体型输入直接复用现行的头顶血条宽度
+   （`HEALTH_BAR_SIZE_BY_KIND`），不新建第二份体型表。钳制 `[0.45, 1.20]m`。
+3. **图标必须能提前撤掉。** 死亡 / 硬直 / 房间停用 / 目标失效都要调 `dismiss()`，
+   否则会出现「已死还在吼」的假信息。
+
+**图标资产**：FX01-16 `VFX-MONSTER-ROAR-ICON-3D`（v002，2026-10-14 改版）→
+`assets/art/vfx/combat_3d/vfx_monster_roar_icon_root_top3d.tscn`（独立 Prefab，纯视觉无碰撞体）。
+图形为**红色感叹号**（整支统一纯红，粗黑描边）。贴图 `assets/art/vfx/textures/vfx_monster_roar_icon_atlas_v001.png`
+（256²，RGBA 透明底，`gpt-image-2` 绘制；原图留 `art_source/vfx/combat_3d/vfx_monster_roar_icon/source/v002/`）。
+摆放与朝向复用头顶血条同族口径：`BILLBOARD_ENABLED` + 关闭深度测试；**不进 `VfxPool3D`**
+（每怪一个常驻 Sprite3D，与血条同量级，池化只抬峰值）。
+
+**弹出节奏：四段，第三段是刻意的「停顿」**（业主 2026-10-14 指定「要有弹出停顿一下的动画」）：
+
+| 段 | 区间 | 内容 |
+|---|---|---|
+| ① 弹出 | `[0, 0.10)` | `scale 0.70 → 1.15`（过冲） |
+| ② 回稳 | `[0.10, 0.18)` | `1.15 → 1.00` |
+| ③ **停顿** | `[0.18, hold]` | **严格静止**在 `1.00` / 满不透明 |
+| ④ 淡出 | `(hold, lifetime)` | 尺寸不变，只降 alpha |
+
+③ 必须是**真静止**（`scale` 与 `alpha` 逐位不变），由验收正面钉住；在停顿段里加缓动或脉动会立刻红。
+
+**图标-血条间隙按比例，不是固定米数**：`gap = 0.30 × icon_edge`。换感叹号后固定 `0.12 m`
+会直接贴住血条（感叹号圆点落在方框底部，实测 elite/Boss 档间隙 −1 px 即重叠），
+改比例后六档间隙 `+4 → +10 px` 等比、真引擎实拍 `+12 px`。
+
+**Boss 豁免**：显示器 Boss 有自己的完整激活流程（`MonitorBossCombat.activation_completed`），
+不得叠加通用启动过程。`MonsterStartupProfile.plays_startup()` 就是这条门禁。
+
+**运行时接线（2026-10-14 已实装）**：
+
+| 位置 | 职责 |
+|---|---|
+| `Enemy3D._tick_alert_state(to_target, delta, alert_duration)` | `alert` 进 `chase` 的**唯一出口**；返回 true = 本帧被启动过程独占 |
+| `Enemy3D._physics_process` | 调用它，返回 true 就 **直接 return**，不跑行动 match —— 这是「不抢跑」的实现点 |
+| `Enemy3D._begin_monster_startup(to_target)` | 进入启动过程；Boss / 未重新武装 / 朝向退化三种情况返回 false，退回原 `alert_duration` 口径 |
+| `Enemy3D._tick_monster_startup(to_target, delta)` | 段 A 恒定转速转身 → 段 B 起吼弹一次图标 → 到点转 `chase`；全程制动 |
+| `Enemy3D._fire_roar_icon()` | 在 `_overhead_health_root` 下实例化 FX01-16，挂在血条槽根 + 偏移 |
+| `Enemy3D.transition_to()` | **中断收口**：离开 `alert` 且不是转 `chase` ⇒ `_cancel_monster_startup()`（撤销图标） |
+
+把门禁抽成具名函数（而不是内联在 `_physics_process`）是刻意的：
+内联时验收只能自己复刻一遍分支逻辑，会出现「测试绿、游戏红」的假绿 ——
+2026-10-14 那次「怪物还是直接冲过来」正是这个形态（公式与 Prefab 全对，状态机却把它跨过去）。
+
+**验收**：`verify_monster_startup_roar` —— 文档数字 ↔ 代码常量逐条比对、窗口两端可达、
+段时长可加和、转角归一化（含负向自测）、图标尺寸表逐项一致、偏移不遮血条、Prefab 的 billboard/无深度测试契约、
+贴图真实带 alpha、弹出曲线、**体型缩放不被弹出动画覆盖**（回归）、纯视觉无碰撞、`dismiss` 幂等；
+**接线**部分另有三组：白盒（驱动真门禁函数）、**端到端**（真 AI + 真 `_physics_process` + 真玩家，
+断言「警觉→追击时长」与「警觉窗口内推进距离」）、源码回归钉。
+实测端到端：警觉→追击 **0.60s**（窗口 [0.30, 0.60]）、警觉窗口内推进 **0.0000m**、图标实际出现。
+负向对照（拆掉门禁）会红 **17 条**，含「短于 0.30s」与「图标从未出现」。
+视觉证据：`outputs/monster_roar_icon_size_contact_sheet.png`（六档体型并排对照）、
+`outputs/monster_startup_capture.png`（真引擎实拍三帧：背对 → 转身完成 → 吼叫中，逐帧带状态读数）。
 
 ## 4. 遭遇生成接口
 
@@ -128,6 +204,7 @@ SelectEligibleElite(seed, floor, history)
 
 - <span style="color:#2E7D32">**[已实装]** 当前 Boss 具有独立 HUD、阶段变化、召唤/远程等行为和清房结果。</span>
 - <span style="color:#2E7D32">**[已实装]** Boss同时保留屏幕顶部总血条和头顶3D红色血条；头顶血条随当前/最大生命更新并保持面向镜头。</span>
+- <span style="color:#2E7D32">**[已实装｜2026-10-14血条表现]** 屏幕顶部总血条改为**两层叠放**：下层白色延迟条（`BossHealthBarDelayed`）追赶真实血量，上层红色真实条（`BossHealthBar`，`fill` 仍为醒目红 `0.96/0.13/0.17`）；两者同高同宽、不增加面板高度，追赶速度 `BOSS_HEALTH_BAR_DELAY_SPEED = 1.8`（与头顶条同一口径）。面板由设计 y `106..160` 上移到 `80..134`（canvas 84.8 → 64.0）以少挡 Boss 本体；新下界由关卡标题带（房间行 14..38、波次行 40..62）的实底 canvas ≈49.6 推导、保留约 14 px 净空，`verify_expedition_monitor_boss_flow` 的重叠阈值同步为 `>= 63.0`。</span>
 - <span style="color:#2E7D32">**[已实装｜2026-08-13]** `floor_number % 5 == 0` 由纯数据规划器判定；当前发布候选范围95F、90F、85F分别使用“深渊档案官 / 熔炉狱监 / 空洞合唱团”稳定内容ID、正式GLB、独立三阶段技能袋和独立竞技场GLB。场地随机家具关闭，改用8/6/5组与造型对应的掩体碰撞。</span>
 - <span style="color:#1565C0">**[用户设计]** Boss 死亡后必须产生专用下行钥匙，作为下一层路线的唯一权限来源。</span>
 - <span style="color:#EF6C00">**[Codex补充]** Boss 系统只发出一次 `boss_defeated` 与奖励清单；关卡系统根据事件签发钥匙并解锁门资格，Boss 脚本不直接寻找门节点。</span>

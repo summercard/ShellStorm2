@@ -1,3 +1,252 @@
+## 2026-10-14 血条表现：延迟扣血白段 ＋ 小怪条 ×0.80 ＋ Boss 条上移
+
+- FeatureID：`ENEMY-AI`；业主口径「按照这个进行修改血条表现，还有现在的小怪血条整体缩小到80%，boss血条放在画面的在上面一些，现在还是会遮挡」。
+- **延迟扣血白段（两套血条都做）**：真实比例 `H = current_hp / max_hp` 立即生效，白段 `L ← move_toward(L, H, Δt × 1.8)` 追赶；红条画 `[0, H]`、白段画 `[H, L]`。**只有受伤才留白** —— 初始化／治疗／满血重置时 `L = H`，否则开局就会挂一条假白段（判据 `_overhead_health_bar_initialized`）。白段**永不写入 `current_hp`**，不参与伤害判定与存档。
+- **两套实现、一个手感真源**：小怪头顶条是**同一张 200×24 纹理里的像素**（`_redraw_overhead_health_bar()` 先铺白段再铺红条）；Boss 屏幕条是**两层 ProgressBar 叠放**（下层 `BossHealthBarDelayed` 白、上层 `BossHealthBar` 红，上层背景 alpha 0 让白段透出），面板高度不变。速度常量只在 `Enemy3D.HEALTH_BAR_DELAY_SPEED` 一处定义，`Dungeon3D.BOSS_HEALTH_BAR_DELAY_SPEED` 引它 —— 同一场战斗里两条白段节奏必须一致。
+- **追赶抽成可步进函数**：`Enemy3D._tick_overhead_health_bar_delay(delta)` / `Dungeon3D._tick_boss_health_bar_delay(delta)`。**不是为了好看**：验收要能传固定 delta 手动步进；靠 `await process_frame` 采样会随机器帧时间浮动，把「白段确实在缩且没越过真实血量」变成飘忽用例。
+- **小怪条 ×0.80**：`Enemy3D.NORMAL_HEALTH_BAR_SCALE = 0.80`，在 `_ensure_overhead_health_bar()` 乘进条宽。**Boss 与精英不缩** —— 精英条靠 2.05 m 宽表达「这只不一样」（`verify_first_elite_deployment_flow` 断言 `>= 2.0`），乘 0.8 会毁掉该区分度。体型表 `HEALTH_BAR_SIZE_BY_KIND` **一行未改**，仍是唯一体型真源；实际生效倍率由**新快照字段 `overhead_health_bar_scale`** 暴露，验收读字段而不是重写一遍「谁该缩」的判断。连带：吼叫图标尺寸 = 条宽 × 0.42 且 `_fire_roar_icon()` 读的是**缩放后的** `_overhead_health_size` ⇒ 图标自动跟随缩到 0.8。
+- **Boss 条上移**：锚点设计 y `106..160` → `80..134`（canvas `84.8 → 64.0`）。新下界不是等比挪的旧数字，而是**由关卡标题带实底反推**：房间行 canvas `11.2..30.4`、波次行 `32.0..49.6` ⇒ 净空约 14.4 px。`verify_expedition_monitor_boss_flow` 的重叠阈值同步 `80.0 → 63.0`（旧阈值是「设计 100 × 0.8」的口径，比标题带实底还低 30 px，等于没在守东西）。
+- 改动前备份：`.workbuddy/backup/20261014_health_bar_visual/before_edits/`。
+- **验收**：`verify_3d_enemy_behavior_flow`（含新增白段双向断言：受伤后有白段 ＋ 步进后只能朝真实值收；7 怪种全覆盖）**rc=0**；`verify_monster_startup_roar` **rc=0**（条宽表逐项 + 图标耦合）；`verify_first_elite_deployment_flow` **rc=0**（精英条仍 `>= 2.0` 宽）。`verify_expedition_monitor_boss_flow` rc=1，44 项中 3 项红（`三波 encounter` / `生命 52000` / `Boss 出生在房间中心`）——**取证为并发会话未提交的 `data/level_plans/expedition_01/level_plan.json`（新增 `monster_rules.stats.per_kind.boss.hp = 32000` 并改 encounter/spawn 口径）所致，与本次血条改动无关**；Boss 条自身 4 条断言（透明外壳 / `≤10 px` / `y >= 63` / 醒目红）全绿。套件仍被既有 `RUNTIME_DESIGN_DATA_PROJECTION_FAILED` 挡在入场检查，未跑 batch。
+- 文档：[06 怪物、唯一精英与 Boss](../06_技术施工_怪物精英与Boss.md) §2 新增 2026-10-14 血条表现条目、§6 Boss 条目补两层叠放与上移口径；[开发记录](2026-10-14_health_bar_visual.md)。
+
+## 2026-10-14 胖子僵尸死亡自爆特效 ＋ 地面持续伤害场（FX01-17 / FX01-18）
+
+- FeatureID：`ENEMY-AI` / `VFX-POOL`；业主口径「胖子僵尸被打死后自爆没有特效，需要增加一个，并且在地上留一个持续伤害的范围效果，持续3秒，这个特效要记录到特效账本中，并且更新相关设计文档」。
+- **爆炸视觉 FX01-17 `VFX-DEATH-BLAST-3D`**：Prefab `assets/art/vfx/combat_3d/vfx_death_blast_root_top3d.tscn` ＋ 脚本 `src/vfx/VfxDeathBlast3D.gd`；SphereMesh 亮芯 + 2 层错峰冲击环 + 9 道放射星芒 + 8 块飞散碎屑 + 一盏 `BlastLight`（无阴影），lifetime 0.62s。**全向对称**、刻意不消费 `context.forward`/`normal` ⇒ 验收不做朝向断言，改为「放射方向矢量和 ≈ 0」并附「全挤在一侧」的反向对照。走 `VfxPool3D`（`FX01_DEATH_BLAST`），调用方 `Enemy3D._detonate_death_explosion`。
+- **尺寸跟着规格半径走**：调用方传 `size = radius × 0.6` ⇒ 5.0m ⇒ `size 3.0` ⇒ 内环外缘 ≈ 4.75m、外环 ≈ 5.29m（视觉正好顶到伤害半径）。**没有**复用 FX01-03：那是通用小爆点（0.46s／核心 0.42m／无灯），装不住 2.2m 大体位怪的自爆。
+- **地面残留伤害场**＝ FX01-18 `VFX-BLAST-ZONE-3D`（视觉层，`vfx_blast_zone_root_top3d.tscn` ＋ `src/vfx/VfxBlastZone3D.gd`）＋ `src/enemy3d/DeathBlastZone3D.gd`（玩法层）。默认 `duration_sec 3.0` / `damage_per_tick 24` / `tick_interval_sec 0.5`；伤害**敌我通吃**，选区与爆炸**完全同口径**（敌对怪走空间注册表含同房过滤、玩家走 `player_3d` 组）。规格落在 `monster_rules.death_explosion.fat_zombie03.zone`；不写该段／`enabled=false` ⇒ 一行不生成，塔楼与其它关卡逐字不变。
+- **三条实测踩到的坑（都留了断言 / 反向对照）**：① 首跳**不能排在 t=0** —— 死亡当帧已结算过一次 180 爆炸，同帧再打会**双倍命中**；② 跳数必须**夹在持续时长内**（`_next_tick <= zone_duration`）—— 只写 `while _elapsed >= _next_tick` 时，**一帧跨过末尾**会把场外时间也拿去结算（反向对照实测跳数 6 → 8）；③ 场地视觉必须**平铺 XZ** 且调用方不旋转（圆环环轴是 Y），否则场地会竖起来。
+- **归属**：FX01-17 进池；FX01-18 由 `DeathBlastZone3D` **宿主自持、刻意不进池**（14.6 §2.2 例外③，同 FX01-16／FX03-03 口径）。两个 Prefab 均**纯视觉、无碰撞体**；**伤害结算不写进 Prefab**（14.6 §1）。
+- 账本：特效账本《资产主表》r36/r37 ＋《3D-特效》FX01-17/FX01-18（含分组头）＋《总览》范围 `$35→$37` ＋ 资产主表 DV 范围同步；《域变更日志》`v0.1.17`。`check_asset_registry.py --ledger vfx` → `asset_count 30 → 32`，**本轮两行零 issue**（既有 14 条 `sha_mismatch` 已定性：那些行记的是 **LF 归一后**的 sha、工作区是 CRLF，门禁比原始字节）。
+- 验收：新增 `verify_death_blast_vfx`（两 Prefab 资产契约／灯真源与包络／无碰撞体／尺寸线性／地面平铺含倾斜 90° 对照／游戏侧选区与到点收场／`Enemy3D` 端到端接线含 `zone.enabled=false` 对照／防假绿哨兵，`samples=12`）登记 `core_scenes`；**四项反向对照**实测有效（首跳改 t=0 → 1 跳＋双倍命中；取消同房过滤 → 跨房敌人吃到 24；外环 2.45→3.50 → 红值 7.560 = 0.72×3×3.5 精确自洽；去掉跳数上界 → 8 跳），还原后复绿。
+- 文档：[14.6 特效规范](../14.6_特效系统与制作规范.md) §2.1/§2.2（新增例外③）＋§10 版本历史 `v003.2`；[远征关卡01设计](../design/远征关卡01设计.md) §4.5.3 新增「表现与地面残留伤害场」＋数据形态加 `zone`；[MODULE_INDEX](../MODULE_INDEX.md) `VFX-POOL` 行；[内容数据库](../01_内容数据库说明.md)《怪物与Boss》胖子僵尸行；[开发记录](2026-10-14_expedition01_monster_rules.md) §12。
+
+### 改版 v002：图标换红色感叹号 + 新增「弹出后停顿」（同日，业主指定）
+
+- 业主口径：「把吼叫的图标改成一个感叹号，然后需要有个弹出停顿一下的动画。」
+- **图形**：由「怪兽大嘴」换成**红色感叹号**，整支（长条 + 圆点）**统一纯红 `#FD0104`**、保留粗黑描边、**去掉青色高光**。不是白长条 + 红圆点，也不是粉红/洋红。`gpt-image-2` 三版迭代（a 形态过窄 → b 等宽梯形定稿 → c 整支纯红采用），原图留 `art_source/.../source/v002/`。
+- **节奏（四段）**：① 弹出 `0.70→1.15`（t=0.10 过冲）② 回稳 `→1.00`（t=0.18）③ **停顿：`0.18→hold` 全程严格静止** ④ 淡出（尺寸不变、只降 alpha）。过冲从 1.08 提到 1.15，更弹；③ 是**真静止**，不是「慢慢收」。新增 `get_hold_still_seconds()` / `is_in_still_hold()` 供验收直接断言。
+- **🔴 换图暴露的连带缺陷（已修）**：原偏移公式用**绝对米数** `+0.12m`。大嘴图形底部在方框内还有空白，所以读起来很宽；**感叹号的圆点正好落在方框底部**（内容 bbox 实测 21/256…235/256），同一个 0.12m 就**直接贴住血条**了 —— 体型对照图实测 elite/Boss 档间隙 **−1px（重叠）**。改为按比例 `gap = 0.30 × icon_edge`（`MonsterStartupProfile.ICON_BAR_GAP_RATIO`）后，`间隙/图标` 恒定 ⇒ 任何体型、任何换图都保持同样分离观感。复测六档 `+4 → +10px` 等比、真引擎实拍 `+12px`。**教训：跨资产间距不要用绝对米数去对齐一个「内容在方框里怎么摆」会变的图形。**
+- **验证**：`verify_monster_startup_roar` **通过** `samples=229`。新增 ① 停顿段「必须真静止」的**正面判据**（扫 4 个时刻断言 scale/alpha 不变）② VFX 侧 4 个弹出常量的文档契约 ③ 尺寸表**偏移列**逐格核对（文档表格数字也纳入机器校验）。**负向对照**（停顿段塞入缓慢脉动）**红 18 条**，含「停顿段不是真静止」。弹停节奏取样条显示停顿三格 scale **逐位相同（0.7031/0.7031/0.7031）**：`outputs/monster_startup_capture_pop_rhythm.png`。
+- **账本**：资产版本升 **v002**；AssetID / Prefab 路径 / **Prefab SHA 均不变**（`.tscn` 未改）⇒ 主表 T 列不动。改主表 r35 的 M/Y、`3D-特效` FX01-16 行的版本/备注、域变更日志 `v0.1.18`。**基线只更新本行指纹**；🔴 **刻意不重算整表摘要** —— 同一本《3D-特效》里有另一会话未提交的 FX01-17/18，整表重算等于替其背书。门禁实测 **failure_count 仍为 3（与改动前逐条相同）⇒ 本次零新增红项**。
+- **新增实拍工具**：`tools/monster_startup_capture.tscn`（场景形式；`-s` 脚本模式不挂 autoload，`Enemy3D` 编不过）。两个截图口径必记：读根视口纹理要等 `RenderingServer.frame_post_draw`，只等 `process_frame` 会拿到**全透明空图**；读回的帧格式可能是浮点（`FORMAT_RGBAH`），`Image.blit_rect` 在格式不一致时**静默不写** ⇒ 必须显式 `convert(Image.FORMAT_RGBA8)`。
+
+## 2026-10-14 怪物启动过程：0.30–0.60s 随机过渡 + 头顶卡通吼叫图标（用户设计）
+
+- FeatureID：`ENEMY-AI` / `ASSET-PIPELINE`；业主口径「怪物从待机、巡游到激活攻击玩家的过程中，不要直接，需要有一个 0.3–0.6 的随机启动过程，启动过程需要表现，先向玩家方向转过来，然后大吼（目前没有状态机先不做动画）然后头顶出现一个吼叫的图标（拿 image-2 绘制一个卡通的）不要太大，按照怪物的体型匹配。然后再启动攻击」。
+- **不新增 AI 状态**：挂在既有 `alert` 上实现，不改 §5.3 优先级仲裁，也不新增合法目标条件。段 A 转身 / 段 B 吼叫 / 段 C 进既有 `combat` 子状态机。
+- **时长公式**（`src/enemy3d/MonsterStartupProfile.gd` 为唯一真源）：`T = clamp(|normalize(Δyaw)| / 520 + 0.16 + jitter, 0.30, 0.60)`，`jitter ∈ [0, 0.18]`。转身段是几何量（转角÷转速）不凑窗口，吼叫段吃掉剩余预算，总时长再钳到窗口；绝大多数情况自然落窗，只有「几乎正对玩家」由下限兜住。
+- **两条实测踩到的坑（都留了断言）**：① `Δyaw` 必须归一化到 `[-180,180]`，否则 359° 会拿 0.69s 去转一个实际只要 0.002s 的角度，转身段直接顶穿启动窗口；② 首版把基准缩放与弹出曲线乘在同一个 `scale` 上，第二次 `activate()` 会被前一次的过冲值污染。
+- **图标尺寸按体型等比**（不是常量）：`icon_edge = clamp(头顶血条宽 × 0.42, 0.45, 1.20) m`，体型输入**直接复用** `Enemy3D.HEALTH_BAR_SIZE_BY_KIND`，刻意不新建第二份体型表。实测：炸弹果 0.483 → 小僵尸 0.580 → 护卫/召唤 0.651 → 胖子僵尸03 0.756 → 唯一精英 0.861 → Boss 1.113 m。偏移 `icon_offset_y = 血条高/2 + 0.12 + icon_edge/2` 保证不遮血条。
+- **资产 FX01-16 `VFX-MONSTER-ROAR-ICON-3D`**：独立 Prefab `assets/art/vfx/combat_3d/vfx_monster_roar_icon_root_top3d.tscn` + `src/vfx/VfxMonsterRoarIcon3D.gd` + 256² RGBA 透明底贴图（`gpt-image-2` 四版迭代，v4 入选）。摆放与朝向复用头顶血条同族口径（`BILLBOARD_ENABLED` + 关闭深度测试）；每怪一个常驻 Sprite3D 由怪物自己持有，**刻意不进 `VfxPool3D`**（与血条同量级，池化只抬峰值）。死亡/硬直/停用/目标失效必须调 `dismiss()`，否则会出现「已死还在吼」。
+- **Boss 豁免**：显示器 Boss 有自己的完整激活流程，由 `MonsterStartupProfile.plays_startup()` 挡掉，不叠加。
+- **验证**：专项 `verify_monster_startup_roar` 通过并登记 `core_scenes`；六档体型对照渲染 `outputs/monster_roar_icon_size_contact_sheet.png`。吼叫动画按业主明确口径不做。
+
+### 追加：运行时接线（同日，业主反馈「怪物还是直接冲过来」后补做）
+
+- **根因**：`Enemy3D._physics_process` 里原是 `if ai_state == "alert" and _state_time > alert_duration: transition_to("chase")`，`alert_duration` 缺省 0.28s ⇒ 启动过程被整体跨过。**公式与 Prefab 全对，状态机把它跨过去了** —— 这就是首次交付「不能在游戏中看到效果」被实际触发的原因。
+- **改动**：把门禁抽成具名函数 `Enemy3D._tick_alert_state(to_target, delta, alert_duration)`（`alert` 进 `chase` 的**唯一出口**），`_physics_process` 只在它返回 true 时直接 return、不跑行动 match；中断收口收敛在 `transition_to()` 一处（离开 `alert` 且不是转 `chase` ⇒ 撤图标）；`get_state_snapshot()` 新增 `startup_*` 字段供探针与验收读取。
+- **为什么抽成具名函数**：内联时验收只能自己复刻一遍分支逻辑 ⇒「测试绿、游戏红」的假绿，本次回归正是这个形态。抽出来后验收能驱动**同一条**代码路径。
+- **验证**：`samples=198` 通过。新增白盒（驱动真门禁函数）、**端到端**（真 AI + 真 `_physics_process` + 真玩家）、源码回归钉三组，全部配**负向对照**：拆掉门禁重跑红 **17 条**，含「短于 0.30s」「图标从未出现」「启动过程没走完就放行」。端到端实测：警觉→追击 **0.6000s**（窗口 [0.30, 0.60]）、警觉窗口内推进 **0.0000m**、图标出现 true。
+- **回归**：`verify_monster_ai_system_complete`、`verify_3d_enemy_behavior_flow`、`verify_enemy_illumination_states`、`verify_training_range_3d_flow`、`verify_unique_elite_roster_flow` 全绿。
+- **顺手修掉一个阻塞整个工程解析的外部缺陷**：另一会话在改的 `src/world3d/Dungeon3D.gd` 同时声明变量 `_fate_greyscale_material`(L276) 与同名函数(L5961)，GDScript 禁止同名 ⇒ `Dungeon3D` 解析失败 ⇒ `MonsterAIManager` autoload 起不来 ⇒ **游戏内 AI 与所有依赖 AI 的验收全部失效**。只把函数改名为 `_ensure_fate_greyscale_material()` 并同步唯一调用点，变量语义未动；备份在 `_scratch/other_session_fix/`。
+
+## 2026-10-14 枪械射程独立化：新增每枪 `range` 字段，弹速不再决定射程（用户指定机制）
+
+- FeatureID：`WEAPON-COMBAT`；业主口径「不同枪械需要对这个有不同的字段。不然有些枪的子弹打太远了…主要是散射喷壶这类散弹枪，射程最多就 7 米即可。步枪大概 20 米，豌豆手枪 15，狙击可以远一些，榴弹 18 米到距离会自动爆炸」。
+- **机制背景**：此前**没有射程字段** —— 射程是「弹速 × 固定 1 秒存活」的副产物（`23 × bullet_speed`），因此弹种之间射程差 2.8 倍（11.5～32.2 m），且改弹速会连带改射程。
+- **新增字段**：枪身 `base_stats` 新增 `range`（米），语义是**弹体最远飞行距离**，与 `bullet_speed` **解耦** —— 弹速今后只决定飞行时间。距退役按**实际飞行路径长度**累计（含反弹折线，不是直线位移）；回旋镖返航段不受射程限制。
+- **到点行为**：普通弹体到射程**直接消失**；爆炸类弹体（`explosive / blackhole / balloon / nth_explosion`）调 `_explode()` **原地自动引爆** —— 榴弹「18 米自动爆炸」即此实现。命中路径与射程上限**共用同一判据**（新抽出的 `Projectile3D._is_explosive_payload()`），替代原先两处重复的内联条件，避免两套条件漂移。
+- **与存活时间的协调**：`range` 缺省（0）时退回旧口径。声明了 `range` 时存活上限按 `range ÷ 弹速 × 1.5` 反推取大 —— 否则固定 1 秒会把远射武器提前掐断（狙击 60 m ÷ 23 m·s⁻¹ = 2.6 s > 1 s）。
+- **逐枪定值**（`BlueprintRegistry` 枪身工厂；内容表《武器》核心数值列同步 `range=`）：
+
+  | 枪身 | range | 依据 |
+  |---|---|---|
+  | 散射喷壶 `bp_shotgun` | **7 m** | 业主指定（散弹枪封近距） |
+  | 豌豆手枪 `bp_pistol` | **15 m** | 业主指定 |
+  | 步枪 `bp_rifle` | **20 m** | 业主指定 |
+  | 初始步枪 `bp_starter_rifle` | **20 m** | 以步枪为原型，同步枪 |
+  | 反胃榴弹筒 `bp_launcher` | **18 m** | 业主指定（到距离自动爆炸） |
+  | 蜂窝机枪 `bp_machinegun` | 18 m | **未指定**，取压制武器中距 |
+  | 花洒机枪 `bp_sprinkler` | 18 m | 同蜂窝机枪（出厂型号共用定位） |
+  | 蓄力萝卜炮 `bp_charge` | 18 m | **未指定**，取与榴弹一致的爆炸炮定位 |
+  | 弹弓狙击 `bp_sniper` | **60 m** | 业主「可以远一些」，取 60 |
+
+- **改动面**：`Projectile3D`（新增 `range_m` / `_traveled`、射程判定、`_is_explosive_payload()` 抽取）；`WeaponModel3D`（新增 `range_m`，三处 spawn 配置注入：主弹、副枪、复制波次；副枪未声明则回落主枪）；`BlueprintRegistry`（9 把枪身加 `range`）。
+- **验收**：`verify_starting_weapon_contract`（`core_scenes`）新增两条判据并**做了负向自测** —— ① 每把远程枪身必须声明 `range > 0` + 逐把核对定值；② 接线三段（枪身 → `WeaponModel3D.range_m` → `Projectile3D.configure` 读取）。实测把散射喷壶改成 0 时三层**同时报红**（`未声明射程` / `射程是 0.0 期望 7.0` / `WeaponModel3D.range_m 是 0.0`），恢复后转绿。回归：`verify_bullet_vfx_profiles` OK（8 profiles / samples=48）、`verify_3d_combat_progression_flow` OK。
+- **遗留待裁决**：① 蜂窝机枪 / 花洒机枪 / 蓄力萝卜炮 / 弹弓狙击 四把的射程为**工程取值**（业主未逐把指定），改动是一行。② **弹种之间不再有射程差异** —— 穿甲弹原先靠 1.4× 弹速获得 32.2 m 射程，现在与其他弹种同为枪身射程；若希望某些弹种仍有射程加成，需另加 `range_multiplier`。③ `_combine_stats` 对未知数值键做**加法**，`range` 属未知键：挂载件若也写 `range` 会与枪身值相加而非覆盖（当前无内容写入，属潜在坑）。④ 敌弹未声明 `range`，行为逐字不变（仍按存活时间）。
+
+## 2026-10-14 新增出厂枪「初始步枪」并替换出厂配发（用户指定内容新增）
+
+- FeatureID：`WEAPON-COMBAT`；业主口径「增加一把初始武器，以步枪为原型，叫做初始步枪；伤害 50、射速 50、换弹 1.8 秒、命运槽 4 个。然后初始武器改成这把，修改相对应的相关设计文档及功能」。
+- **新增内容**：枪身 `bp_starter_rifle`（装配节点 `GunBody_StarterRifle`，名称「初始步枪」）、成品物品 `weapon_starter_rifle`、蓝图碎片 `bp_starter_rifle`。基础数值 `damage 50 / fire_rate 5 / reload_time 1.8 / magazine_size 30 / spread 0.07 / bullet_count 1`（射速由初版的 50 修正为 5：业主 2026-10-14 更正为误报数值），弹匣与散布沿用步枪本体；`fate_slot_capacity = 4`（与前一任出厂枪同口径：白送枪命运槽只有通用枪械的一半）。稀有度 `common`、价格 120、`loot_table_tier 0`、掉落权重与花洒机枪同为 tier0 白送定位。
+- **出厂枪替换**：`BlueprintRegistry.DEFAULT_STARTING_GUN_ID` 由 `bp_sprinkler` 改为 `bp_starter_rifle`。⚠️ 新档首局的地面初始枪**不由该常量决定** —— 它由剧本 `nar_tower_opening_01_wake` 的 `scene.spawn_item` 刷出（`TowerDescent3D._clear_new_game_opening_loadout()` 会先收回白送的枪），本次同步把该剧本 `item_id` 由 `weapon_sprinkler` 改为 `weapon_starter_rifle`。两处必须同改，漏一处就会出现「新档拿到的仍是旧枪」而所有验收全绿。
+- **接线**（新枪落在既有分类里，未新增机制）：`ROOT_ATTACHMENT_SUPPORT` 与 `ASSEMBLY_NODE_ITEM_IDS` 补行；`WeaponModel3D` 的 `GUN_NAME_TO_ID` / `GUN_VISUAL_SCENES` / `GUN_PROFILES` 补行，**枪械美术复用步枪的 `broom_rifle` 资产，不复制 GLB**（口径同花洒机枪复用蜂窝机枪）；`PlayerAvatar3D.WEAPON_ANIMATION_PROFILES` 沿用步枪的 `rifle_braced_burst` 射击姿态；`InventoryUI` 的节点名→装配 ID 映射补行。持枪动画族为 `longgun`（`Player3D.weapon_family_for_gun` 按 gun_id 判定，新枪落到 longgun 分支），持枪移速惩罚因此由机枪的 1.1 变为长枪的 0.8（与步枪相同）。
+- **同步的验收断言**：`verify_starting_weapon_contract`（出厂枪契约，期望值整组改为新枪，配件槽对照对象由蜂窝机枪改为步枪，并新增「原型枪/前任出厂枪不得被顺手改坏」哨兵）、`verify_formal_3d_asset_import`（新枪映射到 `bp_rifle` 的正式资产）、`verify_weapon_instance_contract_matrix`（矩阵补行，并把硬编码的「8 gun bodies」改为按注册表长度打印）、`verify_player3d_weapon_pose_collision_flow`（fire_style 表补行）、`verify_fate_character_completion`（默认枪与移速惩罚由 machinegun 改 longgun）、`verify_new_save_handoff`、`verify_opening_script_runtime`（两处拾取断言）。
+- **实测**：`verify_starting_weapon_contract` → `STARTING_WEAPON_CONTRACT_OK: 出厂枪 初始步枪（weapon_starter_rifle / bp_starter_rifle）身份三方一致，30 发弹匣 / 50 伤害 / 命运槽 4，出厂装配树根节点为 GunBody_StarterRifle`。`verify_weapon_instance_contract_matrix` → `... 9 gun bodies x 8 bullets and 3 melee roots ...`。`verify_player3d_weapon_pose_collision_flow` → `BUNNY_WEAPON_POSE_COLLISION_OK`。`verify_formal_3d_asset_import` 对全部枪身版本 0 报错（残留 2 条 `workshop_stool` / `mission_command_chair` 为既有欠账，非本次引入）。
+- **内容表与账本**：内容数据库《武器》补 `bp_starter_rifle` 行、《掉落物品》补 `weapon_starter_rifle` 行、《总览》计数与口径同步（武器 24→25、掉落物品 45→46）。武器账本《背包物品调用索引》按 `scripts/sync_inventory_item_ledger.py --write` 重生成（武器条目 26→27），《域变更日志》追加 v0.1.103（v0.1.102 已被并发会话的「地面简模正式路径与代码接线」占用）。三张账本门禁通过：`ASSET_REGISTRY_CHECK_OK assets=1244`、`LEDGER_SPLIT_VERIFY_OK`、`INVENTORY_ITEM_LEDGER_OK items=21 weapons=27`。
+- **文档口径**：`01_内容数据库说明`、`04_技术施工_战斗与局内成长`、`10_资产与内容规范`、`12_全游戏完成度清单` 的「7 远程枪身」改为「9 远程枪身」；`11.1_测试功能_独立训练场` 与 `MODULE_INDEX` 的枪架/组合数由 19 架 / 67 组合改为 20 架 / 75 组合（数量由注册表推导，新增内容不需要改魔数）；`04` 的保底武装段改为按 `DEFAULT_STARTING_GUN_ID` 描述；`08_技术施工_剧情触发` 的开场枪引用改为新枪。
+- **遗留待裁决**：① **花洒机枪 `weapon_sprinkler` / `bp_sprinkler` 仍只有运行注册，内容表未登记行** —— 「9 把运行枪身 vs 内容表已登记 8 行」的差额仍在文档里显式标注（上一轮业主裁定「只记录改动」，本次未擅自补行）。② 射速已按业主更正为 **5 发/秒**（`_cooldown = 0.2s`），枪身理论 DPS 250，处于全表中段（低于步枪 360、高于榴弹筒 250）。弹匣 30 发可持续 6 秒，换弹 1.8 秒 —— 已无「出生即碾压」问题。③ 旧存档中的枪实例保留生成时 `assembly_snapshot`，已存在的出厂枪不会自动变成新枪。
+
+## 2026-10-14 已购命运卡改「灰阶 + 压暗 + 缩到 70%」
+
+- FeatureID：`FATE-RULES`；业主口径：「改成灰色的，所有都改成灰色，并且暗下去，还有适当缩小一些 到 70% 的大小。」
+- **灰阶走 `canvas_item` 灰度 shader**（`FATE_GREYSCALE_SHADER_CODE`，按 `luminance = dot(rgb, vec3(0.2126, 0.7152, 0.0722))` 去色），挂在**卡背层**上；材质懒建一次、三张卡共享（`_fate_greyscale_material()`）。
+  - 🔴 **为什么不能用 `modulate` 代替**：卡背线稿本身是亮青绿（`#02FC8E` 级别），`modulate` 只能整体压暗、**去不掉色相** ⇒ 压完是「暗绿」而不是「灰」，正好是业主这次要修的东西。
+  - 卡面层 `TarotArtFace` 自带扫描光 shader，**不去动它**：翻背后它已隐藏，换掉会连带丢掉那条 shader，将来若要做「翻回正面」就没有扫描光了。
+- **压暗走 `modulate`**（`FATE_PURCHASED_DIM_COLOR`），与灰度材质**分工**：材质管「灰多少」，modulate 管「暗多少」，将来单独调任一项互不影响。
+  - 档位是业主**两次**指定的结果：先「暗下去」给 `0.62`，随后「还要再暗一些」下调到 **`0.40`**。实测效果 = 卡背线稿去色后亮度约 0.85 × 0.40 ≈ **0.34 深灰** —— 在深色弹窗底上仍看得出「这里有一张卡」，但已明显退到背景。
+  - 已购卡文字色 `FATE_PURCHASED_TEXT_COLOR` 随之由 `0.62` 提到 **`0.72`**（比压暗值**留余量**）：整列 modulate 会**再乘一次**，而「已购买」是这张卡唯一还需要被读到的事实（它证明这张卡买过了），跟着卡面一起沉到 0.34 会读不出来。实测有效亮度 0.72 × 0.40 ≈ 0.29，暗但可辨。
+  - 🔴 **必须是中性灰 `R=G=B`**：第一版给的是 `(0.62, 0.63, 0.66)`「略带冷调」，被新断言当场判红 —— 掺冷调会把「改成灰色」实际做成「改成灰蓝」，与业主要求不符。新断言钉死 `r == g == b`。
+  - **新增绝对上限断言**（`modulate.r <= 0.50`，用例与视觉验收各一条）：主人连提两次要更暗，只跟常量比的话，谁把常量改回亮档这条也照样绿、拦不住回退。绝对上限把「已经定过的暗度」钉住。
+- **缩到 70%**（`FATE_PURCHASED_CARD_SCALE = 0.70`），且这是**基准缩放**而非悬停反馈：`_tween_fate_card_scale()` 收到的所有 `target` 都是「相对基准的倍率」，最终尺寸 = `target × 基准`（新增 `_fate_card_base_scale()`）。
+  - 🔴 **不这么做会有一个静默回弹**：`_reset_fate_feedback()` 会调 `_tween_fate_card_scale(button, 1.0, ...)`「把所有卡复位」—— 基准写死在 1.0 的话，已购卡的 0.70 会在下一次买卡/关来源面板时被原地冲掉，表现为「缩了一下又弹回原大」。
+- **文字也一并去色**：卡下说明（原本按作用域着色：紫/金/浅蓝）与价格行的 `font_color` 都换成 `FATE_PURCHASED_TEXT_COLOR`（同样中性灰）。为让「买下后整体去色」能重新着色，`_create_reference_fate_card_view()` 新增 meta `tarot_caption_label`。价格行「已购买」原本是**绿**（`0.55, 0.88, 0.62`），现在也是灰。
+- **分档保持**：已购 ⇒ 灰阶 + 压暗 + 70%；**买不起 / 槽满 ⇒ 只做轻度压暗**（`0.56, 0.59, 0.64`），不灰阶不缩小 —— 它们是「暂时/本枪买不了」而不是「已经没了」，压成灰阶会让玩家以为这张卡消失了。`_refresh_door_fate_prices()` 里按 `purchased` 与 `block_reason` 分两支处理。
+- **缺背图时的兜底**：图卡没有卡背层时**不翻面**（翻过去是空白卡），但**灰阶/压暗/70% 照样做** —— 那三样不依赖有没有背图。`_style_purchased_fate_card()` 因此在 `_flip_fate_card_to_back()` 里被提到翻面之前调用。
+- **验证**：`verify_fate_card_purchase_flow` 新增 4 条断言（灰度材质存在且 shader 含 `luminance`、整列 `modulate` 三通道均 < 0.75 **且等于 `FATE_PURCHASED_DIM_COLOR`、且 ≤ 0.50 绝对上限**、缩放精确等于 `FATE_PURCHASED_CARD_SCALE`、卡下说明 `font_color` 的 `r==g==b`），并把原先「悬停后 scale 等于 1.0」改写为「悬停后仍精确等于 0.70 基准」。`verify_reference_hud_fate_visual` 同步加材质/压暗（含 ≤ 0.50 上限）/缩放三条，并重出证据图 `outputs/verification/fate_purchased_card_back.png` —— 图里已购卡为深灰、明显压暗、尺寸约未购卡的 70%。
+
+### 验收（实测）
+
+- `verify_fate_card_purchase_flow`：**exit=0** → `FATE_CARD_PURCHASE_FLOW_OK`（含本节 4 条新断言）。
+- `verify_reference_hud_fate_visual`（真实渲染器 / RTX 4060 Ti Vulkan）：**exit=0** → `REFERENCE_HUD_FATE_VISUAL_OK`，新截图见上。
+
+## 2026-10-14 门后命运卡：买下后翻回背面 + 去掉标题（余额行接管头部位）
+
+- FeatureID：`FATE-RULES`；业主口径：「买完后，翻到背面去，然后上面的命运卡购买的字去掉，本局魂的字往上挪一点，替代这个位置」「买过的卡，鼠标放上去就不会有放大的动画。」
+- **买下后翻回背面**（`_flip_fate_card_to_back()` / `_show_fate_card_back()`）：卡位已用掉，还露着牌面会被当成「还能再买一次」；「已购买」必须和「买得起但没买」在视觉上一眼分开，不能只靠卡下那行小字。手法与出场翻牌**严格对偶**（同样在 90° 薄边时换面，`scale:x → 0.04` → 换面 → `→ 1.0`），减少动效时直接换。stagger 由首次翻牌的 `0.10 + i×0.08` 缩到 `0.04 + i×0.04` —— 这是玩家刚点完的卡，反馈要跟手。
+- 🔴 **翻回背面不碰 `tarot_face_ready`**：那是「翻牌动画结束、可交互」的标记，不是「正在露牌面」。置回 `false` 会让 `_set_fate_feedback_buttons_disabled(false)` 把这张卡**永久禁用**，购买制下键盘/手柄的焦点链（卡列 → 底部退出按钮）当场断链。缺卡背图时**不翻**（翻过去会变成空白卡，比不翻更糟）。
+- **已购买的卡掐掉悬停反馈**（`_set_fate_card_pointer_state`）：放大与悬停亮边都不再给 —— 这张卡已翻回背面、卡位用掉了，任何「碰得到」的反馈都是在骗玩家（它再点只会弹一句「已购买」）。**只掐视觉反馈，按钮仍可聚焦**，焦点导航不断链。
+- **顶部标题整条移除**：它和下面那行余额说的是同一件事，两行叠着白占一块纵向空间。位置由**本局魂余额行**接管 —— 占位逐值沿用原标题的 `16..66`（不是「往上挪一点」的近似值，这样头部高度与改动前完全一致、下面卡列要抬多少有确定的数可算），字号取原标题 40 与原余额 22 之间的 **30**，读作头部又不比卡下价格行抢眼。
+- **卡列上提 `106 → 74`**：头部只剩一行，还留在 106 会让余额行与卡顶之间空出 40 px（改前那 10 px 的 4 倍），看着像掉了一行东西。74 把间距拉回 14 px 的原有节奏。下沿给到 `800`（不是等比例上移的 774）—— 卡列自身只有 694 高且顶部对齐，多出的余量只是容器空余，换来卡底与退出按钮之间约 29 px 间距，与改前的 24 px 同一档。
+- **验收同步**：`verify_fate_card_purchase_flow` 新增「翻回背面 / `tarot_face_side=back` / 翻背后仍可聚焦 / 已购卡悬停不放大 / **未购卡悬停仍放大（反向对照）** / 标题已移除（反向钉子）/ 余额行贴顶且不压卡列」；`verify_reference_hud_fate_visual` 的标题断言翻转为**反向钉子**，新增余额行占位断言，并真跑一次购买把「背面朝上 + 悬停不放大」截成 `outputs/verification/fate_purchased_card_back.png`。
+- 🔴 **踩到的坑（新用例第一版红在这里）**：`tarot_purchased` 是在购买事务里**同步**打上的，而翻背是 **0.36 秒的 tween** ⇒ 买完立刻断言「卡面已隐藏」必然踩空。用例加 `_wait_card_back()` 按真实时间轮询到换面完成再断言（与 `_wait_fate_cards_flipped` 同一套口径：headless 下 process 帧不做垂直同步，固定帧数不可靠）。
+
+### 验收（实测）
+
+- `verify_fate_card_purchase_flow`：**exit=0** → `FATE_CARD_PURCHASE_FLOW_OK`。本轮新增 7 条断言：翻回背面（等 tween 收束后）、`tarot_face_side=back`、翻背后仍可聚焦、已购卡悬停不放大、**未购卡悬停仍放大（反向对照）**、标题已移除（反向钉子）、余额行贴顶且整行不压卡列。
+- `verify_dual_weapon_quick_map_fate_flow`：**exit=0** → `DUAL_WEAPON_QUICK_MAP_FATE_OK`（手柄焦点 / 环绕导航 / `ui_cancel` 三条契约不受本轮影响）。
+- `verify_reference_hud_fate_visual`（真实渲染器 / RTX 4060 Ti Vulkan）：**exit=0** → `REFERENCE_HUD_FATE_VISUAL_OK`；标题断言翻转成反向钉子 + 新增余额行占位断言；真跑一次购买并输出新证据截图 `outputs/verification/fate_purchased_card_back.png`（左侧卡背面朝上、余额行位于原标题位、卡列上提）。
+
+## 2026-10-14 门后命运卡由「三选一」改为「局内魂购卡制」
+
+
+- FeatureID：`FATE-RULES`；业主口径：「三张卡改成非三选一，三张都会出现，通过局内的金币购买，不同稀有度不同价格；可以全部购买，也可以选择全部不买；卡牌下方加上价格；整个屏幕下方中间加一个退出按钮；只能消费局内货币，不能消耗局外总货币池。」
+- **交互重构**（`src/world3d/Dungeon3D.gd`）：门后三张命运卡**全部出场**，不再互斥；每张卡在卡面说明下方**追加一行价格**；标题改为「命运卡 · 购买」并新增**本局魂余额行**；屏幕下方正中新增**「退 出」按钮**（与 ESC / 手柄 `ui_cancel` 同义）。买完弹窗**保持打开**（可以继续买另外两张），只有退出才关闭并提交门后流送。
+- **价格**：新增 `FATE_PRICE_BY_RARITY = [30, 60, 110, 180, 270]`（普通／稀有／史诗／传说／禁忌），公式 `= 旧满槽兑魂基准 [20, 40, 70, 120, 180] × 1.5` 再四舍五入到整十。买价恒高于旧兑魂值 —— 旧值是「放弃卡换魂」，新值是「花魂买卡」，两者不能同价。旧 `FATE_CURRENCY_BY_RARITY`、`_fate_currency_value()`、`_pending_fate_currency_choice` 及其全部调用点一并删除。
+- **支付源硬边界**：只读写 `GameManager.currency`（本局魂，`GameManager.spend_currency` / `add_currency`）。局外总货币池 `BaseManager.get_extraction_points()` 在任何分支都不被读写 —— 专项用例在整段测试前后各取一次抽取点做**逐整数比对**。
+- **购买事务**：先扣魂，再走统一入口 `FateCardGameBridge.apply_card_with_source_selection()`；**应用失败原额退魂**（不允许出现「钱花了、卡没刻上」的静默损失）。三种拒绝态（本局魂不足／目标枪命运槽已满／该卡位已购买）只写状态栏与卡下价格行，**不扣魂、不播选中动画、不关弹窗**。
+- **下线旧契约**：① 一次过门只能取一张卡（旧「三选一」）；② 星星卡满槽时二次点击按稀有度「兑魂」。满槽星星卡改为**置灰不可购买**，卡下显示「命运槽已满」。
+- **卡下价格行状态机**（文字即状态，颜色不是唯一编码）：可买 `◈ N 魂`（按稀有度取色）／买不起 `◈ N 魂 · 魂不足`／满槽 `命运槽已满`／已买 `已购买`；后三种状态整卡压暗，但**仍可聚焦**（键盘／手柄导航不断链）。
+- **独立验收**：新增 `tests/verification/verify_fate_card_purchase_flow.gd`（配套 `.tscn`）并注册进 `core_scenes`，覆盖：价格逐卡取自稀有度表、买成恰好扣该卡价格、买不成分文不扣、重复点击不二次扣魂、满槽不可购买、退出按钮锚在屏幕下方正中且点一次即关闭、真实过门路径落到同一套 UI、局外总池全程不变。
+- **同步用例**：`verify_dual_weapon_quick_map_fate_flow`（满槽语义由「二次点击兑魂」改写为「置灰不可购买且不扣魂」）、`verify_fate_integration_completion`（门后购买失败保留弹窗且原额退魂；买成后弹窗保持打开）、`verify_reference_hud_fate_visual`（新增标题／价格行／余额行／退出按钮四条可见契约）。
+- **文档同步**：[14 命运塔罗牌组](../14_技术施工_命运塔罗牌组.md) 新增 §7.1 门后购卡价格与支付、[04 战斗与局内成长](../04_技术施工_战斗与局内成长.md) §20.2 由「三选一布局」改为「购买布局」并改写 §1／§5.1／§13.6 的满槽兑魂条款、[MODULE_INDEX](../MODULE_INDEX.md) `FATE-RULES` 行；`design/远征关卡01设计.md`、[05 关卡生成与爬楼](../05_技术施工_关卡生成与爬楼.md)、[12 全游戏完成度清单](../12_全游戏完成度清单.md)、[README](../README.md) 中的「穿门命运卡三选一」口径统一改为「购买」。
+- **本次未做（明确边界）**：内容数据库《命运卡》表未加价格列（价格是工程常量 `FATE_PRICE_BY_RARITY`，不是内容数据）；占卜屋 `DivinationMenu`／工作台 `WorkbenchPanel`／收藏室 `FateCardCollectionMenu` 仍各自保留原有免费或独立入口，本次只改**门后**这一条路径。
+
+### 验收（实测）
+
+- `verify_fate_card_purchase_flow`（新，注册进 `core_scenes`）：**exit=0** → `FATE_CARD_PURCHASE_FLOW_OK`。覆盖价格逐卡取自稀有度表、买成恰好扣该卡价、买不成分文不扣、重复点击不二次扣魂、满槽不可购买、退出按钮锚在屏幕下方正中且点一次即关闭、真实过门路径落到同一套 UI、局外总池全程不变。
+- `verify_dual_weapon_quick_map_fate_flow`：**exit=0** → `DUAL_WEAPON_QUICK_MAP_FATE_OK`。满槽语义改写为「置灰不可购买且不扣魂」后，手柄默认焦点 / 左右环绕导航 / `ui_cancel` 三条契约仍全绿。
+- `verify_fate_integration_completion`（该用例要求把 `APPDATA`/`LOCALAPPDATA` 隔离到含 `fate_completion_20261008/integration` 的路径，属既有环境前置）：**exit=0** → `FATE_INTEGRATION_COMPLETION checks=729 failures=0`。
+- `verify_celestial_fate_scope_flow`：**exit=0**。`verify_tower_descent_flow`：**exit=0**。
+- `verify_reference_hud_fate_visual`（真实渲染器 / RTX 4060 Ti Vulkan）：**exit=0** → `REFERENCE_HUD_FATE_VISUAL_OK`；新增标题 / 本局魂余额行 / 卡下价格行 / 底部退出按钮四条可见契约断言，并输出新截图 `outputs/verification/reference_fate_three_choice.png`。
+- **顺带修掉该视觉用例两条「与漂浮相位耦合」的伪红断言**：`_check_tarot_caption_upright` 与逆位卡面倒置判定原本比对**绝对角度**（阈值 0.01 rad），而门后三张卡各自常驻一条轻微错相漂浮 + 透视旋转 tween（作用在列容器上，设计契约见 14 文档 §3.2，幅度最大 ±0.9° ≈ 0.016 rad）⇒ 同一份代码换个帧序就可能红。现改为比对**相对量**（卡下文字不翻转且与所属卡列同向；卡面相对**它自己那张卡**倒置 180°），与采样时刻无关，同时仍然能抓住「文字被倒置」和「整张卡连按钮一起转」这两个真 bug。
+- 门禁：`check_verification_registry.py` 未新增欠账（仍只报既有 6 项未注册场景）；`check_documentation_contracts.py` 未新增断链（仍只剩既有 1 条 `CHANGELOG.md` 断链）。
+- ⚠️ **跑套件前被既有门禁挡住（与本次无关）**：`scripts/run_verification_suite.sh` 会在 `sync_runtime_design_data.py --check` 报 `RUNTIME_DESIGN_DATA_PROJECTION_FAILED`（`expedition_01` 的 `floor_00.json` / `level_plan.json` / `boss_50x40.json` 投影漂移 + manifest 漂移）后直接 `exit 2`，一个场景都跑不到。本轮改用 `ShellStorm2-work/scratch/run_fate_verify.sh`（同样的「工程外工作区 + 目录联接 + 独立 `user://`」隔离）绕开这两道**前置**门禁直接跑场景。该漂移需要一次不带 `--check` 的 `sync_runtime_design_data.py` 重生成投影与 manifest 才能归零，属另一笔账。
+- ⚠️ **既有红项（非本轮引入）**：`verify_3d_parity_core` 仍红在 `Opened adjacent room was not streamed in` 与流送节点预算 `2606/2200`。这两项自 2026-09-23 的全量审计起就挂在账上（`docs/v0.1/audits/2026-09-23_full_project_reassessment.md`、`docs/v0.1/development/2026-10-12_safe_room_no_default_room_key.md` 均有记录），与门后购卡无关。
+
+
+
+- FeatureID：`WEAPON-COMBAT`；业主逐条给出目标值：步枪 60、花洒机枪 12、豌豆手枪 25、弹弓狙击 380、反胃榴弹筒 250（射速 0.8→1）、散射喷壶 45、放大镜瞄具伤害加成 +15；蓄力萝卜炮 880、周围伤害 560；反胃榴弹筒周围范围伤害 180。
+- **基础数值基线**（唯一运行时真身 `src/base/BlueprintRegistry.gd` 的枪身/配件工厂）：豌豆手枪 `damage 18→25`；花洒机枪 `8→12`；散射喷壶 `12→45`；步枪 `22→60`；弹弓狙击 `55→380`；反胃榴弹筒 `38→250` 且 `fire_rate 0.8→1.0`；放大镜瞄具 `damage 5→15`；蓄力萝卜炮 `30→880`。
+- **范围伤害按既有比例模型落地，不新增绝对字段**：`Projectile3D._explode()` 的公式是 `int(弹体伤害 × explosion_damage_scale × 距离衰减)`，衰减 `clampf(1 − d/r, 0.25, 1.0)`、未声明时半径 3.0 m。反胃榴弹筒取 `explosion_damage_scale = 0.697675` ⇒ 中心 `258 × 0.697675 = 180`；蓄力萝卜炮取 `0.630631` ⇒ `888 × 0.630631 = 560`。弹体伤害含默认子弹模块 `mod_bullet_standard` 的 8，换弹种会同时移动直击与范围。
+- **蓄力萝卜炮的范围爆炸是行为标签接线，改数值不会自动生效**：`WeaponModel3D._apply_gun_behavior_tags()` 原本只给 `bp_launcher` 强制加 `explosive`，对 `bp_charge` 只加了一个从未被消费的死标签 `charged`；本次给 `bp_charge` 追加 `explosive`，命中才走 `_explode()`。该枪由此从「纯穿透」变为「穿透 + 爆炸」，属玩法改动，非数值微调。
+- **同步**：内容数据库 `docs/v0.1/data/ShellStorm2_游戏内容数据库_v010.xlsx`《武器》表的核心数值、功能、特殊效果/标签列逐条更新（改前副本 `.bak_20261014_141406_ShellStorm2_游戏内容数据库_v010.xlsx`）。
+- **按业主 2026-10-14「只记录本次改动」裁定未做**：内容表《武器》仍缺 `bp_sprinkler` 行、《掉落物品》仍缺 `weapon_sprinkler` 行，因此「7 远程枪身」口径保持原样未改；武器账本《资产主表》不持玩法数值，只追加《域变更日志》一条。
+- **遗留待裁决**：① 改动后弹弓狙击 380、蓄力萝卜炮满蓄力直击 2068（`release_charge()` 的 `lerp(0.72, 2.35, ratio)`）显著高于其余枪，需确认敌人血量是否已同步到同一量级，否则均为「一击清场」。② 萝卜炮满蓄力时范围中心会随弹体伤害等比膨胀到约 1315；若要求范围伤害恒为 560，须把该值从「弹体伤害的比例」改成绝对字段。③ `charged` 标签仍无消费者，文档所述「超蓄力附带穿透」未实装。④ 存档内 `WeaponInstance.assembly_snapshot` 保留生成时的 `base_stats`，已有旧枪不会自动吃到新数值，需要迁移才生效。
+
+## 2026-10-14 警察僵尸数值 ＋ 弹药豁免空掉落 ＋ 货币独立掉落通道
+
+- FeatureID：`WORLD-PLAN` ＋ `ENEMY-AI`（同一线第三批）；业主口径「警察僵尸的HP改成250 伤害改成30，80%概率掉落一个普通弹药，同时会掉落货币，所有击败的怪物都会掉落货币，这个不算在物品掉落里头，或者做成100%货币+原来的其它物品掉落概率，货币会有多少区分，越多的货币，模型越大」。
+- **澄清（业主已答）**：①「一个普通弹药」= **1 包** `item_ammo_pack`（30-50 发）；② 货币分档 = **按怪种 + 楼层**；③ 物品**保留** 40% 空掉落。
+- **数值**：`ranged_caster`（警察僵尸 / 内容数据库名「孢子射手」/ 资产名「保安僵尸」）**hp 250 / 伤害 30**（速度 1.458 未动），走关卡级 `monster_rules.stats.per_kind` 绝对覆盖；`Enemy3D.PROFILES` 基线 46/2.25/10 **未改**。
+- **🔴 最值钱的发现：80% 被空掉落打成了 47%**。`empty_chance = 0.4` 的掷签在 `entries` **之前**、命中即整体落空 —— **连弹药一起吃**，于是「80% 掉弹药」实际只有 **0.4703**（= 0.8 × 0.6）。隔离实测（各 4000 次）：摘掉空掉落时 `ranged_caster` 弹药率 **0.8047**、带上只有 **0.4703**。业主裁定「**弹药豁免**」。
+  - 实现：`RewardSpec.is_empty_exempt_item()` 按物品 **tag `ammo`** 认定（唯一真源，新增弹药物品自动继承）；编译层在弹药条目写 `exempt_from_empty: true`（`MonsterDropTable` ＋ `MonsterInjector`）；解析层 `RewardService.resolve` 空掉落命中时**只解析豁免条目**，且**不走 `fallback`**（否则「空」会被回退池填满）。
+  - 实测：警察僵尸 **0.7920** ✅；小僵尸 0.3453、炸弹果 0.3468（各自指定概率）；装备类仍被降低（炸弹果「有物品」1.0000 → **0.7210**）。
+- **货币（魂）改走独立掉落通道**。关键事实：货币原本就在物品表里（`@currency:extraction_points`、`2+floor*1`、备注「必掉·公式」）—— 与 `empty_chance` 直接冲突，40% 的击杀**连魂都不掉**，「必掉」名存实亡。
+  - **表里 3 条 `@currency:` 行已删**；改由 `monster_rules.currency`（关卡级）＋ `RewardService.currency_spec_for()` ＋ `RuntimeRewardCoordinator._append_level_currency()` 供给：**100% 必掉、不受任何空判定影响、不占物品件数**。
+  - **摘除防重**：关卡配了该段时，物品规格里的货币条目被 `_drop_currency_entries` 摘掉，否则会**重复发放**；未配置的关卡（塔楼等）不摘、不追加 ⇒ 行为逐字不变。
+  - **分档**（`per_tier` > `per_kind` > `default`，值 = `round(base + per_floor × floor)`）：`melee_chaser` 4+1、`ranged_caster` 7+1、`exploder` 8+2、`ambusher` 8+2、`summoner` 12+3、`fat_zombie03` 20+4、elite 50+20、boss 200+20、default 4+1。
+  - 实测：6 种怪 × 800 次**全部 1.0000**；金额 5 / **8** / 10 / 10 / 15 / 24 精确吻合；警察僵尸 floor 1/3/7 → **8 / 10 / 14**。
+- **货币模型随数量放大**（业主「越多的货币，模型越大」）：`GroundLootPickup3D.CURRENCY_SCALE_TIERS` 分档 `<10 → 0.85` / `10–29 → 1.10` / `30–79 → 1.45` / `≥80 → 1.85`；非货币恒 1.0。实测真实实例 count 3/40/220 → `visual_scale` **0.428 / 0.731 / 0.932**。
+
+### 验收
+
+- `verify_expedition01_spawn_ramp` → **`EXPEDITION01_SPAWN_RAMP_OK ramped_rooms=8`**；`verify_reward_ground_handoff` → ✅（含「currency multiplier」用例，既有货币逻辑未破）。
+- 掉落表导出 `MONSTER_DROP_TABLE_CHECK_OK rows=13 changed=0`；`FEATURE_TRACEABILITY_OK features=37`。
+- **塔楼对照（隔离证据）**：`configure_level_currency({})` ⇒ 不追加、不摘；200 次击杀恰好 200 个货币 grant（**不重复**）。
+- 数据侧：`docs/v0.1/data/怪物掉落表_地图x怪物.csv` 同步（删 3 行 + 孢子射手弹药 34%→80%），JSON 与 CSV `--check` 一致。
+
+### ⚠️ 一处**既有**失败（对照实验已证明与本轮无关）
+
+`verify_reward_service_flow` 报 4 条 ERROR，全围绕 `enemy_type = "shielded"`。证据链：
+`git show HEAD:src/map/MonsterInjector.gd | grep -c shielded` = **0**（HEAD 版就没有）；
+HEAD 版 `BASE_ENEMY_TYPES` 与工作区**逐字节一致**（本次该文件 +36/−0，没删任何东西）；
+HEAD 版 `drop_spec_for` 守卫同样是 `if not BASE_ENEMY_TYPES.has(monster_id): return {}`；测试文件相对 HEAD **未改**。
+⇒ `drop_spec_for("shielded", ...)` 在 HEAD 上**同样返回 `{}`**。根因：**壳甲卫兵 2026-10-03 退役**（`shielded` 从 `BASE_ENEMY_TYPES` 移除）而该用例未同步 ⇒ 它在 HEAD 上就是红的。修它需把用例里的 `shielded` 换成现役怪种（本轮未动）。
+
+---
+
+## 2026-10-14 远征01 关卡级怪物规则 `monster_rules`：数值覆盖 ＋ AI 手感 ＋ 死亡自爆
+
+- FeatureID：`WORLD-PLAN`（关卡数据）＋ `ENEMY-AI`（AI 参数与自爆）；业主口径「A 不动（不改几何真源）、只挪盒位、改怪物初始逻辑、调数值，**这些只有远征01会有**」，随后追加「胖子僵尸被打死后需要能自爆，会影响所有单位，包括敌对单位和玩家，伤害是 180」。
+- **为什么必须先建通道**：23 个 AI 可调点里 **21 个**是 `Dungeon3D` / `Enemy3D` / `MonsterAIManager` 的全局常量或硬编码字面量；主题档案 `iron_frontier.tres` 又被 **5 个场景**共用（远征01/02/99、`IronFrontier3D`、**`TowerDescent3D`**）⇒ 直接改任何一个都会连带改塔楼。故新增 `level_plan.json` **顶层** `monster_rules`，形态与既有 `monster_drop_table` 同构。
+- **「只影响远征01」由三条独立理由保证**：① 只写在远征01 数据文件里，别处不写 ⇒ 空字典 ⇒ 走原常量（`merge({})` 是 no-op、`_ai_param` 键缺失回退全局常量）；② **不进 `layout_id`**（canonical 只含 `level_id/floor_number/entry_side/rooms{key,template_id,variant,center,size,rotation_deg,ports}/global_rotation_deg/run_seed`）⇒ 改数值**不断存档**；③ `spawn_placements` 同样不在 canonical ⇒ **挪盒位也不断存档**。
+- **数值**（业主指定）：小僵尸 **350 / 18 / 3.5**、胖子僵尸 **800 / 35 / 1.5**、显示器Boss **hp 32000**（速度 3.612 未动）。**`Enemy3D.PROFILES` 基线未改**，内容数据库《怪物与Boss》的「正式3D数值」列仍是基线值。
+- **🔴 覆盖写「绝对最终值」而非倍率**：`Enemy3D` 实际值为 `PROFILES × 3.0/10.0 × (data ÷ SOURCE_HP_BASE)`，而 `data.max_hp` 在 `MonsterInjector` 里已被 `int()` 截断过 ⇒ 小僵尸实际基线是 **160** 而不是 `58×3×0.95 = 165`（`int(25×0.95)=23`，`58×3×23/25 = 160.08 → 160`）。写绝对值免去反推，也免得「改了没生效」。另两处顺序：Boss 覆盖必须接在 `_generate_boss` 末尾显示器Boss 固定基线 `merge` **之后**（否则被 `hp:200` 盖掉）；精英从基础怪派生（HP×1.5 / 伤害×1.3），绝对赋值会吃掉倍率，故 `_generate_elite` 末尾**按倍率重算一次**。
+- **胖子僵尸死亡自爆**：配置 `monster_rules.death_explosion.fat_zombie03 = {enabled, damage:180, radius_m:5.0, sfx_radius_m:20.0}`。**刻意不复用 `exploder._explode()`** —— 那是炸弹果的**主动贴近**自爆，三条语义都不同：伤害走 `contact_damage`（随缩放漂）/ **只伤玩家** / 半径硬编码 3.0 m；本能力用**固定 180**、**敌我通吃**、规格半径、**死亡时**触发（`_die()` 内、`killed.emit` **之前**，故被炸死的怪也各自走完掉落结算）。新增 `Enemy3D._detonate_death_explosion()` / `_damage_allies_in_blast()` / `_damage_players_in_blast()`。
+  - **级联安全**：隔壁残血胖子会被牵连炸死 ⇒ 走自己的 `_die()`＋自爆；反向炸回本怪时被 `take_damage` 首行的 `ai_state == "dead"` 挡掉 ⇒ **不无限递归**。
+  - **同房过滤**：`query_radius(..., room_filter=[room_id])`，与 `_heal_nearby_allies` 同口径 ⇒ 门关着时跨房不被炸、也不被顺带激活。
+  - **不转移仇恨**：怪物 AI 目标只从 `player_3d` 组取 ⇒ 「怪炸怪」只掉血、不互殴。
+- **`room_02` 改「中心 1 群 ＋ 四角 4 群」＋ 房间级联动激活**：`encounter.monster_ai.alert_share_radius_m = 60`（本房对角 ≈ 50 m）。**没有新增机制** —— 复用既有同伴警报传播 `_share_ally_alert`，只把半径从全局常量 `ALERT_SHARE_RADIUS = 10.0` 改成房间可配。任一群点火 ⇒ 全房链式围上。
+  - **🔴 数量 20 → 18 是物理容量硬约束**：本房真实可通行区只有一条横带（`z ∈ {-7.5,-2.5,2.5}`，`z = ±7.5/±12.5` 整列容量 0，被家具吃掉），四角砖心**原地容量只有 2~4 只**。四角若沿用原基线的「全盒 ×2」会**越容量**触发落地平移（实测漂移最大 **8.87 m**）并可能盒互叠（判据 I）。故只在**中心盒**（容量 6，唯一宽裕位）与**西北角**保留 ×2，其余三盒回原始量；**组合不变**（仍是那 4 种盒，`room_spread` 用两次）。
+- **掉落加 40% 空掉落**：`monster_drop_table.empty_chance = 0.4`，命中即本次击杀**什么都不掉**（连魂与弹药一并落空）；掷签与后续抽取**共用同一 rng** ⇒ 同 seed 同结果、不新增随机流。**补了一个覆盖盲区**：本表只登记 3/6 种怪，其余走旧公式兜底、够不着表级字段 ⇒ 已在 `RuntimeRewardCoordinator` 存一份概率随 kill 下发、在兜底路径补齐（关卡级，不引全局状态）。`empty_chance` 是**表级扩展键**，`export_monster_drop_table.py` 已改为**保留** `expected_table` 不产出的键（既不抹掉手工配置，也不让 `--check` 误判漂移）。
+
+### 验收（实测）
+
+- **数值**：小僵尸 **350/18/3.500**、胖子僵尸 **800/35/1.500**、Boss **hp 32000**（速度 3.612 未动）；未配置怪逐值不变（`ranged_caster` 129/9、`exploder` 113/28、`ambusher` 142/15、`summoner` 202/8）。
+- **AI 参数**：每只怪均带 `monster_ai`；`room_02` 的 60 m 抵达运行时。
+- **`room_02` 五群**：5 盒 / 单波 / **五盒漂移全 0.00** / 实到 18 / `short=0` / `trunc=0`（`probe_expedition01_box_capacity` 与 `probe_expedition01_wave_counts` 双向吻合）。
+- **自爆**：同房 2 m / 4 m 各 **−180**；同房 12 m **−0**（超半径）；跨房 2 m **−0**（同房过滤）；玩家 3 m **−180**；自爆者不自伤；**级联**两个残血胖子互爆 ⇒ 双双 dead、**进程不挂、无递归**。
+- **空掉落率（4000 次 × 3 种怪）**：`melee_chaser` 0.4098 / `ranged_caster` 0.3902 / `exploder` 0.3982（无 `empty_chance` 的对照组 0.0000）。
+- **塔楼对照（关键隔离证据）**：`TOWER_RULES_EMPTY=true`、无 `override_*`、无 `monster_ai`，数值与改动前逐值一致。
+- 掉落表导出 `MONSTER_DROP_TABLE_CHECK_OK changed=0`；`verify_expedition01_spawn_ramp` → **`EXPEDITION01_SPAWN_RAMP_OK ramped_rooms=8`**。
+
+### ⚠️ 三处**既有**问题（对照实验已证明与本轮无关）
+
+做法：`git checkout HEAD -- floors/floor_00.json` 还原数据后重跑，逐条复现 ⇒ 均为既有欠账，非本轮回归：
+
+1. `verify_expedition01_spawn_ramp` 的 `boss` 漂移快照过期（快照写 `#1: 0.63`，实测 `#0: 11.07 / #3: 4.81`）—— 已按门禁自身提示刷新 `PINNED_DRIFT`。
+2. `verify_level_plan_design_source` 报 `room_overlap:room_10:boss` / `boss:extraction` —— `floor_00.json` 的 `center_m`/`size_m` 本就重叠（设计说明该坐标只是**兜底样例**，非实跑几何）。
+3. 全关 `trunc=5` —— 全在既有身份条目（boss 房 `tile_cells=0` 等），与 `room_02` 无关。
+
+### 文档与登记
+
+设计：[远征关卡01设计](../../v0.1/design/远征关卡01设计.md) 新增 §4.5.2.1（`room_02` 五群与联动）/ §4.5.3（`monster_rules` 全机制）/ §10.4（改动前必读约束），并更新 §4.5.2 触发盒现状；
+[触发器刷怪设计](../../v0.1/design/触发器刷怪设计.md) §3.3 新增 `encounter.monster_ai` 字段、§3.2.3 同步 `room_02`；
+[胖子僵尸03运行配置](../../v0.1/design/胖子僵尸03运行配置.md) 新增「死亡自爆」节与远征01 覆盖说明；
+[怪物设计](../../v0.1/design/怪物设计.md) 三怪覆盖摘要；
+[01_内容数据库说明](../../v0.1/01_内容数据库说明.md) §5.3 新增「基线 ↔ 关卡覆盖」口径；
+内容数据库《怪物与Boss》补覆盖值与自爆。
+登记：`feature_registry.json` 的 `WORLD-PLAN` / `ENEMY-AI` 追加开发记录；`MODULE_INDEX.md` 两行补 2026-10-14 说明；本开发记录 [2026-10-14_expedition01_monster_rules](2026-10-14_expedition01_monster_rules.md)。
+
+### 未做
+
+剩余 9 间房未调；自爆观感未真机确认（沿用 `VFX-EXPLOSION-3D`、size 2.6，比炸弹果的 1.75 大）；`radius_m = 5.0` / `sfx_radius_m = 20.0` 为默认值（业主只指定伤害 180）；掉落 `empty_chance` 目前只对远征01 生效。
+
+---
+
 ## 2026-10-14 远征01 Boss 房整房换成 **Boss房02 深井竞技场**（与测试 99 全套机制对齐）
 
 - FeatureID：`WORLD-BLOCKS`；业主口径「发全套机制，把远征 01 的 boss 房完全换成那个远征 99 的 boss 房」。
@@ -2626,3 +2875,9 @@ WORLD-ENTRY：入口楼最后阶段展开，标记和交互同步；01成功撤�
 ## 2026-10-14 物品道具双模型源
 
 8件参考道具高模及100–200三角地面派生源完成，账本与规范skill同步。见[交付记录](2026-10-14_item_prop_dual_models.md)。
+
+- 2026-10-14 ASSET-PIPELINE / WORLD-LOOT：[8件道具地面简模接入](2026-10-14_item_ground_runtime_import.md)。独立GLB/PackedScene、ground用途分流、分账本及Prefab分页同步；运行验收未执行。
+
+- 2026-10-14 ASSET-PIPELINE / WORLD-LOOT：[通用弹药用途、图标与倾角修正](2026-10-14_ammo_model_identity_icons.md)。按用户更正模型归属，图标复用导入模型，倾斜45度旋转。
+
+- 2026-10-14 AUDIO-MUSIC：[天台（100F）BGM 关闭](2026-10-14_rooftop_bgm_disabled.md)。新增 `TowerAtmosphere3D.rooftop_music_enabled`（默认 false）门控天台曲目——曲目条目、A/B 两版 OGG 资产与触发调用全保留，置 true 即恢复；关闭分支显式 `stop()` 清掉从基地/塔楼带上来的残留曲目；`verify_base99_radio` 断言随契约更新。
