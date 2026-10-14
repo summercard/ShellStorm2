@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1232,
+ "asset_count": 1241,
  "assets": {
   "CHR-PLY-CAPSULE01": {
    "v": "fb9c7766773b1d6a335de6bfe8c9fff37124a233527dad83b2c87933016bfb59",
@@ -6196,32 +6196,77 @@
    "v": "a18f017e15dd358d9c3ab7133c75b3301867a672c077941baec8dbc4f075cb21",
    "c": "音乐",
    "d": "music"
+  },
+  "ENV-ROOFTOP-FLOWERBED-BROKEN": {
+   "v": "0e0d1657800b72f4a568760e6ee7b7758668255f5f012926b27527ee7fa7289c",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-SANDBAG-BARRIER": {
+   "v": "d5cf66427e8384de986abe5980c74fb123204c5b944920d51559607a39d6d877",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-RUBBLE-PILE-A": {
+   "v": "4d132e662f5052a7a25cc139b47cdbd843eccef2ff39efbf713f8a10d14601f1",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-RUBBLE-PILE-B": {
+   "v": "bdbde3c4477d2d38d5d4968a8f2e0f7ebadac5d70ff98c40089046e6d4a1b695",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-RUBBLE-PILE-C": {
+   "v": "8cb9394625bf260cbf3423f848562b1597d11c736912e5d684a64d2d6083528c",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-DEBRIS-PILE-LARGE": {
+   "v": "905876bd89797480292d1946d8999961871120fdfb8160d5dff3dc013ab80b2e",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-BROKEN-CRATE-A": {
+   "v": "7488bb432c2810fc20a0414d390e20344a04d6a286262b820e843144f76bce76",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-BROKEN-CRATE-B": {
+   "v": "e7c95391dcaa30bf6cb0003351b6e14b88efbaf3bf444e055979acfb6daa728a",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-BROKEN-CRATE-C": {
+   "v": "56e96f29695d2a1fa366a0379d1f68cd1f63b5f9d2366da3c5a8aed09101ead3",
+   "c": "场景",
+   "d": "scenes"
   }
  },
  "column_digests": {
-  "1": "0db746bf24a0ceaf53198aaed32755a1c89e28efd606c13f63b835144a7be071",
-  "2": "ce5c5062a3c5c1a38bd59da0a07f40156453ffdbbd152f47320ee98d8281ad38",
-  "3": "ab1c05f340f1e0267725a3ccf9d0a411f71efaae16e7436de11dad94f8308212",
-  "4": "a869ba68e4c7f379b96e1bc8d140dc2bae64626943868b4d73865b581afe2c79",
-  "5": "b92be83f9894425a3d4b49160dea911b14550e9ca9e862a7c88ce963f38ebd4e",
-  "6": "0bab223fe76cf1f1a6b6bc8f5818290184af16987b350c10cd1018cc9d37cd57",
-  "7": "3d093ad969bd2623b21d6f3c8b35f49792f14d7892deeefdf117a1904c69d1df",
-  "8": "efd672bfcdde2e81ac5dd3e06546075a11ed5bf088ca4f9ef875643ca7218076",
-  "9": "c1c35ee71b4d45c9a26fecf3f008ba02405ba925cd9611b51ae63cbe61d3c31d",
-  "10": "7c244922662c085637a23796bc17602f151c7e0aecd3ecb36819748120540a08",
-  "11": "96e1265993951fd7613bf49554de6f2d870a4a99b1c6c12f69526bbb01a93163",
-  "12": "344409134a4798673d9b95127f987c7b92732262eb1c6d9d71e1e9e90644c572",
-  "13": "1480aef8f88a24e75d8a798de02af7e08d9c36e2d6eac9cbfc53c918b9ed34a9",
-  "14": "8798a47004119cf4742d1f2baa70eef2033ca1ce5201fca550d7989556bc750c",
-  "15": "24af18434f7e7f6e3123370dd9bb89503c3e709a4d8282e0dd1c5c9b30197d69",
-  "16": "23476bd57a7f42c3bf7b31cce8c251e5512ded8d8fdccff659b4e3be81114afc",
-  "17": "105ad6a1379c3a2d5dec4f89b786c2b27a94e359f0091f8b07eb068dcf089e33",
-  "20": "578df54fdf2ee7dfdf69cf5932a07509e356004d6db821530c937d28a4fa6042",
-  "21": "31fcef1c4dc4b2d40e23deee942276d893d19381fb877ef192123410dbaec8ad",
-  "22": "75d6101d8930aea41e7270564c7bd314c7e106cc34da4d0e5915ee554d1a9317",
-  "23": "6f49cad9a6c56989da8b032ba1d3a994856dbf06b01eb8f38724fab5a020cf97",
-  "24": "6aa0070ee038f75961f189b08cb52f54b82ac4189189a1e849593ac1d9b98b61",
-  "25": "8bc7f1914e5087cb2a4724d04f25fb8025d26737552374d67d8ea0331f6b7857"
+  "1": "3de81b71ff46074a15eedcd220d56dac6d3bb61de5db165f6780014dd06c4f90",
+  "2": "cc8593cb24cb85ae862f4c19c5a4e5b0e6c6f0e6faf6d6a6dd1327da7ec9ae2a",
+  "3": "b04e0841904706e92c2e096cb39c43d085b80e0380ee8185d9e961c02738dba3",
+  "4": "7d3dceac2831c40579bbf9d7983da044f30af956f841ea95653b33b898e10730",
+  "5": "17050438e7cd91d0df0a40adb18d7a6692840ede144b61ac5e10814ee5c39e59",
+  "6": "9f09e8d57ae650d6ed1f5519e5ab99e6411e578110621ff82d39f2f35c5bbbce",
+  "7": "e46a3ad7c46e659a7fcbe24463b4f20772537ffcd89f02b89c92526f7b1b8045",
+  "8": "6c0dccc970d1ed4c8207af38fb3d7e0fd46c5f518b615b42d04bfe97b8c00f18",
+  "9": "e4127708193f2a343b245f303c6ce8e7b9ef451011217d9c70be46520d5556bc",
+  "10": "1fe5697c741bec92ff84408fcc33ea04e1c2dc728d136dca818fa3e55e46b2ae",
+  "11": "a0326ba1ec95e4139ab8d99d3e852a81c5a67e5376414feda27b906681025e2b",
+  "12": "d322c7a9c4403b20215d12160264e3b3cde6cd49b1324f3b71202731d5c6a6bb",
+  "13": "70e8d67746a0af82be7636b26d104bfacb222561193e6aa7fd11e05a12d7cf38",
+  "14": "9800c2cb52f42ca28fa1b3b399dd9b35a8b7e14b13d79a4cfce2d883d64bffde",
+  "15": "25243b05025b83675b2fd04cfc46dc0339d3ccfeb45af5ffe8cb0faa010d8b79",
+  "16": "aeae3e568cc8a44a22e2c1095e28d5efb11b6fc9f27574eacfe0695cccdfbce8",
+  "17": "4e5960abbb13788a945e654c0622cb26970c745e096cd03a843df676d060506a",
+  "20": "a8eb17778dc0fcac131dd9cf2683f0aaafe33e35bb5fb8049b4fd0c141228e6e",
+  "21": "5985001f8f158097a51ffccca5b65e151f3fb36ba76e66ab82f8130b5a70ac5b",
+  "22": "3d976f095c1ceea732d4c37508f505982abe9661020a8aca9d82e3d657926e2f",
+  "23": "489b5f86af9c434fe78e8fc95a77bfc7b68071a89998343be160fba30e9c786c",
+  "24": "4e593085e1c1ec84c082788e6aaf4d707cc6b54b976cefda25ea60bac71078dd",
+  "25": "57ffc420ab34b49c1295fef0da433ec262ceabcce9e422f9a41220e8d7563619"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -6240,18 +6285,18 @@
   "3D-特效": "c493e5ebb04d8144f468bf536174b4b13af654d2ad7922682227549df676941c"
  },
  "category_counts": {
-  "角色": 25,
-  "敌人": 15,
-  "场景": 760,
+  "UI": 18,
+  "场景": 769,
   "场景道具": 49,
   "基地资产包": 114,
-  "道具": 25,
+  "子弹特效": 9,
+  "敌人": 15,
   "武器": 36,
   "特效": 20,
-  "子弹特效": 9,
-  "UI": 18,
-  "音效": 152,
-  "音乐": 9
+  "角色": 25,
+  "道具": 25,
+  "音乐": 9,
+  "音效": 152
  },
  "targeted_updates": [
   {

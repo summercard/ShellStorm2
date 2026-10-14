@@ -30,6 +30,24 @@
 
 接入边界：结构壳体（234块5m地砖、64段女儿墙直段+4外角、楼梯与碰撞）仍由`TowerFloorStage3D`拥有；装饰层由`source/layouts/100f_decorated_v001/`的布局清单重放 **120 件 / 6 组**（空调与通风口 6 + 绿化 20 + 墙面藤蔓 16 + 女儿墙挂藤 8 + 闭环水管 54 + 立管与支架 16）。装饰件默认`visual_only`（禁用组件自带碰撞），**例外**是绿化三件（`flowerbox` / `plant_large` / `plant_small`，共 20 件）登记为 `blocking` —— 运行时由 `TowerGeometry3D.resolve_visual_bounds()` 量出**实测可视包络**再挂一个 `BoxShape3D`（`StaticBody3D`，layer=1）代理挡玩家，尺寸随美术自动跟随、不写死常量（业主 2026-09-21「花盆和花圃没有阻挡」）。布局源里的房屋围护 24 墙 + 36 封顶归组 `shell_reference`，**只作 Blender 侧参照、运行时不重放** —— `env_base100_upper_shell_30x30_h12` 自 2026-09-20 起已自带同名 60 件，重放会逐面 z-fighting。周边装饰一律**背贴建筑外皮**：墙挂件（4 空调 + 2 通风口）机背埋进外皮内 0.05m，绿化三件按**自身半进深**贴墙（件心离墙中心线 = 墙半厚 − 0.05 + 半进深，花箱 0.5925 / 大盆栽 0.8727377 / 小盆栽 0.5473868），四边各成对、背面齐平（业主 2026-09-21「花盆和花圃靠墙太远了，要挨着墙放」）。已导出 GLB **禁止内嵌色盘**，由共享导入器`tools/asset_pipeline/scene_facility_shared_palette_post_import.gd`绑定公共色盘；旧聚落设施加载入口已按用户要求移除。
 
+## 新增天台破损与废墟类独立组件（2026-10-14 登记，仅账单）
+
+2026-10-14 用户要求为 100F 天台增加一批**场景独立组件**。口径：**本轮只登记场景账本《资产主表》、制作状态 `design_only`，不建 Blender 源 / `catalog.json` 条目 / GLB / Prefab，不含碰撞与玩法语义**。这 9 件与上文参考组件库 v002 分开，是独立件，**不占用**稳定父 ID `ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY`，也不进既有 47 包体系。登记源为 `assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx`《资产主表》；共同字段：归属 `rooftop / 100F`、逻辑ID源键 `rooftop_decor`、子类 `environment_module_3d`、视角 Blender Z-up / -Y、落地件底面 Z=0、优先级 P1、版本 v001、来源「用户设计」。
+
+| AssetID | 中文名 | 规格 | 变体 |
+|---|---|---|---|
+| `ENV-ROOFTOP-FLOWERBED-BROKEN` | 天台破损花圃 | 约 6.0×1.5 m | — |
+| `ENV-ROOFTOP-SANDBAG-BARRIER` | 天台防御沙包墙 | 约 7.0×2.0 m | — |
+| `ENV-ROOFTOP-RUBBLE-PILE-A` | 天台石块堆 A | 高约 1.0~1.3 m | 3 变种 |
+| `ENV-ROOFTOP-RUBBLE-PILE-B` | 天台石块堆 B | 高约 1.0~1.3 m | 同上 |
+| `ENV-ROOFTOP-RUBBLE-PILE-C` | 天台石块堆 C | 高约 1.0~1.3 m | 同上 |
+| `ENV-ROOFTOP-DEBRIS-PILE-LARGE` | 天台大型杂物堆 | 约 12.0×10.0 m | — |
+| `ENV-ROOFTOP-BROKEN-CRATE-A` | 天台破败木箱 A | — | 3 套变种 |
+| `ENV-ROOFTOP-BROKEN-CRATE-B` | 天台破败木箱 B | — | 同上 |
+| `ENV-ROOFTOP-BROKEN-CRATE-C` | 天台破败木箱 C | — | 同上 |
+
+制成需用户另行确认：届时按本页「尺寸与接口」「独立验收」既有口径补 Blender 源与 `catalog` 条目、导出 GLB、跑固定镜头渲染，再登记 Prefab 并接入 `source/layouts/100f_decorated_v001/`；`design_only` 行在「制作状态」推进前**不得**进入运行时装饰布局，也不得据此行做碰撞或玩法判定。
+
 ## 独立验收
 
 独立入口为版本`qa/`脚本：重新打开Blend检查包/目录/唯一归属、尺寸/原点/端点、锁区哈希；严格运行`validate_game_prop.py --all-meshes`检查所有制作源与输出；渲染固定参考镜头全景、俯视、房间近景与组件分类页。完整原始效果图作为参考保存；新建资产无旧几何前后对比，用同相机与灯光的结构素模、最终图检查轮廓和材质。登记`3D-场景通用`，保留既有运行资产状态。
