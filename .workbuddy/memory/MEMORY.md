@@ -14,6 +14,17 @@
   一键重放脚本）；按仓库约定这些**回退指针要入库**。
 - **Godot 常驻会把 `.glb.import` 批量改写**（拉取后 1311 个文件新增
   `mesh_library/use_node_names_as_mesh_names` 等引擎默认键）——属引擎版本差异，**不是内容改动，不要提交**。
+- **远端领先时的推送顺序（2026-10-14 实测）**：`git status -sb` 显示 `behind N` 时必须
+  **先提交自己的改动 → `git fetch` → `git rebase origin/<分支>` → `git push`**；顺序颠倒
+  （先 pull/rebase）会把未提交的已跟踪改动并掉。变基冲突面通常只在
+  `.workbuddy/memory/<日期>.md`（各会话都往末尾追加）⇒ 解法是**两侧块都保留**、按时间排序
+  （旧在前）、删掉 3 个标记行，再用 `git show <commit>:<file>` 逐块 diff 证明两侧逐字完整。
+- **Godot `.gd.uid` 跨机器不一致**（2026-10-14 实测）：同一脚本在两台机生成的 uid 可能不同
+  （`preview_debug_camera_fog_panel.gd.uid` 本机 `eoto4i6txytq` vs 远端 `eqgcha02lcka`）。
+  **以仓库已跟踪版本为准**；本机那份是未跟踪产物，会让 rebase 报
+  `untracked working tree files would be overwritten` ⇒ 先移走本机副本再拉取。
+  判据：`grep -rl "<uid>"` 看有无 `.tscn/.tres` 引用；本项目 `.tscn` 多用 `path=`（不带 uid）
+  引用脚本，故 uid 内容差异通常不影响任何引用。
 
 ## 本机环境
 - 只有 `Documents/ShellStorm2` 一个 Git 工程根；`ShellStorm2-work/`、`ShellStorm2-backup/`
