@@ -86,11 +86,11 @@ const PLAN_TEMPLATE_SIZES: Array[Vector2] = [
 	Vector2(30.0, 40.0),  # office_60x70（缩尺后 30×40）
 	Vector2(30.0, 60.0),  # bridge_60x50（通道桥房本体，工字型，坑沿 y 跨）
 	Vector2(60.0, 30.0),  # bridge_60x50 旋转 90°（同一模板的转置姿态，坑沿 x 跨）
-	Vector2(50.0, 40.0),  # boss_50x40（Boss 房固定）
+	Vector2(80.0, 100.0),  # boss_deep_shaft_80x100（Boss 房固定，深井 + 高位入口）
 	Vector2(25.0, 25.0),  # extraction_25x25 / std_25x25
 ]
 ## Boss 房与撤离房的房型不参与内容池洗牌，尺寸固定。
-const BOSS_ROOM_SIZE := Vector2(50.0, 40.0)
+const BOSS_ROOM_SIZE := Vector2(80.0, 100.0)
 const SIDE_DIRECTIONS := {
 	"north": Vector3(0.0, 0.0, -1.0),
 	"south": Vector3(0.0, 0.0, 1.0),
@@ -606,10 +606,14 @@ func _verify_level_enclosure(tower: TowerDescent3D, failures: Array[String]) -> 
 		var start := corridor.get_meta("start_door_position", Vector3.ZERO) as Vector3
 		var end := corridor.get_meta("end_door_position", Vector3.ZERO) as Vector3
 		var mid := (start + end) * 0.5
-		if _ray(space, mid + Vector3(0, 2.0, 0), mid + Vector3(0, -2.0, 0)).is_empty():
-			failures.append("走廊 %s 中点没有地面" % edge)
+		# 🔴 零长度边（`allow_zero_length` 的**墙贴墙**连接）不是走廊：两房共墙、没有走廊地板，
+		# 开门就是两房直接相通。这类边另有判据（共享门/端口重合 + 逐房「脚下有承重楼面」），
+		# 拿走廊地面去量它必然假红 —— 平层房恰好因为中点落在房内地面而侥幸过关，
+		# 多标高房（Boss 房深井：高位入口 +12 / 平台 0）就立刻暴露。
 		if start.distance_to(end) <= 0.05:
 			continue
+		if _ray(space, mid + Vector3(0, 2.0, 0), mid + Vector3(0, -2.0, 0)).is_empty():
+			failures.append("走廊 %s 中点没有地面" % edge)
 		var direction := (end - start).normalized()
 		var perpendicular := Vector3(-direction.z, 0.0, direction.x)
 		tower._open_edges[edge] = true
@@ -823,7 +827,7 @@ func _verify_expedition_rooms(tower: TowerDescent3D, failures: Array[String]) ->
 				failures.append("入口安全屋尺寸不是 15×15：%s" % dimensions)
 		elif room_id == "boss":
 			if not dimensions.is_equal_approx(BOSS_ROOM_SIZE):
-				failures.append("Boss 房尺寸不是 50×40：%s" % dimensions)
+				failures.append("Boss 房尺寸不是 80×100（深井房）：%s" % dimensions)
 		elif room_id == "extraction":
 			if not dimensions.is_equal_approx(EXPEDITION_ROOM_SIZE):
 				failures.append("撤离房尺寸不是 25×25：%s" % dimensions)

@@ -1434,6 +1434,17 @@ func _align_static_layout_to_room(static_layout: Node3D) -> void:
 			)
 			static_layout.set_meta("safe_room_orientation_steps", steps)
 			static_layout.set_meta("room_orientation_steps", steps)
+		# 没有几何清单的房间（授权端口锚定房）整体转向后，**声明在美术帧里的导航多边形
+		# 必须同步转**：`contains_world_position()` 的房间归属判定与 NavigationMesh 都读它，
+		# 停在旧方位会让「站在平台上的玩家被判成不在本房」，进而影响进房/清房/镜头。
+		# 有清单的房间不走这一支（它们的多边形本来就按房间帧产出）。
+		if authored_layout_instances.is_empty() and static_layout.has_meta("walkable_navigation_polygons"):
+			static_layout.set_meta(
+				"walkable_navigation_polygons",
+				_rotate_walk_polygons(
+					static_layout.get_meta("walkable_navigation_polygons"), delta
+				)
+			)
 	_rehome_static_layout_door(static_layout)
 	_seal_stray_door_walls(static_layout)
 	for child in static_layout.get_children():
@@ -1443,6 +1454,32 @@ func _align_static_layout_to_room(static_layout: Node3D) -> void:
 				module, get_dimensions() * 0.5, static_layout.transform * module.transform
 			)
 	_sync_static_layout_connection_ports(static_layout)
+
+
+## 把 `walkable_navigation_polygons`（美术帧的 `[[x,y,z], …]` 多边形表）整体绕 Y 旋转。
+## 只转 x/z，y 不动；旋转方向与 `_rotate_port_vector` 同源（绕 +Y，右手系）。
+func _rotate_walk_polygons(polygons: Variant, delta_deg: float) -> Array:
+	var result: Array = []
+	if not (polygons is Array):
+		return result
+	var steps := posmod(int(round(delta_deg / 90.0)), 4)
+	for polygon_value in polygons as Array:
+		var rotated_polygon: Array = []
+		for point_value in polygon_value as Array:
+			if not (point_value is Array):
+				continue
+			var point := point_value as Array
+			if point.size() < 3:
+				continue
+			var x := float(point[0])
+			var z := float(point[2])
+			for _step in range(steps):
+				var next_x := z
+				z = -x
+				x = next_x
+			rotated_polygon.append([x, float(point[1]), z])
+		result.append(rotated_polygon)
+	return result
 
 
 ## 把场景坐标转成本局坐标所需的 Y 轴旋转（度，90 的整数倍）。
@@ -1465,7 +1502,19 @@ func _static_layout_alignment_delta_deg(static_layout: Node3D) -> float:
 	var scene_points := _static_layout_planar_points(static_layout)
 	var checklist_points := _checklist_planar_points()
 	if scene_points.is_empty() or checklist_points.is_empty():
-		return 0.0
+		# 🔴 没有几何清单（**授权端口锚定房**：Boss 房深井 / 撤离房，`anchor_policy =
+		# static_port_layout` 会在生成器里整体跳过 `authored_layout_instances`）⇒ 几何配准
+		# 无从谈起。但**本局朝向是已知的**：`template_rotation_deg` 由生成器按端口配对现算
+		# （子口必须与父口反向），已随房表下发。
+		#
+		# 为什么必须用它而不能保守返回 0：美术是**按烘焙帧**保存的固定几何，而端口帧
+		# 随上游链每局可变 —— 实测远征01 同一关 5 个种子里就有 1 个算出 180°
+		# （端口从南翻到北）。不转回来的后果是「门开在实墙上」：玩家在门口走不进去，
+		# 而轮廓判据只会报「那面墙没有碰撞体」。这与有清单时几何配准得到的量同源。
+		#
+		# 旋转量为 0 时逐字维持原行为（塔楼 / 99 等朝向恒 0 的关卡一个字节都不变）。
+		var room_rotation := fposmod(float(get_meta("template_rotation_deg", 0.0)), 360.0)
+		return room_rotation if absf(room_rotation) > 0.5 else 0.0
 	var best_delta := 0.0
 	var best_score := -1
 	var tied: Array[float] = []
@@ -1703,7 +1752,39 @@ func _rehome_static_layout_door(static_layout: Node3D) -> void:
 		Basis(Vector3.UP, deg_to_rad(target_rotation_y_deg)).scaled(door_node.scale),
 		target_position
 	)
+	var previous_position := door_node.position
 	door_node.transform = static_layout.transform.affine_inverse() * room_transform
+	# 搬走 = 原位永久留一个 5m 洞（可从房里走出去）。这是「门墙件唯一」模型的必然缺口：
+	# `_seal_stray_door_walls()` 只处理**还在场的**门墙件，搬走的那件它看不见。
+	if not previous_position.is_equal_approx(door_node.position):
+		_backfill_rehomed_door_spot(static_layout, previous_position)
+
+
+## 门墙件被搬到新门位后，用**同侧实墙件**复制一段补回原位 —— 与 `_seal_stray_door_walls()`
+## 同一套补墙口径（同侧复制 ⇒ 墙样式、朝向与本侧其余墙段逐项一致）。
+## 原位侧判不出来（L 形凹口处的件）一律不动，避免把凹口当边界补墙。
+func _backfill_rehomed_door_spot(static_layout: Node3D, previous_position: Vector3) -> void:
+	var half := get_dimensions() * 0.5
+	var basis := static_layout.transform.basis
+	var side := _authored_wall_side_from_position(static_layout.transform * previous_position, half)
+	if side.is_empty():
+		return
+	var donor := _solid_wall_donor(static_layout, basis, half, side)
+	if donor == null:
+		push_warning(
+			"DungeonRoom3D: %s 的门墙件搬走后 %s 侧找不到实墙件可补洞（该侧会漏空）"
+			% [room_id, side]
+		)
+		return
+	var patch := donor.duplicate() as Node3D
+	if patch == null:
+		return
+	patch.name = "%s_RehomeFill" % str(donor.name)
+	patch.transform = Transform3D(
+		donor.transform.basis,
+		Vector3(previous_position.x, donor.transform.origin.y, previous_position.z)
+	)
+	static_layout.add_child(patch)
 
 
 ## 门墙件 = 带**通透门洞**的那一件。只认组件来源：实测同一批场景里门墙件的来源既有
@@ -5064,9 +5145,21 @@ func _adopt_static_port_door_visuals(static_layout: Node3D) -> void:
 	for side in ["west", "east", "north", "south"]:
 		if not contract.has(side):
 			continue
+		# 🔴 本侧可能**没有**自己的门节点：共享边是「一堵墙一道门」，由
+		# `door_endpoint_owners` 挑一端持有，另一端（本房）**委派**出去
+		# （`_build_door_for_port()` 的 `owns_door_endpoint(side)` 早退）。
+		# 旧实现遇到这种侧直接 `continue` ⇒ 美术门扇**永远不被认领**：它自带碰撞、
+		# 又是关着的，玩家在门口被永久挡死（实测远征01 换 Boss房02 后
+		# 「从 room_10 走不进 Boss 房」，门口前 0.62 m 停住；
+		# 99 恰好是 Boss 自己持有该侧，所以一直没暴露）。
+		# 故委派侧改为**认领到共享门**上：门扇随邻房那扇门一起开合，视觉与玩法一致。
 		var door := get_door_node(side)
 		if door == null:
-			continue
+			door = _shared_door_for_side(side)
+			if door == null:
+				# 连共享门都找不到（邻房还没建好 / 该边根本没有门扇）：至少别让门扇挡死。
+				_disable_port_door_leaf_collision(static_layout, side)
+				continue
 		if bool(door.get_meta("authored_port_visual", false)):
 			continue
 		door.set_presentation_opening(5.02, 6.225)
@@ -5086,6 +5179,45 @@ func _adopt_static_port_door_visuals(static_layout: Node3D) -> void:
 			for body in leaf.find_children("*", "StaticBody3D", true, false):
 				(body as StaticBody3D).collision_layer = 0
 		door.set_meta("authored_port_visual", true)
+
+
+## 本房**没有**该侧门节点时（共享边委派给邻房），去邻房取那扇共享门。
+## 判据与 `_bind_shared_edge_doors()` 同源：按端口而不是按方向取，一墙多门才不张冠李戴。
+func _shared_door_for_side(side: String) -> RoomDoor3D:
+	var target_id := str(door_targets.get(side, ""))
+	if target_id.is_empty():
+		return null
+	var block := get_parent()
+	if block == null:
+		return null
+	var peer := block.get_node_or_null(target_id) as DungeonRoom3D
+	if peer == null:
+		return null
+	var peer_port := peer.get_connection_port_towards(room_id)
+	var peer_port_id := str(peer_port.get("port_id", ""))
+	if not peer_port_id.is_empty():
+		var by_port := peer.get_door_node_by_port(peer_port_id)
+		if by_port != null:
+			return by_port
+	return peer.get_door_node(str(peer_port.get("side", "")))
+
+
+## 门扇无人认领时的兜底：**只关碰撞、不动位置**，保证门洞永远不会被永久堵死。
+func _disable_port_door_leaf_collision(static_layout: Node3D, side: String) -> void:
+	var contract := static_layout.get_meta("port_door_visuals", {}) as Dictionary
+	var names := contract.get(side, []) as Array
+	if names.is_empty():
+		return
+	for source_name in names:
+		var leaf := static_layout.find_child(str(source_name), true, false) as Node3D
+		if leaf == null:
+			continue
+		for body in leaf.find_children("*", "StaticBody3D", true, false):
+			(body as StaticBody3D).collision_layer = 0
+	push_warning(
+		"DungeonRoom3D: %s 的 %s 侧门扇没有门扇可认领（共享边已委派且邻房门未就绪），已仅关碰撞"
+		% [room_id, side]
+	)
 
 
 func _build_boss_arena_dressing() -> void:
@@ -5387,7 +5519,14 @@ func _build_spawn_points() -> void:
 	rng.seed = room_seed ^ room_id.hash() ^ 0x53504157
 	var dimensions := get_dimensions()
 	var cells: Array[Vector3] = _authored_tile_cells.duplicate()
-	if not authored_layout_shell and cells.is_empty():
+	# 🔴 没有地砖清单就退回**包围盒网格**（原先只对「非授权壳」兜底，锚定房会因此
+	# **一个落点都没有**）。为什么锚定房会没有清单：`anchor_policy = static_port_layout`
+	# 的房（Boss 房深井 / 撤离房）在生成器里被整体跳过 `authored_layout_instances`，
+	# 而它的美术由静态场景独占 ⇒ 清单恒空。
+	# 后果链（实测远征01 换上 Boss房02 后）：0 落点 → `_collect_box_stage_entries` 拿不到
+	# 可用点 → 0 波怪 → `spawn_boxes_only` 判「没盒子就不刷」→ **房间开局即肃清、没有首领**，
+	# 而门控的「首领一死就开闸」因此永远等不到首领。
+	if cells.is_empty():
 		for x in range(ceili(dimensions.x / 5.0)):
 			for z in range(ceili(dimensions.y / 5.0)):
 				cells.append(Vector3(-dimensions.x * 0.5 + 2.5 + x * 5.0, 0, -dimensions.y * 0.5 + 2.5 + z * 5.0))
@@ -5418,7 +5557,10 @@ func _spawn_floor_contains(point: Vector3, radius: float) -> bool:
 	var dimensions := get_dimensions()
 	if not Rect2(-dimensions * 0.5, dimensions).encloses(footprint):
 		return false
-	if not authored_layout_shell and _authored_tile_cells.is_empty():
+	# 没有地砖清单 ⇒ 唯一可用的口径就是房间包围盒（与 `_build_spawn_points` 的兜底同源）。
+	# 判据只看「清单是否为空」，**不看是不是授权壳**：授权锚定房（Boss 房深井 / 撤离房）
+	# 的美术由静态场景独占、清单恒空，按旧条件会对**每个点**都返回 false ⇒ 零落点。
+	if _authored_tile_cells.is_empty():
 		return true
 	var covered := 0.0
 	for cell in _authored_tile_cells:

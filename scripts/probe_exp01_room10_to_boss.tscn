@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/probe_exp01_room10_to_boss.gd" id="1"]
+[node name="Room10ToBossProbe" type="Node"]
+script = ExtResource("1")

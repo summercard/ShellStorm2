@@ -1,8 +1,47 @@
+## 2026-10-14 远征01 Boss 房整房换成 **Boss房02 深井竞技场**（与测试 99 全套机制对齐）
+
+- FeatureID：`WORLD-BLOCKS`；业主口径「发全套机制，把远征 01 的 boss 房完全换成那个远征 99 的 boss 房」。
+- **换房结果：两关 boss 房机制逐项一致**（对拍探针 `probe_boss_mechanism_parity` 实测）：同一份共享房图 `f00_boss_room_02_static_layout.tscn`、资产 `ENV-EXPEDITION-L01-BOSS-ROOM-02` **v027**、**652 实例**、一体化走面碰撞（`walk_surface_owner=room`）、雾档 `0.015 / 0.01 / 暗红 / 2s`、**常亮（无墙面开关）**、22 盏原生灯、竞技场门控 **3 道护栏**、过场镜头（俯仰 −30° / 前后 +1.2m / 6s）。差异只剩关卡目录。
+- **数据改动**：`expedition_01/floors/floor_00.json` 的 `boss` → `template_id: boss_deep_shaft_80x100`、`size_m 80×100`、`floor_offset_m −12`、`anchor_policy static_port_layout`、`authored_layout_* v027`；端口重写为 `P1 南门(0,50) height 12 → room_10`、`P2 东门(40,−22.5) → extraction`、`P3 西门(−40,−22.5)` 空；补 `boss_reinforcement_plan`（与 99 同值）。`extraction` 随迁：`floor_offset_m −12` + `anchor_policy static_port_layout`。`level_plan.json` 登记新模板；模板 `boss_deep_shaft_80x100.json` 从 99 复制（同源同数值）。新增绑定壳 `expedition_01/f00_boss_static_layout.tscn`（形制照 99 的壳，**不加旋转** —— 实测加 180° 会把美术镜像）。
+- **落位实测**：`boss 世界 (57.5, −12, −320)`、**南门世界 (57.5, 0, −270)** 与 `room_10` 北口**完全重合（0.000）**；`extraction (110, −12, −342.5)` 与 Boss 东口重合。Boss 入口 `height_m=12` 抵消房身 −12 ⇒ 世界 y=0，与 `room_10` 地面同高（校验器 `connection_port_height_gap` 通过）。
+
+### 🔴 换房暴露并修掉的 5 个引擎缺陷（都是「静默 / 只在多标高房现形」那类）
+
+1. **授权锚定房让整层通用壳体作废** —— `FloorPlanGenerator.authored_shell_block()` 少了「跳过 `static_port_layout` 房」这一步（`attach_authored_layout_shell` 的循环里有）。锚定房房心常**不在 5 m 格线**上（要精确对齐上游端口），builder 报 `room_bound_off_grid` ⇒ **整份块作废 ⇒ 其余所有房间一起退回程序化壳体**。修法与既有跳过同源。
+2. **美术帧不跟随本局朝向** —— 预烘焙静态场景是按烘焙帧的固定几何，而端口帧随链可变。锚定房没有几何清单（生成器跳过 `authored_layout_instances`），旧代码在配准不到时**保守返回 0°**。实测同一关 **5 个种子里 1 个算出 180°** ⇒ 该种子「门开在实墙上」、玩家进不去。修法：无清单时用生成器下发的**本局朝向** `template_rotation_deg` 旋转美术根，并**一并旋转 `walkable_navigation_polygons`**（房间归属判定/NavigationMesh 都读它）。
+3. **锚定房零落点 ⇒ 无首领** —— `_build_spawn_points()` 只从 `authored_layout_instances` 的 `floor_tile` 取候选格，而锚定房该清单恒空；`_spawn_floor_contains()` 又对「授权壳且无地砖」的**每个点**返回 false。后果链：0 落点 → 盒子波次为空 → `spawn_boxes_only` 判「没盒子就不刷」→ **房间开局即肃清、没有首领** ⇒ 门控的「首领一死就开闸」永远等不到首领。修法：两处都改成「**清单为空就退回包围盒口径**」（与非授权房同一兜底）。
+4. **Boss 增援计划不随房旋转** —— `boss_reinforcement_plan` 的 `boss_spawn_local_m` / `spawn_rows[].x_m,z_m` 是房间局部坐标，却不像 `spawn_placements` 那样参与旋转 ⇒ 整房 180° 时首领与增援被投到**房间反面**（深井房里表现为「首领落在楼梯底下」）。修法：新增 `_rotated_boss_reinforcement_plan()`（只实现 0/180°，90/270° 显式告警不静默），并在**两处**旋转点接线；**`side` 必须跟着翻**（校验器把侧名与 x 符号绑死，只翻 x 会 `boss_reinforcement_row_side_mismatch` ⇒ 整关拒启）。
+5. **委派侧的美术门扇永久挡死门洞** —— `_adopt_static_port_door_visuals()` 要求本侧**有门节点**，而共享边是「一堵墙一道门、由 `door_endpoint_owners` 挑一端持有」，另一端委派出去就没有门节点 ⇒ `port_door_visuals` 里那对**自带碰撞、初始关闭**的美术门扇**永远无人驱动**，玩家在门口被永久挡住（实测在门口前 **0.62 m** 停下）。修法：委派侧按端口去邻房取那扇**共享门**并把门扇挂进去（与 `_bind_shared_edge_doors` 同源口径，一墙多门不张冠李戴）；真取不到时**至少关掉碰撞**并告警，绝不留永久堵死。99 恰好是 Boss 自己持有该侧，所以此缺陷一直没暴露。
+
+### 验收（全绿）
+
+- `verify_expedition_level01_flow` → **`EXPEDITION_LEVEL01_FLOW_OK`**，轮廓感知判据 **0 条打空**。
+- 新探针 `probe_exp01_room10_to_boss` → **`ROOM10_TO_BOSS_OK checks=4 failures=0`**：两门洞世界坐标重合 0.000、门洞射线通、真身移动从 `room_10` 走到**高位平台再下到竞技场平台**（终点局部 (0, 0.03, −21.41)）。
+- 门控+镜头探针**两关各 40 项 0 失败**（`SS_BOSS_LEVEL=expedition_01` 可切换关卡；远征01 是在**翻转种子** 20260919 上跑的）。
+- 逐种子实测 `probe_boss_swap_seeds`：**5/5 种子美术帧 == 端口帧**（改前 4/5）。
+- 回归：`verify_boss_room02_runtime` **3081 项 0 失败**、`probe_boss_room02_level99` **265 项 0 失败**（雾气 0.015 未受影响）。
+- 测试期望同步（旧设计的硬编码）：`PLAN_TEMPLATE_SIZES` / `BOSS_ROOM_SIZE` 由 50×40 改 **80×100**；走廊地面判据的**零长度边**（墙贴墙、本来就没有走廊地板）挪到地面检查之前 —— 平层房因中点恰好落在房内地面而侥幸过关，多标高房立刻暴露。
+
+### ⚠️ 两条必须知道的事
+
+- `expedition_01/f00_boss_static_layout.tscn` 与 `room_instances/f00_boss/room_static_layout.tscn`（旧 Boss房01 的存档路径）原本是**硬链接（同一 inode）**⇒ 写其中一个会连带改另一个。已把 `f00_boss/` 那份**还原成原版并断开硬链接**（旧 Boss房01 房图保留不删，本关装配已不用它）。
+- 旧 `boss_50x40` 模板与旧布局**保留**，但没有房间再引用它。
+
 ## 2026-10-14 独立物品道具账本与怪物掉落调用归属
 
 - FeatureID：ASSET / WORLD-LOOT / REWARD-SERVICE / INVENTORY-SLOTS / WEAPON-OWNERSHIP；新增物品道具账本20个运行内容ID，武器账本新增调用索引26个内容ID；两侧互斥覆盖ItemRegistry的46个ID，怪物掉落CSV16行逐行链接唯一登记和原代码入口。新账本无资产主表，原1241个AssetID与资产主表未改。
 - 药水/电池/蓝图碎片/背包/手电模块归物品道具；子弹模块/通用弹药/配件/成品武器归武器。魂与未注册Boss钥匙单列；电池通用箱体及内容表遗漏两ID如实标注。
 - 导航专项、资产结构、武器完整检查和无损门禁通过；全局文档与命名检查仍有既有红项。见[独立交付记录](2026-10-14_inventory_item_ledger.md)。
+## 2026-10-14 远征01 Boss房改「南进」：room_10 出口转北 + 两端重对端口
+
+- FeatureID：`WORLD-BLOCKS`；业主口径「不要改房间的结构，原来的 boss 房也可以，只需要把最后 room10 固定出口朝北即可」。
+- **裁决依据（实测，非推断）**：Boss 房的主故障屏烘在房内**北墙**（局部 `z≈−18.76`，见 `f00_boss_static_layout.tscn` 的 `main_fault_screen`）且**面朝南** —— 只有玩家从**南侧**进入才正对主屏。白模记录的「南进」是对的，旧端口契约的「西进东出」是错的；`boss_50x40.json` 里挂了两年的「落地前必须先裁决」就此结案（`§4.2/§4.4` 与模板 note 同步）。
+- **数据改动**（`data/level_plans/expedition_01/floors/floor_00.json`）：`room_10` 的出口 `B(→boss)` 由**东墙**改**北墙**（`position_m [12.5, −15.0]`、`outward [0,−1]`），`boss` 的入口 `A(→room_10)` 由**西墙**改**南墙**（`[−12.5, 20.0]`、`outward [0,1]`）。实测两端点世界坐标 `(57.5, 0, −270)` **完全重合（距离 0.000）**，Boss 房 `yaw=0`（**美术未被旋转**，主屏仍朝南）。
+- **车道东移 5 m 的理由**：`room_09` 紧贴 `room_10` 西侧，Boss 房 50 m 宽若居中北放会与 `room_09` 压角（实测重叠 25 m²、候选数 0）；车道取 `+12.5 / −12.5` 后候选数回到 2。
+- **必须重烘的原因**：远征房间壳走 `DungeonRoom3D._build_shell()` 的**烘焙静态布局分支**（「静态场景是本关美术的唯一来源」），门洞烘死在墙上、运行时只做「刚体旋转 + 搬一件自持门墙件」。故 `room_10` 要北门、`boss` 要南门 ⇒ 用现成生成器 `scripts/generate_expedition01_room_static_scenes.gd`（`SS_STATIC_ROOMS=room_10,boss`）重烘两张布局：`boss` 由 `east+west` 变 **`south(−12.5)+east(−2.5)`**、`room_10` 由 `east` 变 **`north(+2.5)+east(+12.5)`**。Boss 房 220 实例 / 68 房型组件 / 天花灯 / 墙面开关**逐项保留**。
+- **顺带修掉引擎一个真缺口**：`_rehome_static_layout_door()` 把门墙件**搬**到新门位后，**原位没补墙** ⇒ 换出入口后原位永久留一个 5 m 洞（可从房里走出去；`_seal_stray_door_walls()` 只处理**还在场**的门墙件，搬走的那件它看不见）。新增 `_backfill_rehomed_door_spot()`：门墙件**真的挪动过**时，用**同侧实墙件**复制一段补回原位，口径与 `_seal_stray_door_walls()` 同源；没挪动（原位==新位）时零行为，既有 12 房逐字不变。
+- 验收：`verify_expedition_level01_flow` **`EXPEDITION_LEVEL01_FLOW_OK`**（轮廓感知判据 **0 条打空**；改前基线也 0，中途曾出现 2 条→8 条，已归零）。新探针 `probe_exp01_room10_to_boss` **`ROOM10_TO_BOSS_OK checks=4 failures=0`**：两门洞重合、门洞射线通、真身移动代码从 `room_10` 走到 **Boss 房内部**（`inside_boss=true`）。回归：`verify_boss_room02_runtime` 3081 项 0 失败、`probe_boss_room02_level99` 265 项 0 失败（雾气 0.015 未受影响）。灯具开关回归仍只剩**既有的** `room_01` 一条红（HEAD 同源，非本次引入）。
+- ⚠️ 重烘器写出的 TSCN 带**完整组件元数据**（每节点 asset_id/source_blend/collision_policy 等），故 `f00_boss_static_layout.tscn` 由 98 KB 涨到 410 KB、diff 5664 行 —— 是**同一间房**（节点 223→225、实例 217→221），非结构改动。
 
 ## 2026-10-14 Boss房02 竞技场改为「首领一死就开闸」+ 护栏补间竞态修复
 

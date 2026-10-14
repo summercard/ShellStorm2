@@ -2966,8 +2966,19 @@ func _collect_box_stage_entries(
 			# `spawn_delay_sec` 是延迟键，非 0 的条目会被摘进 `_pending_delayed_spawns`。
 			config["spawn_position"] = point
 			# Monitor encounter: center the boss only; retain the authored escort placements.
+			#
+			# 「居中」以**设计源声明的首领中心**为准（`boss_reinforcement_plan.boss_spawn_local_m`
+			# → `boss_spawn_position_world()`），而不是房间几何中心：多标高房（Boss房02 深井）
+			# 的几何中心落在楼梯与平台之间，按几何中心投放会把首领放进楼梯底下。
+			# 未声明增援计划的房（历史 Boss 房）走原路径 ⇒ 行为逐字不变。
 			if str(config.get("boss_content_id", "")) == "boss_monitor002":
-				config["spawn_position"] = Vector3(room.global_position.x, point.y, room.global_position.z)
+				if room.boss_reinforcement_plan.is_empty():
+					config["spawn_position"] = Vector3(
+						room.global_position.x, point.y, room.global_position.z
+					)
+				else:
+					var boss_center := room.boss_spawn_position_world()
+					config["spawn_position"] = Vector3(boss_center.x, point.y, boss_center.z)
 			config["spawn_delay_sec"] = float(item["delay_sec"])
 			entries.append(config)
 

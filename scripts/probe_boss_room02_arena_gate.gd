@@ -28,7 +28,14 @@ extends Node
 ##   "<godot-console>" --headless --path "<project>" \
 ##     --scene res://scripts/probe_boss_room02_arena_gate.tscn
 
+## 关卡选择：默认 99；`SS_BOSS_LEVEL=expedition_01` 可把同一套断言原样跑到远征01。
+## 两关的 boss 房是**同一张共享房图**（Boss房02），房内几何常量因此通用。
 const EXP99_SCENE: PackedScene = preload("res://scenes/ExpeditionLevel99_3D.tscn")
+const EXP01_SCENE: PackedScene = preload("res://scenes/ExpeditionLevel01_3D.tscn")
+
+
+func _level_scene() -> PackedScene:
+	return EXP01_SCENE if OS.get_environment("SS_BOSS_LEVEL").strip_edges() == "expedition_01" else EXP99_SCENE
 const SPEED_MPS := 3.2
 const ARRIVE_M := 0.60
 const STALL_MOVE_M := 0.002
@@ -89,7 +96,7 @@ func _surface_y(x: float, z: float) -> float:
 
 
 func _spawn(label: String) -> Array:
-	var tower: TowerDescent3D = EXP99_SCENE.instantiate() as TowerDescent3D
+	var tower: TowerDescent3D = _level_scene().instantiate() as TowerDescent3D
 	tower.test_mode = true
 	tower.run_seed_override = 20260919
 	_root.add_child(tower)
@@ -213,7 +220,7 @@ func _phase_boss_death() -> void:
 	# 补 1 只残留小怪 ⇒ 首领死后 `room.cleared` **仍为 false**。
 	# 没有这一步，新旧两种口径（看首领死 / 看清房）在断言上完全等价、区分不开。
 	var survivor := tower.narrative_spawn_enemies(
-		"boss", "melee_chaser", 1, room.to_global(Vector3(-9.0, 0.0, -31.0))
+		"boss", "melee_chaser", 1, _to_world(room, Vector3(-9.0, 0.0, -31.0))
 	)
 	_check(survivor == 1, "[首领之死] 应能补刷 1 只残留小怪（实得 %d）" % survivor)
 
@@ -279,9 +286,24 @@ func _finish() -> void:
 	get_tree().quit(0 if _failures.is_empty() else 1)
 
 
+## 美术帧 → 世界。
+##
+## 🔴 本探针的所有常量（楼梯 z∈[−10,40]、平台 z∈[−35,−10]、三个出口、两处触发线）
+## 都是照 Boss房02 的**烘焙坐标**写的。远征01 的绑定壳会按 `template_rotation_deg`
+## 把整房转过 180°（同一关不同种子实测都会出现），此时房间帧与美术帧相差 180° ——
+## 用房间帧摆点等于把玩家扔到房间另一头，探针会报一堆「本该触发却没触发」。
+func _to_world(room: DungeonRoom3D, local: Vector3) -> Vector3:
+	var art := room.get_node_or_null("AuthoredLayoutArtRoot") as Node3D
+	if art == null:
+		art = room.get_node_or_null("SafeRoomArtRoot") as Node3D
+	if art == null:
+		return room.to_global(local)
+	return art.global_transform * local
+
+
 func _place(player: Player3D, room: DungeonRoom3D, local: Vector3) -> void:
 	var y := _surface_y(local.x, local.z)
-	player.global_position = room.to_global(Vector3(local.x, y, local.z) + Vector3.UP * START_LIFT_M)
+	player.global_position = _to_world(room, Vector3(local.x, y, local.z) + Vector3.UP * START_LIFT_M)
 	player.velocity = Vector3.ZERO
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -293,7 +315,7 @@ func _try_escape(player: Player3D, room: DungeonRoom3D, target_local: Vector3) -
 		Vector3(0.0, 0.0, -22.5) if absf(target_local.x) > 5.0 else Vector3(0.0, 0.0, -16.0)
 	)
 	await _place(player, room, start)
-	var target := room.to_global(Vector3(
+	var target := _to_world(room, Vector3(
 		target_local.x, _surface_y(target_local.x, target_local.z), target_local.z
 	) + Vector3.UP * START_LIFT_M)
 	target.y = player.global_position.y

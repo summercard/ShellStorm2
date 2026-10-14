@@ -1197,6 +1197,54 @@ static func _rotated_connection_port(port: Dictionary, rotation_deg: float) -> D
 	return rotated
 
 
+## Boss 增援计划随房刚体旋转。
+##
+## 🔴 为什么必须转：计划里的 `boss_spawn_local_m` / `spawn_rows[].x_m,z_m` 是**房间局部坐标**，
+## 与 `spawn_placements` 同一坐标系。整房被旋转（远征01 的 180° 北向修正、或落位姿态）时，
+## 不转就会把首领与增援投到房间的**反面** —— 实测深井房里表现为「首领落在楼梯底下」。
+##
+## 只实现 0°/180°（当前唯一在用的两种）：180° 时 `(x,z) → (−x,−z)`，行模型（固定 x + z 列表）
+## 保持同形。90°/270° 会把「行内固定 x」这条结构破坏掉（x 变成随 z 变化），
+## 故**显式告警并原样返回**，绝不静默转错。
+static func _rotated_boss_reinforcement_plan(plan: Dictionary, rotation_deg: float) -> Dictionary:
+	if plan.is_empty():
+		return plan
+	var angle := fposmod(float(rotation_deg), 360.0)
+	if is_zero_approx(angle):
+		return plan
+	if absf(angle - 180.0) > 0.001:
+		push_warning(
+			"FloorPlanGenerator: Boss 增援计划不支持 %.0f° 旋转（只实现 0/180°），已原样保留"
+			% angle
+		)
+		return plan
+	var rotated := plan.duplicate(true)
+	var center := _port_vec2(plan, "boss_spawn_local_m")
+	rotated["boss_spawn_local_m"] = [-center.x, -center.y]
+	var rows: Array = []
+	for row_value in (plan.get("spawn_rows", []) as Array):
+		if not (row_value is Dictionary):
+			continue
+		var row := (row_value as Dictionary).duplicate(true)
+		row["x_m"] = -float(row.get("x_m", 0.0))
+		var z_values: Array = []
+		for z_value in (row.get("z_m", []) as Array):
+			z_values.append(-float(z_value))
+		row["z_m"] = z_values
+		# 🔴 `side` 必须跟着翻：校验器把侧名与 x 的符号绑死
+		# （`boss_reinforcement_row_side_mismatch`：west 要求 x<0、east 要求 x>0）。
+		# 只翻 x 不翻 side ⇒ 整关**拒启**（实测：`远征启动失败 … row_side_mismatch`）。
+		var side := str(row.get("side", ""))
+		if side == "west":
+			row["side"] = "east"
+		elif side == "east":
+			row["side"] = "west"
+		rows.append(row)
+	if plan.has("spawn_rows"):
+		rotated["spawn_rows"] = rows
+	return rotated
+
+
 static func _rotated_connection_ports(ports: Array, rotation_deg: float) -> Array:
 	var result: Array = []
 	for value in ports:
@@ -1262,6 +1310,9 @@ static func _apply_final_global_rotation(rooms: Array, rotation_deg: float) -> v
 		)
 		room["spawn_placements"] = _rotated_spawn_placements(
 			room.get("spawn_placements", []) as Array, rotation_deg
+		)
+		room["boss_reinforcement_plan"] = _rotated_boss_reinforcement_plan(
+			room.get("boss_reinforcement_plan", {}) as Dictionary, rotation_deg
 		)
 		room["authored_layout_instances"] = _rotated_authored_instances(
 			room.get("authored_layout_instances", []) as Array, rotation_deg
@@ -1882,9 +1933,10 @@ static func _constrained_floor_from(
 			# 这四项曾被硬写空 ⇒ 设计源即便声明了也被静默丢弃，运行时恒回退公式波次。
 			"content_type": str(slot.get("content_type", "")),
 			"boss_content_id": str(slot.get("boss_content_id", "")),
-			"boss_reinforcement_plan": (
-				slot.get("boss_reinforcement_plan", {}) as Dictionary
-			).duplicate(true),
+			"boss_reinforcement_plan": _rotated_boss_reinforcement_plan(
+				slot.get("boss_reinforcement_plan", {}) as Dictionary,
+				float(placed_room.get("rotation_deg", 0.0))
+			),
 			"enemy_spawn_plan": (slot.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
 			"reward_plan": (slot.get("reward_plan", {}) as Dictionary).duplicate(true),
 			# 触发盒放置/调用（触发器刷怪设计 §3.2 / §3.3）：与上列字段同口径，
@@ -2766,6 +2818,14 @@ static func authored_shell_block(rooms: Array, templates: Dictionary = {}) -> Ar
 	for value in rooms:
 		var room := value as Dictionary
 		if str(room.get("role", "")) == "stair_entry":
+			continue
+		# 🔴 授权端口锚定房（`anchor_policy = static_port_layout`）**不进本块**。
+		# 这类房（Boss 房深井 / 撤离房）的门位由蓝图逐口写死、房心常常**不在 5m 格线上**
+		# （它要精确对齐上游端口），而 builder 的 `room_bound_off_grid` 会让**整份块**
+		# 作废 ⇒ `attach_authored_layout_shell` 直接 return，**其余所有房间**一起退回
+		# 程序化壳体（实测：boss x=-92.5 触发，全层通用壳体丢失）。
+		# 与 `attach_authored_layout_shell` 循环里那条同名跳过同源，两处必须一致。
+		if str(room.get("anchor_policy", "grid")) == "static_port_layout":
 			continue
 		var built := _authored_shell_block_room(room, templates)
 		if built.is_empty():
