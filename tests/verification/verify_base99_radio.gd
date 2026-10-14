@@ -203,7 +203,10 @@ func _verify_tower_radio_mouse_path(failures: Array[String]) -> void:
 	_assert(failures, radio.get_radio_state() == "off", "离开99F后 radio 未关闭")
 	_verify_status(failures, radio, false)
 	_assert(failures, not radio.audio_player.playing and radio.audio_player.stream == null, "离楼音频停止但红灯应待机")
-	_assert(failures, MusicManager == null or MusicManager.get_current_music_id() == "rooftop_relax", "离开99F后天台音乐未恢复")
+	# 2026-10-14 主人指定：天台暂不播 BGM（TowerAtmosphere3D.rooftop_music_enabled = false）。
+	# 离开99F 落到天台后，MusicManager 必须「没有当前曲目」——既不放 rooftop_relax，
+	# 也不残留 99F 之前挂着的 base_passion / descent_suspense。
+	_assert(failures, MusicManager == null or MusicManager.get_current_music_id().is_empty(), "离开99F后天台不应播放任何BGM")
 
 	player.global_position = radio.global_position + Vector3(0.0, -0.90, 1.1)
 	tower.call("_refresh_physical_location_authority", true)

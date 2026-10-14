@@ -91,6 +91,11 @@ const HEALTH_BAR_FRAME_COLOR := Color(0.12, 0.02, 0.04, 0.96)
 const HEALTH_BAR_EMPTY_COLOR := Color(0.018, 0.024, 0.034, 0.98)
 const HEALTH_BAR_FULL_COLOR := Color(0.93, 0.055, 0.12, 1.0)
 const HEALTH_BAR_LOW_COLOR := Color(1.0, 0.54, 0.12, 1.0)
+## 小怪条只缩视觉，不改敌人模型、碰撞或生命数值；Boss 头顶条保持原尺寸。
+const NORMAL_HEALTH_BAR_SCALE := 0.80
+## 白段是视觉追赶层：真实血量立即减少，白段按速度追到真实比例。
+const HEALTH_BAR_DELAY_SPEED := 1.8
+const HEALTH_BAR_DELAY_COLOR := Color(1.0, 1.0, 1.0, 0.96)
 const HEALTH_BAR_TEXTURE_SIZE := Vector2i(200, 24)
 const HEALTH_BAR_BORDER_PX := 2
 const HEALTH_BAR_PIXEL_SIZE := 0.005
@@ -184,11 +189,40 @@ var _overhead_health_image: Image
 var _overhead_health_texture: ImageTexture
 var _overhead_health_size := Vector2.ZERO
 var _overhead_health_ratio := 1.0
+var _overhead_delayed_health_ratio := 1.0
+var _overhead_health_bar_initialized := false
+## 本怪头顶条实际生效的整体缩放（普通小怪 0.80 / Boss 与精英 1.0）。
+## 真正算它的地方只有 `_ensure_overhead_health_bar` 一处，验收从快照读它，
+## 免得把「谁该缩」的判断抄进测试里、两边各写一遍。
+var _overhead_health_bar_scale := 1.0
 var _elite_health_bar_profile: Dictionary = {}
 var _kind_scale_multiplier := 1.0
 var _variant_scale_multiplier := 1.0
 var illumination_sensor: EnemyIllumination3D
 var _illumination_damage_accumulator := 0.0
+
+# ── 启动过程（0.30–0.60s：转身 → 吼叫 → 头顶图标 → 攻击）────────────────────
+# 设计见 docs/v0.1/06A_怪物AI系统完整设计_评审稿.md §6.1.1–§6.1.4；
+# 数值公式唯一真源 MonsterStartupProfile（本类只消费，不自己算常量）。
+## 启动过程是否正在计时。挂在 `alert` 状态上，不新增 AI 状态。
+var _startup_active := false
+## 段 A（转身）时长（秒）。段 B（吼叫）从它开始。
+var _startup_turn_sec := 0.0
+## 启动过程总时长（秒），∈ [0.30, 0.60]。
+var _startup_total := 0.0
+## 本次抽到的随机抖动，转身速率要用同一个值反推，不能重抽。
+var _startup_jitter := 0.0
+## 归一化后的转角，同上 —— 转身速率必须与时长同源。
+var _startup_delta_yaw_deg := 0.0
+## 只在跨过段 A/段 B 边界时弹一次图标；重复弹会让「吼」变成闪烁。
+var _roar_icon_fired := false
+## 头顶吼叫图标实例。挂在 `_overhead_health_root` 下，随血条槽根逐帧跟位。
+var _roar_icon: VfxMonsterRoarIcon3D = null
+## 同一次交战中只播一次启动过程；脱战静默满 REARM_AFTER_SECONDS 后重新武装。
+var _startup_armed := true
+## `_target == null` 的连续时长，用于重新武装。
+var _disengage_elapsed := 0.0
+var _startup_rng := RandomNumberGenerator.new()
 var _ai_decision: Dictionary = {}
 var _navigation_agent: NavigationAgent3D
 var _stuck_time := 0.0
@@ -204,6 +238,9 @@ var _last_state_reason := "spawned"
 var _ambush_reburrow_cooldown := 0.0
 var _ambush_unseen_time := 0.0
 var _active_explosion_committed := false
+## 关卡级死亡自爆规格（远征01 `monster_rules.death_explosion.<kind>`）。
+## 空字典 = 本怪不自爆（缺省，塔楼与其余关卡恒为空）。
+var _death_explosion: Dictionary = {}
 ## 当前生效的分离推力速度，以及重算相位（-1 = 尚未初始化）。
 var _separation_push := Vector3.ZERO
 var _separation_phase := -1
@@ -229,6 +266,7 @@ func _ready() -> void:
 	illumination_sensor = ILLUMINATION_SCRIPT.new() as EnemyIllumination3D
 	illumination_sensor.configure(self)
 	illumination_sensor.illumination_state_changed.connect(_on_illumination_state_changed)
+	_startup_rng.randomize()
 	apply_profile(enemy_kind)
 	illumination_sensor.force_refresh(true)
 	if MonsterAIManager != null:
@@ -271,6 +309,7 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 	if monitor_combat != null:monitor_combat.cancel()
 	monitor_combat = null
 	enemy_data = data.duplicate(true)
+	_death_explosion = (data.get("death_explosion", {}) as Dictionary).duplicate(true)
 	if not bool(data.get("is_elite", false)):
 		var configured_kind := str(data.get("enemy_type", enemy_kind))
 		if configured_kind == "melee_chaser":
@@ -406,6 +445,15 @@ func _ensure_overhead_health_bar() -> void:
 		_elite_health_bar_profile.get("size", HEALTH_BAR_SIZE_BY_KIND.get(enemy_kind, Vector2(1.65, 0.16)))
 		as Vector2
 	)
+	# 只缩「普通小怪」：Boss 与精英各有独立契约（Boss 条是屏幕顶端条，
+	# 精英条靠 2.05m 宽表达"这只不一样"，见 `verify_first_elite_deployment_flow`
+	# 的 `overhead_health_bar_size.x >= 2.0`），把 0.80 乘到它们身上等于毁掉这个区分度。
+	_overhead_health_bar_scale = (
+		NORMAL_HEALTH_BAR_SCALE
+		if enemy_kind != "boss" and _elite_health_bar_profile.is_empty()
+		else 1.0
+	)
+	wanted_size *= _overhead_health_bar_scale
 	if _overhead_health_root != null and is_instance_valid(_overhead_health_root):
 		if _overhead_health_size.is_equal_approx(wanted_size):
 			return
@@ -420,6 +468,8 @@ func _ensure_overhead_health_bar() -> void:
 		_elite_name_label = null
 		_overhead_health_image = null
 		_overhead_health_texture = null
+		_overhead_health_bar_initialized = false
+		_overhead_delayed_health_ratio = 1.0
 	_overhead_health_root = Node3D.new()
 	_overhead_health_root.name = "OverheadHealthBar"
 	_overhead_health_root.top_level = true
@@ -495,8 +545,19 @@ func _position_overhead_health_bar() -> void:
 func _on_self_health_changed(_enemy: Enemy3D, current: int, maximum: int) -> void:
 	if _overhead_health_sprite == null or _overhead_health_image == null or _overhead_health_texture == null:
 		return
-	_overhead_health_ratio = clampf(float(current) / float(maxi(1, maximum)), 0.0, 1.0)
-	# 单张 Sprite 纹理同时包含底框与填充。没有独立红色平面的平移/缩放，
+	var next_ratio := clampf(float(current) / float(maxi(1, maximum)), 0.0, 1.0)
+	_overhead_health_ratio = next_ratio
+	# 初始化和治疗时不显示错误的白段；只有受伤时让白段暂留，随后在 _process 中追赶。
+	if not _overhead_health_bar_initialized or next_ratio >= _overhead_delayed_health_ratio:
+		_overhead_delayed_health_ratio = next_ratio
+	_overhead_health_bar_initialized = true
+	_redraw_overhead_health_bar()
+
+
+func _redraw_overhead_health_bar() -> void:
+	if _overhead_health_image == null or _overhead_health_texture == null:
+		return
+	# 单张 Sprite 纹理同时包含底框、白色延迟段和当前血量。没有独立平面的平移/缩放，
 	# 所以在任意镜头角度下都不会跑出框外；Sprite3D 自身负责永久朝向摄像机。
 	var frame_color := _elite_health_bar_profile.get("frame_color", HEALTH_BAR_FRAME_COLOR) as Color
 	var empty_color := _elite_health_bar_profile.get("empty_color", HEALTH_BAR_EMPTY_COLOR) as Color
@@ -510,14 +571,43 @@ func _on_self_health_changed(_enemy: Enemy3D, current: int, maximum: int) -> voi
 		HEALTH_BAR_TEXTURE_SIZE.y - HEALTH_BAR_BORDER_PX * 2
 	)
 	_overhead_health_image.fill_rect(inner_rect, empty_color)
-	var fill_width := int(round(float(inner_rect.size.x) * _overhead_health_ratio))
-	if fill_width > 0:
+	var actual_width := int(round(float(inner_rect.size.x) * _overhead_health_ratio))
+	var delayed_width := int(round(float(inner_rect.size.x) * _overhead_delayed_health_ratio))
+	if delayed_width > actual_width:
+		_overhead_health_image.fill_rect(
+			Rect2i(
+				inner_rect.position.x + actual_width,
+				inner_rect.position.y,
+				delayed_width - actual_width,
+				inner_rect.size.y
+			),
+			HEALTH_BAR_DELAY_COLOR
+		)
+	if actual_width > 0:
 		var fill_color := low_color.lerp(full_color, _overhead_health_ratio)
 		_overhead_health_image.fill_rect(
-			Rect2i(inner_rect.position, Vector2i(fill_width, inner_rect.size.y)), fill_color
+			Rect2i(inner_rect.position, Vector2i(actual_width, inner_rect.size.y)), fill_color
 		)
 	_update_illumination_status_text()
 	_overhead_health_texture.update(_overhead_health_image)
+
+
+## 白段追赶真实血量。独立成函数（而不是内联在 `_process` 里）是为了让验收能
+## **手动步进固定 delta** —— 光靠 `await process_frame` 采样，帧时间随机器上下浮动，
+## 「白段确实在缩、且没有越过真实血量」这条断言会变成一条飘忽的用例。
+func _tick_overhead_health_bar_delay(delta: float) -> void:
+	if (
+		enemy_kind == "boss"
+		or not _overhead_health_bar_initialized
+		or _overhead_delayed_health_ratio <= _overhead_health_ratio
+	):
+		return
+	_overhead_delayed_health_ratio = move_toward(
+		_overhead_delayed_health_ratio,
+		_overhead_health_ratio,
+		delta * HEALTH_BAR_DELAY_SPEED
+	)
+	_redraw_overhead_health_bar()
 
 
 func _update_illumination_status_text() -> void:
@@ -693,6 +783,7 @@ func _process(delta: float) -> void:
 			avatar.sync_boss_presentation(monitor_combat.presentation_context())
 		else:
 			avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration())
+	_tick_overhead_health_bar_delay(delta)
 	# 已加载但尚未进入近距离 AI 圈的怪物仍需低成本监听真实受光刺激。
 	# 否则其 physics_process 被暂停后，探照灯永远不可能将它唤醒。
 	if _runtime_ai_active or ai_state == "dead" or illumination_sensor == null:
@@ -779,6 +870,16 @@ func _physics_process(delta: float) -> void:
 		MonsterAIManager.update_enemy_spatial(self)
 	_ai_decision = MonsterAIManager.evaluate_enemy(self) if MonsterAIManager != null else {}
 	_apply_ai_decision(_ai_decision)
+	# 脱战静默计时 ⇒ 启动过程重新武装。
+	# 放在 `_apply_ai_decision` 之后，读的是本帧刚解析出来的目标，不留一帧错位。
+	# 语义：连续无目标满 `REARM_AFTER_SECONDS` 才算「真的脱战了」，
+	# 否则玩家来回探头会让怪物反复吼叫 —— 那是噪音，不是表现。
+	if _target == null or not is_instance_valid(_target):
+		_disengage_elapsed += delta
+		if _disengage_elapsed >= MonsterStartupProfile.REARM_AFTER_SECONDS:
+			_startup_armed = true
+	else:
+		_disengage_elapsed = 0.0
 	if monitor_combat != null and monitor_combat.tick(delta):return
 	if enemy_kind == "ambusher" and _ambush_triggered:
 		var target_distance := global_position.distance_to(_target.global_position) if _target != null and is_instance_valid(_target) else INF
@@ -873,11 +974,18 @@ func _physics_process(delta: float) -> void:
 	var engage_distance := float(_ai_param("engage_distance_m", 13.5))
 	if (distance < engage_distance or stimulus_tracking) and ai_state in ["idle", "patrol", "search"] and (target_visible or stimulus_tracking):
 		transition_to("alert")
+		# 确认合法目标 ⇒ 走启动过程（业主 2026-10-14）。Boss、未重新武装的重复遭遇
+		# 与退化朝向由 `_begin_monster_startup` 内部判掉；那里返回 false 时，
+		# 本状态就退回原来的 `alert_duration` 口径，行为与接线前逐字一致。
+		_begin_monster_startup(to_target)
 	var alert_duration := float(_ai_param(
 		"alert_duration_sec", float(PROFILES[enemy_kind].get("alert", 0.28))
 	))
-	if ai_state == "alert" and _state_time > alert_duration:
-		transition_to("chase")
+	if ai_state == "alert" and _tick_alert_state(to_target, delta, alert_duration):
+		# 启动过程独占本帧：它自己处理制动、朝向与 move_and_slide。
+		# 直接返回是**不抢跑**的关键 —— 继续往下跑行动 match 会把它推进 chase，
+		# 玩家就会看到「怪物直接冲过来」，正是 2026-10-14 要修的现象。
+		return
 	var lost_sight_limit := float(_ai_param("lost_sight_sec", 1.15))
 	match ai_state:
 		"chase":
@@ -1149,6 +1257,109 @@ func _explode() -> void:
 	_die()
 
 
+## 死亡自爆（远征01 `monster_rules.death_explosion.<kind>`，业主 2026-10-14：胖子僵尸 180）。
+##
+## **刻意不复用 `_explode()`** —— 那是炸弹果的主动贴近自爆，三条语义都不同：
+##   1. 伤害取 `contact_damage`（随楼层缩放/主题倍率漂）→ 本函数用**规格里的固定值**；
+##   2. 只伤玩家 → 本函数**敌我通吃**（半径内所有单位，含相邻敌对怪与玩家）；
+##   3. 只判 3.0 m → 本函数用规格半径。
+##
+## 表现（业主 2026-10-14 追加「自爆没有特效」）：走**专属 Prefab** `VFX-DEATH-BLAST-3D`
+## （FX01-17，比通用 `VFX-EXPLOSION-3D` 更大更重、并带一盏 BlastLight），
+## 随后按规格 `zone` 段在地上留一片**持续伤害场** `DeathBlastZone3D`（FX01-18 视觉，默认 3 秒）。
+##
+## 级联安全性：本函数给别的怪 `take_damage` 时，若把对方也打死，对方会走自己的
+## `_die()` + 自爆；而它反向炸到本怪时会被 `take_damage` 首行的 `ai_state == "dead"`
+## 直接挡掉 ⇒ **不存在无限递归**。
+## 仇恨不转移：怪物 AI 的目标只从 `player_3d` 组里取，故「怪炸怪」只掉血、不会互殴。
+func _detonate_death_explosion() -> void:
+	var damage := int(_death_explosion.get("damage", 0))
+	if damage <= 0:
+		return
+	var radius := maxf(0.5, float(_death_explosion.get("radius_m", 5.0)))
+	var sfx_radius := float(_death_explosion.get("sfx_radius_m", 20.0))
+	# 视觉尺寸跟着规格半径走：环外缘 ≈ 0.72 × size × 2.20 ⇒ size ≈ radius × 0.6，
+	# 于是 5.0 m 的自爆画到 ≈4.75 m，观感上正好顶满伤害半径。
+	var blast_size: float = clampf(radius * 0.6, 1.2, 4.0)
+	_spawn_effect("VFX-DEATH-BLAST-3D", blast_size)
+	if sfx_radius > 0.0 and MonsterAIManager != null:
+		MonsterAIManager.broadcast_sound_stimulus(global_position, sfx_radius, "explosion", self)
+	_damage_allies_in_blast(damage, radius)
+	_damage_players_in_blast(damage, radius)
+	_spawn_ground_blast_zone(radius)
+
+
+## 自爆对**敌对单位**的伤害。同房过滤与 `_heal_nearby_allies` / `_strengthen_nearest_enemy`
+## 同口径 —— 门是关着的，跨房的怪不该被炸到（也不该被顺带激活）。
+func _damage_allies_in_blast(damage: int, radius: float) -> void:
+	if GameplaySpatialRegistry3D == null:
+		return
+	var room_filter: Array[String] = []
+	if not room_id.is_empty():
+		room_filter.append(room_id)
+	for value in GameplaySpatialRegistry3D.query_radius(
+		global_position, radius, [GameplaySpatialRegistry3D.KIND_ENEMY], room_filter
+	):
+		var other := value as Enemy3D
+		if other == null or other == self or not is_instance_valid(other):
+			continue
+		# 已死的（含同帧被前一发炸死的）不再受击，避免重复结算与掉落的二次触发。
+		if other.ai_state == "dead" or other.current_hp <= 0:
+			continue
+		var offset := other.global_position - global_position
+		var direction := offset.normalized() if offset.length_squared() > 0.01 else Vector3.UP
+		other.take_damage(damage, false, direction)
+
+
+## 自爆对**玩家**的伤害。距离口径与 `_explode()` 一致（3D 球距离）。
+func _damage_players_in_blast(damage: int, radius: float) -> void:
+	for player in get_tree().get_nodes_in_group("player_3d"):
+		var body := player as Node3D
+		if body == null or not is_instance_valid(body):
+			continue
+		var offset := body.global_position - global_position
+		if offset.length() > radius:
+			continue
+		# 与 `_explode()` 同序：先记仇恨来源（供死亡结算/击杀归属），再结算伤害。
+		if body.has_method("notify_attacked_by"):
+			body.call("notify_attacked_by", self)
+		if body.has_method("take_damage"):
+			body.call("take_damage", damage, false, offset.normalized())
+
+
+## 死亡自爆留在**地上**的持续伤害场（业主 2026-10-14：「在地上留一个持续伤害的范围效果，持续3秒」）。
+##
+## 只读关卡规格 `monster_rules.death_explosion.<kind>.zone`：
+##   - 缺段 / `enabled=false` / `damage_per_tick<=0` ⇒ **一行不生成**，
+##     故未配置的关卡（塔楼等）与旧行为逐字一致；
+##   - `radius_m` 缺省沿用爆炸半径（同一片杀伤范围，不另立第二份口径）。
+##
+## 场地是**独立玩法节点**（`DeathBlastZone3D`），自己按周期结算，
+## 死亡怪本帧后续被回收也不影响它 —— 它在场景树上、不依赖本怪存活。
+func _spawn_ground_blast_zone(radius: float) -> void:
+	var zone_cfg := _death_explosion.get("zone", {}) as Dictionary
+	if zone_cfg.is_empty() or not bool(zone_cfg.get("enabled", false)):
+		return
+	var per_tick := int(zone_cfg.get("damage_per_tick", 0))
+	if per_tick <= 0:
+		return
+	var parent: Node = get_tree().current_scene
+	if parent == null:
+		parent = get_parent()
+	if parent == null:
+		return
+	DeathBlastZone3D.spawn(parent, {
+		"origin": global_position,
+		"radius": maxf(0.5, float(zone_cfg.get("radius_m", radius))),
+		"duration": float(zone_cfg.get("duration_sec", 3.0)),
+		"damage_per_tick": per_tick,
+		"tick_interval": float(zone_cfg.get("tick_interval_sec", 0.5)),
+		"room_id": room_id,
+		"color": EnemyAvatar3D.COLORS.get(enemy_kind, Color(1.0, 0.52, 0.18)),
+		"source": self,
+	})
+
+
 func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, hit_knockback := 0.0, interrupt_movement := true) -> void:
 	if ai_state == "dead":
 		return
@@ -1344,6 +1555,14 @@ func transition_to(state_id: String, reason := "") -> bool:
 	if ai_state == state_id:
 		return true
 	var previous := ai_state
+	# 启动过程是「可打断的过渡段」：离开 alert 一律收尾（死亡 / 硬直 / 房间停用 /
+	# 失去目标转 search / 回巢）。挂在 transition_to 这一个收口上，而不是往
+	# _die / take_damage / set_runtime_active 里各抄一遍 —— 抄漏一处就会出现
+	# 「已死还在吼」的假信息，而这正是不该漏的那一种。
+	# 唯一的例外是「正常走完转 chase」：那时图标要按自己的 lifetime 播完尾巴，
+	# 不能被掐掉（尾巴是「吼 → 打」因果可读性的一部分）。
+	if previous == "alert" and state_id != "alert" and state_id != "chase":
+		_cancel_monster_startup()
 	if previous in ["telegraph", "attack", "recovery"] and state_id not in ["telegraph", "attack", "recovery"]:
 		if MonsterAIManager != null:
 			MonsterAIManager.release_attack_token(self)
@@ -1359,6 +1578,151 @@ func transition_to(state_id: String, reason := "") -> bool:
 	return true
 
 
+# ── 启动过程（0.30–0.60s：转身 → 吼叫 → 头顶图标 → 攻击）────────────────────
+# 设计原文与公式见 docs/v0.1/06A_怪物AI系统完整设计_评审稿.md §6.1.1–§6.1.4。
+# 本类是**消费方**：一切时长/尺寸/角速度都从 MonsterStartupProfile 取，不在这里写常量。
+
+## 头顶吼叫图标 Prefab（FX01-16 VFX-MONSTER-ROAR-ICON-3D）。
+## 按 14.6 §1.2「Prefab 是特效的唯一出口」，这里 preload Prefab 而不是自己 new 一个
+## 同类脚本节点 —— 否则账本登记的路径与实际播放的东西会悄悄脱钩。
+const ROAR_ICON_SCENE := preload(
+	"res://assets/art/vfx/combat_3d/vfx_monster_roar_icon_root_top3d.tscn"
+)
+
+
+## `alert` 状态逐帧推进。
+##
+## 返回 **true 表示本帧被启动过程独占** —— 调用方必须立即返回，不得继续跑行动 match。
+##
+## 抽成具名函数而不是内联在 `_physics_process` 里，是为了让验收能驱动**同一条**代码路径：
+## 在 `_physics_process` 里内联时，测试只能自己复刻一遍分支逻辑，那种「测试绿、游戏红」
+## 的假绿正是 2026-10-14 这次回归的教训（公式与 Prefab 全对，状态机却把它跨过去）。
+func _tick_alert_state(to_target: Vector3, delta: float, alert_duration: float) -> bool:
+	if _startup_active:
+		_tick_monster_startup(to_target, delta)
+		return true
+	if _state_time > alert_duration:
+		transition_to("chase")
+	return false
+
+
+## 进入启动过程。返回是否真的开始计时。
+##
+## 三种情况**不启动**，退回原来的 `alert_duration` 口径（行为与接线前一致）：
+##   ① Boss：它有自己的完整激活流程，不得叠加（`MonsterStartupProfile.plays_startup`）；
+##   ② 本次交战已经吼过一次：脱战静默满 `REARM_AFTER_SECONDS` 才重新武装，
+##      否则玩家来回探头会变成「反复吼叫」的噪音；
+##   ③ 朝向退化（与玩家几乎重合），算不出有意义的转角。
+func _begin_monster_startup(to_target: Vector3) -> bool:
+	_startup_active = false
+	_roar_icon_fired = false
+	if not MonsterStartupProfile.plays_startup(enemy_kind):
+		return false
+	if not _startup_armed:
+		return false
+	var planar := Vector3(to_target.x, 0.0, to_target.z)
+	if planar.length_squared() <= 0.0001:
+		return false
+	# 转角一律先归一到最短转向区间：359° 在几何上是「朝左差 1°」，不是「转身 359°」。
+	# `angle_difference` 直接给最短差，等价于 MonsterStartupProfile.normalize_delta_yaw，
+	# 且两处都过同一条断言（见 verify_monster_startup_roar 的归一化负向自测）。
+	var desired := Vector3(-planar.x, 0.0, -planar.z)
+	var desired_yaw := atan2(desired.x, desired.z)
+	var current_yaw := atan2(-global_basis.z.x, -global_basis.z.z)
+	_startup_delta_yaw_deg = rad_to_deg(angle_difference(current_yaw, desired_yaw))
+	# 抖动只抽一次：转身速率要从同一个值反推，重抽会让两段时长对不上。
+	_startup_jitter = _startup_rng.randf_range(0.0, MonsterStartupProfile.STARTUP_JITTER_MAX)
+	_startup_turn_sec = MonsterStartupProfile.turn_seconds(_startup_delta_yaw_deg)
+	_startup_total = MonsterStartupProfile.startup_seconds(_startup_delta_yaw_deg, _startup_jitter)
+	_startup_active = true
+	_startup_armed = false
+	return true
+
+
+## 启动过程逐帧推进：段 A 转身 → 段 B 起吼（弹一次图标）→ 到点转 chase。
+##
+## 计时用 `_state_time`：它由 `transition_to("alert")` 在进入时归零，语义正好是
+## 「本次 alert 已持续多久」= 启动过程已走多久，不必再养第二个时钟。
+func _tick_monster_startup(to_target: Vector3, delta: float) -> void:
+	if not _startup_active:
+		return
+	# 段 A：朝玩家恒定转速转身。速率由「转角必须在本段内转完」反推，
+	# 不随帧率变化，也不为了凑总时长去乱改转速。
+	var planar := Vector3(to_target.x, 0.0, to_target.z)
+	if planar.length_squared() > 0.0001:
+		var desired_yaw := atan2(-planar.x, -planar.z)
+		var rate := MonsterStartupProfile.turn_rate_deg_per_sec(
+			_startup_delta_yaw_deg, _startup_jitter
+		)
+		rotation.y = rotate_toward(rotation.y, desired_yaw, deg_to_rad(rate) * delta)
+	if not _roar_icon_fired and _state_time >= _startup_turn_sec:
+		_fire_roar_icon()
+	# 全程制动：这段的意义就是给玩家一个可反应的窗口，不能边走边吼。
+	_brake_planar(delta * 18.0)
+	_commit_motion(delta)
+	if _state_time >= _startup_total:
+		_startup_active = false
+		transition_to("chase", "startup_finished")
+
+
+## 起吼：在头顶血条槽根上方弹出图标。
+##
+## 挂到 `_overhead_health_root` 下是刻意复用既有契约 —— 那个根节点 `top_level = true`
+## 且每帧由 `_position_overhead_health_bar()` 跟位，所以图标自动获得
+## 「跟着怪 / 不随怪转身 / 不被身体挡住」三条性质，与头顶血条同一套定位代码，
+## 不新增第二份会漂移的实现。
+##
+## 尺寸按体型：`icon_edge = 头顶血条宽 × 0.42`，钳制 [0.45, 1.20] m。
+func _fire_roar_icon() -> void:
+	if _overhead_health_root == null or not is_instance_valid(_overhead_health_root):
+		# 头顶锚点还没建好：**不置 fired**，下一帧重试，否则这次起吼会被静默吞掉。
+		return
+	_roar_icon_fired = true
+	if _roar_icon != null and is_instance_valid(_roar_icon):
+		_roar_icon.dismiss()
+		_roar_icon = null
+	var icon := ROAR_ICON_SCENE.instantiate() as VfxMonsterRoarIcon3D
+	if icon == null:
+		return
+	_overhead_health_root.add_child(icon)
+	var bar_size := _overhead_health_size
+	var edge := MonsterStartupProfile.icon_edge_m(bar_size.x)
+	var offset_y := MonsterStartupProfile.icon_offset_y_m(bar_size.x, bar_size.y)
+	var hold := MonsterStartupProfile.icon_hold_seconds(
+		_startup_delta_yaw_deg, _startup_jitter
+	)
+	# 先 activate（会把 global_position 设成传入值），**后写 position** 把它钉回
+	# 「血条槽根 + 偏移」。顺序不能反 —— 反了就会被 activate 覆盖成世界原点。
+	icon.activate(
+		_overhead_health_root.global_position,
+		Color.WHITE,
+		edge,
+		{
+			"hold_seconds": hold,
+			"fade_seconds": MonsterStartupProfile.ICON_FADE_SECONDS,
+		},
+	)
+	icon.position = Vector3(0.0, offset_y, 0.0)
+	_roar_icon = icon
+
+
+## 中断启动过程：撤掉头顶图标并清掉计时。
+##
+## 「已死还在吼」是假信息。死亡 / 硬直 / 房间停用 / 失去目标都必须走这里；
+## 调用点收敛在 `transition_to` 离开 alert 的那一处，不往各处分抄。
+func _cancel_monster_startup() -> void:
+	var had_icon := _roar_icon != null and is_instance_valid(_roar_icon)
+	if not _startup_active and not had_icon:
+		return
+	_startup_active = false
+	_roar_icon_fired = false
+	if had_icon:
+		# `dismiss()` 幂等且会发出提前退场信号；本类不订阅该信号，
+		# 所以基类 `_retire()` 会走 queue_free —— 不会每吼一次泄漏一个节点。
+		_roar_icon.dismiss()
+	_roar_icon = null
+
+
 func get_state_snapshot() -> Dictionary:
 	var shape_snapshot := {}
 	if collision_shape != null and collision_shape.shape is CylinderShape3D:
@@ -1372,6 +1736,15 @@ func get_state_snapshot() -> Dictionary:
 	)
 	return {
 		"enemy_kind": enemy_kind, "state": ai_state, "valid_states": VALID_STATES.duplicate(),
+		# 启动过程事实（供验收断言「怪物是不是真的停了 0.30–0.60s 才冲」）。
+		"startup_active": _startup_active,
+		"startup_armed": _startup_armed,
+		"startup_total_sec": _startup_total,
+		"startup_turn_sec": _startup_turn_sec,
+		"startup_delta_yaw_deg": _startup_delta_yaw_deg,
+		"roar_icon_fired": _roar_icon_fired,
+		"roar_icon_active": _roar_icon != null and is_instance_valid(_roar_icon),
+		"disengage_elapsed_sec": _disengage_elapsed,
 		"hp": current_hp, "max_hp": max_hp, "room_id": room_id, "is_3d": true,
 		"elite_modifier_id": elite_modifier_id, "boss_phase": boss_phase,
 		"boss_content_id": str(enemy_data.get("boss_content_id", "")),
@@ -1399,6 +1772,8 @@ func get_state_snapshot() -> Dictionary:
 		"overhead_health_world_locked": _overhead_health_root != null and _overhead_health_root.top_level,
 		"overhead_health_bar_size": _overhead_health_size,
 		"overhead_health_ratio": _overhead_health_ratio,
+		"overhead_delayed_health_ratio": _overhead_delayed_health_ratio,
+		"overhead_health_bar_scale": _overhead_health_bar_scale,
 		"elite_health_bar": not _elite_health_bar_profile.is_empty(),
 		"elite_health_bar_name": _elite_name_label.text if _elite_name_label != null else "",
 		"elite_health_bar_profile": _elite_health_bar_profile.duplicate(true),
@@ -1901,6 +2276,11 @@ func _die() -> void:
 	if enemy_kind == "exploder":
 		if not _active_explosion_committed:
 			_spawn_death_fragments()
+	# 关卡级死亡自爆（远征01 胖子僵尸）。放在 `killed.emit` 之前 —— 自爆炸死的怪
+	# 也必须各自走完自己的 `_die()` + `killed`（掉落不能因为「死于自爆」而漏结算）。
+	# 空规格 = 不自爆，故未配置关卡走到这里是一行 no-op。
+	if not _death_explosion.is_empty():
+		_detonate_death_explosion()
 	collision_layer = 0
 	collision_mask = 0
 	add_to_group(GROUP_DEATH_VISUAL_3D)

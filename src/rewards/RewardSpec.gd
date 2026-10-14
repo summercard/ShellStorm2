@@ -102,6 +102,22 @@ static func is_known_currency(currency_id: String) -> bool:
 	return CURRENCIES.has(currency_id)
 
 
+## 「空掉落豁免」物品：关卡级 `empty_chance` 命中时**仍照判**的物品。
+##
+## 认定口径：物品 tag 含 `ammo`。备弹是战斗续航物资，作者给的是**明确指定的命中率**
+## （业主 2026-10-14：警察僵尸 80%）；若一并被空掉落吃掉，80% 会实际掉到 47%。
+## 按 tag 而不是硬编码 item_id ⇒ 新增弹药物品自动继承，不必逐条记得加标记。
+## 这是**唯一真源**：编译层（MonsterDropTable / MonsterInjector）与解析层都调它。
+static func is_empty_exempt_item(item_id: String) -> bool:
+	if item_id.is_empty():
+		return false
+	var registry := ItemRegistry.get_instance()
+	if not registry.has_item(item_id):
+		return false
+	var tags := registry.get_item(item_id).get("tags", []) as Array
+	return tags.has("ammo")
+
+
 static func known_currency_ids() -> Array[String]:
 	var out: Array[String] = []
 	for key in CURRENCIES.keys():

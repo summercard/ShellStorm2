@@ -352,6 +352,14 @@ const WEAPON_ANIMATION_PROFILES := {
 		"roll": -0.04,
 		"lift": 0.018,
 	},
+	# 初始步枪沿用步枪的射击姿态（同为 longgun 族），不另起一套动作。
+	"bp_starter_rifle": {
+		"fire_style": "rifle_braced_burst",
+		"kick": 0.82,
+		"pitch": 0.20,
+		"roll": 0.025,
+		"lift": 0.020,
+	},
 	"bp_sniper": {
 		"fire_style": "sniper_long_recoil",
 		"kick": 1.62,

@@ -81,7 +81,7 @@ func _verify_real_slot_click_and_3d_icons(
 		if str(weapon_snapshot.get("gun_id", "")) != "bp_shotgun" or not bool(weapon_snapshot.get("has_model", false)):
 			failures.append("Actual inventory click did not synchronize the equipped 3D gun model")
 		# 换枪后回背包的应当是「出厂枪」，而出厂枪由 BlueprintRegistry.DEFAULT_STARTING_GUN_ID
-		# 决定（当前是花洒机枪）。这里不要写死手枪：换一次出厂枪就会红一次，
+		# 决定（当前是初始步枪）。这里不要写死手枪：换一次出厂枪就会红一次，
 		# 而且写死等于永远只盯着一把枪，出厂枪真换错了反而看不出来。
 		var starting_item_id := _starting_weapon_item_id()
 		if starting_item_id.is_empty():

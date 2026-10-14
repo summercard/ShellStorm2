@@ -102,7 +102,8 @@ func _ready() -> void:
 	dungeon.call("_close_full_map")
 	_expect(dungeon.get("_full_map_control") == null, "Full map did not close", failures)
 
-	# A full weapon fate card requires a second click to convert to currency.
+	# 购买制下的满槽语义：目标枪命运槽已满的**星星卡不可购买** —— 卡位置灰、
+	# 点击只给原因、不扣魂、也不关弹窗（旧「二次点击兑魂」转换已随购卡制下线）。
 	var instance := player.get_equipped_weapon_instance()
 	instance.fate_upgrades.clear()
 	for index in range(instance.fate_slot_capacity):
@@ -111,12 +112,30 @@ func _ready() -> void:
 			"stable_card_id": "verification_full_%02d" % index,
 			"effect_version": 1,
 		})
+	GameManager.add_currency(9999)
 	_expect(dungeon.show_reference_fate_overlay_for_test(), "Cannot open reference fate selection", failures)
 	var currency_before := GameManager.currency
-	dungeon.call("_on_door_fate_selected", 0)
-	_expect(bool(dungeon.get("_door_fate_active")) and GameManager.currency == currency_before, "First full-slot click converted without confirmation", failures)
-	dungeon.call("_on_door_fate_selected", 0)
-	_expect(not bool(dungeon.get("_door_fate_active")) and GameManager.currency > currency_before, "Second full-slot click did not convert card to currency", failures)
+	var full_card_index := -1
+	for index in range((dungeon.get("_door_fate_choices") as Array).size()):
+		if str(dungeon.call("_fate_card_block_reason", index)) == "slot_full":
+			full_card_index = index
+			break
+	_expect(full_card_index >= 0, "Full-slot weapon card is not blocked in the purchase model", failures)
+	if full_card_index >= 0:
+		dungeon.call("_on_door_fate_selected", full_card_index)
+		_expect(
+			bool(dungeon.get("_door_fate_active")) and GameManager.currency == currency_before,
+			"Full-slot card purchase was not rejected without spending currency",
+			failures
+		)
+		_expect(
+			str(dungeon.call("_fate_card_block_reason", full_card_index)) == "slot_full",
+			"Full-slot card is still reported as purchasable",
+			failures
+		)
+	# 退出按钮与 ESC / 手柄 B 同义：购买制下弹窗只在退出时关闭。
+	dungeon.call("_close_door_fate_overlay")
+	_expect(not bool(dungeon.get("_door_fate_active")), "Closing the purchase overlay left it active", failures)
 	_expect(dungeon.show_reference_fate_overlay_for_test(), "Cannot reopen fate selection for ESC contract", failures)
 
 	# 手柄可操控契约：命运卡三选一是**代码构造**的覆盖层，不在 UiMenuFocus 那批静态
@@ -266,7 +285,7 @@ func _expect(condition: bool, message: String, failures: Array[String]) -> void:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("DUAL_WEAPON_QUICK_MAP_FATE_OK: two weapon instances, back stow, 1/2 switch, quick 3/4 items, full map, the fate overlay hands gamepad focus to a card with left/right neighbours and ui_cancel dismisses it, and full-slot currency conversion passes")
+		print("DUAL_WEAPON_QUICK_MAP_FATE_OK: two weapon instances, back stow, 1/2 switch, quick 3/4 items, full map, the fate overlay hands gamepad focus to a card with left/right neighbours and ui_cancel dismisses it, and a full-slot star card is unbuyable without spending")
 		get_tree().quit(0)
 		return
 	for failure in failures:

@@ -201,6 +201,10 @@ static func _row_to_entry(row: Dictionary, errors: Array[Dictionary]) -> Diction
 	var chance := float(row["chance"])
 	if chance < 1.0:
 		entry["chance"] = chance
+	# 备弹等「空掉落豁免」物品：关卡级 `empty_chance` 命中时仍照判（见
+	# `RewardSpec.is_empty_exempt_item`）。按 tag 判定 ⇒ 新增弹药物品自动继承。
+	if not entry.is_empty() and SPEC.is_empty_exempt_item(item_id):
+		entry["exempt_from_empty"] = true
 	if entry.is_empty():
 		errors.append(_err("MONSTER_DROP_TABLE_ENTRY_EMPTY", str(row["path"]), "无法编译该行"))
 	return entry

@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/equipment_rack/equipment_rack_root_top3d.tscn" id="13_ft4y7"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_detail_a/floor_detail_a_root_top3d.tscn" id="14_3y156"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_detail_b/floor_detail_b_root_top3d.tscn" id="15_wcyf3"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/island_cart/island_cart_root_top3d.tscn" id="16_gh54e"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/raised_service_a/raised_service_a_root_top3d.tscn" id="17_djdnr"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/raised_service_b/raised_service_b_root_top3d.tscn" id="18_ihpws"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_a/server_rack_a_root_top3d.tscn" id="19_t7764"]
@@ -211,7 +210,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_C"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND" parent="." unique_id=975292029 instance=ExtResource("9_pgw6g")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.8, 0, -3.4969112e-08)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.0921664, 0, -3.5322466)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND"
 metadata/authored_slot_role = "room_type_component"
 
@@ -485,16 +484,6 @@ metadata/authored_slot_role = "room_type_component"
 [node name="ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING" parent="." unique_id=1197186782 instance=ExtResource("15_wcyf3")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.0046, 0.0075, 2.010724e-10)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST" parent="." unique_id=171113858 instance=ExtResource("16_gh54e")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.8124998, -0.0085, -4.15)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST" parent="." unique_id=657589017 instance=ExtResource("16_gh54e")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.8125002, -0.0085, 4.15)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY" parent="." unique_id=872548802 instance=ExtResource("17_djdnr")]

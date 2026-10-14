@@ -34,7 +34,11 @@ var _registry: Dictionary = {
 
 ## 出厂配发主武器。`Player3D.start_with_weapon` 经 `get_starting_weapon_tree()`
 ## 走到这里，所以换掉这一个 ID 就等于换掉「新档出生 / 死亡返城」白送的枪。
-const DEFAULT_STARTING_GUN_ID := "bp_sprinkler"
+##
+## ⚠️ 新档首局的地面初始枪**不在这里** —— 它由剧本 `nar_tower_opening_01_wake` 的
+## `scene.spawn_item` 刷出（`TowerDescent3D._clear_new_game_opening_loadout()` 会先收回
+## 本函数白送的枪）。改出厂枪必须**同时**改那支剧本里的 `item_id`，否则新档拿到的仍是旧枪。
+const DEFAULT_STARTING_GUN_ID := "bp_starter_rifle"
 
 ## PUBG式统一槽位框架：界面位置固定，枪型只声明开放的槽位子集。
 const ROOT_ATTACHMENT_SUPPORT := {
@@ -43,6 +47,7 @@ const ROOT_ATTACHMENT_SUPPORT := {
 	"GunBody_Rifle": ["scope", "muzzle", "magazine", "stock", "tactical", "mutator"],
 	"GunBody_Machinegun": ["scope", "muzzle", "magazine", "stock", "tactical"],
 	"GunBody_Sprinkler": ["scope", "muzzle", "magazine", "stock", "tactical"],
+	"GunBody_StarterRifle": ["scope", "muzzle", "magazine", "stock", "tactical", "mutator"],
 	"GunBody_Sniper": ["scope", "muzzle", "magazine", "stock", "mutator"],
 	"GunBody_Launcher": ["scope", "stock", "tactical", "mutator"],
 	"GunBody_Charge": ["scope", "stock", "tactical", "mutator"],
@@ -54,6 +59,7 @@ const ASSEMBLY_NODE_ITEM_IDS := {
 	"GunBody_Rifle": "weapon_rifle",
 	"GunBody_Machinegun": "weapon_machinegun",
 	"GunBody_Sprinkler": "weapon_sprinkler",
+	"GunBody_StarterRifle": "weapon_starter_rifle",
 	"GunBody_Sniper": "weapon_sniper",
 	"GunBody_Launcher": "weapon_launcher",
 	"GunBody_Charge": "weapon_charge",
@@ -91,6 +97,13 @@ func _build_registry() -> void:
 		"factory": func(): return _create_gunbody_sprinkler(),
 		"tags": ["auto", "high_rate", "spray"],
 		"display_name": "花洒机枪",
+	})
+	_register_gunbody({
+		"item_id": "bp_starter_rifle",
+		"tier": 0,
+		"factory": func(): return _create_gunbody_starter_rifle(),
+		"tags": ["rifle", "automatic", "assault"],
+		"display_name": "初始步枪",
 	})
 	_register_gunbody({
 		"item_id": "bp_shotgun",
@@ -445,7 +458,7 @@ func _create_gunbody_pistol() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Pistol")
 	node.tags = ["pistol", "semi_auto", "sidearm"]
 	node.set_base_stats({
-		"damage": 25, "fire_rate": 3.5, "bullet_count": 1,
+		"damage": 25, "fire_rate": 3.5, "bullet_count": 1, "range": 15,
 		"spread": 0.03, "reload_time": 1.5, "magazine_size": 12,
 	})
 	return node
@@ -470,7 +483,7 @@ func _create_gunbody_shotgun() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Shotgun")
 	node.tags = ["shotgun", "close_range", "burst"]
 	node.set_base_stats({
-		"damage": 45, "fire_rate": 1.2, "bullet_count": 5,
+		"damage": 45, "fire_rate": 1.2, "bullet_count": 5, "range": 7,
 		"spread": 0.35, "reload_time": 3.0, "magazine_size": 6,
 	})
 	return node
@@ -479,7 +492,7 @@ func _create_gunbody_rifle() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Rifle")
 	node.tags = ["rifle", "automatic", "assault"]
 	node.set_base_stats({
-		"damage": 60, "fire_rate": 6.0, "bullet_count": 1,
+		"damage": 60, "fire_rate": 6.0, "bullet_count": 1, "range": 20,
 		"spread": 0.07, "reload_time": 2.2, "magazine_size": 30,
 	})
 	return node
@@ -488,7 +501,7 @@ func _create_gunbody_machinegun() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Machinegun")
 	node.tags = ["auto", "high_rate", "spray"]
 	node.set_base_stats({
-		"damage": 15, "fire_rate": 12.0, "bullet_count": 1,
+		"damage": 15, "fire_rate": 12.0, "bullet_count": 1, "range": 18,
 		"spread": 0.15, "reload_time": 2.8, "magazine_size": 60,
 	})
 	return node
@@ -499,8 +512,21 @@ func _create_gunbody_sprinkler() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Sprinkler")
 	node.tags = ["auto", "high_rate", "spray"]
 	node.set_base_stats({
-		"damage": 12, "fire_rate": 12.0, "bullet_count": 1,
+		"damage": 12, "fire_rate": 12.0, "bullet_count": 1, "range": 18,
 		"spread": 0.15, "reload_time": 2.8, "magazine_size": 100,
+	})
+	return node
+
+## 初始步枪：以步枪为原型的出厂白送枪。单发伤害与射速都远高于量产步枪
+## （业主 2026-10-14 指定 50 / 50 / 换弹 1.8s），因此它的平衡杠杆只剩
+## 「命运槽容量 4」（见 ItemRegistry.weapon_starter_rifle）—— 白送不代表能长成终局武器。
+## 弹匣/散布沿用步枪本体，配件槽位与步枪一致（含特性槽）。
+func _create_gunbody_starter_rifle() -> AssemblyNode:
+	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_StarterRifle")
+	node.tags = ["rifle", "automatic", "assault", "starter_rifle"]
+	node.set_base_stats({
+		"damage": 50, "fire_rate": 5.0, "bullet_count": 1, "range": 20,
+		"spread": 0.07, "reload_time": 1.8, "magazine_size": 30,
 	})
 	return node
 
@@ -508,7 +534,7 @@ func _create_gunbody_sniper() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Sniper")
 	node.tags = ["sniper", "precision", "high_damage"]
 	node.set_base_stats({
-		"damage": 380, "fire_rate": 1.0, "bullet_count": 1,
+		"damage": 380, "fire_rate": 1.0, "bullet_count": 1, "range": 60,
 		"spread": 0.01, "reload_time": 3.5, "magazine_size": 5,
 	})
 	return node
@@ -517,7 +543,7 @@ func _create_gunbody_launcher() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Launcher")
 	node.tags = ["launcher", "explosive", "slow"]
 	node.set_base_stats({
-		"damage": 250, "fire_rate": 1.0, "bullet_count": 1,
+		"damage": 250, "fire_rate": 1.0, "bullet_count": 1, "range": 18,
 		"spread": 0.1, "reload_time": 4.0, "magazine_size": 3,
 		# 命中范围爆炸的中心倍率：弹体伤害(250+标准弹8=258) × 0.697675 = 180。
 		# 沿用"范围伤害=弹体伤害×倍率×距离衰减"的既有模型，距离衰减 1.0→0.25。
@@ -529,7 +555,7 @@ func _create_gunbody_charge() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Charge")
 	node.tags = ["charge", "蓄力", "high_damage"]
 	node.set_base_stats({
-		"damage": 880, "fire_rate": 1.5, "bullet_count": 1,
+		"damage": 880, "fire_rate": 1.5, "bullet_count": 1, "range": 18,
 		"spread": 0.05, "reload_time": 3.0, "magazine_size": 4,
 		"charge_time": 1.2,
 		# 命中范围爆炸的中心倍率：弹体伤害(880+标准弹8=888) × 0.630631 = 560。

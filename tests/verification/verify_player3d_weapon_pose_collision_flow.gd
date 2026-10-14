@@ -9,6 +9,7 @@ const EXPECTED_FIRE_STYLES := {
 	"bp_rifle": "rifle_braced_burst",
 	"bp_machinegun": "machinegun_rattle",
 	"bp_sprinkler": "machinegun_rattle",
+	"bp_starter_rifle": "rifle_braced_burst",
 	"bp_sniper": "sniper_long_recoil",
 	"bp_launcher": "launcher_body_push",
 	"bp_charge": "charge_release",
@@ -61,7 +62,7 @@ func _ready() -> void:
 		failures.append("Invisible virtual capsule did not produce a real gameplay wall collision")
 	player.global_position = Vector3.ZERO
 
-	# 出厂枪已由豌豆手枪换成花洒机枪，因此「手枪」不再等于「默认枪」。
+	# 出厂枪已由豌豆手枪换成初始步枪（bp_starter_rifle），因此「手枪」不再等于「默认枪」。
 	# 本段验的是手枪专用的单手持枪姿势路径（sidearm_hold/run/fire），必须显式装备，
 	# 否则这里量到的是机枪的 longgun 路径，断言会永远对不上。
 	if not player.equip_weapon("bp_pistol", "mod_bullet_standard"):

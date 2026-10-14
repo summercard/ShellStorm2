@@ -95,15 +95,19 @@
         { "port_id": "B", "target": "room_03", "position_m": [20.0, -2.5], "outward": [1.0, 0.0] }
       ],
       "spawn_placements": [
-        { "box": "box_corner_ambush", "center_m": [-12.5, -7.5], "count_multiplier": 2 },
-        { "box": "box_wall_arc", "center_m": [-2.5, -7.5], "count_multiplier": 2 },
-        { "box": "box_room_spread", "center_m": [7.5, 2.5], "count_multiplier": 2 },
-        { "box": "box_corridor_column", "center_m": [7.5, -2.5], "rotation_deg": 90.0, "count_multiplier": 2 }
+        { "box": "box_room_spread", "center_m": [2.5, -2.5], "count_multiplier": 2 },
+        { "box": "box_room_spread", "center_m": [-12.5, -7.5] },
+        { "box": "box_corridor_column", "center_m": [12.5, -7.5] },
+        { "box": "box_wall_arc", "center_m": [-12.5, 2.5], "count_multiplier": 2 },
+        { "box": "box_corner_ambush", "center_m": [12.5, 2.5] }
       ],
       "encounter": {
         "stages": [
-          { "boxes": [0, 1, 2, 3] }
-        ]
+          { "boxes": [0, 1, 2, 3, 4] }
+        ],
+        "monster_ai": {
+          "alert_share_radius_m": 60.0
+        }
       }
     },
     {
@@ -385,7 +389,7 @@
       "content_type": "SCAVENGE",
       "connection_ports": [
         { "port_id": "A", "target": "room_09", "position_m": [-20.0, -2.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "boss", "position_m": [20.0, -2.5], "outward": [1.0, 0.0] }
+        { "port_id": "B", "target": "boss", "position_m": [12.5, -15.0], "outward": [0.0, -1.0] }
       ],
       "spawn_placements": [
         { "box": "box_room_spread", "center_m": [-12.5, -7.5] },
@@ -408,27 +412,53 @@
       "room_type": "BOSS_ROOM",
       "role": "boss",
       "parent_key": "room_10",
-      "template_id": "boss_50x40",
+      "template_id": "boss_deep_shaft_80x100",
       "template_variant": "",
       "center_m": [
         95.0,
         -45.0
       ],
       "size_m": [
-        50.0,
-        40.0
+        80.0,
+        100.0
       ],
       "template_rotation_deg": 0,
+      "floor_offset_m": -12.0,
+      "anchor_policy": "static_port_layout",
+      "authored_layout_shell": true,
+      "authored_layout_asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-02",
+      "authored_layout_version": "v027",
+      "authored_layout_room_id": "boss",
       "content_type": "BOSS",
       "connection_ports": [
-        { "port_id": "A", "target": "room_10", "position_m": [-25.0, -2.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "extraction", "position_m": [25.0, -2.5], "outward": [1.0, 0.0] }
+        { "port_id": "P1", "target": "room_10", "position_m": [0.0, 50.0], "outward": [0.0, 1.0], "height_m": 12.0, "door_width_m": 2.2, "door_axis": "x", "door_line_m": 50.0, "door_center_m": 0.0 },
+        { "port_id": "P2", "target": "extraction", "position_m": [40.0, -22.5], "outward": [1.0, 0.0], "height_m": 0.0, "door_width_m": 2.2, "door_axis": "z", "door_line_m": 40.0, "door_center_m": -22.5 },
+        { "port_id": "P3", "target": "", "position_m": [-40.0, -22.5], "outward": [-1.0, 0.0], "height_m": 0.0, "door_width_m": 2.2, "door_axis": "z", "door_line_m": -40.0, "door_center_m": -22.5 }
       ],
+      "boss_reinforcement_plan": {
+        "enabled": true,
+        "boss_spawn_local_m": [0, -22.5],
+        "activation_delay_sec": 10.0,
+        "spawn_rows": [
+          { "side": "west", "x_m": -10, "z_m": [-32.5, -27.5, -22.5, -17.5, -12.5], "height_m": 3.0 },
+          { "side": "east", "x_m": 10, "z_m": [-32.5, -27.5, -22.5, -17.5, -12.5], "height_m": 3.0 }
+        ],
+        "enemy_request_type": "ambush",
+        "initial_count": 3,
+        "count_step": 1,
+        "max_count_per_round": 8,
+        "initial_interval_sec": 6.0,
+        "interval_step_sec": -0.35,
+        "min_interval_sec": 2.5,
+        "max_reinforcement_alive": 18,
+        "launch_speed_mps": 8.5,
+        "launch_duration_sec": 0.38
+      },
       "spawn_placements": [
-        { "box": "box_boss_arena", "center_m": [-2.5, -2.5] },
-        { "box": "box_room_spread", "center_m": [-17.5, -7.5] },
-        { "box": "box_corner_ambush", "center_m": [17.5, 7.5] },
-        { "box": "box_wall_arc", "center_m": [2.5, 12.5] }
+        { "box": "box_boss_arena", "center_m": [0.0, -22.5] },
+        { "box": "box_room_spread", "center_m": [-7.5, -15.0] },
+        { "box": "box_corner_ambush", "center_m": [7.5, -22.5] },
+        { "box": "box_wall_arc", "center_m": [0.0, -32.5] }
       ],
       "encounter": {
         "stages": [
@@ -456,9 +486,11 @@
         25.0
       ],
       "template_rotation_deg": 0,
+      "floor_offset_m": -12.0,
+      "anchor_policy": "static_port_layout",
       "content_type": "",
       "connection_ports": [
-        { "port_id": "A", "target": "boss", "position_m": [-12.5, 0.0], "outward": [-1.0, 0.0] }
+        { "port_id": "P1", "target": "boss", "position_m": [-12.5, 0.0], "outward": [-1.0, 0.0], "height_m": 0.0, "door_width_m": 2.2, "door_axis": "z", "door_line_m": -12.5, "door_center_m": 0.0 }
       ]
     }
   ],

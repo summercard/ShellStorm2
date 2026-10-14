@@ -102,6 +102,37 @@ func _ai_overrides() -> Dictionary:
 		return {}
 	return {"monster_ai": ai.duplicate(true)}
 
+
+## 死亡自爆规格（`monster_rules.death_explosion.<kind>`）。
+## 返回 `{}` = 本怪不自爆（缺省）。非法/零伤害一律当「不自爆」处理，绝不产出半个规格。
+##
+## 伤害是**绝对固定值**，不走 `contact_damage` —— 那条随楼层缩放与主题倍率会漂，
+## 自爆要的是策划能一眼对上的数（业主 2026-10-14：胖子僵尸 180）。
+func _death_explosion_for(kind: String) -> Dictionary:
+	var table: Dictionary = _level_rules.get("death_explosion", {}) as Dictionary
+	var entry: Variant = table.get(kind, null)
+	if not (entry is Dictionary):
+		return {}
+	var src := entry as Dictionary
+	if not bool(src.get("enabled", true)):
+		return {}
+	var damage := int(src.get("damage", 0))
+	if damage <= 0:
+		return {}
+	return {
+		"damage": damage,
+		"radius_m": maxf(0.5, float(src.get("radius_m", 5.0))),
+		"sfx_radius_m": maxf(0.0, float(src.get("sfx_radius_m", 20.0))),
+	}
+
+
+## 把「关卡级死亡自爆」挂进怪物配置。无配置不写键 ⇒ 塔楼等关卡照旧不自爆。
+func _death_explosion_overrides(kind: String) -> Dictionary:
+	var spec := _death_explosion_for(kind)
+	if spec.is_empty():
+		return {}
+	return {"death_explosion": spec}
+
 ## 根据配置生成怪物列表
 func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 	var enemies: Array[Dictionary] = []
@@ -349,6 +380,7 @@ func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> 
 	# 关卡级覆盖放最后：绝对数值盖掉楼层缩放与主题倍率的乘积，AI 参数随配置下发。
 	result.merge(_stat_override(enemy_type), true)
 	result.merge(_ai_overrides(), true)
+	result.merge(_death_explosion_overrides(enemy_type), true)
 	return result
 
 ## 生成精英敌人
@@ -411,6 +443,7 @@ func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> 
 		)
 	base.merge(stat_override, true)
 	base.merge(_ai_overrides(), true)
+	base.merge(_death_explosion_overrides(base_type), true)
 	return base
 
 ## 生成Boss敌人。
@@ -483,6 +516,7 @@ func _generate_boss(floor: int, floor_level: int, request: Dictionary = {}) -> D
 	# 关卡级覆盖必须放**最后**：盖掉上面那条显示器Boss 身份基线，写 32000 就是 32000。
 	result.merge(_stat_override("boss"), true)
 	result.merge(_ai_overrides(), true)
+	result.merge(_death_explosion_overrides("boss"), true)
 	return result
 
 ## 生成小怪群
@@ -638,6 +672,8 @@ static func drop_spec_for(
 			"chance": ammo_chance,
 			# 旧行为：池已抽出同一物品时，以整包数量**覆盖**该件，而不是多出一件。
 			"merge_same_item": true,
+			# 备弹豁免关卡级空掉落：命中率是作者指定的数，不该被二次打折。
+			"exempt_from_empty": true,
 		})
 	entries.append({
 		"kind": "currency", "currency_id": "extraction_points",

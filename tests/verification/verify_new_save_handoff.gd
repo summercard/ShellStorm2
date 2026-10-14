@@ -4,7 +4,7 @@ extends Node
 const TEST_PATH := "user://new_save_handoff_probe.json"
 const TOWER_SCENE := preload("res://scenes/TowerDescent3D.tscn")
 const ROOM_ID := "floor_01_exit"
-const ITEM_ID := "weapon_sprinkler"
+const ITEM_ID := "weapon_starter_rifle"
 const SPAWN_KEY := "nar_tower_opening_01_wake:starter_weapon"
 const SEED := 990098
 

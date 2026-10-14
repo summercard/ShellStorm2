@@ -172,6 +172,8 @@ func _ready() -> void:
 
 	var initial_reduce_motion: Variant = ProjectSettings.get_setting("accessibility/reduce_motion", false)
 	ProjectSettings.set_setting("accessibility/reduce_motion", false)
+	# 购卡制下单卡点击要有钱可花，否则按下会被前置校验拦下、拿不到反馈锁定态。
+	GameManager.add_currency(9999)
 	_check(dungeon.show_reference_fate_overlay_for_test(), "Could not open deterministic fate overlay", failures)
 	for _frame in 2:
 		await get_tree().process_frame
@@ -190,14 +192,51 @@ func _ready() -> void:
 		var cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
 		var all_text := _collect_label_text(overlay)
 		# 卡面已换成塔罗位图：作用域标签/方位标签/卡名不再由文字承载（图里已有）。
-		# 顶部协议提示和底部信息条按最新视觉需求移除，只保留标题。
-		_check("命 运 卡 三 选 一" in all_text, "Fate overlay title is missing", failures)
+		# 顶部协议提示、底部信息条与标题按最新视觉需求全部移除。
+		# 标题那条用**反向钉子**：它和下面那行余额说的是同一件事，已整体让位给余额行，
+		# 以后谁把它加回来这条即红（2026-10-14 主人要求）。
+		_check("购 买 》" not in all_text and "命 运 卡 ·" not in all_text, "Fate purchase overlay reintroduced its removed title", failures)
 		_check("当前信息" not in all_text, "Fate overlay still contains the removed bottom information bar", failures)
 		_check("FATE PROTOCOL / SELECT ONE" not in all_text, "Fate overlay still contains the removed top protocol label", failures)
+		# 购买制的三条可见契约：顶部本局魂余额、卡下价格行、屏幕下方正中的退出按钮。
+		_check("本局魂 ◈" in all_text, "Fate purchase overlay is missing its run-currency balance line", failures)
+		# 余额行必须**接管原标题的那个头部位**：贴屏幕顶、且整行落在卡列上方（不重叠）。
+		var balance_label := overlay.find_child("FateCurrencyBalance", true, false) as Label
+		_check(balance_label != null, "Fate purchase overlay has no balance label node", failures)
+		if balance_label != null:
+			var viewport_height := get_viewport().get_visible_rect().size.y
+			_check(
+				is_equal_approx(balance_label.anchor_top, 0.0)
+				and balance_label.get_global_rect().end.y <= viewport_height * 0.10,
+				"Fate balance line did not move up into the removed title's header slot",
+				failures
+			)
+			var topmost_card_top := INF
+			for card_node in cards:
+				topmost_card_top = minf(topmost_card_top, (card_node as Control).get_global_rect().position.y)
+			_check(
+				balance_label.get_global_rect().end.y <= topmost_card_top,
+				"Fate balance line overlaps the card row instead of sitting above it",
+				failures
+			)
+		var exit_button := overlay.find_child("FateExitButton", true, false) as Button
+		_check(exit_button != null, "Fate purchase overlay is missing its exit button", failures)
+		if exit_button != null:
+			_check(
+				is_equal_approx(exit_button.anchor_left, 0.5)
+				and is_equal_approx(exit_button.anchor_right, 0.5)
+				and is_equal_approx(exit_button.anchor_bottom, 1.0),
+				"Fate exit button is not anchored to the bottom centre of the screen",
+				failures
+			)
 		for card in cards:
 			var card_control := card as Control
 			var card_button := card_control as Button
 			_check(bool(card_control.get_meta("tarot_face_ready", false)), "Tarot face did not finish flipping", failures)
+			# 卡下价格行是购买制的唯一价格口径，必须存在且带上魂价。
+			var price_label := (card_button.get_meta("tarot_price_label") if card_button.has_meta("tarot_price_label") else null) as Label
+			_check(price_label != null and price_label.text.begins_with("◈ "), "Fate card is missing its price line under the card", failures)
+			_check(int(card_button.get_meta("tarot_price", -1)) > 0, "Fate card has no positive purchase price", failures)
 			_check(not card_button.disabled, "Tarot card stayed disabled after flip", failures)
 			_check(card_control.size.y > card_control.size.x, "Fate choice is not a vertical card", failures)
 			var card_view := card_button.get_meta("fate_feedback_view") as Control
@@ -232,10 +271,22 @@ func _ready() -> void:
 		var reversed_cards := cards.filter(func(value: Node) -> bool: return str(value.get_meta("tarot_orientation", "")) == "逆位")
 		_check(reversed_cards.size() == 1, "Deterministic visual offer does not contain exactly one reversed card", failures)
 		if reversed_cards.size() == 1:
-			# 图卡模式的新契约：**只把卡面图案绕中心倒置**，按钮与卡下功能文字都不旋转。
+			# 图卡模式的新契约：**只把卡面图案相对卡本身倒置 180°**，按钮与卡下功能文字都不旋转。
+			# 不能比对「绝对 PI」：门后三张卡各自常驻一条轻微漂浮/透视旋转 tween（作用在列容器上），
+			# 卡面会跟着列被带动最多 ±0.9°，绝对角度阈值 0.01 rad 会随采样时刻翻面。
+			# 这里比对**卡面相对它自己那张卡**的夹角，与漂浮相位无关。
 			var reversed_card := reversed_cards[0] as Control
 			var reversed_face := reversed_card.find_child("TarotArtFace", true, false) as Control
-			_check(reversed_face != null and absf(absf(reversed_face.get_global_transform().get_rotation()) - PI) < 0.01, "Reversed card art layer is no longer inverted", failures)
+			var reversed_card_rotation := reversed_card.get_global_transform().get_rotation()
+			var reversed_face_rotation := (
+				reversed_face.get_global_transform().get_rotation() if reversed_face != null else 0.0
+			)
+			_check(
+				reversed_face != null
+				and absf(absf(angle_difference(reversed_card_rotation, reversed_face_rotation)) - PI) < 0.01,
+				"Reversed card art layer is no longer inverted relative to its own card",
+				failures
+			)
 			_check(absf(reversed_card.rotation) < 0.01, "Reversed card rotated the whole button instead of only the art layer", failures)
 		for card in cards:
 			_check_tarot_caption_upright(card as Button, failures)
@@ -259,6 +310,64 @@ func _ready() -> void:
 		_check(dungeon.show_reference_fate_overlay_for_test(), "Could not reopen fate overlay after feedback close", failures)
 		await get_tree().create_timer(0.5).timeout
 	_check(_capture("reference_fate_three_choice.png"), "Could not capture reference tarot overlay", failures)
+
+	# —— 买下之后翻回背面 + 悬停不再放大（2026-10-14 主人要求）——
+	# 这是本轮唯一的视觉变更，必须有图可看：真买一张并截出「背面朝上」的形态。
+	dungeon.call("_close_door_fate_overlay")
+	_check(dungeon.show_reference_fate_overlay_for_test(), "Could not reopen the offer for the purchased-card screenshot", failures)
+	await get_tree().create_timer(0.7).timeout
+	var purchase_overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
+	if purchase_overlay != null:
+		GameManager.add_currency(99999)
+		dungeon.call("_refresh_door_fate_prices")
+		var purchase_button := purchase_overlay.find_child("FateChoiceCard_0", true, false) as Button
+		if purchase_button == null:
+			_check(false, "Purchased-card screenshot could not find the first fate card", failures)
+		else:
+			await dungeon.call("_on_door_fate_selected", 0)
+			await get_tree().create_timer(0.7).timeout
+			var purchase_face := (purchase_button.get_meta("tarot_face_node") if purchase_button.has_meta("tarot_face_node") else null) as Control
+			var purchase_back := (purchase_button.get_meta("tarot_back_node") if purchase_button.has_meta("tarot_back_node") else null) as Control
+			_check(purchase_face != null and not purchase_face.visible, "Purchased card kept showing its face", failures)
+			_check(purchase_back != null and purchase_back.visible, "Purchased card did not flip to its back", failures)
+			_check(not purchase_button.disabled, "Purchased card became unfocusable after flipping back", failures)
+			# 已购卡三件套：灰阶材质 + 压暗 + 缩到 70%（业主 2026-10-14 要求）。
+			_check(
+				purchase_back != null and (purchase_back as CanvasItem).material is ShaderMaterial,
+				"Purchased card back has no greyscale material",
+				failures
+			)
+			var purchase_view := purchase_button.get_meta("fate_feedback_view") as Control
+			_check(
+				purchase_view != null and purchase_view.modulate.r < 0.75,
+				"Purchased card column is not dimmed",
+				failures
+			)
+			# 绝对上限：主人连提两次要更暗（0.62 → 0.40），只跟常量比拦不住把常量改回亮档。
+			_check(
+				purchase_view != null and purchase_view.modulate.r <= 0.50,
+				"Purchased card column is not dark enough (modulate %.2f, ceiling 0.50)"
+				% [purchase_view.modulate.r if purchase_view != null else 1.0],
+				failures
+			)
+			_check(
+				purchase_view != null
+				and is_equal_approx(purchase_view.scale.x, Dungeon3D.FATE_PURCHASED_CARD_SCALE),
+				"Purchased card is not scaled to %.2f" % Dungeon3D.FATE_PURCHASED_CARD_SCALE,
+				failures
+			)
+			# 悬停在一张已购买的卡上：不得离开它的 70% 基准缩放。
+			dungeon.call("_on_reference_fate_card_hover", purchase_button, true)
+			await get_tree().create_timer(0.28).timeout
+			_check(
+				purchase_view != null
+				and is_equal_approx(purchase_view.scale.x, Dungeon3D.FATE_PURCHASED_CARD_SCALE),
+				"Purchased card zoomed away from its 70% base scale when hovered",
+				failures
+			)
+			await RenderingServer.frame_post_draw
+			_check(_capture("fate_purchased_card_back.png"), "Could not capture the flipped-back purchased card", failures)
+	dungeon.call("_close_door_fate_overlay")
 
 	# 减少动效同样保留逆位框/图案与正向文字。
 	ProjectSettings.set_setting("accessibility/reduce_motion", true)
@@ -326,14 +435,36 @@ func _check_fate_card_art(button: Button, failures: Array[String]) -> void:
 		_check(not back.visible, "Tarot card back stayed visible after the flip revealed the face", failures)
 
 
-## 卡下功能文字：必须存在、非空、且**正向可读**（不随卡面图案倒置）。
+## 卡下功能文字：必须存在、非空、且**不随卡面图案倒置**（正向可读），并与所属卡列同向。
+## 注意门后三张卡常驻一条轻微漂浮/透视旋转 tween，所以这里不能比对「绝对 0 度」。
 func _check_tarot_caption_upright(button: Button, failures: Array[String]) -> void:
 	var caption := button.get_parent().find_child("FateFunctionCaption", false, false) as Label
 	_check(caption != null, "Fate card is missing its function caption", failures)
 	if caption == null:
 		return
 	_check(not caption.text.strip_edges().is_empty(), "Fate card function caption is empty", failures)
-	_check(absf(caption.get_global_transform().get_rotation()) < 0.01, "Fate function caption is not upright: %s" % caption.text, failures)
+	# 契约是「正向可读」= **不随卡面图案倒置**，不是「绝对 0 度」：门后三张卡本身带
+	# 轻微错相漂浮 + 透视旋转（设计契约，见 `14_技术施工_命运塔罗牌组 §3.2`），列容器一直
+	# 挂在这条 tween 上，卡下文字跟着列一起轻微倾斜属正常表现。用 0.01 rad 当阈值会把
+	# ±0.9° 的漂浮直接判红，而且结果随采样时刻抖动（同一份代码换个帧序就翻面）。
+	# 这里改钉两条**与漂浮相位无关**的判据：
+	#   ① 文字没有翻转（|rot| < 90°）—— 这才是「倒置」这个 bug 的形态；
+	#   ② 文字没有做反向补偿（与所属卡列同向）—— 反向补偿会让正位卡的文字歪在卡面上。
+	var caption_rotation := caption.get_global_transform().get_rotation()
+	_check(
+		absf(caption_rotation) < PI * 0.5,
+		"Fate function caption is inverted (%.4f rad): %s" % [caption_rotation, caption.text],
+		failures
+	)
+	var caption_host := caption.get_parent() as Control
+	if caption_host != null:
+		var host_rotation := caption_host.get_global_transform().get_rotation()
+		_check(
+			absf(angle_difference(caption_rotation, host_rotation)) < 0.01,
+			"Fate function caption does not follow its card column (caption %.4f vs column %.4f): %s"
+			% [caption_rotation, host_rotation, caption.text],
+			failures
+		)
 
 
 func _check_tarot_text_upright(button: Button, failures: Array[String]) -> void:

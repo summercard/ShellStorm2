@@ -37,7 +37,12 @@ var fate_behavior: Dictionary = {}
 # 命中击退强度（m/s）。默认 0 = 不让怪物位移；霰弹枪=0.8（轻微）。
 # 由 WeaponModel3D / 发射逻辑在 spawn 时赋值，命中时透传给 take_projectile_damage。
 var hit_knockback := 0.0
+## 射程上限（米），由枪身 base_stats 的 `range` 下发；`<= 0` 表示不启用（退回旧的「按存活时间」口径）。
+## 与 `speed` 独立：改弹速只改飞行时间，不再连带改射程。
+var range_m := 0.0
 var _lifetime := 0.0
+## 实际飞行路径长度（含反弹折线），用于判定射程上限。
+var _traveled := 0.0
 var _bounces_left := 0
 var _pierces_left := 0
 var _built := false
@@ -91,9 +96,12 @@ func configure(config: Dictionary) -> void:
 	damage = maxi(1, int(damage * float(fate_behavior.get("outbound_damage_multiplier", 1.0))))
 	# 默认 0 = 不让怪物位移；霰弹枪在 WeaponModel3D 注入 0.8（轻微击退）。
 	hit_knockback = float(config.get("hit_knockback", hit_knockback))
+	# 射程上限（米）。0/缺省 = 不启用，保持旧行为（敌弹与旧内容不受影响）。
+	range_m = maxf(0.0, float(config.get("range", 0.0)))
 	_bounces_left = int(fate_behavior.get("bounce_count", 2 if bullet_tags.has("bounce") else 0))
 	_pierces_left = int(fate_behavior.get("pierce_level", 2 if bullet_tags.has("piercing") else 0))
 	_lifetime = 0.0
+	_traveled = 0.0
 	_returning = false
 	_turret_active = false
 	_turret_remaining = 0.0
@@ -146,9 +154,12 @@ func _physics_process(delta: float) -> void:
 		_tick_turret(delta)
 		return
 	_lifetime += delta
-	# 子弹最大存活时间：默认下限 1.0 秒（23 m/s ≈ 23 m 理论射程）；
-	# 命运卡行为可注入更长的 home_lifetime（如 fate_card 追踪弹 5 秒），只增不减于下限。
+	# 子弹最大存活时间：默认下限 1.0 秒；命运卡行为可注入更长的 home_lifetime（如追踪弹 5 秒）。
+	# 有射程字段时，生存时间按「飞满射程」反推并留 50% 余量 —— 否则固定 1 秒会把远射武器提前掐断
+	# （例：狙击 60 m ÷ 23 m·s⁻¹ = 2.6 s，远超 1 s）。距离本身仍由 `range_m` 判定，这里只是兜底。
 	var max_lifetime := maxf(1.0, float(fate_behavior.get("home_lifetime", 1.0)))
+	if range_m > 0.0:
+		max_lifetime = maxf(max_lifetime, range_m / maxf(1.0, speed) * 1.5)
 	if _lifetime >= max_lifetime:
 		if not _returning and bool(fate_behavior.get("spawn_turret_on_land", false)):
 			_become_turret()
@@ -178,7 +189,19 @@ func _physics_process(delta: float) -> void:
 			direction = direction.slerp(desired, minf(1.0, delta * homing_rate)).normalized()
 	_sync_visual_orientation()
 	velocity = direction * speed
-	var collision := move_and_collide(velocity * delta)
+	var step := velocity * delta
+	# 射程上限：按实际飞行路径长度累计（含反弹折线）。榴弹类到点自动引爆，其余直接消失。
+	# 回旋镖返航（_returning）不受射程限制，否则会被掐在半路。
+	if not _returning and range_m > 0.0:
+		_traveled += step.length()
+		if _traveled >= range_m:
+			if _is_explosive_payload():
+				_explode()
+			else:
+				expired.emit()
+			_retire()
+			return
+	var collision := move_and_collide(step)
 	if collision == null:
 		return
 	# 物理命中上下文（先于反弹方向变化），供命中特效读取法线/接触点。
@@ -240,7 +263,7 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 				_add_tracked_collision_exception(collider as PhysicsBody3D)
 			global_position += direction * 0.28
 			return
-		if bullet_tags.has("explosive") or bullet_tags.has("blackhole") or bullet_tags.has("balloon") or bool(fate_behavior.get("nth_explosion", false)):
+		if _is_explosive_payload():
 			_explode()
 		_retire()
 		return
@@ -262,7 +285,7 @@ func _hit_surface(normal: Vector3, hit_context: Dictionary = {}) -> void:
 	if bool(fate_behavior.get("return_to_player", false)) or bool(fate_behavior.get("home_on_land", false)):
 		_begin_return()
 		return
-	if bullet_tags.has("explosive") or bullet_tags.has("blackhole") or bullet_tags.has("balloon") or bool(fate_behavior.get("nth_explosion", false)):
+	if _is_explosive_payload():
 		_explode()
 	_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 0.7, hit_context)
 	_retire()
@@ -334,6 +357,15 @@ func _apply_chain_lightning(first_target: Node) -> void:
 		_spawn_effect(VfxPool3D.FX01_IMPACT, nearest.global_position + Vector3(0, 0.6, 0), bullet_color, 0.72)
 		visited[nearest.get_instance_id()] = true
 		current = nearest
+
+
+func _is_explosive_payload() -> bool:
+	## 命中/到期时应当引爆而不是直接消失的弹体。命中路径与射程上限共用同一判据，
+	## 避免「到射程上限直接消失」与「命中就爆炸」两套条件漂移。
+	return (
+		bullet_tags.has("explosive") or bullet_tags.has("blackhole")
+		or bullet_tags.has("balloon") or bool(fate_behavior.get("nth_explosion", false))
+	)
 
 
 func _explode() -> void:

@@ -166,6 +166,11 @@ func get_scene_fog_snapshot() -> Dictionary:
 ## 它拦的是**本场景的全部 MusicManager 播放**，含 Boss 房的 push_and_play()。
 @export var background_music_enabled := true
 
+## 屋顶（`floor_number >= 100`，即 100F 天台）是否播放 `rooftop_relax`。
+## 2026-10-14 主人指定：天台先不要 BGM。这里是**开关而非删除**——曲目条目、
+## A/B 两版 OGG 资产与触发调用都原地保留，把本项置 true 即立刻恢复。
+@export var rooftop_music_enabled := false
+
 
 func configure(environment: Environment, sun: DirectionalLight3D) -> void:
 	_environment = environment
@@ -231,7 +236,15 @@ func _update_music_for_floor(floor_number: int, rooftop: bool) -> void:
 		mgr.stop()
 		return
 	if rooftop:
-		mgr.play("rooftop_relax")
+		# 2026-10-14 主人指定：天台暂不播 BGM。这里没删任何东西——`rooftop_relax`
+		# 的 MusicCatalog 条目、A/B 两版 OGG 资产、这条 play() 调用都还在，只是被
+		# `rooftop_music_enabled` 挡住；置 true 即恢复。
+		# 关闭时必须显式 stop()：MusicManager 是 autoload，从基地/塔楼上来时
+		# base_passion / descent_suspense 还挂着，不 stop 就会带着响声上天台。
+		if rooftop_music_enabled:
+			mgr.play("rooftop_relax")
+		else:
+			mgr.stop()
 		return
 	if floor_number == 99:
 		# 99F 的 base_passion 由阁楼收音机自己的 AudioStreamPlayer3D 持有。

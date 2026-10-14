@@ -152,12 +152,14 @@ func _contains_seat_name(root: Node) -> bool:
 
 ## gun_id -> 该内容 ID 必须能解析到的正式美术 logic_id。
 ## 断言的是「映射到了正式导入资产」而不是「与 gun_id 同名」：花洒机枪
-## 复用蜂窝机枪的 water_tank_blaster 美术，两行因此指向同一个 logic_id。
+## 复用蜂窝机枪的 water_tank_blaster 美术、初始步枪复用步枪的 broom_rifle 美术，
+## 两行因此指向同一个 logic_id。
 func _verify_runtime_mapping(failures: Array[String]) -> void:
 	var expected := {
 		"bp_pistol": "bp_pistol", "bp_shotgun": "bp_shotgun",
 		"bp_rifle": "bp_rifle", "bp_machinegun": "bp_machinegun",
 		"bp_sprinkler": "bp_machinegun",
+		"bp_starter_rifle": "bp_rifle",
 		"bp_sniper": "bp_sniper", "bp_launcher": "bp_launcher",
 		"bp_charge": "bp_charge",
 	}

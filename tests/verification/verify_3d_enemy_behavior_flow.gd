@@ -78,6 +78,8 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 			* float(Enemy3D.BODY_SCALE_BY_KIND.get(kind, 1.0))
 		)
 		var expected_bar_size := Enemy3D.HEALTH_BAR_SIZE_BY_KIND.get(kind, Vector2.ZERO) as Vector2
+		if kind != "boss":
+			expected_bar_size *= Enemy3D.NORMAL_HEALTH_BAR_SCALE
 		size_multipliers[kind] = enemy.scale.x
 		if (
 			not is_equal_approx(enemy.scale.x, expected_size)
@@ -110,6 +112,24 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 			or not is_zero_approx((enemy.get_node("OverheadHealthBar") as Node3D).global_rotation.length())
 		):
 			failures.append("%s rotated enemy has a desynchronized or inherited-rotation health bar" % kind)
+		# 延迟白段（小怪专属）：受伤后必须留下可见白段，且只能朝真实血量收、不得越过。
+		# 步进用固定 delta 直接调生产函数，取样点与帧率解耦 —— 靠 `await process_frame`
+		# 采样会随机器帧时间浮动，把这条断言变成飘忽用例。
+		#
+		# 前提是**这一击真的扣到了血**：shielded 有 15% 概率完全格挡，零伤害时既没有白段
+		# 也不该有白段（那才是正确行为）。不设这个门，这条用例会按概率随机翻红。
+		if kind != "boss" and enemy.current_hp < enemy.max_hp:
+			var actual_ratio := float(enemy.current_hp) / float(enemy.max_hp)
+			var delayed_ratio := float(state.get("overhead_delayed_health_ratio", 1.0))
+			if delayed_ratio <= actual_ratio:
+				failures.append("%s damage does not leave a visible delayed white health segment" % kind)
+			enemy.call("_tick_overhead_health_bar_delay", 0.02)
+			var settled := float(enemy.get_state_snapshot().get("overhead_delayed_health_ratio", 0.0))
+			if settled >= delayed_ratio or settled < actual_ratio:
+				failures.append(
+					"%s delayed white health segment does not catch up toward real HP: %.4f -> %.4f (real %.4f)"
+					% [kind, delayed_ratio, settled, actual_ratio]
+				)
 		var damage_numbers_before := _count_damage_numbers()
 		# 这里只验证飘字，不验证护盾格挡；零方向避免 shielded 的 15% 随机
 		# 完全格挡让整套回归产生非确定性。

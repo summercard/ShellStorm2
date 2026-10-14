@@ -329,22 +329,22 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_COR
 metadata/authored_slot_role = "room_type_component"
 
 [node name="work_cluster_a" parent="." unique_id=1443252236 instance=ExtResource("14_pq4nd")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.499999, 0, -9.290001)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.499999, 0, -18.230234)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="work_cluster_b" parent="." unique_id=633069430 instance=ExtResource("14_pq4nd")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6.500001, 0, -10.109999)
+transform = Transform3D(-0.016091293, 0, 0.99987054, 0, 1, 0, -0.99987054, 0, -0.016091293, -13.207824, 0, -10.109999)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="work_cluster_c" parent="." unique_id=1925579367 instance=ExtResource("14_pq4nd")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.5000005, 0, 4.7099996)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.5000005, 0, 17.870104)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="work_cluster_d" parent="." unique_id=216442320 instance=ExtResource("14_pq4nd")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6.4999995, 0, 3.8900006)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.9565306, 0, 18.099405)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 

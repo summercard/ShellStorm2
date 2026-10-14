@@ -104,7 +104,55 @@ const OFFSCREEN_INDICATOR_FLOOR_TOLERANCE_M := 4.5
 ## 箭头指向的高度：怪的原点在脚底，指脚底会让箭头在透视下偏低；
 ## 取 0.9 m ≈ 躯干中线（小怪体高约 1.7 m），指向与肉眼看到的身体位置一致。
 const OFFSCREEN_INDICATOR_TARGET_HEIGHT_M := 0.9
-const FATE_CURRENCY_BY_RARITY := [20, 40, 70, 120, 180]
+## Boss 条白色延迟层只负责视觉追赶，真实生命值仍由 ProgressBar.value 立即同步。
+## 速度与头顶条**同一个真源**（`Enemy3D.HEALTH_BAR_DELAY_SPEED`）—— 两条白段的追赶手感
+## 必须一致，否则同一场战斗里 Boss 条和小怪条的节奏会不一样。
+const BOSS_HEALTH_BAR_DELAY_SPEED := Enemy3D.HEALTH_BAR_DELAY_SPEED
+const BOSS_HEALTH_BAR_DELAY_COLOR := Enemy3D.HEALTH_BAR_DELAY_COLOR
+## 门后命运卡的**局内魂购买价**，按稀有度（COMMON/RARE/EPIC/LEGENDARY/MYSTIC）。
+## 公式：旧「满槽兑魂」基准 `[20, 40, 70, 120, 180]` × 1.5，四舍五入到整十 ⇒ `[30, 60, 110, 180, 270]`。
+## 买价必须高于旧兑魂值：旧值是「放弃卡换魂」，新值是「花魂买卡」，两者不能同价。
+## 只由 `GameManager.currency`（本局魂）支付；局外总池 `BaseManager.get_extraction_points()` 永不参与。
+const FATE_PRICE_BY_RARITY := [30, 60, 110, 180, 270]
+
+## 已购买卡的整体缩小倍率（业主 2026-10-14 指定 70%）。
+## ⚠️ 这一档是**基准缩放**，不是悬停反馈 —— `_tween_fate_card_scale` 收到的所有 target
+## 都是「相对基准的倍率」，最终尺寸 = `target × 基准`。否则 `_reset_fate_feedback()` 那句
+## 「把所有卡复位到 1.0」会把已购卡的 0.70 直接冲掉。
+const FATE_PURCHASED_CARD_SCALE := 0.70
+## 已购卡的压暗（乘性 modulate）：整列统一乘这个值，卡背线稿与卡下文字一起变暗。
+##
+## 取值 0.40（2026-10-14 主人先要「暗下去」给了 0.62，随后追加「还要再暗一些」⇒ 下调）：
+## 卡背线稿去色后亮度约 0.85，× 0.40 ≈ 0.34 深灰 —— 在深色弹窗底上仍看得出「这里有一张卡」，
+## 但已经明显退到背景，不会再和未购卡抢注意力。
+##
+## 🔴 **必须是中性灰（R=G=B）**：这里只管「暗多少」，色相归零是灰度材质的职责；
+## 掺一点冷调就会让「所有都改成灰色」变成「所有都改成灰蓝」，与主人要求不符。
+const FATE_PURCHASED_DIM_COLOR := Color(0.40, 0.40, 0.40)
+## 已购卡的文字色：中性灰。卡下说明原本按作用域着色（紫/金/浅蓝）、价格行原本是绿，
+## 这两个彩色都是「这张卡有什么效果」的信息载体，卡买完就不需要再抢注意力了。
+##
+## 比 `FATE_PURCHASED_DIM_COLOR` 留一点余量（0.72 vs 0.40）：整列 modulate 会**再乘一次**，
+## 「已购买」这三个字是这张卡唯一还需要被读到的事实（它证明这张卡买过了），
+## 跟着卡面一起沉到 0.34 会读不出来。实测有效亮度 = 0.72 × 0.40 ≈ 0.29，是暗但可辨的一档。
+## 同样必须 R=G=B，理由同上。
+const FATE_PURCHASED_TEXT_COLOR := Color(0.72, 0.72, 0.72)
+## 已购卡的灰度去色 shader（`canvas_item`，挂在卡背层上）。
+##
+## 为什么非要用材质而不是只调 `modulate`：卡背线稿本身是亮青绿（`#02FC8E` 级别），
+## `modulate` 只能整体压暗、**去不掉色相**，压完仍是「暗绿」而不是「灰」。
+## 这里保留原亮度分布、只丢掉色相，压暗交给 `FATE_PURCHASED_DIM_COLOR` 管（职责分开，
+## 将来单独调「灰多少」或「暗多少」互不影响）。
+const FATE_GREYSCALE_SHADER_CODE := """
+shader_type canvas_item;
+
+void fragment() {
+    vec4 base = texture(TEXTURE, UV);
+    float luminance = dot(base.rgb, vec3(0.2126, 0.7152, 0.0722));
+    COLOR = vec4(vec3(luminance), base.a);
+}
+"""
+
 const BASE_INVENTORY_CAPACITY := 12
 ## 保底武装配套弹药：入场即给 `item_ammo_pack` 的发数（每单位 = 1 发真实备弹）。
 ## 白送手枪由 `Player3D.start_with_weapon` 负责，那条链路只给枪不给弹；
@@ -221,7 +269,11 @@ var _trade_extraction_room_id := ""
 var _enemy_preactivation_accumulator := 0.0
 var _door_fate_active := false
 var _door_fate_choices: Array[FateCard] = []
-var _pending_fate_currency_choice := -1
+## 本次门后购卡中已被买下的卡位（与 `_door_fate_choices` 同序）；退出后清空。
+var _door_fate_purchased: Array[bool] = []
+## 顶部余额行与底部退出按钮的引用，供扣魂后刷新与验收查询。
+var _fate_balance_label: Label = null
+var _fate_exit_button: Button = null
 var _pending_fate_door_from_id := ""
 var _pending_fate_door_target_id := ""
 var _fate_overlay: Control
@@ -232,6 +284,8 @@ var _fate_feedback_locked := false
 var _fate_feedback_selected_index := -1
 var _fate_feedback_dispatch: Tween = null
 var _fate_initializing_focus := false
+## 已购卡共用的灰阶材质（懒建一次，三张卡共享同一实例）。
+var _fate_greyscale_material: ShaderMaterial = null
 var _map_fate_triggers: MapFateTriggers
 # 模态浮窗（雷达 / 背包）的 ESC 关闭按钮
 var _radar_close_button: Button = null
@@ -268,6 +322,8 @@ var _starter_cache_opened := false
 var _boss_panel: PanelContainer = null
 var _boss_label: Label = null
 var _boss_bar: ProgressBar = null
+var _boss_delayed_bar: ProgressBar = null
+var _boss_delayed_value := 1.0
 var _active_boss: Enemy3D = null
 # 常驻交互圆点（门的锚点）单帧缓存：见 _refresh_interaction_dot_cache。
 var _dot_cache_frame := -1
@@ -1032,6 +1088,7 @@ func _make_door_interaction_candidate(
 
 func _process(delta: float) -> void:
 	_tick_bless_dead(delta)
+	_tick_boss_health_bar_delay(delta)
 	_tick_boss_reinforcements(delta)
 	_tick_battery_blink(delta)
 	_tick_enemy_preactivation(delta)
@@ -1178,6 +1235,11 @@ func set_monster_rules(rules: Dictionary) -> void:
 	_monster_rules = rules.duplicate(true) if rules != null else {}
 	if _monster_injector != null:
 		_monster_injector.set_level_rules(_monster_rules)
+	# 货币分档同步给奖励协调器：货币是**独立通道**，不经过 MonsterInjector。
+	if _reward_coordinator != null:
+		_reward_coordinator.configure_level_currency(
+			_monster_rules.get("currency", {}) as Dictionary
+		)
 
 
 ## 取关卡级 AI 参数（`monster_rules.ai.<key>`）。键不存在 ⇒ 回退传入的全局常量，
@@ -3242,7 +3304,7 @@ func _prepare_revealed_hostile_room(room: DungeonRoom3D) -> bool:
 ##
 ## ⛔ 塔楼 100F 天台是塔楼里唯一 `room_type == "START"` 的房间，但它**不再**吃这条补给：
 ## 2026-09-22/23 起「全新存档开场」改落 98F 主人办公室，开场那把枪由剧本
-## `nar_tower_opening_01_wake` 的 `scene.spawn_item` 刷 `weapon_sprinkler`
+## `nar_tower_opening_01_wake` 的 `scene.spawn_item` 刷 `weapon_starter_rifle`
 ## （契约见 `TowerDescent3D._clear_new_game_opening_loadout()`）。
 ## 天台这把霰弹枪是**旧新手教程的遗留**，且它在**每一局**首次进入天台时都会重刷一次、
 ## 写进存档 `segment_runtime_state[].ground_items` 一直躺在天台地面上 ——
@@ -4207,6 +4269,27 @@ func _on_enemy_health_changed(enemy: Enemy3D, current: int, maximum: int) -> voi
 		return
 	_boss_bar.max_value = maxi(1, maximum)
 	_boss_bar.value = current
+	if _boss_delayed_bar != null:
+		_boss_delayed_bar.max_value = _boss_bar.max_value
+	var next_ratio := clampf(float(current) / float(maxi(1, maximum)), 0.0, 1.0)
+	if _boss_delayed_bar == null or next_ratio >= _boss_delayed_value:
+		_boss_delayed_value = next_ratio
+		if _boss_delayed_bar != null:
+			_boss_delayed_bar.value = _boss_delayed_value * _boss_delayed_bar.max_value
+
+
+func _tick_boss_health_bar_delay(delta: float) -> void:
+	if _boss_delayed_bar == null or _boss_bar == null:
+		return
+	var actual_ratio := _boss_bar.value / maxf(1.0, _boss_bar.max_value)
+	if _boss_delayed_value <= actual_ratio:
+		return
+	_boss_delayed_value = move_toward(
+		_boss_delayed_value,
+		actual_ratio,
+		delta * BOSS_HEALTH_BAR_DELAY_SPEED
+	)
+	_boss_delayed_bar.value = _boss_delayed_value * _boss_delayed_bar.max_value
 
 
 func _show_boss_hud(enemy: Enemy3D) -> void:
@@ -4216,7 +4299,14 @@ func _show_boss_hud(enemy: Enemy3D) -> void:
 		# 简约首领条：透明外壳只负责布局，不再使用厚重面板、霓虹边框或投影。
 		_boss_panel = _make_bare_hud_panel()
 		_boss_panel.name = "BossHUD3D"
-		_anchor_control(_boss_panel, 0.5, 0.0, 0.5, 0.0, -340, 106, 340, 160)
+		# 2026-10-14 主人：「boss血条放在画面的上面一些，现在还是会遮挡」。
+		# 上移 106 → 80（canvas 84.8 → 64.0），给 Boss 本体让出约 21 px。
+		# 新位置的下界由**关卡标题带**定：房间行（设计 14..38）与波次行（设计 40..62）
+		# 的实底在 canvas ≈49.6，64.0 留出约 14 px 净空 —— 这就是
+		# `verify_expedition_monitor_boss_flow` 里那条「位于关卡标题带下方、不发生文字重叠」
+		# 断言真正要守的东西（旧阈值 80.0 只是「设计 100」的口径，比标题带实底低 30 px）。
+		# 注意这条要跟着 `HUD_UI_SCALE` 一起想：canvas y = 设计 y × HUD_UI_SCALE(0.80)。
+		_anchor_control(_boss_panel, 0.5, 0.0, 0.5, 0.0, -340, 80, 340, 134)
 		$HUD.add_child(_boss_panel)
 		var margin := MarginContainer.new()
 		margin.add_theme_constant_override("margin_left", _hud_int(18))
@@ -4233,12 +4323,34 @@ func _show_boss_hud(enemy: Enemy3D) -> void:
 		_boss_label.add_theme_color_override("font_outline_color", Color(0.08, 0.01, 0.015, 0.96))
 		_boss_label.add_theme_constant_override("outline_size", _hud_int(5))
 		box.add_child(_boss_label)
+		# 两层叠放：白条追赶真实红条；两者都保留在同一薄条区域内，不增加高度。
+		var bar_stack := Control.new()
+		bar_stack.name = "BossHealthBarStack"
+		bar_stack.custom_minimum_size.y = _hud_int(10)
+		box.add_child(bar_stack)
+		_boss_delayed_bar = ProgressBar.new()
+		_boss_delayed_bar.name = "BossHealthBarDelayed"
+		_boss_delayed_bar.show_percentage = false
+		_boss_delayed_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_boss_delayed_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var delayed_background := StyleBoxFlat.new()
+		delayed_background.bg_color = Color(0.07, 0.025, 0.03, 0.88)
+		delayed_background.border_color = Color(1.0, 0.46, 0.42, 0.38)
+		delayed_background.set_border_width_all(1)
+		delayed_background.set_corner_radius_all(_hud_int(2))
+		_boss_delayed_bar.add_theme_stylebox_override("background", delayed_background)
+		var delayed_fill := StyleBoxFlat.new()
+		delayed_fill.bg_color = BOSS_HEALTH_BAR_DELAY_COLOR
+		delayed_fill.set_corner_radius_all(_hud_int(2))
+		_boss_delayed_bar.add_theme_stylebox_override("fill", delayed_fill)
+		bar_stack.add_child(_boss_delayed_bar)
 		_boss_bar = ProgressBar.new()
 		_boss_bar.name = "BossHealthBar"
 		_boss_bar.show_percentage = false
-		_boss_bar.custom_minimum_size.y = _hud_int(10)
+		_boss_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_boss_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var bar_background := StyleBoxFlat.new()
-		bar_background.bg_color = Color(0.07, 0.025, 0.03, 0.88)
+		bar_background.bg_color = Color(0.07, 0.025, 0.03, 0.0)
 		bar_background.border_color = Color(1.0, 0.46, 0.42, 0.38)
 		bar_background.set_border_width_all(1)
 		bar_background.set_corner_radius_all(_hud_int(2))
@@ -4247,12 +4359,14 @@ func _show_boss_hud(enemy: Enemy3D) -> void:
 		bar_fill.bg_color = Color(0.96, 0.13, 0.17)
 		bar_fill.set_corner_radius_all(_hud_int(2))
 		_boss_bar.add_theme_stylebox_override("fill", bar_fill)
-		box.add_child(_boss_bar)
+		bar_stack.add_child(_boss_bar)
 	# 有正式出场流程的 Boss 必须等动画完成；没有该流程的旧 Boss 保持即时显示。
 	_boss_panel.visible = enemy.monitor_combat == null or enemy.monitor_combat.activation_completed
 	if is_new_boss and AudioManager != null:
 		AudioManager.play_sfx("boss_intro", -1.5)
 	_boss_label.text = "%s  ·  阶段 %d" % [enemy.get_enemy_data().get("name", "废土首领"), enemy.boss_phase]
+	if is_new_boss:
+		_boss_delayed_value = clampf(float(enemy.current_hp) / float(maxi(1, enemy.max_hp)), 0.0, 1.0)
 	_on_enemy_health_changed(enemy, enemy.current_hp, enemy.max_hp)
 
 
@@ -5485,13 +5599,16 @@ func _show_door_fate_choices() -> void:
 		_commit_pending_fate_door_streaming()
 		return
 	_door_fate_choices.clear()
-	_pending_fate_currency_choice = -1
+	_door_fate_purchased.clear()
 	_door_fate_choices.assign(offer)
+	# 三张卡全部出现在场上，买与不买由玩家决定 ⇒ 每个卡位都要有独立的购买状态。
+	for _choice_index in range(_door_fate_choices.size()):
+		_door_fate_purchased.append(false)
 	_door_fate_active = true
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	_build_door_fate_overlay()
-	status_label.text = "门已开启 · 选择命运卡片后继续行动"
+	status_label.text = "门已开启 · 用本局魂购买命运卡，买好后退出"
 
 
 func _build_door_fate_overlay() -> void:
@@ -5507,23 +5624,33 @@ func _build_door_fate_overlay() -> void:
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fate_overlay.add_child(dim)
 
-	# 顶部协议提示已移除：三张卡和标题直接成为交互主体。
-	var title := Label.new()
-	title.text = "《  命 运 卡 三 选 一  》"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", _hud_int(40))
-	title.add_theme_color_override("font_color", Color(0.46, 0.94, 1.0))
-	title.add_theme_color_override("font_outline_color", Color(0.0, 0.48, 0.70, 0.70))
-	title.add_theme_constant_override("outline_size", _hud_int(7))
-	_anchor_control(title, 0.5, 0.0, 0.5, 0.0, -470, 32, 470, 90)
-	_fate_overlay.add_child(title)
+	# 顶部标题已按主人 2026-10-14 要求移除：它和下面那行余额说的是同一件事，
+	# 两行叠着白占一块纵向空间。现在由**本局魂余额行**直接占住这个头部位。
+	#
+	# 余额行：价格是「花本局魂」，玩家必须随时看得到自己还剩多少。
+	_fate_balance_label = Label.new()
+	_fate_balance_label.name = "FateCurrencyBalance"
+	_fate_balance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_fate_balance_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	# 字号 30 = 原标题 40 与原余额 22 之间：接过头部的视觉权重，又不比卡下价格行更抢眼。
+	_fate_balance_label.add_theme_font_size_override("font_size", _hud_int(30))
+	_fate_balance_label.add_theme_color_override("font_color", Color(1.0, 0.84, 0.44))
+	_fate_balance_label.add_theme_color_override("font_outline_color", Color(0.06, 0.03, 0.0, 0.85))
+	_fate_balance_label.add_theme_constant_override("outline_size", _hud_int(5))
+	# 占位逐值沿用原标题的 `16..66`（不是「往上挪一点」的近似值），这样头部高度与
+	# 改动前完全一致，下面卡列要抬多少有确定的数可算。
+	_anchor_control(_fate_balance_label, 0.5, 0.0, 0.5, 0.0, -470, 16, 470, 66)
+	_fate_overlay.add_child(_fate_balance_label)
 
-	# 三张卡是本弹窗的主体，占据标题与信息条之间的全部纵向空间。
+	# 三张卡是本弹窗的主体，占据余额行与退出按钮之间的全部纵向空间。
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", _hud_int(56))
-	_anchor_control(row, 0.5, 0.0, 0.5, 0.0, -570, 112, 570, 806)
+	# 卡列由 `106` 上提到 `74`：头部只剩一行了，若还留在 106，余额行与卡顶之间会空出
+	# 40 px（改前那 10 px 的 4 倍），看着像掉了一行东西。74 让这个间距回到 14 px 的原有节奏。
+	# 下沿给到 800（而不是等比例上移的 774）：卡列自身只有 694 高、且顶部对齐，多出的余量
+	# 只是容器的空余，换来卡底与退出按钮之间约 29 px 的间距，与改前的 24 px 同一档。
+	_anchor_control(row, 0.5, 0.0, 0.5, 0.0, -570, 74, 570, 800)
 	_fate_overlay.add_child(row)
 	_fate_choice_buttons.clear()
 	var card_buttons: Array[Button] = []
@@ -5539,15 +5666,35 @@ func _build_door_fate_overlay() -> void:
 			card_buttons.append(card_button)
 			_fate_choice_buttons.append(card_button)
 			_play_reference_tarot_flip(card_button, card, choice_index)
+	# 屏幕下方正中的退出按钮：买与不买都由它收尾，ESC / 手柄 B 是同一入口。
+	# **必须在 `_configure_fate_card_focus_navigation` 之前建**：焦点链要把三张卡的「下」
+	# 接到它身上，建晚了这一步拿到的就是 null，手柄会走不到退出按钮。
+	_fate_exit_button = Button.new()
+	_fate_exit_button.name = "FateExitButton"
+	_fate_exit_button.text = "退 出"
+	_fate_exit_button.tooltip_text = "退出命运卡购买（对应 ESC）· 已购买的卡继续生效"
+	_fate_exit_button.focus_mode = Control.FOCUS_ALL
+	_fate_exit_button.custom_minimum_size = _hud_size(Vector2(220, 44))
+	_fate_exit_button.add_theme_font_size_override("font_size", _hud_int(24))
+	var exit_styles := UIStyleFactory.make_button_style(
+		UIStyleFactory.make_panel_bg(2).bg_color,
+		Color(0.62, 0.90, 0.96)
+	)
+	UIStyleFactory.apply_button_style(_fate_exit_button, exit_styles)
+	_fate_exit_button.pressed.connect(_cancel_door_fate_selection)
+	_anchor_control(_fate_exit_button, 0.5, 1.0, 0.5, 1.0, -110, -64, 110, -20)
+	_fate_overlay.add_child(_fate_exit_button)
+
 	_configure_fate_card_focus_navigation(card_buttons)
 
-	# 底部信息条已移除：选择反馈通过卡片的放大/缩小动画和状态栏完成。
+	# 底部信息条已移除：选择反馈通过卡片的放大/缩小动画、价格行和状态栏完成。
 	_fate_feedback_label = null
+	_refresh_door_fate_prices()
 
 
-## 门后三选一的单张命运卡：**塔罗图卡**（卡面贴图 + 卡下功能文字）。
+## 门后购卡层的单张命运卡：**塔罗图卡**（卡面贴图 + 卡下功能文字 + 卡下购买价）。
 ##
-## 返回「卡片列」容器（卡 + 卡下功能文字）；真正可聚焦的按钮挂在 meta `tarot_button` 上，
+## 返回「卡片列」容器（卡 + 卡下功能文字 + 价格行）；真正可聚焦的按钮挂在 meta `tarot_button` 上，
 ## 供焦点导航与翻转动画复用。卡面图片本身已带边框与圆角，因此不再叠加程序绘制的
 ## 品质描边、作用域标签、方位三角、目标预览与页脚。
 ## 有对应塔罗美术时用贴图层；缺图时回退到程序卡面，保证补图落地前仍可玩。
@@ -5557,7 +5704,8 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	column.name = "FateChoiceColumn_%d" % choice_index
 	# 三列必须使用同一高度并从同一条顶线开始；否则枪械卡多一行文字时，
 	# VBoxContainer 的居中布局会把整张卡向上顶，造成截图中的卡片错位。
-	column.custom_minimum_size = _hud_size(Vector2(346, 650))
+	# 高度 = 卡面 546 + 说明 92 + 价格行 32 + 两条 12px 间距 = 694，与外层 row 完全等高。
+	column.custom_minimum_size = _hud_size(Vector2(346, 694))
 	column.alignment = BoxContainer.ALIGNMENT_BEGIN
 	column.add_theme_constant_override("separation", _hud_int(12))
 
@@ -5647,6 +5795,21 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	caption.add_theme_constant_override("outline_size", _hud_int(3))
 	caption.add_theme_constant_override("line_spacing", _hud_int(3))
 	column.add_child(caption)
+	# 卡下说明与价格行都要能被「买下后整体去色」重新着色，故各挂一份 meta。
+	button.set_meta("tarot_caption_label", caption)
+	# 卡下价格行：这是「购买制」对玩家的唯一价格口径，只读 `FATE_PRICE_BY_RARITY`。
+	# 状态（可买 / 魂不足 / 命运槽已满 / 已购买）也由这一行承载，卡片本体不额外加角标。
+	var price_label := _make_hud_label("", 22, accent)
+	price_label.name = "FateChoicePrice_%d" % choice_index
+	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	price_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	price_label.custom_minimum_size = _hud_size(Vector2(346, 32))
+	price_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.90))
+	price_label.add_theme_constant_override("outline_size", _hud_int(3))
+	column.add_child(price_label)
+	button.set_meta("tarot_price", _fate_price(card))
+	button.set_meta("tarot_price_label", price_label)
+	button.set_meta("tarot_purchased", false)
 	# 调用方拿到的是「列」而不是按钮，故在列上也挂一份，避免从列上取不到按钮。
 	column.set_meta("tarot_button", button)
 	return column
@@ -5751,9 +5914,99 @@ func _finish_reference_tarot_flip(button: Button, card: FateCard) -> void:
 		return
 	button.disabled = false
 	button.set_meta("tarot_face_ready", true)
+	button.set_meta("tarot_face_side", "front")
 	button.set_meta("tarot_orientation", card.orientation_name())
 	button.set_meta("tarot_face_rotation", button.rotation)
 	_maybe_focus_fate_card(button)
+
+
+## 买下之后把这张卡做成**灰阶 + 压暗 + 缩到 70%**，并翻回背面（主人 2026-10-14 要求）。
+##
+## 为什么必须翻回去：卡位已经用掉了，还露着牌面会让玩家以为这张还能再买一次；
+## 而且「已购买」这个状态在视觉上要能和「买得起但没买」一眼分开，不能只靠卡下那行小字。
+## 手法与 `_play_reference_tarot_flip` 严格对偶：同样在 90° 薄边时换面，减少动效时直接换。
+##
+## ⚠️ 不碰 `tarot_face_ready`：那是「翻牌动画结束、可以交互」的标记，不是「正在露牌面」。
+## 置回 false 会让 `_set_fate_feedback_buttons_disabled(false)` 把这张卡永久禁用，
+## 键盘/手柄的焦点导航当场断链（购买制下焦点链还要经过卡列回退出按钮）。
+func _flip_fate_card_to_back(button: Button, choice_index: int) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	var back := (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as Control
+	# 没有卡背层（图卡缺背图）就保持正面：翻过去会变成一张空白卡，比不翻更糟。
+	# 但**去色 / 压暗 / 缩小照样做** —— 那三样不依赖有没有背图。
+	_style_purchased_fate_card(button, choice_index)
+	if back == null or not is_instance_valid(back):
+		return
+	button.pivot_offset = button.size * 0.5
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		_show_fate_card_back(button)
+		return
+	var tween := button.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	# stagger 比首次翻牌短：这是玩家刚点完的卡，反馈要跟手，不能等三张卡的错峰节奏。
+	tween.tween_interval(0.04 + float(choice_index) * 0.04)
+	tween.tween_property(button, "scale:x", 0.04, 0.14).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_callback(_show_fate_card_back.bind(button))
+	tween.tween_property(button, "scale:x", 1.0, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+## 翻回背面的换面动作：藏卡面、露卡背，并把 `tarot_face_side` 翻到 `back`。
+## 三个动作必须在**同一步**完成 —— 谁先谁后都会让「现在到底朝哪面」有一段时间说不清。
+## 卡面若原本是逆位（绕中心 180°）不必复位：它已经不可见，且这张卡不会再翻回正面。
+func _show_fate_card_back(button: Control) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	var face := (button.get_meta("tarot_face_node") if button.has_meta("tarot_face_node") else null) as Control
+	var back := (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as Control
+	if face != null and is_instance_valid(face):
+		face.visible = false
+	if back != null and is_instance_valid(back):
+		back.visible = true
+	button.set_meta("tarot_face_side", "back")
+
+
+## 已购卡的共用灰阶材质：懒建一次，三张卡共享。
+##
+## 为什么要材质而不是只调 `modulate`：卡背线稿本身是亮青绿（`#02FC8E` 级别），
+## `modulate` 只能整体压暗、**去不掉色相**，压完仍是「暗绿」不是「灰」。
+func _ensure_fate_greyscale_material() -> ShaderMaterial:
+	if _fate_greyscale_material == null:
+		var shader := Shader.new()
+		shader.code = FATE_GREYSCALE_SHADER_CODE
+		_fate_greyscale_material = ShaderMaterial.new()
+		_fate_greyscale_material.shader = shader
+	return _fate_greyscale_material
+
+
+## 把一张已购卡做成「灰阶 + 压暗 + 70%」。**幂等**：重复调用不会叠加效果。
+##
+## 只作用于**可见的那一层贴图**（卡背 `tarot_back_node`）。卡面层 `TarotArtFace`
+## 自带扫描光 shader，翻背后已隐藏，不去动它 —— 换掉会连带丢掉那条 shader，
+## 万一将来要「翻回正面」就没有扫描光了。
+func _style_purchased_fate_card(button: Button, choice_index: int) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	var back := (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as CanvasItem
+	if back != null and is_instance_valid(back):
+		back.material = _ensure_fate_greyscale_material()
+	# 文字也去色：作用域色（紫/金/浅蓝）与「已购买」的绿都不是灰阶，留着会和卡面打架。
+	var caption := (button.get_meta("tarot_caption_label") if button.has_meta("tarot_caption_label") else null) as Label
+	if caption != null and is_instance_valid(caption):
+		caption.add_theme_color_override("font_color", FATE_PURCHASED_TEXT_COLOR)
+	var price_label := (button.get_meta("tarot_price_label") if button.has_meta("tarot_price_label") else null) as Label
+	if price_label != null and is_instance_valid(price_label):
+		price_label.add_theme_color_override("font_color", FATE_PURCHASED_TEXT_COLOR)
+	# 整列压暗走 modulate（乘性），与灰阶材质分工：材质管去色，modulate 管变暗。
+	var view := button.get_meta("fate_feedback_view") as Control
+	if view != null and is_instance_valid(view):
+		view.modulate = FATE_PURCHASED_DIM_COLOR
+	# 缩到 70%：走 `_tween_fate_card_scale`，它会乘上 `_fate_card_base_scale()`，
+	# 所以后续任何悬停复位 / 重排都不会把这张卡弹回 100%。
+	_tween_fate_card_scale(
+		button, 1.0,
+		0.0 if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)) else 0.32
+	)
 
 
 ## 命运卡三选一是**代码构造**的覆盖层（不是场景菜单），因此不在
@@ -5788,12 +6041,14 @@ func _maybe_focus_fate_card(button: Button) -> void:
 		feedback.call("set_hovered", bool(button.get_meta("fate_feedback_hovered", false)))
 
 
-## 三张命运卡横向排布，显式指定左右邻居并首尾环绕。
+## 三张命运卡横向排布，显式指定左右邻居并首尾环绕；**下方向接到屏幕下方的退出按钮**。
 ##
 ## 为什么要显式指定而不是靠引擎自动推导：逆位卡是**整张旋转 180°** 的实体卡面，
 ## 自动 neighbor 推导依赖控件可见矩形的方位关系，旋转后可能失准；显式指定同时补上
 ## 「第一张按左回到最后一张」的环绕（自动推导不做环绕，按到头就没反应了）。
-## 上下也接到同一组环绕：本弹窗只有一维排布，让上下有反应好过把焦点扔出弹窗。
+## 上下为什么不再共用左右环绕：购买制新增了底部退出按钮。若「下」还指向相邻卡，
+## 手柄玩家**永远走不到退出按钮**（自动推导对跨容器、锚点差异大的两个控件同样不可靠），
+## 而这张弹窗现在只有它一个出口 —— 走不到就等于手柄无法离开购卡界面。
 func _configure_fate_card_focus_navigation(buttons: Array[Button]) -> void:
 	var count := buttons.size()
 	if count <= 0:
@@ -5812,7 +6067,16 @@ func _configure_fate_card_focus_navigation(buttons: Array[Button]) -> void:
 		button.focus_neighbor_left = previous_path
 		button.focus_neighbor_right = following_path
 		button.focus_neighbor_top = previous_path
-		button.focus_neighbor_bottom = following_path
+		button.focus_neighbor_bottom = _safe_fate_focus_neighbor_path(button, _fate_exit_button)
+	if _fate_exit_button == null or not is_instance_valid(_fate_exit_button):
+		return
+	# 退出按钮留在同一组里：左右环绕整排卡，向上回第一张卡，再按上/下回到自己。
+	# 这样手柄「下 → 退出 → 上 → 卡」形成闭环，不会把焦点扔出弹窗。
+	var first_card_path := _safe_fate_focus_neighbor_path(_fate_exit_button, buttons[0])
+	_fate_exit_button.focus_neighbor_left = _safe_fate_focus_neighbor_path(_fate_exit_button, buttons[count - 1])
+	_fate_exit_button.focus_neighbor_right = first_card_path
+	_fate_exit_button.focus_neighbor_top = first_card_path
+	_fate_exit_button.focus_neighbor_bottom = first_card_path
 
 
 func _safe_fate_focus_neighbor_path(source: Control, target: Control) -> NodePath:
@@ -5836,9 +6100,9 @@ func _get_fate_target_preview(card: FateCard) -> String:
 	var used := int(target.get("fate_slot_used", 0))
 	var capacity := int(target.get("fate_slot_capacity", 0))
 	if capacity > 0 and used >= capacity:
-		return "当前枪 #%s\n命运槽已满 %d / %d · 可兑魂%d" % [
+		return "当前枪 #%s\n命运槽已满 %d / %d · 不可购买" % [
 			target.get("instance_suffix", str(target.get("weapon_instance_id", "")).right(6).to_upper()),
-			used, capacity, _fate_currency_value(card),
+			used, capacity,
 		]
 	return "当前枪 #%s\n下一槽 %d / %d" % [
 		target.get("instance_suffix", str(target.get("weapon_instance_id", "")).right(6).to_upper()),
@@ -5887,15 +6151,23 @@ func _set_fate_card_pointer_state(button: Button, active: bool, from_focus: bool
 	var focused := bool(button.get_meta("fate_feedback_focused", false))
 	if _fate_feedback_locked or not bool(button.get_meta("tarot_face_ready", false)):
 		return
-	var target := 1.045 if hovered or focused else 1.0
+	# 已购买的卡不再放大、也不再有悬停亮边（主人 2026-10-14 要求）：这张卡已经翻回背面、
+	# 卡位用掉了，任何「碰得到」的反馈都是在骗玩家 —— 它再点也只会弹一句「已购买」。
+	# 注意这里只掐**视觉反馈**：按钮本身仍保持可聚焦，键盘/手柄的焦点导航不能断链。
+	var interactive := not bool(button.get_meta("tarot_purchased", false))
+	var target := 1.045 if interactive and (hovered or focused) else 1.0
 	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
 		target = 1.0
 	_tween_fate_card_scale(button, target, 0.18)
 	var feedback := (button.get_meta("fate_feedback_node") if button.has_meta("fate_feedback_node") else null) as Control
 	if feedback != null and is_instance_valid(feedback):
-		feedback.call("set_hovered", hovered or focused)
+		feedback.call("set_hovered", interactive and (hovered or focused))
 
 
+## 已购买卡的整体缩小倍率（业主 2026-10-14 指定 70%）。
+## 这一档是**基准缩放**，不是悬停反馈 —— `_tween_fate_card_scale` 的所有 target 都是
+## 「相对基准的倍率」，最终尺寸 = `target × 基准`。否则 `_reset_fate_feedback()` 那句
+## 「把所有卡复位到 1.0」会把已购卡的 0.70 直接冲掉。
 func _kill_fate_feedback_tween(button: Control) -> void:
 	if button == null or not is_instance_valid(button):
 		return
@@ -5906,19 +6178,29 @@ func _kill_fate_feedback_tween(button: Control) -> void:
 	_fate_feedback_tweens.erase(key)
 
 
+## 一张卡的**基准缩放**：已购买 = 0.70，其余 = 1.0。
+func _fate_card_base_scale(button: Control) -> float:
+	if button == null or not is_instance_valid(button):
+		return 1.0
+	return FATE_PURCHASED_CARD_SCALE if bool(button.get_meta("tarot_purchased", false)) else 1.0
+
+
 func _tween_fate_card_scale(button: Button, target: float, duration: float) -> void:
 	if button == null or not is_instance_valid(button):
 		return
 	var view: Control = button.get_meta("fate_feedback_view") as Control
 	view.pivot_offset = view.size * 0.5
 	_kill_fate_feedback_tween(button)
+	# `target` 是相对倍率（1.045 = 悬停放大 4.5%），基准由购买状态决定 ⇒ 已购卡
+	# 无论被悬停、复位还是重排，都稳定停在 0.70，不会被复位到 1.0 弹回去。
+	var absolute := target * _fate_card_base_scale(button)
 	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)) or duration <= 0.0:
-		view.scale = Vector2.ONE * target
+		view.scale = Vector2.ONE * absolute
 		return
 	var tween := view.create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tween.tween_property(view, "scale", Vector2.ONE * target, duration)
+	tween.tween_property(view, "scale", Vector2.ONE * absolute, duration)
 	_fate_feedback_tweens[button.get_instance_id()] = tween
 
 
@@ -5926,6 +6208,12 @@ func _on_reference_fate_card_pressed(button: Button, choice_index: int) -> void:
 	if button == null or not is_instance_valid(button) or _fate_feedback_locked:
 		return
 	if not bool(button.get_meta("tarot_face_ready", false)):
+		return
+	# 购买制的前置校验必须在播放「选中」动画之前：不能对一张买不起的卡
+	# 播完放大/闪光再告诉玩家扣不了钱，那是一次假的选中反馈。
+	var block_reason := _fate_card_block_reason(choice_index)
+	if not block_reason.is_empty():
+		_report_fate_block(choice_index, block_reason)
 		return
 	_fate_feedback_locked = true
 	_fate_feedback_selected_index = choice_index
@@ -5993,8 +6281,9 @@ func _reset_fate_feedback(immediate := false) -> void:
 func _apply_fate_choice_after_feedback(choice_index: int) -> void:
 	if not _door_fate_active or not _fate_feedback_locked or choice_index != _fate_feedback_selected_index:
 		return
-	_on_door_fate_selected(choice_index)
-	if _door_fate_active and _pending_fate_currency_choice == choice_index:
+	await _purchase_fate_card(choice_index)
+	# 买下后弹窗**保持打开**（可以继续买另外两张），只把这一次的按下反馈复位。
+	if _door_fate_active:
 		_reset_fate_feedback()
 
 
@@ -6025,39 +6314,53 @@ func _get_fate_choice_text(card: FateCard) -> String:
 	]
 
 
+## 兼容入口：直接购买指定卡位（不走按钮动画反馈）。门后流程与验收用例共用。
+## 真正的购买事务在 `_purchase_fate_card`；本函数只做参数裁剪。
 func _on_door_fate_selected(choice_index: int) -> void:
+	await _purchase_fate_card(choice_index)
+
+
+## 门后命运卡「购买」事务：扣**局内魂** → 应用卡牌 → 标记该卡位已购买。
+##
+## 硬边界：只动 `GameManager.currency`（本局魂）。局外总货币池
+## `BaseManager.get_extraction_points()` 在任何分支都不得被读写 —— 门后买卡是
+## 一次纯局内交易，玩家不会因为买卡而损失带出基地的抽取点。
+##
+## 弹窗保持打开：三张卡可以全买，也可以一张不买，退出按钮才收尾。
+func _purchase_fate_card(choice_index: int) -> void:
 	if not _door_fate_active or choice_index < 0 or choice_index >= _door_fate_choices.size():
 		return
-	var card := _door_fate_choices[choice_index]
-	if _is_weapon_fate_target_full(card):
-		var currency_value := _fate_currency_value(card)
-		if _pending_fate_currency_choice != choice_index:
-			_pending_fate_currency_choice = choice_index
-			status_label.text = "%s：命运槽已满，再次点击转换为%d魂" % [card.card_name, currency_value]
-			if _fate_feedback_label != null:
-				_fate_feedback_label.text = "转换确认 · %s\n再次点击同一张卡：放弃刻印并获得 %d 魂" % [card.card_name, currency_value]
-				_fate_feedback_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.28))
-			return
-		currency_value = _grant_run_currency(currency_value)
-		_close_door_fate_overlay()
-		status_label.text = "命运转化：%s → %d魂" % [card.card_name, currency_value]
+	var block_reason := _fate_card_block_reason(choice_index)
+	if not block_reason.is_empty():
+		_report_fate_block(choice_index, block_reason)
 		return
-	_pending_fate_currency_choice = -1
+	var card := _door_fate_choices[choice_index]
+	var price := _fate_price(card)
+	if not GameManager.spend_currency(price):
+		_report_fate_block(choice_index, "insufficient")
+		_refresh_door_fate_prices()
+		return
 	var result := await FateCardGameBridge.apply_card_with_source_selection(card, _fate_overlay)
 	if not is_inside_tree() or not _door_fate_active:
 		return
 	if not bool(result.get("success", false)):
-		_reset_fate_feedback()
+		# 付了魂但牌没生效 ⇒ 必须原额退魂，不能出现「钱花了、卡没刻上」的静默损失。
+		GameManager.add_currency(price)
 		var failure := str(result.get("message", result.get("reason", "当前目标无法承载该命运")))
-		status_label.text = "%s：%s" % [card.card_name, failure]
-		if _fate_feedback_label != null:
-			_fate_feedback_label.text = "应用失败 · %s\n%s · 请改选其他命运" % [card.card_name, failure]
-			_fate_feedback_label.add_theme_color_override("font_color", Color(1.0, 0.40, 0.30))
+		status_label.text = "购买失败 · %s：%s · 已退还 %d 魂" % [card.card_name, failure, price]
+		_refresh_door_fate_prices()
 		return
-	_close_door_fate_overlay()
+	if choice_index < _door_fate_purchased.size():
+		_door_fate_purchased[choice_index] = true
+	var button := _fate_choice_button(choice_index)
+	if button != null:
+		button.set_meta("tarot_purchased", true)
+		# 买下的卡翻回背面：卡位已经用掉了，露着牌面会让玩家以为还能再买一次。
+		_flip_fate_card_to_back(button, choice_index)
 	if AudioManager != null:
 		AudioManager.play_fate_card_sfx()
-	status_label.text = "命运生效：%s · %s" % [card.card_name, result.get("message", "")]
+	status_label.text = "命运生效：%s · 花费 %d 魂 · 剩余 %d 魂" % [card.card_name, price, GameManager.currency]
+	_refresh_door_fate_prices()
 
 
 func _is_weapon_fate_target_full(card: FateCard) -> bool:
@@ -6068,18 +6371,109 @@ func _is_weapon_fate_target_full(card: FateCard) -> bool:
 	return capacity > 0 and int(target.get("fate_slot_used", 0)) >= capacity
 
 
-func _fate_currency_value(card: FateCard) -> int:
+## 单张卡的购买价：唯一数据源是 `FATE_PRICE_BY_RARITY`，不得在各处另写数字。
+func _fate_price(card: FateCard) -> int:
 	if card == null:
 		return 0
-	return int(FATE_CURRENCY_BY_RARITY[clampi(int(card.card_rarity), 0, FATE_CURRENCY_BY_RARITY.size() - 1)])
+	return int(FATE_PRICE_BY_RARITY[clampi(int(card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)])
+
+
+func _fate_choice_button(choice_index: int) -> Button:
+	if choice_index < 0 or choice_index >= _fate_choice_buttons.size():
+		return null
+	var button := _fate_choice_buttons[choice_index]
+	if button == null or not is_instance_valid(button):
+		return null
+	return button
+
+
+## 这张卡此刻能不能买。返回空串 = 可买；否则是拒绝原因码。
+## 顺序即优先级：已购买 > 命运槽已满 > 魂不足。
+func _fate_card_block_reason(choice_index: int) -> String:
+	if not _door_fate_active or choice_index < 0 or choice_index >= _door_fate_choices.size():
+		return "invalid"
+	var button := _fate_choice_button(choice_index)
+	if button != null and bool(button.get_meta("tarot_purchased", false)):
+		return "purchased"
+	var card := _door_fate_choices[choice_index]
+	if _is_weapon_fate_target_full(card):
+		return "slot_full"
+	if GameManager.currency < _fate_price(card):
+		return "insufficient"
+	return ""
+
+
+## 买不了时的唯一反馈口：只改状态栏，不扣魂、不关弹窗、不播选中动画。
+func _report_fate_block(choice_index: int, block_reason: String) -> void:
+	var card := (
+		_door_fate_choices[choice_index]
+		if choice_index >= 0 and choice_index < _door_fate_choices.size()
+		else null
+	)
+	var card_name := card.card_name if card != null else "命运卡"
+	match block_reason:
+		"purchased":
+			status_label.text = "%s 已购买 · 同一次门后不能重复购买" % card_name
+		"slot_full":
+			status_label.text = "%s：目标枪命运槽已满，无法购买" % card_name
+		"insufficient":
+			status_label.text = "%s 需要 %d 魂，当前只有 %d 魂" % [
+				card_name, _fate_price(card), GameManager.currency,
+			]
+		_:
+			status_label.text = "%s 当前无法购买" % card_name
+
+
+## 刷新顶部余额行 + 三张卡的卡下价格行与置灰状态。扣魂/购买/打开弹窗后必须调用。
+func _refresh_door_fate_prices() -> void:
+	if _fate_balance_label != null and is_instance_valid(_fate_balance_label):
+		_fate_balance_label.text = "本局魂 ◈ %d" % GameManager.currency
+	for choice_index in range(_door_fate_choices.size()):
+		var button := _fate_choice_button(choice_index)
+		if button == null:
+			continue
+		var card := _door_fate_choices[choice_index]
+		var purchased := bool(button.get_meta("tarot_purchased", false))
+		var block_reason := (
+			"purchased" if purchased else _fate_card_block_reason(choice_index)
+		)
+		var label := button.get_meta("tarot_price_label") as Label
+		if label != null and is_instance_valid(label):
+			match block_reason:
+				"purchased":
+					label.text = "已购买"
+					label.add_theme_color_override("font_color", FATE_PURCHASED_TEXT_COLOR)
+				"slot_full":
+					label.text = "命运槽已满"
+					label.add_theme_color_override("font_color", Color(1.0, 0.44, 0.34))
+				"insufficient":
+					label.text = "◈ %d 魂 · 魂不足" % _fate_price(card)
+					label.add_theme_color_override("font_color", Color(1.0, 0.72, 0.36))
+				_:
+					label.text = "◈ %d 魂" % _fate_price(card)
+					label.add_theme_color_override("font_color", _rarity_color(card.card_rarity))
+		# 三种不可买状态的压暗强度刻意分两档：
+		# · 已购买 ⇒ **灰阶 + 压暗 + 缩到 70%**（卡位用掉了，退到背景）
+		# · 买不起 / 槽满 ⇒ 只做轻度压暗。它们是「暂时/本枪买不了」，不是「已经没了」，
+		#   压成灰阶会让玩家以为这张卡已经消失，其实是攒够魂就能买。
+		var view := button.get_meta("fate_feedback_view") as Control
+		if view != null and is_instance_valid(view):
+			if purchased:
+				view.modulate = FATE_PURCHASED_DIM_COLOR
+			elif block_reason.is_empty():
+				view.modulate = Color.WHITE
+			else:
+				view.modulate = Color(0.56, 0.59, 0.64)
 
 
 func _close_door_fate_overlay() -> void:
 	_reset_fate_feedback(true)
 	_door_fate_active = false
 	_door_fate_choices.clear()
-	_pending_fate_currency_choice = -1
+	_door_fate_purchased.clear()
 	_fate_choice_buttons.clear()
+	_fate_balance_label = null
+	_fate_exit_button = null
 	if _fate_overlay != null and is_instance_valid(_fate_overlay):
 		# 先摘除再回收：queue_free() 要等到帧末才真正释放节点。若同一帧内再次
 		# 打开弹窗（连续两次命运卡流程/验收用例），新节点会与仍挂在树上的旧节点
@@ -6104,11 +6498,20 @@ func _commit_pending_fate_door_streaming() -> void:
 	_update_room_streaming(source_id if not source_id.is_empty() else _current_room_id)
 
 
+## 退出按钮 / ESC / 手柄 B 三条路共用：已买下的卡保持生效，未买的直接放弃。
 func _cancel_door_fate_selection() -> void:
 	if not _door_fate_active:
 		return
+	var bought := 0
+	for purchased in _door_fate_purchased:
+		if purchased:
+			bought += 1
 	_close_door_fate_overlay()
-	status_label.text = "已放弃本次命运选择 · 行动继续"
+	status_label.text = (
+		"已退出命运购买 · 本次买下 %d 张 · 行动继续" % bought
+		if bought > 0
+		else "已退出命运购买 · 未消费魂 · 行动继续"
+	)
 
 
 func show_reference_fate_overlay_for_test() -> bool:
@@ -6116,7 +6519,7 @@ func show_reference_fate_overlay_for_test() -> bool:
 		return false
 	var pool := FateCardPresets.door_reward_presets()
 	_door_fate_choices.clear()
-	_pending_fate_currency_choice = -1
+	_door_fate_purchased.clear()
 	for wanted_scope in [FateCard.Scope.WEAPON, FateCard.Scope.WORLD, FateCard.Scope.CHARACTER]:
 		for card in pool:
 			if card.scope == wanted_scope:
@@ -6127,24 +6530,24 @@ func show_reference_fate_overlay_for_test() -> bool:
 	_door_fate_choices[0].set_orientation(FateCard.Orientation.UPRIGHT, 0.25)
 	_door_fate_choices[1].set_orientation(FateCard.Orientation.REVERSED, 0.75)
 	_door_fate_choices[2].set_orientation(FateCard.Orientation.UPRIGHT, 0.25)
+	for _choice_index in range(_door_fate_choices.size()):
+		_door_fate_purchased.append(false)
 	_door_fate_active = true
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	_build_door_fate_overlay()
-	status_label.text = "视觉验收 · 命运卡三选一"
+	status_label.text = "视觉验收 · 命运卡购买"
 	return true
 
 
-func resolve_fate_choice_for_test(choice_index := 0) -> void:
+## 测试口：退出门后购卡弹窗，把门后流程推下去。
+## 购买经济（扣魂 / 余额不足 / 满槽 / 已购买 / 退出按钮）由
+## `verify_fate_card_purchase_flow` 专项覆盖；这里刻意不消费魂、不应用卡，
+## 免得给既有流程用例塞进一张随机命运带来副作用。
+func resolve_fate_choice_for_test(_choice_index := 0) -> void:
 	if not _door_fate_active:
 		return
-	_on_door_fate_selected(clampi(choice_index, 0, _door_fate_choices.size() - 1))
-	if not _door_fate_active:
-		return
-	for index in range(_door_fate_choices.size()):
-		_on_door_fate_selected(index)
-		if not _door_fate_active:
-			return
+	_close_door_fate_overlay()
 
 
 func _get_total_room_keys() -> int:

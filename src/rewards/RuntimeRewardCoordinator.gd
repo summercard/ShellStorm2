@@ -15,6 +15,10 @@ var _monster_drop_errors: Array[Dictionary] = []
 ## `MonsterInjector.drop_spec_for` 的旧公式兜底 —— 那条路够不着表级字段。
 ## 存本变量、随 kill 请求下发，才能让**同关所有普通怪**吃到同一概率。
 var _monster_drop_empty_chance := 0.0
+## 关卡级货币分档（`monster_rules.currency`，2026-10-14）。
+## 空字典 = 本关未配置 ⇒ 货币仍走物品规格自带的那条，且不摘货币条目
+## ⇒ 塔楼与其余未配置关卡行为逐字不变。
+var _level_currency_rules: Dictionary = {}
 
 
 func configure(run_seed: int) -> void:
@@ -42,6 +46,22 @@ func level_drop_table_snapshot() -> Dictionary:
 		"level_id": _level_id,
 		"monster_ids": _monster_drop_specs.keys(),
 		"errors": _monster_drop_errors.duplicate(true),
+	}
+
+
+## 装载关卡级货币分档（`monster_rules.currency`）。与掉落表同寿命，切关/重建时整段替换。
+## 空字典 = 未配置 ⇒ 货币回到「由物品规格自带那条供给」的旧路径。
+func configure_level_currency(rules: Dictionary) -> void:
+	_level_currency_rules = rules.duplicate(true) if rules != null else {}
+
+
+func level_currency_snapshot() -> Dictionary:
+	return {
+		"level_id": _level_id,
+		"configured": not _level_currency_rules.is_empty(),
+		"kinds": (_level_currency_rules.get("per_kind", {}) as Dictionary).keys(),
+		"tiers": (_level_currency_rules.get("per_tier", {}) as Dictionary).keys(),
+		"has_default": _level_currency_rules.has("default"),
 	}
 
 
@@ -79,16 +99,23 @@ func resolve_kill(
 		else "elite" if bool(enemy_data.get("is_elite", false))
 		else "normal"
 	)
+	var monster_id := str(enemy_data.get("enemy_type", "melee_chaser"))
 	var report := _resolve_dispatch({
 		"trigger": "kill",
 		"room_reward_plan": room_reward_plan,
-		"monster_id": str(enemy_data.get("enemy_type", "melee_chaser")),
+		"monster_id": monster_id,
 		"monster_tier": tier,
 		"monster_drop_specs": _monster_drop_specs,
 		"monster_drop_empty_chance": _monster_drop_empty_chance,
+		# 配了关卡级货币分档 ⇒ 把货币从物品规格里摘掉，改由下方独立通道发放。
+		"strip_currency": not _level_currency_rules.is_empty(),
 		"floor_level": _floor_level_from_loot_table(str(enemy_data.get("loot_table", ""))),
 		"context": _context(event_id, floor),
 	})
+	# 货币独立通道（业主 2026-10-14）：**所有被击败的怪 100% 必掉**，
+	# 且「货币不算在物品掉落里头」⇒ 不受 `empty_chance` 影响，也不占物品件数。
+	# 物品侧解析失败（如未登记池）也不连累货币 —— 两者在 grants 层合并、在 errors 层各自上报。
+	_append_level_currency(report, monster_id, tier, floor, event_id)
 	var bounty := maxi(0, int(enemy_data.get("elite_bounty_currency", 0)))
 	if bounty > 0:
 		var bounty_report := SERVICE.resolve({
@@ -104,10 +131,27 @@ func resolve_kill(
 		report["ok"] = bool(report.get("ok", false)) and bool(bounty_report.get("ok", false))
 	# 关卡表的「独立判定」允许同次击杀命中多件实物；若仍压成 1 件，作者表语义就是假的。
 	# 未命中关卡表的旧公式、精英与 Boss 保留既有「一个实物 + 一个魂球」契约。
-	var monster_id := str(enemy_data.get("enemy_type", "melee_chaser"))
 	var uses_level_table := tier == "normal" and _monster_drop_specs.has(monster_id)
 	_collapse_kill_ground_grants(report, uses_level_table)
 	return report
+
+
+## 追加关卡级货币产出。**独立于物品掉落**：不受 `empty_chance` 影响、不占物品件数。
+## 未配置 `monster_rules.currency` 的关卡（塔楼等）在这里是**一行 no-op** ——
+## 货币仍由物品规格自带的那条供给，行为逐字不变。
+func _append_level_currency(
+	report: Dictionary, monster_id: String, tier: String, floor: int, event_id: String
+) -> void:
+	var spec := SERVICE.currency_spec_for(monster_id, tier, floor, _level_currency_rules)
+	if spec.is_empty():
+		return
+	var currency_report := SERVICE.resolve(spec, _context("%s:currency" % event_id, floor))
+	var grants := currency_report.get("grants", []) as Array
+	if grants.is_empty():
+		(report["errors"] as Array).append_array(currency_report.get("errors", []))
+		return
+	(report["grants"] as Array).append_array(grants)
+	report["ok"] = bool(report.get("ok", false)) and bool(currency_report.get("ok", false))
 
 
 func _collapse_kill_ground_grants(report: Dictionary, preserve_physical := false) -> void:

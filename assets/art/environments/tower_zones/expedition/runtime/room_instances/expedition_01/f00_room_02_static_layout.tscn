@@ -135,7 +135,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND" parent="." unique_id=993531684 instance=ExtResource("9_4oqba")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6.9938224e-08, 0, -0.8)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.9904966, 0, -8.105384)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND"
 metadata/authored_slot_role = "room_type_component"
 
@@ -411,13 +411,8 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 4.02
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST" parent="." unique_id=402592979 instance=ExtResource("16_j6474")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.15, -0.0085, -0.81249964)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
-metadata/authored_slot_role = "room_type_component"
-
 [node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST" parent="." unique_id=996481504 instance=ExtResource("16_j6474")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 4.15, -0.0085, -0.81250036)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.756977, -0.0085, -8.210373)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
@@ -512,7 +507,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SHELF"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH" parent="." unique_id=159415510 instance=ExtResource("28_f80rl")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 15.199999, 0, -6.0000014)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 15.199999, 0, -8.79752)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SHELVING"
 metadata/authored_slot_role = "room_type_component"
 

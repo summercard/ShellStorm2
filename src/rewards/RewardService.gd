@@ -79,17 +79,27 @@ static func resolve(spec: Dictionary, context: Dictionary = {}) -> Dictionary:
 	}
 
 	# 关卡级「空掉落」判定（远征01 `monster_drop_table.empty_chance`）。
-	# 命中 ⇒ 本次结算不产出任何东西，**连魂与弹药一并落空**（业主口径「什么都不掉」）。
-	# 掷签放在 entries 之前、与后续抽取共用同一个 rng ⇒ 同 seed 同结果、可复现、
-	# 不新增随机流。缺省 0 = 不做空判定，未配置关卡的掉落逐字不变。
+	# 命中 ⇒ 武器 / 模块 / 配件**整批落空**，但**豁免条目**（备弹）照判 ——
+	# 业主 2026-10-14 裁定「弹药豁免」：弹药给的是作者明确指定的命中率
+	# （警察僵尸 80%），不该被空掉落二次打折（不裁的话 80% 会掉到 47%）。
+	# 掷签放在 entries 之前、与后续抽取共用同一个 rng ⇒ 同 seed 同结果、可复现。
+	# 缺省 0 = 不做空判定，未配置关卡的掉落逐字不变。
+	var empty_rolled := false
+	var entries_to_resolve: Array = spec.get("entries", []) as Array
 	var empty_chance := float(spec.get("empty_chance", 0.0))
 	if empty_chance > 0.0 and rng.randf() < empty_chance:
+		empty_rolled = true
 		report["empty_roll"] = true
-		return report
+		entries_to_resolve = _empty_exempt_entries(entries_to_resolve)
 
-	_resolve_entries(spec.get("entries", []), state, "entries", 0)
+	_resolve_entries(entries_to_resolve, state, "entries", 0)
 
-	if (state["grants"] as Array).is_empty() and spec.has("fallback"):
+	# 空掉落命中时**不走 fallback** —— 否则「空」会被回退池又填满，语义自相矛盾。
+	if (
+		(state["grants"] as Array).is_empty()
+		and spec.has("fallback")
+		and not empty_rolled
+	):
 		# 空池才允许回退；未知 ID 已在 validate 阶段被拒，两者分道。
 		report["used_fallback"] = true
 		_resolve_entries(spec.get("fallback", []), state, "fallback", 0)
@@ -181,22 +191,24 @@ static func _monster_spec_for(request: Dictionary, context: Dictionary) -> Dicti
 	# 走旧公式兜底的怪（本关未登记的怪种）在此补上，保证**同关所有普通怪同一口径**。
 	# 精英 / Boss 不参与（它们另有稳定单件契约）。
 	var level_empty_chance := float(request.get("monster_drop_empty_chance", 0.0))
+	var strip_currency := bool(request.get("strip_currency", false))
 	# 当前关卡的怪物掉落表只覆盖普通怪；房间 kill 已在 _pick_ref 更早命中。
 	# 表里没写这只怪时，继续走 MonsterInjector 旧公式兜底，不会空手。
+	var spec := {}
 	if tier == "normal":
 		var level_specs := request.get("monster_drop_specs", {}) as Dictionary
 		if level_specs.has(monster_id):
-			return (level_specs[monster_id] as Dictionary).duplicate(true)
-	var floor_level := int(request.get("floor_level", 0))
-	var floor := int(context.get("floor", 1))
-	var spec := {}
-	if _monster_spec_provider.is_valid():
-		var injected = _monster_spec_provider.call(monster_id, tier, floor_level, floor)
-		if injected is Dictionary:
-			spec = injected
+			spec = (level_specs[monster_id] as Dictionary).duplicate(true)
 	if spec.is_empty():
-		var injector := preload("res://src/map/MonsterInjector.gd")
-		spec = injector.drop_spec_for(monster_id, tier, floor_level, floor)
+		var floor_level := int(request.get("floor_level", 0))
+		var floor := int(context.get("floor", 1))
+		if _monster_spec_provider.is_valid():
+			var injected = _monster_spec_provider.call(monster_id, tier, floor_level, floor)
+			if injected is Dictionary:
+				spec = injected
+		if spec.is_empty():
+			var injector := preload("res://src/map/MonsterInjector.gd")
+			spec = injector.drop_spec_for(monster_id, tier, floor_level, floor)
 	if (
 		tier == "normal"
 		and level_empty_chance > 0.0
@@ -204,7 +216,108 @@ static func _monster_spec_for(request: Dictionary, context: Dictionary) -> Dicti
 		and not spec.has("empty_chance")
 	):
 		spec["empty_chance"] = level_empty_chance
+	# 货币走**独立通道**（业主 2026-10-14：「货币不算在物品掉落里头」）：
+	# 关卡配了 `monster_rules.currency` 时，把物品规格里的货币条目摘掉 ——
+	# 否则会与 `currency_spec_for` **重复发放**，而且会被 `empty_chance` 误伤成「有时不掉」。
+	# 未配置该段的关卡（塔楼等）不摘，货币仍由规格自带的那条供给，行为逐字不变。
+	if strip_currency:
+		spec = _drop_currency_entries(spec)
 	return spec
+
+
+## 摘出「空掉落豁免」条目（备弹等）。关卡级 `empty_chance` 命中时只解析这些。
+## 标记由数据层写（`MonsterDropTable._row_to_entry` / `MonsterInjector.drop_spec_for`
+## 按 `RewardSpec.is_empty_exempt_item` 判定），本函数只认标记、不猜物品类型。
+static func _empty_exempt_entries(entries) -> Array:
+	var out: Array = []
+	if not (entries is Array):
+		return out
+	for value in entries:
+		if value is Dictionary and bool((value as Dictionary).get("exempt_from_empty", false)):
+			out.append(value)
+	return out
+
+
+## 摘掉规格顶层的货币条目（`entries` 与 `fallback`）。货币改由独立通道发放。
+## 只动这两层：嵌套的 `weighted.options` 本来就只允许物品条目。
+static func _drop_currency_entries(spec: Dictionary) -> Dictionary:
+	if spec.is_empty():
+		return spec
+	var out := spec.duplicate(true)
+	for key in ["entries", "fallback"]:
+		if not out.has(key) or not (out[key] is Array):
+			continue
+		var kept: Array = []
+		for value in out[key]:
+			if (
+				value is Dictionary
+				and str((value as Dictionary).get("kind", "")) == _SPEC.KIND_CURRENCY
+			):
+				continue
+			kept.append(value)
+		out[key] = kept
+	return out
+
+
+## 关卡级货币规格：**独立于物品掉落**，恒 100% 必掉、**不受 `empty_chance` 影响**。
+##
+## 业主 2026-10-14：所有被击败的怪都掉货币，且「货币不算在物品掉落里头」。
+## 数量按「怪种 + 楼层」分档，优先级 `per_tier`（elite/boss）> `per_kind` > `default`；
+## 实际值 = `round(base + per_floor × floor)`（在 `_eval_amount` 里求值）。
+##
+## 返回 `{}` 表示「本关未配置货币分档」⇒ 调用方不追加，货币仍由物品规格自带的那条供给
+## （塔楼与其它未配置关卡因此逐字不变）。
+static func currency_spec_for(
+	monster_id: String,
+	tier: String,
+	floor: int,
+	currency_rules: Dictionary
+) -> Dictionary:
+	if currency_rules.is_empty():
+		return {}
+	var safe_floor := maxi(1, floor)
+	var amount := _currency_amount_for(monster_id, tier, safe_floor, currency_rules)
+	if amount.is_empty():
+		return {}
+	return {
+		"spec_id": "level-currency:%s:%s:%d" % [monster_id, tier, safe_floor],
+		"entries": [{
+			"kind": _SPEC.KIND_CURRENCY,
+			"currency_id": "extraction_points",
+			"amount": amount,
+		}],
+	}
+
+
+## 取某只怪的货币产出公式 `{base, per_floor}`。分档优先级 per_tier > per_kind > default。
+## 三段都没命中（或字段非法）⇒ 回退 `MonsterInjector.drop_spec_for` 的既有常量，
+## **不在这里再写第二套数**。
+static func _currency_amount_for(
+	monster_id: String, tier: String, floor: int, rules: Dictionary
+) -> Dictionary:
+	var per_tier: Dictionary = rules.get("per_tier", {}) as Dictionary
+	var per_kind: Dictionary = rules.get("per_kind", {}) as Dictionary
+	var candidates: Array = [per_tier.get(tier, null), per_kind.get(monster_id, null), rules.get("default", null)]
+	for value in candidates:
+		if not (value is Dictionary):
+			continue
+		var entry := value as Dictionary
+		if not (entry.has("base") and entry.has("per_floor")):
+			continue
+		var base := int(entry.get("base", -1))
+		var per_floor := int(entry.get("per_floor", -1))
+		if base < 0 or per_floor < 0:
+			continue
+		return {"base": base, "per_floor": per_floor}
+	var injector := preload("res://src/map/MonsterInjector.gd")
+	var fallback := injector.drop_spec_for(monster_id, tier, 0, floor)
+	for value in fallback.get("entries", []):
+		if not (value is Dictionary):
+			continue
+		var entry := value as Dictionary
+		if str(entry.get("kind", "")) == _SPEC.KIND_CURRENCY:
+			return (entry.get("amount", {}) as Dictionary).duplicate(true)
+	return {}
 
 
 static func _empty_report(spec_id: String) -> Dictionary:

@@ -2370,6 +2370,11 @@ func _build_expedition_records() -> void:
 	# 关卡级怪物掉落表与当前 plan 同寿命。奖励协调器持有编译结果，切关/重建时整表替换，
 	# 不塞进 MonsterInjector 静态状态，避免同进程多场景与测试之间串味。
 	if _reward_coordinator != null:
+		# 关卡级货币分档：与掉落表同寿命。**必须在 configure_level_drop_table 之后**——
+		# `set_monster_rules` 早于本处执行，那时协调器可能还没建。
+		_reward_coordinator.configure_level_currency(
+			(plan.get("monster_rules", {}) as Dictionary).get("currency", {}) as Dictionary
+		)
 		var drop_report := _reward_coordinator.configure_level_drop_table(
 			str(plan.get("level_id", get_expedition_level_id())),
 			plan.get("monster_drop_table", {}) as Dictionary

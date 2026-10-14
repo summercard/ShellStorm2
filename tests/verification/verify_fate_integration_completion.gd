@@ -64,10 +64,18 @@ func _run() -> void:
 			check(result.get("error", "") == "room_not_in_combat", "失败原因透传 " + id)
 			check(not FateCardEngine.apply_card(card(id, reversed), null).success, "Engine不能绕过世界失败 " + id)
 	check(FateCardGameBridge.get_card_count() == 0 and scope_events == events_before, "世界失败不登记不发scope")
+	# 门后购买失败保留弹窗：世界失败（本房不是战斗状态）时卡没生效，且必须原额退魂。
+	GameManager.add_currency(500)
 	dungeon.show_reference_fate_overlay_for_test()
 	dungeon._door_fate_choices[0] = card("fate_reinforce")
+	var purchase_currency_before := GameManager.currency
 	await dungeon._on_door_fate_selected(0)
-	check(dungeon._door_fate_active and dungeon._door_fate_choices[0].get_stable_card_id() == "fate_reinforce", "世界失败保留正式三选一")
+	check(
+		dungeon._door_fate_active
+		and dungeon._door_fate_choices[0].get_stable_card_id() == "fate_reinforce"
+		and GameManager.currency == purchase_currency_before,
+		"世界失败保留正式购卡弹窗且原额退魂"
+	)
 	dungeon._close_door_fate_overlay()
 	fresh_weapon()
 	var forged := BlueprintRegistry.create_assembly_node("bp_shotgun")
@@ -94,11 +102,17 @@ func _run() -> void:
 		check(dungeon.player.get_equipped_weapon_instance().fate_upgrades.size() == 1, "来源UI成功仅占一槽 " + id)
 		check(not original.is_empty(), "来源真实属性非空 " + id)
 	fresh_weapon()
+	GameManager.add_currency(500)
 	dungeon.show_reference_fate_overlay_for_test()
 	dungeon._door_fate_choices[0] = card("fate_gun_on_gun")
 	_select_button_deferred(dungeon.player.get_weapon_tree().root)
 	await dungeon._on_door_fate_selected(0)
-	check(not dungeon._door_fate_active and dungeon.player.get_equipped_weapon_instance().fate_upgrades.size() == 1, "门后实际选牌调用统一来源入口")
+	check(
+		dungeon._door_fate_active
+		and dungeon.player.get_equipped_weapon_instance().fate_upgrades.size() == 1,
+		"门后实际购买调用统一来源入口，且买完弹窗保持打开"
+	)
+	dungeon._close_door_fate_overlay()
 	fresh_weapon()
 	var workbench := preload("res://scenes/WorkbenchPanel.tscn").instantiate() as WorkbenchPanel
 	add_child(workbench)

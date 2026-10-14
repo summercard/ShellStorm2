@@ -69,7 +69,10 @@ func _ready() -> void:
 		check(tower._boss_label != null and tower._boss_label.get_theme_font_size("font_size") >= 16, "Boss名称字号醒目")
 		check(tower._boss_label != null and tower._boss_label.get_theme_constant("outline_size") >= 4, "Boss名称有高对比描边")
 		check(tower._boss_bar != null and tower._boss_bar.custom_minimum_size.y <= 10.0, "Boss生命条保持细长简约")
-		check(tower._boss_panel.position.y >= 80.0, "Boss血条位于关卡标题带下方、不发生文字重叠")
+		# Boss 条顶边（canvas 坐标 = 设计 y × HUD_UI_SCALE 0.80）：2026-10-14 由设计 106
+		# 上移到 80 ⇒ 64.0。真正要守的是「不与关卡标题带文字重叠」：房间行/波次行的实底在
+		# canvas ≈49.6，63.0 这个下界保证净空仍有 13 px 以上。
+		check(tower._boss_panel.position.y >= 63.0, "Boss血条位于关卡标题带下方、不发生文字重叠")
 		var boss_fill_style := tower._boss_bar.get_theme_stylebox("fill") as StyleBoxFlat
 		check(boss_fill_style != null and boss_fill_style.bg_color.r > 0.9 and boss_fill_style.bg_color.g < 0.2, "Boss生命条使用醒目红色")
 		# Exercise distance gating on the formally spawned boss before normal battle.

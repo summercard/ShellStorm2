@@ -686,7 +686,7 @@ func _phase_i_opening_loadout() -> void:
 			str((gun_data as Dictionary).get("id", "")) if gun_data is Dictionary else "?"
 		)
 		_check(gun_type == "weapon", "地上那件是武器（实际 type=%s）" % gun_type)
-		_check(gun_id == "weapon_sprinkler", "地上那件是剧情目标武器（实际 id=%s）" % gun_id)
+		_check(gun_id == "weapon_starter_rifle", "地上那件是剧情目标武器（实际 id=%s）" % gun_id)
 		_check(
 			gun_data is Dictionary and bool((gun_data as Dictionary).get("narrative_auto_equip", false)),
 			"地面武器保留 narrative_auto_equip 一次性标记",
@@ -717,15 +717,15 @@ func _phase_i_opening_loadout() -> void:
 			if equipped_after_pickup is Dictionary else "?"
 		)
 		_check(
-			equipped_id == "weapon_sprinkler",
-			"真实拾取后主武器槽自动装备 weapon_sprinkler（实际 %s）" % equipped_id,
+			equipped_id == "weapon_starter_rifle",
+			"真实拾取后主武器槽自动装备 weapon_starter_rifle（实际 %s）" % equipped_id,
 		)
 		var remaining_opening_drops := 0
 		for value_after in get_tree().get_nodes_in_group("ground_loot_3d"):
 			var node_after := value_after as Node3D
 			if node_after != null and office.is_ancestor_of(node_after):
 				var data_after: Variant = node_after.get("item_data")
-				if data_after is Dictionary and str((data_after as Dictionary).get("id", "")) == "weapon_sprinkler":
+				if data_after is Dictionary and str((data_after as Dictionary).get("id", "")) == "weapon_starter_rifle":
 					remaining_opening_drops += 1
 		_check(remaining_opening_drops == 0, "自动装备成功后地面剧情枪被正确接受（剩余 %d）" % remaining_opening_drops)
 		_player.global_position = before_pickup_position

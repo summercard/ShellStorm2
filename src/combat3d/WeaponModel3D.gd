@@ -68,6 +68,8 @@ const GUN_VISUAL_SCENES := {
 	# 花洒机枪是蜂窝机枪的出厂型号，共用同一份正式美术资产；它的独立身份
 	# 靠 assembly/bp ID 区分，不复制 GLB。
 	"bp_sprinkler": preload("res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d.tscn"),
+	# 初始步枪以步枪为原型，同样复用步枪的正式美术资产，不复制 GLB。
+	"bp_starter_rifle": preload("res://assets/art/weapons/weapon_3d/runtime/broom_rifle/wpn_broom_rifle_root_top3d_v001.tscn"),
 	"bp_sniper": preload("res://assets/art/weapons/weapon_3d/runtime/candy_sniper/wpn_candy_sniper_root_top3d_v001.tscn"),
 	"bp_launcher": preload("res://assets/art/weapons/weapon_3d/runtime/toaster_launcher/wpn_toaster_launcher_root_top3d_v001.tscn"),
 	"bp_charge": preload("res://assets/art/weapons/weapon_3d/runtime/gumball_cannon/wpn_gumball_cannon_root_top3d_v001.tscn"),
@@ -79,6 +81,7 @@ const GUN_PROFILES := {
 	"bp_rifle": {"length": 1.10, "barrel": 0.62, "width": 0.21, "height": 0.24, "color": Color(0.20, 0.30, 0.27)},
 	"bp_machinegun": {"length": 1.18, "barrel": 0.58, "width": 0.31, "height": 0.30, "color": Color(0.27, 0.29, 0.20)},
 	"bp_sprinkler": {"length": 1.18, "barrel": 0.58, "width": 0.31, "height": 0.30, "color": Color(0.27, 0.29, 0.20)},
+	"bp_starter_rifle": {"length": 1.10, "barrel": 0.62, "width": 0.21, "height": 0.24, "color": Color(0.24, 0.30, 0.22)},
 	"bp_sniper": {"length": 1.30, "barrel": 1.02, "width": 0.19, "height": 0.22, "color": Color(0.18, 0.24, 0.30)},
 	"bp_launcher": {"length": 1.08, "barrel": 0.72, "width": 0.38, "height": 0.36, "color": Color(0.30, 0.22, 0.16)},
 	"bp_charge": {"length": 1.12, "barrel": 0.62, "width": 0.32, "height": 0.34, "color": Color(0.28, 0.18, 0.34)},
@@ -115,6 +118,10 @@ var character_authored_reload := false
 var magazine_size := 12
 var current_ammo := 12
 var bullet_speed := 24.0
+## 射程上限（米），来自枪身 base_stats 的 `range`。与 `bullet_speed` 独立：
+## 弹速只决定飞行时间，射程决定弹体最远能飞多远、到点消失（爆炸弹则自动引爆）。
+## `0` = 未声明，退回「按存活时间」的旧口径（敌弹与未升级内容不受影响）。
+var range_m := 0.0
 var bullet_tags: Array[String] = []
 var bullet_color := Color(0.76, 0.86, 0.92)
 var damage_multiplier := 1.0
@@ -157,6 +164,7 @@ const GUN_NAME_TO_ID := {
 	"GunBody_Pistol": "bp_pistol", "GunBody_Shotgun": "bp_shotgun",
 	"GunBody_Rifle": "bp_rifle", "GunBody_Machinegun": "bp_machinegun",
 	"GunBody_Sprinkler": "bp_sprinkler",
+	"GunBody_StarterRifle": "bp_starter_rifle",
 	"GunBody_Sniper": "bp_sniper", "GunBody_Launcher": "bp_launcher",
 	"GunBody_Charge": "bp_charge",
 	"Melee_BaseballBat": "bp_baseball_bat",
@@ -350,6 +358,7 @@ func _configure_common_stats(stats: Dictionary, melee: bool) -> void:
 		magazine_size = 0
 		current_ammo = 0
 		bullet_speed = 0.0
+		range_m = 0.0
 		charge_time = 0.0
 		_melee_profile = _build_melee_profile(stats)
 		return
@@ -363,6 +372,8 @@ func _configure_common_stats(stats: Dictionary, melee: bool) -> void:
 	magazine_size = maxi(1, int(float(stats.get("magazine_size", 12)) * float(stats.get("fate_magazine_multiplier", 1.0))))
 	current_ammo = magazine_size
 	bullet_speed = 23.0 * float(stats.get("bullet_speed", 1.0)) * float(stats.get("fate_speed_multiplier", 1.0))
+	# 射程与弹速解耦：这里只读枪身声明的 `range`，不再由弹种速度倍率推导。
+	range_m = maxf(0.0, float(stats.get("range", 0.0)))
 	charge_time = maxf(0.0, float(stats.get("charge_time", 0.0)))
 
 
@@ -501,6 +512,8 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			"visual_id": bullet_id,
 			"shooter": shooter,
 			"behavior": behavior,
+			# 枪身声明的射程上限（米）；0 = 不启用，退回旧的按存活时间口径。
+			"range": range_m,
 			# 默认子弹不位移；霰弹枪给轻微击退（0.8 m/s × 0.16s ≈ 0.064m）。
 			# 后续若扩展其他武器的差异化击退，按 gun_id 在这里加分即可。
 			"hit_knockback": 0.8 if gun_id == "bp_shotgun" else 0.0,
@@ -655,6 +668,8 @@ func _fire_secondary_gun(
 			"visual_id": String(secondary.get("bullet_id", bullet_id)),
 			"shooter": shooter,
 			"behavior": attached_behavior,
+			# 副枪用自己声明的射程；未声明则回落主枪。
+			"range": maxf(0.0, float(secondary.get("range", range_m))),
 		}, _muzzle.global_position if _muzzle != null else global_position)
 		projectile_spawned.emit(projectile)
 	return count
@@ -680,6 +695,7 @@ func _fire_copy_wave(
 			"hostile": false, "tags": bullet_tags.duplicate(),
 			"color": bullet_color, "visual_id": bullet_id,
 			"shooter": shooter, "behavior": behavior.duplicate(true),
+			"range": range_m,
 		})
 	var origin := _muzzle.global_position if _muzzle != null else global_position
 	var delay := float(behavior.get("copy_fire_delay", 0.1))

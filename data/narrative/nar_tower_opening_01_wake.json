@@ -20,7 +20,7 @@
     {
       "at": 0.0,
       "do": "scene.spawn_item",
-      "item_id": "weapon_sprinkler",
+      "item_id": "weapon_starter_rifle",
       "spawn_key": "nar_tower_opening_01_wake:starter_weapon",
       "auto_equip": true,
       "count": 1,

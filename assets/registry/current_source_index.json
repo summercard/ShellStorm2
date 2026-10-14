@@ -10900,13 +10900,13 @@
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
-      "bytes": 140711,
+      "bytes": 138451,
       "family": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source.blend",
       "version": [
         1
       ],
       "role": "source",
-      "sha256": "9c1f7ffa3a57dc6b2bfedbb10ccb1d023df98c7761ea42f9eb00aa729958bb5e"
+      "sha256": "a1302b8182d523834dc0af9741eb687044489f66cafa0cfbcbf79d1de1d565d3"
     },
     {
       "path": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
@@ -10970,13 +10970,13 @@
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_ground_source_v001.blend",
-      "bytes": 99990,
+      "bytes": 99272,
       "family": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "183bdba5012c84457782d224b2cc6e871af09e3d126187f665497d98a8ca89cd"
+      "sha256": "3d7baf9637ba5bc14982366f0663af93102512c4c04335b77104983208c3f88c"
     },
     {
       "path": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_ground_source_v001.blend",

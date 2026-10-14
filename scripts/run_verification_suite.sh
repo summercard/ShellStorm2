@@ -233,6 +233,8 @@ core_scenes=(
   verify_vfx_pool_lifecycle
   verify_combat_vfx_toon_v002
   verify_bullet_vfx_profiles
+  verify_monster_startup_roar
+  verify_death_blast_vfx
   verify_unique_elite_roster_flow
   verify_unique_boss_content_flow
   verify_three_segment_tower_generation_flow
@@ -252,6 +254,7 @@ core_scenes=(
   verify_weapon_attachment_inventory_flow
   verify_weapon_instance_fate_ownership_flow
   verify_celestial_fate_scope_flow
+  verify_fate_card_purchase_flow
   verify_finite_ammo_flow
   verify_guaranteed_loadout_ammo_flow
   verify_avatar_return_persistence_flow
