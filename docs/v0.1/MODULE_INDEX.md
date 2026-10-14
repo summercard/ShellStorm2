@@ -75,7 +75,7 @@ ASSET-PIPELINE [塔4周边五组景观建筑当前v003](development/2026-10-03_t
 | PRESENTATION | `HUDPresenter3D`武器栏快照、公共UI组件；VfxPool/CombatEffectPool、AudioManager、MusicManager | HUD/音乐部分；VFX未收敛 | UI、音效、音乐已有独立账本/Skill/验收链；旧CombatEffectPool兼容链仍在；后处理设计与13.1施工已分开，但调参保存失败结果与真渲染未验 |
 | PERFORMANCE | GraphicsSettingsManager、PostfxOverlay、RuntimePerformanceManager→场景/渲染 | 部分 | 调参面板越过画质服务；预算失配、渲染用例归类不全 |
 | TRAINING | `TrainingRange3D`→只读BlueprintRegistry→共用Player3D→训练会话统计 | **测试功能1.0已完成，可独立启动与验收** | 后续伤害分析、靶标编辑和自动压测另升功能版本 |
-| ASSET | 组件规划→Blender母版/实例→稳定GLB/PackedScene→正式房间TSCN；账本分别追踪源/组件/房间 | 组件源与房间编辑分权，接入部分完成 | 房间TSCN拥有布局/灯光/启用编辑权，JSON只作初始化/追溯；组件更新不得覆盖房间编辑，但现有生成器无自动合并保护。三层变体数据登记未实现，禁止未审查重生成 |
+| ASSET | 组件规划→Blender母版/实例→稳定GLB/PackedScene→正式房间TSCN；账本分别追踪源/组件/房间 | 组件源与房间编辑分权，接入部分完成 | 房间TSCN拥有布局/灯光/启用编辑权，JSON只作初始化/追溯；组件更新不得覆盖房间编辑，但现有生成器无自动合并保护。三层变体数据登记未实现，禁止未审查重生成；[物品道具调用账本](../../assets/registry/README.md#物品道具账本与武器物品归属)已建立，子弹/配件归武器账本 |
 | TOOLING | tests/verification、脚本、src/testing→隔离工程→日志与退出码 | 部分 | 用户目录与 `.godot` 已隔离，冷/热缓存自检通过；156 个验证场景已全部唯一归属；验证注册、跨域边界、37功能追溯和媒体资产门禁已并入文档总门禁 |
 
 ## 2. 功能追溯表

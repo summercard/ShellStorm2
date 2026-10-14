@@ -92,7 +92,7 @@
       "file": "ShellStorm2_武器账本_v001.xlsx",
       "categories": ["武器"],
       "id_prefixes": ["WPN"],
-      "sheet_scope": ["3D-武器"],
+      "sheet_scope": ["3D-武器", "背包物品调用索引"],
       "prefab_pages": ["3D-武器"],
       "animation_sheets": [],
       "primary_skill": "game-weapon-model-pipeline",
@@ -156,5 +156,23 @@
       "owner": "待分配",
       "scope_note": "场景BGM、A/B曲目、循环与Music总线资产；曲目映射由MusicCatalog持有，播放生命周期由MusicManager持有。"
     }
-  ]
+  ],
+  "content_ledgers": {
+    "inventory_items": {
+      "path": "assets/registry/ledgers/ShellStorm2_物品道具账本_v001.xlsx",
+      "role": "content_id_navigation",
+      "primary_key": "item_id",
+      "sheets": [
+        "物品道具",
+        "掉落归属导航",
+        "非背包与待设计",
+        "功能调用链"
+      ],
+      "asset_rows": 0,
+      "source_owner": "src/base/ItemRegistry.gd",
+      "weapon_owner": "weapons",
+      "weapon_sheet": "背包物品调用索引",
+      "scope_note": "可进入背包的物品道具内容ID与调用导航；子弹、通用弹药、配件和成品武器归武器账本。无资产主表，不重复分配AssetID。"
+    }
+  }
 }

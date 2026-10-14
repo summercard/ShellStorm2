@@ -1,3 +1,9 @@
+## 2026-10-14 独立物品道具账本与怪物掉落调用归属
+
+- FeatureID：ASSET / WORLD-LOOT / REWARD-SERVICE / INVENTORY-SLOTS / WEAPON-OWNERSHIP；新增物品道具账本20个运行内容ID，武器账本新增调用索引26个内容ID；两侧互斥覆盖ItemRegistry的46个ID，怪物掉落CSV16行逐行链接唯一登记和原代码入口。新账本无资产主表，原1241个AssetID与资产主表未改。
+- 药水/电池/蓝图碎片/背包/手电模块归物品道具；子弹模块/通用弹药/配件/成品武器归武器。魂与未注册Boss钥匙单列；电池通用箱体及内容表遗漏两ID如实标注。
+- 导航专项、资产结构、武器完整检查和无损门禁通过；全局文档与命名检查仍有既有红项。见[独立交付记录](2026-10-14_inventory_item_ledger.md)。
+
 ## 2026-10-14 Boss房02 竞技场改为「首领一死就开闸」+ 护栏补间竞态修复
 
 - FeatureID：`WORLD-BLOCKS`；业主口径「改成 boss 一死就开闸」。**开闸判据由 `room.cleared` 改为新增的 `Dungeon3D.is_room_boss_defeated(room_id)`** —— 后者还要求增援与波次全清，会让护栏一直拖到「残留小怪也清光」才落。Boss 倒下即视为这场仗打完，**残留增援不拦人**。新增 `signal room_boss_defeated(room_id)` + `_boss_defeated_rooms` 登记；写入点是 `_on_enemy_killed()` 里 `enemy_kind == "boss"` 的首领分支（导出枚举，与血量/体型倍率同一判据，不会误判增援），幂等且重复登记不重发信号。
