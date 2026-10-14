@@ -464,6 +464,13 @@ static func generate_from_level_plan(
 		"monster_drop_table": (
 			level_plan.get("monster_drop_table", {}) as Dictionary
 		).duplicate(true),
+		# 关卡级怪物规则（远征01 专属）：数值绝对覆盖 + AI 手感参数。
+		# 与 monster_drop_table 同处透传、同为顶层字段 ⇒ **不进 `_data_driven_layout_id`
+		# 的 canonical**，改它不会让既有存档失配。别的关卡不写本段 ⇒ 空字典 ⇒
+		# 运行时逐字走原常量。
+		"monster_rules": (
+			level_plan.get("monster_rules", {}) as Dictionary
+		).duplicate(true),
 	}
 	plan["valid"] = errors.is_empty()
 	plan["validation_errors"] = errors

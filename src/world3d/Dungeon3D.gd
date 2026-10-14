@@ -202,6 +202,9 @@ var _room_spawn_blocked: Dictionary = {}
 var _loot_module: LootModule
 var _reward_coordinator: RuntimeRewardCoordinator
 var _monster_injector: MonsterInjector
+## 关卡级怪物规则（`level_plan.json` 顶层 `monster_rules`，远征01 专属）。
+## 空字典 = 未配置 ⇒ 数值与 AI 全部走原常量，未配置关卡逐字不变。
+var _monster_rules: Dictionary = {}
 var _inventory: InventoryModule
 var _insurance: InsuranceModule
 var _quick_inventory: InventoryModule
@@ -1169,6 +1172,21 @@ func _hud_floor_label_text() -> String:
 	return "高塔外层 · %s" % minimap.get_floor_label()
 
 
+## 装载关卡级怪物规则（远征01 专属）。由 `TowerDescent3D` 在 bootstrap 拿到 plan 时调一次。
+## 空字典合法 = 本关未配置 ⇒ 全部回退全局常量。
+func set_monster_rules(rules: Dictionary) -> void:
+	_monster_rules = rules.duplicate(true) if rules != null else {}
+	if _monster_injector != null:
+		_monster_injector.set_level_rules(_monster_rules)
+
+
+## 取关卡级 AI 参数（`monster_rules.ai.<key>`）。键不存在 ⇒ 回退传入的全局常量，
+## 于是「未配置本段」与「配了但没写这个键」两种情形行为都逐字不变。
+func _ai_param(key: String, fallback: Variant) -> Variant:
+	var ai: Dictionary = _monster_rules.get("ai", {}) as Dictionary
+	return ai.get(key, fallback)
+
+
 func _tick_enemy_preactivation(delta: float) -> void:
 	_enemy_preactivation_accumulator += delta
 	if _enemy_preactivation_accumulator < ENEMY_PREACTIVATION_INTERVAL:
@@ -1178,10 +1196,12 @@ func _tick_enemy_preactivation(delta: float) -> void:
 	)
 	if player == null:
 		return
+	# 预激活半径可由关卡级规则覆盖（远征01）：默认 38 m = 现有全局常量。
+	var preactivation_range := float(_ai_param("preactivation_range_m", ENEMY_PREACTIVATION_RANGE))
 	var candidates: Array[Node3D] = (
 		GameplaySpatialRegistry3D.query_radius(
 			player.global_position,
-			ENEMY_PREACTIVATION_RANGE,
+			preactivation_range,
 			[GameplaySpatialRegistry3D.KIND_ENEMY]
 		)
 		if GameplaySpatialRegistry3D != null
@@ -1190,7 +1210,7 @@ func _tick_enemy_preactivation(delta: float) -> void:
 	for value in candidates:
 		var enemy := value as Enemy3D
 		if enemy != null and is_instance_valid(enemy) and is_ancestor_of(enemy):
-			enemy.activate_from_player_proximity(player, ENEMY_PREACTIVATION_RANGE)
+			enemy.activate_from_player_proximity(player, preactivation_range)
 
 
 func _setup_run_modules() -> void:
@@ -1226,6 +1246,7 @@ func _setup_run_modules() -> void:
 	_monster_injector = MonsterInjector.new()
 	_monster_injector.set_seed(run_seed ^ 0x454E454D)
 	_monster_injector.set_theme_profile(gameplay_theme)
+	_monster_injector.set_level_rules(_monster_rules)
 	if not test_mode and BaseManager != null:
 		for staged in BaseManager.consume_pending_loadout():
 			if not staged is Dictionary:
@@ -3302,6 +3323,15 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.room_id = room.room_id
 		$ActiveEnemies.add_child(enemy)
 		var spawn_data := enemy_configs[index].duplicate(true)
+		# 房间级 AI 覆盖（`encounter.monster_ai`）：与关卡级同键合并，**房间级优先**。
+		# 两层都空 ⇒ 不写这个键 ⇒ `Enemy3D` 全部回退全局常量（塔楼等未配置关卡逐字不变）。
+		var room_ai: Dictionary = room.encounter.get("monster_ai", {}) as Dictionary
+		if not room_ai.is_empty():
+			var merged_ai: Dictionary = (
+				spawn_data.get("monster_ai", {}) as Dictionary
+			).duplicate(true)
+			merged_ai.merge(room_ai, true)
+			spawn_data["monster_ai"] = merged_ai
 		var launch_target: Variant = spawn_data.get("spawn_launch_target", null)
 		var launch_speed := float(spawn_data.get("spawn_launch_speed_mps", 0.0))
 		var launch_duration := float(spawn_data.get("spawn_launch_duration_sec", 0.0))

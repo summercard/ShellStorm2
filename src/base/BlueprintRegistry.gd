@@ -445,7 +445,7 @@ func _create_gunbody_pistol() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Pistol")
 	node.tags = ["pistol", "semi_auto", "sidearm"]
 	node.set_base_stats({
-		"damage": 18, "fire_rate": 3.5, "bullet_count": 1,
+		"damage": 25, "fire_rate": 3.5, "bullet_count": 1,
 		"spread": 0.03, "reload_time": 1.5, "magazine_size": 12,
 	})
 	return node
@@ -470,7 +470,7 @@ func _create_gunbody_shotgun() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Shotgun")
 	node.tags = ["shotgun", "close_range", "burst"]
 	node.set_base_stats({
-		"damage": 12, "fire_rate": 1.2, "bullet_count": 5,
+		"damage": 45, "fire_rate": 1.2, "bullet_count": 5,
 		"spread": 0.35, "reload_time": 3.0, "magazine_size": 6,
 	})
 	return node
@@ -479,7 +479,7 @@ func _create_gunbody_rifle() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Rifle")
 	node.tags = ["rifle", "automatic", "assault"]
 	node.set_base_stats({
-		"damage": 22, "fire_rate": 6.0, "bullet_count": 1,
+		"damage": 60, "fire_rate": 6.0, "bullet_count": 1,
 		"spread": 0.07, "reload_time": 2.2, "magazine_size": 30,
 	})
 	return node
@@ -499,7 +499,7 @@ func _create_gunbody_sprinkler() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Sprinkler")
 	node.tags = ["auto", "high_rate", "spray"]
 	node.set_base_stats({
-		"damage": 8, "fire_rate": 12.0, "bullet_count": 1,
+		"damage": 12, "fire_rate": 12.0, "bullet_count": 1,
 		"spread": 0.15, "reload_time": 2.8, "magazine_size": 100,
 	})
 	return node
@@ -508,7 +508,7 @@ func _create_gunbody_sniper() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Sniper")
 	node.tags = ["sniper", "precision", "high_damage"]
 	node.set_base_stats({
-		"damage": 55, "fire_rate": 1.0, "bullet_count": 1,
+		"damage": 380, "fire_rate": 1.0, "bullet_count": 1,
 		"spread": 0.01, "reload_time": 3.5, "magazine_size": 5,
 	})
 	return node
@@ -517,8 +517,11 @@ func _create_gunbody_launcher() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Launcher")
 	node.tags = ["launcher", "explosive", "slow"]
 	node.set_base_stats({
-		"damage": 38, "fire_rate": 0.8, "bullet_count": 1,
+		"damage": 250, "fire_rate": 1.0, "bullet_count": 1,
 		"spread": 0.1, "reload_time": 4.0, "magazine_size": 3,
+		# 命中范围爆炸的中心倍率：弹体伤害(250+标准弹8=258) × 0.697675 = 180。
+		# 沿用"范围伤害=弹体伤害×倍率×距离衰减"的既有模型，距离衰减 1.0→0.25。
+		"explosion_damage_scale": 0.697675,
 	})
 	return node
 
@@ -526,9 +529,11 @@ func _create_gunbody_charge() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Charge")
 	node.tags = ["charge", "蓄力", "high_damage"]
 	node.set_base_stats({
-		"damage": 30, "fire_rate": 1.5, "bullet_count": 1,
+		"damage": 880, "fire_rate": 1.5, "bullet_count": 1,
 		"spread": 0.05, "reload_time": 3.0, "magazine_size": 4,
 		"charge_time": 1.2,
+		# 命中范围爆炸的中心倍率：弹体伤害(880+标准弹8=888) × 0.630631 = 560。
+		"explosion_damage_scale": 0.630631,
 	})
 	return node
 
@@ -631,7 +636,7 @@ func _create_attachment_rubber_stock() -> AssemblyNode:
 func _create_attachment_scope() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "Att_Scope")
 	node.tags = ["scope", "crit", "accuracy", "attachment_slot_scope"]
-	node.set_base_stats({ "spread": -0.05, "damage": 5 })
+	node.set_base_stats({ "spread": -0.05, "damage": 15 })
 	return node
 
 func _create_attachment_big_mag() -> AssemblyNode:

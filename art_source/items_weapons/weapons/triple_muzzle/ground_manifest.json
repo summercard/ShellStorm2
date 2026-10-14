@@ -1,0 +1,18 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-TRIPLE-MUZZLE",
+  "slug": "triple_muzzle",
+  "preview_source": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_source_v001.blend",
+  "preview_sha256": "53871c61c511ac2ac41685bcc65e765b591b5cbcd7880d3685cacf545cdd94c5",
+  "ground_source": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_ground_source_v001.blend",
+  "ground_sha256": "3fba4ba572c107b080cb05289d21f8d5f6ae778776f7587ffa998222bdf7c293",
+  "preview_triangles": 7820,
+  "ground_polygons": 198,
+  "ground_triangles": 198,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true
+}

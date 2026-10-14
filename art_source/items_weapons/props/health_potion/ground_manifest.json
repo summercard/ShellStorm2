@@ -1,0 +1,18 @@
+{
+  "asset_id": "ITM-CONSUMABLE-ITEM-HEALTH-POTION",
+  "slug": "health_potion",
+  "preview_source": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source_v001.blend",
+  "preview_sha256": "6d1d848e4cc37d91fc99d0609db46763ef916458e2a418aa621befb07781d5bb",
+  "ground_source": "art_source/items_weapons/props/health_potion/source/itm_health_potion_ground_source_v001.blend",
+  "ground_sha256": "509273cbee4ddeef75c0f51dba3e224ed93fb0e66f52970e97ec5e23dd6647f0",
+  "preview_triangles": 5660,
+  "ground_polygons": 178,
+  "ground_triangles": 178,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true
+}

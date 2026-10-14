@@ -29,6 +29,16 @@ static func compile(level_id: String, table: Dictionary) -> Dictionary:
 		errors.append(_err("MONSTER_DROP_TABLE_ROWS_EMPTY", "monster_drop_table.rows", "rows 不得为空"))
 		return _report({}, errors, 0)
 
+	# 整表级「空掉落」概率（可选）：降低总体掉落的统一旋钮。
+	# 命中 ⇒ 本次击杀什么都不掉（含魂与弹药）。缺省 0 = 不做空判定。
+	var empty_chance := float(table.get("empty_chance", 0.0))
+	if empty_chance < 0.0 or empty_chance > 1.0:
+		errors.append(_err(
+			"MONSTER_DROP_TABLE_EMPTY_CHANCE_INVALID",
+			"monster_drop_table.empty_chance", "empty_chance 必须在 0..1"
+		))
+		empty_chance = 0.0
+
 	var grouped: Dictionary = {}
 	for index in range(rows.size()):
 		var path := "monster_drop_table.rows[%d]" % index
@@ -54,7 +64,7 @@ static func compile(level_id: String, table: Dictionary) -> Dictionary:
 	var specs: Dictionary = {}
 	for monster_id_value in grouped.keys():
 		var monster_id := str(monster_id_value)
-		var compiled := _compile_monster(level_id, monster_id, grouped[monster_id] as Array, errors)
+		var compiled := _compile_monster(level_id, monster_id, grouped[monster_id] as Array, errors, empty_chance)
 		if not compiled.is_empty():
 			specs[monster_id] = compiled
 	if not errors.is_empty():
@@ -101,7 +111,8 @@ static func _normalize_row(row: Dictionary, path: String, errors: Array[Dictiona
 
 
 static func _compile_monster(
-	level_id: String, monster_id: String, rows: Array, errors: Array[Dictionary]
+	level_id: String, monster_id: String, rows: Array, errors: Array[Dictionary],
+	empty_chance: float = 0.0
 ) -> Dictionary:
 	var entries: Array = []
 	var weighted: Array = []
@@ -121,6 +132,8 @@ static func _compile_monster(
 		"spec_id": "level:%s:monster:%s" % [level_id, monster_id],
 		"entries": entries,
 	}
+	if empty_chance > 0.0:
+		spec["empty_chance"] = empty_chance
 	var check := SPEC.validate_spec(spec, spec["spec_id"])
 	if not bool(check.get("ok", false)):
 		for value in check.get("errors", []):

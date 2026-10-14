@@ -354,9 +354,29 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 			monitor_combat = MonitorBossCombat.new(self)
 			attack_range = 6.0
 			if avatar != null:avatar.sync_boss_presentation(monitor_combat.presentation_context())
+	# —— 关卡级绝对数值覆盖（远征01 `monster_rules.stats.per_kind`）——
+	# 覆盖的是**最终值**，直接赋值、不再参与上面的比例还原：写 350 就是 350 点血。
+	# 未配置本段的关卡 data 里没有这三个键 ⇒ 一行都不执行，行为逐字不变。
+	# 放在 boss 分支之后：连显示器Boss 的身份基线也一并盖掉。
+	if data.has("override_max_hp"):
+		max_hp = maxi(1, int(data["override_max_hp"]))
+		current_hp = max_hp
+	if data.has("override_damage"):
+		contact_damage = maxi(0, int(data["override_damage"]))
+	if data.has("override_speed"):
+		move_speed = maxf(0.05, float(data["override_speed"]))
 	_apply_presentation_scale()
 	_ensure_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
+
+
+## 取关卡级 AI 参数（`monster_ai`，由 `MonsterInjector._ai_overrides()` 随配置下发）。
+## 键不存在或整段缺失 ⇒ 回退传入的全局常量，未配置关卡逐字不变。
+func _ai_param(key: String, fallback: Variant) -> Variant:
+	var ai: Variant = enemy_data.get("monster_ai", null)
+	if not (ai is Dictionary):
+		return fallback
+	return (ai as Dictionary).get(key, fallback)
 
 
 func apply_health_multiplier(multiplier: float) -> void:
@@ -850,13 +870,18 @@ func _physics_process(delta: float) -> void:
 		_lost_sight_time += delta
 		if ai_state == "idle" and _state_time > 2.2:
 			transition_to("patrol")
-	if (distance < 13.5 or stimulus_tracking) and ai_state in ["idle", "patrol", "search"] and (target_visible or stimulus_tracking):
+	var engage_distance := float(_ai_param("engage_distance_m", 13.5))
+	if (distance < engage_distance or stimulus_tracking) and ai_state in ["idle", "patrol", "search"] and (target_visible or stimulus_tracking):
 		transition_to("alert")
-	if ai_state == "alert" and _state_time > float(PROFILES[enemy_kind].get("alert", 0.28)):
+	var alert_duration := float(_ai_param(
+		"alert_duration_sec", float(PROFILES[enemy_kind].get("alert", 0.28))
+	))
+	if ai_state == "alert" and _state_time > alert_duration:
 		transition_to("chase")
+	var lost_sight_limit := float(_ai_param("lost_sight_sec", 1.15))
 	match ai_state:
 		"chase":
-			if _lost_sight_time > 1.15:
+			if _lost_sight_time > lost_sight_limit:
 				transition_to("search")
 			else:
 				_tick_chase(to_target, distance, delta)

@@ -132,6 +132,14 @@ def main() -> int:
             continue
         data = json.loads(path.read_text(encoding="utf-8-sig"))
         expected = expected_table(rows)
+        # CSV 不承载**表级扩展字段**（如 `empty_chance` —— 整表「什么都不掉」的概率）。
+        # JSON 里已有的、`expected_table` 不产出的键**原样保留**：既不抹掉手工配置，
+        # 也不让 `--check` 把这类扩展误判成漂移。
+        existing = data.get("monster_drop_table")
+        if isinstance(existing, dict):
+            for key, value in existing.items():
+                if key not in expected:
+                    expected[key] = value
         if data.get("monster_drop_table") == expected:
             continue
         if args.check:

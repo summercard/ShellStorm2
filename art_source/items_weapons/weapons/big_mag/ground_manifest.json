@@ -1,0 +1,18 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-BIG-MAG",
+  "slug": "big_mag",
+  "preview_source": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_source_v001.blend",
+  "preview_sha256": "8513e3320fad3a4af8ee4562b5149b9a45f0e95d72df06accb96b0b7befe72f5",
+  "ground_source": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_ground_source_v001.blend",
+  "ground_sha256": "a67664acb24910e970b61d43ed1cf2e3395a876a6896a67853cd5648a19cafff",
+  "preview_triangles": 5856,
+  "ground_polygons": 192,
+  "ground_triangles": 192,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true
+}

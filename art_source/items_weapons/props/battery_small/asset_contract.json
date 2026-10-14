@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-S",
+  "display_name_zh": "小型电池",
+  "logical_id": "item_battery_s",
+  "category": "道具",
+  "subclass": "consumable",
+  "domain_ledger": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+  "dimensions_m": {
+    "width": 0.311111,
+    "depth": 0.311111,
+    "height": 0.66
+  },
+  "dimension_basis": {
+    "runtime_probe": {
+      "factory": {
+        "xyz_min_m": [
+          -0.379999995231628,
+          -0.330000013113022,
+          -0.402500003576279
+        ],
+        "xyz_size_m": [
+          0.759999990463257,
+          0.660000026226044,
+          0.762500047683716
+        ]
+      },
+      "factory_upright": {
+        "xyz_min_m": [
+          -0.379999995231628,
+          -0.330000013113022,
+          -0.402500003576279
+        ],
+        "xyz_size_m": [
+          0.759999990463257,
+          0.660000026226044,
+          0.762500047683716
+        ]
+      },
+      "ground": {
+        "xyz_min_m": [
+          -0.191520005464554,
+          -0.166320011019707,
+          -0.202859997749329
+        ],
+        "xyz_size_m": [
+          0.383040010929108,
+          0.332640022039413,
+          0.384299993515015
+        ]
+      },
+      "ground_visual_scale": "(0.504, 0.504, 0.504)",
+      "kind": "crate",
+      "name": "小型电池"
+    },
+    "locked_axis_blender": 2,
+    "locked_length_m": 0.66,
+    "method": "按实测主轴定总长；其余轴保持用户参考图形体比例；非将旧占位盒非等比挤成新形体。",
+    "snapshot_date": "2026-10-14"
+  },
+  "origin_and_facing": "底面中心原点；Blender +Z向上，正面-Y；Godot +Y向上、正面+Z",
+  "collision_intent": {
+    "enabled": false,
+    "owner": "外部拾取/武器系统",
+    "method": "无Blender碰撞"
+  },
+  "animation_tier": "tier_0_static",
+  "animation_reason": "独立闭合消耗品/固定配件；无本体运行时开合动画契约，换弹由整件挂点运动驱动。",
+  "source_collection": "ITM_小型电池_中文资产管理",
+  "anchor_contract": [
+    "ItemRoot"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_rule_override": "用户明确要求使用场景材质球规范，武器配件沿用同一四角色模板。",
+  "source_dir": "art_source/items_weapons/props/battery_small/source",
+  "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
+  "stable_glb": "assets/art/items_weapons/props/battery_small/components/itm_battery_small_visual_top3d.glb",
+  "stable_prefab": "assets/art/items_weapons/props/battery_small/runtime/itm_battery_small_root_top3d.tscn",
+  "function_note": "仅Blender原始源制作；后续导入保持现有物品使用/装配规则；当前运行时仍用原表现",
+  "status": "Blender源已完成",
+  "glass_note": "",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
+      "sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54",
+      "triangles": 3616,
+      "usage": "近距离预览"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_ground_source_v001.blend",
+      "sha256": "e7d916bff0cf1d2cab60d49595b38d8f22a5cf9f0d033d71b4e3fa053944f762",
+      "polygons": 120,
+      "triangles": 120,
+      "usage": "地面掉落/拾取显示",
+      "derived_from_sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54"
+    }
+  },
+  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+}

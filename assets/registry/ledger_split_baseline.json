@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1241,
+ "asset_count": 1244,
  "assets": {
   "CHR-PLY-CAPSULE01": {
    "v": "fb9c7766773b1d6a335de6bfe8c9fff37124a233527dad83b2c87933016bfb59",
@@ -5013,7 +5013,7 @@
    "d": "weapons"
   },
   "WPN-BUL-MOD-BULLET-STANDARD": {
-   "v": "639fb09838dca1b05c008605ce230c92e66d60a14d441c0a458e88b6d96315c6",
+   "v": "acf6cef5d83383a90c1b3cbb10a43d8f6c748136da30bc59f3d0b95ba236ccd6",
    "c": "武器",
    "d": "weapons"
   },
@@ -5053,22 +5053,22 @@
    "d": "weapons"
   },
   "WPN-ATT-ATTACH-TRIPLE-MUZZLE": {
-   "v": "195028440d8b953fc70c6dcec0971dc8d9400dd7b80ea53899a4b67509f1a81c",
+   "v": "077728bb73d131ab24c6d54090866718d396ea1abbeb184c2ea3b3be3af0f3a7",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-ATT-ATTACH-RUBBER-STOCK": {
-   "v": "ed407305a265ad1d467350e42a73fede9954c7a769a0292dce62cfb98cde04dd",
+   "v": "d817b3f9dac3f1aefd337ba1f38411c0a9e7d7a4a25e77c57de5b2b813b80a50",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-ATT-ATTACH-SCOPE": {
-   "v": "5d9fe3655c179dfad702aa1a777bd99b2c36d3787c4352bd60c1e93e60907343",
+   "v": "5d56b375c6a52aa6497f9dbaa46cd5e21d8bc255c2db733e91e1820fb32b8cd4",
    "c": "武器",
    "d": "weapons"
   },
   "WPN-ATT-ATTACH-BIG-MAG": {
-   "v": "92fe1f47396ec1d90a7a11a778da3c2d6cbccfdec8e6704e591fc80413530ba8",
+   "v": "ff1dd58281b51348c5a7ce402996c7ef2f8b1e063e4fcfbf070a9183f7b9ab14",
    "c": "武器",
    "d": "weapons"
   },
@@ -6241,32 +6241,47 @@
    "v": "56e96f29695d2a1fa366a0379d1f68cd1f63b5f9d2366da3c5a8aed09101ead3",
    "c": "场景",
    "d": "scenes"
+  },
+  "ITM-CONSUMABLE-ITEM-BATTERY-L": {
+   "v": "7db10bcd348b506f25ba627314cba9d4a515fe10edda60550d8e2fd36de94f80",
+   "c": "道具",
+   "d": "props"
+  },
+  "ITM-CONSUMABLE-ITEM-BATTERY-S": {
+   "v": "b1a67c54631818f2056191bad9aa89b25cb3b61787f12e6283b3bbf068974ca8",
+   "c": "道具",
+   "d": "props"
+  },
+  "ITM-CONSUMABLE-ITEM-HEALTH-POTION": {
+   "v": "2313f7f0779e8d03ace7d76d543ba9b17e9f1291e7228093ba4e4e0dc01e92d8",
+   "c": "道具",
+   "d": "props"
   }
  },
  "column_digests": {
-  "1": "3de81b71ff46074a15eedcd220d56dac6d3bb61de5db165f6780014dd06c4f90",
-  "2": "cc8593cb24cb85ae862f4c19c5a4e5b0e6c6f0e6faf6d6a6dd1327da7ec9ae2a",
-  "3": "b04e0841904706e92c2e096cb39c43d085b80e0380ee8185d9e961c02738dba3",
-  "4": "7d3dceac2831c40579bbf9d7983da044f30af956f841ea95653b33b898e10730",
-  "5": "17050438e7cd91d0df0a40adb18d7a6692840ede144b61ac5e10814ee5c39e59",
-  "6": "9f09e8d57ae650d6ed1f5519e5ab99e6411e578110621ff82d39f2f35c5bbbce",
-  "7": "e46a3ad7c46e659a7fcbe24463b4f20772537ffcd89f02b89c92526f7b1b8045",
-  "8": "6c0dccc970d1ed4c8207af38fb3d7e0fd46c5f518b615b42d04bfe97b8c00f18",
-  "9": "e4127708193f2a343b245f303c6ce8e7b9ef451011217d9c70be46520d5556bc",
-  "10": "1fe5697c741bec92ff84408fcc33ea04e1c2dc728d136dca818fa3e55e46b2ae",
-  "11": "a0326ba1ec95e4139ab8d99d3e852a81c5a67e5376414feda27b906681025e2b",
-  "12": "d322c7a9c4403b20215d12160264e3b3cde6cd49b1324f3b71202731d5c6a6bb",
-  "13": "70e8d67746a0af82be7636b26d104bfacb222561193e6aa7fd11e05a12d7cf38",
-  "14": "9800c2cb52f42ca28fa1b3b399dd9b35a8b7e14b13d79a4cfce2d883d64bffde",
-  "15": "25243b05025b83675b2fd04cfc46dc0339d3ccfeb45af5ffe8cb0faa010d8b79",
-  "16": "aeae3e568cc8a44a22e2c1095e28d5efb11b6fc9f27574eacfe0695cccdfbce8",
-  "17": "4e5960abbb13788a945e654c0622cb26970c745e096cd03a843df676d060506a",
-  "20": "a8eb17778dc0fcac131dd9cf2683f0aaafe33e35bb5fb8049b4fd0c141228e6e",
-  "21": "5985001f8f158097a51ffccca5b65e151f3fb36ba76e66ab82f8130b5a70ac5b",
-  "22": "3d976f095c1ceea732d4c37508f505982abe9661020a8aca9d82e3d657926e2f",
-  "23": "489b5f86af9c434fe78e8fc95a77bfc7b68071a89998343be160fba30e9c786c",
-  "24": "4e593085e1c1ec84c082788e6aaf4d707cc6b54b976cefda25ea60bac71078dd",
-  "25": "57ffc420ab34b49c1295fef0da433ec262ceabcce9e422f9a41220e8d7563619"
+  "1": "facc6cdce3b041744212b099759617c2df3e2f6c1b98966e69296cbd7d3a5677",
+  "2": "a9eb0cb63893102dae2eaa8598f691e0945e693351ef2c05bb10fbbf677b6de3",
+  "3": "e89e0b1060b5bfbd7a611677c38ee32a339a67dbfc4fd84e608ca0d5aa2f09a3",
+  "4": "2c8cbdceba9300b3737edf9d770c3e04771e3c6803d059882b996817523df4fc",
+  "5": "a4afffee5734a93dbf75fb284783bfd1a8d4bfbbd6402fad0e212df860f87830",
+  "6": "d88fbf97c5fd4bea00cc74fab78ac2084764dd3c15893aa2a7c546292ddf8263",
+  "7": "68b75f94788a562141a48ef345e411426051afc1088a476b879c91222f9b35de",
+  "8": "c7a235c3c2a5668ecaf7dfe799ef5e91826662410177a4125746d082d2f715cf",
+  "9": "e1c981a25382038a3ce64fa58c1c852983336161f0dca73cd1eda63b73549dcc",
+  "10": "c7375e59b1a3d7fd66fd46b82dfbf30d259363d57ba2ccae243eb43cd9a6a132",
+  "11": "0c01cfb084bc05565220e40a2b7b5fae29ec79f80321b4ee9ac9de32b955c151",
+  "12": "a7335162db38d6ace21221200aa5c235d0cc748c9ab1bafab9bc98d48ae9ad84",
+  "13": "f1ed1e02deacf6e52a7db24050b5a9b7f79902f44286f4a74ef26a04f392d972",
+  "14": "9d818ab697fde65eba7ba0aa87fc13c79ca29218b926c4bb85884cf9cca29346",
+  "15": "62410d5c35d9e4d1276a49aa8ad723cf028f0d766dabb2b16d7f75baa40d7d24",
+  "16": "feb80846460ffed80e75bd9d77057f7f8b289c5d498c960a381752ffb9be53ff",
+  "17": "7bb7bbefc41bdbf971e11487bd4e37b9d07fb843907b21eb11c261783f284019",
+  "20": "2ae4bb1cc8fb78d95e802d2ca97f8ec588c61b00bd8ae84fc68826923580aac7",
+  "21": "24bd5f2dd039992534976c15b5f4bce1caee83d89162975b94a5cb7a853aa2a7",
+  "22": "d1bb46cfc5bed4bfa8ac51775085dda8e602d9932a1a36562083962e68f0cf10",
+  "23": "74a8a51df4e808c099762000c2a6163614596370bed38c5b92a2ea1e1b5413dd",
+  "24": "f167af8e0cf95651731510a3b6caeae11da5e30b65b354d276fecab905bf58b8",
+  "25": "3793ab47a3882931105d6ae28370380048ecefff66a54cd358ad1fe70970c9d8"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -6294,7 +6309,7 @@
   "武器": 36,
   "特效": 20,
   "角色": 25,
-  "道具": 25,
+  "道具": 28,
   "音乐": 9,
   "音效": 152
  },

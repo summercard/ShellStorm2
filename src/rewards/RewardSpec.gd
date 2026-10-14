@@ -216,6 +216,15 @@ static func validate_spec(spec: Dictionary, path: String = "spec") -> Dictionary
 					errors.append_array(_validate_entry(entry, "%s.fallback[%d]" % [path, index]))
 				index += 1
 
+	# 整份规格的「空掉落」概率（可选）。命中即本次结算不产出任何东西 ——
+	# 连魂与弹药一并落空，语义是「这只怪什么都没掉」。缺省 0 = 不做空判定。
+	if spec.has("empty_chance"):
+		var empty_chance = spec["empty_chance"]
+		if not (empty_chance is int or empty_chance is float):
+			errors.append(_err("INVALID_CHANCE", "%s.empty_chance" % [path], "empty_chance 必须是数值"))
+		elif float(empty_chance) < 0.0 or float(empty_chance) > 1.0:
+			errors.append(_err("INVALID_CHANCE", "%s.empty_chance" % [path], "empty_chance 必须在 0..1"))
+
 	return { "ok": errors.is_empty(), "errors": errors }
 
 

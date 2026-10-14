@@ -1,0 +1,33 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-RUBBER-STOCK",
+  "source_blend": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
+  "source_sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb",
+  "dimensions_m": {
+    "width": 0.124603,
+    "depth": 0.32,
+    "height": 0.222154
+  },
+  "components": 11,
+  "output_meshes": 1,
+  "triangles": 20732,
+  "source_only": true,
+  "previews": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\items_reference_20261014\\previews\\rubber_stock",
+  "contract": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\items_weapons\\weapons\\rubber_stock\\asset_contract.json",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
+      "sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb",
+      "triangles": 20732,
+      "usage": "近距离预览"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_ground_source_v001.blend",
+      "sha256": "4e4a906492d9eb1f79bfd5e756991584422fd30664dd502a25cfe542436791d7",
+      "polygons": 145,
+      "triangles": 145,
+      "usage": "地面掉落/拾取显示",
+      "derived_from_sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb"
+    }
+  },
+  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+}

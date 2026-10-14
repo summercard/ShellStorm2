@@ -1,0 +1,18 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-SCOPE",
+  "slug": "scope",
+  "preview_source": "art_source/items_weapons/weapons/scope/source/wpn_scope_source_v001.blend",
+  "preview_sha256": "6c4244348bb117f35a862187503ab5577be801b5f1dd00e72bcb17c095274b95",
+  "ground_source": "art_source/items_weapons/weapons/scope/source/wpn_scope_ground_source_v001.blend",
+  "ground_sha256": "a6ebf1f74d67fb2ee77f1be0bc5442fe1d74d1058826c6cf4d0a43d3f9b9e138",
+  "preview_triangles": 9044,
+  "ground_polygons": 198,
+  "ground_triangles": 198,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true
+}

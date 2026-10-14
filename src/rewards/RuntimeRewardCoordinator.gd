@@ -10,6 +10,11 @@ var _run_seed := 1
 var _level_id := ""
 var _monster_drop_specs: Dictionary = {}
 var _monster_drop_errors: Array[Dictionary] = []
+## 关卡级「空掉落」概率（`monster_drop_table.empty_chance`）。
+## 为什么单独存一份：本表只登记了部分怪（远征01 是 3/6 种），其余怪走
+## `MonsterInjector.drop_spec_for` 的旧公式兜底 —— 那条路够不着表级字段。
+## 存本变量、随 kill 请求下发，才能让**同关所有普通怪**吃到同一概率。
+var _monster_drop_empty_chance := 0.0
 
 
 func configure(run_seed: int) -> void:
@@ -21,6 +26,7 @@ func configure_level_drop_table(level_id: String, table: Dictionary) -> Dictiona
 	_level_id = level_id
 	_monster_drop_specs.clear()
 	_monster_drop_errors.clear()
+	_monster_drop_empty_chance = clampf(float(table.get("empty_chance", 0.0)), 0.0, 1.0)
 	if table.is_empty():
 		return {"ok": true, "level_id": level_id, "row_count": 0, "monster_count": 0, "errors": []}
 	var compiled := MONSTER_DROP_TABLE.compile(level_id, table)
@@ -79,6 +85,7 @@ func resolve_kill(
 		"monster_id": str(enemy_data.get("enemy_type", "melee_chaser")),
 		"monster_tier": tier,
 		"monster_drop_specs": _monster_drop_specs,
+		"monster_drop_empty_chance": _monster_drop_empty_chance,
 		"floor_level": _floor_level_from_loot_table(str(enemy_data.get("loot_table", ""))),
 		"context": _context(event_id, floor),
 	})

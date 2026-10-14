@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "asset_id": "ITM-CONSUMABLE-ITEM-HEALTH-POTION",
+  "display_name_zh": "治疗药水",
+  "logical_id": "item_health_potion",
+  "category": "道具",
+  "subclass": "consumable",
+  "domain_ledger": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+  "dimensions_m": {
+    "width": 0.673088,
+    "depth": 0.683507,
+    "height": 0.82
+  },
+  "dimension_basis": {
+    "runtime_probe": {
+      "factory": {
+        "xyz_min_m": [
+          -0.275746166706085,
+          -0.409999996423721,
+          -0.3125
+        ],
+        "xyz_size_m": [
+          0.55149233341217,
+          0.819999992847443,
+          0.592499971389771
+        ]
+      },
+      "factory_upright": {
+        "xyz_min_m": [
+          -0.275746166706085,
+          -0.409999996423721,
+          -0.3125
+        ],
+        "xyz_size_m": [
+          0.55149233341217,
+          0.819999992847443,
+          0.592499971389771
+        ]
+      },
+      "ground": {
+        "xyz_min_m": [
+          -0.138976067304611,
+          -0.206640005111694,
+          -0.157500013709068
+        ],
+        "xyz_size_m": [
+          0.277952134609222,
+          0.413280010223389,
+          0.298620015382767
+        ]
+      },
+      "ground_visual_scale": "(0.504, 0.504, 0.504)",
+      "kind": "heal",
+      "name": "治疗药水"
+    },
+    "locked_axis_blender": 2,
+    "locked_length_m": 0.82,
+    "method": "按实测主轴定总长；其余轴保持用户参考图形体比例；非将旧占位盒非等比挤成新形体。",
+    "snapshot_date": "2026-10-14"
+  },
+  "origin_and_facing": "底面中心原点；Blender +Z向上，正面-Y；Godot +Y向上、正面+Z",
+  "collision_intent": {
+    "enabled": false,
+    "owner": "外部拾取/武器系统",
+    "method": "无Blender碰撞"
+  },
+  "animation_tier": "tier_0_static",
+  "animation_reason": "独立闭合消耗品/固定配件；无本体运行时开合动画契约，换弹由整件挂点运动驱动。",
+  "source_collection": "ITM_治疗药水_中文资产管理",
+  "anchor_contract": [
+    "ItemRoot"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_rule_override": "用户明确要求使用场景材质球规范，武器配件沿用同一四角色模板。",
+  "source_dir": "art_source/items_weapons/props/health_potion/source",
+  "source_blend": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source_v001.blend",
+  "stable_glb": "assets/art/items_weapons/props/health_potion/components/itm_health_potion_visual_top3d.glb",
+  "stable_prefab": "assets/art/items_weapons/props/health_potion/runtime/itm_health_potion_root_top3d.tscn",
+  "function_note": "仅Blender原始源制作；后续导入保持现有物品使用/装配规则；当前运行时仍用原表现",
+  "status": "Blender源已完成",
+  "glass_note": "严格四材质公共色盘，药瓶采用不透明清漆与浅色肩部表现玻璃感；未新增透明材质。",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source_v001.blend",
+      "sha256": "6d1d848e4cc37d91fc99d0609db46763ef916458e2a418aa621befb07781d5bb",
+      "triangles": 5660,
+      "usage": "近距离预览"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/props/health_potion/source/itm_health_potion_ground_source_v001.blend",
+      "sha256": "509273cbee4ddeef75c0f51dba3e224ed93fb0e66f52970e97ec5e23dd6647f0",
+      "polygons": 178,
+      "triangles": 178,
+      "usage": "地面掉落/拾取显示",
+      "derived_from_sha256": "6d1d848e4cc37d91fc99d0609db46763ef916458e2a418aa621befb07781d5bb"
+    }
+  },
+  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+}

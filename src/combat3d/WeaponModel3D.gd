@@ -562,8 +562,12 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 func _apply_gun_behavior_tags() -> void:
 	if gun_id == "bp_launcher" and "explosive" not in bullet_tags:
 		bullet_tags.append("explosive")
-	if gun_id == "bp_charge" and "charged" not in bullet_tags:
-		bullet_tags.append("charged")
+	# 蓄力萝卜炮同样打出范围爆炸：命中即爆，中心范围伤害由枪身 explosion_damage_scale 决定。
+	if gun_id == "bp_charge":
+		if "charged" not in bullet_tags:
+			bullet_tags.append("charged")
+		if "explosive" not in bullet_tags:
+			bullet_tags.append("explosive")
 	if bool(_projectile_behavior.get("homing", false)) and "homing" not in bullet_tags:
 		bullet_tags.append("homing")
 	if bool(_projectile_behavior.get("bounce", false)) and "bounce" not in bullet_tags:

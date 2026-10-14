@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "asset_id": "WPN-ATT-ATTACH-RUBBER-STOCK",
+  "display_name_zh": "橡皮枪托",
+  "logical_id": "attach_rubber_stock",
+  "category": "武器",
+  "subclass": "attachment",
+  "domain_ledger": "assets/registry/ledgers/ShellStorm2_武器账本_v001.xlsx",
+  "dimensions_m": {
+    "width": 0.124603,
+    "depth": 0.32,
+    "height": 0.222154
+  },
+  "dimension_basis": {
+    "runtime_probe": {
+      "factory": {
+        "xyz_min_m": [
+          -0.310000002384186,
+          -0.119999997317791,
+          -0.319999992847443
+        ],
+        "xyz_size_m": [
+          0.620000004768372,
+          0.490000009536743,
+          0.639999985694885
+        ]
+      },
+      "factory_upright": {
+        "xyz_min_m": [
+          -0.310000002384186,
+          -0.119999997317791,
+          -0.319999992847443
+        ],
+        "xyz_size_m": [
+          0.620000004768372,
+          0.490000009536743,
+          0.639999985694885
+        ]
+      },
+      "ground": {
+        "xyz_min_m": [
+          -0.156240001320839,
+          -0.060479998588562,
+          -0.161280006170273
+        ],
+        "xyz_size_m": [
+          0.312480002641678,
+          0.246959999203682,
+          0.322560012340546
+        ]
+      },
+      "ground_visual_scale": "(0.504, 0.504, 0.504)",
+      "installed_local": {
+        "xyz_min_m": [
+          -0.109999999403954,
+          -0.0844620019197464,
+          0.215454995632172
+        ],
+        "xyz_size_m": [
+          0.219999998807907,
+          0.219999998807907,
+          0.319999992847443
+        ]
+      },
+      "installed_parent_scale": "(1.0, 1.0, 1.0)",
+      "kind": "attachment",
+      "name": "橡皮枪托"
+    },
+    "locked_axis_blender": 1,
+    "locked_length_m": 0.32,
+    "method": "按实测主轴定总长；其余轴保持用户参考图形体比例；非将旧占位盒非等比挤成新形体。",
+    "snapshot_date": "2026-10-14"
+  },
+  "origin_and_facing": "挂点中心原点；Blender +Y 对应 Godot -Z 枪口，+Z向上",
+  "collision_intent": {
+    "enabled": false,
+    "owner": "外部拾取/武器系统",
+    "method": "无Blender碰撞"
+  },
+  "animation_tier": "tier_0_static",
+  "animation_reason": "独立闭合消耗品/固定配件；无本体运行时开合动画契约，换弹由整件挂点运动驱动。",
+  "source_collection": "WPN_橡皮枪托_中文资产管理",
+  "anchor_contract": [
+    "ItemRoot"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_rule_override": "用户明确要求使用场景材质球规范，武器配件沿用同一四角色模板。",
+  "source_dir": "art_source/items_weapons/weapons/rubber_stock/source",
+  "source_blend": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
+  "stable_glb": "assets/art/items_weapons/weapons/rubber_stock/components/wpn_rubber_stock_visual_top3d.glb",
+  "stable_prefab": "assets/art/items_weapons/weapons/rubber_stock/runtime/wpn_rubber_stock_root_top3d.tscn",
+  "function_note": "仅Blender原始源制作；后续导入保持现有物品使用/装配规则；当前运行时仍用原表现",
+  "status": "Blender源已完成",
+  "glass_note": "",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
+      "sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb",
+      "triangles": 20732,
+      "usage": "近距离预览"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_ground_source_v001.blend",
+      "sha256": "4e4a906492d9eb1f79bfd5e756991584422fd30664dd502a25cfe542436791d7",
+      "polygons": 145,
+      "triangles": 145,
+      "usage": "地面掉落/拾取显示",
+      "derived_from_sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb"
+    }
+  },
+  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+}

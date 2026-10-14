@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "asset_id": "WPN-BUL-MOD-BULLET-STANDARD",
+  "display_name_zh": "标准子弹模块",
+  "logical_id": "mod_bullet_standard",
+  "category": "武器",
+  "subclass": "bullet_module",
+  "domain_ledger": "assets/registry/ledgers/ShellStorm2_武器账本_v001.xlsx",
+  "dimensions_m": {
+    "width": 0.376,
+    "depth": 0.376,
+    "height": 0.94
+  },
+  "dimension_basis": {
+    "runtime_probe": {
+      "factory": {
+        "xyz_min_m": [
+          -0.265882670879364,
+          -0.312370121479034,
+          -0.159999996423721
+        ],
+        "xyz_size_m": [
+          0.649283289909363,
+          0.940555691719055,
+          0.319999992847443
+        ]
+      },
+      "factory_upright": {
+        "xyz_min_m": [
+          -0.157569229602814,
+          -0.269999980926514,
+          -0.159999996423721
+        ],
+        "xyz_size_m": [
+          0.315138459205627,
+          0.939999997615814,
+          0.319999992847443
+        ]
+      },
+      "ground": {
+        "xyz_min_m": [
+          -0.134004876017571,
+          -0.157434538006783,
+          -0.0806400030851364
+        ],
+        "xyz_size_m": [
+          0.327238768339157,
+          0.474040031433105,
+          0.161280006170273
+        ]
+      },
+      "ground_visual_scale": "(0.504, 0.504, 0.504)",
+      "kind": "bullet",
+      "name": "标准子弹模块"
+    },
+    "locked_axis_blender": 2,
+    "locked_length_m": 0.94,
+    "method": "按实测主轴定总长；其余轴保持用户参考图形体比例；非将旧占位盒非等比挤成新形体。",
+    "snapshot_date": "2026-10-14"
+  },
+  "origin_and_facing": "底面中心原点；Blender +Z向上，正面-Y；Godot +Y向上、正面+Z",
+  "collision_intent": {
+    "enabled": false,
+    "owner": "外部拾取/武器系统",
+    "method": "无Blender碰撞"
+  },
+  "animation_tier": "tier_0_static",
+  "animation_reason": "独立闭合消耗品/固定配件；无本体运行时开合动画契约，换弹由整件挂点运动驱动。",
+  "source_collection": "WPN_标准子弹模块_中文资产管理",
+  "anchor_contract": [
+    "ItemRoot"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_rule_override": "用户明确要求使用场景材质球规范，武器配件沿用同一四角色模板。",
+  "source_dir": "art_source/items_weapons/weapons/bullet_standard/source",
+  "source_blend": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
+  "stable_glb": "assets/art/items_weapons/weapons/bullet_standard/components/wpn_bullet_standard_visual_top3d.glb",
+  "stable_prefab": "assets/art/items_weapons/weapons/bullet_standard/runtime/wpn_bullet_standard_root_top3d.tscn",
+  "function_note": "仅Blender原始源制作；后续导入保持现有物品使用/装配规则；当前运行时仍用原表现",
+  "status": "Blender源已完成",
+  "glass_note": "",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
+      "sha256": "9c1f7ffa3a57dc6b2bfedbb10ccb1d023df98c7761ea42f9eb00aa729958bb5e",
+      "triangles": 3368,
+      "usage": "近距离预览"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_ground_source_v001.blend",
+      "sha256": "183bdba5012c84457782d224b2cc6e871af09e3d126187f665497d98a8ca89cd",
+      "polygons": 176,
+      "triangles": 176,
+      "usage": "地面掉落/拾取显示",
+      "derived_from_sha256": "9c1f7ffa3a57dc6b2bfedbb10ccb1d023df98c7761ea42f9eb00aa729958bb5e"
+    }
+  },
+  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+}

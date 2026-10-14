@@ -278,7 +278,7 @@ func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Di
 	var policy := "darkness_seeker" if enemy_kind in DARKNESS_SEEKER_KINDS else "light_hunter"
 	var illumination := enemy.call("get_illumination_snapshot") as Dictionary if enemy.has_method("get_illumination_snapshot") else {}
 	var light_state := str(illumination.get("illumination_state", "darkness"))
-	var vision_range := _vision_range_for_light_state(light_state)
+	var vision_range := _vision_range_for_light_state(light_state, enemy)
 	var forced_target_id := int(record.get("forced_target_instance_id", 0))
 	if forced_target_id > 0 and now <= int(record.get("forced_target_until_msec", 0)):
 		var forced_target := instance_from_id(forced_target_id) as Node3D
@@ -348,7 +348,9 @@ func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Di
 		)
 
 	var players := enemy.get_tree().get_nodes_in_group("player_3d")
-	var proximity := _vision.find_proximity_player(enemy, players)
+	var proximity := _vision.find_proximity_player(enemy, players, float(ai_param_for(
+		enemy, "proximity_awareness_m", MonsterVisionSystem3D.PROXIMITY_AWARENESS_RANGE
+	)))
 	if bool(proximity.get("detected", false)):
 		return _decision(
 			"proximity_contact", 0, false, Vector3.ZERO,
@@ -457,8 +459,11 @@ func _share_ally_alert(source: CharacterBody3D, position: Vector3, now: int, sou
 	var room_filter: Array[String] = []
 	if not source_room.is_empty():
 		room_filter.append(source_room)
+	# 警报传播半径可按关卡（或房间）配置：远征01 房间级配大半径 ⇒
+	# 「一群进入战斗，全房同伴一起围上来」。缺省 10 m = 现有全局常量。
+	var share_radius := float(ai_param_for(source, "alert_share_radius_m", ALERT_SHARE_RADIUS))
 	for candidate in GameplaySpatialRegistry3D.query_radius(
-		position, ALERT_SHARE_RADIUS, [GameplaySpatialRegistry3D.KIND_ENEMY], room_filter
+		position, share_radius, [GameplaySpatialRegistry3D.KIND_ENEMY], room_filter
 	):
 		var ally := candidate as CharacterBody3D
 		if ally == null or ally == source or float(ally.get("current_hp")) <= 0.0:
@@ -522,14 +527,37 @@ func _update_spatial_record(enemy: CharacterBody3D, record: Dictionary) -> void:
 	update_enemy_spatial(enemy)
 
 
-func _vision_range_for_light_state(light_state: String) -> float:
+func _vision_range_for_light_state(light_state: String, enemy: Node = null) -> float:
+	# 三档视野都可被关卡级规则覆盖（远征01 `monster_rules.ai`）：键缺失即回退全局常量。
 	match light_state:
 		"sunlight":
-			return MonsterVisionSystem3D.SUNLIGHT_VISION_RANGE
+			return float(ai_param_for(
+				enemy, "vision_range_sunlight_m", MonsterVisionSystem3D.SUNLIGHT_VISION_RANGE
+			))
 		"artificial_light":
-			return MonsterVisionSystem3D.ARTIFICIAL_LIGHT_VISION_RANGE
+			return float(ai_param_for(
+				enemy, "vision_range_artificial_m",
+				MonsterVisionSystem3D.ARTIFICIAL_LIGHT_VISION_RANGE
+			))
 		_:
-			return MonsterVisionSystem3D.DARKNESS_VISION_RANGE
+			return float(ai_param_for(
+				enemy, "vision_range_dark_m", MonsterVisionSystem3D.DARKNESS_VISION_RANGE
+			))
+
+
+## 取某只怪的关卡级 AI 参数（`monster_ai`，由 `MonsterInjector` 随怪物配置下发、
+## `Enemy3D.configure_from_enemy_data` 记进 `enemy_data`）。
+## 缺省或未配置本段 ⇒ 回退传入的全局常量，塔楼等未配置关卡逐字不变。
+static func ai_param_for(enemy: Node, key: String, fallback: Variant) -> Variant:
+	if enemy == null or not is_instance_valid(enemy):
+		return fallback
+	var data: Variant = enemy.get("enemy_data")
+	if not (data is Dictionary):
+		return fallback
+	var ai: Variant = (data as Dictionary).get("monster_ai", null)
+	if not (ai is Dictionary):
+		return fallback
+	return (ai as Dictionary).get(key, fallback)
 
 
 func _sound_reaches_enemy(enemy: CharacterBody3D, position: Vector3, radius: float, distance: float) -> bool:

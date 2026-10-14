@@ -1,0 +1,18 @@
+{
+  "asset_id": "WPN-BUL-MOD-BULLET-STANDARD",
+  "slug": "bullet_standard",
+  "preview_source": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
+  "preview_sha256": "9c1f7ffa3a57dc6b2bfedbb10ccb1d023df98c7761ea42f9eb00aa729958bb5e",
+  "ground_source": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_ground_source_v001.blend",
+  "ground_sha256": "183bdba5012c84457782d224b2cc6e871af09e3d126187f665497d98a8ca89cd",
+  "preview_triangles": 3368,
+  "ground_polygons": 176,
+  "ground_triangles": 176,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true
+}

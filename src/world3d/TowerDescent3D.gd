@@ -2364,6 +2364,9 @@ func _build_expedition_records() -> void:
 	):
 		_mark_expedition_bootstrap_failed("远征规划缺少入口安全房或 01 号房")
 		return
+	# 关卡级怪物规则（数值绝对覆盖 + AI 手感参数）：与 plan 同寿命，切关/重建时整段替换。
+	# 未写本段的关卡得到空字典 ⇒ 数值与 AI 全部走原常量，行为逐字不变。
+	set_monster_rules(plan.get("monster_rules", {}) as Dictionary)
 	# 关卡级怪物掉落表与当前 plan 同寿命。奖励协调器持有编译结果，切关/重建时整表替换，
 	# 不塞进 MonsterInjector 静态状态，避免同进程多场景与测试之间串味。
 	if _reward_coordinator != null:

@@ -1,0 +1,33 @@
+{
+  "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-S",
+  "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
+  "source_sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54",
+  "dimensions_m": {
+    "width": 0.311111,
+    "depth": 0.311111,
+    "height": 0.66
+  },
+  "components": 9,
+  "output_meshes": 1,
+  "triangles": 3616,
+  "source_only": true,
+  "previews": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\items_reference_20261014\\previews\\battery_small",
+  "contract": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\items_weapons\\props\\battery_small\\asset_contract.json",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
+      "sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54",
+      "triangles": 3616,
+      "usage": "近距离预览"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_ground_source_v001.blend",
+      "sha256": "e7d916bff0cf1d2cab60d49595b38d8f22a5cf9f0d033d71b4e3fa053944f762",
+      "polygons": 120,
+      "triangles": 120,
+      "usage": "地面掉落/拾取显示",
+      "derived_from_sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54"
+    }
+  },
+  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+}

@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-L",
+      "triangles": 168,
+      "bounds": [
+        0.45227956771850586,
+        0.3325243294239044,
+        0.6600000262260437
+      ],
+      "uv_pass": true,
+      "high_unchanged": true
+    },
+    {
+      "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-S",
+      "triangles": 120,
+      "bounds": [
+        0.31111109256744385,
+        0.31111109256744385,
+        0.6600000262260437
+      ],
+      "uv_pass": true,
+      "high_unchanged": true
+    },
+    {
+      "asset_id": "ITM-CONSUMABLE-ITEM-HEALTH-POTION",
+      "triangles": 178,
+      "bounds": [
+        0.6730877161026001,
+        0.6835070252418518,
+        0.8199999928474426
+      ],
+      "uv_pass": true,
+      "high_unchanged": true
+    },
+    {
+      "asset_id": "WPN-BUL-MOD-BULLET-STANDARD",
+      "triangles": 176,
+      "bounds": [
+        0.3760000169277191,
+        0.3760000169277191,
+        0.9399999976158142
+      ],
+      "uv_pass": true,
+      "high_unchanged": true
+    },
+    {
+      "asset_id": "WPN-ATT-ATTACH-BIG-MAG",
+      "triangles": 192,
+      "bounds": [
+        0.11007091775536537,
+        0.07046808302402496,
+        0.23999998718500137
+      ],
+      "uv_pass": true,
+      "high_unchanged": true
+    },
+    {
+      "asset_id": "WPN-ATT-ATTACH-TRIPLE-MUZZLE",
+      "triangles": 198,
+      "bounds": [
+        0.14035087823867798,
+        0.1600000113248825,
+        0.14596491307020187
+      ],
+      "uv_pass": true,
+      "high_unchanged": true
+    },
+    {
+      "asset_id": "WPN-ATT-ATTACH-RUBBER-STOCK",
+      "triangles": 145,
+      "bounds": [
+        0.12460309639573097,
+        0.3199999928474426,
+        0.22215364128351212
+      ],
+      "uv_pass": true,
+      "high_unchanged": true
+    },
+    {
+      "asset_id": "WPN-ATT-ATTACH-SCOPE",
+      "triangles": 198,
+      "bounds": [
+        0.13455830514431,
+        0.2800000011920929,
+        0.18056537955999374
+      ],
+      "uv_pass": true,
+      "high_unchanged": true
+    }
+  ]
+}

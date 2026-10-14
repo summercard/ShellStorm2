@@ -78,6 +78,15 @@ static func resolve(spec: Dictionary, context: Dictionary = {}) -> Dictionary:
 		"truncated": false,
 	}
 
+	# 关卡级「空掉落」判定（远征01 `monster_drop_table.empty_chance`）。
+	# 命中 ⇒ 本次结算不产出任何东西，**连魂与弹药一并落空**（业主口径「什么都不掉」）。
+	# 掷签放在 entries 之前、与后续抽取共用同一个 rng ⇒ 同 seed 同结果、可复现、
+	# 不新增随机流。缺省 0 = 不做空判定，未配置关卡的掉落逐字不变。
+	var empty_chance := float(spec.get("empty_chance", 0.0))
+	if empty_chance > 0.0 and rng.randf() < empty_chance:
+		report["empty_roll"] = true
+		return report
+
 	_resolve_entries(spec.get("entries", []), state, "entries", 0)
 
 	if (state["grants"] as Array).is_empty() and spec.has("fallback"):
@@ -168,6 +177,10 @@ static func _monster_spec_for(request: Dictionary, context: Dictionary) -> Dicti
 	if monster_id.is_empty():
 		return {}
 	var tier := str(request.get("monster_tier", "normal"))
+	# 关卡级「空掉落」概率：落后于表级字段一步 —— 表里登记的怪由编译期就带上，
+	# 走旧公式兜底的怪（本关未登记的怪种）在此补上，保证**同关所有普通怪同一口径**。
+	# 精英 / Boss 不参与（它们另有稳定单件契约）。
+	var level_empty_chance := float(request.get("monster_drop_empty_chance", 0.0))
 	# 当前关卡的怪物掉落表只覆盖普通怪；房间 kill 已在 _pick_ref 更早命中。
 	# 表里没写这只怪时，继续走 MonsterInjector 旧公式兜底，不会空手。
 	if tier == "normal":
@@ -176,12 +189,22 @@ static func _monster_spec_for(request: Dictionary, context: Dictionary) -> Dicti
 			return (level_specs[monster_id] as Dictionary).duplicate(true)
 	var floor_level := int(request.get("floor_level", 0))
 	var floor := int(context.get("floor", 1))
+	var spec := {}
 	if _monster_spec_provider.is_valid():
 		var injected = _monster_spec_provider.call(monster_id, tier, floor_level, floor)
 		if injected is Dictionary:
-			return injected
-	var injector := preload("res://src/map/MonsterInjector.gd")
-	return injector.drop_spec_for(monster_id, tier, floor_level, floor)
+			spec = injected
+	if spec.is_empty():
+		var injector := preload("res://src/map/MonsterInjector.gd")
+		spec = injector.drop_spec_for(monster_id, tier, floor_level, floor)
+	if (
+		tier == "normal"
+		and level_empty_chance > 0.0
+		and not spec.is_empty()
+		and not spec.has("empty_chance")
+	):
+		spec["empty_chance"] = level_empty_chance
+	return spec
 
 
 static func _empty_report(spec_id: String) -> Dictionary:

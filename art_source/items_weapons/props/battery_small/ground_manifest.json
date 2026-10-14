@@ -1,0 +1,18 @@
+{
+  "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-S",
+  "slug": "battery_small",
+  "preview_source": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
+  "preview_sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54",
+  "ground_source": "art_source/items_weapons/props/battery_small/source/itm_battery_small_ground_source_v001.blend",
+  "ground_sha256": "e7d916bff0cf1d2cab60d49595b38d8f22a5cf9f0d033d71b4e3fa053944f762",
+  "preview_triangles": 3616,
+  "ground_polygons": 120,
+  "ground_triangles": 120,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true
+}

@@ -1,0 +1,141 @@
+{
+  "passed": true,
+  "sources": [
+    {
+      "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-L",
+      "source": "art_source/items_weapons/props/battery_large/source/itm_battery_large_source_v001.blend",
+      "bounds_blender_xyz_m": [
+        0.45227956771850586,
+        0.3325243294239044,
+        0.6600000262260437
+      ],
+      "output_meshes": 1,
+      "polygons": 5316,
+      "triangles": 12536,
+      "all_face_uv_pass": true,
+      "four_shared_materials_pass": true,
+      "unpacked_palette_reopened_pass": true,
+      "scale_1_pass": true,
+      "stage": "source_only"
+    },
+    {
+      "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-S",
+      "source": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
+      "bounds_blender_xyz_m": [
+        0.31111109256744385,
+        0.31111109256744385,
+        0.6600000262260437
+      ],
+      "output_meshes": 1,
+      "polygons": 1456,
+      "triangles": 3616,
+      "all_face_uv_pass": true,
+      "four_shared_materials_pass": true,
+      "unpacked_palette_reopened_pass": true,
+      "scale_1_pass": true,
+      "stage": "source_only"
+    },
+    {
+      "asset_id": "ITM-CONSUMABLE-ITEM-HEALTH-POTION",
+      "source": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source_v001.blend",
+      "bounds_blender_xyz_m": [
+        0.6730877161026001,
+        0.6835070252418518,
+        0.8199999928474426
+      ],
+      "output_meshes": 1,
+      "polygons": 2434,
+      "triangles": 5660,
+      "all_face_uv_pass": true,
+      "four_shared_materials_pass": true,
+      "unpacked_palette_reopened_pass": true,
+      "scale_1_pass": true,
+      "stage": "source_only"
+    },
+    {
+      "asset_id": "WPN-ATT-ATTACH-BIG-MAG",
+      "source": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_source_v001.blend",
+      "bounds_blender_xyz_m": [
+        0.11007091775536537,
+        0.07046808302402496,
+        0.23999998718500137
+      ],
+      "output_meshes": 1,
+      "polygons": 2688,
+      "triangles": 5856,
+      "all_face_uv_pass": true,
+      "four_shared_materials_pass": true,
+      "unpacked_palette_reopened_pass": true,
+      "scale_1_pass": true,
+      "stage": "source_only"
+    },
+    {
+      "asset_id": "WPN-BUL-MOD-BULLET-STANDARD",
+      "source": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
+      "bounds_blender_xyz_m": [
+        0.3760000169277191,
+        0.3760000169277191,
+        0.9399999976158142
+      ],
+      "output_meshes": 1,
+      "polygons": 1404,
+      "triangles": 3368,
+      "all_face_uv_pass": true,
+      "four_shared_materials_pass": true,
+      "unpacked_palette_reopened_pass": true,
+      "scale_1_pass": true,
+      "stage": "source_only"
+    },
+    {
+      "asset_id": "WPN-ATT-ATTACH-RUBBER-STOCK",
+      "source": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
+      "bounds_blender_xyz_m": [
+        0.12460309639573097,
+        0.3199999928474426,
+        0.22215364128351212
+      ],
+      "output_meshes": 1,
+      "polygons": 10113,
+      "triangles": 20732,
+      "all_face_uv_pass": true,
+      "four_shared_materials_pass": true,
+      "unpacked_palette_reopened_pass": true,
+      "scale_1_pass": true,
+      "stage": "source_only"
+    },
+    {
+      "asset_id": "WPN-ATT-ATTACH-SCOPE",
+      "source": "art_source/items_weapons/weapons/scope/source/wpn_scope_source_v001.blend",
+      "bounds_blender_xyz_m": [
+        0.13455830514431,
+        0.2800000011920929,
+        0.18056537955999374
+      ],
+      "output_meshes": 1,
+      "polygons": 3830,
+      "triangles": 9044,
+      "all_face_uv_pass": true,
+      "four_shared_materials_pass": true,
+      "unpacked_palette_reopened_pass": true,
+      "scale_1_pass": true,
+      "stage": "source_only"
+    },
+    {
+      "asset_id": "WPN-ATT-ATTACH-TRIPLE-MUZZLE",
+      "source": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_source_v001.blend",
+      "bounds_blender_xyz_m": [
+        0.14035087823867798,
+        0.1600000113248825,
+        0.14596491307020187
+      ],
+      "output_meshes": 1,
+      "polygons": 3482,
+      "triangles": 7820,
+      "all_face_uv_pass": true,
+      "four_shared_materials_pass": true,
+      "unpacked_palette_reopened_pass": true,
+      "scale_1_pass": true,
+      "stage": "source_only"
+    }
+  ]
+}

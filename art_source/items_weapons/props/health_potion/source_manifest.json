@@ -1,0 +1,33 @@
+{
+  "asset_id": "ITM-CONSUMABLE-ITEM-HEALTH-POTION",
+  "source_blend": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source_v001.blend",
+  "source_sha256": "6d1d848e4cc37d91fc99d0609db46763ef916458e2a418aa621befb07781d5bb",
+  "dimensions_m": {
+    "width": 0.673088,
+    "depth": 0.683507,
+    "height": 0.82
+  },
+  "components": 11,
+  "output_meshes": 1,
+  "triangles": 5660,
+  "source_only": true,
+  "previews": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\items_reference_20261014\\previews\\health_potion",
+  "contract": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\items_weapons\\props\\health_potion\\asset_contract.json",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source_v001.blend",
+      "sha256": "6d1d848e4cc37d91fc99d0609db46763ef916458e2a418aa621befb07781d5bb",
+      "triangles": 5660,
+      "usage": "近距离预览"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/props/health_potion/source/itm_health_potion_ground_source_v001.blend",
+      "sha256": "509273cbee4ddeef75c0f51dba3e224ed93fb0e66f52970e97ec5e23dd6647f0",
+      "polygons": 178,
+      "triangles": 178,
+      "usage": "地面掉落/拾取显示",
+      "derived_from_sha256": "6d1d848e4cc37d91fc99d0609db46763ef916458e2a418aa621befb07781d5bb"
+    }
+  },
+  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+}

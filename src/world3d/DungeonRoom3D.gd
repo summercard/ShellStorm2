@@ -1447,6 +1447,7 @@ func _align_static_layout_to_room(static_layout: Node3D) -> void:
 			)
 	_rehome_static_layout_door(static_layout)
 	_seal_stray_door_walls(static_layout)
+	_clear_connection_port_walls(static_layout)
 	for child in static_layout.get_children():
 		var module := child as Node3D
 		if module != null:
@@ -1769,6 +1770,19 @@ func _backfill_rehomed_door_spot(static_layout: Node3D, previous_position: Vecto
 	var side := _authored_wall_side_from_position(static_layout.transform * previous_position, half)
 	if side.is_empty():
 		return
+	# 🔴 原位若是**本局的活门位**，一律不许补墙。
+	#
+	# 为什么：门墙件「唯一」意味着它在烘焙帧只坐在其中一扇门上；本局出入口交换后它被搬到
+	# 自持侧，留下的原位**常常正是另一扇活门**（与父房共享的那扇，由共享边所有者提供门墙件）。
+	# 无脑补墙 = 把那扇门用实墙焊死 —— 实测 2026-10-14 的 14 个种子里每局有 3~7/12 扇门被堵，
+	# 其中 80% 是补墙压门，个别种子连**入口安全屋唯一出口**都被封（业主截图现象）。
+	# 判据用 `_authored_wall_connection_side`（只认「本局 doors + 门槽偏移命中」，不含归属），
+	# 与 `_authored_wall_door_side` 的差别是**不看 owns_door_endpoint** —— 共享边另一端持有时
+	# 本端同样不能补，否则一样压住那扇共享门。原位不是活门位时行为逐字不变。
+	if not _authored_wall_connection_side(
+		static_layout.transform * previous_position, half
+	).is_empty():
+		return
 	var donor := _solid_wall_donor(static_layout, basis, half, side)
 	if donor == null:
 		push_warning(
@@ -1921,6 +1935,84 @@ func _solid_wall_donor(
 		if _authored_wall_side_from_position(basis * node.position, half) == side:
 			return node
 	return fallback
+
+
+## 清掉「坐在本局门槽上的实墙」—— 让本局的门真的通。
+##
+## 为什么必需：远征房间的壳来自**预烘焙静态场景**，墙位按烘焙帧排；本局门槽却由生成器
+## 按链式拼接现算，两者只靠 `_align_static_layout_to_room()` 的**整体刚体旋转**对齐。
+## 旋转不改变「哪一件墙在哪一侧」的相对关系，于是烘焙帧某段实墙落到本局门槽上时，
+## 没有任何机制把它移开 ⇒ 门被焊死。
+##
+## 实测（2026-10-14，业主报「room_09 到 room_10 的门开起来又被堵住」）：
+## `room_10` 烘焙帧是 40×30，北侧 6 段实墙（x=−12.5…12.5 全实墙）；本局是 30×40 `rot=270`，
+## 对齐后这 6 段整体落到**东侧**（lane −12.5…12.5），其中 `x=12.5` 那段正压在本局
+## 「东门 → room_09」的门槽（lane 12.5）上。该边由 room_09 持有门
+## （`door_endpoint_owners["east"] = false`）⇒ room_10 侧既不生成门墙件顶替，
+## `_seal_stray_door_walls()` 也只管门墙件（且 east 在 `doors` 里，天然跳过）⇒ 永久堵死。
+##
+## 判据 = 墙落面 ∈ 本局 `doors` **且**沿墙偏移命中该侧**真实门槽车道**（见 `_live_door_lane()`）。
+## 所以只在门位上动手，非门位的墙一段不动（含 `_seal_stray_door_walls()` 与
+## `_backfill_rehomed_door_spot()` 的补墙）。门墙件（带通透门洞那件）不在此列 ——
+## 它本身就是门，归属由 `_rehome_static_layout_door()` 负责。
+func _clear_connection_port_walls(static_layout: Node3D) -> void:
+	var half := get_dimensions() * 0.5
+	var basis := static_layout.transform.basis
+	var strays: Array[Node3D] = []
+	var cleared: Array[String] = []
+	for child in static_layout.get_children():
+		if not (child is Node3D):
+			continue
+		var node := child as Node3D
+		# 门墙件是门本身，不在此列。
+		if _is_door_wall_piece(node):
+			continue
+		# 与 `_solid_wall_donor()` 同一识别口径：文件名以 wall 开头即墙体件
+		# （`prp_corner_l_5m.tscn` 这类角件不以此开头，天然排除）。
+		if not node.scene_file_path.get_file().begins_with("wall"):
+			continue
+		var world_position := basis * node.position
+		var side := _authored_wall_side_from_position(world_position, half)
+		if side.is_empty() or not doors.has(side):
+			continue
+		var wall_along := world_position.x if side in ["north", "south"] else world_position.z
+		var lane := _live_door_lane(side)
+		var on_slot := false
+		if is_nan(lane):
+			# 本侧端口没声明车道（非计划驱动的老房间）：回退程序化口径。
+			on_slot = not _authored_wall_connection_side(world_position, half).is_empty()
+		else:
+			on_slot = absf(wall_along - lane) <= DOOR_LANE_GUARD_TOLERANCE_M
+		if not on_slot:
+			continue
+		strays.append(node)
+		cleared.append("%s@%s%.1f" % [str(node.name), side, wall_along])
+	for stray in strays:
+		static_layout.remove_child(stray)
+		stray.free()
+	if not cleared.is_empty():
+		set_meta("authored_layout_port_walls_cleared", cleared)
+
+
+## 本房某侧**真实门槽车道**（沿墙偏移，米）——取自连接端口的 `lane_m`。
+##
+## 为什么不读 `tower_wall_door_offset_<side>`：那个 meta 有两个写入方 ——
+## `TowerDescent3D._plan_room_layout()` 写的是**该侧端口的 `lane_m`**（本关实际用的口径），
+## 而基类 `Dungeon3D._plan_room_layout()` 写的是「离 0 最近的 5m 段」启发式。
+## 直读端口即**不依赖 meta 已写入**、也不依赖哪一方最后执行，口径唯一。
+##
+## 返回 `NAN` 表示本侧不是门、或端口未声明车道。
+func _live_door_lane(side: String) -> float:
+	for value in connection_ports:
+		var port := value as Dictionary
+		if str(port.get("side", "")) != side:
+			continue
+		if str(port.get("target_room_id", port.get("target", ""))).is_empty():
+			continue
+		if not port.has("lane_m"):
+			continue
+		return float(port.get("lane_m", 0.0))
+	return NAN
 
 
 func _sync_static_layout_connection_ports(static_layout: Node3D) -> void:

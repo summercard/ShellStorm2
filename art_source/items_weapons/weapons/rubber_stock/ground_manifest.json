@@ -1,0 +1,18 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-RUBBER-STOCK",
+  "slug": "rubber_stock",
+  "preview_source": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
+  "preview_sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb",
+  "ground_source": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_ground_source_v001.blend",
+  "ground_sha256": "4e4a906492d9eb1f79bfd5e756991584422fd30664dd502a25cfe542436791d7",
+  "preview_triangles": 20732,
+  "ground_polygons": 145,
+  "ground_triangles": 145,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "derived_by": "Existing source components: semantic detail removal, ring/profile subsampling and limited Decimate; palette islands repaired; high envelope restored",
+  "source_only": true
+}

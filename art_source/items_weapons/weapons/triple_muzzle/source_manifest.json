@@ -1,0 +1,33 @@
+{
+  "asset_id": "WPN-ATT-ATTACH-TRIPLE-MUZZLE",
+  "source_blend": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_source_v001.blend",
+  "source_sha256": "53871c61c511ac2ac41685bcc65e765b591b5cbcd7880d3685cacf545cdd94c5",
+  "dimensions_m": {
+    "width": 0.140351,
+    "depth": 0.16,
+    "height": 0.145965
+  },
+  "components": 19,
+  "output_meshes": 1,
+  "triangles": 7820,
+  "source_only": true,
+  "previews": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\items_reference_20261014\\previews\\triple_muzzle",
+  "contract": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\items_weapons\\weapons\\triple_muzzle\\asset_contract.json",
+  "model_variants": {
+    "preview": {
+      "source_blend": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_source_v001.blend",
+      "sha256": "53871c61c511ac2ac41685bcc65e765b591b5cbcd7880d3685cacf545cdd94c5",
+      "triangles": 7820,
+      "usage": "近距离预览"
+    },
+    "ground": {
+      "source_blend": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_ground_source_v001.blend",
+      "sha256": "3fba4ba572c107b080cb05289d21f8d5f6ae778776f7587ffa998222bdf7c293",
+      "polygons": 198,
+      "triangles": 198,
+      "usage": "地面掉落/拾取显示",
+      "derived_from_sha256": "53871c61c511ac2ac41685bcc65e765b591b5cbcd7880d3685cacf545cdd94c5"
+    }
+  },
+  "runtime_integration": "两种源均完成，尚未导出或接入用途选择"
+}

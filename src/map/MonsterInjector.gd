@@ -48,6 +48,10 @@ const FLOOR_SCALING := {
 
 var _rng: RandomNumberGenerator
 var _theme_profile: Resource = null
+## 关卡级怪物规则（`level_plan.json` 顶层 `monster_rules`）。空字典 = 未配置
+## ⇒ 数值与 AI 全部走原常量，未配置的关卡行为逐字不变。唯一写入口是
+## `set_level_rules`（由 `Dungeon3D._setup_run_modules` 在装配时调）。
+var _level_rules: Dictionary = {}
 
 func _init():
 	_rng = RandomNumberGenerator.new()
@@ -59,6 +63,44 @@ func set_seed(seed_value: int) -> void:
 
 func set_theme_profile(profile: Resource) -> void:
 	_theme_profile = profile
+
+
+## 装载关卡级怪物规则。整段深拷贝，调用方后续改动不会渗回。
+func set_level_rules(rules: Dictionary) -> void:
+	_level_rules = rules.duplicate(true)
+
+
+## 取某怪种的**关卡级绝对数值覆盖**（`monster_rules.stats.per_kind.<kind>`）。
+##
+## 覆盖的是**最终值**：`hp` 即最终 `max_hp`、`damage` 即最终接触伤害、
+## `speed` 即最终米/秒。不走楼层缩放与主题倍率 —— 写 350 就是 350，
+## 免得「改了没生效」还要反推比例。返回 `{}` = 本怪无覆盖。
+func _stat_override(kind: String) -> Dictionary:
+	var per_kind: Dictionary = (
+		(_level_rules.get("stats", {}) as Dictionary).get("per_kind", {}) as Dictionary
+	)
+	var entry: Variant = per_kind.get(kind, null)
+	if not (entry is Dictionary):
+		return {}
+	var src := entry as Dictionary
+	var out: Dictionary = {}
+	if src.has("hp"):
+		out["override_max_hp"] = maxi(1, int(src["hp"]))
+	if src.has("damage"):
+		out["override_damage"] = maxi(0, int(src["damage"]))
+	if src.has("speed"):
+		out["override_speed"] = maxf(0.05, float(src["speed"]))
+	return out
+
+
+## 把关卡级 AI 手感参数塞进怪物配置（`monster_rules.ai` 原样带上）。
+## 缺省（无本段或本段为空）不写这个键 ⇒ `Enemy3D` / `MonsterAIManager`
+## 一律回退各自常量，塔楼与其余关卡不受影响。
+func _ai_overrides() -> Dictionary:
+	var ai: Dictionary = _level_rules.get("ai", {}) as Dictionary
+	if ai.is_empty():
+		return {}
+	return {"monster_ai": ai.duplicate(true)}
 
 ## 根据配置生成怪物列表
 func generate_enemies(config: Dictionary) -> Array[Dictionary]:
@@ -304,6 +346,9 @@ func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> 
 		if not prefix.is_empty():
 			result["name"] = "%s%s" % [prefix, result["name"]]
 		result["theme_id"] = _theme_profile.theme_id
+	# 关卡级覆盖放最后：绝对数值盖掉楼层缩放与主题倍率的乘积，AI 参数随配置下发。
+	result.merge(_stat_override(enemy_type), true)
+	result.merge(_ai_overrides(), true)
 	return result
 
 ## 生成精英敌人
@@ -352,6 +397,20 @@ func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> 
 	base["loot_table"] = "elite_floor_1" if floor <= 2 else "elite_floor_2"
 	if EliteRosterService != null and not elite_snapshot.is_empty():
 		base = EliteRosterService.apply_archive_to_enemy_config(base, elite_snapshot)
+	# 精英从基础怪派生，于是已经带着基础怪的关卡级覆盖；但覆盖的是**最终值**，
+	# 而精英在 `Enemy3D` 里还会被绝对赋值 ⇒ 必须在此按精英倍率重算一遍，
+	# 否则「1.5 倍血量」会被覆盖吃掉。
+	var stat_override := _stat_override(base_type)
+	if stat_override.has("override_max_hp"):
+		stat_override["override_max_hp"] = maxi(
+			1, int(round(float(stat_override["override_max_hp"]) * 1.5))
+		)
+	if stat_override.has("override_damage"):
+		stat_override["override_damage"] = maxi(
+			0, int(round(float(stat_override["override_damage"]) * 1.3))
+		)
+	base.merge(stat_override, true)
+	base.merge(_ai_overrides(), true)
 	return base
 
 ## 生成Boss敌人。
@@ -421,6 +480,9 @@ func _generate_boss(floor: int, floor_level: int, request: Dictionary = {}) -> D
 	if str(boss_profile["boss_content_id"]) == "boss_monitor002":
 		# Fixed monitor encounter baseline, independent of obsolete tower depth multipliers.
 		result.merge({"hp":200,"max_hp":200,"damage":20,"speed":123.84,"boss_scale":1.0},true)
+	# 关卡级覆盖必须放**最后**：盖掉上面那条显示器Boss 身份基线，写 32000 就是 32000。
+	result.merge(_stat_override("boss"), true)
+	result.merge(_ai_overrides(), true)
 	return result
 
 ## 生成小怪群

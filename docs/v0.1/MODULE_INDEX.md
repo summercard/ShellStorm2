@@ -168,3 +168,5 @@ ENEMY-AI / ASSET-PIPELINE [胖子僵尸减面](development/2026-10-09_fat_zombie
 ENEMY-AI / ASSET-PIPELINE [小僵尸减面减骨](development/2026-10-09_melee_zombie_reduction.md)：1790三角/20骨，每手一骨，重新蒙皮与六段动作、死亡渲染验收通过。
 
 98F四房设施已正式接入：29组件、4份Godot设施布局、328实例，沿用旧墙地砖，第三第四房拆门贯通。验收 erify_block00_facilities（manual）；详见[导入记录](development/2026-10-09_block00_facilities_import.md)。
+
+ASSET-PIPELINE / WORLD-LOOT：[物品道具双模型规范](design/物品道具双模型制作规范.md)；[8件双模型源交付](development/2026-10-14_item_prop_dual_models.md)。preview高模与ground 100–200三角源完成，运行时用途分流待接入。
