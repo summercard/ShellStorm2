@@ -182,8 +182,10 @@ func _build_enemy() -> void:
 		shape = _enemy.collision_shape.shape
 	var hull_height := 1.30
 	if shape is CylinderShape3D:
-		_hull_radius = (shape as CylinderShape3D).radius
-		hull_height = (shape as CylinderShape3D).height
+		# ⚠ 必须乘怪的缩放（`_apply_presentation_scale()` 的 0.7）——`shape.radius` 是**局部**口径，
+		# 画成世界尺寸的壳会比真实碰撞柱粗 43%，看着就像「特效在壳里面」。
+		_hull_radius = (shape as CylinderShape3D).radius * _enemy.scale.x
+		hull_height = (shape as CylinderShape3D).height * _enemy.scale.y
 
 	_hull = MeshInstance3D.new()
 	var hull_mesh := CylinderMesh.new()
@@ -198,6 +200,15 @@ func _build_enemy() -> void:
 
 	_raw_point = Vector3(0.0, HIT_Y, 0.0) + HIT_NORMAL * _hull_radius
 	_anchored_point = _enemy.hit_effect_anchor(_raw_point, HIT_NORMAL)
+	var half := _visual_half_width(_enemy.avatar)
+	print(
+		"PREVIEW derived_inset=%.3f (壳半径 %.3f → 落点 %.3f) 模型半宽 %.3f 落点距模型 %.3f"
+		% [
+			(_raw_point - _anchored_point).length(), _hull_radius,
+			_anchored_point.z, half,
+			maxf(0.0, absf(_anchored_point.z) - half),
+		]
+	)
 
 	_marker_hull = _build_marker(Color(0.30, 0.85, 1.0), _raw_point)
 	_marker_anchor = _build_marker(Color(1.0, 0.30, 0.85), _anchored_point)
@@ -223,6 +234,10 @@ func _visual_half_width(root: Node) -> float:
 	var has := false
 	for node in _mesh_instances(root):
 		var mesh_node := node as MeshInstance3D
+		# ⚠ 必须滤掉没在画的件：`EnemyAvatar3D` 的占位件（_core/_shell/_appendages）在挂上
+		# 正式模型后会被隐藏，网格数据还在 —— 不滤会把包围盒撑到 2.6 倍。
+		if mesh_node.mesh == null or not mesh_node.is_visible_in_tree():
+			continue
 		var local := mesh_node.get_aabb()
 		var world := mesh_node.global_transform * local
 		if not has:

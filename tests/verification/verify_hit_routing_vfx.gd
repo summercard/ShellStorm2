@@ -56,8 +56,18 @@ const EXPECTED_STREAK_NORMAL_DOT_MAX := 0.20
 const EXPECTED_STREAK_STRETCH_MIN := 1.5
 ## 僵尸受击件比金属火星大多少（业主「放大大概 10%」）—— 静态门禁按这个数钉住调用点
 const EXPECTED_ZOMBIE_SIZE_RATIO := 1.10
-## 命中点收进模型的深度（业主「碰撞盒里陷进去坐标大概 0.2 米」）
-const EXPECTED_HIT_INSET_M := 0.20
+## 贴肉判据的容差（米）：落点允许距模型盒面这么远（含 0.03 咬入 + 浮点余量）
+const EXPECTED_HIT_INSET_BITE_TOLERANCE := 0.05
+## **双向**判据的另一侧：贴肉**不许把落点推得比原来更深**。
+##
+## ⚠ 只判「在盒内」是**单向**的 —— 把包围盒算大、或把退让量调大，落点会埋得更深，
+## 反而更容易判过（实测：故意让包围盒虚胖 2.6 倍，单向判据照样全绿）。
+##
+## 另一侧的正确不变式不是「绝对深度 < 某值」（那个值对三只怪各不相同、且没法解释），
+## 而是：**新落点的埋深 ≤ 原始壳面命中点的埋深 + 咬入量**。
+## 因为壳面本来就可能已经在模型里（胖子僵尸 X 向：壳半径 0.770 < 模型半宽 1.839），
+## 那时**本来就不该再往里推**；这条不变式同时钉住「不许埋更深」与「该收时必须收」。
+## 实测：用旧的「先 max(0.20) 再 min」写法，胖子僵尸 X 向会被推深到 0.712+0.20=0.912 ⇒ 本条变红。
 
 ## 僵尸三兄弟（含胖子僵尸）；以及一个**反例**怪种（召唤者，不属于三兄弟）
 const ZOMBIE_KINDS: Array[String] = ["melee_chaser", "ranged_caster", "fat_zombie03"]
@@ -459,43 +469,198 @@ func _spawn_enemy(kind: String) -> Enemy3D:
 	return enemy
 
 
-# ---------------------------------------------------------------- C1b 贴肉落点（0.2m）
+# ---------------------------------------------------------------- C1b 贴肉落点（打在怪身上）
 ## 业主（同轮）：「受击的盒子**没有贴着模型**，碰撞盒里陷进去坐标大概 **0.2 米**」。
-## 弹体是在**碰撞壳表面**判定命中的，而壳比模型大一圈 ⇒ 出生点若不收进去，特效就悬在怪旁边。
-## 这里直接对 `Enemy3D.hit_effect_anchor()` 做三向判定：
-##   ① 给定外法线 ⇒ 落点沿法线反向退 0.2m，且方向朝怪体内（对照：不能反过来推得更远）；
-##   ② 换一条法线 ⇒ 落点必须跟着换（证明真的读了传进来的法线，不是写死 -Z 之类）；
-##   ③ 法线缺失（零向量）⇒ 退回「怪体中心 → 命中点」定外法线，落点与 ① 一致。
+##
+## ⚠ 本用例的判据**不是**「下沉量 == 0.2m」—— 那只是业主给的初估，且实测**不够**：
+## 碰撞壳是**玩法口径的圆柱**（世界半径 0.714 / 0.770 / 0.770，各向同性），
+## 而模型是**各向异性**的（小僵尸模型半宽 0.448×0.334、胖子僵尸 1.839×0.712）。
+## 只退 0.2m 时，小僵尸从正面打仍差 **0.182m**、警察僵尸差 **0.236m**。
+##
+## 真正的判据是「**落点落在模型身上**」，用真渲染/探针量出来的口径直接钉：
+##   对三只僵尸 × 8 个水平方向 + 1 个越顶，落点必须**位于模型可视件包围盒内**
+##   （或距盒面 ≤ 3cm 的浮点余量）。这才是业主看到的「贴在身上 / 悬空」。
+##
+## 另两条纪律：
+##   ① 换一条法线 ⇒ 落点必须跟着换（否则说明法线参数没被真正用上）；
+##   ② 零法线走兜底（「怪体中心 → 命中点」），落点必须仍在模型内。
 func _check_enemy_hit_anchor() -> void:
 	if ENEMY_SCENE == null:
 		_failures.append("敌人场景未加载，贴肉落点用例未执行")
 		return
-	var enemy := _spawn_enemy("melee_chaser")
-	if enemy == null:
-		_failures.append("贴肉落点用例：小僵尸实例化失败")
+	for kind in ZOMBIE_KINDS:
+		var enemy := _spawn_enemy(kind)
+		if enemy == null:
+			_failures.append("贴肉落点用例：%s 实例化失败" % kind)
+			continue
+		enemy.global_position = Vector3(10.0, -1176.0, 5.0)
+		enemy.rotation = Vector3.ZERO
+		_samples += 1
+		# ⚠ 同步执行、不 await：分步执行器 `_process` 不会等协程，
+		# 一旦在这里挂起，循环会跟后面的步骤交错，测量时机就不可控了。
+		# 也让「测试量包围盒」与「实现缓存包围盒」落在同一帧、同一姿势上。
+		_assert_anchor_on_body(enemy, kind)
+		enemy.queue_free()
+
+
+## 逐方向验「落点是否在模型身上」。方向取 8 个水平角 + 1 个越顶 ——
+## 圆柱壳各向同性、模型各向异性，「正面贴住了」不代表「侧面也贴住了」。
+func _assert_anchor_on_body(enemy: Enemy3D, kind: String) -> void:
+	# 碰撞柱世界半径/高度（含 Enemy3D 的缩放）——模拟弹体打到的壳面
+	var local_r := 0.0
+	var local_h := 0.0
+	var shape: Shape3D = null
+	if enemy.collision_shape != null:
+		shape = enemy.collision_shape.shape
+	if shape is CylinderShape3D:
+		local_r = (shape as CylinderShape3D).radius
+		local_h = (shape as CylinderShape3D).height
+	var world_r := local_r * enemy.scale.x
+	var world_h := local_h * enemy.scale.y
+	var aim_y := enemy.global_position.y + world_h * 0.55
+	# ⚠ 判据用**命中高度那一层**的横截面，不是整只怪的包围盒 —— 理由同实现：
+	# 整盒会被头顶 / 脚部的宽件撑大，「在盒内」因此偏松、与观感对不上。
+	var box := _model_slab_aabb(enemy, aim_y)
+	if box.size.length_squared() < 0.001:
+		_failures.append("%s：量不到命中高度那一层的模型横截面，贴肉用例无效" % kind)
 		return
-	enemy.global_position = Vector3(10.0, -1176.0, 5.0)
-	_samples += 1
-	var hull_point := enemy.global_position + Vector3.RIGHT * 0.6
-	var anchored := enemy.hit_effect_anchor(hull_point, Vector3.RIGHT)
-	var sink := (hull_point - anchored).length()
-	_expect(absf(sink - EXPECTED_HIT_INSET_M) < 0.001,
-		"命中点下沉量应为 %.2fm，实测 %.4fm" % [EXPECTED_HIT_INSET_M, sink])
-	_expect((anchored - enemy.global_position).length() < (hull_point - enemy.global_position).length(),
-		"下沉方向反了：特效被推到离怪**更远**的位置（%.3f → %.3f）"
-		% [
-			(hull_point - enemy.global_position).length(),
-			(anchored - enemy.global_position).length(),
-		])
-	# ② 对照：换法线 ⇒ 落点必须换（否则说明法线参数没被真正用上）
-	var anchored_up := enemy.hit_effect_anchor(hull_point, Vector3.UP)
-	_expect(not is_equal_approx(anchored_up.y, anchored.y),
-		"对照失效：换一条法线后落点没变 ⇒ 判据没有辨别力")
-	# ③ 退化：零法线走兜底，落点应与 ① 相同
-	var fallback := enemy.hit_effect_anchor(hull_point, Vector3.ZERO)
-	_expect((fallback - anchored).length() < 0.001,
-		"零法线的兜底方向不对：%s vs %s" % [str(fallback), str(anchored)])
-	enemy.free()
+
+	var worst := 0.0
+	var worst_dir := ""
+	var deepest := 0.0
+	var deepest_dir := ""
+	var probes: Array[Vector3] = []
+	for i in 8:
+		var angle := float(i) / 8.0 * TAU
+		probes.append(Vector3(sin(angle), 0.0, cos(angle)))
+	probes.append(Vector3.UP)
+	for outward in probes:
+		var horizon := Vector3(outward.x, 0.0, outward.z)
+		var hull_point := Vector3(enemy.global_position.x, aim_y, enemy.global_position.z)
+		if horizon.length_squared() > 0.0001:
+			hull_point += horizon.normalized() * world_r
+		else:
+			hull_point.y = enemy.global_position.y + world_h * 0.5
+		var anchored := enemy.hit_effect_anchor(hull_point, outward)
+		var gap := _outside_gap(box, anchored)
+		if gap > worst:
+			worst = gap
+			worst_dir = str(outward.snappedf(0.01))
+		# 反侧不变式：新落点**不许比原始壳面命中点更深**
+		# （壳面本来就在模型里时不该再推；只允许咬入量那点余量）
+		var over := _inside_depth(box, anchored) - _inside_depth(box, hull_point)
+		if over > deepest:
+			deepest = over
+			deepest_dir = str(outward.snappedf(0.01))
+	_expect(worst <= EXPECTED_HIT_INSET_BITE_TOLERANCE,
+		"%s：受击特效仍悬在模型外（最差方向 %s 距模型 %.3f m，容差 %.2f）"
+		% [kind, worst_dir, worst, EXPECTED_HIT_INSET_BITE_TOLERANCE])
+	_expect(deepest <= EXPECTED_HIT_INSET_BITE_TOLERANCE,
+		"%s：贴肉把落点推得比原来更深 %.3f m（方向 %s，容差 %.2f）⇒ 会读成「从肚子里炸」"
+		% [kind, deepest, deepest_dir, EXPECTED_HIT_INSET_BITE_TOLERANCE])
+	# 方向对照：换法线必须换落点
+	var base_point := enemy.global_position + Vector3(0, world_h * 0.55, 0) + Vector3.FORWARD * world_r
+	var right_anchor := enemy.hit_effect_anchor(base_point, Vector3.RIGHT)
+	var up_anchor := enemy.hit_effect_anchor(base_point, Vector3.UP)
+	_expect(not is_equal_approx(right_anchor.y, up_anchor.y),
+		"%s：换一条法线后落点没变 ⇒ 法线参数没被真正消费" % kind)
+	# 零法线兜底：仍在模型内
+	var fallback := enemy.hit_effect_anchor(base_point, Vector3.ZERO)
+	_expect(_outside_gap(box, fallback) <= EXPECTED_HIT_INSET_BITE_TOLERANCE,
+		"%s：零法线兜底的落点跑到模型外（差 %.3f m）" % [kind, _outside_gap(box, fallback)])
+	# 反向对照（防「怎么算都算在盒内」的假绿）：把碰撞壳半径**人为放大 3 倍**，
+	# 落点若还老老实实停在原处、说明它根本没有按「壳面 → 模型」的关系现算。
+	var far_point := base_point + Vector3.FORWARD * world_r * 2.0
+	var far_anchor := enemy.hit_effect_anchor(far_point, Vector3.FORWARD)
+	_expect(far_anchor.distance_to(far_point) > right_anchor.distance_to(base_point) + 0.05,
+		"%s：命中点被推远后，贴肉量没有跟着变大 ⇒ 判据没有辨别力" % kind)
+
+
+## 模型可视件的世界包围盒 —— **滤掉隐藏件**（占位件 _core/_shell/_appendages 在挂上正式
+## 模型后会被隐藏，但网格数据还在；不滤会把盒子撑到 2.6 倍，让「在不在身上」判成全在）。
+func _model_world_aabb(root: Node) -> AABB:
+	var box := AABB()
+	var has := false
+	for node in _walk(root):
+		var mesh_node := node as MeshInstance3D
+		if mesh_node == null or mesh_node.mesh == null:
+			continue
+		if not mesh_node.is_visible_in_tree():
+			continue
+		var world := mesh_node.global_transform * mesh_node.get_aabb()
+		if not has:
+			box = world
+			has = true
+		else:
+			box = box.merge(world)
+	return box
+
+
+## 点在 AABB 内的**埋深**（到最近一个面的距离）；在盒外返回 0
+func _inside_depth(box: AABB, point: Vector3) -> float:
+	if _outside_gap(box, point) > 0.0:
+		return 0.0
+	var lower := box.position
+	var upper := box.position + box.size
+	return minf(
+		minf(point.x - lower.x, upper.x - point.x),
+		minf(minf(point.y - lower.y, upper.y - point.y), minf(point.z - lower.z, upper.z - point.z))
+	)
+
+
+## 「命中盒」：**X/Z 取命中高度那一层的横截面**，**Y 用整只怪的全高**。
+## 与实现 `_visual_local_hit_box()` 同一口径 —— 验收与实现必须量同一个盒子，
+## 否则会出现「解析说贴住了、画面里明显在外面」这种对不上的结论（本项目真遇到过）。
+##
+## 两个空间各取所需：
+##   · X/Z 用横截面 ⇒ 不被头顶 / 脚部的宽件撑大（那会让「在盒内」偏松、与观感对不上）；
+##   · Y 用全高     ⇒ 沿斜法线退让后落点会自然落到更低那一层躯干上，那是**正常**的
+##                    （贴肉是沿法线走，不是沿水平面走），用薄带判会把它误报成「跑到盒外」。
+func _model_slab_aabb(enemy: Enemy3D, world_y: float) -> AABB:
+	var band := 0.30 * enemy.scale.y
+	var min_x := INF
+	var min_z := INF
+	var max_x := -INF
+	var max_z := -INF
+	var min_y := INF
+	var max_y := -INF
+	for node in _walk(enemy):
+		var mesh_node := node as MeshInstance3D
+		if mesh_node == null or mesh_node.mesh == null:
+			continue
+		if not mesh_node.is_visible_in_tree():
+			continue
+		var world := mesh_node.global_transform * mesh_node.get_aabb()
+		min_y = minf(min_y, world.position.y)
+		max_y = maxf(max_y, world.position.y + world.size.y)
+		if world.position.y + world.size.y < world_y - band or world.position.y > world_y + band:
+			continue
+		min_x = minf(min_x, world.position.x)
+		min_z = minf(min_z, world.position.z)
+		max_x = maxf(max_x, world.position.x + world.size.x)
+		max_z = maxf(max_z, world.position.z + world.size.z)
+	if min_x > max_x or min_z > max_z:
+		return AABB()
+	return AABB(
+		Vector3(min_x, min_y, min_z),
+		Vector3(
+			maxf(0.001, max_x - min_x),
+			maxf(0.001, max_y - min_y),
+			maxf(0.001, max_z - min_z)
+		)
+	)
+
+
+## 点离 AABB 还有多远（在盒内 = 0）
+func _outside_gap(box: AABB, point: Vector3) -> float:
+	var lower := box.position
+	var upper := box.position + box.size
+	var clamped := Vector3(
+		clampf(point.x, lower.x, upper.x),
+		clampf(point.y, lower.y, upper.y),
+		clampf(point.z, lower.z, upper.z),
+	)
+	return (point - clamped).length()
 
 
 # ---------------------------------------------------------------- C2 枪击路由
@@ -523,7 +688,8 @@ func _check_projectile_routing() -> void:
 		% [goo_before, pool.active_count(VfxPool3D.FX01_GOO_HIT)])
 	_expect(pool.active_count(VfxPool3D.FX01_METAL_SPARK_HIT) == metal_before,
 		"打中小僵尸误借了 FX01-21（金属火星）")
-	# 贴肉：借出的那件必须落在「弹体位置沿外法线反向退 0.2m」，而不是直接落在弹体位置上
+	# 贴肉：借出的那件必须**落在僵尸的模型上**，而不是停在碰撞壳表面（业主：「没有贴着模型」）。
+	# ⚠ 判据是「在模型包围盒内」，不是「退了正好 0.2m」—— 退让量是按模型体型现算的，三只怪各不相同。
 	var goo_bucket: Array = pool._active.get(VfxPool3D.FX01_GOO_HIT, [])
 	_expect(not goo_bucket.is_empty(), "枪击路由用例：借出的僵尸命中件读不到")
 	if not goo_bucket.is_empty():
@@ -531,10 +697,20 @@ func _check_projectile_routing() -> void:
 		if pooled == null:
 			_failures.append("枪击路由用例：借出的僵尸命中件不是 VfxEffectBase3D")
 		else:
-			var expected_pos := projectile.global_position - Vector3.RIGHT * EXPECTED_HIT_INSET_M
-			_expect((pooled.global_position - expected_pos).length() < 0.001,
-				"借出的僵尸命中件没落在贴肉点上：%s（期望 %s）"
-				% [str(pooled.global_position), str(expected_pos)])
+			var body_box := _model_world_aabb(zombie)
+			var gap := _outside_gap(body_box, pooled.global_position)
+			_expect(gap <= EXPECTED_HIT_INSET_BITE_TOLERANCE,
+				"借出的僵尸命中件没落在模型身上（距模型 %.3f m，落点 %s）"
+				% [gap, str(pooled.global_position)])
+			# 反向对照：**当原始出生点在模型外时**，必须确实往里收了 ——
+			# 「原地不动」也能满足「在盒内」（弹体本来就打得很近时），所以这条要带前提，
+			# 否则会误报（本用例第一次就是栽在这个无条件断言上）。
+			var raw_gap := _outside_gap(body_box, projectile.global_position)
+			if raw_gap > 0.05:
+				_expect(
+					pooled.global_position.distance_to(projectile.global_position) > 0.05,
+					"原始出生点在模型外 %.3f m，却完全没做贴肉收进" % raw_gap
+				)
 
 	# ② 对照：打中召唤者 ⇒ 金属火星，且**不得**再借 FX01-20
 	var other := _spawn_enemy(NON_ZOMBIE_KIND)

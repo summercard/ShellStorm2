@@ -28,14 +28,34 @@ const GROUP_DEATH_VISUAL_3D := "enemy_death_visual_3d"
 ## 特效侧（`VfxZombieGooDeath3D` / `VfxDeathBlast3D` 的 `SPAWN_CENTER_LIFT`）用同一个口径
 ## 反推脚底 —— 两边必须一致，否则「地上的液体」/「地面冲击波」会浮在怪的腰上。
 const EFFECT_SPAWN_LIFT := 0.65
-## **命中特效的贴肉落点**：碰撞壳上的命中点沿**外法线的反向**再收进模型这么多米。
-## 业主 2026-10-14 第四轮：「受击的盒子**没有贴着模型**，碰撞盒里陷进去坐标大概 **0.2 米**」。
+## **命中特效贴肉落点的兜底退让量**（米）。业主 2026-10-14 第四轮初估「大概 0.2 米」。
 ##
-## 根因：弹体是在**碰撞壳表面**判定命中的，而碰撞壳比模型大一圈（胶囊留了余量）
-## ⇒ 特效出生点落在壳外，读作「悬空在怪旁边」。把出生点收进 0.2m 就长回模型上了。
+## 根因（已实测，不是推测）：弹体是在**碰撞壳表面**判命中的，而碰撞壳是**玩法口径**、
+## 比模型胖一大圈 —— 且两边都被 `_apply_presentation_scale()` 的 0.7 缩放，换算到世界坐标后：
+##   melee_chaser  碰撞柱世界半径 **0.714**，模型半宽 x **0.448** / z **0.334**
+##   ranged_caster 碰撞柱世界半径 **0.770**，模型半宽 x **0.449** / z **0.602**
+##   fat_zombie03  碰撞柱世界半径 **0.770**，模型半宽 x **1.839** / z **0.712**（比壳还胖）
+## ⇒ 前两只从正面/背面打中时，壳面比模型**多出 0.27~0.38m**；只退 0.2m 实测仍差 0.18~0.24m。
+## 而胖子僵尸的 X 向反过来 —— 壳面**已经在模型里面**，再退就埋进去了。
+##
+## ⚠ 结论：**一个常数不可能同时满足三只怪 × 各个方向**（壳是各向同性圆柱，模型是各向异性）。
+## 真实退让量由 `hit_effect_anchor()` 按**模型实测包围盒**现算（见 `hit_effect_anchor`），
+## 本常量只在模型包围盒算不出来时兜底。
+##
 ## 只对**怪**用（见 `hit_effect_anchor`）：墙面 / 掩体没有「模型比碰撞盒小」这个问题，
 ## 收进去反而会钻进墙里。
 const HIT_EFFECT_INSET_M := 0.20
+## 贴肉量的**上限**（米）：防止「还差多少」被算得过大时把出生点一路推到怪体中心去
+## （那会读成「从肚子里炸」）。取 0.80 —— 三只僵尸的碰撞柱世界半径是 0.714 / 0.770 / 0.770，
+## 真实需要的退让量最大约 0.47（警察僵尸正背面），留足余量又远小于半径。
+const HIT_EFFECT_MAX_INSET_M := 0.80
+## 判定「模型在命中高度上的横截面」时那条薄带的**半高**（米）。
+## 取 0.30 ≈ 躯干一层：太薄会卡进网格之间的空隙（读成「这一层没东西」而退回整盒），
+## 太厚会把别的高度上的宽件（丸子头 / 脚部）算进这一层的体型。
+const HIT_EFFECT_SLAB_BAND_M := 0.30
+## 落点再往里咬一点（米）：正好落到包围盒表面上时，浮点误差可能让判定读成「差 1e-4 悬空」；
+## 咬这一点点保证落点确实在模型身上，同时小到不影响观感。
+const HIT_EFFECT_BITE_M := 0.03
 ## **僵尸三兄弟**：小僵尸（`melee_chaser`）/ 警察僵尸（`ranged_caster`）/ 胖子僵尸（`fat_zombie03`）。
 ## 业主 2026-10-14 一次点名，**三条口径都挂在这一个名单上**（别拆成三份会漂的别名）：
 ##   ① 被枪击 / 被近战打中 ⇒ FX01-20 `VFX-GOO-HIT-3D`（**v002 起 = 金属火星造型 + 僵尸绿**、
@@ -266,10 +286,20 @@ var _patrol_step := 0
 var _boss_skill_bag: Array[String] = []
 var _boss_skill_index := 0
 var monitor_combat: MonitorBossCombat
+## 显示器 Boss 的子弹受击层（3D 第 3 层，与敌人层的值相同）。
+## **只有动画受击盒在这个层上。**
+## 根节点那个圆柱（半径 1.92×根倍率 = 2.016 m）比可见屏幕宽得多（屏幕半宽仅 0.85 m），
+## 若它继续留在子弹层，子弹会在屏幕**前方 1.0–1.3 m** 处就被它拦下 ——
+## 实测子弹撞到的 collider 名字就叫 `Enemy3D`，命中特效落在模型前面的空气里，
+## 这正是业主看到的「隔空击中」（2026-10-14 第二轮反馈）。
+## 圆柱的**移动/阻挡口径一格未动**（自身移动只看 `collision_mask = 1`），
+## 只是不再接子弹：接子弹的职责整份交给跟骨走的受击盒。
+const MONITOR_BULLET_LAYER := 4
+
 ## 显示器 Boss 的**动画受击盒**。根节点那个固定圆柱跟不上屏幕的前倾/扑砸/自转，
-## 单靠它会让子弹从可见模型里穿过、在模型后面的空气里结算命中。
-## 受击盒挂在**独立代理体** `EnemyHitVolume3D` 上，而不是挂在怪物自己身上 ——
-## 盒子会伸进地面与墙里，挂在身上 `move_and_slide` 会把怪顶起来（实测坐地抬高 0.42 m）。
+## 而且比可见模型宽得多；受击盒挂在**独立代理体** `EnemyHitVolume3D` 上，
+## 而不是挂在怪物自己身上 —— 盒子会伸进地面与墙里，挂在身上 `move_and_slide`
+## 会把怪顶起来（实测坐地抬高 0.42 m）。
 var _monitor_hit_body: EnemyHitVolume3D = null
 var _monitor_hit_shapes: Array[CollisionShape3D] = []
 var _monitor_hit_presentation: MonitorBossPresentation = null
@@ -856,10 +886,13 @@ func _ensure_monitor_hit_volumes() -> bool:
 		return false
 	var body := EnemyHitVolume3D.new()
 	body.name = "MonitorHitVolumes"
-	body.collision_layer = 4
+	body.collision_layer = MONITOR_BULLET_LAYER
 	body.collision_mask = 0
 	body.bind(self)
 	add_child(body)
+	# 圆柱退出子弹层：它半径 2.016 m、比可见屏幕宽 1 m 以上，留着会把子弹拦在屏幕前 1 m 处。
+	# 自身移动只看 `collision_mask`，所以这一步不改变走位、阻挡或任何别的口径。
+	collision_layer = 0
 	var shapes: Array[CollisionShape3D] = []
 	for entry in spec:
 		var box := BoxShape3D.new()
@@ -886,7 +919,10 @@ func _sync_monitor_hit_volumes() -> void:
 	if not is_instance_valid(_monitor_hit_presentation):
 		return
 	if _monitor_hit_body != null and is_instance_valid(_monitor_hit_body):
-		_monitor_hit_body.collision_layer = collision_layer
+		# 死亡后受击盒必须一起失效，否则会留下一组「打得到、但怪已经死了」的幽灵体积。
+		# 不能读 `collision_layer` —— 它已被置 0 让出子弹层（见 `_ensure_monitor_hit_volumes`），
+		# 读它会让受击盒一建出来就失效。看状态而不是看层。
+		_monitor_hit_body.collision_layer = MONITOR_BULLET_LAYER if ai_state != "dead" else 0
 	var transforms := _monitor_hit_presentation.hit_volume_transforms()
 	var count := mini(transforms.size(), _monitor_hit_shapes.size())
 	for index in range(count):
@@ -2472,11 +2508,30 @@ func uses_goo_hit_burst() -> bool:
 	return ZOMBIE_KINDS.has(enemy_kind)
 
 
-## 把碰撞壳上的命中点**收进模型**：`hit_point` 是物理相交点（落在碰撞壳表面），
+## 把碰撞壳上的命中点**摆到模型面上**：`hit_point` 是物理相交点（落在碰撞壳表面），
 ## `surface_normal` 是被击面的**外**法线（`KinematicCollision3D.get_normal()` 口径）。
-## 返回沿外法线反向退 `HIT_EFFECT_INSET_M` 米之后的出生点 —— 特效因此贴在模型上而不是悬空。
 ##
-## 退化情形（任一输入不可用）按「从怪体中心指向命中点」定外法线，效果一致；
+## 算法（**按模型实测几何现算**，不是写死的常数）：
+##   ① 取「命中高度那一层的横截面 + 全高 Y」的世界包围盒（`_visual_world_hit_box`）；
+##   ② 从命中点沿**外法线反向**射一条线，用逐轴夹逼求它**进入**盒子的距离 `travel`；
+##   ③ 退让量 = `travel + HIT_EFFECT_BITE_M`（摆到盒面上再往里咬 0.03m，保证落点在肉里）。
+##
+## ⚠ `travel == 0` 是**必须单独处理**的一侧，不是异常：碰撞壳比模型**窄**时 ——
+## 胖子僵尸 X 向：壳世界半径 0.770、模型半宽 **1.839** —— 命中点本来就在模型**里面**，
+## 这时 **不要再推**（推了就埋进胖身子，读成「从肚子里炸」）。
+## 反过来壳比模型**宽**时（小僵尸 +Z：壳 0.714、模型半宽 0.332）`travel > 0`，落点被收进肉里 ——
+## 业主看到的「悬空」正是缺了这一步。
+##
+## ⚠ 所以**不能**给退让量加「下限 = 0.20」这类固定值：那会在壳比模型窄的那一侧继续往深处推。
+## 实测：去掉 `travel == 0` 守卫、改写成 `max(0.20, ...)` 时，胖子僵尸 X 向被推深到
+## 0.712 + 0.20 = 0.912。
+##
+## 为什么不能全用整只怪的包围盒：那是**全高**的并集，头顶的丸子头 / 脚边的件会把 Z 半宽
+## 撑到 0.622，而胸口那一层实际只有 0.332 ⇒ 退让量少算 0.29m，落点停在壳边上。
+## **真渲染实拍就是这样**：解析读数说「距模型 0.000」，画面里特效却明显在圆柱壳外圈。
+## 所以 X/Z 必须取**命中高度那一层**的横截面。
+##
+## 退化情形（模型盒为空 / 法线不可用）按「从怪体中心指向命中点」定外法线，并退回兜底固定量；
 ## 连怪体中心都与命中点重合时原样返回（不动比乱动安全）。
 ## ⚠ 只对怪调用：墙面 / 掩体不存在「模型比碰撞盒小」的问题。
 func hit_effect_anchor(hit_point: Vector3, surface_normal: Vector3) -> Vector3:
@@ -2485,7 +2540,186 @@ func hit_effect_anchor(hit_point: Vector3, surface_normal: Vector3) -> Vector3:
 		outward = hit_point - global_position
 	if outward.length_squared() < 0.0001:
 		return hit_point
-	return hit_point - outward.normalized() * HIT_EFFECT_INSET_M
+	var direction := outward.normalized()
+
+	var box := _visual_world_hit_box(hit_point)
+	if box.size.length_squared() < 0.0001:
+		# 模型盒不可用（未就绪 / 无网格）⇒ 只能退回固定量
+		return hit_point - direction * HIT_EFFECT_INSET_M
+
+	var travel := _ray_box_enter_distance(box, hit_point, -direction)
+	if travel < 0.0:
+		# 射线沿法线反向打不到模型盒（理论上不该发生）⇒ 只咬一点点，不要盲推
+		return hit_point - direction * HIT_EFFECT_BITE_M
+	# `travel == 0` ⇒ 命中点**已经在模型盒内**（碰撞壳比模型窄的一侧，例如胖子僵尸 X 向：
+	# 壳世界半径 0.770、模型半宽 1.839）⇒ **不要再往里推**，否则埋进胖身子读成「从肚子里炸」。
+	# 实测：去掉这条守卫时，胖子僵尸 X 向被推深到 0.712 + 0.20 = 0.912。
+	var inset := 0.0
+	if travel > 0.0:
+		inset = minf(travel + HIT_EFFECT_BITE_M, HIT_EFFECT_MAX_INSET_M)
+	return hit_point - direction * inset
+
+
+## 射线 `origin + t * direction`（t ≥ 0）**进入** AABB 的距离；打不到返回 -1，起点已在盒内返回 0。
+##
+## ⚠ 必须用这个**逐轴 slab 夹逼**，不能用「盒心支撑函数」那种近似：
+## 支撑平面是在盒子某个角上相切的，命中点一旦**偏离盒心**（怪体中心 Y 与命中高度差半截，
+## 侧面打时 X/Z 也偏），把落点摆到支撑平面上只保证「在平面上」，不保证「在盒子范围内」——
+## 实测会残留 0.32~0.54m 的悬空（警察僵尸 / 胖子僵尸的斜向都中招）。
+func _ray_box_enter_distance(box: AABB, origin: Vector3, direction: Vector3) -> float:
+	var lower := box.position
+	var upper := box.position + box.size
+	var t_enter := -INF
+	var t_exit := INF
+	for axis in 3:
+		var start: float = origin[axis]
+		var step: float = direction[axis]
+		var lo: float = lower[axis]
+		var hi: float = upper[axis]
+		if absf(step) < 0.000001:
+			# 该轴与盒面平行：起点不在这条板内 ⇒ 永远打不到
+			if start < lo or start > hi:
+				return -1.0
+			continue
+		var t0 := (lo - start) / step
+		var t1 := (hi - start) / step
+		if t0 > t1:
+			var swap := t0
+			t0 = t1
+			t1 = swap
+		t_enter = maxf(t_enter, t0)
+		t_exit = minf(t_exit, t1)
+		if t_enter > t_exit:
+			return -1.0
+	if t_enter < 0.0:
+		return 0.0
+	return t_enter
+
+
+## 模型可视件在**本节点局部**空间的包围盒。
+##
+## ⚠ **不做缓存**（这条踩过坑，值得写下来）：正式模型是**异步挂上** `avatar` 的。
+## 一旦把「第一次调用时算出来的盒子」缓存下来，就可能缓存到**只有占位件 / 只挂了一半**
+## 的那一版 ⇒ 之后再也不重算，贴肉量按错误的体型算，特效时对时错（真渲染里表现为
+## 「还是悬在壳边上」，而单测里因为调用时机不同却是对的 —— 两边永远对不上）。
+## 本函数只在**命中时**被调一次（不是每帧），树也浅（十来个节点），重算的开销可以忽略。
+##
+## ⚠ 而且**必须按命中高度切一层薄片**，不能用整只怪的包围盒（见 `_visual_local_slab_aabb`）。
+func _visual_local_aabb() -> AABB:
+	var box := AABB()
+	var has := false
+	for mesh_node in _collect_meshes(avatar):
+		if mesh_node.mesh == null:
+			continue
+		if not _is_shown_under_avatar(mesh_node):
+			continue
+		# 换算到本节点局部空间（去掉 Enemy3D 自身的缩放/旋转/位移）
+		var local := global_transform.affine_inverse() * mesh_node.global_transform * mesh_node.get_aabb()
+		if not has:
+			box = local
+			has = true
+		else:
+			box = box.merge(local)
+	return box
+
+
+## **命中高度处**的模型横截面包围盒（本节点局部空间，Y 只留一条薄带）。
+##
+## ⚠ 为什么不能直接用整只怪的包围盒：那是**全高**的并集 —— 只要头顶的丸子头往后凸一点、
+## 或者脚边有件宽东西，整盒的 Z 半宽就被它们撑到 0.62，而**胸口那一层**实际只有 0.33。
+## 于是「还差多少才贴到身上」被算小了 0.29m，特效停在壳边上 ——
+## **真渲染实拍就是这样**：解析读数说「距模型 0.000」，画面里特效却明显在圆柱壳外圈。
+## 判据与观感对不上的根因就在这：读者要的是「贴在**被打那一层**的肉上」。
+##
+## ⚠ 本函数只给「横截面」用（`_visual_local_hit_box` 会把 Y 换回全高）。
+## **不要**直接拿这条薄带去跑射线：薄带在 Y 上只有 ±0.21m，斜向的射线会在碰到侧面之前
+## 先从 Y 面穿出去 ⇒ 判成「打不到模型」⇒ 退让量掉成 0、落点重新悬空
+## （实测：零法线兜底的斜向射线因此差 0.354m）。
+func _visual_local_slab_aabb(local_y: float, band: float) -> AABB:
+	var low := local_y - band
+	var high := local_y + band
+	var min_x := INF
+	var min_z := INF
+	var max_x := -INF
+	var max_z := -INF
+	for mesh_node in _collect_meshes(avatar):
+		if mesh_node.mesh == null:
+			continue
+		if not _is_shown_under_avatar(mesh_node):
+			continue
+		var local := global_transform.affine_inverse() * mesh_node.global_transform * mesh_node.get_aabb()
+		# 该件的 Y 区间与这条薄带不重叠 ⇒ 它长在别的高度上，不属于这一层的体型
+		if local.position.y + local.size.y < low or local.position.y > high:
+			continue
+		min_x = minf(min_x, local.position.x)
+		min_z = minf(min_z, local.position.z)
+		max_x = maxf(max_x, local.position.x + local.size.x)
+		max_z = maxf(max_z, local.position.z + local.size.z)
+	if min_x > max_x or min_z > max_z:
+		# 这一层没有任何可视件（例如命中点高过头顶）⇒ 退回整只怪的包围盒
+		return _visual_local_aabb()
+	return AABB(
+		Vector3(min_x, low, min_z),
+		Vector3(maxf(0.001, max_x - min_x), maxf(0.001, band * 2.0), maxf(0.001, max_z - min_z))
+	)
+
+
+## 射线求交用的「命中盒」：**X/Z 取命中高度那一层的横截面**，**Y 用整只怪的全高**。
+##
+## 两个空间各取所需，缺一不可：
+##   · X/Z 用横截面 ⇒ 贴肉量按「被打那一层的肉有多宽」算（而不是被头顶/脚部的宽件撑大后算小）；
+##   · Y 用全高     ⇒ 斜向射线不会在碰到侧面之前先从薄带的上/下面穿出去。
+func _visual_local_hit_box(local_y: float, band: float, full: AABB) -> AABB:
+	var slab := _visual_local_slab_aabb(local_y, band)
+	return AABB(
+		Vector3(slab.position.x, full.position.y, slab.position.z),
+		Vector3(slab.size.x, full.size.y, slab.size.z)
+	)
+
+
+## 该网格是否**真的在画**：自身可见，且直到 `avatar`（不含）之前的每一层祖先都可见。
+## ⚠ 必须滤两层（都踩过坑）：
+##   ① 占位件（`_core` / `_shell` / `_appendages`）在挂上正式模型后会被隐藏，网格数据还在 ——
+##      不过滤会把包围盒从 0.90×1.30×0.67 撑到 2.31×1.86×1.78（**2.6 倍**），贴肉量永远算不足；
+##   ② 只滤**自身** `visible` 还不够：模型内部还有**中间节点被隐藏**的件（炮管 / 爪 / LOD 变体），
+##      它们自身可见、祖先被关掉 ⇒ 实际没在画。实测漏掉这层会让小僵尸盒子 Z 从 0.67 虚胖到 0.92、
+##      警察僵尸 +Z 虚胖到 1.54，**正面打仍差 0.18~0.24m**。
+## 刻意**不**看 `avatar` 自身的可见性 —— 它在出生弹出 / 死亡收起时会整体关掉。
+func _is_shown_under_avatar(mesh_node: MeshInstance3D) -> bool:
+	if not mesh_node.visible:
+		return false
+	var node := mesh_node.get_parent()
+	while node != null and node != avatar:
+		if node is Node3D and not (node as Node3D).visible:
+			return false
+		node = node.get_parent()
+	return true
+
+
+## 包围盒换算到世界空间（本节点缩放是均匀的 ⇒ 变换后的 AABB 仍然贴合）
+func _visual_world_aabb() -> AABB:
+	return global_transform * _visual_local_aabb()
+
+
+## 命中点所在高度那一层的模型横截面（世界空间），Y 取全高 —— 供射线求交用。
+## `HIT_EFFECT_SLAB_BAND_M` 是薄带的半高：太薄会让薄带落在网格之间的空隙上（读成「这一层没东西」），
+## 太厚又会把别的高度上的宽件算进来（回到整盒的老问题）。0.30m ≈ 躯干一层。
+func _visual_world_hit_box(hit_point: Vector3) -> AABB:
+	var local_point := global_transform.affine_inverse() * hit_point
+	return global_transform * _visual_local_hit_box(
+		local_point.y, HIT_EFFECT_SLAB_BAND_M, _visual_local_aabb()
+	)
+
+
+func _collect_meshes(root: Node) -> Array[MeshInstance3D]:
+	var found: Array[MeshInstance3D] = []
+	if root == null:
+		return found
+	if root is MeshInstance3D:
+		found.append(root as MeshInstance3D)
+	for child in root.get_children():
+		found.append_array(_collect_meshes(child))
+	return found
 
 
 ## 生成 FX01-19 `VFX-ZOMBIE-GOO-DEATH-3D`：出生点取**胸口**（与 `_spawn_effect` 同口径），
