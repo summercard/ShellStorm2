@@ -1,0 +1,6 @@
+{
+  "_comment": "共享色盘 UID 契约。色盘 .import 被重建会导致 UID 重分配，令全部消费者的 .scn 缓存失效。改动此值必须同时重导消费者。",
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uid": "uid://c8tfkc8nrnge7",
+  "consumers_expected": 812
+}
