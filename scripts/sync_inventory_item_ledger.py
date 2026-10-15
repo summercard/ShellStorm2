@@ -85,6 +85,11 @@ def authored_model_paths():
             block = re.search(r'const\s+' + name + r'\s*:=\s*\{(.*?)\n\}', source, re.S)
             if block:
                 result.update(re.findall(r'"([^"]+)"\s*:\s*preload\("res://([^"]+)"\)', block[1]))
+        if rel == 'src/world3d/ItemModelFactory3D.gd':
+            block = re.search(r'const\s+BACKPACK_SCENES\s*:=\s*\{(.*?)\n\}', source, re.S)
+            if block:
+                result.update({'equipment_backpack_' + slots: path for slots, path in
+                               re.findall(r'(\d+)\s*:\s*preload\("res://([^"]+)"\)', block[1])})
     return result
 
 
@@ -150,6 +155,8 @@ def expected():
             if identity and identity[1] in asset_id_refs:
                 refs = [asset_id_refs[identity[1]]]
             model = '已接入3D资产；地面/图标共用：' + authored_path
+            if authored_path.startswith('assets/art/items_weapons/'):
+                model += '；物品专用色板：assets/art/shared/palette/item_high_visibility_palette_10x10_512.png（HSV S/V×1.61；物品独立四材质；图标本色补光0.45）'
         occurrences = [f'{DROP_CSV}#CSV行{n} / {r["怪物ID"]}' for n, r in enumerate(csv_rows, 2) if r['物品ID'] == item_id]
         note = '已注册；本表只导航，堆叠/数值/掉落概率由原定义拥有'
         if not occurrences:
@@ -191,7 +198,7 @@ def expected():
     for item_id, n in content_rows.items():
         if item_id not in items:
             rows['非背包与待设计'].append([item_id, link(CONTENT, f'掉落物品!A{n}'), '内容表设计条目；ItemRegistry未注册；不可列为当前可入包物品'])
-    rows['非背包与待设计'].append(['@currency:extraction_points', link('src/world3d/Dungeon3D.gd', '_grant_run_currency'), '魂直接入货币余额，不占背包格'])
+    rows['非背包与待设计'].append(['@currency:extraction_points', link('src/world3d/Dungeon3D.gd', '_grant_run_currency'), '金币直接入货币余额，不占背包格'])
     rows['功能调用链'] = [
         ['内容定义', 'ItemRegistry', link(REGISTRY, 'get_item'), '物品字段/堆叠/使用动作与池成员的唯一运行定义'],
         ['掉落编译', 'MonsterDropTable', link('src/rewards/MonsterDropTable.gd', 'compile'), '关卡掉落配置校验；整表失败拒绝部分生效'],
@@ -201,7 +208,7 @@ def expected():
         ['地面发放', 'RewardSink', link('src/rewards/RewardSink.gd', 'apply_ground'), '发放口确认生成结果；不持有背包规则'],
         ['地面实例', 'Dungeon3D', link('src/world3d/Dungeon3D.gd', '_spawn_loot_items'), '按既有房间边界、支撑面和散布规则落地'],
         ['拾取申请', 'GroundLootPickup3D', link('src/world3d/GroundLootPickup3D.gd', 'accept_pickup'), '事务确认后播放收取动画；模型读取ItemModelFactory3D'],
-        ['拾取事务', 'Dungeon3D', link('src/world3d/Dungeon3D.gd', '_on_ground_loot_requested'), '魂走货币；物品走add_item，满包保留、部分接收保留余量'],
+        ['拾取事务', 'Dungeon3D', link('src/world3d/Dungeon3D.gd', '_on_ground_loot_requested'), '金币走货币；物品走add_item，满包保留、部分接收保留余量'],
         ['背包事实', 'InventoryModule', link('src/game/InventoryModule.gd', 'add_item'), '唯一格位所有者；武器实例去重，其他物品按stack_max堆叠'],
         ['使用入口', 'Dungeon3D', link('src/world3d/Dungeon3D.gd', '_on_inventory_item_clicked'), '先分流换弹/武器/背包/手电/配件/子弹；普通use_action进入ItemUseHandler'],
         ['效果处理', 'ItemUseHandler', link('src/game/ItemUseHandler.gd', 'apply'), '药水heal；电池restore_flashlight_charge；拒绝效果时不扣物品'],

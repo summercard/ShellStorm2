@@ -181,6 +181,7 @@ smoke_scenes=(
 )
 
 core_scenes=(
+  verify_grid_inventory_layout
   verify_hologram_unlock
   verify_player3d_directional_motion
   verify_player3d_firing_motion
@@ -278,6 +279,7 @@ core_scenes=(
   verify_expedition_departure_carry
   verify_tower03_expedition_entry
   verify_death_during_extraction_flow
+  verify_encounter_event_flow
   verify_game_entry_flow
   verify_base_world_flow
   verify_dual_weapon_quick_map_fate_flow
@@ -353,6 +355,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+  verify_inventory_experience_visual
   verify_monitor_boss_visual
   verify_base99_radio
   verify_base99_radio_music_notes

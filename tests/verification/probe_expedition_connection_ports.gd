@@ -477,7 +477,7 @@ func _probe_checkpoint_restore(rotation: int, fault: String, accepts_world: bool
 		"equipped_backpack_item": backpack, "equipped_weapon_items": [weapon, secondary], "active_weapon_slot": 1,
 		"quick_item_slots": [{"item": quick, "count": 1, "slot": 0}, {}],
 		"flashlight_module_id": "basic", "flashlight_charge_ratio": 0.37,
-		# run_value 是魂余额的 HUD 镜像；currency_changed 会同步它，不能构造两个独立余额。
+		# run_value 是金币余额的 HUD 镜像；currency_changed 会同步它，不能构造两个独立余额。
 		"room_key_count": 4, "run_currency": 777, "run_value": 777, "kills": 5,
 		"edge_states": poisoned_edges, "merchant_stock": merchant_stock,
 		"trade_extraction_unlocked": true, "trade_extraction_room_id": "room_01",
@@ -563,7 +563,7 @@ func _check_checkpoint_ownership(tower: TowerDescent3D, snapshot: Dictionary, la
 	_check(tower.player.current_hp == int(snapshot["player_hp"]), "%s HP必须恢复" % label)
 	var flashlight := tower.player.get_node_or_null("PlayerFlashlight3D")
 	_check(flashlight != null and is_equal_approx(float(flashlight.call("get_charge_ratio")), float(snapshot["flashlight_charge_ratio"])), "%s 手电电量必须恢复" % label)
-	_check(GameManager.currency == int(snapshot["run_currency"]) and int(tower.get("_room_key_count")) == int(snapshot["room_key_count"]), "%s 魂和携带钥匙必须恢复，区别于禁止回灌的地面钥匙" % label)
+	_check(GameManager.currency == int(snapshot["run_currency"]) and int(tower.get("_room_key_count")) == int(snapshot["room_key_count"]), "%s 金币和携带钥匙必须恢复，区别于禁止回灌的地面钥匙" % label)
 	_check(int(tower.get("_run_value")) == int(snapshot["run_value"]) and int(tower.get("_kills")) == int(snapshot["kills"]), "%s 携带价值和击杀统计必须恢复" % label)
 
 

@@ -1,5 +1,7 @@
 class_name ItemModelIcon3D
 extends Control
+
+const ITEM_ICON_MATERIAL_PRESET := preload("res://src/ui/ItemIconMaterialPreset.gd")
 ## 将世界道具的同一 3D 模型投射为背包图标；配置后只渲染一次。
 ##
 ## 取景口径（2026-09-30 主人反馈「物品大于图标尺寸会被切、居中位置不对」后重写）：
@@ -17,7 +19,7 @@ extends Control
 ##     顶点支撑给出的是真实轮廓，尺寸与居中同时变准（图标也因此更饱满）。
 ##   - 局部特写（avatar 部位按世界 Y 分段）：夹取没法用支撑区间表达，沿用外接盒角点。
 
-@export_range(64, 160, 8) var icon_resolution := 96
+@export_range(64, 512, 8) var icon_resolution := 96
 ## 取景填充比：模型投影最多占取景框 88%，余下是安全边距（描边与抗锯齿不会蹭到边缘）。
 const FIT_FILL_RATIO := 0.88
 ## 视口短边下限；控件被压到极小时不至于把渲染分辨率拉成几个像素。
@@ -137,6 +139,7 @@ func _build_studio() -> void:
 	_preview_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_preview_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_preview_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_preview_rect.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	_preview_rect.texture = _viewport.get_texture()
 	add_child(_preview_rect)
 
@@ -174,9 +177,12 @@ func _rebuild_model() -> void:
 		visible = false
 		return
 	_model.name = "ProjectedItemModel"
+	ITEM_ICON_MATERIAL_PRESET.apply(_model, {})
 	var kind := _resolved_model_kind()
 	_model.rotation_degrees = Vector3(0, 180, 0) if kind.begins_with("avatar_") else Vector3(-8, 18, 0)
 	_viewport.add_child(_model)
+	if kind == "avatar_full":
+		_camera.look_at_from_position(Vector3(0, 1.0, 4.5), Vector3(0, 0.9, 0), Vector3.UP)
 	if kind.begins_with("avatar_"):
 		_model.process_mode = Node.PROCESS_MODE_DISABLED
 	else:
@@ -462,7 +468,7 @@ func _clip_region(box: AABB, region: Rect2) -> AABB:
 
 
 func _collect_meshes(node: Node, out: Array[MeshInstance3D]) -> void:
-	if node is MeshInstance3D:
+	if node is MeshInstance3D and (node as MeshInstance3D).is_visible_in_tree():
 		out.append(node)
 	for child in node.get_children():
 		_collect_meshes(child, out)

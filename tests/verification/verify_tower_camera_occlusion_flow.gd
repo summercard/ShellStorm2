@@ -293,9 +293,12 @@ func _expect_non_south_wall_ignored(
 ) -> void:
 	if bool(snapshot.get("camera_lower_wall_detected", true)):
 		failures.append("%s错误触发了仅限南墙的镜头交互" % label)
+	# 固定机位锚点。这里刻意写死而非引用常量：它要锚定「默认机位常量确实
+	# 生效到运行时相机」这条跨文件契约，默认机位变更时必须同步本行
+	# （2026-10-15 由 9.993940 / 3.699625 改为当前值）。
 	if (
-		absf(tower.player.camera.position.y - 9.993940) > 0.02
-		or absf(tower.player.camera.position.z - 3.699625) > 0.03
+		absf(tower.player.camera.position.y - 10.262659) > 0.02
+		or absf(tower.player.camera.position.z - 4.914455) > 0.03
 	):
 		failures.append("%s错误改变了固定镜头位置：%s" % [label, tower.player.camera.position])
 

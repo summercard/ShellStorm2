@@ -29,9 +29,11 @@ const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_
 const GOO_DEATH_SIZE := 1.0
 ## 胖子僵尸死亡视觉尺寸：业主「把小僵尸的特效放大两倍给胖子僵尸用」⇒ 2.0
 const BLAST_SIZE := 2.0
-## 僵尸受击件尺寸 = 金属火星同档位 ×1.10（与 `Projectile3D.GOO_HIT_SIZE_TARGET` 同值）
-const ZOMBIE_HIT_SIZE := 0.374
-const METAL_HIT_SIZE := 0.34
+## 尺寸**现读调用方常量**，不手写 —— 业主每次调档（如「放大 50%」）都会让手写的数立刻过期，
+## 而预览图一旦过期就会给出与实机不符的判断（本项目已经吃过一次「读数对、画面错」的亏）。
+const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
+const ZOMBIE_HIT_SIZE := PROJECTILE_SCRIPT.GOO_HIT_SIZE_TARGET
+const METAL_HIT_SIZE := PROJECTILE_SCRIPT.METAL_SPARK_SIZE_TARGET
 const FLOOR_Y := 0.0
 const SPAWN_LIFT := 0.65
 const WALL_X := 2.2
@@ -47,6 +49,7 @@ var _wall: MeshInstance3D
 var _ruler: MeshInstance3D
 var _enemy: Enemy3D = null
 var _hull: MeshInstance3D
+var _old_hull: MeshInstance3D
 var _marker_hull: MeshInstance3D
 var _marker_anchor: MeshInstance3D
 var _hull_radius := 1.02
@@ -198,16 +201,33 @@ func _build_enemy() -> void:
 	_hull.position = Vector3(0.0, hull_height * 0.5, 0.0)
 	add_child(_hull)
 
+	# 「旧口径」参考圈：半径 = 现半径 ÷ 0.8（业主 2026-10-15「直径缩小到现在的 80%」）。
+	# 两层同屏 ⇒ 缩了多少肉眼可读；只看新圈的话「80%」是个没有参照的数字。
+	_old_hull = MeshInstance3D.new()
+	var old_mesh := CylinderMesh.new()
+	old_mesh.top_radius = _hull_radius / 0.8
+	old_mesh.bottom_radius = _hull_radius / 0.8
+	old_mesh.height = hull_height
+	old_mesh.radial_segments = 28
+	_old_hull.mesh = old_mesh
+	_old_hull.material_override = _wire_material(Color(1.0, 0.45, 0.35, 0.16))
+	_old_hull.position = Vector3(0.0, hull_height * 0.5, 0.0)
+	add_child(_old_hull)
+
 	_raw_point = Vector3(0.0, HIT_Y, 0.0) + HIT_NORMAL * _hull_radius
 	_anchored_point = _enemy.hit_effect_anchor(_raw_point, HIT_NORMAL)
 	var half := _visual_half_width(_enemy.avatar)
+	print("PREVIEW hull_now=%.3f hull_before=%.3f (x0.8)" % [_hull_radius, _hull_radius / 0.8])
 	print(
 		"PREVIEW derived_inset=%.3f (壳半径 %.3f → 落点 %.3f) 模型半宽 %.3f 落点距模型 %.3f"
 		% [
 			(_raw_point - _anchored_point).length(), _hull_radius,
-			_anchored_point.z, half,
-			maxf(0.0, absf(_anchored_point.z) - half),
+			_anchored_point.z, half, maxf(0.0, absf(_anchored_point.z) - half),
 		]
+	)
+	print(
+		"PREVIEW sizes metal=%.3f zombie=%.3f (scale=%.2f)"
+		% [METAL_HIT_SIZE, ZOMBIE_HIT_SIZE, PROJECTILE_SCRIPT.HIT_EFFECT_SIZE_SCALE]
 	)
 
 	_marker_hull = _build_marker(Color(0.30, 0.85, 1.0), _raw_point)
@@ -299,6 +319,7 @@ func _capture_group(entry: Dictionary) -> void:
 	var show_body := stage == "body"
 	_enemy.visible = show_body
 	_hull.visible = show_body
+	_old_hull.visible = show_body
 	_marker_hull.visible = show_body
 	_marker_anchor.visible = show_body
 	var fx_pos: Vector3 = entry["pos"]

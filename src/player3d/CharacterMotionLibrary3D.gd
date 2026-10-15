@@ -8,6 +8,13 @@ const CURRENT_LIBRARY_PATH := "res://assets/art/characters/player/chr_player_cap
 ## 跑步剪辑（moving / armed_moving）的播放倍率。只缩放采样相位的推进速度，
 ## 不写玩家状态、不改移动速度、不改剪辑数据。走路剪辑（walking）保持 1.0。
 const RUN_CLIP_RATE_SCALE := 1.3
+## 角色动画播放速度全局倍率（业主 2026-10-15：「角色动画播放速度调快 25%」）。
+## 只缩放采样相位的推进速度 —— 也就是下面**唯一**那处 `_time += delta * rate`；
+## 不改状态机时长、不改移动速度、不改剪辑数据、不写玩家状态。
+## 覆盖经本库播放的全部剪辑：待机 / 移动 / 走路 / 锁定 / 开火。
+## 冲刺、受击、落地、死亡由状态机 progress 驱动（`avatar.get("_dash_animation_progress")` 等），
+## 不受这一项影响 —— 那些同时就是玩法时长（冲刺无敌帧等），不该跟着表现一起缩。
+const ANIMATION_RATE_MULTIPLIER := 1.25
 ## 最后一发真实射击后继续保持开火剪辑的时间；不拉长后坐/枪口火光脉冲。
 const FIRE_HOLD_DURATION_S := 2.0
 static var _libraries: Dictionary = {}
@@ -153,6 +160,7 @@ func apply(avatar: Node3D, delta: float) -> void:
 		rate = clampf(planar_speed / (2.4 if walking_clip else 5.0), 0.72, 1.18)
 		if not walking_clip:
 			rate *= RUN_CLIP_RATE_SCALE
+	rate *= ANIMATION_RATE_MULTIPLIER
 	_time += delta * rate
 	playback_rate = rate
 	reference_speed_mps = float(clip.get("reference_speed_mps", 0.0))

@@ -360,7 +360,7 @@ func _verify_interface_and_model(failures: Array[String]) -> void:
 		failures.append("自动贩卖机界面没有展示7个固定货架条目（含初级棒球棍与小型电池）")
 	if menu.find_children("*", "ItemModelIcon3D", true, false).size() < 7:
 		failures.append("购买货架没有复用背包3D物品图标")
-	if "魂" not in menu._points_label.text or "当前背包" not in menu._capacity_label.text:
+	if "金币" not in menu._points_label.text or "当前背包" not in menu._capacity_label.text:
 		failures.append("贩卖机顶部没有明确显示购买货币与购买目标")
 	if "2 / 12" not in menu._capacity_label.text or not _tree_has_label_text(menu._sell_list, "当前背包（与I键一致）"):
 		failures.append("贩卖机没有显示I键背包中的两件物品")

@@ -153,13 +153,20 @@ const STAIR_VISIBLE_GUARD_HALF_WIDTH_M := 2.15
 const STAIR_GUARD_COLLISION_OVERLAP_M := 0.20
 # 楼板边缘阻挡向梯跑扶手中心各搭接少量距离，封住转角缝而不封闭楼梯入口。
 const STAIR_GUARD_CORNER_JOIN_OVERLAP_M := 0.15
-# 默认镜头史（调试快捷键每按一次沿“相机→焦点”视线轴移动0.20m，`;`拉近、`'`拉远）：
-#   v0.1 初始   = 玩家局部 (0, 8.0, 2.77)
-#   2026-09-13 = 上一版基础上按 `'` 拉远 15 次 → (0, 10.719009, 4.037671)
-#   2026-10-09 = 主人实操认为再按 `;` 拉近 4 次更合适 → (0, 9.993940, 3.699625)
-# 三步都只改“相机→焦点”向量的长度、不碰方向，所以默认俯视角与 FOV 65° 始终不变。
-const CAMERA_HEIGHT_M := 9.993940
-const CAMERA_DEFAULT_TRAILING_M := 3.699625
+# 默认镜头史（`;`拉近 / `'`拉远每按一次沿“相机→焦点”视线轴移动0.20m；
+# P 键调试面板「镜头雾气 → 俯仰」每按一次绕焦点转动5°）：
+#   v0.1 初始   = 玩家局部 (0, 8.0, 2.77)                        | 半径 8.330240
+#   2026-09-13 = 上一版基础上按 `'` 拉远 15 次 → (0, 10.719009, 4.037671) | 半径 11.330240
+#   2026-10-09 = 主人实操认为再按 `;` 拉近 4 次更合适 → (0, 9.993940, 3.699625) | 半径 10.530240
+#   2026-10-15 = 主人按 `'` 拉远 4 次回到 09-13 机位，再在 P 面板按一次「压低」
+#                → (0, 10.262659, 4.914455)                       | 半径 11.330240
+# 前三步都只改“相机→焦点”向量的长度、不碰方向，所以默认俯视角始终 65.003882°、FOV 65°不变。
+# 2026-10-15 是本组常量**首次改变俯视角**：绕固定焦点 (0, 0.45, -0.75) 压低 5°，
+# 俯角由 65.003882° 变为 60.003882°；半径因“先拉远4次(+0.80m)、后绕焦点旋转(半径不变)”
+# 而定格在 11.330240m。等效换算：offset = 11.330240 × (sin60.003882°, cos60.003882°)
+# = (9.812659, 5.664455)，故高度 = 0.45 + 9.812659、后移 = 5.664455 − 0.75。
+const CAMERA_HEIGHT_M := 10.262659
+const CAMERA_DEFAULT_TRAILING_M := 4.914455
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0
@@ -176,7 +183,10 @@ const CAMERA_LOWER_WALL_LIFT_RISE_RATE := 8.0
 const CAMERA_LOWER_WALL_LIFT_FALL_RATE := 4.5
 const CAMERA_LOWER_WALL_MIN_TRAILING_M := 0.15
 # 收镜必须在墙进入当前默认镜头通道时触发，不得沿用任何旧阈值；
-# 本常量跟随 CAMERA_DEFAULT_TRAILING_M 自动更新（现为 3.699625m）。
+# 本常量跟随 CAMERA_DEFAULT_TRAILING_M 自动更新（现为 4.914455m）。
+# 「跟随」而非冻结旧绝对值 3.699625，是有几何依据的：探针量出的是墙到玩家的距离，
+# 而相机在玩家后方 trailing 处，于是 distance − trailing = 相机到墙的距离。令阈值 =
+# trailing，触发点恰好落在「相机一碰到墙」上；若冻结旧值，相机得先穿墙 1.21m 才收镜。
 const CAMERA_LOWER_WALL_RETRACT_TRIGGER_M := CAMERA_DEFAULT_TRAILING_M
 const CAMERA_LOWER_WALL_RETRACT_RATE := 10.0
 const CAMERA_LOWER_WALL_EXTEND_RATE := 4.5
@@ -5603,6 +5613,10 @@ func _register_edge_topology(
 	for pair in [[a_record, a_side, b, true], [b_record, b_side, a, false]]:
 		var record := pair[0] as Dictionary
 		var direction := str(pair[1])
+		# 兜底：恢复到旧档 / 由更早路径构建、没吃 `_record()` 新初始化的 record
+		# 可能仍缺这个键。补齐即可 —— 缺键的正确语义与空字典完全一致。
+		if not (record.get("door_endpoint_owners") is Dictionary):
+			record["door_endpoint_owners"] = {}
 		if direction not in (record["doors"] as Array):
 			(record["doors"] as Array).append(direction)
 		(record["door_targets"] as Dictionary)[direction] = str(pair[2])
@@ -6394,7 +6408,7 @@ func _refresh_tower_hud() -> void:
 		_tower_floor_label.text = get_expedition_display_name()
 		_tower_target_label.text = _expedition_objective()
 		_tower_elevator_label.text = "M 路线地图 · F 手电 · Shift 冲刺"
-		_tower_base_currency_label.text = "魂：◈ %d" % BaseManager.get_extraction_points()
+		_tower_base_currency_label.text = "金币：◈ %d" % BaseManager.get_extraction_points()
 		return
 	var floor_number := _current_floor_number()
 	_tower_floor_label.text = (
@@ -6410,7 +6424,7 @@ func _refresh_tower_hud() -> void:
 		if floor_number == 99 else
 		"M 路线地图 · F 手电 · Shift 冲刺"
 	)
-	_tower_base_currency_label.text = "魂：◈ %d" % BaseManager.get_extraction_points()
+	_tower_base_currency_label.text = "金币：◈ %d" % BaseManager.get_extraction_points()
 
 
 func _room_display_name(type_id: String) -> String:
@@ -6993,6 +7007,9 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 		"narrative_spawned_keys": _narrative_spawned_keys.duplicate(true),
 		}
 	)
+	world_state["encounter_events"] = _encounter_event_director.export_snapshot() if _encounter_event_director != null else {
+		"schema_version": 1, "next_instance_number": 1, "instances": [],
+	}
 	if is_expedition() and get_expedition_level_id() == "expedition_01":
 		world_state["expedition_global_rotation_deg"] = int(
 			(_floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary).get("expedition_global_rotation_deg", 0)
@@ -7069,6 +7086,12 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 	_initial_loop_gate_armed = bool(world_state.get("initial_loop_gate_armed", false))
 	_initial_loop_gate_sealed = bool(world_state.get("initial_loop_gate_sealed", false))
 	_segment_runtime_state = RUN_PERSISTENCE_SERVICE.read_segment_runtime_state(snapshot)
+	if _encounter_event_director != null:
+		# 显式标 Variant：`Dictionary.get()` 返回 Variant，用 `:=` 推断会被
+		# 「警告即错误」拦下，整份脚本编译失败（连带塔楼/远征回归全红）。
+		var encounter_state: Variant = world_state.get("encounter_events", {})
+		if encounter_state is Dictionary:
+			_encounter_event_director.import_snapshot(encounter_state as Dictionary)
 	_restore_narrative_spawned_keys(snapshot)
 	# Airlock commits persist their post-unload intent before queue_free starts.
 	# Replaying that intent is required when the process died after the save but

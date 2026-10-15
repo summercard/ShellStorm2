@@ -9,7 +9,7 @@ extends Node
 ##
 ## 本场景三段断言：
 ##   1. 带出发标记的基地快照 ⇒ 背包 / 主副枪 / 装备背包 / 快捷栏 / 保险格 /
-##      HP / 手电电量 / 魂 / 房间钥匙全部装回；
+##      HP / 手电电量 / 金币 / 房间钥匙全部装回；
 ##   2. 同一次入场里**远征出生点契约不被改写**（仍是安全房中心朝前门方向偏 4m，
 ##      不是房间中心）—— 出发交接刻意不恢复坐标；
 ##   3. 反向对照：去掉标记 ⇒ 一律不得装回（证明标记是唯一开关，不是碰巧被别的分支捞到）。
@@ -193,7 +193,7 @@ func _verify_marked_departure(failures: Array[String]) -> void:
 		failures.append("快捷栏物品不是快照里那件")
 
 	if GameManager.currency != CARRY_CURRENCY:
-		failures.append("魂没有带过来：%d，期望 %d" % [GameManager.currency, CARRY_CURRENCY])
+		failures.append("金币没有带过来：%d，期望 %d" % [GameManager.currency, CARRY_CURRENCY])
 	if int(tower._room_key_count) != CARRY_KEYS:
 		failures.append("房间钥匙数没有带过来：%d，期望 %d" % [int(tower._room_key_count), CARRY_KEYS])
 
@@ -398,7 +398,7 @@ func _report_and_quit(failures: Array[String]) -> void:
 	if output.is_empty():
 		print(
 			"EXPEDITION_DEPARTURE_CARRY_OK: 真机链路（含塔楼场景卸载后标记仍存活）把 99F 基地的"
-			+ "背包/主副枪/装备背包/快捷栏/保险格/HP/手电/魂/钥匙全部带进远征；出生点契约未被改写；"
+			+ "背包/主副枪/装备背包/快捷栏/保险格/HP/手电/金币/钥匙全部带进远征；出生点契约未被改写；"
 			+ "去掉标记后一条也不装回；塔楼侧仍走 base 分支"
 		)
 		get_tree().quit(0)

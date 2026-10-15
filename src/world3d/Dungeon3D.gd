@@ -10,6 +10,8 @@ const HUD_PRESENTER_SCRIPT = preload("res://src/ui/HUDPresenter3D.gd")
 const RUNTIME_REWARD_COORDINATOR_SCRIPT = preload("res://src/rewards/RuntimeRewardCoordinator.gd")
 const REWARD_SINK_SCRIPT = preload("res://src/rewards/RewardSink.gd")
 const RUN_MERCHANT_SERVICE_SCRIPT = preload("res://src/game/RunMerchantService.gd")
+const ENCOUNTER_EVENT_DIRECTOR_SCRIPT = preload("res://src/world3d/EncounterEventDirector3D.gd")
+const ENCOUNTER_EVENT_HOST_SCRIPT = preload("res://src/world3d/EncounterEventHost3D.gd")
 const AVATAR_CUSTOMIZATION_PERSISTENCE = preload(
 	"res://src/player3d/customization/AvatarCustomizationPersistence.gd"
 )
@@ -23,6 +25,9 @@ signal room_cleared(room_data)
 signal room_boss_defeated(room_id: String)
 signal room_entered(room_data)
 signal backpack_equipment_changed(snapshot: Dictionary)
+signal encounter_event_started(snapshot: Dictionary)
+signal encounter_event_stage_started(snapshot: Dictionary, stage_index: int)
+signal encounter_event_finished(snapshot: Dictionary)
 
 const ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d.tscn")
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
@@ -41,19 +46,14 @@ const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventor
 const HUD_RELOAD_RING_SCRIPT := preload("res://src/ui/HudReloadRing.gd")
 const FATE_CARD_FEEDBACK_SCRIPT := preload("res://src/ui/FateCardFeedback.gd")
 const HUD_UI_SCALE := 0.80
-## —— HUD 换弹环（2026-10-08，`0.2-PLAYER-001` 追记五）——
-## 主人原话：「就是我换子弹的那个提示圈，帮我换到图片中的枪械图标的位置来，然后大小跟我红圈一样大」。
-## 环从**世界空间**（角色身侧）搬到**右下角武器图标**上，实现是 2D 画布控件 `HudReloadRing`
-## ——`CanvasLayer` 恒在 3D 之上，3D 环摆在图标的屏幕位置上也会被图标本体（不透明网格）压住，
-## 做不到"套在图标上"。世界环那套由 `PlayerAvatar3D.RELOAD_RING_IN_WORLD = false` 退役。
-##
-## 外径：主人标注图（1280×720，该窗口下缩放因子 1.0 ⇒ canvas px == 屏幕 px）红圈实测 **75 px**。
-## 本文件所有 HUD 尺寸都写成「设计 px × `HUD_UI_SCALE`」⇒ 75 / 0.8 = **93.75**，
-## 于是这个数跟后面那排 `_hud_size(...)` 是同一个口径，改 HUD_UI_SCALE 时不会只剩它不跟着缩。
-const HUD_RELOAD_RING_OUTER_DIAMETER_DESIGN := 93.75
-## 环心对齐到武器图标控件（`_hud_weapon_model_icon`）的矩形中心。取**结构量**而不是手绘像素坐标：
-## 标注图上红圈圈心 (1066.0, 675.5)、图标矩形中心 (1067.2, 676.4)，差 1.2 px，取后者。
-## 好处是换分辨率、挪面板、改图标尺寸时环自动跟随，不会脱钩。
+## —— HUD 换弹环（2026-10-15：从武器图标迁到角色右下侧）——
+## 继续复用 2D HudReloadRing；退役的世界环 RELOAD_RING_IN_WORLD 保持 false。
+## 新标注圈约 24×25 屏幕像素。1280×720 基准取外径 25 canvas px，
+## 尺寸与偏移仍统一写成「设计 px × HUD_UI_SCALE」，随 HUD/stretch 同比例缩放。
+const HUD_RELOAD_RING_OUTER_DIAMETER_DESIGN := 31.25
+## 相对角色脚底投影点：基准屏幕右 34 px、下 10 px，让环位于角色身侧而不盖住模型。
+## 相机投影决定锚点，偏移只决定身侧位置；不硬编码标注图的绝对圈心。
+const HUD_RELOAD_RING_CHARACTER_OFFSET_DESIGN := Vector2(42.5, 12.5)
 ##
 ## 武器图标「弹一下」：时长与峰值放大倍率。主人要求「枪械的图标要放大缩小的弹一下」。
 ## 0.42 s 比一次换弹（2 s 上下）短一档 —— 它标的是"扣下换弹键"那一下，不是整个装填过程。
@@ -104,15 +104,16 @@ const OFFSCREEN_INDICATOR_FLOOR_TOLERANCE_M := 4.5
 ## 箭头指向的高度：怪的原点在脚底，指脚底会让箭头在透视下偏低；
 ## 取 0.9 m ≈ 躯干中线（小怪体高约 1.7 m），指向与肉眼看到的身体位置一致。
 const OFFSCREEN_INDICATOR_TARGET_HEIGHT_M := 0.9
-## Boss 条白色延迟层只负责视觉追赶，真实生命值仍由 ProgressBar.value 立即同步。
-## 速度与头顶条**同一个真源**（`Enemy3D.HEALTH_BAR_DELAY_SPEED`）—— 两条白段的追赶手感
-## 必须一致，否则同一场战斗里 Boss 条和小怪条的节奏会不一样。
-const BOSS_HEALTH_BAR_DELAY_SPEED := Enemy3D.HEALTH_BAR_DELAY_SPEED
-const BOSS_HEALTH_BAR_DELAY_COLOR := Enemy3D.HEALTH_BAR_DELAY_COLOR
-## 门后命运卡的**局内魂购买价**，按稀有度（COMMON/RARE/EPIC/LEGENDARY/MYSTIC）。
-## 公式：旧「满槽兑魂」基准 `[20, 40, 70, 120, 180]` × 1.5，四舍五入到整十 ⇒ `[30, 60, 110, 180, 270]`。
-## 买价必须高于旧兑魂值：旧值是「放弃卡换魂」，新值是「花魂买卡」，两者不能同价。
-## 只由 `GameManager.currency`（本局魂）支付；局外总池 `BaseManager.get_extraction_points()` 永不参与。
+## HUD 血条白色延迟层只负责视觉追赶，真实生命值仍由 ProgressBar.value 立即同步。
+## 速度与头顶条**同一个真源**（`Enemy3D.HEALTH_BAR_DELAY_SPEED`）—— 全游戏所有白段的
+## 追赶手感必须一致，否则同一场战斗里 Boss 屏条、玩家主界面条、小怪头顶条会三种节奏。
+## 2026-10-15：Boss 屏条与玩家主界面条共用这两个常量（此前只有 Boss 条一个使用者）。
+const HUD_HEALTH_BAR_DELAY_SPEED := Enemy3D.HEALTH_BAR_DELAY_SPEED
+const HUD_HEALTH_BAR_DELAY_COLOR := Enemy3D.HEALTH_BAR_DELAY_COLOR
+## 门后命运卡的**局内金币购买价**，按稀有度（COMMON/RARE/EPIC/LEGENDARY/MYSTIC）。
+## 公式：旧「满槽兑金币」基准 `[20, 40, 70, 120, 180]` × 1.5，四舍五入到整十 ⇒ `[30, 60, 110, 180, 270]`。
+## 买价必须高于旧兑金币值：旧值是「放弃卡换金币」，新值是「花金币买卡」，两者不能同价。
+## 只由 `GameManager.currency`（本局金币）支付；局外总池 `BaseManager.get_extraction_points()` 永不参与。
 const FATE_PRICE_BY_RARITY := [30, 60, 110, 180, 270]
 
 ## 已购买卡的整体缩小倍率（业主 2026-10-14 指定 70%）。
@@ -129,6 +130,16 @@ const FATE_PURCHASED_CARD_SCALE := 0.70
 ## 🔴 **必须是中性灰（R=G=B）**：这里只管「暗多少」，色相归零是灰度材质的职责；
 ## 掺一点冷调就会让「所有都改成灰色」变成「所有都改成灰蓝」，与主人要求不符。
 const FATE_PURCHASED_DIM_COLOR := Color(0.40, 0.40, 0.40)
+## 已购卡**卡背贴图**的半透明档（主人 2026-10-15：「翻过去的命运卡做一下半透明处理，更淡一些」）。
+##
+## ⚠️ 只作用在卡背贴图层（`tarot_back_node`），**不作用在整列**：卡下那行「已购买」是这张卡
+## 唯一还需要被读到的事实（它证明这张卡买过了），整列半透明会让它变成
+## `0.72 × 0.40 × α ≈ 0.13` 的有效亮度，直接读不出来。所以「淡」只淡卡牌本身。
+##
+## 与 `FATE_PURCHASED_DIM_COLOR` 分工：那个管「暗多少」（乘性颜色），这个管「透多少」（alpha）。
+## 取 0.45：线稿去色压暗后线条亮度约 0.34，半透明混到深底（≈0.03）上落到 ≈0.17 ——
+## 卡形仍读得出，但已经明显像一张「翻过去不用的牌」。
+const FATE_PURCHASED_CARD_ALPHA := 0.45
 ## 已购卡的文字色：中性灰。卡下说明原本按作用域着色（紫/金/浅蓝）、价格行原本是绿，
 ## 这两个彩色都是「这张卡有什么效果」的信息载体，卡买完就不需要再抢注意力了。
 ##
@@ -145,15 +156,54 @@ const FATE_PURCHASED_TEXT_COLOR := Color(0.72, 0.72, 0.72)
 ## 将来单独调「灰多少」或「暗多少」互不影响）。
 const FATE_GREYSCALE_SHADER_CODE := """
 shader_type canvas_item;
+varying vec4 canvas_tint;
+
+void vertex() {
+    canvas_tint = COLOR;
+}
 
 void fragment() {
     vec4 base = texture(TEXTURE, UV);
     float luminance = dot(base.rgb, vec3(0.2126, 0.7152, 0.0722));
-    COLOR = vec4(vec3(luminance), base.a);
+    // Keep inherited dim/alpha: replacing COLOR without its vertex tint makes purchased cards ignore exit fades.
+    COLOR = vec4(vec3(luminance), base.a) * canvas_tint;
 }
 """
 
-const BASE_INVENTORY_CAPACITY := 12
+## 右下角本局金币读数（`RunLootReadout`）的常色（金色）。
+## 抽成常量：「金币不足」反馈要在闪红之后**恢复**它，两处必须取同一个值，不能各写一份。
+const RUN_COIN_READOUT_COLOR := Color(1.0, 0.76, 0.26)
+## —— 门后购卡的交互反馈（主人 2026-10-15：让反馈更容易被看到）——
+##
+## 总原则：**视线在哪里，反馈就落在哪里**。金币的唯一读数在右下角（主人 2026-10-15：
+## 顶部余额行移除，右下金币作为高亮），三张卡在屏幕中央；所以「为什么买不了」「花了多少」
+## 这类反馈必须落在卡上和右下金币读数上，状态栏文字只作为补充。
+##
+## 卡上拒绝反馈：卡片横向抖动（px）与总时长。抖动是**拒绝**语义，与购买成功的
+## 卡背翻转是两套完全不同的动作，不会被混淆。
+const FATE_REJECT_SHAKE_PX := 12.0
+const FATE_REJECT_SHAKE_DURATION := 0.30
+## 拒绝时价格行的瞬时提亮（乘性 modulate，>1 才能压过字色本身）。
+const FATE_REJECT_PRICE_FLASH := Color(1.5, 1.5, 1.5)
+const FATE_REJECT_PRICE_SCALE := 1.14
+## 金币读数扣款时的一次脉冲缩放与时长。
+const FATE_BALANCE_PULSE_SCALE := 1.16
+const FATE_BALANCE_PULSE_DURATION := 0.30
+## 金币读数「金币不足」时闪红的颜色与持续时长（之后恢复 `RUN_COIN_READOUT_COLOR`）。
+const FATE_BALANCE_SHORTAGE_COLOR := Color(1.0, 0.38, 0.32)
+const FATE_BALANCE_SHORTAGE_DURATION := 0.50
+## 扣款飘字：`-N 金币` 从右下金币读数上方浮起并淡出。
+## 为什么要飘字：读数是「32 → 2」的一次数字替换，一闪而过很难被注意到；
+## 飘字把「刚才那一下花了多少」写明白，玩家不用自己去减。
+const FATE_SPEND_POPUP_COLOR := Color(1.0, 0.74, 0.38)
+const FATE_SPEND_POPUP_LIFETIME := 0.90
+const FATE_SPEND_POPUP_RISE := 42
+## 点击退出后，卡列先完成「翻回背面 + 缩小淡出」，再回收整个命运卡弹窗。
+## 这段时长要足够让翻面被看见，但不能让退出像卡住；减少动效时直接跳过。
+const FATE_OVERLAY_EXIT_DURATION := 0.42
+const FATE_OVERLAY_EXIT_FLIP_DURATION := 0.16
+
+const BASE_INVENTORY_CAPACITY := 24
 ## 保底武装配套弹药：入场即给 `item_ammo_pack` 的发数（每单位 = 1 发真实备弹）。
 ## 白送手枪由 `Player3D.start_with_weapon` 负责，那条链路只给枪不给弹；
 ## 没有这份备弹时，弹匣打空且没捡到掉落 = 保底武装彻底哑火。数值是设计输入，不要就地写数字。
@@ -200,6 +250,9 @@ var _boss_defeated_rooms: Dictionary = {}
 var _spawned_rooms: Dictionary = {}
 var _run_loot: Array[Dictionary] = []
 var _run_value := 0
+## 上一次写进右下金币读数的值，用于判断这次刷新是「获得 / 消费 / 无变化」。
+## `-1` 表示还没显示过任何值（首帧初始化不播动画）。
+var _loot_readout_last_value := -1
 var _kills := 0
 var _completed := false
 var _death_dialog: Control = null
@@ -217,12 +270,12 @@ var _emergency_extraction: ExtractionBeacon3D = null
 var _conditional_extractions: Dictionary = {}
 var _active_extraction_beacon: ExtractionBeacon3D = null
 var _extraction_defense_active := false
-var _extraction_mid_wave_spawned := false
-var _extraction_wave_2_spawned := false
-var _extraction_wave_3_spawned := false
-var _extraction_final_wave_spawned := false
+var _extraction_encounter_instance_id := ""
 var _last_player_hp := -1
 var _current_room_id := ""
+var _encounter_event_director: EncounterEventDirector3D
+var _encounter_event_host: EncounterEventHost3D
+var _encounter_event_completed_history: Array[String] = []
 var _room_neighbors: Dictionary = {}
 var _open_edges: Dictionary = {}
 var _corridor_by_edge: Dictionary = {}
@@ -271,12 +324,14 @@ var _door_fate_active := false
 var _door_fate_choices: Array[FateCard] = []
 ## 本次门后购卡中已被买下的卡位（与 `_door_fate_choices` 同序）；退出后清空。
 var _door_fate_purchased: Array[bool] = []
-## 顶部余额行与底部退出按钮的引用，供扣魂后刷新与验收查询。
-var _fate_balance_label: Label = null
+## 底部退出按钮的引用，供退出流程与验收查询。
+## 顶部「本局金币」余额行已按主人 2026-10-15 要求整体移除：右下角的
+## `RunLootReadout`（`loot_label`）是唯一的金币读数，扣款/获得反馈都落在它身上。
 var _fate_exit_button: Button = null
 var _pending_fate_door_from_id := ""
 var _pending_fate_door_target_id := ""
 var _fate_overlay: Control
+var _fate_overlay_closing := false
 var _fate_choice_buttons: Array[Button] = []
 var _fate_feedback_label: Label = null
 var _fate_feedback_tweens: Dictionary = {}
@@ -286,6 +341,16 @@ var _fate_feedback_dispatch: Tween = null
 var _fate_initializing_focus := false
 ## 已购卡共用的灰阶材质（懒建一次，三张卡共享同一实例）。
 var _fate_greyscale_material: ShaderMaterial = null
+## 卡片「拒绝」抖动的 tween，按按钮 instance_id 存。
+## 🔴 与 `_fate_feedback_tweens` **分开存**：那个表里是缩放 tween，两者动的是不同属性
+## （`position:x` vs `scale`），共用一个槽会在求值时把对方 kill 掉。
+var _fate_shake_tweens: Dictionary = {}
+## 价格行「拒绝」闪烁的 tween，同样按按钮 instance_id 存（与抖动分开，属性也不重叠）。
+var _fate_price_flash_tweens: Dictionary = {}
+## 余额行的扣款脉冲 / 不足闪红 tween。两个分开持有，各自只在同类反馈里互相替换。
+## 名称里的 balance 是历史叫法：反馈宿主现在是右下角金币读数 `loot_label`。
+var _fate_balance_pulse_tween: Tween = null
+var _fate_balance_warn_tween: Tween = null
 var _map_fate_triggers: MapFateTriggers
 # 模态浮窗（雷达 / 背包）的 ESC 关闭按钮
 var _radar_close_button: Button = null
@@ -324,6 +389,11 @@ var _boss_label: Label = null
 var _boss_bar: ProgressBar = null
 var _boss_delayed_bar: ProgressBar = null
 var _boss_delayed_value := 1.0
+## 玩家主界面条（`ReferenceCombatHUD/PlayerStatusBlock`）的延迟白段。
+## 与 Boss 屏条同构：白条在下、红条在上，两层占同一矩形 —— 见 `_build_reference_main_hud`。
+var _player_delayed_bar: ProgressBar = null
+var _player_delayed_ratio := 1.0
+var _player_health_bar_initialized := false
 var _active_boss: Enemy3D = null
 # 常驻交互圆点（门的锚点）单帧缓存：见 _refresh_interaction_dot_cache。
 var _dot_cache_frame := -1
@@ -333,7 +403,7 @@ var _reference_hud_root: Control = null
 var _hud_weapon_meta_label: Label = null
 var _hud_weapon_fate_label: Label = null
 var _hud_weapon_model_icon: ItemModelIcon3D = null
-## HUD 换弹环（套在武器图标上）。见 HUD_RELOAD_RING_* 一族常量。
+## HUD 换弹环（角色右下侧的屏幕投影）。见 HUD_RELOAD_RING_* 一族常量。
 var _hud_reload_ring: HudReloadRing = null
 var _hud_reload_ring_active := false
 ## 图标弹跳的已用时长；< 0 表示没在弹（负数不用 0 是因为 t=0 本身是合法采样点）。
@@ -514,6 +584,8 @@ func _can_finish_layout_bootstrap() -> bool:
 
 
 func _exit_tree() -> void:
+	if _encounter_event_director != null:
+		_encounter_event_director.cancel_all("scene_unloaded")
 	for room_id in _wave_spawn_pending.keys():
 		_cancel_room_wave_intermission(str(room_id))
 	if not test_mode and BaseManager != null and _runtime_persistence_active:
@@ -725,10 +797,14 @@ func _snapshot_matches_runtime_map(snapshot: Dictionary) -> bool:
 
 func _build_runtime_world_save_snapshot() -> Dictionary:
 	_capture_loaded_runtime_rooms()
-	return RUN_PERSISTENCE_SERVICE.build_world_state(
+	var world_state := RUN_PERSISTENCE_SERVICE.build_world_state(
 		"dungeon_world_state_v1", _segment_runtime_state,
 		{"narrative_spawned_keys": _narrative_spawned_keys}
 	)
+	world_state["encounter_events"] = _encounter_event_director.export_snapshot() if _encounter_event_director != null else {
+		"schema_version": 1, "next_instance_number": 1, "instances": [],
+	}
+	return world_state
 
 
 func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
@@ -896,6 +972,11 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 
 func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 	_segment_runtime_state = RUN_PERSISTENCE_SERVICE.read_segment_runtime_state(snapshot)
+	if _encounter_event_director != null:
+		var encounter_world_state: Dictionary = snapshot.get("world_state", {}) as Dictionary
+		var encounter_state: Variant = encounter_world_state.get("encounter_events", {})
+		if encounter_state is Dictionary:
+			_encounter_event_director.import_snapshot(encounter_state as Dictionary)
 	_restore_narrative_spawned_keys(snapshot)
 	return true
 
@@ -1086,9 +1167,53 @@ func _make_door_interaction_candidate(
 	}
 
 
+## 启动一项独立运行时遭遇事件。配置先由 Owner 完整校验，拒绝不产生刷怪/标志副作用。
+func start_encounter_event(config: Dictionary) -> Dictionary:
+	if _encounter_event_director == null:
+		return {"ok": false, "error": "encounter_event_unavailable"}
+	return _encounter_event_director.start(config)
+
+
+func cancel_encounter_event(instance_id: String, reason: String = "cancelled", despawn := false) -> Dictionary:
+	if _encounter_event_director == null:
+		return {"ok": false, "error": "encounter_event_unavailable"}
+	return _encounter_event_director.cancel(instance_id, reason, despawn)
+
+
+func get_encounter_event_snapshot(instance_id: String) -> Dictionary:
+	if _encounter_event_director == null:
+		return {}
+	return _encounter_event_director.get_snapshot(instance_id)
+
+
+func advance_encounter_event(instance_id: String, progress: float) -> Dictionary:
+	if _encounter_event_director == null:
+		return {"ok": false, "error": "encounter_event_unavailable"}
+	return _encounter_event_director.advance_external(instance_id, progress)
+
+
+func _on_encounter_event_started(snapshot: Dictionary) -> void:
+	encounter_event_started.emit(snapshot)
+
+
+func _on_encounter_event_stage_started(snapshot: Dictionary, stage_index: int) -> void:
+	encounter_event_stage_started.emit(snapshot, stage_index)
+
+
+func _on_encounter_event_finished(snapshot: Dictionary) -> void:
+	var event_id := str(snapshot.get("event_id", ""))
+	if str(snapshot.get("status", "")) == "completed" and not event_id.is_empty() and event_id not in _encounter_event_completed_history:
+		_encounter_event_completed_history.append(event_id)
+	encounter_event_finished.emit(snapshot)
+	_queue_runtime_autosave("encounter_event_finished")
+
+
 func _process(delta: float) -> void:
+	if _encounter_event_director != null:
+		_encounter_event_director.tick(delta)
 	_tick_bless_dead(delta)
 	_tick_boss_health_bar_delay(delta)
+	_tick_player_health_bar_delay(delta)
 	_tick_boss_reinforcements(delta)
 	_tick_battery_blink(delta)
 	_tick_enemy_preactivation(delta)
@@ -1127,11 +1252,8 @@ func _process(delta: float) -> void:
 	_tick_hud_reload_feedback(delta)
 
 
-## 换弹反馈（HUD 侧）每帧步进：① 把环心对齐到武器图标矩形中心；② 推进图标"弹一下"。
-##
-## 位置放在每帧算而不是建时算：环的锚点是**另一个控件**（武器图标），它的矩形由
-## `HBoxContainer` + `MarginContainer` 布局算出，布局可能在换分辨率、切武器、
-## 图标改尺寸后重跑 —— 建时算一次就会脱钩。
+## 换弹反馈（HUD 侧）每帧步进：① 从当前相机投影角色位置；② 保留武器图标弹跳。
+## 每帧重算锚点，跟随角色移动、镜头跟随/切换和窗口变化，不依赖武器图标的布局。
 ##
 ## 单独成函数（而不是直接写进 `_process`）是为了让验收能**手动步进固定 delta**：
 ## `verify_reference_hud_fate_visual` 会在冻结 `set_process(false)` 的场景里直接调它，
@@ -1142,15 +1264,23 @@ func _tick_hud_reload_feedback(delta: float) -> void:
 
 
 func _place_hud_reload_ring() -> void:
-	if _hud_reload_ring == null or _hud_weapon_model_icon == null:
+	if not is_instance_valid(_hud_reload_ring):
 		return
-	if not is_instance_valid(_hud_weapon_model_icon):
+	var camera := get_viewport().get_camera_3d()
+	if not is_instance_valid(player) or not is_instance_valid(camera):
+		_hud_reload_ring.visible = false
 		return
+	if camera.is_position_behind(player.global_position):
+		_hud_reload_ring.visible = false
+		return
+	# unproject_position 返回视口坐标（非物理窗口像素），逆变换到 HUD 父控件局部坐标。
+	var target := camera.unproject_position(player.global_position)
 	var parent := _hud_reload_ring.get_parent() as Control
-	var icon_center := _hud_weapon_model_icon.get_global_rect().get_center()
 	if parent != null:
-		icon_center -= parent.global_position
-	_hud_reload_ring.position = icon_center - _hud_reload_ring.size * 0.5
+		target = parent.get_global_transform_with_canvas().affine_inverse() * target
+	target += _hud_size(HUD_RELOAD_RING_CHARACTER_OFFSET_DESIGN)
+	_hud_reload_ring.position = target - _hud_reload_ring.size * 0.5
+	_hud_reload_ring.visible = _hud_reload_ring_active
 
 
 func _tick_hud_weapon_icon_pop(delta: float) -> void:
@@ -1209,8 +1339,8 @@ func _on_player_reload_progress_changed(progress: float, _remaining: float) -> v
 		_hud_reload_ring_active = true
 		_hud_weapon_icon_pop_elapsed = 0.0
 	# 进度 0 也可见：那是一圈"空槽"，与退役的世界环同口径（0 是"刚开始装填"，不是"没在装填"）。
-	_hud_reload_ring.visible = true
 	_hud_reload_ring.progress = progress
+	_place_hud_reload_ring()
 
 
 func _on_player_reload_ended(_completed: bool) -> void:
@@ -1309,6 +1439,11 @@ func _setup_run_modules() -> void:
 	_monster_injector.set_seed(run_seed ^ 0x454E454D)
 	_monster_injector.set_theme_profile(gameplay_theme)
 	_monster_injector.set_level_rules(_monster_rules)
+	_encounter_event_host = ENCOUNTER_EVENT_HOST_SCRIPT.new(self)
+	_encounter_event_director = ENCOUNTER_EVENT_DIRECTOR_SCRIPT.new(_encounter_event_host)
+	_encounter_event_director.encounter_event_started.connect(_on_encounter_event_started)
+	_encounter_event_director.encounter_event_stage_started.connect(_on_encounter_event_stage_started)
+	_encounter_event_director.encounter_event_finished.connect(_on_encounter_event_finished)
 	if not test_mode and BaseManager != null:
 		for staged in BaseManager.consume_pending_loadout():
 			if not staged is Dictionary:
@@ -1504,15 +1639,38 @@ func _build_reference_main_hud() -> void:
 	hp_label = _make_hud_label("230 / 230", 17, Color.WHITE)
 	hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stat_vbox.add_child(hp_label)
+	# 2026-10-15 主人：「这个血条表现效果，角色的血条主界面的也要」。玩家条与 Boss 屏条
+	# 同构：白色延迟层先铺底、红色真实条压在上面，两层用 FULL_RECT 跟随同一个 stack。
+	# VBox 只认 stack 的最小尺寸，所以内边距/位置与改造前一模一样（原来那条 220×22 直接
+	# 挂在 VBox 里，现在换成同尺寸的 stack）—— 不改任何既有控件坐标。
+	var hp_stack := Control.new()
+	hp_stack.name = "PlayerHealthBarStack"
+	hp_stack.custom_minimum_size = _hud_size(Vector2(220, 22))
+	hp_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stat_vbox.add_child(hp_stack)
+	_player_delayed_bar = ProgressBar.new()
+	_player_delayed_bar.name = "PlayerHealthBarDelayed"
+	_player_delayed_bar.custom_minimum_size = _hud_size(Vector2(220, 22))
+	_player_delayed_bar.show_percentage = false
+	_player_delayed_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_player_delayed_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_player_delayed_bar.add_theme_stylebox_override("background", _make_bar_style(Color(0.12, 0.02, 0.04), 4))
+	_player_delayed_bar.add_theme_stylebox_override(
+		"fill", _make_bar_style(HUD_HEALTH_BAR_DELAY_COLOR, 4)
+	)
+	hp_stack.add_child(_player_delayed_bar)
 	hp_bar = ProgressBar.new()
+	hp_bar.name = "HPBar"
 	hp_bar.custom_minimum_size = _hud_size(Vector2(220, 22))
 	hp_bar.show_percentage = false
-	hp_bar.add_theme_stylebox_override("background", _make_bar_style(Color(0.12, 0.02, 0.04), 4))
+	hp_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hp_bar.add_theme_stylebox_override("background", _make_bar_style(Color(0.12, 0.02, 0.04, 0.0), 4))
 	var hp_fill := _make_bar_style(Color(0.93, 0.055, 0.12), 4)
 	hp_fill.shadow_color = Color(0.95, 0.02, 0.12, 0.42)
 	hp_fill.shadow_size = 5
 	hp_bar.add_theme_stylebox_override("fill", hp_fill)
-	stat_vbox.add_child(hp_bar)
+	hp_stack.add_child(hp_bar)
 	var energy := HBoxContainer.new()
 	energy.name = "FlashlightBatteryPanel"
 	energy.custom_minimum_size = _hud_size(Vector2(220, 14))
@@ -1532,11 +1690,13 @@ func _build_reference_main_hud() -> void:
 	_hud_battery_time_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_hud_battery_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	energy.add_child(_hud_battery_time_label)
-	loot_label = _make_hud_label("背包 0/12 · 钥匙 1 · 魂 0", 13, Color(1.0, 0.76, 0.26))
-	stat_vbox.add_child(loot_label)
+	# 2026-10-15 主人要求：本局「背包 / 钥匙 / 金币」读数从血条左下方挪到**右下角**，
+	# 字体与字号对齐右下角弹药读数（见下方 `CurrentWeaponPanel` 段落的 RunLootReadout）。
+	# 因此这一行**不再进 `stat_vbox`**，改挂 `_reference_hud_root` 并用右下同套锚点。
+	# 只挪位置、不动数据源：`_refresh_loot_label()` 仍照旧往同一个 `loot_label` 写。
 	# 背板撤掉后这些文字直接压在实景上：远征 01 的浅色天花板/桥体下，白色 HP 数字与
 	# 浅蓝电量说明会同明度而读不出。只加文字描边（不是背板）——不占像素、不改颜色。
-	for label in [hp_label, loot_label, _hud_battery_time_label]:
+	for label in [hp_label, _hud_battery_time_label]:
 		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
 		label.add_theme_constant_override("outline_size", 5)
 
@@ -1656,13 +1816,22 @@ func _build_reference_main_hud() -> void:
 	# 撤掉背板后文字直接压在实景上：这两处（弹药数/命运槽）原先靠深色底保证可读，现只靠描边。
 	# 口径与 _outline_labels 的注释一致：不占像素、不改布局。
 	_outline_labels([ammo_label, _hud_weapon_fate_label])
-	# 换弹环：套在武器图标上的 HUD 圆环（2026-10-08，0.2-PLAYER-001 追记五）。
-	# 挂 `_reference_hud_root` 而**不是**图标自己，两条理由：
-	#   ① 图标在换弹"弹一下"时会整体缩放，挂它下面环会跟着一起胀大；
-	#   ② 图标被 `ItemModelIcon3D.clear_model()`（近战/空手）隐藏时会连带隐藏子节点，
-	#      而环的显隐只该由**换弹状态**决定。
-	# 位置每帧从图标矩形现算（`_place_hud_reload_ring()`），此处不写死坐标。
-	# 它是本函数最后一个 add_child ⇒ 画在武器面板之上；z_index 再保一档，防后来者插队。
+	# 有效信息三（2026-10-15）：右下角只显示本局金币。
+	# 背包数量与钥匙读数不再显示；金币保留黄色，字号继续与弹药读数同档。
+	# 从 `PlayerStatusBlock` 的 `stat_vbox` 移出，落在武器面板**正上方**、右缘与弹药簇齐平。
+	# 数值口径零改动：`_refresh_loot_label()` 仍在写这一枚 `loot_label`。
+	# 主人 2026-10-15 追加：顶部「本局金币」余额行移除后，这里是唯一金币读数，
+	# 购卡扣款 / 获得金币的数字脉冲都落在它身上（见 `_pulse_coin_readout`）。
+	loot_label = _make_hud_label("金币 0", 26, RUN_COIN_READOUT_COLOR)
+	loot_label.name = "RunLootReadout"
+	loot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	loot_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_anchor_control(loot_label, 1.0, 1.0, 1.0, 1.0, -420, -148, -36, -90)
+	_reference_hud_root.add_child(loot_label)
+	_outline_labels([loot_label])
+	# 角色身侧换弹环继续挂在 HUD 根：不受武器图标缩放/隐藏影响，不恢复世界环。
+	# 每帧投影角色位置；进度与生命周期仍只消费真实武器事件。
+	# z_index 保证提示画在场景之上。
 	_hud_reload_ring = HUD_RELOAD_RING_SCRIPT.new() as HudReloadRing
 	_hud_reload_ring.name = "HudReloadRing"
 	_hud_reload_ring.z_index = 1
@@ -2320,6 +2489,14 @@ func _record(id: String, type_id: String, size: String, position: Vector3, doors
 		"id": id, "type": type_id, "size": size, "position": position,
 		"doors": doors, "door_targets": {}, "main": main, "parent": parent,
 		"index": index, "vertical_level": vertical_level,
+		# 🔴 门端口归属必须**在这里**就初始化。`TowerDescent3D._register_edge_topology`
+		#    会无条件执行 `(record["door_endpoint_owners"] as Dictionary)[dir] = ...`；
+		#    若某条 record 缺这个键，`record[...]` 返回 null、`as Dictionary` 仍是 null，
+		#    对 null 索引赋值即抛
+		#    `Invalid access to property or key 'door_endpoint_owners' on a base object of type 'Dictionary'`。
+		#    之前只有 `_append_plan_room_record` 补过它，经 `_append_tower_record`
+		#    创建的 record（塔楼壳体、楼梯端点等）一直缺键 —— 撤离返航重建初始环时就会踩到。
+		"door_endpoint_owners": {},
 	}
 
 
@@ -3140,15 +3317,20 @@ func _roll_box_count(spawn: Dictionary, rng: RandomNumberGenerator) -> int:
 ## 按**点名怪种**生成一只敌人。普通怪直取 `MonsterInjector.generate_box_enemy`，
 ## elite / boss 走各自装配端（身份指派），未知 type 返回 {}。
 func _make_box_enemy(
-	type_id: String, floor: int, floor_level: int, room: DungeonRoom3D
+	type_id: String,
+	floor: int,
+	floor_level: int,
+	room: DungeonRoom3D,
+	elite_encounter_id: String = ""
 ) -> Dictionary:
 	if _monster_injector == null:
 		return {}
+	var encounter_id := elite_encounter_id if not elite_encounter_id.is_empty() else _elite_encounter_id(room)
 	return _monster_injector.generate_box_enemy(type_id, floor, floor_level, {
 		"floor": floor,
 		"floor_level": floor_level,
 		"floor_number": _elite_floor_number(room),
-		"encounter_id": _elite_encounter_id(room),
+		"encounter_id": encounter_id,
 		"seed": run_seed,
 		"boss_content_id": str(room.get_meta("boss_content_id", "")),
 	})
@@ -3205,6 +3387,12 @@ func _on_delayed_spawn_timeout(room_id: String, serial: int) -> void:
 		or not room.is_streamed()
 		or _room_spawn_blocked.has(room_id)
 	):
+		# The timer callback has already removed the entry. The reservation was
+		# counted when queued, so release that count even when the room vanished
+		# before the delayed spawn became eligible.
+		_alive_by_room[room_id] = maxi(0, int(_alive_by_room.get(room_id, 0)) - 1)
+		if room_id == _current_room_id:
+			_update_wave_hud(room_id)
 		return
 	var configs: Array[Dictionary] = []
 	configs.append(entry.get("config", {}) as Dictionary)
@@ -3988,7 +4176,7 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 			enemy.get_persistent_id(), str(reward_report.get("errors", []))
 		])
 	var grants := (reward_report.get("grants", []) as Array).duplicate(true)
-	# 星币王牌的精英击杀赏金并入唯一魂球；房间倍率在统一地面出口应用。
+	# 星币王牌的精英击杀赏金并入唯一金币球；房间倍率在统一地面出口应用。
 	var kill_currency := int(enemy.get_meta("fate_kill_currency", 0))
 	if kill_currency > 0:
 		var merged := false
@@ -4006,13 +4194,26 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 			"_deliver_ground_rewards", loot_room, grants, enemy.global_position,
 			"kill:%s:%s" % [enemy.room_id, enemy.get_persistent_id()]
 		)
+	if _encounter_event_director != null:
+		_encounter_event_director.notify_enemy_departed(
+			_encounter_owner_id(enemy_data), "killed"
+		)
 	_resolve_room_enemy_departure(enemy, false, enemy_data)
 
 
 func _on_enemy_escaped(enemy: Enemy3D, _context: Dictionary) -> void:
 	if not _claim_enemy_departure(enemy):
 		return
+	if _encounter_event_director != null:
+		_encounter_event_director.notify_enemy_departed(
+			_encounter_owner_id(enemy.get_enemy_data()), "escaped"
+		)
 	_resolve_room_enemy_departure(enemy, true, enemy.get_enemy_data())
+
+
+func _encounter_owner_id(enemy_data: Dictionary) -> String:
+	var event_id := str(enemy_data.get("encounter_event_instance_id", ""))
+	return event_id if not event_id.is_empty() else str(enemy_data.get("encounter_instance_id", ""))
 
 
 func _claim_enemy_departure(enemy: Enemy3D) -> bool:
@@ -4287,7 +4488,7 @@ func _tick_boss_health_bar_delay(delta: float) -> void:
 	_boss_delayed_value = move_toward(
 		_boss_delayed_value,
 		actual_ratio,
-		delta * BOSS_HEALTH_BAR_DELAY_SPEED
+		delta * HUD_HEALTH_BAR_DELAY_SPEED
 	)
 	_boss_delayed_bar.value = _boss_delayed_value * _boss_delayed_bar.max_value
 
@@ -4340,7 +4541,7 @@ func _show_boss_hud(enemy: Enemy3D) -> void:
 		delayed_background.set_corner_radius_all(_hud_int(2))
 		_boss_delayed_bar.add_theme_stylebox_override("background", delayed_background)
 		var delayed_fill := StyleBoxFlat.new()
-		delayed_fill.bg_color = BOSS_HEALTH_BAR_DELAY_COLOR
+		delayed_fill.bg_color = HUD_HEALTH_BAR_DELAY_COLOR
 		delayed_fill.set_corner_radius_all(_hud_int(2))
 		_boss_delayed_bar.add_theme_stylebox_override("fill", delayed_fill)
 		bar_stack.add_child(_boss_delayed_bar)
@@ -4654,7 +4855,7 @@ func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> 
 			_map_fate_triggers.on_currency_collected(granted)
 		pickup.accept_pickup(player)
 		_queue_runtime_autosave("ground_loot_picked_up")
-		status_label.text = "取得 %d 魂" % granted
+		status_label.text = "取得 %d 金币" % granted
 		_refresh_loot_label()
 		return
 	var requested := maxi(1, int(item.get("count", 1)))
@@ -4976,21 +5177,21 @@ func _resolve_event_room(room: DungeonRoom3D) -> void:
 			if FateCardGameBridge.get_card_count() > 0:
 				var reward := _rng.randi_range(30, 80)
 				var granted := _grant_run_currency(reward)
-				status_label.text = "命运交易完成：获得 %d 魂" % granted
+				status_label.text = "命运交易完成：获得 %d 金币" % granted
 			else:
 				status_label.text = "命运交易取消：尚无已应用卡片"
 		"GAMBLE":
 			if GameManager.currency < 20:
-				status_label.text = "赌局取消：至少需要 20 魂"
+				status_label.text = "赌局取消：至少需要 20 金币"
 			else:
 				var bet := clampi(GameManager.currency / 2, 20, 100)
 				GameManager.spend_currency(bet)
 				if _rng.randf() < 0.5:
 					var multiplier := _rng.randi_range(2, 5)
 					var granted := _grant_run_currency(bet * multiplier)
-					status_label.text = "赌局胜利：投入 %d，获得 %d 魂" % [bet, granted]
+					status_label.text = "赌局胜利：投入 %d，获得 %d 金币" % [bet, granted]
 				else:
-					status_label.text = "赌局失败：损失 %d 魂" % bet
+					status_label.text = "赌局失败：损失 %d 金币" % bet
 		"REVEAL":
 			_reveal_nearby_rooms(room.room_id, 2)
 			status_label.text = "地图揭示：周围房间类型已标记"
@@ -5608,7 +5809,7 @@ func _show_door_fate_choices() -> void:
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	_build_door_fate_overlay()
-	status_label.text = "门已开启 · 用本局魂购买命运卡，买好后退出"
+	status_label.text = "门已开启 · 用本局金币购买命运卡，买好后退出"
 
 
 func _build_door_fate_overlay() -> void:
@@ -5624,23 +5825,10 @@ func _build_door_fate_overlay() -> void:
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fate_overlay.add_child(dim)
 
-	# 顶部标题已按主人 2026-10-14 要求移除：它和下面那行余额说的是同一件事，
-	# 两行叠着白占一块纵向空间。现在由**本局魂余额行**直接占住这个头部位。
-	#
-	# 余额行：价格是「花本局魂」，玩家必须随时看得到自己还剩多少。
-	_fate_balance_label = Label.new()
-	_fate_balance_label.name = "FateCurrencyBalance"
-	_fate_balance_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_fate_balance_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	# 字号 30 = 原标题 40 与原余额 22 之间：接过头部的视觉权重，又不比卡下价格行更抢眼。
-	_fate_balance_label.add_theme_font_size_override("font_size", _hud_int(30))
-	_fate_balance_label.add_theme_color_override("font_color", Color(1.0, 0.84, 0.44))
-	_fate_balance_label.add_theme_color_override("font_outline_color", Color(0.06, 0.03, 0.0, 0.85))
-	_fate_balance_label.add_theme_constant_override("outline_size", _hud_int(5))
-	# 占位逐值沿用原标题的 `16..66`（不是「往上挪一点」的近似值），这样头部高度与
-	# 改动前完全一致，下面卡列要抬多少有确定的数可算。
-	_anchor_control(_fate_balance_label, 0.5, 0.0, 0.5, 0.0, -470, 16, 470, 66)
-	_fate_overlay.add_child(_fate_balance_label)
+	# 顶部标题已按主人 2026-10-14 要求移除；顶部「本局金币」余额行也按主人
+	# 2026-10-15 要求整体移除 —— 金币的唯一读数是右下角的 `RunLootReadout`，
+	# 两个数字说同一件事，留一份就够了。卡列纵向位置保持不变（74..800），
+	# 顶部留白由暗化层吸收，不重排卡片。
 
 	# 三张卡是本弹窗的主体，占据余额行与退出按钮之间的全部纵向空间。
 	var row := HBoxContainer.new()
@@ -5798,7 +5986,7 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	# 卡下说明与价格行都要能被「买下后整体去色」重新着色，故各挂一份 meta。
 	button.set_meta("tarot_caption_label", caption)
 	# 卡下价格行：这是「购买制」对玩家的唯一价格口径，只读 `FATE_PRICE_BY_RARITY`。
-	# 状态（可买 / 魂不足 / 命运槽已满 / 已购买）也由这一行承载，卡片本体不额外加角标。
+	# 状态（可买 / 金币不足 / 命运槽已满 / 已购买）也由这一行承载，卡片本体不额外加角标。
 	var price_label := _make_hud_label("", 22, accent)
 	price_label.name = "FateChoicePrice_%d" % choice_index
 	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -5880,6 +6068,7 @@ func _play_reference_tarot_flip(button: Button, card: FateCard, choice_index: in
 	var back := (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as Control
 	var reduce_motion := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
 	var tween := button.create_tween()
+	button.set_meta("fate_flip_tween", tween)
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	if reduce_motion:
 		_reveal_reference_tarot_face(button, face, back, card.is_reversed())
@@ -5943,6 +6132,7 @@ func _flip_fate_card_to_back(button: Button, choice_index: int) -> void:
 		_show_fate_card_back(button)
 		return
 	var tween := button.create_tween()
+	button.set_meta("fate_flip_tween", tween)
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	# stagger 比首次翻牌短：这是玩家刚点完的卡，反馈要跟手，不能等三张卡的错峰节奏。
 	tween.tween_interval(0.04 + float(choice_index) * 0.04)
@@ -5990,6 +6180,9 @@ func _style_purchased_fate_card(button: Button, choice_index: int) -> void:
 	var back := (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as CanvasItem
 	if back != null and is_instance_valid(back):
 		back.material = _ensure_fate_greyscale_material()
+		# 半透明：只淡**卡牌本身**（主人 2026-10-15 要求），不淡卡下文字 ——
+		# 见 `FATE_PURCHASED_CARD_ALPHA` 的注释，整列半透明会把「已购买」读没。
+		back.modulate = Color(1.0, 1.0, 1.0, FATE_PURCHASED_CARD_ALPHA)
 	# 文字也去色：作用域色（紫/金/浅蓝）与「已购买」的绿都不是灰阶，留着会和卡面打架。
 	var caption := (button.get_meta("tarot_caption_label") if button.has_meta("tarot_caption_label") else null) as Label
 	if caption != null and is_instance_valid(caption):
@@ -6123,6 +6316,7 @@ func _start_fate_card_idle_motion(card_view: Control, choice_index: int) -> void
 	var tilt := deg_to_rad(0.55 + float(choice_index) * 0.18)
 	var cycle := 2.8 + float(choice_index) * 0.42
 	var tween := card_view.create_tween().set_loops()
+	card_view.set_meta("fate_idle_tween", tween)
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween.tween_interval(fmod(phase, 0.85))
 	tween.tween_property(card_view, "position:y", -lift, cycle * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -6269,6 +6463,7 @@ func _reset_fate_feedback(immediate := false) -> void:
 		var feedback := (button.get_meta("fate_feedback_node") if button.has_meta("fate_feedback_node") else null) as Control
 		if feedback != null and is_instance_valid(feedback):
 			feedback.call("reset_feedback")
+		_reset_fate_price_flash(button)
 	_set_fate_feedback_buttons_disabled(false)
 	if not immediate and focus_index >= 0 and focus_index < _fate_choice_buttons.size():
 		_fate_initializing_focus = true
@@ -6283,7 +6478,7 @@ func _apply_fate_choice_after_feedback(choice_index: int) -> void:
 		return
 	await _purchase_fate_card(choice_index)
 	# 买下后弹窗**保持打开**（可以继续买另外两张），只把这一次的按下反馈复位。
-	if _door_fate_active:
+	if _door_fate_active and not _fate_overlay_closing:
 		_reset_fate_feedback()
 
 
@@ -6320,15 +6515,15 @@ func _on_door_fate_selected(choice_index: int) -> void:
 	await _purchase_fate_card(choice_index)
 
 
-## 门后命运卡「购买」事务：扣**局内魂** → 应用卡牌 → 标记该卡位已购买。
+## 门后命运卡「购买」事务：扣**局内金币** → 应用卡牌 → 标记该卡位已购买。
 ##
-## 硬边界：只动 `GameManager.currency`（本局魂）。局外总货币池
+## 硬边界：只动 `GameManager.currency`（本局金币）。局外总货币池
 ## `BaseManager.get_extraction_points()` 在任何分支都不得被读写 —— 门后买卡是
 ## 一次纯局内交易，玩家不会因为买卡而损失带出基地的抽取点。
 ##
 ## 弹窗保持打开：三张卡可以全买，也可以一张不买，退出按钮才收尾。
 func _purchase_fate_card(choice_index: int) -> void:
-	if not _door_fate_active or choice_index < 0 or choice_index >= _door_fate_choices.size():
+	if not _door_fate_active or _fate_overlay_closing or choice_index < 0 or choice_index >= _door_fate_choices.size():
 		return
 	var block_reason := _fate_card_block_reason(choice_index)
 	if not block_reason.is_empty():
@@ -6344,10 +6539,10 @@ func _purchase_fate_card(choice_index: int) -> void:
 	if not is_inside_tree() or not _door_fate_active:
 		return
 	if not bool(result.get("success", false)):
-		# 付了魂但牌没生效 ⇒ 必须原额退魂，不能出现「钱花了、卡没刻上」的静默损失。
+		# 付了金币但牌没生效 ⇒ 必须原额退金币，不能出现「钱花了、卡没刻上」的静默损失。
 		GameManager.add_currency(price)
 		var failure := str(result.get("message", result.get("reason", "当前目标无法承载该命运")))
-		status_label.text = "购买失败 · %s：%s · 已退还 %d 魂" % [card.card_name, failure, price]
+		status_label.text = "购买失败 · %s：%s · 已退还 %d 金币" % [card.card_name, failure, price]
 		_refresh_door_fate_prices()
 		return
 	if choice_index < _door_fate_purchased.size():
@@ -6359,8 +6554,10 @@ func _purchase_fate_card(choice_index: int) -> void:
 		_flip_fate_card_to_back(button, choice_index)
 	if AudioManager != null:
 		AudioManager.play_fate_card_sfx()
-	status_label.text = "命运生效：%s · 花费 %d 魂 · 剩余 %d 魂" % [card.card_name, price, GameManager.currency]
+	status_label.text = "命运生效：%s · 花费 %d 金币 · 剩余 %d 金币" % [card.card_name, price, GameManager.currency]
 	_refresh_door_fate_prices()
+	# 扣款反馈必须晚于刷新：刷新会把余额文本换成新值，飘字是对「这次变化」的注解。
+	_play_fate_balance_spend_feedback(price)
 
 
 func _is_weapon_fate_target_full(card: FateCard) -> bool:
@@ -6388,7 +6585,7 @@ func _fate_choice_button(choice_index: int) -> Button:
 
 
 ## 这张卡此刻能不能买。返回空串 = 可买；否则是拒绝原因码。
-## 顺序即优先级：已购买 > 命运槽已满 > 魂不足。
+## 顺序即优先级：已购买 > 命运槽已满 > 金币不足。
 func _fate_card_block_reason(choice_index: int) -> String:
 	if not _door_fate_active or choice_index < 0 or choice_index >= _door_fate_choices.size():
 		return "invalid"
@@ -6403,7 +6600,11 @@ func _fate_card_block_reason(choice_index: int) -> String:
 	return ""
 
 
-## 买不了时的唯一反馈口：只改状态栏，不扣魂、不关弹窗、不播选中动画。
+## 买不了时的唯一反馈口：不扣金币、不关弹窗、不播选中动画。
+##
+## 反馈落在**三个地方**，优先级从高到低：卡片本身（抖动 + 价格行闪烁）→ 余额行
+## （金币不足时闪红）→ 状态栏文字（最好看的理由）。原因是视线分布：状态栏在屏幕左上角，
+## 而玩家的视线在三张卡上，「点了没反应」是购卡界面最容易被当成 bug 的体验。
 func _report_fate_block(choice_index: int, block_reason: String) -> void:
 	var card := (
 		_door_fate_choices[choice_index]
@@ -6417,17 +6618,195 @@ func _report_fate_block(choice_index: int, block_reason: String) -> void:
 		"slot_full":
 			status_label.text = "%s：目标枪命运槽已满，无法购买" % card_name
 		"insufficient":
-			status_label.text = "%s 需要 %d 魂，当前只有 %d 魂" % [
+			status_label.text = "%s 需要 %d 金币，当前只有 %d 金币" % [
 				card_name, _fate_price(card), GameManager.currency,
 			]
 		_:
 			status_label.text = "%s 当前无法购买" % card_name
+	# 先刷新再闪：价格行的最终文字与字色由 `_refresh_door_fate_prices()` 决定，
+	# 顺序反过来会让这次的提亮被随后的着色当场冲掉。
+	_refresh_door_fate_prices()
+	_play_fate_reject_feedback(choice_index)
+	if block_reason == "insufficient":
+		_play_fate_balance_shortage_feedback()
 
 
-## 刷新顶部余额行 + 三张卡的卡下价格行与置灰状态。扣魂/购买/打开弹窗后必须调用。
+## 买不了时的**卡上**反馈：卡片横向抖动 + 价格行瞬时提亮放大。
+##
+## 为什么抖 `position:x`：这三张卡有常驻的错相漂浮（动 `position:y` 与 `rotation`），
+## 悬停/选中动的是整列 `scale`。`position:x` 是这条链上唯一空闲的通道，三者叠加互不覆盖。
+## 抖完回到**当次取值**而不是写死的 0：容器在抖动期间重排也不会把卡写坏。
+func _play_fate_reject_feedback(choice_index: int) -> void:
+	var button := _fate_choice_button(choice_index)
+	if button == null:
+		return
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		return
+	var column := (
+		button.get_meta("fate_feedback_view") if button.has_meta("fate_feedback_view") else null
+	) as Control
+	if column != null and is_instance_valid(column):
+		var key := button.get_instance_id()
+		# 🔴 基准 x 记在 meta 上、跨调用复用：若每次都以「当前 position.x」为基准，
+		# 连点会在上一轮还没归位时取到中间值，卡位会一轮轮往右漂。
+		var base_x := float(button.get_meta("fate_shake_base_x", column.position.x))
+		button.set_meta("fate_shake_base_x", base_x)
+		var previous: Variant = _fate_shake_tweens.get(key, null)
+		if previous != null and is_instance_valid(previous):
+			(previous as Tween).kill()
+		column.position.x = base_x
+		var shake := column.create_tween()
+		shake.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		shake.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		shake.tween_property(column, "position:x", base_x + FATE_REJECT_SHAKE_PX, FATE_REJECT_SHAKE_DURATION * 0.18)
+		shake.tween_property(column, "position:x", base_x - FATE_REJECT_SHAKE_PX * 0.72, FATE_REJECT_SHAKE_DURATION * 0.28)
+		shake.tween_property(column, "position:x", base_x + FATE_REJECT_SHAKE_PX * 0.42, FATE_REJECT_SHAKE_DURATION * 0.26)
+		shake.tween_property(column, "position:x", base_x, FATE_REJECT_SHAKE_DURATION * 0.28)
+		# 收尾再写死一次基准：tween 的最后一帧只到「接近 base_x」，显式归位消除浮点残留。
+		shake.tween_callback(_reset_fate_card_shake_x.bind(button, base_x))
+		_fate_shake_tweens[key] = shake
+	# 价格行同步闪一下并按一下：视线落在卡上，反馈就要落在卡上。
+	var price_label := (
+		button.get_meta("tarot_price_label") if button.has_meta("tarot_price_label") else null
+	) as Label
+	if price_label == null or not is_instance_valid(price_label):
+		return
+	var flash_key := button.get_instance_id()
+	var previous_flash: Variant = _fate_price_flash_tweens.get(flash_key, null)
+	if previous_flash != null and is_instance_valid(previous_flash):
+		(previous_flash as Tween).kill()
+	price_label.pivot_offset = price_label.size * 0.5
+	price_label.scale = Vector2.ONE
+	price_label.modulate = Color.WHITE
+	var flash := price_label.create_tween()
+	flash.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	flash.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	flash.tween_property(price_label, "scale", Vector2.ONE * FATE_REJECT_PRICE_SCALE, 0.10)
+	flash.parallel().tween_property(price_label, "modulate", FATE_REJECT_PRICE_FLASH, 0.10)
+	flash.tween_property(price_label, "scale", Vector2.ONE, 0.20)
+	flash.parallel().tween_property(price_label, "modulate", Color.WHITE, 0.20)
+	_fate_price_flash_tweens[flash_key] = flash
+
+
+func _reset_fate_card_shake_x(button: Button, base_x: float) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	var column := (
+		button.get_meta("fate_feedback_view") if button.has_meta("fate_feedback_view") else null
+	) as Control
+	if column != null and is_instance_valid(column):
+		column.position.x = base_x
+
+
+## 把价格行的拒绝闪烁归位。防御性收尾：闪烁若被中途 kill，scale 会卡在 1.14 上 ——
+## 视觉上就是一行比别张卡更大的字，而且看不出原因（正是 `_reset_fate_feedback` 要清掉的那类残影）。
+func _reset_fate_price_flash(button: Button) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	var key := button.get_instance_id()
+	var previous: Variant = _fate_price_flash_tweens.get(key, null)
+	if previous != null and is_instance_valid(previous):
+		(previous as Tween).kill()
+	_fate_price_flash_tweens.erase(key)
+	var price_label := (
+		button.get_meta("tarot_price_label") if button.has_meta("tarot_price_label") else null
+	) as Label
+	if price_label != null and is_instance_valid(price_label):
+		price_label.scale = Vector2.ONE
+		price_label.modulate = Color.WHITE
+
+
+## 金币读数「金币不足」反馈：整行闪红再回到常色。
+##
+## 只闪红、**不抖动**：抖动是「这张卡拒绝你」的语义，两种反馈不能共用同一个动作，
+## 否则玩家分不清是卡的问题还是钱的问题。这里闪红就是把原因直接指回钱上。
+## 宿主是右下角金币读数（主人 2026-10-15：顶部余额行移除后它是唯一金币口径）。
+func _play_fate_balance_shortage_feedback() -> void:
+	var label := loot_label
+	if label == null or not is_instance_valid(label):
+		return
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		return
+	label.add_theme_color_override("font_color", FATE_BALANCE_SHORTAGE_COLOR)
+	if _fate_balance_warn_tween != null and _fate_balance_warn_tween.is_valid():
+		_fate_balance_warn_tween.kill()
+	# tween 宿主用 label 本身而不是弹窗：闪红可能发生在弹窗即将关闭的瞬间，
+	# 挂在弹窗上会让「恢复常色」跟着弹窗一起被销毁，读数从此卡在红色。
+	_fate_balance_warn_tween = label.create_tween()
+	_fate_balance_warn_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_fate_balance_warn_tween.tween_interval(FATE_BALANCE_SHORTAGE_DURATION)
+	_fate_balance_warn_tween.tween_callback(_restore_fate_balance_color)
+
+
+func _restore_fate_balance_color() -> void:
+	if loot_label != null and is_instance_valid(loot_label):
+		loot_label.add_theme_color_override("font_color", RUN_COIN_READOUT_COLOR)
+
+
+## 金币读数的数字变化脉冲：scale 弹到 `FATE_BALANCE_PULSE_SCALE` 再弹回。
+##
+## 消费（买命运卡）与获得（捡金币/击杀赏金/退款）共用同一条曲线 ——
+## 主人 2026-10-15：消费时的数字变化动画，获得金币的时候也要有。
+## 数值方向由调用方保证：这里只负责「数字变了，让人看见」。
+func _pulse_coin_readout() -> void:
+	var label := loot_label
+	if label == null or not is_instance_valid(label):
+		return
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		return
+	if _fate_balance_warn_tween != null and _fate_balance_warn_tween.is_valid():
+		_fate_balance_warn_tween.kill()
+	_restore_fate_balance_color()
+	label.pivot_offset = label.size * 0.5
+	if _fate_balance_pulse_tween != null and _fate_balance_pulse_tween.is_valid():
+		_fate_balance_pulse_tween.kill()
+	label.scale = Vector2.ONE
+	_fate_balance_pulse_tween = label.create_tween()
+	_fate_balance_pulse_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_fate_balance_pulse_tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_fate_balance_pulse_tween.tween_property(
+		label, "scale", Vector2.ONE * FATE_BALANCE_PULSE_SCALE, FATE_BALANCE_PULSE_DURATION * 0.35
+	)
+	_fate_balance_pulse_tween.tween_property(label, "scale", Vector2.ONE, FATE_BALANCE_PULSE_DURATION * 0.65)
+
+
+## 扣款反馈：右下金币读数弹一下 + 读数上方浮出 `-N 金币` 飘字。
+##
+## 为什么光靠读数数字不够：32 → 2 是一次「文本替换」，一闪而过、很容易被忽略；
+## 飘字把「刚才那一下花了多少」写明白，玩家不用自己拿两次读数相减。
+func _play_fate_balance_spend_feedback(amount: int) -> void:
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		return
+	_pulse_coin_readout()
+	_spawn_fate_spend_popup(amount)
+
+
+## 扣款飘字：从右下金币读数上方浮起并淡出，播完自毁。
+## 位置跟着金币读数（同为右下 1.0 锚点、贴在它正上方），确保「减去多少」贴着钱看。
+func _spawn_fate_spend_popup(amount: int) -> void:
+	if _fate_overlay == null or not is_instance_valid(_fate_overlay):
+		return
+	var popup := _make_hud_label("- %d 金币" % amount, 26, FATE_SPEND_POPUP_COLOR)
+	popup.name = "FateCurrencySpendPopup"
+	popup.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	popup.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	popup.add_theme_constant_override("outline_size", _hud_int(4))
+	# 读数占 `(-420,-148)..(-36,-90)`（右下 1.0 锚点），飘字贴其正上方 `8 px`。
+	_anchor_control(popup, 1.0, 1.0, 1.0, 1.0, -430, -200, -60, -156)
+	_fate_overlay.add_child(popup)
+	var start_y := popup.position.y
+	var rise := float(_hud_int(FATE_SPEND_POPUP_RISE))
+	var tween := popup.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(popup, "position:y", start_y - rise, FATE_SPEND_POPUP_LIFETIME)
+	tween.parallel().tween_property(popup, "modulate:a", 0.0, FATE_SPEND_POPUP_LIFETIME)
+	tween.tween_callback(popup.queue_free)
+
+
+## 刷新三张卡的卡下价格行与置灰状态。扣金币/购买/打开弹窗后必须调用。
+## （顶部余额行已移除：金币读数由 `loot_label` 经 `currency_changed` 信号链自行刷新。）
 func _refresh_door_fate_prices() -> void:
-	if _fate_balance_label != null and is_instance_valid(_fate_balance_label):
-		_fate_balance_label.text = "本局魂 ◈ %d" % GameManager.currency
 	for choice_index in range(_door_fate_choices.size()):
 		var button := _fate_choice_button(choice_index)
 		if button == null:
@@ -6447,15 +6826,19 @@ func _refresh_door_fate_prices() -> void:
 					label.text = "命运槽已满"
 					label.add_theme_color_override("font_color", Color(1.0, 0.44, 0.34))
 				"insufficient":
-					label.text = "◈ %d 魂 · 魂不足" % _fate_price(card)
+					# 「金币不足」只说了状态，「还差 N」才是玩家真正要的下一步信息：
+					# 他一眼就能算出还要攒多少，不用自己拿价格减去余额。
+					label.text = "◈ %d 金币 · 还差 %d" % [
+						_fate_price(card), maxi(0, _fate_price(card) - GameManager.currency)
+					]
 					label.add_theme_color_override("font_color", Color(1.0, 0.72, 0.36))
 				_:
-					label.text = "◈ %d 魂" % _fate_price(card)
+					label.text = "◈ %d 金币" % _fate_price(card)
 					label.add_theme_color_override("font_color", _rarity_color(card.card_rarity))
 		# 三种不可买状态的压暗强度刻意分两档：
 		# · 已购买 ⇒ **灰阶 + 压暗 + 缩到 70%**（卡位用掉了，退到背景）
 		# · 买不起 / 槽满 ⇒ 只做轻度压暗。它们是「暂时/本枪买不了」，不是「已经没了」，
-		#   压成灰阶会让玩家以为这张卡已经消失，其实是攒够魂就能买。
+		#   压成灰阶会让玩家以为这张卡已经消失，其实是攒够金币就能买。
 		var view := button.get_meta("fate_feedback_view") as Control
 		if view != null and is_instance_valid(view):
 			if purchased:
@@ -6466,13 +6849,98 @@ func _refresh_door_fate_prices() -> void:
 				view.modulate = Color(0.56, 0.59, 0.64)
 
 
+## 退出命运卡购买时的统一退场：三张卡同时「翻回背面 + 缩小 + 淡出」，
+## 动画结束后才清理覆盖层。这里不直接把 `_door_fate_active` 置 false，
+## 否则 ESC/手柄 B 在动画期间会让玩家输入穿透到战斗层。
+func _animate_fate_overlay_exit(bought: int) -> void:
+	var overlay := _fate_overlay
+	if overlay == null or not is_instance_valid(overlay):
+		_finish_fate_overlay_exit(overlay, bought)
+		return
+	_fate_feedback_locked = true
+	if _fate_feedback_dispatch != null and _fate_feedback_dispatch.is_valid():
+		_fate_feedback_dispatch.kill()
+	_fate_feedback_dispatch = null
+	_set_fate_feedback_buttons_disabled(true)
+	if _fate_exit_button != null and is_instance_valid(_fate_exit_button):
+		_fate_exit_button.disabled = true
+		_fate_exit_button.release_focus()
+	var cards: Array[Dictionary] = []
+	for button in _fate_choice_buttons:
+		if button == null or not is_instance_valid(button):
+			continue
+		var view := (button.get_meta("fate_feedback_view") if button.has_meta("fate_feedback_view") else null) as Control
+		if view == null or not is_instance_valid(view):
+			continue
+		# 退场接管当前姿态，不先跳回基准缩放；停掉进场/购买翻牌与漂浮，避免抢写。
+		_kill_fate_feedback_tween(button)
+		for host in [button, view]:
+			for key in ["fate_flip_tween", "fate_idle_tween"]:
+				var previous: Tween = host.get_meta(key) as Tween if host.has_meta(key) else null
+				if previous != null and previous.is_valid():
+					previous.kill()
+		button.pivot_offset = button.size * 0.5
+		view.pivot_offset = view.size * 0.5
+		cards.append({"button": button, "view": view, "scale": view.scale, "alpha": view.modulate.a, "flip_x": button.scale.x})
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		_finish_fate_overlay_exit(overlay, bought)
+		return
+	# 全部属性由同一进度驱动：没有相互串行的 parallel()、也没有提前回收的固定计时器。
+	var exit_tween := overlay.create_tween()
+	overlay.set_meta("fate_exit_tween", exit_tween)
+	exit_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	exit_tween.tween_method(_sample_fate_overlay_exit.bind(overlay, cards), 0.0, 1.0, FATE_OVERLAY_EXIT_DURATION)
+	exit_tween.tween_callback(_finish_fate_overlay_exit.bind(overlay, bought))
+
+
+func _sample_fate_overlay_exit(progress: float, overlay: Control, cards: Array[Dictionary]) -> void:
+	if not is_instance_valid(overlay) or overlay != _fate_overlay:
+		return
+	overlay.set_meta("fate_exit_progress", progress)
+	var flip_mid := FATE_OVERLAY_EXIT_FLIP_DURATION / FATE_OVERLAY_EXIT_DURATION
+	for state in cards:
+		var button: Button = state["button"]
+		var view: Control = state["view"]
+		if not is_instance_valid(button) or not is_instance_valid(view):
+			continue
+		if progress <= flip_mid:
+			var fold := clampf(progress / flip_mid, 0.0, 1.0)
+			button.scale.x = lerpf(float(state["flip_x"]), 0.04, fold * fold)
+		else:
+			# 有卡背时才换面，缺背图保持原层；不改变已购卡灰阶/半透明样式。
+			var back := button.get_meta("tarot_back_node") as Control if button.has_meta("tarot_back_node") else null
+			if back != null and is_instance_valid(back):
+				_show_fate_card_back(button)
+			var unfold := clampf((progress - flip_mid) / flip_mid, 0.0, 1.0)
+			button.scale.x = lerpf(0.04, 1.0, 1.0 - pow(1.0 - unfold, 2.0))
+		# 前段保留足够的卡形读出翻面，尾段缩到零并淡出，节点销毁时已不可见。
+		view.scale = (state["scale"] as Vector2) * (1.0 - progress * progress)
+		view.modulate.a = float(state["alpha"]) * (1.0 - progress * progress)
+	# 余额、退出按钮和遮罩也随尾段淡出，而不是最后一帧突然消失。
+	overlay.modulate.a = 1.0 - clampf((progress - 0.55) / 0.45, 0.0, 1.0)
+
+
+func _finish_fate_overlay_exit(overlay: Control, bought: int) -> void:
+	# 紧急清理或重开以后，旧动画不得关闭新弹窗。
+	if not _door_fate_active or overlay != _fate_overlay:
+		return
+	_close_door_fate_overlay()
+	status_label.text = (
+		"已退出命运购买 · 本次买下 %d 张 · 行动继续" % bought
+		if bought > 0
+		else "已退出命运购买 · 未消费金币 · 行动继续"
+	)
+
+
 func _close_door_fate_overlay() -> void:
+	# 这是最终清理口。用户点击退出时会先走 `_animate_fate_overlay_exit()`；
+	# 其他流程（房间切换、测试收尾、异常中止）仍可直接调用这里硬清理。
+	_fate_overlay_closing = false
 	_reset_fate_feedback(true)
 	_door_fate_active = false
 	_door_fate_choices.clear()
 	_door_fate_purchased.clear()
 	_fate_choice_buttons.clear()
-	_fate_balance_label = null
 	_fate_exit_button = null
 	if _fate_overlay != null and is_instance_valid(_fate_overlay):
 		# 先摘除再回收：queue_free() 要等到帧末才真正释放节点。若同一帧内再次
@@ -6485,6 +6953,11 @@ func _close_door_fate_overlay() -> void:
 		_fate_overlay.queue_free()
 	_fate_overlay = null
 	_fate_feedback_label = null
+	# 反馈 tween 的宿主已经销毁，引用一并清掉，免得下一轮弹窗拿到失效对象。
+	_fate_shake_tweens.clear()
+	_fate_price_flash_tweens.clear()
+	_fate_balance_pulse_tween = null
+	_fate_balance_warn_tween = null
 	_commit_pending_fate_door_streaming()
 	_sync_player_input_lock()
 
@@ -6499,19 +6972,16 @@ func _commit_pending_fate_door_streaming() -> void:
 
 
 ## 退出按钮 / ESC / 手柄 B 三条路共用：已买下的卡保持生效，未买的直接放弃。
+## 点击退出不会硬切：三张卡先同步翻回背面并缩小淡出，动画完成后才关闭弹窗。
 func _cancel_door_fate_selection() -> void:
-	if not _door_fate_active:
+	if not _door_fate_active or _fate_overlay_closing:
 		return
+	_fate_overlay_closing = true
 	var bought := 0
 	for purchased in _door_fate_purchased:
 		if purchased:
 			bought += 1
-	_close_door_fate_overlay()
-	status_label.text = (
-		"已退出命运购买 · 本次买下 %d 张 · 行动继续" % bought
-		if bought > 0
-		else "已退出命运购买 · 未消费魂 · 行动继续"
-	)
+	_animate_fate_overlay_exit(bought)
 
 
 func show_reference_fate_overlay_for_test() -> bool:
@@ -6541,8 +7011,8 @@ func show_reference_fate_overlay_for_test() -> bool:
 
 
 ## 测试口：退出门后购卡弹窗，把门后流程推下去。
-## 购买经济（扣魂 / 余额不足 / 满槽 / 已购买 / 退出按钮）由
-## `verify_fate_card_purchase_flow` 专项覆盖；这里刻意不消费魂、不应用卡，
+## 购买经济（扣金币 / 余额不足 / 满槽 / 已购买 / 退出按钮）由
+## `verify_fate_card_purchase_flow` 专项覆盖；这里刻意不消费金币、不应用卡，
 ## 免得给既有流程用例塞进一张随机命运带来副作用。
 func resolve_fate_choice_for_test(_choice_index := 0) -> void:
 	if not _door_fate_active:
@@ -7738,17 +8208,22 @@ func get_last_killed_enemy() -> Dictionary:
 func _on_extraction_started(start_duration: float, beacon: ExtractionBeacon3D) -> void:
 	_active_extraction_beacon = beacon
 	_extraction_defense_active = true
-	_extraction_mid_wave_spawned = false
-	_extraction_wave_2_spawned = false
-	_extraction_wave_3_spawned = false
-	_extraction_final_wave_spawned = false
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	if AudioManager != null:
 		AudioManager.play_sfx("extraction_start")
 	extraction_panel.visible = true
 	extraction_bar.value = 0.0
-	_spawn_extraction_attackers(0)
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room != null and _encounter_event_director != null:
+		var config := _build_extraction_encounter_config(room, start_duration)
+		var started := start_encounter_event(config)
+		if bool(started.get("ok", false)):
+			_extraction_encounter_instance_id = str(started.get("instance_id", ""))
+			_advance_extraction_encounter(0.0, beacon)
+		else:
+			_extraction_encounter_instance_id = ""
+			push_warning("[Dungeon3D] Extraction encounter failed to start: %s" % str(started))
 	# 自由撤离：玩家可移动、可射击，30 秒读条中只会越过阈值才离开。
 	status_label.text = "%s撤离启动 · %.0f秒后安全返航，行动自由" % [
 		beacon.beacon_type,
@@ -7760,33 +8235,23 @@ func _on_extraction_progress(progress: float, beacon: ExtractionBeacon3D) -> voi
 	if beacon != _active_extraction_beacon:
 		return
 	extraction_bar.value = progress * 100.0
-	# 5 阶段友驻点进场。阶段阈值划分：
-	# stage 0：0%    (随机 4)
-	# stage 1：18%   (伏击 5)
-	# stage 2：36%   (伏击 6)
-	# stage 3：58%   (精英 + 随机 3)
-	# stage 4：78%   (精英 2 + 伏击 4)
-	if not _extraction_mid_wave_spawned and progress >= 0.18:
-		_extraction_mid_wave_spawned = true
-		_spawn_extraction_attackers(1)
-		status_label.text = "撤离信号 1/4 · 第一波增援逼近"
-	elif progress >= 0.36 and not _extraction_wave_2_spawned:
-		_extraction_wave_2_spawned = true
-		_spawn_extraction_attackers(2)
-		status_label.text = "撤离信号 2/4 · 第二波增援逼近"
-	elif progress >= 0.58 and not _extraction_wave_3_spawned:
-		_extraction_wave_3_spawned = true
-		_spawn_extraction_attackers(3)
-		status_label.text = "撤离信号 3/4 · 精英拦截者出现"
-	elif progress >= 0.78 and not _extraction_final_wave_spawned:
-		_extraction_final_wave_spawned = true
-		_spawn_extraction_attackers(4)
-		status_label.text = "撤离信号即将锁定 · 最后一波拦截"
+	_advance_extraction_encounter(progress, beacon)
+
+
+func _advance_extraction_encounter(progress: float, beacon: ExtractionBeacon3D) -> void:
+	if beacon != _active_extraction_beacon or _extraction_encounter_instance_id.is_empty():
+		return
+	var result := advance_encounter_event(_extraction_encounter_instance_id, progress)
+	if not bool(result.get("ok", false)):
+		push_warning("[Dungeon3D] Extraction encounter progress rejected: %s" % str(result))
 
 
 func _on_extraction_cancelled(beacon: ExtractionBeacon3D) -> void:
 	if beacon != _active_extraction_beacon:
 		return
+	if not _extraction_encounter_instance_id.is_empty() and _encounter_event_director != null:
+		cancel_encounter_event(_extraction_encounter_instance_id, "extraction_cancelled", false)
+	_extraction_encounter_instance_id = ""
 	_extraction_defense_active = false
 	_active_extraction_beacon = null
 	_sync_player_input_lock()
@@ -7799,6 +8264,7 @@ func _on_extraction_cancelled(beacon: ExtractionBeacon3D) -> void:
 func _on_extraction_completed(beacon: ExtractionBeacon3D) -> void:
 	if _active_extraction_beacon != null and beacon != _active_extraction_beacon:
 		return
+	_extraction_encounter_instance_id = ""
 	# 阵亡优先，双条件缺一不可：
 	# `_completed` 防一次行动结算两次；`_is_player_dead()` 防「阵亡被判撤离成功」——
 	# 信标 _process 只认读条归零，不看玩家死活，尸体旁的读条会照常走完。
@@ -7827,6 +8293,9 @@ func _is_player_dead() -> bool:
 ## 顺序是契约 —— 先清 _active_extraction_beacon 再 abort，让 extraction_cancelled
 ## 回调在「不再是当前信标」处直接返回，不要用「受击中断」文案顶掉死亡文案。
 func _abort_extraction_on_death() -> void:
+	if not _extraction_encounter_instance_id.is_empty() and _encounter_event_director != null:
+		cancel_encounter_event(_extraction_encounter_instance_id, "player_dead", true)
+	_extraction_encounter_instance_id = ""
 	var beacon := _active_extraction_beacon
 	_active_extraction_beacon = null
 	_extraction_defense_active = false
@@ -7835,38 +8304,63 @@ func _abort_extraction_on_death() -> void:
 	extraction_panel.visible = false
 
 
-func _spawn_extraction_attackers(stage: int) -> void:
-	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
-	if room == null:
-		return
+func _build_extraction_encounter_config(room: DungeonRoom3D, duration_sec: float) -> Dictionary:
 	var floor := maxi(1, visual_theme.difficulty_rank)
 	var floor_level := clampi(_record_index(room.room_id) / 3, 0, 3)
-	var configs: Array[Dictionary] = []
-	# 撤离现在是 30 秒长读条：5 阶段，每阶段 4-6 只。
-	# 阶段 0：随机 4 只
-	# 阶段 1：伏击 5 只
-	# 阶段 2：伏击 6 只
-	# 阶段 3：精英 + 随机 3 只
-	# 阶段 4：精英 2 只 + 伏击 4 只
-	match stage:
-		0:
-			configs.assign(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
-			while configs.size() < 4:
-				configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
-		1:
-			configs.assign(_monster_injector.generate_enemies({"type": "ambush", "count": 5, "floor": floor, "floor_level": floor_level}))
-		2:
-			configs.assign(_monster_injector.generate_enemies({"type": "ambush", "count": 6, "floor": floor, "floor_level": floor_level}))
-		3:
-			configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level}))
-			configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
-			while configs.size() < 4:
-				configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
-		_:
-			configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level}))
-			configs.append_array(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level}))
-			configs.append_array(_monster_injector.generate_enemies({"type": "ambush", "count": 4, "floor": floor, "floor_level": floor_level}))
-	_spawn_enemy_batch(room, configs, true)
+	var stages: Array = []
+	stages.append({"at_ratio": 0.0, "monsters": _roll_extraction_specs("random", 4, floor, floor_level)})
+	stages.append({"at_ratio": 0.18, "monsters": _roll_extraction_specs("ambush", 5, floor, floor_level)})
+	stages.append({"at_ratio": 0.36, "monsters": _roll_extraction_specs("ambush", 6, floor, floor_level)})
+	var mixed_stage := [{"type": "elite", "count": 1}]
+	mixed_stage.append_array(_roll_extraction_specs("random", 3, floor, floor_level))
+	stages.append({"at_ratio": 0.58, "monsters": mixed_stage})
+	var final_stage := [{"type": "elite", "count": 2}]
+	final_stage.append_array(_roll_extraction_specs("ambush", 4, floor, floor_level))
+	stages.append({"at_ratio": 0.78, "monsters": final_stage})
+	return {
+		"schema_version": 1,
+		"event_id": "extraction_defense:%s" % room.room_id,
+		"room_id": room.room_id,
+		"duration_sec": maxf(0.1, duration_sec),
+		"completion": "timer",
+		"progress_mode": "external",
+		"leave_policy": "follow_current_room",
+		"follow_current_room": true,
+		"max_alive": 2147483647,
+		"prereqs": {"player_alive": true, "run_active": true},
+		"stages": stages,
+		"on_completed": [],
+	}
+
+func _roll_extraction_specs(mode: String, count: int, floor: int, floor_level: int) -> Array:
+	var generated: Array[Dictionary] = []
+	if mode == "random":
+		while generated.size() < count:
+			generated.append_array(_monster_injector.generate_enemies({
+				"type": "random", "floor": floor, "floor_level": floor_level,
+			}))
+	else:
+		generated.assign(_monster_injector.generate_enemies({
+			"type": mode, "count": count, "floor": floor, "floor_level": floor_level,
+		}))
+	var result: Array = []
+	var accepted := 0
+	for config in generated:
+		if accepted >= count:
+			break
+		var type_id := str(config.get("enemy_type", ""))
+		if MonsterInjector.is_authorable_enemy_type(type_id):
+			accepted += 1
+			var found := false
+			for spec_value in result:
+				var spec := spec_value as Dictionary
+				if str(spec.get("type", "")) == type_id:
+					spec["count"] = int(spec.get("count", 0)) + 1
+					found = true
+					break
+			if not found:
+				result.append({"type": type_id, "count": 1})
+	return result
 
 
 func _on_player_hp_changed(current: int, maximum: int) -> void:
@@ -7885,6 +8379,7 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 	)
 	var took_damage := _last_player_hp >= 0 and current < _last_player_hp
 	_last_player_hp = current
+	_sync_player_health_bar_delay(hp_ratio, took_damage)
 	# 自由撤离：玩家可以被打但不被中断。
 	# 只要 HP 不归零就读条继续。
 	if current <= 0:
@@ -7895,6 +8390,47 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 		_death_recorded_generation = _run_generation
 		_abort_extraction_on_death()
 		status_label.text = "生命信号中断 · 正在确认防护体状态"
+
+
+## 玩家主界面条的白色延迟层。语义与 Boss 屏条、小怪头顶条**逐条一致**：
+## 只有「受伤」才留下白段；初始化/治疗/复活/读档立即对齐，否则开局或补血后会挂一段假白。
+## 白段只在 `_player_delayed_ratio` 里活着，**永不写进 `player.current_hp`**，
+## 不参与伤害判定、格挡结算与存档。
+func _sync_player_health_bar_delay(hp_ratio: float, took_damage: bool) -> void:
+	if _player_delayed_bar == null or hp_bar == null:
+		return
+	_player_delayed_bar.max_value = hp_bar.max_value
+	if not _player_health_bar_initialized or not took_damage or hp_ratio >= _player_delayed_ratio:
+		_player_delayed_ratio = hp_ratio
+	_player_health_bar_initialized = true
+	_player_delayed_bar.value = _player_delayed_ratio * _player_delayed_bar.max_value
+
+
+func _tick_player_health_bar_delay(delta: float) -> void:
+	if _player_delayed_bar == null or hp_bar == null:
+		return
+	var actual_ratio := hp_bar.value / maxf(1.0, hp_bar.max_value)
+	# 白段只朝真实血量收，永不越过 —— 越过了就会在红条**左侧**露出一截白，
+	# 看起来像掉血掉反。红条的 shadow 会自然糊在白段左缘，无需额外混合。
+	if _player_delayed_ratio <= actual_ratio:
+		return
+	_player_delayed_ratio = move_toward(
+		_player_delayed_ratio, actual_ratio, delta * HUD_HEALTH_BAR_DELAY_SPEED
+	)
+	_player_delayed_bar.value = _player_delayed_ratio * _player_delayed_bar.max_value
+
+
+## 玩家主界面血条快照。白段是纯视觉层，无法从 `hp_bar.value` 反推，验收只能从这里读。
+func get_player_vitals_bar_snapshot() -> Dictionary:
+	return {
+		"actual_ratio": (
+			hp_bar.value / maxf(1.0, hp_bar.max_value) if hp_bar != null else 0.0
+		),
+		"delayed_ratio": _player_delayed_ratio,
+		"delayed_layer_present": _player_delayed_bar != null,
+		"delayed_layer_name": _player_delayed_bar.name if _player_delayed_bar != null else "",
+		"delayed_speed": HUD_HEALTH_BAR_DELAY_SPEED,
+	}
 
 
 func _on_player_debug_scale_changed(snapshot: Dictionary) -> void:
@@ -8144,6 +8680,8 @@ func _finish_run(success: bool) -> void:
 	if _completed:
 		return
 	_completed = true
+	if _encounter_event_director != null:
+		_encounter_event_director.cancel_all("run_finished")
 	for room_id in _wave_spawn_pending.keys():
 		_cancel_room_wave_intermission(str(room_id))
 	var inventory_before := _inventory.get_slots_snapshot()
@@ -8316,9 +8854,13 @@ func _collect_extracted_items(include_equipped_weapon := false) -> Array[Diction
 func _refresh_loot_label() -> void:
 	if loot_label == null or _inventory == null:
 		return
-	loot_label.text = "背包 %d/%d · 钥匙 %d · 魂 %d" % [
-		_inventory.get_used_slots(), _inventory.get_capacity(), _get_total_room_keys(), _run_value
-	]
+	loot_label.text = "金币 %d" % _run_value
+	# 主人 2026-10-15：消费金币时的数字变化动画，获得金币时也要播。
+	# 数值增加（捡币/赏金/退款）→ 播脉冲；减少（消费）→ 脉冲由
+	# `_play_fate_balance_spend_feedback` 在购买事务里显式播，这里不重复。
+	if _loot_readout_last_value >= 0 and _run_value > _loot_readout_last_value:
+		_pulse_coin_readout()
+	_loot_readout_last_value = _run_value
 	_refresh_quick_item_hud()
 
 

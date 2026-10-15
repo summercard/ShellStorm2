@@ -18,10 +18,11 @@ const BACK_PATH := ART_DIR + "/ui_fate_card_back_v001.png"
 const FACE_SCAN_SHADER_CODE := """
 shader_type canvas_item;
 
-// A restrained diagonal sheen for face art only. The luminance gate keeps
-// black card background from receiving any highlight.
+// A restrained upward sheen for face art only (2026-10-15: bottom -> top, soft
+// edges). The luminance gate keeps black card background from receiving any
+// highlight.
 uniform float scan_speed = 0.22;
-uniform float scan_width = 0.075;
+uniform float scan_width = 0.10;
 uniform float scan_strength = 0.16;
 
 void fragment() {
@@ -29,10 +30,14 @@ void fragment() {
     float luminance = dot(base.rgb, vec3(0.2126, 0.7152, 0.0722));
     float visible_mask = smoothstep(0.045, 0.16, luminance) * step(0.02, base.a);
     float phase = fract(TIME * scan_speed);
-    float center = mix(-0.30, 1.30, phase);
-    float diagonal = UV.x + UV.y * 0.18;
-    float distance_to_band = abs(diagonal - center);
-    float band = 1.0 - smoothstep(scan_width * 0.35, scan_width, distance_to_band);
+    // Bottom -> top: the band centre travels from UV.y = 1.30 (below the card)
+    // to -0.30 (above it). A slight x-slope keeps the sweep from looking mechanical.
+    float center = mix(1.30, -0.30, phase);
+    float scan_coord = UV.y + UV.x * 0.12;
+    float distance_to_band = abs(scan_coord - center);
+    // Soft edge: falloff starts at the band centre (smoothstep 0 -> 1.6 * width),
+    // so there is no hard shoulder anywhere on the band.
+    float band = 1.0 - smoothstep(0.0, scan_width * 1.6, distance_to_band);
     float sheen_mask = band * visible_mask * base.a;
     vec3 sheen = vec3(1.0, 0.98, 0.90) * (sheen_mask * scan_strength);
     COLOR = vec4(base.rgb + sheen, base.a);

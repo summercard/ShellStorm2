@@ -18,6 +18,14 @@ const BG_SLOT := Color(0.010, 0.030, 0.038, 0.50)
 ## 格子悬停高亮
 const BG_SLOT_HOVER := Color(0.025, 0.145, 0.175, 0.50)
 
+# ========== 连续棋盘与拖拽反馈 ==========
+const GRID_EMPTY := Color(0.018, 0.060, 0.086, 0.72)
+const GRID_OCCUPIED := Color(0.075, 0.130, 0.190, 0.92)
+const GRID_PREVIEW_VALID := Color(0.25, 0.95, 0.72, 0.30)
+const GRID_PREVIEW_INVALID := Color(1.0, 0.22, 0.28, 0.30)
+const GRID_PREVIEW_SOURCE := Color(0.95, 0.72, 0.18, 0.30)
+const GRID_FOCUS := Color(0.38, 0.84, 1.0, 1.0)
+
 
 # ========== 主界面战术设计语言 ==========
 const NEON_CYAN := Color(0.20, 0.90, 1.0, 1.0)
@@ -105,3 +113,10 @@ static func hp_color_for_ratio(ratio: float) -> Color:
 		return HP_MID
 	else:
 		return HP_LOW
+
+# Inventory reference palette: soft navy surfaces and quiet neutral outlines.
+const INVENTORY_PANEL := Color(0.075, 0.13, 0.20, 0.92)
+const INVENTORY_SLOT := Color(0.055, 0.10, 0.16, 0.70)
+const INVENTORY_OUTLINE := Color(0.62, 0.68, 0.73, 0.62)
+const INVENTORY_ACTION := Color(0.73, 0.91, 0.98)
+const INVENTORY_SELECTED := Color(1.0, 0.62, 0.20)

@@ -34,6 +34,7 @@ const GOO_HIT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_g
 const METAL_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_metal_spark_hit_root_top3d.tscn")
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
+const MELEE_SCRIPT := preload("res://src/player3d/melee/PlayerMeleeCombat3D.gd")
 
 const GOO_HIT_ID := "VFX-GOO-HIT-3D"
 const METAL_ID := "VFX-METAL-SPARK-HIT-3D"
@@ -56,6 +57,15 @@ const EXPECTED_STREAK_NORMAL_DOT_MAX := 0.20
 const EXPECTED_STREAK_STRETCH_MIN := 1.5
 ## 僵尸受击件比金属火星大多少（业主「放大大概 10%」）—— 静态门禁按这个数钉住调用点
 const EXPECTED_ZOMBIE_SIZE_RATIO := 1.10
+## 命中特效整体倍率（业主 2026-10-15「放大 50%」，打僵尸与打普通物品**同时**生效）
+const EXPECTED_HIT_EFFECT_SIZE_SCALE := 1.5
+## 倍率作用前的金属火星基准档（业主 2026-10-14 那一轮定下来的原值）
+const BASE_METAL_SPARK_TARGET := 0.34
+const BASE_METAL_SPARK_SURFACE := 0.28
+const BASE_METAL_SPARK_BOUNCE := 0.20
+const BASE_METAL_SPARK_CHAIN := 0.26
+## 倍率作用前的近战僵尸档
+const BASE_MELEE_ZOMBIE_SIZE := 0.42
 ## 贴肉判据的容差（米）：落点允许距模型盒面这么远（含 0.03 咬入 + 浮点余量）
 const EXPECTED_HIT_INSET_BITE_TOLERANCE := 0.05
 ## **双向**判据的另一侧：贴肉**不许把落点推得比原来更深**。
@@ -74,7 +84,7 @@ const ZOMBIE_KINDS: Array[String] = ["melee_chaser", "ranged_caster", "fat_zombi
 const NON_ZOMBIE_KIND := "summoner"
 
 ## 实际会跑出 27 个样本（含循环展开）。留一点余量：真有整段用例没执行时必然跌破这里。
-const MIN_SAMPLES := 25
+const MIN_SAMPLES := 30
 
 var _failures: Array[String] = []
 var _samples := 0
@@ -92,6 +102,8 @@ func _ready() -> void:
 		_check_goo_hit_contract,
 		_check_goo_hit_green_twin,
 		_check_enemy_hit_anchor,
+		_check_hit_effect_size_scale,
+		_check_melee_zombie_size_scale,
 		_check_goo_hit_determinism,
 		_check_metal_contract,
 		_check_metal_normal_frame,
@@ -558,22 +570,35 @@ func _assert_anchor_on_body(enemy: Enemy3D, kind: String) -> void:
 	_expect(deepest <= EXPECTED_HIT_INSET_BITE_TOLERANCE,
 		"%s：贴肉把落点推得比原来更深 %.3f m（方向 %s，容差 %.2f）⇒ 会读成「从肚子里炸」"
 		% [kind, deepest, deepest_dir, EXPECTED_HIT_INSET_BITE_TOLERANCE])
-	# 方向对照：换法线必须换落点
+	# 方向对照：换法线必须换落点。
+	# ⚠ **必须带前提**：只有当原始壳面命中点在模型**外面**时，「换法线 ⇒ 落点变」才是有效判据。
+	# 命中点本来就在模型里时（碰撞柱比模型窄的那一侧 —— 胖子僵尸现在就属于这种：壳世界半径
+	# 0.616 而模型半宽远大于它），贴肉量为 0、落点原地不动，两条法线给出同一个点 ——
+	# 那是**正确行为**，不是「法线没被消费」。测试第一次没加这个前提就误报了。
 	var base_point := enemy.global_position + Vector3(0, world_h * 0.55, 0) + Vector3.FORWARD * world_r
+	var base_outside := _outside_gap(box, base_point) > 0.05
 	var right_anchor := enemy.hit_effect_anchor(base_point, Vector3.RIGHT)
-	var up_anchor := enemy.hit_effect_anchor(base_point, Vector3.UP)
-	_expect(not is_equal_approx(right_anchor.y, up_anchor.y),
-		"%s：换一条法线后落点没变 ⇒ 法线参数没被真正消费" % kind)
-	# 零法线兜底：仍在模型内
-	var fallback := enemy.hit_effect_anchor(base_point, Vector3.ZERO)
-	_expect(_outside_gap(box, fallback) <= EXPECTED_HIT_INSET_BITE_TOLERANCE,
-		"%s：零法线兜底的落点跑到模型外（差 %.3f m）" % [kind, _outside_gap(box, fallback)])
-	# 反向对照（防「怎么算都算在盒内」的假绿）：把碰撞壳半径**人为放大 3 倍**，
-	# 落点若还老老实实停在原处、说明它根本没有按「壳面 → 模型」的关系现算。
-	var far_point := base_point + Vector3.FORWARD * world_r * 2.0
-	var far_anchor := enemy.hit_effect_anchor(far_point, Vector3.FORWARD)
-	_expect(far_anchor.distance_to(far_point) > right_anchor.distance_to(base_point) + 0.05,
-		"%s：命中点被推远后，贴肉量没有跟着变大 ⇒ 判据没有辨别力" % kind)
+	if base_outside:
+		var up_anchor := enemy.hit_effect_anchor(base_point, Vector3.UP)
+		_expect(not is_equal_approx(right_anchor.y, up_anchor.y),
+			"%s：换一条法线后落点没变 ⇒ 法线参数没被真正消费" % kind)
+		# 零法线兜底：兜底方向走「怪体中心 → 命中点」，落点仍必须落在模型身上
+		var fallback := enemy.hit_effect_anchor(base_point, Vector3.ZERO)
+		_expect(_outside_gap(box, fallback) <= EXPECTED_HIT_INSET_BITE_TOLERANCE,
+			"%s：零法线兜底的落点跑到模型外（差 %.3f m）" % [kind, _outside_gap(box, fallback)])
+		# 反向对照（防「怎么算都算在盒内」的假绿）：把命中点沿外法线**推远**，
+		# 贴肉量必须跟着变大 —— 写死常量的实现过不了这条。
+		var far_point := base_point + Vector3.FORWARD * world_r * 2.0
+		var far_anchor := enemy.hit_effect_anchor(far_point, Vector3.FORWARD)
+		_expect(far_anchor.distance_to(far_point) > right_anchor.distance_to(base_point) + 0.05,
+			"%s：命中点被推远后，贴肉量没有跟着变大 ⇒ 判据没有辨别力" % kind)
+	else:
+		# 命中点已在模型内（碰撞柱比模型窄的那一侧）⇒ 这一侧的正确行为是**原地不动**：
+		# 不许再往里推（推了就读成「从肚子里炸」）。法线不同不会改变这个结论，
+		# 所以这里钉的是「没被推走」，而不是「换法线要变」。
+		_expect(right_anchor.distance_to(base_point) <= EXPECTED_HIT_INSET_BITE_TOLERANCE,
+			"%s：命中点已在模型内，贴肉却又把它推走了 %.3f m"
+			% [kind, right_anchor.distance_to(base_point)])
 
 
 ## 模型可视件的世界包围盒 —— **滤掉隐藏件**（占位件 _core/_shell/_appendages 在挂上正式
@@ -661,6 +686,86 @@ func _outside_gap(box: AABB, point: Vector3) -> float:
 		clampf(point.z, lower.z, upper.z),
 	)
 	return (point - clamped).length()
+
+
+# ---------------------------------------------------------------- C1c 命中特效整体放大 50%
+## 业主 2026-10-15：「**击中僵尸的受击特效，放大 50%**，包括胖子僵尸的；**击中普通物品的也放大 50%**」。
+##
+## 这一条**不能只验一件**：倍率写在一个旋钮上（金属火星那组基准），僵尸那组是它的派生值 ——
+## 所以既要验「金属那组确实 ×1.5」，也要验「僵尸那组跟着走」。只验一边会漏掉
+## 「倍率只作用到一条路」这种错（那正是本轮最容易出的错：僵尸与普通物品是两条不同的调用路）。
+##
+## 胖子僵尸**不需要单独一条**：它在 `Enemy3D.ZOMBIE_KINDS` 里，与另外两只是同一个判据
+## （`uses_goo_hit_burst()`）⇒ 走同一份尺寸常量。所以这里额外钉一句「胖子确实在这个名单里」，
+## 保证「包括胖子僵尸的」不是靠巧合成立。
+func _check_hit_effect_size_scale() -> void:
+	_samples += 1
+	var scale_now := float(PROJECTILE_SCRIPT.HIT_EFFECT_SIZE_SCALE)
+	_expect(is_equal_approx(scale_now, EXPECTED_HIT_EFFECT_SIZE_SCALE),
+		"命中特效整体倍率应为 %.2f：%.4f" % [EXPECTED_HIT_EFFECT_SIZE_SCALE, scale_now])
+	# 金属火星那组（= 打普通物品 / 墙面 / 地面 / 反弹 / 链电）必须真的被倍率乘上。
+	# ⚠ 逐项直接读常量，**不用** `PROJECTILE_SCRIPT.get("名字")` —— GDScript 的 `get()` 是
+	# 非静态方法，对脚本类直接调用会解析失败（本用例第一版就栽在这）。
+	_check_scaled(
+		"METAL_SPARK_SIZE_TARGET", PROJECTILE_SCRIPT.METAL_SPARK_SIZE_TARGET,
+		BASE_METAL_SPARK_TARGET, scale_now
+	)
+	_check_scaled(
+		"METAL_SPARK_SIZE_SURFACE", PROJECTILE_SCRIPT.METAL_SPARK_SIZE_SURFACE,
+		BASE_METAL_SPARK_SURFACE, scale_now
+	)
+	_check_scaled(
+		"METAL_SPARK_SIZE_BOUNCE", PROJECTILE_SCRIPT.METAL_SPARK_SIZE_BOUNCE,
+		BASE_METAL_SPARK_BOUNCE, scale_now
+	)
+	_check_scaled(
+		"METAL_SPARK_SIZE_CHAIN", PROJECTILE_SCRIPT.METAL_SPARK_SIZE_CHAIN,
+		BASE_METAL_SPARK_CHAIN, scale_now
+	)
+	# 僵尸那件（FX01-20）必须是「金属档位 ×1.10」的派生值 ⇒ 自动跟着放大
+	var goo_target := float(PROJECTILE_SCRIPT.GOO_HIT_SIZE_TARGET)
+	_expect(
+		is_equal_approx(
+			goo_target,
+			float(PROJECTILE_SCRIPT.METAL_SPARK_SIZE_TARGET) * EXPECTED_ZOMBIE_SIZE_RATIO
+		),
+		"僵尸受击件没有跟着金属档位派生（%.4f）⇒ 放大只作用到了一路"
+		% goo_target
+	)
+	# 胖子僵尸必须在受击件分流名单里（业主「包括胖子僵尸的」）
+	_expect(Enemy3D.ZOMBIE_KINDS.has("fat_zombie03"),
+		"胖子僵尸不在 ZOMBIE_KINDS 里 ⇒「包括胖子僵尸」不成立")
+
+
+## 单项：实际值是否等于「倍率作用前的基准 × **验收侧硬编码的倍率**」。
+##
+## ⚠ 期望值**不能**用被测脚本自己报的 `HIT_EFFECT_SIZE_SCALE` 去乘 —— 那样倍率写错时
+## 两边一起动、断言照样绿。反向对照实测过：把倍率改成 1.0 时，
+## 「基准 × scale_now」这种写法**一次都没红**（只有单独那条 `scale_now == 1.5` 抓住了它）。
+## 这里一律用 `EXPECTED_HIT_EFFECT_SIZE_SCALE`，让两个错各自独立暴露。
+func _check_scaled(label: String, actual: float, base: float, _scale_now: float) -> void:
+	var wanted := base * EXPECTED_HIT_EFFECT_SIZE_SCALE
+	_expect(is_equal_approx(actual, wanted),
+		"%s 应为基础 %.2f × %.2f = %.4f，实测 %.4f"
+		% [label, base, EXPECTED_HIT_EFFECT_SIZE_SCALE, wanted, actual])
+
+
+# ---------------------------------------------------------------- C1d 近战僵尸档同步放大
+## 近战那条的尺寸在 `PlayerMeleeCombat3D` 里**独立定档**（没有引用 `Projectile3D` 的常量），
+## 所以「枪击放大了、近战没放大」是**真实可能发生**的错 —— 那会让同一只怪被刀砍比被枪打小一圈。
+## 这里直接读近战脚本的常量，钉住它与枪击僵尸档位的关系。
+func _check_melee_zombie_size_scale() -> void:
+	_samples += 1
+	var melee_size := float(MELEE_SCRIPT.ZOMBIE_HIT_BASE_SIZE)
+	var wanted := BASE_MELEE_ZOMBIE_SIZE * EXPECTED_HIT_EFFECT_SIZE_SCALE
+	_expect(is_equal_approx(melee_size, wanted),
+		"近战僵尸档应为 %.2f × %.2f = %.4f，实测 %.4f ⇒ 近战没有跟着放大"
+		% [BASE_MELEE_ZOMBIE_SIZE, EXPECTED_HIT_EFFECT_SIZE_SCALE, wanted, melee_size])
+	# 近战比子弹「重一点」是本来的设计（1.0~1.5 倍区间）；越界说明两边漂了
+	var gun_target := float(PROJECTILE_SCRIPT.GOO_HIT_SIZE_TARGET)
+	var ratio := melee_size / maxf(0.0001, gun_target)
+	_expect(ratio >= 1.0 and ratio <= 1.5,
+		"近战僵尸档与枪击僵尸档的比例跑出设计区间（%.3f，期望 1.0~1.5）" % ratio)
 
 
 # ---------------------------------------------------------------- C2 枪击路由

@@ -18,6 +18,8 @@
 
 新增测试时使用 `verify_<领域>_<行为>.tscn`，避免阶段号、日期和临时修补名。
 
+格子背包首版数据契约使用 `verify_grid_inventory_layout.tscn`：验证 `ItemRegistry.grid_size/grid_area`、多格矩形连续占位、90°旋转、堆叠、JSON快照恢复；装备栏可装备性继续由既有背包/装备事务专项覆盖。
+
 runner会检查每个场景的完整日志。批次内每个场景使用独立 `user://`，预检与该场景正片共享，避免长期档污染后一场景；导入缓存仍由同次套件共享。故障注入确实需要产生`ERROR`时，在`verification/expected_errors/<场景名>.txt`登记最窄可识别正则；未登记脚本错误返回3，资源或ObjectDB泄漏返回4，均不能凭Godot退出0计为通过。`verify_verification_runner_contract`验证预检与Autoload使用隔离用户目录。
 
 资源扣款事务使用 `verify_extraction_points_spend_transaction.tscn`：覆盖正常持久化、强制写盘失败回滚、余额/参数拒绝和旧revision实例重新加载权威档案。revision冲突分支会产生一条预期的`Refusing stale save`错误日志，验收记录必须与非预期脚本错误分开。
@@ -26,4 +28,4 @@ runner会检查每个场景的完整日志。批次内每个场景使用独立 `
 
 局内商人使用 `verify_run_merchant_transaction.tscn`（纯服务故障注入）和 `verify_run_merchant_integration.tscn`（正式3D场景 UI→钱包/背包/货架→交易撤离快照恢复）。覆盖首开写盘失败、购买失败回滚与重试、关窗重开不刷新、未成交货架/已售报价的跨重载保持；正式渲染表现另验。
 
-地面奖励交接使用 `verify_reward_ground_handoff.tscn`：正式场景验证搜索只落一个真实物、击杀延迟掉出实物与房间倍率魂球；错误搜索配置和无效房间必须给出拒绝诊断。此用例不代表真渲染颜色/数量验收。
+地面奖励交接使用 `verify_reward_ground_handoff.tscn`：正式场景验证搜索只落一个真实物、击杀延迟掉出实物与房间倍率金币球；错误搜索配置和无效房间必须给出拒绝诊断。此用例不代表真渲染颜色/数量验收。

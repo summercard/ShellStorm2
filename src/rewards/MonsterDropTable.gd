@@ -30,7 +30,7 @@ static func compile(level_id: String, table: Dictionary) -> Dictionary:
 		return _report({}, errors, 0)
 
 	# 整表级「空掉落」概率（可选）：降低总体掉落的统一旋钮。
-	# 命中 ⇒ 本次击杀什么都不掉（含魂与弹药）。缺省 0 = 不做空判定。
+	# 命中 ⇒ 本次击杀什么都不掉（含金币与弹药）。缺省 0 = 不做空判定。
 	var empty_chance := float(table.get("empty_chance", 0.0))
 	if empty_chance < 0.0 or empty_chance > 1.0:
 		errors.append(_err(

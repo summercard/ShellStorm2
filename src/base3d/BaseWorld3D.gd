@@ -178,7 +178,7 @@ func _refresh_base_status() -> void:
 	runs_label.text = "总局数: %d" % int(profile.get("total_runs", 0))
 	extraction_label.text = "成功撤离: %d" % int(profile.get("successful_extractions", 0))
 	kills_label.text = "总击杀: %d" % int(profile.get("total_kills", 0))
-	points_label.text = "魂: ◈ %d" % BaseManager.get_extraction_points()
+	points_label.text = "金币: ◈ %d" % BaseManager.get_extraction_points()
 	var loot_count := BaseManager.get_extraction_loot_count()
 	loot_label.text = "待处理战利品: %d" % loot_count
 	loot_label.modulate = Color(1.0, 0.78, 0.35) if loot_count > 0 else Color(0.65, 0.72, 0.78)

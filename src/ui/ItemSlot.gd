@@ -60,6 +60,8 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	var item := payload.get("item", {}) as Dictionary
 	var preview := PanelContainer.new()
 	preview.name = "InventoryDragPreview"
+	preview.z_index = 4095
+	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	preview.custom_minimum_size = Vector2(220, 66)
 	preview.add_theme_stylebox_override(
 		"panel", UIStyleFactory.make_panel_with_border(2, UIPalette.BORDER_FOCUS, 5, 2)
@@ -77,7 +79,7 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	title.add_theme_color_override("font_color", Color(0.50, 0.94, 1.0))
 	text_box.add_child(title)
 	var hint := Label.new()
-	hint.text = "释放到高亮格位 · 红区丢弃"
+	hint.text = "R 旋转 · Esc 取消 · 释放到目标位置"
 	hint.add_theme_font_size_override("font_size", 11)
 	hint.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
 	text_box.add_child(hint)
@@ -91,6 +93,8 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if not data is Dictionary or not bool((data as Dictionary).get("inventory_drag", false)):
 		return false
+	if bool(get_meta("grid_board_cell", false)) and get_parent().has_method("accepts_drop"):
+		return bool(get_parent().call("accepts_drop", data, position + _at_position))
 	var target_kind := str(get_meta("slot_kind", "inventory"))
 	var source_kind := str((data as Dictionary).get("source_kind", "inventory"))
 	var item := (data as Dictionary).get("item", {}) as Dictionary
@@ -139,7 +143,10 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	var source_index := int((data as Dictionary).get("source_index", -1))
 	var source_kind := str((data as Dictionary).get("source_kind", "inventory"))
 	var target_kind := str(get_meta("slot_kind", "inventory"))
-	slot_drop_received.emit(source_index, slot_index, source_kind, target_kind)
+	var target_index := slot_index
+	if bool(get_meta("grid_board_cell", false)):
+		target_index = int(get_parent().call("get_anchor_from_local_position", position + _at_position))
+	slot_drop_received.emit(source_index, target_index, source_kind, target_kind)
 
 
 func _notification(what: int) -> void:
@@ -201,4 +208,7 @@ func _draw() -> void:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.45, 0.56, 0.82, 0.18), true)
 		border_color = Color(0.72, 0.82, 1.0, 1.0)
 		border_width = maxf(border_width, 2.0)
-	draw_rect(Rect2(Vector2.ZERO, size), border_color, false, border_width)
+	var frame := UIStyleFactory.make_inventory_surface(true)
+	frame.border_color = border_color
+	frame.set_border_width_all(int(border_width))
+	draw_style_box(frame, Rect2(Vector2.ZERO, size))

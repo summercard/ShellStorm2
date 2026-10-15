@@ -578,7 +578,7 @@ static func get_loot_table_for_level(floor_level: int) -> String:
 # 怪物表「掉落/进度」列的结构化投影（2026-09-22，REWARD-SERVICE 契约）
 # ---------------------------------------------------------------------------
 #
-# 现状口径：该列在物品/怪物表里仍是自然语言，运行时散在 LootModule 的 26% / 34% / 魂公式里。
+# 现状口径：该列在物品/怪物表里仍是自然语言，运行时散在 LootModule 的 26% / 34% / 金币公式里。
 # 本段把它**逐值**投影成结构化规格（RewardSpec），供 RewardService 解析。
 # **过渡期双写**：旧 `loot_table` 字段与旧 LootModule 分支保留不动（04 §22.11 第 2 步），
 # 第 3 步切消费点、第 4 步删旧路径。数值逐值保持，不得在切换过程中改动。
@@ -595,8 +595,8 @@ const DROP_AMMO_MAX_NORMAL := 50
 ## 精英 / Boss：稳定单件 + 满额备弹。
 const DROP_AMMO_MIN_ELITE := 8
 const DROP_AMMO_MAX_ELITE := 16
-## 魂产量：`round(base + per_floor × floor)`。精英/Boss 的附加魂在现有实现里是**总额**
-## （Dungeon3D 见到已有货币就不再补基础魂），故此处直接给总额，不叠加。
+## 金币产量：`round(base + per_floor × floor)`。精英/Boss 的附加金币在现有实现里是**总额**
+## （Dungeon3D 见到已有货币就不再补基础金币），故此处直接给总额，不叠加。
 const DROP_CURRENCY_BASE_NORMAL := 2
 const DROP_CURRENCY_PER_FLOOR_NORMAL := 1
 const DROP_CURRENCY_BASE_ELITE := 50

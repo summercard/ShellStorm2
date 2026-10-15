@@ -95,15 +95,12 @@
         { "port_id": "B", "target": "room_03", "position_m": [20.0, -2.5], "outward": [1.0, 0.0] }
       ],
       "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [2.5, -2.5], "count_multiplier": 2 },
-        { "box": "box_room_spread", "center_m": [-12.5, -7.5] },
-        { "box": "box_corridor_column", "center_m": [12.5, -7.5] },
-        { "box": "box_wall_arc", "center_m": [-12.5, 2.5], "count_multiplier": 2 },
-        { "box": "box_corner_ambush", "center_m": [12.5, 2.5] }
+        { "box": "box_room_spread", "center_m": [-12.5, -2.5] },
+        { "box": "box_room_spread", "center_m": [12.5, -2.5] }
       ],
       "encounter": {
         "stages": [
-          { "boxes": [0, 1, 2, 3, 4] }
+          { "boxes": [0, 1] }
         ],
         "monster_ai": {
           "alert_share_radius_m": 60.0

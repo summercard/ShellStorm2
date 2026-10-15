@@ -83,7 +83,7 @@ func seed_state(dungeon: Dungeon3D) -> void:
 func compare(dungeon: Dungeon3D, saved: Dictionary) -> void:
 	var p := dungeon.player
 	check(p.current_hp == 43 and p.max_hp == 90, "HP与女祭司上限恢复，无即时回血重放")
-	check(GameManager.currency == 137, "魂不重复扣除/发放")
+	check(GameManager.currency == 137, "金币不重复扣除/发放")
 	check(dungeon._room_key_count == int(saved["room_key_count"]), "永久钥匙不重复发放")
 	check(dungeon._temporary_room_keys == 2, "临时钥匙及楼层归属恢复")
 	var expected_cards := (saved["fate_run_state"]["bridge"]["cards"] as Array).size()
@@ -99,7 +99,7 @@ func compare(dungeon: Dungeon3D, saved: Dictionary) -> void:
 	check(is_equal_approx(dungeon._next_room_enemy_hp_multiplier, 1.2) and is_equal_approx(dungeon._next_room_enemy_damage_multiplier, 0.64), "未来房间倍率")
 	check(dungeon._fate_bounty_queues.size() == 1 and dungeon._fate_drop_quality_rules[0]["count"] == 2, "赏金队列与太阳计数")
 	check(dungeon._room_fate_wave_queued.has("used_room"), "增援一次性标记")
-	check(is_equal_approx(dungeon._world_currency_multiplier, 0.85) and is_equal_approx(dungeon._extraction_time_multiplier, 1.3), "未来魂和撤离倍率")
+	check(is_equal_approx(dungeon._world_currency_multiplier, 0.85) and is_equal_approx(dungeon._extraction_time_multiplier, 1.3), "未来金币和撤离倍率")
 	check(p.weapon_tree.growth_stacks == 3 and p.weapon_tree.get("_overheat_shots") == 7, "运行树成长与热")
 	check(p.weapon_tree.get("_crit_on_kill_stack") == 1 and p.weapon_tree.get("_crit_damage_shots") == 3, "王后两种待用奖励")
 	check(p.weapon.get("_reload_first_shot") and p.weapon.get("_fire_sequence") == 6 and p.weapon.current_ammo == 3, "首发标记/第N发/余弹")
@@ -144,7 +144,7 @@ func _run() -> void:
 	if not writer:
 		var count := FateCardGameBridge.get_card_count()
 		var reward := FateCardGameBridge.retry_pending_character_reward()
-		check(reward.get("success", false) and GameManager.currency == 107 and FateCardGameBridge.get_card_count() == count + 1, "恢复后领取恰好扣魂/登记一次")
+		check(reward.get("success", false) and GameManager.currency == 107 and FateCardGameBridge.get_card_count() == count + 1, "恢复后领取恰好扣金币/登记一次")
 		check(not FateCardGameBridge.retry_pending_character_reward().get("success", false) and GameManager.currency == 107, "已领取拒绝重复")
 		FateCardGameBridge.reset_run_state()
 		dungeon.reset_world_fate_state()

@@ -53,7 +53,7 @@ func _ready() -> void:
 		BaseManager.force_save_failure_for_test = true
 		ui.call("_on_slot_clicked", 0)
 		if GameManager.currency != starting_currency:
-			failures.append("写盘失败后扣魂没有回滚")
+			failures.append("写盘失败后扣金币没有回滚")
 		if inventory.get_slots_snapshot() != starting_slots:
 			failures.append("写盘失败后背包精确格位没有回滚")
 		if merchant.get_offers_snapshot().size() != starting_offers:
@@ -65,7 +65,7 @@ func _ready() -> void:
 		BaseManager.force_save_failure_for_test = false
 		ui.call("_on_slot_clicked", 0)
 		if GameManager.currency != starting_currency - int(offered.get("price", 0)):
-			failures.append("点击 UI 后没有按报价扣魂")
+			failures.append("点击 UI 后没有按报价扣金币")
 		if inventory.get_used_slots() != starting_used_slots + 1:
 			failures.append("点击 UI 后没有把完整物品转入行动背包")
 		var remaining := merchant.get_offers_snapshot()
@@ -76,7 +76,7 @@ func _ready() -> void:
 		BaseManager.load_base()
 		var persisted := BaseManager.get_active_run_checkpoint()
 		if int(persisted.get("run_currency", -1)) != GameManager.currency:
-			failures.append("重读存档后的魂余额不是成交值")
+			failures.append("重读存档后的金币余额不是成交值")
 		var normalized_slots: Variant = JSON.parse_string(JSON.stringify(inventory.get_slots_snapshot()))
 		if persisted.get("inventory_slots", []) != normalized_slots:
 			failures.append("重读存档后的背包格位不是成交值")

@@ -28,20 +28,27 @@ const LEGACY_EFFECT_EXPLOSION := &"explosion"
 ## ⇒ FX01-20 `VFX-GOO-HIT-3D`；打中**其余一切**（墙面 / 掩体 / 地面 / 非僵尸怪种）
 ## ⇒ FX01-21 `VFX-METAL-SPARK-HIT-3D`（5 颗白方块 + 2 根金色长条火星）。
 ##
-## ⚠ 2026-10-14 第四轮（本版）业主：「小僵尸和警察僵尸的受击特效**太大了**，
+## ⚠ 2026-10-14 第四轮业主：「小僵尸和警察僵尸的受击特效**太大了**，
 ## **使用击中其它物体的那个特效**，然后**改成绿色**即可，放大大概 **10%**」
 ## ⇒ FX01-20 升 v002：造型与 FX01-21 **逐字共用**（只换色板），尺寸改为**同档位 ×1.10**。
 ## 所以僵尸那一组不再是独立定档值，而是**派生**自金属火星那一组 —— 以后调金属火星的档位，
 ## 僵尸那条自动跟着走，不会又漂回「一个绿方块糊住半个怪」。
 ##
-## ⚠ 本口径**取代**上一轮的「受击的特效也不要太大，我看到有点太大了，小一点」
+## 本口径**取代**再上一轮的「受击的特效也不要太大，我看到有点太大了，小一点」
 ## （当时把首版的 0.85 / 1.00 压到 0.50 / 0.60）。
-## 要再调只动这里，别去改特效内部的几何常量（那会连死亡件一起带动）。
-const METAL_SPARK_SIZE_TARGET := 0.34
-const METAL_SPARK_SIZE_ABSORB := 0.42
-const METAL_SPARK_SIZE_SURFACE := 0.28
-const METAL_SPARK_SIZE_BOUNCE := 0.20
-const METAL_SPARK_SIZE_CHAIN := 0.26
+##
+## ⚠ 2026-10-15 第五轮业主：「击中僵尸的受击特效，**放大 50%**，包括胖子僵尸的；
+## 击中普通物品的也**放大 50%**」⇒ 引入**唯一一个倍率旋钮** `HIT_EFFECT_SIZE_SCALE`。
+## 它写在**金属火星那组基准值上**，僵尸那组是「金属 ×1.10」的派生值 ⇒ 一次改动同时覆盖
+## 四条路（打僵尸 / 打普通物体 / 打墙面地面 / 链电反弹），不会漏掉某一路。
+##
+## 要再调大小**只动下面这一组数**，别去改特效内部的几何常量（那会连死亡件一起带动）。
+const HIT_EFFECT_SIZE_SCALE := 1.5
+const METAL_SPARK_SIZE_TARGET := 0.34 * HIT_EFFECT_SIZE_SCALE
+const METAL_SPARK_SIZE_ABSORB := 0.42 * HIT_EFFECT_SIZE_SCALE
+const METAL_SPARK_SIZE_SURFACE := 0.28 * HIT_EFFECT_SIZE_SCALE
+const METAL_SPARK_SIZE_BOUNCE := 0.20 * HIT_EFFECT_SIZE_SCALE
+const METAL_SPARK_SIZE_CHAIN := 0.26 * HIT_EFFECT_SIZE_SCALE
 ## 僵尸受击件（FX01-20）的同档位尺寸 = 金属火星 ×1.10。只在这里派生，别再手写定档值。
 const ZOMBIE_HIT_SIZE_RATIO := 1.10
 const GOO_HIT_SIZE_TARGET := METAL_SPARK_SIZE_TARGET * ZOMBIE_HIT_SIZE_RATIO

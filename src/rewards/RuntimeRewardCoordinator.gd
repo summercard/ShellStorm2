@@ -130,7 +130,7 @@ func resolve_kill(
 		(report["errors"] as Array).append_array(bounty_report.get("errors", []))
 		report["ok"] = bool(report.get("ok", false)) and bool(bounty_report.get("ok", false))
 	# 关卡表的「独立判定」允许同次击杀命中多件实物；若仍压成 1 件，作者表语义就是假的。
-	# 未命中关卡表的旧公式、精英与 Boss 保留既有「一个实物 + 一个魂球」契约。
+	# 未命中关卡表的旧公式、精英与 Boss 保留既有「一个实物 + 一个金币球」契约。
 	var uses_level_table := tier == "normal" and _monster_drop_specs.has(monster_id)
 	_collapse_kill_ground_grants(report, uses_level_table)
 	return report

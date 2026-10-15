@@ -49,7 +49,7 @@ func _ready() -> void:
 	inventory.clear_all()
 	_save_ok = false
 	_check(_code(service.purchase("session-2", offer_id, instance_id, inventory, wallet, command)) == "save_failed", "写盘失败拒绝")
-	_check(wallet.currency == 100 and inventory.get_used_slots() == 0 and service.get_offers_snapshot().size() == 1, "写盘失败必须回滚魂、格位与货架")
+	_check(wallet.currency == 100 and inventory.get_used_slots() == 0 and service.get_offers_snapshot().size() == 1, "写盘失败必须回滚金币、格位与货架")
 	_save_ok = true
 	var result := service.purchase("session-2", offer_id, instance_id, inventory, wallet, command)
 	_check(_code(result) == "committed", "重试必须成交")

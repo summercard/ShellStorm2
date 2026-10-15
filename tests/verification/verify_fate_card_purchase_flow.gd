@@ -2,13 +2,13 @@ extends Node
 
 ## 门后命运卡「局内购卡」验收（2026-10-14 主人改版）。
 ##
-## 改版要点：三张卡**全部出现**，不再是「三选一」；每张卡按稀有度标价，用**本局魂**
+## 改版要点：三张卡**全部出现**，不再是「三选一」；每张卡按稀有度标价，用**本局金币**
 ## （`GameManager.currency`）购买；可以全买，也可以一张不买；弹窗只在点「退出」
 ## （或 ESC / 手柄 B）时才关闭；星星卡在目标枪命运槽已满时置灰不可购买。
 ##
 ## 本用例盯死四条不会被别的用例覆盖的契约：
 ## 1. 价格只来自 `FATE_PRICE_BY_RARITY`，且与稀有度一一对应；
-## 2. 每一次购买尝试都满足**货币守恒**：买成 = 恰好扣掉该卡价格；买不成 = 魂分文不少；
+## 2. 每一次购买尝试都满足**货币守恒**：买成 = 恰好扣掉该卡价格；买不成 = 金币分文不少；
 ## 3. 局外总货币池 `BaseManager.get_extraction_points()` 全程一动不动；
 ## 4. 买完弹窗保持打开，只有退出按钮才关闭。
 
@@ -33,7 +33,7 @@ func _ready() -> void:
 	# 局外总池基线：整段测试结束时必须逐整数相等。
 	var extraction_before := BaseManager.get_extraction_points()
 
-	# —— 1) 魂不足：三张卡都按稀有度标价，但一张也买不了 ——
+	# —— 1) 金币不足：三张卡都按稀有度标价，但一张也买不了 ——
 	_set_run_currency(0)
 	instance.fate_upgrades.clear()
 	_expect(dungeon.show_reference_fate_overlay_for_test(), "Cannot open the fate purchase overlay", failures)
@@ -53,6 +53,13 @@ func _ready() -> void:
 			continue
 		var price_label := (button.get_meta("tarot_price_label") if button.has_meta("tarot_price_label") else null) as Label
 		_expect(price_label != null and not price_label.text.strip_edges().is_empty(), "Fate card %d has no price line under the card" % index, failures)
+		# 「金币不足」只说了状态；卡下必须同时写出**还差多少**，玩家才能一眼知道下一步要攒多少。
+		_expect(
+			price_label != null and "还差" in price_label.text,
+			"Unaffordable card %d price line does not spell out the shortfall: %s"
+			% [index, price_label.text if price_label != null else "<null>"],
+			failures
+		)
 		var expected_price := int(Dungeon3D.FATE_PRICE_BY_RARITY[int(card.card_rarity)])
 		_expect(int(button.get_meta("tarot_price", -1)) == expected_price, "Fate card %d price does not come from the rarity table" % index, failures)
 		_expect(
@@ -60,36 +67,63 @@ func _ready() -> void:
 			"Card %d (%s, %d soul) is not reported as unaffordable with an empty wallet" % [index, card.card_name, expected_price],
 			failures
 		)
-	var balance_label := overlay.find_child("FateCurrencyBalance", true, false) as Label
-	_expect(balance_label != null and balance_label.text.contains("0"), "Fate overlay balance line does not show the empty run wallet", failures)
-	# 顶部标题已移除（反向钉子，防误恢复）：这个位置现在由本局魂余额行接管。
+	# 顶部「本局金币」余额行已按主人 2026-10-15 要求移除（反向钉子，防误恢复）：
+	# 金币的唯一读数是右下角的 `RunLootReadout`，弹窗内不允许再出现第二个金币口径。
+	_expect(
+		overlay.find_child("FateCurrencyBalance", true, false) == null,
+		"Fate purchase overlay still contains the removed top balance line",
+		failures
+	)
+	# 顶部标题已移除（反向钉子，防误恢复）。
 	_expect(
 		"购 买" not in _collect_label_text(overlay),
 		"Fate purchase overlay still prints its removed title",
 		failures
 	)
-	if balance_label != null:
-		var viewport_height := dungeon.get_viewport().get_visible_rect().size.y
-		_expect(
-			is_equal_approx(balance_label.anchor_top, 0.0)
-			and balance_label.get_global_rect().end.y <= viewport_height * 0.10,
-			"Fate balance line did not move up into the removed title's header slot",
-			failures
-		)
-		_expect(
-			balance_label.global_position.y + balance_label.size.y
-			<= _topmost_fate_card_top(overlay),
-			"Fate balance line overlaps the card row instead of sitting above it",
-			failures
-		)
-	# 真实点击一张买不起的卡：不能扣魂、不能进反馈锁定态、也不能关弹窗。
+	var loot_readout := dungeon.find_child("RunLootReadout", true, false) as Label
+	_expect(
+		loot_readout != null and loot_readout.text.contains("金币 0"),
+		"Bottom-right run-currency readout does not show the empty run wallet",
+		failures
+	)
+	# 真实点击一张买不起的卡：不能扣金币、不能进反馈锁定态、也不能关弹窗。
 	var first_button := overlay.find_child("FateChoiceCard_0", true, false) as Button
 	dungeon.call("_on_reference_fate_card_pressed", first_button, 0)
 	_expect(not bool(dungeon.get("_fate_feedback_locked")), "Unaffordable card still entered the locked press feedback", failures)
 	_expect(bool(dungeon.get("_door_fate_active")), "Unaffordable card press closed the overlay", failures)
 	_expect(GameManager.currency == 0, "Unaffordable card press spent run currency", failures)
 
-	# —— 2) 买得起的卡：按下即扣魂、卡位标记已购买、弹窗保持打开 ——
+	# —— 1b) 卡上 / 金币读数上的拒绝反馈（业主 2026-10-15：反馈要更容易被看到）——
+	# 状态栏在屏幕左上角，玩家的视线在三张卡上；所以「买不起」必须同时落在**卡**和
+	# **右下金币读数**上（2026-10-15 余额行移除后读数是唯一金币口径）。
+	# 三条各钉一个可见证据：卡片抖动 · 价格行闪亮 · 金币读数转警示色。
+	_expect(
+		not (dungeon.get("_fate_shake_tweens") as Dictionary).is_empty(),
+		"Card rejection feedback did not shake the card column",
+		failures
+	)
+	_expect(
+		dungeon.get("_fate_balance_warn_tween") != null,
+		"Unaffordable purchase did not warn the run-currency readout",
+		failures
+	)
+	_expect(
+		loot_readout != null
+		and loot_readout.get_theme_color("font_color").is_equal_approx(Dungeon3D.FATE_BALANCE_SHORTAGE_COLOR),
+		"Run-currency readout did not turn into its shortage colour",
+		failures
+	)
+	# 价格行闪烁是 tween：点击当帧还没开始推进，等 50 ms 再读乘性提亮（>1 才算「亮过」）。
+	await get_tree().create_timer(0.05).timeout
+	var reject_price_label := first_button.get_meta("tarot_price_label") as Label
+	_expect(
+		reject_price_label != null and reject_price_label.modulate.r > 1.0,
+		"Card rejection feedback did not flash the price line (modulate %s)"
+		% [reject_price_label.modulate if reject_price_label != null else "null"],
+		failures
+	)
+
+	# —— 2) 买得起的卡：按下即扣金币、卡位标记已购买、弹窗保持打开 ——
 	var first_card := choices[0] as FateCard
 	var first_price := int(Dungeon3D.FATE_PRICE_BY_RARITY[int(first_card.card_rarity)])
 	_set_run_currency(first_price + 5)
@@ -97,6 +131,14 @@ func _ready() -> void:
 	var before_buy := GameManager.currency
 	dungeon.call("_on_reference_fate_card_pressed", first_button, 0)
 	await _wait_purchased(overlay, 0)
+	# 扣款反馈：右下金币读数上方浮出「-N 金币」飘字，把这次花掉多少写明白。
+	# 断言紧贴购买完成 —— 飘字只活 0.9 秒，等翻牌动画收束后再读就可能已经自毁了。
+	var spend_popup := overlay.find_child("FateCurrencySpendPopup", true, false) as Label
+	_expect(
+		spend_popup != null and spend_popup.text.contains(str(first_price)),
+		"Purchase did not spell out the spent amount next to the currency readout",
+		failures
+	)
 	await _wait_fate_cards_flipped(overlay)
 	var bought := bool(first_button.get_meta("tarot_purchased", false))
 	_expect(bought, "Affordable card press did not buy the card", failures)
@@ -180,6 +222,17 @@ func _ready() -> void:
 			],
 			failures
 		)
+		# ③b 卡背**半透明**（业主 2026-10-15 要求「翻过去的命运卡做半透明，更淡一些」）。
+		# 只淡卡背贴图层，不淡整列 —— 理由见下一条 ④b 的反向钉子。
+		var back_canvas := back_after as CanvasItem
+		_expect(
+			back_canvas != null
+			and back_canvas.modulate.a < 1.0
+			and is_equal_approx(back_canvas.modulate.a, Dungeon3D.FATE_PURCHASED_CARD_ALPHA),
+			"Bought card back is not translucent (alpha %s)"
+			% [back_canvas.modulate.a if back_canvas != null else 1.0],
+			failures
+		)
 		# ④ 卡下说明也要去色：它原本按作用域着色（紫/金/浅蓝），留着会和灰阶卡面打架。
 		var caption_after := (first_button.get_meta("tarot_caption_label") if first_button.has_meta("tarot_caption_label") else null) as Label
 		_expect(caption_after != null, "Bought card is missing its caption label reference", failures)
@@ -191,6 +244,21 @@ func _ready() -> void:
 				"Bought card caption kept a coloured scope tint: %s" % caption_color,
 				failures
 			)
+		# ④b 文字**不跟着半透明**。这是「淡卡不淡字」这条设计的反向钉子：
+		# 整列调 alpha 会把「已购买」压到 0.72 × 0.40 × α ≈ 0.13 的有效亮度，直接读不出来 ——
+		# 而这行字是这张卡唯一还需要被读到的事实（它证明这张卡买过了）。
+		_expect(
+			caption_after != null and is_equal_approx(caption_after.modulate.a, 1.0),
+			"Bought card caption went translucent together with the card (alpha %s)"
+			% [caption_after.modulate.a if caption_after != null else 1.0],
+			failures
+		)
+		_expect(
+			price_label_after != null and is_equal_approx(price_label_after.modulate.a, 1.0),
+			"Bought card price line went translucent together with the card (alpha %s)"
+			% [price_label_after.modulate.a if price_label_after != null else 1.0],
+			failures
+		)
 		# 已购买的卡：鼠标悬停不再放大（主人 2026-10-14 要求）。
 		dungeon.call("_on_reference_fate_card_hover", first_button, true)
 		await get_tree().create_timer(0.28).timeout
@@ -221,7 +289,7 @@ func _ready() -> void:
 				)
 				dungeon.call("_on_reference_fate_card_hover", other_button, false)
 		dungeon.call("_on_reference_fate_card_hover", first_button, false)
-		# 同一张卡不能买第二次：既不再扣魂，也不关弹窗。
+		# 同一张卡不能买第二次：既不再扣金币，也不关弹窗。
 		var before_second := GameManager.currency
 		await dungeon.call("_on_door_fate_selected", 0)
 		_expect(GameManager.currency == before_second, "Repeat purchase of the same card spent run currency again", failures)
@@ -243,7 +311,7 @@ func _ready() -> void:
 			_expect(GameManager.currency == before_attempt, "Card %d failed to apply but did not refund its soul cost" % index, failures)
 		_expect(bool(dungeon.get("_door_fate_active")), "Card %d attempt closed the overlay early" % index, failures)
 
-	# —— 4) 星星卡满槽：置灰不可购买，且绝不扣魂 ——
+	# —— 4) 星星卡满槽：置灰不可购买，且绝不扣金币 ——
 	dungeon.call("_close_door_fate_overlay")
 	instance.fate_upgrades.clear()
 	for slot_index in range(instance.fate_slot_capacity):
@@ -305,11 +373,32 @@ func _ready() -> void:
 				"Fate exit button has no focus neighbour back up into the card row",
 				failures
 			)
+			var exit_currency := GameManager.currency
+			var exit_cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
 			exit_button.emit_signal("pressed")
+			# 退出不是硬切：同步检查覆盖层还在，重复退出不会创建第二条退场。
+			_expect(bool(dungeon.get("_fate_overlay_closing")), "Fate exit did not enter the animated closing state", failures)
+			_expect(dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == overlay, "Fate overlay was hard-cut before exit animation", failures)
+			_expect(bool(dungeon.get("_door_fate_active")) and exit_button.disabled, "Fate exit released modal input before the animation finished", failures)
+			dungeon.call("_cancel_door_fate_selection")
+			var exit_deadline := Time.get_ticks_msec() + 6000
+			while is_instance_valid(overlay) and float(overlay.get_meta("fate_exit_progress", 0.0)) <= 0.40 and Time.get_ticks_msec() < exit_deadline:
+				await get_tree().process_frame
+			_expect(is_instance_valid(overlay), "Fate exit did not expose an intermediate animation frame", failures)
+			if is_instance_valid(overlay):
+				for exit_card_node in exit_cards:
+					var exit_card := exit_card_node as Button
+					var exit_view := exit_card.get_meta("fate_feedback_view") as Control
+					_expect(exit_card.disabled and exit_view.scale.x < 1.0 and exit_view.modulate.a < 1.0, "A fate card did not shrink and fade during exit", failures)
+					_expect(str(exit_card.get_meta("tarot_face_side", "")) == "back", "A fate card did not flip to its back during exit", failures)
+			await dungeon.call("_on_door_fate_selected", 0)
+			_expect(GameManager.currency == exit_currency, "A closing fate overlay accepted another purchase", failures)
+			# 等退场动画完成，再验证状态和节点都收干净。
+			await _wait_overlay_closed(dungeon)
 			_expect(not bool(dungeon.get("_door_fate_active")), "Fate exit button did not close the purchase overlay", failures)
 			_expect(dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null, "Fate purchase overlay was not torn down", failures)
 
-	# —— 6) 真实过门路径落到同一套购买 UI，且同样只花本局魂 ——
+	# —— 6) 真实过门路径落到同一套购买 UI，且同样只花本局金币 ——
 	await _check_real_door_purchase_entry(dungeon, failures)
 
 	# 局外总池收尾校验：门后买卡是纯局内交易，基地抽取点一个子儿都不能动。
@@ -359,6 +448,7 @@ func _check_real_door_purchase_entry(dungeon: Dungeon3D, failures: Array[String]
 		_expect(price_label != null, "Real door purchase card has no price line", failures)
 	_expect(overlay.find_child("FateExitButton", true, false) != null, "Real door purchase overlay has no exit button", failures)
 	dungeon.call("_cancel_door_fate_selection")
+	await _wait_overlay_closed(dungeon)
 	_expect(not bool(dungeon.get("_door_fate_active")), "Real door purchase overlay did not close on exit", failures)
 
 
@@ -370,7 +460,7 @@ func _find_blocked_card(dungeon: Dungeon3D, reason: String) -> int:
 	return -1
 
 
-## 把本局魂精确设成目标值：走 `add_currency` / `spend_currency` 以便同步 `_run_value` 与自动存档。
+## 把本局金币精确设成目标值：走 `add_currency` / `spend_currency` 以便同步 `_run_value` 与自动存档。
 func _set_run_currency(target: int) -> void:
 	var delta := maxi(0, target) - GameManager.currency
 	if delta > 0:
@@ -426,20 +516,23 @@ func _wait_card_back(overlay: Control, index: int) -> bool:
 	return false
 
 
+## 等退出退场动画真正完成；不能用固定等待，否则慢机器会把已完成的动画误判成未关闭。
+func _wait_overlay_closed(dungeon: Dungeon3D) -> void:
+	var deadline_ms := 6000
+	var elapsed_ms := 0
+	while elapsed_ms < deadline_ms:
+		if not bool(dungeon.get("_door_fate_active")) and dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null:
+			return
+		await get_tree().create_timer(0.05).timeout
+		elapsed_ms += 50
+
+
 ## 弹窗里所有 Label 的文字拼一起，用于「标题已移除」这类反向断言。
 func _collect_label_text(root: Node) -> String:
 	var result := ""
 	for label_node in root.find_children("*", "Label", true, false):
 		result += "\n" + (label_node as Label).text
 	return result
-
-
-## 三张卡里最靠上的那个顶边（屏幕坐标）；没有卡时回一个很大的数，让「余额在卡上方」恒不误判为真。
-func _topmost_fate_card_top(overlay: Control) -> float:
-	var top := INF
-	for card_node in overlay.find_children("FateChoiceCard_*", "Button", true, false):
-		top = minf(top, (card_node as Control).get_global_rect().position.y)
-	return top
 
 
 ## 按**真实时间**轮询：headless 下 process 帧不做垂直同步，固定帧数可能只累积极短的真实 delta。

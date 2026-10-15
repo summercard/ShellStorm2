@@ -595,7 +595,7 @@ static func sun_key() -> FateCard:
 
 
 static func sun_currency() -> FateCard:
-	return _scoped_modifier_card("黄金潮汐", FateCard.CardType.ENHANCE, RARITY_EPIC, "🪙", "魂获取+30%", "本局之后获得的魂数量提升 30%", "currency_gain", {"multiplier": 1.30})
+	return _scoped_modifier_card("黄金潮汐", FateCard.CardType.ENHANCE, RARITY_EPIC, "🪙", "金币获取+30%", "本局之后获得的金币数量提升 30%", "currency_gain", {"multiplier": 1.30})
 
 
 static func sun_scorch() -> FateCard:
@@ -603,11 +603,11 @@ static func sun_scorch() -> FateCard:
 
 
 static func sun_trial() -> FateCard:
-	return _scoped_modifier_card("烈日试炼", FateCard.CardType.CURSE, RARITY_LEGENDARY, "🌞", "强敌双倍魂", "下一个敌对房间敌人伤害提升 25%，其魂掉落翻倍", "next_room_trial", {"damage_multiplier": 1.25, "currency_multiplier": 2.0})
+	return _scoped_modifier_card("烈日试炼", FateCard.CardType.CURSE, RARITY_LEGENDARY, "🌞", "强敌双倍金币", "下一个敌对房间敌人伤害提升 25%，其金币掉落翻倍", "next_room_trial", {"damage_multiplier": 1.25, "currency_multiplier": 2.0})
 
 
 static func sun_bounty() -> FateCard:
-	return _scoped_modifier_card("长昼赏金", FateCard.CardType.RULE, RARITY_EPIC, "🏆", "三房各奖35魂", "接下来 3 个敌对房间肃清时各获得 35 魂", "room_clear_bounty", {"rooms": 3, "amount": 35})
+	return _scoped_modifier_card("长昼赏金", FateCard.CardType.RULE, RARITY_EPIC, "🏆", "三房各奖35金币", "接下来 3 个敌对房间肃清时各获得 35 金币", "room_clear_bounty", {"rooms": 3, "amount": 35})
 
 
 static func sun_extraction() -> FateCard:

@@ -10,7 +10,7 @@ const EnergyService = preload("res://src/base/BaseEnergyService.gd")
 const SaveService = preload("res://src/base/ProfileSaveService.gd")
 const ShopService = preload("res://src/base/BaseShopService.gd")
 const BlueprintService = preload("res://src/base/BlueprintUpgradeService.gd")
-const BASE_LOADOUT_CAPACITY := 12
+const BASE_LOADOUT_CAPACITY := 24
 const BASE_VAULT_CAPACITY := 20
 const RUNTIME_SAVE_DEBOUNCE_SECONDS := 0.45
 
@@ -699,7 +699,7 @@ func record_run(success: bool, kills: int) -> void:
 	save_base()
 
 
-## 将一次行动的统计、魂、撤离战利品／死亡保险中转和行动检查点清理
+## 将一次行动的统计、金币、撤离战利品／死亡保险中转和行动检查点清理
 ## 合并为一次存档提交。相同 transaction_id 重试只返回既有成功结果。
 func commit_run_settlement(request: Dictionary) -> Dictionary:
 	_ensure_data()
@@ -1086,7 +1086,7 @@ func purchase_base_shop_item(item_id: String, transaction_id: String = "", targe
 	if price <= 0:
 		return {"success": false, "reason": "商品购买价配置无效"}
 	if data.extraction_points < price:
-		return {"success": false, "reason": "魂不足"}
+		return {"success": false, "reason": "金币不足"}
 	if target_owner not in ["loadout", "vault"]:
 		return {"success": false, "reason": "购买目标无效"}
 
@@ -1261,7 +1261,7 @@ func purchase_base_shop_item_to_inventory(item_id: String, inventory: InventoryM
 		return {"success": false, "reason": "商品未在基地货架上"}
 	var price := int(definition.get("base_buy_price", 0))
 	if price <= 0 or data.extraction_points < price:
-		return {"success": false, "reason": "魂不足" if price > 0 else "商品购买价配置无效"}
+		return {"success": false, "reason": "金币不足" if price > 0 else "商品购买价配置无效"}
 	var purchased := ShopService.make_item_instance(definition, effective_transaction_id)
 	var old_inventory := inventory.get_slots_snapshot()
 	if inventory.add_item(purchased, 1) != 1:

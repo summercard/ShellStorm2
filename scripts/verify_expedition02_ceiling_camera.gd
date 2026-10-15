@@ -14,7 +14,7 @@ const ROOM_SCENE := (
 	+ "expedition_02/f00_room_02_static_layout.tscn"
 )
 # 与 TowerDescent3D 常量逐值一致（改一边必须改另一边，这里刻意写死成对照表）。
-const CAMERA_HEIGHT_M := 9.993940
+const CAMERA_HEIGHT_M := 10.262659
 const PROBE_START_HEIGHT_M := 1.31
 const SLAB_CLEARANCE_M := 0.28
 const SLAB_MIN_HEIGHT_M := 1.25

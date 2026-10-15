@@ -284,14 +284,16 @@ func _ready() -> void:
 	_validate_combat_floor_layouts(generation, snapshot, failures)
 	_validate_stair_room_clearance(tower, failures)
 	_expect(
-		tower.player.camera.position.is_equal_approx(Vector3(0.0, 9.993940, 3.699625)),
-		"塔楼摄像机没有固定在按4次';'拉近后的默认高度与距离",
+		tower.player.camera.position.is_equal_approx(Vector3(0.0, 10.262659, 4.914455)),
+		"塔楼摄像机没有固定在按4次\"'\"拉远+压低5°后的默认高度与距离",
 		failures
 	)
+	# 俯角锚点：2026-10-15 起默认镜头绕焦点压低 5°，由 65.003882° 变为
+	# 60.003882°（rotation.x = −1.047260 rad）。区间取 ±5°，旧值 65.0039° 落在区间外。
 	_expect(
-		tower.player.camera.rotation.x > -1.25
-		and tower.player.camera.rotation.x < -1.05,
-		"塔楼摄像机没有形成室内65°斜俯视角",
+		tower.player.camera.rotation.x > deg_to_rad(-65.0)
+		and tower.player.camera.rotation.x < deg_to_rad(-55.0),
+		"塔楼摄像机没有形成室内60°斜俯视角",
 		failures
 	)
 	_expect(
@@ -1517,8 +1519,8 @@ func _validate_camera_lower_wall_lift(
 		and is_equal_approx(tower.player.camera.position.x, 0.0)
 		and tower.player.camera.position.z >= 0.149
 		and tower.player.camera.position.z < detected_distance - 0.35
-		and tower.player.camera.position.y > 10.89
-		and tower.player.camera.position.y <= 11.020,
+		and tower.player.camera.position.y > TowerDescent3D.CAMERA_HEIGHT_M + 0.17
+		and tower.player.camera.position.y <= TowerDescent3D.CAMERA_HEIGHT_M + 0.301,
 		"下方墙没有把镜头平滑抬升并收回墙内侧，或错误改变了固定X",
 		failures
 	)
@@ -1541,7 +1543,7 @@ func _validate_camera_lower_wall_lift(
 		failures
 	)
 	_expect(
-		absf(float(blocked_snapshot.get("camera_lower_wall_retract_trigger_m", 0.0)) - 3.699625) <= 0.0001
+		absf(float(blocked_snapshot.get("camera_lower_wall_retract_trigger_m", 0.0)) - 4.914455) <= 0.0001
 		and absf(float(blocked_snapshot.get("camera_lower_wall_probe_height_m", 0.0)) - 1.09) <= 0.0001
 		and absf(float(blocked_snapshot.get("camera_lower_wall_probe_start_m", 0.0)) + 0.46) <= 0.0001
 		and absf(float(blocked_snapshot.get("camera_lower_wall_probe_length_m", 0.0)) - 7.47) <= 0.0001,
@@ -1590,8 +1592,8 @@ func _validate_camera_lower_wall_lift(
 		not bool(recovered_snapshot.get("camera_occluded_player", true))
 		and not bool(recovered_snapshot.get("camera_lower_wall_detected", true))
 		and not bool(recovered_snapshot.get("camera_collision_adjusted", true))
-		and absf(tower.player.camera.position.y - 9.993940) <= 0.02
-		and absf(tower.player.camera.position.z - 3.699625) <= 0.03,
+		and absf(tower.player.camera.position.y - 10.262659) <= 0.02
+		and absf(tower.player.camera.position.z - 4.914455) <= 0.03,
 		"下方墙移除后镜头或角色轮廓没有平滑恢复",
 		failures
 	)
@@ -1614,8 +1616,8 @@ func _validate_camera_lower_wall_lift(
 	_expect(
 		not bool(side_snapshot.get("camera_lower_wall_detected", true))
 		and not bool(side_snapshot.get("camera_collision_adjusted", true))
-		and absf(tower.player.camera.position.y - 9.993940) <= 0.02
-		and absf(tower.player.camera.position.z - 3.699625) <= 0.03,
+		and absf(tower.player.camera.position.y - 10.262659) <= 0.02
+		and absf(tower.player.camera.position.z - 4.914455) <= 0.03,
 		"左右墙错误触发了下方墙镜头抬升",
 		failures
 	)
@@ -1634,8 +1636,8 @@ func _validate_camera_lower_wall_lift(
 			not bool(door_snapshot.get("camera_door_bypass_active", true))
 			and not bool(door_snapshot.get("camera_lower_wall_detected", true))
 			and int(door_snapshot.get("camera_near_faded_mesh_count", -1)) == 0
-			and absf(tower.player.camera.position.y - 9.993940) <= 0.01
-			and absf(tower.player.camera.position.z - 3.699625) <= 0.03
+			and absf(tower.player.camera.position.y - 10.262659) <= 0.01
+			and absf(tower.player.camera.position.z - 4.914455) <= 0.03
 			and absf(tower.player.camera.position.x) <= 0.001,
 			"关闭门错误启用了门槛旁路，或改变了固定镜头",
 			failures

@@ -103,7 +103,7 @@ func _ready() -> void:
 	_expect(dungeon.get("_full_map_control") == null, "Full map did not close", failures)
 
 	# 购买制下的满槽语义：目标枪命运槽已满的**星星卡不可购买** —— 卡位置灰、
-	# 点击只给原因、不扣魂、也不关弹窗（旧「二次点击兑魂」转换已随购卡制下线）。
+	# 点击只给原因、不扣金币、也不关弹窗（旧「二次点击兑金币」转换已随购卡制下线）。
 	var instance := player.get_equipped_weapon_instance()
 	instance.fate_upgrades.clear()
 	for index in range(instance.fate_slot_capacity):
@@ -182,6 +182,7 @@ func _ready() -> void:
 	Input.parse_input_event(cancel_event)
 	Input.flush_buffered_events()
 	await get_tree().process_frame
+	await _wait_fate_overlay_closed(dungeon)
 	_expect(
 		not bool(dungeon.get("_door_fate_active")),
 		"ui_cancel did not cancel the fate selection: gamepad B cannot dismiss the overlay",
@@ -191,6 +192,7 @@ func _ready() -> void:
 	# 函数级取消契约（键盘 ESC 与本条走同一入口，保留原断言）。
 	_expect(dungeon.show_reference_fate_overlay_for_test(), "Cannot reopen fate selection for cancellation contract", failures)
 	dungeon.call("_cancel_door_fate_selection")
+	await _wait_fate_overlay_closed(dungeon)
 	_expect(not bool(dungeon.get("_door_fate_active")), "ESC fate cancellation contract did not close selection", failures)
 
 	_expect(dungeon.get("_weapon_panel") == null, "Hidden weapon presentation page was eagerly added to the fixed HUD shell", failures)
@@ -237,6 +239,17 @@ func _wait_fate_cards_flipped(dungeon: Node, failures: Array[String]) -> void:
 		await get_tree().create_timer(0.05).timeout
 		elapsed_ms += 50
 	failures.append("Fate cards did not finish flipping within %d ms" % deadline_ms)
+
+
+## 等退出退场动画完成；退出期间覆盖层仍在树上，不能只等一帧。
+func _wait_fate_overlay_closed(dungeon: Node) -> void:
+	var deadline_ms := 6000
+	var elapsed_ms := 0
+	while elapsed_ms < deadline_ms:
+		if not bool(dungeon.get("_door_fate_active")) and dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null:
+			return
+		await get_tree().create_timer(0.05).timeout
+		elapsed_ms += 50
 
 
 ## 三张卡是否都已翻面（可见面就绪且已解除 disabled）。

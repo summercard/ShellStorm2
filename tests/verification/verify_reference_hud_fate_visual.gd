@@ -2,7 +2,6 @@ extends Node
 
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
 const TOWER_SCENE: PackedScene = preload("res://scenes/TowerDescent3D.tscn")
-const OUTPUT_DIR := "res://outputs/verification"
 
 
 func _ready() -> void:
@@ -44,10 +43,66 @@ func _ready() -> void:
 	_check(int(dungeon.get_hud_weapon_model_snapshot().get("rebuild_count", -1)) == weapon_rebuilds, "HUD weapon model rebuilds on ordinary ammo updates", failures)
 	_check(absf(minimap.size.x - minimap.size.y) <= 2.0 and minimap.size.x <= 225.0, "Tactical minimap is not circular or 80% scale", failures)
 	_check(minimap.get_snapshot().get("enemy_marker_count", 0) == 2, "Minimap enemy dots are not fed by runtime data", failures)
+	# —— 2026-10-15 玩家主界面血条延迟白段（与 Boss 屏条、小怪头顶条同一口径）——
+	# 白段是纯视觉层：真实 HP 立刻落到 `hp_bar.value`，白条随后按统一速度追赶。
+	# 第 18 行已 `set_process(false)` 停掉自动 tick，所以这里全部用固定 delta 手动步进 ——
+	# 靠 `await process_frame` 取样会随机器帧时间浮动，把这条断言变成飘忽用例。
+	var player_hp_bar := hud.find_child("HPBar", true, false) as ProgressBar
+	var delayed_layer := hud.find_child("PlayerHealthBarDelayed", true, false) as ProgressBar
+	_check(player_hp_bar != null, "Player HP bar is missing", failures)
+	_check(delayed_layer != null, "Player HP delayed white layer is missing", failures)
+	if player_hp_bar != null and delayed_layer != null:
+		var full_hp := int(maxf(1.0, player_hp_bar.max_value))
+		_check(
+			delayed_layer.mouse_filter == Control.MOUSE_FILTER_IGNORE
+			and not delayed_layer.show_percentage,
+			"Player delayed HP layer is not a passive overlay",
+			failures,
+		)
+		# 受伤：红条立刻到新血量，白段必须停在此击之前的满血位置。
+		dungeon.call("_on_player_hp_changed", int(round(full_hp * 0.6)), full_hp)
+		var hurt := dungeon.get_player_vitals_bar_snapshot()
+		_check(
+			absf(float(hurt.get("actual_ratio", -1.0)) - 0.6) <= 0.02,
+			"Player HP bar did not drop to the damaged ratio",
+			failures,
+		)
+		_check(
+			float(hurt.get("delayed_ratio", 0.0)) >= 0.99,
+			"Player damage leaves no visible delayed white segment",
+			failures,
+		)
+		# 追赶：只朝真实血量收，且不得越过（越过会在红条左侧露出白）。
+		dungeon.call("_tick_player_health_bar_delay", 0.05)
+		var chasing := float(dungeon.get_player_vitals_bar_snapshot().get("delayed_ratio", 1.0))
+		_check(
+			chasing < float(hurt.get("delayed_ratio", 1.0)) and chasing >= 0.6,
+			"Player delayed white segment does not catch up toward real HP: %.4f" % chasing,
+			failures,
+		)
+		# 治疗/回满：立即对齐，不留假白段。
+		dungeon.call("_on_player_hp_changed", full_hp, full_hp)
+		_check(
+			is_equal_approx(
+				float(dungeon.get_player_vitals_bar_snapshot().get("delayed_ratio", 0.0)), 1.0
+			),
+			"Player healing left a stale white segment",
+			failures,
+		)
+		# 留一次可见白段给截图：这一帧之后不再步进，截图里能直接看到白段。
+		dungeon.call("_on_player_hp_changed", int(round(full_hp * 0.72)), full_hp)
+		await get_tree().process_frame
+		_check(
+			delayed_layer.get_global_rect().size.is_equal_approx(
+				player_hp_bar.get_global_rect().size
+			),
+			"Player delayed HP layer is not exactly stacked on the real bar",
+			failures,
+		)
 	_check(_capture("reference_combat_hud.png"), "Could not capture reference combat HUD", failures)
-	# —— 2026-10-08（`0.2-PLAYER-001` 追记五）：换弹环搬到 HUD 武器图标上 ——
-	# 真源是主人的标注图：红圈**外径 75 px**、**圈心 = 武器图标控件矩形中心**。
-	# 本段逐条量可控件的几何与显隐，再真跑一次换弹验「进度跟武器计时器」与「图标弹一下」。
+	# —— 2026-10-15：换弹环迁到角色投影右下侧，武器图标仍保留弹跳 ——
+	# 独立钉住外径 25 canvas px、角色脚底投影右 34 / 下 10 px，不从实现常量取期望值。
+	# 冻结场景内只手动步进换弹反馈；移动角色与切换相机后完整复位，不推进世界。
 	# 世界空间那一版环的退役由 `verify_3d_reload_state_flow` 的反向钉子管，两边不重叠。
 	var reload_ring := hud.find_child("HudReloadRing", true, false) as HudReloadRing
 	var weapon_icon := hud.find_child("CurrentWeaponModelIcon3D", true, false) as Control
@@ -56,26 +111,24 @@ func _ready() -> void:
 	if reload_ring != null:
 		var ring_snapshot := reload_ring.get_snapshot()
 		_check(
-			absf(float(ring_snapshot.get("outer_diameter_px", 0.0)) - 75.0) <= 0.5,
-			"HUD reload ring is not the annotated 75 px circle: %s" % ring_snapshot.get("outer_diameter_px"),
+			reload_ring.size.is_equal_approx(Vector2(25.0, 25.0))
+			and is_equal_approx(float(ring_snapshot.get("outer_diameter_px", 0.0)), 25.0),
+			"HUD 换弹环外径不是 25 canvas px：%s" % ring_snapshot.get("outer_diameter_px"),
 			failures
 		)
 		_check(not reload_ring.visible, "HUD reload ring shows while nothing is reloading", failures)
-		# 线宽与发光：2026-10-09 主人返工「太粗了 细一点」⇒ 比例由 0.2226 下调到 0.13。
-		# 0.13 的来源是**主人红笔实测**（核心亮带 5 px ÷ 外半径 37.5 = 0.1333），
-		# 所以这里同时钉住主干（4.875 px）与发光（×1.8 = 8.8 px）两条 —— 只钉主干挡不住
-		# "主干细了、发光还铺 20 px"这种"看着仍然粗"的形态，而那正是返工的原始症状。
+		# 外径缩到 25 px 后仍沿用 0.13 线宽比和 1.8 发光倍数：主干 1.625、发光 2.925 px。
+		# 两条均用严格数值断言，防止只缩主干却保留旧的宽发光。
 		var ring_thickness := float(ring_snapshot.get("thickness_px", 0.0))
 		_check(
-			ring_thickness >= 4.0 and ring_thickness <= 5.8,
-			"HUD reload ring stroke is not the annotated red-pen weight (%.3f px, expected ~4.875)"
-			% ring_thickness,
+			is_equal_approx(ring_thickness, 1.625),
+			"HUD 换弹环主干不是 1.625 px：%.3f" % ring_thickness,
 			failures
 		)
 		var ring_glow_width := float(ring_snapshot.get("glow_width_px", 999.0))
 		_check(
-			ring_glow_width <= 10.5,
-			"HUD reload ring glow spreads too wide to read as a thin ring (%.3f px)" % ring_glow_width,
+			is_equal_approx(ring_glow_width, 2.925),
+			"HUD 换弹环发光宽度不是 2.925 px：%.3f" % ring_glow_width,
 			failures
 		)
 		_check(
@@ -84,16 +137,13 @@ func _ready() -> void:
 			% (ring_snapshot.get("glow_color") as Color).a,
 			failures
 		)
-		# 位置是每帧从图标矩形现算的 —— 这里手动推一次 tick（本场景冻结了 dungeon 的 _process）。
+		# 独立从当前视口相机投影角色，再转到环父控件局部坐标；不使用武器图标作为锚点。
+		var ring_camera := dungeon.get_viewport().get_camera_3d()
+		_check(ring_camera != null, "角色侧换弹环缺少当前视口相机", failures)
 		dungeon.call("_tick_hud_reload_feedback", 0.0)
-		if weapon_icon != null:
-			var ring_center := reload_ring.global_position + reload_ring.size * 0.5
-			var icon_center := weapon_icon.get_global_rect().get_center()
-			_check(
-				ring_center.distance_to(icon_center) <= 1.0,
-				"HUD reload ring is not centred on the weapon icon (offset %s)" % (ring_center - icon_center),
-				failures
-			)
+		_check(not reload_ring.visible, "未换弹时手动 tick 意外显示了 HUD 换弹环", failures)
+		if ring_camera != null:
+			_check_hud_reload_ring_projection(reload_ring, dungeon.player, ring_camera, "初始定位", failures)
 		# 弹跳曲线是**纯函数**，逐点断言：起止都精确归 1、峰值落在设计带内、
 		# 回落深度不失控。回落下沿 = `1 − 0.35 × PEAK` = 0.895（回弹感），
 		# 所以下界取 0.85 而不是 0.9 —— 0.9 会把设计好的回弹直接判红。
@@ -112,20 +162,98 @@ func _ready() -> void:
 		)
 		# 真跑一次换弹：环显形（进度 0 = 空环）→ 图标绕中心弹一下再收回 → 进度跟计时器 → 结束即收。
 		var hud_weapon := dungeon.player.weapon
+		var weapon_was_processing := hud_weapon.is_processing()
 		var hud_inventory := dungeon.get("_inventory") as InventoryModule
 		if hud_inventory != null:
 			hud_inventory.add_item(ItemRegistry.get_instance().get_item("item_ammo_pack"), 6)
 		hud_weapon.current_ammo = maxi(0, hud_weapon.magazine_size - 3)
+		# 故意留下过期位置，确保真实开始事件当场重新定位，而非等下一次 tick 才碰巧正确。
+		reload_ring.position = Vector2(-1000.0, -1000.0)
 		if not dungeon.player.request_reload():
 			_check(false, "Cannot start a reload to exercise the HUD reload ring", failures)
 		else:
+			# request_reload 会唤醒武器 process；冻结真实计时器，后续只按固定 delta 手动推进。
+			hud_weapon.set_process(false)
 			var hud_reload_duration := float(dungeon.player.get_reload_snapshot().get("duration", hud_weapon.reload_time))
 			_check(reload_ring.visible, "HUD reload ring did not appear when the reload started", failures)
+			if ring_camera != null:
+				_check_hud_reload_ring_projection(reload_ring, dungeon.player, ring_camera, "真实换弹开始立即定位", failures)
 			_check(
 				is_equal_approx(reload_ring.progress, 0.0),
 				"HUD reload ring did not start as an empty ring: %.3f" % reload_ring.progress,
 				failures
 			)
+			if ring_camera != null:
+				# 相机是玩家子节点时也固定其世界姿态，确保这次移动真的改变屏幕投影。
+				# 以下操作无 await、无世界 tick，结束时恢复完整 global_transform。
+				var player_transform := dungeon.player.global_transform
+				var camera_transform := ring_camera.global_transform
+				var initial_ring_center := reload_ring.position + reload_ring.size * 0.5
+				dungeon.player.global_position += camera_transform.basis.x.normalized() * 2.0
+				ring_camera.global_transform = camera_transform
+				dungeon.call("_tick_hud_reload_feedback", 0.0)
+				_check(reload_ring.visible, "角色移动后正在换弹的环被隐藏", failures)
+				_check_hud_reload_ring_projection(reload_ring, dungeon.player, ring_camera, "角色移动跟随", failures)
+				_check(
+					(reload_ring.position + reload_ring.size * 0.5).distance_to(initial_ring_center) > 1.0,
+					"角色移动后换弹环仍留在原位置",
+					failures
+				)
+				dungeon.player.global_transform = player_transform
+				ring_camera.global_transform = camera_transform
+				dungeon.call("_tick_hud_reload_feedback", 0.0)
+				_check_hud_reload_ring_projection(reload_ring, dungeon.player, ring_camera, "角色移动复位", failures)
+				# 改变当前相机位置：环必须使用新的投影，而非缓存旧相机姿态。
+				ring_camera.global_position += camera_transform.basis.x.normalized() * 2.0
+				dungeon.call("_tick_hud_reload_feedback", 0.0)
+				_check(reload_ring.visible, "相机移动后正在换弹的环被隐藏", failures)
+				_check_hud_reload_ring_projection(reload_ring, dungeon.player, ring_camera, "相机移动跟随", failures)
+				_check(
+					(reload_ring.position + reload_ring.size * 0.5).distance_to(initial_ring_center) > 1.0,
+					"相机移动后换弹环仍使用旧投影",
+					failures
+				)
+				ring_camera.global_transform = camera_transform
+				# 临时新相机不挂在玩家下，位置与原相机不同，防止硬编码 player.camera 蒙混过关。
+				var alternate_camera := Camera3D.new()
+				alternate_camera.projection = ring_camera.projection
+				alternate_camera.keep_aspect = ring_camera.keep_aspect
+				alternate_camera.size = ring_camera.size
+				alternate_camera.fov = ring_camera.fov
+				alternate_camera.near = ring_camera.near
+				alternate_camera.far = ring_camera.far
+				dungeon.add_child(alternate_camera)
+				alternate_camera.global_transform = camera_transform
+				alternate_camera.global_position -= camera_transform.basis.x.normalized() * 3.0
+				alternate_camera.make_current()
+				_check(dungeon.get_viewport().get_camera_3d() == alternate_camera, "临时相机未成为当前视口相机", failures)
+				dungeon.call("_tick_hud_reload_feedback", 0.0)
+				_check(reload_ring.visible, "切换相机后正在换弹的环被隐藏", failures)
+				_check_hud_reload_ring_projection(reload_ring, dungeon.player, alternate_camera, "当前相机切换跟随", failures)
+				_check(
+					(reload_ring.position + reload_ring.size * 0.5).distance_to(initial_ring_center) > 1.0,
+					"切换相机后换弹环仍使用原相机投影",
+					failures
+				)
+				ring_camera.make_current()
+				alternate_camera.free()
+				ring_camera.global_transform = camera_transform
+				dungeon.call("_tick_hud_reload_feedback", 0.0)
+				_check(dungeon.get_viewport().get_camera_3d() == ring_camera, "临时相机测试后未恢复原当前相机", failures)
+				_check_hud_reload_ring_projection(reload_ring, dungeon.player, ring_camera, "相机切换复位", failures)
+				# 相机 +Z 是身后；移动玩家后再次固定子相机世界姿态，避免相机一起跟过去。
+				dungeon.player.global_position = camera_transform.origin + camera_transform.basis.z.normalized() * 2.0
+				ring_camera.global_transform = camera_transform
+				_check(ring_camera.is_position_behind(dungeon.player.global_position), "身后隐藏测试未把角色移到相机后方", failures)
+				dungeon.call("_tick_hud_reload_feedback", 0.0)
+				_check(not reload_ring.visible, "角色在相机身后时换弹环仍可见", failures)
+				_check(hud_weapon.is_reloading(), "角色移到相机身后意外取消了真实换弹", failures)
+				dungeon.player.global_transform = player_transform
+				ring_camera.global_transform = camera_transform
+				dungeon.call("_tick_hud_reload_feedback", 0.0)
+				_check(reload_ring.visible, "角色返回相机前方后换弹环未恢复", failures)
+				_check_hud_reload_ring_projection(reload_ring, dungeon.player, ring_camera, "身后返回恢复", failures)
+				_check(is_equal_approx(reload_ring.progress, 0.0), "投影测试推进了真实换弹进度", failures)
 			var icon_scale_peak := 1.0
 			var icon_scale_low := 99.0
 			var pop_steps := int(ceil(Dungeon3D.HUD_WEAPON_ICON_POP_DURATION / 0.01))
@@ -162,6 +290,24 @@ func _ready() -> void:
 			hud_weapon.call("_process", hud_reload_duration)
 			dungeon.call("_tick_hud_reload_feedback", 0.0)
 			_check(not reload_ring.visible, "HUD reload ring stayed visible after the reload finished", failures)
+			# 第二轮走真实取消 API，不直接伪造 HUD 的结束事件；随后恢复完成换弹时的弹量。
+			var completed_reload_ammo := hud_weapon.current_ammo
+			hud_weapon.current_ammo = maxi(0, hud_weapon.magazine_size - 3)
+			if not dungeon.player.request_reload():
+				_check(false, "无法开始第二轮换弹以验证取消隐藏", failures)
+			else:
+				hud_weapon.set_process(false)
+				_check(reload_ring.visible and hud_weapon.is_reloading(), "取消测试没有进入可见的真实换弹状态", failures)
+				hud_weapon.call("_process", hud_reload_duration * 0.25)
+				_check(reload_ring.visible and reload_ring.progress > 0.0, "取消前未产生可见的换弹进度", failures)
+				_check(hud_weapon.cancel_reload(), "真实 weapon.cancel_reload 未取消换弹", failures)
+				_check(not hud_weapon.is_reloading(), "取消后真实武器仍在换弹", failures)
+				_check(not reload_ring.visible, "真实取消换弹后 HUD 环未立即隐藏", failures)
+				_check(is_equal_approx(reload_ring.progress, 0.0), "真实取消换弹后 HUD 环未清空进度", failures)
+				dungeon.call("_tick_hud_reload_feedback", Dungeon3D.HUD_WEAPON_ICON_POP_DURATION)
+				_check(not reload_ring.visible, "取消后的反馈 tick 重新显示了 HUD 换弹环", failures)
+			hud_weapon.current_ammo = completed_reload_ammo
+			hud_weapon.set_process(weapon_was_processing)
 	dungeon.call("_toggle_full_map")
 	for _frame in 3:
 		await get_tree().process_frame
@@ -192,33 +338,29 @@ func _ready() -> void:
 		var cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
 		var all_text := _collect_label_text(overlay)
 		# 卡面已换成塔罗位图：作用域标签/方位标签/卡名不再由文字承载（图里已有）。
-		# 顶部协议提示、底部信息条与标题按最新视觉需求全部移除。
-		# 标题那条用**反向钉子**：它和下面那行余额说的是同一件事，已整体让位给余额行，
-		# 以后谁把它加回来这条即红（2026-10-14 主人要求）。
+		# 顶部协议提示、底部信息条、标题与顶部本局金币余额行按最新视觉需求全部移除。
+		# 标题与余额行都用**反向钉子**：金币的唯一读数是右下角的 RunLootReadout，
+		# 弹窗内谁把它们加回来这条即红（2026-10-14 / 2026-10-15 主人要求）。
 		_check("购 买 》" not in all_text and "命 运 卡 ·" not in all_text, "Fate purchase overlay reintroduced its removed title", failures)
 		_check("当前信息" not in all_text, "Fate overlay still contains the removed bottom information bar", failures)
 		_check("FATE PROTOCOL / SELECT ONE" not in all_text, "Fate overlay still contains the removed top protocol label", failures)
-		# 购买制的三条可见契约：顶部本局魂余额、卡下价格行、屏幕下方正中的退出按钮。
-		_check("本局魂 ◈" in all_text, "Fate purchase overlay is missing its run-currency balance line", failures)
-		# 余额行必须**接管原标题的那个头部位**：贴屏幕顶、且整行落在卡列上方（不重叠）。
-		var balance_label := overlay.find_child("FateCurrencyBalance", true, false) as Label
-		_check(balance_label != null, "Fate purchase overlay has no balance label node", failures)
-		if balance_label != null:
-			var viewport_height := get_viewport().get_visible_rect().size.y
-			_check(
-				is_equal_approx(balance_label.anchor_top, 0.0)
-				and balance_label.get_global_rect().end.y <= viewport_height * 0.10,
-				"Fate balance line did not move up into the removed title's header slot",
-				failures
-			)
-			var topmost_card_top := INF
-			for card_node in cards:
-				topmost_card_top = minf(topmost_card_top, (card_node as Control).get_global_rect().position.y)
-			_check(
-				balance_label.get_global_rect().end.y <= topmost_card_top,
-				"Fate balance line overlaps the card row instead of sitting above it",
-				failures
-			)
+		# 购买制的可见契约（2026-10-15 修订）：卡下价格行、屏幕下方正中的退出按钮。
+		_check(
+			"本局金币 ◈" not in all_text,
+			"Fate purchase overlay still contains the removed top balance line",
+			failures
+		)
+		_check(
+			overlay.find_child("FateCurrencyBalance", true, false) == null,
+			"Fate purchase overlay still has a balance label node",
+			failures
+		)
+		var loot_readout := dungeon.find_child("RunLootReadout", true, false) as Label
+		_check(
+			loot_readout != null and "金币" in loot_readout.text,
+			"Bottom-right run-currency readout is missing from the HUD",
+			failures
+		)
 		var exit_button := overlay.find_child("FateExitButton", true, false) as Button
 		_check(exit_button != null, "Fate purchase overlay is missing its exit button", failures)
 		if exit_button != null:
@@ -233,7 +375,7 @@ func _ready() -> void:
 			var card_control := card as Control
 			var card_button := card_control as Button
 			_check(bool(card_control.get_meta("tarot_face_ready", false)), "Tarot face did not finish flipping", failures)
-			# 卡下价格行是购买制的唯一价格口径，必须存在且带上魂价。
+			# 卡下价格行是购买制的唯一价格口径，必须存在且带上金币价。
 			var price_label := (card_button.get_meta("tarot_price_label") if card_button.has_meta("tarot_price_label") else null) as Label
 			_check(price_label != null and price_label.text.begins_with("◈ "), "Fate card is missing its price line under the card", failures)
 			_check(int(card_button.get_meta("tarot_price", -1)) > 0, "Fate card has no positive purchase price", failures)
@@ -255,16 +397,21 @@ func _ready() -> void:
 				_check((feedback.get("accent_color") as Color).is_equal_approx(expected_scope_color), "Fate feedback particle color does not match scope color", failures)
 			# 真跑悬停进入/退出，并立即反向切换，确保共享 tween 不留下残余缩放。
 			dungeon.call("_on_reference_fate_card_hover", card_button, true)
-			await get_tree().create_timer(0.1).timeout
-			_check(card_view.scale.x > 1.0, "Fate card hover did not enlarge the card", failures)
+			# 🔴 这里不写固定 `await timer(0.1 / 0.2)`：缩放是 tween，机器被占满时
+			# 同样的真实时间里只跑得出两三帧，固定时长会把「机器慢」误判成
+			# 「tween 有残余」（2026-10-15 实测踩到：同一份代码上一轮通过、本轮红，
+			# 整轮耗时从 2m49s 涨到 12m40s）。改成按真实时间轮询到收敛 ——
+			# 若 tween 真的坏了，轮询会超时，判据强度不变。
+			var hover_enlarged := await _wait_card_scale(card_view, 1.0, "above", 0.6)
+			_check(hover_enlarged, "Fate card hover did not enlarge the card", failures)
 			if card_button.name == "FateChoiceCard_0":
 				await RenderingServer.frame_post_draw
 				_check(_capture("fate_feedback_hover.png"), "Could not capture fate feedback hover", failures)
 			dungeon.call("_on_reference_fate_card_hover", card_button, false)
 			dungeon.call("_on_reference_fate_card_hover", card_button, true)
 			dungeon.call("_on_reference_fate_card_hover", card_button, false)
-			await get_tree().create_timer(0.2).timeout
-			_check(card_view.scale.is_equal_approx(Vector2.ONE), "Fate card hover tween did not recover after rapid enter/exit", failures)
+			var hover_recovered := await _wait_card_scale(card_view, 1.0, "equal", 1.2)
+			_check(hover_recovered, "Fate card hover tween did not recover after rapid enter/exit", failures)
 			_check(card_control.size.x >= 250.0 and card_control.size.y >= 420.0, "Fate cards are too small to dominate the choice screen", failures)
 			_check(card_control.size.x <= 300.0 and card_control.size.y <= 500.0, "Fate card exceeds its 80%-scaled layout budget", failures)
 			_check_fate_card_art(card as Button, failures)
@@ -356,6 +503,27 @@ func _ready() -> void:
 				"Purchased card is not scaled to %.2f" % Dungeon3D.FATE_PURCHASED_CARD_SCALE,
 				failures
 			)
+			# 卡背**半透明**、卡下文字**不跟着淡**（业主 2026-10-15：翻过去的卡做半透明，更淡一些）。
+			# 两条一起钉：只淡卡牌本身，文字仍是这张卡唯一被读到的事实。
+			var purchase_back_canvas := purchase_back as CanvasItem
+			_check(
+				purchase_back_canvas != null
+				and purchase_back_canvas.modulate.a < 1.0
+				and is_equal_approx(purchase_back_canvas.modulate.a, Dungeon3D.FATE_PURCHASED_CARD_ALPHA),
+				"Purchased card back is not translucent (alpha %s)"
+				% [purchase_back_canvas.modulate.a if purchase_back_canvas != null else 1.0],
+				failures
+			)
+			var purchase_caption := (
+				purchase_button.get_meta("tarot_caption_label")
+				if purchase_button.has_meta("tarot_caption_label")
+				else null
+			) as Label
+			_check(
+				purchase_caption != null and is_equal_approx(purchase_caption.modulate.a, 1.0),
+				"Purchased card caption went translucent together with the card",
+				failures
+			)
 			# 悬停在一张已购买的卡上：不得离开它的 70% 基准缩放。
 			dungeon.call("_on_reference_fate_card_hover", purchase_button, true)
 			await get_tree().create_timer(0.28).timeout
@@ -367,7 +535,33 @@ func _ready() -> void:
 			)
 			await RenderingServer.frame_post_draw
 			_check(_capture("fate_purchased_card_back.png"), "Could not capture the flipped-back purchased card", failures)
-	dungeon.call("_close_door_fate_overlay")
+			# 金币不足时的完整表现证据（2026-10-15）：余额行闪红 + 卡片抖动 + 卡下写出「还差 M」。
+			# 三条在同一帧里拍到，评审一眼就能看出反馈落在哪几个位置。
+			GameManager.spend_currency(GameManager.currency)
+			dungeon.call("_refresh_door_fate_prices")
+			var reject_index := -1
+			for slot in range(3):
+				if str(dungeon.call("_fate_card_block_reason", slot)) == "insufficient":
+					reject_index = slot
+					break
+			_check(reject_index >= 0, "No unaffordable card available to capture the rejection feedback", failures)
+			if reject_index >= 0:
+				var reject_button := purchase_overlay.find_child("FateChoiceCard_%d" % reject_index, true, false) as Button
+				if reject_button != null:
+					dungeon.call("_on_reference_fate_card_pressed", reject_button, reject_index)
+					await get_tree().create_timer(0.09).timeout
+					await RenderingServer.frame_post_draw
+					_check(
+						_capture("fate_reject_feedback.png"),
+						"Could not capture the fate rejection feedback",
+						failures
+					)
+					_check(
+						dungeon.get("_fate_balance_warn_tween") != null,
+						"Rejection feedback did not warn the run-currency balance line",
+						failures
+					)
+	await _check_fate_exit_visual(dungeon, failures)
 
 	# 减少动效同样保留逆位框/图案与正向文字。
 	ProjectSettings.set_setting("accessibility/reduce_motion", true)
@@ -401,12 +595,39 @@ func _ready() -> void:
 	_check(_capture("reference_tower_hud_compact.png"), "Could not capture compact tower HUD", failures)
 
 	if failures.is_empty():
-		print("REFERENCE_HUD_FATE_VISUAL_OK: reversed frames/ornaments stay inverted, all face text stays upright; normal/reduced motion and three entry points verified; reload ring sits on the 75 px annotated circle centred on the weapon icon and the icon pops")
+		print("REFERENCE_HUD_FATE_VISUAL_OK: 逆位框与装饰保持倒置、文字正向；常规/减少动效与三入口已验证；换弹环外径 25 canvas px、主干 1.625 px、发光 2.925 px，角色投影右 34/下 10 px，开始立即定位、角色移动与当前相机变化/切换跟随、身后隐藏及返回恢复、真实进度 0→0.5→完成隐藏和取消隐藏、武器图标弹跳已验证")
 		get_tree().quit(0)
 		return
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+## 期望值由测试独立计算：当前相机投影 → 父控件局部坐标 → 固定右 34 / 下 10 canvas px。
+func _check_hud_reload_ring_projection(
+	ring: HudReloadRing,
+	player: Node3D,
+	camera: Camera3D,
+	stage: String,
+	failures: Array[String],
+) -> void:
+	var parent := ring.get_parent() as Control
+	_check(parent != null, "%s：HUD 换弹环父节点不是 Control" % stage, failures)
+	if parent == null:
+		return
+	_check(not camera.is_position_behind(player.global_position), "%s：角色不在相机前方" % stage, failures)
+	var projected_position := camera.unproject_position(player.global_position)
+	var expected_center := (
+		parent.get_global_transform_with_canvas().affine_inverse() * projected_position
+		+ Vector2(34.0, 10.0)
+	)
+	var actual_center := ring.position + ring.size * 0.5
+	_check(
+		actual_center.distance_to(expected_center) <= 0.01,
+		"%s：换弹环未对齐角色投影右 34 / 下 10 canvas px（实际 %s，期望 %s）"
+		% [stage, actual_center, expected_center],
+		failures
+	)
 
 
 ## 图卡模式契约：每张卡必须有**卡面位图**，且贴图路径必须与这张牌的身份对得上
@@ -513,10 +734,77 @@ func _check_simple_tarot_entries(failures: Array[String]) -> void:
 	divination.free()
 
 
+## 等一张卡的缩放满足条件 —— **按真实时间轮询**，而不是 `await timer(固定秒数)`。
+##
+## 为什么要这样：缩放是 tween，机器被占满时同样长的真实时间里只跑得出两三帧，
+## 固定时长会把「机器慢」误判成「tween 有残余」。轮询到收敛不放松判据 ——
+## tween 若真的坏了就永远等不到，照样超时报红。
+##
+## `mode`：`"equal"` 等收敛到 `target`；`"above"` 等超过 `target`。
+func _wait_card_scale(view: Control, target: float, mode := "equal", timeout := 1.2) -> bool:
+	var elapsed := 0.0
+	while elapsed < timeout:
+		if view == null or not is_instance_valid(view):
+			return false
+		if _card_scale_matches(view, target, mode):
+			return true
+		await get_tree().process_frame
+		elapsed += get_process_delta_time()
+	return view != null and is_instance_valid(view) and _card_scale_matches(view, target, mode)
+
+
+func _card_scale_matches(view: Control, target: float, mode: String) -> bool:
+	if mode == "above":
+		return view.scale.x > target and view.scale.y > target
+	return is_equal_approx(view.scale.x, target) and is_equal_approx(view.scale.y, target)
+
+
+## 暂停同一条真实退场 tween 并逐段推进，保证截图不会错过 0.42 秒动画的中间态。
+## 图片来自游戏 viewport，不是示意图；结束仍由 tween 的 finished 时间轴回收弹窗。
+func _check_fate_exit_visual(dungeon: Dungeon3D, failures: Array[String]) -> void:
+	var overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
+	if overlay == null:
+		_check(false, "Exit animation visual overlay is missing", failures)
+		return
+	var cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
+	await RenderingServer.frame_post_draw
+	_check(_capture("fate_exit_before.png"), "Could not capture fate exit before", failures)
+	var exit_button := overlay.find_child("FateExitButton", true, false) as Button
+	exit_button.pressed.emit()
+	_check(bool(dungeon.get("_door_fate_active")) and bool(dungeon.get("_fate_overlay_closing")), "Exit hard-cut the overlay instead of retaining its modal lock", failures)
+	var exit_tween := overlay.get_meta("fate_exit_tween") as Tween
+	exit_tween.pause()
+	exit_tween.custom_step(Dungeon3D.FATE_OVERLAY_EXIT_DURATION * 0.30)
+	for card_node in cards:
+		var button := card_node as Button
+		var view := button.get_meta("fate_feedback_view") as Control
+		_check(button.disabled and button.scale.x < 0.6 and view.modulate.a < 1.0, "A card did not fold and fade in the first exit phase", failures)
+	await RenderingServer.frame_post_draw
+	_check(_capture("fate_exit_fold.png"), "Could not capture fate exit folding", failures)
+	exit_tween.custom_step(Dungeon3D.FATE_OVERLAY_EXIT_DURATION * 0.25)
+	for card_node in cards:
+		var button := card_node as Button
+		_check(str(button.get_meta("tarot_face_side", "")) == "back", "A card did not turn to the back on exit", failures)
+	await RenderingServer.frame_post_draw
+	_check(_capture("fate_exit_back_shrink.png"), "Could not capture fate exit back shrink", failures)
+	exit_tween.custom_step(Dungeon3D.FATE_OVERLAY_EXIT_DURATION * 0.25)
+	await RenderingServer.frame_post_draw
+	_check(_capture("fate_exit_fade.png"), "Could not capture fate exit fade", failures)
+	exit_tween.custom_step(Dungeon3D.FATE_OVERLAY_EXIT_DURATION)
+	_check(not bool(dungeon.get("_door_fate_active")) and dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null, "Exit animation finished without cleaning up its overlay", failures)
+	await RenderingServer.frame_post_draw
+	_check(_capture("fate_exit_after.png"), "Could not capture fate exit after", failures)
+	# 减少动效分支仍能退出，不留下 locked/closing 或旧节点。
+	ProjectSettings.set_setting("accessibility/reduce_motion", true)
+	_check(dungeon.show_reference_fate_overlay_for_test(), "Cannot reopen reduced-motion exit offer", failures)
+	dungeon.call("_cancel_door_fate_selection")
+	_check(not bool(dungeon.get("_fate_overlay_closing")) and dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null, "Reduced-motion exit left an overlay behind", failures)
+	ProjectSettings.set_setting("accessibility/reduce_motion", false)
+
+
 func _capture(file_name: String) -> bool:
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_DIR))
 	var image := get_viewport().get_texture().get_image()
-	return image != null and image.save_png("%s/%s" % [OUTPUT_DIR, file_name]) == OK
+	return image != null and image.save_png(VerificationOutput.path(file_name)) == OK
 
 
 func _collect_label_text(root: Node) -> String:

@@ -47,6 +47,7 @@ func _ready() -> void:
 		check(snapshot.active_grip_hand_count == (1 if family=="sidearm" else 2), "hand count " + family)
 		support_errors[family] = snapshot.weapon_support_error_m
 		check(snapshot.weapon_support_error_m < 0.02 and snapshot.weapon_support_error_m >= 0.0, "representative support " + family + " " + str(snapshot.weapon_support_error_m))
+		await verify_idle_cycle(player, camera, family + "_idle", visual)
 		if visual:
 			camera.position=Vector3(0,3,-2.2);camera.look_at(Vector3(0,0.6,0))
 			await get_tree().process_frame
@@ -74,7 +75,9 @@ func _ready() -> void:
 						var yaw_low := INF
 						var yaw_high := -INF
 						var motion: CharacterMotionLibrary3D = player.avatar.get("_authored_motion")
-						var duration := 1.0 if speed < 3.2 else 0.8
+						var cache: Dictionary = motion.get("_cache")
+						var duration: float = cache.clips[expected].duration
+						check(is_equal_approx(duration, .92 if speed < 3.2 else .7), "faster authored cycle " + expected)
 						if visual and speed == 5.0:
 							camera.position = Vector3(0, 10.269009, 4.787671) + Vector3(0, .55, -.10)
 							camera.look_at(Vector3(0, .55, -.10)); camera.size = 1.8
@@ -93,8 +96,8 @@ func _ready() -> void:
 								await get_tree().process_frame
 								await RenderingServer.frame_post_draw
 								check(get_viewport().get_texture().get_image().save_png(OUT + "jog/" + expected + "/%03d.png" % sample_id) == OK, "jog game camera capture")
-						check(head_high-head_low > (.032 if speed >= 3.2 else .016), "readable head bounce " + expected)
-						check(rad_to_deg(yaw_high-yaw_low) > (10.0 if speed >= 3.2 else 5.8), "axial torso twist " + expected)
+						check(head_high-head_low > (.060 if speed >= 3.2 else .028), "readable head bounce " + expected)
+						check(rad_to_deg(yaw_high-yaw_low) > (18.0 if speed >= 3.2 else 9.5), "axial torso twist " + expected)
 					if visual and yaw==0.0 and speed==5.0:
 						camera.position=Vector3(3.6,1.2,0) if direction in ["forward","backward"] else Vector3(0,1.25,-3.6)
 						camera.look_at(Vector3(0,0.65,0))
@@ -104,7 +107,7 @@ func _ready() -> void:
 						if direction == "strafe_left":
 							DirAccess.make_dir_recursive_absolute(OUT+family)
 							for frame in range(20):
-								player.avatar.call("_process", 0.8 / 1.3 / 20.0)
+								player.avatar.call("_process", .7 / float(snapshot.motion_playback_rate) / 20.0)
 								await get_tree().process_frame
 								await RenderingServer.frame_post_draw
 								check(get_viewport().get_texture().get_image().save_png(OUT+family+"/%03d.png"%frame)==OK,"animation frame")
@@ -115,7 +118,13 @@ func _ready() -> void:
 		player.set("_presentation_state","idle");player.avatar.call("_process",0.3)
 		support_errors[gun]=player.avatar.get_component_snapshot().weapon_support_error_m
 	# No weapon: read state normally, then explicitly detach its mount for this probe.
-	player.weapon.reparent(self); player.set("_presentation_state","moving")
+	player.weapon.reparent(self)
+	player.weapon.hide()
+	player.aim_yaw = 0.0; player.avatar.visual_root.rotation.y = 0.0
+	player.set("_presentation_state", "idle"); player.velocity = Vector3.ZERO
+	player.avatar.call("_process", .3)
+	await verify_idle_cycle(player, camera, "idle", visual)
+	player.set("_presentation_state","moving")
 	for direction: String in directions:
 		player.velocity=directions[direction]*2.0;player.aim_yaw=0.0;player.avatar.visual_root.rotation.y=0.0
 		player.avatar.call("_process",0.3)
@@ -140,3 +149,35 @@ func _ready() -> void:
 	else:
 		for failure in failures:push_error(failure)
 		get_tree().quit(1)
+
+func verify_idle_cycle(player: Player3D, camera: Camera3D, clip: String, visual: bool) -> void:
+	var motion: CharacterMotionLibrary3D = player.avatar.get("_authored_motion")
+	var cache: Dictionary = motion.get("_cache")
+	var duration: float = cache.clips[clip].duration
+	var low := Vector2(INF, INF)
+	var high := Vector2(-INF, -INF)
+	var foot_l := player.avatar.foot_l.transform
+	var foot_r := player.avatar.foot_r.transform
+	check(is_equal_approx(motion.playback_rate, 1.25), "user idle multiplier retained " + clip)
+	check(duration <= 3.0, "shorter idle cycle " + clip)
+	if visual:
+		camera.position = Vector3(0, 3.2, 2.7)
+		camera.look_at(Vector3(0, .65, 0)); camera.size = 1.8
+		DirAccess.make_dir_recursive_absolute(OUT + "idle/" + clip)
+	for i in range(33):
+		motion.set("_time", duration * float(i) / 32.0)
+		player.avatar.call("_process", 0.0)
+		low.x = minf(low.x, player.avatar.head.position.y)
+		high.x = maxf(high.x, player.avatar.head.position.y)
+		low.y = minf(low.y, player.avatar.body.rotation.y)
+		high.y = maxf(high.y, player.avatar.body.rotation.y)
+		check(player.avatar.foot_l.transform.is_equal_approx(foot_l) and player.avatar.foot_r.transform.is_equal_approx(foot_r), "idle feet planted " + clip)
+		if clip != "idle":
+			var snap := player.avatar.get_component_snapshot()
+			check(snap.right_hand_palm_to_socket_global_distance < .001 and snap.weapon_support_error_m < .02, "idle full cycle grip " + clip)
+		if visual and i < 32:
+			await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+			check(get_viewport().get_texture().get_image().save_png(OUT + "idle/" + clip + "/%03d.png" % i) == OK, "idle frame")
+	check(high.x-low.x > .018, "idle head bounce " + clip)
+	check(rad_to_deg(high.y-low.y) > 7.5, "idle torso rotation " + clip)

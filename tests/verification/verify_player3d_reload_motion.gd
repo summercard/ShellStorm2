@@ -80,7 +80,9 @@ func _ready() -> void:
 			await advance(.05,true)
 			gun_travel=maxf(gun_travel,gun_start.origin.distance_to(player.avatar.weapon_socket.position))
 			gun_rotation=maxf(gun_rotation,gun_start.basis.get_rotation_quaternion().angle_to(player.avatar.weapon_socket.quaternion))
-			if family=="machinegun":
+			# After completion the authored idle may twist/shift again. Only the
+			# service overlay owns the fixed-depth reload requirement.
+			if family=="machinegun" and player.is_reloading():
 				check(absf(player.avatar.weapon_socket.position.z-gun_start.origin.z)<.001,"machinegun stays close without forward translation")
 		if family in ["longgun","machinegun"]:
 			check(gun_travel>.20,"visible gun displacement during reload")

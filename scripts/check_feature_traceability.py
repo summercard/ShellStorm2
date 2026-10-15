@@ -115,8 +115,8 @@ def check(root: Path) -> dict:
         issues.append(f"Features missing from registry: {missing}")
     if extra:
         issues.append(f"Registry features absent from MODULE_INDEX: {extra}")
-    if len(module_rows) != 37:
-        issues.append(f"Expected 37 MODULE_INDEX features, got {len(module_rows)}")
+    if len(module_rows) != 38:
+        issues.append(f"Expected 38 MODULE_INDEX features, got {len(module_rows)}")
 
     return {
         "module_index_features": len(module_rows),
@@ -133,4 +133,4 @@ if __name__ == "__main__":
     if result["issues"]:
         print(f"FEATURE_TRACEABILITY_FAILED issues={len(result['issues'])}")
         raise SystemExit(1)
-    print("FEATURE_TRACEABILITY_OK features=37")
+    print(f"FEATURE_TRACEABILITY_OK features={result['registry_features']}")

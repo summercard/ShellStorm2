@@ -100,7 +100,7 @@ func _run() -> void:
 		player.current_hp = 10
 		hit(100)
 		check(player.current_hp == (25 if reversed else 1), "审判回血/保命")
-		check(GameManager.currency == (150 if reversed else 200), "审判扣魂")
+		check(GameManager.currency == (150 if reversed else 200), "审判扣金币")
 		check(int(player.get_character_fate_snapshot()["last_stand_charges"]) == 0, "审判一次消费")
 		reset()
 		apply("fate_moon_room_heal", reversed)
@@ -153,7 +153,7 @@ func _run() -> void:
 	GameManager.currency = 49
 	player.current_hp = 10
 	hit(100)
-	check(player.current_hp == 0 and GameManager.currency == 49 and player.get_character_fate_snapshot()["last_stand_charges"] == 1, "不足魂不白送救助不消费牌")
+	check(player.current_hp == 0 and GameManager.currency == 49 and player.get_character_fate_snapshot()["last_stand_charges"] == 1, "不足金币不白送救助不消费牌")
 	reset()
 	var trigger := MapFateTriggers.new()
 	add_child(trigger)
@@ -171,7 +171,7 @@ func _run() -> void:
 	var money_before := GameManager.currency
 	var granted := FateCardGameBridge.retry_pending_character_reward()
 	check(bool(granted.get("success", false)), "愚者奖励正式Bridge成功")
-	check(player.get_equipped_weapon_instance().fate_upgrades.size() == slots_before + 1 and GameManager.currency == money_before - 30, "愚者真实占槽扣魂")
+	check(player.get_equipped_weapon_instance().fate_upgrades.size() == slots_before + 1 and GameManager.currency == money_before - 30, "愚者真实占槽扣金币")
 	for index in range(11):
 		trigger._on_kill_recorded()
 	check(int((player.get_character_fate_snapshot()["kill_rules"] as Array)[0]["kills"]) == 20, "愚者每十杀持续计数")
@@ -189,7 +189,7 @@ func _run() -> void:
 	var previous_currency := GameManager.currency
 	FateCardGameBridge._pending_character_rewards.append({"card": card("fate_gun_on_gun"), "currency_cost": 30})
 	var failed_reward := FateCardGameBridge.retry_pending_character_reward()
-	check(not bool(failed_reward["success"]) and GameManager.currency == previous_currency and FateCardGameBridge.get_pending_character_rewards().size() == 1, "愚者来源缺失保留固定牌且退魂")
+	check(not bool(failed_reward["success"]) and GameManager.currency == previous_currency and FateCardGameBridge.get_pending_character_rewards().size() == 1, "愚者来源缺失保留固定牌且退金币")
 	reset()
 	apply("fate_moon_power", true)
 	var first_tree := player.weapon_tree

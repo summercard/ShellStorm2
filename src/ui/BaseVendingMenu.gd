@@ -98,7 +98,7 @@ func _build_interface() -> void:
 
 	_status_label = Label.new()
 	_status_label.custom_minimum_size.y = 38
-	_status_label.text = "请选择商品。购买默认进入随身背包，空间不足时不会扣除魂。"
+	_status_label.text = "请选择商品。购买默认进入随身背包，空间不足时不会扣除金币。"
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_status_label.add_theme_color_override("font_color", Color(0.68, 0.86, 0.92))
@@ -138,7 +138,7 @@ func _make_column(title_text: String, hint_text: String) -> PanelContainer:
 
 
 func _refresh() -> void:
-	_points_label.text = "购买货币｜魂  ◈ %d" % BaseManager.get_extraction_points()
+	_points_label.text = "购买货币｜金币  ◈ %d" % BaseManager.get_extraction_points()
 	_capacity_label.text = (
 		"当前背包(I)  %d / %d" % [_inventory_module.get_used_slots(), _inventory_module.get_capacity()]
 		if _inventory_module != null
@@ -301,7 +301,7 @@ func _on_sell_pressed(instance_id: String, item: Dictionary, source_owner: Strin
 	if bool(result.get("success", false)):
 		if AudioManager != null:
 			AudioManager.play_sfx("merchant_purchase", -3.0)
-		_status_label.text = "出售成功：%s，获得 %d 魂。" % [str(item.get("name", "物品")), int(result.get("value", 0))]
+		_status_label.text = "出售成功：%s，获得 %d 金币。" % [str(item.get("name", "物品")), int(result.get("value", 0))]
 	else:
 		if AudioManager != null:
 			AudioManager.play_sfx("ui_error", -4.0)

@@ -61,7 +61,7 @@ func _ready() -> void:
 		await get_tree().process_frame
 		var killed_drops := _ground_items(room)
 		if killed_drops.size() != after.size() + 2:
-			failures.append("击杀没有按一个实物和一个魂球延迟落地")
+			failures.append("击杀没有按一个实物和一个金币球延迟落地")
 		else:
 			var found_ammo := false
 			var found_currency := false
@@ -72,7 +72,7 @@ func _ready() -> void:
 				if str(dropped.get("id", "")) == "__currency__" and int(dropped.get("count", 0)) == 15:
 					found_currency = true
 			if not found_ammo or not found_currency:
-				failures.append("击杀 grant 的实物或1.5倍房间魂未原样落地")
+				failures.append("击杀 grant 的实物或1.5倍房间金币未原样落地")
 		enemy.queue_free()
 
 		# 关卡表按行独立判定时，一杀可以同时命中多件实物；这里走完整的
@@ -106,7 +106,7 @@ func _ready() -> void:
 		await get_tree().process_frame
 		var table_drops := _ground_items(room)
 		if table_drops.size() != killed_drops.size() + 3:
-			failures.append("表驱动击杀没有同时落地两件实物和一个魂球")
+			failures.append("表驱动击杀没有同时落地两件实物和一个金币球")
 		else:
 			var table_ids: Array[String] = []
 			var physical_positions: Array[Vector3] = []
@@ -120,9 +120,11 @@ func _ready() -> void:
 				failures.append("表驱动击杀的地面物内容不正确：%s" % str(table_ids))
 			if physical_positions.size() == 2 and physical_positions[0].distance_to(physical_positions[1]) < 0.1:
 				failures.append("表驱动的多件实物叠在同一落点，没有按索引散开")
-			# 地面名牌策略（业主 2026-10-10「把掉落的金币上面的文字『魂』隐藏掉」）：
-			# 货币（__currency__）默认不挂名牌，实物仍须挂。期望值由真源
-			# GroundLootPickup3D.should_show_name_label_for() 现算 ⇒ 改策略只改一处。
+			# 地面名牌策略：期望值一律由真源 GroundLootPickup3D.should_show_name_label_for()
+			# 现算 ⇒ 改策略只改那一处常量，这里不复制任何判定。
+			# （历史：2026-10-10 业主曾要求「把掉落的金币上面的文字『魂』隐藏掉」——当时货币
+			#  显示名是「魂」，2026-10-15 已改名「金币」；同日业主又要求把名称加回来，
+			#  现行策略恢复为 all，货币同样挂名牌。）
 			for drop in table_drops:
 				var loot := drop as GroundLootPickup3D
 				var snapshot := loot.get_model_snapshot()

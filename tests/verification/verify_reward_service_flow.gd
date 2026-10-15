@@ -95,8 +95,8 @@ func _case_monster_drop_table() -> void:
 		else:
 			physical += 1
 	_expect(physical == 2, "关卡表独立判定命中两件时必须保留 2 个实物，实际 %d" % physical)
-	_expect(currency == 1, "关卡表的魂公式应产出并合并为 1 个魂球")
-	_expect(currency_amount == 3, "floor=1 时魂公式 2+floor*1 应等于 3")
+	_expect(currency == 1, "关卡表的金币公式应产出并合并为 1 个金币球")
+	_expect(currency_amount == 3, "floor=1 时金币公式 2+floor*1 应等于 3")
 	var room_override := coordinator.resolve_kill({"kill": {"entries": [{"kind": "item", "item_id": "item_ammo_pack", "count": 9}]}}, {
 		"enemy_type": "ranged_caster", "floor": 1, "loot_table": "loot_floor_1_2",
 	}, "drop_table:room_override")
@@ -213,7 +213,7 @@ func _case_runtime_coordinator() -> void:
 	_expect(bool(kill.get("ok", false)), "怪物击杀必须通过统一覆盖链解析：%s" % str(kill.get("errors", [])))
 	_expect(
 		(_SINK.materialize_ground_items(kill.get("grants", [])) as Array).any(func(item): return bool((item as Dictionary).get("is_currency", false))),
-		"怪物击杀统一解析必须保留地面魂奖励"
+		"怪物击杀统一解析必须保留地面金币奖励"
 	)
 	var elite_kill := coordinator.resolve_kill({}, {
 		"enemy_type": "melee_chaser", "floor": 2, "loot_table": "loot_floor_1_2",
@@ -228,7 +228,7 @@ func _case_runtime_coordinator() -> void:
 		else:
 			physical_count += 1
 	_expect(physical_count == 1, "精英击杀必须保持一个非货币地面实体")
-	_expect(currency_count == 1, "基础魂与精英悬赏必须合并为一个地面魂球")
+	_expect(currency_count == 1, "基础金币与精英悬赏必须合并为一个地面金币球")
 
 
 func _case_sink_delivery_confirmation() -> void:

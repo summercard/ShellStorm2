@@ -10,9 +10,10 @@ var _visual: Node3D
 var _label: Label3D
 
 const PICKUP_ANIMATION_DURATION := 0.32
-## 是否挂「房间钥匙」头顶名牌。业主 2026-10-10「不要显示字」⇒ false。
-## 与 `GroundLootPickup3D.LABEL_DISPLAY_POLICY = "none"` 同一口径：地上的掉落物一律不带文字。
-const SHOW_NAME_LABEL := false
+## 是否挂「房间钥匙」头顶名牌。业主 2026-10-15「掉落在地上的物品头上的物品名称，加回来」⇒ true。
+## 与 `GroundLootPickup3D.LABEL_DISPLAY_POLICY = "all"` 同一口径：地上掉落物一律带名称。
+## （2026-10-10 ~ 2026-10-15 期间为 false —— 当时业主口径是「不要显示字」。）
+const SHOW_NAME_LABEL := true
 
 
 func configure(p_room_id: String) -> void:
@@ -103,10 +104,10 @@ func _build_visual() -> void:
 	collision.position.y = 0.72
 	collision.shape = shape
 	add_child(collision)
-	# 业主 2026-10-10「不要显示字」：钥匙与掉落物同一口径 —— **不挂名牌**。
-	# 钥匙本身有独特造型（金色钥匙 + 自发光）与交互圆点，去掉文字不影响识别。
-	# 要恢复只需把这个开关改回 true（下面的设置原样保留，含"不画描边"的结论：
-	# outline_size 8 相对 font_size 34 太粗、相邻字黑边连成一片会看着像黑框）。
+	# 业主 2026-10-15：名称加回来，与地面掉落物同一口径 —— 挂名牌。
+	# （2026-10-10 ~ 2026-10-15 曾按「不要显示字」整块不创建；开关已置回 true。）
+	# 参数沿用当年调好的值，含「不画描边」的结论：
+	# outline_size 8 相对 font_size 34 太粗、相邻字黑边连成一片会看着像黑框 ⇒ 取 0。
 	if SHOW_NAME_LABEL:
 		_label = Label3D.new()
 		_label.name = "KeyLabel"

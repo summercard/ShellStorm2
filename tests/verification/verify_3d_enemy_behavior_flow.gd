@@ -204,6 +204,27 @@ func _verify_damage_number_presentation(failures: Array[String]) -> void:
 		failures.append("3D damage number font sizes are not the requested 150%% scale")
 
 
+## **全部怪种**的碰撞体期望值，硬编码在验收侧（不引用被测表 —— 否则表被改小/改大都会
+## 被「自己和自己相等」放过）。
+##
+## 2026-10-15 业主：「胖子僵尸、小僵尸、警察僵尸的碰撞盒子，高度不调整，直径缩小到现在的 80%」
+## ⇒ 只有僵尸三兄弟的 `radius` ×0.8、`height` 逐字不动；**其余怪种必须一格不变**。
+## 旧值（缩小前）：fat 1.10 / melee 1.02 / ranged 1.10。
+##
+## ⚠ 反向对照**不能**写成「非僵尸的半径 ≠ 0.88」：`exploder` 本来就是 0.88，那样会误报。
+## 必须逐种钉死具体数值。
+const EXPECTED_COLLISION_PROFILES := {
+	"fat_zombie03": {"radius": 0.88, "height": 3.142857},
+	"melee_chaser": {"radius": 0.816, "height": 1.30},
+	"ranged_caster": {"radius": 0.88, "height": 1.62},
+	"summoner": {"radius": 1.22, "height": 1.82},
+	"shielded": {"radius": 0.98, "height": 1.42},
+	"exploder": {"radius": 0.88, "height": 1.28},
+	"ambusher": {"radius": 1.22, "height": 0.86},
+	"boss": {"radius": 1.92, "height": 2.30},
+}
+
+
 func _verify_hit_profiles(failures: Array[String]) -> void:
 	for kind in EnemyAvatar3D.FOOTPRINT_PROFILES.keys():
 		var enemy := _make_enemy(str(kind), Vector3(60 + failures.size(), 0, 60))
@@ -215,6 +236,35 @@ func _verify_hit_profiles(failures: Array[String]) -> void:
 			failures.append("Hit radius mismatch: %s" % kind)
 		if not is_equal_approx(float(collision.get("height", 0.0)), float(visual.get("height", -1.0))):
 			failures.append("Hit height mismatch: %s" % kind)
+		# 逐种钉死半径与高度：僵尸三兄弟是「半径 ×0.8、高度不动」的定档值，
+		# 其余怪种是「一格都不许动」的既有口径。两侧各有各的失败信息，便于定位是谁漂了。
+		var wanted: Variant = EXPECTED_COLLISION_PROFILES.get(str(kind))
+		if wanted is Dictionary:
+			var expected := wanted as Dictionary
+			var zombie := Enemy3D.ZOMBIE_KINDS.has(str(kind))
+			if not is_equal_approx(float(collision.get("radius", -1.0)), float(expected["radius"])):
+				failures.append(
+					"%s collision radius must be %.4f, got %.4f (%s)"
+					% [
+						"Zombie" if zombie else "Non-zombie",
+						float(expected["radius"]),
+						float(collision.get("radius", -1.0)),
+						kind,
+					]
+				)
+			if not is_equal_approx(float(collision.get("height", -1.0)), float(expected["height"])):
+				failures.append(
+					"%s collision height must stay %.4f, got %.4f (%s)"
+					% [
+						"Zombie" if zombie else "Non-zombie",
+						float(expected["height"]),
+						float(collision.get("height", -1.0)),
+						kind,
+					]
+				)
+		else:
+			# 表里有新怪种但期望值没跟进 ⇒ 显式报出来，别让它悄悄漏测
+			failures.append("No collision expectation recorded for new enemy kind: %s" % kind)
 		enemy.queue_free()
 		await get_tree().process_frame
 

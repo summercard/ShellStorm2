@@ -8,11 +8,15 @@ signal item_added(slot: int, item: Dictionary)
 signal item_removed(slot: int)
 signal capacity_changed(current: int, maximum: int)
 
-const DEFAULT_CAPACITY: int = 12  # 默认12格
+const DEFAULT_CAPACITY: int = 24  # 默认6列×4行，共24个棋盘格
+const GRID_COLUMNS: int = 6
 
 class InventorySlot:
 	var item: Dictionary = {}
 	var count: int = 0
+	## 棋盘锚点。slot 索引仍保留为锚点线性索引，兼容旧存档与旧 UI 命令。
+	var grid_position := Vector2i(-1, -1)
+	var rotation_quarters: int = 0
 	
 	func is_empty() -> bool:
 		return item.is_empty() or count <= 0
@@ -20,10 +24,20 @@ class InventorySlot:
 	func clear() -> void:
 		item.clear()
 		count = 0
+		grid_position = Vector2i(-1, -1)
+		rotation_quarters = 0
 	
 	func set_item(itm: Dictionary, n: int) -> void:
 		item = itm.duplicate(true)
 		count = n
+		rotation_quarters = int(item.get("grid_rotation", 0)) % 4
+
+	func set_grid_position(position: Vector2i) -> void:
+		grid_position = position
+
+	func get_grid_size() -> Vector2i:
+		var base := ItemRegistry.grid_size_of(item)
+		return Vector2i(base.y, base.x) if rotation_quarters % 2 == 1 else base
 	
 	func get_item_id() -> String:
 		return item.get("id", "")
@@ -53,21 +67,19 @@ func resize_capacity_collect_overflow(cap: int) -> Array[Dictionary]:
 		return []
 	var packed := get_occupied_slots()
 	var overflow: Array[Dictionary] = []
-	if packed.size() > target_capacity:
-		for index in range(target_capacity, packed.size()):
-			overflow.append((packed[index] as Dictionary).duplicate(true))
-		packed.resize(target_capacity)
 	_capacity = target_capacity
 	_slots.clear()
 	_slots.resize(_capacity)
 	for index in range(_capacity):
 		_slots[index] = InventorySlot.new()
-	for index in range(packed.size()):
-		var entry := packed[index] as Dictionary
-		_slots[index].set_item(
-			entry.get("item", {}) as Dictionary,
-			int(entry.get("count", 1))
-		)
+	for entry_variant in packed:
+		var entry := entry_variant as Dictionary
+		var item := entry.get("item", {}) as Dictionary
+		var placement := _find_placement_for_entry(item, int(entry.get("grid_rotation", 0)))
+		if placement.is_empty():
+			overflow.append(entry.duplicate(true))
+			continue
+		_write_entry_at(int(placement.get("slot", -1)), item, int(entry.get("count", 1)), int(placement.get("grid_rotation", 0)))
 	inventory_changed.emit()
 	capacity_changed.emit(get_used_slots(), _capacity)
 	return overflow
@@ -76,7 +88,7 @@ func resize_capacity_collect_overflow(cap: int) -> Array[Dictionary]:
 func get_capacity() -> int:
 	return _capacity
 
-## 实际使用格子数
+## 旧接口返回物品锚点数，保留给旧存档/门禁。
 func get_used_slots() -> int:
 	var count := 0
 	for slot in _slots:
@@ -84,17 +96,136 @@ func get_used_slots() -> int:
 			count += 1
 	return count
 
-## 剩余可用格子数
+## 棋盘实际占用面积。UI 容量应优先显示这个值，而不是锚点数量。
+func get_used_area() -> int:
+	var area := 0
+	for slot in _slots:
+		if slot.is_empty():
+			continue
+		var size := slot.get_grid_size()
+		area += size.x * size.y
+	return area
+
+## 棋盘宽度。容量变化时按固定6列向下扩展行数。
+func get_grid_columns() -> int:
+	return GRID_COLUMNS
+
+func get_grid_rows() -> int:
+	return ceili(float(_capacity) / float(GRID_COLUMNS))
+
+func get_grid_dimensions() -> Vector2i:
+	return Vector2i(GRID_COLUMNS, get_grid_rows())
+
+## 返回某物品占用的棋盘坐标。item_entry 必须来自 get_slot/get_occupied_slots。
+func get_occupied_grid_cells(item_entry: Dictionary) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	var index := int(item_entry.get("slot", -1))
+	if index < 0:
+		return cells
+	var origin := Vector2i(index % GRID_COLUMNS, index / GRID_COLUMNS)
+	var size := ItemRegistry.grid_size_of(item_entry.get("item", {}) as Dictionary)
+	var rotation := int(item_entry.get("grid_rotation", 0))
+	if rotation % 2 == 1:
+		size = Vector2i(size.y, size.x)
+	for y in size.y:
+		for x in size.x:
+			cells.append(origin + Vector2i(x, y))
+	return cells
+
+func _slot_occupied_cells(slot_index: int) -> Array[Vector2i]:
+	if slot_index < 0 or slot_index >= _slots.size() or _slots[slot_index].is_empty():
+		return []
+	return get_occupied_grid_cells({
+		"slot": slot_index,
+		"item": _slots[slot_index].item,
+		"grid_rotation": _slots[slot_index].rotation_quarters,
+	})
+
+func _cell_belongs_to_source(cell_index: int, source_index: int) -> bool:
+	if source_index < 0:
+		return false
+	var cell := Vector2i(cell_index % GRID_COLUMNS, cell_index / GRID_COLUMNS)
+	return cell in _slot_occupied_cells(source_index)
+
+func _cell_is_free_for_item(cell_index: int, source_index: int = -1, ignored_index: int = -1) -> bool:
+	if _cell_belongs_to_source(cell_index, source_index):
+		return true
+	var cell := Vector2i(cell_index % GRID_COLUMNS, cell_index / GRID_COLUMNS)
+	for occupied_index in _slots.size():
+		if _slots[occupied_index].is_empty() or occupied_index == source_index or occupied_index == ignored_index:
+			continue
+		if cell in _slot_occupied_cells(occupied_index):
+			return false
+	return true
+
+## 判断矩形物品是否能以锚点放入棋盘；允许 source_index 自身占用的格子被忽略。
+func can_place_item_at(item: Dictionary, anchor_index: int, rotation_quarters: int = 0, source_index: int = -1, ignored_index: int = -1) -> bool:
+	if item.is_empty() or anchor_index < 0 or anchor_index >= _capacity:
+		return false
+	var size := ItemRegistry.grid_size_of(item)
+	if rotation_quarters % 2 == 1:
+		size = Vector2i(size.y, size.x)
+	var origin := Vector2i(anchor_index % GRID_COLUMNS, anchor_index / GRID_COLUMNS)
+	if origin.x + size.x > GRID_COLUMNS or origin.y + size.y > get_grid_rows():
+		return false
+	for y in size.y:
+		for x in size.x:
+			var cell := origin + Vector2i(x, y)
+			var occupant := cell.y * GRID_COLUMNS + cell.x
+			if occupant >= _capacity:
+				return false
+			if occupant == source_index:
+				continue
+			if not _cell_is_free_for_item(occupant, source_index, ignored_index):
+				return false
+	return true
+
+func _find_placement_for_entry(item: Dictionary, preferred_rotation: int = 0, source_index: int = -1) -> Dictionary:
+	var rotations: Array[int] = [preferred_rotation % 4]
+	if preferred_rotation % 2 == 0:
+		rotations.append((preferred_rotation + 1) % 4)
+	else:
+		rotations.append((preferred_rotation + 1) % 4)
+	for rotation in rotations:
+		for index in _capacity:
+			if can_place_item_at(item, index, rotation, source_index):
+				return {"slot": index, "grid_rotation": rotation}
+	return {}
+
+func _write_entry_at(anchor_index: int, item: Dictionary, count: int, rotation: int = 0) -> bool:
+	if anchor_index < 0 or anchor_index >= _capacity or not can_place_item_at(item, anchor_index, rotation):
+		return false
+	_slots[anchor_index].set_item(item, count)
+	_slots[anchor_index].rotation_quarters = rotation % 4
+	_slots[anchor_index].item["grid_rotation"] = _slots[anchor_index].rotation_quarters
+	return true
+
+## 找到第一个可放置锚点。标准朝向失败后尝试90°旋转。
+func find_valid_placement(item: Dictionary, source_index: int = -1) -> Dictionary:
+	for rotation in [0, 1]:
+		for index in _capacity:
+			if can_place_item_at(item, index, rotation, source_index):
+				return {"slot": index, "grid_rotation": rotation}
+	return {}
+
+## 剩余可用面积（不是旧的一物一格 free slot）。
+func get_free_grid_cells() -> int:
+	var occupied := {}
+	for entry in get_occupied_slots():
+		for cell in get_occupied_grid_cells(entry):
+			occupied[str(cell)] = true
+	return maxi(0, _capacity - occupied.size())
+
+## 剩余可用格数：兼容旧调用，现返回棋盘剩余面积。
 func get_free_slots() -> int:
-	return _capacity - get_used_slots()
+	return get_free_grid_cells()
 
-## 是否还有空间
 func has_space() -> bool:
-	return get_free_slots() > 0
+	return get_free_grid_cells() > 0
 
-## 是否可以放入指定数量
+## 是否还有足够棋盘面积；精确放置仍由 can_add_item_exact 负责。
 func can_add(num_items: int = 1) -> bool:
-	return get_free_slots() >= num_items
+	return get_free_grid_cells() >= num_items
 
 
 ## 交易预检：已有堆叠的剩余容量也算可用空间；不改变格位。
@@ -113,7 +244,11 @@ func can_add_item_exact(item: Dictionary, count: int = 1) -> bool:
 			remaining -= maxi(0, stack_max - slot.count)
 			if remaining <= 0:
 				return true
-	return remaining <= get_free_slots() * stack_max
+	var size := ItemRegistry.grid_size_of(item)
+	var required_area := maxi(1, size.x * size.y)
+	if remaining <= 0:
+		return true
+	return find_valid_placement(item) != {} and get_free_grid_cells() >= required_area
 
 ## 添加物品（自动分配格子）
 ## 返回实际成功添加的数量
@@ -147,17 +282,22 @@ func add_item(item: Dictionary, count: int = 1) -> int:
 					slot.item = item.duplicate(true)
 					return count
 	
-	# 再找空格子放剩余的
+	# 再按矩形占位寻找锚点。一个堆叠块只占一份物理矩形。
 	while remaining > 0:
-		var empty_idx := _find_empty_slot()
-		if empty_idx < 0:
-			break  # 没有空格子了
+		var placement := find_valid_placement(item)
+		if placement.is_empty():
+			break  # 棋盘没有可容纳该物品的连续区域
+		var anchor_index := int(placement.get("slot", -1))
+		if anchor_index < 0:
+			break
 		var stack_max: int = item.get("stack_max", 1)
 		var can_put: int = min(stack_max, remaining)
-		_slots[empty_idx].set_item(item, can_put)
-		_slots[empty_idx].item = item.duplicate(true)
+		_slots[anchor_index].set_item(item, can_put)
+		_slots[anchor_index].item = item.duplicate(true)
+		_slots[anchor_index].rotation_quarters = int(placement.get("grid_rotation", 0))
+		_slots[anchor_index].item["grid_rotation"] = _slots[anchor_index].rotation_quarters
 		remaining -= can_put
-		item_added.emit(empty_idx, item)
+		item_added.emit(anchor_index, item)
 	
 	if remaining < count:
 		inventory_changed.emit()
@@ -190,11 +330,14 @@ func get_slot(slot_index: int) -> Dictionary:
 	var slot: InventorySlot = _slots[slot_index]
 	if slot.is_empty():
 		return {}
-	return {
+	var result := {
 		"item": slot.item.duplicate(true),
 		"count": slot.count,
 		"slot": slot_index
 	}
+	if slot.rotation_quarters % 4 != 0:
+		result["grid_rotation"] = slot.rotation_quarters % 4
+	return result
 
 ## 获取所有非空格子（用于UI渲染）
 func get_occupied_slots() -> Array[Dictionary]:
@@ -214,6 +357,7 @@ func get_slots_snapshot() -> Array[Dictionary]:
 func restore_slots_snapshot(snapshot: Array) -> void:
 	for slot in _slots:
 		slot.clear()
+	# 旧档的 slot 仍作为首选锚点；大物品原位放不下时再找合法位置。
 	for index in mini(snapshot.size(), _slots.size()):
 		if not snapshot[index] is Dictionary:
 			continue
@@ -222,7 +366,12 @@ func restore_slots_snapshot(snapshot: Array) -> void:
 		var count := int(entry.get("count", 0))
 		if item.is_empty() or count <= 0:
 			continue
-		_slots[index].set_item(item, count)
+		var rotation := int(entry.get("grid_rotation", item.get("grid_rotation", 0))) % 4
+		var placement := {"slot": index, "grid_rotation": rotation} if can_place_item_at(item, index, rotation) else _find_placement_for_entry(item, rotation)
+		if placement.is_empty():
+			push_warning("[InventoryModule] Snapshot item could not fit: %s" % str(item.get("id", "")))
+			continue
+		_write_entry_at(int(placement.get("slot", -1)), item, count, int(placement.get("grid_rotation", rotation)))
 	inventory_changed.emit()
 	capacity_changed.emit(get_used_slots(), _capacity)
 
@@ -327,11 +476,9 @@ func replace_item_in_slot(slot_index: int, item: Dictionary) -> bool:
 	return true
 
 
-## 将一个完整物品写入指定空格。装备位卸装使用该接口，禁止覆盖已有物品。
+## 将一个完整物品写入指定锚点。装备位卸装使用该接口，禁止覆盖已占区域。
 func put_item_in_empty_slot(slot_index: int, item: Dictionary, count: int = 1) -> bool:
 	if slot_index < 0 or slot_index >= _slots.size() or item.is_empty() or count <= 0:
-		return false
-	if not _slots[slot_index].is_empty():
 		return false
 	var normalized := WeaponInstance.ensure_weapon_item(item)
 	if str(normalized.get("type", "")) == "weapon" and count != 1:
@@ -339,52 +486,83 @@ func put_item_in_empty_slot(slot_index: int, item: Dictionary, count: int = 1) -
 	var instance_id := str(normalized.get("weapon_instance_id", ""))
 	if not instance_id.is_empty() and has_weapon_instance(instance_id):
 		return false
-	_slots[slot_index].set_item(normalized, count)
+	if not can_place_item_at(normalized, slot_index):
+		return false
+	_write_entry_at(slot_index, normalized, count)
 	item_added.emit(slot_index, normalized)
 	inventory_changed.emit()
 	capacity_changed.emit(get_used_slots(), _capacity)
 	return true
 
 
-## 背包内拖拽移动/交换。枪械字典整体换位，不重新生成实例或构筑。
-func move_or_swap_slots(from_index: int, to_index: int) -> bool:
-	if from_index < 0 or from_index >= _slots.size():
+## 背包内拖拽移动/交换。以矩形占位做原子预检，不会把大物品塞进重叠区域。
+func can_move_or_swap_slots(from_index: int, to_index: int, requested_rotation: int = -1) -> bool:
+	if from_index < 0 or from_index >= _slots.size() or to_index < 0 or to_index >= _slots.size() or _slots[from_index].is_empty():
 		return false
-	if to_index < 0 or to_index >= _slots.size() or from_index == to_index:
+	var rotation := _slots[from_index].rotation_quarters if requested_rotation < 0 else posmod(requested_rotation, 4)
+	if not can_place_item_at(_slots[from_index].item, to_index, rotation, from_index, to_index):
 		return false
-	var source := _slots[from_index]
-	if source.is_empty():
+	if from_index == to_index or _slots[to_index].is_empty():
+		return true
+	if not can_place_item_at(_slots[to_index].item, from_index, _slots[to_index].rotation_quarters, from_index, to_index):
 		return false
-	var source_item := source.item.duplicate(true)
-	var source_count := source.count
-	var target := _slots[to_index]
-	var target_item := target.item.duplicate(true)
-	var target_count := target.count
-	target.set_item(source_item, source_count)
-	if target_item.is_empty() or target_count <= 0:
-		source.clear()
-	else:
-		source.set_item(target_item, target_count)
+	var source_cells := get_occupied_grid_cells({"slot": to_index, "item": _slots[from_index].item, "grid_rotation": rotation})
+	var target_cells := get_occupied_grid_cells({"slot": from_index, "item": _slots[to_index].item, "grid_rotation": _slots[to_index].rotation_quarters})
+	for cell in source_cells:
+		if cell in target_cells:
+			return false
+	return true
+
+func move_or_swap_slots(from_index: int, to_index: int, requested_rotation: int = -1) -> bool:
+	# Preflight is read-only: rejected rotation must not alter the source footprint.
+	if not can_move_or_swap_slots(from_index, to_index, requested_rotation):
+		return false
+	var source_item := _slots[from_index].item.duplicate(true)
+	var source_count := _slots[from_index].count
+	var source_rotation := _slots[from_index].rotation_quarters if requested_rotation < 0 else posmod(requested_rotation, 4)
+	var target_item := _slots[to_index].item.duplicate(true)
+	var target_count := _slots[to_index].count
+	var target_rotation := _slots[to_index].rotation_quarters
+	_slots[from_index].clear()
+	_slots[to_index].clear()
+	_write_entry_at(to_index, source_item, source_count, source_rotation)
+	if from_index != to_index and not target_item.is_empty():
+		_write_entry_at(from_index, target_item, target_count, target_rotation)
 	inventory_changed.emit()
 	capacity_changed.emit(get_used_slots(), _capacity)
 	return true
 
 
-## 稳定整理：类型 → 稀有度 → 名称 → 枪械实例 ID；只改变格位。
+## 稳定整理：类型 → 稀有度 → 名称 → 枪械实例 ID；面积优先，再按稳定键。
 func sort_items() -> void:
 	var packed: Array[Dictionary] = get_occupied_slots()
+	var before_snapshot := get_slots_snapshot()
 	packed.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		var a_item := a.get("item", {}) as Dictionary
 		var b_item := b.get("item", {}) as Dictionary
-		var a_key := _sort_key(a_item)
-		var b_key := _sort_key(b_item)
-		return a_key.naturalnocasecmp_to(b_key) < 0
+		var a_size := ItemRegistry.grid_size_of(a_item)
+		var b_size := ItemRegistry.grid_size_of(b_item)
+		var a_area := a_size.x * a_size.y
+		var b_area := b_size.x * b_size.y
+		if a_area != b_area:
+			return a_area > b_area
+		return _sort_key(a_item).naturalnocasecmp_to(_sort_key(b_item)) < 0
 	)
 	for slot in _slots:
 		slot.clear()
-	for index in packed.size():
-		var entry := packed[index]
-		_slots[index].set_item(entry.get("item", {}), int(entry.get("count", 1)))
+	var failed_item_id := ""
+	for entry_variant in packed:
+		var entry := entry_variant as Dictionary
+		var placement := find_valid_placement(entry.get("item", {}) as Dictionary)
+		if placement.is_empty():
+			failed_item_id = str((entry.get("item", {}) as Dictionary).get("id", ""))
+			break
+		_write_entry_at(int(placement.get("slot", -1)), entry.get("item", {}) as Dictionary, int(entry.get("count", 1)), int(placement.get("grid_rotation", 0)))
+	if not failed_item_id.is_empty():
+		# 整理必须是原子操作：任何物品放不下，恢复完整快照，禁止静默丢失。
+		restore_slots_snapshot(before_snapshot)
+		push_warning("[InventoryModule] sort_items rolled back; could not fit: %s" % failed_item_id)
+		return
 	inventory_changed.emit()
 	capacity_changed.emit(get_used_slots(), _capacity)
 

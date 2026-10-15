@@ -64,7 +64,7 @@ func _run() -> void:
 			check(result.get("error", "") == "room_not_in_combat", "失败原因透传 " + id)
 			check(not FateCardEngine.apply_card(card(id, reversed), null).success, "Engine不能绕过世界失败 " + id)
 	check(FateCardGameBridge.get_card_count() == 0 and scope_events == events_before, "世界失败不登记不发scope")
-	# 门后购买失败保留弹窗：世界失败（本房不是战斗状态）时卡没生效，且必须原额退魂。
+	# 门后购买失败保留弹窗：世界失败（本房不是战斗状态）时卡没生效，且必须原额退金币。
 	GameManager.add_currency(500)
 	dungeon.show_reference_fate_overlay_for_test()
 	dungeon._door_fate_choices[0] = card("fate_reinforce")
@@ -74,7 +74,7 @@ func _run() -> void:
 		dungeon._door_fate_active
 		and dungeon._door_fate_choices[0].get_stable_card_id() == "fate_reinforce"
 		and GameManager.currency == purchase_currency_before,
-		"世界失败保留正式购卡弹窗且原额退魂"
+		"世界失败保留正式购卡弹窗且原额退金币"
 	)
 	dungeon._close_door_fate_overlay()
 	fresh_weapon()
@@ -147,13 +147,13 @@ func _run() -> void:
 	FateCardGameBridge._pending_character_rewards.append({"card": pending, "currency_cost": 30})
 	GameManager.currency = 100
 	var failed_reward := FateCardGameBridge.retry_pending_character_reward()
-	check(not bool(failed_reward.success) and GameManager.currency == 100, "愚者缺来源失败退魂")
+	check(not bool(failed_reward.success) and GameManager.currency == 100, "愚者缺来源失败退金币")
 	check(FateCardGameBridge._pending_character_rewards[0].card == pending, "待领保留原牌原方位")
 	FateCardGameBridge._process(0.0)
 	check(FateCardGameBridge._reward_button.visible, "愚者待领奖励常驻入口可见")
 	call_deferred("_claim_pending")
 	await FateCardGameBridge._open_pending_rewards()
-	check(FateCardGameBridge.get_pending_character_rewards().is_empty() and GameManager.currency == 70, "UI领取固定奖励一次扣魂")
+	check(FateCardGameBridge.get_pending_character_rewards().is_empty() and GameManager.currency == 70, "UI领取固定奖励一次扣金币")
 	check(dungeon.player.get_equipped_weapon_instance().fate_upgrades.size() == 1, "UI领取固定奖励一次刻印")
 	FateCardGameBridge.scope_state_changed.disconnect(_scope_changed)
 	FateCardGameBridge.reset_run_state()

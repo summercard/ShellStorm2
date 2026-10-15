@@ -135,7 +135,7 @@ func _run() -> void:
 		check(enemy.contact_damage == int(round(base_damage * (0.64 if reversed else 1.25))), "正义节制真实伤害 " + str(reversed))
 		clear_pickups()
 		dungeon._deliver_ground_rewards(room, [{"kind": "currency", "amount": 100}], room.global_position, "trial")
-		check(pickups().size() == 1 and pickups()[0].item_data.count == (50 if reversed else 200), "正义实际魂球 " + str(reversed))
+		check(pickups().size() == 1 and pickups()[0].item_data.count == (50 if reversed else 200), "正义实际金币球 " + str(reversed))
 		apply("fate_curse_map", reversed)
 		var next_batch: Array[Dictionary] = [config()]
 		dungeon._spawn_enemy_batch(room, next_batch, true)
@@ -143,7 +143,7 @@ func _run() -> void:
 		check(future.contact_damage == int(round(base_damage * (0.64 * 0.9 if reversed else 1.25 * 1.15))), "诅咒未来波伤害 " + str(reversed))
 		clear_pickups()
 		dungeon._deliver_ground_rewards(room, [{"kind": "currency", "amount": 100}], room.global_position, "curse")
-		check(pickups()[0].item_data.count == (35 if reversed else 200), "诅咒逆位魂落地 " + str(reversed))
+		check(pickups()[0].item_data.count == (35 if reversed else 200), "诅咒逆位金币落地 " + str(reversed))
 
 	prepare()
 	check(not dungeon.apply_world_fate_card(card("fate_sun_reinforce", true)).success, "无正式精英可投放时皇帝逆位拒绝")
@@ -196,7 +196,7 @@ func _run() -> void:
 	elite.transition_to("telegraph", "verification")
 	check(int(dungeon.player._character_fate.shield) == shield_before + 20, "精英遭遇护盾幂等")
 	dungeon._mark_room_cleared(room, false)
-	check(GameManager.currency == 50, "皇帝逆位清房实际50魂")
+	check(GameManager.currency == 50, "皇帝逆位清房实际50金币")
 	for elite_config in elite_configs:
 		EliteRosterService.settle(str(elite_config.elite_id), str(elite_config.encounter_instance_id), "despawned")
 	prepare()
@@ -219,7 +219,7 @@ func _run() -> void:
 		if str(pickup.item_data.get("type", "")) == "currency":
 			soul_total += int(pickup.item_data.count)
 			soul_count += 1
-	check(soul_total >= 50 and soul_count == 1, "王牌击杀赏金实际合并一个魂球")
+	check(soul_total >= 50 and soul_count == 1, "王牌击杀赏金实际合并一个金币球")
 	room.remove_meta("floor_number")
 
 	prepare()
@@ -235,7 +235,7 @@ func _run() -> void:
 		check(GameManager.currency == [155, 190, 225][index], "独立赏金不串量 " + str(index))
 		clear_pickups()
 		dungeon._deliver_ground_rewards(room, [{"kind": "currency", "amount": 100}], room.global_position, key)
-		check(pickups().size() == (1 if index == 0 else 0), "逆赏金后两房禁魂 " + str(index))
+		check(pickups().size() == (1 if index == 0 else 0), "逆赏金后两房禁金币 " + str(index))
 		room.room_id = old_id
 
 	prepare()

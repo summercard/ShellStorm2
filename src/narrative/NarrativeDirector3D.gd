@@ -663,6 +663,10 @@ func has_flag(key: String) -> bool:
 	return _flags.has(key)
 
 
+func get_flags_snapshot() -> Dictionary:
+	return _flags.duplicate(true)
+
+
 ## 新档 / 新本局：把「本局内存态」整体归零，让 `once = run` 的剧本可以重新触发。
 ##
 ## 由 BaseManager.game_save_reset_completed 驱动（复位存档成功的唯一出口）。

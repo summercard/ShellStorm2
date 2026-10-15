@@ -193,7 +193,7 @@ func _make_elite_row(elite) -> PanelContainer:
 	if bounty > 0:
 		var bounty_lbl := Label.new()
 		var bounty_currency := EliteRosterService.get_bounty_currency(str(elite.get("elite_id", ""))) if EliteRosterService != null else 0
-		bounty_lbl.text = "悬赏%d\n%d魂" % [bounty, bounty_currency]
+		bounty_lbl.text = "悬赏%d\n%d金币" % [bounty, bounty_currency]
 		bounty_lbl.custom_minimum_size = Vector2(72, 0)
 		bounty_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		hbox.add_child(bounty_lbl)

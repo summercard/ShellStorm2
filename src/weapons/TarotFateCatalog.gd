@@ -6,18 +6,18 @@ class_name TarotFateCatalog
 
 static var DEFINITIONS := {
 	# 大阿尔卡那
-	"fate_mark_enemy": _entry("愚者", "MAJOR", "MAJOR", "0", "十杀必得命运，失30魂", "每击杀10个敌人必得一张命运卡，同时失去30魂。", {"chance": 1.0, "currency_cost": 30}),
+	"fate_mark_enemy": _entry("愚者", "MAJOR", "MAJOR", "0", "十杀必得命运，失30金币", "每击杀10个敌人必得一张命运卡，同时失去30金币。", {"chance": 1.0, "currency_cost": 30}),
 	"fate_gun_on_gun": _entry("魔术师", "MAJOR", "MAJOR", "I", "主副枪交替，单发更强", "主副枪改为交替开火；单发威力提高，但主枪射速降低。", {"alternate_fire": true, "damage_scale": 1.25, "fire_rate_scale": 0.75}),
 	"fate_moon_vitality": _entry("女祭司", "MAJOR", "MAJOR", "II", "生命上限-10，恢复50", "最大生命降低10，并立即恢复50生命。", {"amount": -10, "heal": 50}),
 	"fate_sun_extra_loot": _entry("皇后", "MAJOR", "MAJOR", "III", "下箱追加4抽，保留最佳", "下一个容器追加4次候选抽取并保留最高品质结果，最高为稀有且地面仍只掉落1件。", {"count": 4, "max_rarity": "RARE"}),
-	"fate_sun_reinforce": _entry("皇帝", "MAJOR", "MAJOR", "IV", "下房增加精英，奖50魂", "下一个敌对房间增加1名精英；清理后额外获得50魂。", {"count": 1, "elite_count": 1, "clear_currency": 50}),
+	"fate_sun_reinforce": _entry("皇帝", "MAJOR", "MAJOR", "IV", "下房增加精英，奖50金币", "下一个敌对房间增加1名精英；清理后额外获得50金币。", {"count": 1, "elite_count": 1, "clear_currency": 50}),
 	"fate_sun_key": _entry("教皇", "MAJOR", "MAJOR", "V", "获得2把本层临时钥匙", "获得2把临时钥匙，离开当前楼层时失效。", {"count": 2, "temporary_floor_only": true}),
 	"fate_moon_power": _entry("恋人", "MAJOR", "MAJOR", "VI", "枪伤-8%，暴击+15%", "枪械伤害降低8%，暴击率提高15%。", {"multiplier": 0.92, "crit_chance_bonus": 0.15}),
 	"fate_bullet_carry_gun": _entry("战车", "MAJOR", "MAJOR", "VII", "携枪弹命中时高伤开火", "携枪子弹不再持续射击，只在命中时进行一次高伤射击。", {"fire_on_hit": true, "damage_scale": 1.15, "fire_rate_scale": 0.0}),
 	"fate_armor_pierce": _entry("力量", "MAJOR", "MAJOR", "VIII", "伤害+15%，对盾翻倍", "伤害提高15%；不再穿盾，但对护盾造成双倍伤害。", {"damage_scale": 1.15, "pierce_shield": false, "shield_damage_scale": 2.0}),
 	"fate_moon_stride": _entry("隐者", "MAJOR", "MAJOR", "IX", "移速-8%，冲刺无敌延长", "移动速度降低8%，冲刺无敌时间增加0.12秒。", {"multiplier": 0.92, "dash_invulnerability_bonus": 0.12}),
 	"fate_every_seventh": _entry("命运之轮", "MAJOR", "MAJOR", "X", "换弹首发×2.5，弹匣-20%", "每次换弹后的第一发伤害×2.5，但弹匣容量降低20%。", {"nth": 1, "damage_multiplier": 2.5, "after_reload": true, "magazine_multiplier": 0.8}),
-	"fate_sun_trial": _entry("正义", "MAJOR", "MAJOR", "XI", "下房敌伤-20%，魂减半", "下一个敌对房间敌人伤害降低20%，魂掉落减半。", {"damage_multiplier": 0.8, "currency_multiplier": 0.5}),
+	"fate_sun_trial": _entry("正义", "MAJOR", "MAJOR", "XI", "下房敌伤-20%，金币减半", "下一个敌对房间敌人伤害降低20%，金币掉落减半。", {"damage_multiplier": 0.8, "currency_multiplier": 0.5}),
 	"fate_moon_guard": _entry("倒吊人", "MAJOR", "MAJOR", "XII", "受伤+8%，反射15%", "受到伤害提高8%，同时反射15%的实际伤害。", {"multiplier": 1.08, "reflect_ratio": 0.15}),
 	"fate_gluttony": _entry("死神", "MAJOR", "MAJOR", "XIII", "未命中成长，命中时释放", "未命中会累积子弹成长；下一次命中时消耗全部层数。", {"grow_on_miss": true, "consume_growth_on_hit": true}),
 	"fate_sun_scorch": _entry("节制", "MAJOR", "MAJOR", "XIV", "下房敌血+20%，敌伤-20%", "下一个敌对房间敌人生命提高20%，伤害降低20%。", {"multiplier": 1.2, "damage_multiplier": 0.8}),
@@ -25,8 +25,8 @@ static var DEFINITIONS := {
 	"fate_explode_reload": _entry("高塔", "MAJOR", "MAJOR", "XVI", "换弹产生聚怪爆炸", "换弹产生低伤害吸引爆炸，换弹额外耗时缩短为0.2秒。", {"explosion_damage_scale": 0.3, "attract_enemies": true, "reload_time_add": 0.2}),
 	"fate_living_bullet": _entry("星星", "MAJOR", "MAJOR", "XVII", "追踪最远目标，伤害+25%", "子弹改为追踪最远可见敌人，并提高25%伤害。", {"target_mode": "farthest", "damage_scale": 1.25}),
 	"fate_moon_first_hit": _entry("月亮", "MAJOR", "MAJOR", "XVIII", "后续3次受伤降低20%", "每房首次受伤不减免；随后3次受到的伤害降低20%。", {"multiplier": 1.0, "following_hit_multiplier": 0.8, "following_hit_count": 3}),
-	"fate_sun_currency": _entry("太阳", "MAJOR", "MAJOR", "XIX", "魂-15%，每3掉落升品", "魂获取降低15%，每第3件掉落物品质提高1级。", {"multiplier": 0.85, "quality_every": 3, "quality_tiers": 1}),
-	"fate_moon_last_stand": _entry("审判", "MAJOR", "MAJOR", "XX", "致命时耗50魂并回血", "受到致命伤时消耗50魂并恢复25%生命；每张牌仅触发一次。", {"charges": 1, "currency_cost": 50, "heal_ratio": 0.25}),
+	"fate_sun_currency": _entry("太阳", "MAJOR", "MAJOR", "XIX", "金币-15%，每3掉落升品", "金币获取降低15%，每第3件掉落物品质提高1级。", {"multiplier": 0.85, "quality_every": 3, "quality_tiers": 1}),
+	"fate_moon_last_stand": _entry("审判", "MAJOR", "MAJOR", "XX", "致命时耗50金币并回血", "受到致命伤时消耗50金币并恢复25%生命；每张牌仅触发一次。", {"charges": 1, "currency_cost": 50, "heal_ratio": 0.25}),
 	"fate_sun_extraction": _entry("世界", "MAJOR", "MAJOR", "XXI", "撤离+30%，敌速减半", "撤离同步时间增加30%，同步区域内敌人移动速度降低50%。", {"multiplier": 1.3, "enemy_speed_multiplier": 0.5}),
 
 	# 权杖：14张星星命运
@@ -53,13 +53,13 @@ static var DEFINITIONS := {
 	"fate_bless_dead": _entry("圣杯·五", "MINOR", "CUPS", "5", "高血存活后伤害+8%", "高于70%生命存活30秒后，伤害提高8%。", {"hp_threshold": 0.7, "threshold_mode": "above", "survive_duration": 30.0, "damage_bonus": 0.08}),
 
 	# 星币：当前已实装7张太阳命运
-	"fate_reinforce": _entry("星币·王牌", "MINOR", "PENTACLES", "ACE", "五杀增援精英，额外奖魂", "5连杀后增援1名精英，击杀后额外获得50魂。", {"spawn_count": 1, "spawn_elite": true, "clear_currency": 50}),
+	"fate_reinforce": _entry("星币·王牌", "MINOR", "PENTACLES", "ACE", "五杀增援精英，额外奖金币", "5连杀后增援1名精英，击杀后额外获得50金币。", {"spawn_count": 1, "spawn_elite": true, "clear_currency": 50}),
 	"fate_lucky_chest": _entry("星币·二", "MINOR", "PENTACLES", "2", "下箱降品，但多2件", "下一个容器品质降低1级，但额外增加2件物品。", {"quality_boost": -1, "extra_count": 2}),
 	"fate_extra_loot": _entry("星币·三", "MINOR", "PENTACLES", "3", "下箱追加抽取，单件升品", "下一个容器追加一次候选抽取，保留结果品质提高1级，地面仍只掉落1件。", {"extra_count": 1, "quality_boost": 1}),
-	"fate_curse_map": _entry("星币·四", "MINOR", "PENTACLES", "4", "敌伤-10%，魂-30%", "当前房敌人伤害降低10%，但魂掉落降低30%。", {"enemy_damage_multiplier": 0.9, "currency_multiplier": 0.7}),
+	"fate_curse_map": _entry("星币·四", "MINOR", "PENTACLES", "4", "敌伤-10%，金币-30%", "当前房敌人伤害降低10%，但金币掉落降低30%。", {"enemy_damage_multiplier": 0.9, "currency_multiplier": 0.7}),
 	"fate_sun_quality": _entry("星币·五", "MINOR", "PENTACLES", "5", "下箱品质+2，数量-1", "下一个容器品质提高2级，但物品数量减少1件。", {"tiers": 2, "count_delta": -1}),
 	"fate_sun_reveal": _entry("星币·六", "MINOR", "PENTACLES", "6", "揭示4层，只见拓扑", "揭示周围4层拓扑，但隐藏房间类型。", {"radius": 4, "hide_room_types": true}),
-	"fate_sun_bounty": _entry("星币·七", "MINOR", "PENTACLES", "7", "下房奖120，之后两房无魂", "下一个敌对房奖励120魂，之后2个敌对房不掉落魂。", {"rooms": 1, "amount": 120, "zero_currency_rooms_after": 2}),
+	"fate_sun_bounty": _entry("星币·七", "MINOR", "PENTACLES", "7", "下房奖120，之后两房无金币", "下一个敌对房奖励120金币，之后2个敌对房不掉落金币。", {"rooms": 1, "amount": 120, "zero_currency_rooms_after": 2}),
 }
 
 

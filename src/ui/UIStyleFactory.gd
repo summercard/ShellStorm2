@@ -293,7 +293,7 @@ static func apply_tactical_tree(root: Node) -> void:
 			or "确认撤退" in button.text
 		):
 			accent = UIPalette.DANGER_RED
-		elif "购买" in button.text or "魂" in button.text:
+		elif "购买" in button.text or "金币" in button.text:
 			accent = UIPalette.SOUL_GOLD
 		elif "保险" in button.text or "装备" in button.text:
 			accent = UIPalette.NEON_MINT
@@ -311,7 +311,7 @@ static func apply_tactical_tree(root: Node) -> void:
 		var lowered := (label.name + " " + label.text).to_lower()
 		if "title" in lowered or "标题" in lowered:
 			label.add_theme_color_override("font_color", UIPalette.NEON_CYAN)
-		elif "魂" in label.text or "价格" in label.text:
+		elif "金币" in label.text or "价格" in label.text:
 			label.add_theme_color_override("font_color", UIPalette.SOUL_GOLD)
 		elif not label.has_theme_color_override("font_color"):
 			label.add_theme_color_override("font_color", UIPalette.TEXT_PRIMARY)
@@ -344,3 +344,11 @@ static func _bg_for_level(level: int) -> Color:
 		3: return UIPalette.BG_SLOT
 		4: return UIPalette.BG_SLOT_HOVER
 		_: return UIPalette.BG_DARK
+
+static func make_inventory_surface(slot: bool = false) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = UIPalette.INVENTORY_SLOT if slot else UIPalette.INVENTORY_PANEL
+	style.border_color = UIPalette.INVENTORY_OUTLINE if slot else Color(0.24, 0.34, 0.43, 0.55)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(8 if slot else 12)
+	return style

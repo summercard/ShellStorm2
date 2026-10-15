@@ -155,32 +155,53 @@ func _run_offset_function_checks(failures: Array[String]) -> void:
 ## unit_relative = default_relative / |default_relative|，relative_length =
 ## |default_relative| + trailing_offset_m，下界 0.20m 防止相机缩到焦点里。
 func _run_camera_formula_checks(failures: Array[String]) -> void:
-	var camera_height_m := 9.993940
+	var camera_height_m := 10.262659
 	var camera_look_height_m := 0.45
 	var camera_look_ahead_m := 0.75
-	var default_trailing := 3.699625
-	# 当前默认值必须严格等价于默认镜头的“历史固化链”，防止后续只凭近似画面
-	# 手调 Y/Z 而改变原俯视角。链条：v0.1 初始 (0, 8.0, 2.77) 沿“相机→焦点”
-	# 视线轴先按 `'` 拉远 15 次 ×0.20m（2026-09-13 固化），再按 `;` 拉近
-	# 4 次 ×0.20m（2026-10-09 固化），净变化 +11 次。
+	var default_trailing := 4.914455
+	# 当前默认值必须严格等价于默认镜头的“历史固化链”，防止后续只凭近似画面手调
+	# Y/Z 而改掉俯视角。链条（`;`/`'` 每次沿“相机→焦点”视线轴 0.20m；P 面板
+	# 「镜头雾气 → 俯仰」每次绕焦点 5°）：
+	#   v0.1 初始 (0, 8.0, 2.77)
+	#     → `'` 拉远 15 次 ⇒ 2026-09-13 (0, 10.719009, 4.037671)
+	#     → `;` 拉近 4 次  ⇒ 2026-10-09 (0, 9.993940, 3.699625)
+	#     → `'` 拉远 4 次  ⇒ 回到 09-13 机位（半径回到 11.330240）
+	#     → 「压低」1 次   ⇒ 2026-10-15 (0, 10.262659, 4.914455)，本组首次改变俯视角
+	var look_pivot := Vector3(0.0, camera_look_height_m, -camera_look_ahead_m)
+	var current_position := Vector3(0.0, camera_height_m, default_trailing)
+	var current_relative := current_position - look_pivot
+	# ① 半径溯源：前四步里只有 `;`/`'` 改变半径（绕焦点旋转不改半径），
+	#    净效果 = v0.1 初始沿轴拉远 15 次。
 	var origin_relative := Vector3(0.0, 8.0 - camera_look_height_m, 2.77 + camera_look_ahead_m)
-	var promoted_position := (
-		Vector3(0.0, camera_look_height_m, -camera_look_ahead_m)
-		+ origin_relative.normalized() * (origin_relative.length() + 11.0 * 0.20)
+	var expected_radius := origin_relative.length() + 15.0 * 0.20
+	if absf(current_relative.length() - expected_radius) > 0.00001:
+		failures.append(
+			"默认镜头半径不等于 v0.1 初始沿轴净拉远15次：got=%.6f expected=%.6f"
+			% [current_relative.length(), expected_radius]
+		)
+	# ② 往返恒等：10-09 机位按 `'` 拉远 4 次必须精确还原 09-13 机位。
+	var ten_nine_relative := Vector3(
+		0.0, 9.993940 - camera_look_height_m, 3.699625 + camera_look_ahead_m
 	)
-	if promoted_position.distance_to(Vector3(0.0, camera_height_m, default_trailing)) > 0.00001:
-		failures.append("新默认相机位置不等于初始默认沿视线轴净拉远11次：%s" % promoted_position)
-	# 独立复核主人本次的操作口径：上一版默认 (0,10.719009,4.037671) 再连续
-	# 按 4 次 `;` 拉近，每次沿同一条视线轴缩短 0.20m。
-	var previous_relative := Vector3(
-		0.0, 10.719009 - camera_look_height_m, 4.037671 + camera_look_ahead_m
+	var back_to_thirteen := (
+		look_pivot + ten_nine_relative.normalized() * (ten_nine_relative.length() + 4.0 * 0.20)
 	)
-	var zoomed_position := (
-		Vector3(0.0, camera_look_height_m, -camera_look_ahead_m)
-		+ previous_relative.normalized() * (previous_relative.length() - 4.0 * 0.20)
-	)
-	if zoomed_position.distance_to(Vector3(0.0, camera_height_m, default_trailing)) > 0.00001:
-		failures.append("新默认相机位置不等于上一版默认连按4次';'拉近：%s" % zoomed_position)
+	if back_to_thirteen.distance_to(Vector3(0.0, 10.719009, 4.037671)) > 0.00001:
+		failures.append("10-09 机位拉远4次未还原 09-13 机位：%s" % back_to_thirteen)
+	# ③ 完整操作复现：09-13 机位在 P 面板按一次「压低」应等于当前默认值。
+	var orbited := _orbit_point_about_pivot(back_to_thirteen, look_pivot, -5.0)
+	if orbited.distance_to(current_position) > 0.00001:
+		failures.append(
+			"09-13 机位压低5°不等于当前默认值：got=%s expected=%s"
+			% [orbited, current_position]
+		)
+	# ④ 俯角锚点：2026-10-15 首次由 65.003882° 变为 60.003882°。
+	var polar_deg := rad_to_deg(atan2(
+		current_relative.y,
+		Vector2(current_relative.x, current_relative.z).length()
+	))
+	if absf(polar_deg - 60.003882) > 0.0001:
+		failures.append("默认俯角不等于 60.003882°：%.6f" % polar_deg)
 	var default_relative := Vector3(
 		0.0,
 		camera_height_m - camera_look_height_m,
@@ -250,6 +271,33 @@ func _run_camera_formula_checks(failures: Array[String]) -> void:
 				failures.append(
 					"默认相机位置不一致：got=%s expected=%s" % [actual_local_pos, expected_zero]
 				)
+
+
+## 与 TowerDescent3D._orbit_point_about_pivot 逐行等价的本地副本：以 pivot 为圆心、
+## 保持半径不变，把 point 绕水平轴转过 pitch_delta_deg（正=抬高、负=压低）。
+## 这里刻意复制而非实例化 TowerDescent3D 去调用 —— 本测试全程不建场景（见文件头
+## 「不实例化完整的 TowerDescent3D」），故接受这份影子实现；真源算子的任何改动
+## 都必须同步到本函数。
+func _orbit_point_about_pivot(point: Vector3, pivot: Vector3, pitch_delta_deg: float) -> Vector3:
+	var offset := point - pivot
+	var horizontal := Vector2(offset.x, offset.z)
+	var horizontal_distance := horizontal.length()
+	var radius := sqrt(offset.y * offset.y + horizontal_distance * horizontal_distance)
+	if radius <= 0.0001 or horizontal_distance <= 0.0001:
+		return point
+	var polar := clampf(
+		atan2(offset.y, horizontal_distance) + deg_to_rad(pitch_delta_deg),
+		deg_to_rad(3.0),
+		deg_to_rad(88.0)
+	)
+	var new_horizontal_distance := radius * cos(polar)
+	var new_height := radius * sin(polar)
+	var planar := horizontal.normalized()
+	return pivot + Vector3(
+		planar.x * new_horizontal_distance,
+		new_height,
+		planar.y * new_horizontal_distance
+	)
 
 
 func _classify_debug_camera_key(stub: Node, event: InputEventKey) -> String:

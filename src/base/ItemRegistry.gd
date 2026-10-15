@@ -16,6 +16,7 @@ var _items: Dictionary = {}
 
 func _init() -> void:
 	_register_all_items()
+	_apply_grid_sizes()
 
 ## 注册所有内置物品
 func _register_all_items() -> void:
@@ -26,6 +27,90 @@ func _register_all_items() -> void:
 	_register_consumables()
 	_register_flashlight_modules()
 	_apply_base_shop_catalog()
+
+
+## ————————————————————————————————
+## 格子背包占格尺寸（三角洲行动/塔科夫式棋盘背包）
+## ————————————————————————————————
+## 真源表：每件物品在背包棋盘上占的宽×高（格）。口径：
+##   长枪 4×2 · 狙击/发射器 5×2 · 手枪 2×1 · 近战长柄 3×1 · 重斧 2×2
+##   蓝图(纸) 2×1 · 背包本体按容量档 2×2/3×3/4×4 · 电芯包/信标 2×2
+##   大电池/子弹模块 2×1 · 药水/弹药/小电池/钥匙/手电模块/配件 1×1
+## 未登记的物品按 1×1 兜底 —— 新物品忘了登记也放得进包，只是不占便宜。
+## 存的是 JSON 安全的 [w, h] 数组（物品字典会整包进存档，Vector2i 会炸序列化）。
+## 装备位（武器槽/配件网格/背包装备槽/手电位）**不读这张表**：
+## 装备只看可装备性（type/subtype，沿用既有判定），与占格无关。
+const GRID_SIZES: Dictionary = {
+	# 远程武器
+	"weapon_pistol": [2, 1],
+	"weapon_shotgun": [4, 2],
+	"weapon_rifle": [4, 2],
+	"weapon_machinegun": [4, 2],
+	"weapon_sprinkler": [4, 2],
+	"weapon_starter_rifle": [4, 2],
+	"weapon_sniper": [5, 2],
+	"weapon_launcher": [5, 2],
+	"weapon_charge": [3, 2],
+	# 近战武器
+	"weapon_baseball_bat": [3, 1],
+	"weapon_greatblade": [3, 1],
+	"weapon_waraxe": [2, 2],
+	# 背包装备（装备中不占格；作为物品放进包里时占格）
+	"equipment_backpack_2": [2, 2],
+	"equipment_backpack_4": [3, 3],
+	"equipment_backpack_8": [4, 4],
+	# 消耗品
+	"item_health_potion": [1, 1],
+	"item_ammo_pack": [1, 1],
+	"item_battery_s": [1, 1],
+	"item_battery_l": [2, 1],
+	"item_cell_pack": [2, 2],
+	"item_beacon": [2, 2],
+	# 钥匙
+	"item_room_key": [1, 1],
+	# 手电模块
+	"item_flashlight_basic": [1, 1],
+	"item_flashlight_advanced": [1, 1],
+	"item_flashlight_efficient": [1, 1],
+}
+
+## 子弹模块与配件整族统一尺寸，不逐个登记。
+const GRID_SIZE_FAMILY_DEFAULTS: Dictionary = {
+	"mod_bullet_": [2, 1],
+	"attach_": [1, 1],
+	"bp_": [2, 1],
+}
+
+## 把占格尺寸写进每个物品字典（grid_size = [w, h]，JSON 安全）。
+func _apply_grid_sizes() -> void:
+	for item_id in _items.keys():
+		var definition := _items[item_id] as Dictionary
+		var size: Array = GRID_SIZES.get(item_id, [1, 1]) as Array
+		for prefix in GRID_SIZE_FAMILY_DEFAULTS.keys():
+			if str(item_id).begins_with(str(prefix)):
+				size = GRID_SIZE_FAMILY_DEFAULTS.get(prefix, [1, 1]) as Array
+				break
+		definition["grid_size"] = [int(size[0]), int(size[1])]
+		definition["grid_area"] = int(size[0]) * int(size[1])
+
+## 查询物品占格（未知物品 1×1 兜底）。返回 Vector2i 供棋盘逻辑用。
+func get_grid_size(item_id: String) -> Vector2i:
+	var entry: Array = GRID_SIZES.get(item_id, []) as Array
+	if entry.is_empty():
+		for prefix in GRID_SIZE_FAMILY_DEFAULTS.keys():
+			if item_id.begins_with(str(prefix)):
+				entry = GRID_SIZE_FAMILY_DEFAULTS.get(prefix, [1, 1]) as Array
+				break
+	if entry.is_empty():
+		return Vector2i.ONE
+	return Vector2i(int(entry[0]), int(entry[1]))
+
+## 查询物品字典的占格；物品字典可能带 grid_size（注册表应用过），缺字段时回退注册表。
+static func grid_size_of(item: Dictionary) -> Vector2i:
+	var raw: Variant = item.get("grid_size", null)
+	if raw is Array and (raw as Array).size() >= 2:
+		return Vector2i(int((raw as Array)[0]), int((raw as Array)[1]))
+	return get_instance().get_grid_size(str(item.get("id", "")))
 
 
 ## 与内容数据库“基地商店”工作表一致的运行时投影。

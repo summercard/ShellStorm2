@@ -532,7 +532,7 @@ func _open_pending_rewards() -> void:
 	var entries: Array[Dictionary] = []
 	for reward in _pending_character_rewards:
 		var card: FateCard = reward["card"]
-		entries.append({"reward": reward, "label": "%s · %s · %d魂" % [card.card_name, card.orientation_name(), int(reward["currency_cost"])]})
+		entries.append({"reward": reward, "label": "%s · %s · %d金币" % [card.card_name, card.orientation_name(), int(reward["currency_cost"])]})
 	var choice := await _choose_entry("待领命运：失败与取消均保留原牌、原方位", entries, _player)
 	if not bool(choice.get("success", false)):
 		return
@@ -668,7 +668,7 @@ func retry_pending_character_reward(index: int = 0, source: AssemblyNode = null)
 	var reward: Dictionary = _pending_character_rewards[index]
 	var cost := int(reward["currency_cost"])
 	if cost > 0 and not GameManager.spend_currency(cost):
-		return {"success": false, "pending": true, "message": "魂不足；保留已抽定的命运奖励"}
+		return {"success": false, "pending": true, "message": "金币不足；保留已抽定的命运奖励"}
 	var result := apply_card_instance(reward["card"] as FateCard, source)
 	if bool(result.get("success", false)):
 		_pending_character_rewards.remove_at(index)
@@ -713,7 +713,7 @@ func export_fate_snapshot() -> Dictionary:
 	return {"version": 1, "cards": cards, "pending": pending}
 
 
-## 直接替换记录，绝不调用 apply/roll/扣魂；重复导入不重复登记。
+## 直接替换记录，绝不调用 apply/roll/扣金币；重复导入不重复登记。
 func import_fate_snapshot(value: Variant) -> bool:
 	applied_cards.clear()
 	character_card_ids.clear()

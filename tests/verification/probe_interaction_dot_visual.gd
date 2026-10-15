@@ -16,8 +16,8 @@ const OUTPUT_DIR := "res://outputs/verification"
 const DOT_SCRIPT := preload("res://src/ui/InteractionDot3D.gd")
 
 ## 与 TowerDescent3D 保持一致 —— 探针必须用真机位，否则是在对着假象调参。
-const CAMERA_HEIGHT_M := 9.993940
-const CAMERA_TRAILING_M := 3.699625
+const CAMERA_HEIGHT_M := 10.262659
+const CAMERA_TRAILING_M := 4.914455
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0

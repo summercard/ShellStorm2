@@ -38,7 +38,7 @@ func set_shop_name(name: String) -> void:
 var _current_tween: Tween = null
 var _tween_duration: float = 0.25
 
-## 正式战局只展示服务快照；所有购买均发命令，不在 UI 写魂或背包。
+## 正式战局只展示服务快照；所有购买均发命令，不在 UI 写金币或背包。
 func show_offers(session_id: String, offers: Array[Dictionary]) -> void:
 	_session_id = session_id
 	_offers = offers.duplicate(true)
@@ -168,7 +168,7 @@ func _build_shop_grid() -> void:
 	# 货币显示
 	var currency_lbl := Label.new()
 	currency_lbl.name = "CurrencyLabel"
-	currency_lbl.text = "魂: %d" % GameManager.currency
+	currency_lbl.text = "金币: %d" % GameManager.currency
 	currency_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(currency_lbl)
 	
@@ -219,7 +219,7 @@ func _create_shop_slot(item: Dictionary, slot_index: int) -> Control:
 	
 	var price_lbl := Label.new()
 	price_lbl.name = "PriceLabel"
-	price_lbl.text = "魂 %d" % item.get("price", 0)
+	price_lbl.text = "金币 %d" % item.get("price", 0)
 	price_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(price_lbl)
 	
@@ -253,7 +253,7 @@ func _on_currency_changed(amount: int) -> void:
 	_refresh_affordability()
 	var currency_lbl: Label = get_node_or_null("CurrencyLabel") as Label
 	if currency_lbl:
-		currency_lbl.text = "魂: %d" % amount
+		currency_lbl.text = "金币: %d" % amount
 
 ## 刷新商品可用性显示
 func _refresh_affordability() -> void:

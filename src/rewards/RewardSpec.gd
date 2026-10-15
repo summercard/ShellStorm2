@@ -30,10 +30,10 @@ const MAX_FALLBACK := 2
 ## monster kind 的递归深度硬限，防环。
 const MAX_MONSTER_DEPTH := 1
 
-## 货币 ID 登记。当前全项目只有魂一种；BaseData.extraction_points 是它的持久化字段。
+## 货币 ID 登记。当前全项目只有金币一种；BaseData.extraction_points 是它的持久化字段。
 ## 尚无独立货币表，故这里是唯一口径，不得在别处另写一份字符串。
 const CURRENCIES := {
-	"extraction_points": { "name": "魂", "persist_field": "extraction_points" },
+	"extraction_points": { "name": "金币", "persist_field": "extraction_points" },
 }
 
 ## 命名规格运行时登记处（spec_id → spec）。关卡设计源装载时install，测试可注入替身。
@@ -233,7 +233,7 @@ static func validate_spec(spec: Dictionary, path: String = "spec") -> Dictionary
 				index += 1
 
 	# 整份规格的「空掉落」概率（可选）。命中即本次结算不产出任何东西 ——
-	# 连魂与弹药一并落空，语义是「这只怪什么都没掉」。缺省 0 = 不做空判定。
+	# 连金币与弹药一并落空，语义是「这只怪什么都没掉」。缺省 0 = 不做空判定。
 	if spec.has("empty_chance"):
 		var empty_chance = spec["empty_chance"]
 		if not (empty_chance is int or empty_chance is float):

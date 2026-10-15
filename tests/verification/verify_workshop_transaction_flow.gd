@@ -12,9 +12,9 @@ func _ready() -> void:
 
 	var insufficient: Dictionary = manager.upgrade_blueprint("gunbody", 0, "workshop:insufficient")
 	if not bool(insufficient.get("success", false)):
-		failures.append("Tier0→1 在 100 魂时不应余额不足：%s" % str(insufficient))
+		failures.append("Tier0→1 在 100 金币时不应余额不足：%s" % str(insufficient))
 	if manager.data.blueprint_gunbody_tier != 1 or manager.data.extraction_points != 20:
-		failures.append("升级没有原子扣除 80 魂并把枪身提升到 Tier1")
+		failures.append("升级没有原子扣除 80 金币并把枪身提升到 Tier1")
 
 	var revision: int = int(manager.data.save_revision)
 	var duplicate: Dictionary = manager.upgrade_blueprint("gunbody", 0, "workshop:insufficient")

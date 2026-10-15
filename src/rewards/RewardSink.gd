@@ -4,12 +4,12 @@ extends RefCounted
 ##
 ##   GroundSink     落地为地面实体（遵守 04 §21：一物一实体，`count` 为真实数量）
 ##   InventorySink  直接进背包，失败则溢出到 GroundSink
-##   WalletSink     直接入魂
+##   WalletSink     直接入金币
 ##
 ## 分工纪律：`plan()` 是**纯逻辑**（只分类，不碰场景），`apply()` 只调用宿主暴露的三个具名方法。
 ## 本类不得 import 任何 `world3d`，也不得自己抽表 —— 抽表只有 `RewardService` 一处。
 ##
-## 默认出口 = `ground`：保持「魂落在死亡点、拾取才入账」的现行用户设计（04 §21）。
+## 默认出口 = `ground`：保持「金币落在死亡点、拾取才入账」的现行用户设计（04 §21）。
 ## 结算/任务奖励这类"直接到手"的调度点显式传 `sink` 或覆盖 `currency_sink`。
 ##
 ## 设计依据：`docs/v0.1/04_技术施工_战斗与局内成长.md` §22.6。
@@ -41,7 +41,7 @@ class GroundCallbackHost:
 ## options：
 ##   default_sink:String   grants 未显式带 sink 时的归属，默认 `ground`
 ##   currency_sink:String  货币实体的归属，默认沿用 grants 自带的 `wallet`
-##                         （局内掉落要传 `ground`，让魂落在死亡点）
+##                         （局内掉落要传 `ground`，让金币落在死亡点）
 static func plan(grants: Array, options: Dictionary = {}) -> Dictionary:
 	var default_sink := str(options.get("default_sink", SINK_GROUND))
 	if not SINKS.has(default_sink):
@@ -76,7 +76,7 @@ static func materialize_ground_items(grants: Array) -> Array[Dictionary]:
 		var g := grant as Dictionary
 		if str(g.get("kind", "")) == _SPEC.KIND_CURRENCY:
 			out.append({
-				"id": "__currency__", "name": "魂", "type": "currency",
+				"id": "__currency__", "name": "金币", "type": "currency",
 				"count": maxi(1, int(g.get("amount", 1))), "is_currency": true,
 			})
 			continue

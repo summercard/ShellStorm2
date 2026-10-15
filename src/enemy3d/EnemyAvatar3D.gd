@@ -15,10 +15,25 @@ const COLORS := {
 }
 
 # 与实际模块化模型的最大横向轮廓同源；Enemy3D 直接读取该表生成受击/物理体积。
+#
+# ⚠ 2026-10-15 业主：「胖子僵尸、小僵尸、警察僵尸的碰撞盒子，**高度不调整，
+# **直径**缩小到现在的 **80%**」⇒ 只把这三只的 `radius` ×0.8，`height` **逐字不动**。
+#   fat_zombie03  1.10 → 0.88   （1.10 × 0.8）
+#   melee_chaser  1.02 → 0.816  （1.02 × 0.8）
+#   ranged_caster 1.10 → 0.88   （1.10 × 0.8）
+# ⚠️ **这是玩法口径，不是纯视觉**：`radius` 同时被三处消费 ——
+#   ① `Enemy3D` 的碰撞柱（能不能被打到、能不能挤过去）；
+#   ② `_navigation_agent.radius = radius × 0.72`（寻路能否穿过窄缝）；
+#   ③ 状态快照的 `collision_profile`（供验收读取）。
+#   `height` 不动 ⇒ 头顶血条高度、伤害飘字高度都不受影响。
+# ⚠️ 副作用要知悉：这三只的碰撞柱**变细**了 —— 挤过窄缝更容易，但贴墙时模型会更容易穿进墙里
+#   （该表原本刻意留了余量避免穿模）。胖子僵尸尤其明显：它的模型半宽（世界 ≈1.84m）
+#   本来就比碰撞柱（现 0.62m）宽得多，缩到 0.8 后差距进一步拉大。
+# 其余怪种（summoner / shielded / exploder / ambusher / boss）**逐字不动**。
 const FOOTPRINT_PROFILES := {
-	"fat_zombie03": {"radius": 1.10, "height": 3.142857},
-	"melee_chaser": {"radius": 1.02, "height": 1.30},
-	"ranged_caster": {"radius": 1.10, "height": 1.62},
+	"fat_zombie03": {"radius": 0.88, "height": 3.142857},
+	"melee_chaser": {"radius": 0.816, "height": 1.30},
+	"ranged_caster": {"radius": 0.88, "height": 1.62},
 	"summoner": {"radius": 1.22, "height": 1.82},
 	"shielded": {"radius": 0.98, "height": 1.42},
 	"exploder": {"radius": 0.88, "height": 1.28},

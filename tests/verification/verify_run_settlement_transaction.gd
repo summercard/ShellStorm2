@@ -33,7 +33,7 @@ func _verify_success_failure_and_idempotency(failures: Array[String]) -> void:
 	if bool(failed.get("success", false)):
 		failures.append("成功撤离在强制写盘失败时错误报告成功")
 	if manager.data.total_runs != 0 or manager.data.extraction_points != 0:
-		failures.append("成功撤离写盘失败后统计或魂没有回滚")
+		failures.append("成功撤离写盘失败后统计或金币没有回滚")
 	if not manager.data.extraction_loot.is_empty() or manager.data.active_run_snapshot.is_empty():
 		failures.append("成功撤离写盘失败后战利品或行动检查点没有回滚")
 	if "txn_run_success" in manager.data.completed_transaction_ids:
@@ -52,7 +52,7 @@ func _verify_success_failure_and_idempotency(failures: Array[String]) -> void:
 	if manager.data.total_runs != 1 or manager.data.successful_extractions != 1:
 		failures.append("成功撤离事务没有一次性更新行动统计")
 	if manager.data.total_kills != 4 or manager.data.extraction_points != 37:
-		failures.append("成功撤离事务没有一次性更新击杀与魂")
+		failures.append("成功撤离事务没有一次性更新击杀与金币")
 	if manager.data.extraction_loot.size() != 1 or not manager.data.active_run_snapshot.is_empty():
 		failures.append("成功撤离事务没有一次性写入战利品并结束行动")
 	var revision_after_commit: int = manager.data.save_revision
