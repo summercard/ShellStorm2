@@ -26,6 +26,17 @@
   判据：`grep -rl "<uid>"` 看有无 `.tscn/.tres` 引用；本项目 `.tscn` 多用 `path=`（不带 uid）
   引用脚本，故 uid 内容差异通常不影响任何引用。
 
+- **`.git/index.lock` 陈旧锁会潜伏到第一次写操作**（2026-10-15 实测）：当天 08:44 中断遗留的锁，
+  直到中午 `git add` 才报 `Unable to create index.lock`（只读的 `status/diff/fetch` 从不撞它）。
+  ⇒ 删除前必须两条同时成立：无 `git`/`git-lfs`/`ssh` 进程，且 `status --porcelain` 第一列全空
+  （index 无残留暂存）。确认后再 `rm -f .git/index.lock`。
+- **`Uploading LFS objects: 100% … done` 不等于推送成功**（2026-10-15 实测）：
+  长传之后 GitHub 会 `Connection to github.com closed by remote host`，LFS 对象全上去了、
+  但 ref 没更新（远端仍停旧提交、本地仍 `ahead N`）。
+  ⇒ **推送唯一判据**：`git fetch` 后 `git rev-parse HEAD` 与 `git rev-parse origin/<分支>`
+  逐字相同。不符就原样重跑 `git push`（已传 LFS 不重传，第二次几十秒完成）。
+  ⇒ 排期参考：本机到 GitHub LFS 上行 46–125 KB/s，472 MiB blend 约 1h16m，按小时排窗口。
+
 ## 本机环境
 - 只有 `Documents/ShellStorm2` 一个 Git 工程根；`ShellStorm2-work/`、`ShellStorm2-backup/`
   不存在（`WORKSPACE_LAYOUT.md` 按 Windows `I:/工作项目/` 布局写）⇒ 文档里指向 `../ShellStorm2-backup/`
