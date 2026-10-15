@@ -733,3 +733,8 @@ metadata/side = "east"
 metadata/lane_m = -2.5
 metadata/outward = Vector2(1, 0)
 metadata/connected = true
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=194395591]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07392943, 3.4097147, -0.23207903)
+light_color = Color(0.17921922, 0.31672853, 1, 1)
+light_energy = 5.764

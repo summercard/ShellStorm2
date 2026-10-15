@@ -1,0 +1,4277 @@
+{
+  "schema_version": 1,
+  "category": "远景建筑",
+  "block_id": "open_world",
+  "version": "v001",
+  "layout_source_blend": "art_source/environments/open_world/far_city/source/env_far_city_layout_source_v001.blend",
+  "packages": [
+    {
+      "asset_id": "ENV-FAR-BUILDING-001",
+      "logical_id": "env_far_building_001",
+      "name_zh": "左侧折角幕墙塔楼",
+      "slug": "env_far_building_001",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "26层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_001/source/env_far_building_001_source_v001.blend",
+      "collection": "01_左侧折角幕墙塔楼_独立资产包",
+      "source_collection": "01_左侧折角幕墙塔楼_制作组件",
+      "objects": [
+        "左侧折角幕墙塔楼_主体_金属哑光反光"
+      ],
+      "root_object": "左侧折角幕墙塔楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        30.05,
+        25.05,
+        100.8
+      ],
+      "polygon_count": 1066,
+      "triangle_count": 2136,
+      "triangle_budget": 2400,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "049be652893b1d232b61eae6726586bcecb9d08e936ae4f5567f4f9e285c213e"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-002",
+      "logical_id": "env_far_building_002",
+      "name_zh": "中心截角宽体办公楼",
+      "slug": "env_far_building_002",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "20层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_002/source/env_far_building_002_source_v001.blend",
+      "collection": "02_中心截角宽体办公楼_独立资产包",
+      "source_collection": "02_中心截角宽体办公楼_制作组件",
+      "objects": [
+        "中心截角宽体办公楼_主体_金属哑光反光"
+      ],
+      "root_object": "中心截角宽体办公楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        44.05,
+        33.05,
+        78.0
+      ],
+      "polygon_count": 1078,
+      "triangle_count": 2164,
+      "triangle_budget": 2400,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "ba936ca7f5891d99c4f78a58464a33d01a4900030b5739486d5b1b0c03c8c543"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-003",
+      "logical_id": "env_far_building_003",
+      "name_zh": "细长高层办公楼",
+      "slug": "env_far_building_003",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "26层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_003/source/env_far_building_003_source_v001.blend",
+      "collection": "03_细长高层办公楼_独立资产包",
+      "source_collection": "03_细长高层办公楼_制作组件",
+      "objects": [
+        "细长高层办公楼_主体_金属哑光反光"
+      ],
+      "root_object": "细长高层办公楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        18.05,
+        18.05,
+        100.8
+      ],
+      "polygon_count": 644,
+      "triangle_count": 1288,
+      "triangle_budget": 2400,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "4ff7e53e2a4e8658eaecadd14da4300908a9fccb0c6235b8a59e471160c42555"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-004",
+      "logical_id": "env_far_building_004",
+      "name_zh": "平顶矩形商务塔楼",
+      "slug": "env_far_building_004",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "22层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_004/source/env_far_building_004_source_v001.blend",
+      "collection": "04_平顶矩形商务塔楼_独立资产包",
+      "source_collection": "04_平顶矩形商务塔楼_制作组件",
+      "objects": [
+        "平顶矩形商务塔楼_主体_金属哑光反光"
+      ],
+      "root_object": "平顶矩形商务塔楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        24.05,
+        20.05,
+        85.6
+      ],
+      "polygon_count": 724,
+      "triangle_count": 1448,
+      "triangle_budget": 2400,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "7ffb6a8314497e4708db3d96e4bd547f53e52e114bc674cc3d0584dbce95d7a5"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-005",
+      "logical_id": "env_far_building_005",
+      "name_zh": "中高层深色办公楼",
+      "slug": "env_far_building_005",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "17层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_005/source/env_far_building_005_source_v001.blend",
+      "collection": "05_中高层深色办公楼_独立资产包",
+      "source_collection": "05_中高层深色办公楼_制作组件",
+      "objects": [
+        "中高层深色办公楼_主体_金属哑光反光"
+      ],
+      "root_object": "中高层深色办公楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        22.05,
+        18.05,
+        66.6
+      ],
+      "polygon_count": 496,
+      "triangle_count": 992,
+      "triangle_budget": 2400,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "de7f25e085133593679f5339d76453b0600d0ae99882cb0730a8c830f97ceea8"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-006",
+      "logical_id": "env_far_building_006",
+      "name_zh": "阶梯退台高层",
+      "slug": "env_far_building_006",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "21层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_006/source/env_far_building_006_source_v001.blend",
+      "collection": "06_阶梯退台高层_独立资产包",
+      "source_collection": "06_阶梯退台高层_制作组件",
+      "objects": [
+        "阶梯退台高层_主体_金属哑光反光"
+      ],
+      "root_object": "阶梯退台高层_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        28.05,
+        24.05,
+        81.8
+      ],
+      "polygon_count": 652,
+      "triangle_count": 1304,
+      "triangle_budget": 2400,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "59689a9e0c6d5b0beed5af16081d9f1d14a52aec2a6cc8aaa40e4775099c57a4"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-007",
+      "logical_id": "env_far_building_007",
+      "name_zh": "圆角中层幕墙楼",
+      "slug": "env_far_building_007",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "10层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_007/source/env_far_building_007_source_v001.blend",
+      "collection": "07_圆角中层幕墙楼_独立资产包",
+      "source_collection": "07_圆角中层幕墙楼_制作组件",
+      "objects": [
+        "圆角中层幕墙楼_主体_金属哑光反光"
+      ],
+      "root_object": "圆角中层幕墙楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        25.05,
+        20.05,
+        40.0
+      ],
+      "polygon_count": 312,
+      "triangle_count": 632,
+      "triangle_budget": 2400,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "1b0883fee7917e840c9119d0a8b4a2ad9ca9d8c05238efe392f049c6aac6f9a8"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-008",
+      "logical_id": "env_far_building_008",
+      "name_zh": "窄体板式高楼",
+      "slug": "env_far_building_008",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "18层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_008/source/env_far_building_008_source_v001.blend",
+      "collection": "08_窄体板式高楼_独立资产包",
+      "source_collection": "08_窄体板式高楼_制作组件",
+      "objects": [
+        "窄体板式高楼_主体_金属哑光反光"
+      ],
+      "root_object": "窄体板式高楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        16.05,
+        28.05,
+        70.4
+      ],
+      "polygon_count": 596,
+      "triangle_count": 1192,
+      "triangle_budget": 2400,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "ddaa493025f4bee095e9fe28bddbfe166711a1033c0dbc22e8a2d1ca94f4f816"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-009",
+      "logical_id": "env_far_building_009",
+      "name_zh": "七层矩形街区办公楼",
+      "slug": "env_far_building_009",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "7层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_009/source/env_far_building_009_source_v001.blend",
+      "collection": "09_七层矩形街区办公楼_独立资产包",
+      "source_collection": "09_七层矩形街区办公楼_制作组件",
+      "objects": [
+        "七层矩形街区办公楼_主体_金属哑光反光"
+      ],
+      "root_object": "七层矩形街区办公楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        22.05,
+        18.05,
+        28.6
+      ],
+      "polygon_count": 174,
+      "triangle_count": 348,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "fe57964090f97c6cefef96bb07b9d61a57fb57a70b791131fd7d8fa54c5c97b7"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-010",
+      "logical_id": "env_far_building_010",
+      "name_zh": "六层转角L形楼",
+      "slug": "env_far_building_010",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "6层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_010/source/env_far_building_010_source_v001.blend",
+      "collection": "10_六层转角L形楼_独立资产包",
+      "source_collection": "10_六层转角L形楼_制作组件",
+      "objects": [
+        "六层转角L形楼_主体_金属哑光反光"
+      ],
+      "root_object": "六层转角L形楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        28.05,
+        24.05,
+        24.8
+      ],
+      "polygon_count": 206,
+      "triangle_count": 416,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "a17efe7a48f2c7eb4ce971dd3153c80f1b4900efa0ea30b42de73830f916db88"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "logical_id": "env_far_building_011",
+      "name_zh": "六层截角公寓楼",
+      "slug": "env_far_building_011",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "6层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_011/source/env_far_building_011_source_v001.blend",
+      "collection": "11_六层截角公寓楼_独立资产包",
+      "source_collection": "11_六层截角公寓楼_制作组件",
+      "objects": [
+        "六层截角公寓楼_主体_金属哑光反光"
+      ],
+      "root_object": "六层截角公寓楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        22.05,
+        19.05,
+        24.8
+      ],
+      "polygon_count": 164,
+      "triangle_count": 336,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "77a7b5c181d8a480b783c062b2c5786dfb3297c09066883be3b4ca7ccadce90d"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "logical_id": "env_far_building_012",
+      "name_zh": "五层窄体街边楼",
+      "slug": "env_far_building_012",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "5层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_012/source/env_far_building_012_source_v001.blend",
+      "collection": "12_五层窄体街边楼_独立资产包",
+      "source_collection": "12_五层窄体街边楼_制作组件",
+      "objects": [
+        "五层窄体街边楼_主体_金属哑光反光"
+      ],
+      "root_object": "五层窄体街边楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        14.05,
+        24.05,
+        21.0
+      ],
+      "polygon_count": 130,
+      "triangle_count": 260,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "0fbc7359fa1fca32853e01d7fc27ff45a3aa7323680bbb75d434bf9213302e15"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-013",
+      "logical_id": "env_far_building_013",
+      "name_zh": "八层设备屋顶办公楼",
+      "slug": "env_far_building_013",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "8层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_013/source/env_far_building_013_source_v001.blend",
+      "collection": "13_八层设备屋顶办公楼_独立资产包",
+      "source_collection": "13_八层设备屋顶办公楼_制作组件",
+      "objects": [
+        "八层设备屋顶办公楼_主体_金属哑光反光"
+      ],
+      "root_object": "八层设备屋顶办公楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        27.05,
+        22.05,
+        32.4
+      ],
+      "polygon_count": 250,
+      "triangle_count": 500,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "e5858a0d53a97da8507121ac9fb8ec68e5d83a0898a0e5ee0e83efe127cefe58"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-014",
+      "logical_id": "env_far_building_014",
+      "name_zh": "五层U形围合楼",
+      "slug": "env_far_building_014",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "5层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_014/source/env_far_building_014_source_v001.blend",
+      "collection": "14_五层U形围合楼_独立资产包",
+      "source_collection": "14_五层U形围合楼_制作组件",
+      "objects": [
+        "五层U形围合楼_主体_金属哑光反光"
+      ],
+      "root_object": "五层U形围合楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        30.05,
+        26.05,
+        21.0
+      ],
+      "polygon_count": 227,
+      "triangle_count": 462,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "72ef76e9d6468787b569300cd3fef9c8f128adcbff89fe49548e3d3df9736972"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-015",
+      "logical_id": "env_far_building_015",
+      "name_zh": "四层斜角街边楼",
+      "slug": "env_far_building_015",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "4层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_015/source/env_far_building_015_source_v001.blend",
+      "collection": "15_四层斜角街边楼_独立资产包",
+      "source_collection": "15_四层斜角街边楼_制作组件",
+      "objects": [
+        "四层斜角街边楼_主体_金属哑光反光"
+      ],
+      "root_object": "四层斜角街边楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        24.025,
+        19.03483,
+        17.2
+      ],
+      "polygon_count": 108,
+      "triangle_count": 216,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "1261eebdb146fbcdc82d9c024a906d196b4532e12b7c56f85256fb0939a47044",
+      "origin_correction_m": [
+        -0.012499809265136719,
+        -0.017414093017578125,
+        0.0
+      ]
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-016",
+      "logical_id": "env_far_building_016",
+      "name_zh": "五层圆角街区楼",
+      "slug": "env_far_building_016",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "5层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_016/source/env_far_building_016_source_v001.blend",
+      "collection": "16_五层圆角街区楼_独立资产包",
+      "source_collection": "16_五层圆角街区楼_制作组件",
+      "objects": [
+        "五层圆角街区楼_主体_金属哑光反光"
+      ],
+      "root_object": "五层圆角街区楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        23.05,
+        19.05,
+        21.0
+      ],
+      "polygon_count": 122,
+      "triangle_count": 252,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "401076ca521dc46f4619bfd99700126b3fc67ad01f6dab95c5cee5ce08f8b004"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-017",
+      "logical_id": "env_far_building_017",
+      "name_zh": "三层大跨度平顶厂房",
+      "slug": "env_far_building_017",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "3层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_017/source/env_far_building_017_source_v001.blend",
+      "collection": "17_三层大跨度平顶厂房_独立资产包",
+      "source_collection": "17_三层大跨度平顶厂房_制作组件",
+      "objects": [
+        "三层大跨度平顶厂房_主体_金属哑光反光"
+      ],
+      "root_object": "三层大跨度平顶厂房_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        40.05,
+        30.05,
+        13.4
+      ],
+      "polygon_count": 140,
+      "triangle_count": 280,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "26d4494818f8da361697f276ee71c0b7ee6b92b99bcb1679b4785b1661459a3c"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-018",
+      "logical_id": "env_far_building_018",
+      "name_zh": "四层大屋顶截角楼",
+      "slug": "env_far_building_018",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "4层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_018/source/env_far_building_018_source_v001.blend",
+      "collection": "18_四层大屋顶截角楼_独立资产包",
+      "source_collection": "18_四层大屋顶截角楼_制作组件",
+      "objects": [
+        "四层大屋顶截角楼_主体_金属哑光反光"
+      ],
+      "root_object": "四层大屋顶截角楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        38.05,
+        32.05,
+        17.2
+      ],
+      "polygon_count": 190,
+      "triangle_count": 388,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "741e74a10fc338812987f72816cf7a28d4c8d3fdede20f7d9a49454f8ddd3d4c"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "logical_id": "env_far_building_019",
+      "name_zh": "三层街边长条楼",
+      "slug": "env_far_building_019",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "3层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_019/source/env_far_building_019_source_v001.blend",
+      "collection": "19_三层街边长条楼_独立资产包",
+      "source_collection": "19_三层街边长条楼_制作组件",
+      "objects": [
+        "三层街边长条楼_主体_金属哑光反光"
+      ],
+      "root_object": "三层街边长条楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        32.05,
+        13.05,
+        13.4
+      ],
+      "polygon_count": 98,
+      "triangle_count": 196,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "380e414dc8ea2845983e55ec453a8d1a603e5573713aea66572ff941e3313d08"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "logical_id": "env_far_building_020",
+      "name_zh": "四层小型方楼",
+      "slug": "env_far_building_020",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "4层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_020/source/env_far_building_020_source_v001.blend",
+      "collection": "20_四层小型方楼_独立资产包",
+      "source_collection": "20_四层小型方楼_制作组件",
+      "objects": [
+        "四层小型方楼_主体_金属哑光反光"
+      ],
+      "root_object": "四层小型方楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        15.05,
+        15.05,
+        17.2
+      ],
+      "polygon_count": 84,
+      "triangle_count": 168,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "7e0bb0e89cc95e12aa0a3cb15219aa99f9b0501f07c25e879f007771e5922567"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-021",
+      "logical_id": "env_far_building_021",
+      "name_zh": "二层仓储坡顶楼",
+      "slug": "env_far_building_021",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "2层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_021/source/env_far_building_021_source_v001.blend",
+      "collection": "21_二层仓储坡顶楼_独立资产包",
+      "source_collection": "21_二层仓储坡顶楼_制作组件",
+      "objects": [
+        "二层仓储坡顶楼_主体_金属哑光反光"
+      ],
+      "root_object": "二层仓储坡顶楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        33.05,
+        23.05,
+        9.8
+      ],
+      "polygon_count": 70,
+      "triangle_count": 138,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "2c3e9cad62c28d67b0fa1173d1d8fc7e2826a5c7532edc7c902f293f35d7da45"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-022",
+      "logical_id": "env_far_building_022",
+      "name_zh": "三层L形低层楼",
+      "slug": "env_far_building_022",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "3层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_022/source/env_far_building_022_source_v001.blend",
+      "collection": "22_三层L形低层楼_独立资产包",
+      "source_collection": "22_三层L形低层楼_制作组件",
+      "objects": [
+        "三层L形低层楼_主体_金属哑光反光"
+      ],
+      "root_object": "三层L形低层楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        28.05,
+        25.05,
+        13.4
+      ],
+      "polygon_count": 116,
+      "triangle_count": 236,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "950d80b26534a880c99ed02a2c7e549ee9f04dc1602a90ac006c9bfc0ab06026"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "logical_id": "env_far_building_023",
+      "name_zh": "二层窄巷配套楼",
+      "slug": "env_far_building_023",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "2层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_023/source/env_far_building_023_source_v001.blend",
+      "collection": "23_二层窄巷配套楼_独立资产包",
+      "source_collection": "23_二层窄巷配套楼_制作组件",
+      "objects": [
+        "二层窄巷配套楼_主体_金属哑光反光"
+      ],
+      "root_object": "二层窄巷配套楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        13.05,
+        18.05,
+        9.6
+      ],
+      "polygon_count": 56,
+      "triangle_count": 112,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "74092f8cc6c64810a468d0a5f5a8b904d9103c4642bc8159ba7965cf4b415fab"
+    },
+    {
+      "asset_id": "ENV-FAR-BUILDING-024",
+      "logical_id": "env_far_building_024",
+      "name_zh": "三层斜边大屋顶楼",
+      "slug": "env_far_building_024",
+      "category": "场景",
+      "subcategory": "远景建筑",
+      "version": "v001",
+      "block_id": "open_world",
+      "floor_range": "3层；层高3.8m；非可玩远景",
+      "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+      "scene_design_docs": [
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+        "docs/v0.1/10_资产与内容规范.md"
+      ],
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+      "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_024/source/env_far_building_024_source_v001.blend",
+      "collection": "24_三层斜边大屋顶楼_独立资产包",
+      "source_collection": "24_三层斜边大屋顶楼_制作组件",
+      "objects": [
+        "三层斜边大屋顶楼_主体_金属哑光反光"
+      ],
+      "root_object": "三层斜边大屋顶楼_主体_金属哑光反光",
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction_blender": [
+        0,
+        -1,
+        0
+      ],
+      "dimensions_blender_xyz": [
+        38.025,
+        27.03866,
+        13.4
+      ],
+      "polygon_count": 122,
+      "triangle_count": 244,
+      "triangle_budget": 1000,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "animations": [],
+      "emissive": false,
+      "collision_status": "none_visual_only",
+      "exported": false,
+      "godot_imported": false,
+      "dependencies": [],
+      "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+      "authoring_status": "Blender源已完成",
+      "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+      "priority": "P1",
+      "owner": "摩斯拉",
+      "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+      "source_sha256": "ce44fd5698ef5ec4d1f00db6dc9a38a22def5b1edbe77bdd0c8d15270c95460b",
+      "origin_correction_m": [
+        -0.012499809265136719,
+        -0.019331932067871094,
+        0.0
+      ]
+    }
+  ],
+  "instance_count": 161,
+  "instances": [
+    {
+      "instance_id": "布局实例_001_左侧折角幕墙塔楼",
+      "asset_id": "ENV-FAR-BUILDING-001",
+      "location_blender": [
+        -143.10000610351562,
+        22.31999969482422,
+        0.0
+      ],
+      "rotation_z_radians": -0.22689280275926285,
+      "scale": [
+        1.35,
+        1.35,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_002_中心截角宽体办公楼",
+      "asset_id": "ENV-FAR-BUILDING-002",
+      "location_blender": [
+        38.34000015258789,
+        39.959999084472656,
+        0.0
+      ],
+      "rotation_z_radians": -0.12217304763960307,
+      "scale": [
+        1.12,
+        1.12,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_003_细长高层办公楼",
+      "asset_id": "ENV-FAR-BUILDING-003",
+      "location_blender": [
+        10.260000228881836,
+        84.23999786376953,
+        0.0
+      ],
+      "rotation_z_radians": -0.08726646259971647,
+      "scale": [
+        0.76,
+        0.76,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_004_平顶矩形商务塔楼",
+      "asset_id": "ENV-FAR-BUILDING-004",
+      "location_blender": [
+        -65.33999633789062,
+        75.23999786376953,
+        0.0
+      ],
+      "rotation_z_radians": 0.4188790204786391,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_005_中高层深色办公楼",
+      "asset_id": "ENV-FAR-BUILDING-005",
+      "location_blender": [
+        -5.940000057220459,
+        77.4000015258789,
+        0.0
+      ],
+      "rotation_z_radians": -0.08726646259971647,
+      "scale": [
+        0.84,
+        0.84,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_006_阶梯退台高层",
+      "asset_id": "ENV-FAR-BUILDING-006",
+      "location_blender": [
+        65.69999694824219,
+        -87.4800033569336,
+        0.0
+      ],
+      "rotation_z_radians": 0.4886921905584123,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_007_圆角中层幕墙楼",
+      "asset_id": "ENV-FAR-BUILDING-007",
+      "location_blender": [
+        -98.45999908447266,
+        -3.240000009536743,
+        0.0
+      ],
+      "rotation_z_radians": 0.4363323129985824,
+      "scale": [
+        0.78,
+        0.78,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_008_窄体板式高楼",
+      "asset_id": "ENV-FAR-BUILDING-008",
+      "location_blender": [
+        103.86000061035156,
+        76.31999969482422,
+        0.0
+      ],
+      "rotation_z_radians": -0.3141592653589793,
+      "scale": [
+        0.8,
+        0.8,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_009_平顶矩形商务塔楼",
+      "asset_id": "ENV-FAR-BUILDING-004",
+      "location_blender": [
+        -75.05999755859375,
+        -88.19999694824219,
+        0.0
+      ],
+      "rotation_z_radians": 0.4886921905584123,
+      "scale": [
+        1.07,
+        1.07,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_010_中高层深色办公楼",
+      "asset_id": "ENV-FAR-BUILDING-005",
+      "location_blender": [
+        134.4600067138672,
+        20.15999984741211,
+        0.0
+      ],
+      "rotation_z_radians": -0.29670597283903605,
+      "scale": [
+        0.8,
+        0.8,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_011_四层大屋顶截角楼",
+      "asset_id": "ENV-FAR-BUILDING-018",
+      "location_blender": [
+        -125.0999984741211,
+        -14.760000228881836,
+        0.0
+      ],
+      "rotation_z_radians": -0.2792526803190927,
+      "scale": [
+        1.25,
+        1.25,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_012_三层大跨度平顶厂房",
+      "asset_id": "ENV-FAR-BUILDING-017",
+      "location_blender": [
+        72.18000030517578,
+        -20.15999984741211,
+        0.0
+      ],
+      "rotation_z_radians": 0.5061454830783556,
+      "scale": [
+        1.0,
+        1.0,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_013_三层斜边大屋顶楼",
+      "asset_id": "ENV-FAR-BUILDING-024",
+      "location_blender": [
+        153.89999389648438,
+        -90.0,
+        0.0
+      ],
+      "rotation_z_radians": -0.13962634015954636,
+      "scale": [
+        1.1,
+        1.1,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_014_二层仓储坡顶楼",
+      "asset_id": "ENV-FAR-BUILDING-021",
+      "location_blender": [
+        136.97999572753906,
+        82.44000244140625,
+        0.0
+      ],
+      "rotation_z_radians": -0.4363323129985824,
+      "scale": [
+        0.8,
+        0.8,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_015_四层大屋顶截角楼",
+      "asset_id": "ENV-FAR-BUILDING-018",
+      "location_blender": [
+        -5.21999979019165,
+        -102.95999908447266,
+        0.0
+      ],
+      "rotation_z_radians": 0.5585053606381855,
+      "scale": [
+        0.9,
+        0.9,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_016_八层设备屋顶办公楼",
+      "asset_id": "ENV-FAR-BUILDING-013",
+      "location_blender": [
+        94.5,
+        -48.959999084472656,
+        0.0
+      ],
+      "rotation_z_radians": 0.4363323129985824,
+      "scale": [
+        0.82,
+        0.82,
+        1
+      ],
+      "reference_only": true,
+      "hero": true
+    },
+    {
+      "instance_id": "布局实例_017_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -24.376638412475586,
+        -82.68891143798828,
+        0.0
+      ],
+      "rotation_z_radians": -0.8515837717213911,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_018_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        140.60707092285156,
+        -45.90370178222656,
+        0.0
+      ],
+      "rotation_z_radians": 0.2788813925055158,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_019_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        147.90499877929688,
+        -17.030364990234375,
+        0.0
+      ],
+      "rotation_z_radians": 0.33165122098463073,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_020_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -126.95731353759766,
+        -83.15116119384766,
+        0.0
+      ],
+      "rotation_z_radians": -2.0635362545624796,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_021_四层斜角街边楼",
+      "asset_id": "ENV-FAR-BUILDING-015",
+      "location_blender": [
+        43.89485168457031,
+        -97.67523193359375,
+        0.0
+      ],
+      "rotation_z_radians": -0.8515837717213911,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_022_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        -116.46846008300781,
+        -92.42984008789062,
+        0.0
+      ],
+      "rotation_z_radians": 0.3244753432935737,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_023_六层转角L形楼",
+      "asset_id": "ENV-FAR-BUILDING-010",
+      "location_blender": [
+        -130.1663818359375,
+        95.73926544189453,
+        0.0
+      ],
+      "rotation_z_radians": 0.28177186727335224,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_024_六层转角L形楼",
+      "asset_id": "ENV-FAR-BUILDING-010",
+      "location_blender": [
+        -63.59219741821289,
+        6.7616472244262695,
+        0.0
+      ],
+      "rotation_z_radians": -0.4783524313786575,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_025_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -108.28292083740234,
+        -50.85955810546875,
+        0.0
+      ],
+      "rotation_z_radians": -0.492739927767583,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_026_七层矩形街区办公楼",
+      "asset_id": "ENV-FAR-BUILDING-009",
+      "location_blender": [
+        -81.9940185546875,
+        6.966893672943115,
+        0.0
+      ],
+      "rotation_z_radians": 1.115695518226702,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_027_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        94.8211898803711,
+        -89.75491333007812,
+        0.0
+      ],
+      "rotation_z_radians": 0.7544801838344055,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_028_五层圆角街区楼",
+      "asset_id": "ENV-FAR-BUILDING-016",
+      "location_blender": [
+        -37.425418853759766,
+        46.61724853515625,
+        0.0
+      ],
+      "rotation_z_radians": -0.9809788432072748,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_029_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        130.65847778320312,
+        59.34085464477539,
+        0.0
+      ],
+      "rotation_z_radians": 1.9340877619278214,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_030_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        -147.6909942626953,
+        -55.80364227294922,
+        0.0
+      ],
+      "rotation_z_radians": 1.7859910538734778,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_031_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -97.18721008300781,
+        -68.90557861328125,
+        0.0
+      ],
+      "rotation_z_radians": 0.1740452398427388,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_032_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -143.64903259277344,
+        66.42413330078125,
+        0.0
+      ],
+      "rotation_z_radians": -1.2890244595215443,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_033_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        125.75416564941406,
+        -10.254572868347168,
+        0.0
+      ],
+      "rotation_z_radians": -0.04542327942157702,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_034_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        143.55555725097656,
+        -60.74658966064453,
+        0.0
+      ],
+      "rotation_z_radians": -0.17487377126916617,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_035_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -22.367334365844727,
+        27.228717803955078,
+        0.0
+      ],
+      "rotation_z_radians": 0.5984188934785372,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_036_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -41.245418548583984,
+        -67.12432861328125,
+        0.0
+      ],
+      "rotation_z_radians": -0.20131710837464079,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_037_七层矩形街区办公楼",
+      "asset_id": "ENV-FAR-BUILDING-009",
+      "location_blender": [
+        -154.004638671875,
+        -84.85942077636719,
+        0.0
+      ],
+      "rotation_z_radians": -2.0635362545624796,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_038_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        60.12394714355469,
+        84.32588195800781,
+        0.0
+      ],
+      "rotation_z_radians": 1.3393075704480542,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_039_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -58.0337028503418,
+        -71.89070129394531,
+        0.0
+      ],
+      "rotation_z_radians": -1.396751086952158,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_040_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        118.25337219238281,
+        32.867462158203125,
+        0.0
+      ],
+      "rotation_z_radians": -1.853773220167714,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_041_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        -80.48181915283203,
+        -18.620248794555664,
+        0.0
+      ],
+      "rotation_z_radians": 0.10753807969858878,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_042_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        2.890446901321411,
+        47.56919479370117,
+        0.0
+      ],
+      "rotation_z_radians": 0.291456794477867,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_043_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        -131.5920867919922,
+        49.23944854736328,
+        0.0
+      ],
+      "rotation_z_radians": 0.31784940383616256,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_044_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        79.27506256103516,
+        80.72526550292969,
+        0.0
+      ],
+      "rotation_z_radians": 1.3393075704480542,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_045_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        -8.518006324768066,
+        96.5321273803711,
+        0.0
+      ],
+      "rotation_z_radians": -1.365053715396861,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_046_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -61.8157958984375,
+        42.943634033203125,
+        0.0
+      ],
+      "rotation_z_radians": -0.9809788432072748,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_047_三层L形低层楼",
+      "asset_id": "ENV-FAR-BUILDING-022",
+      "location_blender": [
+        78.19206237792969,
+        100.262451171875,
+        0.0
+      ],
+      "rotation_z_radians": -0.27365932108209057,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_048_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        136.91737365722656,
+        38.4005126953125,
+        0.0
+      ],
+      "rotation_z_radians": 0.3632914351329249,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_049_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -92.0490493774414,
+        -103.67070770263672,
+        0.0
+      ],
+      "rotation_z_radians": 0.8712084280939504,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_050_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        40.97087478637695,
+        -76.84296417236328,
+        0.0
+      ],
+      "rotation_z_radians": 1.3692685590595632,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_051_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        -118.66860961914062,
+        83.31061553955078,
+        0.0
+      ],
+      "rotation_z_radians": 0.28177186727335224,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_052_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        116.50736236572266,
+        2.2949471473693848,
+        0.0
+      ],
+      "rotation_z_radians": -1.2391451058102658,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_053_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        96.00798034667969,
+        101.97288513183594,
+        0.0
+      ],
+      "rotation_z_radians": -1.8444556478769873,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_054_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        22.481250762939453,
+        -84.75228118896484,
+        0.0
+      ],
+      "rotation_z_radians": 0.7192125550735055,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_055_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -90.85069274902344,
+        81.08615112304688,
+        0.0
+      ],
+      "rotation_z_radians": -1.120135000714263,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_056_三层L形低层楼",
+      "asset_id": "ENV-FAR-BUILDING-022",
+      "location_blender": [
+        -85.00566864013672,
+        62.04512405395508,
+        0.0
+      ],
+      "rotation_z_radians": -1.120135000714263,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_057_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        0.20086050033569336,
+        -34.08584213256836,
+        0.0
+      ],
+      "rotation_z_radians": 0.9542809534040468,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_058_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        71.98872375488281,
+        -55.346435546875,
+        0.0
+      ],
+      "rotation_z_radians": -0.17487377126916617,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_059_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        -61.143409729003906,
+        -16.27039909362793,
+        0.0
+      ],
+      "rotation_z_radians": 0.10753807969858878,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_060_四层斜角街边楼",
+      "asset_id": "ENV-FAR-BUILDING-015",
+      "location_blender": [
+        -43.878482818603516,
+        77.85659790039062,
+        0.0
+      ],
+      "rotation_z_radians": -1.365053715396861,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_061_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        44.80546569824219,
+        95.10958099365234,
+        0.0
+      ],
+      "rotation_z_radians": -1.802340097720547,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_062_三层L形低层楼",
+      "asset_id": "ENV-FAR-BUILDING-022",
+      "location_blender": [
+        -149.24598693847656,
+        96.88204193115234,
+        0.0
+      ],
+      "rotation_z_radians": -1.2890244595215443,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_063_七层矩形街区办公楼",
+      "asset_id": "ENV-FAR-BUILDING-009",
+      "location_blender": [
+        -160.2438201904297,
+        -15.726301193237305,
+        0.0
+      ],
+      "rotation_z_radians": 1.7859910538734778,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_064_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        139.3483123779297,
+        -5.457859992980957,
+        0.0
+      ],
+      "rotation_z_radians": -0.04542327942157702,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_065_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        153.5586700439453,
+        68.20338439941406,
+        0.0
+      ],
+      "rotation_z_radians": 0.3632914351329249,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_066_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -65.36824035644531,
+        -58.067569732666016,
+        0.0
+      ],
+      "rotation_z_radians": -1.396751086952158,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_067_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        26.177705764770508,
+        7.980237007141113,
+        0.0
+      ],
+      "rotation_z_radians": 1.542501992946393,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_068_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -13.934349060058594,
+        18.065149307250977,
+        0.0
+      ],
+      "rotation_z_radians": 0.291456794477867,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_069_七层矩形街区办公楼",
+      "asset_id": "ENV-FAR-BUILDING-009",
+      "location_blender": [
+        160.3003387451172,
+        31.94734764099121,
+        0.0
+      ],
+      "rotation_z_radians": 1.9340877619278214,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_070_七层矩形街区办公楼",
+      "asset_id": "ENV-FAR-BUILDING-009",
+      "location_blender": [
+        137.5513458251953,
+        101.40184020996094,
+        0.0
+      ],
+      "rotation_z_radians": -1.8444556478769873,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_071_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -8.452092170715332,
+        -41.35515594482422,
+        0.0
+      ],
+      "rotation_z_radians": 0.9868178463947674,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_072_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        156.21311950683594,
+        -37.10313415527344,
+        0.0
+      ],
+      "rotation_z_radians": -1.2919149342893808,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_073_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        18.35090446472168,
+        -15.802962303161621,
+        0.0
+      ],
+      "rotation_z_radians": -0.1703085903407557,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_074_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        129.27877807617188,
+        -51.09933853149414,
+        0.0
+      ],
+      "rotation_z_radians": -1.2919149342893808,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_075_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        -42.992034912109375,
+        -88.16465759277344,
+        0.0
+      ],
+      "rotation_z_radians": 0.8712084280939504,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_076_五层圆角街区楼",
+      "asset_id": "ENV-FAR-BUILDING-016",
+      "location_blender": [
+        152.77728271484375,
+        47.91726303100586,
+        0.0
+      ],
+      "rotation_z_radians": 0.3632914351329249,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_077_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        -160.85858154296875,
+        -2.073669195175171,
+        0.0
+      ],
+      "rotation_z_radians": 1.8886457306310593,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_078_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -144.20523071289062,
+        78.40935516357422,
+        0.0
+      ],
+      "rotation_z_radians": -1.2890244595215443,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_079_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        93.94384765625,
+        -33.368896484375,
+        0.0
+      ],
+      "rotation_z_radians": -1.2391451058102658,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_080_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        -93.49784851074219,
+        -41.832069396972656,
+        0.0
+      ],
+      "rotation_z_radians": 0.10753807969858878,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_081_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        119.35047912597656,
+        51.041664123535156,
+        0.0
+      ],
+      "rotation_z_radians": -1.853773220167714,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_082_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        157.7275390625,
+        -46.65840148925781,
+        0.0
+      ],
+      "rotation_z_radians": 1.3959225555257304,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_083_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        155.65565490722656,
+        10.084059715270996,
+        0.0
+      ],
+      "rotation_z_radians": 1.5253730473733196,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_084_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -94.75137329101562,
+        -57.03973388671875,
+        0.0
+      ],
+      "rotation_z_radians": -1.396751086952158,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_085_四层斜角街边楼",
+      "asset_id": "ENV-FAR-BUILDING-015",
+      "location_blender": [
+        -52.16682052612305,
+        -48.07017135620117,
+        0.0
+      ],
+      "rotation_z_radians": -0.9174916105223163,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_086_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        161.84803771972656,
+        -6.476850986480713,
+        0.0
+      ],
+      "rotation_z_radians": 1.5253730473733196,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_087_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        131.94041442871094,
+        -31.50839614868164,
+        0.0
+      ],
+      "rotation_z_radians": -1.2391451058102658,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_088_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        3.623784065246582,
+        -72.15495300292969,
+        0.0
+      ],
+      "rotation_z_radians": 0.7192125550735055,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_089_六层转角L形楼",
+      "asset_id": "ENV-FAR-BUILDING-010",
+      "location_blender": [
+        -92.89241027832031,
+        95.36962127685547,
+        0.0
+      ],
+      "rotation_z_radians": -1.120135000714263,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_090_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        66.74797058105469,
+        102.89569091796875,
+        0.0
+      ],
+      "rotation_z_radians": -1.802340097720547,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_091_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        161.87994384765625,
+        -22.874393463134766,
+        0.0
+      ],
+      "rotation_z_radians": 0.33165122098463073,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_092_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -162.23741149902344,
+        49.48115158081055,
+        0.0
+      ],
+      "rotation_z_radians": 1.8886457306310593,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_093_七层矩形街区办公楼",
+      "asset_id": "ENV-FAR-BUILDING-009",
+      "location_blender": [
+        -33.16838836669922,
+        -10.139065742492676,
+        0.0
+      ],
+      "rotation_z_radians": -0.4783524313786575,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_094_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        113.78373718261719,
+        -95.84231567382812,
+        0.0
+      ],
+      "rotation_z_radians": 0.2788813925055158,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_095_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -25.672489166259766,
+        92.77511596679688,
+        0.0
+      ],
+      "rotation_z_radians": 0.20574261139803562,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_096_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        13.558700561523438,
+        98.35014343261719,
+        0.0
+      ],
+      "rotation_z_radians": -0.23154377092565048,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_097_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        -100.92642211914062,
+        -82.39761352539062,
+        0.0
+      ],
+      "rotation_z_radians": -1.396751086952158,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_098_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -42.999629974365234,
+        -4.010770797729492,
+        0.0
+      ],
+      "rotation_z_radians": 1.092443895416239,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_099_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        69.62129974365234,
+        8.748449325561523,
+        0.0
+      ],
+      "rotation_z_radians": 2.5036316543202832,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_100_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -162.46893310546875,
+        91.64910125732422,
+        0.0
+      ],
+      "rotation_z_radians": -1.2890244595215443,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_101_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -161.89010620117188,
+        -102.8006591796875,
+        0.0
+      ],
+      "rotation_z_radians": 0.3244753432935737,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_102_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        117.54788970947266,
+        18.057889938354492,
+        0.0
+      ],
+      "rotation_z_radians": -0.2829768933728174,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_103_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        -159.85647583007812,
+        79.61894989013672,
+        0.0
+      ],
+      "rotation_z_radians": -1.2890244595215443,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_104_三层L形低层楼",
+      "asset_id": "ENV-FAR-BUILDING-022",
+      "location_blender": [
+        -69.0579833984375,
+        100.59368896484375,
+        0.0
+      ],
+      "rotation_z_radians": -1.120135000714263,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_105_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        87.85314178466797,
+        72.3766098022461,
+        0.0
+      ],
+      "rotation_z_radians": 0.4107169631146721,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_106_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        -90.33655548095703,
+        19.46273422241211,
+        0.0
+      ],
+      "rotation_z_radians": -1.8797270707186382,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_107_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        14.090921401977539,
+        -47.63943099975586,
+        0.0
+      ],
+      "rotation_z_radians": -0.20152776773533324,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_108_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        70.77970123291016,
+        71.9296646118164,
+        0.0
+      ],
+      "rotation_z_radians": 1.3393075704480542,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_109_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -74.72418212890625,
+        16.120487213134766,
+        0.0
+      ],
+      "rotation_z_radians": 1.115695518226702,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_110_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -122.29853820800781,
+        -70.31916046142578,
+        0.0
+      ],
+      "rotation_z_radians": -2.0635362545624796,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_111_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        152.71109008789062,
+        -28.12204360961914,
+        0.0
+      ],
+      "rotation_z_radians": -1.2391451058102658,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_112_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -84.75279998779297,
+        45.68144607543945,
+        0.0
+      ],
+      "rotation_z_radians": 1.115695518226702,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_113_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -60.319881439208984,
+        -102.2503890991211,
+        0.0
+      ],
+      "rotation_z_radians": 0.8712084280939504,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_114_四层斜角街边楼",
+      "asset_id": "ENV-FAR-BUILDING-015",
+      "location_blender": [
+        10.498372077941895,
+        12.114481925964355,
+        0.0
+      ],
+      "rotation_z_radians": 1.542501992946393,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_115_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        129.8331756591797,
+        -67.53404235839844,
+        0.0
+      ],
+      "rotation_z_radians": 0.2788813925055158,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_116_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        -100.54468536376953,
+        78.77909851074219,
+        0.0
+      ],
+      "rotation_z_radians": -1.2890244595215443,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_117_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        57.84185791015625,
+        102.5782470703125,
+        0.0
+      ],
+      "rotation_z_radians": -1.802340097720547,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_118_四层斜角街边楼",
+      "asset_id": "ENV-FAR-BUILDING-015",
+      "location_blender": [
+        55.74152755737305,
+        -48.328086853027344,
+        0.0
+      ],
+      "rotation_z_radians": -0.816316142960491,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_119_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        26.68714141845703,
+        -71.07633209228516,
+        0.0
+      ],
+      "rotation_z_radians": -0.20152776773533324,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_120_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        -117.52114868164062,
+        57.26707458496094,
+        0.0
+      ],
+      "rotation_z_radians": 0.45247488956206655,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_121_三层街边长条楼",
+      "asset_id": "ENV-FAR-BUILDING-019",
+      "location_blender": [
+        -24.310775756835938,
+        51.45955276489258,
+        0.0
+      ],
+      "rotation_z_radians": -0.9626235483471679,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_122_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        -111.61700439453125,
+        46.43220520019531,
+        0.0
+      ],
+      "rotation_z_radians": -1.11832143723283,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_123_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -160.49440002441406,
+        -28.761194229125977,
+        0.0
+      ],
+      "rotation_z_radians": 0.21519472707858114,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_124_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        161.97854614257812,
+        -66.70771026611328,
+        0.0
+      ],
+      "rotation_z_radians": -0.17487377126916617,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_125_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -48.89654541015625,
+        -16.738929748535156,
+        0.0
+      ],
+      "rotation_z_radians": 0.10753807969858878,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_126_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        154.9256134033203,
+        19.758163452148438,
+        0.0
+      ],
+      "rotation_z_radians": -1.853773220167714,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_127_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        123.1993637084961,
+        -39.85247039794922,
+        0.0
+      ],
+      "rotation_z_radians": 0.2788813925055158,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_128_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        9.413296699523926,
+        66.57140350341797,
+        0.0
+      ],
+      "rotation_z_radians": -1.802340097720547,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_129_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -112.25479888916016,
+        13.245096206665039,
+        0.0
+      ],
+      "rotation_z_radians": -0.30893074392374165,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_130_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -52.760162353515625,
+        101.07459259033203,
+        0.0
+      ],
+      "rotation_z_radians": -1.365053715396861,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_131_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -53.45326232910156,
+        90.9670639038086,
+        0.0
+      ],
+      "rotation_z_radians": 0.20574261139803562,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_132_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        107.52214813232422,
+        28.273099899291992,
+        0.0
+      ],
+      "rotation_z_radians": -0.2829768933728174,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_133_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -109.03874206542969,
+        100.7203369140625,
+        0.0
+      ],
+      "rotation_z_radians": 0.28177186727335224,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_134_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        90.88746643066406,
+        42.11830520629883,
+        0.0
+      ],
+      "rotation_z_radians": 1.1127983751976747,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_135_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -117.0386962890625,
+        -62.670536041259766,
+        0.0
+      ],
+      "rotation_z_radians": -0.492739927767583,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_136_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        -152.0439910888672,
+        -68.51941680908203,
+        0.0
+      ],
+      "rotation_z_radians": -0.492739927767583,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_137_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        115.99832916259766,
+        -13.977200508117676,
+        0.0
+      ],
+      "rotation_z_radians": -0.04542327942157702,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_138_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -163.22364807128906,
+        -57.97539520263672,
+        0.0
+      ],
+      "rotation_z_radians": 0.21519472707858114,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_139_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        108.38105010986328,
+        -85.91089630126953,
+        0.0
+      ],
+      "rotation_z_radians": -0.17487377126916617,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_140_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -55.45785140991211,
+        28.089496612548828,
+        0.0
+      ],
+      "rotation_z_radians": 1.092443895416239,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_141_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        76.1814956665039,
+        17.640634536743164,
+        0.0
+      ],
+      "rotation_z_radians": 0.9159642581970763,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_142_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        89.34363555908203,
+        89.88835144042969,
+        0.0
+      ],
+      "rotation_z_radians": -1.8444556478769873,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_143_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -29.445083618164062,
+        34.76587677001953,
+        0.0
+      ],
+      "rotation_z_radians": -0.9809788432072748,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_144_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -76.78907012939453,
+        -7.228152751922607,
+        0.0
+      ],
+      "rotation_z_radians": 1.6783344064934853,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_145_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        -85.82894134521484,
+        -65.3721694946289,
+        0.0
+      ],
+      "rotation_z_radians": 0.1740452398427388,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_146_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -69.03897094726562,
+        53.12730407714844,
+        0.0
+      ],
+      "rotation_z_radians": 0.5898174835876218,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_147_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        85.78797912597656,
+        30.3697509765625,
+        0.0
+      ],
+      "rotation_z_radians": -0.6548320685978203,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_148_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        -131.52438354492188,
+        73.26095581054688,
+        0.0
+      ],
+      "rotation_z_radians": 0.28177186727335224,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_149_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -36.31581115722656,
+        -52.8181037902832,
+        0.0
+      ],
+      "rotation_z_radians": -0.20131710837464079,
+      "scale": [
+        0.72,
+        0.72,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_150_五层窄体街边楼",
+      "asset_id": "ENV-FAR-BUILDING-012",
+      "location_blender": [
+        25.196504592895508,
+        -101.0767593383789,
+        0.0
+      ],
+      "rotation_z_radians": 0.7192125550735055,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_151_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -51.234405517578125,
+        2.3610312938690186,
+        0.0
+      ],
+      "rotation_z_radians": 1.092443895416239,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_152_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        -4.257800579071045,
+        63.760955810546875,
+        0.0
+      ],
+      "rotation_z_radians": -0.9626235483471679,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_153_四层斜角街边楼",
+      "asset_id": "ENV-FAR-BUILDING-015",
+      "location_blender": [
+        40.2457389831543,
+        4.689391136169434,
+        0.0
+      ],
+      "rotation_z_radians": 0.7437555842988599,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_154_六层截角公寓楼",
+      "asset_id": "ENV-FAR-BUILDING-011",
+      "location_blender": [
+        -152.95596313476562,
+        56.35327911376953,
+        0.0
+      ],
+      "rotation_z_radians": 1.8886457306310593,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_155_三层L形低层楼",
+      "asset_id": "ENV-FAR-BUILDING-022",
+      "location_blender": [
+        154.32643127441406,
+        97.52792358398438,
+        0.0
+      ],
+      "rotation_z_radians": 1.7126933813990604,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_156_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        158.44076538085938,
+        -55.50823211669922,
+        0.0
+      ],
+      "rotation_z_radians": 1.3959225555257304,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_157_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -3.8018710613250732,
+        -64.84486389160156,
+        0.0
+      ],
+      "rotation_z_radians": -0.8515837717213911,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_158_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -106.73318481445312,
+        -98.27238464355469,
+        0.0
+      ],
+      "rotation_z_radians": 0.3244753432935737,
+      "scale": [
+        0.48,
+        0.48,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_159_四层小型方楼",
+      "asset_id": "ENV-FAR-BUILDING-020",
+      "location_blender": [
+        -112.5310287475586,
+        -77.86005401611328,
+        0.0
+      ],
+      "rotation_z_radians": -2.0635362545624796,
+      "scale": [
+        0.57,
+        0.57,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_160_五层U形围合楼",
+      "asset_id": "ENV-FAR-BUILDING-014",
+      "location_blender": [
+        40.65122604370117,
+        71.21287536621094,
+        0.0
+      ],
+      "rotation_z_radians": 1.3393075704480542,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    },
+    {
+      "instance_id": "布局实例_161_二层窄巷配套楼",
+      "asset_id": "ENV-FAR-BUILDING-023",
+      "location_blender": [
+        44.354576110839844,
+        -34.92871856689453,
+        0.0
+      ],
+      "rotation_z_radians": 1.2698760924344714,
+      "scale": [
+        0.65,
+        0.65,
+        1
+      ],
+      "reference_only": true,
+      "hero": false
+    }
+  ],
+  "total_unique_triangles": 15708,
+  "layout_instanced_triangles": 44376,
+  "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+  "formal_godot_layout": false,
+  "collision_status": "none_visual_only",
+  "reference_limits": "两图没有相机/尺度数据，街区按轮廓与道路关系近似追溯，不声称逐像素摄影测量还原"
+}

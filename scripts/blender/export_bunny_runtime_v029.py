@@ -15,27 +15,29 @@ R=Path(__file__).resolve().parents[2]
 B=R/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01'
 MODEL=source_path(B/'production/v021/source/model/chr_bunny01_model_v021.blend')
 VERSION=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--source-version=')), 'v030' if '--firing-v030' in sys.argv else 'v029')
-assert VERSION in ('v029','v030','v031','v032','v033','v034','v035','v036','v037','v038')
+assert VERSION in ('v029','v030','v031','v032','v033','v034','v035','v036','v037','v038','v039')
 SOURCE=source_path(B/f'source/animation/chr_bunny01_animation_{VERSION}.blend')
-OUT=work_path('sessions/2026-10-14_player_jog_v038/export/placeholder').parent if VERSION=='v038' else B/'components/chr_bunny01_motion'
+BATCH='2026-10-15_player_motion_v039' if VERSION=='v039' else '2026-10-14_player_jog_v038'
+INCREMENTAL=VERSION in ('v038','v039')
+OUT=work_path('sessions/'+BATCH+'/export/placeholder').parent if INCREMENTAL else B/'components/chr_bunny01_motion'
 OUT.mkdir(parents=True,exist_ok=True)
 prior_library=json.loads((B/'components/chr_bunny01_motion/anim_bunny01_library.json').read_text(encoding='utf-8'))
 bpy.ops.wm.open_mainfile(filepath=str(MODEL))
 rig=next(o for o in bpy.context.scene.objects if o.type=='ARMATURE');expected=signature(rig)
 rest={k:Matrix(v) for k,v in json.loads(bpy.context.scene['runtime_component_rest']).items()}
 bpy.ops.wm.open_mainfile(filepath=str(SOURCE))
-old=prior_library if VERSION=='v038' else json.loads((B/'production/v024/exports/anim_bunny01_library_v024.json').read_text())
+old=json.loads(json.dumps(prior_library)) if INCREMENTAL else json.loads((B/'production/v024/exports/anim_bunny01_library_v024.json').read_text())
 clips=old['clips'];new={};selected=[];anchors={};action_fps={}
 specs={n:dict(reference_speed_mps=c['reference_speed_mps']) for n,c in prior_library['clips'].items() if 'reference_speed_mps' in c}
 for s in list(bpy.data.scenes):
     state=s.get('preview_clip','')
-    if not state.startswith(('sidearm_','longgun_','machinegun_','unarmed_')):continue
+    if not state.startswith(('sidearm_','longgun_','machinegun_','unarmed_')) and not (VERSION=='v039' and state=='idle'):continue
     assert state not in new,state
     bpy.context.window.scene=s;r=next(o for o in s.objects if o.type=='ARMATURE');assert signature(r)==expected
     anchors={side:list(C.to_3x3()@(rest['hand_'+side].inverted()@r.data.bones['hand_'+side].tail_local)) for side in ('l','r')}
     a=r.animation_data.action;selected.append(a);action_fps[a.name]=s.render.fps
     gun=next((o for o in s.objects if o.name.startswith('PREVIEW_GripSocket')),None)
-    if VERSION=='v038' and not ('_walking_' in state or '_moving_' in state):
+    if INCREMENTAL and not ('_walking_' in state or '_moving_' in state or (VERSION=='v039' and (state=='idle' or state.endswith('_idle')))):
         new[state]=prior_library['clips'][state]
         continue
     first,last=map(int,a.frame_range);frames=[]
@@ -55,13 +57,13 @@ for s in list(bpy.data.scenes):
     new[state]=dict(duration=float(a['duration']),loop=bool(a['loop']),frames=frames,source_action=a.name)
     spec_key=state.replace('_fire_','_')
     if spec_key in specs:new[state]['reference_speed_mps']=specs[spec_key]['reference_speed_mps']
-expected_count=35 if VERSION=='v029' else 77 if VERSION in ('v033','v034','v035','v036','v037','v038') else 74 if VERSION=='v032' else 62
+expected_count=78 if VERSION=='v039' else 35 if VERSION=='v029' else 77 if VERSION in ('v033','v034','v035','v036','v037','v038','v039') else 74 if VERSION=='v032' else 62
 assert len(new)==expected_count,len(new)
 clips.update(new)
 path=OUT/'anim_bunny01_library.json'
-if VERSION=='v038':
-    retained=[n for n in clips if not (n.startswith(('unarmed_','sidearm_','longgun_','machinegun_')) and ('_walking_' in n or '_moving_' in n))]
-    assert len(retained)==35
+if INCREMENTAL:
+    retained=[n for n in clips if not (n.startswith(('unarmed_','sidearm_','longgun_','machinegun_')) and ('_walking_' in n or '_moving_' in n) or VERSION=='v039' and (n=='idle' or n in ('sidearm_idle','longgun_idle','machinegun_idle','sidearm_fire_idle','longgun_fire_idle','machinegun_fire_idle')))]
+    assert len(retained)==(28 if VERSION=='v039' else 35)
     assert all(clips[n]==prior_library['clips'][n] for n in retained)
 if VERSION in ('v035','v036','v037'):
     previous=json.loads(path.read_text(encoding='utf-8'))['clips']
@@ -127,10 +129,10 @@ ledger.update(version=VERSION,new_clip_count=expected_count,glb_clip_count=expec
 if VERSION in ('v030','v031','v032','v033'):
     ledger['missing_actions']=['family_reload','family_charge','heavy_melee']
     ledger['verification']='verify_player3d_firing_motion'
-if VERSION in ('v033','v034','v035','v036','v037','v038'):
+if VERSION in ('v033','v034','v035','v036','v037','v038','v039'):
     ledger['missing_actions']=['family_charge','heavy_melee']
     ledger['verification']='verify_player3d_reload_motion'
-if VERSION=='v038':
-    ledger.update(verification='verify_player3d_directional_motion',modified_directional_clips=56,retained_clips=35,rollback='ShellStorm2-backup/2026-10-14_player_jog_v038/before_edits',retained_clip_provenance=dict(version=prior_library['version'],clips=retained,sha256=hashlib.sha256((B/'components/chr_bunny01_motion/anim_bunny01_library.json').read_bytes()).hexdigest()))
-(OUT/'character_transfer_ledger.json' if VERSION=='v038' else B/'character_transfer_ledger.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2),encoding='utf-8')
+if INCREMENTAL:
+    ledger.update(verification='verify_player3d_directional_motion',modified_directional_clips=56,modified_idle_clips=7 if VERSION=='v039' else 0,retained_clips=len(retained),rollback='ShellStorm2-backup/'+BATCH+'/before_edits',retained_clip_provenance=dict(version=prior_library['version'],clips=retained,sha256=hashlib.sha256((B/'components/chr_bunny01_motion/anim_bunny01_library.json').read_bytes()).hexdigest()))
+(OUT/'character_transfer_ledger.json' if INCREMENTAL else B/'character_transfer_ledger.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2),encoding='utf-8')
 print('RUNTIME_EXPORTED',len(clips),'GLB',len(gltf['animations']))

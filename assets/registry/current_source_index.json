@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-13",
+  "date": "2026-10-15",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -831,69 +831,69 @@
     },
     {
       "path": "art_source/items_weapons/_templates/prp/prp_template_source_v001.blend",
-      "bytes": 94511,
+      "bytes": 93856,
       "family": "assets/art/items_weapons/_templates/prp/prp_template_source_VERSION.blend",
       "version": [
         1
       ],
-      "sha256": "bc547f69da4a594e340f724884b8cf3e543e5c6aac07587258a2b75a8641f020"
+      "sha256": "44f97bd4fcefcf1a812c4872df0a9264f3fc51f7894a61b9f4b20d3e843ea567"
     },
     {
       "path": "art_source/items_weapons/props/backpack_small/source/prp_backpack_small_source_v001.blend",
-      "bytes": 102489,
+      "bytes": 100699,
       "family": "art_source/items_weapons/props/backpack_small/source/prp_backpack_small_source_VERSION.blend",
       "version": [
         1
       ],
-      "sha256": "dae9e45159142fca9e2df367f49fc3ff3659c1f59da0c856687de182eff9fd61"
+      "sha256": "fc03e91b86737b79be6c3d026ca729c3da7fa88bdc1bf04912a11d38f2235475"
     },
     {
       "path": "art_source/items_weapons/props/backpack_small/source/export/v001/prp_backpack_small_optimized_v001.blend",
-      "bytes": 100460,
+      "bytes": 99126,
       "family": "art_source/items_weapons/props/backpack_small/source/export/_VERSION/prp_backpack_small_optimized_VERSION.blend",
       "version": [
         1,
         1
       ],
-      "sha256": "d1d98fca5d6565a08fa4572cc1a58579f086334a036d3bdbb24a8720e7e4d3e8"
+      "sha256": "3b34269af9682eb28b11d3e69a0fc0e00f1f4f8b95414d773469f9a1d92c463c"
     },
     {
       "path": "art_source/items_weapons/props/backpack_medium/source/prp_backpack_medium_source_v001.blend",
-      "bytes": 103224,
+      "bytes": 101307,
       "family": "art_source/items_weapons/props/backpack_medium/source/prp_backpack_medium_source_VERSION.blend",
       "version": [
         1
       ],
-      "sha256": "0fc6aabfb127ea13113020cefc6570f33a6291a7dd197c801db818ced186d387"
+      "sha256": "5af9e7031b332559dd13f447d64c78c3845af4abfe09e0598f261c1fb1cfcdcb"
     },
     {
       "path": "art_source/items_weapons/props/backpack_medium/source/export/v001/prp_backpack_medium_optimized_v001.blend",
-      "bytes": 101120,
+      "bytes": 99586,
       "family": "art_source/items_weapons/props/backpack_medium/source/export/_VERSION/prp_backpack_medium_optimized_VERSION.blend",
       "version": [
         1,
         1
       ],
-      "sha256": "6f839b3683247d68cc749365fb871c0eb8d99f41e94764c70f3e7dab88bffc23"
+      "sha256": "bd6f2cd469b108c853cc8f826856de3d6e2622f7b4844e047f3ddaa9462271ec"
     },
     {
       "path": "art_source/items_weapons/props/backpack_large/source/prp_backpack_large_source_v001.blend",
-      "bytes": 109748,
+      "bytes": 105764,
       "family": "art_source/items_weapons/props/backpack_large/source/prp_backpack_large_source_VERSION.blend",
       "version": [
         1
       ],
-      "sha256": "5fe3077fe470825db4331a10676e1a0f5a3259517a7c78cc6a43910a8439aef3"
+      "sha256": "4fce2d8f590b458f6d2d14607a42695a83d1ec740ec4df33c7196dce11baca66"
     },
     {
       "path": "art_source/items_weapons/props/backpack_large/source/export/v001/prp_backpack_large_optimized_v001.blend",
-      "bytes": 105420,
+      "bytes": 101750,
       "family": "art_source/items_weapons/props/backpack_large/source/export/_VERSION/prp_backpack_large_optimized_VERSION.blend",
       "version": [
         1,
         1
       ],
-      "sha256": "39af2d58af13d72fb0be38972ce956a7d170df87f8753ec0d1a64a0cfed752d7"
+      "sha256": "f8c2156ef2ef470e3c1fd22ebbabb3a7feb26a7aada17835a75dd643f82be924"
     },
     {
       "path": "art_source/environments/tower_zones/shared/source/common_components/v001/generic_scene_components_source_v001.blend",
@@ -9863,13 +9863,13 @@
       "sha256": "d37ec67b4a4af8dca20d473b25fcf4401a2a4ffa3072c132893d11f88c42e83b"
     },
     {
-      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v037.blend",
-      "bytes": 303643546,
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v039.blend",
+      "bytes": 487698271,
       "family": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_VERSION.blend",
       "version": [
-        37
+        39
       ],
-      "sha256": "39722be44c2099a550bd957bb0c3b65bf611d7f4f899d7bf348f80ef49a6d0a8"
+      "sha256": "6062e0d92bdf4f79eb6981110c762cf5d9c4415b5dcf426d84254c3cc35e76ce"
     },
     {
       "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
@@ -10860,563 +10860,856 @@
     },
     {
       "path": "art_source/items_weapons/props/battery_large/source/itm_battery_large_source_v001.blend",
-      "bytes": 240281,
+      "bytes": 239304,
       "family": "art_source/items_weapons/props/battery_large/source/itm_battery_large_source.blend",
       "version": [
         1
       ],
       "role": "source",
-      "sha256": "7157aee1841ef81347a0d5b94a56e380366545b9a3aed0df5470e814eaa7b075"
+      "sha256": "9a447c854c56256f80c17988c67aa7efdb788bda18e08d606617f0896fd0ae89"
     },
     {
       "path": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
-      "bytes": 138013,
+      "bytes": 137213,
       "family": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source.blend",
       "version": [
         1
       ],
       "role": "source",
-      "sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54"
+      "sha256": "f1deca848220a5cc87c2e416e6554577e26f9bc4bb8610bf30a1382c375b7c57"
     },
     {
       "path": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source_v001.blend",
-      "bytes": 169182,
+      "bytes": 167959,
       "family": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source.blend",
       "version": [
         1
       ],
       "role": "source",
-      "sha256": "6d1d848e4cc37d91fc99d0609db46763ef916458e2a418aa621befb07781d5bb"
+      "sha256": "50a9270b073741e47e35576d2ba3425b66a7d28e151ecf232f54187222a3a26c"
     },
     {
       "path": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_source_v001.blend",
-      "bytes": 178408,
+      "bytes": 177149,
       "family": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_source.blend",
       "version": [
         1
       ],
       "role": "source",
-      "sha256": "8513e3320fad3a4af8ee4562b5149b9a45f0e95d72df06accb96b0b7befe72f5"
+      "sha256": "c69fcea3a4bbb66326d6426818267854141d152ee6479cd7fa5fe845e714b6a3"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
-      "bytes": 138451,
+      "bytes": 139562,
       "family": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source.blend",
       "version": [
         1
       ],
       "role": "source",
-      "sha256": "a1302b8182d523834dc0af9741eb687044489f66cafa0cfbcbf79d1de1d565d3"
+      "sha256": "b58b2ad7b01a17ecaf3826f49d25f485586ff169561765d228d907080d5592fa"
     },
     {
       "path": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
-      "bytes": 461773,
+      "bytes": 461409,
       "family": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source.blend",
       "version": [
         1
       ],
       "role": "source",
-      "sha256": "f1cf82e20b7c1a481dfe979503bc3f98fd9566cac09ede315ba238ab9a6c90bb"
+      "sha256": "9b678c44eb85edef527ce2cc504fc7e11ad396a0242147c6d31470b19b874eaf"
     },
     {
       "path": "art_source/items_weapons/weapons/scope/source/wpn_scope_source_v001.blend",
-      "bytes": 197896,
+      "bytes": 196793,
       "family": "art_source/items_weapons/weapons/scope/source/wpn_scope_source.blend",
       "version": [
         1
       ],
       "role": "source",
-      "sha256": "6c4244348bb117f35a862187503ab5577be801b5f1dd00e72bcb17c095274b95"
+      "sha256": "f9f437a06931bc40eb3540b98a0cc36592204d6a424bdf1f27e5289fc91c2319"
     },
     {
       "path": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_source_v001.blend",
-      "bytes": 189038,
+      "bytes": 187722,
       "family": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_source.blend",
       "version": [
         1
       ],
       "role": "source",
-      "sha256": "53871c61c511ac2ac41685bcc65e765b591b5cbcd7880d3685cacf545cdd94c5"
+      "sha256": "880e8cc432c602a28f85985594a4835d5e08f0ae1ab12b478f4814fa344e5816"
     },
     {
       "path": "art_source/items_weapons/props/battery_large/source/itm_battery_large_ground_source_v001.blend",
-      "bytes": 99550,
+      "bytes": 100442,
       "family": "art_source/items_weapons/props/battery_large/source/itm_battery_large_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "63560237834283a742563891778e69b2d634c66c08b47ce7db99bba1313eaa3d"
+      "sha256": "efc7b895a66cc51fb63ae7d4c6c763844763c83fac9db546487c97093c2d7318"
     },
     {
       "path": "art_source/items_weapons/props/battery_small/source/itm_battery_small_ground_source_v001.blend",
-      "bytes": 98674,
+      "bytes": 99424,
       "family": "art_source/items_weapons/props/battery_small/source/itm_battery_small_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "e7d916bff0cf1d2cab60d49595b38d8f22a5cf9f0d033d71b4e3fa053944f762"
+      "sha256": "0f150e88b141276f03dec3bb134873104abc261933b36757b6f8ffc993a819cb"
     },
     {
       "path": "art_source/items_weapons/props/health_potion/source/itm_health_potion_ground_source_v001.blend",
-      "bytes": 100394,
+      "bytes": 100593,
       "family": "art_source/items_weapons/props/health_potion/source/itm_health_potion_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "509273cbee4ddeef75c0f51dba3e224ed93fb0e66f52970e97ec5e23dd6647f0"
+      "sha256": "c3c86cb592914900b0cc438f4f51f1bd4a0a26b6ce8b43e39e002bdb8f2f10d0"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_ground_source_v001.blend",
-      "bytes": 99272,
+      "bytes": 100781,
       "family": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "3d7baf9637ba5bc14982366f0663af93102512c4c04335b77104983208c3f88c"
+      "sha256": "24491f12357220830731fcb5d1b0582a4f2672912a2036548dd48b430512a6cb"
     },
     {
       "path": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_ground_source_v001.blend",
-      "bytes": 100557,
+      "bytes": 100845,
       "family": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "a67664acb24910e970b61d43ed1cf2e3395a876a6896a67853cd5648a19cafff"
+      "sha256": "920a6d65a25b72fca3cbffd95f58ab94f84f2b40113b6b746c911369baca3971"
     },
     {
       "path": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_ground_source_v001.blend",
-      "bytes": 101099,
+      "bytes": 101595,
       "family": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "3fba4ba572c107b080cb05289d21f8d5f6ae778776f7587ffa998222bdf7c293"
+      "sha256": "73485f827928da5f98c7971b726a8d8eb4c75a2d21fa94ae8eeaacfab405e852"
     },
     {
       "path": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_ground_source_v001.blend",
-      "bytes": 100140,
+      "bytes": 100770,
       "family": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "4e4a906492d9eb1f79bfd5e756991584422fd30664dd502a25cfe542436791d7"
+      "sha256": "85bc63326868d201f9a592aca38826406dbcb160c1962d008dedaeab5103bfcc"
     },
     {
       "path": "art_source/items_weapons/weapons/scope/source/wpn_scope_ground_source_v001.blend",
-      "bytes": 101047,
+      "bytes": 101171,
       "family": "art_source/items_weapons/weapons/scope/source/wpn_scope_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "a6ebf1f74d67fb2ee77f1be0bc5442fe1d74d1058826c6cf4d0a43d3f9b9e138"
+      "sha256": "61aa67a95319747a9e55aeaa3b8615050a1c873d3e57eca3cf99d0c5fe0ff468"
     },
     {
       "path": "art_source/items_weapons/props/beacon/source/itm_beacon_source_v001.blend",
-      "bytes": 117139,
+      "bytes": 117506,
       "family": "art_source/items_weapons/props/beacon/source/itm_beacon_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "e90695ab56c3b2b659aab22426f339c77a5f8a6d1598f36e2727ac4eee1e0612"
+      "sha256": "8884abf631b239cb2ce122f3c98a818df30599eff4f1e4cdd382c703f996dfdb"
     },
     {
       "path": "art_source/items_weapons/props/beacon/source/itm_beacon_ground_source_v001.blend",
-      "bytes": 109026,
+      "bytes": 109044,
       "family": "art_source/items_weapons/props/beacon/source/itm_beacon_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "280fc46af24a99492ee3c40c4e484ddb57166a4226f6f685df7194c9c79eeb52"
+      "sha256": "f3c283242712dd44c0e17e5438555af23f826ade264a8296910a3c747b1e616a"
     },
     {
       "path": "art_source/items_weapons/props/room_key/source/itm_room_key_source_v001.blend",
-      "bytes": 113581,
+      "bytes": 113420,
       "family": "art_source/items_weapons/props/room_key/source/itm_room_key_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "c53175ebdbf1f0862da62ea4655b74509f8cda52e1d6611edb73073b04a154a9"
+      "sha256": "14f949a0850562578a7fd3a5ca86df5888e785becbcd4e2621672f290ae11820"
     },
     {
       "path": "art_source/items_weapons/props/room_key/source/itm_room_key_ground_source_v001.blend",
-      "bytes": 105471,
+      "bytes": 104450,
       "family": "art_source/items_weapons/props/room_key/source/itm_room_key_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "ad29b4246d67c9747cd8dce115e505a30b171213a2a0c8e3fdac26f2ba271c08"
+      "sha256": "1bbb5fd5442506580426430d0cd3b3d4896dc395698569fe6c663009badb1953"
     },
     {
       "path": "art_source/items_weapons/props/cell_pack/source/itm_cell_pack_source_v001.blend",
-      "bytes": 118600,
+      "bytes": 117456,
       "family": "art_source/items_weapons/props/cell_pack/source/itm_cell_pack_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "f6185110003af3c570336278edd3c00a7943e932ae17f1da86025f0b460f9e9c"
+      "sha256": "cfd87d79c091f255abe10a0b432bc6fa34d3ea88e3c4c8d1b7dde10cef0f9ed7"
     },
     {
       "path": "art_source/items_weapons/props/cell_pack/source/itm_cell_pack_ground_source_v001.blend",
-      "bytes": 106448,
+      "bytes": 104916,
       "family": "art_source/items_weapons/props/cell_pack/source/itm_cell_pack_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "e5597180a2245454b17fbd428f115a19d394d9b0ae8216322f07c91acd91cbc4"
+      "sha256": "266359cd2ed8c93953611d6299ac2463b555dc937c5c9d7b563018776a5daeda"
     },
     {
       "path": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_source_v001.blend",
-      "bytes": 117244,
+      "bytes": 116370,
       "family": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "4aa7aa704981fe728d589748597a81ab996b327b7f587abe2435b5187fd4405f"
+      "sha256": "90c18e5f2b88e1addac88001fc7791ed25ef8d9e7766451872e148e5c38db06e"
     },
     {
       "path": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_ground_source_v001.blend",
-      "bytes": 103470,
+      "bytes": 102422,
       "family": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "93648c0c7a26d90a312457fb3b0b17bab793d112850662cc548adb4f3854809d"
+      "sha256": "5759f42d7e2a50db174f24111fc11d4a46ae0a57ec85d13071fd7e6973c5544a"
     },
     {
       "path": "art_source/items_weapons/props/flashlight_advanced/source/itm_flashlight_advanced_source_v001.blend",
-      "bytes": 120163,
+      "bytes": 119337,
       "family": "art_source/items_weapons/props/flashlight_advanced/source/itm_flashlight_advanced_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "efc9428956ac23a382dc7f4cc091ab0a2b247f279486f17e6b5d3ae59a1c4f28"
+      "sha256": "1bae3af129248fa1ebe535eef7305d4354b45e71a06aeac84cc1addd27858d0b"
     },
     {
       "path": "art_source/items_weapons/props/flashlight_advanced/source/itm_flashlight_advanced_ground_source_v001.blend",
-      "bytes": 104006,
+      "bytes": 102820,
       "family": "art_source/items_weapons/props/flashlight_advanced/source/itm_flashlight_advanced_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "3483039ecea496c25418f1e197077b35a8b32414f15436b45f0fb430a3d6ae41"
+      "sha256": "2f53b86f5251bac110a10499bd4fca0ec14bdcbd800e3fc063b86b9ba3c1da90"
     },
     {
       "path": "art_source/items_weapons/props/flashlight_efficient/source/itm_flashlight_efficient_source_v001.blend",
-      "bytes": 118671,
+      "bytes": 117863,
       "family": "art_source/items_weapons/props/flashlight_efficient/source/itm_flashlight_efficient_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "06ac4964d85e9ddc1be6eef292b4b7ffe17f4907d6bd17852d423b4a1d1d89b1"
+      "sha256": "42030f578227eb1367d3e20a5f9187b906ac1ea0d7f6c75e5bcf4ad8c05a7cfb"
     },
     {
       "path": "art_source/items_weapons/props/flashlight_efficient/source/itm_flashlight_efficient_ground_source_v001.blend",
-      "bytes": 103704,
+      "bytes": 102519,
       "family": "art_source/items_weapons/props/flashlight_efficient/source/itm_flashlight_efficient_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "e59b7084923cddb354e004f159ccbddcf430eba002a46fbfd186688b565a2553"
+      "sha256": "6cfb91c49293e9a33b6685cb2ea3da0d45c1da1ed9bb5487640b8384bbb17caf"
     },
     {
       "path": "art_source/items_weapons/props/blueprint_scroll/source/itm_blueprint_scroll_source_v001.blend",
-      "bytes": 117134,
+      "bytes": 116247,
       "family": "art_source/items_weapons/props/blueprint_scroll/source/itm_blueprint_scroll_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "d4c8e8700e3e1180af2959c5c8ab903b52a682648bf53beecf7b040166516151"
+      "sha256": "670b451dff80d88da123bed5d4069f9d7c60e2d335eb006788e318038e452bda"
     },
     {
       "path": "art_source/items_weapons/props/blueprint_scroll/source/itm_blueprint_scroll_ground_source_v001.blend",
-      "bytes": 103045,
+      "bytes": 101759,
       "family": "art_source/items_weapons/props/blueprint_scroll/source/itm_blueprint_scroll_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "64459899b1305013356a74bdf8ee5978d524391528b7764a1ad9ee5218d090e1"
+      "sha256": "477065ef6bbeb6844f8c7f7581f6f85de236d27030c3e5db4c9a9c00179f86d0"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_standard/source/wpn_bullet_module_standard_source_v001.blend",
-      "bytes": 112605,
+      "bytes": 112168,
       "family": "art_source/items_weapons/weapons/bullet_module_standard/source/wpn_bullet_module_standard_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "fc30367ba9ff2c63c6eda1510c9898fb6caa6eb6c2f9840b2edb660b99eab613"
+      "sha256": "15cebcaf4cf53d089519a1eb7f29d62945c4b24568e3640710c2f276287c3cb4"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_standard/source/wpn_bullet_module_standard_ground_source_v001.blend",
-      "bytes": 107084,
+      "bytes": 106315,
       "family": "art_source/items_weapons/weapons/bullet_module_standard/source/wpn_bullet_module_standard_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "38b5a4b4401c9582a8c3c36a3e47dc66453583e2282cff7bea5bc3f85886b990"
+      "sha256": "31d131988f15c93125e060835b2581d4632408295953b7454b3a68983d21cca7"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_sticky/source/wpn_bullet_module_sticky_source_v001.blend",
-      "bytes": 126152,
+      "bytes": 125631,
       "family": "art_source/items_weapons/weapons/bullet_module_sticky/source/wpn_bullet_module_sticky_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "dc77daa21f86fb2fc1b6bfb74e7d2926fd8f0807e500989e60c0f20e9dbf0881"
+      "sha256": "bf81755f5fe910f0ce8e38a3820b496060d201d569957741dbd564de430ff8d7"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_sticky/source/wpn_bullet_module_sticky_ground_source_v001.blend",
-      "bytes": 113678,
+      "bytes": 113187,
       "family": "art_source/items_weapons/weapons/bullet_module_sticky/source/wpn_bullet_module_sticky_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "81b233c5a400fa2a4c266da0d8e9ca7571da26fc83bcd7abc86798a813dbcb28"
+      "sha256": "97feda479dc2f89d365e6995be56d7e19df70042c8f630c7c10a83994509518f"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_bounce/source/wpn_bullet_module_bounce_source_v001.blend",
-      "bytes": 116241,
+      "bytes": 115680,
       "family": "art_source/items_weapons/weapons/bullet_module_bounce/source/wpn_bullet_module_bounce_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "f7b35a55cf2909d5b0c2b3e73f81e2741d223c1ae8fdd6e04b88bb9640e01810"
+      "sha256": "98261a7f3f61588c2b30d051f5305e8197a4a0bc42c4ffbf0836e42cd537fc95"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_bounce/source/wpn_bullet_module_bounce_ground_source_v001.blend",
-      "bytes": 104479,
+      "bytes": 103903,
       "family": "art_source/items_weapons/weapons/bullet_module_bounce/source/wpn_bullet_module_bounce_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "9b714e0f306d4557a534a36f96c0318b8e54c1616009ffa90d7ae14473dd8e5f"
+      "sha256": "b8ba915e50438e1a57b5cf9334b0f369aae4e6afa4dde9385f00452c8d54ca5b"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_piercing/source/wpn_bullet_module_piercing_source_v001.blend",
-      "bytes": 113249,
+      "bytes": 112427,
       "family": "art_source/items_weapons/weapons/bullet_module_piercing/source/wpn_bullet_module_piercing_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "a70ef6ee00b969f157304bdee3fcbd15f0a1aea3091c6b1dad69df54418a28b2"
+      "sha256": "24ca8ca71044fb45e80fd9884d61d6f91f580058397354f5e4b523321a6286d9"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_piercing/source/wpn_bullet_module_piercing_ground_source_v001.blend",
-      "bytes": 105843,
+      "bytes": 105013,
       "family": "art_source/items_weapons/weapons/bullet_module_piercing/source/wpn_bullet_module_piercing_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "99045fee5af692b052d0421fc7bb623d322a0fae55aa24a7b26a2848059d2ffa"
+      "sha256": "6ccc70d1bcab29c7e017218c8b1cf33663de6da53c414e955d63965b5f991bf3"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_explosive/source/wpn_bullet_module_explosive_source_v001.blend",
-      "bytes": 121308,
+      "bytes": 121070,
       "family": "art_source/items_weapons/weapons/bullet_module_explosive/source/wpn_bullet_module_explosive_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "e0c875b5cd09d95c9e63150a85516a0d0d64aa8b734f281685e9d7adf9fba262"
+      "sha256": "b73fbac8dde2af88da270157d1f9bcab38e70d482bc2e8493711e4a5fc7ebd33"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_explosive/source/wpn_bullet_module_explosive_ground_source_v001.blend",
-      "bytes": 109675,
+      "bytes": 108599,
       "family": "art_source/items_weapons/weapons/bullet_module_explosive/source/wpn_bullet_module_explosive_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "46814d452d0769790d0bf925e8e63acc0ce0dea03de8adae81eb910a5db55364"
+      "sha256": "79d90649e5c8639db8364a81950cd79adca1ef504d2fe093c80ee13a553f972d"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_homing/source/wpn_bullet_module_homing_source_v001.blend",
-      "bytes": 121055,
+      "bytes": 120072,
       "family": "art_source/items_weapons/weapons/bullet_module_homing/source/wpn_bullet_module_homing_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "d1191e171121973257f31849f1e737efd7ccd727e268b56e37be1462288a22c6"
+      "sha256": "c0b9ee81e261828e0a3e01fd65b3b1307fdb1af92be76d81a3ccde36803aea64"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_homing/source/wpn_bullet_module_homing_ground_source_v001.blend",
-      "bytes": 111356,
+      "bytes": 110439,
       "family": "art_source/items_weapons/weapons/bullet_module_homing/source/wpn_bullet_module_homing_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "b89fed273a5f6b761f02ddc7f1de48c99de91d67cd60745ee6e597a51b023e2c"
+      "sha256": "152f19cf9d52c586e663aec03521df3833b1e3480046ba864827227a89da98eb"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_blackhole/source/wpn_bullet_module_blackhole_source_v001.blend",
-      "bytes": 117012,
+      "bytes": 116249,
       "family": "art_source/items_weapons/weapons/bullet_module_blackhole/source/wpn_bullet_module_blackhole_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "2e491ee305f978f4e7ab6a565c337772372b508af7f307fdcf0f75917d5bb03d"
+      "sha256": "5db8de975e2929b9a7a1939a85ebdfe0418738a23e0988f3c2726f63a96916b7"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_blackhole/source/wpn_bullet_module_blackhole_ground_source_v001.blend",
-      "bytes": 109264,
+      "bytes": 108463,
       "family": "art_source/items_weapons/weapons/bullet_module_blackhole/source/wpn_bullet_module_blackhole_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "81ba8153675a87def5a849fb6b9f398056c2bfa9046ccc1b48170a7572fcf23b"
+      "sha256": "d4deff8ba431e8374661a8af359904336f73d0e6c7ffe82cdef98bf01f135150"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_balloon/source/wpn_bullet_module_balloon_source_v001.blend",
-      "bytes": 116396,
+      "bytes": 115765,
       "family": "art_source/items_weapons/weapons/bullet_module_balloon/source/wpn_bullet_module_balloon_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "36fc0e9c52671865184b563500eda47a727894160a8fb16b61d6db3d37039005"
+      "sha256": "9ba2db3d0825d2b6322dead8ed94260186af62a868bef158dec4317296b69716"
     },
     {
       "path": "art_source/items_weapons/weapons/bullet_module_balloon/source/wpn_bullet_module_balloon_ground_source_v001.blend",
-      "bytes": 109427,
+      "bytes": 107971,
       "family": "art_source/items_weapons/weapons/bullet_module_balloon/source/wpn_bullet_module_balloon_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "142d63635a710d3a1c53990109e18236a2d0f1794335c950be4893bd46a76a52"
+      "sha256": "60a4daa38c0e84b2828ef22dfc3ddeee4cfe2c5da7ea2b33bcae1ab560c982d3"
     },
     {
       "path": "art_source/items_weapons/weapons/attachment_fan/source/wpn_attachment_fan_source_v001.blend",
-      "bytes": 124610,
+      "bytes": 123919,
       "family": "art_source/items_weapons/weapons/attachment_fan/source/wpn_attachment_fan_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "40e6c928abbd3a9dc33c990728551a599d6c72c451c4e3bb2b32156a9004740d"
+      "sha256": "7e819631183af60cf476bcda8b5eea39578082c2c58a9a4f76432b58cd11fd47"
     },
     {
       "path": "art_source/items_weapons/weapons/attachment_fan/source/wpn_attachment_fan_ground_source_v001.blend",
-      "bytes": 107002,
+      "bytes": 106364,
       "family": "art_source/items_weapons/weapons/attachment_fan/source/wpn_attachment_fan_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "c2823bb58a86fe9af407dde601f1fb0590a64446157dec7038eae5f640f3320c"
+      "sha256": "ff9c5058efcd593bc898fc6153620eff94d3ca2c9bd6a4d7b9891a04484d0d66"
     },
     {
       "path": "art_source/items_weapons/weapons/copy_sticker/source/wpn_copy_sticker_source_v001.blend",
-      "bytes": 118697,
+      "bytes": 118265,
       "family": "art_source/items_weapons/weapons/copy_sticker/source/wpn_copy_sticker_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "410b0a0e4a4c40fd25348b937d814a93df893d422a852e58f35a39f70b1d1b99"
+      "sha256": "57416ec43f0d9e38bb7dc66d198246207a8004d119572b17c521864a8b5743de"
     },
     {
       "path": "art_source/items_weapons/weapons/copy_sticker/source/wpn_copy_sticker_ground_source_v001.blend",
-      "bytes": 104184,
+      "bytes": 103421,
       "family": "art_source/items_weapons/weapons/copy_sticker/source/wpn_copy_sticker_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "e1a405438dfa8591b7f5413f796d7b8c0eaf4af54abf7bc7a2be19b8c4752737"
+      "sha256": "9d6af8751c9b4c03dce2f99ba15b363bfd94ac1c23a78d6d2d3536af4a8e0987"
     },
     {
       "path": "art_source/items_weapons/weapons/melee_baseball_bat/source/wpn_melee_baseball_bat_source_v001.blend",
-      "bytes": 115473,
+      "bytes": 115043,
       "family": "art_source/items_weapons/weapons/melee_baseball_bat/source/wpn_melee_baseball_bat_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "4c4d9995b75ade164af85972a537d9a20b5928f50c19a1fd91caef98338bcc0e"
+      "sha256": "5fc0cab7f000c042f17de452d0b80e464b5a92ce298b2d813fcdc227b151ca91"
     },
     {
       "path": "art_source/items_weapons/weapons/melee_baseball_bat/source/wpn_melee_baseball_bat_ground_source_v001.blend",
-      "bytes": 110512,
+      "bytes": 110001,
       "family": "art_source/items_weapons/weapons/melee_baseball_bat/source/wpn_melee_baseball_bat_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "47dc89d4bd6be5de1818bb655807cec8e99e180218da3dda3293aa32eb92526e"
+      "sha256": "217a900672f4c03d08e1db38d172d090214367c7bcf32375bb2a1c318e627302"
     },
     {
       "path": "art_source/items_weapons/weapons/melee_greatblade/source/wpn_melee_greatblade_source_v001.blend",
-      "bytes": 123279,
+      "bytes": 122633,
       "family": "art_source/items_weapons/weapons/melee_greatblade/source/wpn_melee_greatblade_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "c1b3cc43107d00d5fbf11a25aa6f436c0ff48edaad459feacd9bb10b9c30ffce"
+      "sha256": "1220d3c93f8b2608f42e8d82fbaf48fa50f50c603afcab784f82c5e726fe73ce"
     },
     {
       "path": "art_source/items_weapons/weapons/melee_greatblade/source/wpn_melee_greatblade_ground_source_v001.blend",
-      "bytes": 106318,
+      "bytes": 105440,
       "family": "art_source/items_weapons/weapons/melee_greatblade/source/wpn_melee_greatblade_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "0ffcef0f64b3fa10ebbb89028f0c2fcee808ad0b6b207bb7f30d60b41159e9e0"
+      "sha256": "4f7019bd7e7c6960fe6589f54754ec006685c516de505b6bb2bfcf2301d5914f"
     },
     {
       "path": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_source_v001.blend",
-      "bytes": 118984,
+      "bytes": 118660,
       "family": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_source.blend",
       "version": [
         1
       ],
       "role": "preview",
-      "sha256": "c0b5e9dbb326e623e62d98bdebbeda1e6e49b001543ec6d3cde5bc36cd90895a"
+      "sha256": "928e50f8fcba2e18072f83a628cd03c8416f3d96bf1d034fa88fbf34c78d48e3"
     },
     {
       "path": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_ground_source_v001.blend",
-      "bytes": 106360,
+      "bytes": 105701,
       "family": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_ground_source.blend",
       "version": [
         1
       ],
       "role": "ground",
-      "sha256": "5ef467748e8b139f6377ec3d019ee6c2c5a5008288112f3b1d88273c3b8c2e1e"
+      "sha256": "f5e37c5f0afad01efc26272f590b569563b9991c42658a6b38cfe9bf2dca9883"
+    },
+    {
+      "path": "art_source/items_weapons/props/reference_kit/source/prp_reference_item_kit_source_v001.blend",
+      "family": "art_source/items_weapons/props/reference_kit/source/prp_reference_item_kit_source_v001.blend",
+      "version": [
+        1
+      ],
+      "sha256": "cced72b0a266c873e67cb21ae73ae3a72c3a179764f80df107cddef0e4bb3602",
+      "bytes": 210180
+    },
+    {
+      "path": "art_source/shared/palette/item_palette_recipe_v001.json",
+      "family": "item_palette_recipe",
+      "version": [
+        1
+      ],
+      "role": "palette_recipe",
+      "sha256": "b5a7814152676f99f367ce143a1654904f900cb5a33379246abf6eaa9abb9267",
+      "bytes": 1438
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_001/source/env_far_building_001_source_v001.blend",
+      "bytes": 139121,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_001/source/env_far_building_001_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "049be652893b1d232b61eae6726586bcecb9d08e936ae4f5567f4f9e285c213e",
+      "asset_id": "ENV-FAR-BUILDING-001"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_002/source/env_far_building_002_source_v001.blend",
+      "bytes": 138442,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_002/source/env_far_building_002_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "ba936ca7f5891d99c4f78a58464a33d01a4900030b5739486d5b1b0c03c8c543",
+      "asset_id": "ENV-FAR-BUILDING-002"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_003/source/env_far_building_003_source_v001.blend",
+      "bytes": 109153,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_003/source/env_far_building_003_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "4ff7e53e2a4e8658eaecadd14da4300908a9fccb0c6235b8a59e471160c42555",
+      "asset_id": "ENV-FAR-BUILDING-003"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_004/source/env_far_building_004_source_v001.blend",
+      "bytes": 111707,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_004/source/env_far_building_004_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "7ffb6a8314497e4708db3d96e4bd547f53e52e114bc674cc3d0584dbce95d7a5",
+      "asset_id": "ENV-FAR-BUILDING-004"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_005/source/env_far_building_005_source_v001.blend",
+      "bytes": 105462,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_005/source/env_far_building_005_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "de7f25e085133593679f5339d76453b0600d0ae99882cb0730a8c830f97ceea8",
+      "asset_id": "ENV-FAR-BUILDING-005"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_006/source/env_far_building_006_source_v001.blend",
+      "bytes": 110714,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_006/source/env_far_building_006_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "59689a9e0c6d5b0beed5af16081d9f1d14a52aec2a6cc8aaa40e4775099c57a4",
+      "asset_id": "ENV-FAR-BUILDING-006"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_007/source/env_far_building_007_source_v001.blend",
+      "bytes": 100727,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_007/source/env_far_building_007_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "1b0883fee7917e840c9119d0a8b4a2ad9ca9d8c05238efe392f049c6aac6f9a8",
+      "asset_id": "ENV-FAR-BUILDING-007"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_008/source/env_far_building_008_source_v001.blend",
+      "bytes": 109165,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_008/source/env_far_building_008_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "ddaa493025f4bee095e9fe28bddbfe166711a1033c0dbc22e8a2d1ca94f4f816",
+      "asset_id": "ENV-FAR-BUILDING-008"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_009/source/env_far_building_009_source_v001.blend",
+      "bytes": 95993,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_009/source/env_far_building_009_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "fe57964090f97c6cefef96bb07b9d61a57fb57a70b791131fd7d8fa54c5c97b7",
+      "asset_id": "ENV-FAR-BUILDING-009"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_010/source/env_far_building_010_source_v001.blend",
+      "bytes": 97572,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_010/source/env_far_building_010_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "a17efe7a48f2c7eb4ce971dd3153c80f1b4900efa0ea30b42de73830f916db88",
+      "asset_id": "ENV-FAR-BUILDING-010"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_011/source/env_far_building_011_source_v001.blend",
+      "bytes": 95870,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_011/source/env_far_building_011_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "77a7b5c181d8a480b783c062b2c5786dfb3297c09066883be3b4ca7ccadce90d",
+      "asset_id": "ENV-FAR-BUILDING-011"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_012/source/env_far_building_012_source_v001.blend",
+      "bytes": 94654,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_012/source/env_far_building_012_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "0fbc7359fa1fca32853e01d7fc27ff45a3aa7323680bbb75d434bf9213302e15",
+      "asset_id": "ENV-FAR-BUILDING-012"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_013/source/env_far_building_013_source_v001.blend",
+      "bytes": 98549,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_013/source/env_far_building_013_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "e5858a0d53a97da8507121ac9fb8ec68e5d83a0898a0e5ee0e83efe127cefe58",
+      "asset_id": "ENV-FAR-BUILDING-013"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_014/source/env_far_building_014_source_v001.blend",
+      "bytes": 98240,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_014/source/env_far_building_014_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "72ef76e9d6468787b569300cd3fef9c8f128adcbff89fe49548e3d3df9736972",
+      "asset_id": "ENV-FAR-BUILDING-014"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_015/source/env_far_building_015_source_v001.blend",
+      "bytes": 94039,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_015/source/env_far_building_015_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "1261eebdb146fbcdc82d9c024a906d196b4532e12b7c56f85256fb0939a47044",
+      "asset_id": "ENV-FAR-BUILDING-015"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_016/source/env_far_building_016_source_v001.blend",
+      "bytes": 94677,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_016/source/env_far_building_016_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "401076ca521dc46f4619bfd99700126b3fc67ad01f6dab95c5cee5ce08f8b004",
+      "asset_id": "ENV-FAR-BUILDING-016"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_017/source/env_far_building_017_source_v001.blend",
+      "bytes": 94860,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_017/source/env_far_building_017_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "26d4494818f8da361697f276ee71c0b7ee6b92b99bcb1679b4785b1661459a3c",
+      "asset_id": "ENV-FAR-BUILDING-017"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_018/source/env_far_building_018_source_v001.blend",
+      "bytes": 96848,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_018/source/env_far_building_018_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "741e74a10fc338812987f72816cf7a28d4c8d3fdede20f7d9a49454f8ddd3d4c",
+      "asset_id": "ENV-FAR-BUILDING-018"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_019/source/env_far_building_019_source_v001.blend",
+      "bytes": 93460,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_019/source/env_far_building_019_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "380e414dc8ea2845983e55ec453a8d1a603e5573713aea66572ff941e3313d08",
+      "asset_id": "ENV-FAR-BUILDING-019"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_020/source/env_far_building_020_source_v001.blend",
+      "bytes": 93042,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_020/source/env_far_building_020_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "7e0bb0e89cc95e12aa0a3cb15219aa99f9b0501f07c25e879f007771e5922567",
+      "asset_id": "ENV-FAR-BUILDING-020"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_021/source/env_far_building_021_source_v001.blend",
+      "bytes": 92617,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_021/source/env_far_building_021_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "2c3e9cad62c28d67b0fa1173d1d8fc7e2826a5c7532edc7c902f293f35d7da45",
+      "asset_id": "ENV-FAR-BUILDING-021"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_022/source/env_far_building_022_source_v001.blend",
+      "bytes": 94322,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_022/source/env_far_building_022_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "950d80b26534a880c99ed02a2c7e549ee9f04dc1602a90ac006c9bfc0ab06026",
+      "asset_id": "ENV-FAR-BUILDING-022"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_023/source/env_far_building_023_source_v001.blend",
+      "bytes": 92095,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_023/source/env_far_building_023_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "74092f8cc6c64810a468d0a5f5a8b904d9103c4642bc8159ba7965cf4b415fab",
+      "asset_id": "ENV-FAR-BUILDING-023"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/component_packages/env_far_building_024/source/env_far_building_024_source_v001.blend",
+      "bytes": 94587,
+      "family": "art_source/environments/open_world/far_city/component_packages/env_far_building_024/source/env_far_building_024_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "ce44fd5698ef5ec4d1f00db6dc9a38a22def5b1edbe77bdd0c8d15270c95460b",
+      "asset_id": "ENV-FAR-BUILDING-024"
+    },
+    {
+      "path": "art_source/environments/open_world/far_city/source/env_far_city_layout_source_v001.blend",
+      "bytes": 301974,
+      "family": "art_source/environments/open_world/far_city/source/env_far_city_layout_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "role": "source",
+      "sha256": "33bce35c6581ede1fb0d16717e22bf3e9849afdb9a4bb1f6a29965055b91cddf"
     }
   ],
   "authoring_root": "art_source",

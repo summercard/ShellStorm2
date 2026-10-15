@@ -10,7 +10,7 @@
 
 机器入口是 `ledger_index.json` 的 `content_ledgers.inventory_items`，与 `domains` 的美术资产注册职责分开。《物品道具》每行指向 ItemRegistry 内容定义、原内容数据库行、怪物掉落 CSV 行、背包接收接口、使用/装配接口、共用模型工厂及现有 AssetID。原表未登记、运行专用模型缺失和设计未注册均显式标明；资产与内容ID不能因同名或同前缀被当成同物。
 
-《功能调用链》说明原有 Owner 与交接。游戏不加载此 XLSX；掉落表、运行关卡配置、ItemRegistry、InventoryModule 仍拥有原规则。魂直接进入货币余额，设计中的未注册 Boss 钥匙列入《非背包与待设计》。账本不复制价格、堆叠上限、概率或数量，避免成为第二套数值事实源。
+《功能调用链》说明原有 Owner 与交接。游戏不加载此 XLSX；掉落表、运行关卡配置、ItemRegistry、InventoryModule 仍拥有原规则。金币直接进入货币余额，设计中的未注册 Boss 钥匙列入《非背包与待设计》。账本不复制价格、堆叠上限、概率或数量，避免成为第二套数值事实源。
 
 只读核对：`python scripts/sync_inventory_item_ledger.py`。审查源码变更后可使用 `--write` 刷新导航（先按工作区规范备份两本工作簿）；工具不修改现有资产行、其他分页、掉落表或游戏代码。
 
@@ -161,3 +161,5 @@ python tools/asset_pipeline/split_asset_ledger.py --source <单体账本>
 - 3D 场景美术生产流程：[`docs/v0.1/10.1_3D场景美术生产流程.md`](../../docs/v0.1/10.1_3D场景美术生产流程.md)
 - Prefab 分类与目录命名：[`assets/art/3D模型资产目录与命名规范.md`](../art/3D模型资产目录与命名规范.md)
 - 二进制 xlsx 冲突处理：Skill `xlsx-git-conflict-resolution`
+
+物品专用色板：`ITM-PALETTE-ITEM-HIGH-VISIBILITY`登记在道具分账本；正式贴图为`assets/art/shared/palette/item_high_visibility_palette_10x10_512.png`，HSV S/V各×1.61（1.40基础上再增15%）。31个物品资产使用独立四材质，图标采用本色补光副本；，场景继续使用原场景色板；绑定证据见`art_source/shared/palette/item_palette_binding_manifest.json`。

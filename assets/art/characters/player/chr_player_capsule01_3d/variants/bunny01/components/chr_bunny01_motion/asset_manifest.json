@@ -1,9 +1,9 @@
 {
   "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
-  "asset_version": "v038",
+  "asset_version": "v039",
   "assembly_version": "v021",
-  "status": "exported_pending_godot_validation",
-  "source": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v038.blend",
+  "status": "active",
+  "source": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v039.blend",
   "transfer": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/character_transfer_ledger.json",
   "prefab": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
   "skeleton_id": "SKEL-BUNNY01-004",
@@ -58,7 +58,7 @@
       "tracks": 10
     },
     "idle": {
-      "duration": 3.2,
+      "duration": 2.4000000000000004,
       "loop": true,
       "frames": 193,
       "tracks": 10
@@ -112,373 +112,373 @@
       "tracks": 11
     },
     "sidearm_idle": {
-      "duration": 3.2,
+      "duration": 2.4000000000000004,
       "loop": true,
       "frames": 193,
       "tracks": 11
     },
     "longgun_idle": {
-      "duration": 3.6,
+      "duration": 2.7,
       "loop": true,
       "frames": 217,
       "tracks": 11
     },
     "machinegun_idle": {
-      "duration": 4.0,
+      "duration": 3.0,
       "loop": true,
       "frames": 241,
       "tracks": 11
     },
     "sidearm_walking_strafe_left": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "sidearm_walking_strafe_right": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "sidearm_walking_backward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "sidearm_moving_strafe_left": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "sidearm_moving_strafe_right": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "sidearm_moving_backward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "longgun_walking_strafe_left": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "longgun_walking_strafe_right": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "longgun_walking_backward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "longgun_moving_strafe_left": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "longgun_moving_strafe_right": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "longgun_moving_backward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "machinegun_walking_strafe_left": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "machinegun_walking_strafe_right": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "machinegun_walking_backward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "machinegun_moving_strafe_left": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "machinegun_moving_strafe_right": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "machinegun_moving_backward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "sidearm_walking_forward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "sidearm_moving_forward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "longgun_walking_forward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "longgun_moving_forward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "machinegun_walking_forward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "machinegun_moving_forward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "unarmed_walking_strafe_left": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 10
     },
     "unarmed_walking_strafe_right": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 10
     },
     "unarmed_walking_backward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 10
     },
     "unarmed_walking_forward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 10
     },
     "unarmed_moving_strafe_left": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 10
     },
     "unarmed_moving_strafe_right": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 10
     },
     "unarmed_moving_backward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 10
     },
     "unarmed_moving_forward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 10
     },
     "sidearm_fire_idle": {
-      "duration": 3.2,
+      "duration": 2.4000000000000004,
       "loop": true,
       "frames": 193,
       "tracks": 11
     },
     "longgun_fire_idle": {
-      "duration": 3.6,
+      "duration": 2.7,
       "loop": true,
       "frames": 217,
       "tracks": 11
     },
     "machinegun_fire_idle": {
-      "duration": 4.0,
+      "duration": 3.0,
       "loop": true,
       "frames": 241,
       "tracks": 11
     },
     "sidearm_fire_walking_strafe_left": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "sidearm_fire_walking_strafe_right": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "sidearm_fire_walking_backward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "sidearm_fire_moving_strafe_left": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "sidearm_fire_moving_strafe_right": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "sidearm_fire_moving_backward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "longgun_fire_walking_strafe_left": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "longgun_fire_walking_strafe_right": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "longgun_fire_walking_backward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "longgun_fire_moving_strafe_left": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "longgun_fire_moving_strafe_right": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "longgun_fire_moving_backward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "machinegun_fire_walking_strafe_left": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "machinegun_fire_walking_strafe_right": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "machinegun_fire_walking_backward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "machinegun_fire_moving_strafe_left": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "machinegun_fire_moving_strafe_right": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "machinegun_fire_moving_backward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "sidearm_fire_walking_forward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "sidearm_fire_moving_forward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "longgun_fire_walking_forward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "longgun_fire_moving_forward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
     },
     "machinegun_fire_walking_forward": {
-      "duration": 1.0,
+      "duration": 0.92,
       "loop": true,
       "frames": 61,
       "tracks": 11
     },
     "machinegun_fire_moving_forward": {
-      "duration": 0.8,
+      "duration": 0.7000000000000001,
       "loop": true,
       "frames": 49,
       "tracks": 11
@@ -563,28 +563,29 @@
       "bytes": 10282728
     },
     {
-      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v038.blend",
-      "sha256": "eb4cf334096315f2b71e51bb0bd4d5b70f66e148a3a31767793d985c4196972d",
-      "bytes": 381082712
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v039.blend",
+      "sha256": "6062e0d92bdf4f79eb6981110c762cf5d9c4415b5dcf426d84254c3cc35e76ce",
+      "bytes": 487698271
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.json",
-      "sha256": "6d043257da0cff41480c5ff1f4bd10216ad84d0a0b68c6b0f45a5dc836dddd30",
-      "bytes": 13874804
+      "sha256": "cb8ba5522f96e753a7e6cc93ee231c3354bd0e9f339a9933516483378dc08ed5",
+      "bytes": 13891665
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.glb",
-      "sha256": "6b5f7c6c309e8075d73c3d0173f2a03fc96310380399d8b99fcbf4e2f4d2a67c",
-      "bytes": 2283432
+      "sha256": "b6be0a726966e69ef03df13e1bc6dc802fe1dabff129cf254082b33b174538a0",
+      "bytes": 2426500
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
+      "sha256": "5db5eb5a1e03d9e0f3fee9dc595509f86b0e15d2c7e5664d2241521b5b5104cb",
+      "bytes": 5849
     }
   ],
   "limits": [
-    "No detached magazine or gun mechanism animation authored",
-    "Held/back weapon display scales retain existing distinct contracts",
-    "Expedition resume scene skipped in headless; full save-resume not verified",
-    "No family charge or heavy-melee action authored",
-    "Other longguns support offsets differ: 0.029-0.108m at default scale",
-    "No exact world foot lock or 2D directional blend",
-    "No full project or mobile performance suite"
+    "No exact world foot lock or 2D direction blend",
+    "Other longguns retain their existing support socket differences",
+    "Family charge and heavy melee remain separate unfinished actions"
   ]
 }

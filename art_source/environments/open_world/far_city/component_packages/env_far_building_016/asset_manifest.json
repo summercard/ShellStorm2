@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-FAR-BUILDING-016",
+  "logical_id": "env_far_building_016",
+  "name_zh": "五层圆角街区楼",
+  "slug": "env_far_building_016",
+  "category": "场景",
+  "subcategory": "远景建筑",
+  "version": "v001",
+  "block_id": "open_world",
+  "floor_range": "5层；层高3.8m；非可玩远景",
+  "design_scope": "单栋独立组件；无室内、玩法、碰撞；窗格平面化",
+  "scene_design_docs": [
+    "docs/v0.1/design/rooftop_cross_tower_route.md",
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+    "docs/v0.1/10_资产与内容规范.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+  "source_blend": "art_source/environments/open_world/far_city/component_packages/env_far_building_016/source/env_far_building_016_source_v001.blend",
+  "collection": "16_五层圆角街区楼_独立资产包",
+  "source_collection": "16_五层圆角街区楼_制作组件",
+  "objects": [
+    "五层圆角街区楼_主体_金属哑光反光"
+  ],
+  "root_object": "五层圆角街区楼_主体_金属哑光反光",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction_blender": [
+    0,
+    -1,
+    0
+  ],
+  "dimensions_blender_xyz": [
+    23.05,
+    19.05,
+    21.0
+  ],
+  "polygon_count": 122,
+  "triangle_count": 252,
+  "triangle_budget": 1000,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "public_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "animations": [],
+  "emissive": false,
+  "collision_status": "none_visual_only",
+  "exported": false,
+  "godot_imported": false,
+  "dependencies": [],
+  "dimension_basis": "参考无比例尺：沿用LANDSCAPE-SKYLINE20的3.8m层高，占地由参考轮廓比例推定，不是原图实测",
+  "authoring_status": "Blender源已完成",
+  "layout_ownership": "Blender参考实例，不回灌正式Godot场景",
+  "priority": "P1",
+  "owner": "摩斯拉",
+  "source_license": "项目自制；用户提供参考图；参考图权利归原作者，未作授权推断",
+  "source_sha256": "401076ca521dc46f4619bfd99700126b3fc67ad01f6dab95c5cee5ce08f8b004"
+}

@@ -138,7 +138,7 @@
       }
     },
     "currency": {
-      "note": "货币（魂 `extraction_points`）**独立掉落通道**：所有被击败的怪 100% 必掉，**不属于物品掉落**，故不受 monster_drop_table.empty_chance 影响（业主 2026-10-14）。数量按「怪种 + 楼层」分档：优先 per_tier（精英/Boss）> per_kind > default；实际数量 = round(base + per_floor × floor)。**数量越多，地面货币模型越大**（分档常量在 GroundLootPickup3D.CURRENCY_SCALE_TIERS）。",
+      "note": "货币（金币 `extraction_points`）**独立掉落通道**：所有被击败的怪 100% 必掉，**不属于物品掉落**，故不受 monster_drop_table.empty_chance 影响（业主 2026-10-14）。数量按「怪种 + 楼层」分档：优先 per_tier（精英/Boss）> per_kind > default；实际数量 = round(base + per_floor × floor)。**数量越多，地面货币模型越大**（分档常量在 GroundLootPickup3D.CURRENCY_SCALE_TIERS）。",
       "per_tier": {
         "elite": {
           "base": 50,
