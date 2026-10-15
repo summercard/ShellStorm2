@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "asset_id": "ITM-PALETTE-ITEM-HIGH-VISIBILITY",
+  "source": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "target": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+  "color_space": "sRGB HSV",
+  "saturation_multiplier": 1.6099999999999999,
+  "value_multiplier": 1.6099999999999999,
+  "adjustment_history": [
+    1.4,
+    1.15
+  ],
+  "material_roles": [
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
+  ],
+  "material_paths": [
+    "assets/art/items_weapons/shared/materials/itm_metal.tres",
+    "assets/art/items_weapons/shared/materials/itm_matte.tres",
+    "assets/art/items_weapons/shared/materials/itm_clearcoat.tres",
+    "assets/art/items_weapons/shared/materials/itm_emissive.tres"
+  ],
+  "icon_shadow_fill_energy": 0.45,
+  "clamp": "S and V clamp to 1; preserve hue and alpha; round RGB to nearest byte",
+  "dimensions": [
+    512,
+    512
+  ],
+  "cells": [
+    10,
+    10
+  ],
+  "uv_layout_unchanged": true,
+  "source_sha256": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+  "target_sha256": "8da13f6d4da6701b983aa88cfd0e839a8178ab5c51a8f169fc8a4638308cb1c7",
+  "generator": "tools/asset_pipeline/item_palette.py",
+  "import_script": "tools/asset_pipeline/item_shared_palette_post_import.gd"
+}

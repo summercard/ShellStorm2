@@ -84,12 +84,12 @@
     "ItemRoot"
   ],
   "material_roles": [
-    "01_精工金属_紫色骨架",
-    "02_细腻哑光_青绿大面",
-    "03_清漆反光_紫粉点缀",
-    "04_柔和自发光_UI灯光"
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
   ],
-  "material_rule_override": "用户明确要求使用场景材质球规范，武器配件沿用同一四角色模板。",
+  "material_rule_override": "物品独立四材质球；禁止共用场景材质；图标派生补光实例",
   "source_dir": "art_source/items_weapons/weapons/scope/source",
   "source_blend": "art_source/items_weapons/weapons/scope/source/wpn_scope_source_v001.blend",
   "stable_glb": "assets/art/items_weapons/weapons/scope/components/wpn_scope_visual_top3d.glb",
@@ -100,23 +100,46 @@
   "model_variants": {
     "preview": {
       "source_blend": "art_source/items_weapons/weapons/scope/source/wpn_scope_source_v001.blend",
-      "sha256": "6c4244348bb117f35a862187503ab5577be801b5f1dd00e72bcb17c095274b95",
+      "sha256": "f9f437a06931bc40eb3540b98a0cc36592204d6a424bdf1f27e5289fc91c2319",
       "triangles": 9044,
       "usage": "近距离预览"
     },
     "ground": {
       "source_blend": "art_source/items_weapons/weapons/scope/source/wpn_scope_ground_source_v001.blend",
-      "sha256": "a6ebf1f74d67fb2ee77f1be0bc5442fe1d74d1058826c6cf4d0a43d3f9b9e138",
+      "sha256": "61aa67a95319747a9e55aeaa3b8615050a1c873d3e57eca3cf99d0c5fe0ff468",
       "polygons": 198,
       "triangles": 198,
       "usage": "地面掉落/拾取显示",
-      "derived_from_sha256": "6c4244348bb117f35a862187503ab5577be801b5f1dd00e72bcb17c095274b95",
+      "derived_from_sha256": "f9f437a06931bc40eb3540b98a0cc36592204d6a424bdf1f27e5289fc91c2319",
       "stable_glb": "assets/art/items_weapons/weapons/scope/components/wpn_scope_ground_visual_top3d.glb",
       "stable_prefab": "assets/art/items_weapons/weapons/scope/runtime/wpn_scope_ground_root_top3d.tscn",
-      "glb_sha256": "2ef8fc0e7e766584f3708c0554edd0029de21d50a737d6b0e6f120128e1cf1ba",
+      "glb_sha256": "67ea354c62484bbf3c9175c483678f4d5495bab5eabc62d85f83c685e76e8221",
       "prefab_sha256": "d962c82f52ea48e01a84d91e781af87e55ee6936c8280c1b5a7242f4ea0beb1d",
       "status": "exported_pending_godot_validation"
     }
   },
-  "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行"
+  "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行",
+  "palette_contract": {
+    "path": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+    "sha256": "8da13f6d4da6701b983aa88cfd0e839a8178ab5c51a8f169fc8a4638308cb1c7",
+    "recipe": "art_source/shared/palette/item_palette_recipe_v001.json",
+    "import_script": "tools/asset_pipeline/item_shared_palette_post_import.gd",
+    "saturation_multiplier": 1.6099999999999999,
+    "value_multiplier": 1.6099999999999999,
+    "material_roles": [
+      "01_精工金属_道具骨架",
+      "02_细腻哑光_道具大面",
+      "03_清漆反光_道具点缀",
+      "04_柔和自发光_道具UI"
+    ],
+    "material_paths": [
+      "assets/art/items_weapons/shared/materials/itm_metal.tres",
+      "assets/art/items_weapons/shared/materials/itm_matte.tres",
+      "assets/art/items_weapons/shared/materials/itm_clearcoat.tres",
+      "assets/art/items_weapons/shared/materials/itm_emissive.tres"
+    ],
+    "icon_shadow_fill_energy": 0.45,
+    "geometry_uv_unchanged": true,
+    "validated_on": "2026-10-15"
+  }
 }

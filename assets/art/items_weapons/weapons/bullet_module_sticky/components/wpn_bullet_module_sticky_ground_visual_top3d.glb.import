@@ -14,7 +14,7 @@ dest_files=["res://.godot/imported/wpn_bullet_module_sticky_ground_visual_top3d.
 [params]
 
 nodes/root_type=""
-nodes/root_name=""
+nodes/root_name="ItemVisual"
 nodes/root_script=null
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
@@ -33,7 +33,7 @@ animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
-import_script/path="res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+import_script/path="res://tools/asset_pipeline/item_shared_palette_post_import.gd"
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""

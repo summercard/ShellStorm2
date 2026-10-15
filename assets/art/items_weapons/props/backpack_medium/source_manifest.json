@@ -21,11 +21,11 @@
   "source_version": "v001",
   "source_blend": "art_source/items_weapons/props/backpack_medium/source/prp_backpack_medium_source_v001.blend",
   "source_sha256_before": "0fc6aabfb127ea13113020cefc6570f33a6291a7dd197c801db818ced186d387",
-  "source_sha256_after": "0fc6aabfb127ea13113020cefc6570f33a6291a7dd197c801db818ced186d387",
+  "source_sha256_after": "5af9e7031b332559dd13f447d64c78c3845af4abfe09e0598f261c1fb1cfcdcb",
   "optimized_blend": "art_source/items_weapons/props/backpack_medium/source/export/v001/prp_backpack_medium_optimized_v001.blend",
-  "optimized_sha256": "6f839b3683247d68cc749365fb871c0eb8d99f41e94764c70f3e7dab88bffc23",
+  "optimized_sha256": "bd6f2cd469b108c853cc8f826856de3d6e2622f7b4844e047f3ddaa9462271ec",
   "stable_glb": "assets/art/items_weapons/props/backpack_medium/components/prp_backpack_medium_visual_top3d.glb",
-  "glb_sha256": "bc3783000f68302addeaba2591707f5623f6138f5c8c208c6a008f4397af4c72",
+  "glb_sha256": "53df536c96f72f236a89fbe67e03d269b275b620369f6bba5d589928bb0d5a56",
   "glb_triangles": 334,
   "glb_embedded_images": false,
   "optimization": {
@@ -44,10 +44,33 @@
   "runtime_integrated": false,
   "visual_acceptance": "pending",
   "material_roles": [
-    "01_精工金属_紫色骨架",
-    "02_细腻哑光_青绿大面",
-    "03_清漆反光_紫粉点缀",
-    "04_柔和自发光_UI灯光"
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
   ],
-  "palette_sha256": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3"
+  "palette_sha256": "8da13f6d4da6701b983aa88cfd0e839a8178ab5c51a8f169fc8a4638308cb1c7",
+  "palette_contract": {
+    "path": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+    "sha256": "8da13f6d4da6701b983aa88cfd0e839a8178ab5c51a8f169fc8a4638308cb1c7",
+    "recipe": "art_source/shared/palette/item_palette_recipe_v001.json",
+    "import_script": "tools/asset_pipeline/item_shared_palette_post_import.gd",
+    "saturation_multiplier": 1.6099999999999999,
+    "value_multiplier": 1.6099999999999999,
+    "material_roles": [
+      "01_精工金属_道具骨架",
+      "02_细腻哑光_道具大面",
+      "03_清漆反光_道具点缀",
+      "04_柔和自发光_道具UI"
+    ],
+    "material_paths": [
+      "assets/art/items_weapons/shared/materials/itm_metal.tres",
+      "assets/art/items_weapons/shared/materials/itm_matte.tres",
+      "assets/art/items_weapons/shared/materials/itm_clearcoat.tres",
+      "assets/art/items_weapons/shared/materials/itm_emissive.tres"
+    ],
+    "icon_shadow_fill_energy": 0.45,
+    "geometry_uv_unchanged": true,
+    "validated_on": "2026-10-15"
+  }
 }

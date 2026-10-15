@@ -1,7 +1,7 @@
 {
   "asset_id": "ITM-CONSUMABLE-ITEM-BATTERY-S",
   "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
-  "source_sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54",
+  "source_sha256": "f1deca848220a5cc87c2e416e6554577e26f9bc4bb8610bf30a1382c375b7c57",
   "dimensions_m": {
     "width": 0.311111,
     "depth": 0.311111,
@@ -16,25 +16,48 @@
   "model_variants": {
     "preview": {
       "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
-      "sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54",
+      "sha256": "f1deca848220a5cc87c2e416e6554577e26f9bc4bb8610bf30a1382c375b7c57",
       "triangles": 3616,
       "usage": "近距离预览"
     },
     "ground": {
       "source_blend": "art_source/items_weapons/props/battery_small/source/itm_battery_small_ground_source_v001.blend",
-      "sha256": "e7d916bff0cf1d2cab60d49595b38d8f22a5cf9f0d033d71b4e3fa053944f762",
+      "sha256": "0f150e88b141276f03dec3bb134873104abc261933b36757b6f8ffc993a819cb",
       "polygons": 120,
       "triangles": 120,
       "usage": "地面掉落/拾取显示",
-      "derived_from_sha256": "85017af7760230fd9dd0b796bdd15ae3c3eb91dc8e5d977eb307ba32676e8a54",
+      "derived_from_sha256": "f1deca848220a5cc87c2e416e6554577e26f9bc4bb8610bf30a1382c375b7c57",
       "stable_glb": "assets/art/items_weapons/props/battery_small/components/itm_battery_small_ground_visual_top3d.glb",
       "stable_prefab": "assets/art/items_weapons/props/battery_small/runtime/itm_battery_small_ground_root_top3d.tscn",
-      "glb_sha256": "86b03dcf28d761f6431b74160d69eb4fa2726eea2c8d818b2059d82dc795998f",
+      "glb_sha256": "0c24b7a9a48c9db39568eee5af2ef6f2584fed70d67553f63b19cdebee52ef50",
       "prefab_sha256": "609cb7a4a4f47ef8d813a16c2b443a954f1db5bd47a49bbbdb620bc4bad34035",
       "status": "exported_pending_godot_validation"
     }
   },
   "runtime_integration": "ground已导出导入并接线；preview及枪上装配未切换；运行/视觉验收未执行",
   "status": "exported_pending_godot_validation",
-  "function_note": "ground仅视觉；拾取/弹跳/碰撞由GroundLootPickup3D持有，倍率0.504不烘入源"
+  "function_note": "ground仅视觉；拾取/弹跳/碰撞由GroundLootPickup3D持有，倍率0.504不烘入源",
+  "palette_contract": {
+    "path": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+    "sha256": "8da13f6d4da6701b983aa88cfd0e839a8178ab5c51a8f169fc8a4638308cb1c7",
+    "recipe": "art_source/shared/palette/item_palette_recipe_v001.json",
+    "import_script": "tools/asset_pipeline/item_shared_palette_post_import.gd",
+    "saturation_multiplier": 1.6099999999999999,
+    "value_multiplier": 1.6099999999999999,
+    "material_roles": [
+      "01_精工金属_道具骨架",
+      "02_细腻哑光_道具大面",
+      "03_清漆反光_道具点缀",
+      "04_柔和自发光_道具UI"
+    ],
+    "material_paths": [
+      "assets/art/items_weapons/shared/materials/itm_metal.tres",
+      "assets/art/items_weapons/shared/materials/itm_matte.tres",
+      "assets/art/items_weapons/shared/materials/itm_clearcoat.tres",
+      "assets/art/items_weapons/shared/materials/itm_emissive.tres"
+    ],
+    "icon_shadow_fill_energy": 0.45,
+    "geometry_uv_unchanged": true,
+    "validated_on": "2026-10-15"
+  }
 }

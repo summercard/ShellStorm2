@@ -32,7 +32,7 @@ metadata/collision_intent = "none"
     import_file=Path(str(glb)+'.import')
     if import_file.exists():
         text=import_file.read_text('utf-8')
-        text=text.replace('import_script/path=""','import_script/path="res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"')
+        text=text.replace('import_script/path=""','import_script/path="res://tools/asset_pipeline/item_shared_palette_post_import.gd"')
         text=text.replace('gltf/embedded_image_handling=1','gltf/embedded_image_handling=0')
     else:
         resource='res://'+c['stable_glb']
@@ -57,7 +57,7 @@ meshes/generate_lods=false
 meshes/create_shadow_meshes=true
 meshes/light_baking=1
 animation/import=false
-import_script/path="res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+import_script/path="res://tools/asset_pipeline/item_shared_palette_post_import.gd"
 _subresources={{}}
 gltf/naming_version=2
 gltf/embedded_image_handling=0

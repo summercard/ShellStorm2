@@ -35,7 +35,7 @@ for p,c in contracts:
   tex=[n for n in m.node_tree.nodes if n.type=='TEX_IMAGE'];assert len(tex)==1
   t=tex[0];assert t.interpolation=='Closest' and not t.image.packed_file
   assert t.image.filepath.startswith('//')
-  assert Path(bpy.path.abspath(t.image.filepath)).resolve()==(ROOT/'assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png').resolve()
+  assert Path(bpy.path.abspath(t.image.filepath)).resolve()==(ROOT/'assets/art/shared/palette/item_high_visibility_palette_10x10_512.png').resolve()
   assert tuple(t.image.size)==(512,512);images.append(t.image.as_pointer())
  assert len(set(images))==1
  assert len(bpy.data.armatures)==0 and not any(o.animation_data for o in bpy.data.objects)

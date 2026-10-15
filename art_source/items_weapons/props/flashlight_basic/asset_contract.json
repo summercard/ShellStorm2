@@ -29,10 +29,10 @@
   "origin": "bottom_center",
   "animation_tier": "tier_0_static",
   "materials": [
-    "01_精工金属_紫色骨架",
-    "02_细腻哑光_青绿大面",
-    "03_清漆反光_紫粉点缀",
-    "04_柔和自发光_UI灯光"
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
   ],
   "budget_triangles": [
     100,
@@ -43,20 +43,20 @@
   "model_variants": {
     "preview": {
       "source_blend": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_source_v001.blend",
-      "sha256": "4aa7aa704981fe728d589748597a81ab996b327b7f587abe2435b5187fd4405f",
+      "sha256": "90c18e5f2b88e1addac88001fc7791ed25ef8d9e7766451872e148e5c38db06e",
       "triangles": 1316,
       "glb": "assets/art/items_weapons/props/flashlight_basic/components/itm_flashlight_basic_preview_visual_top3d.glb",
       "prefab": "assets/art/items_weapons/props/flashlight_basic/runtime/itm_flashlight_basic_preview_root_top3d.tscn",
-      "glb_sha256": "e0b9c9160e49c243818d4d79845e34bfec30ce7517bcdaa56e69cea99b2240a8",
+      "glb_sha256": "2abdd8d26252ba39a2bec907870cc256c112c98c3755df78af57b6bd57fa5103",
       "prefab_sha256": "be3e0326e429c082a01cf3aa9b93f3f8ff1f25e9ed738125ecb298fe43ee77e4"
     },
     "ground": {
       "source_blend": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_ground_source_v001.blend",
-      "sha256": "93648c0c7a26d90a312457fb3b0b17bab793d112850662cc548adb4f3854809d",
+      "sha256": "5759f42d7e2a50db174f24111fc11d4a46ae0a57ec85d13071fd7e6973c5544a",
       "triangles": 116,
       "glb": "assets/art/items_weapons/props/flashlight_basic/components/itm_flashlight_basic_ground_visual_top3d.glb",
       "prefab": "assets/art/items_weapons/props/flashlight_basic/runtime/itm_flashlight_basic_ground_root_top3d.tscn",
-      "glb_sha256": "71823cb16fe813e92d6bd5d401729e553fe26387fbe0c98b71fa42ee65cbf439",
+      "glb_sha256": "aa5bd5c2b59cb7b8a3776fca3a876bf6e7c0c28f63348496d3ac2543a98379ed",
       "prefab_sha256": "857d03929333b21c18fde2eba27a7ceb127aa40e9c117a096b9ae8187b2bd6ff"
     }
   },
@@ -65,5 +65,28 @@
     "content_mapping": true,
     "ground_budget": true,
     "notes": "see development/2026-10-14_remaining_item_models.md"
+  },
+  "palette_contract": {
+    "path": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+    "sha256": "8da13f6d4da6701b983aa88cfd0e839a8178ab5c51a8f169fc8a4638308cb1c7",
+    "recipe": "art_source/shared/palette/item_palette_recipe_v001.json",
+    "import_script": "tools/asset_pipeline/item_shared_palette_post_import.gd",
+    "saturation_multiplier": 1.6099999999999999,
+    "value_multiplier": 1.6099999999999999,
+    "material_roles": [
+      "01_精工金属_道具骨架",
+      "02_细腻哑光_道具大面",
+      "03_清漆反光_道具点缀",
+      "04_柔和自发光_道具UI"
+    ],
+    "material_paths": [
+      "assets/art/items_weapons/shared/materials/itm_metal.tres",
+      "assets/art/items_weapons/shared/materials/itm_matte.tres",
+      "assets/art/items_weapons/shared/materials/itm_clearcoat.tres",
+      "assets/art/items_weapons/shared/materials/itm_emissive.tres"
+    ],
+    "icon_shadow_fill_energy": 0.45,
+    "geometry_uv_unchanged": true,
+    "validated_on": "2026-10-15"
   }
 }

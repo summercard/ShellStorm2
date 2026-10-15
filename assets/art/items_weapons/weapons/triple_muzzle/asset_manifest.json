@@ -2,9 +2,9 @@
   "asset_id": "WPN-ATT-ATTACH-TRIPLE-MUZZLE",
   "slug": "triple_muzzle",
   "preview_source": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_source_v001.blend",
-  "preview_sha256": "53871c61c511ac2ac41685bcc65e765b591b5cbcd7880d3685cacf545cdd94c5",
+  "preview_sha256": "880e8cc432c602a28f85985594a4835d5e08f0ae1ab12b478f4814fa344e5816",
   "ground_source": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_ground_source_v001.blend",
-  "ground_sha256": "3fba4ba572c107b080cb05289d21f8d5f6ae778776f7587ffa998222bdf7c293",
+  "ground_sha256": "73485f827928da5f98c7971b726a8d8eb4c75a2d21fa94ae8eeaacfab405e852",
   "preview_triangles": 7820,
   "ground_polygons": 198,
   "ground_triangles": 198,
@@ -19,10 +19,33 @@
   "name": "三叉枪口",
   "glb": "assets/art/items_weapons/weapons/triple_muzzle/components/wpn_triple_muzzle_ground_visual_top3d.glb",
   "prefab": "assets/art/items_weapons/weapons/triple_muzzle/runtime/wpn_triple_muzzle_ground_root_top3d.tscn",
-  "glb_sha256": "bbf3ff78e51e66356081cb061697ca19c8a7574d651b20512179f75c25eb32f4",
+  "glb_sha256": "787343417f0a486fe9625d881b576fd8088704b7cc2ec66183fce9e5918f9393",
   "prefab_sha256": "dc29f696a3a6ba10438dd5bdb8ea0c0dfde55ded2bbb30dd8a1c45355286cef5",
-  "source_hashes_unchanged": true,
+  "source_hashes_unchanged": false,
   "model_role": "ground",
   "status": "exported_pending_godot_validation",
-  "consumer": "src/world3d/GroundLootPickup3D.gd via ItemModelFactory3D"
+  "consumer": "src/world3d/GroundLootPickup3D.gd via ItemModelFactory3D",
+  "palette_contract": {
+    "path": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+    "sha256": "8da13f6d4da6701b983aa88cfd0e839a8178ab5c51a8f169fc8a4638308cb1c7",
+    "recipe": "art_source/shared/palette/item_palette_recipe_v001.json",
+    "import_script": "tools/asset_pipeline/item_shared_palette_post_import.gd",
+    "saturation_multiplier": 1.6099999999999999,
+    "value_multiplier": 1.6099999999999999,
+    "material_roles": [
+      "01_精工金属_道具骨架",
+      "02_细腻哑光_道具大面",
+      "03_清漆反光_道具点缀",
+      "04_柔和自发光_道具UI"
+    ],
+    "material_paths": [
+      "assets/art/items_weapons/shared/materials/itm_metal.tres",
+      "assets/art/items_weapons/shared/materials/itm_matte.tres",
+      "assets/art/items_weapons/shared/materials/itm_clearcoat.tres",
+      "assets/art/items_weapons/shared/materials/itm_emissive.tres"
+    ],
+    "icon_shadow_fill_energy": 0.45,
+    "geometry_uv_unchanged": true,
+    "validated_on": "2026-10-15"
+  }
 }

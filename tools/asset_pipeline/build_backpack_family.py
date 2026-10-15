@@ -5,8 +5,8 @@ from mathutils import Vector
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / 'assets/art/items_weapons'
 OUT = ROOT / 'outputs/backpacks_20261008'
-PALETTE = ROOT / 'assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'
-ROLES = ['01_精工金属_紫色骨架','02_细腻哑光_青绿大面','03_清漆反光_紫粉点缀','04_柔和自发光_UI灯光']
+PALETTE = ROOT / 'assets/art/shared/palette/item_high_visibility_palette_10x10_512.png'
+ROLES = ['01_精工金属_道具骨架','02_细腻哑光_道具大面','03_清漆反光_道具点缀','04_柔和自发光_道具UI']
 COLS = ['01_制作组件_已统一材质','02_游戏输出_整合模型','10_骨骼与动画','80_挂点_交互接口','90_展示环境_灯光相机']
 
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()

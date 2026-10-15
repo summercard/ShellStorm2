@@ -6,9 +6,9 @@ ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'scripts'))
 from workspace_paths import work_path
 OUT=work_path('items_reference_20261014/build.json').parent
-PAL=ROOT/'assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'
+PAL=ROOT/'assets/art/shared/palette/item_high_visibility_palette_10x10_512.png'
 TEMPLATE=ROOT/'art_source/items_weapons/_templates/prp/prp_template_source_v001.blend'
-ROLES=['01_精工金属_紫色骨架','02_细腻哑光_青绿大面','03_清漆反光_紫粉点缀','04_柔和自发光_UI灯光']
+ROLES=['01_精工金属_道具骨架','02_细腻哑光_道具大面','03_清漆反光_道具点缀','04_柔和自发光_道具UI']
 COLS=['01_制作组件_已统一材质','02_游戏输出_整合模型','10_骨骼与动画','80_挂点_交互接口','90_展示环境_灯光相机']
 # Zero based palette column,row. Exactly the existing palette; no new texture.
 C={'blue':(4,6),'purple':(5,7),'pink':(6,8),'pink_light':(8,8),'gold':(7,3),'silver':(9,9),'steel':(9,7),'dark':(9,0),'black':(9,0),'cyan':(7,5),'white':(9,9)}

@@ -1,0 +1,1170 @@
+{
+  "date": "2026-10-15",
+  "revision": "independent_four_materials_icon_fill",
+  "palette": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+  "palette_sha256": "8da13f6d4da6701b983aa88cfd0e839a8178ab5c51a8f169fc8a4638308cb1c7",
+  "source_sha256": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+  "scene_unchanged": true,
+  "pixel_recipe_checked": true,
+  "saturation_multiplier": 1.61,
+  "value_multiplier": 1.61,
+  "material_roles": [
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
+  ],
+  "material_paths": [
+    "assets/art/items_weapons/shared/materials/itm_metal.tres",
+    "assets/art/items_weapons/shared/materials/itm_matte.tres",
+    "assets/art/items_weapons/shared/materials/itm_clearcoat.tres",
+    "assets/art/items_weapons/shared/materials/itm_emissive.tres"
+  ],
+  "icon_fill_energy": 0.45,
+  "runtime": {
+    "after_metrics": [
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.585349917535537,
+        "pixels": 11732
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.583177403126318,
+        "pixels": 10986
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.458201578587039,
+        "pixels": 10419
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.331654213437924,
+        "pixels": 11623
+      },
+      {
+        "dark_fraction": 0.218568880962996,
+        "mean_luma": 0.247073322125715,
+        "pixels": 8972
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.264138858520256,
+        "pixels": 9166
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.464760468493744,
+        "pixels": 7648
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.306501528157745,
+        "pixels": 9615
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.3340105507668,
+        "pixels": 8974
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.345966448387491,
+        "pixels": 8974
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.471195473410771,
+        "pixels": 8974
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.365211442261538,
+        "pixels": 11827
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.355383404974636,
+        "pixels": 6619
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.189823479881211,
+        "pixels": 8625
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.265231950207474,
+        "pixels": 8657
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.242618851608831,
+        "pixels": 10042
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.194058659949218,
+        "pixels": 10733
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.333745743589329,
+        "pixels": 7736
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.304231016763029,
+        "pixels": 11932
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.429076830640343,
+        "pixels": 10275
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.496512378299627,
+        "pixels": 11717
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.364173071958125,
+        "pixels": 11069
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.43149510664,
+        "pixels": 12155
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.535576225475961,
+        "pixels": 9271
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.347306493114493,
+        "pixels": 9386
+      },
+      {
+        "dark_fraction": 0.519306282722513,
+        "mean_luma": 0.120958336959417,
+        "pixels": 6112
+      },
+      {
+        "dark_fraction": 0.211698584512906,
+        "mean_luma": 0.255098295223441,
+        "pixels": 4804
+      },
+      {
+        "dark_fraction": 0.246411483253589,
+        "mean_luma": 0.204476110295284,
+        "pixels": 4598
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.224118323915571,
+        "pixels": 8191
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.34881345575655,
+        "pixels": 10199
+      },
+      {
+        "dark_fraction": 0.0,
+        "mean_luma": 0.207230207759693,
+        "pixels": 9118
+      }
+    ],
+    "before_metrics": [
+      {
+        "dark_fraction": 0.158199795431299,
+        "mean_luma": 0.501733467737273,
+        "pixels": 11732
+      },
+      {
+        "dark_fraction": 0.180866557436738,
+        "mean_luma": 0.489882450709613,
+        "pixels": 10986
+      },
+      {
+        "dark_fraction": 0.167866397926864,
+        "mean_luma": 0.393945402533895,
+        "pixels": 10419
+      },
+      {
+        "dark_fraction": 0.201755140669362,
+        "mean_luma": 0.232120391896167,
+        "pixels": 11623
+      },
+      {
+        "dark_fraction": 0.252897904592064,
+        "mean_luma": 0.151040568421578,
+        "pixels": 8972
+      },
+      {
+        "dark_fraction": 0.164411957233253,
+        "mean_luma": 0.181017267280896,
+        "pixels": 9166
+      },
+      {
+        "dark_fraction": 0.0910041841004184,
+        "mean_luma": 0.409375605535631,
+        "pixels": 7648
+      },
+      {
+        "dark_fraction": 0.223712948517941,
+        "mean_luma": 0.242997354151859,
+        "pixels": 9615
+      },
+      {
+        "dark_fraction": 0.258413193670604,
+        "mean_luma": 0.266893883604879,
+        "pixels": 8974
+      },
+      {
+        "dark_fraction": 0.267550702028081,
+        "mean_luma": 0.273632026891045,
+        "pixels": 8974
+      },
+      {
+        "dark_fraction": 0.254735903721863,
+        "mean_luma": 0.36303700381517,
+        "pixels": 8974
+      },
+      {
+        "dark_fraction": 0.167413545277754,
+        "mean_luma": 0.277593524653392,
+        "pixels": 11827
+      },
+      {
+        "dark_fraction": 0.185828675026439,
+        "mean_luma": 0.229095790056022,
+        "pixels": 6619
+      },
+      {
+        "dark_fraction": 0.163594202898551,
+        "mean_luma": 0.14337377974473,
+        "pixels": 8625
+      },
+      {
+        "dark_fraction": 0.291093912440799,
+        "mean_luma": 0.205263746214391,
+        "pixels": 8657
+      },
+      {
+        "dark_fraction": 0.189006174068911,
+        "mean_luma": 0.174624026423103,
+        "pixels": 10042
+      },
+      {
+        "dark_fraction": 0.164911953787385,
+        "mean_luma": 0.128145500895713,
+        "pixels": 10733
+      },
+      {
+        "dark_fraction": 0.218846949327818,
+        "mean_luma": 0.244832626019098,
+        "pixels": 7736
+      },
+      {
+        "dark_fraction": 0.187730472678512,
+        "mean_luma": 0.208994500688212,
+        "pixels": 11932
+      },
+      {
+        "dark_fraction": 0.184428223844282,
+        "mean_luma": 0.322410237396288,
+        "pixels": 10275
+      },
+      {
+        "dark_fraction": 0.145002987112742,
+        "mean_luma": 0.353774352196878,
+        "pixels": 11717
+      },
+      {
+        "dark_fraction": 0.169391995663565,
+        "mean_luma": 0.269727524075318,
+        "pixels": 11069
+      },
+      {
+        "dark_fraction": 0.232908268202386,
+        "mean_luma": 0.31796711145055,
+        "pixels": 12155
+      },
+      {
+        "dark_fraction": 0.161579117678783,
+        "mean_luma": 0.40063455997547,
+        "pixels": 9271
+      },
+      {
+        "dark_fraction": 0.298423183464735,
+        "mean_luma": 0.284839105831233,
+        "pixels": 9386
+      },
+      {
+        "dark_fraction": 0.519306282722513,
+        "mean_luma": 0.120958336959417,
+        "pixels": 6112
+      },
+      {
+        "dark_fraction": 0.211698584512906,
+        "mean_luma": 0.255098295223441,
+        "pixels": 4804
+      },
+      {
+        "dark_fraction": 0.246411483253589,
+        "mean_luma": 0.204476110295284,
+        "pixels": 4598
+      },
+      {
+        "dark_fraction": 0.259186912464901,
+        "mean_luma": 0.193652408599199,
+        "pixels": 8191
+      },
+      {
+        "dark_fraction": 0.176095695656437,
+        "mean_luma": 0.269525920145134,
+        "pixels": 10199
+      },
+      {
+        "dark_fraction": 0.282956788769467,
+        "mean_luma": 0.171278484224045,
+        "pixels": 9118
+      }
+    ],
+    "dark_fraction_after": 0.0385801687565162,
+    "dark_fraction_before": 0.215394519167128,
+    "failures": [],
+    "glbs": 51,
+    "item_models": 31,
+    "mean_luma_ratio": 1.28075878372977,
+    "passed": true,
+    "surfaces_checked": 350
+  },
+  "sources": [
+    {
+      "path": "art_source/items_weapons/props/backpack_large/source/export/v001/prp_backpack_large_optimized_v001.blend",
+      "old_sha256": "65bf7270b3bb933312b8a6c8e4d458ea894055217be8c0970aea582d6bffdff4",
+      "sha256": "f8c2156ef2ef470e3c1fd22ebbabb3a7feb26a7aada17835a75dd643f82be924",
+      "bytes": 101750,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/backpack_large/source/prp_backpack_large_source_v001.blend",
+      "old_sha256": "4211cd177847250b586adfe794a535ae65f16762575c77c085057ae10ac96c60",
+      "sha256": "4fce2d8f590b458f6d2d14607a42695a83d1ec740ec4df33c7196dce11baca66",
+      "bytes": 105764,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/backpack_medium/source/export/v001/prp_backpack_medium_optimized_v001.blend",
+      "old_sha256": "fead1dbfcfe281e1f68b8408170b19e7dad6be8df19b45d89389d744428970e5",
+      "sha256": "bd6f2cd469b108c853cc8f826856de3d6e2622f7b4844e047f3ddaa9462271ec",
+      "bytes": 99586,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/backpack_medium/source/prp_backpack_medium_source_v001.blend",
+      "old_sha256": "90bf6510ce8e77848cfb44fd2c5f02ec8a1bf8df289a1d87ab292e5eb629552b",
+      "sha256": "5af9e7031b332559dd13f447d64c78c3845af4abfe09e0598f261c1fb1cfcdcb",
+      "bytes": 101307,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/backpack_small/source/export/v001/prp_backpack_small_optimized_v001.blend",
+      "old_sha256": "1174c74b427a26939018a6b6a3a7e1e9b3eb7e3d3bbbfeda3b8be8533c3817f5",
+      "sha256": "3b34269af9682eb28b11d3e69a0fc0e00f1f4f8b95414d773469f9a1d92c463c",
+      "bytes": 99126,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/backpack_small/source/prp_backpack_small_source_v001.blend",
+      "old_sha256": "f5209e97241d86134c0b62dcaf6dcab05021e17de47bf797ecb8bac41fa5d312",
+      "sha256": "fc03e91b86737b79be6c3d026ca729c3da7fa88bdc1bf04912a11d38f2235475",
+      "bytes": 100699,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/battery_large/source/itm_battery_large_ground_source_v001.blend",
+      "old_sha256": "78eead3c7bab7ce04349a70081f8c33fd846984c297fecf70584884a00d82768",
+      "sha256": "efc7b895a66cc51fb63ae7d4c6c763844763c83fac9db546487c97093c2d7318",
+      "bytes": 100442,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/battery_large/source/itm_battery_large_source_v001.blend",
+      "old_sha256": "255d6bb5dbd2e96af6ddc2c4fe296f0d311aa8d5999e54d70557c0b5692dc142",
+      "sha256": "9a447c854c56256f80c17988c67aa7efdb788bda18e08d606617f0896fd0ae89",
+      "bytes": 239304,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/battery_small/source/itm_battery_small_ground_source_v001.blend",
+      "old_sha256": "a37301c850f17299f45699e82145ad4b8dd71ef7b5366f55b11d499ef5ce3ca7",
+      "sha256": "0f150e88b141276f03dec3bb134873104abc261933b36757b6f8ffc993a819cb",
+      "bytes": 99424,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/battery_small/source/itm_battery_small_source_v001.blend",
+      "old_sha256": "fd9c4fd26a7271ab87bbd512f8b811e53a42f249e834a355fcf147891cc8a0a2",
+      "sha256": "f1deca848220a5cc87c2e416e6554577e26f9bc4bb8610bf30a1382c375b7c57",
+      "bytes": 137213,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/beacon/source/itm_beacon_ground_source_v001.blend",
+      "old_sha256": "b4868ca0e981d60ae165fece6203bb5f60097badaf38a1116220f50ffeb5c1bc",
+      "sha256": "f3c283242712dd44c0e17e5438555af23f826ade264a8296910a3c747b1e616a",
+      "bytes": 109044,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/beacon/source/itm_beacon_source_v001.blend",
+      "old_sha256": "eefae5573f4cc8d0d9edded193c0a4589bbaad65216f71cfe0bf5c2e3e112ad5",
+      "sha256": "8884abf631b239cb2ce122f3c98a818df30599eff4f1e4cdd382c703f996dfdb",
+      "bytes": 117506,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/blueprint_scroll/source/itm_blueprint_scroll_ground_source_v001.blend",
+      "old_sha256": "4101956b38692d8e672035e7b4fa40ee6c0dbd9d739965662c0e7c5fa43a4b0e",
+      "sha256": "477065ef6bbeb6844f8c7f7581f6f85de236d27030c3e5db4c9a9c00179f86d0",
+      "bytes": 101759,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/blueprint_scroll/source/itm_blueprint_scroll_source_v001.blend",
+      "old_sha256": "bd5ceabafd0ef3b6105b89b5f4a1b0abc621c575e292f437405ceb100badae16",
+      "sha256": "670b451dff80d88da123bed5d4069f9d7c60e2d335eb006788e318038e452bda",
+      "bytes": 116247,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/cell_pack/source/itm_cell_pack_ground_source_v001.blend",
+      "old_sha256": "620c178eb2d614550aea225684481b5f6bc5a16c06d2b06ebccee179f7d4e87c",
+      "sha256": "266359cd2ed8c93953611d6299ac2463b555dc937c5c9d7b563018776a5daeda",
+      "bytes": 104916,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/cell_pack/source/itm_cell_pack_source_v001.blend",
+      "old_sha256": "cb565074d238d79585a2d31fcb1261e2531ae20d474369a80bfef2465e29202a",
+      "sha256": "cfd87d79c091f255abe10a0b432bc6fa34d3ea88e3c4c8d1b7dde10cef0f9ed7",
+      "bytes": 117456,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/flashlight_advanced/source/itm_flashlight_advanced_ground_source_v001.blend",
+      "old_sha256": "0de35601818db4b742d3726aaf1b410ee43f8fbe09148edd71b53fa578c83f6a",
+      "sha256": "2f53b86f5251bac110a10499bd4fca0ec14bdcbd800e3fc063b86b9ba3c1da90",
+      "bytes": 102820,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/flashlight_advanced/source/itm_flashlight_advanced_source_v001.blend",
+      "old_sha256": "bce3e2792587c1f14cca05f346a51e150db2e918b9f41123716a0e9567ac2534",
+      "sha256": "1bae3af129248fa1ebe535eef7305d4354b45e71a06aeac84cc1addd27858d0b",
+      "bytes": 119337,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_ground_source_v001.blend",
+      "old_sha256": "9ec349234589fda68cbb19fbb2b482f3d4c0bb7ce00c853cff935f9ec82a65c0",
+      "sha256": "5759f42d7e2a50db174f24111fc11d4a46ae0a57ec85d13071fd7e6973c5544a",
+      "bytes": 102422,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/flashlight_basic/source/itm_flashlight_basic_source_v001.blend",
+      "old_sha256": "39b587a27f4331fae065186b93f823469de655a88e4075a9c9e70bba44651fb2",
+      "sha256": "90c18e5f2b88e1addac88001fc7791ed25ef8d9e7766451872e148e5c38db06e",
+      "bytes": 116370,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/flashlight_efficient/source/itm_flashlight_efficient_ground_source_v001.blend",
+      "old_sha256": "37005e564b7b4cd53cabb23c4dc404a984f2656ffacb4e8b842bc84083d89e5c",
+      "sha256": "6cfb91c49293e9a33b6685cb2ea3da0d45c1da1ed9bb5487640b8384bbb17caf",
+      "bytes": 102519,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/flashlight_efficient/source/itm_flashlight_efficient_source_v001.blend",
+      "old_sha256": "ad7df4c7e9f099149ac545d0fe1c21a45c8a45f071a226d3beedb29b2dacf973",
+      "sha256": "42030f578227eb1367d3e20a5f9187b906ac1ea0d7f6c75e5bcf4ad8c05a7cfb",
+      "bytes": 117863,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/health_potion/source/itm_health_potion_ground_source_v001.blend",
+      "old_sha256": "58b8f9f34ef56a1050f3067d8ad0e2407ca5eb59ae793d9d8af6bd57720407a1",
+      "sha256": "c3c86cb592914900b0cc438f4f51f1bd4a0a26b6ce8b43e39e002bdb8f2f10d0",
+      "bytes": 100593,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/health_potion/source/itm_health_potion_source_v001.blend",
+      "old_sha256": "5fa7cbaa48434c9e08a70b7d1aa99fed05c8dd5491cc5e0426e1b381efe6e01f",
+      "sha256": "50a9270b073741e47e35576d2ba3425b66a7d28e151ecf232f54187222a3a26c",
+      "bytes": 167959,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/reference_kit/source/prp_reference_item_kit_source_v001.blend",
+      "old_sha256": "ff32be6f9db3c1894d6f03cc339dd68a453c5eca8a077cdfa125681560125361",
+      "sha256": "cced72b0a266c873e67cb21ae73ae3a72c3a179764f80df107cddef0e4bb3602",
+      "bytes": 210180,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/room_key/source/itm_room_key_ground_source_v001.blend",
+      "old_sha256": "fa4c12ee86af22971a3cba2a7e6af78f013e51bdb39e6e11f801cf7ac036b7ad",
+      "sha256": "1bbb5fd5442506580426430d0cd3b3d4896dc395698569fe6c663009badb1953",
+      "bytes": 104450,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/props/room_key/source/itm_room_key_source_v001.blend",
+      "old_sha256": "000770af45e063b8debeb1998fbde442603c7d64dac23afe84be25f7ebbdc35d",
+      "sha256": "14f949a0850562578a7fd3a5ca86df5888e785becbcd4e2621672f290ae11820",
+      "bytes": 113420,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/attachment_fan/source/wpn_attachment_fan_ground_source_v001.blend",
+      "old_sha256": "2533a943e352dcb43097d6882d73802b23d074686502fb78c6329995a2873b54",
+      "sha256": "ff9c5058efcd593bc898fc6153620eff94d3ca2c9bd6a4d7b9891a04484d0d66",
+      "bytes": 106364,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/attachment_fan/source/wpn_attachment_fan_source_v001.blend",
+      "old_sha256": "015661cfe17817c50c6c4429d290893a9468324812b110860cca100e523557fa",
+      "sha256": "7e819631183af60cf476bcda8b5eea39578082c2c58a9a4f76432b58cd11fd47",
+      "bytes": 123919,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_ground_source_v001.blend",
+      "old_sha256": "8745441c6befffb2380886468c3436a815f75fd0cffd9ec2927755f3c752e9eb",
+      "sha256": "920a6d65a25b72fca3cbffd95f58ab94f84f2b40113b6b746c911369baca3971",
+      "bytes": 100845,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/big_mag/source/wpn_big_mag_source_v001.blend",
+      "old_sha256": "9600ca8acb7e6cbec806098bb1d1c82a562dea3155066fb98274af588084828b",
+      "sha256": "c69fcea3a4bbb66326d6426818267854141d152ee6479cd7fa5fe845e714b6a3",
+      "bytes": 177149,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_balloon/source/wpn_bullet_module_balloon_ground_source_v001.blend",
+      "old_sha256": "aaf9079098a8905efcfbe64b02f228ec80c0801bcd360daaf047eda8ce8cbc6a",
+      "sha256": "60a4daa38c0e84b2828ef22dfc3ddeee4cfe2c5da7ea2b33bcae1ab560c982d3",
+      "bytes": 107971,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_balloon/source/wpn_bullet_module_balloon_source_v001.blend",
+      "old_sha256": "82414da6c85ba36277c0d4d7d8f1f7e05c4b33cb4d74f60b05d9c33ed14bd5d8",
+      "sha256": "9ba2db3d0825d2b6322dead8ed94260186af62a868bef158dec4317296b69716",
+      "bytes": 115765,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_blackhole/source/wpn_bullet_module_blackhole_ground_source_v001.blend",
+      "old_sha256": "9fd105305c411c7c986ea0fcee084c79757afaf53d047e693a9ab4ec83d8da9a",
+      "sha256": "d4deff8ba431e8374661a8af359904336f73d0e6c7ffe82cdef98bf01f135150",
+      "bytes": 108463,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_blackhole/source/wpn_bullet_module_blackhole_source_v001.blend",
+      "old_sha256": "98c4e7490a1f854c84f3a2d94a93eb8b91bad47408c7f9e29a5be050bd10898a",
+      "sha256": "5db8de975e2929b9a7a1939a85ebdfe0418738a23e0988f3c2726f63a96916b7",
+      "bytes": 116249,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_bounce/source/wpn_bullet_module_bounce_ground_source_v001.blend",
+      "old_sha256": "0b9fd7ddbfa1e6201bc83dda28d02457caa2dbeb46b2e44782296a789a705a95",
+      "sha256": "b8ba915e50438e1a57b5cf9334b0f369aae4e6afa4dde9385f00452c8d54ca5b",
+      "bytes": 103903,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_bounce/source/wpn_bullet_module_bounce_source_v001.blend",
+      "old_sha256": "f4d9aee93792ce9a8f79c65560b09a95a5a2a5a77d6ef442aada90a5e78ae65f",
+      "sha256": "98261a7f3f61588c2b30d051f5305e8197a4a0bc42c4ffbf0836e42cd537fc95",
+      "bytes": 115680,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_explosive/source/wpn_bullet_module_explosive_ground_source_v001.blend",
+      "old_sha256": "ab023236a2ce866e8f29c7f01b87ddc15ca0a39a6e573f32b825d5a7abd3a41d",
+      "sha256": "79d90649e5c8639db8364a81950cd79adca1ef504d2fe093c80ee13a553f972d",
+      "bytes": 108599,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_explosive/source/wpn_bullet_module_explosive_source_v001.blend",
+      "old_sha256": "2e2d760fdba30b2e8ec9ee6c7e24c528ae025690f85c73b1d7799306b21452a4",
+      "sha256": "b73fbac8dde2af88da270157d1f9bcab38e70d482bc2e8493711e4a5fc7ebd33",
+      "bytes": 121070,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_homing/source/wpn_bullet_module_homing_ground_source_v001.blend",
+      "old_sha256": "6f9a47f62afaa87d77484ce168f2b785ed5c6b4d5e279ec4cad813545a800f93",
+      "sha256": "152f19cf9d52c586e663aec03521df3833b1e3480046ba864827227a89da98eb",
+      "bytes": 110439,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_homing/source/wpn_bullet_module_homing_source_v001.blend",
+      "old_sha256": "2f07d0437ce03b9b44b3a218a1b0cd0983188ed9b84d12b86bdf5e31381a3c72",
+      "sha256": "c0b9ee81e261828e0a3e01fd65b3b1307fdb1af92be76d81a3ccde36803aea64",
+      "bytes": 120072,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_piercing/source/wpn_bullet_module_piercing_ground_source_v001.blend",
+      "old_sha256": "f5be8d1af0b29773d0a84f09dc8b17d81ab08ac191b91f7547b405f11b82a7bc",
+      "sha256": "6ccc70d1bcab29c7e017218c8b1cf33663de6da53c414e955d63965b5f991bf3",
+      "bytes": 105013,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_piercing/source/wpn_bullet_module_piercing_source_v001.blend",
+      "old_sha256": "4f838da322a2fd1e08f5a9cde1c30b50da96b3ad1ecb0a2c835fb02747e22a88",
+      "sha256": "24ca8ca71044fb45e80fd9884d61d6f91f580058397354f5e4b523321a6286d9",
+      "bytes": 112427,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_standard/source/wpn_bullet_module_standard_ground_source_v001.blend",
+      "old_sha256": "d0fb6705857139f39c690ac974a01960528cdff639f41709b2f3c6a03b9b2869",
+      "sha256": "31d131988f15c93125e060835b2581d4632408295953b7454b3a68983d21cca7",
+      "bytes": 106315,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_standard/source/wpn_bullet_module_standard_source_v001.blend",
+      "old_sha256": "87f78b424c06a60409af6b45b5a656d1e06e990f1fefc7835f9d8013bb469c73",
+      "sha256": "15cebcaf4cf53d089519a1eb7f29d62945c4b24568e3640710c2f276287c3cb4",
+      "bytes": 112168,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_sticky/source/wpn_bullet_module_sticky_ground_source_v001.blend",
+      "old_sha256": "563ca712cb15a5f27c067db6f566ae19e8d9608f24eaa4d7db02f0b87e345722",
+      "sha256": "97feda479dc2f89d365e6995be56d7e19df70042c8f630c7c10a83994509518f",
+      "bytes": 113187,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_module_sticky/source/wpn_bullet_module_sticky_source_v001.blend",
+      "old_sha256": "089ebf6494d257ea1298e2ff3ed9fcfeb9e2ad2a968dbe42b45458f098b0cfb4",
+      "sha256": "bf81755f5fe910f0ce8e38a3820b496060d201d569957741dbd564de430ff8d7",
+      "bytes": 125631,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_ground_source_v001.blend",
+      "old_sha256": "176d171f20a0793fd6de89e7af9e93c8ef202cd865e4cb56dcbd8707abb59f6f",
+      "sha256": "24491f12357220830731fcb5d1b0582a4f2672912a2036548dd48b430512a6cb",
+      "bytes": 100781,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/bullet_standard/source/wpn_bullet_standard_source_v001.blend",
+      "old_sha256": "6398a847b4417e1019277c778be0a63fc3264190f2cd99ec51ab79d73937ceba",
+      "sha256": "b58b2ad7b01a17ecaf3826f49d25f485586ff169561765d228d907080d5592fa",
+      "bytes": 139562,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/copy_sticker/source/wpn_copy_sticker_ground_source_v001.blend",
+      "old_sha256": "1530ccf715a1d2e538240575e4a86e16e38f1be01ce5351b574b7d5a1d3a1b6d",
+      "sha256": "9d6af8751c9b4c03dce2f99ba15b363bfd94ac1c23a78d6d2d3536af4a8e0987",
+      "bytes": 103421,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/copy_sticker/source/wpn_copy_sticker_source_v001.blend",
+      "old_sha256": "7782cd43ab0f15de730867b07a511cbfcac88685477ffd175597fcffdb38d251",
+      "sha256": "57416ec43f0d9e38bb7dc66d198246207a8004d119572b17c521864a8b5743de",
+      "bytes": 118265,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/melee_baseball_bat/source/wpn_melee_baseball_bat_ground_source_v001.blend",
+      "old_sha256": "60a8edbbac92d0368fdc657a4b0f13b1d0fb89c441bba9f85caab7e2adbd0eeb",
+      "sha256": "217a900672f4c03d08e1db38d172d090214367c7bcf32375bb2a1c318e627302",
+      "bytes": 110001,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/melee_baseball_bat/source/wpn_melee_baseball_bat_source_v001.blend",
+      "old_sha256": "6a350d42f1f50122a4e9a86875d9fa39e81e8bc3eadaa7cc2dec30ee216ce3f0",
+      "sha256": "5fc0cab7f000c042f17de452d0b80e464b5a92ce298b2d813fcdc227b151ca91",
+      "bytes": 115043,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/melee_greatblade/source/wpn_melee_greatblade_ground_source_v001.blend",
+      "old_sha256": "362c80f43ac3b889ed39874d95c9a479e510872a052b79890bfd3af23ac92005",
+      "sha256": "4f7019bd7e7c6960fe6589f54754ec006685c516de505b6bb2bfcf2301d5914f",
+      "bytes": 105440,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/melee_greatblade/source/wpn_melee_greatblade_source_v001.blend",
+      "old_sha256": "c98d4663aff04bc7d41a90ddea2b492a04e4e0b21eba883b60cca843da5da0ad",
+      "sha256": "1220d3c93f8b2608f42e8d82fbaf48fa50f50c603afcab784f82c5e726fe73ce",
+      "bytes": 122633,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_ground_source_v001.blend",
+      "old_sha256": "29759d06616765ebc6549e6f5eba41eb37f8a75453f29340579c3404b1f0ac21",
+      "sha256": "f5e37c5f0afad01efc26272f590b569563b9991c42658a6b38cfe9bf2dca9883",
+      "bytes": 105701,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_source_v001.blend",
+      "old_sha256": "e870f79fcd954a6e3962446defd5a1ede8e4b8678873760f7577ae2c20b56e81",
+      "sha256": "928e50f8fcba2e18072f83a628cd03c8416f3d96bf1d034fa88fbf34c78d48e3",
+      "bytes": 118660,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_ground_source_v001.blend",
+      "old_sha256": "e51571baf315e1c3a60c159957bc12c8c451a691d4d14966b1429f0d62bdff65",
+      "sha256": "85bc63326868d201f9a592aca38826406dbcb160c1962d008dedaeab5103bfcc",
+      "bytes": 100770,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/rubber_stock/source/wpn_rubber_stock_source_v001.blend",
+      "old_sha256": "168fb60b20678cec5d7e6a41529a831875f3d0ae320b69a485ef86d9d899effe",
+      "sha256": "9b678c44eb85edef527ce2cc504fc7e11ad396a0242147c6d31470b19b874eaf",
+      "bytes": 461409,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/scope/source/wpn_scope_ground_source_v001.blend",
+      "old_sha256": "ed5867a91a7e73f61527443b57cd1bd9679f90485900984c0e501b3ea21b528a",
+      "sha256": "61aa67a95319747a9e55aeaa3b8615050a1c873d3e57eca3cf99d0c5fe0ff468",
+      "bytes": 101171,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/scope/source/wpn_scope_source_v001.blend",
+      "old_sha256": "c3aca25a32ca6fde8756feaafb8ad5107946064213a3a87f7dccd0a0552c9cca",
+      "sha256": "f9f437a06931bc40eb3540b98a0cc36592204d6a424bdf1f27e5289fc91c2319",
+      "bytes": 196793,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_ground_source_v001.blend",
+      "old_sha256": "75d9f00383256acaea5460aa3111885b13a20622b1f101b4d46986b01b30edba",
+      "sha256": "73485f827928da5f98c7971b726a8d8eb4c75a2d21fa94ae8eeaacfab405e852",
+      "bytes": 101595,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/weapons/triple_muzzle/source/wpn_triple_muzzle_source_v001.blend",
+      "old_sha256": "0a51bf42f01307ba42b49cfd76c01d9f54a812a6874872924d0c995cf38e8997",
+      "sha256": "880e8cc432c602a28f85985594a4835d5e08f0ae1ab12b478f4814fa344e5816",
+      "bytes": 187722,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    },
+    {
+      "path": "art_source/items_weapons/_templates/prp/prp_template_source_v001.blend",
+      "old_sha256": "6d1dc19fcd9a8463c7a012778c383cad5a2a6f380573bf16876f99c99f715895",
+      "sha256": "44f97bd4fcefcf1a812c4872df0a9264f3fc51f7894a61b9f4b20d3e843ea567",
+      "bytes": 93856,
+      "geometry_uv_unchanged": true,
+      "material_nodes": 4
+    }
+  ],
+  "glbs": [
+    {
+      "path": "assets/art/items_weapons/props/backpack_large/components/prp_backpack_large_visual_top3d.glb",
+      "old_sha256": "6ce13bd5d287b3471691682852011320a44d239f7757ff6441cffef602fe9819",
+      "sha256": "24255b0013b3cdc744ad29cf632cc64167a8080b13f5449d75fc90fc072f88b2",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/backpack_medium/components/prp_backpack_medium_visual_top3d.glb",
+      "old_sha256": "bc3783000f68302addeaba2591707f5623f6138f5c8c208c6a008f4397af4c72",
+      "sha256": "53df536c96f72f236a89fbe67e03d269b275b620369f6bba5d589928bb0d5a56",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/backpack_small/components/prp_backpack_small_visual_top3d.glb",
+      "old_sha256": "44a3e6d05b915b31fe51e9ca4b2ba703956ed3ceb49e9626bda2ae2e5163ad92",
+      "sha256": "444271a0de528c7d74676a267d149055ed872113fe1247f534aa3f5327a1a235",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/battery_large/components/itm_battery_large_ground_visual_top3d.glb",
+      "old_sha256": "ef818781be772647eeb7f28d65c10c87abf941eef28ee0269515772aa5103d92",
+      "sha256": "7bc054ce32bc2ff7f8e32c84bd52e6005ac28bc304d995fa872f9ff2070d6837",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/battery_small/components/itm_battery_small_ground_visual_top3d.glb",
+      "old_sha256": "86b03dcf28d761f6431b74160d69eb4fa2726eea2c8d818b2059d82dc795998f",
+      "sha256": "0c24b7a9a48c9db39568eee5af2ef6f2584fed70d67553f63b19cdebee52ef50",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/beacon/components/itm_beacon_ground_visual_top3d.glb",
+      "old_sha256": "11f7845254447206fbc668cb351bb0a4c9cf21fdf92191c76676ad642bfeceba",
+      "sha256": "9bd1239a7828bae5864512c67c906d30b58a7b965c61d3b732728f5553eb409f",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/beacon/components/itm_beacon_preview_visual_top3d.glb",
+      "old_sha256": "60bc262d32f82b3ee64f054214abf101afdcb66ca104a2e440c7e2d7b9e09558",
+      "sha256": "edf5789e5abf09e3ddeb755aa5288807eb0d1ce962e55b88b1bfc54857154e42",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/blueprint_scroll/components/itm_blueprint_scroll_ground_visual_top3d.glb",
+      "old_sha256": "3362a052ca352617a08b870d2fb440d2f5f1279d8aa3128e5f208a1308ed371e",
+      "sha256": "b73f613ea3cca0e3cd822bc0a41f3a0ffcff2c98b610771950fa5f8717cfe200",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/blueprint_scroll/components/itm_blueprint_scroll_preview_visual_top3d.glb",
+      "old_sha256": "b4d21c963c54ea8d56d43cbbc3afa90773479a1759356bf89dff4716b967d139",
+      "sha256": "51af1fd17ce8a142366ca7a3918b96275c6643d2761607094188dfc54077b3a4",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/cell_pack/components/itm_cell_pack_ground_visual_top3d.glb",
+      "old_sha256": "de6167d7e0d5d493a474c86be541622f2e310add0654f5334921c2559a2e8ee8",
+      "sha256": "2076ece24ec6b9e11c9826e9994440dac5180851d0a2ac8f294324773fc628d4",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/cell_pack/components/itm_cell_pack_preview_visual_top3d.glb",
+      "old_sha256": "299af36d4763dd27efb01f85ddb9c1ed50b08056df6fd962000471b27a09d339",
+      "sha256": "e50509eb5078bce046c32f0a0660e57ae4d53fcfb50c2dc21f1baef7a26860f6",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/flashlight_advanced/components/itm_flashlight_advanced_ground_visual_top3d.glb",
+      "old_sha256": "f28043c6cd705bec0a002b4d57b0ef10b4f1634e1baa6297e56bf69bb099de8b",
+      "sha256": "5e9b19dbe0e136da03bf57392d0f6b040509e571956222d8ee91450a4f60649e",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/flashlight_advanced/components/itm_flashlight_advanced_preview_visual_top3d.glb",
+      "old_sha256": "be15f37d67aefb352ff952d9d4f3d0a7c2f4922b9f7987ec3740d25464a393d4",
+      "sha256": "b0d602ecaf8ea6b80d3d1ecee1b7be96bd654f703a2eb94867f2e03b53af6685",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/flashlight_basic/components/itm_flashlight_basic_ground_visual_top3d.glb",
+      "old_sha256": "71823cb16fe813e92d6bd5d401729e553fe26387fbe0c98b71fa42ee65cbf439",
+      "sha256": "aa5bd5c2b59cb7b8a3776fca3a876bf6e7c0c28f63348496d3ac2543a98379ed",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/flashlight_basic/components/itm_flashlight_basic_preview_visual_top3d.glb",
+      "old_sha256": "e0b9c9160e49c243818d4d79845e34bfec30ce7517bcdaa56e69cea99b2240a8",
+      "sha256": "2abdd8d26252ba39a2bec907870cc256c112c98c3755df78af57b6bd57fa5103",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/flashlight_efficient/components/itm_flashlight_efficient_ground_visual_top3d.glb",
+      "old_sha256": "43de5027212117aff568ff2ac4c1c4e00dbc48a9f36b1d49b3cf455cff330eaa",
+      "sha256": "d988379ebda1e572ce999d2d6c58662d38b314c0c425a3daef7f5cd501395fbf",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/flashlight_efficient/components/itm_flashlight_efficient_preview_visual_top3d.glb",
+      "old_sha256": "c785956120deca81bf5c0c6dbf4fec42094b4bb6b1dff364e700fe7ee6dad1f2",
+      "sha256": "5b71000d20b8e6f56723da468693d7d0c074e3772b079751eaa1ae3b8b53ced4",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/health_potion/components/itm_health_potion_ground_visual_top3d.glb",
+      "old_sha256": "11e19a43f715c463f0c01ee83e0d0c66eba0c843ff63011dee41aff3f229c045",
+      "sha256": "ae9ed254c12d78f973e630040a95dace015feabeb6651fd812b1765add80f8cb",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/room_key/components/itm_room_key_ground_visual_top3d.glb",
+      "old_sha256": "91a2bf971a2d0fc14764c8f90fdec9b9dfc2fe2f36cab5b488f3cc3bfa9c84fa",
+      "sha256": "b8e7ae2724f1f415711603488d841db931ce0b1ed0799dffa3fd8a32aeab5701",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/props/room_key/components/itm_room_key_preview_visual_top3d.glb",
+      "old_sha256": "0584f002b32c3f2bf32e074e8301ba7f9881ac6aa14008f0f6b1f67b7f74c538",
+      "sha256": "f9a2116d5eb1c0745692a882725e18e9351d0a3684efb1dcd963e37898f9204b",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/attachment_fan/components/wpn_attachment_fan_ground_visual_top3d.glb",
+      "old_sha256": "c4c54d78c2e5bc80c2ed98cdcf53412866e370a6999d9640f3e9d757809c8510",
+      "sha256": "ebb0e2213cc45359c2968a949097c29ec7367f1065ed788ba77e412035bd974b",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/attachment_fan/components/wpn_attachment_fan_preview_visual_top3d.glb",
+      "old_sha256": "1287902a1865c0449e9fedd3928dbef317d11c54143e13de4ff2a8b58dc1566c",
+      "sha256": "c818167b24348269620c50c9f171a4ca22892cc9960c767488f040424ccd0595",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/big_mag/components/wpn_big_mag_ground_visual_top3d.glb",
+      "old_sha256": "1b7c12877a2116a10a661d5229b4b8627a77ce6ade2eae181facdedf465a1df1",
+      "sha256": "a85c78a26813e0ca8f93acb5b3607fa1cd1146bab17e0e92ce8255c6f378cda5",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_balloon/components/wpn_bullet_module_balloon_ground_visual_top3d.glb",
+      "old_sha256": "e148cf3e36ed5da36b2a086e73352d152e8ec54176c77eb1df9d7d210a608513",
+      "sha256": "e125d5ed1cb576ec65883fe4cae78b340b8b0dbbd31ce2f3752eb150b8c9a175",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_balloon/components/wpn_bullet_module_balloon_preview_visual_top3d.glb",
+      "old_sha256": "938ad93f9e50397cf483a3408748fcf562027464c6b7d96e7af1fe350efef0ad",
+      "sha256": "da0dd485caa02cfb5a3c162d018c78d1eb376a920c60d5f60c763337d89cbb00",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_blackhole/components/wpn_bullet_module_blackhole_ground_visual_top3d.glb",
+      "old_sha256": "39bb626cb0724a37c661184b2400673bed8865d43f6f3c6ac6b8c84454cd5919",
+      "sha256": "0982fca3765e55cc979a854f61e2579bef8ba7063e658181be9ce483c85b62b2",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_blackhole/components/wpn_bullet_module_blackhole_preview_visual_top3d.glb",
+      "old_sha256": "b201bfca119e133eb9140f829ff6ae530d5bff56f3f15ca0e97642f65aa1ebf2",
+      "sha256": "a7572d6fd15dfccd5e2c7d48b4f151a5c87362793f191fbeffb61e82cc7c76c5",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_bounce/components/wpn_bullet_module_bounce_ground_visual_top3d.glb",
+      "old_sha256": "194ae07d32e7e8078d74fafa24de374cf6886f8ee30984e15b6cc6b623921c34",
+      "sha256": "e4f54b5f3dee205ac24e099edb05a2ff1ff91c3c0b830d6e2817e4448f89b9ff",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_bounce/components/wpn_bullet_module_bounce_preview_visual_top3d.glb",
+      "old_sha256": "53493d62a6fb26594f1cec8aea619b3f99a64f7276cda83c26f1cf108d5f1473",
+      "sha256": "6426f20b1dea81b2f3e402136fec9f1966a265809947f2d8dc1f4b6d1d2dd996",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_explosive/components/wpn_bullet_module_explosive_ground_visual_top3d.glb",
+      "old_sha256": "5f2cddd2331f77bb83b90e2830d9797560e3a995b2a0e92342423444a4ef2c56",
+      "sha256": "cebfdcae5d1f84a33690304b0482204b604c230ec3d5e4f4d737159580bea2c4",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_explosive/components/wpn_bullet_module_explosive_preview_visual_top3d.glb",
+      "old_sha256": "7feda8bbe95418039627ad2a80d971d34450ff1f3f2f401201e17ad71854568e",
+      "sha256": "6df4c2ed25222c0a80e32468255085513fe8f3c380bac730fcd194b12fcaf356",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_homing/components/wpn_bullet_module_homing_ground_visual_top3d.glb",
+      "old_sha256": "78e4e122fdea03d045daaf0ea6afedac7fb025a753fc2e859ab0a679f959f858",
+      "sha256": "2a23e2da3138b9819dfd27c66728d14b8e07061d6eeeeb181f658e64874bb62a",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_homing/components/wpn_bullet_module_homing_preview_visual_top3d.glb",
+      "old_sha256": "2e0ed34935811c6925f9f1471f9ffcda638e4ec7d1ad5dfdb11bfc8fa2b99035",
+      "sha256": "37908e7fa61f2d8d8d317f3e7954ac1ea5e853960d94109b2a6b9fc00905d1e4",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_piercing/components/wpn_bullet_module_piercing_ground_visual_top3d.glb",
+      "old_sha256": "e6466f6353db081f65e6feaf3a834b16d47006325170869b483c67cf8d2d224f",
+      "sha256": "574aee1bca57f45cccf4214046e724c01c06ba4b5adf240d26a276ad14d6c3c6",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_piercing/components/wpn_bullet_module_piercing_preview_visual_top3d.glb",
+      "old_sha256": "ebd0e162543bab7d19f80ab3b3936a56c93c0ae391fc2e996adc3b04fd042d59",
+      "sha256": "4eda7185bde865e98560caec3a1d61604e98e2533af4a1790e6dc6a09cad22a4",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_standard/components/wpn_bullet_module_standard_ground_visual_top3d.glb",
+      "old_sha256": "048514c8d7f8e4c27b365277ac421424819d8a6f7d8a043c591836012d544af2",
+      "sha256": "0e821990a8ecb75eb369568a50788779c8aff815ae5d0e0be05f435cc45646de",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_standard/components/wpn_bullet_module_standard_preview_visual_top3d.glb",
+      "old_sha256": "617ab30e8a6a75f580b8e9f25262d1278e3fab9ba4f018fad69d1891b4ff8362",
+      "sha256": "7d6060194001788d956b2a1266a581986b77c5a8679e66ad5cde4434c636077e",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_sticky/components/wpn_bullet_module_sticky_ground_visual_top3d.glb",
+      "old_sha256": "ad8546657804c2d57dcccfc1b496bc0781916c828a818680c7e2528755f2c58d",
+      "sha256": "4a32b2d5669dbe4a3b7e8fbb674d299548347b2b856d66aba34fcd600ec1a88b",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_module_sticky/components/wpn_bullet_module_sticky_preview_visual_top3d.glb",
+      "old_sha256": "a205ca324dd36d890602fb0a2a8a9e6a150b223885b1d29be5b5483fe4b04475",
+      "sha256": "705a5062f5b1e43b0f9e1daad2a97ff3b3cb9400aaa9f938b871b88d667fb5bb",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/bullet_standard/components/wpn_bullet_standard_ground_visual_top3d.glb",
+      "old_sha256": "87b0e6c5779ab06db135c4c727379a6304aafb0863d37a5cda3d103ec953b08b",
+      "sha256": "9bca9162dee7c9bdf230178845e163747adebb068203e054649b744ca7f0f8a8",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/copy_sticker/components/wpn_copy_sticker_ground_visual_top3d.glb",
+      "old_sha256": "d514e9dc626456daa62e57d016352e878e563a8d74a15748213d59e2aef757be",
+      "sha256": "aaee1e469d095a5332033cd6e7196c3fab6bb5cb175373599ff1a37ab5560a0c",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/copy_sticker/components/wpn_copy_sticker_preview_visual_top3d.glb",
+      "old_sha256": "32400ea7bc5deb135d3b52dd13fd049243eaa7a49e8723a1f221211fca08b074",
+      "sha256": "3ed84e65ca20d01cfcb221d52f7a4496d19926fc184034194f559168ae7f60bf",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/melee_baseball_bat/components/wpn_melee_baseball_bat_ground_visual_top3d.glb",
+      "old_sha256": "4ff87373fcb22490683e04b485d2ade35710be2fb14539a588b27023a529d1e5",
+      "sha256": "6092fe44410e2e4d9e6f213fa6c2dbb3376e9e2e152d36682f47b6e996765bda",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/melee_baseball_bat/components/wpn_melee_baseball_bat_preview_visual_top3d.glb",
+      "old_sha256": "a830b1195061660e7a8eb943050f48666e0ee2bc6c4be1c8b289f86c9d8bb278",
+      "sha256": "4fcfb2d04987ae122e1f74cb85cae4abcd061d1cef3937b1de475be327e12653",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/melee_greatblade/components/wpn_melee_greatblade_ground_visual_top3d.glb",
+      "old_sha256": "f9cc2a9baa91a383978916f43b91eeea611fbffe84db820dbac473754f8ad189",
+      "sha256": "b25af9a24d8d2ea8273112908cf106d43d1dbe67ffce3d3caf9e2aebe0a19432",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/melee_greatblade/components/wpn_melee_greatblade_preview_visual_top3d.glb",
+      "old_sha256": "d751a8a935bedf899ebb84b1559d9b39bf91665fbca2a2c46f4d72c27609ee9d",
+      "sha256": "f2cd0c3cde9b0bf1d2a62d5bf532adca2cc1587faa6f3af848ae1d4bc9b92424",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/melee_waraxe/components/wpn_melee_waraxe_ground_visual_top3d.glb",
+      "old_sha256": "ebd4601dede84656d53aac828139a7a4d4adc247b66a5b487fb5af892f6d656e",
+      "sha256": "766b3e3beb42db047fb32c8885919b854080f8a7cb7722ce9aa33bd7192f344b",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/melee_waraxe/components/wpn_melee_waraxe_preview_visual_top3d.glb",
+      "old_sha256": "b4771e69b0d6b54e331e48c7f17b0c327f2812716737651eb8a54a3f11b367a6",
+      "sha256": "2827b2187cc4a0944c9ca24386529d84dcba7d122f59105f776c2df006a89d45",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/rubber_stock/components/wpn_rubber_stock_ground_visual_top3d.glb",
+      "old_sha256": "69f7add7e2012d3c4d70a07b445f4f59a5255242bec336d49b74568ed91b6cb3",
+      "sha256": "71b7055df4a3f2f5cbd25d72a9bc5e039a8fa2055b42820854dfdf2eb3ed5fe2",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/scope/components/wpn_scope_ground_visual_top3d.glb",
+      "old_sha256": "2ef8fc0e7e766584f3708c0554edd0029de21d50a737d6b0e6f120128e1cf1ba",
+      "sha256": "67ea354c62484bbf3c9175c483678f4d5495bab5eabc62d85f83c685e76e8221",
+      "binary_geometry_unchanged": true
+    },
+    {
+      "path": "assets/art/items_weapons/weapons/triple_muzzle/components/wpn_triple_muzzle_ground_visual_top3d.glb",
+      "old_sha256": "bbf3ff78e51e66356081cb061697ca19c8a7574d651b20512179f75c25eb32f4",
+      "sha256": "787343417f0a486fe9625d881b576fd8088704b7cc2ec66183fce9e5918f9393",
+      "binary_geometry_unchanged": true
+    }
+  ]
+}

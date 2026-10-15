@@ -29,10 +29,10 @@
   "origin": "existing_grip",
   "animation_tier": "tier_0_static",
   "materials": [
-    "01_精工金属_紫色骨架",
-    "02_细腻哑光_青绿大面",
-    "03_清漆反光_紫粉点缀",
-    "04_柔和自发光_UI灯光"
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
   ],
   "budget_triangles": [
     100,
@@ -43,20 +43,20 @@
   "model_variants": {
     "preview": {
       "source_blend": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_source_v001.blend",
-      "sha256": "c0b5e9dbb326e623e62d98bdebbeda1e6e49b001543ec6d3cde5bc36cd90895a",
+      "sha256": "928e50f8fcba2e18072f83a628cd03c8416f3d96bf1d034fa88fbf34c78d48e3",
       "triangles": 1300,
       "glb": "assets/art/items_weapons/weapons/melee_waraxe/components/wpn_melee_waraxe_preview_visual_top3d.glb",
       "prefab": "assets/art/items_weapons/weapons/melee_waraxe/runtime/wpn_melee_waraxe_preview_root_top3d.tscn",
-      "glb_sha256": "b4771e69b0d6b54e331e48c7f17b0c327f2812716737651eb8a54a3f11b367a6",
+      "glb_sha256": "2827b2187cc4a0944c9ca24386529d84dcba7d122f59105f776c2df006a89d45",
       "prefab_sha256": "da8992b8ec6ec5b7b50714c80d94c250121a0e3102d129f38f4a3ea15a1b8351"
     },
     "ground": {
       "source_blend": "art_source/items_weapons/weapons/melee_waraxe/source/wpn_melee_waraxe_ground_source_v001.blend",
-      "sha256": "5ef467748e8b139f6377ec3d019ee6c2c5a5008288112f3b1d88273c3b8c2e1e",
+      "sha256": "f5e37c5f0afad01efc26272f590b569563b9991c42658a6b38cfe9bf2dca9883",
       "triangles": 152,
       "glb": "assets/art/items_weapons/weapons/melee_waraxe/components/wpn_melee_waraxe_ground_visual_top3d.glb",
       "prefab": "assets/art/items_weapons/weapons/melee_waraxe/runtime/wpn_melee_waraxe_ground_root_top3d.tscn",
-      "glb_sha256": "ebd4601dede84656d53aac828139a7a4d4adc247b66a5b487fb5af892f6d656e",
+      "glb_sha256": "766b3e3beb42db047fb32c8885919b854080f8a7cb7722ce9aa33bd7192f344b",
       "prefab_sha256": "baa91469acf229a4a604fba6d8d4f0c98e17191503ddcd671196792d3d7535bc"
     }
   },
@@ -65,5 +65,28 @@
     "content_mapping": true,
     "ground_budget": true,
     "notes": "see development/2026-10-14_remaining_item_models.md"
+  },
+  "palette_contract": {
+    "path": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+    "sha256": "8da13f6d4da6701b983aa88cfd0e839a8178ab5c51a8f169fc8a4638308cb1c7",
+    "recipe": "art_source/shared/palette/item_palette_recipe_v001.json",
+    "import_script": "tools/asset_pipeline/item_shared_palette_post_import.gd",
+    "saturation_multiplier": 1.6099999999999999,
+    "value_multiplier": 1.6099999999999999,
+    "material_roles": [
+      "01_精工金属_道具骨架",
+      "02_细腻哑光_道具大面",
+      "03_清漆反光_道具点缀",
+      "04_柔和自发光_道具UI"
+    ],
+    "material_paths": [
+      "assets/art/items_weapons/shared/materials/itm_metal.tres",
+      "assets/art/items_weapons/shared/materials/itm_matte.tres",
+      "assets/art/items_weapons/shared/materials/itm_clearcoat.tres",
+      "assets/art/items_weapons/shared/materials/itm_emissive.tres"
+    ],
+    "icon_shadow_fill_energy": 0.45,
+    "geometry_uv_unchanged": true,
+    "validated_on": "2026-10-15"
   }
 }

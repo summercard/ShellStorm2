@@ -21,7 +21,7 @@ from split_asset_ledger import FIRST_DATA_ROW, HEADER_ROW, read_source_rows, ded
 OUT = ROOT / 'outputs/backpacks_20261008/ledger'
 BASE = ROOT / 'assets/registry/ledger_split_baseline.json'
 PARENT = 'ITM-EQUIPMENT-BACKPACK-3D'
-ROLES = ['01_精工金属_紫色骨架', '02_细腻哑光_青绿大面', '03_清漆反光_紫粉点缀', '04_柔和自发光_UI灯光']
+ROLES = ['01_精工金属_道具骨架', '02_细腻哑光_道具大面', '03_清漆反光_道具点缀', '04_柔和自发光_道具UI']
 SPECS = [('small', 2, '小号粉色圆顶背包', [0.56, 0.28, 0.60]), ('medium', 4, '中号黄色单扣背包', [0.66, 0.33, 0.74]), ('large', 8, '大号青色卷铺盖背包', [0.76, 0.38, 0.88])]
 
 def sha(p):
@@ -58,7 +58,7 @@ def contract(spec, index):
             'animation_tier': 'tier_0_static', 'animation_reason': '封闭静态装备；本任务无开盖动作，无骨架、形变及自身动画',
             'source_collection': 'PRP_' + name + '_中文资产管理', 'anchor_contract': ['ItemRoot'],
             'material_roles': ROLES, 'material_override_reason': '用户明确要求场景四材质标准名；不使用道具专属别名',
-            'palette': 'assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png',
+            'palette': 'assets/art/shared/palette/item_high_visibility_palette_10x10_512.png',
             'source_dir': rel(source_path(folder / 'source')), 'source_blend': rel(source_path(folder / 'source' / (logic + '_source_v001.blend'))),
             'optimized_blend': rel(source_path(folder / 'source/export/v001' / (logic + '_optimized_v001.blend'))),
             'stable_glb': rel(folder / 'components' / (logic + '_visual_top3d.glb')),

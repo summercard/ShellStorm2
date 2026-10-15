@@ -190,7 +190,7 @@ metadata/collision_intent = "external_gameplay_owner"
 [node name="Visual" parent="." instance=ExtResource("1")]
 ''',encoding='utf8')
     imp=Path(str(glb)+'.import')
-    if not imp.exists():imp.write_text('[remap]\nimporter="scene"\nimporter_version=1\ntype="PackedScene"\n[params]\nmeshes/generate_lods=false\nanimation/import=false\nimport_script/path="res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"\ngltf/embedded_image_handling=0\n',encoding='utf8')
+    if not imp.exists():imp.write_text('[remap]\nimporter="scene"\nimporter_version=1\ntype="PackedScene"\n[params]\nmeshes/generate_lods=false\nanimation/import=false\nimport_script/path="res://tools/asset_pipeline/item_shared_palette_post_import.gd"\ngltf/embedded_image_handling=0\n',encoding='utf8')
     return {'source_blend':source.relative_to(ROOT).as_posix(),'sha256':sha(source),'triangles':tris(obj),'glb':glb.relative_to(ROOT).as_posix(),'prefab':scene.relative_to(ROOT).as_posix(),'glb_sha256':sha(glb),'prefab_sha256':sha(scene)}
 
 def build(spec):

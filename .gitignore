@@ -309,3 +309,6 @@ art_source/**/*.blend1
 
 # Item preview imports use the same shared-palette contract as ground variants.
 !assets/art/items_weapons/**/components/*_preview_visual_top3d.glb.import
+
+# Item palette import settings are part of the reproducible material contract.
+!assets/art/shared/palette/item_high_visibility_palette_10x10_512.png.import
