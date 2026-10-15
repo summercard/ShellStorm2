@@ -1,250 +1,166 @@
 class_name InsuranceModule
 extends RefCounted
-## 保险格管理模块
-## 负责：保险格数量上限、保险/取出规则、死亡后保底
-
+## 保险所有权与跨局保留；矩形占格统一委托 InventoryModule。
 signal insurance_changed()
 signal item_insured(slot: int, item: Dictionary)
 signal item_claimed(item: Dictionary)
 signal insurance_full()
-
-const DEFAULT_INSURANCE_SLOTS: int = 2  # 默认2个保险格
-
-class InsuranceSlot:
-	var item: Dictionary = {}
-	var count: int = 0
-	var insured_at: int = 0  # 时间戳
-	
-	func is_empty() -> bool:
-		return item.is_empty()
-	
-	func clear() -> void:
-		item.clear()
-		count = 0
-		insured_at = 0
-	
-	func set_item(itm: Dictionary, amount: int = 1) -> void:
-		item = WeaponInstance.ensure_weapon_item(itm).duplicate(true)
-		item.erase("count")
-		count = maxi(1, amount)
-		insured_at = Time.get_unix_time_from_system()
-
-var _insurance_slots: Array[InsuranceSlot] = []
-var _max_slots: int = DEFAULT_INSURANCE_SLOTS
-var _carry_over_on_death: bool = true
+const DEFAULT_INSURANCE_SLOTS := 16
+var _board: InventoryModule
 
 func _init(max_slots: int = DEFAULT_INSURANCE_SLOTS) -> void:
-	_max_slots = max_slots
-	_insurance_slots.resize(_max_slots)
-	for i in range(_insurance_slots.size()):
-		_insurance_slots[i] = InsuranceSlot.new()
+	_board = InventoryModule.new(maxi(1, max_slots))
+	_board.inventory_changed.connect(func() -> void: insurance_changed.emit())
 
-## 设置保险格上限
 func set_max_slots(max_s: int) -> void:
-	_max_slots = max(0, max_s)
-	_insurance_slots.resize(_max_slots)
-	for i in range(_insurance_slots.size()):
-		if _insurance_slots[i] == null:
-			_insurance_slots[i] = InsuranceSlot.new()
+	# Shrinking never silently removes insured property.
+	var snapshot := get_slots_snapshot()
+	_board = InventoryModule.new(maxi(1, max_s))
+	restore_slots_snapshot(snapshot)
+	_board.inventory_changed.connect(func() -> void: insurance_changed.emit())
 	insurance_changed.emit()
 
-## 获取保险格上限
 func get_max_slots() -> int:
-	return _max_slots
+	return _board.get_capacity()
 
-## 获取已用保险格数量
 func get_used_slots() -> int:
-	var count := 0
-	for slot in _insurance_slots:
-		if not slot.is_empty():
-			count += 1
-	return count
+	return _board.get_used_slots()
 
-## 是否有空闲保险格
-func has_space() -> bool:
-	return get_used_slots() < _max_slots
-
-## 获取空闲保险格数量
 func get_free_slots() -> int:
-	return _max_slots - get_used_slots()
+	return _board.get_free_grid_cells()
 
-## 保险物品（从背包指定格子）
-## 物品会被从 InventoryModule 转移到保险格
-## 返回是否成功
+func has_space() -> bool:
+	return get_free_slots() > 0
+
+func can_place_item_at(item: Dictionary, anchor: int, rotation: int = 0) -> bool:
+	return _board.can_place_item_at(item, anchor, rotation)
+
+func can_move_or_swap_slots(source: int, target: int, rotation: int = -1) -> bool:
+	return _board.can_move_or_swap_slots(source, target, rotation)
+
+func move_or_swap_slots(source: int, target: int, rotation: int = -1) -> bool:
+	return _board.move_or_swap_slots(source, target, rotation)
+
 func insure_item(inventory: InventoryModule, slot_index: int) -> bool:
 	if inventory == null:
 		return false
-	return insure_item_to_slot(inventory, slot_index, _find_empty_slot())
+	var entry := inventory.get_slot(slot_index)
+	var placement := _board.find_valid_placement(entry.get("item", {}))
+	if placement.is_empty():
+		insurance_full.emit()
+		return false
+	return insure_item_to_slot(inventory, slot_index, int(placement.slot), int(placement.grid_rotation))
 
-
-## 从背包/快捷栏移动到指定保险格。拖拽必须尊重玩家指向的实际格位；
-## 右键快捷存入仍由 insure_item() 选择第一个空格。
-func insure_item_to_slot(
-	inventory: InventoryModule, source_slot_index: int, insurance_slot_index: int
-) -> bool:
+func insure_item_to_slot(inventory: InventoryModule, source_slot_index: int, insurance_slot_index: int, rotation: int = -1) -> bool:
 	if inventory == null:
 		return false
-	if insurance_slot_index < 0 or insurance_slot_index >= _insurance_slots.size():
+	var entry := inventory.get_slot(source_slot_index)
+	var item: Dictionary = entry.get("item", {}).duplicate(true)
+	if item.is_empty() or has_weapon_instance(str(item.get("weapon_instance_id", ""))):
+		return false
+	if rotation >= 0:
+		item["grid_rotation"] = rotation
+	if not _board.can_place_item_at(item, insurance_slot_index, int(item.get("grid_rotation", 0))):
 		insurance_full.emit()
 		return false
-	if not _insurance_slots[insurance_slot_index].is_empty():
-		insurance_full.emit()
+	var count := int(entry.get("count", 1))
+	if not _board.put_item_in_empty_slot(insurance_slot_index, item, count):
 		return false
-	var slot_data: Dictionary = inventory.get_slot(source_slot_index)
-	if slot_data.is_empty():
+	if not inventory.remove_from_slot(source_slot_index, count):
+		_board.clear_slot(insurance_slot_index)
 		return false
-	var instance_id := str((slot_data.get("item", {}) as Dictionary).get("weapon_instance_id", ""))
-	if not instance_id.is_empty() and has_weapon_instance(instance_id):
-		return false
-	
-	_insurance_slots[insurance_slot_index].set_item(slot_data["item"], int(slot_data.get("count", 1)))
-	inventory.remove_from_slot(source_slot_index, slot_data["count"])
-	
-	insurance_changed.emit()
-	item_insured.emit(insurance_slot_index, slot_data["item"])
+	item_insured.emit(insurance_slot_index, item)
 	return true
 
-## 保险指定物品（直接传入物品数据）
 func insure_item_direct(item: Dictionary) -> bool:
-	if item.is_empty():
+	if item.is_empty() or has_weapon_instance(str(item.get("weapon_instance_id", ""))):
 		return false
-	
-	var instance_id := str(item.get("weapon_instance_id", ""))
-	if not instance_id.is_empty() and has_weapon_instance(instance_id):
-		return false
-	if not has_space():
+	var placement := _board.find_valid_placement(item)
+	if placement.is_empty():
 		insurance_full.emit()
 		return false
-	
-	var empty_idx := _find_empty_slot()
-	if empty_idx < 0:
+	var copy := WeaponInstance.ensure_weapon_item(item).duplicate(true)
+	copy["grid_rotation"] = int(placement.grid_rotation)
+	if not _board.put_item_in_empty_slot(int(placement.slot), copy, maxi(1, int(item.get("count", 1)))):
 		return false
-	
-	var count := maxi(1, int(item.get("count", 1)))
-	if str(item.get("type", "")) == "weapon":
-		count = 1
-	_insurance_slots[empty_idx].set_item(item, count)
-	insurance_changed.emit()
-	item_insured.emit(empty_idx, item)
+	item_insured.emit(int(placement.slot), copy)
 	return true
 
-## 从保险格取出物品（返还给玩家）
-## 返回物品数据，失败返回空字典
 func claim_item(slot_index: int) -> Dictionary:
-	if slot_index < 0 or slot_index >= _insurance_slots.size():
+	var entry := _board.get_slot(slot_index)
+	if entry.is_empty():
 		return {}
-	var slot: InsuranceSlot = _insurance_slots[slot_index]
-	if slot.is_empty():
-		return {}
-	
-	var item: Dictionary = slot.item.duplicate(true)
-	item["count"] = maxi(1, slot.count)
-	slot.clear()
-	insurance_changed.emit()
+	var item: Dictionary = entry.item.duplicate(true)
+	item["count"] = int(entry.count)
+	_board.clear_slot(slot_index)
 	item_claimed.emit(item)
 	return item
 
-## 取出所有保险物品（用于撤离成功后）
 func claim_all() -> Array[Dictionary]:
-	var claimed: Array[Dictionary] = []
-	for slot in _insurance_slots:
-		if not slot.is_empty():
-			var item := slot.item.duplicate(true)
-			item["count"] = maxi(1, slot.count)
-			claimed.append(item)
-			slot.clear()
-	insurance_changed.emit()
-	return claimed
-
-## 死亡时触发：保险格内物品必定保留（不丢失）
-## 返回应该保留的物品列表（实际上保险格物品本来就不会丢失）
-func on_player_death() -> Array[Dictionary]:
-	# 保险格物品默认保留，这是核心价值
-	return claim_all()
-
-## 清空保险格（整局重置）
-func clear_all() -> void:
-	for slot in _insurance_slots:
-		slot.clear()
-	insurance_changed.emit()
-
-## 获取所有保险物品（用于UI）
-## 返回格式与 InventoryModule.get_occupied_slots() 对齐：{item, count, insurance_slot}
-func get_all_insured_items() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	for i in _insurance_slots.size():
-		if not _insurance_slots[i].is_empty():
-			var d: Dictionary = {
-				"item": _insurance_slots[i].item.duplicate(true),
-				"count": maxi(1, _insurance_slots[i].count),
-				"insurance_slot": i  # 供当前保险界面按槽位刷新。
-			}
-			result.append(d)
+	for entry in _board.get_occupied_slots():
+		var item: Dictionary = entry.item.duplicate(true)
+		item["count"] = int(entry.count)
+		result.append(item)
+	_board.clear_all()
 	return result
 
-## API 对齐方法（与 InventoryModule.get_occupied_slots() 对称）
+func on_player_death() -> Array[Dictionary]:
+	return claim_all()
+
+func clear_all() -> void:
+	_board.clear_all()
+
+func get_all_insured_items() -> Array[Dictionary]:
+	var result := _board.get_occupied_slots()
+	for entry in result:
+		entry["insurance_slot"] = int(entry.slot)
+	return result
+
 func get_occupied_slots() -> Array[Dictionary]:
 	return get_all_insured_items()
 
-
-## 存档用完整格位快照，保留空格和原始索引，避免恢复后 UI 槽位跳动。
 func get_slots_snapshot() -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
-	for index in _insurance_slots.size():
-		var slot := _insurance_slots[index]
-		if slot.is_empty():
-			result.append({})
-		else:
-			result.append({
-				"item": slot.item.duplicate(true),
-				"count": maxi(1, slot.count),
-				"insured_at": slot.insured_at,
-				"insurance_slot": index,
-			})
+	var result := _board.get_slots_snapshot()
+	for index in result.size():
+		if not result[index].is_empty():
+			result[index]["insurance_slot"] = index
 	return result
 
-
 func restore_slots_snapshot(snapshot: Array) -> void:
-	for slot in _insurance_slots:
-		slot.clear()
-	for index in mini(snapshot.size(), _insurance_slots.size()):
+	_board.clear_all()
+	for index in snapshot.size():
 		if not snapshot[index] is Dictionary:
 			continue
-		var entry := snapshot[index] as Dictionary
-		var item := entry.get("item", {}) as Dictionary
+		var entry: Dictionary = snapshot[index]
+		var item: Dictionary = entry.get("item", {}).duplicate(true)
 		if item.is_empty():
 			continue
-		_insurance_slots[index].item = WeaponInstance.ensure_weapon_item(item).duplicate(true)
-		_insurance_slots[index].count = maxi(1, int(entry.get("count", 1)))
-		_insurance_slots[index].insured_at = int(entry.get("insured_at", Time.get_unix_time_from_system()))
+		item = WeaponInstance.ensure_weapon_item(item)
+		var rotation := int(entry.get("grid_rotation", item.get("grid_rotation", 0)))
+		var placement := {"slot": index, "grid_rotation": rotation} if _board.can_place_item_at(item, index, rotation) else _board.find_valid_placement(item)
+		# Legacy independent slots could hold objects taller than two cells.
+		# Expand recovery rows only while loading, preserving every saved item.
+		while placement.is_empty():
+			_board.set_capacity(_board.get_capacity() + 8)
+			placement = _board.find_valid_placement(item)
+		item["grid_rotation"] = int(placement.grid_rotation)
+		_board.put_item_in_empty_slot(int(placement.slot), item, maxi(1, int(entry.get("count", 1))))
 	insurance_changed.emit()
 
-## 是否有保险某物品
 func has_item(item_id: String) -> bool:
-	for slot in _insurance_slots:
-		if not slot.is_empty() and slot.item.get("id", "") == item_id:
+	for entry in _board.get_occupied_slots():
+		if str(entry.item.get("id", "")) == item_id:
 			return true
 	return false
 
-
-func has_weapon_instance(weapon_instance_id: String) -> bool:
-	if weapon_instance_id.is_empty():
+func has_weapon_instance(instance_id: String) -> bool:
+	if instance_id.is_empty():
 		return false
-	for slot in _insurance_slots:
-		if not slot.is_empty() and str(slot.item.get("weapon_instance_id", "")) == weapon_instance_id:
+	for entry in _board.get_occupied_slots():
+		if str(entry.item.get("weapon_instance_id", "")) == instance_id:
 			return true
 	return false
 
-func _find_empty_slot() -> int:
-	for i in _insurance_slots.size():
-		if _insurance_slots[i].is_empty():
-			return i
-	return -1
-
-## 调试状态
 func debug_status() -> String:
-	var lines: Array[String] = ["InsuranceModule [%d/%d]" % [get_used_slots(), _max_slots]]
-	for i in _insurance_slots.size():
-		if not _insurance_slots[i].is_empty():
-			lines.append("  [%d] %s ×%d (insured at %d)" % [i, _insurance_slots[i].item.get("id", ""), _insurance_slots[i].count, _insurance_slots[i].insured_at])
-	return "\n".join(lines)
+	return "InsuranceModule [%d/%d]" % [_board.get_used_area(), get_max_slots()]

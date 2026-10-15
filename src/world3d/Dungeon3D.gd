@@ -888,7 +888,7 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 	var inventory_slots: Variant = snapshot.get("inventory_slots", [])
 	if inventory_slots is Array:
 		_inventory.restore_slots_snapshot(inventory_slots as Array)
-	_insurance.set_max_slots(maxi(0, int(snapshot.get("insurance_capacity", _insurance.get_max_slots()))))
+	_insurance.set_max_slots(maxi(16, int(snapshot.get("insurance_capacity", _insurance.get_max_slots()))))
 	var insurance_slots: Variant = snapshot.get("insurance_slots", [])
 	if insurance_slots is Array:
 		_insurance.restore_slots_snapshot(insurance_slots as Array)
@@ -1410,7 +1410,7 @@ func _setup_run_modules() -> void:
 	GameManager.currency_changed.emit(0)
 	_inventory = InventoryModule.new(BASE_INVENTORY_CAPACITY)
 	player.set_reload_ammo_provider(Callable(self, "_provide_reload_ammo"))
-	_insurance = InsuranceModule.new(2)
+	_insurance = InsuranceModule.new()
 	_quick_inventory = InventoryModule.new(2)
 	_death_settlement = DeathSettlementModule.new()
 	if not test_mode and BaseManager != null and _accepts_pending_insurance_return_at_spawn():
@@ -1956,17 +1956,7 @@ func _build_modal_close_button(label: String, on_press: Callable) -> Button:
 	return btn
 
 func _ensure_inventory_close_button() -> void:
-	# 背包打开时显示 ESC 关闭按钮
-	if _inventory_close_button != null and is_instance_valid(_inventory_close_button):
-		return
-	if _reference_hud_root == null:
-		return
-	var btn := _build_modal_close_button("关闭 · ESC", _close_inventory_via_button)
-	# inventory_shell 是 PanelContainer，会把子节点撑满成自己 970×650 的尺寸。放到 _reference_hud_root (Control) 下才能用锚点 + offsets 定位。
-	btn.z_index = 500
-	_anchor_control(btn, 1.0, 0.0, 1.0, 0.0, -180, 18, -18, 60)
-	_reference_hud_root.add_child(btn)
-	_inventory_close_button = btn
+	_teardown_inventory_close_button()
 
 func _teardown_inventory_close_button() -> void:
 	if _inventory_close_button != null and is_instance_valid(_inventory_close_button):
@@ -7422,8 +7412,8 @@ func _on_insure_item_requested(slot_index: int) -> void:
 		status_label.text = "保险格已满或物品无效"
 
 
-func _on_insure_item_to_slot_requested(source_slot_index: int, insurance_slot_index: int) -> void:
-	if not _insurance.insure_item_to_slot(_inventory, source_slot_index, insurance_slot_index):
+func _on_insure_item_to_slot_requested(source_slot_index: int, insurance_slot_index: int, rotation: int = -1) -> void:
+	if not _insurance.insure_item_to_slot(_inventory, source_slot_index, insurance_slot_index, rotation):
 		status_label.text = "目标保险格不可用或物品无效"
 
 
@@ -7440,7 +7430,7 @@ func _on_claim_insurance_requested(slot_index: int) -> void:
 
 
 func _on_insurance_item_move_requested(
-	insurance_slot_index: int, target_index: int, target_kind: String
+	insurance_slot_index: int, target_index: int, target_kind: String, rotation: int = -1
 ) -> void:
 	# 保险是“当前所在集合享受离场保留”，不是物品锁。转出采用背包与
 	# 保险双快照；目标操作失败时恢复两个集合，避免丢失或复制。
@@ -7450,6 +7440,8 @@ func _on_insurance_item_move_requested(
 	var item := _insurance.claim_item(insurance_slot_index)
 	if item.is_empty():
 		return
+	if rotation >= 0:
+		item["grid_rotation"] = rotation
 	var count := maxi(1, int(item.get("count", 1)))
 	var moved := false
 	match target_kind:

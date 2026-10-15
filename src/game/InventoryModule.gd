@@ -8,8 +8,8 @@ signal item_added(slot: int, item: Dictionary)
 signal item_removed(slot: int)
 signal capacity_changed(current: int, maximum: int)
 
-const DEFAULT_CAPACITY: int = 24  # 默认6列×4行，共24个棋盘格
-const GRID_COLUMNS: int = 6
+const DEFAULT_CAPACITY: int = 24  # 默认8列×3行，共24个棋盘格
+const GRID_COLUMNS: int = 8
 
 class InventorySlot:
 	var item: Dictionary = {}
@@ -106,7 +106,7 @@ func get_used_area() -> int:
 		area += size.x * size.y
 	return area
 
-## 棋盘宽度。容量变化时按固定6列向下扩展行数。
+## 棋盘宽度。容量变化时按固定8列向下扩展行数。
 func get_grid_columns() -> int:
 	return GRID_COLUMNS
 
@@ -358,7 +358,7 @@ func restore_slots_snapshot(snapshot: Array) -> void:
 	for slot in _slots:
 		slot.clear()
 	# 旧档的 slot 仍作为首选锚点；大物品原位放不下时再找合法位置。
-	for index in mini(snapshot.size(), _slots.size()):
+	for index in snapshot.size():
 		if not snapshot[index] is Dictionary:
 			continue
 		var entry := snapshot[index] as Dictionary
@@ -368,9 +368,13 @@ func restore_slots_snapshot(snapshot: Array) -> void:
 			continue
 		var rotation := int(entry.get("grid_rotation", item.get("grid_rotation", 0))) % 4
 		var placement := {"slot": index, "grid_rotation": rotation} if can_place_item_at(item, index, rotation) else _find_placement_for_entry(item, rotation)
-		if placement.is_empty():
-			push_warning("[InventoryModule] Snapshot item could not fit: %s" % str(item.get("id", "")))
-			continue
+		# Legacy snapshots may use another row width. Recover all owned items.
+		while placement.is_empty():
+			var start := _capacity
+			_capacity += GRID_COLUMNS
+			for extra in range(start, _capacity):
+				_slots.append(InventorySlot.new())
+			placement = _find_placement_for_entry(item, rotation)
 		_write_entry_at(int(placement.get("slot", -1)), item, count, int(placement.get("grid_rotation", rotation)))
 	inventory_changed.emit()
 	capacity_changed.emit(get_used_slots(), _capacity)
@@ -486,9 +490,10 @@ func put_item_in_empty_slot(slot_index: int, item: Dictionary, count: int = 1) -
 	var instance_id := str(normalized.get("weapon_instance_id", ""))
 	if not instance_id.is_empty() and has_weapon_instance(instance_id):
 		return false
-	if not can_place_item_at(normalized, slot_index):
+	var rotation := int(normalized.get("grid_rotation", 0))
+	if not can_place_item_at(normalized, slot_index, rotation):
 		return false
-	_write_entry_at(slot_index, normalized, count)
+	_write_entry_at(slot_index, normalized, count, rotation)
 	item_added.emit(slot_index, normalized)
 	inventory_changed.emit()
 	capacity_changed.emit(get_used_slots(), _capacity)

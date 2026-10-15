@@ -317,7 +317,7 @@ func _verify_runtime_inventory_transactions(failures: Array[String]) -> void:
 	manager.data = BaseData.new()
 	manager.data.extraction_points = 500
 	manager.data.vault_level = 8
-	var inventory := InventoryModule.new(12)
+	var inventory := InventoryModule.new(24)
 	inventory.add_item(ItemRegistry.get_instance().get_item("weapon_pistol"), 1)
 	inventory.add_item(ItemRegistry.get_instance().get_item("weapon_shotgun"), 1)
 	if inventory.get_used_slots() != 2:
@@ -348,7 +348,7 @@ func _verify_runtime_inventory_transactions(failures: Array[String]) -> void:
 
 
 func _verify_interface_and_model(failures: Array[String]) -> void:
-	var runtime_inventory := InventoryModule.new(12)
+	var runtime_inventory := InventoryModule.new(24)
 	runtime_inventory.add_item(ItemRegistry.get_instance().get_item("weapon_pistol"), 1)
 	runtime_inventory.add_item(ItemRegistry.get_instance().get_item("weapon_shotgun"), 1)
 	var menu_scene := load("res://scenes/BaseVendingMenu.tscn") as PackedScene
@@ -360,9 +360,9 @@ func _verify_interface_and_model(failures: Array[String]) -> void:
 		failures.append("自动贩卖机界面没有展示7个固定货架条目（含初级棒球棍与小型电池）")
 	if menu.find_children("*", "ItemModelIcon3D", true, false).size() < 7:
 		failures.append("购买货架没有复用背包3D物品图标")
-	if "金币" not in menu._points_label.text or "当前背包" not in menu._capacity_label.text:
+	if "金币" not in menu._points_label.text or "背包" not in menu._capacity_label.text:
 		failures.append("贩卖机顶部没有明确显示购买货币与购买目标")
-	if "2 / 12" not in menu._capacity_label.text or not _tree_has_label_text(menu._sell_list, "当前背包（与I键一致）"):
+	if menu._sell_model != runtime_inventory or menu._sell_board.columns != 8 or menu._sell_board._item_visuals.size() != 2:
 		failures.append("贩卖机没有显示I键背包中的两件物品")
 	menu.queue_free()
 	var vault_scene := load("res://scenes/VaultMenu.tscn") as PackedScene
@@ -370,14 +370,10 @@ func _verify_interface_and_model(failures: Array[String]) -> void:
 	vault_menu.set_inventory_module(runtime_inventory)
 	add_child(vault_menu)
 	await get_tree().process_frame
-	if vault_menu.find_children("*", "BaseStorageSlot", true, false).size() < 14:
-		failures.append("保险柜没有生成长期仓储与12格随身背包的可见格子")
-	var visible_runtime_items := 0
-	for slot in vault_menu.find_children("*", "BaseStorageSlot", true, false):
-		if slot is BaseStorageSlot and slot.owner_id == "inventory" and not slot.item.is_empty():
-			visible_runtime_items += 1
-	if visible_runtime_items != 2:
-		failures.append("保险柜右栏没有读取I键背包中的两件物品")
+	if not vault_menu._boards.has("inventory") or vault_menu._boards["inventory"].cells.size() != 24:
+		failures.append("仓库没有生成八列24格随身背包")
+	if vault_menu._models.get("inventory") != runtime_inventory or vault_menu._boards["inventory"]._item_visuals.size() != 2:
+		failures.append("仓库右栏未按实际物品占格呈现两件物品")
 	vault_menu.queue_free()
 	var model_scene := load("res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d.tscn") as PackedScene
 	var model := model_scene.instantiate() as BaseFacility3D

@@ -6,9 +6,9 @@ extends Control
 
 signal item_clicked(slot_index: int, item: Dictionary)
 signal item_to_insurance_requested(slot_index: int)
-signal item_to_insurance_slot_requested(source_slot_index: int, insurance_slot_index: int)
+signal item_to_insurance_slot_requested(source_slot_index: int, insurance_slot_index: int, rotation: int)
 signal item_extraction_requested(slot_index: int)
-signal insurance_item_move_requested(slot_index: int, target_index: int, target_kind: String)
+signal insurance_item_move_requested(slot_index: int, target_index: int, target_kind: String, rotation: int)
 signal item_dropped_to_world(item: Dictionary, count: int)
 signal inventory_changed()  ## 背包变化时发出（供 3D HUD 绑定）
 signal inventory_open_changed(opened: bool)
@@ -27,7 +27,7 @@ signal equipped_backpack_to_inventory_requested(target_slot_index: int)
 signal equipped_backpack_drop_requested()
 
 @export var inventory_capacity: int = 24
-@export var insurance_capacity: int = 2
+@export var insurance_capacity: int = 16
 
 ## 独立模式：是否使用自己创建的Panel；false时依赖父节点已有Grid
 @export var standalone_mode: bool = true
@@ -48,7 +48,7 @@ var _insurance_slots: Array[Control] = []
 var inventory_panel: PanelContainer
 var inventory_grid
 var insurance_panel: PanelContainer
-var insurance_grid: GridContainer
+var insurance_grid: GridInventoryBoard
 var inventory_shell: PanelContainer
 var equipment_panel: PanelContainer
 var equipment_weapon_slot: Control
@@ -138,6 +138,14 @@ func _process(_delta: float) -> void:
 			board.call("set_grid_drag_preview", _drag_item, anchor, _drag_rotation, valid)
 		else:
 			board.call("clear_drag_preview")
+	if _drag_feedback_active and not _drag_cancelled and insurance_grid != null:
+		var local_mouse := insurance_grid.get_global_transform_with_canvas().affine_inverse() * get_viewport().get_mouse_position()
+		var anchor := insurance_grid.get_anchor_from_local_position(local_mouse)
+		if anchor >= 0:
+			var payload := {"source_kind": _drag_source_kind, "source_index": _drag_source_index, "item": _drag_item}
+			insurance_grid.set_grid_drag_preview(_drag_item, anchor, _drag_rotation, _validate_insurance_drop(payload, anchor))
+		else:
+			insurance_grid.clear_drag_preview()
 	# 没有悬浮卡且没有棋盘拖拽时让 _process 进入睡眠。
 	if (item_hover_card == null or not item_hover_card.visible) and not _drag_feedback_active:
 		set_process(false)
@@ -187,9 +195,9 @@ func _setup_standalone_panels() -> void:
 
 	var shell_margin := MarginContainer.new()
 	shell_margin.add_theme_constant_override("margin_left", 0)
-	shell_margin.add_theme_constant_override("margin_top", 32)
+	shell_margin.add_theme_constant_override("margin_top", 0)
 	shell_margin.add_theme_constant_override("margin_right", 0)
-	shell_margin.add_theme_constant_override("margin_bottom", 12)
+	shell_margin.add_theme_constant_override("margin_bottom", 0)
 	inventory_shell.add_child(shell_margin)
 	var columns := HBoxContainer.new()
 	columns.name = "InventoryColumns"
@@ -207,12 +215,15 @@ func _setup_standalone_panels() -> void:
 	)
 	columns.add_child(equipment_panel)
 	# 中央区域故意保留给游戏世界：不拦截鼠标，不放置 UI 面板。
-	var gameplay_space := Control.new()
-	gameplay_space.name = "CenterGameplaySpace"
-	gameplay_space.custom_minimum_size = Vector2(120, 0)
-	gameplay_space.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	gameplay_space.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	columns.add_child(gameplay_space)
+	drop_zone = _create_slot()
+	drop_zone.name = "CenterGameplaySpace"
+	drop_zone.custom_minimum_size = Vector2(120, 0)
+	drop_zone.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	drop_zone.set_meta("slot_kind", "drop")
+	drop_zone.set_meta("invisible_drop_zone", true)
+	drop_zone.get_node("CountLabel").hide()
+	_connect_slot_signals(drop_zone, -1, false)
+	columns.add_child(drop_zone)
 	var equipment_margin := MarginContainer.new()
 	equipment_margin.add_theme_constant_override("margin_left", 12)
 	equipment_margin.add_theme_constant_override("margin_top", 10)
@@ -366,7 +377,7 @@ func _setup_standalone_panels() -> void:
 	backpack_section.add_child(backpack_row)
 	equipment_backpack_slot = _create_slot()
 	equipment_backpack_slot.name = "BackpackEquipmentSlot"
-	equipment_backpack_slot.custom_minimum_size = Vector2(76, 76)
+	equipment_backpack_slot.custom_minimum_size = Vector2(50, 50)
 	equipment_backpack_slot.set_meta("slot_kind", "backpack")
 	if equipment_backpack_slot.has_method("set_slot_index"):
 		equipment_backpack_slot.call("set_slot_index", 0)
@@ -379,13 +390,14 @@ func _setup_standalone_panels() -> void:
 	equipment_backpack_label.add_theme_font_size_override("font_size", 13)
 	equipment_backpack_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	backpack_row.add_child(equipment_backpack_label)
+	equipment_backpack_label.hide()
 	var quick_section := VBoxContainer.new()
 	quick_section.name = "QuickItemEquipmentSection"
 	quick_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	quick_section.size_flags_stretch_ratio = 0.52
 	equipment_support_row.add_child(quick_section)
 	var quick_title := Label.new()
-	quick_title.text = "快捷物品 · 拖入绑定"
+	quick_title.text = "快捷物品"
 	quick_title.add_theme_color_override("font_color", Color(0.44, 0.90, 0.76))
 	quick_title.add_theme_font_size_override("font_size", 12)
 	quick_section.add_child(quick_title)
@@ -395,7 +407,7 @@ func _setup_standalone_panels() -> void:
 	for quick_index in range(2):
 		var quick_slot := _create_slot()
 		quick_slot.name = "QuickItemSlot_%d" % quick_index
-		quick_slot.custom_minimum_size = Vector2(66, 66)
+		quick_slot.custom_minimum_size = Vector2(50, 50)
 		quick_slot.set_meta("slot_kind", "quick_%d" % quick_index)
 		quick_slot.set_meta("drag_disabled", true)
 		if quick_slot.has_method("set_slot_index"):
@@ -408,6 +420,7 @@ func _setup_standalone_panels() -> void:
 	reserved.add_theme_color_override("font_color", UIPalette.TEXT_DISABLED)
 	reserved.add_theme_font_size_override("font_size", 13)
 	equipment_vbox.add_child(reserved)
+	reserved.hide()
 	equipment_fate_label = Label.new()
 	equipment_fate_label.name = "RunFateStateLabel"
 	equipment_fate_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -422,7 +435,7 @@ func _setup_standalone_panels() -> void:
 		"panel",
 		UIStyleFactory.make_panel_with_border(1, UIPalette.BORDER_NORMAL, 6, 1),
 	)
-	inventory_panel.custom_minimum_size = Vector2(382, 0)
+	inventory_panel.custom_minimum_size = Vector2(432, 0)
 	inventory_panel.size_flags_horizontal = Control.SIZE_FILL
 	inventory_panel.size_flags_stretch_ratio = 0.0
 	inventory_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -493,36 +506,15 @@ func _setup_standalone_panels() -> void:
 	
 	insurance_label = Label.new()
 	insurance_label.name = "InsuranceLabel"
-	insurance_label.text = "保险格 0/2 · 死亡/撤退均保留"
+	insurance_label.text = "保险柜"
 	ins_vbox.add_child(insurance_label)
 	
-	insurance_grid = GridContainer.new()
+	insurance_grid = GRID_INVENTORY_BOARD_SCRIPT.new()
 	insurance_grid.name = "InsuranceGrid"
-	insurance_grid.columns = 2
+	insurance_grid.slot_kind = "insurance"
+	insurance_grid.drop_validator = _validate_insurance_drop
 	ins_vbox.add_child(insurance_grid)
 
-	drop_zone = _create_slot()
-	drop_zone.name = "WorldDropZone"
-	drop_zone.custom_minimum_size = Vector2(0, 62)
-	if drop_zone.has_method("set_slot_index"):
-		drop_zone.call("set_slot_index", -1)
-	drop_zone.set_meta("slot_kind", "drop")
-	var drop_count_label := drop_zone.get_node_or_null("CountLabel") as Label
-	if drop_count_label != null:
-		drop_count_label.visible = false
-	drop_zone.add_theme_stylebox_override(
-		"normal", UIStyleFactory.make_panel_with_border(2, Color(0.88, 0.16, 0.18), 5, 2)
-	)
-	_connect_slot_signals(drop_zone, -1, false)
-	var drop_label := Label.new()
-	drop_label.text = "丢弃物品　·　拖到此处释放"
-	drop_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	drop_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	drop_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	drop_label.add_theme_color_override("font_color", Color(1.0, 0.46, 0.42))
-	drop_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	drop_zone.add_child(drop_label)
-	vbox.add_child(drop_zone)
 	close_button = Button.new()
 	close_button.name = "CloseInventoryButton"
 	close_button.text = "返回游戏    [I / Esc]"
@@ -724,7 +716,7 @@ func _build_inventory_grid() -> void:
 	inventory_capacity = target_capacity
 	if inventory_grid != null and inventory_grid.has_method("configure") and inventory_grid.has_method("get_cells"):
 		var board: Control = inventory_grid
-		board.call("configure", target_capacity, _inventory_module.get_grid_columns() if _inventory_module != null and _inventory_module.has_method("get_grid_columns") else 6)
+		board.call("configure", target_capacity, _inventory_module.get_grid_columns() if _inventory_module != null and _inventory_module.has_method("get_grid_columns") else 8)
 		# `get_cells()` 返回的是带元素类型的 Array[Control]。不要把 call() 的返回值
 		# 直接写成 `as Array` 再迭代：在容量变化信号的同步回调里，某些 Godot 版本
 		# 会把这个 Variant 视为未成功转换，结果是棋盘已经生成20个 cell，兼容用
@@ -767,17 +759,11 @@ func _build_inventory_grid() -> void:
 
 ## 构建保险格
 func _build_insurance_grid() -> void:
-	for child in insurance_grid.get_children():
-		child.queue_free()
+	insurance_grid.configure(insurance_capacity, 8)
 	_insurance_slots.clear()
-	
-	for i in insurance_capacity:
-		var slot := _create_slot()
-		slot.name = "InsSlot_%d" % i
-		slot.set_meta("slot_kind", "insurance")
-		insurance_grid.add_child(slot)
+	for slot in insurance_grid.get_cells():
 		_insurance_slots.append(slot)
-		_connect_slot_signals(slot, i, false)
+		_connect_slot_signals(slot, _insurance_slots.size() - 1, false)
 
 ## 连接格子的点击信号
 func _connect_slot_signals(slot: Control, idx: int, is_inventory: bool) -> void:
@@ -884,6 +870,9 @@ func _refresh_insurance_ui() -> void:
 	if _insurance_module == null or insurance_grid == null:
 		return
 	
+	if insurance_capacity != _insurance_module.get_max_slots():
+		insurance_capacity = _insurance_module.get_max_slots()
+		_build_insurance_grid()
 	var occupied: Array[Dictionary] = []
 	if _insurance_module.has_method("get_occupied_slots"):
 		occupied = _insurance_module.get_occupied_slots()
@@ -902,7 +891,8 @@ func _refresh_insurance_ui() -> void:
 			_clear_slot(slot)
 	
 	var used: int = occupied.size()
-	insurance_label.text = "保险格 %d/%d · 死亡/撤退均保留" % [used, insurance_capacity]
+	insurance_label.text = "保险柜"
+	insurance_grid.render_items(occupied)
 
 func _input(event: InputEvent) -> void:
 	if not shortcut_enabled:
@@ -926,7 +916,7 @@ func _input(event: InputEvent) -> void:
 	if key_event != null and key_event.echo:
 		return
 	# 拖拽棋盘物品时用 R 旋转 90°；不占用未拖拽状态下的换弹逻辑。
-	if key_event != null and key_event.pressed and not key_event.echo and _drag_feedback_active and _drag_source_kind == "inventory" and (key_event.keycode == KEY_R or key_event.physical_keycode == KEY_R):
+	if key_event != null and key_event.pressed and not key_event.echo and _drag_feedback_active and _drag_source_kind in ["inventory", "insurance"] and (key_event.keycode == KEY_R or key_event.physical_keycode == KEY_R):
 		_drag_rotation = (_drag_rotation + 1) % 4
 		if inventory_grid != null:
 			inventory_grid.call("set_grid_drag_preview", _drag_item, _drag_source_index, _drag_rotation, false)
@@ -1550,10 +1540,10 @@ func _on_slot_drag_started(source_index: int, source_kind: String, item: Diction
 	if source_kind == "inventory" and inventory_grid != null:
 		inventory_grid.call("set_grid_drag_preview", _drag_item, _drag_source_index, _drag_rotation, true)
 	if drag_status_panel != null and drag_status_label != null:
-		drag_status_label.text = "正在移动「%s」　蓝框入包 · 金框保险 · 红框丢弃" % item.get("name", "快捷物品") if source_kind.begins_with("quick_") else "正在移动「%s」　蓝框入包 · 绿框装备 · 红框丢弃" % item.get("name", "保险物品") if source_kind == "insurance" else (
-			"正在卸下「%s」　蓝框入包 · 红框丢弃" % item.get("name", "武器")
+		drag_status_label.text = "正在移动「%s」　拖到中央丢弃 · Esc 取消" % item.get("name", "快捷物品") if source_kind.begins_with("quick_") else "正在移动「%s」　拖到中央丢弃 · Esc 取消" % item.get("name", "保险物品") if source_kind == "insurance" else (
+			"正在卸下「%s」　拖到中央丢弃 · Esc 取消" % item.get("name", "武器")
 			if source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack"
-			else "正在拖拽「%s」　蓝框换位 · 金框保险 · 绿框装备 · 红框丢弃" % item.get("name", "物品")
+			else "正在拖拽「%s」　R 旋转 · 拖到中央丢弃 · Esc 取消" % item.get("name", "物品")
 		)
 		drag_status_panel.visible = true
 		drag_status_panel.move_to_front()
@@ -1561,6 +1551,8 @@ func _on_slot_drag_started(source_index: int, source_kind: String, item: Diction
 
 func _on_slot_drag_finished(_source_index: int, _source_kind: String, _successful: bool) -> void:
 	_drag_feedback_active = false
+	if insurance_grid != null:
+		insurance_grid.clear_drag_preview()
 	_drag_source_index = -1
 	_drag_source_kind = ""
 	_drag_item.clear()
@@ -1598,10 +1590,13 @@ func _on_slot_drop_received(
 		_refresh_insurance_ui()
 		_refresh_quick_item_ui()
 		return
+	if source_kind == "insurance" and target_kind == "insurance":
+		_insurance_module.move_or_swap_slots(source_index, target_index, _drag_rotation if _drag_feedback_active else -1)
+		return
 	if source_kind == "insurance":
 		# 保险槽索引属于独立集合，交给玩法层完成带快照的所有权事务，
 		# 不能直接当成普通背包索引处理。
-		insurance_item_move_requested.emit(source_index, target_index, target_kind)
+		insurance_item_move_requested.emit(source_index, target_index, target_kind, _drag_rotation if _drag_feedback_active else -1)
 		_refresh_inventory_ui()
 		_refresh_insurance_ui()
 		return
@@ -1661,7 +1656,7 @@ func _on_slot_drop_received(
 			if not item.is_empty() and not str(item.get("use_action", "")).is_empty():
 				inventory_item_to_quick_requested.emit(source_index, int(target_kind.trim_prefix("quick_")))
 		"insurance":
-			item_to_insurance_slot_requested.emit(source_index, target_index)
+			item_to_insurance_slot_requested.emit(source_index, target_index, _drag_rotation if _drag_feedback_active else -1)
 		"drop":
 			_drop_inventory_slot_to_world(source_index)
 	_refresh_inventory_ui()
@@ -1732,7 +1727,8 @@ func _validate_board_drop(data: Dictionary, anchor: int) -> bool:
 	var source := str(data.get("source_kind", ""))
 	if source == "inventory":
 		return _inventory_module.can_move_or_swap_slots(int(data.get("source_index", -1)), anchor, _drag_rotation if _drag_feedback_active else -1)
-	return _inventory_module.can_place_item_at(data.get("item", {}) as Dictionary, anchor)
+	var item: Dictionary = data.get("item", {})
+	return _inventory_module.can_place_item_at(item, anchor, _drag_rotation if _drag_feedback_active else int(item.get("grid_rotation", 0)))
 
 func _create_character_preview() -> Node3D:
 	var scene := preload("res://src/ui/wardrobe/WardrobeMenu3D.gd").AVATAR_PREVIEW_SCENE
@@ -1760,3 +1756,14 @@ func _apply_inventory_style() -> void:
 		button.add_theme_stylebox_override("pressed", pressed)
 		for state in ["font_color", "font_hover_color", "font_pressed_color"]:
 			button.add_theme_color_override(state, Color(0.12, 0.23, 0.30))
+
+func _validate_insurance_drop(data: Dictionary, anchor: int) -> bool:
+	if _drag_cancelled or anchor < 0 or _insurance_module == null:
+		return false
+	var source := str(data.get("source_kind", ""))
+	if source == "insurance":
+		return _insurance_module.can_move_or_swap_slots(int(data.get("source_index", -1)), anchor, _drag_rotation if _drag_feedback_active else -1)
+	if source != "inventory" and not source.begins_with("quick_"):
+		return false
+	var item: Dictionary = data.get("item", {})
+	return _insurance_module.can_place_item_at(item, anchor, _drag_rotation if _drag_feedback_active else int(item.get("grid_rotation", 0)))

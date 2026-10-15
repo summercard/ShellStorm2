@@ -11,10 +11,18 @@ var _buy_list: GridContainer
 var _sell_list: GridContainer
 var _inventory_module: InventoryModule
 var _buy_title_label: Label
+var _sell_board: GridInventoryBoard
+var _sell_actions: VBoxContainer
+var _sell_owner := "inventory"
+var _sell_model: InventoryModule
+var _selected_anchor := -1
+var _source_tabs: Dictionary = {}
+const STORAGE_BOARD := preload("res://src/ui/StorageBoardView.gd")
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	set_meta("ui_style_exempt", true)
 	layer = 100
 	_build_interface()
 	_refresh()
@@ -24,7 +32,7 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("pause"):
+	if event.is_action_pressed("pause") or event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		queue_free()
 
@@ -32,150 +40,157 @@ func _unhandled_input(event: InputEvent) -> void:
 func set_inventory_module(module: InventoryModule) -> void:
 	_inventory_module = module
 	if is_node_ready():
-		if _buy_title_label != null:
-			_buy_title_label.text = "购买货物｜进入当前背包(I)"
-		_status_label.text = "当前背包与I键使用同一数据源；购买、出售和保险柜转移会立即同步。"
 		_refresh()
-
 
 func _build_interface() -> void:
 	var backdrop := ColorRect.new()
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	backdrop.color = Color(0.005, 0.012, 0.018, 0.94)
+	backdrop.color = Color(0.008, 0.012, 0.020, 0.12)
 	add_child(backdrop)
-
-	var frame := PanelContainer.new()
-	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
-	frame.offset_left = 64.0
-	frame.offset_top = 42.0
-	frame.offset_right = -64.0
-	frame.offset_bottom = -42.0
-	frame.add_theme_stylebox_override("panel", _panel_style(Color(0.05, 0.82, 0.94), 3, Color(0.018, 0.045, 0.058, 0.98)))
-	add_child(frame)
-
-	var root := VBoxContainer.new()
-	root.add_theme_constant_override("separation", 12)
-	frame.add_child(root)
-
-	var header := HBoxContainer.new()
-	header.custom_minimum_size.y = 64
-	root.add_child(header)
-	var title := Label.new()
-	title.text = "基地自动贩卖机"
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_color_override("font_color", Color(0.42, 0.94, 1.0))
-	title.add_theme_font_size_override("font_size", 28)
-	header.add_child(title)
+	var columns := HBoxContainer.new()
+	columns.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	columns.offset_left = 14
+	columns.offset_top = 14
+	columns.offset_right = -14
+	columns.offset_bottom = -14
+	columns.add_theme_constant_override("separation", 18)
+	add_child(columns)
+	var buy := _column(columns)
+	var heading := HBoxContainer.new()
+	buy.add_child(heading)
+	_buy_title_label = Label.new()
+	_buy_title_label.text = "贩卖机"
+	_buy_title_label.add_theme_font_size_override("font_size", 22)
+	_buy_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	heading.add_child(_buy_title_label)
 	_points_label = Label.new()
-	_points_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.28))
-	_points_label.add_theme_font_size_override("font_size", 20)
-	header.add_child(_points_label)
+	_points_label.add_theme_color_override("font_color", UIPalette.INVENTORY_SELECTED)
+	heading.add_child(_points_label)
+	var buy_scroll := ScrollContainer.new()
+	buy_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	buy_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	buy.add_child(buy_scroll)
+	_buy_list = GridContainer.new()
+	_buy_list.columns = 2
+	_buy_list.add_theme_constant_override("h_separation", 8)
+	_buy_list.add_theme_constant_override("v_separation", 8)
+	buy_scroll.add_child(_buy_list)
+	var center := Control.new()
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	columns.add_child(center)
+	var sell := _column(columns)
+	var tabs := HBoxContainer.new()
+	sell.add_child(tabs)
+	for source in ["inventory", "vault"]:
+		var tab := Button.new()
+		tab.text = "背包" if source == "inventory" else "仓库"
+		tab.custom_minimum_size = Vector2(100, 36)
+		_style_action(tab)
+		tab.pressed.connect(func() -> void:
+			_sell_owner = source
+			_selected_anchor = -1
+			_refresh())
+		_source_tabs[source] = tab
+		tabs.add_child(tab)
 	_capacity_label = Label.new()
-	_capacity_label.custom_minimum_size.x = 190
-	_capacity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_capacity_label.add_theme_font_size_override("font_size", 18)
-	header.add_child(_capacity_label)
-	var close := Button.new()
-	# 命名成 CloseButton：UiMenuFocus 按这个名字挑「打开即被 A 触发的安全默认焦点」。
-	close.name = "CloseButton"
-	close.text = "关闭  ESC"
-	close.custom_minimum_size = Vector2(126, 40)
-	close.pressed.connect(queue_free)
-	close.add_theme_stylebox_override("normal", _panel_style(Color(0.22, 0.56, 0.66), 1, Color(0.04, 0.10, 0.13)))
-	header.add_child(close)
-
-	var columns := HSplitContainer.new()
-	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	columns.split_offset = 0
-	root.add_child(columns)
-	var buy_panel := _make_column("购买货物｜进入当前背包(I)" if _inventory_module != null else "购买货物｜进入下局带入", "∞ 无限库存 · 消耗品自动合并堆叠")
-	_buy_list = buy_panel.get_meta("list") as GridContainer
-	_buy_title_label = buy_panel.get_meta("title") as Label
-	columns.add_child(buy_panel)
-	var sell_panel := _make_column("出售物品｜随身背包 + 保险柜", "来源明确显示；枪械需二次确认")
-	_sell_list = sell_panel.get_meta("list") as GridContainer
-	columns.add_child(sell_panel)
-
-	_status_label = Label.new()
-	_status_label.custom_minimum_size.y = 38
-	_status_label.text = "请选择商品。购买默认进入随身背包，空间不足时不会扣除金币。"
-	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_status_label.add_theme_color_override("font_color", Color(0.68, 0.86, 0.92))
-	_status_label.add_theme_stylebox_override("normal", _panel_style(Color(0.16, 0.48, 0.58), 1, Color(0.025, 0.065, 0.08)))
-	root.add_child(_status_label)
-
-
-func _make_column(title_text: String, hint_text: String) -> PanelContainer:
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(540, 0)
-	panel.add_theme_stylebox_override("panel", _panel_style(Color(0.10, 0.42, 0.50), 1, Color(0.012, 0.030, 0.040, 0.96)))
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 7)
-	panel.add_child(box)
-	var title := Label.new()
-	title.text = title_text
-	title.add_theme_font_size_override("font_size", 21)
-	title.add_theme_color_override("font_color", Color(0.38, 0.90, 0.98))
-	box.add_child(title)
-	var hint := Label.new()
-	hint.text = hint_text
-	hint.add_theme_color_override("font_color", Color(0.48, 0.65, 0.70))
-	box.add_child(hint)
+	sell.add_child(_capacity_label)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	box.add_child(scroll)
-	var list := GridContainer.new()
-	list.columns = 3
-	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	list.add_theme_constant_override("h_separation", 9)
-	list.add_theme_constant_override("v_separation", 9)
-	scroll.add_child(list)
-	panel.set_meta("list", list)
-	panel.set_meta("title", title)
-	return panel
+	sell.add_child(scroll)
+	_sell_board = STORAGE_BOARD.new()
+	scroll.add_child(_sell_board)
+	_sell_board.slot_clicked.connect(_select_sell)
+	_sell_actions = VBoxContainer.new()
+	sell.add_child(_sell_actions)
+	_status_label = Label.new()
+	_status_label.custom_minimum_size.y = 42
+	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_status_label.text = "选择物品查看售价"
+	_status_label.add_theme_font_size_override("font_size", 13)
+	sell.add_child(_status_label)
+	var close := Button.new()
+	close.name = "CloseButton"
+	close.text = "返回游戏    [Esc]"
+	close.custom_minimum_size.y = 36
+	_style_action(close)
+	close.pressed.connect(queue_free)
+	sell.add_child(close)
 
+func _column(parent: HBoxContainer) -> VBoxContainer:
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size.x = 428
+	var style := UIStyleFactory.make_inventory_surface()
+	style.set_content_margin_all(12)
+	panel.add_theme_stylebox_override("panel", style)
+	parent.add_child(panel)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 12)
+	panel.add_child(box)
+	return box
+
+func _style_action(button: Button) -> void:
+	var style := UIStyleFactory.make_inventory_surface(true)
+	style.bg_color = UIPalette.INVENTORY_ACTION
+	button.add_theme_stylebox_override("normal", style)
+	var hover := style.duplicate() as StyleBoxFlat
+	hover.bg_color = UIPalette.INVENTORY_SELECTED
+	button.add_theme_stylebox_override("hover", hover)
+	button.add_theme_color_override("font_color", Color(0.1, 0.2, 0.27))
+	button.add_theme_color_override("font_hover_color", Color(0.1, 0.2, 0.27))
+	button.add_theme_color_override("font_focus_color", Color(0.1, 0.2, 0.27))
 
 func _refresh() -> void:
-	_points_label.text = "购买货币｜金币  ◈ %d" % BaseManager.get_extraction_points()
-	_capacity_label.text = (
-		"当前背包(I)  %d / %d" % [_inventory_module.get_used_slots(), _inventory_module.get_capacity()]
-		if _inventory_module != null
-		else "下局带入  %d / %d" % [BaseManager.get_pending_loadout_items().size(), BaseManager.get_pending_loadout_capacity()]
-	)
-	_clear_list(_buy_list)
-	_clear_list(_sell_list)
+	for owner_key in _source_tabs:
+		var tab: Button = _source_tabs[owner_key]
+		var normal := tab.get_theme_stylebox("normal").duplicate() as StyleBoxFlat
+		normal.bg_color = UIPalette.INVENTORY_SELECTED if owner_key == _sell_owner else UIPalette.INVENTORY_ACTION
+		tab.add_theme_stylebox_override("normal", normal)
+	_points_label.text = "金币  %d" % BaseManager.get_extraction_points()
+	_clear_children(_buy_list)
 	for item in BaseManager.get_base_shop_goods():
 		_buy_list.add_child(_make_buy_row(item))
-	var loadout_items := BaseManager.get_pending_loadout_items()
-	var vault_items := BaseManager.get_vault_items()
-	var runtime_entries: Array[Dictionary] = []
-	if _inventory_module != null:
-		runtime_entries = _inventory_module.get_occupied_slots()
-	if runtime_entries.is_empty() and loadout_items.is_empty() and vault_items.is_empty():
-		_sell_list.add_child(_make_empty_label("随身背包与保险柜暂无可出售物品"))
-		UIStyleFactory.apply_tactical_tree(self)
-		return
-	if _inventory_module != null and not runtime_entries.is_empty():
-		for entry in runtime_entries:
-			var runtime_item := (entry.get("item", {}) as Dictionary).duplicate(true)
-			runtime_item["count"] = int(entry.get("count", 1))
-			_sell_list.add_child(_make_sell_row(runtime_item, "inventory", int(entry.get("slot", -1))))
-	elif not loadout_items.is_empty():
-		for index in loadout_items.size():
-			_sell_list.add_child(_make_sell_row(loadout_items[index], "loadout", index))
-	if not vault_items.is_empty():
-		for index in vault_items.size():
-			_sell_list.add_child(_make_sell_row(vault_items[index], "vault", index))
-	UIStyleFactory.apply_tactical_tree(self)
+	var owner := "loadout" if _sell_owner == "inventory" and _inventory_module == null else _sell_owner
+	_sell_model = _inventory_module if owner == "inventory" else BaseManager.get_storage_grid(owner)
+	_sell_board.present(_sell_model, owner)
+	# Selecting and confirming a sale is explicit; dropping outside never sells.
+	for cell in _sell_board.cells:
+		cell.set_meta("drag_disabled", true)
+	_capacity_label.text = "%s  %d/%d 格" % ["仓库" if owner == "vault" else "背包", _sell_model.get_used_area(), _sell_model.get_capacity()]
+	_selected_anchor = -1
+	_clear_children(_sell_actions)
 
-
-func _clear_list(list: GridContainer) -> void:
-	for child in list.get_children():
-		list.remove_child(child)
+func _clear_children(node: Node) -> void:
+	for child in node.get_children():
+		node.remove_child(child)
 		child.queue_free()
 
+func _select_sell(anchor: int) -> void:
+	if _selected_anchor >= 0:
+		_sell_board._set_item_hover(_selected_anchor, false)
+	_selected_anchor = anchor
+	_sell_board._set_item_hover(anchor, true)
+	_clear_children(_sell_actions)
+	var entry := _sell_model.get_slot(anchor)
+	if entry.is_empty():
+		return
+	var item: Dictionary = entry.item.duplicate(true)
+	item["count"] = int(entry.count)
+	var owner := "loadout" if _sell_owner == "inventory" and _inventory_module == null else _sell_owner
+	var index := anchor if owner == "inventory" else int(item.get("storage_source_index", -1))
+	var name_label := Label.new()
+	name_label.text = str(item.get("name", "物品")) + "  ×%d" % int(entry.count)
+	name_label.add_theme_font_size_override("font_size", 18)
+	_sell_actions.add_child(name_label)
+	var button := Button.new()
+	var price := BaseShopService.get_sell_price(item) * int(entry.count)
+	button.text = "出售  +%d 金币" % price if price > 0 else "不收购"
+	button.disabled = price <= 0
+	button.custom_minimum_size.y = 40
+	_style_action(button)
+	button.pressed.connect(_on_sell_pressed.bind(str(item.get("item_instance_id", item.get("weapon_instance_id", ""))), item, owner, index, button))
+	_sell_actions.add_child(button)
 
 func _make_buy_row(item: Dictionary) -> PanelContainer:
 	var row := _make_item_row(item)
@@ -184,8 +199,14 @@ func _make_buy_row(item: Dictionary) -> PanelContainer:
 	button.text = "购买  ◈ %d" % int(item.get("base_buy_price", 0))
 	button.custom_minimum_size = Vector2(0, 42)
 	button.disabled = BaseManager.get_extraction_points() < int(item.get("base_buy_price", 0))
+	if _inventory_module != null and not _inventory_module.can_add_item_exact(item, 1):
+		button.disabled = true
+		button.tooltip_text = "背包没有足够的连续空间"
+	elif button.disabled:
+		button.tooltip_text = "金币不足"
 	button.pressed.connect(_on_buy_pressed.bind(str(item.get("id", ""))))
 	button.add_theme_stylebox_override("normal", _panel_style(Color(0.18, 0.72, 0.84), 2, Color(0.035, 0.16, 0.20)))
+	_style_action(button)
 	box.add_child(button)
 	return row
 
@@ -203,6 +224,7 @@ func _make_sell_row(item: Dictionary, source_owner: String, source_index: int) -
 	var instance_id := str(item.get("item_instance_id", item.get("weapon_instance_id", "")))
 	button.pressed.connect(_on_sell_pressed.bind(instance_id, item, source_owner, source_index, button))
 	button.add_theme_stylebox_override("normal", _panel_style(Color(0.94, 0.48, 0.18), 2, Color(0.20, 0.075, 0.035)))
+	_style_action(button)
 	box.add_child(button)
 	return row
 
@@ -210,8 +232,8 @@ func _make_sell_row(item: Dictionary, source_owner: String, source_index: int) -
 func _make_item_row(item: Dictionary, owner_label: String = "") -> PanelContainer:
 	var panel := PanelContainer.new()
 	panel.name = "VendingItemCard"
-	panel.custom_minimum_size = Vector2(168, 232)
-	panel.add_theme_stylebox_override("panel", _panel_style(_rarity_color(str(item.get("rarity", "common"))), 2, Color(0.025, 0.050, 0.062, 0.96)))
+	panel.custom_minimum_size = Vector2(194, 220)
+	panel.add_theme_stylebox_override("panel", UIStyleFactory.make_inventory_surface(true))
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 5)
 	panel.add_child(box)
@@ -258,7 +280,7 @@ func _item_summary(item: Dictionary) -> String:
 		var upgrades: Variant = item.get("fate_upgrades", [])
 		var used: int = upgrades.size() if upgrades is Array else 0
 		if not instance_id.is_empty():
-			return "实例 #%s · 命运 %d/%d · 完整装配随枪保存" % [instance_id.right(6).to_upper(), used, int(item.get("fate_slot_capacity", 8))]
+			return "命运 %d/%d" % [used, int(item.get("fate_slot_capacity", 8))]
 		return "全新独立枪械 · 命运槽 0/%d" % int(item.get("fate_slot_capacity", 8))
 	if str(item.get("subtype", "")) == "backpack":
 		return "装备后增加 %d 个背包格" % int(item.get("extra_slots", 0))
@@ -277,7 +299,7 @@ func _on_buy_pressed(item_id: String) -> void:
 		var item := result.get("item", {}) as Dictionary
 		_status_label.text = "购买成功：%s 已进入%s%s。" % [
 			str(item.get("name", item_id)),
-			"当前I键背包" if _inventory_module != null else "下局带入",
+			"背包" if _inventory_module != null else "下局带入",
 			"（已合并堆叠）" if bool(result.get("merged", false)) else "",
 		]
 	else:
@@ -288,6 +310,14 @@ func _on_buy_pressed(item_id: String) -> void:
 
 
 func _on_sell_pressed(instance_id: String, item: Dictionary, source_owner: String, source_index: int, button: Button) -> void:
+	if source_owner == "inventory":
+		var current := _inventory_module.get_slot(source_index)
+		var current_item: Dictionary = current.get("item", {})
+		if current_item != item and (str(current_item.get("id", "")) != str(item.get("id", "")) or str(current_item.get("weapon_instance_id", "")) != str(item.get("weapon_instance_id", "")) or str(current_item.get("item_instance_id", "")) != str(item.get("item_instance_id", "")) or int(current.get("count", 0)) != int(item.get("count", 1))):
+			_status_label.text = "物品已变化，请重新选择"
+			_refresh()
+			return
+
 	if str(item.get("type", "")) == "weapon" and not bool(button.get_meta("confirm_sell", false)):
 		button.set_meta("confirm_sell", true)
 		button.text = "再次点击\n确认出售"

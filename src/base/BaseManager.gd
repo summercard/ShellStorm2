@@ -1178,7 +1178,7 @@ func get_pending_loadout_capacity() -> int:
 func get_pending_loadout_free_slots() -> int:
 	return maxi(0, BASE_LOADOUT_CAPACITY - data.pending_loadout_items.size())
 
-func transfer_base_storage_item(source_owner: String, source_index: int, target_owner: String) -> Dictionary:
+func transfer_base_storage_item(source_owner: String, source_index: int, target_owner: String, target_slot: int = -1, rotation: int = -1) -> Dictionary:
 	_ensure_data()
 	if source_owner == target_owner or source_owner not in ["vault", "loadout"] or target_owner not in ["vault", "loadout"]:
 		return {"success": false, "reason": "请选择另一侧作为目标"}
@@ -1187,8 +1187,10 @@ func transfer_base_storage_item(source_owner: String, source_index: int, target_
 	if source_index < 0 or source_index >= source.size() or not source[source_index] is Dictionary:
 		return {"success": false, "reason": "来源格已变化，请重试"}
 	var moved := (source[source_index] as Dictionary).duplicate(true)
+	if rotation >= 0:
+		moved["grid_rotation"] = rotation
 	var target_capacity := _get_vault_capacity() if target_owner == "vault" else BASE_LOADOUT_CAPACITY
-	var add_result := _try_add_owned_item(target, moved, target_capacity)
+	var add_result := _try_add_owned_item(target, moved, target_capacity, target_slot)
 	if not bool(add_result.get("success", false)):
 		return add_result
 	var old_vault := data.vault_items.duplicate(true)
@@ -1213,7 +1215,7 @@ func transfer_base_storage_item(source_owner: String, source_index: int, target_
 	data.pending_loadout_items = old_loadout
 	return {"success": false, "reason": "存档失败，转移已回滚"}
 
-func transfer_runtime_inventory_item(source_owner: String, source_index: int, inventory: InventoryModule) -> Dictionary:
+func transfer_runtime_inventory_item(source_owner: String, source_index: int, inventory: InventoryModule, target_slot: int = -1, rotation: int = -1) -> Dictionary:
 	_ensure_data()
 	if inventory == null or source_owner not in ["vault", "inventory"]:
 		return {"success": false, "reason": "当前背包未连接"}
@@ -1227,7 +1229,9 @@ func transfer_runtime_inventory_item(source_owner: String, source_index: int, in
 			return {"success": false, "reason": "I键背包中的来源格已变化"}
 		moved = (slot_data.get("item", {}) as Dictionary).duplicate(true)
 		moved["count"] = int(slot_data.get("count", 1))
-		var add_result := _try_add_owned_item(data.vault_items, moved, _get_vault_capacity())
+		if rotation >= 0:
+			moved["grid_rotation"] = rotation
+		var add_result := _try_add_owned_item(data.vault_items, moved, _get_vault_capacity(), target_slot)
 		if not bool(add_result.get("success", false)):
 			return add_result
 		if not inventory.remove_from_slot(source_index, int(moved.get("count", 1))):
@@ -1238,8 +1242,11 @@ func transfer_runtime_inventory_item(source_owner: String, source_index: int, in
 		if source_index < 0 or source_index >= data.vault_items.size() or not data.vault_items[source_index] is Dictionary:
 			return {"success": false, "reason": "保险柜来源格已变化"}
 		moved = (data.vault_items[source_index] as Dictionary).duplicate(true)
+		if rotation >= 0:
+			moved["grid_rotation"] = rotation
 		var requested := maxi(1, int(moved.get("count", 1)))
-		if inventory.add_item(moved, requested) != requested:
+		var added := inventory.put_item_in_empty_slot(target_slot, moved, requested) if target_slot >= 0 else inventory.add_item(moved, requested) == requested
+		if not added:
 			inventory.restore_slots_snapshot(old_inventory)
 			return {"success": false, "reason": "当前I键背包空间不足"}
 		data.vault_items.remove_at(source_index)
@@ -1312,7 +1319,7 @@ func stage_vault_item_for_loadout(vault_index: int) -> bool:
 func remove_pending_loadout_item(loadout_index: int) -> bool:
 	return bool(transfer_base_storage_item("loadout", loadout_index, "vault").get("success", false))
 
-func _try_add_owned_item(items: Array, incoming: Dictionary, capacity: int) -> Dictionary:
+func _try_add_owned_item(items: Array, incoming: Dictionary, capacity: int, target_slot: int = -1) -> Dictionary:
 	var updated := items.duplicate(true)
 	var normalized := ShopService.ensure_item_instance(incoming)
 	var incoming_item_instance := str(normalized.get("item_instance_id", ""))
@@ -1330,7 +1337,7 @@ func _try_add_owned_item(items: Array, incoming: Dictionary, capacity: int) -> D
 	var content_id := str(normalized.get("id", normalized.get("weapon_content_id", "")))
 	var first_slot := -1
 	var merged := false
-	if stack_max > 1 and not content_id.is_empty():
+	if target_slot < 0 and stack_max > 1 and not content_id.is_empty():
 		for index in updated.size():
 			if not updated[index] is Dictionary:
 				continue
@@ -1362,7 +1369,11 @@ func _try_add_owned_item(items: Array, incoming: Dictionary, capacity: int) -> D
 		if first_slot < 0:
 			first_slot = updated.size() - 1
 		remaining -= int(stack.get("count", 1))
-	return {"success": true, "items": updated, "slot_index": first_slot, "merged": merged}
+	var original := _storage_board(items, capacity, true)
+	var board := _storage_board(updated, original.get_capacity(), false, first_slot if target_slot >= 0 else -1, target_slot)
+	if board == null:
+		return {"success": false, "reason": "目标位置没有足够的连续空间"}
+	return {"success": true, "items": _storage_items(board), "slot_index": first_slot, "merged": merged}
 
 func clear_pending_loadout() -> void:
 	var not_restored: Array = []
@@ -1715,3 +1726,64 @@ func _set_debug_unlock_override(level_id: String, enabled: bool) -> void:
 		_debug_unlock_overrides.erase(level_id)
 	if not _write_debug_unlock_overrides():
 		push_error("[BaseManager] 调试解锁覆盖写入失败：%s" % DEBUG_UNLOCK_OVERRIDE_PATH)
+
+## Persistent arrays keep their stable transaction indexes; spatial anchors are separate metadata.
+func _storage_board(items: Array, capacity: int, recover: bool, manual_index: int = -1, manual_slot: int = -1) -> InventoryModule:
+	var board := InventoryModule.new(capacity)
+	for index in items.size():
+		if not items[index] is Dictionary:
+			continue
+		var item: Dictionary = items[index].duplicate(true)
+		item["storage_source_index"] = index
+		var anchor := manual_slot if index == manual_index else int(item.get("storage_slot", -1))
+		var rotation := int(item.get("grid_rotation", 0))
+		if not board.can_place_item_at(item, anchor, rotation):
+			if index == manual_index:
+				return null
+			var placement := board.find_valid_placement(item)
+			while placement.is_empty() and recover:
+				board.set_capacity(board.get_capacity() + 8)
+				placement = board.find_valid_placement(item)
+			if placement.is_empty():
+				return null
+			anchor = int(placement.slot)
+			item["grid_rotation"] = int(placement.grid_rotation)
+		board.put_item_in_empty_slot(anchor, item, maxi(1, int(item.get("count", 1))))
+	return board
+
+func _storage_items(board: InventoryModule) -> Array:
+	var entries := board.get_occupied_slots()
+	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.item.get("storage_source_index", 0)) < int(b.item.get("storage_source_index", 0)))
+	var items: Array = []
+	for entry in entries:
+		var item: Dictionary = entry.item.duplicate(true)
+		item.erase("storage_source_index")
+		item["storage_slot"] = int(entry.slot)
+		item["count"] = int(entry.count)
+		items.append(item)
+	return items
+
+func get_storage_grid(owner: String) -> InventoryModule:
+	_ensure_data()
+	return _storage_board(data.vault_items if owner == "vault" else data.pending_loadout_items, _get_vault_capacity() if owner == "vault" else BASE_LOADOUT_CAPACITY, true)
+
+func move_storage_grid_item(owner: String, source_anchor: int, target_anchor: int, rotation: int = -1, sort_all: bool = false) -> bool:
+	if owner not in ["vault", "loadout"]:
+		return false
+	var board := get_storage_grid(owner)
+	if sort_all:
+		board.sort_items()
+	elif not board.move_or_swap_slots(source_anchor, target_anchor, rotation):
+		return false
+	var before: Array = (data.vault_items if owner == "vault" else data.pending_loadout_items).duplicate(true)
+	if owner == "vault":
+		data.vault_items = _storage_items(board)
+	else:
+		data.pending_loadout_items = _storage_items(board)
+	if save_base("storage_layout"):
+		return true
+	if owner == "vault":
+		data.vault_items = before
+	else:
+		data.pending_loadout_items = before
+	return false

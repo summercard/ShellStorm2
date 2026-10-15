@@ -12,12 +12,13 @@ signal slot_drag_finished(source_index: int, source_kind: String, successful: bo
 
 const ITEM_SLOT_SCENE: PackedScene = preload("res://scenes/ItemSlot.tscn")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
-const CELL_SIZE := 58.0
+const CELL_SIZE := 50.0
 # 连续棋盘：格子边缘直接相连，不制造独立卡片之间的缝隙。
 const CELL_GAP := 0.0
 const BOARD_PADDING := 0.0
 
-var columns: int = 6
+var columns: int = 8
+var slot_kind := "inventory"
 var capacity: int = 24
 var cells: Array[Control] = []
 var _item_visuals: Dictionary = {}
@@ -29,7 +30,7 @@ var _preview_rotation := 0
 var _preview_valid := false
 var _preview_visible := false
 
-func configure(next_capacity: int, next_columns: int = 6) -> void:
+func configure(next_capacity: int, next_columns: int = 8) -> void:
 	capacity = maxi(1, next_capacity)
 	columns = maxi(1, next_columns)
 	_rebuild_cells()
@@ -96,7 +97,7 @@ func render_items(entries: Array) -> void:
 		if not entry_variant is Dictionary:
 			continue
 		var entry := entry_variant as Dictionary
-		var anchor := int(entry.get("slot", -1))
+		var anchor := int(entry.get("slot", entry.get("insurance_slot", -1)))
 		var item := entry.get("item", {}) as Dictionary
 		if anchor < 0 or item.is_empty():
 			continue
@@ -228,7 +229,7 @@ func _rebuild_cells() -> void:
 		cell.position = get_cell_position(index)
 		cell.custom_minimum_size = Vector2(CELL_SIZE, CELL_SIZE)
 		cell.size = Vector2(CELL_SIZE, CELL_SIZE)
-		cell.set_meta("slot_kind", "inventory")
+		cell.set_meta("slot_kind", slot_kind)
 		cell.set_meta("grid_board_cell", true)
 		cell.set_meta("slot_index", index)
 		cell.call("set_slot_index", index)

@@ -192,6 +192,8 @@ func _on_mouse_exited() -> void:
 
 
 func _draw() -> void:
+	if bool(get_meta("invisible_drop_zone", false)):
+		return
 	var border_color := Color(0.34, 0.39, 0.48, 0.75)
 	var border_width := 1.0
 	if _drag_feedback_active:
