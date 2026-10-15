@@ -64,6 +64,78 @@ L2 每个房间还有两个**可选**字段：
 - 已有设计页：`docs/v0.1/design/远征关卡01设计.md`（单层独立关卡，含 Boss 房与走廊两处席位空缺）
 - 同族已填完的设计表实例：`docs/v0.1/design/新关卡设计表_测试关卡99.md`
 
+### 0.1 全项目刷怪路径总览（改刷怪前先看这张表）
+
+> 2026-10-15 逐处核对源码后补。**本节每个数字都是从代码里量出来的，不是设计意图。**
+> 常见误解：以为「刷怪盒 / 关卡批次 / 剧情刷怪 / 遭遇事件」是四条平行管线 ——
+> 其实前两条是**同一台引擎的两种编成数据**，而且项目里还另有 3 条旁路没被数进去。
+
+**一句话结构：4 条入口、3 条旁路、1 个出口。**
+
+```text
+编成来源（同一台引擎，按优先级互斥）        独立入口
+  ① 刷怪盒   spawn_placements              ④ 剧情刷怪   narrative_spawn_enemies
+  ② 设计源   enemy_spawn_plan  ← 本 Skill   ⑤ 遭遇事件   EncounterEventHost3D
+  ③ 房型公式 BOSS/ELITE/TRAP/BASEMENT
+        ↓                                        ↓
+  房间波次链 _commit_room_waves → _spawn_next_room_wave
+        ↓
+  旁路：延迟出怪 / 预约刷怪 / 下场房追加
+        ↓
+  唯一实例化出口  _spawn_enemy_batch()
+```
+
+#### 三条编成来源按**优先级互斥**（不是叠加）
+
+`Dungeon3D._spawn_room_enemies()`（`src/world3d/Dungeon3D.gd:2917`）进房时分流：
+
+| 优先级 | 来源 | 判据（代码位置） | 命中后 |
+|---|---|---|---|
+| 1 | **刷怪盒** | `_spawn_box_waves()` :3093（读 `room.spawn_placements`） | **只认盒子**，另两条全不参与 |
+| 2 | **设计源** ← 本 Skill | `_authored_spawn_waves()` :3070（读 `room.enemy_spawn_plan`） | 全量接管该房波次 |
+| 3 | **房型公式** | `match room.room_type` :2969 起 + `desired = 4 + floor*2 + (2 large / 4 arena / 0)` | 兜底 |
+
+三条都汇进同一个 `_commit_room_waves()`（:3427），推进节奏完全一样：
+**首波 → 清完 → 间歇 → 下一波**。盒子能额外指定**落点、错开延迟、按盒数分波**，设计源不能。
+
+#### 另两条独立入口 ＋ 三条旁路
+
+| 类型 | 路径 | 代码位置 |
+|---|---|---|
+| 独立入口 | 剧情刷怪（剧本 `scene.spawn`） | `narrative_spawn_enemies()` :3675 ← `NarrativeAdapter3D.gd:1244` |
+| 独立入口 | 遭遇事件（撤离防守 / 设施 / 剧情事件） | `EncounterEventHost3D.encounter_event_spawn()` :74 |
+| 旁路 | 延迟出怪（盒子 `delay_sec`） | `_queue_delayed_spawn()` :3350 → `_on_delayed_spawn_timeout()` :3369 |
+| 旁路 | 预约刷怪（召唤 / **Boss 增援** / 休眠恢复） | `_reserve_room_spawn()` :4121 → `_flush_reserved_room_spawns()` :4151 |
+| 旁路 | 下场房追加（命运卡 `fate_sun_reinforce`） | `apply_world_fate_card()` :5278 |
+
+**唯一出口** `_spawn_enemy_batch()`（:3522）共 6 个调用点（:3450 首波 / :4057 后续波 /
+:3404 延迟 / :4151 预约 / :3729 剧情 / `EncounterEventHost3D:74` 遭遇事件）。
+数值、AI、掉落、存活账、落点判据**都只有这一套真源**。
+
+⚠️ 两个**不是**布怪的，别数进来：`Dungeon3D:7280` 是房间休眠恢复**重建**敌人（还原状态）；
+`Player3DStateGallery:284` 是角色画廊预览。
+
+#### 三条陷阱
+
+1. **摆了盒子就全量接管。** 该房波次数 / 每波数量 / 怪物组成全由盒子给，
+   设计源 `enemy_spawn_plan` 与房型公式**都不再参与**。给一个已摆盒的房填刷怪计划 = 静默无效。
+2. **「至少 N 只」≠「精确 N 只」。** 盒子与设计源走**「至少」**口径（补到 ≥ N，**可能超**）；
+   遭遇事件是**精确 N**（超出截断）。要精确数量只能用遭遇事件。
+3. **不加第 N 条管线。** 新玩法（新设施 / 新剧情触发 / 增援变体）优先复用
+   `Dungeon3D.start_encounter_event(config)` —— 已支持前置条件、波次、`max_alive`、
+   完成 / 取消条件与存档恢复。
+
+#### 越界了就换 Skill
+
+| 要改的是 | 去哪 |
+|---|---|
+| 刷怪盒的摆放 / 落点 / 延迟 | `04-battle-room-runtime-assembler`；机制见 `docs/v0.1/design/触发器刷怪设计.md` |
+| 剧情里定点刷怪 | `10-narrative-timeline-authoring`（剧本 `scene.spawn`） |
+| 遭遇事件（前置 / 波次 / 完成条件） | `docs/v0.1/design/触发器刷怪设计.md` §10 |
+| 房子级刷怪计划 `enemy_spawn_plan` | **本 Skill**，见下面第 2 步补充 |
+
+
+
 ---
 
 ## 1. 动手前的必读（按顺序，不要跳）

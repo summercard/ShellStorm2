@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-10-14",
+  "updated_at": "2026-10-15",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -109,7 +109,8 @@
       "owner": "InventoryModule",
       "design_docs": [
         "docs/v0.1/design/战斗奖励与物品流转设计.md",
-        "docs/v0.1/04_技术施工_战斗与局内成长.md"
+        "docs/v0.1/04_技术施工_战斗与局内成长.md",
+        "docs/v0.1/design/装备与棋盘式包裹设计.md"
       ],
       "development_records": [
         "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md",
@@ -1078,6 +1079,25 @@
         }
       ],
       "status": "source_only"
+    },
+    {
+      "feature_id": "ENCOUNTER-EVENT",
+      "owner": "EncounterEventDirector3D",
+      "design_docs": [
+        "docs/v0.1/design/触发器刷怪设计.md",
+        "docs/v0.1/09_技术施工_存档结算与复活.md"
+      ],
+      "development_records": [
+        "docs/v0.1/development/2026-10-15_encounter_event_mechanism.md",
+        "docs/v0.1/development/CHANGELOG.md"
+      ],
+      "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_encounter_event_flow"
+        }
+      ],
+      "status": "partial"
     }
   ]
 }

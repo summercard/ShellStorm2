@@ -1,3 +1,161 @@
+## 2026-10-15 记录：全项目刷怪路径总览（4 入口 / 3 旁路 / 1 出口）
+
+- 起因：主人问「项目中的 4 种布怪逻辑，是剧情刷怪、刷怪盒子刷怪、关卡批次刷怪、和这个倒计时刷怪对吗」。**逐处核对源码后答案是「不对」** —— 前两条其实是同一台引擎的两种编成数据，另有 3 条旁路未被数进去。把这个结论落成文档与 skill，避免后来者再按「四条平行管线」理解。
+- **事实（均从源码量出，非设计意图）**：
+  - `Dungeon3D._spawn_room_enemies()`（`Dungeon3D.gd:2917`）按**优先级互斥**分流三条编成来源：① 刷怪盒 `_spawn_box_waves()` :3093（读 `room.spawn_placements`）② 设计源 `_authored_spawn_waves()` :3070（读 `room.enemy_spawn_plan`）③ 房型公式（`match room.room_type` :2969 起 + `desired = 4 + floor*2 + size_class`）。三条都汇进 `_commit_room_waves()` :3427，推进节奏完全相同（首波 → 清完 → 间歇 → 下一波）。**盒子与设计源不是平行管线，是同引擎的两种数据格式**；差别只在盒子能指定落点 / 延迟 / 按盒数分波。
+  - 另两条**独立入口**：剧情刷怪 `narrative_spawn_enemies()` :3675（唯一调用方 `NarrativeAdapter3D.gd:1244`，来自剧本 `scene.spawn`）、遭遇事件 `EncounterEventHost3D.encounter_event_spawn()` :74。
+  - 三条**旁路**：延迟出怪 `_queue_delayed_spawn()` :3350 → `_on_delayed_spawn_timeout()` :3369；预约刷怪 `_reserve_room_spawn()` :4121 → `_flush_reserved_room_spawns()` :4151（蜂巢怪召唤 / **Boss 增援** / 房间休眠恢复）；下场房追加 `apply_world_fate_card()` :5278（命运卡 `fate_sun_reinforce`）。
+  - **唯一实例化出口** `_spawn_enemy_batch()`（:3522），6 个调用点：:3450 首波 / :4057 后续波 / :3404 延迟 / :4151 预约 / :3729 剧情 / `EncounterEventHost3D:74` 遭遇事件。数值、AI、掉落、存活账、落点判据只有这一套真源。
+  - **两个不是布怪的**（易被误算）：`Dungeon3D:7280` 是房间休眠恢复**重建**敌人；`Player3DStateGallery:284` 是角色画廊预览。
+- **顺带纠正命名**：「倒计时刷怪」正式名是**运行时遭遇事件**，撤离防守只是其第一个使用方。它有两个正交轴 —— 完成条件 `timer`/`clear`/`timer_and_clear`、进度模式 `tick`/`external`。撤离用 `timer` + `external`，严格说连「倒计时」都不是，是跟外部进度条同步。
+- **三条陷阱已入档**：① 摆了盒子就全量接管（给已摆盒的房填刷怪计划 = 静默无效）②「至少 N 只」≠「精确 N 只」（盒子与设计源可能超，只有遭遇事件精确）③ 不加第 N 条管线，新玩法优先复用 `start_encounter_event(config)`。
+- **落位**：`docs/v0.1/design/触发器刷怪设计.md` 新增 **§0 全项目刷怪路径总览**（含结构图、优先级表、6 调用点表、陷阱、**各路径文档与 Skill 归属表**）；skill `09-level-plan-authoring` 新增 §0.1 同名总览（含「越界了就换 Skill」路由）；skill `10-narrative-timeline-authoring` 在 `scene.spawn` 行加交叉指引。两个 skill 已按镜像纪律同步到 `skills_drafts` / `.codex/skills` / `~/.codex/skills`，四副本 sha256 一致。
+- **未做**：本机 `--sync` 会因 Safe-Delete 守卫中途抛错并且不重建已删目录，故按 skill-mirror-sync 记录的安全替代流程用 `cp -rf` 只增不删。全量 `--check` 仍报 14 条既有漂移，**全部属另外 4 个 skill**（`meeting-transcript-to-design-doc`、`shellstorm2-asset-ledger-row-authoring`、`sofunny-image`、`sofunny-resource-sharing`），与本次改动无关，未擅自代修。
+
+## 2026-10-15 修复：全局类被抢注（TowerDescent3D）导致开场崩溃掉出地图
+
+- 症状：编辑器/运行时刷屏 `Parse Error: Class "TowerDescent3D" hides a global script class.`、`Failed to load script "res://src/world3d/TowerDescent3D.gd"`，游戏开场**没有地板、玩家直接掉出地图**，无法正常游玩；另有大量 `run_completed` / `_get_run_settlement_transaction_id` / `test_mode on Nil` 等 `Node3D` 退化解引用报错。
+- **根因（唯一）**：`_scratch/encounter_reg/head_tower.gd` 是一份**带 `class_name TowerDescent3D` 的整份脚本副本**，落在 `res://` 内；`_scratch/` 当时**没有 `.gdignore`**，Godot 照常扫描，该类抢注成功，`.godot/global_script_class_cache.cfg` 里 `TowerDescent3D` 一度指向该副本（`path: res://_scratch/encounter_reg/head_tower.gd`），真身被挤出缓存 → 加载失败 → 场景根退化成 `Node3D` → 地板/碰撞没建 → 玩家坠落。**上述九个症状同源，不是九个独立问题。**
+- 该副本由本轮对比 HEAD 时 `git show HEAD:src/world3d/TowerDescent3D.gd > _scratch/.../head_tower.gd` 产生，属**本方操作失误**。
+- **本仓库第二次踩同一坑**：2026-09-22 已有 `_scratch/gamepad_submenu/baseline_bak/Player3D.gd` 抢注 `Player3D` 的记录（措辞几乎逐字相同）。属结构性陷阱，非偶发。
+- 修复：① 删副本及其 `.uid`；② **新增 `_scratch/.gdignore`**（可逆单行文件）让 Godot 完全不扫描该目录，根治；③ `godot --headless --path . --import` 刷缓存，核对 `TowerDescent3D/Dungeon3D/Enemy3D/ItemRegistry/InventoryModule/InventoryUI` 全部指回 `src/**`、`res://_scratch` 条目归零。代价已明说：`_scratch` 下 3 个临时探针不再被导入，需运行时临时移出；输出写入不受影响。
+- **顺带核实**：`ShellStorm2/.workbuddy/backup/20261014_health_bar_visual/before_edits/` 下另有 `Dungeon3D.gd`/`Enemy3D.gd` 两份同类副本，但**无 `.uid`**（Godot 从未导入）且缓存指向正确 ⇒ Godot 跳过点目录，`.workbuddy/` 不参与扫描，**无需处理**（且该目录不可删）。
+- **一并修掉的真实运行时崩溃**：`SCRIPT ERROR: Invalid access to property or key 'door_endpoint_owners' on a base object of type 'Dictionary'`（`TowerDescent3D._register_edge_topology:5619`）。`Dungeon3D._record()` 初始化了 `doors`/`door_targets` 却**漏了 `door_endpoint_owners`**，而该处无条件对它索引赋值：缺键 ⇒ `record[...]` 返回 null ⇒ `as Dictionary` 仍为 null ⇒ 对 null 赋值抛错。此前只有 `_append_plan_room_record()` 补键，**经 `_append_tower_record()` 创建的 record**（塔楼壳体、楼梯端点）一直缺键，撤离返航重建初始环时必踩。危害不止一行报错：`SCRIPT ERROR` **打断函数执行**，门端口归属写一半就退出。修复：① `_record()` 补 `"door_endpoint_owners": {}`（根治）；② `_register_edge_topology()` 写前兜底（缺键语义与空字典等价）。该报错由 1~2 次降为 **0**。
+- **验收（修复后实跑）**：`--import` 严重报错 **0 行**、`EXIT=0`；`verify_tower_descent_flow`、`verify_game_entry_flow`、`verify_encounter_event_flow`、`verify_death_during_extraction_flow` 均 `EXIT=0` 且**各自 `SCRIPT ERROR` 0**；`verify_block00_floor98_assembly` 228 断言 227 通过。`hides a global script class`、`Failed to load script TowerDescent3D`、Node3D 退化解引用、`door_endpoint_owners` 崩溃 —— 六份日志全部归零。
+- **未修（均与两个根因无关，如实列出）**：`verify_block00_floor98_assembly` 唯一失败断言 `和平区房间 floor_01_entry 刷怪登记=3 期望 0`（证据 `type=STAIR_LOBBY 首访=true 待刷波次=0 cleared=true` —— 已排除：`ROOM_TYPES_WITH_HOSTILES` 不含 `STAIR_LOBBY`，该房不走刷怪入口；本轮**未改任何增加 `_alive_by_room` 的路径**；属计数残留，需单独排查）；`verify_tower_extraction_return_flow` 剩 3 条（背包棋盘化 / 保险结算流）；`verify_opening_script_runtime` 125 项仅 1 项失败（开场剧情枪归属，与 `verify_new_save_handoff` 同族）。
+- 记录：[全局类抢注与门端口归属修复](2026-10-15_global_class_hijack_and_door_endpoint_fix.md)。
+
+## 2026-10-15 撤离防守抽成独立运行时遭遇事件机制（Encounter Event）
+
+- FeatureID：`ENCOUNTER-EVENT`（新增）/ `WORLD-PLAN` / `ELITE-ROSTER` / `NARRATIVE-TRIGGER` / `SAVE-RUN`；工程 0.1.0。
+- 业主原话要点：「你看一下撤离信标，启动后刷怪的逻辑，能用在其它地方吗」→「帮我做成一个独立机制，方便于我在游戏过程中调用，可以刷什么怪，持续多久，刷多少，前置条件和完成结果是什么。然后更新相关的设计文档」。
+- 新增 `src/world3d/EncounterEventDirector3D.gd`（状态 Owner：配置校验、实例 ID、阶段推进、完成/取消/失败、结果动作、快照导出恢复）与 `src/world3d/EncounterEventHost3D.gd`（Dungeon 窄适配：上下文、编成解析、统一刷怪入口、事件归属存活统计、清理、白名单结果动作）。Director 不读 Dungeon 私有成员。
+- `Dungeon3D` 新增四个公开入口 `start_encounter_event` / `cancel_encounter_event` / `advance_encounter_event` / `get_encounter_event_snapshot`，并转发三条信号 `encounter_event_started` / `_stage_started` / `_finished`。
+- 撤离防守迁移为第一个使用方：`completion: "timer"` ＋ `progress_mode: "external"`，读条与结算权仍在撤离信标；五阶段阈值 `0 / 18% / 36% / 58% / 78%` 与原实现一致。原 `_spawn_extraction_attackers()` 与四个阶段布尔状态（`_extraction_mid_wave_spawned` 等）已删除，撤离刷怪不再有第二个入口。
+- 本轮修掉的实现缺陷：`interval_sec` 原先只编译成单阶段（间隔不生效）；`on_cancelled` 在白名单里但被直接拒绝；`encounter_event_live_count()` 漏算休眠房间快照／`_reserved_room_spawns`／`_pending_delayed_spawns`；`encounter_event_despawn()` 只清已实例化敌人（延迟/预约队列与精英预约残留）；结果动作失败会把已完成事件改写成 `failed`。
+- 两个归属字段分工固化：事件写 `encounter_event_instance_id`，精英名册写 `encounter_instance_id`（事件不覆盖）；取归属先读事件字段再退精英字段。事件完成**不等于**房间清房，五条链（事件完成／清房／击杀／逃脱／精英结算）互不串账。
+- 事件敌人 `persistent_id` 改由 `spawn_serial` 派生并随快照落档，续局不撞号。快照写入 `world_state.encounter_events`（Dungeon 与 Tower 两条 world_state 都写），恢复只回灌计划、不造实体、不重放结果动作。
+- **同轮修掉的既有缺陷**：`Dungeon3D._on_delayed_spawn_timeout()` 在「到点时房间不在／未流送／被封锁」的丢弃分支只把条目移出队列、**不减** `_alive_by_room` ⇒ 每丢弃一只留一个幽灵计数，该房 `alive == 0` 恒不成立、下一波永不自动来。现补 `-1` 并刷新 HUD。
+- **编译阻断**：`TowerDescent3D.gd` 的遭遇事件恢复段写 `var encounter_state := world_state.get("encounter_events", {})`，从 Variant 推断，撞项目「警告即错误」⇒ 整份 `TowerDescent3D.gd` 解析失败，连带 `verify_tower_extraction_return_flow`、`verify_death_during_extraction_flow`、`verify_expedition_extraction_carry_return` 三个回归红。已改为显式 `: Variant`（与 `Dungeon3D` 同写法）。
+- **验收（本轮实跑）**：`verify_encounter_event_flow` 通过，`EXIT=0`、`ENCOUNTER_EVENT_FLOW_OK samples=31`（由 23 提至 31，新增 `interval_sec` 分段与按间隔派发、`on_cancelled` 只执行一次、重复取消幂等），日志 `SCRIPT ERROR 0 / Parse Error 0 / 泄漏 0`。回归通过：`verify_death_during_extraction_flow`、`verify_dungeon_wave_intermission`、`verify_room_graph_persistence_services`、`verify_expedition_resume_entry`、`verify_pause_game_save_reset_flow`（均 `EXIT=0`）。
+- **未通过、且不属本机制（逐函数比对 HEAD 后确认，未修改）**：`verify_tower_extraction_return_flow`（`TowerDescent3D._register_edge_topology` 第 5619 行 `door_endpoint_owners` 缺失键 —— 该函数及整条调用链与 HEAD 逐字节相同；另三条断言落在背包棋盘化／保险结算流）、`verify_expedition_extraction_carry_return`（背包准备）、`verify_new_save_handoff`（开场刷枪链）。
+- **文档同步**：`design/触发器刷怪设计.md` 新增 §10（配置契约、阶段与 `interval_sec` 换算公式、完成/进度模式、离房策略、前置、`max_alive` 容量公式、归属、结果动作、快照、三条取消路径、未决项）；`09` 新增 §3.4 快照与恢复语义；`06` 新增 §4.1 与怪物系统的边界；`08` 新增 §5.6 剧情侧能接什么（含「时间轴尚无 `scene.encounter` 指令」的诚实说明）；`13` 新增 §11 流送与在途账；`MODULE_INDEX` 与 `feature_registry.json` 新增 `ENCOUNTER-EVENT` 行；开发记录见 `2026-10-15_encounter_event_mechanism.md`。
+- **门禁顺带修复**：`MODULE_INDEX` 的 `VFX-POOL` 行原为 8 个单元格（多余 `|`），`check_feature_traceability` 因此恒红；已把多出的两段并入第 6 格。`INVENTORY-SLOTS` 在 `feature_registry.json` 补齐 `design/装备与棋盘式包裹设计.md`（MODULE_INDEX 早已链接）。新增 FeatureID 后 `check_feature_traceability.py` 的期望功能数 37 → 38，并把硬编码的成功输出改为按登记数打印。`design/14.6_特效系统与制作规范.md` 里指向僵尸浓液死亡时间轴的链接路径由 `../outputs/` 修为 `../../outputs/`（目标文件在工程根 `outputs/zombie_goo_death/` 下确实存在）。仍余 7 个未注册验收入口（6 个在 HEAD 就未注册、1 个是未提交新件，均不属本机制），headless 试跑 5 通过 / 2 失败（`verify_expedition01_spawn_ramp`、`verify_grid_inventory_layout`）；登记会改变套件成员与耗时，未代做。`CHANGELOG.md:813` 指向一份从未存在的 `2026-10-08_boss002_spawn_speed.md`，属他人历史条目，未擅自改写。
+- **未做（留待单独裁定）**：`light` 结果动作当前明确返回失败（房间灯光无正式接口），要么补接口要么从白名单移除；`on_cancelled` 是否长期留在公开契约、结果动作失败的持久化与重试语义；休眠房间／预约／延迟三类来源同时存在时的逐项去重反向对照。
+
+## 2026-10-15 跑步与待机摆幅及节奏增强 v039
+
+PLAYER-STATE / ENTRY-AVATAR / ASSET-PIPELINE；工程0.1.0。63条动作修订，保留用户全局1.25倍率，四方向/待机、射击/换弹真实渲染及角色回归通过；资产登记与回滚见[开发记录](2026-10-15_player_motion_v039.md)。
+
+## 2026-10-15 换弹环：从右下武器图标迁到角色身侧
+
+- FeatureID：`UI-HUD` / `PRESENTATION`，用户要求「把换弹的UI动画 从右下角武器图标的位置 挪到角色身边的这个位置和大小」。绿色标注测量约 24×25 px；原图当前无可确认路径，因此不宣称绝对圈心逐像素重合。
+- `Dungeon3D.gd` 复用 `HudReloadRing`，外径设计值 93.75→31.25，经 0.8 HUD 缩放后由 75→25 canvas px；锚点改为当前相机投影角色脚底，经 HUD 父控件逆变换后右 34/下 10 canvas px。开始事件立即定位、每帧跟随，角色/相机无效或角色在镜头身后时隐藏但不干预真实换弹，重新可投影时恢复。
+- 换弹计时、弹药、玩法和存档规则不变；完成/取消仍由真实武器结束信号收尾，世界环保持 `RELOAD_RING_IN_WORLD=false`，原武器图标弹跳保留。金币读数仍为右下黄色 `金币 N`。
+- `HudReloadRing.gd` 更新当前位置/尺寸注释，保留 0.13 细环比例、1.8 发光倍数和原颜色；25px 外径对应主干 1.625px、发光宽 2.925px。
+- `verify_reference_hud_fate_visual.gd` 用新25px/角色投影替换旧75px/图标中心断言，新增角色移动、相机移动/切换、身后隐藏/返回、开始立即定位及真实取消检查。截图接现有 `VerificationOutput.path()`，本轮输出统一到工程外 `ShellStorm2-work/outputs/reload_ring_character_side/`。未新增 AssetID、美术资产或修改账本，未恢复世界环。
+- 备份：`ShellStorm2-backup/2026-10-15_reload_ring_character_side/before_edits/`；独立验证配置/用户数据/日志：`ShellStorm2-work/sessions/2026-10-15_reload_ring_character_side_112454/`。现行设计 r4、技术施工 §20.1、功能索引及 v0.2 追记已同步，游戏版本不变。
+- **运行结果**：五项 batch 完整执行，`verify_reference_hud_fate_visual`、`verify_finite_ammo_flow` 均打印功能 OK，但因 `Parameter "material" is null.` 被日志门禁判为3；`verify_tactical_inventory_minimap_flow` 为1（21类拖拽/所有权断言失败，另有材质错误）；`verify_hud_presenter_3d` 与 `verify_3d_reload_state_flow` 为0。总体 `VERIFICATION_SUITE_FAILED count=5 failed=3`，不宣称全绿。batch 无 `SCRIPT ERROR`；退出阶段另被安全删除护栏拦截，验证工作区留存，未绕过护栏。
+- **改动前后对照**：在独立私有 `src/` 中以改动前 `Dungeon3D.gd/HudReloadRing.gd` 替换本轮两文件，其余保持当前工程；有限弹药的1类错误、战术背包的22类错误（21类断言 + 材质）与 batch 完全一致，新增/减少均0。有限弹药 before 场景返回0但日志门禁3，战术背包 before返回1；证据为本轮 `before_after_comparison.json` 与 `before/logs/`，未修改主工程的背包规则或错误白名单。
+- **真实实拍**：正式塔楼相机下 `character_reload_half.png` 为1280×720，控件外径25、角色脚底投影 `(640,403.5591)`、环心 `(674,413.5591)`，真实武器进度0.5，取消后隐藏；右下金币为黄色 `金币 60`、字体21px。`character_reload_detail_native.png`/`character_reload_detail_4x.png` 为原图裁切及整数倍放大，不合成圆环；`pixel_measurement.json` 实测含抗锯齿/微光的半弧纵向边界27px，区别于名义25px外径。正常场景入口截图返回0、日志门禁3（8条材质null，未白名单）；早先外部 `--script` 探针因Autoload编译顺序报未声明单例，已改为正常Node场景入口，重拍无 `SCRIPT ERROR`。
+- **标注同尺寸窗口复核**：另以1277×681运行正式塔楼截图 `window_1277x681/character_reload_half.png`，HUD canvas为1350×720，25canvas px随stretch约为23.65屏幕px，含抗锯齿/微光的半弧实测纵向边界26px，屏幕环心 `(670.6615,391.1580)`；位置随角色与相机确定，不宣称与原图未知运行态的圈心绝对一致。该次探针返回0并打印 `CHARACTER_RELOAD_PROBE_OK`，仍有8条材质null，无脚本错误。
+- **全局检查未通过（已存在的跨功能门禁问题，未擅自接受漂移）**：文档检查退出1，失效链接2处、`VFX-POOL` 行格式、7个未注册验证入口、棋盘背包设计追溯及 UI 行数16/18不一致；媒体域检查退出1（UI 16/18）；UI资产检查退出1（6个SHA漂移，均非本轮改动路径）；运行命名检查退出1（其他工作区14个带版本资产、3个目录及引用计数上升）。详见本轮 `gates.log` 与 `documentation_final.log`。本轮源码 `git diff --check` 退出0。
+
+## 2026-10-15 物品独立四材质与图标补光
+
+- FeatureID：ASSET-PIPELINE / INVENTORY-SLOTS / WORLD-LOOT。
+- 物品采用独立四材质，色板在上一轮基础上S/V再增15%（累计1.61）；图标本色补光防止暗部死黑。
+- 31模型/51GLB/64Blender同步，四个材质资产、账本、设计和skill更新；[实测结果与边界](2026-10-15_item_independent_materials.md)。
+
+## 2026-10-15 物品专用高亮高饱和色板
+
+- FeatureID：ASSET-PIPELINE / WORLD-LOOT / INVENTORY-SLOTS。
+- 独立512×512色板，HSV饱和度与亮度各×1.40；31物品资产、51GLB、64份Blender源和模板同步，场景色板不变。
+- 地面/图标实际渲染及材质检查通过，账本、源哈希、设计和三个skill同步。
+- [交付与检查边界](2026-10-15_item_palette.md)。
+
+## 2026-10-15 默认包裹扩容至6×4（24格）
+
+- `InventoryModule`、`Dungeon3D`、`BaseManager`、`InventoryUI` 与棋盘视图的默认基础容量统一为 `24`。
+- 棋盘列数保持 `6`，默认行数由 `2` 调整为 `4`；装备背包仍在基础容量上提供扩展面积。
+- 现有物品占格规则不变，继续由 `ItemRegistry.grid_size/grid_area` 提供真实占格；装备栏仍是独立槽位，不与包裹格绑定。
+- 相关验证基线同步改为24格。
+
+## 2026-10-15 棋盘式格子背包首版骨架 ＋ 物品占格尺寸落盘
+
+- FeatureID：`INVENTORY-SLOTS` / `PRESENTATION`；用户口径「包裹做成三角洲行动式整体棋盘，每件物品有自己的占格；装备栏不与物品格绑定，只判定可装备性」。
+- `ItemRegistry` 为现有48项物品补齐 JSON 安全的 `grid_size=[w,h]` 与 `grid_area`；典型尺寸：步枪 `4×2`、狙击/发射器 `5×2`、手枪 `2×1`、背包档 `2×2/3×3/4×4`，未知物品 `1×1` 兜底。
+- `InventoryModule` 增加棋盘列/行、矩形碰撞、90°旋转、面积空位检测、JSON快照恢复与面积优先整理；继续保留 `inventory_slots[]` 与旧 `slot` 索引作为锚点兼容层。
+- `InventoryUI` 背包区接入 `GridInventoryBoard`：棋盘整体绘制，物品视觉跨多个格子；装备栏未改造，仍按原独立槽位和 `type/subtype` 判定。
+- 新增设计页 `design/装备与棋盘式包裹设计.md`，已从 `design/README.md`、主 `README.md`、`战斗奖励与物品流转设计.md`、`04_技术施工_战斗与局内成长.md` 互链。
+- 新增 `verify_grid_inventory_layout.tscn`：验证尺寸落盘、4×2连续占格、碰撞、旋转、堆叠和旧JSON快照恢复。
+- **施工状态**：首版数据/规则/UI骨架已落盘；真实鼠标落点 ghost、拖拽跨格放置、旋转快捷键与完整视觉验收仍是下一阶段，不把本条标记为最终体验完成。
+
+## 2026-10-15 远征01 `room_02` 刷怪盒 5 → 2（中线左右两群）
+
+- FeatureID：`WORLD-PLAN`（关卡数据）；业主口径「远征01的关卡，第二个房间，5 个刷怪点改成 2 个刷怪点」＋落位示意图（两个绿框分居房间中心线左右、纵向约在房间中线高度）。
+- **数据改动**（只有 `art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json` 与其投影 `data/level_plans/expedition_01/floors/floor_00.json` 两处）：`room_02` 的 `spawn_placements` 由 5 盒（`room_spread`×2 / `corridor_column` / `wall_arc` / `corner_ambush`）改为 **2 盒**，两盒都是 `box_room_spread`，落在 `[-12.5, -2.5]` 与 `[12.5, -2.5]`；`count_multiplier` **全部去掉**（两盒回到盒资产原始量 3 只）；`encounter.stages` 由 `[[0,1,2,3,4]]` 收成 `[[0,1]]`（仍是单波）；`encounter.monster_ai.alert_share_radius_m = 60` **保留**（两群相距 25 m，联动围上的效果不变）。房总 **18 → 6**。
+- **落位依据**：A/B 两口（`[-20, -2.5]` / `[20, -2.5]`）都在 `z = -2.5` ⇒ 这条就是**主通行线**，玩家从进门到出门必然从两群之间穿过；`x = ±12.5` 是中线左右各两砖半，盒边在 `x = ±14.5`、两侧墙在 `±20` ⇒ 净距 **5.5 m ≥ 判据 H 的 5 m**，最外一圈仍无落点。
+- **⚠️ 盒资产一律不动**：`data/spawn_boxes/*.json` 是全关共享的（5 个小盒 ＋ Boss 台被 11 间房反复引用），本房只是不再引用其中三个实例型别。
+- **实测（种子 77001199，两个探针双向吻合）**：`probe_expedition01_box_capacity` → `room_02` 两盒 `cap_declared = 7 / 6`、漂移 `0.00 / 0.00`；`probe_expedition01_wave_counts` → 逐盒实到 `3 / 3`、房总 **6**、`short = 0`、`trunc = 0`。全关 `realized = 158 / design_max = 172 / trunc = 5`、盒实例 **42**。
+- **存档安全**：`spawn_placements` / `encounter` **不进 `layout_id`**（canonical 只含几何与端口）⇒ 挪盒位不断档，与 2026-10-14 建 `monster_rules` 时确认的口径一致。
+- **投影一致性**：跑 `scripts/sync_runtime_design_data.py`（40 文件），`--check` 与 `check_workspace_hygiene.py` 的源/投影逐字节比对均通过。⚠️ 顺带修掉一处**既有**投影漂移：`boss_50x40.json` 的 `note` 在运行数据里比设计源新（2026-10-14「南进」裁定当时只写进了运行数据），本次把该文本**回填进设计源**再重投影 —— 源与投影从此一致，不再被下一次同步覆盖。
+- **门禁**：`check_expedition_room_asset_status.py` → `EXPEDITION_ASSET_STATUS_OK`；`verify_level_plan_design_source.tscn` **无任何刷怪盒判据（A–L）报错**；`check_documentation_contracts.py` 扫过的 1661 条本地链接里，本轮两份文档 0 条断开。
+- **⚠️ 既有红项（非本轮引入，2026-10-14 条目已登记过前两项）**：`verify_level_plan_design_source` 的 `room_overlap:room_10:boss` / `boss:extraction`（`floor_00.json` 兜底样例坐标本就重叠，实跑几何按种子现算）；全关 `trunc = 5`（全在 Boss 房 `tile_cells=0` 的既有身份条目）；`check_expedition_room_footprints.py` 报 `boss_deep_shaft_80x100` 模板文件缺失；`check_documentation_contracts.py` 的 `VFX-POOL` 行 / 验证注册表未登记项 / 媒体域行数三类（属并行的 VFX 与 UI 域）。
+
+### 文档同步
+
+- [远征关卡01设计](../design/远征关卡01设计.md)：§4.5.2 现状表 `room_02` 行（5 → 2 盒、18 → 6 只）、§4.5.2.1 **重写为「两群布局与联动激活（2026-10-15）」**并附本房砖心容量复测表（五群版压成「历史版本」留痕）、§4.5.0 盒数 44 → 42。
+- [触发器刷怪设计](../design/触发器刷怪设计.md)：§3.2.4 **新增**「第三轮：`room_02` 减为两群」（含布局表与实测表）；§3.1.1 盒数口径（3~5 盒 → 2~5 盒、44 → 42）、§3.2.2 `count_multiplier` 现状列、§3.2.3 第二轮表与全关口径、§6 迁移路径表、§8 P3 证据段同步追注。
+- **未改**：`docs/v0.1/development/2026-10-14_expedition01_monster_rules.md`（当日事实记录，改写等于篡改历史）。
+- **平面图纸不需重跑**：`render_expedition01_plan_sheet.py` **不绘制刷怪盒**（它的数据源是 §3.1 尺寸与 §4.2 坐标，本轮未动），故 `refs/expedition01/plans/*.svg` 与图集 HTML 保持原样。
+
+## 2026-10-15 玩家主界面血条：延迟扣血白段（与 Boss / 小怪同源）
+
+- FeatureID：`PRESENTATION`；业主口径「这个血条表现效果，角色的血条主界面的也要找个表现」——「这个」= 2026-10-14 落地的延迟扣血白段。
+- **做法与 Boss 屏条同构**：左上角色状态块的生命条由单条 `ProgressBar` 改为 `PlayerHealthBarStack` 里**两层叠放** —— 下层 `PlayerHealthBarDelayed`（白 fill）追赶、上层 `HPBar`（红 fill，`background` alpha 0 让白段透出）。stack 取原条最小值 `220×22`，而 `VBoxContainer` 只认**直接子节点**的尺寸 ⇒ 块内内边距与上下邻居（血量数值 / 手电刻度 / 金币读数）位置一字不动。
+- **语义逐条对齐**（`_sync_player_health_bar_delay` / `_tick_player_health_bar_delay`）：`L ← move_toward(L, H, Δt × 1.8)`，**只有受伤才留白**；初始化／治疗／复活／读档**当帧对齐** —— 少了这条，初始 `L = 1.0` 与首次 `H < 1.0` 的差值会在开局第一帧被当成一次「受伤」画出来，是一句假信息。白段只活在 `_player_delayed_ratio`，**不写 `player.current_hp`、不参与伤害判定与格挡结算、不进存档**。
+- **常量改名**：`BOSS_HEALTH_BAR_DELAY_SPEED/_COLOR` → `HUD_HEALTH_BAR_DELAY_SPEED/_COLOR` —— 它现在同时喂 Boss 屏条与玩家条，名字里再只有 Boss 就是误导。真源仍是 `Enemy3D.HEALTH_BAR_DELAY_*`，全游戏白段手感统一。`docs/v0.1/development/**` 历史记录里的旧名按「不改写历史」原样保留（现行文档已同步改名）。
+- **验收**：`verify_reference_hud_fate_visual` 新增玩家条断言（延迟层是被动层、受伤留白、只朝真实值收且不越过、回满不留残影、两层几何完全重合），并在截图前留一次可见白段。白段状态经 `get_player_vitals_bar_snapshot()` 暴露 —— 不在测试里重抄「谁该留白」的判断。
+
+## 2026-10-15 角色动画提速 25% ＋ 恢复地面掉落物名牌 ＋ 货币改名「金币」
+
+- FeatureID：横切 `PRESENTATION` / `WORLD-LOOT` / 文本口径三项；业主口径「① 角色动画播放速度调快 25%；② 原来去掉的掉落在地上的物品头上的物品名称，加回来；③ 货币的『魂』的名称改成金币，要同步更新设计文档和账本」。
+- **角色动画 ×1.25**：`src/player3d/CharacterMotionLibrary3D.gd` 新增 `ANIMATION_RATE_MULTIPLIER = 1.25`，只乘在**唯一的采样相位推进入口** `_time += delta * rate` 上，覆盖待机／移动／走路／锁定／开火五类剪辑。**冲刺、受击、落地、死亡不在本次范围** —— 它们走状态机 progress，且同时就是玩法时长（冲刺无敌帧等），不该跟着表现一起缩。既有 `RUN_CLIP_RATE_SCALE = 1.3`（跑步剪辑）保留，实际速率为 `1.3 × 1.25 = 1.625`。
+- **地面掉落物名牌恢复**：`GroundLootPickup3D.LABEL_DISPLAY_POLICY` 由 `"none"` 回到 `"all"`、`RoomKeyPickup3D.SHOW_NAME_LABEL` 由 `false` 回到 `true`。2026-10-10 那两轮「隐藏货币文字」→「所有掉落都不要字」的沿革已写进两个常量旁的注释，防止再次反复。名牌参数沿用 2026-09-29 调好的值（**不画描边**：`outline_size = 0`，给 8 会连成黑框）；淡出仍走 `GeometryInstance3D.transparency`，`check_label3d_fade.py` 门禁不变。验收侧的期望值本来就由真源 `should_show_name_label_for()` 现算 ⇒ 改策略不影响用例正确性。
+- **货币显示名「魂」→「金币」**：只改**玩家可见文案与文档口径**；内部字段 `extraction_points`、物品 ID `__currency__`、音效事件 `world.pickup.soul`、资产 ID `AUD-SFX-SOUL-PICKUP` **一律不动**（存档兼容与资产身份）。改动面：33 个 `.gd`（HUD、基地商店、商人、怪物档案、命运卡文案、状态栏、`reason` 消息、掉落物显示名 `RewardSpec`/`RewardSink`）／探针断言 2 处（`verify_base_shop_save_flow` 的 `"金币" in _points_label.text`、`verify_reference_hud_fate_visual` 的 `"本局金币 ◈"`）／现行设计文档 21 个文件 176 处／账本。颜色名 `魂金` 一并改为 `货币金`（顺序敏感：先改颜色名，否则会被通用替换打成「金币金」）。
+- 🔴 **`UIStyleFactory` 是隐藏耦合点**：`"魂" in button.text` / `"魂" in label.text` 是按钮与标签的配色判定，文案改名而这里不同步 ⇒ 样式静默失效。已同步。
+- **账本**：《物品道具账本》「非背包与待设计」C6、「功能调用链」D13 两处说明文字；生成脚本 `scripts/sync_inventory_item_ledger.py` 同步改（不改则下次重跑覆盖）。xlsx 用**外科式替换**（按 zip 条目逐个搬运，只把两个 worksheet 里 `魂` 的字符引用 `&#39746;` 换成 `&#37329;&#24065;`）—— 资产主表 1251 行、`ledger_split_baseline.json` 全部指纹未动（该 baseline 的 `sheet_digests` 本就不含这两个说明 sheet，`verify_ledger_split.py` 用 `.get()` 取值，缺失不报错）。
+- **明确保留不动**：资产登记名 `ITM-PICKUP-SOUL-ORB / 灵魂球`、`AUD-SFX-SOUL-PICKUP / 魂球拾取`（含 VAR02/VAR03）—— 与英文 ID 配对的资产身份，不是货币名称；`docs/v0.1/development/**` 与 `docs/v0.1/audits/**`（历史事实记录，改写等于篡改历史）；引用业主 2026-10-10 原话的两处注释（原话保留，另加改名注记）。
+
+## 2026-10-15 门后命运卡退出：全卡翻转缩小退场
+
+- FeatureID：`FATE-RULES` / `PRESENTATION`；业主口径「点击退出后，所有卡牌要有个翻转缩小的动画，不要硬切结束」。
+- `Dungeon3D.gd`：底部退出按钮、ESC、手柄 `ui_cancel` 统一进入 `0.42s` 退场。前 `0.16s` 卡面沿 X 收窄，在薄边处翻回卡背；所有三张卡（含已购卡）同步从当前尺寸缩到零并淡出，尾段余额、退出按钮和遮罩一并淡出。动画的完成回调才清理弹窗、提交门后流送并解锁玩家输入；减少动效直接关闭。
+- **竞态收口**：退场锁住卡按钮与退出按钮、拒绝重复退出与新购买；停掉进场/购买翻牌及常驻漂浮，避免同属性 tween 抢写；不先复位到 100%（保留已购卡 70% 与当前悬停尺寸）；旧动画携带原覆盖层身份，紧急关闭后不会误关新弹窗。内层 `_close_door_fate_overlay()` 仍保留同步硬清理语义，供切场/测试收尾使用。
+- **材质修正**：真实渲染中发现已购卡灰度 shader 原来覆盖 `COLOR`，丢失继承的压暗与 alpha；现在保存 vertex tint 再乘灰度贴图，已购卡的灰阶、0.40 压暗、0.45 半透明及退场透明度都实际生效。
+- **专项**：`verify_fate_card_purchase_flow` 验证退场中间态仍保留覆盖层/输入锁、所有卡缩小淡出并翻背、重复退出与退场购买无效、动画完成后清理；`verify_dual_weapon_quick_map_fate_flow` 的 ESC / 手柄取消改为等待实际收口；`verify_reference_hud_fate_visual` 以同一真实 tween 分段取 viewport 截图，并覆盖减少动效直接关闭。三项定向运行及错误日志门禁均为 `0`，没有意外脚本错误。
+- **补充回归**：`verify_hud_presenter_3d`、`verify_fate_integration_completion`、`verify_celestial_fate_scope_flow` 的场景退出码与错误日志门禁均为 `0`；UI 账本结构门禁 `--ledger ui --scope structure` 为 `0`。集成用例第一次因隔离路径不含其写死的 `fate_completion_20261008/integration` 标记而主动拒绝启动，按要求改成独享隔离目录后实跑通过，不修改用例隔离保护。
+- **证据**：`outputs/verification/fate_exit_before.png`、`fate_exit_fold.png`、`fate_exit_back_shrink.png`、`fate_exit_fade.png`、`fate_exit_after.png`，汇总预览 `outputs/verification/fate_exit_preview.html`；本次不创建新美术资产、不修改购买数值与掉落规则。
+- **工程门禁另记**：文档与媒体域总门禁尚有非本次退场引入的跨域未对齐项（两处断链、VFX-POOL 行、未登记验收项、INVENTORY-SLOTS 设计链接和 UI 账本 18/期望16），不把本次定向通过宣称为全工程通过。最初旧共享 manual-verify 工作区创建失败及运行模块 Nil 错误，改为原工程 + 独立 APPDATA 的存档隔离定向运行后未重现；不将失败那轮作为通过证据。
+- 文档：[04 战斗与局内成长](../04_技术施工_战斗与局内成长.md) §20.2、[14 命运塔罗牌组](../14_技术施工_命运塔罗牌组.md) §7.1 同步退出时序。
+
+## 2026-10-15 门后购卡：反馈落到卡与余额上 ＋ 已购卡半透明
+
+- FeatureID：`FATE-RULES`；业主口径「命运卡购买的这个地方，表现交互要做一下优化，让人更容易理解和看到反馈；购买完成后翻过去的命运卡牌，做一下半透明的处理，更淡一些」。
+- **半透明只加在卡背贴图层**（`back.modulate.a = FATE_PURCHASED_CARD_ALPHA = 0.45`），**不加在整列**：整列调 alpha 会把「已购买」压到 `0.72 × 0.40 × α ≈ 0.13` 的有效亮度，直接读不出来 —— 而这行字是这张卡唯一还需要被读到的事实。已购卡因此从「三件套」升级为**四件套：灰阶 ＋ 压暗 ＋ 半透明 ＋ 70%**，四条各管一个属性（材质管色相、`modulate` 颜色管亮度、`modulate.a` 管透度、基准缩放管尺寸），将来单独调任一项互不影响。
+- **反馈落点原则：视线在哪里，反馈就落在哪里**。状态栏在屏幕左上角，玩家视线在三张卡上 —— 只写状态栏的体感就是「点了没反应」，这是购卡界面最容易被当成 bug 的一类体验。三条新反馈：
+  - 拒绝（`_report_fate_block()`）⇒ 卡片**横向抖动** ＋ 价格行**提亮并按一下**。抖动走 `position:x`：三张卡的常驻错相漂浮占 `position:y` 与 `rotation`，悬停与选中占整列 `scale`，这是唯一空闲的通道。
+  - 魂不足 ⇒ 顶部余额行**闪红**再看回常色（只闪红、不抖动：抖动是「这张卡拒绝你」的语义，两种反馈共用一个动作会让玩家分不清是卡的问题还是钱的问题）。
+  - 扣款成功 ⇒ 余额行脉冲 ＋ 右侧浮出 `- N 魂` 飘字（0.9 s 后自毁）。余额由 32 变 2 只是一次「文本替换」，一闪而过很容易被忽略。
+- **价格行文案**：`◈ N 魂 · 魂不足` → `◈ N 魂 · 还差 M`。「魂不足」只说了状态，「还差多少」才是玩家要的下一步信息。
+- 🔴 **踩到的坑**：抖动若每次都以「当前 `position.x`」为基准，连点会在上一轮还没归位时取到中间值 ⇒ 卡位一轮轮往右漂。基准 x 改记在 `meta` 上跨调用复用，并在 tween 收尾显式归位；抖动与价格行闪烁的 tween 各自独立成表，不与缩放反馈共用槽位。
+- **验收**：`verify_fate_card_purchase_flow` 新增 9 条断言（卡背 alpha 等于 `FATE_PURCHASED_CARD_ALPHA` 且 < 1、**卡下说明与价格行的 alpha 恒为 1.0** 的反向钉子、抖动 tween 非空、余额警示 tween 非空、余额行转警示色、价格行 `modulate.r > 1`、扣款飘字存在且含金额、价格行含「还差」），`exit=0`；`verify_reference_hud_fate_visual`（真实渲染器）`exit=0`，重出两张证据图：`outputs/verification/fate_purchased_card_back.png`（已购卡为半透明淡灰线稿，卡形仍可辨、「已购买」仍可读）与 `outputs/verification/fate_reject_feedback.png`（魂不足的完整表现：余额行闪红 ＋ 卡片抖动 ＋ 卡下写出「还差 M」）。
+- 文档：[04 战斗与局内成长](../04_技术施工_战斗与局内成长.md) §20.2（四件套 ＋ 反馈落点原则 ＋ 价格行文案）；[14 命运塔罗牌组](../14_技术施工_命运塔罗牌组.md) §3.2/§7.1/§8。
+- 🔴 **顺手修掉一条会误报的既有断言**：`verify_reference_hud_fate_visual` 的「悬停 tween 快速 enter/exit 后恢复」原本写死 `await timer(0.2)` 再比 `scale == 1.0`。缩放是 tween，机器被占满时同样长的真实时间里只跑得出两三帧 ⇒ 把「机器慢」误判成「tween 有残余」（本轮实测踩到：同一份代码上一轮 `exit=0`、本轮红，整轮耗时 `2m49s → 12m40s`）。改成 `_wait_card_scale()` 按真实时间轮询到收敛 —— tween 若真坏了会轮询超时，判据强度不变。
+- **本次未做**：占卜屋 `DivinationMenu`／工作台 `WorkbenchPanel` 的入口沿用各自原有反馈，本次只改**门后**这一条路径。
+- ⚠️ **发现（未处理，需主人拍板）**：`docs/v0.1/` 的正式技术文档里货币术语是**「金币」**（04／14 两份全文 0 处「魂」），而运行时 HUD 实际显示「**本局魂** ◈ N」、卡下价格行 `◈ N 魂`。同一段文本写进本 CHANGELOG 会保留「魂」、写进 14 文档却变成「金币」⇒ 那两份文档上存在「魂 → 金币」的替换。本次**跟随文档现状按「金币」写**，未擅自动运行时文案。
+
 ## 2026-10-14 武器构建链路中文化（K 键武器表现页 ＋ 工作台/工坊）
 
 - FeatureID：`UI-LOCALE-TEXT`（**跨功能横切模块，不占 MODULE_INDEX 的 37 项 FeatureID**）；业主口径「把 k 键的枪械构建链路，用中文，后面的这个构建链路全部需要显示中文，可以切换语言，预留空间，这个要单独的一个模块，更新设计文档」。
@@ -631,6 +789,12 @@ HEAD 版 `drop_spec_for` 守卫同样是 `if not BASE_ENEMY_TYPES.has(monster_id
 ## 2026-10-09 鸟群场景特效 Blender 源
 
 两套各7只的低模鸟群：12秒空中掠过、24秒落地停留再起飞；场景共享哑光材质与冷白色格。可编辑骨骼关键帧、源文件、完整预览和专项检查已交付，未接入Godot。[制作与验收记录](2026-10-09_bird_flock_blender_sources.md)。
+
+## 2026-10-15 默认镜头按 `'` 拉远4次并压低5°
+
+主人本次口径：在 2026-10-09 默认机位上按 `'` 拉远4次，然后在 P 键调试面板「镜头雾气 → 俯仰」按一次「压低」。默认镜头由玩家局部`(0, 9.993940, 3.699625)`改为`(0, 10.262659, 4.914455)`：拉远4次使相机到焦点距离 `10.530240m → 11.330240m`，再绕固定焦点`(0, 0.45, -0.75)`压低5°，等效俯视角 `65.003882° → 60.003882°`；FOV 65°不变。新值由 `CAMERA_HEIGHT_M=10.262659` 与 `CAMERA_DEFAULT_TRAILING_M=4.914455` 两个唯一事实源常量承载。收镜触发继续直接引用 `CAMERA_DEFAULT_TRAILING_M`，因此仍保持「相机进入墙体通道就收镜」的几何语义，不冻结旧的 3.699625m。远征02房间级 `camera_profile` 不受污染，未写 profile 的 room_01 自动使用新全局默认值；普通房顶盖夹镜允许高度仍为 3.42m，下压量 `6.5739m → 6.8427m`。存档、玩家朝向、移动、战斗、敌人、设施、掉落、楼层、门、楼梯、FOV 和玩法规则均未修改；调试偏移仍不落盘，F12 复位回到这组新默认机位。
+
+数值验算：旧默认相对焦点向量为`(0, 9.543940, 4.449625)`，半径`10.530239948m`；拉远4次后半径`11.330239948m`，极角`65.003882455°`；压低5°后极角`60.003882455°`，由 `r×(sinθ, cosθ)` 回算得到高度`10.262659481m`、后移`4.914455065m`，写回6位小数的回代误差低于`1e-5m`。同步了 `verify_debug_camera_hotkeys` 的半径/往返/压低/俯角断言、三个塔楼专项的固定机位与楼板夹具、两个视觉预览脚本和远征02顶盖探针。验收：`verify_debug_camera_hotkeys` 输出`DEBUG_CAMERA_HOTKEYS_OK`退出0；远征02顶盖探针输出`EXPEDITION02_CEILING_CAMERA_VERIFY_OK`退出0；塔楼实机日志打印`camera_local=(0.0, 10.26266, 4.914455)`。镜头遮挡专项的剩余红项与旧值 A/B 对照没有新增集合，均为既有随机布局/墙标记问题；灯光墙体专项剩余光照误判、99F楼层支撑、98F刷怪时序三条既有红项。详见[交付记录](2026-10-15_default_camera_pitch_lower_1.md)。
 
 ## 2026-10-09 默认镜头按 `;` 拉近4次
 
@@ -2919,3 +3083,8 @@ WORLD-ENTRY：入口楼最后阶段展开，标记和交互同步；01成功撤�
 - 2026-10-14 ENEMY-AI / BOSS-STAGES：[Boss002 显示器动画受击体积](2026-10-14_boss002_monitor_hit_volume.md)。业主两轮：「隔空击中」→「**还是离着非常远**」。**主因是根节点那个固定圆柱太胖**（半径 2.016 m，而屏幕半宽只有 0.85 m）——实测子弹撞到的 collider 名字就叫 `Enemy3D`，停点落在屏幕**前方 1.0–1.3 m**；第二因是屏幕在动画里甩出圆柱（砸地帧前向 1.81 m），只靠圆柱时最差姿态仅覆盖本体顶点 34.77%。改法：**圆柱退出子弹层**（移动/阻挡口径一字未改），接子弹职责整份交给 8 个**跟骨走**的骨局部受击盒（屏幕/后轴/底座/三段弹簧支撑/两只手），挂在独立被动碰撞体 `EnemyHitVolume3D` 上（mask=0 ⇒ 不干扰走位：实测挂在本体上会把坐地的怪抬高 0.42 m）；盒子**只用刚性顶点**定尺寸（否则 hand.L 会胀到几何的 9.5 倍）。实测：本体顶点覆盖 **100%**；瞄准可见屏幕点射击的落点误差**中位 0.351 m**（理论地板 0.17 m = 子弹半径）；A/B 开盒子 0.229 m 打在模型上、关盒子**整条穿过 16.44 m**。`verify_monitor_boss_flow` **591 项 0 失败**，`verify_3d_enemy_behavior_flow` / `verify_unique_boss_content_flow` 回归绿。数值可复算：`scripts/probe_monitor_boss_hit_volumes.gd`。另修复：该用例引用的两份源级参考数据被瘦身提交移出版本控制导致用例崩溃，已从瘦身备份取回（206 KB）。
 
 - 2026-10-14 ENTRY-AVATAR：[全新存档开场影片](2026-10-14_opening_movie_entry.md)。新档走 loading → 开场影片（20.06 s）→ 渐黑无缝进游戏，**不进主页菜单**，直接落 98F 主人办公室；已有存档照旧主页菜单。入口覆盖层改为二选一（`OpeningMovieScreen3D` / `MainEntryScreen3D`），判据**复用** `_should_open_new_game_in_master_office()` 零新增存档字段，故续档重进永不重播。顺带把 `StartupLoadingScreen` 由同步切场景改为后台预加载真实进度（原先真实档启动 8～12 秒会让进度条冻在 100% 再硬跳，而影片正接其后）。两条硬约束已钉进代码与设计文档：① **headless 下 `load()` 一个 `.ogv` 会让整个 Godot 进程挂死**，故影片层在 headless 下连播放器节点都不创建；② **Windows 上 gyan.dev 构建的 FFmpeg Theora 编码器是坏的**（ffmpeg 自解即报 `error in unpack_block_qpis`，Godot 里整屏彩虹噪点，与 `-q:v`/分辨率对齐均无关），必须用 BtbN 构建。真机渲染实测交接时序 21.81 s，与设计分段逐段吻合。见 [v0.2/PLAN](../../v0.2/PLAN.md) 的 0.2-ENTRY-001。
+
+
+## 2026-10-15 装备与棋盘包裹体验深化
+
+双侧深蓝界面、角色居中装备布局、跨格整件命中、旋转/取消、扩容滚动及空间事务修复。真实鼠标与双分辨率专项通过；旧回归与门禁限制见[交付记录](2026-10-15_inventory_experience.md)。

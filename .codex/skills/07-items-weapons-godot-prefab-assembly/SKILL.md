@@ -1,7 +1,6 @@
 ---
 name: 07-items-weapons-godot-prefab-assembly
 description: 当需要把已通过美术验收的道具或枪械 Blender 输出导出 GLB 并在 Godot 中组装为正式 PackedScene 时使用，处理稳定路径、碰撞与挂点分离、重导入与独立加载验证。覆盖道具分支与枪械分支；不重新设计造型，不修改玩法代码。
-agent_created: true
 metadata:
   display_name_zh: 07 道具与武器 Godot Prefab 组装
 ---
@@ -121,3 +120,17 @@ godot --headless --import --path "<项目目录>"
 运行时清单结构见 [assets/runtime_manifest_template.json](assets/runtime_manifest_template.json)。
 
 通过后交给 `08-items-weapons-code-integration`。
+
+## 物品专用高亮色板（2026-10-15）
+
+物品道具（含背包、消耗品、蓝图、子弹模块、配件及已制作近战）统一使用 `assets/art/shared/palette/item_high_visibility_palette_10x10_512.png`。高低模/优化源和运行材质均需更新；场景、固定设施及枪械主体仍使用原色板。保留PaletteUV和10×10格布局，材质使用下述四个物品独立角色，不共用场景材质。
+
+色板由 `tools/asset_pipeline/item_palette.py` 从原场景色板确定性生成：sRGB HSV的S、V各乘1.40再乘1.15（累计1.61）并封顶1，保留H与Alpha；灰阶保持中性。配方在 `art_source/shared/palette/item_palette_recipe_v001.json`，不能以新色板为输入再次增亮。GLB不内嵌图片，导入绑定脚本必须使用 `tools/asset_pipeline/item_shared_palette_post_import.gd`，底色和发光均绑定新色板，发光乘法、Closest采样。
+
+更新色板绑定时核对全部当前源与优化母版，重新打开验证几何/UV/变换不变；实测导入后底色、发光贴图路径和游戏地面/图标。同步源哈希、契约/清单、当前源索引、账本和无损基线；场景原色板哈希必须保持不变。不要把历史构建报告当作当前源哈希。
+
+### 独立四材质与图标补光（当前规则）
+
+物品道具使用独立的 `01_精工金属_道具骨架` / `02_细腻哑光_道具大面` / `03_清漆反光_道具点缀` / `04_柔和自发光_道具UI`，不得沿用场景材质名称或资源。正式四材质位于 `assets/art/items_weapons/shared/materials/itm_{metal|matte|clearcoat|emissive}.tres`，由物品导入脚本按角色引用。源、优化源、模板和清单保持一致。
+
+图标使用 `src/ui/ItemIconMaterialPreset.gd` 将四材质复制为图标surface override，用同色板本色发光补暗，能量下限0.45、乘法、白色因子；保留PBR和更强原发光。不新增第五个角色，不修改世界或场景材质。验证开/关补光时必须请求SubViewport新帧，并比较可见像素；读取原始四资源确认无污染。色板当前S/V总倍率1.61（上一轮1.40基础上再提高15%），配方仍从原始场景PNG生成，禁止重复叠加。

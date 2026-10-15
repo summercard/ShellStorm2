@@ -190,6 +190,11 @@ grep -E "verify_opening_script_runtime_(OK|FAIL)" _scratch/narrative/opening.log
 | `actor.pose` | `clip` / `phase` / `to_phase` / `duration` / `frozen` | 相位锁。趴↔起身 = `dead` 相位 1.0↔0.0 |
 | `actor.face` | `yaw_deg` / `relative` / `duration` | `relative: true` = 在接管前朝向上叠加（张望用） |
 | `scene.spawn` | `room_id` / `kind` / `count` / `spread` / **`point_room` + `point_offset`** / **`axis`** / **`stagger_m`** / `side` / `distance` / `forward_m` | 只有**和平区/空房**才是必要的；战斗房本来就会自己刷怪 |
+
+> **刷怪不止这一条路。** 全项目共 4 条入口 ＋ 3 条旁路，最终汇进唯一出口 `_spawn_enemy_batch()`；
+> `scene.spawn` 只是其中「剧情刷怪」这一条。总览见 `09-level-plan-authoring` §0.1，
+> 或 `docs/v0.1/design/触发器刷怪设计.md` §0。⚠️ 关键差异：`scene.spawn` 与刷怪盒走
+> **「至少 N 只」**口径（**可能超**），运行时遭遇事件（撤离防守用的那套）才是**精确 N**。
 | `scene.despawn` | `room_id` | 只清带 `narrative_spawned` 标记的怪，不动关卡原有的 |
 
 <span style="color:#791F1F">**要"镜头从上往下压"，必须给 `elevation_deg`；只改 `distance` 不叫俯冲。**</span>

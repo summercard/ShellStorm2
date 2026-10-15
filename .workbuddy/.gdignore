@@ -1,0 +1,10 @@
+# 让 Godot 跳过整个 .workbuddy/ 目录（2026-10-15 补上）。
+#
+# 本目录是 WorkBuddy 的项目数据（备份 / 记忆 / 临时件），**不是游戏资源**，
+# 但它在 `res://` 内。目前 Godot 只是"恰好"跳过了点目录，所以还能相安无事：
+# `backup/20261014_health_bar_visual/before_edits/` 下的 `Dungeon3D.gd`、`Enemy3D.gd`
+# 是带 `class_name` 的完整副本，一旦被扫描就会抢注全局类（详见 `_scratch/.gdignore`
+# 里记的那两次事故）。
+#
+# 这条规则把"恰好"变成"确定"：无论 Godot 版本怎么变，这里都不会再被当成游戏脚本。
+# 删除本文件即可撤销（备份数据本身不受任何影响）。

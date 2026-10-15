@@ -144,6 +144,41 @@ icon_offset_y = health_bar_height × 0.5 + 0.30 × icon_edge_m + icon_edge_m × 
 
 <span style="color:#EF6C00">**[Codex补充]** 房间不能在循环中自行随机敌人；否则重载、开门、进入房间可能得到不同列表并破坏清房条件。</span>
 
+### 4.1 运行时遭遇事件（Encounter Event，2026-10-15）
+
+除关卡作者写的刷怪盒之外，运行时还有一条**由调用方发起**的刷怪路径：
+`Dungeon3D.start_encounter_event(config)`（契约见
+[触发器刷怪设计 §10](design/触发器刷怪设计.md)）。本机制与怪物系统的边界如下：
+
+| 事项 | 谁负责 |
+|---|---|
+| 怪种合法性 | 怪物系统：普通怪必须过 `MonsterInjector.is_authorable_enemy_type()`；未知怪种与 `boss` 一律拒绝（`enemy_type_not_authorable` / `boss_requires_dedicated_flow`） |
+| 数值、AI、掉落 | 怪物系统：遭遇事件**不复制**数值，走 `_make_box_enemy()` → `generate_box_enemy()` |
+| 实例化与存活账 | 关卡系统：统一走 `Dungeon3D._spawn_enemy_batch()` |
+| 编成（刷几只、什么时候） | 遭遇事件自己的配置 |
+| 精英投放 | 精英名册 `EliteRosterService`：遭遇事件只提交预约号，不决定精英是谁 |
+
+**两个归属字段的分工（不许混用）：**
+
+```gdscript
+# 遭遇事件写的字段
+enemy_data["encounter_event_instance_id"]  # 这一只属于哪个事件实例
+# 精英名册写的字段（遭遇事件不得覆盖）
+enemy_data["encounter_instance_id"]        # 精英的预约号，用于结算与"同一时刻最多一只同名精英"
+```
+
+取归属时**先读事件字段、再退回精英字段**（`_encounter_owner_id()`）。
+这样事件完成判定只数自己派发的怪，不会把精英名册的预约号误当自己的。
+
+**撤怪时的精英结算**：`encounter_event_despawn()` 对带 `elite_id` 的敌人调
+`EliteRosterService.settle(elite_id, encounter_instance_id, "despawned", ...)`——
+撤掉的精英要**正常归还名册**，否则那只精英会一直占着「已在场」的坑位。
+撤怪**不伪造击杀、不发奖励**。
+
+**Boss 明确不在这条路径上**：`boss` 类型在配置校验阶段就被拒
+（`boss_requires_dedicated_flow`）。Boss 的阶段、激活流程、下行钥匙与隔离提交各有一套
+专属链（见 §6），不走普通遭遇事件 —— 免得在这里长出第二套 Boss 流程。
+
 ## 5. 12 只唯一精英
 
 ### 5.1 已冻结规则
@@ -197,14 +232,14 @@ SelectEligibleElite(seed, floor, history)
 - 每次成功逃脱只成长一级，上限12级；每级累计生命+8%、接触/技能伤害+4.5%。状态按等级和逃脱次数推进为 `Escaped / Equipped / Growing / RevengeHunter / RegionalBoss / QuasiBoss`。
 - `armed_rush` 的副枪追射由内容参数控制：1—4级每3次基础攻击触发，5—8级每2次，9—12级每次触发。该频率成长独立于通用攻击冷却和受光倍率。
 - 逃脱时读取玩家当前枪械快照，只保存稳定枪身内容ID、1—3发弹数预算和白名单弹丸特征，最多保留最近3件；不保存玩家 `weapon_instance_id`、Node、Resource或原始DPS。下次遭遇转译为副枪追射弹数与爆炸特征。
-- 悬赏按逃脱次数提升至1—5级，对应45/75/115/165/230魂。再次遭遇并击杀后，悬赏作为地面魂掉落，仍需玩家拾取，继续经过当前房间/世界魂倍率。
+- 悬赏按逃脱次数提升至1—5级，对应45/75/115/165/230金币。再次遭遇并击杀后，悬赏作为地面金币掉落，仍需玩家拾取，继续经过当前房间/世界金币倍率。
 - 玩家最后伤害来源保存 `elite_id + encounter_instance_id`；只有造成死亡的有效精英来源才获得击杀玩家与逃脱成长，普通怪、环境伤害和过期来源不会误记。
 
 ## 6. Boss 与下行解锁
 
 - <span style="color:#2E7D32">**[已实装]** 当前 Boss 具有独立 HUD、阶段变化、召唤/远程等行为和清房结果。</span>
 - <span style="color:#2E7D32">**[已实装]** Boss同时保留屏幕顶部总血条和头顶3D红色血条；头顶血条随当前/最大生命更新并保持面向镜头。</span>
-- <span style="color:#2E7D32">**[已实装｜2026-10-14血条表现]** 屏幕顶部总血条改为**两层叠放**：下层白色延迟条（`BossHealthBarDelayed`）追赶真实血量，上层红色真实条（`BossHealthBar`，`fill` 仍为醒目红 `0.96/0.13/0.17`）；两者同高同宽、不增加面板高度，追赶速度 `BOSS_HEALTH_BAR_DELAY_SPEED = 1.8`（与头顶条同一口径）。面板由设计 y `106..160` 上移到 `80..134`（canvas 84.8 → 64.0）以少挡 Boss 本体；新下界由关卡标题带（房间行 14..38、波次行 40..62）的实底 canvas ≈49.6 推导、保留约 14 px 净空，`verify_expedition_monitor_boss_flow` 的重叠阈值同步为 `>= 63.0`。</span>
+- <span style="color:#2E7D32">**[已实装｜2026-10-14血条表现]** 屏幕顶部总血条改为**两层叠放**：下层白色延迟条（`BossHealthBarDelayed`）追赶真实血量，上层红色真实条（`BossHealthBar`，`fill` 仍为醒目红 `0.96/0.13/0.17`）；两者同高同宽、不增加面板高度，追赶速度 `HUD_HEALTH_BAR_DELAY_SPEED = 1.8`（与头顶条同一口径；该常量 2026-10-15 由 `BOSS_HEALTH_BAR_DELAY_SPEED` 改名 —— 它现在同时喂 Boss 屏条与玩家主界面条，名字里不该再只有 Boss）。面板由设计 y `106..160` 上移到 `80..134`（canvas 84.8 → 64.0）以少挡 Boss 本体；新下界由关卡标题带（房间行 14..38、波次行 40..62）的实底 canvas ≈49.6 推导、保留约 14 px 净空，`verify_expedition_monitor_boss_flow` 的重叠阈值同步为 `>= 63.0`。</span>
 - <span style="color:#2E7D32">**[已实装｜2026-08-13]** `floor_number % 5 == 0` 由纯数据规划器判定；当前发布候选范围95F、90F、85F分别使用“深渊档案官 / 熔炉狱监 / 空洞合唱团”稳定内容ID、正式GLB、独立三阶段技能袋和独立竞技场GLB。场地随机家具关闭，改用8/6/5组与造型对应的掩体碰撞。</span>
 - <span style="color:#1565C0">**[用户设计]** Boss 死亡后必须产生专用下行钥匙，作为下一层路线的唯一权限来源。</span>
 - <span style="color:#EF6C00">**[Codex补充]** Boss 系统只发出一次 `boss_defeated` 与奖励清单；关卡系统根据事件签发钥匙并解锁门资格，Boss 脚本不直接寻找门节点。</span>

@@ -136,6 +136,15 @@ follow.position.z = BODY_BACK_Z + size.z × k / 2 + BACK_GAP
 | 真实渲染 | `outputs/backpack_worn_fix_20261014/`：`worn_{back,three_quarter,side,front}.png` 确认背包在躯干背面 |
 | 临时探针 | 已全部删除（量法已并入契约文件） |
 
+**常量推导依据（本地产物，`outputs/*` 不入版本库，复查时可重新生成）**：
+
+| 文件 | 支撑的常量 |
+|---|---|
+| `outputs/backpack_worn_fix_20261014/measure/backpack_socket_probe.txt` | 定位「胸前」的关键证据：各挂点与运行时模型的躯干空间 z |
+| `.../measure/head_envelope_worst.txt` | `BACKPACK_WORN_HEAD_BOTTOM_Y = 0.272`（出自 `landing@0.425`） |
+| `.../measure/body_envelope_motion.txt` | `BACKPACK_WORN_BODY_BACK_Z = 0.200`（躯干动作包络 ≡ 静态包络）＋ 三档比例 |
+| `.../measure/backpack_worn_sweep.txt` | 倍率上限 `k ≤ 0.44` 的竖向带宽推导 |
+
 ## 七、同轮发现、未处理（如实登记）
 
 `99955a3b`（2026-10-13，道具低模生产流程 v0.2）重生产背包资产后三角数升到 **`322 / 334 / 424`**，与 `ed7c4da0` 时期收紧的契约预算 `≤100` 冲突 ⇒ `verify_backpack_equipment_flow` 稳定报 **6 条红**（每档 2 次，来自装备段与背负段各量一次）。

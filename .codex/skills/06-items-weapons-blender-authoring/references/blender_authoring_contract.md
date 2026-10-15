@@ -57,7 +57,7 @@
 
 ## 4. 色盘与 PaletteUV
 
-- 唯一色盘：`assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png`。
+- 道具分支色盘：`assets/art/shared/palette/item_high_visibility_palette_10x10_512.png`；枪械主体色盘：`assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png`。
 - 图片数据块必须**外链**该文件（相对路径以 `//` 开头），不得内嵌、不得复制到资产目录。
 - 采样 `Closest`，512×512、10×10 纯色格，第 10 列为冷调灰阶。
 - 每个输出网格有且只有 `PaletteUV` 一层；不保留 `UVMap` / `UV贴图` 旧层。
@@ -141,7 +141,7 @@ blender --background --factory-startup --python scripts/blender/validate_items_w
 blender --background "<资产逻辑名>_source_v001.blend" --python \
     "~/.workbuddy/skills/blender-game-prop-standard/scripts/validate_game_prop.py" -- \
     --max-materials 4 \
-    --shared-palette "<项目>/assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+    --shared-palette "<项目>/assets/art/shared/palette/item_high_visibility_palette_10x10_512.png"
 ```
 
 ## 9. 门禁速查
@@ -156,3 +156,5 @@ blender --background "<资产逻辑名>_source_v001.blend" --python \
 | 动画 | `tier_1` 及以上无动画；`tier_0` 建了骨架 |
 | 坐标 | 根缩放不为 1；用缩放凑尺寸 |
 | 越界 | 碰撞体、玩法脚本、角色动作进入导出集合 |
+
+道具当前规则：独立四材质资源位于 `assets/art/items_weapons/shared/materials/`，禁止共用场景材质；物品专用色板累计S/V倍率1.61，图标按ItemIconMaterialPreset派生补光实例。
