@@ -1076,6 +1076,11 @@ func _physics_process(delta: float) -> void:
 	if ai_state == "dead":
 		velocity = Vector3.ZERO
 		return
+	if _melee_stagger_remaining > 0.0:
+		_melee_stagger_remaining = maxf(0.0, _melee_stagger_remaining - delta)
+		_steer_planar(_external_velocity + _last_hit_direction * _hit_knockback, 1.0)
+		_commit_motion(delta)
+		return
 	if _elite_escape_active:
 		_tick_elite_escape(delta)
 		return
@@ -1698,6 +1703,15 @@ func apply_pull(origin: Vector3, strength: float) -> void:
 
 
 ## 近战击退走敌人公开接口，不让玩家动作机直接写 AI 内部速度。
+var _melee_stagger_remaining := 0.0
+
+func apply_melee_stagger(duration: float) -> void:
+	if current_hp <= 0 or ai_state == "dead" or enemy_kind == "boss" or monitor_combat != null or _elite_escape_active:
+		return
+	_melee_stagger_remaining = maxf(_melee_stagger_remaining, clampf(duration, 0.0, 0.30))
+	transition_to("stagger")
+
+
 func apply_melee_knockback(direction: Vector3, strength: float, duration := 0.20) -> void:
 	if ai_state == "dead":
 		return

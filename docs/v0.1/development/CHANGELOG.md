@@ -1,3 +1,22 @@
+## 2026-10-16 修复：触发式遭遇封不住入口门（共享门归属 + 绑定）
+
+- 业主原话要点：「激活后进来的门还是开着的，还能往房间外走。检查以下」。
+- **症状**：踩点遭遇激活后 `_room_is_sealed()` 已为真、门交互候选也确实被掐掉，**但玩家能顺进来那条门巷一路走到房外**。数据与其它日志均无异常。
+- **复现**：新增探针 `tests/verification/probe_encounter_seal_door.gd`（`probe_*` 按仓内惯例免登记）。步骤：进 `room_03` → **先把入口边打开**（真实游玩里玩家就是从那儿进来的，不开边则后面的封门断言会空过＝假绿）→ 走到房心触发 → 让玩家**沿门巷**逐帧往房外走，量最远局部 x。结果：修复前 **−23.00**（房外 8 m）、封门后 `room_02` 东侧门扇 `is_open = true`；修复后 **−14.49**（房内）、`is_open = false`。⚠ 探针第一版沿 `z=0` 直走，撞的是实墙，把「墙挡住了」误读成「封门有效」——走位必须走**门洞那条线**。
+- **根因（两层）**：
+  - 直接层：`set_room_seal()` 遍历的是**本房** `door_targets`，而共享边的门扇**只由一端建出并持有**（`door_endpoint_owners`）。`room_03` 入口（西墙→room_02）的门扇挂在 **`room_02` 名下** ⇒ 本房 `get_door_node("west")` 返回 `null` ⇒ 循环体什么都不做、也不报错 ⇒ **静默空转**。
+  - 隐藏层：`TowerDescent3D._bind_shared_edge_doors()` 取门扇时**只认端口**（`get_door_node_by_port`），拿到 `null` 就 `continue`；而远征01 的门扇走 `_build_door()` 的**按方向**路径、`_door_nodes_by_port` 始终为空 ⇒ **共享门在本关从未被绑过**（那段绑定是死代码）。
+- **修法（两处，互为兜底）**：
+  - `Dungeon3D.set_room_seal()`：本房取不到门扇时**按"这扇门通向哪一间"去对端取同一扇**（新增 `DungeonRoom3D.get_door_node_towards(target_room_id)`：先在本房 `_door_nodes` 找 `target_room_id` 匹配的，再退到 `door_targets` 里该目标对应的方向），拿到后调 `set_open(false)`。**不依赖绑定是否成功**——绑定在装配期、封门在运行时，只修绑定等于把封门挂在一个隐式前置上。
+  - `TowerDescent3D._bind_shared_edge_doors()`：按端口取不到时**回落按方向取**（一墙多门时端口优先，回退不会覆盖它）。不用「本房方向」去对端查——共享门两端方位是**镜像**的（本房 `west` ↔ 对端 `east`），一墙多门还会张冠李戴。
+- **顺带修好的第二个后果（同一根因）**：绑定没发生时**每间房都缺对端那一扇门**（实测远征01 逐房 `live = 1 / plan = 2`）⇒ `get_nearest_door()`（只遍历本房 `_door_nodes`）在本房一侧找不到它 ⇒ 那扇门**在本房是单向门**。绑定生效后 **12/13 间房**达到「计划门数 == 运行时门数」。
+- **一处实现细节（已在代码注释里写明，防后来者误判）**：绑进来的门其 `RoomDoor3D.direction` 记的仍是**建门方**方位标号，与本房登记键**不同名**。不影响功能：`direction` 只作诊断，**全仓无任何生产代码读它**（已全量 grep）；交互目标走本房 `door_targets[登记键]`，因此对端拿到的目标房是**正确**的。
+- **连带发现（既有缺陷，本轮未改）**：boss 的房间数据里有**空目标端口** `{"port_id":"P3","target":"","position_m":[-40,-22.5],"outward":[-1,0]}`，照样建出一扇**通向无处的西侧门**（`door_targets` 与计划都没有它）。修复前它「通过」检查纯属侥幸——boss 少了南门、多了西门，**计数正好相等**。需内容裁定：「去掉该端口」还是「补它的目标」。
+- **测试侧改动**：`verify_door_passability` 测试 1 的判据由「键 == `door.direction`」改为「目标房非空 **且**（方向同名 **或** 确为绑入的共享门，以绑定时写的 `shared_edge_key` 元数据为准）」。原判据断言的是**实现细节**，只因绑定一直是死代码才看似成立。改后测试 1 由 `6/8` 变 **`8/8`**（门的登记总数由 6 变 8，纯新增无覆盖）。
+- **验收（本轮实跑）**：`verify_encounter_trigger_room_flow` **91 项**、`EXIT=0`；`verify_door_function_check`、`verify_room_graph_persistence_services`、`verify_tower_descent_flow`、`verify_expedition_wave_chain`、`verify_dungeon_wave_intermission`、`verify_death_during_extraction_flow`、`verify_encounter_event_flow`、`verify_expedition_extraction_carry_return` 均 `EXIT=0`。对照实验：撤掉绑定回落 ⇒ 4 条封门断言变红（含「封门只覆盖 1/2 扇门」「解封后仍拿不到入口门扇 ⇒ 玩家从房里走不回去」）。
+- **未通过且不属本轮（均已核为既有）**：`verify_expedition_room_static_scenes` 由修复前 18 项红降为 9 项（余项是房型件 metadata / 实例漂移 + 上述 boss 空端口）；`verify_door_passability` 测试 9「找不到 EVENT 测试房」——该测试加载 `battle_level01/floor_98`，而该层当前 16 间房**没有 EVENT 房** ⇒ 过期测试，非回归；`verify_block00_floor98_assembly` 的 `floor_01_entry 刷怪登记=3`；`verify_expedition01_spawn_ramp` 的 `room_02` 盒数；`verify_expedition_level01_flow` 的掉落表 16 vs 13；`verify_tower_extraction_return_flow` 的保险格一族。
+- **文档同步**：`design/触发器刷怪设计.md` 新增 **§3.3.6 封门到底关的是「谁的」那扇门**（含两层根因、两处修法、兼容性说明、三条防假绿写法），并把 §3.3.1 键表的 `seal_room` 引用改指 §3.3.6；开发记录见 `2026-10-16_encounter_seal_shared_door_fix.md`。
+
 ## 2026-10-16 踩点遭遇编成总量缩到约 60%（难度下调）
 
 - 业主原话：「太难打了，总量帮我减少到 60%」。范围按上下文取**刚做的五个踩点触发式遭遇房**（`room_03`/`room_04`/`room_06`/`room_09`/`room_10`）——它们是「清完才放行 + 封门 + 怪主动围上来」三重叠加，压力最大；仍按盒出波的房（`room_01`/`room_02`/`room_05`/`room_07`/`room_08`/`boss`）本轮**未动**。
@@ -98,6 +117,19 @@
 - **验收（本轮实跑）**：新增 `verify_encounter_trigger_room_flow`（32 项断言，`ENCOUNTER_TRIGGER_ROOM_OK samples=32`，`EXIT=0`）盯七条行为 —— 进房不刷怪不判清；角落不触发、房心才触发；落门后延迟出第一波；第一波未清完第二波不开；波间不判清不解封；到点停刷且剩余阶段作废；到点开灯成功；清完肃清并解封。回归 `verify_encounter_event_flow`、`verify_expedition_wave_chain`、`verify_dungeon_wave_intermission` 均 `EXIT=0`。`verify_expedition01_spawn_ramp` 已同步（room_03 移出逐盒曲线，另立 `TRIGGER_EXPECTED_WAVES` 盯编成）。
 - **未通过且不属本轮**：`verify_expedition01_spawn_ramp` 剩 room_02 三条（数据已被改为 2 盒、门禁仍按 5 盒口径）；`verify_expedition_level01_flow` 的「怪物掉落表应有 16 行，实际 13」；`verify_level_plan_design_source` 的 `room_overlap:room_10:boss` / `boss:extraction` 两条。三者在本轮之前就红，未擅自代修。
 - **文档同步**：`design/触发器刷怪设计.md` 新增 §3.3.1（第二种调用机制：踩点触发式遭遇，含键表与三条必知行为）＋ §0 总览补记 ＋ §10 补 `stage_advance` 与 `clear` 门控说明、`light` 结果动作由「未实装」改为「已接通」；`design/远征关卡01设计.md` 新增 `room_03` 专节（业主口径、参数表、逐波编成表）；`data/runtime_design_data_manifest.json` 随投影重生成。
+
+## 2026-10-16 记录：强化怪红色发光眼 + `Head` 骨绑点
+
+- 起因：业主「强化怪，帮我做一个红色发光特效，放在眼睛的位置，专门给强化怪用的，眼睛位置需要有一个绑点，直接在 godot 引擎在对应骨骼的位置加上去。你需要自己去找到这个点，然后加完后验证」。
+- **实现**：新增 `src/enemy3d/StrongVariantEyeGlow3D.gd`（一对自发光眼球 + 一盏弱溢光）；挂到 `Head` 骨的 `BoneAttachment3D`（与保安僵尸背的枪同一套机制）。眼位由 `MonsterVariants.EYE_SOCKETS` 配方驱动、**按模型几何实时算**，不写死坐标：小僵尸 0.535/0.160、保安僵尸 0.630/0.155、胖子 0.880/0.195（比例/半宽）。
+- **「找眼睛」这一步的硬事实**（全实测）：三个模型**没有 eye 骨**、**单 surface 单材质 `emission=off`**（几何/材质/贴图都没有可自动识别的眼睛特征）；小僵尸与保安僵尸的 `Head` 骨 pose 在**胸口** y≈0.85 而网格的头在 y≈1.5 ⇒ 骨空间与网格**不同源**（bind pose y = −0.890）；胖子的手臂与头同高；保安僵尸身上有把**无蒙皮的枪**。
+- **否决了五条自动定位路线**（骨骼直读 / 顶点最前簇 / 像素亮度亮斑 / 贴图 UV 眼白 / 蒙皮反解），最终用**带烧入刻度线的实拍标定图 + 逐档目视比对**定档，再落成可复现配方。标定工具保留 4 个（眼位标定、保安僵尸单独标定、挂点语义实测、视觉证据），其余一次性探针已清理。
+- **四个实现坑**：① `BoneAttachment3D` 的 global 含**骨旋转 basis**，手写骨位姿求逆会让眼睛飞到胸口/下巴/脚底（正解：对引擎给的挂点矩阵求逆）；② GLB **本帧刚实例化**，同帧读数未解析（得分两步、下一帧算）；③ 保安僵尸的**无蒙皮枪网格**会拉低包围盒下界（只取有蒙皮的角色本体）；④ `BoneAttachment3D` 在**自己的通知里**更新变换，同帧读数得假故障（读数前等一帧）。
+- **负向自测抓到一条假绿**：最初只断言「配方 ↔ 生效值自洽」，把 `y_ratio` 0.535 改 0.30 后两边仍自洽、**测试照样绿**而眼睛已掉到肚子上 ⇒ 补了文档侧硬编码的 `DOC_EYE_SOCKETS` 逐值钉子。
+- **验收**：新增 `tests/verification/verify_strong_variant_eye_glow.gd/.tscn`（已登记 `core_scenes`），实测 **`EYE_GLOW_OK`（samples=35，engine ERROR 0）**。负向对照：`y_ratio` 改坏 → 红 1；绑点改挂 `Root` 骨 → 红 3；让普通怪放行 → 红 3；半径减半 → 红 1；还原后 md5 一致且复绿。
+- **视觉证据**：`outputs/strong_variant_eye_glow_evidence.png`（三组「原怪 ｜ 强化怪」头部对照）、`outputs/eye_confirm.png`、`outputs/ranged_eye_scan.png`。
+- **如实报告的局限**：标定精度约 ±0.03 m（低模、无眼骨）；三个模型的动画**几乎不转头**（最大头位移 1.3~3.4 mm），故跟随测试断言「绑点与骨完全同步」而非位移量级；溢光刻意压低（半径 0.85 / 能量 0.22）—— 第一版 0.85 能量把整只怪染成红灯笼，那不是眼睛发光。
+- **落位**：`docs/v0.1/design/怪物设计.md`（新增「红色发光眼」节 + 真源表）、`docs/v0.1/06_技术施工_怪物精英与Boss.md` §3.4（新增）、`docs/v0.1/development/2026-10-16_strong_variant_monsters.md`（本文详版追加第二轮）。
 
 ## 2026-10-16 记录：普通怪变种（-强化怪）—— 小僵尸 / 胖子僵尸 / 保安僵尸各一只
 

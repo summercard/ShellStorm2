@@ -3,13 +3,19 @@ extends Area3D
 ## 靶场刷怪台：玩家踏入触发区即刷出一波怪；清场后离开再进入可再次触发，
 ## 也可走近按 E 手动补刷。
 ##
-## 生成的敌人走 MonsterInjector 的触发盒口径（按点名怪种生成），
+## 生成的敌人走 `MonsterInjector.generate_box_enemy()`（按点名怪种生成），
 ## 数值与远征关卡同源，因此靶场里测到的血量/伤害与实战一致。
+##
+## 「焦土 / 试炼 / 诅咒」这类世界命运会通过 `world_game_mode` 给出**下一波倍率**，
+## 本台在生成时消费它：直接缩放生成数据里的 `hp / max_hp / damage`，
+## 走的正是关卡级缩放那条同一条比例还原路径，而不是事后改数值。
 ##
 ## 本节点不写任何存档：敌人只活在当前场景树里，离开靶场即随场景释放。
 
 signal wave_spawned(pad: TrainingSpawnPad3D, count: int)
 signal wave_cleared(pad: TrainingSpawnPad3D)
+## 转发本台敌人的死亡事件：靶场据此把测试用物资放进本场背包。
+signal enemy_killed(enemy: Enemy3D, loot: Dictionary)
 
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
 ## 可点名的普通怪种（与 MonsterInjector.is_authorable_enemy_type 的白名单一致）。
@@ -22,6 +28,8 @@ const TRIGGER_RADIUS_M := 8.0
 @export var spawn_count := 3
 ## 生成后的敌人挂到哪个节点下；由 TrainingRange3D 注入，为空时退化为本节点的父节点。
 var enemy_container: Node3D = null
+## 世界命运宿主；为空时一律按无倍率生成。
+var world_game_mode: TrainingWorldGameMode3D = null
 
 var _enemies: Array[Enemy3D] = []
 var _injector: MonsterInjector = null
@@ -47,20 +55,36 @@ func _ready() -> void:
 
 ## 刷出一整波。返回实际生成数量；上一波若还活着会先清掉，保证不会无限累积。
 func spawn_wave() -> int:
+	return spawn_wave_with(spawn_count, enemy_type)
+
+
+## 指定数量与怪种刷一波。世界命运的「增援」走这里，它的数量与台子默认值无关。
+func spawn_wave_with(count: int, type_id: String) -> int:
 	clear_wave()
 	var host := enemy_container if enemy_container != null else get_parent()
 	if host == null:
 		return 0
+	var resolved_type := type_id if ENEMY_OPTIONS.has(type_id) else "melee_chaser"
+	var multipliers := world_game_mode.consume_wave_multipliers() if world_game_mode != null else {}
+	var hp_multiplier := float(multipliers.get("hp_multiplier", 1.0))
+	var damage_multiplier := float(multipliers.get("damage_multiplier", 1.0))
+	var total := maxi(1, count)
 	var spawned := 0
-	for index in range(spawn_count):
-		var data := _injector.generate_box_enemy(enemy_type, 1, 0)
+	for index in range(total):
+		var data := _injector.generate_box_enemy(resolved_type, 1, 0)
 		if data.is_empty():
 			break
+		# 世界命运倍率走关卡级缩放的同一路径：缩放源数值，交给 Enemy3D 的比例还原来处理。
+		if not is_equal_approx(hp_multiplier, 1.0):
+			data["hp"] = int(round(float(data.get("hp", 1)) * hp_multiplier))
+			data["max_hp"] = int(round(float(data.get("max_hp", data.get("hp", 1))) * hp_multiplier))
+		if not is_equal_approx(damage_multiplier, 1.0):
+			data["damage"] = int(round(float(data.get("damage", 0)) * damage_multiplier))
 		var enemy := ENEMY_SCENE.instantiate() as Enemy3D
 		if enemy == null:
 			break
 		host.add_child(enemy)
-		var angle := TAU * float(index) / float(maxi(1, spawn_count))
+		var angle := TAU * float(index) / float(total)
 		enemy.global_position = global_position + Vector3(cos(angle), 0.0, sin(angle)) * SPAWN_RING_RADIUS_M
 		enemy.room_id = "training_range"
 		enemy.configure_from_enemy_data(data)
@@ -85,7 +109,9 @@ func clear_wave() -> void:
 func alive_count() -> int:
 	var alive := 0
 	for enemy in _enemies:
-		if is_instance_valid(enemy) and not enemy.is_dead():
+		# Enemy3D 没有 is_dead()：死亡态要读 ai_state。
+		# 早期版本这里调了 is_dead()，会在每次清点存活数时抛"方法不存在"。
+		if is_instance_valid(enemy) and enemy.ai_state != "dead":
 			alive += 1
 	return alive
 
@@ -144,7 +170,8 @@ func _on_body_exited(body: Node3D) -> void:
 		_prompt.visible = false
 
 
-func _on_enemy_killed(_enemy: Enemy3D, _loot: Dictionary) -> void:
+func _on_enemy_killed(enemy: Enemy3D, loot: Dictionary) -> void:
+	enemy_killed.emit(enemy, loot)
 	if alive_count() == 0:
 		wave_cleared.emit(self)
 

@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
-  "version": "v039",
-  "status": "active",
+  "version": "v040",
+  "status": "exported_pending_godot_validation",
   "classification": "version_increment",
   "skeleton_id": "SKEL-BUNNY01-004",
   "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
@@ -15,167 +15,26 @@
       "bytes": 10282728
     },
     {
-      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v039.blend",
-      "sha256": "6062e0d92bdf4f79eb6981110c762cf5d9c4415b5dcf426d84254c3cc35e76ce",
-      "bytes": 487698271
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v040.blend",
+      "sha256": "e89c153996853facb57fc140371bdfeb38930dcec24c599fec7233c1aa09d194",
+      "bytes": 524046883
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.json",
-      "sha256": "cb8ba5522f96e753a7e6cc93ee231c3354bd0e9f339a9933516483378dc08ed5",
-      "bytes": 13891665
+      "sha256": "b75c236a1f3636f8349e20e562e6cf4041cbfd24f12f95128848749f23545790",
+      "bytes": 16428145
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.glb",
-      "sha256": "b6be0a726966e69ef03df13e1bc6dc802fe1dabff129cf254082b33b174538a0",
-      "bytes": 2426500
-    },
-    {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
-      "sha256": "5db5eb5a1e03d9e0f3fee9dc595509f86b0e15d2c7e5664d2241521b5b5104cb",
-      "bytes": 5849
+      "sha256": "a49fce6c8014c1d22c9da3fb89fd49014f5e3a89f02ed56ad52f03c26d49008b",
+      "bytes": 667276
     }
   ],
   "animation_adapter": "anatomical_to_rigid_node_map",
   "consumer": "src/player3d/CharacterMotionLibrary3D.gd",
   "state_owner": "src/player3d/Player3D.gd",
   "prefab": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
-  "verification": {
-    "import": {
-      "scene": "import",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 82.78386998176575,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\import.log"
-    },
-    "verify_player3d_directional_motion_visual": {
-      "scene": "verify_player3d_directional_motion",
-      "visual": true,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 42.57211756706238,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_directional_motion_visual.log"
-    },
-    "verify_player3d_firing_motion": {
-      "scene": "verify_player3d_firing_motion",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 8.145748376846313,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_firing_motion.log"
-    },
-    "verify_player3d_firing_motion_visual": {
-      "scene": "verify_player3d_firing_motion",
-      "visual": true,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 21.633001804351807,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_firing_motion_visual.log"
-    },
-    "verify_player3d_reload_motion": {
-      "scene": "verify_player3d_reload_motion",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 9.681132078170776,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_reload_motion.log"
-    },
-    "verify_player3d_reload_motion_visual": {
-      "scene": "verify_player3d_reload_motion",
-      "visual": true,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 19.18921184539795,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_reload_motion_visual.log"
-    },
-    "verify_player3d_weapon_switch": {
-      "scene": "verify_player3d_weapon_switch",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 9.245054244995117,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_weapon_switch.log"
-    },
-    "verify_player3d_animation_flow": {
-      "scene": "verify_player3d_animation_flow",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 5.501817941665649,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_animation_flow.log"
-    },
-    "verify_player3d_weapon_pose_collision_flow": {
-      "scene": "verify_player3d_weapon_pose_collision_flow",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 5.146177768707275,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_weapon_pose_collision_flow.log"
-    },
-    "verify_player3d_diy_flow": {
-      "scene": "verify_player3d_diy_flow",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 5.125184535980225,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_diy_flow.log"
-    },
-    "verify_player3d_avatar_bounds": {
-      "scene": "verify_player3d_avatar_bounds",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 5.563208818435669,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_avatar_bounds.log"
-    },
-    "verify_player3d_head_accessory_flow": {
-      "scene": "verify_player3d_head_accessory_flow",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 5.410059690475464,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_head_accessory_flow.log"
-    },
-    "verify_player3d_lower_body_socket_flow": {
-      "scene": "verify_player3d_lower_body_socket_flow",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 4.849520206451416,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_lower_body_socket_flow.log"
-    },
-    "verify_player3d_state_gallery_flow": {
-      "scene": "verify_player3d_state_gallery_flow",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 5.4276533126831055,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_state_gallery_flow.log"
-    },
-    "verify_player3d_idle_animation_flow": {
-      "scene": "verify_player3d_idle_animation_flow",
-      "visual": false,
-      "exit_code": 0,
-      "unexpected_errors": [],
-      "seconds": 5.862481355667114,
-      "user_data_isolated_before_autoload": true,
-      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\after\\verify_player3d_idle_animation_flow.log"
-    }
-  },
+  "verification": "verify_player3d_melee_motion",
   "collision_owner": "scenes/Player3D.tscn",
   "authoring_height_m": 1.5,
   "blender_forward": "+Y",
@@ -727,22 +586,200 @@
       "loop": false,
       "frames": 109,
       "tracks": 11
+    },
+    "melee_axe_1_active": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_1_recovery": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_1_windup": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_2_active": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_2_recovery": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_2_windup": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_3_active": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_3_recovery": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_3_windup": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_idle": {
+      "duration": 1.6,
+      "loop": true,
+      "frames": 61,
+      "tracks": 11
+    },
+    "melee_bat_1_active": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_1_recovery": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_1_windup": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_2_active": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_2_recovery": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_2_windup": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_3_active": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_3_recovery": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_3_windup": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_idle": {
+      "duration": 1.6,
+      "loop": true,
+      "frames": 61,
+      "tracks": 11
+    },
+    "melee_blade_1_active": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_1_recovery": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_1_windup": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_2_active": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_2_recovery": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_2_windup": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_3_active": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_3_recovery": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_3_windup": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_idle": {
+      "duration": 1.6,
+      "loop": true,
+      "frames": 61,
+      "tracks": 11
     }
   },
-  "new_clip_count": 78,
+  "new_clip_count": 30,
   "retained_legacy_clip_count": 14,
-  "glb_clip_count": 78,
+  "glb_clip_count": 30,
   "missing_actions": [
-    "family_charge",
-    "heavy_melee"
+    "family_charge"
   ],
-  "rollback": "ShellStorm2-backup/2026-10-15_player_motion_v039/before_edits",
-  "git_baseline": "01c0c674fdb4a58f2642f01e75e828879b551e84",
-  "modified_directional_clips": 56,
-  "modified_idle_clips": 7,
-  "retained_clips": 28,
+  "rollback": "ShellStorm2-backup/2026-10-16_melee_v040/before_edits",
+  "git_baseline": "5a07681828a38372bb0b06125742c5e2515420d0",
+  "added_melee_clips": 30,
+  "retained_clips": 91,
   "retained_clip_provenance": {
-    "version": "v038",
+    "version": "v039",
     "clips": [
       "armed_idle",
       "armed_moving",
@@ -752,6 +789,7 @@
       "dead",
       "falling",
       "hurt",
+      "idle",
       "landing",
       "locked",
       "moving",
@@ -760,6 +798,68 @@
       "longgun_reload",
       "machinegun_reload",
       "sidearm_reload",
+      "sidearm_idle",
+      "longgun_idle",
+      "machinegun_idle",
+      "sidearm_walking_strafe_left",
+      "sidearm_walking_strafe_right",
+      "sidearm_walking_backward",
+      "sidearm_moving_strafe_left",
+      "sidearm_moving_strafe_right",
+      "sidearm_moving_backward",
+      "longgun_walking_strafe_left",
+      "longgun_walking_strafe_right",
+      "longgun_walking_backward",
+      "longgun_moving_strafe_left",
+      "longgun_moving_strafe_right",
+      "longgun_moving_backward",
+      "machinegun_walking_strafe_left",
+      "machinegun_walking_strafe_right",
+      "machinegun_walking_backward",
+      "machinegun_moving_strafe_left",
+      "machinegun_moving_strafe_right",
+      "machinegun_moving_backward",
+      "sidearm_walking_forward",
+      "sidearm_moving_forward",
+      "longgun_walking_forward",
+      "longgun_moving_forward",
+      "machinegun_walking_forward",
+      "machinegun_moving_forward",
+      "unarmed_walking_strafe_left",
+      "unarmed_walking_strafe_right",
+      "unarmed_walking_backward",
+      "unarmed_walking_forward",
+      "unarmed_moving_strafe_left",
+      "unarmed_moving_strafe_right",
+      "unarmed_moving_backward",
+      "unarmed_moving_forward",
+      "sidearm_fire_idle",
+      "longgun_fire_idle",
+      "machinegun_fire_idle",
+      "sidearm_fire_walking_strafe_left",
+      "sidearm_fire_walking_strafe_right",
+      "sidearm_fire_walking_backward",
+      "sidearm_fire_moving_strafe_left",
+      "sidearm_fire_moving_strafe_right",
+      "sidearm_fire_moving_backward",
+      "longgun_fire_walking_strafe_left",
+      "longgun_fire_walking_strafe_right",
+      "longgun_fire_walking_backward",
+      "longgun_fire_moving_strafe_left",
+      "longgun_fire_moving_strafe_right",
+      "longgun_fire_moving_backward",
+      "machinegun_fire_walking_strafe_left",
+      "machinegun_fire_walking_strafe_right",
+      "machinegun_fire_walking_backward",
+      "machinegun_fire_moving_strafe_left",
+      "machinegun_fire_moving_strafe_right",
+      "machinegun_fire_moving_backward",
+      "sidearm_fire_walking_forward",
+      "sidearm_fire_moving_forward",
+      "longgun_fire_walking_forward",
+      "longgun_fire_moving_forward",
+      "machinegun_fire_walking_forward",
+      "machinegun_fire_moving_forward",
       "sidearm_stow_slot0",
       "sidearm_draw_slot0",
       "sidearm_stow_slot1",
@@ -773,40 +873,6 @@
       "machinegun_stow_slot1",
       "machinegun_draw_slot1"
     ],
-    "sha256": "6d043257da0cff41480c5ff1f4bd10216ad84d0a0b68c6b0f45a5dc836dddd30",
-    "rollback_library": "I:\\工作项目\\shellstrom2\\ShellStorm2-backup\\2026-10-15_player_motion_v039\\before_edits\\assets\\art\\characters\\player\\chr_player_capsule01_3d\\variants\\bunny01\\components\\chr_bunny01_motion\\anim_bunny01_library.json"
-  },
-  "duplicate_gate": {
-    "classification": "version_increment",
-    "passed": true,
-    "report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\asset_guard\\CHR-PLY-CAPSULE01-3D-BUNNY01_bunny01.json",
-    "same_asset_id_count": 16,
-    "identical_registered_file_count": 10
-  },
-  "validation_status": "targeted_pass_with_declared_limits",
-  "validated_at": "2026-10-15",
-  "stage_history": [
-    "authored",
-    "exported_pending_godot_validation",
-    "validated",
-    "active"
-  ],
-  "source_validation": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\source_validation.json",
-  "export_comparison": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\export_comparison.json",
-  "preview": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-15_player_motion_v039\\preview\\jog.gif",
-  "limits": [
-    "No exact world foot lock or 2D direction blend",
-    "Other longguns retain their existing support socket differences",
-    "Family charge and heavy melee remain separate unfinished actions"
-  ],
-  "expected_errors": [],
-  "unexpected_errors": [],
-  "not_executed": [
-    "Full project suite",
-    "Mobile device performance",
-    "Full expedition save/resume"
-  ],
-  "runtime_default_scale": 0.8,
-  "runtime_default_height_m": 1.2,
-  "weapon_grip_contract": "authored palm offsets, no runtime IK"
+    "sha256": "cb8ba5522f96e753a7e6cc93ee231c3354bd0e9f339a9933516483378dc08ed5"
+  }
 }

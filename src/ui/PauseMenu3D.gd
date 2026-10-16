@@ -502,10 +502,31 @@ func _get_game_root() -> Node:
 	return hud.get_parent() if hud != null else null
 
 
-## 训练靶场入口只在基地开放。靶场内部复用同一个暂停面板，若不加这条判据，
-## 玩家在靶场里按 Esc 会看到"进入训练靶场"的按钮 —— 靶场进靶场，套娃。
+## 训练靶场入口只在基地开放。
+##
+## 「在基地」的权威口径是**场景根自己的 `is_player_inside_facility()`**，
+## 不能按类名判断：玩家的基地是 `TowerDescent3D`（主场景，99F 基地营地，
+## 基地安全区以建筑壳体为准），而 `BaseWorld3D` 只是历史「兼容基地」——
+## 照类名判会让按钮在真正的基地里永远显示"仅基地可用"。
+##
+## 靶场内部复用同一个暂停面板，因此这条判据同时负责防套娃：
+## 在靶场里按 Esc 不该看到"进入训练靶场"。
 func is_training_range_available() -> bool:
-	return _get_game_root() is BaseWorld3D
+	var root := _get_game_root()
+	if root == null:
+		return false
+	# 兼容基地（历史场景）整场都是基地；保留它可用，避免回退路径被一起关掉。
+	if root is BaseWorld3D:
+		return true
+	if root.has_method("is_player_inside_facility"):
+		return bool(root.call("is_player_inside_facility"))
+	return false
+
+
+## 当前场景文件路径；用于把来源场景交给靶场，退出时原路返回。
+func _current_scene_path() -> String:
+	var scene := get_tree().current_scene
+	return scene.scene_file_path if scene != null else ""
 
 
 func _refresh_training_range_action() -> void:
@@ -517,7 +538,7 @@ func _refresh_training_range_action() -> void:
 	training_range_hint.text = (
 		"靶场内可自由取用全部枪械、刷怪实战与装配任意命运卡；离开后装备与物品原样还原"
 		if available
-		else "当前不在基地，无法进入训练靶场"
+		else "仅 99F 基地内可用；进入塔楼行动或战局后不可用"
 	)
 	training_range_hint.modulate = Color(0.44, 0.78, 0.74) if available else Color(0.70, 0.58, 0.48)
 
@@ -531,6 +552,9 @@ func _request_training_range() -> void:
 		training_range_hint.text = "训练靶场场景缺失。"
 		training_range_hint.modulate = Color(1.0, 0.48, 0.34)
 		return
+	# 登记来源场景：靶场退出时原路返回。绝不能靠 BaseWorld3D 兜底 ——
+	# 那是历史「兼容基地」，玩家不是从那出发的。
+	TrainingRange3D.set_origin_scene_path(_current_scene_path())
 	# 必须先解除暂停：get_tree().paused 是全局的，会原样带进新场景，
 	# 靶场的 _ready 与物理帧就都不跑了 —— 表现为"点进去直接卡死"。
 	set_paused(false)

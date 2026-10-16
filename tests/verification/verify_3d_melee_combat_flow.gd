@@ -125,8 +125,11 @@ func _verify_three_step_state_machine(player: Player3D, failures: Array[String])
 	var melee_machine := player.get_state_machine_snapshot().get("melee_action_machine", {}) as Dictionary
 	if int((melee_machine.get("state_machine", {}).get("states", []) as Array).size()) != 4:
 		failures.append("Melee action machine does not expose exactly four phases")
-	if int((player.get_state_machine_snapshot().get("states", []) as Array).size()) != 8:
-		failures.append("Adding melee changed the eight-state locomotion machine")
+	var actual_states: Array = player.get_state_machine_snapshot().get("states", [])
+	var expected_states := ["idle","moving","dashing","hurt","locked","falling","landing","seated","climbing","dead"]
+	actual_states.sort();expected_states.sort()
+	if actual_states != expected_states:
+		failures.append("Melee changed the current locomotion state contract")
 	if enemy.current_hp >= initial_hp:
 		failures.append("Melee active windows did not damage the target")
 	if (enemy.get("_external_velocity") as Vector3).length() <= 0.01:
@@ -178,8 +181,14 @@ func _verify_large_visual_contract(player: Player3D, failures: Array[String]) ->
 		var bounds := snapshot.get("visual_bounds_hint", Vector3.ZERO) as Vector3
 		if bounds.z < 2.30 or bounds.x < 0.80:
 			failures.append("Melee weapon %s is not authored as a visibly large model" % snapshot.get("gun_id", ""))
-		if player.weapon.find_children("*", "MeshInstance3D", true, false).size() < 5:
-			failures.append("Melee weapon %s does not build a readable modular 3D model" % snapshot.get("gun_id", ""))
+		var slug := "greatblade" if str(snapshot.get("gun_id", "")) == "bp_greatblade" else "waraxe"
+		var expected_scene := "res://assets/art/items_weapons/weapons/melee_%s/runtime/wpn_melee_%s_ground_root_top3d.tscn" % [slug,slug]
+		var found_scene := false
+		for node in player.weapon.find_children("*", "Node3D", true, false):
+			if node.scene_file_path == expected_scene:
+				found_scene = not node.find_children("*", "MeshInstance3D", true, false).is_empty()
+		if not found_scene:
+			failures.append("Melee weapon is not the registered optimized PackedScene: " + slug)
 		if player.weapon.find_children("*", "CollisionObject3D", true, false).size() != 0:
 			failures.append("Large melee visual adds gameplay collision to the player")
 	player.switch_weapon_slot(0)

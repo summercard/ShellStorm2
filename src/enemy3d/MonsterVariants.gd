@@ -32,6 +32,76 @@ const VARIANT_SUFFIX := "_strong"
 const DISPLAY_SUFFIX := "-强化怪"
 
 
+# ── 眼睛绑点配方（2026-10-16）────────────────────────────────────────────────
+#
+# 强化怪要长一对**红色发光眼**，挂在 `Head` 骨上。但三个模型的骨骼有下列事实
+# （全部由 `tools/probe_eye_*` 系列探针实测得出，不是推测）：
+#
+#   ① **没有 eye 骨**，只有 `Head`；每个模型是**单 surface、单材质、emission=off**，
+#      所以「眼睛」在几何 / 材质 / 贴图上都没有可自动识别的特征；
+#   ② 小僵尸与保安僵尸的 `Head` 骨 **pose 位于 y≈0.85（胸口）**，而网格的头在 y≈1.5
+#      —— 骨空间与网格空间**不同源**（bind pose 的 y 是 −0.890）；胖子僵尸同源（y≈2.65）；
+#   ③ 因此眼位必须用「模型总高比例 + 眼距半宽 + 相对头部最前点的前移」三件来描述，
+#      再由 `EnemyAvatar3D` 在**运行时按模型自身顶点算**出骨空间局部偏移。
+#
+# **为什么存配方而不是存绝对坐标**：换成绝对坐标后，模型一旦重导 / 换版，眼睛会漂到脸外，
+# 而且没人知道该改成多少。存配方则随模型自动重算 —— 这是本项目「单一真源」的一贯口径。
+#
+# 数值来源：`tools/probe_eye_confirm.tscn` / `probe_eye_xruler.tscn` 的实拍标定图
+# （刻度线直接烧进像素，逐档目视比对）。**精度约 ±0.03 m**：这三只怪是低模
+# （1545~2993 顶点），眼球在网格上只有几个面片，无法做到像素级对齐。
+# 对「眼睛处的一团红光」这个表现目标，该精度足够；若要更准须改模型加眼骨。
+##
+## 基类 → 眼位配方。
+const EYE_SOCKETS := {
+	"melee_chaser": {
+		# 眼睛高度 / 模型总高。
+		"y_ratio": 0.535,
+		# 单眼离中线距离（模型根空间 x，米）。
+		"half_x": 0.160,
+		# 相对「头部带最前 z」再往前多少（负 = 更靠近相机），保证眼球浮在脸外不陷进去。
+		"front_offset": -0.040,
+		# 眼球半径（米，模型根空间；根节点放大后世界尺寸按倍率走）。
+		"radius": 0.030,
+	},
+	"ranged_caster": {
+		# 注意：保安僵尸**戴着大檐帽**，比另两只怪的头型高得多，所以眼位比例明显更大。
+		# 实测扫描图（`tools/probe_ranged_eye_scan.tscn`）显示眼睛落在 0.60~0.66 之间。
+		"y_ratio": 0.630,
+		"half_x": 0.155,
+		"front_offset": -0.040,
+		"radius": 0.030,
+	},
+	"fat_zombie03": {
+		"y_ratio": 0.880,
+		"half_x": 0.195,
+		"front_offset": -0.040,
+		"radius": 0.042,
+	},
+}
+
+## 「头部带」的判定：模型总高从顶部往下算的比例（与探针一致，改则眼位整体平移）。
+const EYE_HEAD_BAND_FROM_TOP := 0.45
+## 头部带内取 z 时的横向上限（米），用于排除手臂与肩部。
+const EYE_HEAD_HALF_X_LIMIT := 0.45
+
+
+## 取**变种**的眼位配方；传基类或普通怪一律返回 `{}`。
+##
+## 严格是有意的：调用点用它回答「这只怪该不该长发光眼」，
+## 若在此处对基类也放行，普通怪会跟着长出红眼（实测踩过一次）。
+## 需要按基类取配方时用 `eye_socket_for_base`。
+static func eye_socket_for(variant_kind: String) -> Dictionary:
+	return eye_socket_for_base(base_of(variant_kind))
+
+
+## 按**基类**取眼位配方；该基类没有配方返回 `{}`。
+static func eye_socket_for_base(base_kind: String) -> Dictionary:
+	if not EYE_SOCKETS.has(base_kind):
+		return {}
+	return (EYE_SOCKETS[base_kind] as Dictionary).duplicate(true)
+
+
 ## 基类 → 变种规格。
 ##
 ## `key` 必须是有正式美术的普通怪；`variant_id` 由 `_make_variant_id(key)` 派生，

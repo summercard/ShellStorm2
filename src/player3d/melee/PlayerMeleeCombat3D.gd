@@ -41,6 +41,8 @@ var _last_hit_count := 0
 var _swing_feedback_count := 0
 var _impact_feedback_count := 0
 var _last_feedback: Dictionary = {}
+var _active_resolved := false
+var _hit_stop_requested := false
 
 
 func configure(owner_player: Player3D) -> void:
@@ -90,6 +92,7 @@ func request_attack() -> bool:
 func cancel(reason := "cancelled") -> void:
 	if _machine == null or _phase == "ready":
 		return
+	player.clear_melee_hit_stop()
 	_last_cancel_reason = reason
 	_queued_next = false
 	_combo_index = -1
@@ -117,6 +120,7 @@ func enter_ready() -> void:
 
 
 func enter_phase(next_phase: String) -> void:
+	_active_resolved = false
 	_phase = next_phase
 	_phase_elapsed = 0.0
 	_phase_duration = maxf(0.01, float(_step_snapshot.get("%s_s" % next_phase, 0.1)))
@@ -135,8 +139,9 @@ func finish_recovery() -> void:
 
 
 func resolve_active_hit() -> void:
-	if player == null or _step_snapshot.is_empty() or _phase != "active":
+	if player == null or _step_snapshot.is_empty() or _phase != "active" or _active_resolved:
 		return
+	_active_resolved = true
 	_last_hit_count = 0
 	var origin := player.global_position + Vector3.UP * 0.72
 	var forward := player.aim_direction
@@ -167,6 +172,11 @@ func resolve_active_hit() -> void:
 			continue
 		_hit_target_ids[target_id] = true
 		var result := _apply_hit(target, direction)
+		if not bool(result.get("damage_applied", false)):
+			continue
+		if not _hit_stop_requested:
+			_hit_stop_requested = true
+			player.request_melee_hit_stop()
 		_spawn_hit_feedback(target, result)
 		_last_hit_count += 1
 		hit_resolved.emit(result)
@@ -214,6 +224,7 @@ func _begin_combo_step() -> void:
 	if _combo_index < 0 or _combo_index >= steps.size():
 		cancel("missing_combo_step")
 		return
+	_hit_stop_requested = false
 	_step_snapshot = (steps[_combo_index] as Dictionary).duplicate(true)
 	_step_snapshot["reach"] = float(profile.get("reach", 2.5))
 	_step_snapshot["arc_degrees"] = float(profile.get("arc_degrees", 100.0))
@@ -247,9 +258,14 @@ func _apply_hit(target: Node3D, direction: Vector3) -> Dictionary:
 	var damage_scale := float(_step_snapshot.get("damage_scale", 1.0))
 	var critical := weapon.roll_melee_critical()
 	var applied_damage := maxi(1, int(round(float(weapon.damage) * damage_scale)))
+	var hp_before: Variant = target.get("current_hp")
 	target.call("take_damage", applied_damage, critical, direction)
+	var hp_after: Variant = target.get("current_hp")
+	var damage_applied := hp_before != null and hp_after != null and int(hp_after) < int(hp_before)
+	if damage_applied and target.has_method("apply_melee_stagger"):
+		target.call("apply_melee_stagger", 0.30 if _combo_index == 2 else 0.20)
 	var knockback := float(_current_melee_profile().get("knockback", 4.0)) * float(_step_snapshot.get("knockback_scale", 1.0))
-	if target.has_method("apply_melee_knockback"):
+	if damage_applied and target.has_method("apply_melee_knockback"):
 		target.call("apply_melee_knockback", direction, knockback, 0.20)
 	return {
 		"attack_instance_id": _attack_instance_id,
@@ -258,6 +274,7 @@ func _apply_hit(target: Node3D, direction: Vector3) -> Dictionary:
 		"combo_step": _combo_index + 1,
 		"target_instance_id": target.get_instance_id(),
 		"damage": applied_damage,
+		"damage_applied": damage_applied,
 		"critical": critical,
 		"knockback": knockback,
 		"hit_position": target.global_position + Vector3.UP * 0.65,

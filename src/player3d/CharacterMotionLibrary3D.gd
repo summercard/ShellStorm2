@@ -124,8 +124,15 @@ func apply(avatar: Node3D, delta: float) -> void:
 		if not clips.has(clip_name):
 			fallback_reason = "missing_" + clip_name
 			clip_name = locomotion_name
-	if family == "heavy_melee":
-		fallback_reason = "single_hand_attachment_only"
+	var melee_family := str({"bp_baseball_bat": "bat", "bp_greatblade": "blade", "bp_waraxe": "axe"}.get(weapon_id, ""))
+	var melee_now := family == "heavy_melee" and bool(avatar.get("_melee_animation_active")) and state in ["idle", "moving"]
+	var melee_hold := family == "heavy_melee" and state in ["idle", "moving", "locked"] and not melee_family.is_empty()
+	if melee_now:
+		clip_name = "melee_%s_%d_%s" % [melee_family, int(avatar.get("_melee_combo_step")), str(avatar.get("_melee_phase"))]
+	elif melee_hold and state != "moving":
+		clip_name = "melee_%s_idle" % melee_family
+	if family == "heavy_melee" and not clips.has("melee_%s_idle" % melee_family):
+		fallback_reason = "missing_melee_" + melee_family
 	var authored_anatomical := int(_cache.get("schema", 0)) == 2 and clips.has(clip_name)
 	var reload_now := armed and bool(avatar.get("_reload_animation_active")) and state in ["idle", "moving", "seated"]
 	var switch_now := false
@@ -150,7 +157,7 @@ func apply(avatar: Node3D, delta: float) -> void:
 		_state = clip_name
 		_transition_pose = _last_pose.duplicate(true)
 		_transition_time = 0.0
-		_transition_duration = 0.06 if "_fire_" in clip_name else 0.18
+		_transition_duration = 0.001 if melee_now else (0.06 if "_fire_" in clip_name or melee_hold else 0.18)
 	_transition_time += delta
 	var clip: Dictionary = clips[clip_name]
 	var duration: float = clip.duration
@@ -173,6 +180,8 @@ func apply(avatar: Node3D, delta: float) -> void:
 			var player: Node = avatar.get("_player")
 			if player != null and player.has_method("get_death_animation_progress"):
 				phase = player.get_death_animation_progress()
+	if melee_now:
+		phase = float(avatar.get("_melee_progress"))
 	phase = fposmod(phase, 1.0) if bool(clip.loop) else clampf(phase, 0.0, 1.0)
 	if pose_lock_enabled:
 		phase = clampf(pose_lock_phase, 0.0, 1.0)
@@ -182,6 +191,11 @@ func apply(avatar: Node3D, delta: float) -> void:
 	var switch_cursor := 0.0
 	active_overlay = ""
 	overlay_progress = 0.0
+	if melee_hold and state == "moving" and not melee_now and clips.has("melee_%s_idle" % melee_family):
+		var hold_name := "melee_%s_idle" % melee_family
+		switch_frames = clips[hold_name].frames
+		switch_cursor = fposmod(_time / float(clips[hold_name].duration), 1.0) * (switch_frames.size() - 1)
+		active_overlay = hold_name
 	if reload_now and not switch_now:
 		var reload_name := family + "_reload"
 		if clips.has(reload_name):
@@ -208,12 +222,12 @@ func apply(avatar: Node3D, delta: float) -> void:
 	var legacy_grip_override := live_grip_active and _version != "v021"
 	var live_hand_l_global: Transform3D = avatar.bunny_hand_l.global_transform
 	var live_hand_r_global: Transform3D = avatar.bunny_hand_r.global_transform
-	if authored_anatomical and (armed or not bool(avatar.get("_weapon_grip_pose_active"))):
+	if authored_anatomical and (armed or melee_hold or not bool(avatar.get("_weapon_grip_pose_active"))):
 		avatar.hand.transform = Transform3D.IDENTITY
 	for bone: String in _nodes:
 		var target: Node3D = _nodes[bone]
 		if target == null: continue
-		var switching_track := not switch_frames.is_empty() and bone in ["hand_l", "hand_r", "weapon_socket"]
+		var switching_track := not switch_frames.is_empty() and (bone in ["hand_l", "hand_r", "weapon_socket"] or (active_overlay.begins_with("melee_") and bone in ["body", "head", "ear_l", "ear_r"]))
 		if not frames[first].has(bone) and not switching_track: continue
 		var a: Dictionary = frames[first].get(bone, {})
 		var b: Dictionary = frames[second].get(bone, {})

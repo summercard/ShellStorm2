@@ -708,6 +708,10 @@ func _fire_secondary_gun(
 		return 0
 	for entry in _fate_mounts:
 		if entry["stats"].get("mount_id") == secondary.get("mount_id"):
+			# 与 _update_fate_mounts 同一条纪律：先判有效性再做 as。副枪模型随挂点
+			# 一起被释放时，这里若直接 `as WeaponModel3D` 会抛 freed object。
+			if not is_instance_valid(entry.get("weapon")):
+				continue
 			var mounted := entry["weapon"] as WeaponModel3D
 			if is_instance_valid(mounted):
 				var direction := -mounted._muzzle.global_basis.z.normalized() if is_instance_valid(mounted._muzzle) else aim_direction
@@ -1293,6 +1297,13 @@ func _rebuild_fate_mounts() -> void:
 	_mount_pulse = 0.0
 	if not is_instance_valid(_visual_root):
 		return
+	# 同一视觉根下只允许存在一个挂点锚。_rebuild_visual() 在模型未入树时会提前返回
+	# （不换 _visual_root），此时直接再建锚点会留下孤儿锚点与其副枪模型 —— 表现为
+	# 同一把副枪被渲染两遍。先摘掉旧的再建。
+	var previous_anchor := _visual_root.get_node_or_null("FateWeaponSocket")
+	if previous_anchor != null:
+		_visual_root.remove_child(previous_anchor)
+		previous_anchor.queue_free()
 	# Every gun has this structural socket, even with zero fate cards.
 	var anchor := Marker3D.new()
 	anchor.name = "FateWeaponSocket"
@@ -1316,6 +1327,16 @@ func _rebuild_fate_mounts() -> void:
 
 
 func _update_fate_mounts() -> void:
+	# 先剔除已释放的挂点。武器视觉重建（_rebuild_visual）用 queue_free() 延迟释放旧
+	# _visual_root，其下的挂点会在帧末消失，而 _fate_mounts 可能仍持有引用。
+	# 必须**先判有效性、再做 as 转换**：`as` 作用在已释放对象上会抛
+	# "Trying to cast a freed object"，而本函数由 _process 每帧调用，会变成每帧刷屏。
+	var live_entries: Array[Dictionary] = []
+	for entry in _fate_mounts:
+		if is_instance_valid(entry.get("point")):
+			live_entries.append(entry)
+	if live_entries.size() != _fate_mounts.size():
+		_fate_mounts = live_entries
 	var counts := {false: 0, true: 0}
 	var indices := {false: 0, true: 0}
 	for entry in _fate_mounts:

@@ -513,6 +513,8 @@ func _process(delta: float) -> void:
 	if _player == null or not is_instance_valid(_player):
 		_player = _find_player()
 	_read_player_state()
+	if _player != null and _player.is_melee_hit_stopped() and _state in ["idle", "moving"]:
+		return
 	_update_orientation(delta)
 	var assembly_version := str(get_meta("assembly_version", ""))
 	if assembly_version == "v021":
@@ -858,7 +860,7 @@ func _get_missing_authored_action() -> String:
 	if str(get_meta("assembly_version", "")) != "v021" or not _weapon_grip_pose_active:
 		return ""
 	if _weapon_class == "heavy_melee" and _melee_animation_active:
-		return "heavy_melee_%s" % _melee_phase
+		return "" if _authored_motion.active_clip.begins_with("melee_") else "heavy_melee_%s" % _melee_phase
 	if _reload_animation_active:
 		return "" if _authored_motion.active_overlay == "%s_reload" % _weapon_class else "%s_reload" % _weapon_class
 	if _charging_animation_active:

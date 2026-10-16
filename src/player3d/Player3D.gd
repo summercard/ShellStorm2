@@ -608,6 +608,20 @@ func _apply_debug_scale() -> void:
 		capsule.height = _base_collision_height * ratio
 
 
+var _melee_hit_stop_pending := false
+var _melee_hit_stop_frame := -1
+
+func request_melee_hit_stop() -> void:
+	_melee_hit_stop_pending = true
+
+func clear_melee_hit_stop() -> void:
+	_melee_hit_stop_pending = false
+	_melee_hit_stop_frame = -1
+
+func is_melee_hit_stopped() -> bool:
+	return _melee_hit_stop_frame == Engine.get_physics_frames()
+
+
 func _physics_process(delta: float) -> void:
 	_seat_exit_push_suppression = maxf(0.0, _seat_exit_push_suppression - delta)
 	_update_invincibility(delta)
@@ -616,6 +630,12 @@ func _physics_process(delta: float) -> void:
 	_silence_remaining = maxf(0.0, _silence_remaining - delta)
 	_update_aim_from_mouse()
 	_update_combat_input()
+	if _melee_hit_stop_pending:
+		_melee_hit_stop_pending = false
+		if current_hp > 0 and not input_locked and get_state_machine_state() in ["idle", "moving"] and melee_combat != null and melee_combat.get_snapshot().active:
+			_melee_hit_stop_frame = Engine.get_physics_frames()
+			return
+		clear_melee_hit_stop()
 	if _state_machine != null:
 		_state_machine.physics_update(delta)
 	if melee_combat != null:

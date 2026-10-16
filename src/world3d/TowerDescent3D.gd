@@ -5680,20 +5680,27 @@ func _bind_shared_edge_doors() -> void:
 		# 一墙多门时 `get_door_node(方向)` 只给该方向第一扇，会张冠李戴
 		# （room_04 的门会被指向"通向 room_03 的那扇"）。按端口取才精确 ——
 		# 端口的 target 就是"这扇门通向哪一间"。
+		#
+		# ⚠ 2026-10-16 修：按端口取不到时必须**回落**到按方向取。
+		# 远征01 的门扇走 `_build_door()` 的**按方向**路径建出，`_door_nodes_by_port`
+		# 始终为空 ⇒ 旧实现按端口拿到 null 就直接 `continue`，**共享门在本关从未被绑过**。
+		# 后果两个，都是玩家直接摸得到的：
+		#   ① 本房 `_door_nodes` 里没有入口门 ⇒ `set_room_seal()` 关不到它；
+		#   ② `get_nearest_door()` 只遍历 `_door_nodes` ⇒ 本房一侧开不了那扇门
+		#      （共享门沦为单向门）。
+		# 一墙多门时端口优先（target 更精确），回落只在端口取不到时生效、不会覆盖它。
+		#
+		# 绑进来的门，其 `RoomDoor3D.direction` 记的仍是**建门方**的方位标号，与本房
+		# 登记的键**不同名**（共享边两端方位是镜像的）。这不影响功能：`direction` 只作
+		# 诊断用，全仓**没有任何生产代码读它**；交互目标走的是本房
+		# `door_targets[登记键]`（见 `DungeonRoom3D.get_nearest_door`），所以对端拿到的
+		# 目标房是**正确**的。唯一依赖「键 == door.direction」的是
+		# `verify_door_passability` 测试 1，已随之改正。
 		var shared_door: RoomDoor3D = null
 		var owner_port := owner.get_connection_port_towards(peer_id)
 		var owner_port_id := str(owner_port.get("port_id", ""))
 		if not owner_port_id.is_empty():
 			shared_door = owner.get_door_node_by_port(owner_port_id)
-		# ⚠ 按端口取不到时必须**回落**到按方向取（2026-10-16 修）。
-		# 远征01 的房间门由 `_build_door()` 的**按方向**路径建出，`_door_nodes_by_port`
-		# 始终是空的 ⇒ 旧实现拿到 null 就直接 `continue`，**共享门从来没被绑过**。
-		# 后果有两个，都是玩家直接摸得到的：
-		#   ① 本房`_door_nodes`里没有入口门 ⇒ `set_room_seal()` 关不到它 ⇒
-		#      封锁后玩家还能从进来那扇门走出去；
-		#   ② `get_nearest_door()` 只遍历 `_door_nodes` ⇒ 从本房一侧**开不了**那扇门
-		#      （共享门变成单向门）。
-		# 方向在"一墙一门"的常见情况下就是答案；一墙多门时端口优先，回退不会覆盖它。
 		if shared_door == null:
 			shared_door = owner.get_door_node(owner_side)
 		if shared_door == null:

@@ -52,11 +52,24 @@ func _ready() -> void:
 				print("  ❌ %s/%s 门为 null" % [room_id, direction])
 				tests_failed += 1
 				continue
-			# 配置检查
-			if door.direction == direction and not door.target_room_id.is_empty():
+			# 配置检查。登记在 `_door_nodes[键]` 下的门有两种**都合法**的形态：
+			#   ① **本房自建**：`_build_door(方向)` 建出的，`door.direction` 与本房键同名。
+			#   ② **共享边绑入**：该边的门扇是「一堵墙一道门」，只由**一端**建出并持有
+			#      （`door_endpoint_owners`），另一端由 `_bind_shared_edge_doors()` 绑进来。
+			#      2026-10-16 前那条绑定在远征01 是**死代码**（门扇走按方向建、按端口查不到
+			#      就 `continue`），所以本断言里从来没出现过形态 ② —— 它记的是**建门方**的
+			#      方位标号，与本房键镜像**不同名**。
+			# 判据：目标房非空，且「方向同名」或「确为绑入的共享门」二者之一成立。
+			# 绑入形态以绑定时写的 `shared_edge_key` 元数据为准（不是拿本房方向去猜）。
+			# `keys()` 迭代出的是 Variant ⇒ 比较结果无法参与 `:=` 推断（本仓「警告即错误」），
+			# 显式标 bool。
+			var is_local: bool = door.direction == direction
+			var is_shared: bool = not str(door.get_meta("shared_edge_key", "")).is_empty()
+			if not door.target_room_id.is_empty() and (is_local or is_shared):
 				configured += 1
 			else:
-				print("  ❌ %s/%s 门配置错误 direction=%s target=%s" % [room_id, direction, door.direction, door.target_room_id])
+				print("  ❌ %s/%s 门配置错误 direction=%s target=%s shared=%s"
+					% [room_id, direction, door.direction, door.target_room_id, str(is_shared)])
 				tests_failed += 1
 	if configured == total_doors:
 		print("  ✅ %d 扇门全部正确配置 direction + target_room_id" % total_doors)
