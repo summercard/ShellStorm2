@@ -1,0 +1,183 @@
+PLAYER-STATE / ENTRY-AVATAR / ASSET-PIPELINE：[跑步与待机增强v039](development/2026-10-15_player_motion_v039.md)。保留用户1.25倍播放，63条动作放大扭转/起伏并缩短循环；源/运行/真实渲染专项通过，完整工程与移动端未验。
+
+ASSET-PIPELINE / WORLD-BLOCKS：[远征Boss房02装配](design/远征关卡01_Boss房02装配.md)。v027，46组件/652实例；01原Boss房01保留，02独立TSCN已导入；测试关卡99 boss正式引用02。组件承重、门表现与走行空间按场景契约接线。见[交付记录](development/2026-10-13_boss_room02_godot_import.md)。
+
+# v0.1 模块、功能与工程契约索引
+
+ASSET-PIPELINE / WORLD-BLOCKS / PLAYER-STATE / ENEMY-AI：[美术制作源分离](development/2026-10-11_art_source_split.md)。当前源统一 `art_source/`，Git/LFS 管理且不入包；保留 1,095 份 Blend，原位资源 5,011 文件保真，39 份运行 JSON 投影通过，正式资源路径与版本不变。目录规则见 [制作源规范](../ART_SOURCE_LAYOUT.md)。
+
+ASSET-PIPELINE / PLAYER-STATE / ENEMY-AI：[贴图去重与尺寸优化](development/2026-10-11_runtime_texture_optimization.md)，依据[运行贴图预算](design/runtime_texture_budget.md)。玩家≤1024、怪物（含Boss）≤512、其他≤1024；正式PCK502.73→267.12MiB，玩家272.70→63.44MiB，完全重复CTEX已清零。104模型几何/骨架/动画保真、资源包加载及角色/怪物专项通过，真实玩家握枪渲染通过；完整流程及APK未执行，历史门禁红项保留。
+
+ASSET-PIPELINE / WORLD-BLOCKS：[工程瘦身执行记录](development/2026-10-11_workspace_slimming.md)。两阶段已实施：工程59.48→约12.69GiB（冷目录约12.06GiB），Windows PCK 1973.90→502.73MiB；保留1,102份当前源、完整Git、文档及正式运行资产，旧源/预览/历史产物在上层备份。39份运行JSON投影、账本与运行资源保真验证通过，全量游戏历史红项及旧缓存保留见记录。原[计划](audits/2026-10-11_development_workspace_slimming_plan.md)保留作实施前估算。
+
+PERFORMANCE-RUNTIME / ENTRY-AVATAR / WORLD-BLOCKS / SAVE-PROFILE：[启动与进房刷怪卡顿诊断](development/2026-10-11_startup_room_stutter_diagnosis.md)。当前存档副本真实启动8～12秒；同步怪物首用加载259/327毫秒、无重复物理进房通知的受控进房318毫秒、同步保存30～60毫秒。已定位加载、波次/碰撞扫描、存档热点，未实施正式性能修复。
+
+ASSET-PIPELINE / WORLD-BLOCKS：[98F父亲办公室原始源v002](development/2026-10-09_father_office_blender_source.md)。24组件/270实例，四材质、尺寸与PaletteUV专项通过，已登记Blender源，未接入Godot。
+
+ASSET-PIPELINE / WORLD-BLOCKS：[98F会议室与走廊门厅源v001](development/2026-10-09_block00_story_rooms_blender_source.md)。12尊低面雕塑、中央6m净空，源内三四房5m贯通、废墟断线及壁画；9新组件/24外链组件，已登记Blender源，未接入Godot。
+
+PLAYER-STATE / ASSET-PIPELINE：[机枪换弹左前斜向v037](development/2026-10-08_player_motion_reload_v037.md)。按参考图顶视左前约45°、枪口上抬、近身不前伸；其余90条及计时保持。专项证据与限制见记录。[v036历史](development/2026-10-08_player_motion_reload_v036.md)。
+
+PLAYER-STATE / ASSET-PIPELINE：[三类换弹v033](development/2026-10-08_player_motion_reload_v033.md)。三类各一条换弹，直接按真实换弹进度采样，移动下肢/耳朵独立；专项174检查和真实渲染通过。完整项目/移动端未验。
+
+PLAYER-STATE / ASSET-PIPELINE / SAVE-PROFILE：[无枪摆臂与双槽收取枪v032](development/2026-10-08_player_motion_switch_v032.md)。无枪前后交替摆臂、侧移保持；1/2重复当前槽收枪并双背负，换槽先收后取；动画88条，专项96检查通过，完整续档及全局套件未验。
+
+ASSET-PIPELINE / WORLD-BLOCKS [SKYLINE20塔3东侧正式投放](development/CHANGELOG.md#skyline20-v007-塔3东侧正式投放)：v007主体50×50m/20层，8组件/37实例、7720三角，屋顶占59.22%。用户授权接入正式游戏与open_world编辑场景，初始共享摆位(75,-86.36,-195)，[用户手调增量同步](development/CHANGELOG.md#2026-10-08-open_world建筑手调增量同步)后实际世界根(54.139153,-86.36,-177.601841)，屋面比塔3主天台低10m，游戏1栋、无碰撞，路线回归319/0；主表826–834及Prefab718–726使用位置已同步validated。逐项美术确认及全局历史红项保留，不提升总体完成状态。
+
+PLAYER-STATE / ASSET-PIPELINE：[长枪机枪斜持微调v031](development/2026-10-07_player_motion_carry_v031.md)；[举枪及四方向射击v030](development/2026-10-07_player_motion_firing_v030.md)。非开火长枪/机枪略斜、机枪收近；射击/停火切换与四方向双速度保持。换弹蓄力近战、逐枪型支撑贴合和脚底锁地仍待完善。
+
+UI-LOCALE-TEXT / PRESENTATION：[武器构建链路文本本地化设计](design/武器构建链路文本本地化设计.md)。独立模块 `src/i18n/GameText`（默认中文 · 英文预留 · 可切换 · 回退链兜底）覆盖 K 键武器表现页、工作台与枪械工坊的玩家可见文案；内部稳定 ID 与调试口径不变，验收 `probe_localization_contract`（跨功能横切，不占 37 项 FeatureID）。
+
+PLAYER-STATE / ASSET-PIPELINE：[持枪移动耳朵跟随v028](development/2026-10-07_player_ear_sway_v028.md)。18循环增加反移动方向飘动与错相回弹，保持v027持枪/脚步；源级待导入。
+
+PLAYER-STATE / ASSET-PIPELINE：[持枪三方向移动v027](development/2026-10-07_player_directional_v027.md)。以v026持枪状态制作三枪型×慢走/正常移动×左移/右移/后退18循环；源级待导入，前进与运行速度同步待完成。
+
+PLAYER-STATE / ASSET-PIPELINE：[持枪待机位置修订v026](development/2026-10-07_player_weapon_idle_v026.md)。按正侧参考调整短枪，长枪机枪整体前移、双手同步跟随；源级待导入，v025保留。
+
+PLAYER-STATE / ENTRY-AVATAR / ASSET-PIPELINE：[三类持枪站立待机源v025](development/2026-10-07_player_weapon_idle_v025.md)。短枪单手朝上、长枪胸前斜持、机枪低位承重，三个独立循环；旧14动作与静止骨架保留。源级验收完成，未接入Godot；四方向移动仍待制作，不提升玩家动画总体完成状态。
+
+VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](development/2026-10-04_stutter_deep_diagnosis.md)。同场景云海当前→历史→当前复验：旧版P95约16.8ms，当前54.7～64.3ms；历史排云覆盖改变是关键差异，不能无损回滚。正式逻辑计时支持周期保存短顿，生产修复未实施。
+
+TIME-DAYNIGHT / SAVE-PROFILE / WORLD-BLOCKS：[楼顶与吊桥卡顿复查](development/2026-10-04_stutter_recheck.md)。当前存档同步保存约12ms；1440p云海慢区独立于保存，720p未重现百毫秒停顿；回归提交未锁定、性能未修复。
+
+VFX-POOL / WORLD-BLOCKS：[100F吊桥云海卡顿诊断](development/2026-10-04_bridge_cloud_stutter_diagnosis.md)。当前RTX4060Ti真实1440p重复路线帧中位51.221ms、P95 67.325ms；隐藏云海7.120/8.629ms。720p隐藏地表城市改善很小，冻结逻辑仍保留云海负担；13组完成，性能未修复，不改变美术品质与避让合同。
+
+BOSS-STAGES / ASSET-PIPELINE：[Boss002技能设计](design/Boss002显示器技能设计.md)、[动画设计](design/Boss002显示器动画设计.md)。v035正式Prefab（10米触发activate后战斗、原版侧翘横移move）、17剪辑/64骨、十二态、四技能与三阶段已接入远征01 f00_boss；同AssetID台账active。远征01正式进房/三波清房/撤离门专项见[投放记录](development/2026-10-07_expedition01_monitor_boss_spawn.md)。专项与真实渲染证据见[正式导入记录](development/2026-10-06_boss002_runtime_import.md)。
+
+ASSET-PIPELINE / WORLD-BLOCKS [500米地表与程序城市v004](development/2026-10-03_cross_tower_landscape_foundation.md#500米地表与全域城市v004后续交付)：200新楼/23非空批次，25分区包含旧城总覆盖；96原实例与塔桥完整矩阵保持。真实Forward+665项与登记/门禁/快照7项合计672项、云海30,209项通过；主表825/Prefab专表717受控登记及无损基线通过。中央两区新增0，玩家和诊断四图分开；工程既有红项与移动端/LOD未验单列，不提升总体完成状态。
+
+ASSET-PIPELINE [跨塔路线景观补全代理v003](development/2026-10-03_cross_tower_landscape_foundation.md)：正式接入4基础、1地表、4新远景、2原城市下延段，共11独立PackedScene；当前100F/99F/98F完整运行时主塔实测最低-24.30；地表顶-80、厚0.2、余量20.25m。96原城市顶面/实例不变，仅2栋补长；Tower2原底低于地表，独立box向更深底面延续，不抬楼。264项几何/保护/材质/截图专项通过，真实六机位图和报告见outputs/landscape_completion_20261003。新增地上包络冲突0，34对既有关系及8对地下交叠单列；未进行三角检测、XLSX转正或全工程验收，不提升整个ASSET-PIPELINE完成状态。
+
+ASSET-PIPELINE [07号物流建筑源v005](development/2026-10-03_logistics07_hvac_optimization_v005.md)：11台空调逐台减面59%–61%，整栋输出降至87,939三角面；334包、4材质、6张Cycles预览，源与色盘UV验收通过；场景账本824行已更新。原始制作记录见[v004](development/2026-10-03_logistics07_building_source.md)。未导入Godot，用户视觉待复核，不提升总体完成状态。
+
+ASSET-PIPELINE [塔4周边五组景观建筑当前v003](development/2026-10-03_tower04_landscape_damage.md)：与SKYLINE同级、独立母版；增加中段差异破坏、倾斜断柱与塌板，并保留两栋在建骨架。73实例，各组含植物2098/2334/2450/2098/2991三角不变；源、范围锁定、空洞与色盘验收通过，场景账本819–823行更新。用户视觉待复核，未导入Godot，不提升总体完成状态。
+
+工程版本：0.1.0。设计索引修订：r11（2026-09-30，房间生产流程与接入状态）。事实核对基线：`622d6c4a` + 当前工作区。
+后续验收快照：[`bda2c828`全局验收](audits/2026-09-24_global_acceptance.md)及[逐功能表](audits/2026-09-24_global_feature_matrix.md)。下表中的历史通过数/资产零问题不代表本轮通过，当前结果以新快照为准。
+本表建立追溯入口，不替代各模块设计，也不把现存实现自动认定为设计已批准。功能关系、解耦和文档补全见[执行计划](FEATURE_RELATIONSHIP_PLAN.md)与[逐项跟踪表](FEATURE_RELATIONSHIP_MATRIX.md)。[P0/P1/P2 后全项目完整复评](audits/2026-09-23_full_project_reassessment.md)保留其原时点证据；后续资产复核和开发记录优先于其中的旧数字。
+
+## 1. 独立开发判断
+
+“可独立”指可以通过清晰输入/输出和替身验证规则，不要求脱离 Godot 引擎；“部分”表示已有边界，但正式接入仍依赖全局或场景内部；“不足”表示状态、UI、存档或场景编排混合。按目录分文件、存在信号或存在测试，均不足以单独证明解耦。
+
+| 模块ID | 当前事实所有者与数据链 | 独立开发结论 | 首要缺口 |
+|---|---|---|---|
+| PLAYER | `Player3D`状态/生命→独立状态类→Avatar；`PlayerInteractionController3D`仲裁→门/设施命令 | 部分 | Player3D仍含装备、背包接口、动作与全局依赖；状态原因契约不完整 |
+| WEAPON | `BlueprintRegistry/ItemRegistry`内容→`WeaponInstance`→装配树→`WeaponModel3D/Projectile3D` | 部分 | 统一命中上下文、内容导入与全局所有权账本未闭环；需先明确节点树的生命周期 |
+| INVENTORY | `InventoryModule/InsuranceModule`格位→`EquipmentTransactionService`换装→玩家实例槽 | 换装事务可独立，其余部分 | 场景仍编排卸装、快捷栏、掉落、回滚；集合去重不是全局唯一账本 |
+| FATE | `FateCardPresets/TarotFateCatalog`→`FateCardEngine`→武器/角色/世界持有者 | 部分 | 世界执行器耦合Dungeon；48运行卡与78设计卡要持续区分 |
+| WORLD | `FloorPlanGenerator`纯计划（塔楼 `generate()` + 远征 `generate_expedition()`）→`RoomGraphRuntime`查询→`Dungeon3D/TowerDescent3D`装配；`WORLD-BLOCKS`定义区块归属（塔楼主场景四区块 + 远征场景 `Blocks/Expedition`）；`BaseFacilityCatalog(mission_operations)`→`RogueMapSelectMenu`→`ExpeditionLoadingScreen`→远征关卡场景提供关卡入口 | 计划/查询可独立，生命周期部分收口 | 到达门现为“FloorBundle成功→快照成功→开门”；隔离卸载先落盘提交意图再删节点，恢复会重放已卸载段。但父子编排和私有字段依赖仍多，完整生命周期Service仍未提取 |
+| ENEMY | `Enemy3D`战斗、`MonsterAIManager`调度、`EnemyIllumination3D`光照查询 | 部分 | 公共管理器及空间上下文必需；物种行为主要集中在Enemy3D |
+| ELITE | `EliteContentCatalog`静态名册→`EliteRosterService`预约/成长→`BaseManager`公开档案命令/查询→`BaseData.elite_archive_records` | 部分 | 跨域私有字段写入已移除，写盘失败由BaseManager回滚；仅1/12内容投放 |
+| BOSS | `BossContentCatalog`95/90/85定义→Enemy3D阶段→塔楼下行权限计数 | 部分 | 设计Boss钥匙ID与当前计数式授权不一致；门和持久化交接不足 |
+| BASE | `BaseFacilityCatalog/Service`→`BaseManager`→BaseData；`BlueprintUpgradeService`拥有工坊纯规则；设施适配器→UI | 规则可局部独立，工坊事务已独立验收 | Manager仍含存储/多类交易/能源/外观/运行档；成本表尚未外置为版本化内容 |
+| SAVE | 场景→`RunPersistenceService`快照→`BaseManager`唯一长期写者→`ProfileSaveService`封套/`AtomicJsonStore` | 序列化可独立，结算/工坊/隔离边界已有事务 | 多领域写入的revision回滚与通知未统一；塔楼完整故障套件仍受隐藏旧流程/P0基线限制 |
+| NARRATIVE | 触发声明（位置/事件/脚本）→时间轴 JSON→`NarrativeDirector3D`绑定`NarrativeAdapter3D`→对话/奖励/房间地面物；完整收口→`BaseManager.narrative_history` | 部分；核心运行链与`run`跨局历史已接入 | `scene.spawn_item`经奖励服务解析并挂入房间；`BaseManager`独占长期历史写入且失败回滚。`retry/never`新语义、通用条件与全部内容投放仍待裁决/施工 |
+| TIME | `GameTimeManager`唯一运行时权威→`WorldTimeDomain`纯算法→BaseData时间/太阳/HUD/能源恢复输入 | 算法可独立，接入部分 | 规则仍为代码常量；时间落档失败与跨重启联动测试需进入明确模块验收集 |
+| POWER | `BaseEnergyService/BaseManager`拥有基地电力；`PlayerFlashlight3D`拥有行动手电电量；恢复舱负责两域转换 | 当前两条链可独立验证，系统开发中 | 基地灯光与设施负载尚未接统一电网服务、事件和真实表现验收 |
+| ENTRY | `GameEntryFlow`一次性入口意图→塔楼主页→玩法；AvatarCustomizationPersistence→BaseData | 部分 | 塔楼仍负责主页与设施UI装配；外观作者包、运行包装、用户装配版本需分别追踪 |
+| PRESENTATION | `HUDPresenter3D`武器栏快照、公共UI组件；VfxPool/CombatEffectPool、AudioManager、MusicManager | HUD/音乐部分；VFX未收敛 | UI、音效、音乐已有独立账本/Skill/验收链；旧CombatEffectPool兼容链仍在；后处理设计与13.1施工已分开，但调参保存失败结果与真渲染未验 |
+| PERFORMANCE | GraphicsSettingsManager、PostfxOverlay、RuntimePerformanceManager→场景/渲染 | 部分 | 调参面板越过画质服务；预算失配、渲染用例归类不全 |
+| TRAINING | `TrainingRange3D`→只读BlueprintRegistry→共用Player3D→军械库/刷怪台/命运卡组装台→训练会话统计 | **测试功能1.1已完成，Esc 入口（仅基地）与独立启动均可验收** | 后续伤害分析、靶标编辑和自动压测另升功能版本 |
+| ASSET | 组件规划→Blender母版/实例→稳定GLB/PackedScene→正式房间TSCN；账本分别追踪源/组件/房间 | 组件源与房间编辑分权，接入部分完成 | 房间TSCN拥有布局/灯光/启用编辑权，JSON只作初始化/追溯；组件更新不得覆盖房间编辑，但现有生成器无自动合并保护。三层变体数据登记未实现，禁止未审查重生成；[物品道具调用账本](../../assets/registry/README.md#物品道具账本与武器物品归属)已建立，子弹/配件归武器账本 |
+| TOOLING | tests/verification、脚本、src/testing→隔离工程→日志与退出码 | 部分 | 用户目录与 `.godot` 已隔离，冷/热缓存自检通过；156 个验证场景已全部唯一归属；验证注册、跨域边界、37功能追溯和媒体资产门禁已并入文档总门禁 |
+
+## 2. 功能追溯表
+
+“玩法设计”是未来规则主源，“技术施工”是当前接口与实现差距。已迁移的14项按此前后顺序列出；其余旧主题页仍是临时入口，独立设计完整性待补/待审，不因列于本表就宣称设计已完成。“历史定位”不等于本次重新通过。
+
+机器可追溯副本见 [`feature_registry.json`](feature_registry.json)。它为本表 37 个 FeatureID 逐条登记唯一状态 Owner、主设计、开发记录和已注册验收；`python3 scripts/check_feature_traceability.py` 阻止缺项、断链和未注册场景回退。
+
+| 功能ID | 功能 | 主设计 | 正式代码/数据入口 | 验收入口（tests/verification） | 契约与记录现状 |
+|---|---|---|---|---|---|
+| PLAYER-STATE | 八态、移动、受击、冲刺 | [03](03_技术施工_玩家与操作.md) | `src/player3d/Player3D.gd`、`states/` | `verify_player3d_animation_flow` | 手枪待机/移动/换弹/开火/gallery专项已按显式`bp_pistol`前置恢复并通过；原因码/回放待补 |
+| PLAYER-INTERACT | 门、灯、设施统一仲裁 | [03](03_技术施工_玩家与操作.md) | `PlayerInteractionController3D`→Tower | `verify_unified_player_interaction_flow` | 实现存在；原完成度“未统一”过期 |
+| PLAYER-LIGHT | 手电、电池、光照/可见性 | [03](03_技术施工_玩家与操作.md)、[15.1](15.1_技术施工_电力系统.md) | `PlayerFlashlight3D/PlayerVision3D`→ItemUseHandler | `verify_3d_flashlight_charge_flow` | 当前链已纳入电力系统；基地供电表现仍待完善 |
+| WEAPON-COMBAT | 远程/近战、命中与反馈 | [玩法设计](design/战斗奖励与物品流转设计.md)；[04](04_技术施工_战斗与局内成长.md) | `src/combat3d/`、`src/player3d/melee/` | `verify_3d_melee_combat_flow`、`verify_3d_melee_feedback_flow` | 有设计与历史；反馈验收未通过 |
+| WEAPON-OWNERSHIP | 完整武器实例转移 | [玩法设计](design/战斗奖励与物品流转设计.md)；[04](04_技术施工_战斗与局内成长.md)、[09](09_技术施工_存档结算与复活.md) | `WeaponInstance`→`EquipmentTransactionService` | `verify_equipment_transaction_service`、`verify_weapon_instance_contract_matrix` | 可用替身验证；全局所有权仍待补 |
+| INVENTORY-SLOTS | 棋盘式背包、物品占格、保险、快捷物品、扩容 | [玩法设计](design/战斗奖励与物品流转设计.md)；[装备与棋盘式包裹](design/装备与棋盘式包裹设计.md)；[04](04_技术施工_战斗与局内成长.md) | `ItemRegistry`→`InventoryModule`→`GridInventoryBoard/InventoryUI`；装备事务独立 | `verify_grid_inventory_layout`、`verify_backpack_equipment_flow`、`verify_finite_ammo_flow`、`verify_guaranteed_loadout_ammo_flow` | 八列50px棋盘、8×2保险柜、中央丢弃、仓库定点转移与贩卖机买卖已接入；验收边界见[八列与基地仓储记录](development/2026-10-15_inventory_storage_r3.md) |
+| FATE-RULES | 48运行塔罗、78目标牌组、三作用域、门后购卡制 | [14](14_技术施工_命运塔罗牌组.md)、[04](04_技术施工_战斗与局内成长.md) | `FateCardPresets/FateCardEngine/TarotFateCatalog` | `verify_tarot_fate_runtime`、`verify_celestial_fate_scope_flow`、`verify_fate_card_purchase_flow`、`verify_fate_weapon_completion`、`verify_fate_character_completion`、`verify_fate_world_completion`、`verify_fate_integration_completion`、`verify_fate_resume_completion` | 有设计与历史；[逆位文字正向可读专项](development/CHANGELOG.md#2026-10-08-逆位命运卡文字正向可读)通过；2026-10-14 门后由「三选一 + 满槽兑金币」改为**局内金币购卡制**（三张全出、按稀有度标价、可全买可不买、只在退出时关闭），专项 `verify_fate_card_purchase_flow`；48张运行消费者已补全，整体仍部分完成；新增30张未施工，真实窗口/静态配件/精英跨楼层边界待验收 |
+| WORLD-PLAN | 纯数据关卡/房间图；塔楼四区块与远征Expedition归属 | [远征01 设计](design/远征关卡01设计.md)；[05](05_技术施工_关卡生成与爬楼.md)、[05.1](05.1_关卡区块设计.md) | `FloorPlanGenerator/RoomGraphRuntime`、`TowerDescent3D/Blocks` | `verify_floor_plan_generator`、`verify_room_graph_persistence_services`、`verify_tower_level_blocks`、`verify_dungeon_wave_intermission` | 计划/查询可独立；远征01数据驱动13房、固定房型（pin_content_templates=true）、整房端口约束摆位已接通。room_03/room_04差异仍硬编码；房型→变体→房间数据登记未实现，不要求每局随机。完整门事务及整关回归仍待闭环；远征01开门后原位camera-only代理已接入，专项 `verify_expedition_camera_door_proxies` 与结果见[开发记录](development/CHANGELOG.md#2026-10-12-远征01开门摄像机门墙代理)。不提升整关完成状态；波次记录见[开发记录](development/2026-09-26_room_wave_intermission.md)。2026-10-14 新增**关卡级怪物规则** `monster_rules`（数值绝对覆盖 ＋ AI 手感参数 ＋ 死亡自爆），落点只在远征01、**不进 `layout_id`**（不断存档）；同期 `room_02` 改「中心 1 群 ＋ 四角 4 群」并加房间级联动激活（60 m），见[开发记录](development/2026-10-14_expedition01_monster_rules.md) |
+| WORLD-ENTRY | 基地全息城市选关、塔3门前确认、读取界面与来源返航 | [全息城市设计](design/远征全息城市交互设计.md)；[塔3天台入口](design/rooftop_cross_tower_route.md)；[远征01](design/远征关卡01设计.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D`拥有行动来源；`ExpeditionDepartureService`统一出发交接，基地选关/天台门→`ExpeditionLoadingScreen`→目标关卡 | `verify_expedition_hologram_city`、`verify_expedition_departure_carry`、`verify_tower03_expedition_entry`、`verify_expedition_extraction_carry_return` | 入口最后阶段及01通关解锁02已接入，02实际场景待制作，见[入口记录](development/2026-10-12_hologram02.md)。基地与塔3来源分别返航；双梯碰撞、来源续局与死亡/撤离/退出专项和真实窗口通过，见[塔3记录](development/2026-10-12_tower03_expedition_entry.md)。整关历史墙体/走廊缺口保留，见[全息记录](development/2026-09-29_expedition_hologram_city.md)；读取页布局与分帧加载见[读取记录](development/2026-10-12_loading_animation_budget.md)，首次返基地顿帧仍待消除 |
+| WORLD-GATE | 到达门、Boss门、楼梯 | [05](05_技术施工_关卡生成与爬楼.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D`→FloorBundle→runtime checkpoint→RoomDoor3D | `verify_arrival_gate_floor_bundle_flow` | 2026-09-23裁决：连续爬塔非当前主玩法，97F以下关闭；旧到达门/Boss门综合失败降为低优先级保留。正式版本只要求远征主线、99F与98F区块00；未来重开爬塔时复核完整合同 |
+| WORLD-SEGMENT | 隔离间、区段卸载、永久遗失 | [05](05_技术施工_关卡生成与爬楼.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D._finalize_airlock_commit`→BaseManager checkpoint→unload | `verify_arrival_gate_floor_bundle_flow`、`verify_three_segment_tower_generation_flow` | 2026-09-23裁决：三区段、隔离间与永久遗失链当前关闭并降为低优先级；保留实现和验收，不判绿，未来连续爬塔重新开放时统一恢复与核签 |
+| WORLD-LOOT | 搜索、清房钥匙、剧情刷物、掉落与拾取 | [玩法设计](design/战斗奖励与物品流转设计.md)；[04](04_技术施工_战斗与局内成长.md)、[05](05_技术施工_关卡生成与爬楼.md)、[08](08_技术施工_剧情触发.md) | `RuntimeRewardCoordinator.grants[]`→`RewardSink.apply_ground`→`Dungeon3D`/`GroundLootPickup3D` | `verify_reward_ground_handoff`、`verify_opening_script_runtime`、`verify_new_save_handoff`、`verify_finite_ammo_flow` | 剧情刷物/清房/搜索/击杀按实际落地报告；地面实体内部仍消费旧 item 字典，真渲染按用户要求暂缓。2026-10-14 两项改动（均只在远征01 生效）：① **关卡空掉落率只作用于装备类**，带 tag `ammo` 的备弹**豁免**（否则「警察僵尸 80% 掉弹药」会被二次打折成 47%）；② **货币（金币）改走独立掉落通道** —— 100% 必掉、不占物品件数、不受空判定影响，数量按怪种+楼层分档、**地面模型随数量分档放大**。见[开发记录](development/2026-10-14_expedition01_monster_rules.md) |
+| ENCOUNTER-EVENT | 运行时遭遇事件：可随时调用的独立刷怪编排（刷什么／多少／多久／分不分波／前置条件／完成与取消条件） | [触发器刷怪](design/触发器刷怪设计.md)；[09](09_技术施工_存档结算与复活.md) | `EncounterEventDirector3D`（状态Owner）＋`EncounterEventHost3D`（Dungeon窄适配）→`Dungeon3D.start_encounter_event`／`cancel_encounter_event`／`advance_encounter_event`／`get_encounter_event_snapshot` | `verify_encounter_event_flow` | 撤离防守已迁移为它的第一个使用方（`completion: timer`＋`progress_mode: external`，读条与结算权仍在撤离信标）。支持 `timer`／`clear`／`timer_and_clear`、`pause`／`cancel`／`follow_current_room`、前置条件、`max_alive` 存活上限、`flag`／`hint` 结果动作与快照恢复；Boss 明确拒绝走普通路径。`light` 尚未有正式房间灯光接口，返回失败而非假装成功。见[开发记录](development/2026-10-15_encounter_event_mechanism.md) |
+| REWARD-SERVICE | 统一奖励与掉落：一份 Spec → 唯一解析器 → 三个发放口（物品/任务/搜索/怪物/清房钥匙/保底备弹/剧情） | [玩法设计](design/战斗奖励与物品流转设计.md)；[04](04_技术施工_战斗与局内成长.md)（§22）、[05](05_技术施工_关卡生成与爬楼.md)（§11 `reward_slots[]`）、[01](01_内容数据库说明.md)（§5.5/§5.7） | `src/rewards/`：`RuntimeRewardCoordinator`（运行时调度/确定性事件ID）+`RewardPoolRegistry/RewardSpec/RewardService/RewardSink` | `verify_reward_service_flow`、`verify_reward_ground_handoff`、`verify_requested_experience_upgrade_flow`、`verify_finite_ammo_flow`、`verify_narrative_timeline` | 报告只保留`grants[]`；四条地面主链通过Sink确认实际生成；专用发放出口与废弃池/真渲染另行管理 |
+| ENEMY-AI | 感知、导航、攻击、光照 | [06A](06A_怪物AI系统完整设计_评审稿.md)、[06](06_技术施工_怪物精英与Boss.md) | `Enemy3D/MonsterAIManager/MonsterVisionSystem3D` | `verify_monster_ai_system_complete`、`verify_enemy_illumination_states`、`verify_monster_startup_roar` | 有较完整规范；真实错误日志仍需严查。2026-10-14 新增**关卡级 AI 参数**（`monster_rules.ai` ＋ 房间级 `encounter.monster_ai`，缺键回退全局常量）与**胖子僵尸死亡自爆**（固定 180 伤害、敌我通吃、可级联、同房过滤）＋**警察僵尸数值覆盖**（hp 250 / 伤害 30），均只在远征01 生效；见[开发记录](development/2026-10-14_expedition01_monster_rules.md)。2026-10-14 另新增**启动过程**（业主设计）：待机/巡游进攻击前先走 0.30–0.60s 随机过渡（转身→大吼→头顶吼叫图标→攻击），挂在既有 `alert` 上、不新增状态；时长与图标尺寸公式真源 `src/enemy3d/MonsterStartupProfile.gd`，图标为 FX01-16 `VFX-MONSTER-ROAR-ICON-3D`（按体型 0.42 倍血条宽、钳制 0.45–1.20m）。2026-10-14 改版 v002：图标换成**红色感叹号**，并加「弹出→**停顿（严格静止）**→淡出」节奏；图标-血条间隙由固定 0.12m 改为按图标边长 0.30 的比例；见 [06A §6.1.1](06A_怪物AI系统完整设计_评审稿.md#611-启动过程2026-10-14-用户设计) 与 [开发记录](development/2026-10-14_monster_startup_roar.md)。**接线已完成**（`Enemy3D._tick_alert_state` 是 alert 进 chase 的唯一出口；端到端实测警觉→追击 0.60s、警觉窗口内推进 0.0000m） |
+| ELITE-ROSTER | 唯一名册、预约、跨局成长 | [06](06_技术施工_怪物精英与Boss.md) | `EliteContentCatalog/EliteRosterService`→`BaseManager`档案命令/查询→BaseData | `verify_unique_elite_roster_flow`、`verify_first_elite_growth_flow` | 12名册/1投放；私有档案直写已移除，事务失败回滚；其余11为design_only |
+| BOSS-STAGES | 显示器Boss002、95/90/85 Boss及下行权限 | [Boss002技能设计](design/Boss002显示器技能设计.md)、[06](06_技术施工_怪物精英与Boss.md) | `BossContentCatalog`→Enemy3D→Tower | `verify_expedition_monitor_boss_flow`、`verify_monitor_boss_flow`、`verify_monitor_boss_visual`、`verify_unique_boss_content_flow` | Boss002正式链已验收；既有钥匙实体契约仍未完全对齐 |
+| BASE-FACILITY | 设施入口、禁射、常驻和恢复 | [07](07_技术施工_基地设施.md) | `BaseFacilityCatalog/Service`→BaseFacility3D | `verify_base_facility_framework`、`verify_tower_base_facility_persistent_flow` | 全息终端作者锁定交互盒及语义命名StaticBody碰撞已接入，交互区专项通过；其余旧基地资产专项仍待裁决 |
+| BASE-SHOP | 基地购买、出售、保险柜转移 | [玩法设计](design/基地经济与存档结算设计.md)；[07](07_技术施工_基地设施.md)、[09](09_技术施工_存档结算与复活.md) | BaseManager事务→BaseShopService→ItemRegistry | `verify_base_shop_save_flow`、`verify_tower_facility_inventory_binding`、`verify_extraction_points_spend_transaction` | 商店已有幂等/回滚；普通资源扣款已在写盘失败和revision冲突时回滚/拒绝，工坊事务也已收口到BASE-WORKSHOP |
+| BASE-WORKSHOP | 蓝图升级与手电模块 | [07.1](07.1_玩法系统_枪械工坊.md)、[07](07_技术施工_基地设施.md) | `WorkshopMenu`→`BaseManager.upgrade_blueprint`→`BlueprintUpgradeService`→BaseData | `verify_workshop_transaction_flow`（`core`） | **核心事务已完成**：扣金币+Tier+幂等ID一次写盘；成功/余额不足/旧Tier/写盘失败回滚/重试/重载幂等独立验收通过。成本数据外置和工坊详情表现仍待做 |
+| RUN-MERCHANT | 局内商人、消费与回退 | [玩法设计](design/基地经济与存档结算设计.md)；[04.1](04.1_玩法系统_局内商人.md)、[04](04_技术施工_战斗与局内成长.md) | `RunMerchantService`按房间持久货架→GameManager/Inventory/同步行动快照→`MerchantUI`展示 | `verify_run_merchant_transaction`、`verify_run_merchant_integration`、`verify_full_3d_game_flow` | **部分完成**：首开、成交故障回滚、关窗重开和跨重载同报价/实例逻辑专项已通过；正式表现未验，综合场景节点预算旧红项未关闭 |
+| SAVE-PROFILE | 总档封套、校验、迁移与复位 | [玩法设计](design/基地经济与存档结算设计.md)；[09](09_技术施工_存档结算与复活.md) | `BaseData/ProfileSaveService/AtomicJsonStore` | `verify_pause_game_save_reset_flow`、`verify_base_shop_save_flow`、`verify_extraction_points_spend_transaction` | 普通资源扣款失败回滚已有专项；文件底层失败/备份链仍需补完整故障矩阵 |
+| SAVE-RUN | 行动自动存档、重载恢复 | [玩法设计](design/基地经济与存档结算设计.md)；[09](09_技术施工_存档结算与复活.md) | `RunPersistenceService`→Dungeon/Tower快照 | `verify_runtime_autosave_flow`、`verify_tower_runtime_restart_restore`、`verify_new_save_handoff`（均注册 `core`） | 新档98F→99F基地快照→重登的房间地面物与携带物已专项通过；一般故障矩阵仍待扩大 |
+| RUN-SETTLE | 撤离、死亡、保险返还 | [玩法设计](design/基地经济与存档结算设计.md)；[09](09_技术施工_存档结算与复活.md) | DeathSettlementModule→Dungeon/Tower→`BaseManager.commit_run_settlement` | `verify_run_settlement_transaction`、`verify_death_during_extraction_flow`、`verify_tower_extraction_return_flow` | 成功/死亡结算已一次原子写盘，写盘失败回滚、重试、跨重载幂等已有独立专项；本轮实测`verify_run_settlement_transaction` 通过 |
+| RUN-REVIVE | 复活策略 | [09](09_技术施工_存档结算与复活.md) | `RevivalPolicy`（v0.1 空策略） | `verify_revival_policy_contract` | **契约已建立、玩法仍未实现**：无复活源时稳定返回`no_revival_source`、无预约与副作用；次数/成本/复活点仍由后续设计决定，不把返基地伪装成复活 |
+| NARRATIVE-TRIGGER | 剧情触发、时间轴编排与调用权限 | [主线剧本（内容）](design/主线剧情剧本.md)；[08（系统契约）](08_技术施工_剧情触发.md) | `src/narrative/`、`NarrativeDirector` Autoload、`BaseManager.narrative_history`、`data/narrative/` | `verify_narrative_timeline`、`verify_opening_script_runtime`、`verify_new_save_handoff`（均注册 `core`） | **核心链与`run`跨局历史已实装**：完整收口写长期档，抢占/中止不写；剧情`scene.spawn_item`可通过`spawn_key`幂等落地。`retry/never`新语义、通用条件引擎与全部内容投放仍待裁决/施工。主线02—05现已接入一次性怪物、剧情步行与震屏；镜头碰撞、同层安全刷怪及旧怪错误落点修复见[修复记录](development/2026-10-12_narrative_spawn_camera_fix.md)；专项 `verify_narrative_opening_02_05` 验证实体/读档/镜头归还，见[交付记录](development/2026-10-12_narrative_opening_02_05.md)。作者侧规范见 Skill `10-narrative-timeline-authoring` |
+| DIALOGUE-UI | 底栏对话框、头顶气泡、打字机与推进 | [玩法设计](design/对话与战斗信息呈现设计.md)；[18](18_技术施工_UI与对话系统.md) | `src/ui/dialogue/DialogueUI.gd`（autoload）、`src/ui/bubble/`（气泡三件） | `verify_dialogue_ui_flow`、`verify_speech_bubble_3d`（均已注册`core`） | **已实装主链**：底栏打字/推进/三态outcome与头顶气泡；原6处文档口径已按现行代码收敛，抢占旧run回执、跳过键及真实渲染仍待验/补 |
+| TIME-DAYNIGHT | 权威时间、日夜与能源恢复时间输入 | [玩法设计](design/时间日夜与画质设计.md)；[15](15_技术施工_时间日夜与基地能源.md) | WorldTimeDomain/GameTimeManager→太阳/HUD | `verify_main_entry_realtime_sun_flow` | 新档09:00起始，无起点字段的旧档维持17:00与累计进度，见[修复记录](development/2026-10-12_narrative_spawn_camera_fix.md)；已与电力玩法拆分；统一数据配置仍待完善 |
+| POWER-SYSTEM | 基地电力、手电电力、恢复舱与未来基地负载 | [15.1](15.1_技术施工_电力系统.md) | BaseEnergyService/BaseManager；PlayerFlashlight3D/ItemUseHandler | `verify_3d_flashlight_charge_flow`、`verify_base_overhaul_flow` | **开发中**：现有两条能源链已记录；基地灯光/设施用电待接入 |
+| ENTRY-AVATAR | 启动分流、外观、衣柜、脱困 | [16](16_技术施工_主页面与角色换装.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[09](09_技术施工_存档结算与复活.md) | GameEntryFlow→Tower新档98F办公室/已有档99F基地→AvatarCustomizationPersistence；入口覆盖层二选一 `OpeningMovieScreen3D`（新档）/ `MainEntryScreen3D`（已有档） | `verify_game_entry_flow`、`verify_opening_movie_entry_flow`、`verify_avatar_return_persistence_flow`、`verify_block00_floor98_assembly`、`verify_new_save_handoff`、`verify_electronic_mask_flow`、`verify_character_expression_flow` | 新档98F、基地重登99F和未拾取地面枪跨重启已通过；开场枪由剧情生成。新档开场影片（loading→影片→渐黑无缝进游戏，不走主页菜单）已接入并真机渲染验证交接时序，见[交付记录](development/2026-10-14_opening_movie_entry.md)；有档照旧主页菜单。[电子面饰v005柔和自发光](development/2026-10-01_character_expression_soft_emission.md)8种饱满无嘴部网格、状态事件随机调用、眨眼/闪烁和真实渲染通过。独立展示相机/视觉代理目标仍未满足 |
+| UI-HUD | HUD、地图与模态输入 | [玩法设计](design/对话与战斗信息呈现设计.md)；[04](04_技术施工_战斗与局内成长.md) | HUDPresenter3D/DungeonMinimap3D/InventoryUI/HudReloadRing | `verify_hud_presenter_3d`、`verify_tactical_inventory_minimap_flow`、`verify_reference_hud_fate_visual` | Presenter可独立；其他UI仍直接读写多域。2026-10-15 换弹环迁到角色右下侧、基准25px，当前相机投影跟随，运行结果见[开发日志](development/CHANGELOG.md) |
+| VFX-POOL | Prefab注册、借出、回收；场景常驻室外云海 | [14.6](14.6_特效系统与制作规范.md) | VfxPool3D/CombatEffectPool3D→战斗调用者 | `verify_outdoor_clouds`（v002品质/实际玩家渲染通过，建筑变动局部避让及楼角可见修复30209项通过；[设计](design/outdoor_cloud_sea.md)）、`verify_vfx_pool_lifecycle`、`verify_combat_vfx_toon_v002`、`verify_bullet_vfx_profiles`、`verify_3d_melee_feedback_flow`、`verify_3d_enemy_behavior_flow`、`verify_base99_radio_music_notes`、`verify_death_blast_vfx`、`verify_zombie_goo_death_vfx`、`verify_hit_routing_vfx` |收音机音符为独立纯视觉持续附件，由radio持有、不进池，真实播放驱动且off/离层即时清空；近战和伤害飘字验收已迁正式 `VfxPool3D` AssetID；explosion 兼容链仍保留旧池，尚未完全退役；[鸟群运行包装v003](development/2026-10-12_bird_flock_refinement.md)已接入：桥上/桥下塔2上方两组200m/24s错落飞行、翼速135%，100F地面组；每鸟75%尺度±10%错落，21鸟专项与真实渲染通过；[子弹特效制作v001](development/2026-10-13_bullet_vfx_production.md)已落地：8 弹种专属弹体纯视觉（FX01-08..FX01-15）各一独立 Prefab + 共享基类 `VfxBulletBody3D`，走 `Projectile3D` 的 `visual_id` 路由、刻意不进 `VfxPool3D`（生命周期归弹体池）；专项 `verify_bullet_vfx_profiles` 通过（8 profile／路由／尺寸／真装配真开火端到端）；[死亡自爆特效v003.2](development/2026-10-14_expedition01_monster_rules.md)已落地：FX01-17 `VFX-DEATH-BLAST-3D`（胖子僵尸死亡爆炸，0.62s、带 `BlastLight`、全向对称）走本池路由；FX01-18 `VFX-BLAST-ZONE-3D`（自爆地面残留伤害场之**视觉层**，3s，伤害在 `DeathBlastZone3D`）**刻意不进池**（宿主自持，同 FX01-16／FX03-03 口径）；专项 `verify_death_blast_vfx` 通过（含倾斜 90° 平铺对照、`zone.enabled=false` 对照、防假绿哨兵，`samples=12`）；[枪族弹体尺寸档 v003.6](development/2026-10-14_gun_family_bullet_size.md)已落地：弹体视觉尺寸改为「弹种 profile × 枪身族档位」两层，档位真源 `WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG`（键 = 枪身 tags 族标识，非 `gun_id`）——散射喷壶由小变大（出生 42%、0.30s 线性长满）、反胃榴弹筒 ×1.55、弹弓狙击横向 ×0.95 + 沿飞行轴 ×2.0，其余枪持平中性档；`VfxBulletBody3D` 新增**确定性**生长包络与「各件局部长轴」轴向拉伸（不写父级 scale，避免父级非均匀缩放 × 子级旋转的剪切）；`Projectile3D` 新增 `_gun_bullet_geometry` 下发链路，子投射物继承、复借双处复位；专项 `verify_bullet_vfx_profiles` 扩至 `samples=59`（含 9 枪档位与五组反向对照）；同日追加**散射喷壶弹体 ×2**（出生 0.84 / 长满 2.00，grow_from 0.42 为比例故两端同步翻倍），并修正一处「声明与实现不符」—— 碰撞球半径原复用含枪身族倍率的出口（霰弹 ×2 会把判定半径 0.12→0.24），现拆为 `_visual_scale_factor()` 与 `_collision_scale_factor()`（后者不含枪身族），碰撞回到基准 0.12；同日再减面到 **100 面以内**（业主「减面，减到 100 个面以下先」）：弹芯/外壳改 4 边棱柱（`CapsuleMesh` 的圆头来自 `rings`，`rings=0` 等价平盖圆柱且贵 8 面，圆头在 100 面预算内买不起）、尾迹锥 4 段、滴珠改 `BoxMesh`；单弹 **44~80 面**（改前 468~1020，均值 819→61.3），件数与尾迹构图未动；面数上限 100 + 逐弹种实测值已硬编码进验收（`samples=69`）防回涨；[僵尸死亡表现 v003.5](14.6_特效系统与制作规范.md)已落地：FX01-19 `VFX-ZOMBIE-GOO-DEATH-3D`（小僵尸 / 警察僵尸死亡「绿色方块爆开」，1.35s，走本池路由）——12 枚绿色方块爆炸粒子（尺度过冲 4.6 倍、0.24s 收干净）+ 14 枚 g=30 抛物线飞溅粒子（解析式求落点、落地压扁缩没）+ 4 块扁平方形地面液体（落在飞溅粒子的真实落点，**严格停留 0.50s** 后下沉 0.30m 并淡出）；`context.floor_y` 为地面高度唯一真源（−1176 m 深层楼专测，未传时按「胸口=脚底+0.65」反推，**绝不以 0 兜底**）；同事务 `Enemy3D` **去掉小僵尸 / 警察僵尸的 2.4s 倒地动画与尸体**（模型同帧收起、节点本帧回收、不进死亡显影组；其它怪种死亡链路逐字不变）；专项 `verify_zombie_goo_death_vfx` 通过（含停留窗口行为测量、`floor_y` 三向对照、胖子僵尸反向对照，`samples=14`），`verify_melee_zombie_death_visibility` 同步改写为新契约；[命中特效分流 v003.6](14.6_特效系统与制作规范.md)已落地：**新增 FX01-20 `VFX-GOO-HIT-3D`**（打中僵尸三兄弟小僵尸/警察僵尸/胖子僵尸时 12 枚绿方块爆开，0.26s，**刻意无灯、不消费 normal**）与 **FX01-21 `VFX-METAL-SPARK-HIT-3D`**（打中其余一切时 5 颗白方块 + 2 根金色长条火星，火星沿**切平面**擦出，**唯一消费 `context.normal`** 的战斗命中件）；两件走 `VfxPool3D`（`FX01_GOO_HIT` / `FX01_METAL_SPARK_HIT`），分流入口**唯一**：`Enemy3D.uses_goo_hit_burst()`（`ZOMBIE_KINDS`），枪击（`Projectile3D._spawn_hit_effect` 五处）与近战（`PlayerMeleeCombat3D`）共用 ⇒ 同一只怪不可能两种读法；`VFX-IMPACT-3D` 保留给非僵尸死亡爆点/护盾弹开，命中路径已不再借它。**FX01-17 重做 v002** = 小僵尸死亡表现 **×2 + 绿色冲击波**（尺寸由调用方固定 2.0，不再按伤害半径反推）；**FX01-19 保持 v001 不变**（业主「小僵尸的死亡特效不要改变」，冲击波只有胖子僵尸那条有）。结构：抽 `VfxGooDeathBase3D`（两条死亡链路共享身体，子类只覆盖资产身份 + 冲击波开关）与 `ToonVfxBurst`（共享运动学）。专项 `verify_hit_routing_vfx` 通过（`samples=26`，含两件无灯正面断言、法线坐标系 +X 对照、火星切平面三法线、枪击路由三向对照、近战静态门禁）；`verify_death_blast_vfx` 与 `verify_zombie_goo_death_vfx` 同步改按新设计；[僵尸受击件 v003.8](14.6_特效系统与制作规范.md)已落地：**FX01-20 `VFX-GOO-HIT-3D` 升 v002** —— 业主「小僵尸和警察僵尸的受击特效太大了，**使用击中其它物体的那个特效**，然后**改成绿色**即可，放大大概 **10%**」⇒ v001 的「12 枚绿方块爆开」整组退役，换成 FX01-21 那一套（5 颗方块 + 2 根长条火星）**只换色板**：`VfxMetalSparkHit3D` 抽成**共享父类**（只暴露 `_asset_id/_asset_version` 与色板三项钩子），`VfxGooHit3D` 只写这五个⇒ 两件几何与运动学**逐字相同**、不可能各自漂移。**尺寸不再独立定档**：`Projectile3D.ZOMBIE_HIT_SIZE_RATIO = 1.10`，`GOO_HIT_SIZE_*` 由 `METAL_SPARK_SIZE_*` 派生（0.374 / 0.462）；近战新增 `PlayerMeleeCombat3D.ZOMBIE_HIT_BASE_SIZE = 0.42`（近战件那套 0.88~1.6 是按 FX01-05 基准定的，直接喂给方块基准 0.16 的火星造型会糊住半个怪 —— 那正是「太大」的根因）。**新增贴肉落点契约**（`Enemy3D.hit_effect_anchor(hit_point, surface_normal)`）：`Projectile3D._spawn_hit_effect()` 对 `Enemy3D` 一律先过这道（怪体碰撞柱是玩法口径、比模型大一圈，不收就悬在壳外），**墙面 / 掩体不过**；退让量**按模型实测几何现算** —— 取「命中高度那一层的横截面 + 全高 Y」的包围盒，沿外法线反向射线用逐轴 slab 夹逼求进入距离，`travel == 0`（壳比模型窄，如胖子僵尸 X 向）时**不推**；⚠️ 初版写死 0.20m 经真渲染实测**仍悬空 0.18~0.24m**，不能写死（详见 14.6 v003.8 行）；**朝向契约同时改口**为消费 `context.normal`（与 FX01-21 同形），近战侧由 `_hit_surface_normal()` 补外法线。专项 `verify_hit_routing_vfx` 改按 v002，`samples 26 → 29`，新增「两件同形」双向对照（同一 size 下件数/尺度/外推量/长条长度逐项相等，颜色**必须不同**；绿色判据直接看颜色通道，不读被测脚本自报字段）、贴肉落点三向判定、枪击借出件落点断言、两条静态门禁|
+| AUDIO-MUSIC | 音效、场景音乐与音频资产映射 | [音乐播放清单](design/音乐播放清单.md)、[音效系统与资产设计](design/音效系统与资产设计.md)、[10](10_资产与内容规范.md)、[14.8](14.8_音乐系统与配乐资产.md) | AudioManager/MusicCatalog/MusicManager/MusicTrigger；目标扩展 SoundSet/CueProfile 语义事件映射 | `verify_music_system`、`verify_requested_experience_upgrade_flow` | 音乐清单和全游戏音效目标设计已建立；36组SFX已重制替换为v002；89组140条声音与基础SoundSet语义入口已建立，详见development/2026-10-13_sfx_rebuild.md；新增领域触发、遮挡、统一设置与真实听感仍待完成；AudioManager与MusicManager继续分开管理生命周期；2026-10-14 天台（100F）BGM 用 `TowerAtmosphere3D.rooftop_music_enabled` 开关关闭（默认 false，`rooftop_relax` 曲目条目、A/B OGG 资产与触发调用全保留，置 true 即恢复；见[开发记录](development/2026-10-14_rooftop_bgm_disabled.md)） |
+| GRAPHICS-POSTFX | 画面设置、调参、屏幕后处理 | [玩法设计](design/时间日夜与画质设计.md)；[13.1](13.1_技术施工_画质设置与后处理.md)、[13](13_技术施工_性能优化与热管理.md)（上级） | GraphicsSettingsManager/PostfxOverlay/FlashlightColorTweaker | `verify_graphics_settings_ui_flow`、`verify_postfx_overlay_runtime`、`verify_postfx_autopersist`、`verify_graphics_settings_visual` | 设计与施工已分层；调参转正范围待裁决，保存失败结果、UI与3D像素隔离、正式画面/性能仍未闭环，旧7/9口径失配不能只凭文档关闭 |
+| PERFORMANCE-RUNTIME | 帧预算、流送、长测与退出 | [13](13_技术施工_性能优化与热管理.md)、[11](11_测试与发布.md) | RuntimePerformanceManager/GameplaySpatialRegistry3D | `verify_3d_performance_budget`、`verify_performance_runtime_complete` | 有规范/历史；节点预算失败，未执行本次真实GPU/长测 |
+| TRAINING-RANGE | 独立靶场与武器预览 | [11.1](11.1_测试功能_独立训练场.md) | `src/training3d/TrainingRange3D.gd`、`TrainingArmoryBay3D.gd`、`TrainingSpawnPad3D.gd`、`TrainingFateBenchPanel.gd` | `verify_training_range_3d_flow`、`verify_training_range_isolation`、`verify_pause_menu_training_range_entry`、`verify_training_range_3d_visual` | **功能版本1.1已完成**：入口移至 Esc（仅基地可用，靶场内部不自嵌套）；20 架军械库无限取用、3 个刷怪触发台、全量命运卡组装台、10×10 5m 地砖封边场地；三类靶标、重置/退出、暂停及 BaseData 逐键还原由独立契约覆盖 |
+| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[账本入口](../../assets/registry/README.md) | 白盒/风格→02建模前组件计划→01母版/实例→稳定组件→03可继承/Godot变体/Blender差异→正式房间TSCN | `scripts/check_asset_registry.py`、`scripts/check_media_asset_domains.py`、资产专项、真实场景渲染 | **部分完成**：开放世界塔2/塔楼03原资产为独立仅表现场景，塔2含三独立塔吊；[跨塔天桥](design/rooftop_cross_tower_route.md)已连接主塔100F与等高塔3，塔2低16m不可进入，两段桥使用原塔吊起重臂，308项专项通过，见[导入记录](development/2026-09-30_openworld_towers_runtime_import.md)。远征13房已有静态TSCN；L型走廊v012的l_turn/u_turn、数据库v014的db_01、办公室v009、桥房v010、Boss v011及复用安全屋已接入。标准房82实例源未转正，room_07仅通用壳体；db_02与撤离正式美术/完整验收未闭环。数据登记和自动合并保护未实现；历史资产零问题不代表当前工作区重新通过，见[链路修订记录](development/2026-09-18_战局房间美术制成与导入链路.md) |
+| ASSET-ROOFTOP | 天台参考组件与标准外墙 | [组件契约r2](design/rooftop_component_library.md) | `tower_zones/rooftop/source/reference_components/v002/`的Blend与catalog；Godot入口保留原版 | `qa/validate_rooftop.py`、锁区签名、严格逐面UV、固定镜头渲染 | Blender源44独立包完成；新增7挂藤变体与厚门口；运行天台设施已清空，见[清空记录](development/2026-09-17_rooftop_facilities_removed.md)；外墙主体5×0.30×11.9m；未导出或接入Godot，见[交付记录](development/2026-09-17_rooftop_ivy_thick_door_v002.md)；2026-10-14 登记 9 件天台破损/废墟类独立组件（`design_only`，仅入场景账本、未制作），见[登记记录](development/2026-10-14_rooftop_standalone_components_registered.md) |
+
+## 3. 开发记录定位
+
+ASSET-PIPELINE当前补充：[塔4-2与圆形屋面升层](design/tower04_ground_court.md)已形成塔4 v010、独立庭院近景v002及远景合景。圆形屋面升高5m并增加28级旋梯；庭院23种组件/1027实例，远景合景583247三角。三项资产已登记，结构/UV源验收通过；未导入引擎，详见[交付记录](development/2026-10-02_tower04_ground_court.md)。
+
+ASSET-PIPELINE历史补充：[塔4商场源契约](design/tower04_mall_source.md)与[v005末世平台记录](development/2026-10-01_tower04_apocalypse_platform.md)。150×50m、五层；1109独立包，平台按五区及XY≤10m模块管理；54独立营地设施、12局部藤蔓，保留694地板及原流线。四材质/公共贴图/MipMap不变，下部主体锁定。仅Blender源，未导入运行时；v001–v004保留。[v004近景地表](development/2026-10-01_tower04_surface_step2.md)、[v003路线](development/2026-10-01_tower04_routes_step1.md)及[v002记录](development/2026-10-01_tower04_plan_refinement.md)保留原时点事实。
+
+当前全部功能共同关联[本次审计记录](development/2026-09-12_documentation_audit.md)，它只记录审计，不冒充功能开发史。既有功能的原始开发记录按下列位置回溯：
+
+- PLAYER：[玩家历史](development/history/03_玩家与操作_历史记录.md)。
+- WEAPON/INVENTORY/FATE/UI：[战斗历史](development/history/04_战斗与局内成长_历史记录.md)。
+- ENEMY/ELITE/BOSS：[怪物历史](development/history/06_怪物精英与Boss_历史记录.md)、[精英推送摘要](development/history/14.5_推送更新摘要_2026-08-27.md)。
+- BASE：[基地历史](development/history/07_基地设施_历史记录.md)。
+- PERFORMANCE/TOOLING：[性能历史](development/history/13_性能优化与热管理_历史记录.md)、[测试历史](development/history/11_测试与发布_历史记录.md)。
+- AUDIO/VFX：[音乐修复](development/history/14.8_音乐系统与配乐资产_历史记录.md)、[特效快照](development/history/14.6_特效系统与制作规范_历史记录.md)。
+- WORLD/SAVE/TIME/ENTRY/ASSET：[版本开发日志](development/CHANGELOG.md)及[场景成品化历史](development/history/17_天台至98层成品化验收.md)。逐功能关联已收录到 `feature_registry.json`，不再只依赖本节的人工分组。
+- P2 追溯和媒体资产拆分：[P2修复记录](development/2026-09-23_p2_media_and_traceability_repair.md)。
+- WORLD-ENTRY：[关卡传送入口与远征关卡设计](development/2026-09-18_level_teleport_entry_and_standalone_map.md)、[远征关卡出生安全房退出门契约](development/2026-09-19_standalone_safe_room_exit_contract.md)、[远征关卡01制作记录](development/2026-09-19_expedition_level01_buildout.md)。
+- NARRATIVE：剧情时间轴核心链与对话 UI 均已实装并进入 core；见 `src/narrative/`、`verify_narrative_timeline`、`verify_opening_script_runtime`。玩法事件（`MapFateTriggers`/命运卡）与剧情事件保持区分，不合并。RUN-REVIVE 已有空策略契约但无实际复活来源；GRAPHICS-POSTFX 已拆独立设计与施工，但正式表现/保存失败合同仍缺；RUN-MERCHANT与BASE-WORKSHOP已有独立玩法页。开发中功能不得因文档已建立而提前标成实现完成。
+
+## 4. 允许的独立开发方式
+
+ASSET-PIPELINE 新增独立 [SKYLINE 8层大楼及景观接入](development/2026-09-30_skyline08_building_source.md)：`ENV-OPENWORLD-SKYLINE08`、v004，252组件及整楼稳定PackedScene已导入并按指定坐标接入大地图，全部复用塔2既有四角色材质；独立加载与真实渲染专项通过。仅表现无碰撞；导航、楼内行走及移动端性能/LOD验收未执行，不提升ASSET-PIPELINE总体完成状态。
+
+优先将楼层计划、房间图查询、装备交换、HUD映射、时间/能源计算作为稳定边界，使用输入快照和替身开发。跨模块输入使用内容ID、实例ID、布局ID、事务ID和版本化快照相连；UI与表现订阅结果，不成为领域事实源。
+
+塔楼生命周期、统一结算、工坊交易、VFX迁移暂不能按“已完全解耦”并行改写；**剧情已冻结命令、数据所有者与失败语义**（见 [08](08_技术施工_剧情触发.md) §5/§6/§8），可按 v0.2 阶段独立施工。其余先冻结命令、数据所有者与失败语义，再做逐链路提取。每次提取同时保留正常流程与故障恢复验收，不做一次性大重写。
+
+`REWARD-SERVICE`（[04](04_技术施工_战斗与局内成长.md) §22）属于“已冻结命令、数据所有者与失败语义”的一类，可按 §22.11 五步独立施工：解析器是 `RefCounted` 纯逻辑，输入 `(spec, seed, floor, depth, multipliers)`、输出实体数组，**不依赖 Godot 场景**即可用替身验证；禁止它反向读 `Dungeon3D`/`RoomGraphRuntime`/任何 `world3d`。第 1 步影子模式不改现网行为，是安全起点。
+
+## CHARACTER-EXPRESSION · 独立表情模块
+
+Owner：`CharacterExpressionSystem`；[设计与接口](design/character_expression_system.md)。选择/随机/保持在独立模块，Player状态事件只经过适配器发命令；网格显示不反向写玩法、衣柜或角色动作。入口`verify_character_expression_flow`，当前制作与验收见[自发光减弱](development/2026-10-01_character_expression_soft_emission.md)；[无嘴部深化](development/2026-10-01_character_expression_mouth_free.md)保留历史，[初版8种表达记录](development/2026-10-01_character_expression_system.md)保留历史。
+
+ASSET-PIPELINE / ENEMY-AI [胖子僵尸03](design/胖子僵尸03动作设计.md)：v011，2.2m/512贴图、13动画/12态绑定；独立kind `fat_zombie03`可在实体场景、固定波次和触发盒调用，已接替壳甲卫兵的现行盒/怪池，厚血慢速/拍合/局部轻击/死亡已验收。见[运行配置](design/胖子僵尸03运行配置.md)及[运行交付](development/2026-10-03_fat_zombie03_runtime_binding.md)。
+
+ENEMY-AI / ASSET-PIPELINE [壳甲卫兵退役](development/2026-10-03_shielded_retirement.md)：现行刷怪由03胖子接替，旧存档及历史设计保留；独立验收verify_shielded_retirement。
+
+ENEMY-AI / ASSET-PIPELINE [死亡视野修复](development/2026-10-04_fat_zombie03_death_visibility.md)：死亡退出AI后仍由独立组参与视野遮挡，表现帧推进倒地至回收；真实Player3D视野与渲染、原失踪条件负向验证。
+
+ENEMY-AI / ASSET-PIPELINE [胖子僵尸减面](development/2026-10-09_fat_zombie03_reduction.md)：1979三角，保留13段动作，重新导入与死亡渲染通过。
+
+ENEMY-AI / ASSET-PIPELINE [小僵尸减面减骨](development/2026-10-09_melee_zombie_reduction.md)：1790三角/20骨，每手一骨，重新蒙皮与六段动作、死亡渲染验收通过。
+
+98F四房设施已正式接入：29组件、4份Godot设施布局、328实例，沿用旧墙地砖，第三第四房拆门贯通。验收 erify_block00_facilities（manual）；详见[导入记录](development/2026-10-09_block00_facilities_import.md)。
+
+ASSET-PIPELINE / WORLD-LOOT：[物品道具双模型规范](design/物品道具双模型制作规范.md)；[8件双模型源交付](development/2026-10-14_item_prop_dual_models.md)；[地面简模接入](development/2026-10-14_item_ground_runtime_import.md)。ground已导入并接线，preview高模待导入；运行与视觉验收未执行。
+
+ASSET-PIPELINE / WORLD-LOOT / INVENTORY-SLOTS / WEAPON-COMBAT：[剩余20件双模型与28个ID接入](development/2026-10-14_remaining_item_models.md)，蓝图共用、拾取/图标/装配验收与账本同步完成。
+
+ASSET-PIPELINE / WORLD-LOOT / INVENTORY-SLOTS：[物品独立高亮高饱和色板](development/2026-10-15_item_palette.md)，31资产使用专用贴图，S/V各提高40%，源、运行材质、账本与skill已同步。
+
+ASSET-PIPELINE / INVENTORY-SLOTS / WORLD-LOOT：[物品独立四材质与图标补光](development/2026-10-15_item_independent_materials.md)，S/V累计1.61；四材质独立、图标补光0.45，真实开关对比通过。
