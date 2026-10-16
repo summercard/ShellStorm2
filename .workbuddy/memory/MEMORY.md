@@ -26,6 +26,13 @@
   判据：`grep -rl "<uid>"` 看有无 `.tscn/.tres` 引用；本项目 `.tscn` 多用 `path=`（不带 uid）
   引用脚本，故 uid 内容差异通常不影响任何引用。
 
+- **「僵尸冲突态」：`UU` 残留但 `merge --abort`/`rebase --abort` 都报没有进行中的操作**（2026-10-16 实测）：
+  表现为 `status` 有 `UU` 行、`.git/` 里躺着 `REBASE_HEAD` + `AUTO_MERGE`，却既无 `MERGE_HEAD`
+  也无 `rebase-merge/`、`rebase-apply/` 目录（上次合并被别的会话/中断打断后留下的孤儿状态）。
+  ⇒ 判据是 `git rev-list --left-right --count HEAD...origin/<分支>`：**`0  0` 说明 HEAD 已等于远端最新**，
+  此时「拉取最新」无事可做，要清的只是本地残留 ⇒ 先备份涉及文件，再
+  `git reset --hard HEAD`（HEAD 即线上版本）+ `rm -f .git/REBASE_HEAD .git/AUTO_MERGE`。
+  未跟踪文件（本地新写的评审报告等）不受影响，会保留。
 - **`.git/index.lock` 陈旧锁会潜伏到第一次写操作**（2026-10-15 实测）：当天 08:44 中断遗留的锁，
   直到中午 `git add` 才报 `Unable to create index.lock`（只读的 `status/diff/fetch` 从不撞它）。
   ⇒ 删除前必须两条同时成立：无 `git`/`git-lfs`/`ssh` 进程，且 `status --porcelain` 第一列全空
