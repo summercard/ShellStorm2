@@ -74,8 +74,8 @@ func set_root(new_root: AssemblyNode) -> bool:
 	if root != null:
 		clear_assembly(false)
 	root = new_root
-	root.depth = 0
-	_register_node(root)
+	root.set_subtree_depth(0)
+	_register_subtree(root)
 	_apply_stats(root.get_computed_stats())
 	tree_changed.emit()
 	stats_changed.emit(root.get_computed_stats())
@@ -113,7 +113,7 @@ func mount(
 			validation_failed.emit("当前枪械未开放%s槽" % AssemblyNode.get_attachment_slot_display_name(int(slot_type)))
 			return false
 	# 深度检查
-	if _get_subtree_depth(child) + parent_node.depth > MAX_DEPTH:
+	if _get_subtree_depth(child) - child.depth + parent_node.depth + 1 > MAX_DEPTH:
 		validation_failed.emit("超过最大深度限制 (%d)" % MAX_DEPTH)
 		return false
 	# 循环引用检查

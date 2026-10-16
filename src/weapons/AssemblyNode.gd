@@ -22,6 +22,7 @@ enum SlotType {
 	STOCK,       # 枪托槽
 	TACTICAL,    # 战术配件槽
 	MUTATOR,     # 特性配件槽
+	MOUNT_2, MOUNT_3, MOUNT_4, MOUNT_5, MOUNT_6, MOUNT_7, MOUNT_8,
 }
 
 ## 所有枪械共用一套公开配件位置；具体枪械通过 supports_<slot> 标签开放子集。
@@ -73,6 +74,8 @@ var slots: Dictionary = {
 	SlotType.MUTATOR: null,    # 特性配件槽
 }
 
+const FATE_MOUNT_SLOTS: Array[int] = [SlotType.MOUNT, SlotType.MOUNT_2, SlotType.MOUNT_3, SlotType.MOUNT_4, SlotType.MOUNT_5, SlotType.MOUNT_6, SlotType.MOUNT_7, SlotType.MOUNT_8]
+
 ## 父节点引用（反向指针，构成双向树）
 var parent_node: AssemblyNode = null
 
@@ -83,6 +86,8 @@ var depth: int = 0
 static var _uid_counter: int = 0
 
 func _init(p_node_type: NodeType = NodeType.GUN_BODY, p_name: String = "") -> void:
+	for slot in FATE_MOUNT_SLOTS:
+		slots[slot] = null
 	node_type = p_node_type
 	node_name = p_name if p_name != "" else _default_name(p_node_type)
 	node_id = _generate_uid()
@@ -225,7 +230,7 @@ func mount(slot_type: SlotType, child: AssemblyNode) -> bool:
 	# 建立连接
 	slots[slot_type] = child
 	child.parent_node = self
-	child.depth = depth + 1
+	child.set_subtree_depth(depth + 1)
 
 	return true
 
@@ -235,7 +240,7 @@ func unmount(slot_type: SlotType) -> AssemblyNode:
 	var child: AssemblyNode = slots[slot_type]
 	if child != null:
 		child.parent_node = null
-		child.depth = 0
+		child.set_subtree_depth(0)
 		slots[slot_type] = null
 	return child
 
@@ -311,3 +316,10 @@ func get_debug_info() -> Dictionary:
 
 func _to_string() -> String:
 	return "[AssemblyNode:%s %s(%s) d=%d]" % [node_id, node_name, NodeType.keys()[node_type], depth]
+
+
+func set_subtree_depth(value: int) -> void:
+	depth = value
+	for child: AssemblyNode in slots.values():
+		if child != null:
+			child.set_subtree_depth(value + 1)

@@ -7,14 +7,14 @@ class_name TarotFateCatalog
 static var DEFINITIONS := {
 	# 大阿尔卡那
 	"fate_mark_enemy": _entry("愚者", "MAJOR", "MAJOR", "0", "十杀必得命运，失30金币", "每击杀10个敌人必得一张命运卡，同时失去30金币。", {"chance": 1.0, "currency_cost": 30}),
-	"fate_gun_on_gun": _entry("魔术师", "MAJOR", "MAJOR", "I", "主副枪交替，单发更强", "主副枪改为交替开火；单发威力提高，但主枪射速降低。", {"alternate_fire": true, "damage_scale": 1.25, "fire_rate_scale": 0.75}),
+	"fate_gun_on_gun": _entry("魔术师", "MAJOR", "MAJOR", "I", "身后挂副枪，可叠加横排", "所选副武器挂在角色身后；闲置缩小，开火放大，多个挂点横向排列。", {"mount_reversed": true}),
 	"fate_moon_vitality": _entry("女祭司", "MAJOR", "MAJOR", "II", "生命上限-10，恢复50", "最大生命降低10，并立即恢复50生命。", {"amount": -10, "heal": 50}),
 	"fate_sun_extra_loot": _entry("皇后", "MAJOR", "MAJOR", "III", "下箱追加4抽，保留最佳", "下一个容器追加4次候选抽取并保留最高品质结果，最高为稀有且地面仍只掉落1件。", {"count": 4, "max_rarity": "RARE"}),
 	"fate_sun_reinforce": _entry("皇帝", "MAJOR", "MAJOR", "IV", "下房增加精英，奖50金币", "下一个敌对房间增加1名精英；清理后额外获得50金币。", {"count": 1, "elite_count": 1, "clear_currency": 50}),
 	"fate_sun_key": _entry("教皇", "MAJOR", "MAJOR", "V", "获得2把本层临时钥匙", "获得2把临时钥匙，离开当前楼层时失效。", {"count": 2, "temporary_floor_only": true}),
 	"fate_moon_power": _entry("恋人", "MAJOR", "MAJOR", "VI", "枪伤-8%，暴击+15%", "枪械伤害降低8%，暴击率提高15%。", {"multiplier": 0.92, "crit_chance_bonus": 0.15}),
-	"fate_bullet_carry_gun": _entry("战车", "MAJOR", "MAJOR", "VII", "携枪弹命中时高伤开火", "携枪子弹不再持续射击，只在命中时进行一次高伤射击。", {"fire_on_hit": true, "damage_scale": 1.15, "fire_rate_scale": 0.0}),
-	"fate_armor_pierce": _entry("力量", "MAJOR", "MAJOR", "VIII", "伤害+15%，对盾翻倍", "伤害提高15%；不再穿盾，但对护盾造成双倍伤害。", {"damage_scale": 1.15, "pierce_shield": false, "shield_damage_scale": 2.0}),
+	"fate_bullet_carry_gun": _entry("战车", "MAJOR", "MAJOR", "VII", "携枪弹向后自动攻击", "子弹携带所选武器，枪口朝后自动开火；近战武器朝后自动挥击。", {"mount_reversed": true}),
+	"fate_armor_pierce": _entry("力量", "MAJOR", "MAJOR", "VIII", "慢速滚石命中碎裂，范围击退", "弹速与射速减半；石头命中怪物或障碍后碎裂，击退3米内怪物。", {"rock_projectile": true, "rock_shatter": true, "fire_rate_scale": 0.5}),
 	"fate_moon_stride": _entry("隐者", "MAJOR", "MAJOR", "IX", "移速-8%，冲刺无敌延长", "移动速度降低8%，冲刺无敌时间增加0.12秒。", {"multiplier": 0.92, "dash_invulnerability_bonus": 0.12}),
 	"fate_every_seventh": _entry("命运之轮", "MAJOR", "MAJOR", "X", "换弹首发×2.5，弹匣-20%", "每次换弹后的第一发伤害×2.5，但弹匣容量降低20%。", {"nth": 1, "damage_multiplier": 2.5, "after_reload": true, "magazine_multiplier": 0.8}),
 	"fate_sun_trial": _entry("正义", "MAJOR", "MAJOR", "XI", "下房敌伤-20%，金币减半", "下一个敌对房间敌人伤害降低20%，金币掉落减半。", {"damage_multiplier": 0.8, "currency_multiplier": 0.5}),

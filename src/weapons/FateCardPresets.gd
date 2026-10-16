@@ -17,8 +17,8 @@ const RARITY_MYSTIC := FateCard.CardRarity.MYSTIC
 static func bullet_carry_gun() -> FateCard:
 	var card := FateCard.new("子弹背枪", FateCard.CardType.COMBINE, RARITY_EPIC)
 	card.icon_emoji = "🔫"
-	card.short_description = "子弹飞出去时自动开枪"
-	card.description = "选择一个子弹和一个枪身，该子弹将携带枪身并自动射击"
+	card.short_description = "子弹携带所选武器，飞行中自动攻击"
+	card.description = "选择一把随身武器，每发子弹携带其模型；枪械向前开火，近战自动挥击"
 	card.tags = ["Fate.Combine", "Fate.AddChildNode", "bullet_mountable"]
 	card.effect = {
 		"action": FateCard.EffectAction.ATTACH_GUN_TO_BULLET,
@@ -39,7 +39,7 @@ static func gun_on_gun() -> FateCard:
 	var card := FateCard.new("枪上加枪", FateCard.CardType.COMBINE, RARITY_LEGENDARY)
 	card.icon_emoji = "🔗"
 	card.short_description = "副枪跟随主枪一起开火"
-	card.description = "选择一个枪身，将其挂到当前枪身上，副枪跟随射击"
+	card.description = "选择随身武器挂在枪口旁，可叠加横排；闲置缩小，开火放大并跟随攻击"
 	card.tags = ["Fate.Combine", "Fate.AddChildNode"]
 	card.effect = {
 		"action": FateCard.EffectAction.ATTACH_GUN_TO_GUN,
@@ -107,13 +107,14 @@ static func overclock() -> FateCard:
 static func armor_pierce() -> FateCard:
 	var card := FateCard.new("穿甲强化", FateCard.CardType.ENHANCE, RARITY_RARE)
 	card.icon_emoji = "🎯"
-	card.short_description = "伤害提升 50%，无视护盾"
-	card.description = "选择一个节点，伤害提升 50%，无视护盾减伤效果"
+	card.short_description = "滚石弹：弹速与射速减半"
+	card.description = "子弹变为沿地面滚动的石头；弹速降低50%，射速降低50%"
 	card.tags = ["Fate.Enhance", "Fate.AddDamage"]
 	card.effect = {
 		"action": FateCard.EffectAction.ADD_DAMAGE,
-		"damage_scale": 1.5,
-		"pierce_shield": true,
+		"rock_projectile": true,
+		"rock_shatter": false,
+		"fire_rate_scale": 0.5,
 	}
 	return card
 

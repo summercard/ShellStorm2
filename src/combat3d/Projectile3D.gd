@@ -11,6 +11,7 @@ const BULLET_VISUAL_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d
 ## 键 = 子弹模块 content_id（mod_bullet_*）；查不到即回落通用弹体 BULLET_VISUAL_SCENE。
 ## 八个弹种一条 Prefab 一个类，见 src/vfx/VfxBullet<Type>3D.gd 与账本「子弹特效」大类。
 const BULLET_VISUAL_REGISTRY: Dictionary = {
+	"fate_rock": preload("res://assets/art/vfx/combat_3d/vfx_fate_rock_root_top3d.tscn"),
 	"mod_bullet_standard": preload("res://assets/art/vfx/combat_3d/vfx_bullet_standard_root_top3d.tscn"),
 	"mod_bullet_sticky": preload("res://assets/art/vfx/combat_3d/vfx_bullet_sticky_root_top3d.tscn"),
 	"mod_bullet_bounce": preload("res://assets/art/vfx/combat_3d/vfx_bullet_bounce_root_top3d.tscn"),
@@ -53,6 +54,11 @@ const METAL_SPARK_SIZE_CHAIN := 0.26 * HIT_EFFECT_SIZE_SCALE
 const ZOMBIE_HIT_SIZE_RATIO := 1.10
 const GOO_HIT_SIZE_TARGET := METAL_SPARK_SIZE_TARGET * ZOMBIE_HIT_SIZE_RATIO
 const GOO_HIT_SIZE_ABSORB := METAL_SPARK_SIZE_ABSORB * ZOMBIE_HIT_SIZE_RATIO
+
+var _weapon_socket: Marker3D
+var _carried_weapon: WeaponModel3D
+var _rock_vertical_speed := 0.0
+var _rock_shattered := false
 
 var direction := Vector3(0, 0, -1)
 var speed := 24.0
@@ -121,6 +127,8 @@ func configure(config: Dictionary) -> void:
 	source_weapon_tree = source_tree_value as WeaponAssemblyTree if is_instance_valid(source_tree_value) else null
 	source_weapon = source_weapon_value as WeaponModel3D if is_instance_valid(source_weapon_value) else null
 	_hit_any = false
+	_rock_vertical_speed = 0.0
+	_rock_shattered = false
 	_ungrown_damage = damage
 	_attached_hit_fired = false
 	_return_hit_ids.clear()
@@ -146,6 +154,7 @@ func configure(config: Dictionary) -> void:
 	_attached_shot_timer = 0.12
 	_sync_visual_route(config)
 	if _built:
+		_rebuild_carried_weapon()
 		_apply_visual_configuration()
 		_sync_visual_orientation()
 
@@ -180,6 +189,7 @@ func _ready() -> void:
 		_add_tracked_collision_exception(shooter as PhysicsBody3D)
 	_build_visual()
 	_built = true
+	_rebuild_carried_weapon()
 	_apply_visual_configuration()
 	_sync_visual_orientation()
 
@@ -226,6 +236,11 @@ func _physics_process(delta: float) -> void:
 			direction = direction.slerp(desired, minf(1.0, delta * homing_rate)).normalized()
 	_sync_visual_orientation()
 	velocity = direction * speed
+	if bool(fate_behavior.get("rock_projectile", false)) and not _returning:
+		_rock_vertical_speed -= 18.0 * delta
+		velocity.y = _rock_vertical_speed
+		if is_instance_valid(_visual):
+			_visual.call("roll", speed * delta / 0.18)
 	var step := velocity * delta
 	# 射程上限：按实际飞行路径长度累计（含反弹折线）。榴弹类到点自动引爆，其余直接消失。
 	# 回旋镖返航（_returning）不受射程限制，否则会被掐在半路。
@@ -249,6 +264,17 @@ func _physics_process(delta: float) -> void:
 	if collider != null and collider.has_method("take_damage"):
 		_hit_target(collider, hit_context)
 		return
+	if bool(fate_behavior.get("rock_projectile", false)) and collision.get_normal().y > 0.55:
+		_rock_vertical_speed = 0.0
+		var planar := Vector3(direction.x, 0.0, direction.z).normalized() * speed * delta
+		var ground_collision := move_and_collide(planar)
+		if ground_collision != null:
+			var obstacle := ground_collision.get_collider() as Node
+			if obstacle != null and obstacle.has_method("take_damage"):
+				_hit_target(obstacle)
+			else:
+				_hit_surface(ground_collision.get_normal())
+		return
 	_hit_surface(collision.get_normal(), hit_context)
 
 
@@ -262,6 +288,8 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 			if collider.has_method("on_projectile_absorbed"):
 				collider.call("on_projectile_absorbed", damage)
 			_spawn_hit_effect(collider, GOO_HIT_SIZE_ABSORB, METAL_SPARK_SIZE_ABSORB, hit_context)
+			if bool(fate_behavior.get("rock_shatter", false)):
+				_shatter_rock()
 			_retire()
 			return
 		if bool(fate_behavior.get("size_growth", false)) and is_instance_valid(source_weapon_tree):
@@ -279,6 +307,10 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 			collider.call("take_damage", damage, critical, direction, hit_knockback)
 		_apply_secondary_effect(collider)
 		_apply_fate_on_hit(collider)
+		if bool(fate_behavior.get("rock_shatter", false)):
+			_shatter_rock()
+			_retire()
+			return
 		hit_confirmed.emit(collider, damage, critical)
 		_spawn_hit_effect(collider, GOO_HIT_SIZE_TARGET, METAL_SPARK_SIZE_TARGET, hit_context)
 		if bool(fate_behavior.get("spawn_turret_on_land", false)):
@@ -307,6 +339,10 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 
 
 func _hit_surface(normal: Vector3, hit_context: Dictionary = {}) -> void:
+	if bool(fate_behavior.get("rock_shatter", false)):
+		_shatter_rock()
+		_retire()
+		return
 	if _returning:
 		return
 	if _bounces_left > 0:
@@ -514,7 +550,7 @@ func _visual_scene_for(visual_id: String) -> PackedScene:
 
 ## 按 config.visual_id 切换弹体视觉（缺省 "" = 通用弹体，与未接入弹种前的行为一致）。
 func _sync_visual_route(config: Dictionary) -> void:
-	var requested := String(config.get("visual_id", ""))
+	var requested := "fate_rock" if bool(fate_behavior.get("rock_projectile", false)) else String(config.get("visual_id", ""))
 	if requested == _visual_id and is_instance_valid(_visual):
 		return
 	_visual_id = requested
@@ -553,7 +589,7 @@ func _apply_visual_configuration() -> void:
 	if _visual != null:
 		_visual.configure(bullet_color, _visual_scale_factor(), _bullet_visual_context())
 	if _collision_shape != null and _collision_shape.shape is SphereShape3D:
-		(_collision_shape.shape as SphereShape3D).radius = 0.12 * _collision_scale_factor()
+		(_collision_shape.shape as SphereShape3D).radius = (0.18 if bool(fate_behavior.get("rock_projectile", false)) else 0.12) * _collision_scale_factor()
 
 
 func _return_destination() -> Vector3:
@@ -645,20 +681,57 @@ func _tick_turret(delta: float) -> void:
 	)
 
 
+func _rebuild_carried_weapon() -> void:
+	if is_instance_valid(_carried_weapon):
+		_carried_weapon.free()
+	_carried_weapon = null
+	if not is_instance_valid(_weapon_socket):
+		_weapon_socket = Marker3D.new()
+		_weapon_socket.name = "BulletWeaponSocket"
+		add_child(_weapon_socket)
+	_weapon_socket.transform = Transform3D.IDENTITY
+	_weapon_socket.position = Vector3(0.0, 0.12, 0.0)
+	_weapon_socket.scale = Vector3.ONE * 0.45
+	var attached := fate_behavior.get("attached_gun", {}) as Dictionary
+	if attached.is_empty():
+		return
+	_weapon_socket.rotation.y = PI if bool(attached.get("mount_reversed", false)) else 0.0
+	_carried_weapon = WeaponModel3D.create_mounted(attached.get("assembly_snapshot", {}), _weapon_socket)
+	if is_instance_valid(_carried_weapon):
+		_carried_weapon.set_damage_multiplier(float(fate_behavior.get("owner_damage_multiplier", 1.0)))
+
+
 func _tick_attached_gun(delta: float) -> void:
-	if not fate_behavior.has("attached_gun"):
+	# Legacy saved reverse Chariot retains its recorded on-hit trigger; new r3 cards never set it.
+	if bool((fate_behavior.get("attached_gun", {}) as Dictionary).get("fire_on_hit", false)):
+		return
+	if not is_instance_valid(_carried_weapon):
 		return
 	_attached_shot_timer -= delta
 	if _attached_shot_timer > 0.0:
 		return
-	var attached := fate_behavior.get("attached_gun", {}) as Dictionary
-	if bool(attached.get("fire_on_hit", false)):
+	_attached_shot_timer = 0.65 if _carried_weapon.is_melee_weapon() else 1.0 / maxf(0.2, _carried_weapon.fire_rate)
+	var muzzle := _carried_weapon._muzzle
+	var forward := -muzzle.global_basis.z.normalized() if is_instance_valid(muzzle) else -_weapon_socket.global_basis.z.normalized()
+	_carried_weapon.fire_mounted(shooter, forward)
+
+
+func _shatter_rock() -> void:
+	if _rock_shattered:
 		return
-	var target := _nearest_target()
-	if target == null:
-		return
-	_attached_shot_timer = 1.0 / maxf(0.2, float(attached.get("fire_rate", 2.0)) * float(fate_behavior.get("uncontrolled_fire_rate_scale", 1.0)))
-	_fire_attached_gun(attached, (target.global_position + Vector3(0, 0.65, 0) - global_position).normalized())
+	_rock_shattered = true
+	for target in get_tree().get_nodes_in_group("enemies"):
+		if not target is Node3D or not target.has_method("apply_melee_knockback"):
+			continue
+		var offset: Vector3 = target.global_position - global_position
+		if offset.length() <= 3.0:
+			var away := Vector3(offset.x, 0.0, offset.z).normalized()
+			if away.length_squared() < 0.01:
+				away = Vector3(direction.x, 0.0, direction.z).normalized()
+			target.call("apply_melee_knockback", away, 6.0, 0.25)
+	var pool := _resolve_vfx_pool()
+	if pool != null:
+		pool.acquire(VfxPool3D.FX01_FATE_ROCK_SHATTER, global_position, Color(0.48, 0.40, 0.30), 1.0, {})
 
 
 func _fire_attached_gun(attached: Dictionary, base_direction: Vector3) -> void:
@@ -769,6 +842,11 @@ func get_orientation_snapshot() -> Dictionary:
 
 
 func _retire() -> void:
+	if is_instance_valid(_carried_weapon):
+		_carried_weapon.queue_free()
+		_carried_weapon.set_process(false)
+		_carried_weapon.visible = false
+	_carried_weapon = null
 	if not _active:
 		return
 	_active = false

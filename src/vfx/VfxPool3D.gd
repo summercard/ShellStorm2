@@ -31,7 +31,10 @@ const FX01_METAL_SPARK_HIT := "VFX-METAL-SPARK-HIT-3D"
 const FX02_DAMAGE_NUMBER := "VFX-DAMAGE-NUMBER-3D"
 const FX02_HEAL_NUMBER := "VFX-HEAL-NUMBER-3D"
 
+const FX01_FATE_ROCK_SHATTER := "VFX-FATE-ROCK-SHATTER-3D"
+
 const _REGISTRY := {
+	FX01_FATE_ROCK_SHATTER: preload("res://assets/art/vfx/combat_3d/vfx_fate_rock_shatter_root_top3d.tscn"),
 	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d.tscn"),
 	FX01_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d.tscn"),
 	FX01_EXPLOSION: preload("res://assets/art/vfx/combat_3d/vfx_explosion_root_top3d.tscn"),

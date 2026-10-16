@@ -226,6 +226,7 @@ static func _find_nodes_by_selector(
 	var results: Array[AssemblyNode] = []
 	var descendants: Array[AssemblyNode] = root.get_all_descendants()
 	descendants.append(root)  # 包含根节点
+	descendants.sort_custom(func(a: AssemblyNode, b: AssemblyNode): return a.depth < b.depth)
 
 	var node_type_filter := -1
 	match select.to_upper():
@@ -271,6 +272,7 @@ static func _apply_attach_gun_to_bullet(
 	if bullet_node == null:
 		# 自动找一个子弹
 		var descendants: Array[AssemblyNode] = root.get_all_descendants()
+		descendants.sort_custom(func(a: AssemblyNode, b: AssemblyNode): return a.depth < b.depth)
 		for d in descendants:
 			if d.node_type == AssemblyNode.NodeType.BULLET:
 				bullet_node = d
@@ -290,7 +292,7 @@ static func _apply_attach_gun_to_bullet(
 
 	# 挂载到子弹的 MOUNT 槽
 	if bullet_node.slots[AssemblyNode.SlotType.MOUNT] != null:
-		attached_gun.free()
+		tree._free_assembly_subtree(attached_gun)
 		result.error = ApplyError.SLOT_OCCUPIED
 		result.message = "Bullet mount slot already occupied"
 		return result
@@ -314,7 +316,7 @@ static func _apply_attach_gun_to_bullet(
 	if not ok:
 		result.error = ApplyError.APPLY_FAILED
 		result.message = "Failed to mount gun to bullet"
-		attached_gun.free()
+		tree._free_assembly_subtree(attached_gun)
 		return result
 
 	modified.append(bullet_node)
@@ -421,6 +423,7 @@ static func _apply_attach_gun_to_gun(
 			main_gun = root
 		else:
 			var descendants: Array[AssemblyNode] = root.get_all_descendants()
+			descendants.sort_custom(func(a: AssemblyNode, b: AssemblyNode): return a.depth < b.depth)
 			for d in descendants:
 				if d.node_type == AssemblyNode.NodeType.GUN_BODY:
 					main_gun = d
@@ -431,10 +434,14 @@ static func _apply_attach_gun_to_gun(
 		result.message = "No GUN_BODY node found to attach secondary gun"
 		return result
 
-	# 检查主枪的 MOUNT 槽是否空闲
-	if main_gun.slots[AssemblyNode.SlotType.MOUNT] != null:
+	var mount_slot := -1
+	for slot in AssemblyNode.FATE_MOUNT_SLOTS:
+		if main_gun.slots.get(slot) == null:
+			mount_slot = slot
+			break
+	if mount_slot < 0:
 		result.error = ApplyError.SLOT_OCCUPIED
-		result.message = "Main gun mount slot already occupied"
+		result.message = "All fate mounts occupied"
 		return result
 
 	# 从 effect 参数获取缩放参数
@@ -446,11 +453,11 @@ static func _apply_attach_gun_to_gun(
 	var secondary_gun := _make_attached_gun(source, card)
 	secondary_gun.tags.append("Fate.SecondaryGun")
 	# 将副枪挂载到主枪的 MOUNT 槽
-	var ok: bool = tree.mount(main_gun, AssemblyNode.SlotType.MOUNT, secondary_gun)
+	var ok: bool = tree.mount(main_gun, mount_slot, secondary_gun)
 	if not ok:
 		result.error = ApplyError.APPLY_FAILED
 		result.message = "Failed to mount secondary gun"
-		secondary_gun.free()
+		tree._free_assembly_subtree(secondary_gun)
 		return result
 	if bool(card.effect.get("alternate_fire", false)):
 		var main_stats := main_gun.get_base_stats()
@@ -539,6 +546,18 @@ static func _apply_add_damage(
 		return result
 
 	var target: AssemblyNode = targets[0]
+	if bool(card.effect.get("rock_projectile", false)):
+		var rock_stats := target.get_base_stats()
+		rock_stats["rock_projectile"] = true
+		rock_stats["rock_shatter"] = bool(card.effect.get("rock_shatter", false))
+		rock_stats["fate_speed_multiplier"] = float(rock_stats.get("fate_speed_multiplier", 1.0)) * 0.5
+		rock_stats["fire_rate"] = float(rock_stats.get("fire_rate", 4.0)) * float(card.effect.get("fire_rate_scale", 0.5))
+		target.set_base_stats(rock_stats)
+		tree.refresh_stats()
+		result.success = true
+		result.modified_nodes = [target]
+		_fate_audio_card_applied()
+		return result
 	var damage_bonus: float = card.effect.get("damage_scale", 1.0)
 	var stats: Dictionary = target.get_base_stats()
 	stats["fate_damage_multiplier"] = float(stats.get("fate_damage_multiplier", 1.0)) * damage_bonus
@@ -1186,6 +1205,7 @@ static func _apply_out_of_control(
 			break
 	if bullet_node == null:
 		var descendants: Array[AssemblyNode] = root.get_all_descendants()
+		descendants.sort_custom(func(a: AssemblyNode, b: AssemblyNode): return a.depth < b.depth)
 		for d in descendants:
 			if d.node_type == AssemblyNode.NodeType.BULLET:
 				bullet_node = d
@@ -1235,6 +1255,7 @@ static func _apply_size_growth(
 			break
 	if bullet_node == null:
 		var descendants: Array[AssemblyNode] = root.get_all_descendants()
+		descendants.sort_custom(func(a: AssemblyNode, b: AssemblyNode): return a.depth < b.depth)
 		for d in descendants:
 			if d.node_type == AssemblyNode.NodeType.BULLET:
 				bullet_node = d
@@ -1270,21 +1291,14 @@ static func _apply_size_growth(
 
 
 static func _make_attached_gun(source: AssemblyNode, card: FateCard) -> AssemblyNode:
-	var gun := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, source.node_name)
-	var stats := source.get_computed_stats().duplicate(true)
+	# Freeze the entire source structure; never fold child guns into parent statistics.
+	var gun := WeaponInstance._deserialize_node(WeaponInstance._serialize_node(source))
+	var stats := gun.get_base_stats().duplicate(true)
 	stats["fate_damage_multiplier"] = float(stats.get("fate_damage_multiplier", 1.0)) * float(card.effect.get("damage_scale", 1.0))
 	stats["fire_rate"] = float(stats.get("fire_rate", 4.0)) * float(card.effect.get("fire_rate_scale", 1.0))
-	stats["fire_on_hit"] = card.effect.get("fire_on_hit", false)
+	stats["mount_reversed"] = bool(card.effect.get("mount_reversed", false))
 	stats["follow_probability"] = card.effect.get("follow_probability", 1.0)
-	stats.erase("attached_gun")
-	stats.erase("alternate_fire")
 	gun.set_base_stats(stats)
-	gun.tags = source.tags.duplicate()
-	var bullet: AssemblyNode = source.slots.get(AssemblyNode.SlotType.BULLET)
-	if bullet != null:
-		for tag in bullet.tags:
-			if tag not in gun.tags:
-				gun.tags.append(tag)
 	return gun
 
 

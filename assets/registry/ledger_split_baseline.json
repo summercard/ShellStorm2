@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1280,
+ "asset_count": 1282,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -6436,6 +6436,16 @@
    "v": "e68132ff5e310e482e1b3610fb317098202b091900a64cc46417e1cd2e9654e9",
    "c": "场景",
    "d": "scenes"
+  },
+  "VFX-FATE-ROCK-3D": {
+   "v": "df48099df36cfc26ea512795e1f4a6c8593098b9ef1d3f84270d1486dcc6625e",
+   "c": "子弹特效",
+   "d": "vfx"
+  },
+  "VFX-FATE-ROCK-SHATTER-3D": {
+   "v": "4f0d807e9d53ca25633a0affb6a03338f9f0b2f3829b1d03baca2e924b69e5f1",
+   "c": "特效",
+   "d": "vfx"
   }
  },
  "column_digests": {
@@ -6477,7 +6487,7 @@
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
   "3D-物品": "0bba6748006c5b75fefd481d2406d12691ea639b33437364bccb53d0cff5be58",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
-  "3D-特效": "2de20ebfdd341a2233c1a488f867e4bd5df0e2cc632cc5e189ea2d26aee57e75"
+  "3D-特效": "005667a33fc6b457c347a01fad311d71bddbf8a2d56571c1d2474278ab6d5397"
  },
  "category_counts": {
   "UI": 18,
@@ -6600,6 +6610,18 @@
    "operation": "retain required latest authoring manifests and validation tools at art_source",
    "cells": 64,
    "manifest": "assets/registry/art_source_migration.json"
+  },
+  {
+   "date": "2026-10-16",
+   "operation": "Add two user-requested Strength VFX only; all old asset-row and VFX-sheet cells verified equal to before-edits snapshot; retain historical asset digest failures",
+   "asset_ids": [
+    "VFX-FATE-ROCK-3D",
+    "VFX-FATE-ROCK-SHATTER-3D"
+   ],
+   "previous_recorded_sheet_digest": "2de20ebfdd341a2233c1a488f867e4bd5df0e2cc632cc5e189ea2d26aee57e75",
+   "actual_before_sheet_digest": "6e8c48a253e26b27dbe16719b5c85129301f541ccd0a6914ce7d655291ed5df6",
+   "after_sheet_digest": "005667a33fc6b457c347a01fad311d71bddbf8a2d56571c1d2474278ab6d5397",
+   "record": "docs/v0.1/development/2026-10-16_star_physical_mounts.md"
   }
  ]
 }

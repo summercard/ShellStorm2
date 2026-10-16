@@ -159,6 +159,10 @@
         },
         {
           "kind": "scene",
+          "id": "verify_star_physical_mounts"
+        },
+        {
+          "kind": "scene",
           "id": "verify_fate_character_completion"
         },
         {

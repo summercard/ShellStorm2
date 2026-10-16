@@ -248,6 +248,7 @@ core_scenes=(
   verify_training_range_3d_flow
   verify_3d_fate_weapon_flow
   verify_fate_weapon_completion
+  verify_star_physical_mounts
   verify_fate_character_completion
   verify_fate_world_completion
   verify_fate_integration_completion

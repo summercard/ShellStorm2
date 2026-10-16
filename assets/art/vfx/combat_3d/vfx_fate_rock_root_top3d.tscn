@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxFateRock3D.gd" id="1"]
+[sub_resource type="StandardMaterial3D" id="material"]
+albedo_color = Color(0.42, 0.35, 0.27, 1)
+roughness = 0.94
+[sub_resource type="SphereMesh" id="rock"]
+radius = 0.18
+height = 0.36
+radial_segments = 6
+rings = 2
+material = SubResource("material")
+[node name="FateRock" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-FATE-ROCK-3D"
+metadata/asset_version = "v001"
+[node name="Rock" type="MeshInstance3D" parent="."]
+mesh = SubResource("rock")
+scale = Vector3(1.0, 0.92, 1.12)

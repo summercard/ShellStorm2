@@ -226,7 +226,14 @@ func _ready() -> void:
 		configure(gun_id, bullet_id)
 
 
+var _fate_mounts: Array[Dictionary] = []
+var _mount_pulse := 0.0
+var _mounted_melee_time := 0.0
+
 func _process(delta: float) -> void:
+	_mount_pulse = maxf(0.0, _mount_pulse - delta)
+	_update_fate_mounts()
+	_mounted_melee_time = maxf(0.0, _mounted_melee_time - delta)
 	for index in range(_pending_secondary_shots.size() - 1, -1, -1):
 		var shot := _pending_secondary_shots[index]
 		shot["remaining"] = float(shot["remaining"]) - delta
@@ -263,9 +270,13 @@ func _process(delta: float) -> void:
 			0.0,
 			-reload_arch * 0.16 + service_tick * 0.035
 		)
+	if _mounted_melee_time > 0.0 and _visual_root != null:
+		_visual_root.rotation.y = sin((1.0 - _mounted_melee_time / 0.45) * PI) * 1.8 - 0.9
 	# 没有冷却/换弹/蓄力/明显后坐力时，整把枪没在动，关闭 process 节省 CPU。
 	if (
 		_cooldown <= 0.0
+		and _fate_mounts.is_empty()
+		and _mounted_melee_time <= 0.0
 		and _reload_remaining <= 0.0
 		and not _charge_active
 		and absf(_recoil) < 0.001
@@ -315,6 +326,7 @@ func configure(p_gun_id: String, p_bullet_id: String) -> bool:
 	if bullet_node != null:
 		bullet_node.free()
 	_rebuild_visual()
+	_rebuild_fate_mounts()
 	loadout_changed.emit(gun_id, bullet_id)
 	ammo_changed.emit(current_ammo, magazine_size)
 	return true
@@ -336,11 +348,7 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 		_reload_first_shot = false
 		_secondary_rate_remainder = 0.0
 	_source_tree = tree
-	var bullet: AssemblyNode = null
-	for node in root.get_all_descendants():
-		if node.node_type == AssemblyNode.NodeType.BULLET:
-			bullet = node
-			break
+	var bullet := root.slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode
 	gun_id = str(GUN_NAME_TO_ID.get(root.node_name, "bp_pistol"))
 	var root_is_melee := "melee" in root.tags
 	bullet_id = "" if root_is_melee else str(BULLET_NAME_TO_ID.get(bullet.node_name if bullet != null else "", "mod_bullet_standard"))
@@ -361,9 +369,11 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 		var owner_gun := node.parent_node
 		while owner_gun != null and owner_gun.node_type != AssemblyNode.NodeType.GUN_BODY:
 			owner_gun = owner_gun.parent_node
-		if node != root and node.node_type == AssemblyNode.NodeType.GUN_BODY:
+		if node != root and node.node_type == AssemblyNode.NodeType.GUN_BODY and owner_gun == root:
 			var child_stats := node.get_computed_stats().duplicate(true)
 			child_stats["tags"] = node.tags.duplicate()
+			child_stats["assembly_snapshot"] = WeaponInstance._serialize_node(node)
+			child_stats["mount_id"] = node.node_id
 			if node.parent_node != null and node.parent_node.node_type == AssemblyNode.NodeType.BULLET:
 				_projectile_behavior["attached_gun"] = child_stats
 			elif "Fate.SecondaryGun" in node.tags:
@@ -376,6 +386,7 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 	bullet_geometry = _resolve_bullet_geometry(root.tags)
 	bullet_color = BULLET_COLORS.get(bullet_id, Color(0.20, 0.84, 0.92) if root_is_melee else Color(0.76, 0.86, 0.92))
 	_rebuild_visual()
+	_rebuild_fate_mounts()
 	loadout_changed.emit(gun_id, bullet_id)
 	ammo_changed.emit(current_ammo, magazine_size)
 	return true
@@ -384,7 +395,7 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 func _configure_common_stats(stats: Dictionary, melee: bool) -> void:
 	weapon_kind = "melee" if melee else "ranged"
 	if melee:
-		_base_damage = maxi(1, int(stats.get("damage", 1)))
+		_base_damage = maxi(1, int(float(stats.get("damage", 1)) * float(stats.get("fate_damage_multiplier", 1.0))))
 		damage = maxi(1, int(_base_damage * damage_multiplier))
 		fire_rate = 0.0
 		projectile_count = 0
@@ -446,6 +457,8 @@ func clear_weapon() -> void:
 	weapon_kind = "ranged"
 	_melee_profile.clear()
 	if _visual_root != null:
+		_visual_root.visible = false
+		_visual_root.process_mode = Node.PROCESS_MODE_DISABLED
 		_visual_root.queue_free()
 		_visual_root = null
 	_muzzle = null
@@ -503,6 +516,8 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 	_cooldown = 1.0 / fire_rate
 	current_ammo -= 1
 	_fire_sequence += 1
+	_mount_pulse = 0.14
+	_update_fate_mounts()
 	_recoil = 0.16 if gun_id == "bp_shotgun" or gun_id == "bp_launcher" else 0.09
 	# 开火触发后坐力衰减，重新打开 process。
 	set_process(true)
@@ -650,7 +665,7 @@ func _extract_projectile_behavior(stats: Dictionary) -> Dictionary:
 		"uncontrolled_damage_scale", "copy_fire", "copy_fire_delay",
 		"second_wave_damage_scale", "explode_on_reload", "explosion_radius",
 		"explosion_damage_scale", "every_nth_fire", "every_nth_attach_gun",
-		"visual_has_eyes", "visual_has_legs",
+		"visual_has_eyes", "visual_has_legs", "rock_projectile", "rock_shatter",
 		"fate_attachment_hit_trigger",
 		"crit_on_kill", "crit_damage_multiplier", "pierce_shield", "shield_damage_scale",
 		"target_mode", "return_on_hit", "refund_ammo", "outbound_damage_multiplier",
@@ -691,36 +706,20 @@ func _fire_secondary_gun(
 ) -> int:
 	if randf() > float(secondary.get("follow_probability", 1.0)):
 		return 0
-	var count := maxi(1, int(secondary.get("bullet_count", 1)))
-	var attached_behavior := _extract_projectile_behavior(secondary)
-	attached_behavior["source_weapon_tree"] = _source_tree
-	attached_behavior["source_weapon"] = self
-	var child_damage := (float(secondary.get("damage", 0)) + float(secondary.get("bullet_damage", 5))) * float(secondary.get("fate_damage_multiplier", 1.0)) * damage_multiplier
-	if bool(_projectile_behavior.get("uncontrolled_gun", false)):
-		aim_direction = aim_direction.rotated(Vector3.UP, randf_range(-PI, PI) * float(_projectile_behavior.get("aim_randomness", 1.0)))
-		child_damage *= float(_projectile_behavior.get("uncontrolled_damage_scale", 1.0))
-		_recoil *= float(_projectile_behavior.get("uncontrolled_recoil_scale", 1.0))
-	for index in range(count):
-		var angle := (float(index) - float(count - 1) * 0.5) * float(secondary.get("spread", 0.08))
-		var is_critical := forced_critical or randf() < _critical_chance + _character_critical_bonus(shooter)
-		var projectile := _acquire_projectile(world, {
-			"direction": aim_direction.rotated(Vector3.UP, angle),
-			"speed": 23.0 * float(secondary.get("bullet_speed", 1.0)) * float(secondary.get("fate_speed_multiplier", 1.0)),
-			"damage": maxi(1, int(child_damage * (_critical_damage_multiplier / 1.5 if is_critical else 1.0))),
-			"critical": is_critical,
-			"hostile": false,
-			"tags": secondary.get("tags", []),
-			"color": bullet_color.lightened(0.12),
-			# 副枪弹体沿用主枪弹种视觉（副枪 bullet_id 缺省回落本枪 bullet_id）。
-			"visual_id": String(secondary.get("bullet_id", bullet_id)),
-			"gun_bullet_geometry": bullet_geometry,
-			"shooter": shooter,
-			"behavior": attached_behavior,
-			# 副枪用自己声明的射程；未声明则回落主枪。
-			"range": maxf(0.0, float(secondary.get("range", range_m))),
-		}, _muzzle.global_position if _muzzle != null else global_position)
-		projectile_spawned.emit(projectile)
-	return count
+	for entry in _fate_mounts:
+		if entry["stats"].get("mount_id") == secondary.get("mount_id"):
+			var mounted := entry["weapon"] as WeaponModel3D
+			if is_instance_valid(mounted):
+				var direction := -mounted._muzzle.global_basis.z.normalized() if is_instance_valid(mounted._muzzle) else aim_direction
+				var child_multiplier := damage_multiplier
+				if bool(_projectile_behavior.get("uncontrolled_gun", false)):
+					direction = direction.rotated(Vector3.UP, randf_range(-PI, PI) * float(_projectile_behavior.get("aim_randomness", 1.0)))
+					child_multiplier *= float(_projectile_behavior.get("uncontrolled_damage_scale", 1.0))
+					_recoil *= float(_projectile_behavior.get("uncontrolled_recoil_scale", 1.0))
+				mounted.set_damage_multiplier(child_multiplier)
+				mounted._critical_chance = 1.0 if forced_critical else _critical_chance
+				return mounted.fire_mounted(shooter, direction, forced_critical)
+	return 0
 
 
 func _fire_copy_wave(
@@ -981,6 +980,8 @@ func _rebuild_visual() -> void:
 	if not is_inside_tree():
 		return
 	if _visual_root != null:
+		_visual_root.visible = false
+		_visual_root.process_mode = Node.PROCESS_MODE_DISABLED
 		_visual_root.queue_free()
 	_visual_root = Node3D.new()
 	_visual_root.name = "MeleeVisual" if is_melee_weapon() else "GunVisual"
@@ -1049,8 +1050,6 @@ func _rebuild_visual() -> void:
 			_add_box("InstalledTactical", Vector3(width * 0.70, -height * 0.06, -length * 0.62), Vector3(width * 0.32, height * 0.32, length * 0.28), accent_material)
 		if source_root.slots.get(AssemblyNode.SlotType.MUTATOR) != null:
 			_add_box("InstalledMutator", Vector3(-width * 0.56, height * 0.10, -length * 0.42), Vector3(width * 0.12, height * 0.54, length * 0.36), accent_material)
-		if source_root.slots.get(AssemblyNode.SlotType.MOUNT) != null:
-			_add_box("InstalledMount", Vector3(0, height * 0.78, -length * 0.48), Vector3(width * 0.60, height * 0.32, length * 0.30), accent_material)
 	var fate_used := maxi(0, int(get_meta("fate_slot_used", 0)))
 	for fate_index in mini(fate_used, 8):
 		var row := fate_index / 4
@@ -1121,8 +1120,6 @@ func _add_imported_attachment_visuals(asset: Node3D, accent_material: StandardMa
 		if source_root.slots.get(AssemblyNode.SlotType.MUTATOR) != null:
 			if not _add_authored_attachment(source_root.slots[AssemblyNode.SlotType.MUTATOR], "InstalledMutator", _socket_position(asset, "MutatorSocket", Vector3(-0.14, 0.02, -0.30)), 0.16):
 				_add_box("InstalledMutator", _socket_position(asset, "MutatorSocket", Vector3(-0.14, 0.02, -0.30)), Vector3(0.06, 0.16, 0.16), accent_material)
-		if source_root.slots.get(AssemblyNode.SlotType.MOUNT) != null:
-			_add_box("InstalledMount", _socket_position(asset, "ScopeSocket", Vector3(0, 0.24, -0.30)), Vector3(0.18, 0.08, 0.18), accent_material)
 	var fate_used := maxi(0, int(get_meta("fate_slot_used", 0)))
 	var rune_origin := _socket_position(asset, "MutatorSocket", Vector3(-0.14, 0.06, -0.28))
 	for fate_index in mini(fate_used, 8):
@@ -1272,3 +1269,91 @@ func _material(color: Color, metallic: float, roughness: float, emission := fals
 		material.emission = color
 		material.emission_energy_multiplier = 1.6
 	return material
+
+
+## Shared projection for carried and gun-mounted weapons: the actual source tree drives its own model and muzzle.
+static func create_mounted(snapshot: Dictionary, parent: Node3D) -> WeaponModel3D:
+	var tree := WeaponAssemblyTree.new()
+	var root := WeaponInstance._deserialize_node(snapshot)
+	if root == null:
+		tree.free()
+		return null
+	tree.set_root(root)
+	var mounted := WeaponModel3D.new()
+	mounted.gun_id = ""
+	mounted.name = "MountedWeapon"
+	parent.add_child(mounted)
+	mounted.add_child(tree)
+	mounted.configure_from_tree(tree)
+	return mounted
+
+
+func _rebuild_fate_mounts() -> void:
+	_fate_mounts.clear()
+	_mount_pulse = 0.0
+	if not is_instance_valid(_visual_root):
+		return
+	# Every gun has this structural socket, even with zero fate cards.
+	var anchor := Marker3D.new()
+	anchor.name = "FateWeaponSocket"
+	_visual_root.add_child(anchor)
+	if is_instance_valid(_muzzle):
+		anchor.position = _visual_root.to_local(_muzzle.global_position) + Vector3(0.20, 0.0, 0.0)
+	for stats in _secondary_guns:
+		var point := Marker3D.new()
+		point.name = "Mount%d" % (_fate_mounts.size() + 1)
+		anchor.add_child(point)
+		var mounted := create_mounted(stats.get("assembly_snapshot", {}), point)
+		if mounted == null:
+			continue
+		mounted.render_layers = render_layers
+		mounted._apply_render_layers_recursive(mounted)
+		mounted.projectile_spawned.connect(func(projectile: Projectile3D): projectile_spawned.emit(projectile))
+		_fate_mounts.append({"point": point, "weapon": mounted, "stats": stats, "reversed": bool(stats.get("mount_reversed", false))})
+	_update_fate_mounts()
+	if not _fate_mounts.is_empty():
+		set_process(true)
+
+
+func _update_fate_mounts() -> void:
+	var counts := {false: 0, true: 0}
+	var indices := {false: 0, true: 0}
+	for entry in _fate_mounts:
+		counts[entry["reversed"]] += 1
+	for entry in _fate_mounts:
+		var point := entry["point"] as Marker3D
+		if not is_instance_valid(point):
+			continue
+		var rear := bool(entry["reversed"])
+		var horizontal := (float(indices[rear]) - float(counts[rear] - 1) * 0.5) * 0.48
+		indices[rear] += 1
+		point.position = Vector3(horizontal, 0.0, 0.0)
+		var player := _find_owner_player()
+		if rear and is_instance_valid(player):
+			point.global_transform = Transform3D(player.global_basis.orthonormalized(), player.to_global(Vector3(horizontal, 0.85, 0.65)))
+		elif rear:
+			point.position = Vector3(horizontal, 0.0, 0.85)
+		point.scale = Vector3.ONE * (0.65 if _mount_pulse > 0.0 and not display_only else 0.22)
+
+
+func fire_mounted(shooter: Node3D, forward: Vector3, forced_critical := false) -> int:
+	# A frozen source is an effect instance: never debit the player's source inventory ammunition.
+	if is_melee_weapon():
+		_mounted_melee_time = 0.45
+		set_process(true)
+		var reach := maxf(0.3, float(_melee_profile.get("reach", 1.6)) * global_basis.get_scale().length() / sqrt(3.0))
+		for target in get_tree().get_nodes_in_group("enemies"):
+			if not target is Node3D or target == shooter or not target.has_method("take_damage"):
+				continue
+			var offset: Vector3 = target.global_position - global_position
+			if offset.length() <= reach and offset.normalized().dot(forward) >= cos(deg_to_rad(float(_melee_profile.get("arc_degrees", 100.0)) * 0.5)):
+				var query := PhysicsRayQueryParameters3D.create(global_position, target.global_position + Vector3(0, 0.5, 0), 1)
+				if shooter is CollisionObject3D:
+					query.exclude = [shooter.get_rid()]
+				var obstruction := get_world_3d().direct_space_state.intersect_ray(query)
+				if obstruction.is_empty() or obstruction.get("collider") == target:
+					target.call("take_damage", damage, forced_critical, forward, float(_melee_profile.get("knockback", 4.0)))
+		return 1
+	_cooldown = 0.0
+	current_ammo = magazine_size
+	return projectile_count if _fire_now(forward, shooter, 1.0) else 0

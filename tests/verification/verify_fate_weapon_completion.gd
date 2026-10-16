@@ -78,7 +78,7 @@ func _run() -> void:
 			var weapon := _weapon(tree)
 			var scale_value := 1.0
 			match id:
-				"fate_armor_pierce": scale_value = 1.15 if reversed else 1.5
+				"fate_armor_pierce": scale_value = 1.0
 				"fate_scale_node": scale_value = 0.8 if reversed else 1.3
 				"fate_huge_scale": scale_value = 0.8 if reversed else 1.5
 				"fate_overclock": scale_value = 1.55 if reversed else 1.0
@@ -90,7 +90,7 @@ func _run() -> void:
 			var p := _fire(weapon)
 			_check(p != null, id + "实际发射")
 			if id == "fate_armor_pierce":
-				_check(bool(p.fate_behavior.get("pierce_shield", false)) != reversed, "力量穿盾方向")
+				_check(bool(p.fate_behavior.get("rock_shatter", false)) == reversed and is_equal_approx(weapon.bullet_speed, base_speed * 0.5), "力量石头方向与速度")
 	var mount_tree := _tree()
 	_card(mount_tree, "fate_gun_on_gun")
 	var mount := _weapon(mount_tree)
@@ -101,9 +101,9 @@ func _run() -> void:
 	_card(alternate_tree, "fate_gun_on_gun", true)
 	var alternate := _weapon(alternate_tree)
 	var first := _fire(alternate)
-	_check(shots.size() == 1 and is_equal_approx(alternate.fire_rate, baseline.fire_rate * 0.75), "逆位交替首发和降速")
+	_check(shots.size() == 2 and is_equal_approx(alternate.fire_rate, baseline.fire_rate), "逆位身后副枪同射")
 	var second := _fire(alternate)
-	_check(shots.size() == 1 and first.damage > base_damage and second.damage > base_damage, "逆位交替单发强化")
+	_check(shots.size() == 2 and first.damage == base_damage and second.damage == base_damage, "逆位不再改变主枪伤害")
 	var reload_tree := _tree()
 	_card(reload_tree, "fate_every_seventh", true)
 	var reload := _weapon(reload_tree)
@@ -228,11 +228,9 @@ func _run() -> void:
 		var carrier := _fire(carry_weapon)
 		var child_count := _projectile_count()
 		carrier._tick_attached_gun(1.0)
-		_check(_projectile_count() == child_count + (0 if reversed else 1), "携枪持续/命中模式隔离")
-		if reversed:
-			carrier._apply_fate_on_hit(enemy)
-			carrier._apply_fate_on_hit(enemy)
-			_check(_projectile_count() == child_count + 1, "逆位携枪只命中发射一次")
+		_check(_projectile_count() == child_count + 1, "携枪正逆均持续攻击")
+		var carried_forward := -carrier._carried_weapon._muzzle.global_basis.z.normalized()
+		_check(carried_forward.dot(carrier.direction) < -0.99 if reversed else carried_forward.dot(carrier.direction) > 0.99, "携枪正逆枪口朝向")
 		var devil_tree := _tree()
 		_card(devil_tree, "fate_gun_on_gun")
 		_card(devil_tree, "fate_out_of_control", reversed)
@@ -282,7 +280,7 @@ func _run() -> void:
 		seed(54321)
 		piercing.direction = Vector3.BACK
 		piercing._hit_target(shield)
-		_check(shield.current_hp == 10000 - (int(int(base_damage * 1.15) * 2 * 0.32) if reversed else int(base_damage * 1.5)), "力量盾面伤害")
+		_check(shield.current_hp == 10000 - int(base_damage * 0.32), "力量不再附送穿盾或盾面增伤")
 	var seventh_tree := _tree()
 	_card(seventh_tree, "fate_every_seventh")
 	var seventh := _weapon(seventh_tree)
