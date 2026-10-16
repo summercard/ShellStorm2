@@ -19,6 +19,17 @@
   （先 pull/rebase）会把未提交的已跟踪改动并掉。变基冲突面通常只在
   `.workbuddy/memory/<日期>.md`（各会话都往末尾追加）⇒ 解法是**两侧块都保留**、按时间排序
   （旧在前）、删掉 3 个标记行，再用 `git show <commit>:<file>` 逐块 diff 证明两侧逐字完整。
+- **第二个高频冲突面＝`docs/v0.1/MODULE_INDEX.md` 的功能表格行**（2026-10-16 实测）：
+  两个会话同时改相邻的 `| FEATURE-ID | … |` 行时，git 会把它们当成同一区块冲突，
+  两侧各带 1 行自己的更新 ⇒ 解法是**逐行取各自较新的一侧**（不是整块取一侧），
+  保持表格行数结构完整；判据＝`grep -c '^<<<<<<<'` 归零后逐行核对。
+  同批 `assets/registry/ledger_split_baseline.json` 若只是两侧各自新增键/改 digest，
+  git 通常能**自动合并**，但必须用 `git diff origin/<分支> -- <file>` 逐块确认两侧改动都在
+  （本次保留远端 3 处 UI 摘要 + 本地 2 张特效，`asset_count` 1280→1282）。
+- **门禁要取「合并前后同数值」为基线，而不是只看退出码**（2026-10-16 实测）：账本/命名/文档三条门禁
+  本就常红（既有债务），判据是 **merge 前后逐项数值完全相同 = 本次 0 新增问题**。
+  本机**没有 `timeout` 命令**（`command not found`），长命令别用它包裹；门禁需 `python3` 带
+  `openpyxl` ⇒ 用 `/tmp/pyshim` 垫片（`#!/bin/sh` + `exec <venv>/bin/python "$@"`）前置进 PATH。
 - **Godot `.gd.uid` 跨机器不一致**（2026-10-14 实测）：同一脚本在两台机生成的 uid 可能不同
   （`preview_debug_camera_fog_panel.gd.uid` 本机 `eoto4i6txytq` vs 远端 `eqgcha02lcka`）。
   **以仓库已跟踪版本为准**；本机那份是未跟踪产物，会让 rebase 报
