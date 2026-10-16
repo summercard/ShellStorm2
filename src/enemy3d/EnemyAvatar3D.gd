@@ -54,6 +54,13 @@ const FORMAL_MELEE_SCENE_PATH := FORMAL_NORMAL_SCENES[FORMAL_MELEE_KIND]
 const FORMAL_MELEE_VISUAL_HEIGHT := FORMAL_NORMAL_HEIGHTS[FORMAL_MELEE_KIND]
 
 var enemy_kind := "melee_chaser"
+## 用于查表的**基类**：强化怪回退到原怪，普通怪等于自己。
+##
+## 本文件里所有「按种分叉」的判定（外壳尺寸、附肢、正式模型路由、埋伏姿态）
+## 都必须读它而不是 `enemy_kind`。否则「小僵尸-强化怪」这种新 kind 会一路
+## 掉到 `match` 的默认分支：既拿不到正式小僵尸模型，也生不出正确的外壳 ——
+## 表现静默退化成一只默认怪，而日志里一个字都不会说。
+var _base_kind := "melee_chaser"
 var ai_state := "idle"
 var _elapsed := 0.0
 var _root: Node3D
@@ -75,7 +82,10 @@ var _formal_elite_root: Node3D
 
 
 func configure(kind: String) -> void:
-	enemy_kind = kind if COLORS.has(kind) else "melee_chaser"
+	var known := COLORS.has(kind) or MonsterVariants.is_variant(kind)
+	enemy_kind = kind if known else "melee_chaser"
+	var base_kind := MonsterVariants.base_of(enemy_kind)
+	_base_kind = base_kind if not base_kind.is_empty() else enemy_kind
 	_rebuild()
 
 
@@ -130,7 +140,12 @@ func set_ambush_revealed(revealed: bool) -> void:
 
 
 static func get_footprint_profile(kind: String) -> Dictionary:
-	return (FOOTPRINT_PROFILES.get(kind, FOOTPRINT_PROFILES["melee_chaser"]) as Dictionary).duplicate()
+	# 强化怪回退基类：变种的碰撞体形状照抄原怪，**不在这里放大**。
+	# 世界尺寸由 `Enemy3D` 根节点的 `scale`（含变种体型倍率）统一放大，
+	# 碰撞柱是它的子节点 ⇒ 自动跟随。在表里再乘一次 1.5 会放大两遍。
+	var base_kind := MonsterVariants.base_of(kind)
+	var lookup := base_kind if not base_kind.is_empty() else kind
+	return (FOOTPRINT_PROFILES.get(lookup, FOOTPRINT_PROFILES["melee_chaser"]) as Dictionary).duplicate()
 
 
 func flash_hit() -> void:
@@ -151,6 +166,9 @@ func get_formal_death_duration() -> float:
 func get_component_snapshot() -> Dictionary:
 	return {
 		"enemy_kind": enemy_kind,
+		# 强化怪查表走基类；把两件事分开暴露，验收才能断言
+		# 「kind 是变种、但外观/碰撞确实取自原怪」。
+		"base_kind": _base_kind,
 		"ai_state": ai_state,
 		"components": ["skeletal_model", "state_vfx"] if has_formal_normal() else ["core", "shell", "appendages", "state_vfx"],
 		"component_count": 2 if has_formal_normal() else 4,
@@ -179,9 +197,9 @@ func _process(delta: float) -> void:
 		_tell_ring.visible = ai_state == "telegraph" and not has_animated_boss()
 		return
 	var bob := sin(_elapsed * 3.3 + float(get_instance_id() % 11)) * 0.07
-	var hidden_offset := -0.58 if enemy_kind == "ambusher" and not _ambush_revealed else 0.0
+	var hidden_offset := -0.58 if _base_kind == "ambusher" and not _ambush_revealed else 0.0
 	_root.position.y = lerpf(_root.position.y, bob + hidden_offset, minf(1.0, delta * 12.0))
-	var target_scale := Vector3(1.0, 0.24, 1.0) if enemy_kind == "ambusher" and not _ambush_revealed else Vector3.ONE
+	var target_scale := Vector3(1.0, 0.24, 1.0) if _base_kind == "ambusher" and not _ambush_revealed else Vector3.ONE
 	_root.scale = _root.scale.lerp(target_scale, minf(1.0, delta * 14.0))
 	_appendages.rotation.y += delta * (1.5 if ai_state == "attack" else 0.18 if ai_state == "recovery" else 0.35)
 	_tell_ring.visible = ai_state == "telegraph"
@@ -212,7 +230,7 @@ func _rebuild() -> void:
 	_elite_presentation_asset_id = ""
 	_root.name = "VisualRoot"
 	add_child(_root)
-	_base_color = COLORS[enemy_kind]
+	_base_color = COLORS[_base_kind]
 	_shell_material = _material(_base_color, 0.42, 0.66)
 	_core_material = _material(_base_color.lightened(0.42), 0.18, 0.32, true)
 	_appendages = Node3D.new()
@@ -220,16 +238,16 @@ func _rebuild() -> void:
 	_root.add_child(_appendages)
 
 	var body_size := Vector3(1.25, 1.15, 1.25)
-	if enemy_kind == "boss":
+	if _base_kind == "boss":
 		body_size = Vector3(2.3, 2.1, 2.3)
-	elif enemy_kind in ["ranged_caster", "summoner"]:
+	elif _base_kind in ["ranged_caster", "summoner"]:
 		body_size = Vector3(1.05, 1.5, 1.05)
-	elif enemy_kind == "ambusher":
+	elif _base_kind == "ambusher":
 		body_size = Vector3(1.45, 0.72, 1.45)
 	_shell = _add_capsule("Shell", Vector3(0, body_size.y * 0.54, 0), body_size, _shell_material, _root)
 	_core = _add_sphere("Core", Vector3(0, body_size.y * 0.75, -body_size.z * 0.48), body_size.x * 0.20, _core_material, _root)
 
-	match enemy_kind:
+	match _base_kind:
 		"melee_chaser":
 			_add_claws(0.84, 0.50)
 		"ranged_caster":
@@ -263,12 +281,12 @@ func _rebuild() -> void:
 	_root.add_child(_tell_ring)
 	# 正式普通怪分支：非精英 melee_chaser 在程序化外壳之后挂载独立小僵尸包装，
 	# 隐藏壳/核/附肢、保留 tell ring；动画由包装自驱动，避免旧 bob/appendage 程序姿势叠加。
-	if FORMAL_NORMAL_SCENES.has(enemy_kind) and _root != null:
+	if FORMAL_NORMAL_SCENES.has(_base_kind) and _root != null:
 		_load_formal_normal_model()
 
 
 func _load_formal_normal_model() -> void:
-	var scene_path := str(FORMAL_NORMAL_SCENES.get(enemy_kind, ""))
+	var scene_path := str(FORMAL_NORMAL_SCENES.get(_base_kind, ""))
 	var scene := load(scene_path) as PackedScene
 	assert(scene != null, "Formal normal scene missing for %s" % enemy_kind)
 	_formal_normal_root = scene.instantiate() as Node3D

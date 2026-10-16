@@ -3,6 +3,13 @@ extends RefCounted
 ## 怪物注入器 — 根据房间类型和层级生成怪物配置
 
 ## 怪物基础类型配置
+##
+## 带 `_strong` 后缀的三个是「普通怪变种（-强化怪）」，倍率定义见 `MonsterVariants`。
+## 它们的 `hp_base` / `damage_base` / `speed` **逐值照抄原怪**，倍率不在这里乘：
+## 倍率由 `Enemy3D.PROFILES` 的派生层（`_profile_for`）作用**一次**。
+## 若此处也乘一遍，Enemy3D 的「原怪基线 → 实际值」比例还原会把倍率算两遍
+## （实测会把 ×2 放大成 ×4）。`name` 与 `MonsterVariants.display_name_of()` 必须一致，
+## 由 `verify_strong_variant_monsters` 断言钉住。
 const BASE_ENEMY_TYPES := {
 	"fat_zombie03": {"name": "胖子僵尸", "hp_base": 100, "damage_base": 8, "speed": 20.5714286},
 	"melee_chaser": { "name": "小僵尸", "hp_base": 25, "damage_base": 5, "speed": 80 },
@@ -11,6 +18,9 @@ const BASE_ENEMY_TYPES := {
 	"exploder": { "name": "炸弹果", "hp_base": 10, "damage_base": 15, "speed": 70 },
 	"ambusher": { "name": "地刺虫", "hp_base": 18, "damage_base": 7, "speed": 90 },
 	"boss": { "name": "准首领", "hp_base": 100, "damage_base": 12, "speed": 42 },
+	"melee_chaser_strong": { "name": "小僵尸-强化怪", "hp_base": 25, "damage_base": 5, "speed": 80 },
+	"fat_zombie03_strong": { "name": "胖子僵尸-强化怪", "hp_base": 100, "damage_base": 8, "speed": 20.5714286 },
+	"ranged_caster_strong": { "name": "保安僵尸-强化怪", "hp_base": 15, "damage_base": 8, "speed": 50 },
 }
 
 const ENEMY_PRESENTATION := {
@@ -21,6 +31,11 @@ const ENEMY_PRESENTATION := {
 	"exploder": { "emoji": "💣", "color": Color(1.0, 0.58, 0.14, 1.0), "ai_type": "bomber" },
 	"ambusher": { "emoji": "🦂", "color": Color(0.78, 0.28, 0.88, 1.0), "ai_type": "trapper" },
 	"boss": { "emoji": "👹", "color": Color(1.0, 0.12, 0.08, 1.0), "ai_type": "chase" },
+	# 强化怪表现照抄原怪：业主 2026-10-16 裁定「只放大 1.5 倍」作为唯一区分手段，
+	# 不做换色/发光。emoji 与 color 是掉落与诊断用的，仍沿用原怪以免出现第四套配色。
+	"melee_chaser_strong": { "emoji": "尸", "color": Color(0.95, 0.28, 0.24, 1.0), "ai_type": "chase" },
+	"fat_zombie03_strong": {"emoji": "尸", "color": Color(0.38, 0.43, 0.26), "ai_type": "chase"},
+	"ranged_caster_strong": { "emoji": "🍄", "color": Color(0.62, 0.35, 1.0, 1.0), "ai_type": "ranged" },
 }
 
 ## 精英词缀配置
@@ -46,7 +61,14 @@ const FLOOR_SCALING := {
 	5: { "hp_mult": 2.2, "damage_mult": 1.8, "loot_mult": 2.2 },
 }
 
+## 强化怪升级的默认概率（`monster_rules.strong_variant.chance` 缺省时用）。
+## 业主 2026-10-16 定「每只怪约 15% 是强化版」。
+const DEFAULT_STRONG_VARIANT_CHANCE := 0.15
+
 var _rng: RandomNumberGenerator
+## 强化怪升级专用随机流。**必须与 `_rng` 分开**：`_rng` 被 boss / elite / 公式路径共用，
+## 若把升级的掷骰混进去，既有固定种子的抽取结果会整体位移，破坏已验收的可复现性。
+var _strong_rng: RandomNumberGenerator
 var _theme_profile: Resource = null
 ## 关卡级怪物规则（`level_plan.json` 顶层 `monster_rules`）。空字典 = 未配置
 ## ⇒ 数值与 AI 全部走原常量，未配置的关卡行为逐字不变。唯一写入口是
@@ -56,9 +78,14 @@ var _level_rules: Dictionary = {}
 func _init():
 	_rng = RandomNumberGenerator.new()
 	_rng.seed = Time.get_ticks_msec()
+	_strong_rng = RandomNumberGenerator.new()
+	_strong_rng.seed = _rng.seed
 
 func set_seed(seed_value: int) -> void:
 	_rng.seed = seed_value
+	# 从主种子派生（异或一个固定常量）而不是复用它：两条流由此互相独立，
+	# 但「同一个 run_seed ⇒ 同一份强化怪分布」这条可复现性仍然成立。
+	_strong_rng.seed = seed_value ^ 0x5D1C3B79
 
 
 func set_theme_profile(profile: Resource) -> void:
@@ -79,6 +106,10 @@ func _stat_override(kind: String) -> Dictionary:
 	var per_kind: Dictionary = (
 		(_level_rules.get("stats", {}) as Dictionary).get("per_kind", {}) as Dictionary
 	)
+	if MonsterVariants.is_variant(kind):
+		# 强化怪的数值**从原怪那一行实时派生**，绝不要求关卡再抄一份强化怪的数。
+		# 于是把 `per_kind.melee_chaser.hp` 从 350 调成 400，强化怪自动变 800。
+		return _derive_stat_override(MonsterVariants.base_of(kind), per_kind)
 	var entry: Variant = per_kind.get(kind, null)
 	if not (entry is Dictionary):
 		return {}
@@ -88,6 +119,29 @@ func _stat_override(kind: String) -> Dictionary:
 		out["override_max_hp"] = maxi(1, int(src["hp"]))
 	if src.has("damage"):
 		out["override_damage"] = maxi(0, int(src["damage"]))
+	if src.has("speed"):
+		out["override_speed"] = maxf(0.05, float(src["speed"]))
+	return out
+
+
+## 强化怪的关卡级绝对数值 = **原怪的绝对数值 × 变种倍率**。
+##
+## 速度不乘倍率：业主 2026-10-16 只要求生命 / 攻击 / 体型 / 自爆范围 / 弹道，
+## 强化怪跑得和原怪一样快。
+func _derive_stat_override(base_kind: String, per_kind: Dictionary) -> Dictionary:
+	var entry: Variant = per_kind.get(base_kind, null)
+	if not (entry is Dictionary):
+		return {}
+	var src := entry as Dictionary
+	var out: Dictionary = {}
+	if src.has("hp"):
+		out["override_max_hp"] = maxi(1, int(round(
+			float(src["hp"]) * MonsterVariants.multiplier(base_kind, "hp_mult")
+		)))
+	if src.has("damage"):
+		out["override_damage"] = maxi(0, int(round(
+			float(src["damage"]) * MonsterVariants.multiplier(base_kind, "damage_mult")
+		)))
 	if src.has("speed"):
 		out["override_speed"] = maxf(0.05, float(src["speed"]))
 	return out
@@ -103,6 +157,39 @@ func _ai_overrides() -> Dictionary:
 	return {"monster_ai": ai.duplicate(true)}
 
 
+## 强化怪升级概率（读 `monster_rules.strong_variant`）。
+##
+## 返回 `0.0` = 本关不启用强化怪。此时 `_roll_strong_kind` **一次随机数都不掷**，
+## 所以未配置本段的关卡，随机流与改动前逐字一致（项目的「未配置 ⇒ 行为不变」铁律）。
+func _strong_variant_chance() -> float:
+	var section: Variant = _level_rules.get("strong_variant", null)
+	if not (section is Dictionary):
+		return 0.0
+	var cfg := section as Dictionary
+	if not bool(cfg.get("enabled", true)):
+		return 0.0
+	return clampf(float(cfg.get("chance", DEFAULT_STRONG_VARIANT_CHANCE)), 0.0, 1.0)
+
+
+## 按关卡概率把普通怪升级成它的**强化版**（`MonsterVariants`）。
+##
+## 实现刻意放在 `_generate_basic_enemy` 的出口，而不是各个刷怪池里：
+## 远征01 由**刷怪盒**驱动（`spawn_placements` 优先级最高），做在池子里根本不会生效；
+## 做在出口上，则刷怪盒 / 设计源 / 房型公式三条编成来源自动全部覆盖。
+##
+## 未配置 / 该怪没有强化版 / 没抽中 —— 三种情况都原样返回 `kind`。
+func _roll_strong_kind(kind: String) -> String:
+	var chance := _strong_variant_chance()
+	if chance <= 0.0:
+		return kind
+	var variant_id := MonsterVariants.variant_of(kind)
+	if variant_id.is_empty():
+		return kind
+	if _strong_rng.randf() >= chance:
+		return kind
+	return variant_id
+
+
 ## 死亡自爆规格（`monster_rules.death_explosion.<kind>`）。
 ## 返回 `{}` = 本怪不自爆（缺省）。非法/零伤害一律当「不自爆」处理，绝不产出半个规格。
 ##
@@ -110,20 +197,37 @@ func _ai_overrides() -> Dictionary:
 ## 自爆要的是策划能一眼对上的数（业主 2026-10-14：胖子僵尸 180）。
 func _death_explosion_for(kind: String) -> Dictionary:
 	var table: Dictionary = _level_rules.get("death_explosion", {}) as Dictionary
+	var radius_mult := 1.0
 	var entry: Variant = table.get(kind, null)
 	if not (entry is Dictionary):
-		return {}
+		# 强化怪不自带一行 ⇒ 从原怪那一行派生，只把**半径**乘变种倍率。
+		# 原怪本身不自爆时 entry 仍不是字典 ⇒ 下面直接返回空：
+		# 变种不会凭空长出一场爆炸。
+		var base_kind := MonsterVariants.base_of(kind)
+		if base_kind.is_empty():
+			return {}
+		entry = table.get(base_kind, null)
+		if not (entry is Dictionary):
+			return {}
+		radius_mult = MonsterVariants.multiplier(base_kind, "death_explosion_radius_mult")
 	var src := entry as Dictionary
 	if not bool(src.get("enabled", true)):
 		return {}
 	var damage := int(src.get("damage", 0))
 	if damage <= 0:
 		return {}
-	return {
+	var spec := {
 		"damage": damage,
-		"radius_m": maxf(0.5, float(src.get("radius_m", 5.0))),
+		"radius_m": maxf(0.5, float(src.get("radius_m", 5.0)) * radius_mult),
 		"sfx_radius_m": maxf(0.0, float(src.get("sfx_radius_m", 20.0))),
 	}
+	# ⚠ 2026-10-16 修：此处原先**丢弃了 zone 段**，而 `Enemy3D._spawn_ground_blast_zone()`
+	# 正是靠它才会生成地面持续伤害场 ⇒ 关卡配置里写的 zone 从来没有生效过（静默失效）。
+	# 现在原样透传；`zone.radius_m` 缺省仍沿用爆炸半径，也就是已乘过倍率的那个值。
+	var zone: Variant = src.get("zone", null)
+	if zone is Dictionary and not (zone as Dictionary).is_empty():
+		spec["zone"] = (zone as Dictionary).duplicate(true)
+	return spec
 
 
 ## 把「关卡级死亡自爆」挂进怪物配置。无配置不写键 ⇒ 塔楼等关卡照旧不自爆。
@@ -344,11 +448,20 @@ func _get_available_types_for_level(floor_level: int, floor: int = 1) -> Array[S
 			return ["summoner", "fat_zombie03", "ambusher"]
 	return ["melee_chaser"]
 
-## 生成基础敌人
-func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> Dictionary:
-	var base: Dictionary = BASE_ENEMY_TYPES.get(enemy_type, BASE_ENEMY_TYPES["melee_chaser"])
+## 生成基础敌人。
+##
+## `allow_strong = false` 供**精英**使用：精英在 `_generate_elite` 里还要叠自己的
+## 「巨大化」等词缀，再被升级成强化怪会变成双重强化（血量乘两遍），
+## 且精英的血条/名册契约都按原种走。精英是**身份指派**，不该被随机升级改写身份。
+func _generate_basic_enemy(
+	enemy_type: String, floor: int, floor_level: int, allow_strong: bool = true
+) -> Dictionary:
+	# 强化怪升级走**出口**而不是池子：刷怪盒 / 设计源 / 房型公式三条编成来源
+	# 全部汇到这里，做在这里才不会漏掉刷怪盒（远征01 正是盒子驱动）。
+	var resolved_type := _roll_strong_kind(enemy_type) if allow_strong else enemy_type
+	var base: Dictionary = BASE_ENEMY_TYPES.get(resolved_type, BASE_ENEMY_TYPES["melee_chaser"])
 	var scaling: Dictionary = FLOOR_SCALING.get(floor, FLOOR_SCALING[1])
-	var presentation: Dictionary = ENEMY_PRESENTATION.get(enemy_type, ENEMY_PRESENTATION["melee_chaser"])
+	var presentation: Dictionary = ENEMY_PRESENTATION.get(resolved_type, ENEMY_PRESENTATION["melee_chaser"])
 	
 	var hp: float = base["hp_base"] * scaling["hp_mult"]
 	var damage: float = base["damage_base"] * scaling["damage_mult"]
@@ -359,7 +472,7 @@ func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> 
 		speed *= float(_theme_profile.get_enemy_rule("speed_multiplier", 1.0))
 	
 	var result := {
-		"enemy_type": enemy_type,
+		"enemy_type": resolved_type,
 		"name": base["name"],
 		"hp": int(hp),
 		"max_hp": int(hp),
@@ -378,9 +491,10 @@ func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> 
 			result["name"] = "%s%s" % [prefix, result["name"]]
 		result["theme_id"] = _theme_profile.theme_id
 	# 关卡级覆盖放最后：绝对数值盖掉楼层缩放与主题倍率的乘积，AI 参数随配置下发。
-	result.merge(_stat_override(enemy_type), true)
+	# 强化怪在这三处都走「从原怪派生」，所以策划只需要维护原怪那一行。
+	result.merge(_stat_override(resolved_type), true)
 	result.merge(_ai_overrides(), true)
-	result.merge(_death_explosion_overrides(enemy_type), true)
+	result.merge(_death_explosion_overrides(resolved_type), true)
 	return result
 
 ## 生成精英敌人
@@ -401,7 +515,9 @@ func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> 
 		"base_enemy_id", _get_theme_fallback_enemy("fat_zombie03")
 	))
 	# 无名王冠复用Boss轻量外观，但仍走精英结算而不是Boss路线解锁。
-	var base: Dictionary = _generate_basic_enemy(base_type, floor, floor_level)
+	# 精英禁用强化升级：精英是身份指派，且下面还要叠「巨大化」等词缀，
+	# 再升级一次会变成双重强化（血量乘两遍）。
+	var base: Dictionary = _generate_basic_enemy(base_type, floor, floor_level, false)
 	base["is_elite"] = true
 	base["hp"] = int(base["hp"] * 1.5)
 	base["max_hp"] = base["hp"]

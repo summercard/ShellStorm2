@@ -65,8 +65,13 @@ func _replay_room(room: DungeonRoom3D) -> Dictionary:
 	var drift_sum := 0.0
 	var rows := 0
 	if placements.is_empty():
-		print("# %s no placements" % room.room_id)
-		return {"realized": 0, "design_max": 0, "trunc": 0, "drift": 0.0}
+		# 本探针量的是**逐盒**实到数，对无盒的房不适用。
+		# ⚠ 返回的字典必须**带齐 `rows`**：2026-10-16 之前漏了这个键，
+		# 而 `_ready` 会读 `agg["rows"]` —— 一遇到无盒的房就整支探针崩掉，
+		# 表现成"探针跑到一半没输出了"（room_03 改触发式时就该暴露，当时只有 1 房所以没注意）。
+		var trigger_tag := "踩点触发式遭遇" if not (room.encounter.get("trigger", {}) as Dictionary).is_empty() else "无盒"
+		print("# %s no placements (%s，不适用逐盒口径)" % [room.room_id, trigger_tag])
+		return {"realized": 0, "design_max": 0, "trunc": 0, "drift": 0.0, "rows": 0}
 	var stages := tower._resolve_encounter_stages(room.encounter, placements.size())
 	var floor_number := maxi(1, tower.visual_theme.difficulty_rank)
 	var denom := maxf(1.0, float(tower._records.size() - 1))

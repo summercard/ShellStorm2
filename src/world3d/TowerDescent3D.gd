@@ -5685,7 +5685,16 @@ func _bind_shared_edge_doors() -> void:
 		var owner_port_id := str(owner_port.get("port_id", ""))
 		if not owner_port_id.is_empty():
 			shared_door = owner.get_door_node_by_port(owner_port_id)
-		else:
+		# ⚠ 按端口取不到时必须**回落**到按方向取（2026-10-16 修）。
+		# 远征01 的房间门由 `_build_door()` 的**按方向**路径建出，`_door_nodes_by_port`
+		# 始终是空的 ⇒ 旧实现拿到 null 就直接 `continue`，**共享门从来没被绑过**。
+		# 后果有两个，都是玩家直接摸得到的：
+		#   ① 本房`_door_nodes`里没有入口门 ⇒ `set_room_seal()` 关不到它 ⇒
+		#      封锁后玩家还能从进来那扇门走出去；
+		#   ② `get_nearest_door()` 只遍历 `_door_nodes` ⇒ 从本房一侧**开不了**那扇门
+		#      （共享门变成单向门）。
+		# 方向在"一墙一门"的常见情况下就是答案；一墙多门时端口优先，回退不会覆盖它。
+		if shared_door == null:
 			shared_door = owner.get_door_node(owner_side)
 		if shared_door == null:
 			# 该边是 5m 通洞 / 坍塌（白盒里本来就没有墙件）⇒ 本来就没有门扇可共享。

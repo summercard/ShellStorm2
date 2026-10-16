@@ -2274,6 +2274,31 @@ func get_door_node_by_port(port_id: String) -> RoomDoor3D:
 	return _door_nodes_by_port.get(port_id) as RoomDoor3D
 
 
+## 取「通向 `target_room_id` 那一间」的门扇。
+##
+## 与 `get_door_node(方向)` 的差别：方向是本房自己的叫法，"通向哪一间"才是跨房的同一件事 ——
+## 共享边上两端的方向名不同（room_02 叫 east、room_03 叫 west），只有按目标房才认得同一扇门。
+##
+## 为什么需要它：共享边只有一端持有门扇，另一端（本房）的 `_door_nodes` 里**没有节点**。
+## 封锁一个房间时必须能关掉"进来时那扇门"，而它在对端手里 —— 调用方拿本房的方向去
+## `get_door_node()` 会拿到 null 并静默什么都不做（2026-10-16 业主报的"封门后还能走出去"
+## 就是这个静默空转）。本函数给调用方一个**按目标房**找门的入口。
+##
+## 回退链：① 本房 `_door_nodes` 里 `target_room_id` 匹配的（含共享绑定进来的）；
+## ② 本房 `door_targets` 里该目标对应的方向（方向标号可能与门扇自身记录不同）。
+func get_door_node_towards(target_room_id: String) -> RoomDoor3D:
+	if target_room_id.is_empty():
+		return null
+	for value in _door_nodes.values():
+		var door := value as RoomDoor3D
+		if door != null and door.target_room_id == target_room_id:
+			return door
+	for direction_value in door_targets.keys():
+		if str(door_targets[direction_value]) == target_room_id:
+			return _door_nodes.get(direction_value) as RoomDoor3D
+	return null
+
+
 ## 静态 TSCN 只接管视觉与固定碰撞；门槽 lane 归属仍必须按本局拓扑重新计算。
 ## 该步骤只读取实例清单，不生成第二套墙/地砖/设施。
 func _apply_authored_runtime_door_contract(dimensions: Vector2) -> void:

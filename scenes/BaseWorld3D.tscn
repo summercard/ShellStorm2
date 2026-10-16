@@ -49,14 +49,17 @@ description = "查看野外道路情报；副本必须从对应建筑入口进�
 activation_type = 2
 facility_color = Color(0.88, 0.48, 0.18, 1)
 
-[node name="TrainingRange" parent="Facilities" instance=ExtResource("3_facility")]
-position = Vector3(-10, 0, -7.9)
-facility_id = "training_range"
-display_name = "地下训练靶场"
-description = "隔离测试全部枪身、弹药与组合；离场不保留测试配置"
-activation_type = 1
-target_scene_path = "res://scenes/TrainingRange3D.tscn"
-facility_color = Color(0.28, 0.76, 0.70, 1)
+; 地下训练靶场入口已从基地设施牌移到 Esc 暂停菜单（2026-10-16）。
+; catalog 条目与靶场场景都保留；要恢复地面设施牌时，把下面这段取消注释
+; 并贴回 Facilities 节点下即可。
+; [node name="TrainingRange" parent="Facilities" instance=ExtResource("3_facility")]
+; position = Vector3(-10, 0, -7.9)
+; facility_id = "training_range"
+; display_name = "地下训练靶场"
+; description = "隔离测试全部枪身、弹药与组合；离场不保留测试配置"
+; activation_type = 1
+; target_scene_path = "res://scenes/TrainingRange3D.tscn"
+; facility_color = Color(0.28, 0.76, 0.70, 1)
 
 [node name="Workshop" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-14.5, 0, -2.6)

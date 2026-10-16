@@ -22,6 +22,17 @@ const LIGHT_HUNTER_KINDS := ["melee_chaser", "fat_zombie03", "shielded", "explod
 const DARKNESS_SEEKER_KINDS := ["ranged_caster", "summoner", "ambusher"]
 const RANGED_KINDS := ["ranged_caster", "summoner", "boss"]
 
+## 事件猎杀（`set_hunt_target`）的默认有效期与刷新节奏（毫秒）。
+##
+## 它不是「猎杀持续多久」，而是**刷新间隔的上限**：事件机制每帧都会下发一次，
+## 而本管理器只在「剩余有效期不足一半」时才真正改写记录 ⇒ 每只怪大约每
+## `HUNT_REFRESH_MSEC / 2` 才被写一次字典。30 只怪的房间里，这条指令
+## 不会变成「每帧 30 次写」。
+##
+## 它同时是**自动熄火**时间：事件一旦终结、不再刷新，猎杀在 1.2 s 内自然过期，
+## 不需要事件机制反过来逐个解绑 —— 少一条「忘了关」的失败路径。
+const HUNT_REFRESH_MSEC := 1200
+
 var _vision: MonsterVisionSystem3D = VISION_SCRIPT.new()
 var _records: Dictionary = {}
 var _attack_tokens: Dictionary = {}
@@ -188,6 +199,47 @@ func broadcast_sound_stimulus(
 	return alerted
 
 
+## 事件级猎杀：把「玩家就在那里」这条敌情直接押进该怪的记录，**不需要它先被打到**。
+##
+## 与 `notify_enemy_attacked` 的分工（两者不许互相顶替）：
+##   · 那个是**反馈**：谁打了我 ⇒ 我记住谁。有效期 8 s，走 `damage_contact`，
+##     由真实受击驱动。
+##   · 这个是**指令**：事件机制要求这一批怪围上去。走 `hunt_contact`，有效期短、
+##     必须持续刷新，因此天然是「事件在跑才有效」。
+##
+## 因此本方法不写 `forced_target_*`（那组字段的语义是「被打过」）：已受伤的怪
+## 再被猎杀时，`damage_contact` 仍按原有优先级压过 `hunt_contact`，两条刺激不串账。
+##
+## 返回 true 表示**这次真的写了记录**；被刷新窗口挡下时返回 false —— 调用方
+## 不得把 false 当成失败（它只表示"没必要重复写"）。
+func set_hunt_target(enemy: Node3D, target: Node3D, duration_msec := HUNT_REFRESH_MSEC) -> bool:
+	if enemy == null or not is_instance_valid(enemy):
+		return false
+	if target == null or not is_instance_valid(target):
+		return false
+	# 已阵亡的不收指令：猎杀不是复活术，也不该给尸体继续记账。
+	if str(enemy.get("ai_state")) == "dead":
+		return false
+	var instance_id := enemy.get_instance_id()
+	if not _records.has(instance_id):
+		register_enemy(enemy)
+	var now := Time.get_ticks_msec()
+	var record := _records[instance_id] as Dictionary
+	var target_id := target.get_instance_id()
+	# 同一目标、且剩余有效期仍充足 ⇒ 不重写（见 `HUNT_REFRESH_MSEC`）。
+	if (
+		int(record.get("hunt_target_instance_id", 0)) == target_id
+		and now + duration_msec / 2 <= int(record.get("hunt_until_msec", 0))
+	):
+		return false
+	record["hunt_target_instance_id"] = target_id
+	record["hunt_until_msec"] = now + maxi(1, duration_msec)
+	record["hunt_target_position"] = target.global_position
+	record["next_update_msec"] = 0
+	_records[instance_id] = record
+	return true
+
+
 func request_attack_token(enemy: Node3D, target: Node3D, channel := "melee") -> bool:
 	if enemy == null or target == null or not is_instance_valid(enemy) or not is_instance_valid(target):
 		return false
@@ -246,6 +298,8 @@ func get_enemy_snapshot(enemy: Node3D) -> Dictionary:
 	snapshot["memory"] = (record.get("stimuli", []) as Array).duplicate(true)
 	snapshot["attack_token_channel"] = str(record.get("attack_token_channel", ""))
 	snapshot["attack_token_target_id"] = int(record.get("attack_token_target_id", 0))
+	snapshot["hunt_target_instance_id"] = int(record.get("hunt_target_instance_id", 0))
+	snapshot["hunt_until_msec"] = int(record.get("hunt_until_msec", 0))
 	snapshot["room_id"] = str(record.get("room_id", ""))
 	snapshot["floor_index"] = int(record.get("floor_index", 0))
 	return snapshot
@@ -291,6 +345,27 @@ func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Di
 			)
 		record["forced_target_instance_id"] = 0
 		record["forced_target_until_msec"] = 0
+
+	# 事件猎杀：与「被打过」同级地压过视觉与光照策略 —— 封锁房里关着灯，
+	# 若还让黑暗追光者先去找暗处，玩家会看到"一半怪围上来、一半怪躲开"。
+	# `target_visible = false` / `line_of_sight = false` 是**如实**报告：它们没看见你，
+	# 只是知道你在哪。Enemy3D 靠 `hunt_contact` 走 stimulus_tracking 这一档来行动。
+	var hunt_id := int(record.get("hunt_target_instance_id", 0))
+	if hunt_id > 0 and now <= int(record.get("hunt_until_msec", 0)):
+		var hunted := instance_from_id(hunt_id) as Node3D
+		if _target_is_legal(enemy, hunted):
+			var hunted_position := hunted.global_position
+			record["hunt_target_position"] = hunted_position
+			record["last_known_target_position"] = hunted_position
+			record["last_contact_msec"] = now
+			record["selected_target_instance_id"] = hunt_id
+			return _decision(
+				"hunt_contact", hunt_id, false, hunted_position,
+				hunted_position, "hunt", policy, false, "combat", vision_range,
+				"event_hunt_target_locked", 990.0
+			)
+		record["hunt_target_instance_id"] = 0
+		record["hunt_until_msec"] = 0
 
 	var selected := _select_visible_target(enemy, record, vision_range)
 	if not selected.is_empty():
@@ -646,6 +721,9 @@ func _new_record(enemy: Node3D) -> Dictionary:
 		"ally_alert_position": Vector3.ZERO,
 		"forced_target_instance_id": 0,
 		"forced_target_until_msec": 0,
+		"hunt_target_instance_id": 0,
+		"hunt_until_msec": 0,
+		"hunt_target_position": Vector3.ZERO,
 		"selected_target_instance_id": 0,
 		"selected_target_score": 0.0,
 		"attack_token_target_id": 0,

@@ -236,6 +236,7 @@ core_scenes=(
   verify_combat_vfx_toon_v002
   verify_bullet_vfx_profiles
   verify_monster_startup_roar
+  verify_strong_variant_monsters
   verify_death_blast_vfx
   verify_zombie_goo_death_vfx
   verify_hit_routing_vfx
@@ -246,6 +247,8 @@ core_scenes=(
   verify_3d_melee_feedback_flow
   verify_audio_library_flow
   verify_training_range_3d_flow
+  verify_training_range_isolation
+  verify_pause_menu_training_range_entry
   verify_3d_fate_weapon_flow
   verify_fate_weapon_completion
   verify_star_physical_mounts
@@ -281,6 +284,7 @@ core_scenes=(
   verify_tower03_expedition_entry
   verify_death_during_extraction_flow
   verify_encounter_event_flow
+  verify_encounter_trigger_room_flow
   verify_game_entry_flow
   verify_base_world_flow
   verify_dual_weapon_quick_map_fate_flow

@@ -6,6 +6,7 @@ extends RefCounted
 ## encounter_event_context(room_id, instance_id) -> Dictionary
 ## encounter_event_spawn(instance_id, room_id, monster_spec, count) -> Dictionary
 ## encounter_event_live_count(instance_id) -> int
+## encounter_event_hunt(instance_id) -> Dictionary
 ## encounter_event_apply_result(action) -> Dictionary
 
 signal encounter_event_started(snapshot: Dictionary)
@@ -16,6 +17,12 @@ const SCHEMA_VERSION := 1
 const COMPLETIONS := ["timer", "clear", "timer_and_clear"]
 const LEAVE_POLICIES := ["pause", "cancel", "follow_current_room"]
 const PROGRESS_MODES := ["tick", "external"]
+## 阶段推进方式：
+##   `time`  —— 只看时间阈值（`at_sec` / `at_ratio`）。到达即派发，可能多波同时在场。
+##   `clear` —— 在时间阈值**之上**再加一道清算门槛：上一阶段必须「已派发完」**且**
+##              事件归属的存活数归零，本阶段才允许开始。用于「一波打完才出下一波」。
+## 两种模式都保留时间阈值 = 阶段最早开始时刻（`clear` 模式下即「前一阶段刚清完也要等够」）。
+const STAGE_ADVANCES := ["time", "clear"]
 const PREREQ_KEYS := [
 	"player_alive", "run_active", "room_cleared", "current_room", "flags", "completed_events",
 ]
@@ -23,7 +30,8 @@ const ACTION_KEYS := ["type", "key", "value", "room_id", "on", "text"]
 const CONFIG_KEYS := [
 	"schema_version", "event_id", "room_id", "duration_sec", "completion", "stages", "monsters",
 	"count", "interval_sec", "total_count", "max_alive", "prereqs", "on_completed", "on_cancelled",
-	"leave_policy", "progress_mode", "follow_current_room",
+	"leave_policy", "progress_mode", "follow_current_room", "stage_advance",
+	"hunt_player", "hud_countdown",
 ]
 const STAGE_KEYS := ["at_sec", "at_ratio", "monsters"]
 const MONSTER_KEYS := ["type", "count", "content_id"]
@@ -159,9 +167,42 @@ func tick(delta: float) -> void:
 		var state := _instances[instance_id] as Dictionary
 		if bool(state.get("terminal", false)):
 			continue
+		_refresh_hunt(instance_id, state)
 		if str((state.get("config", {}) as Dictionary).get("progress_mode", "tick")) == "external":
 			continue
 		_step_instance(instance_id, state, delta)
+
+
+## 事件猎杀（`hunt_player`）的每帧刷新。
+##
+## 放在 `tick` 里、**早于** `external` 早退：猎杀与「谁推进时间」正交 ——
+## 撤离防守那种外部进度事件若哪天开了猎杀，也一样该生效。
+## 每帧调不会变成写放大：`MonsterAIManager.set_hunt_target` 自带刷新窗口
+## （见 `HUNT_REFRESH_MSEC`），同一窗口内重复下发直接返回。
+func _refresh_hunt(instance_id: String, state: Dictionary) -> void:
+	if not bool((state.get("config", {}) as Dictionary).get("hunt_player", false)):
+		return
+	_host_call("encounter_event_hunt", [instance_id], {})
+
+
+## 取某房里**仍在跑、且开了倒计时环**的事件快照（没有则空字典）。
+##
+## 这是给 HUD 的**只读投影**：只读 `elapsed` / `duration_sec` / `terminal`，
+## 不推进、不改状态 —— 环的显隐因此永远与事件本身一致，不会各记一份倒计时。
+## 「该不该画环」的判据留在这里，调用方只拿到结论。
+func get_room_countdown_snapshot(room_id: String) -> Dictionary:
+	if room_id.is_empty():
+		return {}
+	for value in _instances.values():
+		var state := value as Dictionary
+		if bool(state.get("terminal", false)):
+			continue
+		if str(state.get("room_id", "")) != room_id:
+			continue
+		if not bool((state.get("config", {}) as Dictionary).get("hud_countdown", false)):
+			continue
+		return state.duplicate(true)
+	return {}
 
 
 func advance_external(instance_id: String, progress: float) -> Dictionary:
@@ -254,8 +295,16 @@ static func validate_config(config: Dictionary) -> Dictionary:
 	var progress_mode := str(config.get("progress_mode", "tick"))
 	if progress_mode not in PROGRESS_MODES:
 		return _reject("progress_mode_invalid")
+	var stage_advance := str(config.get("stage_advance", "time"))
+	if stage_advance not in STAGE_ADVANCES:
+		return _reject("stage_advance_invalid")
 	if config.has("follow_current_room") and not (config["follow_current_room"] is bool):
 		return _reject("follow_current_room_invalid")
+	# `hunt_player`（事件猎杀）与 `hud_countdown`（右上角倒计时环）都是**表现/手感开关**，
+	# 与事件状态机无关：缺省 false ⇒ 既有调用方（撤离防守）逐字不变。
+	for boolean_key in ["hunt_player", "hud_countdown"]:
+		if config.has(boolean_key) and not (config[boolean_key] is bool):
+			return _reject("%s_invalid" % boolean_key)
 	var prereqs: Variant = config.get("prereqs", {})
 	if not prereqs is Dictionary:
 		return _reject("prereqs_invalid")
@@ -286,6 +335,9 @@ static func validate_config(config: Dictionary) -> Dictionary:
 	normalized["stages"] = stages
 	normalized["leave_policy"] = leave_policy
 	normalized["progress_mode"] = progress_mode
+	normalized["stage_advance"] = stage_advance
+	normalized["hunt_player"] = bool(config.get("hunt_player", false))
+	normalized["hud_countdown"] = bool(config.get("hud_countdown", false))
 	normalized["prereqs"] = (prereqs as Dictionary).duplicate(true)
 	normalized["on_completed"] = action_result["actions"]
 	normalized["on_cancelled"] = cancelled_action_result["actions"]
@@ -317,6 +369,9 @@ func _step_instance(instance_id: String, state: Dictionary, delta: float) -> voi
 	if bool(state.get("terminal", false)):
 		return
 	if float(state.get("elapsed", 0.0)) >= float(config["duration_sec"]):
+		# 计时到点 ⇒ **不再开新波**。未开始的阶段整体作废并计入 `dropped`；
+		# 已开始的阶段不动（它们的怪还在场上，由清房 / 取消逻辑收尾）。
+		_drop_unstarted_stages(state)
 		if str(config["completion"]) == "clear":
 			_try_finish_clear(instance_id, state)
 			if not bool(state.get("terminal", false)):
@@ -333,6 +388,7 @@ func _dispatch_due_stages(instance_id: String, state: Dictionary) -> void:
 	var config := state.get("config", {}) as Dictionary
 	var stages: Array = config.get("stages", []) as Array
 	var elapsed := float(state.get("elapsed", 0.0))
+	var clear_gated := str(config.get("stage_advance", "time")) == "clear"
 	for index in stages.size():
 		var stage := stages[index] as Dictionary
 		var stage_state := (state["stage_states"] as Array)[index] as Dictionary
@@ -340,6 +396,17 @@ func _dispatch_due_stages(instance_id: String, state: Dictionary) -> void:
 		if stage.has("at_ratio"):
 			threshold = float(stage["at_ratio"]) * float(config["duration_sec"])
 		if not bool(stage_state.get("started", false)) and elapsed >= threshold:
+			# `clear` 模式：时间到之外，还要求**上一阶段已派发完且场上清空**。
+			if clear_gated and index > 0:
+				var previous := (state["stage_states"] as Array)[index - 1] as Dictionary
+				if not bool(previous.get("complete", false)):
+					break
+				# ⚠ 每次判门槛都必须**重新问**存活数，绝不能缓存。
+				# 同一帧里前面刚派发完的阶段已经把怪放进场了；若沿用上一阶段算出的 0，
+				# 后面所有阶段会连锁通过 —— 实测表现是「一波出完就把六波全出完」，
+				# 清怪门控彻底失效（`verify_encounter_trigger_room_flow` 抓到的就是这个）。
+				if int(_host_call("encounter_event_live_count", [instance_id], 0)) > 0:
+					break
 			stage_state["started"] = true
 			encounter_event_stage_started.emit(get_snapshot(instance_id), index)
 		_spawn_pending_stage(instance_id, state, index)
@@ -456,6 +523,30 @@ func _apply_result_actions(state: Dictionary, action_key := "on_completed") -> v
 	if not (state["failed"] as Array).is_empty():
 		state["result_action_failed"] = true
 		state["result"]["result_action_error"] = "result_action_failed"
+
+
+## 把**尚未开始**的阶段整体作废，并把其中还没派发的数量计进 `dropped`。
+## 「时间结束后就不刷怪」这条规则的落点就在这里：计时一到，剩下的波不再有机会开始。
+## 已开始的阶段不动 —— 它们的怪已经在场上，归清房 / 取消逻辑管。
+func _drop_unstarted_stages(state: Dictionary) -> int:
+	if bool(state.get("stages_dropped", false)):
+		return 0
+	var dropped := 0
+	for stage_value in state.get("stage_states", []) as Array:
+		var stage_state := stage_value as Dictionary
+		if bool(stage_state.get("started", false)):
+			continue
+		for monster_value in stage_state.get("pending", []) as Array:
+			var monster := monster_value as Dictionary
+			dropped += maxi(0, int(monster.get("count", 0)) - int(monster.get("_spawned", 0)))
+		(stage_state["pending"] as Array).clear()
+		stage_state["complete"] = true
+		stage_state["dropped"] = true
+	state["stages_dropped"] = true
+	if dropped > 0:
+		state["dropped"] = int(state.get("dropped", 0)) + dropped
+	state["pending"] = _pending_total(state)
+	return dropped
 
 
 func _pending_total(state: Dictionary) -> int:

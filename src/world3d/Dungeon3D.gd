@@ -44,6 +44,12 @@ const CODE_HUD_GLYPH_SCRIPT := preload("res://src/ui/CodeHUDGlyph.gd")
 const NEON_FRAME_SCRIPT := preload("res://src/ui/NeonFrameControl.gd")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 const HUD_RELOAD_RING_SCRIPT := preload("res://src/ui/HudReloadRing.gd")
+const ENCOUNTER_COUNTDOWN_RING_SCRIPT := preload("res://src/ui/EncounterCountdownRing.gd")
+## —— HUD 遭遇倒计时环（2026-10-16，业主标注放右上角）——
+## 外径取 108 设计 px（×HUD_UI_SCALE ⇒ 86.4 canvas px）：
+## 圆心那行 `M:SS` 用的是与右下金币读数**同一个**字号（26×0.8≈21 px），
+## 环再小一圈就会让 5 个字符贴到环带上。
+const ENCOUNTER_COUNTDOWN_RING_DIAMETER_DESIGN := 108.0
 const FATE_CARD_FEEDBACK_SCRIPT := preload("res://src/ui/FateCardFeedback.gd")
 const HUD_UI_SCALE := 0.80
 ## —— HUD 换弹环（2026-10-15：从武器图标迁到角色右下侧）——
@@ -203,7 +209,7 @@ const FATE_SPEND_POPUP_RISE := 42
 const FATE_OVERLAY_EXIT_DURATION := 0.42
 const FATE_OVERLAY_EXIT_FLIP_DURATION := 0.16
 
-const BASE_INVENTORY_CAPACITY := 24
+const BASE_INVENTORY_CAPACITY := 40
 ## 保底武装配套弹药：入场即给 `item_ammo_pack` 的发数（每单位 = 1 发真实备弹）。
 ## 白送手枪由 `Player3D.start_with_weapon` 负责，那条链路只给枪不给弹；
 ## 没有这份备弹时，弹匣打空且没捡到掉落 = 保底武装彻底哑火。数值是设计输入，不要就地写数字。
@@ -300,6 +306,15 @@ var _delayed_spawn_serial := 0
 var _room_intermission_seconds: Dictionary = {}
 var _room_fate_wave_queued: Dictionary = {}
 var _room_spawn_blocked: Dictionary = {}
+## —— 踩点触发式遭遇（`docs/v0.1/design/触发器刷怪设计.md` §3.3 调用层扩展）——
+## 本房声明了 `encounter.trigger` 时就**不在进房时刷怪**，改由玩家走到房间内某个点触发。
+## `_room_encounters_fired` 记录已触发过的房（每局一次），`_room_encounter_active` 记录
+## 进行中的事件实例 —— 后者是「本房有怪没清完」之外的**第二个不判清房**的理由：
+## 波与波之间场上会短暂清空，若没有这道门，房间会在两波之间被误判为已肃清并放行。
+var _room_encounters_fired: Dictionary = {}
+var _room_encounter_active: Dictionary = {}
+## 被「落下门扇」封住的房间（room_id → 原因）。封住期间门不可交互、且保持关闭。
+var _sealed_rooms: Dictionary = {}
 var _loot_module: LootModule
 var _reward_coordinator: RuntimeRewardCoordinator
 var _monster_injector: MonsterInjector
@@ -405,6 +420,8 @@ var _hud_weapon_fate_label: Label = null
 var _hud_weapon_model_icon: ItemModelIcon3D = null
 ## HUD 换弹环（角色右下侧的屏幕投影）。见 HUD_RELOAD_RING_* 一族常量。
 var _hud_reload_ring: HudReloadRing = null
+## 右上角遭遇倒计时环（只在事件声明了 `hud_countdown` 且仍在跑时可见）。
+var _hud_countdown_ring: EncounterCountdownRing = null
 var _hud_reload_ring_active := false
 ## 图标弹跳的已用时长；< 0 表示没在弹（负数不用 0 是因为 t=0 本身是合法采样点）。
 var _hud_weapon_icon_pop_elapsed := -1.0
@@ -1079,6 +1096,10 @@ func _can_switch_weapon_slot() -> bool:
 func get_interaction_candidate(interacting_player: Player3D) -> Dictionary:
 	if _completed or interacting_player == null or interacting_player != player:
 		return {}
+	# 被封住的房间：整房不提供任何门交互（门扇已落下，玩家按不出"开门"）。
+	# 放在最前面，先于「最近的门」查询 —— 否则玩家走到门前仍会看到开门提示与圆点。
+	if _room_is_sealed(_current_room_id):
+		return {}
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	if room == null:
 		return {}
@@ -1202,15 +1223,43 @@ func _on_encounter_event_stage_started(snapshot: Dictionary, stage_index: int) -
 
 func _on_encounter_event_finished(snapshot: Dictionary) -> void:
 	var event_id := str(snapshot.get("event_id", ""))
+	var status := str(snapshot.get("status", ""))
 	if str(snapshot.get("status", "")) == "completed" and not event_id.is_empty() and event_id not in _encounter_event_completed_history:
 		_encounter_event_completed_history.append(event_id)
+	var room_id := str(snapshot.get("room_id", ""))
+	if not room_id.is_empty() and _room_encounter_active.has(room_id):
+		_room_encounter_active.erase(room_id)
+		if status == "completed":
+			# 计时到点：不再出新波，但**已出的怪还要打完**。
+			# 若此刻场上已空（玩家在到点前刚把最后一波清干净），本房直接判肃清 ——
+			# 否则不会再有击杀事件来推动清房判定，房间会一直锁着。
+			_try_settle_encounter_room_clear(room_id)
+		else:
+			# 取消 / 失败一律解封：任何非正常收尾都不能把玩家永久锁死在房里。
+			set_room_seal(room_id, false)
 	encounter_event_finished.emit(snapshot)
 	_queue_runtime_autosave("encounter_event_finished")
+
+
+## 遭遇收尾补判：场上真的空了 ⇒ 本房肃清。
+## 只由 `_on_encounter_event_finished` 调用 —— 正常路径仍走击杀事件。
+func _try_settle_encounter_room_clear(room_id: String) -> void:
+	if int(_alive_by_room.get(room_id, 0)) > 0 or _reserved_spawn_count(room_id) > 0:
+		return
+	if not (_enemy_nodes_by_room.get(room_id, []) as Array).is_empty():
+		return
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null or room.cleared:
+		return
+	_mark_room_cleared(room, true)
+	status_label.text = "遭遇结束 · 房间肃清，钥匙已掉落"
 
 
 func _process(delta: float) -> void:
 	if _encounter_event_director != null:
 		_encounter_event_director.tick(delta)
+	_tick_room_encounter_triggers(delta)
+	_tick_encounter_countdown_hud()
 	_tick_bless_dead(delta)
 	_tick_boss_health_bar_delay(delta)
 	_tick_player_health_bar_delay(delta)
@@ -1719,6 +1768,24 @@ func _build_reference_main_hud() -> void:
 	_hud_floor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_anchor_control(_hud_floor_label, 1.0, 0.0, 1.0, 0.0, -300, 12, -12, 38)
 	_reference_hud_root.add_child(_hud_floor_label)
+
+	# —— 右上角遭遇倒计时环（2026-10-16）——
+	# 位置按业主标注：右上角，落在世界时间（`WorldDateTimeHUD`，右缘 -18、y 48..98）
+	# 正下方。右缘与世界时间对齐同一列 —— 两块右边缘对齐才不会是"一高一低地飘"。
+	# 外径 = -126 到 -18 = 108 设计 px，与 `ENCOUNTER_COUNTDOWN_RING_DIAMETER_DESIGN` 同值。
+	# 与雷达（`minimap`，y 44..318 但已隐藏）区域重叠是安全的：那个节点只剩占位。
+	_hud_countdown_ring = ENCOUNTER_COUNTDOWN_RING_SCRIPT.new() as EncounterCountdownRing
+	_hud_countdown_ring.name = "EncounterCountdownRing"
+	_hud_countdown_ring.visible = false
+	_anchor_control(_hud_countdown_ring, 1.0, 0.0, 1.0, 0.0, -126, 100, -18, 208)
+	_reference_hud_root.add_child(_hud_countdown_ring)
+	# 中间那行时间「用下方金币的字体」= 与右下 `RunLootReadout` **同一个** `_make_hud_label`
+	# 口径（同字号 26、同 `RUN_COIN_READOUT_COLOR`、同 `_outline_labels` 描边）。
+	# 环本身也取同一色系（见 `EncounterCountdownRing.FILL_COLOR`），
+	# 否则"金币字体"那句话只落实了一半：字是金的、圈是青的。
+	var countdown_label := _make_hud_label("1:00", 26, RUN_COIN_READOUT_COLOR)
+	_outline_labels([countdown_label])
+	_hud_countdown_ring.bind_label(countdown_label)
 	# 2026-09-28 主人要求：右侧两块「时间」分开处置 —— 下面的本局计时栏（「◷ 00:12 ⏸」）
 	# 整个去掉，上面的世界时间只去背板（见 TowerDescent3D._install_world_time_hud）。
 	# 只隐藏外壳、不删节点：_update_hud_timer 仍每帧写 _hud_timer_label.text，
@@ -2877,9 +2944,10 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	elif room.room_type == "EVENT":
 		room.cleared = false
 		var event_ready := _ensure_event_room_objective(room)
-		# 「事件 + 战斗」双职房（业主裁定 2026-09-26）：EVENT 房**显式摆了触发盒**时，
-		# 事件终端照常保留，同时按盒出波。⚠️ 只有真有盒才进刷怪入口 —— 否则无盒的
-		# EVENT 房会掉进 `_spawn_room_enemies` 的公式兜底刷出随机怪（不是本意）。
+		# 「事件 + 战斗」双职房（业主裁定 2026-09-26）：EVENT 房带**编排战斗**时，事件终端照常保留、
+		# 同时出波。⚠️ 只有真有编排战斗才进刷怪入口 —— 否则无编成的 EVENT 房会掉进
+		# `_spawn_room_enemies` 的公式兜底刷出随机怪（不是本意）。
+		# 编排战斗的两种承载（触发盒 / 踩点触发式遭遇）都由 `_event_room_has_authored_combat` 认。
 		if _event_room_has_authored_combat(room):
 			_event_combat_rooms[room.room_id] = true
 			_spawn_room_enemies(room)
@@ -2894,19 +2962,298 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		_mark_room_cleared(room, room.room_type not in ["START", "EXTRACTION", "ELEVATOR"])
 
 
-## 「事件 + 战斗」双职房判据：EVENT 房**显式摆了触发盒**才带战斗（业主裁定 2026-09-26）。
-## 刻意与 `HOSTILE_ROOM_TYPES` 分开：EVENT 不在**公式刷怪**的入口门里，只有带盒才有战斗，
-## 免得塔楼 / 主题池里无盒的程序化事件房被顺带刷上随机怪。
-## 判据只看设计源（`spawn_placements`），不看运行态 —— 进房首帧就要决定要不要进刷怪入口。
+## 「事件 + 战斗」双职房判据：EVENT 房带了**编排战斗**才带战斗（业主裁定 2026-09-26）。
+## 刻意与 `HOSTILE_ROOM_TYPES` 分开：EVENT 不在**公式刷怪**的入口门里，只有带编排战斗才有战斗，
+## 免得塔楼 / 主题池里没有编排战斗的程序化事件房被顺带刷上随机怪。
+## 判据只看设计源（`spawn_placements` / `encounter.trigger`），不看运行态 —— 进房首帧就要定。
+##
+## ⚠ 2026-10-16 扩展：编排战斗现在有两种承载 —— **触发盒**与**踩点触发式遭遇**。
+## 旧判据只认盒子，而 `room_09`（本关唯一 EVENT 房）改踩点遭遇后 `spawn_placements` 清空 ⇒
+## 判据返回 false ⇒ `_on_room_entered` 的 EVENT 分支**根本不调 `_spawn_room_enemies()`**，
+## 该房于是被当成「纯事件房」：`_event_combat_rooms` 不登记 ⇒
+## 事件终端一结算就走到 `_mark_room_cleared()`，**敌群还在场上就把去路门放行**。
+## 所以判据必须与「编排战斗由谁承载」同步扩，不能只认其中一种。
 func _event_room_has_authored_combat(room: DungeonRoom3D) -> bool:
 	if room == null or room.room_type != "EVENT":
 		return false
+	if _room_has_encounter_trigger(room):
+		return true
 	return not room.spawn_placements.is_empty()
+
+
+## —— 踩点触发式遭遇（`encounter.trigger`，调用层扩展）——
+##
+## 与既有「触发盒」的关系：**盒子管出什么怪，这里管什么时候开始**，正是
+## `触发器刷怪设计.md` §3.3「调用机制与盒子分开写」那条分层的直接落地。
+## 现有调用机制只有一种（玩家进房即出）；本段加上第二种（走到房间内某点才出）。
+##
+## 三条硬约束，缺一都会表现成「说不清的怪现象」：
+##   1. 进房时**不刷怪、且不判清房**（见 `_spawn_room_enemies` 的早退分支）——
+##      否则去路门立刻解锁，玩家根本不会走到触发点。
+##   2. 波与波之间场上会短暂清空 ⇒ `_resolve_room_enemy_departure` 必须认
+##      `_room_encounter_active` 这道门，否则第一波清完就把房间判清、门放行。
+##   3. 计时到点后不再开新波（由 Director 的 `_drop_unstarted_stages` 负责），
+##      但**已出的怪仍要打完** —— 所以封门只在「房间真被肃清」时解除。
+const STRONG_RANDOM_FALLBACK: Array[String] = [
+	"melee_chaser_strong", "fat_zombie03_strong", "ranged_caster_strong",
+]
+
+
+func _room_has_encounter_trigger(room: DungeonRoom3D) -> bool:
+	if room == null:
+		return false
+	return not (room.encounter.get("trigger", {}) as Dictionary).is_empty()
+
+
+## 触发区中心（带心 / 圆心）。**按房间局部坐标换算到世界**，不是把偏移当世界轴用 ——
+## 远征01 的 room_04 / room_06 / room_10 被端口对接链旋转过 90°，布局里的
+## `size_m` / `position_m` 是**示例版图**口径，与运行时局部轴不是同一套
+## （实测：room_04 布局写 45×40，运行时是 40×45；布局写 `template_rotation_deg: 0`，
+## 而运行时几何已经转过了）。
+func _room_encounter_trigger_center(room: DungeonRoom3D) -> Vector3:
+	var trigger := room.encounter.get("trigger", {}) as Dictionary
+	var offset := _placement_vec2(trigger.get("offset_m", [0.0, 0.0]))
+	return room.to_global(Vector3(offset.x, 0.0, offset.y))
+
+
+## 触发判定：`circle`（房心半径，沿用）或 `band`（**满宽带**）。
+##
+## 为什么要有带：圆的半径再大也**绕得过去** —— 玩家贴着墙走就能从旁边溜过，
+## 触发不了。带的作用是**不可绕过**：它沿 `axis` 铺满房间在该轴上的整个跨度，
+## 只在另一根轴上有 `thickness_m` 的厚度；只要厚度轴与**入口门的法线同轴**，
+## 从入口进来的任何一条连续路径都必须穿过它。
+##
+## 判定在**房间局部坐标**里做（`to_local`），因此房间被旋转过也照样正确 ——
+## 而且「铺满整轴」按的是运行时 `get_dimensions()`，不是写死的数字：
+## 房间被重新对接、尺寸变化时，带子自动跟着铺满，不会留下一条可钻的缝。
+func _room_encounter_trigger_contains(room: DungeonRoom3D, world_position: Vector3) -> bool:
+	if room == null:
+		return false
+	var trigger := room.encounter.get("trigger", {}) as Dictionary
+	if trigger.is_empty():
+		return false
+	var offset := _placement_vec2(trigger.get("offset_m", [0.0, 0.0]))
+	var local := room.to_local(world_position) - Vector3(offset.x, 0.0, offset.y)
+	local.y = 0.0
+	if str(trigger.get("shape", "circle")) == "band":
+		var thickness := maxf(0.1, float(trigger.get("thickness_m", 6.0)))
+		var dimensions := room.get_dimensions()
+		# 轴约定与 `DungeonRoom3D` 的门位表同一套：北 = -z、南 = +z、东 = +x、西 = -x。
+		if str(trigger.get("axis", "z")) == "x":
+			return absf(local.z) <= thickness * 0.5 and absf(local.x) <= dimensions.x * 0.5
+		return absf(local.x) <= thickness * 0.5 and absf(local.z) <= dimensions.y * 0.5
+	var radius := maxf(1.0, float(trigger.get("radius_m", 6.0)))
+	return local.length() <= radius
+
+
+## 右上角遭遇倒计时环：只对「当前房里、仍在跑、且声明了 `hud_countdown` 的事件」显示。
+##
+## 不按事件类型硬编码 —— 撤离防守若哪天也想要环，只需在它的配置里开
+## `hud_countdown`，不必在这里再加一条分支。读数直接取自事件快照，
+## 不另存一份倒计时：两处计时必然会漂，而漂了之后没人知道该信哪个。
+func _tick_encounter_countdown_hud() -> void:
+	if _hud_countdown_ring == null:
+		return
+	if _encounter_event_director == null or _current_room_id.is_empty():
+		_hud_countdown_ring.visible = false
+		return
+	var snapshot := _encounter_event_director.get_room_countdown_snapshot(_current_room_id)
+	if snapshot.is_empty():
+		# 事件终结（完成 / 取消 / 失败）或玩家离房 ⇒ 环立即消失，不留残影。
+		_hud_countdown_ring.visible = false
+		return
+	var config := snapshot.get("config", {}) as Dictionary
+	var duration := maxf(0.001, float(config.get("duration_sec", 0.0)))
+	_hud_countdown_ring.visible = true
+	_hud_countdown_ring.set_time(duration - float(snapshot.get("elapsed", 0.0)), duration)
+
+
+## 逐帧轮询触发点。**刻意不用 Area3D**：与剧情位置触发同一取舍 ——
+## 多一个常驻 Area3D 就是多一份节点预算与碰撞层维护，而这里只需要一次距离比较。
+func _tick_room_encounter_triggers(_delta: float) -> void:
+	if _completed or _current_room_id.is_empty() or player == null:
+		return
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if not _room_has_encounter_trigger(room):
+		return
+	if _room_encounters_fired.has(room.room_id):
+		return
+	if not _room_encounter_trigger_contains(room, player.global_position):
+		return
+	_start_room_encounter(room)
+
+
+func _start_room_encounter(room: DungeonRoom3D) -> Dictionary:
+	# 先记「已触发」再启动：启动失败也**不再重试**，避免玩家站在触发点上反复弹警告。
+	_room_encounters_fired[room.room_id] = true
+	var started := start_encounter_event(_build_room_encounter_config(room))
+	if not bool(started.get("ok", false)):
+		push_warning("[Dungeon3D] 踩点遭遇启动失败（%s）：%s" % [room.room_id, str(started)])
+		return started
+	_room_encounter_active[room.room_id] = str(started.get("instance_id", ""))
+	if bool(room.encounter.get("seal_room", true)):
+		set_room_seal(room.room_id, true, "encounter")
+	if AudioManager != null:
+		AudioManager.play_sfx("wave_start", -3.0)
+	if _is_current_room(room.room_id):
+		status_label.text = "遭遇开始 · 击退所有波次才能离开"
+	return started
+
+
+## 由房间的 `encounter` 编译成遭遇事件配置。
+##
+## 与撤离防守的差别只有两处，都是刻意的：
+##   · `progress_mode: tick`（自己计时，不需要外部喂进度）；
+##   · `stage_advance: clear`（一波清完才出下一波，而不是按撤离进度追加）。
+func _build_room_encounter_config(room: DungeonRoom3D) -> Dictionary:
+	var encounter := room.encounter
+	var floor := maxi(1, visual_theme.difficulty_rank)
+	var floor_level := clampi(
+		int(float(_record_index(room.room_id)) / maxf(1.0, float(_records.size() - 1)) * 3.0), 0, 3
+	)
+	var start_delay := maxf(0.0, float(encounter.get("start_delay_sec", 1.0)))
+	var stages: Array = []
+	var raw_stages := encounter.get("stages", []) as Array
+	for index in raw_stages.size():
+		var raw_stage := raw_stages[index] as Dictionary
+		var monsters := _resolve_encounter_stage_monsters(
+			raw_stage, room, floor, floor_level
+		)
+		if monsters.is_empty():
+			continue
+		stages.append({
+			# 第一波给「落门 → 出怪」的准备间隔；后续波的门槛由清算条件把关，
+			# 时间阈值只写 0 表示「前一波刚清完即可立刻开始」。
+			"at_sec": start_delay if stages.is_empty() else 0.0,
+			"monsters": monsters,
+		})
+	var actions: Array = []
+	if bool(encounter.get("light_on_finish", false)):
+		actions.append({"type": "light", "room_id": room.room_id, "on": true})
+	# `hunt_player`：让这一波的怪**主动围向玩家**（而不是站在暗处等玩家撞上来）。
+	# 触发式遭遇是"把玩家关进房里打完"，等同竞技场 —— 若还按野外潜行那套
+	# 「要有视锥 + 视线才追」，关灯房里会有一半怪站原地不动。
+	# `hud_countdown`：右上角倒计时环。二者都只是开关，判据全在机制侧。
+	return {
+		"schema_version": 1,
+		"event_id": "room_encounter:%s" % room.room_id,
+		"room_id": room.room_id,
+		"duration_sec": maxf(1.0, float(encounter.get("duration_sec", 60.0))),
+		"completion": "timer",
+		"progress_mode": "tick",
+		# 从数据读，缺省 `clear`。**不能写死**：`stage_advance` 是被
+		# `LevelPlanValidator` 逐值校验的正式键（只许 `time` / `clear`），
+		# 硬编码会让 `"time"` 静默失效 —— 数据说"按时间叠加"、
+		# 实际表现却是"清完才出下一波"，这类"配了没生效"最难查。
+		"stage_advance": str(encounter.get("stage_advance", "clear")),
+		"hunt_player": bool(encounter.get("hunt_player", false)),
+		"hud_countdown": bool(encounter.get("hud_countdown", true)),
+		"leave_policy": "cancel",
+		"max_alive": 2147483647,
+		"prereqs": {"player_alive": true, "run_active": true},
+		"stages": stages,
+		"on_completed": actions,
+	}
+
+
+## 把一波的声明解析成遭遇事件的 `monsters` 数组。
+##
+## 两种写法，同一房里**只许用其中一种**：
+##   · `{"monsters": [{"type": "melee_chaser", "count": 8}, ...]}` —— 显式编成；
+##   · `{"type": "strong_random", "count": 2}` —— 「随机的强化僵尸」，
+##     触发时从 `MonsterVariants` 的变种池里抽，抽成几个具体 `*_strong` 条目。
+##     解析放在这里而不是 Director 里：Director 的配置契约只认**具体怪种**，
+##     留在那边会污染它的类型白名单。
+func _resolve_encounter_stage_monsters(
+	raw_stage: Dictionary, room: DungeonRoom3D, floor: int, floor_level: int
+) -> Array:
+	var monsters: Array = []
+	var rng := RandomNumberGenerator.new()
+	rng.seed = run_seed ^ room.room_id.hash() ^ 0x53545247
+	var pool: Array[String] = []
+	pool.assign(MonsterVariants.all_variant_ids())
+	if pool.is_empty():
+		pool.assign(STRONG_RANDOM_FALLBACK)
+	for value in raw_stage.get("monsters", []) as Array:
+		var entry := value as Dictionary
+		var type_id := str(entry.get("type", ""))
+		var count := maxi(0, int(entry.get("count", 0)))
+		if count <= 0:
+			continue
+		if type_id != "strong_random":
+			monsters.append({"type": type_id, "count": count})
+			continue
+		# 抽成逐只的具体变种，再按怪种归并 —— Director 只认「具体怪种 + 数量」。
+		var tally: Dictionary = {}
+		for _unit in count:
+			var picked: String = pool[rng.randi() % pool.size()]
+			tally[picked] = int(tally.get(picked, 0)) + 1
+		for picked_value in tally.keys():
+			monsters.append({"type": str(picked_value), "count": int(tally[picked_value])})
+	return monsters
+
+
+## 封住 / 解开一个房间：封住期间门保持关闭且不可交互。
+##
+## 为什么不能只 `set_door_open(false)`：门关上了玩家按 E 还能再开（来路的边已是
+## 开启状态，`_try_open_room_door` 会直接回「通道已经开启」）。所以必须同时
+## 掐掉交互候选与开门判定，见 `get_interaction_candidate` / `_try_open_room_door`。
+##
+## ⚠ **共享边的门扇不在本房手里**（2026-10-16 修）：一条边只由一端建门扇，另一端
+## `_door_nodes` 里没有节点。旧实现只遍历本房 `door_targets` 并 `room.set_door_open(...)`：
+## 入口方向拿不到节点时 `set_door_open` 里 `if door != null` 静默早退 —— 门根本没关，
+## 玩家可以直接从进来那扇门走出去。所以本房没有节点时，必须**按目标房去对端关那扇**。
+func set_room_seal(room_id: String, sealed: bool, reason: String = "") -> void:
+	if room_id.is_empty():
+		return
+	if sealed:
+		_sealed_rooms[room_id] = reason
+	else:
+		_sealed_rooms.erase(room_id)
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(room):
+		return
+	if not sealed:
+		# 解封只恢复「可以开」，不替玩家把门推开 —— 门该由玩家自己按 E。
+		return
+	for direction_value in room.door_targets.keys():
+		var direction := str(direction_value)
+		var local_door := room.get_door_node(direction)
+		if local_door != null:
+			room.set_door_open(direction, false)
+			continue
+		# 本房没有这扇门 ⇒ 它是共享边，门扇在对端。按"通向哪一间"去对端取同一扇门。
+		var peer_id := str(room.door_targets[direction_value])
+		var peer := _room_by_id.get(peer_id) as DungeonRoom3D
+		if peer == null or not is_instance_valid(peer):
+			continue
+		var peer_door := peer.get_door_node_towards(room_id)
+		if peer_door != null:
+			peer_door.set_open(false)
+
+
+func _room_is_sealed(room_id: String) -> bool:
+	return _sealed_rooms.has(room_id)
+
+
+func _is_current_room(room_id: String) -> bool:
+	return room_id == _current_room_id
 
 
 func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 	if room == null:
 		return false
+	# —— 踩点触发式遭遇（`encounter.trigger`）——
+	# 本房不在进房时刷怪：玩家走到房间里那个触发点才开始。这里**刻意清空**波次账、
+	# 但**绝不 `_mark_room_cleared`** —— 房间要保持「未肃清」，否则去路门会被当成
+	# 已通、玩家可以直接走到下一房，触发也就没意义了。
+	# 触发本身由 `_tick_room_encounter_triggers()` 逐帧轮询（零新增常驻节点）。
+	if _room_has_encounter_trigger(room):
+		_alive_by_room[room.room_id] = 0
+		_room_wave_queues[room.room_id] = []
+		room.cleared = false
+		_update_wave_hud(room.room_id)
+		return true
 	# 和平区（区块00 等叙事固定关卡）：本房**不刷怪**，开局即放行。
 	#   · 房型保持 COMBAT 不变（HUD / 小地图 / 流送语义与塔楼其余楼层一致），
 	#     只是没有敌人 —— 与「未指派首领的 BOSS 房」同口径：立刻清房，绝不留下锁门。
@@ -4229,6 +4576,11 @@ func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data:
 		_schedule_room_wave_intermission(enemy.room_id)
 		return
 	var room: DungeonRoom3D = _room_by_id.get(enemy.room_id) as DungeonRoom3D
+	# 踩点遭遇进行中：波与波之间场上会短暂清空，这时**不能**判本房已肃清 ——
+	# 否则第一波刚清完房间就被放行、封门也一并解除，后续波次形同虚设。
+	if _room_encounter_active.has(enemy.room_id):
+		status_label.text = "遭遇进行中 · 尚有波次待发"
+		return
 	if _extraction_defense_active and enemy.room_id == _current_room_id:
 		status_label.text = "撤离拦截波已压制 · 信号仍在同步"
 		return
@@ -5571,6 +5923,9 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 		return
 	var was_cleared := room.cleared
 	room.cleared = true
+	# 踩点遭遇的房间：肃清即解封 —— 门扇恢复可交互，玩家可以开门离开。
+	_room_encounter_active.erase(room.room_id)
+	set_room_seal(room.room_id, false)
 	if _boss_reinforcement_states.has(room.room_id):
 		(_boss_reinforcement_states[room.room_id] as Dictionary)["stopped"] = true
 	_cancel_room_wave_intermission(room.room_id)
@@ -5720,6 +6075,11 @@ func _door_policy_towards(room_id: String, target_room_id: String) -> Dictionary
 
 func _try_open_room_door(target_room_id: String) -> bool:
 	if target_room_id.is_empty() or _current_room_id.is_empty():
+		return false
+	# 封住期间一律拒绝，且**必须放在 `_open_edges` 早退之前**：
+	# 来路那条边本来就是开启状态，否则会走到「通道已经开启」分支直接放行。
+	if _room_is_sealed(_current_room_id):
+		status_label.text = "门扇已落下 · 击退所有波次才能离开"
 		return false
 	if _door_fate_active:
 		status_label.text = "先选择当前命运卡片，再开启下一扇门"
@@ -7659,7 +8019,7 @@ func _on_equipped_backpack_to_inventory_requested(target_slot_index: int) -> voi
 	if player == null or not player.has_method("unequip_backpack_item"):
 		return
 	if target_slot_index < 0 or target_slot_index >= BASE_INVENTORY_CAPACITY:
-		status_label.text = "卸下背包时请选择基础12格内的空格"
+		status_label.text = "卸下背包时请选择基础%d格内的空格" % BASE_INVENTORY_CAPACITY
 		return
 	if not _inventory.get_slot(target_slot_index).is_empty():
 		status_label.text = "卸下背包失败：目标格已有物品"

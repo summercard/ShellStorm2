@@ -123,6 +123,10 @@
       "proximity_awareness_m": 4.8,
       "alert_share_radius_m": 10.0
     },
+    "strong_variant": {
+      "enabled": true,
+      "chance": 0.15
+    },
     "death_explosion": {
       "fat_zombie03": {
         "enabled": true,

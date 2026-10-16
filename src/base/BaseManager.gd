@@ -10,7 +10,7 @@ const EnergyService = preload("res://src/base/BaseEnergyService.gd")
 const SaveService = preload("res://src/base/ProfileSaveService.gd")
 const ShopService = preload("res://src/base/BaseShopService.gd")
 const BlueprintService = preload("res://src/base/BlueprintUpgradeService.gd")
-const BASE_LOADOUT_CAPACITY := 24
+const BASE_LOADOUT_CAPACITY := 40
 const BASE_VAULT_CAPACITY := 20
 const RUNTIME_SAVE_DEBOUNCE_SECONDS := 0.45
 

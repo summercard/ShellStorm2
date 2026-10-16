@@ -1,3 +1,116 @@
+## 2026-10-16 踩点遭遇编成总量缩到约 60%（难度下调）
+
+- 业主原话：「太难打了，总量帮我减少到 60%」。范围按上下文取**刚做的五个踩点触发式遭遇房**（`room_03`/`room_04`/`room_06`/`room_09`/`room_10`）——它们是「清完才放行 + 封门 + 怪主动围上来」三重叠加，压力最大；仍按盒出波的房（`room_01`/`room_02`/`room_05`/`room_07`/`room_08`/`boss`）本轮**未动**。
+- **缩放规则**（刻意的，不是简单砍）：`每项 = max(1, floor(n × 0.6 + 0.5))`。
+  - **每项至少留 1**：否则某个怪种会在某一波整体消失（第 3/6 波的强化怪、第 2/4/6 波的保安僵尸最容易这样）。那不是"减量"，是**改了编成意图** —— 怪种组合本身就是编成的一部分。
+  - 取整用 `floor(x+0.5)` 而不是 Python 的 `round`：后者是 banker's rounding（`round(0.5)=0`、`round(2.5)=2`），会让 1 只的条目直接归零。
+- **实测**（两处数据逐字节一致）：
+
+  | 房 | 原总量 | 新总量 | 占比 |
+  |---|---|---|---|
+  | `room_03` | 94 | 56 | 59.6% |
+  | `room_04` | 99 | 58 | 58.6% |
+  | `room_06` | 106 | 63 | 59.4% |
+  | `room_09` | 120 | 72 | 60.0% |
+  | `room_10` | 127 | 76 | 59.8% |
+  | **合计** | **546** | **325** | **59.5%** |
+
+- **其余参数逐字未动**（已逐项断言核对：时长 / `start_delay_sec` / `stage_advance` / `seal_room` / `light_on_finish` / `hunt_player` / `hud_countdown` / 触发形状与朝向 / 波数 / 无盒）。**只减量，不改机制** —— 所以你之前定的 60/60/90/105 秒、落门封房、到点开灯、怪围过来、右上角倒计时环全部照旧。
+- **同轮修掉一条断言的设计缺陷**：`verify_encounter_trigger_room_flow` 里「第二波与第一波不同」原本用 `wave_2 != wave_1`（比**总数**）。缩量后 `room_03` 第 1 波（胖1+小5=6）与第 2 波（胖1+小3+保2=6）**总数正好相同**，旧断言误报「第二波没换编成」。已改为比**编成签名**（`怪种:只数` 排序后连接）—— 比总数本就是个弱代理：两波总量相同但组成不同是合法且常见的；反过来，两波组成完全一样才是真问题。改后这条断言更能抓住真错。
+- **验收（本轮实跑）**：`verify_encounter_trigger_room_flow` `EXIT=0`（`ENCOUNTER_TRIGGER_ROOM_OK samples=83`）；`verify_expedition01_spawn_ramp` 的 `TRIGGER_EXPECTED` 逐波数值已同步（值由数据生成，避免手抄错），剩 3 条仍是既有 room_02 口径；回归 `verify_encounter_event_flow`、`verify_expedition_wave_chain`、`verify_dungeon_wave_intermission`、`verify_3d_enemy_behavior_flow`、`verify_death_during_extraction_flow` 均 `EXIT=0`。
+- **未通过且不属本轮**：`verify_expedition01_spawn_ramp` 剩 room_02 三条；`verify_expedition_level01_flow` 掉落表行数；`verify_level_plan_design_source` 的 `room_overlap:room_10:boss` / `boss:extraction`。
+- **文档同步**：`design/远征关卡01设计.md` 的 `room_03` 逐波表与四房逐波表改为缩后口径（并注明原值），新增缩放规则说明（含"每项至少留 1"与取整口径的理由）。
+
+## 2026-10-16 room_04/06/09/10 改满宽带触发式遭遇 + 抓到 EVENT 房判据回归
+
+- 业主原话要点：「room-04 也改成这个机制，把原来的布的怪去掉。然后触发区域在这里，也是一分钟。06号房间，也是改成这个机制，然后触发放在中间的位置，注意这些区域都要横向铺开，不要让玩家可以绕开。09也修改，09改成1分半，10也修改，改成1分45秒。」业主补充裁定（问询后）：「room_04 触发带＝**南北向满宽、放房心**」；「波次编成＝**逐房温和递增**」。
+- **数据**（设计源 ＋ 运行时投影，逐字节一致）：`room_04`/`room_06`/`room_09`/`room_10` 的 `spawn_placements` 全部清空（各 4 盒），`encounter` 改触发式：满宽带 + 房心、`duration_sec` **60 / 60 / 90 / 105**、`start_delay_sec 1.0`、`stage_advance "clear"`、`seal_room`/`light_on_finish`/`hunt_player`/`hud_countdown` 全开、**各 6 波**。逐房编成总量 99 / 106 / 120 / 127，梯子逐房温和加档（本关盒实例 42 → **22**）。
+- **新机制：满宽带触发（`shape: "band"`）** —— 业主「不要让玩家可以绕开」的直接落地。圆**再大也绕得过去**（贴墙即绕），带子沿一根房间局部轴**铺满整个跨度**、另一根轴只有 6 m 厚。
+  - 契约：`"trigger": { "shape": "band", "axis": "z", "thickness_m": 6.0, "offset_m": [0,0] }`；`axis` 是**铺满**的那根轴。轴约定沿用 `DungeonRoom3D` 门位表：**北 = −z、南 = +z、东 = +x、西 = −x**。
+  - **「不可绕过」的成立条件只有一条**：厚度轴必须与**入口门法线**同轴。据此定：`room_04`/`room_09`/`room_10` 薄在 x、铺满 z；`room_06` 薄在 z、铺满 x。
+  - **跨度按运行时 `get_dimensions()` 现算，不写死数字** —— 房间重新对接/尺寸变化时带子自动铺满，不留可钻的缝。
+  - **判定在房间局部坐标里做**（`room.to_local`）。这不是洁癖：本关房间由**端口对接链**摆放，几何在**旋转过的**坐标系里建（节点 `rotation.y` 仍报 0）——实测 `room_04` 布局写 45×40、运行时是 40×45；`room_06`/`room_10` 布局写 40×30、运行时是 30×40；`room_06` 端口布局是 west/east、运行时是 south/north。**按布局坐标放触发带会差 90°**，正好让带子与通行方向平行、彻底失效。原先 `_room_encounter_trigger_center` 把偏移当世界轴用，已一并改为 `to_global`。
+  - 校验器：`TRIGGER_KEYS` 白名单（未知键报错）＋ `shape` 枚举 ＋ band 要求 `axis ∈ {x,z}`、`thickness_m ∈ [1,20]`；**两套形状各自只认自己的键**（band 上写 `radius_m`、圆上写 `axis`/`thickness_m` 都报错），避免"配了没生效"伪装成"这房触发不了"。
+- **⚠ 本轮实际抓到的回归（本轮最重要的一条）：`EVENT` 房的「有编排战斗」判据失效。** `room_09` 是本关唯一 `EVENT` 房（事件 + 战斗双职房）。`Dungeon3D._event_room_has_authored_combat()` 原本只看 `spawn_placements` 是否非空 —— 那是"编排战斗只有触发盒一种承载"时的写法。去掉盒子后它返回 false ⇒ `_on_room_entered` 的 EVENT 分支**不调 `_spawn_room_enemies()`** ⇒ `_event_combat_rooms` 不登记 ⇒ 该房被当成「纯事件房」⇒ **事件终端一结算就 `_mark_room_cleared()`，敌群还在场上就把去路门放行**。表现是「门莫名开了」，而数据、日志都看不出异常（踩点遭遇本身照常触发/刷怪/封门）。已把判据扩成「`spawn_placements` 非空 **或** 声明了 `encounter.trigger`」两条都认。
+- **验收（本轮实跑）**：
+  - `verify_encounter_trigger_room_flow` 由 44 项扩到 **83 项**（`ENCOUNTER_TRIGGER_ROOM_OK samples=83`，`EXIT=0`）。新增：四房形状/厚度/带外一点必须带外/厚度小于通行跨度；**横向两侧贴边处必须命中判定**（"不可绕过"的决定性几何证据）；`room_04` **贴侧墙**从带前走到带后的**走位验证**（带前不触发、进带才触发、且封门）；`room_09` 的 EVENT 判据 + 进房后 `_event_combat_rooms` 登记 + 进房不刷怪。
+  - **三个对照实验（证明新断言真有牙齿，不是"刚好绿"）**：
+    1. 把 `room_04` 的 `axis` 由 `z` 改成 `x`（＝与进门方向平行、贴墙可绕过）⇒ 走位断言立刻红（玩家贴墙走完全程都不触发）。
+    2. 把实现里的跨度写死 `5.0` m（模拟"没铺满"）⇒ **四房 × 两侧共 8 条贴边断言** + 走位断言全红。
+    3. 把 `_event_room_has_authored_combat()` 的触发式分支短路掉 ⇒ `room_09` 的 EVENT 两条断言红。
+  - `verify_expedition01_spawn_ramp`：四房移出 `RAMP_*` 三张表（曲线量的是逐盒增量，无盒的房留在链上只会恒红），另立 `TRIGGER_EXPECTED`（逐房：时长 / 形状 / **端口朝向** / 逐波编成）。新增 `_verify_trigger_shape()` 逐房钉「入口门法线轴 == 带子厚度轴」——**这是功能的守卫**：朝向一变，带子就与通行方向平行，而数据看起来毫无异常。`PINNED_DRIFT` 按契约缩掉 `room_04` 那条（已无盒 ⇒ 不存在盒心漂移），并在注里写明"缩表是改动的必然结果，不是把红项抹掉"。
+  - 回归：`verify_encounter_event_flow`、`verify_expedition_wave_chain`、`verify_dungeon_wave_intermission`、`verify_3d_enemy_behavior_flow`、`verify_enemy_stimulus_activation`、`verify_death_during_extraction_flow`、`verify_hud_presenter_3d` 均 `EXIT=0`。`--import` 严重报错 **0 行**；投影 `--check` 干净。
+  - **新增探针** `probe_expedition01_encounter_spawn_capacity`：量**房间级落点池容量**（遭遇事件走 `spawn_point_for_index`，与触发盒的盒内撒点是两条路径）。实测四房 + `room_03` 容量均 ≥ 64（候选点 200~390），最大一波 31 只，余量充足 —— 这条必须量，因为落点耗尽时 `spawn_point_for_index` 返回 `Vector3.INF`，而 `_spawn_enemy_batch` 会把非有限落点判为整批失败并**写 `_room_spawn_blocked` 把该房永久锁死**。
+- **顺带修掉的两处既有缺陷**：
+  - `probe_expedition01_wave_counts` 在「无盒房」分支返回的字典**漏了 `rows` 键**，而调用方读 `agg["rows"]` ⇒ 一遇到触发式房就整支探针崩掉（表现为"跑到一半没输出了"）。`room_03` 改触发式时只 1 房、没撞上；本轮 5 房后暴露。已补齐键并给无盒房打印"不适用逐盒口径"。
+  - `_room_encounter_trigger_contains` 原本先读 `room.encounter` 再判 `room == null`（顺序反了），已调整。
+- **测试自身的一个假绿（记下来，避免再犯）**：新写的走位验证第一版是**瞬移**玩家到带外另一侧 —— 触发判定只问"当前是否在带内"，瞬移**跳过了带子**，于是那次走位什么都没证明（断言红得很对）。已改成按 0.4 m 步进真的走过去。同轮还修掉一处同类假绿：`_verify_band_rooms()` 是协程（内部有 `await`），调用处漏了 `await` ⇒ 它会跑到第一个 `await` 就返回、后面断言一条都不执行，而测试照样打印 OK。**协程调用点必须 await，这与"断言写对"同等重要。**
+- **工作流事故（如实记录）**：本轮有几次用 `bash heredoc` 传含 `\r\n` 的 Python 字面量，被改写成了字面 `/r/n`，导致替换静默不命中（几次"断言失败"由此而来），最后一次还把 `src/world3d/Dungeon3D.gd` 的一行写坏。已全量扫描确认**只有这一处**并修复；后续改文件一律改用 `chr(13)+chr(10)` 或无转义的编辑方式。
+- **未通过且不属本轮**（本轮之前即红，未代修）：`verify_expedition01_spawn_ramp` 剩 room_02 三条（数据已改为 2 盒、门禁仍按 5 盒口径）；`verify_expedition_level01_flow` 的「怪物掉落表应有 16 行，实际 13」；`verify_level_plan_design_source` 的 `room_overlap:room_10:boss` / `boss:extraction`。
+- **文档同步**：`design/触发器刷怪设计.md` 键表补 `trigger.shape` / `trigger.axis` / `trigger.thickness_m` 三行，新增 **§3.3.4 满宽带触发（为什么圆不够）** 与 **§3.3.5 EVENT 房判据必须跟着承载方式走**；`design/远征关卡01设计.md` 新增四房专节（运行时朝向表 + 逐波编成表 + 与门禁的关系）、`room_09` 的事件房小节与判据段改写、盒实例 42 → **22** 与全关实测数刷新为 `realized=83/design_max=95/trunc=5`（并注明下降不是回归）、§4.5.2 表头补"五房已移出本表"；`data/runtime_design_data_manifest.json` 随投影重生成。
+
+## 2026-10-16 room_03 追加：怪主动围过来 + 右上角倒计时环
+
+- 业主原话要点：「首先这个刷的怪要开始往角色围过来，然后要增加倒计时的 ui 界面 [标注图] 放在画面的右上角，一个圈，然后中间有时间倒计时，字体用下方的金币的字体。」
+- **问题一：怪不围过来。** 怪物 AI 的感知是给**野外潜行**设计的（`MonsterVisionSystem3D`：要有水平视锥 + 静态遮挡下的视线才追）；触发式遭遇是「把门落下来在房里打完」，等同竞技场，两条叠起来就表现成**房里的怪站原地不动**。封锁房通常还关着灯，`ranged_caster` 那类「黑暗追光者」更会主动躲向暗处。⇒ 新增 `hunt_player` 开关与事件猎杀通道。
+  - `MonsterAIManager.set_hunt_target(enemy, target, duration_msec)`：把「玩家就在那里」作为**事件指令**押进该怪的记录，走新决策 `hunt_contact`，`target_visible = false` / `line_of_sight = false`（那边如实报告"没看见、只是知道在哪"），由 `Enemy3D` 的 `stimulus_tracking` 档驱动行动。
+  - **与受击仇恨的分工**：`notify_enemy_attacked` 是**反馈**（谁打我，记住谁；8 s，走 `damage_contact`）；本方法是指令（1.2 s，必须持续刷新）。**不写 `forced_target_*`**（那组字段语义是"被打过"），因此已受伤的怪仍按 `damage_contact` 处理，两条刺激不串账。
+  - **优先级**：`hunt_contact` 压过视觉与光照策略 —— 否则关灯房里会"一半怪围上来、一半怪躲开"。
+  - **刷新窗口** `HUNT_REFRESH_MSEC = 1200`：事件每帧下发，管理器只在"剩余有效期不足一半"时才真写记录 ⇒ 每只怪约 0.6 s 写一次，30 只怪的房间不会变成每帧 30 次写。它同时是**自动熄火**时间：事件一终结就不再刷新，1.2 s 内自然过期，不需要反向逐个解绑。
+  - 只对**已实例化**的怪生效（`EncounterEventHost3D.encounter_event_hunt`）；预约 / 延迟队列里的条目没有 `Enemy3D` 节点可写，实到后下一帧被盖上。目标取"活着的玩家"，玩家已死则如实返回没有目标。
+- **问题二：右上角倒计时环。** 新增控件 `src/ui/EncounterCountdownRing.gd`（`class_name EncounterCountdownRing`）+ HUD 挂载 + 每帧刷新。
+  - **所有者边界**：环**不拥有**倒计时。计时归运行时遭遇事件，HUD 通过 `EncounterEventDirector3D.get_room_countdown_snapshot(room_id)` 拿**只读投影**（新公开方法）。不另存一份倒计时 —— 两处计时必然会漂，漂了之后没人知道该信哪个。
+  - **位置**：`HUD/ReferenceCombatHUD/EncounterCountdownRing`，锚右上角，偏移设计值 `(-126,100)..(-18,208)`，右缘与**世界时间**（右缘 -18）对齐同一列；世界时间 y 48..98、环 y 100..208，不重叠。外径 108 设计 px（×`HUD_UI_SCALE` 0.8 = 86.4 canvas px）—— 再小一圈，圆心那行 5 个字符就会贴到环带上。
+  - **字体**：中间时间由 `Dungeon3D._make_hud_label("1:00", 26, RUN_COIN_READOUT_COLOR)` 造好后经 `bind_label()` 注入 —— 与右下角金币读数 `RunLootReadout` **同一个**字号、同一个颜色常量、同一套 `_outline_labels` 描边。控件自己不 `draw_string`，否则会出现"同一个金币体两种描边"的漂移。环也取同色系（字是金的、圈是青的等于那句话只落实一半）。
+  - **几何**：起点 12 点、顺时针（与换弹环同一角度约定，否则两个环会转反）；线宽比 0.075（换弹环比 0.13，本环更细 —— 它是背景信息）；**弧画剩余量**（弧越短时间越少），文字秒数**上取整**（还剩 0.2 s 显示 `0:01`，否则与环上还剩的弧互相打脸）。
+  - **显隐**：只在「当前房有仍在跑、且配置开了 `hud_countdown` 的事件」时显示；事件终结或玩家离房立即隐藏，不留残影。撤离防守**当前不开**这个环（它的进度由撤离读条自己表达）。
+- **配置层**：`EncounterEventDirector3D` 新增两个布尔键 `hunt_player` / `hud_countdown`（缺省 `false` / `false`，两者都只是开关，判据全在机制侧）；`Dungeon3D._build_room_encounter_config` 从房间 `encounter` 透传（`hud_countdown` 缺省 `true`，触发式遭遇默认有环）。`room_03` 两份数据（设计源 + 运行时投影）都开 `hunt_player: true`、`hud_countdown: true`。
+- **同轮修掉一个"配了没生效"**：`Dungeon3D._build_room_encounter_config` 里 `stage_advance` 原为**硬编码 `"clear"`**，而它是被 `LevelPlanValidator` 逐值校验的正式键（只许 `time` / `clear`）⇒ 数据写 `"time"` 会**静默失效**（说要按时间叠加、实际清完才出下一波）。改为从数据读、缺省 `clear`。另把设计文档里 `light_on_finish` 的缺省值由 `true` 改正为 `false`（与代码一致）。
+- **校验器**：`LevelPlanValidator._validate_triggered_encounter` 新增键白名单 `TRIGGER_ENCOUNTER_KEYS`（未知键一律报错，与 Director 对事件配置的口径一致）+ 四个布尔键的类型校验 + `monster_ai` 必须是字典。动机：`hunt_player: ture` 这类拼错，关卡照常能跑、只是那一房的怪全部站原地不动，靠人肉发现太贵。
+- **验收（本轮实跑）**：
+  - `verify_encounter_trigger_room_flow` 由 32 项扩到 **44 项**（`ENCOUNTER_TRIGGER_ROOM_OK samples=44`，`EXIT=0`），新增：没触发时环隐藏、触发即出现且文字 = 总时长、刚触发是整圈、环读数与事件 `elapsed` 同源（容差 1 s）、事件终结后环立即消失、事件怪**全部**被盖上猎杀目标且决策为 `hunt_contact`、**≥80% 的怪在 120 物理帧内朝玩家靠近 ≥0.5 m 且进入交战状态**。
+  - **阈值有对照实验撑腰**（同一场景，120 物理帧 ≈ 2 s）：
+
+    | 猎杀 | 靠近 >0.5 m | 进交战态 | 最小靠近量 | 最远者剩余 |
+    |---|---|---|---|---|
+    | 开 | 9/9 | 9/9 | +2.34 m | 16.73 m |
+    | 关 | 2/9 | 1/9 | −0.17 m | 21.22 m |
+
+    关掉之后**七只怪站着不动**（正是业主看到的现象）；80% 与 22%/11% 之间留着宽裕判据带。对照实验同时证明新断言**真的有牙齿**（无猎杀时两条断言立即红）。
+  - `verify_expedition01_spawn_ramp` 的 `_verify_trigger_encounters` 增补 `hunt_player` / `hud_countdown` 两项数据面断言（行为归专项、数据归门禁，两头都钉住）。
+  - 回归：`verify_encounter_event_flow`、`verify_expedition_wave_chain`、`verify_dungeon_wave_intermission`、`verify_3d_enemy_behavior_flow`、`verify_enemy_stimulus_activation`、`verify_enemy_illumination_states`、`verify_hud_presenter_3d`、`verify_monster_startup_roar`、`verify_strong_variant_monsters`、`verify_death_during_extraction_flow` 均 `EXIT=0`。`--import` 严重报错 0 行，新类已进 `global_script_class_cache.cfg`（`res://src/ui/EncounterCountdownRing.gd`），`res://_scratch` 污染条目 0。
+  - **真实渲染取证**（`is_capture`：窗口模式，两个时刻各一张）：新增 `tests/verification/capture_encounter_countdown_ring.gd` / `.tscn` ⇒ `outputs/verification/encounter_countdown_ring_1.png`（t=38 s，文字 `0:22`）与 `_2.png`（t=55 s，文字 `0:05`）。环心实测 `(1222.4, 123.2)`、外径 86.4 px；按角度逐点采样**亮弧 132° / 28°**，对 22 s / 5 s 的理论值 132° / 30°；底轨整圈可见（环带上「更金」程度比环外一致高 +30~+34）。**这两张图不能由 headless 几何断言代替** —— 位置与配色是"看起来对不对"的问题。
+- **未通过且不属本轮**（本轮之前即红，未代修）：`verify_expedition01_spawn_ramp` 剩 room_02 三条（数据已改为 2 盒、门禁仍按 5 盒口径）；`verify_expedition_level01_flow` 的「怪物掉落表应有 16 行，实际 13」；`verify_level_plan_design_source` 的 `room_overlap:room_10:boss` / `boss:extraction`。
+- **文档同步**：`design/对话与战斗信息呈现设计.md` 新增 **UI-HUD r5** 段（抬头修订号 r4→r5，位置/字号/几何/显隐/验收与两张截图取证）；`design/触发器刷怪设计.md` §3.3.1 键表补 `hunt_player` / `hud_countdown` 两行，新增 **§3.3.2 事件猎杀**（与受击仇恨的分工表、三条实现口径、刷新窗口）与 **§3.3.3 右上角倒计时环**；`design/远征关卡01设计.md` room_03 参数表补两行；`data/runtime_design_data_manifest.json` 随投影重生成。
+
+## 2026-10-16 远征01 room_03 改为踩点触发式遭遇（去盒 + 关门 + 到点开灯）
+
+- 业主原话要点：「去掉所有进门后的现有的刷怪盒子。在房间中间摆放一个触发器，玩家走到房间中间的时候，开始进入倒计时，约 1 分钟，开始刷怪。刷怪的逻辑是一波完成后刷下一波，如果一波没打完不会刷。时间结束后就不刷怪。刷怪的方法和撤离信标一致。……激活后这个房间的入口门扇就会落下，把玩家关在房间里。时间到了以后，房间灯会自动打开。」
+- 业主补充裁定：「时间内如果清理快的话会继续刷，所以后面也要（增强）」⇒ 波次不是固定三波，而是**写足 6 波、清得快就继续往下走**；「踩到后立即开始，落门，隔 1 秒后开始出」⇒ `start_delay_sec = 1.0`。
+- **数据**（`art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json` ＋ `data/level_plans/expedition_01/floors/floor_00.json` 投影，逐字节一致）：`room_03` 的 `spawn_placements` 清空（4 盒全去），`encounter` 改为 `trigger` 形态：房心触发（`radius_m 6.0`、`offset_m [0,0]`）、`duration_sec 60`、`start_delay_sec 1`、`stage_advance "clear"`、`seal_room true`、`light_on_finish true`；6 波显式编成（`encounter.stages[].monsters`）：① 胖1+小8 ② 胖2+小5+保安4 ③ 胖2+小8+随机强化2 ④ 胖3+小8+保安4+随机强化2 ⑤ 胖3+小10+保安5+随机强化3 ⑥ 胖4+小10+保安6+随机强化4。
+- **机制（通用，非 room_03 专用）**：
+  - `EncounterEventDirector3D` 新增 `stage_advance`（`time` 默认 / `clear`）—— `clear` = 上一阶段派发完**且**事件归属存活数归零才开下一阶段；并新增计时到点的「未开始阶段整体作废」（`_drop_unstarted_stages`，计入快照 `dropped`）。
+  - `EncounterEventHost3D` 的 `light` 结果动作**接通**（转发 `DungeonRoom3D.set_room_light_on()`）—— 此前「无正式接口、一律返回失败」的口径作废。
+  - `Dungeon3D` 新增：触发点逐帧轮询（零新增常驻节点）；`encounter.trigger` 房间**进房不刷怪、也不判清房**；`set_room_seal()` 落门封房（关门 ＋ 掐掉门交互候选 ＋ 拒绝开门，且在 `_open_edges` 早退**之前**判 —— 否则来路那条已开启的边会直接放行）；`_room_encounter_active` 作为「波与波之间不判清」的第二道门；肃清即解封；事件终结后补判清房（玩家恰在到点前清完最后一波时，不会再有击杀事件来推动）。
+  - `strong_random` 怪物条目在**编译配置时**抽成具体 `*_strong`（取 `MonsterVariants` 变种池），不让遭遇事件的类型白名单认识这个词。
+  - `LevelPlanValidator`：判据 A 给触发式房间开口子（真敌对房在 `spawn_boxes_only` 层里**允许**没有盒子）；新增 `_validate_triggered_encounter`（半径 1~60 m、时长、`stage_advance` 枚举、每波 `monsters` 非空、`type` 必须可授权且**拒 boss**、触发式阶段不得再写 `boxes`）。
+- **本轮抓到的真 bug（由新写的验收发现）**：`stage_advance: clear` 的门槛判定里我把存活数**在同一帧内缓存**了。同一帧里前面刚派发完的阶段已经把怪放进场，沿用上一阶段算出的 0 会让后面所有阶段**连锁通过** —— 实测快照 `requested=94 / spawned=94 / dropped=0`，即「一波出完就把六波全出完」，清怪门控形同不存在。改为每次判门槛都重新问存活数后：`spawned=20 / dropped=74`（只出前两波），门控成立。
+- **验收（本轮实跑）**：新增 `verify_encounter_trigger_room_flow`（32 项断言，`ENCOUNTER_TRIGGER_ROOM_OK samples=32`，`EXIT=0`）盯七条行为 —— 进房不刷怪不判清；角落不触发、房心才触发；落门后延迟出第一波；第一波未清完第二波不开；波间不判清不解封；到点停刷且剩余阶段作废；到点开灯成功；清完肃清并解封。回归 `verify_encounter_event_flow`、`verify_expedition_wave_chain`、`verify_dungeon_wave_intermission` 均 `EXIT=0`。`verify_expedition01_spawn_ramp` 已同步（room_03 移出逐盒曲线，另立 `TRIGGER_EXPECTED_WAVES` 盯编成）。
+- **未通过且不属本轮**：`verify_expedition01_spawn_ramp` 剩 room_02 三条（数据已被改为 2 盒、门禁仍按 5 盒口径）；`verify_expedition_level01_flow` 的「怪物掉落表应有 16 行，实际 13」；`verify_level_plan_design_source` 的 `room_overlap:room_10:boss` / `boss:extraction` 两条。三者在本轮之前就红，未擅自代修。
+- **文档同步**：`design/触发器刷怪设计.md` 新增 §3.3.1（第二种调用机制：踩点触发式遭遇，含键表与三条必知行为）＋ §0 总览补记 ＋ §10 补 `stage_advance` 与 `clear` 门控说明、`light` 结果动作由「未实装」改为「已接通」；`design/远征关卡01设计.md` 新增 `room_03` 专节（业主口径、参数表、逐波编成表）；`data/runtime_design_data_manifest.json` 随投影重生成。
+
+## 2026-10-16 记录：普通怪变种（-强化怪）—— 小僵尸 / 胖子僵尸 / 保安僵尸各一只
+
+- 起因：业主「增加一个怪物的种类，属于普通怪变种，正式名称叫 xxx-强化怪，做小僵尸、警察僵尸、胖子僵尸，体型放大 1.5 倍……」。两轮澄清后定：**倍率一律乘法**（×2 即 ×2）、「警察僵尸」= 项目里的**保安僵尸**（`ranged_caster`）、**独立怪种进随机池约 15%**、**只放大 1.5 倍**区分视觉、**数值引用原怪 × 倍率**（不另抄一份）、攻击距离**随体型同步 ×1.5**、保安僵尸子弹伤害**不变**。
+- **倍率**（唯一真源 `src/enemy3d/MonsterVariants.gd`）：小僵尸 hp×2 dmg×2 体型×1.5 攻击距离×1.5；胖子 hp×2 dmg×2 体型×1.5 攻击距离×1.5 自爆半径×1.5；保安 hp×1.5 dmg×1.0 体型×1.5 攻击距离×1.5 弹速×1.3 射程×2。速度三者全不变。
+- **四条关键决策**：① 变种**不占 `PROFILES` 行**，数值由 `Enemy3D.profile_for()` 从基类实时派生 ⇒ 调普通怪强化怪自动跟随（验收正面钉住 `not PROFILES.has(variant_id)`）；② 升级点落在**统一生成出口** `MonsterInjector._generate_basic_enemy()` —— 远征01 是**刷怪盒驱动**，做在随机池里等于没做；③ 新增独立随机流 `_strong_rng`（`run_seed` 异或常量派生），未配 `strong_variant` 的关卡**一次都不掷** ⇒ 未配置关卡逐字不变；④ `EnemyAvatar3D` 内十几处 `match enemy_kind` 统一改读 `_base_kind`，否则变种掉进默认分支、**拿不到正式模型且日志不提**。
+- **两处新旋钮**：`DEFAULT_ENEMY_PROJECTILE_SPEED = 7.0`（敌弹弹速原先**硬编码在 `_fire_projectile`**、被所有远程怪与 Boss 共用，抽成常量后按种覆盖）；`DEFAULT_ENEMY_PROJECTILE_RANGE_M = 7.0`（敌人子弹**原先没有射程概念**，靠 1 秒存活兜底 ≈ 7 m，「距离×2」是净新增旋钮）。普通怪与 Boss 均不下发 ⇒ 行为逐字不变。
+- **顺手修掉的既有缺陷**：`MonsterInjector._death_explosion_for()` 原先返回时**丢弃配置里的 `zone` 段**，而 `Enemy3D._spawn_ground_blast_zone()` 正是靠它才生成地面持续伤害场 ⇒ 远征01 配的 `zone`（3 秒烫伤圈）**从来没有生效过**。已原样透传并留回归钉。
+- **验收**：新增 `tests/verification/verify_strong_variant_monsters.gd/.tscn`（已登记 `core_scenes`），实测 **`STRONG_VARIANT_OK`（samples=4259，engine ERROR 0）**。覆盖 12 处登记逐表扫描、真实例最终数值、外观基类、条宽不吃默认值、碰撞不被放大两遍、弹道隔离、关卡覆盖派生、自爆派生、zone 回归、15% 统计、同种子可复现、未配置关卡不掷骰、精英不升级。**负向对照**：变种 ID 改名 → 红 20 条；`hp_mult` 2.0→3.0 → 红 1 条；还原后 md5 一致且复绿。
+- **门禁**：`check_asset_registry --scope structure` OK；`check_verification_registry` 剩余 6 条 `unregistered` 与 2026-10-14 记录同名同数、**非本次引入**；`verify_ledger_split` 15 条失败**全部在 vfx 域**（`mod_bullet_*`），enemies 域零红，`git status` 确认**本轮未触碰任何 xlsx / ledgers**。
+- **账本未加行（有意）**：三变种**零新美术资产**（模型/材质/贴图/动画/Prefab 全复用原怪），账本「一行 = 一个真实资产」、《3D-敌人》明文「没有 Prefab 就不能加行」，加行会造出三行指向同一 tscn 的伪资产。变种关系落在 `怪物设计.md` 与 `06_技术施工` §3.3。若要在账本留痕需在既有行「备注」列补写并重建 `ledger_split_baseline.json`（9 域摘要），属独立事务，本轮未擅自执行。
+- **落位**：`docs/v0.1/design/怪物设计.md`（新增「普通怪变种」节）、`docs/v0.1/06_技术施工_怪物精英与Boss.md` §3.3（新增）、`docs/v0.1/design/触发器刷怪设计.md` §0.2.1（新增）、`docs/v0.1/development/2026-10-16_strong_variant_monsters.md`（本文详版）。
+
 ## 2026-10-16 星星卡节点与挂点构筑评估
 
 - FeatureID：`FATE-RULES`，关联`WEAPON-COMBAT/WEAPON-OWNERSHIP`。用户要求先处理节点与挂点顺序，挂副枪必须真实呈现对应副枪，功能绑定同一结构；太阳/月亮暂缓。

@@ -17,6 +17,9 @@ const DEFINITIONS: Array[Dictionary] = [
 		"level_property": "",
 		"color": Color(0.88, 0.48, 0.18),
 	},
+	# 2026-10-16：靶场入口已从基地设施牌移到 Esc 暂停菜单，基地地面不再放这块牌子。
+	# 条目本身保留 —— 它仍是 action_path 与可用性快照的唯一真源，
+	# 要恢复地面入口只需在 BaseWorld3D.tscn 的 Facilities 下贴回 TrainingRange 节点。
 	{
 		"facility_id": "training_range",
 		"display_name": "地下训练靶场",

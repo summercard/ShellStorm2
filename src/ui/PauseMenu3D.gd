@@ -10,6 +10,7 @@ signal game_save_reset_requested()
 signal game_save_reset_resolved(result: Dictionary)
 
 const ReturnAction = preload("res://src/ui/unstuck/ReturnToBaseAction.gd")
+const TRAINING_RANGE_SCENE_PATH := "res://scenes/TrainingRange3D.tscn"
 
 const AA_MODES := ["off", "fxaa", "msaa_2x", "msaa_4x", "msaa_8x", "taa"]
 const AA_LABELS := ["关闭", "FXAA（快速）", "MSAA 2×", "MSAA 4×", "MSAA 8×", "TAA（高档推荐）"]
@@ -25,6 +26,8 @@ const DEVICE_MODE_LABELS := ["自动跟随", "锁定键鼠", "锁定手柄"]
 @onready var return_to_base_hint: Label = $Center/Panel/Margin/MainPage/ReturnToBaseHint
 @onready var reset_game_save_button: Button = $Center/Panel/Margin/MainPage/ResetGameSaveButton
 @onready var reset_game_save_hint: Label = $Center/Panel/Margin/MainPage/ResetGameSaveHint
+@onready var training_range_button: Button = $Center/Panel/Margin/MainPage/TrainingRangeButton
+@onready var training_range_hint: Label = $Center/Panel/Margin/MainPage/TrainingRangeHint
 @onready var reset_game_save_dialog: ConfirmationDialog = $ResetGameSaveDialog
 @onready var main_page: VBoxContainer = $Center/Panel/Margin/MainPage
 @onready var graphics_page: VBoxContainer = $Center/Panel/Margin/GraphicsPage
@@ -78,6 +81,7 @@ func _ready() -> void:
 	controls_button.pressed.connect(_show_controls_page)
 	# 失败态返城会替换整个场景；等 GUI 输入派发结束后再执行。
 	return_to_base_button.pressed.connect(_request_return_to_base, CONNECT_DEFERRED)
+	training_range_button.pressed.connect(_request_training_range, CONNECT_DEFERRED)
 	reset_game_save_button.pressed.connect(_request_game_save_reset)
 	reset_game_save_dialog.confirmed.connect(_confirm_game_save_reset)
 	back_button.pressed.connect(_show_main_page)
@@ -148,9 +152,12 @@ func close_entry_settings() -> void:
 	resume_button.text = _resume_button_default_text
 	return_to_base_button.visible = true
 	return_to_base_hint.visible = true
+	training_range_button.visible = true
+	training_range_hint.visible = true
 	reset_game_save_button.visible = true
 	reset_game_save_hint.visible = true
 	_refresh_return_to_base_action()
+	_refresh_training_range_action()
 
 
 ## 套用「主页设置」上下文的视觉覆盖：隐藏与战局 / 存档相关的按钮与提示，
@@ -158,6 +165,8 @@ func close_entry_settings() -> void:
 func _apply_entry_settings_overrides() -> void:
 	return_to_base_button.visible = false
 	return_to_base_hint.visible = false
+	training_range_button.visible = false
+	training_range_hint.visible = false
 	reset_game_save_button.visible = false
 	reset_game_save_hint.visible = false
 	main_page_title.text = "设置"
@@ -225,6 +234,7 @@ func _show_main_page() -> void:
 	_hide_sub_pages()
 	main_page.visible = true
 	_refresh_return_to_base_action()
+	_refresh_training_range_action()
 	if center.visible:
 		graphics_button.grab_focus()
 	if _entry_settings_context:
@@ -490,6 +500,44 @@ func _refresh_return_to_base_action() -> void:
 func _get_game_root() -> Node:
 	var hud := get_parent()
 	return hud.get_parent() if hud != null else null
+
+
+## 训练靶场入口只在基地开放。靶场内部复用同一个暂停面板，若不加这条判据，
+## 玩家在靶场里按 Esc 会看到"进入训练靶场"的按钮 —— 靶场进靶场，套娃。
+func is_training_range_available() -> bool:
+	return _get_game_root() is BaseWorld3D
+
+
+func _refresh_training_range_action() -> void:
+	if training_range_button == null or training_range_hint == null:
+		return
+	var available := is_training_range_available()
+	training_range_button.disabled = not available
+	training_range_button.text = "进入训练靶场" if available else "进入训练靶场（仅基地可用）"
+	training_range_hint.text = (
+		"靶场内可自由取用全部枪械、刷怪实战与装配任意命运卡；离开后装备与物品原样还原"
+		if available
+		else "当前不在基地，无法进入训练靶场"
+	)
+	training_range_hint.modulate = Color(0.44, 0.78, 0.74) if available else Color(0.70, 0.58, 0.48)
+
+
+func _request_training_range() -> void:
+	if not is_training_range_available():
+		training_range_hint.text = "只能在基地里进入训练靶场。"
+		training_range_hint.modulate = Color(1.0, 0.48, 0.34)
+		return
+	if not ResourceLoader.exists(TRAINING_RANGE_SCENE_PATH, "PackedScene"):
+		training_range_hint.text = "训练靶场场景缺失。"
+		training_range_hint.modulate = Color(1.0, 0.48, 0.34)
+		return
+	# 必须先解除暂停：get_tree().paused 是全局的，会原样带进新场景，
+	# 靶场的 _ready 与物理帧就都不跑了 —— 表现为"点进去直接卡死"。
+	set_paused(false)
+	var change_error := get_tree().change_scene_to_file(TRAINING_RANGE_SCENE_PATH)
+	if change_error != OK:
+		training_range_hint.text = "进入训练靶场失败：%s" % error_string(change_error)
+		training_range_hint.modulate = Color(1.0, 0.40, 0.30)
 
 
 func _restore_high_defaults() -> void:

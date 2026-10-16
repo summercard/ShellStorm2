@@ -167,6 +167,20 @@ const PROFILES := {
 	# configure_from_enemy_data 的比例还原继续放大。改这一处 = 全楼层等比例放大。
 	"boss": {"hp": 5200, "speed": 1.72, "damage": 24, "range": 9.5, "cooldown": 1.45},
 }
+# 「-强化怪」（`MonsterVariants`）**不在上表占行**。变种的 hp / damage / range /
+# 弹道全部由 `_profile_for()` 从基类实时派生，只把倍率作用一次。
+# 理由：单独抄一份变种基线 = 两份数值，调普通怪时必然漂移。
+
+## 敌人子弹的**基准弹速**（m/s）。现行敌弹在 `_fire_projectile` 里写死这个数，
+## 所有远程怪与 Boss 技能共用同一个值。抽成常量是为了让「强化怪弹速 ×1.3」
+## 有一个确定的乘法基准，而不是在派生时凭记忆再写一个 7。
+const DEFAULT_ENEMY_PROJECTILE_SPEED := 7.0
+## 敌人子弹的**基准飞行距离**（m）。
+##
+## 敌弹当前没有射程字段（`Projectile3D.range_m == 0` 表示不启用），实际飞行距离由
+## 「最大存活 1 秒」兜底给出 ≈ 7 m/s × 1 s。这里把这个**既有事实**显式记下来，
+## 好让「强化怪射程 ×2」有基准可乘；普通怪仍然不下发射程 ⇒ 行为逐字不变。
+const DEFAULT_ENEMY_PROJECTILE_RANGE_M := 7.0
 
 # MonsterInjector 的旧 2D 基线只用于还原楼层、主题、精英与小怪倍率；
 # 实际 3D TTK 必须建立在上面的 PROFILES 上，避免 10–40 HP 覆盖 3D 战斗基线。
@@ -181,7 +195,12 @@ const SOURCE_DAMAGE_BASE := {
 	"shielded": 3.0, "exploder": 15.0, "ambusher": 7.0, "boss": 20.0,
 }
 
-@export_enum("fat_zombie03", "melee_chaser", "ranged_caster", "summoner", "exploder", "ambusher", "boss") var enemy_kind := "melee_chaser"
+## `_strong` 后缀的三个是「普通怪变种」，定义与倍率见 `MonsterVariants`；
+## 列在这里只是为了场景里手动摆放时下拉选得到，它们的数值一律从基类派生。
+@export_enum(
+	"fat_zombie03", "melee_chaser", "ranged_caster", "summoner", "exploder", "ambusher", "boss",
+	"fat_zombie03_strong", "melee_chaser_strong", "ranged_caster_strong"
+) var enemy_kind := "melee_chaser"
 @export var room_id := ""
 
 var max_hp := 58
@@ -251,6 +270,10 @@ var _overhead_health_bar_scale := 1.0
 var _elite_health_bar_profile: Dictionary = {}
 var _kind_scale_multiplier := 1.0
 var _variant_scale_multiplier := 1.0
+## 当前怪种**生效中**的战斗基线。普通怪就是 `PROFILES` 里那一行；
+## 强化怪是 `_profile_for()` 派生出来的副本（不写回表）。
+## 每帧读它而不是反复查表/派生，避免在 `_physics_process` 里重复构造字典。
+var _active_profile: Dictionary = {}
 var illumination_sensor: EnemyIllumination3D
 var _illumination_damage_accumulator := 0.0
 
@@ -349,10 +372,62 @@ func _ready() -> void:
 	_last_motion_position = global_position
 
 
+## 查表用的怪种 key：**强化怪一律回退到它的基类**。
+##
+## 体型表、血条宽表、血量基线表都不为变种单列一行 —— 变种改的是「倍率」，
+## 表的形状照抄原怪。于是以后改原怪的体型或条宽，强化怪自动跟随，
+## 不存在「同一件事写两处、改一处忘另一处」。
+func _table_kind() -> String:
+	return MonsterVariants.base_of(enemy_kind) if MonsterVariants.is_variant(enemy_kind) else enemy_kind
+
+
+## 取某怪种的战斗基线。强化怪 = **原怪基线 × 变种倍率**，实时派生。
+##
+## 返回的是派生副本，不是 `PROFILES[base]` 的引用 —— 派生值不写回表，
+## 所以「原怪基线」始终只有一份。改 `PROFILES["melee_chaser"]["hp"]`，
+## 强化怪下一次 `apply_profile` 就跟着变。
+##
+## 未在 `MonsterVariants` 登记倍率的键（如 `speed` / `cooldown` / `patrol_multiplier`）
+## 一律照抄原怪 —— 业主 2026-10-16 未要求强化怪变速，故体型变大但速度不变。
+##
+## `static` 是刻意的：本函数只读常量，不碰实例状态。于是验收可以**直接调它**，
+## 不必实例化一整只怪（裸 `Enemy3D.new()` 缺 Avatar/CollisionShape3D 子节点，
+## 一 apply_profile 就刷 engine ERROR，会把「按 ERROR 计数判定」的跑法搅浑）。
+static func profile_for(kind: String) -> Dictionary:
+	if not MonsterVariants.is_variant(kind):
+		return PROFILES.get(kind, PROFILES["melee_chaser"]) as Dictionary
+	var base_kind := MonsterVariants.base_of(kind)
+	if not PROFILES.has(base_kind):
+		return PROFILES["melee_chaser"] as Dictionary
+	var spec: Dictionary = MonsterVariants.VARIANTS[base_kind]
+	var out: Dictionary = (PROFILES[base_kind] as Dictionary).duplicate(true)
+	out["hp"] = float(out["hp"]) * float(spec.get("hp_mult", 1.0))
+	out["damage"] = float(out["damage"]) * float(spec.get("damage_mult", 1.0))
+	# 体型放大 1.5 倍后攻击距离必须同步放大。否则模型把手/打击面伸到 1.5 倍，
+	# 判定还停在原值 ⇒ 出现「视觉上贴上去了却打不到」的错位（业主 2026-10-16 定）。
+	out["range"] = float(out["range"]) * float(spec.get("attack_range_mult", 1.0))
+	# 弹道只对**声明了倍率**的变种生效（当前只有远程怪）。没声明的变种不写这两个键，
+	# 于是 Boss / 精英 / 普通远程怪的子弹逐字不变。
+	if spec.has("projectile_speed_mult"):
+		out["projectile_speed"] = DEFAULT_ENEMY_PROJECTILE_SPEED * float(spec["projectile_speed_mult"])
+	if spec.has("projectile_range_mult"):
+		out["projectile_range"] = DEFAULT_ENEMY_PROJECTILE_RANGE_M * float(spec["projectile_range_mult"])
+	return out
+
+
 func apply_profile(kind: String) -> void:
-	enemy_kind = kind if PROFILES.has(kind) else "melee_chaser"
-	_kind_scale_multiplier = float(BODY_SCALE_BY_KIND.get(enemy_kind, 1.0))
-	var profile: Dictionary = PROFILES[enemy_kind]
+	var known := PROFILES.has(kind) or MonsterVariants.is_variant(kind)
+	enemy_kind = kind if known else "melee_chaser"
+	_active_profile = profile_for(enemy_kind)
+	# 体型 = 原怪的**物种层级** × 变种的**体型倍率**，两段分开乘。
+	# 这样物种层级仍只有一份真源：强化胖子跟随胖子的 1.0，
+	# 将来胖子调成 1.1，强化胖子自动跟着变 1.65 而不是停在 1.5。
+	var kind_scale := float(BODY_SCALE_BY_KIND.get(_table_kind(), 1.0))
+	var variant_base := MonsterVariants.base_of(enemy_kind)
+	if not variant_base.is_empty():
+		kind_scale *= MonsterVariants.multiplier(variant_base, "scale_mult")
+	_kind_scale_multiplier = kind_scale
+	var profile: Dictionary = _active_profile
 	var hp_multiplier := BOSS_HP_MULTIPLIER if enemy_kind == "boss" else NORMAL_HP_MULTIPLIER
 	max_hp = int(round(float(profile["hp"]) * hp_multiplier))
 	current_hp = max_hp
@@ -418,13 +493,13 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 	apply_profile(str(data.get("enemy_type", enemy_kind)))
 	var profile_hp := max_hp
 	var profile_damage := contact_damage
-	var source_hp_base := float(SOURCE_HP_BASE.get(enemy_kind, profile_hp))
+	var source_hp_base := float(SOURCE_HP_BASE.get(_table_kind(), profile_hp))
 	var source_max_hp := maxf(1.0, float(data.get("max_hp", data.get("hp", source_hp_base))))
 	var source_current_hp := clampf(float(data.get("hp", source_max_hp)), 0.0, source_max_hp)
 	_source_hp_scale = maxf(0.05, source_max_hp / maxf(1.0, source_hp_base))
 	max_hp = maxi(1, int(round(float(profile_hp) * _source_hp_scale)))
 	current_hp = clampi(int(round(float(max_hp) * source_current_hp / source_max_hp)), 1, max_hp)
-	var source_damage_base := float(SOURCE_DAMAGE_BASE.get(enemy_kind, profile_damage))
+	var source_damage_base := float(SOURCE_DAMAGE_BASE.get(_table_kind(), profile_damage))
 	var source_damage := float(data.get("damage", source_damage_base))
 	_source_damage_scale = (
 		maxf(0.0, source_damage / source_damage_base)
@@ -434,7 +509,7 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 	contact_damage = maxi(0, int(round(float(profile_damage) * _source_damage_scale)))
 	# 2D px/s 按24 px/m适配到3D，再统一降到旧速度的70%。使用原始Profile
 	# 作为缺省值，避免apply_profile已经降速后被重复乘0.7。
-	var source_speed := float(data.get("speed", float(PROFILES[enemy_kind]["speed"]) * 24.0))
+	var source_speed := float(data.get("speed", float(_active_profile["speed"]) * 24.0))
 	move_speed = maxf(0.35, source_speed / 24.0 * GLOBAL_MOVE_SPEED_MULTIPLIER)
 	if bool(data.get("is_elite", false)):
 		elite_modifier_id = str(data.get("modifier_id_en", "Elite.Huge"))
@@ -515,7 +590,7 @@ func _apply_presentation_scale() -> void:
 
 func _ensure_overhead_health_bar() -> void:
 	var wanted_size := (
-		_elite_health_bar_profile.get("size", HEALTH_BAR_SIZE_BY_KIND.get(enemy_kind, Vector2(1.65, 0.16)))
+		_elite_health_bar_profile.get("size", HEALTH_BAR_SIZE_BY_KIND.get(_table_kind(), Vector2(1.65, 0.16)))
 		as Vector2
 	)
 	# 只缩「普通小怪」：Boss 与精英各有独立契约（Boss 条是屏幕顶端条，
@@ -1076,7 +1151,7 @@ func _physics_process(delta: float) -> void:
 		if enemy_kind == "fat_zombie03" and ai_state == "stagger":
 			_steer_planar(_last_hit_direction * _hit_knockback, 1.0)
 			_commit_motion(delta)
-			if _state_time >= float(PROFILES[enemy_kind]["stagger"]):
+			if _state_time >= float(_active_profile["stagger"]):
 				transition_to("idle", "stagger_no_target_finished")
 			return
 		if enemy_kind == "fat_zombie03" and ai_state in ["telegraph", "attack", "recovery"]:
@@ -1084,7 +1159,7 @@ func _physics_process(delta: float) -> void:
 				MonsterAIManager.release_attack_token(self)
 			transition_to("search", "clap_target_lost")
 		var awareness := str(_ai_decision.get("awareness", "unaware"))
-		if awareness in ["room_light_search", "seek_darkness", "lost_contact", "proximity_contact", "sound_contact"]:
+		if awareness in ["room_light_search", "seek_darkness", "lost_contact", "proximity_contact", "sound_contact", "hunt_contact"]:
 			_last_known_target_position = _ai_decision.get("stimulus_position", global_position) as Vector3
 			if awareness in ["proximity_contact", "sound_contact"] and ai_state not in ["alert", "search", "telegraph", "attack", "stagger"]:
 				transition_to("alert")
@@ -1119,7 +1194,9 @@ func _physics_process(delta: float) -> void:
 	var awareness := str(_ai_decision.get("awareness", ""))
 	# 手电命中和受击仇恨都是有明确玩家来源的强刺激。它们不依赖当前视锥，
 	# 否则怪物转身或远距离中弹后的下一帧就会丢失目标，只停留在原地搜索。
-	var stimulus_tracking := awareness in ["flashlight_contact", "damage_contact"]
+	# `hunt_contact` 是**事件指令**（封锁房、设施触发）下发的"我就是知道你在哪"：
+	# 与手电命中、受击仇恨同档，不依赖视锥与视线，否则怪一转身就丢目标。
+	var stimulus_tracking := awareness in ["flashlight_contact", "damage_contact", "hunt_contact"]
 	if target_visible or stimulus_tracking:
 		_last_known_target_position = _ai_decision.get("target_position", _target.global_position) as Vector3
 		_lost_sight_time = 0.0
@@ -1135,7 +1212,7 @@ func _physics_process(delta: float) -> void:
 		# 本状态就退回原来的 `alert_duration` 口径，行为与接线前逐字一致。
 		_begin_monster_startup(to_target)
 	var alert_duration := float(_ai_param(
-		"alert_duration_sec", float(PROFILES[enemy_kind].get("alert", 0.28))
+		"alert_duration_sec", float(_active_profile.get("alert", 0.28))
 	))
 	if ai_state == "alert" and _tick_alert_state(to_target, delta, alert_duration):
 		# 启动过程独占本帧：它自己处理制动、朝向与 move_and_slide。
@@ -1173,7 +1250,7 @@ func _physics_process(delta: float) -> void:
 		"stagger":
 			_steer_planar(_last_hit_direction * _hit_knockback, 1.0)
 			_commit_motion(delta)
-			if _state_time > float(PROFILES[enemy_kind].get("stagger", 0.16)):
+			if _state_time > float(_active_profile.get("stagger", 0.16)):
 				transition_to("chase")
 	var clap_locked := enemy_kind == "fat_zombie03" and (ai_state in ["attack", "recovery"] or (ai_state == "telegraph" and _state_time >= 1.0))
 	if monitor_combat != null:
@@ -1255,7 +1332,7 @@ func _tick_patrol(delta: float) -> void:
 		_patrol_target = _home_position + Vector3(cos(angle), 0, sin(angle)) * 1.7
 	var offset := _patrol_target - global_position
 	offset.y = 0.0
-	_steer_planar(offset.normalized() * get_effective_move_speed() * float(PROFILES[enemy_kind].get("patrol_multiplier", 0.32)), minf(1.0, delta * 3.2))
+	_steer_planar(offset.normalized() * get_effective_move_speed() * float(_active_profile.get("patrol_multiplier", 0.32)), minf(1.0, delta * 3.2))
 	_commit_motion(delta)
 
 
@@ -1340,7 +1417,13 @@ func _fire_projectile(to_target: Vector3, amount: int, color: Color, explosive :
 	if get_tree().current_scene == null:
 		return
 	var config := {
-		"direction": to_target.normalized(), "speed": 7, "damage": amount,
+		"direction": to_target.normalized(),
+		# 弹速与射程都按**当前怪种**下发。普通怪与 Boss 没有这两个键 ⇒ 取默认值，
+		# 子弹行为与「硬编码 7 / 无射程」时代逐字一致；强化远程怪在 `_profile_for()`
+		# 里拿到 9.1 m/s 与 14 m。改这里不会连带改 Boss 与精英的子弹。
+		"speed": float(_active_profile.get("projectile_speed", DEFAULT_ENEMY_PROJECTILE_SPEED)),
+		"range": float(_active_profile.get("projectile_range", 0.0)),
+		"damage": amount,
 		"hostile": true, "critical": false, "tags": ["explosive"] if explosive else [],
 		"color": color, "shooter": self,
 	}
@@ -2276,8 +2359,8 @@ func _track_stuck_recovery(delta: float, intended_velocity: Vector3) -> void:
 
 
 func _recovery_duration() -> float:
-	if PROFILES[enemy_kind].has("recovery"):
-		return float(PROFILES[enemy_kind]["recovery"])
+	if _active_profile.has("recovery"):
+		return float(_active_profile["recovery"])
 	return 0.62 if enemy_kind == "boss" else 0.48 if enemy_kind in ["shielded", "exploder"] else 0.34
 
 
@@ -2411,8 +2494,8 @@ func _behavior_role() -> String:
 
 
 func _telegraph_duration() -> float:
-	if PROFILES[enemy_kind].has("telegraph"):
-		return float(PROFILES[enemy_kind]["telegraph"])
+	if _active_profile.has("telegraph"):
+		return float(_active_profile["telegraph"])
 	if enemy_kind == "exploder":
 		return 0.9
 	if enemy_kind == "ambusher":

@@ -130,16 +130,49 @@
         { "port_id": "A", "target": "room_02", "position_m": [-15.0, -2.5], "outward": [-1.0, 0.0] },
         { "port_id": "B", "target": "room_04", "position_m": [15.0, -2.5], "outward": [1.0, 0.0] }
       ],
-      "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-7.5, -12.5], "count_bonus": 1 },
-        { "box": "box_corner_ambush", "center_m": [7.5, -12.5] },
-        { "box": "box_corridor_column", "center_m": [-7.5, 2.5], "count_bonus": 1 },
-        { "box": "box_wall_arc", "center_m": [7.5, 2.5], "rotation_deg": 90.0, "count_bonus": 1 }
-      ],
+      "spawn_placements": [],
       "encounter": {
+        "trigger": { "radius_m": 6.0, "offset_m": [0.0, 0.0] },
+        "duration_sec": 60.0,
+        "start_delay_sec": 1.0,
+        "stage_advance": "clear",
+        "seal_room": true,
+        "light_on_finish": true,
+        "hunt_player": true,
+        "hud_countdown": true,
         "stages": [
-          { "boxes": [0, 1] },
-          { "boxes": [2, 3] }
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 5 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 3 },
+            { "type": "ranged_caster", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 5 },
+            { "type": "strong_random", "count": 1 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 5 },
+            { "type": "ranged_caster", "count": 2 },
+            { "type": "strong_random", "count": 1 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 6 },
+            { "type": "ranged_caster", "count": 3 },
+            { "type": "strong_random", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 6 },
+            { "type": "ranged_caster", "count": 4 },
+            { "type": "strong_random", "count": 2 }
+          ] }
         ]
       }
     },
@@ -168,16 +201,49 @@
         { "port_id": "C", "target": "", "position_m": [-15.0, -20.0], "outward": [0.0, -1.0] },
         { "port_id": "D", "target": "", "position_m": [15.0, -20.0], "outward": [0.0, -1.0] }
       ],
-      "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-15.0, -12.5], "count_bonus": 2 },
-        { "box": "box_corner_ambush", "center_m": [5.0, -12.5], "count_bonus": 1 },
-        { "box": "box_wall_arc", "center_m": [15.0, -12.5], "count_bonus": 1 },
-        { "box": "box_corridor_column", "center_m": [-15.0, 7.5] }
-      ],
+      "spawn_placements": [],
       "encounter": {
+        "trigger": { "shape": "band", "axis": "z", "thickness_m": 6.0, "offset_m": [0.0, 0.0] },
+        "duration_sec": 60.0,
+        "start_delay_sec": 1.0,
+        "stage_advance": "clear",
+        "seal_room": true,
+        "light_on_finish": true,
+        "hunt_player": true,
+        "hud_countdown": true,
         "stages": [
-          { "boxes": [0, 1] },
-          { "boxes": [2, 3] }
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 5 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 4 },
+            { "type": "ranged_caster", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 5 },
+            { "type": "strong_random", "count": 1 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 5 },
+            { "type": "ranged_caster", "count": 2 },
+            { "type": "strong_random", "count": 1 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 6 },
+            { "type": "ranged_caster", "count": 3 },
+            { "type": "strong_random", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 7 },
+            { "type": "ranged_caster", "count": 4 },
+            { "type": "strong_random", "count": 2 }
+          ] }
         ]
       }
     },
@@ -240,16 +306,49 @@
         { "port_id": "A", "target": "room_05", "position_m": [-20.0, -2.5], "outward": [-1.0, 0.0] },
         { "port_id": "B", "target": "room_07", "position_m": [20.0, -2.5], "outward": [1.0, 0.0] }
       ],
-      "spawn_placements": [
-        { "box": "box_corner_ambush", "center_m": [-12.5, -7.5], "count_bonus": 1 },
-        { "box": "box_room_spread", "center_m": [-2.5, -7.5], "count_bonus": 2 },
-        { "box": "box_wall_arc", "center_m": [12.5, -2.5], "rotation_deg": 90.0, "count_bonus": 3 },
-        { "box": "box_corridor_column", "center_m": [7.5, 2.5] }
-      ],
+      "spawn_placements": [],
       "encounter": {
+        "trigger": { "shape": "band", "axis": "x", "thickness_m": 6.0, "offset_m": [0.0, 0.0] },
+        "duration_sec": 60.0,
+        "start_delay_sec": 1.0,
+        "stage_advance": "clear",
+        "seal_room": true,
+        "light_on_finish": true,
+        "hunt_player": true,
+        "hud_countdown": true,
         "stages": [
-          { "boxes": [0, 1] },
-          { "boxes": [2, 3] }
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 5 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 4 },
+            { "type": "ranged_caster", "count": 3 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 5 },
+            { "type": "strong_random", "count": 1 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 6 },
+            { "type": "ranged_caster", "count": 3 },
+            { "type": "strong_random", "count": 1 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 6 },
+            { "type": "ranged_caster", "count": 4 },
+            { "type": "strong_random", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 7 },
+            { "type": "ranged_caster", "count": 4 },
+            { "type": "strong_random", "count": 2 }
+          ] }
         ]
       }
     },
@@ -351,17 +450,49 @@
         { "port_id": "A", "target": "room_08", "position_m": [-15.0, -2.5], "outward": [-1.0, 0.0] },
         { "port_id": "B", "target": "room_10", "position_m": [15.0, -2.5], "outward": [1.0, 0.0] }
       ],
-      "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-7.5, -12.5] },
-        { "box": "box_corner_ambush", "center_m": [7.5, -12.5] },
-        { "box": "box_corridor_column", "center_m": [-7.5, 2.5], "count_bonus": 3 },
-        { "box": "box_wall_arc", "center_m": [7.5, 2.5], "rotation_deg": 90.0, "count_bonus": 4 }
-      ],
+      "spawn_placements": [],
       "encounter": {
+        "trigger": { "shape": "band", "axis": "z", "thickness_m": 6.0, "offset_m": [0.0, 0.0] },
+        "duration_sec": 90.0,
+        "start_delay_sec": 1.0,
+        "stage_advance": "clear",
+        "seal_room": true,
+        "light_on_finish": true,
+        "hunt_player": true,
+        "hud_countdown": true,
         "stages": [
-          { "boxes": [0, 1] },
-          { "boxes": [2] },
-          { "boxes": [3] }
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 5 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 4 },
+            { "type": "ranged_caster", "count": 3 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 6 },
+            { "type": "strong_random", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 6 },
+            { "type": "ranged_caster", "count": 4 },
+            { "type": "strong_random", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 7 },
+            { "type": "ranged_caster", "count": 4 },
+            { "type": "strong_random", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 3 },
+            { "type": "melee_chaser", "count": 7 },
+            { "type": "ranged_caster", "count": 5 },
+            { "type": "strong_random", "count": 3 }
+          ] }
         ]
       }
     },
@@ -388,16 +519,49 @@
         { "port_id": "A", "target": "room_09", "position_m": [-20.0, -2.5], "outward": [-1.0, 0.0] },
         { "port_id": "B", "target": "boss", "position_m": [12.5, -15.0], "outward": [0.0, -1.0] }
       ],
-      "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-12.5, -7.5] },
-        { "box": "box_center_elite", "center_m": [7.5, -7.5], "count_bonus": 5 },
-        { "box": "box_wall_arc", "center_m": [12.5, 2.5], "rotation_deg": 90.0, "count_bonus": 3 },
-        { "box": "box_corner_ambush", "center_m": [-2.5, 2.5] }
-      ],
+      "spawn_placements": [],
       "encounter": {
+        "trigger": { "shape": "band", "axis": "z", "thickness_m": 6.0, "offset_m": [0.0, 0.0] },
+        "duration_sec": 105.0,
+        "start_delay_sec": 1.0,
+        "stage_advance": "clear",
+        "seal_room": true,
+        "light_on_finish": true,
+        "hunt_player": true,
+        "hud_countdown": true,
         "stages": [
-          { "boxes": [0, 1] },
-          { "boxes": [2, 3] }
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 1 },
+            { "type": "melee_chaser", "count": 6 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 4 },
+            { "type": "ranged_caster", "count": 3 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 6 },
+            { "type": "strong_random", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 2 },
+            { "type": "melee_chaser", "count": 7 },
+            { "type": "ranged_caster", "count": 4 },
+            { "type": "strong_random", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 3 },
+            { "type": "melee_chaser", "count": 7 },
+            { "type": "ranged_caster", "count": 4 },
+            { "type": "strong_random", "count": 2 }
+          ] },
+          { "monsters": [
+            { "type": "fat_zombie03", "count": 3 },
+            { "type": "melee_chaser", "count": 8 },
+            { "type": "ranged_caster", "count": 5 },
+            { "type": "strong_random", "count": 3 }
+          ] }
         ]
       }
     },

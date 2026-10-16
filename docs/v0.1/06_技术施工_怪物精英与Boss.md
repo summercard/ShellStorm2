@@ -136,6 +136,61 @@ icon_offset_y = health_bar_height × 0.5 + 0.30 × icon_edge_m + icon_edge_m × 
 视觉证据：`outputs/monster_roar_icon_size_contact_sheet.png`（六档体型并排对照）、
 `outputs/monster_startup_capture.png`（真引擎实拍三帧：背对 → 转身完成 → 吼叫中，逐帧带状态读数）。
 
+### 3.3 普通怪变种（-强化怪）施工口径（2026-10-16）
+
+设计见[怪物设计 §普通怪变种](design/怪物设计.md#普通怪变种-强化怪--2026-10-16-业主设计)。
+本节只记施工口径。
+
+**数值唯一真源**：`src/enemy3d/MonsterVariants.gd`（纯数据 + 静态函数、不持节点）。
+
+```text
+variant_id      = base_kind + "_strong"
+display_name    = 原怪名 + "-强化怪"
+倍率            = {hp_mult, damage_mult, scale_mult, attack_range_mult,
+                   death_explosion_radius_mult?, projectile_speed_mult?, projectile_range_mult?}
+```
+
+**四条不许破的规矩：**
+
+1. **变种不占 `PROFILES` 行。** 数值由 `Enemy3D.profile_for()` 从基类实时派生。
+   单独抄一份 = 两份数值，调普通怪时必然漂移 —— 验收正面钉住
+   `not Enemy3D.PROFILES.has(variant_id)`。
+2. **新增怪种必须逐表登记，漏一处就静默退化。** 各处查表判据都是
+   `kind if TABLE.has(kind) else "melee_chaser"` —— 写错名字不报错，只变回小僵尸。
+   本次涉及：`MonsterInjector.BASE_ENEMY_TYPES` / `ENEMY_PRESENTATION` /
+   `SpawnBoxCatalog.ALLOWED_BOX_TYPES`，以及 `EnemyAvatar3D` 的
+   `COLORS` / `FOOTPRINT_PROFILES` / `FORMAL_NORMAL_SCENES`。
+   `EnemyAvatar3D` 内部十几处 `match enemy_kind` 已统一改读 `_base_kind`，
+   否则变种会掉进程序化外壳分支、拿不到正式模型。
+3. **升级点必须在统一出口**（`MonsterInjector._generate_basic_enemy`），不能做在刷怪池里
+   —— 远征01 由刷怪盒驱动（`spawn_placements` 优先级最高），做在池子里完全不生效。
+   精英传 `allow_strong = false` 禁用升级（身份指派不该被随机改写）。
+4. **随机流必须与 `_rng` 分开**（`_strong_rng`，由 `run_seed` 异或常量派生）。
+   混进共用流会让既有固定种子的抽取结果整体位移。未配 `strong_variant` 的关卡
+   **一次都不掷** ⇒ 未配置关卡行为逐字不变。
+
+**弹道下发的两处新旋钮**（原先没有）：
+
+| 常量 | 值 | 说明 |
+|---|---|---|
+| `Enemy3D.DEFAULT_ENEMY_PROJECTILE_SPEED` | `7.0` | 敌弹基准弹速。原先硬编码在 `_fire_projectile` 里，被所有远程怪与 Boss 技能共用；抽成常量后由 `PROFILES[kind].projectile_speed` 按种覆盖 |
+| `Enemy3D.DEFAULT_ENEMY_PROJECTILE_RANGE_M` | `7.0` | 敌弹基准飞行距离（= 1 秒存活 × 7 m/s 的既有事实）。**普通怪与 Boss 不下发此键**，仍走存活时间兜底 ⇒ 行为逐字不变 |
+
+只有声明了 `projectile_*_mult` 的变种会拿到这两个键，因此强化远程怪的子弹变快变远，
+而普通远程怪与 Boss 的子弹一个字节都没动。
+
+**顺手修掉的既有缺陷**：`MonsterInjector._death_explosion_for()` 原先在返回时
+**丢弃了配置里的 `zone` 段**，而 `Enemy3D._spawn_ground_blast_zone()` 正是靠它才会生成
+地面持续伤害场 ⇒ 关卡里写的 `zone`（3 秒烫伤圈）从来没有生效过。现已原样透传。
+
+**验收**：`tests/verification/verify_strong_variant_monsters.gd` —— 定义表自洽、倍率逐条对业主口径、
+**12 处登记逐表扫描**、真 `Enemy3D` 实例上的最终数值（生命/伤害/攻击距离/体型/移速不变）、
+外观基类与正式模型确实取自原怪、头顶条宽不吃查表默认值、碰撞形状不被放大两遍、
+弹道只影响强化远程怪、关卡覆盖派生、自爆半径派生、`zone` 透传回归、
+15% 概率统计（n=4000，容差 [0.12, 0.18]）、同种子可复现、未配置关卡不掷骰、精英不被升级。
+实测 `STRONG_VARIANT_OK`（samples=4259，0 engine ERROR）。
+负向对照：变种 ID 改名 → 红 20 条；`hp_mult` 2.0→3.0 → 红 1 条。
+
 ## 4. 遭遇生成接口
 
 关卡提交 `EncounterRequest`：房间 ID、楼层深度、房间类型、主题、预算、生成槽、随机流。怪物系统返回不可变 `EncounterPlan`：敌人内容 ID、修饰器、槽位、出现时点和合法空计划原因。

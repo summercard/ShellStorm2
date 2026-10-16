@@ -25,6 +25,10 @@ shadow_enabled = true
 
 [node name="Services" type="Node3D" parent="."]
 
+[node name="SpawnPads" type="Node3D" parent="."]
+
+[node name="Enemies" type="Node3D" parent="."]
+
 [node name="CombatEffectPool3D" type="Node3D" parent="."]
 script = ExtResource("5_fx_pool")
 

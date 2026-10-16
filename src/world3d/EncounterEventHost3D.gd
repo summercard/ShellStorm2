@@ -116,6 +116,46 @@ func encounter_event_live_count(instance_id: String) -> int:
 					count += 1
 	return count
 
+## 事件猎杀：把玩家位置持续押给**事件归属的已实例化敌人**。
+##
+## 为什么只认已实例化的：预约 / 延迟队列里的条目还没有 `Enemy3D` 节点，
+## 没有"记录"可写。它们实到之后的下一帧就会被盖上（本方法由 Director 每帧调用）
+## —— 与其在三处队列里各写一遍、把同一事实存三份，不如让它晚一帧。
+##
+## 为什么走 `MonsterAIManager.set_hunt_target` 而不是直接改敌人字段：
+## 感知、记忆、开火令牌的唯一真源都在那边；这里只做"谁算这个事件的怪"的判定。
+func encounter_event_hunt(instance_id: String) -> Dictionary:
+	if not _valid():
+		return {"ok": false, "reason": "host_unavailable"}
+	var target := _hunt_target()
+	if target == null:
+		return {"ok": false, "reason": "no_hunt_target"}
+	if MonsterAIManager == null:
+		return {"ok": false, "reason": "ai_manager_unavailable"}
+	var stamped := 0
+	for room_id_value in dungeon._enemy_nodes_by_room.keys():
+		for node in dungeon._enemy_nodes_by_room[room_id_value] as Array:
+			var enemy := node as Enemy3D
+			if enemy == null or not is_instance_valid(enemy):
+				continue
+			if _encounter_owner_id(enemy.get_enemy_data()) != instance_id:
+				continue
+			if MonsterAIManager.set_hunt_target(enemy, target):
+				stamped += 1
+	return {"ok": true, "stamped": stamped}
+
+
+## 猎杀目标 = 活着的玩家。死了就没有目标可押 —— 返回 null 让上层如实以"没有目标"收场，
+## 而不是押给一具尸体（那会让怪围着尸体转）。
+func _hunt_target() -> Node3D:
+	var candidate := dungeon.player
+	if candidate == null or not is_instance_valid(candidate):
+		return null
+	if float(candidate.current_hp) <= 0.0:
+		return null
+	return candidate as Node3D
+
+
 func encounter_event_despawn(instance_id: String, _reason: String) -> Dictionary:
 	if not _valid():
 		return {"ok": false, "error": "host_unavailable"}
@@ -195,9 +235,15 @@ func encounter_event_apply_result(action: Dictionary) -> Dictionary:
 			dungeon.status_label.text = str(action["text"])
 			return {"ok": true}
 		"light":
-			# Light toggling remains owned by the room/facility systems. Do not claim success
-			# until a formal room light endpoint is available.
-			return {"ok": false, "error": "result_action_failed"}
+			# 房间灯光的所有权仍在房间系统（`DungeonRoom3D.set_room_light_on()`），
+			# 这里只做转发 —— 不自己开关 Light3D、也不猜房间有没有灯。
+			# 房间不存在或没有可控灯 ⇒ 如实返回失败，不假装成功。
+			var light_room := dungeon._room_by_id.get(str(action.get("room_id", ""))) as DungeonRoom3D
+			if light_room == null or not light_room.has_method("set_room_light_on"):
+				return {"ok": false, "error": "light_room_unavailable"}
+			if not bool(light_room.call("set_room_light_on", bool(action.get("on", true)))):
+				return {"ok": false, "error": "light_room_unavailable"}
+			return {"ok": true}
 	return {"ok": false, "error": "result_action_failed"}
 
 func _settle_unspawned_elites(configs: Array, from_index := 0) -> void:

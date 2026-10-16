@@ -27,10 +27,14 @@ const DEFAULT_WALL_RECESS_TILES := 1
 
 ## 盒子出怪清单允许的 type：普通怪 6 种（MonsterInjector.BASE_ENEMY_TYPES 去 boss）
 ## 外加 `elite` / `boss` —— 后两者是**身份指派**（内容），编成（数量/时机）仍由盒子给。
+## 三个 `_strong`（-强化怪）也允许点名：它们平时由 15% 概率自动升级产出
+## （见 `MonsterInjector._roll_strong_kind`），但允许盒子直接摆，
+## 好让「这一房固定放一只强化胖子」这种编排写得出来。
 const ALLOWED_BOX_TYPES: Array[String] = [
 	"fat_zombie03",
 	"melee_chaser", "ranged_caster", "summoner",
 	"exploder", "ambusher",
+	"fat_zombie03_strong", "melee_chaser_strong", "ranged_caster_strong",
 	"elite", "boss",
 ]
 

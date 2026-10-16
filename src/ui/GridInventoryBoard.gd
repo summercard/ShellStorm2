@@ -19,7 +19,7 @@ const BOARD_PADDING := 0.0
 
 var columns: int = 8
 var slot_kind := "inventory"
-var capacity: int = 24
+var capacity: int = 40
 var cells: Array[Control] = []
 var _item_visuals: Dictionary = {}
 var drop_validator: Callable

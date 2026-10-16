@@ -44,6 +44,29 @@ const BOSS_REINFORCEMENT_REQUEST_TYPES := ["ambush"]
 const SPAWN_BOX_CATALOG := preload("res://src/map/SpawnBoxCatalog.gd")
 ## 调用层波次上限：与 SPAWN_PLAN_MAX_WAVES 同口径（一次遭遇不该超过 6 波）。
 const SPAWN_BOX_MAX_STAGES := 6
+## 踩点触发式遭遇（`encounter.trigger`）允许出现的键。
+##
+## **未知键一律报错** —— 与 Director 对事件配置的口径一致：拼错字段名必须当场炸，
+## 而不是"配置了但没生效"。后者最坏的形态是 `hunt_player: ture` 拼错了，
+## 关卡照常能跑、只是那一房的怪全部站原地不动，得靠人肉发现。
+const TRIGGER_ENCOUNTER_KEYS := [
+	"trigger", "duration_sec", "start_delay_sec", "stage_advance",
+	"seal_room", "light_on_finish", "hunt_player", "hud_countdown",
+	"stages", "monster_ai",
+]
+## 触发式遭遇里取值必须是 bool 的键。
+const TRIGGER_ENCOUNTER_FLAGS := [
+	"seal_room", "light_on_finish", "hunt_player", "hud_countdown",
+]
+## 触发区形状。`circle` = 房心半径（早期写法）；`band` = **满宽带**（沿一根轴铺满房间，
+## 另一根轴上只有厚度）—— 圆的半径再大也能贴墙绕过去，带子是**不可绕过**的那个。
+const TRIGGER_SHAPES := ["circle", "band"]
+## `trigger` 子字典允许的键。**同样不许有未知键**：`from` / `width` 这类"看着像但对不上"的
+## 拼写会静默退化成默认圆，玩家照样能绕过去。
+const TRIGGER_KEYS := ["shape", "axis", "radius_m", "thickness_m", "offset_m"]
+## 带子厚度上限（米）。厚度大到吃掉半间房，就退化成"进房即触发"，
+## 与"走到带上才触发"的意图相反 —— 与圆的 60 m 上限同一取舍。
+const TRIGGER_BAND_THICKNESS_MAX_M := 20.0
 
 
 ## 校验整张关卡（L1 + 全部 L2 + 引用的全部 L3）。
@@ -1064,7 +1087,13 @@ static func _validate_spawn_boxes(
 			and not bool(room.get("authored_layout_peaceful", false))
 		)
 		var placements := _placement_entries(room, key, errors)
-		if boxes_only and hostile:
+		# 踩点触发式遭遇（`encounter.trigger`）：本房**不在进房时刷怪**，
+		# 该用什么怪由 `encounter.stages[].monsters` 直接写死，与刷怪盒无关。
+		# 所以判据 A「真敌对房必须有盒」对它不成立 —— 它本来就不该有盒。
+		var trigger_encounter := not (
+			(room.get("encounter", {}) as Dictionary).get("trigger", {}) as Dictionary
+		).is_empty()
+		if boxes_only and hostile and not trigger_encounter:
 			if placements.is_empty():
 				errors.append("spawn_boxes_missing_for_hostile_room:%s" % key)
 			if not (room.get("enemy_spawn_plan", {}) as Dictionary).is_empty():
@@ -1256,6 +1285,11 @@ static func _validate_encounter(
 		errors.append("encounter_not_object:%s" % key)
 		return errors
 	var encounter := raw as Dictionary
+	# 踩点触发式遭遇与盒子式共用 `encounter` 这一层，但 `stages` 的语义完全不同：
+	# 那边写盒子下标（`boxes`），这边写显式编成（`monsters`）。两条校验互不走对方的分支。
+	var trigger := encounter.get("trigger", {}) as Dictionary
+	if not trigger.is_empty():
+		return _validate_triggered_encounter(encounter, key)
 	if placement_count <= 0:
 		errors.append("encounter_without_placements:%s" % key)
 		return errors
@@ -1302,6 +1336,105 @@ static func _validate_encounter(
 	for index in range(placement_count):
 		if not scheduled.has(index):
 			errors.append("spawn_placement_never_scheduled:%s:%d" % [key, index])
+	return errors
+
+
+## 踩点触发式遭遇（`encounter.trigger`）的逐条校验。
+##
+## 判据：
+##   · `trigger.radius_m` 必须为正且不超过 60 m —— 触发判定是**逐帧轮询**，
+##     半径大到覆盖整房就等于「进房即出」，与「走到中间才触发」的意图相反；
+##     半径 < 1.0 则可能被玩家单帧位移穿过（与剧情位置触发同一取舍）。
+##   · `duration_sec` 必须为正；`start_delay_sec` 不得为负。
+##   · `stage_advance` 只许 `time` / `clear`（与 Director 的 `STAGE_ADVANCES` 对齐）。
+##   · 每波必须写 `monsters` 且非空；条目形如 `{type, count}`，`count > 0`。
+##   · `type` 要么是 `strong_random`（运行期抽成具体 `*_strong`），
+##     要么必须是**可授权普通怪**；`boss` 一律拒绝（走专属流程）。
+static func _validate_triggered_encounter(encounter: Dictionary, key: String) -> Array[String]:
+	var errors: Array[String] = []
+	for key_name in encounter.keys():
+		if str(key_name) not in TRIGGER_ENCOUNTER_KEYS:
+			errors.append("encounter_trigger_unknown_field:%s:%s" % [key, str(key_name)])
+	for flag_key in TRIGGER_ENCOUNTER_FLAGS:
+		if encounter.has(flag_key) and not (encounter[flag_key] is bool):
+			errors.append("encounter_trigger_flag_not_bool:%s:%s" % [key, flag_key])
+	if encounter.has("monster_ai") and not (encounter.get("monster_ai") is Dictionary):
+		errors.append("encounter_trigger_monster_ai_not_object:%s" % key)
+	var trigger := encounter.get("trigger", {}) as Dictionary
+	for trigger_key in trigger.keys():
+		if str(trigger_key) not in TRIGGER_KEYS:
+			errors.append("encounter_trigger_unknown_field:%s:%s" % [key, str(trigger_key)])
+	if trigger.has("offset_m") and not (trigger.get("offset_m") is Array):
+		errors.append("encounter_trigger_offset_invalid:%s" % key)
+	var shape := str(trigger.get("shape", "circle"))
+	if shape not in TRIGGER_SHAPES:
+		errors.append("encounter_trigger_shape_invalid:%s:%s" % [key, shape])
+	# 两套形状各自只认自己的键：带子上写 `radius_m`、或圆上写 `axis`，
+	# 都是"配了但没生效"—— 报错而不是静默取默认。
+	if shape == "band":
+		if trigger.has("radius_m"):
+			errors.append("encounter_trigger_radius_on_band:%s" % key)
+		var axis := str(trigger.get("axis", ""))
+		if axis not in ["x", "z"]:
+			errors.append("encounter_trigger_axis_invalid:%s:%s" % [key, axis])
+		var thickness := float(trigger.get("thickness_m", 0.0))
+		if thickness < 1.0 or thickness > TRIGGER_BAND_THICKNESS_MAX_M:
+			errors.append("encounter_trigger_thickness_invalid:%s:%s" % [key, str(thickness)])
+	else:
+		if trigger.has("axis") or trigger.has("thickness_m"):
+			errors.append("encounter_trigger_band_keys_on_circle:%s" % key)
+		var radius := float(trigger.get("radius_m", 6.0))
+		if radius < 1.0 or radius > 60.0:
+			errors.append("encounter_trigger_radius_invalid:%s:%s" % [key, str(radius)])
+	var duration := float(encounter.get("duration_sec", 60.0))
+	if duration <= 0.0:
+		errors.append("encounter_duration_invalid:%s:%s" % [key, str(duration)])
+	if float(encounter.get("start_delay_sec", 1.0)) < 0.0:
+		errors.append("encounter_start_delay_negative:%s" % key)
+	var advance := str(encounter.get("stage_advance", "clear"))
+	if advance not in ["time", "clear"]:
+		errors.append("encounter_stage_advance_invalid:%s:%s" % [key, advance])
+	# 触发式遭遇的房间**不该**再有盒子：两套编成来源同时存在时，
+	# 实际生效的是触发式（进房不刷），盒子会静默作废 —— 这种"写了却没生效"必须报。
+	if not (encounter.get("stages", []) is Array) or (encounter.get("stages", []) as Array).is_empty():
+		errors.append("encounter_stages_empty:%s" % key)
+		return errors
+	var stages := encounter.get("stages", []) as Array
+	if stages.size() > SPAWN_BOX_MAX_STAGES:
+		errors.append(
+			"encounter_too_many_stages:%s:%d>%d" % [key, stages.size(), SPAWN_BOX_MAX_STAGES]
+		)
+	for stage_index in range(stages.size()):
+		var stage_value: Variant = stages[stage_index]
+		if not (stage_value is Dictionary):
+			errors.append("encounter_stage_not_object:%s:%d" % [key, stage_index])
+			continue
+		var stage := stage_value as Dictionary
+		if not (stage.get("boxes", []) as Array).is_empty():
+			errors.append("encounter_trigger_stage_has_boxes:%s:%d" % [key, stage_index])
+		var raw_monsters: Variant = stage.get("monsters", [])
+		if not (raw_monsters is Array) or (raw_monsters as Array).is_empty():
+			errors.append("encounter_stage_monsters_empty:%s:%d" % [key, stage_index])
+			continue
+		for monster_value in (raw_monsters as Array):
+			if not (monster_value is Dictionary):
+				errors.append("encounter_stage_monster_not_object:%s:%d" % [key, stage_index])
+				continue
+			var monster := monster_value as Dictionary
+			var type_id := str(monster.get("type", ""))
+			if int(monster.get("count", 0)) <= 0:
+				errors.append(
+					"encounter_stage_monster_count_invalid:%s:%d:%s" % [key, stage_index, type_id]
+				)
+			if type_id == "strong_random":
+				continue
+			if type_id == "boss":
+				errors.append("encounter_stage_monster_boss_not_allowed:%s:%d" % [key, stage_index])
+				continue
+			if not MONSTER_INJECTOR.is_authorable_enemy_type(type_id):
+				errors.append(
+					"encounter_stage_monster_type_unknown:%s:%d:%s" % [key, stage_index, type_id]
+				)
 	return errors
 
 

@@ -8,7 +8,7 @@ signal item_added(slot: int, item: Dictionary)
 signal item_removed(slot: int)
 signal capacity_changed(current: int, maximum: int)
 
-const DEFAULT_CAPACITY: int = 24  # 默认8列×3行，共24个棋盘格
+const DEFAULT_CAPACITY: int = 40  # 默认8列×5行，共40个棋盘格
 const GRID_COLUMNS: int = 8
 
 class InventorySlot:

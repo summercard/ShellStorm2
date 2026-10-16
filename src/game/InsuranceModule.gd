@@ -9,15 +9,30 @@ const DEFAULT_INSURANCE_SLOTS := 16
 var _board: InventoryModule
 
 func _init(max_slots: int = DEFAULT_INSURANCE_SLOTS) -> void:
-	_board = InventoryModule.new(maxi(1, max_slots))
-	_board.inventory_changed.connect(func() -> void: insurance_changed.emit())
+	_bind_board(InventoryModule.new(maxi(1, max_slots)))
+
+## 用 WeakRef + 静态转发连接 _board 的 inventory_changed。
+## 直接 connect 捕获 self 的 lambda 会让 _board 的信号表强引用本模块，
+## 与本模块持有的 _board 构成 RefCounted 引用环；Godot 纯引用计数无环收集，
+## 两个实例都永不归零，退出时报 "2 resources still in use at exit"
+## （导出包隔离冒烟门禁因此失败）。
+static func _relay_inventory_changed(owner_ref: WeakRef) -> void:
+	var owner: Object = owner_ref.get_ref()
+	if owner != null:
+		owner.emit_signal("insurance_changed")
+
+func _bind_board(board: InventoryModule) -> void:
+	_board = board
+	_board.inventory_changed.connect(_relay_inventory_changed.bind(weakref(self)))
 
 func set_max_slots(max_s: int) -> void:
 	# Shrinking never silently removes insured property.
 	var snapshot := get_slots_snapshot()
-	_board = InventoryModule.new(maxi(1, max_s))
+	var board := InventoryModule.new(maxi(1, max_s))
+	_board = board
 	restore_slots_snapshot(snapshot)
-	_board.inventory_changed.connect(func() -> void: insurance_changed.emit())
+	# 连接时机保持在 restore 之后，避免恢复过程多冒一次 insurance_changed。
+	board.inventory_changed.connect(_relay_inventory_changed.bind(weakref(self)))
 	insurance_changed.emit()
 
 func get_max_slots() -> int:

@@ -26,7 +26,7 @@ signal backpack_slot_equip_requested(source_slot_index: int)
 signal equipped_backpack_to_inventory_requested(target_slot_index: int)
 signal equipped_backpack_drop_requested()
 
-@export var inventory_capacity: int = 24
+@export var inventory_capacity: int = 40
 @export var insurance_capacity: int = 16
 
 ## 独立模式：是否使用自己创建的Panel；false时依赖父节点已有Grid
@@ -88,7 +88,7 @@ var close_button: Button
 var _drag_cancelled := false
 
 const SLOT_SIZE := 78
-const BASE_INVENTORY_CAPACITY := 24
+const BASE_INVENTORY_CAPACITY := 40
 const SLOT_SCENE: PackedScene = preload("res://scenes/ItemSlot.tscn")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 const GRID_INVENTORY_BOARD_SCRIPT: Script = preload("res://src/ui/GridInventoryBoard.gd")
@@ -385,7 +385,7 @@ func _setup_standalone_panels() -> void:
 	backpack_row.add_child(equipment_backpack_slot)
 	equipment_backpack_label = Label.new()
 	equipment_backpack_label.name = "BackpackEquipmentLabel"
-	equipment_backpack_label.text = "未装备\n基础容量 24格"
+	equipment_backpack_label.text = "未装备\n基础容量 %d格" % BASE_INVENTORY_CAPACITY
 	equipment_backpack_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	equipment_backpack_label.add_theme_font_size_override("font_size", 13)
 	equipment_backpack_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
