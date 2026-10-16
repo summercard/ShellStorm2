@@ -357,7 +357,7 @@ func _build_interface() -> void:
 	title.text = "基地衣柜  /  AVATAR LOADOUT"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 26)
-	title.add_theme_color_override("font_color", Color(0.48, 0.94, 1.0))
+	UIStyleFactory.apply_prism_label(title, "value", 5, 26)
 	header_row.add_child(title)
 	var close_button := Button.new()
 	# 命名成 CloseButton：UiMenuFocus 按这个名字挑「打开即被 A 触发的安全默认焦点」。
@@ -382,7 +382,7 @@ func _build_interface() -> void:
 	current_title.text = "当前穿搭"
 	current_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	current_title.add_theme_font_size_override("font_size", 21)
-	current_title.add_theme_color_override("font_color", Color(0.44, 0.88, 0.98))
+	UIStyleFactory.apply_prism_label(current_title, "value", 3, 18)
 	current_box.add_child(current_title)
 	for slot_id in Catalog.SLOT_ORDER:
 		var category := Button.new()
@@ -403,7 +403,7 @@ func _build_interface() -> void:
 	center_hint.text = "实际角色预览 · 纯表现装配"
 	center_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	center_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	center_hint.add_theme_color_override("font_color", Color(0.66, 0.88, 0.94))
+	UIStyleFactory.apply_prism_label(center_hint, "faint", 2, 14)
 	center_hint.add_theme_font_size_override("font_size", 16)
 	root.add_child(center_hint)
 
@@ -421,7 +421,7 @@ func _build_interface() -> void:
 	_options_title = Label.new()
 	_options_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_options_title.add_theme_font_size_override("font_size", 21)
-	_options_title.add_theme_color_override("font_color", Color(0.44, 0.92, 1.0))
+	UIStyleFactory.apply_prism_label(_options_title, "value", 3, 18)
 	options_box.add_child(_options_title)
 	var separator := HSeparator.new()
 	options_box.add_child(separator)
@@ -440,10 +440,10 @@ func _build_interface() -> void:
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_status_label.add_theme_color_override("font_color", Color(0.62, 0.82, 0.88))
+	UIStyleFactory.apply_prism_label(_status_label, "faint", 1, 14)
 	options_box.add_child(_status_label)
 
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 
 
 func _refresh_current_loadout() -> void:
@@ -455,7 +455,9 @@ func _refresh_current_loadout() -> void:
 		var button := _current_labels.get(slot_id) as Button
 		if button != null:
 			button.text = "  %s\n  %s" % [Catalog.get_slot_label(slot_id), Catalog.get_variant_label(variant_id)]
-			button.add_theme_color_override("font_color", Catalog.get_variant_color(variant_id).lightened(0.28))
+			button.add_theme_color_override(
+				"font_color", UIStyleFactory.prism_normalize_color(Catalog.get_variant_color(variant_id).lightened(0.28))
+			)
 
 
 func _refresh_category_buttons() -> void:
@@ -520,7 +522,7 @@ func _refresh_option_grid() -> void:
 		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		label.add_theme_font_size_override("font_size", 14)
-		label.add_theme_color_override("font_color", Color(0.86, 0.96, 0.98))
+		UIStyleFactory.apply_prism_label(label, "value", 2, 14)
 		content.add_child(label)
 
 
@@ -536,12 +538,17 @@ func _create_variant_preview(slot_id: String, variant_id: String) -> Node3D:
 	return avatar
 
 
+## 棱镜线框面板：深蓝半透 + 1px 白线；width >= 2 视为"强调"（提亮线 + 加厚底衬）。
+## **content_margin 与旧版逐值一致**，因此换皮不挪动任何内容。
 func _panel_style(border: Color, background: Color, width: int) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = background
-	style.border_color = border
-	style.set_border_width_all(width)
-	style.set_corner_radius_all(5)
+	var emphasis := width >= 2
+	var style := UIStyleFactory.make_prism_surface(not emphasis)
+	style.set_border_width_all(2 if emphasis else 1)
+	style.border_color = (
+		UIStyleFactory.prism_normalize_color(border) if emphasis else Color(1.0, 1.0, 1.0, 0.34)
+	)
+	style.bg_color.a = 0.62 if emphasis else 0.42
+	style.set_corner_radius_all(2)
 	style.content_margin_left = 12.0
 	style.content_margin_right = 12.0
 	style.content_margin_top = 10.0

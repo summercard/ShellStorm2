@@ -305,7 +305,13 @@ func _build() -> void:
 	_panel = PanelContainer.new()
 	_panel.name = "Panel"
 	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_panel.add_theme_stylebox_override("panel", UIStyleFactory.make_tactical_panel())
+	# 叙事底栏：棱镜模态面板（冷蓝半透 + 1px 次级白线，全方角）。内容边距与旧战术面板逐值一致。
+	var dialogue_panel_style := UIStyleFactory.make_prism_panel(true, 0.62)
+	dialogue_panel_style.content_margin_left = 14.0
+	dialogue_panel_style.content_margin_right = 14.0
+	dialogue_panel_style.content_margin_top = 10.0
+	dialogue_panel_style.content_margin_bottom = 10.0
+	_panel.add_theme_stylebox_override("panel", dialogue_panel_style)
 	_panel.anchor_left = 0.0
 	_panel.anchor_right = 1.0
 	_panel.anchor_top = 1.0
@@ -321,20 +327,20 @@ func _build() -> void:
 	column.add_theme_constant_override("separation", 6)
 	_panel.add_child(column)
 
-	_speaker_label = UIStyleFactory.make_outline_label("", UIPalette.NEON_CYAN)
+	_speaker_label = UIStyleFactory.make_outline_label("", UIPalette.PRISM_LABEL)
 	_speaker_label.name = "Speaker"
-	_speaker_label.add_theme_font_size_override("font_size", 15)
+	UIStyleFactory.apply_prism_label(_speaker_label, "label", 3, 15)
 	column.add_child(_speaker_label)
 
-	_text_label = UIStyleFactory.make_outline_label("", UIPalette.TEXT_PRIMARY)
+	_text_label = UIStyleFactory.make_outline_label("", UIPalette.PRISM_TEXT)
 	_text_label.name = "Text"
-	_text_label.add_theme_font_size_override("font_size", 19)
+	UIStyleFactory.apply_prism_label(_text_label, "value", 1, 19)
 	_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(_text_label)
 
-	_hint_label = UIStyleFactory.make_outline_label("[回车] 继续", UIPalette.TEXT_SECONDARY)
+	_hint_label = UIStyleFactory.make_outline_label("[回车] 继续", UIPalette.PRISM_TEXT_FAINT)
 	_hint_label.name = "Hint"
-	_hint_label.add_theme_font_size_override("font_size", 13)
+	UIStyleFactory.apply_prism_label(_hint_label, "faint", 1, 13)
 	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	column.add_child(_hint_label)

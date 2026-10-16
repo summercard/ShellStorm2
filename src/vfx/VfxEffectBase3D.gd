@@ -93,3 +93,9 @@ func follow_forward() -> Vector3:
 	if dir.length_squared() < 0.0001:
 		return Vector3.FORWARD
 	return dir.normalized()
+
+
+## Stop a caller-owned sustained effect through the normal retirement signal.
+func finish() -> void:
+	if _active:
+		_retire()

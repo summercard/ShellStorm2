@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sofunny Image"
+  short_description: "通过 Sofunny-AIKey 调用 Gemini、GPT Image、Qwen Image 或 Seedream 生成图片"
+  default_prompt: "Use $sofunny-image to generate or edit an image through the Sofunny-AIKey platform, reading ~/.sofunny/aikey-config.json first and selecting the correct Gemini, OpenAI Images, or Seedream protocol adapter from the model name."

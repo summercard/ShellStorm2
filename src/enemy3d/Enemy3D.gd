@@ -16,6 +16,7 @@ const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 const VfxPool3D = preload("res://src/vfx/VfxPool3D.gd")
 const VfxEffectBase3D = preload("res://src/vfx/VfxEffectBase3D.gd")
+const VfxHealNumber3D = preload("res://src/vfx/VfxHealNumber3D.gd")
 const DAMAGE_NUMBER_SCRIPT := preload("res://src/fx/CombatDamageNumber3D.gd")
 const ILLUMINATION_SCRIPT := preload("res://src/enemy3d/EnemyIllumination3D.gd")
 ## 敌人分组名的唯一来源。Player3D/Projectile3D/PlayerVision3D 等按名字扫组，
@@ -1485,7 +1486,10 @@ func receive_healing(amount: int) -> void:
 		return
 	current_hp = mini(max_hp, current_hp + maxi(0, amount))
 	health_changed.emit(self, current_hp, max_hp)
-	_spawn_effect("VFX-DAMAGE-NUMBER-3D", 0.52)
+	# 治疗必须走**治疗**飘字（FX02-02）。历史上这里借的是 VFX-DAMAGE-NUMBER-3D 且不带
+	# context.text_value ⇒ 回血时会飘一个**红字 "0"**，而 VFX-HEAL-NUMBER-3D 全工程零调用方
+	# （2026-09-21 特效审计 P0-1 同源问题）。
+	_spawn_heal_number(amount)
 
 
 func _explode() -> void:
@@ -1629,7 +1633,8 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 	_last_hit_direction = hit_direction
 	_hit_knockback = maxf(0.0, hit_knockback)
 	avatar.flash_hit()
-	_spawn_effect("VFX-DAMAGE-NUMBER-3D", 0.72)
+	# 只留一处飘字。历史上这里还有一行 `_spawn_effect("VFX-DAMAGE-NUMBER-3D", 0.72)`
+	# 与下一行双发：它不带 context.text_value ⇒ 飘出一个 "0"（2026-09-21 审计 P0-1）。
 	_spawn_damage_number(applied, critical)
 	if current_hp <= 0:
 		_die()
@@ -1712,14 +1717,14 @@ func apply_melee_stagger(duration: float) -> void:
 	transition_to("stagger")
 
 
-func apply_melee_knockback(direction: Vector3, strength: float, duration := 0.20) -> void:
+func apply_melee_knockback(direction: Vector3, strength: float, duration := 0.20, strength_cap := 10.5) -> void:
 	if ai_state == "dead":
 		return
 	var planar := direction
 	planar.y = 0.0
 	if planar.length_squared() <= 0.001:
 		return
-	_external_velocity = planar.normalized() * clampf(strength, 0.5, 10.5)
+	_external_velocity = planar.normalized() * clampf(strength, 0.5, clampf(strength_cap,10.5,20.0))
 	_external_timer = clampf(duration, 0.08, 0.42)
 
 
@@ -3055,12 +3060,28 @@ func _spawn_effect(asset_id: StringName, size: float) -> void:
 		effect.activate(world_position, color, size)
 
 
+## 飘字逐发随机幅度（业主 2026-10-16：「不要太整齐，带一些随机」）。
+##
+## 为什么随机必须活在**调用方**而不是特效脚本：FX02-01 / FX02-02 是被逐帧断言驱动的对象
+## （验收与视觉探针都手动步进到固定时刻再断言姿态 / 高度），把 `randf()` 埋进 `_on_activate`
+## 会让那些断言变成随机红。⇒ 随机在本文件生成、经 context 传给特效；
+##    特效对同一 context **逐位可复现**，源码里不出现 `randf()`。
+##    这条纪律与 FX01-06 抛壳随机化（vfx skill §5.5.3）完全同源。
+##
+## 每项都是"把随机化之前特效里的那个固定点摊成一团"。漂移用 Vector2(X 幅度, Z 幅度)：
+## 只沿镜头水平面散布，Y 由上升距离负责。
+const DMG_NUM_SPAWN_JITTER := Vector3(0.16, 0.06, 0.16)
+const DMG_NUM_RISE_SCALE := Vector2(0.85, 1.30)
+const DMG_NUM_HORIZONTAL_DRIFT := Vector2(0.22, 0.22)
+const DMG_NUM_POP_SCALE := Vector2(1.28, 1.48)
+const DMG_NUM_DURATION_SCALE := Vector2(0.90, 1.18)
+const HEAL_NUMBER_PREFIX := "+"
+
+
 func _spawn_damage_number(amount: int, critical: bool) -> void:
 	if amount <= 0 or get_tree().current_scene == null:
 		return
-	var footprint := EnemyAvatar3D.get_footprint_profile(enemy_kind)
-	var world_height := float(footprint.get("height", 1.3)) * maxf(scale.y, 0.01)
-	var spawn_position := global_position + Vector3.UP * (world_height + 0.72)
+	var spawn_position := _damage_number_spawn_position()
 	# 伤害颜色：普通=红 #ff4444；暴击=金 #ffcc33
 	var dmg_color: Color = Color("ffcc33") if critical else Color("ff4444")
 	# FX02-01 伤害飘字：走 VfxPool3D 新体系
@@ -3068,7 +3089,7 @@ func _spawn_damage_number(amount: int, critical: bool) -> void:
 	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
 		(vfx_pools[0] as VfxPool3D).acquire(
 			VfxPool3D.FX02_DAMAGE_NUMBER, spawn_position, dmg_color, 1.0,
-			{"text_value": str(amount), "critical": critical}
+			_damage_number_context(amount, critical, str(amount))
 		)
 		return
 	# 兼容旧 DAMAGE_NUMBER_SCRIPT（待 14.6 §6 迁移完成后删除）
@@ -3076,3 +3097,54 @@ func _spawn_damage_number(amount: int, critical: bool) -> void:
 	get_tree().current_scene.add_child(damage_number)
 	damage_number.global_position = spawn_position
 	damage_number.call("configure", amount, critical)
+
+
+## 治疗飘字（FX02-02）。与伤害飘字共用同一套随机幅度和出生点口径，
+## 只有颜色（治疗绿，由特效自己定，不由调用方指定）与文本（"+N"）不同。
+func _spawn_heal_number(amount: int) -> void:
+	if amount <= 0 or get_tree().current_scene == null:
+		return
+	var spawn_position := _damage_number_spawn_position()
+	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
+	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
+		(vfx_pools[0] as VfxPool3D).acquire(
+			VfxPool3D.FX02_HEAL_NUMBER, spawn_position, VfxHealNumber3D.HEAL_COLOR, 1.0,
+			_damage_number_context(amount, false, HEAL_NUMBER_PREFIX + str(amount))
+		)
+		return
+	# 池不可用时退化为兜底脚本 —— 它画不出治疗绿，但至少把数值显示出来（不静默）。
+	var heal_number := DAMAGE_NUMBER_SCRIPT.new() as Node3D
+	get_tree().current_scene.add_child(heal_number)
+	heal_number.global_position = spawn_position
+	heal_number.call("configure", amount, false)
+
+
+## 飘字出生点：怪物头顶。按体型轮廓高度 × 当前根缩放换算，与血条/吼叫图标同一口径。
+func _damage_number_spawn_position() -> Vector3:
+	var footprint := EnemyAvatar3D.get_footprint_profile(enemy_kind)
+	var world_height := float(footprint.get("height", 1.3)) * maxf(scale.y, 0.01)
+	return global_position + Vector3.UP * (world_height + 0.72)
+
+
+## 逐发随机 context。键的口径见 `src/vfx/VfxDamageNumber3D.gd` 头注。
+## `magnitude` 必须单独传：特效的字号 / 描边分级读它，而不是去解析 `text_value`
+## —— 解析字符串会让 "+12" 这类带前缀的文本被分错档。
+func _damage_number_context(amount: int, critical: bool, text: String) -> Dictionary:
+	return {
+		"text_value": text,
+		"magnitude": amount,
+		"critical": critical,
+		"spawn_offset": Vector3(
+			randf_range(-DMG_NUM_SPAWN_JITTER.x, DMG_NUM_SPAWN_JITTER.x),
+			randf_range(-DMG_NUM_SPAWN_JITTER.y, DMG_NUM_SPAWN_JITTER.y),
+			randf_range(-DMG_NUM_SPAWN_JITTER.z, DMG_NUM_SPAWN_JITTER.z)
+		),
+		"rise_scale": randf_range(DMG_NUM_RISE_SCALE.x, DMG_NUM_RISE_SCALE.y),
+		"drift": Vector3(
+			randf_range(-DMG_NUM_HORIZONTAL_DRIFT.x, DMG_NUM_HORIZONTAL_DRIFT.x),
+			0.0,
+			randf_range(-DMG_NUM_HORIZONTAL_DRIFT.y, DMG_NUM_HORIZONTAL_DRIFT.y)
+		),
+		"pop_scale": randf_range(DMG_NUM_POP_SCALE.x, DMG_NUM_POP_SCALE.y),
+		"duration_scale": randf_range(DMG_NUM_DURATION_SCALE.x, DMG_NUM_DURATION_SCALE.y),
+	}

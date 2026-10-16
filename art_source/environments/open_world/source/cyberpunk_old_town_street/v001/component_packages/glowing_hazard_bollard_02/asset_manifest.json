@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.component_package.asset_manifest",
+  "schema_version": 1,
+  "component_id": "comp_glowing_hazard_bollard_02",
+  "slug": "glowing_hazard_bollard_02",
+  "display_name": "街角红橙条纹发光警示防撞柱_02",
+  "category": "prop",
+  "source_blend": "env_cyberpunk_old_town_street_source_v001.blend",
+  "output_collection": "资产包_glowing_hazard_bollard_02",
+  "pivot_rule": "bottom_center_z0",
+  "forward_axis": "-Y",
+  "up_axis": "+Z",
+  "dimensions_m": [
+    0.45,
+    0.45,
+    1.35
+  ],
+  "mesh_objects": [
+    "街角红橙条纹发光警示防撞柱_02_UI灯光自发光",
+    "街角红橙条纹发光警示防撞柱_02_主体"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "polygon_count": 70
+}

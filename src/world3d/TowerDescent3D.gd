@@ -4430,52 +4430,36 @@ func _on_initial_loop_entry_physically_entered(room: DungeonRoom3D) -> void:
 func _show_initial_loop_retreat_warning() -> void:
 	if _initial_loop_retreat_overlay != null and is_instance_valid(_initial_loop_retreat_overlay):
 		return
-	var overlay := Control.new()
+	# 「棱镜线框」撤退警戒卡：冷蓝压暗 + 四角括号模态 + 黑徽章警戒头 + 内嵌规则说明白线框；
+	# 左侧"留在 98F"是实心近白高对比安全钮（默认焦点），右侧"确认撤退"是平红危险钮。
+	var spec := UIStyleFactory.make_prism_confirm_modal(
+		"放弃 98–95F Boss 大循环？",
+		"RETREAT WARNING",
+		"确认撤退后，背包内全部物品以及主武器、副武器都会永久丢失。\n保险格物资按保险规则安全保留；此操作不可撤销。",
+		[
+			UIStyleFactory.prism_button_spec("CancelButton", "取消 · 留在98F", "primary", 250.0, 54.0),
+			UIStyleFactory.prism_button_spec("ConfirmButton", "确认撤退 · 全部丢失", "danger", 270.0, 54.0),
+		],
+		UIPalette.PRISM_DANGER,
+		Vector2(760, 400),
+		0.70
+	)
+	var overlay := spec["overlay"] as Control
 	overlay.name = "InitialLoopRetreatWarning"
-	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	overlay.z_index = 920
-	var dim := ColorRect.new()
-	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	dim.color = Color(0.01, 0.0, 0.0, 0.78)
-	dim.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.add_child(dim)
-	var panel := PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.position = Vector2(-310, -145)
-	panel.custom_minimum_size = Vector2(620, 290)
-	panel.add_theme_stylebox_override("panel", _make_hud_style(Color(1.0, 0.24, 0.18), Color(0.05, 0.008, 0.010, 0.98), 3))
-	overlay.add_child(panel)
-	var margin := _make_margin(24, 22, 24, 22)
-	panel.add_child(margin)
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 14)
-	margin.add_child(box)
-	var title := _make_hud_label("放弃 98–95F Boss 大循环？", 24, Color(1.0, 0.36, 0.28))
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(title)
-	var detail := _make_hud_label("确认撤退后，背包内全部物品以及主武器、副武器都会永久丢失。\n保险格按保险规则保留；此操作不可撤销。", 15, Color(0.94, 0.88, 0.86))
-	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(detail)
-	var buttons := HBoxContainer.new()
-	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	buttons.add_theme_constant_override("separation", 18)
-	box.add_child(buttons)
-	var cancel := Button.new()
-	cancel.text = "取消 · 留在98F"
-	cancel.custom_minimum_size = Vector2(190, 48)
-	cancel.pressed.connect(_cancel_initial_loop_retreat)
-	buttons.add_child(cancel)
-	var confirm := Button.new()
-	confirm.text = "确认撤退 · 全部丢失"
-	confirm.custom_minimum_size = Vector2(220, 48)
-	confirm.pressed.connect(_confirm_initial_loop_retreat)
-	buttons.add_child(confirm)
+	var panel := spec["panel"] as Control
+	var buttons := spec["buttons"] as Array
+	var cancel := buttons[0] as Button
+	var confirm := buttons[1] as Button
+	UIStyleFactory.attach_prism_keycap(cancel, "ESC")
 	$HUD.add_child(overlay)
 	_initial_loop_retreat_overlay = overlay
+	cancel.pressed.connect(_cancel_initial_loop_retreat)
+	confirm.pressed.connect(_confirm_initial_loop_retreat)
+	UIFX.pop_in_modal(panel)
 	cancel.grab_focus()
 	_sync_player_input_lock()
+
 
 
 func _cancel_initial_loop_retreat() -> void:
@@ -4542,57 +4526,35 @@ func _show_expedition_exit_warning() -> void:
 	# 首门开启后经重新上线回到 98F 安全房的玩家走的是同一个入口，故同样生效。
 	if _expedition_exit_overlay != null and is_instance_valid(_expedition_exit_overlay):
 		return
-	var overlay := Control.new()
-	overlay.name = "ExpeditionExitWarning"
-	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 920
-	var dim := ColorRect.new()
-	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	dim.color = Color(0.01, 0.0, 0.0, 0.78)
-	dim.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.add_child(dim)
-	var panel := PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.position = Vector2(-310, -145)
-	panel.custom_minimum_size = Vector2(620, 290)
-	panel.add_theme_stylebox_override("panel", _make_hud_style(Color(1.0, 0.24, 0.18), Color(0.05, 0.008, 0.010, 0.98), 3))
-	overlay.add_child(panel)
-	var margin := _make_margin(24, 22, 24, 22)
-	panel.add_child(margin)
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 14)
-	margin.add_child(box)
-	var title := _make_hud_label("退出本次独立副本行动？", 24, Color(1.0, 0.36, 0.28))
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(title)
-	var detail := _make_hud_label(
+	var spec := UIStyleFactory.make_prism_confirm_modal(
+		"退出本次独立副本行动？",
+		"EXPEDITION ABORT",
 		"确认后，背包内全部物品以及主武器、副武器都会永久丢失。\n"
-		+ "保险格按保险规则保留；你将立即返回%s，本次行动结束且不可撤销。" % _expedition_return_label(),
-		15,
-		Color(0.94, 0.88, 0.86)
+		+ "保险格按保险规则安全保留；你将立即返回%s，本次行动结束且不可撤销。" % _expedition_return_label(),
+		[
+			UIStyleFactory.prism_button_spec("CancelButton", "取消 · 留在副本", "primary", 250.0, 54.0),
+			UIStyleFactory.prism_button_spec("ConfirmButton", "确认退出 · 全部丢失", "danger", 270.0, 54.0),
+		],
+		UIPalette.PRISM_DANGER,
+		Vector2(780, 404),
+		0.70
 	)
-	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(detail)
-	var buttons := HBoxContainer.new()
-	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	buttons.add_theme_constant_override("separation", 18)
-	box.add_child(buttons)
-	var cancel := Button.new()
-	cancel.text = "取消 · 留在副本"
-	cancel.custom_minimum_size = Vector2(190, 48)
-	cancel.pressed.connect(_cancel_expedition_exit)
-	buttons.add_child(cancel)
-	var confirm := Button.new()
-	confirm.text = "确认退出 · 全部丢失"
-	confirm.custom_minimum_size = Vector2(220, 48)
-	confirm.pressed.connect(_confirm_expedition_exit)
-	buttons.add_child(confirm)
+	var overlay := spec["overlay"] as Control
+	overlay.name = "ExpeditionExitWarning"
+	overlay.z_index = 920
+	var panel := spec["panel"] as Control
+	var buttons := spec["buttons"] as Array
+	var cancel := buttons[0] as Button
+	var confirm := buttons[1] as Button
+	UIStyleFactory.attach_prism_keycap(cancel, "ESC")
 	$HUD.add_child(overlay)
 	_expedition_exit_overlay = overlay
+	cancel.pressed.connect(_cancel_expedition_exit)
+	confirm.pressed.connect(_confirm_expedition_exit)
+	UIFX.pop_in_modal(panel)
 	cancel.grab_focus()
 	_sync_player_input_lock()
+
 
 
 func _cancel_expedition_exit() -> void:
@@ -4813,35 +4775,33 @@ func activate_arrival_between_for_test(upper_room_id: String, lower_room_id: Str
 func _show_airlock_warning() -> void:
 	if _airlock_warning_overlay != null and is_instance_valid(_airlock_warning_overlay):
 		return
-	var panel := PanelContainer.new()
-	panel.name = "SegmentAirlockWarning"
-	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	panel.custom_minimum_size = Vector2(520.0, 220.0)
-	var box := VBoxContainer.new()
-	panel.add_child(box)
-	var title := Label.new()
-	title.text = "跨段隔离确认"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(title)
-	var detail := Label.new()
-	detail.text = "进入隔离间后，未拾取物将永久丢失；旧段房间、敌人和碰撞将卸载。\n默认取消，确认后才打开下端门。"
-	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(detail)
-	var buttons := HBoxContainer.new()
-	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	box.add_child(buttons)
-	var cancel_button := Button.new()
-	cancel_button.text = "取消"
+	var spec := UIStyleFactory.make_prism_confirm_modal(
+		"跨段隔离确认",
+		"AIRLOCK SEAL",
+		"进入隔离间后，未拾取物将永久丢失；旧段房间、敌人和碰撞将卸载。\n默认取消，确认后才打开下端门。",
+		[
+			UIStyleFactory.prism_button_spec("CancelButton", "取消", "primary", 220.0, 52.0),
+			UIStyleFactory.prism_button_spec("ConfirmButton", "确认进入", "warn", 220.0, 52.0),
+		],
+		UIPalette.PRISM_WARN,
+		Vector2(720, 386),
+		0.62
+	)
+	var overlay := spec["overlay"] as Control
+	overlay.name = "SegmentAirlockWarning"
+	overlay.z_index = 900
+	var panel := spec["panel"] as Control
+	var buttons := spec["buttons"] as Array
+	var cancel_button := buttons[0] as Button
+	var confirm_button := buttons[1] as Button
+	UIStyleFactory.attach_prism_keycap(cancel_button, "ESC")
+	$HUD.add_child(overlay)
+	_airlock_warning_overlay = overlay
 	cancel_button.pressed.connect(cancel_airlock_transition)
-	buttons.add_child(cancel_button)
-	var confirm_button := Button.new()
-	confirm_button.text = "确认进入"
 	confirm_button.pressed.connect(confirm_airlock_transition)
-	buttons.add_child(confirm_button)
-	$HUD.add_child(panel)
-	_airlock_warning_overlay = panel
+	UIFX.pop_in_modal(panel)
 	cancel_button.grab_focus()
+
 
 
 func cancel_airlock_transition() -> void:
@@ -6233,50 +6193,44 @@ func _install_tower_hud() -> void:
 	margin.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	margin.offset_left = 14.0
 	margin.offset_top = 176.0
-	margin.offset_right = 270.0
-	margin.offset_bottom = 290.0
+	margin.offset_right = 278.0
+	margin.offset_bottom = 294.0
 	$HUD.add_child(margin)
 	var panel := PanelContainer.new()
 	margin.add_child(panel)
-	# 2026-09-28 主人要求：任务引导卡去掉背板与描边，文字直接浮在实景上。
-	# 内容边距沿用原值 ⇒ 四行文字的位置一字不动，只是背后的深色底与青边框消失。
-	# 塔楼模式（「楼顶 · 100F」那一套文案）与本卡共用同一处口径。
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0, 0, 0, 0)
-	style.border_color = Color(0, 0, 0, 0)
-	style.set_border_width_all(0)
-	style.set_corner_radius_all(0)
-	style.content_margin_left = 11.0
-	style.content_margin_right = 11.0
+	# 2026-10-17 主人要求：引导卡的背框（底衬 + 四角括号）撤掉。只留左侧 2px 白强调竖条 ——
+	# 那是「引用块」式分组线，宽仅 2px、不成框，用来表明这几行属于同一段引导信息；
+	# 文字本身带 4px 描边，去掉底衬后压在实景上仍然读得出。
+	var style := _make_bare_hud_style()
+	style.border_width_left = 2
+	style.border_color = Color(1.0, 1.0, 1.0, 0.78)
+	style.content_margin_left = 10.0
+	style.content_margin_right = 12.0
 	style.content_margin_top = 8.0
 	style.content_margin_bottom = 8.0
 	panel.add_theme_stylebox_override("panel", style)
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 2)
+	vbox.add_theme_constant_override("separation", 3)
 	panel.add_child(vbox)
 	_tower_floor_label = Label.new()
-	_tower_floor_label.add_theme_font_size_override("font_size", 19)
-	_tower_floor_label.add_theme_color_override("font_color", Color(0.56, 0.93, 1.0))
+	UIStyleFactory.apply_prism_label(_tower_floor_label, "value", 3, 19)
 	vbox.add_child(_tower_floor_label)
 	_tower_target_label = Label.new()
-	_tower_target_label.add_theme_font_size_override("font_size", 12)
 	_tower_target_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	UIStyleFactory.apply_prism_label(_tower_target_label, "label", 1, 12)
 	vbox.add_child(_tower_target_label)
 	_tower_elevator_label = Label.new()
-	_tower_elevator_label.add_theme_font_size_override("font_size", 11)
-	_tower_elevator_label.add_theme_color_override("font_color", Color(0.72, 0.82, 0.88))
+	UIStyleFactory.apply_prism_label(_tower_elevator_label, "faint", 1, 11)
 	vbox.add_child(_tower_elevator_label)
 	_tower_base_currency_label = Label.new()
-	_tower_base_currency_label.add_theme_font_size_override("font_size", 12)
-	_tower_base_currency_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.28))
+	UIStyleFactory.apply_prism_label(_tower_base_currency_label, "warn", 2, 13)
 	vbox.add_child(_tower_base_currency_label)
-	# 背板撤掉后文字直接压在实景上：远征 01 的浅色天花板/桥体下，灰蓝的操作行
-	# （「M 路线地图…」）会与背景同明度而看不清。这里只加文字描边 —— 不是背板，
-	# 不改布局、不占像素、不改颜色；深色与浅色背景都能读。
 	for label in [
 		_tower_floor_label, _tower_target_label,
 		_tower_elevator_label, _tower_base_currency_label,
 	]:
+		# 撤掉背板后，描边是唯一的可读性保障。口径与 `Dungeon3D._outline_labels` 对齐
+		# （纯黑 0.85 / 5px）—— 楼顶白墙 + 云海天空上，4px 会明显发虚。
 		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
 		label.add_theme_constant_override("outline_size", 5)
 
@@ -6285,24 +6239,26 @@ func _install_world_time_hud() -> void:
 	if _world_time_label != null:
 		return
 	var parent_control := _reference_hud_root if _reference_hud_root != null else $HUD
-	# 2026-09-28 主人要求：上面这块「时间」只去掉背板、保留文字（下面那块本局计时栏
-	# 是整套去掉，见 Dungeon3D._build_reference_main_hud 的 SessionTimerPanel）。
-	# 世界时间面板只有一层背板（StyleBox），没有 _add_neon_frame 的四角括号，
-	# 所以换全透明外壳即净。_make_bare_hud_panel 由 Dungeon3D 继承而来，与战局 HUD 同口径。
 	var panel := _make_bare_hud_panel()
 	panel.name = "WorldDateTimeHUD"
-	# 2026-09-28 主人要求：世界时间从计时栏下方（原 offset_top 366）挪到右上。
-	# 右上这块 y 44..318 原本是雷达圆盘占的，雷达已按要求隐藏 ⇒ 这里正好空出来，
-	# 时间条落在楼层标签（y 12..38）正下方，不与其重叠；计时栏现已隐藏，更无冲突。
+	# 2026-10-17 主人要求：时间读数撤掉背框，只留文字。内边距原样保留，读数不会贴边；
+	# 该 Label 自带 4px 描边，落在实景上仍可读。
+	var clock_style := _make_bare_hud_style()
+	clock_style.content_margin_left = 10.0
+	clock_style.content_margin_right = 10.0
+	clock_style.content_margin_top = 4.0
+	clock_style.content_margin_bottom = 4.0
+	panel.add_theme_stylebox_override("panel", clock_style)
 	_anchor_control(panel, 1.0, 0.0, 1.0, 0.0, -292, 48, -18, 98)
 	parent_control.add_child(panel)
 	_world_time_label = _make_hud_label(
-		"2075-01-01  09:00", 14, Color(0.72, 0.94, 1.0)
+		"2075-01-01  09:00", 16, Color(0.86, 0.96, 1.0)
 	)
 	_world_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_world_time_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(_world_time_label)
-	# 撤背板后这行浅青字压在天花板/桥体上会同明度，描边加强到与其它无背板面板同级（5）。
+	# 加字距 —— 参考图里时间这类读数也是"宽字距技术排印"
+	UIStyleFactory.apply_prism_label(_world_time_label, "value", 2, 16)
 	_world_time_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
 	_world_time_label.add_theme_constant_override("outline_size", 5)
 	if (
@@ -6311,6 +6267,7 @@ func _install_world_time_hud() -> void:
 	):
 		GameTimeManager.minute_changed.connect(_on_world_time_minute_changed)
 	_refresh_world_time_hud()
+
 
 
 func _on_world_time_minute_changed(snapshot: Dictionary) -> void:
@@ -6558,7 +6515,8 @@ func _open_elevator_panel() -> void:
 	_elevator_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	$HUD.add_child(_elevator_overlay)
 	var dim := ColorRect.new()
-	dim.color = Color(0.0, 0.0, 0.0, 0.68)
+	# 冷蓝压暗（棱镜），非纯黑。
+	dim.color = Color(UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.70)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_elevator_overlay.add_child(dim)
 	var panel := PanelContainer.new()
@@ -6568,29 +6526,26 @@ func _open_elevator_panel() -> void:
 	panel.offset_right = 230.0
 	panel.offset_bottom = 235.0
 	_elevator_overlay.add_child(panel)
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.025, 0.055, 0.072, 0.98)
-	style.border_color = Color(0.20, 0.86, 0.92)
-	style.set_border_width_all(3)
-	style.set_corner_radius_all(12)
+	# 棱镜模态面板：冷蓝加厚底衬 + 四角括号（一屏唯一的"选框"），全方角零投影。
+	var style := UIStyleFactory.make_prism_panel(true, 0.72)
 	style.content_margin_left = 28.0
 	style.content_margin_right = 28.0
 	style.content_margin_top = 24.0
 	style.content_margin_bottom = 24.0
 	panel.add_theme_stylebox_override("panel", style)
+	UIStyleFactory.attach_prism_bracket_frame(panel, "solid", 26.0, 2.0, 0.0)
 	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 10)
 	panel.add_child(vbox)
 	var title := Label.new()
 	title.text = "塔楼电梯"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 30)
-	title.add_theme_color_override("font_color", Color(0.60, 0.96, 1.0))
+	UIStyleFactory.apply_prism_label(title, "value", 5, 26)
 	vbox.add_child(title)
 	var hint := Label.new()
 	hint.text = "只能前往99层与已经亲自点亮的楼层"
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint.add_theme_font_size_override("font_size", 15)
+	UIStyleFactory.apply_prism_label(hint, "faint", 1, 13)
 	vbox.add_child(hint)
 	for floor_number in _sorted_unlocked_elevator_floors():
 		var button := Button.new()
@@ -6601,6 +6556,7 @@ func _open_elevator_panel() -> void:
 		button.custom_minimum_size.y = 48.0
 		button.disabled = floor_number == _current_floor_number()
 		button.pressed.connect(_travel_elevator_to.bind(floor_number))
+		UIStyleFactory.apply_prism_button(button, "ghost", 2, 18, 3, "none")
 		vbox.add_child(button)
 	var spacer := Control.new()
 	spacer.custom_minimum_size.y = 6.0
@@ -6609,7 +6565,11 @@ func _open_elevator_panel() -> void:
 	close_button.text = "关闭"
 	close_button.custom_minimum_size.y = 42.0
 	close_button.pressed.connect(_close_elevator_panel)
+	# 安全侧 = 实心近白主行动钮（棱镜默认焦点铁律）。
+	UIStyleFactory.apply_prism_button(close_button, "primary", 2, 16, 2, "none")
 	vbox.add_child(close_button)
+	# 手柄通路：选层面板此前没有默认焦点，纯手柄玩家打开后无法直接用十字键选层。
+	UiMenuFocus.ensure_focus(_elevator_overlay)
 	_sync_player_input_lock()
 
 

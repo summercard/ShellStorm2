@@ -12,7 +12,7 @@ COPIES = {
     "C_project_codex": os.path.join("I:" + os.sep, "工作项目", "shellstrom2", "ShellStorm2", ".codex", "skills"),
     "D_user_codex": os.path.expanduser(os.path.join("~", ".codex", "skills")),
 }
-SKIP_DIRS = {"__pycache__", ".git"}
+SKIP_DIRS = {"__pycache__", ".git", "state"}
 
 
 def tree(root):

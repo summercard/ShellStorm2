@@ -149,18 +149,22 @@ func _build_ui() -> void:
 	root.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(root)
 
+	# 启动壳是**全屏菜单**（不是压在实景上的 HUD），走棱镜模态底：
+	# 深墨底 + 顶部 1px 次级白线，零辉光零渐变 —— 规范 §3.1。
 	var backdrop := ColorRect.new()
 	backdrop.name = "Backdrop"
-	backdrop.color = Color(0.008, 0.014, 0.022, 1.0)
+	backdrop.color = Color(
+		UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 1.0
+	)
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
 	root.add_child(backdrop)
 
 	var top_line := ColorRect.new()
 	top_line.name = "TopLine"
-	top_line.color = Color(0.18, 0.72, 0.82, 1.0)
+	top_line.color = UIPalette.PRISM_LINE_SOFT
 	top_line.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top_line.offset_bottom = 2.0
+	top_line.offset_bottom = 1.0
 	top_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(top_line)
 
@@ -179,24 +183,21 @@ func _build_ui() -> void:
 	eyebrow.name = "Eyebrow"
 	eyebrow.text = "SHELLSTORM 2  ·  OPERATION SYSTEM"
 	eyebrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	eyebrow.add_theme_font_size_override("font_size", 14)
-	eyebrow.add_theme_color_override("font_color", Color(0.28, 0.78, 0.86, 1.0))
+	UIStyleFactory.apply_prism_label(eyebrow, "label", 6, 14)
 	center.add_child(eyebrow)
 
 	var title := Label.new()
 	title.name = "Title"
 	title.text = "弹壳风暴2"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 42)
-	title.add_theme_color_override("font_color", Color(0.84, 0.96, 1.0, 1.0))
+	UIStyleFactory.apply_prism_label(title, "value", 4, 42)
 	center.add_child(title)
 
 	var subtitle := Label.new()
 	subtitle.name = "Subtitle"
 	subtitle.text = "正在准备你的行动"
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle.add_theme_font_size_override("font_size", 17)
-	subtitle.add_theme_color_override("font_color", Color(0.52, 0.68, 0.73, 1.0))
+	UIStyleFactory.apply_prism_label(subtitle, "faint", 3, 17)
 	center.add_child(subtitle)
 
 	var spacer := Control.new()
@@ -212,30 +213,23 @@ func _build_ui() -> void:
 	_progress.max_value = 100.0
 	_progress.value = 0.0
 	_progress.show_percentage = false
-	var background := StyleBoxFlat.new()
-	background.bg_color = Color(0.035, 0.075, 0.10, 1.0)
-	background.border_color = Color(0.12, 0.38, 0.45, 1.0)
-	background.set_border_width_all(1)
-	background.set_corner_radius_all(3)
-	_progress.add_theme_stylebox_override("background", background)
-	var fill := StyleBoxFlat.new()
-	fill.bg_color = Color(0.20, 0.76, 0.84, 1.0)
-	fill.set_corner_radius_all(3)
-	_progress.add_theme_stylebox_override("fill", fill)
+	# 进度槽 = 1px 白线空槽；填充 = 强调色实心条（棱镜里唯一的"面"，属语义件）。
+	_progress.add_theme_stylebox_override("background", UIStyleFactory.make_prism_progress_background())
+	_progress.add_theme_stylebox_override(
+		"fill", UIStyleFactory.make_prism_progress_fill(UIPalette.PRISM_ACCENT)
+	)
 	center.add_child(_progress)
 
 	_step_label = Label.new()
 	_step_label.name = "Step"
 	_step_label.text = STEP_TEXTS[0]
 	_step_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_step_label.add_theme_font_size_override("font_size", 15)
-	_step_label.add_theme_color_override("font_color", Color(0.70, 0.84, 0.86, 1.0))
+	UIStyleFactory.apply_prism_label(_step_label, "label", 2, 15)
 	center.add_child(_step_label)
 
 	_status_label = Label.new()
 	_status_label.name = "Status"
 	_status_label.text = "请稍候"
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_status_label.add_theme_font_size_override("font_size", 13)
-	_status_label.add_theme_color_override("font_color", Color(0.38, 0.52, 0.56, 1.0))
+	UIStyleFactory.apply_prism_label(_status_label, "faint", 1, 13)
 	center.add_child(_status_label)

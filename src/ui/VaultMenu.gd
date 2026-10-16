@@ -16,7 +16,8 @@ var _drag_data: Dictionary = {}
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_meta("ui_style_exempt", true)
-	$Background.color = Color(0.008, 0.012, 0.020, 0.12)
+	# 冷蓝压暗（棱镜）：仓库是"压在实景上的双栏大棋盘"，只做轻压暗保住实景冷调。
+	$Background.color = Color(UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.46)
 	$Panel.hide()
 	var columns := HBoxContainer.new()
 	columns.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -35,6 +36,9 @@ func _ready() -> void:
 	close_button.pressed.connect(queue_free)
 	_build_vault_view()
 	status_label.text = ""
+	# 只做外观层：面板样式盒换棱镜线框（沿用 content_margin，格子尺寸不变）+ 文字色归一化。
+	UIStyleFactory.prism_reskin_styleboxes(self)
+	UIStyleFactory.prism_normalize_label_colors(self)
 	UiMenuFocus.ensure_focus(self)
 
 func set_inventory_module(module: InventoryModule) -> void:
@@ -62,7 +66,7 @@ func _add_column(parent: HBoxContainer, owner: String, title: String) -> void:
 	box.add_child(header)
 	var label := Label.new()
 	label.text = title
-	label.add_theme_font_size_override("font_size", 20)
+	UIStyleFactory.apply_prism_label(label, "value", 3, 20)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(label)
 	_headings[owner] = label
@@ -96,22 +100,15 @@ func _add_column(parent: HBoxContainer, owner: String, title: String) -> void:
 		status_label.reparent(box)
 		status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		status_label.custom_minimum_size = Vector2(0, 48)
-		status_label.add_theme_font_size_override("font_size", 13)
+		UIStyleFactory.apply_prism_label(status_label, "faint", 1, 13)
 		close_button.reparent(box)
 		close_button.custom_minimum_size = Vector2(0, 36)
 		close_button.text = "返回游戏    [Esc]"
 		_style_button(close_button)
 
+## 小工具钮（整理 / 返回）：透明底 + 白字，**不加括号**（一屏括号数量必须克制）。
 func _style_button(button: Button) -> void:
-	var style := UIStyleFactory.make_inventory_surface(true)
-	style.bg_color = UIPalette.INVENTORY_ACTION
-	button.add_theme_stylebox_override("normal", style)
-	var hover := style.duplicate() as StyleBoxFlat
-	hover.bg_color = UIPalette.INVENTORY_SELECTED
-	button.add_theme_stylebox_override("hover", hover)
-	button.add_theme_color_override("font_color", Color(0.10, 0.20, 0.27))
-	button.add_theme_color_override("font_hover_color", Color(0.10, 0.20, 0.27))
-	button.add_theme_color_override("font_focus_color", Color(0.10, 0.20, 0.27))
+	UIStyleFactory.apply_prism_button(button, "ghost", 2, 15, 2, "none")
 
 func _build_vault_view() -> void:
 	for owner in _boards:

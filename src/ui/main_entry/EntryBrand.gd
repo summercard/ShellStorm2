@@ -1,64 +1,47 @@
 extends Control
-## 启动页品牌图形：左侧白青色倾斜大标题「弹壳风暴」+ 品红「2」，
+## 启动页品牌图形（棱镜线框版）：左侧「弹壳风暴 2」白线字标 + 贯穿细线。
 ## 全部用 Control._draw 自绘（中文使用默认系统字体，无需外部字体资源）。
-
-# Built-in TAU is used for circular accents.
-
-var _t := 0.0
+##
+## 旧版（斜切 + 青色/品红霓虹发光 + 呼吸脉冲）按规范 §11 反面清单移除：
+## 棱镜语言零辉光、零渐变，字标只保留近白正文 + 一条天蓝强调（语义色）与结构细线。
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	resized.connect(queue_redraw)
 
-func _process(delta: float) -> void:
-	if not is_visible_in_tree():
-		return
-	_t += delta
-	queue_redraw()
 
 func _draw() -> void:
-	var font := _font()
+	var h := size.y
+	if h <= 4.0:
+		return
+	var font := UIStyleFactory.make_prism_font(4)
+	if font == null:
+		font = _font()
 	if font == null:
 		return
-	var h := size.y
-	if h <= 1.0:
-		return
-	var base := h * 0.47
-	var shear := -0.18
-	# 斜切（shear）：x' = x + shear * y，使标题向右上倾斜。
-	var cyan_accent := Color(0.02, 0.82, 0.95, 0.16)
-	draw_arc(Vector2(size.x * 0.46, h * 0.51), h * 0.57, -1.2, 3.9, 64, cyan_accent, 1.0, true)
-	draw_set_transform(Vector2(size.x * 0.38, h * 0.25), -0.36, Vector2(0.56, 1.3))
-	draw_circle(Vector2.ZERO, 22.0, cyan_accent)
-	draw_set_transform(Vector2(size.x * 0.52, h * 0.23), 0.36, Vector2(0.56, 1.3))
-	draw_circle(Vector2.ZERO, 22.0, cyan_accent)
-	var m := Transform2D(Vector2(1.0, 0.0), Vector2(shear, 1.0), Vector2(28, 0))
-	draw_set_transform_matrix(m)
-	var cyan := Color(0.78, 0.97, 1.0, 1.0)
-	var magenta := Color(1.0, 0.18, 0.62, 1.0)
+	var base := h * 0.44
 	var title := "弹壳风暴"
 	var two := "2"
 	var title_w := font.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, int(base)).x
-	var two_size := int(base * 1.50)
-	var gap := base * 0.10
-	var start_x := 8.0
-	var baseline := h * 0.5 + base * 0.36
-	# 呼吸微光（与按钮同频）
-	var breath := 0.5 + 0.5 * sin(_t * 2.2)
-	# 外发光多层叠加
-	for i in range(3, 0, -1):
-		var a := 0.10 * float(i) * (0.7 + 0.3 * breath)
-		var off := Vector2(-float(i) * 1.5, 0.0)
-		draw_string(font, Vector2(start_x, baseline) + off, title, HORIZONTAL_ALIGNMENT_LEFT, -1, int(base), Color(cyan.r, cyan.g, cyan.b, a))
-		draw_string(font, Vector2(start_x + title_w + gap, baseline) + off, two, HORIZONTAL_ALIGNMENT_LEFT, -1, two_size, Color(magenta.r, magenta.g, magenta.b, a))
-	# 清晰本体
-	draw_string(font, Vector2(start_x, baseline), title, HORIZONTAL_ALIGNMENT_LEFT, -1, int(base), cyan)
-	draw_string(font, Vector2(start_x + title_w + gap, baseline), two, HORIZONTAL_ALIGNMENT_LEFT, -1, two_size, magenta)
-	draw_set_transform_matrix(Transform2D.IDENTITY)
-	draw_line(Vector2(6, h * 0.30), Vector2(18, h * 0.12), Color(0.05, 0.94, 1), 3, true)
-	draw_line(Vector2(18, h * 0.12), Vector2(34, h * 0.12), Color(0.05, 0.94, 1), 3, true)
-	draw_line(Vector2(size.x - 26, h * 0.84), Vector2(size.x - 8, h * 0.58), Color(0.05, 0.94, 1), 3, true)
-	draw_line(Vector2(24, h * 0.77), Vector2(size.x * 0.68, h * 0.77), Color(0.02, 0.88, 0.98, 0.8), 2, true)
+	var start_x := 12.0
+	var baseline := h * 0.50
+	# 字标：近白正文 + 天蓝强调的「2」（唯一彩色，起强调作用，不作装饰铺陈）。
+	draw_string(
+		font, Vector2(start_x, baseline), title,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, int(base), UIPalette.PRISM_TEXT
+	)
+	draw_string(
+		font, Vector2(start_x + title_w + base * 0.18, baseline), two,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, int(base), UIPalette.PRISM_ACCENT
+	)
+	# 结构细线：字标下方一条贯穿白线 + 一条更短的次级弱线。
+	var rule_y := baseline + base * 0.24
+	var rule_w := size.x - start_x - 6.0
+	draw_rect(Rect2(start_x, rule_y, rule_w, 1.0), Color(1.0, 1.0, 1.0, 0.30), true)
+	draw_rect(Rect2(start_x, rule_y + 7.0, rule_w * 0.40, 1.0), Color(1.0, 1.0, 1.0, 0.14), true)
+	# 左侧 2px 竖线：与常驻 HUD 的引导竖线同构，表明"这一块属于品牌区"。
+	draw_rect(Rect2(start_x - 9.0, h * 0.10, 2.0, h * 0.34), Color(1.0, 1.0, 1.0, 0.55), true)
+
 
 func _font() -> Font:
 	var f := get_theme_font("font")

@@ -314,7 +314,7 @@ const WEAPON_POSE_STATES := [
 	"sidearm_hold", "sidearm_run", "sidearm_fire", "sidearm_reload", "sidearm_charge",
 	"longgun_hold", "longgun_run", "longgun_fire", "longgun_reload", "longgun_charge",
 	"machinegun_hold", "machinegun_run", "machinegun_fire", "machinegun_reload", "machinegun_charge",
-	"heavy_melee_hold", "heavy_melee_run", "heavy_melee_windup", "heavy_melee_active", "heavy_melee_recovery",
+	"heavy_melee_charging", "heavy_melee_spinning", "heavy_melee_hold", "heavy_melee_run", "heavy_melee_windup", "heavy_melee_active", "heavy_melee_recovery",
 ]
 const WEAPON_ANIMATION_PROFILES := {
 	"bp_pistol": {

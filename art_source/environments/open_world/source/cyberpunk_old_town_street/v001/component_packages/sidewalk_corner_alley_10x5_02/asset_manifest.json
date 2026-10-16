@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.component_package.asset_manifest",
+  "schema_version": 1,
+  "component_id": "comp_sidewalk_corner_alley_10x5_02",
+  "slug": "sidewalk_corner_alley_10x5_02",
+  "display_name": "街角小巷台阶石砖段_10x5m_02",
+  "category": "structural",
+  "source_blend": "env_cyberpunk_old_town_street_source_v001.blend",
+  "output_collection": "资产包_sidewalk_corner_alley_10x5_02",
+  "pivot_rule": "bottom_center_z0",
+  "forward_axis": "-Y",
+  "up_axis": "+Z",
+  "dimensions_m": [
+    5.0,
+    10.0,
+    0.35
+  ],
+  "mesh_objects": [
+    "街角小巷台阶石砖段_10x5m_02_主体"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "polygon_count": 78
+}

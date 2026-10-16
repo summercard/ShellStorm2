@@ -20,15 +20,27 @@ func _ready() -> void:
 	scroll_container = get_node_or_null("Panel/VBox/ScrollContainer")
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
-		# 关闭按钮统一样式
-		var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
-		UIStyleFactory.apply_button_style(close_button, close_styles)
 	_find_elite_archive()
 	_build_archive_view()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
+	# 精英行的"状态语义色"必须在通用树皮之后重刷，否则会被通用面板样式抹平。
+	_prism_tint_elite_rows()
 	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
 	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
 	UiMenuFocus.ensure_focus(self)
+
+
+## 通用树皮把所有面板刷成同一款无描边底衬；精英行需要按状态保留语义线色，
+## 因此在树皮之后按 meta 记录的 state 重刷一遍（棱镜语言：只改线的颜色，不改填充）。
+func _prism_tint_elite_rows() -> void:
+	if content == null:
+		return
+	for child in content.get_children():
+		if child is PanelContainer and child.has_meta("elite_state"):
+			var panel := child as PanelContainer
+			panel.add_theme_stylebox_override(
+				"panel", _elite_state_prism_style(str(panel.get_meta("elite_state")))
+			)
 
 func _find_elite_archive() -> void:
 	_elite_archive = get_tree().get_first_node_in_group("elite_archive")
@@ -117,6 +129,7 @@ func _translate_state(state: String) -> String:
 func _make_elite_row(elite) -> PanelContainer:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(620, 60)
+	panel.set_meta("elite_state", str(elite.state if "state" in elite else "?"))
 	panel.add_theme_stylebox_override("panel", _get_elite_panel_style(elite))
 
 	var hbox := HBoxContainer.new()
@@ -235,33 +248,37 @@ func _shorten_module_id(module_id: String) -> String:
 	return m
 
 func _get_elite_panel_style(elite) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.set_corner_radius_all(4)
-	style.set_border_width_all(1)
-
 	var state: String = elite.state if "state" in elite else "?"
+	return _elite_state_prism_style(state)
+
+
+## 状态语义线色（棱镜语言：只换线的颜色 + 底衬厚薄，不做渐变、不做投影）。
+func _elite_state_prism_style(state: String) -> StyleBoxFlat:
+	var line := UIPalette.PRISM_LINE_SOFT
+	var fill_alpha := 0.32
 	match state:
 		"Killed":
-			style.bg_color = Color(0.15, 0.15, 0.18, 0.8)
-			style.set_border_color(Color(0.3, 0.3, 0.35, 0.5))
+			line = Color(1.0, 1.0, 1.0, 0.18)
+			fill_alpha = 0.20
 		"RegionalBoss", "QuasiBoss":
-			style.bg_color = Color(0.25, 0.08, 0.05, 0.9)
-			style.set_border_color(Color(0.8, 0.2, 0.1, 0.7))
+			line = UIPalette.PRISM_DANGER
 		"RevengeHunter":
-			style.bg_color = Color(0.20, 0.10, 0.20, 0.9)
-			style.set_border_color(Color(0.7, 0.3, 0.8, 0.6))
+			line = UIPalette.PRISM_ACCENT
 		"Escaped", "Equipped", "Growing":
-			style.bg_color = Color(0.12, 0.18, 0.25, 0.9)
-			style.set_border_color(Color(0.4, 0.55, 0.8, 0.5))
-		_:  # Newborn
-			style.bg_color = Color(0.15, 0.18, 0.20, 0.9)
-			style.set_border_color(Color(0.4, 0.4, 0.5, 0.5))
-
+			line = Color(1.0, 1.0, 1.0, 0.46)
+		_:
+			line = UIPalette.PRISM_LINE_SOFT
+	var style := UIStyleFactory.make_prism_slot_style(false)
+	style.bg_color = Color(
+		UIPalette.PRISM_SURFACE.r, UIPalette.PRISM_SURFACE.g, UIPalette.PRISM_SURFACE.b, fill_alpha
+	)
+	style.border_color = line
 	return style
 
 func _make_hsep() -> HSeparator:
 	var sep := HSeparator.new()
 	sep.custom_minimum_size = Vector2(0, 4)
+	sep.add_theme_stylebox_override("separator", UIStyleFactory.make_prism_separator_style(0.20))
 	return sep
 
 func _add_close_hint() -> void:

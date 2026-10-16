@@ -33,7 +33,7 @@ Godot `4.7.2.stable.official.ed1daf0bf`。独立克隆工程在 Autoload 启动�
 
 真实渲染为独立展示场景，展示同一正式运行模型的魔术师闲置/开火、战车正逆、力量石头/碎裂；没有宣称完成完整战局的人工操作或压力/手感验收。原有资源UID回退警告仍在。
 
-![三张星星牌实体表现](../../../../ShellStorm2-work/probes/2026-10-16_star_physical/star_physical.png)
+三张星星牌实体表现截图：`ShellStorm2-work/probes/2026-10-16_star_physical/star_physical.png`
 
 日志、反向对照与截图：`ShellStorm2-work/probes/2026-10-16_star_physical/`。用于跑测试的临时工程副本已在交付收尾时清理；正式专项代码留在 `tests/verification/verify_star_physical_mounts.*`，已注册 core 套件和 feature_registry。
 

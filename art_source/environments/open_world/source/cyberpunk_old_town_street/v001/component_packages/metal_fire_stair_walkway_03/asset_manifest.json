@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.component_package.asset_manifest",
+  "schema_version": 1,
+  "component_id": "comp_metal_fire_stair_walkway_03",
+  "slug": "metal_fire_stair_walkway_03",
+  "display_name": "工业外挂金属消防楼梯与检修走道_03",
+  "category": "prop",
+  "source_blend": "env_cyberpunk_old_town_street_source_v001.blend",
+  "output_collection": "资产包_metal_fire_stair_walkway_03",
+  "pivot_rule": "bottom_center_z0",
+  "forward_axis": "-Y",
+  "up_axis": "+Z",
+  "dimensions_m": [
+    4.5,
+    1.8,
+    5.2
+  ],
+  "mesh_objects": [
+    "工业外挂金属消防楼梯与检修走道_03_主体"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "polygon_count": 84
+}

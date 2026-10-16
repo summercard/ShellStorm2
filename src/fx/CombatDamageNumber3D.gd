@@ -1,15 +1,17 @@
 class_name CombatDamageNumber3D
 extends Node3D
-## 3D 战斗飘字：沿用 HUD 的冷青描边与暖色伤害语义，始终朝向镜头并短促弹出。
+## 3D 战斗飘字的**独立兜底实例**（仅当 `VfxPool3D` 不在场景里时才被使用）。
+## 正常路径见 `src/vfx/VfxDamageNumber3D.gd`（池化、FX02-01）。
+##
+## 字体与样式一律取 `src/vfx/DamageNumberStyle.gd` —— 本文件**禁止**再自行声明字体族或字号：
+## 历史上正是这里写了一套等宽字体、而生效链路 `VfxDamageNumber3D` 从没设过字体，
+## 导致实机飘字一直是 Label3D 默认字体，那套等宽字体只活在跑不到的兜底分支里。
+
+const Style := preload("res://src/vfx/DamageNumberStyle.gd")
 
 const NORMAL_COLOR := Color(1.0, 0.30, 0.26, 1.0)
 const HEAVY_COLOR := Color(1.0, 0.53, 0.16, 1.0)
 const CRITICAL_COLOR := Color(1.0, 0.88, 0.24, 1.0)
-const OUTLINE_COLOR := Color(0.015, 0.055, 0.085, 0.96)
-const TECH_FONT_FAMILIES := ["SF Mono", "Menlo", "monospace"]
-const NORMAL_FONT_SIZE := 102
-const HEAVY_FONT_SIZE := 114
-const CRITICAL_FONT_SIZE := 129
 
 var _label: Label3D
 
@@ -20,15 +22,13 @@ func configure(amount: int, critical := false) -> void:
 	_label = Label3D.new()
 	_label.name = "DamageText"
 	_label.text = ("✦ " if critical else "") + str(maxi(1, amount))
-	# 等宽粗体数字让读数更像战术终端；按上一版的 1.5 倍放大，同时保持高分辨率字形。
-	_label.font = _make_tech_font()
-	# 固定屏幕尺寸会把低分辨率的 Label3D 字图强制拉大，导致马赛克；改用
-	# 更高字形分辨率和较小世界像素比，让文字随镜头自然缩放且保持清晰。
-	_label.font_size = CRITICAL_FONT_SIZE if critical else HEAVY_FONT_SIZE if amount >= 40 else NORMAL_FONT_SIZE
-	_label.outline_size = 20 if critical else 15
+	# 漫画风超粗字形 + 粗勾边，与池化链路同一真源。
+	_label.font = Style.make_font()
+	_label.font_size = Style.font_size_for(amount, critical)
+	_label.outline_size = Style.outline_size_for(amount, critical)
+	_label.outline_modulate = Style.OUTLINE_COLOR
 	_label.modulate = _color_for(amount, critical)
-	_label.outline_modulate = OUTLINE_COLOR
-	_label.pixel_size = 0.0036
+	_label.pixel_size = Style.PIXEL_SIZE
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.no_depth_test = true
 	_label.fixed_size = false
@@ -38,19 +38,10 @@ func configure(amount: int, critical := false) -> void:
 	_start_animation(amount, critical)
 
 
-func _make_tech_font() -> SystemFont:
-	var font := SystemFont.new()
-	font.font_names = PackedStringArray(TECH_FONT_FAMILIES)
-	font.font_weight = 700
-	font.multichannel_signed_distance_field = true
-	font.msdf_size = 96
-	return font
-
-
 func _color_for(amount: int, critical: bool) -> Color:
 	if critical:
 		return CRITICAL_COLOR
-	if amount >= 40:
+	if amount >= Style.HEAVY_AMOUNT_THRESHOLD:
 		return HEAVY_COLOR
 	return NORMAL_COLOR
 
@@ -67,6 +58,6 @@ func _start_animation(amount: int, critical: bool) -> void:
 	tween.set_parallel(true)
 	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "scale", Vector3.ONE * 0.82, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	# Label3D 淡出必须走 transparency：只淡 modulate.a 会留下冷青描边残影（业主 2026-10-10）。
+	# Label3D 淡出必须走 transparency：只淡 modulate.a 会留下勾边残影（业主 2026-10-10）。
 	tween.tween_property(_label, "transparency", 1.0, duration).set_delay(duration * 0.42).set_trans(Tween.TRANS_SINE)
 	tween.chain().tween_callback(queue_free)

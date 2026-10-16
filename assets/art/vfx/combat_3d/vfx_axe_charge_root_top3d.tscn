@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3]
+[ext_resource type="Script" path="res://src/vfx/VfxAxeCharge3D.gd" id="1"]
+[ext_resource type="Shader" path="res://assets/art/vfx/combat_3d/melee_ribbon.gdshader" id="2"]
+[sub_resource type="ShaderMaterial" id="Mat"]
+shader = ExtResource("2")
+shader_parameter/tint = Color(1.0, 0.7176470588235294, 0.25098039215686274, 0.8)
+shader_parameter/arc = 0.88
+[sub_resource type="TorusMesh" id="Ring"]
+inner_radius = 0.84
+outer_radius = 1.0
+rings = 40
+ring_segments = 6
+[sub_resource type="TorusMesh" id="Thin"]
+inner_radius = 0.97
+outer_radius = 1.0
+rings = 40
+ring_segments = 4
+[sub_resource type="BoxMesh" id="Chip"]
+size = Vector3(0.07,0.07,0.16)
+[node name="VfxAxeCharge3D" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-MELEE-AXE-CHARGE-3D"
+metadata/asset_version = "v001"
+[node name="Visual" type="Node3D" parent="."]
+[node name="Ribbon" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Ring")
+material_override = SubResource("Mat")
+scale = Vector3(1,0.15,1)
+cast_shadow = 0
+[node name="Echo" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Thin")
+material_override = SubResource("Mat")
+rotation = Vector3(0,3.14159,0)
+position = Vector3(0,0.12,0)
+scale = Vector3(0.83,0.2,0.83)
+cast_shadow = 0

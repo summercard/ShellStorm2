@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_base_visual_v004.glb" id="1_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_base_visual.glb" id="1_visual"]
 [ext_resource type="Script" path="res://src/base3d/PushableSeat3D.gd" id="2_seat"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_swivel_visual_v004.glb" id="3_swivel"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_swivel_visual.glb" id="3_swivel"]
 
 [sub_resource type="BoxShape3D" id="ShapePushableChair"]
 size = Vector3(1.26, 0.23, 1.24)

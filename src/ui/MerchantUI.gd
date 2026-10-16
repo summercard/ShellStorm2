@@ -25,7 +25,9 @@ func _ready() -> void:
 	_build_shop_grid()
 	_hide_panel()
 	GameManager.currency_changed.connect(_on_currency_changed)
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
+	# 货架格的"买得起/买不起"两级线宽在树皮之后重刷，避免被通用面板样式覆盖。
+	_refresh_affordability()
 
 ## 设置商人层级
 func set_tier(tier: int) -> void:
@@ -47,7 +49,7 @@ func show_offers(session_id: String, offers: Array[Dictionary]) -> void:
 		_items.append((offer.get("item", {}) as Dictionary).duplicate(true))
 	_build_shop_grid()
 	_refresh_affordability()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 	_show_panel_animated()
 	var close_btn := get_node_or_null("VBox/TitleHBox/CloseButton") as Button
 	if close_btn != null:
@@ -103,23 +105,24 @@ func _input(event: InputEvent) -> void:
 			hide_merchant()
 			get_viewport().set_input_as_handled()
 
-## 设置面板样式
+## 设置面板样式（棱镜线框）
 func _set_panel_styling() -> void:
-	var bg := UIStyleFactory.make_panel_with_border(0, UIPalette.TEXT_GOLD, 8, 2)
-	bg.bg_color = UIPalette.BG_DEEPEST
+	# 商人面板 = 模态级：冷蓝半透底 + 1px 次级白线 + 四角括号（一屏唯一的"选框"）。
+	var bg := UIStyleFactory.make_prism_panel(true, 0.72)
+	bg.content_margin_left = 14.0
+	bg.content_margin_right = 14.0
+	bg.content_margin_top = 10.0
+	bg.content_margin_bottom = 10.0
 	add_theme_stylebox_override("panel", bg)
+	UIStyleFactory.attach_prism_bracket_frame(self, "solid", 24.0, 2.0, 0.0)
 
-	_affordable_style = StyleBoxFlat.new()
-	_affordable_style.bg_color = UIPalette.BG_SLOT
-	_affordable_style.set_border_width_all(1)
-	_affordable_style.set_border_color(UIPalette.STATUS_OK)
-	_affordable_style.set_corner_radius_all(4)
-
-	_unaffordable_style = StyleBoxFlat.new()
-	_unaffordable_style.bg_color = Color(0.18, 0.15, 0.15, 0.9)
-	_unaffordable_style.set_border_width_all(1)
-	_unaffordable_style.set_border_color(UIPalette.STATUS_NO)
-	_unaffordable_style.set_corner_radius_all(4)
+	# 货架格：线框语言不用红/绿填充表达"买得起/买不起"，改用线的亮暗两级。
+	_affordable_style = UIStyleFactory.make_prism_slot_style(false)
+	_unaffordable_style = UIStyleFactory.make_prism_slot_style(false)
+	_unaffordable_style.bg_color = Color(
+		UIPalette.PRISM_SURFACE.r, UIPalette.PRISM_SURFACE.g, UIPalette.PRISM_SURFACE.b, 0.16
+	)
+	_unaffordable_style.border_color = Color(1.0, 1.0, 1.0, 0.15)
 
 ## 创建商品网格
 func _build_shop_grid() -> void:
@@ -275,10 +278,8 @@ func _refresh_affordability() -> void:
 			var style: StyleBoxFlat
 			if affordable:
 				style = _affordable_style.duplicate()
-				style.set_border_color(UIPalette.STATUS_OK)
 			else:
 				style = _unaffordable_style.duplicate()
-				style.set_border_color(UIPalette.STATUS_NO)
 			panel.add_theme_stylebox_override("panel", style)
 		
 		# 更新价格标签颜色
@@ -288,9 +289,10 @@ func _refresh_affordability() -> void:
 		elif slot.has_node("VBox/PriceLabel"):
 			price_lbl = slot.get_node("VBox/PriceLabel") as Label
 		if price_lbl != null:
+			# 买得起 = 琥珀（与货币同槽）；买不起 = 压暗的极弱字。
 			price_lbl.add_theme_color_override(
 				"font_color",
-				Color(0.3, 1.0, 0.3, 1.0) if affordable else UIPalette.HP_LOW,
+				UIPalette.PRISM_WARN if affordable else UIPalette.PRISM_TEXT_FAINT,
 			)
 
 ## 设置显示/隐藏（内部用，不再直接设置 visible_ratio）

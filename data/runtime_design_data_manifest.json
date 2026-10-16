@@ -107,6 +107,11 @@
       "sha256": "1be63bfe44b7788b8efecfc4839c1d6bfceebb80f76df48a456ca73523e94254"
     },
     {
+      "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/boss_deep_shaft_80x100.json",
+      "runtime": "data/level_plans/expedition_01/room_templates/boss_deep_shaft_80x100.json",
+      "sha256": "a59c5d45f98de531c2e41de5c9320ebed7a2e6efa6d440be642f5178c19766af"
+    },
+    {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/bridge_60x50.json",
       "runtime": "data/level_plans/expedition_01/room_templates/bridge_60x50.json",
       "sha256": "5213b571fdb7065cf2c8579395d5b991b624ac9e97db8a6684d3b92a77339aa7"

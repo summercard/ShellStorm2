@@ -38,6 +38,62 @@ func _ready() -> void:
 	_refresh_facilities()
 	_restore_world_position()
 	_on_player_state_changed(player.get_presentation_state(), {})
+	_apply_prism_base_hud()
+
+
+## 99F 基地世界常驻 HUD 收编到「棱镜线框」。
+##
+## 场景里原本内嵌了三个 **8px 圆角 + 霓虹青描边** 的深蓝卡片
+## （`StyleInfo` / `StyleStatus`，见 `scenes/BaseWorld3D.tscn`）——那是上一代语言。
+## 这里在运行时把它们换成**无背框**的棱镜 HUD（规范 §5.9 定案：常驻 HUD 压在实景上，
+## 任何半透明卡片都是实打实地吃视野），可读性由真描边兜底。
+##
+## 为什么写在脚本里而不是直接改 .tscn 的 sub_resource：
+## 除了样式盒，还要给文字套**宽字距字体**并加描边 —— 这些是主题覆盖而不是样式盒，
+## 逐个写在场景里会散。
+##
+## ⚠️ 两个坑：
+## 1. `HUD` 是 **`CanvasLayer`**，不是 `Control`。早先写成 `get_node_or_null("HUD") as Control`
+##    会静默拿到 `null`，整段收口变成空操作（2026-10-17 实机截图发现基地面板仍是 8px 圆角旧卡片）。
+## 2. 只逐面板收口，**不要**从 `HUD` 整棵树递归 —— `HUD/PauseOverlay` 是 wave 1 已定标的
+##    `PauseMenu3D` 成品，`prism_normalize_label_colors` 只认 `ui_prism_exempt`、不认
+##    `ui_style_exempt`，从上面刷一遍会把它改回未定标状态。
+##
+## ⚠️ 节点名与路径（`HUD/InfoPanel` / `HUD/StatePanel` / `HUD/StatusPanel`）保持不变 ——
+## `probe_test_level_99_gameplay` 按名索引 `HUD/StatusPanel`。
+func _apply_prism_base_hud() -> void:
+	var hud := get_node_or_null("HUD") as CanvasLayer
+	if hud == null:
+		return
+	for panel_name in ["InfoPanel", "StatePanel", "StatusPanel"]:
+		var panel := hud.get_node_or_null(panel_name) as PanelContainer
+		if panel == null:
+			continue
+		var previous := panel.get_theme_stylebox("panel")
+		var style := UIStyleFactory.make_prism_bare_style()
+		# 布局零回归：逐边沿用场景旧样式盒的**生效**内容边距（`get_content_margin`
+		# 会把 `-1` 解析成边框宽度），不自己拍一个数。
+		if previous != null:
+			style.content_margin_left = previous.get_content_margin(SIDE_LEFT)
+			style.content_margin_top = previous.get_content_margin(SIDE_TOP)
+			style.content_margin_right = previous.get_content_margin(SIDE_RIGHT)
+			style.content_margin_bottom = previous.get_content_margin(SIDE_BOTTOM)
+		panel.add_theme_stylebox_override("panel", style)
+		_prism_tone_base_hud_text(panel)
+	var hint := hud.get_node_or_null("ControlHint") as Label
+	if hint != null:
+		UIStyleFactory.prism_normalize_label_colors(hint)
+		# ⚠️ `apply_prism_outline_recursive` 只扫**后代**、不含传进去的 root 自己，
+		# 所以裸 Label 必须就地补一次描边，不能指望递归帮它加。
+		hint.add_theme_constant_override("outline_size", 3)
+		hint.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.62))
+
+
+## HUD 文本收口：先归一到棱镜语义色，再补 4px 深描边 ——
+## 基地实景是明亮低多边形，近白字不加描边会直接掉对比度（规范 §5.9 的兜底手段）。
+func _prism_tone_base_hud_text(root: Node) -> void:
+	UIStyleFactory.prism_normalize_label_colors(root)
+	UIStyleFactory.apply_prism_outline_recursive(root, 4.0, 0.62)
 
 
 func _start_base_music_with_delay() -> void:

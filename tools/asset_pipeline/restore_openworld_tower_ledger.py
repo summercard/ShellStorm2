@@ -18,9 +18,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from ledger_registry import LedgerIndex
 from split_asset_ledger import CONTENT_COLUMNS, _row_digest, col_digest, dedupe_key_formula, dedupe_result_formula, read_source_rows
 
-LEDGER = ROOT / "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx"
+_INDEX = LedgerIndex.load(ROOT)
+LEDGER = _INDEX.domain_for_key("scenes").path
 BASELINE = ROOT / "assets/registry/ledger_split_baseline.json"
-MASTER = ROOT / "assets/registry/ShellStorm2_美术资产台账_v001.xlsx"
+MASTER = _INDEX.master_path
 TOWER02 = ROOT / "art_source/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend"
 TOWER03 = ROOT / "art_source/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend"
 

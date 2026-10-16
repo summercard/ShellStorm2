@@ -120,6 +120,12 @@ func _ensure_standalone_ui() -> void:
 	_setup_interaction_feedback()
 	set_meta("ui_style_exempt", true)
 	_apply_inventory_style()
+	# 仓储轨收编到棱镜线框：**只做外观层**——
+	# prism_reskin_styleboxes 逐节点替换样式盒并原样沿用 content_margin（格子尺寸/行列/落位不变），
+	# prism_normalize_label_colors 只把既有文字色映射到棱镜语义色。
+	# 拖拽预检、占格判定、装备/拆分/丢弃逻辑一行未动。
+	UIStyleFactory.prism_reskin_styleboxes(self)
+	UIStyleFactory.prism_normalize_label_colors(self)
 	_set_panel_positions()
 	_standalone_ui_built = true
 	_set_inventory_panel_visibility(false)
@@ -1745,17 +1751,8 @@ func _apply_inventory_style() -> void:
 		if panel != null:
 			panel.add_theme_stylebox_override("panel", UIStyleFactory.make_inventory_surface())
 	for button in [sort_button, close_button]:
-		var normal := UIStyleFactory.make_inventory_surface(true)
-		normal.bg_color = UIPalette.INVENTORY_ACTION
-		var hover := normal.duplicate() as StyleBoxFlat
-		hover.bg_color = Color(0.90, 0.97, 1.0)
-		var pressed := normal.duplicate() as StyleBoxFlat
-		pressed.bg_color = UIPalette.INVENTORY_SELECTED
-		button.add_theme_stylebox_override("normal", normal)
-		button.add_theme_stylebox_override("hover", hover)
-		button.add_theme_stylebox_override("pressed", pressed)
-		for state in ["font_color", "font_hover_color", "font_pressed_color"]:
-			button.add_theme_color_override(state, Color(0.12, 0.23, 0.30))
+		# 棱镜主行动：实心近白底 + 深墨字（安全侧默认焦点）。
+		UIStyleFactory.apply_prism_button(button, "primary", 2, 16, 2, "none")
 
 func _validate_insurance_drop(data: Dictionary, anchor: int) -> bool:
 	if _drag_cancelled or anchor < 0 or _insurance_module == null:

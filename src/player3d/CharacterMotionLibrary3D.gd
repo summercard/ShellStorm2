@@ -127,8 +127,16 @@ func apply(avatar: Node3D, delta: float) -> void:
 	var melee_family := str({"bp_baseball_bat": "bat", "bp_greatblade": "blade", "bp_waraxe": "axe"}.get(weapon_id, ""))
 	var melee_now := family == "heavy_melee" and bool(avatar.get("_melee_animation_active")) and state in ["idle", "moving"]
 	var melee_hold := family == "heavy_melee" and state in ["idle", "moving", "locked"] and not melee_family.is_empty()
+	var melee_snapshot: Dictionary = avatar.get("_player").melee_combat.get_snapshot() if melee_now else {}
 	if melee_now:
 		clip_name = "melee_%s_%d_%s" % [melee_family, int(avatar.get("_melee_combo_step")), str(avatar.get("_melee_phase"))]
+		var mode := str(melee_snapshot.get("attack_mode","normal"))
+		if str(avatar.get("_melee_phase")) == "charging":
+			clip_name = "melee_%s_charge" % melee_family
+		elif mode == "spin":
+			clip_name = "melee_blade_spin" if str(avatar.get("_melee_phase")) == "spinning" else "melee_blade_spin_recovery"
+		elif mode == "charged":
+			clip_name = "melee_axe_charged_%s" % str(avatar.get("_melee_phase"))
 	elif melee_hold and state != "moving":
 		clip_name = "melee_%s_idle" % melee_family
 	if family == "heavy_melee" and not clips.has("melee_%s_idle" % melee_family):
@@ -157,7 +165,7 @@ func apply(avatar: Node3D, delta: float) -> void:
 		_state = clip_name
 		_transition_pose = _last_pose.duplicate(true)
 		_transition_time = 0.0
-		_transition_duration = 0.001 if melee_now else (0.06 if "_fire_" in clip_name or melee_hold else 0.18)
+		_transition_duration = 0.12 if clip_name == "melee_blade_spin_recovery" else 0.001 if melee_now else (0.06 if "_fire_" in clip_name or melee_hold else 0.18)
 	_transition_time += delta
 	var clip: Dictionary = clips[clip_name]
 	var duration: float = clip.duration
@@ -181,7 +189,7 @@ func apply(avatar: Node3D, delta: float) -> void:
 			if player != null and player.has_method("get_death_animation_progress"):
 				phase = player.get_death_animation_progress()
 	if melee_now:
-		phase = float(avatar.get("_melee_progress"))
+		phase = float(melee_snapshot.get("spin_progress",0.0)) if str(avatar.get("_melee_phase")) == "spinning" else float(avatar.get("_melee_progress"))
 	phase = fposmod(phase, 1.0) if bool(clip.loop) else clampf(phase, 0.0, 1.0)
 	if pose_lock_enabled:
 		phase = clampf(pose_lock_phase, 0.0, 1.0)

@@ -25,6 +25,13 @@ const TILE_SNAP_Y_C01 := -0.056
 const TILE_SNAP_Y_C02 := -0.081
 ## 三条射击道中心线（沿用改造前位置，保持既有靶位与镜头预览口径不变）。
 const LANE_X := [-8.0, 0.0, 8.0]
+## 南墙（+Z 侧）可视件隐藏开关 —— 2026-10-16 业主：「靶场南面的墙去掉，太遮挡了，但是阻挡还要在」。
+## 靶场是俯视视角，南墙横在军械库那一侧的画面里，挡住整片视野；去掉可视后场地通透。
+## 🔴 只关 `ImportedModel` 的可见性，**碰撞体原样留在场景里** —— 玩家仍走不出 50×50 场地。
+## 🔴 墙 prefab 是 7 个房间共用的正式美术件（`ENV-BATTLE-COMMON-WALL-STANDARD-5M`），
+##    改动只能落在本场景的实例上，绝不能碰 prefab 本身。
+## 隐藏的可视节点保持在树中（不是 free），把本常量改回 false 即可原样恢复。
+const HIDE_SOUTH_WALL_VISUAL := true
 ## 灯光网格 3 列 × 4 行 = 12 盏，覆盖整块 50×50 场地。
 const LIGHT_COL_X := [-15.0, 0.0, 15.0]
 const LIGHT_ROW_Z := [-20.0, -8.0, 4.0, 16.0]
@@ -33,6 +40,8 @@ var _metal: StandardMaterial3D
 var _accent: StandardMaterial3D
 var _tile_counts := {"c01": 0, "c02": 0}
 var _wall_segment_count := 0
+## 其中「有碰撞、无可视」的段数（当前只有南墙），供探针核对隐藏确实生效、且碰撞仍在。
+var _hidden_visual_segment_count := 0
 
 
 func _ready() -> void:
@@ -55,6 +64,7 @@ func get_snapshot() -> Dictionary:
 		"light_count": get_tree().get_nodes_in_group("training_light_3d").filter(func(node): return is_ancestor_of(node)).size(),
 		"floor_tile_count": int(_tile_counts["c01"]) + int(_tile_counts["c02"]),
 		"boundary_wall_segment_count": _wall_segment_count,
+		"boundary_wall_visual_hidden_count": _hidden_visual_segment_count,
 		"arena_size_m": GRID_UNIT_M * float(GRID_TILES),
 		"is_3d": true,
 	}
@@ -83,6 +93,7 @@ func _build_floor_tiles() -> void:
 
 ## 四条边各 10 段 5m 墙，正好 50m 闭合。墙 prefab 装饰面在局部 -Z，
 ## 逐边旋转使装饰面一律朝向场地内侧（玩家永远看不到结构背板）。
+## 南边（+Z 侧）走 HIDE_SOUTH_WALL_VISUAL：只去掉可视件，碰撞照旧。
 func _build_boundary_walls() -> void:
 	var wall_root := Node3D.new()
 	wall_root.name = "BoundaryWalls"
@@ -92,19 +103,28 @@ func _build_boundary_walls() -> void:
 		# 北墙（-Z 侧）：内侧朝 +Z，需绕竖轴 180°。
 		_place_wall_segment(wall_root, Vector3(along, 0.0, -HALF_EXTENT), PI)
 		# 南墙（+Z 侧）：装饰面本就在局部 -Z，正对内侧，无需旋转。
-		_place_wall_segment(wall_root, Vector3(along, 0.0, HALF_EXTENT), 0.0)
+		_place_wall_segment(wall_root, Vector3(along, 0.0, HALF_EXTENT), 0.0, HIDE_SOUTH_WALL_VISUAL)
 		# 西墙（-X 侧）：内侧朝 +X。
 		_place_wall_segment(wall_root, Vector3(-HALF_EXTENT, 0.0, along), -PI * 0.5)
 		# 东墙（+X 侧）：内侧朝 -X。
 		_place_wall_segment(wall_root, Vector3(HALF_EXTENT, 0.0, along), PI * 0.5)
 
 
-func _place_wall_segment(parent: Node3D, position: Vector3, yaw: float) -> void:
+## hide_visual 只关可视子树（`ImportedModel.visible = false`），不删节点、不动 `WallStandardCollision`
+## —— 阻挡因此逐字节保持不变（碰撞盒 5×11.9×0.3 与可视尺寸无关，且一直由组件自持）。
+func _place_wall_segment(
+	parent: Node3D, position: Vector3, yaw: float, hide_visual := false
+) -> void:
 	var segment := WALL_SEGMENT_SCENE.instantiate() as Node3D
 	segment.name = "WallSegment_%02d" % _wall_segment_count
 	segment.position = position
 	segment.rotation.y = yaw
 	parent.add_child(segment)
+	if hide_visual:
+		var visual := segment.get_node_or_null("ImportedModel") as Node3D
+		if visual != null:
+			visual.visible = false
+			_hidden_visual_segment_count += 1
 	_wall_segment_count += 1
 
 

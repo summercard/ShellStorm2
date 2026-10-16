@@ -1,0 +1,84 @@
+[gd_scene load_steps=7 format=3]
+[ext_resource type="Script" path="res://src/vfx/VfxAxeImpact3D.gd" id="1"]
+[ext_resource type="Shader" path="res://assets/art/vfx/combat_3d/melee_ribbon.gdshader" id="2"]
+[sub_resource type="ShaderMaterial" id="Mat"]
+shader = ExtResource("2")
+shader_parameter/tint = Color(1.0, 0.6039215686274509, 0.2196078431372549, 0.8)
+shader_parameter/arc = 0.97
+[sub_resource type="TorusMesh" id="Ring"]
+inner_radius = 0.84
+outer_radius = 1.0
+rings = 40
+ring_segments = 6
+[sub_resource type="TorusMesh" id="Thin"]
+inner_radius = 0.97
+outer_radius = 1.0
+rings = 40
+ring_segments = 4
+[sub_resource type="BoxMesh" id="Chip"]
+size = Vector3(0.07,0.07,0.16)
+[node name="VfxAxeImpact3D" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-MELEE-AXE-IMPACT-3D"
+metadata/asset_version = "v001"
+[node name="Visual" type="Node3D" parent="."]
+[node name="Ribbon" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Ring")
+material_override = SubResource("Mat")
+scale = Vector3(1,0.15,1)
+cast_shadow = 0
+[node name="Echo" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Thin")
+material_override = SubResource("Mat")
+rotation = Vector3(0,3.14159,0)
+position = Vector3(0,0.12,0)
+scale = Vector3(0.83,0.2,0.83)
+cast_shadow = 0
+[node name="Debris0" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Chip")
+material_override = SubResource("Mat")
+position = Vector3(0.65,0.10,0.0)
+rotation = Vector3(0.3,0.0,0.4)
+cast_shadow = 0
+[node name="Debris1" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Chip")
+material_override = SubResource("Mat")
+position = Vector3(0.45961940777125593,0.10,0.45961940777125593)
+rotation = Vector3(0.3,0.7853981633974483,0.4)
+cast_shadow = 0
+[node name="Debris2" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Chip")
+material_override = SubResource("Mat")
+position = Vector3(3.9801020972288984e-17,0.10,0.65)
+rotation = Vector3(0.3,1.5707963267948966,0.4)
+cast_shadow = 0
+[node name="Debris3" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Chip")
+material_override = SubResource("Mat")
+position = Vector3(-0.4596194077712559,0.10,0.45961940777125593)
+rotation = Vector3(0.3,2.356194490192345,0.4)
+cast_shadow = 0
+[node name="Debris4" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Chip")
+material_override = SubResource("Mat")
+position = Vector3(-0.65,0.10,7.960204194457797e-17)
+rotation = Vector3(0.3,3.141592653589793,0.4)
+cast_shadow = 0
+[node name="Debris5" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Chip")
+material_override = SubResource("Mat")
+position = Vector3(-0.459619407771256,0.10,-0.4596194077712559)
+rotation = Vector3(0.3,3.9269908169872414,0.4)
+cast_shadow = 0
+[node name="Debris6" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Chip")
+material_override = SubResource("Mat")
+position = Vector3(-1.1940306291686693e-16,0.10,-0.65)
+rotation = Vector3(0.3,4.71238898038469,0.4)
+cast_shadow = 0
+[node name="Debris7" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Chip")
+material_override = SubResource("Mat")
+position = Vector3(0.4596194077712558,0.10,-0.459619407771256)
+rotation = Vector3(0.3,5.497787143782138,0.4)
+cast_shadow = 0

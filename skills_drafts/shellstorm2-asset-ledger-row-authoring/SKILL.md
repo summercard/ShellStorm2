@@ -74,10 +74,7 @@ ws.row_dimensions[模板行].height`。日期列穿同款数字格式即可（�
 
 - ⛔ **绝对不要跑 `split_asset_ledger.py --baseline-only`**！它从 `ledger_index.json` 的 `master.path`
   读《资产主表》，而总目录**已不持有资产行** ⇒ 会把 409 行基线**清空**，反过来制造 409 条 `asset_lost`。
-- ✅ 正确做法（最小外科编辑）。⚠️ 本仓库**并不存在** `tools/ledger_reconcile_baseline_spikeshell.py`
-  （2026-10-14 实测：该模板路径已失效）。可直接照抄现成先例：
-  `.workbuddy/backup/20261014_rooftop_components/apply_rooftop_baseline.py`（最近一次真实补录，
-  scenes 域 +9），或既有 `tools/asset_pipeline/update_*.py` / `scripts/register_*.py` 里的基线段落。核心四步：
+- ✅ 正确做法（最小外科编辑，见 `tools/ledger_reconcile_baseline_spikeshell.py` 模板）：
   1. 备份 `ledger_split_baseline.json` → `.bak_<tag>`；
   2. 用 `read_source_rows(ws)` 读新行，`_row_digest(values)` 算指纹，
      `bl["assets"][ID] = {"v": digest, "c": 大类, "d": 域key}`；`bl["asset_count"] = len(bl["assets"])`；
@@ -103,24 +100,16 @@ ws.row_dimensions[模板行].height`。日期列穿同款数字格式即可（�
 ## 跑门禁的标准姿势
 
 ```bash
-# —— 本机 macOS 口径（2026-10-14 实测，优先用这套）——
-PY=/Users/summercards/.workbuddy/binaries/python/envs/default/bin/python
-R=/Users/summercards/Documents/ShellStorm2          # 工作区路径本身就是 ASCII，无需另造 cwd
-cd "$R"
-
-"$PY" "$R/scripts/check_asset_registry.py" --project-root "$R" --scope structure   # 期望 ASSET_REGISTRY_CHECK_OK
-"$PY" "$R/scripts/check_asset_registry.py" --project-root "$R" --scope full --ledger scenes
-"$PY" "$R/tools/asset_pipeline/verify_ledger_split.py" --project-root "$R"          # 期望 LEDGER_SPLIT_VERIFY_OK
-"$PY" "$R/scripts/check_asset_runtime_naming.py"                                    # 注意：**不接受 --project-root**
-```
-
-```bash
-# —— Windows 口径（Git Bash / I: 盘布局，仅在 Windows 机器上有效）——
 export PATH="/c/Program Files/Git/usr/bin:$PATH"
 PY="C:/Users/zhuangmenghong/.workbuddy/binaries/python/envs/default/Scripts/python.exe"
 mkdir -p "I:/工作项目/shellstrom2/_scratch/ledger_gate_cwd"
 cd "I:/工作项目/shellstrom2/_scratch/ledger_gate_cwd"       # ASCII cwd，避开工作区 inspect.py 遮蔽
 R="I:/工作项目/shellstrom2/ShellStorm2"
+
+"$PY" "$R/scripts/check_asset_registry.py" --project-root "$R" --scope structure   # 期望 ASSET_REGISTRY_CHECK_OK
+"$PY" "$R/scripts/check_asset_registry.py" --project-root "$R" --scope full --ledger enemies
+"$PY" "$R/tools/asset_pipeline/verify_ledger_split.py" --project-root "$R"          # 期望 LEDGER_SPLIT_VERIFY_OK
+"$PY" "$R/scripts/check_asset_runtime_naming.py"                                    # 注意：**不接受 --project-root**
 ```
 
 - **退出码别用管道取**（`| tail` 会把 `$?` 变成 tail 的）。用 `run(){ …; echo "EXIT=$?"; }` 落到文件再 grep。
@@ -165,7 +154,7 @@ R="I:/工作项目/shellstrom2/ShellStorm2"
 
 - ⛔ **别用 sheetagent MCP 的 `resolve_local_excel`** 读本项目：它解析不了中文绝对路径
   （`I:/…` 被判非绝对路径，`/i/…` 被拼成 `i:\i\…`，实测报 `INVALID_LOCAL_PATH` / `LOCAL_PATH_NOT_FOUND`）。
-- ✅ 用零依赖的 `scripts/blender/xlsx_read.py`（值）与 `scripts/blender/xlsx_formula_dump.py`（值 + 公式），
+- ✅ 用零依赖的 `tools/xlsx_read.py`（值）与 `tools/xlsx_formula_dump.py`（值 + 公式），
   stdlib `zipfile` + `ElementTree`，避开 openpyxl 在本机偶发的 OpenBLAS 报错。
   `--formula-only` / `--rows` / `--cols` 可精确定位。
 

@@ -1,0 +1,2082 @@
+{
+  "schema": "shellstorm2.openworld.component_instances",
+  "schema_version": 1,
+  "suite_name": "cyberpunk_old_town_street",
+  "version": "v001",
+  "coord_system": "blender_z_up_right_handed",
+  "rotation_convention": "rotation_y_deg_records_blender_rot_z_deg_for_godot_neg_y_mapping",
+  "total_instances": 109,
+  "instances": [
+    {
+      "instance_id": "inst_square_street_plinth_01",
+      "component_id": "comp_square_street_plinth_40x40_01",
+      "slug": "square_street_plinth_40x40_01",
+      "display_name": "工整四方形街区基底_40x40m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wet_asphalt_lane_01",
+      "component_id": "comp_wet_asphalt_lane_10x10_01",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "display_name": "湿润双黄线柏油路面_10x10m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        0.0,
+        -15.0,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wet_asphalt_crosswalk_01",
+      "component_id": "comp_wet_asphalt_crosswalk_10x10_02",
+      "slug": "wet_asphalt_crosswalk_10x10_02",
+      "display_name": "湿润斑马线柏油路面_10x10m_02",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        0.0,
+        -5.0,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wet_asphalt_lane_02",
+      "component_id": "comp_wet_asphalt_lane_10x10_01",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "display_name": "湿润双黄线柏油路面_10x10m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        0.0,
+        5.0,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wet_asphalt_lane_03",
+      "component_id": "comp_wet_asphalt_lane_10x10_01",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "display_name": "湿润双黄线柏油路面_10x10m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        0.0,
+        15.0,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_left_01",
+      "component_id": "comp_sidewalk_curb_slab_10x5_01",
+      "slug": "sidewalk_curb_slab_10x5_01",
+      "display_name": "人行道石砖路缘直段_10x5m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        -7.5,
+        -15.0,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_right_01",
+      "component_id": "comp_sidewalk_curb_slab_10x5_01",
+      "slug": "sidewalk_curb_slab_10x5_01",
+      "display_name": "人行道石砖路缘直段_10x5m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        7.5,
+        -15.0,
+        1.2
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_left_02",
+      "component_id": "comp_sidewalk_curb_slab_10x5_01",
+      "slug": "sidewalk_curb_slab_10x5_01",
+      "display_name": "人行道石砖路缘直段_10x5m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        -7.5,
+        -5.0,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_right_02",
+      "component_id": "comp_sidewalk_curb_slab_10x5_01",
+      "slug": "sidewalk_curb_slab_10x5_01",
+      "display_name": "人行道石砖路缘直段_10x5m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        7.5,
+        -5.0,
+        1.2
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_left_03",
+      "component_id": "comp_sidewalk_curb_slab_10x5_01",
+      "slug": "sidewalk_curb_slab_10x5_01",
+      "display_name": "人行道石砖路缘直段_10x5m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        -7.5,
+        5.0,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_right_03",
+      "component_id": "comp_sidewalk_curb_slab_10x5_01",
+      "slug": "sidewalk_curb_slab_10x5_01",
+      "display_name": "人行道石砖路缘直段_10x5m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        7.5,
+        5.0,
+        1.2
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_left_04",
+      "component_id": "comp_sidewalk_curb_slab_10x5_01",
+      "slug": "sidewalk_curb_slab_10x5_01",
+      "display_name": "人行道石砖路缘直段_10x5m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        -7.5,
+        15.0,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_right_04",
+      "component_id": "comp_sidewalk_curb_slab_10x5_01",
+      "slug": "sidewalk_curb_slab_10x5_01",
+      "display_name": "人行道石砖路缘直段_10x5m_01",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        7.5,
+        15.0,
+        1.2
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_alley_01",
+      "component_id": "comp_sidewalk_corner_alley_10x5_02",
+      "slug": "sidewalk_corner_alley_10x5_02",
+      "display_name": "街角小巷台阶石砖段_10x5m_02",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        -14.5,
+        -5.5,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_alley_02",
+      "component_id": "comp_sidewalk_corner_alley_10x5_02",
+      "slug": "sidewalk_corner_alley_10x5_02",
+      "display_name": "街角小巷台阶石砖段_10x5m_02",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        -14.5,
+        9.5,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_alley_03",
+      "component_id": "comp_sidewalk_corner_alley_10x5_02",
+      "slug": "sidewalk_corner_alley_10x5_02",
+      "display_name": "街角小巷台阶石砖段_10x5m_02",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        14.5,
+        -5.5,
+        1.2
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_sidewalk_alley_04",
+      "component_id": "comp_sidewalk_corner_alley_10x5_02",
+      "slug": "sidewalk_corner_alley_10x5_02",
+      "display_name": "街角小巷台阶石砖段_10x5m_02",
+      "category": "structural",
+      "collection": "03A_街区基底与道路人行道",
+      "blender_room_local": [
+        14.5,
+        9.5,
+        1.2
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_brick_tower_01",
+      "component_id": "comp_hotel_brick_tower_core_12x12_01",
+      "slug": "hotel_brick_tower_core_12x12_01",
+      "display_name": "红褐砖石老旧酒店主体_12x12m_01",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -13.2,
+        1.8,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_shutter_shopfront_01",
+      "component_id": "comp_hotel_shutter_shopfront_03",
+      "slug": "hotel_shutter_shopfront_03",
+      "display_name": "酒店底层金属卷帘门与暖红雨棚入口_03",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -6.8,
+        1.8,
+        1.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_arch_win_front_01",
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗与窗台残雪模块_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -10.2,
+        -4.05,
+        6.4
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_arch_win_streetA_01",
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗与窗台残雪模块_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -7.35,
+        -0.8,
+        6.4
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_arch_win_streetB_01",
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗与窗台残雪模块_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -7.35,
+        3.8,
+        6.4
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_arch_win_front_02",
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗与窗台残雪模块_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -10.2,
+        -4.05,
+        11.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_arch_win_streetA_02",
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗与窗台残雪模块_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -7.35,
+        -0.8,
+        11.2
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_arch_win_streetB_02",
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗与窗台残雪模块_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -7.35,
+        3.8,
+        11.2
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_arch_win_front_03",
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗与窗台残雪模块_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -10.2,
+        -4.05,
+        16.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_arch_win_streetA_03",
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗与窗台残雪模块_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -7.35,
+        -0.8,
+        16.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hotel_arch_win_streetB_03",
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗与窗台残雪模块_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -7.35,
+        3.8,
+        16.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_neon_sign_hotel_nexus_01",
+      "component_id": "comp_neon_sign_hotel_nexus_01",
+      "slug": "neon_sign_hotel_nexus_01",
+      "display_name": "巨型竖向粉红HOTEL与NEXUS霓虹招牌_01",
+      "category": "prop",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -6.65,
+        -0.95,
+        3.7
+      ],
+      "rotation_y_deg": 72.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pharmacy_shop_block_01",
+      "component_id": "comp_pharmacy_shop_block_10x10_01",
+      "slug": "pharmacy_shop_block_10x10_01",
+      "display_name": "低矮药店与相邻商业店铺楼体_10x10m_01",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -13.5,
+        -8.5,
+        1.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_neon_sign_kanji_yaku_01",
+      "component_id": "comp_neon_sign_kanji_yaku_02",
+      "slug": "neon_sign_kanji_yaku_02",
+      "display_name": "冷蓝方形汉字藥发光招牌与粉紫副牌_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -8.15,
+        -7.8,
+        4.8
+      ],
+      "rotation_y_deg": 82.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_industrial_bar_building_01",
+      "component_id": "comp_industrial_bar_building_12x14_01",
+      "slug": "industrial_bar_building_12x14_01",
+      "display_name": "深灰金属板与砖混工业酒吧建筑_12x14m_01",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        13.2,
+        6.2,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_neon_sign_bar_martini_01",
+      "component_id": "comp_neon_sign_bar_martini_02",
+      "slug": "neon_sign_bar_martini_02",
+      "display_name": "竖向红蓝BAR与鸡尾酒杯霓虹招牌_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        6.55,
+        -2.2,
+        3.6
+      ],
+      "rotation_y_deg": -38.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_foreground_rooftop_left_01",
+      "component_id": "comp_foreground_rooftop_deck_12x10_01",
+      "slug": "foreground_rooftop_deck_12x10_01",
+      "display_name": "前景机械工业平屋顶平台A_12x10m_01",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        -12.5,
+        -14.8,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.15,
+        0.92,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_foreground_rooftop_right_01",
+      "component_id": "comp_foreground_rooftop_deck_12x10_02",
+      "slug": "foreground_rooftop_deck_12x10_02",
+      "display_name": "前景机械工业平屋顶平台B_12x10m_02",
+      "category": "structural",
+      "collection": "03B_主体建筑与霓虹招牌",
+      "blender_room_local": [
+        12.8,
+        -6.5,
+        1.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.1,
+        1.55,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_rooftop_chiller_01",
+      "component_id": "comp_rooftop_twin_fan_chiller_01",
+      "slug": "rooftop_twin_fan_chiller_01",
+      "display_name": "屋顶双圆扇工业冷却空调机组_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -8.8,
+        -12.6,
+        4.88
+      ],
+      "rotation_y_deg": 28.0,
+      "scale": [
+        1.15,
+        1.15,
+        1.15
+      ]
+    },
+    {
+      "instance_id": "inst_rooftop_chiller_02",
+      "component_id": "comp_rooftop_twin_fan_chiller_01",
+      "slug": "rooftop_twin_fan_chiller_01",
+      "display_name": "屋顶双圆扇工业冷却空调机组_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -14.2,
+        -15.2,
+        4.88
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_rooftop_chiller_03",
+      "component_id": "comp_rooftop_twin_fan_chiller_01",
+      "slug": "rooftop_twin_fan_chiller_01",
+      "display_name": "屋顶双圆扇工业冷却空调机组_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        12.5,
+        -10.5,
+        5.08
+      ],
+      "rotation_y_deg": -20.0,
+      "scale": [
+        1.05,
+        1.05,
+        1.05
+      ]
+    },
+    {
+      "instance_id": "inst_rooftop_vent_01",
+      "component_id": "comp_rooftop_exhaust_vent_box_02",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "display_name": "屋顶方形百叶排风塔与管道箱_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -6.8,
+        -11.6,
+        4.88
+      ],
+      "rotation_y_deg": 18.0,
+      "scale": [
+        1.05,
+        1.05,
+        1.05
+      ]
+    },
+    {
+      "instance_id": "inst_rooftop_vent_02",
+      "component_id": "comp_rooftop_exhaust_vent_box_02",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "display_name": "屋顶方形百叶排风塔与管道箱_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -12.5,
+        -12.2,
+        4.88
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        0.95,
+        0.95,
+        0.95
+      ]
+    },
+    {
+      "instance_id": "inst_rooftop_vent_03",
+      "component_id": "comp_rooftop_exhaust_vent_box_02",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "display_name": "屋顶方形百叶排风塔与管道箱_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        9.2,
+        -8.8,
+        5.08
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_rooftop_vent_04",
+      "component_id": "comp_rooftop_exhaust_vent_box_02",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "display_name": "屋顶方形百叶排风塔与管道箱_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        14.2,
+        -4.5,
+        5.08
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.1,
+        1.1,
+        1.1
+      ]
+    },
+    {
+      "instance_id": "inst_skybridge_pillar_left_01",
+      "component_id": "comp_skybridge_hazard_pillar_02",
+      "slug": "skybridge_hazard_pillar_02",
+      "display_name": "黄黑警示条纹高架桥重型支撑柱_02",
+      "category": "structural",
+      "collection": "03C_跨街高架桥与远景街区",
+      "blender_room_local": [
+        -5.8,
+        7.2,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_skybridge_pillar_right_02",
+      "component_id": "comp_skybridge_hazard_pillar_02",
+      "slug": "skybridge_hazard_pillar_02",
+      "display_name": "黄黑警示条纹高架桥重型支撑柱_02",
+      "category": "structural",
+      "collection": "03C_跨街高架桥与远景街区",
+      "blender_room_local": [
+        6.2,
+        5.5,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_skybridge_truss_span_01",
+      "component_id": "comp_skybridge_truss_span_22m_01",
+      "slug": "skybridge_truss_span_22m_01",
+      "display_name": "跨街重型装甲高架走廊主梁_22m_01",
+      "category": "structural",
+      "collection": "03C_跨街高架桥与远景街区",
+      "blender_room_local": [
+        0.2,
+        6.4,
+        10.25
+      ],
+      "rotation_y_deg": -8.0,
+      "scale": [
+        1.05,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_skybridge_sign_sector07_01",
+      "component_id": "comp_skybridge_sign_sector07_district_03",
+      "slug": "skybridge_sign_sector07_district_03",
+      "display_name": "高架桥SECTOR07发光标识铭牌组_03",
+      "category": "structural",
+      "collection": "03C_跨街高架桥与远景街区",
+      "blender_room_local": [
+        0.6,
+        4.12,
+        10.6
+      ],
+      "rotation_y_deg": -8.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_distant_cyber_alley_backdrop_01",
+      "component_id": "comp_distant_cyber_alley_backdrop_01",
+      "slug": "distant_cyber_alley_backdrop_01",
+      "display_name": "高架桥后方远景建筑群与霓虹灯牌簇_01",
+      "category": "structural",
+      "collection": "03C_跨街高架桥与远景街区",
+      "blender_room_local": [
+        0.0,
+        15.2,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.25,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_vertical_01",
+      "component_id": "comp_facade_pipe_cluster_vertical_01",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "display_name": "建筑立面重型竖向工业管道束与法兰_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -8.0,
+        -3.0,
+        1.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_vertical_02",
+      "component_id": "comp_facade_pipe_cluster_vertical_01",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "display_name": "建筑立面重型竖向工业管道束与法兰_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -6.9,
+        5.8,
+        1.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_vertical_03",
+      "component_id": "comp_facade_pipe_cluster_vertical_01",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "display_name": "建筑立面重型竖向工业管道束与法兰_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -9.2,
+        -5.0,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_vertical_04",
+      "component_id": "comp_facade_pipe_cluster_vertical_01",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "display_name": "建筑立面重型竖向工业管道束与法兰_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        7.6,
+        2.8,
+        1.45
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_vertical_05",
+      "component_id": "comp_facade_pipe_cluster_vertical_01",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "display_name": "建筑立面重型竖向工业管道束与法兰_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        7.6,
+        8.5,
+        1.45
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_horizontal_01",
+      "component_id": "comp_facade_pipe_elbow_horizontal_02",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "display_name": "建筑立面横向转角管道桥架与电缆束_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -8.1,
+        -6.2,
+        5.05
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_horizontal_02",
+      "component_id": "comp_facade_pipe_elbow_horizontal_02",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "display_name": "建筑立面横向转角管道桥架与电缆束_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -8.1,
+        0.5,
+        5.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_horizontal_03",
+      "component_id": "comp_facade_pipe_elbow_horizontal_02",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "display_name": "建筑立面横向转角管道桥架与电缆束_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -11.5,
+        -4.0,
+        5.25
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_horizontal_04",
+      "component_id": "comp_facade_pipe_elbow_horizontal_02",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "display_name": "建筑立面横向转角管道桥架与电缆束_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        7.6,
+        -5.5,
+        5.25
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_horizontal_05",
+      "component_id": "comp_facade_pipe_elbow_horizontal_02",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "display_name": "建筑立面横向转角管道桥架与电缆束_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        11.2,
+        -9.2,
+        6.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_pipe_horizontal_06",
+      "component_id": "comp_facade_pipe_elbow_horizontal_02",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "display_name": "建筑立面横向转角管道桥架与电缆束_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -11.2,
+        -9.8,
+        6.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_fire_stair_01",
+      "component_id": "comp_metal_fire_stair_walkway_03",
+      "slug": "metal_fire_stair_walkway_03",
+      "display_name": "工业外挂金属消防楼梯与检修走道_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -6.8,
+        8.8,
+        5.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_fire_stair_02",
+      "component_id": "comp_metal_fire_stair_walkway_03",
+      "slug": "metal_fire_stair_walkway_03",
+      "display_name": "工业外挂金属消防楼梯与检修走道_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -6.8,
+        12.2,
+        8.25
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_fire_stair_03",
+      "component_id": "comp_metal_fire_stair_walkway_03",
+      "slug": "metal_fire_stair_walkway_03",
+      "display_name": "工业外挂金属消防楼梯与检修走道_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        7.2,
+        9.5,
+        5.95
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wall_ac_01",
+      "component_id": "comp_wall_ac_outdoor_unit_03",
+      "slug": "wall_ac_outdoor_unit_03",
+      "display_name": "建筑外墙悬挂式空调外机与支架_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -9.2,
+        -3.5,
+        6.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wall_ac_02",
+      "component_id": "comp_wall_ac_outdoor_unit_03",
+      "slug": "wall_ac_outdoor_unit_03",
+      "display_name": "建筑外墙悬挂式空调外机与支架_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -9.2,
+        -3.5,
+        10.95
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wall_ac_03",
+      "component_id": "comp_wall_ac_outdoor_unit_03",
+      "slug": "wall_ac_outdoor_unit_03",
+      "display_name": "建筑外墙悬挂式空调外机与支架_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -7.5,
+        -1.2,
+        7.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wall_ac_04",
+      "component_id": "comp_wall_ac_outdoor_unit_03",
+      "slug": "wall_ac_outdoor_unit_03",
+      "display_name": "建筑外墙悬挂式空调外机与支架_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -7.5,
+        3.6,
+        9.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wall_ac_05",
+      "component_id": "comp_wall_ac_outdoor_unit_03",
+      "slug": "wall_ac_outdoor_unit_03",
+      "display_name": "建筑外墙悬挂式空调外机与支架_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -8.8,
+        -6.8,
+        5.85
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wall_ac_06",
+      "component_id": "comp_wall_ac_outdoor_unit_03",
+      "slug": "wall_ac_outdoor_unit_03",
+      "display_name": "建筑外墙悬挂式空调外机与支架_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        7.5,
+        -1.5,
+        7.95
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wall_ac_07",
+      "component_id": "comp_wall_ac_outdoor_unit_03",
+      "slug": "wall_ac_outdoor_unit_03",
+      "display_name": "建筑外墙悬挂式空调外机与支架_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        7.5,
+        2.5,
+        11.45
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_wall_ac_08",
+      "component_id": "comp_wall_ac_outdoor_unit_03",
+      "slug": "wall_ac_outdoor_unit_03",
+      "display_name": "建筑外墙悬挂式空调外机与支架_03",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        9.5,
+        -7.8,
+        6.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_retro_sedan_car_01",
+      "component_id": "comp_retro_cyber_sedan_car_01",
+      "slug": "retro_cyber_sedan_car_01",
+      "display_name": "复古方正深色轿车_亮红尾灯与暖前灯_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -1.8,
+        2.2,
+        1.34
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_retro_sedan_car_02",
+      "component_id": "comp_retro_cyber_sedan_car_01",
+      "slug": "retro_cyber_sedan_car_01",
+      "display_name": "复古方正深色轿车_亮红尾灯与暖前灯_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        2.2,
+        -3.8,
+        1.34
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_street_lamp_01",
+      "component_id": "comp_industrial_street_lamp_pole_01",
+      "slug": "industrial_street_lamp_pole_01",
+      "display_name": "工业风双臂冷白街道路灯与信号灯杆_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.2,
+        4.2,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_street_lamp_02",
+      "component_id": "comp_industrial_street_lamp_pole_01",
+      "slug": "industrial_street_lamp_pole_01",
+      "display_name": "工业风双臂冷白街道路灯与信号灯杆_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.2,
+        -7.8,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_street_lamp_03",
+      "component_id": "comp_industrial_street_lamp_pole_01",
+      "slug": "industrial_street_lamp_pole_01",
+      "display_name": "工业风双臂冷白街道路灯与信号灯杆_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.2,
+        -2.5,
+        1.45
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_street_lamp_04",
+      "component_id": "comp_industrial_street_lamp_pole_01",
+      "slug": "industrial_street_lamp_pole_01",
+      "display_name": "工业风双臂冷白街道路灯与信号灯杆_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.2,
+        -8.8,
+        1.45
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_street_lamp_05",
+      "component_id": "comp_industrial_street_lamp_pole_01",
+      "slug": "industrial_street_lamp_pole_01",
+      "display_name": "工业风双臂冷白街道路灯与信号灯杆_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.2,
+        12.2,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hazard_bollard_01",
+      "component_id": "comp_glowing_hazard_bollard_02",
+      "slug": "glowing_hazard_bollard_02",
+      "display_name": "街角红橙条纹发光警示防撞柱_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.1,
+        -0.8,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hazard_bollard_02",
+      "component_id": "comp_glowing_hazard_bollard_02",
+      "slug": "glowing_hazard_bollard_02",
+      "display_name": "街角红橙条纹发光警示防撞柱_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.1,
+        6.8,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hazard_bollard_03",
+      "component_id": "comp_glowing_hazard_bollard_02",
+      "slug": "glowing_hazard_bollard_02",
+      "display_name": "街角红橙条纹发光警示防撞柱_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.1,
+        -5.5,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hazard_bollard_04",
+      "component_id": "comp_glowing_hazard_bollard_02",
+      "slug": "glowing_hazard_bollard_02",
+      "display_name": "街角红橙条纹发光警示防撞柱_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.1,
+        5.2,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_hazard_bollard_05",
+      "component_id": "comp_glowing_hazard_bollard_02",
+      "slug": "glowing_hazard_bollard_02",
+      "display_name": "街角红橙条纹发光警示防撞柱_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.1,
+        -10.8,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_guardrail_01",
+      "component_id": "comp_street_guardrail_fence_4m_01",
+      "slug": "street_guardrail_fence_4m_01",
+      "display_name": "人行道黑色金属防护栏杆_4m_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.15,
+        -11.5,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_guardrail_02",
+      "component_id": "comp_street_guardrail_fence_4m_01",
+      "slug": "street_guardrail_fence_4m_01",
+      "display_name": "人行道黑色金属防护栏杆_4m_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.15,
+        -7.2,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_guardrail_03",
+      "component_id": "comp_street_guardrail_fence_4m_01",
+      "slug": "street_guardrail_fence_4m_01",
+      "display_name": "人行道黑色金属防护栏杆_4m_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.15,
+        -2.8,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_guardrail_04",
+      "component_id": "comp_street_guardrail_fence_4m_01",
+      "slug": "street_guardrail_fence_4m_01",
+      "display_name": "人行道黑色金属防护栏杆_4m_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.15,
+        1.8,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_guardrail_05",
+      "component_id": "comp_street_guardrail_fence_4m_01",
+      "slug": "street_guardrail_fence_4m_01",
+      "display_name": "人行道黑色金属防护栏杆_4m_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.15,
+        10.5,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_guardrail_06",
+      "component_id": "comp_street_guardrail_fence_4m_01",
+      "slug": "street_guardrail_fence_4m_01",
+      "display_name": "人行道黑色金属防护栏杆_4m_01",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.15,
+        14.8,
+        1.45
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_utility_cabinet_01",
+      "component_id": "comp_street_utility_trash_cabinet_02",
+      "slug": "street_utility_trash_cabinet_02",
+      "display_name": "街道金属配电控制箱与垃圾箱组_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -6.4,
+        -3.2,
+        1.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_utility_cabinet_02",
+      "component_id": "comp_street_utility_trash_cabinet_02",
+      "slug": "street_utility_trash_cabinet_02",
+      "display_name": "街道金属配电控制箱与垃圾箱组_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -6.4,
+        1.2,
+        1.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_utility_cabinet_03",
+      "component_id": "comp_street_utility_trash_cabinet_02",
+      "slug": "street_utility_trash_cabinet_02",
+      "display_name": "街道金属配电控制箱与垃圾箱组_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -8.2,
+        -7.5,
+        1.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_utility_cabinet_04",
+      "component_id": "comp_street_utility_trash_cabinet_02",
+      "slug": "street_utility_trash_cabinet_02",
+      "display_name": "街道金属配电控制箱与垃圾箱组_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        6.4,
+        -4.8,
+        1.45
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_utility_cabinet_05",
+      "component_id": "comp_street_utility_trash_cabinet_02",
+      "slug": "street_utility_trash_cabinet_02",
+      "display_name": "街道金属配电控制箱与垃圾箱组_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        6.4,
+        2.2,
+        1.45
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_utility_cabinet_06",
+      "component_id": "comp_street_utility_trash_cabinet_02",
+      "slug": "street_utility_trash_cabinet_02",
+      "display_name": "街道金属配电控制箱与垃圾箱组_02",
+      "category": "prop",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -6.4,
+        10.2,
+        1.45
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_manhole_grate_01",
+      "component_id": "comp_drain_manhole_grate_set_01",
+      "slug": "drain_manhole_grate_set_01",
+      "display_name": "路面圆形铸铁井盖与路缘排水格栅组_01",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -1.2,
+        -7.2,
+        1.34
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_manhole_grate_02",
+      "component_id": "comp_drain_manhole_grate_set_01",
+      "slug": "drain_manhole_grate_set_01",
+      "display_name": "路面圆形铸铁井盖与路缘排水格栅组_01",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        1.6,
+        -1.5,
+        1.34
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_manhole_grate_03",
+      "component_id": "comp_drain_manhole_grate_set_01",
+      "slug": "drain_manhole_grate_set_01",
+      "display_name": "路面圆形铸铁井盖与路缘排水格栅组_01",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -2.8,
+        5.5,
+        1.34
+      ],
+      "rotation_y_deg": 45.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_manhole_grate_04",
+      "component_id": "comp_drain_manhole_grate_set_01",
+      "slug": "drain_manhole_grate_set_01",
+      "display_name": "路面圆形铸铁井盖与路缘排水格栅组_01",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        2.5,
+        9.2,
+        1.34
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_manhole_grate_05",
+      "component_id": "comp_drain_manhole_grate_set_01",
+      "slug": "drain_manhole_grate_set_01",
+      "display_name": "路面圆形铸铁井盖与路缘排水格栅组_01",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -4.2,
+        -3.2,
+        1.34
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_manhole_grate_06",
+      "component_id": "comp_drain_manhole_grate_set_01",
+      "slug": "drain_manhole_grate_set_01",
+      "display_name": "路面圆形铸铁井盖与路缘排水格栅组_01",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        4.2,
+        -7.8,
+        1.34
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_01",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.4,
+        -4.0,
+        1.45
+      ],
+      "rotation_y_deg": 85.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_02",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -5.4,
+        2.6,
+        1.45
+      ],
+      "rotation_y_deg": 95.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_03",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -8.0,
+        -2.0,
+        5.35
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_04",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.4,
+        -7.2,
+        1.45
+      ],
+      "rotation_y_deg": -85.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_05",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        5.4,
+        -1.0,
+        1.45
+      ],
+      "rotation_y_deg": -95.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_06",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -6.2,
+        8.2,
+        1.45
+      ],
+      "rotation_y_deg": 45.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_07",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        6.2,
+        7.2,
+        1.45
+      ],
+      "rotation_y_deg": -45.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_08",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        -10.8,
+        -10.5,
+        4.88
+      ],
+      "rotation_y_deg": 15.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_09",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        11.2,
+        -10.5,
+        5.08
+      ],
+      "rotation_y_deg": -15.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "inst_snow_patch_10",
+      "component_id": "comp_curb_snow_slush_patch_02",
+      "slug": "curb_snow_slush_patch_02",
+      "display_name": "街角路缘与窗台冷白残雪堆积层_02",
+      "category": "decal",
+      "collection": "03D_车辆路灯与屋顶机电设施",
+      "blender_room_local": [
+        0.0,
+        6.8,
+        13.85
+      ],
+      "rotation_y_deg": -8.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ]
+}

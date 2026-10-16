@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.component_package.asset_manifest",
+  "schema_version": 1,
+  "component_id": "comp_pharmacy_shop_block_10x10_01",
+  "slug": "pharmacy_shop_block_10x10_01",
+  "display_name": "低矮药店与相邻商业店铺楼体_10x10m_01",
+  "category": "structural",
+  "source_blend": "env_cyberpunk_old_town_street_source_v001.blend",
+  "output_collection": "资产包_pharmacy_shop_block_10x10_01",
+  "pivot_rule": "bottom_center_z0",
+  "forward_axis": "-Y",
+  "up_axis": "+Z",
+  "dimensions_m": [
+    10.0,
+    10.0,
+    13.5
+  ],
+  "mesh_objects": [
+    "低矮药店与相邻商业店铺楼体_10x10m_01_UI灯光自发光",
+    "低矮药店与相邻商业店铺楼体_10x10m_01_主体"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "polygon_count": 144
+}

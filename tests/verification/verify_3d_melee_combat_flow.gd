@@ -123,7 +123,7 @@ func _verify_three_step_state_machine(player: Player3D, failures: Array[String])
 			if int(_hit_results[index].get("combo_step", 0)) != index + 1:
 				failures.append("Melee hit results are not ordered 1/2/3")
 	var melee_machine := player.get_state_machine_snapshot().get("melee_action_machine", {}) as Dictionary
-	if int((melee_machine.get("state_machine", {}).get("states", []) as Array).size()) != 4:
+	if int((melee_machine.get("state_machine", {}).get("states", []) as Array).size()) != 6:
 		failures.append("Melee action machine does not expose exactly four phases")
 	var actual_states: Array = player.get_state_machine_snapshot().get("states", [])
 	var expected_states := ["idle","moving","dashing","hurt","locked","falling","landing","seated","climbing","dead"]

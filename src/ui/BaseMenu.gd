@@ -52,7 +52,7 @@ func _ready() -> void:
 
 	# 显示玩家数据
 	_refresh_stats()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
 	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
 	UiMenuFocus.ensure_focus(self)
@@ -73,7 +73,7 @@ func _refresh_stats() -> void:
 	# 检查撤离战利品
 	_check_and_show_extraction_loot()
 	_refresh_facility_directory()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 
 
 func _build_facility_directory() -> void:

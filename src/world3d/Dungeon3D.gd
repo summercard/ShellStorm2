@@ -41,7 +41,6 @@ const CORRIDOR_WALL_PREFAB: PackedScene = preload("res://assets/art/props/dungeo
 const CORRIDOR_CEILING_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_ceiling_segment.tscn")
 const CORRIDOR_STAIR_TREAD_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_stair_tread.tscn")
 const CODE_HUD_GLYPH_SCRIPT := preload("res://src/ui/CodeHUDGlyph.gd")
-const NEON_FRAME_SCRIPT := preload("res://src/ui/NeonFrameControl.gd")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 const HUD_RELOAD_RING_SCRIPT := preload("res://src/ui/HudReloadRing.gd")
 const ENCOUNTER_COUNTDOWN_RING_SCRIPT := preload("res://src/ui/EncounterCountdownRing.gd")
@@ -153,7 +152,7 @@ const FATE_PURCHASED_CARD_ALPHA := 0.45
 ## 「已购买」这三个字是这张卡唯一还需要被读到的事实（它证明这张卡买过了），
 ## 跟着卡面一起沉到 0.34 会读不出来。实测有效亮度 = 0.72 × 0.40 ≈ 0.29，是暗但可辨的一档。
 ## 同样必须 R=G=B，理由同上。
-const FATE_PURCHASED_TEXT_COLOR := Color(0.72, 0.72, 0.72)
+const FATE_PURCHASED_TEXT_COLOR := UIPalette.PRISM_TEXT_FAINT
 ## 已购卡的灰度去色 shader（`canvas_item`，挂在卡背层上）。
 ##
 ## 为什么非要用材质而不是只调 `modulate`：卡背线稿本身是亮青绿（`#02FC8E` 级别），
@@ -178,7 +177,7 @@ void fragment() {
 
 ## 右下角本局金币读数（`RunLootReadout`）的常色（金色）。
 ## 抽成常量：「金币不足」反馈要在闪红之后**恢复**它，两处必须取同一个值，不能各写一份。
-const RUN_COIN_READOUT_COLOR := Color(1.0, 0.76, 0.26)
+const RUN_COIN_READOUT_COLOR := UIPalette.PRISM_WARN
 ## —— 门后购卡的交互反馈（主人 2026-10-15：让反馈更容易被看到）——
 ##
 ## 总原则：**视线在哪里，反馈就落在哪里**。金币的唯一读数在右下角（主人 2026-10-15：
@@ -1613,20 +1612,23 @@ func _install_holographic_hud_style() -> void:
 	_build_reference_main_hud()
 	_install_offscreen_enemy_indicator()
 
-	var extraction_style := _make_hud_style(Color(0.22, 1.0, 0.66), Color(0.008, 0.044, 0.046, 0.94), 2)
-	extraction_panel.add_theme_stylebox_override("panel", extraction_style)
+	# 2026-10-17 主人要求：主 HUD 的背框全部撤掉，撤离进度条外壳同样改为全透明。
+	# 进度条本体（background + fill）保留 —— 那是内容，不是背板。
+	extraction_panel.add_theme_stylebox_override("panel", _make_bare_hud_style())
 	_anchor_control(extraction_panel, 0.5, 1.0, 0.5, 1.0, -250, -252, 250, -184)
 	extraction_bar.custom_minimum_size = _hud_size(Vector2(460, 22))
 	var progress_background := StyleBoxFlat.new()
-	progress_background.bg_color = Color(0.012, 0.08, 0.075, 0.92)
-	progress_background.set_corner_radius_all(3)
+	progress_background.bg_color = Color(1.0, 1.0, 1.0, 0.16)
+	progress_background.border_color = UIPalette.PRISM_LINE_SOFT
+	progress_background.set_border_width_all(1)
+	progress_background.set_corner_radius_all(1)
 	extraction_bar.add_theme_stylebox_override("background", progress_background)
 	var progress_fill := StyleBoxFlat.new()
-	progress_fill.bg_color = Color(0.18, 0.96, 0.62)
-	progress_fill.set_corner_radius_all(3)
-	progress_fill.shadow_color = Color(0.10, 0.88, 0.54, 0.45)
-	progress_fill.shadow_size = 5
+	progress_fill.bg_color = UIPalette.PRISM_ACCENT
+	progress_fill.set_corner_radius_all(1)
+	progress_fill.shadow_size = 0
 	extraction_bar.add_theme_stylebox_override("fill", progress_fill)
+
 
 
 func _build_reference_main_hud() -> void:
@@ -1653,29 +1655,24 @@ func _build_reference_main_hud() -> void:
 	_reference_hud_root.add_child(_hud_wave_label)
 
 	var player_panel := _make_hud_panel(cyan, Color(0.006, 0.018, 0.030, 0.88))
-	# 2026-09-28 主人要求：角色状态块的蓝色背板也去掉。背板由两部分叠成，必须一起撤：
-	# ① _make_hud_panel 的深色底 + 青色描边 + 外发光（本处）：换成全透明 StyleBox；
-	# ② _add_neon_frame 的青色四角括号（下方那一行，已删除调用）。
-	# 内层 MarginContainer 的 12/10/12/10 仍是唯一内边距来源 ⇒ 内容位置一字不动。
+	# 2026-10-17 主人要求：主 HUD 的背框（底衬 + 描边 + 四角括号）**全部撤掉** —— 太占视野。
+	# 统一收敛到 `_make_bare_hud_style()` 的全透明外壳：内边距仍由内层 MarginContainer 承担，
+	# 所以血条 / 电芯 / 文字的落位一像素不动；可读性交给 `_make_hud_label` 自带的描边兜底。
 	player_panel.add_theme_stylebox_override("panel", _make_bare_hud_style())
 	player_panel.name = "PlayerStatusBlock"
-	_anchor_control(player_panel, 0.0, 0.0, 0.0, 0.0, 18, 46, 360, 178)
+	_anchor_control(player_panel, 0.0, 0.0, 0.0, 0.0, 18, 44, 358, 174)
 	_reference_hud_root.add_child(player_panel)
 	# tap 头像 → 切换背包（键 I / Tab 等效）
 	player_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	player_panel.tooltip_text = "点击打开/关闭背包 [键 I / Tab]"
 	player_panel.gui_input.connect(_on_player_status_gui_input.bind(player_panel))
-	var player_margin := _make_margin(12, 10, 12, 10)
+	var player_margin := _make_margin(12, 8, 12, 8)
 	player_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	player_panel.add_child(player_margin)
 	var player_row := HBoxContainer.new()
 	player_row.add_theme_constant_override("separation", _hud_int(12))
 	player_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	player_margin.add_child(player_row)
-	# 2026-09-28 主人要求：角色状态块不再显示「头像格」。头像格那个深色方块背板是
-	# CodeHUDGlyph._draw_robot() 自绘的，因此整格置不可见即可同时去掉背板与头像。
-	# 节点仍创建并挂进同一行，只置 visible=false —— HBoxContainer 会跳过不可见子节点，
-	# 不必改布局代码，也不动任何既有探针读取的节点结构，回滚只需删掉下面一行。
 	var portrait := CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
 	portrait.custom_minimum_size = _hud_size(Vector2(82, 82))
 	portrait.configure("robot", Color(1.0, 0.25, 0.84))
@@ -1683,46 +1680,49 @@ func _build_reference_main_hud() -> void:
 	player_row.add_child(portrait)
 	var stat_vbox := VBoxContainer.new()
 	stat_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	stat_vbox.add_theme_constant_override("separation", _hud_int(5))
+	stat_vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	stat_vbox.add_theme_constant_override("separation", _hud_int(6))
 	player_row.add_child(stat_vbox)
-	hp_label = _make_hud_label("230 / 230", 17, Color.WHITE)
-	hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	stat_vbox.add_child(hp_label)
-	# 2026-10-15 主人：「这个血条表现效果，角色的血条主界面的也要」。玩家条与 Boss 屏条
-	# 同构：白色延迟层先铺底、红色真实条压在上面，两层用 FULL_RECT 跟随同一个 stack。
-	# VBox 只认 stack 的最小尺寸，所以内边距/位置与改造前一模一样（原来那条 220×22 直接
-	# 挂在 VBox 里，现在换成同尺寸的 stack）—— 不改任何既有控件坐标。
+	# 对标《逃离鸭科夫》圆角胶囊血条：HP 读数直接居中嵌在圆角红血条正中央，省去上方冗余独立行
 	var hp_stack := Control.new()
 	hp_stack.name = "PlayerHealthBarStack"
-	hp_stack.custom_minimum_size = _hud_size(Vector2(220, 22))
+	hp_stack.custom_minimum_size = _hud_size(Vector2(220, 26))
 	hp_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stat_vbox.add_child(hp_stack)
 	_player_delayed_bar = ProgressBar.new()
 	_player_delayed_bar.name = "PlayerHealthBarDelayed"
-	_player_delayed_bar.custom_minimum_size = _hud_size(Vector2(220, 22))
+	_player_delayed_bar.custom_minimum_size = _hud_size(Vector2(220, 26))
 	_player_delayed_bar.show_percentage = false
 	_player_delayed_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_player_delayed_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_player_delayed_bar.add_theme_stylebox_override("background", _make_bar_style(Color(0.12, 0.02, 0.04), 4))
+	var hp_bg_style := _make_bar_style(UIPalette.PRISM_HP_BG, 1)
+	hp_bg_style.border_color = Color(1.0, 1.0, 1.0, 0.30)
+	hp_bg_style.set_border_width_all(1)
+	_player_delayed_bar.add_theme_stylebox_override("background", hp_bg_style)
 	_player_delayed_bar.add_theme_stylebox_override(
-		"fill", _make_bar_style(HUD_HEALTH_BAR_DELAY_COLOR, 4)
+		"fill", _make_bar_style(HUD_HEALTH_BAR_DELAY_COLOR, 1)
 	)
 	hp_stack.add_child(_player_delayed_bar)
 	hp_bar = ProgressBar.new()
 	hp_bar.name = "HPBar"
-	hp_bar.custom_minimum_size = _hud_size(Vector2(220, 22))
+	hp_bar.custom_minimum_size = _hud_size(Vector2(220, 26))
 	hp_bar.show_percentage = false
 	hp_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hp_bar.add_theme_stylebox_override("background", _make_bar_style(Color(0.12, 0.02, 0.04, 0.0), 4))
-	var hp_fill := _make_bar_style(Color(0.93, 0.055, 0.12), 4)
-	hp_fill.shadow_color = Color(0.95, 0.02, 0.12, 0.42)
-	hp_fill.shadow_size = 5
+	hp_bar.add_theme_stylebox_override("background", _make_bar_style(Color(0.12, 0.02, 0.04, 0.0), 1))
+	# 平红实心条，无辉光 —— 棱镜语言的条是"色块"，不是"发光管"
+	var hp_fill := _make_bar_style(UIPalette.PRISM_HP_RED, 1)
+	hp_fill.shadow_size = 0
 	hp_bar.add_theme_stylebox_override("fill", hp_fill)
 	hp_stack.add_child(hp_bar)
+	hp_label = _make_hud_label("230 / 230", 16, Color.WHITE)
+	hp_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hp_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hp_stack.add_child(hp_label)
 	var energy := HBoxContainer.new()
 	energy.name = "FlashlightBatteryPanel"
-	energy.custom_minimum_size = _hud_size(Vector2(220, 14))
+	energy.custom_minimum_size = _hud_size(Vector2(220, 18))
 	energy.add_theme_constant_override("separation", _hud_int(6))
 	energy.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stat_vbox.add_child(energy)
@@ -1730,24 +1730,22 @@ func _build_reference_main_hud() -> void:
 	for index in range(3):
 		var pip := Panel.new()
 		pip.name = "BatteryCell_%d" % index
-		pip.custom_minimum_size = _hud_size(Vector2(34, 9))
-		pip.add_theme_stylebox_override("panel", _make_hud_style(cyan, Color(cyan, 0.72), 1))
+		pip.custom_minimum_size = _hud_size(Vector2(34, 11))
+		pip.add_theme_stylebox_override(
+			"panel",
+			_make_prism_hud_card_style(UIPalette.PRISM_LINE, 0.46, 1, 1)
+		)
 		energy.add_child(pip)
 		_hud_battery_cells.append(pip)
-	_hud_battery_time_label = _make_hud_label("基地内暂停耗电 · 100%", 11, Color(0.72, 0.86, 0.96))
+	_hud_battery_time_label = _make_hud_label("基地内暂停耗电 · 100%", 12, Color(0.84, 0.92, 0.98))
 	_hud_battery_time_label.name = "BatteryTimeLabel"
 	_hud_battery_time_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_hud_battery_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	energy.add_child(_hud_battery_time_label)
-	# 2026-10-15 主人要求：本局「背包 / 钥匙 / 金币」读数从血条左下方挪到**右下角**，
-	# 字体与字号对齐右下角弹药读数（见下方 `CurrentWeaponPanel` 段落的 RunLootReadout）。
-	# 因此这一行**不再进 `stat_vbox`**，改挂 `_reference_hud_root` 并用右下同套锚点。
-	# 只挪位置、不动数据源：`_refresh_loot_label()` 仍照旧往同一个 `loot_label` 写。
-	# 背板撤掉后这些文字直接压在实景上：远征 01 的浅色天花板/桥体下，白色 HP 数字与
-	# 浅蓝电量说明会同明度而读不出。只加文字描边（不是背板）——不占像素、不改颜色。
 	for label in [hp_label, _hud_battery_time_label]:
-		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
-		label.add_theme_constant_override("outline_size", 5)
+		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.88))
+		label.add_theme_constant_override("outline_size", 4)
+
 
 	seed_label = _make_hud_label("SEED", 12, subdued)
 	_anchor_control(seed_label, 0.0, 0.0, 0.0, 0.0, 22, 180, 360, 202)
@@ -1815,7 +1813,6 @@ func _build_reference_main_hud() -> void:
 	# 放到左侧目标卡下方，避免继续遮挡角色前方与中央战斗视野。
 	_anchor_control(info_panel, 0.0, 0.0, 0.0, 0.0, 18, 370, 338, 425)
 	_reference_hud_root.add_child(info_panel)
-	_add_neon_frame(info_panel, cyan, 0.58, false)
 	var info_margin := _make_margin(10, 5, 10, 5)
 	info_panel.add_child(info_margin)
 	status_label = _make_hud_label("正在建立行动区……", 11, Color(0.76, 0.91, 0.98))
@@ -1834,61 +1831,57 @@ func _build_reference_main_hud() -> void:
 	# 下方 QuickItemHUD_0/1 两块保持原位不动。
 	var weapon_panel := _make_bare_hud_panel()
 	weapon_panel.name = "CurrentWeaponPanel"
+	# 2026-10-17 主人要求：右下武器栏同样撤掉背框（`_make_bare_hud_panel` 已是全透明外壳，
+	# 原先附加的棱镜卡片底衬 + 四角括号在此删除）。弹药读数靠描边压在实景上仍然清晰。
 	# 右下角。offset 仍是 canvas 坐标、且会被 ×HUD_UI_SCALE：350×70 → 实际 280×56，
 	# 落在 verify_finite_ammo_flow 的「250..312 × 44..59」尺寸契约内（内容更小 ⇒ 由锚框决定）。
 	_anchor_control(weapon_panel, 1.0, 1.0, 1.0, 1.0, -368, -90, -18, -20)
 	_reference_hud_root.add_child(weapon_panel)
 	# 右下武器栏：tap 在主武器 / 副武器 之间切换（_on_ammo_changed 里 [N] 会自动反映新槽位）
 	weapon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	weapon_panel.tooltip_text = "点击切换主/副武器"
+	weapon_panel.tooltip_text = "点击切换主/副武器 [键 1 / 2]"
 	weapon_panel.gui_input.connect(_on_weapon_panel_gui_input.bind(weapon_panel))
-	var weapon_margin := _make_margin(8, 5, 8, 4)
+	var weapon_margin := _make_margin(8, 4, 10, 4)
 	weapon_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_panel.add_child(weapon_margin)
 	var weapon_row := HBoxContainer.new()
 	# 内容靠右贴角：面板宽度由锚框（280）撑住，内容只有约 200 ⇒ 右侧对齐才不会飘在中间。
 	weapon_row.alignment = BoxContainer.ALIGNMENT_END
-	weapon_row.add_theme_constant_override("separation", _hud_int(10))
+	weapon_row.add_theme_constant_override("separation", _hud_int(8))
 	weapon_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_margin.add_child(weapon_row)
+	# 棱镜实体白底黑字方键帽 [1/2]
+	var weapon_keycap := UIStyleFactory.make_prism_keycap_badge("1", _hud_int(12), _hud_size(Vector2(22, 20)))
+	weapon_keycap.name = "WeaponSlotKeycap"
+	weapon_keycap.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	weapon_row.add_child(weapon_keycap)
 	_hud_weapon_model_icon = ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
 	_hud_weapon_model_icon.name = "CurrentWeaponModelIcon3D"
-	_hud_weapon_model_icon.custom_minimum_size = _hud_size(Vector2(64, 46))
+	_hud_weapon_model_icon.custom_minimum_size = _hud_size(Vector2(60, 44))
 	_hud_weapon_model_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	# 取景交给 ItemModelIcon3D 自适应（2026-09-30 主人反馈「物品大于图标尺寸会被切、
-	# 居中位置不对」）：相机尺寸与模型位移由模型自身外接盒算出，此处不再写死倍率。
-	# 原来这里传 0.34（被 clamp 到 0.45）＝按手枪调的一档，换步枪/巨剑就出框。
 	_hud_weapon_model_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(_hud_weapon_model_icon)
 	_refresh_hud_weapon_model(true)
 	# 有效信息一：当前子弹数 · N备弹（不再显示弹匣容量）。font 26×0.8 → 21 px。
 	ammo_label = _make_hud_label("0 · 0备弹", 26, Color.WHITE)
-	ammo_label.custom_minimum_size = _hud_size(Vector2(96, 44))
+	ammo_label.custom_minimum_size = _hud_size(Vector2(92, 42))
 	ammo_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ammo_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(ammo_label)
-	# 有效信息二：命运卡槽占用，只留「已用/容量」。青色小号，与左边白色弹药数区分开。
-	_hud_weapon_fate_label = _make_hud_label("0/0", 15, Color(0.48, 0.84, 0.94))
+	# 有效信息二：命运卡槽占用，只留「已用/容量」。天青色小号，与左边白色弹药数区分开。
+	_hud_weapon_fate_label = _make_hud_label("0/0", 15, UIPalette.PRISM_ACCENT)
 	_hud_weapon_fate_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_hud_weapon_fate_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(_hud_weapon_fate_label)
 	# 武器名（[N] 名称 · 主/副武器）：主人要求「其它文字不要」⇒ 不再显示。
 	# 但节点保留在树上并继续接收 weapon_meta_text —— Presenter 的只读投影契约
 	# （verify_hud_presenter_3d）要求该字段逐字产出，删节点会让写入路径空引用。
-	# 挂在面板（而非 weapon_row）下且不可见 ⇒ 容器布局跳过不可见子节点，不占一格。
 	_hud_weapon_meta_label = _make_hud_label("当前武器 · 未装备", 9, Color(0.92, 0.95, 0.98))
 	_hud_weapon_meta_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hud_weapon_meta_label.visible = false
 	weapon_panel.add_child(_hud_weapon_meta_label)
-	# 撤掉背板后文字直接压在实景上：这两处（弹药数/命运槽）原先靠深色底保证可读，现只靠描边。
-	# 口径与 _outline_labels 的注释一致：不占像素、不改布局。
 	_outline_labels([ammo_label, _hud_weapon_fate_label])
-	# 有效信息三（2026-10-15）：右下角只显示本局金币。
-	# 背包数量与钥匙读数不再显示；金币保留黄色，字号继续与弹药读数同档。
-	# 从 `PlayerStatusBlock` 的 `stat_vbox` 移出，落在武器面板**正上方**、右缘与弹药簇齐平。
-	# 数值口径零改动：`_refresh_loot_label()` 仍在写这一枚 `loot_label`。
-	# 主人 2026-10-15 追加：顶部「本局金币」余额行移除后，这里是唯一金币读数，
-	# 购卡扣款 / 获得金币的数字脉冲都落在它身上（见 `_pulse_coin_readout`）。
+	# 有效信息三（2026-10-15）：右下角只显示本局金币（保持字号26与右对齐契约）。
 	loot_label = _make_hud_label("金币 0", 26, RUN_COIN_READOUT_COLOR)
 	loot_label.name = "RunLootReadout"
 	loot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -1911,6 +1904,7 @@ func _build_reference_main_hud() -> void:
 	for quick_index in range(2):
 		var quick_panel := _make_bare_hud_panel()
 		quick_panel.name = "QuickItemHUD_%d" % quick_index
+		# 2026-10-17：快捷物品槽的背框一并撤掉（内容只有一枚图标 + 一行小字，框纯属占用）。
 		var left := -220.0 if quick_index == 0 else 162.0
 		var right := -162.0 if quick_index == 0 else 220.0
 		_anchor_control(quick_panel, 0.5, 1.0, 0.5, 1.0, left, -75, right, -20)
@@ -1929,13 +1923,14 @@ func _build_reference_main_hud() -> void:
 		quick_icon_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_box.add_child(quick_icon_host)
 		_hud_quick_item_icon_hosts.append(quick_icon_host)
-		var quick_label := _make_hud_label("[%d] 空" % (quick_index + 3), 7, Color(0.66, 0.94, 0.84))
+		var quick_label := _make_hud_label("[%d] 空" % (quick_index + 3), 8, Color(0.92, 0.96, 1.0))
 		quick_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		quick_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_box.add_child(quick_label)
 		_hud_quick_item_labels.append(quick_label)
 		_outline_labels([quick_label])
 	_refresh_quick_item_hud()
+
 	# 右下角不再放 R/SHIFT/F/E 四个动作键图标：动作本身仍走 InputMap（键盘与手柄照常），
 	# 这里只去掉 HUD 上的可视 + 点击入口。
 
@@ -2014,11 +2009,7 @@ func _build_modal_close_button(label: String, on_press: Callable) -> Button:
 	btn.focus_mode = Control.FOCUS_NONE
 	btn.custom_minimum_size = _hud_size(Vector2(150, 36))
 	btn.add_theme_font_size_override("font_size", _hud_int(13))
-	var styles := UIStyleFactory.make_button_style(
-		UIStyleFactory.make_panel_bg(2).bg_color,
-		Color(0.62, 0.90, 0.96)
-	)
-	UIStyleFactory.apply_button_style(btn, styles)
+	UIStyleFactory.apply_prism_button(btn, "ghost", 2, 13, 2, "none")
 	btn.pressed.connect(on_press)
 	return btn
 
@@ -2070,16 +2061,53 @@ func _make_hud_panel(accent: Color, background: Color) -> PanelContainer:
 
 
 func _make_hud_style(accent: Color, background: Color, border_width: int) -> StyleBoxFlat:
+	# 局内 HUD 弹层统一到「棱镜线框」：冷蓝半透底 + 白系细线，零圆角、零投影。
+	# 底色 alpha 仍严格 <= 0.50（verify_finite_ammo_flow 的透明度契约）。
 	var style := StyleBoxFlat.new()
-	# 战局 HUD 与其弹层统一采用约50%底色透明度；文字和描边保持清晰。
-	background.a = minf(background.a, 0.50)
-	style.bg_color = background
-	style.border_color = accent
-	style.set_border_width_all(border_width)
-	style.set_corner_radius_all(5)
-	style.shadow_color = Color(accent, 0.22)
-	style.shadow_size = 7
+	style.bg_color = Color(
+		UIPalette.PRISM_SURFACE.r,
+		UIPalette.PRISM_SURFACE.g,
+		UIPalette.PRISM_SURFACE.b,
+		minf(maxf(background.a, 0.0), 0.50)
+	)
+	# 只有"语义色"（危险 / 警告 / 强调）才允许给线着色，其余一律走次级白线 ——
+	# 避免把旧的霓虹青当成"结构色"铺满整屏。
+	var semantic := UIStyleFactory.prism_normalize_color(accent)
+	if semantic == UIPalette.PRISM_DANGER or semantic == UIPalette.PRISM_WARN or semantic == UIPalette.PRISM_ACCENT:
+		style.border_color = semantic
+	else:
+		style.border_color = UIPalette.PRISM_LINE_SOFT
+	style.set_border_width_all(maxi(1, border_width))
+	style.set_corner_radius_all(2)
+	style.shadow_size = 0
 	return style
+
+
+## 构造「棱镜线框」HUD 卡片 StyleBox：极淡深蓝底衬 + 1px 白线方角细框，零辉光。
+## 严格保证 alpha <= 0.50 —— verify_finite_ammo_flow 的五十趴透明度探针契约。
+func _make_prism_hud_card_style(
+	border_color: Color = UIPalette.PRISM_LINE_SOFT,
+	alpha: float = 0.44,
+	radius: int = 2,
+	border_width: int = 1
+) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(
+		UIPalette.PRISM_SURFACE.r,
+		UIPalette.PRISM_SURFACE.g,
+		UIPalette.PRISM_SURFACE.b,
+		clampf(alpha, 0.0, 0.50)
+	)
+	style.border_color = border_color
+	style.set_border_width_all(border_width)
+	style.set_corner_radius_all(radius)
+	style.shadow_size = 0
+	style.content_margin_left = 0.0
+	style.content_margin_right = 0.0
+	style.content_margin_top = 0.0
+	style.content_margin_bottom = 0.0
+	return style
+
 
 
 ## 全透明 HUD 外壳：撤掉底色、描边、圆角与外发光，只保留 PanelContainer 的布局职责。
@@ -2129,9 +2157,19 @@ func _make_hud_label(text_value: String, font_size: int, color: Color) -> Label:
 	label.text = text_value
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_font_size_override("font_size", _hud_int(font_size))
-	label.add_theme_color_override("font_color", color)
+	# 调色板收口：HUD 里散落的硬编码色（近白 / 霓虹青 / 金币金 / 平红）按色相
+	# 归到棱镜语义槽，不再逐处改写 —— 语义分工（危险/警告/强调/成功）完整保留。
+	# 原色的 alpha 予以保留（有些 HUD 字本来就带半透，例如淡出态）。
+	var normalized := UIStyleFactory.prism_normalize_color(color)
+	normalized.a = color.a
+	label.add_theme_color_override("font_color", normalized)
+	# HUD 压在明亮低多边形实景上，白字必须留描边 —— 棱镜规范 §4.4 的可读性例外，
+	# 也是"无背板 / 无卡片"语言下唯一能保证任意背景可读的手段。
 	label.add_theme_color_override("font_outline_color", Color(0.0, 0.025, 0.045, 0.94))
 	label.add_theme_constant_override("outline_size", 3)
+	var font := UIStyleFactory.make_prism_font(1)
+	if font != null:
+		label.add_theme_font_override("font", font)
 	return label
 
 
@@ -2142,14 +2180,6 @@ func _make_margin(left: int, top: int, right: int, bottom: int) -> MarginContain
 	margin.add_theme_constant_override("margin_right", _hud_int(right))
 	margin.add_theme_constant_override("margin_bottom", _hud_int(bottom))
 	return margin
-
-
-func _add_neon_frame(parent: Control, accent: Color, glow: float, scan_lines: bool) -> void:
-	var frame := NEON_FRAME_SCRIPT.new() as NeonFrameControl
-	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
-	frame.configure(accent, glow, scan_lines)
-	parent.add_child(frame)
-	parent.move_child(frame, parent.get_child_count() - 1)
 
 
 func _anchor_control(
@@ -2267,7 +2297,7 @@ func _toggle_full_map() -> void:
 	_full_map_overlay.z_index = 850
 	var dim := ColorRect.new()
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	dim.color = Color(0.0, 0.004, 0.010, 0.84)
+	dim.color = Color(UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.72)
 	dim.mouse_filter = Control.MOUSE_FILTER_STOP
 	_full_map_overlay.add_child(dim)
 	_full_map_control = DungeonMinimap3D.new()
@@ -2279,7 +2309,7 @@ func _toggle_full_map() -> void:
 	_full_map_control.set_full_map_mode(true)
 	_full_map_control.copy_state_from(minimap)
 	_full_map_overlay.add_child(_full_map_control)
-	var hint := _make_hud_label("M / ESC 关闭 · 仅显示本层已探索房间与当前位置", 14, Color(0.62, 0.90, 0.96))
+	var hint := _make_hud_label("M / ESC 关闭 · 仅显示本层已探索房间与当前位置", 14, UIPalette.PRISM_LABEL)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_anchor_control(hint, 0.5, 1.0, 0.5, 1.0, -360, -44, 360, -16)
 	_full_map_overlay.add_child(hint)
@@ -4862,9 +4892,14 @@ func _show_boss_hud(enemy: Enemy3D) -> void:
 		_boss_label.name = "BossName"
 		_boss_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_boss_label.add_theme_font_size_override("font_size", _hud_int(21))
-		_boss_label.add_theme_color_override("font_color", Color(1.0, 0.92, 0.88))
+		# BOSS 名归到棱镜"危险"语义槽（与 BossPanel 的 danger 线同色），
+		# 不再用上一代那层暖白偏粉的手调色。
+		_boss_label.add_theme_color_override("font_color", UIPalette.PRISM_DANGER)
 		_boss_label.add_theme_color_override("font_outline_color", Color(0.08, 0.01, 0.015, 0.96))
 		_boss_label.add_theme_constant_override("outline_size", _hud_int(5))
+		var boss_font := UIStyleFactory.make_prism_font(3)
+		if boss_font != null:
+			_boss_label.add_theme_font_override("font", boss_font)
 		box.add_child(_boss_label)
 		# 两层叠放：白条追赶真实红条；两者都保留在同一薄条区域内，不增加高度。
 		var bar_stack := Control.new()
@@ -6328,7 +6363,12 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	var caption := FateCardView.build_caption(card, _hud_int(22), _hud_size(Vector2(346, 0)).x, target_detail)
 	# 说明区也统一预留高度：先保证三张卡面和文字基线整齐，再容纳枪械卡的第二行信息。
 	caption.custom_minimum_size = _hud_size(Vector2(346, 92))
-	caption.add_theme_color_override("font_color", accent)
+	caption.add_theme_color_override(
+		"font_color", UIStyleFactory.prism_normalize_color(accent)
+	)
+	var caption_font := UIStyleFactory.make_prism_font(2)
+	if caption_font != null:
+		caption.add_theme_font_override("font", caption_font)
 	caption.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.88))
 	caption.add_theme_constant_override("outline_size", _hud_int(3))
 	caption.add_theme_constant_override("line_spacing", _hud_int(3))
@@ -6386,7 +6426,6 @@ func _build_programmatic_fate_face(host: Control, card: FateCard, accent: Color)
 	effect.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	effect.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(effect)
-	_add_neon_frame(host, accent, 1.0, true)
 	return margin
 
 
@@ -6395,8 +6434,13 @@ func _build_programmatic_fate_back(host: Control, accent: Color) -> Control:
 	back.name = "TarotCardBack"
 	back.set_anchors_preset(Control.PRESET_FULL_RECT)
 	back.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var back_style := _make_hud_style(Color(accent, 0.92), Color(0.006, 0.012, 0.030, 0.99), 3)
-	back_style.set_corner_radius_all(10)
+	# 卡背要**遮住翻转中的卡面**，不能用 HUD 弹层的 0.50 半透底
+	# （那是 verify_finite_ammo_flow 对 HUD 面板的透明度契约，不适用于卡牌实体）。
+	# 这里给卡背一块近乎不透明的棱镜深墨板 + 1px 线，方角。
+	var back_style := UIStyleFactory.make_prism_panel(true, 0.96)
+	back_style.border_color = UIStyleFactory.prism_normalize_color(Color(accent, 0.92))
+	back_style.set_border_width_all(1)
+	back_style.set_corner_radius_all(2)
 	back.add_theme_stylebox_override("panel", back_style)
 	host.add_child(back)
 	var back_glyph := _make_hud_label("✦\n命运塔罗\nFATE", 30, Color(accent, 0.92))
@@ -8843,6 +8887,12 @@ func _apply_weapon_hud_command(command: Dictionary) -> void:
 	if _hud_weapon_meta_label != null:
 		# 面板上已不显示（visible=false），但仍按只读投影契约逐字接收文本。
 		_hud_weapon_meta_label.text = str(command.get("weapon_meta_text", "当前武器 · 未装备"))
+		if _reference_hud_root != null:
+			var keycap_lbl := _reference_hud_root.find_child("KeycapLabel", true, false) as Label
+			if keycap_lbl != null:
+				var meta_str := _hud_weapon_meta_label.text
+				keycap_lbl.text = "2" if meta_str.begins_with("[2]") else "1"
+
 	if _hud_weapon_fate_label != null:
 		# 只留命运卡槽占用「已用/容量」，去掉「实例 #… · 命运 … · K 详情」整行。
 		_hud_weapon_fate_label.text = "%d/%d" % [
@@ -8956,59 +9006,33 @@ func _reset_death_settlement_state() -> void:
 func _show_death_confirmation_dialog() -> void:
 	if _death_dialog != null and is_instance_valid(_death_dialog):
 		return
-	var overlay := Control.new()
+	# 「棱镜线框」死亡结算确认：冷蓝压暗 + 四角括号模态卡 + 黑徽章标题（含下折角）
+	# + 内嵌规则说明白线框 + 单枚实心近白高对比按钮（死亡本身已发生，按钮是"继续"而非"销毁"）。
+	var spec := UIStyleFactory.make_prism_confirm_modal(
+		"行动人员已倒下",
+		"MIA / DOWNED",
+		"未保险物资将按死亡规则结算，保险柜内物资予以保留。\n确认后立即返回 %s。" % _death_return_location_text(),
+		[
+			UIStyleFactory.prism_button_spec(
+				"ConfirmButton", _death_return_button_text(), "primary", 380.0, 56.0
+			)
+		],
+		UIPalette.PRISM_DANGER,
+		Vector2(760, 382),
+		0.70
+	)
+	var overlay := spec["overlay"] as Control
 	overlay.name = "DeathConfirmationDialog"
-	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	overlay.z_index = 950
-	var dim := ColorRect.new()
-	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	dim.color = Color(0.005, 0.010, 0.018, 0.78)
-	dim.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.add_child(dim)
-	var panel := PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.position = Vector2(-260, -130)
-	panel.custom_minimum_size = Vector2(520, 260)
-	panel.add_theme_stylebox_override(
-		"panel",
-		UIStyleFactory.make_panel_with_border(0, UIPalette.HP_LOW, 8, 2)
-	)
-	overlay.add_child(panel)
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 26)
-	margin.add_theme_constant_override("margin_top", 24)
-	margin.add_theme_constant_override("margin_right", 26)
-	margin.add_theme_constant_override("margin_bottom", 22)
-	panel.add_child(margin)
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 15)
-	margin.add_child(box)
-	var title := Label.new()
-	title.text = "行动人员已倒下"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 28)
-	title.add_theme_color_override("font_color", Color(1.0, 0.34, 0.28))
-	box.add_child(title)
-	var detail := Label.new()
-	detail.text = "未保险物资将按死亡规则结算。确认后返回 %s。" % _death_return_location_text()
-	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	detail.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
-	box.add_child(detail)
-	var confirm := Button.new()
-	confirm.text = _death_return_button_text()
-	confirm.custom_minimum_size = Vector2(0, 52)
-	UIStyleFactory.apply_button_style(
-		confirm,
-		UIStyleFactory.make_button_style(Color(0.15, 0.035, 0.045, 0.98), UIPalette.HP_LOW)
-	)
-	confirm.pressed.connect(_confirm_death_return)
-	box.add_child(confirm)
+	var panel := spec["panel"] as Control
 	$HUD.add_child(overlay)
+	var confirm := (spec["buttons"] as Array)[0] as Button
+	confirm.pressed.connect(_confirm_death_return)
 	_death_dialog = overlay
+	UIFX.pop_in_modal(panel)
 	confirm.grab_focus()
 	_sync_player_input_lock()
+
 
 
 func _death_return_location_text() -> String:
@@ -9400,14 +9424,12 @@ func _apply_battery_fill_color(tier: int, ratio: float) -> void:
 		var cell := _hud_battery_cells[index]
 		var filled := index < active_cells
 		var was_filled := _hud_battery_cell_prev_filled[index]
-		var style := _make_hud_style(
-			Color(0.23, 0.88, 1.0) if not filled else color,
-			Color(0.23, 0.88, 1.0, 0.16) if not filled else Color(color, 0.82),
+		var style := _make_prism_hud_card_style(
+			Color(1.0, 1.0, 1.0, 0.30) if not filled else color,
+			0.14 if not filled else 0.46,
 			1,
+			1
 		)
-		if filled:
-			style.shadow_color = Color(color, 0.38)
-			style.shadow_size = 3
 		cell.add_theme_stylebox_override("panel", style)
 		if filled != was_filled:
 			_animate_battery_cell_transition(cell, was_filled, filled, color, index)

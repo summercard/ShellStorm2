@@ -1,0 +1,39 @@
+cyberpunk_old_town_street (v001) - 40x40m Square Cyberpunk Old Town Street Diorama
+├── 01_制作组件_按组件拆分_v001 (32 Master Components)
+├── 02_游戏输出_独立资产包_v001 (32 Output Packages, Body/Emissive Split)
+├── 03_场景拼装_实例布局_v001 (109 Collection Instances)
+└── 90_展示与动态_灯光相机 (Cameras, Neon Lights, 3D Steam Plumes & 6 Keyframed Animations)
+
+Component Catalog Summary:
+  - [comp_square_street_plinth_40x40_01] 工整四方形街区基底_40x40m_01 | polys=60 | instances=1
+  - [comp_wet_asphalt_lane_10x10_01] 湿润双黄线柏油路面_10x10m_01 | polys=78 | instances=3
+  - [comp_wet_asphalt_crosswalk_10x10_02] 湿润斑马线柏油路面_10x10m_02 | polys=96 | instances=1
+  - [comp_sidewalk_curb_slab_10x5_01] 人行道石砖路缘直段_10x5m_01 | polys=276 | instances=8
+  - [comp_sidewalk_corner_alley_10x5_02] 街角小巷台阶石砖段_10x5m_02 | polys=78 | instances=4
+  - [comp_hotel_brick_tower_core_12x12_01] 红褐砖石老旧酒店主体_12x12m_01 | polys=418 | instances=1
+  - [comp_hotel_arch_window_bay_02] 酒店暖光拱形窗与窗台残雪模块_02 | polys=108 | instances=9
+  - [comp_hotel_shutter_shopfront_03] 酒店底层金属卷帘门与暖红雨棚入口_03 | polys=168 | instances=1
+  - [comp_neon_sign_hotel_nexus_01] 巨型竖向粉红HOTEL与NEXUS霓虹招牌_01 | polys=282 | instances=1
+  - [comp_pharmacy_shop_block_10x10_01] 低矮药店与相邻商业店铺楼体_10x10m_01 | polys=144 | instances=1
+  - [comp_neon_sign_kanji_yaku_02] 冷蓝方形汉字藥发光招牌与粉紫副牌_02 | polys=246 | instances=1
+  - [comp_industrial_bar_building_12x14_01] 深灰金属板与砖混工业酒吧建筑_12x14m_01 | polys=240 | instances=1
+  - [comp_neon_sign_bar_martini_02] 竖向红蓝BAR与鸡尾酒杯霓虹招牌_02 | polys=168 | instances=1
+  - [comp_foreground_rooftop_deck_12x10_01] 前景机械工业平屋顶平台A_12x10m_01 | polys=294 | instances=1
+  - [comp_foreground_rooftop_deck_12x10_02] 前景机械工业平屋顶平台B_12x10m_02 | polys=230 | instances=1
+  - [comp_skybridge_truss_span_22m_01] 跨街重型装甲高架走廊主梁_22m_01 | polys=444 | instances=1
+  - [comp_skybridge_hazard_pillar_02] 黄黑警示条纹高架桥重型支撑柱_02 | polys=84 | instances=2
+  - [comp_skybridge_sign_sector07_district_03] 高架桥SECTOR07发光标识铭牌组_03 | polys=648 | instances=1
+  - [comp_distant_cyber_alley_backdrop_01] 高架桥后方远景建筑群与霓虹灯牌簇_01 | polys=330 | instances=1
+  - [comp_rooftop_twin_fan_chiller_01] 屋顶双圆扇工业冷却空调机组_01 | polys=174 | instances=3
+  - [comp_rooftop_exhaust_vent_box_02] 屋顶方形百叶排风塔与管道箱_02 | polys=42 | instances=4
+  - [comp_wall_ac_outdoor_unit_03] 建筑外墙悬挂式空调外机与支架_03 | polys=32 | instances=8
+  - [comp_facade_pipe_cluster_vertical_01] 建筑立面重型竖向工业管道束与法兰_01 | polys=78 | instances=5
+  - [comp_facade_pipe_elbow_horizontal_02] 建筑立面横向转角管道桥架与电缆束_02 | polys=60 | instances=6
+  - [comp_metal_fire_stair_walkway_03] 工业外挂金属消防楼梯与检修走道_03 | polys=84 | instances=3
+  - [comp_retro_cyber_sedan_car_01] 复古方正深色轿车_亮红尾灯与暖前灯_01 | polys=178 | instances=2
+  - [comp_industrial_street_lamp_pole_01] 工业风双臂冷白街道路灯与信号灯杆_01 | polys=60 | instances=5
+  - [comp_glowing_hazard_bollard_02] 街角红橙条纹发光警示防撞柱_02 | polys=70 | instances=5
+  - [comp_street_guardrail_fence_4m_01] 人行道黑色金属防护栏杆_4m_01 | polys=120 | instances=6
+  - [comp_street_utility_trash_cabinet_02] 街道金属配电控制箱与垃圾箱组_02 | polys=18 | instances=6
+  - [comp_drain_manhole_grate_set_01] 路面圆形铸铁井盖与路缘排水格栅组_01 | polys=84 | instances=6
+  - [comp_curb_snow_slush_patch_02] 街角路缘与窗台冷白残雪堆积层_02 | polys=18 | instances=10

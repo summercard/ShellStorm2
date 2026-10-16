@@ -31,7 +31,7 @@ func _ready() -> void:
 	_build_blueprint_list()
 	_build_flashlight_module_panel()
 	_refresh_flashlight_module_panel()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
 	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
 	UiMenuFocus.ensure_focus(self)

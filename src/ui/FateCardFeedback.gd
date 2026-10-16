@@ -61,16 +61,17 @@ func _draw() -> void:
 	var bounds := Rect2(Vector2(2.0, 2.0), size - Vector2(4.0, 4.0))
 	if bounds.size.x <= 0.0 or bounds.size.y <= 0.0:
 		return
+	# 棱镜线框：**只画 1px 线**。旧版那两道 grow(3)/grow(1) 的粗描边叠起来是一圈
+	# 发光晕，属上一代语言；这里把"闪一下"完全交给线的亮度变化表达。
 	var flash_ratio := clampf(1.0 - _flash_elapsed / _flash_duration, 0.0, 1.0)
-	var edge_alpha := 0.14 if _hovered else 0.0
+	var edge_alpha := 0.20 if _hovered else 0.0
+	var line_width := 1.0
 	if flash_ratio > 0.0:
-		# 两道细线叠出克制的光感，避免盖住卡面主体。
-		edge_alpha = maxf(edge_alpha, 0.22 + flash_ratio * 0.58)
-		var glow_color := Color(accent_color, edge_alpha * 0.28)
-		draw_rect(bounds.grow(3.0), glow_color, false, 5.0)
-		draw_rect(bounds.grow(1.0), Color(accent_color, edge_alpha * 0.46), false, 3.0)
+		edge_alpha = maxf(edge_alpha, 0.42 + flash_ratio * 0.52)
+		# 闪的瞬间线提到 2px（仍是方角实线，不是发光），落回后保持 1px。
+		line_width = 1.0 + flash_ratio
 	if edge_alpha > 0.0:
-		draw_rect(bounds, Color(accent_color, edge_alpha), false, 1.5)
+		draw_rect(bounds, Color(accent_color, edge_alpha), false, line_width)
 	for particle in _particles:
 		var life := clampf(float(particle["life"]) / 0.34, 0.0, 1.0)
 		var particle_size := float(particle["size"])

@@ -20,6 +20,10 @@ const INDIRECT_DIFFUSE_MODES := ["low", "medium", "high"]
 const INDIRECT_DIFFUSE_LABELS := ["低 · 近域", "中 · 平衡", "高 · 完整"]
 const DEVICE_MODE_LABELS := ["自动跟随", "锁定键鼠", "锁定手柄"]
 
+## 主页左栏宽度（逻辑像素）。参考图的菜单只占屏宽约三分之一，
+## 右半边留给实景；把细线铺满整屏就失去了"左栏"这个语义。
+const PRISM_RAIL_WIDTH := 820.0
+
 @onready var resume_button: Button = $Center/Panel/Margin/MainPage/ResumeButton
 @onready var graphics_button: Button = $Center/Panel/Margin/MainPage/GraphicsButton
 @onready var return_to_base_button: Button = $Center/Panel/Margin/MainPage/ReturnToBaseButton
@@ -89,9 +93,10 @@ func _ready() -> void:
 	high_defaults_button.pressed.connect(_restore_high_defaults)
 	_setup_graphics_controls()
 	_setup_input_controls()
-	UIStyleFactory.apply_tactical_tree(self)
+	_apply_prism_pause_style()
 	_main_page_title_default_text = main_page_title.text
 	_resume_button_default_text = resume_button.text
+
 
 
 func try_consume_pause_input() -> bool:
@@ -192,6 +197,407 @@ func _apply_pause_visual(paused: bool) -> void:
 	dim.visible = paused
 	center.visible = paused
 	mouse_filter = Control.MOUSE_FILTER_STOP if paused else Control.MOUSE_FILTER_IGNORE
+	if paused:
+		var panel := get_node_or_null("Center/Panel") as Control
+		if panel != null:
+			UIFX.pop_in_modal(panel)
+
+
+## 「棱镜线框」全量装配（2026-10-16 业主第二轮指定参考图）：
+## 深色徽章标题 + 白色延长细线 + 下折角提示；主行动 = 实心近白高对比；
+## 次行动 = 四角括号线框；复位存档 = 平红危险；设置行 = 方角箭头 + 大号近白值；
+## 全方角、无辉光、无渐变。所有节点名 / 路径 / 类型保持不变。
+func _apply_prism_pause_style() -> void:
+	set_meta("ui_style_exempt", true)
+	_build_prism_pause_chrome()
+	_style_prism_main_page()
+	_style_prism_graphics_page()
+	_style_prism_controls_page()
+	_style_prism_reset_dialog()
+
+
+## 外壳：极淡底衬，**不加外框**。参考图整屏没有一处"卡片边框"——
+## 结构感全部来自贯穿细线与那一个括号选框，外面再套一圈大括号会立刻回到上一轮的乱线感。
+## 压暗也收得比上一轮浅：参考图的实景是主角，UI 只是浮在上面的线。
+func _build_prism_pause_chrome() -> void:
+	var panel := get_node_or_null("Center/Panel") as PanelContainer
+	if panel != null:
+		panel.add_theme_stylebox_override("panel", UIStyleFactory.make_prism_panel(true, 0.30))
+		panel.custom_minimum_size = Vector2(1040, 700)
+	if dim != null:
+		dim.color = Color(UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.70)
+
+
+## 深色徽章（参考图左上 NEW GAME 的形态）。Label 自带 `normal` 样式盒，正好当胶囊底用，
+## 因此无需新增节点、也不必改动既有节点树。
+## 参考图的徽章是**纯深色实块**（没有白色描边），描边会把胶囊变成"按钮"。
+func _apply_prism_badge_to_label(
+	label: Label,
+	font_size: int = 26,
+	spacing: int = 6,
+	align_left: bool = true
+) -> void:
+	if label == null:
+		return
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.039, 0.059, 0.086, 0.94)
+	style.border_color = Color(0, 0, 0, 0)
+	style.set_border_width_all(0)
+	style.set_corner_radius_all(6)
+	style.shadow_size = 0
+	style.content_margin_left = 30.0
+	style.content_margin_right = 30.0
+	style.content_margin_top = 8.0
+	style.content_margin_bottom = 8.0
+	label.add_theme_stylebox_override("normal", style)
+	label.add_theme_constant_override("outline_size", 0)
+	label.size_flags_horizontal = (
+		Control.SIZE_SHRINK_BEGIN if align_left else Control.SIZE_SHRINK_CENTER
+	)
+	label.horizontal_alignment = (
+		HORIZONTAL_ALIGNMENT_LEFT if align_left else HORIZONTAL_ALIGNMENT_CENTER
+	)
+	UIStyleFactory.apply_prism_label(label, "value", spacing, font_size)
+
+
+## 把白色键帽骑到按钮右端（参考图所有快捷键都是实体白方块）。
+## 统一走工厂版本，这样"给文本让位"的右内边距补偿也会一起生效。
+func _attach_prism_keycap(btn: Button, key_text: String) -> void:
+	UIStyleFactory.attach_prism_keycap(btn, key_text, 12, 20.0)
+
+
+## 在 VBox 页里紧贴某个控件下方插入一条左对齐的下折角（参考图徽章底部的 ⌄）。
+func _insert_prism_chevron_below(page: VBoxContainer, anchor: Control, alpha: float = 0.5) -> void:
+	if page == null or anchor == null or page.get_node_or_null("PrismHeaderChevron") != null:
+		return
+	var chevron := UIStyleFactory.make_prism_chevron(
+		"down", Color(1.0, 1.0, 1.0, alpha), Vector2(16, 10), 2.0
+	)
+	chevron.name = "PrismHeaderChevron"
+	chevron.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	page.add_child(chevron)
+	page.move_child(chevron, anchor.get_index() + 1)
+
+
+## 在 VBox 页里紧贴某个控件下方插入一条 1px 白色细分割线。
+func _insert_prism_rule_below(page: VBoxContainer, anchor: Control, alpha: float = 0.30) -> void:
+	if page == null or anchor == null or page.get_node_or_null("PrismHeaderRule") != null:
+		return
+	var rule := UIStyleFactory.make_prism_rule(Color(1.0, 1.0, 1.0, alpha), 1.0)
+	rule.name = "PrismHeaderRule"
+	page.add_child(rule)
+	page.move_child(rule, anchor.get_index() + 1)
+
+
+# ---------- 主页 ----------
+
+## 主页 = 参考图的左栏结构，而不是"一列居中按钮 + 每个按钮一圈括号"。
+##   徽章标题 → ⌄ → 一组贯穿细线分隔的左对齐行动行 → 一个括号选框（CONTINUE 位）。
+## 括号只出现在唯一的那一个"当前选框"上，其余行动一律是行。
+func _style_prism_main_page() -> void:
+	# 标题 = 深色徽章（参考图 NEW GAME）。文字里的 [Esc] 交给实体白键帽承担，
+	# 因此这里先剥掉，_ready 随后捕获的 _resume_button_default_text 也是剥好的版本。
+	main_page_title.text = main_page_title.text.strip_edges()
+	_apply_prism_badge_to_label(main_page_title, 26, 6)
+	_insert_prism_chevron_below(main_page, main_page_title, 0.5)
+	# 左栏自上而下排，不垂直居中 —— 参考图的菜单占据左上区域，不是屏幕正中。
+	main_page.alignment = BoxContainer.ALIGNMENT_BEGIN
+	main_page.add_theme_constant_override("separation", 6)
+
+	var info := get_node_or_null("Center/Panel/Margin/MainPage/Info") as Label
+	if info != null:
+		UIStyleFactory.apply_prism_label(info, "label", 2, 13)
+		info.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		info.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+
+	# 五条行动行：左栏宽、左对齐大字、行尾折角，行与行之间由上方细线切开。
+	var row_specs: Array = [
+		[graphics_button, "ghost"],
+		[controls_button, "ghost"],
+		[training_range_button, "ghost"],
+		[return_to_base_button, "muted"],
+		[reset_game_save_button, "danger"],
+	]
+	for spec in row_specs:
+		var row_button := spec[0] as Button
+		if row_button == null:
+			continue
+		UIStyleFactory.apply_prism_row_button(row_button, str(spec[1]), 22, 5)
+		row_button.custom_minimum_size = Vector2(PRISM_RAIL_WIDTH, 52)
+		row_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+
+	# 主行动 = 参考图底部那个四角括号选框（CONTINUE 位）：不填充，靠括号表达"当前选框"。
+	# 文案左对齐、贴着括号左臂排，这是参考图 CONTINUE 的排印方式。
+	resume_button.text = "继续行动"
+	resume_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	resume_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	resume_button.custom_minimum_size = Vector2(PRISM_RAIL_WIDTH * 0.50, 74)
+	UIStyleFactory.apply_prism_button(resume_button, "ghost", 0, 26, 6, "solid", 26.0, 2.0)
+	_attach_prism_keycap(resume_button, "ESC")
+	var resume_style := resume_button.get_theme_stylebox("normal")
+	if resume_style is StyleBoxFlat:
+		for state in ["normal", "hover", "pressed", "focus"]:
+			var flat := (resume_button.get_theme_stylebox(state) as StyleBoxFlat)
+			if flat == null:
+				continue
+			var clone := flat.duplicate() as StyleBoxFlat
+			clone.content_margin_left = 34.0
+			resume_button.add_theme_stylebox_override(state, clone)
+
+	# 细线必须**从后往前**插：插入会挪动同容器内后续节点的索引。
+	UIStyleFactory.attach_prism_row_rule(resume_button, 0.34, "ResumeButton", PRISM_RAIL_WIDTH)
+	for i in range(row_specs.size() - 1, -1, -1):
+		var row_button := row_specs[i][0] as Button
+		if row_button == null:
+			continue
+		UIStyleFactory.attach_prism_row_rule(
+			row_button, 0.20, str(row_button.name), PRISM_RAIL_WIDTH
+		)
+
+	for hint in [training_range_hint, return_to_base_hint, reset_game_save_hint]:
+		if hint != null:
+			UIStyleFactory.apply_prism_label(hint, "faint", 1, 12)
+			hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+			hint.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	var performance_hint := get_node_or_null("Center/Panel/Margin/MainPage/PerformanceHint") as Label
+	if performance_hint != null:
+		UIStyleFactory.apply_prism_label(performance_hint, "faint", 1, 12)
+		performance_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		performance_hint.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+
+
+## 主页行错峰入场：悬挂式细线列表"自上而下逐条点亮"。
+## 只动 alpha —— 整行 900+px 宽，缩放式入场会让行在水平方向抽动。
+## 挂在"每次打开"而不是 _ready：首次构建时控件尺寸还是 0，第一帧没有意义。
+func _stagger_main_page_rows() -> void:
+	UIFX.prism_fade_stagger([
+		graphics_button, controls_button, training_range_button,
+		return_to_base_button, reset_game_save_button, resume_button,
+	], 0.028, 0.14)
+
+
+# ---------- 画面设置页 ----------
+
+func _style_prism_graphics_page() -> void:
+	var header := get_node_or_null("Center/Panel/Margin/GraphicsPage/Header") as HBoxContainer
+	if header != null:
+		var title := header.get_node_or_null("Title") as Label
+		if title != null:
+			title.text = "画面设置"
+			_apply_prism_badge_to_label(title, 22, 4)
+			# 徽章靠左，右侧接一条白色细延长线（参考图 NEW GAME 右侧那条线）
+			title.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	if header != null and header.get_node_or_null("PrismHeaderLine") == null:
+		var line := UIStyleFactory.make_prism_rule(Color(1.0, 1.0, 1.0, 0.50), 1.0)
+		line.name = "PrismHeaderLine"
+		line.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		line.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		line.custom_minimum_size = Vector2(60, 1)
+		header.add_child(line)
+		header.move_child(line, 1)
+	if renderer_label != null:
+		UIStyleFactory.apply_prism_label(renderer_label, "accent", 2, 13)
+		renderer_label.add_theme_color_override("font_color", UIPalette.PRISM_ACCENT)
+		renderer_label.custom_minimum_size.x = 190.0
+
+	var page := graphics_page
+	_insert_prism_chevron_below(page, header)
+	var rule_node := page.get_node_or_null("Rule") as HSeparator
+	if rule_node != null:
+		rule_node.add_theme_stylebox_override("separator", _make_prism_separator_style(0.28))
+
+	var preset_label := get_node_or_null("Center/Panel/Margin/GraphicsPage/PresetRow/PresetLabel") as Label
+	if preset_label != null:
+		UIStyleFactory.apply_prism_label(preset_label, "label", 1, 13)
+	UIStyleFactory.apply_prism_button(high_defaults_button, "ghost", 2, 15, 2)
+	high_defaults_button.custom_minimum_size = Vector2(210, 44)
+
+	# 抗锯齿行：弱标签 + 方角箭头 + 大号近白当前值 + 右侧说明
+	var aa_row := get_node_or_null("Center/Panel/Margin/GraphicsPage/AASection") as HBoxContainer
+	var aa_label := aa_row.get_node_or_null("Label") as Label if aa_row != null else null
+	if aa_label != null:
+		UIStyleFactory.apply_prism_label(aa_label, "label", 2, 13)
+		aa_label.custom_minimum_size = Vector2(190, 44)
+	var aa_hint := aa_row.get_node_or_null("AAHint") as Label if aa_row != null else null
+	if aa_hint != null:
+		UIStyleFactory.apply_prism_label(aa_hint, "faint", 1, 12)
+		aa_hint.custom_minimum_size = Vector2(210, 44)
+	# 抗锯齿行占据整条通栏，可以承担 [◀] 值 [▶] 的参考图行式样。
+	_install_prism_option_row(aa_row, aa_option)
+
+	# 但 Scroll/Grid 里的两行是**半栏**（两列网格），塞进箭头会把网格最小宽度
+	# 从 905 撑到 1236，直接顶穿 972 的面板内宽 —— 因此这两行只把字号收小、不加箭头。
+	# 注意不能给说明文字开自动折行：这两行高度只有 58，折到第三行会溢出并压住下一行。
+	for opt in [shadow_option, indirect_diffuse_option]:
+		UIStyleFactory.apply_prism_option_button(opt, 17, 3)
+		if opt != null:
+			opt.custom_minimum_size = Vector2(maxf(opt.custom_minimum_size.x, 150.0), 44.0)
+	for row_path in [
+		"Center/Panel/Margin/GraphicsPage/Scroll/Grid/Shadows",
+		"Center/Panel/Margin/GraphicsPage/Scroll/Grid/IndirectDiffuse",
+	]:
+		var row := get_node_or_null(row_path) as HBoxContainer
+		if row == null:
+			continue
+		var caption := row.get_node_or_null("Label") as Label
+		if caption != null:
+			UIStyleFactory.apply_prism_label(caption, "label", 1, 13)
+			caption.autowrap_mode = TextServer.AUTOWRAP_OFF
+			caption.custom_minimum_size = Vector2(0, 0)
+			caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	# 网格两列都要能吸收余量，否则右列会在面板右侧留下一条空档。
+	for key in _toggle_nodes.keys():
+		var chk := _toggle_nodes[key] as CheckButton
+		if chk != null:
+			UIStyleFactory.apply_prism_check_button(chk, 15)
+			chk.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for row_path in [
+		"Center/Panel/Margin/GraphicsPage/Scroll/Grid/Shadows",
+		"Center/Panel/Margin/GraphicsPage/Scroll/Grid/IndirectDiffuse",
+	]:
+		var row := get_node_or_null(row_path) as Control
+		if row != null:
+			row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	if status_label != null:
+		UIStyleFactory.apply_prism_label(status_label, "label", 1, 13)
+	UIStyleFactory.apply_prism_button(back_button, "ghost", 2, 16, 3)
+	back_button.text = "返回"
+	back_button.custom_minimum_size = Vector2(210, 46)
+	_attach_prism_keycap(back_button, "ESC")
+
+
+func _make_prism_separator_style(alpha: float) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(1.0, 1.0, 1.0, alpha)
+	style.set_border_width_all(0)
+	style.set_corner_radius_all(0)
+	style.shadow_size = 0
+	style.content_margin_top = 0.0
+	style.content_margin_bottom = 0.0
+	return style
+
+
+# ---------- 操作设置页 ----------
+
+func _style_prism_controls_page() -> void:
+	var header := get_node_or_null("Center/Panel/Margin/ControlsPage/Header") as HBoxContainer
+	if header != null:
+		var title := header.get_node_or_null("Title") as Label
+		if title != null:
+			title.text = "操作设置"
+			_apply_prism_badge_to_label(title, 22, 4)
+			title.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		if header.get_node_or_null("PrismHeaderLine") == null:
+			var line := UIStyleFactory.make_prism_rule(Color(1.0, 1.0, 1.0, 0.50), 1.0)
+			line.name = "PrismHeaderLine"
+			line.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			line.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			line.custom_minimum_size = Vector2(60, 1)
+			header.add_child(line)
+			header.move_child(line, 1)
+	if device_status_label != null:
+		UIStyleFactory.apply_prism_label(device_status_label, "accent", 2, 13)
+
+	var page := controls_page
+	_insert_prism_chevron_below(page, header)
+	var rule_node := page.get_node_or_null("Rule") as HSeparator
+	if rule_node != null:
+		rule_node.add_theme_stylebox_override("separator", _make_prism_separator_style(0.28))
+
+	_install_prism_option_row(
+		get_node_or_null("Center/Panel/Margin/ControlsPage/DeviceRow") as HBoxContainer,
+		device_mode_option
+	)
+	var device_row := get_node_or_null("Center/Panel/Margin/ControlsPage/DeviceRow") as HBoxContainer
+	if device_row != null:
+		var caption := device_row.get_node_or_null("Label") as Label
+		if caption != null:
+			UIStyleFactory.apply_prism_label(caption, "label", 1, 13)
+
+	# 三条摇杆参数：细白线轨道 + 方把手 + 右侧白线方角数值框
+	for row_path in [
+		"Center/Panel/Margin/ControlsPage/MoveDeadzoneRow",
+		"Center/Panel/Margin/ControlsPage/AimDeadzoneRow",
+		"Center/Panel/Margin/ControlsPage/AimSmoothingRow",
+	]:
+		var row := get_node_or_null(row_path) as HBoxContainer
+		if row == null:
+			continue
+		var caption := row.get_node_or_null("Label") as Label
+		if caption != null:
+			UIStyleFactory.apply_prism_label(caption, "label", 1, 13)
+	for slider in [move_deadzone_slider, aim_deadzone_slider, aim_smoothing_slider]:
+		UIStyleFactory.apply_prism_slider(slider)
+	var value_box := UIStyleFactory.make_prism_value_box_style()
+	for value_label in [move_deadzone_value, aim_deadzone_value, aim_smoothing_value]:
+		if value_label == null:
+			continue
+		value_label.add_theme_stylebox_override("normal", value_box)
+		UIStyleFactory.apply_prism_label(value_label, "value", 2, 16)
+		value_label.custom_minimum_size = Vector2(84, 34)
+
+	for chk in [gamepad_enabled_toggle, left_stick_aim_toggle, aim_assist_toggle, vibration_toggle]:
+		if chk != null:
+			UIStyleFactory.apply_prism_check_button(chk, 15)
+
+	var binding_hint := get_node_or_null("Center/Panel/Margin/ControlsPage/BindingHint") as Label
+	if binding_hint != null:
+		UIStyleFactory.apply_prism_label(binding_hint, "faint", 1, 12)
+	if controls_status_label != null:
+		UIStyleFactory.apply_prism_label(controls_status_label, "label", 1, 13)
+	UIStyleFactory.apply_prism_button(controls_back_button, "ghost", 2, 16, 3)
+	controls_back_button.text = "返回"
+	controls_back_button.custom_minimum_size = Vector2(210, 46)
+	_attach_prism_keycap(controls_back_button, "ESC")
+
+
+# ---------- 复位存档二次确认弹窗 ----------
+
+func _style_prism_reset_dialog() -> void:
+	if reset_game_save_dialog == null:
+		return
+	# 这是 Window 系弹窗（`ConfirmationDialog`），外观由 `panel` + `embedded_border` +
+	# 标题栏主题项共同绘制 —— 只覆盖 `panel` 压不住系统灰底与圆角标题栏，必须走整套 chrome。
+	# 注意：本引擎版本下 `title_height` 不会改变内容框从窗口顶边下移的距离，
+	# 标题因此稳定地浮在白线框正上方，形成"带标签的线框"。
+	UIStyleFactory.apply_prism_window_chrome(reset_game_save_dialog, 18, 28, 16)
+	var ok_btn := reset_game_save_dialog.get_ok_button()
+	var cancel_btn := reset_game_save_dialog.get_cancel_button()
+	if ok_btn != null:
+		ok_btn.custom_minimum_size = Vector2(150, 42)
+		UIStyleFactory.apply_prism_button(ok_btn, "danger", 2, 15, 2)
+	if cancel_btn != null:
+		cancel_btn.custom_minimum_size = Vector2(150, 42)
+		UIStyleFactory.apply_prism_button(cancel_btn, "primary", 2, 15, 2)
+		UIStyleFactory.attach_prism_keycap(cancel_btn, "ESC", 12, 14.0)
+
+
+# ---------- 通用：把 OptionButton 变成"方角箭头选择行" ----------
+
+## 在既有 HBox 行内就地插入 [◀] 与 [▶] 两个方角箭头钮，夹住 OptionButton，
+## 并把 OptionButton 本身极简化（去底、去框、去自带箭头、大号近白字）。
+## 全过程不移动、不新增、不替换任何既有节点的路径。
+func _install_prism_option_row(row: HBoxContainer, opt: OptionButton) -> void:
+	if row == null or opt == null:
+		return
+	UIStyleFactory.apply_prism_option_button(opt, 22, 3)
+	if opt.custom_minimum_size.y < 46.0:
+		opt.custom_minimum_size = Vector2(opt.custom_minimum_size.x, 46.0)
+	if row.get_node_or_null("PrismPrev") == null:
+		var prev := UIStyleFactory.make_prism_arrow_button("left", 46.0)
+		prev.name = "PrismPrev"
+		prev.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		row.add_child(prev)
+		row.move_child(prev, opt.get_index())
+		var next := UIStyleFactory.make_prism_arrow_button("right", 46.0)
+		next.name = "PrismNext"
+		next.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		row.add_child(next)
+		row.move_child(next, opt.get_index() + 1)
+		UIStyleFactory.bind_prism_option_stepping(opt, prev, next)
+
 
 
 func _setup_graphics_controls() -> void:
@@ -225,6 +631,7 @@ func _show_graphics_page() -> void:
 	_hide_sub_pages()
 	main_page.visible = false
 	graphics_page.visible = true
+	UIFX.switch_page_fade(graphics_page)
 	renderer_label.text = GraphicsSettingsManager.get_renderer_summary()
 	_sync_graphics_controls()
 	aa_option.grab_focus()
@@ -233,10 +640,12 @@ func _show_graphics_page() -> void:
 func _show_main_page() -> void:
 	_hide_sub_pages()
 	main_page.visible = true
+	UIFX.switch_page_fade(main_page)
 	_refresh_return_to_base_action()
 	_refresh_training_range_action()
 	if center.visible:
 		graphics_button.grab_focus()
+		_stagger_main_page_rows()
 	if _entry_settings_context:
 		_apply_entry_settings_overrides()
 
@@ -245,9 +654,11 @@ func _show_controls_page() -> void:
 	_hide_sub_pages()
 	main_page.visible = false
 	controls_page.visible = true
+	UIFX.switch_page_fade(controls_page)
 	_sync_input_controls()
 	_refresh_device_status()
 	device_mode_option.grab_focus()
+
 
 
 func _hide_sub_pages() -> void:

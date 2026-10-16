@@ -187,6 +187,13 @@ core_scenes=(
   verify_player3d_firing_motion
   verify_player3d_weapon_switch
   verify_player3d_reload_motion
+  verify_base99_radio_sound
+  verify_base99_swivel_chairs
+  verify_environment_bird_flocks
+  verify_expedition01_spawn_ramp
+  verify_expedition_resume_entry
+  verify_player3d_melee_motion
+  verify_pushable_base_chairs
   verify_monitor_boss_flow
   "${smoke_scenes[@]}"
   verify_floor_plan_generator
@@ -357,6 +364,7 @@ core_scenes=(
   verify_wardrobe_preview_fill_flow
   verify_electronic_mask_flow
   verify_character_expression_flow
+  verify_training_range_south_wall_boundary
 )
 
 # These scenes read the viewport texture and therefore require a real renderer.

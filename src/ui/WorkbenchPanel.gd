@@ -40,7 +40,7 @@ func _ready() -> void:
 
 	_build_transform_button()
 	_build_weapon_options()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
 	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
 	UiMenuFocus.ensure_focus(self)
@@ -307,11 +307,8 @@ func _create_fate_card_view(card: FateCard) -> Control:
 	# 卡身份：供验收把卡面贴图与被抽中的卡牌逐一对上，防止"图装错牌"。
 	btn.set_meta("tarot_stable_card_id", card.get_stable_card_id())
 	btn.pressed.connect(_on_fate_card_selected.bind(card))
-	var hover := StyleBoxFlat.new()
-	hover.bg_color = Color(1.0, 1.0, 1.0, 0.07)
-	hover.set_corner_radius_all(8)
-	hover.set_border_width_all(2)
-	hover.border_color = Color(1.0, 1.0, 1.0, 0.55)
+	# 悬停/焦点框：棱镜 = 1px 白线 + 方角（旧版是 8px 圆角 + 2px 亮边）。
+	var hover := UIStyleFactory.make_prism_slot_style(true)
 	btn.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
 	btn.add_theme_stylebox_override("hover", hover)
 	btn.add_theme_stylebox_override("focus", hover)
@@ -332,9 +329,15 @@ func _create_fate_card_view(card: FateCard) -> Control:
 	else:
 		btn.text = "%s\n%s" % [card.card_name, card.short_description]
 		btn.add_theme_font_size_override("font_size", 11)
-		btn.add_theme_color_override("font_color", Color(0.86, 0.90, 0.95))
-		var fallback := UIStyleFactory.make_panel_with_border(2, FateCard.rarity_color(card.card_rarity), 6, 2)
-		fallback.bg_color = UIPalette.BG_DARK
+		btn.add_theme_color_override("font_color", UIPalette.PRISM_TEXT)
+		var fb_font := UIStyleFactory.make_prism_font(2)
+		if fb_font != null:
+			btn.add_theme_font_override("font", fb_font)
+		# 缺图回退卡：棱镜方角 + 稀有度线（color 走归一化，保留稀有度分级）。
+		var fallback := UIStyleFactory.make_panel_with_border(
+			2, FateCard.rarity_color(card.card_rarity), 2, 1
+		)
+		fallback.bg_color = UIPalette.PRISM_SURFACE_SOLID
 		btn.add_theme_stylebox_override("normal", fallback)
 
 	column.add_child(FateCardView.build_caption(card, 11, 112))

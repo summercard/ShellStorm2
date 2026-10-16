@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.component_package.asset_manifest",
+  "schema_version": 1,
+  "component_id": "comp_wet_asphalt_lane_10x10_01",
+  "slug": "wet_asphalt_lane_10x10_01",
+  "display_name": "湿润双黄线柏油路面_10x10m_01",
+  "category": "structural",
+  "source_blend": "env_cyberpunk_old_town_street_source_v001.blend",
+  "output_collection": "资产包_wet_asphalt_lane_10x10_01",
+  "pivot_rule": "bottom_center_z0",
+  "forward_axis": "-Y",
+  "up_axis": "+Z",
+  "dimensions_m": [
+    10.0,
+    10.0,
+    0.16
+  ],
+  "mesh_objects": [
+    "湿润双黄线柏油路面_10x10m_01_主体"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "polygon_count": 78
+}

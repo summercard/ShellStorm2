@@ -26,7 +26,7 @@ func _ready() -> void:
 		skip_button.pressed.connect(_on_skip_pressed)
 	_selected_card_label_reset()
 	_draw_cards()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 	# 默认焦点落在「跳过」上：打开即按 A 不该直接定下命运卡。
 	UiMenuFocus.ensure_focus(self)
 
@@ -54,7 +54,7 @@ func _draw_cards() -> void:
 	# 更新说明
 	if instruction_label:
 		instruction_label.text = "选择一张命运预兆，它会保留到下一局首次开门选择"
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 
 
 ## 创建一张命运卡视图：塔罗卡面贴图 + 卡下功能文字。
@@ -77,12 +77,12 @@ func _create_card_view(card: FateCard) -> Control:
 	btn.set_meta("tarot_stable_card_id", card.get_stable_card_id())
 	btn.pressed.connect(_on_card_button_pressed.bind(card))
 
-	# 卡面自带描边，按钮只保留悬停高亮
+	# 悬停 = 白线选框提亮（棱镜语言：只提亮线，不加圆角、不加辉光）
 	var hover := StyleBoxFlat.new()
-	hover.bg_color = Color(1.0, 1.0, 1.0, 0.07)
-	hover.set_corner_radius_all(10)
+	hover.bg_color = Color(1.0, 1.0, 1.0, 0.06)
+	hover.set_corner_radius_all(2)
 	hover.set_border_width_all(2)
-	hover.border_color = Color(1.0, 1.0, 1.0, 0.55)
+	hover.border_color = Color(1.0, 1.0, 1.0, 0.72)
 	btn.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
 	btn.add_theme_stylebox_override("hover", hover)
 	btn.add_theme_stylebox_override("focus", hover)
@@ -113,11 +113,12 @@ func _create_card_view(card: FateCard) -> Control:
 		)
 		btn.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 		btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		btn.add_theme_color_override("font_color", FateCard.rarity_color(card.card_rarity))
+		btn.add_theme_color_override("font_color", UIStyleFactory.prism_normalize_color(FateCard.rarity_color(card.card_rarity)))
 		btn.add_theme_font_size_override("font_size", 12)
 		btn.add_theme_font_size_override("normal", 12)
-		var fallback_bg := UIStyleFactory.make_panel_with_border(1, FateCard.rarity_color(card.card_rarity), 6, 2)
-		fallback_bg.bg_color = UIPalette.BG_DARK
+		var fallback_bg := UIStyleFactory.make_prism_slot_style(false)
+		fallback_bg.set_border_width_all(2)
+		fallback_bg.border_color = UIStyleFactory.prism_normalize_color(FateCard.rarity_color(card.card_rarity))
 		btn.add_theme_stylebox_override("normal", fallback_bg)
 
 	column.add_child(FateCardView.build_caption(card, 13, 232))
@@ -207,7 +208,9 @@ func _update_selected_label(card: FateCard) -> void:
 	selected_card_label.text = (
 		"已选: [%s] %s · %s" % [FateCard.rarity_name(card.card_rarity), card.card_name, card.orientation_name()]
 	)
-	selected_card_label.add_theme_color_override("font_color", color)
+	selected_card_label.add_theme_color_override(
+		"font_color", UIStyleFactory.prism_normalize_color(color)
+	)
 	selected_card_label.visible = true
 
 

@@ -36,7 +36,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func _build_interface() -> void:
 	var backdrop := ColorRect.new()
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	backdrop.color = Color(0.004, 0.014, 0.018, 0.94)
+	# 冷蓝压暗（非纯黑）：棱镜模态的标准遮罩。
+	backdrop.color = Color(UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.72)
 	add_child(backdrop)
 
 	var frame := PanelContainer.new()
@@ -45,9 +46,9 @@ func _build_interface() -> void:
 	frame.offset_top = -286.0
 	frame.offset_right = 370.0
 	frame.offset_bottom = 286.0
-	frame.add_theme_stylebox_override(
-		"panel", _panel_style(Color(0.22, 0.86, 0.62), 3, Color(0.018, 0.052, 0.050, 0.98))
-	)
+	frame.add_theme_stylebox_override("panel", _prism_panel_style(0.62, 24))
+	# 四角括号 = 本风格唯一的"选框"手段（全屏只此一处，不与其他线框打架）。
+	UIStyleFactory.attach_prism_bracket_frame(frame, "solid", 26.0, 2.0, 0.0)
 	add_child(frame)
 
 	var root := VBoxContainer.new()
@@ -56,55 +57,49 @@ func _build_interface() -> void:
 	var title := Label.new()
 	title.text = "基地状态恢复舱"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 30)
-	title.add_theme_color_override("font_color", Color(0.44, 1.0, 0.76))
+	UIStyleFactory.apply_prism_label(title, "value", 5, 26)
 	root.add_child(title)
 	var subtitle := Label.new()
 	subtitle.text = "恢复生命与手电电量 · 基地内不会自动补充手电"
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle.add_theme_color_override("font_color", Color(0.58, 0.76, 0.73))
+	UIStyleFactory.apply_prism_label(subtitle, "faint", 2, 13)
 	root.add_child(subtitle)
 
 	var energy_panel := PanelContainer.new()
-	energy_panel.add_theme_stylebox_override(
-		"panel", _panel_style(Color(0.18, 0.62, 0.52), 2, Color(0.025, 0.095, 0.085, 0.96))
-	)
+	energy_panel.add_theme_stylebox_override("panel", _prism_panel_style(0.30, 14))
 	root.add_child(energy_panel)
 	var energy_box := VBoxContainer.new()
 	energy_box.add_theme_constant_override("separation", 5)
 	energy_panel.add_child(energy_box)
-	_energy_label = _make_label("基地电量 --/--", 24, Color(0.54, 1.0, 0.74))
+	_energy_label = _make_label("基地电量 --/--", 22, "value", 3)
 	energy_box.add_child(_energy_label)
-	_time_label = _make_label("2075-01-01  09:00", 16, Color(0.48, 0.78, 0.86))
+	_time_label = _make_label("2075-01-01  09:00", 15, "faint", 1)
 	energy_box.add_child(_time_label)
 
 	var state_panel := PanelContainer.new()
 	state_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	state_panel.add_theme_stylebox_override(
-		"panel", _panel_style(Color(0.12, 0.42, 0.46), 1, Color(0.014, 0.040, 0.052, 0.96))
-	)
+	state_panel.add_theme_stylebox_override("panel", _prism_panel_style(0.24, 14))
 	root.add_child(state_panel)
 	var state_box := VBoxContainer.new()
 	state_box.add_theme_constant_override("separation", 12)
 	state_panel.add_child(state_box)
-	_hp_label = _make_label("生命  -- / --", 22, Color(1.0, 0.52, 0.48))
+	_hp_label = _make_label("生命  -- / --", 22, "value", 3)
 	state_box.add_child(_hp_label)
-	_flashlight_label = _make_label("手电  --%", 22, Color(0.72, 0.94, 1.0))
+	_flashlight_label = _make_label("手电  --%", 22, "value", 3)
 	state_box.add_child(_flashlight_label)
-	_cost_label = _make_label("本次消耗  -- 基地电量", 20, Color(1.0, 0.80, 0.32))
+	# 消耗 = 需要留意但非毁灭性 → 琥珀语义色。
+	_cost_label = _make_label("本次消耗  -- 基地电量", 20, "warn", 3)
 	state_box.add_child(_cost_label)
 
 	_restore_button = Button.new()
 	_restore_button.text = "恢复全部状态"
 	_restore_button.custom_minimum_size.y = 58.0
 	_restore_button.pressed.connect(_on_restore_pressed)
-	_restore_button.add_theme_font_size_override("font_size", 20)
-	_restore_button.add_theme_stylebox_override(
-		"normal", _panel_style(Color(0.22, 0.86, 0.62), 2, Color(0.035, 0.18, 0.13))
-	)
+	# 主行动：实心近白底 + 深墨字（棱镜默认焦点铁律：安全侧永远是实心白钮）。
+	UIStyleFactory.apply_prism_button(_restore_button, "primary", 2, 20, 3)
 	root.add_child(_restore_button)
 
-	_status_label = _make_label("", 16, Color(0.66, 0.84, 0.82))
+	_status_label = _make_label("", 16, "faint", 2)
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_status_label.custom_minimum_size.y = 32.0
 	root.add_child(_status_label)
@@ -114,8 +109,20 @@ func _build_interface() -> void:
 	close.text = "关闭  ESC"
 	close.custom_minimum_size.y = 44.0
 	close.pressed.connect(queue_free)
+	UIStyleFactory.apply_prism_button(close, "ghost", 2, 17, 2)
 	root.add_child(close)
-	UIStyleFactory.apply_tactical_tree(self)
+
+
+## 棱镜面板底衬：深蓝半透 + 1px 次级白线，方角；内边距用参数控制（不依赖样式盒的零边距）。
+func _prism_panel_style(alpha: float, margin: float) -> StyleBoxFlat:
+	var style := UIStyleFactory.make_prism_panel(true, alpha)
+	style.border_color = UIPalette.PRISM_LINE_SOFT
+	style.set_border_width_all(1)
+	style.content_margin_left = margin
+	style.content_margin_right = margin
+	style.content_margin_top = margin * 0.75
+	style.content_margin_bottom = margin * 0.75
+	return style
 
 
 func _refresh(status_override := "") -> void:
@@ -171,22 +178,8 @@ func _on_minute_changed(_snapshot: Dictionary) -> void:
 	_refresh(_status_label.text if _status_label != null else "")
 
 
-func _make_label(text: String, font_size: int, color: Color) -> Label:
+func _make_label(text: String, font_size: int, role: String = "value", spacing: int = 2) -> Label:
 	var label := Label.new()
 	label.text = text
-	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", color)
+	UIStyleFactory.apply_prism_label(label, role, spacing, font_size)
 	return label
-
-
-func _panel_style(border: Color, width: int, background: Color) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = background
-	style.border_color = border
-	style.set_border_width_all(width)
-	style.set_corner_radius_all(8)
-	style.content_margin_left = 16.0
-	style.content_margin_right = 16.0
-	style.content_margin_top = 12.0
-	style.content_margin_bottom = 12.0
-	return style

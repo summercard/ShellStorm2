@@ -1,0 +1,4 @@
+interface:
+  display_name: "内网资源分享"
+  short_description: "把本地 HTML、静态站点或 APK / ZIP 等资源包发布成内网分享链接"
+  default_prompt: "使用 $sofunny-resource-sharing 发布这个本地文件或目录，并返回可分享的内网 URL。"

@@ -110,7 +110,7 @@ bl['category_counts']=dict(sorted(Counter(v[2] for _,v in union).items()))
 assert all(bl['assets'][k]==v for k,v in old['assets'].items() if k not in target|{ASSET_ID})
 write(bp,bl)
 # Add the shared palette subclass to the existing ITM coding rule.
-p=index.master_path if hasattr(index,'master_path') else ROOT/'assets/registry/ShellStorm2_美术资产台账_v001.xlsx'
+p=index.master_path
 wb=openpyxl.load_workbook(p);ws=wb['分类与编码']
 for row in ws:
     if row[0].value=='ITM':

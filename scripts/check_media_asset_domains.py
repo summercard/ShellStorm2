@@ -17,7 +17,8 @@ EXPECTED = {
         "file": "ShellStorm2_UI账本_v001.xlsx",
         "category": "UI",
         "skill": "ui-asset-pipeline",
-        "count": 16,
+        "count": 18,
+        "initial_count": 16,
         "tests": ["verify_hud_presenter_3d", "verify_pause_game_save_reset_flow", "verify_gamepad_input_flow"],
     },
     "audio": {

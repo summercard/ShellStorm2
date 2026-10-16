@@ -80,7 +80,7 @@ func _ready() -> void:
 	# 面板不可见时关掉 process，仅靠 show() 时唤醒。
 	set_process(false)
 	_refresh_locale_ui()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 
 ## 构建面板UI
 func _build_panel() -> void:
@@ -353,6 +353,8 @@ func _refresh_stats() -> void:
 		label.add_theme_font_size_override("font_size", 14)
 		label.add_theme_color_override("font_color", Color(0.80, 0.75, 0.65, 1.0))
 		_stats_container.add_child(label)
+	# 同样是运行时新建的行，重建后补一次窄口径收口（只改字色与字体）。
+	UIStyleFactory.prism_normalize_label_colors(_stats_container)
 
 ## 计算简单 DPS（伤害 × 射速）
 func _compute_dps(stats: Dictionary) -> String:
@@ -370,8 +372,9 @@ func _refresh_tree() -> void:
 	if _weapon_tree == null or _weapon_tree.get_root() == null:
 		var empty_lbl := Label.new()
 		empty_lbl.text = GameText.text("panel.empty_weapon")
-		empty_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 0.8))
+		empty_lbl.add_theme_color_override("font_color", UIPalette.PRISM_TEXT_FAINT)
 		_tree_container.add_child(empty_lbl)
+		UIStyleFactory.prism_normalize_label_colors(_tree_container)
 		return
 
 	# 更新标题（枪身名走本地化：内部节点名 → 显示名）
@@ -381,6 +384,10 @@ func _refresh_tree() -> void:
 
 	# 递归绘制树
 	_draw_node(_weapon_tree.get_root(), _tree_container, 0)
+	# 树行是**运行时**新建的（_ready 里的 apply_prism_tree 那时还没有它们），
+	# 所以每次重建后补一遍窄口径收口：只把文字色映射到棱镜语义槽 + 套棱镜字体，
+	# 不碰任何 StyleBox、不改尺寸与缩进。
+	UIStyleFactory.prism_normalize_label_colors(_tree_container)
 
 ## 递归绘制节点
 func _draw_node(node: AssemblyNode, parent: VBoxContainer, indent_depth: int) -> void:
@@ -666,18 +673,19 @@ func _set_row_highlight(row: Control, color) -> void:
 		return
 	var bg := ColorRect.new()
 	bg.set_meta("row_highlight", true)
-	bg.color = color
+	# 高亮底色归一到棱镜语义槽，但**保留原 alpha**（这是"淡色带"，不是实心块）。
+	var highlight := UIStyleFactory.prism_normalize_color(color)
+	highlight.a = color.a
+	bg.color = highlight
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.position = Vector2(0, 0)
 	bg.size = row.custom_minimum_size
 	bg.z_index = -1
 	row.add_child(bg)
-	# 给 border 颜色（用 StyleBoxFlat）
-	var style := StyleBoxFlat.new()
+	# 行框：棱镜 1px 白线方角（旧版 3px 圆角）。
+	var style := UIStyleFactory.make_prism_slot_style(true)
 	style.bg_color = Color(0, 0, 0, 0)
-	style.set_border_width_all(1)
-	style.set_border_color(SELECTED_BORDER_COLOR)
-	style.set_corner_radius_all(3)
+	style.border_color = UIStyleFactory.prism_normalize_color(SELECTED_BORDER_COLOR)
 	row.add_theme_stylebox_override("hover", style)
 
 ## 显示节点详情弹窗

@@ -21,7 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.008, 0.012, 0.018, 0.82)
+color = Color(0.02, 0.035, 0.055, 0.56)
 mouse_filter = 0
 
 [node name="Center" type="CenterContainer" parent="."]
@@ -33,55 +33,55 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(900, 650)
+custom_minimum_size = Vector2(920, 660)
 layout_mode = 2
 
 [node name="Margin" type="MarginContainer" parent="Center/Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 26
-theme_override_constants/margin_right = 30
+theme_override_constants/margin_left = 34
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 34
 theme_override_constants/margin_bottom = 26
 
 [node name="MainPage" type="VBoxContainer" parent="Center/Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="Title" type="Label" parent="Center/Panel/Margin/MainPage"]
 layout_mode = 2
 text = "行动暂停"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0.46, 0.9, 1, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 32
 
 [node name="Info" type="Label" parent="Center/Panel/Margin/MainPage"]
 layout_mode = 2
-text = "当前地图、敌人AI和所有计时均已停止\n再次按 Esc 或点击按钮继续"
+text = "PAUSED · 当前地图、敌人 AI 与所有计时均已停止 · 按 Esc 或点击下方按钮继续"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0.76, 0.82, 0.88, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.76, 0.84, 0.92, 1)
+theme_override_font_sizes/font_size = 15
 
 [node name="SpacerTop" type="Control" parent="Center/Panel/Margin/MainPage"]
-custom_minimum_size = Vector2(0, 28)
+custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 
 [node name="GraphicsButton" type="Button" parent="Center/Panel/Margin/MainPage"]
-custom_minimum_size = Vector2(360, 52)
+custom_minimum_size = Vector2(440, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "画面设置"
 theme_override_font_sizes/font_size = 18
 
 [node name="ControlsButton" type="Button" parent="Center/Panel/Margin/MainPage"]
-custom_minimum_size = Vector2(360, 52)
+custom_minimum_size = Vector2(440, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "操作设置"
 theme_override_font_sizes/font_size = 18
 
 [node name="TrainingRangeButton" type="Button" parent="Center/Panel/Margin/MainPage"]
-custom_minimum_size = Vector2(360, 52)
+custom_minimum_size = Vector2(440, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "进入训练靶场"
@@ -92,11 +92,11 @@ theme_override_font_sizes/font_size = 18
 layout_mode = 2
 text = "仅基地可用 · 靶场内配置不带入存档"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0.44, 0.78, 0.74, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.56, 0.82, 0.78, 1)
+theme_override_font_sizes/font_size = 13
 
 [node name="ReturnToBaseButton" type="Button" parent="Center/Panel/Margin/MainPage"]
-custom_minimum_size = Vector2(360, 52)
+custom_minimum_size = Vector2(440, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "返回基地中心（不可用）"
@@ -107,37 +107,37 @@ theme_override_font_sizes/font_size = 18
 layout_mode = 2
 text = "战局中不可使用；仅在基地自由活动时提供脱困"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0.7, 0.58, 0.48, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.72, 0.64, 0.56, 1)
+theme_override_font_sizes/font_size = 13
 
 [node name="ResetGameSaveButton" type="Button" parent="Center/Panel/Margin/MainPage"]
-custom_minimum_size = Vector2(360, 52)
+custom_minimum_size = Vector2(440, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "复位游戏存档"
 theme_override_colors/font_color = Color(1, 0.54, 0.42, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 17
 
 [node name="ResetGameSaveHint" type="Label" parent="Center/Panel/Margin/MainPage"]
 layout_mode = 2
 text = "清除全部游戏进度与当前行动；画面设置保留"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0.82, 0.58, 0.50, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.86, 0.62, 0.56, 1)
+theme_override_font_sizes/font_size = 13
 
 [node name="ResumeButton" type="Button" parent="Center/Panel/Margin/MainPage"]
-custom_minimum_size = Vector2(260, 48)
+custom_minimum_size = Vector2(340, 52)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "继续行动  [Esc]"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 19
 
 [node name="PerformanceHint" type="Label" parent="Center/Panel/Margin/MainPage"]
 layout_mode = 2
-text = "游戏中按 0 随时显示 / 隐藏实时性能开销"
+text = "游戏中按 [0] 键可随时显示 / 隐藏实时性能监控面板"
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0.46, 0.72, 0.82, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.56, 0.76, 0.88, 1)
+theme_override_font_sizes/font_size = 13
 
 [node name="GraphicsPage" type="VBoxContainer" parent="Center/Panel/Margin"]
 visible = false
@@ -145,22 +145,23 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="Header" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage"]
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_constants/separation = 14
 
 [node name="Title" type="Label" parent="Center/Panel/Margin/GraphicsPage/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "画面设置  /  HIGH-END VISUALS"
-theme_override_colors/font_color = Color(0.46, 0.9, 1, 1)
-theme_override_font_sizes/font_size = 26
+text = "画面设置  (VISUAL & QUALITY)"
+theme_override_colors/font_color = Color(0.95, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 24
 
 [node name="RendererLabel" type="Label" parent="Center/Panel/Margin/GraphicsPage/Header"]
 layout_mode = 2
 text = "Forward+"
 horizontal_alignment = 2
 vertical_alignment = 1
-theme_override_colors/font_color = Color(0.58, 0.76, 0.84, 1)
+theme_override_colors/font_color = Color(0.38, 0.82, 1, 1)
 theme_override_font_sizes/font_size = 14
 
 [node name="Rule" type="HSeparator" parent="Center/Panel/Margin/GraphicsPage"]
@@ -173,9 +174,9 @@ theme_override_constants/separation = 14
 [node name="PresetLabel" type="Label" parent="Center/Panel/Margin/GraphicsPage/PresetRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "专业高档预设 · 清晰轮廓 / 克制辉光 / 电影层次"
+text = "专业高档预设 · 清晰轮廓 / 克制辉光 / 电影级光影层次"
 vertical_alignment = 1
-theme_override_colors/font_color = Color(0.78, 0.86, 0.91, 1)
+theme_override_colors/font_color = Color(0.84, 0.90, 0.96, 1)
 theme_override_font_sizes/font_size = 15
 
 [node name="HighDefaultsButton" type="Button" parent="Center/Panel/Margin/GraphicsPage/PresetRow"]
@@ -190,9 +191,9 @@ theme_override_constants/separation = 16
 [node name="Label" type="Label" parent="Center/Panel/Margin/GraphicsPage/AASection"]
 custom_minimum_size = Vector2(220, 44)
 layout_mode = 2
-text = "抗锯齿"
+text = "抗锯齿模式 (AA)"
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 
 [node name="AAOption" type="OptionButton" parent="Center/Panel/Margin/GraphicsPage/AASection"]
 custom_minimum_size = Vector2(310, 44)
@@ -202,12 +203,12 @@ size_flags_horizontal = 3
 [node name="AAHint" type="Label" parent="Center/Panel/Margin/GraphicsPage/AASection"]
 custom_minimum_size = Vector2(240, 44)
 layout_mode = 2
-text = "高档推荐：TAA"
+text = "推荐档位：TAA"
 vertical_alignment = 1
-theme_override_colors/font_color = Color(0.46, 0.76, 0.84, 1)
+theme_override_colors/font_color = Color(0.52, 0.82, 0.94, 1)
 
 [node name="Scroll" type="ScrollContainer" parent="Center/Panel/Margin/GraphicsPage"]
-custom_minimum_size = Vector2(0, 390)
+custom_minimum_size = Vector2(0, 380)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
@@ -215,32 +216,32 @@ horizontal_scroll_mode = 0
 [node name="Grid" type="GridContainer" parent="Center/Panel/Margin/GraphicsPage/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 22
-theme_override_constants/v_separation = 12
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 10
 columns = 2
 
 [node name="Bloom" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 50)
+custom_minimum_size = Vector2(400, 52)
 layout_mode = 2
 text = "辉光 / Bloom\n克制强化自发光、枪火与霓虹"
 
 [node name="SSAO" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 50)
+custom_minimum_size = Vector2(400, 52)
 layout_mode = 2
 text = "环境遮蔽 / SSAO\n增强墙角、接触面与结构厚度"
 
 [node name="SSIL" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 50)
+custom_minimum_size = Vector2(400, 52)
 layout_mode = 2
 text = "屏幕间接光 / SSIL\n补足动态物体的细微反弹光"
 
 [node name="SSR" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 50)
+custom_minimum_size = Vector2(400, 52)
 layout_mode = 2
 text = "屏幕空间反射 / SSR\n强化金属、湿地与光滑表面"
 
 [node name="IndirectDiffuse" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 58)
+custom_minimum_size = Vector2(400, 58)
 layout_mode = 2
 theme_override_constants/separation = 10
 
@@ -255,17 +256,17 @@ custom_minimum_size = Vector2(145, 44)
 layout_mode = 2
 
 [node name="VolumetricFog" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 50)
+custom_minimum_size = Vector2(400, 52)
 layout_mode = 2
 text = "体积雾\n表现灯束、空气层次与纵深"
 
 [node name="DistanceFog" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 50)
+custom_minimum_size = Vector2(400, 52)
 layout_mode = 2
 text = "距离雾\n控制远景融合与楼层氛围"
 
 [node name="Shadows" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 58)
+custom_minimum_size = Vector2(400, 58)
 layout_mode = 2
 theme_override_constants/separation = 10
 
@@ -280,12 +281,12 @@ custom_minimum_size = Vector2(145, 44)
 layout_mode = 2
 
 [node name="ColorGrading" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 50)
+custom_minimum_size = Vector2(400, 52)
 layout_mode = 2
 text = "电影色彩分级\n轻微增强对比、饱和与白点"
 
 [node name="SceneParticles" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 50)
+custom_minimum_size = Vector2(400, 52)
 layout_mode = 2
 text = "场景氛围粒子\n关闭后可显著降低 GPU 与 draw call 开销"
 
@@ -298,35 +299,36 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "设置实时生效并自动保存"
 vertical_alignment = 1
-theme_override_colors/font_color = Color(0.45, 0.9, 0.68, 1)
+theme_override_colors/font_color = Color(0.46, 0.88, 0.54, 1)
 
 [node name="BackButton" type="Button" parent="Center/Panel/Margin/GraphicsPage/Footer"]
-custom_minimum_size = Vector2(200, 44)
+custom_minimum_size = Vector2(210, 46)
 layout_mode = 2
 text = "返回  [Esc]"
 
 [node name="ControlsPage" type="VBoxContainer" parent="Center/Panel/Margin"]
 visible = false
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 
 [node name="Header" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_constants/separation = 14
 
 [node name="Title" type="Label" parent="Center/Panel/Margin/ControlsPage/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "操作设置  /  INPUT & GAMEPAD"
-theme_override_colors/font_color = Color(0.46, 0.9, 1, 1)
-theme_override_font_sizes/font_size = 26
+text = "操作设置  (INPUT & GAMEPAD)"
+theme_override_colors/font_color = Color(0.95, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 24
 
 [node name="DeviceStatusLabel" type="Label" parent="Center/Panel/Margin/ControlsPage/Header"]
 layout_mode = 2
 text = "当前输入：键盘与鼠标"
 horizontal_alignment = 2
 vertical_alignment = 1
-theme_override_colors/font_color = Color(0.58, 0.76, 0.84, 1)
+theme_override_colors/font_color = Color(0.38, 0.82, 1, 1)
 theme_override_font_sizes/font_size = 14
 
 [node name="Rule" type="HSeparator" parent="Center/Panel/Margin/ControlsPage"]
@@ -337,19 +339,19 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="Label" type="Label" parent="Center/Panel/Margin/ControlsPage/DeviceRow"]
-custom_minimum_size = Vector2(420, 52)
+custom_minimum_size = Vector2(420, 48)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "操控方式\n自动 = 跟随最近一次真实输入，插着手柄但不操作时仍算键鼠"
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 
 [node name="DeviceModeOption" type="OptionButton" parent="Center/Panel/Margin/ControlsPage/DeviceRow"]
-custom_minimum_size = Vector2(320, 48)
+custom_minimum_size = Vector2(300, 44)
 layout_mode = 2
 
 [node name="GamepadEnabled" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
-custom_minimum_size = Vector2(0, 46)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "启用手柄操控\n关闭后手柄按键与摇杆不再驱动角色，可随时切回"
 
@@ -358,15 +360,15 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="Label" type="Label" parent="Center/Panel/Margin/ControlsPage/MoveDeadzoneRow"]
-custom_minimum_size = Vector2(420, 40)
+custom_minimum_size = Vector2(420, 38)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "左摇杆死区\n越小越灵敏，越大越能压住手柄漂移"
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 
 [node name="MoveDeadzoneSlider" type="HSlider" parent="Center/Panel/Margin/ControlsPage/MoveDeadzoneRow"]
-custom_minimum_size = Vector2(240, 40)
+custom_minimum_size = Vector2(240, 38)
 layout_mode = 2
 min_value = 0.05
 max_value = 0.5
@@ -374,27 +376,27 @@ step = 0.01
 value = 0.2
 
 [node name="MoveDeadzoneValue" type="Label" parent="Center/Panel/Margin/ControlsPage/MoveDeadzoneRow"]
-custom_minimum_size = Vector2(72, 40)
+custom_minimum_size = Vector2(76, 32)
 layout_mode = 2
 text = "0.20"
-horizontal_alignment = 2
+horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 
 [node name="AimDeadzoneRow" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="Label" type="Label" parent="Center/Panel/Margin/ControlsPage/AimDeadzoneRow"]
-custom_minimum_size = Vector2(420, 40)
+custom_minimum_size = Vector2(420, 38)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "右摇杆死区\n影响瞄准摇杆的起手灵敏度"
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 
 [node name="AimDeadzoneSlider" type="HSlider" parent="Center/Panel/Margin/ControlsPage/AimDeadzoneRow"]
-custom_minimum_size = Vector2(240, 40)
+custom_minimum_size = Vector2(240, 38)
 layout_mode = 2
 min_value = 0.05
 max_value = 0.5
@@ -402,27 +404,27 @@ step = 0.01
 value = 0.12
 
 [node name="AimDeadzoneValue" type="Label" parent="Center/Panel/Margin/ControlsPage/AimDeadzoneRow"]
-custom_minimum_size = Vector2(72, 40)
+custom_minimum_size = Vector2(76, 32)
 layout_mode = 2
 text = "0.12"
-horizontal_alignment = 2
+horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 
 [node name="AimSmoothingRow" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="Label" type="Label" parent="Center/Panel/Margin/ControlsPage/AimSmoothingRow"]
-custom_minimum_size = Vector2(420, 40)
+custom_minimum_size = Vector2(420, 38)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "瞄准平滑\n0 = 跟手最快；越高越稳、转向越慢"
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 
 [node name="AimSmoothingSlider" type="HSlider" parent="Center/Panel/Margin/ControlsPage/AimSmoothingRow"]
-custom_minimum_size = Vector2(240, 40)
+custom_minimum_size = Vector2(240, 38)
 layout_mode = 2
 min_value = 0.0
 max_value = 0.9
@@ -430,37 +432,37 @@ step = 0.01
 value = 0.15
 
 [node name="AimSmoothingValue" type="Label" parent="Center/Panel/Margin/ControlsPage/AimSmoothingRow"]
-custom_minimum_size = Vector2(72, 40)
+custom_minimum_size = Vector2(76, 32)
 layout_mode = 2
 text = "0.15"
-horizontal_alignment = 2
+horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 
 [node name="AimAssist" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
-custom_minimum_size = Vector2(0, 46)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "瞄准辅助\n摇杆瞄准时，准星被视野内已照亮的敌人轻微吸引（偏转有上限，不会抢走控制）"
 
 [node name="LeftStickAim" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
-custom_minimum_size = Vector2(0, 46)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "左摇杆同控朝向\n默认关闭。开启后推左摇杆时角色朝向跟随移动方向；右摇杆一动立刻抢回朝向"
 
 [node name="Vibration" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
-custom_minimum_size = Vector2(0, 46)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "手柄震动反馈\n受击、开火与冲刺时触发震动"
 
 [node name="Spacer" type="Control" parent="Center/Panel/Margin/ControlsPage"]
-custom_minimum_size = Vector2(0, 8)
+custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 
 [node name="BindingHint" type="Label" parent="Center/Panel/Margin/ControlsPage"]
 layout_mode = 2
-text = "默认键位：左摇杆 移动 · 右摇杆 瞄准 · RT 射击/近战 · A 交互 · B 冲刺 · X 换弹 · Y 探照灯\nLB 主武器 · RB 副武器 · 十字键左/右 快捷物品 · Select 背包 · 左摇杆按下 地图 · Start 暂停"
-theme_override_colors/font_color = Color(0.52, 0.78, 0.86, 1)
-theme_override_font_sizes/font_size = 14
+text = "手柄键位：[左摇杆] 移动 · [右摇杆] 瞄准 · [RT] 射击/近战 · [A] 交互 · [B] 冲刺 · [X] 换弹 · [Y] 探照灯\n[LB] 主武器 · [RB] 副武器 · [十字键左/右] 快捷物品 · [Select] 背包 · [L3] 地图 · [Start] 暂停"
+theme_override_colors/font_color = Color(0.68, 0.84, 0.94, 1)
+theme_override_font_sizes/font_size = 13
 
 [node name="Footer" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
 layout_mode = 2
@@ -471,10 +473,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "设置实时生效并自动保存"
 vertical_alignment = 1
-theme_override_colors/font_color = Color(0.45, 0.9, 0.68, 1)
+theme_override_colors/font_color = Color(0.46, 0.88, 0.54, 1)
 
 [node name="BackButton" type="Button" parent="Center/Panel/Margin/ControlsPage/Footer"]
-custom_minimum_size = Vector2(200, 44)
+custom_minimum_size = Vector2(210, 46)
 layout_mode = 2
 text = "返回  [Esc]"
 

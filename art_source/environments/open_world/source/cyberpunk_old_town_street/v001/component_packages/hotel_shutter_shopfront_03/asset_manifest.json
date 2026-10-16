@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.component_package.asset_manifest",
+  "schema_version": 1,
+  "component_id": "comp_hotel_shutter_shopfront_03",
+  "slug": "hotel_shutter_shopfront_03",
+  "display_name": "酒店底层金属卷帘门与暖红雨棚入口_03",
+  "category": "structural",
+  "source_blend": "env_cyberpunk_old_town_street_source_v001.blend",
+  "output_collection": "资产包_hotel_shutter_shopfront_03",
+  "pivot_rule": "bottom_center_z0",
+  "forward_axis": "-Y",
+  "up_axis": "+Z",
+  "dimensions_m": [
+    11.6,
+    2.2,
+    5.2
+  ],
+  "mesh_objects": [
+    "酒店底层金属卷帘门与暖红雨棚入口_03_UI灯光自发光",
+    "酒店底层金属卷帘门与暖红雨棚入口_03_主体"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "polygon_count": 168
+}

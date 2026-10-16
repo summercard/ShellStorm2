@@ -609,12 +609,15 @@ func _apply_debug_scale() -> void:
 
 
 var _melee_hit_stop_pending := false
+var _melee_hit_stop_ticks := 0
 var _melee_hit_stop_frame := -1
 
-func request_melee_hit_stop() -> void:
+func request_melee_hit_stop(frames := 1) -> void:
 	_melee_hit_stop_pending = true
+	_melee_hit_stop_ticks = maxi(_melee_hit_stop_ticks, clampi(frames,1,4))
 
 func clear_melee_hit_stop() -> void:
+	_melee_hit_stop_ticks = 0
 	_melee_hit_stop_pending = false
 	_melee_hit_stop_frame = -1
 
@@ -631,7 +634,8 @@ func _physics_process(delta: float) -> void:
 	_update_aim_from_mouse()
 	_update_combat_input()
 	if _melee_hit_stop_pending:
-		_melee_hit_stop_pending = false
+		_melee_hit_stop_ticks -= 1
+		_melee_hit_stop_pending = _melee_hit_stop_ticks > 0
 		if current_hp > 0 and not input_locked and get_state_machine_state() in ["idle", "moving"] and melee_combat != null and melee_combat.get_snapshot().active:
 			_melee_hit_stop_frame = Engine.get_physics_frames()
 			return
@@ -1064,7 +1068,7 @@ func get_weapon_move_penalty() -> float:
 
 func get_move_speed() -> float:
 	var base := maxf(MIN_MOVE_SPEED_MPS, SPEED - get_weapon_move_penalty())
-	return base * float(_character_fate.get("move_speed_multiplier", 1.0))
+	return base * float(_character_fate.get("move_speed_multiplier", 1.0)) * (melee_combat.movement_multiplier() if melee_combat != null else 1.0)
 
 
 func get_dash_cooldown_duration() -> float:
@@ -2739,7 +2743,9 @@ func _update_combat_input() -> void:
 		return
 	if weapon.is_melee_weapon():
 		if shoot_just_pressed_here:
-			request_melee_attack()
+			melee_combat.begin_trigger()
+		if shoot_released_here:
+			melee_combat.release_trigger()
 	elif shoot_pressed_here:
 		weapon.try_fire(aim_direction, self)
 	if not weapon.is_melee_weapon() and Input.is_action_just_pressed("reload"):

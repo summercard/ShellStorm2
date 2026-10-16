@@ -1,23 +1,33 @@
 extends Button
-## 弹壳风暴 启动页霓虹切角按钮。
-## 通过 Control._draw 自绘六边斜切形状、呼吸微光、流光、hover/焦点平移与按下反馈，
-## 保留真实 Button 以兼容键盘 / 手柄焦点与 pressed 信号。
+## 弹壳风暴 启动页按钮（棱镜线框版）。
+## 通过 Control._draw 自绘，保留真实 Button 以兼容键盘 / 手柄焦点与 pressed 信号。
+##
+## 造型按《UI风格规范_棱镜线框》：
+##   · role = "primary"（开始游戏）：**实心近白底 + 深墨字**，方角，无辉光无渐变；
+##   · role = "ghost"  （设置）    ：**透明底 + 白字 + 四角 L 形括号**，悬停括号提亮。
+## 旧版的六边斜切 + 呼吸霓虹光晕 + 流光扫线 + 齿轮装饰全部移除（规范 §11 反面清单）。
 
 # 不声明 class_name：避免与项目内同名资源冲突，外部一律走 res:// 路径引用。
 
-const NEON_CYAN := Color(0.20, 0.90, 1.0, 1.0)
-
-@export var accent := NEON_CYAN
+## "primary" = 实心近白主行动；"ghost" = 透明底四角括号次行动。
+@export var role := "primary"
+## 保留字段（旧场景属性）：本版不再使用冷却/光晕参数，留桩以免旧场景加载报错。
 @export var chamfer := 16.0
 @export var glow_strength := 1.0
 @export var draw_gear := false
-@export var label_text := "开始游戏 >>"
+@export var label_text := "开始游戏"
 
-var _t := 0.0
 var _hover := false
 var _pressed := false
 var _focus_blend := 0.0
 var _press_blend := 0.0
+
+const _PRISM_INK := Color(0.043, 0.071, 0.110, 1.0)
+const _PRISM_TEXT := Color(0.949, 0.965, 0.984, 1.0)
+const _PRISM_PRIMARY_BG := Color(0.949, 0.965, 0.984, 1.0)
+const _PRISM_PRIMARY_BG_HOVER := Color(1.0, 1.0, 1.0, 1.0)
+const _PRISM_PRIMARY_BG_PRESS := Color(0.780, 0.816, 0.867, 1.0)
+
 
 func _ready() -> void:
 	flat = true
@@ -39,110 +49,90 @@ func _ready() -> void:
 	focus_entered.connect(queue_redraw)
 	focus_exited.connect(queue_redraw)
 
+
 func _on_resized() -> void:
 	queue_redraw()
+
 
 func _process(delta: float) -> void:
 	if not is_visible_in_tree():
 		return
-	_t += delta
-	_focus_blend = move_toward(_focus_blend, 1.0 if (_hover or has_focus()) and not disabled else 0.0, delta * 8.0)
-	_press_blend = move_toward(_press_blend, 1.0 if _pressed and not disabled else 0.0, delta * 16.0)
+	_focus_blend = move_toward(_focus_blend, 1.0 if (_hover or has_focus()) and not disabled else 0.0, delta * 9.0)
+	_press_blend = move_toward(_press_blend, 1.0 if _pressed and not disabled else 0.0, delta * 18.0)
 	queue_redraw()
+
 
 func _draw() -> void:
 	var w := size.x
 	var h := size.y
-	if w <= 1.0 or h <= 1.0:
+	if w <= 2.0 or h <= 2.0:
 		return
-	var ch := minf(chamfer, minf(h * 0.5, w * 0.5))
-	var base := PackedVector2Array([
-		Vector2(0.0, h * 0.5),
-		Vector2(ch, 0.0),
-		Vector2(w - ch, 0.0),
-		Vector2(w, h * 0.5),
-		Vector2(w - ch, h),
-		Vector2(ch, h),
-	])
+	var offset := Vector2(1.0, 1.0) * _press_blend
+	var rect := Rect2(Vector2(1.0, 1.0) + offset, Vector2(w - 2.0, h - 2.0))
 	var focus := has_focus() or _hover
-	var shift := Vector2(7.0 * _focus_blend, 0.0)
-	var press := Vector2(2.0, 2.0) * _press_blend
-	var pts := PackedVector2Array()
-	for p in base:
-		pts.append(p + shift + press)
-	var breath := 0.5 + 0.5 * sin(_t * 2.2)
-	var glow_a := (0.16 + 0.22 * breath) * glow_strength
-	if focus:
-		glow_a += 0.26
-	if disabled:
-		glow_a *= 0.35
-	var center := Vector2(w * 0.5, h * 0.5) + shift + press
-	# 外层呼吸光晕
-	for i in range(3, 0, -1):
-		var grow := float(i) * 2.2
-		var gp := PackedVector2Array()
-		for p in pts:
-			gp.append(center + (p - center) * (1.0 + grow / maxf(w, 1.0)))
-		_solid(gp, Color(accent.r, accent.g, accent.b, glow_a * 0.22 * float(i)))
-	# 填充
-	var fill := Color(0.012, 0.028, 0.045, 0.88)
-	if focus:
-		fill.a += 0.10
-	if disabled:
-		fill.a *= 0.5
-	_solid(pts, fill)
-	# 霓虹描边
-	var border := Color(accent.r, accent.g, accent.b, clampf(0.6 + 0.35 * breath + (0.2 if focus else 0.0), 0.0, 1.0))
-	if disabled:
-		border.a *= 0.5
-	var line := pts.duplicate()
-	line.append(pts[0])
-	draw_polyline(line, border, 2.0, true)
-	# 流光：沿上边扫过的高亮线段
-	_draw_flow(pts, focus)
-	# 文字与图标
-	_draw_label(shift + press, focus, breath)
+	if role == "primary":
+		_draw_primary(rect, focus)
+	else:
+		_draw_ghost(rect, focus, w, h)
 
-func _draw_flow(pts: PackedVector2Array, focus: bool) -> void:
-	var a := pts[1]
-	var b := pts[2]
-	var flow := fmod(_t * 0.35, 1.0)
-	var head := a.lerp(b, flow)
-	var tail_t := flow - 0.20
-	var tail := a.lerp(b, clampf(tail_t, 0.0, 1.0))
-	var alpha := 0.45 + 0.4 * float(focus)
-	draw_line(tail, head, Color(0.85, 1.0, 1.0, alpha), 2.0)
-	draw_circle(head, 1.8, Color(1.0, 1.0, 1.0, 0.75))
 
-func _draw_label(off: Vector2, focus: bool, _breath: float) -> void:
-	var font := _font()
+## 主行动：实心近白底 + 深墨字。无描边、无圆角、无光晕。
+func _draw_primary(rect: Rect2, focus: bool) -> void:
+	var fill := _PRISM_PRIMARY_BG
+	if disabled:
+		fill = Color(0.60, 0.64, 0.69, 0.42)
+	elif _pressed:
+		fill = _PRISM_PRIMARY_BG_PRESS
+	elif focus:
+		fill = _PRISM_PRIMARY_BG_HOVER
+	draw_rect(rect, fill, true)
+	var text_col := _PRISM_INK
+	if disabled:
+		text_col = Color(_PRISM_INK.r, _PRISM_INK.g, _PRISM_INK.b, 0.45)
+	_draw_label(rect, text_col, 4)
+
+
+## 次行动：透明底 + 白字 + 四角 L 形括号（本风格的"选框"语言）。
+func _draw_ghost(rect: Rect2, focus: bool, w: float, h: float) -> void:
+	var line_a := 0.58 + 0.38 * _focus_blend
+	if disabled:
+		line_a *= 0.35
+	var arm := minf(18.0, minf(h * 0.42, w * 0.16))
+	var t := 2.0
+	var col := Color(1.0, 1.0, 1.0, clampf(line_a, 0.0, 1.0))
+	var lt := rect.position
+	var rb := rect.position + rect.size
+	# 四角各由一条横臂 + 一条竖臂组成（L 形），边线中段留空 —— 这是本风格的"选框"。
+	var arms := [
+		Rect2(lt, Vector2(arm, t)),
+		Rect2(lt, Vector2(t, arm)),
+		Rect2(Vector2(rb.x - arm, lt.y), Vector2(arm, t)),
+		Rect2(Vector2(rb.x - t, lt.y), Vector2(t, arm)),
+		Rect2(Vector2(lt.x, rb.y - t), Vector2(arm, t)),
+		Rect2(Vector2(lt.x, rb.y - arm), Vector2(t, arm)),
+		Rect2(Vector2(rb.x - arm, rb.y - t), Vector2(arm, t)),
+		Rect2(Vector2(rb.x - t, rb.y - arm), Vector2(t, arm)),
+	]
+	for arm_rect in arms:
+		draw_rect(arm_rect, col, true)
+	var text_col := Color(1.0, 1.0, 1.0, 1.0) if focus else _PRISM_TEXT
+	if disabled:
+		text_col = Color(_PRISM_TEXT.r, _PRISM_TEXT.g, _PRISM_TEXT.b, 0.45)
+	_draw_label(rect, text_col, 5)
+
+
+func _draw_label(rect: Rect2, col: Color, spacing: int) -> void:
+	var font := UIStyleFactory.make_prism_font(spacing)
+	if font == null:
+		font = _font()
 	if font == null:
 		return
-	var fs := int(size.y * 0.42)
-	var col := Color(0.86, 0.98, 1.0, 1.0)
-	if focus:
-		col = Color(1.0, 1.0, 1.0, 1.0)
-	if disabled:
-		col.a *= 0.5
-	var cx := off.x + size.x * 0.5 - font.get_string_size(label_text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x * 0.5
-	var cy := off.y + size.y * 0.5 + fs * 0.34
-	if draw_gear:
-		_draw_gear(Vector2(size.x - 48.0, off.y + size.y * 0.5), fs * 0.36, accent)
-	draw_string(font, Vector2(cx, cy), label_text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, col)
+	var fs := int(size.y * 0.40)
+	var center := rect.position + rect.size * 0.5
+	var text_size := font.get_string_size(label_text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs)
+	var origin := Vector2(center.x - text_size.x * 0.5, center.y + fs * 0.34)
+	draw_string(font, origin, label_text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, col)
 
-func _draw_gear(c: Vector2, r: float, col: Color) -> void:
-	draw_arc(c, r, 0.0, TAU, 14, col, 2.0)
-	for i in range(8):
-		var ang := TAU * float(i) / 8.0
-		var p1 := c + Vector2(cos(ang), sin(ang)) * r
-		var p2 := c + Vector2(cos(ang), sin(ang)) * (r + r * 0.36)
-		draw_line(p1, p2, col, 2.0)
-
-func _solid(points: PackedVector2Array, col: Color) -> void:
-	var cols := PackedColorArray()
-	for _i in points.size():
-		cols.append(col)
-	draw_polygon(points, cols)
 
 func _font() -> Font:
 	var f := get_theme_font("font")

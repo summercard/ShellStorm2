@@ -586,12 +586,12 @@ func _create_melee_waraxe() -> AssemblyNode:
 		"weapon_kind": "melee", "damage": 46,
 		"melee_reach": 2.85, "melee_arc_degrees": 100.0, "melee_knockback": 7.2,
 		"melee_combo_count": 3,
-		"melee_1_damage_scale": 0.78, "melee_1_windup_s": 0.28,
-		"melee_1_active_s": 0.12, "melee_1_recovery_s": 0.28, "melee_1_knockback_scale": 0.90,
-		"melee_2_damage_scale": 1.02, "melee_2_windup_s": 0.30,
-		"melee_2_active_s": 0.13, "melee_2_recovery_s": 0.32, "melee_2_knockback_scale": 1.10,
-		"melee_3_damage_scale": 1.62, "melee_3_windup_s": 0.46,
-		"melee_3_active_s": 0.16, "melee_3_recovery_s": 0.56, "melee_3_knockback_scale": 1.70,
+		"melee_1_damage_scale": 0.78, "melee_1_windup_s": 0.48,
+		"melee_1_active_s": 0.14, "melee_1_recovery_s": 0.40, "melee_1_knockback_scale": 0.90,
+		"melee_2_damage_scale": 1.02, "melee_2_windup_s": 0.52,
+		"melee_2_active_s": 0.16, "melee_2_recovery_s": 0.46, "melee_2_knockback_scale": 1.10,
+		"melee_3_damage_scale": 1.62, "melee_3_windup_s": 0.65,
+		"melee_3_active_s": 0.20, "melee_3_recovery_s": 0.65, "melee_3_knockback_scale": 1.70,
 	})
 	return node
 

@@ -26,6 +26,9 @@ func _ready() -> void:
 	layer = 100
 	_build_interface()
 	_refresh()
+	# 只做外观层：面板换棱镜线框（沿用 content_margin，格子尺寸不变）+ 文字色归一化。
+	UIStyleFactory.prism_reskin_styleboxes(self)
+	UIStyleFactory.prism_normalize_label_colors(self)
 	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
 	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
 	UiMenuFocus.ensure_focus(self)
@@ -45,7 +48,8 @@ func set_inventory_module(module: InventoryModule) -> void:
 func _build_interface() -> void:
 	var backdrop := ColorRect.new()
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	backdrop.color = Color(0.008, 0.012, 0.020, 0.12)
+	# 冷蓝压暗（棱镜）。
+	backdrop.color = Color(UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.46)
 	add_child(backdrop)
 	var columns := HBoxContainer.new()
 	columns.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -60,11 +64,12 @@ func _build_interface() -> void:
 	buy.add_child(heading)
 	_buy_title_label = Label.new()
 	_buy_title_label.text = "贩卖机"
-	_buy_title_label.add_theme_font_size_override("font_size", 22)
+	UIStyleFactory.apply_prism_label(_buy_title_label, "value", 4, 22)
 	_buy_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_child(_buy_title_label)
 	_points_label = Label.new()
-	_points_label.add_theme_color_override("font_color", UIPalette.INVENTORY_SELECTED)
+	# 金币读数 = 琥珀语义色（与主 HUD 的余额同槽）。
+	UIStyleFactory.apply_prism_label(_points_label, "warn", 2, 16)
 	heading.add_child(_points_label)
 	var buy_scroll := ScrollContainer.new()
 	buy_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -94,6 +99,7 @@ func _build_interface() -> void:
 		_source_tabs[source] = tab
 		tabs.add_child(tab)
 	_capacity_label = Label.new()
+	UIStyleFactory.apply_prism_label(_capacity_label, "label", 2, 15)
 	sell.add_child(_capacity_label)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -108,7 +114,7 @@ func _build_interface() -> void:
 	_status_label.custom_minimum_size.y = 42
 	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_status_label.text = "选择物品查看售价"
-	_status_label.add_theme_font_size_override("font_size", 13)
+	UIStyleFactory.apply_prism_label(_status_label, "faint", 1, 13)
 	sell.add_child(_status_label)
 	var close := Button.new()
 	close.name = "CloseButton"
@@ -130,23 +136,20 @@ func _column(parent: HBoxContainer) -> VBoxContainer:
 	panel.add_child(box)
 	return box
 
+## 行动钮：购买 = 实心近白主行动；出售 = 平红危险（不填充）。
+## 一屏不加括号 —— 括号留给"唯一的那一个当前选框"。
 func _style_action(button: Button) -> void:
-	var style := UIStyleFactory.make_inventory_surface(true)
-	style.bg_color = UIPalette.INVENTORY_ACTION
-	button.add_theme_stylebox_override("normal", style)
-	var hover := style.duplicate() as StyleBoxFlat
-	hover.bg_color = UIPalette.INVENTORY_SELECTED
-	button.add_theme_stylebox_override("hover", hover)
-	button.add_theme_color_override("font_color", Color(0.1, 0.2, 0.27))
-	button.add_theme_color_override("font_hover_color", Color(0.1, 0.2, 0.27))
-	button.add_theme_color_override("font_focus_color", Color(0.1, 0.2, 0.27))
+	var role := "primary"
+	if "出售" in button.text or "丢弃" in button.text or "删除" in button.text:
+		role = "danger"
+	UIStyleFactory.apply_prism_button(button, role, 2, 16, 2, "none")
+
 
 func _refresh() -> void:
 	for owner_key in _source_tabs:
 		var tab: Button = _source_tabs[owner_key]
-		var normal := tab.get_theme_stylebox("normal").duplicate() as StyleBoxFlat
-		normal.bg_color = UIPalette.INVENTORY_SELECTED if owner_key == _sell_owner else UIPalette.INVENTORY_ACTION
-		tab.add_theme_stylebox_override("normal", normal)
+		var active: bool = owner_key == _sell_owner
+		UIStyleFactory.apply_prism_button(tab, "primary" if active else "ghost", 2, 15, 2, "none")
 	_points_label.text = "金币  %d" % BaseManager.get_extraction_points()
 	_clear_children(_buy_list)
 	for item in BaseManager.get_base_shop_goods():
@@ -205,7 +208,6 @@ func _make_buy_row(item: Dictionary) -> PanelContainer:
 	elif button.disabled:
 		button.tooltip_text = "金币不足"
 	button.pressed.connect(_on_buy_pressed.bind(str(item.get("id", ""))))
-	button.add_theme_stylebox_override("normal", _panel_style(Color(0.18, 0.72, 0.84), 2, Color(0.035, 0.16, 0.20)))
 	_style_action(button)
 	box.add_child(button)
 	return row
@@ -223,7 +225,6 @@ func _make_sell_row(item: Dictionary, source_owner: String, source_index: int) -
 	button.disabled = total_price <= 0
 	var instance_id := str(item.get("item_instance_id", item.get("weapon_instance_id", "")))
 	button.pressed.connect(_on_sell_pressed.bind(instance_id, item, source_owner, source_index, button))
-	button.add_theme_stylebox_override("normal", _panel_style(Color(0.94, 0.48, 0.18), 2, Color(0.20, 0.075, 0.035)))
 	_style_action(button)
 	box.add_child(button)
 	return row
@@ -249,22 +250,20 @@ func _make_item_row(item: Dictionary, owner_label: String = "") -> PanelContaine
 	name_label.text = str(item.get("name", item.get("id", "未知物品")))
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	name_label.add_theme_font_size_override("font_size", 16)
-	name_label.add_theme_color_override("font_color", Color(0.88, 0.96, 0.98))
+	UIStyleFactory.apply_prism_label(name_label, "value", 2, 16)
 	details.add_child(name_label)
 	var type_label := Label.new()
 	var stock_text := owner_label if not owner_label.is_empty() else ("∞ 无限库存" if str(item.get("base_stock_rule", "")) == "unlimited" else "物品")
 	type_label.text = "%s · %s" % [_type_name(str(item.get("type", "item"))), stock_text]
 	type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	type_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	type_label.add_theme_color_override("font_color", Color(0.35, 0.78, 0.88))
+	UIStyleFactory.apply_prism_label(type_label, "label", 3, 12)
 	details.add_child(type_label)
 	var description := Label.new()
 	description.text = _item_summary(item)
 	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	description.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	description.add_theme_font_size_override("font_size", 11)
-	description.add_theme_color_override("font_color", Color(0.58, 0.69, 0.73))
+	UIStyleFactory.apply_prism_label(description, "faint", 1, 11)
 	details.add_child(description)
 	var actions := VBoxContainer.new()
 	actions.name = "CardActions"
@@ -345,7 +344,7 @@ func _make_empty_label(text: String) -> Label:
 	label.custom_minimum_size.y = 72
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_color_override("font_color", Color(0.42, 0.58, 0.64))
+	UIStyleFactory.apply_prism_label(label, "faint", 1, 15)
 	return label
 
 
@@ -354,24 +353,8 @@ func _make_source_label(text: String) -> Label:
 	label.text = "— %s —" % text
 	label.custom_minimum_size.y = 30
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_color_override("font_color", Color(0.42, 0.90, 0.98))
+	UIStyleFactory.apply_prism_label(label, "label", 3, 14)
 	return label
-
-
-func _panel_style(border: Color, width: int, background: Color) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = background
-	style.border_color = border
-	style.set_border_width_all(width)
-	style.corner_radius_top_left = 7
-	style.corner_radius_top_right = 7
-	style.corner_radius_bottom_left = 7
-	style.corner_radius_bottom_right = 7
-	style.content_margin_left = 12
-	style.content_margin_right = 12
-	style.content_margin_top = 8
-	style.content_margin_bottom = 8
-	return style
 
 
 func _rarity_color(rarity: String) -> Color:

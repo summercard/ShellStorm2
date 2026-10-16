@@ -76,12 +76,11 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	margin.add_child(text_box)
 	var title := Label.new()
 	title.text = "正在拖拽 · %s" % str(item.get("name", "物品"))
-	title.add_theme_color_override("font_color", Color(0.50, 0.94, 1.0))
+	UIStyleFactory.apply_prism_label(title, "value", 2, 0)
 	text_box.add_child(title)
 	var hint := Label.new()
 	hint.text = "R 旋转 · Esc 取消 · 释放到目标位置"
-	hint.add_theme_font_size_override("font_size", 11)
-	hint.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
+	UIStyleFactory.apply_prism_label(hint, "faint", 1, 11)
 	text_box.add_child(hint)
 	set_drag_preview(preview)
 	_drag_started = true

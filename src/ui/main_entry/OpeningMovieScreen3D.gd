@@ -300,8 +300,7 @@ func _build_ui() -> void:
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_status_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_status_label.add_theme_font_size_override("font_size", 16)
-	_status_label.add_theme_color_override("font_color", Color(0.62, 0.74, 0.78, 1.0))
+	UIStyleFactory.apply_prism_label(_status_label, "faint", 3, 16)
 	_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(_status_label)
 
@@ -315,10 +314,14 @@ func _build_ui() -> void:
 	_skip_hint.offset_top = -52.0
 	_skip_hint.offset_right = -28.0
 	_skip_hint.offset_bottom = -22.0
+	# 跳过提示压在活动画面上，必须保描边（规范 §4.4 允许的"亮景可读性"例外）。
 	_skip_hint.add_theme_font_size_override("font_size", 14)
-	_skip_hint.add_theme_color_override("font_color", Color(0.70, 0.80, 0.84, 0.72))
+	_skip_hint.add_theme_color_override("font_color", UIPalette.PRISM_TEXT)
 	_skip_hint.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
 	_skip_hint.add_theme_constant_override("outline_size", 5)
+	var skip_font := UIStyleFactory.make_prism_font(2)
+	if skip_font != null:
+		_skip_hint.add_theme_font_override("font", skip_font)
 	_skip_hint.visible = false
 	_skip_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(_skip_hint)

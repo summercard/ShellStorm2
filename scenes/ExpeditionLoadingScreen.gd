@@ -6,10 +6,10 @@ class_name ExpeditionLoadingScreen
 ## 基地落盘与入口登记由 RogueMapSelectMenu 在切场景前完成；本界面只负责
 ## 展示真实资源与场景装配进度，并跨场景保留遮罩直到 Tower 就绪。
 ##
-## 视觉（2026-10-09 主人指定，黑白极简）：
-##   · 纯黑底；右下角主角小兔子的**纯白正侧面剪影**原地跑动；
-##   · 旁边一个逐字起伏的波浪 `LOADING` 字样；
-##   · 屏幕底部一条白进度条，剪影正好站在它上面。
+## 视觉（2026-10 改为「棱镜线框」；原 2026-10-09 的黑白极简为其前身）：
+##   · 深墨底；右下角主角小兔子的**纯白正侧面剪影**原地跑动；
+##   · 旁边一个逐字起伏的波浪 `LOADING` 字样（棱镜字距）；
+##   · 屏幕底部一条白色进度条，剪影正好站在它上面。
 ##   · 进/出各由全局光圈过场 IrisTransition 负责：进来时黑圈往中心收拢，
 ##     读条走满后黑圈从中心往外展开、露出关卡。
 ##
@@ -63,7 +63,9 @@ const WAVE_AMPLITUDE := 7.0
 const WAVE_SPEED := 3.4
 const WAVE_PHASE_STEP := 0.62
 
-const INK := Color(0.0, 0.0, 0.0, 1.0)
+## 棱镜线框下读取页是「深墨底 + 白线 + 白字」：底色从纯黑提到棱镜深墨
+## （与启动壳、主菜单、暂停菜单同一底色族），白线与白字不变 —— 剪影仍是纯白。
+const INK := Color(0.031, 0.055, 0.086, 1.0)
 const PAPER := Color(1.0, 1.0, 1.0, 1.0)
 const BAR_TRACK_COLOR := Color(1.0, 1.0, 1.0, 0.16)
 
@@ -623,8 +625,7 @@ func _build_status_controls(content: Control) -> void:
 	_status_label = Label.new()
 	_status_label.name = "LoadingStatus"
 	_status_label.text = "正在读取…"
-	_status_label.add_theme_font_size_override("font_size", 18)
-	_status_label.add_theme_color_override("font_color", PAPER)
+	UIStyleFactory.apply_prism_label(_status_label, "label", 3, 18)
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_status_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 	_status_label.offset_left = -WAVE_RIGHT_MARGIN - 320.0
@@ -638,7 +639,6 @@ func _build_status_controls(content: Control) -> void:
 	_retry_button.name = "RetryButton"
 	_retry_button.text = "重试读取"
 	_retry_button.visible = false
-	_retry_button.add_theme_font_size_override("font_size", 18)
 	_retry_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 	_retry_button.offset_left = -WAVE_RIGHT_MARGIN - 220.0
 	_retry_button.offset_top = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 96.0)
@@ -646,6 +646,7 @@ func _build_status_controls(content: Control) -> void:
 	_retry_button.offset_bottom = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 52.0)
 	_retry_button.pressed.connect(_on_retry_pressed)
 	content.add_child(_retry_button)
+	UIStyleFactory.apply_prism_button(_retry_button, "ghost", 2, 16, 2, "none")
 
 
 func _build_progress_bar(content: Control) -> void:
@@ -679,7 +680,11 @@ func _build_wave_text(content: Control) -> void:
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content.add_child(holder)
 
-	var font := ThemeDB.fallback_font
+	# 字宽必须用**同一个字体对象**量，否则按回退量出来的宽度会和棱镜字距对不上，
+	# 波浪字母会互相挤在一起或散开。
+	var font: Font = UIStyleFactory.make_prism_font(3)
+	if font == null:
+		font = ThemeDB.fallback_font
 	var word := "LOADING"
 	var cursor := 0.0
 	_wave_slots.clear()
@@ -689,7 +694,9 @@ func _build_wave_text(content: Control) -> void:
 		label.name = "L%d" % index
 		label.text = letter
 		label.add_theme_font_size_override("font_size", WAVE_FONT_SIZE)
-		label.add_theme_color_override("font_color", PAPER)
+		if font != null:
+			label.add_theme_font_override("font", font)
+		label.add_theme_color_override("font_color", UIPalette.PRISM_TEXT)
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var width := WAVE_FONT_SIZE * 0.72
 		if font != null:

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
-  "version": "v040",
+  "version": "v041",
   "status": "exported_pending_godot_validation",
   "classification": "version_increment",
   "skeleton_id": "SKEL-BUNNY01-004",
@@ -15,19 +15,19 @@
       "bytes": 10282728
     },
     {
-      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v040.blend",
-      "sha256": "e89c153996853facb57fc140371bdfeb38930dcec24c599fec7233c1aa09d194",
-      "bytes": 524046883
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v041.blend",
+      "sha256": "20cfabac098819ea04ab9b79afaa17b0ddfc14ede6f6baab07c07e5cab4653ec",
+      "bytes": 537526424
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.json",
-      "sha256": "b75c236a1f3636f8349e20e562e6cf4041cbfd24f12f95128848749f23545790",
-      "bytes": 16428145
+      "sha256": "88a5c75df4cb46d8af851d5ea90d4a789f858c9001a0b50291d8811dfa99ecf4",
+      "bytes": 17461653
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.glb",
-      "sha256": "a49fce6c8014c1d22c9da3fb89fd49014f5e3a89f02ed56ad52f03c26d49008b",
-      "bytes": 667276
+      "sha256": "34b22d18814290302760dff9b0558ee8894671ad8e9bfdb83e55c2cddcc730f4",
+      "bytes": 793592
     }
   ],
   "animation_adapter": "anatomical_to_rigid_node_map",
@@ -588,55 +588,79 @@
       "tracks": 11
     },
     "melee_axe_1_active": {
-      "duration": 0.2,
+      "duration": 0.14,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_axe_1_recovery": {
-      "duration": 0.35,
+      "duration": 0.4,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_axe_1_windup": {
-      "duration": 0.3,
+      "duration": 0.48,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_axe_2_active": {
-      "duration": 0.2,
+      "duration": 0.14,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_axe_2_recovery": {
-      "duration": 0.35,
+      "duration": 0.4,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_axe_2_windup": {
-      "duration": 0.3,
+      "duration": 0.48,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_axe_3_active": {
-      "duration": 0.2,
+      "duration": 0.14,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_axe_3_recovery": {
-      "duration": 0.35,
+      "duration": 0.4,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_axe_3_windup": {
-      "duration": 0.3,
+      "duration": 0.48,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_charge": {
+      "duration": 1.0,
+      "loop": false,
+      "frames": 121,
+      "tracks": 11
+    },
+    "melee_axe_charged_active": {
+      "duration": 0.18,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_charged_recovery": {
+      "duration": 0.7,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_charged_windup": {
+      "duration": 0.08,
       "loop": false,
       "frames": 41,
       "tracks": 11
@@ -648,55 +672,55 @@
       "tracks": 11
     },
     "melee_bat_1_active": {
-      "duration": 0.2,
+      "duration": 0.14,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_bat_1_recovery": {
-      "duration": 0.35,
+      "duration": 0.4,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_bat_1_windup": {
-      "duration": 0.3,
+      "duration": 0.2,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_bat_2_active": {
-      "duration": 0.2,
+      "duration": 0.14,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_bat_2_recovery": {
-      "duration": 0.35,
+      "duration": 0.4,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_bat_2_windup": {
-      "duration": 0.3,
-      "loop": false,
-      "frames": 41,
-      "tracks": 11
-    },
-    "melee_bat_3_active": {
       "duration": 0.2,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
+    "melee_bat_3_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
     "melee_bat_3_recovery": {
-      "duration": 0.35,
+      "duration": 0.4,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_bat_3_windup": {
-      "duration": 0.3,
+      "duration": 0.2,
       "loop": false,
       "frames": 41,
       "tracks": 11
@@ -708,57 +732,63 @@
       "tracks": 11
     },
     "melee_blade_1_active": {
-      "duration": 0.2,
+      "duration": 0.14,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_blade_1_recovery": {
-      "duration": 0.35,
+      "duration": 0.4,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_blade_1_windup": {
-      "duration": 0.3,
+      "duration": 0.2,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_blade_2_active": {
-      "duration": 0.2,
+      "duration": 0.14,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_blade_2_recovery": {
-      "duration": 0.35,
+      "duration": 0.4,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_blade_2_windup": {
-      "duration": 0.3,
-      "loop": false,
-      "frames": 41,
-      "tracks": 11
-    },
-    "melee_blade_3_active": {
       "duration": 0.2,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
+    "melee_blade_3_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
     "melee_blade_3_recovery": {
-      "duration": 0.35,
+      "duration": 0.4,
       "loop": false,
       "frames": 41,
       "tracks": 11
     },
     "melee_blade_3_windup": {
-      "duration": 0.3,
+      "duration": 0.2,
       "loop": false,
       "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_charge": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 121,
       "tracks": 11
     },
     "melee_blade_idle": {
@@ -766,17 +796,29 @@
       "loop": true,
       "frames": 61,
       "tracks": 11
+    },
+    "melee_blade_spin": {
+      "duration": 0.55,
+      "loop": true,
+      "frames": 121,
+      "tracks": 11
+    },
+    "melee_blade_spin_recovery": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
     }
   },
-  "new_clip_count": 30,
+  "new_clip_count": 37,
   "retained_legacy_clip_count": 14,
-  "glb_clip_count": 30,
+  "glb_clip_count": 37,
   "missing_actions": [
     "family_charge"
   ],
-  "rollback": "ShellStorm2-backup/2026-10-16_melee_v040/before_edits",
-  "git_baseline": "5a07681828a38372bb0b06125742c5e2515420d0",
-  "added_melee_clips": 30,
+  "rollback": "ShellStorm2-backup/2026-10-16_melee_v041/before_edits",
+  "git_baseline": "8e91dd91ebdee2f6b5b41b7f6c4c4188c14be04b",
+  "added_melee_clips": 37,
   "retained_clips": 91,
   "retained_clip_provenance": {
     "version": "v039",

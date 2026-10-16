@@ -40,7 +40,7 @@ func _ready() -> void:
 		failures.append("One wide melee attack did not resolve exactly two target hits")
 	if int(feedback.get("swing_count", 0)) != 1 or int(feedback.get("impact_target_count", 0)) != 2:
 		failures.append("Melee feedback snapshot does not separate one swing from two target impacts")
-	if pool.active_count(VfxPool3D.FX01_MELEE_SLASH) != 1 or pool.active_count(VfxPool3D.FX01_GOO_HIT) != 2 or pool.active_count(VfxPool3D.FX01_MELEE_IMPACT) != 0:
+	if pool.active_count(VfxPool3D.FX01_BLADE_SWEEP) != 1 or pool.active_count(VfxPool3D.FX01_GOO_HIT) != 2 or pool.active_count(VfxPool3D.FX01_MELEE_IMPACT) != 0:
 		failures.append("Parameterized combat VFX kit did not emit one slash and two zombie goo impacts")
 	if int(audio.get("melee_swing", 0)) != 1 or int(audio.get("melee_impact", 0)) != 1:
 		failures.append("Multi-target melee audio is not layered as one swing plus one contact event")

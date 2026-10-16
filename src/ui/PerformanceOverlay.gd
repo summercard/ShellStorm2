@@ -24,15 +24,13 @@ func _ready() -> void:
 	custom_minimum_size = Vector2(332, 232)
 	_label = Label.new()
 	_label.name = "Metrics"
-	_label.add_theme_font_size_override("font_size", 14)
-	_label.add_theme_color_override("font_color", Color(0.84, 0.94, 1.0))
-	_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.95))
-	_label.add_theme_constant_override("shadow_offset_x", 1)
-	_label.add_theme_constant_override("shadow_offset_y", 1)
+	# 只读诊断面板：棱镜排版 + 靠面板底衬保可读性，**不加文字投影**
+	# （规范：零投影；投影是上一代战术皮肤的表达手段）。
+	UIStyleFactory.apply_prism_label(_label, "value", 1, 14)
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(_label)
 	RenderingServer.viewport_set_measure_render_time(get_viewport().get_viewport_rid(), true)
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -86,9 +84,14 @@ func _refresh_metrics() -> void:
 		+ "动态阴影         %s（始终开启）\n" % GraphicsSettingsManager.get_shadow_quality()
 		+ "太阳间接漫反射   %s（始终开启）" % GraphicsSettingsManager.get_indirect_diffuse_quality()
 	)
+	# FPS 三档语义色直接取棱镜语义槽，不再用本地硬编码的三色。
 	_label.add_theme_color_override(
 		"font_color",
-		Color(0.52, 1.0, 0.72) if fps >= 55 else Color(1.0, 0.78, 0.30) if fps >= 40 else Color(1.0, 0.34, 0.30)
+		UIPalette.PRISM_OK
+		if fps >= 55
+		else UIPalette.PRISM_WARN
+		if fps >= 40
+		else UIPalette.PRISM_DANGER
 	)
 
 

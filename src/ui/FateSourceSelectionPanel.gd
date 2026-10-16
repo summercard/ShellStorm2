@@ -97,8 +97,8 @@ func open_choices(heading: String, entries: Array[Dictionary], hint := "") -> vo
 	back.pressed.connect(cancel)
 	box.add_child(back)
 
-	UIStyleFactory.apply_tactical_tree(margin)
-	# 稀有度强调必须晚于 apply_tactical_tree：否则卡片的描边会被通用青色样式覆盖。
+	UIStyleFactory.apply_prism_tree(margin, {"button_role": "auto"})
+	# 稀有度强调必须晚于 apply_prism_tree：否则卡片的描边会被通用（未着色）样式覆盖。
 	# 图标与卡片同色（两侧都取 item 的 rarity），一眼能分清主副枪。
 	for card in cards:
 		var accent: Color = card["accent"]

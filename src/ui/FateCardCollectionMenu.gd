@@ -19,7 +19,7 @@ func _ready() -> void:
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
 	_build_collection_view()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
 	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
 	UiMenuFocus.ensure_focus(self)
@@ -100,21 +100,22 @@ func _create_card_ui(card: FateCard) -> Control:
 		column.add_child(holder)
 		FateCardView.build_art_layer(holder, art, card.is_reversed(), "TarotArtFace")
 	else:
-		# 缺图回退：保留旧的文字卡
+		# 缺图回退：保留旧的文字卡（棱镜线框 + 稀有度语义线色，豁免通用树皮以免被抹平）
 		var panel := PanelContainer.new()
 		panel.custom_minimum_size = Vector2(CARD_SIZE, CARD_SIZE * 1.56)
+		panel.set_meta("ui_prism_exempt", true)
 		var bg := StyleBoxFlat.new()
-		bg.bg_color = Color(0.1, 0.1, 0.14, 0.97)
-		bg.set_border_width_all(2)
-		bg.set_border_color(FateCard.rarity_color(card.card_rarity))
-		bg.set_corner_radius_all(6)
-		panel.add_theme_stylebox_override("normal", bg)
+		bg.bg_color = Color(UIPalette.PRISM_SURFACE.r, UIPalette.PRISM_SURFACE.g, UIPalette.PRISM_SURFACE.b, 0.60)
+		bg.set_border_width_all(1)
+		bg.set_border_color(UIStyleFactory.prism_normalize_color(FateCard.rarity_color(card.card_rarity)))
+		bg.set_corner_radius_all(2)
+		panel.add_theme_stylebox_override("panel", bg)
 		var vbox := VBoxContainer.new()
 		vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 		panel.add_child(vbox)
 		var name_lbl := Label.new()
 		name_lbl.text = card.card_name
-		name_lbl.add_theme_font_size_override("font_size", 12)
+		UIStyleFactory.apply_prism_label(name_lbl, "value", 2, 12)
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		vbox.add_child(name_lbl)

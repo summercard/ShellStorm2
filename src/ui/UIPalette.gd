@@ -120,3 +120,55 @@ const INVENTORY_SLOT := Color(0.055, 0.10, 0.16, 0.70)
 const INVENTORY_OUTLINE := Color(0.62, 0.68, 0.73, 0.62)
 const INVENTORY_ACTION := Color(0.73, 0.91, 0.98)
 const INVENTORY_SELECTED := Color(1.0, 0.62, 0.20)
+
+# ========== 「棱镜线框」Prism Wireframe 视觉规范 Token ==========
+# 2026-10-16 业主否决鸭科夫深蓝圆角胶囊风，改按新参考图重塑：
+# 设计语言 = 明亮低多边形 + 全白细线几何。UI **不画实心卡片**，只用 1px 白线、
+# 四角括号选框、方角箭头钮、白底黑字方键帽与黑白高对比主行动钮；
+# 排版为「弱标签(大写+字距) / 强数值(近白+字距)」两级。
+
+## 全屏压暗底色（保留 3D 实景可见，参考图即"无遮罩感"）
+const PRISM_DIM := Color(0.031, 0.055, 0.086, 0.58)
+## 面板极淡底：几乎不遮挡实景（HUD 卡片 alpha 契约 <= 0.50）
+const PRISM_SURFACE := Color(0.055, 0.086, 0.129, 0.42)
+## 模态面板底：稍实一点以承载密集设置项，仍是深蓝透明而非实心卡片
+const PRISM_SURFACE_SOLID := Color(0.043, 0.071, 0.110, 0.72)
+## 主体线（四角括号 / 分隔线 / 键帽轮廓）
+const PRISM_LINE := Color(1.0, 1.0, 1.0, 0.86)
+## 次级线（分隔线、未选中框）
+const PRISM_LINE_SOFT := Color(1.0, 1.0, 1.0, 0.34)
+## 极弱线（底衬网格、静态框）
+const PRISM_LINE_FAINT := Color(1.0, 1.0, 1.0, 0.14)
+## 主文字（近白，对应参考图 HIDDEN TEMPLE / CONTINUE）
+const PRISM_TEXT := Color(0.949, 0.965, 0.984, 1.0)
+## 弱标签（钢蓝，对应参考图 ARENA / THEME / GAME MODE）
+const PRISM_LABEL := Color(0.545, 0.643, 0.784, 1.0)
+## 最弱说明文字
+const PRISM_TEXT_FAINT := Color(0.404, 0.482, 0.600, 1.0)
+## 深色墨水（实心近白按钮上的文字，等价参考图黑底白字的反相）
+const PRISM_INK := Color(0.043, 0.071, 0.110, 1.0)
+## 天蓝强调（取自参考图背景蓝；仅用于焦点、选中与进度）
+const PRISM_ACCENT := Color(0.310, 0.659, 1.0, 1.0)
+## 史诗紫：**稀有度专用**的第二强调色。
+## 棱镜调色板原本只有"天蓝强调"一个冷色槽，但稀有度（普通/稀有/史诗/传说/秘法）
+## 是必须可区分的**语义色**，蓝与紫挤进同一槽会让背包与图鉴失去分级可读性，
+## 故单独开一槽（仍属语义色，不作装饰铺陈；一屏内仍受"彩色面数 ≤ 2"约束）。
+const PRISM_EPIC := Color(0.720, 0.545, 1.0, 1.0)
+## 平红危险（纯平色，无辉光无渐变）
+const PRISM_DANGER := Color(1.0, 0.420, 0.353, 1.0)
+## 琥珀警示
+const PRISM_WARN := Color(1.0, 0.741, 0.290, 1.0)
+## 成功/安全绿（平色）
+const PRISM_OK := Color(0.376, 0.878, 0.588, 1.0)
+## 生命条平红（HUD 探针契约：r > 0.75 且 g < 0.25）
+const PRISM_HP_RED := Color(0.925, 0.196, 0.227, 1.0)
+## 生命条底槽（深灰蓝，非深红，保持线框冷感）
+const PRISM_HP_BG := Color(0.086, 0.106, 0.137, 0.72)
+## 实体白方键帽底色与深色键帽字
+const PRISM_KEYCAP_BG := Color(0.949, 0.965, 0.984, 1.0)
+const PRISM_KEYCAP_TEXT := Color(0.043, 0.071, 0.110, 1.0)
+## 实心主行动钮（近白）三态
+const PRISM_PRIMARY_BG := Color(0.949, 0.965, 0.984, 1.0)
+const PRISM_PRIMARY_BG_HOVER := Color(1.0, 1.0, 1.0, 1.0)
+const PRISM_PRIMARY_BG_PRESS := Color(0.780, 0.816, 0.867, 1.0)
+

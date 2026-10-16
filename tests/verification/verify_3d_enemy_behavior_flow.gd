@@ -4,6 +4,12 @@ const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
 const DAMAGE_NUMBER_SCRIPT := preload("res://src/fx/CombatDamageNumber3D.gd")
 
+## 伤害飘字字体/样式的期望值，**硬编码在验收侧**（不引用被测常量 —— 引用它们会让
+## 「常量被改成什么、期望就跟着变成什么」，断言恒绿）。常量本身的钉子在专项
+## `verify_damage_number_style_flow` 里。
+const EXPECTED_DAMAGE_FONT_WEIGHT := 900
+const EXPECTED_DAMAGE_FONT_SIZES := {"normal": 116, "heavy": 134, "critical": 152}
+
 var _summon_count := 0
 
 
@@ -175,33 +181,50 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 	await get_tree().process_frame
 
 
+## 伤害飘字的字体与字号分级。
+##
+## ⚠ 本函数曾经直接 `new CombatDamageNumber3D` —— 那是条**跑不到的兜底链路**
+## （只在 VfxPool3D 不在场时才用），实机走的是 `VfxPool3D` → `VfxDamageNumber3D`。
+## 于是改坏实机字体不会变红，是结构性假绿（2026-10-16 收口）。现在一律从池里取
+## **生效实例**读真值。
+## 完整覆盖（力度曲线 / 弹出超调 / 随机化极差 / 同 context 逐位确定性 / 常量钉子 /
+## 治疗飘字与伤害飘字同源）见专项 `tests/verification/verify_damage_number_style_flow.tscn`。
 func _verify_damage_number_presentation(failures: Array[String]) -> void:
-	var normal := CombatDamageNumber3D.new()
-	add_child(normal)
-	normal.configure(12, false)
-	var heavy := CombatDamageNumber3D.new()
-	add_child(heavy)
-	heavy.configure(48, false)
-	var critical := CombatDamageNumber3D.new()
-	add_child(critical)
-	critical.configure(48, true)
-	for sample in [normal, heavy, critical]:
-		var label := sample.get_node_or_null("DamageText") as Label3D
-		if label == null or not label.font is SystemFont:
-			failures.append("3D damage number does not use the selected terminal-style system font")
+	var pool := get_tree().get_first_node_in_group("vfx_pool_3d") as VfxPool3D
+	if pool == null:
+		failures.append("damage number presentation check needs the VfxPool3D autoload")
+		return
+	var cases := [
+		{"amount": 12, "critical": false, "tag": "normal"},
+		{"amount": 48, "critical": false, "tag": "heavy"},
+		{"amount": 48, "critical": true, "tag": "critical"},
+	]
+	for case in cases:
+		var tag: String = str(case["tag"])
+		var effect := pool.acquire(
+			VfxPool3D.FX02_DAMAGE_NUMBER, Vector3.ZERO, Color("ff4444"), 1.0,
+			{
+				"text_value": str(int(case["amount"])),
+				"magnitude": int(case["amount"]),
+				"critical": bool(case["critical"]),
+			}
+		)
+		var label := effect.get_node_or_null("DamageLabel") as Label3D
+		if label == null:
+			failures.append("damage number [%s] renders no Label3D on the live pooled effect" % tag)
 			continue
-		var system_font := label.font as SystemFont
-		if (
-			system_font.font_names != PackedStringArray(CombatDamageNumber3D.TECH_FONT_FAMILIES)
-			or system_font.font_weight != 700
-		):
-			failures.append("3D damage number terminal font configuration drifted")
-	if (
-		(normal.get_node("DamageText") as Label3D).font_size != CombatDamageNumber3D.NORMAL_FONT_SIZE
-		or (heavy.get_node("DamageText") as Label3D).font_size != CombatDamageNumber3D.HEAVY_FONT_SIZE
-		or (critical.get_node("DamageText") as Label3D).font_size != CombatDamageNumber3D.CRITICAL_FONT_SIZE
-	):
-		failures.append("3D damage number font sizes are not the requested 150%% scale")
+		if not label.font is SystemFont:
+			failures.append("damage number [%s] does not use the comic-style system font" % tag)
+		elif (label.font as SystemFont).font_weight != EXPECTED_DAMAGE_FONT_WEIGHT:
+			failures.append(
+				"damage number [%s] font weight drifted to %d" % [tag, (label.font as SystemFont).font_weight]
+			)
+		var expected_size: int = int(EXPECTED_DAMAGE_FONT_SIZES[tag])
+		if label.font_size != expected_size:
+			failures.append(
+				"damage number [%s] font size is %d, expected %d" % [tag, label.font_size, expected_size]
+			)
+		pool.retire(VfxPool3D.FX02_DAMAGE_NUMBER, effect)
 
 
 ## **全部怪种**的碰撞体期望值，硬编码在验收侧（不引用被测表 —— 否则表被改小/改大都会

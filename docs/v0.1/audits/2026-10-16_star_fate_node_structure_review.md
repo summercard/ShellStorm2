@@ -214,11 +214,11 @@
 - 预期拒绝：重复魔术师的单MOUNT占用，属于探针特意覆盖的拒绝路径；并非脚本异常。
 - 未执行：36张全部组合、全部正逆的真实输入游玩、存档迁移、性能压力、正式入口购卡事务全回归。结构探针直接调用正式执行器与正式WeaponModel3D，不把它包装成完整玩家流程验收。
 
-- [最终结构探针日志](../../../../ShellStorm2-work/probes/2026-10-16_star_structure/runtime_settled.log)
-- [既有专项日志](../../../../ShellStorm2-work/probes/2026-10-16_star_structure/existing_weapon_completion.log)
-- [本轮一次性探针源](../../../../ShellStorm2-work/probes/2026-10-16_star_structure/star_probe.gd)
-- [真实渲染日志](../../../../ShellStorm2-work/probes/2026-10-16_star_structure/visual.log)
-- [主枪与挂枪对照截图](../../../../ShellStorm2-work/probes/2026-10-16_star_structure/weapon_comparison.png)
+- 最终结构探针日志：`ShellStorm2-work/probes/2026-10-16_star_structure/runtime_settled.log`
+- 既有专项日志：`ShellStorm2-work/probes/2026-10-16_star_structure/existing_weapon_completion.log`
+- 本轮一次性探针源：`ShellStorm2-work/probes/2026-10-16_star_structure/star_probe.gd`
+- 真实渲染日志：`ShellStorm2-work/probes/2026-10-16_star_structure/visual.log`
+- 主枪与挂枪对照截图：`ShellStorm2-work/probes/2026-10-16_star_structure/weapon_comparison.png`
 
 真实渲染：Compatibility/OpenGL，退出0，截图保存返回0，SCRIPT ERROR=0、ERROR=0；存在资源UID回退和TAA不受该渲染器支持的警告。已亲眼检查截图：右侧挂枪版本仅比基准多顶部方块，没有副枪实体。本截图是正式模型/构筑代码的独立展示，不是完整关卡游玩截图。
 

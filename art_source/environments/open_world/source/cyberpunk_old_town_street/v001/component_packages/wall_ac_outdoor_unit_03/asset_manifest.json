@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.component_package.asset_manifest",
+  "schema_version": 1,
+  "component_id": "comp_wall_ac_outdoor_unit_03",
+  "slug": "wall_ac_outdoor_unit_03",
+  "display_name": "建筑外墙悬挂式空调外机与支架_03",
+  "category": "prop",
+  "source_blend": "env_cyberpunk_old_town_street_source_v001.blend",
+  "output_collection": "资产包_wall_ac_outdoor_unit_03",
+  "pivot_rule": "bottom_center_z0",
+  "forward_axis": "-Y",
+  "up_axis": "+Z",
+  "dimensions_m": [
+    1.2,
+    0.65,
+    0.95
+  ],
+  "mesh_objects": [
+    "建筑外墙悬挂式空调外机与支架_03_主体"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "polygon_count": 32
+}

@@ -33,7 +33,19 @@ const FX02_HEAL_NUMBER := "VFX-HEAL-NUMBER-3D"
 
 const FX01_FATE_ROCK_SHATTER := "VFX-FATE-ROCK-SHATTER-3D"
 
+const FX01_AXE_CHARGE := "VFX-MELEE-AXE-CHARGE-3D"
+const FX01_AXE_CLEAVE := "VFX-MELEE-AXE-CLEAVE-3D"
+const FX01_AXE_IMPACT := "VFX-MELEE-AXE-IMPACT-3D"
+const FX01_BLADE_SWEEP := "VFX-MELEE-BLADE-SWEEP-3D"
+const FX01_BLADE_WHIRLWIND := "VFX-MELEE-BLADE-WHIRLWIND-3D"
+
 const _REGISTRY := {
+	FX01_AXE_CHARGE: preload("res://assets/art/vfx/combat_3d/vfx_axe_charge_root_top3d.tscn"),
+	FX01_AXE_CLEAVE: preload("res://assets/art/vfx/combat_3d/vfx_axe_cleave_root_top3d.tscn"),
+	FX01_AXE_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_axe_impact_root_top3d.tscn"),
+	FX01_BLADE_SWEEP: preload("res://assets/art/vfx/combat_3d/vfx_blade_sweep_root_top3d.tscn"),
+	FX01_BLADE_WHIRLWIND: preload("res://assets/art/vfx/combat_3d/vfx_blade_whirlwind_root_top3d.tscn"),
+
 	FX01_FATE_ROCK_SHATTER: preload("res://assets/art/vfx/combat_3d/vfx_fate_rock_shatter_root_top3d.tscn"),
 	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d.tscn"),
 	FX01_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d.tscn"),

@@ -126,21 +126,18 @@ size_flags_vertical = 3
 [node name="StartButton" type="Button" parent="Screen/MenuPanel/Margin/Content"]
 custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
-text = "开始游戏 >>"
+text = "开始游戏"
 script = ExtResource("3_neon")
-label_text = "开始游戏 >>"
-chamfer = 18.0
-glow_strength = 1.15
+role = "primary"
+label_text = "开始游戏"
 
 [node name="SettingsButton" type="Button" parent="Screen/MenuPanel/Margin/Content"]
 custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
 text = "设置"
 script = ExtResource("3_neon")
+role = "ghost"
 label_text = "设置"
-draw_gear = true
-chamfer = 18.0
-glow_strength = 0.95
 
 [node name="Hint" type="Label" parent="Screen/MenuPanel/Margin/Content"]
 visible = false

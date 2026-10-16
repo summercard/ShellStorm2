@@ -66,12 +66,39 @@ func _ready() -> void:
 	screen.visible = false
 	start_button.pressed.connect(start_game)
 	settings_button.pressed.connect(_open_settings)
-	# 启动页的标题、六边形霓虹按钮与菜单壳全部自绘：声明豁免，避免被战术皮肤
+	# 启动页的标题、按钮与菜单壳全部自绘：声明豁免，避免被任何批量皮肤
 	# 重新套上矩形描边与底色（会在按钮/面板背后露出一圈多余边框）。
 	set_meta("ui_style_exempt", true)
-	UIStyleFactory.apply_tactical_tree(self)
+	_apply_prism_entry_style()
 	if auto_present_when_player_found:
 		call_deferred("_auto_present")
+
+
+## 启动页棱镜化：品牌字标与两个按钮走 Control._draw 自绘（见 EntryBrand / EntryNeonButton），
+## 这里只负责把文字件、分隔线与压暗层收进「棱镜线框」口径。
+## 节点路径与 signal 一字未动（verify_expedition_resume_entry 断言 StartButton / SettingsButton 存在）。
+func _apply_prism_entry_style() -> void:
+	var backdrop := screen.get_node_or_null("Backdrop") as ColorRect
+	if backdrop != null:
+		# 冷蓝压暗而非纯黑：保留右侧 3D 角色与天台云海的冷调。
+		backdrop.color = Color(
+			UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.46
+		)
+	# 菜单壳保持 StyleBoxEmpty（只承担布局）：棱镜语言不画卡片。
+	var eyebrow := screen.get_node_or_null("MenuPanel/Margin/Content/Eyebrow") as Label
+	if eyebrow != null:
+		UIStyleFactory.apply_prism_label(eyebrow, "label", 4, 15)
+	var subtitle := screen.get_node_or_null("MenuPanel/Margin/Content/Subtitle") as Label
+	if subtitle != null:
+		UIStyleFactory.apply_prism_label(subtitle, "faint", 3, 16)
+	var hint := screen.get_node_or_null("MenuPanel/Margin/Content/Hint") as Label
+	if hint != null:
+		UIStyleFactory.apply_prism_label(hint, "faint", 1, 13)
+	var rule := screen.get_node_or_null("MenuPanel/Margin/Content/Rule") as HSeparator
+	if rule != null:
+		rule.add_theme_stylebox_override("separator", UIStyleFactory.make_prism_separator_style(0.24))
+	if transition_hint != null:
+		UIStyleFactory.apply_prism_label(transition_hint, "value", 2, 17)
 
 
 func _process(delta: float) -> void:

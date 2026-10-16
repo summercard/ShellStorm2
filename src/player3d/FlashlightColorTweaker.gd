@@ -191,7 +191,7 @@ func _ready() -> void:
 	offset_bottom = 820.0
 	custom_minimum_size = Vector2(430, 0)
 	_build_ui()
-	UIStyleFactory.apply_tactical_tree(self)
+	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
 	_resolve_flashlight()
 	_select_tab(TabId.LIGHT)
 	_setup_postfx_persist()

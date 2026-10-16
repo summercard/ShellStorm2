@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.component_package.asset_manifest",
+  "schema_version": 1,
+  "component_id": "comp_skybridge_truss_span_22m_01",
+  "slug": "skybridge_truss_span_22m_01",
+  "display_name": "跨街重型装甲高架走廊主梁_22m_01",
+  "category": "structural",
+  "source_blend": "env_cyberpunk_old_town_street_source_v001.blend",
+  "output_collection": "资产包_skybridge_truss_span_22m_01",
+  "pivot_rule": "bottom_center_z0",
+  "forward_axis": "-Y",
+  "up_axis": "+Z",
+  "dimensions_m": [
+    22.0,
+    4.6,
+    4.8
+  ],
+  "mesh_objects": [
+    "跨街重型装甲高架走廊主梁_22m_01_UI灯光自发光",
+    "跨街重型装甲高架走廊主梁_22m_01_主体"
+  ],
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "polygon_count": 444
+}

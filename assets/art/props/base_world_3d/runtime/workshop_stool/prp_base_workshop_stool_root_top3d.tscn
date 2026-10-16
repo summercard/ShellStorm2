@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_base_visual_v004.glb" id="1_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_base_visual.glb" id="1_visual"]
 [ext_resource type="Script" path="res://src/base3d/PushableSeat3D.gd" id="2_seat"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_swivel_visual_v004.glb" id="3_swivel"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_swivel_visual.glb" id="3_swivel"]
 
 [sub_resource type="BoxShape3D" id="ShapePushableStool"]
 size = Vector3(1.28, 0.26, 1.24)

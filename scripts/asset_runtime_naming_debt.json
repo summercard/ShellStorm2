@@ -308,9 +308,7 @@
     "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v020",
     "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021"
   ],
-  "backup_residue": [
-    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import.bak_pre_standard_fix"
-  ],
+  "backup_residue": [],
   "reference_counts": {
     "gd": 23,
     "tscn": 93

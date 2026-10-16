@@ -27,7 +27,7 @@ func _ready() -> void:
 	for ui in get_tree().root.find_children("*", "Control", true, false): ui.visible = false
 	var motion: CharacterMotionLibrary3D = p.avatar.get("_authored_motion")
 	var cache: Dictionary = motion.get("_cache")
-	check(cache.version == "v040", "current library")
+	check(cache.version == "v041", "current library")
 	for family: String in {"bat":"baseball_bat","blade":"greatblade","axe":"waraxe"}:
 		var slug: String = {"bat":"baseball_bat","blade":"greatblade","axe":"waraxe"}[family]
 		check(p.equip_weapon("bp_"+slug,""),"equip "+family)
@@ -48,7 +48,8 @@ func _ready() -> void:
 					check(snap.right_hand_palm_to_socket_global_distance < .001,"palm grip")
 					check(motion.palm_global(p.avatar,"l").distance_to(p.avatar.weapon_socket.global_transform * Vector3(0,0,.18)) < .002,"support palm grip")
 					check(not snap.legacy_procedural_motion_enabled,"no procedural motion")
-					low=minf(low,p.avatar.body.rotation.y);high=maxf(high,p.avatar.body.rotation.y)
+					var force_axis: float = p.avatar.body.rotation.x if family == "axe" else p.avatar.body.rotation.y
+					low=minf(low,force_axis);high=maxf(high,force_axis)
 					if visual and (i in [0,9,20] or step==3):
 						await get_tree().process_frame; await RenderingServer.frame_post_draw
 						get_viewport().get_texture().get_image().save_png(out+"%s_%d_%s_%02d.png" % [family,step,phase,i])
@@ -57,7 +58,7 @@ func _ready() -> void:
 							await get_tree().process_frame;await RenderingServer.frame_post_draw
 							get_viewport().get_texture().get_image().save_png(out+"%s_%d_side.png" % [family,step])
 							camera.position=Vector3(3,3,4);camera.look_at(Vector3(0,.6,0))
-			check(rad_to_deg(high-low)>45,"torso force "+family)
+			check(rad_to_deg(high-low)>(14 if family == "axe" else 45),"torso force "+family)
 		p.melee_combat.cancel("test_reset")
 		for direction in [Vector3.FORWARD,Vector3.BACK,Vector3.LEFT,Vector3.RIGHT]:
 			p.velocity=direction*5;p.set("_presentation_state","moving");p.avatar.call("_process",.3)
