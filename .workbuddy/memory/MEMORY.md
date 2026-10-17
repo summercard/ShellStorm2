@@ -48,12 +48,18 @@
   直到中午 `git add` 才报 `Unable to create index.lock`（只读的 `status/diff/fetch` 从不撞它）。
   ⇒ 删除前必须两条同时成立：无 `git`/`git-lfs`/`ssh` 进程，且 `status --porcelain` 第一列全空
   （index 无残留暂存）。确认后再 `rm -f .git/index.lock`。
-- **`Uploading LFS objects: 100% … done` 不等于推送成功**（2026-10-15 实测）：
+- **`Uploading LFS objects: 100% … done` 不等于推送成功**（2026-10-15、10-17 两次实测，
+  已升级为规律：**本次含新的大 LFS 对象时，第一次 push 几乎必定「传完就断」**）：
   长传之后 GitHub 会 `Connection to github.com closed by remote host`，LFS 对象全上去了、
   但 ref 没更新（远端仍停旧提交、本地仍 `ahead N`）。
   ⇒ **推送唯一判据**：`git fetch` 后 `git rev-parse HEAD` 与 `git rev-parse origin/<分支>`
   逐字相同。不符就原样重跑 `git push`（已传 LFS 不重传，第二次几十秒完成）。
-  ⇒ 排期参考：本机到 GitHub LFS 上行 46–125 KB/s，472 MiB blend 约 1h16m，按小时排窗口。
+  ⇒ 推送流程固定为「push → 复核 SHA → 不符原样再 push 一次」，**不要只信一次退出码**。
+  ⇒ 排期参考：本机到 GitHub LFS 上行 46–515 KB/s；472 MiB（67 个 blend）约 1h16m，
+  单个 512 MiB 的 blend 约 20m（峰值 515 KB/s）。大批 blend 按小时排窗口。
+  ⇒ 月度流量：10-15（498 MB）+ 10-17（538 MB）已 ≈1.01 GB，越过 GitHub Free 的 1 GB/月
+  额度线，**时间点与「传完必断」吻合**。动画源策略待定（建议只留当前版进 LFS，
+  历史版归档本地/NAS）—— 拍板后再写成硬约定。
 
 ## 本机环境
 - 只有 `Documents/ShellStorm2` 一个 Git 工程根；`ShellStorm2-work/`、`ShellStorm2-backup/`
