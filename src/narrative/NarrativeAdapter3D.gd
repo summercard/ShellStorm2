@@ -379,6 +379,11 @@ func _player_walk_to(params: Dictionary) -> Dictionary:
 		return _degraded("player.walk_to 需要剧情输入独占与玩家步行接口。")
 	if not (target is Vector3):
 		return _degraded("player.walk_to 目标锚点不可用。")
+	# 时间轴已持有输入独占，但在某些测试/切场边界上，Dungeon 的逐帧锁同步
+	# 可能尚未把 Player3D.input_locked 写回。这里补一次幂等锁定，确保
+	# 自动步行不会因为锁状态落后一帧而被玩家状态机拒绝。
+	if not bool(player.get("input_locked")) and player.has_method("set_input_locked"):
+		player.call("set_input_locked", true)
 	if not bool(player.call("begin_narrative_walk", target, float(params.get("duration", 2.4)), float(params.get("speed", 2.8)))):
 		return _failed("player.walk_to 被玩家状态拒绝。")
 	return _done(Callable(self, "_stop_player_walk"))

@@ -250,6 +250,19 @@ func can_add_item_exact(item: Dictionary, count: int = 1) -> bool:
 		return true
 	return find_valid_placement(item) != {} and get_free_grid_cells() >= required_area
 
+## 购买预检：只在独立棋盘副本尝试，失败/余额不足不移动真实物品。
+## 普通拾取不调用此口，保留玩家自行布局的规则。
+func plan_purchase_add(item: Dictionary, count: int = 1) -> Dictionary:
+	var board := InventoryModule.new(_capacity)
+	board.restore_slots_snapshot(get_slots_snapshot())
+	if board.can_add_item_exact(item, count) and board.add_item(item, count) == count:
+		return {"slots": board.get_slots_snapshot(), "sorted": false}
+	board.restore_slots_snapshot(get_slots_snapshot())
+	board.sort_items()
+	if board.can_add_item_exact(item, count) and board.add_item(item, count) == count:
+		return {"slots": board.get_slots_snapshot(), "sorted": true}
+	return {}
+
 ## 添加物品（自动分配格子）
 ## 返回实际成功添加的数量
 func add_item(item: Dictionary, count: int = 1) -> int:

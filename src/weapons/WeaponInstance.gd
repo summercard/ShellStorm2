@@ -227,14 +227,20 @@ func to_item_dictionary() -> Dictionary:
 func get_presentation_snapshot(tree: WeaponAssemblyTree = null, owner_location: String = "") -> Dictionary:
 	var stats := {}
 	var attachment_layout: Array[Dictionary] = []
+	# 弹药槽不在 `PUBLIC_ATTACHMENT_SLOTS` 里（它不是「配件」），所以单独出一条
+	# `bullet_module`。装备面板靠它显示当前装的子弹模块 —— 少这一条，玩家换了弹
+	# 在界面上完全看不出来。
+	var bullet_module: Dictionary = {}
 	if tree != null and tree.get_root() != null:
 		stats = tree.get_computed_stats()
 		attachment_layout = _build_attachment_layout(tree.get_root())
+		bullet_module = _bullet_module_entry(tree.get_root())
 	else:
 		var temp_tree := build_runtime_tree()
 		if temp_tree != null:
 			stats = temp_tree.get_computed_stats()
 			attachment_layout = _build_attachment_layout(temp_tree.get_root())
+			bullet_module = _bullet_module_entry(temp_tree.get_root())
 			temp_tree.free()
 	return {
 		"weapon_instance_id": weapon_instance_id,
@@ -249,6 +255,7 @@ func get_presentation_snapshot(tree: WeaponAssemblyTree = null, owner_location: 
 		"fate_upgrades": fate_upgrades.duplicate(true),
 		"attachment_slots": _attachment_layout_to_dictionary(attachment_layout),
 		"attachment_layout": attachment_layout,
+		"bullet_module": bullet_module,
 		"computed_stats": stats.duplicate(true),
 		"current_ammo": current_ammo,
 	}
@@ -358,6 +365,21 @@ static func _build_attachment_layout(root: AssemblyNode) -> Array[Dictionary]:
 			"installed_node_name": child.node_name if child != null else "",
 		})
 	return layout
+
+
+## 弹药槽内容（不是配件，单独一条给装备面板 / HUD 用）。
+static func _bullet_module_entry(root: AssemblyNode) -> Dictionary:
+	if root == null:
+		return {}
+	var child := root.slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode
+	if child == null:
+		return {}
+	var item := BlueprintRegistry.get_item_for_assembly_node(child)
+	return {
+		"item_id": BlueprintRegistry.get_item_id_for_assembly_node(child),
+		"node_name": child.node_name,
+		"display_name": str(item.get("name", "")),
+	}
 
 
 static func _attachment_layout_to_dictionary(layout: Array[Dictionary]) -> Dictionary:

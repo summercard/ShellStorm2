@@ -294,6 +294,14 @@ func _ready() -> void:
 		await dungeon.call("_on_door_fate_selected", 0)
 		_expect(GameManager.currency == before_second, "Repeat purchase of the same card spent run currency again", failures)
 		_expect(str(dungeon.call("_fate_card_block_reason", 0)) == "purchased", "Repeat purchase of the same card was not rejected", failures)
+		# 门后事务必须随正式运行时快照保留：offer_id、候选、冻结报价和已购位不能只存在内存。
+		var fate_save := dungeon.build_runtime_save_snapshot()
+		var fate_state := fate_save.get("fate_run_state", {}) as Dictionary
+		var door_state := fate_state.get("door", {}) as Dictionary
+		_expect(int(door_state.get("offer_id", 0)) > 0, "门后快照没有保存 offer_id", failures)
+		_expect((door_state.get("cards", []) as Array).size() == choices.size(), "门后快照没有保存全部候选卡", failures)
+		_expect(not (door_state.get("quotes", {}) as Dictionary).is_empty(), "门后快照没有保存冻结报价", failures)
+		_expect(bool(((door_state.get("cards", []) as Array)[0] as Dictionary).get("purchased", false)), "门后快照没有保存已购卡位", failures)
 
 	# —— 3) 货币守恒：所有剩余卡的购买尝试，要么恰好扣价、要么原额保留 ——
 	for index in range(1, choices.size()):

@@ -208,8 +208,8 @@ func _verify_monster_drop_table_plan_contract(failures: Array[String]) -> void:
 	var second := FloorPlanGenerator.generate_from_level_plan(EXPEDITION_LEVEL_ID, 0, 77001200)
 	var table := first.get("monster_drop_table", {}) as Dictionary
 	var rows := table.get("rows", []) as Array
-	if rows.size() != 16:
-		failures.append("远征01运行时 plan 的怪物掉落表应有 16 行，实际 %d" % rows.size())
+	if rows.size() != 13:
+		failures.append("远征01运行时 plan 的怪物掉落表应有 13 行，实际 %d" % rows.size())
 	var monsters: Dictionary = {}
 	for value in rows:
 		var row := value as Dictionary

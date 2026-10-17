@@ -173,6 +173,9 @@ func accept_pickup(target: Node3D = null) -> void:
 	if _accepted:
 		return
 	_accepted = true
+	# 接受拾取即完成世界所有权交接。视觉飞入动画仍继续，但节点不能再作为
+	# 地面物被快照、重放或再次拾取；否则“已装备但地面还留一把”会污染下线存档。
+	remove_from_group("ground_loot_3d")
 	_collecting = false
 	if target != null:
 		_collection_target = target

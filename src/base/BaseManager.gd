@@ -1271,9 +1271,10 @@ func purchase_base_shop_item_to_inventory(item_id: String, inventory: InventoryM
 		return {"success": false, "reason": "金币不足" if price > 0 else "商品购买价配置无效"}
 	var purchased := ShopService.make_item_instance(definition, effective_transaction_id)
 	var old_inventory := inventory.get_slots_snapshot()
-	if inventory.add_item(purchased, 1) != 1:
-		inventory.restore_slots_snapshot(old_inventory)
+	var purchase_plan := inventory.plan_purchase_add(purchased, 1)
+	if purchase_plan.is_empty():
 		return {"success": false, "reason": "当前I键背包空间不足"}
+	inventory.restore_slots_snapshot(purchase_plan["slots"])
 	var old_points := data.extraction_points
 	data.extraction_points -= price
 	ShopService.append_completed(data.completed_transaction_ids, effective_transaction_id)

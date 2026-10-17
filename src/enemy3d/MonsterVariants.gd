@@ -55,44 +55,45 @@ const DISPLAY_SUFFIX := "-强化怪"
 ## 基类 → 眼位配方。
 const EYE_SOCKETS := {
 	"melee_chaser": {
+		# 2026-10-17：按原贴图两瞳中心射线命中蒙皮表面，再反算 Head 骨空间。
+		# 两眼贴图并非关于模型根对称；直接跟骨，避免全身高度配方漂移。
+		"bone_offsets": [Vector3(0.133553, 0.207281, 0.241197), Vector3(-0.166665, 0.203328, 0.249580)],
+		# 下方比例只供旧标定工具取景；正式定位优先使用骨空间双眼锚点。
 		# 眼睛高度 / 模型总高。
-		"y_ratio": 0.535,
+		"y_ratio": 0.550,
 		# 单眼离中线距离（模型根空间 x，米）。
 		"half_x": 0.160,
-		# 相对「头部带最前 z」再往前多少（负 = 更靠近相机），保证眼球浮在脸外不陷进去。
-		"front_offset": -0.040,
+		# 相对「双眼窄带脸部最前 z」再往前多少（负 = 更靠近相机），保证眼球浮在脸外不陷进去。
+		"front_offset": -0.015,
 		# 眼球半径（米，模型根空间；根节点放大后世界尺寸按倍率走）。
-		"radius": 0.030,
+		"radius": 0.040,
 	},
 	"ranged_caster": {
 		# 注意：保安僵尸**戴着大檐帽**，比另两只怪的头型高得多，所以眼位比例明显更大。
 		# 实测扫描图（`tools/probe_ranged_eye_scan.tscn`）显示眼睛落在 0.60~0.66 之间。
 		"y_ratio": 0.630,
 		"half_x": 0.155,
-		"front_offset": -0.040,
-		"radius": 0.030,
+		"front_offset": -0.015,
+		"radius": 0.040,
 	},
 	"fat_zombie03": {
 		"y_ratio": 0.880,
 		"half_x": 0.195,
-		"front_offset": -0.040,
-		"radius": 0.042,
+		"front_offset": -0.015,
+		"radius": 0.050,
 	},
 }
 
-## 「头部带」的判定：模型总高从顶部往下算的比例（与探针一致，改则眼位整体平移）。
+## 旧头部带探针参数，仅保留给历史标定工具；正式眼位改用双眼附近窄带。
 const EYE_HEAD_BAND_FROM_TOP := 0.45
 ## 头部带内取 z 时的横向上限（米），用于排除手臂与肩部。
 const EYE_HEAD_HALF_X_LIMIT := 0.45
 
 
-## 取**变种**的眼位配方；传基类或普通怪一律返回 `{}`。
-##
-## 严格是有意的：调用点用它回答「这只怪该不该长发光眼」，
-## 若在此处对基类也放行，普通怪会跟着长出红眼（实测踩过一次）。
-## 需要按基类取配方时用 `eye_socket_for_base`。
+## 三类僵尸普通版与强化版共用眼位配方（2026-10-17 用户修订）。
 static func eye_socket_for(variant_kind: String) -> Dictionary:
-	return eye_socket_for_base(base_of(variant_kind))
+	var base_kind := base_of(variant_kind)
+	return eye_socket_for_base(base_kind if not base_kind.is_empty() else variant_kind)
 
 
 ## 按**基类**取眼位配方；该基类没有配方返回 `{}`。

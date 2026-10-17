@@ -2401,6 +2401,8 @@ func _build_expedition_records() -> void:
 		)
 		if not bool(drop_report.get("ok", false)):
 			push_error("[TowerDescent3D] 关卡怪物掉落表编译失败: %s" % str(drop_report.get("errors", [])))
+	# 经济服务必须在 plan 的全部真实编成可见后配置；它不会读取余额或未来收益。
+	configure_expedition_fate_economy(plan)
 	# 规划里的房间 ID 已经就是 start / room_01..05 / extraction；入口房直接落成 start。
 	_append_plan_room_record(plan, entry_spec, "")
 	var entry_record := _find_record(str(entry_spec.get("id", "")))

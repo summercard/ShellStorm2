@@ -26,6 +26,13 @@ const EXPECTED_FATE_SLOTS := 4
 const EXPECTED_DAMAGE := 50
 const EXPECTED_FIRE_RATE := 5.0
 const EXPECTED_MAGAZINE := 30
+## 出厂树挂的子弹必须是标准弹。
+##
+## ⚠️ 2026-10-17 修的真 bug：`build_default_weapon_tree()` 旧实现「挑第一个不是标准弹的子弹」，
+## tier0 可用列表 [standard, sticky, bounce] ⇒ 出厂初始步枪一直挂 `Bullet_Sticky`，
+## 命中后走 `apply_damage_over_time(max(2, damage/3), 2.4)`，56 弹伤 ⇒ 18 DOT ⇒ 每 0.5s 掉 4 点。
+## 玩家看到的是「打中怪物还在持续掉 4 点血」，实际是白送的特殊弹。这条断言就是防它复发。
+const EXPECTED_STARTING_BULLET := "Bullet_Standard"
 
 ## 初始步枪以步枪为原型：配件槽位与步枪同套；步枪本体不得被顺手改坏。
 const RIFLE_ASSEMBLY_ID := "bp_rifle"
@@ -185,6 +192,15 @@ func _check_starting_tree(failures: Array[String]) -> void:
 		failures.append(
 			"出厂装配树的根是 %s，期望 %s：豌豆手枪没有被替换掉"
 			% [root.node_name, EXPECTED_NODE_NAME]
+		)
+	# 出厂枪只给枪、不给特殊弹：挂错弹会让「初始步枪」自带 DOT / 减速，玩家会当成 bug 报。
+	var bullet := root.slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode
+	if bullet == null:
+		failures.append("出厂装配树没有挂子弹模块：初始步枪开不了火")
+	elif bullet.node_name != EXPECTED_STARTING_BULLET:
+		failures.append(
+			"出厂装配树挂的子弹是 %s，期望 %s；特殊弹必须由玩家手动装配"
+			% [bullet.node_name, EXPECTED_STARTING_BULLET]
 		)
 	tree.free()
 

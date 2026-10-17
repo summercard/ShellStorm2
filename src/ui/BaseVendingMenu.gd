@@ -202,7 +202,7 @@ func _make_buy_row(item: Dictionary) -> PanelContainer:
 	button.text = "购买  ◈ %d" % int(item.get("base_buy_price", 0))
 	button.custom_minimum_size = Vector2(0, 42)
 	button.disabled = BaseManager.get_extraction_points() < int(item.get("base_buy_price", 0))
-	if _inventory_module != null and not _inventory_module.can_add_item_exact(item, 1):
+	if _inventory_module != null and _inventory_module.plan_purchase_add(item, 1).is_empty():
 		button.disabled = true
 		button.tooltip_text = "背包没有足够的连续空间"
 	elif button.disabled:

@@ -844,6 +844,13 @@ func is_melee_weapon() -> bool:
 	return weapon_kind == "melee" and not _melee_profile.is_empty()
 
 
+## 蓄力枪当前是否正在蓄力。只读判定：`try_fire` 负责起蓄、`release_charge`
+## 负责击发，两者行为不变。自动射击（InputSettings.auto_fire）需要凭此
+## 决定"蓄满了该自动松手"，否则蓄力类武器会一直按着永不击发。
+func is_charge_active() -> bool:
+	return _charge_active
+
+
 func get_melee_profile() -> Dictionary:
 	return _melee_profile.duplicate(true)
 

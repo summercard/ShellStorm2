@@ -165,6 +165,9 @@ var _mobile_face_active := false
 var _mobile_shoot_active := false
 var _mobile_shoot_was_active := false
 var _mobile_input_available := false
+## 自动射击（InputSettings.auto_fire）的蓄力节奏。仅在该开关打开且手持蓄力类
+## 武器时被写入；关闭开关立即清零，不会残留任何"半蓄力"状态。
+var _auto_fire_charge_elapsed := 0.0
 var _backpack_model: Node3D = null
 var _backpack_follow: Node3D = null
 ## ── 背负贴合契约（全部在 BodyJoint 局部空间，v021 骨架实测值）─────────────────
@@ -632,7 +635,7 @@ func _physics_process(delta: float) -> void:
 	_tick_weapon_transition(delta)
 	_silence_remaining = maxf(0.0, _silence_remaining - delta)
 	_update_aim_from_mouse()
-	_update_combat_input()
+	_update_combat_input(delta)
 	if _melee_hit_stop_pending:
 		_melee_hit_stop_ticks -= 1
 		_melee_hit_stop_pending = _melee_hit_stop_ticks > 0
@@ -940,7 +943,11 @@ func set_test_move_direction(direction: Variant) -> void:
 
 
 func begin_narrative_walk(target: Vector3, duration: float, speed: float) -> bool:
-	if not input_locked or current_hp <= 0 or not target.is_finite():
+	# 剧情先锁输入、再在同一时间轴启动自动步行。状态机此时可能已经
+	# 切进 locked，但输入锁的逐帧同步尚未完成；locked 本身就是这里的
+	# 叙事接管证据，不能把这条合法请求误判成失败。
+	var narrative_lock_ready := input_locked or get_state_machine_state() == "locked"
+	if not narrative_lock_ready or current_hp <= 0 or not target.is_finite():
 		return false
 	_narrative_walk_target = target
 	_narrative_walk_remaining = maxf(0.1, duration)
@@ -2034,6 +2041,88 @@ func install_attachment_item_to_weapon_slot(
 	}
 
 
+## 给指定主/副武器换装一个子弹模块（弹药槽）。
+##
+## 与 `install_attachment_item_to_weapon_slot` 同一套事务边界，只是槽位是
+## `SlotType.BULLET`（不在 `PUBLIC_ATTACHMENT_SLOTS` 里，所以不能复用那个入口）：
+## 读实例 → 造新节点 → 在临时树上试装 → `capture_runtime_tree` 写回 → 刷新运行态。
+## 换下的旧模块通过 `removed_item` 返回，由调用方决定是回背包还是丢弃。
+func install_bullet_module_to_weapon_slot(item: Dictionary, weapon_slot_index: int) -> Dictionary:
+	if weapon_slot_index < 0 or weapon_slot_index >= equipped_weapon_slots.size():
+		return {"success": false, "reason": "武器槽无效"}
+	if str(item.get("type", "")) != "module" or str(item.get("subtype", "")) != "bullet":
+		return {"success": false, "reason": "该物品不是子弹模块"}
+	var instance := get_equipped_weapon_instance_for_slot(weapon_slot_index)
+	if instance == null:
+		return {"success": false, "reason": "目标武器槽为空"}
+	var bullet_item_id := str(item.get("id", ""))
+	var new_node := BlueprintRegistry.create_assembly_node(bullet_item_id)
+	if new_node == null or new_node.node_type != AssemblyNode.NodeType.BULLET:
+		if new_node != null:
+			new_node.free()
+		return {"success": false, "reason": "子弹模块装配数据无效"}
+	var temp_tree := instance.build_runtime_tree()
+	if temp_tree == null or temp_tree.get_root() == null:
+		new_node.free()
+		if temp_tree != null:
+			temp_tree.free()
+		return {"success": false, "reason": "目标武器构筑无法读取"}
+	var root := temp_tree.get_root()
+	if "melee" in root.tags:
+		new_node.free()
+		temp_tree.free()
+		return {"success": false, "reason": "近战武器没有弹药槽"}
+	var existing := root.slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode
+	if existing != null and BlueprintRegistry.get_item_id_for_assembly_node(existing) == bullet_item_id:
+		new_node.free()
+		temp_tree.free()
+		return {"success": false, "reason": "弹药槽已装配同款子弹模块"}
+	var removed_item := BlueprintRegistry.get_item_for_assembly_node(existing)
+	if existing != null:
+		temp_tree.unmount(existing)
+	if not temp_tree.mount(root, AssemblyNode.SlotType.BULLET, new_node):
+		if existing != null:
+			temp_tree.mount(root, AssemblyNode.SlotType.BULLET, existing)
+		new_node.free()
+		temp_tree.free()
+		return {"success": false, "reason": "子弹模块安装规则校验失败"}
+	instance.capture_runtime_tree(temp_tree)
+	temp_tree.free()
+	if existing != null and is_instance_valid(existing):
+		existing.free()
+	if not _refresh_weapon_slot_after_instance_change(weapon_slot_index, instance):
+		return {"success": false, "reason": "子弹模块已写入实例，但运行态刷新失败"}
+	return {
+		"success": true,
+		"slot_type": AssemblyNode.SlotType.BULLET,
+		"slot_key": "bullet",
+		"removed_item": removed_item,
+		"weapon_item": instance.to_item_dictionary(),
+	}
+
+
+## 装备面板显示用：指定武器槽当前装的子弹模块物品（空 = 该枪没有独立弹药模块）。
+## 与 `get_weapon_attachment_layout_for_slot` 同源：活动槽读运行树，备用槽读实例快照。
+func get_equipped_bullet_item_for_slot(slot_index: int) -> Dictionary:
+	var instance := get_equipped_weapon_instance_for_slot(slot_index)
+	if instance == null:
+		return {}
+	var tree: WeaponAssemblyTree = weapon_tree if slot_index == active_weapon_slot else null
+	var presentation := instance.get_presentation_snapshot(
+		tree, "主武器" if slot_index == 0 else "副武器"
+	)
+	var entry := presentation.get("bullet_module", {}) as Dictionary
+	var item_id := str(entry.get("item_id", ""))
+	if item_id.is_empty():
+		return {}
+	var item := ItemRegistry.get_instance().get_item(item_id).duplicate(true)
+	if item.is_empty():
+		return {}
+	item["equipped_weapon_slot"] = slot_index
+	item["equipped_node_name"] = str(entry.get("node_name", ""))
+	return item
+
+
 func remove_attachment_from_weapon_slot(weapon_slot_index: int, slot_type: int) -> Dictionary:
 	if slot_type not in AssemblyNode.PUBLIC_ATTACHMENT_SLOTS:
 		return {"success": false, "reason": "配件槽无效"}
@@ -2716,9 +2805,10 @@ func request_melee_attack() -> bool:
 	return not weapon_holstered and _weapon_transition_phase.is_empty() and melee_combat != null and melee_combat.request_attack()
 
 
-func _update_combat_input() -> void:
+func _update_combat_input(delta: float = 0.0) -> void:
 	if weapon_holstered or not _weapon_transition_phase.is_empty():
 		if weapon != null: weapon.cancel_charge()
+		_auto_fire_charge_elapsed = 0.0
 		return
 	var shoot_pressed_here: bool = Input.is_action_pressed("shoot")
 	var shoot_just_pressed_here: bool = Input.is_action_just_pressed("shoot")
@@ -2737,6 +2827,7 @@ func _update_combat_input() -> void:
 	if input_locked or current_hp <= 0 or weapon == null or _silence_remaining > 0.0 or _active_ladder != null:
 		if weapon != null:
 			weapon.cancel_charge()
+		_auto_fire_charge_elapsed = 0.0
 		return
 	# 禁用玩家输入不应打断脚本、测试场或 AI 显式启动的蓄力；只有真实输入读取被跳过。
 	if not combat_enabled:
@@ -2746,8 +2837,29 @@ func _update_combat_input() -> void:
 			melee_combat.begin_trigger()
 		if shoot_released_here:
 			melee_combat.release_trigger()
-	elif shoot_pressed_here:
-		weapon.try_fire(aim_direction, self)
+		# 近战不参与自动射击（自动挥击会改掉节奏与命中窗口），保持纯手动。
+		_auto_fire_charge_elapsed = 0.0
+	else:
+		var auto_fire_on: bool = InputSettings != null and InputSettings.is_auto_fire_enabled()
+		if auto_fire_on and not shoot_pressed_here:
+			# 自动射击（ESC → 操作设置开关）：玩家自己没有按住射击键时，
+			# 补一个"虚拟按住"。真实按键永远优先，所以开启后手动操作与
+			# 未开启时逐帧一致；唯一的差异是没人按键时枪照样按准星开火。
+			if weapon.charge_time > 0.0 and weapon.is_charge_active():
+				# 蓄力类（如蓄力炮）：蓄满即自动松手击发，冷却结束后重新起蓄。
+				# 少了这一段它会一直"按住"，永远等不到 release，等于哑火。
+				_auto_fire_charge_elapsed += delta
+				if _auto_fire_charge_elapsed >= weapon.charge_time:
+					_auto_fire_charge_elapsed = 0.0
+					weapon.release_charge()
+				else:
+					weapon.try_fire(aim_direction, self)
+			else:
+				_auto_fire_charge_elapsed = 0.0
+				weapon.try_fire(aim_direction, self)
+		elif shoot_pressed_here:
+			_auto_fire_charge_elapsed = 0.0
+			weapon.try_fire(aim_direction, self)
 	if not weapon.is_melee_weapon() and Input.is_action_just_pressed("reload"):
 		request_reload()
 

@@ -69,6 +69,7 @@ func _ready() -> void:
 	_check_profile_is_derived_not_stored()
 	_check_projectile_untouched_for_others()
 	await _check_runtime_enemy()
+	await _check_real_ranged_attack()
 	_check_override_derivation()
 	_check_death_explosion_derivation()
 	_check_zone_passthrough_regression()
@@ -577,3 +578,33 @@ func _report() -> void:
 			push_error(failure)
 		print("STRONG_VARIANT_FAIL: %d failures (samples=%d)" % [_failures.size(), _samples])
 	get_tree().quit(0 if _failures.is_empty() else 1)
+
+
+# 实际攻击回归：只检查 profile 会漏掉强化保安掉进近战分支的问题。
+func _check_real_ranged_attack() -> void:
+	var pool := ProjectilePool3D.new()
+	add_child(pool)
+	for kind in ["ranged_caster", "ranged_caster_strong"]:
+		var enemy := ENEMY_SCENE.instantiate() as Enemy3D
+		add_child(enemy)
+		enemy.apply_profile(kind)
+		enemy.set_physics_process(false)
+		enemy.position = Vector3(0, 2.0, 0)
+		var before := pool.get_child_count()
+		enemy._perform_attack(Vector3.FORWARD, 4.0)
+		_expect(pool.get_child_count() - before == 3, kind + " actual attack must emit 3 bullets")
+		for index in range(before, pool.get_child_count()):
+			var bullet := pool.get_child(index) as Projectile3D
+			bullet.set_physics_process(false)
+			_expect(is_equal_approx(bullet.global_position.y - enemy.global_position.y, 0.92), kind + " bullet height must stay 0.92m above feet")
+			_expect(is_zero_approx(bullet.direction.y), kind + " bullets must fly horizontally")
+			_expect(bullet.visible and bullet.find_child("*", true, false) != null, kind + " missing bullet visual")
+			_expect(is_equal_approx(bullet.speed, 9.1 if kind.ends_with("_strong") else 7.0), kind + " wrong actual bullet speed")
+			_expect(bullet.damage == enemy.contact_damage, kind + " wrong actual bullet damage")
+		print("RANGED_ACTUAL ", kind, " bullets=", pool.get_child_count() - before, " height=0.92")
+		_samples += 1
+		# Bullets keep shooter references: release them before the shooter.
+		for bullet in pool.get_children():
+			bullet.free()
+		enemy.free()
+	pool.free()

@@ -8,7 +8,7 @@ extends Node
 ##   - 业主口径 docs/v0.1/design/怪物设计.md「红色发光眼」
 ##
 ## 覆盖：
-##   ① 三个变种各长**一对**红眼；普通怪**一只都不长**（回归钉：曾因回退分支放行而全怪长眼）；
+##   ① 三个变种各长**一对**红眼；普通僵尸同样各有一对（回归钉：曾因回退分支放行而全怪长眼）；
 ##   ② 挂在 `Head` 骨的 `BoneAttachment3D` 上 —— 不是固定坐标节点，否则转头穿帮；
 ##   ③ 材质**真发红光**（emission 开、色相偏红、强度 > 0），不是普通红材质；
 ##   ④ 左右对称（|L.x+R.x|≈0、等高）—— 不对称说明眼位换算写歪；
@@ -37,13 +37,13 @@ const MIRROR_TOLERANCE_M := 0.01
 ## **文档侧硬编码一份眼位配方**，与 `MonsterVariants.EYE_SOCKETS` 逐值比对。
 ##
 ## 为什么必须有这一份（实测教训）：只断言「配方 ↔ 生效值自洽」是不够的 ——
-## 把配方里的 y_ratio 从 0.535 改成 0.30，实现跟着用 0.30，两边仍然自洽，
+## 把配方里的 y_ratio 从 0.550 改成 0.30，实现跟着用 0.30，两边仍然自洽，
 ## **测试照样绿**，而眼睛已经掉到肚子上。所以配方的**绝对值**必须另有钉子。
 ## 这与 `verify_monster_startup_roar` 把文档数字硬编码一遍是同一套纪律。
 const DOC_EYE_SOCKETS := {
-	"melee_chaser": {"y_ratio": 0.535, "half_x": 0.160, "radius": 0.030},
-	"ranged_caster": {"y_ratio": 0.630, "half_x": 0.155, "radius": 0.030},
-	"fat_zombie03": {"y_ratio": 0.880, "half_x": 0.195, "radius": 0.042},
+	"melee_chaser": {"y_ratio": 0.550, "half_x": 0.160, "radius": 0.040},
+	"ranged_caster": {"y_ratio": 0.630, "half_x": 0.155, "radius": 0.040},
+	"fat_zombie03": {"y_ratio": 0.880, "half_x": 0.195, "radius": 0.050},
 }
 ## 头部带判定与横向上限也必须钉住：改动它们会整体平移所有眼位。
 const DOC_HEAD_BAND_FROM_TOP := 0.45
@@ -56,7 +56,8 @@ var _samples := 0
 func _ready() -> void:
 	_check_doc_contract()
 	await _check_strong_variants_have_glow()
-	await _check_normal_monsters_have_none()
+	await _check_normal_monsters_have_glow()
+	await _check_fat_basecolor()
 	await _check_socket_is_bone_attachment()
 	await _check_material_really_glows()
 	await _check_eye_positions_match_socket()
@@ -139,16 +140,12 @@ func _check_strong_variants_have_glow() -> void:
 		enemy.free()
 
 
-## ② 普通怪一只都不长（回归钉）。
-##
-## 来由：`MonsterVariants.eye_socket_for()` 最初对基类也放行，
-## 结果**所有普通怪都长了红眼**（实测输出「melee_chaser 眼数=2」）。
-## 这条断言就是那次缺陷留下的钉子。
-func _check_normal_monsters_have_none() -> void:
+## ② 2026-10-17：普通僵尸也有双眼红光，其余无配方怪种不变。
+func _check_normal_monsters_have_glow() -> void:
 	for base_kind in MonsterVariants.all_base_kinds():
 		var enemy := await _spawn(base_kind)
 		var eyes := _eyes_of(enemy)
-		_expect(eyes.size() == 0, "普通怪 %s 不该长发光眼，实得 %d 只" % [base_kind, eyes.size()])
+		_expect(eyes.size() == 2, "普通僵尸 %s 应有两只发光眼，实得 %d 只" % [base_kind, eyes.size()])
 		_samples += 1
 		enemy.free()
 	# 没配方的怪同样不长。
@@ -239,6 +236,15 @@ func _check_eye_positions_match_socket() -> void:
 		var eyes := _eyes_of(enemy)
 		if eyes.size() != 2:
 			_fail("%s 的眼数不是 2，跳过眼位检查" % variant_id)
+			enemy.free()
+			continue
+		if base_kind == "melee_chaser":
+			# 原贴图两瞳非根坐标镜像：改按独立标定的 Head 骨空间锚点验收，
+			# 不再要求发光眼对齐一个与原瞳孔无关的对称轴。
+			var expected := [Vector3(0.133553, 0.207281, 0.241197), Vector3(-0.166665, 0.203328, 0.249580)]
+			for index in range(2):
+				_expect(eyes[index].position.distance_to(expected[index]) < 0.001, "melee eye must match calibrated pupil anchor")
+			_samples += 1
 			enemy.free()
 			continue
 		var to_local := enemy.global_transform.affine_inverse()
@@ -454,9 +460,36 @@ func _fail(message: String) -> void:
 
 func _report() -> void:
 	if _failures.is_empty():
-		print("EYE_GLOW_OK: variant glow / normal none / bone socket / material / mirror / ratio / follow / no-impact / dismiss pass (samples=%d)" % _samples)
+		print("EYE_GLOW_OK: variant glow / normal glow / bone socket / material / mirror / ratio / follow / no-impact / dismiss pass (samples=%d)" % _samples)
 	else:
 		for failure in _failures:
 			push_error(failure)
 		print("EYE_GLOW_FAIL: %d failures (samples=%d)" % [_failures.size(), _samples])
 	get_tree().quit(0 if _failures.is_empty() else 1)
+
+
+# 颜色贴图被按法线压缩时会丢蓝通道，身体变黄绿；对比导入前后的实际像素。
+func _check_fat_basecolor() -> void:
+	var enemy := await _spawn("fat_zombie03")
+	var visual = enemy.avatar._formal_normal_root
+	for mesh in visual._meshes:
+		for surface in mesh.mesh.get_surface_count():
+			var material := mesh.get_active_material(surface) as StandardMaterial3D
+			_expect(material != null and not material.emission_enabled, "fat body must not emit in idle")
+			if material == null or material.albedo_texture == null:
+				continue
+			var imported := material.albedo_texture.get_image()
+			if imported.is_compressed():
+				imported.decompress()
+			var source := Image.load_from_file(material.albedo_texture.resource_path)
+			var delta := Vector3.ZERO
+			for y in range(8, imported.get_height(), 16):
+				for x in range(8, imported.get_width(), 16):
+					var a := imported.get_pixel(x, y)
+					var b := source.get_pixel(x, y)
+					delta += Vector3(absf(a.r-b.r), absf(a.g-b.g), absf(a.b-b.b))
+			delta /= float((imported.get_width()/16) * (imported.get_height()/16))
+			_expect(delta.x < 0.04 and delta.y < 0.04 and delta.z < 0.04, "fat basecolor import channel drift: " + str(delta))
+			print("FAT_BASECOLOR mean RGB error=", delta)
+			_samples += 1
+	enemy.free()

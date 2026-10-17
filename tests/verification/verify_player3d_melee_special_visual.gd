@@ -2,6 +2,9 @@ extends Node3D
 const PLAYER=preload("res://scenes/Player3D.tscn")
 var failures:Array[String]=[]
 func _ready() -> void:
+	var output := OS.get_environment("BUNNY_VERIFICATION_OUTPUT")
+	if output.is_empty():output="user://melee_verification"
+	DirAccess.make_dir_recursive_absolute(output)
 	var p:=PLAYER.instantiate() as Player3D;add_child(p)
 	p.set_physics_process(false);p.set_process(false);p.avatar.set_process(false)
 	await get_tree().process_frame
@@ -38,7 +41,7 @@ func _ready() -> void:
 			if motion.palm_global(p.avatar,"l").distance_to(p.avatar.weapon_socket.global_transform*Vector3(0,0,.18))>.002:failures.append("support grip "+str(c[3]))
 			if fx!=null:fx.call("_on_tick",t*float(c[6]),float(c[6]))
 			await get_tree().process_frame;await RenderingServer.frame_post_draw
-			get_viewport().get_texture().get_image().save_png(OS.get_environment("BUNNY_VERIFICATION_OUTPUT")+"/%s_%02d.png"%[c[3],i])
+			get_viewport().get_texture().get_image().save_png(output+"/%s_%02d.png"%[c[3],i])
 		if fx!=null:fx.finish()
 	p.melee_combat.cancel("test_done")
 	if failures.is_empty():print("BUNNY_MELEE_SPECIAL_VISUAL_OK frames=264")

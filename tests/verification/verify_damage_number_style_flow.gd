@@ -22,8 +22,9 @@ const EXPECTED_FONT_FAMILIES: Array[String] = [
 const EXPECTED_FONT_WEIGHT := 900
 const EXPECTED_MSDF_SIZE := 128
 ## MSDF 距离场宽度。**这是描边能不能渲染出来的开关**：Godot 下 MSDF 描边的可达上限
-## ≈ `msdf_pixel_range / 2`，默认 16 只够描边到 8；我们声明 26/30/34 ⇒ 被截成 1px 细丝。
+## ≈ `msdf_pixel_range / 2`，默认 16 只够描边到 8；当时声明 26/30/34 ⇒ 被截成 1px 细丝。
 ## 2026-10-17 近距离定尺实测：range=16 → 6px；48 → 21px；64/80 → 26px（足额）。
+## 同日描边减半为 13/15/17（业主「太粗了，缩小一半」）后，64 仍是足额且带余量的取值。
 const EXPECTED_MSDF_PIXEL_RANGE := 64
 ## 上限同样是实测来的：range 96 起距离场精度不够，出现**左右不对称**（一侧描边整条丢失）。
 ## 不是为了"省"而设的护栏，是「别为了保险往上加」的反向对照结论。
@@ -32,9 +33,9 @@ const EXPECTED_PIXEL_SIZE := 0.00375
 const EXPECTED_NORMAL_FONT_SIZE := 116
 const EXPECTED_HEAVY_FONT_SIZE := 134
 const EXPECTED_CRITICAL_FONT_SIZE := 152
-const EXPECTED_NORMAL_OUTLINE := 26
-const EXPECTED_HEAVY_OUTLINE := 30
-const EXPECTED_CRITICAL_OUTLINE := 34
+const EXPECTED_NORMAL_OUTLINE := 13
+const EXPECTED_HEAVY_OUTLINE := 15
+const EXPECTED_CRITICAL_OUTLINE := 17
 const EXPECTED_HEAVY_THRESHOLD := 40
 ## 世界字高 = 字号 × 像素比：116 × 0.00375 = 0.435 m。
 const EXPECTED_NORMAL_GLYPH_HEIGHT := 0.435

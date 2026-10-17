@@ -8,6 +8,8 @@ func check(ok: bool, message: String) -> void:
 	checks += 1
 	if not ok: failures.append(message)
 func _ready() -> void:
+	if OS.get_environment("BUNNY_VERIFICATION_OUTPUT").is_empty():out="user://melee_verification/"
+	DirAccess.make_dir_recursive_absolute(out)
 	var visual := "--visual" in OS.get_cmdline_user_args()
 	var p := PLAYER.instantiate() as Player3D
 	add_child(p)
@@ -27,7 +29,7 @@ func _ready() -> void:
 	for ui in get_tree().root.find_children("*", "Control", true, false): ui.visible = false
 	var motion: CharacterMotionLibrary3D = p.avatar.get("_authored_motion")
 	var cache: Dictionary = motion.get("_cache")
-	check(cache.version == "v041", "current library")
+	check(cache.version == "v042", "current library")
 	for family: String in {"bat":"baseball_bat","blade":"greatblade","axe":"waraxe"}:
 		var slug: String = {"bat":"baseball_bat","blade":"greatblade","axe":"waraxe"}[family]
 		check(p.equip_weapon("bp_"+slug,""),"equip "+family)
@@ -48,6 +50,11 @@ func _ready() -> void:
 					check(snap.right_hand_palm_to_socket_global_distance < .001,"palm grip")
 					check(motion.palm_global(p.avatar,"l").distance_to(p.avatar.weapon_socket.global_transform * Vector3(0,0,.18)) < .002,"support palm grip")
 					check(not snap.legacy_procedural_motion_enabled,"no procedural motion")
+					if family=="axe":
+						var plane_normal:=(p.avatar.weapon_socket.global_basis*Vector3.UP).normalized()
+						check(absf(plane_normal.x)>.98,"axe blade plane follows vertical cut")
+						if phase=="active" and i==9:
+							check((p.avatar.weapon_socket.global_basis*Vector3.LEFT).normalized().dot(Vector3.DOWN)>.98,"silver blade leads contact")
 					var force_axis: float = p.avatar.body.rotation.x if family == "axe" else p.avatar.body.rotation.y
 					low=minf(low,force_axis);high=maxf(high,force_axis)
 					if visual and (i in [0,9,20] or step==3):

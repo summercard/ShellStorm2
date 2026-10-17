@@ -28,7 +28,7 @@ func _ready() -> void:
 	_check_capacity_matches_outside(training, failures)
 	await _check_slot_round_trip(training, failures)
 	await _check_weapon_panel_tracks_tree(training, failures)
-	_check_drop_spawns_ground_loot(training, failures)
+	await _check_drop_spawns_ground_loot(training, failures)
 	if not training.is_base_data_unchanged():
 		failures.append("equipment/backpack UI mutated BaseData")
 	training.queue_free()

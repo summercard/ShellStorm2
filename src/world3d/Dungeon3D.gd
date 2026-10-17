@@ -10,6 +10,8 @@ const HUD_PRESENTER_SCRIPT = preload("res://src/ui/HUDPresenter3D.gd")
 const RUNTIME_REWARD_COORDINATOR_SCRIPT = preload("res://src/rewards/RuntimeRewardCoordinator.gd")
 const REWARD_SINK_SCRIPT = preload("res://src/rewards/RewardSink.gd")
 const RUN_MERCHANT_SERVICE_SCRIPT = preload("res://src/game/RunMerchantService.gd")
+const FATE_ECONOMY_SERVICE_SCRIPT = preload("res://src/game/FateEconomyService.gd")
+const SPAWN_BOX_CATALOG_SCRIPT = preload("res://src/map/SpawnBoxCatalog.gd")
 const ENCOUNTER_EVENT_DIRECTOR_SCRIPT = preload("res://src/world3d/EncounterEventDirector3D.gd")
 const ENCOUNTER_EVENT_HOST_SCRIPT = preload("res://src/world3d/EncounterEventHost3D.gd")
 const AVATAR_CUSTOMIZATION_PERSISTENCE = preload(
@@ -115,11 +117,15 @@ const OFFSCREEN_INDICATOR_TARGET_HEIGHT_M := 0.9
 ## 2026-10-15：Boss 屏条与玩家主界面条共用这两个常量（此前只有 Boss 条一个使用者）。
 const HUD_HEALTH_BAR_DELAY_SPEED := Enemy3D.HEALTH_BAR_DELAY_SPEED
 const HUD_HEALTH_BAR_DELAY_COLOR := Enemy3D.HEALTH_BAR_DELAY_COLOR
-## 门后命运卡的**局内金币购买价**，按稀有度（COMMON/RARE/EPIC/LEGENDARY/MYSTIC）。
-## 公式：旧「满槽兑金币」基准 `[20, 40, 70, 120, 180]` × 1.5，四舍五入到整十 ⇒ `[30, 60, 110, 180, 270]`。
-## 买价必须高于旧兑金币值：旧值是「放弃卡换金币」，新值是「花金币买卡」，两者不能同价。
+## 非远征门后购卡的历史稀有度基准；远征01改由 FateEconomyService 的真实收益区间冻结报价。
 ## 只由 `GameManager.currency`（本局金币）支付；局外总池 `BaseManager.get_extraction_points()` 永不参与。
 const FATE_PRICE_BY_RARITY := [30, 60, 110, 180, 270]
+
+## 远征命运经济由纯服务持有；门后报价只从该服务读冻结快照。
+var _fate_economy = FATE_ECONOMY_SERVICE_SCRIPT.new()
+var _fate_door_quote: Dictionary = {}
+var _fate_door_offer_id := 0
+var _fate_door_snapshot_to_restore: Dictionary = {}
 
 ## 已购买卡的整体缩小倍率（业主 2026-10-14 指定 70%）。
 ## ⚠️ 这一档是**基准缩放**，不是悬停反馈 —— `_tween_fate_card_scale` 收到的所有 target
@@ -152,7 +158,7 @@ const FATE_PURCHASED_CARD_ALPHA := 0.45
 ## 「已购买」这三个字是这张卡唯一还需要被读到的事实（它证明这张卡买过了），
 ## 跟着卡面一起沉到 0.34 会读不出来。实测有效亮度 = 0.72 × 0.40 ≈ 0.29，是暗但可辨的一档。
 ## 同样必须 R=G=B，理由同上。
-const FATE_PURCHASED_TEXT_COLOR := UIPalette.PRISM_TEXT_FAINT
+const FATE_PURCHASED_TEXT_COLOR := Color(0.72, 0.72, 0.72)
 ## 已购卡的灰度去色 shader（`canvas_item`，挂在卡背层上）。
 ##
 ## 为什么非要用材质而不是只调 `modulate`：卡背线稿本身是亮青绿（`#02FC8E` 级别），
@@ -637,6 +643,8 @@ func _activate_runtime_persistence() -> void:
 			_insurance.clear_all()
 			push_error("[Dungeon3D] Failed to commit death-insurance return to the 99F runtime checkpoint")
 	_runtime_persistence_active = true
+	if _door_fate_active:
+		call_deferred("_restore_pending_door_fate_overlay")
 	BaseManager.register_runtime_checkpoint_provider(self)
 	if _inventory != null and not _inventory.inventory_changed.is_connected(_on_runtime_inventory_changed):
 		_inventory.inventory_changed.connect(_on_runtime_inventory_changed)
@@ -740,6 +748,8 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"player": player.export_fate_snapshot(),
 		"world": export_world_fate_snapshot(),
 		"bridge": FateCardGameBridge.export_fate_snapshot(),
+		"economy": _fate_economy.export_snapshot(),
+		"door": _export_door_fate_snapshot(),
 	}
 	return RUN_PERSISTENCE_SERVICE.finalize_runtime_snapshot(snapshot)
 
@@ -837,6 +847,8 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 		snapshot["trade_extraction_unlocked"] = false
 		snapshot["trade_extraction_room_id"] = ""
 	_restore_carried_ownership(snapshot)
+	if not _fate_door_snapshot_to_restore.is_empty():
+		call_deferred("_restore_pending_door_fate_overlay")
 	_restore_merchant_stock_from_snapshot(snapshot)
 	_trade_extraction_unlocked = bool(snapshot.get("trade_extraction_unlocked", false))
 	_trade_extraction_room_id = str(snapshot.get("trade_extraction_room_id", ""))
@@ -886,6 +898,86 @@ func _base_runtime_restore_position(room: DungeonRoom3D) -> Vector3:
 ## 一律留给落点场景自己的出生点。不这么做的话，基地快照的 `current_room_id=facility`
 ## 会在目的地图里被 `_resolve_runtime_restore_room()` 兜底解析成"入口安全房"，
 ## 把远征刻意的出生点偏移（安全房中心朝前门偏 4m）直接抹掉。
+func _export_door_fate_snapshot() -> Dictionary:
+	var cards: Array = []
+	for index in range(_door_fate_choices.size()):
+		var card := _door_fate_choices[index]
+		cards.append({
+			"stable_card_id": card.get_stable_card_id(),
+			"orientation": "REVERSED" if card.is_reversed() else "UPRIGHT",
+			"orientation_roll": card.orientation_roll,
+			"purchased": bool(_door_fate_purchased[index]) if index < _door_fate_purchased.size() else false,
+			"price": int(_fate_door_quote.get(card.get_stable_card_id(), _fate_price(card))),
+		})
+	return {
+		"schema_version": 1,
+		"active": _door_fate_active,
+		"offer_id": _fate_door_offer_id,
+		"from_id": _pending_fate_door_from_id,
+		"target_id": _pending_fate_door_target_id,
+		"closing": false,
+		"cards": cards,
+		"quotes": _fate_door_quote.duplicate(true),
+	}
+
+
+func _import_door_fate_snapshot(value: Variant) -> bool:
+	if not value is Dictionary:
+		return false
+	var snapshot: Dictionary = value as Dictionary
+	if int(snapshot.get("schema_version", 0)) != 1:
+		return false
+	var restored_cards: Array[FateCard] = []
+	var restored_purchased: Array[bool] = []
+	for row_value in snapshot.get("cards", []) as Array:
+		if not row_value is Dictionary:
+			return false
+		var row: Dictionary = row_value as Dictionary
+		var stable_id := str(row.get("stable_card_id", ""))
+		var card: FateCard = null
+		for candidate in FateCardPresets.door_reward_presets():
+			if candidate.get_stable_card_id() == stable_id:
+				card = candidate
+				break
+		if card == null:
+			return false
+		var orientation := FateCard.Orientation.REVERSED if str(row.get("orientation", "UPRIGHT")) in ["REVERSED", "逆位"] else FateCard.Orientation.UPRIGHT
+		card.set_orientation(orientation, float(row.get("orientation_roll", 0.0)))
+		restored_cards.append(card)
+		restored_purchased.append(bool(row.get("purchased", false)))
+	_door_fate_choices.assign(restored_cards)
+	_door_fate_purchased.assign(restored_purchased)
+	_fate_door_offer_id = maxi(0, int(snapshot.get("offer_id", 0)))
+	_fate_door_quote = (snapshot.get("quotes", {}) as Dictionary).duplicate(true)
+	_pending_fate_door_from_id = str(snapshot.get("from_id", ""))
+	_pending_fate_door_target_id = str(snapshot.get("target_id", ""))
+	_door_fate_active = bool(snapshot.get("active", false)) and not restored_cards.is_empty()
+	_fate_door_snapshot_to_restore = snapshot.duplicate(true) if (
+		_door_fate_active or not _pending_fate_door_target_id.is_empty()
+	) else {}
+	return true
+
+
+func _restore_pending_door_fate_overlay() -> void:
+	if _fate_door_snapshot_to_restore.is_empty() or _fate_overlay != null:
+		return
+	_fate_door_snapshot_to_restore = {}
+	if not _door_fate_active:
+		if not _pending_fate_door_target_id.is_empty():
+			_show_door_fate_choices()
+		return
+	_build_door_fate_overlay()
+	for index in range(_door_fate_purchased.size()):
+		if not _door_fate_purchased[index]:
+			continue
+		var button := _fate_choice_button(index)
+		if button != null:
+			button.set_meta("tarot_purchased", true)
+			_flip_fate_card_to_back(button, index)
+	_refresh_door_fate_prices()
+	_sync_player_input_lock()
+
+
 func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) -> void:
 	# 角色在位置恢复期间保持无命运效果，避免安全落点被算成一次进房奖励。
 	player.reset_character_fate_state()
@@ -893,6 +985,8 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 	var resume_fate: bool = fate is Dictionary and int((fate as Dictionary).get("version", 0)) == 1 and not bool(snapshot.get(SUCCESSFUL_EXTRACTION_CARRY_KEY, false)) and not bool(snapshot.get(MISSION_OPERATIONS_DEPARTURE_CARRY_KEY, false))
 	if resume_fate and not bool(snapshot.get("world_restore_failed", false)):
 		import_world_fate_snapshot(fate.get("world"))
+		_fate_economy.import_snapshot(fate.get("economy", {}))
+		_import_door_fate_snapshot(fate.get("door", {}))
 	else:
 		import_world_fate_snapshot({})
 	var backpack := snapshot.get("equipped_backpack_item", {}) as Dictionary
@@ -1420,6 +1514,27 @@ func set_monster_rules(rules: Dictionary) -> void:
 		)
 
 
+## 远征命运经济只从当前关卡设计源的真实刷怪盒/遭遇编成建模。
+## 这里不触碰商人、背包或训练 UI；纯服务只接收数据并冻结报价。
+func configure_expedition_fate_economy(plan: Dictionary) -> void:
+	if plan.is_empty() or str(plan.get("level_id", "")) != "expedition_01":
+		return
+	var box_catalog: Dictionary = {}
+	for box_id_value in SPAWN_BOX_CATALOG_SCRIPT.all_ids():
+		var box_id := str(box_id_value)
+		box_catalog[box_id] = SPAWN_BOX_CATALOG_SCRIPT.load_box(box_id)
+	var rooms: Array = plan.get("rooms", []) as Array
+	var floor := maxi(1, visual_theme.difficulty_rank if visual_theme != null else 1)
+	_fate_economy.configure_from_runtime(
+		rooms,
+		box_catalog,
+		(_monster_rules.get("currency", {}) as Dictionary),
+		floor,
+		maxi(1, int(plan.get("content_room_count", 10))),
+		float((_monster_rules.get("strong_variant", {}) as Dictionary).get("chance", 0.0))
+	)
+
+
 ## 取关卡级 AI 参数（`monster_rules.ai.<key>`）。键不存在 ⇒ 回退传入的全局常量，
 ## 于是「未配置本段」与「配了但没写这个键」两种情形行为都逐字不变。
 func _ai_param(key: String, fallback: Variant) -> Variant:
@@ -1532,6 +1647,7 @@ func _setup_run_modules() -> void:
 	_inventory_ui.attachment_slot_install_requested.connect(_on_attachment_slot_install_requested)
 	_inventory_ui.attachment_slot_remove_requested.connect(_on_attachment_slot_remove_requested)
 	_inventory_ui.attachment_slot_drop_requested.connect(_on_attachment_slot_drop_requested)
+	_inventory_ui.bullet_module_install_requested.connect(_on_bullet_module_install_requested)
 	_inventory_ui.backpack_slot_equip_requested.connect(_on_backpack_slot_equip_requested)
 	_inventory_ui.equipped_backpack_to_inventory_requested.connect(_on_equipped_backpack_to_inventory_requested)
 	_inventory_ui.equipped_backpack_drop_requested.connect(_on_equipped_backpack_drop_requested)
@@ -4554,6 +4670,17 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 				break
 		if not merged:
 			grants.append({"kind": "currency", "amount": kill_currency})
+	if _fate_economy.is_configured():
+		var kill_income := 0
+		for grant_value in grants:
+			var grant := grant_value as Dictionary
+			if str(grant.get("kind", "")) != "currency":
+				continue
+			if bool(_room_zero_currency.get(enemy.room_id, false)):
+				continue
+			var multiplier := float(_room_currency_multipliers.get(enemy.room_id, 1.0))
+			kill_income += maxi(0, int(round(float(grant.get("amount", 0)) * multiplier)))
+		_fate_economy.record_actual_kill_income(kill_income)
 	if (bool(enemy_data.get("is_elite", false)) or enemy.enemy_kind == "boss") and player.has_method("on_fate_elite_killed"):
 		player.call("on_fate_elite_killed")
 	if not grants.is_empty():
@@ -5224,7 +5351,11 @@ func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> 
 		return
 	var pickup_offset := player.global_position - pickup.global_position
 	pickup_offset.y = 0.0
-	if pickup_offset.length() > pickup.get_pickup_distance_m():
+	# 剧情开场枪是可恢复的“一次性自动装备”实体。正式 Area3D 请求仍只能
+	# 在拾取距离内发出；这里额外允许同房的恢复/重放事务完成交接，避免
+	# 玩家下线后回到房间中心时，明明站在保留的枪旁边却无法完成剧情枪接管。
+	var narrative_auto_equip := bool(item.get("narrative_auto_equip", false)) and str(item.get("type", "")) == "weapon"
+	if pickup_offset.length() > pickup.get_pickup_distance_m() and not narrative_auto_equip:
 		return
 	if bool(item.get("is_currency", false)) or str(item.get("id", "")) == "__currency__":
 		var granted := _grant_run_currency(int(item.get("count", 1)))
@@ -6180,12 +6311,29 @@ func try_open_room_door(target_room_id: String) -> bool:
 func _show_door_fate_choices() -> void:
 	if _door_fate_active:
 		return
-	var offer := FateCardPresets.draw_offer(3, _rng)
+	var offer: Array[FateCard] = (
+		_gate_expedition_fate_offer()
+		if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured()
+		else FateCardPresets.draw_offer(3, _rng)
+	)
 	if offer.is_empty():
 		_commit_pending_fate_door_streaming()
 		return
 	_door_fate_choices.clear()
 	_door_fate_purchased.clear()
+	_fate_door_offer_id += 1
+	_fate_door_quote.clear()
+	for card_value in offer:
+		var offered_card := card_value as FateCard
+		if offered_card == null:
+			continue
+		_fate_door_quote[offered_card.get_stable_card_id()] = (
+			_fate_economy.frozen_quote_for_card(
+				int(offered_card.card_rarity), _fate_door_offer_id, offered_card.get_stable_card_id(), run_seed
+			)
+			if _fate_economy.is_configured()
+			else int(FATE_PRICE_BY_RARITY[clampi(int(offered_card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)])
+		)
 	_door_fate_choices.assign(offer)
 	# 三张卡全部出现在场上，买与不买由玩家决定 ⇒ 每个卡位都要有独立的购买状态。
 	for _choice_index in range(_door_fate_choices.size()):
@@ -6194,6 +6342,7 @@ func _show_door_fate_choices() -> void:
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	_build_door_fate_overlay()
+	_queue_runtime_autosave("fate_door_offer_opened")
 	status_label.text = "门已开启 · 用本局金币购买命运卡，买好后退出"
 
 
@@ -6386,6 +6535,7 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	price_label.add_theme_constant_override("outline_size", _hud_int(3))
 	column.add_child(price_label)
 	button.set_meta("tarot_price", _fate_price(card))
+	button.set_meta("tarot_price_bounds", _fate_price_bounds(card))
 	button.set_meta("tarot_price_label", price_label)
 	button.set_meta("tarot_purchased", false)
 	# 调用方拿到的是「列」而不是按钮，故在列上也挂一份，避免从列上取不到按钮。
@@ -6500,6 +6650,8 @@ func _finish_reference_tarot_flip(button: Button, card: FateCard) -> void:
 	button.set_meta("tarot_face_side", "front")
 	button.set_meta("tarot_orientation", card.orientation_name())
 	button.set_meta("tarot_face_rotation", button.rotation)
+	if bool(button.get_meta("tarot_purchased", false)):
+		_show_fate_card_back(button)
 	_maybe_focus_fate_card(button)
 
 
@@ -6950,6 +7102,7 @@ func _purchase_fate_card(choice_index: int) -> void:
 		AudioManager.play_fate_card_sfx()
 	status_label.text = "命运生效：%s · 花费 %d 金币 · 剩余 %d 金币" % [card.card_name, price, GameManager.currency]
 	_refresh_door_fate_prices()
+	_queue_runtime_autosave("fate_card_purchased")
 	# 扣款反馈必须晚于刷新：刷新会把余额文本换成新值，飘字是对「这次变化」的注解。
 	_play_fate_balance_spend_feedback(price)
 
@@ -6962,11 +7115,55 @@ func _is_weapon_fate_target_full(card: FateCard) -> bool:
 	return capacity > 0 and int(target.get("fate_slot_used", 0)) >= capacity
 
 
-## 单张卡的购买价：唯一数据源是 `FATE_PRICE_BY_RARITY`，不得在各处另写数字。
+## 单张卡价格只读本门打开时冻结的报价。
+## 远征公式见 FateEconomyService：真实编成参考收益 → 明示上下界；实际击杀收入只解锁稀有度，
+## 不改已经冻结的报价，也不按剩余余额动态宰价。非远征专项继续使用历史价格表。
 func _fate_price(card: FateCard) -> int:
 	if card == null:
 		return 0
-	return int(FATE_PRICE_BY_RARITY[clampi(int(card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)])
+	var stable_id := card.get_stable_card_id()
+	if _fate_door_quote.has(stable_id):
+		return int(_fate_door_quote[stable_id])
+	var rarity := clampi(int(card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)
+	if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured():
+		return _fate_economy.frozen_quote_for_card(rarity, _fate_door_offer_id, stable_id, run_seed)
+	return int(FATE_PRICE_BY_RARITY[rarity])
+
+
+func _fate_price_bounds(card: FateCard) -> Dictionary:
+	if card == null:
+		return {"min": 0, "quote": 0, "max": 0}
+	if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured():
+		return _fate_economy.price_bounds_for_card(int(card.card_rarity), card.get_stable_card_id())
+	var price := _fate_price(card)
+	return {"min": price, "quote": price, "max": price}
+
+
+func _expedition_fate_max_rarity() -> int:
+	return _fate_economy.max_unlocked_rarity() if _fate_economy.is_configured() else FateCard.CardRarity.MYSTIC
+
+
+func _gate_expedition_fate_offer() -> Array[FateCard]:
+	var max_rarity := _expedition_fate_max_rarity()
+	var pool: Array[FateCard] = []
+	var ids: Dictionary = {}
+	for card in FateCardPresets.door_reward_presets():
+		var stable_id := card.get_stable_card_id()
+		if int(card.card_rarity) <= max_rarity and not ids.has(stable_id):
+			pool.append(card)
+			ids[stable_id] = true
+	var identity_rng := RandomNumberGenerator.new()
+	identity_rng.seed = hash("%d|%d|fate_identity" % [run_seed, _fate_door_offer_id + 1])
+	var orientation_rng := RandomNumberGenerator.new()
+	orientation_rng.seed = hash("%d|%d|fate_orientation" % [run_seed, _fate_door_offer_id + 1])
+	var offer: Array[FateCard] = []
+	while offer.size() < 3 and not pool.is_empty():
+		var index := identity_rng.randi_range(0, pool.size() - 1)
+		var card := pool[index]
+		pool.remove_at(index)
+		card.roll_orientation(orientation_rng.randf())
+		offer.append(card)
+	return offer
 
 
 func _fate_choice_button(choice_index: int) -> Button:
@@ -6983,6 +7180,8 @@ func _fate_choice_button(choice_index: int) -> Button:
 func _fate_card_block_reason(choice_index: int) -> String:
 	if not _door_fate_active or choice_index < 0 or choice_index >= _door_fate_choices.size():
 		return "invalid"
+	if choice_index < _door_fate_purchased.size() and _door_fate_purchased[choice_index]:
+		return "purchased"
 	var button := _fate_choice_button(choice_index)
 	if button != null and bool(button.get_meta("tarot_purchased", false)):
 		return "purchased"
@@ -7227,7 +7426,14 @@ func _refresh_door_fate_prices() -> void:
 					]
 					label.add_theme_color_override("font_color", Color(1.0, 0.72, 0.36))
 				_:
-					label.text = "◈ %d 金币" % _fate_price(card)
+					var bounds := _fate_price_bounds(card)
+					label.text = (
+						"◈ %d 金币 · 区间 %d–%d" % [
+							_fate_price(card), int(bounds.get("min", 0)), int(bounds.get("max", 0))
+						]
+						if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured()
+						else "◈ %d 金币" % _fate_price(card)
+					)
 					label.add_theme_color_override("font_color", _rarity_color(card.card_rarity))
 		# 三种不可买状态的压暗强度刻意分两档：
 		# · 已购买 ⇒ **灰阶 + 压暗 + 缩到 70%**（卡位用掉了，退到背景）
@@ -7353,6 +7559,7 @@ func _close_door_fate_overlay() -> void:
 	_fate_balance_pulse_tween = null
 	_fate_balance_warn_tween = null
 	_commit_pending_fate_door_streaming()
+	_queue_runtime_autosave("fate_door_closed")
 	_sync_player_input_lock()
 
 
@@ -7394,6 +7601,10 @@ func show_reference_fate_overlay_for_test() -> bool:
 	_door_fate_choices[0].set_orientation(FateCard.Orientation.UPRIGHT, 0.25)
 	_door_fate_choices[1].set_orientation(FateCard.Orientation.REVERSED, 0.75)
 	_door_fate_choices[2].set_orientation(FateCard.Orientation.UPRIGHT, 0.25)
+	_fate_door_offer_id += 1
+	_fate_door_quote.clear()
+	for card in _door_fate_choices:
+		_fate_door_quote[card.get_stable_card_id()] = int(FATE_PRICE_BY_RARITY[clampi(int(card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)])
 	for _choice_index in range(_door_fate_choices.size()):
 		_door_fate_purchased.append(false)
 	_door_fate_active = true
@@ -7928,7 +8139,13 @@ func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void
 		_install_attachment_from_inventory(slot_index, item, player.get_active_weapon_slot(), _slot_type_for_item(item))
 		return
 	if item.get("type", "") == "module":
-		if _can_swap_installed_module(item, slot_index):
+		# 子弹模块走专用事务（写武器实例 + 旧模块回背包 + 装备界面立刻刷新）；
+		# 其它模块（手电筒等）仍走原来的就地挂载路径。
+		if str(item.get("subtype", "")) == "bullet":
+			_install_bullet_module_from_inventory(
+				slot_index, item, player.get_active_weapon_slot()
+			)
+		elif _can_swap_installed_module(item, slot_index):
 			_inventory.remove_from_slot(slot_index, 1)
 			if not _install_weapon_module_from_item(item):
 				_inventory.add_item(item, 1)
@@ -8466,6 +8683,52 @@ func _remove_attachment_to_inventory(
 	status_label.text = "已从%s拆下%s" % [
 		"主武器" if weapon_slot_index == 0 else "副武器",
 		removed_item.get("name", AssemblyNode.get_attachment_slot_display_name(attachment_slot_type)),
+	]
+	return true
+
+
+## 子弹模块从背包装入指定主/副武器的弹药槽（装备界面拖放 → 武器格）。
+##
+## 事务顺序：先从背包扣 1 个 → 调 `Player3D.install_bullet_module_to_weapon_slot`
+## （写武器实例 + 刷新运行态）→ 换下的旧模块放回背包。任何一步失败都整体回滚，
+## 不能出现「背包少了模块、枪上也没装上」的中间态。
+func _on_bullet_module_install_requested(source_slot_index: int, weapon_slot_index: int) -> void:
+	var source := _inventory.get_slot(source_slot_index)
+	if source.is_empty():
+		return
+	_install_bullet_module_from_inventory(
+		source_slot_index, source.get("item", {}) as Dictionary, weapon_slot_index
+	)
+
+
+func _install_bullet_module_from_inventory(
+	source_slot_index: int, item: Dictionary, weapon_slot_index: int
+) -> bool:
+	if player == null or not player.has_method("install_bullet_module_to_weapon_slot"):
+		return false
+	if str(item.get("type", "")) != "module" or str(item.get("subtype", "")) != "bullet":
+		status_label.text = "只能把子弹模块拖到武器格"
+		return false
+	if not _inventory.remove_from_slot(source_slot_index, 1):
+		return false
+	var result := player.call(
+		"install_bullet_module_to_weapon_slot", item, weapon_slot_index
+	) as Dictionary
+	if not bool(result.get("success", false)):
+		_inventory.add_item(item, 1)
+		status_label.text = str(result.get("reason", "子弹模块装配失败"))
+		return false
+	var removed_item := result.get("removed_item", {}) as Dictionary
+	if not removed_item.is_empty() and _inventory.add_item(removed_item, 1) <= 0:
+		# 背包放不下换下的旧模块 ⇒ 把旧弹装回去、新弹退回，保持与操作前一致。
+		player.call("install_bullet_module_to_weapon_slot", removed_item, weapon_slot_index)
+		_inventory.add_item(item, 1)
+		status_label.text = "弹药槽更换失败 · 背包没有空间容纳换下的模块"
+		return false
+	status_label.text = "已把%s装到%s%s" % [
+		item.get("name", "子弹模块"),
+		"主武器" if weapon_slot_index == 0 else "副武器",
+		"" if removed_item.is_empty() else "（换下%s）" % removed_item.get("name", "旧模块"),
 	]
 	return true
 

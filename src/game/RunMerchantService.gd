@@ -131,7 +131,8 @@ func purchase(
 	if str(item.get("type", "")) == "weapon" and owned_weapon_instance.is_valid():
 		if bool(owned_weapon_instance.call(instance_id)):
 			return _failure("inventory_rejected")
-	if not inventory.can_add_item_exact(item, 1):
+	var purchase_plan := inventory.plan_purchase_add(item, 1)
+	if purchase_plan.is_empty():
 		return _failure("inventory_full")
 	if int(wallet.get("currency")) < price:
 		return _failure("insufficient_currency")
@@ -140,10 +141,7 @@ func purchase(
 	var inventory_before := inventory.get_slots_snapshot()
 	if not bool(wallet.call("spend_currency", price)):
 		return _failure("insufficient_currency")
-	if inventory.add_item(item, 1) != 1:
-		inventory.restore_slots_snapshot(inventory_before)
-		wallet.call("add_currency", price)
-		return _failure("inventory_rejected")
+	inventory.restore_slots_snapshot(purchase_plan["slots"])
 	_offers.remove_at(offer_index)
 	_stocks[_merchant_id] = _offers.duplicate(true)
 	if not bool(commit_checkpoint.call()):

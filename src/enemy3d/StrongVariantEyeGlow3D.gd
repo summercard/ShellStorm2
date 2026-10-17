@@ -1,11 +1,11 @@
 class_name StrongVariantEyeGlow3D
 extends Node3D
-## 强化怪（普通怪变种）的**红色发光眼**表现。
+## 三类僵尸普通版与强化版共用的双眼红光。
 ##
 ## 一对自发光眼球 + 一盏很弱的溢光灯，挂在 `Head` 骨的 `BoneAttachment3D` 下，
 ## 因此**随头部动画一起走**（这是本节点存在的全部意义：不能是固定世界坐标）。
 ##
-## 设计口径（业主 2026-10-16）：「红色发光特效，放在眼睛的位置，专门给强化怪用」。
+## 2026-10-17 用户修订：普通与强化僵尸均显示两个清晰红光。
 ## 三只变种（小僵尸 / 胖子僵尸 / 保安僵尸-强化怪）共用这一套，眼位差异由
 ## `MonsterVariants.EYE_SOCKETS` 的配方给出，不在本文件写死任何一只怪的坐标。
 ##
@@ -15,8 +15,8 @@ extends Node3D
 
 ## 眼球自发光颜色（业主指定的红）。
 const GLOW_COLOR := Color(1.0, 0.055, 0.075, 1.0)
-## 自发光强度。取值刻意不追求「刺眼」：变种怪是常规敌人，不是 Boss 特效。
-const EMISSION_ENERGY := 2.6
+## 红色亮芯；每眼独立柔光晕保证关闭 bloom 后仍可读。
+const EMISSION_ENERGY := 4.0
 ## 呼吸脉冲：周期（秒）与强度摆幅（±）。
 ## 给一点脉动是为了让「这是活物在盯着你」被读出来 —— 完全静止的红点会像贴图瑕疵。
 const PULSE_PERIOD_SEC := 1.9
@@ -27,7 +27,7 @@ const PULSE_AMPLITUDE := 0.34
 ##
 ## 现在的取值让溢光只够在眼球周围形成一小圈「红光晕」，脸的本色仍是原色。
 const LIGHT_RANGE_M := 0.85
-const LIGHT_ENERGY := 0.22
+const LIGHT_ENERGY := 0.05
 
 ## 每个眼球节点名（验收按名取节点，不用位置猜）。
 const LEFT_EYE_NAME := "EyeGlowL"
@@ -40,6 +40,7 @@ var variant_id := ""
 var eye_radius := 0.030
 
 var _elapsed := 0.0
+static var _halo_shader: Shader
 
 
 ## 建好两只眼 + 一盏灯。`local_positions` 是本节点空间（= 骨空间）里的左右眼位置。
@@ -147,6 +148,38 @@ func _add_eye(node_name: String, position: Vector3, color: Color) -> void:
 	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	node.layers = 1
 	add_child(node)
+	_add_halo("Halo" + node_name, position, color)
+
+
+func _add_halo(node_name: String, center: Vector3, color: Color) -> void:
+	if _halo_shader == null:
+		_halo_shader = Shader.new()
+		_halo_shader.code = """
+shader_type spatial;
+render_mode unshaded, blend_add, depth_draw_never, cull_disabled;
+uniform vec4 glow_color : source_color;
+void vertex() {
+ vec3 s = vec3(length(MODEL_MATRIX[0].xyz), length(MODEL_MATRIX[1].xyz), length(MODEL_MATRIX[2].xyz));
+ MODELVIEW_MATRIX = VIEW_MATRIX * mat4(vec4(INV_VIEW_MATRIX[0].xyz * s.x, 0.0), vec4(INV_VIEW_MATRIX[1].xyz * s.y, 0.0), vec4(INV_VIEW_MATRIX[2].xyz * s.z, 0.0), MODEL_MATRIX[3]);
+}
+void fragment() {
+ float r = length(UV - vec2(0.5)) * 2.0;
+ ALBEDO = glow_color.rgb;
+ ALPHA = pow(max(0.0, 1.0 - r), 2.0) * 0.7;
+}
+"""
+	var material := ShaderMaterial.new()
+	material.shader = _halo_shader
+	material.set_shader_parameter("glow_color", color)
+	var quad := QuadMesh.new()
+	quad.size = Vector2.ONE * eye_radius * 7.0
+	quad.material = material
+	var halo := MeshInstance3D.new()
+	halo.name = node_name
+	halo.mesh = quad
+	halo.position = center
+	halo.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(halo)
 
 
 func _add_light(color: Color) -> void:

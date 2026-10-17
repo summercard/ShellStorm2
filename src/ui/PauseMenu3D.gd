@@ -48,6 +48,7 @@ const PRISM_RAIL_WIDTH := 820.0
 @onready var aim_smoothing_value: Label = $Center/Panel/Margin/ControlsPage/AimSmoothingRow/AimSmoothingValue
 @onready var left_stick_aim_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/LeftStickAim
 @onready var aim_assist_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/AimAssist
+@onready var auto_fire_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/AutoFire
 @onready var vibration_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/Vibration
 @onready var controls_back_button: Button = $Center/Panel/Margin/ControlsPage/Footer/BackButton
 @onready var controls_status_label: Label = $Center/Panel/Margin/ControlsPage/Footer/Status
@@ -538,7 +539,7 @@ func _style_prism_controls_page() -> void:
 		UIStyleFactory.apply_prism_label(value_label, "value", 2, 16)
 		value_label.custom_minimum_size = Vector2(84, 34)
 
-	for chk in [gamepad_enabled_toggle, left_stick_aim_toggle, aim_assist_toggle, vibration_toggle]:
+	for chk in [gamepad_enabled_toggle, left_stick_aim_toggle, aim_assist_toggle, auto_fire_toggle, vibration_toggle]:
 		if chk != null:
 			UIStyleFactory.apply_prism_check_button(chk, 15)
 
@@ -689,6 +690,7 @@ func _setup_input_controls() -> void:
 	gamepad_enabled_toggle.toggled.connect(_on_gamepad_enabled_toggled)
 	left_stick_aim_toggle.toggled.connect(_on_left_stick_aim_toggled)
 	aim_assist_toggle.toggled.connect(_on_aim_assist_toggled)
+	auto_fire_toggle.toggled.connect(_on_auto_fire_toggled)
 	vibration_toggle.toggled.connect(_on_vibration_toggled)
 	move_deadzone_slider.value_changed.connect(
 		_on_deadzone_changed.bind("gamepad_move_deadzone")
@@ -743,6 +745,14 @@ func _on_aim_assist_toggled(enabled: bool) -> void:
 	controls_status_label.modulate = Color(0.45, 0.9, 0.68)
 
 
+func _on_auto_fire_toggled(enabled: bool) -> void:
+	if _syncing_controls:
+		return
+	InputSettings.set_value("auto_fire", enabled)
+	controls_status_label.text = "自动射击已%s · 设置已保存" % ("开启" if enabled else "关闭")
+	controls_status_label.modulate = Color(0.45, 0.9, 0.68)
+
+
 func _on_vibration_toggled(enabled: bool) -> void:
 	if _syncing_controls:
 		return
@@ -794,6 +804,7 @@ func _sync_input_controls() -> void:
 	gamepad_enabled_toggle.button_pressed = bool(settings.get("gamepad_enabled", true))
 	left_stick_aim_toggle.button_pressed = bool(settings.get("gamepad_left_stick_aim", false))
 	aim_assist_toggle.button_pressed = bool(settings.get("gamepad_aim_assist", true))
+	auto_fire_toggle.button_pressed = bool(settings.get("auto_fire", false))
 	vibration_toggle.button_pressed = bool(settings.get("gamepad_vibration", true))
 	var move_deadzone := float(settings.get("gamepad_move_deadzone", 0.20))
 	var aim_deadzone := float(settings.get("gamepad_aim_deadzone", 0.12))

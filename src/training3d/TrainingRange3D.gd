@@ -268,6 +268,7 @@ func _build_equipment_ui() -> void:
 	_inventory_ui.attachment_slot_install_requested.connect(_on_attachment_slot_install_requested)
 	_inventory_ui.attachment_slot_remove_requested.connect(_on_attachment_slot_remove_requested)
 	_inventory_ui.attachment_slot_drop_requested.connect(_on_attachment_slot_drop_requested)
+	_inventory_ui.bullet_module_install_requested.connect(_on_bullet_module_install_requested)
 	_inventory_ui.backpack_slot_equip_requested.connect(_on_backpack_slot_equip_requested)
 	_inventory_ui.equipped_backpack_to_inventory_requested.connect(_on_equipped_backpack_to_inventory_requested)
 	_inventory_ui.equipped_backpack_drop_requested.connect(_on_equipped_backpack_drop_requested)
@@ -403,6 +404,34 @@ func _on_attachment_slot_install_requested(
 		return
 	_inventory.remove_from_slot(source_slot_index, 1)
 	status_label.text = "已安装 %s" % str(item.get("name", "配件"))
+
+
+## 子弹模块拖到武器格 ⇒ 换那把枪的弹药槽。靶场不写存档，失败只回滚内存状态。
+func _on_bullet_module_install_requested(source_slot_index: int, weapon_slot_index: int) -> void:
+	var slot := _inventory.get_slot(source_slot_index)
+	if slot.is_empty():
+		return
+	var item := slot.get("item", {}) as Dictionary
+	var result := player.install_bullet_module_to_weapon_slot(item, weapon_slot_index)
+	if not bool(result.get("success", false)):
+		status_label.text = str(result.get("reason", "子弹模块安装失败"))
+		return
+	if not _inventory.remove_from_slot(source_slot_index, 1):
+		# 背包扣除失败 ⇒ 把新弹退回，避免「枪上装了、包里还留着」。
+		var rollback := result.get("removed_item", {}) as Dictionary
+		if not rollback.is_empty():
+			player.install_bullet_module_to_weapon_slot(rollback, weapon_slot_index)
+		status_label.text = "子弹模块安装失败：背包扣除失败"
+		return
+	var removed := result.get("removed_item", {}) as Dictionary
+	if not removed.is_empty() and _inventory.add_item(removed, 1) <= 0:
+		player.install_bullet_module_to_weapon_slot(removed, weapon_slot_index)
+		_inventory.add_item(item, 1)
+		status_label.text = "弹药槽更换失败 · 背包没有空间容纳换下的模块"
+		return
+	status_label.text = "已把%s装到%s" % [
+		item.get("name", "子弹模块"), "主武器" if weapon_slot_index == 0 else "副武器",
+	]
 
 
 func _on_attachment_slot_remove_requested(

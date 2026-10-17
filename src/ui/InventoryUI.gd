@@ -18,6 +18,8 @@ signal equipped_weapon_drop_requested(weapon_slot_index: int)
 signal attachment_slot_install_requested(source_slot_index: int, weapon_slot_index: int, attachment_slot_type: int)
 signal attachment_slot_remove_requested(weapon_slot_index: int, attachment_slot_type: int, target_slot_index: int)
 signal attachment_slot_drop_requested(weapon_slot_index: int, attachment_slot_type: int)
+## 子弹模块装入某把武器的弹药槽（拖到主/副武器格时发出；换下的旧模块由玩法层放回背包）。
+signal bullet_module_install_requested(source_slot_index: int, weapon_slot_index: int)
 signal quick_item_assignment_requested(quick_slot_index: int, item_id: String)
 signal inventory_item_to_quick_requested(source_slot_index: int, quick_slot_index: int)
 signal quick_item_move_requested(source_quick_index: int, target_index: int, target_kind: String)
@@ -56,6 +58,10 @@ var equipment_weapon_label: Label
 var equipment_weapon_slots: Array[Control] = []
 var equipment_weapon_labels: Array[Label] = []
 var equipment_attachment_slots: Array = []
+## 每把武器下面那一行「弹药」的只读格子与名字标签。弹药槽不是配件槽
+## （`AssemblyNode.PUBLIC_ATTACHMENT_SLOTS` 不含 BULLET），所以单独一套控件。
+var equipment_bullet_slots: Array[Control] = []
+var equipment_bullet_labels: Array[Label] = []
 var equipment_backpack_slot: Control
 var equipment_backpack_label: Label
 var quick_item_slots: Array[Control] = []
@@ -308,6 +314,45 @@ func _setup_standalone_panels() -> void:
 		weapon_label.text = "未装备"
 		slot_box.add_child(weapon_label)
 		equipment_weapon_labels.append(weapon_label)
+		# 弹药行：显示这把枪实际装的子弹模块。玩家在背包里换了弹种，
+		# 这里必须立刻能看出来 —— 否则「我明明换了弹，怎么没变化」会反复被当成 bug。
+		var bullet_row := HBoxContainer.new()
+		bullet_row.name = "Weapon%dBulletRow" % weapon_slot_index
+		bullet_row.add_theme_constant_override("separation", 6)
+		bullet_row.alignment = BoxContainer.ALIGNMENT_CENTER
+		slot_box.add_child(bullet_row)
+		var bullet_slot := _create_slot()
+		bullet_slot.name = "Weapon%dBulletSlot" % weapon_slot_index
+		bullet_slot.custom_minimum_size = Vector2(30, 30)
+		# 只读展示格：不吃拖放（slot_kind 不在任何可接收分支里），也不可拖出。
+		bullet_slot.set_meta("slot_kind", "bullet_display_%d" % weapon_slot_index)
+		bullet_slot.set_meta("drag_disabled", true)
+		if bullet_slot.has_method("set_slot_index"):
+			bullet_slot.call("set_slot_index", weapon_slot_index)
+		_connect_slot_signals(bullet_slot, weapon_slot_index, false)
+		bullet_row.add_child(bullet_slot)
+		# 文字竖排（标题 + 弹名）而不是横排：武器列只有 108px 宽，横排会被挤成省略号。
+		var bullet_text_col := VBoxContainer.new()
+		bullet_text_col.name = "Weapon%dBulletText" % weapon_slot_index
+		bullet_text_col.add_theme_constant_override("separation", 0)
+		bullet_text_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		bullet_row.add_child(bullet_text_col)
+		var bullet_caption := Label.new()
+		bullet_caption.text = "弹药"
+		bullet_caption.add_theme_font_size_override("font_size", 10)
+		bullet_caption.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
+		bullet_text_col.add_child(bullet_caption)
+		var bullet_label := Label.new()
+		bullet_label.name = "Weapon%dBulletLabel" % weapon_slot_index
+		bullet_label.text = "未装填"
+		bullet_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		bullet_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		bullet_label.add_theme_font_size_override("font_size", 10)
+		bullet_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		bullet_label.add_theme_color_override("font_color", UIPalette.TEXT_DISABLED)
+		bullet_text_col.add_child(bullet_label)
+		equipment_bullet_slots.append(bullet_slot)
+		equipment_bullet_labels.append(bullet_label)
 		var attachment_title := Label.new()
 		attachment_title.text = "配件 · 点击拆卸"
 		attachment_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1071,6 +1116,27 @@ func _item_glyph(item: Dictionary) -> String:
 	return "ITM"
 
 
+## 子弹模块的悬浮说明。
+##
+## ⚠️ 这里必须写清楚「怎么装」。旧版落到通用 else 分支只写「拖拽：换位或丢弃到地面」，
+## 而拖到武器格当时根本不接收 ⇒ 玩家按提示试一次失败就再也不会尝试，
+## 「弹种挂件没有入口」的印象就是这么来的。
+func _bullet_module_hover_text(item: Dictionary) -> String:
+	var lines: Array[String] = ["子弹模块 · 装到武器弹药槽"]
+	var stats := BlueprintRegistry.get_bullet_base_stats(str(item.get("id", "")))
+	if not stats.is_empty():
+		lines.append("命中伤害 +%d · 弹速 ×%.2f" % [
+			int(stats.get("bullet_damage", 0)), float(stats.get("bullet_speed", 1.0)),
+		])
+	var description := str(item.get("description", ""))
+	if not description.is_empty():
+		lines.append(description)
+	lines.append("")
+	lines.append("左键：装到当前主武器（旧模块回背包）")
+	lines.append("拖到主/副武器格：装到那把枪；拖回背包：归还")
+	return "\n".join(lines)
+
+
 func _weapon_hover_text(item: Dictionary) -> String:
 	var instance_id := str(item.get("weapon_instance_id", ""))
 	var upgrades: Variant = item.get("fate_upgrades", [])
@@ -1264,6 +1330,7 @@ func _refresh_equipment_ui() -> void:
 			_clear_slot(slot)
 			equipment_weapon_labels[weapon_slot_index].text = "%s未装备" % ("主武器" if weapon_slot_index == 0 else "副武器")
 			_refresh_weapon_attachment_slots(weapon_slot_index, [])
+			_refresh_weapon_bullet_display(weapon_slot_index, {})
 			continue
 		_update_slot_with_item(slot, {"item": item, "count": 1, "slot": weapon_slot_index})
 		var instance_id := str(item.get("weapon_instance_id", ""))
@@ -1278,6 +1345,10 @@ func _refresh_equipment_ui() -> void:
 		if _weapon_owner.has_method("get_weapon_attachment_layout_for_slot"):
 			layout = _weapon_owner.call("get_weapon_attachment_layout_for_slot", weapon_slot_index) as Array[Dictionary]
 		_refresh_weapon_attachment_slots(weapon_slot_index, layout)
+		var bullet_item: Dictionary = {}
+		if _weapon_owner.has_method("get_equipped_bullet_item_for_slot"):
+			bullet_item = _weapon_owner.call("get_equipped_bullet_item_for_slot", weapon_slot_index) as Dictionary
+		_refresh_weapon_bullet_display(weapon_slot_index, bullet_item)
 	_refresh_quick_item_ui()
 
 
@@ -1323,6 +1394,27 @@ func _refresh_weapon_attachment_slots(weapon_slot_index: int, layout: Array[Dict
 		if caption != null:
 			caption.visible = false
 		_apply_attachment_slot_frame(slot, true, false)
+
+
+## 弹药行刷新：空 → 「未装填」灰字；有 → 图标 + 模块名。
+## 只读展示，不接拖放/点击：换弹入口是「背包左键」或「拖到武器格」，
+## 弹药槽本身不做拆卸（拆掉会留下一把没有弹种映射的枪，比不显示更容易出事故）。
+func _refresh_weapon_bullet_display(weapon_slot_index: int, bullet_item: Dictionary) -> void:
+	if weapon_slot_index < 0 or weapon_slot_index >= equipment_bullet_slots.size():
+		return
+	var slot := equipment_bullet_slots[weapon_slot_index]
+	var label := equipment_bullet_labels[weapon_slot_index]
+	slot.set_meta("drag_disabled", true)
+	if bullet_item.is_empty():
+		_clear_slot(slot)
+		slot.set_meta("drag_disabled", true)
+		label.text = "未装填"
+		label.add_theme_color_override("font_color", UIPalette.TEXT_DISABLED)
+		return
+	_update_slot_with_item(slot, {"item": bullet_item, "count": 1, "slot": weapon_slot_index})
+	slot.set_meta("drag_disabled", true)
+	label.text = str(bullet_item.get("name", "子弹模块"))
+	label.add_theme_color_override("font_color", UIPalette.ITEM_BULLET)
 
 
 func _apply_attachment_slot_frame(slot: Control, filled: bool, disabled: bool) -> void:
@@ -1476,6 +1568,8 @@ func _show_item_hover_card(item: Dictionary, count: int = 1) -> void:
 	item_hover_title.text = "%s%s" % [item_name, " ×%d" % count if count > 1 else ""]
 	if str(item.get("type", "")) == "weapon":
 		item_hover_body.text = _weapon_hover_text(item)
+	elif str(item.get("type", "")) == "module" and str(item.get("subtype", "")) == "bullet":
+		item_hover_body.text = _bullet_module_hover_text(item)
 	elif str(item.get("type", "")) == "equipment" and str(item.get("subtype", "")) == "backpack":
 		item_hover_body.text = "背包装备 / %s\n装备后增加 %d 个物品格\n%s\n\n左键或拖入背包槽装备" % [
 			item.get("rarity", "common"), int(item.get("extra_slots", 0)), item.get("description", ""),
@@ -1643,8 +1737,15 @@ func _on_slot_drop_received(
 			_inventory_module.move_or_swap_slots(source_index, target_index, requested_rotation)
 		"weapon_0", "weapon_1":
 			var source: Dictionary = _inventory_module.get_slot(source_index)
-			if not source.is_empty() and str((source.get("item", {}) as Dictionary).get("type", "")) == "weapon":
+			var dragged := source.get("item", {}) as Dictionary
+			if not source.is_empty() and str(dragged.get("type", "")) == "weapon":
 				weapon_slot_equip_requested.emit(source_index, int(target_kind.trim_prefix("weapon_")))
+			elif (
+				str(dragged.get("type", "")) == "module"
+				and str(dragged.get("subtype", "")) == "bullet"
+			):
+				# 子弹模块拖到武器格 = 装进那把枪的弹药槽（旧模块由玩法层放回背包）。
+				bullet_module_install_requested.emit(source_index, int(target_kind.trim_prefix("weapon_")))
 		_ when target_kind.begins_with("attachment_"):
 			var source: Dictionary = _inventory_module.get_slot(source_index)
 			var item := source.get("item", {}) as Dictionary

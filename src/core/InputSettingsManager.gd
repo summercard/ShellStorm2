@@ -34,6 +34,10 @@ const DEFAULT_SETTINGS := {
 	"gamepad_left_stick_aim": false,
 	"gamepad_aim_assist": true,
 	"gamepad_vibration": true,
+	# 自动射击：开启后持枪即按当前准星持续开火，不必按住射击键。
+	# **出厂默认 false**：关闭时 Player3D 的输入路径与旧版完全一致
+	# （不读该值、不合成任何按键），因此对现有玩法零影响。
+	"auto_fire": false,
 }
 
 ## 滑条范围与 sanitize 共用同一份常量，避免界面上下限和实际取值漂移。
@@ -98,6 +102,13 @@ func is_left_stick_aim_enabled() -> bool:
 
 func is_vibration_enabled() -> bool:
 	return bool(_settings.get("gamepad_vibration", true))
+
+
+## 自动射击是否开启（ESC → 操作设置里的开关）。
+## 开启后 Player3D 会把「按住射击键」合成出来；键鼠 / 手柄 / 触屏的真实按键
+## 优先级更高 —— 玩家自己按住时一律走原逻辑，不会被自动射击打断。
+func is_auto_fire_enabled() -> bool:
+	return bool(_settings.get("auto_fire", false))
 
 
 func set_value(key: String, value: Variant, save := true) -> bool:

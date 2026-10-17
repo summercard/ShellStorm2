@@ -1376,7 +1376,7 @@ func _perform_attack(to_target: Vector3, distance: float) -> void:
 	# 当前目标有效，避免悬空引用造成重复结算。
 	_attack_timer = attack_cooldown
 	_last_attack_result = "committed"
-	match enemy_kind:
+	match _table_kind():
 		"fat_zombie03":
 			_last_attack_result = "miss"
 			if distance <= attack_range and (-global_basis.z).dot(to_target.normalized()) >= 0.5 and is_instance_valid(_target) and _has_line_of_sight(_target) and _target.has_method("take_damage"):

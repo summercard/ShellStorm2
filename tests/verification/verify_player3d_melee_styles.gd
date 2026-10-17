@@ -74,7 +74,10 @@ func _ready() -> void:
 		fx.finish();check(not fx.visible,"effect retires")
 		var reused:=pool.acquire(id,Vector3.ZERO,Color.WHITE,1.0,{"duration":.1})
 		check(reused.visible,"effect reusable");reused.call("_process",.2);check(not reused.visible,"effect expires")
-	var path:=OS.get_environment("BUNNY_VERIFICATION_OUTPUT")+"/melee_styles_report.json"
+	var output:=OS.get_environment("BUNNY_VERIFICATION_OUTPUT")
+	if output.is_empty():output="user://melee_verification"
+	DirAccess.make_dir_recursive_absolute(output)
+	var path:=output+"/melee_styles_report.json"
 	var file:=FileAccess.open(path,FileAccess.WRITE);file.store_string(JSON.stringify({"checks":checks,"failures":failures},"  "));file.close()
 	if failures.is_empty():print("BUNNY_MELEE_STYLES_OK checks=",checks)
 	else:push_error(str(failures))

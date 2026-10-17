@@ -24,6 +24,8 @@ const MODEL_HEIGHT := {
 }
 
 var _cam: Camera3D
+var _game_view := false
+var _attack_view := false
 var _out := "res://outputs/eye_glow_capture.png"
 
 
@@ -31,18 +33,20 @@ func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
 	if args.size() > 0:
 		_out = args[0]
+	_attack_view = args.size() > 1 and args[1] == "attack"
+	_game_view = args.size() > 1 and args[1] == "game"
 	_build_env()
 	var shots: Array[Image] = []
 
 	for pair in PAIRS:
+		if _attack_view and pair[0] != "ranged_caster":
+			continue
 		var base_kind := str(pair[0])
 		var variant_kind := str(pair[1])
-		# 取一个共同取景：用**变种**的眼位定机位，原怪按同框比例对齐，
-		# 这样两张图的头部在同一高度、可直接左右对照（此前分开取景导致原怪常常是空框）。
+		# 各按自身眼位取景；攻击模式使用共同世界尺度对比发射高度。
 		var glance := await _shoot_one(variant_kind, Vector3.ZERO, 0.0)
 		var variant_img: Image = glance["image"]
-		var focus: Vector3 = glance["focus"]
-		var base_shot := await _shoot_one(base_kind, focus, float(glance["size"]))
+		var base_shot := await _shoot_one(base_kind, Vector3.ZERO, 0.0)
 		shots.append(base_shot["image"])
 		shots.append(variant_img)
 
@@ -85,7 +89,7 @@ func _shoot_one(kind: String, focus: Vector3, ortho_size: float) -> Dictionary:
 		var l := local_eyes[0]
 		var r := local_eyes[1]
 		print("[glow]   眼皮(怪局部) L=%s R=%s" % [_v(l), _v(r)])
-		print("[glow]   对称性 |L.x+R.x|=%.4f（应≈0） 高度差=%.4f（应≈0）" % [
+		print("[glow]   对称性 |L.x+R.x|=%.4f（骨锚点可非对称） 高度差=%.4f" % [
 			absf(l.x + r.x), absf(l.y - r.y)
 		])
 		print("[glow]   眼高比例=%.4f（配方 %.4f）" % [
@@ -100,11 +104,23 @@ func _shoot_one(kind: String, focus: Vector3, ortho_size: float) -> Dictionary:
 			focus = Vector3(0.0, float(MODEL_HEIGHT[kind]) * total * ratio, 0.0)
 		ortho_size = 0.62 * total * (2.2 if kind.begins_with("fat_zombie03") else 1.6)
 
+	var attack_pool: ProjectilePool3D
+	if _attack_view:
+		attack_pool = ProjectilePool3D.new()
+		add_child(attack_pool)
+		enemy._perform_attack(Vector3.FORWARD, 4.0)
+		for bullet in attack_pool.get_children():
+			bullet.set_physics_process(false)
+			bullet.global_position += bullet.direction * 1.6
+		focus = Vector3(0, 1.0, -0.7)
+		ortho_size = 4.8
 	_cam.projection = Camera3D.PROJECTION_ORTHOGONAL
 	_cam.size = ortho_size
-	_cam.position = Vector3(focus.x, focus.y, focus.z - 2.0)
-	_cam.look_at(Vector3(focus.x, focus.y, 0.0), Vector3.UP)
+	_cam.position = focus + (Vector3(0, 4.5, -7.0) if _game_view or _attack_view else Vector3(0, 0, -2.0))
+	_cam.look_at(focus, Vector3.UP)
 	var img := await _shot()
+	if attack_pool != null:
+		attack_pool.queue_free()
 	enemy.queue_free()
 	await get_tree().process_frame
 	return {"image": img, "focus": focus, "size": ortho_size}
@@ -115,7 +131,7 @@ func _find_eyes(enemy: Enemy3D) -> Array[Node3D]:
 	if enemy.avatar == null:
 		return out
 	for node in enemy.avatar.find_children("*", "MeshInstance3D", true, false):
-		if str((node as MeshInstance3D).name).begins_with("EyeGlow"):
+		if str((node as MeshInstance3D).name) in ["EyeGlowL", "EyeGlowR"]:
 			out.append(node as Node3D)
 	return out
 
@@ -129,8 +145,8 @@ func _build_env() -> void:
 	env.ambient_light_energy = 0.9
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	# 与游戏一致的辉光（`GraphicsSettingsManager` bloom → glow_intensity 0.72）：
-	# 不开它，自发光材质只会是一块死红，看不出「发光」。
-	env.glow_enabled = true
+	# game 模式故意关闭辉光，核验独立柔光晕。
+	env.glow_enabled = not _game_view
 	env.glow_intensity = 0.72
 	env.glow_bloom = 0.12
 	env.glow_hdr_threshold = 0.85

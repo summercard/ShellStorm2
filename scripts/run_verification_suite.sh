@@ -181,6 +181,7 @@ smoke_scenes=(
 )
 
 core_scenes=(
+  verify_damage_number_style_flow
   verify_grid_inventory_layout
   verify_hologram_unlock
   verify_player3d_directional_motion
@@ -193,6 +194,7 @@ core_scenes=(
   verify_expedition01_spawn_ramp
   verify_expedition_resume_entry
   verify_player3d_melee_motion
+  verify_player3d_melee_styles
   verify_pushable_base_chairs
   verify_monitor_boss_flow
   "${smoke_scenes[@]}"
@@ -270,9 +272,11 @@ core_scenes=(
   verify_starting_weapon_contract
   verify_equipment_transaction_service
   verify_weapon_attachment_inventory_flow
+  verify_bullet_module_equipment_flow
   verify_weapon_instance_fate_ownership_flow
   verify_celestial_fate_scope_flow
   verify_fate_card_purchase_flow
+  verify_fate_economy_service
   verify_finite_ammo_flow
   verify_guaranteed_loadout_ammo_flow
   verify_avatar_return_persistence_flow
@@ -337,6 +341,7 @@ core_scenes=(
   verify_formal_3d_asset_import
   verify_main_entry_cinematic_flow
   verify_main_entry_realtime_sun_flow
+  verify_main_entry_stage_light
   verify_melee_zombie_presentation
   verify_fat_zombie03
   verify_fat_zombie03_death_visibility
@@ -371,6 +376,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+  verify_player3d_melee_special_visual
   verify_inventory_experience_visual
   verify_monitor_boss_visual
   verify_base99_radio

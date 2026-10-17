@@ -383,6 +383,28 @@ func get_item_for_assembly_node(node: AssemblyNode) -> Dictionary:
 	return ItemRegistry.get_instance().get_item(item_id) if not item_id.is_empty() else {}
 
 
+## 子弹模块的展示用基础属性（背包悬浮卡、装配对比用）。
+##
+## 直接 `create_assembly_node()` 会造一个 Node；悬浮卡每次鼠标进入都会调，不缓存就是
+## 持续分配 ⇒ 这里按 content_id 记忆化。返回的是副本，调用方随便改。
+var _bullet_base_stats_cache: Dictionary = {}
+
+func get_bullet_base_stats(item_id: String) -> Dictionary:
+	if _bullet_base_stats_cache.has(item_id):
+		return (_bullet_base_stats_cache[item_id] as Dictionary).duplicate(true)
+	_ensure_registry()
+	var entry: Dictionary = _registry["bullet"].get(item_id, {})
+	if entry.is_empty():
+		return {}
+	var node := entry["factory"].call() as AssemblyNode
+	if node == null:
+		return {}
+	var stats := node.get_base_stats()
+	node.free()
+	_bullet_base_stats_cache[item_id] = stats.duplicate(true)
+	return stats
+
+
 func get_attachment_slot_type_for_item(item: Dictionary) -> int:
 	var node := create_assembly_node(str(item.get("assembly_id", item.get("id", ""))))
 	if node == null:
@@ -406,13 +428,25 @@ func build_default_weapon_tree(blueprint_tier: int) -> WeaponAssemblyTree:
 		if not available_guns.is_empty():
 			gun_id = available_guns[0]["item_id"]
 
-	# 子弹：尝试挂一个同Tier可用的
+	# 子弹：出厂树固定挂标准弹。特殊弹（黏黏/反弹/穿透…）是玩家在包裹里手动装配的玩法选择，
+	# 不能由「自动挑一个」悄悄塞进出厂枪。
+	#
+	# ⚠️ 2026-10-17 修：旧实现是 `for b in available_bullets: if b["item_id"] != "mod_bullet_standard"`，
+	#   本意大概是「挑一个可用的」，实际效果是**跳过标准弹、选中注册表里第一颗特殊弹**
+	#   ——tier0 的可用列表是 [standard, sticky, bounce]，于是出厂初始步枪一直挂着
+	#   `Bullet_Sticky`。命中触发 Projectile3D._apply_secondary_effect 的
+	#   `apply_damage_over_time(max(2, damage/3), 2.4)`，56 点弹伤 ⇒ 18 点 DOT，
+	#   每 0.5s 结算 `ceil(18×0.2)=4` 点 ⇒ 玩家看到「打中怪物后还在 4 点 4 点地掉血」。
+	#   这不是持续伤害设计，是选弹循环把特殊弹当默认弹。
 	var available_bullets: Array[Dictionary] = get_available_bullets(blueprint_tier)
 	var bullet_id: String = "mod_bullet_standard"
+	var standard_available := false
 	for b in available_bullets:
-		if b["item_id"] != bullet_id:
-			bullet_id = b["item_id"]
+		if str(b["item_id"]) == bullet_id:
+			standard_available = true
 			break
+	if not standard_available and not available_bullets.is_empty():
+		bullet_id = str(available_bullets[0]["item_id"])
 
 	return build_weapon_tree(gun_id, bullet_id)
 

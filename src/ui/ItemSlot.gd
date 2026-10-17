@@ -112,7 +112,16 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 			and str(item.get("subtype", "")) == str(get_meta("accepted_subtype", ""))
 		)
 	if target_kind.begins_with("weapon_"):
-		return carried_source and str(item.get("type", "")) == "weapon"
+		# 武器格除了整把枪，也接受「子弹模块」——落到哪把枪上就换那把枪的弹药槽。
+		# 模块类型是 type=module / subtype=bullet，与 attachment 完全分开：
+		# 瞄具/枪口等配件仍然只能进 attachment_ 格，不会被武器格误吃。
+		return carried_source and (
+			str(item.get("type", "")) == "weapon"
+			or (
+				str(item.get("type", "")) == "module"
+				and str(item.get("subtype", "")) == "bullet"
+			)
+		)
 	if target_kind == "backpack":
 		return (
 			carried_source
@@ -173,7 +182,13 @@ func set_drag_feedback(active: bool, is_source: bool, dragged_item: Dictionary =
 		or target_kind == "insurance" and (source_kind == "inventory" or source_kind.begins_with("quick_")) and not has_meta("slot_item")
 		or target_kind.begins_with("quick_") and source_kind.begins_with("quick_")
 		or target_kind.begins_with("attachment_") and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "attachment" and not bool(get_meta("slot_disabled", false)) and str(dragged_item.get("subtype", "")) == str(get_meta("accepted_subtype", ""))
-		or target_kind.begins_with("weapon_") and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "weapon"
+		or target_kind.begins_with("weapon_") and source_kind in ["inventory", "insurance"] and (
+			str(dragged_item.get("type", "")) == "weapon"
+			or (
+				str(dragged_item.get("type", "")) == "module"
+				and str(dragged_item.get("subtype", "")) == "bullet"
+			)
+		)
 		or target_kind == "backpack" and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "equipment" and str(dragged_item.get("subtype", "")) == "backpack"
 		or target_kind.begins_with("quick_") and source_kind in ["inventory", "insurance"] and not str(dragged_item.get("use_action", "")).is_empty()
 	)

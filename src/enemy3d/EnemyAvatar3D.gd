@@ -79,7 +79,7 @@ var _elite_presentation_asset_id := ""
 var _formal_normal_root: Node3D
 var _formal_normal_scene_path := ""
 var _formal_elite_root: Node3D
-## 强化怪的红色发光眼（`StrongVariantEyeGlow3D`）。普通怪恒为 null。
+## 普通与强化僵尸的双眼红光。
 var _eye_glow: StrongVariantEyeGlow3D
 ## 发光眼所挂的骨骼绑点（`BoneAttachment3D`，挂在 `Head` 骨上）。
 var _eye_socket: BoneAttachment3D
@@ -304,16 +304,12 @@ func _rebuild() -> void:
 	# 隐藏壳/核/附肢、保留 tell ring；动画由包装自驱动，避免旧 bob/appendage 程序姿势叠加。
 	if FORMAL_NORMAL_SCENES.has(_base_kind) and _root != null:
 		_load_formal_normal_model()
-		# 强化怪才有红色发光眼；普通怪没有配方，这里什么都不做。
+		# 按配方为普通与强化僵尸挂接红眼。
 		if monster_has_eye_glow():
 			_setup_eye_socket()
 
 
-## 本机是否该长发光眼：**只认配方**，不认怪种名。
-##
-## 判据是「这个变种有没有眼位配方」而不是「kind 是不是 xxx_strong」——
-## 于是以后新增一只变种怪时，只要在 `MonsterVariants.EYE_SOCKETS` 补一行就自动生效，
-## 不需要回来改这里（也不会出现「登记了变种却忘了加眼睛」的静默不一致）。
+## 是否有已标定的僵尸眼位配方；普通版和强化版均可用。
 func monster_has_eye_glow() -> bool:
 	return not MonsterVariants.eye_socket_for(enemy_kind).is_empty()
 
@@ -356,7 +352,7 @@ func _setup_eye_socket() -> void:
 ## ## 眼位是怎么算出来的（关键，别改成拍脑袋的常量）
 ## 三个模型**没有 eye 骨**，且小僵尸 / 保安僵尸的 `Head` 骨 pose 在**胸口**（y≈0.85）
 ## 而网格的头在 y≈1.5 —— 骨空间与网格**不同源**。所以：
-##   ① 用**蒙皮后顶点**取「头部带」（顶部 45% 高度）算总高与最前 z；
+##   ① 用**蒙皮后顶点**算总高，再取两眼附近窄带的脸部表面深度；
 ##   ② 按配方（`MonsterVariants.EYE_SOCKETS`）算出**模型根空间**的左右眼点；
 ##   ③ 把眼点换算成挂点的局部坐标 —— 直接对**引擎给出的挂点世界矩阵求逆**。
 ##
@@ -370,13 +366,14 @@ func _finalize_eye_glow() -> void:
 	var socket_spec := MonsterVariants.eye_socket_for(enemy_kind)
 	if socket_spec.is_empty():
 		return
-	var points := _eye_points_in_model_space(socket_spec)
-	if points.is_empty():
-		return
-	var socket_inverse := _eye_socket.global_transform.affine_inverse()
-	var local_offsets: Array = []
-	for point in points:
-		local_offsets.append(socket_inverse * (global_transform * (point as Vector3)))
+	var local_offsets: Array = socket_spec.get("bone_offsets", []).duplicate()
+	if local_offsets.is_empty():
+		var points := _eye_points_in_model_space(socket_spec)
+		if points.is_empty():
+			return
+		var socket_inverse := _eye_socket.global_transform.affine_inverse()
+		for point in points:
+			local_offsets.append(socket_inverse * (global_transform * (point as Vector3)))
 
 	if _eye_glow != null and is_instance_valid(_eye_glow):
 		_eye_glow.queue_free()
@@ -432,21 +429,20 @@ func _eye_points_in_model_space(socket: Dictionary) -> Array:
 	var height := bounds.size.y
 	if height <= 0.0:
 		return []
-	# 「头部带最前 z」：只取顶部一条带、且横向收在头宽内，
-	# 否则手臂 / 肩 / 枪会把最前点抢走（胖子僵尸的手臂与头同高，实测必踩）。
-	var limit := float(MonsterVariants.EYE_HEAD_HALF_X_LIMIT)
-	var band_lo := bottom + height * (1.0 - float(MonsterVariants.EYE_HEAD_BAND_FROM_TOP))
-	var front := INF
-	for point in points:
-		if point.y < band_lo or absf(point.x) > limit:
-			continue
-		front = minf(front, point.z)
-	if front == INF:
-		front = bounds.position.z
+	# 只在每只眼附近取脸部表面。整个头部带的最前点会命中头发、帽檐或鼻尖，
+	# 把红眼悬到脸前 0.2–0.3m；正面图看似对齐，俯视就落到下巴/胸口。
 	var eye_y := bottom + height * float(socket.get("y_ratio", 0.5))
 	var half_x := float(socket.get("half_x", 0.15))
-	var eye_z := front + float(socket.get("front_offset", -0.04))
+	var front := INF
+	for point in points:
+		if absf(point.y - eye_y) <= 0.06 and absf(absf(point.x) - half_x) <= 0.09:
+			front = minf(front, point.z)
+	if front == INF:
+		push_warning("Eye surface calibration missing: %s" % enemy_kind)
+		return []
+	var eye_z := front + float(socket.get("front_offset", -0.015))
 	return [Vector3(-half_x, eye_y, eye_z), Vector3(half_x, eye_y, eye_z)]
+
 
 
 ## 单顶点蒙皮：`Σ wᵢ · (bone_global_poseᵢ · skin.get_bind_poseᵢ) · v`。
