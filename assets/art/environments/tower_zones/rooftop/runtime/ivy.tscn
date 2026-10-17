@@ -1,12 +1,18 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 ; 100F 天台装饰组件：墙面攀爬藤蔓（v002 参考组件库导出，纯视觉）
 ; 稳定运行时路径：rooftop/runtime/ivy.tscn
 ; GLB：rooftop/components/env_rooftop_ref_ivy_top3d.glb
 
+[ext_resource type="Script" path="res://src/world3d/PlantSway3D.gd" id="2_sway"]
+
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_ivy_top3d.glb" id="1_visual"]
 
 [node name="RooftopIvy" type="Node3D"]
+script = ExtResource("2_sway")
+foliage_base_y = 3.80
+sway_from_top = true
+wall_mounted = true
 metadata/asset_id = "ENV-ROOFTOP-REF-IVY"
 metadata/package_id = "ENV-ROOFTOP-REF-IVY"
 metadata/asset_version = "v002"
