@@ -176,6 +176,10 @@
         {
           "kind": "scene",
           "id": "verify_fate_resume_completion"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_fate_economy_service"
         }
       ],
       "status": "partial"
