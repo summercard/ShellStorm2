@@ -7134,7 +7134,9 @@ func _fate_price_bounds(card: FateCard) -> Dictionary:
 	if card == null:
 		return {"min": 0, "quote": 0, "max": 0}
 	if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured():
-		return _fate_economy.price_bounds_for_card(int(card.card_rarity), card.get_stable_card_id())
+		return _fate_economy.price_bounds_for_card(
+			int(card.card_rarity), card.get_stable_card_id(), _fate_door_offer_id
+		)
 	var price := _fate_price(card)
 	return {"min": price, "quote": price, "max": price}
 

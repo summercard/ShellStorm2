@@ -16,8 +16,10 @@ class_name StartupLoadingScreen
 ## **只有名字 + 进度条，纯黑底，零装饰。** 名字与进度条**同角度斜置**（-13°）。
 ##
 ## 视觉基调沿用主面板的棱镜线框语言 —— 近白字、深墨底、方角、无渐变、无卡片；
-## 在此之上按主人要求叠一层**赛博色散**：粉/青 RGB 分离 + 边缘故障带。
+## 在此之上按主人要求叠一层**赛博色散**（粉/青 RGB 分离）。
 ## 色散是本屏唯一允许的"辉光类"效果，只服务于启动壳的压迫感，不进 HUD 体系。
+##
+## ⚠️ 无任何画面边缘特效。名字大到撑爆画幅、允许被屏幕边缘切掉 —— 那是构图，不是装饰。
 
 const TARGET_SCENE := "res://scenes/TowerDescent3D.tscn"
 const MIN_DISPLAY_SECONDS := 1.10
@@ -27,47 +29,201 @@ const MIN_DISPLAY_SECONDS := 1.10
 ## 角度会被拉歪（宽屏上 -13° 就不会是 -13°）。等比缩放是保住角度不变形的唯一办法。
 const DESIGN_SIZE := Vector2(1280.0, 720.0)
 
-## 名字是屏幕上唯一的主角：140px ≈ 1/5 屏高。
+## 名字是屏幕上唯一的主角 —— **大到撑爆画面**。
+## 260px 时旋转后的视觉包围盒约 1302×608，横向超出 1280 画幅约 22px：
+## 左右各切掉约 11px（只有笔画边角出画），既撑满画幅又保住名字完整可读。
+## 这是刻意的构图 —— 压满画幅才有压迫感；但**不能切到认不出名字**，
+## 想更狠可推到 290（会真切掉字形），但那开始牺牲可读性 —— 这一步是分寸，不是极限。
 const TITLE_TEXT := "弹壳风暴2"
-const TITLE_FONT_SIZE := 140.0
+const TITLE_FONT_SIZE := 260.0
 ## 整块名字的摆放角（度）。负值 = 逆时针 = 右端抬高。
 ## **进度条共用同一个角度** —— 主人要的是"名字和条一起歪"。
 const TITLE_ROTATION_DEG := -13.0
 ## 字形自身的斜切（tan 值）。中文竖笔多，整块已经斜了，字形再斜一次会散，故留 0。
 const TITLE_SKEW := 0.0
 const TITLE_TRACKING := 8
-## 旋转中心高度比例：略高于画面正中，上方留白多、视线自然下压到进度条。
-const TITLE_CENTER_RATIO := 0.428
+## 旋转中心高度比例。字撑爆后必须**略高于正中**：
+## 居中会让字块下沿顶到屏幕底，进度条无处安放。0.42 让标题顶部微出画（约 10px）、
+## 底部留出约 66px 给进度条。
+const TITLE_CENTER_RATIO := 0.42
 
 ## 进度条：跟着名字一起斜。
 ## 宽度是**字块宽度的比例**（不是屏宽）—— 挂屏宽时条会甩出字块右端，看着跟名字不是一体。
-const BAR_WIDTH_OF_TEXT := 0.72
-const BAR_HEIGHT := 7.0
+## 字撑爆后条不能用 0.72 长（会跟着斜出画）：0.34 且**锚字块下中**，
+## 才能在斜置后的底部空带里完整可见、不被左右边缘切掉。
+const BAR_WIDTH_OF_TEXT := 0.34
+const BAR_HEIGHT := 8.0
 ## 条相对字块底沿的下沉距离（设计基准像素）。
-const BAR_GAP := 40.0
+## 字撑爆后紧贴字沿会把条"吸"进字里，36 才让它在底部空带里独立成立。
+const BAR_GAP := 36.0
 
 ## 全屏底色：近黑，带一点冷调（棱镜深墨，但不是纯黑，保留屏幕质感）。
+## 它只是**最底一层**；上面压着色块构成层（见 `_draw_scheme`）。
 const BACKDROP_COLOR := Color(0.024, 0.032, 0.043, 1.0)
+
+# ========== 色块构成背景（黑底 + 多方向碎切） ==========
+## 主色四件套：玫红 / 绿 / 蓝 / 黑。**黑是主角**，占画面 65%；
+## 彩色只负责"闪"，不负责"铺满"。形只切几刀，剩下全是空。
+const SCHEME_PINK := Color(1.0, 0.176, 0.494, 1.0)
+const SCHEME_GREEN := Color(0.008, 0.902, 0.463, 1.0)
+const SCHEME_BLUE := Color(0.114, 0.416, 1.0, 1.0)
+const SCHEME_BLACK := Color(0.024, 0.032, 0.043, 1.0)
+
+## 面积配额（主人指定基准）：鲜艳 30% / 撞色 5%。**这是 f0 那帧的基准值**，
+## 不是所有帧的统一值 —— 主人要求"部分画面的比例可以鲜艳色彩降到 10% 以下"，
+## 所以每帧的鲜艳占比在 0%~30% 之间浮动（见 `FRAME_SPECS`，每帧实测写在注释里）。
+const VIVID_TARGET := 0.30
+const CLASH_TARGET := 0.05
+
+## 碎切形状池（设计基准 1280×720 坐标）。
+##
+## ⚠ **十块鲜艳形状 + 两块撞色形状，角度互不相同，且全部离开名字的 -13°**。
+## 上一版让切线和名字同角度，结果是"速度线"——所有线平行，读起来是冲刺感。
+## 这一版要的是**紊乱**：角度互相打断、大小悬殊、位置不构成任何韵律。
+##
+## 池化而不是每帧手写顶点：每帧用索引挑子集（见 `FRAME_SPECS`），
+## 于是"更多帧"是加一行索引，不是复制一套坐标。
+##
+## 各块单独面积（鞋带公式，围绕 1280×720 全屏，`measure_area_share()` 可复算）：
+##   0 A ~72°   9.77%      6 G ~+15°   1.35%
+##   1 B ~-32°   8.33%      7 H ~-55°   0.74%
+##   2 C ~-62°   2.66%      8 I ~+80°   0.57%
+##   3 D ~+38°   1.60%      9 J ~-38°   0.66%
+##   4 E ~-48°   1.45%     10 X ~-17°   3.82%（撞色专用，细长）
+##   5 F ~-20°   1.24%     11 Y ~+72°   1.14%（撞色专用，陡块）
+const PIECE_POOL: Array = [
+	# 0 A 陡竖切 ~72°：最大的一块，从左上压下来。**宽度是按"不能让黑失去主体地位"定的** ——
+	# 更宽的话满帧彩色会超过 30%，黑就被切成缝了（实测过 14% 版：视觉上黑反而不是主角）。
+	[Vector2(0, 0), Vector2(90, 0), Vector2(186, 720), Vector2(26, 720)],
+	# 1 B 缓横 ~-32°：横贯右下，与 A 几乎垂直
+	[Vector2(760, 520), Vector2(1280, 368), Vector2(1280, 506), Vector2(812, 676)],
+	# 2 C 陡对角 ~-62°：贴右上角切一刀
+	[Vector2(1144, 0), Vector2(1280, 0), Vector2(1280, 258), Vector2(1222, 250)],
+	# 3 D 反斜 ~+38°：方向是"反的"，专门打架
+	[Vector2(486, 720), Vector2(710, 576), Vector2(774, 642), Vector2(556, 720)],
+	# 4 E 三角 ~-48°：三角，破掉其余块的四边形节奏
+	[Vector2(430, 0), Vector2(606, 0), Vector2(430, 152)],
+	# 5 F 小块 ~-20°：孤立在右中，不让画面只靠边缘
+	[Vector2(878, 118), Vector2(1016, 92), Vector2(1034, 172), Vector2(898, 198)],
+	# 6 G 近乎水平 ~+15°：贴近底部的扁条
+	[Vector2(120, 470), Vector2(360, 520), Vector2(352, 570), Vector2(112, 520)],
+	# 7 H 陡竖 ~-55°：顶部小尖条
+	[Vector2(700, 60), Vector2(760, 44), Vector2(790, 150), Vector2(730, 166)],
+	# 8 I 近乎竖 ~+80°：底部右下的小方块
+	[Vector2(960, 600), Vector2(1010, 596), Vector2(1024, 700), Vector2(974, 704)],
+	# 9 J 斜 ~-38°：左中偏上
+	[Vector2(200, 300), Vector2(330, 270), Vector2(342, 314), Vector2(212, 344)],
+	# 10 X 撞色长条 ~-17°：横跨左中，能读成"一整刀"
+	[Vector2(268, 250), Vector2(600, 168), Vector2(624, 268), Vector2(292, 350)],
+	# 11 Y 撞色陡块 ~+72°：右下，与 X 不成平行
+	[Vector2(1046, 392), Vector2(1128, 368), Vector2(1156, 488), Vector2(1074, 512)],
+]
+
+## 八个闪切帧。每帧 = {vivid: 形状索引数组, clash: 索引数组, colors: [鲜艳色, 撞色]}。
+##
+## **比例是逐帧不同的**，不是每帧都 30%。主人明确要求"部分画面的比例可以鲜艳色彩降到 10% 以下"，
+## 并且"比例可以多一些" —— 八帧覆盖 0% / 6.66% / 8.33% / 11.79% / 12.58% / 15.37% / 19.44% / 25.05%。
+## 由小到大、大、中、小、熄灯，观感是呼吸而不是匀速闪。
+##
+## 实测占比（`measure_area_share()` 会逐帧打印，以它为准）：
+##   f0 鲜艳 25.05% + 撞色 4.96%  → 黑 70.00%   ← 最满的一帧
+##   f1 鲜艳  8.33% + 撞色 3.82%  → 黑 87.85%   ← 降到 10% 以下
+##   f2 鲜艳 15.37% + 撞色 1.14%  → 黑 83.49%
+##   f3 鲜艳  6.66% + 撞色 4.96%  → 黑 88.38%   ← 降到 10% 以下
+##   f4 鲜艳 19.44% + 撞色 3.82%  → 黑 76.74%
+##   f5 鲜艳 12.58% + 撞色 3.82%  → 黑 83.61%
+##   f6 鲜艳 11.79% + 撞色 1.14%  → 黑 87.07%
+##   f7 鲜艳  0.00% + 撞色 1.14%  → 黑 98.86%   ← 黑场
+## **黑每帧都在 70% 以上** —— 这是"主要颜色还是黑色"的可核对定义，不是形容词。
+const FRAME_SPECS: Array = [
+	{"vivid": [0, 1, 2, 3, 4, 5], "clash": [10, 11], "colors": [SCHEME_PINK, SCHEME_GREEN]},
+	{"vivid": [1], "clash": [10], "colors": [SCHEME_BLUE, SCHEME_PINK]},
+	{"vivid": [0, 2, 3, 6], "clash": [11], "colors": [SCHEME_GREEN, SCHEME_BLUE]},
+	{"vivid": [2, 4, 5, 7, 8], "clash": [10, 11], "colors": [SCHEME_PINK, SCHEME_BLUE]},
+	{"vivid": [0, 1, 6], "clash": [10], "colors": [SCHEME_BLUE, SCHEME_GREEN]},
+	{"vivid": [1, 3, 5, 7, 9], "clash": [10], "colors": [SCHEME_GREEN, SCHEME_PINK]},
+	{"vivid": [0, 4, 8], "clash": [11], "colors": [SCHEME_PINK, SCHEME_GREEN]},
+	{"vivid": [], "clash": [11], "colors": [null, SCHEME_BLUE]},
+]
+
+## 单帧时长（秒）。主人指定 **0.1–0.2 s**，取 0.15。
+##
+## ⚠ 闪切已与律动拍**解耦**：律动仍是 138 BPM（每拍 0.435 s）驱动字的抖动，
+## 背景换成 0.15 s 一帧。两者不再锁同一个时钟 —— 这是刻意的：
+## 主人先要"跟着音乐切"，后又明确要"0.1–0.2 s、帧数更多"，
+## 而 138 BPM 的一拍就是 0.435 s，物理上不可能又快又锁拍。
+## 现在的观感是"字在按鼓点震、背景在更快的频率上闪"，两套节奏叠在一起更躁。
+const FLASH_SECONDS := 0.15
+## 帧数。八帧一轮 = 1.2 s。
+const FRAME_COUNT := 8
+
+## 每帧的镜像组合 `[flip_x, flip_y]`。
+##
+## ⚠ **形状不换、落点全换**：镜像不改变任何碎片的面积，所以每帧的比例恒定成立；
+## 但同一组碎片的落点全变了，观感是"每次切法都不同"。
+## 真去手写八套顶点，迟早有一套面积对不上，而且改起来是八倍工作量。
+const FRAME_FLIPS: Array = [
+	[false, false], [true, false], [false, true], [true, true],
+	[false, false], [true, false], [false, true], [true, true],
+]
 
 # ========== 赛博色散 ==========
 ## 品红 / 青 双色。经典 RGB split 的 R 与 B 通道替身。
 const CHROMA_PINK := Color(1.0, 0.239, 0.616, 1.0)
 const CHROMA_CYAN := Color(0.133, 0.902, 1.0, 1.0)
 ## 色散偏移（设计基准像素）。粉走左上、青走右下，形成对角分离。
-const CHROMA_OFFSET := 4.2
+const CHROMA_OFFSET := 3.6
 ## 色散层的 base alpha：太高会盖住白主体，太低看不见。
 const CHROMA_ALPHA := 0.88
 
-## 边缘故障带参数。
-const EDGE_BAND_PX := 54.0
-const EDGE_BAND_ALPHA := 0.17
-const EDGE_BAND_STEPS := 16
-## 故障碎片刷新间隔（秒）；每次刷新自带随机数量/位置，避免机械节拍。
-const GLITCH_INTERVAL := 0.46
-const GLITCH_FRAG_MIN := 10
-const GLITCH_FRAG_MAX := 18
+## 名字的深色描边宽度（设计基准像素）。
+## 背景改成多色色块后，白字压亮色块会糊 —— 这层描边是可读性刚需，不是装饰。
+## 取值：字高 260px 时 5px ≈ 2% 字高，够把轮廓抠出来又不至于变成"粗边字"。
+const OUTLINE_PX := 5.0
+## 描边色：比黑底更深的近黑（不是纯黑 —— 纯黑在多色背景上像"挖洞"）。
+const OUTLINE_COLOR := Color(0.012, 0.016, 0.022, 1.0)
+
+# ========== 朋克律动 ==========
+## 名字不是静止的：它跟着一个**虚拟鼓点**在抖。
+## 三层叠出来的"音乐颤抖"，从细到粗：
+##   1. 常驻微颤 —— 设备通电的嗡鸣，恒定小幅、频率高，是底噪不是主角；
+##   2. 节拍冲击 —— 每拍一次，方向按拍重新掷，幅度随拍内衰减，像被人一拳一拳顶；
+##   3. 强拍重音 —— 每小节第一拍额外一次横向错位，色散同时炸开。
+## 三层必须都故意错开频率（别用 2 的倍数），否则会合成一条规律的波浪，立刻变成"呼吸"
+## 而不是"颤动"。这是这类效果最容易翻车的地方。
+##
+## 节拍速度 138 BPM ≈ 每拍 0.435 s：朋克/工业电子常见的中快速度，
+## 既不会慢到像心跳，也不会快成闪烁。
+const BEAT_BPM := 138.0
+const BEAT_SECONDS := 60.0 / BEAT_BPM
+## 每小节拍数。强拍落在每小节第一拍。
+const BEATS_PER_BAR := 4
+## 拍内衰减指数：越大越"干脆"（拍头砸完立刻收），越小越拖尾。
+const BEAT_DECAY := 2.8
+
+## 入场冲击：从 1.09 倍缩到 1.0，砸进正位。开场第一帧就在强拍上。
+const INTRO_SECONDS := 0.30
+const INTRO_SCALE := 1.09
+
+## 常驻微颤（设计基准像素 / 度）
+const TREMBLE_PX := 0.5
+const TREMBLE_DEG := 0.10
+## 节拍抖动
+const SHAKE_PX := 2.4
+const SHAKE_DEG := 0.45
+## 强拍额外冲击
+const ACCENT_PX := 4.2
+const ACCENT_DEG := 0.75
+## 每拍鼓一下的缩放脉动（0.016 = 1.6%）
+const PULSE_SCALE := 0.016
+## 色散在节拍 / 强拍上的附加扩散量
+const CHROMA_BEAT_PX := 2.2
+const CHROMA_ACCENT_PX := 2.8
 
 var _elapsed := 0.0
+## 律动专用时钟。**不能复用 `_elapsed`** —— 那个在 `_advanced` 之后就不再累加
+## （它管的是"最短展示时长"），而动画要一直跑到节点被移除。
+var _fx_time := 0.0
 var _advanced := false
 var _transition_requested := false
 var _failed := false
@@ -77,7 +233,7 @@ var _progress: ProgressBar
 ## 只在启动失败时才显示 —— 正常路径上它是隐藏的，不占版面。
 var _status_label: Label
 var _title_art: Control
-var _edge_art: Control
+var _scheme_art: Control
 
 var _load_requested := false
 var _load_done := false
@@ -86,19 +242,11 @@ var _load_progress := 0.0
 var _target_scene: PackedScene
 var _title_font_cache: FontVariation
 
-# 故障带状态
-var _rng := RandomNumberGenerator.new()
-var _glitch_timer := 0.0
-var _glitch_frags: Array = []
-var _scan_phase := 0.0
-
 
 func _ready() -> void:
 	layer = 128
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_rng.seed = 0x5E115702
 	_build_ui()
-	_refresh_glitch()
 	if _should_skip_delay():
 		_enter_game()
 		return
@@ -106,7 +254,14 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_animate_fx(delta)
+	# 律动时钟无条件推进 + 无条件重绘：动画必须在 `_advanced` 之后依然活着，
+	# 否则加载卡在最后一段时字会突然僵住，比不做动画更难看。
+	_fx_time += delta
+	if _title_art != null:
+		_title_art.queue_redraw()
+	# 背景闪切跟着同一个时钟走：每拍换一套配色，换色点和鼓点严格对齐。
+	if _scheme_art != null:
+		_scheme_art.queue_redraw()
 	if _advanced or _failed:
 		return
 	_elapsed += delta
@@ -194,50 +349,181 @@ func _update_ui() -> void:
 	var ratio := maxf(_load_progress, time_ratio)
 	if _progress != null:
 		_progress.value = ratio * 100.0
-	# 视觉条是自绘的，不吃 ProgressBar 的样式，所以数值变化后必须手动重绘。
-	if _title_art != null:
-		_title_art.queue_redraw()
 
 
-# ========== 故障带动画 ==========
+# ========== 律动 ==========
 
-func _animate_fx(delta: float) -> void:
-	_scan_phase = fmod(_scan_phase + delta * 0.22, 1.0)
-	_glitch_timer += delta
-	if _glitch_timer >= GLITCH_INTERVAL:
-		_glitch_timer = 0.0
-		_refresh_glitch()
-	if _edge_art != null:
-		_edge_art.queue_redraw()
+## 拍内脉冲：拍头 1.0，按 BEAT_DECAY 衰减到拍尾 0。
+func _beat_pulse() -> float:
+	var phase := fmod(_fx_time, BEAT_SECONDS) / BEAT_SECONDS
+	return pow(1.0 - phase, BEAT_DECAY)
 
 
-## 重新掷一批故障碎片。RNG 用固定 seed，所以每次运行图案一致、可复现，
-## 不会出现"这次特别花"的不稳定观感。
-func _refresh_glitch() -> void:
-	_glitch_frags.clear()
-	var count := _rng.randi_range(GLITCH_FRAG_MIN, GLITCH_FRAG_MAX)
-	for i in count:
-		var side := _rng.randi_range(0, 3)
-		var pink := _rng.randf() < 0.5
-		var color := CHROMA_PINK if pink else CHROMA_CYAN
-		# 四分之三给"细长撕裂"，四分之一给"厚短线"，制造粗细对比。
-		var thin := _rng.randf() < 0.75
-		var thickness := _rng.randf_range(1.0, 2.5) if thin else _rng.randf_range(3.0, 7.0)
-		var length := _rng.randf_range(46.0, 280.0) if thin else _rng.randf_range(18.0, 70.0)
-		var inset := _rng.randf_range(0.0, EDGE_BAND_PX)
-		var t := _rng.randf_range(0.04, 0.96)
-		var alpha := _rng.randf_range(0.30, 0.85)
-		var rect := Rect2()
-		match side:
-			0:  # 左
-				rect = Rect2(inset, t * DESIGN_SIZE.y, thickness, length)
-			1:  # 右
-				rect = Rect2(DESIGN_SIZE.x - inset - thickness, t * DESIGN_SIZE.y, thickness, length)
-			2:  # 上
-				rect = Rect2(t * DESIGN_SIZE.x, inset, length, thickness)
-			_:  # 下
-				rect = Rect2(t * DESIGN_SIZE.x, DESIGN_SIZE.y - inset - thickness, length, thickness)
-		_glitch_frags.append({"rect": rect, "color": color, "alpha": alpha})
+## 强拍脉冲：每小节第一拍才有值，其余拍返回 0。
+func _accent_pulse() -> float:
+	var beat_index := int(floor(_fx_time / BEAT_SECONDS))
+	if beat_index % BEATS_PER_BAR != 0:
+		return 0.0
+	return _beat_pulse()
+
+
+## 确定性哈希 → [-1, 1]。
+## 用它而不是 `RandomNumberGenerator`：抖动方向要"每拍换一次、拍内保持不变"。
+## 每帧真随机会让字变成一坨噪点闪烁，而不是"在震"——这两者的观感差别极大。
+static func _hash_unit(n: int) -> float:
+	var x := sin(float(n) * 12.9898 + 78.233) * 43758.5453
+	return (x - floor(x)) * 2.0 - 1.0
+
+
+## 本拍的方向种子。同一拍内所有帧拿到同一个值，跨拍才换。
+func _beat_seed() -> int:
+	return int(floor(_fx_time / BEAT_SECONDS))
+
+
+## 名字这一帧的完整律动姿态。集中在一处算，`_draw_title` 只负责用。
+func _rhythm_pose(s: float) -> Dictionary:
+	var pulse := _beat_pulse()
+	var accent := _accent_pulse()
+	# 衰减再平方一次：让"砸下去"的瞬间更尖，收尾更软。
+	var hit := pulse * pulse
+	var seed := _beat_seed()
+
+	# 三个不互约的高频正弦 = 非周期微颤（设备嗡鸣感）。
+	var fine := sin(_fx_time * 73.0) + sin(_fx_time * 113.0) * 0.6
+	var fine_rot := sin(_fx_time * 97.0) * 0.7 + sin(_fx_time * 149.0) * 0.3
+
+	# 位移：强拍以横向为主（像音波从侧面顶一下），节拍拍以纵向为主。
+	var amp_x := SHAKE_PX * hit + ACCENT_PX * accent
+	var amp_y := SHAKE_PX * hit * 0.55 + ACCENT_PX * accent * 0.35
+	var offset := Vector2(
+		_hash_unit(seed * 7 + 1) * amp_x + fine * TREMBLE_PX,
+		_hash_unit(seed * 13 + 5) * amp_y + sin(_fx_time * 131.0) * TREMBLE_PX
+	) * s
+
+	var deg := TITLE_ROTATION_DEG
+	deg += _hash_unit(seed * 29 + 11) * (SHAKE_DEG * hit + ACCENT_DEG * accent)
+	deg += fine_rot * TREMBLE_DEG
+
+	# 入场：从 1.09 砸回 1.0。
+	var intro := clampf(_fx_time / INTRO_SECONDS, 0.0, 1.0)
+	var intro_ease := 1.0 - pow(1.0 - intro, 3.0)
+	var scale := lerpf(INTRO_SCALE, 1.0, intro_ease)
+	# 每拍鼓一下（强拍鼓得更多）。
+	scale *= 1.0 + PULSE_SCALE * pulse + 0.012 * accent
+
+	# 色散跟着节拍炸开：平时 4.2px，节拍 +2.8，强拍再 +3.6。
+	var chroma := CHROMA_OFFSET + CHROMA_BEAT_PX * pulse + CHROMA_ACCENT_PX * accent
+
+	return {
+		"offset": offset,
+		"degrees": deg,
+		"scale": scale,
+		"chroma": chroma * s,
+		"accent": accent,
+	}
+
+
+# ========== 色块构成背景 ==========
+
+## 当前帧号。0.15 s 一帧，八帧一轮（1.2 s）。
+func _frame_index() -> int:
+	return int(floor(_fx_time / FLASH_SECONDS)) % FRAME_COUNT
+
+
+## 把碎片顶点按镜像组合变换一次。
+func _mirror_points(points: Array, flip_x: bool, flip_y: bool) -> PackedVector2Array:
+	var out := PackedVector2Array()
+	out.resize(points.size())
+	for i in points.size():
+		var p: Vector2 = points[i]
+		out[i] = Vector2(
+			DESIGN_SIZE.x - p.x if flip_x else p.x,
+			DESIGN_SIZE.y - p.y if flip_y else p.y
+		)
+	return out
+
+
+## 鞋带公式算多边形面积。返回**占全屏比例**（0~1）。
+## 只在 `measure_area_share()` 里用来核对配额，运行时不调用。
+static func _polygon_share(points: PackedVector2Array) -> float:
+	if points.size() < 3:
+		return 0.0
+	var acc := 0.0
+	var n := points.size()
+	for i in n:
+		var a := points[i]
+		var b := points[(i + 1) % n]
+		acc += a.x * b.y - b.x * a.y
+	return absf(acc) * 0.5 / (DESIGN_SIZE.x * DESIGN_SIZE.y)
+
+
+## 面积自检：返回每帧的 {index, vivid, clash, black}。
+##
+## 这是"注释里的百分比到底真不真"的唯一凭据 —— 顶点或索引表被改动后，
+## 探针会在这里立刻暴露配额漂移，而不是等肉眼发现"这帧怎么这么满"。
+## 镜像不改变面积，所以这里只按原样算一次即可覆盖该帧所有镜像。
+func measure_area_share() -> Array:
+	var frames: Array = []
+	for i in FRAME_SPECS.size():
+		var spec: Dictionary = FRAME_SPECS[i]
+		var vivid := 0.0
+		var clash := 0.0
+		for idx in spec["vivid"]:
+			vivid += _polygon_share(_mirror_points(PIECE_POOL[idx], false, false))
+		for idx in spec["clash"]:
+			clash += _polygon_share(_mirror_points(PIECE_POOL[idx], false, false))
+		frames.append({
+			"index": i,
+			"vivid": vivid,
+			"clash": clash,
+			"black": maxf(0.0, 1.0 - vivid - clash),
+		})
+	return frames
+
+
+## 画色块构成背景。
+##
+## 只有一件事：把当帧挑出的几块**方向互相打架**的碎片切到画布上，其余全留黑。
+## 不铺满、不加边框、不做渐变 —— 黑色是主体，彩色是刀口。
+func _draw_scheme(art: Control) -> void:
+	var box := art.size
+	var s := _ui_scale(box)
+	if s <= 0.0:
+		return
+	# 统一缩放的画布：用 transform 把设计基准 1280×720 映射到实际尺寸，
+	# 之后的坐标全部按基准写，不再逐处乘 s。
+	art.draw_set_transform(Vector2.ZERO, 0.0, Vector2(s, s))
+
+	var index := _frame_index()
+	var spec: Dictionary = FRAME_SPECS[index]
+	var flip: Array = FRAME_FLIPS[index]
+	var colors: Array = spec["colors"]
+	var vivid_color = colors[0]
+	var clash_color: Color = colors[1]
+
+	# 先后顺序有讲究：鲜艳色先铺、撞色后压。
+	# 反过来的话，撞色会被鲜艳色整块盖掉 —— 撞色配额直接归零。
+	if vivid_color != null:
+		for piece_index in spec["vivid"]:
+			art.draw_colored_polygon(
+				_mirror_points(PIECE_POOL[piece_index], flip[0], flip[1]), vivid_color
+			)
+	for piece_index in spec["clash"]:
+		art.draw_colored_polygon(
+			_mirror_points(PIECE_POOL[piece_index], flip[0], flip[1]), clash_color
+		)
+
+	# 强拍闪白：整屏提亮 4% 再回落。
+	# 黑色占主体后不能给太多 —— 白闪过高会把黑场冲成灰，黑就不黑了。
+	var accent := _accent_pulse()
+	if accent > 0.01:
+		art.draw_rect(
+			Rect2(Vector2.ZERO, DESIGN_SIZE),
+			Color(1.0, 1.0, 1.0, 0.04 * accent),
+			true
+		)
+
+	art.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
 # ========== 构建 ==========
@@ -256,14 +542,15 @@ func _build_ui() -> void:
 	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
 	root.add_child(backdrop)
 
-	# 边缘故障带压在字之下：它属于"屏幕本身的噪声"，不该盖住内容。
-	_edge_art = Control.new()
-	_edge_art.name = "EdgeFx"
-	_edge_art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_edge_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_edge_art.draw.connect(_draw_edge_fx.bind(_edge_art))
-	_edge_art.resized.connect(_edge_art.queue_redraw)
-	root.add_child(_edge_art)
+	# 色块构成层：压在最底的黑底之上、名字之下。
+	# 它自带全屏填充，所以必须排在 Backdrop 之后，否则会被黑底盖掉。
+	_scheme_art = Control.new()
+	_scheme_art.name = "SchemeArt"
+	_scheme_art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_scheme_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_scheme_art.draw.connect(_draw_scheme.bind(_scheme_art))
+	_scheme_art.resized.connect(_scheme_art.queue_redraw)
+	root.add_child(_scheme_art)
 
 	# 名字 + 进度条画在同一张自绘层里：它们共用一套旋转坐标系，
 	# 分成两个节点反而要在两处重复算同一个变换，迟早对不齐。
@@ -349,8 +636,10 @@ func _ui_scale(box: Vector2) -> float:
 ##
 ## ⚠ 斜着摆用 `draw_set_transform(中心, 角度, 1)` **绕字块中心旋转**，不是节点 `rotation`：
 ##   节点旋转会把子控件排版盒一起带走；绕中心旋转天然保持居中，不用补任何位移。
-## ⚠ 进度条在同一旋转坐标系里画，所以它跟名字**严丝合缝地同角度**。
-##   条在局部坐标里仍是水平矩形 —— 它是被坐标系带歪的，不是自己斜的。
+## ⚠ **字抖，条不抖。** 两段各用一套 transform：
+##   名字吃律动姿态（位移/角度/缩放全带抖动），进度条用干净坐标系。
+##   条是读进度的功能件 —— 跟着鼓点跳会让读数发飘，还显得廉价。
+##   这不是妥协：动感归表现，准确归功能，分得越清两者都成立。
 ## ⚠ 画完必须复位 transform，否则后续绘制会跟着歪。
 func _draw_title(art: Control) -> void:
 	var font := _title_font()
@@ -370,40 +659,79 @@ func _draw_title(art: Control) -> void:
 	var origin := Vector2(-text_size.x * 0.5, (ascent - descent) * 0.5)
 	var block_bottom := (ascent + descent) * 0.5
 
-	art.draw_set_transform(center, deg_to_rad(TITLE_ROTATION_DEG), Vector2.ONE)
+	var pose := _rhythm_pose(s)
+	var shake: Vector2 = pose["offset"]
+	var title_scale: float = pose["scale"]
 
-	# ---- 名字：粉 / 青 色散 + 白色主体 ----
+	# ---- 名字：律动坐标系（位移 + 抖动角 + 脉动缩放）----
+	# 抖动位移加在**屏幕坐标**上（不是旋转后的局部坐标）：横向抖动就该是屏幕横向，
+	# 不然斜了 13° 之后"横抖"会变成斜向抖，物理上不对。
+	art.draw_set_transform(
+		center + shake,
+		deg_to_rad(float(pose["degrees"])),
+		Vector2(title_scale, title_scale)
+	)
+
+	var offset: float = pose["chroma"]
+	# 强拍时色散方向翻转一次，制造"信号被打断又接回"的错觉。
+	var accent: float = pose["accent"]
+	var flip := -1.0 if accent > 0.45 else 1.0
+
+	# ---- 底层：近黑描边 ----
+	# ⚠ 背景现在是玫红/绿/蓝色块，白字压在亮色块上（尤其绿色 #02E676）会直接糊掉。
+	# 所以必须先刷一层**比黑底更深的描边**：8 个方向各偏一点，
+	# 把字的轮廓从任意底色上"抠"出来。这一层不是装饰，是背景变多色后的可读性刚需。
+	var outline_px := OUTLINE_PX * s * title_scale
+	var outline_color := OUTLINE_COLOR
+	for dir in [
+		Vector2(-1.0, -1.0), Vector2(0.0, -1.0), Vector2(1.0, -1.0),
+		Vector2(-1.0, 0.0), Vector2(1.0, 0.0),
+		Vector2(-1.0, 1.0), Vector2(0.0, 1.0), Vector2(1.0, 1.0),
+	]:
+		art.draw_string(
+			font, origin + dir * outline_px, TITLE_TEXT,
+			HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, outline_color
+		)
+
+	# ---- 中层：粉 / 青 色散 ----
 	# 粉走左上、青走右下；白主体居中压在两者之间。
-	var offset := CHROMA_OFFSET * s
 	art.draw_string(
-		font, origin + Vector2(-offset, -offset * 0.42), TITLE_TEXT,
+		font, origin + Vector2(-offset, -offset * 0.42) * flip, TITLE_TEXT,
 		HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
 		Color(CHROMA_PINK.r, CHROMA_PINK.g, CHROMA_PINK.b, CHROMA_ALPHA)
 	)
 	art.draw_string(
-		font, origin + Vector2(offset, offset * 0.42), TITLE_TEXT,
+		font, origin + Vector2(offset, offset * 0.42) * flip, TITLE_TEXT,
 		HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
 		Color(CHROMA_CYAN.r, CHROMA_CYAN.g, CHROMA_CYAN.b, CHROMA_ALPHA)
 	)
+
+	# ---- 顶层：白主体 ----
 	art.draw_string(
 		font, origin, TITLE_TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size,
 		UIPalette.PRISM_TEXT
 	)
 
-	# ---- 进度条：同一坐标系，同角度 ----
-	# 左端与字块左缘对齐（而不是居中）：条是名字的"底座"，对齐才像一体。
+	# ---- 进度条：干净坐标系，只保留基础旋转 ----
+	art.draw_set_transform(center, deg_to_rad(TITLE_ROTATION_DEG), Vector2.ONE)
+
 	var bar_w := text_size.x * BAR_WIDTH_OF_TEXT
 	var bar_h := BAR_HEIGHT * s
 	var bar_top := block_bottom + BAR_GAP * s
-	var bar_left := origin.x
+	var bar_left := -bar_w * 0.5
 	var ratio := 0.0
 	if _progress != null and _progress.max_value > 0.0:
 		ratio = clampf(_progress.value / _progress.max_value, 0.0, 1.0)
 
-	# 空槽：极淡底 + 1px 白描边（棱镜语义件）。底要能看见，否则读不出"还剩多少"。
-	art.draw_rect(Rect2(bar_left, bar_top, bar_w, bar_h), Color(1.0, 1.0, 1.0, 0.10), true)
+	# 空槽：**深色衬底** + 白描边。
+	# ⚠ 原来是"10% 白底"，那是给纯黑背景设计的。现在背景是亮玫红/亮绿/亮蓝，
+	# 半透明白底会直接消失 —— 读不出"还剩多少"，进度条就废了。
+	# 所以改成不透明近黑衬底 + 加粗到 2px 的白边：深底压住任何亮色块，白边再把它框出来。
+	var bar_backing := OUTLINE_COLOR
+	bar_backing.a = 0.88
+	art.draw_rect(Rect2(bar_left, bar_top, bar_w, bar_h), bar_backing, true)
 	art.draw_rect(
-		Rect2(bar_left, bar_top, bar_w, bar_h), Color(1.0, 1.0, 1.0, 0.34), false, 1.0 * s
+		Rect2(bar_left, bar_top, bar_w, bar_h), Color(1.0, 1.0, 1.0, 0.72), false, 2.0 * s
 	)
 
 	var fill_w := bar_w * ratio
@@ -427,69 +755,3 @@ func _draw_title(art: Control) -> void:
 		)
 
 	art.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-
-
-# ========== 边缘故障带 ==========
-
-## 屏幕四周的赛博干扰。分三层：
-##   1. 四边粉/青晕带：逐条细线叠出向内衰减的"渗色"，左粉右青、上下混色。
-##   2. 随机故障碎片：拉扯的撕裂条，每 0.46s 重掷一批。
-##   3. 下行扫描亮带：全屏 CRT 感，用 sin 在首尾淡出。
-##
-## 三层都压在内容之下，alpha 合计很低 —— 干扰是"屏在抖"，不是"画面糊了"。
-func _draw_edge_fx(art: Control) -> void:
-	var box := art.size
-	var s := _ui_scale(box)
-	if s <= 0.0:
-		return
-	var band := EDGE_BAND_PX * s
-	var step := band / float(EDGE_BAND_STEPS)
-
-	# 1) 边缘晕带。alpha 随内进距离二次衰减，边缘最浓、往里迅速散掉。
-	for i in EDGE_BAND_STEPS:
-		var t := float(i) / float(EDGE_BAND_STEPS)
-		var a := EDGE_BAND_ALPHA * (1.0 - t) * (1.0 - t)
-		var d := t * band
-		# 左（粉）
-		art.draw_rect(
-			Rect2(d, 0.0, step, box.y),
-			Color(CHROMA_PINK.r, CHROMA_PINK.g, CHROMA_PINK.b, a), true
-		)
-		# 右（青）
-		art.draw_rect(
-			Rect2(box.x - d - step, 0.0, step, box.y),
-			Color(CHROMA_CYAN.r, CHROMA_CYAN.g, CHROMA_CYAN.b, a), true
-		)
-		# 上（青，弱一档）
-		art.draw_rect(
-			Rect2(0.0, d, box.x, step),
-			Color(CHROMA_CYAN.r, CHROMA_CYAN.g, CHROMA_CYAN.b, a * 0.55), true
-		)
-		# 下（粉，弱一档）
-		art.draw_rect(
-			Rect2(0.0, box.y - d - step, box.x, step),
-			Color(CHROMA_PINK.r, CHROMA_PINK.g, CHROMA_PINK.b, a * 0.55), true
-		)
-
-	# 2) 故障碎片
-	for frag in _glitch_frags:
-		var r: Rect2 = frag["rect"]
-		var c: Color = frag["color"]
-		var a: float = frag["alpha"]
-		art.draw_rect(
-			Rect2(r.position.x * s, r.position.y * s, r.size.x * s, r.size.y * s),
-			Color(c.r, c.g, c.b, a), true
-		)
-
-	# 3) 下行扫描亮带
-	var scan_y := _scan_phase * box.y
-	var scan_h := 3.0 * s
-	var fade := sin(_scan_phase * PI)
-	art.draw_rect(
-		Rect2(0.0, scan_y, box.x, scan_h),
-		Color(CHROMA_CYAN.r, CHROMA_CYAN.g, CHROMA_CYAN.b, 0.10 * fade), true
-	)
-	art.draw_rect(
-		Rect2(0.0, scan_y + scan_h, box.x, scan_h * 2.0),
-		Color(CHROMA_PINK.r, CHROMA_PINK.g, CHROMA_PINK.b, 0.045 * fade), true
-	)

@@ -24,28 +24,70 @@ const INTRO_FACE_FILL_ENERGY := 2.0
 const INTRO_FACE_FILL_RANGE_M := 2.6
 const PRESENTATION_SOUTH_DIRECTION := Vector3(0.0, 0.0, 1.0)
 
-## 开场页展示灯的冷白色，光柱与地面光斑都取同一个值。
-## 三处必须同色，否则会看出「光柱是一层、角色是另一层」。
-const INTRO_LIGHT_COLOR := Color(0.82, 0.91, 1.0)
+## 舞台灯颜色 —— 与靶场（TrainingRangeEnvironment3D._build_lighting）的暖光灯**同值**。
+## 靶场那盏是 WastelandLight3D 的暖光档：Color(1.0, 0.58, 0.24)，能量 2.5、射程 8.5。
+## 取这个值不是"随便一个橙色"：冷白叠加在冷蓝暗底上必然泛灰，
+## 而靶场这盏的橙是暖色偏红，叠加后会明确读成"灯光"而不是"灰雾"。
+const STAGE_LIGHT_WARM_COLOR := Color(1.0, 0.58, 0.24)
+
+## 地面光斑的**贴片颜色**，刻意比舞台暖橙更亮。
+##
+## 为什么必须单独一个值：光斑材质是 unshaded，屏幕上的颜色几乎就等于 albedo 本身。
+## 直接用 (1.0, 0.58, 0.24) 渲出来是 sRGB 约 (140, 87, 44) —— 一块暗棕橙，
+## 看着就是"淡"。提亮只能改这个色值，改不了照明。
+const STAGE_POOL_COLOR := Color(1.0, 0.82, 0.56)
+
+## 展示用主灯颜色：**也取舞台暖色**，而不是原来的冷白。
+## 原来冷白照角色、暖橙画光柱，结果是角色偏灰、只有脚下是暖的，冷暖割裂 ——
+## 「光打在角色身上」在观感上不成立。改成同一色系后角色才真正站在那束光里。
+## 但不用 1.0/0.58/0.24 那么纯的橙（那是发光体色，直接当照明会把角色染成橘色），
+## 而是同色相提亮：保留橙的暖调，同时把 G 拉高让肤色和布料不发暗。
+const INTRO_LIGHT_COLOR := Color(1.0, 0.80, 0.62)
 
 ## —— 舞台光柱与地面光斑 ——
 ## 已有的 SpotLight3D 把 light_cull_mask 限死在 PLAYER 层（见 _install_intro_spotlight），
 ## 地板完全不参与受光，所以地面**永远不会**出现光斑，也没有可看见的光柱。
-## 这里补的两件都是「画出来的」，不新增任何 Light3D，因此不会污染基地既有布光：
-##   1) StageBeam 圆锥：叠加混合、自上而下渐隐，补出可见光柱
-##   2) StagePool 圆盘：叠加混合的径向渐变，补出地面光斑
-## 与 WastelandLight3D 的 LightPool 同一套做法（unshaded + 叠加 + 不投影）。
+## 这里补的两件都是「画出来的」，不新增任何 Light3D，因此不会污染基地既有布光。
 ##
-## 尺寸口径：角色高 1.5m，光斑半径取 1.55m ⇒ 直径 3.1m ≈ 2× 角色高。
-## 光柱底半径取同一个 1.55m，锥面正好收在光斑边缘，两者不会错位。
-const STAGE_POOL_RADIUS_M := 1.40
+## 两者刻意用**不同**的材质类型，因为它们要解决的事不一样：
+##   · StageBeam 走自定义 shader 的 blend_add：需要体积感、双向渐隐，加色混合才像光。
+##   · StagePool 照抄 WastelandLight3D._build_light_pool()：StandardMaterial3D
+##     + unshaded + emission 0.72 + alpha 0.18。这是靶场地面光斑的**原始做法**，
+##     换任何别的写法都会和靶场对不上。
+##
+## 尺寸口径：角色高 1.5m，光斑半径 1.40m ⇒ 直径 2.8m ≈ 1.9× 角色高。
+## 光柱底半径取同一个值，锥面正好收在光斑边缘，两者不会错位。
+## 地面光斑半径。光斑范围要够大才不会"看着淡" —— 之前只加亮度，中心已经很亮（峰值 113）
+## 但范围窄、边缘衰减快，整体感受仍是淡。扩大范围比继续提亮有效，也不会让中心过曝。
+const STAGE_POOL_RADIUS_M := 1.75
+## 光柱底半径**与光斑分开**。共用同一个值会把锥体一起撑宽 —— 锥底一旦到 2.3m，
+## 5.2m 高的锥在近景里会糊满整个上半屏，变成一片棕色渐变而不是一束光。
+const STAGE_BEAM_BOTTOM_RADIUS_M := 1.45
 ## 光斑抬离地面 2cm：既避免与地板 Z-fighting，又不会在脚下穿帮。
 const STAGE_POOL_LIFT_M := 0.02
 ## 光柱顶端收到 9cm，锥顶正好落在展示灯位置（高 5.2m），不会戳穿天花板。
 const STAGE_BEAM_APEX_RADIUS_M := 0.09
-## 强度刻意压低：这是「看得见的光」，不是照明。拉高会盖掉角色自身的布光。
-const STAGE_BEAM_STRENGTH := 0.13
-const STAGE_POOL_STRENGTH := 0.42
+## 光柱浓度。单层锥，不做多层叠加 —— 叠层会在圆柱分段处露出弧形接缝。
+const STAGE_BEAM_STRENGTH := 0.230
+## 光柱是否绘制。
+## ⚠️ 靶场那套灯**只有地面光斑、没有光柱**（见 WastelandLight3D._build_light_pool）。
+## 要跟靶场完全一致就置 false；要保留「舞台灯打下来」的锥形观感就保持 true。
+const STAGE_BEAM_ENABLED := true
+## 地面光斑 alpha。接近不透明：光斑的颜色几乎完全由 STAGE_POOL_COLOR 决定，
+## 底层地砖只透出 4%，这样"亮"才不会被暗地板拉下去。
+const STAGE_POOL_ALPHA := 0.96
+## 舞台主光：真正照亮地砖的那盏 OmniLight3D（对应靶场 WastelandLight3D 的灯珠）。
+## 射程比靶场 8.5m 收窄到 3.6m —— 这里是近景聚光，不是房间照明。
+const STAGE_KEY_LIGHT_ENERGY := 13.0
+const STAGE_KEY_LIGHT_RANGE_M := 5.0
+## 灯的高度。放低到 1.1m 才有「从下往上打亮地面和小腿」的聚光感；
+## 放高会变成一片均匀的环境光，舞台感全无。
+const STAGE_KEY_LIGHT_HEIGHT_M := 2.15
+
+## 收灯动画时长。要"很快但看得出来"——0.3 秒左右刚好在读成"收束"而不是"闪掉"。
+const STAGE_DISMISS_DURATION_S := 0.30
+## 收缩终点的缩放。不用 0：完全归零的那一帧会有跳变，留 4% 再释放更顺。
+const STAGE_DISMISS_END_SCALE := 0.04
 
 ## 光柱：沿局部高度做双向渐隐（顶端大面积消失，看起来像从黑暗里打下来），
 ## 中心给出亮芯、边缘削软 —— 只做均匀叠加会变成一块「灰色塑料片」，
@@ -53,13 +95,13 @@ const STAGE_POOL_STRENGTH := 0.42
 ## blend_add 是这套假体积光的核心：它只「加亮」背景，不需要任何真实光源照亮地板。
 const STAGE_BEAM_SHADER_CODE := """
 shader_type spatial;
-render_mode blend_add, unshaded, cull_back, depth_draw_never, shadows_disabled;
+render_mode blend_add, unshaded, cull_disabled, depth_draw_never, shadows_disabled;
 
-uniform vec4 beam_color : source_color = vec4(0.82, 0.91, 1.0, 1.0);
-uniform float beam_strength : hint_range(0.0, 1.0) = 0.14;
+uniform vec4 beam_color : source_color = vec4(1.0, 0.58, 0.24, 1.0);
+uniform float beam_strength : hint_range(0.0, 1.0) = 0.20;
 uniform float beam_height = 5.2;
-uniform float top_fade : hint_range(0.0, 1.0) = 0.55;
-uniform float bottom_fade : hint_range(0.0, 0.5) = 0.22;
+uniform float top_fade : hint_range(0.0, 1.0) = 0.18;
+uniform float bottom_fade : hint_range(0.0, 1.0) = 0.78;
 
 varying float height_ratio;
 
@@ -68,37 +110,55 @@ void vertex() {
 }
 
 void fragment() {
-	// 上下都要化掉：底部硬切会在地面留下一条直边，整根光柱看着像纸片。
-	// 底部提前消散，由地面光斑接手"被照亮"的观感。
+	// 垂直强度：下淡上亮。
+	// bottom_fade 覆盖到 55% 高度 —— 角色高 1.5m、光柱 5.2m，人物完全落在这一段里，
+	// 所以人物所在区域是渐暗的，光柱不会在角色身上糊成一块。
+	// top_fade 只留 18%，顶端柔和收尾但不提前衰减，视觉重心因此上移。
 	float vertical = smoothstep(0.0, bottom_fade, height_ratio)
 		* (1.0 - smoothstep(1.0 - top_fade, 1.0, height_ratio));
-	float rim = 1.0 - abs(dot(normalize(NORMAL), normalize(VIEW)));
-	// 边缘压到 15%：锥面是真实网格，正对视线处若不衰减，轮廓会画出一条硬边，
-	// 看起来像半透明塑料壳而不是光。
-	float edge = 1.0 - smoothstep(0.35, 1.0, rim) * 0.85;
+	// 伪体积散射：越靠中心越亮。用视线角做幂次衰减，
+	// 掠射（画面上锥体的左右两侧）收得比正视更快，轮廓因此自然化掉。
+	float cosine = clamp(abs(dot(normalize(NORMAL), normalize(VIEW))), 0.0, 1.0);
+	float core = pow(cosine, 1.6);
 	ALBEDO = beam_color.rgb;
-	ALPHA = clamp(vertical * edge * beam_strength, 0.0, 1.0);
+	ALPHA = clamp(vertical * core * beam_strength, 0.0, 1.0);
 }
 """
 
-## 地面光斑：径向渐变，中心实、边缘完全化掉。用 PlaneMesh 的 0..1 UV 算半径，
-## 不用圆柱端盖 —— 端盖 UV 的映射口径不稳定，换网格就会错位。
-## 中心保留一段近实心区（pool_core），这样脚下一圈是明确的"被照亮"，
-## 而不是一团糊开的亮雾。
-const STAGE_POOL_SHADER_CODE := """
-shader_type spatial;
-render_mode blend_add, unshaded, cull_disabled, depth_draw_never, shadows_disabled;
+## 地面光斑不用着色器：直接照抄 WastelandLight3D._build_light_pool() 的做法
+## （StandardMaterial3D + unshaded + emission 0.72 + alpha 0.18）。靶场那圈橙光
+## 就是这么来的，换任何别的写法都会跟靶场对不上。
+## 网格也用 CylinderMesh 薄片而不是 PlaneMesh —— 与靶场同一种几何。
 
-uniform vec4 pool_color : source_color = vec4(0.82, 0.91, 1.0, 1.0);
-uniform float pool_strength : hint_range(0.0, 1.0) = 0.30;
-uniform float pool_core : hint_range(0.0, 0.9) = 0.06;
+## 开场页压暗：**中心透、四边暗**的径向渐变，而不是原来那种整块均匀压暗。
+##
+## 原来是一整块 alpha 0.46 的深蓝盖住全屏，等于给画面蒙一层灰 —— 实测平均饱和度
+## 只有 0.226、34.4% 的像素近乎无彩，这就是"灰蒙蒙"的主要来源。
+## 改成暗角后：画面中心（角色与标题所在处）几乎不压暗，四边保留压暗收边。
+##
+## 距离口径：把 UV 拉到 -1..1 求椭圆半径，所以四角约 1.41、四边中点约 1.0。
+## inner/outer 两个半径决定"从哪儿开始暗、暗到哪儿为止"。
+## 中心 0.06 / 边缘 0.46 这两个值是在真机截图上反推验证过的：
+## 平均饱和度 0.226 → 0.269，无彩像素 34.4% → 27.8%。
+const ENTRY_VIGNETTE_CENTER_ALPHA := 0.06
+const ENTRY_VIGNETTE_EDGE_ALPHA := 0.46
+const ENTRY_VIGNETTE_INNER_RADIUS := 0.25
+const ENTRY_VIGNETTE_OUTER_RADIUS := 0.80
+
+const ENTRY_VIGNETTE_SHADER_CODE := """
+shader_type canvas_item;
+
+uniform vec4 dim_color : source_color = vec4(0.031, 0.055, 0.086, 1.0);
+uniform float center_alpha : hint_range(0.0, 1.0) = 0.06;
+uniform float edge_alpha : hint_range(0.0, 1.0) = 0.46;
+uniform float inner_radius : hint_range(0.0, 1.5) = 0.25;
+uniform float outer_radius : hint_range(0.0, 1.6) = 0.80;
 
 void fragment() {
 	vec2 centered = UV * 2.0 - 1.0;
-	float radius = clamp(length(centered), 0.0, 1.0);
-	float falloff = 1.0 - smoothstep(pool_core, 1.0, radius);
-	ALBEDO = pool_color.rgb;
-	ALPHA = falloff * pool_strength;
+	float radius = length(centered);
+	float t = smoothstep(inner_radius, outer_radius, radius);
+	COLOR = vec4(dim_color.rgb, mix(center_alpha, edge_alpha, t));
 }
 """
 
@@ -132,6 +192,10 @@ var _intro_spotlight: SpotLight3D = null
 var _intro_face_fill: OmniLight3D = null
 ## 舞台光柱与地面光斑的容器：只在这个界面存在，进游戏时随展示灯一起释放。
 var _intro_stage: Node3D = null
+## 正在播放收灯动画的那个容器。它已从 _intro_stage 摘出，但仍留在树上直到动画结束；
+## 单独持有引用是为了「动画中途被强制取消」时还能把它正确释放，避免泄漏一个孤儿节点。
+var _dismissing_stage: Node3D = null
+var _stage_dismiss_tween: Tween = null
 
 ## 当前活着的入口界面实例。进游戏后本节点不会被释放（只隐藏 screen），
 ## 所以游戏内仍能通过 get_active_entry() 拿到它、随时把舞台灯开回来。
@@ -165,10 +229,11 @@ func _ready() -> void:
 func _apply_prism_entry_style() -> void:
 	var backdrop := screen.get_node_or_null("Backdrop") as ColorRect
 	if backdrop != null:
-		# 冷蓝压暗而非纯黑：保留右侧 3D 角色与天台云海的冷调。
-		backdrop.color = Color(
-			UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.46
-		)
+		# 保留 ColorRect 本体（节点路径不变），但用它承载径向渐变材质：
+		# 中心几乎不压暗、四边压到原来的 0.46，形成暗角。
+		# 原来是一整块均匀 0.46 的深蓝，等于给全画面蒙一层灰，是「灰蒙蒙」的主要来源。
+		backdrop.color = Color.WHITE
+		backdrop.material = _make_entry_vignette_material()
 	# 菜单壳保持 StyleBoxEmpty（只承担布局）：棱镜语言不画卡片。
 	var eyebrow := screen.get_node_or_null("MenuPanel/Margin/Content/Eyebrow") as Label
 	if eyebrow != null:
@@ -184,6 +249,24 @@ func _apply_prism_entry_style() -> void:
 		rule.add_theme_stylebox_override("separator", UIStyleFactory.make_prism_separator_style(0.24))
 	if transition_hint != null:
 		UIStyleFactory.apply_prism_label(transition_hint, "value", 2, 17)
+
+
+## 开场页压暗层的径向渐变材质。中心 0.06（几乎不压暗）、四边 0.46（保持收边）。
+## 颜色沿用 PRISM_DIM 的冷蓝——它现在是"边缘颜色"，不再是整屏蒙层，
+## 所以既保留冷调又不会给画面灌灰。
+func _make_entry_vignette_material() -> ShaderMaterial:
+	var shader := Shader.new()
+	shader.code = ENTRY_VIGNETTE_SHADER_CODE
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	material.set_shader_parameter("dim_color", Color(
+		UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 1.0
+	))
+	material.set_shader_parameter("center_alpha", ENTRY_VIGNETTE_CENTER_ALPHA)
+	material.set_shader_parameter("edge_alpha", ENTRY_VIGNETTE_EDGE_ALPHA)
+	material.set_shader_parameter("inner_radius", ENTRY_VIGNETTE_INNER_RADIUS)
+	material.set_shader_parameter("outer_radius", ENTRY_VIGNETTE_OUTER_RADIUS)
+	return material
 
 
 func _process(delta: float) -> void:
@@ -307,7 +390,10 @@ func start_game() -> void:
 	_transition_start_fov = _camera.fov
 	start_button.disabled = true
 	transition_hint.visible = true
-	_remove_intro_spotlight()
+	# 照角色的展示灯立刻灭（它们本来就不该进玩法），舞台光柱/光斑走收束动画。
+	# 不能在这里直接 queue_free：那会在画面上变成一次硬切。
+	_remove_intro_lights()
+	_dismiss_intro_stage_animated()
 	start_requested.emit()
 
 
@@ -439,7 +525,10 @@ func _finish_transition() -> void:
 			_player.avatar.visual_root.rotation = _saved_visual_root_rotation
 	_presenting = false
 	_transitioning = false
-	_remove_intro_spotlight()
+	# 收灯动画可能还在演（skip_to_gameplay 会立刻走到这里）——让动画自己演完，
+	# 只在没有动画时兜底硬删，保证这一步结束时一定没有残留。
+	_remove_intro_lights()
+	_remove_intro_stage_if_idle()
 	_restore_camera_attributes()
 	_restore_gameplay_hud()
 	screen.visible = false
@@ -580,12 +669,22 @@ func _build_intro_stage() -> bool:
 	_intro_stage.name = "MainEntryStageLight"
 	_intro_stage.set_meta("main_entry_only", true)
 	owner_player.add_child(_intro_stage)
-	# 光柱：底半径 = 光斑半径，锥顶收在 9cm 并落在展示灯的高度上。
+	_build_stage_beam_shells()
+	_build_stage_pool()
+	return true
+
+
+## 光柱：多层嵌套锥，逐层缩小半径、共用同一浓度。
+## 每层都 cull_disabled（正反面都参与叠加），加上层数叠加，
+## 从侧面看就是「中心亮、边缘淡」的软柱，而不是一块均匀的三角形色块。
+func _build_stage_beam_shells() -> void:
+	if not STAGE_BEAM_ENABLED:
+		return
 	var beam_mesh := CylinderMesh.new()
 	beam_mesh.top_radius = STAGE_BEAM_APEX_RADIUS_M
-	beam_mesh.bottom_radius = STAGE_POOL_RADIUS_M
+	beam_mesh.bottom_radius = STAGE_BEAM_BOTTOM_RADIUS_M
 	beam_mesh.height = INTRO_SPOTLIGHT_HEIGHT_M
-	beam_mesh.radial_segments = 32
+	beam_mesh.radial_segments = 48
 	beam_mesh.rings = 1
 	# 去掉两端封盖：加了盖会在锥底铺出一整块实心圆，光斑就变成叠了两层。
 	beam_mesh.cap_top = false
@@ -596,19 +695,54 @@ func _build_intro_stage() -> bool:
 	beam.material_override = _make_stage_beam_material()
 	beam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_intro_stage.add_child(beam)
-	# 玩家节点原点即脚底，光柱竖直居中立在脚下。
+	# 玩家节点原点即脚底，锥体竖直居中。
 	beam.position = Vector3(0.0, INTRO_SPOTLIGHT_HEIGHT_M * 0.5, 0.0)
-	# 光斑：PlaneMesh 默认就躺在 XZ 平面、法线朝上，不需要旋转。
-	var pool_mesh := PlaneMesh.new()
-	pool_mesh.size = Vector2(STAGE_POOL_RADIUS_M, STAGE_POOL_RADIUS_M) * 2.0
+
+
+## 地面光斑：照抄靶场 LightPool —— CylinderMesh 薄圆片（略带喇叭口），
+## 高度只有 1.8cm，从角色视角看就是贴着地面的一块圆。
+##
+## ⚠️ 但 LightPool 只是靶场那圈光的**第二层**。第一层是 WastelandLight3D 里的真实
+## OmniLight3D（能量 2.5、射程 8.5）真正照亮了地砖。只画 LightPool 不点灯，
+## 结果是「一块贴在地上的半透明圆片」，怎么调都发灰 —— 因为它没有照亮任何东西。
+## 所以下面另外补一盏 STAGE_KEY_LIGHT，两件一起才是靶场那套效果。
+func _build_stage_pool() -> void:
+	var pool_mesh := CylinderMesh.new()
+	pool_mesh.top_radius = STAGE_POOL_RADIUS_M * 0.92
+	pool_mesh.bottom_radius = STAGE_POOL_RADIUS_M
+	pool_mesh.height = 0.018
+	pool_mesh.radial_segments = 32
+	pool_mesh.material = _make_stage_pool_material()
 	var pool := MeshInstance3D.new()
 	pool.name = "StagePool"
 	pool.mesh = pool_mesh
-	pool.material_override = _make_stage_pool_material()
 	pool.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_intro_stage.add_child(pool)
 	pool.position = Vector3(0.0, STAGE_POOL_LIFT_M, 0.0)
-	return true
+	_build_stage_key_light()
+
+
+## 舞台主光：**真正照亮地面**的那一层，对应靶场 WastelandLight3D 里的 OmniLight3D。
+## 这是「光斑」与「贴片」的分界线 —— 没有它，地砖的受光不会变，看起来就是一张圆纸。
+##
+## 它照 WORLD + PLAYER 两层：要照亮地砖就必须放开 WORLD。
+## 这不会污染基地，因为本节点只在展示期存在，进游戏（三处释放点）即被销毁。
+func _build_stage_key_light() -> void:
+	var key_light := OmniLight3D.new()
+	key_light.name = "StageKeyLight"
+	key_light.light_color = STAGE_LIGHT_WARM_COLOR
+	key_light.light_energy = STAGE_KEY_LIGHT_ENERGY
+	key_light.light_indirect_energy = 0.0
+	key_light.omni_range = STAGE_KEY_LIGHT_RANGE_M
+	key_light.omni_attenuation = 1.2
+	key_light.shadow_enabled = false
+	key_light.light_cull_mask = (
+		GameDesignConfig.RENDER_LAYER_WORLD | GameDesignConfig.RENDER_LAYER_PLAYER
+	)
+	key_light.set_meta("main_entry_only", true)
+	_intro_stage.add_child(key_light)
+	# 贴地一点：太高会变成环境光洒满全场，失去「一束打下来」的聚光感。
+	key_light.position = Vector3(0.0, STAGE_KEY_LIGHT_HEIGHT_M, 0.0)
 
 
 ## 舞台灯挂在谁身上。优先用展示期记下的玩家；进游戏后那个引用可能已随场景重建失效，
@@ -655,19 +789,28 @@ func _make_stage_beam_material() -> ShaderMaterial:
 	shader.code = STAGE_BEAM_SHADER_CODE
 	var material := ShaderMaterial.new()
 	material.shader = shader
-	material.set_shader_parameter("beam_color", INTRO_LIGHT_COLOR)
+	material.set_shader_parameter("beam_color", STAGE_LIGHT_WARM_COLOR)
 	material.set_shader_parameter("beam_strength", STAGE_BEAM_STRENGTH)
 	material.set_shader_parameter("beam_height", INTRO_SPOTLIGHT_HEIGHT_M)
 	return material
 
 
-func _make_stage_pool_material() -> ShaderMaterial:
-	var shader := Shader.new()
-	shader.code = STAGE_POOL_SHADER_CODE
-	var material := ShaderMaterial.new()
-	material.shader = shader
-	material.set_shader_parameter("pool_color", INTRO_LIGHT_COLOR)
-	material.set_shader_parameter("pool_strength", STAGE_POOL_STRENGTH)
+## 地面光斑材质。与靶场 WastelandLight3D 的 LightPool 同构：unshaded + alpha 透明。
+##
+## ⚠️ 不要在这里配 emission —— unshaded 材质会跳过光照阶段，而 emission 正是在
+## 光照阶段累加的，所以 emission_energy_multiplier 对最终画面**毫无影响**。
+## 实测把倍率从 2.7 拉到 10.0，同一区域 RGB 一个像素都没变。
+## 想调亮只能改 albedo 颜色（见 STAGE_POOL_COLOR），这是唯一有效的杠杆。
+func _make_stage_pool_material() -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(
+		STAGE_POOL_COLOR.r, STAGE_POOL_COLOR.g,
+		STAGE_POOL_COLOR.b, STAGE_POOL_ALPHA
+	)
+	material.metallic = 0.0
+	material.roughness = 1.0
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	return material
 
 
@@ -684,6 +827,12 @@ func _count_stage_lights() -> int:
 
 func _remove_intro_spotlight() -> void:
 	_remove_intro_stage()
+	_remove_intro_lights()
+
+
+## 只清那两盏照角色的真实展示灯（聚光 + 面部补光），不动舞台光柱/光斑。
+## 拆出来是因为「进游戏」时两者的退场方式不同：灯要立刻灭，舞台灯要收缩。
+func _remove_intro_lights() -> void:
 	if _intro_spotlight != null and is_instance_valid(_intro_spotlight):
 		_intro_spotlight.queue_free()
 		_intro_spotlight = null
@@ -692,16 +841,99 @@ func _remove_intro_spotlight() -> void:
 		_intro_face_fill = null
 
 
-## 只清舞台光柱/光斑，不动那两盏展示用真实灯。
+## 立即硬删，连收灯动画一起取消。用于「安装前清场」和「节点卸载」两条路径 ——
+## 那两种情况没有下一帧可等，动画没有意义。
 ## 先从父节点摘除再 queue_free：queue_free 是帧末才真正释放，
 ## 同一帧内重新开灯会出现两个同名节点并存，摘除能保证视觉上不闪、也不重名。
 func _remove_intro_stage() -> void:
+	_kill_stage_dismiss_tween()
 	if _intro_stage != null and is_instance_valid(_intro_stage):
 		var parent := _intro_stage.get_parent()
 		if parent != null:
 			parent.remove_child(_intro_stage)
 		_intro_stage.queue_free()
 	_intro_stage = null
+	if _dismissing_stage != null and is_instance_valid(_dismissing_stage):
+		var dismissing_parent := _dismissing_stage.get_parent()
+		if dismissing_parent != null:
+			dismissing_parent.remove_child(_dismissing_stage)
+		_dismissing_stage.queue_free()
+	_dismissing_stage = null
+
+
+## 收灯动画：锥体与地面光斑同时往中心收缩、同时变淡，然后一起消失。
+##
+## 为什么是「缩小 + 淡出」而不是直接删：直接删在画面上是一次硬切，
+## 光柱会在一帧内凭空不见，读起来像 bug。缩到中心再淡掉才像一个动作收尾。
+##
+## 锥体用 XZ 缩放而不是改网格半径：CylinderMesh 是共享资源，
+## 改它会影响所有实例；缩放是每个实例自己的属性。
+## 缩放原点在锥体中心（本地原点是母线中点），所以底端收得比顶端快 ——
+## 顶端本来就只有 9cm，视觉上就是「底下的范围收起来」。
+func _dismiss_intro_stage_animated() -> bool:
+	if _intro_stage == null or not is_instance_valid(_intro_stage):
+		return false
+	_kill_stage_dismiss_tween()
+	_dismissing_stage = _intro_stage
+	_intro_stage = null
+	var stage := _dismissing_stage
+	_stage_dismiss_tween = create_tween()
+	_stage_dismiss_tween.set_parallel(true)
+	_stage_dismiss_tween.set_trans(Tween.TRANS_CUBIC)
+	_stage_dismiss_tween.set_ease(Tween.EASE_IN)
+	_stage_dismiss_tween.tween_method(
+		_apply_stage_dismiss_progress.bind(stage),
+		1.0,
+		0.0,
+		STAGE_DISMISS_DURATION_S
+	)
+	_stage_dismiss_tween.chain().tween_callback(_finish_stage_dismiss.bind(stage))
+	return true
+
+
+## 收灯进度 t：1.0 = 完整可见，0.0 = 已收到中心。
+## 缩放与亮度同步推进 —— 只缩不淡会留下一个细亮条，只淡不缩会像雾散。
+func _apply_stage_dismiss_progress(t: float, stage: Node3D) -> void:
+	if not is_instance_valid(stage):
+		return
+	var shrink := lerpf(STAGE_DISMISS_END_SCALE, 1.0, t)
+	var beam := stage.get_node_or_null("StageBeam") as MeshInstance3D
+	if beam != null:
+		beam.scale = Vector3(shrink, 1.0, shrink)
+		var beam_material := beam.material_override as ShaderMaterial
+		if beam_material != null:
+			beam_material.set_shader_parameter("beam_strength", STAGE_BEAM_STRENGTH * t)
+	var pool := stage.get_node_or_null("StagePool") as MeshInstance3D
+	if pool != null:
+		pool.scale = Vector3(shrink, 1.0, shrink)
+		var pool_material := pool.get_active_material(0) as StandardMaterial3D
+		if pool_material != null:
+			pool_material.albedo_color.a = STAGE_POOL_ALPHA * t
+	var key_light := stage.get_node_or_null("StageKeyLight") as OmniLight3D
+	if key_light != null:
+		key_light.light_energy = STAGE_KEY_LIGHT_ENERGY * t
+
+
+func _finish_stage_dismiss(stage: Node3D) -> void:
+	if is_instance_valid(stage):
+		stage.queue_free()
+	if _dismissing_stage == stage:
+		_dismissing_stage = null
+	_stage_dismiss_tween = null
+
+
+func _kill_stage_dismiss_tween() -> void:
+	if _stage_dismiss_tween != null and _stage_dismiss_tween.is_valid():
+		_stage_dismiss_tween.kill()
+	_stage_dismiss_tween = null
+
+
+## 动画进行中就让它演完，已经在演的时候不要硬切 ——
+## 这个函数给 _finish_transition 用：那一步必须保证最终干净，但不该把动画掐掉。
+func _remove_intro_stage_if_idle() -> void:
+	if _dismissing_stage != null and is_instance_valid(_dismissing_stage):
+		return
+	_remove_intro_stage()
 
 
 func _refresh_player_status() -> void:

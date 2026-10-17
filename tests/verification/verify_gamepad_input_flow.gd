@@ -883,15 +883,15 @@ func _verify_pause_controls_page(failures: Array[String]) -> void:
 		return
 	if not main_page.visible or controls_page.visible or graphics_page.visible:
 		failures.append("暂停菜单初始状态应停在主页")
-	var mode_option := pause.get_node("Center/Panel/Margin/ControlsPage/DeviceRow/DeviceModeOption") as OptionButton
-	var enabled_toggle := pause.get_node("Center/Panel/Margin/ControlsPage/GamepadEnabled") as CheckButton
-	var vibration_toggle := pause.get_node("Center/Panel/Margin/ControlsPage/Vibration") as CheckButton
-	var move_slider := pause.get_node("Center/Panel/Margin/ControlsPage/MoveDeadzoneRow/MoveDeadzoneSlider") as HSlider
-	var move_value := pause.get_node("Center/Panel/Margin/ControlsPage/MoveDeadzoneRow/MoveDeadzoneValue") as Label
-	var aim_slider := pause.get_node("Center/Panel/Margin/ControlsPage/AimDeadzoneRow/AimDeadzoneSlider") as HSlider
-	var smoothing_slider := pause.get_node("Center/Panel/Margin/ControlsPage/AimSmoothingRow/AimSmoothingSlider") as HSlider
-	var left_stick_aim_toggle := pause.get_node_or_null("Center/Panel/Margin/ControlsPage/LeftStickAim") as CheckButton
-	var aim_assist_toggle := pause.get_node_or_null("Center/Panel/Margin/ControlsPage/AimAssist") as CheckButton
+	var mode_option := pause.get_node("Center/Panel/Margin/ControlsPage/Scroll/Body/DeviceRow/DeviceModeOption") as OptionButton
+	var enabled_toggle := pause.get_node("Center/Panel/Margin/ControlsPage/Scroll/Body/GamepadEnabled") as CheckButton
+	var vibration_toggle := pause.get_node("Center/Panel/Margin/ControlsPage/Scroll/Body/Vibration") as CheckButton
+	var move_slider := pause.get_node("Center/Panel/Margin/ControlsPage/Scroll/Body/MoveDeadzoneRow/MoveDeadzoneSlider") as HSlider
+	var move_value := pause.get_node("Center/Panel/Margin/ControlsPage/Scroll/Body/MoveDeadzoneRow/MoveDeadzoneValue") as Label
+	var aim_slider := pause.get_node("Center/Panel/Margin/ControlsPage/Scroll/Body/AimDeadzoneRow/AimDeadzoneSlider") as HSlider
+	var smoothing_slider := pause.get_node("Center/Panel/Margin/ControlsPage/Scroll/Body/AimSmoothingRow/AimSmoothingSlider") as HSlider
+	var left_stick_aim_toggle := pause.get_node_or_null("Center/Panel/Margin/ControlsPage/Scroll/Body/LeftStickAim") as CheckButton
+	var aim_assist_toggle := pause.get_node_or_null("Center/Panel/Margin/ControlsPage/Scroll/Body/AimAssist") as CheckButton
 	var status := pause.get_node("Center/Panel/Margin/ControlsPage/Footer/Status") as Label
 	var device_status := pause.get_node("Center/Panel/Margin/ControlsPage/Header/DeviceStatusLabel") as Label
 	if mode_option.item_count != InputSettings.DEVICE_MODES.size():

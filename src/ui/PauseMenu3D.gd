@@ -38,18 +38,18 @@ const PRISM_RAIL_WIDTH := 820.0
 @onready var controls_button: Button = $Center/Panel/Margin/MainPage/ControlsButton
 @onready var controls_page: VBoxContainer = $Center/Panel/Margin/ControlsPage
 @onready var device_status_label: Label = $Center/Panel/Margin/ControlsPage/Header/DeviceStatusLabel
-@onready var device_mode_option: OptionButton = $Center/Panel/Margin/ControlsPage/DeviceRow/DeviceModeOption
-@onready var gamepad_enabled_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/GamepadEnabled
-@onready var move_deadzone_slider: HSlider = $Center/Panel/Margin/ControlsPage/MoveDeadzoneRow/MoveDeadzoneSlider
-@onready var move_deadzone_value: Label = $Center/Panel/Margin/ControlsPage/MoveDeadzoneRow/MoveDeadzoneValue
-@onready var aim_deadzone_slider: HSlider = $Center/Panel/Margin/ControlsPage/AimDeadzoneRow/AimDeadzoneSlider
-@onready var aim_deadzone_value: Label = $Center/Panel/Margin/ControlsPage/AimDeadzoneRow/AimDeadzoneValue
-@onready var aim_smoothing_slider: HSlider = $Center/Panel/Margin/ControlsPage/AimSmoothingRow/AimSmoothingSlider
-@onready var aim_smoothing_value: Label = $Center/Panel/Margin/ControlsPage/AimSmoothingRow/AimSmoothingValue
-@onready var left_stick_aim_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/LeftStickAim
-@onready var aim_assist_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/AimAssist
-@onready var auto_fire_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/AutoFire
-@onready var vibration_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/Vibration
+@onready var device_mode_option: OptionButton = $Center/Panel/Margin/ControlsPage/Scroll/Body/DeviceRow/DeviceModeOption
+@onready var gamepad_enabled_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/Scroll/Body/GamepadEnabled
+@onready var move_deadzone_slider: HSlider = $Center/Panel/Margin/ControlsPage/Scroll/Body/MoveDeadzoneRow/MoveDeadzoneSlider
+@onready var move_deadzone_value: Label = $Center/Panel/Margin/ControlsPage/Scroll/Body/MoveDeadzoneRow/MoveDeadzoneValue
+@onready var aim_deadzone_slider: HSlider = $Center/Panel/Margin/ControlsPage/Scroll/Body/AimDeadzoneRow/AimDeadzoneSlider
+@onready var aim_deadzone_value: Label = $Center/Panel/Margin/ControlsPage/Scroll/Body/AimDeadzoneRow/AimDeadzoneValue
+@onready var aim_smoothing_slider: HSlider = $Center/Panel/Margin/ControlsPage/Scroll/Body/AimSmoothingRow/AimSmoothingSlider
+@onready var aim_smoothing_value: Label = $Center/Panel/Margin/ControlsPage/Scroll/Body/AimSmoothingRow/AimSmoothingValue
+@onready var left_stick_aim_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/Scroll/Body/LeftStickAim
+@onready var aim_assist_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/Scroll/Body/AimAssist
+@onready var auto_fire_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/Scroll/Body/AutoFire
+@onready var vibration_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/Scroll/Body/Vibration
 @onready var controls_back_button: Button = $Center/Panel/Margin/ControlsPage/Footer/BackButton
 @onready var controls_status_label: Label = $Center/Panel/Margin/ControlsPage/Footer/Status
 @onready var renderer_label: Label = $Center/Panel/Margin/GraphicsPage/Header/RendererLabel
@@ -508,10 +508,10 @@ func _style_prism_controls_page() -> void:
 		rule_node.add_theme_stylebox_override("separator", _make_prism_separator_style(0.28))
 
 	_install_prism_option_row(
-		get_node_or_null("Center/Panel/Margin/ControlsPage/DeviceRow") as HBoxContainer,
+		get_node_or_null("Center/Panel/Margin/ControlsPage/Scroll/Body/DeviceRow") as HBoxContainer,
 		device_mode_option
 	)
-	var device_row := get_node_or_null("Center/Panel/Margin/ControlsPage/DeviceRow") as HBoxContainer
+	var device_row := get_node_or_null("Center/Panel/Margin/ControlsPage/Scroll/Body/DeviceRow") as HBoxContainer
 	if device_row != null:
 		var caption := device_row.get_node_or_null("Label") as Label
 		if caption != null:
@@ -519,9 +519,9 @@ func _style_prism_controls_page() -> void:
 
 	# 三条摇杆参数：细白线轨道 + 方把手 + 右侧白线方角数值框
 	for row_path in [
-		"Center/Panel/Margin/ControlsPage/MoveDeadzoneRow",
-		"Center/Panel/Margin/ControlsPage/AimDeadzoneRow",
-		"Center/Panel/Margin/ControlsPage/AimSmoothingRow",
+		"Center/Panel/Margin/ControlsPage/Scroll/Body/MoveDeadzoneRow",
+		"Center/Panel/Margin/ControlsPage/Scroll/Body/AimDeadzoneRow",
+		"Center/Panel/Margin/ControlsPage/Scroll/Body/AimSmoothingRow",
 	]:
 		var row := get_node_or_null(row_path) as HBoxContainer
 		if row == null:
@@ -543,7 +543,7 @@ func _style_prism_controls_page() -> void:
 		if chk != null:
 			UIStyleFactory.apply_prism_check_button(chk, 15)
 
-	var binding_hint := get_node_or_null("Center/Panel/Margin/ControlsPage/BindingHint") as Label
+	var binding_hint := get_node_or_null("Center/Panel/Margin/ControlsPage/Scroll/Body/BindingHint") as Label
 	if binding_hint != null:
 		UIStyleFactory.apply_prism_label(binding_hint, "faint", 1, 12)
 	if controls_status_label != null:
@@ -552,6 +552,14 @@ func _style_prism_controls_page() -> void:
 	controls_back_button.text = "返回"
 	controls_back_button.custom_minimum_size = Vector2(210, 46)
 	_attach_prism_keycap(controls_back_button, "ESC")
+
+	# 设置行现在放在 Scroll/Body 里：720p 视口下这一页的行数会超过面板高度，
+	# 必须靠纵向滚动装下（否则底部返回按钮会被裁到面板外）。滚动条沿用棱镜样式，
+	# Scroll 自身不画底衬，避免设置行外面多出一层方框。
+	var scroll := controls_page.get_node_or_null("Scroll") as ScrollContainer
+	if scroll != null:
+		scroll.add_theme_stylebox_override("panel", UIStyleFactory.make_prism_panel(false, 0.0))
+		UIStyleFactory.apply_prism_scrollbar(scroll)
 
 
 # ---------- 复位存档二次确认弹窗 ----------

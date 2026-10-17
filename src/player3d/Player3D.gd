@@ -165,9 +165,18 @@ var _mobile_face_active := false
 var _mobile_shoot_active := false
 var _mobile_shoot_was_active := false
 var _mobile_input_available := false
-## 自动射击（InputSettings.auto_fire）的蓄力节奏。仅在该开关打开且手持蓄力类
-## 武器时被写入；关闭开关立即清零，不会残留任何"半蓄力"状态。
-var _auto_fire_charge_elapsed := 0.0
+## 自动射击（InputSettings.auto_fire）的搜索参数。
+## 「只打自己面前的那只」= 以下五条全中才开火：
+##   1. 存活             2. 已照亮（黑暗里的敌人不可见，自动射击不许透视）
+##   3. 武器射程内       4. 落在相机视锥内（真的在屏幕上）
+##   5. 准星锥内且无墙遮挡
+const AUTO_FIRE_CONE_DEG := 35.0
+## 枪身没有声明 range 时的兜底搜索半径（米）。声明了就以武器射程为准 ——
+## 自动射击不该比枪本身打得更远。
+const AUTO_FIRE_FALLBACK_RANGE_M := 18.0
+## 视线检测只查世界几何层（与玩家子弹 mask 里的「世界」位一致），
+## 敌人自身的命中体不在此层，因此不会被自己挡住。
+const AUTO_FIRE_LOS_MASK := 1
 var _backpack_model: Node3D = null
 var _backpack_follow: Node3D = null
 ## ── 背负贴合契约（全部在 BodyJoint 局部空间，v021 骨架实测值）─────────────────
@@ -635,7 +644,7 @@ func _physics_process(delta: float) -> void:
 	_tick_weapon_transition(delta)
 	_silence_remaining = maxf(0.0, _silence_remaining - delta)
 	_update_aim_from_mouse()
-	_update_combat_input(delta)
+	_update_combat_input()
 	if _melee_hit_stop_pending:
 		_melee_hit_stop_ticks -= 1
 		_melee_hit_stop_pending = _melee_hit_stop_ticks > 0
@@ -2805,10 +2814,9 @@ func request_melee_attack() -> bool:
 	return not weapon_holstered and _weapon_transition_phase.is_empty() and melee_combat != null and melee_combat.request_attack()
 
 
-func _update_combat_input(delta: float = 0.0) -> void:
+func _update_combat_input() -> void:
 	if weapon_holstered or not _weapon_transition_phase.is_empty():
 		if weapon != null: weapon.cancel_charge()
-		_auto_fire_charge_elapsed = 0.0
 		return
 	var shoot_pressed_here: bool = Input.is_action_pressed("shoot")
 	var shoot_just_pressed_here: bool = Input.is_action_just_pressed("shoot")
@@ -2827,7 +2835,6 @@ func _update_combat_input(delta: float = 0.0) -> void:
 	if input_locked or current_hp <= 0 or weapon == null or _silence_remaining > 0.0 or _active_ladder != null:
 		if weapon != null:
 			weapon.cancel_charge()
-		_auto_fire_charge_elapsed = 0.0
 		return
 	# 禁用玩家输入不应打断脚本、测试场或 AI 显式启动的蓄力；只有真实输入读取被跳过。
 	if not combat_enabled:
@@ -2838,30 +2845,117 @@ func _update_combat_input(delta: float = 0.0) -> void:
 		if shoot_released_here:
 			melee_combat.release_trigger()
 		# 近战不参与自动射击（自动挥击会改掉节奏与命中窗口），保持纯手动。
-		_auto_fire_charge_elapsed = 0.0
 	else:
 		var auto_fire_on: bool = InputSettings != null and InputSettings.is_auto_fire_enabled()
+		# 真实按键永远优先：玩家自己按着射击键时，本帧完全走原手动逻辑。
+		var auto_target: Enemy3D = null
 		if auto_fire_on and not shoot_pressed_here:
-			# 自动射击（ESC → 操作设置开关）：玩家自己没有按住射击键时，
-			# 补一个"虚拟按住"。真实按键永远优先，所以开启后手动操作与
-			# 未开启时逐帧一致；唯一的差异是没人按键时枪照样按准星开火。
-			if weapon.charge_time > 0.0 and weapon.is_charge_active():
-				# 蓄力类（如蓄力炮）：蓄满即自动松手击发，冷却结束后重新起蓄。
-				# 少了这一段它会一直"按住"，永远等不到 release，等于哑火。
-				_auto_fire_charge_elapsed += delta
-				if _auto_fire_charge_elapsed >= weapon.charge_time:
-					_auto_fire_charge_elapsed = 0.0
-					weapon.release_charge()
-				else:
-					weapon.try_fire(aim_direction, self)
-			else:
-				_auto_fire_charge_elapsed = 0.0
+			auto_target = _find_auto_fire_target()
+		if auto_target == null:
+			# 没有目标就不开枪 —— 自动射击是「遇敌才打」，不是「一直扣着扳机」。
+			# 收枪只在**自动射击真的接管过**时才做：玩家自己按住蓄力枪时
+			# 这里的 cancel_charge 会把他的蓄力抹掉，等于手动蓄力炮永久哑火。
+			if auto_fire_on and not shoot_pressed_here and weapon.charge_time > 0.0 and weapon.is_charge_active():
+				weapon.cancel_charge()
+			if shoot_pressed_here:
 				weapon.try_fire(aim_direction, self)
-		elif shoot_pressed_here:
-			_auto_fire_charge_elapsed = 0.0
-			weapon.try_fire(aim_direction, self)
+		else:
+			# 弹道指向选中的那只敌人（水平），但**不改** aim_direction / 面朝向 /
+			# 准星 —— 自动射击只管开火，不许替玩家转视角。
+			var shot_direction := _auto_fire_shot_direction(auto_target)
+			if weapon.charge_time > 0.0 and _is_charge_full():
+				# 蓄满就松手击发；冷却结束后下一帧会重新起蓄。
+				# 判满读武器自己的 charge_ratio，**不用本地计时器**：计时器依赖
+				# 每帧传入的 delta，一旦有调用方按默认参数（0）进来就永远释放不了。
+				weapon.release_charge()
+			else:
+				# 未蓄满（或尚未起蓄）：持续喂方向，让蓄力跟着目标走。
+				# 冷却中的 try_fire 会被武器自己拦下，不会多消耗弹。
+				weapon.try_fire(shot_direction, self)
 	if not weapon.is_melee_weapon() and Input.is_action_just_pressed("reload"):
 		request_reload()
+
+
+## 蓄力是否已经充满。武器把进度钳在 [0,1]，留 1/1000 的浮点余量。
+func _is_charge_full() -> bool:
+	if weapon == null or not weapon.is_charge_active():
+		return false
+	return float(weapon.get_snapshot().get("charge_ratio", 0.0)) >= 0.999
+
+
+## 选出自动射击的那一只敌人：准星锥内、屏幕上、武器射程内、已照亮、无墙遮挡。
+## 打分 `score = θ / 锥半角 + d / 射程`（各项归一后等权），取最小者 ——
+## 优先「正对着的」，其次是「更近的」，不会在两只之间来回跳。
+func _find_auto_fire_target() -> Enemy3D:
+	var tree := get_tree()
+	if tree == null or weapon == null:
+		return null
+	var flat_aim := Vector2(aim_direction.x, aim_direction.z)
+	if flat_aim.length_squared() <= 0.000001:
+		return null
+	flat_aim = flat_aim.normalized()
+	var max_range := weapon.range_m if weapon.range_m > 0.0 else AUTO_FIRE_FALLBACK_RANGE_M
+	var cone_rad := deg_to_rad(AUTO_FIRE_CONE_DEG)
+	var best_enemy: Enemy3D = null
+	var best_score := INF
+	for node in tree.get_nodes_in_group(ENEMY_GROUP):
+		var enemy := node as Enemy3D
+		if enemy == null or enemy.current_hp <= 0:
+			continue
+		# 黑暗中的敌人不可见，自动射击不许代替玩家看见它（与瞄准辅助同一条铁律）。
+		if enemy.get_illumination_state() == EnemyIllumination3D.STATE_DARKNESS:
+			continue
+		var to_enemy := enemy.global_position - global_position
+		to_enemy.y = 0.0
+		var distance := to_enemy.length()
+		if distance <= 0.0001 or distance > max_range:
+			continue
+		var angle := absf(flat_aim.angle_to(Vector2(to_enemy.x, to_enemy.z) / distance))
+		if angle > cone_rad:
+			continue
+		if not _is_enemy_on_screen(enemy) or not _has_clear_shot_at(enemy):
+			continue
+		var score := angle / cone_rad + distance / max_range
+		if score < best_score:
+			best_score = score
+			best_enemy = enemy
+	return best_enemy
+
+
+## 「进入屏幕内才有」：用相机视锥判定，而不是靠距离猜。
+## 判定点抬到敌人胸口高度，避免脚底被视锥边缘裁掉导致明明看得见却不开火。
+func _is_enemy_on_screen(enemy: Enemy3D) -> bool:
+	if camera == null or not camera.is_inside_tree():
+		return true
+	return camera.is_position_in_frustum(enemy.global_position + Vector3.UP * 0.9)
+
+
+## 墙上不隔空开火：从胸口到敌人胸口打一条只查世界几何的射线。
+func _has_clear_shot_at(enemy: Enemy3D) -> bool:
+	var world := get_world_3d()
+	if world == null:
+		return true
+	var space := world.direct_space_state
+	if space == null:
+		return true
+	var query := PhysicsRayQueryParameters3D.create(
+		global_position + Vector3.UP * 1.1,
+		enemy.global_position + Vector3.UP * 0.9,
+		AUTO_FIRE_LOS_MASK
+	)
+	query.collide_with_areas = false
+	query.hit_from_inside = false
+	return space.intersect_ray(query).is_empty()
+
+
+## 自动射击的弹道方向：水平指向目标。玩家位置而非枪口作为起点，
+## 与 aim_direction 的口径一致（准星本身就是以角色为圆心算的）。
+func _auto_fire_shot_direction(enemy: Enemy3D) -> Vector3:
+	var to_enemy := enemy.global_position - global_position
+	to_enemy.y = 0.0
+	if to_enemy.length_squared() <= 0.000001:
+		return aim_direction
+	return to_enemy.normalized()
 
 
 func _tick_dash_input_buffer(delta: float) -> void:

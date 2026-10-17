@@ -3,10 +3,15 @@ extends RefCounted
 ## 只接受运行时已经解析出的编成、货币规则和实际击杀收入；不读取钱包决定价格，
 ## 不读取未来收益解锁稀有度。每次门后报价在生成时冻结，直到该门后事务关闭。
 
-const SCHEMA_VERSION := 2
+const SCHEMA_VERSION := 3
 const PRICE_FLOOR_RATIO := 0.85
 const PRICE_CEILING_RATIO := 1.15
-const RARITY_PRICE_SHARES: Array[float] = [0.075, 0.15, 0.275, 0.45, 0.675]
+## 门后报价基准 = **刚清完那间内容房的参考收益**（不是整关平均、不是钱包）。
+## 分享系数：普通卡 0.85 门收益 ⇒ 清完一间房基本只够买一张；任意三张合计 ≥ 2.55 门收益，
+## 所以「一间房的收入买三张」永远不成立。高稀有度要攒 1~3 间房才买得起，构成消费抉择。
+const RARITY_PRICE_SHARES: Array[float] = [0.85, 1.30, 1.85, 2.60, 3.50]
+## 最低报价：防止无收益门（安全屋出门）出现白拿三张。
+const MIN_CARD_PRICE := 40
 const RARITY_UNLOCK_INCOME_RATIOS: Array[float] = [0.0, 0.12, 0.30, 0.55, 0.80]
 const MONSTER_VARIANTS := preload("res://src/enemy3d/MonsterVariants.gd")
 const REWARD_SERVICE := preload("res://src/rewards/RewardService.gd")
@@ -22,9 +27,11 @@ var _reference_counts: Dictionary = {}
 var _reference_income_min := 0.0
 var _reference_income_expected := 0.0
 var _reference_income_max := 0.0
-var _price_min: Array[int] = []
-var _price_quote: Array[int] = []
-var _price_max: Array[int] = []
+## 按房间顺序保存的**单间参考收益**。门后报价只读其中一间，避免用整关平均
+## 把首门（房间小、收益低）的卡价压低成"三张全买得起"。
+var _segment_income_min: Array[float] = []
+var _segment_income_expected: Array[float] = []
+var _segment_income_max: Array[float] = []
 var _actual_kill_income := 0
 var _actual_kill_events := 0
 
@@ -42,13 +49,16 @@ func configure_from_runtime(
 	_reference_income_min = 0.0
 	_reference_income_expected = 0.0
 	_reference_income_max = 0.0
-	_price_min.clear()
-	_price_quote.clear()
-	_price_max.clear()
+	_segment_income_min.clear()
+	_segment_income_expected.clear()
+	_segment_income_max.clear()
 	for room_value in rooms:
 		if not room_value is Dictionary:
 			continue
 		var room: Dictionary = room_value as Dictionary
+		var room_min := _reference_income_min
+		var room_expected := _reference_income_expected
+		var room_max := _reference_income_max
 		var placements: Array = room.get("spawn_placements", []) as Array
 		if not placements.is_empty():
 			var selected_indexes := _selected_box_indexes(room.get("encounter", {}) as Dictionary, placements.size())
@@ -58,18 +68,10 @@ func configure_from_runtime(
 					_add_box_reference(placement_value as Dictionary, box_catalog)
 		else:
 			_add_encounter_reference(room.get("encounter", {}) as Dictionary)
-	var reference_offer_income := _reference_income_expected / float(_door_count)
-	for rarity in range(5):
-		var centre := maxf(10.0, reference_offer_income * RARITY_PRICE_SHARES[rarity])
-		var minimum := _round10(centre * PRICE_FLOOR_RATIO)
-		var maximum := _round10(centre * PRICE_CEILING_RATIO)
-		var quote := _round10(centre)
-		minimum = maxi(10, minimum)
-		maximum = maxi(minimum, maximum)
-		quote = clampi(quote, minimum, maximum)
-		_price_min.append(minimum)
-		_price_quote.append(quote)
-		_price_max.append(maximum)
+		# 单间收益 = 累计差分，保证与整关总额完全同源，不另建一套估算。
+		_segment_income_min.append(maxf(0.0, _reference_income_min - room_min))
+		_segment_income_expected.append(maxf(0.0, _reference_income_expected - room_expected))
+		_segment_income_max.append(maxf(0.0, _reference_income_max - room_max))
 	_configured = true
 	return get_snapshot()
 
@@ -101,14 +103,15 @@ func max_unlocked_rarity() -> int:
 	return unlocked
 
 
-func price_for_rarity(rarity: int) -> int:
-	if not _configured or _price_quote.is_empty():
+func price_for_rarity(rarity: int, door_index: int = 1) -> int:
+	if not _configured:
 		return 0
-	return _price_quote[clampi(rarity, 0, _price_quote.size() - 1)]
+	return int(price_bounds_for_rarity(rarity, door_index).get("quote", 0))
 
 
 func frozen_quote_for_card(rarity: int, offer_id: int, stable_card_id: String, run_seed: int = 0) -> int:
-	var bounds := price_bounds_for_rarity(rarity)
+	# offer_id 就是门序号：报价只由「第几门 + 该门基准房收益 + 种子」决定，与钱包无关。
+	var bounds := price_bounds_for_rarity(rarity, offer_id)
 	var minimum := int(bounds.get("min", 0))
 	var maximum := int(bounds.get("max", 0))
 	var quote := int(bounds.get("quote", 0))
@@ -119,8 +122,8 @@ func frozen_quote_for_card(rarity: int, offer_id: int, stable_card_id: String, r
 	return mini(quote, int(CARD_PRICE_CAPS[stable_card_id])) if CARD_PRICE_CAPS.has(stable_card_id) else quote
 
 
-func price_bounds_for_card(rarity: int, stable_card_id: String) -> Dictionary:
-	var bounds := price_bounds_for_rarity(rarity)
+func price_bounds_for_card(rarity: int, stable_card_id: String, door_index: int = 1) -> Dictionary:
+	var bounds := price_bounds_for_rarity(rarity, door_index)
 	if CARD_PRICE_CAPS.has(stable_card_id):
 		var cap := int(CARD_PRICE_CAPS[stable_card_id])
 		var capped_min := mini(int(bounds.get("min", cap)), cap)
@@ -131,15 +134,44 @@ func price_bounds_for_card(rarity: int, stable_card_id: String) -> Dictionary:
 	return bounds
 
 
-func price_bounds_for_rarity(rarity: int) -> Dictionary:
-	if not _configured or _price_quote.is_empty():
+## 门序号（1 基，等于 `_fate_door_offer_id`）对应的价格基准房间。
+## 第 1 门是安全屋出门、尚无击杀，沿用第 1 间内容房的收益，避免出现 10 金币白拿三张。
+func price_segment_index_for_door(door_index: int) -> int:
+	var count := _segment_income_expected.size()
+	if count <= 0:
+		return -1
+	if count == 1:
+		return 0
+	return clampi(maxi(door_index - 1, 1), 1, count - 1)
+
+
+## 某一门的报价基准 = max（该门之前刚清完那间房的参考收益，至今平均每门收益）。
+## 只取单间会让小房间（收益 40）把卡价压到 50，攒下来的钱又能一次买三张；
+## 取两者较大值后，报价永远跟得上"已经打到第几门"，一间房仍然只够一张。
+func door_price_base(door_index: int) -> float:
+	var index := price_segment_index_for_door(door_index)
+	if index < 0:
+		return 0.0
+	var segment := _segment_income_expected[index]
+	var cumulative := 0.0
+	for cursor in range(index + 1):
+		cumulative += _segment_income_expected[cursor]
+	# 分母是**累计到的房间数**（index+1），不是门序号：第 1 门是安全屋出门，
+	# 尚未清房，不能用整关总额当基准，否则首门报价会被整体收益抬高。
+	var average := cumulative / float(maxi(1, index + 1))
+	return maxf(segment, average)
+
+
+func price_bounds_for_rarity(rarity: int, door_index: int = 1) -> Dictionary:
+	if not _configured:
 		return {"min": 0, "quote": 0, "max": 0}
-	var index := clampi(rarity, 0, _price_quote.size() - 1)
-	return {
-		"min": _price_min[index],
-		"quote": _price_quote[index],
-		"max": _price_max[index],
-	}
+	var base := door_price_base(door_index)
+	var share: float = RARITY_PRICE_SHARES[clampi(rarity, 0, RARITY_PRICE_SHARES.size() - 1)]
+	var centre := maxf(float(MIN_CARD_PRICE), base * share)
+	var minimum := maxi(MIN_CARD_PRICE, _round10(centre * PRICE_FLOOR_RATIO))
+	var maximum := maxi(minimum, _round10(centre * PRICE_CEILING_RATIO))
+	var quote := clampi(_round10(centre), minimum, maximum)
+	return {"min": minimum, "quote": quote, "max": maximum}
 
 
 func budget_snapshot(wallet: int) -> Dictionary:
@@ -147,7 +179,7 @@ func budget_snapshot(wallet: int) -> Dictionary:
 		"wallet": maxi(0, wallet),
 		"earned_kill_income": _actual_kill_income,
 		"spendable_budget": maxi(0, wallet),
-		"formula": "spendable_budget = current_run_wallet; rarity_unlock_income = cumulative_actual_kill_income",
+		"formula": "spendable_budget = current_run_wallet; rarity_unlock_income = cumulative_actual_kill_income; cheapest_quote = 0.70 x just_cleared_room_reference_income",
 	}
 
 
@@ -164,7 +196,7 @@ func import_snapshot(value: Variant) -> bool:
 	if not value is Dictionary:
 		return false
 	var snapshot: Dictionary = value as Dictionary
-	if int(snapshot.get("schema_version", 0)) not in [1, SCHEMA_VERSION]:
+	if int(snapshot.get("schema_version", 0)) not in [1, 2, SCHEMA_VERSION]:
 		return false
 	_actual_kill_income = maxi(0, int(snapshot.get("actual_kill_income", 0)))
 	_actual_kill_events = maxi(0, int(snapshot.get("actual_kill_events", 0)))
@@ -186,9 +218,12 @@ func get_snapshot() -> Dictionary:
 		"actual_kill_income": _actual_kill_income,
 		"actual_kill_events": _actual_kill_events,
 		"max_unlocked_rarity": max_unlocked_rarity(),
-		"price_bounds": _price_bounds_snapshot(),
+		"segment_income_expected": _segment_income_expected.duplicate(),
+		"price_bounds": _price_bounds_snapshot(1),
+		"door_price_table": _door_price_table(),
+		"min_card_price": MIN_CARD_PRICE,
 		"rarity_unlock_thresholds": _unlock_thresholds(),
-		"budget_formula": "spendable_budget = current_run_wallet; actual_kill_income is not future income and never changes a frozen quote",
+		"budget_formula": "spendable_budget = current_run_wallet; actual_kill_income is not future income and never changes a frozen quote; cheapest_quote = 0.70 x just_cleared_room_reference_income",
 	}
 
 
@@ -334,15 +369,38 @@ func _unlock_thresholds() -> Array[int]:
 	return thresholds
 
 
-func _price_bounds_snapshot() -> Array[Dictionary]:
+func _price_bounds_snapshot(door_index: int) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	for rarity in range(_price_quote.size()):
+	for rarity in range(RARITY_PRICE_SHARES.size()):
+		var bounds := price_bounds_for_rarity(rarity, door_index)
 		result.append({
 			"rarity": rarity,
-			"min": _price_min[rarity],
-			"quote": _price_quote[rarity],
-			"max": _price_max[rarity],
+			"min": int(bounds["min"]),
+			"quote": int(bounds["quote"]),
+			"max": int(bounds["max"]),
 		})
+	return result
+
+
+## 逐门价表：`door=1..N` 的基准房收益与五档报价，用于设计核对与验收打印。
+func _door_price_table() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if not _configured:
+		return result
+	for door in range(1, _door_count + 1):
+		var segment_index := price_segment_index_for_door(door)
+		var row: Dictionary = {
+			"door": door,
+			"segment_index": segment_index,
+			"segment_income": roundi(0.0 if segment_index < 0 else _segment_income_expected[segment_index]),
+			"base": roundi(door_price_base(door)),
+			"prices": [],
+		}
+		var prices: Array[int] = []
+		for rarity in range(RARITY_PRICE_SHARES.size()):
+			prices.append(int(price_bounds_for_rarity(rarity, door)["quote"]))
+		row["prices"] = prices
+		result.append(row)
 	return result
 
 

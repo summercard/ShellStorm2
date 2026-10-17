@@ -467,7 +467,7 @@ ESC 暂停页的「复位游戏存档二次确认」是 `ConfirmationDialog`（`
 | **受约束界面（只改样式）** | `InventoryUI`、`ItemSlot`、`VaultMenu`、`BaseVendingMenu` | `prism_reskin_styleboxes` + `prism_normalize_label_colors`；`ItemSlot` 的拖拽浮层单独上棱镜。**格子 / 布局 / 拖拽 / 交易逻辑一行未动**（§7.3.1） |
 | **武器构建** | `WorkbenchPanel`、`WeaponAssemblyTreePanel` | 树皮 + 运行时新建行（树行、统计行）在重建后补窄口径收口；行高亮由"3px 圆角框 + 色带"改 1px 白线 + 归一化淡色带 |
 | **局内弹窗与全屏层** | `Dungeon3D`（HUD 弹层 / 模态关闭钮 / 全屏地图 / 塔罗卡背 / 卡反馈）、`TowerDescent3D._open_elevator_panel()` | `_make_hud_style` 保持 `a <= 0.50`；删掉两处 `_add_neon_frame` 调用并**删除该函数与 `NEON_FRAME_SCRIPT` 常量**；塔罗卡背单开一块不透明棱镜板（不受 HUD 半透契约约束）；`FateCardFeedback` 由"三层粗描边叠加"改**单线 1px**（闪的瞬间 2px） |
-| **启动流与对话** | `StartupLoadingScreen`、`OpeningMovieScreen3D`、`ExpeditionLoadingScreen`、`dialogue/DialogueUI` | 启动壳/读取页：深墨底 + 白线 + 棱镜进度槽；读取页波浪 `LOADING` 改用**同一个字体对象**量宽（否则棱镜字距会让字母挤在一起）；开场影片保留描边（压在活动画面上）；叙事底栏面板 + 三级排印。`StartupLoadingScreen` 于 2026-10-17 按主人指定收敛为**纯黑底 + 整块斜置名字 + 同角度斜进度条**，并在棱镜骨架之上叠一层**粉/青赛博色散 + 边缘故障带**（唯一授权例外，仅此一屏，见 UI 清单 UI-01） |
+| **启动流与对话** | `StartupLoadingScreen`、`OpeningMovieScreen3D`、`ExpeditionLoadingScreen`、`dialogue/DialogueUI` | 启动壳/读取页：深墨底 + 白线 + 棱镜进度槽；读取页波浪 `LOADING` 改用**同一个字体对象**量宽（否则棱镜字距会让字母挤在一起）；开场影片保留描边（压在活动画面上）；叙事底栏面板 + 三级排印。`StartupLoadingScreen` 于 2026-10-17 按主人指定收敛为**纯黑底 + 撑满画幅的斜置名字 + 同角度斜进度条**，并在棱镜骨架之上叠一层**粉/青赛博色散**（唯一授权例外，仅此一屏、仅作用于字与条，不做画面边框特效，见 UI 清单 UI-01） |
 | **开发者层** | `PerformanceOverlay`、`player3d/FlashlightColorTweaker` | FPS 三档语义色改 `PRISM_OK/WARN/DANGER`；撤掉文字投影（改由面板底衬保可读性）；**滑条纳入 `apply_prism_tree`** |
 
 **开工前需读的坑**（第二批踩到的）：
