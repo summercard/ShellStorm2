@@ -1,9 +1,9 @@
 {
   "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
-  "asset_version": "v039",
+  "asset_version": "v042",
   "assembly_version": "v021",
   "status": "active",
-  "source": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v039.blend",
+  "source": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v042.blend",
   "transfer": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/character_transfer_ledger.json",
   "prefab": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
   "skeleton_id": "SKEL-BUNNY01-004",
@@ -554,6 +554,228 @@
       "loop": false,
       "frames": 109,
       "tracks": 11
+    },
+    "melee_axe_1_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_1_recovery": {
+      "duration": 0.4,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_1_windup": {
+      "duration": 0.48,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_2_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_2_recovery": {
+      "duration": 0.4,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_2_windup": {
+      "duration": 0.48,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_3_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_3_recovery": {
+      "duration": 0.4,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_3_windup": {
+      "duration": 0.48,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_charge": {
+      "duration": 1.0,
+      "loop": false,
+      "frames": 121,
+      "tracks": 11
+    },
+    "melee_axe_charged_active": {
+      "duration": 0.18,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_charged_recovery": {
+      "duration": 0.7,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_charged_windup": {
+      "duration": 0.08,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_axe_idle": {
+      "duration": 1.6,
+      "loop": true,
+      "frames": 61,
+      "tracks": 11
+    },
+    "melee_bat_1_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_1_recovery": {
+      "duration": 0.4,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_1_windup": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_2_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_2_recovery": {
+      "duration": 0.4,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_2_windup": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_3_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_3_recovery": {
+      "duration": 0.4,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_3_windup": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_bat_idle": {
+      "duration": 1.6,
+      "loop": true,
+      "frames": 61,
+      "tracks": 11
+    },
+    "melee_blade_1_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_1_recovery": {
+      "duration": 0.4,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_1_windup": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_2_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_2_recovery": {
+      "duration": 0.4,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_2_windup": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_3_active": {
+      "duration": 0.14,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_3_recovery": {
+      "duration": 0.4,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_3_windup": {
+      "duration": 0.2,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
+    },
+    "melee_blade_charge": {
+      "duration": 0.35,
+      "loop": false,
+      "frames": 121,
+      "tracks": 11
+    },
+    "melee_blade_idle": {
+      "duration": 1.6,
+      "loop": true,
+      "frames": 61,
+      "tracks": 11
+    },
+    "melee_blade_spin": {
+      "duration": 0.55,
+      "loop": true,
+      "frames": 121,
+      "tracks": 11
+    },
+    "melee_blade_spin_recovery": {
+      "duration": 0.3,
+      "loop": false,
+      "frames": 41,
+      "tracks": 11
     }
   },
   "files": [
@@ -563,29 +785,29 @@
       "bytes": 10282728
     },
     {
-      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v039.blend",
-      "sha256": "6062e0d92bdf4f79eb6981110c762cf5d9c4415b5dcf426d84254c3cc35e76ce",
-      "bytes": 487698271
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v042.blend",
+      "sha256": "94774453e91c8c78e6738157964ea6d6b7e96d2f19bdca99496c2e01a3b6580d",
+      "bytes": 537545424
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.json",
-      "sha256": "cb8ba5522f96e753a7e6cc93ee231c3354bd0e9f339a9933516483378dc08ed5",
-      "bytes": 13891665
+      "sha256": "ef8e6264e9156f0ff763138f5308604e9ec31ffbf4960a3f35a0fbd9466e6a32",
+      "bytes": 17460416
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.glb",
-      "sha256": "b6be0a726966e69ef03df13e1bc6dc802fe1dabff129cf254082b33b174538a0",
-      "bytes": 2426500
+      "sha256": "34b22d18814290302760dff9b0558ee8894671ad8e9bfdb83e55c2cddcc730f4",
+      "bytes": 793592
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
-      "sha256": "5db5eb5a1e03d9e0f3fee9dc595509f86b0e15d2c7e5664d2241521b5b5104cb",
+      "sha256": "50861d4bc1ff5fc16ac2851288a4e4cbbb0018078aee848e63e570b0066c8306",
       "bytes": 5849
     }
   ],
   "limits": [
-    "No exact world foot lock or 2D direction blend",
-    "Other longguns retain their existing support socket differences",
-    "Family charge and heavy melee remain separate unfinished actions"
+    "Full project suite and mobile not executed",
+    "Balance remains provisional",
+    "Non-melee family charge not included"
   ]
 }

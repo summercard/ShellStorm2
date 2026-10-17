@@ -10,6 +10,7 @@ from workspace_paths import work_path
 from export_character_bundle import signature
 SOURCE=R/'art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v039.blend'
 TARGET=SOURCE.with_name('chr_bunny01_animation_v041.blend')
+if not SOURCE.exists():SOURCE=R.parent/'ShellStorm2-backup/2026-10-16_melee_v041/retired_sources/chr_bunny01_animation_v039.blend'
 OUT=work_path('sessions/2026-10-16_melee_v041/source_report.json').parent
 FAMILIES={'bat':'baseball_bat','blade':'greatblade','axe':'waraxe'}
 def mix(a,b,t):return tuple(x+(y-x)*t for x,y in zip(a,b))
@@ -43,6 +44,13 @@ def params(family,step,phase,t):
     return mix(end,hold,smooth(t))
 def build():
     bpy.ops.wm.open_mainfile(filepath=str(SOURCE))
+    # Archived masters retain relative model links from their original folder.
+    for library in bpy.data.libraries:
+        if 'chr_bunny01_model_v021.blend' in library.filepath:
+            model=R/'art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend'
+            if Path(bpy.path.abspath(library.filepath)).resolve()!=model.resolve():
+                library.filepath=str(model)
+                library.reload()
     for old_scene in list(bpy.data.scenes):
         if old_scene.get('preview_clip','').startswith('melee_'):bpy.data.scenes.remove(old_scene)
     template=next(s for s in bpy.data.scenes if s.get('preview_clip')=='idle')

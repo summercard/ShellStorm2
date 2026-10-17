@@ -9863,13 +9863,13 @@
       "sha256": "d37ec67b4a4af8dca20d473b25fcf4401a2a4ffa3072c132893d11f88c42e83b"
     },
     {
-      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v039.blend",
-      "bytes": 487698271,
+      "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v042.blend",
+      "bytes": 537545424,
       "family": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_VERSION.blend",
       "version": [
-        39
+        42
       ],
-      "sha256": "6062e0d92bdf4f79eb6981110c762cf5d9c4415b5dcf426d84254c3cc35e76ce"
+      "sha256": "94774453e91c8c78e6738157964ea6d6b7e96d2f19bdca99496c2e01a3b6580d"
     },
     {
       "path": "art_source/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",

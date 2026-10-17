@@ -444,6 +444,11 @@ custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "瞄准辅助\n摇杆瞄准时，准星被视野内已照亮的敌人轻微吸引（偏转有上限，不会抢走控制）"
 
+[node name="AutoFire" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "自动射击\n开启后不必按住射击键：持枪即按当前准星持续开火。近战武器不受影响"
+
 [node name="LeftStickAim" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
