@@ -1,0 +1,21 @@
+# 大世界 · 地下街区 Blender 源制作
+
+- FeatureID：ASSET-PIPELINE；工程版本：0.1.0；资产版本：v001。
+- 来源：用户提供的赛博朋克街区概念图（HOTEL / NEXUS / 藥 / BAR / SECTOR 07 東區 / 跨街高架 / 湿路反光），指定为**大世界地下街区**（cavern street），不是地表街区、不是塔楼房间。
+- 独立资产：`ENV-OPENWORLD-UNDERGROUND-STREET`；区块 `block_id = open_world`，域 `scenes`，不归入塔楼四区块或远征房型库。
+- 源：`art_source/environments/open_world/source/underground_street/v001/env_underground_street_source_v001.blend`。
+- 街区总包络 52.0×52.0×30.0m：基底岩板 52×52（厚 1.8）、四周 10m 岩壁衬砌模块（30m 高）、拱顶板底 28.6m、顶板桁架 5 道、四角 30m 支撑巨柱、四面隧道口拱门。
+- 45 个独立资产包 / 187 个实例 / 15 410 三角面；组件库唯一组件 45 ≤ 50，同族最大 2（`neon_sign_vertical`、`facade_pipe`、`road_deck`、`wet_detail`、`ceiling_service`、`roof_equipment` 均为 2）。
+- 集合四级：`01_制作组件_按组件拆分_v001`（45，默认隐藏）/ `02_游戏输出_独立资产包_v001`（45，默认隐藏，Godot 前需显式开启）/ `03_场景拼装_实例布局_v001`（5 个分组：基底道路、主体建筑与霓虹、跨街高架与地下围护、街道设施与车辆、吊顶结构与管线）/ `90_展示与动态_灯光相机`（13 灯 + 5 相机）。
+- 材质：四共享角色 `01_精工金属_紫色骨架 / 02_细腻哑光_青绿大面 / 03_清漆反光_紫粉点缀 / 04_柔和自发光_UI灯光`，加 `05_环境柔雾_青白蒸汽`（蒸汽贴地雾片专用，alpha 0.035）。色盘外链 `assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png`，`Closest` 插值，未打包。
+- 组件局部原点统一为**底面中心 Z=0**（几何归零，高程由实例 Empty 变换承担）；正面 = 局部 −Y。catalog 的 `source_z_offset_m` 记录归零前的原始高程，供追溯。
+- 验收：`qa/validate_game_prop.json` 17 项全通过（15 410/15 410 面逐面 PaletteUV 单格安全岛、活动层与渲染层、UV Map 节点、Closest、无废弃材质）；`qa/source_audit.json` 14 项全通过（四级集合、空包、唯一归属、包数三方一致、尺寸/原点、实例数、材质、色盘、组件预算与族预算）。
+- 预览：`render_ref_45deg_final.png`（参考三分之四）、`render_street_closeup_final.png`（街角近景）、`render_ceiling_vault_final.png`（顶棚仰视）、`render_top_ortho_final.png`（俯视正交）、`render_shell_overview_final.png`（围护全景）。
+- 本轮为**纯表现 Blender 源阶段**：未导出 GLB、未建 PackedScene、无碰撞/导航/LOD/可玩洞口；账本只登记街区总套件（第 962 行），组件级明细以 `component_catalog.json` 为准，**不写入《3D-场景通用》**（该页一行 = 一个真实存在的 PackedScene）。
+- 可重建脚本：`scripts/blender/build_openworld_underground_street_v001.py`（幂等，先清场景再建）、`ug_street_lib_v001.py`（几何/材质/PaletteUV 基础库）、`light_underground_street_v001.py`（13 灯 + AgX 色彩管理）、`render_underground_street_v001.py`（五机位）、`audit_underground_street_v001.py`（源审计）。重建顺序：build → light → render → audit → validate。
+- 账本登记脚本：`scripts/register_underground_street_ledger.py`；基线补录：`scripts/refresh_ledger_baseline_ugstreet.py`（`asset_count` 1292→1293，`场景` 793→794，23 列指纹重算，`sheet_digests` 未变）。
+- 门禁：`check_asset_registry.py --ledger scenes` → OK（957 行，0 issue）；`--scope structure` → OK（1293 行 / 9 本）；`check_asset_runtime_naming.py` → OK（只拦新增，欠账快照未变）。`verify_ledger_split.py` 剩余 1 条 `moved_sheet_mutated`，落在 `vfx / 3D-特效`，**改动前即存在**（本域账本未改，`git status` 无 vfx 账本改动），非本次引入，未做批量回填。
+- 已知取舍：
+  - 大堂立面拱窗由独立模块 `hotel_arch_window_bay_02` 实例化（5 层 × 3 列 = 15 个），主体只留窗台托，避免同一窗做两遍。
+  - 蒸汽只用 2 处、贴地薄片：四角色材质体系里没有体积雾，堆高会读成实体饼状。真正的体积感留给 Godot 后处理。
+  - 湿路反光由 `wet_reflect_streak_05` 贴地拉丝 + `puddle_reflect_patch_04` 水洼承担，不用整片高粗糙反光垫（会把车道打白）。

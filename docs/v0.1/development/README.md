@@ -1,5 +1,7 @@
 # v0.1 开发记录
 
+- [大世界 · 地下街区 Blender 源制作](2026-10-18_openworld_underground_street_source.md)：45 组件 / 187 实例 / 52×52×30m 地下街区；逐面 PaletteUV 与源审计全通过，仅 Blender 源阶段。
+
 - [怪物启动过程与头顶吼叫图标](2026-10-14_monster_startup_roar.md)
 
 - [特效域新增「子弹特效」大类与 8 弹种专属弹体特效](2026-10-13_bullet_vfx_category.md)

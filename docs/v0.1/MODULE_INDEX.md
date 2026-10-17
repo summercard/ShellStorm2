@@ -52,6 +52,8 @@ ASSET-PIPELINE / WORLD-BLOCKS [500米地表与程序城市v004](development/2026
 
 ASSET-PIPELINE [跨塔路线景观补全代理v003](development/2026-10-03_cross_tower_landscape_foundation.md)：正式接入4基础、1地表、4新远景、2原城市下延段，共11独立PackedScene；当前100F/99F/98F完整运行时主塔实测最低-24.30；地表顶-80、厚0.2、余量20.25m。96原城市顶面/实例不变，仅2栋补长；Tower2原底低于地表，独立box向更深底面延续，不抬楼。264项几何/保护/材质/截图专项通过，真实六机位图和报告见outputs/landscape_completion_20261003。新增地上包络冲突0，34对既有关系及8对地下交叠单列；未进行三角检测、XLSX转正或全工程验收，不提升整个ASSET-PIPELINE完成状态。
 
+ASSET-PIPELINE [大世界地下街区Blender源v001](development/2026-10-18_openworld_underground_street_source.md)：`ENV-OPENWORLD-UNDERGROUND-STREET`，街区52×52×30m，45组件/187实例/15,410三角面；四共享材质角色+环境柔雾，逐面PaletteUV 15,410/15,410通过、源审计14项通过；场景账本第962行，`asset_count` 1292→1293、`场景` 793→794。仅Blender源阶段：未导出GLB、未建PackedScene、无碰撞/导航；`verify_ledger_split` 剩余1条为既有 `vfx/3D-特效` 摘要漂移，非本次引入。不提升总体完成状态。
+
 ASSET-PIPELINE [07号物流建筑源v005](development/2026-10-03_logistics07_hvac_optimization_v005.md)：11台空调逐台减面59%–61%，整栋输出降至87,939三角面；334包、4材质、6张Cycles预览，源与色盘UV验收通过；场景账本824行已更新。原始制作记录见[v004](development/2026-10-03_logistics07_building_source.md)。未导入Godot，用户视觉待复核，不提升总体完成状态。
 
 ASSET-PIPELINE [塔4周边五组景观建筑当前v003](development/2026-10-03_tower04_landscape_damage.md)：与SKYLINE同级、独立母版；增加中段差异破坏、倾斜断柱与塌板，并保留两栋在建骨架。73实例，各组含植物2098/2334/2450/2098/2991三角不变；源、范围锁定、空洞与色盘验收通过，场景账本819–823行更新。用户视觉待复核，未导入Godot，不提升总体完成状态。

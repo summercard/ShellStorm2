@@ -1,0 +1,45 @@
+{
+  "schema": "shellstorm2.openworld.asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-UNDERGROUND-STREET-METAL_FIRE_STAIR_WALKWAY_03",
+  "package_id": "metal_fire_stair_walkway_03",
+  "slug": "metal_fire_stair_walkway_03",
+  "name_zh": "外挂金属消防梯与检修走道_03",
+  "suite": "underground_street",
+  "version": "v001",
+  "category": "facility",
+  "family_id": "facade_fire_stair",
+  "source_blend": "art_source/environments/open_world/source/underground_street/v001/env_underground_street_source_v001.blend",
+  "blender_collection": "资产包_metal_fire_stair_walkway_03",
+  "source_collection": "组件源_metal_fire_stair_walkway_03",
+  "objects": [
+    "外挂金属消防梯与检修走道_03_主体"
+  ],
+  "source_objects": [
+    "源_外挂金属消防梯与检修走道_03_主体"
+  ],
+  "pivot_rule": "bottom_center_z0",
+  "source_z_offset_m": 0.0,
+  "front_axis": "+X",
+  "dimensions_m": [
+    3.44,
+    3.825,
+    4.631
+  ],
+  "polygon_count": 138,
+  "instance_count": 1,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "emissive_split": false,
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uv_layer": "PaletteUV",
+  "collision": "none（Blender 源阶段；碰撞归后续 Godot 包装）",
+  "export": {
+    "glb": null,
+    "exported": false
+  },
+  "note": ""
+}

@@ -1,0 +1,920 @@
+{
+  "schema": "shellstorm2.openworld.component_catalog",
+  "schema_version": 1,
+  "suite_name": "underground_street",
+  "asset_id_root": "ENV-OPENWORLD-UNDERGROUND-STREET",
+  "version": "v001",
+  "block_id": "open_world",
+  "district": "地下街区",
+  "unique_component_count": 44,
+  "total_instance_count": 185,
+  "components": [
+    {
+      "component_id": "comp_cavern_base_slab_52x52_01",
+      "slug": "cavern_base_slab_52x52_01",
+      "display_name": "地下街区基底岩板_52x52m_01",
+      "family_id": "base_slab",
+      "category": "structural",
+      "dimensions_m": [
+        53.97,
+        54.452,
+        2.0
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -1.8,
+      "output_collection": "资产包_cavern_base_slab_52x52_01",
+      "mesh_objects": [
+        "地下街区基底岩板_52x52m_01_主体"
+      ],
+      "polygon_count": 174,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_cavern_wall_module_10x30_01",
+      "slug": "cavern_wall_module_10x30_01",
+      "display_name": "地下岩壁混凝土衬砌模块_10x30m_01",
+      "family_id": "cavern_wall",
+      "category": "structural",
+      "dimensions_m": [
+        10.0,
+        1.85,
+        30.0
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_cavern_wall_module_10x30_01",
+      "mesh_objects": [
+        "地下岩壁混凝土衬砌模块_10x30m_01_主体",
+        "地下岩壁混凝土衬砌模块_10x30m_01_UI灯光自发光"
+      ],
+      "polygon_count": 156,
+      "instance_count": 16
+    },
+    {
+      "component_id": "comp_cavern_ceiling_slab_52x52_01",
+      "slug": "cavern_ceiling_slab_52x52_01",
+      "display_name": "地下街区拱顶板与梁格_52x52m_01",
+      "family_id": "ceiling",
+      "category": "structural",
+      "dimensions_m": [
+        52.0,
+        52.0,
+        2.59
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 27.41,
+      "output_collection": "资产包_cavern_ceiling_slab_52x52_01",
+      "mesh_objects": [
+        "地下街区拱顶板与梁格_52x52m_01_主体",
+        "地下街区拱顶板与梁格_52x52m_01_UI灯光自发光"
+      ],
+      "polygon_count": 272,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_ceiling_truss_rib_52m_01",
+      "slug": "ceiling_truss_rib_52m_01",
+      "display_name": "顶板钢桁架横梁_52m_01",
+      "family_id": "ceiling_truss",
+      "category": "structural",
+      "dimensions_m": [
+        51.778,
+        1.019,
+        4.22
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 23.38,
+      "output_collection": "资产包_ceiling_truss_rib_52m_01",
+      "mesh_objects": [
+        "顶板钢桁架横梁_52m_01_主体",
+        "顶板钢桁架横梁_52m_01_UI灯光自发光"
+      ],
+      "polygon_count": 376,
+      "instance_count": 5
+    },
+    {
+      "component_id": "comp_tunnel_portal_arch_10m_01",
+      "slug": "tunnel_portal_arch_10m_01",
+      "display_name": "隧道口拱门墙_10x30m_01",
+      "family_id": "portal",
+      "category": "structural",
+      "dimensions_m": [
+        10.0,
+        2.18,
+        30.0
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_tunnel_portal_arch_10m_01",
+      "mesh_objects": [
+        "隧道口拱门墙_10x30m_01_主体",
+        "隧道口拱门墙_10x30m_01_UI灯光自发光"
+      ],
+      "polygon_count": 216,
+      "instance_count": 4
+    },
+    {
+      "component_id": "comp_cavern_support_column_30m_01",
+      "slug": "cavern_support_column_30m_01",
+      "display_name": "地下支撑巨柱_30m_01",
+      "family_id": "cavern_column",
+      "category": "structural",
+      "dimensions_m": [
+        2.7,
+        2.8,
+        26.6
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_cavern_support_column_30m_01",
+      "mesh_objects": [
+        "地下支撑巨柱_30m_01_主体",
+        "地下支撑巨柱_30m_01_UI灯光自发光"
+      ],
+      "polygon_count": 190,
+      "instance_count": 4
+    },
+    {
+      "component_id": "comp_wet_asphalt_lane_10x10_01",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "display_name": "湿润双黄线柏油车道_10x10m_01",
+      "family_id": "road_deck",
+      "category": "floor",
+      "dimensions_m": [
+        10.0,
+        10.0,
+        0.21
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -0.18,
+      "output_collection": "资产包_wet_asphalt_lane_10x10_01",
+      "mesh_objects": [
+        "湿润双黄线柏油车道_10x10m_01_主体"
+      ],
+      "polygon_count": 54,
+      "instance_count": 8
+    },
+    {
+      "component_id": "comp_wet_asphalt_film_10x10_02",
+      "slug": "wet_asphalt_film_10x10_02",
+      "display_name": "湿润反光膜覆盖层_10x10m_02",
+      "family_id": "road_wet_film",
+      "category": "floor",
+      "dimensions_m": [
+        9.8,
+        9.8,
+        0.008
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_wet_asphalt_film_10x10_02",
+      "mesh_objects": [
+        "湿润反光膜覆盖层_10x10m_02_主体"
+      ],
+      "polygon_count": 6,
+      "instance_count": 0
+    },
+    {
+      "component_id": "comp_wet_asphalt_crosswalk_10x5_02",
+      "slug": "wet_asphalt_crosswalk_10x5_02",
+      "display_name": "湿润斑马线覆盖层_10x5m_02",
+      "family_id": "road_marking",
+      "category": "floor",
+      "dimensions_m": [
+        8.74,
+        4.85,
+        0.022
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.012,
+      "output_collection": "资产包_wet_asphalt_crosswalk_10x5_02",
+      "mesh_objects": [
+        "湿润斑马线覆盖层_10x5m_02_主体"
+      ],
+      "polygon_count": 96,
+      "instance_count": 4
+    },
+    {
+      "component_id": "comp_wet_asphalt_intersection_10x10_03",
+      "slug": "wet_asphalt_intersection_10x10_03",
+      "display_name": "湿润柏油十字路口_10x10m_03",
+      "family_id": "road_deck",
+      "category": "floor",
+      "dimensions_m": [
+        10.0,
+        10.0,
+        0.242
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -0.18,
+      "output_collection": "资产包_wet_asphalt_intersection_10x10_03",
+      "mesh_objects": [
+        "湿润柏油十字路口_10x10m_03_主体"
+      ],
+      "polygon_count": 92,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_sidewalk_tile_5x5_01",
+      "slug": "sidewalk_tile_5x5_01",
+      "display_name": "人行道石砖与路缘_5x5m_01",
+      "family_id": "sidewalk",
+      "category": "floor",
+      "dimensions_m": [
+        5.28,
+        5.0,
+        0.5
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -0.2,
+      "output_collection": "资产包_sidewalk_tile_5x5_01",
+      "mesh_objects": [
+        "人行道石砖与路缘_5x5m_01_主体"
+      ],
+      "polygon_count": 72,
+      "instance_count": 28
+    },
+    {
+      "component_id": "comp_puddle_reflect_patch_04",
+      "slug": "puddle_reflect_patch_04",
+      "display_name": "湿面反光水洼贴片_04",
+      "family_id": "wet_detail",
+      "category": "floor",
+      "dimensions_m": [
+        3.7,
+        3.0,
+        0.014
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.014,
+      "output_collection": "资产包_puddle_reflect_patch_04",
+      "mesh_objects": [
+        "湿面反光水洼贴片_04_主体"
+      ],
+      "polygon_count": 20,
+      "instance_count": 5
+    },
+    {
+      "component_id": "comp_wet_reflect_streak_05",
+      "slug": "wet_reflect_streak_05",
+      "display_name": "湿路面霓虹倒影拉丝_05",
+      "family_id": "wet_detail",
+      "category": "floor",
+      "dimensions_m": [
+        4.785,
+        5.2,
+        0.014
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.014,
+      "output_collection": "资产包_wet_reflect_streak_05",
+      "mesh_objects": [
+        "湿路面霓虹倒影拉丝_05_主体"
+      ],
+      "polygon_count": 210,
+      "instance_count": 6
+    },
+    {
+      "component_id": "comp_drain_manhole_grate_set_01",
+      "slug": "drain_manhole_grate_set_01",
+      "display_name": "铸铁井盖与排水格栅组_01",
+      "family_id": "drain_detail",
+      "category": "floor",
+      "dimensions_m": [
+        2.56,
+        0.897,
+        0.07
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_drain_manhole_grate_set_01",
+      "mesh_objects": [
+        "铸铁井盖与排水格栅组_01_主体"
+      ],
+      "polygon_count": 92,
+      "instance_count": 3
+    },
+    {
+      "component_id": "comp_hotel_brick_tower_core_10x12_01",
+      "slug": "hotel_brick_tower_core_10x12_01",
+      "display_name": "红褐砖石老旧酒店主体_10x12m_01",
+      "family_id": "hotel",
+      "category": "structural",
+      "dimensions_m": [
+        10.48,
+        12.48,
+        28.4
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_hotel_brick_tower_core_10x12_01",
+      "mesh_objects": [
+        "红褐砖石老旧酒店主体_10x12m_01_主体",
+        "红褐砖石老旧酒店主体_10x12m_01_UI灯光自发光"
+      ],
+      "polygon_count": 234,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_hotel_arch_window_bay_02",
+      "slug": "hotel_arch_window_bay_02",
+      "display_name": "酒店暖光拱形窗套_02",
+      "family_id": "hotel_window",
+      "category": "structural",
+      "dimensions_m": [
+        2.04,
+        0.59,
+        3.005
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_hotel_arch_window_bay_02",
+      "mesh_objects": [
+        "酒店暖光拱形窗套_02_主体",
+        "酒店暖光拱形窗套_02_UI灯光自发光"
+      ],
+      "polygon_count": 95,
+      "instance_count": 15
+    },
+    {
+      "component_id": "comp_hotel_shutter_shopfront_03",
+      "slug": "hotel_shutter_shopfront_03",
+      "display_name": "酒店底层卷帘门与雨棚入口_03",
+      "family_id": "shopfront",
+      "category": "structural",
+      "dimensions_m": [
+        5.84,
+        1.5,
+        4.0
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_hotel_shutter_shopfront_03",
+      "mesh_objects": [
+        "酒店底层卷帘门与雨棚入口_03_主体",
+        "酒店底层卷帘门与雨棚入口_03_UI灯光自发光"
+      ],
+      "polygon_count": 132,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_pharmacy_shop_block_10x8_01",
+      "slug": "pharmacy_shop_block_10x8_01",
+      "display_name": "低矮药店商业楼体_10x8m_01",
+      "family_id": "pharmacy",
+      "category": "structural",
+      "dimensions_m": [
+        10.4,
+        8.2,
+        8.6
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_pharmacy_shop_block_10x8_01",
+      "mesh_objects": [
+        "低矮药店商业楼体_10x8m_01_主体",
+        "低矮药店商业楼体_10x8m_01_UI灯光自发光"
+      ],
+      "polygon_count": 138,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_industrial_bar_building_10x12_01",
+      "slug": "industrial_bar_building_10x12_01",
+      "display_name": "深灰金属板工业酒吧楼_10x12m_01",
+      "family_id": "bar_building",
+      "category": "structural",
+      "dimensions_m": [
+        10.2,
+        12.0,
+        23.1
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_industrial_bar_building_10x12_01",
+      "mesh_objects": [
+        "深灰金属板工业酒吧楼_10x12m_01_主体",
+        "深灰金属板工业酒吧楼_10x12m_01_UI灯光自发光"
+      ],
+      "polygon_count": 240,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_foreground_service_roof_15x15_01",
+      "slug": "foreground_service_roof_15x15_01",
+      "display_name": "前景机房屋顶体量_15x15m_01",
+      "family_id": "service_roof",
+      "category": "structural",
+      "dimensions_m": [
+        15.2,
+        15.05,
+        10.2
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_foreground_service_roof_15x15_01",
+      "mesh_objects": [
+        "前景机房屋顶体量_15x15m_01_主体",
+        "前景机房屋顶体量_15x15m_01_UI灯光自发光"
+      ],
+      "polygon_count": 168,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_backdrop_tower_block_10x7_01",
+      "slug": "backdrop_tower_block_10x7_01",
+      "display_name": "背景高楼体量_10x7x29m_01",
+      "family_id": "backdrop_tower",
+      "category": "structural",
+      "dimensions_m": [
+        10.2,
+        7.2,
+        28.55
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_backdrop_tower_block_10x7_01",
+      "mesh_objects": [
+        "背景高楼体量_10x7x29m_01_主体",
+        "背景高楼体量_10x7x29m_01_UI灯光自发光"
+      ],
+      "polygon_count": 194,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_neon_sign_hotel_vertical_01",
+      "slug": "neon_sign_hotel_vertical_01",
+      "display_name": "竖向 HOTEL 霓虹主招牌_01",
+      "family_id": "neon_sign_vertical",
+      "category": "facility",
+      "dimensions_m": [
+        2.1,
+        1.81,
+        12.3
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_neon_sign_hotel_vertical_01",
+      "mesh_objects": [
+        "竖向 HOTEL 霓虹主招牌_01_主体",
+        "竖向 HOTEL 霓虹主招牌_01_UI灯光自发光"
+      ],
+      "polygon_count": 156,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_neon_sign_pharmacy_kanji_02",
+      "slug": "neon_sign_pharmacy_kanji_02",
+      "display_name": "方形藥字发光招牌_02",
+      "family_id": "neon_sign_board",
+      "category": "facility",
+      "dimensions_m": [
+        3.32,
+        0.44,
+        4.07
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -0.12,
+      "output_collection": "资产包_neon_sign_pharmacy_kanji_02",
+      "mesh_objects": [
+        "方形藥字发光招牌_02_主体",
+        "方形藥字发光招牌_02_UI灯光自发光"
+      ],
+      "polygon_count": 90,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_neon_sign_bar_vertical_03",
+      "slug": "neon_sign_bar_vertical_03",
+      "display_name": "竖向 BAR 与鸡尾酒杯霓虹_03",
+      "family_id": "neon_sign_vertical",
+      "category": "facility",
+      "dimensions_m": [
+        1.7,
+        1.3,
+        6.4
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_neon_sign_bar_vertical_03",
+      "mesh_objects": [
+        "竖向 BAR 与鸡尾酒杯霓虹_03_主体",
+        "竖向 BAR 与鸡尾酒杯霓虹_03_UI灯光自发光"
+      ],
+      "polygon_count": 126,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_skybridge_sign_sector07_04",
+      "slug": "skybridge_sign_sector07_04",
+      "display_name": "SECTOR07 東區 高架铭牌_04",
+      "family_id": "neon_sign_board",
+      "category": "facility",
+      "dimensions_m": [
+        9.12,
+        0.56,
+        2.48
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -0.04,
+      "output_collection": "资产包_skybridge_sign_sector07_04",
+      "mesh_objects": [
+        "SECTOR07 東區 高架铭牌_04_主体",
+        "SECTOR07 東區 高架铭牌_04_UI灯光自发光"
+      ],
+      "polygon_count": 114,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_neon_blade_sign_cluster_05",
+      "slug": "neon_blade_sign_cluster_05",
+      "display_name": "小型灯箱刀旗组_05",
+      "family_id": "neon_sign_blade",
+      "category": "facility",
+      "dimensions_m": [
+        1.9,
+        0.28,
+        4.2
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_neon_blade_sign_cluster_05",
+      "mesh_objects": [
+        "小型灯箱刀旗组_05_主体",
+        "小型灯箱刀旗组_05_UI灯光自发光"
+      ],
+      "polygon_count": 60,
+      "instance_count": 4
+    },
+    {
+      "component_id": "comp_skybridge_truss_span_21m_01",
+      "slug": "skybridge_truss_span_21m_01",
+      "display_name": "跨街重型装甲走廊_21m_01",
+      "family_id": "skybridge",
+      "category": "structural",
+      "dimensions_m": [
+        21.546,
+        3.9,
+        3.7
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 12.3,
+      "output_collection": "资产包_skybridge_truss_span_21m_01",
+      "mesh_objects": [
+        "跨街重型装甲走廊_21m_01_主体",
+        "跨街重型装甲走廊_21m_01_UI灯光自发光"
+      ],
+      "polygon_count": 654,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_skybridge_hazard_pillar_02",
+      "slug": "skybridge_hazard_pillar_02",
+      "display_name": "黄黑警示条纹支撑柱_12.8m_02",
+      "family_id": "bridge_pillar",
+      "category": "structural",
+      "dimensions_m": [
+        1.8,
+        1.8,
+        12.8
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_skybridge_hazard_pillar_02",
+      "mesh_objects": [
+        "黄黑警示条纹支撑柱_12.8m_02_主体",
+        "黄黑警示条纹支撑柱_12.8m_02_UI灯光自发光"
+      ],
+      "polygon_count": 150,
+      "instance_count": 2
+    },
+    {
+      "component_id": "comp_ceiling_duct_bundle_20m_01",
+      "slug": "ceiling_duct_bundle_20m_01",
+      "display_name": "吊顶风管管束_20m_01",
+      "family_id": "ceiling_service",
+      "category": "support",
+      "dimensions_m": [
+        20.0,
+        5.65,
+        3.25
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -0.05,
+      "output_collection": "资产包_ceiling_duct_bundle_20m_01",
+      "mesh_objects": [
+        "吊顶风管管束_20m_01_主体"
+      ],
+      "polygon_count": 260,
+      "instance_count": 2
+    },
+    {
+      "component_id": "comp_hanging_lamp_industrial_01",
+      "slug": "hanging_lamp_industrial_01",
+      "display_name": "工业吊灯_01",
+      "family_id": "ceiling_light",
+      "category": "support",
+      "dimensions_m": [
+        1.32,
+        1.32,
+        2.12
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_hanging_lamp_industrial_01",
+      "mesh_objects": [
+        "工业吊灯_01_主体",
+        "工业吊灯_01_UI灯光自发光"
+      ],
+      "polygon_count": 52,
+      "instance_count": 7
+    },
+    {
+      "component_id": "comp_ceiling_exhaust_fan_3x3_01",
+      "slug": "ceiling_exhaust_fan_3x3_01",
+      "display_name": "吊顶排风机_3x3m_01",
+      "family_id": "ceiling_service",
+      "category": "support",
+      "dimensions_m": [
+        3.2,
+        3.2,
+        0.94
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -0.16,
+      "output_collection": "资产包_ceiling_exhaust_fan_3x3_01",
+      "mesh_objects": [
+        "吊顶排风机_3x3m_01_主体",
+        "吊顶排风机_3x3m_01_UI灯光自发光"
+      ],
+      "polygon_count": 96,
+      "instance_count": 2
+    },
+    {
+      "component_id": "comp_industrial_street_lamp_pole_01",
+      "slug": "industrial_street_lamp_pole_01",
+      "display_name": "双臂工业路灯与信号灯杆_01",
+      "family_id": "street_lamp",
+      "category": "facility",
+      "dimensions_m": [
+        4.2,
+        0.58,
+        7.061
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_industrial_street_lamp_pole_01",
+      "mesh_objects": [
+        "双臂工业路灯与信号灯杆_01_主体",
+        "双臂工业路灯与信号灯杆_01_UI灯光自发光"
+      ],
+      "polygon_count": 96,
+      "instance_count": 8
+    },
+    {
+      "component_id": "comp_glowing_hazard_bollard_02",
+      "slug": "glowing_hazard_bollard_02",
+      "display_name": "发光警示防撞柱_02",
+      "family_id": "street_bollard",
+      "category": "facility",
+      "dimensions_m": [
+        0.56,
+        0.533,
+        1.12
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_glowing_hazard_bollard_02",
+      "mesh_objects": [
+        "发光警示防撞柱_02_主体",
+        "发光警示防撞柱_02_UI灯光自发光"
+      ],
+      "polygon_count": 70,
+      "instance_count": 6
+    },
+    {
+      "component_id": "comp_street_guardrail_fence_4m_01",
+      "slug": "street_guardrail_fence_4m_01",
+      "display_name": "人行道金属防护栏杆_4m_01",
+      "family_id": "street_guardrail",
+      "category": "facility",
+      "dimensions_m": [
+        4.06,
+        0.26,
+        1.05
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_street_guardrail_fence_4m_01",
+      "mesh_objects": [
+        "人行道金属防护栏杆_4m_01_主体"
+      ],
+      "polygon_count": 120,
+      "instance_count": 5
+    },
+    {
+      "component_id": "comp_street_utility_cabinet_02",
+      "slug": "street_utility_cabinet_02",
+      "display_name": "街道配电控制箱与垃圾箱组_02",
+      "family_id": "street_utility",
+      "category": "facility",
+      "dimensions_m": [
+        2.01,
+        0.87,
+        1.7
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_street_utility_cabinet_02",
+      "mesh_objects": [
+        "街道配电控制箱与垃圾箱组_02_主体",
+        "街道配电控制箱与垃圾箱组_02_UI灯光自发光"
+      ],
+      "polygon_count": 72,
+      "instance_count": 4
+    },
+    {
+      "component_id": "comp_retro_cyber_sedan_car_01",
+      "slug": "retro_cyber_sedan_car_01",
+      "display_name": "复古方正深色轿车_01",
+      "family_id": "vehicle",
+      "category": "facility",
+      "dimensions_m": [
+        4.7,
+        2.24,
+        1.42
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_retro_cyber_sedan_car_01",
+      "mesh_objects": [
+        "复古方正深色轿车_01_主体",
+        "复古方正深色轿车_01_UI灯光自发光"
+      ],
+      "polygon_count": 176,
+      "instance_count": 3
+    },
+    {
+      "component_id": "comp_rooftop_twin_fan_chiller_01",
+      "slug": "rooftop_twin_fan_chiller_01",
+      "display_name": "屋顶双风扇冷却机组_01",
+      "family_id": "roof_equipment",
+      "category": "facility",
+      "dimensions_m": [
+        2.75,
+        1.7,
+        2.5
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_rooftop_twin_fan_chiller_01",
+      "mesh_objects": [
+        "屋顶双风扇冷却机组_01_主体",
+        "屋顶双风扇冷却机组_01_UI灯光自发光"
+      ],
+      "polygon_count": 132,
+      "instance_count": 3
+    },
+    {
+      "component_id": "comp_rooftop_exhaust_vent_box_02",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "display_name": "屋顶方形排风管箱_02",
+      "family_id": "roof_equipment",
+      "category": "facility",
+      "dimensions_m": [
+        1.64,
+        1.24,
+        2.36
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_rooftop_exhaust_vent_box_02",
+      "mesh_objects": [
+        "屋顶方形排风管箱_02_主体"
+      ],
+      "polygon_count": 68,
+      "instance_count": 4
+    },
+    {
+      "component_id": "comp_wall_ac_outdoor_unit_03",
+      "slug": "wall_ac_outdoor_unit_03",
+      "display_name": "建筑外墙悬挂空调外机_03",
+      "family_id": "facade_detail",
+      "category": "facility",
+      "dimensions_m": [
+        0.9,
+        0.741,
+        1.2
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -0.6,
+      "output_collection": "资产包_wall_ac_outdoor_unit_03",
+      "mesh_objects": [
+        "建筑外墙悬挂空调外机_03_主体"
+      ],
+      "polygon_count": 44,
+      "instance_count": 8
+    },
+    {
+      "component_id": "comp_facade_pipe_cluster_vertical_01",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "display_name": "立面重型竖向管道束_01",
+      "family_id": "facade_pipe",
+      "category": "facility",
+      "dimensions_m": [
+        0.84,
+        0.64,
+        6.0
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_facade_pipe_cluster_vertical_01",
+      "mesh_objects": [
+        "立面重型竖向管道束_01_主体"
+      ],
+      "polygon_count": 148,
+      "instance_count": 5
+    },
+    {
+      "component_id": "comp_facade_pipe_elbow_horizontal_02",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "display_name": "立面横向转角管道桥架_02",
+      "family_id": "facade_pipe",
+      "category": "facility",
+      "dimensions_m": [
+        3.23,
+        0.59,
+        1.3
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": -0.9,
+      "output_collection": "资产包_facade_pipe_elbow_horizontal_02",
+      "mesh_objects": [
+        "立面横向转角管道桥架_02_主体"
+      ],
+      "polygon_count": 46,
+      "instance_count": 4
+    },
+    {
+      "component_id": "comp_metal_fire_stair_walkway_03",
+      "slug": "metal_fire_stair_walkway_03",
+      "display_name": "外挂金属消防梯与检修走道_03",
+      "family_id": "facade_fire_stair",
+      "category": "facility",
+      "dimensions_m": [
+        3.44,
+        3.825,
+        4.631
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_metal_fire_stair_walkway_03",
+      "mesh_objects": [
+        "外挂金属消防梯与检修走道_03_主体"
+      ],
+      "polygon_count": 138,
+      "instance_count": 1
+    },
+    {
+      "component_id": "comp_street_rock_rubble_pile_04",
+      "slug": "street_rock_rubble_pile_04",
+      "display_name": "街区碎石堆_04",
+      "family_id": "ground_debris",
+      "category": "floor",
+      "dimensions_m": [
+        3.1,
+        2.4,
+        0.9
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 0.0,
+      "output_collection": "资产包_street_rock_rubble_pile_04",
+      "mesh_objects": [
+        "街区碎石堆_04_主体"
+      ],
+      "polygon_count": 47,
+      "instance_count": 3
+    },
+    {
+      "component_id": "comp_sky_cable_span_24m_01",
+      "slug": "sky_cable_span_24m_01",
+      "display_name": "跨街电缆束_24m_01",
+      "family_id": "cable",
+      "category": "support",
+      "dimensions_m": [
+        24.019,
+        1.4,
+        2.55
+      ],
+      "pivot_rule": "bottom_center_z0",
+      "source_z_offset_m": 19.25,
+      "output_collection": "资产包_sky_cable_span_24m_01",
+      "mesh_objects": [
+        "跨街电缆束_24m_01_主体",
+        "跨街电缆束_24m_01_UI灯光自发光"
+      ],
+      "polygon_count": 298,
+      "instance_count": 2
+    }
+  ]
+}
