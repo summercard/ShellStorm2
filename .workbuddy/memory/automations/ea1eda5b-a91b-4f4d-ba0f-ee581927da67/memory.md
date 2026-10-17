@@ -5,6 +5,15 @@
 
 ## 执行历史
 
+### 2026-10-17 05:04 — **成功**（常规全流程，无干预）
+- 流水线一次跑通，未重试：导出 401.4 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / **`SMOKE_OK`**）→ 生成文档 → 覆盖发布（`server-api-update`，4 文件）→ 线上校验通过。耗时 4m36s。
+- 包：`ShellStorm2.exe`，**420,853,136 B**，SHA256 `8c109be9d0f8fca348e2fa718f0d9d0151f6239d56dc49eae0e2baedd647cf31`。
+- 线上独立复验：直链 HEAD HTTP 200 / Content-Length 420,853,136（＝本地）/ Last-Modified `16 Oct 2026 21:05:23 GMT`；**整包下载 420,853,136 B（41.3s @9.7 MB/s），重算 SHA256 逐字节一致**；更新页 HTTP 200 / 15,194 B。站点列表仍只有 `shellstorm2-20261012-190519` 一个。
+- 更新内容：CHANGELOG 8 条 / 提交 8 条（折叠 1）/ 未提交 0 项（工作区干净）。
+- 主条目：触发式遭遇封不住入口门（共享门归属+绑定）、踩点遭遇编成缩到约60%、room_04/06/09/10 改满宽带触发式、room_03 怪主动围猎+右上倒计时环、room_03 改踩点触发式（去盒+关门+到点开灯）、强化怪红色发光眼+`Head` 绑点、普通怪变种（-强化怪：小/胖/保安各一只）、星星卡节点与挂点构筑评估。
+- 合规：`project.godot` 的 `config/name="弹壳风暴2"` 未改；**本流程未执行任何 commit/push**（`6a59e26e「2026-10-17 每日自动提交」是另一条自动化产生的，非本次）；冒烟全程隔离 `APPDATA`；未新建站点；线上临时下载文件已清理。
+- 备注：上一轮（10-16）修复的 `InsuranceModule` RefCounted 引用环已稳定生效，本轮冒烟不再报 `resources still in use at exit`。
+
 ### 2026-10-16 08:25 — 修复后发布**成功**（主人指令「修复测试一下」）
 - 修复：`src/game/InsuranceModule.gd` 的 `_board.inventory_changed` 连接由「捕获 self 的 lambda」改为 `WeakRef` + 静态转发 `_relay_inventory_changed`，解开 `InsuranceModule ↔ InventoryModule` 的 RefCounted 引用环。`set_max_slots` 同步改，连接时机保持在 `restore_slots_snapshot` 之后。
 - 修复后：①源码 headless 复跑 `^ERROR` 0 行 / `Resource still in use` 0 条 → ②导出 394.1 MiB → ③三道门禁全绿（**`SMOKE_OK`**）→ ④生成文档 → ⑤覆盖发布（`server-api-update`）→ ⑥线上校验通过。
