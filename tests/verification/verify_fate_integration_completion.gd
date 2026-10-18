@@ -114,12 +114,14 @@ func _run() -> void:
 	)
 	dungeon._close_door_fate_overlay()
 	fresh_weapon()
-	var workbench := preload("res://scenes/WorkbenchPanel.tscn").instantiate() as WorkbenchPanel
+	# 2026-10-18：武器改造台改为 6×6 炼金盘，命运卡入口已收敛到门后购卡层与占卜屋。
+	# 这条断言反向钉住"改造台不要再长出第二套选卡入口"。
+	var workbench := preload("res://scenes/WorkbenchPanel.tscn").instantiate() as Control
 	add_child(workbench)
-	workbench.set_player(dungeon.player)
-	_select_button_deferred(dungeon.player.get_weapon_tree().root)
-	await workbench._on_fate_card_selected(card("fate_bullet_carry_gun"))
-	check(dungeon.player.get_equipped_weapon_instance().fate_upgrades.size() == 1, "工作台实际选牌调用统一来源入口")
+	check(
+		not workbench.has_method("_on_fate_card_selected"),
+		"武器改造台已不做命运卡入口，选卡只走门后购卡层 / 占卜屋"
+	)
 	workbench.queue_free()
 	fresh_weapon()
 	var secondary := ItemRegistry.get_instance().get_item("weapon_shotgun")

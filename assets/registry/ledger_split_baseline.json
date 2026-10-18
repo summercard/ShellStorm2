@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-10-18T04:50:03",
+ "captured_at": "2026-10-18",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1298,
+ "asset_count": 1306,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -5188,7 +5188,7 @@
    "d": "scenes"
   },
   "ENV-ROOFTOP-BROKEN-CRATE-A": {
-   "v": "7488bb432c2810fc20a0414d390e20344a04d6a286262b820e843144f76bce76",
+   "v": "ba8b816730a23663200b1c81ef684d614e5ecfd0b0fff249da0b4af7d705af3d",
    "c": "场景",
    "d": "scenes"
   },
@@ -5213,7 +5213,7 @@
    "d": "scenes"
   },
   "ENV-ROOFTOP-FLOWERBED-BROKEN": {
-   "v": "0e0d1657800b72f4a568760e6ee7b7758668255f5f012926b27527ee7fa7289c",
+   "v": "cfbeb18a2ab6c301854cc796a690461a6472dc65d58ce753b375d526b20d9653",
    "c": "场景",
    "d": "scenes"
   },
@@ -5223,22 +5223,22 @@
    "d": "scenes"
   },
   "ENV-ROOFTOP-RUBBLE-PILE-A": {
-   "v": "4d132e662f5052a7a25cc139b47cdbd843eccef2ff39efbf713f8a10d14601f1",
+   "v": "c821cde0445b38952f32fc18f610067d6bb7c68bcc25f6342b2527b0de64125f",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-ROOFTOP-RUBBLE-PILE-B": {
-   "v": "bdbde3c4477d2d38d5d4968a8f2e0f7ebadac5d70ff98c40089046e6d4a1b695",
+   "v": "0df1faebabd1a9c6e27985faad37f76641ee4101856c90f91db7519fa7cc46a2",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-ROOFTOP-RUBBLE-PILE-C": {
-   "v": "8cb9394625bf260cbf3423f848562b1597d11c736912e5d684a64d2d6083528c",
+   "v": "f5e7f8f6d9ba0d0b754395d9ac69c2979230ac29e71d6c8cff0235bbe914cc4d",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-ROOFTOP-SANDBAG-BARRIER": {
-   "v": "d5cf66427e8384de986abe5980c74fb123204c5b944920d51559607a39d6d877",
+   "v": "dadbba8326c2f796ae8496d89421c905b9d84071a3a5270add4fe2e671eeb1b3",
    "c": "场景",
    "d": "scenes"
   },
@@ -6526,32 +6526,72 @@
    "v": "a7a7f8df922074cbe471388936c82446f8b00042f9c968714f35e74a8c6c6114",
    "c": "特效",
    "d": "vfx"
+  },
+  "ENV-EXPEDITION-SECRET-DOOR-BOARDS": {
+   "v": "13ce38d51bf26e69a20e7d16b5dce21b39d91a8fdeb8b65e9b4902ca26238531",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXPEDITION-SECRET-DOOR-LEAF": {
+   "v": "3950d669f9cfcd9785160f0bbf4793a631bb96d39962862aba16368fb9b817bb",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-FALLEN-PLANTER": {
+   "v": "5a86bcc342f78ca6a144ddd8acddaa6d47b2fafcdc717330eda5d3cb52c03c70",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-GUIDANCE-FLOWERBOX": {
+   "v": "467d25ccf3f887b4c27486181d960a68566e30722abed006de9a8e74e82f7e4e",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-GUIDANCE-LAYOUT": {
+   "v": "4eea704d3f7fce7ceb83635ee4e99de9ff2fd506ebd63cb2d1fe1eeff52e52a8",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-TIMBER-PILE": {
+   "v": "07911217ac78c1ea0b01acd33074dcc362e5f419c4df4d3010c7dfe99cd70e28",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-COVERED-CARGO": {
+   "v": "a270517b33124a2ecdb6d30d4e9baab4308e5bbde6cccce03ec15570a491441f",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-ROOFTOP-GRASS-PATCH": {
+   "v": "e0f433d33787376dacb546cc29f619cd9cd21da2c096f331d7af60e98bd5a4ff",
+   "c": "场景",
+   "d": "scenes"
   }
  },
  "column_digests": {
-  "1": "1c4c40c4c046acec82cf76476563df8678906d76497510a98c3e5b116d3f1867",
-  "2": "587b8404c5e9ac23f644b33eb5a63251753d730ec8ce784476fe4315ccedf979",
-  "3": "f0f8c7814856e4b98dbbaf1b2d90cd3e558a3a78bef67061ed197ae3c60c72b1",
-  "4": "1d64aa7ad1477eef12d617c65c114b145fbb5af6fce74068761b1ab7117be23c",
-  "5": "eae4716889fa9151c3592d093743673914ce12d2366ed70a82f308db07e0177e",
-  "6": "52e65aec1ebebb8b498e101a0777db9ece531348398a07f4545de5c1347eb133",
-  "7": "c45103ca90f476888c7b3c73094e46f2d0ad9e5264d4b39d25d242c0a464285a",
-  "8": "9507da4e9bfe87ca0d7b5fe3715562e716d0f3e1cf5959efe9584ebb9732ee41",
-  "9": "029b22fd90a53ddb28af3e8d6c3f029ea2ac44b9fa22f27cb3d76a965491df4e",
-  "10": "89437815283ddb4973c9a95c83f10f0954a3cfc973579dafa773da48918bfd68",
-  "11": "8d7764dc0912e97a45fc2f86e7e61fbc4cfd0deb1736b25faaeea8e8c4f555d3",
-  "12": "111c77f6773f75b22e072ecd9fb3c709f4463fd0c85b4ebacf7698252f162fe6",
-  "13": "d9f9f3311c856e5a3243831c637f6470f1f407d2255bf18c28775c51369c32b6",
-  "14": "3f17afee6dfb313df7583b91f64af959cfd241e48c216f547e8437449cd06c65",
-  "15": "3d905af97e6d819bf557e7d54ab045726c68f6a7deb0ad1e283e97693f48aa1f",
-  "16": "3f1f17bac66b31087c5e5a1323e14f11d63481e350d0373f0eee34d3265771fd",
-  "17": "273eb4aaefc5bfcd1f9919b65adba3d123f0b44a2933dbed9f7f074f35df46c1",
-  "20": "683e6c52d05b59e6c841710e3f76fa36dff8404676b1115f7c9931d1ef45e9fe",
-  "21": "91865b2ad9eebb4bcda77305e5aa28bf62ef83ace2f5c86398e5ba84342a1b09",
-  "22": "a16205c4af34190169b5ccab7d630449098335aa9e52738af5e06027a9501ed3",
-  "23": "21e7cad92db04cd66a66b0c218c39c7ac59e92b67b4c7c4eee99ef17d0e2efdb",
-  "24": "dba1b63499fe5b89dbf5aad3aaa014f4e62d5bc950cc60ea6da10a7f471804a1",
-  "25": "6f9137320e2ca632287be729b49300f9b87dd633f31ff32ad2ca30f95ae798fc"
+  "1": "8902ea1680d9a4be4a39a114a2e50898b7c9bcb6d382d7572036c5b5fa5d3412",
+  "2": "82a274a6e5c0a3c627fefdf636e8007da72543a332b91139d1a5f295805f5706",
+  "3": "e8c86f95f0e2bf4923bf928386df6e5d260b1a89e5f55b78522e66cb6fcaeb59",
+  "4": "d3945f46068e7d1399ed81b4059266833920d2697d008392cf1e8917948b7aeb",
+  "5": "ae6d83707a02b3e4ff9c986d3b885051039d6f1e958ba8f46b2e04e2f19be4ed",
+  "6": "7b99af7ac90a59b656d7b1004444394b958ad372b8335369f65fd5c774f3af87",
+  "7": "4bef52130b178c519c7955fdcaf7bbc0995861cd3c8572e7cc5cad84e67dca3f",
+  "8": "5fdfc3bad12c9936c47dbafadab8a6358b8234268016201b537325dad5111e41",
+  "9": "cc22da275b833348817d1bf0c5fa8f1e891aaa69ae7c3e00183129374c4b358c",
+  "10": "fc7dbb8a8e48b0eb29a276307231fd42fb5f976b988958a6e5b3268aec2f8e5d",
+  "11": "302dfe7171ea50dfd1d873a60cef18b02bf8baac9461a5f2e9bbf0816d25657d",
+  "12": "c69e0236e1b7408b12e9930c0bc5551d6360187919d5bef7cce83c11e671d5f4",
+  "13": "68e3a72eaf472e07021c1c8151a0e9a16068d78b0f3009026a173a0ef6552c66",
+  "14": "73a304cece814696715eafaf279e2433aad33796e53d1b3414523a7d1ce664f4",
+  "15": "08e372087fa2753c67d75362b357e557ba13880130d2d81097fd9dffcc74713a",
+  "16": "198bc288b4dc167cbe67c5ce6412f9b743dc78c180e3bba25260404972074b86",
+  "17": "bb0f068155a577c49ae4542cf786b2931d68da223ef20c267a17b0973627a77c",
+  "20": "9e400c327f1978d78d109417ff04265b55935e5c2ca9039f3b709959b9c9af99",
+  "21": "10649beb76155777207182a2c3d78bdeea23a68d53a41d1ec8c09849f7f383e3",
+  "22": "8ccde55a85d50c0cf08ea3364c2d5f2c1815a6f16b9259ca7cf68c0da8b1a09f",
+  "23": "14a87e2c6427626cd2b95d4cf650c6daf55e2d2063a33b3bfa63a542a60993a4",
+  "24": "6c3707d2e892c0f383b243d8ec47b9ea5b298ba19d2e83290acb47a105a5eb88",
+  "25": "bcd9bb1ab01cf934a91c803a2b953145db20ee9f33d21548e583517211eea4ea"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -6561,18 +6601,19 @@
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
   "敌人动画与状态": "9a965b0f46a3e7506a04f96070abfe7c0beae1aed0a80e2ae9e99fcaf5c08552",
   "3D-敌人": "b3851d07c27edfb6fed4c01e87814bb8b1675b8b235e6558601925a866cb240b",
-  "3D-场景通用": "661900d3d35cb4d3c2e276ef7a34d191e13605b07106007c4a3796fed0199654",
+  "3D-场景通用": "188c75345dc7547c6d939fbaa732a12eefa86393a4ccfbe3754c0899749bba73",
   "3D-设施": "60949a4e4d892dc425a78abdf55ee776b8da45bae11b3cb9516bc8136c079871",
   "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
   "3D-物品": "0bba6748006c5b75fefd481d2406d12691ea639b33437364bccb53d0cff5be58",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
+  "背包物品调用索引": "add8176439baf2b0d3ac2e9f73d6f1fd488dda8d2e388e9a22959a66e00bec66",
   "3D-特效": "9558f5992d9c3a0fcdf2d206856e3034621765c9d7d58157639ae1e0acbd3199"
  },
  "category_counts": {
   "角色": 25,
   "敌人": 15,
-  "场景": 794,
+  "场景": 802,
   "场景道具": 49,
   "基地资产包": 114,
   "道具": 39,

@@ -1,3 +1,264 @@
+## 2026-10-18 99F 基地灯具与屏幕动态（7 通道故障闪 / 呼吸 / 流水 / 频闪）
+
+- 业主裁决「两个都做吧 节奏不要太快 时间错开」：红色应急灯做故障闪 + 门边警示灯做慢呼吸，全部节拍放慢、事件必须错开。新增 `src/world3d/BaseLampDynamics3D.gd`，在 `zone_base.tscn` 挂一个 `Art/基地灯具动态` 节点，接管 7 个对象的 9 个 surface。
+- 七通道：A 霓虹 8~15s 抽动（0.72）/ B 床头灯 5.4s 呼吸（0.87~1.00 **向下沉**）/ C 贩卖机 9~14s「眯眼」（0.62）/ D 配电柜三灯自检流水（相位差 0.32s，0.18↔1.85）/ E1 应急灯 6.5~12s 双跳（0.15）/ E2 门警示灯 8.6s 双向呼吸 / F 电脑屏 10~16.5s 频闪（8~14Hz，**常态不发光**）。
+- **写入口让位**：`BaseFixtureGlow3D` 是这些材质的唯一所有者（开关写 0/原值、启动序列写 0/0.16/1.0）。新脚本只在它静止时段写 `baseline × factor`，并在它重新接管时把当时能量读回当新 baseline；`self_owned` 的屏幕面自己开关 `emission_enabled`。N11 验到启动序列 70 帧内受控能量只落在三档、越界 0。
+- **错开**：同时 ≤2 个事件、相邻起始 ≥2.9s、进场景首事件分别在 1.8/7.5/10/13.5/17s。**霓虹有预约权** —— 不给的话实测 24% 的霓虹事件被闸门推到 15s 以上（等于改业主给的节拍），给了之后回到 8.05~14.92s、中位 12.02s。
+- **实测纠正三处「名字对、东西不对」**：① `42_柔和自发光_v019_001` 是**台灯发光头**不是电脑屏；② 电脑屏是 `42_主体` 的 surface 2（`03_清漆反光`，emission 本来关着）；③ 台灯罩已纯白过曝，**往上加亮度零变化**，呼吸必须向下沉（×0.90 有 32614px 变化）。判定手法：逐 surface 染色 + 开关切换取差异包围盒。
+- 幅度全部由梯度实验定值（1.0/0.9/0.72/0.55/0.42 逐档真渲染量差异像素），不靠感觉。
+- 验收 20 项全绿：`verify_base_lamp_dynamics.gd`（headless 12 项，结构和时序）+ `verify_base_lamp_visual.gd`（真渲染 8 项，看得见 + 关灯无残留）。视觉实测：霓虹 18.8% / 床头灯 5.4% / 贩卖机 14.9% / 三灯 0.19% / 应急灯 4.2% / 门灯 1.0% / 电脑屏 14.4%。headless 跑视觉套件走 exit 2 不代签。
+- 踩坑记 7 条（验证脚本自身）：规划与拍摄用了两个实例导致 RNG 错位、`_process` 在关停前已推进时钟、频闪频率乘了归一化时间变成 40Hz、envelope 乘两次把事件两端压平、`emission_operator` 忘了从 MULTIPLY 改 ADD 导致自发光被乘成 0、关灯态判据误把墙面当残留、GDScript 格式串 `%%）` 导致格式化静默失效。
+- 未做：贩卖机**真眨眼**（眼睛与屏面同 surface、2262 个碎岛，要拆几何才行，与「不动美术源」冲突，待裁决）、屏保扫描亮带、画质档开关。见[记录](2026-10-18_base99_lamp_dynamics.md)。
+
+## 2026-10-18 远征01 暗门可布位点普查（12 间房 / 201 个合法槽）与 S4 改址
+
+- 新增只读探针 `tests/verification/probe_secret_site_candidates.gd`：逐房逐墙逐槽跑三条判据（槽位合法 / 不压主路门洞 / 朝外是真外墙），产出可布清单与不可布原因。
+- 普查结果：12 间主路房合计 **201 个合法位点**；`boss` 53、`room_01`/`room_05` 各 20、`room_08` 19、`room_04` 18、`room_02`/`room_06` 各 12、`room_09`/`room_10` 各 11、`room_03` 10、`extraction` 9、`room_07` 6。
+- 跨 3 个种子：**主路门槽 12/12 在作者系里一致**、**压门波动 0 项** —— 「写死一个槽」的前提成立。另有 6 项「贴邻房」波动（`room_01` 的 `south+0.0/+5.0`、`west-2.5` 等），选点避开即可。
+- **修掉 S4**：原 `room_10 / north +2.5` 运行时落到 `room_10` 与 `room_09` 的**共用墙**（270° 旋转把 `north` 转到东墙）。改为 `room_10 / south -7.5` → 实机西墙 `-7.5`、离最近主路门 21.5m、朝外净空 3.0m。选 `-7.5` 而非更远的 `+7.5`，是因为后者在**设计源坐标**上落进 `boss`，静态 A3 会报红。
+- 三个坑写进记录：模板 lane 相位是 `±(半长−7.5−5k)` 不是 `0/±5`；运行时 `rotation_deg` 是 90/180/270（用运行时 wall 跨种子比会得到 11/12 间假波动，必须反算作者系）；静态 A3 用的是示例版图坐标，不能当实机保证。
+- 验收：`SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 …` + `VERIFICATION_SUITE_OK`。见[记录](2026-10-18_secret_site_slot_survey.md)。
+
+## 2026-10-18 武器改造台版式重排：5×5 炼炉居中、背包贴右、按钮与信息全在底部
+
+- 业主口径：「右边还是我的包裹，中间是炼炉，炼炉尽可能四方形，先 5×5，按钮直接放底下，所有信息也放底下」。
+- **盘面 6×6 → 5×5**（25 格，正方形）。`WeaponForge.TRAY_COLUMNS/TRAY_ROWS` 与 `WorkbenchPanel` 的同名常量同步改，验收新增「行列必须相等」「两层常量逐值一致」两组断言 —— 面板自己建棋盘、规则层算容量，两处漂移会让看到的格数与算出的容量不一致。
+- **版面从「左盘面 + 右背包 + 中下读数 + 底按钮」压成三段**：页头 / 主体（炼炉 + 背包）/ 页脚。读数行与操作行全部收进页脚，主体区不再夹任何信息行；`ESC 关闭` 从页头右上挪到页脚右下 —— 页头不再挂任何按钮。
+- **炼炉真正居中，不能用 `HBoxContainer`**：HBox 只能让"炼炉+背包"这一组整体居中，炼炉必然被背包挤到左半边（实测偏中心 118px）。改为 `Control` + `_layout_body()`：在 `resized` 时手算两个矩形，炼炉水平居中、背包贴右边缘，撞车时按 `TRAY_BAG_GAP`（48）把炼炉往左夹。实测 1280 基准：炼炉 378..794（中心 586，面板中心 640）、背包 842..1210，中间留 48。
+- **背包列数不能跟着画面改**：一度把 `BAG_COLUMNS` 改成 6 想让背包变窄，结果 4×2 的步枪直接画出棋盘右边界 —— `InventoryModule.GRID_COLUMNS` 恒为 8，物品槽位索引是按那个列数算的，改列数等于让同一个索引落到不同行列。已回调为 8，只改格边长（52 → 46）来腾空间，并在文档里写成硬约束。
+- **读数七栏等分铺满页脚**：每栏 `size_flags_horizontal = EXPAND_FILL`。不铺满时七栏挤在左边、右半空一片，读起来不像一条数据带。
+- **状态栏空白文案必须压一行**：原文案 68 字，在 1280×720 下换行，第二行直接顶到底部边框上。改为 44 字：「任意物品可作材料 · 材料越稀有品质越高 · 单枪＝重铸 / 两把＝融合 / 纯材料满 6＝合成」。
+- 盘面格边长 54 → 80（少一行后可以放大，盘面 400×400 仍是这一屏的主体），背包格 50 → 46（8 列 × 46 = 368，再大就顶到居中的炼炉）。
+- 验收：`verify_weapon_forge` 全绿（exit 0）。新增版式门禁四条：主体区不得包含 `Readout`/`Actions`/`ForgeButton`；页脚必须是「读数 + 操作」两行且为整页最后一个子节点；关闭按钮必须在页脚；炼炉必须排在背包左侧。盘面锚点用例随 5×5 全部重算（4×2 越界从列 5 改成列 2）。回归 `verify_weapon_drop_grade` / `verify_fate_integration_completion` / `probe_localization_contract` 全绿。
+- 文档：[07.2](../07.2_玩法系统_武器改造台.md) §1/§7/§9/§10 同步、[UI 清单](../design/UI与UX全局设计及全界面清单.md) UI-21、[功能索引](../MODULE_INDEX.md)、[04 技术施工](../04_技术施工_战斗与局内成长.md)。
+
+## 2026-10-18 武器改造台：所有物品都能当材料，材料稀有度直接提品质
+
+- 业主口径：「所有东西都能当材料，材料的稀有度会提升稀有度」。
+- **入场判据从"白名单"翻转为"非空即可"**：旧版只收 `type=weapon` 与 `module/bullet`，配件/消耗品/装备一律拒绝。现在 `WeaponForge.accepts()` 对任何非空物品返回 true，盘内物品只分两种角色——**蓝本**（只有武器，决定枪身）与**材料**（其余一切，按 `rarity` 折算）。`REJECT_INVALID_PAYLOAD` 整个删除：不再存在"非法投入物"这个概念。
+- **新增 `RARITY_POINTS`（稀有度分）表**，与 `MELT_VALUES`（熔炼值）分开维护。这是本次最关键的取舍：
+  - 熔炼值 **平滑**（common 1 / uncommon 2 / rare 3 / epic 4 / legendary 6）—— 回答"够不够数量"，白装也必须算 1。
+  - 稀有度分 **陡峭且 common 恒 0**（0 / 1 / 2 / 4 / 7）—— 回答"值不值钱"，白装不能有任何分量。
+  - 合成一张表会让两件事互相污染：要么白装能刷金，要么白装凑不了数量。
+- **品质公式改用稀有度分驱动**：`w = 基础权重 × 武器步进^(n-1) ± 稀有度倾斜 × R`，倾斜系数 蓝 −0.015 / 紫 +0.011 / 金 +0.007。实算 n=1：R=0 → 70/25/5；R=3 → 64.9/28.0/7.0；R=10 → 53.4/35.0/11.7；R=20 → 37.7/44.3/17.9；R=40 → 8.9/61.6/29.5。
+- **R3 从"不搏金"改为"也吃稀有度分"**。旧规则在材料只有弹药模块时成立；现在所有物品都能当材料，若 R3 不吃稀有度，「投 6 件白装」和「投 6 件传说」会得到同样的概率，玩家没有任何理由投好东西。现状是**数量看熔炼值、品质看稀有度分**，两条轴各管一件事。
+- **R1 燃料门槛从"≥1 个模块"改为"≥3 点熔炼值"**（`FUEL_THRESHOLD`）。既然是任意材料，用"件数"当门槛会让 1 件白装也能重铸；按熔炼值算，1 件 rare 材料或 3 件白装都能过，语义统一且可解释。
+- **已带品质的物品折算额外稀有度分**（紫 +1 / 金 +2）：一把金品质步枪当材料显然比同名蓝品质的更值钱。不加这项，玩家会撞上"熔金枪和熔蓝枪一个结果"。
+- **修一个统计 bug**（写代码时自己引入、被验收抓住）：两把武器时稀有度只累计了第二把 —— 原实现"边收边算、第一把当蓝本不计数"，n=2 时漏掉。改为收完所有武器后统一累计。
+- **经济上不会崩，靠三道独立堵口**：① common 稀有度分 = 0，堆白装只能凑数量；② 品质权重有蓝地板 0.05，稀有材料再多也留 5% 基础池；③ 金币费用按投入估值计，烧稀有材料本身就贵。对照：加 1 件 epic（R=4）把金概率从 5.0% 抬到 8.0%，费用同时从 72 涨到 90+ —— **稀有材料是"花更多钱买更高概率"，不是"更划算"**。
+- **界面**：读数行 6 栏扩到 **7 栏**，新增 `RARITY`（稀有度分总和）。这是"材料提品质"的唯一可见抓手，塞进 `GRADE ODDS` 里玩家看不出是它把概率顶上去了。`PAYLOAD` 改为「N 枪 · M 材料」。提示行加「材料越稀有，产出品质越高」。
+- **修一个渲染 bug**：棋盘物品块没开 `clip_contents`，1×1 格的标题（"放大瞄镜"四个字）比格宽长，直接压到右边相邻格上，把两件物品的名字叠成一团。`GridInventoryBoard.render_items` 现在统一裁剪。
+- 验收：`verify_weapon_forge` 扩到 16 组（新增 `materials-raise-grade`：稀有材料抬金压蓝、R 0→32 单调性、30 件白装 R 仍为 0、金品质材料更值钱、融合累计两把）。三处反向自测确认断言真的会红：把 common 稀有度分改成 1 → 4 条断言红；把稀有度倾斜清零 → 4 条红；把蓝本退回"取第一把" → 50/50 断言红。回归 `verify_weapon_drop_grade`、`verify_fate_integration_completion`、`probe_localization_contract` 全绿。
+- 文档：[07.2](../07.2_玩法系统_武器改造台.md) §1/§2/§3/§4 重写、[UI 清单](../design/UI与UX全局设计及全界面清单.md) UI-21、[功能索引](../MODULE_INDEX.md)。
+
+## 2026-10-18 武器改造台改为 6×6 炼金盘（炼金抽卡）
+
+- 业主口径：改造台改成"升级武器用的"—— 打开是 6×6 物品格子（包裹同款存放方式），把武器与物品丢进去炼金，产出不一样品质（蓝/紫/金）与属性的武器，同时随机弹药模块；放武器则以它为蓝本抽卡，纯模块攒够数量也能组合出武器，2 把武器产生更随机的效果。
+- **同日追加裁决（第二轮）**：①「两把随机」= 蓝本真的掷骰，且弹种从**枪的属性与子弹模块**里一起随机；②熔炼**要付金币**；③界面按最新棱镜风格重做。
+  - **蓝本随机**：`WeaponForge.pick_blueprint(weapons, rng)` 等概率掷骰（旧版取 `damage` 最高那把）。`classify` 不再预设蓝本，改返回 `blueprint_candidates`，读数栏显示「随机（N 把之一）」—— 先算出"最强那把"显示出来会让玩家以为结果已定，出来另一把时会被当成 bug。
+  - **弹种两层候选**：投入模块按堆叠数量计票 + **每把投入武器自带绑定弹种各计 1 票**（`WeaponForge.collect_bound_bullets`，从 `bullet_module_id` 顶层/嵌套层取，缺字段才建实例读 `presentation_snapshot`）。所以 R2 一个模块都不投也能从两把枪的弹道里随机，不再永远掉回标准弹。
+  - **金币费用**：`cost = max(min, ceil(投入估值 × rate))`，估值 = Σ(物品表 `price` × 数量)；费率 R1 0.30 / R2 0.40 / R3 0.50，最低价 20/40/40。按估值计费而不是固定价 —— 固定价会让"熔 350 的蓄力炮"和"熔 45 的球棒"同价，等于鼓励拿最便宜的垃圾反复刷。R3 费率最高，因为 R2 已经牺牲一把枪，R3 只烧模块不加价就会变成稳定套利。实算：步枪 150+标准弹 30 → 180×0.30 = **54**；步枪+手枪 220×0.40 = **88**；标准弹×6 180×0.50 = **90**。
+  - **扣费顺序**：金币排在建背包之前 —— 后面的失败路径只需退钱，不必处理"钱扣了枪没进包"的中间态。写背包失败时 `restore_slots_snapshot` + 盘面回滚 + `add_currency` 退钱，三件一起。
+  - **防"产出少一件"**：`outputs.size()` 必须等于预演的 `output_count`，不等就整笔拒绝。否则「合成 3 把只构建出 2 把」会让玩家白搭一批模块且看不出原因。
+- **界面按棱镜规范重做**（`PRISM-WIREFRAME`）：不画实心卡片，区域由 1px 白线 + 四角括号界定；两级排印（`WEAPON FORGE` 宽字距弱标签 / 「武器改造台」近白大字）；读数行一行 6 栏 `PAYLOAD`/`MELT`/`RECIPE`/`BLUEPRINT`/`GRADE ODDS`/`FEE`，`FEE` 买不起转 `PRISM_DANGER` 红并把主按钮置灰。`GridInventoryBoard` 新增 `prism_mode`（格子只画 1px 白线、不填底色）+ 可配置格边长；`ItemSlot` 加 `prism_slot` 绘制分支。I 键背包是棱镜豁免项，默认行为不变。
+- **三处靠截图才发现的界面 bug**（headless 断言看不见，必须真渲染）：
+  1. 面板被挂到 CanvasLayer / 普通 Node 下时锚点算不出尺寸 ⇒ 必须显式 `_fit_to_viewport()` 按视口/父矩形铺满，否则模态只占左上角一小块。
+  2. 空格子残留 `x1`：`ItemSlot.tscn` 的 `CountLabel` 默认文案就是 `x1`，棋盘从不隐藏它 ⇒ 在 `_rebuild_cells` 里统一 `visible = false`。
+  3. 确认层被枪械图标盖住：棋盘把物品画布提到 `z_index = 4`，确认层留在默认层就被压住 ⇒ `z_index = 64`；同时 0.42 的棱镜底衬让下层文字穿透 ⇒ 卡片改近不透明深墨（0.96）。
+  - 另修：720p 基准下 6 行盘面 + 两行读数会把操作钮顶出可视区 ⇒ 读数压成**单行 6 栏**、盘面格 72→54。
+- **能力替换**：移除旧的三件事 —— 按蓝图 tier 免费换枪身（`tree.set_root` 会连带释放旧枪的子弹与配件且不回包）、免费换弹种（不校验背包持有）、抽 3 张命运卡三选一。换装入口收敛到 I 键背包，选卡入口收敛到门后购卡层与占卜屋。
+- **新增 `src/weapons/WeaponForge.gd`** 纯规则层：熔炼值按 rarity 折算（1/2/3/4/6）；R1 重铸 = 1 枪 + ≥1 模块；R2 融合 = ≥2 枪（蓝本取伤害最高那把，n=2 附 1 个随机配件、n≥3 附 2 个）；R3 合成 = 纯模块熔炼值 ≥6，每 6 点产出 1 把、上限 3 把。
+- **品质公式**：以 `WeaponDropGrade.ROLL_WEIGHTS` 为基线，武器数按 0.55/1.35/1.75 逐把放大，模块熔炼值按 −0.010/+0.007/+0.003 每点倾斜，蓝权重 0.05 地板。**R3 不吃任何加成** —— 否则堆 30 个标准弹搏金会成为最优解。实算：1 枪 70/25/5；2 枪 47.5/41.7/10.8；3 枪 25.8/55.5/18.7；4 枪 11.7/61.5/26.8。
+- **为什么 R1 必须有燃料**：单枪单独重铸时品质只有上升档（产出永远 ≥ 蓝），玩家能拿同一把枪反复掷而只承担"枪还是枪"的风险，纯套利。把成本钉在消耗品上赌局才成立：投 1 枪 + 1 标准弹，成本 30，期望数值增益折合约 4.9，净亏约 25。
+- **产出实例**：新实例 ID；`drop_grade` 落盘、命运槽走 `apply_to_item` 只加一次；`fate_upgrades` 为空（不继承）；`bullet_module_locked = false` —— 炼金产物可自由换弹，锁定仍是野生掉落专属。
+- **界面**：`WorkbenchPanel` 全代码重建（场景只留空根节点）—— 左栏 6×6 盘面（`GridInventoryBoard`，`slot_kind="alchemy"`）、右栏玩家背包（与 I 键同源 `InventoryModule`）、解析行实时显示武器数/模块数/熔炼值/配方/三档概率、含武器时二次确认、关面板退物且放不下时拒绝关闭。`ItemSlot` 只加一条拖拽反馈分支，判定复用棋盘 `drop_validator`，没有新增第二条拖拽通路。
+- **事务**：`classify → 掷骰 → build_output → 背包快照 → 清盘 → 逐件 add_item`，任一失败 `restore_slots_snapshot` + 盘面回滚。
+- 验收：新增 `verify_weapon_forge`（12 组，含 5×20000 次分布收敛、满包回滚、三次读档不复利、蓝本选择、源码门禁、headless 界面构建）→ `WEAPON_FORGE_OK`，exit 0。
+- **被波及的旧验收已同步修好**：`verify_weapon_drop_grade` 的源码门禁原把 `WorkbenchPanel._apply_selection` 当换弹入口（面板已不换弹），改为「保留 Player3D / Dungeon3D 两条执行入口 + 反向钉住改造台不得重新长出换弹旁路」；`verify_fate_integration_completion` 改断言为「改造台不得再有命运卡入口」；`verify_reference_hud_fate_visual` 的简单塔罗入口减为占卜屋一条（改造台的翻卡动画已随功能移除）。三项复跑全部 exit 0。
+- 文档：[07.2 玩法系统｜武器改造台](../07.2_玩法系统_武器改造台.md)（新增，FeatureID `RUN-FORGE`）、[UI 清单](../design/UI与UX全局设计及全界面清单.md) UI-21 重写、[功能索引](../MODULE_INDEX.md) 与 `feature_registry.json` 新增条目。详见[交付记录](2026-10-18_weapon_forge_alchemy.md)。
+
+## 2026-10-18 天台正式交互杂物与风摆草
+
+- 8件正式组件，12大型箱货、48风摆草；沙袋、水泥与木料替换原白盒，保留初登顶通路。
+- Blender源/独立优化/GLB/Prefab、场景交互分类与账本同步。详见[交付记录](2026-10-18_rooftop_formal_interactive_assets.md)。
+
+## 2026-10-18 掉落枪自带绑定弹药模块（不可拆卸）
+
+- 业主口径：掉落的武器会随机配置某个弹药模块，并且不能拆卸。
+- **新增 `src/weapons/WeaponBulletDrop.gd`**：8 个弹药模块按稀有度阶梯掷骰，权重和 100 —— 标准 34 / 黏黏 15 / 回旋镖 13 / 穿甲 11 / 爆炸 10 / 气球 8 / 蜂卵 6 / 黑洞 3。约 1/3 的掉落枪自带特殊弹道，标准弹仍占三分之一，保证白板枪不绝迹。刻意不按 Boss/强化怪分档：稀有感应当来自武器出得多不多，再叠一层档位表只会让规则更难解释。
+- **掷骰在 `RewardService._roll_dropped_weapon()`**：与品质共用 `state["rng"]`，顺序固定「先品质、后弹药」。**必须先写 `bullet_module_id` 再 `ensure_weapon_item`** —— ensure 会立刻按它生成装配快照，晚一步写就等于没写（快照里仍是标准弹，之后读档再也改不回来）。
+- **锁定落成数据而非 UI**：`WeaponInstance.bullet_module_locked` 随实例持久化，`WeaponAssemblyTree` 装载时同步。三条互不共用的换弹入口各自判据：
+  - `Player3D.install_bullet_module_to_weapon_slot()`（装备面板 + 训练场）
+  - `Dungeon3D._install_weapon_module_from_item()`（局内快捷装配，绕过上一条直接改树）
+  - `WorkbenchPanel._apply_selection()`（基地工作台换子弹）
+  三处由 `verify_weapon_drop_grade` 的源码门禁钉住，删任一处即变红。
+- **近战不配弹不锁**（没有弹药槽）；**非掉落来源不锁** —— 出厂保底枪、蓝图合成、商人购入、训练场借枪的弹药槽仍可自由更换，避免「回基地买一把就锁死」。
+- **读档不换弹**：弹种随装配快照与 `bullet_module_id` 落盘，`from_item` 只还原不掷骰。验收做了三次序列化往返，弹种与锁定标记逐次不变。
+- **UI**：背包武器悬浮卡新增「弹药模块：X（已绑定 · 不可更换）」；换弹被拒时状态栏给出「该枪的弹药模块已绑定，无法更换」，不静默失败。
+- 顺带修一处**自己引入的环境问题**：上一轮把改动备份放在 `_scratch/monster_drop_backup/`（项目内），Godot 把那几个 `.gd` 扫进全局类缓存，导致 `Class "X" hides a global script class`。已加 `.gdignore` 隔离并刷新缓存。
+- 验收：`verify_weapon_drop_grade` 扩展到 10 组（规格 / 20000 次弹药分布 / 掉落边界 / 运行时倍率 / 读档幂等 / 同 seed 复现 / 名牌 / 绑定弹药 / 三次读档弹种不变 / 三入口源码门禁）→ `WEAPON_DROP_GRADE_OK`。新增 `tools/probe_bullet_lock` 走真实 `Player3D` 事务：掉落枪换弹被拒且原因含「绑定」、弹药不变；同玩家换装非掉落霰弹枪仍可正常换弹 → `PROBE_BULLET_LOCK_DONE OK`。回归：`verify_bullet_module_equipment_flow`、`verify_reward_ground_handoff`、`verify_starting_weapon_contract` 全绿。
+- **修上一轮引入的回归**：`verify_finite_ammo_flow` 报「精英怪未掉保底备弹」—— 根因是上一轮给精英加的 `prefer_pool`（让精英改抽池、不出备弹）。该改动既与业主口径「枪只从 Boss / 强化怪出」冲突，也违反既有备弹契约，已把 `prefer_pool` 整个删除、`_collapse_kill_ground_grants` 恢复原样。`verify_finite_ammo_flow` 复绿，精英出枪率回到 0.00%。
+- 文档：04 §22.14、[战斗奖励与物品流转设计](../design/战斗奖励与物品流转设计.md)、[07.1 枪械工坊](../07.1_玩法系统_枪械工坊.md)。账本：内容数据库《字段字典》新增 `bullet_module_locked` / `bullet_module_id`。
+
+## 2026-10-18 传送支线位点改成固定槽位：暗门不再压主路门洞
+
+- 业主口径：「我的每个房间的门扇和门墙都是固定的， 暗门的出口和入口也做成固定的位置就好了。这个位置是用来做入口还是出口，哪条路可以自由控制。这样永远都不会有堵路的情况。」
+- **先坐实问题**：新探针 `tests/verification/probe_secret_door_vs_main_doors`（常驻、不进套件）量出 `SecretDoor_S3` 与 `room_06 → room_07` 的 `Door_North` 中心距 **0.00m**，其余三个位点 27.04 / 2.50 / 16.77m —— 只有 S3 撞上，而它撞的是**主路必经门洞**，2.2m 木板（板宽 2.2m = 门宽 2.2m）带碰撞把主路钉死，破板后按 E 还会被传到 1320m 外的子图。
+- **根因**：`secret_site` 不随房间旋转，`connection_ports` 却走两道 —— 落位姿态（`placed_room.rotation_deg`，桥房族转置 40×30→30×40）+ 整层旋转（远征01 恒 180°）。代码里「位点用 `wall` 表达所以不需要旋转」那条注释是错的：`wall` 是**房间自己的墙**，房间翻了它就得跟着翻。实机证据：`room_03` 设计源中心 `(-45, 50)`、实机 `(90, -40)`，设计源坐标根本不能代替运行时坐标。
+- **改法**：位点用 `wall` + `lane`（沿墙偏移，缺省 0 = 墙中点）表达，与 `connection_ports.position_m` 同一局部系、与模板 `wall_lane_table` 同一套槽位语言；`FloorPlanGenerator` 新增 `_rotated_secret_site()`，在落位姿态与整层旋转两处都调（复用 `_rotate_port_vector`，180°/90°/270° 同式）；`SecretBranch3D._collect_sites()` 增 `_wall_tangent()`，位点 = 墙中点 + 沿墙切向 × `lane`。
+- **角色自由配**：`role` 与位置解耦，同一对两个槽互换入口/出口不需要动几何。现 `S1`/`S3` 入口、`S2`/`S4` 出口。
+- **落点（设计源 → 实机）**：S1 `south +2.5` → `(92.50, -20.00)` 南墙 `+2.5`，离门 25.74m；S2 `north +7.5` → `(125.00, -167.50)` 西墙 `-7.5`，17.68m；S3 `north +5.0` → `(125.00, -197.50)` 西墙 `-5.0`，14.58m；S4 `north +2.5` → `(70.00, -247.50)` 东墙 `+2.5`，10.00m。设计源声明的墙与实机落墙**故意不同**（落位姿态 + 整层旋转叠加），这正是不能写世界坐标的理由。
+- **新增断言 A20**：运行时把每个 `SecretDoor_S*` 与所有 `Door_*` 门扇量水平距离，< 2.3m（两块 2.2m 门不重叠）报红。静态断言只看得见设计源，挡不住这类问题 —— S3 撞门时 A1/A2/A3 全绿。
+- **A1 放宽**：从「该墙面不许有端口」改为「同墙端口与位点中心距 ≥ 2.3m」。一墙多门本来就合法（`room_10` 运行时东墙、北墙各一门），原判据会把合法布局判红。
+- **A2 加判据**：`|lane| ≤ 半墙长 − 2.3`（留出半个门宽），并让 A3 的朝外探针按 `lane` 偏移后的真实位点算。
+- **A3 去重**：三档深度撞进同一间房会连报三条，改成只报一次 —— 一条缺陷刷三条红会淹没真正的其它红项。
+- 验收：`verify_secret_branch_flow` 19 → **20 条**，实跑 `SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 …`、`VERIFICATION_SUITE_OK`。反向对照把 S3 临时改成「东墙 lane 0」（按当前旋转链正好落回那道主路门洞），套件精确报红 `A20 SecretDoor_S3 压在主路门洞 Door_North 上（中心距 0.00m）` + `A1` 同墙间距 0.00m + `A3` 撞进 room_08，还原数据后复绿。
+- 仍未解决：**A3 只能判设计源**（比对设计源房间矩形，实机房位是重排过的），「位点在房间外墙」这条设计意图没有运行时保证；有运行时保证的只有「不撞主路门洞」。
+- 记录：[2026-10-18_secret_site_fixed_slot.md](2026-10-18_secret_site_fixed_slot.md)
+
+## 2026-10-18 掉落枪械三档品质：蓝 / 紫 / 金
+
+- 业主口径：掉落的枪械随机出蓝/紫/金三档。蓝=基础；紫=伤害 +10%、命运卡格子 +2；金=伤害 +15%、格子 +4。掉落文字上要能看出品质。
+- **新增唯一真源 `src/weapons/WeaponDropGrade.gd`**：三档权重 `70% / 25% / 5%`（和为 1，验收断言），倍率 1.00 / 1.10 / 1.15，命运槽 +0 / +2 / +4。权重取 70/25/5 的理由：单局枪械约 3 把 ⇒ 期望 0.75 紫 + 0.15 金，约 7 局一把金。
+- **与 `rarity` 刻意分开**：`rarity` 是"哪把枪"（物品表写死，命运卡的品质规则也在改它），`drop_grade` 是"这一把滚出什么品质"。混用会让「紫枪」和「紫装」的数字互相打架。
+- **掷骰只在奖励链出口**：`RewardService._roll_dropped_weapon()` 吃 `state["rng"]`，逐把掷 —— `count=3` 的枪械条目得到 3 个各自独立的品质。非 `type=="weapon"` 原样返回，不写 `drop_grade`。出厂保底枪 / 蓝图合成 / 商人 / 训练场借枪不走奖励链 ⇒ 恒为蓝，避免"回基地买一把就是金枪"。
+- **命运槽在掉落时落盘**：`apply_to_item()` 把 `fate_slot_capacity` 加成写进物品字典；`WeaponInstance.from_item()` 只读不算 ⇒ 反复读档不复利（验收跑三次往返逐值不变）。
+- **伤害倍率不进快照**：`WeaponAssemblyTree.get_computed_stats()` 出口乘一次，`damage` 与 `bullet_damage` 都乘（远程最终伤害是两者之和）。写进 `base_stats` 会被原样存档，三进三出能把 +10% 变成 +33%。
+- **统一了树内的数值读取**：`set_root` / `mount` / `unmount` / `get_weapon_info` / `get_debug_info` 原本直连 `root.get_computed_stats()`，会把品质倍率丢掉（装个配件伤害就回落）。全部改走 `self.get_computed_stats()`。
+- **旁挂枪补乘**：命运卡「枪上枪」的副枪身走 `AssemblyNode` 层，在 `WeaponModel3D.configure_from_tree` 收集 `child_stats` 时补乘品质倍率。
+- **掉落文字**：`GroundLootPickup3D` 名牌改由 `WeaponDropGrade.label_for()` 出字（`紫｜步枪`），并按品质着色（蓝 `#5CB8FF` / 紫 `#B870FF` / 金 `#FFC73D`）。旧口径「名牌只写名字」仍然成立 —— 这里加的是品质（拾取前唯一有决策价值的信息），不是实例编号。
+- **背包悬浮卡**：武器详情加「品质」行，加成数字由 `WeaponDropGrade` 折算，不写死常量。
+- 验收：新增 `verify_weapon_drop_grade`（规格 / 20000 次分布 / 掉落边界 / 运行时倍率 / 三次读档幂等 / 同 seed 复现 / 名牌文字 / 未知品质反向对照）→ `WEAPON_DROP_GRADE_OK`。`verify_reward_service_flow` 仍是同 4 条既有红（`shielded` 不在 `BASE_ENEMY_TYPES`），无新增；`verify_starting_weapon_contract`、`verify_reward_ground_handoff`、`verify_training_range_fate_loadout`、`verify_strong_variant_monsters` 全绿。
+- 文档：04 §22.13、[战斗奖励与物品流转设计](../design/战斗奖励与物品流转设计.md)、[07.1 枪械工坊](../07.1_玩法系统_枪械工坊.md)。账本：内容数据库《字段字典》新增 `drop_grade` / `grade_damage_multiplier` 两行，《武器》表说明行补品质口径。
+
+## 2026-10-18 子图遭遇编成：每间固定 5 只强化怪 + 2 只普通怪
+
+- 业主口径：「不用加掉落加成 子图里 固定刷每个房间里有 5 只强化怪物和两只普通怪物」。
+- **编成唯一真源** `MonsterInjector.build_secret_branch_encounter()`：5 强化 + 2 普通，只有一波，按 `run_seed ^ room_id.hash()` 轮转怪种（5 只恒为 2/2/1 分布）。
+- **档位必须钉死**：生成时两端都传 `allow_strong = false`。不关这个开关，那 2 只「普通怪」各有 15% 概率被升级成强化怪 —— 玩家数出来就是 6 强化 + 1 普通。
+- **首次进房才刷**：子图房不在 `_records`，`_on_room_entered` 收不到它们。`SecretBranch3D` 把房间自带的 `player_entered` 转成一条上报（新增注入 `_room_enter_handler`），由 `Dungeon3D._on_secret_branch_room_entered` 切 `_current_room_id` 再调 `_spawn_enemy_batch`。**不切 `_current_room_id`，7 只怪会站着不动**（`MonsterAIManager._target_is_legal` 只允许本房敌人锁定玩家）。
+- **清房不借 `_mark_room_cleared`**：那条链发房间钥匙、走房间奖励结算、推进命运卡、刷撤离信标锁，全是主图语义；且对子图房是静默空操作（`_room_by_id` 取不到 ⟹ 房间永远算不清）。改用 `_on_secret_branch_room_cleared`，只在 7 只全灭时标清 + 播 `wave_clear`。
+- **掉落**：无加成，走常规击杀。顺带补 `_on_enemy_killed` 的 `loot_room` 回落 —— 原来取 `_room_by_id` 得到 null，`_spawn_loot_items(null, …)` 静默返回 0，表现是「7 只打死，地上什么都没有」。
+- **子图房间门原本按不开**：门交互由 `Dungeon3D.get_interaction_candidate` 按 `_current_room_id` 取房，子图房取不到就给空候选。现回落到 `SecretBranch3D.nearest_closed_door()`，并走 `mode = "secret_branch_door"` 的专用交互（只把门抬起来，不消耗钥匙、不触发命运卡）。房间门 `door_policies` 三项全关：子图没有钥匙产出，`requires_key = true` 会让门永远打不开。
+- **在子图里存档**：`_runtime_current_room_id_for_save()` 回落到 `_last_main_room_id`（最近一次主图房间），避免写出一个 `_room_by_id` 里查不到的 `secret_*` id 让续局崩。
+- **`configure` 不再清空运行期回调**：验收 A11 会用 6 个参数重配一次（只为换「已清数」provider），原来顺手把 `_room_enter_handler` 覆盖成空 `Callable` —— 现象是「重配之后进的房间不刷怪」。现在只在拿到有效 `Callable` 时覆盖。
+- 验收：`verify_secret_branch_flow` 增至 **19 条**（新增 A19：没进过的房不刷 / 进房恰好 5 强化 + 2 普通 / 7 只全灭即标清）。反向对照一次（强化数量改 4 + 摘掉清房分支）精确报红两条，还原后复绿。实跑 `SECRET_BRANCH_FLOW_OK`、`VERIFICATION_SUITE_OK`。
+- 顺带记一条验收坑：击杀会在 `_claim_enemy_departure` 里把节点从 `_enemy_nodes_by_room[room_id]` 摘掉，验收脚本边遍历边删会「每杀一只跳一只」（7 只剩 3 只），看着像伤害没生效 —— 必须遍历 `.duplicate()`。
+- 记录：[2026-10-18_secret_branch_encounter.md](2026-10-18_secret_branch_encounter.md)
+
+## 2026-10-18 枪械产出收口：普通怪归零、强化怪 25%、Boss 1-2 把 + 5-6 件
+
+- 业主口径：枪械只从 Boss 与强化怪出；Boss 固定 1-2 把；强化怪 20-30%；搜刮容器保留但压到 20% 以下；Boss 一次 5-6 件。
+- **普通怪归零**：9 件远程枪身从 `loot_floor_1_2` / `loot_floor_3_4` / `loot_floor_5` / `loot_abyss` 全部移除（近战保留）。改动前普通怪单只出枪 4.5~6.3%，改后实测 20000 次为 0.00%。
+- **强化怪新通道**：新增 `strong_weapon_floor_1/2` 池，`MonsterInjector.drop_spec_for` 出口按 `MonsterVariants.is_variant()` 追加一条 `chance=0.25` 的条目。挂在出口而不是池里，是因为远征01 由刷怪盒驱动，做在池子里根本不生效。实测 25.52% / 25.22%。
+- **Boss 拆池**：`boss_weapon_floor_1/2` 只装枪；`boss_floor_1/2` 剔除全部远程枪，只剩蓝图/模块/配件/背包/电池/信标。件数公式 `枪(1..2) + 其它(3) + 弹药(1) = 5..6`，实测枪数 1.49/1.50、件数 5.49/5.50，范围严格 [5..6]。
+- **`merge_same_item` 下沉到条目级**：Boss 的两个枪条目与非枪条目必须写 `false`。池内抽签有放回，旧语义「同 id 覆盖成一件」会把两把同名枪并成一把（实测第二把命中率从 50% 掉到 40%）、总件数散到 3-7。
+- **精英：确认不掉枪（原判断已更正）**：`_collapse_kill_ground_grants` 的「优先保留弹药」会把 `elite_floor_*` 池掉落整件吞掉 —— 20000 次实测精英出枪 0.00%，池里 50~67% 的枪权重从未落地，精英实际只掉 8-16 发备弹。本轮曾加 `prefer_pool` 让精英改抽池（并一度以为「出枪 50%」），但该改动**与业主口径「枪只从 Boss / 强化怪出」冲突，且打红 `verify_finite_ammo_flow`**，已完全回退。精英是否应让池内容真正落地（备弹+池物品两件、或把备弹并入池成员）属独立裁决项，见 04 §22.12「精英遗留」。
+- **搜刮池**：只有 `scavenge_floor_5` 超标（26.0%），远程枪权重 ×0.7 降到 19.7%；其余四档原本就在 10.8~18.8%，未动。
+- **远征01 作者表**：小菌猪去掉 `weapon_pistol`、炸弹果去掉 `weapon_launcher`，重跑 `scripts/export_monster_drop_table.py`（11 行）。
+- **账本同步**：内容数据库《掉落物品》45 行「产出位置/权重」按 ItemRegistry 重生成（保留 `base_vending unlimited` 这类池外渠道说明）；《怪物与Boss》掉落列改写为新的 Boss 契约。
+- 验收：新增探针 `tools/probe_weapon_drop_rates`（20000 次/类）。`verify_reward_ground_handoff` / `verify_run_settlement_transaction` / `verify_starting_weapon_contract` / `verify_strong_variant_monsters` 全绿；`verify_reward_service_flow` 与基线同为 4 条既有红项（`shielded` 不在 `BASE_ENEMY_TYPES`），无新增。
+- 记录：[04 §22.12](../04_技术施工_战斗与局内成长.md)、[06 §3.5 / §6](../06_技术施工_怪物精英与Boss.md)
+
+## 2026-10-18 隐藏门：门板常驻确认 + 改成按 E 传送 + 搜索同款圆点
+
+- 业主提问「门板是一直有的在的吗？不用等怪杀完才会出现吧」—— 查证：**是**。门板在 `SecretBranch3D._build_pair()` 装配时就建好，与已清房数无关；清房只走 `set_locked()` 拦伤害，不碰显示。此条不改代码，只写进设计 §4.1 免下次再问。
+- 业主指示「进入需要过去点 e 然后传送，带一个和搜索一样的圆点」。改法：`SecretDoor3D` 自己实现 `PlayerInteractionController3D` 的三件套（候选/聚焦/执行，**不自己读 E 键**），圆点用全场统一的 `InteractionDot3D` —— 走近 2.6 m（与圆点「走近变大」同一窗口）显示「(e) 进入暗门」，按 E 才瞬移。
+- 圆点只在**破板后**出现：木板完好时按 E 什么也不该发生（锁定态连血都不掉），挂一个按不动的「按 E」等于骗人。线索仍由木板自身承担（板缝透光）。
+- 退役踩上就走的 `Area3D`（`_build_gate` / `_build_return_gate` / `_on_gate_body_entered` / `_on_door_broken`）。旧盒 1.6m 深、从墙面往房里凹 0.8m —— 玩家贴墙走就被吸走，既拒绝不了也看不出触发原因。
+- 顺带修两个不通的口：① 出口门的「传送区」原本只是把玩家往同一间房里推 1.2m（无反馈），现改为双向入口（§5.4），按 E 落到子图末间；② 子图末端回主图原是一个看不见的 `Area3D`，撤离房进去则**没有路出来** —— 两处统一改成**常开门**（`configure_portal`：只有门叶、无木板层、一开始就是 BROKEN）：`R0/R1` 装末间东墙、`B0/B1` 装撤离房南墙。
+- 瞬移加一条：落地前清零 `velocity`。带着跑动速度落地会被同一帧积分拉回门里（表现成「按了 E 只挪一小段」）。
+- 补一处自洽：走 `R0/R1` 穿回主图时 `open_silently()` 把出口房间那扇同源木板门一起打开 —— 否则玩家在出口房间内侧落地，回头看那扇门还是钉死的。`restore_state()` 的破碎分支复用同一函数。
+- 验收：A9 整段重写（未破不可传送/破后可传送/文案带 `[E]`/在 provider 组/按 E 落点正确），A11 改 `teleport_ready`，A15 改常开门口径，仍 18 条；两条反向对照（`can_teleport()` 恒真、`is_interaction_dot_visible()` 恒真）均精确报红后还原复绿。
+- 记录：[2026-10-18_secret_door_press_e.md](2026-10-18_secret_door_press_e.md)
+
+## 2026-10-18 子图房间接正式美术（借主路房间，不新建资产）
+
+- 业主指示「直接拿已有房间的去拼」。子图房原是程序化**灰盒**：能走、门对、走廊通，但房间里空空如也 —— 结构断言全绿也看不出这个问题。
+- 新增 4 个**共享房壳**（`room_instances/expedition_01/f00_secret_shared_*_static_layout.tscn`），各 instance 一份主路房间 tscn：`corridor_45x40`→`f00_room_01`、`office_60x70`→`f00_room_03`、`bridge_60x50`→`f00_room_05`、`extraction_25x25`→`f00_extraction`。
+- 壳根**刻意不写 `metadata/room_id`**：`DungeonRoom3D._build_shell` 会在它非空时与房间 id 比对、不一致直接 `push_error`；子图房 id 是 `secret_<pair>_<i>` 且模板每局可能不同，只能由 `SecretBranch3D._shared_layout_path()` 按模板显式下发路径。
+- 摆位/门位全部交给现成逻辑：`_align_static_layout_to_room()` 转朝向、`_rehome_static_layout_door()` 搬门墙、`_seal_stray_door_walls()` 封废门洞。桥房借烘焙 30×60 的美术，子图链沿 X ⇒ 运行时转 90° 成 60×30。
+- 验收：新增 A18（每间房 `static_layout_scene_loaded` 为真）。反向对照「路径直接返回空」→ 7 间房全部报「退回程序化灰盒」，还原复绿。`verify_secret_branch_flow` 现 18 条断言；`verify_expedition_level01_flow` 与清理自检均绿。
+
+## 2026-10-18 修验收工作区清理：EXIT trap 自检不再报红
+
+- 症状：`run_verification_suite.sh` 每轮结束都判 `[verify] FAIL: 临时工作区未被清理`，磁盘上留下 13 个 `shellstorm-verification.*`（每个约 0.4 GB，合计约 5 GB）。
+- 根因：`scripts/verification_workspace.py::remove()` 是**逐文件递归删除**，工作区里 `.godot/imported` 有 5300+ 个小文件，逐个删既慢（单个工作区约 7 分钟）又会被上层「单轮批量删除」保护拦在第 50 个上 —— 拦下来的结果是工作区留在盘上，trap 里的 `assert_workspace_removed` 因此报红。
+- 修法：`remove()` 在 Windows 上改为「先摘链、再整棵树一次删」：`_iter_reparse()` 只用 `os.scandir` 走目录项、绝不穿透 `junction`；`_unlink_reparse()` 用 `os.rmdir` 把链接**当链接删**；确认树上再无 reparse point 后，用一次 `SHFileOperationW` 删整棵树。逐项递归仅作兜底。
+- 安全护栏不变：仍要求工作区在项目之外、名字前缀 `shellstorm-verification.`、根不能是链接；新增的是「删之前必须证明树上没有链接」这一步。
+- 结果：`verify_expedition_level01_flow` 输出 `EXPEDITION_LEVEL01_FLOW_OK` + `VERIFICATION_SUITE_OK`，**不再有清理 FAIL**；13 个陈旧工作区已清完，`verification/` 从约 5 GB 降到 64 MB。
+
+## 2026-10-18 支线撤离房接上信标（复用现成机制）
+
+- 业主指出「撤离信标在撤离房里本来就有」。查证：信标**不在任何房间 tscn 里**（`prp_extraction_beacon_root_top3d.tscn` 全工程只在 `Dungeon3D.gd` 引用一次），由 `_create_extraction()` → `_create_extraction_beacon()` 运行时挂到房间。机制本来就有，缺的是「子图撤离房没接上去」—— 上一轮把它写进「未实现」是把「没接线」当成了「没有系统」。
+- 做法：`SecretBranch3D` 接收 `Dungeon3D` 注入的信标工厂，在 `secret_extraction_<pair>` 房内创建 `STANDARD` + 非锁定 `ExtractionBeacon3D`。不新建撤离系统、不新建结算分支，`extraction_completed → _finish_run(true)` 原样生效。
+- 一处刻意差异：子图信标打 `secret_branch` 标记，`_on_extraction_started` 据此跳过防线遭遇 —— 子图房不在 `_room_by_id`，按 `_current_room_id` 取房会把遭遇落到玩家已离开的主图房间上。
+- 验收：新增 A17（信标 1 个 / `STANDARD` / 非锁定 / 在 `extraction_beacon_3d` 组内）；反向对照「不放信标」→ `A17 pair 0/1 撤离房信标 0 个` 精确报红。`verify_secret_branch_flow` 现 17 条断言。
+- 记录：[2026-10-18_secret_branch_phase3_door_to_door.md](2026-10-18_secret_branch_phase3_door_to_door.md) 末节
+
+## 2026-10-18 传送支线第三阶段：子图按「门与门对接」返工
+
+- 业主指出方法错误：子图应由**门与门对接**生成。查证 05.2 §3.5.1（显式端口 + 共墙唯一所有权）、§3.6 第 7 条（支线房从锁定模板集合取）、设计 §3.5（房型池 `corridor_45x40`/`office_60x70`/`bridge_60x50`）——上一轮的「自建盒子 + 传送串联」确实不合规，而且把「四面封闭只能传送」写进了设计文档，等于给错误背书。
+- 子图房间改为真 `DungeonRoom3D`：尺寸读 L3 `size_m`、按 `doors`/`door_targets` 开洞建 `RoomDoor3D`、相邻两间用**主路同一条** `_build_corridor` 连接。删除 `_build_chain_gates`、`_build_box_room`、`_add_box`；撤离房也改为真房型 `extraction_25x25`（无门，靠隐藏门进）。桥房只排链中间并用转置姿态（60×30），不新建模板 id。
+- **门位 lane**：40 m 墙没有 0 m 槽（最近 `-2.5`）。`_build_wall` 加 `opening_lane_m` 按 lane 不等长切墙，门洞与门扇读同一个 `wall_door_lane_<side>`；lane 取 `RoomDoorLane.nearest_offset()`。默认 0 ⇒ 既有房间行为逐字不变。
+- **走廊中心线**：`_build_corridor` 加 `lateral_offset_m`，跟着门位平移（否则门在 -2.5、走道在中轴，出门撞墙）。
+- **走廊常驻启用**：加 `persistent` 参数；子图房不进 `_open_edges`/`_spawned_rooms`，走流送判据的走廊永远不可见且无碰撞（玩家踩空掉出关卡）。`TowerDescent3D` 重写里 `persistent` 转走基类实现。
+- A16 重写：不再断言「传送门数量」，改为断言「无串联传送门 + 每间真房型 + 门互指 + 门扇在 lane + 走廊可见且中心线与门位重合」。两条反向对照（不接走廊／房间不开门）均精确报红。
+- `verify_secret_branch_flow` 通过；`verify_expedition_level01_flow` 输出 `EXPEDITION_LEVEL01_FLOW_OK`。
+- 记录：[2026-10-18_secret_branch_phase3_door_to_door.md](2026-10-18_secret_branch_phase3_door_to_door.md)
+
+## 2026-10-18 传送支线第二阶段：入口锁、撤离门阈值、子图连通
+
+- 入口木板锁定：入口房未清时 `take_damage` 不掉血、不破，只发 `hit_locked` 信号；`export_state` 带 `locked`（否则读档会提前解锁）。清房后由 `_mark_room_cleared` → `_refresh_secret_locks_after_clear()` 解锁，只解锁不重锁。
+- 撤离门按 `ceil(内容房总数 × 0.4)` 解锁，远征 01 = 5。撤离门改成真正的「门 + 门后房间 + 门后传送区」，装在第一间房北墙，坐标按该房自身尺寸算（房型池有 25×25 / 30×25 / 25×30）。
+- **补两处结构缺口（不是新功能）**：① 子图房间四面封闭且房与房之间没有传送，玩家进第一间就走不动 → 加串联门（第 i 间 → 第 i+1 间）；② 出口门在主图那侧、玩家进了子图够不到 → 加末端返回门（最后一间 → 主图出口房内侧）。
+- **修门朝向反了**：`atan2(-normal.x, -normal.z)` 让木板朝墙外凸、门腔插进房间，玩家在房里看到的是半掩门而不是钉死的木板。改为 `atan2(normal.x, normal.z)`。资产包围盒只报尺寸不报朝向，第一阶段靠 AABB 验收时是绿的。
+- **修内容房口径**：运行时 `room_type` 是语义类型，原排除表漏了 `STAIR_LOBBY`，入口大厅（初始 `cleared=true`）被算成内容房 —— 总数虚高到 12、已清数开局白送 1，所有木板白送 20 血、撤离门白送 1 点进度。补 `STAIR_LOBBY`/`SAFE_ROOM` 后总数 11、开局 0、阈值 5。
+- 验收：`verify_secret_branch_flow` 扩到 16 条断言；A10/A11/A14/A15/A16 各做反向对照（A11 第一版是假绿 —— 只比对状态抓不到阈值失效，改成主动驱动 `refresh_extraction_locks()` 才抓到）。`verify_expedition_level01_flow` 通过。
+- 记录：[2026-10-18_secret_branch_phase2.md](2026-10-18_secret_branch_phase2.md)
+
+## 2026-10-18 隐藏门正式美术资产：单扇半掩门 + 可打掉木板（两件组件）
+
+- 新需求：Blender 做隐藏门原始资产 —— 一个门、半掩、里面透光、外面用木板钉住、木板可打掉，拆成两个组件先带进关卡。
+- 新增 `secret_door_leaf`（门框 2.2×2.5 + 1.70m 门腔 + 单扇门半掩 45° + 腔内自发光，2.48×2.64m）与 `secret_door_boards`（5 横板 + 2 斜撑 + 19 钉，2.38×2.51×0.14m）。AssetID `ENV-EXPEDITION-SECRET-DOOR-LEAF` / `-BOARDS`。
+- `SecretDoor3D` 从一块程序化 Box 改为两层宿主：破板只拆木板层，**门叶留在原地**；碰撞只覆盖木板层，打掉时只关那一层。资产缺失时退回程序化单板。
+- 尺寸不靠拍：门洞 2.2×2.5 取自 `office_room/door_wall` 实测；门腔 1.70m 是单扇 2.14m 门开 45° 需要 `2.14×sin45°≈1.51m` 行程推出来的（0.85m 会让门叶穿出腔背）。
+- 两件共用同一装配系（原点地面门洞中心，`Y=0` = 房间侧墙面）。**禁止按各自包围盒分别居中** —— 第一版这样做把木板推到了门扇后面。
+- 光透出来的做法：门腔后壁自发光面板 + 前层亮条 + 地面溢光；木板横向缝隙 0.10–0.14m 且**缝高与自发光条对齐**，光是物理穿过板缝的。在门洞平面放发光楔形试了两次都读成"又一块门板"，已否掉。
+- 受击提亮只改木板主体 surface 的材质副本；**不能用 `material_override`**，那会把钉子从金属变成木头。
+- 验收：`validate_game_prop.py` passed（3 网格 584 面全为有效色格 UV 岛、无内嵌贴图）；Godot 侧逐 surface 确认 `palette_bound=true` / NEAREST / MULTIPLY；`verify_secret_branch_flow` 加 A14 断言（破板后门叶仍可见）并做反向对照；`verify_expedition_level01_flow` 通过。
+- 台账：《资产主表》967–968 行、《3D-场景通用》789–790 行、域变更日志 v0.1.40。
+- 记录：[2026-10-18_secret_door_asset.md](2026-10-18_secret_door_asset.md)
+
+## 2026-10-18 传送支线第一阶段：位点、隐藏门、传送、白盒子图
+
+- 设计依据：[支线秘密房间设计](../design/支线秘密房间设计.md)；施工边界 [05 §5.5](../05_技术施工_关卡生成与爬楼.md)。
+- **数据**：`floor_00.json` 四个房间各加一段 `secret_site`（`site_id/pair_id/role/wall/door_width_m`）。位点只声明**墙面**不存世界坐标，坐标由房间外框 + wall 运行期现算 —— 改版图时位点自动跟随。四个位点全部落在无端口墙面、朝外 3m 无遮挡，已由 A1–A3 静态断言钉住。
+- **五级透传**：真源 → 投影 → `normalize_floor` 白名单 → `_constrained_slot` 蓝图槽 → `_constrained_floor_from` 房表 → `room_from_source` → `_append_plan_room_record` → `Dungeon3D._prepare_layout_rooms`。⚠️ 中间两层是**独立的字段白名单**且不在文档里显式列出，漏登记的表现是「设计源写了、运行时为空、全链无报错」——本次实测踩到，补完才见位点。同类历史事故为 2026-09-25「刷怪批次与设计不符」。
+- **新增 `src/world3d/SecretDoor3D.gd`**：`extends StaticBody3D`（子弹与近战的 collider 就是这个节点，脚本挂父节点收不到伤害）。三段状态、血量 `60 + 20 × 已清内容房数`、受击只做 0.12s 提亮。板体为**程序化 BoxMesh**（2.2×2.4×0.3）而非门扇 Prefab：门扇有门框与把手，一眼看出是门，与「隐藏门」冲突；设计 §4.2 已同步改写为程序化方案，零新增资产、零账本登记。
+- **新增 `src/world3d/SecretBranch3D.gd`**：位点解析、配对、种子刷出、三处传送区、白盒子图（地板+四面墙、无天花板）、撤离房、存档导出/恢复。子图是独立 `Node3D` 分支，**不进 `_records`、不进全层地图、不参与流送与拓扑校验**。
+- **装配时机**：最初挂在 `Dungeon3D._finish_layout_connections()`，实测**永不执行** —— 远征走 `TowerDescent3D._prepare_floor_bundle()` 逐房补记录。最终定在 `_prepare_floor_bundle` 补完非入口房之后，并在 `_build_expedition_records` 末尾保留一次；`_create_secret_branches()` 带幂等守卫，否则两处调用会造两套板体。
+- **传送两个 deferred 坑（实测踩过）**：① `body_entered` 在物理查询期触发，改坐标必须 `set_deferred("global_position", ...)`；② 破板发生在伤害回调里，`monitoring = true` 当帧不生效，必须 `set_deferred`，否则表现为「板破了但走进去没反应」。
+- **验收**：新增 `verify_secret_branch_flow`（已注册进 `core`）通过 —— `位点=4 生成规则=确定 传送=可达 隔离=通过 存档=往返一致`；反向对照把 `_pair_spawned(0)` 改成 `false` 后 A4 逐种子报红，还原复绿。`verify_expedition_level01_flow` 通过，主链未受影响。
+- **未实现（下一阶段）**：未清房时入口板不可破、撤离门阈值解锁、撤离信标与结算、子图刷怪与掉落加成、B1–B3 运行时断言。子图为白盒，正式美术在范围外。
+- 顺带解掉一处门禁硬编码：`check_feature_traceability.py` 原写死「期望 38 个功能」，新增功能必须先改门禁；改为以注册表条数为准，`missing/extra` 仍双向断言。
+
+## 2026-10-18 关卡接入解耦：通用机制不再按关卡 ID 分支
+
+- 起因：业主提出远征 02 要能同步开发。排查发现 `Dungeon3D` 有 5 处 `"expedition_01"` 硬编码，把 02 锁在门外。
+- 根因是一对互相掩盖的死分支：`configure_expedition_fate_economy` 用 `level_id != "expedition_01" → return` 挡掉 02，四处消费方又用 `map_id == "expedition_01" and is_configured()` 判定。前半句让 02 永不被配置，后半句在 02 上恒假 —— 既有 762 项经济验收全绿，因为只跑 01。后果是静默降级：02 的命运卡退回固定价格表，没有逐门定价与稀有度解锁。
+- 改法：新增唯一判据 `Dungeon3D.uses_dynamic_fate_economy()`，只看能力（`_fate_economy.is_configured()`）不看关卡 ID；配置环节去掉关卡 ID 条件（plan 空是唯一拒绝）。四处消费方与 `_expedition_fate_max_rarity` 统一改用该方法。改后 `Dungeon3D.gd` 内 `expedition_0N` 只存在注释中。
+- 新增静态门禁 `scripts/check_level_decoupling.py`：扫描 7 个通用机制容器，`"expedition_0N"` 出现在活代码即退出 1。反向对照注入 1 处旧写法后 `violations=1 / exit 1`，还原后 0 违规且字节一致。
+- 新增规范 [关卡接入规范](../关卡接入规范.md)：分界线是「通用机制按能力分支，关卡专属内容按 ID 分支」，含数据层清单、终局房要求（`BOSS_ROOM` + `EXTRACTION_ROOM`）、并行开发文件归属与自检清单。`AGENTS.md` 同步加入该前置阅读与门禁要求。
+- 验收：`verify_fate_economy_service` 通过（762 项 / 0 失败，`FATE_FORMAL_PATH_COMPLETED`）；`verify_expedition_level01_flow` 通过（13 房、Boss、STANDARD 撤离、塔楼未改动）；`check_documentation_contracts.py` issues 为空。
+- 边界：02 的设计源仍缺 `monster_rules`，`configure_from_runtime` 拿不到编成会保持未配置、继续回退固定价格表 —— 这是数据缺口不是解耦缺陷，补齐后自动获得逐门定价。`TowerDescent3D.gd` 的 9 处关卡判定经逐个核对全属关卡专属内容（出生偏移/朝向/相机/氛围），未改。详见[开发记录](2026-10-18_level_decoupling.md)。
+
+## 2026-10-18 天台首次登顶杂物引导
+
+- 按用户红线布置130件独立杂物；复用倾倒盆栽/花箱，木料、石堆与破损花圃采用白盒。逐件阻挡，出口→北侧通道→桥口保留。
+- 记录为场景交互内容，未来移动/清除条件及状态持久化仍待实现。场景账本更新8项。
+- 设计与验收见[本次交付](2026-10-18_rooftop_guidance_clutter.md)。
+
 ## 2026-10-17 晚间 命运卡改按「一间房 ≈ 一张」逐门定价
 
 ## 2026-10-18 远征01卡池与低粒子元素反馈

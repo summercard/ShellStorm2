@@ -224,6 +224,7 @@ core_scenes=(
   verify_battle_wall_floor_facility_kit
   verify_central_expedition_hologram_facility
   verify_expedition_level01_flow
+  verify_secret_branch_flow
   verify_expedition_room_static_scenes
   verify_expedition_camera_door_proxies
   verify_expedition_room_type_component_replay
@@ -274,6 +275,7 @@ core_scenes=(
   verify_weapon_attachment_inventory_flow
   verify_bullet_module_equipment_flow
   verify_weapon_instance_fate_ownership_flow
+  verify_weapon_drop_grade
   verify_celestial_fate_scope_flow
   verify_fate_card_purchase_flow
   verify_fate_economy_service
@@ -378,6 +380,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+  verify_rooftop_guidance_clutter
   verify_player3d_melee_special_visual
   verify_inventory_experience_visual
   verify_monitor_boss_visual

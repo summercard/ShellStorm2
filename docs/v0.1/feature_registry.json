@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-10-15",
+  "updated_at": "2026-10-18",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -592,6 +592,25 @@
       "status": "partial"
     },
     {
+      "feature_id": "RUN-FORGE",
+      "owner": "WeaponForge",
+      "design_docs": [
+        "docs/v0.1/07.2_玩法系统_武器改造台.md",
+        "docs/v0.1/04_技术施工_战斗与局内成长.md",
+        "docs/v0.1/design/UI与UX全局设计及全界面清单.md"
+      ],
+      "development_records": [
+        "docs/v0.1/development/2026-10-18_weapon_forge_alchemy.md"
+      ],
+      "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_weapon_forge"
+        }
+      ],
+      "status": "partial"
+    },
+    {
       "feature_id": "SAVE-PROFILE",
       "owner": "BaseManager",
       "design_docs": [
@@ -1014,7 +1033,8 @@
         "docs/v0.1/design/rooftop_cross_tower_route.md",
         "docs/v0.1/design/怪物设计.md",
         "docs/v0.1/design/胖子僵尸03动作设计.md",
-        "docs/v0.1/design/胖子僵尸03运行配置.md"
+        "docs/v0.1/design/胖子僵尸03运行配置.md",
+        "docs/v0.1/design/rooftop_first_visit_guidance.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-09-30_rooftop_cross_tower_route.md",
@@ -1035,7 +1055,9 @@
         "docs/v0.1/development/2026-10-04_fat_zombie03_death_visibility.md",
         "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md",
         "docs/v0.1/development/2026-10-13_bullet_vfx_category.md",
-        "docs/v0.1/development/2026-10-14_rooftop_standalone_components_registered.md"
+        "docs/v0.1/development/2026-10-14_rooftop_standalone_components_registered.md",
+        "docs/v0.1/development/2026-10-18_rooftop_guidance_clutter.md",
+        "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md"
       ],
       "verification": [
         {
@@ -1076,6 +1098,10 @@
         {
           "kind": "scene",
           "id": "verify_tower03_expedition_entry"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_rooftop_guidance_clutter"
         }
       ],
       "status": "partial"
@@ -1084,12 +1110,15 @@
       "feature_id": "ASSET-ROOFTOP",
       "owner": "RooftopReferenceComponentCatalog",
       "design_docs": [
-        "docs/v0.1/design/rooftop_component_library.md"
+        "docs/v0.1/design/rooftop_component_library.md",
+        "docs/v0.1/design/rooftop_first_visit_guidance.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-09-17_rooftop_reference_components_v001.md",
         "docs/v0.1/development/2026-09-17_rooftop_ivy_thick_door_v002.md",
-        "docs/v0.1/development/2026-10-14_rooftop_standalone_components_registered.md"
+        "docs/v0.1/development/2026-10-14_rooftop_standalone_components_registered.md",
+        "docs/v0.1/development/2026-10-18_rooftop_guidance_clutter.md",
+        "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md"
       ],
       "verification": [
         {
@@ -1100,6 +1129,10 @@
         {
           "kind": "scene",
           "id": "verify_rooftop_door"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_rooftop_guidance_clutter"
         }
       ],
       "status": "source_only"
@@ -1119,6 +1152,24 @@
         {
           "kind": "scene",
           "id": "verify_encounter_event_flow"
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "feature_id": "WORLD-SECRET",
+      "owner": "SecretBranch3D",
+      "design_docs": [
+        "docs/v0.1/design/支线秘密房间设计.md",
+        "docs/v0.1/05_技术施工_关卡生成与爬楼.md"
+      ],
+      "development_records": [
+        "docs/v0.1/development/2026-10-18_secret_branch_phase1.md"
+      ],
+      "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_secret_branch_flow"
         }
       ],
       "status": "partial"

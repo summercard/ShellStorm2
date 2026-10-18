@@ -710,27 +710,26 @@ func _check_tarot_text_upright(button: Button, failures: Array[String]) -> void:
 
 
 func _check_simple_tarot_entries(failures: Array[String]) -> void:
-	var workbench := WorkbenchPanel.new()
+	# 2026-10-18：武器改造台改为 6×6 炼金盘，塔罗三选一入口已移除，
+	# 「简单塔罗入口」只剩占卜屋一条。逆位翻卡的可读性判据不变，只减一个入口。
 	var divination := DivinationMenu.new()
 	var reversed_card := FateCardPresets.fate_reinforce()
 	reversed_card.set_orientation(FateCard.Orientation.REVERSED, 0.8)
 	for reduce_motion in [false, true]:
 		ProjectSettings.set_setting("accessibility/reduce_motion", reduce_motion)
-		for entry in [workbench, divination]:
-			var button := Button.new()
-			button.text = "星币·王牌\n逆位\n" + reversed_card.short_description
-			button.size = Vector2(240, 120)
-			add_child(button)
-			entry.call("_play_workbench_tarot_flip" if entry == workbench else "_play_card_flip", button, reversed_card, 0)
-			_check(button.disabled, "Simple tarot entry allows clicks before reveal", failures)
-			await get_tree().create_timer(0.55).timeout
-			_check_tarot_text_upright(button, failures)
-			_check(absf(absf(button.rotation) - PI) < 0.01, "Simple tarot entry lost reversed frame", failures)
-			button.size = Vector2(300, 140)
-			await get_tree().process_frame
-			_check_tarot_text_upright(button, failures)
-			button.free()
-	workbench.free()
+		var button := Button.new()
+		button.text = "星币·王牌\n逆位\n" + reversed_card.short_description
+		button.size = Vector2(240, 120)
+		add_child(button)
+		divination.call("_play_card_flip", button, reversed_card, 0)
+		_check(button.disabled, "Simple tarot entry allows clicks before reveal", failures)
+		await get_tree().create_timer(0.55).timeout
+		_check_tarot_text_upright(button, failures)
+		_check(absf(absf(button.rotation) - PI) < 0.01, "Simple tarot entry lost reversed frame", failures)
+		button.size = Vector2(300, 140)
+		await get_tree().process_frame
+		_check_tarot_text_upright(button, failures)
+		button.free()
 	divination.free()
 
 

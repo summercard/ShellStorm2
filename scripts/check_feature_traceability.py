@@ -115,8 +115,14 @@ def check(root: Path) -> dict:
         issues.append(f"Features missing from registry: {missing}")
     if extra:
         issues.append(f"Registry features absent from MODULE_INDEX: {extra}")
-    if len(module_rows) != 38:
-        issues.append(f"Expected 38 MODULE_INDEX features, got {len(module_rows)}")
+    # 期望条数**不写死**：以注册表为准（两边一致性已由下面的 missing/extra 各自断言）。
+    # 写死数字会让「新增一个功能」必须先改门禁，等于给正常增量加一道无意义的锁。
+    expected_count = len(by_id)
+    if expected_count and len(module_rows) != expected_count:
+        issues.append(
+            f"MODULE_INDEX/registry feature count mismatch: "
+            f"{len(module_rows)} vs {expected_count}"
+        )
 
     return {
         "module_index_features": len(module_rows),
