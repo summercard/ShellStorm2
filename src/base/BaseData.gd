@@ -80,6 +80,12 @@ var extraction_loot: Array = []
 # 这一条边界；基地运行态检查点成功接管后会原子清空，不能混入撤离战利品。
 var pending_insurance_slots: Array = []
 
+# 合成目录的硬保底计数（跨局持久）。键 = 被保底的钥匙物品 ID，值 = `{misses:int}`。
+# 语义与判据见 SynthesisCatalog.resolve_settlement：**只在击败过首领的局里记账**，
+# 没打首领的局既不累加也不清零，否则「进图→撤离」可以无限刷计数。
+# 旧档没有这个字段 = 一次都没记过账。
+var synthesis_pity: Dictionary = {}
+
 # 存档封套元数据与有界事务幂等日志
 var save_revision: int = 0
 var last_saved_at_unix: int = 0
@@ -144,6 +150,7 @@ func _to_dict() -> Dictionary:
 		"pending_loadout_items": pending_loadout_items,
 		"extraction_loot": extraction_loot,
 		"pending_insurance_slots": pending_insurance_slots,
+		"synthesis_pity": synthesis_pity,
 		"save_revision": save_revision,
 		"last_saved_at_unix": last_saved_at_unix,
 		"last_save_reason": last_save_reason,
@@ -221,6 +228,15 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("pending_loadout_items") and d["pending_loadout_items"] is Array: data.pending_loadout_items = Array(d["pending_loadout_items"])
 	if d.has("extraction_loot") and d["extraction_loot"] is Array: data.extraction_loot = Array(d["extraction_loot"])
 	if d.has("pending_insurance_slots") and d["pending_insurance_slots"] is Array: data.pending_insurance_slots = Array(d["pending_insurance_slots"])
+	# 保底计数只接受「键 → 字典」的形状。坏形状视为没记过账，而不是把整个计数清成 0
+	# 后照常跑 —— 后者会让一个被写坏的值变成"差 3 次"的既成事实。
+	if d.has("synthesis_pity") and d["synthesis_pity"] is Dictionary:
+		for raw_key in (d["synthesis_pity"] as Dictionary).keys():
+			var bucket: Variant = (d["synthesis_pity"] as Dictionary).get(raw_key)
+			if bucket is Dictionary:
+				data.synthesis_pity[str(raw_key)] = {
+					"misses": maxi(0, int((bucket as Dictionary).get("misses", 0))),
+				}
 	if d.has("save_revision"): data.save_revision = int(d["save_revision"])
 	if d.has("last_saved_at_unix"): data.last_saved_at_unix = int(d["last_saved_at_unix"])
 	if d.has("last_save_reason"): data.last_save_reason = str(d["last_save_reason"])

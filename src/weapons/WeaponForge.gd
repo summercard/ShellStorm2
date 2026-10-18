@@ -83,6 +83,10 @@ const BLUE_WEIGHT_FLOOR := 0.05
 ## 配方与拒绝码
 ## ————————————————————————————————
 const RECIPE_NONE := ""
+## R0 定向合成：投够钥匙就产出**指定**枪身。判定**早于 R1** ——
+## 否则「1 把棒球棍 + 足够燃料」会被 R1 重铸截走，近战升级链永远走不到。
+## 配方表真源是 `SynthesisCatalog`，这里只负责把它插进判定顺序。
+const RECIPE_DIRECTED := "directed"
 const RECIPE_REMELT := "remelt"
 const RECIPE_FUSION := "fusion"
 const RECIPE_SYNTHESIS := "synthesis"
@@ -95,6 +99,14 @@ const REJECT_BACKPACK_FULL := "backpack_full"
 const REJECT_INSUFFICIENT_CURRENCY := "insufficient_currency"
 const REJECT_NO_BLUEPRINT := "no_blueprint"
 const REJECT_NO_OUTPUT := "no_output"
+## 碎片钥匙已凑齐、但燃料熔炼值不够。
+##
+## **必须拒绝而不是降级**：碎片是打怪攒出来的凭据，静默降级成 R3 盲盒
+## 等于骗玩家把它烧掉还不给对应的枪。UI 要写清"还差 N 点熔炼值"。
+##
+## 注意只适用于**碎片链**。武器链（钥匙是那把枪本身）燃料不够时要继续走 R1 重铸 ——
+## 那是设计的分岔：V 3–5 重铸 / V ≥ 6 升级。
+const REJECT_SYNTHESIS_FUEL_SHORT := "synthesis_fuel_short"
 
 ## R1 的燃料门槛（熔炼值）。**所有物品都能当材料**，但"能当"不等于"一件就够"。
 ##
@@ -303,10 +315,44 @@ static func classify(items: Array) -> Dictionary:
 		"blueprint_candidates": [],
 		"blueprint_index": -1,
 		"coin_cost": 0,
+		# R0 命中（或"钥匙齐/燃料差"）时填配方与产出规格；否则为空。
+		"synthesis": {},
+		# 钥匙差 1–2 个时的**软提示**（不阻止熔炼）。
+		"synthesis_hint": {},
 	}
 	if weapons.is_empty() and materials.is_empty():
 		result["reason"] = REJECT_EMPTY_TRAY
 		return result
+
+	# ——— R0 定向合成：必须排在 R1 之前 ———
+	# 「1 把棒球棍 + 燃料 ≥3」同时满足 R1 与 R0，判定顺序决定结果：
+	# 先 R0 才能升级成断刃，先 R1 就只能重铸棒球棍。业主口径要的是前者。
+	var directed: Dictionary = SynthesisCatalog.find_key_complete(weapons, materials)
+	if not directed.is_empty():
+		var fuel_min := int(directed["fuel_min"])
+		if melt >= fuel_min:
+			result["synthesis"] = _directed_payload(directed, melt)
+			result["recipe"] = RECIPE_DIRECTED
+			result["output_count"] = 1
+			# 固定价，不走 `coin_cost_for`：合成配方的投入物是固定的，
+			# 按投入估值计费会让"同样两条碎片因为顺手多丢几件垃圾而涨价"。
+			result["coin_cost"] = int(directed["coin_cost"])
+			return result
+		# 钥匙齐但燃料不够 —— 两种钥匙行为**必须不同**：
+		#
+		# ① 武器链（钥匙就是那把枪）：燃料不够只是"没升级"，继续走 R1 重铸它。
+		#    在这里直接拒绝会让玩家被自己的棒球棍卡死 —— R1 永远够不到。
+		# ② 碎片链（钥匙是蓝图碎片）：凭据不能静默烧掉，必须拒绝并说清还差多少。
+		if not SynthesisCatalog.is_weapon_key(str(directed["key_item_id"])):
+			result["synthesis"] = _directed_payload(directed, melt)
+			result["reason"] = REJECT_SYNTHESIS_FUEL_SHORT
+			return result
+
+	# 钥匙差 1–2 个：盘面上确实有这条配方的钥匙，给一条软提示。
+	# **不拒绝** —— 玩家仍可走 R1/R2/R3，剥夺"我就是要烧掉这批货"的自由是错的。
+	var short: Dictionary = SynthesisCatalog.nearest_key_short(weapons, materials)
+	if not short.is_empty():
+		result["synthesis_hint"] = short
 
 	if weapons.size() >= 2:
 		result["recipe"] = RECIPE_FUSION
@@ -340,19 +386,71 @@ static func classify(items: Array) -> Dictionary:
 	return result
 
 
-## 单件物品的估值（含堆叠数量）。取物品表的 `price`，缺失按 0 计。
+## R0 命中后的产出规格载荷（给 `WorkbenchPanel` 用，不在这里建物品）。
 ##
+## 顺手算好「还差多少燃料」：UI 要显示"还差 N 点熔炼值才能合成{产物名}"，
+## 让它自己减一遍容易算错，也会让 UI 依赖 `fuel_min` 的语义。
+static func _directed_payload(recipe: Dictionary, melt: int) -> Dictionary:
+	var fuel_min := int(recipe["fuel_min"])
+	var product_id := str(recipe["product_id"])
+	var product := ItemRegistry.get_instance().get_item(product_id)
+	return {
+		"recipe_id": str(recipe["recipe_id"]),
+		"curve_tier": int(recipe["curve_tier"]),
+		"product_id": product_id,
+		"product_name": str(product.get("name", product_id)),
+		"assembly_id": SynthesisCatalog.assembly_id_for_product(product_id),
+		"key_item_id": str(recipe["key_item_id"]),
+		"key_count": int(recipe["key_count"]),
+		"fuel_min": fuel_min,
+		"fuel_short": maxi(0, fuel_min - melt),
+		"coin_cost": int(recipe["coin_cost"]),
+		"quality_bonus": int(recipe["quality_bonus"]),
+		"preload_bullet": str(recipe["preload_bullet"]),
+		"preload_attachments": int(recipe["preload_attachments"]),
+	}
+
+
+## 零价物品的估值兜底（按 rarity）。
+##
+## 全库有 3 件 `price = 0` 的手电模块。它们当燃料时估值为 0，费用只落到最低价 ——
+## 那是"0 成本换高价值产出"。目前靠"全库只有 3 件、凑不满 R3 的 6 点"偶然堵住，
+## **不是规则堵住**：再加一件零价物品就通了。所以这里给一个兜底价。
+##
+## 兜底价刻意定得比 `base_sell_price`（商价的一半）更低，
+## 于是"零价物当燃料"既不划算也不吃亏，只是不再免费。
+const ZERO_PRICE_VALUE: Dictionary = {
+	"common": 10,
+	"uncommon": 15,
+	"rare": 25,
+	"epic": 40,
+	"legendary": 60,
+}
+
+
+## 单件物品的估值（含堆叠数量）。
+##
+## 优先取物品表 `price`；**取不到或为 0 时按 rarity 兜底**（见 `ZERO_PRICE_VALUE`）。
 ## 不用 `base_sell_price`：卖价只是估值的一半，用它当基数会让熔炼费低到
 ## "贵枪随便熔"，失去按价值分档的意义。
 static func item_value(item: Dictionary) -> int:
 	if item.is_empty():
 		return 0
+	var definition := ItemRegistry.get_instance().get_item(str(item.get("id", "")))
 	var price := maxi(0, int(item.get("price", 0)))
 	if price <= 0:
 		# 调用方传进来的往往是实例字典，`price` 可能已被剥离；回查物品表。
-		var definition := ItemRegistry.get_instance().get_item(str(item.get("id", "")))
 		price = maxi(0, int(definition.get("price", 0)))
+	if price <= 0:
+		price = _zero_price_fallback(item, definition)
 	return price * maxi(1, int(item.get("count", 1)))
+
+
+static func _zero_price_fallback(item: Dictionary, definition: Dictionary) -> int:
+	var rarity := str(item.get("rarity", definition.get("rarity", "common")))
+	if not ZERO_PRICE_VALUE.has(rarity):
+		rarity = "common"
+	return int(ZERO_PRICE_VALUE[rarity])
 
 
 ## 金币费用：`max(min_cost, ceil(投入估值 × rate))`。参数见 `COIN_RATE` / `COIN_MIN`。

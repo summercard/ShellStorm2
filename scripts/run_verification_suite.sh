@@ -280,6 +280,7 @@ core_scenes=(
   verify_fate_card_purchase_flow
   verify_fate_economy_service
   verify_fate_level01_pool
+  verify_expedition_fate_surplus
   verify_fate_element_vfx
   verify_finite_ammo_flow
   verify_guaranteed_loadout_ammo_flow
@@ -374,6 +375,8 @@ core_scenes=(
   verify_electronic_mask_flow
   verify_character_expression_flow
   verify_training_range_south_wall_boundary
+  verify_weapon_forge
+  verify_synthesis_catalog
 )
 
 # These scenes read the viewport texture and therefore require a real renderer.

@@ -38,9 +38,23 @@ func run() -> void:
 	for i in range(16):
 		dungeon.set("_fate_door_offer_id", i)
 		var offer: Array = dungeon.call("_gate_expedition_fate_offer")
-		check(offer.size() == 2, "rarity intersection shows two, no outside filler")
+		check(offer.size() == 3, "full 21 pool shows three per gate, no rarity narrowing")
 		for card: FateCard in offer:
 			check(not card.is_reversed() and Policy.allows("expedition_01", card.get_stable_card_id()), "formal gate")
+	# 门后保底：三张全买不起时，最低那张必须落到当前余额（0 也要成立）。
+	if dungeon.uses_dynamic_fate_economy():
+		var probe: Array[FateCard] = FateCardPresets.draw_offer(3, null, "expedition_01")
+		dungeon.set("_door_fate_choices", probe)
+		var quotes: Dictionary = {}
+		for card: FateCard in probe:
+			quotes[card.get_stable_card_id()] = 9999
+		dungeon.set("_fate_door_quote", quotes)
+		GameManager.currency = 0
+		dungeon.call("_ensure_affordable_fate_choice")
+		var lowest := 9999
+		for card: FateCard in probe:
+			lowest = mini(lowest, int(dungeon.call("_fate_price", card)))
+		check(lowest == 0, "affordable guarantee did not drop the cheapest card to the wallet")
 	dungeon.set("_door_fate_choices", FateCardPresets.draw_offer(3, null, "expedition_01"))
 	var saved: Dictionary = dungeon.call("_export_door_fate_snapshot")
 	check(bool(dungeon.call("_import_door_fate_snapshot", saved)), "same snapshot accepted")

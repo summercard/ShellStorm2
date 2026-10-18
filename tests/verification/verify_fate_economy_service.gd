@@ -95,8 +95,10 @@ func _check_one_card_per_door(formal: Dictionary) -> void:
 		var prices: Array = row["prices"]
 		var cheapest := int(prices[0])
 		var cumulative := 0
-		# 第 door 门打开时已清完的房间 = 序号 0..door-1（第 1 门只有安全屋，无收益）。
-		for cursor in range(mini(door, segments.size())):
+		# 第 door 门打开时已清完的房间 = 序号 0..door（0 是收益为 0 的安全屋，
+		# 1..door 是 room_01..room_door）。安全屋→room_01 是入口交通门、不弹命运卡，
+		# 所以第 1 次命运门出现在清完 room_01 之后，门序号 k 对应 segment k。
+		for cursor in range(mini(door + 1, segments.size())):
 			cumulative += int(round(float(segments[cursor])))
 		print("FATE_DOOR_PRICE door=%d segment_index=%d segment=%d base=%d cumulative=%d common=%d rare=%d epic=%d legend=%d mystic=%d" % [
 			door, segment_index, segment_income, base, cumulative,
@@ -167,10 +169,9 @@ func _check_formal_expedition() -> void:
 	for offer_id in range(40):
 		dungeon.set("_fate_door_offer_id", offer_id)
 		var cards: Array[FateCard] = dungeon.call("_gate_expedition_fate_offer")
-		_expect(cards.size() == 2, "01白名单普通交集应为两张，不得越界补第三张")
+		_expect(cards.size() == 3, "21张全池每门应出三张，不得被稀有度门槛收窄")
 		var ids: Array[String] = []
 		for card in cards:
-			_expect(card.card_rarity == FateCard.CardRarity.COMMON, "零击杀池混入贵卡")
 			_expect(card.get_stable_card_id() not in ids, "正式池三卡重复")
 			ids.append(card.get_stable_card_id())
 			if card.is_reversed():
@@ -363,17 +364,20 @@ func _quote_phase_with_reward_fixture(dungeon: TowerDescent3D, phase: String, ta
 		dungeon.set("_fate_door_offer_id", probe_id)
 		var probe_cards: Array[FateCard] = dungeon.call("_gate_expedition_fate_offer")
 		for card in probe_cards:
-			_expect(int(card.card_rarity) <= economy.max_unlocked_rarity(), "正式阶段抽入未解锁贵卡")
 			if int(card.card_rarity) >= 3:
 				high_seen = true
 	dungeon.set("_fate_door_offer_id", saved_id)
-	_expect(high_seen == (phase == "late"), "中期禁贵卡/后期可见贵卡不成立")
+	_expect(high_seen, "全池随机抽牌连续40门未见传奇卡，抽池未真正打开")
 	print("FATE_FORMAL_HIGH_POOL phase=%s high_rarity_seen=%s samples=40" % [phase, high_seen])
 	for card: FateCard in dungeon.get("_door_fate_choices"):
 		var price: int = dungeon.call("_fate_price", card)
 		var bounds: Dictionary = dungeon.call("_fate_price_bounds", card)
-		_expect(price >= int(bounds["min"]) and price <= int(bounds["max"]), "正式%s报价越界" % phase)
-		_expect(int(card.card_rarity) <= economy.max_unlocked_rarity(), "未解锁贵卡入池")
+		# 保底价是本门唯一允许低于下界的报价：它被压到当前余额，且全场只有一张。
+		var is_guarantee := price < int(bounds["min"]) and price == maxi(0, GameManager.currency)
+		_expect(
+			is_guarantee or (price >= int(bounds["min"]) and price <= int(bounds["max"])),
+			"正式%s报价越界" % phase
+		)
 	dungeon.call("_close_door_fate_overlay")
 
 

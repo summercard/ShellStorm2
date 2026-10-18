@@ -5,11 +5,21 @@ class_name UIFX
 
 extends RefCounted
 
+## UIFX 的默认缩放口径。旧式卡片按钮沿用这两个值（幅度大、有"果冻感"）；
+## 棱镜线框按钮改用 `UIStyleFactory.attach_button_feedback` 传的 1.014 / 0.988
+## —— 硬边几何不适合大回弹。常量放在这里，是为了避免两处各写一遍数字。
+const DEFAULT_HOVER_SCALE := 1.05
+const DEFAULT_PRESSED_SCALE := 0.95
+
 
 ## 给按钮挂上 hover/pressed 缩放反馈
 ## 1.05x on hover (0.08s), 0.95x on pressed (0.05s), 1.0x on exit/disabled
 ## 必须在 Button 已经添加到场景树后调用（_ready 之后）
-static func attach_button_press(btn: Button, hover_scale: float = 1.05, pressed_scale: float = 0.95) -> void:
+static func attach_button_press(
+	btn: Button,
+	hover_scale: float = DEFAULT_HOVER_SCALE,
+	pressed_scale: float = DEFAULT_PRESSED_SCALE
+) -> void:
 	if btn == null:
 		return
 	# pivot 居中（让缩放看起来自然）

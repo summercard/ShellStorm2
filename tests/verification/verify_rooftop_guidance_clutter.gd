@@ -58,7 +58,7 @@ func _ready() -> void:
 			check(world_bounds.position.y >= -0.03, "sunk visual " + id)
 			check(world_bounds.position.y <= 0.04, "floating visual " + id)
 			check(world_bounds.position.x >= -50.05 and world_bounds.end.x <= 50.05 and world_bounds.position.z >= -35.05 and world_bounds.end.z <= 45.05, "outside rooftop " + id + " " + str(world_bounds))
-	check(count == 190, "authored count mismatch " + str(count))
+	check(count == 192, "authored count mismatch " + str(count))
 	check(foliage_count == 48, "grass patch count mismatch")
 	if grass_material != null:
 		grass_clock = float(grass_material.get_shader_parameter("wind_time"))
@@ -96,6 +96,10 @@ func _ready() -> void:
 	check(not capsule_hits(Vector3(-22,0,12.5)).is_empty(), "west-to-south shortcut not blocked")
 	check(not capsule_hits(Vector3(24,0,11.5)).is_empty(), "east-to-south shortcut not blocked")
 	check(not capsule_hits(Vector3(30,0,-14.5)).is_empty(), "east barrier seam open")
+	# User-marked gaps: sample the middle and both ends of each added crate.
+	for center in [Vector3(-30.4,0,-10.5), Vector3(31,0,-11.5)]:
+		for offset in [-1.5, 0.0, 1.5]:
+			check(not capsule_hits(center + Vector3(0,0,offset)).is_empty(), "marked gap open " + str(center) + " offset=" + str(offset))
 	check(capsule_hits(Vector3(18,0,-2.5)).is_empty(), "central east door obstructed")
 	print("ROOFTOP_GUIDANCE_COUNTS items=%d tilted=%d shapes=%d route_trigger=%s" % [count,tilted,collision_count,str(trigger_crossed)])
 	if DisplayServer.get_name() != "headless":

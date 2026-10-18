@@ -14,7 +14,7 @@
 
 [node name="RooftopGuidanceClutter" type="Node3D"]
 metadata/asset_id = "ENV-ROOFTOP-GUIDANCE-LAYOUT"
-metadata/asset_version = "v003"
+metadata/asset_version = "v004"
 metadata/layout_owner = "this_tscn"
 metadata/interaction_status = "planned_locked"
 metadata/future_state_owner = "scene_interaction_system_pending"
@@ -1364,5 +1364,19 @@ metadata/remove_condition = "design_pending"
 transform = Transform3D(0.297351, 0.000000, -0.954768, 0.000000, 1.000000, 0.000000, 0.954768, 0.000000, 0.297351, 20.5872383117676, 0.0149999996647239, -7.5476450920105)
 metadata/scene_content_id = "roof_clutter_190"
 metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_191" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.275637, 0.000000, -0.961262, 0.000000, 1.000000, 0.000000, 0.961262, 0.000000, 0.275637, -30.400000, 0.015000, -10.500000)
+metadata/scene_content_id = "roof_clutter_191"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_192" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.207912, 0.000000, -0.978148, 0.000000, 1.000000, 0.000000, 0.978148, 0.000000, 0.207912, 31.000000, 0.015000, -11.500000)
+metadata/scene_content_id = "roof_clutter_192"
+metadata/initial_state = "blocking"
 metadata/move_condition = "design_pending"
 metadata/remove_condition = "design_pending"

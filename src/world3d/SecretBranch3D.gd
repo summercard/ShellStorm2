@@ -69,6 +69,12 @@ const DOOR_HP_BASE := 60
 const DOOR_HP_PER_CLEARED := 20
 ## 撤离门解锁阈值（占内容房比例），见设计 §6.2。
 const EXTRACTION_UNLOCK_RATIO := 0.4
+## 门装到墙面之外时，木板外沿还要再离开墙面多少（m）。
+## 3cm 足够让木板与墙面之间出现一道能看见的缝，又不会让整樘门明显悬空。
+const WALL_FACE_CLEARANCE_M := 0.03
+## 门前净空检测：射线高度（m）与往房间内量的深度（m）。
+const SITE_CLEAR_EYE_Y_M := 1.2
+const SITE_CLEAR_DEPTH_M := 2.4
 ## 传送落点相对地面的高度（m）。玩家胶囊原点在地面上。
 const TELEPORT_Y := 0.05
 ## 进支线 / 回主路的按键牌动词。只在这里各写一份：
@@ -121,6 +127,12 @@ var _extraction_doors: Dictionary = {}
 ## `combat = false` 的是撤离房：它是安全间（信标所在），不刷怪 —— 与「子图撤离房
 ## 跳过防线遭遇」同一条口径，不能让人一边读条一边被 5 只强化怪围住。
 var _branch_rooms: Dictionary = {}
+## room_id -> 主图房间节点。只在 `_collect_sites()` 前建一次：
+## 位点要按**实测墙面外沿**外推，光有房间记录（center/dimensions）不够。
+var _room_nodes: Dictionary = {}
+## `_collect_sites()` 的产物，供 `debug_snapshot()` 与验收读取
+## （要看「推了多少米」「门前被什么挡住」，不能只看门节点坐标）。
+var _sites_debug: Array = []
 
 
 ## `rooms_source` 是 `Dungeon3D._records` 的拷贝（只读用途：读房间 center/size/secret_site）。
@@ -168,6 +180,7 @@ func configure(
 ## 主入口：解析位点 → 决定刷哪几对 → 建板体 → 建子图。
 func build() -> void:
 	var sites := _collect_sites()
+	_sites_debug = sites.duplicate(true)
 	if sites.is_empty():
 		return
 	for pair_id in [0, 1]:
@@ -180,6 +193,60 @@ func build() -> void:
 			push_warning("[SecretBranch3D] 配对 %d 缺入口或出口位点，已跳过" % pair_id)
 			continue
 		_build_pair(pair_id, entry, exit_site)
+	# 这里房间节点多半还没进树（远征 bootstrap 先于房间装配，实测房间索引只有 1 个），
+	# 拿不到墙体几何。等这一帧结束、房间齐了再补做一次外推；`settle_sites()` 幂等。
+	call_deferred("settle_sites")
+
+
+## 房间齐了之后补做「位点外推」。
+##
+## 两处触发：`build()` 末尾的 deferred（同帧兜底），以及 `Dungeon3D._create_secret_branches`
+## 的幂等分支（`_finish_layout_connections()` 那条链，此时房间已全部装配完）。
+## 幂等：推过的位点带着 `wall_push_m`，再进来直接跳过，不会越推越远。
+func settle_sites() -> void:
+	_build_room_index()
+	if _room_nodes.is_empty():
+		return
+	var shifted := 0
+	for value in _sites_debug:
+		var site := value as Dictionary
+		if float(site.get("wall_push_m", 0.0)) > 0.0:
+			continue
+		if not _room_nodes.has(str(site.get("room_id", ""))):
+			continue
+		_push_site_out_of_wall(site)
+		_measure_site_blocker(site)
+		if float(site.get("wall_push_m", 0.0)) > 0.0:
+			_shift_door(site)
+			shifted += 1
+	if shifted > 0:
+		for value in _sites_debug:
+			var site := value as Dictionary
+			if site.has("blocker"):
+				push_warning(
+					"[SecretBranch3D] 位点 %s（%s）门前 2.4m 被 %s 挡住 —— 玩家看不到也走不到，请改 lane"
+					% [
+						str(site.get("site_id", "")), str(site.get("room_id", "")),
+						str(site.get("blocker", "")),
+					]
+				)
+
+
+## 位点外推后，门节点与它自带的传送落点要一起平移 ——
+## 只挪门不挪落点，玩家按 E 会落在门框里。
+func _shift_door(site: Dictionary) -> void:
+	var door := _doors.get(str(site.get("site_id", ""))) as Node3D
+	if door == null or not is_instance_valid(door):
+		return
+	var offset := float(site.get("wall_push_m", 0.0))
+	if offset <= 0.0:
+		return
+	var normal := site.get("normal", Vector3.FORWARD) as Vector3
+	door.global_position -= normal * offset
+	var target: Variant = door.call("get_teleport_target")
+	if target is Vector3:
+		var verb := str(door.get("_teleport_verb"))
+		door.call("set_teleport_target", (target as Vector3) - normal * offset, verb)
 
 
 ## —— 位点解析 ——
@@ -193,6 +260,7 @@ func build() -> void:
 ## 为什么不能只取中点：墙中点经常正是主路门洞的位置，2.2m 木板会把主路钉死
 ## （远征01 S3 曾与 `room_06 → room_07` 的 `Door_North` 重合 0.00m）。
 func _collect_sites() -> Array:
+	_build_room_index()
 	var result: Array = []
 	for value in _rooms_source:
 		var record := value as Dictionary
@@ -215,7 +283,7 @@ func _collect_sites() -> Array:
 			+ Vector3(normal.x * half.x, 0.0, normal.z * half.z)
 			+ _wall_tangent(wall) * lane
 		)
-		result.append({
+		var entry := {
 			"site_id": str(site.get("site_id", "")),
 			"pair_id": int(site.get("pair_id", -1)),
 			"role": str(site.get("role", "")),
@@ -223,9 +291,150 @@ func _collect_sites() -> Array:
 			"lane": lane,
 			"normal": normal,
 			"position": point,
+			"authored_position": point,
 			"room_id": str(record.get("id", "")),
-		})
+		}
+		# 位点解析出来的只是「房间包围盒边界」，那不是墙面 —— 墙件原点虽坐在
+		# ±dimensions/2 上，但墙厚是**向房间外侧**展开的，可视面还会再往房间里
+		# 探出 0.3~0.6m。木板只有 0.142m 厚，直接装在这个点上会被墙体包住：
+		# 远征 01 的 S1 实测墙体可视面凸出 0.465m，玩家看到的是一整面平墙，
+		# 业主连续两局「打到第 4 间完全找不到入口」就是这个原因。
+		# ⇒ 装配前先按实测墙面外沿把整樘门（门叶 + 木板）推到墙外面。
+		_push_site_out_of_wall(entry)
+		_measure_site_blocker(entry)
+		result.append(entry)
 	return result
+
+
+## 扫一遍宿主树，建 `room_id -> 房间节点`。
+##
+## 只在 `build()` 之前调用一次：那时主图房间已装配完、子图还没建，
+## 所以不会把 `secret_*` 混进来。**必须从场景根往下扫**：本节点挂在
+## `Dungeon3D`（`SecretBranches`），而远征的房间在 `Blocks/Expedition/` 下，
+## 既不是本节点的子节点，也不一定是 `Dungeon3D` 的子节点。
+func _build_room_index() -> void:
+	_room_nodes.clear()
+	var host: Node = self
+	while host.get_parent() != null:
+		host = host.get_parent()
+	_index_rooms(host)
+
+
+func _index_rooms(node: Node) -> void:
+	for child in node.get_children():
+		var room_id_value: Variant = child.get("room_id")
+		if room_id_value != null:
+			var room_id := str(room_id_value)
+			if not room_id.is_empty() and not room_id.begins_with("secret_") and not _room_nodes.has(room_id):
+				_room_nodes[room_id] = child
+		_index_rooms(child)
+
+
+## 把位点从「房间边界」推到「墙面可视外沿之外」。
+##
+## 为什么必须实测而不是写死一个偏移：每间房的墙厚不一样（远征 01 里
+## room_03 凸 0.465m，room_07 几乎不凸）。写死小了照样被埋，写死大了
+## 整樘门会浮在房间当中。
+##
+## 只认名字/来源里带 `wall` 的网格，**不认家具**：工作台、货架也贴墙摆，
+## 但它们不是「看得见门」的基准面；把它们算进来会把门推到家具外面。
+func _push_site_out_of_wall(site: Dictionary) -> void:
+	var room := _room_nodes.get(str(site.get("room_id", ""))) as Node3D
+	if room == null:
+		return
+	var point := site.get("position", Vector3.ZERO) as Vector3
+	var normal := site.get("normal", Vector3.FORWARD) as Vector3
+	if normal == Vector3.ZERO:
+		return
+	var base := point.dot(normal)
+	# `normal` 是**朝房间外**的法线（`_wall_normal("south") = +Z`），房间内部在 -normal 侧。
+	# 所以「墙面挡在门前面」看的是**最小**投影，不是最大：
+	# 远征 01 S1 的墙体区间 -20.465 ~ -19.850，-20.465 才是拦住玩家的那一面。
+	var face := INF
+	for node in room.find_children("*", "MeshInstance3D", true, false):
+		var mesh_node := node as MeshInstance3D
+		if mesh_node.mesh == null or not _is_wall_mesh(mesh_node):
+			continue
+		var box := mesh_node.global_transform * mesh_node.get_aabb()
+		if not _box_near_point(box, point):
+			continue
+		for index in range(8):
+			face = minf(face, box.get_endpoint(index).dot(normal))
+	if face == INF:
+		return
+	var offset := base - face + WALL_FACE_CLEARANCE_M
+	if offset <= 0.0:
+		return
+	site["wall_push_m"] = offset
+	site["wall_face_m"] = face
+	site["position"] = point - normal * offset
+
+
+## 门前 2.4m 内有没有实体家具挡着（工作台、货架…）。
+##
+## 位点是**固定数据**，这里不换槽也不挪家具 —— 只把挡路件的名字带回去，
+## 由验收/探针报红，让人回去改 `secret_site.lane`。静默通过会让「门在那里，
+## 但被工作台挡住」这种问题一路漏到玩家手里（room_06 的 S2 就是这样）。
+func _measure_site_blocker(site: Dictionary) -> void:
+	var point := site.get("position", Vector3.ZERO) as Vector3
+	var normal := site.get("normal", Vector3.FORWARD) as Vector3
+	if normal == Vector3.ZERO:
+		return
+	var world := get_world_3d()
+	if world == null:
+		return
+	var space := world.direct_space_state
+	if space == null:
+		return
+	var from := point + Vector3(0.0, SITE_CLEAR_EYE_Y_M, 0.0)
+	# 从门前 0.5m 往里量到 2.4m：这个区间正好是玩家站着看门的位置。
+	var query := PhysicsRayQueryParameters3D.create(
+		from - normal * 0.5, from - normal * SITE_CLEAR_DEPTH_M
+	)
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	var hit := space.intersect_ray(query)
+	if hit.is_empty():
+		return
+	site["blocker"] = _node_label(hit.get("collider") as Node)
+
+
+## 一层层往上找，认出「这是墙」。
+func _is_wall_mesh(node: Node) -> bool:
+	var cursor := node
+	for _i in range(4):
+		if cursor == null:
+			break
+		if str(cursor.name).to_lower().contains("wall"):
+			return true
+		if cursor is Node3D and (cursor as Node3D).scene_file_path.to_lower().contains("wall"):
+			return true
+		cursor = cursor.get_parent()
+	return false
+
+
+## 墙件长 5m，位点可能落在段的端头：中心距放宽到 3.2m 才不漏。
+func _box_near_point(box: AABB, point: Vector3) -> bool:
+	var center := box.get_center()
+	if Vector2(center.x - point.x, center.z - point.z).length() > 3.2:
+		return false
+	# 门洞高度区间：把只有地脚、屋檐之类的件排除掉。
+	return box.end.y > 0.8 and box.position.y < 2.4
+
+
+## 碰撞体 → 祖先生成件名，便于人眼认出「是哪个工作台挡的」。
+func _node_label(node: Node) -> String:
+	var cursor := node
+	for _i in range(4):
+		if cursor == null:
+			break
+		if str(cursor.name).begins_with("ENV-") or str(cursor.name).begins_with("DB-"):
+			return str(cursor.name)
+		cursor = cursor.get_parent()
+	if node == null:
+		return ""
+	return str(node.get_parent().name if node.get_parent() != null else node.name)
+
 
 
 func _record_dimensions(record: Dictionary) -> Vector2:
@@ -920,4 +1129,5 @@ func debug_snapshot() -> Dictionary:
 		"pairs": _pairs.keys(),
 		"doors": _doors.keys(),
 		"branch_points": _branch_points.duplicate(true),
+		"sites": _sites_debug.duplicate(true),
 	}

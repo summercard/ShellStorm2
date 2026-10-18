@@ -155,13 +155,32 @@ static func apply_button_style(btn: Button, style_dict: Dictionary) -> void:
 	btn.add_theme_color_override("font_pressed_color", UIPalette.PRISM_LABEL)
 	btn.add_theme_color_override("font_disabled_color", UIPalette.PRISM_TEXT_FAINT)
 	btn.add_theme_font_override("font", make_prism_font(2))
-	# 弹性缩放反馈（必须在 add_child 之后调用，否则 _ready 还没跑完）
+	# 沿用 UIFX 默认的 1.05 / 0.95 —— 这一路（旧式卡片按钮）一直是这个手感，
+	# 改成棱镜的 1.014/0.988 会悄悄改变全项目老按钮的回弹幅度。
+	attach_button_feedback(btn, UIFX.DEFAULT_HOVER_SCALE, UIFX.DEFAULT_PRESSED_SCALE)
+
+
+## 按钮的**通用交互反馈**：悬停/按下弹性缩放 + `ui_hover` / `ui_click` 音效。
+## 这是全项目按钮"有没有反应"的唯一来源，任何按钮（包括自绘按钮）都应走这里，
+## 不要各自 `mouse_entered.connect` 一套 —— 那会漏掉音效或重复叠动效。
+##
+## 缩放口径与 `apply_prism_button` 一致（默认 1.014 / 0.988）：棱镜语言是硬边几何，
+## 回弹幅度必须小到"几乎看不出位移、但松手瞬间有回弹感"，用 1.05 会变成果冻。
+## 旧式卡片按钮（`apply_button_style`）显式传 `UIFX.DEFAULT_*` 保持原本手感。
+## 必须在 `add_child` 之后调用；节点尚未入树时自动挂到 `ready`（一次性）。
+static func attach_button_feedback(
+	btn: Button, hover_scale: float = 1.014, pressed_scale: float = 0.988
+) -> void:
+	if btn == null:
+		return
 	if btn.is_inside_tree():
-		UIFX.attach_button_press(btn)
+		UIFX.attach_button_press(btn, hover_scale, pressed_scale)
 		_bind_button_audio(btn)
 	else:
 		# 延迟到 _ready 后挂载
-		btn.ready.connect(UIFX.attach_button_press.bind(btn), CONNECT_ONE_SHOT)
+		btn.ready.connect(
+			UIFX.attach_button_press.bind(btn, hover_scale, pressed_scale), CONNECT_ONE_SHOT
+		)
 		btn.ready.connect(_bind_button_audio.bind(btn), CONNECT_ONE_SHOT)
 
 
@@ -997,12 +1016,7 @@ static func apply_prism_button(
 		resolved_bracket = ""
 	if not resolved_bracket.is_empty():
 		attach_prism_bracket_frame(btn, resolved_bracket, arm, thickness, 0.0)
-	if btn.is_inside_tree():
-		UIFX.attach_button_press(btn, 1.014, 0.988)
-		_bind_button_audio(btn)
-	else:
-		btn.ready.connect(UIFX.attach_button_press.bind(btn, 1.014, 0.988), CONNECT_ONE_SHOT)
-		btn.ready.connect(_bind_button_audio.bind(btn), CONNECT_ONE_SHOT)
+	attach_button_feedback(btn)
 
 
 # ---------- 菜单行：参考图左栏「贯穿细线 + 左对齐大字」列表 ----------

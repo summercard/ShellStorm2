@@ -597,7 +597,8 @@
       "design_docs": [
         "docs/v0.1/07.2_玩法系统_武器改造台.md",
         "docs/v0.1/04_技术施工_战斗与局内成长.md",
-        "docs/v0.1/design/UI与UX全局设计及全界面清单.md"
+        "docs/v0.1/design/UI与UX全局设计及全界面清单.md",
+        "docs/v0.1/design/UI风格规范_棱镜线框.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-10-18_weapon_forge_alchemy.md"
@@ -606,6 +607,26 @@
         {
           "kind": "scene",
           "id": "verify_weapon_forge"
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "feature_id": "RUN-SYNTHESIS",
+      "owner": "SynthesisCatalog",
+      "design_docs": [
+        "docs/v0.1/07.3_玩法系统_合成目录与兴趣曲线.md",
+        "docs/v0.1/07.2_玩法系统_武器改造台.md",
+        "docs/v0.1/design/UI与UX全局设计及全界面清单.md"
+      ],
+      "development_records": [
+        "docs/v0.1/development/2026-10-18_weapon_forge_alchemy.md",
+        "docs/v0.1/development/2026-10-18_synthesis_pity_settlement.md"
+      ],
+      "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_synthesis_catalog"
         }
       ],
       "status": "partial"

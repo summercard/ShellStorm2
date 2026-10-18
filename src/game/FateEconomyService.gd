@@ -10,7 +10,7 @@ const PRICE_CEILING_RATIO := 1.15
 ## 分享系数：普通卡 0.85 门收益 ⇒ 清完一间房基本只够买一张；任意三张合计 ≥ 2.55 门收益，
 ## 所以「一间房的收入买三张」永远不成立。高稀有度要攒 1~3 间房才买得起，构成消费抉择。
 const RARITY_PRICE_SHARES: Array[float] = [0.85, 1.30, 1.85, 2.60, 3.50]
-## 最低报价：防止无收益门（安全屋出门）出现白拿三张。
+## 最低报价：防止极低收益房间把卡价压到近乎白拿。
 const MIN_CARD_PRICE := 40
 const RARITY_UNLOCK_INCOME_RATIOS: Array[float] = [0.0, 0.12, 0.30, 0.55, 0.80]
 const MONSTER_VARIANTS := preload("res://src/enemy3d/MonsterVariants.gd")
@@ -134,18 +134,25 @@ func price_bounds_for_card(rarity: int, stable_card_id: String, door_index: int 
 	return bounds
 
 
-## 门序号（1 基，等于 `_fate_door_offer_id`）对应的价格基准房间。
-## 第 1 门是安全屋出门、尚无击杀，沿用第 1 间内容房的收益，避免出现 10 金币白拿三张。
+## 门序号（1 基，等于 `_fate_door_offer_id`）对应的价格基准房间 = **刚清完的那一间**。
+##
+## 安全屋→第 1 间内容房是入口交通门（`triggers_fate=false`），不弹命运卡；因此第 1 次
+## 命运门实际出现在清完 `room_01` 之后，门序号 k 恒对应 segment k（k 从 1 起，
+## `segments[0]` 是安全屋、收益为 0）。下限取 1 就是为了跳过安全屋那间空房。
+##
+## 2026-10-18 修正：原式 `clampi(max(door_index - 1, 1), …)` 假设「第 1 门是安全屋出门」，
+## 于是把每一门都往前错了一间房 —— 第 2 门（清完 room_02）拿了 room_01 的基准，
+## 第 3 门（清完 room_03）拿了 room_02 的 40，与实际收益差一个数量级。
 func price_segment_index_for_door(door_index: int) -> int:
 	var count := _segment_income_expected.size()
 	if count <= 0:
 		return -1
 	if count == 1:
 		return 0
-	return clampi(maxi(door_index - 1, 1), 1, count - 1)
+	return clampi(door_index, 1, count - 1)
 
 
-## 某一门的报价基准 = max（该门之前刚清完那间房的参考收益，至今平均每门收益）。
+## 某一门的报价基准 = max（刚清完那间房的参考收益，至今平均每门收益）。
 ## 只取单间会让小房间（收益 40）把卡价压到 50，攒下来的钱又能一次买三张；
 ## 取两者较大值后，报价永远跟得上"已经打到第几门"，一间房仍然只够一张。
 func door_price_base(door_index: int) -> float:
@@ -156,8 +163,8 @@ func door_price_base(door_index: int) -> float:
 	var cumulative := 0.0
 	for cursor in range(index + 1):
 		cumulative += _segment_income_expected[cursor]
-	# 分母是**累计到的房间数**（index+1），不是门序号：第 1 门是安全屋出门，
-	# 尚未清房，不能用整关总额当基准，否则首门报价会被整体收益抬高。
+	# 分母是**累计到的房间数**（index+1，含收益为 0 的安全屋），不是门序号；
+	# 用整关总额当基准会把首门报价抬到玩家还没赚到的水平。
 	var average := cumulative / float(maxi(1, index + 1))
 	return maxf(segment, average)
 

@@ -43,3 +43,7 @@ FeatureID：WORLD-BLOCKS / ASSET-ROOFTOP / ASSET-PIPELINE；关联 NARRATIVE-TIM
 `tests/verification/verify_rooftop_guidance_clutter.tscn`：真实主场景中检查唯一挂载、ID唯一、独立碰撞、物件范围、出口到桥前的玩家胶囊通路、初始南侧绕行阻挡、桥口净空和非天台不挂载。真实渲染输出俯视与出口视角，确认倾斜错落、没有悬空和门口堵死。旧装饰专项独立回归。
 
 关联：[天台组件契约](rooftop_component_library.md)、[跨塔路线](rooftop_cross_tower_route.md)。本次结果见 [开发记录](../development/2026-10-18_rooftop_guidance_clutter.md)。
+
+### 两处缺口封堵
+
+用户截图标注的西侧出口北面与东侧杂物边界，各以一个独立大型木箱补齐可穿行缺口。使用实际箱体碰撞，保留通往桥口的既有路线；新增内容ID191/192同样归场景交互系统未来管理。

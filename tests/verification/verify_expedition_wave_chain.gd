@@ -58,6 +58,11 @@ func _ready() -> void:
 	tower = SCENE.instantiate() as TowerDescent3D
 	tower.test_mode = true
 	tower.run_seed_override = SEED_VALUE
+	# 本门禁测的是**波次生死周期与延迟记账口径**（「实体 1 + 在途 1」这类精确计数），
+	# 不是怪量。2026-10-18 起远征战斗房会并入 25% 编成外增援，会把这些精确计数打偏
+	# ⇒ 这里显式关掉，保证被测机制单独成立。增援本身由
+	# `verify_expedition_fate_surplus` 独立验证（含「卡价/参考收益一字不变」）。
+	tower.expedition_surplus_enabled = false
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().physics_frame

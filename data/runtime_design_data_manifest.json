@@ -94,7 +94,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/expedition_01/floors/floor_00.json",
-      "sha256": "874e9692b1e34fd23acc0c6f70d7129a440a48b072dcf8bfd57d24e30555acb9"
+      "sha256": "b68f054745b1cd94176269e3c125e07e58524649bbfe5a5b0c200c2619a16e5b"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",

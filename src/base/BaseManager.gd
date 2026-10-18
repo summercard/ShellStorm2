@@ -27,6 +27,13 @@ var _runtime_checkpoint_timer: Timer
 var _runtime_checkpoint_dirty := false
 var _pending_runtime_reason := ""
 
+## 合成保底的「待提交记账」。非空 = `plan_synthesis_pity` 已经改过
+## `data.synthesis_pity` 但还没随 `commit_run_settlement` 落盘。
+## 快照存的是记账前的版本，供提交失败时整体撤回。
+var _synthesis_pity_snapshot: Dictionary = {}
+## 同一次结算的重试必须拿到同一份结论（不得二次记账），所以把 plan 结果缓存下来。
+var _synthesis_pity_plan: Dictionary = {}
+
 func _ready() -> void:
 	_runtime_checkpoint_timer = Timer.new()
 	_runtime_checkpoint_timer.name = "RuntimeCheckpointDebounce"
@@ -723,6 +730,13 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	var old_insurance := data.pending_insurance_slots.duplicate(true)
 	var old_checkpoint := data.active_run_snapshot.duplicate(true)
 	var old_transactions := data.completed_transaction_ids.duplicate()
+	# 保底是「先记账、后提交」：`plan_synthesis_pity` 已经在内存里改过计数，
+	# 这里取的是那次记账**之前**的版本。没有待提交记账时就是当前值本身。
+	var old_synthesis_pity := (
+		_synthesis_pity_snapshot.duplicate(true)
+		if not _synthesis_pity_snapshot.is_empty()
+		else data.synthesis_pity.duplicate(true)
+	)
 
 	if success and str(request.get("expedition_level_id", "")) == "expedition_01":
 		data.expedition_02_unlocked = true
@@ -756,6 +770,9 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	data.active_run_snapshot = (request.get("return_checkpoint", {}) as Dictionary).duplicate(true)
 	ShopService.append_completed(data.completed_transaction_ids, transaction_id)
 	if save_base("run_settlement:%s" % ("success" if success else "death")):
+		# 记账已落盘，暂存快照随之作废；下一次结算重新开始一轮记账。
+		_synthesis_pity_snapshot = {}
+		_synthesis_pity_plan = {}
 		return {
 			"success": true,
 			"duplicate": false,
@@ -774,7 +791,70 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 		data.pending_insurance_slots = old_insurance
 		data.active_run_snapshot = old_checkpoint
 		data.completed_transaction_ids.assign(old_transactions)
+		data.synthesis_pity = old_synthesis_pity
+	# 存档失败：这一轮记账整体作废，重试时重新判定（而不是带着已推进的计数重来）。
+	_synthesis_pity_snapshot = {}
+	_synthesis_pity_plan = {}
 	return {"success": false, "reason": "存档失败，行动结算已整体回滚", "transaction_id": transaction_id}
+
+
+## 放弃这一轮待提交的保底记账：把计数恢复成记账前的版本。
+##
+## 用在两个"这局不算数"的出口：结算被判为重复提交（事务早已落过）、
+## 以及塔楼／远征在提交后被中止（交接快照写失败等）。
+## 不调它的后果是计数白推进一格 —— 玩家会莫名其妙少一次保底。
+func discard_synthesis_pity_plan() -> void:
+	if _synthesis_pity_snapshot.is_empty():
+		return
+	_ensure_data()
+	data.synthesis_pity = _synthesis_pity_snapshot.duplicate(true)
+	_synthesis_pity_snapshot = {}
+	_synthesis_pity_plan = {}
+
+
+## 合成保底当前计数（工作台「保底 n/3」用）。只读 —— 不记账、不写档。
+func get_synthesis_pity_misses(item_id: String) -> int:
+	_ensure_data()
+	return SynthesisCatalog.pity_progress(data.synthesis_pity, item_id)
+
+
+## 结算前判定并记账一次保底，返回 `{granted, item, misses, threshold}`。
+##
+## **调用契约（必须先 plan 后 commit）**：
+##   1. 调用方在本局结算物已确定之后调本函数；
+##   2. `granted` 非空时，`item` 是一件**真物品**，调用方负责把它交给玩家
+##      （撤离路径追加进结算物、带物返航路径直接塞背包）；
+##   3. 随后必须调 `commit_run_settlement` —— 计数靠这次提交落盘，
+##      存档失败时会整体撤回。跳过 commit 就等于凭空给了一件保底物。
+##
+## 为什么判定在前、提交在后：保底物要落进**各自不同的**交付通道
+## （Dungeon3D 走待领取栏、远征成功返航走随身背包），
+## 把它塞进 commit 内部就只能认一种通道，另一条路径的保底会凭空消失。
+func plan_synthesis_pity(loot_ids: Array, boss_cleared: bool) -> Dictionary:
+	_ensure_data()
+	# 同一次结算重试（存档失败后再撤一次）不得重复记账。
+	if not _synthesis_pity_plan.is_empty():
+		return _synthesis_pity_plan.duplicate(true)
+	if _synthesis_pity_snapshot.is_empty():
+		_synthesis_pity_snapshot = data.synthesis_pity.duplicate(true)
+	var result := SynthesisCatalog.resolve_settlement(
+		data.synthesis_pity, loot_ids, boss_cleared
+	)
+	result["item"] = {}
+	var granted_id := str(result.get("granted", ""))
+	if not granted_id.is_empty():
+		var definition := ItemRegistry.get_instance().get_item(granted_id)
+		if definition.is_empty():
+			# 保底钥匙不在物品表里 ⇒ 不能当作已发；计数退回，把问题留成可见的错误。
+			push_error("[BaseManager] 保底物品不存在：%s" % granted_id)
+			result["granted"] = ""
+			data.synthesis_pity = _synthesis_pity_snapshot.duplicate(true)
+		else:
+			var granted_item := ShopService.ensure_item_instance(definition.duplicate(true))
+			granted_item["count"] = 1
+			result["item"] = granted_item
+	_synthesis_pity_plan = result.duplicate(true)
+	return result
 
 
 func is_tutorial_completed() -> bool:

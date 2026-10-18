@@ -1179,19 +1179,11 @@ func _finish_run(success: bool) -> void:
 	var extracted_count := _death_settlement.process_extraction_settlement(
 		_inventory, _insurance, _quick_inventory
 	)
-	var summary := {
-		"success": true,
-		"kills": _kills,
-		"value": _run_value,
-		"loot": _run_loot.duplicate(true),
-		"seed": run_seed,
-		"theme_id": gameplay_theme.theme_id,
-		"settlement": {"retained": true, "extracted_count": extracted_count},
-		"inventory_capacity": _inventory.get_capacity(),
-		"insurance_capacity": _insurance.get_max_slots(),
-		"return_room_id": "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility",
-	}
+	# 保底走「带物返航」通道：判定赶在存档事务前（记账随事务落盘），
+	# 交付必须等事务提交成功之后 —— 否则存档失败、玩家还在原地，背包里却已经多了一件。
+	var pity_result: Dictionary = {}
 	if not test_mode:
+		pity_result = _plan_synthesis_pity_carry()
 		var transaction_id := _get_run_settlement_transaction_id(true)
 		var commit := BaseManager.commit_run_settlement({
 			"transaction_id": transaction_id,
@@ -1208,8 +1200,27 @@ func _finish_run(success: bool) -> void:
 			status_label.text = "撤离结算保存失败 · 请重试撤离"
 			push_error("[TowerDescent3D] Successful extraction settlement failed: %s" % commit)
 			return
+		_deliver_synthesis_pity_carry(pity_result)
+	var pity_summary := pity_result.duplicate(true)
+	pity_summary.erase("item")
+	var summary := {
+		"success": true,
+		"kills": _kills,
+		"value": _run_value,
+		"loot": _run_loot.duplicate(true),
+		"seed": run_seed,
+		"theme_id": gameplay_theme.theme_id,
+		"settlement": {"retained": true, "extracted_count": extracted_count},
+		"inventory_capacity": _inventory.get_capacity(),
+		"insurance_capacity": _insurance.get_max_slots(),
+		"return_room_id": "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility",
+		"synthesis_pity": pity_summary,
+	}
 	_hold_player_after_settlement()
-	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
+	var line := "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
+	if not str(pity_result.get("granted", "")).is_empty():
+		line += " · 保底补给 1 件"
+	status_label.text = line
 	run_completed.emit(true, summary)
 	if not test_mode:
 		await get_tree().create_timer(0.8).timeout
@@ -1232,19 +1243,11 @@ func _finish_expedition_successful_extraction() -> void:
 	var extracted_count := _death_settlement.process_extraction_settlement(
 		_inventory, _insurance, _quick_inventory
 	)
-	var summary := {
-		"success": true,
-		"kills": _kills,
-		"value": _run_value,
-		"loot": _run_loot.duplicate(true),
-		"seed": run_seed,
-		"theme_id": gameplay_theme.theme_id,
-		"settlement": {"retained": true, "extracted_count": extracted_count},
-		"inventory_capacity": _inventory.get_capacity(),
-		"insurance_capacity": _insurance.get_max_slots(),
-		"return_room_id": "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility",
-	}
+	# 保底：判定随存档事务落盘，交付在事务提交成功之后、交接快照之前 ——
+	# 顺序错了会出现「快照里没有那件保底物，但它又已经被算作发过了」。
+	var pity_result: Dictionary = {}
 	if not test_mode or force_extraction_settlement_for_test:
+		pity_result = _plan_synthesis_pity_carry()
 		var commit := BaseManager.commit_run_settlement({
 			"transaction_id": _get_run_settlement_transaction_id(true),
 			"expedition_level_id": get_expedition_level_id(),
@@ -1265,13 +1268,32 @@ func _finish_expedition_successful_extraction() -> void:
 		# 检查点；再写交接快照，保证它就是存档里最后一份所有权。
 		BaseManager.unregister_runtime_checkpoint_provider(self, false)
 		_runtime_persistence_active = false
+		_deliver_synthesis_pity_carry(pity_result)
 		if not _write_successful_extraction_carry_checkpoint():
 			_completed = false
 			status_label.text = "撤离交接保存失败 · 请重试撤离"
 			push_error("[TowerDescent3D] Expedition extraction carry handoff failed")
 			return
+	var pity_summary := pity_result.duplicate(true)
+	pity_summary.erase("item")
+	var summary := {
+		"success": true,
+		"kills": _kills,
+		"value": _run_value,
+		"loot": _run_loot.duplicate(true),
+		"seed": run_seed,
+		"theme_id": gameplay_theme.theme_id,
+		"settlement": {"retained": true, "extracted_count": extracted_count},
+		"inventory_capacity": _inventory.get_capacity(),
+		"insurance_capacity": _insurance.get_max_slots(),
+		"return_room_id": "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility",
+		"synthesis_pity": pity_summary,
+	}
 	_hold_player_after_settlement()
-	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
+	var line := "撤离成功 · %d件物资完整保留 · 正在返航%s" % [_run_loot.size(), _expedition_return_label()]
+	if not str(pity_result.get("granted", "")).is_empty():
+		line += " · 保底补给 1 件"
+	status_label.text = line
 	run_completed.emit(true, summary)
 	if test_mode:
 		return

@@ -2720,7 +2720,11 @@ func _finish_layout_connections() -> void:
 func _create_secret_branches() -> void:
 	# 幂等：远征在 bootstrap 里显式调用一次，`_finish_layout_connections` 那条链
 	# 也可能在别的关卡路径上再调一次。重复装配会造出两套板体。
+	#
+	# 第二次进来时房间已全部装配完，正好补做「位点外推」：bootstrap 那次房间还没进树，
+	# 拿不到墙体几何，暗门会埋在墙里（远征 01 的 S1 实测被墙包住 0.465m）。
 	if _secret_branch != null and is_instance_valid(_secret_branch):
+		_secret_branch.call("settle_sites")
 		return
 	var declared := false
 	for record in _records:
@@ -4298,6 +4302,80 @@ func _resolve_spawn_position(
 	return room.spawn_point_for_index(index)
 
 
+## ==================== 编成外增援（远征） ====================
+##
+## 业主口径 2026-10-18：「可以加怪，但是不要影响卡片价格和本身逻辑」。
+##
+## **不能加进关卡编成**：门后报价基准 `B_k` 直接由 `spawn_placements` /
+## `encounter.stages` 的编成收益算出（`FateEconomyService.configure_from_runtime`）。
+## 往编成里加 25% 的怪，参考收益涨 25%、卡价也涨 25%，玩家买到的张数一张不多
+## （整条主路模拟：x1.25 → 10 张，x1.5 → 10 张，与不加怪完全相同）。
+##
+## 所以这里在**编成之外**追加一波：它在 `_commit_room_waves` 之后才进队列，
+## 关卡计划里没有它 ⇒ 参考收益、冻结报价、抽牌规则全部一个字都不变；玩家实际
+## 多杀一批怪、多拿金币（走同一条击杀记账通道），同样三张卡于是更容易买得起。
+##
+## 比例按**该房第一波的怪数**算，不按金币算 —— 收益表以后改了也不用重调。
+const EXPEDITION_SURPLUS_RATIO := 0.25
+const EXPEDITION_SURPLUS_MIN := 1
+const EXPEDITION_SURPLUS_MAX := 8
+## 只给**有战斗的内容房**加。Boss 战不该被增援放大难度；交通房（撤离 / 安全屋 /
+## 楼梯厅 / 起点）没有战斗编成，也就没有金币可加。
+const EXPEDITION_SURPLUS_EXCLUDED_ROOM_TYPES := [
+	"BOSS", "EXTRACTION", "SAFE_ROOM", "STAIR_LOBBY", "START",
+]
+## 增援开关。**生产恒为 true**；只为「只测波次记账 / 时序」的老专项提供隔离手段，
+## 免得它们的「实体 1 + 在途 1」这类精确计数被多出来的小怪打红 —— 那些用例测的是
+## 记账口径，不是怪量。增援本身由 `verify_expedition_fate_surplus` 独立验证。
+var expedition_surplus_enabled := true
+
+
+## 生成一波编成外增援；不适用时返回空数组（调用方直接跳过）。
+func _build_expedition_surplus_wave(
+	room: DungeonRoom3D, first_wave: Array
+) -> Array[Dictionary]:
+	var none: Array[Dictionary] = []
+	if not expedition_surplus_enabled:
+		return none
+	if not get_runtime_map_id().begins_with("expedition"):
+		return none
+	if room == null or str(room.room_type) in EXPEDITION_SURPLUS_EXCLUDED_ROOM_TYPES:
+		return none
+	var base_count := first_wave.size()
+	if base_count <= 0:
+		return none
+	var count := clampi(
+		int(round(float(base_count) * EXPEDITION_SURPLUS_RATIO)),
+		EXPEDITION_SURPLUS_MIN,
+		EXPEDITION_SURPLUS_MAX
+	)
+	# 随机流隔离：`MonsterInjector` 的 `_rng` / `_strong_rng` 是**全关卡共享的有状态流**，
+	# 直接借用会让后续房间的编成跟着变，且同种子重开不再逐字复现。
+	# 这里按 `run_seed + room_id` 派生一个确定状态生成增援，生成完原样还原 ⇒
+	# 增援自身可复现（同房同种子必然同一批怪），且对其它房间零影响。
+	var plain_rng: RandomNumberGenerator = _monster_injector.get("_rng")
+	var strong_rng: RandomNumberGenerator = _monster_injector.get("_strong_rng")
+	var saved_plain := 0
+	var saved_strong := 0
+	if plain_rng != null:
+		saved_plain = plain_rng.state
+		plain_rng.state = hash("%d|%s|fate_surplus" % [run_seed, room.room_id])
+	if strong_rng != null:
+		saved_strong = strong_rng.state
+		strong_rng.state = hash("%d|%s|fate_surplus_strong" % [run_seed, room.room_id])
+	var wave := _monster_injector.generate_enemies({
+		"type": "ambush",
+		"count": count,
+		"floor": maxi(1, visual_theme.difficulty_rank if visual_theme != null else 1),
+		"floor_level": 0,
+	})
+	if plain_rng != null:
+		plain_rng.state = saved_plain
+	if strong_rng != null:
+		strong_rng.state = saved_strong
+	return wave
+
+
 ## 把已分好的波次提交为本房的刷怪队列，并立刻刷出第一波。
 ## `waves` 每项是一波的敌人配置数组（公式路径与设计源路径共用此处）。
 ## 返回是否成功出怪；任一步失败都会把房间解锁，防软锁。
@@ -4319,6 +4397,13 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 		_note_room_enemy_modifiers(room)
 	var wave_count := waves.size()
 	var first_wave: Array[Dictionary] = waves.pop_front() as Array[Dictionary]
+	# 编成外增援：**并入第一波**，不新增波次。
+	# ① 不写回关卡计划 ⇒ 参考收益 / 冻结报价 / 抽牌规则一个字不变（卡价不动）；
+	# ② 不新增波次 ⇒ 清房时机、波次 HUD、木板血量与撤离进度的时间轴全部不变，
+	#    只是每间战斗房的小怪多 25%。独立成波会多等一个 2 秒间歇，属于不必要的体感变化。
+	var surplus_wave := _build_expedition_surplus_wave(room, first_wave)
+	if not surplus_wave.is_empty():
+		first_wave.append_array(surplus_wave)
 	_cancel_room_wave_intermission(room.room_id)
 	_room_wave_queues[room.room_id] = waves
 	_room_wave_numbers[room.room_id] = 1
@@ -6750,6 +6835,8 @@ func _show_door_fate_choices() -> void:
 	# 三张卡全部出现在场上，买与不买由玩家决定 ⇒ 每个卡位都要有独立的购买状态。
 	for _choice_index in range(_door_fate_choices.size()):
 		_door_fate_purchased.append(false)
+	# 报价填完之后才有价可判：三张全买不起时把最低那张压到当前余额。
+	_ensure_affordable_fate_choice()
 	_door_fate_active = true
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
@@ -7553,17 +7640,39 @@ func _fate_price_bounds(card: FateCard) -> Dictionary:
 	return {"min": price, "quote": price, "max": price}
 
 
-func _expedition_fate_max_rarity() -> int:
-	return _fate_economy.max_unlocked_rarity() if uses_dynamic_fate_economy() else FateCard.CardRarity.MYSTIC
+## 门后保底：每次三张里至少一张买得起。
+##
+## 命运门总是在清完一间房之后才开（安全屋→room_01 是入口交通门，不弹卡），所以玩家
+## 手里通常有钱；但三张是稀有度全开随机，仍可能整手都是高价卡，或者前面几门把钱花光。
+## 这里把**报价最低的那张**下调到当前余额：只降不升、只动一张、且只在三张全买不起时生效。
+##
+## 这是「冻结报价」的唯一例外 —— 冻结价仍由门序号 / 基准房收益 / 种子决定，
+## 保底只做兜底压价；压价结果写进 `_fate_door_quote`，随快照恢复，不重算、不随余额涨回去。
+## 非远征入口（塔楼等）继续用历史固定价，不参与保底。
+func _ensure_affordable_fate_choice() -> void:
+	if not uses_dynamic_fate_economy() or _door_fate_choices.is_empty():
+		return
+	var wallet := maxi(0, GameManager.currency)
+	var cheapest: FateCard = null
+	for card in _door_fate_choices:
+		if card == null:
+			continue
+		if cheapest == null or _fate_price(card) < _fate_price(cheapest):
+			cheapest = card
+	if cheapest == null:
+		return
+	if _fate_price(cheapest) > wallet:
+		_fate_door_quote[cheapest.get_stable_card_id()] = wallet
 
 
 func _gate_expedition_fate_offer() -> Array[FateCard]:
-	var max_rarity := _expedition_fate_max_rarity()
+	# 只按关卡白名单过滤，不再按「已解锁稀有度」收窄：主人的口径是池子 21 张、
+	# 每次随机 3 张、保底一张买得起。稀有度门槛会把初期池子压到 2 张，直接违背这条。
 	var pool: Array[FateCard] = []
 	var ids: Dictionary = {}
 	for card in FateCardPresets.door_reward_presets():
 		var stable_id := card.get_stable_card_id()
-		if int(card.card_rarity) <= max_rarity and not ids.has(stable_id) and preload("res://src/weapons/FateOfferPolicy.gd").allows(get_runtime_map_id(), stable_id):
+		if not ids.has(stable_id) and preload("res://src/weapons/FateOfferPolicy.gd").allows(get_runtime_map_id(), stable_id):
 			pool.append(card)
 			ids[stable_id] = true
 	var identity_rng := RandomNumberGenerator.new()
@@ -9766,13 +9875,14 @@ func _finish_run(success: bool) -> void:
 			quick_settlement.get("total_lost", 0)
 		)
 		_run_loot = _collect_extracted_items(false)
-	var summary := {
-		"success": success, "kills": _kills, "value": _run_value,
-		"loot": _run_loot.duplicate(true), "seed": run_seed,
-		"theme_id": gameplay_theme.theme_id, "settlement": settlement,
-		"inventory_capacity": _inventory.get_capacity(), "insurance_capacity": _insurance.get_max_slots(),
-	}
+	# 保底在提交**之前**判定并把补发物塞进 `_run_loot`，所以 summary 与状态行
+	# 看到的是同一份结算物 —— 不能一处算总数、一处算不含补发的数。
+	var pity_result: Dictionary = {}
 	if not test_mode:
+		# 先判保底再提交：补发物必须进本局结算物，件数与待领取栏才一致。
+		# 只在成功撤离时判 —— 死在里面的局没有"带出"这回事。
+		if success:
+			pity_result = _plan_synthesis_pity_drop()
 		var transaction_id := _get_run_settlement_transaction_id(success)
 		var commit := BaseManager.commit_run_settlement({
 			"transaction_id": transaction_id,
@@ -9805,16 +9915,82 @@ func _finish_run(success: bool) -> void:
 		# 结算后的场景卸载不再回写旧运行态；保险/战利品已经进入长期事务。
 		BaseManager.unregister_runtime_checkpoint_provider(self, false)
 		_runtime_persistence_active = false
+	# summary 只带结论，不带补发物本体（物品已在 `_run_loot` 里）。
+	var pity_summary := pity_result.duplicate(true)
+	pity_summary.erase("item")
+	var summary := {
+		"success": success, "kills": _kills, "value": _run_value,
+		"loot": _run_loot.duplicate(true), "seed": run_seed,
+		"theme_id": gameplay_theme.theme_id, "settlement": settlement,
+		"inventory_capacity": _inventory.get_capacity(), "insurance_capacity": _insurance.get_max_slots(),
+		"synthesis_pity": pity_summary,
+	}
 	# 终局已提交：返航窗口内玩家输入被锁、站着挨打，残留拦截怪能把他拖死，
 	# 从而在已写盘的结果之上再叠一次死亡结算（或作废后以 hp=0 卡住）。
 	if success:
 		_hold_player_after_settlement()
-	status_label.text = "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()] if success else "行动失败 · 按原规则结算未保险物资"
+	if success:
+		var line := "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()]
+		# 保底补发必须说出来。玩家看不到"为什么多了一件"，就会当成掉落表的随机。
+		if not str(pity_result.get("granted", "")).is_empty():
+			line += " · 保底补给 1 件"
+		status_label.text = line
+	else:
+		status_label.text = "行动失败 · 按原规则结算未保险物资"
 	run_completed.emit(success, summary)
 	if not test_mode:
 		await get_tree().create_timer(0.18 if not success else 1.6).timeout
 		var entry_request_id: int = _request_return_entry_context(success)
 		await _return_to_scene_after_settlement(entry_request_id)
+
+
+## 本局合成保底：判一次、必要时补一件。返回 `{granted, misses, threshold, item}`。
+##
+## 「这一局算不算一次机会」只看本局有没有真打死首领（`_boss_defeated_rooms` 非空）：
+## 一个首领都没打就从撤离点走人，既不推进也不清零 ——
+## 否则「进图二十秒 → 撤离」就能把保底刷出来，它就不再是运气下限。
+##
+## 补发物直接进 `_run_loot`：它随后既进待领取栏、又进状态行的件数。
+## 只在成功撤离时调用（`_finish_run(true)`），死亡路径没有"带出"这回事。
+func _plan_synthesis_pity_drop() -> Dictionary:
+	var loot_ids: Array = []
+	for raw_item in _run_loot:
+		if raw_item is Dictionary:
+			loot_ids.append(str((raw_item as Dictionary).get("id", "")))
+	var result := BaseManager.plan_synthesis_pity(
+		loot_ids, not _boss_defeated_rooms.is_empty()
+	)
+	var item := result.get("item", {}) as Dictionary
+	if not item.is_empty():
+		_run_loot.append(item)
+	return result
+
+
+## 「带物返航」路径（塔楼 / 远征成功撤离）的保底：只判定与记账，**不交付**。
+##
+## 这条路径把战利品原地留在背包里、不复制进待领取栏，所以补发物不能走
+## `_run_loot`（那张表在这里是"只读参考"）。交付必须等存档事务提交成功之后
+## 再做 —— 否则存档失败、玩家还在原地，背包里却已经多了一件保底物。
+func _plan_synthesis_pity_carry() -> Dictionary:
+	var loot_ids: Array = []
+	for raw_item in _run_loot:
+		if raw_item is Dictionary:
+			loot_ids.append(str((raw_item as Dictionary).get("id", "")))
+	return BaseManager.plan_synthesis_pity(loot_ids, not _boss_defeated_rooms.is_empty())
+
+
+## 把保底物交给玩家。**必须在 `plan_synthesis_pity_carry` 的存档事务成功之后调用。**
+## 背包塞不下时退回待领取栏 —— 保底物绝不能因为"格子不够"凭空消失。
+func _deliver_synthesis_pity_carry(result: Dictionary) -> bool:
+	var item := result.get("item", {}) as Dictionary
+	if item.is_empty():
+		return false
+	if _inventory != null and _inventory.add_item(item, 1) > 0:
+		BaseManager.save_base("synthesis_pity_carry")
+		return true
+	BaseManager.add_extraction_loot(item, 1)
+	BaseManager.save_base("synthesis_pity_carry_overflow")
+	return true
 
 
 ## 结算完成后的统一返航入口。子类可覆写读取页过场，但不能改变上层结算顺序。
@@ -9844,6 +10020,8 @@ func _absorb_duplicate_settlement(commit: Dictionary) -> bool:
 	if not bool(commit.get("duplicate", false)):
 		return false
 	push_error("[Dungeon3D] 行动结算已提交过，忽略重复请求：%s" % commit)
+	# 这一局早就结算过了：刚才 `plan_synthesis_pity` 推进的那格计数必须退回。
+	BaseManager.discard_synthesis_pity_plan()
 	return true
 
 

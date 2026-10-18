@@ -363,8 +363,8 @@
         "site_id": "S2",
         "pair_id": 0,
         "role": "exit",
-        "wall": "north",
-        "lane": 7.5,
+        "wall": "south",
+        "lane": 2.5,
         "door_width_m": 2.2
       }
     },

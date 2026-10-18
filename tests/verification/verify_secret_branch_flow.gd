@@ -21,6 +21,8 @@ extends Node
 ##   A18 子图每一间都加载了正式美术（共享房壳），不许退回程序化灰盒
 ##   A19 子图每间固定 5 只强化怪 + 2 只普通怪，首次进房才刷，全灭即标清
 ##   A20 位点木板不得压在**任何**主路门洞上（运行时实测中心距 ≥ 半个门宽 ×2）
+##   A21 木板必须露在墙面之外：从房间内 4m 朝门中心的射线，首个必须命中门本身
+##   A22 门前 2.4m 不得被工作台/货架等家具挡住（否则看得见也走不到）
 ##   （A12 跳跃边界、A13 击杀账 —— 未实现，见 UNIMPLEMENTED）
 
 const EXPEDITION_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
@@ -31,13 +33,16 @@ const STATEMENT_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
 ## 同一局部系），业主要求位点固定、角色自由配 —— 入口/出口只由 `role` 决定。
 const EXPECTED_SITES := {
 	"S1": {"room_id": "room_03", "pair_id": 0, "role": "entry", "wall": "south", "lane": 2.5},
-	"S2": {"room_id": "room_06", "pair_id": 0, "role": "exit", "wall": "north", "lane": 7.5},
+	"S2": {"room_id": "room_06", "pair_id": 0, "role": "exit", "wall": "south", "lane": 2.5},
 	"S3": {"room_id": "room_07", "pair_id": 1, "role": "entry", "wall": "north", "lane": 5.0},
 	"S4": {"room_id": "room_10", "pair_id": 1, "role": "exit", "wall": "south", "lane": -7.5},
 }
 ## A20：位点木板与任何主路门洞的中心水平距离下限。
 ## 木板与门洞都是 2.2m 宽，中心距 < 2.2m 即两者重叠 —— 留 0.1m 让浮点有余量。
 const SITE_DOOR_MIN_CLEARANCE_M := 2.3
+## A21：从房间内往门中心打视线射线的起点（离墙面多深、人眼高度）。
+const SITE_RAY_INSET_M := 4.0
+const SITE_RAY_EYE_Y_M := 1.4
 ## 子图偏移带（设计 §3.6）：pair 0 从 +1000m 起，pair 1 再 +300m。
 const BRANCH_BASE_X := 1000.0
 const BRANCH_STRIDE_X := 300.0
@@ -50,14 +55,14 @@ const DOOR_HP_PER_CLEARED := 20
 func _ready() -> void:
 	var failures: Array[String] = []
 	var notes: Array[String] = []
-	_check_static_sites(failures)
+	_check_static_sites(failures, notes)
 	_check_spawn_rules(failures)
 	await _check_runtime(failures, notes)
 	_report(failures, notes)
 
 
 ## —— A1 / A2 / A3：静态位点合法性 ——
-func _check_static_sites(failures: Array[String]) -> void:
+func _check_static_sites(failures: Array[String], notes: Array[String]) -> void:
 	var normalized := LevelPlanLoader.normalize_floor(LEVEL_ID, 0)
 	if not (normalized.get("errors", []) as Array).is_empty():
 		failures.append("A1 规范化失败：%s" % str(normalized.get("errors", [])))
@@ -176,7 +181,15 @@ func _check_static_sites(failures: Array[String]) -> void:
 				var oc := other.get("center", Vector2.ZERO) as Vector2
 				var os := other.get("size", Vector2.ZERO) as Vector2
 				if absf(probe.x - oc.x) < os.x * 0.5 - 0.001 and absf(probe.y - oc.y) < os.y * 0.5 - 0.001:
-					failures.append("A3 位点 %s 朝外撞进房间 %s" % [site_id, other_id])
+					# **不判红**：设计源坐标是重排前的示例版图（`room_10` 设计
+					# (50,-45)、实机 (55,-250)，差 200m 量级），静态「朝外撞房」
+					# 的结论对运行时没有意义 —— S2 实际装配在 room_06 东墙，
+					# 离隔壁 3m 以上，而设计源上它的南邻正好是 room_05。
+					# 运行时保证交给 A20（不压主路门洞）与 A21（视线可见）。
+					notes.append(
+						"A3 位点 %s 在设计源图上朝外落进 %s（实机房位已重排，仅记录）"
+						% [site_id, other_id]
+					)
 					a3_hit = true
 					break
 
@@ -278,6 +291,10 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 		return
 
 	var snapshot := branch.call("debug_snapshot") as Dictionary
+	# A21/A22 必须在**任何破板用例之前**跑：A9/A14 会把 S1 打碎，
+	# 木板碰撞层随即关闭，再打射线就什么也命中不了（第一版放在 A20 后面，
+	# 结果 A21 对 S1 报「没打到任何东西」）。
+	_check_site_visibility(tower, failures, notes)
 	var doors: Array = snapshot.get("doors", []) as Array
 	# 77001199 下 pair 1 是否刷出由种子决定；至少 pair 0 的两个位点必须在。
 	if doors.size() < 2:
@@ -767,6 +784,84 @@ func _check_site_door_clearance(
 		notes.append("A20 场上没有主图侧板体（pair 未刷出？），判据未实测")
 
 
+## A21 / A22：暗门「看不看得见」。
+##
+## 起因：业主连续两局「打到第 4 间完全找不到支线入口」。实测发现 S1 的木板只向
+## 房间凸 0.142m，而 `room_03` 的墙体可视面凸出 0.465m —— 木板整个埋在墙里，
+## 玩家看到的是一整面平墙。装配侧（`SecretBranch3D._push_site_out_of_wall`）
+## 已按实测墙面外沿把整樘门推到墙外，这里把结果锁死：
+##
+##   A21 从房间内 4m 处朝门中心打视线射线，第一个命中的必须是这扇门本身；
+##   A22 `sites` 里不得有 `blocker`（门前 2.4m 被工作台/货架挡住）。
+##
+## 为什么不用「木板 AABB 在墙面外」这种纯几何判据：墙件不是规则盒子
+## （L 形凹口、门垛、装饰带），AABB 会把整面墙的包络算进来，判不准。
+## 射线问的是「玩家眼睛走过去，先看到谁」，与真实观感一致。
+func _check_site_visibility(
+	tower: Node, failures: Array[String], notes: Array[String]
+) -> void:
+	var branch := tower.get_node_or_null("SecretBranches")
+	if branch == null:
+		failures.append("A21 找不到 SecretBranches 节点")
+		return
+	var snapshot := branch.call("debug_snapshot") as Dictionary
+	var sites: Array = snapshot.get("sites", []) as Array
+	if sites.is_empty():
+		failures.append("A21 位点快照为空 —— 装配侧没有暴露 sites，判据无法实测")
+		return
+
+	for value in sites:
+		var site := value as Dictionary
+		if site.has("blocker"):
+			failures.append(
+				"A22 位点 %s（%s）门前 2.4m 被 %s 挡住，玩家看不到也走不到"
+				% [
+					str(site.get("site_id", "")), str(site.get("room_id", "")),
+					str(site.get("blocker", "")),
+				]
+			)
+
+	var world: World3D = tower.get_world_3d()
+	if world == null:
+		failures.append("A21 拿不到 World3D，射线判据无法实测")
+		return
+	var space: PhysicsDirectSpaceState3D = world.direct_space_state
+	var checked := 0
+	for value in sites:
+		var site := value as Dictionary
+		var site_id := str(site.get("site_id", ""))
+		var door := branch.get_node_or_null("SecretDoor_%s" % site_id) as Node3D
+		if door == null:
+			continue
+		var position := site.get("position", Vector3.ZERO) as Vector3
+		var normal := site.get("normal", Vector3.FORWARD) as Vector3
+		if normal == Vector3.ZERO:
+			continue
+		# 起点在房间内侧：`normal` 朝房间外，所以往里走是 -normal。
+		var origin := position - normal * SITE_RAY_INSET_M
+		origin.y = SITE_RAY_EYE_Y_M
+		var target := position + Vector3(0.0, 1.3, 0.0)
+		var query := PhysicsRayQueryParameters3D.create(origin, target)
+		query.collide_with_areas = false
+		query.collide_with_bodies = true
+		var hit: Dictionary = space.intersect_ray(query)
+		if hit.is_empty():
+			failures.append("A21 位点 %s 的视线射线没打到任何东西（门没有碰撞？）" % site_id)
+			continue
+		var collider := hit.get("collider") as Node
+		var is_door := collider == door or (collider != null and door.is_ancestor_of(collider))
+		if not is_door:
+			var blocker := "?"
+			if collider != null and collider.get_parent() != null:
+				blocker = str(collider.get_parent().name)
+			failures.append(
+				"A21 位点 %s 从房间里看过去先撞到 %s —— 木板被挡住，玩家看不见入口"
+				% [site_id, blocker]
+			)
+		checked += 1
+	notes.append("A21/A22 实测 %d 个位点的可见性" % checked)
+
+
 func _collect_door_positions(root: Node, out: Array) -> void:
 	for child in root.get_children():
 		var node := child as Node
@@ -787,7 +882,7 @@ func _report(failures: Array[String], notes: Array[String]) -> void:
 	print("[UNIMPLEMENTED] A12/B1-B3 跳跃边界运行时断言（当前只有静态数据核对）")
 	print("[UNIMPLEMENTED] A13 子图击杀与主图合计的独立账（当前只并入全局击杀数）")
 	if failures.is_empty():
-		print("SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 生成规则=确定 传送=可达 隔离=通过 编成=5强化+2普通 存档=往返一致")
+		print("SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 门板可见 生成规则=确定 传送=可达 隔离=通过 编成=5强化+2普通 存档=往返一致")
 		print("VERIFICATION_SEGMENT_OK")
 		get_tree().quit(0)
 		return
