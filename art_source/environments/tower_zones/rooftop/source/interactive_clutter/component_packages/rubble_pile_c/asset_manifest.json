@@ -1,0 +1,168 @@
+{
+  "slug": "rubble_pile_c",
+  "asset_id": "ENV-ROOFTOP-RUBBLE-PILE-C",
+  "name": "水泥碎块C",
+  "version": "v002",
+  "collision": [
+    {
+      "size": [
+        1.45,
+        0.999615,
+        1.57934
+      ],
+      "transform": [
+        0.979885,
+        0.162574,
+        -0.115734,
+        -0.169356,
+        0.984217,
+        -0.051341,
+        0.105561,
+        0.069909,
+        0.991952,
+        -1.5,
+        0.66499,
+        0.158502
+      ]
+    },
+    {
+      "size": [
+        1.45,
+        1.11809,
+        1.311908
+      ],
+      "transform": [
+        0.981007,
+        0.19391,
+        0.004814,
+        -0.193956,
+        0.980329,
+        0.036546,
+        0.002368,
+        -0.036785,
+        0.99932,
+        -0.55,
+        0.712763,
+        0.075864
+      ]
+    },
+    {
+      "size": [
+        1.45,
+        0.984893,
+        1.467152
+      ],
+      "transform": [
+        0.987704,
+        -0.07974,
+        0.13447,
+        0.073175,
+        0.995905,
+        0.053086,
+        -0.138153,
+        -0.042593,
+        0.989495,
+        0.5,
+        0.6,
+        0.221781
+      ]
+    },
+    {
+      "size": [
+        1.45,
+        0.973635,
+        1.231559
+      ],
+      "transform": [
+        0.987613,
+        0.144272,
+        0.061693,
+        -0.148252,
+        0.986765,
+        0.065696,
+        -0.051398,
+        -0.074028,
+        0.995931,
+        1.5,
+        0.630557,
+        0.053791
+      ]
+    },
+    {
+      "size": [
+        1.5,
+        0.55,
+        1.1
+      ],
+      "transform": [
+        0.920876,
+        0.155839,
+        -0.357353,
+        -0.112796,
+        0.98393,
+        0.138416,
+        0.373181,
+        -0.087156,
+        0.923656,
+        0.05,
+        1.0,
+        0.0
+      ]
+    }
+  ],
+  "origin_shift_blender": [
+    0.0424494743347168,
+    0.1555311679840088,
+    -0.006668565794825554
+  ],
+  "bounds_blender": [
+    4.642555236816406,
+    1.8265244960784912,
+    1.4388178586959839
+  ],
+  "collection": "水泥碎块C_资产包",
+  "object": "水泥碎块C_主体",
+  "source_blend": "art_source\\environments\\tower_zones\\rooftop\\source\\interactive_clutter\\rooftop_interactive_clutter_v001.blend",
+  "optimized_blend": "art_source\\environments\\tower_zones\\rooftop\\source\\interactive_clutter\\export\\v001\\rooftop_interactive_clutter_optimized_v001.blend",
+  "glb": "assets/art/environments/tower_zones/rooftop/components/guidance/env_rooftop_rubble_pile_c_visual_top3d.glb",
+  "prefab": "assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_rubble_pile_c_root_top3d.tscn",
+  "block_id": "rooftop",
+  "floor_range": "100F",
+  "category": "scene_interactive_content",
+  "source": "水泥碎块C_主体",
+  "triangles_before": 980,
+  "manifest": "art_source\\environments\\tower_zones\\rooftop\\source\\interactive_clutter\\component_packages\\rubble_pile_c\\asset_manifest.json",
+  "scene_design_docs": [
+    "docs/v0.1/design/rooftop_first_visit_guidance.md",
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/05.2_关卡版图白盒与生成规范.md"
+  ],
+  "runtime_integrated": true,
+  "optimization": {
+    "isolated_vertices_removed": 0,
+    "zero_area_faces_removed": 0,
+    "merge_distance": 0,
+    "reason": "Preserve UV islands, silhouette, seams, bottom/back faces and explicit double-sided grass; no arbitrary decimation",
+    "budget": null,
+    "budget_source": "No project per-component triangle budget supplied"
+  },
+  "triangles_after": 980,
+  "reduction_ratio": 0.0,
+  "source_sha256_before": "2247d38acc2c6d77316e924a2a1081d55cb08c66fc5477384155d1d7c6766816",
+  "source_sha256_after": "2247d38acc2c6d77316e924a2a1081d55cb08c66fc5477384155d1d7c6766816",
+  "optimized_sha256": "6a20bc96a7e861ff4f8a18da4223bac1ff0805daaf7fdcfb41364a4725f4ff32",
+  "glb_sha256": "f3cd4f930d287675317e8d5b9951891b7d80688fceec366fcb9eb9ef4b2c8e29",
+  "staged_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-18_rooftop_formal\\rubble_pile_c.glb",
+  "exported": true,
+  "fidelity_validation": "Fixed source/optimized front/back/side/game renders reviewed; retained silhouette, original vertices, palette UV, seams and component bounds",
+  "qa": {
+    "source_palette_uv": "passed",
+    "optimized_palette_uv": "passed",
+    "glb_images_textures": 0,
+    "runtime": "ROOFTOP_GUIDANCE_OK 190 instances, 342 shapes; wind advances and pauses",
+    "source_sha_unchanged": true,
+    "record": "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md"
+  },
+  "design_scope": "首次登顶交互杂物正式化与地面风摆草",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表 / 3D-场景通用"
+}

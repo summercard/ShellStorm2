@@ -1,0 +1,53 @@
+{
+  "assets": [
+    {
+      "asset_id": "ENV-ROOFTOP-RUBBLE-PILE-A",
+      "shapes": 5,
+      "surfaces": 2,
+      "triangles": 980
+    },
+    {
+      "asset_id": "ENV-ROOFTOP-RUBBLE-PILE-B",
+      "shapes": 5,
+      "surfaces": 2,
+      "triangles": 980
+    },
+    {
+      "asset_id": "ENV-ROOFTOP-RUBBLE-PILE-C",
+      "shapes": 5,
+      "surfaces": 2,
+      "triangles": 980
+    },
+    {
+      "asset_id": "ENV-ROOFTOP-TIMBER-PILE",
+      "shapes": 3,
+      "surfaces": 1,
+      "triangles": 276
+    },
+    {
+      "asset_id": "ENV-ROOFTOP-SANDBAG-BARRIER",
+      "shapes": 7,
+      "surfaces": 1,
+      "triangles": 1092
+    },
+    {
+      "asset_id": "ENV-ROOFTOP-BROKEN-CRATE-A",
+      "shapes": 1,
+      "surfaces": 2,
+      "triangles": 2084
+    },
+    {
+      "asset_id": "ENV-ROOFTOP-COVERED-CARGO",
+      "shapes": 1,
+      "surfaces": 2,
+      "triangles": 1804
+    },
+    {
+      "asset_id": "ENV-ROOFTOP-GRASS-PATCH",
+      "shapes": 0,
+      "surfaces": 1,
+      "triangles": 1328
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,14 @@
+{
+  "renderer": "CYCLES",
+  "samples": 12,
+  "resolution": [1000, 650],
+  "view_transform": "Standard",
+  "look": "None",
+  "exposure": 1.0,
+  "orthographic_scale": 31,
+  "look_at": [0, 0, 1],
+  "views": {"game": [22, -30, 30], "front": [0, -35, 12], "back": [0, 35, 12], "side": [35, 0, 16]},
+  "lights": [{"position": [-8, -12, 22], "energy": 4500, "disk_size": 12}, {"position": [12, 5, 14], "energy": 3000, "disk_size": 10}],
+  "contact_sheet": "asset index i placed at (i%4*7-10.5, floor(i/4)*7-3.5, 0), only temporary preview copies",
+  "outputs": "ShellStorm2-work/sessions/2026-10-18_rooftop_formal/{source,optimized}_{game,front,back,side}.png"
+}

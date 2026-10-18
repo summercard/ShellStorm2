@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/guidance/env_rooftop_timber_pile_visual_top3d.glb" id="visual"]
+
+[sub_resource type="BoxShape3D" id="s0"]
+size = Vector3(4.600000, 0.480000, 1.050000)
+
+[sub_resource type="BoxShape3D" id="s1"]
+size = Vector3(4.100000, 0.500000, 0.850000)
+
+[sub_resource type="BoxShape3D" id="s2"]
+size = Vector3(3.700000, 0.400000, 0.700000)
+
+[node name="timber_pile" type="Node3D" groups=["scene_interactive_content"]]
+metadata/asset_id = "ENV-ROOFTOP-TIMBER-PILE"
+metadata/asset_version = "v002"
+metadata/art_status = "formal"
+metadata/content_category = "scene_interactive_object"
+metadata/interaction_status = "planned_locked"
+metadata/collision_owner = "self"
+metadata/source_blend = "res://art_source\environments\tower_zones\rooftop\source\interactive_clutter\rooftop_interactive_clutter_v001.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/guidance/env_rooftop_timber_pile_visual_top3d.glb"
+metadata/asset_manifest = "res://art_source\environments\tower_zones\rooftop\source\interactive_clutter\component_packages\timber_pile\asset_manifest.json"
+metadata/block_id = "rooftop"
+metadata/future_actions = PackedStringArray("move", "remove")
+metadata/nonblocking_foliage = false
+
+[node name="ImportedModel" parent="." instance=ExtResource("visual")]
+
+[node name="Piece00" type="StaticBody3D" parent="."]
+transform = Transform3D(0.996195, 0.087036, 0.004561, -0.087156, 0.994829, 0.052137, 0.000000, -0.052336, 0.998630, 0.000000, 0.460146, -0.142646)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="Piece00"]
+shape = SubResource("s0")
+
+[node name="Piece01" type="StaticBody3D" parent="."]
+transform = Transform3D(0.967616, -0.138644, -0.210943, 0.116191, 0.986500, -0.115403, 0.224095, 0.087156, 0.970662, 0.150000, 0.833727, 0.107354)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="Piece01"]
+shape = SubResource("s1")
+
+[node name="Piece02" type="StaticBody3D" parent="."]
+transform = Transform3D(0.975259, 0.069714, 0.209786, -0.075470, 0.996956, 0.019551, -0.207785, -0.034899, 0.977552, -0.300000, 1.233727, -0.242646)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="Piece02"]
+shape = SubResource("s2")

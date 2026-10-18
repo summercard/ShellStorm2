@@ -1,0 +1,1368 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_timber_pile_root_top3d.tscn" id="timber_pile"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_rubble_pile_a_root_top3d.tscn" id="rubble_pile_a"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_rubble_pile_b_root_top3d.tscn" id="rubble_pile_b"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_rubble_pile_c_root_top3d.tscn" id="rubble_pile_c"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_sandbag_barrier_root_top3d.tscn" id="flowerbed_broken"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_fallen_planter_root_top3d.tscn" id="fallen_planter"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_guidance_flowerbox_root_top3d.tscn" id="guidance_flowerbox"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_broken_crate_a_root_top3d.tscn" id="broken_crate_a"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_covered_cargo_root_top3d.tscn" id="covered_cargo"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_grass_patch_root_top3d.tscn" id="grass_patch"]
+
+[node name="RooftopGuidanceClutter" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-GUIDANCE-LAYOUT"
+metadata/asset_version = "v003"
+metadata/layout_owner = "this_tscn"
+metadata/interaction_status = "planned_locked"
+metadata/future_state_owner = "scene_interaction_system_pending"
+
+[node name="WestUpper" type="Node3D" parent="."]
+
+[node name="WestBranch" type="Node3D" parent="."]
+
+[node name="WestLower" type="Node3D" parent="."]
+
+[node name="NorthIsland" type="Node3D" parent="."]
+
+[node name="EastLower" type="Node3D" parent="."]
+
+[node name="EastUpper" type="Node3D" parent="."]
+
+[node name="WestCorner" type="Node3D" parent="."]
+
+[node name="roof_clutter_001" parent="WestUpper" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.990759, 0.000000, 0.135633, 0.000000, 1.000000, 0.000000, -0.135633, 0.000000, 0.990759, -43.245189666748, 0.0149999996647239, -23.3158645629883)
+metadata/scene_content_id = "roof_clutter_001"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_002" parent="WestUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(-0.339984, -0.105969, -0.934442, 0.741858, 0.580453, -0.335740, 0.577977, -0.807369, -0.118731, -42.9208106994629, 0.371442854404449, -22.3906936645508)
+metadata/scene_content_id = "roof_clutter_002"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_003" parent="WestUpper" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.990089, 0.075756, 0.118256, -0.072386, 0.996846, -0.032541, -0.120348, 0.023659, 0.992450, -45.1409225463867, 0.167384192347527, -19.614896774292)
+metadata/scene_content_id = "roof_clutter_003"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_004" parent="WestUpper" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.939946, 0.000000, 0.341324, 0.000000, 1.000000, 0.000000, -0.341324, 0.000000, 0.939946, -38.3728561401367, 0.0149999996647239, -20.2983264923096)
+metadata/scene_content_id = "roof_clutter_004"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_005" parent="WestUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.994738, -0.000612, 0.102447, -0.102438, 0.008585, 0.994702, -0.001488, -0.999963, 0.008477, -31.3320331573486, 0.931563854217529, -19.0316257476807)
+metadata/scene_content_id = "roof_clutter_005"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_006" parent="WestUpper" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.985656, 0.000000, 0.168764, 0.000000, 1.000000, 0.000000, -0.168764, 0.000000, 0.985656, -36.080623626709, 0.0149999996647239, -19.2062873840332)
+metadata/scene_content_id = "roof_clutter_006"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_007" parent="WestUpper" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(0.971844, 0.000000, -0.235626, 0.000000, 1.000000, 0.000000, 0.235626, 0.000000, 0.971844, -44.4195976257324, 0.0149999996647239, -22.8013286590576)
+metadata/scene_content_id = "roof_clutter_007"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_008" parent="WestUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.792756, -0.101568, -0.601017, 0.572946, 0.460663, 0.677881, 0.208015, -0.881745, 0.423386, -41.9876022338867, 0.438122808933258, -22.1645584106445)
+metadata/scene_content_id = "roof_clutter_008"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_009" parent="WestUpper" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.035506, 0.000000, 0.999369, 0.000000, 1.000000, 0.000000, -0.999369, 0.000000, 0.035506, -29.1466865539551, 0.0149999996647239, -11.9932889938354)
+metadata/scene_content_id = "roof_clutter_009"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_010" parent="WestUpper" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.122435, -0.093171, -0.988094, 0.004335, 0.995624, -0.093344, 0.992467, 0.007145, 0.122303, -42.1128692626953, 0.0668531209230423, -21.9774894714355)
+metadata/scene_content_id = "roof_clutter_010"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_011" parent="WestUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.696617, 0.016009, -0.717265, -0.714794, 0.101326, -0.691956, 0.061600, 0.994725, 0.082028, -31.0711936950684, 0.66547679901123, -18.5335483551025)
+metadata/scene_content_id = "roof_clutter_011"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_012" parent="WestUpper" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.977713, 0.203124, -0.053091, -0.204331, 0.978730, -0.018329, 0.048238, 0.028768, 0.998421, -47.615104675293, 0.410775750875473, -19.9667816162109)
+metadata/scene_content_id = "roof_clutter_012"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_013" parent="WestUpper" instance=ExtResource("timber_pile")]
+transform = Transform3D(-0.354502, 0.000000, 0.935055, 0.000000, 1.000000, 0.000000, -0.935055, 0.000000, -0.354502, -29.6823501586914, 0.0149999996647239, -8.32568359375)
+metadata/scene_content_id = "roof_clutter_013"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_014" parent="WestUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.488699, 0.080439, -0.868736, 0.763677, 0.442041, 0.470529, 0.421866, -0.893381, 0.154596, -42.4955978393555, 0.437741070985794, -21.6718101501465)
+metadata/scene_content_id = "roof_clutter_014"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_015" parent="WestUpper" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.980273, 0.000000, 0.197648, 0.000000, 1.000000, 0.000000, -0.197648, 0.000000, 0.980273, -33.7240562438965, 0.0149999996647239, -18.6981163024902)
+metadata/scene_content_id = "roof_clutter_015"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_016" parent="WestUpper" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.964187, 0.000000, -0.265225, 0.000000, 1.000000, 0.000000, 0.265225, 0.000000, 0.964187, -40.8720512390137, 0.0149999996647239, -23.4971199035645)
+metadata/scene_content_id = "roof_clutter_016"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_017" parent="WestUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(-0.775545, -0.015940, -0.631091, 0.616027, -0.237620, -0.751031, -0.137988, -0.971227, 0.194105, -40.7147827148438, 1.36513841152191, -22.54225730896)
+metadata/scene_content_id = "roof_clutter_017"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_018" parent="WestUpper" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.985315, 0.000000, -0.170748, 0.000000, 1.000000, 0.000000, 0.170748, 0.000000, 0.985315, -41.3520011901855, 0.0149999996647239, -20.3451614379883)
+metadata/scene_content_id = "roof_clutter_018"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_019" parent="WestUpper" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.077662, 0.073346, 0.994278, -0.011728, 0.997288, -0.072652, -0.996911, -0.006018, 0.078312, -29.5418834686279, 0.0711891129612923, -15.4199848175049)
+metadata/scene_content_id = "roof_clutter_019"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_020" parent="WestUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.825854, -0.015546, -0.563670, -0.554951, 0.154820, -0.817350, 0.099974, 0.987820, 0.119231, -31.536693572998, 0.519606709480286, -21.3366966247559)
+metadata/scene_content_id = "roof_clutter_020"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_021" parent="WestUpper" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(0.945509, 0.000000, -0.325595, 0.000000, 1.000000, 0.000000, 0.325595, 0.000000, 0.945509, -45.1961975097656, 0.0149999996647239, -23.9342670440674)
+metadata/scene_content_id = "roof_clutter_021"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_022" parent="WestUpper" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.999848, 0.000000, 0.017457, 0.000000, 1.000000, 0.000000, -0.017457, 0.000000, 0.999848, -31.2202663421631, 0.0149999996647239, -17.8326416015625)
+metadata/scene_content_id = "roof_clutter_022"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_023" parent="WestUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.961845, -0.105647, 0.252376, -0.148578, 0.572875, 0.806064, -0.229738, -0.812806, 0.535320, -45.7456016540527, 0.407549887895584, -23.0071392059326)
+metadata/scene_content_id = "roof_clutter_023"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_024" parent="WestBranch" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.962718, 0.230565, 0.141468, -0.231168, 0.972835, -0.012386, -0.140481, -0.020779, 0.989865, -44.3764495849609, 0.458853542804718, -12.4175071716309)
+metadata/scene_content_id = "roof_clutter_024"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_025" parent="WestBranch" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.820377, -0.028286, 0.571122, -0.522750, 0.367706, 0.769106, -0.231760, -0.929512, 0.286871, -43.2122611999512, 0.453291594982147, -11.0612030029297)
+metadata/scene_content_id = "roof_clutter_025"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_026" parent="WestBranch" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.964898, 0.232812, 0.121536, -0.229558, 0.972459, -0.040324, -0.127577, 0.011009, 0.991768, -41.7823104858398, 0.468863517045975, -11.1094455718994)
+metadata/scene_content_id = "roof_clutter_026"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_027" parent="WestBranch" instance=ExtResource("timber_pile")]
+transform = Transform3D(-0.185436, 0.000000, -0.982656, 0.000000, 1.000000, 0.000000, 0.982656, 0.000000, -0.185436, -44.2839202880859, 0.0149999996647239, -11.4346761703491)
+metadata/scene_content_id = "roof_clutter_027"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_028" parent="WestBranch" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.981158, -0.080205, -0.175772, 0.192588, 0.333303, 0.922940, -0.015439, -0.939402, 0.342469, -44.6122589111328, 0.46945333480835, -11.5886058807373)
+metadata/scene_content_id = "roof_clutter_028"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_029" parent="WestBranch" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.729154, 0.000000, 0.684350, 0.000000, 1.000000, 0.000000, -0.684350, 0.000000, 0.729154, -33.8196563720703, 0.0149999996647239, -10.8872404098511)
+metadata/scene_content_id = "roof_clutter_029"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_030" parent="WestBranch" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.901332, 0.000000, -0.433129, 0.000000, 1.000000, 0.000000, 0.433129, 0.000000, 0.901332, -36.0284729003906, 0.0149999996647239, -12.4631938934326)
+metadata/scene_content_id = "roof_clutter_030"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_031" parent="WestBranch" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.917592, -0.241563, -0.315710, 0.231150, 0.970351, -0.070633, 0.323412, -0.008164, 0.946223, -39.0954971313477, 0.48606550693512, -11.6387739181519)
+metadata/scene_content_id = "roof_clutter_031"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_032" parent="WestBranch" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.755471, 0.002007, -0.655179, -0.652976, 0.084291, -0.752673, 0.053715, 0.996439, 0.064990, -43.540355682373, 0.676268696784973, -10.5006723403931)
+metadata/scene_content_id = "roof_clutter_032"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_033" parent="WestBranch" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.117344, -0.060686, 0.991235, -0.025377, 0.997622, 0.064082, -0.992767, -0.032674, 0.115525, -31.5074005126953, 0.0972139239311218, -9.02845859527588)
+metadata/scene_content_id = "roof_clutter_033"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_034" parent="WestLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.750202, 0.000000, -0.661209, 0.000000, 1.000000, 0.000000, 0.661209, 0.000000, 0.750202, -26.9265727996826, 0.0149999996647239, 12.8118562698364)
+metadata/scene_content_id = "roof_clutter_034"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_035" parent="WestLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.999777, 0.015741, -0.014111, 0.010888, 0.188726, 0.981969, 0.018120, -0.981904, 0.188512, -26.8533058166504, 0.543636560440063, 12.5300712585449)
+metadata/scene_content_id = "roof_clutter_035"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_036" parent="WestLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.522152, 0.000000, 0.852852, 0.000000, 1.000000, 0.000000, -0.852852, 0.000000, 0.522152, -28.8967914581299, 0.0149999996647239, 8.10867881774902)
+metadata/scene_content_id = "roof_clutter_036"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_037" parent="WestLower" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.947250, 0.000000, -0.320497, 0.000000, 1.000000, 0.000000, 0.320497, 0.000000, 0.947250, -25.9050827026367, 0.0149999996647239, 13.4446516036987)
+metadata/scene_content_id = "roof_clutter_037"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_038" parent="WestLower" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.865213, 0.250220, 0.434506, -0.244344, 0.967130, -0.070392, -0.437837, -0.045265, 0.897914, -27.5194396972656, 0.510939657688141, 10.501859664917)
+metadata/scene_content_id = "roof_clutter_038"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_039" parent="WestLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.997752, 0.004603, -0.066860, -0.066965, 0.108289, -0.991861, 0.002674, 0.994109, 0.108354, -18.1220207214355, 0.666072249412537, 13.9365663528442)
+metadata/scene_content_id = "roof_clutter_039"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_040" parent="WestLower" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.200505, -0.170129, -0.964808, 0.069634, 0.984790, -0.159182, 0.977215, -0.035267, 0.209302, -26.3783397674561, 0.221378162503242, 12.1248540878296)
+metadata/scene_content_id = "roof_clutter_040"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_041" parent="WestLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.208016, 0.000000, -0.978125, 0.000000, 1.000000, 0.000000, 0.978125, 0.000000, 0.208016, -26.4819087982178, 0.0149999996647239, 11.9616622924805)
+metadata/scene_content_id = "roof_clutter_041"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_042" parent="WestLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.642088, 0.031174, -0.765997, -0.761375, 0.142723, -0.632406, 0.089611, 0.989272, 0.115376, -19.298002243042, 0.601617455482483, 14.0964031219482)
+metadata/scene_content_id = "roof_clutter_042"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_043" parent="WestLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.998400, 0.000000, -0.056555, 0.000000, 1.000000, 0.000000, 0.056555, 0.000000, 0.998400, -25.0286293029785, 0.0149999996647239, 13.1099710464478)
+metadata/scene_content_id = "roof_clutter_043"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_044" parent="WestLower" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.998707, 0.000000, -0.050841, 0.000000, 1.000000, 0.000000, 0.050841, 0.000000, 0.998707, -21.9752311706543, 0.0149999996647239, 12.4310369491577)
+metadata/scene_content_id = "roof_clutter_044"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_045" parent="WestLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.728873, -0.082014, -0.679719, 0.578423, 0.604921, 0.547263, 0.366294, -0.792050, 0.488350, -28.5671482086182, 0.394060850143433, 14.2780342102051)
+metadata/scene_content_id = "roof_clutter_045"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_046" parent="WestLower" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.974351, 0.000000, -0.225034, 0.000000, 1.000000, 0.000000, 0.225034, 0.000000, 0.974351, -19.0713958740234, 0.0149999996647239, 12.1978588104248)
+metadata/scene_content_id = "roof_clutter_046"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_047" parent="WestLower" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.908783, -0.129408, 0.396695, 0.117621, 0.991588, 0.054015, -0.400349, -0.002429, 0.916360, -24.8273258209229, 0.266663432121277, 11.5645093917847)
+metadata/scene_content_id = "roof_clutter_047"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_048" parent="WestLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.243628, 0.028194, -0.969459, 0.961344, -0.139256, 0.237539, -0.128305, -0.989855, -0.061031, -18.3536548614502, 1.14586973190308, 15.7734546661377)
+metadata/scene_content_id = "roof_clutter_048"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_049" parent="WestLower" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(0.882834, 0.000000, 0.469684, 0.000000, 1.000000, 0.000000, -0.469684, 0.000000, 0.882834, -16.404203414917, 0.0149999996647239, 12.5691566467285)
+metadata/scene_content_id = "roof_clutter_049"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_050" parent="WestLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.864209, 0.000000, -0.503133, 0.000000, 1.000000, 0.000000, 0.503133, 0.000000, 0.864209, -29.2295932769775, 0.0149999996647239, 12.6621351242065)
+metadata/scene_content_id = "roof_clutter_050"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_051" parent="WestLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.559391, 0.024756, -0.828534, 0.789375, 0.289081, 0.541590, 0.252921, -0.956985, 0.142167, -28.810510635376, 0.466220617294312, 14.4644556045532)
+metadata/scene_content_id = "roof_clutter_051"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_052" parent="WestLower" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.627317, 0.140521, -0.765982, -0.080242, 0.990014, 0.115904, 0.774619, -0.011244, 0.632328, -29.1101245880127, 0.228778973221779, 14.3006649017334)
+metadata/scene_content_id = "roof_clutter_052"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_053" parent="NorthIsland" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(-0.326887, 0.000000, -0.945063, 0.000000, 1.000000, 0.000000, 0.945063, 0.000000, -0.326887, -12.979585647583, 0.0149999996647239, -29.0373992919922)
+metadata/scene_content_id = "roof_clutter_053"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_054" parent="NorthIsland" instance=ExtResource("fallen_planter")]
+transform = Transform3D(-0.821127, 0.008700, -0.570679, 0.560345, -0.177715, -0.808969, -0.108456, -0.984043, 0.141052, -14.3375492095947, 1.28811371326447, -28.4148902893066)
+metadata/scene_content_id = "roof_clutter_054"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_055" parent="NorthIsland" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.989935, 0.000000, 0.141526, 0.000000, 1.000000, 0.000000, -0.141526, 0.000000, 0.989935, -16.0472202301025, 0.0149999996647239, -30.124584197998)
+metadata/scene_content_id = "roof_clutter_055"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_056" parent="NorthIsland" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(0.696680, 0.000000, -0.717382, 0.000000, 1.000000, 0.000000, 0.717382, 0.000000, 0.696680, -2.59271907806396, 0.0149999996647239, -31.6392726898193)
+metadata/scene_content_id = "roof_clutter_056"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_057" parent="NorthIsland" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.403771, 0.000000, -0.914860, 0.000000, 1.000000, 0.000000, 0.914860, 0.000000, 0.403771, -9.57022762298584, 0.0149999996647239, -28.6059799194336)
+metadata/scene_content_id = "roof_clutter_057"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_058" parent="NorthIsland" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.649971, -0.030379, -0.759352, 0.750332, 0.184193, 0.634882, 0.120580, -0.982421, 0.142514, -14.859185218811, 0.558297514915466, -29.4972705841064)
+metadata/scene_content_id = "roof_clutter_058"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_059" parent="NorthIsland" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.970939, 0.237525, -0.029324, -0.236802, 0.971207, 0.026103, 0.034680, -0.018401, 0.999229, -4.0264368057251, 0.477639734745026, -32.6854667663574)
+metadata/scene_content_id = "roof_clutter_059"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_060" parent="NorthIsland" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.668739, 0.070260, -0.740170, 0.579938, 0.573670, 0.578424, 0.465254, -0.816067, 0.342889, -9.06429100036621, 0.405484855175018, -30.3639392852783)
+metadata/scene_content_id = "roof_clutter_060"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_061" parent="NorthIsland" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(-0.587151, -0.179743, -0.789270, -0.083656, 0.983289, -0.161694, 0.805143, -0.028911, -0.592375, -7.52094602584839, 0.249119430780411, -28.3351345062256)
+metadata/scene_content_id = "roof_clutter_061"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_062" parent="NorthIsland" instance=ExtResource("timber_pile")]
+transform = Transform3D(-0.397515, 0.000000, -0.917596, 0.000000, 1.000000, 0.000000, 0.917596, 0.000000, -0.397515, -3.44062805175781, 0.0149999996647239, -31.3466701507568)
+metadata/scene_content_id = "roof_clutter_062"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_063" parent="NorthIsland" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(0.634509, 0.000000, -0.772916, 0.000000, 1.000000, 0.000000, 0.772916, 0.000000, 0.634509, -7.02359676361084, 0.0149999996647239, -27.1303977966309)
+metadata/scene_content_id = "roof_clutter_063"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_064" parent="NorthIsland" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.022779, 0.000933, -0.999740, 0.996556, 0.079729, 0.022781, 0.079730, -0.996816, 0.000886, -11.8940420150757, 0.651899576187134, -30.5603408813477)
+metadata/scene_content_id = "roof_clutter_064"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_065" parent="NorthIsland" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.199046, 0.000000, -0.979990, 0.000000, 1.000000, 0.000000, 0.979990, 0.000000, 0.199046, -13.7296981811523, 0.0149999996647239, -30.9641513824463)
+metadata/scene_content_id = "roof_clutter_065"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_066" parent="NorthIsland" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.718446, -0.114670, -0.686065, 0.071219, 0.993261, -0.091435, 0.691927, 0.016830, 0.721772, -13.3837423324585, 0.192710369825363, -29.9561195373535)
+metadata/scene_content_id = "roof_clutter_066"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_067" parent="NorthIsland" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.948573, 0.000000, -0.316558, 0.000000, 1.000000, 0.000000, 0.316558, 0.000000, 0.948573, -5.85373306274414, 0.0149999996647239, -27.7381324768066)
+metadata/scene_content_id = "roof_clutter_067"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_068" parent="NorthIsland" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.768964, -0.022166, -0.638908, 0.632538, -0.118508, 0.765409, -0.092682, -0.992706, -0.077107, -4.39527320861816, 1.2231673002243, -31.6065826416016)
+metadata/scene_content_id = "roof_clutter_068"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_069" parent="NorthIsland" instance=ExtResource("timber_pile")]
+transform = Transform3D(-0.654573, 0.000000, -0.755999, 0.000000, 1.000000, 0.000000, 0.755999, 0.000000, -0.654573, -7.85638809204102, 0.0149999996647239, -29.6614437103271)
+metadata/scene_content_id = "roof_clutter_069"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_070" parent="NorthIsland" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.414839, -0.043773, -0.908841, 0.885887, -0.208505, 0.414404, -0.207637, -0.977041, -0.047717, -4.59444999694824, 1.36206638813019, -32.0058403015137)
+metadata/scene_content_id = "roof_clutter_070"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_071" parent="NorthIsland" instance=ExtResource("timber_pile")]
+transform = Transform3D(-0.238941, 0.000000, -0.971034, 0.000000, 1.000000, 0.000000, 0.971034, 0.000000, -0.238941, -6.39590787887573, 0.0149999996647239, -29.1551666259766)
+metadata/scene_content_id = "roof_clutter_071"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_072" parent="NorthIsland" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.874286, 0.000000, -0.485411, 0.000000, 1.000000, 0.000000, 0.485411, 0.000000, 0.874286, -16.8193283081055, 0.0149999996647239, -29.3280429840088)
+metadata/scene_content_id = "roof_clutter_072"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_073" parent="NorthIsland" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.814656, 0.255707, -0.520528, -0.201181, 0.966417, 0.159888, 0.543932, -0.025534, 0.838741, -11.5209922790527, 0.481380313634872, -29.1044292449951)
+metadata/scene_content_id = "roof_clutter_073"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_074" parent="NorthIsland" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.347423, -0.013119, -0.937617, 0.902433, -0.267000, 0.338121, -0.254779, -0.963607, -0.080923, -14.8154134750366, 1.45033729076386, -31.6380615234375)
+metadata/scene_content_id = "roof_clutter_074"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_075" parent="NorthIsland" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.038293, 0.195535, -0.979949, 0.018628, 0.980358, 0.196345, 0.999093, -0.025773, 0.033899, -2.91717505455017, 0.154857710003853, -32.4008712768555)
+metadata/scene_content_id = "roof_clutter_075"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_076" parent="EastLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.667226, 0.000000, -0.744856, 0.000000, 1.000000, 0.000000, 0.744856, 0.000000, 0.667226, 30.4277229309082, 0.0149999996647239, 9.95522975921631)
+metadata/scene_content_id = "roof_clutter_076"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_077" parent="EastLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.932428, 0.005178, 0.361320, -0.360581, 0.078820, 0.929392, -0.023667, -0.996875, 0.075361, 33.6671714782715, 0.901958465576172, 1.47156202793121)
+metadata/scene_content_id = "roof_clutter_077"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_078" parent="EastLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.869294, 0.000000, -0.494296, 0.000000, 1.000000, 0.000000, 0.494296, 0.000000, 0.869294, 32.4207611083984, 0.0149999996647239, 8.27170181274414)
+metadata/scene_content_id = "roof_clutter_078"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_079" parent="EastLower" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.893736, 0.000000, 0.448594, 0.000000, 1.000000, 0.000000, -0.448594, 0.000000, 0.893736, 21.0067691802979, 0.0149999996647239, 10.9413738250732)
+metadata/scene_content_id = "roof_clutter_079"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_080" parent="EastLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.781891, 0.061056, 0.620418, -0.605488, 0.311317, 0.732439, -0.148427, -0.948343, 0.280385, 25.7722816467285, 0.459842622280121, 12.5308284759521)
+metadata/scene_content_id = "roof_clutter_080"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_081" parent="EastLower" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.827463, 0.000000, -0.561521, 0.000000, 1.000000, 0.000000, 0.561521, 0.000000, 0.827463, 24.5691585540771, 0.0149999996647239, 13.0857639312744)
+metadata/scene_content_id = "roof_clutter_081"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_082" parent="EastLower" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.374359, 0.103709, -0.921466, -0.021365, 0.994427, 0.103241, 0.927038, -0.018962, 0.374488, 30.0097274780273, 0.11046389490366, -0.783760011196136)
+metadata/scene_content_id = "roof_clutter_082"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_083" parent="EastLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.867044, 0.012389, -0.498078, 0.482082, 0.231610, 0.844958, 0.125828, -0.972730, 0.194843, 26.0100841522217, 0.487373471260071, 13.6866006851196)
+metadata/scene_content_id = "roof_clutter_083"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_084" parent="EastLower" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(0.670926, 0.000000, -0.741525, 0.000000, 1.000000, 0.000000, 0.741525, 0.000000, 0.670926, 24.6681098937988, 0.0149999996647239, 12.3418979644775)
+metadata/scene_content_id = "roof_clutter_084"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_085" parent="EastLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(-0.648798, 0.000000, -0.760961, 0.000000, 1.000000, 0.000000, 0.760961, 0.000000, -0.648798, 31.3328762054443, 0.0149999996647239, 2.38740205764771)
+metadata/scene_content_id = "roof_clutter_085"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_086" parent="EastLower" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(-0.222381, 0.000000, -0.974960, 0.000000, 1.000000, 0.000000, 0.974960, 0.000000, -0.222381, 24.1474781036377, 0.0149999996647239, 12.7689113616943)
+metadata/scene_content_id = "roof_clutter_086"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_087" parent="EastLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.882269, -0.082035, -0.463542, 0.445555, 0.463320, 0.766038, 0.151927, -0.882386, 0.445324, 24.0625152587891, 0.441059470176697, 13.3306865692139)
+metadata/scene_content_id = "roof_clutter_087"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_088" parent="EastLower" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.964474, 0.000000, -0.264179, 0.000000, 1.000000, 0.000000, 0.264179, 0.000000, 0.964474, 25.69384765625, 0.0149999996647239, 14.1233053207397)
+metadata/scene_content_id = "roof_clutter_088"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_089" parent="EastLower" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(-0.208600, -0.099978, -0.972878, 0.019259, 0.994148, -0.106293, 0.977812, -0.040909, -0.205453, 32.6209678649902, 0.101188726723194, 5.54749822616577)
+metadata/scene_content_id = "roof_clutter_089"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_090" parent="EastLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(-0.614042, 0.007349, -0.789239, -0.788117, 0.048405, 0.613620, 0.042712, 0.998801, -0.023931, 27.0205230712891, 0.957664608955383, 12.4239616394043)
+metadata/scene_content_id = "roof_clutter_090"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_091" parent="EastLower" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(-0.579863, 0.000000, -0.814714, 0.000000, 1.000000, 0.000000, 0.814714, 0.000000, -0.579863, 30.2095489501953, 0.0149999996647239, -9.30431747436523)
+metadata/scene_content_id = "roof_clutter_091"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_092" parent="EastLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.979164, 0.000000, 0.203069, 0.000000, 1.000000, 0.000000, -0.203069, 0.000000, 0.979164, 24.0119171142578, 0.0149999996647239, 12.1760568618774)
+metadata/scene_content_id = "roof_clutter_092"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_093" parent="EastLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.516119, 0.050015, -0.855055, 0.712782, 0.528469, 0.461154, 0.474935, -0.847478, 0.237103, 27.3166122436523, 0.415241479873657, 13.1559419631958)
+metadata/scene_content_id = "roof_clutter_093"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_094" parent="EastLower" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.392761, 0.088765, -0.915347, 0.008648, 0.994930, 0.100193, 0.919600, -0.047268, 0.390002, 29.5279502868652, 0.0847426876425743, -12.2594947814941)
+metadata/scene_content_id = "roof_clutter_094"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_095" parent="EastLower" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.198920, 0.000000, -0.980016, 0.000000, 1.000000, 0.000000, 0.980016, 0.000000, 0.198920, 26.8034076690674, 0.0149999996647239, 12.0151844024658)
+metadata/scene_content_id = "roof_clutter_095"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_096" parent="EastLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.997515, -0.016025, 0.068611, -0.067108, 0.080622, 0.994483, -0.021468, -0.996616, 0.079346, 23.8380928039551, 0.768526911735535, 13.7912511825562)
+metadata/scene_content_id = "roof_clutter_096"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_097" parent="EastLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.983352, 0.000000, -0.181713, 0.000000, 1.000000, 0.000000, 0.181713, 0.000000, 0.983352, 27.5011463165283, 0.0149999996647239, 11.2490291595459)
+metadata/scene_content_id = "roof_clutter_097"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_098" parent="EastLower" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(0.469604, 0.000000, -0.882877, 0.000000, 1.000000, 0.000000, 0.882877, 0.000000, 0.469604, 31.1988372802734, 0.0149999996647239, -3.64871096611023)
+metadata/scene_content_id = "roof_clutter_098"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_099" parent="EastLower" instance=ExtResource("timber_pile")]
+transform = Transform3D(-0.390842, 0.000000, -0.920458, 0.000000, 1.000000, 0.000000, 0.920458, 0.000000, -0.390842, 31.6198024749756, 0.0149999996647239, -6.54822206497192)
+metadata/scene_content_id = "roof_clutter_099"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_100" parent="EastLower" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.562855, 0.000700, -0.826556, 0.787234, 0.304311, 0.536336, 0.251906, -0.952572, 0.170732, 33.043514251709, 0.464019894599915, -1.26458096504211)
+metadata/scene_content_id = "roof_clutter_100"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_101" parent="EastLower" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(-0.821921, -0.137553, -0.552744, -0.118276, 0.990467, -0.070609, 0.557187, 0.007341, -0.830355, 33.2383041381836, 0.272142350673676, -1.55588102340698)
+metadata/scene_content_id = "roof_clutter_101"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_102" parent="EastLower" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.996666, 0.000000, 0.081589, 0.000000, 1.000000, 0.000000, -0.081589, 0.000000, 0.996666, 17.0236644744873, 0.0149999996647239, 10.4241542816162)
+metadata/scene_content_id = "roof_clutter_102"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_103" parent="EastUpper" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.351099, 0.076130, -0.933238, 0.011017, 0.996284, 0.085418, 0.936273, -0.040271, 0.348956, 38.124137878418, 0.0813642144203186, -25.9345397949219)
+metadata/scene_content_id = "roof_clutter_103"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_104" parent="EastUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.959629, 0.002947, -0.281254, 0.281108, 0.023880, 0.959379, 0.009543, -0.999710, 0.022088, 39.0745429992676, 0.79723846912384, -26.660343170166)
+metadata/scene_content_id = "roof_clutter_104"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_105" parent="EastUpper" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(-0.326816, 0.000000, -0.945088, 0.000000, 1.000000, 0.000000, 0.945088, 0.000000, -0.326816, 37.4071846008301, 0.0149999996647239, -32.0005531311035)
+metadata/scene_content_id = "roof_clutter_105"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_106" parent="EastUpper" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.837551, 0.000000, -0.546359, 0.000000, 1.000000, 0.000000, 0.546359, 0.000000, 0.837551, 35.2619590759277, 0.0149999996647239, -19.5156707763672)
+metadata/scene_content_id = "roof_clutter_106"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_107" parent="EastUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.938079, -0.002489, -0.346411, 0.346256, -0.023999, 0.937833, -0.010648, -0.999709, -0.021651, 39.0020713806152, 0.932629942893982, -24.560266494751)
+metadata/scene_content_id = "roof_clutter_107"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_108" parent="EastUpper" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(-0.441771, 0.085412, -0.893053, 0.054847, 0.996167, 0.068143, 0.895450, -0.018878, -0.444762, 33.8520698547363, 0.155225843191147, -20.8169765472412)
+metadata/scene_content_id = "roof_clutter_108"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_109" parent="EastUpper" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.915804, 0.000000, -0.401627, 0.000000, 1.000000, 0.000000, 0.401627, 0.000000, 0.915804, 32.4587554931641, 0.0149999996647239, -18.3394527435303)
+metadata/scene_content_id = "roof_clutter_109"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_110" parent="EastUpper" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(-0.241632, 0.072725, -0.967639, -0.025805, 0.996353, 0.081327, 0.970025, 0.044621, -0.238874, 38.6350593566895, 0.10720819234848, -24.3867053985596)
+metadata/scene_content_id = "roof_clutter_110"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_111" parent="EastUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.964369, 0.004253, -0.264527, 0.264385, 0.020962, 0.964189, 0.009646, -0.999771, 0.019091, 36.3696212768555, 0.795162677764893, -20.7290134429932)
+metadata/scene_content_id = "roof_clutter_111"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_112" parent="EastUpper" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(0.912359, 0.000000, -0.409391, 0.000000, 1.000000, 0.000000, 0.409391, 0.000000, 0.912359, 37.9266014099121, 0.0149999996647239, -21.6751613616943)
+metadata/scene_content_id = "roof_clutter_112"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_113" parent="EastUpper" instance=ExtResource("timber_pile")]
+transform = Transform3D(-0.172762, 0.000000, -0.984964, 0.000000, 1.000000, 0.000000, 0.984964, 0.000000, -0.172762, 39.7442398071289, 0.0149999996647239, -26.2713718414307)
+metadata/scene_content_id = "roof_clutter_113"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_114" parent="EastUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.227694, -0.033811, -0.973146, -0.960591, 0.155841, -0.230171, 0.159439, 0.987203, 0.003005, 39.2713890075684, 0.549328148365021, -23.6205253601074)
+metadata/scene_content_id = "roof_clutter_114"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_115" parent="EastUpper" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(-0.262699, 0.157429, -0.951948, 0.005310, 0.986821, 0.161731, 0.964863, 0.037431, -0.260073, 37.6063957214355, 0.111186780035496, -29.3048400878906)
+metadata/scene_content_id = "roof_clutter_115"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_116" parent="EastUpper" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(-0.309860, 0.000000, -0.950782, 0.000000, 1.000000, 0.000000, 0.950782, 0.000000, -0.309860, 38.4422874450684, 0.0149999996647239, -22.8986625671387)
+metadata/scene_content_id = "roof_clutter_116"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_117" parent="EastUpper" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.242123, -0.106873, -0.964342, 0.027779, 0.994271, -0.103215, 0.969848, -0.001798, 0.243704, 30.6544456481934, 0.115895748138428, -16.3196887969971)
+metadata/scene_content_id = "roof_clutter_117"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_118" parent="EastUpper" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.948092, -0.023187, -0.317151, 0.312339, -0.119408, 0.942436, -0.059723, -0.992574, -0.105968, 37.6917114257813, 1.13767063617706, -28.8226871490479)
+metadata/scene_content_id = "roof_clutter_118"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_119" parent="WestCorner" instance=ExtResource("rubble_pile_c")]
+transform = Transform3D(0.928893, 0.000000, -0.370347, 0.000000, 1.000000, 0.000000, 0.370347, 0.000000, 0.928893, -47.2788696289063, 0.0149999996647239, -24.5677604675293)
+metadata/scene_content_id = "roof_clutter_119"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_120" parent="WestCorner" instance=ExtResource("fallen_planter")]
+transform = Transform3D(-0.142829, -0.005546, -0.989732, 0.962727, -0.232843, -0.137627, -0.229689, -0.972498, 0.038596, -47.4972152709961, 1.31017231941223, -25.5025768280029)
+metadata/scene_content_id = "roof_clutter_120"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_121" parent="WestCorner" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.905160, 0.000000, 0.425072, 0.000000, 1.000000, 0.000000, -0.425072, 0.000000, 0.905160, -47.5345458984375, 0.0149999996647239, -25.2244110107422)
+metadata/scene_content_id = "roof_clutter_121"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_122" parent="WestCorner" instance=ExtResource("guidance_flowerbox")]
+transform = Transform3D(0.087798, 0.169354, 0.981637, -0.065978, 0.984267, -0.163907, -0.993951, -0.050376, 0.097590, -46.1352386474609, 0.21665421128273, -23.2128086090088)
+metadata/scene_content_id = "roof_clutter_122"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_123" parent="WestCorner" instance=ExtResource("fallen_planter")]
+transform = Transform3D(-0.151118, 0.048800, -0.987310, 0.804199, 0.586867, -0.094084, 0.574828, -0.808212, -0.127931, -47.8904685974121, 0.377349376678467, -24.7009143829346)
+metadata/scene_content_id = "roof_clutter_123"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_124" parent="NorthIsland" instance=ExtResource("flowerbed_broken")]
+transform = Transform3D(0.644801, 0.000000, -0.764350, 0.000000, 1.000000, 0.000000, 0.764350, 0.000000, 0.644801, -8.30262660980225, 0.0149999996647239, -26.0879993438721)
+metadata/scene_content_id = "roof_clutter_124"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_125" parent="NorthIsland" instance=ExtResource("timber_pile")]
+transform = Transform3D(0.957313, 0.000000, 0.289054, 0.000000, 1.000000, 0.000000, -0.289054, 0.000000, 0.957313, -4.18088722229004, 0.0149999996647239, -30.8912391662598)
+metadata/scene_content_id = "roof_clutter_125"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_126" parent="NorthIsland" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(0.996158, 0.000000, -0.087572, 0.000000, 1.000000, 0.000000, 0.087572, 0.000000, 0.996158, -8.73190116882324, 0.0149999996647239, -27.6929721832275)
+metadata/scene_content_id = "roof_clutter_126"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_127" parent="NorthIsland" instance=ExtResource("fallen_planter")]
+transform = Transform3D(0.624660, 0.045861, 0.779549, -0.754836, 0.291206, 0.587726, -0.200056, -0.955560, 0.216522, -5.00653505325317, 0.455394744873047, -32.041877746582)
+metadata/scene_content_id = "roof_clutter_127"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_128" parent="EastLower" instance=ExtResource("rubble_pile_a")]
+transform = Transform3D(0.531703, 0.000000, -0.846931, 0.000000, 1.000000, 0.000000, 0.846931, 0.000000, 0.531703, 23.295877456665, 0.0149999996647239, 12.6483631134033)
+metadata/scene_content_id = "roof_clutter_128"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_129" parent="EastUpper" instance=ExtResource("timber_pile")]
+transform = Transform3D(-0.354748, 0.000000, -0.934962, 0.000000, 1.000000, 0.000000, 0.934962, 0.000000, -0.354748, 38.2973175048828, 0.0149999996647239, -26.5940380096436)
+metadata/scene_content_id = "roof_clutter_129"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_130" parent="NorthIsland" instance=ExtResource("rubble_pile_b")]
+transform = Transform3D(-0.358293, 0.000000, -0.933609, 0.000000, 1.000000, 0.000000, 0.933609, 0.000000, -0.358293, -3.68157505989075, 0.0149999996647239, -31.9722518920898)
+metadata/scene_content_id = "roof_clutter_130"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="LargeCargo" type="Node3D" parent="."]
+
+[node name="roof_clutter_131" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.978148, 0.000000, -0.207912, 0.000000, 1.000000, 0.000000, 0.207912, 0.000000, 0.978148, -43.0, 0.0149999996647239, -28.0)
+metadata/scene_content_id = "roof_clutter_131"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_132" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.987688, 0.000000, 0.156434, 0.000000, 1.000000, 0.000000, -0.156434, 0.000000, 0.987688, -35.0, 0.0149999996647239, -24.0)
+metadata/scene_content_id = "roof_clutter_132"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_133" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.951057, 0.000000, -0.309017, 0.000000, 1.000000, 0.000000, 0.309017, 0.000000, 0.951057, -18.0, 0.0149999996647239, -27.0)
+metadata/scene_content_id = "roof_clutter_133"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_134" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.956305, 0.000000, 0.292372, 0.000000, 1.000000, 0.000000, -0.292372, 0.000000, 0.956305, -2.0, 0.0149999996647239, -26.0)
+metadata/scene_content_id = "roof_clutter_134"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_135" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.990268, 0.000000, -0.139173, 0.000000, 1.000000, 0.000000, 0.139173, 0.000000, 0.990268, 39.0, 0.0149999996647239, -30.0)
+metadata/scene_content_id = "roof_clutter_135"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_136" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.927184, 0.000000, -0.374607, 0.000000, 1.000000, 0.000000, 0.374607, 0.000000, 0.927184, 36.0, 0.0149999996647239, 4.0)
+metadata/scene_content_id = "roof_clutter_136"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_137" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.978148, 0.000000, 0.207912, 0.000000, 1.000000, 0.000000, -0.207912, 0.000000, 0.978148, 26.0, 0.0149999996647239, 16.5)
+metadata/scene_content_id = "roof_clutter_137"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_138" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
+transform = Transform3D(0.961262, 0.000000, -0.275637, 0.000000, 1.000000, 0.000000, 0.275637, 0.000000, 0.961262, -23.0, 0.0149999996647239, 16.5)
+metadata/scene_content_id = "roof_clutter_138"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_139" parent="LargeCargo" instance=ExtResource("covered_cargo")]
+transform = Transform3D(0.997564, 0.000000, -0.069756, 0.000000, 1.000000, 0.000000, 0.069756, 0.000000, 0.997564, -10.0, 0.0149999996647239, -32.0)
+metadata/scene_content_id = "roof_clutter_139"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_140" parent="LargeCargo" instance=ExtResource("covered_cargo")]
+transform = Transform3D(0.965926, 0.000000, 0.258819, 0.000000, 1.000000, 0.000000, -0.258819, 0.000000, 0.965926, 41.0, 0.0149999996647239, -23.0)
+metadata/scene_content_id = "roof_clutter_140"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_141" parent="LargeCargo" instance=ExtResource("covered_cargo")]
+transform = Transform3D(0.970296, 0.000000, -0.241922, 0.000000, 1.000000, 0.000000, 0.241922, 0.000000, 0.970296, 35.0, 0.0149999996647239, -5.0)
+metadata/scene_content_id = "roof_clutter_141"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_142" parent="LargeCargo" instance=ExtResource("covered_cargo")]
+transform = Transform3D(0.990268, 0.000000, 0.139173, 0.000000, 1.000000, 0.000000, -0.139173, 0.000000, 0.990268, -41.0, 0.0149999996647239, -16.0)
+metadata/scene_content_id = "roof_clutter_142"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="GroundGrass" type="Node3D" parent="."]
+
+[node name="roof_clutter_143" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.254200, 0.000000, 0.967152, 0.000000, 1.000000, 0.000000, -0.967152, 0.000000, -0.254200, -45.1424102783203, 0.0149999996647239, -25.7690200805664)
+metadata/scene_content_id = "roof_clutter_143"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_144" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.933693, 0.000000, 0.358074, 0.000000, 1.000000, 0.000000, -0.358074, 0.000000, 0.933693, -45.0503044128418, 0.0149999996647239, -27.4383087158203)
+metadata/scene_content_id = "roof_clutter_144"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_145" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.976718, 0.000000, -0.214529, 0.000000, 1.000000, 0.000000, 0.214529, 0.000000, -0.976718, -44.5886878967285, 0.0149999996647239, -27.4583988189697)
+metadata/scene_content_id = "roof_clutter_145"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_146" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.232821, 0.000000, 0.972520, 0.000000, 1.000000, 0.000000, -0.972520, 0.000000, 0.232821, -45.9563217163086, 0.0149999996647239, -25.6233577728271)
+metadata/scene_content_id = "roof_clutter_146"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_147" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.682078, 0.000000, 0.731280, 0.000000, 1.000000, 0.000000, -0.731280, 0.000000, -0.682078, -34.9468231201172, 0.0149999996647239, -22.089485168457)
+metadata/scene_content_id = "roof_clutter_147"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_148" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.642278, 0.000000, -0.766472, 0.000000, 1.000000, 0.000000, 0.766472, 0.000000, 0.642278, -32.350700378418, 0.0149999996647239, -22.4038600921631)
+metadata/scene_content_id = "roof_clutter_148"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_149" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.835919, 0.000000, -0.548852, 0.000000, 1.000000, 0.000000, 0.548852, 0.000000, -0.835919, -34.4497261047363, 0.0149999996647239, -22.386251449585)
+metadata/scene_content_id = "roof_clutter_149"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_150" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.966744, 0.000000, 0.255748, 0.000000, 1.000000, 0.000000, -0.255748, 0.000000, 0.966744, -36.1472816467285, 0.0149999996647239, -22.397159576416)
+metadata/scene_content_id = "roof_clutter_150"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_151" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.771468, 0.000000, -0.636268, 0.000000, 1.000000, 0.000000, 0.636268, 0.000000, 0.771468, -19.1364803314209, 0.0149999996647239, -28.0661773681641)
+metadata/scene_content_id = "roof_clutter_151"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_152" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.210493, 0.000000, -0.977595, 0.000000, 1.000000, 0.000000, 0.977595, 0.000000, 0.210493, -17.5204219818115, 0.0149999996647239, -27.0302867889404)
+metadata/scene_content_id = "roof_clutter_152"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_153" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.771704, 0.000000, 0.635982, 0.000000, 1.000000, 0.000000, -0.635982, 0.000000, -0.771704, -19.8634223937988, 0.0149999996647239, -28.1567478179932)
+metadata/scene_content_id = "roof_clutter_153"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_154" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.554020, 0.000000, -0.832504, 0.000000, 1.000000, 0.000000, 0.832504, 0.000000, 0.554020, -20.4106845855713, 0.0149999996647239, -30.7023239135742)
+metadata/scene_content_id = "roof_clutter_154"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_155" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.574197, 0.000000, 0.818717, 0.000000, 1.000000, 0.000000, -0.818717, 0.000000, 0.574197, -4.30592393875122, 0.0149999996647239, -28.9251689910889)
+metadata/scene_content_id = "roof_clutter_155"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_156" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.864494, 0.000000, 0.502643, 0.000000, 1.000000, 0.000000, -0.502643, 0.000000, 0.864494, -1.74863195419312, 0.0149999996647239, -25.2843170166016)
+metadata/scene_content_id = "roof_clutter_156"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_157" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.350829, 0.000000, -0.936440, 0.000000, 1.000000, 0.000000, 0.936440, 0.000000, -0.350829, -3.09799790382385, 0.0149999996647239, -28.8237380981445)
+metadata/scene_content_id = "roof_clutter_157"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_158" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.824242, 0.000000, 0.566238, 0.000000, 1.000000, 0.000000, -0.566238, 0.000000, -0.824242, -2.70782208442688, 0.0149999996647239, -27.7603282928467)
+metadata/scene_content_id = "roof_clutter_158"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_159" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.671195, 0.000000, -0.741281, 0.000000, 1.000000, 0.000000, 0.741281, 0.000000, -0.671195, 36.8691635131836, 0.0149999996647239, -29.6993675231934)
+metadata/scene_content_id = "roof_clutter_159"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_160" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.522911, 0.000000, -0.852387, 0.000000, 1.000000, 0.000000, 0.852387, 0.000000, 0.522911, 39.2472953796387, 0.0149999996647239, -26.0427360534668)
+metadata/scene_content_id = "roof_clutter_160"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_161" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.778117, 0.000000, -0.628119, 0.000000, 1.000000, 0.000000, 0.628119, 0.000000, -0.778117, 36.887336730957, 0.0149999996647239, -28.1557273864746)
+metadata/scene_content_id = "roof_clutter_161"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_162" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.739239, 0.000000, -0.673444, 0.000000, 1.000000, 0.000000, 0.673444, 0.000000, 0.739239, 37.1948204040527, 0.0149999996647239, -29.9503555297852)
+metadata/scene_content_id = "roof_clutter_162"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_163" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.304937, 0.000000, -0.952373, 0.000000, 1.000000, 0.000000, 0.952373, 0.000000, 0.304937, 35.321590423584, 0.0149999996647239, 3.49271011352539)
+metadata/scene_content_id = "roof_clutter_163"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_164" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.288633, 0.000000, 0.957440, 0.000000, 1.000000, 0.000000, -0.957440, 0.000000, 0.288633, 36.6521377563477, 0.0149999996647239, 2.69302892684937)
+metadata/scene_content_id = "roof_clutter_164"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_165" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.075001, 0.000000, 0.997183, 0.000000, 1.000000, 0.000000, -0.997183, 0.000000, 0.075001, 36.0754241943359, 0.0149999996647239, 1.8806459903717)
+metadata/scene_content_id = "roof_clutter_165"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_166" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.153509, 0.000000, 0.988147, 0.000000, 1.000000, 0.000000, -0.988147, 0.000000, 0.153509, 34.5923843383789, 0.0149999996647239, 3.79071807861328)
+metadata/scene_content_id = "roof_clutter_166"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_167" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.936907, 0.000000, -0.349577, 0.000000, 1.000000, 0.000000, 0.349577, 0.000000, 0.936907, 28.5528087615967, 0.0149999996647239, 15.1350841522217)
+metadata/scene_content_id = "roof_clutter_167"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_168" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.475318, 0.000000, 0.879814, 0.000000, 1.000000, 0.000000, -0.879814, 0.000000, 0.475318, 29.0780754089355, 0.0149999996647239, 15.7305994033813)
+metadata/scene_content_id = "roof_clutter_168"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_169" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.288048, 0.000000, -0.957616, 0.000000, 1.000000, 0.000000, 0.957616, 0.000000, -0.288048, 28.0724029541016, 0.0149999996647239, 15.3699283599854)
+metadata/scene_content_id = "roof_clutter_169"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_170" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.488837, 0.000000, -0.872375, 0.000000, 1.000000, 0.000000, 0.872375, 0.000000, 0.488837, 26.0451354980469, 0.0149999996647239, 16.2097549438477)
+metadata/scene_content_id = "roof_clutter_170"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_171" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.911240, 0.000000, 0.411875, 0.000000, 1.000000, 0.000000, -0.411875, 0.000000, -0.911240, -21.6937732696533, 0.0149999996647239, 15.231969833374)
+metadata/scene_content_id = "roof_clutter_171"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_172" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.402576, 0.000000, -0.915387, 0.000000, 1.000000, 0.000000, 0.915387, 0.000000, 0.402576, -20.6723213195801, 0.0149999996647239, 14.6279468536377)
+metadata/scene_content_id = "roof_clutter_172"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_173" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.991888, 0.000000, -0.127112, 0.000000, 1.000000, 0.000000, 0.127112, 0.000000, -0.991888, -24.894115447998, 0.0149999996647239, 16.4065685272217)
+metadata/scene_content_id = "roof_clutter_173"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_174" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.777245, 0.000000, -0.629198, 0.000000, 1.000000, 0.000000, 0.629198, 0.000000, 0.777245, -22.1610240936279, 0.0149999996647239, 16.496000289917)
+metadata/scene_content_id = "roof_clutter_174"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_175" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.581396, 0.000000, 0.813621, 0.000000, 1.000000, 0.000000, -0.813621, 0.000000, 0.581396, -14.5849142074585, 0.0149999996647239, 21.89719581604)
+metadata/scene_content_id = "roof_clutter_175"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_176" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.930403, 0.000000, -0.366538, 0.000000, 1.000000, 0.000000, 0.366538, 0.000000, 0.930403, -19.4312114715576, 0.0149999996647239, 20.1976318359375)
+metadata/scene_content_id = "roof_clutter_176"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_177" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.137647, 0.000000, 0.990481, 0.000000, 1.000000, 0.000000, -0.990481, 0.000000, -0.137647, -16.3583393096924, 0.0149999996647239, 23.6194953918457)
+metadata/scene_content_id = "roof_clutter_177"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_178" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.356992, 0.000000, 0.934107, 0.000000, 1.000000, 0.000000, -0.934107, 0.000000, 0.356992, -17.0271072387695, 0.0149999996647239, 20.6372890472412)
+metadata/scene_content_id = "roof_clutter_178"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_179" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.152959, 0.000000, 0.988233, 0.000000, 1.000000, 0.000000, -0.988233, 0.000000, -0.152959, 17.0, 0.0149999996647239, 18.1422462463379)
+metadata/scene_content_id = "roof_clutter_179"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_180" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.639496, 0.000000, 0.768794, 0.000000, 1.000000, 0.000000, -0.768794, 0.000000, 0.639496, 16.4533023834229, 0.0149999996647239, 18.630651473999)
+metadata/scene_content_id = "roof_clutter_180"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_181" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.817023, 0.000000, -0.576605, 0.000000, 1.000000, 0.000000, 0.576605, 0.000000, 0.817023, 17.0, 0.0149999996647239, 18.1748924255371)
+metadata/scene_content_id = "roof_clutter_181"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_182" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.980310, 0.000000, 0.197463, 0.000000, 1.000000, 0.000000, -0.197463, 0.000000, -0.980310, 17.0, 0.0149999996647239, 20.2251625061035)
+metadata/scene_content_id = "roof_clutter_182"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_183" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.576663, 0.000000, 0.816982, 0.000000, 1.000000, 0.000000, -0.816982, 0.000000, 0.576663, -17.5434646606445, 0.0149999996647239, -6.20351409912109)
+metadata/scene_content_id = "roof_clutter_183"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_184" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.920373, 0.000000, 0.391041, 0.000000, 1.000000, 0.000000, -0.391041, 0.000000, -0.920373, -17.0, 0.0149999996647239, -8.84333515167236)
+metadata/scene_content_id = "roof_clutter_184"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_185" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.914880, 0.000000, 0.403727, 0.000000, 1.000000, 0.000000, -0.403727, 0.000000, 0.914880, -18.2428722381592, 0.0149999996647239, -7.60940790176392)
+metadata/scene_content_id = "roof_clutter_185"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_186" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.935299, 0.000000, -0.353858, 0.000000, 1.000000, 0.000000, 0.353858, 0.000000, 0.935299, -17.0, 0.0149999996647239, -6.67392921447754)
+metadata/scene_content_id = "roof_clutter_186"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_187" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.711905, 0.000000, -0.702276, 0.000000, 1.000000, 0.000000, 0.702276, 0.000000, 0.711905, 19.3550128936768, 0.0149999996647239, -7.42426776885986)
+metadata/scene_content_id = "roof_clutter_187"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_188" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.825078, 0.000000, -0.565018, 0.000000, 1.000000, 0.000000, 0.565018, 0.000000, -0.825078, 17.6231212615967, 0.0149999996647239, -8.80885219573975)
+metadata/scene_content_id = "roof_clutter_188"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_189" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(-0.997151, 0.000000, -0.075429, 0.000000, 1.000000, 0.000000, 0.075429, 0.000000, -0.997151, 18.2038879394531, 0.0149999996647239, -9.78619766235352)
+metadata/scene_content_id = "roof_clutter_189"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="roof_clutter_190" parent="GroundGrass" instance=ExtResource("grass_patch")]
+transform = Transform3D(0.297351, 0.000000, -0.954768, 0.000000, 1.000000, 0.000000, 0.954768, 0.000000, 0.297351, 20.5872383117676, 0.0149999996647239, -7.5476450920105)
+metadata/scene_content_id = "roof_clutter_190"
+metadata/initial_state = "growing"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"

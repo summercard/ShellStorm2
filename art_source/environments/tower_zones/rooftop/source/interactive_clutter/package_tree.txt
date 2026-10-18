@@ -1,0 +1,8 @@
+rubble_pile_a -> 水泥碎块A_资产包
+rubble_pile_b -> 水泥碎块B_资产包
+rubble_pile_c -> 水泥碎块C_资产包
+timber_pile -> 旧木料堆_资产包
+sandbag_barrier -> 防洪沙袋堆_资产包
+broken_crate_a -> 大型旧木箱_资产包
+covered_cargo -> 篷布大货包_资产包
+grass_patch -> 地缝风摆杂草_资产包

@@ -1,0 +1,62 @@
+{
+  "slug": "grass_patch",
+  "asset_id": "ENV-ROOFTOP-GRASS-PATCH",
+  "name": "地缝风摆杂草",
+  "version": "v001",
+  "collision": [],
+  "origin_shift_blender": [
+    0.007544815540313721,
+    0.015692025423049927,
+    -0.0
+  ],
+  "bounds_blender": [
+    2.0411882400512695,
+    1.6475982666015625,
+    0.7139718532562256
+  ],
+  "collection": "地缝风摆杂草_资产包",
+  "object": "地缝风摆杂草_主体",
+  "source_blend": "art_source\\environments\\tower_zones\\rooftop\\source\\interactive_clutter\\rooftop_interactive_clutter_v001.blend",
+  "optimized_blend": "art_source\\environments\\tower_zones\\rooftop\\source\\interactive_clutter\\export\\v001\\rooftop_interactive_clutter_optimized_v001.blend",
+  "glb": "assets/art/environments/tower_zones/rooftop/components/guidance/env_rooftop_grass_patch_visual_top3d.glb",
+  "prefab": "assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_grass_patch_root_top3d.tscn",
+  "block_id": "rooftop",
+  "floor_range": "100F",
+  "category": "scene_interactive_content",
+  "source": "地缝风摆杂草_主体",
+  "triangles_before": 1328,
+  "manifest": "art_source\\environments\\tower_zones\\rooftop\\source\\interactive_clutter\\component_packages\\grass_patch\\asset_manifest.json",
+  "scene_design_docs": [
+    "docs/v0.1/design/rooftop_first_visit_guidance.md",
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/05.2_关卡版图白盒与生成规范.md"
+  ],
+  "runtime_integrated": true,
+  "optimization": {
+    "isolated_vertices_removed": 0,
+    "zero_area_faces_removed": 0,
+    "merge_distance": 0,
+    "reason": "Closed blades with 3mm thickness replace coplanar opposite faces to prevent glTF triangle removal; cleanup retains silhouette and underside.",
+    "budget": null,
+    "budget_source": "No project per-component triangle budget supplied"
+  },
+  "triangles_after": 1328,
+  "reduction_ratio": 0.23694779116465864,
+  "source_sha256_before": "2247d38acc2c6d77316e924a2a1081d55cb08c66fc5477384155d1d7c6766816",
+  "source_sha256_after": "2247d38acc2c6d77316e924a2a1081d55cb08c66fc5477384155d1d7c6766816",
+  "optimized_sha256": "6a20bc96a7e861ff4f8a18da4223bac1ff0805daaf7fdcfb41364a4725f4ff32",
+  "glb_sha256": "6db2d8e91f371080ab818bba62627c74202212d8d4c894e3866260e56d433861",
+  "staged_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-18_rooftop_formal\\grass_patch.glb",
+  "exported": true,
+  "fidelity_validation": "Fixed source/optimized front/back/side/game renders reviewed; retained silhouette, original vertices, palette UV, seams and component bounds",
+  "qa": {
+    "source_palette_uv": "passed",
+    "optimized_palette_uv": "passed",
+    "glb_images_textures": 0,
+    "runtime": "ROOFTOP_GUIDANCE_OK 190 instances, 342 shapes; wind advances and pauses",
+    "source_sha_unchanged": true,
+    "record": "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md"
+  },
+  "design_scope": "首次登顶交互杂物正式化与地面风摆草",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表 / 3D-场景通用"
+}

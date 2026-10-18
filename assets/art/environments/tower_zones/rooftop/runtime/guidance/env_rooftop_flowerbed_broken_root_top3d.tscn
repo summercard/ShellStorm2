@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="mat"]
+albedo_color = Color(0.59, 0.63, 0.58, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="mesh0"]
+size = Vector3(6.000000, 0.950000, 1.500000)
+material = SubResource("mat")
+
+[sub_resource type="BoxShape3D" id="shape0"]
+size = Vector3(6.000000, 0.950000, 1.500000)
+
+[sub_resource type="BoxMesh" id="mesh1"]
+size = Vector3(2.500000, 0.350000, 0.260000)
+material = SubResource("mat")
+
+[sub_resource type="BoxShape3D" id="shape1"]
+size = Vector3(2.500000, 0.350000, 0.260000)
+
+[sub_resource type="BoxMesh" id="mesh2"]
+size = Vector3(2.600000, 0.300000, 0.250000)
+material = SubResource("mat")
+
+[sub_resource type="BoxShape3D" id="shape2"]
+size = Vector3(2.600000, 0.300000, 0.250000)
+
+[sub_resource type="BoxMesh" id="mesh3"]
+size = Vector3(0.300000, 0.600000, 1.400000)
+material = SubResource("mat")
+
+[sub_resource type="BoxShape3D" id="shape3"]
+size = Vector3(0.300000, 0.600000, 1.400000)
+
+[node name="flowerbed_broken" type="Node3D" groups=["scene_interactive_content"]]
+metadata/asset_id = "ENV-ROOFTOP-FLOWERBED-BROKEN"
+metadata/asset_version = "v001"
+metadata/art_status = "whitebox"
+metadata/interaction_status = "planned_locked"
+metadata/future_actions = PackedStringArray("move", "remove")
+metadata/collision_owner = "self"
+
+[node name="Piece00" type="StaticBody3D" parent="."]
+transform = Transform3D(1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.475000, 0.000000)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="MeshInstance3D" parent="Piece00"]
+mesh = SubResource("mesh0")
+
+[node name="Collision" type="CollisionShape3D" parent="Piece00"]
+shape = SubResource("shape0")
+
+[node name="Piece01" type="StaticBody3D" parent="."]
+transform = Transform3D(0.990128, 0.121869, -0.069237, -0.121572, 0.992546, 0.008501, 0.069756, 0.000000, 0.997564, -1.700000, 1.000000, -0.650000)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="MeshInstance3D" parent="Piece01"]
+mesh = SubResource("mesh1")
+
+[node name="Collision" type="CollisionShape3D" parent="Piece01"]
+shape = SubResource("shape1")
+
+[node name="Piece02" type="StaticBody3D" parent="."]
+transform = Transform3D(0.990737, -0.087156, 0.104131, 0.086678, 0.996195, 0.009110, -0.104528, 0.000000, 0.994522, 1.700000, 1.000000, 0.650000)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="MeshInstance3D" parent="Piece02"]
+mesh = SubResource("mesh2")
+
+[node name="Collision" type="CollisionShape3D" parent="Piece02"]
+shape = SubResource("shape2")
+
+[node name="Piece03" type="StaticBody3D" parent="."]
+transform = Transform3D(0.978148, -0.203368, -0.043227, 0.207912, 0.956773, 0.203368, 0.000000, -0.207912, 0.978148, 2.900000, 0.800000, 0.100000)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="MeshInstance3D" parent="Piece03"]
+mesh = SubResource("mesh3")
+
+[node name="Collision" type="CollisionShape3D" parent="Piece03"]
+shape = SubResource("shape3")

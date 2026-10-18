@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/flowerbox.tscn" id="visual"]
+
+[sub_resource type="BoxShape3D" id="shape"]
+size = Vector3(4.500000, 1.100000, 1.185000)
+
+[node name="guidance_flowerbox" type="Node3D" groups=["scene_interactive_content"]]
+metadata/asset_id = "ENV-ROOFTOP-GUIDANCE-FLOWERBOX"
+metadata/asset_version = "v001"
+metadata/art_status = "existing_visual_reuse"
+metadata/interaction_status = "planned_locked"
+metadata/future_actions = PackedStringArray("move", "remove")
+metadata/collision_owner = "self"
+
+[node name="Visual" parent="." instance=ExtResource("visual")]
+
+[node name="Body" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="Body"]
+position = Vector3(0.000000, 0.550000, 0.000000)
+shape = SubResource("shape")
