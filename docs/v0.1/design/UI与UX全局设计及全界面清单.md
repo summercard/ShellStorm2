@@ -373,22 +373,24 @@
   - **中央 3D 检视与放射状槽位环**：中央大图实时旋转展示当前武器 3D 模型，四周环绕 **6 大配件槽位节点** 与 **命运赋能槽位**，用动态折线连接至枪身对应部位，直观呈现“枪械母体 + 6 配件 + 命运卡”的完整构建树。
   - **右侧属性对比与词条面**：展示伤害、射速、换弹、散布、射程等核心六维数值及当前生效的全部命运塔罗正/逆位修正。
 
-#### UI-21 局内武器改造台 · 6×6 炼金盘（`WorkbenchPanel`）
+#### UI-21 局内武器改造台 · 5×5 炼金盘（`WorkbenchPanel`）
 - **场景与脚本**：`scenes/WorkbenchPanel.tscn` + `src/ui/WorkbenchPanel.gd` + `src/weapons/WeaponForge.gd`
 - **账本 ID**：*待补录（建议 `UI-MODAL-WORKBENCH`）*
 - **层级**：`Dungeon3D/$HUD` 动态实例化模态框
 - **触发方式**：在战局内与 `upgrade` 型服务台（武器改造台）按 `E` 交互打开。
 - **美术风格**：**棱镜线框（`PRISM-WIREFRAME`）**，与全站一致。不画实心卡片，区域由 1px 白线 + 四角括号界定。
-- **核心功能**：**炼金抽卡**。左侧 6×6（36 格）炼金盘按 `grid_size` 占格，**所有物品都能当材料**（武器是蓝本，其余按 `rarity` 折算），并支付金币后熔炼，产出**蓝本、品质（蓝/紫/金）、弹种**全部重新掷骰的新枪实例。三条配方见[玩法系统｜武器改造台](../07.2_玩法系统_武器改造台.md)：单武器 + 材料 ≥3 熔炼值 = 重铸；≥2 把武器 = 融合（蓝本随机 + 弹种从各枪自带弹种随机 + 随机附带配件）；纯材料 ≥6 熔炼值 = 合成。**材料的稀有度直接提升品质**（稀有度分 common 0 / uncommon 1 / rare 2 / epic 4 / legendary 7）。费用 `max(min, ceil(投入估值×rate))`，R1/R2/R3 费率 0.30/0.40/0.50。
+- **核心功能**：**炼金抽卡**。中栏 5×5（25 格，正方形）炼炉按 `grid_size` 占格，**所有物品都能当材料**（武器是蓝本，其余按 `rarity` 折算），并支付金币后熔炼，产出**蓝本、品质（蓝/紫/金）、弹种**全部重新掷骰的新枪实例。三条配方见[玩法系统｜武器改造台](../07.2_玩法系统_武器改造台.md)：单武器 + 材料 ≥3 熔炼值 = 重铸；≥2 把武器 = 融合（蓝本随机 + 弹种从各枪自带弹种随机 + 随机附带配件）；纯材料 ≥6 熔炼值 = 合成。**材料的稀有度直接提升品质**（稀有度分 common 0 / uncommon 1 / rare 2 / epic 4 / legendary 7）。费用 `max(min, ceil(投入估值×rate))`，R1/R2/R3 费率 0.30/0.40/0.50。
 - **布局**：
   - 页头：`WEAPON FORGE` 弱标签 + 「武器改造台」强标题；右侧 `COINS` 读数 + `ESC 关闭`。
-  - 左栏 `ALCHEMY GRID 6 × 6`（格边长 54，外挂 ghost 括号）；右栏 `INVENTORY`（与 I 键同源 `InventoryModule`，格边长 50）。
-  - 读数行**一行 7 栏**两级排印：`PAYLOAD`（N 枪 · M 材料）/ `MELT` / `RARITY`（稀有度分，材料提品质的唯一可见抓手）/ `RECIPE` / `BLUEPRINT`（R2 显示「随机（N 把之一）」）/ `GRADE ODDS` / `FEE`（买不起转危险红）。
+  - **主体**：中栏炼炉 `ALCHEMY GRID 5 × 5`（格边长 80，正方形，外挂 ghost 括号）；右栏 `INVENTORY`（与 I 键同源 `InventoryModule`，格边长 46、8 列，与 `InventoryModule.GRID_COLUMNS` 一致）。
+  - **页脚两行**：第一行 7 栏读数（`PAYLOAD` / `MELT` / `RARITY` / `RECIPE` / `BLUEPRINT` / `GRADE ODDS` / `FEE`）等分铺满；第二行左侧状态文案、右侧 `ESC 关闭` + 「熔 炼」。**按钮与信息全在底部，主体区不夹任何信息行。**
+  - **版式实现**：炼炉水平居中、背包贴右，靠 `_layout_body()` 在 `resized` 时手算矩形；用 `HBoxContainer` 只能让整组居中，炼炉会必然偏左。
+  - 读数行**一行 7 栏**两级排印（位于页脚第一行）：`PAYLOAD`（N 枪 · M 材料）/ `MELT` / `RARITY`（稀有度分，材料提品质的唯一可见抓手）/ `RECIPE` / `BLUEPRINT`（R2 显示「随机（N 把之一）」）/ `GRADE ODDS` / `FEE`（买不起转危险红）。
   - 底部：状态行 + `primary` 白底实心「熔 炼」+ 一行窄注。
 - **视觉硬约束**：
   - 格子只画 1px 白线、不填底色（棋盘 `prism_mode = true`）；I 键背包是棱镜豁免项，保持原样式。
   - 确认层必须**全屏 0.90 压暗 + 近不透明深墨卡片**且 `z_index = 64` —— 棋盘把物品画布提到 `z_index = 4`，确认层留在默认层会被枪械图标盖住；0.42 的棱镜底衬在这层会透出下层文字。
-  - 视口基准 1280×720：6 行盘面 + **单行**读数 + 操作行必须全部落在 720 内（读数两行会顶出操作钮）。
+  - 视口基准 1280×720：5 行盘面（格 80）+ 两行页脚必须全部落在 720 内；状态栏空白文案必须压在一行内。
 - **交互硬约束**：
   - **任何非空物品都可入场**：武器当蓝本，其余（弹药模块 / 配件 / 消耗品 / 装备 / 蓝图）一律当材料。"不是材料"的唯一判据是空格。
   - 材料块必须 `clip_contents = true`，否则 1×1 格的标题会压到相邻格上。
@@ -641,7 +643,7 @@
 | 18 | `InventoryUI` | 棋盘式包裹与装备主界面 | `src/ui/InventoryUI.gd` | `L:1 / z:350` | 棱镜线框(**仅样式**) | 已接入 | `UI-SCREEN-INVENTORY-3D` |
 | 19 | `ItemModelIcon3D` | 3D 物品实时正交图标组件 | `src/ui/ItemModelIcon3D.gd` | 子视口组件 | 3D 实物同源 | 组件级 | 待补录 |
 | 20 | `WeaponPresentationPage3D` | K 键武器表现与构建树页 | `src/ui/WeaponAssemblyTreePanel.gd` | `L:1 / z:420` | 棱镜线框(双语) | 已接入 | 待补录 |
-| 21 | `WorkbenchPanel` | 局内武器改造台（6×6 炼金盘） | `src/ui/WorkbenchPanel.gd` | `L:1 / 模态` | 棱镜线框(双语) | 改造中 | 待补录 |
+| 21 | `WorkbenchPanel` | 局内武器改造台（5×5 炼金盘） | `src/ui/WorkbenchPanel.gd` | `L:1 / 模态` | 棱镜线框(双语) | 已接入 | 待补录 |
 | 22 | `MerchantUI` | 局内流浪拾荒商界面 | `src/ui/MerchantUI.gd` | `L:1 / 模态` | 棱镜线框 | 已接入 | `UI-MODAL-MERCHANT` |
 | 23 | `DoorFateOverlay3D` | 门后命运塔罗三选一购卡 | `src/world3d/Dungeon3D.gd` | `L:1 / z:900` | 棱镜线框+塔罗贴图 | 完整焦点链 | `UI-MODAL-FATE-DRAW` |
 | 24 | `FateSourceSelectionPanel` | 命运卡赋能目标选择框 | `src/ui/FateSourceSelectionPanel.gd` | `L:1 / z:910` | 棱镜线框+3D图标 | 数字键/焦点 | 待补录 |
