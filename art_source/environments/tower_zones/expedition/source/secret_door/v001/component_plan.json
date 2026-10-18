@@ -1,0 +1,55 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "status": "frozen_before_geometry",
+  "version": "secret_door_v001",
+  "block_id": "expedition",
+  "level_id": "expedition_01",
+  "design_scope": "scene_art",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+  "registration_status": "已产出源与运行 GLB；账本登记待办",
+  "component_budget": {
+    "limit": 50,
+    "planned": 2,
+    "remaining": 48
+  },
+  "components": [
+    {
+      "slug": "secret_door_leaf",
+      "family": "secret_door",
+      "purpose": "半掩门 + 内腔透光，隐藏门被打破后可见"
+    },
+    {
+      "slug": "secret_door_boards",
+      "family": "secret_door",
+      "purpose": "外侧钉死木板，可打掉，打掉后露出门"
+    }
+  ],
+  "dimension_contract": {
+    "opening_clear_m": [
+      2.2,
+      2.5
+    ],
+    "frame_depth_m": 0.12,
+    "cavity_depth_m": 1.7,
+    "leaf_open_deg": 45.0,
+    "board_cover_m": [
+      2.36,
+      2.5
+    ]
+  },
+  "derivation": {
+    "opening_source": "office_room/door_wall/door_wall_root_top3d.tscn 实测门洞 2.2×2.5",
+    "wall_thickness_m": 1.11,
+    "note": "site x 坐标落在 5m 墙模块拼缝上，因此采用贴面门框方案，不改 5m 网格模块。"
+  },
+  "style": {
+    "palette": "设施低亮多巴胺色盘_10x10_512.png",
+    "roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ]
+  }
+}

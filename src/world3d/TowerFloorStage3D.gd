@@ -4,6 +4,8 @@ extends Node3D
 ## 远征单层关卡与 use_standard_map 仍按各自口径（内容外框 / 250 标准图）。
 ## 重复地砖和外墙使用 Blender 导入 Mesh + MultiMesh；承重碰撞独立于渲染。
 
+const ROOFTOP_GUIDANCE_SCENE: PackedScene = preload("res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_guidance_layout_root_top3d.tscn")
+
 const GRID_UNIT := 5.0
 const GRID_COUNT := 50
 const MAP_SIZE := GRID_UNIT * GRID_COUNT
@@ -342,6 +344,7 @@ func _ready() -> void:
 	if _uses_rooftop_profile():
 		await _build_rooftop_authored_layout()
 		_build_rooftop_ground_birds()
+		add_child(ROOFTOP_GUIDANCE_SCENE.instantiate())
 	set_meta("loading_stage_ready", true)
 
 

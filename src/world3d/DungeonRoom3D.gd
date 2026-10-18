@@ -519,6 +519,11 @@ var camera_profile: Dictionary = {}
 ## side -> bool。显式端口关卡中一条边只有父端为 true；子端绑定同一扇共享门。
 ## 空字典表示旧关卡，仍保持每房自持门的兼容行为。
 var door_endpoint_owners: Dictionary = {}
+## 传送支线位点（支线秘密房间设计 §3.2）：本房哪面墙上有可打破的隐藏门。
+## `{site_id, pair_id, role, wall}`；空字典 = 本房无位点。
+## 本房**不建门、不管传送** —— 建门与传送都归 Dungeon3D；这里只承载声明，
+## 让位点随房间节点一起流送/卸载。
+var secret_site: Dictionary = {}
 
 
 func configure(config: Dictionary) -> void:
@@ -558,6 +563,7 @@ func configure(config: Dictionary) -> void:
 	door_endpoint_owners = (
 		config.get("door_endpoint_owners", door_endpoint_owners) as Dictionary
 	).duplicate(true)
+	secret_site = (config.get("secret_site", secret_site) as Dictionary).duplicate(true)
 
 
 ## 把关卡设计源里的 Boss 中心点与两侧增援点落成可见、可探测的运行时 Marker3D。
@@ -2503,10 +2509,10 @@ func _build_shell() -> void:
 	if size_class == "rooftop":
 		_build_rooftop_shell(dimensions)
 		return
-	_build_wall("north", Vector3(0, 1.4, -dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0))
-	_build_wall("south", Vector3(0, 1.4, dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0))
-	_build_wall("west", Vector3(-dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1))
-	_build_wall("east", Vector3(dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1))
+	_build_wall("north", Vector3(0, 1.4, -dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0), _wall_door_lane("north"))
+	_build_wall("south", Vector3(0, 1.4, dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0), _wall_door_lane("south"))
+	_build_wall("west", Vector3(-dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1), _wall_door_lane("west"))
+	_build_wall("east", Vector3(dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1), _wall_door_lane("east"))
 	for direction in doors:
 		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
 	for corner in [
@@ -4765,7 +4771,18 @@ func _build_floor_partitions(dimensions: Vector2) -> void:
 			_set_camera_lower_wall_on_static_bodies(horizontal_partition, true)
 
 
-func _build_wall(direction: String, center: Vector3, length: float, axis: Vector3) -> void:
+## 该方向门洞沿墙的偏移（m）。0 = 墙面中心。
+##
+## 来源是**房间配置**（子图房按模板 `wall_lane_table` 写入 `wall_door_lane_<side>`），
+## 未声明的房间恒为 0 —— 主路、塔楼、基地的程序化房间行为逐字不变。
+## 门洞切口与门扇必须读同一个值，否则会出现「洞在左边、门扇在中间」。
+func _wall_door_lane(direction: String) -> float:
+	return float(get_meta("wall_door_lane_%s" % direction, 0.0))
+
+
+func _build_wall(
+	direction: String, center: Vector3, length: float, axis: Vector3, opening_lane_m: float = 0.0
+) -> void:
 	var has_door := doors.has(direction)
 	var thickness := 0.28
 	var height := 2.8
@@ -4782,9 +4799,23 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 			_set_camera_lower_wall_on_static_bodies(wall, true)
 		return
 	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
-	var segment_length := (length - opening) * 0.5
-	for side in [-1.0, 1.0]:
-		var offset: Vector3 = axis * float(side) * (opening * 0.5 + segment_length * 0.5)
+	# 门位沿墙偏移：模板 `wall_lane_table` 的合法槽位（05.2 §3.5.2）。
+	# 默认 0 = 墙面中心，与既有全部程序化房间逐字等价 —— 只有声明了 lane 的
+	# 房间（子图）才会偏离中心，主路/塔楼行为不变。
+	var lane := clampf(opening_lane_m, -(length - opening) * 0.5, (length - opening) * 0.5)
+	# 门洞两侧的墙段：按 lane 切成**不等长**两段（原实现恒为对称两段）。
+	var segment_lengths := [
+		lane + length * 0.5 - opening * 0.5,
+		length * 0.5 - lane - opening * 0.5,
+	]
+	for side_index in range(2):
+		var segment_length := float(segment_lengths[side_index])
+		if segment_length <= 0.05:
+			# lane 贴到墙角时一侧墙段长度为 0：不建零厚度墙件（会产生退化碰撞）。
+			continue
+		var segment_sign := -1.0 if side_index == 0 else 1.0
+		var offset_along := lane + segment_sign * (opening * 0.5 + segment_length * 0.5)
+		var offset: Vector3 = axis * offset_along
 		var segment_size := Vector3(segment_length, height, thickness) if axis.x > 0.0 else Vector3(thickness, height, segment_length)
 		var wall_segment := _spawn_prefab(
 			"Wall_%s" % direction,
@@ -4799,7 +4830,7 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 	var lintel := _spawn_prefab(
 		"DoorLintel_%s" % direction,
 		DOOR_LINTEL_PREFAB,
-		center + Vector3(0, 1.18, 0),
+		center + axis * lane + Vector3(0, 1.18, 0),
 		lintel_size,
 		_trim_material
 	)
@@ -4846,7 +4877,12 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 	if door_leaf != null:
 		_disable_static_collision_descendants(door_leaf)
 	# 与 _build_tower_wall_run 同步：门偏移到沿墙中心最近模块位置 (5m 网格偶数段是 ±2.5m)。
-	var door_offset_along := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
+	# 子图房按模板 lane 声明（`wall_door_lane_<side>`）优先；未声明的房间回退塔楼旧键，
+	# 两者都没有就是 0（墙面中心），与既有全部程序化房间一致。
+	var door_offset_along := float(get_meta(
+		"wall_door_lane_%s" % direction,
+		get_meta("tower_wall_door_offset_%s" % direction, 0.0)
+	))
 	# 门扇停在墙件原点上：安全房墙件与塔楼墙件同样以原点坐边界网格线，门墙
 	# 门洞切向中心也是 0，门扇正好落在门垛之间，并和走廊起点同线。
 	var face_x := dimensions.x * 0.5

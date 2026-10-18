@@ -65,6 +65,24 @@ const FLOOR_SCALING := {
 ## 业主 2026-10-16 定「每只怪约 15% 是强化版」。
 const DEFAULT_STRONG_VARIANT_CHANCE := 0.15
 
+## —— 传送支线（子图）固定编成 ——
+## 业主 2026-10-18 定：**子图每一间固定 5 只强化怪 + 2 只普通怪**，
+## 不给额外掉落加成（要收益就把它们打死，走常规击杀掉落）。
+##
+## 为什么写死数量而不走公式：子图是可选的高风险房间，玩家进去之前应当能预期
+## 「这一间有多硬」。数量随楼层/进度漂移，会让「5 + 2」这条口径变成一句空话。
+const SECRET_BRANCH_STRONG_COUNT := 5
+const SECRET_BRANCH_NORMAL_COUNT := 2
+## 强化怪只从**已有正式变种**里取（`MonsterVariants.VARIANTS` 的三个 id）。
+const SECRET_BRANCH_STRONG_KINDS := [
+	"melee_chaser_strong",
+	"fat_zombie03_strong",
+	"ranged_caster_strong",
+]
+## 普通怪只取**有强化版的那三类**：同一种怪的两个档摆在一起，玩家一眼能看出差别
+## （强化怪体型 ×1.5），不会把「蜂巢怪」误当成强化怪的同类。
+const SECRET_BRANCH_NORMAL_KINDS := ["melee_chaser", "fat_zombie03", "ranged_caster"]
+
 var _rng: RandomNumberGenerator
 ## 强化怪升级专用随机流。**必须与 `_rng` 分开**：`_rng` 被 boss / elite / 公式路径共用，
 ## 若把升级的掷骰混进去，既有固定种子的抽取结果会整体位移，破坏已验收的可复现性。
@@ -284,6 +302,37 @@ func generate_box_enemy(type_id: String, floor: int, floor_level: int, extra: Di
 	if is_authorable_enemy_type(type_id):
 		return _generate_basic_enemy(type_id, floor, floor_level)
 	return {}
+
+## 子图房间编成：**固定 5 只强化怪 + 2 只普通怪**，顺序「先强化、后普通」。
+##
+## `allow_strong = false` 是这条口径的关键：`_generate_basic_enemy` 的默认出口会按
+## 关卡概率（`monster_rules.strong_variant`）把普通怪升级成强化怪。不关掉它，
+## 那 2 只「普通怪」各有 15% 概率变成强化怪 —— 玩家数出来就是 6 强化 + 1 普通，
+## 「每间 5 强化 + 2 普通」的承诺当场破功。强化怪一侧同样显式关掉：虽然
+## `_roll_strong_kind` 对已是变种的 id 本来就原样透传，但关掉能让「这里是编程式
+## 指定」写在调用点上，且不消耗强化怪的随机流。
+##
+## `seed_value` 只决定「三类强化怪从哪一类开始轮转」（5 只恒为 2/2/1 分布），
+## 不改变数量、种类集合与档位 —— 同一间房重复调用得到同一份编成。
+func build_secret_branch_encounter(
+	floor: int, floor_level: int, seed_value: int
+) -> Array[Dictionary]:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	var out: Array[Dictionary] = []
+	var rotation := rng.randi_range(0, SECRET_BRANCH_STRONG_KINDS.size() - 1)
+	for index in range(SECRET_BRANCH_STRONG_COUNT):
+		var kind := str(
+			SECRET_BRANCH_STRONG_KINDS[(rotation + index) % SECRET_BRANCH_STRONG_KINDS.size()]
+		)
+		out.append(_generate_basic_enemy(kind, floor, floor_level, false))
+	for index in range(SECRET_BRANCH_NORMAL_COUNT):
+		var kind := str(
+			SECRET_BRANCH_NORMAL_KINDS[(rotation + index) % SECRET_BRANCH_NORMAL_KINDS.size()]
+		)
+		out.append(_generate_basic_enemy(kind, floor, floor_level, false))
+	return out
+
 
 ## 设计源覆盖：按关卡设计源给定的波次计划生成敌人。
 ## 外层每项 = 一波（**波次数钉死**），每波有两种写法，**互斥**：
@@ -726,6 +775,21 @@ const TIER_NORMAL := "normal"
 const TIER_ELITE := "elite"
 const TIER_BOSS := "boss"
 
+## 强化怪出枪概率（业主 2026-10-18：「强化怪 20-30% 概率掉落」）。
+## 取区间中值 25%：低于 20% 会让「打强化怪有枪」这件事形不成预期，
+## 高于 30% 则强化怪（15% 出现率）的枪产能会超过 Boss。
+const STRONG_VARIANT_WEAPON_CHANCE := 0.25
+## Boss 第 2 把枪的概率。业主口径「固定 1-2 把」⇒ 第 1 把必出、第 2 把 50%，
+## 期望 1.5 把，落在 [1, 2] 闭区间内。
+const BOSS_SECOND_WEAPON_CHANCE := 0.5
+## Boss 非枪掉落件数（蓝图 / 模块 / 配件 / 背包 / 电池 / 信标）。
+## 总件数 = 枪 1-2 + 其它 3 + 弹药 1 = **恒为 5-6 件**（业主 2026-10-18）。
+##
+## 这里能固定成 3 件，靠的是条目级 `merge_same_item=false`：
+## 池内抽签是有放回的，同 id 重复若按旧语义「覆盖成一件」，实测总量会散到 3-7 件。
+## 关掉合并后，抽到同名物品就是两件独立实物（Boss 的蓝图/模块本来就该给多份）。
+const BOSS_OTHER_DROPS := 3
+
 
 ## 取某只怪在当前档位/层深下的结构化掉落规格（等价于怪物表该行的 `drop` 列）。
 ##
@@ -777,9 +841,39 @@ static func drop_spec_for(
 			currency_per_floor = DROP_CURRENCY_PER_FLOOR_NORMAL
 
 	var entries: Array = []
-	if item_chance > 0.0:
+	# ── Boss：1-2 把枪 + 3 件其它 + 1 包弹药 = 5-6 件（2026-10-18）──────────
+	# 枪与非枪拆成两个池：混池抽 3 次无法保证「一定出枪」，而 Boss 的契约是枪必出。
+	# 第 2 把用独立 entry 的 chance 表达「50% 再给一把」，不引入区间 draws
+	# （draws 只接受整数，写 {"min":1,"max":2} 会被 int() 静默截成 1）。
+	if resolved_tier == TIER_BOSS:
+		var boss_weapon_pool := "boss_weapon_floor_%d" % [safe_floor]
+		entries.append({
+			"kind": "pool", "pool_id": boss_weapon_pool, "draws": 1,
+			"chance": 1.0, "max_drops": 2, "merge_same_item": false,
+		})
+		entries.append({
+			"kind": "pool", "pool_id": boss_weapon_pool, "draws": 1,
+			"chance": BOSS_SECOND_WEAPON_CHANCE, "max_drops": 2, "merge_same_item": false,
+		})
+		entries.append({
+			"kind": "pool", "pool_id": "boss_floor_%d" % [safe_floor],
+			"draws": BOSS_OTHER_DROPS, "max_drops": BOSS_OTHER_DROPS,
+			"merge_same_item": false,
+		})
+	elif item_chance > 0.0:
 		entries.append({
 			"kind": "pool", "pool_id": pool_id, "draws": 1, "chance": item_chance,
+		})
+	# ── 强化怪：25% 追加 1 把枪（业主 2026-10-18）────────────────────────────
+	# 只认 `_strong` 变种。精英（ELITE 房）的 `is_elite` 是**身份指派**，不是强化怪，
+	# 仍走 elite_floor_* 的「100% 抽 1 件」，不叠加这条通道。
+	if MonsterVariants.is_variant(monster_id):
+		var strong_pool := (
+			"strong_weapon_floor_1" if safe_floor <= 2 else "strong_weapon_floor_2"
+		)
+		entries.append({
+			"kind": "pool", "pool_id": strong_pool, "draws": 1,
+			"chance": STRONG_VARIANT_WEAPON_CHANCE, "max_drops": 1,
 		})
 	if ammo_chance > 0.0:
 		entries.append({

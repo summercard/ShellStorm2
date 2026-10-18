@@ -151,7 +151,7 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		# 已登记的房间级可选字段：enemy_spawn_plan（刷怪计划）、boss_content_id（首领指派）、
 		# boss_reinforcement_plan（Boss 激活后并发增援）、reward_plan（统一掉落计划，
 		# 04 §22.7 / 05 §11 reward_slots）、spawn_placements（触发盒放置，触发器刷怪设计 §3.2）、
-		# encounter（波次调用 §3.3）。
+		# encounter（波次调用 §3.3）、secret_site（传送支线位点，支线秘密房间设计 §3.2）。
 		var spawn_plan: Dictionary = {}
 		var raw_spawn_plan: Variant = raw.get("enemy_spawn_plan", {})
 		if raw_spawn_plan is Dictionary:
@@ -199,6 +199,18 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		var raw_camera_profile: Variant = raw.get("camera_profile", {})
 		if raw_camera_profile is Dictionary:
 			camera_profile = (raw_camera_profile as Dictionary).duplicate(true)
+		# 传送支线位点（支线秘密房间设计 §3.2）：本房哪面墙上有一个可打破的隐藏门。
+		# 只声明 `wall`（north/south/east/west）与配对角色，**不存世界坐标** ——
+		# 坐标由房间外框 + wall 在运行时推导，改版图时位点自动跟随，不会两处不同步。
+		# 本层只做类型守卫 + 深拷贝；位点合法性（该墙无端口、两侧留白）由
+		# `verify_secret_branch_flow` 的静态断言负责。
+		# 缺省空字典 ⇒ 本房无位点，未声明关卡一个字段都不多，行为逐字不变。
+		var secret_site: Dictionary = {}
+		var raw_secret_site: Variant = raw.get("secret_site", {})
+		if raw_secret_site is Dictionary:
+			secret_site = (raw_secret_site as Dictionary).duplicate(true)
+		elif raw.has("secret_site"):
+			errors.append("secret_site_not_object:%s" % str(raw.get("key", "")))
 		# 房间连接端口是房间美术局部空间里的稳定接口。位置与朝外法线随整房
 		# rotation_deg 一起旋转；target 只声明本端口接哪一个房间 key。
 		# 未连接候选端口保留 target=""，装配时必须由实墙封回，不能留下镂空。
@@ -276,6 +288,7 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"authored_layout_instances": authored_instances,
 			"camera_profile": camera_profile,
 			"connection_ports": connection_ports,
+			"secret_site": secret_site,
 		}
 		if str(room["key"]).is_empty():
 			errors.append("room_key_empty")

@@ -291,6 +291,10 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		"connection_ports": (
 			src.get("connection_ports", []) as Array
 		).duplicate(true),
+		# 传送支线位点（支线秘密房间设计 §3.2）。与上面同样「设计源钉死优先」：
+		# 本层只透传，不推导坐标、不校验墙面。空字典 = 本房无位点。
+		# **不进 `_data_driven_layout_id`**（指纹只含几何与端口），故加它不会让既有存档失配。
+		"secret_site": (src.get("secret_site", {}) as Dictionary).duplicate(true),
 	}
 
 
@@ -922,6 +926,10 @@ static func _constrained_slot(
 		# 与 `content_type` 那批字段是同一类坑（写了没人搬，静默失效）。
 		"floor_offset_m": float(raw.get("floor_offset_m", 0.0)),
 		"anchor_policy": str(raw.get("anchor_policy", "grid")),
+		# 传送支线位点（支线秘密房间设计 §3.2）：与上面那批同一个坑 ——
+		# 槽位不带，`_constrained_floor_from` 产出的房表就没有它，
+		# `room_from_source` 再白名单也取不到，整条链静默失效。
+		"secret_site": (raw.get("secret_site", {}) as Dictionary).duplicate(true),
 	}
 
 
@@ -1260,6 +1268,60 @@ static func _rotated_connection_ports(ports: Array, rotation_deg: float) -> Arra
 	return result
 
 
+## 墙面法线（本地系，x 向东、z 向南）：与 `_side_from_outward` 同一口径。
+static func _wall_normal_2d(wall: String) -> Vector2:
+	match wall:
+		"north": return Vector2(0.0, -1.0)
+		"south": return Vector2(0.0, 1.0)
+		"east": return Vector2(1.0, 0.0)
+		"west": return Vector2(-1.0, 0.0)
+	return Vector2.ZERO
+
+
+## 沿墙方向：南北墙沿 x，东西墙沿 z。`lane` 与端口 `position_m` 的沿墙分量同符号。
+static func _wall_tangent_2d(wall: String) -> Vector2:
+	match wall:
+		"north", "south": return Vector2(1.0, 0.0)
+		"east", "west": return Vector2(0.0, 1.0)
+	return Vector2.ZERO
+
+
+## 传送支线位点随房刚体旋转（支线秘密房间设计 §3.2）。
+##
+## 位点用 `wall` + `lane` 表达（房间自己的墙 + 沿墙偏移），与 `connection_ports`
+## 同一局部系。整层转 180° 时端口会翻，位点不翻就停在旧方位。
+##
+## ⚠️ 这里曾经写着「墙面跟着房间一起转，所以不需要旋转」—— 错在把 `wall` 当成了
+## **世界轴**方位。远征01 整层转 180° 后，S3 声明在「南墙」，实机落到房间北墙；
+## 而那面墙正是 `room_06 → room_07` 的主路门洞，2.2m 木板把主路钉死了
+## （实测板体与 Door_North 重合 0.00m）。位点既是房间自己的墙，就必须跟着转。
+##
+## 旋转口径与 `_rotate_port_vector` 完全一致：法线转完定新墙，沿墙切向转完与
+## 新切向同向则 `lane` 保号、反向则取负。90°/270° 一并成立（当前只有 180° 在用）。
+static func _rotated_secret_site(site: Dictionary, rotation_deg: float) -> Dictionary:
+	if site.is_empty():
+		return site
+	var rotated := site.duplicate(true)
+	var angle := fposmod(float(rotation_deg), 360.0)
+	if is_zero_approx(angle):
+		return rotated
+	var wall := str(site.get("wall", ""))
+	var normal := _wall_normal_2d(wall)
+	if normal == Vector2.ZERO:
+		return rotated
+	var new_wall := _side_from_outward(_rotate_port_vector(normal, angle))
+	if new_wall.is_empty():
+		return rotated
+	var new_tangent := _wall_tangent_2d(new_wall)
+	var rotated_tangent := _rotate_port_vector(_wall_tangent_2d(wall), angle)
+	var lane_sign := signf(rotated_tangent.dot(new_tangent))
+	rotated["wall"] = new_wall
+	if site.has("lane"):
+		var lane := float(site.get("lane", 0.0))
+		rotated["lane"] = lane * (lane_sign if not is_zero_approx(lane_sign) else 1.0)
+	return rotated
+
+
 static func _rotated_spawn_placements(placements: Array, rotation_deg: float) -> Array:
 	var result: Array = []
 	for value in placements:
@@ -1307,6 +1369,11 @@ static func _apply_final_global_rotation(rooms: Array, rotation_deg: float) -> v
 			)
 		room["connection_ports"] = _rotated_connection_ports(
 			room.get("connection_ports", []) as Array, rotation_deg
+		)
+		# 传送支线位点必须与端口同一次刚体旋转。`wall` / `lane` 是**房间自己的墙**，
+		# 与 `connection_ports.position_m` 同一局部系 —— 漏转就会停在旧方位。
+		room["secret_site"] = _rotated_secret_site(
+			room.get("secret_site", {}) as Dictionary, rotation_deg
 		)
 		room["ports"] = _rotated_lane_ports(room.get("ports", []) as Array, rotation_deg)
 		room["derived_ports"] = _rotated_lane_ports(
@@ -1961,6 +2028,15 @@ static func _constrained_floor_from(
 			# 随机拼接会从开口池里挑口，房表写死的 target 配对不是最终合同。
 			"connection_ports": _rotated_connection_ports(
 				placed_room.get("connection_ports", slot.get("connection_ports", [])) as Array,
+				float(placed_room.get("rotation_deg", 0.0))
+			),
+			# 传送支线位点：与上列字段同口径，本层只搬运不解释。
+			# `wall` / `lane` 表达的是**房间自己的墙**（与端口同一局部系），
+			# 所以要和端口一起经过**两道**刚体旋转：先落位姿态（`placed_room.rotation_deg`，
+			# 桥房族转置会把 40×30 摆成 30×40），再整层旋转（`_apply_final_global_rotation`）。
+			# 少了任何一道，木板就会停在旧方位 —— S3 曾因此压在 room_06→room_07 的主路门洞上。
+			"secret_site": _rotated_secret_site(
+				slot.get("secret_site", {}) as Dictionary,
 				float(placed_room.get("rotation_deg", 0.0))
 			),
 		})

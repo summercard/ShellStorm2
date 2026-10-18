@@ -1,0 +1,9 @@
+secret_door/v001/
+├─ secret_door_v001.blend
+├─ component_packages_v001/facilities/secret_door_leaf/
+│  └─ asset_manifest.json
+├─ component_packages_v001/facilities/secret_door_boards/
+│  └─ asset_manifest.json
+├─ component_plan.json
+├─ component_catalog.json
+└─ qa/

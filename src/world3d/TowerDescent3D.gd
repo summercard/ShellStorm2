@@ -2430,6 +2430,11 @@ func _build_expedition_records() -> void:
 	# 只在远征置真，塔楼 98F 入口安全房保持 12 段直墙口径不变。
 	entry_record["safe_room_corner_l"] = true
 	_validate_floor_layout_plans()
+	# 传送支线（支线秘密房间设计）：远征不走 Dungeon3D 的 `_generate_layout`，
+	# `_finish_layout_connections` 那条链在这里不执行 —— 因此必须在此显式触发。
+	# 位点坐标只依赖房间记录（position + custom_dimensions），不需要房间实例已就绪，
+	# 所以放在 bootstrap 末尾即可；`_create_secret_branches` 自身幂等。
+	_create_secret_branches()
 
 
 ## 未带朝向字段的进行中旧战局继续使用旧版，绝不迁移其世界坐标。
@@ -2643,6 +2648,11 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		runtime_ports.append(port)
 	record["connection_ports"] = runtime_ports
 	record["door_endpoint_owners"] = {}
+	# 传送支线位点（支线秘密房间设计 §3.2）：只在房表声明了才落字段。
+	# 未声明的房间一个字段都不多 —— 塔楼与远征 02 行为逐字不变。
+	# 这里**只透传**，不推导世界坐标、不建门；坐标与建门都归 Dungeon3D。
+	if spec.has("secret_site") and not (spec.get("secret_site", {}) as Dictionary).is_empty():
+		record["secret_site"] = (spec.get("secret_site", {}) as Dictionary).duplicate(true)
 	var authored_camera_profile := (
 		spec.get("camera_profile", {}) as Dictionary
 	).duplicate(true)
@@ -3118,7 +3128,19 @@ func _build_topology() -> void:
 			(child["door_targets"] as Dictionary)[child_direction] = parent_id
 
 
-func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: int) -> void:
+func _build_corridor(
+	from_room: DungeonRoom3D,
+	to_room: DungeonRoom3D,
+	index: int,
+	persistent: bool = false,
+	lateral_offset_m: float = 0.0
+) -> void:
+	# 子图走廊走**基类**通用实现：塔楼这份重写绑了核心筒、边类型与流送开关，
+	# 用在主图外的子图上既没有核心筒也没有开门边，会建出一条永远不可见、
+	# 碰撞被关掉的走廊（玩家踩空掉出关卡）。
+	if persistent:
+		super._build_corridor(from_room, to_room, index, true, lateral_offset_m)
+		return
 	var edge := _edge_key(from_room.room_id, to_room.room_id)
 	if str(_edge_kind_by_key.get(edge, "horizontal")) != "vertical":
 		_build_tower_horizontal_corridor(from_room, to_room, index, edge)
@@ -5414,6 +5436,10 @@ func _prepare_floor_bundle(floor_index: int) -> Dictionary:
 			continue
 		var parent_key := str(spec.get("parent_key", ""))
 		_append_plan_room_record(plan, spec, str(ids_by_key.get(parent_key, "")))
+	# 传送支线（支线秘密房间设计）：本函数是远征房间记录**真正补齐**的地方，
+	# 位点声明随这批记录一起到位。`_create_secret_branches` 幂等 ——
+	# 入口房那一轮调用会因 records 里还没有带位点的房间而提前返回。
+	_create_secret_branches()
 	for value in plan.get("rooms", []):
 		var spec := value as Dictionary
 		var parent_key := str(spec.get("parent_key", ""))

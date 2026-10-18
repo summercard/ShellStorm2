@@ -1,0 +1,63 @@
+{
+  "library_id": "ENV-EXPEDITION-SECRET-DOOR-LIBRARY",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\secret_door\\v001\\secret_door_v001.blend",
+  "palette_uv_layer": "PaletteUV",
+  "shared_palette": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+  "blender_forward_axis": "+Y",
+  "blender_up_axis": "+Z",
+  "origin_contract": "wall_face_bottom_center",
+  "assembly_frame": {
+    "shared_between": [
+      "secret_door_leaf",
+      "secret_door_boards"
+    ],
+    "y_zero": "房间侧墙面",
+    "boards_range_y": [
+      0.0,
+      0.145
+    ],
+    "frame_range_y": [
+      -0.12,
+      0.0
+    ],
+    "cavity_range_y": [
+      -1.82,
+      -0.12
+    ],
+    "note": "两件共用同一装配系，Godot 里都放在同一原点即可正确叠层，无需位移。"
+  },
+  "runtime_root": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\components\\common_components",
+  "asset_id": "ENV-EXPEDITION-SECRET-DOOR-LEAF",
+  "slug": "secret_door_leaf",
+  "name_zh": "隐藏门叶：门框 2.48×2.64m + 门腔 1.70m + 单扇半掩门（45°）+ 腔内自发光面",
+  "component_family": "secret_door",
+  "collection": "隐藏门叶_资产包",
+  "root_object": "secret_door_leaf_主体",
+  "assembly_shift_m": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "object_count": 2,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_count": 3,
+  "bounds_size_m": [
+    2.48,
+    2.64,
+    1.82
+  ],
+  "opening_clear_m": [
+    2.2,
+    2.5
+  ],
+  "cavity_depth_m": 1.7,
+  "leaf_open_deg": 45.0,
+  "collision_owner": "godot_prefab",
+  "passage_owner": "godot_teleport_gate",
+  "asset_ledger": "pending registration",
+  "notes": "门腔深度 0.85m 用于容纳 42° 半掩门扇；墙体外表面在 Y=0，门腔全部位于 Y<0 一侧。"
+}

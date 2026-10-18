@@ -1,0 +1,52 @@
+{
+  "schema": "shellstorm2.battle.component_catalog",
+  "schema_version": 1,
+  "version": "secret_door_v001",
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "package_root": "component_packages_v001/facilities",
+  "package_count": 2,
+  "collections": [
+    "隐藏门叶_资产包",
+    "木板封堵_资产包"
+  ],
+  "entries": [
+    {
+      "slug": "secret_door_leaf",
+      "asset_id": "ENV-EXPEDITION-SECRET-DOOR-LEAF",
+      "name_zh": "隐藏门叶：门框 2.48×2.64m + 门腔 1.70m + 单扇半掩门（45°）+ 腔内自发光面",
+      "collection": "隐藏门叶_资产包",
+      "category": "facilities",
+      "manifest": "component_packages_v001/facilities/secret_door_leaf/asset_manifest.json",
+      "glb": "assets/art/environments/tower_zones/expedition/components/common_components/secret_door_leaf/secret_door_leaf_visual_top3d.glb",
+      "bounds_size_m": [
+        2.48,
+        2.64,
+        1.82
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "secret_door_boards",
+      "asset_id": "ENV-EXPEDITION-SECRET-DOOR-BOARDS",
+      "name_zh": "隐藏门木板封堵：5 条横板 + 2 条交叉斜撑 + 19 枚铁钉，可整体打掉",
+      "collection": "木板封堵_资产包",
+      "category": "facilities",
+      "manifest": "component_packages_v001/facilities/secret_door_boards/asset_manifest.json",
+      "glb": "assets/art/environments/tower_zones/expedition/components/common_components/secret_door_boards/secret_door_boards_visual_top3d.glb",
+      "bounds_size_m": [
+        2.38,
+        2.512,
+        0.142
+      ],
+      "material_roles": [
+        "02_细腻哑光_青绿大面",
+        "01_精工金属_紫色骨架"
+      ]
+    }
+  ]
+}

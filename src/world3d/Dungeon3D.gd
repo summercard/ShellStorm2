@@ -35,6 +35,10 @@ const ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
 const EXTRACTION_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_extraction_beacon_root_top3d.tscn")
 const KEY_SCRIPT := preload("res://src/world3d/RoomKeyPickup3D.gd")
+## 传送支线管理器（支线秘密房间设计）。只在房表声明了 `secret_site` 的关卡上实例化。
+const SECRET_BRANCH_SCRIPT := preload("res://src/world3d/SecretBranch3D.gd")
+## 子图房型表走 L3 加载器（与生成器/校验器同一份读取口径，不另写文件解析）。
+const LEVEL_PLAN_LOADER := preload("res://src/map/LevelPlanLoader.gd")
 const GROUND_LOOT_SCRIPT := preload("res://src/world3d/GroundLootPickup3D.gd")
 const WORKBENCH_SCENE: PackedScene = preload("res://scenes/WorkbenchPanel.tscn")
 const WEAPON_PRESENTATION_SCENE: PackedScene = preload("res://scenes/WeaponAssemblyTreePanel.tscn")
@@ -276,6 +280,17 @@ var _run_generation := 0
 ## 该死亡已被终局结算覆盖，不得再弹框、不得再结算。
 var _death_recorded_generation := -1
 var _extraction: ExtractionBeacon3D = null
+## 传送支线管理器（支线秘密房间设计）。未声明 `secret_site` 的关卡恒为 null。
+var _secret_branch: Node3D = null
+## 子图房间登记表：room_id -> DungeonRoom3D。**只收已经在子图里刷过怪的房**。
+## 用途有三，都不碰主图那套账：
+##   · `_on_enemy_killed` 取 `loot_room`（掉落要按房间做散布，null 会静默掉 0 件）；
+##   · `_resolve_room_enemy_departure` 判「这是子图的房」⇒ 走子图清房分支；
+##   · 门交互路由：子图房不在 `_room_by_id` 里。
+var _secret_branch_room_ids: Dictionary = {}
+## 最近一次进入的**主图**房间。子图不参与存档，在子图里存档时回落到它
+## （见 `_runtime_current_room_id_for_save`）。
+var _last_main_room_id := ""
 var _standard_extraction: ExtractionBeacon3D = null
 var _emergency_extraction: ExtractionBeacon3D = null
 var _conditional_extractions: Dictionary = {}
@@ -760,6 +775,12 @@ func _runtime_current_floor_index() -> int:
 
 
 func _runtime_current_room_id_for_save() -> String:
+	# 在子图里存档时**不能**把 `secret_*` 写进去：那个 id 不在 `_room_by_id` 里，
+	# 续局按它取房只会得到 null，玩家会被丢进一个没有房间的世界。
+	# 回落到最近一次主图房间 —— 子图本来就不参与存档（它不在 `_records`、
+	# 不写全层地图、刷出来的怪也不进 segment 状态）。
+	if _secret_branch_room_ids.has(_current_room_id):
+		return _last_main_room_id
 	return _current_room_id
 
 
@@ -1198,7 +1219,9 @@ func get_interaction_candidate(interacting_player: Player3D) -> Dictionary:
 		return {}
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	if room == null:
-		return {}
+		# 子图房间不在 `_room_by_id`（设计 §1：主图与子图刻意隔离）。不补这条，
+		# 子图里的房间门永远给不出候选 —— 玩家按 E 没反应，卡在第二间门外。
+		return _secret_branch_door_candidate(interacting_player)
 	var door_info := room.get_nearest_door(player.global_position)
 	if door_info.is_empty() or bool(door_info.get("is_open", false)):
 		return {}
@@ -1258,8 +1281,41 @@ func perform_interaction(
 ) -> bool:
 	if interacting_player == null or interacting_player != player or _completed:
 		return false
+	# 子图房间门：不消耗钥匙、不触发命运卡、不要求清房（见 `SecretBranch3D` 的
+	# `door_policies`）。这里只做「把那扇门抬起来」。
+	if str(candidate.get("mode", "")) == "secret_branch_door":
+		return _open_secret_branch_door(candidate.get("door"))
 	var target_room_id := str(candidate.get("target_room_id", ""))
 	return not target_room_id.is_empty() and _try_open_room_door(target_room_id)
+
+
+## 子图房间最近的一扇关着的门 → 交互候选。
+## 门位与距离判定都在 `SecretBranch3D.nearest_closed_door`（它手里才有子图房间表）。
+func _secret_branch_door_candidate(interacting_player: Player3D) -> Dictionary:
+	if _secret_branch == null or not is_instance_valid(_secret_branch):
+		return {}
+	var info := _secret_branch.call(
+		"nearest_closed_door", interacting_player.global_position
+	) as Dictionary
+	if info.is_empty():
+		return {}
+	var door := info.get("door") as RoomDoor3D
+	if door == null or not is_instance_valid(door):
+		return {}
+	return _make_door_interaction_candidate(
+		door, "secret_branch_door", str(info.get("target_room_id", "")), 80
+	)
+
+
+func _open_secret_branch_door(door_value: Variant) -> bool:
+	var door := door_value as RoomDoor3D
+	if door == null or not is_instance_valid(door) or door.is_open:
+		return false
+	door.set_open(true)
+	status_label.text = "暗室通道已开启"
+	if MonsterAIManager != null and player != null:
+		MonsterAIManager.broadcast_sound_stimulus(player.global_position, 6.5, "door_open", player)
+	return true
 
 
 func _make_door_interaction_candidate(
@@ -1519,8 +1575,18 @@ func set_monster_rules(rules: Dictionary) -> void:
 
 ## 远征命运经济只从当前关卡设计源的真实刷怪盒/遭遇编成建模。
 ## 这里不触碰商人、背包或训练 UI；纯服务只接收数据并冻结报价。
+##
+## **关卡无关**：本函数不判断 `level_id` 是否等于某个具体关卡。
+## 任何远征关卡只要 `plan` 非空、能从中读出真实编成，就会被建模并置 `_configured = true`；
+## 读不出（空 plan / 缺编成）时 `configure_from_runtime` 会保持未配置，
+## 消费方统一经 `uses_dynamic_fate_economy()` 回退到历史固定价格表。
+##
+## ⚠️ 历史上这里写的是 `level_id != "expedition_01" → return`，那会造成自锁：
+## 新增关卡永远不配置经济 ⇒ `is_configured()` 恒假 ⇒ 永远拿不到逐门定价。
+## 新增关卡时**不要**在这里补 `== "expedition_0N"`，见
+## [关卡接入规范](../../docs/v0.1/关卡接入规范.md) §3。
 func configure_expedition_fate_economy(plan: Dictionary) -> void:
-	if plan.is_empty() or str(plan.get("level_id", "")) != "expedition_01":
+	if plan.is_empty():
 		return
 	var box_catalog: Dictionary = {}
 	for box_id_value in SPAWN_BOX_CATALOG_SCRIPT.all_ids():
@@ -1536,6 +1602,20 @@ func configure_expedition_fate_economy(plan: Dictionary) -> void:
 		maxi(1, int(plan.get("content_room_count", 10))),
 		float((_monster_rules.get("strong_variant", {}) as Dictionary).get("chance", 0.0))
 	)
+
+
+## **唯一判据**：本局是否使用「关卡级动态命运经济」（逐门定价 / 稀有度解锁 / 报价区间）。
+##
+## 只看能力，不看关卡 ID：
+## - 为真 ⇒ 报价取 `_fate_economy` 的冻结快照，同门同价、可恢复；
+## - 为假 ⇒ 回退历史固定价格表 `FATE_PRICE_BY_RARITY`（塔楼与非远征路径）。
+##
+## ❗ 这是全文件**唯一**允许判断"要不要用动态经济"的地方。
+## 新增关卡时不要在别处再写 `get_runtime_map_id() == "expedition_0N"`：
+## 那个写法会让新关卡在配置环节被挡掉、在消费环节却以为已配置，
+## 形成"永远走不到"的死分支。见 [关卡接入规范](../../docs/v0.1/关卡接入规范.md) §3。
+func uses_dynamic_fate_economy() -> bool:
+	return _fate_economy.is_configured()
 
 
 ## 取关卡级 AI 参数（`monster_rules.ai.<key>`）。键不存在 ⇒ 回退传入的全局常量，
@@ -2604,6 +2684,9 @@ func _prepare_layout_rooms() -> void:
 			"connection_ports": record.get("connection_ports", []),
 			"camera_profile": record.get("camera_profile", {}),
 			"door_endpoint_owners": record.get("door_endpoint_owners", {}),
+			# 传送支线位点（支线秘密房间设计 §3.2）：与其余房间级字段同样逐级透传。
+			# 未声明位点的房间得到空字典 ⇒ 一个节点都不建，行为逐字不变。
+			"secret_site": record.get("secret_site", {}),
 		})
 		room.position = record["position"]
 		$GeneratedRooms.add_child(room)
@@ -2625,6 +2708,297 @@ func _finish_layout_connections() -> void:
 		if parent != null and child != null:
 			_build_corridor(parent, child, int(record["index"]))
 	_create_extraction()
+	_create_secret_branches()
+
+
+## 传送支线（支线秘密房间设计 §3）：房表声明了 `secret_site` 才装配。
+##
+## 刻意与主图隔离：
+##   · 子图房间**不进** `_records`、不进全层地图、不参与流送与拓扑校验；
+##   · 位点坐标由房间外框 + wall 现算，不读设计源世界坐标；
+##   · 未声明位点的关卡（塔楼、远征 02）一个节点都不建，行为逐字不变。
+func _create_secret_branches() -> void:
+	# 幂等：远征在 bootstrap 里显式调用一次，`_finish_layout_connections` 那条链
+	# 也可能在别的关卡路径上再调一次。重复装配会造出两套板体。
+	if _secret_branch != null and is_instance_valid(_secret_branch):
+		return
+	var declared := false
+	for record in _records:
+		if not (record.get("secret_site", {}) as Dictionary).is_empty():
+			declared = true
+			break
+	if not declared:
+		return
+	var branch_node := SECRET_BRANCH_SCRIPT.new()
+	branch_node.name = "SecretBranches"
+	add_child(branch_node)
+	# 主图房间坐标已是世界坐标，原点取零即可 —— 子图按 +1000m 偏移，不撞主图。
+	#
+	# 子图房型、走廊、美术都**取自现成实现**，不给支线单开一套：
+	#   · `room_templates` = L3 模板表（设计 §3.5 的房型池）；
+	#   · `corridor_builder` = 主路同一条 `_build_corridor`；
+	#   · `room_theme` = 本关主题，子图房与主路房同材质；
+	#   · `beacon_factory` = 主撤离房同一个信标工厂；
+	#   · `level_id` = 拼共享房壳路径（子图房借主路房间的正式 tscn，不是灰盒）。
+	# 缺任一项时支线**降级但不崩**：模板缺失退回内值尺寸，走廊缺失只告警，
+	# 房间壳缺失退回程序化（A18 会把「灰盒」判红）。
+	var branch_level_id := _resolve_branch_level_id()
+	branch_node.configure(
+		Vector3.ZERO, run_seed, _records, Callable(self, "_count_cleared_content_rooms"),
+		Callable(self, "_room_cleared"), Callable(self, "_count_content_rooms"),
+		_load_secret_branch_room_templates(branch_level_id),
+		Callable(self, "_build_secret_branch_corridor"), visual_theme,
+		Callable(self, "_create_secret_branch_extraction_beacon"), branch_level_id,
+		Callable(self, "_on_secret_branch_room_entered"),
+		Callable(self, "_set_secret_branch_status")
+	)
+	branch_node.build()
+	_secret_branch = branch_node
+
+
+## 子图撤离房的信标：**复用** `_create_extraction_beacon`，不新建撤离系统。
+##
+## `STANDARD` + 非锁定（设计 §6.1）。结算走现成的 `extraction_completed →
+## _finish_run(true)`，与主撤离房完全一致（设计 §6.3）。
+##
+## 打 `secret_branch` 标记只有一个用处：`_on_extraction_started` 据此**跳过防线遭遇** ——
+## 子图房间不进 `_room_by_id`，那份遭遇会按 `_current_room_id` 落到玩家已经离开的主图房间上，
+## 表现成「人在子图读条，主图房里刷怪」。
+func _create_secret_branch_extraction_beacon(room: DungeonRoom3D) -> void:
+	var beacon := _create_extraction_beacon(room, "STANDARD", 30.0, false, Vector3.ZERO)
+	if beacon == null:
+		push_warning("[Dungeon3D] 子图撤离信标创建失败：%s" % str(room.room_id if room else "<null>"))
+		return
+	beacon.set_meta("secret_branch", true)
+
+
+## 子图走廊：与主路**同一条实现**，但常驻启用（子图房间不进流送/开门边集合），
+## 且按房间声明的 lane 平移中心线。
+func _build_secret_branch_corridor(
+	from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: int, lateral_offset_m: float
+) -> void:
+	_build_corridor(from_room, to_room, index, true, lateral_offset_m)
+
+
+# ============================================================================
+# 子图战斗（业主 2026-10-18：每间固定 5 只强化怪 + 2 只普通怪，不加掉落加成）
+# ----------------------------------------------------------------------------
+# 子图房间**不在** `_records` / `_room_by_id` / 流送图里（设计 §1：物理与拓扑都
+# 刻意隔离）。所以这里既不调 `_on_room_entered`，也不调 `_mark_room_cleared`，
+# 只借用两件**与本图无关**的东西：
+#   · `_spawn_enemy_batch`：实例化、接信号、挂 `$ActiveEnemies`、写存活账；
+#   · `_enemy_nodes_by_room` / `_alive_by_room`：击杀与掉落本来就在这张账上。
+# ============================================================================
+
+
+## 玩家踏进子图房间：切「当前房间」，首次进入时按编成刷怪。
+##
+## 为什么必须切 `_current_room_id`（漏了这条，怪会站着不动）：
+##   · `MonsterAIManager._target_is_legal` 只允许「本房敌人」追玩家；
+##   · `_spawn_enemy_batch` 用 `room.room_id == _current_room_id` 决定敌人是否激活；
+##   · `_update_wave_hud` 也按它决定这一屏该显示谁的波次。
+##
+## 为什么不走 `_on_room_entered`：那条链要重算流送、换小地图、写存档检查点，
+## 全部以「主图房间图」为前提。子图不在那张图里，塞进去会改坏主图的流送状态。
+func _on_secret_branch_room_entered(room: DungeonRoom3D, with_encounter: bool) -> void:
+	if room == null or not is_instance_valid(room):
+		return
+	_secret_branch_room_ids[room.room_id] = room
+	_current_room_id = room.room_id
+	room_label.text = "%s · 暗室" % room.room_id
+	_update_wave_hud(room.room_id)
+	if not with_encounter or _spawned_rooms.has(room.room_id):
+		return
+	_spawned_rooms[room.room_id] = true
+	_spawn_secret_branch_room_enemies(room)
+
+
+## 子图一间房的固定编成：**5 只强化怪 + 2 只普通怪**。
+##
+## 编成由 `MonsterInjector.build_secret_branch_encounter` 出（数量与档位的唯一真源），
+## 实例化/掉落/击杀账全部复用 `_spawn_enemy_batch` —— 不给子图另开一套刷怪链，
+## 否则「召唤、延迟出怪、掉落、清房判定」会出现两份实现并且迟早分叉。
+##
+## 与主路的四处差别（都是有意的）：
+##   · 不消费命运卡给的「下一房加成」（不调 `_note_room_enemy_modifiers`）；
+##   · 不吃「已清房数」难度曲线：7 只是固定承诺，不随进度漂移；
+##   · 不产房间钥匙（子图的门不消耗钥匙，见 `SecretBranch3D` 的 `door_policies`）；
+##   · 不加掉落加成（业主 2026-10-18：收益就走常规击杀掉落）。
+func _spawn_secret_branch_room_enemies(room: DungeonRoom3D) -> int:
+	if _monster_injector == null:
+		return 0
+	var floor_number := maxi(1, visual_theme.difficulty_rank)
+	var floor_level := RoomData.FloorLevel.MEDIUM
+	var configs := _monster_injector.build_secret_branch_encounter(
+		floor_number, floor_level, run_seed ^ room.room_id.hash()
+	)
+	if configs.is_empty():
+		push_error("[Dungeon3D] 子图房间 %s 编成为空，本间保持空置" % room.room_id)
+		room.cleared = true
+		return 0
+	# 一间只有一波：波次账写 1/1，HUD 显示「波次 1/1」而不是「波次 —」。
+	_room_wave_queues[room.room_id] = []
+	_room_wave_numbers[room.room_id] = 1
+	_room_wave_totals[room.room_id] = 1
+	_enemy_nodes_by_room[room.room_id] = []
+	var spawned := _spawn_enemy_batch(room, configs, false)
+	if spawned <= 0:
+		push_error("[Dungeon3D] 子图房间 %s 刷怪失败，本间放行" % room.room_id)
+		_room_wave_queues[room.room_id] = []
+		_alive_by_room[room.room_id] = 0
+		# 刷不出来也不能让玩家对着空房等：直接标清。
+		room.cleared = true
+		_update_wave_hud(room.room_id, "刷怪失败 · 已放行")
+		return 0
+	_update_wave_hud(room.room_id, "暗室清剿")
+	status_label.text = "暗室警戒 · %d 只强化怪 + %d 只普通怪" % [
+		MonsterInjector.SECRET_BRANCH_STRONG_COUNT,
+		MonsterInjector.SECRET_BRANCH_NORMAL_COUNT,
+	]
+	return spawned
+
+
+## 子图房间肃清（7 只全死）。
+##
+## **不走 `_mark_room_cleared`**：那条链会发房间钥匙、走奖励协调器结算、推进命运卡、
+## 刷新撤离信标锁 —— 全是主图语义，用在子图上会凭空多出钥匙与结算。
+func _on_secret_branch_room_cleared(room_id: String) -> void:
+	var room := _secret_branch_room_ids.get(room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(room):
+		return
+	room.cleared = true
+	if AudioManager != null:
+		AudioManager.play_sfx("wave_clear", -3.0)
+	var total := (
+		MonsterInjector.SECRET_BRANCH_STRONG_COUNT + MonsterInjector.SECRET_BRANCH_NORMAL_COUNT
+	)
+	status_label.text = "暗室肃清 · 本间 %d 个敌对信号已清除" % total
+	_update_wave_hud(room_id, "房间肃清")
+
+
+## 子图状态栏文案（`SecretBranch3D` 打开房间门时上报）。缺省不写。
+func _set_secret_branch_status(text: String) -> void:
+	if not text.is_empty():
+		status_label.text = text
+
+
+## 供验收与诊断：子图逐间的编成/存活/清房状态。
+## 存活数按 `_enemy_nodes_by_room` 里**还没死**的实体数算，与击杀账同一口径。
+func secret_branch_encounter_snapshot() -> Array:
+	var rows: Array = []
+	for room_id in _secret_branch_room_ids:
+		var room := _secret_branch_room_ids[room_id] as DungeonRoom3D
+		var strong := 0
+		var plain := 0
+		var kinds: Array = []
+		for value in _enemy_nodes_by_room.get(room_id, []):
+			if not is_instance_valid(value) or not (value is Enemy3D):
+				continue
+			var enemy := value as Enemy3D
+			if enemy.ai_state == "dead":
+				continue
+			var kind := str(enemy.enemy_kind)
+			kinds.append(kind)
+			if MonsterVariants.is_variant(kind):
+				strong += 1
+			else:
+				plain += 1
+		rows.append({
+			"room_id": room_id,
+			"strong_alive": strong,
+			"plain_alive": plain,
+			"kinds": kinds,
+			"cleared": room.cleared if room != null and is_instance_valid(room) else false,
+			"current": room_id == _current_room_id,
+		})
+	return rows
+
+
+## 子图房型表：按当前关卡 id 读 L3 模板。取不到返回空字典（支线用内值尺寸兜底）。
+##
+## 关卡 id 从祖先节点取 —— `Dungeon3D` 自己不知道关卡身份，但远征/塔楼的
+## 上层节点知道（`get_expedition_level_id` / `get_runtime_map_id`）。
+func _load_secret_branch_room_templates(level_id: String = "") -> Dictionary:
+	var resolved := level_id if not level_id.is_empty() else _resolve_branch_level_id()
+	if resolved.is_empty():
+		return {}
+	return LEVEL_PLAN_LOADER.load_room_templates(resolved)
+
+
+## 本关 id（支线用）。逐级向上问，先问远征关卡 id，再问运行时地图 id。
+func _resolve_branch_level_id() -> String:
+	var node: Node = self
+	while node != null:
+		if node.has_method("get_expedition_level_id"):
+			var expedition_id := str(node.call("get_expedition_level_id"))
+			if not expedition_id.is_empty():
+				return expedition_id
+		if node.has_method("get_runtime_map_id"):
+			var map_id := str(node.call("get_runtime_map_id"))
+			if not map_id.is_empty():
+				return map_id
+		node = node.get_parent()
+	return ""
+
+
+## 「已清内容房数」：板体血量与撤离门解锁条件都吃这个值（设计 §4.1 / §6.2）。
+##
+## 什么算「内容房」：玩家必须清掉才有进度的房间。
+## 排除项的口径在 2026-10-18 修正过一次 —— 原来的排除表只有
+## `START/EXTRACTION/ELEVATOR/FACILITY`，但**运行时的 room_type 是语义类型**
+## （`COMBAT`/`SCAVENGE`/`STORAGE`/`EVENT`/`BOSS`/`STAIR_LOBBY`/`EXTRACTION`），
+## 设计源里的 `COMMON_ROOM` 到这里已经不存在了。于是入口大厅（`STAIR_LOBBY`，
+## 初始即 `cleared == true`）被当成内容房，造成两处偏差：
+##   · 远征 01 内容房总数虚高到 12（实际 11）
+##   · 已清数开局就是 1 ⇒ 所有木板白送 20 血、撤离门白送 1 点进度
+## 加上 `STAIR_LOBBY` 与 `SAFE_ROOM` 之后远征 01：总数 11、开局 0、阈值 5。
+const NON_CONTENT_ROOM_TYPES := [
+	"START", "EXTRACTION", "ELEVATOR", "FACILITY", "STAIR_LOBBY", "SAFE_ROOM",
+]
+
+
+func _is_content_room(room: DungeonRoom3D) -> bool:
+	if room == null or not is_instance_valid(room):
+		return false
+	return not (str(room.room_type) in NON_CONTENT_ROOM_TYPES)
+
+
+func _count_cleared_content_rooms() -> int:
+	var count := 0
+	for room in _rooms:
+		if _is_content_room(room) and room.cleared:
+			count += 1
+	return count
+
+
+## 内容房总数：撤离门阈值 `ceil(总内容房数 × 0.4)` 的分母（设计 §6.2）。
+func _count_content_rooms() -> int:
+	var count := 0
+	for room in _rooms:
+		if _is_content_room(room):
+			count += 1
+	return count
+
+
+## 清房后刷新支线两道锁。只做「解锁」，不做「重新上锁」——
+## 已经打开的门不该因为后续状态变化再关上。
+func _refresh_secret_locks_after_clear() -> void:
+	if _secret_branch == null or not is_instance_valid(_secret_branch):
+		return
+	_secret_branch.call("refresh_entry_locks", Callable(self, "_room_cleared"))
+	_secret_branch.call("refresh_extraction_locks")
+
+
+## 按 room_id 查某间房是否已清。入口板是否可破吃这个（设计 §5.2）。
+## 查不到一律返回 false —— 位点对应不到房间时宁可锁着，也不要放玩家进一条
+## 状态未知的支线。
+func _room_cleared(room_id: String) -> bool:
+	if room_id.is_empty():
+		return false
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(room):
+		return false
+	return room.cleared
 
 
 func _ensure_structural_shells_resident() -> void:
@@ -2858,7 +3232,13 @@ func _room_size_for(type_id: String, index: int) -> String:
 	return ["small", "medium", "medium", "large"][index % 4]
 
 
-func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: int) -> void:
+func _build_corridor(
+	from_room: DungeonRoom3D,
+	to_room: DungeonRoom3D,
+	index: int,
+	persistent: bool = false,
+	lateral_offset_m: float = 0.0
+) -> void:
 	var from := from_room.global_position
 	var to := to_room.global_position
 	var delta := to - from
@@ -2871,6 +3251,13 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	var to_half := to_dimensions.x * 0.5 if horizontal else to_dimensions.y * 0.5
 	var start := from + direction * (from_half - 0.18)
 	var end := to - direction * (to_half - 0.18)
+	# 走廊中心线 = 两端门位（05.2 §3.5.2「两侧 lane 决定同一条走廊中心线」）。
+	# 门位不在墙面中心时，走廊必须整体沿切向平移同样的距离，否则门在左侧、
+	# 走道在中轴，玩家出门就撞墙。
+	if not is_zero_approx(lateral_offset_m):
+		var lateral_axis := Vector3(0, 0, 1) if horizontal else Vector3(1, 0, 0)
+		start += lateral_axis * lateral_offset_m
+		end += lateral_axis * lateral_offset_m
 	var center := (start + end) * 0.5
 	var length := maxf(0.6, start.distance_to(end))
 	var body := StaticBody3D.new()
@@ -2891,15 +3278,18 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	body.collision_mask = 0
 	$GeneratedCorridors.add_child(body)
 	var edge := _edge_key(from_room.room_id, to_room.room_id)
-	_corridor_by_edge[edge] = body
-	body.visible = false
-	body.process_mode = Node.PROCESS_MODE_DISABLED
+	if not persistent:
+		_corridor_by_edge[edge] = body
+	# `persistent` = 子图走廊：子图房间不进 `_open_edges` / `_spawned_rooms`，
+	# 走流送判定的走廊会永远 visible=false 且碰撞被禁用 —— 玩家一脚踩空掉出关卡。
+	body.visible = persistent
+	body.process_mode = Node.PROCESS_MODE_INHERIT if persistent else Node.PROCESS_MODE_DISABLED
 	var floor_size := Vector3(length, 0.26, 3.8) if horizontal else Vector3(3.8, 0.26, length)
 	var floor_material := StandardMaterial3D.new()
 	floor_material.albedo_color = visual_theme.floor_color.lightened(0.055)
 	floor_material.metallic = 0.08
 	floor_material.roughness = 0.90
-	_spawn_corridor_piece(body, "CorridorFloor_%02d" % index, CORRIDOR_FLOOR_PREFAB, floor_size, Vector3.ZERO, floor_material)
+	_spawn_corridor_piece(body, "CorridorFloor_%02d" % index, CORRIDOR_FLOOR_PREFAB, floor_size, Vector3.ZERO, floor_material, not persistent)
 	var wall_material := StandardMaterial3D.new()
 	wall_material.albedo_color = visual_theme.wall_color.darkened(0.08)
 	wall_material.metallic = 0.62
@@ -2908,7 +3298,7 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 		var wall_size := Vector3(length, 2.25, 0.25) if horizontal else Vector3(0.25, 2.25, length)
 		var wall_offset := Vector3(0, 1.25, side * 1.92) if horizontal else Vector3(side * 1.92, 1.25, 0)
 		var side_index := 0 if side < 0.0 else 1
-		_spawn_corridor_piece(body, "CorridorWall_%02d_%d" % [index, side_index], CORRIDOR_WALL_PREFAB, wall_size, wall_offset, wall_material)
+		_spawn_corridor_piece(body, "CorridorWall_%02d_%d" % [index, side_index], CORRIDOR_WALL_PREFAB, wall_size, wall_offset, wall_material, not persistent)
 	if is_vertical_connector:
 		# 封闭楼梯间顶部与墙共同阻挡视线；台阶只做可读表现，连续斜坡承担移动碰撞。
 		var ceiling_size := Vector3(length, 0.22, 3.8) if horizontal else Vector3(3.8, 0.22, length)
@@ -2922,10 +3312,10 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 				0.075,
 				0.0 if horizontal else lerpf(-length * 0.5, length * 0.5, ratio)
 			)
-			_spawn_corridor_piece(body, "StairTread_%02d_%02d" % [index, step_index], CORRIDOR_STAIR_TREAD_PREFAB, tread_size, tread_offset, wall_material)
+			_spawn_corridor_piece(body, "StairTread_%02d_%02d" % [index, step_index], CORRIDOR_STAIR_TREAD_PREFAB, tread_size, tread_offset, wall_material, not persistent)
 
 
-func _spawn_corridor_piece(parent: Node3D, node_name: String, prefab: PackedScene, scale_vec: Vector3, local_position: Vector3, material: StandardMaterial3D) -> void:
+func _spawn_corridor_piece(parent: Node3D, node_name: String, prefab: PackedScene, scale_vec: Vector3, local_position: Vector3, material: StandardMaterial3D, collisions_disabled: bool = true) -> void:
 	if prefab == null:
 		push_error("Dungeon3D: missing corridor prefab for %s" % node_name)
 		return
@@ -2936,7 +3326,7 @@ func _spawn_corridor_piece(parent: Node3D, node_name: String, prefab: PackedScen
 	instance.position = local_position
 	instance.scale = scale_vec
 	_apply_corridor_material_override(instance, material)
-	_set_corridor_collisions_disabled(instance, true)
+	_set_corridor_collisions_disabled(instance, collisions_disabled)
 	parent.add_child(instance)
 
 
@@ -3072,6 +3462,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		_cancel_room_wave_intermission(previous_runtime_room_id)
 		_capture_room_runtime_state(previous_runtime_room_id)
 	_current_room_id = room.room_id
+	_last_main_room_id = room.room_id
 	room_entered.emit(room)
 	if _runtime_persistence_active and BaseManager != null:
 		BaseManager.flush_runtime_checkpoint("room_transition")
@@ -4652,6 +5043,11 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 	last_killed_enemy_data = enemy_data.duplicate(true)
 	kill_recorded.emit()
 	var loot_room := _room_by_id.get(enemy.room_id) as DungeonRoom3D
+	# 子图房间不在 `_room_by_id` 里；不补这一句，`_spawn_loot_items(null, ...)`
+	# 会**静默返回 0** —— 表现是「7 只怪打死了，地上什么也没有」。
+	# 这里只是借用子图房自己的包围盒做散布与贴地，掉落表仍来自敌人数据。
+	if loot_room == null:
+		loot_room = _secret_branch_room_ids.get(enemy.room_id) as DungeonRoom3D
 	var reward_report := _reward_coordinator.resolve_kill(
 		loot_room.reward_plan if loot_room != null else {},
 		enemy_data,
@@ -4743,6 +5139,12 @@ func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data:
 		return
 	if _extraction_defense_active and enemy.room_id == _current_room_id:
 		status_label.text = "撤离拦截波已压制 · 信号仍在同步"
+		return
+	# 子图房间：清房语义与主图不同（不发钥匙、不结算、不推进命运卡），
+	# 且房间不在 `_room_by_id` 里 —— 上面那句 `_mark_room_cleared(room, true)`
+	# 对它会静默变成空操作（`room == null` 直接 return），于是「打完了但房间永远算不清」。
+	if _secret_branch_room_ids.has(enemy.room_id):
+		_on_secret_branch_room_cleared(enemy.room_id)
 		return
 	_mark_room_cleared(room, true)
 	status_label.text = (
@@ -5395,12 +5797,12 @@ func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> 
 			return
 		pickup.accept_pickup(player)
 		_queue_runtime_autosave("ground_loot_weapon_auto_equipped")
-		status_label.text = "已装备 %s" % item.get("name", item.get("id", "武器"))
+		status_label.text = "已装备 %s" % WeaponDropGrade.label_for(item)
 		_refresh_loot_label()
 		return
 	var added := _inventory.add_item(item, requested)
 	if added <= 0:
-		status_label.text = "背包已满 · %s 留在地面" % item.get("name", "物资")
+		status_label.text = "背包已满 · %s 留在地面" % WeaponDropGrade.label_for(item)
 		return
 	if added >= requested:
 		pickup.accept_pickup(player)
@@ -5408,7 +5810,7 @@ func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> 
 		pickup.item_data["count"] = requested - added
 	_queue_runtime_autosave("ground_loot_picked_up")
 	status_label.text = "拾取 %s x%d%s" % [
-		item.get("name", item.get("id", "物资")),
+		WeaponDropGrade.label_for(item),
 		added,
 		" · 按 I 打开背包，左键装备" if str(item.get("type", "")) == "weapon" else "",
 	]
@@ -5536,7 +5938,7 @@ func _open_workbench() -> void:
 	$HUD.add_child(_workbench_panel)
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
-	status_label.text = "改造台：7 远程 + 2 近战 · 8 弹药，使用同一装配树"
+	status_label.text = "改造台：投入武器与弹药模块熔炼，产出品质与弹种重掷的新枪"
 
 
 func _open_merchant(merchant_id: String = "") -> void:
@@ -6102,6 +6504,11 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 	if not was_cleared:
 		player.on_fate_room_cleared(room.room_id)
 		room_cleared.emit(room)
+		# 传送支线的两道锁都吃「已清内容房数」：
+		#   · 入口木板：入口房清完才可破（设计 §5.2）
+		#   · 撤离门：已清 ≥ ceil(总数×0.4) 解锁（设计 §6.2）
+		# 放在这里而不是每帧轮询 —— 这两个值只会随清房变化。
+		_refresh_secret_locks_after_clear()
 		var clear_report := _reward_coordinator.resolve_clear(
 			room.reward_plan,
 			maxi(1, visual_theme.difficulty_rank),
@@ -6316,7 +6723,7 @@ func _show_door_fate_choices() -> void:
 		return
 	var offer: Array[FateCard] = (
 		_gate_expedition_fate_offer()
-		if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured()
+		if uses_dynamic_fate_economy()
 		else FateCardPresets.draw_offer(3, _rng, get_runtime_map_id())
 	)
 	if offer.is_empty():
@@ -7130,7 +7537,7 @@ func _fate_price(card: FateCard) -> int:
 	if _fate_door_quote.has(stable_id):
 		return int(_fate_door_quote[stable_id])
 	var rarity := clampi(int(card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)
-	if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured():
+	if uses_dynamic_fate_economy():
 		return _fate_economy.frozen_quote_for_card(rarity, _fate_door_offer_id, stable_id, run_seed)
 	return int(FATE_PRICE_BY_RARITY[rarity])
 
@@ -7138,7 +7545,7 @@ func _fate_price(card: FateCard) -> int:
 func _fate_price_bounds(card: FateCard) -> Dictionary:
 	if card == null:
 		return {"min": 0, "quote": 0, "max": 0}
-	if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured():
+	if uses_dynamic_fate_economy():
 		return _fate_economy.price_bounds_for_card(
 			int(card.card_rarity), card.get_stable_card_id(), _fate_door_offer_id
 		)
@@ -7147,7 +7554,7 @@ func _fate_price_bounds(card: FateCard) -> Dictionary:
 
 
 func _expedition_fate_max_rarity() -> int:
-	return _fate_economy.max_unlocked_rarity() if _fate_economy.is_configured() else FateCard.CardRarity.MYSTIC
+	return _fate_economy.max_unlocked_rarity() if uses_dynamic_fate_economy() else FateCard.CardRarity.MYSTIC
 
 
 func _gate_expedition_fate_offer() -> Array[FateCard]:
@@ -7438,7 +7845,7 @@ func _refresh_door_fate_prices() -> void:
 						"◈ %d 金币 · 区间 %d–%d" % [
 							_fate_price(card), int(bounds.get("min", 0)), int(bounds.get("max", 0))
 						]
-						if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured()
+						if uses_dynamic_fate_economy()
 						else "◈ %d 金币" % _fate_price(card)
 					)
 					label.add_theme_color_override("font_color", _rarity_color(card.card_rarity))
@@ -8744,6 +9151,11 @@ func _install_weapon_module_from_item(item: Dictionary) -> bool:
 	var tree := player.get_weapon_tree()
 	if tree == null or tree.get_root() == null:
 		return false
+	# 局内快捷装配这条链**绕过** `Player3D.install_bullet_module_to_weapon_slot`，
+	# 直接改运行树；不在这里单独拦一次，绑定锁定形同虚设。
+	if str(item.get("subtype", "")) == "bullet" and tree.bullet_module_locked:
+		status_label.text = "该枪的弹药模块已绑定，无法更换"
+		return false
 	var new_node := BlueprintRegistry.create_assembly_node(str(item.get("assembly_id", item.get("id", ""))))
 	if new_node == null:
 		return false
@@ -8881,7 +9293,11 @@ func _on_extraction_started(start_duration: float, beacon: ExtractionBeacon3D) -
 	extraction_panel.visible = true
 	extraction_bar.value = 0.0
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
-	if room != null and _encounter_event_director != null:
+	# 子图撤离房跳过防线遭遇：子图房不在 `_room_by_id` 里，按 `_current_room_id`
+	# 取的会是玩家**已经离开**的主图房间 —— 表现成「人在子图读条、主图房里刷怪」。
+	# 读条、面板与结算全部照旧，只有这一场遭遇不建。
+	var skip_defense := beacon.has_meta("secret_branch")
+	if not skip_defense and room != null and _encounter_event_director != null:
 		var config := _build_extraction_encounter_config(room, start_duration)
 		var started := start_encounter_event(config)
 		if bool(started.get("ok", false)):

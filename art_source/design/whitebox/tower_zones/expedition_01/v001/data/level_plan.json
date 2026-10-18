@@ -189,23 +189,15 @@
     "schema": "shellstorm2.monster_drop_table",
     "schema_version": 1,
     "source_csv": "docs/v0.1/data/怪物掉落表_地图x怪物.csv",
-    "rows_sha256": "fc1aab847ebe06eb965d6fd1ee7b43b23b2cc53c9954a198aa608d5edfd3d668",
+    "rows_sha256": "587db6fd99a5568ea705f828b0180dddf56fdfe1986f613b30ed0e5c9a4a3cdd",
     "rows": [
-      {
-        "monster_id": "melee_chaser",
-        "item_id": "weapon_pistol",
-        "chance": 0.26,
-        "weight": 3,
-        "quantity": 1,
-        "note": "主武器·权重池"
-      },
       {
         "monster_id": "melee_chaser",
         "item_id": "weapon_baseball_bat",
         "chance": 0.26,
         "weight": 2,
         "quantity": 1,
-        "note": "近战·权重池"
+        "note": "近战·权重池（枪械 2026-10-18 移出普通怪）"
       },
       {
         "monster_id": "melee_chaser",
@@ -273,17 +265,10 @@
       },
       {
         "monster_id": "exploder",
-        "item_id": "weapon_launcher",
-        "weight": 0.8,
-        "quantity": 1,
-        "note": "权重池·抽1件"
-      },
-      {
-        "monster_id": "exploder",
         "item_id": "item_ammo_pack",
         "chance": 0.34,
         "quantity": "30-50",
-        "note": "备弹·独立判定"
+        "note": "备弹·独立判定（枪械 2026-10-18 移出普通怪）"
       }
     ],
     "empty_chance": 0.4
