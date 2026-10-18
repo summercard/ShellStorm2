@@ -1137,13 +1137,31 @@ func _bullet_module_hover_text(item: Dictionary) -> String:
 	return "\n".join(lines)
 
 
+## 品质行。加成数字**从 WeaponDropGrade 折算**，不在这里写死 10 / 15 / 2 / 4 ——
+## 文档一改、这里就跟着变，避免"面板写 +10%、实际 +15%"。
+func _weapon_grade_line(grade: String) -> String:
+	var resolved := WeaponDropGrade.normalize(grade)
+	var percent := int(round((WeaponDropGrade.damage_multiplier(resolved) - 1.0) * 100.0))
+	var slots := WeaponDropGrade.fate_slot_bonus(resolved)
+	if percent <= 0 and slots <= 0:
+		return "品质：%s（基础数值）" % WeaponDropGrade.display_name(resolved)
+	var parts: Array[String] = []
+	if percent > 0:
+		parts.append("伤害 +%d%%" % percent)
+	if slots > 0:
+		parts.append("命运槽 +%d" % slots)
+	return "品质：%s（%s）" % [WeaponDropGrade.display_name(resolved), " · ".join(parts)]
+
+
 func _weapon_hover_text(item: Dictionary) -> String:
 	var instance_id := str(item.get("weapon_instance_id", ""))
 	var upgrades: Variant = item.get("fate_upgrades", [])
 	var upgrade_list: Array = upgrades if upgrades is Array else []
 	var capacity := int(item.get("fate_slot_capacity", 8))
+	var grade := WeaponDropGrade.normalize(str(item.get("drop_grade", "")))
 	var lines: Array[String] = [
 		"%s　#%s" % [item.get("name", item.get("id", "武器")), instance_id.right(6).to_upper()],
+		_weapon_grade_line(grade),
 		"★ 星星命运 %d/%d（永久）" % [upgrade_list.size(), capacity],
 	]
 	if upgrade_list.is_empty():
@@ -1168,6 +1186,14 @@ func _weapon_hover_text(item: Dictionary) -> String:
 	var instance := WeaponInstance.from_item(item)
 	if instance != null:
 		var presentation := instance.get_presentation_snapshot()
+		var bullet_module := presentation.get("bullet_module", {}) as Dictionary
+		if not bullet_module.is_empty():
+			# 掉落枪的弹药模块是绑定的：玩家必须一眼看出"这个槽动不了"，
+			# 否则会反复尝试更换、以为是 UI 卡住。
+			lines.append("弹药模块：%s%s" % [
+				bullet_module.get("display_name", "未知"),
+				"（已绑定 · 不可更换）" if instance.bullet_module_locked else "",
+			])
 		var installed: Array[String] = []
 		for raw_entry in presentation.get("attachment_layout", []):
 			if raw_entry is Dictionary and not str((raw_entry as Dictionary).get("installed_item_id", "")).is_empty():

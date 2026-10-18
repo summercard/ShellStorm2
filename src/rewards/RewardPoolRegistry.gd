@@ -121,6 +121,37 @@ const POOLS := {
 		"status": STATUS_ACTIVE, "migration_target": "",
 		"note": "同上；floor>=3 时 boss_floor_%d 会拼出未登记池名，见 report() 的 latent 段",
 	},
+	# ── 2026-10-18 枪械产出收口：枪只从 Boss / 强化怪出 ──────────────────────
+	# 拆成四个池而不是原地调权重，是因为「枪」与「蓝图/模块/配件」要能独立掷骰：
+	# Boss 的核心掉落契约是「1-2 把枪 + 3 件其它」，混在一个池里做不到件数拆分。
+	"boss_weapon_floor_1": {
+		"name": "首领枪械池·第1档",
+		"usage": USAGE_BOSS, "tier": TIER_SHALLOW,
+		"roll": ROLL_WEIGHTED, "cap": 2,
+		"status": STATUS_ACTIVE, "migration_target": "",
+		"note": "MonsterInjector.drop_spec_for(TIER_BOSS)：第1把必出 + 第2把 50%，合计 1-2 把",
+	},
+	"boss_weapon_floor_2": {
+		"name": "首领枪械池·第2档",
+		"usage": USAGE_BOSS, "tier": TIER_MEDIUM,
+		"roll": ROLL_WEIGHTED, "cap": 2,
+		"status": STATUS_ACTIVE, "migration_target": "",
+		"note": "同上；含蓄力萝卜炮等高层枪械",
+	},
+	"strong_weapon_floor_1": {
+		"name": "强化怪枪械池·浅层",
+		"usage": USAGE_ELITE, "tier": TIER_SHALLOW,
+		"roll": ROLL_WEIGHTED, "cap": 1,
+		"status": STATUS_ACTIVE, "migration_target": "",
+		"note": "仅 _strong 变种（MonsterVariants）使用；击杀时 25% 概率抽 1 把",
+	},
+	"strong_weapon_floor_2": {
+		"name": "强化怪枪械池·深层",
+		"usage": USAGE_ELITE, "tier": TIER_MEDIUM,
+		"roll": ROLL_WEIGHTED, "cap": 1,
+		"status": STATUS_ACTIVE, "migration_target": "",
+		"note": "同上；floor>2 走此池。精英（ELITE 房）不使用本池，仍走 elite_floor_*",
+	},
 	"scavenge_floor_1": {
 		"name": "搜索池·第1档",
 		"usage": USAGE_SEARCH, "tier": TIER_SHALLOW,

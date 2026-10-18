@@ -371,6 +371,16 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 			owner_gun = owner_gun.parent_node
 		if node != root and node.node_type == AssemblyNode.NodeType.GUN_BODY and owner_gun == root:
 			var child_stats := node.get_computed_stats().duplicate(true)
+			# 旁挂枪（命运卡「枪上枪」）不走 `tree.get_computed_stats()`，所以品质倍率
+			# 在这里补一次，否则同一把金枪的主枪身吃加成、挂上去的副枪身不吃。
+			# `Projectile3D._fire_attached_gun` 直接读这两个键算伤害。
+			var grade_multiplier := (
+				WeaponDropGrade.damage_multiplier(_source_tree.drop_grade) if _source_tree != null else 1.0
+			)
+			if not is_equal_approx(grade_multiplier, 1.0):
+				child_stats["damage"] = float(child_stats.get("damage", 0.0)) * grade_multiplier
+				child_stats["bullet_damage"] = float(child_stats.get("bullet_damage", 0.0)) * grade_multiplier
+			child_stats["drop_grade"] = _source_tree.drop_grade if _source_tree != null else WeaponDropGrade.GRADE_BLUE
 			child_stats["tags"] = node.tags.duplicate()
 			child_stats["assembly_snapshot"] = WeaponInstance._serialize_node(node)
 			child_stats["mount_id"] = node.node_id

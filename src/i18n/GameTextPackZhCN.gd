@@ -124,6 +124,15 @@ const DATA := {
 		"STOCK": "枪托槽",
 		"TACTICAL": "战术槽",
 		"MUTATOR": "特性槽",
+		# 递归挂载槽（命运构筑用）。AssemblyNode.SlotType 里是 MOUNT_2…MOUNT_8 共七个，
+		# 只写 MOUNT 会让 `probe_localization_contract` 的枚举键契约报 7 条缺口。
+		"MOUNT_2": "挂载槽 2",
+		"MOUNT_3": "挂载槽 3",
+		"MOUNT_4": "挂载槽 4",
+		"MOUNT_5": "挂载槽 5",
+		"MOUNT_6": "挂载槽 6",
+		"MOUNT_7": "挂载槽 7",
+		"MOUNT_8": "挂载槽 8",
 	},
 
 	"stat": {

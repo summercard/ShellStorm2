@@ -382,11 +382,13 @@ static func _resolve_item_entry(entry: Dictionary, state: Dictionary, path: Stri
 	var definition := registry.get_item(item_id)
 	# 枪械 count=N 意味着 N 把不同的真实武器，不能把同一 instance_id
 	# 塞进一个 count=N 的地面字典或背包堆叠。
+	# 掉落品质（蓝/紫/金）在**这里**逐把掷骰 —— 这是"枪械掉落"的唯一出口，
+	# 两把同名枪会各自滚出各自的品质（业主 2026-10-18）。
 	if str(definition.get("type", "")) == "weapon":
 		for index in range(count):
 			_append_grant(state, {
 				"kind": _SPEC.KIND_ITEM, "item_id": item_id, "count": 1,
-				"item": _WEAPON_INSTANCE.ensure_weapon_item(definition),
+				"item": _roll_dropped_weapon(definition, state),
 				"sink": str(entry.get("sink", "ground")), "pool_id": "",
 				"slot": "%s:%d" % [path, index], "merged": false,
 			}, false)
@@ -447,12 +449,16 @@ static func _resolve_pool_entry(entry: Dictionary, state: Dictionary, path: Stri
 		return
 
 	var mode := _POOLS.roll_mode(pool_id)
+	# 条目级合并开关（2026-10-18）：默认 `true` = 旧语义「同 id 覆盖成一件」。
+	# Boss 的「1-2 把枪 + 3 件其它」必须写 `false`：两把同名枪是两个独立
+	# `WeaponInstance`，被覆盖会静默少 1 把（实测第二把命中率从 50% 掉到 40%）。
+	var merge_same_item := bool(entry.get("merge_same_item", true))
 	match mode:
 		_POOLS.ROLL_INDEPENDENT:
 			_draw_independent(entry, state, path, pool_id, members)
 		_POOLS.ROLL_ALL:
 			for member in members:
-				_append_member(state, member, path, pool_id)
+				_append_member(state, member, path, pool_id, merge_same_item)
 		_:
 			_draw_weighted(entry, state, path, pool_id, members)
 
@@ -475,6 +481,7 @@ static func _draw_weighted(
 	var draws := mini(_POOLS.cap(pool_id), cap)
 	if entry.has("draws"):
 		draws = mini(maxi(0, int(entry["draws"])), cap)
+	var merge_same_item := bool(entry.get("merge_same_item", true))
 
 	for _i in range(draws):
 		var roll := rng.randf() * total
@@ -485,7 +492,7 @@ static func _draw_weighted(
 			if roll <= cumulative:
 				picked = member
 				break
-		_append_member(state, picked, path, pool_id)
+		_append_member(state, picked, path, pool_id, merge_same_item)
 
 
 static func _draw_independent(
@@ -530,7 +537,7 @@ static func _draw_independent(
 		hits = hits.slice(0, cap)
 
 	for member in hits:
-		_append_member(state, member, path, pool_id)
+		_append_member(state, member, path, pool_id, bool(entry.get("merge_same_item", true)))
 
 
 ## 条目可用的件数上限。
@@ -637,7 +644,36 @@ static func _eval_amount(raw, state: Dictionary, _path: String) -> int:
 	return maxi(0, int(round(value)))
 
 
-static func _append_member(state: Dictionary, member: Dictionary, path: String, pool_id: String) -> void:
+## 掉落的枪械在这里掷**品质**与**绑定弹药模块**。**全仓唯一实现**，别在别处再掷一次。
+##
+## 掷骰顺序固定为「先品质、后弹药」，两次都吃同一个 `state["rng"]` ⇒
+## 同 run_seed 同击杀事件必得同一把枪、同一品质、同一弹种，回放可逐位对拍。
+## 改顺序会让既有 seed 的落点整体位移，必须与 04 §22.13 / §22.14 同批改。
+##
+## 弹药模块是**绑定**的（`bullet_module_locked = true`）：掉落枪的弹种是这把枪的身份，
+## 装备面板 / 局内快捷装配 / 工作台三条换弹链都会拒绝。近战没有弹药槽，不配弹也不锁。
+##
+## 非枪械（模块 / 配件 / 弹药 / 消耗品）原样返回，绝不写 `drop_grade`
+## —— 那会让背包里的每个零件都长出一个没有效果文的品质标签。
+static func _roll_dropped_weapon(item: Dictionary, state: Dictionary) -> Dictionary:
+	if str(item.get("type", "")) != "weapon":
+		return _WEAPON_INSTANCE.ensure_weapon_item(item)
+	var rng: RandomNumberGenerator = state["rng"]
+	var grade := WeaponDropGrade.roll(rng.randf())
+	var prepared := item.duplicate(true)
+	if not WeaponBulletDrop.is_melee_weapon(prepared):
+		# 必须先写 `bullet_module_id` 再 ensure：ensure 会立刻按它生成装配快照，
+		# 晚一步写就等于没写（快照里仍是标准弹，读档再也改不回来）。
+		prepared["bullet_module_id"] = WeaponBulletDrop.roll(rng.randf())
+		prepared["bullet_module_locked"] = true
+	var ensured := _WEAPON_INSTANCE.ensure_weapon_item(prepared)
+	return WeaponDropGrade.apply_to_item(ensured, grade)
+
+
+static func _append_member(
+	state: Dictionary, member: Dictionary, path: String, pool_id: String,
+	merge_same_item := true
+) -> void:
 	var item: Dictionary = member.duplicate(true)
 	item.erase("loot_weight")
 	item.erase("loot_chance")
@@ -646,12 +682,12 @@ static func _append_member(state: Dictionary, member: Dictionary, path: String, 
 		"kind": _SPEC.KIND_ITEM,
 		"item_id": str(item.get("id", "")),
 		"count": 1,
-		"item": _WEAPON_INSTANCE.ensure_weapon_item(item),
+		"item": _roll_dropped_weapon(item, state),
 		"sink": "ground",
 		"pool_id": pool_id,
 		"slot": path,
 		"merged": false,
-	}, true)
+	}, merge_same_item)
 
 
 static func _append_grant(state: Dictionary, grant: Dictionary, merge_same_item: bool) -> void:

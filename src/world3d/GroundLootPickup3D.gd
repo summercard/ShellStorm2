@@ -314,17 +314,35 @@ func _build_visual(color: Color) -> void:
 	## 原来武器会追加「 #编号 · 构筑 n/8」，那两项在拾取前对玩家没有任何决策价值，
 	## 只把名牌撑长、挤小字号。武器实例号与构筑进度在背包（I）/ 工作台里看得更全。
 	## 不要再把后缀加回来 —— 需要看实例身份请走 InventoryUI，别复刻到世界里。
-	_label.text = str(item_data.get("name", item_data.get("id", "物资")))
+	##
+	## 业主 2026-10-18 追加：**掉落枪械必须体现品质（蓝 / 紫 / 金）**。
+	## 品质决定伤害与命运卡格子，是拾取前唯一有决策价值的信息，与上面那条不冲突：
+	## 这里加的是品质标签，不是实例身份。格式与取色统一由 `WeaponDropGrade` 给，
+	## 别在本文件里另写一套前缀字符串。
+	_label.text = WeaponDropGrade.label_for(item_data)
 	_label.font_size = LABEL_FONT_SIZE
 	_label.pixel_size = LABEL_PIXEL_SIZE
 	_label.outline_size = LABEL_OUTLINE_SIZE
-	_label.modulate = color.lightened(0.20)
+	_label.modulate = _label_tint(color)
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	# 正对镜头 + 不参与深度遮挡：俯视相机下这才读得到（与敌人血条同口径）。
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.no_depth_test = true
 	add_child(_label)
+
+
+## 名牌着色。**品质色优先**：远处看不清两三个字时，颜色是唯一能分辨蓝/紫/金的信息。
+## 无 `drop_grade`（零件 / 消耗品 / 货币）沿用旧的物品色提亮口径，行为不变。
+static func label_tint_for(data: Dictionary, item_color: Color) -> Color:
+	var grade := str(data.get("drop_grade", ""))
+	if not WeaponDropGrade.is_valid(grade):
+		return item_color.lightened(0.20)
+	return WeaponDropGrade.color(grade).lightened(0.10)
+
+
+func _label_tint(item_color: Color) -> Color:
+	return label_tint_for(item_data, item_color)
 
 
 ## 货币判定。`__currency__` 与 `is_currency` 是同一口径，与

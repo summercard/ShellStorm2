@@ -16,6 +16,16 @@ signal reload_started  # 开始换弹
 ## 树的根节点（主枪身）
 var root: AssemblyNode = null
 
+## 掉落品质（蓝 / 紫 / 金）。由 `WeaponInstance` 在装配树建成后注入。
+## **不进装配快照**：品质是实例属性，快照会被原样存档，写进去会在每次读档重复乘。
+## 效果只在 `get_computed_stats()` 出口乘一次，因此幂等。规则见 `WeaponDropGrade`。
+var drop_grade: String = WeaponDropGrade.GRADE_BLUE
+
+## 弹药模块是否绑定锁定（掉落枪自带，不可拆卸/替换）。
+## 由 `WeaponInstance` 在装配树建成/装载后注入；权威值在实例上，这里只是运行投影。
+## 所有「换弹药槽」的入口都读它 —— 只灰 UI 按钮挡不住局内快捷装配与工作台两条链。
+var bullet_module_locked: bool = false
+
 ## 最大深度限制（防止无限递归/组合爆炸）
 const MAX_DEPTH: int = 5
 
@@ -76,9 +86,9 @@ func set_root(new_root: AssemblyNode) -> bool:
 	root = new_root
 	root.set_subtree_depth(0)
 	_register_subtree(root)
-	_apply_stats(root.get_computed_stats())
+	_apply_stats(get_computed_stats())
 	tree_changed.emit()
-	stats_changed.emit(root.get_computed_stats())
+	stats_changed.emit(get_computed_stats())
 	return true
 
 
@@ -126,11 +136,11 @@ func mount(
 		return false
 	_register_subtree(child)
 	var previous_ammo := current_ammo
-	_apply_stats(root.get_computed_stats())
+	_apply_stats(get_computed_stats())
 	if "melee" not in root.tags:
 		current_ammo = clampi(previous_ammo, 0, magazine_size)
 	tree_changed.emit()
-	stats_changed.emit(root.get_computed_stats())
+	stats_changed.emit(get_computed_stats())
 	ammo_changed.emit(current_ammo, magazine_size)
 	return true
 
@@ -146,7 +156,7 @@ func unmount(node: AssemblyNode) -> bool:
 	_unregister_subtree(node)
 	parent.unmount(slot_type)
 	var previous_ammo := current_ammo
-	var stats := root.get_computed_stats() if root != null else {}
+	var stats := get_computed_stats()
 	_apply_stats(stats)
 	if root != null and "melee" not in root.tags:
 		current_ammo = clampi(previous_ammo, 0, magazine_size)
@@ -207,8 +217,34 @@ func get_max_depth() -> int:
 
 
 ## 获取当前武器的合成属性（对外暴露的计算接口）
+## 计算全树数值，并在**出口**叠加掉落品质的伤害倍率。
+##
+## 为什么在出口而不是写进节点 `base_stats`：
+##   · 节点 base_stats 会被序列化进 `assembly_snapshot`，读档 → 再乘 → 复利；
+##   · 出口只算一遍，`refresh_stats()` / UI 面板 / 实战读的是同一份数，不会两套数字。
+##
+## 蓝品质（×1.00）直接跳过，返回逐值不变 ⇒ 未掉落的出厂枪 / 商人枪行为零变化。
 func get_computed_stats() -> Dictionary:
-	return root.get_computed_stats() if root != null else {}
+	if root == null:
+		return {}
+	var stats := root.get_computed_stats()
+	var multiplier := WeaponDropGrade.damage_multiplier(drop_grade)
+	if not is_equal_approx(multiplier, 1.0):
+		# 远程最终伤害 = `damage + bullet_damage`（见 WeaponModel3D._configure_common_stats），
+		# 两个键都乘，否则品质加成会被子弹伤害那一半稀释。
+		stats["damage"] = _scale_stat(stats.get("damage", 0), multiplier)
+		if stats.has("bullet_damage"):
+			stats["bullet_damage"] = _scale_stat(stats["bullet_damage"], multiplier)
+	stats["drop_grade"] = drop_grade
+	stats["grade_damage_multiplier"] = multiplier
+	return stats
+
+
+## 按原值的类型缩放的整数/浮点保守处理：整数进、整数出，避免 UI 上冒出 16.499999。
+static func _scale_stat(raw: Variant, multiplier: float) -> Variant:
+	if raw is int:
+		return int(round(float(raw) * multiplier))
+	return float(raw) * multiplier
 
 
 ## 节点数值被命运卡直接修改后，立即同步到实战射击参数与 UI。
@@ -216,7 +252,9 @@ func refresh_stats() -> void:
 	if root == null:
 		return
 	var previous_ammo := current_ammo
-	var stats := root.get_computed_stats()
+	# 必须走 self.get_computed_stats()（含品质倍率），不能直连 root ——
+	# 直连会让「改品质后刷新」这一下把加成丢掉，只有首次装配才生效。
+	var stats := get_computed_stats()
 	_apply_stats(stats)
 	current_ammo = mini(previous_ammo, magazine_size)
 	tree_changed.emit()
@@ -369,7 +407,7 @@ func get_weapon_info() -> Dictionary:
 		"spread": spread,
 		"reload_time": reload_time,
 		"ammo": "%d/%d" % [current_ammo, magazine_size],
-		"damage": root.get_computed_stats().get("damage", 10) if root != null else 0,
+		"damage": get_computed_stats().get("damage", 10),
 		"reloading": _is_reloading,
 		"tree_string": get_assembly_tree_string(),
 	}
@@ -382,7 +420,7 @@ func get_debug_info() -> Dictionary:
 	return {
 		"max_depth": get_max_depth(),
 		"node_count": _node_registry.size(),
-		"computed_stats": root.get_computed_stats(),
+		"computed_stats": get_computed_stats(),
 		"tree_string": get_assembly_tree_string(),
 		"root_info": root.get_debug_info(),
 	}

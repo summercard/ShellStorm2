@@ -239,6 +239,23 @@ display_name    = 原怪名 + "-强化怪"
 三个模型的动画以整体位移为主、**几乎不转头**（实测最大头位移仅 1.3~3.4 mm），
 所以跟随测试断言的是「绑点与骨**完全同步**」而不是位移量级。
 
+### 3.5 强化怪的枪械掉落（2026-10-18）
+
+业主口径：**枪械只从 Boss 与强化怪出**。强化怪的出枪概率取区间中值 25%。
+
+| 项 | 值 | 事实源 |
+|---|---|---|
+| 判定 | `MonsterVariants.is_variant(monster_id)`（ID 后缀 `_strong`） | `src/enemy3d/MonsterVariants.gd` |
+| 概率 | `STRONG_VARIANT_WEAPON_CHANCE = 0.25` | `src/map/MonsterInjector.gd` |
+| 池 | 浅层 `strong_weapon_floor_1` / 深层 `strong_weapon_floor_2` | `src/rewards/RewardPoolRegistry.gd` |
+| 件数 | 命中抽 **1 把** | 同上 |
+
+**为什么挂在 `drop_spec_for` 出口**：强化怪由 `_generate_basic_enemy` 的出口统一升级，编成来源有刷怪盒 / 设计源 / 房型公式三条。把追加条目做在出口，三条来源自动全部覆盖，不存在"盒子刷的强化怪不掉枪"这种漏口。
+
+**精英不吃这条通道**：精英的 `is_elite` 是身份指派（`EliteRosterService` 名册 + 词缀），不是随机升级的 `_strong` 变种。精英仍走 `elite_floor_1/2`，但**实际不掉枪**：那唯一一件地面实物被「优先保留备弹」规则占用（见 [04 §22.12 精英遗留](../04_技术施工_战斗与局内成长.md)）。`is_elite` 也不吃强化怪的 25% 通道。
+
+**实测**（`tools/probe_weapon_drop_rates`，20000 次/类）：强化怪浅层 25.52%、深层 25.22%。
+
 ## 4. 遭遇生成接口
 
 关卡提交 `EncounterRequest`：房间 ID、楼层深度、房间类型、主题、预算、生成槽、随机流。怪物系统返回不可变 `EncounterPlan`：敌人内容 ID、修饰器、槽位、出现时点和合法空计划原因。
@@ -350,7 +367,8 @@ SelectEligibleElite(seed, floor, history)
 - <span style="color:#1565C0">**[用户设计]** 玩家进入95→94楼梯后的隔离间前必须收到旧区段未拾取物永久丢失提示；Boss死亡本身不卸载98–95F。</span>
 - <span style="color:#EF6C00">**[Codex补充]** 90→89、85→84等后续Boss边界也使用隔离间释放上一Boss区段，但只有95→94楼梯间带电梯。</span>
 - <span style="color:#EF6C00">**[Codex补充]** Boss只提供死亡事实和一次性钥匙奖励，不拥有隔离门、区段提交或卸载权限。旧区段只能在玩家完整进入隔离间且后门锁定后由关卡生命周期服务释放。</span>
-- <span style="color:#2E7D32">**[已实装]** `BossContentCatalog` 是逐五层Boss内容映射；Boss表现根保留程序模板作低成本回退，正式内容加载后关闭程序外观并启用对应高模。未来85层以下继续按同一接口扩表，不复用当前三只的内容ID和场地资产。</span>
+- <span style="color:#2E7D32">**[已实装｜2026-10-18 掉落契约]** Boss 固定掉 1-2 把远程枪 + 3 件其它 + 1 包弹药，物理总数恒为 5-6 件。枪走独立池 `boss_weapon_floor_N`（`boss_floor_N` 已剔除全部远程枪）；第 1 把 `p=1.0`、第 2 把 `p=0.5`，期望 1.5 把。两个枪条目与非枪条目都必须写 `merge_same_item=false` —— 否则同 id 会被覆盖，实测枪数掉到 1.40、总件数散到 3-7。</span>
+<span style="color:#2E7D32">**[已实装]** `BossContentCatalog` 是逐五层Boss内容映射；Boss表现根保留程序模板作低成本回退，正式内容加载后关闭程序外观并启用对应高模。未来85层以下继续按同一接口扩表，不复用当前三只的内容ID和场地资产。</span>
 
 ## 7. 怪物与 Boss 三态受光玩法
 

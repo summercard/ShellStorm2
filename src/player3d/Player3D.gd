@@ -2064,6 +2064,11 @@ func install_bullet_module_to_weapon_slot(item: Dictionary, weapon_slot_index: i
 	var instance := get_equipped_weapon_instance_for_slot(weapon_slot_index)
 	if instance == null:
 		return {"success": false, "reason": "目标武器槽为空"}
+	# 掉落枪的弹药模块是**绑定**的：它和品质一样是这把枪的身份，不允许拆卸或替换。
+	# 判据在实例上（`bullet_module_locked`），不在 UI 上 —— 训练场借枪、局内快捷装配、
+	# 工作台三条链最终都汇到这里，只有这里拦得住。
+	if instance.bullet_module_locked:
+		return {"success": false, "reason": "该枪的弹药模块已绑定，无法更换"}
 	var bullet_item_id := str(item.get("id", ""))
 	var new_node := BlueprintRegistry.create_assembly_node(bullet_item_id)
 	if new_node == null or new_node.node_type != AssemblyNode.NodeType.BULLET:

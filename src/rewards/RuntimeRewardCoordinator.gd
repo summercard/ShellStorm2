@@ -130,9 +130,20 @@ func resolve_kill(
 		(report["errors"] as Array).append_array(bounty_report.get("errors", []))
 		report["ok"] = bool(report.get("ok", false)) and bool(bounty_report.get("ok", false))
 	# 关卡表的「独立判定」允许同次击杀命中多件实物；若仍压成 1 件，作者表语义就是假的。
-	# 未命中关卡表的旧公式、精英与 Boss 保留既有「一个实物 + 一个金币球」契约。
+	# Boss / 强化怪保留多件（2026-10-18）：
+	#   · Boss = 1-2 把枪 + 其它 + 1 包弹药，压成 1 件会把枪直接吞掉；
+	#   · 强化怪 = 普通掉落 + 25% 的一把枪，压成 1 件且优先保留弹药 ⇒ 枪永远见不到。
+	# 精英保持**既有契约**：一个实物 + 一个金币球，且那 1 件优先备弹
+	# （`verify_reward_service_flow` 与 `verify_finite_ammo_flow` 双向钉死）。
+	# ⚠ 已知遗留（本次不修，属独立裁决）：精英的 `elite_floor_*` 池里那些权重
+	#   —— 含 50~67% 的枪 —— **从来不会落地**，因为那 1 件永远被备弹占用。
+	#   2026-10-18 曾试图用 `prefer_pool` 让精英改抽池，结果与「枪只从 Boss /
+	#   强化怪出」的业主口径冲突，且打红 `verify_finite_ammo_flow`，已回退。
+	#   要不要让精英以「备弹 + 池物品」两件掉落，需要单独立项裁决。
 	var uses_level_table := tier == "normal" and _monster_drop_specs.has(monster_id)
-	_collapse_kill_ground_grants(report, uses_level_table)
+	var is_strong_variant := MonsterVariants.is_variant(monster_id)
+	var preserve_physical := uses_level_table or tier == "boss" or is_strong_variant
+	_collapse_kill_ground_grants(report, preserve_physical)
 	return report
 
 
@@ -154,6 +165,10 @@ func _append_level_currency(
 	report["ok"] = bool(report.get("ok", false)) and bool(currency_report.get("ok", false))
 
 
+## 把一次击杀的地面实物压到「1 件 + 1 个金币球」（`preserve_physical` 时全部保留）。
+## 压缩时**优先保留备弹** —— 这是 2026-09 起的既有手感，`verify_finite_ammo_flow`
+## 与 `verify_reward_service_flow` 双向钉死，不要为了「让池物品露脸」改这条优先级：
+## 2026-10-18 试过一次（精英改抽池），直接打红备弹门禁，已回退。
 func _collapse_kill_ground_grants(report: Dictionary, preserve_physical := false) -> void:
 	var grants := report.get("grants", []) as Array
 	var currency_grants: Array = []

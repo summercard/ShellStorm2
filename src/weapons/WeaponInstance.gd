@@ -13,6 +13,16 @@ var weapon_instance_id: String = ""
 var weapon_content_id: String = ""
 var assembly_id: String = ""
 var rarity: String = "common"
+## 掉落品质（蓝 / 紫 / 金）。与 `rarity` 是两个维度：`rarity` 是"哪把枪"，
+## 这个是"这一把滚出了什么品质"。规则与倍率的唯一真源见 `WeaponDropGrade`。
+## 非掉落来源（出厂枪、蓝图合成、商人）保持 `blue` = 无额外加成。
+var drop_grade: String = WeaponDropGrade.GRADE_BLUE
+## 弹药模块是否**绑定锁定**（掉落枪自带，不可拆卸/替换）。
+##
+## 与 `drop_grade` 同为实例属性、随存档走。判据由 `WeaponBulletDrop` 给，
+## 锁定后所有换弹入口（装备面板 / 局内快捷装配 / 工作台）都必须拒绝，
+## 不能只在 UI 上灰按钮 —— 那样任何一条调用链都能绕过去。
+var bullet_module_locked: bool = false
 var fate_slot_capacity: int = DEFAULT_FATE_SLOT_CAPACITY
 var fate_upgrades: Array[Dictionary] = []
 var assembly_snapshot: Dictionary = {}
@@ -49,9 +59,19 @@ static func from_item(item: Dictionary, runtime_tree: WeaponAssemblyTree = null)
 	):
 		instance.assembly_id = canonical_assembly_id
 	instance.rarity = str(item.get("rarity", nested.get("rarity", "common")))
+	## 品质只读不算：`fate_slot_capacity` 在掉落时已含加成（见 WeaponDropGrade.apply_to_item），
+	## 这里再按品质加一次会让每次读档多涨格子。
+	instance.drop_grade = WeaponDropGrade.normalize(str(item.get(
+		"drop_grade", nested.get("drop_grade", WeaponDropGrade.GRADE_BLUE)
+	)))
 	instance.fate_slot_capacity = maxi(0, int(item.get(
 		"fate_slot_capacity", nested.get("fate_slot_capacity", DEFAULT_FATE_SLOT_CAPACITY)
 	)))
+	## 弹药绑定锁定只读不算：它是掉落时定下的事实，不能因读档路径不同而变。
+	## 兼容旧存档（没有这个键）⇒ 默认 false，老枪仍可自由换弹，行为不变。
+	instance.bullet_module_locked = bool(item.get(
+		"bullet_module_locked", nested.get("bullet_module_locked", false)
+	))
 	var stored_upgrades: Variant = item.get("fate_upgrades", nested.get("fate_upgrades", []))
 	if stored_upgrades is Array:
 		for upgrade in stored_upgrades:
@@ -73,9 +93,14 @@ static func from_item(item: Dictionary, runtime_tree: WeaponAssemblyTree = null)
 	elif instance.assembly_snapshot.is_empty():
 		var root := BlueprintRegistry.create_assembly_node(instance.assembly_id)
 		if root != null:
-			# 远程成品枪拥有自己的标准子弹模块；近战根不伪装成零弹量枪械。
+			# 远程成品枪拥有自己的弹药模块。**优先取物品字典里写死的 `bullet_module_id`**
+			# —— 掉落时由 `WeaponBulletDrop` 掷定并落盘，读档必须还原同一个弹种，
+			# 不能在这里再掷一次（否则每次读档换一种弹）。缺省才回落到标准弹。
+			# 近战根不伪装成零弹量枪械。
 			if "melee" not in root.tags:
-				var bullet_id := str(item.get("bullet_module_id", "mod_bullet_standard"))
+				var bullet_id := WeaponBulletDrop.normalize(
+					str(item.get("bullet_module_id", WeaponBulletDrop.FALLBACK_BULLET))
+				)
 				var bullet := BlueprintRegistry.create_assembly_node(bullet_id)
 				if bullet != null and not root.mount(AssemblyNode.SlotType.BULLET, bullet):
 					bullet.free()
@@ -127,6 +152,10 @@ func build_runtime_tree() -> WeaponAssemblyTree:
 		return null
 	_hydrate_and_migrate_root(root)
 	var tree := WeaponAssemblyTree.new(root)
+	# 品质倍率由运行时现场乘一次（不写进快照 ⇒ 反复读档不复利）。
+	tree.drop_grade = drop_grade
+	tree.bullet_module_locked = bullet_module_locked
+	tree.refresh_stats()
 	if current_ammo >= 0:
 		tree.current_ammo = clampi(current_ammo, 0, tree.magazine_size)
 	return tree
@@ -146,6 +175,9 @@ func load_into_runtime_tree(tree: WeaponAssemblyTree) -> bool:
 		if root != null:
 			_free_assembly_subtree(root)
 		return false
+	tree.drop_grade = drop_grade
+	tree.bullet_module_locked = bullet_module_locked
+	tree.refresh_stats()
 	if current_ammo >= 0:
 		tree.current_ammo = clampi(current_ammo, 0, tree.magazine_size)
 		tree.ammo_changed.emit(tree.current_ammo, tree.magazine_size)
@@ -204,6 +236,8 @@ func to_item_dictionary() -> Dictionary:
 	item["weapon_content_id"] = weapon_content_id
 	item["assembly_id"] = assembly_id
 	item["rarity"] = rarity
+	item["drop_grade"] = drop_grade
+	item["bullet_module_locked"] = bullet_module_locked
 	item["fate_slot_capacity"] = fate_slot_capacity
 	item["fate_upgrades"] = fate_upgrades.duplicate(true)
 	item["assembly_snapshot"] = stored_assembly_snapshot.duplicate(true)
@@ -215,6 +249,8 @@ func to_item_dictionary() -> Dictionary:
 		"weapon_content_id": weapon_content_id,
 		"assembly_id": assembly_id,
 		"rarity": rarity,
+		"drop_grade": drop_grade,
+		"bullet_module_locked": bullet_module_locked,
 		"fate_slot_capacity": fate_slot_capacity,
 		"fate_upgrades": fate_upgrades.duplicate(true),
 		"assembly_snapshot": stored_assembly_snapshot.duplicate(true),
@@ -249,6 +285,11 @@ func get_presentation_snapshot(tree: WeaponAssemblyTree = null, owner_location: 
 		"assembly_id": assembly_id,
 		"display_name": str(_base_item.get("name", weapon_content_id)),
 		"rarity": rarity,
+		"drop_grade": drop_grade,
+		"drop_grade_display": WeaponDropGrade.display_name(drop_grade),
+		"drop_grade_color": WeaponDropGrade.color(drop_grade),
+		"grade_damage_multiplier": WeaponDropGrade.damage_multiplier(drop_grade),
+		"bullet_module_locked": bullet_module_locked,
 		"owner_location": owner_location,
 		"fate_slot_capacity": fate_slot_capacity,
 		"fate_slot_used": fate_upgrades.size(),
