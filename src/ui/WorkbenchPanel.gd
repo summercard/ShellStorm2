@@ -1,77 +1,141 @@
 class_name WorkbenchPanel
 extends Control
+## 武器改造台 — 6×6 炼金盘（炼金抽卡）。
+##
+## 业主口径（2026-10-18）：把武器与弹药模块投进 6×6 的格子里熔炼，
+## 产出**品质（蓝/紫/金）与弹药模块重新掷骰**的新枪。规则真源见 `WeaponForge`。
+##
+## 本文件只负责三件事：**盘面存放与拖拽、投入解析的可视化、熔炼事务**。
+## 品质概率、熔炼值、产出构建一律调 `WeaponForge`，不在这里复写任何数值。
+##
+## 事务边界（与工坊同一条纪律）：
+##   快照 → 销毁投入 → 写入产出 → 任一失败则盘面与背包逐字节回滚。
+## 关闭面板时盘内物品必须退回背包；放不下就留在盘里并拒绝关闭，不允许直接销毁。
 
-## 武器改造面板 — 工作台交互界面
-## 展示当前武器装配树、可选枪身/子弹/配件
-## 允许玩家重新选择和装配武器
+signal forge_completed(result: Dictionary)
+signal closed
 
-@onready var panel_container: PanelContainer
-@onready var title_label: Label
-@onready var weapon_tree_label: Label
-@onready var gunbody_options: VBoxContainer
-@onready var bullet_options: VBoxContainer
-@onready var status_label: Label
-@onready var close_button: Button
+const TRAY_KIND := "alchemy"
+const BAG_KIND := "inventory"
+const TRAY_COLUMNS := 5
+const TRAY_ROWS := 5
+const TRAY_CAPACITY := TRAY_COLUMNS * TRAY_ROWS
+## 背包列数**必须**等于 `InventoryModule.GRID_COLUMNS`（8）。
+##
+## 物品的槽位索引是按那个列数算出来的；这里若擅自改成 6 列，同一个索引会
+## 落到不同行列上，4×2 的枪就会画出棋盘右边界（截图能直接看到溢出）。
+## 想让背包变窄只能改格边长，不能改列数。
+const BAG_COLUMNS := 8
+## 炼金盘格边长。5×5 比 6×6 少一行，格子可以放大到 80 撑住"盘面是主角"，
+## 同时整体仍是正方形 —— 业主口径「尽可能是四方形」。
+const TRAY_CELL_SIZE := 80.0
+## 背包格边长：8 列 × 46 = 368 宽。再大就会顶到居中的炼炉上（1280 基准只剩 ~60px 间距）。
+const BAG_CELL_SIZE := 46.0
+## 炼炉与背包之间的最小空隙。两者都用绝对锚点定位，这个值只在夹紧时兜底。
+const TRAY_BAG_GAP := 48.0
+## 页脚状态栏的空白态文案：三条配方速记。
+##
+## 必须压在一行内：状态栏左侧可用宽度约 760px、字号 12，超过约 60 字就会换行，
+## 换行后的第二行会顶到底部边框上（720p 基准尤其明显）。
+const HINT_TEXT := "任意物品可作材料　·　材料越稀有品质越高　·　单枪＝重铸 / 两把＝融合 / 纯材料满 6＝合成"
 
-var _player: Node = null
+## 盘内一格：anchor 为锚点线性下标，rotation 为 90° 转数。
+const TRAY_ENTRY_ANCHOR := "anchor"
+const TRAY_ENTRY_ITEM := "item"
+const TRAY_ENTRY_COUNT := "count"
+const TRAY_ENTRY_ROTATION := "rotation"
+
+var _player: Player3D = null
 var _workbench_ref: Node = null
-var _current_selection: Dictionary = {}
-var _transform_button: Button = null
-var _transform_mode: bool = false
-var _fate_selection_busy := false
+var _inventory: InventoryModule = null
+var _tray: Array[Dictionary] = []
+var _rng := RandomNumberGenerator.new()
+var _busy := false
+var _pending_plan: Dictionary = {}
+
+var _tray_board: GridInventoryBoard = null
+var _bag_board: GridInventoryBoard = null
+var _bag_title: Label = null
+var _body_tray_column: Control = null
+var _body_bag_column: Control = null
+var _stat_payload: Label = null
+var _stat_melt: Label = null
+var _stat_rarity: Label = null
+var _stat_recipe: Label = null
+var _stat_blueprint: Label = null
+var _stat_grades: Label = null
+var _stat_cost: Label = null
+var _coins_label: Label = null
+var _status: Label = null
+var _forge_button: Button = null
+var _confirm_layer: Control = null
+var _confirm_text: Label = null
+
+
+func set_player(player: Player3D) -> void:
+	_player = player
+
+
+func set_workbench_ref(ref: Node) -> void:
+	_workbench_ref = ref
 
 
 func _ready() -> void:
-	panel_container = get_node_or_null("PanelContainer")
-	close_button = get_node_or_null("PanelContainer/VBox/CloseButton")
-	weapon_tree_label = get_node_or_null("PanelContainer/VBox/WeaponTreeLabel")
-	status_label = get_node_or_null("PanelContainer/VBox/StatusLabel")
-	gunbody_options = get_node_or_null("PanelContainer/VBox/HBox/GunbodyPanel/VBox")
-	bullet_options = get_node_or_null("PanelContainer/VBox/HBox/BulletPanel/VBox")
-
-	panel_container.custom_minimum_size = Vector2(760, 520)
-	position = Vector2(100, 80)
-
-	if close_button:
-		close_button.pressed.connect(_on_close_pressed)
-		# 关闭按钮统一样式
-		var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
-		UIStyleFactory.apply_button_style(close_button, close_styles)
-
-	_build_transform_button()
-	_build_weapon_options()
-	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
-	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
-	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
-	UiMenuFocus.ensure_focus(self)
+	# 面板被 add_child 到 CanvasLayer / 普通 Node 下时，Control 的锚点算不出尺寸
+	# （父节点不是 Control，没有可参照的矩形），必须显式按视口铺满。
+	_fit_to_viewport()
+	if not get_viewport().size_changed.is_connected(_fit_to_viewport):
+		get_viewport().size_changed.connect(_fit_to_viewport)
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	_inventory = _resolve_inventory()
+	_rng.randomize()
+	_build_ui()
+	_refresh_all()
+	if _player != null and is_instance_valid(_player):
+		_player.set_input_locked(true)
+	if _inventory != null and not _inventory.inventory_changed.is_connected(_on_inventory_changed):
+		_inventory.inventory_changed.connect(_on_inventory_changed)
+	# 金币变动要立刻反映到费用栏（不足时红字 + 按钮禁用），否则玩家得反复开关面板。
+	if GameManager != null and not GameManager.currency_changed.is_connected(_on_currency_changed):
+		GameManager.currency_changed.connect(_on_currency_changed)
 
 
-func _build_transform_button() -> void:
-	_transform_button = Button.new()
-	_transform_button.text = GameText.text("workbench.transform_enter")
-	_transform_button.custom_minimum_size = Vector2(260, 36)
-	_transform_button.add_theme_font_size_override("font_size", 14)
-	# 命运按钮使用紫色 accent
-	var transform_styles := UIStyleFactory.make_button_style(
-		UIStyleFactory.make_panel_with_border(2, UIPalette.ITEM_FATE_CARD, 5, 1).bg_color,
-		UIPalette.ITEM_FATE_CARD,
-	)
-	UIStyleFactory.apply_button_style(_transform_button, transform_styles)
-	_transform_button.pressed.connect(_on_transform_toggle)
-	# 添加到 gunbody panel 标题下面
-	if gunbody_options != null:
-		gunbody_options.add_child(_transform_button)
+## 铺满视口。父节点是 Control 时用父矩形，否则用视口矩形。
+func _fit_to_viewport() -> void:
+	var parent_control := get_parent() as Control
+	var rect := get_viewport().get_visible_rect()
+	var target := rect.size if parent_control == null else parent_control.size
+	if target.x <= 0.0 or target.y <= 0.0:
+		target = rect.size
+	position = Vector2.ZERO
+	size = target
+
+
+func _exit_tree() -> void:
+	if _inventory != null and _inventory.inventory_changed.is_connected(_on_inventory_changed):
+		_inventory.inventory_changed.disconnect(_on_inventory_changed)
+	if GameManager != null and GameManager.currency_changed.is_connected(_on_currency_changed):
+		GameManager.currency_changed.disconnect(_on_currency_changed)
+	if _player != null and is_instance_valid(_player):
+		_player.set_input_locked(false)
+
+
+func _on_currency_changed(_amount: int) -> void:
+	_refresh_readout()
+
+
+func _resolve_inventory() -> InventoryModule:
+	if _workbench_ref != null and _workbench_ref.has_method("get_inventory_module"):
+		return _workbench_ref.call("get_inventory_module") as InventoryModule
+	return null
 
 
 func _input(event: InputEvent) -> void:
-	# ESC 关闭
 	if event.is_action_pressed("ui_cancel") or _is_key_just_pressed(event, KEY_ESCAPE):
-		_on_close_pressed()
-		get_viewport().set_input_as_handled()
-		return
-	# T 键切换命运改造模式
-	if _is_key_just_pressed(event, KEY_T) and _transform_button != null:
-		_on_transform_toggle()
+		if _confirm_layer != null and _confirm_layer.visible:
+			_cancel_confirm()
+		else:
+			_close()
 		get_viewport().set_input_as_handled()
 
 
@@ -86,383 +150,937 @@ func _is_key_just_pressed(event: InputEvent, key: Key) -> bool:
 	)
 
 
-func set_player(player: Node) -> void:
-	_player = player
-	if is_node_ready():
-		_build_weapon_options()
+## ————————————————————————————————
+## 界面
+## ————————————————————————————————
 
+func _build_ui() -> void:
+	var dim := ColorRect.new()
+	dim.name = "Dim"
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.color = UIPalette.PRISM_DIM
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(dim)
 
-func set_workbench_ref(ref: Node) -> void:
-	_workbench_ref = ref
+	# 棱镜语言：不画实心卡片。面板只留 0.46 的极淡底衬 + 四角括号，
+	# 结构由 1px 细线与括号界定（规范 §1.2 铁律 1）。
+	var panel := PanelContainer.new()
+	panel.name = "Panel"
+	panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel.offset_left = 40.0
+	panel.offset_top = 14.0
+	panel.offset_right = -40.0
+	panel.offset_bottom = -14.0
+	panel.add_theme_stylebox_override("panel", UIStyleFactory.make_prism_panel(true, 0.46))
+	UIStyleFactory.attach_prism_bracket_frame(panel, "solid", 30.0, 2.0)
+	add_child(panel)
 
+	var margin := MarginContainer.new()
+	margin.name = "Margin"
+	margin.add_theme_constant_override("margin_left", 30)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 30)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
 
-## 切换命运改造模式（基础/命运卡片）
-func _on_transform_toggle() -> void:
-	_transform_mode = not _transform_mode
-	_rebuild_options()
-
-
-## 重建选项（根据当前模式显示枪身/子弹或命运卡片）
-func _rebuild_options() -> void:
-	if _transform_mode:
-		_show_fate_card_options()
-	else:
-		_show_blueprint_options()
-
-
-func _show_blueprint_options() -> void:
-	var gunbody_tier: int = BaseManager.get_blueprint_tier("gunbody")
-	var bullet_tier: int = BaseManager.get_blueprint_tier("bullet")
-	_populate_gunbody_options(gunbody_tier)
-	_populate_bullet_options(bullet_tier)
-	if _transform_button:
-		_transform_button.text = GameText.text("workbench.transform_enter")
-	_update_weapon_tree_display()
-
-
-## 构建可选武器列表
-func _build_weapon_options() -> void:
-	if _player == null:
-		_update_status(GameText.text("workbench.player_not_ready"))
-		return
-
-	_update_weapon_tree_display()
-	_rebuild_options()
-
-
-func _update_weapon_tree_display() -> void:
-	if weapon_tree_label == null:
-		return
-
-	if _player and _player.has_method("get_weapon_tree"):
-		var tree: Node = _player.get_weapon_tree()
-		if tree != null and tree.has_method("get_localized_assembly_tree_string"):
-			weapon_tree_label.text = (
-				GameText.text("workbench.current_weapon_prefix")
-				+ "\n"
-				+ str(tree.call("get_localized_assembly_tree_string"))
-			)
-		elif tree != null and tree.has_method("get_assembly_tree_string"):
-			weapon_tree_label.text = (
-				GameText.text("workbench.current_weapon_prefix")
-				+ "\n"
-				+ str(tree.call("get_assembly_tree_string"))
-			)
-		elif tree != null and tree.has_method("get_weapon_info"):
-			var info: Dictionary = tree.get_weapon_info()
-			weapon_tree_label.text = GameText.text("workbench.stats_line_format", [
-				info.get("fire_rate", 0),
-				info.get("projectile_count", 0),
-				info.get("spread", 0),
-				info.get("ammo", "?"),
-			])
-		else:
-			weapon_tree_label.text = GameText.text("workbench.tree_unready")
-	else:
-		weapon_tree_label.text = GameText.text("workbench.player_invalid")
-
-
-func _populate_gunbody_options(tier: int) -> void:
-	if gunbody_options == null:
-		return
-
-	# 清空旧内容
-	_clear_gunbody_options()
-
-	var available := BlueprintRegistry.get_available_gunbodies(tier)
-	_ensure_transform_button_parent()
-
-	var header := Label.new()
-	header.text = GameText.text("workbench.gunbody_header")
-	header.add_theme_color_override("font_color", Color(0.8, 0.9, 1.0))
-	gunbody_options.add_child(header)
-
-	if available.is_empty():
-		var empty_lbl := Label.new()
-		empty_lbl.text = GameText.text("workbench.no_gunbody")
-		gunbody_options.add_child(empty_lbl)
-		return
-
-	for entry in available:
-		var btn := Button.new()
-		btn.text = GameText.text("workbench.tier_option_format", [entry["tier"], entry["display_name"]])
-		btn.custom_minimum_size = Vector2(220, 32)
-		btn.pressed.connect(_on_gunbody_selected.bind(entry["item_id"]))
-		# 枪身选项用 BORDER_FOCUS 蓝
-		var gunbody_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_FOCUS)
-		UIStyleFactory.apply_button_style(btn, gunbody_styles)
-		gunbody_options.add_child(btn)
-
-
-func _populate_bullet_options(tier: int) -> void:
-	if bullet_options == null:
-		return
-
-	# 清空旧内容
-	for child in bullet_options.get_children():
-		child.queue_free()
-
-	var available := BlueprintRegistry.get_available_bullets(tier)
-
-	var header := Label.new()
-	header.text = GameText.text("workbench.bullet_header")
-	header.add_theme_color_override("font_color", Color(0.8, 1.0, 0.8))
-	bullet_options.add_child(header)
-
-	if available.is_empty():
-		var empty_lbl := Label.new()
-		empty_lbl.text = GameText.text("workbench.no_bullet")
-		bullet_options.add_child(empty_lbl)
-		return
-
-	for entry in available:
-		var btn := Button.new()
-		btn.text = GameText.text("workbench.tier_option_format", [entry["tier"], entry["display_name"]])
-		btn.custom_minimum_size = Vector2(220, 32)
-		btn.pressed.connect(_on_bullet_selected.bind(entry["item_id"]))
-		# 子弹选项用 ITEM_BULLET 蓝色
-		var bullet_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.ITEM_BULLET)
-		UIStyleFactory.apply_button_style(btn, bullet_styles)
-		bullet_options.add_child(btn)
-
-
-func _on_gunbody_selected(item_id: String) -> void:
-	_current_selection["gunbody"] = item_id
-	_apply_selection()
-	_update_status(GameText.text("workbench.selected_gunbody_format", [item_id]))
-
-
-func _on_bullet_selected(item_id: String) -> void:
-	_current_selection["bullet"] = item_id
-	_apply_selection()
-	_update_status(GameText.text("workbench.selected_bullet_format", [item_id]))
-
-
-## 在命运改造模式下显示随机抽取的命运卡片
-func _show_fate_card_options() -> void:
-	if gunbody_options == null or bullet_options == null:
-		return
-
-	# 清空两侧
-	_clear_gunbody_options()
-	for child in bullet_options.get_children():
-		child.queue_free()
-
-	# 更新标题
-	if _transform_button:
-		_transform_button.text = GameText.text("workbench.transform_exit")
-	_ensure_transform_button_parent()
-
-	var header := Label.new()
-	header.text = GameText.text("workbench.fate_header")
-	header.add_theme_color_override("font_color", Color(0.8, 0.5, 1.0, 1.0))
-	gunbody_options.add_child(header)
-
-	# 共享塔罗抽牌：无重复，正/逆位各50%。
-	var choices := FateCardPresets.draw_offer(3, null, FateCardGameBridge.get_offer_level_id())
-
-	if choices.is_empty():
-		var empty_lbl := Label.new()
-		empty_lbl.text = GameText.text("workbench.no_fate_card")
-		gunbody_options.add_child(empty_lbl)
-		return
-
-	# 命运卡以塔罗图卡横向排布（面板较窄，用小尺寸卡面 + 卡下功能文字）
-	var card_row := HBoxContainer.new()
-	card_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	card_row.add_theme_constant_override("separation", 8)
-	gunbody_options.add_child(card_row)
-	for choice_index in range(choices.size()):
-		var card := choices[choice_index]
-		var card_view := _create_fate_card_view(card)
-		card_row.add_child(card_view)
-		var btn := card_view.get_meta("tarot_button") as Button
-		if btn != null:
-			_play_workbench_tarot_flip(btn, card, choice_index)
-
-	# 右侧显示说明
-	var desc := Label.new()
-	desc.text = GameText.text("workbench.fate_desc")
-	desc.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7, 0.9))
-	desc.add_theme_font_size_override("font_size", 13)
-	desc.autowrap_mode = TextServer.AUTOWRAP_WORD
-	desc.custom_minimum_size = Vector2(200, 100)
-	bullet_options.add_child(desc)
-
-
-## 工作台的命运卡视图：塔罗卡面 + 卡下功能文字（面板窄，故用紧凑尺寸）。
-func _create_fate_card_view(card: FateCard) -> Control:
 	var column := VBoxContainer.new()
-	column.alignment = BoxContainer.ALIGNMENT_CENTER
-	column.add_theme_constant_override("separation", 6)
+	column.name = "VBox"
+	column.add_theme_constant_override("separation", 8)
+	margin.add_child(column)
 
-	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(112, 175)
-	btn.text = ""
-	btn.clip_contents = true
-	btn.focus_mode = Control.FOCUS_ALL
-	btn.tooltip_text = "%s\n%s\n%s" % [FateCard.scope_display_name(card.scope), FateCard.scope_target_text(card.scope), card.description]
-	btn.set_meta("tarot_button", btn)
-	btn.set_meta("tarot_face_ready", false)
-	# 卡身份：供验收把卡面贴图与被抽中的卡牌逐一对上，防止"图装错牌"。
-	btn.set_meta("tarot_stable_card_id", card.get_stable_card_id())
-	btn.pressed.connect(_on_fate_card_selected.bind(card))
-	# 悬停/焦点框：棱镜 = 1px 白线 + 方角（旧版是 8px 圆角 + 2px 亮边）。
-	var hover := UIStyleFactory.make_prism_slot_style(true)
-	btn.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
-	btn.add_theme_stylebox_override("hover", hover)
-	btn.add_theme_stylebox_override("focus", hover)
-	btn.add_theme_stylebox_override("pressed", hover)
-	column.add_child(btn)
+	# 版面只分三段：页头 / 主体（炼炉 + 背包）/ 页脚。
+	# 业主 2026-10-18 口径：按钮直接放最底下、所有信息也放底下 ——
+	# 主体区不再夹任何读数或按钮，整块竖向空间全留给盘面与背包。
+	column.add_child(_build_header())
+	column.add_child(UIStyleFactory.make_prism_rule(UIPalette.PRISM_LINE_FAINT, 1.0))
+	column.add_child(_build_body())
+	column.add_child(UIStyleFactory.make_prism_rule(UIPalette.PRISM_LINE_FAINT, 1.0))
+	column.add_child(_build_footer())
+	add_child(_build_confirm_layer())
 
-	var art := FateCardView.art_for(card)
-	btn.set_meta("tarot_art_mode", art != null)
-	if art != null:
-		var back_node: Control = null
-		if FateCardView.back_texture() != null:
-			back_node = FateCardView.build_back_layer(btn)
-		var face := FateCardView.build_art_layer(btn, art, card.is_reversed(), "TarotArtFace")
-		if face != null:
-			face.visible = false
-		btn.set_meta("tarot_face_node", face)
-		btn.set_meta("tarot_back_node", back_node)
-	else:
-		btn.text = "%s\n%s" % [card.card_name, card.short_description]
-		btn.add_theme_font_size_override("font_size", 11)
-		btn.add_theme_color_override("font_color", UIPalette.PRISM_TEXT)
-		var fb_font := UIStyleFactory.make_prism_font(2)
-		if fb_font != null:
-			btn.add_theme_font_override("font", fb_font)
-		# 缺图回退卡：棱镜方角 + 稀有度线（color 走归一化，保留稀有度分级）。
-		var fallback := UIStyleFactory.make_panel_with_border(
-			2, FateCard.rarity_color(card.card_rarity), 2, 1
-		)
-		fallback.bg_color = UIPalette.PRISM_SURFACE_SOLID
-		btn.add_theme_stylebox_override("normal", fallback)
 
-	column.add_child(FateCardView.build_caption(card, 11, 112))
-	# 调用方拿到的是「列」而不是按钮，故在列上也挂一份，避免从列上取不到按钮。
-	column.set_meta("tarot_button", btn)
+## 页脚 = 读数行 + 操作行。读数在上、按钮压在最底，符合"信息与按钮都在底下"。
+func _build_footer() -> Control:
+	var footer := VBoxContainer.new()
+	footer.name = "Footer"
+	footer.add_theme_constant_override("separation", 8)
+	footer.add_child(_build_readout())
+	footer.add_child(_build_actions())
+	return footer
+
+
+func _build_header() -> Control:
+	var row := HBoxContainer.new()
+	row.name = "Header"
+	row.add_theme_constant_override("separation", 20)
+
+	# 两级排印：大写宽字距弱标签 + 近白大字（规范 §4.1）。
+	var title_column := VBoxContainer.new()
+	title_column.name = "TitleColumn"
+	title_column.add_theme_constant_override("separation", 2)
+	var eyebrow := Label.new()
+	eyebrow.name = "Eyebrow"
+	eyebrow.text = "WEAPON FORGE　·　ALCHEMY"
+	UIStyleFactory.apply_prism_label(eyebrow, "label", 5, 11)
+	title_column.add_child(eyebrow)
+	var title := Label.new()
+	title.name = "Title"
+	title.text = "武器改造台"
+	UIStyleFactory.apply_prism_label(title, "value", 4, 24)
+	title_column.add_child(title)
+	row.add_child(title_column)
+
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(spacer)
+
+	# 金币是常驻资源，留在页头右上；"本次熔炼"的一切读数与按钮都在页脚。
+	var coin_column := VBoxContainer.new()
+	coin_column.name = "CoinColumn"
+	coin_column.add_theme_constant_override("separation", 0)
+	var coin_caption := Label.new()
+	coin_caption.name = "CoinCaption"
+	coin_caption.text = "COINS"
+	coin_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	UIStyleFactory.apply_prism_label(coin_caption, "label", 4, 10)
+	coin_column.add_child(coin_caption)
+	_coins_label = Label.new()
+	_coins_label.name = "CoinsLabel"
+	_coins_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_coins_label.text = "0"
+	UIStyleFactory.apply_prism_label(_coins_label, "value", 2, 22)
+	coin_column.add_child(_coins_label)
+	row.add_child(coin_column)
+	return row
+
+
+func _build_body() -> Control:
+	# 用**手动定位**而不是 HBox：业主口径是「中间炼炉、右边包裹」。
+	# HBox 只能让"炼炉+背包"这一组整体居中 —— 那炼炉必然偏左（背包占了右半）。
+	# 这里让炼炉锚在水平中心、背包锚在右边缘，两块各自贴住该待的位置。
+	#
+	# 不用 anchors 而用 resized 回调：窄屏下两者会重叠，只有拿到实时宽度
+	# 才能把炼炉往左夹回来（`TRAY_BAG_GAP` 就是那道夹紧余量）。
+	var body := Control.new()
+	body.name = "Body"
+	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
+
+	_body_tray_column = _build_tray_column()
+	body.add_child(_body_tray_column)
+	_body_bag_column = _build_bag_column()
+	body.add_child(_body_bag_column)
+	body.resized.connect(_layout_body)
+	_layout_body()
+	return body
+
+
+## 把炼炉放到水平中心、背包贴右边缘；空间不够时炼炉左移，保证两者不重叠。
+func _layout_body() -> void:
+	if _body_tray_column == null or _body_bag_column == null:
+		return
+	var body_size := (_body_tray_column.get_parent() as Control).size
+	if body_size.x <= 0.0 or body_size.y <= 0.0:
+		return
+	var tray_min := _body_tray_column.get_combined_minimum_size()
+	var bag_min := _body_bag_column.get_combined_minimum_size()
+	var bag_width := maxf(bag_min.x, 1.0)
+
+	# 背包：右边缘对齐，纵向吃满主体高度。
+	var bag_x := maxf(0.0, body_size.x - bag_width)
+	_body_bag_column.position = Vector2(bag_x, 0.0)
+	_body_bag_column.size = Vector2(bag_width, body_size.y)
+
+	# 炼炉：水平居中；若撞到背包，就退到「背包左边 - 空隙」。
+	var tray_width := tray_min.x
+	var tray_x := (body_size.x - tray_width) * 0.5
+	var limit := bag_x - TRAY_BAG_GAP - tray_width
+	if tray_x > limit:
+		tray_x = limit
+	tray_x = maxf(0.0, tray_x)
+	var tray_height := minf(tray_min.y, body_size.y)
+	_body_tray_column.position = Vector2(tray_x, (body_size.y - tray_height) * 0.5)
+	_body_tray_column.size = Vector2(tray_width, tray_height)
+
+
+## 中栏：炼炉。5×5 正方形盘面，是整个面板的主体。
+func _build_tray_column() -> Control:
+	var column := VBoxContainer.new()
+	column.name = "TrayColumn"
+	# 竖直居中：盘面比可用高度矮一点时，宁可上下都留白，也不要顶着页头。
+	column.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	column.add_theme_constant_override("separation", 8)
+
+	var caption := Label.new()
+	caption.name = "TrayCaption"
+	caption.text = "ALCHEMY GRID　%d × %d" % [TRAY_COLUMNS, TRAY_ROWS]
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	UIStyleFactory.apply_prism_label(caption, "label", 4, 11)
+	column.add_child(caption)
+
+	_tray_board = GridInventoryBoard.new()
+	_tray_board.name = "TrayBoard"
+	_tray_board.slot_kind = TRAY_KIND
+	_tray_board.prism_mode = true
+	_tray_board.configure(TRAY_CAPACITY, TRAY_COLUMNS, TRAY_CELL_SIZE)
+	_tray_board.drop_validator = Callable(self, "_validate_tray_drop")
+
+	# 括号框必须挂在**外层容器**上：棋盘重建会清空自己的全部子节点。
+	var tray_frame := Control.new()
+	tray_frame.name = "TrayFrame"
+	tray_frame.custom_minimum_size = _tray_board.custom_minimum_size + Vector2(16, 16)
+	tray_frame.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_tray_board.position = Vector2(8, 8)
+	tray_frame.add_child(_tray_board)
+	UIStyleFactory.attach_prism_bracket_frame(tray_frame, "ghost", 18.0, 2.0)
+	column.add_child(tray_frame)
+	_connect_board(_tray_board)
+
+	var note := Label.new()
+	note.name = "TrayNote"
+	note.text = "拖回右侧＝取回　·　盘内拖动＝调整位置　·　放进去的东西会被销毁"
+	note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	UIStyleFactory.apply_prism_label(note, "faint", 1, 11)
+	column.add_child(note)
 	return column
 
 
-func _play_workbench_tarot_flip(button: Button, card: FateCard, choice_index: int) -> void:
-	var art_mode := bool(button.get_meta("tarot_art_mode", false))
-	# 注意：不能用 get_meta(key, null) 取默认——Godot 在默认值本身为 null 时仍会打错误日志。
-	var face: Control = (button.get_meta("tarot_face_node") if button.has_meta("tarot_face_node") else null) as Control
-	var back: Control = (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as Control
-	if not art_mode:
-		face = UIStyleFactory.make_tarot_button_text(button)
-		button.set_meta("tarot_face_node", face)
-	button.disabled = true
-	button.set_meta("tarot_face_ready", false)
-	if not art_mode:
-		button.text = "✦ 命运塔罗"
-	button.pivot_offset = button.size * 0.5
-	var tween := button.create_tween()
-	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
-		button.modulate.a = 0.0
-		if not art_mode:
-			button.text = ""
-			face.visible = true
-			UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
-		else:
-			FateCardView.reveal(face, back, card.is_reversed())
-		tween.tween_property(button, "modulate:a", 1.0, 0.15)
-	else:
-		tween.tween_interval(0.10 + float(choice_index) * 0.08)
-		tween.tween_property(button, "scale:x", 0.04, 0.14)
-		tween.tween_callback(func() -> void:
-			if not art_mode:
-				button.text = ""
-				face.visible = true
-				UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
-			else:
-				FateCardView.reveal(face, back, card.is_reversed())
-		)
-		tween.tween_property(button, "scale:x", 1.0, 0.18)
-	tween.tween_callback(func() -> void:
-		button.disabled = false
-		button.set_meta("tarot_face_ready", true)
-		button.set_meta("tarot_face_rotation", button.rotation)
+## 右栏：玩家背包。与 I 键同源 `InventoryModule`。
+func _build_bag_column() -> Control:
+	var column := VBoxContainer.new()
+	column.name = "BagColumn"
+	column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_theme_constant_override("separation", 8)
+	_bag_title = Label.new()
+	_bag_title.name = "BagTitle"
+	_bag_title.text = "INVENTORY"
+	UIStyleFactory.apply_prism_label(_bag_title, "label", 4, 11)
+	column.add_child(_bag_title)
+
+	var scroll := ScrollContainer.new()
+	scroll.name = "BagScroll"
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	UIStyleFactory.apply_prism_scrollbar(scroll)
+	column.add_child(scroll)
+
+	_bag_board = GridInventoryBoard.new()
+	_bag_board.name = "BagBoard"
+	_bag_board.slot_kind = BAG_KIND
+	_bag_board.prism_mode = true
+	_bag_board.configure(
+		_inventory.get_capacity() if _inventory != null else InventoryModule.DEFAULT_CAPACITY,
+		BAG_COLUMNS,
+		BAG_CELL_SIZE
 	)
+	_bag_board.drop_validator = Callable(self, "_validate_bag_drop")
+	scroll.add_child(_bag_board)
+	_connect_board(_bag_board)
+	return column
 
 
-func _clear_gunbody_options() -> void:
-	for child in gunbody_options.get_children():
-		if child == _transform_button:
+func _build_readout() -> Control:
+	var grid := GridContainer.new()
+	grid.name = "Readout"
+	# 一行 7 栏。视口基准 1280×720，两行读数会把操作钮挤出可视区。
+	grid.columns = 7
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 20)
+	grid.add_theme_constant_override("v_separation", 6)
+	grid.add_theme_constant_override("h_separation", 28)
+	_stat_payload = _add_stat(grid, "PAYLOAD")
+	_stat_melt = _add_stat(grid, "MELT")
+	# 稀有度分必须单列：它是"材料的稀有度提升品质"这条规则的唯一可见抓手，
+	# 塞进 GRADE ODDS 里玩家看不出是它把概率顶上去了。
+	_stat_rarity = _add_stat(grid, "RARITY")
+	_stat_recipe = _add_stat(grid, "RECIPE")
+	_stat_blueprint = _add_stat(grid, "BLUEPRINT")
+	_stat_grades = _add_stat(grid, "GRADE ODDS")
+	_stat_cost = _add_stat(grid, "FEE")
+	return grid
+
+
+## 一个读数块 = 弱标签 + 强数值。中间态（中灰中等字号）按规范视为违规。
+func _add_stat(grid: GridContainer, caption: String) -> Label:
+	var block := VBoxContainer.new()
+	block.name = "Stat_%s" % caption.replace(" ", "_")
+	# 七栏等分页脚宽度：读数区要像一整条数据带，不能左边挤成一团、右边空一片。
+	block.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	block.add_theme_constant_override("separation", 2)
+	var cap := Label.new()
+	cap.text = caption
+	UIStyleFactory.apply_prism_label(cap, "label", 4, 10)
+	block.add_child(cap)
+	var value := Label.new()
+	value.text = "—"
+	UIStyleFactory.apply_prism_label(value, "value", 2, 17)
+	block.add_child(value)
+	grid.add_child(block)
+	return value
+
+
+## 操作行：状态栏在左，关闭与熔炼压在最右下。这是整个面板的最后一层。
+func _build_actions() -> Control:
+	var row := HBoxContainer.new()
+	row.name = "Actions"
+	row.add_theme_constant_override("separation", 16)
+
+	_status = Label.new()
+	_status.name = "Status"
+	_status.text = HINT_TEXT
+	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	# 给一个最小高度：运行时消息换行时按钮不能被顶得上下跳。
+	_status.custom_minimum_size = Vector2(0, 46)
+	UIStyleFactory.apply_prism_label(_status, "faint", 1, 12)
+	row.add_child(_status)
+
+	var close_button := Button.new()
+	close_button.name = "CloseButton"
+	close_button.text = "ESC　关闭"
+	close_button.custom_minimum_size = Vector2(124, 46)
+	close_button.pressed.connect(_close)
+	UIStyleFactory.apply_prism_button(close_button, "ghost", 2, 13, 3)
+	row.add_child(close_button)
+
+	_forge_button = Button.new()
+	_forge_button.name = "ForgeButton"
+	_forge_button.text = "熔　炼"
+	_forge_button.custom_minimum_size = Vector2(220, 46)
+	_forge_button.pressed.connect(_on_forge_pressed)
+	UIStyleFactory.apply_prism_button(_forge_button, "primary", 2, 17, 5)
+	row.add_child(_forge_button)
+	return row
+
+
+func _build_confirm_layer() -> Control:
+	# 根是全屏 Control：只有先铺满，内部居中容器才有可参照的矩形，
+	# 括号框才能贴着真实面板画（直接给 PanelContainer 设 PRESET_CENTER 会画歪）。
+	var layer := Control.new()
+	layer.name = "ConfirmLayer"
+	layer.visible = false
+	layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	layer.mouse_filter = Control.MOUSE_FILTER_STOP
+	# 棋盘把每件物品的画布提到 z_index=4；确认层若留在 0，枪械图标会盖在弹窗上。
+	layer.z_index = 64
+
+	var scrim := ColorRect.new()
+	scrim.name = "Scrim"
+	scrim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	# 比主遮罩更重：这一步要让玩家"看不见背包"，否则会误以为还能继续拖东西。
+	scrim.color = Color(
+		UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.90
+	)
+	scrim.mouse_filter = Control.MOUSE_FILTER_STOP
+	layer.add_child(scrim)
+
+	var center := CenterContainer.new()
+	center.name = "Center"
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(center)
+
+	var card := PanelContainer.new()
+	card.name = "ConfirmCard"
+	card.custom_minimum_size = Vector2(600, 0)
+	# 确认层必须"读得清"。棱镜的 0.42 底衬在这层会被下面的盘面和背包穿透，
+	# 文字直接压在枪械图标上 —— 收紧到接近不透明的深墨。
+	var card_style := UIStyleFactory.make_prism_panel(true, 0.96)
+	card_style.bg_color = Color(
+		UIPalette.PRISM_INK.r, UIPalette.PRISM_INK.g, UIPalette.PRISM_INK.b, 0.96
+	)
+	card_style.border_color = UIPalette.PRISM_LINE
+	card_style.set_border_width_all(2)
+	card.add_theme_stylebox_override("panel", card_style)
+	center.add_child(card)
+
+	var pad := MarginContainer.new()
+	pad.add_theme_constant_override("margin_left", 34)
+	pad.add_theme_constant_override("margin_top", 26)
+	pad.add_theme_constant_override("margin_right", 34)
+	pad.add_theme_constant_override("margin_bottom", 26)
+	card.add_child(pad)
+
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 12)
+	pad.add_child(column)
+	var warn := Label.new()
+	warn.name = "ConfirmWarn"
+	warn.text = "IRREVERSIBLE"
+	UIStyleFactory.apply_prism_label(warn, "danger", 5, 11)
+	column.add_child(warn)
+	_confirm_text = Label.new()
+	_confirm_text.name = "ConfirmText"
+	_confirm_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	UIStyleFactory.apply_prism_label(_confirm_text, "value", 1, 15)
+	column.add_child(_confirm_text)
+	column.add_child(UIStyleFactory.make_prism_rule(UIPalette.PRISM_LINE_FAINT, 1.0))
+	var buttons := HBoxContainer.new()
+	buttons.alignment = BoxContainer.ALIGNMENT_END
+	buttons.add_theme_constant_override("separation", 16)
+	var cancel := Button.new()
+	cancel.name = "CancelButton"
+	cancel.text = "取消"
+	cancel.custom_minimum_size = Vector2(130, 46)
+	cancel.pressed.connect(_cancel_confirm)
+	UIStyleFactory.apply_prism_button(cancel, "ghost", 2, 16, 3)
+	buttons.add_child(cancel)
+	var ok := Button.new()
+	ok.name = "ConfirmButton"
+	ok.text = "确认熔炼"
+	ok.custom_minimum_size = Vector2(180, 46)
+	ok.pressed.connect(_confirm_plan)
+	UIStyleFactory.apply_prism_button(ok, "primary", 2, 16, 3)
+	buttons.add_child(ok)
+	column.add_child(buttons)
+	_confirm_layer = layer
+	return layer
+
+
+func _connect_board(board: GridInventoryBoard) -> void:
+	for cell in board.cells:
+		if cell.has_signal("slot_drop_received") and not cell.slot_drop_received.is_connected(_on_board_drop):
+			cell.slot_drop_received.connect(_on_board_drop)
+
+
+## ————————————————————————————————
+## 刷新
+## ————————————————————————————————
+
+func _refresh_all() -> void:
+	_refresh_tray()
+	_refresh_bag()
+	_refresh_readout()
+
+
+func _on_inventory_changed() -> void:
+	_refresh_bag()
+	_refresh_readout()
+
+
+func _refresh_tray() -> void:
+	if _tray_board == null:
+		return
+	var entries: Array = []
+	for entry in _tray:
+		entries.append({
+			"slot": int(entry[TRAY_ENTRY_ANCHOR]),
+			"item": entry[TRAY_ENTRY_ITEM],
+			"count": int(entry[TRAY_ENTRY_COUNT]),
+			"grid_rotation": int(entry[TRAY_ENTRY_ROTATION]),
+		})
+	_apply_payloads(_tray_board, entries, TRAY_KIND)
+	_tray_board.render_items(entries)
+
+
+func _refresh_bag() -> void:
+	if _bag_board == null or _inventory == null:
+		return
+	if _bag_board.capacity != _inventory.get_capacity():
+		_bag_board.configure(_inventory.get_capacity(), BAG_COLUMNS, BAG_CELL_SIZE)
+		_connect_board(_bag_board)
+	var entries: Array = _inventory.get_occupied_slots()
+	_apply_payloads(_bag_board, entries, BAG_KIND)
+	_bag_board.render_items(entries)
+	if _bag_title != null:
+		_bag_title.text = "背包（%d / %d 格）" % [
+			_inventory.get_used_slots(), _inventory.get_capacity(),
+		]
+
+
+## 把每个有物品的锚点格写成拖拽源；空格显式清掉 payload，避免拖动旧物品。
+func _apply_payloads(board: GridInventoryBoard, entries: Array, kind: String) -> void:
+	for cell in board.cells:
+		cell.set_meta("slot_kind", kind)
+		if cell.has_meta("drag_payload"):
+			cell.remove_meta("drag_payload")
+	for entry_variant in entries:
+		if not entry_variant is Dictionary:
 			continue
-		child.queue_free()
+		var entry := entry_variant as Dictionary
+		var anchor := int(entry.get("slot", -1))
+		if anchor < 0 or anchor >= board.cells.size():
+			continue
+		board.cells[anchor].set_meta("drag_payload", {
+			"item": (entry.get("item", {}) as Dictionary).duplicate(true),
+			"count": int(entry.get("count", 1)),
+		})
 
 
-func _ensure_transform_button_parent() -> void:
-	if _transform_button == null or gunbody_options == null:
+func _refresh_readout() -> void:
+	if _stat_cost == null:
 		return
-	if _transform_button.get_parent() != gunbody_options:
-		if _transform_button.get_parent() != null:
-			_transform_button.get_parent().remove_child(_transform_button)
-		gunbody_options.add_child(_transform_button)
-	gunbody_options.move_child(_transform_button, 0)
-
-
-func _apply_selection() -> void:
-	if _player == null or not _player.has_method("get_weapon_tree"):
+	if _coins_label != null:
+		_coins_label.text = str(_coins())
+	var plan := WeaponForge.classify(_tray_probe_items())
+	var recipe := str(plan["recipe"])
+	if recipe == WeaponForge.RECIPE_NONE:
+		_stat_payload.text = "—"
+		_stat_melt.text = "—"
+		_stat_rarity.text = "—"
+		_stat_recipe.text = "—"
+		_stat_blueprint.text = "—"
+		_stat_grades.text = "—"
+		_stat_cost.text = "—"
+		_stat_cost.remove_theme_color_override("font_color")
+		UIStyleFactory.apply_prism_label(_stat_cost, "value", 2, 17)
+		_forge_button.disabled = true
 		return
-
-	var tree: Node = _player.get_weapon_tree()
-	if tree == null:
-		return
-
-	# 如果选择了枪身，替换根节点
-	if _current_selection.has("gunbody"):
-		var gun_id: String = _current_selection["gunbody"]
-		var new_gun: Node = BlueprintRegistry.create_assembly_node(gun_id)
-		if new_gun != null:
-			tree.set_root(new_gun)
-
-	# 如果选择了子弹，挂到枪身上
-	if _current_selection.has("bullet"):
-		var bullet_id: String = _current_selection["bullet"]
-		var new_bullet: Node = BlueprintRegistry.create_assembly_node(bullet_id)
-		if new_bullet != null:
-			var root: Node = tree.get_root()
-			if root != null:
-				var old_bullet: Node = root.slots.get(AssemblyNode.SlotType.BULLET)
-				if old_bullet != null:
-					tree.unmount(old_bullet)
-					old_bullet.free()
-				# 必须走 WeaponAssemblyTree.mount，才能触发数值、3D 模型和 HUD 同步。
-				if not tree.mount(root, AssemblyNode.SlotType.BULLET, new_bullet):
-					new_bullet.free()
-
-	_current_selection.clear()
-	_update_weapon_tree_display()
-
-
-## 命运卡片被选中 → 通过 FateCardGameBridge 应用到武器树
-func _on_fate_card_selected(card: FateCard) -> void:
-	if _fate_selection_busy:
-		return
-	_fate_selection_busy = true
-	var result: Dictionary = await FateCardGameBridge.apply_card_with_source_selection(card, self)
-	_fate_selection_busy = false
-	if result.get("success", false):
-		_update_status(GameText.text("workbench.fate_applied_format", [card.card_name]))
-		_update_weapon_tree_display()
+	var weapons := (plan["weapons"] as Array).size()
+	# 材料按**个数**显示而不是条目数：投 1 组 ×3 药水，玩家要看的是 3 件材料。
+	var materials := 0
+	for value in plan["materials"] as Array:
+		materials += maxi(1, int((value as Dictionary).get("count", 1)))
+	var melt := int(plan["melt"])
+	var rarity_points := int(plan["rarity_points"])
+	var probabilities := WeaponForge.grade_probabilities(weapons, rarity_points)
+	_stat_payload.text = "%d 枪 · %d 材料" % [weapons, materials]
+	_stat_melt.text = str(melt)
+	_stat_rarity.text = str(rarity_points)
+	_stat_recipe.text = _recipe_text(recipe)
+	# 蓝本一栏必须说清"随机"，否则玩家会以为出来的一定是某一把。
+	if weapons >= 2:
+		_stat_blueprint.text = "随机（%d 把之一）" % weapons
+	elif weapons == 1:
+		_stat_blueprint.text = "投入武器"
 	else:
-		_update_status(GameText.text("workbench.fate_failed_format", [
-			card.card_name, result.get("message", GameText.text("workbench.unknown_error")),
-		]))
+		_stat_blueprint.text = "随机枪身"
+	_stat_grades.text = "蓝 %.0f%% · 紫 %.0f%% · 金 %.0f%%" % [
+		float(probabilities.get(WeaponDropGrade.GRADE_BLUE, 0.0)) * 100.0,
+		float(probabilities.get(WeaponDropGrade.GRADE_PURPLE, 0.0)) * 100.0,
+		float(probabilities.get(WeaponDropGrade.GRADE_GOLD, 0.0)) * 100.0,
+	]
+	var cost := int(plan.get("coin_cost", 0))
+	_stat_cost.text = str(cost)
+	var affordable := cost <= _coins()
+	UIStyleFactory.apply_prism_label(_stat_cost, "value" if affordable else "danger", 2, 17)
+	_forge_button.disabled = _busy or not affordable
 
 
-func _update_status(msg: String) -> void:
-	if status_label:
-		status_label.text = msg
+func _recipe_text(recipe: String) -> String:
+	match recipe:
+		WeaponForge.RECIPE_REMELT:
+			return "重铸"
+		WeaponForge.RECIPE_FUSION:
+			return "融合"
+		WeaponForge.RECIPE_SYNTHESIS:
+			return "合成"
+	return "—"
 
 
-func _on_close_pressed() -> void:
-	if _workbench_ref != null and _workbench_ref.has_method("handle_esc"):
-		_workbench_ref.handle_esc()
+func _reason_text(reason: String) -> String:
+	match reason:
+		WeaponForge.REJECT_SINGLE_WEAPON_WITHOUT_FUEL:
+			return "单把武器需要配材料当燃料"
+		WeaponForge.REJECT_INSUFFICIENT_FUEL:
+			return "燃料熔炼值不足 %d 点（3 件白装，或 1 件稀有材料）" % WeaponForge.FUEL_THRESHOLD
+		WeaponForge.REJECT_INSUFFICIENT_MELT:
+			return "材料熔炼值不足 6 点，凑不够合成门槛"
+		WeaponForge.REJECT_BACKPACK_FULL:
+			return "背包空间不足"
+		WeaponForge.REJECT_INSUFFICIENT_CURRENCY:
+			return "金币不足"
+	return "拖入武器或任意材料开始"
+
+
+## ————————————————————————————————
+## 拖拽
+## ————————————————————————————————
+
+func _validate_tray_drop(data: Dictionary, anchor: int) -> bool:
+	var item := data.get("item", {}) as Dictionary
+	if not WeaponForge.accepts(item):
+		return false
+	var source_kind := str(data.get("source_kind", ""))
+	var rotation := int(item.get("grid_rotation", 0))
+	var ignore_anchor := -1
+	if source_kind == TRAY_KIND:
+		ignore_anchor = int(data.get("source_index", -1))
+	elif source_kind != BAG_KIND:
+		return false
+	return _tray_can_place(item, anchor, rotation, ignore_anchor)
+
+
+func _validate_bag_drop(data: Dictionary, _anchor: int) -> bool:
+	return str(data.get("source_kind", "")) == TRAY_KIND
+
+
+func _on_board_drop(
+	source_index: int, target_index: int, source_kind: String, target_kind: String
+) -> void:
+	if _busy:
+		return
+	if target_kind == TRAY_KIND:
+		_drop_into_tray(source_index, target_index, source_kind)
+	elif target_kind == BAG_KIND and source_kind == TRAY_KIND:
+		_drop_back_to_bag(source_index)
+
+
+func _drop_into_tray(source_index: int, target_anchor: int, source_kind: String) -> void:
+	if _inventory == null:
+		return
+	var item: Dictionary = {}
+	var count := 1
+	var rotation := 0
+	var from_anchor := -1
+	if source_kind == BAG_KIND:
+		var slot := _inventory.get_slot(source_index)
+		if slot.is_empty():
+			return
+		item = slot.get("item", {}) as Dictionary
+		count = int(slot.get("count", 1))
+	elif source_kind == TRAY_KIND:
+		var entry := _tray_entry_at(source_index)
+		if entry.is_empty():
+			return
+		item = entry[TRAY_ENTRY_ITEM] as Dictionary
+		count = int(entry[TRAY_ENTRY_COUNT])
+		rotation = int(entry[TRAY_ENTRY_ROTATION])
+		from_anchor = source_index
 	else:
-		queue_free()
+		return
+	if not _tray_can_place(item, target_anchor, rotation, from_anchor):
+		var size := ItemRegistry.grid_size_of(item)
+		_set_status("这个位置放不下：需要 %d×%d 格" % [size.x, size.y])
+		return
+	if from_anchor >= 0:
+		_tray_entry_at(from_anchor)[TRAY_ENTRY_ANCHOR] = target_anchor
+	else:
+		if not _tray_append(item, count, target_anchor, rotation):
+			return
+		# 先入盘、成功后才从背包扣除：中途失败不会吞物品。
+		if not _inventory.remove_from_slot(source_index, count):
+			_tray_remove_anchor(target_anchor)
+			_set_status("无法从背包取出该物品")
+			return
+	_refresh_all()
+
+
+func _drop_back_to_bag(source_anchor: int) -> void:
+	if _inventory == null:
+		return
+	var entry := _tray_entry_at(source_anchor)
+	if entry.is_empty():
+		return
+	var item := entry[TRAY_ENTRY_ITEM] as Dictionary
+	var count := int(entry[TRAY_ENTRY_COUNT])
+	var added := _inventory.add_item(item, count)
+	if added <= 0:
+		_set_status("背包放不下，物品仍在盘内")
+		return
+	if added < count:
+		entry[TRAY_ENTRY_COUNT] = count - added
+		_set_status("背包只放得下一部分（%d / %d），其余仍在盘内" % [added, count])
+	else:
+		_tray.erase(entry)
+	_refresh_all()
+
+
+## ————————————————————————————————
+## 盘面存储（6×6，按 grid_size 占格）
+## ————————————————————————————————
+
+func _tray_cells(anchor: int, item: Dictionary, rotation: int) -> Array[int]:
+	var cells: Array[int] = []
+	if anchor < 0 or anchor >= TRAY_CAPACITY:
+		return cells
+	var size := ItemRegistry.grid_size_of(item)
+	if rotation % 2 == 1:
+		size = Vector2i(size.y, size.x)
+	var origin := Vector2i(anchor % TRAY_COLUMNS, anchor / TRAY_COLUMNS)
+	if origin.x + size.x > TRAY_COLUMNS or origin.y + size.y > TRAY_ROWS:
+		return cells
+	for y in range(size.y):
+		for x in range(size.x):
+			cells.append((origin.y + y) * TRAY_COLUMNS + (origin.x + x))
+	return cells
+
+
+func _tray_can_place(item: Dictionary, anchor: int, rotation: int, ignore_anchor := -1) -> bool:
+	var cells := _tray_cells(anchor, item, rotation)
+	if cells.is_empty():
+		return false
+	for entry in _tray:
+		if int(entry[TRAY_ENTRY_ANCHOR]) == ignore_anchor:
+			continue
+		var other_cells := _tray_cells(
+			int(entry[TRAY_ENTRY_ANCHOR]),
+			entry[TRAY_ENTRY_ITEM] as Dictionary,
+			int(entry[TRAY_ENTRY_ROTATION])
+		)
+		for cell in cells:
+			if cell in other_cells:
+				return false
+	return true
+
+
+func _tray_append(item: Dictionary, count: int, anchor: int, rotation: int) -> bool:
+	if not _tray_can_place(item, anchor, rotation):
+		return false
+	_tray.append({
+		TRAY_ENTRY_ANCHOR: anchor,
+		TRAY_ENTRY_ITEM: item.duplicate(true),
+		TRAY_ENTRY_COUNT: count,
+		TRAY_ENTRY_ROTATION: rotation,
+	})
+	return true
+
+
+func _tray_entry_at(anchor: int) -> Dictionary:
+	for entry in _tray:
+		if int(entry[TRAY_ENTRY_ANCHOR]) == anchor:
+			return entry
+	return {}
+
+
+func _tray_remove_anchor(anchor: int) -> void:
+	var entry := _tray_entry_at(anchor)
+	if not entry.is_empty():
+		_tray.erase(entry)
+
+
+## 盘内物品的探针副本：`count` 写进字典，`WeaponForge.melt_value_of` 才能按堆叠算。
+func _tray_probe_items() -> Array:
+	var items: Array = []
+	for entry in _tray:
+		var probe := (entry[TRAY_ENTRY_ITEM] as Dictionary).duplicate(true)
+		probe["count"] = int(entry[TRAY_ENTRY_COUNT])
+		items.append(probe)
+	return items
+
+
+## ————————————————————————————————
+## 熔炼事务
+## ————————————————————————————————
+
+func _on_forge_pressed() -> void:
+	if _busy:
+		return
+	var plan := WeaponForge.classify(_tray_probe_items())
+	if str(plan["recipe"]) == WeaponForge.RECIPE_NONE:
+		_set_status(_reason_text(str(plan["reason"])))
+		return
+	if not (plan["weapons"] as Array).is_empty():
+		_pending_plan = plan
+		_confirm_text.text = "销毁 %d 把武器与 %d 个弹药模块，支付 %d 金币，产出一把全新枪械。\n蓝本与弹种随机，命运卡不继承，弹药不锁定。" % [
+			(plan["weapons"] as Array).size(),
+			(plan["modules"] as Array).size(),
+			int(plan.get("coin_cost", 0)),
+		]
+		_confirm_layer.visible = true
+		return
+	_execute_forge(plan)
+
+
+func _confirm_plan() -> void:
+	_confirm_layer.visible = false
+	if _pending_plan.is_empty():
+		return
+	var plan := _pending_plan
+	_pending_plan = {}
+	_execute_forge(plan)
+
+
+func _cancel_confirm() -> void:
+	_pending_plan = {}
+	_confirm_layer.visible = false
+
+
+func _execute_forge(plan: Dictionary) -> void:
+	if _inventory == null:
+		_set_status("背包不可用，无法熔炼")
+		return
+	_busy = true
+	_set_status("正在熔炼……")
+	var recipe := str(plan["recipe"])
+	var tier := _blueprint_tier()
+	var outputs := _build_outputs(plan, recipe, tier)
+	if outputs.is_empty():
+		_busy = false
+		_set_status("没有可用的枪身蓝图，熔炼未执行")
+		return
+	# 产出数量不足预演值 ⇒ 直接拒绝，不销毁任何投入。
+	# 否则「合成 3 把但只构建出 2 把」会让玩家白搭进去一批模块，而且看不出为什么。
+	var expected := int(plan["output_count"])
+	if outputs.size() != expected:
+		_busy = false
+		_set_status("产出构建异常（预期 %d 把，实际 %d 把），熔炼未执行" % [expected, outputs.size()])
+		return
+	# 金币先校验再扣：`spend_currency` 是原子布尔返回，但把它排在写背包之前，
+	# 后面的失败路径只需退钱，不必处理"钱扣了枪没进包"的中间态。
+	var cost := int(plan.get("coin_cost", 0))
+	if cost > 0 and not _spend_coins(cost):
+		_busy = false
+		_refresh_readout()
+		_set_status("金币不足：需要 %d，持有 %d。投入物一件未动" % [cost, _coins()])
+		return
+
+	# 事务：先快照，再销毁投入、写产出；任一失败全量回滚（含金币）。
+	var inventory_snapshot: Array = _inventory.get_slots_snapshot()
+	var tray_snapshot := _clone_tray(_tray)
+	_tray.clear()
+	var written := 0
+	for output in outputs:
+		if _inventory.add_item(output, 1) <= 0:
+			_inventory.restore_slots_snapshot(inventory_snapshot)
+			_tray = tray_snapshot
+			if cost > 0:
+				_refund_coins(cost)
+			_busy = false
+			_refresh_all()
+			_set_status("背包空间不足，熔炼已回滚：投入物与 %d 金币均已退回" % cost)
+			return
+		written += 1
+
+	_busy = false
+	_refresh_all()
+	var lines: Array[String] = []
+	for output in outputs:
+		lines.append("%s｜%s｜%s" % [
+			WeaponDropGrade.display_name(str(output.get("drop_grade", ""))),
+			str(output.get("name", "武器")),
+			_bullet_display(output),
+		])
+	var message := "熔炼完成：%s（消耗 %d 金币）" % ["，".join(lines), cost]
+	_set_status(message)
+	forge_completed.emit({
+		"success": true,
+		"recipe": recipe,
+		"count": written,
+		"coin_cost": cost,
+		"outputs": outputs,
+		"message": message,
+	})
+
+
+func _build_outputs(plan: Dictionary, recipe: String, tier: int) -> Array:
+	var outputs: Array = []
+	if recipe == WeaponForge.RECIPE_SYNTHESIS:
+		var gunbodies := BlueprintRegistry.get_available_gunbodies(tier)
+		if gunbodies.is_empty():
+			return outputs
+		var count := int(plan["output_count"])
+		for _index in range(count):
+			var entry := gunbodies[_rng.randi_range(0, gunbodies.size() - 1)] as Dictionary
+			var output := WeaponForge.build_output({
+				"assembly_id": str(entry.get("item_id", "")),
+				"grade": WeaponForge.roll_grade_value(
+					_rng.randf(), 0, int(plan["rarity_points"])
+				),
+				"bullet_id": WeaponForge.roll_bullet(plan["modules"], _rng),
+				"attachments": [],
+			})
+			if not output.is_empty():
+				outputs.append(output)
+		return outputs
+
+	var weapons := plan["weapons"] as Array
+	var weapon_count := weapons.size()
+	# R2：蓝本**随机**取一把（业主要求「两把随机」）。R1：只有一把，随机退化为取它。
+	var blueprint := plan["blueprint"] as Dictionary
+	if weapon_count >= 2:
+		blueprint = WeaponForge.pick_blueprint(weapons, _rng).get("item", {}) as Dictionary
+	var assembly_id := str(blueprint.get("assembly_id", ""))
+	if assembly_id.is_empty():
+		return outputs
+	var melee := WeaponForge.is_melee(blueprint)
+	# 弹种候选 = 投入模块（按数量计票）+ 投入武器自带弹种（各 1 票）。
+	var bound := WeaponForge.collect_bound_bullets(weapons)
+	var bullet_id := "" if melee else WeaponForge.roll_bullet(plan["modules"], _rng, bound)
+	var attachments: Array[String] = []
+	if weapon_count >= 2 and not melee:
+		var wanted := int(WeaponForge.FUSION_ATTACHMENTS.get(mini(weapon_count, 3), 1))
+		attachments = WeaponForge.roll_attachments(assembly_id, tier, wanted, _rng)
+	var output := WeaponForge.build_output({
+		"assembly_id": assembly_id,
+		"grade": WeaponForge.roll_grade(_rng, weapon_count, int(plan["rarity_points"])),
+		"bullet_id": bullet_id,
+		"attachments": attachments,
+	})
+	if not output.is_empty():
+		outputs.append(output)
+	return outputs
+
+
+## ————————————————————————————————
+## 金币
+## ————————————————————————————————
+
+func _coins() -> int:
+	if GameManager == null:
+		return 0
+	return int(GameManager.currency)
+
+
+func _spend_coins(amount: int) -> bool:
+	if amount <= 0:
+		return true
+	if GameManager == null:
+		return false
+	return GameManager.spend_currency(amount)
+
+
+func _refund_coins(amount: int) -> void:
+	if amount <= 0 or GameManager == null:
+		return
+	GameManager.add_currency(amount)
+
+
+func _blueprint_tier() -> int:
+	if BaseManager != null:
+		return maxi(0, int(BaseManager.get_blueprint_tier("gunbody")))
+	return 0
+
+
+func _bullet_display(output: Dictionary) -> String:
+	var bullet_id := str(output.get("bullet_module_id", ""))
+	if bullet_id.is_empty():
+		return "近战"
+	var definition := ItemRegistry.get_instance().get_item(bullet_id)
+	return str(definition.get("name", bullet_id))
+
+
+func _clone_tray(source: Array[Dictionary]) -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	for entry in source:
+		out.append((entry as Dictionary).duplicate(true))
+	return out
+
+
+## ————————————————————————————————
+## 关闭
+## ————————————————————————————————
+
+func _close() -> void:
+	if _busy:
+		return
+	if not _return_tray_to_inventory():
+		_set_status("背包放不下盘内物品，先腾出格子再关闭")
+		return
+	closed.emit()
+	queue_free()
+
+
+## 盘内残留必须原样退回背包。放不下就整笔回滚并拒绝关闭 ——
+## 关面板顺手销毁玩家的枪是这类界面最容易犯、也最不可挽回的错。
+func _return_tray_to_inventory() -> bool:
+	if _tray.is_empty():
+		return true
+	if _inventory == null:
+		return false
+	var snapshot: Array = _inventory.get_slots_snapshot()
+	for entry in _tray:
+		var added := _inventory.add_item(
+			entry[TRAY_ENTRY_ITEM] as Dictionary, int(entry[TRAY_ENTRY_COUNT])
+		)
+		if added < int(entry[TRAY_ENTRY_COUNT]):
+			_inventory.restore_slots_snapshot(snapshot)
+			return false
+	_tray.clear()
+	return true
+
+
+func _set_status(message: String) -> void:
+	if _status != null:
+		_status.text = message

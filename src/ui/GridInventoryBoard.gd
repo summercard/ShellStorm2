@@ -12,7 +12,9 @@ signal slot_drag_finished(source_index: int, source_kind: String, successful: bo
 
 const ITEM_SLOT_SCENE: PackedScene = preload("res://scenes/ItemSlot.tscn")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
+## 基准格边长。棋盘允许按界面需要放大（炼金盘用 64），默认 50 保持背包不变。
 const CELL_SIZE := 50.0
+var cell_size: float = CELL_SIZE
 # 连续棋盘：格子边缘直接相连，不制造独立卡片之间的缝隙。
 const CELL_GAP := 0.0
 const BOARD_PADDING := 0.0
@@ -20,6 +22,11 @@ const BOARD_PADDING := 0.0
 var columns: int = 8
 var slot_kind := "inventory"
 var capacity: int = 40
+## 棱镜模式：格子只画 1px 白线框、不画底色。
+##
+## 用于棱镜线框界面（规范 §1.2 铁律 1「不画实心卡片」）。I 键背包是豁免项，
+## 保持原样式；炼金盘与改造台里的背包视图走棱镜，同屏语言才一致。
+var prism_mode := false
 var cells: Array[Control] = []
 var _item_visuals: Dictionary = {}
 var drop_validator: Callable
@@ -30,9 +37,10 @@ var _preview_rotation := 0
 var _preview_valid := false
 var _preview_visible := false
 
-func configure(next_capacity: int, next_columns: int = 8) -> void:
+func configure(next_capacity: int, next_columns: int = 8, next_cell_size: float = CELL_SIZE) -> void:
 	capacity = maxi(1, next_capacity)
 	columns = maxi(1, next_columns)
+	cell_size = maxf(24.0, next_cell_size)
 	_rebuild_cells()
 
 func get_cells() -> Array[Control]:
@@ -40,18 +48,18 @@ func get_cells() -> Array[Control]:
 
 func get_cell_position(index: int) -> Vector2:
 	return Vector2(
-		BOARD_PADDING + float(index % columns) * (CELL_SIZE + CELL_GAP),
-		BOARD_PADDING + float(index / columns) * (CELL_SIZE + CELL_GAP)
+		BOARD_PADDING + float(index % columns) * (cell_size + CELL_GAP),
+		BOARD_PADDING + float(index / columns) * (cell_size + CELL_GAP)
 	)
 
 func get_cell_size() -> Vector2:
-	return Vector2(CELL_SIZE, CELL_SIZE)
+	return Vector2(cell_size, cell_size)
 
 func get_anchor_from_local_position(local_position: Vector2) -> int:
 	if columns <= 0:
 		return -1
-	var x := int(floor((local_position.x - BOARD_PADDING) / CELL_SIZE))
-	var y := int(floor((local_position.y - BOARD_PADDING) / CELL_SIZE))
+	var x := int(floor((local_position.x - BOARD_PADDING) / cell_size))
+	var y := int(floor((local_position.y - BOARD_PADDING) / cell_size))
 	if x < 0 or y < 0 or x >= columns:
 		return -1
 	var anchor := y * columns + x
@@ -79,8 +87,8 @@ func get_item_rect(anchor_index: int, item_size: Vector2i) -> Rect2:
 	return Rect2(
 		origin,
 		Vector2(
-			float(item_size.x) * CELL_SIZE + float(maxi(0, item_size.x - 1)) * CELL_GAP,
-			float(item_size.y) * CELL_SIZE + float(maxi(0, item_size.y - 1)) * CELL_GAP
+			float(item_size.x) * cell_size + float(maxi(0, item_size.x - 1)) * CELL_GAP,
+			float(item_size.y) * cell_size + float(maxi(0, item_size.y - 1)) * CELL_GAP
 		)
 	)
 
@@ -106,6 +114,9 @@ func render_items(entries: Array) -> void:
 			size = Vector2i(size.y, size.x)
 		var visual := Panel.new()
 		visual.name = "GridItem_%d" % anchor
+		# 必须裁剪：1×1 格的标题（"放大瞄镜"四个字）比格宽还长，
+		# 不裁就会压到右边相邻格上，把两件物品的名字叠成一团。
+		visual.clip_contents = true
 		visual.position = get_cell_position(anchor)
 		visual.size = get_item_rect(anchor, size).size
 		visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -219,20 +230,26 @@ func _rebuild_cells() -> void:
 	_item_visuals.clear()
 	var rows := ceili(float(capacity) / float(columns))
 	custom_minimum_size = Vector2(
-		BOARD_PADDING * 2.0 + columns * CELL_SIZE + maxi(0, columns - 1) * CELL_GAP,
-		BOARD_PADDING * 2.0 + rows * CELL_SIZE + maxi(0, rows - 1) * CELL_GAP
+		BOARD_PADDING * 2.0 + columns * cell_size + maxi(0, columns - 1) * CELL_GAP,
+		BOARD_PADDING * 2.0 + rows * cell_size + maxi(0, rows - 1) * CELL_GAP
 	)
 	size = custom_minimum_size
 	for index in capacity:
 		var cell := ITEM_SLOT_SCENE.instantiate() as Control
 		cell.name = "InvSlot_%d" % index
 		cell.position = get_cell_position(index)
-		cell.custom_minimum_size = Vector2(CELL_SIZE, CELL_SIZE)
-		cell.size = Vector2(CELL_SIZE, CELL_SIZE)
+		cell.custom_minimum_size = Vector2(cell_size, cell_size)
+		cell.size = Vector2(cell_size, cell_size)
 		cell.set_meta("slot_kind", slot_kind)
 		cell.set_meta("grid_board_cell", true)
 		cell.set_meta("slot_index", index)
+		cell.set_meta("prism_slot", prism_mode)
 		cell.call("set_slot_index", index)
+		# 棋盘自己会在 `render_items` 里给占用块画数量角标；格子自带的 CountLabel
+		# 来自 ItemSlot.tscn 的默认文案 "x1"，不隐藏的话每一格空格都会挂着 "x1"。
+		var cell_count := cell.get_node_or_null("CountLabel") as Control
+		if cell_count != null:
+			cell_count.visible = false
 		add_child(cell)
 		cells.append(cell)
 		cell.mouse_entered.connect(_set_item_hover.bind(index, true))

@@ -181,6 +181,8 @@ func set_drag_feedback(active: bool, is_source: bool, dragged_item: Dictionary =
 		)
 		or target_kind == "insurance" and (source_kind == "inventory" or source_kind.begins_with("quick_")) and not has_meta("slot_item")
 		or target_kind.begins_with("quick_") and source_kind.begins_with("quick_")
+		# 炼金盘（武器改造台）是独立模态：背包与盘内都往里拖，盘内也能互相挪。
+		or target_kind == "alchemy" and (source_kind == "inventory" or source_kind == "alchemy")
 		or target_kind.begins_with("attachment_") and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "attachment" and not bool(get_meta("slot_disabled", false)) and str(dragged_item.get("subtype", "")) == str(get_meta("accepted_subtype", ""))
 		or target_kind.begins_with("weapon_") and source_kind in ["inventory", "insurance"] and (
 			str(dragged_item.get("type", "")) == "weapon"
@@ -224,6 +226,17 @@ func _draw() -> void:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.45, 0.56, 0.82, 0.18), true)
 		border_color = Color(0.72, 0.82, 1.0, 1.0)
 		border_width = maxf(border_width, 2.0)
+	# 棱镜格：只有 1px 白线，不画底衬 —— 棱镜语言「不画实心卡片」的格子形态。
+	if bool(get_meta("prism_slot", false)):
+		var prism_color := UIPalette.PRISM_LINE_FAINT
+		if _drag_feedback_active and _drag_feedback_source:
+			prism_color = Color(1.0, 0.76, 0.20, 1.0)
+		elif _drag_feedback_active and _drag_feedback_valid:
+			prism_color = border_color
+		elif _hovered:
+			prism_color = UIPalette.PRISM_LINE_SOFT
+		draw_rect(Rect2(Vector2.ZERO, size), prism_color, false, maxf(1.0, border_width))
+		return
 	var frame := UIStyleFactory.make_inventory_surface(true)
 	frame.border_color = border_color
 	frame.set_border_width_all(int(border_width))
