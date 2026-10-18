@@ -1,6 +1,8 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=21 format=3]
 
 [ext_resource type="Script" path="res://src/world3d/BaseFixtureGlow3D.gd" id="20_fixture_glow"]
+
+[ext_resource type="Script" path="res://src/world3d/BaseLampDynamics3D.gd" id="22_lamp_dynamics"]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d.tscn" id="3_workshop"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d.tscn" id="7_stool"]
@@ -50,6 +52,10 @@ metadata/layout_contract = "只编辑位置、旋转、灯光和美术装饰；�
 metadata/runtime_owner = "TowerDescent3D._install_facilities"
 metadata/source_blend = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
 metadata/art_revision = "v026_corner_l_5m_visual_wrapper"
+
+[node name="基地灯具动态" type="Node3D" parent="."]
+script = ExtResource("22_lamp_dynamics")
+metadata/usage = "99F 灯具/屏幕的呼吸与故障闪（霓虹抽动·床头灯呼吸·贩卖机眯眼·配电柜三灯自检·应急灯双跳·门边警示灯呼吸·二楼电脑屏频闪）。只改 emission_energy_multiplier 的倍率，不改颜色、不新增光源；写入口与 BaseFixtureGlow3D 的开关/启动序列互斥，见脚本头三条硬约束"
 
 [node name="编辑器参考_运行时自动隐藏" type="Node3D" parent="."]
 metadata/editor_guide = true
