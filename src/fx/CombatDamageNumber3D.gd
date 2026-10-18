@@ -9,14 +9,10 @@ extends Node3D
 
 const Style := preload("res://src/vfx/DamageNumberStyle.gd")
 
-const NORMAL_COLOR := Color(1.0, 0.30, 0.26, 1.0)
-const HEAVY_COLOR := Color(1.0, 0.53, 0.16, 1.0)
-const CRITICAL_COLOR := Color(1.0, 0.88, 0.24, 1.0)
-
 var _label: Label3D
 
 
-func configure(amount: int, critical := false) -> void:
+func configure(amount: int, critical := false, element := "") -> void:
 	if _label != null:
 		return
 	_label = Label3D.new()
@@ -27,7 +23,7 @@ func configure(amount: int, critical := false) -> void:
 	_label.font_size = Style.font_size_for(amount, critical)
 	_label.outline_size = Style.outline_size_for(amount, critical)
 	_label.outline_modulate = Style.OUTLINE_COLOR
-	_label.modulate = _color_for(amount, critical)
+	_label.modulate = Style.damage_color(critical, element)
 	_label.pixel_size = Style.PIXEL_SIZE
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.no_depth_test = true
@@ -38,17 +34,9 @@ func configure(amount: int, critical := false) -> void:
 	_start_animation(amount, critical)
 
 
-func _color_for(amount: int, critical: bool) -> Color:
-	if critical:
-		return CRITICAL_COLOR
-	if amount >= Style.HEAVY_AMOUNT_THRESHOLD:
-		return HEAVY_COLOR
-	return NORMAL_COLOR
-
-
 func _start_animation(amount: int, critical: bool) -> void:
-	var duration := clampf(0.58 + float(amount) * 0.003, 0.58, 0.82)
-	var rise := 0.56 + minf(0.24, float(amount) * 0.006)
+	var duration: float = Style.DAMAGE_LIFETIME
+	var rise: float = Style.DAMAGE_RISE
 	var drift := (float(get_instance_id() % 7) - 3.0) * 0.055
 	var pop_scale := 1.24 if critical else 1.12
 	scale = Vector3.ONE * pop_scale
@@ -56,8 +44,8 @@ func _start_animation(amount: int, critical: bool) -> void:
 	var target_position := start_position + Vector3(drift, rise, 0.0)
 	var tween := create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "scale", Vector3.ONE * 0.82, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", Vector3.ONE * 0.82, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	# Label3D 淡出必须走 transparency：只淡 modulate.a 会留下勾边残影（业主 2026-10-10）。
-	tween.tween_property(_label, "transparency", 1.0, duration).set_delay(duration * 0.42).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(_label, "transparency", 1.0, duration * 0.38).set_delay(duration * 0.62).set_trans(Tween.TRANS_SINE)
 	tween.chain().tween_callback(queue_free)

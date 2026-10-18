@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "policies": {
+    "expedition_01": {
+      "policy_id": "expedition_01_starter",
+      "revision": 1,
+      "upright_only": true,
+      "card_ids": [
+        "fate_gun_on_gun",
+        "fate_bullet_carry_gun",
+        "fate_armor_pierce",
+        "fate_living_bullet",
+        "fate_every_seventh",
+        "fate_scale_node",
+        "fate_chain_lightning",
+        "fate_bounce_bullet",
+        "fate_barrage_copy",
+        "fate_fuse_fire",
+        "fate_fuse_frost",
+        "fate_crit_kill",
+        "fate_moon_vitality",
+        "fate_moon_power",
+        "fate_moon_stride",
+        "fate_moon_guard",
+        "fate_moon_dash",
+        "fate_moon_room_heal",
+        "fate_sun_scorch",
+        "fate_sun_extra_loot",
+        "fate_sun_quality"
+      ]
+    }
+  }
+}

@@ -252,6 +252,10 @@ var _strafe_sign := 1.0
 var _bypass_shield_once := false
 var _fate_statuses: Dictionary = {}
 var _fate_freeze_remaining := 0.0
+var _fate_visuals: Dictionary = {}
+var _fate_ice_slow_active := false
+var _damage_element := ""
+const DamageStyle := preload("res://src/vfx/DamageNumberStyle.gd")
 var _source_hp_scale := 1.0
 var _source_damage_scale := 1.0
 var _overhead_health_root: Node3D
@@ -1045,6 +1049,7 @@ func activate_from_stimulus(stimulus_position: Vector3, _stimulus_kind := "inter
 
 func _physics_process(delta: float) -> void:
 	_tick_fate_statuses(delta)
+	_sync_fate_visuals()
 	if _fate_freeze_remaining > 0.0 and ai_state != "dead":
 		_fate_freeze_remaining = maxf(0.0, _fate_freeze_remaining - delta)
 		velocity = Vector3.ZERO
@@ -1635,7 +1640,7 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 	avatar.flash_hit()
 	# 只留一处飘字。历史上这里还有一行 `_spawn_effect("VFX-DAMAGE-NUMBER-3D", 0.72)`
 	# 与下一行双发：它不带 context.text_value ⇒ 飘出一个 "0"（2026-09-21 审计 P0-1）。
-	_spawn_damage_number(applied, critical)
+	_spawn_damage_number(applied, critical, _damage_element)
 	if current_hp <= 0:
 		_die()
 	else:
@@ -1668,7 +1673,15 @@ func take_projectile_damage(
 	_bypass_shield_once = bool(behavior.get("pierce_shield", "armor" in tags or "piercing" in tags))
 	if enemy_kind == "shielded" and not _bypass_shield_once and hit_direction.dot(-global_basis.z) < -0.15:
 		amount = maxi(1, int(amount * float(behavior.get("shield_damage_scale", 1.0))))
+	_damage_element = str(behavior.get("damage_element", ""))
+	if _damage_element.is_empty():
+		var elements: Dictionary = behavior.get("fate_elements", {})
+		for element in ["fire", "ice", "poison"]:
+			if elements.has(element):
+				_damage_element = element
+				break
 	take_damage(amount, critical, hit_direction, hit_knockback, hit_knockback > 0.0)
+	_damage_element = ""
 	_bypass_shield_once = false
 	var source: Variant = behavior.get("source_weapon_tree")
 	if ai_state == "dead" and is_instance_valid(source):
@@ -1739,6 +1752,8 @@ func apply_fate_element(element: String, params: Dictionary, weapon_damage: int,
 			_fate_freeze_remaining = maxf(_fate_freeze_remaining, duration)
 		else:
 			apply_slow(1.0 - float(params.get("slow_ratio", 0.35)), float(params.get("slow_duration", 3.0)))
+			_fate_ice_slow_active = true
+		_sync_fate_visuals()
 		return
 	var key := element + ("_burst" if params.has("burst_delay") else "")
 	var state: Dictionary = _fate_statuses.get(key, {})
@@ -1750,6 +1765,8 @@ func apply_fate_element(element: String, params: Dictionary, weapon_damage: int,
 		"ratio": float(params.get("burst_damage_scale", params.get("dot_damage_per_sec", params.get("dot_damage_per_stack", 0.05)))),
 		"burst": params.has("burst_delay"), "source": source, "attacker": attacker,
 	}
+
+	_sync_fate_visuals()
 
 
 func _tick_fate_statuses(delta: float) -> void:
@@ -1770,7 +1787,7 @@ func _tick_fate_statuses(delta: float) -> void:
 			var applied := maxi(1, int(round(float(state["damage"]) * float(state["ratio"]) * int(state["stacks"]) * ticks)))
 			current_hp = maxi(0, current_hp - applied)
 			health_changed.emit(self, current_hp, max_hp)
-			_spawn_damage_number(applied, false)
+			_spawn_damage_number(applied, false, "poison" if str(key).begins_with("poison") else "fire")
 			if current_hp <= 0:
 				var source: Variant = state["source"]
 				_die()
@@ -2527,6 +2544,7 @@ func _telegraph_duration() -> float:
 func _die() -> void:
 	if ai_state == "dead":
 		return
+	_clear_fate_visuals()
 	transition_to("dead")
 	if AudioManager != null:
 		AudioManager.play_enemy_die_sfx()
@@ -3078,12 +3096,12 @@ const DMG_NUM_DURATION_SCALE := Vector2(0.90, 1.18)
 const HEAL_NUMBER_PREFIX := "+"
 
 
-func _spawn_damage_number(amount: int, critical: bool) -> void:
+func _spawn_damage_number(amount: int, critical: bool, element := "") -> void:
 	if amount <= 0 or get_tree().current_scene == null:
 		return
 	var spawn_position := _damage_number_spawn_position()
-	# 伤害颜色：普通=红 #ff4444；暴击=金 #ffcc33
-	var dmg_color: Color = Color("ffcc33") if critical else Color("ff4444")
+	# 元素色与暴击金色统一由 DamageStyle 管理。
+	var dmg_color: Color = DamageStyle.damage_color(critical, element)
 	# FX02-01 伤害飘字：走 VfxPool3D 新体系
 	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
 	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
@@ -3096,7 +3114,7 @@ func _spawn_damage_number(amount: int, critical: bool) -> void:
 	var damage_number := DAMAGE_NUMBER_SCRIPT.new() as Node3D
 	get_tree().current_scene.add_child(damage_number)
 	damage_number.global_position = spawn_position
-	damage_number.call("configure", amount, critical)
+	damage_number.call("configure", amount, critical, element)
 
 
 ## 治疗飘字（FX02-02）。与伤害飘字共用同一套随机幅度和出生点口径，
@@ -3148,3 +3166,48 @@ func _damage_number_context(amount: int, critical: bool, text: String) -> Dictio
 		"pop_scale": randf_range(DMG_NUM_POP_SCALE.x, DMG_NUM_POP_SCALE.y),
 		"duration_scale": randf_range(DMG_NUM_DURATION_SCALE.x, DMG_NUM_DURATION_SCALE.y),
 	}
+
+
+## Visuals consume the existing gameplay state; stacking never creates more particles.
+func _sync_fate_visuals() -> void:
+	if ai_state == "dead":
+		_clear_fate_visuals()
+		return
+	if _slow_timer <= 0.0:
+		_fate_ice_slow_active = false
+	_set_fate_visual(VfxPool3D.FX01_FATE_FIRE, _fate_statuses.has("fire"))
+	_set_fate_visual(VfxPool3D.FX01_FATE_POISON, _fate_statuses.has("poison") or _fate_statuses.has("poison_burst"))
+	_set_fate_visual(VfxPool3D.FX01_FATE_FROST, _fate_freeze_remaining > 0.0 or _fate_ice_slow_active)
+
+func _set_fate_visual(asset_id: StringName, enabled: bool) -> void:
+	var current: Variant = _fate_visuals.get(asset_id)
+	if not enabled:
+		if is_instance_valid(current):
+			current.finish()
+		_fate_visuals.erase(asset_id)
+		return
+	if is_instance_valid(current):
+		return
+	var footprint := EnemyAvatar3D.get_footprint_profile(enemy_kind)
+	var visual_size := clampf(float(footprint.get("height", 1.3)) / 1.3 * absf(global_basis.y.length()), 0.65, 2.0)
+	var context := {"follow": self, "follow_local_offset": Vector3.ZERO}
+	var pools := get_tree().get_nodes_in_group("vfx_pool_3d")
+	var visual: VfxEffectBase3D
+	if not pools.is_empty() and pools[0] is VfxPool3D:
+		visual = (pools[0] as VfxPool3D).acquire(asset_id, global_position, Color.WHITE, visual_size, context)
+	else:
+		visual = VfxPool3D.create_unpooled(asset_id)
+		if visual != null:
+			get_parent().add_child(visual)
+			visual.activate(global_position, Color.WHITE, visual_size, context)
+	if visual != null:
+		_fate_visuals[asset_id] = visual
+
+func _clear_fate_visuals() -> void:
+	for visual in _fate_visuals.values():
+		if is_instance_valid(visual):
+			visual.finish()
+	_fate_visuals.clear()
+
+func _exit_tree() -> void:
+	_clear_fate_visuals()

@@ -655,7 +655,7 @@ var _pending_character_rewards: Array[Dictionary] = []
 
 
 func grant_random_card_from_character(currency_cost: int = 0) -> Dictionary:
-	var offer := FateCardPresets.draw_offer(1)
+	var offer := FateCardPresets.draw_offer(1, null, get_offer_level_id())
 	if offer.is_empty():
 		return {"success": false, "message": "运行牌池为空"}
 	_pending_character_rewards.append({"card": offer[0], "currency_cost": maxi(0, currency_cost)})
@@ -766,3 +766,15 @@ func import_fate_snapshot(value: Variant) -> bool:
 
 func _to_string() -> String:
 	return "[FateCardGameBridge: cards=%d]" % applied_cards.size()
+
+
+## Resolve the host from the active player, never from unrelated background scenes.
+func get_offer_level_id() -> String:
+	if not is_instance_valid(_player):
+		return ""
+	var host: Node = _player
+	while is_instance_valid(host):
+		if host.has_method("get_runtime_map_id"):
+			return str(host.call("get_runtime_map_id"))
+		host = host.get_parent()
+	return ""

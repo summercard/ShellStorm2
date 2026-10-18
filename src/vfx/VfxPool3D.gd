@@ -6,6 +6,11 @@ const VfxEffectBase3D = preload("res://src/vfx/VfxEffectBase3D.gd")
 ## 规范见 docs/v0.1/14.6_特效系统与制作规范.md §5
 ## 调用方按 AssetID（如 "VFX-MUZZLE-FLASH-3D"）路由到对应 bucket
 
+const FX01_FATE_FIRE := "VFX-FATE-FIRE-3D"
+const FX01_FATE_FROST := "VFX-FATE-FROST-3D"
+const FX01_FATE_POISON := "VFX-FATE-POISON-3D"
+const FX01_FATE_LIGHTNING := "VFX-FATE-LIGHTNING-3D"
+
 const FX01_MUZZLE_FLASH := "VFX-MUZZLE-FLASH-3D"
 const FX01_IMPACT := "VFX-IMPACT-3D"
 const FX01_EXPLOSION := "VFX-EXPLOSION-3D"
@@ -46,6 +51,10 @@ const _REGISTRY := {
 	FX01_BLADE_SWEEP: preload("res://assets/art/vfx/combat_3d/vfx_blade_sweep_root_top3d.tscn"),
 	FX01_BLADE_WHIRLWIND: preload("res://assets/art/vfx/combat_3d/vfx_blade_whirlwind_root_top3d.tscn"),
 
+	FX01_FATE_FIRE: preload("res://assets/art/vfx/combat_3d/vfx_fate_fire_root_top3d.tscn"),
+	FX01_FATE_FROST: preload("res://assets/art/vfx/combat_3d/vfx_fate_frost_root_top3d.tscn"),
+	FX01_FATE_POISON: preload("res://assets/art/vfx/combat_3d/vfx_fate_poison_root_top3d.tscn"),
+	FX01_FATE_LIGHTNING: preload("res://assets/art/vfx/combat_3d/vfx_fate_lightning_root_top3d.tscn"),
 	FX01_FATE_ROCK_SHATTER: preload("res://assets/art/vfx/combat_3d/vfx_fate_rock_shatter_root_top3d.tscn"),
 	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d.tscn"),
 	FX01_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d.tscn"),

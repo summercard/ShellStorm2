@@ -259,7 +259,7 @@ func _show_fate_card_options() -> void:
 	gunbody_options.add_child(header)
 
 	# 共享塔罗抽牌：无重复，正/逆位各50%。
-	var choices := FateCardPresets.draw_offer(3)
+	var choices := FateCardPresets.draw_offer(3, null, FateCardGameBridge.get_offer_level_id())
 
 	if choices.is_empty():
 		var empty_lbl := Label.new()

@@ -160,20 +160,14 @@ func _check_formal_expedition() -> void:
 	_expect(economy._selected_box_indexes(stages, 3) == flattened, "经济重复盒语义与生产不一致")
 	var main_rng: RandomNumberGenerator = dungeon.get("_rng")
 	var rng_before := main_rng.state
-	# 选取包含逆位的固定门次样本；只改测试门序号，不伪造卡方位或候选。
+	# 01新局仅正位；历史逆位快照兼容由verify_fate_level01_pool覆盖。
 	var sample_offer_id := 0
-	for candidate_offer in range(40):
-		dungeon.set("_fate_door_offer_id", candidate_offer + 1)
-		var sampled: Array[FateCard] = dungeon.call("_gate_expedition_fate_offer")
-		if sampled.any(func(card: FateCard) -> bool: return card.is_reversed()):
-			sample_offer_id = candidate_offer
-			break
 	var signatures: Dictionary = {}
 	var reversed_count := 0
 	for offer_id in range(40):
 		dungeon.set("_fate_door_offer_id", offer_id)
 		var cards: Array[FateCard] = dungeon.call("_gate_expedition_fate_offer")
-		_expect(cards.size() == 3, "零击杀时未提供三张低档卡")
+		_expect(cards.size() == 2, "01白名单普通交集应为两张，不得越界补第三张")
 		var ids: Array[String] = []
 		for card in cards:
 			_expect(card.card_rarity == FateCard.CardRarity.COMMON, "零击杀池混入贵卡")
@@ -182,9 +176,10 @@ func _check_formal_expedition() -> void:
 			if card.is_reversed():
 				reversed_count += 1
 		signatures["|".join(ids)] = true
+	_expect(reversed_count == 0, "01不得生成逆位")
 	_expect(signatures.size() > 1, "前期随机抽牌退化为固定排列")
 	_expect(main_rng.state == rng_before, "抽牌污染主随机流")
-	print("FATE_FORMAL_RANDOM offers=40 identity_sets=%d reversed=%d slots=120" % [signatures.size(), reversed_count])
+	print("FATE_FORMAL_RANDOM offers=40 identity_sets=%d reversed=%d slots=80" % [signatures.size(), reversed_count])
 	dungeon.set("_fate_door_offer_id", sample_offer_id)
 	dungeon.call("_show_door_fate_choices")
 	var zero_offer: Dictionary = dungeon.call("_export_door_fate_snapshot")
@@ -269,7 +264,7 @@ func _check_formal_expedition() -> void:
 	for card_row: Dictionary in door_before["cards"]:
 		if str(card_row["orientation"]) == "REVERSED":
 			reversed_saved = true
-	_expect(reversed_saved, "恢复样本没有逆位卡，逆位恢复未受检")
+	_expect(not reversed_saved, "01新局快照不得出现逆位")
 	dungeon.queue_free()
 	for frame in range(3):
 		await get_tree().process_frame
@@ -307,8 +302,8 @@ func _check_formal_expedition() -> void:
 		await dungeon.call("_purchase_fate_card", index)
 		_expect((dungeon.get("_door_fate_purchased") as Array)[index], "存钱后未能购买本门剩余卡")
 		_expect(before - GameManager.currency == price, "同门全买扣费不守恒")
-	_expect((dungeon.get("_door_fate_purchased") as Array).count(true) == 3, "后续购买被强制限张数")
-	print("FATE_FORMAL_ALL_BOUGHT count=3 wallet=%d" % GameManager.currency)
+	_expect((dungeon.get("_door_fate_purchased") as Array).count(true) == resumed_choices.size(), "后续购买被强制限张数")
+	print("FATE_FORMAL_ALL_BOUGHT count=%d wallet=%d" % [resumed_choices.size(), GameManager.currency])
 	dungeon.call("_close_door_fate_overlay")
 	var closed_offer_id := int(dungeon.get("_fate_door_offer_id"))
 	var closed: Dictionary = dungeon.build_runtime_save_snapshot()

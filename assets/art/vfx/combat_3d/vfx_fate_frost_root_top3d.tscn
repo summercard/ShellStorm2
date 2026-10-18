@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Script" path="res://src/vfx/VfxFateFrost3D.gd" id="1"]
+[sub_resource type="StandardMaterial3D" id="mat"]
+shading_mode = 0
+albedo_color = Color(0.48, 0.87, 1, 0.85)
+transparency = 1
+[sub_resource type="PrismMesh" id="crystal"]
+material = SubResource("mat")
+size = Vector3(0.18, 0.31, 0.14)
+[sub_resource type="CylinderMesh" id="patch"]
+material = SubResource("mat")
+top_radius = 0.45
+bottom_radius = 0.45
+height = 0.012
+radial_segments = 8
+rings = 1
+
+[node name="VfxFateFrost3D" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-FATE-FROST-3D"
+metadata/asset_version = "v001"
+lifetime = 3600000.0
+[node name="Patch" type="MeshInstance3D" parent="."]
+mesh = SubResource("patch")
+cast_shadow = 0
+[node name="Particles" type="Node3D" parent="."]
+
+[node name="P0" type="MeshInstance3D" parent="Particles"]
+mesh = SubResource("crystal")
+cast_shadow = 0
+
+[node name="P1" type="MeshInstance3D" parent="Particles"]
+mesh = SubResource("crystal")
+cast_shadow = 0
+
+[node name="P2" type="MeshInstance3D" parent="Particles"]
+mesh = SubResource("crystal")
+cast_shadow = 0
+
+[node name="P3" type="MeshInstance3D" parent="Particles"]
+mesh = SubResource("crystal")
+cast_shadow = 0

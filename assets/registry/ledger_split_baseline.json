@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1293,
+ "asset_count": 1298,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -6501,32 +6501,57 @@
    "v": "987c328aae9804f104908ac8a823dd5ab43ca8e20fb4a1c826f641318f1d4ec2",
    "c": "场景",
    "d": "scenes"
+  },
+  "VFX-FATE-FIRE-3D": {
+   "v": "72d03d1680211ec11ff19710f43a0ab6f32c736393167d7d177ac64cdb5cf44b",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-FATE-FROST-3D": {
+   "v": "8bcda0d1dfc389e5bb5189ab42cf4e36c8e89fa6f5926414f5c581149a61b88f",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-FATE-POISON-3D": {
+   "v": "2c48376a7187c1a2a208f6660f04d241fb79712c7f0686cdcf3cf8f32729abfe",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-FATE-LIGHTNING-3D": {
+   "v": "dc091d04d07fb89b79450344298d886e3ea108c526a2792d2fa83afdf4ac4c03",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-DAMAGE-NUMBER-3D": {
+   "v": "a7a7f8df922074cbe471388936c82446f8b00042f9c968714f35e74a8c6c6114",
+   "c": "特效",
+   "d": "vfx"
   }
  },
  "column_digests": {
-  "1": "1c533591b8707b74ad697a8f0b751224df8cb515ef20ea608f090f7daa99b6c8",
-  "2": "0f7bc437b3f164623a0f782b5467705728a4564a8b85263dc1481672b7175d09",
-  "3": "512ac1c24cacbe8422456b9cfb3cd95994bafcaa68a43dc3f8542067250077d2",
-  "4": "3c808b171cf87b708057a35795b4a6e154a1fdbcfe8fada55226c23e3d05338d",
-  "5": "ff6558d58c38a06e12cfb6754e35aa2d6be0d8afe65b1a3ed99062a90a3c6ec1",
-  "6": "e6ae2c4182de864bd400f0d04dacd0ec661e19ee043b34d36589bb37e10e6ad5",
-  "7": "d7b6d247664222780e2db533690442266f30bd1afdc456c060a4541fd7cfaff7",
-  "8": "7eca1446dd4601b0371058e60ee0384255f37271da749d9e2633fa95432fe01c",
-  "9": "78ddc9f78b121b827314240da1abcefebc10261940ff7dd4d704ac3d886fa60f",
-  "10": "2cea46686a116c9d9d534824d15f20ba8cc74f49444099b8255a63a7013b874b",
-  "11": "8017b3bb3c38e7609315ad46caea54d2477ef0d7c992c085b3d1b4cb438689bc",
-  "12": "ff86a13da4ea6c558ffbe9523d3629a8b01d4f782cb3655a2e738e299754cd56",
-  "13": "120162d491976db8c3653c362bf171dd741b19a5983af93aca7391f7349be2f6",
-  "14": "75ef0b1c8f0c87ac88bde93c58da4cd8f78af330243ae65defab70d33114ce77",
-  "15": "0264cbf0f386d1927c9afe348c47fd798a20fbf7e44e2e5f74e3bea90c4a3581",
-  "16": "d225a46c64ca5d0df738e3fe18c4643f8af8b44c4f78bc623f1aa6bddbcf75ca",
-  "17": "792c593b8f653d124580d952a60b1094af01cc0349ac35f884f07b2bb0e992c3",
-  "20": "895017e3178e874dbedef750a1b8a6182e9b3d2159520ad5146cb2e1812a46c1",
-  "21": "81b674e319bab32911d21a3de37eac2492a8b9d459ed74f07cd79ffebb835134",
-  "22": "ff9ebdbaa4a1a8e8b9f0bdacefc22b7339f05623ed6447e2397c564a3355738d",
-  "23": "2d45e7c11a0b36becd2cf97cd053308dbeaf38f1c1dae64dacf79a34bbabb129",
-  "24": "c8e5a0bd8a1d3dd7201d1d74d1abe4bf4d545c20e4c4260f9b08c280cf7853aa",
-  "25": "9ad05a425e23df86762531b35877f009b58247bf878e9c4a9ac5f019fbf3a3e6"
+  "1": "1c4c40c4c046acec82cf76476563df8678906d76497510a98c3e5b116d3f1867",
+  "2": "587b8404c5e9ac23f644b33eb5a63251753d730ec8ce784476fe4315ccedf979",
+  "3": "f0f8c7814856e4b98dbbaf1b2d90cd3e558a3a78bef67061ed197ae3c60c72b1",
+  "4": "1d64aa7ad1477eef12d617c65c114b145fbb5af6fce74068761b1ab7117be23c",
+  "5": "eae4716889fa9151c3592d093743673914ce12d2366ed70a82f308db07e0177e",
+  "6": "52e65aec1ebebb8b498e101a0777db9ece531348398a07f4545de5c1347eb133",
+  "7": "c45103ca90f476888c7b3c73094e46f2d0ad9e5264d4b39d25d242c0a464285a",
+  "8": "9507da4e9bfe87ca0d7b5fe3715562e716d0f3e1cf5959efe9584ebb9732ee41",
+  "9": "029b22fd90a53ddb28af3e8d6c3f029ea2ac44b9fa22f27cb3d76a965491df4e",
+  "10": "89437815283ddb4973c9a95c83f10f0954a3cfc973579dafa773da48918bfd68",
+  "11": "8d7764dc0912e97a45fc2f86e7e61fbc4cfd0deb1736b25faaeea8e8c4f555d3",
+  "12": "111c77f6773f75b22e072ecd9fb3c709f4463fd0c85b4ebacf7698252f162fe6",
+  "13": "d9f9f3311c856e5a3243831c637f6470f1f407d2255bf18c28775c51369c32b6",
+  "14": "3f17afee6dfb313df7583b91f64af959cfd241e48c216f547e8437449cd06c65",
+  "15": "3d905af97e6d819bf557e7d54ab045726c68f6a7deb0ad1e283e97693f48aa1f",
+  "16": "3f1f17bac66b31087c5e5a1323e14f11d63481e350d0373f0eee34d3265771fd",
+  "17": "273eb4aaefc5bfcd1f9919b65adba3d123f0b44a2933dbed9f7f074f35df46c1",
+  "20": "683e6c52d05b59e6c841710e3f76fa36dff8404676b1115f7c9931d1ef45e9fe",
+  "21": "91865b2ad9eebb4bcda77305e5aa28bf62ef83ace2f5c86398e5ba84342a1b09",
+  "22": "a16205c4af34190169b5ccab7d630449098335aa9e52738af5e06027a9501ed3",
+  "23": "21e7cad92db04cd66a66b0c218c39c7ac59e92b67b4c7c4eee99ef17d0e2efdb",
+  "24": "dba1b63499fe5b89dbf5aad3aaa014f4e62d5bc950cc60ea6da10a7f471804a1",
+  "25": "6f9137320e2ca632287be729b49300f9b87dd633f31ff32ad2ca30f95ae798fc"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -6542,21 +6567,21 @@
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
   "3D-物品": "0bba6748006c5b75fefd481d2406d12691ea639b33437364bccb53d0cff5be58",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
-  "3D-特效": "eed3d11d0eb05cfdcc6d0e225a821d355876bfe37c0eb7158f1d3105d8395aba"
+  "3D-特效": "9558f5992d9c3a0fcdf2d206856e3034621765c9d7d58157639ae1e0acbd3199"
  },
  "category_counts": {
-  "UI": 18,
+  "角色": 25,
+  "敌人": 15,
   "场景": 794,
   "场景道具": 49,
   "基地资产包": 114,
-  "子弹特效": 10,
-  "敌人": 15,
-  "武器": 36,
-  "特效": 32,
-  "角色": 25,
   "道具": 39,
-  "音乐": 9,
-  "音效": 152
+  "武器": 36,
+  "特效": 37,
+  "子弹特效": 10,
+  "UI": 18,
+  "音效": 152,
+  "音乐": 9
  },
  "targeted_updates": [
   {
@@ -6677,6 +6702,21 @@
    "actual_before_sheet_digest": "6e8c48a253e26b27dbe16719b5c85129301f541ccd0a6914ce7d655291ed5df6",
    "after_sheet_digest": "005667a33fc6b457c347a01fad311d71bddbf8a2d56571c1d2474278ab6d5397",
    "record": "docs/v0.1/development/2026-10-16_star_physical_mounts.md"
+  },
+  {
+   "date": "2026-10-18",
+   "operation": "4 elemental VFX plus missing main-sheet registration for existing damage-number 3D; preserve all unrelated asset digests and historical cells",
+   "asset_ids": [
+    "VFX-DAMAGE-NUMBER-3D",
+    "VFX-FATE-FIRE-3D",
+    "VFX-FATE-FROST-3D",
+    "VFX-FATE-LIGHTNING-3D",
+    "VFX-FATE-POISON-3D"
+   ],
+   "previous_recorded_sheet_digest": "eed3d11d0eb05cfdcc6d0e225a821d355876bfe37c0eb7158f1d3105d8395aba",
+   "actual_before_sheet_digest": "47252bdd0c7cd2132cb4e6340336c62205ad70beb9b0ec294b018c9637e8a6c6",
+   "after_sheet_digest": "9558f5992d9c3a0fcdf2d206856e3034621765c9d7d58157639ae1e0acbd3199",
+   "record": "docs/v0.1/development/2026-10-18_fate_elements.md"
   }
  ]
 }

@@ -1,0 +1,37 @@
+{
+  "asset_version": "v001",
+  "source_type": "Godot authored meshes and scripts; no Blender source",
+  "particle_budget_per_effect": 4,
+  "effects": [
+    {
+      "asset_id": "VFX-FATE-FIRE-3D",
+      "source_number": "FX01-29",
+      "prefab": "assets/art/vfx/combat_3d/vfx_fate_fire_root_top3d.tscn",
+      "script": "src/vfx/VfxFateFire3D.gd",
+      "owner": "Enemy3D existing state"
+    },
+    {
+      "asset_id": "VFX-FATE-FROST-3D",
+      "source_number": "FX01-30",
+      "prefab": "assets/art/vfx/combat_3d/vfx_fate_frost_root_top3d.tscn",
+      "script": "src/vfx/VfxFateFrost3D.gd",
+      "owner": "Enemy3D existing state"
+    },
+    {
+      "asset_id": "VFX-FATE-POISON-3D",
+      "source_number": "FX01-31",
+      "prefab": "assets/art/vfx/combat_3d/vfx_fate_poison_root_top3d.tscn",
+      "script": "src/vfx/VfxFatePoison3D.gd",
+      "owner": "Enemy3D existing state"
+    },
+    {
+      "asset_id": "VFX-FATE-LIGHTNING-3D",
+      "source_number": "FX01-32",
+      "prefab": "assets/art/vfx/combat_3d/vfx_fate_lightning_root_top3d.tscn",
+      "script": "src/vfx/VfxFateLightning3D.gd",
+      "owner": "VfxPool3D transient .20s + per-hop delay"
+    }
+  ],
+  "design": "docs/v0.1/14.6_特效系统与制作规范.md",
+  "verification": "tests/verification/verify_fate_element_vfx.tscn"
+}

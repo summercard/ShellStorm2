@@ -41,7 +41,7 @@ func _draw_cards() -> void:
 	_pending_card_reset()
 
 	# 从共享塔罗卡池无重复抽取，并为每张牌独立判定正/逆位。
-	var options := FateCardPresets.draw_offer(3)
+	var options := FateCardPresets.draw_offer(3, null, FateCardGameBridge.get_offer_level_id())
 
 	for choice_index in range(options.size()):
 		var card := options[choice_index]

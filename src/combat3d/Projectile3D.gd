@@ -434,13 +434,12 @@ func _apply_chain_lightning(first_target: Node) -> void:
 		if nearest == null:
 			break
 		chain_damage = maxi(1, int(chain_damage * chain_scale))
-		nearest.take_projectile_damage(chain_damage, false, (nearest.global_position - current.global_position).normalized(), bullet_tags, fate_behavior, shooter)
-		# 链电落到的那只怪仍是「命中目标」⇒ 与普通命中同一分流（打中僵尸给绿方块）。
-		# ⚠ 出生点取**那只怪**的位置，不是弹体自己的位置。
-		_spawn_hit_effect(
-			nearest, GOO_HIT_SIZE_TARGET, METAL_SPARK_SIZE_CHAIN, {},
-			nearest.global_position + Vector3(0, 0.6, 0)
-		)
+		var hit_behavior := fate_behavior.duplicate()
+		hit_behavior["damage_element"] = "lightning"
+		var arc_start := current.global_position + Vector3.UP * 0.6
+		var arc_end := nearest.global_position + Vector3.UP * 0.6
+		_spawn_effect(VfxPool3D.FX01_FATE_LIGHTNING, arc_start, Color.WHITE, 1.0, {"end_position": arc_end, "delay": _index * 0.025})
+		nearest.take_projectile_damage(chain_damage, false, (nearest.global_position - current.global_position).normalized(), bullet_tags, hit_behavior, shooter)
 		visited[nearest.get_instance_id()] = true
 		current = nearest
 

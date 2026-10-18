@@ -136,3 +136,19 @@ static func outline_size_for(amount: int, critical: bool) -> int:
 ## 该档位的世界字高（米）。给验收读数用，避免验收自己拿字号乘像素比又乘错。
 static func world_glyph_height_for(amount: int, critical: bool) -> float:
 	return float(font_size_for(amount, critical)) * PIXEL_SIZE
+
+
+const DAMAGE_LIFETIME := 0.56
+const DAMAGE_RISE := 0.90
+const DAMAGE_FADE_IN := 0.04
+const NORMAL_COLOR := Color("fff1d5")
+const CRITICAL_COLOR := Color("ffd34e")
+static func damage_color(critical: bool, element := "") -> Color:
+	if critical:
+		return CRITICAL_COLOR
+	match element:
+		"fire": return Color("ff783d")
+		"ice": return Color("8ee5ff")
+		"poison": return Color("8de85b")
+		"lightning": return Color("c2faff")
+	return NORMAL_COLOR

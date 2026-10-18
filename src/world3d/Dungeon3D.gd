@@ -341,6 +341,7 @@ var _trade_extraction_unlocked := false
 var _trade_extraction_room_id := ""
 var _enemy_preactivation_accumulator := 0.0
 var _door_fate_active := false
+var _fate_offer_policy_snapshot: Dictionary = {}
 var _door_fate_choices: Array[FateCard] = []
 ## 本次门后购卡中已被买下的卡位（与 `_door_fate_choices` 同序）；退出后清空。
 var _door_fate_purchased: Array[bool] = []
@@ -911,6 +912,7 @@ func _export_door_fate_snapshot() -> Dictionary:
 		})
 	return {
 		"schema_version": 1,
+		"policy": _fate_offer_policy_snapshot.duplicate(true),
 		"active": _door_fate_active,
 		"offer_id": _fate_door_offer_id,
 		"from_id": _pending_fate_door_from_id,
@@ -945,6 +947,7 @@ func _import_door_fate_snapshot(value: Variant) -> bool:
 		card.set_orientation(orientation, float(row.get("orientation_roll", 0.0)))
 		restored_cards.append(card)
 		restored_purchased.append(bool(row.get("purchased", false)))
+	_fate_offer_policy_snapshot = (snapshot.get("policy", {}) as Dictionary).duplicate(true)
 	_door_fate_choices.assign(restored_cards)
 	_door_fate_purchased.assign(restored_purchased)
 	_fate_door_offer_id = maxi(0, int(snapshot.get("offer_id", 0)))
@@ -6314,7 +6317,7 @@ func _show_door_fate_choices() -> void:
 	var offer: Array[FateCard] = (
 		_gate_expedition_fate_offer()
 		if get_runtime_map_id() == "expedition_01" and _fate_economy.is_configured()
-		else FateCardPresets.draw_offer(3, _rng)
+		else FateCardPresets.draw_offer(3, _rng, get_runtime_map_id())
 	)
 	if offer.is_empty():
 		_commit_pending_fate_door_streaming()
@@ -6334,6 +6337,8 @@ func _show_door_fate_choices() -> void:
 			if _fate_economy.is_configured()
 			else int(FATE_PRICE_BY_RARITY[clampi(int(offered_card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)])
 		)
+	var rules := preload("res://src/weapons/FateOfferPolicy.gd").policy(get_runtime_map_id())
+	_fate_offer_policy_snapshot = {"policy_id": rules.get("policy_id", "global"), "revision": rules.get("revision", 0)}
 	_door_fate_choices.assign(offer)
 	# 三张卡全部出现在场上，买与不买由玩家决定 ⇒ 每个卡位都要有独立的购买状态。
 	for _choice_index in range(_door_fate_choices.size()):
@@ -7151,7 +7156,7 @@ func _gate_expedition_fate_offer() -> Array[FateCard]:
 	var ids: Dictionary = {}
 	for card in FateCardPresets.door_reward_presets():
 		var stable_id := card.get_stable_card_id()
-		if int(card.card_rarity) <= max_rarity and not ids.has(stable_id):
+		if int(card.card_rarity) <= max_rarity and not ids.has(stable_id) and preload("res://src/weapons/FateOfferPolicy.gd").allows(get_runtime_map_id(), stable_id):
 			pool.append(card)
 			ids[stable_id] = true
 	var identity_rng := RandomNumberGenerator.new()
@@ -7163,7 +7168,7 @@ func _gate_expedition_fate_offer() -> Array[FateCard]:
 		var index := identity_rng.randi_range(0, pool.size() - 1)
 		var card := pool[index]
 		pool.remove_at(index)
-		card.roll_orientation(orientation_rng.randf())
+		preload("res://src/weapons/FateOfferPolicy.gd").orient(card, orientation_rng.randf(), get_runtime_map_id())
 		offer.append(card)
 	return offer
 

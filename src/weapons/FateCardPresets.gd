@@ -702,9 +702,9 @@ static func door_reward_presets() -> Array[FateCard]:
 ## 所有三选一入口共享的抽牌与方位判定。
 ## 先无重复抽卡，再让每个卡位独立以50%概率成为正位或逆位。
 static func draw_offer(
-	count := 3, rng: RandomNumberGenerator = null
+	count := 3, rng: RandomNumberGenerator = null, level_id := ""
 ) -> Array[FateCard]:
-	var pool := playable_presets()
+	var pool := preload("res://src/weapons/FateOfferPolicy.gd").filter_pool(playable_presets(), level_id)
 	var offer: Array[FateCard] = []
 	var wanted := mini(maxi(0, count), pool.size())
 	while offer.size() < wanted:
@@ -722,7 +722,7 @@ static func draw_offer(
 		if duplicate:
 			continue
 		var roll := rng.randf() if rng != null else randf()
-		candidate.roll_orientation(roll)
+		preload("res://src/weapons/FateOfferPolicy.gd").orient(candidate, roll, level_id)
 		offer.append(candidate)
 	return offer
 

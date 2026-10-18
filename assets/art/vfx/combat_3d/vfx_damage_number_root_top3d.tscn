@@ -4,3 +4,5 @@
 
 [node name="VfxDamageNumber3D" type="Node3D"]
 script = ExtResource("1_damage")
+metadata/asset_id = "VFX-DAMAGE-NUMBER-3D"
+metadata/asset_version = "v005"

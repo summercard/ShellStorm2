@@ -2,10 +2,10 @@ class_name VfxDamageNumber3D
 extends "res://src/vfx/VfxEffectBase3D.gd"
 ## FX02-01 / VFX-DAMAGE-NUMBER-3D 伤害数字飘字特效
 ##
-## 视觉：Label3D + 漫画风超粗字形 + 粗勾边 + 颜色编码（红 / 橙 / 暴击金）。
+## 视觉：Label3D + 漫画风超粗字形 + 粗勾边 + 颜色编码（普通暖白 / 元素色 / 暴击金）。
 ##       字体族、字重、字号分级、描边分级、世界像素比一律取 `DamageNumberStyle`
 ##       —— 本脚本**不得**再自行声明字体或字号（历史上两处口径就是这么漂移的）。
-## 行为：基线 lifetime 0.70s × context.duration_scale；猛起步上升 + 超调弹出 + 渐显渐隐；billboarding。
+## 行为：基线 lifetime 0.56s × context.duration_scale；猛起步上升 + 超调弹出 + 渐显渐隐；billboarding。
 ##
 ## ⚠ 随机化纪律（vfx skill §5.5.3）：本脚本对同一 context **逐位可复现**，源码内不出现 `randf()`。
 ##    它是被逐帧断言驱动的对象，把随机埋进来会让验收变成随机红。
@@ -22,18 +22,18 @@ extends "res://src/vfx/VfxEffectBase3D.gd"
 const Style := preload("res://src/vfx/DamageNumberStyle.gd")
 
 ## 基线时长。乘 `context.duration_scale` 后写入基类 `lifetime`。
-const BASE_LIFETIME := 0.70
+const BASE_LIFETIME := Style.DAMAGE_LIFETIME
 ## 基线上升距离（米）。乘 `context.rise_scale`。
 ## 力度口径（业主 2026-10-16「飘起的力度感强一些」）= 位移曲线 + 距离两个手段一起给：
 ## 距离 0.60 → 0.90（+50%），曲线从 ease-out quad 换成 ease-out cubic（前 1/3 走完 70% 位移）。
-const BASE_RISE_DISTANCE := 0.90
+const BASE_RISE_DISTANCE := Style.DAMAGE_RISE
 ## 弹出收束时长：出生瞬间放大到 `pop_scale`，再在这个时间内收到 1.0。
 ## 这是"打出来"的冲击感来源 —— 先过冲再收，比"从小长大"有力得多。
 const POP_SETTLE_TIME := 0.14
 ## 弹出收束后再缓缩到的终值。避免飘到末尾还是满尺寸、像贴纸。
 const SETTLED_SCALE := 0.90
 ## 渐显时长：快显（比旧版 0.15 更短），让数字"砸"出来而不是"浮"出来。
-const FADE_IN_TIME := 0.08
+const FADE_IN_TIME := Style.DAMAGE_FADE_IN
 ## 开始渐隐的时间占寿命比例。
 const FADE_OUT_START_RATIO := 0.62
 
@@ -70,7 +70,7 @@ func _on_activate(_world_pos: Vector3, color: Color, _size: float, context: Dict
 	_label.text = str(context.get("text_value", "0"))
 	_label.font_size = Style.font_size_for(magnitude, critical)
 	_label.outline_size = Style.outline_size_for(magnitude, critical)
-	# 颜色：调用方传入（红 / 橙 / 暴击金）。基色 alpha 归一为 1，透明度全部由 transparency 承载
+	# 颜色：调用方按 DamageNumberStyle 传入（暖白 / 元素色 / 暴击金）。基色 alpha 归一为 1，透明度全部由 transparency 承载
 	# —— Label3D 淡出必须走 transparency：描边不吃 modulate 的 alpha，只淡正文会留下勾边残影
 	#    （业主 2026-10-10）。`transparency = 1 - alpha` 与旧 `modulate.a = alpha` 逐值等价。
 	_label.modulate = Color(color.r, color.g, color.b, 1.0)

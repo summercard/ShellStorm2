@@ -1,0 +1,114 @@
+[gd_scene load_steps=10 format=3]
+[ext_resource type="Script" path="res://src/vfx/VfxFateLightning3D.gd" id="1"]
+[ext_resource type="Shader" path="res://assets/art/vfx/combat_3d/vfx_soft_disc.gdshader" id="2"]
+[sub_resource type="StandardMaterial3D" id="coremat"]
+shading_mode = 0
+albedo_color = Color(0.82, 0.98, 1, 1)
+[sub_resource type="StandardMaterial3D" id="halomat"]
+shading_mode = 0
+transparency = 1
+albedo_color = Color(0.08, 0.65, 1, 0.20)
+[sub_resource type="BoxMesh" id="core"]
+material = SubResource("coremat")
+size = Vector3(1, 1, 1)
+[sub_resource type="BoxMesh" id="halo"]
+material = SubResource("halomat")
+size = Vector3(1, 1, 1)
+[sub_resource type="PrismMesh" id="spark"]
+material = SubResource("coremat")
+size = Vector3(0.14, 0.32, 0.14)
+[sub_resource type="ShaderMaterial" id="glowmat"]
+shader = ExtResource("2")
+shader_parameter/tint = Color(0.15, 0.7, 1, 0.42)
+[sub_resource type="QuadMesh" id="glow"]
+material = SubResource("glowmat")
+size = Vector2(0.75, 0.75)
+
+[node name="VfxFateLightning3D" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-FATE-LIGHTNING-3D"
+metadata/asset_version = "v001"
+lifetime = 0.20
+
+[node name="Core0" type="MeshInstance3D" parent="."]
+mesh = SubResource("core")
+cast_shadow = 0
+
+[node name="Halo0" type="MeshInstance3D" parent="."]
+mesh = SubResource("halo")
+cast_shadow = 0
+
+[node name="Core1" type="MeshInstance3D" parent="."]
+mesh = SubResource("core")
+cast_shadow = 0
+
+[node name="Halo1" type="MeshInstance3D" parent="."]
+mesh = SubResource("halo")
+cast_shadow = 0
+
+[node name="Core2" type="MeshInstance3D" parent="."]
+mesh = SubResource("core")
+cast_shadow = 0
+
+[node name="Halo2" type="MeshInstance3D" parent="."]
+mesh = SubResource("halo")
+cast_shadow = 0
+
+[node name="Core3" type="MeshInstance3D" parent="."]
+mesh = SubResource("core")
+cast_shadow = 0
+
+[node name="Halo3" type="MeshInstance3D" parent="."]
+mesh = SubResource("halo")
+cast_shadow = 0
+
+[node name="Core4" type="MeshInstance3D" parent="."]
+mesh = SubResource("core")
+cast_shadow = 0
+
+[node name="Halo4" type="MeshInstance3D" parent="."]
+mesh = SubResource("halo")
+cast_shadow = 0
+
+[node name="Core5" type="MeshInstance3D" parent="."]
+mesh = SubResource("core")
+cast_shadow = 0
+
+[node name="Halo5" type="MeshInstance3D" parent="."]
+mesh = SubResource("halo")
+cast_shadow = 0
+[node name="Particles" type="Node3D" parent="."]
+
+[node name="P0" type="MeshInstance3D" parent="Particles"]
+mesh = SubResource("spark")
+cast_shadow = 0
+
+[node name="P1" type="MeshInstance3D" parent="Particles"]
+mesh = SubResource("spark")
+cast_shadow = 0
+
+[node name="P2" type="MeshInstance3D" parent="Particles"]
+mesh = SubResource("spark")
+cast_shadow = 0
+
+[node name="P3" type="MeshInstance3D" parent="Particles"]
+mesh = SubResource("spark")
+cast_shadow = 0
+
+[node name="StartGlow" type="MeshInstance3D" parent="."]
+mesh = SubResource("glow")
+cast_shadow = 0
+
+[node name="EndGlow" type="MeshInstance3D" parent="."]
+mesh = SubResource("glow")
+cast_shadow = 0
+
+[node name="Leader" type="MeshInstance3D" parent="."]
+mesh = SubResource("glow")
+cast_shadow = 0
+
+[node name="ArcLight" type="OmniLight3D" parent="."]
+light_color = Color(0.25, 0.8, 1, 1)
+light_energy = 0.0
+omni_range = 1.8
+shadow_enabled = false
