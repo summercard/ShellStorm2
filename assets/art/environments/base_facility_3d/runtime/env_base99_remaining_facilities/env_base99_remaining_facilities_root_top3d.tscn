@@ -135,6 +135,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.294715, 0, 0.005127907)
 [node name="46_BATTERY模块收纳箱_资产包" parent="." unique_id=1684392948 instance=ExtResource("17_loft_battery_cabinet")]
 
 [node name="31_参考床架床品与床下收纳_资产包" parent="." unique_id=466562610 instance=ExtResource("18_loft_bed_and_bedding")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0568511)
 metadata/layout_revision = "v021_loft_layout_adjustment_001"
 metadata/layout_note = "Clockwise 90 degrees about original package center; pillows face north beside privacy curtain."
 
@@ -143,7 +144,7 @@ metadata/layout_note = "Clockwise 90 degrees about original package center; pill
 [node name="34_床边暖灰地毯_资产包" parent="." unique_id=1028284954 instance=ExtResource("20_loft_bedside_rug")]
 
 [node name="37_红棕茶几与生活物件_资产包" parent="." unique_id=1627938498 instance=ExtResource("21_loft_coffee_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0, 2.83)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5575154, 0, 3.1083937)
 metadata/layout_revision = "v021_loft_layout_adjustment_001"
 metadata/layout_note = "Moved south-west to the clear floor space below the loft rug."
 
@@ -169,10 +170,12 @@ metadata/layout_note = "Counter-clockwise 90 degrees about original package cent
 [node name="43_带扶手办公椅_资产包" parent="." unique_id=252210050 instance=ExtResource("29_loft_office_chair")]
 
 [node name="39_青绿圆形坐墩01_资产包" parent="." unique_id=2112828412 instance=ExtResource("30_loft_pouf_01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.7593393)
 
 [node name="40_深绿圆形坐墩02_资产包" parent="." unique_id=1773137458 instance=ExtResource("31_loft_pouf_02")]
 
 [node name="41_床前辅助小桌_资产包" parent="." unique_id=1474554021 instance=ExtResource("32_loft_side_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5873609, 0, 2.1426754)
 
 [node name="35_红紫条纹隔断帘_资产包" parent="." unique_id=106463020 instance=ExtResource("33_loft_striped_privacy_curtain")]
 

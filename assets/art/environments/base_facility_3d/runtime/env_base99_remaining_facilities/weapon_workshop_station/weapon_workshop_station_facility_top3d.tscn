@@ -6,15 +6,15 @@
 [sub_resource type="BoxShape3D" id="ShapeInteraction"]
 size = Vector3(3.523101, 5.31, 7.35)
 
-[node name="怪物档案室" type="Area3D"]
+[node name="武器改造台" type="Area3D"]
 position = Vector3(-13.838449, 1.995, 3.4)
 collision_layer = 0
 collision_mask = 1
 script = ExtResource("1_script")
-facility_id = "monster_archive"
-display_name = "怪物档案室"
-description = "查看成长中的精英与悬赏情报"
-menu_scene_path = "res://scenes/MonsterArchiveMenu.tscn"
+facility_id = "weapon_forge"
+display_name = "武器改造台"
+description = "把武器与任意物品投进炼炉；钥匙齐了能定向合成，否则重掷品质与弹种"
+menu_scene_path = "res://scenes/WorkbenchMenu.tscn"
 base_size_multiplier = 1.0
 metadata/interaction_shape_locked = true
 metadata/interaction_margin_m = 0.8
@@ -34,7 +34,7 @@ position = Vector3(13.838449, -1.995, -3.4)
 [node name="NameLabel" type="Label3D" parent="."]
 position = Vector3(0, 2.305, 0)
 billboard = 1
-text = "怪物档案室"
+text = "武器改造台"
 font_size = 32
 outline_size = 8
 modulate = Color(0.82, 0.96, 1, 1)

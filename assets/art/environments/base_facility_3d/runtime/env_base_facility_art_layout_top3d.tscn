@@ -106,11 +106,22 @@ description = "使用赛博储物站模型管理长期仓储与当前背包"
 menu_scene_path = "res://scenes/VaultMenu.tscn"
 base_size_multiplier = 1.0
 
-[node name="怪物档案台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
+; 2026-10-19 业主口径：这个位点（西侧门下方、基地左下角）原本是「怪物档案台」，
+; 要求"同样的设置换一个功能" —— 位置、模型、E 键交互全部不动，只把打开的界面换成武器改造台。
+;
+; ⚠️ 运行时**真正生效**的设施不在本文件，而在
+; `env_base99_remaining_facilities/weapon_workshop_station/weapon_workshop_station_facility_top3d.tscn`
+; （`Blocks/Base/Art` 走的是 zone_base.tscn，那条链上挂的是那个包装场景）。
+; 这里同步改是为了两份布置层不出现"同一个位点两个功能"的分歧。
+;
+; 怪物档案室本身没有下线：BaseFacilityCatalog 仍保留 monster_archive 条目、
+; scenes/MonsterArchiveMenu.tscn 仍在。要恢复只需把 facility_id 改回去。
+[node name="武器改造台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
 position = Vector3(-3, 0, 11.6)
-facility_id = "monster_archive"
-display_name = "怪物档案台"
-menu_scene_path = "res://scenes/MonsterArchiveMenu.tscn"
+facility_id = "weapon_forge"
+display_name = "武器改造台"
+description = "把武器与任意物品投进炼炉；钥匙齐了能定向合成，否则重掷品质与弹种"
+menu_scene_path = "res://scenes/WorkbenchMenu.tscn"
 beacon_light_enabled = false
 
 [node name="命运卡收藏室" parent="设施交互节点_可移动旋转" instance=ExtResource("6_retro")]

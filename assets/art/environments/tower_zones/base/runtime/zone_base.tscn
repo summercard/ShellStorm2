@@ -1,27 +1,25 @@
-[gd_scene load_steps=21 format=3]
-
-[ext_resource type="Script" path="res://src/world3d/BaseFixtureGlow3D.gd" id="20_fixture_glow"]
-
-[ext_resource type="Script" path="res://src/world3d/BaseLampDynamics3D.gd" id="22_lamp_dynamics"]
+[gd_scene format=3 uid="uid://b8uu7lsb5l3yn"]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d.tscn" id="3_workshop"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d.tscn" id="7_stool"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/base99_radio/prp_base99_radio_root_top3d.tscn" id="15_radio"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d.tscn" id="8_chair"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_structural/east_mezzanine_structure/east_mezzanine_structure_root_top3d.tscn" id="9_east_mezzanine"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/base99_telescopic_ladder/prp_base99_telescopic_ladder_root_top3d.tscn" id="10_east_stair"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d.tscn" id="11_northwest_stair"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base100_upper_shell_30x30_h12/env_base100_upper_shell_30x30_h12_root_top3d.tscn" id="12_upper_shell"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/base99_radio/prp_base99_radio_root_top3d.tscn" id="15_radio"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals/env_base99_floor_visuals_root_top3d.tscn" id="16_floor_visuals_v021"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents/env_base99_wall_contents_root_top3d.tscn" id="17_wall_contents"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/env_base99_remaining_facilities_root_top3d.tscn" id="18_remaining_facilities"]
+[ext_resource type="PackedScene" uid="uid://c5dsbdpedoi0d" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/env_base99_remaining_facilities_root_top3d.tscn" id="18_remaining_facilities"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_structural/underdeck_sheet_blocker/underdeck_sheet_blocker_root_top3d.tscn" id="19_underdeck"]
+[ext_resource type="Script" uid="uid://dg5p8j6msojac" path="res://src/world3d/BaseFixtureGlow3D.gd" id="20_fixture_glow"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d.tscn" id="21_corner_visual"]
+[ext_resource type="Script" uid="uid://c7uyvdw66v8hh" path="res://src/world3d/BaseLampDynamics3D.gd" id="22_lamp_dynamics"]
 
 [sub_resource type="StandardMaterial3D" id="MatEditorFloor"]
 transparency = 1
-albedo_color = Color(0.08, 0.28, 0.32, 0.26)
 shading_mode = 0
+albedo_color = Color(0.08, 0.28, 0.32, 0.26)
 
 [sub_resource type="PlaneMesh" id="MeshEditorFloor"]
 material = SubResource("MatEditorFloor")
@@ -31,8 +29,8 @@ subdivide_depth = 5
 
 [sub_resource type="StandardMaterial3D" id="MatEditorBoundary"]
 transparency = 1
-albedo_color = Color(0.7, 0.18, 0.72, 0.2)
 shading_mode = 0
+albedo_color = Color(0.7, 0.18, 0.72, 0.2)
 
 [sub_resource type="BoxMesh" id="MeshBoundaryNS"]
 material = SubResource("MatEditorBoundary")
@@ -42,7 +40,7 @@ size = Vector3(30, 0.08, 0.12)
 material = SubResource("MatEditorBoundary")
 size = Vector3(0.12, 0.08, 30)
 
-[node name="Art" type="Node3D"]
+[node name="Art" type="Node3D" unique_id=236694259]
 script = ExtResource("20_fixture_glow")
 metadata/asset_id = "ENV-BASE99-ART-LAYOUT-3D"
 metadata/block_id = "base"
@@ -53,147 +51,125 @@ metadata/runtime_owner = "TowerDescent3D._install_facilities"
 metadata/source_blend = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
 metadata/art_revision = "v026_corner_l_5m_visual_wrapper"
 
-[node name="基地灯具动态" type="Node3D" parent="."]
+[node name="基地灯具动态" type="Node3D" parent="." unique_id=1769150723]
 script = ExtResource("22_lamp_dynamics")
 metadata/usage = "99F 灯具/屏幕的呼吸与故障闪（霓虹抽动·床头灯呼吸·贩卖机眯眼·配电柜三灯自检·应急灯双跳·门边警示灯呼吸·二楼电脑屏频闪）。只改 emission_energy_multiplier 的倍率，不改颜色、不新增光源；写入口与 BaseFixtureGlow3D 的开关/启动序列互斥，见脚本头三条硬约束"
 
-[node name="编辑器参考_运行时自动隐藏" type="Node3D" parent="."]
+[node name="编辑器参考_运行时自动隐藏" type="Node3D" parent="." unique_id=1140263841]
 metadata/editor_guide = true
 
-[node name="30米地面参考" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
+[node name="30米地面参考" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏" unique_id=611140896]
 mesh = SubResource("MeshEditorFloor")
 
-[node name="北墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
-position = Vector3(0, 0.04, -15)
+[node name="北墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏" unique_id=594366793]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, -15)
 mesh = SubResource("MeshBoundaryNS")
 
-[node name="南墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
-position = Vector3(0, 0.04, 15)
+[node name="南墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏" unique_id=1964048555]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 15)
 mesh = SubResource("MeshBoundaryNS")
 
-[node name="西墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
-position = Vector3(-15, 0.04, 0)
+[node name="西墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏" unique_id=510836164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.04, 0)
 mesh = SubResource("MeshBoundaryEW")
 
-[node name="东墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
-position = Vector3(15, 0.04, 0)
+[node name="东墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏" unique_id=2084429235]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.04, 0)
 mesh = SubResource("MeshBoundaryEW")
 
-[node name="基地结构组件_可移动旋转" type="Node3D" parent="."]
+[node name="基地结构组件_可移动旋转" type="Node3D" parent="." unique_id=1049855066]
 metadata/usage = "V017→V021结构资产保留Blender烘焙坐标；碰撞由各独立Prefab维护"
 
-; Base99 的四个转角由该美术布置层直接持有视觉；DungeonRoom3D 继续保留
-; 对应的既有双臂碰撞节点，避免视觉替换影响相机和角色阻挡。
-[node name="V026西北L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" instance=ExtResource("21_corner_visual")]
-position = Vector3(-15, 0, -15)
-rotation = Vector3(0, -1.570796, 0)
-metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
-metadata/visual_only = true
-metadata/collision_owner = "DungeonRoom3D"
+[node name="V026西北L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" unique_id=2043048151 instance=ExtResource("21_corner_visual")]
+transform = Transform3D(3.1391647e-07, 0, -1, 0, 1, 0, 1, 0, 3.1391647e-07, -15, 0, -15)
 
-[node name="V026东北L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" instance=ExtResource("21_corner_visual")]
-position = Vector3(15, 0, -15)
-rotation = Vector3(0, 3.141593, 0)
-metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
-metadata/visual_only = true
-metadata/collision_owner = "DungeonRoom3D"
+[node name="V026东北L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" unique_id=629164060 instance=ExtResource("21_corner_visual")]
+transform = Transform3D(-1, 0, -3.2584137e-07, 0, 1, 0, 3.2584137e-07, 0, -1, 15, 0, -15)
 
-[node name="V026西南L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" instance=ExtResource("21_corner_visual")]
-position = Vector3(-15, 0, 15)
-metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
-metadata/visual_only = true
-metadata/collision_owner = "DungeonRoom3D"
+[node name="V026西南L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" unique_id=1385490478 instance=ExtResource("21_corner_visual")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 15)
 
-[node name="V026东南L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" instance=ExtResource("21_corner_visual")]
-position = Vector3(15, 0, 15)
-rotation = Vector3(0, 1.570796, 0)
-metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
-metadata/visual_only = true
-metadata/collision_owner = "DungeonRoom3D"
+[node name="V026东南L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" unique_id=1162787295 instance=ExtResource("21_corner_visual")]
+transform = Transform3D(3.1391647e-07, 0, 1, 0, 1, 0, -1, 0, 3.1391647e-07, 15, 0, 15)
 
-[node name="BlenderV021完整地板表现_仅视觉" parent="." instance=ExtResource("16_floor_visuals_v021")]
+[node name="100层上层围护与24米封顶" parent="基地结构组件_可移动旋转" unique_id=1707809008 instance=ExtResource("12_upper_shell")]
+
+[node name="V021东墙阁楼主体结构" parent="基地结构组件_可移动旋转" unique_id=2046396239 instance=ExtResource("9_east_mezzanine")]
+
+[node name="99层至100层双段伸缩直梯" parent="基地结构组件_可移动旋转" unique_id=254150961 instance=ExtResource("10_east_stair")]
+transform = Transform3D(3.1391647e-07, 0, -1, 0, 1, 0, 1, 0, 3.1391647e-07, 14.5, 6, -7.5)
+
+[node name="V021西北贴墙L型楼梯" parent="基地结构组件_可移动旋转" unique_id=1915275006 instance=ExtResource("11_northwest_stair")]
+
+[node name="V021阁楼下方铁皮封闭体" parent="基地结构组件_可移动旋转" unique_id=440160438 instance=ExtResource("19_underdeck")]
+
+[node name="BlenderV021完整地板表现_仅视觉" parent="." unique_id=103855502 instance=ExtResource("16_floor_visuals_v021")]
 metadata/usage = "Blender V020完整地板替换旧DungeonRoom3D基础砖MultiMesh；FloorSupport碰撞保持原6×6×5m规格"
 metadata/source_layout = "base_facility_runtime_layout_hq_v021.blend"
-metadata/source_blender_version = "v021"
 
-[node name="100层上层围护与24米封顶" parent="基地结构组件_可移动旋转" instance=ExtResource("12_upper_shell")]
+[node name="设施交互节点_可移动旋转" type="Node3D" parent="." unique_id=35993476]
 
-[node name="设施交互节点_可移动旋转" type="Node3D" parent="."]
+[node name="枪械工坊" parent="设施交互节点_可移动旋转" unique_id=1057938769 instance=ExtResource("3_workshop")]
+transform = Transform3D(-1, 0, -3.2584137e-07, 0, 1, 0, 3.2584137e-07, 0, -1, -3, 0, -11.6)
 
-[node name="枪械工坊" parent="设施交互节点_可移动旋转" instance=ExtResource("3_workshop")]
-position = Vector3(-3, 0, -11.6)
-rotation = Vector3(0, 3.141593, 0)
-facility_id = "weapon_workshop"
-menu_scene_path = "res://scenes/WorkshopMenu.tscn"
-base_size_multiplier = 1.0
-
-[node name="场景装饰_可自由增删" type="Node3D" parent="."]
+[node name="场景装饰_可自由增删" type="Node3D" parent="." unique_id=1415895547]
 metadata/usage = "这里可以继续添加无玩法碰撞的装饰模型"
 
-[node name="99F床边桌独立收音机" parent="场景装饰_可自由增删" instance=ExtResource("15_radio")]
-position = Vector3(-1.95, 6.97, -13.87143)
-rotation = Vector3(0, 0.174533, 0)
+[node name="99F床边桌独立收音机" parent="场景装饰_可自由增删" unique_id=1470729748 instance=ExtResource("15_radio")]
+transform = Transform3D(0.9848077, 0, 0.17364825, 0, 1, 0, -0.17364825, 0, 0.9848077, -1.95, 6.97, -13.87143)
 metadata/placement_role = "46号BATTERY模块收纳箱顶部中央可用桌面"
 metadata/placement_surface_y = 6.97
 metadata/placement_clearance_contract = "2倍v003收音机；置于46号BATTERY模块收纳箱顶部；避开相邻45号医疗模块收纳箱与47号FOOD模块收纳箱；不移动承载家具"
 metadata/interactive = true
 
-[node name="BlenderV021非门墙面内容_仅视觉" parent="场景装饰_可自由增删" instance=ExtResource("17_wall_contents")]
+[node name="BlenderV021非门墙面内容_仅视觉" parent="场景装饰_可自由增删" unique_id=504212117 instance=ExtResource("17_wall_contents")]
 metadata/usage = "V017墙面内容导出为V021；门和结构墙体不在本实例范围，根节点保持原点以复用Blender摆放"
 
-[node name="BlenderV021剩余非门非墙设施" parent="场景装饰_可自由增删" instance=ExtResource("18_remaining_facilities")]
+[node name="BlenderV021剩余非门非墙设施" parent="场景装饰_可自由增删" unique_id=2143597487 instance=ExtResource("18_remaining_facilities")]
 metadata/usage = "V017剩余独立设施、仓储、阁楼家具与环境支持包；保留Blender烘焙摆放，物理设施自带简化阻挡"
 
-[node name="维修圆凳_独立装饰" parent="场景装饰_可自由增删" instance=ExtResource("7_stool")]
-position = Vector3(-3, 0, -9.8)
+[node name="维修圆凳_独立装饰" parent="场景装饰_可自由增删" unique_id=641394827 instance=ExtResource("7_stool")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -9.8)
+continuous_cd = true
 metadata/placement_role = "枪械工坊配套独立座椅"
 metadata/interactive = false
 
-[node name="战术指挥椅_独立装饰" parent="场景装饰_可自由增删" instance=ExtResource("8_chair")]
-position = Vector3(-9, 0, -9.8)
+[node name="战术指挥椅_独立装饰" parent="场景装饰_可自由增删" unique_id=228430644 instance=ExtResource("8_chair")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -9.8)
+continuous_cd = true
 metadata/placement_role = "远征情报终端配套独立座椅"
 metadata/interactive = false
 
-[node name="基地美术灯光_可编辑" type="Node3D" parent="."]
+[node name="基地美术灯光_可编辑" type="Node3D" parent="." unique_id=290828852]
 metadata/usage = "可调整颜色、能量、范围、阴影；不要改塔楼全局环境。本节点下手工摆放的原生 OmniLight3D 由东西墙那对开关统一控制：各自的 visible 表示是否参与，开关只决定此刻亮不亮（BaseFixtureGlow3D._collect_authored_art_lights）"
 
-[node name="中央冷色主灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
+[node name="中央冷色主灯" type="OmniLight3D" parent="基地美术灯光_可编辑" unique_id=1478283923]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
 visible = false
-position = Vector3(0, 5.5, 0)
 light_color = Color(0.42, 0.78, 1, 1)
 light_energy = 0.65
 shadow_enabled = true
 omni_range = 18.0
 omni_attenuation = 1.25
 
-[node name="西北紫色轮廓灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
+[node name="西北紫色轮廓灯" type="OmniLight3D" parent="基地美术灯光_可编辑" unique_id=1183000619]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 3.4, -8.5)
 visible = false
-position = Vector3(-8.5, 3.4, -8.5)
 light_color = Color(0.75, 0.25, 1, 1)
 light_energy = 0.38
 shadow_enabled = true
 omni_range = 10.0
 
-[node name="东南暖色轮廓灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
+[node name="东南暖色轮廓灯" type="OmniLight3D" parent="基地美术灯光_可编辑" unique_id=1735115432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 3.4, 8.5)
 visible = false
-position = Vector3(8.5, 3.4, 8.5)
 light_color = Color(1, 0.46, 0.18, 1)
 light_energy = 0.32
 shadow_enabled = true
 omni_range = 10.0
 
-[node name="玩法锚点_只移动不删除" type="Node3D" parent="."]
+[node name="玩法锚点_只移动不删除" type="Node3D" parent="." unique_id=443767249]
 
-[node name="99层电梯锚点" type="Marker3D" parent="玩法锚点_只移动不删除"]
-position = Vector3(9, 0, 11.6)
-rotation = Vector3(0, 3.141593, 0)
+[node name="99层电梯锚点" type="Marker3D" parent="玩法锚点_只移动不删除" unique_id=892650796]
+transform = Transform3D(-1, 0, -3.2584137e-07, 0, 1, 0, 3.2584137e-07, 0, -1, 9, 0, 11.6)
 metadata/bridge_id = "elevator_99f"
-[node name="V021东墙阁楼主体结构" parent="基地结构组件_可移动旋转" instance=ExtResource("9_east_mezzanine")]
-
-[node name="99层至100层双段伸缩直梯" parent="基地结构组件_可移动旋转" instance=ExtResource("10_east_stair")]
-position = Vector3(14.5, 6, -7.5)
-rotation = Vector3(0, -1.570796, 0)
-
-[node name="V021西北贴墙L型楼梯" parent="基地结构组件_可移动旋转" instance=ExtResource("11_northwest_stair")]
-
-[node name="V021阁楼下方铁皮封闭体" parent="基地结构组件_可移动旋转" instance=ExtResource("19_underdeck")]
