@@ -91,6 +91,12 @@ var _footer_readout: Control = null
 var _footer_actions: Control = null
 var _confirm_layer: Control = null
 var _confirm_text: Label = null
+## 合成表现层：兔子闸门。只负责"看起来发生了什么"，事务仍在上面的 `_execute_forge` 里。
+var _gate_veil: SynthesisGateVeil = null
+## 闸门播放期间暂存的收尾报告（刷新 + 文案 + 信号）。播完或中途收掉时消费一次。
+var _pending_forge_report: Dictionary = {}
+## 闸门期间盖住背包的封条（避免产物提前剧透）。
+var _bag_seal: Control = null
 
 
 func set_player(player: Player3D) -> void:
@@ -304,6 +310,12 @@ func _build_pages() -> Control:
 func _switch_page(page_id: String) -> void:
 	if page_id == _active_page:
 		return
+	# 闸门还盖着的时候切页：闸门是炼炉那一栏的子层级，页一切走就没人管了。
+	# 直接收掉并补上还没做的收尾，否则切回来会看到半截闸门 + 盘上还摆着已被消耗的材料。
+	if _gate_veil != null and _gate_veil.is_playing():
+		_gate_veil.abort()
+		_busy = false
+		_flush_pending_forge_report()
 	_active_page = page_id
 	if _forge_page != null:
 		_forge_page.visible = page_id == PAGE_FORGE
@@ -613,9 +625,68 @@ func _build_body() -> Control:
 	body.add_child(_body_tray_column)
 	_body_bag_column = _build_bag_column()
 	body.add_child(_body_bag_column)
+
+	# 闸门压在炼炉那一栏的正上方。加在最后 ⇒ 画在背包之上；
+	# 但它的矩形只等于炼炉栏，所以视觉上盖不到背包（业主口径：闸门只在中间范围里）。
+	_gate_veil = SynthesisGateVeil.new()
+	_gate_veil.name = "SynthesisGateVeil"
+	# 棋盘把每件物品的画布提到 z_index=4；闸门留在 0 会被枪械图标穿透。
+	_gate_veil.z_index = 32
+	_gate_veil.finished.connect(_on_gate_finished)
+	body.add_child(_gate_veil)
+
+	# 背包封条：闸门开着的那几秒，产物**已经真的进包了**（事务先行），
+	# 不封住就等于在闸门旁边挂一块"答案是它"的牌子，3 秒等待变成空转。
+	# 它不是闸门的一部分（不挡中间），只跟随闸门的时长出现与消失。
+	_bag_seal = _build_bag_seal()
+	body.add_child(_bag_seal)
+
 	body.resized.connect(_layout_body)
 	_layout_body()
 	return body
+
+
+## 背包封条：半透明深底 + 一行「仓门封闭中」。
+##
+## 只挡视觉、不锁交互 —— 玩家在闸门期间点背包格不会出问题（盘面已清空），
+## 只是这段时间不该让他先看见答案。
+func _build_bag_seal() -> Control:
+	var seal := Control.new()
+	seal.name = "BagSeal"
+	seal.visible = false
+	seal.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	seal.z_index = 32
+
+	var scrim := ColorRect.new()
+	scrim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	# 不透明：0.94 时截图里还能看出底下有几件东西、什么轮廓 —— 那等于没封。
+	scrim.color = UIPalette.PRISM_INK
+	scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	seal.add_child(scrim)
+
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	seal.add_child(center)
+
+	var column := VBoxContainer.new()
+	column.alignment = BoxContainer.ALIGNMENT_CENTER
+	column.add_theme_constant_override("separation", 6)
+	center.add_child(column)
+
+	var caption := Label.new()
+	caption.name = "BagSealCaption"
+	caption.text = "INVENTORY SEALED"
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	UIStyleFactory.apply_prism_label(caption, "label", 4, 11)
+	column.add_child(caption)
+
+	var note := Label.new()
+	note.text = "仓门封闭中" 
+	note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	UIStyleFactory.apply_prism_label(note, "faint", 1, 12)
+	column.add_child(note)
+	return seal
 
 
 ## 把炼炉放到水平中心、背包贴右边缘；空间不够时炼炉左移，保证两者不重叠。
@@ -644,6 +715,16 @@ func _layout_body() -> void:
 	var tray_height := minf(tray_min.y, body_size.y)
 	_body_tray_column.position = Vector2(tray_x, (body_size.y - tray_height) * 0.5)
 	_body_tray_column.size = Vector2(tray_width, tray_height)
+
+	# 闸门与炼炉栏逐像素对齐 —— "遮住中间的界面"就是这条矩形，
+	# 宽高随手算，不在闸门里写死尺寸（换分辨率不会露边）。
+	if _gate_veil != null:
+		_gate_veil.position = _body_tray_column.position
+		_gate_veil.size = _body_tray_column.size
+	# 封条贴住背包栏，且**不越过背包左边界**，免得把闸门那栏也压暗。
+	if _bag_seal != null:
+		_bag_seal.position = _body_bag_column.position
+		_bag_seal.size = _body_bag_column.size
 
 
 ## 中栏：炼炉。5×5 正方形盘面，是整个面板的主体。
@@ -1388,10 +1469,6 @@ func _execute_forge(plan: Dictionary) -> void:
 		var done_recipe := str((output as Dictionary).get("created_recipe_id", ""))
 		if not done_recipe.is_empty():
 			_completed_recipes[done_recipe] = true
-	_refresh_all()
-	if _active_page == PAGE_CATALOG:
-		_refresh_catalog()
-		_apply_page_footer()
 	var lines: Array[String] = []
 	for output in outputs:
 		lines.append("%s｜%s｜%s" % [
@@ -1399,16 +1476,77 @@ func _execute_forge(plan: Dictionary) -> void:
 			str(output.get("name", "武器")),
 			_bullet_display(output),
 		])
-	var message := "熔炼完成：%s（消耗 %d 金币）" % ["，".join(lines), cost]
-	_set_status(message)
-	forge_completed.emit({
+	var report := {
 		"success": true,
 		"recipe": recipe,
 		"count": written,
 		"coin_cost": cost,
 		"outputs": outputs,
-		"message": message,
-	})
+		"message": "熔炼完成：%s（消耗 %d 金币）" % ["，".join(lines), cost],
+	}
+	_play_synthesis_gate(report)
+
+
+## 闸门表现。**事务在这里已经全部落地**（钱扣了、产物进包了、盘面清了），
+## 这一段只负责"让玩家看见材料被关起来、然后换成产物"。
+##
+## ## 为什么界面刷新要等到闸门播完
+##
+## 第一版在关闸前就 `_refresh_all()` 并写了结果文案，截图里一眼看穿：
+## **闸门还关着，页脚已经写着"熔炼完成：蓝｜豌豆手枪"，背包里那把枪也摆在那儿了。**
+## 那等于把揭晓提前剧透，3 秒的等待变成一个空转的过场。
+##
+## 所以这里刻意**不刷新**：盘面继续显示刚被吃掉的材料、背包不动、文案停在
+## 「内容置换中」，全部在 `_finish_forge` 里一次性换掉 —— 闸门升起那一刻
+## 玩家看到的才是"里头的东西被替换了"。
+##
+## `_busy` 全程保持 true：闸门盖着盘面时再点熔炼只会读到空盘面。
+func _play_synthesis_gate(report: Dictionary) -> void:
+	var outputs := report.get("outputs", []) as Array
+	if _gate_veil == null or outputs.is_empty():
+		_finish_forge(report)
+		return
+	_pending_forge_report = report
+	_busy = true
+	_set_status("内容置换中 · 闸门开启后揭晓")
+	if _bag_seal != null:
+		_bag_seal.visible = true
+	_gate_veil.play(outputs)
+
+
+func _on_gate_finished() -> void:
+	_busy = false
+	if _bag_seal != null:
+		_bag_seal.visible = false
+	var report := _pending_forge_report
+	_pending_forge_report = {}
+	if not report.is_empty():
+		_finish_forge(report)
+
+
+## 真正的收尾：刷新盘面/背包/读数、写结果文案、发信号。
+##
+## 只在**揭晓之后**调用。闸门被中途收掉（切页 / 关闭面板）时也必须走一次，
+## 否则界面会永远停在"盘上还摆着那批材料"的旧画面上 —— 那些材料其实早就销毁了。
+func _finish_forge(report: Dictionary) -> void:
+	_refresh_all()
+	if _active_page == PAGE_CATALOG:
+		_refresh_catalog()
+		_apply_page_footer()
+	_set_status(str(report.get("message", "")))
+	forge_completed.emit(report)
+
+
+## 闸门被中途收掉时的兜底：把还欠着的那次收尾补上。
+func _flush_pending_forge_report() -> void:
+	if _bag_seal != null:
+		_bag_seal.visible = false
+	if _pending_forge_report.is_empty():
+		return
+	var report := _pending_forge_report
+	_pending_forge_report = {}
+	_busy = false
+	_finish_forge(report)
 
 
 func _build_outputs(plan: Dictionary, recipe: String, tier: int) -> Array:
@@ -1550,6 +1688,12 @@ func _clone_tray(source: Array[Dictionary]) -> Array[Dictionary]:
 ## ————————————————————————————————
 
 func _close() -> void:
+	# 闸门播放中允许直接关：事务已经落盘、盘面已清空，
+	# 拦着不让关只会让玩家对着一个按 ESC 没反应的界面等 3 秒。
+	if _gate_veil != null and _gate_veil.is_playing():
+		_gate_veil.abort()
+		_busy = false
+		_flush_pending_forge_report()
 	if _busy:
 		return
 	if not _return_tray_to_inventory():
