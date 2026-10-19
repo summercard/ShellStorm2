@@ -373,17 +373,19 @@
   - **中央 3D 检视与放射状槽位环**：中央大图实时旋转展示当前武器 3D 模型，四周环绕 **6 大配件槽位节点** 与 **命运赋能槽位**，用动态折线连接至枪身对应部位，直观呈现“枪械母体 + 6 配件 + 命运卡”的完整构建树。
   - **右侧属性对比与词条面**：展示伤害、射速、换弹、散布、射程等核心六维数值及当前生效的全部命运塔罗正/逆位修正。
 
-#### UI-21 局内武器改造台 · 5×5 炼金盘（`WorkbenchPanel`）
-- **场景与脚本**：`scenes/WorkbenchPanel.tscn` + `src/ui/WorkbenchPanel.gd` + `src/weapons/WeaponForge.gd`
+#### UI-21 武器改造台 · 5×5 炼金盘（`WorkbenchPanel`）
+- **场景与脚本**：`src/ui/WorkbenchPanel.gd`（功能本体）+ `src/ui/WorkbenchMenu.gd` + `scenes/WorkbenchMenu.tscn`（设施入口包装）+ `src/weapons/WeaponForge.gd` + `src/weapons/SynthesisCatalog.gd` + `src/ui/SynthesisGateVeil.gd`（合成表现）
 - **账本 ID**：*待补录（建议 `UI-MODAL-WORKBENCH`）*
-- **层级**：`Dungeon3D/$HUD` 动态实例化模态框
-- **触发方式**：在战局内与 `upgrade` 型服务台（武器改造台）按 `E` 交互打开。
+- **层级**：`TowerDescent3D` 下由 `_open_facility_menu()` 实例化的 `CanvasLayer`（`WorkbenchMenu`），面板本体是铺满视口的 `Control`
+- **触发方式**：**99F 基地左下角（西侧门下方）那台「武器改造台」按 `E`**。该位点在 2026-10-19 之前是「怪物档案室」，按业主要求"同样的设置换一个功能"——位点、`49_武器工作台与弹药附件` 模型、E 键交互全部不动，只把打开的界面换成改造台。`facility_id = "weapon_forge"`，`action_path = res://scenes/WorkbenchMenu.tscn`；怪物档案室的 catalog 条目与菜单场景仍保留（下线的是入口，不是能力）。
+- **打开期间必须让位**：基地 HUD 是另一个 `CanvasLayer`、层号与菜单相同，不会被 0.58 的遮罩盖住。`WorkbenchMenu._ready()` 必须 `HUD.visible = false`、关闭（含 `_exit_tree` 兜底）恢复 —— 否则血条/金币/小地图会与炼炉叠成一团。与 `WardrobeMenu3D` 同一套做法。
 - **两个页签**：`熔炼`（默认）/ `合成目录`。合成目录是"钥匙 → 武器"的九条配方清单，见[合成目录与兴趣曲线](../07.3_玩法系统_合成目录与兴趣曲线.md)；页签用棱镜 1px 下划线标记当前页，不用按钮底色。
+- **合成表现（兔子闸门）**：点击熔炼后，一块带兔子封印的闸门**只在炼炉那一栏的矩形内**落下 → 0.12s 后兔子双眼转红并脉动 → 3.00s 处开始上升 → 3.60s 升到底 → 停留 1.40s 展示产物。**播放期间不得剧透**：不刷新背包、状态栏只写「内容置换中」，背包另加不透明封条；刷新与结果文案在闸门收起后一次性换掉。详见[记录](../development/2026-10-19_synthesis_gate_veil.md)。
 - **美术风格**：**棱镜线框（`PRISM-WIREFRAME`）**，与全站一致。不画实心卡片，区域由 1px 白线 + 四角括号界定。
 - **核心功能**：**炼金抽卡**。中栏 5×5（25 格，正方形）炼炉按 `grid_size` 占格，**所有物品都能当材料**（武器是蓝本，其余按 `rarity` 折算），并支付金币后熔炼，产出**蓝本、品质（蓝/紫/金）、弹种**全部重新掷骰的新枪实例。三条配方见[玩法系统｜武器改造台](../07.2_玩法系统_武器改造台.md)：单武器 + 材料 ≥3 熔炼值 = 重铸；≥2 把武器 = 融合（蓝本随机 + 弹种从各枪自带弹种随机 + 随机附带配件）；纯材料 ≥6 熔炼值 = 合成。**材料的稀有度直接提升品质**（稀有度分 common 0 / uncommon 1 / rare 2 / epic 4 / legendary 7）。费用 `max(min, ceil(投入估值×rate))`，R1/R2/R3 费率 0.30/0.40/0.50。
 - **布局**：
   - 页头：`WEAPON FORGE` 弱标签 + 「武器改造台」强标题；右侧 `COINS` 读数 + `ESC 关闭`。
-  - **主体**：中栏炼炉 `ALCHEMY GRID 5 × 5`（格边长 80，正方形，外挂 ghost 括号）；右栏 `INVENTORY`（与 I 键同源 `InventoryModule`，格边长 46、8 列，与 `InventoryModule.GRID_COLUMNS` 一致）。
+  - **主体**：中栏炼炉 `ALCHEMY GRID 5 × 5`（格边长 70，正方形，外挂 ghost 括号）；右栏 `INVENTORY`（与 I 键同源 `InventoryModule`，格边长 46、8 列，与 `InventoryModule.GRID_COLUMNS` 一致）。格边长 70 是**可用高度**算出来的：1280×720 下 Pages 区 444px，扣掉标签/说明/括号内边距后 364px，5 行 ⇒ 每格 ≤ 72.8。
   - **页脚两行**：第一行 7 栏读数（`PAYLOAD` / `MELT` / `RARITY` / `RECIPE` / `BLUEPRINT` / `GRADE ODDS` / `FEE`）等分铺满；第二行左侧状态文案、右侧 `ESC 关闭` + 「熔 炼」。**按钮与信息全在底部，主体区不夹任何信息行。**
   - **版式实现**：炼炉水平居中、背包贴右，靠 `_layout_body()` 在 `resized` 时手算矩形；用 `HBoxContainer` 只能让整组居中，炼炉会必然偏左。
   - 读数行**一行 7 栏**两级排印（位于页脚第一行）：`PAYLOAD`（N 枪 · M 材料）/ `MELT` / `RARITY`（稀有度分，材料提品质的唯一可见抓手）/ `RECIPE` / `BLUEPRINT`（R2 显示「随机（N 把之一）」）/ `GRADE ODDS` / `FEE`（买不起转危险红）。
