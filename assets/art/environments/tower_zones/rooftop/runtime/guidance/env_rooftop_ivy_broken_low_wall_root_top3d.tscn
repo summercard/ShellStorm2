@@ -1,0 +1,113 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/guidance/env_rooftop_ivy_broken_low_wall_visual_top3d.glb" id="visual"]
+[ext_resource type="Script" path="res://src/world3d/PlantSway3D.gd" id="sway"]
+
+[sub_resource type="BoxShape3D" id="s0"]
+size = Vector3(0.575, 5.05, 0.30)
+
+[sub_resource type="BoxShape3D" id="s1"]
+size = Vector3(0.575, 4.8, 0.30)
+
+[sub_resource type="BoxShape3D" id="s2"]
+size = Vector3(0.575, 3.7, 0.30)
+
+[sub_resource type="BoxShape3D" id="s3"]
+size = Vector3(0.575, 3.25, 0.30)
+
+[sub_resource type="BoxShape3D" id="s4"]
+size = Vector3(0.575, 2.95, 0.30)
+
+[sub_resource type="BoxShape3D" id="s5"]
+size = Vector3(0.575, 2.35, 0.30)
+
+[sub_resource type="BoxShape3D" id="s6"]
+size = Vector3(0.575, 1.75, 0.30)
+
+[sub_resource type="BoxShape3D" id="s7"]
+size = Vector3(0.575, 1.2, 0.30)
+
+[node name="IvyBrokenLowWall" type="Node3D" groups=["scene_interactive_content"]]
+metadata/asset_id = "ENV-ROOFTOP-IVY-BROKEN-LOW-WALL"
+metadata/asset_version = "v002"
+metadata/art_status = "formal"
+metadata/content_category = "scene_interactive_object"
+metadata/interaction_status = "planned_locked"
+metadata/future_actions = PackedStringArray("move", "remove")
+metadata/collision_owner = "self"
+metadata/block_id = "rooftop"
+metadata/source_blend = "res://art_source/environments/tower_zones/rooftop/source/ivy_broken_low_wall/rooftop_ivy_broken_low_wall_v002.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("visual")]
+
+[node name="Foliage" parent="ImportedModel" index="1"]
+script = ExtResource("sway")
+foliage_base_y = 5.12
+sway_from_top = true
+wall_mounted = true
+
+[node name="WallSegment0" type="StaticBody3D" parent="."]
+position = Vector3(-2.0125, 2.525, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="WallSegment0"]
+shape = SubResource("s0")
+
+[node name="WallSegment1" type="StaticBody3D" parent="."]
+position = Vector3(-1.4375000000000002, 2.4, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="WallSegment1"]
+shape = SubResource("s1")
+
+[node name="WallSegment2" type="StaticBody3D" parent="."]
+position = Vector3(-0.8625000000000003, 1.85, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="WallSegment2"]
+shape = SubResource("s2")
+
+[node name="WallSegment3" type="StaticBody3D" parent="."]
+position = Vector3(-0.2875000000000003, 1.625, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="WallSegment3"]
+shape = SubResource("s3")
+
+[node name="WallSegment4" type="StaticBody3D" parent="."]
+position = Vector3(0.28749999999999964, 1.475, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="WallSegment4"]
+shape = SubResource("s4")
+
+[node name="WallSegment5" type="StaticBody3D" parent="."]
+position = Vector3(0.8624999999999998, 1.175, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="WallSegment5"]
+shape = SubResource("s5")
+
+[node name="WallSegment6" type="StaticBody3D" parent="."]
+position = Vector3(1.4374999999999996, 0.875, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="WallSegment6"]
+shape = SubResource("s6")
+
+[node name="WallSegment7" type="StaticBody3D" parent="."]
+position = Vector3(2.0124999999999993, 0.6, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="WallSegment7"]
+shape = SubResource("s7")
+
+[editable path="ImportedModel"]

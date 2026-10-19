@@ -1,0 +1,37 @@
+{
+  "version": "v002",
+  "same_camera_and_lighting": true,
+  "source_unchanged_during_optimization": true,
+  "reference_ivy_source_unchanged": true,
+  "glb_triangles": 29968,
+  "views": {
+    "game": {
+      "mean_absolute_channel_error_0_255": [
+        0.00016615384615384615,
+        0.0002,
+        0.00018923076923076923
+      ]
+    },
+    "front": {
+      "mean_absolute_channel_error_0_255": [
+        0.0002153846153846154,
+        0.00022769230769230768,
+        0.0002492307692307692
+      ]
+    },
+    "back": {
+      "mean_absolute_channel_error_0_255": [
+        0.0001,
+        9.076923076923078e-05,
+        0.00010461538461538461
+      ]
+    },
+    "side": {
+      "mean_absolute_channel_error_0_255": [
+        4.153846153846154e-05,
+        5.538461538461539e-05,
+        4e-05
+      ]
+    }
+  }
+}

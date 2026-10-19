@@ -1,0 +1,67 @@
+{
+  "asset_id": "ENV-ROOFTOP-IVY-BROKEN-LOW-WALL",
+  "name": "藤蔓覆盖破损矮墙",
+  "slug": "ivy_broken_low_wall",
+  "version": "v002",
+  "block_id": "rooftop",
+  "floor_range": "100F",
+  "design_scope": "西侧井口出口平台南端沿井口东边",
+  "scene_design_docs": [
+    "docs/v0.1/design/rooftop_first_visit_guidance.md",
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/05.2_关卡版图白盒与生成规范.md"
+  ],
+  "source_blend": "art_source\\environments\\tower_zones\\rooftop\\source\\ivy_broken_low_wall\\rooftop_ivy_broken_low_wall_v002.blend",
+  "optimized_blend": "art_source\\environments\\tower_zones\\rooftop\\source\\ivy_broken_low_wall\\export\\v002\\rooftop_ivy_broken_low_wall_optimized_v002.blend",
+  "source_sha256_before": "d017185e1ec29767b5e59dccd9fe13039f369b835cbb2c8b2cb804ce1bcf86d2",
+  "source_sha256_after": "d017185e1ec29767b5e59dccd9fe13039f369b835cbb2c8b2cb804ce1bcf86d2",
+  "optimized_sha256": "983968321f5eb8202c488f6d8f10f730a9d573704ac94cc0a02af864237e2977",
+  "glb_sha256": "55605f65fb399cc6ca38fbe30ac09f5df382e3550ee1ff349fbc4b5baef9060b",
+  "glb": "assets/art/environments/tower_zones/rooftop/components/guidance/env_rooftop_ivy_broken_low_wall_visual_top3d.glb",
+  "prefab": "assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_ivy_broken_low_wall_root_top3d.tscn",
+  "triangles_before": {
+    "Wall": 1216,
+    "Ivy": 28752
+  },
+  "triangles_after": {
+    "Wall": 1216,
+    "Ivy": 28752
+  },
+  "optimization": {
+    "operations": [
+      "remove isolated vertices",
+      "remove zero area faces",
+      "explicit triangulation"
+    ],
+    "budget": null,
+    "reduction": "0; preserve masonry break silhouette, mortar, leaf backs and vine segments"
+  },
+  "collision_heights": [
+    5.05,
+    4.8,
+    3.7,
+    3.25,
+    2.95,
+    2.35,
+    1.75,
+    1.2
+  ],
+  "wall_thickness": 0.3,
+  "ivy_parent_asset": "ENV-ROOFTOP-REF-IVY",
+  "ivy_source_sha256": "d9e96fa13e39e4e11abaef6c59b7d6211e9c616717a5ca59488c959dda31cc0a",
+  "hanging_envelope_godot_y": [
+    -4.8,
+    5.4
+  ],
+  "collection": "藤蔓破损矮墙_资产包",
+  "objects": [
+    "Wall",
+    "Foliage",
+    "Ivy"
+  ],
+  "origin": "bottom center; Blender Z-up to Godot Y-up",
+  "runtime_integrated": true,
+  "exported": true,
+  "asset_ledger": "assets\\registry\\ledgers\\ShellStorm2_场景账本_v001.xlsx#资产主表 / 3D-场景通用",
+  "qa_record": "docs/v0.1/development/2026-10-19_rooftop_ivy_low_wall.md"
+}

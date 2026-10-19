@@ -12,9 +12,11 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_covered_cargo_root_top3d.tscn" id="covered_cargo"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_grass_patch_root_top3d.tscn" id="grass_patch"]
 
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/runtime/guidance/env_rooftop_ivy_broken_low_wall_root_top3d.tscn" id="ivy_wall"]
+
 [node name="RooftopGuidanceClutter" type="Node3D"]
 metadata/asset_id = "ENV-ROOFTOP-GUIDANCE-LAYOUT"
-metadata/asset_version = "v004"
+metadata/asset_version = "v005"
 metadata/layout_owner = "this_tscn"
 metadata/interaction_status = "planned_locked"
 metadata/future_state_owner = "scene_interaction_system_pending"
@@ -279,7 +281,7 @@ metadata/move_condition = "design_pending"
 metadata/remove_condition = "design_pending"
 
 [node name="roof_clutter_036" parent="WestLower" instance=ExtResource("timber_pile")]
-transform = Transform3D(0.522152, 0.000000, 0.852852, 0.000000, 1.000000, 0.000000, -0.852852, 0.000000, 0.522152, -28.8967914581299, 0.0149999996647239, 8.10867881774902)
+transform = Transform3D(0.522152, 0.000000, 0.852852, 0.000000, 1.000000, 0.000000, -0.852852, 0.000000, 0.522152, -26.8967914581299, 0.0149999996647239, 8.10867881774902)
 metadata/scene_content_id = "roof_clutter_036"
 metadata/initial_state = "blocking"
 metadata/move_condition = "design_pending"
@@ -1377,6 +1379,15 @@ metadata/remove_condition = "design_pending"
 [node name="roof_clutter_192" parent="LargeCargo" instance=ExtResource("broken_crate_a")]
 transform = Transform3D(0.207912, 0.000000, -0.978148, 0.000000, 1.000000, 0.000000, 0.978148, 0.000000, 0.207912, 31.000000, 0.015000, -11.500000)
 metadata/scene_content_id = "roof_clutter_192"
+metadata/initial_state = "blocking"
+metadata/move_condition = "design_pending"
+metadata/remove_condition = "design_pending"
+
+[node name="IvyWall" type="Node3D" parent="."]
+
+[node name="roof_clutter_193" parent="IvyWall" instance=ExtResource("ivy_wall")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -29.4, 0.015, 7.7)
+metadata/scene_content_id = "roof_clutter_193"
 metadata/initial_state = "blocking"
 metadata/move_condition = "design_pending"
 metadata/remove_condition = "design_pending"

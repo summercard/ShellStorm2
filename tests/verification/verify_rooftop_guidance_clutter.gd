@@ -54,11 +54,24 @@ func _ready() -> void:
 			for shape in shapes:
 				check(not shape.disabled and shape.get_parent().collision_layer == 1, "inactive collision " + id)
 			collision_count += shapes.size()
-			var world_bounds := mesh_vertex_bounds(item)
+			var world_bounds := mesh_vertex_bounds(item.get_node("ImportedModel/Wall") if id == "roof_clutter_193" else item)
 			check(world_bounds.position.y >= -0.03, "sunk visual " + id)
 			check(world_bounds.position.y <= 0.04, "floating visual " + id)
 			check(world_bounds.position.x >= -50.05 and world_bounds.end.x <= 50.05 and world_bounds.position.z >= -35.05 and world_bounds.end.z <= 45.05, "outside rooftop " + id + " " + str(world_bounds))
-	check(count == 192, "authored count mismatch " + str(count))
+	check(count == 193, "authored count mismatch " + str(count))
+	var ivy_wall := clutter.get_node_or_null("IvyWall/roof_clutter_193")
+	check(ivy_wall != null, "ivy low wall missing")
+	if ivy_wall != null:
+		check(ivy_wall.get_node("ImportedModel/Foliage") is PlantSway3D, "ivy wall foliage wind missing")
+		var wall_mesh := ivy_wall.get_node("ImportedModel/Wall") as MeshInstance3D
+		check(wall_mesh.get_active_material(0) is BaseMaterial3D, "solid wall must not sway")
+		var leaves := ivy_wall.get_node("ImportedModel/Foliage/Ivy") as MeshInstance3D
+		check(leaves.get_active_material(0) is ShaderMaterial, "ivy leaves missing wind shader")
+		var hanging_bounds := mesh_vertex_bounds(leaves)
+		check(hanging_bounds.position.y >= -4.8 and hanging_bounds.position.y <= -3.5, "ivy hanging length outside designed envelope")
+		check(hanging_bounds.end.y >= 4.7 and hanging_bounds.end.y <= 5.5, "ivy crest coverage mismatch")
+		check(hanging_bounds.position.x < -30.5, "hanging ivy must clear inner face of stairwell enclosure")
+		check(wall_mesh.mesh.get_aabb().size.z <= 0.36, "wall thickness must match adjacent 0.30m enclosure")
 	check(foliage_count == 48, "grass patch count mismatch")
 	if grass_material != null:
 		grass_clock = float(grass_material.get_shader_parameter("wind_time"))
@@ -101,6 +114,8 @@ func _ready() -> void:
 		for offset in [-1.5, 0.0, 1.5]:
 			check(not capsule_hits(center + Vector3(0,0,offset)).is_empty(), "marked gap open " + str(center) + " offset=" + str(offset))
 	check(capsule_hits(Vector3(18,0,-2.5)).is_empty(), "central east door obstructed")
+	for z in [5.7, 7.7, 9.7]:
+		check(not capsule_hits(Vector3(-29.4,0,z)).is_empty(), "ivy wall collision missing " + str(z))
 	print("ROOFTOP_GUIDANCE_COUNTS items=%d tilted=%d shapes=%d route_trigger=%s" % [count,tilted,collision_count,str(trigger_crossed)])
 	if DisplayServer.get_name() != "headless":
 		await screenshots()
@@ -124,7 +139,10 @@ func capsule_hits(point: Vector3) -> Array[Dictionary]:
 func mesh_vertex_bounds(item: Node3D) -> AABB:
 	var lo := Vector3(INF, INF, INF)
 	var hi := Vector3(-INF, -INF, -INF)
-	for mesh in item.find_children("*", "MeshInstance3D", true, false):
+	var meshes := item.find_children("*", "MeshInstance3D", true, false)
+	if item is MeshInstance3D:
+		meshes.append(item)
+	for mesh in meshes:
 		for surface in mesh.mesh.get_surface_count():
 			for vertex in mesh.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]:
 				var point: Vector3 = mesh.global_transform * vertex
@@ -174,6 +192,15 @@ func screenshots() -> void:
 		await get_tree().process_frame
 	await RenderingServer.frame_post_draw
 	get_viewport().get_texture().get_image().save_png(out + "/rooftop_guidance_exit.png")
+	var ivy_wall := clutter.get_node_or_null("IvyWall/roof_clutter_193") as Node3D
+	if ivy_wall != null:
+		camera.size = 15.0
+		camera.position = ivy_wall.global_position + Vector3(-11, 9, 12)
+		camera.look_at(ivy_wall.global_position + Vector3(0, 0.5, -1))
+		for i in 10:
+			await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		get_viewport().get_texture().get_image().save_png(out + "/rooftop_ivy_wall_close.png")
 	var grass := clutter.get_node_or_null("GroundGrass/roof_clutter_175") as Node3D
 	if grass != null:
 		camera.size = 5.0
