@@ -15,8 +15,11 @@ func _ready() -> void:
 
 func _verify_catalog(failures: Array[String]) -> void:
 	var definitions := FacilityCatalog.all_definitions()
-	if definitions.size() != 9:
-		failures.append("正式基地设施目录不是 9 项")
+	# 10 = 原 9 条 + 2026-10-19 新增的 weapon_forge（武器改造台）。
+	# 断言的是**这条数目被有意改过**，不是"某个具体数字才对"：
+	# 增减设施必须回来改这里，避免有人顺手加了条目而目录界面悄悄变形。
+	if definitions.size() != 10:
+		failures.append("正式基地设施目录不是 10 项（实际 %d）" % definitions.size())
 	var ids: Dictionary = {}
 	var all_text := ""
 	for definition in definitions:
@@ -47,8 +50,8 @@ func _verify_query_and_atomic_command(failures: Array[String]) -> void:
 	data.blueprint_bullet_tier = 2
 	data.blueprint_attachment_tier = 3
 	var snapshots := FacilityService.get_all_snapshots(data)
-	if snapshots.size() != 9:
-		failures.append("统一设施查询没有返回 9 个快照")
+	if snapshots.size() != 10:
+		failures.append("统一设施查询没有返回 10 个快照（实际 %d）" % snapshots.size())
 	for snapshot in snapshots:
 		if str(snapshot.get("summary", "")).is_empty():
 			failures.append("设施缺少玩家可读摘要：%s" % str(snapshot.get("facility_id", "")))
@@ -92,15 +95,20 @@ func _verify_world_and_terminal(failures: Array[String]) -> void:
 				% [facility.facility_id, facility.prompt_label.font_size]
 			)
 	if (
-		world_ids.size() != 8
+		world_ids.size() != 7
 		or not world_ids.has("vault")
 		or not world_ids.has("base_vending")
 		or not world_ids.has("base_recovery")
 		or not world_ids.has("avatar_wardrobe")
 	):
-		failures.append("3D 基地没有绑定现行 8 个实体设施 ID: %s" % str(world_ids.keys()))
+		failures.append("3D 基地没有绑定现行 7 个实体设施 ID: %s" % str(world_ids.keys()))
+	# 2026-10-19：本场景是**历史兼容基地**（`GameDesignConfig.BASE_SCENE_3D`），
+	# 不是玩家实际进的 99F（那是 `TowerDescent3D`）。所以：
+	#   - 怪物档案室在这里早已下线（`verify_base_optional_facilities_removed` 钉住），
+	#     设施数为 7 —— 原先这里写的 8 是那次下线时漏改的，属既有红项；
+	#   - 武器改造台只装在正式 99F，本场景不装（不把新功能摊进兼容场景）。
 	if world_ids.has("fate_divination") or world_ids.has("base_console") or world_ids.has("monster_archive"):
-		failures.append("3D 基地仍实例化命运占卜屋或基地管理终端")
+		failures.append("3D 基地仍实例化命运占卜屋、基地管理终端或已下线的怪物档案室")
 
 	var menu_scene := load("res://scenes/BaseMenu.tscn") as PackedScene
 	var menu := menu_scene.instantiate() as BaseMenu
@@ -108,8 +116,16 @@ func _verify_world_and_terminal(failures: Array[String]) -> void:
 	add_child(menu)
 	await get_tree().process_frame
 	var grid := menu.get_node_or_null("VBox/HSplit/RightPanel/BuildingsGrid") as GridContainer
-	if grid == null or grid.get_child_count() != 9:
-		failures.append("基地管理界面没有显示完整 9 设施目录")
+	# 目录条数 = `BaseFacilityCatalog.DEFINITIONS.size()`（现为 10：原 9 条 + 武器改造台）。
+	# 写成常量而不是魔数，改目录时不必再回来改这里。
+	var expected_directory_size: int = BaseFacilityCatalog.DEFINITIONS.size()
+	if grid == null or grid.get_child_count() != expected_directory_size:
+		failures.append(
+			"基地管理界面没有显示完整 %d 设施目录（实际 %d）" % [
+				expected_directory_size,
+				grid.get_child_count() if grid != null else -1,
+			]
+		)
 	else:
 		var terminal_text := ""
 		for child in grid.get_children():
@@ -143,7 +159,7 @@ func _collect_label_text(root: Node) -> String:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("BASE_FACILITY_FRAMEWORK_OK: nine stable facilities, shared snapshots, visible status, directory, and atomic upgrade planning pass")
+		print("BASE_FACILITY_FRAMEWORK_OK: ten stable facilities (7 on the legacy base scene + catalog entries), shared snapshots, visible status, directory, and atomic upgrade planning pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

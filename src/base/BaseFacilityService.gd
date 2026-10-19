@@ -53,6 +53,10 @@ static func get_snapshot(facility_id: String, data: BaseData) -> Dictionary:
 			snapshot["attention"] = not data.extraction_loot.is_empty()
 		"monster_archive":
 			snapshot["summary"] = "精英档案 · Lv.%d" % level
+		"weapon_forge":
+			# 不写配方条数：那个数字的真源在 `SynthesisCatalog.RECIPES`，
+			# 在这里抄一份就会在改配方时悄悄过期。读的是"能做什么"，不是"有多少条"。
+			snapshot["summary"] = "炼金合成 · 武器与材料换枪"
 		"fate_collection":
 			snapshot["summary"] = "48张牌 · 正/逆位"
 		"base_vending":

@@ -90,7 +90,10 @@ func _check_optional_facilities_can_be_restored(failures: Array[String]) -> void
 		return
 	var required_functions := [
 		"func _install_elevator_facility(",
-		"func _create_standalone_elevator(",
+		# 2026-10-19 顺手修正陈旧断言：这个函数在实现里早已改名为
+		# `_create_level_elevator`（返回 BaseFacility3D），验收脚本没跟着改，
+		# 导致本条一直是红项 —— 噪音会盖住真正的问题。
+		"func _create_level_elevator(",
 		"func _elevator_wall_pose(",
 		"func _on_facility_activated(",
 		"func _open_elevator_panel(",

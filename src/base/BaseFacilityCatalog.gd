@@ -41,6 +41,17 @@ const DEFINITIONS: Array[Dictionary] = [
 		"color": Color(0.75, 0.42, 0.16),
 	},
 	{
+		"facility_id": "weapon_forge",
+		"display_name": "武器改造台",
+		"description": "把武器与任意物品投进炼炉；钥匙齐了能定向合成，否则重掷品质与弹种",
+		"action_kind": ACTION_MENU,
+		"action_path": "res://scenes/WorkbenchMenu.tscn",
+		# 改造台没有建筑等级：它的能力由「持有什么材料」决定，不由 level 决定。
+		"legacy_building_type": -1,
+		"level_property": "",
+		"color": Color(0.62, 0.42, 0.90),
+	},
+	{
 		"facility_id": "vault",
 		"display_name": "保险柜",
 		"description": "管理撤离物资与下局带入",
