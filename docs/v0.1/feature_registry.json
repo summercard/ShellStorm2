@@ -747,6 +747,7 @@
       "feature_id": "NARRATIVE-TRIGGER",
       "owner": "NarrativeDirector3D",
       "design_docs": [
+        "docs/v0.1/design/主线剧情节点表.md",
         "docs/v0.1/design/主线剧情剧本.md",
         "docs/v0.1/08_技术施工_剧情触发.md"
       ],
