@@ -364,7 +364,7 @@
         "pair_id": 0,
         "role": "exit",
         "wall": "south",
-        "lane": 2.5,
+        "lane": -7.5,
         "door_width_m": 2.2
       }
     },

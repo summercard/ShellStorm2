@@ -5,6 +5,11 @@ const ROOM_SCRIPT := preload("res://src/world3d/DungeonRoom3D.gd")
 const TOWER_DOOR_LEAF_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_door_leaf_5m.tscn"
 )
+## 暗门整樘预制体。房间 TSCN 里放的是**这个资源**的实例 ——
+## 编辑器里看到的门与运行时 `SecretBranch3D` 建的是同一份，不存在两套外观。
+const SECRET_DOOR_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn"
+)
 const RUN_SEED := 77001199
 const OUTPUT_ROOT := "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01"
 const ROOM_IDS: Array[String] = [
@@ -29,6 +34,9 @@ const AUTHORED_DEVICE_ROOMS: Array[String] = [
 ]
 
 var failures: Array[String] = []
+## 本局运行时塔楼根。`_emit_authored_secret_doors()` 要从它下面读
+## `SecretBranches` 算定的位点（含外推后的真实位置）。
+var tower_runtime: Node3D = null
 
 func _ready() -> void:
 	var previous_static_layout_mode: bool = ROOM_SCRIPT.use_expedition_static_layout_scenes
@@ -45,6 +53,7 @@ func _ready() -> void:
 	if tower == null:
 		_fail("远征01场景无法实例化")
 	else:
+		tower_runtime = tower as Node3D
 		tower.test_mode = true
 		tower.run_seed_override = RUN_SEED
 		add_child(tower)
@@ -179,6 +188,8 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 	# 必须在下面统一接管 owner 之前挂上 —— 这个循环会把它们的 owner 一并设好。
 	if room_id in AUTHORED_DEVICE_ROOMS:
 		_emit_authored_room_devices(dungeon_room, root_owner)
+	# 暗门同样固化成静态节点：业主在编辑器里直接看到门、直接拖。
+	_emit_authored_secret_doors(dungeon_room, root_owner)
 	# 房间场景只拥有顶层 prefab 实例根；组件内部 owner 保持原 PackedScene 边界。
 	# 递归改 owner 会把 ImportedModel/Mesh/Collision 全部展开进房间 TSCN，
 	# 既破坏 prefab 可编辑边界，也会在退出时造成大规模 3D RID 泄漏。
@@ -200,6 +211,129 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 		else:
 			print("STATIC_SCENE_WRITTEN room=%s path=%s children=%d" % [room_id, path, root_owner.get_child_count()])
 	root_owner.free()
+
+
+## 把本房间的暗门固化成静态节点（业主 2026-10-19：要在房间 TSCN 里看得见、能拖）。
+##
+## 位置真源**分两层**，先后顺序不能反：
+##   ① 已有 TSCN 里那扇门的 `transform` —— 业主在编辑器里手调过的位置，必须原样留住；
+##   ② 没有才用运行时算出的位点（已按实测墙面外推到墙外 0.40m）。
+## 这样「重跑生成器」只补齐缺的门，不会把人的手调抹回自动值 ——
+## 文件头那句「全量重写会抹掉别人手调」的告警对暗门不再成立。
+##
+## metadata 是给编辑器和排查用的：`secret_site_id` 让运行时知道这扇门对应哪个位点，
+## 改名字反而会让它退回自动位点（名字就是契约，`SecretDoor_<site_id>`）。
+func _emit_authored_secret_doors(dungeon_room: DungeonRoom3D, root_owner: Node3D) -> void:
+	if SECRET_DOOR_PREFAB == null:
+		_fail("暗门预制体缺失，%s 无法固化门前节点" % dungeon_room.room_id)
+		return
+	var sites := _runtime_secret_sites()
+	if sites.is_empty():
+		return
+	var room_id := dungeon_room.room_id
+	var existing := _read_existing_secret_doors(room_id)
+	# 位点是**世界坐标**，房间 TSCN 存的是**房间局部**。少这一层换算，
+	# 关卡一挪房间，编辑器里的门与游戏里的门就会差出整个房间的距离。
+	var room_inverse := dungeon_room.global_transform.affine_inverse()
+	var emitted := 0
+	for value in sites:
+		var site := value as Dictionary
+		if str(site.get("room_id", "")) != room_id:
+			continue
+		var site_id := str(site.get("site_id", ""))
+		if site_id.is_empty():
+			continue
+		var door := SECRET_DOOR_PREFAB.instantiate() as Node3D
+		if door == null:
+			_fail("%s 暗门 `%s` 预制体实例化失败" % [room_id, site_id])
+			continue
+		door.name = "SecretDoor_%s" % site_id
+		var room_local: Transform3D = (
+			existing.get(site_id, Transform3D.IDENTITY) as Transform3D
+		)
+		var kept_manual := existing.has(site_id)
+		if not kept_manual:
+			room_local = room_inverse * _site_transform(site)
+		door.transform = root_owner.transform.affine_inverse() * room_local
+		door.set_meta("secret_site_id", site_id)
+		door.set_meta("secret_pair_id", int(site.get("pair_id", -1)))
+		door.set_meta("secret_role", str(site.get("role", "")))
+		# 声明这扇门是**位置真源**：运行时按它的 transform 装门，不是纯装饰。
+		door.set_meta("secret_door_position_source", "authored")
+		door.set_meta("secret_door_position_kept_manual", kept_manual)
+		root_owner.add_child(door)
+		emitted += 1
+	if emitted > 0:
+		print("AUTHORED_SECRET_DOORS room=%s doors=%d kept_manual=%d" % [
+			room_id, emitted, existing.size(),
+		])
+
+
+## 运行时算定的全部支线位点（含 `_push_site_out_of_wall()` 外推后的位置）。
+func _runtime_secret_sites() -> Array:
+	if tower_runtime == null:
+		return []
+	var branch := tower_runtime.get_node_or_null("SecretBranches")
+	if branch == null:
+		return []
+	# 房间这刻已装配完，正好补做一次外推，拿到的是**实测墙面之外**的位置。
+	branch.call("settle_sites")
+	var snapshot := branch.call("debug_snapshot") as Dictionary
+	if snapshot == null:
+		return []
+	return snapshot.get("sites", []) as Array
+
+
+## 位点 → 房间局部 transform。`SecretDoor3D` 的朝向契约：
+## `rotation.y = atan2(normal.x, normal.z)`（门的 +Z 对准朝外法线）。
+func _site_transform(site: Dictionary) -> Transform3D:
+	var position := site.get("position", Vector3.ZERO) as Vector3
+	var normal := site.get("normal", Vector3.FORWARD) as Vector3
+	var basis := Basis.IDENTITY
+	if normal.length() > 0.0001:
+		basis = Basis(Vector3.UP, atan2(normal.x, normal.z))
+	return Transform3D(basis, position)
+
+
+## 读已有房间 TSCN 里 `SecretDoor_*` 的**房间局部** transform。
+##
+## 只认根层直接子节点：门的 `DoorLeaf` / `Boards` 子节点也是 Node3D，
+## 递归下去会把手动位置算到门叶上。
+func _read_existing_secret_doors(room_id: String) -> Dictionary:
+	var result: Dictionary = {}
+	var path := "%s/f00_%s_static_layout.tscn" % [OUTPUT_ROOT, room_id]
+	if not ResourceLoader.exists(path):
+		return result
+	var packed := load(path) as PackedScene
+	if packed == null:
+		return result
+	var state := packed.get_state()
+	if state == null:
+		return result
+	var root_xform := _state_transform(state, 0)
+	for index in range(state.get_node_count()):
+		var node_name := str(state.get_node_name(index))
+		if not node_name.begins_with("SecretDoor_"):
+			continue
+		# 只认根层：`get_node_path()` 返回节点自己的完整路径（`./SecretDoor_S1`），
+		# 根层即「斜杠恰好 1 个」；门叶/木板会是 `./SecretDoor_S1/DoorLeaf`。
+		var node_path := str(state.get_node_path(index))
+		if node_path.count("/") != 1:
+			continue
+		var site_id := node_name.trim_prefix("SecretDoor_")
+		if site_id.is_empty():
+			continue
+		result[site_id] = root_xform * _state_transform(state, index)
+	return result
+
+
+## 取 SceneState 里某个节点的 transform；没有该属性就返回单位阵
+## （预制体默认位置就是这个值 —— 导出时与默认相同会被省略）。
+func _state_transform(state: SceneState, index: int) -> Transform3D:
+	for property_index in range(state.get_node_property_count(index)):
+		if str(state.get_node_property_name(index, property_index)) == "transform":
+			return state.get_node_property_value(index, property_index) as Transform3D
+	return Transform3D.IDENTITY
 
 
 ## 把房间灯与墙面开关固化进静态布局 —— 「设备真源」从运行时自建改成场景持有。
