@@ -1,0 +1,106 @@
+{
+  "asset_id": "ENV-TOWER-STAIRWELL-TURN-RAIL",
+  "name": "楼梯间折返平台护栏",
+  "slug": "turning_landing_rail",
+  "version": "v001",
+  "block_id": "stairs",
+  "floor_range": "99F-100F / 98F-99F 折返平台",
+  "design_scope": "两座楼梯间折返平台四段护栏（外沿 + 两跑之间井口 + 两处墙角窄槽）",
+  "coordinate_frame": "stairwell_assembly_root_local",
+  "godot_local_mapping": "Godot local = (x, z, -y) of the stairwell assembly root",
+  "scene_design_docs": [
+    "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#3D-场景通用",
+  "source_blend": "art_source/environments/tower_descent_3d/source/turning_landing_rail/env_tower_stairwell_turn_rail_source_v001.blend",
+  "source_sha256": "1a94aa9db4a90b71c0f15397f1c9696709e77348f84b39656f99df8284ac6773",
+  "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_turn_rail_top3d.glb",
+  "glb_sha256": "27d5946b3e76aa10383d7f01d8039a430ac88952750142ed7229936859eef9b8",
+  "glb_node_count": 1,
+  "glb_mesh_count": 1,
+  "glb_material_count": 1,
+  "glb_image_count": 0,
+  "glb_texture_count": 0,
+  "triangles": 252,
+  "bbox_min": [
+    0.235,
+    18.015,
+    -6.02
+  ],
+  "bbox_max": [
+    14.615,
+    24.005,
+    -4.845
+  ],
+  "bbox_size": [
+    14.38,
+    5.99,
+    1.175
+  ],
+  "runs": [
+    {
+      "label": "外沿",
+      "x": [
+        0.3,
+        14.55
+      ],
+      "y_center": 23.93,
+      "length_m": 14.25,
+      "post_count": 6,
+      "post_spacing_m": 2.85
+    },
+    {
+      "label": "内沿_西槽",
+      "x": [
+        0.36,
+        1.28
+      ],
+      "y_center": 18.09,
+      "length_m": 0.92,
+      "post_count": 2,
+      "post_spacing_m": 0.92
+    },
+    {
+      "label": "内沿_中井",
+      "x": [
+        5.73,
+        9.28
+      ],
+      "y_center": 18.09,
+      "length_m": 3.55,
+      "post_count": 3,
+      "post_spacing_m": 1.775
+    },
+    {
+      "label": "内沿_东槽",
+      "x": [
+        13.73,
+        14.53
+      ],
+      "y_center": 18.09,
+      "length_m": 0.8,
+      "post_count": 2,
+      "post_spacing_m": 0.8
+    }
+  ],
+  "part_count": 21,
+  "material_roles": [
+    "01_精工金属_紫色骨架"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "palette_uv": [
+    0.735,
+    0.445
+  ],
+  "palette_rgb": [
+    46,
+    104,
+    112
+  ],
+  "collision_owner": "assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_turn_rail/env_tower_stairwell_turn_rail_root_top3d.tscn",
+  "collision_method": "4 x BoxShape3D（逐段，尺寸 = 该段扶手包络）",
+  "runtime_attach": "TowerDescent3D._add_stairwell_turn_rail()：挂为楼梯间可视根的子节点，恒等变换",
+  "build_script": "art_source/environments/tower_descent_3d/source/turning_landing_rail/build_turning_landing_rail_v001.py"
+}

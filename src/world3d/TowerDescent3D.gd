@@ -50,6 +50,20 @@ const STAIR_GENERIC_SCENE: PackedScene = preload(
 const STAIR_ROOFTOP_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_rooftop_12m/env_tower_stairwell_rooftop_12m_root_top3d.tscn"
 )
+## 折返平台护栏（ENV-TOWER-STAIRWELL-TURN-RAIL）。
+##
+## 2026-10-19 业主实机反馈「99-100 / 99-98 的楼梯间，这两边都没有栏杆，角色会走过去」。
+## 两座楼梯间共用同一套 12m 楼梯间美术（v021 双装配根），三层楼板里**只有折返平台**
+## （Blender 装配根局部 z=−6.00，Godot 相对视口 y=−6.00）一条护栏都没有：
+##   · 外侧长边 → 到围护远墙之间是 6m 深采光井，平台侧全敞口（14.2m）；
+##   · 内侧长边 → 两跑之间的井口 3.55m，两侧另有 0.92 / 0.80m 角部窄槽。
+## 该组件几何**写在楼梯间装配根局部坐标系**，因此这里只做恒等挂载：
+## 不出现任何偏移常量，A（yaw π）/ B（yaw 0）两个装配根自动各自就位。
+## 验收：`verify_stairwell_turn_rail`（护栏射线必须命中、两跑口必须仍可通行、实例数 2）。
+const STAIR_TURN_RAIL_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_turn_rail/env_tower_stairwell_turn_rail_root_top3d.tscn"
+)
+const STAIR_TURN_RAIL_ASSET_ID := "ENV-TOWER-STAIRWELL-TURN-RAIL"
 const COMBAT_FLOOR_COUNT := 4
 ## 可玩最深层的**楼层号**（不是 floor_index）。收缩/恢复塔楼深度改这一个数字。
 ##
@@ -3354,6 +3368,38 @@ func _add_imported_stairwell_visual(
 			enclosure_collision_count += 1
 	connector.set_meta("enclosure_collision_count", enclosure_collision_count)
 	_stair_support_surface_count += walkable_collision_count
+	_add_stairwell_turn_rail(connector, visual)
+
+
+## 折返平台护栏：几何写在楼梯间装配根局部坐标系，只做恒等挂载。
+##
+## 挂载时机必须在 `_add_imported_stair_collisions()` **之后** —— 那个函数会遍历
+## `visual` 子树里所有 MeshInstance3D 并按名字决定是否生成 trimesh 碰撞；
+## 护栏的网格名不含 `Walkable` / `EnclosureWall_`，提前挂进去虽然不生成碰撞，
+## 但会让「围护碰撞数」这类计数依赖遍历顺序。挂完再补，语义最干净。
+func _add_stairwell_turn_rail(connector: Node3D, visual: Node3D) -> void:
+	if STAIR_TURN_RAIL_SCENE == null:
+		push_error("STAIR_TURN_RAIL_SCENE 缺失：折返平台将无护栏")
+		return
+	var rail := STAIR_TURN_RAIL_SCENE.instantiate() as Node3D
+	if rail == null:
+		push_error("折返平台护栏实例化失败")
+		return
+	rail.name = "StairwellTurnRail"
+	# 恒等：资产几何已经是装配根局部坐标。禁止在这里加 position/rotation —— 
+	# 一加就会让 A（yaw π）与 B（yaw 0）两个装配根各自错位。
+	visual.add_child(rail)
+	var segment_count := 0
+	for body_value in rail.find_children("*", "StaticBody3D", true, false):
+		var body := body_value as StaticBody3D
+		if body != null:
+			body.set_meta("stair_turn_rail_collision", true)
+			segment_count += 1
+	rail.set_meta("asset_id", STAIR_TURN_RAIL_ASSET_ID)
+	rail.set_meta("asset_version", "v001")
+	rail.set_meta("rail_segment_count", segment_count)
+	connector.set_meta("stair_turn_rail_segment_count", segment_count)
+	connector.set_meta("stair_turn_rail_asset_id", STAIR_TURN_RAIL_ASSET_ID)
 
 
 func _add_imported_stair_collisions(root: Node) -> int:

@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=3]
+
+; Stable AssetID: ENV-TOWER-STAIRWELL-TURN-RAIL
+; 楼梯间折返平台护栏：几何写在**楼梯间装配根局部坐标系**，
+; 运行时由 TowerDescent3D._add_stairwell_turn_rail() 挂成楼梯间可视根的
+; 子节点（恒等变换），因此本 Prefab 的坐标不需要任何运行时偏移。
+; 碰撞逐段用 BoxShape3D（尺寸 = 该段扶手包络），不生成 trimesh。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_turn_rail_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_outer"]
+size = Vector3(14.38, 1.175, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_inner_west"]
+size = Vector3(0.92, 1.175, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_inner_well"]
+size = Vector3(3.55, 1.175, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_inner_east"]
+size = Vector3(0.8, 1.175, 0.15)
+
+[node name="EnvTowerStairwellTurnRailRootTop3D" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-STAIRWELL-TURN-RAIL"
+metadata/asset_version = "v001"
+metadata/blender_source_version = "v001"
+metadata/block_id = "stairs"
+metadata/floor_range = "99F-100F / 98F-99F 折返平台"
+metadata/coordinate_frame = "stairwell_assembly_root_local"
+metadata/collision_owner = "self"
+metadata/collision_method = "4 x BoxShape3D"
+metadata/source_blend = "res://art_source/environments/tower_descent_3d/source/turning_landing_rail/env_tower_stairwell_turn_rail_source_v001.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="RailOuter" type="StaticBody3D" parent="."]
+position = Vector3(7.425, -5.4325, -23.93)
+collision_layer = 1
+collision_mask = 0
+metadata/rail_segment = "outer_edge"
+
+[node name="Collision" type="CollisionShape3D" parent="RailOuter"]
+shape = SubResource("BoxShape3D_outer")
+
+[node name="RailInnerWest" type="StaticBody3D" parent="."]
+position = Vector3(0.82, -5.4325, -18.09)
+collision_layer = 1
+collision_mask = 0
+metadata/rail_segment = "inner_west_slot"
+
+[node name="Collision" type="CollisionShape3D" parent="RailInnerWest"]
+shape = SubResource("BoxShape3D_inner_west")
+
+[node name="RailInnerWell" type="StaticBody3D" parent="."]
+position = Vector3(7.505, -5.4325, -18.09)
+collision_layer = 1
+collision_mask = 0
+metadata/rail_segment = "inner_flight_gap"
+
+[node name="Collision" type="CollisionShape3D" parent="RailInnerWell"]
+shape = SubResource("BoxShape3D_inner_well")
+
+[node name="RailInnerEast" type="StaticBody3D" parent="."]
+position = Vector3(14.13, -5.4325, -18.09)
+collision_layer = 1
+collision_mask = 0
+metadata/rail_segment = "inner_east_slot"
+
+[node name="Collision" type="CollisionShape3D" parent="RailInnerEast"]
+shape = SubResource("BoxShape3D_inner_east")
