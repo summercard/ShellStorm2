@@ -26,6 +26,11 @@ class_name SecretBranch3D
 ##   门板本身**一直在**（装配时就有，不等清房）—— 清房只决定能不能打穿它。
 
 const SECRET_DOOR_SCRIPT := preload("res://src/world3d/SecretDoor3D.gd")
+## 整樘暗门的预制体（门叶 + 木板 + 碰撞 + 透光 + 安装箱）。
+## 与房间 TSCN 里手动摆放的是**同一个资源**：编辑器里看到的就是游戏里的。
+const SECRET_DOOR_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_zones/expedition/runtime/common_components/secret_door/secret_door_root_top3d.tscn"
+)
 ## 门槽的唯一实现（与生成器/校验器同一份）。子图**不复制**「墙长→lane」公式。
 const ROOM_DOOR_LANE := preload("res://src/map/RoomDoorLane.gd")
 
@@ -69,12 +74,24 @@ const DOOR_HP_BASE := 60
 const DOOR_HP_PER_CLEARED := 20
 ## 撤离门解锁阈值（占内容房比例），见设计 §6.2。
 const EXTRACTION_UNLOCK_RATIO := 0.4
-## 门装到墙面之外时，木板外沿还要再离开墙面多少（m）。
-## 3cm 足够让木板与墙面之间出现一道能看见的缝，又不会让整樘门明显悬空。
-const WALL_FACE_CLEARANCE_M := 0.03
+## 门必须从墙面凸出多少（m）。
+##
+## 3cm 只能保证「不穿模」，但玩家实测站在墙前开手电也看不出这里有门 ——
+## 塔内是夜间光，齐平的一块板在暗房里读作「墙」。业主要的是
+## 「墙壁凸出来一块，一眼看得见」（2026-10-19 第二次反馈），
+## 所以这里取一个**肉眼可辨**的凸出量：门框前表面离墙面 0.40m。
+const WALL_FACE_CLEARANCE_M := 0.40
 ## 门前净空检测：射线高度（m）与往房间内量的深度（m）。
 const SITE_CLEAR_EYE_Y_M := 1.2
 const SITE_CLEAR_DEPTH_M := 2.4
+## 「看得见」判据的取样框（米）：门宽收窄后的一半、往房间里量的深度、
+## 门高区间。碰撞射线查不出「美术面挡住但碰撞代理盒没挡住」——
+## room_06 的东墙被一个 5.15×5.15 的转角壳体整块盖住，射线照样能打到门，
+## 玩家却只看到一面平墙。所以必须再按**可视包围盒**查一遍。
+const SITE_COVER_HALF_W_M := 0.9
+const SITE_COVER_DEPTH_M := 1.2
+const SITE_COVER_BOTTOM_Y_M := 0.2
+const SITE_COVER_TOP_Y_M := 2.6
 ## 传送落点相对地面的高度（m）。玩家胶囊原点在地面上。
 const TELEPORT_Y := 0.05
 ## 进支线 / 回主路的按键牌动词。只在这里各写一份：
@@ -133,6 +150,10 @@ var _room_nodes: Dictionary = {}
 ## `_collect_sites()` 的产物，供 `debug_snapshot()` 与验收读取
 ## （要看「推了多少米」「门前被什么挡住」，不能只看门节点坐标）。
 var _sites_debug: Array = []
+## site_id -> { room_local: Transform3D, room_id: String }
+## 房间 TSCN 里**手动摆放**的暗门节点。有就用手摆的位置（业主在编辑器里拖的就是它），
+## 没有才退回数据位点 + 自动外推。
+var _authored_doors: Dictionary = {}
 
 
 ## `rooms_source` 是 `Dungeon3D._records` 的拷贝（只读用途：读房间 center/size/secret_site）。
@@ -207,9 +228,26 @@ func settle_sites() -> void:
 	_build_room_index()
 	if _room_nodes.is_empty():
 		return
+	# 房间索引这时才齐（bootstrap 阶段只有 1 间）。手动摆位可能刚才没读到，
+	# 所以重读一次；新命中的位点要把已经建好的门搬过去。
+	_read_authored_doors()
+	for value in _sites_debug:
+		var site := value as Dictionary
+		if bool(site.get("manual_site", false)):
+			continue
+		if _apply_authored_door(site):
+			_rebase_door(site)
 	var shifted := 0
 	for value in _sites_debug:
 		var site := value as Dictionary
+		if bool(site.get("manual_site", false)):
+			# 手动摆位重扫一遍「墙面在哪」：`_collect_sites()` 那一刻房间往往还没装配完
+			# （bootstrap 先于房间），凸出量是空的。这里补齐数值，但仍然不动位置。
+			_push_site_out_of_wall(site, false)
+			var manual_door := _doors.get(str(site.get("site_id", ""))) as Node3D
+			if manual_door != null:
+				_apply_site_mount(manual_door, site)
+			continue
 		if float(site.get("wall_push_m", 0.0)) > 0.0:
 			continue
 		if not _room_nodes.has(str(site.get("room_id", ""))):
@@ -230,10 +268,44 @@ func settle_sites() -> void:
 						str(site.get("blocker", "")),
 					]
 				)
+	# 视觉遮挡必须**每次都查**，且与 `shifted` 无关：外推救不了 5m 厚的转角壳，
+	# 而这一条恰恰是射线判据查不出来的盲区（ray 能穿过去，玩家只看到墙）。
+	for value in _sites_debug:
+		_measure_visual_cover(value as Dictionary)
 
 
-## 位点外推后，门节点与它自带的传送落点要一起平移 ——
-## 只挪门不挪落点，玩家按 E 会落在门框里。
+## 把已经建好的门搬到 TSCN 给的手摆位置。
+##
+## 与 `_shift_door()` 的区别：那个是「沿法线外推一小段」，这个是「换到另一个位点」，
+## 方向和距离都不一定沿法线。
+##
+## **落点不跟着门走**（2026-10-19 修正，业主「按 E 传送到空房间」）。
+## 曾经这里写的是「落点同样要跟着走」，理由是「出口侧落点就定在门前面」。那个理由
+## 在改版后已经不成立：入口/出口门的落点都是**子图房间中心**（`points[0]` /
+## `points[last]`，世界 x≈1015），跟门在主图哪个墙角毫无关系。手摆把门挪了 39m，
+## 落点被同一个 delta 推出去 39m —— 人直接落在子图房间外 39m 的空中往下掉，
+## 看上去就是「传送到一个空房间，支线没装配」。门挪多少，落点一寸都不该动。
+func _rebase_door(site: Dictionary) -> void:
+	var door := _doors.get(str(site.get("site_id", ""))) as Node3D
+	if door == null or not is_instance_valid(door):
+		return
+	# 房间 TSCN 里那扇手动门此刻也在场（房间是实例化 TSCN 的）。
+	# 位点是晚一步才读到的（bootstrap 时房间还没装配），所以刚才已经建了一扇 ——
+	# 把房间里那扇摘掉，免得同一处叠两樘门。位置已经读到 `site` 里，不会丢。
+	_drop_room_duplicate_door(site)
+	var target := site.get("position", Vector3.ZERO) as Vector3
+	door.global_position = target
+	var normal := site.get("normal", Vector3.FORWARD) as Vector3
+	if normal != Vector3.ZERO:
+		door.rotation.y = atan2(normal.x, normal.z)
+	# 落点保持原值：它指向子图房间中心，与这扇门在主图的哪个位置无关。
+
+
+## 位点外推后，把门节点推离墙面。
+##
+## **只挪门，不挪落点**（同 `_rebase_door` 的理由）。外推量最大 0.4m，对子图落点
+## 来说同样是错误位移；宁可让落点纹丝不动，也不要把「门贴在墙上」这件事
+## 传染给「人落在哪里」。
 func _shift_door(site: Dictionary) -> void:
 	var door := _doors.get(str(site.get("site_id", ""))) as Node3D
 	if door == null or not is_instance_valid(door):
@@ -243,10 +315,9 @@ func _shift_door(site: Dictionary) -> void:
 		return
 	var normal := site.get("normal", Vector3.FORWARD) as Vector3
 	door.global_position -= normal * offset
-	var target: Variant = door.call("get_teleport_target")
-	if target is Vector3:
-		var verb := str(door.get("_teleport_verb"))
-		door.call("set_teleport_target", (target as Vector3) - normal * offset, verb)
+	# 门被推离墙面后，背后会留出一段空当。让门自己补一个「安装箱」填住，
+	# 否则从侧面看会像一块悬空的板（门叶原点契约是 wall_face_bottom_center）。
+	door.call("set_mount_depth", offset)
 
 
 ## —— 位点解析 ——
@@ -261,6 +332,7 @@ func _shift_door(site: Dictionary) -> void:
 ## （远征01 S3 曾与 `room_06 → room_07` 的 `Door_North` 重合 0.00m）。
 func _collect_sites() -> Array:
 	_build_room_index()
+	_read_authored_doors()
 	var result: Array = []
 	for value in _rooms_source:
 		var record := value as Dictionary
@@ -294,16 +366,106 @@ func _collect_sites() -> Array:
 			"authored_position": point,
 			"room_id": str(record.get("id", "")),
 		}
+		# 房间 TSCN 里如果已经手动摆好了这扇门（业主在编辑器里拖的），
+		# 就用他的手摆位置与朝向 —— 不再按数据推算，也不再自动外推。
+		# 「数据位点」于是退回成**没摆过时的兜底**，两套真源不会打架。
+		var manual := _apply_authored_door(entry)
 		# 位点解析出来的只是「房间包围盒边界」，那不是墙面 —— 墙件原点虽坐在
 		# ±dimensions/2 上，但墙厚是**向房间外侧**展开的，可视面还会再往房间里
 		# 探出 0.3~0.6m。木板只有 0.142m 厚，直接装在这个点上会被墙体包住：
 		# 远征 01 的 S1 实测墙体可视面凸出 0.465m，玩家看到的是一整面平墙，
 		# 业主连续两局「打到第 4 间完全找不到入口」就是这个原因。
 		# ⇒ 装配前先按实测墙面外沿把整樘门（门叶 + 木板）推到墙外面。
-		_push_site_out_of_wall(entry)
+		# 手动摆的只**量**不推：位置是业主要的，动它等于把手调抹掉。
+		_push_site_out_of_wall(entry, not manual)
 		_measure_site_blocker(entry)
+		_measure_visual_cover(entry)
 		result.append(entry)
 	return result
+
+
+## 把 TSCN 里手动摆的暗门变换写进位点。返回是否命中。
+##
+## 门节点在 TSCN 里是预制体实例，其 `transform` 是**房间局部**；位点要的是**世界坐标**，
+## 所以必须乘一次房间自己的 `global_transform` —— 少这一步，门会落在房间原点附近
+## （远征 01 实测差 98~256m，正好是各房间的世界平移量）。
+##
+## 朝向取门节点的 +Z：`SecretDoor3D` 装配时约定
+## `rotation.y = atan2(normal.x, normal.z)`，即 +Z 轴对准朝外法线。
+func _apply_authored_door(site: Dictionary) -> bool:
+	var site_id := str(site.get("site_id", ""))
+	var room_id := str(site.get("room_id", ""))
+	var authored_value: Variant = _authored_doors.get(site_id)
+	if authored_value == null:
+		return false
+	var authored := authored_value as Dictionary
+	# 同名位点只认自己房间那一扇：`S1` 这种短名跨楼重名时不会张冠李戴。
+	if str(authored.get("room_id", "")) != room_id:
+		return false
+	var room := _room_nodes.get(room_id) as Node3D
+	if room == null:
+		return false
+	var local := authored.get("room_local", Transform3D.IDENTITY) as Transform3D
+	var world_xform := room.global_transform * local
+	var normal := world_xform.basis.z
+	normal.y = 0.0
+	if normal.length() > 0.001:
+		site["normal"] = normal.normalized()
+	site["position"] = world_xform.origin
+	site["authored_position"] = world_xform.origin
+	site["manual_site"] = true
+	return true
+
+
+## 从房间 TSCN 里读手动摆放的暗门节点。
+##
+## 为什么读 TSCN 而不是读运行时节点：房间在运行时是**按 `authored_layout_instances`
+## 现搭**的，TSCN 只是导出快照 —— 所以这一层读取是「把编辑器的意图带回运行时」的
+## 唯一通道。`static_layout_scene_path` 已在 `DungeonRoom3D` 上，直接 load 即可
+## （导出时它本来就在缓存里）。
+##
+## 只认根层子节点（`parent = "."`）：门的 `DoorLeaf` / `Boards` 也是 `Node3D`，
+## 往下递归会把它们当成两扇门。
+func _read_authored_doors() -> void:
+	_authored_doors.clear()
+	for room_id_value in _room_nodes:
+		var room_id := str(room_id_value)
+		var room := _room_nodes[room_id] as Node3D
+		if room == null:
+			continue
+		var path := str(room.get("static_layout_scene_path"))
+		if path.is_empty() or not ResourceLoader.exists(path):
+			continue
+		var packed := load(path) as PackedScene
+		if packed == null:
+			continue
+		var state := packed.get_state()
+		if state == null:
+			continue
+		var root_xform := Transform3D.IDENTITY
+		for property_index in range(state.get_node_property_count(0)):
+			if str(state.get_node_property_name(0, property_index)) == "transform":
+				root_xform = state.get_node_property_value(0, property_index) as Transform3D
+		for index in range(state.get_node_count()):
+			var node_name := str(state.get_node_name(index))
+			if not node_name.begins_with("SecretDoor"):
+				continue
+			# 只认根层：`get_node_path()` 给的是**节点自己的完整路径**（`./SecretDoor_S1`），
+			# 所以「根层」= 只有一段名字（斜杠恰好 1 个）。
+			var node_path := str(state.get_node_path(index))
+			if node_path.count("/") != 1:
+				continue
+			var xform := Transform3D.IDENTITY
+			for property_index in range(state.get_node_property_count(index)):
+				if str(state.get_node_property_name(index, property_index)) == "transform":
+					xform = state.get_node_property_value(index, property_index) as Transform3D
+			var site_id := node_name.trim_prefix("SecretDoor_")
+			if site_id == node_name:
+				continue
+			_authored_doors[site_id] = {
+				"room_local": root_xform * xform,
+				"room_id": room_id,
+			}
 
 
 ## 扫一遍宿主树，建 `room_id -> 房间节点`。
@@ -338,7 +500,11 @@ func _index_rooms(node: Node) -> void:
 ##
 ## 只认名字/来源里带 `wall` 的网格，**不认家具**：工作台、货架也贴墙摆，
 ## 但它们不是「看得见门」的基准面；把它们算进来会把门推到家具外面。
-func _push_site_out_of_wall(site: Dictionary) -> void:
+##
+## `apply = false` 时**只量不推**（手动摆位走这条）：仍然算出墙面在哪、
+## 门凸出多少，让 A23 与 `debug_snapshot()` 能看到「这一摆是不是埋进墙里」，
+## 但绝不改业主亲手放的位置。
+func _push_site_out_of_wall(site: Dictionary, apply: bool = true) -> void:
 	var room := _room_nodes.get(str(site.get("room_id", ""))) as Node3D
 	if room == null:
 		return
@@ -351,22 +517,49 @@ func _push_site_out_of_wall(site: Dictionary) -> void:
 	# 所以「墙面挡在门前面」看的是**最小**投影，不是最大：
 	# 远征 01 S1 的墙体区间 -20.465 ~ -19.850，-20.465 才是拦住玩家的那一面。
 	var face := INF
-	for node in room.find_children("*", "MeshInstance3D", true, false):
-		var mesh_node := node as MeshInstance3D
-		if mesh_node.mesh == null or not _is_wall_mesh(mesh_node):
+	# 必须用 `VisualInstance3D` + `_visual_world_box()`：远征的墙件有一部分是用
+	# `MultiMeshInstance3D` 铺出来的，只扫 `MeshInstance3D` 会漏掉整面墙，
+	# 于是位点以为「没找到墙」而不外推（S2/S4 就是这样只凸了最小量）。
+	for node in room.find_children("*", "VisualInstance3D", true, false):
+		var visual := node as VisualInstance3D
+		if visual == null or not _is_wall_mesh(visual):
 			continue
-		var box := mesh_node.global_transform * mesh_node.get_aabb()
+		var box := _visual_world_box(visual)
+		if box.size == Vector3.ZERO:
+			continue
 		if not _box_near_point(box, point):
 			continue
 		for index in range(8):
 			face = minf(face, box.get_endpoint(index).dot(normal))
 	if face == INF:
+		if not apply:
+			# 手动摆位 + 认不出墙件（S2/S4 所在的东/西墙是转角壳体，名字里没有
+			# wall，`_is_wall_mesh()` 认不出来）。位置本身来自装配时的外推，
+			# 按装配常量记一笔，并标记成**估计值** —— A23 照常判，但 NOTE 会说明
+			# 这个数不是实测的。
+			site["protrude_m"] = WALL_FACE_CLEARANCE_M
+			site["protrude_estimated"] = true
+			return
+		# 没认到墙件（房型用别的方式拼墙）：不能当「已就位」放过。
+		# 按正式凸出量整体前推，宁可多凸一点，也不要再留一扇齐平的隐形门。
+		site["wall_push_m"] = WALL_FACE_CLEARANCE_M
+		site["protrude_m"] = WALL_FACE_CLEARANCE_M
+		site["position"] = point - normal * WALL_FACE_CLEARANCE_M
 		return
-	var offset := base - face + WALL_FACE_CLEARANCE_M
-	if offset <= 0.0:
-		return
-	site["wall_push_m"] = offset
+	# 凸出量固定 = WALL_FACE_CLEARANCE_M。算出负数说明门本来就在墙面前 ≥0.40m，
+	# 那就不动它（offset 夹到 0），绝不为了「统一数值」把门往墙里推。
+	var offset := maxf(base - face + WALL_FACE_CLEARANCE_M, 0.0)
 	site["wall_face_m"] = face
+	if not apply:
+		# 手动摆位：只记录「门心比墙面外凸多少」，一个毫米都不挪。
+		# `normal` 朝房间外、房间内部在 -normal 侧 ⇒ 墙面最凸进房间的那一层是
+		# **最小**投影，门心投影比它更小才叫「露在墙外」，两者相减即凸出量。
+		site["wall_push_m"] = 0.0
+		site["protrude_m"] = face - base
+		return
+	var protrude := face - (base - offset)
+	site["wall_push_m"] = offset
+	site["protrude_m"] = protrude
 	site["position"] = point - normal * offset
 
 
@@ -399,6 +592,101 @@ func _measure_site_blocker(site: Dictionary) -> void:
 	site["blocker"] = _node_label(hit.get("collider") as Node)
 
 
+## 门前**肉眼**是否被盖住 —— 与 `_measure_site_blocker()` 的碰撞射线互补。
+##
+## 为什么射线不够：墙体/装饰的**碰撞代理盒**往往比美术面薄得多（有的甚至只在
+## 墙平面留一层壳）。`room_06` 东墙上一个 5.15×5.15×11.9 的转角壳体把整樘门
+## 包在肚子里，射线照样一路穿到门板 → A21 判"可见"，玩家却只看到一面平墙。
+##
+## 外推也救不了它：要推出这个壳得挪 5m，门就飘在房间当中了。所以这类位点
+## **不修正、只报错** —— 槽位本身不合法，必须回数据里换 `lane`。
+func _measure_visual_cover(site: Dictionary) -> void:
+	var room := _room_nodes.get(str(site.get("room_id", ""))) as Node3D
+	if room == null:
+		return
+	var point := site.get("position", Vector3.ZERO) as Vector3
+	var normal := site.get("normal", Vector3.FORWARD) as Vector3
+	if normal == Vector3.ZERO:
+		return
+	var tangent := _wall_tangent(str(site.get("wall", "")))
+	if tangent == Vector3.ZERO:
+		return
+	var base := point.dot(normal)
+	var along := point.dot(tangent)
+
+	var cover_name := ""
+	var cover_m := 0.0
+	for node in room.find_children("*", "VisualInstance3D", true, false):
+		# 门自己也是「墙面前凸出的一坨」，不排除的话 A22 会一直报
+		# 「整樘门被 ImportedModel 盖住（凸出 0.14m）」—— 那 0.14m 是木板厚度本身。
+		if _is_secret_door_part(node):
+			continue
+		var box := _visual_world_box(node as VisualInstance3D)
+		if box.size == Vector3.ZERO:
+			continue
+		# 竖直方向必须是"门高主体"：地脚线、屋檐这类件不算覆盖。
+		if box.end.y < 1.2 or box.position.y > 2.0:
+			continue
+		if Vector2(box.get_center().x - point.x, box.get_center().z - point.z).length() > 4.0:
+			continue
+		var lo := INF
+		var hi := -INF
+		var t_lo := INF
+		var t_hi := -INF
+		for index in range(8):
+			var corner := box.get_endpoint(index)
+			var proj := corner.dot(normal)
+			lo = minf(lo, proj)
+			hi = maxf(hi, proj)
+			var along_proj := corner.dot(tangent)
+			t_lo = minf(t_lo, along_proj)
+			t_hi = maxf(t_hi, along_proj)
+		# 只"擦到门边"不算盖住：沿墙方向必须真的压过门宽的大部分。
+		var overlap := minf(t_hi, along + SITE_COVER_HALF_W_M) - maxf(t_lo, along - SITE_COVER_HALF_W_M)
+		if overlap < SITE_COVER_HALF_W_M * 1.2:
+			continue
+		# 往房间内**凸到门前面**多少（normal 朝房间外，所以越小越靠房间内）。
+		var front := base - lo
+		if front <= 0.05:
+			continue
+		if front > cover_m:
+			cover_m = front
+			cover_name = _node_label(node)
+
+	if cover_name.is_empty():
+		site.erase("covered_by")
+		site.erase("cover_m")
+		return
+	site["covered_by"] = cover_name
+	site["cover_m"] = cover_m
+	# 只在第一次发现时告警，`settle_sites()` 会被调多次，别刷屏。
+	if not bool(site.get("_cover_warned", false)):
+		site["_cover_warned"] = true
+		push_warning(
+			"[SecretBranch3D] 位点 %s（%s）整樘门被 %s 的实心外壳盖住（凸出 %.2fm）—— 这个槽位不合法，必须换 lane"
+			% [
+				str(site.get("site_id", "")), str(site.get("room_id", "")),
+				cover_name, cover_m,
+			]
+		)
+
+
+## 绘制件的世界包围盒：`MultiMeshInstance3D` 也要认 —— 只扫 `MeshInstance3D`
+## 会把整片用 MultiMesh 铺出来的墙漏掉（漏一片就等于判"门前没东西"）。
+func _visual_world_box(node: VisualInstance3D) -> AABB:
+	if node is MeshInstance3D:
+		var mesh_node := node as MeshInstance3D
+		if mesh_node.mesh == null:
+			return AABB()
+		return mesh_node.global_transform * mesh_node.get_aabb()
+	if node is MultiMeshInstance3D:
+		var multi := node as MultiMeshInstance3D
+		if multi.multimesh == null or multi.multimesh.mesh == null:
+			return AABB()
+		return multi.global_transform * multi.multimesh.get_aabb()
+	return AABB()
+
+
 ## 一层层往上找，认出「这是墙」。
 func _is_wall_mesh(node: Node) -> bool:
 	var cursor := node
@@ -408,6 +696,21 @@ func _is_wall_mesh(node: Node) -> bool:
 		if str(cursor.name).to_lower().contains("wall"):
 			return true
 		if cursor is Node3D and (cursor as Node3D).scene_file_path.to_lower().contains("wall"):
+			return true
+		cursor = cursor.get_parent()
+	return false
+
+
+## 这块可视件是不是**暗门自己**的一部分（门叶 / 木板 / 安装箱）。
+##
+## 房间 TSCN 里现在直接摆着暗门（业主可手调），运行时房间又是实例化这个 TSCN 的，
+## 所以门口那几件几何确实在房间子树里。它们是「门」，不是「挡住门的墙」。
+func _is_secret_door_part(node: Node) -> bool:
+	var cursor := node
+	for _i in range(4):
+		if cursor == null:
+			return false
+		if str(cursor.name).begins_with("SecretDoor"):
 			return true
 		cursor = cursor.get_parent()
 	return false
@@ -423,13 +726,19 @@ func _box_near_point(box: AABB, point: Vector3) -> bool:
 
 
 ## 碰撞体 → 祖先生成件名，便于人眼认出「是哪个工作台挡的」。
+## 命名前缀两种都认：`ENV-`/`DB-`（装配件）与 `ENV_`/`Imported_`（美术导入件）——
+## 只认横杠那版会把 `ENV_TOWER_CORNER_L_5M` 报成它爹 `ImportedModel`，等于没说。
 func _node_label(node: Node) -> String:
 	var cursor := node
 	for _i in range(4):
 		if cursor == null:
 			break
-		if str(cursor.name).begins_with("ENV-") or str(cursor.name).begins_with("DB-"):
-			return str(cursor.name)
+		var name_text := str(cursor.name)
+		if (
+			name_text.begins_with("ENV-") or name_text.begins_with("DB-")
+			or name_text.begins_with("ENV_") or name_text.begins_with("Imported_")
+		):
+			return name_text
 		cursor = cursor.get_parent()
 	if node == null:
 		return ""
@@ -813,28 +1122,94 @@ func _build_branch_corridors(pair_id: int, rooms: Array) -> void:
 		_corridor_builder.call(from_room, to_room, 100 + pair_id * 10 + index, lane)
 
 
+## 取一樘门节点。预制体缺失时退回纯脚本节点（资产缺失不该让关卡打不开）。
+func _instantiate_door() -> Node3D:
+	if SECRET_DOOR_SCENE != null:
+		var scene_node := SECRET_DOOR_SCENE.instantiate()
+		if scene_node != null:
+			return scene_node as Node3D
+	return SECRET_DOOR_SCRIPT.new() as Node3D
+
+
 func _build_door(pair_id: int, site: Dictionary, locked: bool = false) -> Node3D:
-	var door_node := SECRET_DOOR_SCRIPT.new()
-	door_node.name = "SecretDoor_%s" % str(site.get("site_id", ""))
-	var position := site.get("position", Vector3.ZERO) as Vector3
-	# 资产装配系原点在**地面、门洞中心**（不是板体中心）：门叶与木板共用这一原点，
-	# 木板朝资产 -Z 凸向房间、门腔朝 +Z 凹进墙里。所以这里直接落地面点。
-	door_node.position = position
-	var normal := site.get("normal", Vector3.FORWARD) as Vector3
-	# 让资产的 **-Z 对齐「指向房间内」**（木板那面朝向房间、门腔朝墙内凹）。
-	# 绕 Y 转 θ 后资产 -Z 轴 = (-sinθ, 0, -cosθ)；要它等于 -normal：
-	#   -sinθ = -n.x, -cosθ = -n.z  ⇒  θ = atan2(n.x, n.z)
-	# ⚠️ 早先写成 atan2(-n.x, -n.z)，结果木板朝**墙外**凸、门腔反而插进房间，
-	# 玩家在房里看到的是那扇门叶而不是钉死的木板。资产包围盒看不出这个错，
-	# 因为它只报尺寸不报朝向，只有进游戏看才发现。
-	door_node.rotation.y = atan2(normal.x, normal.z)
+	# 房间 TSCN 里已经有一扇**业主手摆**的门时，接管它 —— 不再新建第二扇。
+	# 运行时房间是直接实例化房间 TSCN 的（`DungeonRoom3D._build_shell`），
+	# 编辑器里那扇门在游戏里本来就在场；再建一扇只会两扇叠在同一处。
+	var door_node := _adopt_authored_door(site)
+	var adopted := door_node != null
+	if not adopted:
+		door_node = _instantiate_door()
+		door_node.name = "SecretDoor_%s" % str(site.get("site_id", ""))
+		var position := site.get("position", Vector3.ZERO) as Vector3
+		# 资产装配系原点在**地面、门洞中心**（不是板体中心）：门叶与木板共用这一原点，
+		# 木板朝资产 -Z 凸向房间、门腔朝 +Z 凹进墙里。所以这里直接落地面点。
+		door_node.position = position
+		var normal := site.get("normal", Vector3.FORWARD) as Vector3
+		# 让资产的 **-Z 对齐「指向房间内」**（木板那面朝向房间、门腔朝墙内凹）。
+		# 绕 Y 转 θ 后资产 -Z 轴 = (-sinθ, 0, -cosθ)；要它等于 -normal：
+		#   -sinθ = -n.x, -cosθ = -n.z  ⇒  θ = atan2(n.x, n.z)
+		# ⚠️ 早先写成 atan2(-n.x, -n.z)，结果木板朝**墙外**凸、门腔反而插进房间，
+		# 玩家在房里看到的是那扇门叶而不是钉死的木板。资产包围盒看不出这个错，
+		# 因为它只报尺寸不报朝向，只有进游戏看才发现。
+		door_node.rotation.y = atan2(normal.x, normal.z)
 	door_node.call("configure", site, _door_hp())
 	door_node.call("set_locked", locked)
 	# 传送由门自己按 E 触发（`teleport_requested`），不再有踩上去就走的 Area3D。
-	door_node.connect("teleport_requested", _on_door_teleport_requested)
-	add_child(door_node)
+	if not door_node.is_connected("teleport_requested", _on_door_teleport_requested):
+		door_node.connect("teleport_requested", _on_door_teleport_requested)
+	if not adopted:
+		add_child(door_node)
+	_apply_site_mount(door_node, site)
 	_doors[str(site.get("site_id", ""))] = door_node
 	return door_node
+
+
+## 摘掉房间里那扇「手摆但没被接管」的门（同 site_id）。
+##
+## 只在晚一步读到 TSCN 位点时才有活干：`_collect_sites()` 那刻房间还没装配，
+## 我们按数据位点先建了一扇；等房间齐了才发现 TSCN 里也有一扇 —— 同一处两樘门。
+## 用 `remove_child` 而不是只 `queue_free`：后者要到帧末才生效，
+## 同帧的 A22 可视遮挡检查还会扫到它，报一条假红。
+func _drop_room_duplicate_door(site: Dictionary) -> void:
+	var room := _room_nodes.get(str(site.get("room_id", ""))) as Node3D
+	if room == null:
+		return
+	var site_id := str(site.get("site_id", ""))
+	var duplicate := room.find_child("SecretDoor_%s" % site_id, true, false)
+	if duplicate == null:
+		return
+	if duplicate == _doors.get(site_id):
+		return
+	var host := duplicate.get_parent()
+	if host != null:
+		host.remove_child(duplicate)
+	duplicate.queue_free()
+
+
+## 房间 TSCN 里手动摆放的那扇门（`SecretDoor_<site_id>`）。没有就返回 null。
+func _adopt_authored_door(site: Dictionary) -> Node3D:
+	if not bool(site.get("manual_site", false)):
+		return null
+	var room := _room_nodes.get(str(site.get("room_id", ""))) as Node3D
+	if room == null:
+		return null
+	var door_name := "SecretDoor_%s" % str(site.get("site_id", ""))
+	var door := room.find_child(door_name, true, false) as Node3D
+	if door == null:
+		return null
+	# 位置/朝向就是业主在编辑器里摆的那个 transform，一个数都不改。
+	return door
+
+
+## 按「门比墙面凸出多少」补安装箱厚度。
+##
+## 自动外推的门由 `_shift_door()` 负责；手摆的门不经过那条路，但同样可能被推出墙面
+## 0.4m —— 不填这一段，侧面看就是一块悬空的板。`protrude_m` 由 `_push_site_out_of_wall`
+## 实测得出（`face - 门心投影`），两种来源共用同一份数值。
+func _apply_site_mount(door: Node3D, site: Dictionary) -> void:
+	var protrude := float(site.get("protrude_m", 0.0))
+	if protrude > 0.02 and door.has_method("set_mount_depth"):
+		door.call("set_mount_depth", protrude)
 
 
 ## 入口板能否破：入口所在房间必须已清（设计 §5.2）。
@@ -858,7 +1233,7 @@ func _door_hp() -> int:
 ## 与谜题门的差别只有两点：没有木板（不用打），state 一开始就是 BROKEN。
 ## 其余（门叶资产、装配系、圆点协议、按 E 触发）完全相同 —— 不给支线另起一套传送表现。
 func _build_portal_door(site: Dictionary, verb: String, target: Vector3) -> Node3D:
-	var door_node := SECRET_DOOR_SCRIPT.new()
+	var door_node := _instantiate_door()
 	door_node.name = "SecretDoor_%s" % str(site.get("site_id", ""))
 	door_node.position = site.get("position", Vector3.ZERO) as Vector3
 	var normal := site.get("normal", Vector3.FORWARD) as Vector3

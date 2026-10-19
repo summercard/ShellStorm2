@@ -217,6 +217,12 @@ const FATE_SPEND_POPUP_RISE := 42
 ## 这段时长要足够让翻面被看见，但不能让退出像卡住；减少动效时直接跳过。
 const FATE_OVERLAY_EXIT_DURATION := 0.42
 const FATE_OVERLAY_EXIT_FLIP_DURATION := 0.16
+## 门后购卡弹窗（含全屏暗化层）的 `z_index`，写在 `HUD` 下。
+const FATE_OVERLAY_Z_INDEX := 900
+## 弹窗打开期间给金币读数的 `z_index`（`loot_label` 挂在 `ReferenceCombatHUD` 下，父 z=100）。
+## 100 + 900 = 1000 > 弹窗 900 ⇒ 读数不被暗化层压暗。
+## 主人 2026-10-19：别把金币 UI 遮掉 —— 这张弹窗里唯一的对照数字就是它（价格 vs 余额）。
+const FATE_COIN_READOUT_Z_ABOVE_VEIL := 900
 
 const BASE_INVENTORY_CAPACITY := 40
 ## 保底武装配套弹药：入场即给 `item_ammo_pack` 的发数（每单位 = 1 发真实备弹）。
@@ -613,6 +619,10 @@ func _ready() -> void:
 	status_label.text = "%s · 初始钥匙 1，把战利品安全带到撤离点" % gameplay_theme.fantasy
 	_refresh_loot_label()
 	generation_completed.emit(get_generation_snapshot())
+	var world_audio := preload("res://src/audio/WorldAudioEnvironment3D.gd").new()
+	world_audio.name = "WorldAudioEnvironment"
+	add_child(world_audio)
+	world_audio.configure(self, player)
 	call_deferred("_activate_runtime_persistence")
 
 
@@ -4319,6 +4329,14 @@ func _resolve_spawn_position(
 const EXPEDITION_SURPLUS_RATIO := 0.25
 const EXPEDITION_SURPLUS_MIN := 1
 const EXPEDITION_SURPLUS_MAX := 8
+## 指定房固定总量（业主 2026-10-19：「room1改成15只 room2改成12只」）。
+## 口径是**该房第一波的总怪数**（含延迟在途预约），即玩家实际要清掉的只数。
+## 写法仍是「编成外补齐」：第一波先按设计源刷出来，再把差额补进同一波 ⇒
+## 卡价与抽牌完全看不到这些怪（见上方说明）。
+const EXPEDITION_ROOM_ENEMY_TOTALS := {
+	"room_01": 15,
+	"room_02": 12,
+}
 ## 只给**有战斗的内容房**加。Boss 战不该被增援放大难度；交通房（撤离 / 安全屋 /
 ## 楼梯厅 / 起点）没有战斗编成，也就没有金币可加。
 const EXPEDITION_SURPLUS_EXCLUDED_ROOM_TYPES := [
@@ -4330,25 +4348,37 @@ const EXPEDITION_SURPLUS_EXCLUDED_ROOM_TYPES := [
 var expedition_surplus_enabled := true
 
 
-## 生成一波编成外增援；不适用时返回空数组（调用方直接跳过）。
-func _build_expedition_surplus_wave(
-	room: DungeonRoom3D, first_wave: Array
-) -> Array[Dictionary]:
-	var none: Array[Dictionary] = []
+## 该房应该补多少只怪。返回 0 = 不补。
+##
+## 已指定总量的房按「目标 − 现有」算；其余战斗房沿用 25% 比例。
+## 入参是该房**当前存活账**（= 已实到 + 延迟在途预约），所以差额是精确的 ——
+## 补完之后 `_alive_by_room` 恰好等于目标值，不受延迟出怪影响。
+func _expedition_surplus_deficit(room: DungeonRoom3D, alive: int) -> int:
 	if not expedition_surplus_enabled:
-		return none
+		return 0
 	if not get_runtime_map_id().begins_with("expedition"):
-		return none
-	if room == null or str(room.room_type) in EXPEDITION_SURPLUS_EXCLUDED_ROOM_TYPES:
-		return none
-	var base_count := first_wave.size()
-	if base_count <= 0:
-		return none
-	var count := clampi(
-		int(round(float(base_count) * EXPEDITION_SURPLUS_RATIO)),
+		return 0
+	if room == null or alive <= 0:
+		return 0
+	if str(room.room_type) in EXPEDITION_SURPLUS_EXCLUDED_ROOM_TYPES:
+		return 0
+	var target := alive + clampi(
+		int(round(float(alive) * EXPEDITION_SURPLUS_RATIO)),
 		EXPEDITION_SURPLUS_MIN,
 		EXPEDITION_SURPLUS_MAX
 	)
+	if EXPEDITION_ROOM_ENEMY_TOTALS.has(room.room_id):
+		target = int(EXPEDITION_ROOM_ENEMY_TOTALS[room.room_id])
+	return maxi(0, target - alive)
+
+
+## 把差额补进**当前这一波**（additive=true，不新增波次）。
+## 不新增波次 ⇒ 清房时机、波次 HUD、木板血量与撤离进度的时间轴全部不变。
+## 返回实际补上的只数。
+func _apply_expedition_surplus(room: DungeonRoom3D, alive: int) -> int:
+	var deficit := _expedition_surplus_deficit(room, alive)
+	if deficit <= 0:
+		return 0
 	# 随机流隔离：`MonsterInjector` 的 `_rng` / `_strong_rng` 是**全关卡共享的有状态流**，
 	# 直接借用会让后续房间的编成跟着变，且同种子重开不再逐字复现。
 	# 这里按 `run_seed + room_id` 派生一个确定状态生成增援，生成完原样还原 ⇒
@@ -4363,9 +4393,9 @@ func _build_expedition_surplus_wave(
 	if strong_rng != null:
 		saved_strong = strong_rng.state
 		strong_rng.state = hash("%d|%s|fate_surplus_strong" % [run_seed, room.room_id])
-	var wave := _monster_injector.generate_enemies({
+	var extra := _monster_injector.generate_enemies({
 		"type": "ambush",
-		"count": count,
+		"count": deficit,
 		"floor": maxi(1, visual_theme.difficulty_rank if visual_theme != null else 1),
 		"floor_level": 0,
 	})
@@ -4373,7 +4403,11 @@ func _build_expedition_surplus_wave(
 		plain_rng.state = saved_plain
 	if strong_rng != null:
 		strong_rng.state = saved_strong
-	return wave
+	if extra.is_empty():
+		return 0
+	if _spawn_enemy_batch(room, extra, true) < 0:
+		return 0
+	return extra.size()
 
 
 ## 把已分好的波次提交为本房的刷怪队列，并立刻刷出第一波。
@@ -4397,13 +4431,6 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 		_note_room_enemy_modifiers(room)
 	var wave_count := waves.size()
 	var first_wave: Array[Dictionary] = waves.pop_front() as Array[Dictionary]
-	# 编成外增援：**并入第一波**，不新增波次。
-	# ① 不写回关卡计划 ⇒ 参考收益 / 冻结报价 / 抽牌规则一个字不变（卡价不动）；
-	# ② 不新增波次 ⇒ 清房时机、波次 HUD、木板血量与撤离进度的时间轴全部不变，
-	#    只是每间战斗房的小怪多 25%。独立成波会多等一个 2 秒间歇，属于不必要的体感变化。
-	var surplus_wave := _build_expedition_surplus_wave(room, first_wave)
-	if not surplus_wave.is_empty():
-		first_wave.append_array(surplus_wave)
 	_cancel_room_wave_intermission(room.room_id)
 	_room_wave_queues[room.room_id] = waves
 	_room_wave_numbers[room.room_id] = 1
@@ -4422,7 +4449,15 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 		_mark_room_cleared(room, true)
 		status_label.text = "敌群载入失败，房间已安全解锁"
 		return false
-	status_label.text = "区域警戒：波次 1/%d · %d 个敌对信号" % [wave_count, spawned]
+	# 编成外补齐：第一波先按设计源刷出来，再按「目标 − 现有存活账」补差额进同一波。
+	# ① 不写回关卡计划 ⇒ 参考收益 / 冻结报价 / 抽牌规则一个字不变（卡价不动）；
+	# ② 不新增波次 ⇒ 清房时机、波次 HUD、木板血量与撤离进度的时间轴全部不变。
+	# 放在 `_spawn_enemy_batch` 之后而不是之前，是因为差额要按**真实存活账**算：
+	# 盒子倍率、延迟在途预约都会影响实际只数，只有刷完才知道差多少。
+	_apply_expedition_surplus(room, int(_alive_by_room.get(room.room_id, 0)))
+	status_label.text = "区域警戒：波次 1/%d · %d 个敌对信号" % [
+		wave_count, int(_alive_by_room.get(room.room_id, spawned)),
+	]
 	_update_wave_hud(room.room_id)
 	return true
 
@@ -6851,12 +6886,19 @@ func _build_door_fate_overlay() -> void:
 	_fate_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fate_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	_fate_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
-	_fate_overlay.z_index = 900
+	_fate_overlay.z_index = FATE_OVERLAY_Z_INDEX
 	$HUD.add_child(_fate_overlay)
 	var dim := ColorRect.new()
 	dim.color = Color(0.002, 0.008, 0.016, 0.62)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fate_overlay.add_child(dim)
+
+	# 金币读数浮到暗化层之上（主人 2026-10-19：不要遮住金币 UI）。
+	# 只提这一行，不动别的 HUD：暗化仍负责把战斗画面压下去，读数则保持常色可读 ——
+	# 「还要攒多少」现在完全靠自己对照价格与余额，读数被压暗就等于把唯一依据抹掉。
+	# 复原在 `_close_door_fate_overlay()`，与弹窗生命周期同进同出。
+	if loot_label != null and is_instance_valid(loot_label):
+		loot_label.z_index = FATE_COIN_READOUT_Z_ABOVE_VEIL
 
 	# 顶部标题已按主人 2026-10-14 要求移除；顶部「本局金币」余额行也按主人
 	# 2026-10-15 要求整体移除 —— 金币的唯一读数是右下角的 `RunLootReadout`，
@@ -7942,21 +7984,14 @@ func _refresh_door_fate_prices() -> void:
 					label.text = "命运槽已满"
 					label.add_theme_color_override("font_color", Color(1.0, 0.44, 0.34))
 				"insufficient":
-					# 「金币不足」只说了状态，「还差 N」才是玩家真正要的下一步信息：
-					# 他一眼就能算出还要攒多少，不用自己拿价格减去余额。
-					label.text = "◈ %d 金币 · 还差 %d" % [
-						_fate_price(card), maxi(0, _fate_price(card) - GameManager.currency)
-					]
+					# 主人 2026-10-19：卡下只写价格，不写「还差 M」。
+					# 买不起这件事由字色（琥珀）+ 卡片轻度压暗表达；右下金币读数就在同一屏，
+					# 玩家自己对照即可，卡下不必再替他算一遍减法。
+					label.text = "◈ %d 金币" % _fate_price(card)
 					label.add_theme_color_override("font_color", Color(1.0, 0.72, 0.36))
 				_:
-					var bounds := _fate_price_bounds(card)
-					label.text = (
-						"◈ %d 金币 · 区间 %d–%d" % [
-							_fate_price(card), int(bounds.get("min", 0)), int(bounds.get("max", 0))
-						]
-						if uses_dynamic_fate_economy()
-						else "◈ %d 金币" % _fate_price(card)
-					)
+					# 同样只留价格：远征动态报价的「区间 a–b」也不再上屏（主人 2026-10-19）。
+					label.text = "◈ %d 金币" % _fate_price(card)
 					label.add_theme_color_override("font_color", _rarity_color(card.card_rarity))
 		# 三种不可买状态的压暗强度刻意分两档：
 		# · 已购买 ⇒ **灰阶 + 压暗 + 缩到 70%**（卡位用掉了，退到背景）
@@ -8065,6 +8100,10 @@ func _close_door_fate_overlay() -> void:
 	_door_fate_purchased.clear()
 	_fate_choice_buttons.clear()
 	_fate_exit_button = null
+	# 金币读数的层级随弹窗一起复原：弹窗开着时它被提到暗化层之上，
+	# 关掉后必须回到普通 HUD 层，否则后续弹层（背包/暂停）再也压不住它。
+	if loot_label != null and is_instance_valid(loot_label):
+		loot_label.z_index = 0
 	if _fate_overlay != null and is_instance_valid(_fate_overlay):
 		# 先摘除再回收：queue_free() 要等到帧末才真正释放节点。若同一帧内再次
 		# 打开弹窗（连续两次命运卡流程/验收用例），新节点会与仍挂在树上的旧节点
@@ -8665,6 +8704,11 @@ func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void
 		# 子弹模块走专用事务（写武器实例 + 旧模块回背包 + 装备界面立刻刷新）；
 		# 其它模块（手电筒等）仍走原来的就地挂载路径。
 		if str(item.get("subtype", "")) == "bullet":
+			# 2026-10-19：手动更换总闸关闭。这里先拦一次，避免「先从背包扣 1 个、
+			# 事务再拒绝」的中间态；真正的判据仍在 Player3D 事务里。
+			if not WeaponBulletDrop.is_manual_swap_enabled():
+				_reject_manual_bullet_module_swap()
+				return
 			_install_bullet_module_from_inventory(
 				slot_index, item, player.get_active_weapon_slot()
 			)
@@ -9224,6 +9268,16 @@ func _on_bullet_module_install_requested(source_slot_index: int, weapon_slot_ind
 	)
 
 
+## 手动更换弹药模块的统一拒绝口（2026-10-19 总闸关闭）。
+##
+## 背包左键与 `_install_bullet_module_from_inventory` 都先经过这里；账本
+## 《背包物品调用索引》的「使用/装配入口」也指向本函数 —— 它如实描述当前唯一行为：
+## 拒绝手动换弹，并提示去枪械工坊。
+func _reject_manual_bullet_module_swap() -> bool:
+	status_label.text = WeaponBulletDrop.manual_swap_block_reason()
+	return false
+
+
 func _install_bullet_module_from_inventory(
 	source_slot_index: int, item: Dictionary, weapon_slot_index: int
 ) -> bool:
@@ -9232,6 +9286,9 @@ func _install_bullet_module_from_inventory(
 	if str(item.get("type", "")) != "module" or str(item.get("subtype", "")) != "bullet":
 		status_label.text = "只能把子弹模块拖到武器格"
 		return false
+	# 先判渠道，再动背包：总闸关闭时不能先 remove_from_slot 再回滚。
+	if not WeaponBulletDrop.is_manual_swap_enabled():
+		return _reject_manual_bullet_module_swap()
 	if not _inventory.remove_from_slot(source_slot_index, 1):
 		return false
 	var result := player.call(
@@ -9262,9 +9319,13 @@ func _install_weapon_module_from_item(item: Dictionary) -> bool:
 		return false
 	# 局内快捷装配这条链**绕过** `Player3D.install_bullet_module_to_weapon_slot`，
 	# 直接改运行树；不在这里单独拦一次，绑定锁定形同虚设。
-	if str(item.get("subtype", "")) == "bullet" and tree.bullet_module_locked:
-		status_label.text = "该枪的弹药模块已绑定，无法更换"
-		return false
+	# 2026-10-19 追加：手动更换总闸关闭后，非掉落枪也走不到这条旁路。
+	if str(item.get("subtype", "")) == "bullet":
+		if tree.bullet_module_locked:
+			status_label.text = "该枪的弹药模块已绑定，无法手动更换（需在枪械工坊）"
+			return false
+		if not WeaponBulletDrop.is_manual_swap_enabled():
+			return _reject_manual_bullet_module_swap()
 	var new_node := BlueprintRegistry.create_assembly_node(str(item.get("assembly_id", item.get("id", ""))))
 	if new_node == null:
 		return false

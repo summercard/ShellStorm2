@@ -53,6 +53,10 @@ const OPENING_H_M := 2.5
 const BOARDS_COLLISION_D_M := 0.16
 ## 破碎后延迟多久关闭碰撞（秒）。给一次命中反馈的时间，不做破碎物理。
 const BREAK_COLLISION_DELAY_S := 0.08
+## 破板木屑特效（FX01-33 `VFX-BOARD-DEBRIS-3D`）的尺寸档。
+## 基准 1.0 = 门板 2.38×2.51m 对应的碎块（单块 0.34~0.52m，见 `VfxBoardDebris3D`）。
+## 业主 2026-10-19 定「大块一点」⇒ 不要再按 0.6~0.8 往小缩，那样就退回"碎屑"读法。
+const BOARD_DEBRIS_EFFECT_SIZE := 1.0
 ## 交互距离（m）。与 `InteractionDot3D.APPROACH_NEAR_DISTANCE_M` 同值 ——
 ## 「站到能按 E 的距离」正是圆点长到满尺寸的那一圈，两者不能各写一个数。
 const INTERACT_RANGE_M := 2.6
@@ -83,6 +87,11 @@ var _locked := false
 
 var _door_leaf: Node3D = null
 var _boards: Node3D = null
+## 门被推出墙面后，用来填住「门框 ↔ 墙面」之间空当的安装箱。
+var _mount_box: MeshInstance3D = null
+var _mount_depth := 0.0
+## 板缝透光（见 `_build_leak_light`）。常开门不建，撤离/返程门不当谜题用。
+var _leak_light: OmniLight3D = null
 var _shape: CollisionShape3D = null
 var _fallback_mesh: MeshInstance3D = null
 var _broken_emitted := false
@@ -134,8 +143,31 @@ func configure_portal(site: Dictionary, verb: String, target: Vector3) -> void:
 
 ## 门叶常驻、木板可拆。两者缺任一个都退回程序化单板，避免关卡因资产缺失开不了。
 ## `with_boards = false` 时只建门叶（常开门，见 `configure_portal`）。
+##
+## 两条路径共用这个函数：
+##   ① **预制体**（`secret_door_root_top3d.tscn`）里已经摆好 `DoorLeaf` / `Boards`
+##      子节点 —— 美术在编辑器里能直接看到门、能拖位点，运行时原样复用，不重建；
+##   ② 代码 `new()` 出来的空节点 —— 按下面的原有流程实例化资产。
+## 判断依据是「树上有没有那个子节点」，不是「谁创建的」，两种用法互不干扰。
 func _build_visual(with_boards: bool = true) -> void:
+	if _door_leaf == null:
+		_door_leaf = get_node_or_null("DoorLeaf") as Node3D
+	if _boards == null:
+		_boards = get_node_or_null("Boards") as Node3D
+	if _fallback_mesh == null:
+		_fallback_mesh = get_node_or_null("Panel") as MeshInstance3D
 	if _door_leaf != null or _fallback_mesh != null:
+		# 预制体路径：木板层已经在树上。
+		if _boards != null:
+			if with_boards:
+				_build_leak_light()
+			else:
+				# 常开门（返程/撤离）：木板层**不存在**，不是「藏起来」——
+				# `debug_snapshot().has_boards` 与碰撞层都从这一处收口，
+				# 避免留下「看不见但还挡人」的中间态。
+				_drop_boards_layer()
+		elif not with_boards:
+			_drop_boards_layer()
 		return
 	if DOOR_LEAF_SCENE != null and BOARDS_SCENE != null:
 		_door_leaf = DOOR_LEAF_SCENE.instantiate() as Node3D
@@ -145,10 +177,112 @@ func _build_visual(with_boards: bool = true) -> void:
 			_boards = BOARDS_SCENE.instantiate() as Node3D
 			_boards.name = "Boards"
 			add_child(_boards)
+			_build_leak_light()
 		return
 	# 资产缺失：只有谜题门才需要一块兜底板；常开门没有板要挡，直接留空。
 	if with_boards:
 		_build_fallback_panel()
+
+
+## 摘掉木板层：常开门专用。节点、碰撞、透光一起收干净。
+func _drop_boards_layer() -> void:
+	if _boards != null:
+		if _boards.get_parent() == self:
+			remove_child(_boards)
+		_boards.queue_free()
+		_boards = null
+	if _leak_light == null:
+		_leak_light = get_node_or_null("LeakLight") as OmniLight3D
+	if _leak_light != null:
+		_leak_light.visible = false
+	if _shape == null:
+		_shape = get_node_or_null("BoardsShape") as CollisionShape3D
+	if _shape != null:
+		_shape.set_deferred("disabled", true)
+
+
+## 板缝透光：暗门自带的一点微光。
+##
+## 为什么必须有（2026-10-19 主人实测「进游戏在 room3 南墙看不见支线的门」）：
+## 塔内房间**没有顶灯**（实测 `room_03` 子树里 `Light3D` 数量为 0），玩家手电
+## `start_enabled = false` 默认关闭 —— 在没手电的情况下，那面墙是纯黑的。
+## 于是「把门推出墙外」这一步在暗房里等于不存在：几何对了，眼睛还是什么都看不到。
+##
+## 这盏灯不是标记物，是**设计 §4.1「门腔透光」的那束光**：低能量 + 短射程 +
+## 偏绿的冷色，只在门前一小圈把门板与墙的落差照出一条轮廓，玩家走近才看得清，
+## 走远仍然只是一个暗暗的暖点，不当路标用。
+const LEAK_LIGHT_ENERGY := 1.6
+const LEAK_LIGHT_RANGE_M := 4.2
+const LEAK_LIGHT_COLOR := Color(0.62, 1.0, 0.82)
+## 灯放在门板前方（门局部 -Z 是房间侧），让光从板缝外溢。
+const LEAK_LIGHT_OFFSET := Vector3(0.0, 1.05, -0.62)
+
+
+func _build_leak_light() -> void:
+	if _leak_light == null:
+		# 预制体里已经放好了灯（编辑器可调能量/射程），直接接管。
+		_leak_light = get_node_or_null("LeakLight") as OmniLight3D
+	if _leak_light != null:
+		_leak_light.visible = true
+		return
+	_leak_light = OmniLight3D.new()
+	_leak_light.name = "LeakLight"
+	_leak_light.light_color = LEAK_LIGHT_COLOR
+	_leak_light.light_energy = LEAK_LIGHT_ENERGY
+	_leak_light.omni_range = LEAK_LIGHT_RANGE_M
+	_leak_light.omni_attenuation = 1.6
+	_leak_light.shadow_enabled = false
+	_leak_light.position = LEAK_LIGHT_OFFSET
+	_leak_light.add_to_group("secret_door_leak_light")
+	add_child(_leak_light)
+
+
+## 安装箱：门被推出墙面后，把「门框 ↔ 墙面」之间那段空当填实。
+##
+## 为什么必须有：门叶资产的原点契约是 `wall_face_bottom_center`（Y=0 就是墙面），
+## 一旦整樘门被推离墙面 0.4m，从侧面就会看到门框悬空、背后漏出墙皮。
+## 填一个与门框同色的深色箱体，外观读作「墙里鼓出来一块钢板」，
+## 也正好是业主说的「墙壁凸出来」。
+##
+## 局部轴向：门节点的 -Z 朝房间、+Z 朝墙内（见 `_place_door` 的
+## `rotation.y = atan2(normal.x, normal.z)` 与门叶资产的 Blender +Y → Godot -Z 约定）。
+## 所以箱体从 z=0 铺到 z=depth，正好顶到墙面。
+const MOUNT_BOX_W_M := OPENING_W_M + 0.20
+const MOUNT_BOX_H_M := OPENING_H_M + 0.10
+
+
+func set_mount_depth(depth: float) -> void:
+	_mount_depth = maxf(0.0, depth)
+	if _mount_depth <= 0.02:
+		return
+	if _mount_box == null:
+		# 预制体里带了一个默认隐藏的 `MountBox`：材质与外观由美术在编辑器里定，
+		# 运行时只按实际外推量改厚度并显形。
+		_mount_box = get_node_or_null("MountBox") as MeshInstance3D
+	if _mount_box != null:
+		var template := _mount_box.mesh as BoxMesh
+		if template != null:
+			var sized := template.duplicate() as BoxMesh
+			sized.size = Vector3(MOUNT_BOX_W_M, MOUNT_BOX_H_M, _mount_depth + 0.02)
+			_mount_box.mesh = sized
+		_mount_box.position = Vector3(0.0, MOUNT_BOX_H_M * 0.5, _mount_depth * 0.5)
+		_mount_box.visible = true
+		return
+	_mount_box = MeshInstance3D.new()
+	_mount_box.name = "MountBox"
+	var box := BoxMesh.new()
+	# 比门框（2.48 × 2.64）略小，藏进门框后面，避免侧脸共面 z-fighting；
+	# 厚度多 2cm 顶进墙里，接缝不留缝。
+	box.size = Vector3(MOUNT_BOX_W_M, MOUNT_BOX_H_M, _mount_depth + 0.02)
+	_mount_box.mesh = box
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.15, 0.15, 0.16)
+	material.metallic = 0.55
+	material.roughness = 0.62
+	_mount_box.material_override = material
+	_mount_box.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	_mount_box.position = Vector3(0.0, MOUNT_BOX_H_M * 0.5, _mount_depth * 0.5)
+	add_child(_mount_box)
 
 
 func _build_fallback_panel() -> void:
@@ -171,6 +305,9 @@ func _build_fallback_panel() -> void:
 ## 碰撞只覆盖木板层。门叶（门框）在 2.2m 洞口之外，不参与碰撞 ——
 ## 洞口本身的可通行性由房间墙件保证，木板是唯一的额外阻挡。
 func _build_collision() -> void:
+	if _shape == null:
+		# 预制体里已经带了 `BoardsShape`（尺寸/位置在编辑器里可改），复用不重建。
+		_shape = get_node_or_null("BoardsShape") as CollisionShape3D
 	if _shape != null:
 		return
 	_shape = CollisionShape3D.new()
@@ -219,6 +356,9 @@ func _break_open() -> void:
 	if state == State.BROKEN:
 		return
 	state = State.BROKEN
+	# 木板崩飞：真正的「打碎」感在这里，不是那个缩放动画。
+	# 必须在拆木板**之前**播 —— 碎块要从门板上"爆开"，不是从空气里。
+	_spawn_board_debris()
 	var visual: Node3D = _boards if _boards != null else _fallback_mesh
 	if visual != null:
 		var tween := create_tween()
@@ -240,6 +380,35 @@ func _emit_broken_once() -> void:
 		return
 	_broken_emitted = true
 	broken.emit(site_id)
+
+
+## 破板时飞出的木头碎块（FX01-33）。**只在真打破时**播：
+## 读档恢复（`restore_state`）与静默打开（`_open_silently`）都不走这里 ——
+## 进游戏时门早就破了，再崩一次碎块会像"墙自己炸了"。
+func _spawn_board_debris() -> void:
+	var pools := get_tree().get_nodes_in_group("vfx_pool_3d")
+	if pools.is_empty():
+		return
+	var pool := pools[0] as VfxPool3D
+	if pool == null:
+		return
+	# `forward`：门局部 -Z = 房间侧（见文件头的坐标系说明）⇒ 碎块朝玩家站的那一侧崩。
+	# `floor_y`：门自己的世界 y —— 门原点契约就是「墙底地面点」，所以这里就是真地面。
+	#   ⛔ 绝不以 0 兜底：塔楼楼层向下建（98F ≈ y=-1176m），给 0 会让碎块第一帧就触地、
+	#   被夹到世界原点附近，看起来像"特效没出来"（同 14.6 §5.5.2 弹壳那个坑）。
+	# `seed`：每次破板给不同值 ⇒ 每次散得不一样。随机化只许活在调用方，
+	#   特效脚本不含 `randf()`（同 seed 逐位可复现，验收靠它做重放）。
+	pool.acquire(
+		VfxPool3D.FX01_BOARD_DEBRIS,
+		global_position,
+		panel_color,
+		BOARD_DEBRIS_EFFECT_SIZE,
+		{
+			"forward": -global_basis.z,
+			"floor_y": global_position.y,
+			"seed": Time.get_ticks_usec() & 0x7FFFFFFF,
+		}
+	)
 
 
 ## 受击反馈：木板短暂提亮，说明「这层能打」。门叶不参与反馈 —— 打的是钉子板。

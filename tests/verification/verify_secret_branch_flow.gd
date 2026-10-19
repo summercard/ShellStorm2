@@ -23,6 +23,9 @@ extends Node
 ##   A20 位点木板不得压在**任何**主路门洞上（运行时实测中心距 ≥ 半个门宽 ×2）
 ##   A21 木板必须露在墙面之外：从房间内 4m 朝门中心的射线，首个必须命中门本身
 ##   A22 门前 2.4m 不得被工作台/货架等家具挡住（否则看得见也走不到）
+##   A23 门框前表面必须比墙面凸出 ≥ 0.25m —— 3cm 那种「刚好不穿模」在暗房里就是一面平墙
+##   A24 房间 TSCN 里手摆的门必须与运行时那扇门重合（差 ≤1cm、朝向点积 ≥0.99）
+##   A25 按 E 的落点必须落在**子图房间的平面范围内**（不是房间外几十米的空中）
 ##   （A12 跳跃边界、A13 击杀账 —— 未实现，见 UNIMPLEMENTED）
 
 const EXPEDITION_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
@@ -43,6 +46,8 @@ const SITE_DOOR_MIN_CLEARANCE_M := 2.3
 ## A21：从房间内往门中心打视线射线的起点（离墙面多深、人眼高度）。
 const SITE_RAY_INSET_M := 4.0
 const SITE_RAY_EYE_Y_M := 1.4
+## A23：门框前表面离墙面的凸出下限（m）。低于它，暗房里看起来就是平墙。
+const SITE_MIN_PROTRUSION_M := 0.25
 ## 子图偏移带（设计 §3.6）：pair 0 从 +1000m 起，pair 1 再 +300m。
 const BRANCH_BASE_X := 1000.0
 const BRANCH_STRIDE_X := 300.0
@@ -295,6 +300,9 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 	# 木板碰撞层随即关闭，再打射线就什么也命中不了（第一版放在 A20 后面，
 	# 结果 A21 对 S1 报「没打到任何东西」）。
 	_check_site_visibility(tower, failures, notes)
+	# A24：房间 TSCN 里手摆的门必须与运行时那扇门重合。这条不碰碰撞，
+	# 放这里只是图省事（同一个 snapshot），顺序无所谓。
+	_check_authored_door_parity(tower, failures, notes)
 	var doors: Array = snapshot.get("doors", []) as Array
 	# 77001199 下 pair 1 是否刷出由种子决定；至少 pair 0 的两个位点必须在。
 	if doors.size() < 2:
@@ -412,6 +420,22 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 						"A9 按 E 后玩家未被移到子图落点：%s -> %s（目标 %s）"
 						% [str(door_s1.call("get_interaction_dot_anchor")), str(player.global_position), str(target)]
 					)
+
+				# A25：落点必须**真的在子图房间里**。
+				#
+				# A9 只比「玩家位置 vs 落点」，两边一起被推歪时它照样是绿的 —— 2026-10-19
+				# 业主实测「按 E 传送到空房间」正是这种：`_rebase_door()` 把门的手摆位移
+				# 也加到了落点上，落点被子图房间外推 39m，人落在房间外的空中往下掉，
+				# 眼里就是一间没装配的空房。几何判据比距离阈值可靠：
+				# 落点必须落在某一间子图房间的平面范围内，高度不离地。
+				var landing := player.global_position
+				var landing_room := _room_containing(branch, landing)
+				if landing_room.is_empty():
+					failures.append(
+						"A25 按 E 的落点不在任何子图房间里：%s —— 玩家会落在空处/下坠" % str(landing)
+					)
+				else:
+					notes.append("A25 传送落点落在子图房间内：%s" % landing_room)
 
 		# A11：撤离门阈值 = ceil(内容房总数 × 0.4)，且锁定态与「已清 vs 阈值」一致。
 		# A15：子图末端必须有回主图的传送门 —— 出口门板在主图那侧，玩家进了子图
@@ -792,7 +816,13 @@ func _check_site_door_clearance(
 ## 已按实测墙面外沿把整樘门推到墙外，这里把结果锁死：
 ##
 ##   A21 从房间内 4m 处朝门中心打视线射线，第一个命中的必须是这扇门本身；
-##   A22 `sites` 里不得有 `blocker`（门前 2.4m 被工作台/货架挡住）。
+##   A22 `sites` 里不得有 `blocker`（门前 2.4m 被工作台/货架挡住），
+##       也不得有 `covered_by`（整樘门被实心外壳盖住）。
+##
+## 为什么 A22 还要单独查 `covered_by`：射线只认碰撞体，而墙体/外壳的**碰撞代理盒
+## 往往比美术面薄**（有的只在墙平面留一层壳）。`room_06` 东墙上一个 5.15m 的转角
+## 壳体把整樘门包在肚子里，A21 的射线一路穿到门、判"可见"，玩家却只看到平墙 ——
+## 所以装配侧另外按**可视包围盒**量了一遍，结果走 `covered_by`。
 ##
 ## 为什么不用「木板 AABB 在墙面外」这种纯几何判据：墙件不是规则盒子
 ## （L 形凹口、门垛、装饰带），AABB 会把整面墙的包络算进来，判不准。
@@ -818,6 +848,25 @@ func _check_site_visibility(
 				% [
 					str(site.get("site_id", "")), str(site.get("room_id", "")),
 					str(site.get("blocker", "")),
+				]
+			)
+		if site.has("covered_by"):
+			failures.append(
+				"A22 位点 %s（%s）整樘门被 %s 的外壳盖住（凸出 %.2fm）—— 射线能穿过去，但玩家只看到墙"
+				% [
+					str(site.get("site_id", "")), str(site.get("room_id", "")),
+					str(site.get("covered_by", "")), float(site.get("cover_m", 0.0)),
+				]
+			)
+		# A23：凸出量必须大到肉眼可辨。03cm 那种"刚好不穿模"等于齐平，
+		# 在塔内夜间光下人眼读作"墙"（业主 2026-10-19 第二次实测）。
+		var protrude := float(site.get("protrude_m", 0.0))
+		if protrude < SITE_MIN_PROTRUSION_M:
+			failures.append(
+				"A23 位点 %s（%s）只从墙面凸出 %.3fm（< %.2fm）—— 暗房里看起来就是一面平墙"
+				% [
+					str(site.get("site_id", "")), str(site.get("room_id", "")),
+					protrude, SITE_MIN_PROTRUSION_M,
 				]
 			)
 
@@ -859,7 +908,113 @@ func _check_site_visibility(
 				% [site_id, blocker]
 			)
 		checked += 1
-	notes.append("A21/A22 实测 %d 个位点的可见性" % checked)
+	var protrusions: Array[String] = []
+	var manuals := 0
+	for value in sites:
+		var site := value as Dictionary
+		var mark := ""
+		if bool(site.get("manual_site", false)):
+			manuals += 1
+			# 手动摆位 + 认不出墙件时凸出量是**估计值**（按装配常量），不是实测。
+			mark = "~" if bool(site.get("protrude_estimated", false)) else "*"
+		protrusions.append(
+			"%s=%.2fm%s" % [
+				str(site.get("site_id", "")), float(site.get("protrude_m", 0.0)), mark,
+			]
+		)
+	notes.append(
+		"A21/A22/A23 实测 %d 个位点（* = 手摆且实测凸出，~ = 手摆但墙件认不出、按装配常量估）：凸出 %s"
+		% [checked, " ".join(protrusions)]
+	)
+
+
+## A25：这个点落在哪一间子图房间里（空串 = 不在任何房里）。
+##
+## 判据用房间自己的 `get_dimensions()` 平面范围 + 1.5m 高度容差，不看碰撞、
+## 不看触发器 —— 落点是否在房内是**几何事实**，不该依赖玩家是否刚好踩到 Area3D。
+func _room_containing(branch: Node, point: Vector3) -> String:
+	var rows_value: Variant = branch.get("_branch_rooms")
+	if not (rows_value is Dictionary):
+		return ""
+	var rows := rows_value as Dictionary
+	for room_id in rows:
+		var room := (rows[room_id] as Dictionary).get("room") as DungeonRoom3D
+		if room == null or not is_instance_valid(room) or not room.is_inside_tree():
+			continue
+		var dims: Vector2 = room.call("get_dimensions")
+		if absf(point.x - room.global_position.x) > dims.x * 0.5:
+			continue
+		if absf(point.z - room.global_position.z) > dims.y * 0.5:
+			continue
+		if absf(point.y - room.global_position.y) > 1.5:
+			continue
+		return str(room_id)
+	return ""
+
+
+## A24：房间 TSCN 里手摆的门 = 运行时那扇门。
+##
+## 新机制（2026-10-19 业主）让门直接摆进房间 TSCN，编辑器里可看可拖，运行时按它的
+## transform 装门。这条断言盯住两边别走散：TSCN 局部 → 世界，必须与 `sites[].position`
+## 重合、朝向同向。差 1cm 以上就判红 —— 那意味着业主拖完、游戏里却歪到墙缝外。
+func _check_authored_door_parity(tower: Node, failures: Array, notes: Array) -> void:
+	var branch := tower.get_node_or_null("SecretBranches")
+	if branch == null:
+		return
+	var snapshot := branch.call("debug_snapshot") as Dictionary
+	var sites: Array = snapshot.get("sites", []) as Array
+	var checked := 0
+	for value in sites:
+		var site := value as Dictionary
+		if not bool(site.get("manual_site", false)):
+			continue
+		var room_id := str(site.get("room_id", ""))
+		var room := tower.find_child(room_id, true, false) as Node3D
+		if room == null:
+			continue
+		var path := str(room.get("static_layout_scene_path"))
+		if path.is_empty() or not ResourceLoader.exists(path):
+			continue
+		var packed := load(path) as PackedScene
+		if packed == null:
+			continue
+		var state := packed.get_state()
+		if state == null:
+			continue
+		var root_local := Transform3D.IDENTITY
+		for index in range(state.get_node_property_count(0)):
+			if str(state.get_node_property_name(0, index)) == "transform":
+				root_local = state.get_node_property_value(0, index) as Transform3D
+		var site_id := str(site.get("site_id", ""))
+		var wanted_name := "SecretDoor_%s" % site_id
+		var door_local: Variant = null
+		for index in range(state.get_node_count()):
+			if str(state.get_node_name(index)) != wanted_name:
+				continue
+			door_local = Transform3D.IDENTITY
+			for property_index in range(state.get_node_property_count(index)):
+				if str(state.get_node_property_name(index, property_index)) == "transform":
+					door_local = state.get_node_property_value(index, property_index) as Transform3D
+			break
+		if door_local == null:
+			continue
+		var world := room.global_transform * (root_local * (door_local as Transform3D))
+		var want := site.get("position", Vector3.ZERO) as Vector3
+		var gap := world.origin.distance_to(want)
+		var facing := world.basis.z
+		facing.y = 0.0
+		var want_normal := site.get("normal", Vector3.FORWARD) as Vector3
+		var dot := 0.0
+		if facing.length() > 0.001 and want_normal.length() > 0.001:
+			dot = facing.normalized().dot(want_normal.normalized())
+		if gap > 0.01 or dot < 0.99:
+			failures.append(
+				"A24 位点 %s（%s）TSCN 里手摆的门与运行时门不重合：差 %.3fm，朝向点积 %.3f"
+				% [site_id, room_id, gap, dot]
+			)
+		checked += 1
+	if checked > 0:
+		notes.append("A24 手摆门与运行时一致：%d 扇" % checked)
 
 
 func _collect_door_positions(root: Node, out: Array) -> void:
@@ -882,7 +1037,7 @@ func _report(failures: Array[String], notes: Array[String]) -> void:
 	print("[UNIMPLEMENTED] A12/B1-B3 跳跃边界运行时断言（当前只有静态数据核对）")
 	print("[UNIMPLEMENTED] A13 子图击杀与主图合计的独立账（当前只并入全局击杀数）")
 	if failures.is_empty():
-		print("SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 门板可见 生成规则=确定 传送=可达 隔离=通过 编成=5强化+2普通 存档=往返一致")
+		print("SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 门板可见 落点在房内 生成规则=确定 传送=可达 隔离=通过 编成=5强化+2普通 存档=往返一致")
 		print("VERIFICATION_SEGMENT_OK")
 		get_tree().quit(0)
 		return
