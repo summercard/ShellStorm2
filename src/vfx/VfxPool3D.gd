@@ -38,6 +38,13 @@ const FX02_HEAL_NUMBER := "VFX-HEAL-NUMBER-3D"
 
 const FX01_FATE_ROCK_SHATTER := "VFX-FATE-ROCK-SHATTER-3D"
 
+## 暗门木板被打碎时飞出的**大块木碎片**（FX01-33）——由 `SecretDoor3D._break_open()` 借出。
+##
+## ⚠ 与 FX01-01~05 的区别：它是**事件型**（一整扇门板被轰开），不是高频件
+##   ⇒ 带一盏 0.55s 的短灯（塔内夜间光下没灯就看不见碎块），成本可以接受。
+## 抛出物同族：**不绑 follow**、无碰撞体、程序化落地（见 `VfxBoardDebris3D`）。
+const FX01_BOARD_DEBRIS := "VFX-BOARD-DEBRIS-3D"
+
 const FX01_AXE_CHARGE := "VFX-MELEE-AXE-CHARGE-3D"
 const FX01_AXE_CLEAVE := "VFX-MELEE-AXE-CLEAVE-3D"
 const FX01_AXE_IMPACT := "VFX-MELEE-AXE-IMPACT-3D"
@@ -56,6 +63,7 @@ const _REGISTRY := {
 	FX01_FATE_POISON: preload("res://assets/art/vfx/combat_3d/vfx_fate_poison_root_top3d.tscn"),
 	FX01_FATE_LIGHTNING: preload("res://assets/art/vfx/combat_3d/vfx_fate_lightning_root_top3d.tscn"),
 	FX01_FATE_ROCK_SHATTER: preload("res://assets/art/vfx/combat_3d/vfx_fate_rock_shatter_root_top3d.tscn"),
+	FX01_BOARD_DEBRIS: preload("res://assets/art/vfx/combat_3d/vfx_board_debris_root_top3d.tscn"),
 	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d.tscn"),
 	FX01_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d.tscn"),
 	FX01_EXPLOSION: preload("res://assets/art/vfx/combat_3d/vfx_explosion_root_top3d.tscn"),

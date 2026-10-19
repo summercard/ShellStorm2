@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: VFX-BOARD-DEBRIS-3D
+; 暗门木板被打碎时的木头碎块飞溅（8 大块 + 5 片小碎屑 + 0.55s 短灯）。
+; 业主 2026-10-19：「做一个门被打碎的木头飞出来的特效，大块一点的」。
+; 碎片几何由 `VfxBoardDebris3D._build()` 按确定性散列生成（不写死 13 个节点，
+; 免得改片数要手改 Prefab）；本文件只固定两样**节点真相**：
+;   ① 根节点脚本与资产身份 meta；
+;   ② `DebrisLight` —— 灯必须具名且写在 Prefab 里，验收按名字查（14.6 §4）。
+[ext_resource type="Script" path="res://src/vfx/VfxBoardDebris3D.gd" id="1_board_debris"]
+
+[node name="VfxBoardDebris3D" type="Node3D"]
+script = ExtResource("1_board_debris")
+metadata/asset_id = "VFX-BOARD-DEBRIS-3D"
+metadata/asset_version = "v001"
+
+[node name="DebrisLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 0.45, -0.65)
+light_color = Color(1, 0.82, 0.58, 1)
+light_energy = 1.5
+shadow_enabled = false
+omni_range = 3.6
