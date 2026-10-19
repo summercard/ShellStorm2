@@ -1,8 +1,11 @@
 class_name WeaponBulletDrop
 extends RefCounted
-## 掉落枪械自带的**绑定弹药模块** —— 唯一真源。
+## 弹药模块的绑定与更换渠道 —— 唯一真源。
 ##
 ## 业主口径（2026-10-18）：掉落武器会随机配置某个弹药模块，**并且不能拆卸**。
+## 业主口径（2026-10-19）：**手动更换机制整体关闭**。任何枪械的弹药模块都不能从背包、
+## 装备界面或局内快捷装配直接替换；后续只能通过枪械工坊的特殊流程更换（待实现）。
+## 「随机在枪身上」的机制保留 —— 掉落枪仍随机自带弹种，仍是这把枪的身份。
 ##
 ## ## 为什么"绑定"要落成一个字段
 ## 「不能拆」如果只写在 UI 里（灰掉按钮），`Player3D.install_bullet_module_to_weapon_slot`
@@ -55,6 +58,27 @@ const FALLBACK_BULLET := "mod_bullet_standard"
 
 ## 近战武器没有弹药槽。
 const MELEE_SUBTYPE := "melee_weapon"
+
+## 玩家手动更换弹药模块的总闸（2026-10-19 业主口径）。
+##
+## `false` = 背包左键、拖到武器格、装备界面、局内快捷装配、基地改造台全部拒绝。
+## 这不替代 `WeaponInstance.bullet_module_locked`：那个字段描述「掉落枪的弹种是身份」，
+## 这里描述「当前版本根本没有手动更换这个渠道」。两者都要判，顺序是先身份、后渠道，
+## 掉落枪因此会先得到「已绑定」的专属原因。
+##
+## 枪械工坊的特殊更换流程是**未来唯一合法出口**。它实现时必须走独立命令，
+## 不能把这个常量翻成 true —— 翻 true 等于把 2026-10-17 那三条手动入口全部放回来。
+const MANUAL_SWAP_ENABLED := false
+const MANUAL_SWAP_BLOCK_REASON := "弹药模块已锁定，需在枪械工坊更换"
+
+
+## 当前版本是否允许玩家手动更换弹药模块。UI 与事务都读这一处。
+static func is_manual_swap_enabled() -> bool:
+	return MANUAL_SWAP_ENABLED
+
+
+static func manual_swap_block_reason() -> String:
+	return MANUAL_SWAP_BLOCK_REASON
 
 
 ## 按 0..1 的均匀抽样值选弹药模块。传 `rng.randf()`。
@@ -113,4 +137,6 @@ static func summary_line() -> String:
 	var parts: Array[String] = []
 	for bullet_id in ROLL_ORDER:
 		parts.append("%s=%.0f%%" % [bullet_id, float(ROLL_WEIGHTS[bullet_id])])
-	return "WEAPON_BULLET_DROP total=%.0f locked=on %s" % [total, " ".join(parts)]
+	return "WEAPON_BULLET_DROP total=%.0f locked=on manual_swap=%s %s" % [
+		total, "off" if not MANUAL_SWAP_ENABLED else "on", " ".join(parts),
+	]

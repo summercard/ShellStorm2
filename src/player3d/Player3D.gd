@@ -6,6 +6,7 @@ extends CharacterBody3D
 signal hp_changed(current: int, maximum: int)
 signal dash_started()
 signal dash_ended()
+signal audible_footstep_requested()
 signal dash_cooldown_changed(cooldown_ratio: float)
 signal presentation_state_changed(state_id: String, context: Dictionary)
 signal input_lock_changed(locked: bool)
@@ -218,6 +219,7 @@ var _last_safe_ground_position := Vector3.ZERO
 var _has_safe_ground_position := false
 var _fall_recovery_count := 0
 var _footstep_sound_accumulator := 0.0
+var _audible_footstep_accumulator := 0.0
 var _debug_scale_step := 0
 var _base_avatar_scale := Vector3.ONE
 var _base_collision_position := Vector3.ZERO
@@ -2065,10 +2067,15 @@ func install_bullet_module_to_weapon_slot(item: Dictionary, weapon_slot_index: i
 	if instance == null:
 		return {"success": false, "reason": "目标武器槽为空"}
 	# 掉落枪的弹药模块是**绑定**的：它和品质一样是这把枪的身份，不允许拆卸或替换。
-	# 判据在实例上（`bullet_module_locked`），不在 UI 上 —— 训练场借枪、局内快捷装配、
-	# 工作台三条链最终都汇到这里，只有这里拦得住。
+	# 判据在实例上（`bullet_module_locked`），不在 UI 上 —— 装备面板、训练场借枪、
+	# 局内快捷装配最终都汇到这里或各自的旁路，只有事务层拦得住所有调用方。
 	if instance.bullet_module_locked:
-		return {"success": false, "reason": "该枪的弹药模块已绑定，无法更换"}
+		return {"success": false, "reason": "该枪的弹药模块已绑定，无法手动更换（需在枪械工坊）"}
+	# 2026-10-19：手动更换总闸关闭。非掉落枪（出厂 / 蓝图合成 / 商人 / 训练场借枪）
+	# 虽然 `bullet_module_locked == false`，也不允许走这条事务换弹；未来只开
+	# 枪械工坊的特殊流程，不恢复本入口。
+	if not WeaponBulletDrop.is_manual_swap_enabled():
+		return {"success": false, "reason": WeaponBulletDrop.manual_swap_block_reason()}
 	var bullet_item_id := str(item.get("id", ""))
 	var new_node := BlueprintRegistry.create_assembly_node(bullet_item_id)
 	if new_node == null or new_node.node_type != AssemblyNode.NodeType.BULLET:
@@ -3011,7 +3018,15 @@ func _begin_dash() -> bool:
 func _tick_footstep_sound(delta: float) -> void:
 	if not is_on_floor() or Vector2(velocity.x, velocity.z).length() < 1.0 or is_dashing:
 		_footstep_sound_accumulator = 0.0
+		_audible_footstep_accumulator = 0.0
 		return
+	# Listener feedback has its own cadence. Preserve the existing 0.55s AI
+	# stimulus cadence/radius so adding audible steps cannot change detection.
+	_audible_footstep_accumulator += delta
+	var audible_interval := clampf(1.65 / maxf(1.0, Vector2(velocity.x, velocity.z).length()), 0.24, 0.55)
+	if _audible_footstep_accumulator >= audible_interval:
+		_audible_footstep_accumulator = fmod(_audible_footstep_accumulator, audible_interval)
+		audible_footstep_requested.emit()
 	_footstep_sound_accumulator += delta
 	if _footstep_sound_accumulator < 0.55:
 		return

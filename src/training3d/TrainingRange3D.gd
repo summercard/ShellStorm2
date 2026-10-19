@@ -407,7 +407,13 @@ func _on_attachment_slot_install_requested(
 
 
 ## 子弹模块拖到武器格 ⇒ 换那把枪的弹药槽。靶场不写存档，失败只回滚内存状态。
+##
+## 2026-10-19：手动更换总闸关闭 —— 连靶场也不提供这条路径。靶场要试不同弹种走
+## **军械库组合**（`equip_combination_for_test`，整把枪重新装配、不调用本事务）。
 func _on_bullet_module_install_requested(source_slot_index: int, weapon_slot_index: int) -> void:
+	if not WeaponBulletDrop.is_manual_swap_enabled():
+		status_label.text = WeaponBulletDrop.manual_swap_block_reason()
+		return
 	var slot := _inventory.get_slot(source_slot_index)
 	if slot.is_empty():
 		return

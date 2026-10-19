@@ -28,6 +28,7 @@ func _ready() -> void:
 	_check_capacity_matches_outside(training, failures)
 	await _check_slot_round_trip(training, failures)
 	await _check_weapon_panel_tracks_tree(training, failures)
+	_check_bullet_swap_locked(training, failures)
 	await _check_drop_spawns_ground_loot(training, failures)
 	if not training.is_base_data_unchanged():
 		failures.append("equipment/backpack UI mutated BaseData")
@@ -110,6 +111,48 @@ func _check_slot_round_trip(training: TrainingRange3D, failures: Array[String]) 
 		failures.append("backpack slot was not consumed after equipping from it")
 
 
+## 2026-10-19：手动更换总闸关闭，靶场背包也不能把子弹模块装到枪上。
+## 军械库的弹药选择是另一条链（整枪重新装配），不在本用例的禁止范围内。
+func _check_bullet_swap_locked(training: TrainingRange3D, failures: Array[String]) -> void:
+	var inventory := training.get_inventory()
+	var player := training.player
+	if inventory == null or player == null:
+		return
+	var bullet_item := ItemRegistry.get_instance().get_item("mod_bullet_sticky")
+	if bullet_item.is_empty():
+		failures.append("cannot load mod_bullet_sticky to test the training-range lock")
+		return
+	inventory.add_item(bullet_item, 1)
+	var source_index := -1
+	for index in inventory.get_capacity():
+		var slot := inventory.get_slot(index)
+		if slot.is_empty():
+			continue
+		if str((slot.get("item", {}) as Dictionary).get("id", "")) == "mod_bullet_sticky":
+			source_index = index
+			break
+	if source_index < 0:
+		failures.append("cannot place a bullet module in the training-range backpack")
+		return
+	var before_id := str(player.get_equipped_bullet_item_for_slot(0).get("id", ""))
+	training.call("_on_bullet_module_install_requested", source_index, 0)
+	if str(player.get_equipped_bullet_item_for_slot(0).get("id", "")) != before_id:
+		failures.append("training range still swaps bullet modules from the backpack")
+	if _count_item(inventory, "mod_bullet_sticky") != 1:
+		failures.append("training-range bullet module was consumed by the rejected swap")
+
+
+func _count_item(inventory: InventoryModule, item_id: String) -> int:
+	var total := 0
+	for index in inventory.get_capacity():
+		var slot := inventory.get_slot(index)
+		if slot.is_empty():
+			continue
+		if str((slot.get("item", {}) as Dictionary).get("id", "")) == item_id:
+			total += int(slot.get("count", 0))
+	return total
+
+
 ## 换枪会整体替换 weapon_tree；装备界面必须跟着换，否则显示上一把枪的构筑。
 func _check_weapon_panel_tracks_tree(training: TrainingRange3D, failures: Array[String]) -> void:
 	if not training.equip_combination_for_test("bp_pistol", "mod_bullet_standard"):
@@ -138,7 +181,7 @@ func _check_drop_spawns_ground_loot(training: TrainingRange3D, failures: Array[S
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
 		print(
-			"TRAINING_RANGE_EQUIPMENT_UI_OK: InventoryUI and WeaponAssemblyTreePanel reused from the run, backpack capacity %d matches outside, slot round trip works, panel follows weapon tree, drop spawns ground loot, BaseData untouched"
+			"TRAINING_RANGE_EQUIPMENT_UI_OK: InventoryUI and WeaponAssemblyTreePanel reused from the run, backpack capacity %d matches outside, slot round trip works, bullet swap locked, panel follows weapon tree, drop spawns ground loot, BaseData untouched"
 			% OUTSIDE_BACKPACK_CAPACITY
 		)
 		get_tree().quit(0)

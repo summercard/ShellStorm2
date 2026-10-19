@@ -18,7 +18,8 @@ signal equipped_weapon_drop_requested(weapon_slot_index: int)
 signal attachment_slot_install_requested(source_slot_index: int, weapon_slot_index: int, attachment_slot_type: int)
 signal attachment_slot_remove_requested(weapon_slot_index: int, attachment_slot_type: int, target_slot_index: int)
 signal attachment_slot_drop_requested(weapon_slot_index: int, attachment_slot_type: int)
-## 子弹模块装入某把武器的弹药槽（拖到主/副武器格时发出；换下的旧模块由玩法层放回背包）。
+## 子弹模块装入某把武器的弹药槽（旧模块由玩法层放回背包）。
+## 2026-10-19 起手动更换总闸关闭，本信号不再发出；保留接口给未来的工坊/测试流程。
 signal bullet_module_install_requested(source_slot_index: int, weapon_slot_index: int)
 signal quick_item_assignment_requested(quick_slot_index: int, item_id: String)
 signal inventory_item_to_quick_requested(source_slot_index: int, quick_slot_index: int)
@@ -338,7 +339,9 @@ func _setup_standalone_panels() -> void:
 		bullet_text_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		bullet_row.add_child(bullet_text_col)
 		var bullet_caption := Label.new()
-		bullet_caption.text = "弹药"
+		# 2026-10-19：手动更换总闸关闭 —— 标题直接写「锁定」，玩家不用点开悬浮卡
+		# 才知道这个槽动不了。宽度只有 72px 左右，所以只加两个字，详细原因在悬浮卡里。
+		bullet_caption.text = "弹药（锁定）" if not WeaponBulletDrop.is_manual_swap_enabled() else "弹药"
 		bullet_caption.add_theme_font_size_override("font_size", 10)
 		bullet_caption.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
 		bullet_text_col.add_child(bullet_caption)
@@ -1122,7 +1125,7 @@ func _item_glyph(item: Dictionary) -> String:
 ## 而拖到武器格当时根本不接收 ⇒ 玩家按提示试一次失败就再也不会尝试，
 ## 「弹种挂件没有入口」的印象就是这么来的。
 func _bullet_module_hover_text(item: Dictionary) -> String:
-	var lines: Array[String] = ["子弹模块 · 装到武器弹药槽"]
+	var lines: Array[String] = ["子弹模块"]
 	var stats := BlueprintRegistry.get_bullet_base_stats(str(item.get("id", "")))
 	if not stats.is_empty():
 		lines.append("命中伤害 +%d · 弹速 ×%.2f" % [
@@ -1132,8 +1135,14 @@ func _bullet_module_hover_text(item: Dictionary) -> String:
 	if not description.is_empty():
 		lines.append(description)
 	lines.append("")
-	lines.append("左键：装到当前主武器（旧模块回背包）")
-	lines.append("拖到主/副武器格：装到那把枪；拖回背包：归还")
+	# 2026-10-19：手动更换总闸关闭。这里不能再写「左键装配 / 拖到武器格」——
+	# 玩家照着做只会失败，而且会以为 UI 卡住。
+	if WeaponBulletDrop.is_manual_swap_enabled():
+		lines.append("左键：装到当前主武器（旧模块回背包）")
+		lines.append("拖到主/副武器格：装到那把枪；拖回背包：归还")
+	else:
+		lines.append("当前版本不能从背包直接装到枪上")
+		lines.append("需在枪械工坊通过特殊流程更换（待开放）")
 	return "\n".join(lines)
 
 
@@ -1188,11 +1197,13 @@ func _weapon_hover_text(item: Dictionary) -> String:
 		var presentation := instance.get_presentation_snapshot()
 		var bullet_module := presentation.get("bullet_module", {}) as Dictionary
 		if not bullet_module.is_empty():
-			# 掉落枪的弹药模块是绑定的：玩家必须一眼看出"这个槽动不了"，
-			# 否则会反复尝试更换、以为是 UI 卡住。
+			# 手动更换总闸关闭后，所有枪的弹药槽都是只读的。掉落枪额外说明它
+			# 的弹种是掉落时定下的身份；非掉落枪只提示去枪械工坊。
+			var bullet_suffix := "（需枪械工坊更换）"
+			if instance.bullet_module_locked:
+				bullet_suffix = "（已绑定 · 需枪械工坊更换）"
 			lines.append("弹药模块：%s%s" % [
-				bullet_module.get("display_name", "未知"),
-				"（已绑定 · 不可更换）" if instance.bullet_module_locked else "",
+				bullet_module.get("display_name", "未知"), bullet_suffix,
 			])
 		var installed: Array[String] = []
 		for raw_entry in presentation.get("attachment_layout", []):
@@ -1423,8 +1434,8 @@ func _refresh_weapon_attachment_slots(weapon_slot_index: int, layout: Array[Dict
 
 
 ## 弹药行刷新：空 → 「未装填」灰字；有 → 图标 + 模块名。
-## 只读展示，不接拖放/点击：换弹入口是「背包左键」或「拖到武器格」，
-## 弹药槽本身不做拆卸（拆掉会留下一把没有弹种映射的枪，比不显示更容易出事故）。
+## 只读展示，不接拖放/点击。2026-10-19 起手动更换总闸关闭，弹药槽本身也不提供
+## 拆卸（拆掉会留下一把没有弹种映射的枪，比不显示更容易出事故）。
 func _refresh_weapon_bullet_display(weapon_slot_index: int, bullet_item: Dictionary) -> void:
 	if weapon_slot_index < 0 or weapon_slot_index >= equipment_bullet_slots.size():
 		return
@@ -1769,8 +1780,10 @@ func _on_slot_drop_received(
 			elif (
 				str(dragged.get("type", "")) == "module"
 				and str(dragged.get("subtype", "")) == "bullet"
+				and WeaponBulletDrop.is_manual_swap_enabled()
 			):
 				# 子弹模块拖到武器格 = 装进那把枪的弹药槽（旧模块由玩法层放回背包）。
+				# 2026-10-19 起总闸关闭，本分支不再触发；留判据是防未来把拖放规则改宽。
 				bullet_module_install_requested.emit(source_index, int(target_kind.trim_prefix("weapon_")))
 		_ when target_kind.begins_with("attachment_"):
 			var source: Dictionary = _inventory_module.get_slot(source_index)

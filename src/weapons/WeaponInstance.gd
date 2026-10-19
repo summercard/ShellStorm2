@@ -68,7 +68,8 @@ static func from_item(item: Dictionary, runtime_tree: WeaponAssemblyTree = null)
 		"fate_slot_capacity", nested.get("fate_slot_capacity", DEFAULT_FATE_SLOT_CAPACITY)
 	)))
 	## 弹药绑定锁定只读不算：它是掉落时定下的事实，不能因读档路径不同而变。
-	## 兼容旧存档（没有这个键）⇒ 默认 false，老枪仍可自由换弹，行为不变。
+	## 兼容旧存档（没有这个键）⇒ 默认 false。身份锁只描述「是不是掉落身份锁」；
+	## 2026-10-19 起手动更换渠道已整体关闭，老枪即使 false 也不能手动换弹。
 	instance.bullet_module_locked = bool(item.get(
 		"bullet_module_locked", nested.get("bullet_module_locked", false)
 	))
