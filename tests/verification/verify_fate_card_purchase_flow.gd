@@ -52,15 +52,24 @@ func _ready() -> void:
 		if button == null:
 			continue
 		var price_label := (button.get_meta("tarot_price_label") if button.has_meta("tarot_price_label") else null) as Label
+		var expected_price := int(Dungeon3D.FATE_PRICE_BY_RARITY[int(card.card_rarity)])
 		_expect(price_label != null and not price_label.text.strip_edges().is_empty(), "Fate card %d has no price line under the card" % index, failures)
-		# 「金币不足」只说了状态；卡下必须同时写出**还差多少**，玩家才能一眼知道下一步要攒多少。
+		# 卡下只留价格（主人 2026-10-19）：「还差 M」与动态报价的「区间 a–b」都已要求移除。
+		# 买不起这件事改由字色（琥珀）+ 卡片轻度压暗表达，对照数字看右下金币读数。
+		# 这里同时钉两条：价格数字必须原样写出；那两段被删掉的信息不得回流。
 		_expect(
-			price_label != null and "还差" in price_label.text,
-			"Unaffordable card %d price line does not spell out the shortfall: %s"
+			price_label != null
+			and price_label.text == "◈ %d 金币" % int(button.get_meta("tarot_price", expected_price)),
+			"Unaffordable card %d price line is not the bare price: %s"
 			% [index, price_label.text if price_label != null else "<null>"],
 			failures
 		)
-		var expected_price := int(Dungeon3D.FATE_PRICE_BY_RARITY[int(card.card_rarity)])
+		_expect(
+			price_label != null and "还差" not in price_label.text and "区间" not in price_label.text,
+			"Unaffordable card %d price line brought back the removed shortfall/range text: %s"
+			% [index, price_label.text if price_label != null else "<null>"],
+			failures
+		)
 		_expect(int(button.get_meta("tarot_price", -1)) == expected_price, "Fate card %d price does not come from the rarity table" % index, failures)
 		_expect(
 			str(dungeon.call("_fate_card_block_reason", index)) == "insufficient",
@@ -86,6 +95,19 @@ func _ready() -> void:
 		"Bottom-right run-currency readout does not show the empty run wallet",
 		failures
 	)
+	# 主人 2026-10-19：暗化层不得遮住金币 UI。读数在弹窗打开期间必须浮到弹层之上，
+	# 否则「价格 vs 余额」这唯一一组对照数字会被压暗到看不清。
+	if loot_readout != null:
+		var loot_effective_z := loot_readout.z_index
+		var loot_parent := loot_readout.get_parent() as Control
+		if loot_parent != null:
+			loot_effective_z += loot_parent.z_index
+		_expect(
+			loot_effective_z > overlay.z_index,
+			"Run-currency readout sits under the fate dim veil (effective z %d vs overlay %d)"
+			% [loot_effective_z, overlay.z_index],
+			failures
+		)
 	# 真实点击一张买不起的卡：不能扣金币、不能进反馈锁定态、也不能关弹窗。
 	var first_button := overlay.find_child("FateChoiceCard_0", true, false) as Button
 	dungeon.call("_on_reference_fate_card_pressed", first_button, 0)
@@ -405,6 +427,14 @@ func _ready() -> void:
 			await _wait_overlay_closed(dungeon)
 			_expect(not bool(dungeon.get("_door_fate_active")), "Fate exit button did not close the purchase overlay", failures)
 			_expect(dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null, "Fate purchase overlay was not torn down", failures)
+			# 提权只属于这次弹窗：关掉后读数必须回到普通 HUD 层，否则后续弹层压不住它。
+			var readout_after_exit := dungeon.find_child("RunLootReadout", true, false) as Label
+			_expect(
+				readout_after_exit == null or readout_after_exit.z_index == 0,
+				"Run-currency readout kept its raised z_index after the overlay closed (z %d)"
+				% [readout_after_exit.z_index if readout_after_exit != null else -1],
+				failures
+			)
 
 	# —— 6) 真实过门路径落到同一套购买 UI，且同样只花本局金币 ——
 	await _check_real_door_purchase_entry(dungeon, failures)

@@ -46,8 +46,10 @@ func _ready() -> void:
 		failures.append("Multi-target melee audio is not layered as one swing plus one contact event")
 	for event_name in ["melee_swing", "melee_impact"]:
 		var path := str(AudioManager.SFX.get(event_name, ""))
-		if path.is_empty() or not path.ends_with("_v002.ogg") or not FileAccess.file_exists(path):
+		if path.is_empty() or not path.ends_with("_v003.ogg") or not FileAccess.file_exists(path):
 			failures.append("Melee runtime audio event is missing its versioned OGG: %s" % event_name)
+		elif not load(path) is AudioStreamOggVorbis:
+			failures.append("Natural melee recording cannot decode as OGG: %s" % event_name)
 	if pool.find_children("*", "CollisionObject3D", true, false).size() != 0:
 		failures.append("Melee feedback VFX introduced gameplay collision")
 	if pool.find_children("*", "MeshInstance3D", true, false).size() < 10:

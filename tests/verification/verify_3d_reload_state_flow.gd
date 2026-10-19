@@ -32,6 +32,23 @@ func _ready() -> void:
 	player.avatar.call("_process", 0.2)
 	var base_avatar := player.avatar.get_component_snapshot()
 	var base_right_grip_distance := float(base_avatar.get("hand_r_to_socket_global_distance", 999.0))
+
+	# 2026-10-19 主人要求去掉「角色下半身贴地的圈」（低血量警告环 LowHealthRing）。
+	# 钉成会失败的断言，而不是只留一句注释：把血量压到 20%（`is_low_health()` 为真）后
+	# 环**仍然**显示 ⇒ 判红。开关在 `PlayerAvatar3D.LOW_HEALTH_RING_IN_WORLD`。
+	var full_hp := player.current_hp
+	player.current_hp = maxi(1, int(player.max_hp * 0.2))
+	player.avatar.call("_process", 0.2)
+	var low_hp_snapshot := player.avatar.get_component_snapshot()
+	if not player.is_low_health():
+		failures.append("Test setup failed to reach the low-health band, so the retired ring was never exercised")
+	if bool(low_hp_snapshot.get("low_health_ring_visible", true)):
+		failures.append("Retired low-health ground ring is still visible at 20% HP (LOW_HEALTH_RING_IN_WORLD must stay false)")
+	if bool(low_hp_snapshot.get("low_health_ring_enabled", true)):
+		failures.append("Low-health ground ring switch flipped back on; the ring was retired on 2026-10-19")
+	player.current_hp = full_hp
+	player.avatar.call("_process", 0.2)
+
 	var magazine_size := player.weapon.magazine_size
 	player.weapon.current_ammo = maxi(0, magazine_size - 4)
 	if not player.weapon.request_reload():

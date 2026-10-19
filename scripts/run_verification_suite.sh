@@ -251,12 +251,14 @@ core_scenes=(
   verify_death_blast_vfx
   verify_zombie_goo_death_vfx
   verify_hit_routing_vfx
+  verify_board_debris_vfx
   verify_unique_elite_roster_flow
   verify_unique_boss_content_flow
   verify_three_segment_tower_generation_flow
   verify_3d_melee_combat_flow
   verify_3d_melee_feedback_flow
   verify_audio_library_flow
+  verify_world_environment_audio_flow
   verify_training_range_3d_flow
   verify_training_range_isolation
   verify_training_range_fate_loadout
@@ -377,6 +379,8 @@ core_scenes=(
   verify_training_range_south_wall_boundary
   verify_weapon_forge
   verify_synthesis_catalog
+  verify_synthesis_gate
+  verify_workbench_menu_entry
 )
 
 # These scenes read the viewport texture and therefore require a real renderer.
@@ -433,6 +437,7 @@ retired_scenes=(
 
 renderer_scenes=(
   "${visual_scenes[@]}"
+  verify_world_environment_audio_flow
 )
 
 is_renderer_scene() {

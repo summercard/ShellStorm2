@@ -535,8 +535,9 @@ func _ready() -> void:
 			)
 			await RenderingServer.frame_post_draw
 			_check(_capture("fate_purchased_card_back.png"), "Could not capture the flipped-back purchased card", failures)
-			# 金币不足时的完整表现证据（2026-10-15）：余额行闪红 + 卡片抖动 + 卡下写出「还差 M」。
-			# 三条在同一帧里拍到，评审一眼就能看出反馈落在哪几个位置。
+			# 金币不足时的完整表现证据：余额行闪红 + 卡片抖动 + 卡下价格行（2026-10-19 起只写价格，
+			# 不再写「还差 M」）+ 右下金币读数保持常色不被暗化层压暗。
+			# 四件事在同一帧里拍到，评审一眼就能看出反馈落在哪几个位置。
 			GameManager.spend_currency(GameManager.currency)
 			dungeon.call("_refresh_door_fate_prices")
 			var reject_index := -1

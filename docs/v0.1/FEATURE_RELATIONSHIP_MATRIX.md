@@ -38,7 +38,7 @@
 | ENTRY-AVATAR | 新档/基地快照/战局快照 → GameEntryFlow/Tower → 98F开场或99F基地/玩家装配 | 关系待收口 | 独立设计待补/待审；16/16.1及09已定位；新档98F、基地重登99F及未拾取枪交接已专项通过，展示合同仍红 | 独立展示相机/视觉代理目标继续跟进；不得将默认装备覆盖持久化携带物 | P1 | 持续维护 |
 | UI-HUD | 玩家/战局快照 → HUDPresenter → HUD/地图/模态 | 局部独立 | 独立设计页已补；04 §20.1已限定HUDPresenter只拥有武器栏只读投影与模型替换命令，不代表整套HUD解耦 | 生命/金币/地图/快捷栏及模态命令仍由场景编排；逐域只读快照和真实渲染待补 | P1 | 文档已标缺口/功能待修 |
 | VFX-POOL | 战斗效果ID → VfxPool3D → Prefab/回收 | 局部独立 | 独立设计待补/待审；14.6已定位；旧池兼容链仍在 | 清点explosion旧入口、统一借还事件及资源版本 | P2 | 待处理 |
-| AUDIO-MUSIC | 领域事实/场景ID → AudioManager/MusicManager → SoundSet/CueProfile/声音总线 | 局部独立 | 音乐播放清单与全游戏音效系统/资产设计已补；音乐和音效生命周期继续分开；36个SFX仅为兼容基线 | 实现语义事件映射、SoundSet/CueProfile注册、统一总线控制、失败/静音语义及真实设备听感验收；不把文档交付视为实现完成 | P1 | 文档已补/功能待修 |
+| AUDIO-MUSIC | 领域事实/场景ID → AudioManager/MusicManager → SoundSet/CueProfile/声音总线 | 局部独立 | 108组166条SFX；七类枪种独立声音、天台风/户外鸟/四类脚步/真实设备/灯开关/楼梯回声已接，Windows输出与无头专项通过；音乐和音效生命周期继续分开 | 统一设置、更多领域触发、人工混音听感与Android待验；[本次证据](development/2026-10-19_world_audio_runtime.md) | P1 | 部分实现/人工与移动端待验 |
 | GRAPHICS-POSTFX | 画质设置 → GraphicsSettingsManager/PostfxOverlay → 画面 | 关系待收口 | 独立设计页已补；13.1独立主设计已补，分清正式cfg、临时覆盖、Overlay Shader和调参JSON | 写盘结果/回滚、UI污染与真实渲染/设备预算待验；旧7/9差异不因文档自动关闭 | P1 | 文档已对齐/功能待验 |
 | PERFORMANCE-RUNTIME | 场景/设置指标 → RuntimePerformanceManager → 预算/诊断 | 链路清楚 | 独立设计待补/待审；13/11已定位；当前预算红 | 对齐真实GPU、节点、尖峰和长测证据口径 | P1 | 待处理 |
 | TRAINING-RANGE | 只读蓝图 → TrainingRange3D → 会话统计/退出 | 独立 | 独立设计待补/待审；11.1独立设计完整；1.0已完成 | 新增能力另立修订，不将训练状态写入正式档 | 维护 | 持续维护 |

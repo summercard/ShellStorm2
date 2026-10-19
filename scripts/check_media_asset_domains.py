@@ -26,9 +26,9 @@ EXPECTED = {
         "file": "ShellStorm2_音效账本_v001.xlsx",
         "category": "音效",
         "skill": "audio-sfx-asset-pipeline",
-        "count": 152,
+        "count": 178,
         "initial_count": 48,
-        "tests": ["verify_requested_experience_upgrade_flow", "verify_3d_melee_feedback_flow"],
+        "tests": ["verify_requested_experience_upgrade_flow", "verify_3d_melee_feedback_flow", "verify_audio_library_flow", "verify_world_environment_audio_flow"],
     },
     "music": {
         "name": "音乐",

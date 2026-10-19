@@ -342,9 +342,10 @@ func _case_bullet_bound_on_drop() -> void:
 			"近战武器不得带弹药模块"
 		)
 
-	# ⑤ 非掉落来源（出厂枪 / 蓝图合成 / 商人）不锁，仍可自由换弹
+	# ⑤ 非掉落来源（出厂枪 / 蓝图合成 / 商人）不写身份锁；这不代表可手动换弹，
+	# 2026-10-19 起渠道总闸对所有枪关闭。
 	var fresh := INSTANCE.from_item(ItemRegistry.get_instance().get_item("weapon_rifle"))
-	_expect(fresh != null and not fresh.bullet_module_locked, "非掉落枪不得被锁弹药")
+	_expect(fresh != null and not fresh.bullet_module_locked, "非掉落枪不得被写弹药身份锁")
 
 
 func _case_bullet_lock_guards() -> void:
@@ -369,6 +370,28 @@ func _case_bullet_lock_guards() -> void:
 		not forge_source.contains("bullet_module_install") and not forge_source.contains("SlotType.BULLET"),
 		"武器改造台不得重新长出换弹旁路 —— 它现在只做炼金，换弹统一走 I 键背包"
 	)
+
+	# 2026-10-19：手动更换总闸关闭。所有可能换弹的 UI/事务入口都必须读总闸，
+	# 只判 `bullet_module_locked` 已经不够 —— 非掉落枪的该字段是 false。
+	_expect(not BULLET.is_manual_swap_enabled(), "弹药模块手动更换总闸必须处于关闭状态")
+	_expect(
+		BULLET.manual_swap_block_reason().contains("枪械工坊"),
+		"手动更换的拒绝原因必须指向枪械工坊"
+	)
+	var policy_guards := [
+		"res://src/player3d/Player3D.gd",
+		"res://src/world3d/Dungeon3D.gd",
+		"res://src/ui/InventoryUI.gd",
+		"res://src/ui/ItemSlot.gd",
+		"res://src/training3d/TrainingRange3D.gd",
+	]
+	for path in policy_guards:
+		var source := FileAccess.get_file_as_string(str(path))
+		_expect(not source.is_empty(), "换弹渠道源文件读取失败：%s" % path)
+		_expect(
+			source.contains("is_manual_swap_enabled"),
+			"%s 缺少弹药模块手动更换总闸判据 —— 该入口能绕过 2026-10-19 口径" % path
+		)
 
 
 func _stats_for(base_item: Dictionary, grade: String) -> Dictionary:

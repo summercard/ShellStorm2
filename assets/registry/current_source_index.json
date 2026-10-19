@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-18",
+  "date": "2026-10-19",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -11728,6 +11728,24 @@
         1
       ],
       "sha256": "a6556f6ffb1a9bb3f32b8d22c80c234910f192e7908b6f0487b41e4d7ed6bba2"
+    },
+    {
+      "path": "art_source/environments/tower_zones/rooftop/source/ivy_broken_low_wall/rooftop_ivy_broken_low_wall_v002.blend",
+      "bytes": 3639972,
+      "family": "rooftop_ivy_low_wall_source_blend",
+      "version": [
+        2
+      ],
+      "sha256": "d017185e1ec29767b5e59dccd9fe13039f369b835cbb2c8b2cb804ce1bcf86d2"
+    },
+    {
+      "path": "art_source/environments/tower_zones/rooftop/source/ivy_broken_low_wall/export/v002/rooftop_ivy_broken_low_wall_optimized_v002.blend",
+      "bytes": 2874904,
+      "family": "rooftop_ivy_low_wall_optimized_blend",
+      "version": [
+        2
+      ],
+      "sha256": "983968321f5eb8202c488f6d8f10f730a9d573704ac94cc0a02af864237e2977"
     }
   ],
   "authoring_root": "art_source",

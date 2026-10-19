@@ -40,18 +40,19 @@ func run() -> void:
 	_check(bool(probe.expedition_surplus_enabled), "增援默认未开启")
 	probe.free()
 
-	# ② 战斗房存活账按公式变多：extra = clamp(round(base × 0.25), 1, 8)
-	for room_id in ["room_01", "room_02"]:
+	# ② 指定房总量必须精确：room_01 = 15、room_02 = 12（业主 2026-10-19 口径）。
+	#    其余战斗房沿用 25% 比例，Boss 与交通房不加。
+	var totals := {"room_01": 15, "room_02": 12}
+	for room_id in totals.keys():
 		var base: int = int(off["alive"].get(room_id, -1))
 		var plus: int = int(on["alive"].get(room_id, -1))
-		var expected := clampi(int(round(float(base) * RATIO)), SURPLUS_MIN, SURPLUS_MAX)
 		print(
-			"ROOM %s type=%s base=%d plus=%d expected_delta=%d" % [
-				room_id, str(on["types"].get(room_id, "")), base, plus, expected
+			"ROOM %s type=%s base=%d plus=%d target=%d" % [
+				room_id, str(on["types"].get(room_id, "")), base, plus, int(totals[room_id])
 			]
 		)
 		_check(base > 0, "%s 关闭增援后没有敌人，用例前提不成立" % room_id)
-		_check(plus - base == expected, "%s 增援数量不符：%d - %d != %d" % [room_id, plus, base, expected])
+		_check(plus == int(totals[room_id]), "%s 总量应为 %d，实得 %d" % [room_id, int(totals[room_id]), plus])
 
 	# ③ Boss 房不加：前后完全一致
 	var boss_base: int = int(off["alive"].get("boss", -1))

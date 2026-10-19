@@ -25,7 +25,10 @@ func _ready() -> void:
 	var workshop := _find_facility(world, "weapon_workshop")
 	var vault := _find_facility(world, "vault")
 	var fate_collection := _find_facility(world, "fate_collection")
-	var monster_archive := _find_facility(world, "monster_archive")
+	# 2026-10-19：这个位点（西侧下方）的功能按业主要求从怪物档案室换成武器改造台。
+	# 美术没动 —— 断言的仍然是同一个资产包 `weapon_workshop_station`，
+	# 所以这条检查的语义（这个位点绑对了模型）不变，只是设施 id 跟着功能走。
+	var weapon_forge := _find_facility(world, "weapon_forge")
 	var recovery := _find_facility(world, "base_recovery")
 	var wardrobe := _find_facility(world, "avatar_wardrobe")
 	var workshop_stool := world.find_child("维修圆凳_独立装饰", true, false) as Node3D
@@ -58,7 +61,7 @@ func _ready() -> void:
 		_check(light_root != null and light_root.get_child_count() >= 3, "基地可编辑灯组缺失", failures)
 		_check(elevator_anchor != null, "99层电梯可编辑锚点缺失", failures)
 		_check(_count_facilities(art_layout) == 8, "美术布置层没有保留8个交互设施桥接节点", failures)
-		_check(monster_archive != null and "weapon_workshop_station" in str(monster_archive.get_meta("asset_source", "")), "怪物档案室未绑定49_02_游戏输出整合模型", failures)
+		_check(weapon_forge != null and "weapon_workshop_station" in str(weapon_forge.get_meta("asset_source", "")), "武器改造台未绑定49_02_游戏输出整合模型", failures)
 		_check(
 			art_layout.transform.is_equal_approx(authored_layout_transform),
 			"运行时重置了基地美术布置层的作者Transform",

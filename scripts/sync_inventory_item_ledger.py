@@ -128,7 +128,12 @@ def expected():
             use = link('src/world3d/Dungeon3D.gd', '_equip_weapon_from_inventory')
             model = 'weapon；真实武器快照重建'
         elif item['type'] == 'attachment' or item.get('subtype') == 'bullet':
-            use = link('src/world3d/Dungeon3D.gd', '_install_attachment_from_inventory' if item['type'] == 'attachment' else '_install_weapon_module_from_item')
+            # 2026-10-19：子弹模块手动更换总闸关闭。账本必须指向真实的当前入口 ——
+            # 拒绝口 `_reject_manual_bullet_module_swap`，而不是已关闭的安装函数。
+            if item['type'] == 'attachment':
+                use = link('src/world3d/Dungeon3D.gd', '_install_attachment_from_inventory')
+            else:
+                use = link('src/world3d/Dungeon3D.gd', '_reject_manual_bullet_module_swap')
             model = 'attachment' if item['type'] == 'attachment' else 'bullet'
         elif item.get('subtype') == 'backpack':
             use = link('src/world3d/Dungeon3D.gd', '_equip_backpack_from_inventory')
@@ -169,6 +174,8 @@ def expected():
             note += '；电池使用动作存在，模型仍落入crate兜底'
         if item.get('subtype') == 'flashlight_module':
             note += '；使用需设施上下文，入包不等于可在战局切换'
+        if item.get('subtype') == 'bullet':
+            note += '；2026-10-19 起手动更换已关闭，需枪械工坊特殊流程（待实现）'
         pools = item['pools']
         row = [item_id, item['name'], item['type'], item.get('subtype', ''), owner,
                link(REGISTRY, f'L{item["line"]}'), link(CONTENT, f'掉落物品!A{content_rows[item_id]}') if item_id in content_rows else '缺行',

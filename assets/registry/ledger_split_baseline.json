@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1306,
+ "asset_count": 1333,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -133,42 +133,42 @@
    "d": "audio"
   },
   "AUD-SFX-AMB-BASE-FACILITY": {
-   "v": "6b51f9144fc2afecafd17dd916150b7d567eac64dc63f0d3624e15de027b4866",
+   "v": "5dee6c91f185e37d926197513842025b459fa1a32afc4983854f04bf3ed335cb",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-AMB-BOSS-ARENA": {
-   "v": "1ad52ed4d8a6a344c67dde1d7afc1ba1bc9ee593f7cb41af0f224701b6a09bd7",
+   "v": "1b9c433ce5b76c77b53ad0681ffe11333bbae088cd5d00908d75507b1c572964",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-AMB-EXPEDITION-OPEN": {
-   "v": "4ac9c270256949f7fc5bd86a840743a68095e1af36d9e7813bfe44d10f803bef",
+   "v": "029e9de1c4d97ded666155ecc0438969e59eb17aaf446e7c48a513a713a3f3cc",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-AMB-EXPEDITION-ROOM": {
-   "v": "e75076ad216b812d50a920635474e7643b7f6774f270f4f8c86091c1ebe31653",
+   "v": "dabaf567f0560a7750561b55d3c36ada154199ab51446d3f3dc605ea840928be",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-AMB-EXTRACTION-BEACON": {
-   "v": "f57727fb0247e1d15cb7d586f379eaa9cdf38b3ce54459a4e5a2f634ba801db6",
+   "v": "79e3d82539c2dde1f691dd8667b5b451635e88bf43ef6afa1aa25d768d512b96",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-AMB-RECOVERY": {
-   "v": "260dc24ccfb76fda23ce8aef1ecb5893958f3a6690d95340a55021fd47524a41",
+   "v": "a7fa44ad0d6f8eed1d3cd5e4b2149b045a5b39ff11fbb87e6361cd203f942ace",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-AMB-WORKSHOP": {
-   "v": "adfe63c1abda7c761057cd54534ff6cdf1e4e6d192331e2f506dd9523813e718",
+   "v": "34732a1f32e868e8dabb4b217e36e2f831da75b572f72078443090829358fa42",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-AMMO-EMPTY": {
-   "v": "cfe5514323065dbe21d6b686bc03d3e9750802bffa6ec37be3158ef8c186348c",
+   "v": "1ca8a37b6e5655f3540d1a76c7036c214e8cc124cd030d51e8fdcaa31a815a68",
    "c": "音效",
    "d": "audio"
   },
@@ -188,157 +188,157 @@
    "d": "audio"
   },
   "AUD-SFX-CONTAINER-CANCEL": {
-   "v": "2deea1403fae340929168dec49e2d50d28b50009b0aacbfb9ffd2c627594782c",
+   "v": "15500f7b8e1e2be16ad36a82239163a656e1e62e4f51143678d0ca92d84b6c8d",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-CONTAINER-OPEN": {
-   "v": "0636d8659d19151d8b55472e254fdc7628b6367d3fc183e01c33c0fbd0ce058e",
+   "v": "09c310723bfae31a0390bac16c1132741076fef07f29f57716ca5b5799cf4ba2",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-CONTAINER-SEARCH": {
-   "v": "c7a2a946fa17991481b34c15b02619bdab0322fcb697a692d9e6c3e6cfa517ac",
+   "v": "49a095d196a857cf1e6c2a65a4492f7a4683abe4f90b4d5cd8185bc05a8d7adc",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-CRIT-HIT": {
-   "v": "9a2ad835f9dfe7f7c1f8d7362538e3a055be0d0e5a1944b611f6b5a5160343ed",
+   "v": "031a2af65edd91287975a6ce37cd238f4d198e9b961f60a5a773681e9d6c5ef1",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-CRIT-HIT-VAR02": {
-   "v": "f4368c419da0f6cf1b9416ac0335c2c2654509140a4e4e80349fecda47122e02",
+   "v": "e85533e456399831e75e7f5997789ef4cd842b027e465129810ada12ef52c026",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-CRIT-HIT-VAR03": {
-   "v": "d6a7a850285922a434cb0fa15351a4bf9f09ff38535963699ef515fff0a34967",
+   "v": "066fa5c362b9a544fccdcd377f5f9b2a39472f79f96add1fc38cf06fbecf0659",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-DOOR-CLOSE": {
-   "v": "9c3eb01e1d73d860ea9a028ffb9f9a41477a2898520024b71b148bc5590bf229",
+   "v": "43d5fc04693f304020d82d63a9af21e11995feada22eab115c32ad54d8a8c9fe",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-DOOR-LOCKED": {
-   "v": "945969e90ff7b6245c86c1c58ce242b68345aa67dea96ae28dd7d0532ff880a2",
+   "v": "75e7284e8b9980db781e843aa3298eee6983e4833443e8597c7ddf9272afcf4a",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-DOOR-OPEN": {
-   "v": "fa7af5bccff502f89a65036aee443b61900e5d4e92c5afae95eb63a45e47386e",
+   "v": "e481169c43d019ec3af94cd3cf362a327e59353d16acec5c00a45b9049400f43",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-ALERT": {
-   "v": "c083754ff84b307c33f710602e9356b47b7a5770907c876c1c3c041bfd7ea2cf",
+   "v": "cb2ae323bc9d35b02269bf9a20950b186e2c86a80a92c012c43cafd357743c2b",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-ATTACK": {
-   "v": "a3203023706dca453fa540e900c96c2a87d41ca7db0d550c3f5ce4f0d6e3c8dd",
+   "v": "5e699dc4a886ed52d372e90a1ddf38338cbd65ac6c674963339951780a284304",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-ATTACK-VAR02": {
-   "v": "703644ede62d296951dd18d2e0ef6c339d28b3f529dc787161aa64255b772a5a",
+   "v": "9a333300c56c2484d0a8a0a141ca884c23dc984ed63c263c4999ffc445134365",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-ATTACK-VAR03": {
-   "v": "8a9b0a34b5affc54b36be4df55223955caff4d211e9e40762527d6d9be75e979",
+   "v": "6f43ccf438542c82b5e622d68f1236a13af469700cf03296dcd763ba7b48e6ce",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-AVOID-LIGHT": {
-   "v": "0d70b8ae6fb275fe901a7b66e985205ce71c07ef7a3f8481549310bce1347a58",
+   "v": "0c6aa1326f1eccff1e61c7f61639460ec3e36d9e2a601dc197a98472498aedf1",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-CHARGE": {
-   "v": "78af576b3740f6c06a5cece6060d5cb912198f3d1ddeff159ae7e5b3143eef7d",
+   "v": "3547b76f78feb7ed1cb56ab6e76007a26611efa8901b268bbe776520913715b4",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-DIE": {
-   "v": "d5f681d3bfc8a3314484f5eb028785da6b925de4456efb6de7cfff3791cecbfa",
+   "v": "06636f01440c68682ab65b6c879e44f33ecb25ec53943f0c0d4d85ff7a6adfa9",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-DIE-VAR02": {
-   "v": "3efe5209c23d31c04ba7d5f5056b285b6146a09dc46dcab1275bdaac4bbe8ac5",
+   "v": "f0a657c3bb81d01b7c18e97f691f816226a812a165cefdd2c3d1939ddefede2b",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-DIE-VAR03": {
-   "v": "8bce8c5eab97006bdb89f586f90e5e481e331c4463b82137cc65f108c48131c5",
+   "v": "9d985b81537e42b2c02ae0b65bfb4b6dedb029d08d9179bb03fa50e55fbfe3c6",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-EXPLOSION": {
-   "v": "85b700ff1f1cb1f827b4e02c588421d2adac37b71bb9be315bddd1218a3b5b3d",
+   "v": "8c01cc7bb19e4dd14e0aee3ca00aa0f50ca08fbb11ea6f39764e644979dab6a2",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-EXPLOSION-VAR02": {
-   "v": "8ec2829d37be9e8ff8b2c8ab25d6cf02b412c3a0949a1f3e6f10a78a1c2d8f4b",
+   "v": "0d855345ef7a67eb6641577122e1b48c20bcf9bfb6023a6a7e0380bafd08388b",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-EXPLOSION-VAR03": {
-   "v": "176947e871304d7992acf527cd7a123210c0568d6f69148b16ad76a996a90fc4",
+   "v": "e306de7ed3ecc94b536403e476d35210b0ef653c5939ee72fcd1e6e32c2bd5bc",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-HEAL": {
-   "v": "4136167c7c8cfa11ea2383f4a1b128728caea759902d8946adc08a6dd5f3932d",
+   "v": "1c571a3d5b7bbdb495b5ac08ccdbb55b0068df4531b77345a9508be3533c50da",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-HIT": {
-   "v": "6eda8c55208ed9763579ab718d432d13e8a2a05f5c5551091b6557c8c57f09a7",
+   "v": "52c804e1d4ef9a9af3618c08c9bec00fde37824d30143c8d45b8fcea08866683",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-HIT-VAR02": {
-   "v": "3db96c5591161ae3b442215c7940836e3912cdaeeb1c361bbd20065b791b9a5b",
+   "v": "f49873ee31f52670d8bc8b2093fedd7aa38f4e66b7db93685e510da2f5b93702",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-HIT-VAR03": {
-   "v": "5f0acfd71f80ae4f287ec7a51f154802695f1f717ada4f9b5808c6af99cf0a86",
+   "v": "1fa3c3bb0d0abfa180da71382cecb5cee3b9bf006b6a2f854df1e27a37955b8a",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-SEARCH": {
-   "v": "b9ca640eb5d41947296e998eb2677740e68800d494c6f35dbed8ac6ee69f4616",
+   "v": "6894e5b71b099262de12204be6bc6b0e223fa7cebb07f627950df5f793dd631f",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-SHIELD": {
-   "v": "cab016b6fb73b5dcbcd7b2a13339e5f3d8b2860eb8c362adbdd7b66b143f6a82",
+   "v": "148d03cd4bf5b8e25bab9d3652187722c9f9f7fe8117f70138dae7bf3c324846",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-SUMMON": {
-   "v": "a31595a83bf37e405737bd07217539981433719b8847763fe4e5ec92091a7aab",
+   "v": "50104e6bfbcb6efbcf26789e883512f17cac4b61383a9ee90f8c562a27bbef11",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-TELEGRAPH": {
-   "v": "076930a0140fff49d0d4227728add9c792653697cbe3a2638ce893a59c7018d9",
+   "v": "1342afba0483f4cac0d04a102715cb479cee7f5f54d796520b6c504d5a59828f",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-TELEGRAPH-VAR02": {
-   "v": "ad34a67384e858b58b2524f3eb96cd27335447d3e0aaae4a92019adce1cfbf6e",
+   "v": "5e493233e2f50afbd005dc30afa7c51c239972f023a2a740a2fcc8ac045da163",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-ENEMY-TELEGRAPH-VAR03": {
-   "v": "d281ff9dc5ddf6d3f0de352d6f5a52ee285cd03b883f51f6c870dd7814762336",
+   "v": "c318186b8eba4e1016751dc92bfdc4eb8a224495dd996b281040b46d12d823b2",
    "c": "音效",
    "d": "audio"
   },
@@ -358,7 +358,7 @@
    "d": "audio"
   },
   "AUD-SFX-FACILITY-ACTIVATE": {
-   "v": "0e0718f9aee878898847455769936205cb65deae6a020541c8fc7e827e0b798b",
+   "v": "ea8d492eb61c4ffff003320dcab7ac652114b3504cd74442727ecbef1a863b88",
    "c": "音效",
    "d": "audio"
   },
@@ -398,72 +398,72 @@
    "d": "audio"
   },
   "AUD-SFX-FLASHLIGHT-OFF": {
-   "v": "18c1e1f8757e7c7ab59eb1ad1c0706952c9e59640c75c6e323a2910df46a0f00",
+   "v": "4f0c218f89599bbe5355d42d5c2fef84205af8c2b266c1cf3374035022114726",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FLASHLIGHT-ON": {
-   "v": "445e1a35d5cf07fa0c6c32e8335813700f04772878a11d13a162e2d87a2a39eb",
+   "v": "1543607617ef60abbd61402cc898fb7e3a9c5a4e3405bbfc6fb0f14dc46005a3",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-CONCRETE": {
-   "v": "74ec20d7c9f2b23b4e42106805591bb7348090d32ea69206454f975e42446b81",
+   "v": "fd722ee78f5457e5c1f0a2b8cd74d891ec401220b8cc97d59d7e69ee7515f77e",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-CONCRETE-VAR02": {
-   "v": "cd31d924fc0e73f5ac98613c4af9115e79ea9120bf4695c3b8bec90f532dcf50",
+   "v": "ccc7ad6fe81b164e1e761777e9e7437f511a83e077c2b5ed31bb9fa56ddb2c67",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-CONCRETE-VAR03": {
-   "v": "89074090e0a4b11ed763c7da5574356ad5086734f6c9d550420127ad37a91792",
+   "v": "808d0dc1ab256c846baca69132bf8ccccb4ec26a7303b9d8b83b832113b00673",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-CONCRETE-VAR04": {
-   "v": "731bfd3fe40d8c0e1b45947bd21ad10540a6fa79a2c884e9fd952409578a8c05",
+   "v": "ac42a161fb10fe3205f7e64ad443d8e32299c78d74258875a0e5de96961256bb",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-DEBRIS": {
-   "v": "123f82a6f76bbd6bd449af01e1c365556db951009445a14ca2177708f1552ca9",
+   "v": "62f9aab7694ed9ee41b9f891d9b073ec5e0f9a21c91946f2842a96963dbd4d31",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-DEBRIS-VAR02": {
-   "v": "fed6ac46c592033088828a5f7bf877bc6ce77227341bc0a486ee567d3a1c521e",
+   "v": "e07affc703a278b37544c1f96f15e60e09470a8b04a42ca557ce66d3b2474545",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-DEBRIS-VAR03": {
-   "v": "c2066ab9011f854dbe19f144fad0331880481916b3bb35e24f45ad356b7939c6",
+   "v": "2ddf2d5092f6ff8a49a0647d9c42c72186e0b86ca8db3b4cca28f2ae41fa0fb6",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-DEBRIS-VAR04": {
-   "v": "c1e76359195374514924bd4d12ad1d1228bab7e13da3f1e9af0358df08254945",
+   "v": "ac6ffc5bb4dbb5307b8ce182f4884ec5abedf6559ff7653e94aba544442bb122",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-METAL": {
-   "v": "b522eb715137c80c51e1ab9d54ba1ef91b165f8124734c996a2424343cbfdea9",
+   "v": "f9be3ffe6e61ab92e125d13ed32b190191aa9aecec59a50f17daee68ba943c24",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-METAL-VAR02": {
-   "v": "769175567aa81eed7ae0b84c584b2492db37ed483e79cc8d7cc1688480465c9a",
+   "v": "6a5fe9fccf80aa3472e339b5696828b4e5aaf6acabf21d7597e8d00160116b20",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-METAL-VAR03": {
-   "v": "826754ccb651664ebbeb334f042e3ff6f07c8ffdca8b1ec42c0945084b56448a",
+   "v": "d2412a1b1af38054f9e6d23c820b860569f691d1d8a2f56bb59e81344161619f",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-FOOTSTEP-METAL-VAR04": {
-   "v": "aa5632b13cbe338745a061f145a0732202e86f40fa85734d0d005309f5bb18d3",
+   "v": "264fc360b5b51719bdf1963805df75fb9409b1f2a6a3060a8ef170848cfa2b39",
    "c": "音效",
    "d": "audio"
   },
@@ -473,32 +473,32 @@
    "d": "audio"
   },
   "AUD-SFX-ITEM-PICKUP": {
-   "v": "910c93774eb02468185936a4d9bb10e18218e7481b62071e416af6b818446a32",
+   "v": "74e8174629ebaa278ea6ddab377923c53064fa103b1c36f04dcac49cb21b6873",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-LASER-FIRE": {
-   "v": "e87ed44b1cac1bd9d023e7aa4f1921e41d2f6e1abfd29e08f82fc2ce2afc5001",
+   "v": "df611453a1195414d74a520fae3bfb1b5644f755f8dbba3c206f8b86c82f98d7",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-LASER-FIRE-VAR02": {
-   "v": "283d11f03c45073680c7df2b373385a9ca2f5a3beeecdf72f0ee0773a32f0aca",
+   "v": "6660138f10f6d02d438705313c71a0a1df7a5def13b3c70d58c858357bd09667",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-LASER-FIRE-VAR03": {
-   "v": "64150a18ca951c69b48e568e162e57889f46e61dc00ef945520f7b747ad0c0a3",
+   "v": "212ea9fdbdc00583e2334db8ff5cd96e55c62a1db6398247e73c705c017957c3",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-LIGHT-OFF": {
-   "v": "d6809832c1af9c2036ab38d46f658c700f05fed3d5c92ef068fc6fbfc5261310",
+   "v": "0fe2977947667bbed158f1dd3070d62ecb93ce3df30e27896470a024f71aabc5",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-LIGHT-ON": {
-   "v": "b1ca378fc0e59c8508ea4ea692d3f67fa0fcaa70689b1d8090e4c5880de5fc33",
+   "v": "6c47d8256621b8afef2826968896c58764f2f3d11f987f791834bcb1f95e86a1",
    "c": "音效",
    "d": "audio"
   },
@@ -508,67 +508,67 @@
    "d": "audio"
   },
   "AUD-SFX-MELEE-CANCEL": {
-   "v": "04785140797d0de8beb693d910fa742ae25038eeb3ad1dd82229a9746b313fa9",
+   "v": "ec2227dc9a3b8c55a46c928e67d6006788fe88e51b958ae617f8e51751499f11",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-HEAVY-IMPACT": {
-   "v": "9ebdde0ebd813e4411b648521876f26ac8a3fc8ccfe144e81f7a0beb893b00e7",
+   "v": "1ee0727ca8d53bb7ef4002488192a9d2f80b7e201b92d03e5d0dc4dcad0c485f",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-HEAVY-IMPACT-VAR02": {
-   "v": "5cc6376583cf6673f3ed956ebabdcb8fcff44e40cde83b1f3cab7186aba212c3",
+   "v": "8212c1a9909f17b3db9ded94ad98e575f18750409bc93b5cd6da91fea8565ce6",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-HEAVY-IMPACT-VAR03": {
-   "v": "7ebb6d740214ac73eaad1804efaa41386384aeade0b42215a5283bdc508619e0",
+   "v": "e59a0e2c1e19fc99687fb3755b3e266f8fb0b924cc2b41a4ef6116b7a35a0e2e",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-IMPACT": {
-   "v": "193825894c5d8952355e3464c96f10e4492b8d7ff1b60841248e4ff9fbc3fd44",
+   "v": "48c0ce3c62eed8a616356d62dd78c3dc0f5009c7e4397cd27e9916a7239e35b1",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-IMPACT-VAR02": {
-   "v": "6a479d0fec0f369e78ab2cb950e20d5c1728d7d9365f0f0c45985926f0bdd973",
+   "v": "7e1edf4606158b3490cd3e3b0f5272ef7ef8727b5988e6b64c9464cc7b6db817",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-IMPACT-VAR03": {
-   "v": "b8b43c22bed6ea1481f44866e7b461220e55f79f870d97a343986ceae81e50d2",
+   "v": "fc0afd8b31401cd7952f2c3d2f2464a66a3e08afc3b476480b46c5dfbec90bb1",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-SWING": {
-   "v": "91fe3aade2e9c07537399a65507a76dfd4301d784ae05d0aaa704a24fab4810c",
+   "v": "381bcdc0efc4cf22b91ec82859df7d82121b570e50086b973dab2efea4a81ec8",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-SWING-VAR02": {
-   "v": "d117271a2b369b5aaf52d3540bdccadf67ddf2f2b0d57aad402c3a0e9a19a75c",
+   "v": "75ddb724626a96abf6a210400cbe7ff5459a8f1de257f95d75db214f55aca53a",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-SWING-VAR03": {
-   "v": "77b4fa861038a2cb598208643b60d09cfb693e891994a4a1880e2d25e0681680",
+   "v": "665976c3a8d97a9751b4b6a6a18f31984071f4235a5fb72986ea06a31351ac43",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-TARGET-HIT": {
-   "v": "86c8c213b2219c17ae5d23c9157b8bb1ee642ec1fbc593d68fd5f23f427e971e",
+   "v": "074083b0400692f193e81a0695ef1bad57cc637e76b11b09ee9be2158c9a0964",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-TARGET-HIT-VAR02": {
-   "v": "ce230bc7642bf6e1bdd63c32b73237e8ab2edde253f82032e2432f7f3ec7a614",
+   "v": "1b81b4e5ac588a41dd0e9fb88b69fbe917041c7f7c955e795d9c9ec76d06e27e",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-MELEE-TARGET-HIT-VAR03": {
-   "v": "74f9f4d61664cbdad0d8b1fe88c844250c89b95a087a33459144e904ffd0d3a0",
+   "v": "4443a5388064aabf2d6ccb0016149eb64dce60d8e2a179c1307dc70ed0305c68",
    "c": "音效",
    "d": "audio"
   },
@@ -583,112 +583,112 @@
    "d": "audio"
   },
   "AUD-SFX-PISTOL-FIRE": {
-   "v": "5d98b72c3994f60a14440648eb95468ba329b384be7a6a343f9537f670c68e77",
+   "v": "6a50f51e1a1fdaac13f077eb2a6019d9fd068c7511479c29e198f2a0d16ecd09",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PISTOL-FIRE-VAR02": {
-   "v": "981a354123410ec8cd3035a605e6d7b0acd5de7de75fde1cdbc7125b6f6ee677",
+   "v": "34eef567577a5046d01d165ddcb3c624d3dd5c04d5096ce50729eff6c7d60780",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PISTOL-FIRE-VAR03": {
-   "v": "c3d9e9880fa5ed92079ec2fa2b8965a6137b2f7ec193800be59de8adc1eaeaa2",
+   "v": "2cc346b8312837d2df492d4483b6c33eebc7bf011104379f647afd40dd12dce1",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-DASH": {
-   "v": "c1ebf2aa5dbdd6c12cbb5bfb02c0632bd376bd19bce78a361fa25827daaf69d9",
+   "v": "a673e2368b0f3d43a8a4e282e6fcbd18c7774ff96e33ad58d9e23834f22b07c7",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-DASH-VAR02": {
-   "v": "6003d4f1e73a72635b75a92653d2fba8ffe5550549c72358e7f2747cca2639a5",
+   "v": "cb9b37afdfeb6f41048af464259e9c015000d2f3c1a2d699c4829a260a10591c",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-DASH-VAR03": {
-   "v": "3ab96ed099db3eb0a2d47d2c47604d1d399486f579058168b952397b6113b018",
+   "v": "d41209043d08cf16ae34a3b3cd7ad7cb0964dc9cf916e98b4c65e0707a82b7e6",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-DEATH": {
-   "v": "b26d1626081848ee9693a78753667f95fe590dc5deeead782ffb4a43908cca40",
+   "v": "96bfe98575efc881cbe929293e51c56198455b624f8ccb8382efbe46ecea271c",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-DOWN": {
-   "v": "f0c386dd55ddcf6908b139b6de4d00b803eb04cedb0c2becb5f624aad4248add",
+   "v": "b22135e0653253c110ab2bca39f56742bfe2297acf77ecf51b6059ddba936d7e",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-HIT": {
-   "v": "dc0e0fa3e80c884e0bef0e5beebce03544489f4a09a4f5b29c5fe6699ce55bb3",
+   "v": "4082758e450a0ffe216b832605267e6497f796cdcaf437352d30d8da289a7caa",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-HIT-VAR02": {
-   "v": "a77c7eb20365ba71c7a17c91852323d1364441583c11b948e56c0a3efefd9da9",
+   "v": "18037a5d3f3b4eed42f50b138d770a12df588aa9d70e48e0e6feed393bdb1172",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-HIT-VAR03": {
-   "v": "c2f4d7f404e54aee1f38b6754cf1e0132ca07b665fb6ad336621476658ffabc3",
+   "v": "39ec345e4c86c161e8617d8c75f787c27b7b0a9320d8940d8cc8e9253688de2a",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-LAND": {
-   "v": "28d64434e3c92d5cf8729e08c100de43be40d3e5ec97a50d9ab14f9cd77351cb",
+   "v": "9664cd1de8130a8626889243f7c9b652dfc0e81d5c55826fb683f2cc9f0c2f7f",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-LAND-VAR02": {
-   "v": "951efdd926095cf7c39e484cbd44480043f36ce3684542c962988d9500ae53a3",
+   "v": "71465290360711ad9d3910d71d8480a866ec394f1043acea2294c5e8cc5d6b54",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PLAYER-LAND-VAR03": {
-   "v": "e396a9f066569299bef9ea69ef9217f85162de13a6b5770129475a9fc03c96f3",
+   "v": "b3ea6a4174ff5ee234da9edba84e494f3e56cfd48a009ad4b4db16f529e7cf56",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PROJECTILE-IMPACT": {
-   "v": "ac881a9b72691cd59fc752c1f8b3ee6f8470ee89f4dc25f1a267cf6cc00eeeb0",
+   "v": "6e0bd3dccf46376aba6affa89a12c6006e9b646a318f153ddcc88650513c4a5f",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PROJECTILE-IMPACT-VAR02": {
-   "v": "52b2aaa793df36411eeba2805dfb6634196818c1c0cfca48efeccbd615805fbf",
+   "v": "d9dee1978d6832b57711d1f4d49d9cd330cdeae5885b8ccb5ab4a4ccf762d004",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-PROJECTILE-IMPACT-VAR03": {
-   "v": "26420e5d5e4f0693d772bac6cf80150a37dacd0dca3220245e8a12961b3f11a8",
+   "v": "c14bbf2861bde3d732b0aaa04e293f6f6ce1be746b5346c42585c73e42f5ae3e",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-RADIO-OFF": {
-   "v": "ce74fc5d5a1daec03927ad0da32cf7dc335023d3d7b64c95c585506ca97bc581",
+   "v": "64a31c96c040ddebe1e5c7e61060b23ead3d41e6fd1925fd06a3a34e31d46f08",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-RADIO-ON": {
-   "v": "c1626689b5ad2c8f427f3c239cedc6beffc5d5aed781cdd4db1a43c8e29a64a0",
+   "v": "9c4a37ab6498a25076dcd402204e2994f81022159432007865098ddf1e8292c9",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-RELOAD": {
-   "v": "1b59e3c6c80110a185ca895a9bde2dc3d077b47542d68199dd9d25908bbcad6a",
+   "v": "43e615e5caadae9a372b70943642055bc73b8ee2e0183ede57398053ad0d38ba",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-RELOAD-ACTION": {
-   "v": "3c2b2d89fd1e7f269ea8dc4b5e279fd52c5794b1ada59cf0514b87f7ab4337c8",
+   "v": "690057b2ea9553853b4c3c038ca14dfe06e4da0bda998819132d71249d830c8b",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-RELOAD-END": {
-   "v": "1dfdcf0483cdf7da1ceea5069fe0b9a07a4556f3a1b697458a6f73bd50d42d0b",
+   "v": "8f342732160cf7de8bd9e9d644dd84284aebbe7cc7c3b903a2ef6eb9abbb15fe",
    "c": "音效",
    "d": "audio"
   },
@@ -703,17 +703,17 @@
    "d": "audio"
   },
   "AUD-SFX-RIFLE-FIRE": {
-   "v": "9a21c8eb851826016419fac412f3bd3f017b81e9ec391bf10ff8bfccdd79a6ab",
+   "v": "69e2a0f17cb09a2e1f573ccdf94f4c7a08a31ae224584866a89c60fdc255334f",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-RIFLE-FIRE-VAR02": {
-   "v": "4c86547ca1590761d7a1bb9756d2a4e71860cd885e4b46b10906abf5b138192c",
+   "v": "91fa50d929941bc55a2d2c5bc7120545184b5a1637fc020121a1d0d8468b9098",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-RIFLE-FIRE-VAR03": {
-   "v": "c7d29176465f5eac698288743f01f76090b9502ca2f240bdbac269897243391c",
+   "v": "5832d039646bf249c5eb84e0673a5c525953a39cda67342663daf4e02680b818",
    "c": "音效",
    "d": "audio"
   },
@@ -723,47 +723,47 @@
    "d": "audio"
   },
   "AUD-SFX-SHOTGUN-FIRE": {
-   "v": "4d435ee2477e9868ff50001c55630dd2dfe1027e00455f3ee23c327c26ff2442",
+   "v": "eb1df0c9336aae034e663a80adaddccc5ba69d9dc482113fe5cdd24e6b052634",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-SHOTGUN-FIRE-VAR02": {
-   "v": "dcafd176b4ededbd0227a365226d2a2097c02189e30ba3d69b9296f4b4cecaff",
+   "v": "0a63e4d3232769fc7990127463d1a9a7e3ed0775187f8c1a9b7b6134c91e55d1",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-SHOTGUN-FIRE-VAR03": {
-   "v": "8ee1831dc5408da0d3ff37f8abb886872e3966d17682844afb07dad96d14253c",
+   "v": "5af5113f808c6780d7ff8433fd27b8e37a1f3d1edca14da0056426672085cd2e",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-SMG-FIRE": {
-   "v": "460ed293c576b0e69a3626e1228e6335ebef38ac5a4cf34361fb7c3d84af8f99",
+   "v": "71de85b047482762de3503879905ca3c951fcb230595569245e4be07577d9078",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-SMG-FIRE-VAR02": {
-   "v": "a17c1329cbe25d642973393199468b5fdb7fb3a32627664e71c5e25d91f4cf34",
+   "v": "07a2498a226593ee4560b73e224899e97b1397cfa5aaaf974362f62c08a5d576",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-SMG-FIRE-VAR03": {
-   "v": "08a8e48b72060f80ba0fc0343aa963297acfb6b8a0cfd86be1de78556f024d80",
+   "v": "3803e38a25dd44ee5b8a74238ee530067b03b67939dc2606c21db972b3b6b2bf",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-SNIPER-FIRE": {
-   "v": "f9e838cb7c577665944ae948341ac13a2ba0dcd5b6f6c2401db04254e57add9d",
+   "v": "3fd8a9eab4bd66192824391da16787af1116442ca1c150b0fd3ac556a4221147",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-SNIPER-FIRE-VAR02": {
-   "v": "fc330872ce0a6c7efc0b08efd7dcf9ad1353a1855e1174bb012fb8160c7b9cbb",
+   "v": "5baa90f59ce8123a9496f612af534dad1942df44c8ec17086fc6861789ebf51e",
    "c": "音效",
    "d": "audio"
   },
   "AUD-SFX-SNIPER-FIRE-VAR03": {
-   "v": "c3814cad6030a8720aa207a48c861f4369a2ad3682b1133d9fecee67783d35e8",
+   "v": "a75dada1296dd89e0420450ffb80fbb71fb373bfccf0e554009e5d5b326fb3e9",
    "c": "音效",
    "d": "audio"
   },
@@ -818,7 +818,7 @@
    "d": "audio"
   },
   "AUD-SFX-WEAPON-ATTACH": {
-   "v": "7fd9f8e784b31ad545b4df69cc05adf5a62ea4cb421dd8c30985435a72fdfe2f",
+   "v": "b7c2bbaa887985e71407444ea1bd351670b5ced8eff68b6f66f5d7fdbc6b7440",
    "c": "音效",
    "d": "audio"
   },
@@ -828,7 +828,7 @@
    "d": "audio"
   },
   "AUD-SFX-WEAPON-SWAP": {
-   "v": "976f73f562319fa41ff4b406c15dda2289e030dd7a3fe4ba1a4fc5ed34704712",
+   "v": "d652a3b697c5cda45b1db90af1b61cc24dbcc3a16dd3f58aa7b8607099148522",
    "c": "音效",
    "d": "audio"
   },
@@ -6548,7 +6548,7 @@
    "d": "scenes"
   },
   "ENV-ROOFTOP-GUIDANCE-LAYOUT": {
-   "v": "58748067dc315398ffd27e2285f5e2c66bd310d0d5761ef589bbc3edfc0ba5ec",
+   "v": "d009cb8425719f21018b02bdc633ee8f4b3644006976741e1dd27bd96b4d8b52",
    "c": "场景",
    "d": "scenes"
   },
@@ -6566,32 +6566,167 @@
    "v": "e0f433d33787376dacb546cc29f619cd9cd21da2c096f331d7af60e98bd5a4ff",
    "c": "场景",
    "d": "scenes"
+  },
+  "ENV-ROOFTOP-IVY-BROKEN-LOW-WALL": {
+   "v": "e8cc396eaa3b9afbaf137fdb4427beb9934ea881e49c547cb8834acc5ecef004",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "AUD-SFX-LAUNCHER-FIRE": {
+   "v": "852b17dca29dc7a1e2650ecd6756ba2493bbfaad65ac920f59de016c9cc645d4",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-LAUNCHER-FIRE-VAR02": {
+   "v": "3a573044b49d13abf6ae9b6636629fecf3c6c8193eb9683ad6514885f24131e8",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-LAUNCHER-FIRE-VAR03": {
+   "v": "a5cfdb9baaa41eb6af8fd352f1329eaeb8bbe3375b9e281a2d29ed6f66209bfa",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-RELOAD-PISTOL": {
+   "v": "85a2e6eb7de1380475e739c7de07a15a24a91a918ba741a4d5c17b5732cb1075",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-RELOAD-RIFLE": {
+   "v": "6311603f965983969fd891b4efb36d66091eaaf8e0df6e8bb915dab9fae0152b",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-RELOAD-MACHINEGUN": {
+   "v": "080a5c26f68a1827505ef5d7beedf822f2f8b48a27894a6a9424429eaf62cd7e",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-RELOAD-SHOTGUN": {
+   "v": "b3561f105cfb52006c9b8fe043607a85a808182d7ea1e1f6f8940aac86ed003d",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-RELOAD-SNIPER": {
+   "v": "1a9b5f1a0f78ea6913303875946aa291e649742b4a49d29d4ca2e583c7e39d7e",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-RELOAD-LAUNCHER": {
+   "v": "52541c8f91fd524f9119288713a3491f2bf2e14b03cafa4d60c368d91f71834c",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-RELOAD-CHARGE": {
+   "v": "0aa78c06a36cd42e3543b869f880b19b2d695f39868df6c4cc3b9f7be180c326",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-PICKUP-PISTOL": {
+   "v": "088257963df4e392afe9b27b175fba82cf4a5d3b3569b6e9b3a4bd30b923b943",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-PICKUP-RIFLE": {
+   "v": "2c9bba4b5d0e05367bc2a2caee4aaf6e374fd7fd334989e81e91b566cdf22bd5",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-PICKUP-MACHINEGUN": {
+   "v": "5d12d323347e32029bd66d874ad85c5a68af2977832b744df76bdeb9dd0e5b16",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-PICKUP-SHOTGUN": {
+   "v": "e9d3bb9c632f1c8a5164cf5abd1c6d3a4719afde9be18523264b61b3bc8c911d",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-PICKUP-SNIPER": {
+   "v": "4e0c2af4111eb7ab0738dd0841ec6e91b395157d193e57f265cf82a5193f1a49",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-PICKUP-LAUNCHER": {
+   "v": "4d9970087af57272d4f170739f3c4716519b8a958e93874033e162ab83e36c10",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-PICKUP-CHARGE": {
+   "v": "235e639327c35c69265c53189decfe979b1c82863b6d2fabd07edea98116367e",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-FOOTSTEP-WOOD": {
+   "v": "ec916d36625e60e8c3dfeca23edc8f600417738dc4a6ef9ca1bfc32d8aae8143",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-FOOTSTEP-WOOD-VAR02": {
+   "v": "cabae8e702b28ac5f22d76a959aa3047a9aba5184dd41aef7a6749494e4bbfe7",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-FOOTSTEP-WOOD-VAR03": {
+   "v": "ff4fdebf94cffdc85797d2bb39311940e93d0ca42a9e07a13ed450301d8f7887",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-FOOTSTEP-WOOD-VAR04": {
+   "v": "57c4dace9e1ebf0f4d7181202cbc99aae12740c4ae1cd9f8e3c7b87b6bd9a008",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-OUTDOOR-BIRD": {
+   "v": "7ba17fde6e82d88771528cccc2d1ab5c871568270d23dd38673e08568b80d263",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-OUTDOOR-BIRD-VAR02": {
+   "v": "1d96d83762217be558d4e70f54bd3876a458cbb96e313e695ba0a73adf0f5a4c",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-OUTDOOR-BIRD-VAR03": {
+   "v": "a803c822cbac23e66ad0c011ae1019c7197bad39252a54f21f4d1516c0e6b07d",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-AMB-FAN": {
+   "v": "2e10ced98d10559e1acb9dc2b42e266f91df1b1daad60bbe56272361ec93fa24",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-AMB-BLOWER": {
+   "v": "2e988535245219e94608d69a8f43cc1d9f0e71dd5272b8ba8b48848be0ff35d7",
+   "c": "音效",
+   "d": "audio"
   }
  },
  "column_digests": {
-  "1": "8902ea1680d9a4be4a39a114a2e50898b7c9bcb6d382d7572036c5b5fa5d3412",
-  "2": "82a274a6e5c0a3c627fefdf636e8007da72543a332b91139d1a5f295805f5706",
-  "3": "e8c86f95f0e2bf4923bf928386df6e5d260b1a89e5f55b78522e66cb6fcaeb59",
-  "4": "d3945f46068e7d1399ed81b4059266833920d2697d008392cf1e8917948b7aeb",
-  "5": "ae6d83707a02b3e4ff9c986d3b885051039d6f1e958ba8f46b2e04e2f19be4ed",
-  "6": "7b99af7ac90a59b656d7b1004444394b958ad372b8335369f65fd5c774f3af87",
-  "7": "4bef52130b178c519c7955fdcaf7bbc0995861cd3c8572e7cc5cad84e67dca3f",
-  "8": "5fdfc3bad12c9936c47dbafadab8a6358b8234268016201b537325dad5111e41",
-  "9": "cc22da275b833348817d1bf0c5fa8f1e891aaa69ae7c3e00183129374c4b358c",
-  "10": "fc7dbb8a8e48b0eb29a276307231fd42fb5f976b988958a6e5b3268aec2f8e5d",
-  "11": "302dfe7171ea50dfd1d873a60cef18b02bf8baac9461a5f2e9bbf0816d25657d",
-  "12": "c69e0236e1b7408b12e9930c0bc5551d6360187919d5bef7cce83c11e671d5f4",
-  "13": "c6a092517b78f88a0ebf081394f93a3137fae3bc230cab8f205d30b3739c5388",
-  "14": "986f2075df8105dd8845cf3ff39adbf5512d3f2131868ecbad7bafe8f71d79df",
-  "15": "08e372087fa2753c67d75362b357e557ba13880130d2d81097fd9dffcc74713a",
-  "16": "198bc288b4dc167cbe67c5ce6412f9b743dc78c180e3bba25260404972074b86",
-  "17": "bb0f068155a577c49ae4542cf786b2931d68da223ef20c267a17b0973627a77c",
-  "20": "3ea93bef4940726c34241d7fad5912f46eeb85469f2704d807ff3418add0b407",
-  "21": "10649beb76155777207182a2c3d78bdeea23a68d53a41d1ec8c09849f7f383e3",
-  "22": "8ccde55a85d50c0cf08ea3364c2d5f2c1815a6f16b9259ca7cf68c0da8b1a09f",
-  "23": "14a87e2c6427626cd2b95d4cf650c6daf55e2d2063a33b3bfa63a542a60993a4",
-  "24": "6c3707d2e892c0f383b243d8ec47b9ea5b298ba19d2e83290acb47a105a5eb88",
-  "25": "50f9f057b6ccea9375197dbdb0fc57b9bfd3e6725ad15e1cd2bd880e51de132b"
+  "1": "da5671abf32b3334aa24f3ea2fe42d61aec3fca8e8acfce93e12624a9302c831",
+  "2": "cbbc43cdf15b526eee4e04655066bcdc44dda3616876d597e59095b98aa8763d",
+  "3": "23c0c0d491ad68010756729a8a316e2e80e9ba6fbe04497a360cba8d4f91a22d",
+  "4": "71758cdaad83222541737dff34cca3f1d26cc3a25fb5a3cd3706a8eb2e9e7888",
+  "5": "897e06d91981182f021142ec1ddce53e134737d5584bce17e7713d4cdfd2fa0a",
+  "6": "eb280c94ad70a892eb68b347f93d47b7939e6ac2340696fd808fb5d86859a6a3",
+  "7": "d9a13197ab6e70a14986decdd4c8aaa08e22e9d73a8987af78e49c166f6d3327",
+  "8": "19a4ff61f5f2b8ff9baed096036c7a47e2d776682eda6fb6323409e5d7e7e84e",
+  "9": "5b04799c139e55258973a05dcb252e0fdba80baa83068097e7f18480e970ab0b",
+  "10": "d8c64006ba4830e450e373e5f021bf71236c7bfe35c2ae2246c76acc3eb79d79",
+  "11": "cbbc4a20d4c7ce5992ae69c16877748de810b46772e1e5bc1d880a6c183e3fd3",
+  "12": "b541bbb23584124ba541bc0f0302ead69685987477f612c1245faf796f14c90e",
+  "13": "3386568537471641bff1cc1cdcec254bc136989fad8e8fc59428d42674c10e29",
+  "14": "12c84fd7cda49550538cde94b5f86eb8279b2bb25d0704e53baccd87dce38aa0",
+  "15": "6b296990cd510cf523811501f2131b470c6840724da5b61354842d5729bc3efa",
+  "16": "be1e5acd422e68fc5525c7a627c32c7a33948708b1cbfc9df9287e612fec1bc7",
+  "17": "c275eb5b9be5766dfb2e4a9234dc11c3634a6340c51b5524eff02b281c4b4063",
+  "20": "4c8e4f3fb68debbd7980e13535b669e11179dd46547a4243bc374d309b57a43b",
+  "21": "d3932717501425d2cc50f66e35e4c2d758e65f1ba2f89850989f140afb1704c9",
+  "22": "bfd82cb6a3530e35005d470ff731169a02ce8dbbff14fd7455d2d5e8c5afaaf1",
+  "23": "c55b648f20fb2edfd1b269ce59d674d414518538d7a2b231470f872db94ef3bb",
+  "24": "1659d97c385f47c2c2be0d8f29eb875a807fe84d2f7bde2ccf7166cd730d50f9",
+  "25": "38cad7e8e3fb0fa7cf1947bafb7c1f3aae8dfde01cabf1bcf26d4061e4519d01"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -6601,19 +6736,20 @@
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
   "敌人动画与状态": "9a965b0f46a3e7506a04f96070abfe7c0beae1aed0a80e2ae9e99fcaf5c08552",
   "3D-敌人": "b3851d07c27edfb6fed4c01e87814bb8b1675b8b235e6558601925a866cb240b",
-  "3D-场景通用": "188c75345dc7547c6d939fbaa732a12eefa86393a4ccfbe3754c0899749bba73",
+  "3D-场景通用": "1a50d7edf24e3dc792806426ab07a29d47685efb282ff61470dab34f6795c0a2",
   "3D-设施": "60949a4e4d892dc425a78abdf55ee776b8da45bae11b3cb9516bc8136c079871",
   "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
   "3D-物品": "0bba6748006c5b75fefd481d2406d12691ea639b33437364bccb53d0cff5be58",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
-  "背包物品调用索引": "add8176439baf2b0d3ac2e9f73d6f1fd488dda8d2e388e9a22959a66e00bec66",
+  "背包物品调用索引": "586212c8949d6e45d26a9e7f00c1e9150e7575df4606bfa545bbf86327f0162e",
   "3D-特效": "9558f5992d9c3a0fcdf2d206856e3034621765c9d7d58157639ae1e0acbd3199"
  },
  "category_counts": {
+  "音效": 178,
   "角色": 25,
   "敌人": 15,
-  "场景": 802,
+  "场景": 803,
   "场景道具": 49,
   "基地资产包": 114,
   "道具": 39,
@@ -6621,7 +6757,6 @@
   "特效": 37,
   "子弹特效": 10,
   "UI": 18,
-  "音效": 152,
   "音乐": 9
  },
  "targeted_updates": [

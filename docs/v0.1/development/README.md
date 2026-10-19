@@ -1,5 +1,7 @@
 # v0.1 开发记录
 
+- [弹药模块手动更换关闭](2026-10-19_bullet_module_manual_swap_lock.md)：所有枪不能再从背包/装备界面/局内快捷装配换弹；掉落枪随机弹种保留，后续仅枪械工坊特殊流程可换。
+
 - [大世界 · 地下街区 Blender 源制作](2026-10-18_openworld_underground_street_source.md)：45 组件 / 187 实例 / 52×52×30m 地下街区；逐面 PaletteUV 与源审计全通过，仅 Blender 源阶段。
 
 - [怪物启动过程与头顶吼叫图标](2026-10-14_monster_startup_roar.md)

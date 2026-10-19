@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-10-18",
+  "updated_at": "2026-10-19",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -66,7 +66,8 @@
       ],
       "development_records": [
         "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md",
-        "docs/v0.1/development/2026-09-24_design_contract_backfill.md"
+        "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
+        "docs/v0.1/development/2026-10-19_bullet_module_manual_swap_lock.md"
       ],
       "verification": [
         {
@@ -76,6 +77,10 @@
         {
           "kind": "scene",
           "id": "verify_3d_melee_feedback_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_bullet_module_equipment_flow"
         }
       ],
       "status": "partial"
@@ -507,7 +512,8 @@
         "docs/v0.1/07_技术施工_基地设施.md"
       ],
       "development_records": [
-        "docs/v0.1/development/history/07_基地设施_历史记录.md"
+        "docs/v0.1/development/history/07_基地设施_历史记录.md",
+        "docs/v0.1/development/2026-10-19_workbench_facility_entry.md"
       ],
       "verification": [
         {
@@ -517,6 +523,10 @@
         {
           "kind": "scene",
           "id": "verify_tower_base_facility_persistent_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_workbench_menu_entry"
         }
       ],
       "status": "partial"
@@ -621,12 +631,18 @@
       ],
       "development_records": [
         "docs/v0.1/development/2026-10-18_weapon_forge_alchemy.md",
-        "docs/v0.1/development/2026-10-18_synthesis_pity_settlement.md"
+        "docs/v0.1/development/2026-10-18_synthesis_pity_settlement.md",
+        "docs/v0.1/development/2026-10-19_synthesis_gate_veil.md",
+        "docs/v0.1/development/2026-10-19_workbench_facility_entry.md"
       ],
       "verification": [
         {
           "kind": "scene",
           "id": "verify_synthesis_catalog"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_synthesis_gate"
         }
       ],
       "status": "partial"
@@ -1078,7 +1094,8 @@
         "docs/v0.1/development/2026-10-13_bullet_vfx_category.md",
         "docs/v0.1/development/2026-10-14_rooftop_standalone_components_registered.md",
         "docs/v0.1/development/2026-10-18_rooftop_guidance_clutter.md",
-        "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md"
+        "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md",
+        "docs/v0.1/development/2026-10-19_rooftop_ivy_low_wall.md"
       ],
       "verification": [
         {
@@ -1139,7 +1156,8 @@
         "docs/v0.1/development/2026-09-17_rooftop_ivy_thick_door_v002.md",
         "docs/v0.1/development/2026-10-14_rooftop_standalone_components_registered.md",
         "docs/v0.1/development/2026-10-18_rooftop_guidance_clutter.md",
-        "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md"
+        "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md",
+        "docs/v0.1/development/2026-10-19_rooftop_ivy_low_wall.md"
       ],
       "verification": [
         {

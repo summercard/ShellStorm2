@@ -1,3 +1,97 @@
+# 2026-10-19 暗门破板木块飞溅特效
+
+打碎暗门木板时飞出 **8 块大木片 + 5 片小碎屑**（单片最长 0.58m，门宽的 1/6~1/4），朝房间侧崩出、抛物落地弹一下、滑行停住；自带 0.55s 暖色短灯照亮碎块。新资产 `VFX-BOARD-DEBRIS-3D`（FX01-33）走 `VfxPool3D`，调用方 `SecretDoor3D._break_open()`，读档恢复/静默打开不重播。验收 9 条 + 四组反向对照全绿。见[记录](2026-10-19_board_debris_vfx.md)。
+
+## 2026-10-19 枪声爆响与室内风声修正
+
+枪声独立降低6dB并压缩密集叠加峰值；风声柔化、降低并改为间歇阵风，室内立即停风及鸟叫。修正无屋顶碰撞的普通室内误判户外的问题。素材/枪种/账本数量保持，见[记录](2026-10-19_gunfire_wind_mix.md)。
+
+## 2026-10-19 环境声音正式接入
+
+天台风声、户外鸟叫、四类地板脚步、真实风扇/鼓风机声源、电灯开关与楼梯间回声接到塔楼/远征实际场景。新增9条录音资产，108组166条运行声音、账本178条；系统提示保持干声。无头和Windows声音输出专项通过，人工听感与Android待验。见[交付记录](2026-10-19_world_audio_runtime.md)。
+
+## 2026-10-19 音效账本登记补齐
+
+补齐42条枪械相关音效的枪种、变体父ID、母版路径、时长、许可及验收状态；169条总数保持。域变更日志升至v0.2.1，已接入36条与仅素材就绪6条分别登记，人工听感/Android待验。见[记录](2026-10-19_weapon_audio_profiles.md#音效分账本补齐)。
+
+## 2026-10-19 按 E 传送到空房间：落点被门的位移带跑了
+
+- 业主：「我可以看到了，也可以打破墙，但是我点击 E 后，传送会传送到空房间，好像没有装配支线的房间。」
+- **不是房间没装配**：子图 7 间房全在、壳体全是正式美术（1333～1910 件可视件）。落点落在**子图首间南墙外 19m 的空中**（`(1020, 0, 39.135)` vs 房间中心 `(1015, 0, 0)`，房深只到 `z=±20`），实测 `on_floor=false`、`velocity.y=-0.41`，人一直往下掉。
+- **根因**：`_rebase_door()` 把「门从自动位点搬到 TSCN 手摆位点」的位移 `delta` 也加到了传送落点上（老注释说「出口侧落点就定在门前面」，但改版后落点是**子图房间中心**，跟门在主图哪个墙角无关）。S1 手摆位与自动位点差 **39.135m**，落点被同一个 delta 甩出房间。`_shift_door()` 里同样两行（外推 ≤0.4m）一并删掉。
+- **为什么判据全绿**：A9 比的是「玩家位置 vs 落点」，两边被同一个 delta 推歪，距离仍是 0.000m —— 自证式断言。
+- **断言 24 → 25**：新增 **A25**「按 E 的落点必须落在某一间子图房间的 `get_dimensions()` 平面范围内（高度容差 1.5m）」，用几何判据，不看碰撞/Area3D。
+- **实测修前 → 修后**（种子 `1122239949`）：落点 `(1020,0,39.135)` → `(1015,0,0)`；距首间中心 39.5m → **0.0m**；`on_floor` **false**（`velocity.y=-0.41`）→ **true**；落点 40m 内可视件 785 → 1789。
+- **反向对照**：临时把「落点 += delta」加回去，真实流程立刻复现旧落点与下坠。⚠️ 但 `verify_secret_branch_flow` 跑在 `test_mode` 下、`delta` 恒为 0，**套件复现不出这个时序**，所以真实流程探针才是唯一有效对照。
+- **新探针** `probe_secret_branch_landing.gd`：真实流程破板 → 按 E → 打印落点、与各间距离、落点周围可视件数。
+- 详见[记录](2026-10-19_secret_door_prefab_in_room.md) §7。
+
+## 2026-10-19 暗门做成房间 TSCN 里的可手摆预制体
+
+- 业主：「把这个预制体加到场景房间的预制体里，让我可以在房间的预制体 tscn 里头看到、可以手动摆放。这样既不影响功能，我也可以直观地去调整它。」
+- **暗门整樘预制体**：新建 `secret_door_root_top3d.tscn`（`SecretDoor` 根 + `DoorLeaf` + `Boards` + `BoardsShape` + `LeakLight` + `MountBox`）。`SecretDoor3D` 改成「先按名字找子节点，找到就复用」——同一份脚本既能跑预制体实例，也能跑 `new()` 出来的空节点。
+- **写进房间 TSCN**：生成器新增 `_emit_authored_secret_doors()`，4 间有 `secret_site` 的房间（`room_03/06/07/10`）各写入一个 `SecretDoor_<site_id>` 节点，`metadata/secret_site_id` 记录身份。**节点名就是契约**。
+- **手调不会被覆盖**：生成器读旧 TSCN 里同名的 `transform` 优先（`kept_manual=1`），没有才用运行时位点。重跑 `SS_STATIC_ROOMS=room_03 …` 实测位置原地不动。
+- **运行时接管而不是重造**：`DungeonRoom3D._build_shell()` 本来就是实例化房间 TSCN 的，那扇门在游戏里本来就在场。`_build_door()` 先 `_adopt_authored_door()` 接管，不再 `add_child` 第二扇；晚一步读到 TSCN 时由 `_rebase_door()` 搬家 + `_drop_room_duplicate_door()` 摘掉重复。
+- **断言 23 → 24**：新增 **A24**「TSCN 手摆门与运行时门重合（差 ≤1cm、朝向点积 ≥0.99）」。本机实测 4 扇全部 0.000m / 1.000。
+- **拖动闭环实测**：把 S1 的 `transform` x 从 `2.5` 改成 `6.5`（模拟拖 4m），运行时位点立刻变 `96.50`；重跑生成器后仍是 `6.5`。
+- **三个坑**：① `SceneState.get_node_path()` 返回节点自己的路径（`./SecretDoor_S1`）不是父路径，根层判据是「斜杠恰好 1 个」；② TSCN 存房间局部、位点是世界坐标，少一次 `global_transform` 换算差 98~256m；③ 门进了房间子树后 A22 把木板自己当遮挡（凸出 0.14m = 板厚），加 `_is_secret_door_part()` 排除。
+- **已知限制**：S2/S4 的东/西墙是转角壳体，`_is_wall_mesh()` 认不出，凸出量按装配常量估计（NOTE 里用 `~` 标记），拖进墙里 A23 不会变红。
+- 详见[记录](2026-10-19_secret_door_prefab_in_room.md)。
+
+## 2026-10-19 暗门「看不见」真因：看错了墙 + 只凸 3cm
+
+- 主人开手电仍看不见，要求按**真实游戏流程**核对「3 号房间到底有没有这道门」。
+- **门在，位置报错了**：`room_03` 的 `S1` 实机在**北墙**（世界约 `(87.5, -64.5)`）。设计源写 `south`，远征 01 整层按 180° 生成，`FloorPlanGenerator._rotated_secret_site()` 会把墙向一起转 —— 之前所有报告与截图标注都跟着设计源说「南墙」，人去看南墙当然什么都没有。
+- **凸出量只有 3cm**：`WALL_FACE_CLEARANCE_M = 0.03` 是「不穿模」判据，不是「看得见」判据。实测门心 64.505、墙面可视面 64.535，只凸 0.030m；A21 射线照样命中门，所以验收全绿而人眼全黑。
+- **修法**：① 凸出量 `0.40m`（新常量语义 + `protrude_m` 落进 `sites[]`）；② 墙件识别从 `MeshInstance3D` 改成 `VisualInstance3D` + `_visual_world_box()`，覆盖 `MultiMeshInstance3D` 铺的墙（S2/S4 此前因此只凸 0.25）；③ `SecretDoor3D.set_mount_depth()` 在门框背后补同色 `MountBox` 安装箱填缝，外观读作「墙里鼓出一块钢板」。
+- **断言 22 → 23**：新增 **A23** `protrude_m ≥ 0.25m`。反向对照（常量压回 0.03）四条全红：`[FAIL] A23 位点 S1（room_03）只从墙面凸出 0.030m…`；改回 0.40 后 `[NOTE] … 凸出 S1=0.40m S2=0.40m S3=0.40m S4=0.40m` + `SECRET_BRANCH_FLOW_OK`。
+- **新探针**：`probe_secret_door_real_run.gd`（`test_mode=false`，走真机 bootstrap/存档，核对房表、墙向、凸出量）。`probe_secret_door_player_view.gd` / `probe_secret_door_shot.gd` 加 `SS2_SEED`，可按主人存档那局（`1122239949`）复现。
+- 实拍：`outputs/secret_door_shots/S1_wide_light0.png`（手电关、11m 外）、`player_S1_light1.png`、`00_room03_暗门位置.png`（平面定位）。见[记录](2026-10-18_secret_door_visibility.md)。
+
+## 2026-10-19 弹药模块手动更换关闭（枪械工坊唯一出口，待实现）
+
+- 业主口径：「子弹模块手动更换机制锁掉（随机在枪身上的机制保留）；玩家不能从背包直接替换枪的子弹模块；后期在枪械工坊通过特殊方法才能更换；只改这个，其它不动。」
+- **两层判据**：`WeaponInstance.bullet_module_locked` 继续只描述「掉落枪的弹种是身份」；新增渠道总闸 `WeaponBulletDrop.MANUAL_SWAP_ENABLED = false` 描述「当前版本没有手动更换这个动作」。所有枪受总闸约束，顺序先身份后渠道，掉落枪仍先得到「已绑定」原因。
+- **四条入口全拦**：`Player3D.install_bullet_module_to_weapon_slot`（装备面板/训练场事务）、`Dungeon3D._on_inventory_item_clicked`（背包左键，扣包前拒绝）、`Dungeon3D._install_weapon_module_from_item`（局内快捷装配旁路）、`ItemSlot._can_drop_data`/`set_drag_feedback` + `InventoryUI._on_slot_drop_received`（拖武器格）。拒绝文案统一含「枪械工坊」。
+- **界面**：装备界面弹药标题改为「弹药（锁定）」，弹药格仍只读显示当前模块；子弹模块悬浮卡删掉「左键装配/拖到武器格」，改为「需在枪械工坊通过特殊流程更换（待开放）」；武器悬浮卡对所有枪追加「（需枪械工坊更换）」，掉落枪保留「已绑定」。
+- **保留**：`RewardService` 仍掷 `WeaponBulletDrop.roll()`，掉落枪随机弹种、`bullet_module_id`、读档不换弹全部不变；子弹模块物品仍可掉落、拾取、存放、出售、带入带出。
+- **验收改判据**：`verify_bullet_module_equipment_flow` → `BULLET_MODULE_LOCK_OK`，覆盖三条手动入口、直接事务、武器格拖放判据、悬浮卡文案、装备界面锁定标注、掉落枪随机弹种与「绑定」优先原因、五处源码门禁。`verify_weapon_drop_grade` 的 lock-guards 加严到 `is_manual_swap_enabled`。`probe_bullet_lock` 反向对照改为「非掉落枪同样拒绝」。
+- **实跑**：`verify_bullet_module_equipment_flow` / `verify_weapon_drop_grade` / `verify_weapon_attachment_inventory_flow` / `verify_starting_weapon_contract` / `verify_training_range_equipment_ui` 全 exit 0；`probe_bullet_lock` → `PROBE_BULLET_LOCK_DONE OK`。
+- **文档/账本**：04 §22.14 增 2026-10-19 口径与四入口矩阵；07.1 把工坊列为唯一合法出口并增未实现项；07.2/07.3 删除「可自由换弹」旧描述；11.1 标注军械库为测试专用整枪重装、背包换弹同样关闭；内容数据库《字段字典》更新 `bullet_module_locked` 并新增 `bullet_module_swap_channel`；武器账本《背包物品调用索引》8 个子弹模块入口改指 `_reject_manual_bullet_module_swap`。见[记录](2026-10-19_bullet_module_manual_swap_lock.md)。
+
+## 2026-10-19 命运卡价格行只留价格 + 金币读数不再被遮暗
+
+- 业主两张截图两条口径：「命运卡牌抽卡的界面 这个信息不需要。只要显示金币即可」＋「还有遮挡的这一块，不要把金币的 UI 给遮挡掉了」。
+- **价格行**：`_refresh_door_fate_prices()` 的 `insufficient` 分支从 `◈ N 金币 · 还差 M` 改为 `◈ N 金币`，远征动态报价的 `◈ N 金币 · 区间 a–b` 也一并去掉。买不起改由**琥珀字色 + 卡片轻度压暗**表达 —— 状态没丢，丢的只是那两段算出/统计出来的数字。`_fate_price_bounds()` 仍保留在卡牌 meta（`tarot_price_bounds`）上供验收核对报价，只是不再上屏。
+- **金币 UI 被遮**：`loot_label`（`RunLootReadout`）挂在 `z_index=100` 的 `ReferenceCombatHUD` 下，而购卡弹层 `z_index=900` + 全屏 `dim`（alpha 0.62），读数被压成灰金——截图里就是那团「被盖住」的东西。修法是**只提这一行**：弹窗打开时 `loot_label.z_index = FATE_COIN_READOUT_Z_ABOVE_VEIL(900)`（有效 1000 > 900），`_close_door_fate_overlay()` 复原为 0。暗化仍负责压住战斗画面，只是不再压价格与余额这唯一一组对照数字。
+- **断言**：`verify_fate_card_purchase_flow` 三条改动——① 买不起的卡价格行必须**恰好**等于 `◈ N 金币`；② 反向钉子：`还差`/`区间` 不得回流；③ 弹窗期间读数有效 z（自身 + 父链）必须大于弹层 z，关窗后必须回到 0。
+- 文档：04 §20.2、14 §3.2/§8 同步新口径（旧的「还差 M 才是下一步信息」那段作废）。
+
+## 2026-10-19 井口藤蔓破损矮墙
+
+- 标注位置新增正式藤蔓矮墙，场景账本与源/优化/GLB/Prefab同步；静止墙体、藤蔓风摆、出口路线验收通过。见[交付记录](2026-10-19_rooftop_ivy_low_wall.md)。
+
+## 2026-10-19 暗门在暗房里等于不存在 → 补"板缝透光"
+
+- 主人实测：「进游戏在 room3 的南墙，看不见支线的门。」**上一轮的截图挂了拍照补光，只证明了几何在那儿，没证明玩家看得见。**
+- **实测**：`room_03` 子树里 `Light3D` 数量 = **0**（塔内房间不装顶灯，蓝灯带是自发光装饰、照不亮墙）；玩家手电 `start_enabled = false` 默认关闭；手电还朝下打（目标点在 11m 外、离地 0.38m），站 4m 看墙时光斑落在脚边。门区平均亮度 **27.9/255**（手电关）→ **35.2/255**（手电开），等于看不见。
+- **修法**：`SecretDoor3D` 加一盏"板缝透光" `LeakLight`（`energy 1.6 / range 4.2m / Color(0.62,1.0,0.82)`，门局部 `(0,1.05,-0.62)`，不投阴影），只在有木板的谜题门上建。这就是设计 §4.1「门后有人，板缝透光」那条一直空着的表现。
+- **对照**：`SS2_PV_NOLIGHT=1` 只关这盏灯、其余不变 —— 改造前 `room_03` 全黑只剩灯带；改造后门板/斜撑/门与墙的落差一眼可辨。并排出图 `outputs/secret_door_shots/00_暗门_改造前后.png`。
+- **新探针** `probe_secret_door_player_view`：把玩家挪到门前、冻住逻辑，在玩家眼位（1.62m）架相机、只用玩家手电，每个位点拍手电关/开两张。⚠️ 直接用 `Player3D` 自带相机拍会得到**俯视地板**（freeze 后它保留自己的局部姿态），所以另架机位。
+- 验收仍全绿：`SECRET_BRANCH_FLOW_OK …`。
+
+## 2026-10-19 拍图核对：S2 其实还埋在墙里，补「可视遮挡」判据
+
+- 业主让「截个有隐藏门的房间图看一眼」。**射线全绿，实拍才发现 4 个位点里有 1 个（`S2`）在画面里根本不存在** —— 贴近 1.4m 拍，镜头里只有一面平墙。
+- **为什么 A21 没抓到**：它打的是碰撞射线，而墙体外壳的**碰撞代理盒比美术面薄**。`room_06` 东墙压着一个 `ENV_TOWER_CORNER_L_5M` 转角壳体（AABB `pos=(150,0,-165.15) size=(5.15,11.90,5.15)`），把墙连门一起包进肚子；射线在 3.84m 处命中 `SecretDoor_S2/` → 判可见。**和业主两次反馈的是同一类坑：碰撞说能到，眼睛看不见。**
+- **归因方式**：把该件 `visible=false` 重拍同机位，木板立刻回到画面正中 —— 不靠推理，靠对照。
+- **修法**：装配侧加 `_measure_visual_cover()`，按 `VisualInstance3D` **可视**包围盒（含 `MultiMeshInstance3D`）量门前方；竖直要盖住门高主体、沿墙要真压过门宽（只擦边不算，这条把 `room_10` 的 `RoomLightSwitch3D` 挡在误报外），凸出 >0.05m 判「盖住」，写 `sites[].covered_by` 并 `push_warning`，A22 一并对它判红。**外推救不了这类位点**（挪 5m 门就飘在房间当中），只能换 `lane`。
+- **数据换槽**：`S2` 由 `south +2.5`（实机东墙 `-2.5`，`(155,-162.5)`）改为 `south -7.5`（实机东墙 `+7.5`，`(155,-152.5)`），离转角壳 7.5m。
+- **反向对照**：改回 `+2.5` 立刻红 —— `[FAIL] A22 位点 S2（room_06）整樘门被 ENV_TOWER_CORNER_L_5M 的外壳盖住（凸出 5.00m）—— 射线能穿过去，但玩家只看到墙`。
+- **新探针**：`probe_secret_door_shot`（带窗口跑，headless 出不了图）拍 3/4 侧视 + 贴近 + 正面，产物在 `outputs/secret_door_shots/`；`probe_secret_door_occluder` 列出位点前方所有绘制件及 AABB。
+- **实拍结论**：`S1` 外推 0.50m、`S3` 0.35m、`S2/S4` 0.00m，四道门在画面里都看得见，`S2/S4` 板缝里还能看到隐藏房间的绿光。见[开发记录](2026-10-18_secret_door_visibility.md)。
+
 ## 2026-10-18 暗门看得见了：木板原来被墙体包住
 
 - 业主反馈：两局打到第 4 间房，完全找不到支线入口。查下来是实打实的问题，不是眼力。
@@ -10,6 +104,36 @@
 - **新探针** `probe_secret_door_visibility`：7 秒列出四个位点的外推量、门前遮挡、视线首个命中，改版图后跑这个看回归。
 - **结果**：`SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 门板可见 …`，22 条断言。
 - **仍未做**：没有开墙洞，破板后背后仍是实墙（无门腔/透光）；要那层表现得让墙体生成支持 `secret_site` 开洞。见[开发记录](2026-10-18_secret_door_visibility.md)。
+
+## 2026-10-19 99F 西侧那个交互点：怪物档案室 → 武器改造台（同样的设置换一个功能）
+
+- 业主口径：「99 层基地里面的左下角的部分有一个建筑设施是怪物档案馆，就是在西边的门的下面……帮我把这怪物档案馆的这个开始的这个指向给它转到这个功能的这个界面这边来，就是同样的设置换一个功能」。
+- **先核实"玩家实际进的是哪个场景"**：`run/main_scene` → `StartupLoadingScreen` → `TowerDescent3D.tscn`；`BaseWorld3D.tscn` 只是历史兼容基地。探针打印 `base_facility` 组，钉住真正的那个位点：`id=monster_archive`、路径 `.../49_武器工作台与弹药附件_资产包`、`pos=(-13.84, -10.56, 10.36)` —— 西侧（x 负）、下方（z 正），正是业主说的"左下角、西边门下面"。
+- **改法**：`BaseFacilityCatalog` 新增 `weapon_forge`（无建筑等级：能力由"持有什么材料"决定，不由 level 决定）；`BaseFacilityService` 补 summary（**刻意不写"配方 N 条"**，那个真源在 `SynthesisCatalog.RECIPES`，抄一份就会过期）。
+- **只改真正生效的那个节点**：`weapon_workshop_station_facility_top3d.tscn` 的 `facility_id`/`display_name`/`description`/`menu_scene_path`/`NameLabel` 全部改向改造台，**`position` 与资产包实例一字未动**（业主的"同样的设置"）。另一份未参与运行的布置层同步改，避免两份出现"同一个位点两个功能"的分歧。
+- **新增入口包装 `WorkbenchMenu`（CanvasLayer）**：`WorkbenchPanel` 是纯 `Control`（自己铺满视口/自己处理 ESC/关闭自毁），而 `_open_facility_menu()` 的契约是"CanvasLayer + set_inventory_module/set_player/set_facility"。**没有**把面板改成 CanvasLayer —— 它被两条验收直接 `new()` 挂在普通 Node 下跑，靠 `_fit_to_viewport()` 拿视口矩形。入口形态与功能本体分开更稳。注意时序：三个 setter 在 `add_child` 之前调，只能存字段，转发在 `_ready()`。
+- **一个靠截图才发现的问题：基地 HUD 没让位**。第一版实拍里炼炉格子中间压着血条、金币、小地图、状态栏 —— 不是"两个界面"，是"界面坏了"。原因：改造台遮罩是 0.58 的 `PRISM_DIM`（**刻意**让 3D 实景可见），而基地 HUD 是**另一个 CanvasLayer、层号与菜单相同（实测都 `layer=1`）**，不会被遮罩盖住。改法沿用衣柜菜单既有做法（`WardrobeMenu3D._hide_gameplay_hud`）：`_ready` 隐藏、关闭恢复，另补 `_exit_tree()` 兜底（菜单被外部摘掉时 HUD 也要回来，否则玩家回到一个"什么都没有"的基地）。
+- **顺手修掉两条本轮之前就红的陈旧断言**（`git show HEAD:` 对比确认非本轮引入）：① `verify_base_facility_framework` 断言 `world_ids.size() != 8`，而 `BaseWorld3D.tscn` 早在怪物档案室下线时只有 7 个设施，验收没跟着改；② `verify_base_optional_facilities_removed` 要求 `_create_standalone_elevator(`，实现早已改名 `_create_level_elevator(`。**错数字长期红着会把真正的新红项盖住**。
+- **验收**：新增 `verify_workbench_menu_entry`（`core`），在真 `TowerDescent3D` 里跑整条装配链 9 组断言：仍 8 设施 / `monster_archive` 不在 / `weapon_forge` 在且 `x<=-5 且 z>=5`（半空间判定，允许美术微调但不能搬走）/ `asset_source` 仍含 `weapon_workshop_station`（**模型没跟着换**）/ 名字与 `[E] 打开 武器改造台` / catalog 与场景可加载且 `monster_archive` 仍保留 / 真激活后 `WorkbenchMenu` 里挂着 `WorkbenchPanel` 且背包·玩家·按钮·炼炉栏非空 / 打开期间 HUD 隐藏且不得叠第二个菜单 / 关闭后清引用·恢复 HUD·解锁输入。`WORKBENCH_MENU_ENTRY_OK` exit 0。
+- 真渲染 3 张实拍：`workbench_facility_in_base.png`（机器仍是原来那台）、`workbench_panel_opened.png`（面板打开、HUD 已让位）、`workbench_panel_catalog.png`（合成目录四段九条，含「保底 0/3」）。
+- 回归：`verify_base_facility_framework`、`verify_base_optional_facilities_removed`、`verify_base_facility_interaction_zones`、`verify_synthesis_catalog`、`verify_synthesis_gate`、`verify_weapon_forge` 全 exit 0。`verify_formal_asset_placement_visual` 仍 exit 1，卡在「中央冷色主灯 在单灯基地契约下仍参与运行时照明」—— `zone_base.tscn` 与灯具脚本本轮一字未改，属并发灯具线；那条位点绑定我另用探针验过。见[记录](2026-10-19_workbench_facility_entry.md)。
+- 未做：怪物档案室没有"搬到别处"（现在只有 catalog 条目与菜单场景，无地面入口；要装回来贴一个 `facility_id = "monster_archive"` 的节点即可）；历史兼容基地不加改造台；基地里没做"耗材提示"。
+
+## 2026-10-19 合成表现：兔子闸门（关下 → 眼睛发红 → 3 秒后开启换物）
+
+- 业主口径：「点击合成后 一个带有兔子logo的闸门关下，遮住中间的界面，这个闸门就在中间界面范围里，然后兔子眼睛发红，过了约3秒 闸门打开 里头的东西被替换成合成的东西」。
+- 新增 `src/ui/SynthesisGateVeil.gd`（纯表现层），挂在 `WorkbenchPanel` 的**炼炉那一栏**上，矩形由 `_layout_body()` 同步成 `_body_tray_column` 的 position/size —— 闸门只盖中间、不碰背包与页脚。时间轴：关闸 0.60s（smoothstep + 落底抖 1~2px）→ 保持 2.40s（0.12s 后眼睛从熄灭拉到全红）→ **3.00s 处**开始上升 0.60s（ease-in）→ 停留 1.40s 展示产物。整段 5.00s。
+- **「约 3 秒」的落点是闭合后到开始上升**，不是整段动画 —— 玩家感知里"卡在那儿等它开"的就是那 3 秒。
+- **闸门必须是后加的子节点**：`_draw()` 的输出排在所有子节点之前，画在 veil 自己的 `_draw` 里会被台面盖住（那样闸门等于关不上）。拆成 `ShutterLayer` 兄弟节点 + `clip_contents` 裁掉顶边。
+- **三个靠截图才发现的坑**：
+  1. **剧透**：第一版在关闸前就 `_refresh_all()` 并写结果文案 —— 截图里闸门盖着炼炉，页脚已经写着「熔炼完成：蓝｜豌豆手枪」，背包里那把枪也摆着。3 秒等待变成空转。改法：成功分支不刷新，报告塞 `_pending_forge_report`，文案改「内容置换中」，刷新/写结果/发信号全挪到 `_finish_forge()` 由 `_on_gate_finished` 触发；背包另加不透明 `BagSeal`（产物确实已进包，事务先行）。
+  2. **竖缝 + 横节 = 看成一整块网格**，和底下那块 5×5 棋盘撞脸、像闸门半透明。删竖缝，改斜向高光 + 左右导轨（亮边/暗缝/每 26px 螺栓）+ 横贯加固带把圆牌"装"上去。
+  3. **升起来只有 0.6 秒能看清产物**。加 `linger` 段 1.4s + 末段 35% 淡出；台面背景改**不透明**（0.95 时底下带材料的盘面会透上来，"新材料 + 旧材料残影"像没换干净）。
+- **兔子徽标**纯 `_draw` 几何：8 颗螺栓铆死的金属圆牌（是门上的一枚**封印**，不是贴纸）、耳长头圆、三对胡须、红光四层辉光 + 芯部提亮（**红光没有芯会脏成暗红点**）、两眼异相位脉动、眼睛亮起时牌面泛红 + 铭牌状态灯一起转红。贴图缩放会糊，还多一份资源要对版本。
+- **交互**：关闸段不可跳（画面还没盖住，跳会露揭底半帧）、保持段与停留段可点掉、开闸段不可跳。`abort()` 立刻收起但**不发 `finished`**（那是"播完了"），收掉时补 `_flush_pending_forge_report()`，否则界面永远停在"盘上还摆着那批材料"。
+- **音效**复用既有事件不新增资产：`door_close` / `melee_heavy_impact`（落底）/ `facility_activate`（眼睛）/ `door_open` / `item_pickup`（揭晓）。眼睛音用 `_eye_cue_played` 只响一次。
+- **验收**：新增 `verify_synthesis_gate`（`core`），时间用**手动驱动 `_process(dt)`**（`set_process(false)` 后逐帧推进，把 5 秒压进几十毫秒且确定性），6 组断言：几何逐像素重合/与背包不相交/被主体区 encloses/`z_index > 4`、初始态、时间轴四段推进、点击规则、`abort` 不发 `finished`、端到端（含防剧透断言：封条可见 + 状态栏不含「熔炼完成」+ 台上就是背包里那把枪）。`SYNTHESIS_GATE_OK` exit 0。
+- 真渲染 4 帧存 `outputs/verification/synthesis_gate_{closed,revealing,revealed,done}.png`（1280×720 / Vulkan Forward+）。像素自证：闭合时 `x=450` 纵向采样蓝通道唯一亮行是警示条 ⇒ 确实完全遮住；横截面 `y=480` 异常列只在导轨与加固带边 ⇒ 无竖缝网格。见[记录](2026-10-19_synthesis_gate_veil.md)。
 
 ## 2026-10-18 合成保底接进掉落结算（`synthesis_pity.bp_charge` 真正落地）
 
@@ -24,6 +148,15 @@
 - **口径放宽并写进文档**：`boss_floor_2` → "任意首领"。绑死到某层房间 ID 会让关卡改版时保底**静默失效**；放宽后最坏情况是玩家在别的 boss 层也攒进度，那仍然是他打来的。见 [07.3 §5.2.1](../07.3_玩法系统_合成目录与兴趣曲线.md)。
 - **验收**：`verify_synthesis_catalog` 31 → **36 条**，新增的 22/23 是**落地**断言而非规则断言：补发物必须是一件 `id == "bp_charge"` 的真物品、必须进 `extraction_loot`、计数清零、**独立 `save_path` 反序列化重载后 `synthesis_pity` 仍在**（证明真进了存档）、`force_save_failure_for_test` 下计数退回记账前。exit 0。
 - 另登记 `tests/verification/expected_errors/verify_synthesis_catalog.txt`：端到端事务要往盘面投料 → 建 `ItemModelIcon3D` 的 SubViewport → headless dummy renderer 报 `Parameter "material" is null`。这是无渲染器下的固有噪声，不代签视觉。见[记录](2026-10-18_synthesis_pity_settlement.md)。
+
+## 2026-10-19 room_01 / room_02 指定怪量：15 只 / 12 只（卡价仍不动）
+
+- 业主口径：「room1改成15只 room2改成12只」。
+- **仍是编成外补齐，不改关卡计划**：改计划里的编成会同步抬高参考收益与卡价（前一日的对比表已证），所以新增 `EXPEDITION_ROOM_ENEMY_TOTALS = {"room_01": 15, "room_02": 12}`，由 `_apply_expedition_surplus()` 在第一波刷出后按差额补齐。其余战斗房继续走 `现有 + clamp(round(现有 × 0.25), 1, 8)`。
+- **算法从「刷怪前按比例并入」改为「刷怪后按存活账补差」**：盒子 `count_multiplier` / `count_bonus` / 延迟出怪都会改变实际只数，只有刷完才知道差多少。按真实存活账（已实到 + 延迟在途预约）补，补完恒等于目标值。旧的 `_build_expedition_surplus_wave()` 被 `_expedition_surplus_deficit()` + `_apply_expedition_surplus()` 取代。
+- **实测**：`room_01` 14 → **15**、`room_02` 6 → **12**、`boss` 1 → 1（不加）。`room_01` 清房击杀收入 89 → **94**；门后报价仍为 70/110/150/210/290，参考收益 `[0, 82.65, 40, 453.4, …]` 逐字未变。
+- **验收**：`verify_expedition_fate_surplus` 10 条全绿（断言 `room_01 == 15`、`room_02 == 12`、Boss 不变、价表逐字相同、同种子可复现）；`verify_fate_economy_service` 398 条全绿（checks 由 401 降到 398，是因为 room_01 从 18 只降到 15 只、少了 3 条逐怪 floor 断言，非失败）；`verify_expedition_wave_chain` 全绿。
+- 同步：[命运塔罗 §7.1.1](../14_技术施工_命运塔罗牌组.md#711-编成外增援2026-10-18业主口径可以加怪但不要影响卡片价格和本身逻辑)、[六关投放 §8](design/命运卡六关投放设计.md)。
 
 ## 2026-10-18 远征战斗房加怪（编成外增援）：怪更多、卡价一分不动
 
@@ -3661,3 +3794,17 @@ WORLD-ENTRY：入口楼最后阶段展开，标记和交互同步；01成功撤�
 ## 2026-10-16 星星命运实体构筑
 
 战车携带所选武器实体并从自身枪口自动开火，支持近战与逆位朝后；魔术师副武器横排叠加、闲置缩小/开火放大、逆位移至身后；力量改为慢速滚石与逆位碎裂范围击退。完整来源结构、默认目标选择、子树深度、持久化与回收同步修正。新增特效FX01-22/23已登记，内容库与设计同步。结果、隔离证据和全局既有门禁失败见[专项开发记录](2026-10-16_star_physical_mounts.md)。
+
+- 2026-10-19 · ASSET-ROOFTOP / WORLD-BLOCKS：井口断墙v002按绿色标线调整高度与0.30m墙厚，复用天台藤蔓并向井壁下垂，正式源/优化/Prefab/账本同步；真实场景专项通过。见[交付记录](2026-10-19_rooftop_ivy_low_wall.md)。
+# 2026-10-19 枪械战斗音效改用录音
+
+开火全部变体、换弹、空仓、拾取、切枪与装配共13组25条改用CC0录音剪辑，取消这些组的旧电子/卡通合成声音。Godot无头与真实播放、资源、媒体域及账本门禁通过；人工听感和Android待验。见[交付记录](2026-10-19_realistic_weapon_sfx.md)。
+
+# 2026-10-19 枪种声音与身份路由
+
+9个实际枪身ID按7类区分开火、换弹、拾取，去掉正式射击按射速/弹丸数猜声音的逻辑；新增榴弹筒独立开火与七类机械操作声音。104组157条音效与169行账本校验通过，高射速/多弹丸仍保持枪种身份。真实Forward+与无头验收通过，人工听感/Android待验。见[交付记录](2026-10-19_weapon_audio_profiles.md)。
+
+# 2026-10-19 环境及实体音效自然化
+
+47组84条环境/实体音效改用自然Foley与录音素材，包括全部7组无缝环境循环；29组系统提示与28组既有枪种音效保持原文件。账本v0.2.2同步84条目标资产的版本、源、许可、哈希与待验说明，总数169条不变。见[交付记录](2026-10-19_natural_world_audio.md)。
+
