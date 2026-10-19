@@ -180,11 +180,7 @@ func accept_pickup(target: Node3D = null) -> void:
 	if target != null:
 		_collection_target = target
 	if AudioManager != null:
-		AudioManager.play_sfx(
-			"soul_pickup" if bool(item_data.get("is_currency", false)) else "item_pickup",
-			-4.0,
-			randf_range(0.97, 1.03)
-		)
+		AudioManager.play_pickup_sfx(item_data, -4.0)
 	set_deferred("monitoring", false)
 	collision_mask = 0
 	for child in find_children("*", "CollisionShape3D", true, false):

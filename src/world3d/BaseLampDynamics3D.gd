@@ -169,8 +169,24 @@ func _ready() -> void:
 	_rng.seed = DEFAULT_SEED
 	# 子节点的 _ready 早于父节点（Art），而材质 duplicate 发生在 Art._ready 里。
 	# 等两帧再登记，否则拿到的还是未 duplicate 的资产材质（改了会污染所有实例）。
-	await get_tree().process_frame
-	await get_tree().process_frame
+	#
+	# ⚠️ 等帧期间必须**自己能活下来**：`await get_tree().process_frame` 里的
+	#    `get_tree()` 是每帧现取的 —— 节点一旦被摘出场景树就返回 null，
+	#    随后 `null.process_frame` 直接抛错并**中断协程**（登记永远不执行）。
+	#    实测踩到的正是这条：带「进行中行动」的存档冷启动时，先加载 99F 主场景
+	#    （本节点 _ready 开始等帧），紧接着 `TowerDescent3D._ready` 判断要转场到
+	#    独立副本、`call_deferred(change_scene_to_file)`，主场景在同一帧内被
+	#    `change_scene` 摘出根节点 ⇒ 报
+	#    `Parameter "data.tree" is null` + `Invalid access to property ... 'process_frame'`。
+	#    所以：先把 SceneTree 抓成局部变量，每等一帧再确认自己还挂在树上。
+	var tree := get_tree()
+	if tree == null:
+		return
+	for _frame in 2:
+		await tree.process_frame
+		if not is_inside_tree():
+			# 整棵场景已被换掉，本节点随它一起销毁，没有素材可登记。
+			return
 	_register_targets()
 
 

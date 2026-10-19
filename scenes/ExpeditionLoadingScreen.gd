@@ -57,6 +57,9 @@ const BAR_HEIGHT := 6.0
 const SHOWCASE_RIGHT_MARGIN := 72.0
 const SHOWCASE_BOTTOM_MARGIN := BAR_BOTTOM_MARGIN + BAR_HEIGHT
 const WAVE_RIGHT_MARGIN := SHOWCASE_RIGHT_MARGIN + float(SHOWCASE_SIZE.x) + 8.0
+## 底部状态文字与光斑之间要留的间隙。两枚圆错开后，左灯会再往左探 34px，
+## 圆又是清晰硬边，压到字上会很难看 —— 所以状态文字/重试按钮单独用更靠左的右边距。
+const STATUS_RIGHT_MARGIN := WAVE_RIGHT_MARGIN + 52.0
 const WAVE_BOTTOM_MARGIN := BAR_BOTTOM_MARGIN + BAR_HEIGHT + 92.0
 const WAVE_FONT_SIZE := 34
 const WAVE_AMPLITUDE := 7.0
@@ -68,6 +71,50 @@ const WAVE_PHASE_STEP := 0.62
 const INK := Color(0.031, 0.055, 0.086, 1.0)
 const PAPER := Color(1.0, 1.0, 1.0, 1.0)
 const BAR_TRACK_COLOR := Color(1.0, 1.0, 1.0, 0.16)
+
+## —— 兔子身后的两枚纯色圆（2026-10-19）——
+## 两个**纯色实心圆**：圆内恒定颜色、圆外全透明、边界只有一像素抗锯齿带。
+## 没有内部衰减、没有柔边、没有光晕 —— 是两块贴上去的色片，不是"光"。
+## 光的读法完全靠 `blend_add`：单灯区 1×、交叠区 2×，交叠自己形成一块更亮的实色形状。
+##
+## 为什么去掉衰减：任何内部渐变都会读成光晕，与"纯色平面"的要求直接冲突。
+## 纯色 + 硬边才和读取页的棱镜语汇（纯白剪影、纯白进度条、纯白硬边）同族。
+##
+## 颜色推导（数值必须给公式）：add 模式下 light_color 是**加色量**。
+## 目标单灯 (118, 103, 30)，底色 (8, 14, 22)，增量 (110, 89, 8)：
+##   light_color = (110, 89, 8)/255 ≈ (0.435, 0.349, 0.031)
+## 交叠处加两次，自然得到 (229, 191, 38) —— 不需要第二套颜色。
+## 判定"够不够黄"要分开看两个量：增量 G/R=0.81、B/R=0.07 决定黄不黄；
+## 成品 G/R=0.87、B/R=0.25（B 被底色抬起）。上一版增量 B/R=0.33，所以读成橄榄。
+## 实测回填：单灯区 (118, 103, 30)、交叠区 (229, 191, 38)。
+const CIRCLE_SHADER := preload("res://assets/shaders/loading_circle.gdshader")
+const CIRCLE_COLOR := Color(0.435, 0.349, 0.031, 1.0)
+## 承载圆的方形控件边长。圆心对准兔子剪影的身体中心（见 _build_circle）。
+const CIRCLE_SIZE := 360.0
+## 圆半径占控件边长的比例：0.25 ⇒ 直径 180px。
+## 实测剪影包围盒 65×158，脚底几乎贴进度条顶边 —— 圆底对齐进度条底边、
+## 兔子站在圆里偏下，读作圆形色块落在兔子脚下。
+const CIRCLE_RADIUS_UV := 0.25
+## 边界抗锯齿带宽（uv）：0.014 × 360px ≈ 5px，实测底色到纯色约 2px 过渡。
+## 这是"纯色平面"能保留的极限 —— 再大就成了柔边。
+const CIRCLE_EDGE := 0.014
+## —— 交错移动 ——
+## 两灯沿同一条椭圆反向运动（相位差 π）：A 向右上时 B 向左下，扫到两端后互换，
+## 于是它们在中间交错而过，而不是像一块贴纸整体平移。
+##   A = (+sin·x, -cos·y - sep)
+##   B = (-sin·x, +cos·y + sep)
+## sep 让两灯在纵向上分居上下，交错时不会完全重合（完全重合会只剩一团、看不出"两个"）。
+## 横向幅度大、纵向起伏小 —— 读作"两盏灯左右对穿而过"；
+## 纵向若跟横向同量级，动作会变成"绕着彼此转"，就不是"交错"了。
+const CIRCLE_ORBIT_X_UV := 0.085
+const CIRCLE_ORBIT_Y_UV := 0.012
+const CIRCLE_LAMP_SEP_UV := 0.045
+## 2.4 rad/s ⇒ 周期 2.62s；2 秒读条里走完约 0.76 个周期，一眼看得出在交错。
+const CIRCLE_ORBIT_SPEED := 2.40
+## 强度只在 0.94~1.0 之间微微起伏 —— 幅度再大就成了闪烁。
+const CIRCLE_INTENSITY_BASE := 0.97
+const CIRCLE_INTENSITY_SWING := 0.03
+const CIRCLE_BREATH_SPEED := 1.15
 
 var _world_render_was_disabled := false
 var _owns_world_render_gate := false
@@ -104,6 +151,8 @@ var _wave_time := 0.0
 var _showcase_viewport: SubViewport
 var _bunny: Node3D
 var _bunny_motion: CharacterMotionLibrary3D
+var _circle_mat: ShaderMaterial
+var _circle: ColorRect
 
 
 func _ready() -> void:
@@ -136,6 +185,7 @@ func _process(delta: float) -> void:
 	_elapsed += delta
 	_wave_time += delta
 	_drive_bunny(delta)
+	_drive_circle()
 	_animate_wave()
 	if _resource_request_active:
 		_poll_resource_request()
@@ -572,6 +622,7 @@ func _build_ui() -> void:
 	root.add_child(content)
 	_content = content
 
+	_build_circle(content)
 	_build_wave_text(content)
 	_build_progress_bar(content)
 	_build_status_controls(content)
@@ -628,9 +679,9 @@ func _build_status_controls(content: Control) -> void:
 	UIStyleFactory.apply_prism_label(_status_label, "label", 3, 18)
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_status_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	_status_label.offset_left = -WAVE_RIGHT_MARGIN - 320.0
+	_status_label.offset_left = -STATUS_RIGHT_MARGIN - 320.0
 	_status_label.offset_top = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 42.0)
-	_status_label.offset_right = -WAVE_RIGHT_MARGIN
+	_status_label.offset_right = -STATUS_RIGHT_MARGIN
 	_status_label.offset_bottom = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 12.0)
 	_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content.add_child(_status_label)
@@ -640,9 +691,9 @@ func _build_status_controls(content: Control) -> void:
 	_retry_button.text = "重试读取"
 	_retry_button.visible = false
 	_retry_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	_retry_button.offset_left = -WAVE_RIGHT_MARGIN - 220.0
+	_retry_button.offset_left = -STATUS_RIGHT_MARGIN - 220.0
 	_retry_button.offset_top = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 96.0)
-	_retry_button.offset_right = -WAVE_RIGHT_MARGIN
+	_retry_button.offset_right = -STATUS_RIGHT_MARGIN
 	_retry_button.offset_bottom = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 52.0)
 	_retry_button.pressed.connect(_on_retry_pressed)
 	content.add_child(_retry_button)
@@ -666,6 +717,58 @@ func _build_progress_bar(content: Control) -> void:
 	_bar_fill.size = Vector2(0.0, BAR_HEIGHT)
 	_bar_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_bar_track.add_child(_bar_fill)
+
+
+## 兔子身后那两枚纯色圆。纯 2D 图层：先于兔子视口入树，所以永远画在剪影**下面**。
+## 效果读作「两盏探照灯打在兔子背后的墙上，交错扫过」—— 白剪影不动、色块在它背后交错；
+## 不加真实灯光、不改剪影材质，避免把纯白剪影照出明暗而毁掉原来的极简。
+##
+## 控件中心（uv 0.5）是两灯运动的基点。竖直方向要让**较低的那枚**下缘正好落在
+## 进度条底边，于是 center_y 里把 CIRCLE_LAMP_SEP_UV 也加上去：
+##   center_y = BAR_BOTTOM_MARGIN + 半径 + sep_y×CIRCLE_SIZE
+## 横向额外留出 CIRCLE_ORBIT_X_UV 的余量，摆到端点时圆也不会顶出屏幕被硬裁。
+func _build_circle(content: Control) -> void:
+	var radius_px := CIRCLE_SIZE * CIRCLE_RADIUS_UV
+	var center_x := SHOWCASE_RIGHT_MARGIN + float(SHOWCASE_SIZE.x) * 0.5
+	var center_y := BAR_BOTTOM_MARGIN + radius_px + CIRCLE_LAMP_SEP_UV * CIRCLE_SIZE
+	var half := CIRCLE_SIZE * 0.5
+
+	_circle_mat = ShaderMaterial.new()
+	_circle_mat.shader = CIRCLE_SHADER
+	_circle_mat.set_shader_parameter("light_color", CIRCLE_COLOR)
+	_circle_mat.set_shader_parameter("intensity", CIRCLE_INTENSITY_BASE)
+	_circle_mat.set_shader_parameter("radius", CIRCLE_RADIUS_UV)
+	_circle_mat.set_shader_parameter("edge", CIRCLE_EDGE)
+	_circle_mat.set_shader_parameter("offset_a", Vector2(0.0, -CIRCLE_LAMP_SEP_UV))
+	_circle_mat.set_shader_parameter("offset_b", Vector2(0.0, CIRCLE_LAMP_SEP_UV))
+
+	_circle = ColorRect.new()
+	_circle.name = "BunnyCircle"
+	_circle.color = Color(1.0, 1.0, 1.0, 1.0)
+	_circle.material = _circle_mat
+	_circle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_circle.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	_circle.offset_left = -(center_x + half)
+	_circle.offset_right = -(center_x - half)
+	_circle.offset_top = -(center_y + half)
+	_circle.offset_bottom = -(center_y - half)
+	content.add_child(_circle)
+
+
+## 交错移动：两灯沿同一条椭圆反向运动，相位差 π。
+##   A = (+sin·x, -cos·y - sep)      B = (-sin·x, +cos·y + sep)
+## 于是 A 往右上时 B 往左下，到端点后互换 —— 两者在中间交错而过。
+## 纵向 sep 让它们交错时仍分居上下，不会压成一团（压成一团就只剩一个圆，看不出"两个"）。
+func _drive_circle() -> void:
+	if _circle_mat == null:
+		return
+	var phase := _wave_time * CIRCLE_ORBIT_SPEED
+	var swing_x := sin(phase) * CIRCLE_ORBIT_X_UV
+	var swing_y := -cos(phase) * CIRCLE_ORBIT_Y_UV
+	var breath := CIRCLE_INTENSITY_BASE + CIRCLE_INTENSITY_SWING * sin(_wave_time * CIRCLE_BREATH_SPEED + 0.6)
+	_circle_mat.set_shader_parameter("offset_a", Vector2(swing_x, swing_y - CIRCLE_LAMP_SEP_UV))
+	_circle_mat.set_shader_parameter("offset_b", Vector2(-swing_x, -swing_y + CIRCLE_LAMP_SEP_UV))
+	_circle_mat.set_shader_parameter("intensity", breath)
 
 
 ## 波浪 `LOADING`：每个字母一个 Label，各自按相位上下起伏（左起波浪式传导）。

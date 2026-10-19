@@ -28,8 +28,8 @@ const FLASHLIGHT_TIER_THRESHOLDS := [0.60, 0.30, 0.10, 0.01]
 @export var start_enabled := false
 
 @export_group("Beam")
-@export var beam_color := Color("#7dc4ea")
-@export_range(0.0, 32.0, 0.1) var beam_energy := 7.60
+@export var beam_color := Color("#f17554")
+@export_range(0.0, 32.0, 0.1) var beam_energy := 10.80
 @export_range(4.0, 40.0, 0.5) var beam_range := 25.0
 @export_range(20.0, 110.0, 1.0) var beam_angle_degrees := 66.0
 @export_range(0.1, 2.0, 0.05) var beam_attenuation := 0.48
@@ -48,15 +48,15 @@ const FLASHLIGHT_TIER_THRESHOLDS := [0.60, 0.30, 0.10, 0.01]
 @export_range(0.0, 2.0, 0.05) var target_height := 0.38
 
 @export_group("Environment Spill")
-@export var spill_color := Color("#469ac2")
-@export_range(0.0, 8.0, 0.05) var spill_energy := 1.20
+@export var spill_color := Color("#fa7e34")
+@export_range(0.0, 8.0, 0.05) var spill_energy := 1.50
 @export_range(1.0, 10.0, 0.25) var spill_range := 4.8
 @export_range(0.1, 4.0, 0.05) var spill_attenuation := 2.0
 @export_range(0.2, 2.0, 0.05) var spill_height := 0.65
 
 @export_group("Avatar Front Fill")
-@export var front_fill_color := Color("#558cec")
-@export_range(0.0, 16.0, 0.05) var front_fill_energy := 5.25
+@export var front_fill_color := Color("#ec8e55")
+@export_range(0.0, 16.0, 0.05) var front_fill_energy := 8.40
 @export_range(1.0, 8.0, 0.25) var front_fill_range := 4.0
 @export_range(20.0, 110.0, 1.0) var front_fill_angle_degrees := 74.0
 @export_range(0.1, 3.0, 0.05) var front_fill_attenuation := 1.15

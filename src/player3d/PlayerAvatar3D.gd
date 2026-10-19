@@ -162,6 +162,23 @@ var _customization: Dictionary = DEFAULT_CUSTOMIZATION.duplicate()
 var _wearable_root: Node3D = null
 var _wearable_nodes: Dictionary = {}
 
+## —— 低血量警告环（2026-10-19 退役）——
+## 节点 `VisualRoot/StateVFX/LowHealthRing` 定义在
+## `assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn`
+## （TorusMesh 内径 0.86 / 外径 0.91，`position = (0, 0.12, 0)`，血红半透明 + 自发光）。
+## 环轴是 Y ⇒ 环面天然躺在 XZ 平面，12 cm 离地、跟着角色跑。
+##
+## 2026-10-19 主人原话：「去掉角色下半身贴地的那个」。俯视角下它被读成
+## "脚底画了个红圈"，与「无血条 / 不靠地面涂装表达状态」这套视觉口径相冲。
+##
+## 🔴 为什么**不删节点**：`@onready var low_health_ring` 是硬引用，节点一删就是 null，
+## 两处 `visible` 写入直接崩。所以照 `RELOAD_RING_IN_WORLD` 的老办法 —— 节点留着、
+## 用开关把可见性钉死。哪天要恢复，改回 `true` 就整条链路复活，不用再建 mesh。
+##
+## 判据不是注释而是会失败的断言：`tests/verification/verify_3d_reload_state_flow.gd`
+## 把血量压到 20%（`is_low_health()` 为真）后仍显示环 ⇒ 判红。
+const LOW_HEALTH_RING_IN_WORLD := false
+
 ## —— 换弹进度环（2026-10-04 主人要求，2026-10-05 改口径）——
 ## 原样是「头顶一条 1.20 × 0.18 的横向 QuadMesh 进度条」（`RELOAD_FILL_WIDTH`，
 ## 用 `fill.scale.x` + 平移锁左边缘表达进度）。主人要求换成**搜索读条那套圆环动画**，
@@ -714,6 +731,7 @@ func get_component_snapshot() -> Dictionary:
 		"dash_dust_emitting": _state == "dashing",
 		"lock_ring_visible": lock_ring.visible,
 		"low_health_ring_visible": low_health_ring.visible,
+		"low_health_ring_enabled": LOW_HEALTH_RING_IN_WORLD,
 	}
 
 
@@ -902,7 +920,7 @@ func _update_authored_motion_progress(delta: float) -> void:
 	lock_ring.visible = _state == "locked"
 	lock_ring.rotation.y += delta * 1.7
 	var low_health := bool(_player.call("is_low_health")) if _player != null and _player.has_method("is_low_health") else false
-	low_health_ring.visible = low_health and _state != "dead"
+	low_health_ring.visible = LOW_HEALTH_RING_IN_WORLD and low_health and _state != "dead"
 	match _state:
 		"dashing":
 			var duration := 0.18
@@ -1327,7 +1345,7 @@ func _update_state_motion(delta: float) -> void:
 	lock_ring.visible = _state == "locked"
 	lock_ring.rotation.y += delta * 1.7
 	var low_health := bool(_player.call("is_low_health")) if _player != null and _player.has_method("is_low_health") else false
-	low_health_ring.visible = low_health and _state != "dead"
+	low_health_ring.visible = LOW_HEALTH_RING_IN_WORLD and low_health and _state != "dead"
 	low_health_ring.scale = Vector3.ONE * (1.0 + sin(_elapsed * TAU * 2.1) * 0.06)
 
 
