@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "design_revision": "AUDIO-SFX r1",
-  "production_revision": "industrial-r2",
-  "source_method": "Original offline layered DSP sound design; no external samples or AI-generation claims",
+  "design_revision": "AUDIO-SFX r5",
+  "production_revision": "world-environment-r6",
+  "source_method": "Natural recording/Foley world and ambience; recorded gun families; original DSP retained only for explicit system cue allowlist",
   "mix_policy": "44.1kHz PCM24 mono point sources; fixed asset peak headroom; per-family variations; no runtime synthesis fallback",
   "unbound_policy": "New document sounds are an authored library; domain hooks require separate verified facts. narrative.fx_sfx dispatches an existing event; amb.radio_local remains owned by MusicManager/Base99Radio3D.",
   "sounds": [
@@ -25,7 +25,12 @@
       "legacy": true,
       "frequency": 155,
       "weight": 1,
-      "tail": 0.1
+      "tail": 0.1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "rifle_fire",
@@ -46,7 +51,12 @@
       "legacy": true,
       "frequency": 125,
       "weight": 1.3,
-      "tail": 0.105
+      "tail": 0.105,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "shotgun_fire",
@@ -67,7 +77,12 @@
       "legacy": true,
       "frequency": 76,
       "weight": 2.4,
-      "tail": 0.19
+      "tail": 0.19,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "smg_fire",
@@ -88,7 +103,18 @@
       "legacy": true,
       "frequency": 200,
       "weight": 0.7,
-      "tail": 0.055
+      "tail": 0.055,
+      "production_override": {
+        "revision": "recorded-weapons-r3",
+        "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
+        "asset_ids": [
+          "AUD-SFX-SMG-FIRE",
+          "AUD-SFX-SMG-FIRE-VAR02",
+          "AUD-SFX-SMG-FIRE-VAR03"
+        ],
+        "license": "CC0-1.0",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "sniper_fire",
@@ -109,7 +135,12 @@
       "legacy": true,
       "frequency": 63,
       "weight": 2.8,
-      "tail": 0.24
+      "tail": 0.24,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "laser_fire",
@@ -127,7 +158,12 @@
       "max_voices": 2,
       "owner": "AudioManager compatibility caller",
       "trigger_fact": "combat.weapon.fire_energy confirmed edge; only the domain owner may emit",
-      "legacy": true
+      "legacy": true,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_hit",
@@ -147,7 +183,12 @@
       "trigger_fact": "enemy.hit confirmed edge; only the domain owner may emit",
       "legacy": true,
       "frequency": 145,
-      "weight": 0.7
+      "weight": 0.7,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_die",
@@ -167,7 +208,12 @@
       "trigger_fact": "enemy.death confirmed edge; only the domain owner may emit",
       "legacy": true,
       "frequency": 72,
-      "weight": 1.4
+      "weight": 1.4,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "player_hit",
@@ -187,7 +233,12 @@
       "trigger_fact": "player.hurt confirmed edge; only the domain owner may emit",
       "legacy": true,
       "frequency": 105,
-      "weight": 1.3
+      "weight": 1.3,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "player_dash",
@@ -205,7 +256,12 @@
       "max_voices": 2,
       "owner": "AudioManager compatibility caller",
       "trigger_fact": "player.dash confirmed edge; only the domain owner may emit",
-      "legacy": true
+      "legacy": true,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "reload",
@@ -229,7 +285,16 @@
         0.12,
         0.24,
         0.38
-      ]
+      ],
+      "production_override": {
+        "revision": "recorded-weapons-r3",
+        "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
+        "asset_ids": [
+          "AUD-SFX-RELOAD"
+        ],
+        "license": "CC0-1.0",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "crit_hit",
@@ -249,7 +314,12 @@
       "trigger_fact": "enemy.crit confirmed edge; only the domain owner may emit",
       "legacy": true,
       "frequency": 460,
-      "weight": 0.6
+      "weight": 0.6,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "melee_swing",
@@ -267,7 +337,12 @@
       "max_voices": 2,
       "owner": "AudioManager compatibility caller",
       "trigger_fact": "combat.melee.swing confirmed edge; only the domain owner may emit",
-      "legacy": true
+      "legacy": true,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "melee_impact",
@@ -287,7 +362,12 @@
       "trigger_fact": "combat.melee.impact confirmed edge; only the domain owner may emit",
       "legacy": true,
       "frequency": 87,
-      "weight": 1.8
+      "weight": 1.8,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "fate_card",
@@ -483,7 +563,16 @@
       "frequency": 960,
       "clicks": [
         0.027
-      ]
+      ],
+      "production_override": {
+        "revision": "recorded-weapons-r3",
+        "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
+        "asset_ids": [
+          "AUD-SFX-AMMO-EMPTY"
+        ],
+        "license": "CC0-1.0",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "item_pickup",
@@ -506,7 +595,16 @@
       "clicks": [
         0.044,
         0.079
-      ]
+      ],
+      "production_override": {
+        "revision": "recorded-weapons-r3",
+        "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
+        "asset_ids": [
+          "AUD-SFX-ITEM-PICKUP"
+        ],
+        "license": "CC0-1.0",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "soul_pickup",
@@ -553,7 +651,12 @@
       "clicks": [
         0.055,
         0.59
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "door_locked",
@@ -577,7 +680,12 @@
         0.055,
         0.085,
         0.16
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "container_open",
@@ -600,7 +708,12 @@
       "clicks": [
         0.08,
         0.24
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "wave_start",
@@ -836,7 +949,12 @@
       "trigger_fact": "player.footstep confirmed edge; only the domain owner may emit",
       "legacy": false,
       "material": "concrete",
-      "frequency": 160
+      "frequency": 160,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "footstep_metal",
@@ -856,7 +974,12 @@
       "trigger_fact": "player.footstep.metal confirmed edge; only the domain owner may emit",
       "legacy": false,
       "material": "metal",
-      "frequency": 135
+      "frequency": 135,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "footstep_debris",
@@ -876,7 +999,12 @@
       "trigger_fact": "player.footstep.debris confirmed edge; only the domain owner may emit",
       "legacy": false,
       "material": "debris",
-      "frequency": 200
+      "frequency": 200,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "player_land",
@@ -896,7 +1024,12 @@
       "trigger_fact": "player.land confirmed edge; only the domain owner may emit",
       "legacy": false,
       "frequency": 85,
-      "weight": 1.3
+      "weight": 1.3,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "player_down",
@@ -916,7 +1049,12 @@
       "trigger_fact": "player.down confirmed edge; only the domain owner may emit",
       "legacy": false,
       "frequency": 58,
-      "weight": 2.5
+      "weight": 2.5,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "player_death",
@@ -942,7 +1080,12 @@
         110
       ],
       "step": 0.2,
-      "decay": 0.21
+      "decay": 0.21,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "flashlight_on",
@@ -964,7 +1107,12 @@
       "frequency": 1700,
       "clicks": [
         0.035
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "flashlight_off",
@@ -986,7 +1134,12 @@
       "frequency": 1250,
       "clicks": [
         0.023
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "reload_action",
@@ -1009,7 +1162,16 @@
       "clicks": [
         0.06,
         0.15
-      ]
+      ],
+      "production_override": {
+        "revision": "recorded-weapons-r3",
+        "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
+        "asset_ids": [
+          "AUD-SFX-RELOAD-ACTION"
+        ],
+        "license": "CC0-1.0",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "reload_end",
@@ -1032,7 +1194,16 @@
       "clicks": [
         0.028,
         0.06
-      ]
+      ],
+      "production_override": {
+        "revision": "recorded-weapons-r3",
+        "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
+        "asset_ids": [
+          "AUD-SFX-RELOAD-END"
+        ],
+        "license": "CC0-1.0",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "weapon_swap",
@@ -1055,7 +1226,16 @@
       "clicks": [
         0.06,
         0.13
-      ]
+      ],
+      "production_override": {
+        "revision": "recorded-weapons-r3",
+        "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
+        "asset_ids": [
+          "AUD-SFX-WEAPON-SWAP"
+        ],
+        "license": "CC0-1.0",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "weapon_attach",
@@ -1078,7 +1258,16 @@
       "clicks": [
         0.035,
         0.11
-      ]
+      ],
+      "production_override": {
+        "revision": "recorded-weapons-r3",
+        "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
+        "asset_ids": [
+          "AUD-SFX-WEAPON-ATTACH"
+        ],
+        "license": "CC0-1.0",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "weapon_attach_denied",
@@ -1122,7 +1311,12 @@
       "trigger_fact": "combat.projectile.impact confirmed edge; only the domain owner may emit",
       "legacy": false,
       "frequency": 560,
-      "weight": 0.5
+      "weight": 0.5,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "melee_target_hit",
@@ -1142,7 +1336,12 @@
       "trigger_fact": "combat.melee.target_hit confirmed edge; only the domain owner may emit",
       "legacy": false,
       "frequency": 190,
-      "weight": 0.7
+      "weight": 0.7,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "melee_heavy_impact",
@@ -1162,7 +1361,12 @@
       "trigger_fact": "combat.melee.heavy_impact confirmed edge; only the domain owner may emit",
       "legacy": false,
       "frequency": 61,
-      "weight": 2.5
+      "weight": 2.5,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "melee_cancel",
@@ -1184,7 +1388,12 @@
       "frequency": 490,
       "clicks": [
         0.035
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_alert",
@@ -1209,7 +1418,12 @@
         440
       ],
       "decay": 0.06,
-      "step": 0.07
+      "step": 0.07,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_search",
@@ -1233,7 +1447,12 @@
         220
       ],
       "decay": 0.06,
-      "step": 0.07
+      "step": 0.07,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_telegraph",
@@ -1258,7 +1477,12 @@
         740
       ],
       "decay": 0.06,
-      "step": 0.07
+      "step": 0.07,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_attack",
@@ -1282,7 +1506,12 @@
         280
       ],
       "decay": 0.06,
-      "step": 0.07
+      "step": 0.07,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_summon",
@@ -1308,7 +1537,12 @@
         523
       ],
       "decay": 0.06,
-      "step": 0.07
+      "step": 0.07,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_heal",
@@ -1334,7 +1568,12 @@
         1318
       ],
       "decay": 0.06,
-      "step": 0.07
+      "step": 0.07,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_avoid_light",
@@ -1359,7 +1598,12 @@
         587
       ],
       "decay": 0.06,
-      "step": 0.07
+      "step": 0.07,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_charge",
@@ -1377,7 +1621,12 @@
       "max_voices": 2,
       "owner": "enemy domain",
       "trigger_fact": "enemy.ranged_charge confirmed edge; only the domain owner may emit",
-      "legacy": false
+      "legacy": false,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_shield",
@@ -1395,7 +1644,12 @@
       "max_voices": 2,
       "owner": "enemy domain",
       "trigger_fact": "enemy.shield_raise confirmed edge; only the domain owner may emit",
-      "legacy": false
+      "legacy": false,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "enemy_explosion",
@@ -1415,7 +1669,12 @@
       "trigger_fact": "enemy.explosion confirmed edge; only the domain owner may emit",
       "legacy": false,
       "frequency": 47,
-      "weight": 3
+      "weight": 3,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "door_close",
@@ -1438,7 +1697,12 @@
       "clicks": [
         0.04,
         0.45
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "container_search",
@@ -1462,7 +1726,12 @@
         0.075,
         0.16,
         0.23
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "container_cancel",
@@ -1484,7 +1753,12 @@
       "frequency": 590,
       "clicks": [
         0.048
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "light_on",
@@ -1502,7 +1776,12 @@
       "max_voices": 2,
       "owner": "world domain",
       "trigger_fact": "world.light.switch_on confirmed edge; only the domain owner may emit",
-      "legacy": false
+      "legacy": false,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "light_off",
@@ -1521,7 +1800,12 @@
       "owner": "world domain",
       "trigger_fact": "world.light.switch_off confirmed edge; only the domain owner may emit",
       "legacy": false,
-      "rising": false
+      "rising": false,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "facility_activate",
@@ -1539,7 +1823,12 @@
       "max_voices": 2,
       "owner": "world domain",
       "trigger_fact": "world.facility.activate confirmed edge; only the domain owner may emit",
-      "legacy": false
+      "legacy": false,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "facility_confirm",
@@ -1609,7 +1898,12 @@
       "frequency": 1800,
       "clicks": [
         0.04
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "radio_off",
@@ -1631,7 +1925,12 @@
       "frequency": 1200,
       "clicks": [
         0.025
-      ]
+      ],
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "fate_applied",
@@ -1875,7 +2174,12 @@
       "legacy": false,
       "frequency": 60,
       "cutoff": 1700,
-      "pulse": false
+      "pulse": false,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "amb_workshop",
@@ -1896,7 +2200,12 @@
       "legacy": false,
       "frequency": 90,
       "cutoff": 3500,
-      "pulse": false
+      "pulse": false,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "amb_recovery",
@@ -1917,7 +2226,12 @@
       "legacy": false,
       "frequency": 120,
       "cutoff": 1600,
-      "pulse": true
+      "pulse": true,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "amb_expedition_room",
@@ -1938,7 +2252,12 @@
       "legacy": false,
       "frequency": 48,
       "cutoff": 1400,
-      "pulse": false
+      "pulse": false,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "amb_expedition_open",
@@ -1959,7 +2278,12 @@
       "legacy": false,
       "frequency": 39,
       "cutoff": 3800,
-      "pulse": false
+      "pulse": false,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "amb_extraction_beacon",
@@ -1980,7 +2304,12 @@
       "legacy": false,
       "frequency": 80,
       "cutoff": 1800,
-      "pulse": true
+      "pulse": true,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     },
     {
       "key": "amb_boss_arena",
@@ -2001,7 +2330,509 @@
       "legacy": false,
       "frequency": 41,
       "cutoff": 1200,
-      "pulse": true
+      "pulse": true,
+      "production_override": {
+        "revision": "natural-world-r5",
+        "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "launcher_fire",
+      "name": "launcher_fire",
+      "events": [
+        "combat.weapon.fire.launcher"
+      ],
+      "variants": 3,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "reload_pistol",
+      "name": "reload_pistol",
+      "events": [
+        "combat.weapon.reload_start"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "reload_rifle",
+      "name": "reload_rifle",
+      "events": [
+        "combat.weapon.reload_start"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "reload_machinegun",
+      "name": "reload_machinegun",
+      "events": [
+        "combat.weapon.reload_start"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "reload_shotgun",
+      "name": "reload_shotgun",
+      "events": [
+        "combat.weapon.reload_start"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "reload_sniper",
+      "name": "reload_sniper",
+      "events": [
+        "combat.weapon.reload_start"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "reload_launcher",
+      "name": "reload_launcher",
+      "events": [
+        "combat.weapon.reload_start"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "reload_charge",
+      "name": "reload_charge",
+      "events": [
+        "combat.weapon.reload_start"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "pickup_pistol",
+      "name": "pickup_pistol",
+      "events": [
+        "world.pickup.item"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "pickup_rifle",
+      "name": "pickup_rifle",
+      "events": [
+        "world.pickup.item"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "pickup_machinegun",
+      "name": "pickup_machinegun",
+      "events": [
+        "world.pickup.item"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "pickup_shotgun",
+      "name": "pickup_shotgun",
+      "events": [
+        "world.pickup.item"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "pickup_sniper",
+      "name": "pickup_sniper",
+      "events": [
+        "world.pickup.item"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "pickup_launcher",
+      "name": "pickup_launcher",
+      "events": [
+        "world.pickup.item"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "pickup_charge",
+      "name": "pickup_charge",
+      "events": [
+        "world.pickup.item"
+      ],
+      "variants": 1,
+      "production_override": {
+        "revision": "gun-families-r4",
+        "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "footstep_wood",
+      "name": "footstep_wood",
+      "variants": 4,
+      "events": [
+        "player.footstep.wood"
+      ],
+      "production_override": {
+        "renderer": "tools/asset_pipeline/build_world_environment_assets.py",
+        "revision": "world-environment-r6",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "outdoor_bird",
+      "name": "outdoor_bird",
+      "variants": 3,
+      "events": [
+        "amb.outdoor_bird"
+      ],
+      "production_override": {
+        "renderer": "tools/asset_pipeline/build_world_environment_assets.py",
+        "revision": "world-environment-r6",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "amb_fan",
+      "name": "amb_fan",
+      "variants": 1,
+      "events": [
+        "amb.fan"
+      ],
+      "production_override": {
+        "renderer": "tools/asset_pipeline/build_world_environment_assets.py",
+        "revision": "world-environment-r6",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
+    },
+    {
+      "key": "amb_blower",
+      "name": "amb_blower",
+      "variants": 1,
+      "events": [
+        "amb.blower"
+      ],
+      "production_override": {
+        "renderer": "tools/asset_pipeline/build_world_environment_assets.py",
+        "revision": "world-environment-r6",
+        "source_of_current_duration_and_version": "src/assets/audio/sfx/sfx_catalog.json"
+      }
     }
-  ]
+  ],
+  "weapon_profiles": {
+    "bp_pistol": {
+      "family": "pistol",
+      "fire": "pistol_fire",
+      "reload": "reload_pistol",
+      "pickup": "pickup_pistol"
+    },
+    "bp_rifle": {
+      "family": "rifle",
+      "fire": "rifle_fire",
+      "reload": "reload_rifle",
+      "pickup": "pickup_rifle"
+    },
+    "bp_machinegun": {
+      "family": "machinegun",
+      "fire": "smg_fire",
+      "reload": "reload_machinegun",
+      "pickup": "pickup_machinegun"
+    },
+    "bp_shotgun": {
+      "family": "shotgun",
+      "fire": "shotgun_fire",
+      "reload": "reload_shotgun",
+      "pickup": "pickup_shotgun"
+    },
+    "bp_sniper": {
+      "family": "sniper",
+      "fire": "sniper_fire",
+      "reload": "reload_sniper",
+      "pickup": "pickup_sniper"
+    },
+    "bp_launcher": {
+      "family": "launcher",
+      "fire": "launcher_fire",
+      "reload": "reload_launcher",
+      "pickup": "pickup_launcher"
+    },
+    "bp_charge": {
+      "family": "charge",
+      "fire": "laser_fire",
+      "reload": "reload_charge",
+      "pickup": "pickup_charge"
+    },
+    "bp_starter_rifle": {
+      "family": "rifle",
+      "fire": "rifle_fire",
+      "reload": "reload_rifle",
+      "pickup": "pickup_rifle"
+    },
+    "bp_sprinkler": {
+      "family": "machinegun",
+      "fire": "smg_fire",
+      "reload": "reload_machinegun",
+      "pickup": "pickup_machinegun"
+    }
+  },
+  "world_style_policy": {
+    "revision": "natural-world-r5 + world-environment-r6",
+    "system_sets": [
+      "fate_card",
+      "extraction_start",
+      "extraction_done",
+      "extraction_abort",
+      "ui_hover",
+      "ui_click",
+      "ui_error",
+      "soul_pickup",
+      "wave_start",
+      "wave_clear",
+      "boss_intro",
+      "boss_phase",
+      "boss_defeat",
+      "merchant_purchase",
+      "flashlight_charge_up",
+      "flashlight_low_battery",
+      "flashlight_depleted",
+      "weapon_attach_denied",
+      "facility_confirm",
+      "facility_denied",
+      "fate_applied",
+      "retreat_confirmed",
+      "settlement_failed",
+      "loading_failed",
+      "generation_fallback",
+      "return_failed",
+      "ui_back",
+      "ui_loading_step",
+      "narrative_stinger"
+    ],
+    "weapon_sets": [
+      "ammo_empty",
+      "item_pickup",
+      "laser_fire",
+      "launcher_fire",
+      "pickup_charge",
+      "pickup_launcher",
+      "pickup_machinegun",
+      "pickup_pistol",
+      "pickup_rifle",
+      "pickup_shotgun",
+      "pickup_sniper",
+      "pistol_fire",
+      "reload",
+      "reload_action",
+      "reload_charge",
+      "reload_end",
+      "reload_launcher",
+      "reload_machinegun",
+      "reload_pistol",
+      "reload_rifle",
+      "reload_shotgun",
+      "reload_sniper",
+      "rifle_fire",
+      "shotgun_fire",
+      "smg_fire",
+      "sniper_fire",
+      "weapon_attach",
+      "weapon_swap"
+    ],
+    "natural_world_sets": [
+      "amb_base_facility",
+      "amb_boss_arena",
+      "amb_expedition_open",
+      "amb_expedition_room",
+      "amb_extraction_beacon",
+      "amb_recovery",
+      "amb_workshop",
+      "container_cancel",
+      "container_open",
+      "container_search",
+      "crit_hit",
+      "door_close",
+      "door_locked",
+      "door_open",
+      "enemy_alert",
+      "enemy_attack",
+      "enemy_avoid_light",
+      "enemy_charge",
+      "enemy_die",
+      "enemy_explosion",
+      "enemy_heal",
+      "enemy_hit",
+      "enemy_search",
+      "enemy_shield",
+      "enemy_summon",
+      "enemy_telegraph",
+      "facility_activate",
+      "flashlight_off",
+      "flashlight_on",
+      "footstep_concrete",
+      "footstep_debris",
+      "footstep_metal",
+      "light_off",
+      "light_on",
+      "melee_cancel",
+      "melee_heavy_impact",
+      "melee_impact",
+      "melee_swing",
+      "melee_target_hit",
+      "player_dash",
+      "player_death",
+      "player_down",
+      "player_hit",
+      "player_land",
+      "projectile_impact",
+      "radio_off",
+      "radio_on",
+      "footstep_wood",
+      "outdoor_bird",
+      "amb_fan",
+      "amb_blower"
+    ],
+    "preserved_asset_hashes": {
+      "AUD-SFX-PISTOL-FIRE": "2d1576d7c3c9084d3346db4d9cc1d13d430b1c76f94dcdac37c6e213fc052ce1",
+      "AUD-SFX-PISTOL-FIRE-VAR02": "fb41b0f496b140fe2b5294cab33b613892f407c6b96e0e746ca0c0823bfa88b5",
+      "AUD-SFX-PISTOL-FIRE-VAR03": "61e25683091a693a843dbe7545d9e0f3b403b94d81ff54719b31e0c293f87dfb",
+      "AUD-SFX-RIFLE-FIRE": "2619bc170ef22d9810e72574207bfa9fb1bf045367ac7d106185d3605b2182a5",
+      "AUD-SFX-RIFLE-FIRE-VAR02": "08785bc5f5167f6250958917751f9ca1a094bdccfae59c37b38f00424a2c9023",
+      "AUD-SFX-RIFLE-FIRE-VAR03": "8054e39060da22d17c7c7b3af82eb67c9a2a5793349ae71b1c7d9b497500f532",
+      "AUD-SFX-SHOTGUN-FIRE": "2707a0a3eb9452f90a96b7d1f54933ceefdddd07af789dccec08106925933b1e",
+      "AUD-SFX-SHOTGUN-FIRE-VAR02": "7957234d9ecede12ddb26483ff6695b84f563e32a376e1741dbb1db454b5f49f",
+      "AUD-SFX-SHOTGUN-FIRE-VAR03": "0a3776e8bdb82f42151f15870a72acf4e0b22f40d71b12104201d3c3980ccb98",
+      "AUD-SFX-SMG-FIRE": "fe4006026d25ab04e7bc0c25515a26515970a0a2b0369a5454f1cb1459b61da3",
+      "AUD-SFX-SMG-FIRE-VAR02": "f16d1e4b9746748e0a6dee7a1cde490c165e3a0aea0b8557b5023d2f07e659c1",
+      "AUD-SFX-SMG-FIRE-VAR03": "49b0d1472ce6ce56490ed2ec1c2eae126d29e51728c314a1257736d2a9265d24",
+      "AUD-SFX-SNIPER-FIRE": "72ddba4e6c846444b22ff94178c069b557c3d3a04680895405273062503ccdd4",
+      "AUD-SFX-SNIPER-FIRE-VAR02": "90c285e2a15a7aaeee068524c44eccb854270324715989bdc991e85f6a7d637f",
+      "AUD-SFX-SNIPER-FIRE-VAR03": "4ba6022aab7637d65df8039dd558501c178a84b528d1a9a9213b4dfb7f583a10",
+      "AUD-SFX-LASER-FIRE": "7dc1e5d2ff243d6cd181cbc02ae9037f04371a6e18e2d0176519b489ae06a203",
+      "AUD-SFX-LASER-FIRE-VAR02": "2c58175b62e76afeffec820f35aad882d107ba1482acd8dd99727e235be87f83",
+      "AUD-SFX-LASER-FIRE-VAR03": "64400cf67e8b9e262a5732dade7dfed50488abc2fd0e5db1d64aaa9ed7cba910",
+      "AUD-SFX-RELOAD": "ab57b66c3f2f3323922e7de670fa3644b6450815813fa9775d29626bb2949067",
+      "AUD-SFX-FATE-CARD": "033341ed92ed32763400ade5761c0c038a8da4d6538ea95e8a14e67be8ce47be",
+      "AUD-SFX-EXTRACTION-START": "449fcee06e0f4cc6a0740fe9ad3c1e1e4a53f8a95818dd5b29d2c366b3457036",
+      "AUD-SFX-EXTRACTION-DONE": "b0c9c53e094458748b45ee4ad7863ff29ba0cb9beeb816db79cf5900793a1ee8",
+      "AUD-SFX-EXTRACTION-ABORT": "76fc5f2ff8d22245de8a48851621dfd0c4e4949cf3a1875f6fa539d4ffcbc11a",
+      "AUD-SFX-UI-HOVER": "2772ac905f02bc0a152ca70a3c000c44cfadb570c1fef11bad8cb4ef11c3723a",
+      "AUD-SFX-UI-CLICK": "48807664a48f6cc543d6b9e495d3b48c6767ae0d6c70d1f1dde5c06b8ad4e042",
+      "AUD-SFX-UI-ERROR": "3bb876ba30dfd92d4a6cb49c004d040bd66027fbdab4f1157a21a39c1e3e13bb",
+      "AUD-SFX-AMMO-EMPTY": "2edcf45a5ceff21bcc5f3d2288df5a89e9828df21dfc6102e03287a866078b04",
+      "AUD-SFX-ITEM-PICKUP": "fe2208533d781612f7fa619fd7b145a717d890cccc20480293c9f2cc7824c6b0",
+      "AUD-SFX-SOUL-PICKUP": "939e8ae2bf2e33731de5b069f85fbadff62cfadf4302a5c21f793d71368d3359",
+      "AUD-SFX-SOUL-PICKUP-VAR02": "2e2d854b5fe224aa75d872c89071e3a20b9db941f0a3a6f16b76bfeee92ca312",
+      "AUD-SFX-SOUL-PICKUP-VAR03": "0996aa426aee9e94f33eb7438a82c10e9eab8a333e5802aaaa28fc623553cee8",
+      "AUD-SFX-WAVE-START": "4e34d2c5444b4e47f4146d0e69dfcffe249e2daa6d5bce04c426320dbdaf1edd",
+      "AUD-SFX-WAVE-CLEAR": "dc92511b8486a0532733c87122b1bbb1f5f60c388de6c1697704598f8b82d3c0",
+      "AUD-SFX-BOSS-INTRO": "acf8bc4b1181bece760040e4fe2322ae11028bb1db849158d247176099cf7453",
+      "AUD-SFX-BOSS-PHASE": "df208905b6e702275ae3da3dcd2641203eb71d9badd41a996f8f1efd44afe1d3",
+      "AUD-SFX-BOSS-DEFEAT": "19d332b369ea8a4ab4e27e7b2e14aad7ef2cbcfc66b59a31e7ac094daeea0119",
+      "AUD-SFX-MERCHANT-PURCHASE": "a906d3f454b8b99e6033041d656a5d8865c103c196dc7b7fd9c037f6ab091f1c",
+      "AUD-SFX-FLASHLIGHT-CHARGE-UP": "502bf2806e6af3136bcdfd45adc87eb49ebd2e84ca29b73d72d4ecfb2e3057f4",
+      "AUD-SFX-FLASHLIGHT-LOW-BATTERY": "c7af87bf7c5e6d0ff379fe58a21303ad149f6aa636ab010d31e07c25393035c4",
+      "AUD-SFX-FLASHLIGHT-DEPLETED": "5a9ce5c159c480b73d499241b2be62623bd9a6fa8aeb04c43034d6b4a2436e9d",
+      "AUD-SFX-RELOAD-ACTION": "03721cca712b4a04bd4590f1930158ff1ab0946d2d224eeaa5ebbe421427d503",
+      "AUD-SFX-RELOAD-END": "ee606322d996f396f83f8e1d17648a22c1e7b903ef3a0cc85ee9e8c5817063dc",
+      "AUD-SFX-WEAPON-SWAP": "b5bb16fea072a464db0ce79c6f2b9a12caaf0d865ce50cc08ca1c351be0b9e53",
+      "AUD-SFX-WEAPON-ATTACH": "1f9d87be6bef85f78a8949d839712ed03435ab8c246709231f4d585ada275281",
+      "AUD-SFX-WEAPON-ATTACH-DENIED": "5cdbbf2b668b0e954670023ed03e78ed3ce9cbcef49966f141011cb34e506cc2",
+      "AUD-SFX-FACILITY-CONFIRM": "4af6ac13678a2016d89cb9e70fae431447d3c8b65aca5099b6dfcbe95b201bb9",
+      "AUD-SFX-FACILITY-DENIED": "7d3431c8d8891b6bfdbae310f769ba68235b3bbc7dccab86c2fe8dc3a6977b71",
+      "AUD-SFX-FATE-APPLIED": "14782bf52a5f8e9530382a5ab7d4b3969d24ebd6960ed1d9cb0b1ae8110f4238",
+      "AUD-SFX-RETREAT-CONFIRMED": "93393dea7de80d30e2fc23cc582e8560617cc53fe6eabde7b5d80ef5cdb9a9f4",
+      "AUD-SFX-SETTLEMENT-FAILED": "a9bf75e6fc8db27342df7bbd98a8ac0b9fd5eb63592742f30a7bd7410f78bfc0",
+      "AUD-SFX-LOADING-FAILED": "5277aca52c7c5812b7c2e0d770bca0b00aae2aff77e063f886f60d822434b98f",
+      "AUD-SFX-GENERATION-FALLBACK": "5e692fa5d588bc5d5b9f85b7a4d56ff5876ae3f1069d5cf59037d5418bc20dc9",
+      "AUD-SFX-RETURN-FAILED": "247308f3b454ab729c86ca2126570a4245ca99c16e955c65fcbac6df5f620947",
+      "AUD-SFX-UI-BACK": "454caf944a12541748572983b77d4442964fc8bb3d570e50eef52eec0f7f7e40",
+      "AUD-SFX-UI-LOADING-STEP": "f351545c8ac4ff54a2162c70b179cbf70b07be0335c44ea2470dec74935447bf",
+      "AUD-SFX-NARRATIVE-STINGER": "c1cf6dedd98dfbb5ccc360f8d7d9c88c5191f7d24163aed65b5892c1f6d0c04a",
+      "AUD-SFX-LAUNCHER-FIRE": "513e8941bc2de85a73e184a9487f4cd093a70ecdfcb09b18da792a0b86785c42",
+      "AUD-SFX-LAUNCHER-FIRE-VAR02": "8c266cb47d129075be2df51c22a513c1c9020ace7828255ed3580cc7d2b69576",
+      "AUD-SFX-LAUNCHER-FIRE-VAR03": "223181d0db923cbae2f9c5856fa04f874cc53d4c1846dd0f89ba69cb94afc508",
+      "AUD-SFX-RELOAD-PISTOL": "b5efa2ba2a2d4e29b553acd4c5bb5500f72f681404b22a74f6e16543fd2a85eb",
+      "AUD-SFX-RELOAD-RIFLE": "3b2df172a418435e0f91780e56c105d146cb91dfaed25ff600b6bc87ed844f23",
+      "AUD-SFX-RELOAD-MACHINEGUN": "fe530812218cfec5fe640e4ea149ecddb90611d3b9f98ff7578226aeb136bf1e",
+      "AUD-SFX-RELOAD-SHOTGUN": "b3648a34c5f35e0246d02cafa456d64b520b9aa2c8e7bf6f51d5513488c7192c",
+      "AUD-SFX-RELOAD-SNIPER": "afa31bcc0057f7698161020174f3f6b6fd4b107e0ce78f68a2027ce8adfab40e",
+      "AUD-SFX-RELOAD-LAUNCHER": "69c8c2414298f59821a767678e293ac4daa4b6a6e717cffa4d144a4a7735252b",
+      "AUD-SFX-RELOAD-CHARGE": "95f604350b7f8741bfe4a2fc58a518319d6741834713f85a3beaf7fd8e36f3ca",
+      "AUD-SFX-PICKUP-PISTOL": "d331b30ad95ca74d5730e2e34c7b698e2a56e9d0bf62b3e174f3c2023f4c563d",
+      "AUD-SFX-PICKUP-RIFLE": "bfb11330b24e7cbdedfcc117e9658ebb48b53c39f1ff0c237a3f692da20b2cd0",
+      "AUD-SFX-PICKUP-MACHINEGUN": "0aaebe759f8381aa954210ee806b55c82dddcc7d3743c47102fe030e547a0364",
+      "AUD-SFX-PICKUP-SHOTGUN": "c750cb004085f3d5c58d69e76ca07a294d9c584c049644787ce779fab2ca2495",
+      "AUD-SFX-PICKUP-SNIPER": "418694d51db36f517b665c4baadbb04c415a07a3e2bb63c901c7bf137c99b1e4",
+      "AUD-SFX-PICKUP-LAUNCHER": "698d604186ed82c729b73aae12ae714ce65976a4247a0a27c26694c1ab9bab64",
+      "AUD-SFX-PICKUP-CHARGE": "8f854b54bac7100f467ab63ad385172780ff3aa53915968598a869b8c7662a8f"
+    },
+    "changed_assets": 93,
+    "environment_loops": 9
+  }
 }

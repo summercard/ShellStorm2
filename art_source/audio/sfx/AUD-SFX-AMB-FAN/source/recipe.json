@@ -1,0 +1,43 @@
+{
+  "renderer": "tools/asset_pipeline/build_world_environment_assets.py",
+  "asset": {
+    "asset_id": "AUD-SFX-AMB-FAN",
+    "key": "amb_fan",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-FAN/source/amb_fan_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/amb_fan_v001.ogg",
+    "version": 1,
+    "duration_sec": 8,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "41dd52b810fe7b32d8ac499560dac3e2915fcc3f5af0b807d36b1de24f040ab5",
+    "source_sha256": "25834f8a89345fb5eba6da12f378b0df1dd132276fd7e3a2c69e0ac25063b5eb",
+    "production_revision": "world-environment-r6",
+    "source_method": "Sourced recordings / real-world environment playback",
+    "license_source": "https://opengameart.org/content/broken-fan-loop | dklon",
+    "license_scope": "CC-BY-3.0",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": true,
+    "peak_target_db": -20,
+    "event_ids": [
+      "amb.fan"
+    ],
+    "sound_set_id": "SFXSET-AMB-FAN"
+  },
+  "input": {
+    "path": "art_source/audio/sfx/recorded_world_library/source/fan.wav",
+    "sha256": "38f78440c021e6546feb0cd16d5af016557fc08fc838b301682dbd3ce7cca19f",
+    "credit": "dklon",
+    "source_url": "https://opengameart.org/content/broken-fan-loop",
+    "license": "CC-BY-3.0"
+  },
+  "start_sec": 0,
+  "duration_sec": 8,
+  "lowpass_hz": 4500,
+  "gain": 0.5178954570135192,
+  "loop_crossfade_sec": 0.5
+}

@@ -1,57 +1,40 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "weapon_attach",
-    "name": "weapon_attach",
-    "events": [
-      "combat.weapon.attach"
-    ],
-    "preset": "mechanical",
-    "duration": 0.26,
-    "variants": 1,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "combat domain",
-    "trigger_fact": "combat.weapon.attach confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 1100,
-    "clicks": [
-      0.035,
-      0.11
-    ]
-  },
+  "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
   "asset": {
     "asset_id": "AUD-SFX-WEAPON-ATTACH",
     "key": "weapon_attach",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-WEAPON-ATTACH/source/weapon_attach_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/weapon_attach_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.26,
+    "source_path": "art_source/audio/sfx/AUD-SFX-WEAPON-ATTACH/source/weapon_attach_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/weapon_attach_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.3,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "e9ff3a3e43ecb77a9f1d0226f7715908204170baaa321f221aafb9374af76aff",
-    "source_sha256": "66e9a143653b388ba8ddd5a5e12807274b642012c98acfdc8f78b7f9fb820407",
-    "seed": 743999869,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "1f9d87be6bef85f78a8949d839712ed03435ab8c246709231f4d585ada275281",
+    "source_sha256": "6f2aa9d707afcf89371f880b9c1597de01a0717e84d03a48fa00b9b9c505e2fa",
+    "license_source": "https://opengameart.org/content/gun-reload-sounds | SpringySpringo",
+    "license_scope": "CC0-1.0; edited recording; OpenSpades free pak distribution",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -14,
     "event_ids": [
       "combat.weapon.attach"
     ],
-    "sound_set_id": "SFXSET-WEAPON-ATTACH"
+    "sound_set_id": "SFXSET-WEAPON-ATTACH",
+    "production_revision": "recorded-weapons-r3"
   },
-  "stems": [
-    "mechanism"
-  ]
+  "input": "recording_Rifle_RaiseLocal.opus",
+  "input_sha256": "f893e899438e1dd1eea0b95492ac5661171e90fc3b2e51b7570566b60b8acf2f",
+  "start_sec": 0.05,
+  "duration_limit_sec": 0.3,
+  "filters": "highpass=f=75,lowpass=f=14500,afade=t=in:st=0:d=0.001,afade=t=out:st=0.27500:d=0.025",
+  "gain": 0.3545556564283286,
+  "download_url": "https://raw.githubusercontent.com/DeathByDenim/openspades-free-pak/main/Sounds/Weapons/Rifle/RaiseLocal.opus",
+  "license": "CC0-1.0",
+  "attribution": "SpringySpringo",
+  "source_page": "https://opengameart.org/content/gun-reload-sounds"
 }

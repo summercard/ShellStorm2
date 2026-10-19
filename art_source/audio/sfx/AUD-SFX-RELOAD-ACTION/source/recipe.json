@@ -1,57 +1,40 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "reload_action",
-    "name": "reload_action",
-    "events": [
-      "combat.weapon.reload_action"
-    ],
-    "preset": "mechanical",
-    "duration": 0.3,
-    "variants": 1,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "combat domain",
-    "trigger_fact": "combat.weapon.reload_action confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 650,
-    "clicks": [
-      0.06,
-      0.15
-    ]
-  },
+  "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
   "asset": {
     "asset_id": "AUD-SFX-RELOAD-ACTION",
     "key": "reload_action",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-RELOAD-ACTION/source/reload_action_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/reload_action_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.3,
+    "source_path": "art_source/audio/sfx/AUD-SFX-RELOAD-ACTION/source/reload_action_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/reload_action_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.62,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "98172e546620c87482ceac551d933564434c079ff6dbd7dcb0a41946d3d38485",
-    "source_sha256": "fc57b298ee1a2b78b11a09d553c174ff0b963fe1c440c8a576fe4c8c06e2dac7",
-    "seed": 2346185193,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "03721cca712b4a04bd4590f1930158ff1ab0946d2d224eeaa5ebbe421427d503",
+    "source_sha256": "01039cf302a4b649d8b051a0621663c97ee8103940f97117f11b2537473eec5c",
+    "license_source": "https://opengameart.org/content/equipment-clicks-iii | LFA",
+    "license_scope": "CC0-1.0; edited recording; OpenSpades free pak distribution",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -14,
     "event_ids": [
       "combat.weapon.reload_action"
     ],
-    "sound_set_id": "SFXSET-RELOAD-ACTION"
+    "sound_set_id": "SFXSET-RELOAD-ACTION",
+    "production_revision": "recorded-weapons-r3"
   },
-  "stems": [
-    "mechanism"
-  ]
+  "input": "recording_SMG_Reload.opus",
+  "input_sha256": "a520d5c2da20f1ed4f43e25fb2fafdfb5a8e5b5f0bf5a585a0d73ea1a999881f",
+  "start_sec": 0.43,
+  "duration_limit_sec": 0.62,
+  "filters": "highpass=f=75,lowpass=f=14500,afade=t=in:st=0:d=0.001,afade=t=out:st=0.59500:d=0.025",
+  "gain": 0.6358756146470439,
+  "download_url": "https://raw.githubusercontent.com/DeathByDenim/openspades-free-pak/main/Sounds/Weapons/SMG/Reload.opus",
+  "license": "CC0-1.0",
+  "attribution": "LFA",
+  "source_page": "https://opengameart.org/content/equipment-clicks-iii"
 }

@@ -1,56 +1,40 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "ammo_empty",
-    "name": "空仓扳机",
-    "events": [
-      "combat.weapon.empty"
-    ],
-    "preset": "mechanical",
-    "duration": 0.14,
-    "variants": 1,
-    "peak_db": -13,
-    "priority": "P2",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "combat.weapon.empty confirmed edge; only the domain owner may emit",
-    "legacy": true,
-    "frequency": 960,
-    "clicks": [
-      0.027
-    ]
-  },
+  "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
   "asset": {
     "asset_id": "AUD-SFX-AMMO-EMPTY",
     "key": "ammo_empty",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-AMMO-EMPTY/source/ammo_empty_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/ammo_empty_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.14,
+    "source_path": "art_source/audio/sfx/AUD-SFX-AMMO-EMPTY/source/ammo_empty_v003.wav",
+    "runtime_path": "res://src/assets/audio/sfx/ammo_empty_v003.ogg",
+    "version": 3,
+    "duration_sec": 0.1,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "6fdd510b054fa7ecd2579d77146ebe30e00e1b941954a4517281eced87d08cfb",
-    "source_sha256": "082f6825f66b4145c0d42e29bfefc381d21aa91e79a115f57dd3deb7b89cee45",
-    "seed": 3570549634,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "2edcf45a5ceff21bcc5f3d2288df5a89e9828df21dfc6102e03287a866078b04",
+    "source_sha256": "8dad81e64be39c4bdebe623a2b5143860f71c8c4e3a3c2dc1fa216f3652d04d7",
+    "license_source": "https://opengameart.org/content/equipment-clicks-iii | LFA",
+    "license_scope": "CC0-1.0; edited recording; OpenSpades free pak distribution",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -13,
+    "peak_target_db": -14,
     "event_ids": [
       "combat.weapon.empty"
     ],
-    "sound_set_id": "SFXSET-AMMO-EMPTY"
+    "sound_set_id": "SFXSET-AMMO-EMPTY",
+    "production_revision": "recorded-weapons-r3"
   },
-  "stems": [
-    "mechanism"
-  ]
+  "input": "recording_SMG_RaiseLocal.opus",
+  "input_sha256": "cedeefa96673bfa026a70fe7eb35212bd702ddcc995f27d0ac40506a04322e68",
+  "start_sec": 0.06,
+  "duration_limit_sec": 0.1,
+  "filters": "highpass=f=75,lowpass=f=14500,afade=t=in:st=0:d=0.001,afade=t=out:st=0.07500:d=0.025",
+  "gain": 0.47594395347461577,
+  "download_url": "https://raw.githubusercontent.com/DeathByDenim/openspades-free-pak/main/Sounds/Weapons/SMG/RaiseLocal.opus",
+  "license": "CC0-1.0",
+  "attribution": "LFA",
+  "source_page": "https://opengameart.org/content/equipment-clicks-iii"
 }

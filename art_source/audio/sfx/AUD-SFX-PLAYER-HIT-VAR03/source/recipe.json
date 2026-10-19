@@ -1,57 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "player_hit",
-    "name": "玩家受伤",
-    "events": [
-      "player.hurt"
-    ],
-    "preset": "hurt",
-    "duration": 0.29,
-    "variants": 3,
-    "peak_db": -7,
-    "priority": "P0",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "player.hurt confirmed edge; only the domain owner may emit",
-    "legacy": true,
-    "frequency": 105,
-    "weight": 1.3
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-PLAYER-HIT-VAR03",
     "key": "player_hit",
     "variant": 2,
-    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-HIT-VAR03/source/player_hit_alt03_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/player_hit_alt03_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.29,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-HIT-VAR03/source/player_hit_alt03_v003.wav",
+    "runtime_path": "res://src/assets/audio/sfx/player_hit_alt03_v003.ogg",
+    "version": 3,
+    "duration_sec": 0.55,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "1b50e5bec55e1342596941fceeeef4007ace51330bb297a8d8431e02ed98470c",
-    "source_sha256": "df59949ca2f7a95a668bb495e5098f21aab27e3cb17337d5234012cc004a660c",
-    "seed": 3447402623,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "0f2c5bef737273aaecff02e09422afa8a7ed808df93f3c65e3430912e3c1094e",
+    "source_sha256": "4488daead88a358954880cbadad589b691d5b684aa8cb2fe336b371e1164adfd",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney; https://opengameart.org/content/male-gruntyelling-sounds | HaelDB",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -7,
+    "peak_target_db": -14,
     "event_ids": [
       "player.hurt"
     ],
-    "sound_set_id": "SFXSET-PLAYER-HIT"
+    "sound_set_id": "SFXSET-PLAYER-HIT",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mass",
-    "contact",
-    "fracture",
-    "body_pressure"
-  ]
+  "layers": [
+    {
+      "source": "human_3grunt3.wav",
+      "start_sec": 0,
+      "duration_sec": 0.45,
+      "offset_sec": 0,
+      "gain": 0.6
+    },
+    {
+      "source": "impact_impactPunch_medium_002.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.5
+    }
+  ],
+  "sources": {
+    "human_3grunt3.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/human_3grunt3.wav",
+      "sha256": "6006516ae7979896a4053cfc88f26ef575a67133fa0c51de5d9a893498960cc9",
+      "credit": "HaelDB",
+      "source_url": "https://opengameart.org/content/male-gruntyelling-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "yelling sounds/3grunt3.wav"
+    },
+    "impact_impactPunch_medium_002.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactPunch_medium_002.ogg",
+      "sha256": "6492f9ccbc8d24dcef607bb1b48790b7870961474561f7fe5601e1c73a3018ef",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactPunch_medium_002.ogg"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.37209976352194823,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

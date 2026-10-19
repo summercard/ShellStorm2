@@ -1,60 +1,49 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "sniper_fire",
-    "name": "狙击枪射击",
-    "events": [
-      "combat.weapon.fire.sniper"
-    ],
-    "preset": "gun",
-    "duration": 0.68,
-    "variants": 3,
-    "peak_db": -8,
-    "priority": "P1",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 8,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "combat.weapon.fire.sniper confirmed edge; only the domain owner may emit",
-    "legacy": true,
-    "frequency": 63,
-    "weight": 2.8,
-    "tail": 0.24
-  },
+  "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
   "asset": {
     "asset_id": "AUD-SFX-SNIPER-FIRE-VAR02",
     "key": "sniper_fire",
     "variant": 1,
-    "source_path": "art_source/audio/sfx/AUD-SFX-SNIPER-FIRE-VAR02/source/sniper_fire_alt02_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/sniper_fire_alt02_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.68,
+    "source_path": "art_source/audio/sfx/AUD-SFX-SNIPER-FIRE-VAR02/source/sniper_fire_alt02_v004.wav",
+    "runtime_path": "res://src/assets/audio/sfx/sniper_fire_alt02_v004.ogg",
+    "version": 4,
+    "duration_sec": 0.85,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "4c1a7ad3209096760d5f76272fd7b7f66099f7fb0cfe4d811e2870a5c4c9592d",
-    "source_sha256": "f4293292a1ee6b267e0881c2971346bbe50bfa2008b3a6075e82f9981fb07aca",
-    "seed": 3738004428,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "90c285e2a15a7aaeee068524c44eccb854270324715989bdc991e85f6a7d637f",
+    "source_sha256": "6e7f9fd3740ba8a480dc7bbeb6fa0eca101cdd329c531bae6197ed29b5582ef8",
+    "license_source": "https://opengameart.org/content/gunshot-sounds | Vincent Sevedge / Tabasco",
+    "license_scope": "CC-BY-3.0 (archive notice; page also offers CC0; retain stricter attribution)",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -8,
+    "peak_target_db": -10,
     "event_ids": [
       "combat.weapon.fire.sniper"
     ],
-    "sound_set_id": "SFXSET-SNIPER-FIRE"
+    "sound_set_id": "SFXSET-SNIPER-FIRE",
+    "production_revision": "gun-families-r4"
   },
-  "stems": [
-    "muzzle_crack",
-    "combustion",
-    "body",
-    "mechanism",
-    "room_tail",
-    "receiver"
-  ]
+  "inputs": [
+    {
+      "file": "recording_mosin.wav",
+      "sha256": "ece6fff8f3b21aa8bc41943c0293d3fab6a553db33dd2427a388838324a39719",
+      "start_sec": 1.658,
+      "length_sec": 0.85,
+      "offset_sec": 0,
+      "gain": 1,
+      "credit": "Vincent Sevedge / Tabasco",
+      "source_page": "https://opengameart.org/content/gunshot-sounds",
+      "license": "CC-BY-3.0 (archive notice; page also offers CC0; retain stricter attribution)"
+    }
+  ],
+  "duration_sec": 0.85,
+  "lowpass_hz": 14000,
+  "peak_db": -10,
+  "normalization_gain": 0.756242177779044,
+  "leading_trim_samples": 1058,
+  "input_filter": "highpass=75Hz; afftdn nr=12 nf=-35; 1ms/25ms layer fades; 30ms output fade; no pitch shift"
 }

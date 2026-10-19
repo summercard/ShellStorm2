@@ -1,57 +1,40 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "reload_end",
-    "name": "reload_end",
-    "events": [
-      "combat.weapon.reload_end"
-    ],
-    "preset": "mechanical",
-    "duration": 0.19,
-    "variants": 1,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "combat domain",
-    "trigger_fact": "combat.weapon.reload_end confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 800,
-    "clicks": [
-      0.028,
-      0.06
-    ]
-  },
+  "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
   "asset": {
     "asset_id": "AUD-SFX-RELOAD-END",
     "key": "reload_end",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-RELOAD-END/source/reload_end_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/reload_end_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.19,
+    "source_path": "art_source/audio/sfx/AUD-SFX-RELOAD-END/source/reload_end_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/reload_end_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.32,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "6f0d56583f17be2ed2cd361d0139ea5fd6bb3c9f36eb8402c4bf0b06d69cc052",
-    "source_sha256": "33a87efec3702a3b398765e225af736350dc1350a57ffbde593e723cdf5e73f6",
-    "seed": 3055227763,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "ee606322d996f396f83f8e1d17648a22c1e7b903ef3a0cc85ee9e8c5817063dc",
+    "source_sha256": "14d6547346cfcee9532dc7a81ae7adec4fce9a0c2a1e1a1cd00ed22e2df4b384",
+    "license_source": "https://opengameart.org/content/gun-reload-sounds | SpringySpringo",
+    "license_scope": "CC0-1.0; edited recording; OpenSpades free pak distribution",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -14,
     "event_ids": [
       "combat.weapon.reload_end"
     ],
-    "sound_set_id": "SFXSET-RELOAD-END"
+    "sound_set_id": "SFXSET-RELOAD-END",
+    "production_revision": "recorded-weapons-r3"
   },
-  "stems": [
-    "mechanism"
-  ]
+  "input": "recording_Rifle_RaiseLocal.opus",
+  "input_sha256": "f893e899438e1dd1eea0b95492ac5661171e90fc3b2e51b7570566b60b8acf2f",
+  "start_sec": 0.05,
+  "duration_limit_sec": 0.32,
+  "filters": "highpass=f=75,lowpass=f=14500,afade=t=in:st=0:d=0.001,afade=t=out:st=0.29500:d=0.025",
+  "gain": 0.3545556564283286,
+  "download_url": "https://raw.githubusercontent.com/DeathByDenim/openspades-free-pak/main/Sounds/Weapons/Rifle/RaiseLocal.opus",
+  "license": "CC0-1.0",
+  "attribution": "SpringySpringo",
+  "source_page": "https://opengameart.org/content/gun-reload-sounds"
 }

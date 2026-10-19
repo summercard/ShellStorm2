@@ -1,0 +1,88 @@
+# Recorded world audio sources
+
+Edits: extraction, layering, filters, gain, fades, looping. No claim that creature voices are real animals.
+
+- art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Impacts_Flesh1.opus — magnuswaker; CC0; https://freesound.org/people/magnuswaker/sounds/522091/
+- art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_medium_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Impacts_Flesh2.opus — magnuswaker; CC0; https://freesound.org/people/magnuswaker/sounds/522091/
+- art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_medium_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Impacts_Flesh3.opus — satanicupsman; CC0; https://freesound.org/people/satanicupsman/sounds/144015/
+- art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_medium_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.6.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_heavy_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.11.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_heavy_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.16.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_heavy_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/human_3grunt1.wav — HaelDB; CC0-1.0; https://opengameart.org/content/male-gruntyelling-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPunch_medium_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/human_3grunt2.wav — HaelDB; CC0-1.0; https://opengameart.org/content/male-gruntyelling-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPunch_medium_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/human_3grunt3.wav — HaelDB; CC0-1.0; https://opengameart.org/content/male-gruntyelling-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPunch_medium_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/rpg_cloth1.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Spade_Miss.opus — Iwan Gabovitch; CC0; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes
+- art_source/audio/sfx/recorded_world_library/source/rpg_cloth2.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/rpg_cloth3.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPunch_heavy_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPunch_heavy_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPunch_heavy_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactMetal_medium_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactMetal_medium_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactMetal_medium_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/rpg_metalLatch.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/rpg_doorOpen_2.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/rpg_beltHandle1.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/rpg_creak1.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/impact_footstep_concrete_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_footstep_concrete_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_footstep_concrete_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_footstep_concrete_003.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPlate_light_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPlate_light_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPlate_light_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPlate_light_003.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_footstep_grass_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactMining_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_footstep_grass_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactMining_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_footstep_grass_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactMining_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_footstep_grass_003.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactMining_003.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/human_3grunt4.wav — HaelDB; CC0-1.0; https://opengameart.org/content/male-gruntyelling-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_heavy_003.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/human_3grunt6.wav — HaelDB; CC0-1.0; https://opengameart.org/content/male-gruntyelling-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_heavy_004.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/rpg_cloth4.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/rpg_metalClick.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/impact_impactWood_light_000.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactWood_light_001.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/impact_impactWood_light_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/rpg_drawKnife2.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/rpg_clothBelt.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.9.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.2.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.3.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.5.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.12.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.4.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.7.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.10.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Grenade_Debris.opus — Blender Foundation; CC0; https://opengameart.org/content/tree-falling-yo-frankie
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.1.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.15.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/monster_monster.14.ogg — StarNinjas; CC0-1.0; https://opengameart.org/content/16-monster-growls
+- art_source/audio/sfx/recorded_world_library/source/impact_impactPlate_heavy_002.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/rpg_clothBelt2.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Grenade_Explode1.opus — Michel Baradari; CC-BY 3.0; https://opengameart.org/content/2-high-quality-explosions
+- art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Grenade_Explode2.opus — Michel Baradari; CC-BY 3.0; https://opengameart.org/content/2-high-quality-explosions
+- art_source/audio/sfx/recorded_world_library/source/rpg_doorClose_2.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/impact_impactMetal_medium_003.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/impact-sounds
+- art_source/audio/sfx/recorded_world_library/source/rpg_handleSmallLeather.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/rpg_beltHandle2.ogg — Kenney; CC0-1.0; https://kenney.nl/assets/rpg-audio
+- art_source/audio/sfx/recorded_world_library/source/fan.wav — dklon; CC-BY-3.0; https://opengameart.org/content/broken-fan-loop
+- art_source/audio/sfx/recorded_world_library/source/vent.mp3 — MidFag; CC-BY-3.0; https://opengameart.org/content/ventilation-version2
+- art_source/audio/sfx/recorded_world_library/source/wind.wav — remaxim; CC0-1.0; https://opengameart.org/content/short-wind-sound
+
+- Bird chirps recorded by syncopika, CC0-1.0: https://opengameart.org/content/bird-chirping-sounds ; edits: excerpts, mono, filtering, fades, normalization. Wood footsteps: Kenney Impact Sounds, CC0-1.0.

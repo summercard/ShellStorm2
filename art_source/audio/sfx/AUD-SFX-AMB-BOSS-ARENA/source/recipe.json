@@ -1,57 +1,67 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "amb_boss_arena",
-    "name": "amb_boss_arena",
-    "events": [
-      "amb.boss_arena"
-    ],
-    "preset": "ambience",
-    "duration": 6,
-    "variants": 1,
-    "peak_db": -26,
-    "priority": "P2",
-    "spatial_mode": "world_bed",
-    "bus": "Ambience",
-    "max_voices": 2,
-    "owner": "amb domain",
-    "trigger_fact": "amb.boss_arena confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 41,
-    "cutoff": 1200,
-    "pulse": true
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-AMB-BOSS-ARENA",
     "key": "amb_boss_arena",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-BOSS-ARENA/source/amb_boss_arena_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/amb_boss_arena_v001.ogg",
-    "version": 1,
-    "duration_sec": 6,
+    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-BOSS-ARENA/source/amb_boss_arena_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/amb_boss_arena_v002.ogg",
+    "version": 2,
+    "duration_sec": 10,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "881915488b164267ad44681d47ad82e47b22c6479cd78d10ff23df1f7b6a6106",
-    "source_sha256": "3e8ce8e38a2125617821723ac46cbe9a12166381e966276428eadbc691a9ca0c",
-    "seed": 3152737480,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "3da5acdf658792b93fec3bd13ec516c5026ab9bfc8d5b3d1822b0e686c256a80",
+    "source_sha256": "4484b4c8d34988f999109687b76d1b11d2ec1e08d6eebdd2fd68e90cf8a5c213",
+    "license_source": "https://opengameart.org/content/broken-fan-loop | dklon; https://opengameart.org/content/short-wind-sound | remaxim",
+    "license_scope": "CC-BY-3.0; CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_bed",
     "loop": true,
-    "peak_target_db": -26,
+    "peak_target_db": -21,
     "event_ids": [
       "amb.boss_arena"
     ],
-    "sound_set_id": "SFXSET-AMB-BOSS-ARENA"
+    "sound_set_id": "SFXSET-AMB-BOSS-ARENA",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "room_air",
-    "machinery",
-    "beacon"
-  ]
+  "layers": [
+    {
+      "source": "wind.wav",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.55
+    },
+    {
+      "source": "fan.wav",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.65
+    }
+  ],
+  "sources": {
+    "wind.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/wind.wav",
+      "sha256": "4435f5ad1baf171f21f876f778d0a8a7447becea0c4955bb2566e0c63ab20f41",
+      "credit": "remaxim",
+      "source_url": "https://opengameart.org/content/short-wind-sound",
+      "license": "CC0-1.0"
+    },
+    "fan.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/fan.wav",
+      "sha256": "38f78440c021e6546feb0cd16d5af016557fc08fc838b301682dbd3ce7cca19f",
+      "credit": "dklon",
+      "source_url": "https://opengameart.org/content/broken-fan-loop",
+      "license": "CC-BY-3.0"
+    }
+  },
+  "lowpass_hz": 1600,
+  "gain": 0.6515180014819887,
+  "loop_crossfade_sec": 0.5,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

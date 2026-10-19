@@ -1,0 +1,60 @@
+{
+  "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+  "asset": {
+    "asset_id": "AUD-SFX-LAUNCHER-FIRE-VAR02",
+    "key": "launcher_fire",
+    "variant": 1,
+    "sound_set_id": "SFXSET-LAUNCHER-FIRE",
+    "event_ids": [
+      "combat.weapon.fire.launcher"
+    ],
+    "spatial_mode": "world_3d",
+    "source_path": "art_source/audio/sfx/AUD-SFX-LAUNCHER-FIRE-VAR02/source/launcher_fire_alt02_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/launcher_fire_alt02_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.66,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "8c266cb47d129075be2df51c22a513c1c9020ace7828255ed3580cc7d2b69576",
+    "source_sha256": "330e878302f807605e17c7c37dee4c5ffd1b3d7a21762112833ae1e9a1e78597",
+    "peak_target_db": -10,
+    "license_source": "https://opengameart.org/content/gun-reload-sounds | SpringySpringo; https://opengameart.org/content/gunshot-sounds | Vincent Sevedge / Tabasco",
+    "license_scope": "CC-BY-3.0 (archive notice; page also offers CC0; retain stricter attribution); CC0-1.0",
+    "status": "imported_pending_listening",
+    "production_revision": "gun-families-r4",
+    "loop": false
+  },
+  "inputs": [
+    {
+      "file": "recording_shotty.wav",
+      "sha256": "2e4b51fafbc93ea2b9aa0cf2428d6bad6cfa79817f2d0d7aa38c64dc97afa02f",
+      "start_sec": 0.13,
+      "length_sec": 0.55,
+      "offset_sec": 0,
+      "gain": 1,
+      "credit": "Vincent Sevedge / Tabasco",
+      "source_page": "https://opengameart.org/content/gunshot-sounds",
+      "license": "CC-BY-3.0 (archive notice; page also offers CC0; retain stricter attribution)"
+    },
+    {
+      "file": "recording_shotguncock.wav",
+      "sha256": "33e007321ba83301c861aef573f2c40b70bc62f8f24c0164877e6dd123e24371",
+      "start_sec": 0.18,
+      "length_sec": 0.23,
+      "offset_sec": 0.025,
+      "gain": 0.22,
+      "credit": "SpringySpringo",
+      "source_page": "https://opengameart.org/content/gun-reload-sounds",
+      "license": "CC0-1.0"
+    }
+  ],
+  "duration_sec": 0.66,
+  "lowpass_hz": 2900,
+  "peak_db": -10,
+  "normalization_gain": 0.31983973327678256,
+  "leading_trim_samples": 1062,
+  "input_filter": "highpass=75Hz; afftdn nr=12 nf=-35; 1ms/25ms layer fades; 30ms output fade; no pitch shift"
+}

@@ -1,57 +1,84 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "melee_impact",
-    "name": "近战命中主层",
-    "events": [
-      "combat.melee.impact"
-    ],
-    "preset": "impact",
-    "duration": 0.37,
-    "variants": 3,
-    "peak_db": -10,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 5,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "combat.melee.impact confirmed edge; only the domain owner may emit",
-    "legacy": true,
-    "frequency": 87,
-    "weight": 1.8
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-MELEE-IMPACT-VAR03",
     "key": "melee_impact",
     "variant": 2,
-    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-IMPACT-VAR03/source/melee_impact_alt03_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/melee_impact_alt03_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.37,
+    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-IMPACT-VAR03/source/melee_impact_alt03_v003.wav",
+    "runtime_path": "res://src/assets/audio/sfx/melee_impact_alt03_v003.ogg",
+    "version": 3,
+    "duration_sec": 0.45,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "f78fb0e30df0917595ccb0aa77583911cae64b6ba596ca9895d0cfb4ba6ed16c",
-    "source_sha256": "d54d52601495eb49f5724c0fb9d9db37add5bb0a61173f3a5f83ede3e63d7557",
-    "seed": 2389806952,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "b588b94b01b63f58d0240d95b88d6c9e1f14e2735e912375ca2bceb6715f6a7f",
+    "source_sha256": "856a77aea10608298763d0f73f1c5a15c964a127544de1262ed165fa063d2b22",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney; https://kenney.nl/assets/rpg-audio | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -10,
+    "peak_target_db": -13,
     "event_ids": [
       "combat.melee.impact"
     ],
-    "sound_set_id": "SFXSET-MELEE-IMPACT"
+    "sound_set_id": "SFXSET-MELEE-IMPACT",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mass",
-    "contact",
-    "fracture",
-    "contact_ring"
-  ]
+  "layers": [
+    {
+      "source": "impact_impactPunch_heavy_002.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "impact_impactMetal_medium_002.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.25
+    },
+    {
+      "source": "rpg_cloth3.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.2
+    }
+  ],
+  "sources": {
+    "impact_impactPunch_heavy_002.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactPunch_heavy_002.ogg",
+      "sha256": "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactPunch_heavy_002.ogg"
+    },
+    "impact_impactMetal_medium_002.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactMetal_medium_002.ogg",
+      "sha256": "7e89ce2ca0dbda95ea2b78d4b50791cab35c10d20e9f5ccd45dd0b00e99ff548",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactMetal_medium_002.ogg"
+    },
+    "rpg_cloth3.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_cloth3.ogg",
+      "sha256": "a48632d17a4f1416541d261a32a31612e01267144c407fa3ecab3ff410f0085b",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/cloth3.ogg"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.14928992198556193,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

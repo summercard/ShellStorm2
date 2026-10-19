@@ -1,57 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_hit",
-    "name": "敌人受击",
-    "events": [
-      "enemy.hit"
-    ],
-    "preset": "impact",
-    "duration": 0.18,
-    "variants": 3,
-    "peak_db": -8,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 5,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "enemy.hit confirmed edge; only the domain owner may emit",
-    "legacy": true,
-    "frequency": 145,
-    "weight": 0.7
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-HIT-VAR03",
     "key": "enemy_hit",
     "variant": 2,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-HIT-VAR03/source/enemy_hit_alt03_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_hit_alt03_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.18,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-HIT-VAR03/source/enemy_hit_alt03_v003.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_hit_alt03_v003.ogg",
+    "version": 3,
+    "duration_sec": 0.36,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "054dfc24a62e7c9709d271e7f760d17cfa1677cdd459f0fcd52dfdb4e11aaeb0",
-    "source_sha256": "70e240e2444c2bb5cfcbafe8b83dcfda1cbd078d671509a2261313873eedca58",
-    "seed": 3979750156,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "a23931de5f876c485f5fa90e821396a98a903c9b32c4eab37660c8acec61e84c",
+    "source_sha256": "921a0e0fadd5a3e835ec5d2f6ea801bd792b4d05057c018b84bf4b7735f28432",
+    "license_source": "https://freesound.org/people/satanicupsman/sounds/144015/ | satanicupsman; https://kenney.nl/assets/impact-sounds | Kenney",
+    "license_scope": "CC0; CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -8,
+    "peak_target_db": -14,
     "event_ids": [
       "enemy.hit"
     ],
-    "sound_set_id": "SFXSET-ENEMY-HIT"
+    "sound_set_id": "SFXSET-ENEMY-HIT",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mass",
-    "contact",
-    "fracture",
-    "contact_ring"
-  ]
+  "layers": [
+    {
+      "source": "openspades_Weapons_Impacts_Flesh3.opus",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "impact_impactSoft_medium_002.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.35
+    }
+  ],
+  "sources": {
+    "openspades_Weapons_Impacts_Flesh3.opus": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Impacts_Flesh3.opus",
+      "sha256": "4328b33b2be9b32e7b59c7a85d259d354ff2d4644e3571c5f1e4879230340957",
+      "credit": "satanicupsman",
+      "license": "CC0",
+      "source_url": "https://freesound.org/people/satanicupsman/sounds/144015/",
+      "distribution_url": "https://github.com/DeathByDenim/openspades-free-pak"
+    },
+    "impact_impactSoft_medium_002.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_medium_002.ogg",
+      "sha256": "5069e3571a77d7f7aae9ef71d0364aa245fb7d64a7c8cc9956f221d03088c089",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactSoft_medium_002.ogg"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.15561576866917057,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

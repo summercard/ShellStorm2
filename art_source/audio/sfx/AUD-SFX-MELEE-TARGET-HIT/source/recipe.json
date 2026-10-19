@@ -1,57 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "melee_target_hit",
-    "name": "melee_target_hit",
-    "events": [
-      "combat.melee.target_hit"
-    ],
-    "preset": "hurt",
-    "duration": 0.19,
-    "variants": 3,
-    "peak_db": -8,
-    "priority": "P0",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "combat domain",
-    "trigger_fact": "combat.melee.target_hit confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 190,
-    "weight": 0.7
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-MELEE-TARGET-HIT",
     "key": "melee_target_hit",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-TARGET-HIT/source/melee_target_hit_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/melee_target_hit_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.19,
+    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-TARGET-HIT/source/melee_target_hit_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/melee_target_hit_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.36,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "3d72effc546665593988d0fbefcac7aad276099cdc8b262c839a43735e30b166",
-    "source_sha256": "edf469e8b05a6aeec05a8d0af599c9fabc74f552fb11e0e932fa54cd2832f0f0",
-    "seed": 3083274383,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "577037bc12aa90ac1d107ba7993ba1cab6ce20490293c64b38dd3245c1b80462",
+    "source_sha256": "a35a3dd184944b00b4c061c44de88e91de12e66b3c90a47797fc13073d984fb2",
+    "license_source": "https://freesound.org/people/magnuswaker/sounds/522091/ | magnuswaker; https://kenney.nl/assets/impact-sounds | Kenney",
+    "license_scope": "CC0; CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -8,
+    "peak_target_db": -16,
     "event_ids": [
       "combat.melee.target_hit"
     ],
-    "sound_set_id": "SFXSET-MELEE-TARGET-HIT"
+    "sound_set_id": "SFXSET-MELEE-TARGET-HIT",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mass",
-    "contact",
-    "fracture",
-    "body_pressure"
-  ]
+  "layers": [
+    {
+      "source": "openspades_Weapons_Impacts_Flesh1.opus",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "impact_impactSoft_medium_000.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.35
+    }
+  ],
+  "sources": {
+    "openspades_Weapons_Impacts_Flesh1.opus": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Impacts_Flesh1.opus",
+      "sha256": "385bd262a54c76bccf98bcf2ab0406486aa4a71fd70593c6a47a56f8fe11e5e6",
+      "credit": "magnuswaker",
+      "license": "CC0",
+      "source_url": "https://freesound.org/people/magnuswaker/sounds/522091/",
+      "distribution_url": "https://github.com/DeathByDenim/openspades-free-pak"
+    },
+    "impact_impactSoft_medium_000.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_medium_000.ogg",
+      "sha256": "7d3ba0bb5e60a11b5d3e558c141303dcf494256675fbf753c0d252d2cf0481e3",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactSoft_medium_000.ogg"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.12893076402501136,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

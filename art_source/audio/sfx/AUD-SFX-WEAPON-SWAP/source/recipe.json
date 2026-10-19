@@ -1,57 +1,40 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "weapon_swap",
-    "name": "weapon_swap",
-    "events": [
-      "combat.weapon.swap"
-    ],
-    "preset": "mechanical",
-    "duration": 0.29,
-    "variants": 1,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "combat domain",
-    "trigger_fact": "combat.weapon.swap confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 350,
-    "clicks": [
-      0.06,
-      0.13
-    ]
-  },
+  "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
   "asset": {
     "asset_id": "AUD-SFX-WEAPON-SWAP",
     "key": "weapon_swap",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-WEAPON-SWAP/source/weapon_swap_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/weapon_swap_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.29,
+    "source_path": "art_source/audio/sfx/AUD-SFX-WEAPON-SWAP/source/weapon_swap_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/weapon_swap_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.39,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "3bc56e7c6a05414de479016b979fdd7a33d32845d8392a69098968cd037dbd8a",
-    "source_sha256": "b8453ac966f340c8d08b51bc382a3d6dd62766b04c58efb8148695d4c7ab80fb",
-    "seed": 4185423034,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "b5bb16fea072a464db0ce79c6f2b9a12caaf0d865ce50cc08ca1c351be0b9e53",
+    "source_sha256": "d1e3d2d6cadeaf34081269c4bd1be17f73e940f2dc76d38005916614f1e9e165",
+    "license_source": "https://opengameart.org/content/equipment-clicks-iii | LFA",
+    "license_scope": "CC0-1.0; edited recording; OpenSpades free pak distribution",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -14,
     "event_ids": [
       "combat.weapon.swap"
     ],
-    "sound_set_id": "SFXSET-WEAPON-SWAP"
+    "sound_set_id": "SFXSET-WEAPON-SWAP",
+    "production_revision": "recorded-weapons-r3"
   },
-  "stems": [
-    "mechanism"
-  ]
+  "input": "recording_SMG_RaiseLocal.opus",
+  "input_sha256": "cedeefa96673bfa026a70fe7eb35212bd702ddcc995f27d0ac40506a04322e68",
+  "start_sec": 0,
+  "duration_limit_sec": 0.39,
+  "filters": "highpass=f=75,lowpass=f=14500,afade=t=in:st=0:d=0.001,afade=t=out:st=0.36500:d=0.025",
+  "gain": 0.47595911188224643,
+  "download_url": "https://raw.githubusercontent.com/DeathByDenim/openspades-free-pak/main/Sounds/Weapons/SMG/RaiseLocal.opus",
+  "license": "CC0-1.0",
+  "attribution": "LFA",
+  "source_page": "https://opengameart.org/content/equipment-clicks-iii"
 }

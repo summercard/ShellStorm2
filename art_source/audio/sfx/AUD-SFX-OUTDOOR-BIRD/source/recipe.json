@@ -1,0 +1,43 @@
+{
+  "renderer": "tools/asset_pipeline/build_world_environment_assets.py",
+  "asset": {
+    "asset_id": "AUD-SFX-OUTDOOR-BIRD",
+    "key": "outdoor_bird",
+    "variant": 0,
+    "source_path": "art_source/audio/sfx/AUD-SFX-OUTDOOR-BIRD/source/outdoor_bird_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/outdoor_bird_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.95,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "aaa4b49595820ab95b700b9111b251643d3676d12e825d3e312930e1958e870b",
+    "source_sha256": "82be5a3a71d47b32b533cfc2b1f491f84e35492123e6736b1ecb6d3c74b1a1f5",
+    "production_revision": "world-environment-r6",
+    "source_method": "Sourced recordings / real-world environment playback",
+    "license_source": "https://opengameart.org/content/bird-chirping-sounds | syncopika",
+    "license_scope": "CC0-1.0",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -20,
+    "event_ids": [
+      "amb.outdoor_bird"
+    ],
+    "sound_set_id": "SFXSET-OUTDOOR-BIRD"
+  },
+  "input": {
+    "path": "art_source/audio/sfx/recorded_world_library/source/syncopika_birdchirping071414.wav",
+    "sha256": "bc6e28bd823b653b2abf3384d4147718603af6bcd98e26166345df71a61eeb08",
+    "credit": "syncopika",
+    "source_url": "https://opengameart.org/content/bird-chirping-sounds",
+    "license": "CC0-1.0"
+  },
+  "start_sec": 0.0,
+  "duration_sec": 0.95,
+  "lowpass_hz": 15000,
+  "gain": 1.4297407975489558,
+  "loop_crossfade_sec": 0
+}

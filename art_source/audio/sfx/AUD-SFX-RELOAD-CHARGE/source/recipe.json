@@ -1,0 +1,60 @@
+{
+  "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+  "asset": {
+    "asset_id": "AUD-SFX-RELOAD-CHARGE",
+    "key": "reload_charge",
+    "variant": 0,
+    "sound_set_id": "SFXSET-RELOAD-CHARGE",
+    "spatial_mode": "listener_follow",
+    "event_ids": [
+      "combat.weapon.reload_start"
+    ],
+    "source_path": "art_source/audio/sfx/AUD-SFX-RELOAD-CHARGE/source/reload_charge_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/reload_charge_v001.ogg",
+    "version": 1,
+    "duration_sec": 1.26,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "95f604350b7f8741bfe4a2fc58a518319d6741834713f85a3beaf7fd8e36f3ca",
+    "source_sha256": "40e4e93420dc9e9fc3d792260a3ebecdaeaf679f57bee824bde6e0e53f383a7c",
+    "peak_target_db": -14,
+    "license_source": "https://opengameart.org/content/equipment-clicks-iii | LFA; https://opengameart.org/content/gun-reload-sounds | SpringySpringo",
+    "license_scope": "CC0-1.0",
+    "status": "imported_pending_listening",
+    "production_revision": "gun-families-r4",
+    "loop": false
+  },
+  "inputs": [
+    {
+      "file": "recording_SMG_Reload.opus",
+      "sha256": "a520d5c2da20f1ed4f43e25fb2fafdfb5a8e5b5f0bf5a585a0d73ea1a999881f",
+      "start_sec": 0.44,
+      "length_sec": 0.65,
+      "offset_sec": 0,
+      "gain": 1,
+      "credit": "LFA",
+      "source_page": "https://opengameart.org/content/equipment-clicks-iii",
+      "license": "CC0-1.0"
+    },
+    {
+      "file": "recording_shotguncock.wav",
+      "sha256": "33e007321ba83301c861aef573f2c40b70bc62f8f24c0164877e6dd123e24371",
+      "start_sec": 0.03,
+      "length_sec": 0.42,
+      "offset_sec": 0.8,
+      "gain": 1,
+      "credit": "SpringySpringo",
+      "source_page": "https://opengameart.org/content/gun-reload-sounds",
+      "license": "CC0-1.0"
+    }
+  ],
+  "duration_sec": 1.26,
+  "lowpass_hz": 14000,
+  "peak_db": -14,
+  "normalization_gain": 0.09582015321543155,
+  "leading_trim_samples": 7449,
+  "input_filter": "highpass=75Hz; afftdn nr=12 nf=-35; 1ms/25ms layer fades; 30ms output fade; no pitch shift"
+}

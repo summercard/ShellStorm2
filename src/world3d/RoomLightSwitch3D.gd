@@ -96,6 +96,8 @@ func toggle_light() -> bool:
 	if _controlled_lights.is_empty() or _is_busy():
 		return false
 	var next_state := not is_light_on()
+	if AudioManager != null:
+		AudioManager.emit_event("world.light.switch_on" if next_state else "world.light.switch_off", {"source_node": self, "source_position": global_position, "volume_db": 2.0, "max_distance": 14.0, "unit_size": 2.0})
 	if next_state and _has_turn_on_presentation():
 		_run_turn_on_sequence()
 		return true

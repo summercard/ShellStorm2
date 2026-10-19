@@ -1,63 +1,84 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "player_death",
-    "name": "player_death",
-    "events": [
-      "player.death_confirmed"
-    ],
-    "preset": "stinger",
-    "duration": 1.35,
-    "variants": 1,
-    "peak_db": -11,
-    "priority": "P1",
-    "spatial_mode": "ui_2d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "player domain",
-    "trigger_fact": "player.death_confirmed confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 55,
-    "notes": [
-      220,
-      164.81,
-      110
-    ],
-    "step": 0.2,
-    "decay": 0.21
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-PLAYER-DEATH",
     "key": "player_death",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-DEATH/source/player_death_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/player_death_v001.ogg",
-    "version": 1,
-    "duration_sec": 1.35,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-DEATH/source/player_death_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/player_death_v002.ogg",
+    "version": 2,
+    "duration_sec": 1.15,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "6a065d6b4cdae9fcd6d6e7ff1c94d0d47cf118b388b8498a04fe53533c63ec3b",
-    "source_sha256": "def0961e8a9275230919df72355a39a989d8025e44d1c72dd2b5992e8280d544",
-    "seed": 2164665274,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "c7ccbb37fcf7c232c06f9ea1f503b9943d7774e730da591ef9a1e92084e8dc32",
+    "source_sha256": "077f54c0f7f5dafd5a96c215e0dc5f709373e065918826a4f9e30562985d360f",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney; https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/male-gruntyelling-sounds | HaelDB",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "ui_2d",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -15,
     "event_ids": [
       "player.death_confirmed"
     ],
-    "sound_set_id": "SFXSET-PLAYER-DEATH"
+    "sound_set_id": "SFXSET-PLAYER-DEATH",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "electronic_identity",
-    "industrial_weight",
-    "impact_air",
-    "steel_resonance"
-  ]
+  "layers": [
+    {
+      "source": "human_3grunt6.wav",
+      "start_sec": 0,
+      "duration_sec": 0.8,
+      "offset_sec": 0,
+      "gain": 0.5
+    },
+    {
+      "source": "impact_impactSoft_heavy_004.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0.2,
+      "gain": 0.8
+    },
+    {
+      "source": "rpg_cloth4.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0.25,
+      "gain": 0.3
+    }
+  ],
+  "sources": {
+    "human_3grunt6.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/human_3grunt6.wav",
+      "sha256": "c334b34e7a64d67f226cd0a54fb237b8fbcc09e5ac6258a32fafcecc2c2e0857",
+      "credit": "HaelDB",
+      "source_url": "https://opengameart.org/content/male-gruntyelling-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "yelling sounds/3grunt6.wav"
+    },
+    "impact_impactSoft_heavy_004.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_heavy_004.ogg",
+      "sha256": "e008f0b6b14f62339c8fe9f9b45cbd6317ba4f66604c4899053b8017020a36f0",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactSoft_heavy_004.ogg"
+    },
+    "rpg_cloth4.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_cloth4.ogg",
+      "sha256": "e7ab9a6c4466dea874196c61f59bf1da05cfe58748f42fadd695d441a154a99b",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/cloth4.ogg"
+    }
+  },
+  "lowpass_hz": 11000,
+  "gain": 0.15694826273713847,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

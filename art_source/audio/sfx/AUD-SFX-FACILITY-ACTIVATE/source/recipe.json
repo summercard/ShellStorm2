@@ -1,54 +1,68 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "facility_activate",
-    "name": "facility_activate",
-    "events": [
-      "world.facility.activate"
-    ],
-    "preset": "power",
-    "duration": 0.9,
-    "variants": 1,
-    "peak_db": -13,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "world domain",
-    "trigger_fact": "world.facility.activate confirmed edge; only the domain owner may emit",
-    "legacy": false
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-FACILITY-ACTIVATE",
     "key": "facility_activate",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-FACILITY-ACTIVATE/source/facility_activate_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/facility_activate_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.9,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FACILITY-ACTIVATE/source/facility_activate_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/facility_activate_v002.ogg",
+    "version": 2,
+    "duration_sec": 1.7,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "b4cd44d3fe42d9811becf068f8ee42326fdf2054a22b12fe7492f862214a1da1",
-    "source_sha256": "b0157b41a26489c048e1311c01bf79ba01db18b10cf2552a2e2a8261dad0e594",
-    "seed": 3354329260,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "ec4c8ee9cb12febd1c02923167c91ac152bb8a0e46254121b138133e9655d531",
+    "source_sha256": "33a9487adfe982194caa3bdfccf55fb9f0ec5c0d495ec1e35fc7e16a8cd7320a",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/broken-fan-loop | dklon",
+    "license_scope": "CC-BY-3.0; CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -13,
+    "peak_target_db": -19,
     "event_ids": [
       "world.facility.activate"
     ],
-    "sound_set_id": "SFXSET-FACILITY-ACTIVATE"
+    "sound_set_id": "SFXSET-FACILITY-ACTIVATE",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mechanism",
-    "coil",
-    "electronic_identity"
-  ]
+  "layers": [
+    {
+      "source": "rpg_metalLatch.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.3
+    },
+    {
+      "source": "fan.wav",
+      "start_sec": 0,
+      "duration_sec": 1.5,
+      "offset_sec": 0.06,
+      "gain": 0.45
+    }
+  ],
+  "sources": {
+    "rpg_metalLatch.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_metalLatch.ogg",
+      "sha256": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/metalLatch.ogg"
+    },
+    "fan.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/fan.wav",
+      "sha256": "38f78440c021e6546feb0cd16d5af016557fc08fc838b301682dbd3ce7cca19f",
+      "credit": "dklon",
+      "source_url": "https://opengameart.org/content/broken-fan-loop",
+      "license": "CC-BY-3.0"
+    }
+  },
+  "lowpass_hz": 6500,
+  "gain": 0.29545723951592884,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

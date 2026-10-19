@@ -1,61 +1,54 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_avoid_light",
-    "name": "enemy_avoid_light",
-    "events": [
-      "enemy.avoid_light"
-    ],
-    "preset": "enemy",
-    "duration": 0.29,
-    "variants": 1,
-    "peak_db": -12,
-    "priority": "P1",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 5,
-    "owner": "enemy domain",
-    "trigger_fact": "enemy.avoid_light confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 310,
-    "notes": [
-      740,
-      587
-    ],
-    "decay": 0.06,
-    "step": 0.07
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-AVOID-LIGHT",
     "key": "enemy_avoid_light",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-AVOID-LIGHT/source/enemy_avoid_light_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_avoid_light_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.29,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-AVOID-LIGHT/source/enemy_avoid_light_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_avoid_light_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.6,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "a4e76b3402f6ff4502cdb0827b2b10a539157a64255e63d9906b33c3f66d55e0",
-    "source_sha256": "d77050accc4b32c32eb80b45f921d5713f78c6b31555a922f6d1328a20cd632e",
-    "seed": 2211206520,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "97611a0724f342438f30a5e80bfa1527edc64d58efac99d7d321b0328635f0ab",
+    "source_sha256": "97913df8b2afb990a58e2b893f82193d7cc7fd0460ac2bb7fe19d1eb4e325b2c",
+    "license_source": "https://opengameart.org/content/16-monster-growls | StarNinjas",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -12,
+    "peak_target_db": -17,
     "event_ids": [
       "enemy.avoid_light"
     ],
-    "sound_set_id": "SFXSET-ENEMY-AVOID-LIGHT"
+    "sound_set_id": "SFXSET-ENEMY-AVOID-LIGHT",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "electronic_identity",
-    "vocal_resonator",
-    "breath_grit"
-  ]
+  "layers": [
+    {
+      "source": "monster_monster.15.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    }
+  ],
+  "sources": {
+    "monster_monster.15.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/monster_monster.15.ogg",
+      "sha256": "e8d9c34c3f83c1c7bd948eaad80459cb493cb07d006d49f86009f89414a40b95",
+      "credit": "StarNinjas",
+      "source_url": "https://opengameart.org/content/16-monster-growls",
+      "license": "CC0-1.0",
+      "archive_member": "monster.15.ogg"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.05252292674935541,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

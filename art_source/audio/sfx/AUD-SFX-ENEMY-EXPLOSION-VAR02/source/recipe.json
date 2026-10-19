@@ -1,58 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_explosion",
-    "name": "enemy_explosion",
-    "events": [
-      "enemy.explosion"
-    ],
-    "preset": "explosion",
-    "duration": 1.05,
-    "variants": 3,
-    "peak_db": -7,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "enemy domain",
-    "trigger_fact": "enemy.explosion confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 47,
-    "weight": 3
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-EXPLOSION-VAR02",
     "key": "enemy_explosion",
     "variant": 1,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-EXPLOSION-VAR02/source/enemy_explosion_alt02_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_explosion_alt02_v001.ogg",
-    "version": 1,
-    "duration_sec": 1.05,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-EXPLOSION-VAR02/source/enemy_explosion_alt02_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_explosion_alt02_v002.ogg",
+    "version": 2,
+    "duration_sec": 1.5,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "2497be450a6774c669bde78fe67b262ff986146912f74da8fc8596a091ddb9e4",
-    "source_sha256": "9df0deaac104e44c33154b6f18125da4b79e53b39b171b700ae3aa1b39239a68",
-    "seed": 695023116,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "3ce447045b34c97be0c58d277432fb3d4ab24c07cb6b019b935a84542e1cb0d5",
+    "source_sha256": "bec49032178ee7ca01fcf984ef83914e6ab57dab51f01b0df30ca067aabb83b7",
+    "license_source": "https://opengameart.org/content/2-high-quality-explosions | Michel Baradari; https://opengameart.org/content/tree-falling-yo-frankie | Blender Foundation",
+    "license_scope": "CC-BY 3.0; CC0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -7,
+    "peak_target_db": -12,
     "event_ids": [
       "enemy.explosion"
     ],
-    "sound_set_id": "SFXSET-ENEMY-EXPLOSION"
+    "sound_set_id": "SFXSET-ENEMY-EXPLOSION",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mass",
-    "contact",
-    "fracture",
-    "debris",
-    "fragments"
-  ]
+  "layers": [
+    {
+      "source": "openspades_Weapons_Grenade_Explode2.opus",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "openspades_Weapons_Grenade_Debris.opus",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0.12,
+      "gain": 0.4
+    }
+  ],
+  "sources": {
+    "openspades_Weapons_Grenade_Explode2.opus": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Grenade_Explode2.opus",
+      "sha256": "f609733612da03c0e79f6c577308a2ee31566420739931061332c58c85e68863",
+      "credit": "Michel Baradari",
+      "license": "CC-BY 3.0",
+      "source_url": "https://opengameart.org/content/2-high-quality-explosions",
+      "distribution_url": "https://github.com/DeathByDenim/openspades-free-pak"
+    },
+    "openspades_Weapons_Grenade_Debris.opus": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Grenade_Debris.opus",
+      "sha256": "9b0c2c2e32352e7a9463bd3b81fa00fe81b81b870411b48e37599d96c7d14dea",
+      "credit": "Blender Foundation",
+      "license": "CC0",
+      "source_url": "https://opengameart.org/content/tree-falling-yo-frankie",
+      "distribution_url": "https://github.com/DeathByDenim/openspades-free-pak"
+    }
+  },
+  "lowpass_hz": 14000,
+  "gain": 0.29497509957036827,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

@@ -1,62 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_heal",
-    "name": "enemy_heal",
-    "events": [
-      "enemy.heal"
-    ],
-    "preset": "enemy",
-    "duration": 0.72,
-    "variants": 1,
-    "peak_db": -12,
-    "priority": "P1",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 5,
-    "owner": "enemy domain",
-    "trigger_fact": "enemy.heal confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 180,
-    "notes": [
-      659,
-      880,
-      1318
-    ],
-    "decay": 0.06,
-    "step": 0.07
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-HEAL",
     "key": "enemy_heal",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-HEAL/source/enemy_heal_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_heal_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.72,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-HEAL/source/enemy_heal_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_heal_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.95,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "1b1a58ea4ae3ef034607eb515b03c66ea131494cb0915abf9841f7c8b3d2584e",
-    "source_sha256": "ed7cabc20de99eacd782d61708448fcbb1165c85426ca81bd672eac62a56ca04",
-    "seed": 3729700827,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "768ac81b39c5ee91877d662b66156ebfae2ecbcb1974b86fc0ffda8cda7d7446",
+    "source_sha256": "9ae76a7871355bc3859ba08e1550c62eb82f4840fd72cb99ae1fc74354f4e310",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/16-monster-growls | StarNinjas",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -12,
+    "peak_target_db": -19,
     "event_ids": [
       "enemy.heal"
     ],
-    "sound_set_id": "SFXSET-ENEMY-HEAL"
+    "sound_set_id": "SFXSET-ENEMY-HEAL",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "electronic_identity",
-    "vocal_resonator",
-    "breath_grit"
-  ]
+  "layers": [
+    {
+      "source": "rpg_clothBelt.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.5
+    },
+    {
+      "source": "monster_monster.1.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.25
+    }
+  ],
+  "sources": {
+    "rpg_clothBelt.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_clothBelt.ogg",
+      "sha256": "f29560a2aea95bbfeb643e1e8f56ec2b6f7e32f32ce4e140645a36db81de3253",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/clothBelt.ogg"
+    },
+    "monster_monster.1.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/monster_monster.1.ogg",
+      "sha256": "359540221dad0ceed939a3416c3f525329fb7a5bbb28369a421108b3bc842310",
+      "credit": "StarNinjas",
+      "source_url": "https://opengameart.org/content/16-monster-growls",
+      "license": "CC0-1.0",
+      "archive_member": "monster.1.ogg"
+    }
+  },
+  "lowpass_hz": 6500,
+  "gain": 0.3554021869710822,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

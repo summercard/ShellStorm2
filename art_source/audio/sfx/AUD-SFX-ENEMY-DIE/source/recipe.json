@@ -1,57 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_die",
-    "name": "敌人死亡",
-    "events": [
-      "enemy.death"
-    ],
-    "preset": "death",
-    "duration": 0.63,
-    "variants": 3,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "enemy.death confirmed edge; only the domain owner may emit",
-    "legacy": true,
-    "frequency": 72,
-    "weight": 1.4
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-DIE",
     "key": "enemy_die",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-DIE/source/enemy_die_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_die_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.63,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-DIE/source/enemy_die_v003.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_die_v003.ogg",
+    "version": 3,
+    "duration_sec": 1.0,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "8c9e549e925feb70c1a4bf0069609d900cb882065eda688ff6a834a18d850939",
-    "source_sha256": "87aa1171b3375aa5e913a0ae3c2d8c4e78da3e52eaa0da31399147e39a4bbe7f",
-    "seed": 3736607804,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "daa09ded09a7bd7a7e327811f594cd96eb9678bc6719fb6a5729dce14efe840c",
+    "source_sha256": "f1ec5889e8de4218259b26590e77648a33a15847d539abef9ccb8e74c54eefd3",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney; https://opengameart.org/content/16-monster-growls | StarNinjas",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -14,
     "event_ids": [
       "enemy.death"
     ],
-    "sound_set_id": "SFXSET-ENEMY-DIE"
+    "sound_set_id": "SFXSET-ENEMY-DIE",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mass",
-    "contact",
-    "fracture",
-    "collapse"
-  ]
+  "layers": [
+    {
+      "source": "monster_monster.6.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "impact_impactSoft_heavy_000.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0.15,
+      "gain": 0.5
+    }
+  ],
+  "sources": {
+    "monster_monster.6.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/monster_monster.6.ogg",
+      "sha256": "25124d2c6b83c64c33de017bb2c26b486e4cecbb8fe7a49d460c429cc156a467",
+      "credit": "StarNinjas",
+      "source_url": "https://opengameart.org/content/16-monster-growls",
+      "license": "CC0-1.0",
+      "archive_member": "monster.6.ogg"
+    },
+    "impact_impactSoft_heavy_000.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_heavy_000.ogg",
+      "sha256": "49e7ca88743fca974bb8676ea138b751cfd8f9033b5e7af8736c2a215d6edbc1",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactSoft_heavy_000.ogg"
+    }
+  },
+  "lowpass_hz": 11000,
+  "gain": 0.184660427468981,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

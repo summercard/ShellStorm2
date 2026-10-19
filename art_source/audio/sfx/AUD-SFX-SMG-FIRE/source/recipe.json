@@ -1,60 +1,40 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "smg_fire",
-    "name": "冲锋枪射击",
-    "events": [
-      "combat.weapon.fire.smg"
-    ],
-    "preset": "gun",
-    "duration": 0.15,
-    "variants": 3,
-    "peak_db": -8,
-    "priority": "P1",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 8,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "combat.weapon.fire.smg confirmed edge; only the domain owner may emit",
-    "legacy": true,
-    "frequency": 200,
-    "weight": 0.7,
-    "tail": 0.055
-  },
+  "renderer": "tools/asset_pipeline/replace_weapon_sfx_recordings.py",
   "asset": {
     "asset_id": "AUD-SFX-SMG-FIRE",
     "key": "smg_fire",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-SMG-FIRE/source/smg_fire_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/smg_fire_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.15,
+    "source_path": "art_source/audio/sfx/AUD-SFX-SMG-FIRE/source/smg_fire_v003.wav",
+    "runtime_path": "res://src/assets/audio/sfx/smg_fire_v003.ogg",
+    "version": 3,
+    "duration_sec": 0.23,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "63c158aa397521ac9bc42a8864946f32a885ddd5743f174bb808d6ce790028fc",
-    "source_sha256": "26dacbfff99f10eae7f35a9850238fde49c8537ff5942b74842fd938325e1fa4",
-    "seed": 3768716957,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "fe4006026d25ab04e7bc0c25515a26515970a0a2b0369a5454f1cb1459b61da3",
+    "source_sha256": "5edb688aa2ef9377b27c1bf3a9914253d690ba7befd309a871b9a570a6c147d3",
+    "license_source": "https://opengameart.org/content/the-free-firearm-sound-library | Ben Jaszczak, Brian Nelson, Kevin Heras, Matthew Nanney",
+    "license_scope": "CC0-1.0; edited recording; OpenSpades free pak distribution",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -8,
+    "peak_target_db": -10,
     "event_ids": [
       "combat.weapon.fire.smg"
     ],
-    "sound_set_id": "SFXSET-SMG-FIRE"
+    "sound_set_id": "SFXSET-SMG-FIRE",
+    "production_revision": "recorded-weapons-r3"
   },
-  "stems": [
-    "muzzle_crack",
-    "combustion",
-    "body",
-    "mechanism",
-    "room_tail",
-    "receiver"
-  ]
+  "input": "recording_SMG_V2Local2.opus",
+  "input_sha256": "cd26fe8a42d069df3c11f9b26a6aa4d57148919150eaabc999e8cbbb7c917635",
+  "start_sec": 0,
+  "duration_limit_sec": 0.23,
+  "filters": "highpass=f=75,lowpass=f=14500,afade=t=in:st=0:d=0.001,afade=t=out:st=0.20500:d=0.025",
+  "gain": 0.3930228348245494,
+  "download_url": "https://raw.githubusercontent.com/DeathByDenim/openspades-free-pak/main/Sounds/Weapons/SMG/V2Local2.opus",
+  "license": "CC0-1.0",
+  "attribution": "Ben Jaszczak, Brian Nelson, Kevin Heras, Matthew Nanney",
+  "source_page": "https://opengameart.org/content/the-free-firearm-sound-library"
 }

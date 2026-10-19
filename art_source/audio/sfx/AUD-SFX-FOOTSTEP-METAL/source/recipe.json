@@ -1,57 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "footstep_metal",
-    "name": "footstep_metal",
-    "events": [
-      "player.footstep.metal"
-    ],
-    "preset": "footstep",
-    "duration": 0.22,
-    "variants": 4,
-    "peak_db": -15,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "player domain",
-    "trigger_fact": "player.footstep.metal confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "material": "metal",
-    "frequency": 135
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-FOOTSTEP-METAL",
     "key": "footstep_metal",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-METAL/source/footstep_metal_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/footstep_metal_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.22,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-METAL/source/footstep_metal_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/footstep_metal_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.38,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "3e73a98e32dff3bc2decf5882bf63311cea711d82a2ca4b6ac9e36166855be10",
-    "source_sha256": "e9a6a5e5b3413a2a58fe593e070a632c723c5aba85ada708024d4922e67b6221",
-    "seed": 2015719462,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "6a69c1e59215f836fa24b1ce49981599b840c3c3bff0ab28bc3b6756c6886b5d",
+    "source_sha256": "eff7d09c594b3f01b19404bafcb944a8050d367b07ecce5bdf16acdbca67f0c0",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -15,
+    "peak_target_db": -20,
     "event_ids": [
       "player.footstep.metal"
     ],
-    "sound_set_id": "SFXSET-FOOTSTEP-METAL"
+    "sound_set_id": "SFXSET-FOOTSTEP-METAL",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "sole",
-    "heel",
-    "toe_grit",
-    "floor"
-  ]
+  "layers": [
+    {
+      "source": "impact_footstep_concrete_000.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "impact_impactPlate_light_000.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.3
+    }
+  ],
+  "sources": {
+    "impact_footstep_concrete_000.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_footstep_concrete_000.ogg",
+      "sha256": "d7267e183067757c92c169de2a379abea592cfca6b39bb2e8feea15221ad79fe",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/footstep_concrete_000.ogg"
+    },
+    "impact_impactPlate_light_000.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactPlate_light_000.ogg",
+      "sha256": "6e797cf8a5bfc52d7ed5eb47c227974c1cf2a674954fec5b539cea7d62c7282c",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactPlate_light_000.ogg"
+    }
+  },
+  "lowpass_hz": 14000,
+  "gain": 0.07970847891175596,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

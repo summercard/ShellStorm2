@@ -1,56 +1,67 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "amb_expedition_room",
-    "name": "amb_expedition_room",
-    "events": [
-      "amb.expedition_room"
-    ],
-    "preset": "ambience",
-    "duration": 6,
-    "variants": 1,
-    "peak_db": -26,
-    "priority": "P2",
-    "spatial_mode": "world_bed",
-    "bus": "Ambience",
-    "max_voices": 2,
-    "owner": "amb domain",
-    "trigger_fact": "amb.expedition_room confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 48,
-    "cutoff": 1400,
-    "pulse": false
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-AMB-EXPEDITION-ROOM",
     "key": "amb_expedition_room",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-EXPEDITION-ROOM/source/amb_expedition_room_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/amb_expedition_room_v001.ogg",
-    "version": 1,
-    "duration_sec": 6,
+    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-EXPEDITION-ROOM/source/amb_expedition_room_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/amb_expedition_room_v002.ogg",
+    "version": 2,
+    "duration_sec": 10,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "74b9927ce5f27e64fb05c1a4715acd024ac35c3aa571ef9b816cf04f127169a7",
-    "source_sha256": "3933723907964e7ffc298d817be044fb14853cdee63cda7433df0f34e77f534d",
-    "seed": 2507382854,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "1ab5fd0e77f82be20d5565b0fa854db86c5574eded3a083ed717c7e41d8d5402",
+    "source_sha256": "0367b38a49d9ff08bf044b2f0d49b1d3437866ca4b33e5345373b23d45d7e6e0",
+    "license_source": "https://opengameart.org/content/short-wind-sound | remaxim; https://opengameart.org/content/ventilation-version2 | MidFag",
+    "license_scope": "CC-BY-3.0; CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_bed",
     "loop": true,
-    "peak_target_db": -26,
+    "peak_target_db": -21,
     "event_ids": [
       "amb.expedition_room"
     ],
-    "sound_set_id": "SFXSET-AMB-EXPEDITION-ROOM"
+    "sound_set_id": "SFXSET-AMB-EXPEDITION-ROOM",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "room_air",
-    "machinery"
-  ]
+  "layers": [
+    {
+      "source": "wind.wav",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.45
+    },
+    {
+      "source": "vent.mp3",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.35
+    }
+  ],
+  "sources": {
+    "wind.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/wind.wav",
+      "sha256": "4435f5ad1baf171f21f876f778d0a8a7447becea0c4955bb2566e0c63ab20f41",
+      "credit": "remaxim",
+      "source_url": "https://opengameart.org/content/short-wind-sound",
+      "license": "CC0-1.0"
+    },
+    "vent.mp3": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/vent.mp3",
+      "sha256": "fb582e06a7a0df34fbc76bc193833d78e03169cda4a38be6ce88cd54fb326fd3",
+      "credit": "MidFag",
+      "source_url": "https://opengameart.org/content/ventilation-version2",
+      "license": "CC-BY-3.0"
+    }
+  },
+  "lowpass_hz": 2500,
+  "gain": 1.0666418541490679,
+  "loop_crossfade_sec": 0.5,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

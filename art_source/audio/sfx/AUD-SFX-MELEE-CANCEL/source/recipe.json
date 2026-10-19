@@ -1,56 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "melee_cancel",
-    "name": "melee_cancel",
-    "events": [
-      "combat.melee.cancel"
-    ],
-    "preset": "mechanical",
-    "duration": 0.19,
-    "variants": 1,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "combat domain",
-    "trigger_fact": "combat.melee.cancel confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 490,
-    "clicks": [
-      0.035
-    ]
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-MELEE-CANCEL",
     "key": "melee_cancel",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-CANCEL/source/melee_cancel_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/melee_cancel_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.19,
+    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-CANCEL/source/melee_cancel_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/melee_cancel_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.35,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "79f8783557710fe68d96599498dcefd9b4f2a788f18d5d8889612d41b68975f3",
-    "source_sha256": "e46a86b122dd3747c2624f7961c79e4616c0eccf9f98e42a59c129d0c922e42a",
-    "seed": 3915132186,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "ed3d03eafd0fc958163d329a9e0e94126b108777d99dc3ba423af6467c3a41ce",
+    "source_sha256": "5abddfd14a48b6de39b6a6a5ba72214d083aaff7b6914406c429897f36b78150",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -18,
     "event_ids": [
       "combat.melee.cancel"
     ],
-    "sound_set_id": "SFXSET-MELEE-CANCEL"
+    "sound_set_id": "SFXSET-MELEE-CANCEL",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mechanism"
-  ]
+  "layers": [
+    {
+      "source": "rpg_drawKnife2.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.6
+    },
+    {
+      "source": "rpg_clothBelt.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.4
+    }
+  ],
+  "sources": {
+    "rpg_drawKnife2.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_drawKnife2.ogg",
+      "sha256": "d5df6a4130cbb016f97b4883769a418917b9629cb4c21717030b186e0c73281a",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/drawKnife2.ogg"
+    },
+    "rpg_clothBelt.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_clothBelt.ogg",
+      "sha256": "f29560a2aea95bbfeb643e1e8f56ec2b6f7e32f32ce4e140645a36db81de3253",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/clothBelt.ogg"
+    }
+  },
+  "lowpass_hz": 12000,
+  "gain": 0.8606614966183137,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

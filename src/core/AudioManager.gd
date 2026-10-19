@@ -10,20 +10,20 @@ var music_volume: float = 0.8
 # 正式音效资产。OGG Vorbis 是桌面与移动端共同的运行时主格式；WAV 只保留母版。
 const SFX: Dictionary = {
 	# 现有战斗/流程事件
-	"pistol_fire": "res://src/assets/audio/sfx/pistol_fire_v002.ogg",
-	"rifle_fire": "res://src/assets/audio/sfx/rifle_fire_v002.ogg",
-	"shotgun_fire": "res://src/assets/audio/sfx/shotgun_fire_v002.ogg",
-	"smg_fire": "res://src/assets/audio/sfx/smg_fire_v002.ogg",
-	"sniper_fire": "res://src/assets/audio/sfx/sniper_fire_v002.ogg",
-	"laser_fire": "res://src/assets/audio/sfx/laser_fire_v002.ogg",
-	"enemy_hit": "res://src/assets/audio/sfx/enemy_hit_v002.ogg",
-	"enemy_die": "res://src/assets/audio/sfx/enemy_die_v002.ogg",
-	"player_hit": "res://src/assets/audio/sfx/player_hit_v002.ogg",
-	"player_dash": "res://src/assets/audio/sfx/player_dash_v002.ogg",
-	"reload": "res://src/assets/audio/sfx/reload_v002.ogg",
-	"crit_hit": "res://src/assets/audio/sfx/crit_hit_v002.ogg",
-	"melee_swing": "res://src/assets/audio/sfx/melee_swing_v002.ogg",
-	"melee_impact": "res://src/assets/audio/sfx/melee_impact_v002.ogg",
+	"pistol_fire": "res://src/assets/audio/sfx/pistol_fire_v004.ogg",
+	"rifle_fire": "res://src/assets/audio/sfx/rifle_fire_v004.ogg",
+	"shotgun_fire": "res://src/assets/audio/sfx/shotgun_fire_v004.ogg",
+	"smg_fire": "res://src/assets/audio/sfx/smg_fire_v003.ogg",
+	"sniper_fire": "res://src/assets/audio/sfx/sniper_fire_v004.ogg",
+	"laser_fire": "res://src/assets/audio/sfx/laser_fire_v004.ogg",
+	"enemy_hit": "res://src/assets/audio/sfx/enemy_hit_v003.ogg",
+	"enemy_die": "res://src/assets/audio/sfx/enemy_die_v003.ogg",
+	"player_hit": "res://src/assets/audio/sfx/player_hit_v003.ogg",
+	"player_dash": "res://src/assets/audio/sfx/player_dash_v003.ogg",
+	"reload": "res://src/assets/audio/sfx/reload_v003.ogg",
+	"crit_hit": "res://src/assets/audio/sfx/crit_hit_v003.ogg",
+	"melee_swing": "res://src/assets/audio/sfx/melee_swing_v003.ogg",
+	"melee_impact": "res://src/assets/audio/sfx/melee_impact_v003.ogg",
 	"fate_card": "res://src/assets/audio/sfx/fate_card_v002.ogg",
 	"extraction_start": "res://src/assets/audio/sfx/extraction_start_v002.ogg",
 	"extraction_done": "res://src/assets/audio/sfx/extraction_done_v002.ogg",
@@ -33,12 +33,12 @@ const SFX: Dictionary = {
 	"ui_hover": "res://src/assets/audio/sfx/ui_hover_v002.ogg",
 	"ui_click": "res://src/assets/audio/sfx/ui_click_v002.ogg",
 	"ui_error": "res://src/assets/audio/sfx/ui_error_v002.ogg",
-	"ammo_empty": "res://src/assets/audio/sfx/ammo_empty_v002.ogg",
-	"item_pickup": "res://src/assets/audio/sfx/item_pickup_v002.ogg",
+	"ammo_empty": "res://src/assets/audio/sfx/ammo_empty_v003.ogg",
+	"item_pickup": "res://src/assets/audio/sfx/item_pickup_v003.ogg",
 	"soul_pickup": "res://src/assets/audio/sfx/soul_pickup_v002.ogg",
-	"door_open": "res://src/assets/audio/sfx/door_open_v002.ogg",
-	"door_locked": "res://src/assets/audio/sfx/door_locked_v002.ogg",
-	"container_open": "res://src/assets/audio/sfx/container_open_v002.ogg",
+	"door_open": "res://src/assets/audio/sfx/door_open_v003.ogg",
+	"door_locked": "res://src/assets/audio/sfx/door_locked_v003.ogg",
+	"container_open": "res://src/assets/audio/sfx/container_open_v003.ogg",
 	"wave_start": "res://src/assets/audio/sfx/wave_start_v002.ogg",
 	"wave_clear": "res://src/assets/audio/sfx/wave_clear_v002.ogg",
 	"boss_intro": "res://src/assets/audio/sfx/boss_intro_v002.ogg",
@@ -60,20 +60,103 @@ var _last_feedback_request: Dictionary = {}
 var _catalog: Dictionary = {}
 var _variant_cursors: Dictionary = {}
 var _voices: Array[Node] = []
+var _world_reverb: AudioEffectReverb
+var _world_delay: AudioEffectDelay
+var _world_acoustic_owner := 0
+var _world_acoustic_profile := "dry"
+var _world_wet_target := 0.0
 
 const CATALOG_PATH := "res://src/assets/audio/sfx/sfx_catalog.json"
 const MAX_TOTAL_VOICES := 40
+const GUNFIRE_GAIN_DB := -6.0
 
 func _ready() -> void:
 	load_audio_settings()
 	_load_catalog()
 	# New buses inherit SFX so existing SFX volume/mute remains effective.
-	for bus_name in ["UI", "Ambience"]:
+	for bus_name in ["SFX", "UI", "Ambience", "WorldSFX", "Gunfire", "OutdoorWind"]:
 		if AudioServer.get_bus_index(bus_name) < 0:
 			AudioServer.add_bus()
 			var index := AudioServer.bus_count - 1
 			AudioServer.set_bus_name(index, bus_name)
-			AudioServer.set_bus_send(index, "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master")
+			AudioServer.set_bus_send(index, "Master" if bus_name == "SFX" else "SFX")
+	# Keep gun identity intact while reducing the initial blast and stacked fire.
+	var gunfire_bus := AudioServer.get_bus_index("Gunfire")
+	AudioServer.set_bus_send(gunfire_bus, "WorldSFX")
+	AudioServer.set_bus_volume_db(gunfire_bus, GUNFIRE_GAIN_DB)
+	var gunfire_compressor := AudioEffectCompressor.new()
+	gunfire_compressor.threshold = -14.0
+	gunfire_compressor.ratio = 3.0
+	gunfire_compressor.attack_us = 200.0
+	gunfire_compressor.release_ms = 80.0
+	gunfire_compressor.gain = 0.0
+	AudioServer.add_bus_effect(gunfire_bus, gunfire_compressor)
+	var wind_bus := AudioServer.get_bus_index("OutdoorWind")
+	AudioServer.set_bus_send(wind_bus, "Ambience")
+	var wind_highpass := AudioEffectHighPassFilter.new()
+	wind_highpass.cutoff_hz = 120.0
+	wind_highpass.resonance = 0.5
+	AudioServer.add_bus_effect(wind_bus, wind_highpass)
+	var wind_lowpass := AudioEffectLowPassFilter.new()
+	wind_lowpass.cutoff_hz = 1800.0
+	wind_lowpass.resonance = 0.5
+	AudioServer.add_bus_effect(wind_bus, wind_lowpass)
+	var world_bus := AudioServer.get_bus_index("WorldSFX")
+	_world_reverb = AudioEffectReverb.new()
+	_world_reverb.room_size = 0.72
+	_world_reverb.damping = 0.55
+	_world_reverb.predelay_msec = 35.0
+	_world_reverb.wet = 0.0
+	_world_reverb.dry = 1.0
+	AudioServer.add_bus_effect(world_bus, _world_reverb)
+	_world_delay = AudioEffectDelay.new()
+	_world_delay.tap1_delay_ms = 125.0
+	_world_delay.tap1_level_db = -60.0
+	_world_delay.tap1_active = false
+	_world_delay.tap2_active = false
+	_world_delay.feedback_active = false
+	AudioServer.add_bus_effect(world_bus, _world_delay)
+
+
+func _process(delta: float) -> void:
+	if _world_reverb == null:
+		return
+	_world_reverb.wet = move_toward(_world_reverb.wet, _world_wet_target, delta * 0.6)
+	_world_delay.tap1_active = _world_reverb.wet > 0.001
+	_world_delay.tap1_level_db = lerpf(-60.0, -18.0, clampf(_world_reverb.wet / 0.24, 0.0, 1.0))
+
+
+func set_world_acoustics(profile: String, owner: Node) -> void:
+	_world_acoustic_owner = owner.get_instance_id()
+	_world_acoustic_profile = "stairwell" if profile == "stairwell" else "dry"
+	_world_wet_target = 0.24 if _world_acoustic_profile == "stairwell" else 0.0
+
+
+func release_world_acoustics(owner: Node) -> void:
+	if owner.get_instance_id() != _world_acoustic_owner:
+		return
+	_world_acoustic_owner = 0
+	_world_acoustic_profile = "dry"
+	_world_wet_target = 0.0
+	if _world_reverb != null:
+		_world_reverb.wet = 0.0
+		_world_delay.tap1_active = false
+
+
+func get_world_acoustic_snapshot() -> Dictionary:
+	return {"profile": _world_acoustic_profile, "wet": _world_reverb.wet if _world_reverb != null else 0.0, "target_wet": _world_wet_target, "world_bus": "WorldSFX", "ui_bus": "UI"}
+
+
+func play_world_loop(key: String, source: Node3D, context: Dictionary = {}) -> Node:
+	var request := context.duplicate()
+	request.source_node = source
+	return _play_sound_set(key, float(request.get("volume_db", 0.0)), 1.0, request)
+
+
+func play_world_one_shot(key: String, source: Node3D, context: Dictionary = {}) -> Node:
+	var request := context.duplicate()
+	request.source_node = source
+	return _play_sound_set(key, float(request.get("volume_db", 0.0)), 1.0, request)
 
 
 func _load_catalog() -> void:
@@ -108,7 +191,11 @@ func play_sfx(sfx_name: String, volume_db: float = 0.0, pitch_scale: float = 1.0
 func emit_event(event_id: String, context: Dictionary = {}) -> Node:
 	_load_catalog()
 	var event: Dictionary = (_catalog.get("events", {}) as Dictionary).get(event_id, {})
+	if context.has("gun_id") and event_id in ["combat.weapon.reload_start", "world.pickup.item"]:
+		return _play_weapon_sound(str(context["gun_id"]), "reload" if event_id == "combat.weapon.reload_start" else "pickup", float(context.get("volume_db", 0.0)), 1.0, context)
 	if event_id == "combat.weapon.fire":
+		if context.has("gun_id"):
+			return _play_weapon_sound(str(context["gun_id"]), "fire", float(context.get("volume_db", 0.0)), 1.0, context)
 		var profile := str(context.get("weapon_audio_profile", ""))
 		if profile in ["pistol", "rifle", "shotgun", "smg", "sniper", "laser"]:
 			return _play_sound_set(profile + "_fire", float(context.get("volume_db", 0.0)), 1.0, context)
@@ -126,6 +213,7 @@ func _play_sound_set(sfx_name: String, volume_db: float, pitch_scale: float, con
 		"volume_db": volume_db,
 		"pitch_scale": pitch_scale,
 		"path": path,
+		"context": context.duplicate(),
 	}
 	if path.is_empty():
 		_report_missing_asset(sfx_name, "未登记事件")
@@ -167,7 +255,7 @@ func _play_sound_set(sfx_name: String, volume_db: float, pitch_scale: float, con
 			if victim == null:
 				return null
 			stop_voice(victim)
-		var spatial := str(sound_set.get("spatial_mode", "ui_2d")) == "world_3d" and (is_instance_valid(source) or context.has("source_position"))
+		var spatial := str(context.get("spatial_mode", sound_set.get("spatial_mode", "ui_2d"))) == "world_3d" and (is_instance_valid(source) or context.has("source_position"))
 		var player: Node = AudioStreamPlayer3D.new() if spatial else AudioStreamPlayer.new()
 		if looping and stream is AudioStreamOggVorbis:
 			stream = stream.duplicate() as AudioStream
@@ -176,6 +264,11 @@ func _play_sound_set(sfx_name: String, volume_db: float, pitch_scale: float, con
 		player.volume_db = volume_db + linear_to_db(maxf(sfx_volume, 0.0001))
 		player.pitch_scale = clampf(pitch_scale, 0.5, 2.0)
 		player.bus = str(sound_set.get("bus", "SFX"))
+		if str(context.get("mix_role", "")) == "outdoor_wind":
+			player.bus = "OutdoorWind"
+		var style: Dictionary = _catalog.get("world_style_policy", {})
+		if player.bus == "SFX" and (sfx_name in style.get("natural_world_sets", []) or sfx_name in style.get("weapon_sets", [])):
+			player.bus = "WorldSFX"
 		if player.bus == "UI":
 			player.process_mode = Node.PROCESS_MODE_ALWAYS
 		player.set_meta("sound_set", sfx_name)
@@ -185,8 +278,9 @@ func _play_sound_set(sfx_name: String, volume_db: float, pitch_scale: float, con
 			lifetime_owner = self
 		lifetime_owner.add_child(player)
 		if spatial:
-			(player as AudioStreamPlayer3D).global_position = source.global_position if is_instance_valid(source) else context["source_position"]
-			(player as AudioStreamPlayer3D).max_distance = 30.0
+			(player as AudioStreamPlayer3D).global_position = context.get("source_position", source.global_position if is_instance_valid(source) else Vector3.ZERO)
+			(player as AudioStreamPlayer3D).max_distance = float(context.get("max_distance", 30.0))
+			(player as AudioStreamPlayer3D).unit_size = float(context.get("unit_size", 1.0))
 		_voices.append(player)
 		player.play()
 		player.finished.connect(player.queue_free)
@@ -219,6 +313,12 @@ func validate_sound_library() -> Dictionary:
 			count += 1
 			if not str(path).ends_with(".ogg") or not FileAccess.file_exists(str(path)):
 				missing.append(str(path))
+	var profiles: Dictionary = _catalog.get("weapon_profiles", {})
+	for gun_id in profiles:
+		for action in ["fire", "reload", "pickup"]:
+			var key := get_weapon_sound_set(str(gun_id), action)
+			if key.is_empty() or get_sound_set(key).get("paths", []).is_empty():
+				missing.append("weapon_profiles.%s.%s" % [gun_id, action])
 	return {"asset_count": count, "sound_set_count": (_catalog.get("sound_sets", {}) as Dictionary).size(), "missing": missing}
 
 
@@ -265,20 +365,40 @@ func save_audio_settings() -> void:
 
 ## ========== 战斗音效辅助 ==========
 
-## 射击音效（根据武器 fire_rate 推算类型）
-func play_fire_sfx(fire_rate: float, projectile_count: int) -> void:
-	var sfx_key: String
-	if projectile_count >= 5:
-		sfx_key = "shotgun_fire"
-	elif fire_rate >= 10.0:
-		sfx_key = "smg_fire"
-	elif fire_rate >= 5.0:
-		sfx_key = "rifle_fire"
-	elif fire_rate >= 2.0:
-		sfx_key = "pistol_fire"
-	else:
-		sfx_key = "sniper_fire"
-	play_sfx(sfx_key)
+## 枪身身份唯一决定音色；射速、弹丸数与命运配件不能改变枪种。
+func get_weapon_sound_set(gun_id: String, action: String) -> String:
+	_load_catalog()
+	var profiles: Dictionary = _catalog.get("weapon_profiles", {})
+	var profile: Dictionary = profiles.get(gun_id, {})
+	return str(profile.get(action, ""))
+
+
+func _play_weapon_sound(gun_id: String, action: String, volume_db: float = 0.0, pitch: float = 1.0, context: Dictionary = {}) -> Node:
+	var key := get_weapon_sound_set(gun_id, action)
+	if key.is_empty():
+		_report_missing_asset("%s.%s" % [gun_id, action], "未登记枪身音频配置")
+		return null
+	return _play_sound_set(key, volume_db, pitch, context)
+
+
+func play_fire_sfx(gun_id: String) -> void:
+	_play_weapon_sound(gun_id, "fire")
+
+
+func play_pickup_sfx(item: Dictionary, volume_db: float = -4.0) -> void:
+	if bool(item.get("is_currency", false)):
+		play_sfx("soul_pickup", volume_db)
+		return
+	if str(item.get("type", "")) == "weapon":
+		var nested: Dictionary = item.get("weapon_instance", {})
+		var gun_id := str(item.get("assembly_id", nested.get("assembly_id", "")))
+		if gun_id.is_empty():
+			var content_id := str(item.get("weapon_content_id", nested.get("weapon_content_id", item.get("id", ""))))
+			gun_id = str(ItemRegistry.get_instance().get_item(content_id).get("assembly_id", ""))
+		if not get_weapon_sound_set(gun_id, "pickup").is_empty():
+			_play_weapon_sound(gun_id, "pickup", volume_db)
+			return
+	play_sfx("item_pickup", volume_db)
 
 ## 暴击命中音效
 func play_crit_sfx() -> void:
@@ -297,8 +417,8 @@ func play_dash_sfx() -> void:
 	play_sfx("player_dash")
 
 ## 换弹音效
-func play_reload_sfx() -> void:
-	play_sfx("reload")
+func play_reload_sfx(gun_id: String) -> void:
+	_play_weapon_sound(gun_id, "reload")
 
 ## 怪物死亡音效
 func play_enemy_die_sfx() -> void:

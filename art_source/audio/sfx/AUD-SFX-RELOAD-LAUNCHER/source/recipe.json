@@ -1,0 +1,60 @@
+{
+  "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+  "asset": {
+    "asset_id": "AUD-SFX-RELOAD-LAUNCHER",
+    "key": "reload_launcher",
+    "variant": 0,
+    "sound_set_id": "SFXSET-RELOAD-LAUNCHER",
+    "spatial_mode": "listener_follow",
+    "event_ids": [
+      "combat.weapon.reload_start"
+    ],
+    "source_path": "art_source/audio/sfx/AUD-SFX-RELOAD-LAUNCHER/source/reload_launcher_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/reload_launcher_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.92,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "69c8c2414298f59821a767678e293ac4daa4b6a6e717cffa4d144a4a7735252b",
+    "source_sha256": "8cbfa075f73693a8b2bd31ca68e7767a3b088019548697f3bb5df46909f152b0",
+    "peak_target_db": -14,
+    "license_source": "https://opengameart.org/content/gun-reload-sounds | SpringySpringo",
+    "license_scope": "CC0-1.0",
+    "status": "imported_pending_listening",
+    "production_revision": "gun-families-r4",
+    "loop": false
+  },
+  "inputs": [
+    {
+      "file": "recording_assaultriflereload1.wav",
+      "sha256": "efb2d724d634eabe6ba8d3065686abca848bb7497d4d43a5e4aed5e5ea23016f",
+      "start_sec": 0.17,
+      "length_sec": 0.3,
+      "offset_sec": 0,
+      "gain": 1,
+      "credit": "SpringySpringo",
+      "source_page": "https://opengameart.org/content/gun-reload-sounds",
+      "license": "CC0-1.0"
+    },
+    {
+      "file": "recording_shotguncock.wav",
+      "sha256": "33e007321ba83301c861aef573f2c40b70bc62f8f24c0164877e6dd123e24371",
+      "start_sec": 0.16,
+      "length_sec": 0.27,
+      "offset_sec": 0.6,
+      "gain": 1,
+      "credit": "SpringySpringo",
+      "source_page": "https://opengameart.org/content/gun-reload-sounds",
+      "license": "CC0-1.0"
+    }
+  ],
+  "duration_sec": 0.92,
+  "lowpass_hz": 14000,
+  "peak_db": -14,
+  "normalization_gain": 0.09582399328653583,
+  "leading_trim_samples": 4755,
+  "input_filter": "highpass=75Hz; afftdn nr=12 nf=-35; 1ms/25ms layer fades; 30ms output fade; no pitch shift"
+}

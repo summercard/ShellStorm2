@@ -1,56 +1,54 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "container_cancel",
-    "name": "container_cancel",
-    "events": [
-      "world.container.search_cancel"
-    ],
-    "preset": "mechanical",
-    "duration": 0.19,
-    "variants": 1,
-    "peak_db": -17,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "world domain",
-    "trigger_fact": "world.container.search_cancel confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 590,
-    "clicks": [
-      0.048
-    ]
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-CONTAINER-CANCEL",
     "key": "container_cancel",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-CONTAINER-CANCEL/source/container_cancel_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/container_cancel_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.19,
+    "source_path": "art_source/audio/sfx/AUD-SFX-CONTAINER-CANCEL/source/container_cancel_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/container_cancel_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.32,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "dfc008fab97b5f64f2b63ce7f568cfe8292229d0e52ededd6a9b2d05cc1e887b",
-    "source_sha256": "4d0a1d7924e9a87a2d0ad339672ff4c0fa2aea34a6456af4b0f5ca67fc0dd2ea",
-    "seed": 853395526,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "9ac4bf602c676d80bb3a39af427d418b49f8ad1c017c6fd3f0e58938903d9da7",
+    "source_sha256": "495932a9ed3f3477e53dbcb7041a2501d84dc9663a3bbbd84432f6e24cb15b7f",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -17,
+    "peak_target_db": -20,
     "event_ids": [
       "world.container.search_cancel"
     ],
-    "sound_set_id": "SFXSET-CONTAINER-CANCEL"
+    "sound_set_id": "SFXSET-CONTAINER-CANCEL",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mechanism"
-  ]
+  "layers": [
+    {
+      "source": "rpg_beltHandle2.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    }
+  ],
+  "sources": {
+    "rpg_beltHandle2.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_beltHandle2.ogg",
+      "sha256": "f3b692d5c83263c25bce779805b212dbab515d18a603c695fc6a1e8650cf5366",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/beltHandle2.ogg"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.13578052930497322,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

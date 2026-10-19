@@ -1,0 +1,43 @@
+{
+  "renderer": "tools/asset_pipeline/build_world_environment_assets.py",
+  "asset": {
+    "asset_id": "AUD-SFX-FOOTSTEP-WOOD-VAR03",
+    "key": "footstep_wood",
+    "variant": 2,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-WOOD-VAR03/source/footstep_wood_alt03_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/footstep_wood_alt03_v001.ogg",
+    "version": 1,
+    "duration_sec": 0.38,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "d2530f602317a9c5fd805ad3d4ed37b195b8b5a5838e4f769abd13c4c66fefaf",
+    "source_sha256": "1e443acc1d76249056b563d67789ecf8ea31e2e7afa9d94bf1ffc75cee650a78",
+    "production_revision": "world-environment-r6",
+    "source_method": "Sourced recordings / real-world environment playback",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney",
+    "license_scope": "CC0-1.0",
+    "status": "imported_pending_listening",
+    "spatial_mode": "world_3d",
+    "loop": false,
+    "peak_target_db": -20,
+    "event_ids": [
+      "player.footstep.wood"
+    ],
+    "sound_set_id": "SFXSET-FOOTSTEP-WOOD"
+  },
+  "input": {
+    "path": "art_source/audio/sfx/recorded_world_library/source/impact_footstep_wood_002.ogg",
+    "sha256": "9ff095b05cee5eec40b081defe3f0eef7232bb16d4865ce03b9f6dbab875cfdd",
+    "credit": "Kenney",
+    "source_url": "https://kenney.nl/assets/impact-sounds",
+    "license": "CC0-1.0"
+  },
+  "start_sec": 0,
+  "duration_sec": 0.38,
+  "lowpass_hz": 14000,
+  "gain": 0.09729790705729534,
+  "loop_crossfade_sec": 0
+}

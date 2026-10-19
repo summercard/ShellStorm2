@@ -1,54 +1,60 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "laser_fire",
-    "name": "能量武器射击",
-    "events": [
-      "combat.weapon.fire_energy"
-    ],
-    "preset": "laser",
-    "duration": 0.32,
-    "variants": 3,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "combat.weapon.fire_energy confirmed edge; only the domain owner may emit",
-    "legacy": true
-  },
+  "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
   "asset": {
     "asset_id": "AUD-SFX-LASER-FIRE",
     "key": "laser_fire",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-LASER-FIRE/source/laser_fire_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/laser_fire_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.32,
+    "source_path": "art_source/audio/sfx/AUD-SFX-LASER-FIRE/source/laser_fire_v004.wav",
+    "runtime_path": "res://src/assets/audio/sfx/laser_fire_v004.ogg",
+    "version": 4,
+    "duration_sec": 0.9,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "02c5e3b8fd4ca16ccc72a1500d180d43b940cf5958fd828781bb8aac1ec480ee",
-    "source_sha256": "cf9fd7212410d8ae4f82eb9f3e6c799a1adf69e0b8d1cdae02d93c1cc7df37cb",
-    "seed": 2200813567,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "7dc1e5d2ff243d6cd181cbc02ae9037f04371a6e18e2d0176519b489ae06a203",
+    "source_sha256": "2a7a3e4e23b664ae85ae82193eb574d16e13252b4a22bdca9934c8395709c7fd",
+    "license_source": "https://opengameart.org/content/gun-reload-sounds | SpringySpringo; https://opengameart.org/content/gunshot-sounds | Vincent Sevedge / Tabasco",
+    "license_scope": "CC-BY-3.0 (archive notice; page also offers CC0; retain stricter attribution); CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -10,
     "event_ids": [
       "combat.weapon.fire_energy"
     ],
-    "sound_set_id": "SFXSET-LASER-FIRE"
+    "sound_set_id": "SFXSET-LASER-FIRE",
+    "production_revision": "gun-families-r4"
   },
-  "stems": [
-    "energy_core",
-    "ion_snap",
-    "capacitor"
-  ]
+  "inputs": [
+    {
+      "file": "recording_mosin.wav",
+      "sha256": "ece6fff8f3b21aa8bc41943c0293d3fab6a553db33dd2427a388838324a39719",
+      "start_sec": 0.418,
+      "length_sec": 0.85,
+      "offset_sec": 0,
+      "gain": 1,
+      "credit": "Vincent Sevedge / Tabasco",
+      "source_page": "https://opengameart.org/content/gunshot-sounds",
+      "license": "CC-BY-3.0 (archive notice; page also offers CC0; retain stricter attribution)"
+    },
+    {
+      "file": "recording_assaultriflereload1.wav",
+      "sha256": "efb2d724d634eabe6ba8d3065686abca848bb7497d4d43a5e4aed5e5ea23016f",
+      "start_sec": 0.9,
+      "length_sec": 0.24,
+      "offset_sec": 0.025,
+      "gain": 0.13,
+      "credit": "SpringySpringo",
+      "source_page": "https://opengameart.org/content/gun-reload-sounds",
+      "license": "CC0-1.0"
+    }
+  ],
+  "duration_sec": 0.9,
+  "lowpass_hz": 5200,
+  "peak_db": -10,
+  "normalization_gain": 0.3901575115136556,
+  "leading_trim_samples": 1910,
+  "input_filter": "highpass=75Hz; afftdn nr=12 nf=-35; 1ms/25ms layer fades; 30ms output fade; no pitch shift"
 }

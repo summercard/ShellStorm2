@@ -1,54 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "player_dash",
-    "name": "玩家闪避",
-    "events": [
-      "player.dash"
-    ],
-    "preset": "dash",
-    "duration": 0.29,
-    "variants": 3,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "player.dash confirmed edge; only the domain owner may emit",
-    "legacy": true
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-PLAYER-DASH-VAR03",
     "key": "player_dash",
     "variant": 2,
-    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-DASH-VAR03/source/player_dash_alt03_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/player_dash_alt03_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.29,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-DASH-VAR03/source/player_dash_alt03_v003.wav",
+    "runtime_path": "res://src/assets/audio/sfx/player_dash_alt03_v003.ogg",
+    "version": 3,
+    "duration_sec": 0.42,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "8d21458bd95d4ab2eea8789c7f2a8fd5b82aeef57a40a2c74b3557be7fddb1f1",
-    "source_sha256": "dd1734ef6df08891b1f33540f4b6f98286ca9bde16d7d37018969b1998e427bb",
-    "seed": 4062104404,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "f09a5234668ac91e9d9a142b650e3ce7621a2619fdad2351601ff46376785a31",
+    "source_sha256": "977e21d2cfb8b59ac8c27b56ab51f22458831b6e2558e5696cfbb2991c6671b4",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+    "license_scope": "CC0; CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -17,
     "event_ids": [
       "player.dash"
     ],
-    "sound_set_id": "SFXSET-PLAYER-DASH"
+    "sound_set_id": "SFXSET-PLAYER-DASH",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "air",
-    "weight",
-    "cloth"
-  ]
+  "layers": [
+    {
+      "source": "rpg_cloth3.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "openspades_Weapons_Spade_Miss.opus",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.45
+    }
+  ],
+  "sources": {
+    "rpg_cloth3.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_cloth3.ogg",
+      "sha256": "a48632d17a4f1416541d261a32a31612e01267144c407fa3ecab3ff410f0085b",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/cloth3.ogg"
+    },
+    "openspades_Weapons_Spade_Miss.opus": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Spade_Miss.opus",
+      "sha256": "7ad813c01655d5bebb69a9297ec1d2c5f07c4d5ba1ecfa7ff9158e45b96bee28",
+      "credit": "Iwan Gabovitch",
+      "license": "CC0",
+      "source_url": "https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes",
+      "distribution_url": "https://github.com/DeathByDenim/openspades-free-pak"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.3645278477411343,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

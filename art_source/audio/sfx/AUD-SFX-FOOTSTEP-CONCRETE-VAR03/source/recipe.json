@@ -1,56 +1,54 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "footstep_concrete",
-    "name": "footstep_concrete",
-    "events": [
-      "player.footstep"
-    ],
-    "preset": "footstep",
-    "duration": 0.22,
-    "variants": 4,
-    "peak_db": -15,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "player domain",
-    "trigger_fact": "player.footstep confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "material": "concrete",
-    "frequency": 160
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-FOOTSTEP-CONCRETE-VAR03",
     "key": "footstep_concrete",
     "variant": 2,
-    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-CONCRETE-VAR03/source/footstep_concrete_alt03_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/footstep_concrete_alt03_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.22,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-CONCRETE-VAR03/source/footstep_concrete_alt03_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/footstep_concrete_alt03_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.36,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "e0cd474e648d50090d8a808598b6c927f37da3c2a7f50e3c9c46e4084cf784e3",
-    "source_sha256": "680b69ccc7cbe538650894a6dc9f4baa6bb5984a16c7ffddb011d472a58efcb7",
-    "seed": 2756307121,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "be24bdd2be9bdabe598f2e7a985b63fc889c02da74bba6aaf0f3747ab13ec0ac",
+    "source_sha256": "994f22280adbaefeb275f224c8b32dce4d9711c3d13adb37d72d3c31ef1c4d33",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -15,
+    "peak_target_db": -20,
     "event_ids": [
       "player.footstep"
     ],
-    "sound_set_id": "SFXSET-FOOTSTEP-CONCRETE"
+    "sound_set_id": "SFXSET-FOOTSTEP-CONCRETE",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "sole",
-    "heel",
-    "toe_grit"
-  ]
+  "layers": [
+    {
+      "source": "impact_footstep_concrete_002.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    }
+  ],
+  "sources": {
+    "impact_footstep_concrete_002.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_footstep_concrete_002.ogg",
+      "sha256": "b21fa546d74941196b25da8a20b7010abd8c05c4fcf93545d1f344e66a664e13",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/footstep_concrete_002.ogg"
+    }
+  },
+  "lowpass_hz": 14000,
+  "gain": 0.09556045195860806,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

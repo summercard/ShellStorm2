@@ -1,56 +1,67 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "amb_base_facility",
-    "name": "amb_base_facility",
-    "events": [
-      "amb.base_facility"
-    ],
-    "preset": "ambience",
-    "duration": 6,
-    "variants": 1,
-    "peak_db": -26,
-    "priority": "P2",
-    "spatial_mode": "world_bed",
-    "bus": "Ambience",
-    "max_voices": 2,
-    "owner": "amb domain",
-    "trigger_fact": "amb.base_facility confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 60,
-    "cutoff": 1700,
-    "pulse": false
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-AMB-BASE-FACILITY",
     "key": "amb_base_facility",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-BASE-FACILITY/source/amb_base_facility_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/amb_base_facility_v001.ogg",
-    "version": 1,
-    "duration_sec": 6,
+    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-BASE-FACILITY/source/amb_base_facility_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/amb_base_facility_v002.ogg",
+    "version": 2,
+    "duration_sec": 10,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "d15908ec5087fdec413b6e08c9943d46b73b12e7a9d42919eccfcd6f5c156923",
-    "source_sha256": "2fffa6b0cc71faf5364334d01b2d07acd2a4b8c58901f3639bf0898664674ea8",
-    "seed": 2980678173,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "f79870c8f7ad1a1d2e4196facf0203e0a207774cbd97458566d06ddca9c5ee31",
+    "source_sha256": "d1bcd0f0662b9b7cefebef79e93da379092434c52df7f3899c85c3410410deed",
+    "license_source": "https://opengameart.org/content/broken-fan-loop | dklon; https://opengameart.org/content/ventilation-version2 | MidFag",
+    "license_scope": "CC-BY-3.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_bed",
     "loop": true,
-    "peak_target_db": -26,
+    "peak_target_db": -21,
     "event_ids": [
       "amb.base_facility"
     ],
-    "sound_set_id": "SFXSET-AMB-BASE-FACILITY"
+    "sound_set_id": "SFXSET-AMB-BASE-FACILITY",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "room_air",
-    "machinery"
-  ]
+  "layers": [
+    {
+      "source": "vent.mp3",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.8
+    },
+    {
+      "source": "fan.wav",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.15
+    }
+  ],
+  "sources": {
+    "vent.mp3": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/vent.mp3",
+      "sha256": "fb582e06a7a0df34fbc76bc193833d78e03169cda4a38be6ce88cd54fb326fd3",
+      "credit": "MidFag",
+      "source_url": "https://opengameart.org/content/ventilation-version2",
+      "license": "CC-BY-3.0"
+    },
+    "fan.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/fan.wav",
+      "sha256": "38f78440c021e6546feb0cd16d5af016557fc08fc838b301682dbd3ce7cca19f",
+      "credit": "dklon",
+      "source_url": "https://opengameart.org/content/broken-fan-loop",
+      "license": "CC-BY-3.0"
+    }
+  },
+  "lowpass_hz": 3000,
+  "gain": 0.657671663777027,
+  "loop_crossfade_sec": 0.5,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

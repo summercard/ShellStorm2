@@ -1,57 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "footstep_debris",
-    "name": "footstep_debris",
-    "events": [
-      "player.footstep.debris"
-    ],
-    "preset": "footstep",
-    "duration": 0.22,
-    "variants": 4,
-    "peak_db": -15,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "player domain",
-    "trigger_fact": "player.footstep.debris confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "material": "debris",
-    "frequency": 200
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-FOOTSTEP-DEBRIS",
     "key": "footstep_debris",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-DEBRIS/source/footstep_debris_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/footstep_debris_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.22,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FOOTSTEP-DEBRIS/source/footstep_debris_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/footstep_debris_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.4,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "1c177bf2d59c6f6ed14a49f360cbd96c45f4b16a0601a7b9c6bd6569ae8e50f4",
-    "source_sha256": "5019803befa782756fb0fcaec4cb28e1fcfd81aa0ca1e87d6205ac013da4a11c",
-    "seed": 3637526865,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "4ef668da2b7121f54485d8cffd28752e1a251d7af521e03ead2470b08c43ef01",
+    "source_sha256": "6cacece1969ee645f6e00622cbca4b78a350548661c12dd05672f49c211a6bb4",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -15,
+    "peak_target_db": -20,
     "event_ids": [
       "player.footstep.debris"
     ],
-    "sound_set_id": "SFXSET-FOOTSTEP-DEBRIS"
+    "sound_set_id": "SFXSET-FOOTSTEP-DEBRIS",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "sole",
-    "heel",
-    "toe_grit",
-    "grit"
-  ]
+  "layers": [
+    {
+      "source": "impact_footstep_grass_000.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "impact_impactMining_000.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.25
+    }
+  ],
+  "sources": {
+    "impact_footstep_grass_000.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_footstep_grass_000.ogg",
+      "sha256": "9d49497777405d78d7cf7f2888e28277f3a23192300cfd1d79d54876b20f479f",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/footstep_grass_000.ogg"
+    },
+    "impact_impactMining_000.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactMining_000.ogg",
+      "sha256": "36b4ea107222d073c67ca64dde26944975609202d5090b2f2021213c1a7e35cd",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactMining_000.ogg"
+    }
+  },
+  "lowpass_hz": 14000,
+  "gain": 0.08132822596516946,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

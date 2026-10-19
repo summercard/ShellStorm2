@@ -1,55 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "melee_swing",
-    "name": "近战挥砍空气层",
-    "events": [
-      "combat.melee.swing"
-    ],
-    "preset": "swing",
-    "duration": 0.31,
-    "variants": 3,
-    "peak_db": -10,
-    "priority": "P2",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "combat.melee.swing confirmed edge; only the domain owner may emit",
-    "legacy": true
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-MELEE-SWING-VAR03",
     "key": "melee_swing",
     "variant": 2,
-    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-SWING-VAR03/source/melee_swing_alt03_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/melee_swing_alt03_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.31,
+    "source_path": "art_source/audio/sfx/AUD-SFX-MELEE-SWING-VAR03/source/melee_swing_alt03_v003.wav",
+    "runtime_path": "res://src/assets/audio/sfx/melee_swing_alt03_v003.ogg",
+    "version": 3,
+    "duration_sec": 0.42,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "a2ce4a97a68b60b28fb5b86b03c1e01ccd24d6e594505d408cd4121709e05d80",
-    "source_sha256": "771b028167d40480c00ea15b55d9edeaf657049da2599cf06b62748ac454dd5b",
-    "seed": 1281596405,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "092fe127282a2e64d093935759b37e6f5edfdbb2af05cca4ec2a600e49251f36",
+    "source_sha256": "d6e777aa162c7e398caccb882a3a5d169c1b0a98163bde5772113ce66e58e3d5",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+    "license_scope": "CC0; CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -10,
+    "peak_target_db": -16,
     "event_ids": [
       "combat.melee.swing"
     ],
-    "sound_set_id": "SFXSET-MELEE-SWING"
+    "sound_set_id": "SFXSET-MELEE-SWING",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "air",
-    "weight",
-    "cloth",
-    "blade"
-  ]
+  "layers": [
+    {
+      "source": "openspades_Weapons_Spade_Miss.opus",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "rpg_cloth3.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.6
+    }
+  ],
+  "sources": {
+    "openspades_Weapons_Spade_Miss.opus": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/openspades_Weapons_Spade_Miss.opus",
+      "sha256": "7ad813c01655d5bebb69a9297ec1d2c5f07c4d5ba1ecfa7ff9158e45b96bee28",
+      "credit": "Iwan Gabovitch",
+      "license": "CC0",
+      "source_url": "https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes",
+      "distribution_url": "https://github.com/DeathByDenim/openspades-free-pak"
+    },
+    "rpg_cloth3.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_cloth3.ogg",
+      "sha256": "a48632d17a4f1416541d261a32a31612e01267144c407fa3ecab3ff410f0085b",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/cloth3.ogg"
+    }
+  },
+  "lowpass_hz": 14000,
+  "gain": 0.2294997271461701,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

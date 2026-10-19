@@ -1,0 +1,6 @@
+Gunshot Sounds — Vincent Sevedge / Tabasco
+https://opengameart.org/content/gunshot-sounds
+Archive copyright notice: Copyright (c) 2009 Vincent Sevedge.
+Archive license: Creative Commons Attribution 3.0 Unported, https://creativecommons.org/licenses/by/3.0/
+The web page offers CC0; ShellStorm2 retains the archive attribution and CC-BY-3.0 terms.
+Edits: transient extraction, noise reduction, filtering, fades, peak normalization; launcher/charge layered with separately credited CC0 Foley.

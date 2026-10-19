@@ -1,60 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_attack",
-    "name": "enemy_attack",
-    "events": [
-      "enemy.attack"
-    ],
-    "preset": "enemy",
-    "duration": 0.24,
-    "variants": 3,
-    "peak_db": -12,
-    "priority": "P1",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 5,
-    "owner": "enemy domain",
-    "trigger_fact": "enemy.attack confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 140,
-    "notes": [
-      280
-    ],
-    "decay": 0.06,
-    "step": 0.07
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-ATTACK-VAR02",
     "key": "enemy_attack",
     "variant": 1,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-ATTACK-VAR02/source/enemy_attack_alt02_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_attack_alt02_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.24,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-ATTACK-VAR02/source/enemy_attack_alt02_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_attack_alt02_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.65,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "d1cc18ae95bc2ffe2d0614bb8e979a53e51e971cd6dcf1112728bf9f09e5f0e4",
-    "source_sha256": "4dbb5bad4918d8c71f28bec0401d4f4f5c7bd1136bc90ec410a766b64e4e52ef",
-    "seed": 1777661417,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "2b3d25ba62527a3f401ae73f0f68e0e768ea0f075cfec4ebd2d51b210902445a",
+    "source_sha256": "a2b118743cac29dfe2570a3be8dc148f9c005ce3a408a09ba8432e9414cb2a23",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/16-monster-growls | StarNinjas",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -12,
+    "peak_target_db": -16,
     "event_ids": [
       "enemy.attack"
     ],
-    "sound_set_id": "SFXSET-ENEMY-ATTACK"
+    "sound_set_id": "SFXSET-ENEMY-ATTACK",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "electronic_identity",
-    "vocal_resonator",
-    "breath_grit"
-  ]
+  "layers": [
+    {
+      "source": "monster_monster.7.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.7
+    },
+    {
+      "source": "rpg_cloth2.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.4
+    }
+  ],
+  "sources": {
+    "monster_monster.7.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/monster_monster.7.ogg",
+      "sha256": "c1d9e628264ac5d3c70e9d80941be152676d997eae7cb0a8184bbd896759ef5f",
+      "credit": "StarNinjas",
+      "source_url": "https://opengameart.org/content/16-monster-growls",
+      "license": "CC0-1.0",
+      "archive_member": "monster.7.ogg"
+    },
+    "rpg_cloth2.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_cloth2.ogg",
+      "sha256": "8a7451193c38bc05483aec25dd193e163a15d44cf7fff04ac7912573231b0201",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/cloth2.ogg"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.14517062060108213,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

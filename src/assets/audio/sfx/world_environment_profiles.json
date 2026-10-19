@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "surface_rules": [
+    {
+      "surface": "metal",
+      "tokens": [
+        "floor_rivet",
+        "floor_plain",
+        "metal_floor",
+        "metal_grate",
+        "grating",
+        "steel_walkway",
+        "metal_stair"
+      ]
+    },
+    {
+      "surface": "wood",
+      "tokens": [
+        "wood_floor",
+        "wooden_floor",
+        "wood_deck",
+        "floor_wood",
+        "wood_plank"
+      ]
+    },
+    {
+      "surface": "debris",
+      "tokens": [
+        "rubble",
+        "debris_floor",
+        "broken_floor",
+        "gravel",
+        "floor_broken"
+      ]
+    }
+  ],
+  "room_surfaces": {
+    "FACILITY": "metal"
+  },
+  "footsteps": {
+    "concrete": "footstep_concrete",
+    "metal": "footstep_metal",
+    "debris": "footstep_debris",
+    "wood": "footstep_wood"
+  },
+  "devices": {
+    "desk_fan": {
+      "set": "amb_fan",
+      "max_distance": 12.0,
+      "unit_size": 3.0,
+      "volume_db": 1.0
+    },
+    "air_conditioner": {
+      "set": "amb_blower",
+      "max_distance": 18.0,
+      "unit_size": 4.0,
+      "volume_db": 2.0
+    },
+    "hvac_vent": {
+      "set": "amb_blower",
+      "max_distance": 14.0,
+      "unit_size": 3.0,
+      "volume_db": -2.0
+    }
+  },
+  "device_scenes": {
+    "res://assets/art/environments/rooftop_courtyard_3d/runtime/desk_fan/prp_desk_fan_root_top3d.tscn": "desk_fan",
+    "res://assets/art/environments/rooftop_courtyard_3d/runtime/air_conditioner/prp_air_conditioner_root_top3d.tscn": "air_conditioner",
+    "res://assets/art/environments/tower_zones/rooftop/runtime/hvac_vent.tscn": "hvac_vent"
+  },
+  "wind_set": "amb_expedition_open",
+  "wind_volume_db": {
+    "outdoor": -13.0,
+    "rooftop": -10.0
+  },
+  "bird_event": "amb.outdoor_bird",
+  "bird_interval_seconds": [
+    8.0,
+    18.0
+  ],
+  "device_voice_budget": 6,
+  "context_interval_seconds": 0.15,
+  "device_interval_seconds": 0.35,
+  "wind_gust_seconds": [
+    5.0,
+    9.0
+  ],
+  "wind_quiet_seconds": [
+    9.0,
+    18.0
+  ]
+}

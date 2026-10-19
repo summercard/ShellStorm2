@@ -1,56 +1,54 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "flashlight_on",
-    "name": "flashlight_on",
-    "events": [
-      "player.flashlight_on"
-    ],
-    "preset": "mechanical",
-    "duration": 0.15,
-    "variants": 1,
-    "peak_db": -17,
-    "priority": "P2",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "player domain",
-    "trigger_fact": "player.flashlight_on confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 1700,
-    "clicks": [
-      0.035
-    ]
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-FLASHLIGHT-ON",
     "key": "flashlight_on",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-FLASHLIGHT-ON/source/flashlight_on_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/flashlight_on_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.15,
+    "source_path": "art_source/audio/sfx/AUD-SFX-FLASHLIGHT-ON/source/flashlight_on_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/flashlight_on_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.22,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "f53207af8601b61fc5caed026d0b8e619c814a609a2bd71eff7a26efa4c42369",
-    "source_sha256": "9903b7c11aaf105d0dc1c72816d812d6fc9e7df31df4eec5a91358315463f3f2",
-    "seed": 4197204637,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "e9326db12f08f46d0e124ac92a5494259ebd1610f877255581b40c70f3dd627a",
+    "source_sha256": "7de9b3f222638326221590d55b4026616f66fc755a7db3049c9274d10b62e4b1",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -17,
+    "peak_target_db": -20,
     "event_ids": [
       "player.flashlight_on"
     ],
-    "sound_set_id": "SFXSET-FLASHLIGHT-ON"
+    "sound_set_id": "SFXSET-FLASHLIGHT-ON",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mechanism"
-  ]
+  "layers": [
+    {
+      "source": "rpg_metalClick.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    }
+  ],
+  "sources": {
+    "rpg_metalClick.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_metalClick.ogg",
+      "sha256": "9851a69d0c613e13bceef08060ecc4148f098ef487927cbebe270d642398a3b3",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/metalClick.ogg"
+    }
+  },
+  "lowpass_hz": 14000,
+  "gain": 0.20948058174844175,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

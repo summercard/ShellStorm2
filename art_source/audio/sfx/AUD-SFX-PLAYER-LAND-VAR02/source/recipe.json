@@ -1,56 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "player_land",
-    "name": "player_land",
-    "events": [
-      "player.land"
-    ],
-    "preset": "land",
-    "duration": 0.34,
-    "variants": 3,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "player domain",
-    "trigger_fact": "player.land confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 85,
-    "weight": 1.3
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-PLAYER-LAND-VAR02",
     "key": "player_land",
     "variant": 1,
-    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-LAND-VAR02/source/player_land_alt02_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/player_land_alt02_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.34,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-LAND-VAR02/source/player_land_alt02_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/player_land_alt02_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.5,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "e454f9ae7e096445a786ead4b8d9981fc91a4f8416c019799db21c98131658e9",
-    "source_sha256": "f56cfcd8302a7507313e539a796c087b4afd5261dbfcfbb49f266723d312a4ba",
-    "seed": 2476534809,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "e407f5ced53df69f51280e7c1a7fea28fec118ac30300df16f35a2ba1c80aaa0",
+    "source_sha256": "57be3a3a57bdeb393052aeb7c6a623669c8d32331cd7dc317961dfebac8e3183",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -17,
     "event_ids": [
       "player.land"
     ],
-    "sound_set_id": "SFXSET-PLAYER-LAND"
+    "sound_set_id": "SFXSET-PLAYER-LAND",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mass",
-    "contact",
-    "fracture"
-  ]
+  "layers": [
+    {
+      "source": "impact_impactSoft_heavy_001.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "impact_footstep_concrete_001.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.45
+    }
+  ],
+  "sources": {
+    "impact_impactSoft_heavy_001.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_heavy_001.ogg",
+      "sha256": "4d0096364ba9e46119d2ff6df493fdc101bd2e1efae061da5e5f77a53b3fdcb6",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactSoft_heavy_001.ogg"
+    },
+    "impact_footstep_concrete_001.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_footstep_concrete_001.ogg",
+      "sha256": "507a75eb19b897087855a3be3cf11a12d7fa37d143ad535eeebe0b8031c7325d",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/footstep_concrete_001.ogg"
+    }
+  },
+  "lowpass_hz": 12000,
+  "gain": 0.10978839977717328,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

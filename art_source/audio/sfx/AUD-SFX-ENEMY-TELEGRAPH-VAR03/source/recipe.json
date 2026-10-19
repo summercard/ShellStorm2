@@ -1,61 +1,54 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_telegraph",
-    "name": "enemy_telegraph",
-    "events": [
-      "enemy.telegraph"
-    ],
-    "preset": "enemy",
-    "duration": 0.38,
-    "variants": 3,
-    "peak_db": -12,
-    "priority": "P1",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 5,
-    "owner": "enemy domain",
-    "trigger_fact": "enemy.telegraph confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 210,
-    "notes": [
-      523,
-      740
-    ],
-    "decay": 0.06,
-    "step": 0.07
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-TELEGRAPH-VAR03",
     "key": "enemy_telegraph",
     "variant": 2,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-TELEGRAPH-VAR03/source/enemy_telegraph_alt03_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_telegraph_alt03_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.38,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-TELEGRAPH-VAR03/source/enemy_telegraph_alt03_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_telegraph_alt03_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.85,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "9078f8a7a76270fef3c44619c643654f0c9000c538ae3b293e1997db02e52dad",
-    "source_sha256": "4c9cf7e685c47a0a624f99433bb0117ae5824a4384269618d12aa684fe26071a",
-    "seed": 3007718977,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "13a84b1ff85952a39933693773ce61f1b8bdc9d63d4b1b0368a7aa4ce7a79298",
+    "source_sha256": "8e0dc5ccdc5c0cd59d3294af1acff21d87d6ff67d557a1436c0b13b85f3e1234",
+    "license_source": "https://opengameart.org/content/16-monster-growls | StarNinjas",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -12,
+    "peak_target_db": -15,
     "event_ids": [
       "enemy.telegraph"
     ],
-    "sound_set_id": "SFXSET-ENEMY-TELEGRAPH"
+    "sound_set_id": "SFXSET-ENEMY-TELEGRAPH",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "electronic_identity",
-    "vocal_resonator",
-    "breath_grit"
-  ]
+  "layers": [
+    {
+      "source": "monster_monster.12.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    }
+  ],
+  "sources": {
+    "monster_monster.12.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/monster_monster.12.ogg",
+      "sha256": "f729a838ee2ed4bb02feb1a5d15c0104a91d2ca745a36ca96ace1d136111fc1a",
+      "credit": "StarNinjas",
+      "source_url": "https://opengameart.org/content/16-monster-growls",
+      "license": "CC0-1.0",
+      "archive_member": "monster.12.ogg"
+    }
+  },
+  "lowpass_hz": 12000,
+  "gain": 0.19888038637386815,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

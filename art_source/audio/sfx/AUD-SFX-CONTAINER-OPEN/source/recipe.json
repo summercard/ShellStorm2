@@ -1,61 +1,84 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "container_open",
-    "name": "计时搜索完成",
-    "events": [
-      "world.container.search_finish"
-    ],
-    "preset": "container",
-    "duration": 0.52,
-    "variants": 1,
-    "peak_db": -12,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "world.container.search_finish confirmed edge; only the domain owner may emit",
-    "legacy": true,
-    "frequency": 510,
-    "clicks": [
-      0.08,
-      0.24
-    ]
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-CONTAINER-OPEN",
     "key": "container_open",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-CONTAINER-OPEN/source/container_open_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/container_open_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.52,
+    "source_path": "art_source/audio/sfx/AUD-SFX-CONTAINER-OPEN/source/container_open_v003.wav",
+    "runtime_path": "res://src/assets/audio/sfx/container_open_v003.ogg",
+    "version": 3,
+    "duration_sec": 0.85,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "0ae7e2ed1c6d20b26138bb837ecd4917d9fc1686126ba441a3ef3febf5e72edd",
-    "source_sha256": "d956cfa8bb1d34035f3d655fbc926b4a74e12a1a80e99b34742745560b807be0",
-    "seed": 2577610968,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "8602c081ee19d37f7911db8b05b7e27a0d0142bd4fa0274342bd48060c8227fa",
+    "source_sha256": "6e8b7f2bd639398c790c5122226b90ad34903255182e36dc559e89f42899ddc4",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -12,
+    "peak_target_db": -18,
     "event_ids": [
       "world.container.search_finish"
     ],
-    "sound_set_id": "SFXSET-CONTAINER-OPEN"
+    "sound_set_id": "SFXSET-CONTAINER-OPEN",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mechanism",
-    "rail_friction",
-    "motor",
-    "end_stop",
-    "panel"
-  ]
+  "layers": [
+    {
+      "source": "rpg_beltHandle1.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "rpg_metalLatch.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0.08,
+      "gain": 0.6
+    },
+    {
+      "source": "rpg_creak1.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0.12,
+      "gain": 0.5
+    }
+  ],
+  "sources": {
+    "rpg_beltHandle1.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_beltHandle1.ogg",
+      "sha256": "2ef665bd8b65dbe669f4560be38a6d8f04a162e618b15a49e3e71b58e558aab0",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/beltHandle1.ogg"
+    },
+    "rpg_metalLatch.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_metalLatch.ogg",
+      "sha256": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/metalLatch.ogg"
+    },
+    "rpg_creak1.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_creak1.ogg",
+      "sha256": "8a346186fd297254248cab8e8117060a52a5cf2a84f603153a762108550ea95e",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/creak1.ogg"
+    }
+  },
+  "lowpass_hz": 11000,
+  "gain": 0.14521592055376548,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

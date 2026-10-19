@@ -1,54 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_shield",
-    "name": "enemy_shield",
-    "events": [
-      "enemy.shield_raise"
-    ],
-    "preset": "power",
-    "duration": 0.49,
-    "variants": 1,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "enemy domain",
-    "trigger_fact": "enemy.shield_raise confirmed edge; only the domain owner may emit",
-    "legacy": false
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-SHIELD",
     "key": "enemy_shield",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-SHIELD/source/enemy_shield_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_shield_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.49,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-SHIELD/source/enemy_shield_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_shield_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.75,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "11c45b76905fa8348c95626f33c1e15b0d02c92ff40266a08096379b172c56ad",
-    "source_sha256": "9bbc1b39c68672fd33436c937d55e3d6624e397ccf3e7a6c2358e67d6d4e20ae",
-    "seed": 2297910454,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "3483d5652bafa962a586a7f2ad1d018943e22f5b0bada7a13bd367ce11104c89",
+    "source_sha256": "84810c23b0a22a20208e228a40f5506efc0e3d44a282e2e111d0ddc569146fdd",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney; https://kenney.nl/assets/rpg-audio | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -16,
     "event_ids": [
       "enemy.shield_raise"
     ],
-    "sound_set_id": "SFXSET-ENEMY-SHIELD"
+    "sound_set_id": "SFXSET-ENEMY-SHIELD",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mechanism",
-    "coil",
-    "electronic_identity"
-  ]
+  "layers": [
+    {
+      "source": "impact_impactPlate_heavy_002.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "rpg_clothBelt2.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.4
+    }
+  ],
+  "sources": {
+    "impact_impactPlate_heavy_002.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactPlate_heavy_002.ogg",
+      "sha256": "b0cab75d1befa32b4cf215d8ee7e1c400a39182e8b105963b8e310f825b198a1",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactPlate_heavy_002.ogg"
+    },
+    "rpg_clothBelt2.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_clothBelt2.ogg",
+      "sha256": "d545b1d9f20e6188140aaf551a96f1e82fe0d15f7ca066fac8b065e1231e0038",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/clothBelt2.ogg"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.19712959453834863,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

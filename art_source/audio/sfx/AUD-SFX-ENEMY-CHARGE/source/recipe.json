@@ -1,54 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_charge",
-    "name": "enemy_charge",
-    "events": [
-      "enemy.ranged_charge"
-    ],
-    "preset": "power",
-    "duration": 0.85,
-    "variants": 1,
-    "peak_db": -11,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "enemy domain",
-    "trigger_fact": "enemy.ranged_charge confirmed edge; only the domain owner may emit",
-    "legacy": false
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-CHARGE",
     "key": "enemy_charge",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-CHARGE/source/enemy_charge_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_charge_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.85,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-CHARGE/source/enemy_charge_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_charge_v002.ogg",
+    "version": 2,
+    "duration_sec": 1.0,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "992a2dccf14b5fe92c3552a6ae5be78634eb9774f42a57e5d124fc857f947ae9",
-    "source_sha256": "007c055fc7780c76115e48f9b8a95911d7f8dd5d6e337a4b00aefb675845c3e8",
-    "seed": 3396941486,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "64daf919649b5664335a8acc3c3324322a21a194632e69d69280d00aefbd735f",
+    "source_sha256": "32af25fd96c8b5ea820450a708619b4cfcaf5f4456222df7ba5ec751a7ad505a",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/16-monster-growls | StarNinjas",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -11,
+    "peak_target_db": -15,
     "event_ids": [
       "enemy.ranged_charge"
     ],
-    "sound_set_id": "SFXSET-ENEMY-CHARGE"
+    "sound_set_id": "SFXSET-ENEMY-CHARGE",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mechanism",
-    "coil",
-    "electronic_identity"
-  ]
+  "layers": [
+    {
+      "source": "monster_monster.14.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.7
+    },
+    {
+      "source": "rpg_cloth4.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.3
+    }
+  ],
+  "sources": {
+    "monster_monster.14.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/monster_monster.14.ogg",
+      "sha256": "54e6edeb5f803699ae8baf44aa3c6f540dad2b84a7dd3f986375c97363abe60f",
+      "credit": "StarNinjas",
+      "source_url": "https://opengameart.org/content/16-monster-growls",
+      "license": "CC0-1.0",
+      "archive_member": "monster.14.ogg"
+    },
+    "rpg_cloth4.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_cloth4.ogg",
+      "sha256": "e7ab9a6c4466dea874196c61f59bf1da05cfe58748f42fadd695d441a154a99b",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/cloth4.ogg"
+    }
+  },
+  "lowpass_hz": 9000,
+  "gain": 0.09432053594226199,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

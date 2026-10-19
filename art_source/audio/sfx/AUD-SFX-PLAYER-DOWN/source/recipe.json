@@ -1,57 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "player_down",
-    "name": "player_down",
-    "events": [
-      "player.down"
-    ],
-    "preset": "hurt",
-    "duration": 0.68,
-    "variants": 1,
-    "peak_db": -8,
-    "priority": "P0",
-    "spatial_mode": "listener_follow",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "player domain",
-    "trigger_fact": "player.down confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 58,
-    "weight": 2.5
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-PLAYER-DOWN",
     "key": "player_down",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-DOWN/source/player_down_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/player_down_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.68,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PLAYER-DOWN/source/player_down_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/player_down_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.85,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "e4aa1520fa462f6cb23d0eabee97dcabf96ab8c551d18ef165137cbc6db05319",
-    "source_sha256": "0964640c2f135bd1118912eff276a6f93432765f5ed03af2efa2879534d172dc",
-    "seed": 3924731677,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "98044c7f4b4233fa201d997b9ad620b9ecfd7cb670fae9047e8b4476572627c8",
+    "source_sha256": "f11fff5420893805aee68985e1a84dae2dcc5a48a24c110ced7ae7827575d016",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney; https://opengameart.org/content/male-gruntyelling-sounds | HaelDB",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "listener_follow",
     "loop": false,
-    "peak_target_db": -8,
+    "peak_target_db": -15,
     "event_ids": [
       "player.down"
     ],
-    "sound_set_id": "SFXSET-PLAYER-DOWN"
+    "sound_set_id": "SFXSET-PLAYER-DOWN",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mass",
-    "contact",
-    "fracture",
-    "body_pressure"
-  ]
+  "layers": [
+    {
+      "source": "human_3grunt4.wav",
+      "start_sec": 0,
+      "duration_sec": 0.6,
+      "offset_sec": 0,
+      "gain": 0.6
+    },
+    {
+      "source": "impact_impactSoft_heavy_003.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0.2,
+      "gain": 0.8
+    }
+  ],
+  "sources": {
+    "human_3grunt4.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/human_3grunt4.wav",
+      "sha256": "4ba97adf030acefa10195f88c3fb329ebbea2c9638bd412896e1b4fc0ca35404",
+      "credit": "HaelDB",
+      "source_url": "https://opengameart.org/content/male-gruntyelling-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "yelling sounds/3grunt4.wav"
+    },
+    "impact_impactSoft_heavy_003.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactSoft_heavy_003.ogg",
+      "sha256": "d00286a2dc62ee5cb4d42bf56120e7050a855f69e655fc1294410aadd337eba3",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactSoft_heavy_003.ogg"
+    }
+  },
+  "lowpass_hz": 12000,
+  "gain": 0.1738170732820797,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

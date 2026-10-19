@@ -617,8 +617,8 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 		)
 	_spawn_muzzle_effect(world)
 	_spawn_shell_casing(shooter)
-	if AudioManager != null:
-		AudioManager.play_fire_sfx(fire_rate, emitted_count)
+	if AudioManager != null and not alternate_secondary:
+		AudioManager.play_fire_sfx(gun_id)
 	if MonsterAIManager != null:
 		MonsterAIManager.broadcast_sound_stimulus(
 			shooter.global_position if shooter != null else global_position,
@@ -810,7 +810,7 @@ func request_reload() -> bool:
 	cancel_charge()
 	_perform_reload_explosion()
 	if AudioManager != null:
-		AudioManager.play_reload_sfx()
+		AudioManager.play_reload_sfx(gun_id)
 	reload_started.emit(_active_reload_duration)
 	reload_progress_changed.emit(0.0, _reload_remaining)
 	# 换弹动画每帧更新，唤醒 process。

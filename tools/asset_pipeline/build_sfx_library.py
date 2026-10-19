@@ -168,6 +168,9 @@ def write24(path,x):
   w.setnchannels(1); w.setsampwidth(3); w.setframerate(RATE); w.writeframes(frames)
 
 def main():
+ current=ROOT/'src/assets/audio/sfx/sfx_catalog.json'
+ if current.exists() and any(a.get('production_revision') in ['recorded-weapons-r3','gun-families-r4'] for a in json.loads(current.read_text(encoding='utf-8')).get('assets', [])):
+  raise SystemExit('Recorded weapon assets are installed. The legacy DSP rebuild is retired; preserve the recording recipes and catalog.')
  parser=argparse.ArgumentParser(); parser.add_argument('--install',action='store_true'); args=parser.parse_args()
  contract=json.loads(CONTRACT.read_text(encoding='utf-8'))
  stage=work_path('sessions/2026-10-13_sfx_rebuild/staged/catalog.json').parent

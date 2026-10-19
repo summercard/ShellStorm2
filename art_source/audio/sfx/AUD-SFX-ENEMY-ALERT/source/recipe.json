@@ -1,61 +1,54 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "enemy_alert",
-    "name": "enemy_alert",
-    "events": [
-      "enemy.alert"
-    ],
-    "preset": "enemy",
-    "duration": 0.42,
-    "variants": 1,
-    "peak_db": -12,
-    "priority": "P1",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 5,
-    "owner": "enemy domain",
-    "trigger_fact": "enemy.alert confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 160,
-    "notes": [
-      330,
-      440
-    ],
-    "decay": 0.06,
-    "step": 0.07
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-ENEMY-ALERT",
     "key": "enemy_alert",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-ALERT/source/enemy_alert_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/enemy_alert_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.42,
+    "source_path": "art_source/audio/sfx/AUD-SFX-ENEMY-ALERT/source/enemy_alert_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/enemy_alert_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.85,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "111d5fbeffd2a0010c957f0c5306cab02542282e0c6c18d3846f749d800806fb",
-    "source_sha256": "0995de132746a3bc8b76564ee55b749e17ddc86eeeb99ebaef0eecf3a2e3afc1",
-    "seed": 3772633278,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "d82249392834623ee8bf71c7528adddf65375b96b5e33d1ecb748e6677711c55",
+    "source_sha256": "348ecd9051b5a9bfb13cdcd87c44de0bb2396e2016e023c8040a0ec321147468",
+    "license_source": "https://opengameart.org/content/16-monster-growls | StarNinjas",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -12,
+    "peak_target_db": -16,
     "event_ids": [
       "enemy.alert"
     ],
-    "sound_set_id": "SFXSET-ENEMY-ALERT"
+    "sound_set_id": "SFXSET-ENEMY-ALERT",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "electronic_identity",
-    "vocal_resonator",
-    "breath_grit"
-  ]
+  "layers": [
+    {
+      "source": "monster_monster.9.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    }
+  ],
+  "sources": {
+    "monster_monster.9.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/monster_monster.9.ogg",
+      "sha256": "0c8611d4d32c2ead9d64b2376e0ae2d440dd1da1141dfc57a64a75cd01636092",
+      "credit": "StarNinjas",
+      "source_url": "https://opengameart.org/content/16-monster-growls",
+      "license": "CC0-1.0",
+      "archive_member": "monster.9.ogg"
+    }
+  },
+  "lowpass_hz": 11000,
+  "gain": 0.09725759236292406,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

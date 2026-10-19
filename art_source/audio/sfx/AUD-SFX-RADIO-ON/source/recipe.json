@@ -1,56 +1,54 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "radio_on",
-    "name": "radio_on",
-    "events": [
-      "world.radio.on"
-    ],
-    "preset": "mechanical",
-    "duration": 0.18,
-    "variants": 1,
-    "peak_db": -17,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 2,
-    "owner": "world domain",
-    "trigger_fact": "world.radio.on confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 1800,
-    "clicks": [
-      0.04
-    ]
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-RADIO-ON",
     "key": "radio_on",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-RADIO-ON/source/radio_on_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/radio_on_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.18,
+    "source_path": "art_source/audio/sfx/AUD-SFX-RADIO-ON/source/radio_on_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/radio_on_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.22,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "229b87d16f399a9254700fdc8c09ce4c72028ff86545d8c8d2786c9a4c2a7731",
-    "source_sha256": "9ee6924cd5874c59ab00def95858f14c96cdbaef4948fd98ffa80bee40df9bff",
-    "seed": 83887627,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "11891598b570fb916e8910dcff4f779365a6048c4289d374b98916606d399776",
+    "source_sha256": "7de9b3f222638326221590d55b4026616f66fc755a7db3049c9274d10b62e4b1",
+    "license_source": "https://kenney.nl/assets/rpg-audio | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -17,
+    "peak_target_db": -20,
     "event_ids": [
       "world.radio.on"
     ],
-    "sound_set_id": "SFXSET-RADIO-ON"
+    "sound_set_id": "SFXSET-RADIO-ON",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mechanism"
-  ]
+  "layers": [
+    {
+      "source": "rpg_metalClick.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    }
+  ],
+  "sources": {
+    "rpg_metalClick.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/rpg_metalClick.ogg",
+      "sha256": "9851a69d0c613e13bceef08060ecc4148f098ef487927cbebe270d642398a3b3",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/metalClick.ogg"
+    }
+  },
+  "lowpass_hz": 14000,
+  "gain": 0.20948058174844175,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

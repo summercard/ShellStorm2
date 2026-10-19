@@ -1,60 +1,49 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "rifle_fire",
-    "name": "步枪射击",
-    "events": [
-      "combat.weapon.fire.rifle"
-    ],
-    "preset": "gun",
-    "duration": 0.24,
-    "variants": 3,
-    "peak_db": -8,
-    "priority": "P1",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 8,
-    "owner": "AudioManager compatibility caller",
-    "trigger_fact": "combat.weapon.fire.rifle confirmed edge; only the domain owner may emit",
-    "legacy": true,
-    "frequency": 125,
-    "weight": 1.3,
-    "tail": 0.105
-  },
+  "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
   "asset": {
     "asset_id": "AUD-SFX-RIFLE-FIRE-VAR02",
     "key": "rifle_fire",
     "variant": 1,
-    "source_path": "art_source/audio/sfx/AUD-SFX-RIFLE-FIRE-VAR02/source/rifle_fire_alt02_v002.wav",
-    "runtime_path": "res://src/assets/audio/sfx/rifle_fire_alt02_v002.ogg",
-    "version": 2,
-    "duration_sec": 0.24,
+    "source_path": "art_source/audio/sfx/AUD-SFX-RIFLE-FIRE-VAR02/source/rifle_fire_alt02_v004.wav",
+    "runtime_path": "res://src/assets/audio/sfx/rifle_fire_alt02_v004.ogg",
+    "version": 4,
+    "duration_sec": 0.4,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "f9ed2ac2934b4eb2a6c2203a65227170999c0a2808ad151d2c956c7d23832aff",
-    "source_sha256": "31951dc93e0d5e92919943db4148f393ed9dc0e41dbb6398ced27372b299282e",
-    "seed": 2236735342,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "08785bc5f5167f6250958917751f9ca1a094bdccfae59c37b38f00424a2c9023",
+    "source_sha256": "f269d9d8b7dac3f2020ee24b018d8116a61ad652892ccfce900bad8cb6a27c0e",
+    "license_source": "https://opengameart.org/content/gunshot-sounds | Vincent Sevedge / Tabasco",
+    "license_scope": "CC-BY-3.0 (archive notice; page also offers CC0; retain stricter attribution)",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -8,
+    "peak_target_db": -10,
     "event_ids": [
       "combat.weapon.fire.rifle"
     ],
-    "sound_set_id": "SFXSET-RIFLE-FIRE"
+    "sound_set_id": "SFXSET-RIFLE-FIRE",
+    "production_revision": "gun-families-r4"
   },
-  "stems": [
-    "muzzle_crack",
-    "combustion",
-    "body",
-    "mechanism",
-    "room_tail",
-    "receiver"
-  ]
+  "inputs": [
+    {
+      "file": "recording_sks.wav",
+      "sha256": "236b1fbc029dd44efe930c9a75d383a92b2ae72b69a78b44830e449e83da61a4",
+      "start_sec": 2.29,
+      "length_sec": 0.4,
+      "offset_sec": 0,
+      "gain": 1,
+      "credit": "Vincent Sevedge / Tabasco",
+      "source_page": "https://opengameart.org/content/gunshot-sounds",
+      "license": "CC-BY-3.0 (archive notice; page also offers CC0; retain stricter attribution)"
+    }
+  ],
+  "duration_sec": 0.4,
+  "lowpass_hz": 14000,
+  "peak_db": -10,
+  "normalization_gain": 0.41567280332708867,
+  "leading_trim_samples": 1106,
+  "input_filter": "highpass=75Hz; afftdn nr=12 nf=-35; 1ms/25ms layer fades; 30ms output fade; no pitch shift"
 }

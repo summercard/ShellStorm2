@@ -1,0 +1,49 @@
+{
+  "renderer": "tools/asset_pipeline/build_weapon_audio_profiles.py",
+  "asset": {
+    "asset_id": "AUD-SFX-RELOAD-RIFLE",
+    "key": "reload_rifle",
+    "variant": 0,
+    "sound_set_id": "SFXSET-RELOAD-RIFLE",
+    "spatial_mode": "listener_follow",
+    "event_ids": [
+      "combat.weapon.reload_start"
+    ],
+    "source_path": "art_source/audio/sfx/AUD-SFX-RELOAD-RIFLE/source/reload_rifle_v001.wav",
+    "runtime_path": "res://src/assets/audio/sfx/reload_rifle_v001.ogg",
+    "version": 1,
+    "duration_sec": 1.49,
+    "source_format": "PCM24 WAV",
+    "runtime_format": "OGG Vorbis q6",
+    "sample_rate_hz": 44100,
+    "source_channels": 1,
+    "runtime_channels": 1,
+    "sha256": "3b2df172a418435e0f91780e56c105d146cb91dfaed25ff600b6bc87ed844f23",
+    "source_sha256": "06a5a37156cdba6979b73d911ae9bb58f0519846dbd819e24fceb02be0378ee5",
+    "peak_target_db": -14,
+    "license_source": "https://opengameart.org/content/gun-reload-sounds | SpringySpringo",
+    "license_scope": "CC0-1.0",
+    "status": "imported_pending_listening",
+    "production_revision": "gun-families-r4",
+    "loop": false
+  },
+  "inputs": [
+    {
+      "file": "recording_assaultriflereload1.wav",
+      "sha256": "efb2d724d634eabe6ba8d3065686abca848bb7497d4d43a5e4aed5e5ea23016f",
+      "start_sec": 0.04,
+      "length_sec": 1.45,
+      "offset_sec": 0,
+      "gain": 1,
+      "credit": "SpringySpringo",
+      "source_page": "https://opengameart.org/content/gun-reload-sounds",
+      "license": "CC0-1.0"
+    }
+  ],
+  "duration_sec": 1.49,
+  "lowpass_hz": 14000,
+  "peak_db": -14,
+  "normalization_gain": 0.11519326702764948,
+  "leading_trim_samples": 10468,
+  "input_filter": "highpass=75Hz; afftdn nr=12 nf=-35; 1ms/25ms layer fades; 30ms output fade; no pitch shift"
+}

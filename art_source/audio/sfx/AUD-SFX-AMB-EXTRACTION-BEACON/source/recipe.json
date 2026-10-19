@@ -1,57 +1,67 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "amb_extraction_beacon",
-    "name": "amb_extraction_beacon",
-    "events": [
-      "amb.extraction_beacon"
-    ],
-    "preset": "ambience",
-    "duration": 6,
-    "variants": 1,
-    "peak_db": -26,
-    "priority": "P2",
-    "spatial_mode": "world_bed",
-    "bus": "Ambience",
-    "max_voices": 2,
-    "owner": "amb domain",
-    "trigger_fact": "amb.extraction_beacon confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 80,
-    "cutoff": 1800,
-    "pulse": true
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-AMB-EXTRACTION-BEACON",
     "key": "amb_extraction_beacon",
     "variant": 0,
-    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-EXTRACTION-BEACON/source/amb_extraction_beacon_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/amb_extraction_beacon_v001.ogg",
-    "version": 1,
-    "duration_sec": 6,
+    "source_path": "art_source/audio/sfx/AUD-SFX-AMB-EXTRACTION-BEACON/source/amb_extraction_beacon_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/amb_extraction_beacon_v002.ogg",
+    "version": 2,
+    "duration_sec": 10,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "1ebcf0191c2321ffe9d0c55d1930831f123d3f8b4ee8cd4b5e0110374a6df565",
-    "source_sha256": "4cbb6e9a83180bbf00cc82a02fa0ff01a935c9363002fc528a04cde451df5d42",
-    "seed": 95498813,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "3b66d7dc1653e72c4bf3a2588135a89bec6f60a09260e496487d6e377450f71c",
+    "source_sha256": "a99484a6d7f94b764b4fb6bacf6fb7c30414b7bef87e9f724d54634f32bf4531",
+    "license_source": "https://opengameart.org/content/broken-fan-loop | dklon; https://opengameart.org/content/short-wind-sound | remaxim",
+    "license_scope": "CC-BY-3.0; CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_bed",
     "loop": true,
-    "peak_target_db": -26,
+    "peak_target_db": -21,
     "event_ids": [
       "amb.extraction_beacon"
     ],
-    "sound_set_id": "SFXSET-AMB-EXTRACTION-BEACON"
+    "sound_set_id": "SFXSET-AMB-EXTRACTION-BEACON",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "room_air",
-    "machinery",
-    "beacon"
-  ]
+  "layers": [
+    {
+      "source": "fan.wav",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.55
+    },
+    {
+      "source": "wind.wav",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.3
+    }
+  ],
+  "sources": {
+    "fan.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/fan.wav",
+      "sha256": "38f78440c021e6546feb0cd16d5af016557fc08fc838b301682dbd3ce7cca19f",
+      "credit": "dklon",
+      "source_url": "https://opengameart.org/content/broken-fan-loop",
+      "license": "CC-BY-3.0"
+    },
+    "wind.wav": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/wind.wav",
+      "sha256": "4435f5ad1baf171f21f876f778d0a8a7447becea0c4955bb2566e0c63ab20f41",
+      "credit": "remaxim",
+      "source_url": "https://opengameart.org/content/short-wind-sound",
+      "license": "CC0-1.0"
+    }
+  },
+  "lowpass_hz": 4200,
+  "gain": 0.7998609991461217,
+  "loop_crossfade_sec": 0.5,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }

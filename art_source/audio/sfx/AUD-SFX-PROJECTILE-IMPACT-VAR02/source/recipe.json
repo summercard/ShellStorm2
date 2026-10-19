@@ -1,57 +1,69 @@
 {
-  "renderer": "tools/asset_pipeline/build_sfx_library.py",
-  "renderer_sha256": "2e3701d18785e5a59b052998a5feb70912c6c727f5f5ba4186eb427728c051e7",
-  "spec": {
-    "key": "projectile_impact",
-    "name": "projectile_impact",
-    "events": [
-      "combat.projectile.impact"
-    ],
-    "preset": "impact",
-    "duration": 0.19,
-    "variants": 3,
-    "peak_db": -8,
-    "priority": "P2",
-    "spatial_mode": "world_3d",
-    "bus": "SFX",
-    "max_voices": 5,
-    "owner": "combat domain",
-    "trigger_fact": "combat.projectile.impact confirmed edge; only the domain owner may emit",
-    "legacy": false,
-    "frequency": 560,
-    "weight": 0.5
-  },
+  "renderer": "tools/asset_pipeline/build_natural_world_audio.py",
   "asset": {
     "asset_id": "AUD-SFX-PROJECTILE-IMPACT-VAR02",
     "key": "projectile_impact",
     "variant": 1,
-    "source_path": "art_source/audio/sfx/AUD-SFX-PROJECTILE-IMPACT-VAR02/source/projectile_impact_alt02_v001.wav",
-    "runtime_path": "res://src/assets/audio/sfx/projectile_impact_alt02_v001.ogg",
-    "version": 1,
-    "duration_sec": 0.19,
+    "source_path": "art_source/audio/sfx/AUD-SFX-PROJECTILE-IMPACT-VAR02/source/projectile_impact_alt02_v002.wav",
+    "runtime_path": "res://src/assets/audio/sfx/projectile_impact_alt02_v002.ogg",
+    "version": 2,
+    "duration_sec": 0.4,
     "source_format": "PCM24 WAV",
     "runtime_format": "OGG Vorbis q6",
     "sample_rate_hz": 44100,
     "source_channels": 1,
     "runtime_channels": 1,
-    "sha256": "a3e627f5a99191ac1d7debfabfda62f986ba378c8a944ce4a9a15b23d2212822",
-    "source_sha256": "a931c9b87f9e035ab0f6d6e120539513d606a23c1e1e5fa3d83daa368356b0de",
-    "seed": 1847473264,
-    "license_source": "Original deterministic DSP synthesis; no external samples",
-    "license_scope": "Project-owned authored recipe; no third-party sample license",
+    "sha256": "70b8c471ba121d419cf611936600b94167dcaf87d5e1c337942eca2dea15d37f",
+    "source_sha256": "7258879d80dfe2bc0ac6a2b52bc118bdf17e39ba53e5ff3cd6d05cd638ae404b",
+    "license_source": "https://kenney.nl/assets/impact-sounds | Kenney",
+    "license_scope": "CC0-1.0",
     "status": "imported_pending_listening",
     "spatial_mode": "world_3d",
     "loop": false,
-    "peak_target_db": -8,
+    "peak_target_db": -16,
     "event_ids": [
       "combat.projectile.impact"
     ],
-    "sound_set_id": "SFXSET-PROJECTILE-IMPACT"
+    "sound_set_id": "SFXSET-PROJECTILE-IMPACT",
+    "production_revision": "natural-world-r5",
+    "source_method": "Sourced recordings / Foley edit and linear layering; no tone synthesis"
   },
-  "stems": [
-    "mass",
-    "contact",
-    "fracture",
-    "contact_ring"
-  ]
+  "layers": [
+    {
+      "source": "impact_impactMining_001.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 1
+    },
+    {
+      "source": "impact_impactWood_light_001.ogg",
+      "start_sec": 0,
+      "duration_sec": null,
+      "offset_sec": 0,
+      "gain": 0.45
+    }
+  ],
+  "sources": {
+    "impact_impactMining_001.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactMining_001.ogg",
+      "sha256": "61235a18de3f3d92118235398222dbf51d448f1be70b1c8bc962b10b86f2d9c6",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactMining_001.ogg"
+    },
+    "impact_impactWood_light_001.ogg": {
+      "path": "art_source/audio/sfx/recorded_world_library/source/impact_impactWood_light_001.ogg",
+      "sha256": "4b76bf3ccc8e60d19188f3165b778a7817786faa6887c55d9049bcbeef3b425f",
+      "credit": "Kenney",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "archive_member": "Audio/impactWood_light_001.ogg"
+    }
+  },
+  "lowpass_hz": 13000,
+  "gain": 0.13120007138190665,
+  "loop_crossfade_sec": 0,
+  "mix_policy": "44.1kHz mono PCM24; one-shots peak normalized; beds RMS -31dBFS with -21dBFS peak ceiling"
 }
