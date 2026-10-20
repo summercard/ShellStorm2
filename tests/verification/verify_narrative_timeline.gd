@@ -564,8 +564,8 @@ func _phase_c_real_scripts() -> void:
 	_check(_avatar.pose_calls >= 2, "姿态被下过至少两次指令（实际 %d）" % _avatar.pose_calls)
 	# 2026-09-22 主人要求：起身后补一段「对着地上的枪说」——台词因此从 1 句变 2 句。
 	_check(
-		_bark.lines == ["人呢", "那是主人留下的礼物。。"],
-		"台词是『人呢』+『那是主人留下的礼物。。』（实际 %s）" % str(_bark.lines),
+		_bark.lines == ["人呢", "那是主人留下的礼物……"],
+		"台词是『人呢』+『那是主人留下的礼物……』（实际 %s）" % str(_bark.lines),
 	)
 	_check(not _player.input_locked, "收口后输入归还")
 	_check(not NarrativeDirector.is_player_input_locked(), "收口后交回输入独占权")

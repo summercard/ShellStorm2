@@ -1132,6 +1132,7 @@ func _build_facility_light_switches() -> void:
 			_light_switches[index].link_switch(_light_switches[other_index])
 	_light_switch = _light_switches[0] if not _light_switches.is_empty() else null
 	_bind_light_switch_signal()
+	_bind_facility_presentation_light_control(true)
 
 
 func _prune_facility_switches() -> void:
@@ -1173,12 +1174,17 @@ func _place_facility_light_switch(
 	light_switch.set_meta("facility_entry_direction", "west_entry_north_first_wall")
 
 
+func bind_base_power_presentation() -> void:
+	_bind_facility_presentation_light_control(_facility_lights_currently_on())
+
+
 func _bind_facility_presentation_light_control(starts_on: bool) -> void:
 	if room_type != "FACILITY":
 		return
+	for light_switch in _all_room_light_switches():
+		light_switch.bind_base_power()
 	var art_layout := get_node_or_null("Art")
 	if art_layout == null or not art_layout.has_method("set_presentation_lighting_enabled"):
-		push_warning("基地美术自发光灯控未就绪")
 		return
 	# 成对开关都要能播完整启动序列，也都要能把关灯状态转给美术自发光；
 	# set_presentation_lighting_enabled 幂等，重复连接同一 Callable 由判重挡住。
@@ -1191,6 +1197,8 @@ func _bind_facility_presentation_light_control(starts_on: bool) -> void:
 		# 总启动时长约五秒；第4.5秒中央顶灯先亮，剩余小灯继续完成启动。
 		light_switch.configure_turn_on_presentation(art_layout, 5.0)
 	art_layout.call("set_presentation_lighting_enabled", starts_on)
+	for light_switch in _all_room_light_switches():
+		light_switch.bind_base_power()
 
 
 ## 成对常驻开关「此刻是否点着灯」，供 detail 重建时把美术表现恢复到开关的当前状态

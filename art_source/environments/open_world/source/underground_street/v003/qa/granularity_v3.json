@@ -1,0 +1,779 @@
+{
+  "passed": false,
+  "thresholds": {
+    "islands_per_m": 8.0,
+    "fine_per_m": 4.0,
+    "fine_abs_min": 6,
+    "islands_abs_min": 12,
+    "p50_max": 0.9
+  },
+  "prop_max_dim": 6.0,
+  "component_count": 47,
+  "judged_count": 30,
+  "failed_count": 28,
+  "components": [
+    {
+      "slug": "backdrop_tower_block_10x7_01",
+      "islands": 400,
+      "fine_count": 2,
+      "polys": 2450,
+      "bbox_max_m": 30.4,
+      "p10": 0.66,
+      "p50": 1.4,
+      "p90": 7.0,
+      "islands_per_m": 13.16,
+      "fine_per_m": 0.07,
+      "exempt_flat": false,
+      "fails": [
+        "fine=2<122"
+      ]
+    },
+    {
+      "slug": "cavern_base_slab_52x52_01",
+      "islands": 29,
+      "fine_count": 0,
+      "polys": 174,
+      "bbox_max_m": 54.45,
+      "p10": 2.776,
+      "p50": 3.369,
+      "p90": 4.085,
+      "islands_per_m": 0.53,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "cavern_ceiling_slab_52x52_01",
+      "islands": 40,
+      "fine_count": 0,
+      "polys": 368,
+      "bbox_max_m": 52.0,
+      "p10": 1.1,
+      "p50": 50.0,
+      "p90": 52.0,
+      "islands_per_m": 0.77,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "cavern_support_column_30m_01",
+      "islands": 34,
+      "fine_count": 0,
+      "polys": 208,
+      "bbox_max_m": 26.6,
+      "p10": 0.9,
+      "p50": 1.2,
+      "p90": 24.5,
+      "islands_per_m": 1.28,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "cavern_wall_module_10x30_01",
+      "islands": 30,
+      "fine_count": 0,
+      "polys": 180,
+      "bbox_max_m": 30.0,
+      "p10": 2.2,
+      "p50": 2.4,
+      "p90": 23.0,
+      "islands_per_m": 1.0,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "ceiling_duct_bundle_20m_01",
+      "islands": 38,
+      "fine_count": 0,
+      "polys": 260,
+      "bbox_max_m": 20.0,
+      "p10": 1.17,
+      "p50": 2.3,
+      "p90": 20.0,
+      "islands_per_m": 1.9,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=38<160",
+        "fine=0<80"
+      ]
+    },
+    {
+      "slug": "ceiling_exhaust_fan_3x3_01",
+      "islands": 13,
+      "fine_count": 0,
+      "polys": 110,
+      "bbox_max_m": 3.2,
+      "p10": 0.23,
+      "p50": 1.0,
+      "p90": 3.0,
+      "islands_per_m": 4.06,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=13<26",
+        "fine=0<13",
+        "p50=1.00>0.90"
+      ]
+    },
+    {
+      "slug": "ceiling_truss_rib_52m_01",
+      "islands": 56,
+      "fine_count": 0,
+      "polys": 436,
+      "bbox_max_m": 51.78,
+      "p10": 0.68,
+      "p50": 1.36,
+      "p90": 2.476,
+      "islands_per_m": 1.08,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "drain_manhole_grate_set_01",
+      "islands": 12,
+      "fine_count": 0,
+      "polys": 92,
+      "bbox_max_m": 2.56,
+      "p10": 0.4,
+      "p50": 0.6,
+      "p90": 0.92,
+      "islands_per_m": 4.69,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=12<20",
+        "fine=0<10"
+      ]
+    },
+    {
+      "slug": "facade_billboard_panel_03",
+      "islands": 26,
+      "fine_count": 0,
+      "polys": 156,
+      "bbox_max_m": 3.94,
+      "p10": 0.32,
+      "p50": 1.48,
+      "p90": 3.28,
+      "islands_per_m": 6.59,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=26<32",
+        "fine=0<16",
+        "p50=1.48>0.90"
+      ]
+    },
+    {
+      "slug": "facade_pipe_cluster_vertical_01",
+      "islands": 16,
+      "fine_count": 3,
+      "polys": 148,
+      "bbox_max_m": 6.0,
+      "p10": 0.189,
+      "p50": 0.324,
+      "p90": 6.0,
+      "islands_per_m": 2.67,
+      "fine_per_m": 0.5,
+      "exempt_flat": false,
+      "fails": [
+        "islands=16<48",
+        "fine=3<24"
+      ]
+    },
+    {
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "islands": 6,
+      "fine_count": 0,
+      "polys": 46,
+      "bbox_max_m": 3.23,
+      "p10": 0.44,
+      "p50": 0.9,
+      "p90": 3.1,
+      "islands_per_m": 1.86,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "foreground_service_roof_15x15_01",
+      "islands": 30,
+      "fine_count": 0,
+      "polys": 192,
+      "bbox_max_m": 15.2,
+      "p10": 0.6,
+      "p50": 7.5,
+      "p90": 15.0,
+      "islands_per_m": 1.97,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=30<122",
+        "fine=0<61"
+      ]
+    },
+    {
+      "slug": "glowing_hazard_bollard_02",
+      "islands": 10,
+      "fine_count": 0,
+      "polys": 116,
+      "bbox_max_m": 1.12,
+      "p10": 0.2,
+      "p50": 0.3,
+      "p90": 0.56,
+      "islands_per_m": 8.93,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=10<12",
+        "fine=0<6"
+      ]
+    },
+    {
+      "slug": "hanging_lamp_industrial_01",
+      "islands": 6,
+      "fine_count": 0,
+      "polys": 66,
+      "bbox_max_m": 2.12,
+      "p10": 0.4,
+      "p50": 1.24,
+      "p90": 1.32,
+      "islands_per_m": 2.83,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=6<17",
+        "fine=0<8",
+        "p50=1.24>0.90"
+      ]
+    },
+    {
+      "slug": "hotel_brick_tower_core_10x12_01",
+      "islands": 1226,
+      "fine_count": 34,
+      "polys": 7552,
+      "bbox_max_m": 28.52,
+      "p10": 0.42,
+      "p50": 1.691,
+      "p90": 2.94,
+      "islands_per_m": 42.99,
+      "fine_per_m": 1.19,
+      "exempt_flat": false,
+      "fails": [
+        "fine=34<114"
+      ]
+    },
+    {
+      "slug": "industrial_bar_building_10x12_01",
+      "islands": 619,
+      "fine_count": 128,
+      "polys": 3836,
+      "bbox_max_m": 22.92,
+      "p10": 0.09,
+      "p50": 1.18,
+      "p90": 8.3,
+      "islands_per_m": 27.01,
+      "fine_per_m": 5.58,
+      "exempt_flat": false,
+      "fails": []
+    },
+    {
+      "slug": "industrial_street_lamp_pole_01",
+      "islands": 20,
+      "fine_count": 0,
+      "polys": 132,
+      "bbox_max_m": 7.06,
+      "p10": 0.32,
+      "p50": 0.5,
+      "p90": 1.743,
+      "islands_per_m": 2.83,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=20<56",
+        "fine=0<28"
+      ]
+    },
+    {
+      "slug": "narrow_alley_shophouse_02",
+      "islands": 55,
+      "fine_count": 0,
+      "polys": 350,
+      "bbox_max_m": 15.9,
+      "p10": 1.36,
+      "p50": 2.4,
+      "p90": 9.0,
+      "islands_per_m": 3.46,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=55<127",
+        "fine=0<64"
+      ]
+    },
+    {
+      "slug": "neon_blade_sign_cluster_05",
+      "islands": 13,
+      "fine_count": 0,
+      "polys": 78,
+      "bbox_max_m": 4.2,
+      "p10": 0.83,
+      "p50": 1.76,
+      "p90": 1.9,
+      "islands_per_m": 3.1,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=13<34",
+        "fine=0<17",
+        "p50=1.76>0.90"
+      ]
+    },
+    {
+      "slug": "neon_sign_bar_vertical_03",
+      "islands": 47,
+      "fine_count": 3,
+      "polys": 282,
+      "bbox_max_m": 6.4,
+      "p10": 0.335,
+      "p50": 0.774,
+      "p90": 6.18,
+      "islands_per_m": 7.34,
+      "fine_per_m": 0.47,
+      "exempt_flat": false,
+      "fails": [
+        "islands=47<51",
+        "fine=3<26"
+      ]
+    },
+    {
+      "slug": "neon_sign_hotel_vertical_01",
+      "islands": 55,
+      "fine_count": 9,
+      "polys": 342,
+      "bbox_max_m": 12.39,
+      "p10": 0.072,
+      "p50": 1.26,
+      "p90": 12.06,
+      "islands_per_m": 4.44,
+      "fine_per_m": 0.73,
+      "exempt_flat": false,
+      "fails": [
+        "islands=55<99",
+        "fine=9<50"
+      ]
+    },
+    {
+      "slug": "pharmacy_shop_block_10x8_01",
+      "islands": 658,
+      "fine_count": 54,
+      "polys": 4145,
+      "bbox_max_m": 11.42,
+      "p10": 0.22,
+      "p50": 0.86,
+      "p90": 2.8,
+      "islands_per_m": 57.62,
+      "fine_per_m": 4.73,
+      "exempt_flat": false,
+      "fails": []
+    },
+    {
+      "slug": "puddle_reflect_patch_04",
+      "islands": 2,
+      "fine_count": 0,
+      "polys": 20,
+      "bbox_max_m": 3.7,
+      "p10": 2.035,
+      "p50": 2.035,
+      "p90": 3.7,
+      "islands_per_m": 0.54,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "retro_cyber_sedan_car_01",
+      "islands": 25,
+      "fine_count": 0,
+      "polys": 206,
+      "bbox_max_m": 4.7,
+      "p10": 0.34,
+      "p50": 0.44,
+      "p90": 4.6,
+      "islands_per_m": 5.32,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=25<38",
+        "fine=0<19"
+      ]
+    },
+    {
+      "slug": "road_paint_dash_run_03",
+      "islands": 32,
+      "fine_count": 0,
+      "polys": 192,
+      "bbox_max_m": 9.44,
+      "p10": 0.72,
+      "p50": 1.12,
+      "p90": 3.0,
+      "islands_per_m": 3.39,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "rooftop_exhaust_vent_box_02",
+      "islands": 10,
+      "fine_count": 0,
+      "polys": 68,
+      "bbox_max_m": 2.36,
+      "p10": 0.6,
+      "p50": 1.2,
+      "p90": 1.6,
+      "islands_per_m": 4.24,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=10<19",
+        "fine=0<9",
+        "p50=1.20>0.90"
+      ]
+    },
+    {
+      "slug": "rooftop_twin_fan_chiller_01",
+      "islands": 17,
+      "fine_count": 0,
+      "polys": 160,
+      "bbox_max_m": 2.75,
+      "p10": 0.88,
+      "p50": 1.0,
+      "p90": 1.2,
+      "islands_per_m": 6.18,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=17<22",
+        "fine=0<11",
+        "p50=1.00>0.90"
+      ]
+    },
+    {
+      "slug": "sidewalk_tile_5x5_01",
+      "islands": 12,
+      "fine_count": 0,
+      "polys": 72,
+      "bbox_max_m": 5.28,
+      "p10": 0.8,
+      "p50": 2.26,
+      "p90": 5.0,
+      "islands_per_m": 2.27,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "sky_cable_span_24m_01",
+      "islands": 54,
+      "fine_count": 0,
+      "polys": 370,
+      "bbox_max_m": 24.02,
+      "p10": 0.22,
+      "p50": 0.6,
+      "p90": 2.018,
+      "islands_per_m": 2.25,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=54<192",
+        "fine=0<96"
+      ]
+    },
+    {
+      "slug": "skybridge_hazard_pillar_02",
+      "islands": 29,
+      "fine_count": 0,
+      "polys": 174,
+      "bbox_max_m": 12.8,
+      "p10": 1.24,
+      "p50": 1.24,
+      "p90": 1.36,
+      "islands_per_m": 2.27,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=29<102",
+        "fine=0<51"
+      ]
+    },
+    {
+      "slug": "skybridge_sign_sector07_04",
+      "islands": 32,
+      "fine_count": 0,
+      "polys": 192,
+      "bbox_max_m": 9.12,
+      "p10": 0.84,
+      "p50": 2.109,
+      "p90": 9.0,
+      "islands_per_m": 3.51,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=32<73",
+        "fine=0<36"
+      ]
+    },
+    {
+      "slug": "skybridge_truss_span_21m_01",
+      "islands": 109,
+      "fine_count": 0,
+      "polys": 666,
+      "bbox_max_m": 21.55,
+      "p10": 1.0,
+      "p50": 1.977,
+      "p90": 20.8,
+      "islands_per_m": 5.06,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=109<172",
+        "fine=0<86"
+      ]
+    },
+    {
+      "slug": "steam_vapor_vent_02",
+      "islands": 46,
+      "fine_count": 0,
+      "polys": 432,
+      "bbox_max_m": 3.03,
+      "p10": 0.299,
+      "p50": 0.391,
+      "p90": 1.48,
+      "islands_per_m": 15.16,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "fine=0<12"
+      ]
+    },
+    {
+      "slug": "street_cable_harness_03",
+      "islands": 29,
+      "fine_count": 3,
+      "polys": 180,
+      "bbox_max_m": 4.0,
+      "p10": 0.22,
+      "p50": 0.88,
+      "p90": 1.002,
+      "islands_per_m": 7.25,
+      "fine_per_m": 0.75,
+      "exempt_flat": false,
+      "fails": [
+        "islands=29<32",
+        "fine=3<16"
+      ]
+    },
+    {
+      "slug": "street_guardrail_fence_4m_01",
+      "islands": 20,
+      "fine_count": 0,
+      "polys": 120,
+      "bbox_max_m": 4.06,
+      "p10": 0.26,
+      "p50": 0.51,
+      "p90": 1.05,
+      "islands_per_m": 4.93,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=20<32",
+        "fine=0<16"
+      ]
+    },
+    {
+      "slug": "street_pavement_detail_03",
+      "islands": 25,
+      "fine_count": 1,
+      "polys": 150,
+      "bbox_max_m": 5.0,
+      "p10": 0.44,
+      "p50": 0.6,
+      "p90": 5.0,
+      "islands_per_m": 5.0,
+      "fine_per_m": 0.2,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "street_rock_rubble_pile_04",
+      "islands": 6,
+      "fine_count": 0,
+      "polys": 47,
+      "bbox_max_m": 3.1,
+      "p10": 0.5,
+      "p50": 0.585,
+      "p90": 1.922,
+      "islands_per_m": 1.94,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "street_utility_cabinet_02",
+      "islands": 11,
+      "fine_count": 0,
+      "polys": 78,
+      "bbox_max_m": 2.01,
+      "p10": 0.6,
+      "p50": 1.0,
+      "p90": 1.7,
+      "islands_per_m": 5.47,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=11<16",
+        "fine=0<8",
+        "p50=1.00>0.90"
+      ]
+    },
+    {
+      "slug": "traffic_signal_mast_02",
+      "islands": 32,
+      "fine_count": 0,
+      "polys": 230,
+      "bbox_max_m": 6.4,
+      "p10": 0.2,
+      "p50": 0.48,
+      "p90": 1.48,
+      "islands_per_m": 5.0,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "islands=32<51",
+        "fine=0<26"
+      ]
+    },
+    {
+      "slug": "tunnel_portal_arch_10m_01",
+      "islands": 45,
+      "fine_count": 0,
+      "polys": 270,
+      "bbox_max_m": 30.0,
+      "p10": 0.6,
+      "p50": 1.9,
+      "p90": 8.0,
+      "islands_per_m": 1.5,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "vending_machine_bank_02",
+      "islands": 39,
+      "fine_count": 0,
+      "polys": 234,
+      "bbox_max_m": 4.32,
+      "p10": 0.3,
+      "p50": 1.0,
+      "p90": 2.1,
+      "islands_per_m": 9.03,
+      "fine_per_m": 0.0,
+      "exempt_flat": false,
+      "fails": [
+        "fine=0<17",
+        "p50=1.00>0.90"
+      ]
+    },
+    {
+      "slug": "wall_ac_outdoor_unit_03",
+      "islands": 6,
+      "fine_count": 2,
+      "polys": 44,
+      "bbox_max_m": 1.2,
+      "p10": 0.18,
+      "p50": 0.38,
+      "p90": 0.84,
+      "islands_per_m": 5.0,
+      "fine_per_m": 1.67,
+      "exempt_flat": false,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "wet_asphalt_crosswalk_10x5_02",
+      "islands": 16,
+      "fine_count": 0,
+      "polys": 96,
+      "bbox_max_m": 8.74,
+      "p10": 0.62,
+      "p50": 4.7,
+      "p90": 4.7,
+      "islands_per_m": 1.83,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "wet_asphalt_intersection_10x10_03",
+      "islands": 10,
+      "fine_count": 0,
+      "polys": 92,
+      "bbox_max_m": 10.0,
+      "p10": 0.6,
+      "p50": 0.9,
+      "p90": 9.84,
+      "islands_per_m": 1.0,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "wet_asphalt_lane_10x10_01",
+      "islands": 9,
+      "fine_count": 0,
+      "polys": 54,
+      "bbox_max_m": 10.0,
+      "p10": 2.2,
+      "p50": 9.8,
+      "p90": 9.84,
+      "islands_per_m": 0.9,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    },
+    {
+      "slug": "wet_reflect_streak_05",
+      "islands": 35,
+      "fine_count": 0,
+      "polys": 210,
+      "bbox_max_m": 5.2,
+      "p10": 0.339,
+      "p50": 0.514,
+      "p90": 0.743,
+      "islands_per_m": 6.73,
+      "fine_per_m": 0.0,
+      "exempt_flat": true,
+      "skipped": true,
+      "fails": []
+    }
+  ]
+}

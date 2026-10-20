@@ -21,6 +21,7 @@ func _ready() -> void:
 	var time_source := get_node_or_null("/root/GameTimeManager")
 	if time_source != null and time_source.has_signal("minute_changed"):
 		time_source.minute_changed.connect(_on_minute_changed)
+	BaseManager.base_power_changed.connect(_on_base_power_changed)
 	_refresh()
 	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
 	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
@@ -134,7 +135,7 @@ func _refresh(status_override := "") -> void:
 	_energy_label.text = "基地电量  %.0f / %.0f" % [
 		float(energy.get("current", 0.0)), float(energy.get("capacity", 100.0))
 	]
-	_energy_label.tooltip_text = "每游戏小时恢复 %.1f；接口可扩展到发电机、天气与设施升级。" % float(energy.get("regen_per_game_hour", 0.0))
+	_energy_label.tooltip_text = "天台发电机开启时每游戏小时恢复 %.1f；关闭时停止供电和恢复。" % float(energy.get("regen_per_game_hour", 0.0))
 	_hp_label.text = "生命  %d / %d  （缺失 %d）" % [
 		int(snapshot.get("current_hp", 0)),
 		int(snapshot.get("max_hp", 0)),
@@ -183,3 +184,7 @@ func _make_label(text: String, font_size: int, role: String = "value", spacing: 
 	label.text = text
 	UIStyleFactory.apply_prism_label(label, role, spacing, font_size)
 	return label
+
+
+func _on_base_power_changed(_enabled: bool) -> void:
+	_refresh()

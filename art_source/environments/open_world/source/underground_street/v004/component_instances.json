@@ -1,0 +1,2331 @@
+{
+  "schema": "shellstorm2.openworld.component_instances",
+  "schema_version": 1,
+  "suite_name": "underground_street",
+  "version": "v004",
+  "total_instance_count": 211,
+  "note": "仅初始化与追溯；正式摆位由后续 Godot TSCN 拥有",
+  "instances": [
+    {
+      "name": "inst_wet_asphalt_lane_10x10_01_001",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        0.0,
+        -20.0,
+        -0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_wet_asphalt_lane_10x10_01_002",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        0.0,
+        -10.0,
+        -0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_wet_asphalt_lane_10x10_01_003",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        0.0,
+        10.0,
+        -0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_wet_asphalt_lane_10x10_01_004",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        0.0,
+        20.0,
+        -0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_wet_asphalt_lane_10x10_01_005",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -20.0,
+        0.0,
+        -0.18
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wet_asphalt_lane_10x10_01_006",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -10.0,
+        0.0,
+        -0.18
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wet_asphalt_lane_10x10_01_007",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        10.0,
+        0.0,
+        -0.18
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wet_asphalt_lane_10x10_01_008",
+      "slug": "wet_asphalt_lane_10x10_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        20.0,
+        0.0,
+        -0.18
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wet_asphalt_intersection_10x10_03_009",
+      "slug": "wet_asphalt_intersection_10x10_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        0.0,
+        0.0,
+        -0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_wet_asphalt_crosswalk_10x5_02_010",
+      "slug": "wet_asphalt_crosswalk_10x5_02",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        0.0,
+        -7.5,
+        0.012
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_wet_asphalt_crosswalk_10x5_02_011",
+      "slug": "wet_asphalt_crosswalk_10x5_02",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        0.0,
+        7.5,
+        0.012
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_wet_asphalt_crosswalk_10x5_02_012",
+      "slug": "wet_asphalt_crosswalk_10x5_02",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        0.0,
+        0.012
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wet_asphalt_crosswalk_10x5_02_013",
+      "slug": "wet_asphalt_crosswalk_10x5_02",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        0.0,
+        0.012
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_014",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        -22.5,
+        -0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_015",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        -17.5,
+        -0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_016",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        -12.5,
+        -0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_017",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        -7.5,
+        -0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_018",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        7.5,
+        -0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_019",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        12.5,
+        -0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_020",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        17.5,
+        -0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_021",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        22.5,
+        -0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_022",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        -22.5,
+        -0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_023",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        -17.5,
+        -0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_024",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        -12.5,
+        -0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_025",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        -7.5,
+        -0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_026",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        7.5,
+        -0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_027",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        12.5,
+        -0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_028",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        17.5,
+        -0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_029",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        22.5,
+        -0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_030",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -22.5,
+        -7.5,
+        -0.2
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_031",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -17.5,
+        -7.5,
+        -0.2
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_032",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -12.5,
+        -7.5,
+        -0.2
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_033",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        12.5,
+        -7.5,
+        -0.2
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_034",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        17.5,
+        -7.5,
+        -0.2
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_035",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        22.5,
+        -7.5,
+        -0.2
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_036",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -22.5,
+        7.5,
+        -0.2
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_037",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -17.5,
+        7.5,
+        -0.2
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_038",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -12.5,
+        7.5,
+        -0.2
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_039",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        12.5,
+        7.5,
+        -0.2
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_040",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        17.5,
+        7.5,
+        -0.2
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_sidewalk_tile_5x5_01_041",
+      "slug": "sidewalk_tile_5x5_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        22.5,
+        7.5,
+        -0.2
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_puddle_reflect_patch_04_042",
+      "slug": "puddle_reflect_patch_04",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -2.9,
+        -12.6,
+        0.014
+      ],
+      "rz": 12
+    },
+    {
+      "name": "inst_puddle_reflect_patch_04_043",
+      "slug": "puddle_reflect_patch_04",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        3.1,
+        3.4,
+        0.014
+      ],
+      "rz": -40
+    },
+    {
+      "name": "inst_puddle_reflect_patch_04_044",
+      "slug": "puddle_reflect_patch_04",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -3.3,
+        11.6,
+        0.014
+      ],
+      "rz": 78
+    },
+    {
+      "name": "inst_puddle_reflect_patch_04_045",
+      "slug": "puddle_reflect_patch_04",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        8.4,
+        -2.6,
+        0.014
+      ],
+      "rz": 25
+    },
+    {
+      "name": "inst_puddle_reflect_patch_04_046",
+      "slug": "puddle_reflect_patch_04",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -9.2,
+        2.4,
+        0.014
+      ],
+      "rz": -15
+    },
+    {
+      "name": "inst_puddle_reflect_patch_04_047",
+      "slug": "puddle_reflect_patch_04",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        2.4,
+        18.4,
+        0.014
+      ],
+      "rz": 8
+    },
+    {
+      "name": "inst_wet_reflect_streak_05_048",
+      "slug": "wet_reflect_streak_05",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -3.4,
+        -13.2,
+        0.014
+      ],
+      "rz": 0
+    },
+    {
+      "name": "inst_wet_reflect_streak_05_049",
+      "slug": "wet_reflect_streak_05",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -3.2,
+        -2.4,
+        0.014
+      ],
+      "rz": 0
+    },
+    {
+      "name": "inst_wet_reflect_streak_05_050",
+      "slug": "wet_reflect_streak_05",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        3.0,
+        12.0,
+        0.014
+      ],
+      "rz": 0
+    },
+    {
+      "name": "inst_wet_reflect_streak_05_051",
+      "slug": "wet_reflect_streak_05",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -8.0,
+        -8.4,
+        0.014
+      ],
+      "rz": 90
+    },
+    {
+      "name": "inst_wet_reflect_streak_05_052",
+      "slug": "wet_reflect_streak_05",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        8.0,
+        6.4,
+        0.014
+      ],
+      "rz": 90
+    },
+    {
+      "name": "inst_wet_reflect_streak_05_053",
+      "slug": "wet_reflect_streak_05",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        2.2,
+        18.6,
+        0.014
+      ],
+      "rz": 0
+    },
+    {
+      "name": "inst_drain_manhole_grate_set_01_054",
+      "slug": "drain_manhole_grate_set_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -4.1,
+        -14.2,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_drain_manhole_grate_set_01_055",
+      "slug": "drain_manhole_grate_set_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        4.0,
+        6.2,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_drain_manhole_grate_set_01_056",
+      "slug": "drain_manhole_grate_set_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -4.0,
+        18.4,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_drain_manhole_grate_set_01_057",
+      "slug": "drain_manhole_grate_set_01",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        14.0,
+        4.2,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_foreground_service_roof_15x15_01_058",
+      "slug": "foreground_service_roof_15x15_01",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -20.0,
+        -20.0,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_pharmacy_shop_block_10x8_01_059",
+      "slug": "pharmacy_shop_block_10x8_01",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -15.0,
+        -9.0,
+        -0.037347
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_hotel_brick_tower_core_10x12_01_060",
+      "slug": "hotel_brick_tower_core_10x12_01",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -15.0,
+        5.5,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_narrow_alley_shophouse_02_061",
+      "slug": "narrow_alley_shophouse_02",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -12.0,
+        17.0,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_foreground_service_roof_15x15_01_062",
+      "slug": "foreground_service_roof_15x15_01",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        22.0,
+        -19.0,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_industrial_bar_building_10x12_01_063",
+      "slug": "industrial_bar_building_10x12_01",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        15.0,
+        -6.5,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_backdrop_tower_block_10x7_01_064",
+      "slug": "backdrop_tower_block_10x7_01",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        15.0,
+        4.0,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_backdrop_tower_block_10x7_01_065",
+      "slug": "backdrop_tower_block_10x7_01",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        15.0,
+        19.0,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_backdrop_tower_block_10x7_01_066",
+      "slug": "backdrop_tower_block_10x7_01",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -15.0,
+        22.5,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_neon_sign_hotel_vertical_01_067",
+      "slug": "neon_sign_hotel_vertical_01",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -9.98,
+        0.2,
+        6.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_neon_sign_bar_vertical_03_068",
+      "slug": "neon_sign_bar_vertical_03",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        9.98,
+        -1.6,
+        9.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_neon_blade_sign_cluster_05_069",
+      "slug": "neon_blade_sign_cluster_05",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -9.88,
+        -1.6,
+        3.4
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_neon_blade_sign_cluster_05_070",
+      "slug": "neon_blade_sign_cluster_05",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -9.88,
+        8.6,
+        5.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_neon_blade_sign_cluster_05_071",
+      "slug": "neon_blade_sign_cluster_05",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        9.88,
+        2.0,
+        5.6
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_neon_blade_sign_cluster_05_072",
+      "slug": "neon_blade_sign_cluster_05",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        9.88,
+        10.6,
+        3.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_neon_blade_sign_cluster_05_073",
+      "slug": "neon_blade_sign_cluster_05",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        9.88,
+        14.6,
+        4.4
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_neon_blade_sign_cluster_05_074",
+      "slug": "neon_blade_sign_cluster_05",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -9.88,
+        15.0,
+        5.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_skybridge_truss_span_21m_01_075",
+      "slug": "skybridge_truss_span_21m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        13.5,
+        -0.03
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_skybridge_hazard_pillar_02_076",
+      "slug": "skybridge_hazard_pillar_02",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -8.8,
+        13.5,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_skybridge_hazard_pillar_02_077",
+      "slug": "skybridge_hazard_pillar_02",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        8.8,
+        13.5,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_skybridge_sign_sector07_04_078",
+      "slug": "skybridge_sign_sector07_04",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -1.5,
+        11.62,
+        11.71
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_079",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -20.0,
+        25.7,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_080",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -20.0,
+        -25.7,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_081",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -10.0,
+        25.7,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_082",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -10.0,
+        -25.7,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_083",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        10.0,
+        25.7,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_084",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        10.0,
+        -25.7,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_085",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        20.0,
+        25.7,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_086",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        20.0,
+        -25.7,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_087",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        25.7,
+        -20.0,
+        0.0
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_088",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -25.7,
+        -20.0,
+        0.0
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_089",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        25.7,
+        -10.0,
+        0.0
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_090",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -25.7,
+        -10.0,
+        0.0
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_091",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        25.7,
+        10.0,
+        0.0
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_092",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -25.7,
+        10.0,
+        0.0
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_093",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        25.7,
+        20.0,
+        0.0
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_cavern_wall_module_10x30_01_094",
+      "slug": "cavern_wall_module_10x30_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -25.7,
+        20.0,
+        0.0
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_tunnel_portal_arch_10m_01_095",
+      "slug": "tunnel_portal_arch_10m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        25.65,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_tunnel_portal_arch_10m_01_096",
+      "slug": "tunnel_portal_arch_10m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        -25.65,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_tunnel_portal_arch_10m_01_097",
+      "slug": "tunnel_portal_arch_10m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        25.65,
+        0.0,
+        0.0
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_tunnel_portal_arch_10m_01_098",
+      "slug": "tunnel_portal_arch_10m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -25.65,
+        0.0,
+        0.0
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_cavern_base_slab_52x52_01_099",
+      "slug": "cavern_base_slab_52x52_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        0.0,
+        -1.8
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_ceiling_slab_52x52_01_100",
+      "slug": "cavern_ceiling_slab_52x52_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        0.0,
+        27.41
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_ceiling_truss_rib_52m_01_101",
+      "slug": "ceiling_truss_rib_52m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        -20.0,
+        23.38
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_ceiling_truss_rib_52m_01_102",
+      "slug": "ceiling_truss_rib_52m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        -10.0,
+        23.38
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_ceiling_truss_rib_52m_01_103",
+      "slug": "ceiling_truss_rib_52m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        0.0,
+        23.38
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_ceiling_truss_rib_52m_01_104",
+      "slug": "ceiling_truss_rib_52m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        10.0,
+        23.38
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_ceiling_truss_rib_52m_01_105",
+      "slug": "ceiling_truss_rib_52m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        0.0,
+        20.0,
+        23.38
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_support_column_30m_01_106",
+      "slug": "cavern_support_column_30m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -22.5,
+        -22.5,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_support_column_30m_01_107",
+      "slug": "cavern_support_column_30m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        22.5,
+        -22.5,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_support_column_30m_01_108",
+      "slug": "cavern_support_column_30m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        -22.5,
+        22.5,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_cavern_support_column_30m_01_109",
+      "slug": "cavern_support_column_30m_01",
+      "group": "03C_跨街高架与地下围护",
+      "loc": [
+        22.5,
+        22.5,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_110",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -8.4,
+        -19.0,
+        0.15
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_111",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -8.4,
+        -2.0,
+        0.15
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_112",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -8.4,
+        12.0,
+        0.15
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_113",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -8.4,
+        20.0,
+        0.15
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_114",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        8.4,
+        -16.0,
+        0.15
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_115",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        8.4,
+        4.0,
+        0.15
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_116",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        8.4,
+        17.0,
+        0.15
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_117",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        14.0,
+        -7.2,
+        0.15
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_118",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -14.0,
+        7.2,
+        0.15
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_industrial_street_lamp_pole_01_119",
+      "slug": "industrial_street_lamp_pole_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -18.0,
+        7.2,
+        0.15
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_glowing_hazard_bollard_02_120",
+      "slug": "glowing_hazard_bollard_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -5.8,
+        -10.6,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_glowing_hazard_bollard_02_121",
+      "slug": "glowing_hazard_bollard_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -5.8,
+        -4.4,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_glowing_hazard_bollard_02_122",
+      "slug": "glowing_hazard_bollard_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        5.8,
+        -10.6,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_glowing_hazard_bollard_02_123",
+      "slug": "glowing_hazard_bollard_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        5.8,
+        4.4,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_glowing_hazard_bollard_02_124",
+      "slug": "glowing_hazard_bollard_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        10.6,
+        -4.4,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_glowing_hazard_bollard_02_125",
+      "slug": "glowing_hazard_bollard_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -10.6,
+        4.4,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_glowing_hazard_bollard_02_126",
+      "slug": "glowing_hazard_bollard_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -5.8,
+        15.4,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_glowing_hazard_bollard_02_127",
+      "slug": "glowing_hazard_bollard_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        5.8,
+        9.4,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_guardrail_fence_4m_01_128",
+      "slug": "street_guardrail_fence_4m_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -8.6,
+        -20.0,
+        0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_guardrail_fence_4m_01_129",
+      "slug": "street_guardrail_fence_4m_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -8.6,
+        -15.0,
+        0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_guardrail_fence_4m_01_130",
+      "slug": "street_guardrail_fence_4m_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        8.6,
+        15.0,
+        0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_guardrail_fence_4m_01_131",
+      "slug": "street_guardrail_fence_4m_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        12.0,
+        -10.6,
+        0.18
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_street_guardrail_fence_4m_01_132",
+      "slug": "street_guardrail_fence_4m_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -12.0,
+        10.6,
+        0.18
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_street_guardrail_fence_4m_01_133",
+      "slug": "street_guardrail_fence_4m_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        8.6,
+        7.0,
+        0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_utility_cabinet_02_134",
+      "slug": "street_utility_cabinet_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.0,
+        -8.6,
+        0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_utility_cabinet_02_135",
+      "slug": "street_utility_cabinet_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.2,
+        8.4,
+        0.18
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_street_utility_cabinet_02_136",
+      "slug": "street_utility_cabinet_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        20.0,
+        -8.6,
+        0.18
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_street_utility_cabinet_02_137",
+      "slug": "street_utility_cabinet_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -20.0,
+        8.2,
+        0.18
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_street_utility_cabinet_02_138",
+      "slug": "street_utility_cabinet_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.0,
+        16.6,
+        0.18
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_retro_cyber_sedan_car_01_139",
+      "slug": "retro_cyber_sedan_car_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -2.6,
+        -16.0,
+        0.02
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_retro_cyber_sedan_car_01_140",
+      "slug": "retro_cyber_sedan_car_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        2.7,
+        16.5,
+        0.02
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_retro_cyber_sedan_car_01_141",
+      "slug": "retro_cyber_sedan_car_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        16.0,
+        1.6,
+        0.02
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_retro_cyber_sedan_car_01_142",
+      "slug": "retro_cyber_sedan_car_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -2.4,
+        2.8,
+        0.02
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_143",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.55,
+        2.2,
+        5.76
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_144",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.55,
+        5.4,
+        10.56
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_145",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.55,
+        8.2,
+        15.56
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_146",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.55,
+        10.4,
+        20.56
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_147",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.55,
+        2.4,
+        5.96
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_148",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.55,
+        5.6,
+        10.76
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_149",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.55,
+        8.4,
+        14.96
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_150",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.55,
+        -7.4,
+        3.96
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_151",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.55,
+        -2.6,
+        5.16
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_wall_ac_outdoor_unit_03_152",
+      "slug": "wall_ac_outdoor_unit_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.55,
+        10.2,
+        19.96
+      ],
+      "rz": -90.0
+    },
+    {
+      "name": "inst_facade_pipe_cluster_vertical_01_153",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.7,
+        9.4,
+        0.004
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_facade_pipe_cluster_vertical_01_154",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.7,
+        0.0,
+        0.004
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_facade_pipe_cluster_vertical_01_155",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.7,
+        1.4,
+        0.004
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_facade_pipe_cluster_vertical_01_156",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.7,
+        9.8,
+        0.004
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_facade_pipe_cluster_vertical_01_157",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.7,
+        -3.2,
+        0.004
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_facade_pipe_cluster_vertical_01_158",
+      "slug": "facade_pipe_cluster_vertical_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.7,
+        12.4,
+        0.004
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_facade_pipe_elbow_horizontal_02_159",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.7,
+        3.6,
+        3.7
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_facade_pipe_elbow_horizontal_02_160",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.7,
+        6.9,
+        0.3
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_facade_pipe_elbow_horizontal_02_161",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.7,
+        4.0,
+        2.5
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_facade_pipe_elbow_horizontal_02_162",
+      "slug": "facade_pipe_elbow_horizontal_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.7,
+        8.0,
+        5.1
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_rooftop_twin_fan_chiller_01_163",
+      "slug": "rooftop_twin_fan_chiller_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -22.0,
+        -20.0,
+        7.62
+      ],
+      "rz": 15.0
+    },
+    {
+      "name": "inst_rooftop_twin_fan_chiller_01_164",
+      "slug": "rooftop_twin_fan_chiller_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -14.0,
+        -21.0,
+        7.62
+      ],
+      "rz": -30.0
+    },
+    {
+      "name": "inst_rooftop_twin_fan_chiller_01_165",
+      "slug": "rooftop_twin_fan_chiller_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -17.0,
+        4.4,
+        26.3
+      ],
+      "rz": 10.0
+    },
+    {
+      "name": "inst_rooftop_twin_fan_chiller_01_166",
+      "slug": "rooftop_twin_fan_chiller_01",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        13.2,
+        -20.4,
+        7.62
+      ],
+      "rz": 15.0
+    },
+    {
+      "name": "inst_rooftop_exhaust_vent_box_02_167",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -24.0,
+        -13.5,
+        7.62
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_rooftop_exhaust_vent_box_02_168",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -18.5,
+        -13.0,
+        7.62
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_rooftop_exhaust_vent_box_02_169",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -11.0,
+        -20.0,
+        7.62
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_rooftop_exhaust_vent_box_02_170",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        17.2,
+        4.0,
+        18.3
+      ],
+      "rz": 45.0
+    },
+    {
+      "name": "inst_rooftop_exhaust_vent_box_02_171",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -13.0,
+        -13.0,
+        7.5
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_rooftop_exhaust_vent_box_02_172",
+      "slug": "rooftop_exhaust_vent_box_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        16.4,
+        -20.2,
+        7.62
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_rock_rubble_pile_04_173",
+      "slug": "street_rock_rubble_pile_04",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -20.0,
+        3.4,
+        -0.011
+      ],
+      "rz": 30.0
+    },
+    {
+      "name": "inst_street_rock_rubble_pile_04_174",
+      "slug": "street_rock_rubble_pile_04",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        4.4,
+        21.5,
+        -0.011
+      ],
+      "rz": -20.0
+    },
+    {
+      "name": "inst_street_rock_rubble_pile_04_175",
+      "slug": "street_rock_rubble_pile_04",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -8.6,
+        3.2,
+        -0.011
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_steam_vapor_vent_02_176",
+      "slug": "steam_vapor_vent_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -3.2,
+        4.4,
+        0.0
+      ],
+      "rz": 12.0
+    },
+    {
+      "name": "inst_steam_vapor_vent_02_177",
+      "slug": "steam_vapor_vent_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        4.0,
+        -13.0,
+        0.0
+      ],
+      "rz": -8.0
+    },
+    {
+      "name": "inst_steam_vapor_vent_02_178",
+      "slug": "steam_vapor_vent_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.0,
+        -6.0,
+        0.0
+      ],
+      "rz": 22.0
+    },
+    {
+      "name": "inst_vending_machine_bank_02_179",
+      "slug": "vending_machine_bank_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.1,
+        -11.6,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_vending_machine_bank_02_180",
+      "slug": "vending_machine_bank_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.1,
+        -3.4,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_traffic_signal_mast_02_181",
+      "slug": "traffic_signal_mast_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -6.4,
+        -6.2,
+        0.0
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_traffic_signal_mast_02_182",
+      "slug": "traffic_signal_mast_02",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        6.4,
+        6.2,
+        0.0
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_ceiling_duct_bundle_20m_01_183",
+      "slug": "ceiling_duct_bundle_20m_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        -20.0,
+        22.16
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_ceiling_duct_bundle_20m_01_184",
+      "slug": "ceiling_duct_bundle_20m_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        20.0,
+        22.16
+      ],
+      "rz": 90.0
+    },
+    {
+      "name": "inst_ceiling_duct_bundle_20m_01_185",
+      "slug": "ceiling_duct_bundle_20m_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        -14.0,
+        0.0,
+        24.96
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_ceiling_duct_bundle_20m_01_186",
+      "slug": "ceiling_duct_bundle_20m_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        14.0,
+        0.0,
+        24.96
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_hanging_lamp_industrial_01_187",
+      "slug": "hanging_lamp_industrial_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        -18.0,
+        20.021
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_hanging_lamp_industrial_01_188",
+      "slug": "hanging_lamp_industrial_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        -12.0,
+        20.021
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_hanging_lamp_industrial_01_189",
+      "slug": "hanging_lamp_industrial_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        -6.0,
+        20.021
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_hanging_lamp_industrial_01_190",
+      "slug": "hanging_lamp_industrial_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        0.0,
+        20.021
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_hanging_lamp_industrial_01_191",
+      "slug": "hanging_lamp_industrial_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        6.0,
+        20.021
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_hanging_lamp_industrial_01_192",
+      "slug": "hanging_lamp_industrial_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        12.0,
+        20.021
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_hanging_lamp_industrial_01_193",
+      "slug": "hanging_lamp_industrial_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        18.0,
+        20.021
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_ceiling_exhaust_fan_3x3_01_194",
+      "slug": "ceiling_exhaust_fan_3x3_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        -14.0,
+        0.0,
+        27.9
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_ceiling_exhaust_fan_3x3_01_195",
+      "slug": "ceiling_exhaust_fan_3x3_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        14.0,
+        0.0,
+        27.9
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_sky_cable_span_24m_01_196",
+      "slug": "sky_cable_span_24m_01",
+      "group": "03E_吊顶结构与管线",
+      "loc": [
+        0.0,
+        19.0,
+        1.988
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_road_paint_dash_run_03_197",
+      "slug": "road_paint_dash_run_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        0.0,
+        -13.0,
+        0.004
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_road_paint_dash_run_03_198",
+      "slug": "road_paint_dash_run_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        0.0,
+        13.0,
+        0.004
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_pavement_detail_03_199",
+      "slug": "street_pavement_detail_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        -22.5,
+        0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_pavement_detail_03_200",
+      "slug": "street_pavement_detail_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        -12.5,
+        0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_pavement_detail_03_201",
+      "slug": "street_pavement_detail_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        12.5,
+        0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_pavement_detail_03_202",
+      "slug": "street_pavement_detail_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        -7.5,
+        17.5,
+        0.2
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_pavement_detail_03_203",
+      "slug": "street_pavement_detail_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        -17.5,
+        0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_street_pavement_detail_03_204",
+      "slug": "street_pavement_detail_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        7.5,
+        0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_street_pavement_detail_03_205",
+      "slug": "street_pavement_detail_03",
+      "group": "03A_街区基底与道路",
+      "loc": [
+        7.5,
+        22.5,
+        0.2
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_street_cable_harness_03_206",
+      "slug": "street_cable_harness_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.98,
+        6.2,
+        3.949288
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_cable_harness_03_207",
+      "slug": "street_cable_harness_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        -9.98,
+        1.4,
+        0.349288
+      ],
+      "rz": 0.0
+    },
+    {
+      "name": "inst_street_cable_harness_03_208",
+      "slug": "street_cable_harness_03",
+      "group": "03D_街道设施与车辆",
+      "loc": [
+        9.98,
+        -7.4,
+        4.149288
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_facade_billboard_panel_03_209",
+      "slug": "facade_billboard_panel_03",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        9.98,
+        4.0,
+        12.382679
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_facade_billboard_panel_03_210",
+      "slug": "facade_billboard_panel_03",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        9.98,
+        19.0,
+        10.182679
+      ],
+      "rz": 180.0
+    },
+    {
+      "name": "inst_facade_billboard_panel_03_211",
+      "slug": "facade_billboard_panel_03",
+      "group": "03B_主体建筑与霓虹",
+      "loc": [
+        -9.98,
+        22.5,
+        11.782679
+      ],
+      "rz": 0.0
+    }
+  ]
+}

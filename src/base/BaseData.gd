@@ -60,6 +60,7 @@ var equipped_flashlight_module_id: String = "basic"
 # 基地能源只随该游戏时间推进，不使用离线墙钟补偿。
 var world_time_start_unix_seconds: int = TimeDomain.START_UNIX_SECONDS
 var world_time_elapsed_game_seconds: float = 0.0
+var base_generator_enabled: bool = true
 var base_energy_current: float = 100.0
 var base_energy_capacity: float = 100.0
 var base_energy_last_synced_game_seconds: float = 0.0
@@ -142,6 +143,7 @@ func _to_dict() -> Dictionary:
 		"equipped_flashlight_module_id": equipped_flashlight_module_id,
 		"world_time_start_unix_seconds": world_time_start_unix_seconds,
 		"world_time_elapsed_game_seconds": world_time_elapsed_game_seconds,
+		"base_generator_enabled": base_generator_enabled,
 		"base_energy_current": base_energy_current,
 		"base_energy_capacity": base_energy_capacity,
 		"base_energy_last_synced_game_seconds": base_energy_last_synced_game_seconds,
@@ -214,6 +216,7 @@ static func from_dict(d: Dictionary) -> BaseData:
 		data.world_time_start_unix_seconds = TimeDomain.LEGACY_START_UNIX_SECONDS
 	if d.has("world_time_elapsed_game_seconds"):
 		data.world_time_elapsed_game_seconds = maxf(0.0, float(d["world_time_elapsed_game_seconds"]))
+	data.base_generator_enabled = bool(d.get("base_generator_enabled", true))
 	if d.has("base_energy_capacity"):
 		data.base_energy_capacity = maxf(1.0, float(d["base_energy_capacity"]))
 	if d.has("base_energy_current"):

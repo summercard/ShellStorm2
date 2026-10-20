@@ -58,7 +58,7 @@ func _ready() -> void:
 			check(world_bounds.position.y >= -0.03, "sunk visual " + id)
 			check(world_bounds.position.y <= 0.04, "floating visual " + id)
 			check(world_bounds.position.x >= -50.05 and world_bounds.end.x <= 50.05 and world_bounds.position.z >= -35.05 and world_bounds.end.z <= 45.05, "outside rooftop " + id + " " + str(world_bounds))
-	check(count == 193, "authored count mismatch " + str(count))
+	check(count == 194, "authored count mismatch " + str(count))
 	var ivy_wall := clutter.get_node_or_null("IvyWall/roof_clutter_193")
 	check(ivy_wall != null, "ivy low wall missing")
 	if ivy_wall != null:
@@ -72,6 +72,39 @@ func _ready() -> void:
 		check(hanging_bounds.end.y >= 4.7 and hanging_bounds.end.y <= 5.5, "ivy crest coverage mismatch")
 		check(hanging_bounds.position.x < -30.5, "hanging ivy must clear inner face of stairwell enclosure")
 		check(wall_mesh.mesh.get_aabb().size.z <= 0.36, "wall thickness must match adjacent 0.30m enclosure")
+	var generator := clutter.get_node_or_null("EastDoorGenerator/roof_clutter_194") as Node3D
+	check(generator != null, "east door generator missing")
+	if generator != null:
+		check(generator.global_position.distance_to(Vector3(18, 0.015, 4.5)) < 0.01, "generator placement drift")
+		var body := generator.get_node("ImportedModel/GeneratorBody") as MeshInstance3D
+		var body_bounds := mesh_vertex_bounds(body)
+		check(absf(body_bounds.size.x-1.5) < 0.02 and absf(body_bounds.size.z-2.0) < 0.02, "generator 1.5x2 footprint mismatch")
+		check(generator.find_children("*", "CollisionShape3D", true, false).size() == 1, "ground cable must not block player")
+		check(generator.get_meta("cable_count", 0) == 4, "generator cable revision missing")
+		var wires := mesh_vertex_bounds(generator.get_node("ImportedModel/GroundCable"))
+		check(wires.position.x >= 14.94 and wires.position.x < 15.10, "cables must stop inside east wall, not emerge indoors")
+		for entry_name in ["WallEntry1", "WallEntry2", "WallEntry3"]:
+			var entry := generator.get_node(entry_name) as Node3D
+			check(entry.global_position.x > 14.85 and entry.global_position.x < 15.15, "wire end outside wall slab")
+			var ray := PhysicsRayQueryParameters3D.create(entry.global_position + Vector3(1, 0, 0), entry.global_position - Vector3(0.4, 0, 0), 1)
+			var hit := get_viewport().world_3d.direct_space_state.intersect_ray(ray)
+			check(not hit.is_empty(), "wire end misses solid wall " + entry_name)
+			if not hit.is_empty():
+				check(absf(hit.position.x - 15.15) < 0.06, "wire enters unexpected obstacle " + entry_name)
+		var door := tower.get("_base_rooftop_transit_door") as Node3D
+		check(door != null, "central east door missing")
+		if door != null:
+			check(generator.global_position.z > door.global_position.z+2.5, "generator must be south of central east door")
+			for dx in [1.5, 2.0, 3.0, 4.0]:
+				check(capsule_hits(door.global_position + Vector3(dx, 0, 0)).is_empty(), "generator obstructs east door approach")
+		var overlap := PhysicsShapeQueryParameters3D.new()
+		var footprint := BoxShape3D.new()
+		footprint.size = Vector3(1.46, 1.30, 1.96)
+		overlap.shape = footprint
+		overlap.transform.origin = generator.global_position + Vector3(0, 0.75, 0)
+		overlap.collision_mask = 1
+		overlap.exclude = [(generator.get_node("Body") as StaticBody3D).get_rid()]
+		check(get_viewport().world_3d.direct_space_state.intersect_shape(overlap).is_empty(), "generator overlaps existing collision")
 	check(foliage_count == 48, "grass patch count mismatch")
 	if grass_material != null:
 		grass_clock = float(grass_material.get_shader_parameter("wind_time"))
@@ -201,6 +234,15 @@ func screenshots() -> void:
 			await get_tree().process_frame
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png(out + "/rooftop_ivy_wall_close.png")
+	var generator := clutter.get_node_or_null("EastDoorGenerator/roof_clutter_194") as Node3D
+	if generator != null:
+		camera.size = 11.0
+		camera.position = generator.global_position + Vector3(8, 8, -10)
+		camera.look_at(generator.global_position + Vector3(-0.25, 0.5, 1.4))
+		for i in 10:
+			await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		get_viewport().get_texture().get_image().save_png(out + "/rooftop_generator_close.png")
 	var grass := clutter.get_node_or_null("GroundGrass/roof_clutter_175") as Node3D
 	if grass != null:
 		camera.size = 5.0

@@ -1,0 +1,62 @@
+{
+  "schema": "shellstorm2.openworld.asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-UNDERGROUND-STREET-02-STREET_CABLE_HARNESS_03",
+  "package_id": "street_cable_harness_03",
+  "slug": "street_cable_harness_03",
+  "name_zh": "贴墙线束_4m_03",
+  "suite": "underground_street",
+  "version": "v004",
+  "district": "地下街区",
+  "category": "facility",
+  "family_id": "wall_cable",
+  "serves_districts": [
+    "地下街区"
+  ],
+  "scope": "suite_local",
+  "source_blend": "art_source/environments/open_world/source/underground_street/v004/env_underground_street_source_v004.blend",
+  "reused_from": null,
+  "geometry_source": "build_openworld_underground_street_v004.py::c_cable_harness_detail",
+  "blender_collection": "资产包_street_cable_harness_03",
+  "source_collection": "组件源_street_cable_harness_03",
+  "objects": [
+    "贴墙线束_4m_03_主体"
+  ],
+  "source_objects": [
+    "源_贴墙线束_4m_03_主体"
+  ],
+  "pivot_rule": "bottom_center_z0",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "source_z_offset_m": 0.3493,
+  "front_axis": "+X",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "dimensions_m": [
+    4.038,
+    0.295,
+    0.751
+  ],
+  "polygon_count": 762,
+  "instance_count": 3,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uv_layer": "PaletteUV",
+  "collision": "none（Blender 源阶段；碰撞归后续 Godot 包装）",
+  "export": {
+    "glb": null,
+    "exported": false
+  },
+  "note": "三束松弛电缆/吊环/分线盒/下垂段；补街面线缆密度"
+}

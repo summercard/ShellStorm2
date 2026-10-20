@@ -6016,6 +6016,7 @@ func _install_facilities() -> void:
 	if _facility_art_layout.get_parent() == null:
 		facility_floor.add_child(_facility_art_layout)
 	_facility_art_layout.visible = true
+	facility_floor.bind_base_power_presentation()
 	var editor_guide := _facility_art_layout.get_node_or_null("编辑器参考_运行时自动隐藏") as Node3D
 	if editor_guide != null:
 		editor_guide.visible = false

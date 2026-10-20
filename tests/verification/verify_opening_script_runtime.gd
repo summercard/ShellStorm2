@@ -753,7 +753,7 @@ func _phase_i_opening_loadout() -> void:
 		_check(not face_cue.is_empty(), "剧本 01 有「朝办公室里的枪转过去」的 actor.face")
 		_check(
 			gift_say.contains("主人留下的礼物"),
-			"剧本 01 有「那是主人留下的礼物。。」这句台词",
+			"剧本 01 有「那是主人留下的礼物……」这句台词",
 		)
 		_check(
 			end_at > gift_at and gift_at >= 0.0,

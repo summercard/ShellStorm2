@@ -181,6 +181,7 @@ smoke_scenes=(
 )
 
 core_scenes=(
+  verify_base_generator_power
   verify_damage_number_style_flow
   verify_grid_inventory_layout
   verify_hologram_unlock

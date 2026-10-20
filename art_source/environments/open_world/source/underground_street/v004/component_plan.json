@@ -1,0 +1,151 @@
+{
+  "schema": "shellstorm2.openworld.component_plan",
+  "schema_version": 1,
+  "suite_name": "underground_street",
+  "version": "v004",
+  "street_number": 2,
+  "component_budget": {
+    "limit": 50,
+    "unique": 47,
+    "reused": 15,
+    "new": 32
+  },
+  "family_budget": "同族常规 ≤3、有明确状态轴 ≤5",
+  "families": {
+    "base_slab": [
+      "cavern_base_slab_52x52_01"
+    ],
+    "cavern_wall": [
+      "cavern_wall_module_10x30_01"
+    ],
+    "ceiling": [
+      "cavern_ceiling_slab_52x52_01"
+    ],
+    "ceiling_truss": [
+      "ceiling_truss_rib_52m_01"
+    ],
+    "portal": [
+      "tunnel_portal_arch_10m_01"
+    ],
+    "cavern_column": [
+      "cavern_support_column_30m_01"
+    ],
+    "road_deck": [
+      "wet_asphalt_lane_10x10_01",
+      "wet_asphalt_intersection_10x10_03"
+    ],
+    "road_marking": [
+      "wet_asphalt_crosswalk_10x5_02",
+      "road_paint_dash_run_03"
+    ],
+    "sidewalk": [
+      "sidewalk_tile_5x5_01"
+    ],
+    "wet_detail": [
+      "puddle_reflect_patch_04",
+      "wet_reflect_streak_05"
+    ],
+    "drain_detail": [
+      "drain_manhole_grate_set_01"
+    ],
+    "hotel": [
+      "hotel_brick_tower_core_10x12_01"
+    ],
+    "pharmacy": [
+      "pharmacy_shop_block_10x8_01"
+    ],
+    "bar_building": [
+      "industrial_bar_building_10x12_01"
+    ],
+    "service_roof": [
+      "foreground_service_roof_15x15_01"
+    ],
+    "backdrop_tower": [
+      "backdrop_tower_block_10x7_01"
+    ],
+    "neon_sign_vertical": [
+      "neon_sign_hotel_vertical_01",
+      "neon_sign_bar_vertical_03"
+    ],
+    "neon_sign_board": [
+      "skybridge_sign_sector07_04"
+    ],
+    "neon_sign_blade": [
+      "neon_blade_sign_cluster_05"
+    ],
+    "skybridge": [
+      "skybridge_truss_span_21m_01"
+    ],
+    "bridge_pillar": [
+      "skybridge_hazard_pillar_02"
+    ],
+    "ceiling_service": [
+      "ceiling_duct_bundle_20m_01",
+      "ceiling_exhaust_fan_3x3_01"
+    ],
+    "ceiling_light": [
+      "hanging_lamp_industrial_01"
+    ],
+    "street_lamp": [
+      "industrial_street_lamp_pole_01"
+    ],
+    "street_bollard": [
+      "glowing_hazard_bollard_02"
+    ],
+    "street_guardrail": [
+      "street_guardrail_fence_4m_01"
+    ],
+    "street_utility": [
+      "street_utility_cabinet_02"
+    ],
+    "vehicle": [
+      "retro_cyber_sedan_car_01"
+    ],
+    "roof_equipment": [
+      "rooftop_twin_fan_chiller_01",
+      "rooftop_exhaust_vent_box_02"
+    ],
+    "facade_detail": [
+      "wall_ac_outdoor_unit_03"
+    ],
+    "facade_pipe": [
+      "facade_pipe_cluster_vertical_01",
+      "facade_pipe_elbow_horizontal_02"
+    ],
+    "ground_debris": [
+      "street_rock_rubble_pile_04"
+    ],
+    "cable": [
+      "sky_cable_span_24m_01"
+    ],
+    "street_vapor": [
+      "steam_vapor_vent_02"
+    ],
+    "alley_shophouse": [
+      "narrow_alley_shophouse_02"
+    ],
+    "traffic_mast": [
+      "traffic_signal_mast_02"
+    ],
+    "vending_bank": [
+      "vending_machine_bank_02"
+    ],
+    "sidewalk_detail": [
+      "street_pavement_detail_03"
+    ],
+    "wall_cable": [
+      "street_cable_harness_03"
+    ],
+    "wall_billboard": [
+      "facade_billboard_panel_03"
+    ]
+  },
+  "layout_groups": [
+    "03A_街区基底与道路",
+    "03B_主体建筑与霓虹",
+    "03C_跨街高架与地下围护",
+    "03D_街道设施与车辆",
+    "03E_吊顶结构与管线"
+  ],
+  "reuse_policy": "v004 原地升级 24 件道具几何 + 5 栋建筑补颗粒层；slug 与实例摆位不变，故不新增/不删除组件"
+}

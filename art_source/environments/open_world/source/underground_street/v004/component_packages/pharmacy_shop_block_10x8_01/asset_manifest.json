@@ -1,0 +1,64 @@
+{
+  "schema": "shellstorm2.openworld.asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-UNDERGROUND-STREET-02-PHARMACY_SHOP_BLOCK_10X8_01",
+  "package_id": "pharmacy_shop_block_10x8_01",
+  "slug": "pharmacy_shop_block_10x8_01",
+  "name_zh": "低矮药店商业楼体_10x8m_01",
+  "suite": "underground_street",
+  "version": "v004",
+  "district": "地下街区",
+  "category": "structural",
+  "family_id": "pharmacy",
+  "serves_districts": [
+    "地下街区"
+  ],
+  "scope": "suite_local",
+  "source_blend": "art_source/environments/open_world/source/underground_street/v004/env_underground_street_source_v004.blend",
+  "reused_from": "art_source/environments/open_world/source/underground_street/v003",
+  "geometry_source": "build_openworld_underground_street_v004.py::c_pharmacy_block_detail",
+  "blender_collection": "资产包_pharmacy_shop_block_10x8_01",
+  "source_collection": "组件源_pharmacy_shop_block_10x8_01",
+  "objects": [
+    "低矮药店商业楼体_10x8m_01_主体",
+    "低矮药店商业楼体_10x8m_01_UI灯光自发光"
+  ],
+  "source_objects": [
+    "源_低矮药店商业楼体_10x8m_01_主体",
+    "源_低矮药店商业楼体_10x8m_01_UI灯光自发光"
+  ],
+  "pivot_rule": "bottom_center_z0",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "source_z_offset_m": -0.0373,
+  "front_axis": "+X",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "dimensions_m": [
+    11.42,
+    8.96,
+    10.197
+  ],
+  "polygon_count": 3859,
+  "instance_count": 1,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uv_layer": "PaletteUV",
+  "collision": "none（Blender 源阶段；碰撞归后续 Godot 包装）",
+  "export": {
+    "glb": null,
+    "exported": false
+  },
+  "note": ""
+}

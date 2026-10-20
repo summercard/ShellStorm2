@@ -1,0 +1,62 @@
+{
+  "schema": "shellstorm2.openworld.asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-UNDERGROUND-STREET-02-ROAD_PAINT_DASH_RUN_03",
+  "package_id": "road_paint_dash_run_03",
+  "slug": "road_paint_dash_run_03",
+  "name_zh": "路面标线组_10x10m_03",
+  "suite": "underground_street",
+  "version": "v004",
+  "district": "地下街区",
+  "category": "road_detail",
+  "family_id": "road_marking",
+  "serves_districts": [
+    "地下街区"
+  ],
+  "scope": "suite_local",
+  "source_blend": "art_source/environments/open_world/source/underground_street/v004/env_underground_street_source_v004.blend",
+  "reused_from": "art_source/environments/open_world/source/underground_street/v003",
+  "geometry_source": "build_openworld_underground_street_v004.py::c_road_paint",
+  "blender_collection": "资产包_road_paint_dash_run_03",
+  "source_collection": "组件源_road_paint_dash_run_03",
+  "objects": [
+    "路面标线组_10x10m_03_主体"
+  ],
+  "source_objects": [
+    "源_路面标线组_10x10m_03_主体"
+  ],
+  "pivot_rule": "bottom_center_z0",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "source_z_offset_m": 0.004,
+  "front_axis": "+Z",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "dimensions_m": [
+    9.44,
+    9.4,
+    0.026
+  ],
+  "polygon_count": 192,
+  "instance_count": 2,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uv_layer": "PaletteUV",
+  "collision": "none（Blender 源阶段；碰撞归后续 Godot 包装）",
+  "export": {
+    "glb": null,
+    "exported": false
+  },
+  "note": "车道虚线/停止线/导向箭头/井盖圈/补丁缝；覆盖层做法，不改车道本体"
+}

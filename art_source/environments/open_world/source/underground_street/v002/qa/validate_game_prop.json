@@ -1,0 +1,808 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\open_world\\source\\underground_street\\v002\\env_underground_street_source_v002.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 76,
+  "polygon_count": 12640,
+  "valid_island_polygon_count": 12640,
+  "uv_reports": [
+    {
+      "object": "SECTOR07 東區 高架铭牌_04_UI灯光自发光",
+      "polygon_count": 78,
+      "valid_island_polygon_count": 78,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SECTOR07 東區 高架铭牌_04_主体",
+      "polygon_count": 114,
+      "valid_island_polygon_count": 114,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "人行道石砖与路缘_5x5m_01_主体",
+      "polygon_count": 72,
+      "valid_island_polygon_count": 72,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "人行道金属防护栏杆_4m_01_主体",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "低矮药店商业楼体_10x8m_01_UI灯光自发光",
+      "polygon_count": 286,
+      "valid_island_polygon_count": 286,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "低矮药店商业楼体_10x8m_01_主体",
+      "polygon_count": 3859,
+      "valid_island_polygon_count": 3859,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "前景机房屋顶体量_15x15m_01_UI灯光自发光",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "前景机房屋顶体量_15x15m_01_主体",
+      "polygon_count": 168,
+      "valid_island_polygon_count": 168,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双臂工业路灯与信号灯杆_01_UI灯光自发光",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双臂工业路灯与信号灯杆_01_主体",
+      "polygon_count": 96,
+      "valid_island_polygon_count": 96,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "发光警示防撞柱_02_UI灯光自发光",
+      "polygon_count": 46,
+      "valid_island_polygon_count": 46,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "发光警示防撞柱_02_主体",
+      "polygon_count": 70,
+      "valid_island_polygon_count": 70,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "吊顶排风机_3x3m_01_UI灯光自发光",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "吊顶排风机_3x3m_01_主体",
+      "polygon_count": 96,
+      "valid_island_polygon_count": 96,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "吊顶风管管束_20m_01_主体",
+      "polygon_count": 260,
+      "valid_island_polygon_count": 260,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "售货机与取货柜组_02_UI灯光自发光",
+      "polygon_count": 42,
+      "valid_island_polygon_count": 42,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "售货机与取货柜组_02_主体",
+      "polygon_count": 192,
+      "valid_island_polygon_count": 192,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "地下岩壁混凝土衬砌模块_10x30m_01_UI灯光自发光",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "地下岩壁混凝土衬砌模块_10x30m_01_主体",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "地下支撑巨柱_30m_01_UI灯光自发光",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "地下支撑巨柱_30m_01_主体",
+      "polygon_count": 190,
+      "valid_island_polygon_count": 190,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "地下街区基底岩板_52x52m_01_主体",
+      "polygon_count": 174,
+      "valid_island_polygon_count": 174,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "地下街区拱顶板与梁格_52x52m_01_UI灯光自发光",
+      "polygon_count": 96,
+      "valid_island_polygon_count": 96,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "地下街区拱顶板与梁格_52x52m_01_主体",
+      "polygon_count": 272,
+      "valid_island_polygon_count": 272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "地面蒸汽排风口与上升汽柱_02_UI灯光自发光",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "地面蒸汽排风口与上升汽柱_02_主体",
+      "polygon_count": 418,
+      "valid_island_polygon_count": 418,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "复古方正深色轿车_01_UI灯光自发光",
+      "polygon_count": 30,
+      "valid_island_polygon_count": 30,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "复古方正深色轿车_01_主体",
+      "polygon_count": 176,
+      "valid_island_polygon_count": 176,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "外挂金属消防梯与检修走道_03_主体",
+      "polygon_count": 138,
+      "valid_island_polygon_count": 138,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型灯箱刀旗组_05_UI灯光自发光",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型灯箱刀旗组_05_主体",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶双风扇冷却机组_01_UI灯光自发光",
+      "polygon_count": 28,
+      "valid_island_polygon_count": 28,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶双风扇冷却机组_01_主体",
+      "polygon_count": 132,
+      "valid_island_polygon_count": 132,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶方形排风管箱_02_主体",
+      "polygon_count": 68,
+      "valid_island_polygon_count": 68,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "工业吊灯_01_UI灯光自发光",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "工业吊灯_01_主体",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "建筑外墙悬挂空调外机_03_主体",
+      "polygon_count": 44,
+      "valid_island_polygon_count": 44,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "悬臂交通信号灯杆_6.4m_02_UI灯光自发光",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "悬臂交通信号灯杆_6.4m_02_主体",
+      "polygon_count": 176,
+      "valid_island_polygon_count": 176,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "深灰金属板工业酒吧楼_10x12m_01_UI灯光自发光",
+      "polygon_count": 90,
+      "valid_island_polygon_count": 90,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "深灰金属板工业酒吧楼_10x12m_01_主体",
+      "polygon_count": 240,
+      "valid_island_polygon_count": 240,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "湿润双黄线柏油车道_10x10m_01_主体",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "湿润斑马线覆盖层_10x5m_02_主体",
+      "polygon_count": 96,
+      "valid_island_polygon_count": 96,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "湿润柏油十字路口_10x10m_03_主体",
+      "polygon_count": 92,
+      "valid_island_polygon_count": 92,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "湿路面霓虹倒影拉丝_05_主体",
+      "polygon_count": 210,
+      "valid_island_polygon_count": 210,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "湿面反光水洼贴片_04_主体",
+      "polygon_count": 20,
+      "valid_island_polygon_count": 20,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "窄巷小店面_4x9x13m_02_UI灯光自发光",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "窄巷小店面_4x9x13m_02_主体",
+      "polygon_count": 296,
+      "valid_island_polygon_count": 296,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面横向转角管道桥架_02_主体",
+      "polygon_count": 46,
+      "valid_island_polygon_count": 46,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面重型竖向管道束_01_主体",
+      "polygon_count": 148,
+      "valid_island_polygon_count": 148,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "竖向 BAR 与鸡尾酒杯霓虹_03_UI灯光自发光",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "竖向 BAR 与鸡尾酒杯霓虹_03_主体",
+      "polygon_count": 126,
+      "valid_island_polygon_count": 126,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "竖向 HOTEL 霓虹主招牌_01_UI灯光自发光",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "竖向 HOTEL 霓虹主招牌_01_主体",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "红褐砖石老旧酒店主体_10x12m_01_UI灯光自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "红褐砖石老旧酒店主体_10x12m_01_主体",
+      "polygon_count": 234,
+      "valid_island_polygon_count": 234,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "背景高楼体量_10x7x29m_01_UI灯光自发光",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "背景高楼体量_10x7x29m_01_主体",
+      "polygon_count": 194,
+      "valid_island_polygon_count": 194,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "街区碎石堆_04_主体",
+      "polygon_count": 47,
+      "valid_island_polygon_count": 47,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "街道配电控制箱与垃圾箱组_02_UI灯光自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "街道配电控制箱与垃圾箱组_02_主体",
+      "polygon_count": 72,
+      "valid_island_polygon_count": 72,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "跨街电缆束_24m_01_UI灯光自发光",
+      "polygon_count": 72,
+      "valid_island_polygon_count": 72,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "跨街电缆束_24m_01_主体",
+      "polygon_count": 298,
+      "valid_island_polygon_count": 298,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "跨街重型装甲走廊_21m_01_UI灯光自发光",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "跨街重型装甲走廊_21m_01_主体",
+      "polygon_count": 654,
+      "valid_island_polygon_count": 654,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "酒店底层卷帘门与雨棚入口_03_UI灯光自发光",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "酒店底层卷帘门与雨棚入口_03_主体",
+      "polygon_count": 132,
+      "valid_island_polygon_count": 132,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "酒店暖光拱形窗套_02_UI灯光自发光",
+      "polygon_count": 17,
+      "valid_island_polygon_count": 17,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "酒店暖光拱形窗套_02_主体",
+      "polygon_count": 95,
+      "valid_island_polygon_count": 95,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "铸铁井盖与排水格栅组_01_主体",
+      "polygon_count": 92,
+      "valid_island_polygon_count": 92,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "隧道口拱门墙_10x30m_01_UI灯光自发光",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "隧道口拱门墙_10x30m_01_主体",
+      "polygon_count": 216,
+      "valid_island_polygon_count": 216,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶板钢桁架横梁_52m_01_UI灯光自发光",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶板钢桁架横梁_52m_01_主体",
+      "polygon_count": 376,
+      "valid_island_polygon_count": 376,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "黄黑警示条纹支撑柱_12.8m_02_UI灯光自发光",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "黄黑警示条纹支撑柱_12.8m_02_主体",
+      "polygon_count": 150,
+      "valid_island_polygon_count": 150,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

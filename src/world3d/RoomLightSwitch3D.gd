@@ -14,6 +14,9 @@ var _controlled_lights: Array[WastelandLight3D] = []
 var _linked_switches: Array[RoomLightSwitch3D] = []
 var _turn_on_presentation: Node
 var _turn_on_presentation_duration := 0.0
+var _base_power_available := true
+var _resume_after_power := true
+var _sequence_generation := 0
 var _transitioning := false
 var _player_in_range := false
 var _prompt: Label3D
@@ -45,12 +48,29 @@ func configure_group(
 	controlled_lights: Array[WastelandLight3D],
 	starts_on := false
 ) -> void:
+	_resume_after_power = starts_on
 	_controlled_lights.clear()
 	for light in controlled_lights:
 		if light != null and is_instance_valid(light):
 			_controlled_lights.append(light)
-			light.set_light_enabled(starts_on)
+			light.set_light_enabled(starts_on and _base_power_available)
 	_update_state_visual()
+
+
+func bind_base_power() -> void:
+	if not BaseManager.base_power_changed.is_connected(_on_base_power_changed):
+		BaseManager.base_power_changed.connect(_on_base_power_changed)
+	_on_base_power_changed(BaseManager.is_base_power_on())
+
+
+func _on_base_power_changed(enabled: bool) -> void:
+	if enabled == _base_power_available:
+		return
+	_base_power_available = enabled
+	set_light_on(enabled and _resume_after_power)
+	# 主灯尚未亮起时也必须取消美术启动协程，不能依赖 changed 事件。
+	if is_instance_valid(_turn_on_presentation):
+		_turn_on_presentation.call("set_presentation_lighting_enabled", is_light_on())
 
 
 func configure_turn_on_presentation(controller: Node, duration_seconds := 4.2) -> void:
@@ -93,9 +113,10 @@ func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 
 func toggle_light() -> bool:
 	_prune_invalid_lights()
-	if _controlled_lights.is_empty() or _is_busy():
+	if not _base_power_available or _controlled_lights.is_empty() or _is_busy():
 		return false
 	var next_state := not is_light_on()
+	_remember_light_intent(next_state)
 	if AudioManager != null:
 		AudioManager.emit_event("world.light.switch_on" if next_state else "world.light.switch_off", {"source_node": self, "source_position": global_position, "volume_db": 2.0, "max_distance": 14.0, "unit_size": 2.0})
 	if next_state and _has_turn_on_presentation():
@@ -109,10 +130,21 @@ func toggle_light() -> bool:
 	return true
 
 
+func _remember_light_intent(enabled: bool) -> void:
+	_resume_after_power = enabled
+	for peer in _linked_switches:
+		if is_instance_valid(peer):
+			peer._resume_after_power = enabled
+
+
 func set_light_on(enabled: bool) -> bool:
+	if _base_power_available:
+		_remember_light_intent(enabled)
+	enabled = enabled and _base_power_available
 	_prune_invalid_lights()
 	if _controlled_lights.is_empty():
 		return false
+	_sequence_generation += 1
 	_transitioning = false
 	var changed := is_light_on() != enabled
 	for light in _controlled_lights:
@@ -199,6 +231,8 @@ func _has_turn_on_presentation() -> bool:
 
 
 func _run_turn_on_sequence() -> void:
+	_sequence_generation += 1
+	var generation := _sequence_generation
 	_transitioning = true
 	_update_state_visual()
 	_refresh_linked_visuals()
@@ -206,13 +240,13 @@ func _run_turn_on_sequence() -> void:
 		"play_turn_on_sequence", _turn_on_presentation_duration
 	)
 	await get_tree().create_timer(STAGED_MAIN_LIGHT_START_SECONDS).timeout
-	if not is_instance_valid(self):
+	if not is_instance_valid(self) or not _base_power_available or not _transitioning or generation != _sequence_generation:
 		return
 	for light in _controlled_lights:
 		if light != null and is_instance_valid(light):
 			light.set_light_enabled(true)
 	await presentation_sequence
-	if not is_instance_valid(self):
+	if not is_instance_valid(self) or not _base_power_available or not _transitioning or generation != _sequence_generation:
 		return
 	_transitioning = false
 	_update_state_visual()

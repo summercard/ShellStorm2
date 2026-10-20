@@ -16,6 +16,9 @@ static func sync_to_game_time(data: BaseData, elapsed_game_seconds: float) -> fl
 	data.base_energy_current = clampf(
 		data.base_energy_current, 0.0, data.base_energy_capacity
 	)
+	if not data.base_generator_enabled:
+		data.base_energy_last_synced_game_seconds = now
+		return 0.0
 	# 新档从满电开始；第一次看见大于0的世界时间时只建立基准，不补离线收益。
 	# 若玩家已在起始时刻消费过能源，last=0 是合法基准，必须从0开始计算恢复。
 	if (
@@ -43,19 +46,21 @@ static func get_snapshot(data: BaseData, elapsed_game_seconds: float) -> Diction
 			"current": 0.0,
 			"capacity": 100.0,
 			"ratio": 0.0,
-			"regen_per_game_hour": REGEN_PER_GAME_HOUR,
+			"regen_per_game_hour": REGEN_PER_GAME_HOUR if data != null and data.base_generator_enabled else 0.0,
 			"available": false,
 		}
 	sync_to_game_time(data, elapsed_game_seconds)
 	var missing := maxf(0.0, data.base_energy_capacity - data.base_energy_current)
 	return {
-		"current": data.base_energy_current,
+		"current": data.base_energy_current if data.base_generator_enabled else 0.0,
+		"stored_current": data.base_energy_current,
+		"powered": data.base_generator_enabled,
 		"capacity": data.base_energy_capacity,
-		"ratio": data.base_energy_current / maxf(1.0, data.base_energy_capacity),
-		"regen_per_game_hour": REGEN_PER_GAME_HOUR,
-		"game_hours_to_full": missing / REGEN_PER_GAME_HOUR,
+		"ratio": data.base_energy_current / maxf(1.0, data.base_energy_capacity) if data.base_generator_enabled else 0.0,
+		"regen_per_game_hour": REGEN_PER_GAME_HOUR if data != null and data.base_generator_enabled else 0.0,
+		"game_hours_to_full": missing / REGEN_PER_GAME_HOUR if data.base_generator_enabled else -1.0,
 		"last_synced_game_seconds": data.base_energy_last_synced_game_seconds,
-		"available": true,
+		"available": data.base_generator_enabled,
 	}
 
 

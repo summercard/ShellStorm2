@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/pipe_riser/pipe_riser_root_top3d.tscn" id="14_j4qp1"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/planter/planter_root_top3d.tscn" id="15_7q85e"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/server_rack/server_rack_root_top3d.tscn" id="16_3k56t"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/north_server_03/north_server_03_root_top3d.tscn" id="17_2vouo"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/server_gallery/server_gallery_root_top3d.tscn" id="17_a212i"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_a/service_cart_a_root_top3d.tscn" id="18_s0pps"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_b/service_cart_b_root_top3d.tscn" id="19_rdlw5"]
@@ -24,6 +25,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="25_kvl6t"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_c/wall_5m_c_root_top3d.tscn" id="26_uwes0"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_d/wall_5m_d_root_top3d.tscn" id="27_adeti"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/north_broken_core/north_broken_core_root_top3d.tscn" id="27_tgtgv"]
 [ext_resource type="Script" uid="uid://dmwls48f10kdl" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
 [ext_resource type="Script" uid="uid://dgieqgeh1moll" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
@@ -73,8 +75,13 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.10
 script = ExtResource("901_authored_switch")
 metadata/authored_room_device = "light_switch"
 
+[node name="ENV-EXPEDITION-L-CORRIDOR-CONSOLE_03" parent="." unique_id=208378269 instance=ExtResource("1_tgtgv")]
+transform = Transform3D(0.03600358, 0, 1.3231068, 0, 1.6933861, 0, -2.530933, 0, 0.018821746, 5.9971313, 0, -21.059717)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A"
+metadata/authored_slot_role = "room_type_component"
+
 [node name="ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00" parent="." unique_id=847806123 instance=ExtResource("1_tgtgv")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.646, 0, -19.5)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.646, 0, -15.051603)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A"
 metadata/authored_slot_role = "room_type_component"
 
@@ -83,13 +90,23 @@ transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, 18.5
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B"
 metadata/authored_slot_role = "room_type_component"
 
+[node name="ENV-EXPEDITION-L-CORRIDOR-CONSOLE_01" parent="ENV-EXPEDITION-L-CORRIDOR-CONSOLE_01" unique_id=2142658956 instance=ExtResource("2_2vouo")]
+transform = Transform3D(-0.014817502, 0, 0.9998902, 0, 1, 0, -0.9998902, 0, -0.014817502, -16.164705, 0, 3.776626)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B"
+metadata/authored_slot_role = "room_type_component"
+
 [node name="ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02" parent="." unique_id=1540282345 instance=ExtResource("2_2vouo")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -9.92, 0, 20.6238)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -9.92, 0, 21.45303)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-CRATE_00" parent="." unique_id=1375340628 instance=ExtResource("3_rslmh")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.6913, 0, -20.6)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.6913, 0, -13.732458)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-CRATE"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-CRATE_02" parent="." unique_id=1896989200 instance=ExtResource("3_rslmh")]
+transform = Transform3D(0.59273034, 0, 0.805401, 0, 1, 0, -0.805401, 0, 0.59273034, 6.0151033, 0, 0.25237775)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-CRATE"
 metadata/authored_slot_role = "room_type_component"
 
@@ -99,7 +116,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-CRATE"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-CRATE_04" parent="." unique_id=1163958554 instance=ExtResource("3_rslmh")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -18.0087, 0, 20.7)
+transform = Transform3D(-0.7955793, 0, 0.6058495, 0, 1, 0, -0.6058495, 0, -0.7955793, -19.21966, 0, 21.454832)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-CRATE"
 metadata/authored_slot_role = "room_type_component"
 
@@ -244,7 +261,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-PLANTER_00" parent="." unique_id=1827304219 instance=ExtResource("15_7q85e")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.8, 0, -17.0868)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.8, 0, -6.9624825)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PLANTER"
 metadata/authored_slot_role = "room_type_component"
 
@@ -254,33 +271,69 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PLANTER"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-PLANTER_02" parent="." unique_id=728030824 instance=ExtResource("15_7q85e")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.8, 0, 8.7632)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -19.152355, 0, 8.469149)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PLANTER"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_00" parent="." unique_id=1852509975 instance=ExtResource("16_3k56t")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.7675, 0, -9.7)
+transform = Transform3D(0.94263524, 0, -1.4902233, 0, 1.3748373, 0, 1.80986, 0, 0.776158, 17.856041, 0, -20.64834)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
 metadata/authored_slot_role = "room_type_component"
+
+[node name="SafeRoomPackage_north_server_05" parent="." unique_id=1997827479 instance=ExtResource("17_2vouo")]
+transform = Transform3D(-0.02293783, 0.0010302991, 1.1762437, 1.43178, 0.058126554, 0.026529511, -0.1225888, 1.515657, -0.004804013, 6.3657856, 1.2432187, -6.300708)
+metadata/room_package_id = "north_server_03"
+
+[node name="SafeRoomPackage_north_server_04" parent="." unique_id=265409400 instance=ExtResource("17_2vouo")]
+transform = Transform3D(-0.39616162, 0, 1.3133595, -0.6279238, 0.7622952, -0.2074025, -1.0867196, -0.4404662, -0.35894227, -18.184464, 0.15939265, 19.88727)
+metadata/room_package_id = "north_server_03"
+
+[node name="SafeRoomPackage_north_server_03" parent="." unique_id=338038046 instance=ExtResource("17_2vouo")]
+transform = Transform3D(2.4942258e-08, 0, -1.1754768, 0, 0.9382965, 0, 2.0916147, 0, 1.4017422e-08, 18.30902, -0.0093829725, -17.277573)
+metadata/room_package_id = "north_server_03"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_01" parent="." unique_id=575594241 instance=ExtResource("16_3k56t")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.7675, 0, -8.5)
+transform = Transform3D(2.4942251e-08, 0, -1.1754768, 0, 0.9382965, 0, 2.0916142, 0, 1.401742e-08, 18.7675, 0, -8.659487)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
 metadata/authored_slot_role = "room_type_component"
 
+[node name="SafeRoomPackage_north_server_04" parent="ENV-EXPEDITION-L-CORRIDOR-SERVER_01" unique_id=1229822824 instance=ExtResource("17_2vouo")]
+transform = Transform3D(-0.9999884, 0, -0.0049392814, 0, 1.4916052, 0, 0.00493925, 0, -0.999988, 0.13676357, 0.29471377, 10.473772)
+metadata/room_package_id = "north_server_03"
+
 [node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_02" parent="." unique_id=1531854880 instance=ExtResource("16_3k56t")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.0325, 0, 21)
+transform = Transform3D(-0.9997314, 0, -0.023175895, 0, 1, 0, 0.023175895, 0, -0.9997314, -16.705475, 0, 21.57066)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_03" parent="." unique_id=2026044565 instance=ExtResource("16_3k56t")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -13.0325, 0, 21)
+transform = Transform3D(-0.99319303, 0, -0.116480075, 0, 1, 0, 0.116480075, 0, -0.99319303, -13.0325, 0, 21.294334)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_05" parent="." unique_id=960924352 instance=ExtResource("16_3k56t")]
+transform = Transform3D(0.9992303, 0, 0.0392251, 0, 1, 0, -0.0392251, 0, 0.9992303, -15.472416, 0, 8.61519)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_05" parent="ENV-EXPEDITION-L-CORRIDOR-SERVER_05" unique_id=1556431625 instance=ExtResource("16_3k56t")]
+transform = Transform3D(0.99923015, 0, 0.039225105, 0, 1, 0, -0.039225105, 0, 0.99923015, 3.446413, 0, -0.08038473)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_04" parent="." unique_id=177896753 instance=ExtResource("16_3k56t")]
-transform = Transform3D(0.9795261, 0, 0.20131737, 0, 1, 0, -0.20131737, 0, 0.9795261, -9.0325, 0, 8.7)
+transform = Transform3D(0.9795261, 0, 0.20131737, 0, 1, 0, -0.20131737, 0, 0.9795261, -14.166658, 0, 8.478683)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY3" parent="." unique_id=1714738194 instance=ExtResource("17_a212i")]
+transform = Transform3D(-0.116577856, -0.14309037, -0.98281974, 0.011087613, 0.9893179, -0.14535162, 0.99311966, -0.027841907, -0.11374603, 18.419128, 3.130012, 16.420034)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY2" parent="." unique_id=615188284 instance=ExtResource("17_a212i")]
+transform = Transform3D(-0.97132546, 0.2377537, -2.316588e-08, 0.2377537, 0.97132546, 5.670369e-09, 2.3849761e-08, 0, -1, 8.298445, 1.925, 21.440304)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY" parent="." unique_id=1043339596 instance=ExtResource("17_a212i")]
@@ -288,13 +341,33 @@ transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.5
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY"
 metadata/authored_slot_role = "room_type_component"
 
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY2" parent="." unique_id=1918233020 instance=ExtResource("18_s0pps")]
+transform = Transform3D(-0.18878688, 0, -0.98201805, 0, 1, 0, 0.98201805, 0, -0.18878688, 18.486027, 0, 20.85931)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A"
+metadata/authored_slot_role = "room_type_component"
+
 [node name="ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY" parent="." unique_id=1048694177 instance=ExtResource("18_s0pps")]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.2688, 0, 9.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A"
 metadata/authored_slot_role = "room_type_component"
 
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH4" parent="." unique_id=1473664879 instance=ExtResource("19_rdlw5")]
+transform = Transform3D(0.004206326, 0, -0.9999911, 0, 1, 0, 0.9999911, 0, 0.004206326, 4.038767, 0, 8.307108)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH2" parent="." unique_id=967956164 instance=ExtResource("19_rdlw5")]
+transform = Transform3D(-1, 0, -2.3849761e-08, 0, 1, 0, 2.3849761e-08, 0, -1, -19.391136, 0, 10.120641)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH3" parent="." unique_id=1197577788 instance=ExtResource("19_rdlw5")]
+transform = Transform3D(-1, 0, -2.3849761e-08, 0, 1, 0, 2.3849761e-08, 0, -1, -18.984077, 0, 17.655191)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B"
+metadata/authored_slot_role = "room_type_component"
+
 [node name="ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH" parent="." unique_id=1301151031 instance=ExtResource("19_rdlw5")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -5.1999993, 0, 20.7312)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -8.415216, 0, 21.400208)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B"
 metadata/authored_slot_role = "room_type_component"
 
@@ -863,3 +936,7 @@ metadata/side = "east"
 metadata/lane_m = 15.0
 metadata/outward = Vector2(1, 0)
 metadata/connected = false
+
+[node name="SafeRoomPackage_north_broken_core" parent="." unique_id=678104770 instance=ExtResource("27_tgtgv")]
+transform = Transform3D(0.0069114342, 0, -0.9999761, 0, 1, 0, 0.9999761, 0, 0.0069114342, 18.525108, 1.1920929e-08, -12.032139)
+metadata/room_package_id = "north_broken_core"

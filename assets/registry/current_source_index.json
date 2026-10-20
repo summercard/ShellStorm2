@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-19",
+  "date": "2026-10-20",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -11746,6 +11746,24 @@
         2
       ],
       "sha256": "983968321f5eb8202c488f6d8f10f730a9d573704ac94cc0a02af864237e2977"
+    },
+    {
+      "path": "art_source/environments/tower_zones/rooftop/source/generator/rooftop_generator_v002.blend",
+      "bytes": 1183190,
+      "family": "rooftop_generator_source_blend",
+      "version": [
+        2
+      ],
+      "sha256": "f29d63ddf04e41e76864e64c4f16a87ad4f3b0a8a79255fc902a0ef03b45abe5"
+    },
+    {
+      "path": "art_source/environments/tower_zones/rooftop/source/generator/export/v002/rooftop_generator_optimized_v002.blend",
+      "bytes": 977894,
+      "family": "rooftop_generator_optimized_blend",
+      "version": [
+        2
+      ],
+      "sha256": "cc312defc2e03fdeb16849161357b290192c1c469f77b8d2c02b604ecc58996f"
     }
   ],
   "authoring_root": "art_source",

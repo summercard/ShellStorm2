@@ -1418,6 +1418,9 @@ func _cancel_confirm() -> void:
 
 
 func _execute_forge(plan: Dictionary) -> void:
+	if not BaseManager.is_base_power_on():
+		_set_status("基地断电，请启动100层天台发电机")
+		return
 	if _inventory == null:
 		_set_status("背包不可用，无法熔炼")
 		return

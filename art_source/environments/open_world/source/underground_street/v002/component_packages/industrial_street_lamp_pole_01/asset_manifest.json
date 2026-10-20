@@ -1,0 +1,68 @@
+{
+  "schema": "shellstorm2.openworld.asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-UNDERGROUND-STREET-02-INDUSTRIAL_STREET_LAMP_POLE_01",
+  "package_id": "industrial_street_lamp_pole_01",
+  "slug": "industrial_street_lamp_pole_01",
+  "name_zh": "双臂工业路灯与信号灯杆_01",
+  "suite": "underground_street",
+  "version": "v002",
+  "district": "地下街区",
+  "category": "facility",
+  "family_id": "street_lamp",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "serves_districts": [
+    "地下街区"
+  ],
+  "scope": "suite_local",
+  "source_blend": "art_source/environments/open_world/source/underground_street/v002/env_underground_street_source_v002.blend",
+  "reused_from": "art_source/environments/open_world/source/underground_street/v001",
+  "geometry_source": "build_openworld_underground_street_v001.py::c_street_lamp",
+  "blender_collection": "资产包_industrial_street_lamp_pole_01",
+  "source_collection": "组件源_industrial_street_lamp_pole_01",
+  "objects": [
+    "双臂工业路灯与信号灯杆_01_主体",
+    "双臂工业路灯与信号灯杆_01_UI灯光自发光"
+  ],
+  "source_objects": [
+    "源_双臂工业路灯与信号灯杆_01_主体",
+    "源_双臂工业路灯与信号灯杆_01_UI灯光自发光"
+  ],
+  "pivot_rule": "bottom_center_z0",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "source_z_offset_m": 0.0,
+  "front_axis": "+X",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "dimensions_m": [
+    4.2,
+    0.58,
+    7.061
+  ],
+  "polygon_count": 96,
+  "instance_count": 10,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "emissive_split": true,
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uv_layer": "PaletteUV",
+  "collision": "none（Blender 源阶段；碰撞归后续 Godot 包装）",
+  "export": {
+    "glb": null,
+    "exported": false
+  },
+  "note": ""
+}

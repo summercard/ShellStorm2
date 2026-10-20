@@ -220,6 +220,8 @@ func _process(delta: float) -> void:
 
 
 func get_interaction_candidate(_player: Player3D) -> Dictionary:
+	if not facility_id.is_empty() and not FacilityCatalog.get_definition(facility_id).is_empty():
+		apply_snapshot(BaseManager.get_facility_snapshot(facility_id))
 	if not _player_in_range:
 		return {}
 	return {
@@ -239,6 +241,8 @@ func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 	if not _player_in_range:
 		return false
+	if not facility_id.is_empty() and not FacilityCatalog.get_definition(facility_id).is_empty():
+		apply_snapshot(BaseManager.get_facility_snapshot(facility_id))
 	if _available:
 		activated.emit(self)
 	return true

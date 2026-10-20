@@ -1,0 +1,64 @@
+{
+  "schema": "shellstorm2.openworld.asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-UNDERGROUND-STREET-02-CEILING_TRUSS_RIB_52M_01",
+  "package_id": "ceiling_truss_rib_52m_01",
+  "slug": "ceiling_truss_rib_52m_01",
+  "name_zh": "顶板钢桁架横梁_52m_01",
+  "suite": "underground_street",
+  "version": "v004",
+  "district": "地下街区",
+  "category": "structural",
+  "family_id": "ceiling_truss",
+  "serves_districts": [
+    "地下街区"
+  ],
+  "scope": "suite_local",
+  "source_blend": "art_source/environments/open_world/source/underground_street/v004/env_underground_street_source_v004.blend",
+  "reused_from": "art_source/environments/open_world/source/underground_street/v003",
+  "geometry_source": "build_openworld_underground_street_v004.py::c_ceiling_truss",
+  "blender_collection": "资产包_ceiling_truss_rib_52m_01",
+  "source_collection": "组件源_ceiling_truss_rib_52m_01",
+  "objects": [
+    "顶板钢桁架横梁_52m_01_主体",
+    "顶板钢桁架横梁_52m_01_UI灯光自发光"
+  ],
+  "source_objects": [
+    "源_顶板钢桁架横梁_52m_01_主体",
+    "源_顶板钢桁架横梁_52m_01_UI灯光自发光"
+  ],
+  "pivot_rule": "bottom_center_z0",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "source_z_offset_m": 23.38,
+  "front_axis": "+X",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "dimensions_m": [
+    51.778,
+    1.019,
+    4.22
+  ],
+  "polygon_count": 376,
+  "instance_count": 5,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uv_layer": "PaletteUV",
+  "collision": "none（Blender 源阶段；碰撞归后续 Godot 包装）",
+  "export": {
+    "glb": null,
+    "exported": false
+  },
+  "note": ""
+}

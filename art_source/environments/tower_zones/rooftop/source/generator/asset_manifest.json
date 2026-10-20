@@ -1,0 +1,82 @@
+{
+  "asset_id": "ENV-ROOFTOP-GENERATOR",
+  "name": "天台带电缆发电机",
+  "slug": "generator",
+  "version": "v002",
+  "block_id": "rooftop",
+  "floor_range": "100F",
+  "design_scope": "中央房屋东侧门南边",
+  "scene_design_docs": [
+    "docs/v0.1/design/rooftop_first_visit_guidance.md",
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/05.2_关卡版图白盒与生成规范.md"
+  ],
+  "source_blend": "art_source/environments/tower_zones/rooftop/source/generator/rooftop_generator_v002.blend",
+  "optimized_blend": "art_source/environments/tower_zones/rooftop/source/generator/export/v002/rooftop_generator_optimized_v002.blend",
+  "source_sha256_before": "f29d63ddf04e41e76864e64c4f16a87ad4f3b0a8a79255fc902a0ef03b45abe5",
+  "source_sha256_after": "f29d63ddf04e41e76864e64c4f16a87ad4f3b0a8a79255fc902a0ef03b45abe5",
+  "optimized_sha256": "cc312defc2e03fdeb16849161357b290192c1c469f77b8d2c02b604ecc58996f",
+  "glb_sha256": "6b4fee9eda2f7eab7aad1bfc09c3c044e7ac0cd71e6f7f6c4a0472cc714dbfa2",
+  "glb": "assets/art/environments/tower_zones/rooftop/components/generator/env_rooftop_generator_visual_top3d.glb",
+  "prefab": "assets/art/environments/tower_zones/rooftop/runtime/generator/env_rooftop_generator_root_top3d.tscn",
+  "triangles_before": {
+    "GeneratorBody": 3005,
+    "GroundCable": 3880
+  },
+  "triangles_after": {
+    "GeneratorBody": 3005,
+    "GroundCable": 3880
+  },
+  "reduction_ratio": 0,
+  "optimization": {
+    "operations": [
+      "remove isolated vertices",
+      "remove zero area faces",
+      "recalculate normals",
+      "explicit triangulation"
+    ],
+    "budget": null,
+    "retained_faces": "back and underside needed for independent object views; single bevel segment and 8-sided cable preserve silhouette"
+  },
+  "cable_count": 4,
+  "wall_entry_endpoints_blender": [
+    [
+      -3.0,
+      -4.3,
+      0.18
+    ],
+    [
+      -3.0,
+      1.2,
+      0.18
+    ],
+    [
+      -3.0,
+      -2.9,
+      0.16
+    ]
+  ],
+  "wall_interval_world_x": [
+    14.85,
+    15.15
+  ],
+  "body_footprint": [
+    1.5,
+    2.0
+  ],
+  "height": 1.47,
+  "objects": [
+    "GeneratorBody",
+    "GroundCable"
+  ],
+  "collection": "发电机_资产包",
+  "origin": "generator body bottom center; cable is attached nonblocking visual extension",
+  "interaction_status": "planned_locked",
+  "runtime_integrated": true,
+  "exported": true,
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表 / 3D-场景通用",
+  "qa_record": "docs/v0.1/development/2026-10-20_rooftop_generator.md",
+  "power_behavior": "base_master_switch",
+  "power_state_owner": "BaseManager.data.base_generator_enabled",
+  "runtime_script": "src/world3d/RooftopGenerator3D.gd"
+}

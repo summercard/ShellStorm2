@@ -1,0 +1,68 @@
+{
+  "schema": "shellstorm2.openworld.asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-UNDERGROUND-STREET-02-STREET_UTILITY_CABINET_02",
+  "package_id": "street_utility_cabinet_02",
+  "slug": "street_utility_cabinet_02",
+  "name_zh": "街道配电控制箱与垃圾箱组_02",
+  "suite": "underground_street",
+  "version": "v003",
+  "district": "地下街区",
+  "category": "facility",
+  "family_id": "street_utility",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "serves_districts": [
+    "地下街区"
+  ],
+  "scope": "suite_local",
+  "source_blend": "art_source/environments/open_world/source/underground_street/v003/env_underground_street_source_v003.blend",
+  "reused_from": "art_source/environments/open_world/source/underground_street/v002",
+  "geometry_source": "build_openworld_underground_street_v003.py::c_utility_cabinet",
+  "blender_collection": "资产包_street_utility_cabinet_02",
+  "source_collection": "组件源_street_utility_cabinet_02",
+  "objects": [
+    "街道配电控制箱与垃圾箱组_02_主体",
+    "街道配电控制箱与垃圾箱组_02_UI灯光自发光"
+  ],
+  "source_objects": [
+    "源_街道配电控制箱与垃圾箱组_02_主体",
+    "源_街道配电控制箱与垃圾箱组_02_UI灯光自发光"
+  ],
+  "pivot_rule": "bottom_center_z0",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "source_z_offset_m": 0.0,
+  "front_axis": "+X",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "dimensions_m": [
+    2.01,
+    0.87,
+    1.7
+  ],
+  "polygon_count": 72,
+  "instance_count": 5,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "emissive_split": true,
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uv_layer": "PaletteUV",
+  "collision": "none（Blender 源阶段；碰撞归后续 Godot 包装）",
+  "export": {
+    "glb": null,
+    "exported": false
+  },
+  "note": ""
+}

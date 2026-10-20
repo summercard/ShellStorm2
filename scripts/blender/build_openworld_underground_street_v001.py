@@ -1342,10 +1342,13 @@ def write_catalogs(records, inst_records):
         f.write("\n".join(lines) + "\n")
 
 
-try:
-    main()
-except Exception as exc:  # 桥接只回 stdout，异常必须自己打出来
-    import traceback
-    traceback.print_exc()
-    print("BUILD_FAILED:", exc)
-    raise
+if os.environ.get("UG_STREET_BUILD_LIB_ONLY") != "1":
+    # v002 起本文件同时充当「组件母版生成器库」：设该环境变量后 import 本模块可拿到
+    # COMPONENTS 注册表与全部 c_* 构建函数，但不执行 main()（否则会清空当前场景）。
+    try:
+        main()
+    except Exception as exc:  # 桥接只回 stdout，异常必须自己打出来
+        import traceback
+        traceback.print_exc()
+        print("BUILD_FAILED:", exc)
+        raise

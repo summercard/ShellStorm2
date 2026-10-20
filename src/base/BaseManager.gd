@@ -1,5 +1,6 @@
 extends Node
 
+signal base_power_changed(enabled: bool)
 signal game_save_reset_completed(result: Dictionary)
 signal blueprint_tier_changed(category_id: String, tier: int, transaction_id: String)
 
@@ -48,6 +49,7 @@ func _notification(what: int) -> void:
 		flush_runtime_checkpoint("application_boundary")
 
 func load_base() -> void:
+	call_deferred("_publish_loaded_base_power")
 	var json: Variant = AtomicJsonStore.load_dictionary(
 		save_path, Callable(self, "_is_supported_save_candidate")
 	)
@@ -73,6 +75,11 @@ func load_base() -> void:
 			save_base("migrate_legacy_profile")
 		return
 	data = BaseData.new()
+
+
+func _publish_loaded_base_power() -> void:
+	if data != null:
+		base_power_changed.emit(data.base_generator_enabled)
 
 
 func _is_supported_save_candidate(candidate: Dictionary) -> bool:
@@ -555,6 +562,28 @@ func sync_base_energy_to_game_time(
 	return snapshot
 
 
+func is_base_power_on() -> bool:
+	_ensure_data()
+	return data.base_generator_enabled
+
+
+func set_base_generator_enabled(enabled: bool) -> Dictionary:
+	_ensure_data()
+	if data.base_generator_enabled == enabled:
+		return {"success": true, "powered": enabled}
+	# 先结算旧开关状态的时间，停机时间永远不能补发电量。
+	EnergyService.sync_to_game_time(data, data.world_time_elapsed_game_seconds)
+	var previous_data := data
+	var previous := data.base_generator_enabled
+	data.base_generator_enabled = enabled
+	if not save_base("base_generator_switch"):
+		if data == previous_data:
+			data.base_generator_enabled = previous
+		return {"success": false, "reason": "存档失败，发电机开关未改变"}
+	base_power_changed.emit(enabled)
+	return {"success": true, "powered": enabled}
+
+
 func get_base_energy_snapshot(elapsed_game_seconds: float = -1.0) -> Dictionary:
 	_ensure_data()
 	var now := elapsed_game_seconds
@@ -595,7 +624,10 @@ func get_recovery_facility_snapshot(player: Node) -> Dictionary:
 		and bool(plan.get("needed", false))
 		and bool(plan.get("affordable", false))
 	)
-	if current_hp <= 0:
+	if not is_base_power_on():
+		result["available"] = false
+		result["reason"] = "基地断电，请启动100层天台发电机"
+	elif current_hp <= 0:
 		result["reason"] = "倒地状态不能使用恢复设施"
 	elif not bool(plan.get("needed", false)):
 		result["reason"] = "生命与手电均已充满"
@@ -608,7 +640,7 @@ func get_recovery_facility_snapshot(player: Node) -> Dictionary:
 
 func consume_base_energy(amount: float, reason := "base_energy_consume") -> bool:
 	_ensure_data()
-	if amount <= 0.0:
+	if amount <= 0.0 or not is_base_power_on():
 		return false
 	sync_base_energy_to_game_time(data.world_time_elapsed_game_seconds, false)
 	if data.base_energy_current + 0.0001 < amount:
@@ -623,7 +655,7 @@ func consume_base_energy(amount: float, reason := "base_energy_consume") -> bool
 
 func add_base_energy(amount: float, reason := "base_energy_restore") -> bool:
 	_ensure_data()
-	if amount <= 0.0 or data.base_energy_current >= data.base_energy_capacity:
+	if not is_base_power_on() or amount <= 0.0 or data.base_energy_current >= data.base_energy_capacity:
 		return false
 	var previous := data.base_energy_current
 	data.base_energy_current = minf(
@@ -639,6 +671,8 @@ func add_base_energy(amount: float, reason := "base_energy_restore") -> bool:
 ## 保存成功后才修改运行态 HP 与手电，避免存档失败时白扣或白送能源。
 func recover_player_state_at_facility(player: Node) -> Dictionary:
 	_ensure_data()
+	if not is_base_power_on():
+		return {"success": false, "reason": "基地断电，请启动100层天台发电机"}
 	if player == null or not is_instance_valid(player):
 		return {"success": false, "reason": "未找到角色"}
 	if not player.has_method("heal"):
@@ -1028,6 +1062,8 @@ func upgrade_blueprint(
 	category_id: String, expected_tier: int, transaction_id: String = ""
 ) -> Dictionary:
 	_ensure_data()
+	if not is_base_power_on():
+		return {"success": false, "reason": "基地断电，请启动100层天台发电机"}
 	var effective_transaction_id := transaction_id
 	if effective_transaction_id.is_empty():
 		effective_transaction_id = ShopService.generate_transaction_id("blueprint_%s" % category_id)
@@ -1154,6 +1190,8 @@ func get_base_shop_goods() -> Array[Dictionary]:
 
 func purchase_base_shop_item(item_id: String, transaction_id: String = "", target_owner: String = "loadout") -> Dictionary:
 	_ensure_data()
+	if not is_base_power_on():
+		return {"success": false, "reason": "基地断电，请启动100层天台发电机"}
 	var effective_transaction_id := transaction_id
 	if effective_transaction_id.is_empty():
 		effective_transaction_id = ShopService.generate_transaction_id("buy")
@@ -1338,6 +1376,8 @@ func transfer_runtime_inventory_item(source_owner: String, source_index: int, in
 
 func purchase_base_shop_item_to_inventory(item_id: String, inventory: InventoryModule, transaction_id: String = "") -> Dictionary:
 	_ensure_data()
+	if not is_base_power_on():
+		return {"success": false, "reason": "基地断电，请启动100层天台发电机"}
 	if inventory == null:
 		return {"success": false, "reason": "当前I键背包未连接"}
 	var effective_transaction_id := transaction_id if not transaction_id.is_empty() else ShopService.generate_transaction_id("buy")

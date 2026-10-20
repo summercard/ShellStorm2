@@ -1,0 +1,68 @@
+{
+  "schema": "shellstorm2.openworld.asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-UNDERGROUND-STREET-02-SKYBRIDGE_HAZARD_PILLAR_02",
+  "package_id": "skybridge_hazard_pillar_02",
+  "slug": "skybridge_hazard_pillar_02",
+  "name_zh": "黄黑警示条纹支撑柱_12.8m_02",
+  "suite": "underground_street",
+  "version": "v003",
+  "district": "地下街区",
+  "category": "structural",
+  "family_id": "bridge_pillar",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "serves_districts": [
+    "地下街区"
+  ],
+  "scope": "suite_local",
+  "source_blend": "art_source/environments/open_world/source/underground_street/v003/env_underground_street_source_v003.blend",
+  "reused_from": "art_source/environments/open_world/source/underground_street/v002",
+  "geometry_source": "build_openworld_underground_street_v003.py::c_bridge_pillar",
+  "blender_collection": "资产包_skybridge_hazard_pillar_02",
+  "source_collection": "组件源_skybridge_hazard_pillar_02",
+  "objects": [
+    "黄黑警示条纹支撑柱_12.8m_02_主体",
+    "黄黑警示条纹支撑柱_12.8m_02_UI灯光自发光"
+  ],
+  "source_objects": [
+    "源_黄黑警示条纹支撑柱_12.8m_02_主体",
+    "源_黄黑警示条纹支撑柱_12.8m_02_UI灯光自发光"
+  ],
+  "pivot_rule": "bottom_center_z0",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "source_z_offset_m": 0.0,
+  "front_axis": "+X",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "dimensions_m": [
+    1.8,
+    1.8,
+    12.8
+  ],
+  "polygon_count": 150,
+  "instance_count": 2,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "emissive_split": true,
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uv_layer": "PaletteUV",
+  "collision": "none（Blender 源阶段；碰撞归后续 Godot 包装）",
+  "export": {
+    "glb": null,
+    "exported": false
+  },
+  "note": ""
+}

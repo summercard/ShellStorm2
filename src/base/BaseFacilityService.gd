@@ -80,6 +80,11 @@ static func get_snapshot(facility_id: String, data: BaseData) -> Dictionary:
 			snapshot["attention"] = false
 		_:
 			snapshot["summary"] = str(snapshot.get("description", "设施可用"))
+	if facility_id in ["mission_operations", "weapon_workshop", "weapon_forge", "monster_archive", "base_vending", "base_recovery"] and not data.base_generator_enabled:
+		snapshot["available"] = false
+		snapshot["availability_reason"] = "基地断电，请启动100层天台发电机"
+		snapshot["summary"] = "总电源已关闭"
+		snapshot["attention"] = true
 	return snapshot
 
 

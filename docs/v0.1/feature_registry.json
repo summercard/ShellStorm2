@@ -818,10 +818,12 @@
       "feature_id": "POWER-SYSTEM",
       "owner": "BaseEnergyService",
       "design_docs": [
-        "docs/v0.1/15.1_技术施工_电力系统.md"
+        "docs/v0.1/15.1_技术施工_电力系统.md",
+        "docs/v0.1/design/base_generator_power.md"
       ],
       "development_records": [
-        "docs/v0.1/development/2026-09-12_documentation_audit.md"
+        "docs/v0.1/development/2026-09-12_documentation_audit.md",
+        "docs/v0.1/development/2026-10-20_base_generator_power.md"
       ],
       "verification": [
         {
@@ -831,6 +833,10 @@
         {
           "kind": "scene",
           "id": "verify_base_overhaul_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_base_generator_power"
         }
       ],
       "status": "development"
@@ -1096,7 +1102,8 @@
         "docs/v0.1/development/2026-10-14_rooftop_standalone_components_registered.md",
         "docs/v0.1/development/2026-10-18_rooftop_guidance_clutter.md",
         "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md",
-        "docs/v0.1/development/2026-10-19_rooftop_ivy_low_wall.md"
+        "docs/v0.1/development/2026-10-19_rooftop_ivy_low_wall.md",
+        "docs/v0.1/development/2026-10-20_rooftop_generator.md"
       ],
       "verification": [
         {
@@ -1158,7 +1165,8 @@
         "docs/v0.1/development/2026-10-14_rooftop_standalone_components_registered.md",
         "docs/v0.1/development/2026-10-18_rooftop_guidance_clutter.md",
         "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md",
-        "docs/v0.1/development/2026-10-19_rooftop_ivy_low_wall.md"
+        "docs/v0.1/development/2026-10-19_rooftop_ivy_low_wall.md",
+        "docs/v0.1/development/2026-10-20_rooftop_generator.md"
       ],
       "verification": [
         {

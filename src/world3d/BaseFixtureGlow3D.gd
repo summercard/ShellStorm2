@@ -90,7 +90,7 @@ func _collect_authored_art_lights() -> void:
 func _apply_spill_visibility(spill_light: OmniLight3D, wanted: bool) -> void:
 	if spill_light == null or not is_instance_valid(spill_light):
 		return
-	spill_light.visible = wanted and bool(
+	spill_light.visible = wanted and BaseManager.is_base_power_on() and bool(
 		_authored_art_light_visible.get(spill_light.get_instance_id(), true)
 	)
 
@@ -111,6 +111,7 @@ func get_presentation_snapshot() -> Dictionary:
 ## 基地墙边开关调用此方法。开关是唯一状态源；这里仅同步美术表现，
 ## 保留每个材质原有的色彩和HDR能量，恢复时不重新计算也不改写资产。
 func set_presentation_lighting_enabled(enabled: bool) -> void:
+	enabled = enabled and BaseManager.is_base_power_on()
 	if not enabled:
 		# 作废在途的手摆灯延迟：已经关灯了，延迟到点不能再把灯补亮。
 		_startup_generation += 1
@@ -133,10 +134,13 @@ func set_presentation_lighting_enabled(enabled: bool) -> void:
 ## 闪烁。RoomLightSwitch3D 会在第4.5秒并行点亮中央玩法顶灯。
 ## 手摆美术灯不参与分批，统一延后 AUTHORED_ART_LIGHT_DELAY_SECONDS 亮相。
 func play_turn_on_sequence(duration_seconds := 4.2) -> void:
+	if not BaseManager.is_base_power_on():
+		return
 	set_presentation_lighting_enabled(false)
 	if _controlled_emission_materials.is_empty():
 		_presentation_lighting_enabled = true
 		return
+	var generation := _startup_generation
 	_presentation_starting = true
 	# 与下面的分批序列并行推进；世代号在关灯/重开时会自增，从而中止这条延迟。
 	_start_authored_art_light_delay(_startup_generation, duration_seconds)
@@ -155,8 +159,12 @@ func play_turn_on_sequence(duration_seconds := 4.2) -> void:
 			for flicker_index in range(flicker_count):
 				_set_material_energy_range(start_index, end_index, 0.16)
 				await get_tree().create_timer(minf(batch_duration * 0.30, 0.075)).timeout
+				if generation != _startup_generation or not BaseManager.is_base_power_on():
+					return
 				_set_material_energy_range(start_index, end_index, 0.0)
 				await get_tree().create_timer(minf(batch_duration * 0.25, 0.06)).timeout
+				if generation != _startup_generation or not BaseManager.is_base_power_on():
+					return
 		_set_material_energy_range(start_index, end_index, 1.0)
 		_set_spill_progress(batch_index + 1, batch_count)
 		var flicker_time := (
@@ -166,6 +174,10 @@ func play_turn_on_sequence(duration_seconds := 4.2) -> void:
 			else 0.0
 		)
 		await get_tree().create_timer(maxf(batch_duration - flicker_time, 0.01)).timeout
+		if generation != _startup_generation or not BaseManager.is_base_power_on():
+			return
+	if not BaseManager.is_base_power_on():
+		return
 	_set_material_energy_range(0, _controlled_emission_materials.size(), 1.0)
 	_set_spill_progress(batch_count, batch_count)
 	_presentation_starting = false
@@ -173,6 +185,8 @@ func play_turn_on_sequence(duration_seconds := 4.2) -> void:
 
 
 func _set_material_energy_range(start_index: int, end_index: int, factor: float) -> void:
+	if not BaseManager.is_base_power_on():
+		factor = 0.0
 	for material_index in range(start_index, end_index):
 		var material := _controlled_emission_materials[material_index]
 		if material == null or not is_instance_valid(material):

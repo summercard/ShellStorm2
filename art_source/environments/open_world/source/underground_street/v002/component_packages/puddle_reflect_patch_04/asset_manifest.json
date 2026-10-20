@@ -1,0 +1,66 @@
+{
+  "schema": "shellstorm2.openworld.asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-UNDERGROUND-STREET-02-PUDDLE_REFLECT_PATCH_04",
+  "package_id": "puddle_reflect_patch_04",
+  "slug": "puddle_reflect_patch_04",
+  "name_zh": "湿面反光水洼贴片_04",
+  "suite": "underground_street",
+  "version": "v002",
+  "district": "地下街区",
+  "category": "floor",
+  "family_id": "wet_detail",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "serves_districts": [
+    "地下街区"
+  ],
+  "scope": "suite_local",
+  "source_blend": "art_source/environments/open_world/source/underground_street/v002/env_underground_street_source_v002.blend",
+  "reused_from": "art_source/environments/open_world/source/underground_street/v001",
+  "geometry_source": "build_openworld_underground_street_v001.py::c_puddle",
+  "blender_collection": "资产包_puddle_reflect_patch_04",
+  "source_collection": "组件源_puddle_reflect_patch_04",
+  "objects": [
+    "湿面反光水洼贴片_04_主体"
+  ],
+  "source_objects": [
+    "源_湿面反光水洼贴片_04_主体"
+  ],
+  "pivot_rule": "bottom_center_z0",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "source_z_offset_m": 0.014,
+  "front_axis": "+X",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "dimensions_m": [
+    3.7,
+    3.0,
+    0.014
+  ],
+  "polygon_count": 20,
+  "instance_count": 6,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "emissive_split": false,
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "uv_layer": "PaletteUV",
+  "collision": "none（Blender 源阶段；碰撞归后续 Godot 包装）",
+  "export": {
+    "glb": null,
+    "exported": false
+  },
+  "note": ""
+}
