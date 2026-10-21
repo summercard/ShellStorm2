@@ -33,8 +33,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CHANGELOG = ROOT / "docs" / "v0.1" / "development" / "CHANGELOG.md"
 
-# CHANGELOG 条目：`## YYYY-MM-DD 标题`，正文是 `- ` 开头的要点
-_ENTRY_RE = re.compile(r"^##\s+(\d{4}-\d{2}-\d{2})\s+(.+?)\s*$", re.M)
+# CHANGELOG 条目：`## YYYY-MM-DD 标题`，正文是 `- ` 开头的要点。
+# 实际文件混用 `#` / `##` 两级标题（2026-10-20 起新条目写成 `#`），
+# 只认 `##` 会静默漏报整条 —— 2026-10-21 就因为这条正则把当日 4 条记成 0 条。
+_ENTRY_RE = re.compile(r"^#{1,3}\s+(\d{4}-\d{2}-\d{2})\s+(.+?)\s*$", re.M)
+# 另一种写法：直接以日期开头的列项 `- 2026-10-20 · 标题：正文`
+_DATED_BULLET_RE = re.compile(r"^-\s+(\d{4}-\d{2}-\d{2})\s*[·:：]\s*(.+?)\s*$", re.M)
 _BULLET_RE = re.compile(r"^-\s+(.+?)\s*$", re.M)
 
 # 这些提交是「记账/同步」类的机械提交，对读者没有信息量，默认折叠
@@ -70,21 +74,41 @@ def run_git(args: list[str]) -> str:
 def parse_changelog(since_date: str) -> list[dict]:
     """取 CHANGELOG 里日期 >= since_date 的条目。
 
-    文件是「最新在最上面」，所以从头部扫到第一个早于窗口的条目即可停。
+    文件大体「最新在最上面」，但尾部还混着后来追记的日期列项，所以不能
+    碰到第一条更早的就 break —— 改成按位置排序后逐条按日期过滤。
     """
     if not CHANGELOG.is_file():
         return []
     text = CHANGELOG.read_text(encoding="utf-8", errors="ignore")
-    matches = list(_ENTRY_RE.finditer(text))
+    spans: list[tuple[int, int, str, str, str]] = []
+    for m in _ENTRY_RE.finditer(text):
+        spans.append((m.start(), m.end(), m.group(1), m.group(2), "heading"))
+    for m in _DATED_BULLET_RE.finditer(text):
+        spans.append((m.start(), m.end(), m.group(1), m.group(2), "bullet"))
+    spans.sort(key=lambda s: s[0])
+
     entries: list[dict] = []
-    for i, m in enumerate(matches):
-        date = m.group(1)
+    for i, (start, end, date, raw_title, kind) in enumerate(spans):
         if date < since_date:
-            break  # 后面的更早，不必再看
-        body_end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
-        body = text[m.end() : body_end]
+            continue
+        body_end = spans[i + 1][0] if i + 1 < len(spans) else len(text)
+        body = text[end:body_end]
+        title = raw_title
+        seeded: list[str] = []
+        if kind == "bullet":
+            # 列项写成「- 日期 · 分类：正文」，把分类当标题、正文当要点。
+            # 没有冒号时退一步按首个逗号切（如「[基地发电机总电源](…)，POWER-SYSTEM r2」）。
+            plain_title = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", raw_title)
+            head, sep, tail = plain_title.partition("：")
+            if not sep:
+                head, sep, tail = plain_title.partition("，")
+            if sep and tail.strip():
+                title, seeded = head.strip(), [tail.strip()]
+            else:
+                title = plain_title
         bullets = [b.strip() for b in _BULLET_RE.findall(body)]
         bullets = [b for b in bullets if b]
+        bullets = seeded + bullets
         is_paragraph = False
         if not bullets:
             # 段落式条目：把非空行拼成一段摘要，避免条目在发布页上显示为空
@@ -102,7 +126,7 @@ def parse_changelog(since_date: str) -> list[dict]:
         entries.append(
             {
                 "date": date,
-                "title": m.group(2),
+                "title": title,
                 "bullets": bullets[:MAX_BULLETS_PER_ENTRY],
                 "bullet_total": len(bullets),
                 "is_paragraph": is_paragraph,

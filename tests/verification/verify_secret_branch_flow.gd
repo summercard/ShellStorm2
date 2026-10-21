@@ -26,6 +26,9 @@ extends Node
 ##   A23 门框前表面必须比墙面凸出 ≥ 0.25m —— 3cm 那种「刚好不穿模」在暗房里就是一面平墙
 ##   A24 房间 TSCN 里手摆的门必须与运行时那扇门重合（差 ≤1cm、朝向点积 ≥0.99）
 ##   A25 按 E 的落点必须落在**子图房间的平面范围内**（不是房间外几十米的空中）
+##   A26 场上不许留「房间 TSCN 带来的摆位锚点门」副本 —— 它没 configure，打它只会碎块飞、木板不动、按 E 无反应
+##   A27 子图每一间房**脚下必须实心**（1m 网格向下射线不许有空格）—— 主路的实心来自整层 FloorSupport，子图够不着
+##   A28 子图房**壳必须摆正**（美术足迹 = 本间尺寸）—— 不摆正就是「墙偏出 2.5m、门墙开在没门的那面」
 ##   （A12 跳跃边界、A13 击杀账 —— 未实现，见 UNIMPLEMENTED）
 
 const EXPEDITION_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
@@ -52,6 +55,9 @@ const SITE_MIN_PROTRUSION_M := 0.25
 const BRANCH_BASE_X := 1000.0
 const BRANCH_STRIDE_X := 300.0
 const BRANCH_X_TOLERANCE := 400.0
+## A28：壳足迹与本间尺寸的允许误差（m）。与 `SecretBranch3D.SHELL_FIT_TOLERANCE_M`
+## 同值但**独立写死**（验收不读产品常量，写错才抓得到）。
+const SHELL_FIT_TOLERANCE_M := 1.5
 ## 板体血量公式（设计 §4.1）：HP = 60 + 20 × 已清内容房数。
 const DOOR_HP_BASE := 60
 const DOOR_HP_PER_CLEARED := 20
@@ -303,6 +309,11 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 	# A24：房间 TSCN 里手摆的门必须与运行时那扇门重合。这条不碰碰撞，
 	# 放这里只是图省事（同一个 snapshot），顺序无所谓。
 	_check_authored_door_parity(tower, failures, notes)
+	# A26：房间里那扇「摆位锚点」副本必须已经清掉 —— 场上只许有登记过的门。
+	await _check_room_copy_doors(tower, branch, failures, notes)
+	# A27/A28：子图房**脚下实心** + **壳摆正**（业主 2026-10-21「装配的房间有问题，会掉落」）。
+	await _check_branch_floors(branch, failures, notes)
+	await _check_branch_shell_fit(branch, failures, notes)
 	var doors: Array = snapshot.get("doors", []) as Array
 	# 77001199 下 pair 1 是否刷出由种子决定；至少 pair 0 的两个位点必须在。
 	if doors.size() < 2:
@@ -952,6 +963,237 @@ func _room_containing(branch: Node, point: Vector3) -> String:
 	return ""
 
 
+## A26：房间里那扇「摆位锚点门」副本必须已经被清掉。
+##
+## 为什么要有这条（业主 2026-10-21「打门后有破碎动画，但木板没消失，也不能点 E」）：
+##   `SecretBranch3D._create_secret_branches()` 跑在 `_prepare_floor_bundle()` 里 ——
+##   那一刻房间**记录**齐了、房间节点和壳体都还没建，接管必然落空，于是自己建一扇；
+##   等壳体建好，房间 TSCN 里那扇**没被 `configure()` 过**的副本才冒出来。
+##   玩家打中副本时：`_boards` 为 null（木板不消失）、`_has_teleport` 为 false
+##   （按 E 无候选），而 `_spawn_board_debris()` 不依赖这两者（碎块照飞）。
+##   三个症状一起出现，看着像「破板坏了」，其实是同一处叠了两扇门。
+##
+## 判据：场上每一扇 `SecretDoor3D` 都必须被 `configure()` 认领（`site_id` 非空）
+##   并且在 `_doors` 登记表里。清道夫见 `SecretBranch3D._arm_room_copy_watch()`。
+func _check_room_copy_doors(tower: Node, branch: Node, failures: Array, notes: Array) -> void:
+	# 先把房间壳体催出来：房间 TSCN 里那扇副本只有在壳体建成之后才存在。
+	# 不催就没东西可查 —— 实测不催时场上副本 0 扇，关掉清道夫做反向对照也照样绿，
+	# 这条断言等于空过（同 A25 的「套件跑不出真实时序」）。
+	var rooms: Dictionary = branch.get("_room_nodes") as Dictionary
+	var forced := 0
+	for room_id in rooms:
+		var room := rooms[room_id] as DungeonRoom3D
+		if room == null or not is_instance_valid(room):
+			continue
+		if bool(room.get("_shell_built")):
+			continue
+		room.call("ensure_shell_built")
+		forced += 1
+	if forced > 0:
+		# 清道夫挂在 `node_added` 上、走 deferred —— 给它两帧把副本摘掉。
+		await get_tree().process_frame
+		await get_tree().process_frame
+	var registered: Array = []
+	var doors: Dictionary = branch.get("_doors") as Dictionary
+	for site_id in doors:
+		registered.append(doors[site_id])
+	var total := 0
+	var copies: Array[String] = []
+	for node in tower.find_children("*", "StaticBody3D", true, false):
+		if not (node is SecretDoor3D):
+			continue
+		total += 1
+		var door := node as SecretDoor3D
+		var sid := str(door.site_id)
+		if sid.is_empty() or not registered.has(door):
+			copies.append(
+				"%s（site_id=%s）" % [str(tower.get_path_to(door)), sid if not sid.is_empty() else "<空>"]
+			)
+	if not copies.is_empty():
+		failures.append(
+			"A26 场上仍有 %d 扇没被装配认领的门副本：%s —— 玩家打它会是「碎块飞了、木板不动、按 E 无反应」"
+			% [copies.size(), ", ".join(copies)]
+		)
+	else:
+		notes.append("A26 场上门全部被认领：%d 扇" % total)
+
+
+## A27：支线每一间房**脚下必须是实的** —— 1 m 网格向下射线不许留空格。
+##
+## 为什么要有这条（业主 2026-10-21「装配的房间有问题。会掉落。支线的」）：
+##   主路房间踩得实，靠的不是房间自带的地砖，而是 `TowerFloorStage3D` 按**整层**铺的
+##   `FloorSupport` 大板（实测 room_01 的 440 个俯视采样点里 330 格踩的是它）。
+##   子图整条链挂在主图外 +1000 m，够不着那块板；共享房壳只带来美术地砖
+##   （`corridor_45x40` 42 块 5 m 砖 = 1050 ㎡，房间 1800 ㎡），于是 66%~78% 的
+##   位置脚下是虚空 —— 按 E 进去就一路掉出关卡。
+##   修法见 `SecretBranch3D._ensure_floor_support()`（每间铺一块顶面贴 y=0 的承重盒）。
+##
+## 判据用**射线**而不是「节点在不在」：承重盒存在但位置/厚度写错时节点照样在。
+## 每间按 1 m 网格从房心上方 2.2 m 打到地面下 6 m，命中高度必须在地面 ±0.6 m 内
+## （打到地面的装饰件也算数，只要不是掉进虚空）。
+func _check_branch_floors(branch: Node, failures: Array, notes: Array) -> void:
+	var rooms: Dictionary = branch.get("_branch_rooms") as Dictionary
+	if rooms.is_empty():
+		failures.append("A27 子图房间登记为空，判据无法实测")
+		return
+	# 壳体/承重盒只有在建完之后才存在；`test_mode` 下没被催建时是空的（同 A26 的坑）。
+	var forced := 0
+	for room_id in rooms:
+		var room := (rooms[room_id] as Dictionary).get("room") as DungeonRoom3D
+		if room == null or not is_instance_valid(room):
+			continue
+		if not bool(room.get("_shell_built")):
+			room.call("ensure_shell_built")
+			forced += 1
+	if forced > 0:
+		await get_tree().process_frame
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+	var world := get_viewport().world_3d
+	if world == null:
+		failures.append("A27 拿不到 World3D，射线判据无法实测")
+		return
+	var space := world.direct_space_state
+	var checked := 0
+	# 一个分支根下只有**一块** `SecretFloorSupport`（每条子图链一块），里面按房间数放盒。
+	# 所以要对「全部承重体」求和，不能拿某一块的子节点数去比房间数。
+	var support_bodies := {}
+	var bad: Array[String] = []
+	for room_id in rooms:
+		var room := (rooms[room_id] as Dictionary).get("room") as DungeonRoom3D
+		if room == null or not is_instance_valid(room):
+			continue
+		var support := room.get_parent().get_node_or_null("SecretFloorSupport") as StaticBody3D
+		if support != null:
+			support_bodies[support.get_instance_id()] = support.get_child_count()
+		var dims := room.get_dimensions()
+		var floor_y := room.global_position.y
+		var cols := maxi(1, int(floor(dims.x)))
+		var rows := maxi(1, int(floor(dims.y)))
+		var holes := 0
+		for row in range(rows):
+			for col in range(cols):
+				var lx := -dims.x * 0.5 + (float(col) + 0.5) * (dims.x / float(cols))
+				var lz := -dims.y * 0.5 + (float(row) + 0.5) * (dims.y / float(rows))
+				var point := room.global_transform * Vector3(lx, 0.0, lz)
+				var query := PhysicsRayQueryParameters3D.create(
+					Vector3(point.x, floor_y + 2.2, point.z),
+					Vector3(point.x, floor_y - 6.0, point.z)
+				)
+				query.collide_with_areas = false
+				var hit: Dictionary = space.intersect_ray(query)
+				if hit.is_empty():
+					holes += 1
+					continue
+				var hit_y := float((hit.get("position", Vector3.ZERO) as Vector3).y)
+				if hit_y < floor_y - 0.6:
+					holes += 1
+		checked += 1
+		if holes > 0:
+			bad.append("%s 空 %d/%d" % [room_id, holes, cols * rows])
+	if checked == 0:
+		failures.append("A27 一间子图房都没量到 —— 判据空过")
+		return
+	var support_shapes := 0
+	for key in support_bodies:
+		support_shapes += int(support_bodies[key])
+	if support_shapes < checked:
+		failures.append(
+			"A27 承重盒数量不足：%d 块承重盒 vs %d 间房（漏铺的房间会掉出关卡）"
+			% [support_shapes, checked]
+		)
+	if not bad.is_empty():
+		failures.append(
+			"A27 子图房间脚下有洞：%s —— 玩家按 E 进去会掉出关卡" % ", ".join(bad)
+		)
+	else:
+		notes.append("A27 子图 %d 间房脚下全部实心（承重盒 %d 块）" % [checked, support_shapes])
+
+
+## A28：支线房间的**壳必须摆正** —— 美术足迹要落在本间尺寸上。
+##
+## 为什么单独一条（同一天业主「装配的房间有问题」的另一半）：
+##   主路房间的壳朝向由「布局实例清单 × 关卡房表」几何配准得出；子图房不在 `_records`
+##   里、没有清单 ⇒ 那条路回落到 `template_rotation_deg`，而子图从来没设过 ⇒ 恒 0。
+##   于是 `corridor_45x40` 的壳（烘焙 40×45）被原样塞进 45×40 的房间：四面墙整体偏出
+##   2.5 m、门墙落在北墙而房间的门在东/西墙（实测墙探针 155/170 打空）。
+##   修法见 `SecretBranch3D._shared_shell_alignment_deg()`（按足迹定 0/90，按门侧破平局）。
+##
+## 判据：房间局部系里**全部网格**的 AABB 必须与本间 `get_dimensions()` 双向吻合
+## （容差 1.5 m —— 转错 90° 的候选至少差 4 m，不会混淆）。
+func _check_branch_shell_fit(branch: Node, failures: Array, notes: Array) -> void:
+	var rooms: Dictionary = branch.get("_branch_rooms") as Dictionary
+	if rooms.is_empty():
+		failures.append("A28 子图房间登记为空，判据无法实测")
+		return
+	var checked := 0
+	var bad: Array[String] = []
+	for room_id in rooms:
+		var room := (rooms[room_id] as Dictionary).get("room") as DungeonRoom3D
+		if room == null or not is_instance_valid(room):
+			continue
+		var box := _room_local_visual_box(room)
+		if box.size == Vector3.ZERO:
+			continue
+		checked += 1
+		var dims := room.get_dimensions()
+		var dx := absf(box.size.x - dims.x)
+		var dz := absf(box.size.z - dims.y)
+		var applied := float(room.get_meta("shared_shell_alignment_deg", 0.0))
+		var root := room.get_node_or_null("AuthoredLayoutArtRoot") as Node3D
+		var applied_real := rad_to_deg(root.rotation.y) if root != null else 0.0
+		if dx > SHELL_FIT_TOLERANCE_M or dz > SHELL_FIT_TOLERANCE_M:
+			bad.append(
+				"%s 美术 %.1fx%.1f vs 房间 %.1fx%.1f" % [room_id, box.size.x, box.size.z, dims.x, dims.y]
+			)
+			continue
+		# 角度差取「最小有向夹角」：`deg_to_rad`/`rad_to_deg` 往返有 1e-8 级浮点残差，
+		# 直接 `fposmod(diff, 360)` 会把它放大成 360.0（第一版就栽在这里，报「差 360°」）。
+		var delta_deg := absf(fposmod(applied - applied_real + 180.0, 360.0) - 180.0)
+		if applied > 0.5 and delta_deg > 1.0:
+			bad.append(
+				"%s 声明转 %.1f° 实际壳根 %.1f°（差 %.1f°）" % [
+					room_id, applied, applied_real, delta_deg,
+				]
+			)
+	if checked == 0:
+		failures.append("A28 一间子图房都没量到 —— 判据空过")
+		return
+	if not bad.is_empty():
+		failures.append("A28 子图房壳没摆正：%s —— 墙/门会错位" % ", ".join(bad))
+	else:
+		notes.append("A28 子图 %d 间房壳足迹全部与本间尺寸吻合" % checked)
+
+
+## 房间局部系里全部网格的 AABB（跳过 `editor_preview_only` 子树 —— 那些件运行时不出现）。
+func _room_local_visual_box(room: DungeonRoom3D) -> AABB:
+	var box := AABB()
+	var started := false
+	var to_local := room.global_transform.affine_inverse()
+	for node in room.find_children("*", "MeshInstance3D", true, false):
+		var mesh := node as MeshInstance3D
+		if mesh == null or mesh.mesh == null:
+			continue
+		if _under_preview_only(mesh, room):
+			continue
+		var part := to_local * (mesh.global_transform * mesh.mesh.get_aabb())
+		if not started:
+			box = part
+			started = true
+		else:
+			box = box.merge(part)
+	return box
+
+
+func _under_preview_only(node: Node, stop: Node) -> bool:
+	var probe: Node = node
+	while probe != null and probe != stop:
+		if bool(probe.get_meta("editor_preview_only", false)):
+			return true
+		probe = probe.get_parent()
+	return false
+
+
 ## A24：房间 TSCN 里手摆的门 = 运行时那扇门。
 ##
 ## 新机制（2026-10-19 业主）让门直接摆进房间 TSCN，编辑器里可看可拖，运行时按它的
@@ -1037,7 +1279,7 @@ func _report(failures: Array[String], notes: Array[String]) -> void:
 	print("[UNIMPLEMENTED] A12/B1-B3 跳跃边界运行时断言（当前只有静态数据核对）")
 	print("[UNIMPLEMENTED] A13 子图击杀与主图合计的独立账（当前只并入全局击杀数）")
 	if failures.is_empty():
-		print("SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 门板可见 落点在房内 生成规则=确定 传送=可达 隔离=通过 编成=5强化+2普通 存档=往返一致")
+		print("SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 门板可见 落点在房内 门副本=已清 脚下实心 壳已摆正 生成规则=确定 传送=可达 隔离=通过 编成=5强化+2普通 存档=往返一致")
 		print("VERIFICATION_SEGMENT_OK")
 		get_tree().quit(0)
 		return

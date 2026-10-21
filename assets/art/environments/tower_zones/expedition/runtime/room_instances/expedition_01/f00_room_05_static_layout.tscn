@@ -107,7 +107,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="half_partition_-1" parent="." unique_id=592566472 instance=ExtResource("3_tahw7")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 9.999998, 0, -17.7)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 9.999998, 0, -29.270504)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION"
 metadata/authored_slot_role = "room_type_component"
 
@@ -587,12 +587,12 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-BRIDGE-WALL_X670"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="bank_crate_-1_0" parent="." unique_id=754091729 instance=ExtResource("12_wd0ub")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -11.400002, -0.035, -18.012499)
+transform = Transform3D(0.18952397, 0, -0.98187613, 0, 1, 0, 0.98187613, 0, 0.18952397, -13.339776, -0.035, -16.365238)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="bank_crate_-1_1" parent="." unique_id=775082114 instance=ExtResource("12_wd0ub")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9.582363, -0.050658345, -18.0125)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9.582363, -0.050658345, -16.244352)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE"
 metadata/authored_slot_role = "room_type_component"
 
@@ -602,7 +602,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="bank_crate_1_1" parent="." unique_id=951686244 instance=ExtResource("12_wd0ub")]
-transform = Transform3D(-0.92949355, 0, 0.36883837, 0, 1, 0, -0.36883837, 0, -0.92949355, -9.45932, 0.001835227, 25.209034)
+transform = Transform3D(-0.92949355, 0, 0.36883837, 0, 1, 0, -0.36883837, 0, -0.92949355, -9.45932, 0.001835227, 26.33628)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE"
 metadata/authored_slot_role = "room_type_component"
 
@@ -612,7 +612,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-END_CRATE"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="end_crate_1" parent="." unique_id=1713520527 instance=ExtResource("13_afxhw")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.9999976, -0.035, 27.4875)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3.9545984, -0.035, 28.440466)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-END_CRATE"
 metadata/authored_slot_role = "room_type_component"
 
@@ -622,7 +622,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-END_POWER"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="end_power_1" parent="." unique_id=1282587790 instance=ExtResource("14_h4gpx")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.8999977, -0.0075, 28.1875)
+transform = Transform3D(-0.65696746, 0, 0.7539189, 0, 1, 0, -0.7539189, 0, -0.65696746, -7.6324787, -0.0075, 28.1875)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-END_POWER"
 metadata/authored_slot_role = "room_type_component"
 
@@ -657,17 +657,17 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="near_crate_-1" parent="." unique_id=1261542515 instance=ExtResource("16_8amwm")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 9.999998, -0.035, -25.0346)
+transform = Transform3D(-0.27484867, 0, -0.9614874, 0, 1, 0, 0.9614874, 0, -0.27484867, 13.073671, -0.035, -24.405272)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="near_crate_1" parent="." unique_id=1008490674 instance=ExtResource("16_8amwm")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 10.000002, -0.035, 24.9654)
+transform = Transform3D(-0.57407665, 0, -0.8188016, 0, 1, 0, 0.8188016, 0, -0.57407665, 13.204091, -0.035, 28.060524)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="near_server_-1" parent="." unique_id=1346211271 instance=ExtResource("17_cmygx")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.797498, 0, -19.500002)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 13.476398, 0, -19.500002)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER"
 metadata/authored_slot_role = "room_type_component"
 
@@ -677,12 +677,12 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="partition_box_-1" parent="." unique_id=1006228120 instance=ExtResource("18_2c4ff")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.7999983, -0.035, -20.2125)
+transform = Transform3D(-0.05296354, 0, 0.99859643, 0, 1, 0, -0.99859643, 0, -0.05296354, 13.557417, -0.035, -22.086714)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="partition_box_1" parent="." unique_id=1002442292 instance=ExtResource("18_2c4ff")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.800002, -0.035, 20.1875)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.6571884, -0.035, 18.948605)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX"
 metadata/authored_slot_role = "room_type_component"
 
@@ -717,22 +717,22 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_
 metadata/authored_slot_role = "room_type_component"
 
 [node name="upper_bank_-1_0" parent="." unique_id=1156858132 instance=ExtResource("20_edu7y")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.787502, -0.1475, -24.749998)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -13.500372, -0.1475, -24.749998)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z6197"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="upper_bank_-1_1" parent="." unique_id=1844017811 instance=ExtResource("21_riyad")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.797502, 0, -21.999998)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -13.471837, 0, -21.999998)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z5450"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="upper_bank_-1_2" parent="." unique_id=369429129 instance=ExtResource("21_riyad")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.797502, 0, -19.249998)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -13.462263, 0, -19.249998)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z5450"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="upper_bank_1_0" parent="." unique_id=1962922426 instance=ExtResource("20_edu7y")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.787498, -0.1475, 19.250002)
+transform = Transform3D(-0.79520893, 0, -0.60633546, 0, 1, 0, 0.60633546, 0, -0.79520893, -13.405102, -0.1475, 19.250002)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z6197"
 metadata/authored_slot_role = "room_type_component"
 
@@ -747,12 +747,12 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z5450"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="upper_console_-1" parent="." unique_id=357584819 instance=ExtResource("22_ppcnr")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.952616, 0, -27.49507)
+transform = Transform3D(-0.050000355, 0, 0.9987492, 0, 1, 0, -0.9987492, 0, -0.050000355, -10.823695, 0, -29.02299)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="upper_console_1" parent="." unique_id=1251928423 instance=ExtResource("22_ppcnr")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10.3724985, 0, 17.3)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -13.668882, 0, 16.453558)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE"
 metadata/authored_slot_role = "room_type_component"
 

@@ -325,6 +325,12 @@ func _build_collision() -> void:
 ## 子弹与近战共用的受击入口（`Projectile3D._hit_target` 走这里）。
 ## 签名必须与 `Enemy3D.take_damage` 兼容：多出的参数一律忽略。
 func take_damage(damage: int, _critical: bool = false, _direction: Vector3 = Vector3.ZERO, _knockback: float = 0.0) -> void:
+	# 没被装配认领的门不接受伤害。`site_id` 只由 `configure()` 写入 —— 房间 TSCN 里
+	# 那扇「摆位锚点」副本从来没被 configure 过，放它进食伤链就会「碎块飞了、
+	# 木板不动、按 E 没反应」（业主 2026-10-21 实测）。清道夫见
+	# `SecretBranch3D._arm_room_copy_watch()`，这里是第二道闸。
+	if str(site_id).is_empty():
+		return
 	if state != State.SEALED or damage <= 0:
 		return
 	if _locked:

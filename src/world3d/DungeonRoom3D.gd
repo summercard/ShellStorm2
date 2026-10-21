@@ -362,6 +362,23 @@ const SPAWN_BOX_SAMPLE_STEP_M := 1.0
 ## ⚠ 不要拿 `SPAWN_CLEARANCE_M`（离墙净距，1.15）当怪半径 —— 那是给「怪与墙」留的余量，
 ## 拿来当「怪与怪」的门禁会把 10×10 的盒子压到只剩 4 个落点（实测 room_01/room_04）。
 const ENEMY_BODY_RADIUS_M := 0.8
+## —— 刷怪可达性闸门（业主 2026-10-21）——
+## 现象：手摆布局把角落围成玩家进不去的空腔，但空腔里的地砖仍然「满铺」，
+## 旧的「地砖覆盖 + 家具障碍」两道闸对它全部放行 ⇒ 怪刷在玩家打不到的地方，
+## 战斗房永远清不完、门永远不开。
+##
+## 做法：从**每个连接门内侧**在 0.5 m 网格上做 4 邻接洪泛，只保留玩家胶囊
+## （r=0.34，见 `scenes/Player3D.tscn` 的 `ShapePlayer`）站得住的格；
+## 由 `_spawn_floor_contains()` 末尾统一收口 ⇒ 索引落点 / 盒内采样 / 剧情落点
+## 三条路同时生效，不各写一份判定。
+const SPAWN_REACH_GRID_M := 0.5
+const SPAWN_REACH_PLAYER_RADIUS_M := 0.34
+## 玩家胶囊总高 1.5：底面高于这个高度的碰撞体（头顶横梁、吊管）不算挡路。
+const SPAWN_REACH_PLAYER_HEIGHT_M := 1.55
+## 安全阀：可达格占「可站格」的比例低于此值 ⇒ 判定**闸门自己算错了**
+## （门没找到 / 家具 AABB 取错 / 房间还没建完），停用并退回旧行为。
+## 绝不能因为算错把整间房判成不可刷 —— 那会让战斗房永远等不到「清完开门」。
+const SPAWN_REACH_MIN_COVERAGE := 0.35
 ## 盒内取点的**有界重洗**轮数。单轮「随机序 + 首适配」可能因先抽到**居中**的点而把小盒余量
 ## 一次吃光（3×3 盒、间距 1.7 m 时中心到池内任一点 ≤1.414 m ⇒ 第二只无处可放），于是「本来排
 ## 得下」被误判成「排不下」、触发落地平移且**随种子翻面**。首轮取不满就换种再试、取首个取满者
@@ -391,6 +408,14 @@ var _spawn_blockers: Array[AABB] = []
 var _narrative_spawn_probe_frame := -1
 var _narrative_spawn_detail_id := 0
 var _spawn_available: Array[int] = []
+## 玩家可达格集合（键 = `Vector2i(ix, iz)`，见 `_spawn_reach_key()`）。
+## `_spawn_reach_active = false` ⇒ 闸门不启用，`_spawn_floor_contains()` 逐字走旧行为。
+var _spawn_reach_cells := {}
+var _spawn_reach_active := false
+var _spawn_reach_evaluated := false
+## 未落锁时（家具碰撞还没进树）同一帧只试一次 —— 否则 `_build_spawn_points()` 的
+## 每个候选点都会触发一次 `_collect_spawn_blockers()`，白扫整棵子树 4800 遍。
+var _spawn_reach_probe_frame := -1
 # 区块壳体地砖格心（5m 模数格）的半宽与命中容差。非矩形房（L / U / 工字桥）的凹口在
 # 摆位阶段就被 `point_in_polygon` 剔掉了砖，「格心集合」因此就是房内可用点的真源；
 # 触发盒的盒心吸附（`snap_box_center_to_tile`）也依赖这套格心：
@@ -5712,8 +5737,191 @@ func _spawn_clearance() -> float:
 	return SPAWN_BOSS_CLEARANCE_M if room_type == "BOSS" else SPAWN_CLEARANCE_M
 
 
+## —— 刷怪可达性闸门（业主 2026-10-21）——
+##
+## 只做一件事：把「玩家从门走不进去的空腔」从刷怪落点里剔掉。
+##
+## 为什么不能靠「地砖覆盖 + 家具 AABB」拦住：手摆布局把角落用柜子/工位围起来之后，
+## 空腔里的地砖仍然满铺（地砖清单是按房型铺的，不随家具走），家具本身又是**障碍**
+## 而不是**围墙** —— 只要空腔内部还有 ≥ 净距的空地，旧逻辑就认为那里能站怪。
+## 结果是怪刷在玩家打不到的角落，战斗房清不完、门永远不开。
+##
+## 代价与边界：这是**几何可达性**，不是导航网格。它只回答「玩家胶囊从门能不能走到」，
+## 不回答「走过去好不好走」。家具的 AABB 是绕 Y 旋转后的保守盒 ⇒ 斜摆家具的阻挡会
+## 略微偏大，宁可少刷一只，也不刷在打不到的地方。
+func _ensure_spawn_reach() -> void:
+	if _spawn_reach_evaluated:
+		return
+	var frame := Engine.get_physics_frames()
+	if _spawn_reach_probe_frame == frame:
+		return
+	_spawn_reach_probe_frame = frame
+	# 细节没建 ⇒ 家具碰撞体还没进物理空间，此时算出来的「可达」是假的。等下一次再算。
+	if not _detail_built:
+		return
+	# 多级房不适用：Boss 深井的主通行面由 `walkable_navigation_polygons` 跨楼层表达
+	# （坑底 -12m），0.5 m 单层网格会把井口与井底糊成同一片；撤离房的门被信标结构占位。
+	# 这两类房的落点仍走既有口径（地砖 + 障碍），本闸门不介入 —— 实测强开会把
+	# Boss 盒心挤漂 20.8 m，那是副作用不是收益。
+	if room_type == "BOSS" or room_type == "EXTRACTION":
+		return
+	_spawn_reach_active = false
+	_spawn_reach_cells.clear()
+	_collect_spawn_blockers()
+	# 一件障碍都没有（程序化空房 / 塔楼标准间）⇒ 不存在「围出来的空腔」，算也是全通。
+	if _spawn_blockers.is_empty():
+		return
+	var dimensions := get_dimensions()
+	var columns := int(floor(dimensions.x / SPAWN_REACH_GRID_M))
+	var rows := int(floor(dimensions.y / SPAWN_REACH_GRID_M))
+	if columns <= 1 or rows <= 1:
+		return
+	# ① 通行性：障碍 AABB 在 XZ 上膨胀玩家半径；头顶构件不算挡路。
+	var blocked := {}
+	for value in _spawn_blockers:
+		var bounds := value as AABB
+		if bounds.position.y >= SPAWN_REACH_PLAYER_HEIGHT_M:
+			continue
+		var ix0 := clampi(int(floor((bounds.position.x - SPAWN_REACH_PLAYER_RADIUS_M + dimensions.x * 0.5) / SPAWN_REACH_GRID_M)), 0, columns - 1)
+		var ix1 := clampi(int(floor((bounds.end.x + SPAWN_REACH_PLAYER_RADIUS_M + dimensions.x * 0.5) / SPAWN_REACH_GRID_M)), 0, columns - 1)
+		var iz0 := clampi(int(floor((bounds.position.z - SPAWN_REACH_PLAYER_RADIUS_M + dimensions.y * 0.5) / SPAWN_REACH_GRID_M)), 0, rows - 1)
+		var iz1 := clampi(int(floor((bounds.end.z + SPAWN_REACH_PLAYER_RADIUS_M + dimensions.y * 0.5) / SPAWN_REACH_GRID_M)), 0, rows - 1)
+		for ix in range(ix0, ix1 + 1):
+			for iz in range(iz0, iz1 + 1):
+				blocked[Vector2i(ix, iz)] = true
+	var walkable := {}
+	for ix in columns:
+		for iz in rows:
+			var key := Vector2i(ix, iz)
+			if not blocked.has(key):
+				walkable[key] = true
+	if walkable.is_empty():
+		return
+	# ② 种子：每个连接门内侧 2 m。门洞格本身常被门扇占着，向内缩。
+	var queue: Array[Vector2i] = []
+	for value in connection_ports:
+		var port := value as Dictionary
+		var raw := port.get("position_m", []) as Array
+		if raw.size() < 2:
+			continue
+		var inward := Vector2.ZERO
+		var outward_raw := port.get("outward", []) as Array
+		if outward_raw.size() >= 2:
+			inward = Vector2(float(outward_raw[0]), float(outward_raw[1])).normalized()
+		var seed_point := Vector3(float(raw[0]) - inward.x * 2.0, 0.0, float(raw[1]) - inward.y * 2.0)
+		var seed_key := _spawn_reach_key(seed_point)
+		var found := _spawn_reach_nearest(walkable, seed_key, 10)
+		if found.x >= 0 and not queue.has(found):
+			queue.append(found)
+	var visited := _spawn_reach_flood(walkable, queue)
+	# ③ 没有任何门能给出种子（深井 Boss 房、撤离房）⇒ 取最大连通分量。
+	#    玩家能进这间房，就一定站在最大那块空地上。
+	if visited.is_empty():
+		visited = _spawn_reach_largest_component(walkable)
+	if visited.is_empty():
+		return
+	var coverage := float(visited.size()) / float(walkable.size())
+	if coverage < SPAWN_REACH_MIN_COVERAGE:
+		# 判负也要落锁：否则每次刷怪都会重算一遍，白烧一次洪泛。
+		_spawn_reach_evaluated = true
+		push_warning(
+			"DungeonRoom3D: 房间 %s 的可达性只覆盖 %.0f%% 的可站格（阈值 %.0f%%），闸门停用、退回旧行为"
+			% [room_id, coverage * 100.0, SPAWN_REACH_MIN_COVERAGE * 100.0]
+		)
+		return
+	# 判定成立才落锁。`_spawn_blockers` 为空时**不锁**：那可能是家具细节刚建、
+	# 碰撞还没进树的一帧，下一次刷怪要能重算。
+	_spawn_reach_evaluated = true
+	_spawn_reach_cells = visited
+	_spawn_reach_active = true
+	# ④ 候选池是在 `_ready()` 生成的（当时家具细节还没建、闸门未启用）⇒ 重算一遍。
+	#    这里是唯一的重算入口：同一 `room_seed`，除被闸门剔掉的点外逐点不变。
+	_build_spawn_points()
+
+
+func _spawn_reach_key(point: Vector3) -> Vector2i:
+	var dimensions := get_dimensions()
+	return Vector2i(
+		int(floor((point.x + dimensions.x * 0.5) / SPAWN_REACH_GRID_M)),
+		int(floor((point.z + dimensions.y * 0.5) / SPAWN_REACH_GRID_M))
+	)
+
+
+func _spawn_reach_contains(point: Vector3) -> bool:
+	if not _spawn_reach_active:
+		return true
+	return _spawn_reach_cells.has(_spawn_reach_key(point))
+
+
+## 从种子格向外找最近的可站格（螺旋半径 `max_steps` 格）。找不到返回 (-1, -1)。
+func _spawn_reach_nearest(walkable: Dictionary, key: Vector2i, max_steps: int) -> Vector2i:
+	if walkable.has(key):
+		return key
+	for step in range(1, max_steps + 1):
+		for dx in range(-step, step + 1):
+			for dz in range(-step, step + 1):
+				if maxi(absi(dx), absi(dz)) != step:
+					continue
+				var probe := Vector2i(key.x + dx, key.y + dz)
+				if walkable.has(probe):
+					return probe
+	return Vector2i(-1, -1)
+
+
+func _spawn_reach_flood(walkable: Dictionary, seeds: Array[Vector2i]) -> Dictionary:
+	var visited := {}
+	var queue: Array[Vector2i] = []
+	for seed in seeds:
+		if walkable.has(seed) and not visited.has(seed):
+			visited[seed] = true
+			queue.append(seed)
+	var neighbours := [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
+	while not queue.is_empty():
+		var current: Vector2i = queue.pop_back()
+		for delta in neighbours:
+			var next: Vector2i = current + delta
+			if visited.has(next) or not walkable.has(next):
+				continue
+			visited[next] = true
+			queue.append(next)
+	return visited
+
+
+func _spawn_reach_largest_component(walkable: Dictionary) -> Dictionary:
+	var visited := {}
+	var best := {}
+	var neighbours := [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
+	for value in walkable.keys():
+		var start: Vector2i = value
+		if visited.has(start):
+			continue
+		var component: Array[Vector2i] = [start]
+		var queue: Array[Vector2i] = [start]
+		visited[start] = true
+		while not queue.is_empty():
+			var current: Vector2i = queue.pop_back()
+			for delta in neighbours:
+				var next: Vector2i = current + delta
+				if visited.has(next) or not walkable.has(next):
+					continue
+				visited[next] = true
+				component.append(next)
+				queue.append(next)
+		if component.size() > best.size():
+			best.clear()
+			for key in component:
+				best[key] = true
+	return best
+
+
 ## 完整包围正方形都须被主层地砖并集覆盖（比圆形占地更保守，也覆盖凹角）。
 func _spawn_floor_contains(point: Vector3, radius: float) -> bool:
+	# 可达性收口：三条刷怪路径（索引落点 / 盒内采样 / 剧情落点）都从这道闸过，
+	# 所以判定只写这一处。闸门未启用时逐字返回旧行为。
+	_ensure_spawn_reach()
+	if not _spawn_reach_contains(point):
+		return false
+
 	var footprint := Rect2(Vector2(point.x - radius, point.z - radius), Vector2.ONE * radius * 2.0)
 	var dimensions := get_dimensions()
 	if not Rect2(-dimensions * 0.5, dimensions).encloses(footprint):
@@ -5843,6 +6051,8 @@ func spawn_point_for_index(index: int) -> Vector3:
 	var safe_index := maxi(0, index)
 	if safe_index == 0 or enemy_spawn_points.is_empty():
 		enemy_spawn_points.clear()
+		# 首次出怪时家具细节已建 ⇒ 这里才是可达性闸门真正生效的时机（见 `_ensure_spawn_reach`）。
+		_ensure_spawn_reach()
 		_collect_spawn_blockers()
 		_spawn_available.clear()
 		for i in _spawn_candidates.size():
@@ -5906,6 +6116,8 @@ func spawn_points_in_box(
 		return result
 	if _spawn_candidates.is_empty():
 		_build_spawn_points()
+	# 闸门首次生效时会重算候选池 ⇒ 必须赶在 `_spawn_candidates` 被读取之前。
+	_ensure_spawn_reach()
 	_collect_spawn_blockers()
 	box_center_local = snap_box_center_to_tile(box_center_local, wall_recess_tiles)
 	var size := Vector2(
@@ -6122,6 +6334,8 @@ func resolve_spawn_box_center_local(
 ) -> Vector2:
 	if _spawn_candidates.is_empty():
 		_build_spawn_points()
+	# 闸门首次生效时会重算候选池 ⇒ 必须赶在 `_spawn_candidates` 被读取之前。
+	_ensure_spawn_reach()
 	_collect_spawn_blockers()
 	box_center_local = snap_box_center_to_tile(box_center_local, wall_recess_tiles)
 	var size := Vector2(

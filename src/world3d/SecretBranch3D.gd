@@ -103,6 +103,18 @@ const VERB_LEAVE_EXTRACTION := "返回支线"
 ## 子图房间门（`RoomDoor3D`）的交互距离（m）。与主路 `DungeonRoom3D.get_nearest_door`
 ## 的缺省一致：站在门前能按 E，站远一点就不再给候选。
 const DOOR_INTERACT_RANGE_M := 3.4
+## 子图**承重地板**（见 `_ensure_floor_support()`）。
+##
+## 厚度与主路 `TowerFloorStage3D.FLOOR_THICKNESS` 同值：主路 `FloorSupport` 的盒心
+## 下移半个厚度、顶面贴 y=0；子图照抄这个口径，玩家胶囊落点因此不需要任何偏移。
+const BRANCH_FLOOR_SUPPORT_THICKNESS_M := 0.30
+const BRANCH_FLOOR_SUPPORT_NAME := "SecretFloorSupport"
+## 壳足迹与本间尺寸的允许误差（m）。
+##
+## 取 1.5 而不是 1.0：`office_60x70` 的壳里有一件伸出房间 0.8 m 的装饰件，离树量足迹
+## 时量到 41.1（进树后会被裁掉一层，实测 40.3）。而**转错 90° 的候选至少差 4 m**
+## （45×40 ↔ 40×45、30×60 ↔ 60×30），1.5 不会把错朝向放进来。
+const SHELL_FIT_TOLERANCE_M := 1.5
 
 ## 主图 site 原点，子图按它偏移。由 `configure` 注入。
 var _origin := Vector3.ZERO
@@ -154,6 +166,13 @@ var _sites_debug: Array = []
 ## 房间 TSCN 里**手动摆放**的暗门节点。有就用手摆的位置（业主在编辑器里拖的就是它），
 ## 没有才退回数据位点 + 自动外推。
 var _authored_doors: Dictionary = {}
+## 房间副本清道夫是否已挂上（只挂一次）。
+var _room_copy_watch_armed := false
+## 本次装配一共清掉了几扇「房间 TSCN 带来的摆位锚点副本」（诊断用）。
+var _pruned_room_copies := 0
+## 共享房壳足迹缓存：壳路径 -> {size: Vector2, door_sides: Array}。
+## 同一份壳在一次装配里只会被不同房间重复用到，量一次就够。
+var _shell_footprints: Dictionary = {}
 
 
 ## `rooms_source` 是 `Dungeon3D._records` 的拷贝（只读用途：读房间 center/size/secret_site）。
@@ -216,6 +235,10 @@ func build() -> void:
 		_build_pair(pair_id, entry, exit_site)
 	# 这里房间节点多半还没进树（远征 bootstrap 先于房间装配，实测房间索引只有 1 个），
 	# 拿不到墙体几何。等这一帧结束、房间齐了再补做一次外推；`settle_sites()` 幂等。
+	#
+	# 同时挂上「房间副本清道夫」：房间 TSCN 里那扇门此刻还没被实例化（房间本体都在
+	# 这一步之后才建），所以接管一定落空；等壳体建好它才冒出来，必须按事件盯住。
+	_arm_room_copy_watch()
 	call_deferred("settle_sites")
 
 
@@ -272,6 +295,9 @@ func settle_sites() -> void:
 	# 而这一条恰恰是射线判据查不出来的盲区（ray 能穿过去，玩家只看到墙）。
 	for value in _sites_debug:
 		_measure_visual_cover(value as Dictionary)
+	# 房间齐了这一轮，把还没被认领的「摆位锚点门」清一遍。
+	# `node_added` 那条路已经能兜住按需出现的副本，这里是同帧兜底 + 幂等扫尾。
+	_sweep_room_copies()
 
 
 ## 把已经建好的门搬到 TSCN 给的手摆位置。
@@ -1011,9 +1037,20 @@ func _spawn_branch_room(
 	# 「洞在一边、门扇在另一边」——那条边就永远走不过去。
 	for direction in doors:
 		room.set_meta("wall_door_lane_%s" % direction, lane)
+	# 壳的朝向必须**先**下发：`_align_static_layout_to_room()` 在 `_build_shell()`
+	# 里按这条 meta 整体转壳，门洞与门扇是它之后才建的。晚一步就会「墙转过去了、
+	# 门还按旧方位开」。
+	var layout_deg := _shared_shell_alignment_deg(
+		str(room.static_layout_scene_path), size, doors
+	)
+	if not is_zero_approx(layout_deg):
+		room.set_meta("template_rotation_deg", layout_deg)
+		room.set_meta("shared_shell_alignment_deg", layout_deg)
 	room.position = center
 	root.add_child(room)
 	room.ensure_shell_built()
+	# 脚下必须是实的（2026-10-21 业主「支线的装配有问题，会掉下去」）。
+	_ensure_floor_support(root, center, size)
 	room.set_stream_state(DungeonRoom3D.STREAM_SHELL_READY)
 	# 进房上报：子图房间不在 `_records` 里，`Dungeon3D._on_room_entered` 那条链
 	# 收不到它们。挂到房间自带的 `player_entered`（由 `RoomTrigger` 的 Area3D 发），
@@ -1021,6 +1058,196 @@ func _spawn_branch_room(
 	_branch_rooms[room_id] = {"room": room, "combat": encounter, "entered": false}
 	room.player_entered.connect(_on_branch_room_player_entered)
 	return room
+
+
+## 共享房壳的**摆放朝向**（0 / 90 / 180 / 270）。
+##
+## 为什么子图必须自己算这个角度：主路房间的壳朝向由
+## `DungeonRoom3D._static_layout_alignment_delta_deg()` 拿「布局实例清单 × 关卡房表」
+## 做几何配准得出；子图房**不在 `_records` 里、没有清单**，那条路会直接回落到
+## `template_rotation_deg`（子图从来没设过 ⇒ 恒 0）。结果是壳按烘焙朝向原样摆进
+## 房间：`corridor_45x40` 的壳烘焙成 40×45、房间是 45×40 ⇒ 四面墙整体偏出 2.5 m、
+## 门墙落在北墙而房间的门在东/西墙（实测墙探针 155/170 打空）。
+##
+## 判据只有两条，都能量，不靠猜：
+##   ① **足迹**：壳美术在自身局部系里的 AABB 必须与本间 `size` 吻合；
+##      转置了就只能靠 90°/270°（两个角度足迹相同，所以还要 ②）；
+##   ② **门侧**：壳里烘焙的门墙（`snapshot_tower_wall_door_offset_<side>`）
+##      转过去之后要落在本间真的开门的那些边上，重合越多越好。
+##
+## 两条都不成立时返回 0（**保守：不转**）。宁可维持烘焙朝向，也不瞎转。
+func _shared_shell_alignment_deg(path: String, size: Vector2, doors: Array) -> float:
+	if path.is_empty() or size.x <= 0.1 or size.y <= 0.1:
+		return 0.0
+	var footprint: Dictionary = _shared_shell_footprint(path)
+	var art_size := footprint.get("size", Vector2.ZERO) as Vector2
+	if art_size.x <= 0.1 or art_size.y <= 0.1:
+		return 0.0
+	var baked_door_sides: Array = footprint.get("door_sides", []) as Array
+	var candidates: Array[float] = []
+	for deg in [0.0, 90.0, 180.0, 270.0]:
+		var rotated := art_size
+		if not is_zero_approx(fposmod(deg, 180.0)):
+			rotated = Vector2(art_size.y, art_size.x)
+		if (
+			absf(rotated.x - size.x) <= SHELL_FIT_TOLERANCE_M
+			and absf(rotated.y - size.y) <= SHELL_FIT_TOLERANCE_M
+		):
+			candidates.append(deg)
+	if candidates.is_empty():
+		push_warning(
+			"[SecretBranch3D] 房壳 %s 的足迹 %.1fx%.1f 与房间 %.1fx%.1f 对不上，维持烘焙朝向"
+			% [path.get_file(), art_size.x, art_size.y, size.x, size.y]
+		)
+		return 0.0
+	if candidates.size() == 1:
+		return candidates[0]
+	# ② 门侧：把烘焙门墙按候选角转过去，数有几个落在本间要开的边上。
+	var wanted: Array = []
+	for direction in doors:
+		wanted.append(str(direction))
+	var best_deg := candidates[0]
+	var best_hits := -1
+	for deg in candidates:
+		var hits := 0
+		for side_value in baked_door_sides:
+			var mapped := _rotate_wall_side(str(side_value), deg)
+			if wanted.has(mapped):
+				hits += 1
+		if hits > best_hits:
+			best_hits = hits
+			best_deg = deg
+	return best_deg
+
+
+## 壳美术的足迹与**烘焙门墙朝向**（同一份壳只量一次）。
+##
+## 量法：实例化后把每件 `MeshInstance3D` 的局部变换沿父链乘到壳原点，取 AABB。
+## 不依赖入树、不跑物理，代价是一次实例化 —— 每种模板只做一次（缓存）。
+func _shared_shell_footprint(path: String) -> Dictionary:
+	if _shell_footprints.has(path):
+		return _shell_footprints[path] as Dictionary
+	var result := {"size": Vector2.ZERO, "door_sides": [] as Array}
+	var packed := load(path) as PackedScene
+	if packed == null:
+		_shell_footprints[path] = result
+		return result
+	var instance := packed.instantiate()
+	if instance == null:
+		_shell_footprints[path] = result
+		return result
+	var box := AABB()
+	var started := false
+	for node in instance.find_children("*", "MeshInstance3D", true, false):
+		var mesh := node as MeshInstance3D
+		if mesh == null or mesh.mesh == null:
+			continue
+		if _hidden_in_shell(mesh, instance):
+			continue
+		var local := Transform3D.IDENTITY
+		var probe: Node = mesh
+		while probe != null and probe != instance:
+			if probe is Node3D:
+				local = (probe as Node3D).transform * local
+			probe = probe.get_parent()
+		var part: AABB = local * mesh.mesh.get_aabb()
+		if not started:
+			box = part
+			started = true
+		else:
+			box = box.merge(part)
+	var door_sides: Array = []
+	for node in instance.find_children("*", "", true, false):
+		for meta_name in node.get_meta_list():
+			var key := str(meta_name)
+			if not key.begins_with("snapshot_tower_wall_door_offset_"):
+				continue
+			var side := key.trim_prefix("snapshot_tower_wall_door_offset_")
+			if not door_sides.has(side):
+				door_sides.append(side)
+	if started:
+		result["size"] = Vector2(box.size.x, box.size.z)
+	result["door_sides"] = door_sides
+	instance.free()
+	_shell_footprints[path] = result
+	return result
+
+
+## 壳里**不会出现在游戏里**的件：`editor_preview_only` 子树（`_build_shell` 会把它们
+## 置 `visible = false`）与自身隐藏的节点。量足迹时必须剔掉，否则量出来比房间大
+## 一圈（实测 office 壳 40.3 → 41.1，正是差了一件预览件）。
+func _hidden_in_shell(node: Node, shell_root: Node) -> bool:
+	var probe: Node = node
+	while probe != null and probe != shell_root:
+		if probe is Node3D and not (probe as Node3D).visible:
+			return true
+		if bool(probe.get_meta("editor_preview_only", false)):
+			return true
+		probe = probe.get_parent()
+	return false
+
+
+## 绕 Y 转 `deg` 之后，某一面墙的朝向变成哪一面（轴约定与 `DungeonRoom3D` 同一套：
+## 北 = -Z、南 = +Z、东 = +X、西 = -X）。
+func _rotate_wall_side(side: String, deg: float) -> String:
+	var normal := Vector3.ZERO
+	match side:
+		"north":
+			normal = Vector3(0, 0, -1)
+		"south":
+			normal = Vector3(0, 0, 1)
+		"east":
+			normal = Vector3(1, 0, 0)
+		"west":
+			normal = Vector3(-1, 0, 0)
+		_:
+			return side
+	var rotated := Basis(Vector3.UP, deg_to_rad(deg)) * normal
+	if absf(rotated.x) >= absf(rotated.z):
+		return "east" if rotated.x > 0.0 else "west"
+	return "south" if rotated.z > 0.0 else "north"
+
+
+## 子图房间的**承重地板**：一块顶面贴 `y = 0` 的静态盒，铺满整间房的矩形投影。
+##
+## 为什么必须补（业主 2026-10-21：「装配的房间有问题，会掉落。支线的」）：
+##   主路房间脚下之所以踩得实，靠的**不是**房间自带的地砖，而是
+##   `TowerFloorStage3D._build_support()` 按整层范围铺的 `FloorSupport` 大板 ——
+##   实测 room_01 的 440 个俯视采样点里 **330 格踩的是 FloorSupport**、只有 102 格
+##   踩到美术件。共享房壳只带来**美术地砖**：`corridor_45x40` 42 块 5m 砖 = 1050 ㎡，
+##   而房间是 45×40 = 1800 ㎡；`bridge_60x50` 更少。
+##   子图整条链挂在主图外 +1000 m（`BRANCH_ORIGIN_X_M`），`FloorSupport` 够不着 ⇒
+##   玩家按 E 落在子图房里，脚下 66%~78% 的位置是虚空，一路掉出关卡。
+##
+## 口径与主路逐项对齐（不另立一套）：
+##   · 层 1 / 掩码 0 —— 与 `FloorSupport` 同层，射线与角色落地判定都看得见；
+##   · `PROCESS_MODE_ALWAYS` —— 承重板不能随流送窗口退出物理空间（同主路口径）；
+##   · 厚度 `FLOOR_THICKNESS`（0.30）、盒心下移半个厚度 ⇒ **顶面正好在 y = 0**，
+##     与地砖顶面共面，玩家胶囊落点不需要为它加任何偏移。
+##
+## 桥房的 12 m 下沉坑同样被这块板封在下面，**与主路完全一致**（主路 `FloorSupport`
+## 也不给坑开洞）。坑按设计是「下层不可达、纯装饰」，真掉进去反而卡死。
+func _ensure_floor_support(root: Node3D, center: Vector3, size: Vector2) -> void:
+	if root == null or not is_instance_valid(root):
+		return
+	var body := root.get_node_or_null(BRANCH_FLOOR_SUPPORT_NAME) as StaticBody3D
+	if body == null:
+		body = StaticBody3D.new()
+		body.name = BRANCH_FLOOR_SUPPORT_NAME
+		# 承重板与主路 `FloorSupport` 同一个理由：跨流送窗口常驻。
+		body.process_mode = Node.PROCESS_MODE_ALWAYS
+		body.collision_layer = 1
+		body.collision_mask = 0
+		body.set_meta("branch_floor_support", true)
+		root.add_child(body)
+	var shape := BoxShape3D.new()
+	shape.size = Vector3(size.x, BRANCH_FLOOR_SUPPORT_THICKNESS_M, size.y)
+	var collision := CollisionShape3D.new()
+	collision.name = "Support_%02d" % body.get_child_count()
+	collision.shape = shape
+	# `body` 挂在 `root` 原点，房间中心是 `root` 局部坐标 ⇒ 直接用它做盒心。
+	collision.position = Vector3(center.x, -BRANCH_FLOOR_SUPPORT_THICKNESS_M * 0.5, center.z)
+	body.add_child(collision)
 
 
 ## 玩家踏进子图房间（房间自带 `RoomTrigger` 的 Area3D 触发）。
@@ -1184,6 +1411,76 @@ func _drop_room_duplicate_door(site: Dictionary) -> void:
 	if host != null:
 		host.remove_child(duplicate)
 	duplicate.queue_free()
+
+
+## 房间 TSCN 里那扇「摆位锚点门」的清道夫（业主 2026-10-21）。
+##
+## 为什么必须按事件盯，而不是装配时清一次就完：
+##   `_create_secret_branches()` 跑在 `_prepare_floor_bundle()` 里 —— 那一刻房间
+##   **记录**齐了，但房间节点和壳体都还没建（`_instantiate_dynamic_room` 与
+##   `_ensure_structural_shells_resident` 都在它之后）。所以装配时 `find_child`
+##   一定落空，等壳体建好，TSCN 里那扇门才冒出来。
+##
+## 玩家打到的如果是这扇副本，三个症状会一次出现（业主实测原话
+## 「有木板破碎的动画，但是木板没有消失，也不能点击进入支线」）：
+##   · `_boards` 为 null（没 configure）⇒ 缩放到 0.01 与 `visible = false`
+##     全打在 null 上 —— **木板永远不消失**；
+##   · `_has_teleport` 为 false ⇒ `can_teleport()` 恒假 —— **按 E 无候选**；
+##   · `_spawn_board_debris()` 不依赖这两者 ⇒ **碎块照样飞**。
+## 所以修补点不在动画，而在「不该存在的第二扇门」。
+func _arm_room_copy_watch() -> void:
+	if _room_copy_watch_armed:
+		return
+	_room_copy_watch_armed = true
+	var tree := get_tree()
+	if tree == null:
+		return
+	if not tree.node_added.is_connected(_on_tree_node_added):
+		tree.node_added.connect(_on_tree_node_added)
+
+
+func _on_tree_node_added(node: Node) -> void:
+	if not (node is SecretDoor3D):
+		return
+	# 装配自己建的门也走这条信号（`_build_door()` 里 `add_child` 在前、登记在后），
+	# 所以延迟到帧末再判 —— 那时 `_doors` 已经写好，不会误杀正主。
+	call_deferred("_prune_room_copy_door", node)
+
+
+## 只删「没被装配认领」的那一份。
+##
+## 判据用 `site_id`：它由 `configure()` / `configure_portal()` 写入，而房间副本
+## 从来没人 configure 过 ⇒ 空。这比「在不在 `_doors` 里」更早成立（登记发生在
+## `add_child` 之后），也顺带挡住任何将来漏网的裸门。
+func _prune_room_copy_door(node: Node) -> void:
+	if node == null or not is_instance_valid(node):
+		return
+	var door := node as SecretDoor3D
+	if door == null:
+		return
+	if not str(door.site_id).is_empty():
+		return
+	for value in _doors.values():
+		if value == door:
+			return
+	var host := door.get_parent()
+	if host != null:
+		# `remove_child` 而不是只 `queue_free`：后者要到帧末才生效，
+		# 这一帧里玩家射线/可视遮挡检查还会扫到它（同 `_drop_room_duplicate_door` 的理由）。
+		host.remove_child(door)
+	door.queue_free()
+	_pruned_room_copies += 1
+	print("[SecretBranch3D] 清掉房间 TSCN 带来的摆位锚点门副本：%s" % str(door.name))
+
+
+## 全场景扫一遍未认领的暗门。`settle_sites()` 每次收尾调用，幂等。
+func _sweep_room_copies() -> void:
+	var host: Node = self
+	while host.get_parent() != null:
+		host = host.get_parent()
+	for node in host.find_children("*", "StaticBody3D", true, false):
+		if node is SecretDoor3D:
+			_prune_room_copy_door(node)
 
 
 ## 房间 TSCN 里手动摆放的那扇门（`SecretDoor_<site_id>`）。没有就返回 null。
