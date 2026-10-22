@@ -29,6 +29,8 @@ extends Node
 ##   A26 场上不许留「房间 TSCN 带来的摆位锚点门」副本 —— 它没 configure，打它只会碎块飞、木板不动、按 E 无反应
 ##   A27 子图每一间房**脚下必须实心**（1m 网格向下射线不许有空格）—— 主路的实心来自整层 FloorSupport，子图够不着
 ##   A28 子图房**壳必须摆正**（美术足迹 = 本间尺寸）—— 不摆正就是「墙偏出 2.5m、门墙开在没门的那面」
+##   A29 子图**承重板不许铺出可走面** —— 铺满包围盒会让玩家走到 L 形凹口/桥腰外侧还站着
+##   A30 子图**门洞必须落在可走面上** —— L 形凹口那段没有墙也没有砖，门开在那里就是「走出去在房间外」
 ##   （A12 跳跃边界、A13 击杀账 —— 未实现，见 UNIMPLEMENTED）
 
 const EXPEDITION_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
@@ -1063,18 +1065,28 @@ func _check_branch_floors(branch: Node, failures: Array, notes: Array) -> void:
 		var room := (rooms[room_id] as Dictionary).get("room") as DungeonRoom3D
 		if room == null or not is_instance_valid(room):
 			continue
+		var room_key := str(room_id)
 		var support := room.get_parent().get_node_or_null("SecretFloorSupport") as StaticBody3D
 		if support != null:
 			support_bodies[support.get_instance_id()] = support.get_child_count()
+		var tiles := _room_tile_boxes(room)
 		var dims := room.get_dimensions()
 		var floor_y := room.global_position.y
 		var cols := maxi(1, int(floor(dims.x)))
 		var rows := maxi(1, int(floor(dims.y)))
 		var holes := 0
+		var walkable := 0
 		for row in range(rows):
 			for col in range(cols):
 				var lx := -dims.x * 0.5 + (float(col) + 0.5) * (dims.x / float(cols))
 				var lz := -dims.y * 0.5 + (float(row) + 0.5) * (dims.y / float(rows))
+				# 🔴 只查**真实可走面**。非矩形房（`corridor_45x40` 是 L 形）的凹口
+				# 本来就既没有地砖也不该有承重板 —— 按包围盒查会把 30×25 的凹口
+				# 一律报成「洞」，而那片区域是房间外，玩家本来就不该站上去。
+				# 这条口径与产品侧 `_ensure_floor_support()` 按砖铺完全同源。
+				if not _tile_boxes_cover(tiles, lx, lz):
+					continue
+				walkable += 1
 				var point := room.global_transform * Vector3(lx, 0.0, lz)
 				var query := PhysicsRayQueryParameters3D.create(
 					Vector3(point.x, floor_y + 2.2, point.z),
@@ -1090,7 +1102,36 @@ func _check_branch_floors(branch: Node, failures: Array, notes: Array) -> void:
 					holes += 1
 		checked += 1
 		if holes > 0:
-			bad.append("%s 空 %d/%d" % [room_id, holes, cols * rows])
+			bad.append("%s 空 %d/%d" % [room_key, holes, walkable])
+		# 每间房必须至少有一块自己的承重盒（按名字前缀，含房间 id）。
+		var own_shapes := 0
+		if support != null:
+			for child in support.get_children():
+				if str(child.name).begins_with("%s_Support_" % room_key):
+					own_shapes += 1
+		if own_shapes <= 0:
+			bad.append("%s 没有自己的承重盒" % room_key)
+		# 落点必须在真实可走面上：L 形的几何中心会落进凹口，那里刻意没板。
+		#
+		# ⚠️ 这里按**当前**地砖重算一遍，而不是只读登记值：`landing` 是建房时算的，
+		# 那一刻壳可能还没建（`test_mode` 下常见）⇒ 量不到砖会退回几何中心，
+		# 中心又正好在凹口里。判据要的是**最终装配结果**，不是某一刻的快照。
+		var registered: Vector3 = (rooms[room_id] as Dictionary).get(
+			"landing", room.global_position
+		) as Vector3
+		var local_registered := room.global_transform.affine_inverse() * registered
+		var landing_local := local_registered
+		if not _tile_boxes_cover(tiles, landing_local.x, landing_local.z):
+			landing_local = _nearest_tile_point(tiles, local_registered)
+		if not _tile_boxes_cover(tiles, landing_local.x, landing_local.z):
+			bad.append("%s 落点不在可走面上（注册 %.1f, %.1f）" % [
+				room_key, local_registered.x, local_registered.z,
+			])
+		elif landing_local.distance_to(local_registered) > 0.05:
+			notes.append("%s 落点由 (%.1f, %.1f) 校到最近砖 (%.1f, %.1f)" % [
+				room_key, local_registered.x, local_registered.z,
+				landing_local.x, landing_local.z,
+			])
 	if checked == 0:
 		failures.append("A27 一间子图房都没量到 —— 判据空过")
 		return
@@ -1108,6 +1149,227 @@ func _check_branch_floors(branch: Node, failures: Array, notes: Array) -> void:
 		)
 	else:
 		notes.append("A27 子图 %d 间房脚下全部实心（承重盒 %d 块）" % [checked, support_shapes])
+	_check_branch_no_escape(branch, failures, notes)
+
+
+## A29：**承重板不许铺到房间可走面之外**（业主 2026-10-22「角色会跑到房间外面去」）。
+##
+## 为什么 A27 抓不到这条：A27 查的是「有砖的地方下面有没有实心」——
+## 一块盖满整个包围盒的大板当然处处实心，A27 全绿。业主遇到的恰恰是**反过来**：
+## 没砖的地方（L 形凹口、工字形腰侧）也被大板填实 ⇒ 玩家能走到房间外还站着不掉。
+## 实测 `secret_0_0` 有 **720 ㎡** 这样的格子（30×25 的凹口）。
+##
+## 判据：拿 `SecretFloorSupport` 里每块承重盒的**角点**去问「这里有没有地砖」。
+## 有任何一个角落在砖外 ⇒ 那块板铺出了可走面。
+##
+## ⚠️ 不能用「射线探地面」那种写法：墙和家具都是竖直面，射线在 1.2 m 高就撞上了，
+## 会把每一面墙脚下的格子都误报成「能站但房间外」（实测 secret_0_1 假报 92 格）；
+## 工字形房（`bridge_60x50`）的坑沿同理。直接比板与砖，与射线无关。
+func _check_branch_no_escape(branch: Node, failures: Array, notes: Array) -> void:
+	var rooms: Dictionary = branch.get("_branch_rooms") as Dictionary
+	if rooms.is_empty():
+		return
+	# 承重盒角点允许的容差（m）：砖与砖之间有约 0.15 m 建模缝，
+	# 产品的盒还额外向外放了 `BRANCH_FLOOR_SUPPORT_OVERLAP_M`（0.06）。
+	# 0.5 远小于半砖（2.5），不会把真铺出去的那一列放进来。
+	const BOARD_MARGIN_M := 0.5
+	var offenders: Array[String] = []
+	for room_id in rooms:
+		var row := rooms[room_id] as Dictionary
+		var room := row.get("room") as DungeonRoom3D
+		if room == null or not is_instance_valid(room) or not room.is_inside_tree():
+			continue
+		if not bool(room.get("_shell_built")):
+			continue
+		var tiles := _room_tile_boxes(room)
+		if tiles.is_empty():
+			# 量不到砖（美术缺失/灰盒）—— 这一间的可走面无从界定，跳过而不是误报。
+			continue
+		var support := room.get_parent().get_node_or_null("SecretFloorSupport") as StaticBody3D
+		if support == null:
+			continue
+		var outside := 0
+		for child in support.get_children():
+			var shape_node := child as CollisionShape3D
+			if shape_node == null:
+				continue
+			var box_shape := shape_node.shape as BoxShape3D
+			if box_shape == null:
+				continue
+			# 只看本间房的盒（名字带房间 id）。
+			if not str(shape_node.name).begins_with("%s_Support_" % str(room_id)):
+				continue
+			var center_world := shape_node.global_position
+			var half := Vector2(box_shape.size.x, box_shape.size.z) * 0.5
+			var bad_corner := false
+			for sign_x in [-1.0, 1.0]:
+				for sign_z in [-1.0, 1.0]:
+					var corner_world := center_world + Vector3(
+						half.x * sign_x, 0.0, half.y * sign_z
+					)
+					var local := room.global_transform.affine_inverse() * corner_world
+					if not _tile_boxes_cover(tiles, local.x, local.z):
+						bad_corner = true
+						break
+				if bad_corner:
+					break
+			if bad_corner:
+				outside += 1
+		if outside > 0:
+			offenders.append("%s %d 块" % [str(room_id), outside])
+	if not offenders.is_empty():
+		failures.append(
+			"A29 子图承重板铺到了房间可走面之外：%s —— 玩家能走到房间外面" % ", ".join(offenders)
+		)
+	else:
+		notes.append("A29 子图承重板没有铺出可走面（玩家走不出房间）")
+	_check_branch_doors_on_floor(branch, failures, notes)
+
+
+## A30：子图每扇门的**门洞必须落在可走面上**。
+##
+## 为什么单列一条：`corridor_45x40` 是 L 形，凹口那 30×25 既没有地砖也**没有外墙**。
+## 门位若按房间中线取（`RoomDoorLane.nearest_offset` = −2.5），东门就正好开在凹口上 ——
+## 那一段没有墙、脚下没有砖，玩家从走廊走进来直接站在房间外
+## （业主 2026-10-22「支点场景的位置会飘逸，角色会跑到房间外面去」）。
+## 实测修复前 `secret_0_0` 的东门就报「洞口在轮廓内：否」。
+##
+## 判据：门洞中心（房间帧 `(±半宽, lane)` / `(lane, ±半深)`）必须被某块地砖覆盖。
+func _check_branch_doors_on_floor(branch: Node, failures: Array, notes: Array) -> void:
+	var rooms: Dictionary = branch.get("_branch_rooms") as Dictionary
+	if rooms.is_empty():
+		return
+	var bad: Array[String] = []
+	var checked := 0
+	for room_id in rooms:
+		var room := (rooms[room_id] as Dictionary).get("room") as DungeonRoom3D
+		if room == null or not is_instance_valid(room) or not room.is_inside_tree():
+			continue
+		if not bool(room.get("_shell_built")) or (room.doors as Array).is_empty():
+			continue
+		var tiles := _room_tile_boxes(room)
+		if tiles.is_empty():
+			continue
+		var dims := room.get_dimensions()
+		var half_x := dims.x * 0.5
+		var half_z := dims.y * 0.5
+		for door_value in room.doors:
+			var side := str(door_value)
+			var lane := float(room.get_meta(
+				"tower_wall_door_offset_%s" % side,
+				room.get_meta("wall_door_lane_%s" % side, 0.0)
+			))
+			var point := Vector2.ZERO
+			match side:
+				"north": point = Vector2(lane, -half_z)
+				"south": point = Vector2(lane, half_z)
+				"east": point = Vector2(half_x, lane)
+				"west": point = Vector2(-half_x, lane)
+				_: continue
+			checked += 1
+			if not _tile_boxes_cover(tiles, point.x, point.y):
+				bad.append("%s 的 %s 门（lane %+.1f）" % [str(room_id), side, lane])
+	if checked == 0:
+		return
+	if not bad.is_empty():
+		failures.append(
+			"A30 子图门洞开在可走面之外：%s —— 那一段没有墙也没有地砖，走进去就在房间外"
+			% ", ".join(bad)
+		)
+	else:
+		notes.append("A30 子图 %d 扇门的门洞都落在可走面上" % checked)
+
+
+
+## 房间**真实可走面**的地砖 AABB（房间帧，每块砖一个）。
+##
+## 判据是**几何**，不认名字：子图的共享壳是嵌套子场景（`f00_secret_shared_*` 里只有一个
+## `Room01` 实例），真正的 `TILE_R00_C00` 在更深的层级，按实例根名字一律拿不到。
+## 地砖 = 水平薄片（厚度 ≤ 0.8 m）且顶面贴 `y = 0`；墙 11.9 m 高、家具更厚，都进不来。
+const TILE_MAX_THICKNESS_M := 0.8
+const TILE_MAX_TOP_OFFSET_M := 0.4
+## 与产品侧 `SecretBranch3D.SHELL_TILE_MIN_AREA_M2` **同值但独立写死**（验收不读产品常量）。
+const TILE_MIN_AREA_M2 := 4.0
+
+
+func _room_tile_boxes(room: DungeonRoom3D) -> Array[AABB]:
+	var out: Array[AABB] = []
+	var to_local := room.global_transform.affine_inverse()
+	var room_y := room.global_position.y
+	for node in room.find_children("*", "MeshInstance3D", true, false):
+		var mesh := node as MeshInstance3D
+		if mesh == null or mesh.mesh == null or not mesh.is_visible_in_tree():
+			continue
+		var local := mesh.get_aabb()
+		var xform := mesh.global_transform
+		var world := AABB()
+		var first := true
+		for index in range(8):
+			var corner := local.position + Vector3(
+				local.size.x if (index & 1) else 0.0,
+				local.size.y if (index & 2) else 0.0,
+				local.size.z if (index & 4) else 0.0,
+			)
+			var point := xform * corner
+			if first:
+				world = AABB(point, Vector3.ZERO)
+				first = false
+			else:
+				world = world.expand(point)
+		if world.size.y > TILE_MAX_THICKNESS_M:
+			continue
+		if absf(world.position.y + world.size.y - room_y) > TILE_MAX_TOP_OFFSET_M:
+			continue
+		# 与产品侧同口径：只留**够大**的片（5×5 砖 25 ㎡；压条/缝条远小于它）。
+		# 不筛的话窄片的 AABB 会把「砖与砖之间的缝」也算成可走面，
+		# 于是同一块地面在产品侧是密铺、在验收侧是带缝的棋盘格 —— 两边对不上。
+		if world.size.x * world.size.z < TILE_MIN_AREA_M2:
+			continue
+		var local_min := to_local * world.position
+		var local_max := to_local * (world.position + world.size)
+		out.append(AABB(
+			Vector3(minf(local_min.x, local_max.x), 0.0, minf(local_min.z, local_max.z)),
+			Vector3(absf(local_max.x - local_min.x), 1.0, absf(local_max.z - local_min.z))
+		))
+	return out
+
+
+## 砖块之间在美术里有约 0.15 m 的建模缝（压条/缝条），采样点落在缝上时
+## 严格 AABB 判定会判「没砖」。A29/A27 的采样是 1 m 网格、格心固定，
+## 一旦房间尺寸不是整数砖（如 30×40 的 office 砖心是 2.5 + 5n），格心就会周期性压在缝上。
+## 给 0.4 m 容差：小于半砖（2.5 m），不会把「真的没砖」放进来。
+const TILE_COVER_TOLERANCE_M := 0.4
+
+
+func _tile_boxes_cover(boxes: Array[AABB], local_x: float, local_z: float) -> bool:
+	for box in boxes:
+		var covers_x := (
+			local_x >= box.position.x - TILE_COVER_TOLERANCE_M
+			and local_x <= box.position.x + box.size.x + TILE_COVER_TOLERANCE_M
+		)
+		var covers_z := (
+			local_z >= box.position.z - TILE_COVER_TOLERANCE_M
+			and local_z <= box.position.z + box.size.z + TILE_COVER_TOLERANCE_M
+		)
+		if covers_x and covers_z:
+			return true
+	return false
+
+
+## 离 `from_local` 最近的砖盒中心（房间帧）。砖一块都没有时原样返回。
+func _nearest_tile_point(boxes: Array[AABB], from_local: Vector3) -> Vector3:
+	if boxes.is_empty():
+		return from_local
+	var best := from_local
+	var best_distance := INF
+	for box in boxes:
+		var center := box.get_center()
+		var candidate := Vector3(center.x, from_local.y, center.z)
+		var distance := Vector2(candidate.x - from_local.x, candidate.z - from_local.z).length()
+		if distance < best_distance:
+			best_distance = distance
+			best = candidate
+	return best
 
 
 ## A28：支线房间的**壳必须摆正** —— 美术足迹要落在本间尺寸上。
@@ -1279,7 +1541,7 @@ func _report(failures: Array[String], notes: Array[String]) -> void:
 	print("[UNIMPLEMENTED] A12/B1-B3 跳跃边界运行时断言（当前只有静态数据核对）")
 	print("[UNIMPLEMENTED] A13 子图击杀与主图合计的独立账（当前只并入全局击杀数）")
 	if failures.is_empty():
-		print("SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 门板可见 落点在房内 门副本=已清 脚下实心 壳已摆正 生成规则=确定 传送=可达 隔离=通过 编成=5强化+2普通 存档=往返一致")
+		print("SECRET_BRANCH_FLOW_OK 位点=4 槽位固定 门洞不重合 门板可见 落点在房内 门副本=已清 脚下实心 壳已摆正 承重不出界 门在可走面 生成规则=确定 传送=可达 隔离=通过 编成=5强化+2普通 存档=往返一致")
 		print("VERIFICATION_SEGMENT_OK")
 		get_tree().quit(0)
 		return

@@ -108,6 +108,8 @@ const DOOR_INTERACT_RANGE_M := 3.4
 ## 厚度与主路 `TowerFloorStage3D.FLOOR_THICKNESS` 同值：主路 `FloorSupport` 的盒心
 ## 下移半个厚度、顶面贴 y=0；子图照抄这个口径，玩家胶囊落点因此不需要任何偏移。
 const BRANCH_FLOOR_SUPPORT_THICKNESS_M := 0.30
+## 每块承重盒向外放的量（m）：吃掉相邻地砖之间那点建模缝，避免胶囊卡在缝上。
+const BRANCH_FLOOR_SUPPORT_OVERLAP_M := 0.06
 const BRANCH_FLOOR_SUPPORT_NAME := "SecretFloorSupport"
 ## 壳足迹与本间尺寸的允许误差（m）。
 ##
@@ -115,6 +117,19 @@ const BRANCH_FLOOR_SUPPORT_NAME := "SecretFloorSupport"
 ## 时量到 41.1（进树后会被裁掉一层，实测 40.3）。而**转错 90° 的候选至少差 4 m**
 ## （45×40 ↔ 40×45、30×60 ↔ 60×30），1.5 不会把错朝向放进来。
 const SHELL_FIT_TOLERANCE_M := 1.5
+## —— 壳的「真砖格」量法（见 `_shared_shell_footprint()`）——
+## 判「这是地砖」用：网格件厚度上限（m）。墙 11.9 m、家具更厚，都进不来。
+const SHELL_TILE_MAX_THICKNESS_M := 0.8
+## 判「这是地砖」用：顶面离壳地面（y=0）的允许偏差（m）。
+const SHELL_TILE_MAX_TOP_OFFSET_M := 0.4
+## 砖格归整粒度（m），与模板 `grid_unit_m` 同值。
+const SHELL_TILE_GRID_M := 5.0
+## 判「这个点在某块砖上」用：半个砖格 + 容差（m）。
+const SHELL_TILE_HALF_M := 2.5
+const SHELL_TILE_HIT_TOLERANCE_M := 0.05
+## 判「这是地砖」用：面积下限（㎡）。5×5 砖是 25，压条/缝条远小于它。
+## 不筛掉这些窄片，一块砖会被切成好几片，承重盒数暴涨（实测 7288 块）。
+const SHELL_TILE_MIN_AREA_M2 := 4.0
 
 ## 主图 site 原点，子图按它偏移。由 `configure` 注入。
 var _origin := Vector3.ZERO
@@ -831,7 +846,10 @@ func _build_pair(pair_id: int, entry: Dictionary, exit_site: Dictionary) -> void
 	var room_states := _build_branch_rooms(branch_root, pair_id, room_count)
 	var points: Array = []
 	for value in room_states:
-		points.append((value as Dictionary).get("center", Vector3.ZERO))
+		var state := value as Dictionary
+		# 落点用 `landing`（可走面上的点），**不是** `center`（包围盒几何中心）。
+		# L 形房的几何中心会落在凹口里 —— 那块刻意没有承重板，人一落下去就掉出关卡。
+		points.append(state.get("landing", state.get("center", Vector3.ZERO)))
 	_branch_points[pair_id] = points
 	if room_states.is_empty():
 		return
@@ -883,16 +901,22 @@ func _build_pair(pair_id: int, entry: Dictionary, exit_site: Dictionary) -> void
 ##
 ## 返回 `{room, center, size, index, lane, template_id}`：撤离门与末端返回门都要按
 ## 这一间自己的尺寸贴墙，写死半深会在 45×40 的房上把门放到墙外。
+##
+## 分两趟走：**先算全链的门位槽，再逐间建房**。
+## 为什么不能边建边算：`lane` 必须整条链共用一个（走廊是直线、门要同轴），
+## 而槽的合法性要同时看**每一间**的壳（L 形凹口没有砖也没有外墙）。
+## 逐间各算一个的话，`corridor_45x40`（L 形）会把门算到凹口上 ——
+## 玩家从走廊走进来直接站在房间外（业主 2026-10-22「角色会跑到房间外面去」）。
 func _build_branch_rooms(root: Node3D, pair_id: int, count: int) -> Array:
 	var picked := _pick_branch_templates(pair_id, count)
-	var rooms: Array = []
 	var origin := _branch_origin(pair_id)
+	# —— 第一趟：只算几何与门位，不建节点 ——
+	var plans: Array = []
 	var cursor_x := origin.x
 	for index in range(picked.size()):
 		var entry := picked[index] as Dictionary
 		var size := entry.get("size", BRANCH_TEMPLATE_FALLBACK[BRIDGE_TEMPLATE_ID]) as Vector2
-		var room_id := "secret_%d_%d" % [pair_id, index]
-		var center := Vector3(cursor_x + size.x * 0.5, 0.0, origin.y)
+		var template_id := str(entry.get("template_id", ""))
 		# 端口的**唯一权威**是本间的邻居：首间只有东门，末间只有西门。
 		# 这条同时保证「未连接的候选端口维持实体封墙」—— 少开一个门就少一条路，
 		# 不会留下通往空地的洞。
@@ -904,21 +928,44 @@ func _build_branch_rooms(root: Node3D, pair_id: int, count: int) -> Array:
 		if index < picked.size() - 1:
 			doors.append("east")
 			door_targets["east"] = "secret_%d_%d" % [pair_id, index + 1]
-		var lane := _branch_door_lane(size)
-		var template_id := str(entry.get("template_id", ""))
+		var path := _shared_layout_path(template_id)
+		plans.append({
+			"index": index,
+			"size": size,
+			"template_id": template_id,
+			"path": path,
+			"doors": doors,
+			"door_targets": door_targets,
+			"center": Vector3(cursor_x + size.x * 0.5, 0.0, origin.y),
+			"layout_deg": _shared_shell_alignment_deg(path, size, doors),
+		})
+		cursor_x += size.x + ROOM_GAP_M
+	# —— 全链一个门位槽 ——
+	var lane := _solve_chain_lane(plans)
+	# —— 第二趟：建房 ——
+	var rooms: Array = []
+	for value in plans:
+		var plan := value as Dictionary
+		var index := int(plan["index"])
+		var size := plan["size"] as Vector2
+		var center := plan["center"] as Vector3
 		var room := _spawn_branch_room(
-			root, room_id, center, size, doors, door_targets, index, lane, template_id
+			root, "secret_%d_%d" % [pair_id, index], center, size,
+			plan["doors"] as Array, plan["door_targets"] as Dictionary,
+			index, lane, str(plan["template_id"])
 		)
 		rooms.append({
 			"room": room,
 			"center": center,
+		# 传送落点 = 可走面上离中心最近的点（L 形的几何中心会落在凹口里）。
+		# 由 `_spawn_branch_room()` 算好并登记在 `_branch_rooms` 里 —— 那里撤离房也走同一条，
+		# 落点只有一处口径。这里只取，不重算（重算会多遍历一遍全部网格件）。
+		"landing": ((_branch_rooms.get(room.room_id, {}) as Dictionary).get("landing", center) as Vector3),
 			"size": size,
 			"index": index,
 			"lane": lane,
-			"template_id": str(entry.get("template_id", "")),
+			"template_id": str(plan["template_id"]),
 		})
-		# 下一间从本间东侧 + 走廊段处开始（5 m 整数段，与主路同一口径）。
-		cursor_x += size.x + ROOM_GAP_M
 	_build_branch_corridors(pair_id, rooms)
 	return rooms
 
@@ -1049,13 +1096,20 @@ func _spawn_branch_room(
 	room.position = center
 	root.add_child(room)
 	room.ensure_shell_built()
-	# 脚下必须是实的（2026-10-21 业主「支线的装配有问题，会掉下去」）。
-	_ensure_floor_support(root, center, size)
+	# 脚下必须是实的（2026-10-21 业主「支线的装配有问题，会掉下去」），
+	# 且只盖在**真实地砖**上（2026-10-22 业主「角色会跑到房间外面去」）。
+	_ensure_floor_support(root, room)
+	# 落点必须落在**可走面**上：包围盒几何中心对 L 形房会落在凹口里（那里刻意没板）。
+	# 算在这里而不是调用方，是因为**撤离房也走这个函数**（它不走 `_build_branch_rooms`），
+	# 落点只在一处算才不会两套口径。
+	var landing := _branch_landing_point(room)
 	room.set_stream_state(DungeonRoom3D.STREAM_SHELL_READY)
 	# 进房上报：子图房间不在 `_records` 里，`Dungeon3D._on_room_entered` 那条链
 	# 收不到它们。挂到房间自带的 `player_entered`（由 `RoomTrigger` 的 Area3D 发），
 	# 上层据此切「当前房间」并按编成刷怪。
-	_branch_rooms[room_id] = {"room": room, "combat": encounter, "entered": false}
+	_branch_rooms[room_id] = {
+		"room": room, "combat": encounter, "entered": false, "landing": landing,
+	}
 	room.player_entered.connect(_on_branch_room_player_entered)
 	return room
 
@@ -1120,14 +1174,19 @@ func _shared_shell_alignment_deg(path: String, size: Vector2, doors: Array) -> f
 	return best_deg
 
 
-## 壳美术的足迹与**烘焙门墙朝向**（同一份壳只量一次）。
+## 壳美术的足迹、**烘焙门墙朝向**与**真砖格**（同一份壳只量一次）。
 ##
 ## 量法：实例化后把每件 `MeshInstance3D` 的局部变换沿父链乘到壳原点，取 AABB。
 ## 不依赖入树、不跑物理，代价是一次实例化 —— 每种模板只做一次（缓存）。
+##
+## `tiles` 是**地砖格心**（壳局部，5 m 格）：判「某处地面上有没有砖」用。
+## 为什么需要它：`corridor_45x40` 是 L 形，凹口那 30×25 没有砖也没有外墙；
+## 门位若按房间中线取，就会开在凹口上（那一段没有墙），玩家从走廊走进来
+## 直接落在房间外（业主 2026-10-22「角色会跑到房间外面去」）。
 func _shared_shell_footprint(path: String) -> Dictionary:
 	if _shell_footprints.has(path):
 		return _shell_footprints[path] as Dictionary
-	var result := {"size": Vector2.ZERO, "door_sides": [] as Array}
+	var result := {"size": Vector2.ZERO, "door_sides": [] as Array, "tiles": [] as Array}
 	var packed := load(path) as PackedScene
 	if packed == null:
 		_shell_footprints[path] = result
@@ -1138,6 +1197,7 @@ func _shared_shell_footprint(path: String) -> Dictionary:
 		return result
 	var box := AABB()
 	var started := false
+	var tiles: Array = []
 	for node in instance.find_children("*", "MeshInstance3D", true, false):
 		var mesh := node as MeshInstance3D
 		if mesh == null or mesh.mesh == null:
@@ -1156,6 +1216,16 @@ func _shared_shell_footprint(path: String) -> Dictionary:
 			started = true
 		else:
 			box = box.merge(part)
+		# 地砖 = **水平薄片且顶面贴 y=0** 的件（几何判据，不认名字：共享壳是嵌套
+		# 子场景，`TILE_R00_C00` 在更深的层级，按名字一律拿不到）。
+		if part.size.y <= SHELL_TILE_MAX_THICKNESS_M and absf(part.end.y) <= SHELL_TILE_MAX_TOP_OFFSET_M:
+			# ⚠️ 存**原始砖心**，不归整。实测 `corridor_45x40` 的砖心是
+			# `-17.5 / -12.5 / … / +17.5`（= 2.5 + 5n），**不是** 5 的整数倍 ——
+			# 拿 `roundf(c/5)*5` 归整会把 2.5→0、7.5→10，格心整体漂 2.5 m，
+			# 门位判据于是在「有砖 / 没砖」之间给出反向答案（实测把凹口边上的 +2.5 判成合法）。
+			# 不去重也无所谓：一块砖最多几片网格，判 4 个门点的开销可以忽略。
+			var center := part.get_center()
+			tiles.append(Vector2(center.x, center.z))
 	var door_sides: Array = []
 	for node in instance.find_children("*", "", true, false):
 		for meta_name in node.get_meta_list():
@@ -1168,6 +1238,7 @@ func _shared_shell_footprint(path: String) -> Dictionary:
 	if started:
 		result["size"] = Vector2(box.size.x, box.size.z)
 	result["door_sides"] = door_sides
+	result["tiles"] = tiles
 	instance.free()
 	_shell_footprints[path] = result
 	return result
@@ -1208,7 +1279,7 @@ func _rotate_wall_side(side: String, deg: float) -> String:
 	return "south" if rotated.z > 0.0 else "north"
 
 
-## 子图房间的**承重地板**：一块顶面贴 `y = 0` 的静态盒，铺满整间房的矩形投影。
+## 子图房间的**承重地板**：顶面贴 `y = 0` 的静态盒，逐块盖在**真实地砖**上。
 ##
 ## 为什么必须补（业主 2026-10-21：「装配的房间有问题，会掉落。支线的」）：
 ##   主路房间脚下之所以踩得实，靠的**不是**房间自带的地砖，而是
@@ -1219,16 +1290,23 @@ func _rotate_wall_side(side: String, deg: float) -> String:
 ##   子图整条链挂在主图外 +1000 m（`BRANCH_ORIGIN_X_M`），`FloorSupport` 够不着 ⇒
 ##   玩家按 E 落在子图房里，脚下 66%~78% 的位置是虚空，一路掉出关卡。
 ##
+## 🔴 **按砖铺、不按包围盒铺**（业主 2026-10-22：「角色会跑到房间外面去」）。
+##   第一版按 `size` 铺了一整块矩形 —— 对 L 形 `corridor_45x40` 等于把 30×25 的**凹口**
+##   也填成了实心，实测 720 ㎡「能站但已经在房间外」：玩家从凹口那侧的门走出去，
+##   脚下居然有地板，一路走到房间外面还是不掉，看上去就是「场景漂了、人跑出房间」。
+##   现在只盖真正有地砖的位置（地砖就是房间的可走区）。
+##
 ## 口径与主路逐项对齐（不另立一套）：
 ##   · 层 1 / 掩码 0 —— 与 `FloorSupport` 同层，射线与角色落地判定都看得见；
 ##   · `PROCESS_MODE_ALWAYS` —— 承重板不能随流送窗口退出物理空间（同主路口径）；
 ##   · 厚度 `FLOOR_THICKNESS`（0.30）、盒心下移半个厚度 ⇒ **顶面正好在 y = 0**，
 ##     与地砖顶面共面，玩家胶囊落点不需要为它加任何偏移。
+##   · 每块向外放 `BRANCH_FLOOR_SUPPORT_OVERLAP_M`，吃掉相邻砖之间的建模缝。
 ##
-## 桥房的 12 m 下沉坑同样被这块板封在下面，**与主路完全一致**（主路 `FloorSupport`
-## 也不给坑开洞）。坑按设计是「下层不可达、纯装饰」，真掉进去反而卡死。
-func _ensure_floor_support(root: Node3D, center: Vector3, size: Vector2) -> void:
-	if root == null or not is_instance_valid(root):
+## 一件砖都量不到时（美术缺失 / 回退程序化灰盒）**退回整矩形**：宁可退化，
+## 也不能让玩家掉出关卡。
+func _ensure_floor_support(root: Node3D, room: DungeonRoom3D) -> void:
+	if root == null or not is_instance_valid(root) or room == null:
 		return
 	var body := root.get_node_or_null(BRANCH_FLOOR_SUPPORT_NAME) as StaticBody3D
 	if body == null:
@@ -1240,14 +1318,150 @@ func _ensure_floor_support(root: Node3D, center: Vector3, size: Vector2) -> void
 		body.collision_mask = 0
 		body.set_meta("branch_floor_support", true)
 		root.add_child(body)
-	var shape := BoxShape3D.new()
-	shape.size = Vector3(size.x, BRANCH_FLOOR_SUPPORT_THICKNESS_M, size.y)
-	var collision := CollisionShape3D.new()
-	collision.name = "Support_%02d" % body.get_child_count()
-	collision.shape = shape
-	# `body` 挂在 `root` 原点，房间中心是 `root` 局部坐标 ⇒ 直接用它做盒心。
-	collision.position = Vector3(center.x, -BRANCH_FLOOR_SUPPORT_THICKNESS_M * 0.5, center.z)
-	body.add_child(collision)
+	var boxes := _branch_floor_boxes(room)
+	for box in boxes:
+		var shape := BoxShape3D.new()
+		shape.size = Vector3(box.size.x, BRANCH_FLOOR_SUPPORT_THICKNESS_M, box.size.z)
+		var collision := CollisionShape3D.new()
+		collision.name = "%s_Support_%02d" % [str(room.room_id), body.get_child_count()]
+		collision.shape = shape
+		var center := box.get_center()
+		collision.position = Vector3(center.x, -BRANCH_FLOOR_SUPPORT_THICKNESS_M * 0.5, center.z)
+		body.add_child(collision)
+	if OS.get_environment("SS2_BRANCH_DEBUG") == "1":
+		print("[SecretBranch3D] 承重盒 %s：%d 格" % [str(room.room_id), boxes.size()])
+
+
+## 该房间的**传送落点**：真实可走面上、离房间几何中心最近的那个砖格心。
+##
+## 为什么不能直接用 `room.global_position`：那是**包围盒几何中心**，
+## 而 `corridor_45x40` 是 L 形 —— 45×40 的包围盒中心 (0,0) 正落在凹口里
+## （实测 `secret_0_0` 的中心就在凹口内）。玩家按 E 落下去等于落在房间外，
+## 凹口又刻意没有承重板 ⇒ 直接掉出关卡，看上去就是「场景漂了、人飘在房间外」。
+##
+## 口径：**无条件**取「有砖的格心」里离中心最近的一个。
+## 不做「中心若压在砖上就原样用中心」那支 —— 那种模糊判定会在砖块边界上
+## 给出不确定答案（中心离砖边 0.0 m，差一个容差就翻脸），实测正是它让
+## `secret_0_2` 的落点判成「在房间外」。矩形房的中心本来就落在格心上，位移为 0。
+## 一块砖都量不到时（美术缺失）退回中心（兜底，见 `_ensure_floor_support()`）。
+func _branch_landing_point(room: DungeonRoom3D) -> Vector3:
+	var center := room.global_position
+	var boxes := _branch_floor_boxes(room)
+	if boxes.size() <= 1:
+		return center
+	var best := center
+	var best_distance := INF
+	for box in boxes:
+		var box_center := box.get_center()
+		var candidate := Vector3(box_center.x, center.y, box_center.z)
+		var distance := Vector2(candidate.x - center.x, candidate.z - center.z).length()
+		if distance < best_distance:
+			best_distance = distance
+			best = candidate
+	return best
+
+
+## 该房间**真实可走面**的世界 AABB 列表（按 5 m 格聚合，一格一个盒）。
+##
+## 只认「水平薄片 + 顶面贴 y = 0」的网格件 —— 不认名字：子图的共享壳是**嵌套子场景**，
+## `TILE_R00_C00` 在更深的层级，按实例根名字一律拿不到（实测一件都量不到）。
+## 墙 11.9 m 高、家具更厚，都被这两个判据挡在外面。
+##
+## ⚠️ **必须按格聚合，不能一件网格一个盒**：一块地砖在美术里由好几片网格组成
+## （面板 + 缝条 + 压条），实测 7 间房会铺出 **7288 块**承重盒，物理广相每帧都在扫。
+## 归格口径与砖心一致：格心 = `-half + (k + 0.5) × 5`。
+## 为什么是这个式子而不是「5 的整数倍」：砖心随该轴**块数奇偶**变 ——
+## 40 宽（偶数块）砖心是 2.5 + 5n（-17.5 / -12.5 / …），
+## 45 深（奇数块）砖心是 5n（-20 / -15 / …）。
+## 统一写成 `-half + (k+0.5)×5` 两种都落得准。
+##
+## 量不到任何砖时返回**整块包围盒**（兜底，见 `_ensure_floor_support()` 头注释）。
+func _branch_floor_boxes(room: DungeonRoom3D) -> Array[AABB]:
+	var dims := room.get_dimensions()
+	var center := room.global_position
+	var half_x := dims.x * 0.5
+	var half_z := dims.y * 0.5
+	var overlap := BRANCH_FLOOR_SUPPORT_OVERLAP_M
+	# 格索引 → 该格是否真有砖。
+	var tiles: Array[AABB] = []
+	for node in room.find_children("*", "MeshInstance3D", true, false):
+		var mesh := node as MeshInstance3D
+		if mesh == null or mesh.mesh == null:
+			continue
+		# ⚠️ 不能用 `is_visible_in_tree()`：建房那一刻整棵支线树**通常还没入树**
+		# （`build()` 早于父场景挂载），`is_visible_in_tree()` 会一律返回 false ⇒
+		# 一块砖都量不到 ⇒ 兜底成整矩形 ⇒ 传送落点退回几何中心 ⇒ L 形的中心
+		# 正好落在凹口里，玩家按 E 掉出关卡。只沿父链看 `visible` 就够了。
+		if _hidden_in_shell(mesh, room):
+			continue
+		var world := _mesh_world_aabb(mesh)
+		if world.size.y > SHELL_TILE_MAX_THICKNESS_M:
+			continue
+		# 只认**顶面贴本间地面**的片：桥房的坑底砖在 y=-12 一带，被这条挡掉。
+		if absf(world.position.y + world.size.y - center.y) > SHELL_TILE_MAX_TOP_OFFSET_M:
+			continue
+		# 只留**够大**的片：一块 5×5 砖还挂着压条/缝条（很窄），按面积筛掉它们，
+		# 一砖就只剩一片。不筛的话承重盒会涨到 7288 块。
+		if world.size.x * world.size.z < SHELL_TILE_MIN_AREA_M2:
+			continue
+		tiles.append(world)
+	if tiles.is_empty():
+		return [AABB(
+			Vector3(center.x - half_x, 0.0, center.z - half_z),
+			Vector3(dims.x, 1.0, dims.y)
+		)]
+	# 🔴 格原点取**地砖自身的最小角**，不取房间包围盒。
+	# 为什么：砖心随该轴的**块数奇偶**变（40 宽是 2.5+5n、45 深是 5n），
+	# 还夹着 -7.49 这种浮点砖心。拿房间边界推格心，会在某些壳上把整列砖
+	# 挪到隔壁格 —— 于是凭空出现「有砖没板」（掉下去）或「有板没砖」（走出房间）。
+	# 以地砖最小角为基准、按 `round` 求格索引，浮点噪声被并掉，与砖的真实位置零假设。
+	var origin_x := INF
+	var origin_z := INF
+	for tile in tiles:
+		origin_x = minf(origin_x, tile.position.x)
+		origin_z = minf(origin_z, tile.position.z)
+	var cells := {}
+	for tile in tiles:
+		var index := Vector2i(
+			roundi((tile.position.x - origin_x) / SHELL_TILE_GRID_M),
+			roundi((tile.position.z - origin_z) / SHELL_TILE_GRID_M)
+		)
+		cells[index] = true
+	var out: Array[AABB] = []
+	for key in cells.keys():
+		var index := key as Vector2i
+		out.append(AABB(
+			Vector3(
+				origin_x + float(index.x) * SHELL_TILE_GRID_M - overlap, 0.0,
+				origin_z + float(index.y) * SHELL_TILE_GRID_M - overlap
+			),
+			Vector3(
+				SHELL_TILE_GRID_M + overlap * 2.0, 1.0,
+				SHELL_TILE_GRID_M + overlap * 2.0
+			)
+		))
+	return out
+
+
+## 网格件的世界 AABB（8 角点变换后取包围）。
+func _mesh_world_aabb(mesh: MeshInstance3D) -> AABB:
+	var local := mesh.get_aabb()
+	var xform := mesh.global_transform
+	var box := AABB()
+	var first := true
+	for index in range(8):
+		var corner := local.position + Vector3(
+			local.size.x if (index & 1) else 0.0,
+			local.size.y if (index & 2) else 0.0,
+			local.size.z if (index & 4) else 0.0,
+		)
+		var point := xform * corner
+		if first:
+			box = AABB(point, Vector3.ZERO)
+			first = false
+		else:
+			box = box.expand(point)
+	return box
 
 
 ## 玩家踏进子图房间（房间自带 `RoomTrigger` 的 Area3D 触发）。
@@ -1315,6 +1529,106 @@ func room_encounter_snapshot() -> Array:
 ## 子图链沿 X 串联 ⇒ 门只落在东西墙，墙长 = 房间深度 `size.y`。
 func _branch_door_lane(size: Vector2) -> float:
 	return ROOM_DOOR_LANE.nearest_offset(size.y)
+
+
+## 一条子图链**共用**的门位槽（所有房间同值）。
+##
+## 为什么必须整条链共用一个：相邻两间隔 5 m 走廊、沿 X 直连，走廊是**直线**
+## ⇒ 两端门必须同轴（`lane` 相同）。每间各算一个只在「各房型 `size.y` 相同」时
+## 才碰巧相等，混入 `bridge_60x50`（深度 30）就会错位。
+##
+## 三道筛选，全部可量、不靠猜：
+##   ① **模板合法槽**：`RoomDoorLane.lane_offsets(size.y)`，与白盒校验同一份实现；
+##   ② **链内交集**：深度不同的房型槽集不同，取所有房间都有的那些；
+##   ③ **真实砖格命中**：门洞点（房间帧 `(±半宽, lane)`）必须落在壳的**地砖格**上。
+##      `corridor_45x40` 是 L 形，凹口那 30×25 既没有砖也没有外墙 ——
+##      门按中线开就会落在凹口上，玩家从走廊走进来直接站在房间外
+##      （业主 2026-10-22「角色会跑到房间外面去」）。
+##
+## 通过者里取**离中线最近**的；一个都没有才退回 `nearest_offset`（行为与旧版一致）。
+func _solve_chain_lane(entries: Array) -> float:
+	if entries.is_empty():
+		return 0.0
+	# ① + ②：链内合法槽交集。
+	var shared: Array[float] = []
+	for index in range(entries.size()):
+		var size := (entries[index] as Dictionary).get("size", Vector2.ZERO) as Vector2
+		var offsets := ROOM_DOOR_LANE.lane_offsets(size.y)
+		if index == 0:
+			shared.assign(offsets)
+			continue
+		var kept: Array[float] = []
+		for offset in shared:
+			for candidate in offsets:
+				if is_equal_approx(offset, candidate):
+					kept.append(offset)
+					break
+		shared.assign(kept)
+	if shared.is_empty():
+		var fallback := (entries[0] as Dictionary).get("size", Vector2.ZERO) as Vector2
+		return ROOM_DOOR_LANE.nearest_offset(fallback.y)
+	# 按「离中线由近及远」试，取第一个全链通过者。
+	shared.sort_custom(func(a: float, b: float) -> bool: return absf(a) < absf(b))
+	for lane in shared:
+		if _chain_lane_clears_footprints(entries, lane):
+			return lane
+	push_warning(
+		"[SecretBranch3D] 子图链没有「所有门都落在真实地砖上」的门位槽 —— 退回最近槽 %.1f，"
+		% ROOM_DOOR_LANE.nearest_offset(
+			((entries[0] as Dictionary).get("size", Vector2.ZERO) as Vector2).y
+		)
+		+ "可能出现「门开在凹口上」。"
+	)
+	return ROOM_DOOR_LANE.nearest_offset(
+		((entries[0] as Dictionary).get("size", Vector2.ZERO) as Vector2).y
+	)
+
+
+## 该 lane 下，链里每间房的每扇门是否都落在壳的真砖格上。
+func _chain_lane_clears_footprints(entries: Array, lane: float) -> bool:
+	for value in entries:
+		var entry := value as Dictionary
+		var size := entry.get("size", Vector2.ZERO) as Vector2
+		var path := str(entry.get("path", ""))
+		var deg := float(entry.get("layout_deg", 0.0))
+		var doors := entry.get("doors", []) as Array
+		if path.is_empty() or doors.is_empty():
+			continue
+		var footprint := _shared_shell_footprint(path)
+		var tiles := footprint.get("tiles", []) as Array
+		if tiles.is_empty():
+			# 量不到砖格（矩形壳的砖可能被别的判据吃掉了）⇒ 不做否决，
+			# 否则一个量法意外会把整条链的门位判死。
+			continue
+		var half_x := size.x * 0.5
+		# 房间帧 → 壳局部（壳只绕原点转过 `deg`）。
+		var basis := Basis(Vector3.UP, deg_to_rad(-deg))
+		for door_value in doors:
+			var side := str(door_value)
+			var point := Vector3.ZERO
+			match side:
+				"east":
+					point = Vector3(half_x, 0.0, lane)
+				"west":
+					point = Vector3(-half_x, 0.0, lane)
+				_:
+					# 子图链只开东西门；出现南北门说明上游写错了，不在这里否决。
+					continue
+			var local := basis * point
+			if not _tiles_contain(tiles, Vector2(local.x, local.z)):
+				return false
+	return true
+
+
+## `(x, z)` 是否落在某个砖格内（±半格 + 容差）。
+func _tiles_contain(tiles: Array, point: Vector2) -> bool:
+	for value in tiles:
+		var cell := value as Vector2
+		var inside_x := absf(point.x - cell.x) <= SHELL_TILE_HALF_M + SHELL_TILE_HIT_TOLERANCE_M
+		var inside_z := absf(point.y - cell.y) <= SHELL_TILE_HALF_M + SHELL_TILE_HIT_TOLERANCE_M
+		if inside_x and inside_z:
+			return true
+	return false
 
 
 ## 模板 → 共享房壳的完整路径。缺 id 或缺文件返回空串（调用方回退程序化）。

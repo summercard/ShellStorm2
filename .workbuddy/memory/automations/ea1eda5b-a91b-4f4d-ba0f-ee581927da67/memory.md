@@ -5,6 +5,15 @@
 
 ## 执行历史
 
+### 2026-10-22 05:05 — **成功**（常规全流程，一次跑通，无重试）
+- 首轮即通过：导出 358.4 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。总耗时 4m31s。
+- 包：`ShellStorm2.exe`，**375,780,488 B**（358.4 MiB），SHA256 `24ba5ab61869fbb5abf8e6e03994093bc1d473b86b0454f0159aa9682c14ab33`。
+- 线上独立复验：直链 HEAD 200 / Content-Length 375,780,488（＝本地）/ Last-Modified `21 Oct 2026 21:05:38 GMT`；**整包重下载 375,780,488 B（15s @26.3 MB/s），SHA256 逐字节一致**；更新页 200 / 9,885 B（＝本地），4 个 `<h3>`；`/ShellStorm2.exe` 子路径 200 同大小；更新日志 md 200 / 6,475 B。旧 `更新日志_2026-10-21/20.md`、`发布失败报告_2026-10-16.md` 均 **404**。站点列表仍只 `shellstorm2-20261012-190519`（3 files / 375,796,848 B）。
+- 更新内容：CHANGELOG 4 条 / 提交 1 条（`72929957` 67 项，另一条自动化 04:03 产生）/ 未提交 4 项（`assets/registry` 的 3 个 `.before_ugstreet02/03/04` 基线备份 + `tools/_tmp_flat_capture.gd.uid`，无害）。
+- 四条＝room_08 墙位六口径审计（真因是 L 形凹口朝向：美术帧 40×45 vs 房间 45×40，待业主裁定，未动 production）、支线房间掉落+壳装歪（补 `SecretFloorSupport` + 共享壳配准，断言 26/28）、03 号房暗门南墙→北墙（数据源保持 south 靠 180° 旋转取反）、暗门破板修复（A26 反空过写法）。
+- 昨日修好的采集器生效：`# YYYY-MM-DD` 一级标题被正确计入，未再现「0 条」。
+- 合规：`project.godot` 第 56 行 `config/name="弹壳风暴2"` 未改；**未执行 commit/push**；冒烟隔离 `APPDATA`；未新建站点；临时下载文件已删。
+
 ### 2026-10-21 05:08 — **成功**（首轮发布 + 修采集器后覆盖重发文档）
 - 首轮 05:04：导出 358.4 MiB → 三道门禁全绿 → 发布 → 线上校验通过。但**更新内容被统计成「CHANGELOG 0 条」**，而实际有 4 条 10-20 条目。
 - **根因**：`scripts/collect_daily_changes.py` 的 `_ENTRY_RE` 只认 `## YYYY-MM-DD`。CHANGELOG 自 10-20 起新条目写成 `# YYYY-MM-DD`（一级标题），另有 `- 2026-10-20 · 分类：正文` 的日期列项写法，两种都被静默跳过。

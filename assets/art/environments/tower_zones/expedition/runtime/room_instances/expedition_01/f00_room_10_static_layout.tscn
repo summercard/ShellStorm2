@@ -118,8 +118,13 @@ transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 1, 1
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_A"
 metadata/authored_slot_role = "room_type_component"
 
+[node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT2" parent="." unique_id=1104484974 instance=ExtResource("7_7kw2c")]
+transform = Transform3D(0.03418647, 0.301553, -0.95283663, -0.4193316, 0.8697425, 0.26021034, 0.9071895, 0.39065877, 0.15618412, 2.831902, 7.6289883, 12.156184)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_B"
+metadata/authored_slot_role = "room_type_component"
+
 [node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT" parent="." unique_id=1458320959 instance=ExtResource("7_7kw2c")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 1.5000001, 10.3825, 3.6)
+transform = Transform3D(1.1256571e-08, -0.3300696, -0.94395673, 3.93604e-09, 0.94395673, -0.3300696, 1, 0, 1.1924881e-08, -0.17665589, 8.076103, 7.9798746)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_B"
 metadata/authored_slot_role = "room_type_component"
 
@@ -129,7 +134,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_C"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND" parent="." unique_id=914664138 instance=ExtResource("9_uki4o")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -0.8, 0, 3.4969112e-08)
+transform = Transform3D(-0.41119617, 0, -0.9115469, 0, 1, 0, 0.9115469, 0, -0.41119617, -7.291655, -9.536743e-07, -6.4958925)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND"
 metadata/authored_slot_role = "room_type_component"
 
@@ -391,7 +396,7 @@ metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
 [node name="ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE" parent="." unique_id=758615628 instance=ExtResource("13_wsjrs")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0.8000007, 0, 16.7)
+transform = Transform3D(-0.9958225, 0, 0.09131036, 0, 1, 0, -0.09131036, 0, -0.9958225, -1.5562191, 0, 19.015238)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK"
 metadata/authored_slot_role = "room_type_component"
 
@@ -406,12 +411,12 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST" parent="." unique_id=312533677 instance=ExtResource("16_35n5t")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -0.8124998, -0.0085, 4.15)
+transform = Transform3D(-0.5426762, 0, 0.839942, 0, 1, 0, -0.839942, 0, -0.5426762, -8.902536, -0.0085, 4.323748)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST" parent="." unique_id=1841187293 instance=ExtResource("16_35n5t")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -0.8125002, -0.0085, -4.15)
+transform = Transform3D(-0.18474051, 0, 0.98278725, 0, 1, 0, -0.98278725, 0, -0.18474051, -8.031921, -0.0085, -10.520555)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
@@ -471,7 +476,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02" parent="." unique_id=1091483304 instance=ExtResource("24_ypcvc")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 8.7925, -0.0085, -5.5000005)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 9.80503, -0.0085, -5.5000005)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/authored_slot_role = "room_type_component"
 
@@ -694,7 +699,7 @@ metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="GenericShell_WALL_north_ym235_m52_5" parent="." unique_id=1981608357 instance=ExtResource("36_55c5w")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 20)
+transform = Transform3D(0.7065512, -0.7076619, 0, 0.7076619, 0.7065512, 0, 0, 0, 1, 7.7115684, 2.5909915, 19.60898)
 metadata/grid_unit_m = 5.0
 metadata/tower_wall_direction = "south"
 metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
