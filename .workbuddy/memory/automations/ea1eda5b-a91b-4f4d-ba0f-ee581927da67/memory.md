@@ -5,6 +5,15 @@
 
 ## 执行历史
 
+### 2026-10-23 05:05 — **成功**（常规全流程，一次跑通，无重试）
+- 首轮即通过：导出 358.3 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。总耗时 4m15s。
+- 包：`ShellStorm2.exe`，**375,753,000 B**（358.3 MiB），SHA256 `faa0366a520ea5683b7f5fd2d2dac5c7c415818c1122b4bca188c900949211cd`。
+- 线上独立复验：直链 HEAD 200 / Content-Length 375,753,000（＝本地）/ Last-Modified `22 Oct 2026 21:05:27 GMT`；**整包重下载 375,753,000 B（7.96s @47.2 MB/s），SHA256 逐字节一致**；更新页 200 / 5,149 B（＝本地），1 个 `<h3>`；更新日志 md 200 / 2,608 B；旧 `更新日志_2026-10-22/21.md`、`发布失败报告_2026-10-16.md` 均 **404**。站点列表仍只 1 个 `shellstorm2-20261012-190519`（3 files / 375,760,757 B＝exe+页+md）。
+- 更新内容：CHANGELOG **1 条** / 提交 1 条（`22bb0c89` 18 项，另一条自动化 04:03 产生）/ 未提交 4 项（`assets/registry` 3 个 `.before_ugstreet02/03/04` 基线备份 + `tools/_tmp_flat_capture.gd.uid`，无害）。
+- 唯一一条＝`# 2026-10-22 支线「位置会飘逸、角色跑到房间外面去」`（L 形凹口三连修：门洞开在凹口上 → 整链共用槽 `_solve_chain_lane()` 实选 +7.5；承重板改只盖真砖 `_branch_floor_boxes()` 278 块；落点取有砖格心 `_branch_landing_point()`；断言 28→30）。**只有 1 条是真实情况不是采集漏报**：窗口 since_date=2026-10-22，而 10-21 那 4 条已在昨日发布，10-23 凌晨无新条目（git 的 18 项是 10-22 工作的补提交）。
+- 合规：`project.godot` 第 56 行 `config/name="弹壳风暴2"` 未改（`git diff project.godot` 空）；HEAD 仍 `22bb0c89`，**未执行 commit/push**；冒烟隔离 `APPDATA`；未新建站点；临时下载文件已删。
+- 观察：包体 358.3 MiB 与昨日 358.4 MiB 基本持平，无异常漂移。
+
 ### 2026-10-22 05:05 — **成功**（常规全流程，一次跑通，无重试）
 - 首轮即通过：导出 358.4 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。总耗时 4m31s。
 - 包：`ShellStorm2.exe`，**375,780,488 B**（358.4 MiB），SHA256 `24ba5ab61869fbb5abf8e6e03994093bc1d473b86b0454f0159aa9682c14ab33`。
