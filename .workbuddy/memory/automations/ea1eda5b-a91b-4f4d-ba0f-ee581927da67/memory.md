@@ -5,6 +5,15 @@
 
 ## 执行历史
 
+### 2026-10-24 05:04 — **成功**（常规全流程，一次跑通，无重试）
+- 首轮即通过：导出 358.3 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。总耗时 3m24s。
+- 包：`ShellStorm2.exe`，**375,753,096 B**（358.3 MiB），SHA256 `f3c0284c5369b9772ef1fb05d7f01349f4581bea2db2e06a768db4cf657ef959`。
+- 线上独立复验：直链 HEAD 200 / Content-Length 375,753,096（＝本地）/ Last-Modified `23 Oct 2026 21:04:08 GMT`；**整包重下载 375,753,096 B（7.0s @51.2 MB/s），SHA256 逐字节一致**；更新页 200 / 2,966 B（＝本地），`<h1>弹壳风暴2</h1>`、按钮 `href="ShellStorm2.exe"` 子路径 200 同大小；更新日志 md 200 / 799 B（＝本地）；旧 `更新日志_2026-10-23.md`、`发布失败报告_2026-10-16.md` 均 **404**。站点列表 `shellstorm2-20261012-190519` 仍 3 files / 375,756,861 B（exe+页+md 之和，对得上）。
+- **更新内容：CHANGELOG 0 条 / 提交 1 条 / 未提交 4 项**。0 条已回源核对：CHANGELOG 文件内不存在 10-23 / 10-24 的标题条目，也不存在这两个日期的日期列项 —— 是真实「没写」，不是采集漏报（`#`/`##` 漂移问题昨日已修）。
+- **包体几乎与昨日全等**（+96 B）：因为 10-23 的唯一工作（`2026-10-23_anim_showcase_reel.md`：128 剪辑角色全动画总览 jpg/mp4）全部落在 `tools/` + `scripts/`，而 `export_presets.cfg` 的 `exclude_filter` 明确排除 `tools/*,scripts/*,docs/*` ⇒ **本日包对玩家零玩法变更**。页面上「窗口内 CHANGELOG 没有新增条目」在功能意义上是诚实的。
+- 合规：`project.godot` 第 56 行 `config/name="弹壳风暴2"` 未改（`git diff project.godot` 空）；HEAD 仍 `69669435`（「2026-10-24 每日自动提交：9 项变更」，另一条自动化 04:02 产生），**未执行 commit/push**；冒烟隔离 `APPDATA`；未新建站点；临时下载文件已删。发布目录事前事后都只有 3 个发布物。
+- 待业主处理：**10-23 有开发记录但没写 CHANGELOG 条目**，导致更新页只有提交记录、没有内容摘要。建议补一条 `# 2026-10-23 …`（开发记录已备好素材），下一轮即会带上。
+
 ### 2026-10-23 05:05 — **成功**（常规全流程，一次跑通，无重试）
 - 首轮即通过：导出 358.3 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。总耗时 4m15s。
 - 包：`ShellStorm2.exe`，**375,753,000 B**（358.3 MiB），SHA256 `faa0366a520ea5683b7f5fd2d2dac5c7c415818c1122b4bca188c900949211cd`。
