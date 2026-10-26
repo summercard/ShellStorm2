@@ -23,6 +23,10 @@ const LIBRARY_PATH := "res://assets/art/characters/player/chr_player_capsule01_3
 const CHAR_HEIGHT := 1.50
 ## 角色占格子高度的比例，其余留给动作幅度与标签。
 const CELL_FILL := 0.62
+## 挂道具时角色占比要小一些：枪沿角色局部 -Z 伸出约 1 m，75° 侧视后几乎全落在横向上。
+## 但**不能靠一味缩小角色**来腾地方（缩到 0.46 时人只有格高一半，细节全丢）；
+## 正确做法是同时把格子做宽（见脚本里各主题的 cell 比例）。布局可用 "cell_fill" 覆盖。
+const CELL_FILL_WITH_PROPS := 0.55
 ## 脚底离格子底边的余量（占格高比例）。
 const FOOT_MARGIN := 0.06
 ## 与 PlayerAvatar3D.BUNNY_LINEAR_SCALE 同值。挂载武器按它缩放，保证与游戏内一致。
@@ -57,6 +61,8 @@ var _still := false
 var _still_phase := -1.0
 var _use_weapons := false
 var _avatar_yaw := 26.0
+## 播放倍率：<1 放慢，让开火这种 3~4 cm 的后坐看得见。只缩放采样相位推进速度。
+var _playback := 1.0
 var _yaw := 0.0
 var _pitch := 0.0
 var _cols := 1
@@ -82,6 +88,8 @@ func _ready() -> void:
 	_build_environment()
 	_build_grid()
 	await RenderingServer.frame_post_draw
+	_center_cells()
+	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 
 	DirAccess.make_dir_recursive_absolute(_out_dir)
@@ -104,7 +112,7 @@ func _ready() -> void:
 		get_tree().quit(0)
 		return
 
-	var dt := 1.0 / float(_fps)
+	var dt := 1.0 / float(_fps) * _playback
 	for f in range(_frames):
 		for entry in _entries:
 			_advance(entry, dt)
@@ -130,6 +138,7 @@ func _parse_args() -> void:
 			"--yaw": _yaw = float(value)
 			"--pitch": _pitch = float(value)
 			"--avatar-yaw": _avatar_yaw = float(value)
+			"--playback": _playback = maxf(0.05, float(value))
 			"--phase": _still_phase = float(value)
 			"--no-weapons": _use_weapons = false
 			"--with-props": _use_weapons = true
@@ -147,7 +156,8 @@ func _build_viewport() -> void:
 	_stage = Node3D.new()
 	_viewport.add_child(_stage)
 
-	_cell_h = CHAR_HEIGHT / CELL_FILL
+	var fill := CELL_FILL_WITH_PROPS if _use_weapons else float(_layout.get("cell_fill", CELL_FILL))
+	_cell_h = CHAR_HEIGHT / fill
 	_cell_w = _cell_h * (float(_cell_px.x) / float(_cell_px.y))
 
 	_camera = Camera3D.new()
@@ -220,11 +230,14 @@ func _build_grid() -> void:
 			0.0
 		)
 		_stage.add_child(wrapper)
+		# 展示朝向挂在外层 wrapper 上，不能挂在 avatar 上：
+		# 动画库的 `root` 轨道每帧都会被采样，avatar 的旋转会被重置成单位四元数，
+		# 挂在自己身上的 yaw 会被逐帧抹掉（实测转 72° 完全没生效）。
+		if absf(_avatar_yaw) > 0.01:
+			wrapper.rotation_degrees.y = _avatar_yaw
 
 		var avatar: Node3D = AVATAR_SCENE.instantiate()
 		wrapper.add_child(avatar)
-		if absf(_avatar_yaw) > 0.01:
-			avatar.rotation_degrees.y = _avatar_yaw
 		# 保留 PlayerAvatar3D 脚本只为拿到它 _ready 的外观装配（面罩/配色）；
 		# 随后停掉 _process，避免状态机每帧覆写手工采样的骨骼。
 		avatar.set_process(false)
@@ -255,6 +268,7 @@ func _build_grid() -> void:
 		# 基线对齐：把该剪辑所有帧里骨骼的最低点拉到格子基线上。
 		# 否则 dead/hurt 这类整体下沉的剪辑会比 idle 低半头，横向比较时读不出差异。
 		wrapper.position.y -= _lowest_bone_y(clip.get("frames", []))
+		entry["base_position"] = wrapper.position
 		_entries.append(entry)
 		_apply_pose(entry)
 
@@ -349,7 +363,14 @@ func _apply_pose(entry: Dictionary) -> void:
 		if target == null or not a.has(bone) or not b.has(bone):
 			continue
 		target.position = _vec(a[bone].p).lerp(_vec(b[bone].p), blend)
-		target.quaternion = _quat(a[bone].q).slerp(_quat(b[bone].q), blend)
+		if bone == "weapon_socket":
+			# 游戏内真值：CharacterMotionLibrary3D 只把插槽**位置**挪到掌心，
+			# 朝向会回落到 rest（单位旋转）—— 实测 socket 前向在游戏里是水平的
+			# （-0.60, 0, -0.80，只跟随 visual_root 的 yaw）。若照搬库里的四元数，
+			# 枪口会被拧成朝上挡脸（sidearm_idle 的插槽 -Z 是 (0.12, 0.82, -0.56)，55° 朝上）。
+			target.quaternion = Quaternion.IDENTITY
+		else:
+			target.quaternion = _quat(a[bone].q).slerp(_quat(b[bone].q), blend)
 		target.scale = _vec(a[bone].s).lerp(_vec(b[bone].s), blend)
 	# 基础/空手剪辑没有 weapon_socket 轨道：把持物点跟到右手。
 	if not a.has("weapon_socket"):
@@ -359,6 +380,58 @@ func _apply_pose(entry: Dictionary) -> void:
 			socket.position = WEAPON_SOCKET_REST
 			socket.quaternion = Quaternion.IDENTITY
 			socket.global_position = hand_r.global_position
+
+
+## 按实际渲染出来的网格包围盒把每格内容摆正。
+##
+## 为什么不能只靠"原点在格子中心"：枪沿角色局部 -Z 伸出去 ~1 m，角色转到 75° 后
+## 这段长度几乎完全落在屏幕横向上，原点居中就等于内容整体偏出半格（实测开火那三行
+## 角色被切掉一半）。
+##
+## 居中基准**排除展示道具**：观众看的是角色动作，若把枪也算进包围盒中心，
+## 角色本体就会被推到格子一侧（枪身 1 m 全摊在角色右边）。所以横向只按角色本体居中，
+## 道具允许伸出格子；纵向仍按本体脚底对齐基线。
+func _center_cells() -> void:
+	for entry: Dictionary in _entries:
+		var wrapper: Node3D = entry.wrapper
+		if wrapper == null or not is_instance_valid(wrapper):
+			continue
+		var box := _visible_aabb(wrapper, true)
+		if box.size == Vector3.ZERO:
+			box = _visible_aabb(wrapper, false)
+		if box.size == Vector3.ZERO:
+			continue
+		var base: Vector3 = entry.get("base_position", wrapper.position)
+		var center_x := (box.position.x + box.end.x) * 0.5
+		wrapper.position.x += base.x - center_x
+		wrapper.position.y += base.y - box.position.y
+
+
+## 该子树里所有可见 MeshInstance3D 在世界空间的合并包围盒。
+## `exclude_props` 为真时跳过展示道具（ShowcaseProp）子树。
+func _visible_aabb(node: Node, exclude_props: bool) -> AABB:
+	var merged := AABB()
+	var seen := false
+	for mesh_node: Node in _collect_visible_meshes(node, exclude_props):
+		var mesh := mesh_node as MeshInstance3D
+		var local := mesh.global_transform * mesh.get_aabb()
+		if not seen:
+			merged = local
+			seen = true
+		else:
+			merged = merged.merge(local)
+	return merged if seen else AABB()
+
+
+func _collect_visible_meshes(node: Node, exclude_props: bool) -> Array:
+	var out := []
+	if exclude_props and node.name == "ShowcaseProp":
+		return out
+	if node is MeshInstance3D and (node as MeshInstance3D).is_visible_in_tree():
+		out.append(node)
+	for child in node.get_children():
+		out.append_array(_collect_visible_meshes(child, exclude_props))
+	return out
 
 
 func _find_node(root: Node, node_name: String) -> Node3D:
