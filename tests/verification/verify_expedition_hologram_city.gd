@@ -7,11 +7,19 @@ class RecordingMenu extends RogueMapSelectMenu:
 	func _enter_level(level_id: String) -> void:
 		requests.append(level_id)
 
+## 解锁档开关。支持命令行 `-- --unlocked`，也支持环境变量 ——
+## 后者是因为 `run_verification_suite.sh` 不给单场景传额外参数，
+## 导致"已解锁 ⇒ 多一个入口"这条分支**在套件里从来没被跑过**。
+## 加上环境变量入口后，套件可以这样覆盖：`HOLOGRAM_CITY_UNLOCKED=1 bash scripts/run_verification_suite.sh scene verify_expedition_hologram_city`
+func _is_unlocked_run() -> bool:
+	return "--unlocked" in OS.get_cmdline_user_args() or OS.get_environment("HOLOGRAM_CITY_UNLOCKED") == "1"
+
+
 func _ready() -> void:
 	if "--tower" in OS.get_cmdline_user_args():
 		await _verify_tower()
 		return
-	BaseManager.data.expedition_02_unlocked = "--unlocked" in OS.get_cmdline_user_args()
+	BaseManager.data.expedition_02_unlocked = _is_unlocked_run()
 	var environment := WorldEnvironment.new()
 	var env := Environment.new()
 	env.background_mode = Environment.BG_COLOR
@@ -81,13 +89,32 @@ func _ready() -> void:
 		Input.flush_buffered_events()
 	_expect(menu.requests == menu.LEVEL_IDS, "mouse clicks routed to wrong levels")
 	_expect(menu._city.site_reveal(0) == 1.0 and menu._city.site_reveal(1) == 1.0, "staged sites incomplete")
-	if "--unlocked" in OS.get_cmdline_user_args():
-		_expect(menu._city.sites.size() == 3, "unlocked 02 missing")
+	# 全息城的入口数必须等于导航列表长度 —— 这才是真正的不变式。
+	# 早期两边各写一份硬编码数组（菜单一份、城市一份），断言又各写死数字，
+	# 结果"多一个入口"这类错误反而被两个数字同时写死给掩盖了。
+	_expect(menu._city.sites.size() == menu.LEVEL_IDS.size(), "city entry count drifted from navigation list")
+	if _is_unlocked_run():
+		_expect(menu._city.sites.size() == 4, "unlocked 02 (plus pending 03) missing")
 		var front: Vector2 = menu._camera.unproject_position(menu._city.markers[0].global_position)
 		var rear: Vector2 = menu._camera.unproject_position(menu._city.markers[2].global_position)
 		_expect(rear.y < front.y and rear.x > front.x, "02 not behind 01 in reference region")
 	else:
-		_expect(menu._city.sites.size() == 2, "locked 02 still present")
+		# 未解锁 02 ⇒ 只剩 01 / 99 / 待开放的 03
+		_expect(menu._city.sites.size() == 3, "locked navigation entry count wrong")
+	# 视廊遮挡：**可见性不能只靠"屏幕坐标在视口内"来证明**。
+	#
+	# `_pick()` 是射线与标记平面求交，不判遮挡；`unproject_position` 也不判。
+	# 于是"牌面被楼群整个挡住"这种缺陷会让上面每条断言都绿 —— 03 首次上线正是如此：
+	# 断言全过，截图里却找不到它。这里直接数"挡在镜头与牌面之间"的方块实例。
+	#
+	# 只约束**声明了 `sightline` 的入口**（当前是 03）。01/99 走主循环挖空的老路径、
+	# 02 是历史上就有遮挡的既有观感，给它们补硬数量断言等于顺手改既有画面。
+	for i in menu.LEVEL_IDS.size():
+		var sightline := float(menu._city._anchors[i].get("sightline", 0.0))
+		if sightline <= 0.0:
+			continue
+		var occluders: int = menu._city.sightline_occluders(i, sightline)
+		_expect(occluders == 0, "entry %s hidden behind %d blocks (sightline %.1f not cleared)" % [menu.LEVEL_IDS[i], occluders, sightline])
 	menu._focus = -1
 	await get_tree().create_timer(0.6).timeout
 	await _shot("active")

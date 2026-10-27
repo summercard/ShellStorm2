@@ -5,6 +5,16 @@
 
 ## 执行历史
 
+### 2026-10-27 05:04 — **成功**（常规全流程，一次跑通，无重试）
+- 首轮即通过：导出 358.3 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。总耗时 4m07s。
+- 包：`ShellStorm2.exe`，**375,753,096 B**（358.3 MiB），SHA256 `f3c0284c5369b9772ef1fb05d7f01349f4581bea2db2e06a768db4cf657ef959`。
+- **SHA256 与 10-24/25/26 版逐字节全等**，但今天 `project.godot` 确有改动，故专门做了归因（不是复用旧包）：exe mtime `2026-10-27 05:03:18`（今日重新导出），Last-Modified 刷新为 `26 Oct 2026 21:04:41 GMT`。真因＝过去 24h 唯一提交 `941d6769` 的 5 项里，`project.godot` 只改了 `config/features` 引擎标识 4.6→4.7，**已用字节级检索证实该串不进入导出 PCK**（`\x03\x00\x00\x004.7\x0c\x00\x00\x00Forward Plus` 与 4.6 版本均查不到，`GDPC` 头在偏移 43,740,046）；其余 4 项是 `tools/`、`scripts/`、`docs/`（被 `exclude_filter` 排除）+ 本自动化 memory ⇒ 确定性导出同一份游戏内容。**本日包对玩家零玩法变更。**
+- 线上独立复验：直链 HEAD 200 / Content-Length 375,753,096（＝本地）/ Last-Modified `26 Oct 2026 21:04:41 GMT`；**整包重下载 375,753,096 B（3.51s @107 MB/s），sha256 + `cmp` 逐字节一致**；更新页 200 / 2,966 B（＝本地），`<h1>弹壳风暴2</h1>`、按钮 `href="ShellStorm2.exe"` 子路径 200；更新日志 md 200 / 799 B（＝本地）；旧 `更新日志_2026-10-26/25.md`、`发布失败报告_2026-10-16.md` 均 **404**。站点列表 `shellstorm2-20261012-190519` 仍 3 files / 375,756,861 B（＝exe+页+md 之和）。未新建站点（列表无 10-27 新站）。
+- **更新内容：CHANGELOG 0 条 / 提交 1 条 / 未提交 4 项**。0 条已回源核对：`grep -nE '2026-10-(2[3-7])'` **全文件零命中**，首条仍是 `# 2026-10-22 …`，mtime 仍 `Oct 22 16:37` ⇒ 真实「没写」，非采集漏报。
+- 合规：`config/name="弹壳风暴2"` 未改（第 56 行核对，`git diff project.godot` 空）；HEAD 仍 `941d6769`，**未执行 commit/push**；冒烟隔离 `APPDATA`；发布目录事前事后都只有 3 个发布物；临时下载文件已删。
+- 待业主处理（**连续第四天挂账**）：CHANGELOG 自 10-22 后一条未写，更新页连续四天只能显示提交记录。10-23 的素材（`2026-10-23_anim_showcase_reel.md`，128 剪辑重构）现成，补一条即可回填。
+- **新发现（本轮首次提出，建议尽快定）**：`project.godot` 的 `config/features` 已于 10-26 13:32 改为 `4.7`，但 `daily_release.py` 仍固定用 `I:\Godot_v4.6.3-stable_win64.exe\..._console.exe` 导出 ⇒ **今日包实际由 4.6.3 产出**。启动冒烟能过，但版本声明与产出引擎不一致是隐患（4.7 编辑过的资源将来可能 4.6 读不了，且 4.7 特性不会进包）。建议把脚本引擎路径切到 4.7 并确认导出模板同版。
+
 ### 2026-10-26 05:04 — **成功**（常规全流程，一次跑通，无重试）
 - 首轮即通过：导出 358.3 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。总耗时 3m38s。
 - 包：`ShellStorm2.exe`，**375,753,096 B**（358.3 MiB），SHA256 `f3c0284c5369b9772ef1fb05d7f01349f4581bea2db2e06a768db4cf657ef959`。
@@ -162,3 +172,4 @@
 - **RefCounted 成环是这个工程的复发型陷阱**：`A` 持 `B`，又把捕获 `A` 的 lambda `connect` 到 `B` 的信号 ⇒ 环闭合，Godot 纯引用计数不回收，退出报 `N resources still in use at exit`（N = 泄漏文件数）。改法：`WeakRef` + `static` 转发。
 - **判断「是不是我改坏的」用临时还原跑基线**：`cp` 备份 → `git stash push -- <文件>` → 跑同一用例 → `git stash pop` → `diff -q` 校验与备份逐字节一致。零风险，别猜。
 - **`run_verification_suite.sh` 在本机会被 safe-delete 拦截**：其收尾清理触发「单轮 50 项批量删除需确认」，套件在拷贝工作区阶段即中止。改用直接跑场景：`APPDATA=<隔离> "$GODOT" --headless --path <ROOT> --scene res://tests/verification/<name>.tscn`。
+- **「SHA256 与前几日全等」要归因，不能简单当复用旧包、也不能简单当正常**：两步——①看 exe mtime 与线上 Last-Modified 是否今日刷新（证明真跑了导出）；②把 24h 内变更逐项过一遍「是否进 PCK」。已知不进包的类型：`project.godot` 的 `config/features`（编辑器元数据，字节级检索 `<len>4.7<len>Forward Plus` 在 exe 里查不到）、`tools/`+`scripts/`+`docs/`（`export_presets.cfg` 的 `exclude_filter` 排除）、自动化 memory。三者都不变时才允许宣布「对玩家零玩法变更」。

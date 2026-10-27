@@ -1,0 +1,40 @@
+﻿分组,文件名,中文名,像素,特征/内容
+c1,Level_1.png,标题卡（非房间）,400×225,进入第一层时的地名卡，不是房间布局
+c1,Room1.png,普通房,180×70,标准战斗房：桌子、火药桶
+c1,Chamber_One_Room.png,普通房 · 变体,113×39,横向偏窄的战斗房
+c1,Chamber_One_Room_One.png,普通房 · 变体 1,180×88,含四张桌子（可翻倒当掩体）
+c1,Chamber_One_Room_Two.png,普通房 · 变体 2,119×70,含三个火药桶（可引爆）
+c1,Room_In_Minimap.png,传送点房,151×125,房内固定有传送点，可跨层内直达
+c1,Room_One_mini.png,普通房 · 小地图,116×49,小地图上的房间缩略图
+c1,Chest_Room_Brown.png,宝箱房 · 棕,84×71,最低档掉落
+c1,Chest_Room_Blue.png,宝箱房 · 蓝,180×157,中档掉落
+c1,Green_Chest_Room_One_Chamber_One.png,宝箱房 · 绿,180×160,较高档掉落
+c1,Green_Chest_Room_One_Chamber_One_minimap.png,宝箱房 · 绿 · 小地图,79×65,同上，小地图缩略
+c1,Pre-Boss_Room_One.png,首领前房,53×61,进 Boss 前的整备间，无敌人
+c1,Pre-Boss_Room_One_In_Game.png,首领前房 · 实机,180×142,同上，带 HUD 的实机画面
+c1,POst_Boss_Room_Chamber_One.png,首领后房,180×167,打赢 Boss 后的房间，含下一层电梯
+c1,POst_Boss_Room_Chamber_One_minimap.png,首领后房 · 小地图,92×82,同上，小地图缩略
+c1,Corridor_One_Chamber_One.png,走廊 · 1,180×111,连接两房间的窄通道
+c1,Corridor_One_Chamber_One_In-Game.png,走廊 · 1 · 实机,43×37,同上，实机画面
+c1,Corridor_one_in-game.png,走廊 · 1 · 实机 2,180×71,同上，另一角度
+c1,Corridor_2.png,走廊 · 2,106×40,走廊变体
+c1,Corridor_3.png,走廊 · 3,180×207,走廊变体
+c1,Corridor_Three.png,走廊 · 3 · 变体,73×48,走廊变体
+c1,Entrance_to_Oubliette_One.png,隐藏层入口（壁炉）,180×191,壁炉 → 淹水后进入 Oubliette
+c1,Oubliette.png,隐藏层 · Oubliette,74×73,隐藏层的房间外观
+c1,Gatling_Gull.png,首领 · 加特林鸥,263×230,Boss 本体与房间
+c1,Gatling_Gull_Boss_Room_One.png,首领房 · 加特林鸥 1,180×174,场景变体一
+c1,Gatling_Gull_Boss_Room_2.png,首领房 · 加特林鸥 2,180×161,场景变体二
+c1,Trigger_Twins_Boss_Room_One.png,首领房 · 双枪兄弟,174×123,另一组 Boss 的房间
+c1,Bullet_King.png,首领 · 弹丸之王,191×229,Boss 本体与房间
+secret,Secret_Room_Random_001.png,隐藏房 · 随机001,729×601,1-4 个随机拾取物　权重 15
+secret,Basic_secret_room_001.png,隐藏房 · 001,570×620,1-2 个随机拾取物　权重 15
+secret,Basic_secret_room_002.png,隐藏房 · 002,556×591,中央岛上一只随机宝箱，四周是坑　权重 15
+secret,Basic_secret_room_003.png,隐藏房 · 003,854×904,中央岛上 1-2 个拾取物，四周是坑　权重 15
+secret,Basic_secret_room_004.png,隐藏房 · 004,861×918,3 只宝箱（极易是拟态）　权重 1
+secret,Basic_secret_room_005.png,隐藏房 · 005,576×623,3 只随机宝箱　权重 1
+secret,Basic_secret_room_006.png,隐藏房 · 006,613×611,中央岛：2 只已解锁宝箱 + 尖刺陷阱 + 中心火焰陷阱　权重 1
+secret,Basic_secret_room_007.png,隐藏房 · 007,603×610,中央岛：5 个拾取物 + 棋盘式交替火焰陷阱　权重 1
+secret,Basic_secret_room_009.png,隐藏房 · 009,580×618,1-4 拾取物 + 1 只宝箱（必定已解锁）　权重 1
+secret,DeadGuy_secret_chest.png,隐藏房 · 死者宝箱,762×619,棕箱(已解锁) + 蓝箱 + 绿箱 + 1 把钥匙 + 骨架与纸条　权重 1
+secret,WhichRoomIsThis.png,隐藏房 · NPC（女巫）,805×904,Witches；需存档时长 >4h 且进过第二层 >5 次　权重 0.05

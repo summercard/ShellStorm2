@@ -1,0 +1,552 @@
+﻿楼层,flow,房型,原始标签,门数,门面,门面中文,形状
+F1,F1_Castle_Flow_01,ENTRANCE,Gungeon Entrance,1,S1,南,1门
+F1,F1_Castle_Flow_01,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F1,F1_Castle_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_01,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_01,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_01,EXIT,Exit_Room_Basic,1,N1,北,1门
+F1,F1_Castle_Flow_01,SHOP,Shop Room Table,1,N1,北,1门
+F1,F1_Castle_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_01,REWARD,REWARD,2,N2,北×2,2门·同侧
+F1,F1_Castle_Flow_01,HUB,HUB,3,N1S1E1,北+南+东,3门
+F1,F1_Castle_Flow_01,NORMAL,NORMAL,3,S1E1W1,南+东+西,3门
+F1,F1_Castle_Flow_01,HUB,HUB,4,S2W2,南×2+西×2,4门·两侧各双
+F1,F1_Castle_Flow_01,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F1,F1_Castle_Flow_01,NORMAL,NORMAL,2,N1E1,北+东,2门·相邻
+F1,F1_Castle_Flow_01,REWARD,REWARD,2,N1W1,北+西,2门·相邻
+F1,F1_Castle_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_02_TwoBigWings,ENTRANCE,Gungeon Entrance,1,S1,南,1门
+F1,F1_Castle_Flow_02_TwoBigWings,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_02_TwoBigWings,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F1,F1_Castle_Flow_02_TwoBigWings,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_02_TwoBigWings,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_02_TwoBigWings,EXIT,Exit_Room_Basic,1,N1,北,1门
+F1,F1_Castle_Flow_02_TwoBigWings,SHOP,Shop Room Table,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_02_TwoBigWings,NORMAL,NORMAL,2,N1W1,北+西,2门·相邻
+F1,F1_Castle_Flow_02_TwoBigWings,REWARD,REWARD,2,N1E1,北+东,2门·相邻
+F1,F1_Castle_Flow_02_TwoBigWings,HUB,HUB,3,N1S2,北+南×2,3门·一侧双门
+F1,F1_Castle_Flow_02_TwoBigWings,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_02_TwoBigWings,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_02_TwoBigWings,REWARD,REWARD,2,N2,北×2,2门·同侧
+F1,F1_Castle_Flow_02_TwoBigWings,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F1,F1_Castle_Flow_02_TwoBigWings,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_02_TwoBigWings,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F1,F1_Castle_Flow_02_TwoBigWings,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_03_TwoPathsToBoss,ENTRANCE,Gungeon Entrance,1,S1,南,1门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_03_TwoPathsToBoss,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_03_TwoPathsToBoss,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_03_TwoPathsToBoss,EXIT,Exit_Room_Basic,1,N1,北,1门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,SHOP,Shop Room Table,1,N1,北,1门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_03_TwoPathsToBoss,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,CONNECTOR,CONNECTOR,2,S1E1,南+东,2门·相邻
+F1,F1_Castle_Flow_03_TwoPathsToBoss,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_03_TwoPathsToBoss,HUB,HUB,3,N1S1E1,北+南+东,3门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,HUB,HUB,3,N1S1E1,北+南+东,3门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,REWARD,REWARD,1,N1,北,1门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,REWARD,REWARD,1,N1,北,1门
+F1,F1_Castle_Flow_03_TwoPathsToBoss,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F1,F1_Castle_Flow_04_FourSmallWings,ENTRANCE,Gungeon Entrance,1,S1,南,1门
+F1,F1_Castle_Flow_04_FourSmallWings,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_04_FourSmallWings,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F1,F1_Castle_Flow_04_FourSmallWings,BOSS_FOYER,Boss Foyers,2,S1E1,南+东,2门·相邻
+F1,F1_Castle_Flow_04_FourSmallWings,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_04_FourSmallWings,EXIT,Exit_Room_Basic,1,N1,北,1门
+F1,F1_Castle_Flow_04_FourSmallWings,SHOP,Shop Room Table,2,N2,北×2,2门·同侧
+F1,F1_Castle_Flow_04_FourSmallWings,HUB,HUB,5,N1S2E1W1,北+南×2+东+西,5门
+F1,F1_Castle_Flow_04_FourSmallWings,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_04_FourSmallWings,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F1,F1_Castle_Flow_04_FourSmallWings,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F1,F1_Castle_Flow_04_FourSmallWings,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_04_FourSmallWings,NORMAL,NORMAL,1,W1,西,1门
+F1,F1_Castle_Flow_04_FourSmallWings,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_04_FourSmallWings,REWARD,REWARD,1,N1,北,1门
+F1,F1_Castle_Flow_04_FourSmallWings,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_04_FourSmallWings,REWARD,REWARD,1,N1,北,1门
+F1,F1_Castle_Flow_05_QuickBoss,ENTRANCE,Gungeon Entrance,1,S1,南,1门
+F1,F1_Castle_Flow_05_QuickBoss,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_05_QuickBoss,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_05_QuickBoss,BOSS_FOYER,Boss Foyers,2,S1E1,南+东,2门·相邻
+F1,F1_Castle_Flow_05_QuickBoss,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_05_QuickBoss,EXIT,Exit_Room_Basic,1,N1,北,1门
+F1,F1_Castle_Flow_05_QuickBoss,SHOP,Shop Room Table,1,N1,北,1门
+F1,F1_Castle_Flow_05_QuickBoss,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F1,F1_Castle_Flow_05_QuickBoss,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_05_QuickBoss,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_05_QuickBoss,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F1,F1_Castle_Flow_05_QuickBoss,NORMAL,NORMAL,3,S1E1W1,南+东+西,3门
+F1,F1_Castle_Flow_05_QuickBoss,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_05_QuickBoss,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F1,F1_Castle_Flow_05_QuickBoss,NORMAL,NORMAL,3,N2S1,北×2+南,3门·一侧双门
+F1,F1_Castle_Flow_05_QuickBoss,REWARD,REWARD,1,N1,北,1门
+F1,F1_Castle_Flow_05_QuickBoss,REWARD,REWARD,1,N1,北,1门
+F1,F1_Castle_Flow_06_StandardVariant,ENTRANCE,Gungeon Entrance,1,S1,南,1门
+F1,F1_Castle_Flow_06_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_06_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_06_StandardVariant,BOSS_FOYER,Boss Foyers,2,S1E1,南+东,2门·相邻
+F1,F1_Castle_Flow_06_StandardVariant,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_06_StandardVariant,EXIT,Exit_Room_Basic,1,N1,北,1门
+F1,F1_Castle_Flow_06_StandardVariant,SHOP,Shop Room Table,1,N1,北,1门
+F1,F1_Castle_Flow_06_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F1,F1_Castle_Flow_06_StandardVariant,NORMAL,NORMAL,2,N1E1,北+东,2门·相邻
+F1,F1_Castle_Flow_06_StandardVariant,REWARD,REWARD,2,N1W1,北+西,2门·相邻
+F1,F1_Castle_Flow_06_StandardVariant,HUB,HUB,3,N1S2,北+南×2,3门·一侧双门
+F1,F1_Castle_Flow_06_StandardVariant,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F1,F1_Castle_Flow_06_StandardVariant,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F1,F1_Castle_Flow_06_StandardVariant,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F1,F1_Castle_Flow_06_StandardVariant,NORMAL,NORMAL,1,N1,北,1门
+F1,F1_Castle_Flow_06_StandardVariant,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F1,F1_Castle_Flow_06_StandardVariant,REWARD,REWARD,1,N1,北,1门
+F1,F1_Castle_Flow_06_StandardVariant,CONNECTOR,CONNECTOR,2,S1W1,南+西,2门·相邻
+F2,F2_Gungeon_Flow_01,ENTRANCE,Floor_02_Gungeon_Entrance,2,S2,南×2,2门·同侧
+F2,F2_Gungeon_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_01,NORMAL,NORMAL,2,N1E1,北+东,2门·相邻
+F2,F2_Gungeon_Flow_01,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F2,F2_Gungeon_Flow_01,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_01,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_01,EXIT,Exit_Room_Basic,1,N1,北,1门
+F2,F2_Gungeon_Flow_01,SPECIAL,SecretHelpers_RoomTable,2,N1W1,北+西,2门·相邻
+F2,F2_Gungeon_Flow_01,REWARD,REWARD,2,N1E1,北+东,2门·相邻
+F2,F2_Gungeon_Flow_01,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F2,F2_Gungeon_Flow_01,SHOP,Shop Room Table,2,S1W1,南+西,2门·相邻
+F2,F2_Gungeon_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_01,HUB,HUB,4,N1S2W1,北+南×2+西,4门·一侧双门
+F2,F2_Gungeon_Flow_01,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F2,F2_Gungeon_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_01,REWARD,REWARD,2,N2,北×2,2门·同侧
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,ENTRANCE,Floor_02_Gungeon_Entrance,1,S1,南,1门
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,EXIT,Exit_Room_Basic,1,N1,北,1门
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,NORMAL,NORMAL,1,E1,东,1门
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,REWARD,REWARD,1,N1,北,1门
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,HUB,HUB,4,N1S2E1,北+南×2+东,4门·一侧双门
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,NORMAL,NORMAL,3,S1E1W1,南+东+西,3门
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,SHOP,Shop Room Table,2,N2,北×2,2门·同侧
+F2,F2_Gungeon_Flow_02_SnowflakeLoopBranches,REWARD,REWARD,1,N1,北,1门
+F2,F2_Gungeon_Flow_03_TripleCellBlock,ENTRANCE,Floor_02_Gungeon_Entrance,2,S2,南×2,2门·同侧
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,3,N2S1,北×2+南,3门·一侧双门
+F2,F2_Gungeon_Flow_03_TripleCellBlock,BOSS_FOYER,Boss Foyers,2,S1E1,南+东,2门·相邻
+F2,F2_Gungeon_Flow_03_TripleCellBlock,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_03_TripleCellBlock,EXIT,Exit_Room_Basic,1,N1,北,1门
+F2,F2_Gungeon_Flow_03_TripleCellBlock,HUB,HUB,3,N1S2,北+南×2,3门·一侧双门
+F2,F2_Gungeon_Flow_03_TripleCellBlock,REWARD,REWARD,2,N1E1,北+东,2门·相邻
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F2,F2_Gungeon_Flow_03_TripleCellBlock,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_03_TripleCellBlock,SHOP,Shop Room Table,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,3,N1S1E1,北+南+东,3门
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,2,N1W1,北+西,2门·相邻
+F2,F2_Gungeon_Flow_03_TripleCellBlock,REWARD,REWARD,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_03_TripleCellBlock,NORMAL,NORMAL,2,N2,北×2,2门·同侧
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,ENTRANCE,Floor_02_Gungeon_Entrance,2,S2,南×2,2门·同侧
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,EXIT,Exit_Room_Basic,1,N1,北,1门
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,REWARD,REWARD,1,N1,北,1门
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,SHOP,Shop Room Table,1,E1,东,1门
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,REWARD,REWARD,1,N1,北,1门
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,HUB,HUB,4,N2S1W1,北×2+南+西,4门·一侧双门
+F2,F2_Gungeon_Flow_04_BranchesOffBigLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_05_QuadCellBlock,ENTRANCE,Floor_02_Gungeon_Entrance,2,S2,南×2,2门·同侧
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F2,F2_Gungeon_Flow_05_QuadCellBlock,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_05_QuadCellBlock,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_05_QuadCellBlock,EXIT,Exit_Room_Basic,1,N1,北,1门
+F2,F2_Gungeon_Flow_05_QuadCellBlock,SHOP,Shop Room Table,2,N2,北×2,2门·同侧
+F2,F2_Gungeon_Flow_05_QuadCellBlock,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F2,F2_Gungeon_Flow_05_QuadCellBlock,REWARD,REWARD,2,N2,北×2,2门·同侧
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,3,S2E1,南×2+东,3门·一侧双门
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_05_QuadCellBlock,REWARD,REWARD,1,N1,北,1门
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F2,F2_Gungeon_Flow_05_QuadCellBlock,NORMAL,NORMAL,2,N2,北×2,2门·同侧
+F2,F2_Gungeon_Flow_06_LongRewardChains,ENTRANCE,Floor_02_Gungeon_Entrance,1,S1,南,1门
+F2,F2_Gungeon_Flow_06_LongRewardChains,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_06_LongRewardChains,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_06_LongRewardChains,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_06_LongRewardChains,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_06_LongRewardChains,EXIT,Exit_Room_Basic,1,N1,北,1门
+F2,F2_Gungeon_Flow_06_LongRewardChains,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F2,F2_Gungeon_Flow_06_LongRewardChains,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F2,F2_Gungeon_Flow_06_LongRewardChains,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_06_LongRewardChains,HUB,HUB,4,N1S2E1,北+南×2+东,4门·一侧双门
+F2,F2_Gungeon_Flow_06_LongRewardChains,REWARD,REWARD,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_06_LongRewardChains,NORMAL,NORMAL,2,N2,北×2,2门·同侧
+F2,F2_Gungeon_Flow_06_LongRewardChains,SHOP,Shop Room Table,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_06_LongRewardChains,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_06_LongRewardChains,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F2,F2_Gungeon_Flow_06_LongRewardChains,REWARD,REWARD,2,N1E1,北+东,2门·相邻
+F2,F2_Gungeon_Flow_06_LongRewardChains,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F2,F2_Gungeon_Flow_06_LongRewardChains,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_06_LongRewardChains,NORMAL,NORMAL,2,N1W1,北+西,2门·相邻
+F2,F2_Gungeon_Flow_07_StandardVariant,ENTRANCE,Floor_02_Gungeon_Entrance,1,S1,南,1门
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,EXIT,Exit_Room_Basic,1,N1,北,1门
+F2,F2_Gungeon_Flow_07_StandardVariant,HUB,HUB,4,N1S2W1,北+南×2+西,4门·一侧双门
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,HUB,HUB,3,N1S2,北+南×2,3门·一侧双门
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F2,F2_Gungeon_Flow_07_StandardVariant,SHOP,Shop Room Table,2,S1E1,南+东,2门·相邻
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,REWARD,REWARD,2,N2,北×2,2门·同侧
+F2,F2_Gungeon_Flow_07_StandardVariant,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_07_StandardVariant,REWARD,REWARD,2,N2,北×2,2门·同侧
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,ENTRANCE,Floor_02_Gungeon_Entrance,1,S1,南,1门
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,EXIT,Exit_Room_Basic,1,N1,北,1门
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,HUB,HUB,5,N1S2E1W1,北+南×2+东+西,5门
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,SHOP,Shop Room Table,1,N1,北,1门
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,REWARD,REWARD,1,N1,北,1门
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,REWARD,REWARD,1,N1,北,1门
+F2,F2_Gungeon_Flow_08_ImmediateHubThreePaths,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,ENTRANCE,Elevator Entrance,1,S1,南,1门
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,BOSS_FOYER,Boss Foyers,2,S1E1,南+东,2门·相邻
+F3,F3_Mines_Flow_01,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,EXIT,Exit_Room_Basic,1,N1,北,1门
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,REWARD,REWARD,1,N1,北,1门
+F3,F3_Mines_Flow_01,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,3,S2E1,南×2+东,3门·一侧双门
+F3,F3_Mines_Flow_01,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,HUB,HUB,3,N1S2,北+南×2,3门·一侧双门
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_01,REWARD,REWARD,2,N2,北×2,2门·同侧
+F3,F3_Mines_Flow_01,SHOP,Shop Room Table,2,N2,北×2,2门·同侧
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,ENTRANCE,Elevator Entrance,2,S2,南×2,2门·同侧
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,NORMAL,NORMAL,2,N1W1,北+西,2门·相邻
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,EXIT,Exit_Room_Basic,1,N1,北,1门
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,CONNECTOR,CONNECTOR (1 - 3 rooms),2,S1E1,南+东,2门·相邻
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,REWARD,REWARD,1,N1,北,1门
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,CONNECTOR,CONNECTOR (1 child only),3,S1E1W1,南+东+西,3门
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,HUB,HUB,4,N1S2W1,北+南×2+西,4门·一侧双门
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,SHOP,Shop Room Table,2,S1E1,南+东,2门·相邻
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,REWARD,REWARD,2,N2,北×2,2门·同侧
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,REWARD,REWARD,1,N1,北,1门
+F3,F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop,NORMAL,NORMAL,1,N1,北,1门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,ENTRANCE,Elevator Entrance,2,S2,南×2,2门·同侧
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,EXIT,Exit_Room_Basic,1,N1,北,1门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,REWARD,REWARD,1,N1,北,1门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,CONNECTOR,CONNECTOR (1 child only),3,S1E1W1,南+东+西,3门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,3,S1E1W1,南+东+西,3门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,REWARD,REWARD,1,N1,北,1门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,SHOP,Shop Room Table,1,N1,北,1门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,1,W1,西,1门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,3,N1S1E1,北+南+东,3门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,NORMAL,NORMAL,1,E1,东,1门
+F3,F3_Mines_Flow_03_ManyShortChainsSpidering,REWARD,REWARD,1,N1,北,1门
+F3,F3_Mines_Flow_04_BossFoyerLoop,ENTRANCE,Elevator Entrance,2,E1W1,东+西,2门·相对
+F3,F3_Mines_Flow_04_BossFoyerLoop,NORMAL,NORMAL,3,S1E1W1,南+东+西,3门
+F3,F3_Mines_Flow_04_BossFoyerLoop,NORMAL,NORMAL,3,S1E1W1,南+东+西,3门
+F3,F3_Mines_Flow_04_BossFoyerLoop,CONNECTOR,CONNECTOR,2,S1E1,南+东,2门·相邻
+F3,F3_Mines_Flow_04_BossFoyerLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_04_BossFoyerLoop,CONNECTOR,CONNECTOR (1 - 3 rooms),2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_04_BossFoyerLoop,NORMAL,NORMAL,3,S2W1,南×2+西,3门·一侧双门
+F3,F3_Mines_Flow_04_BossFoyerLoop,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_04_BossFoyerLoop,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_04_BossFoyerLoop,EXIT,Exit_Room_Basic,1,N1,北,1门
+F3,F3_Mines_Flow_04_BossFoyerLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_04_BossFoyerLoop,REWARD,REWARD,1,N1,北,1门
+F3,F3_Mines_Flow_04_BossFoyerLoop,NORMAL,NORMAL,3,N1S1E1,北+南+东,3门
+F3,F3_Mines_Flow_04_BossFoyerLoop,SHOP,Shop Room Table,1,N1,北,1门
+F3,F3_Mines_Flow_04_BossFoyerLoop,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F3,F3_Mines_Flow_04_BossFoyerLoop,REWARD,REWARD,1,N1,北,1门
+F3,F3_Mines_Flow_04_BossFoyerLoop,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_04_BossFoyerLoop,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_04_BossFoyerLoop,NORMAL,NORMAL,1,N1,北,1门
+F3,F3_Mines_Flow_05_TwoBigLoops,ENTRANCE,Elevator Entrance,1,S1,南,1门
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,2,N1W1,北+西,2门·相邻
+F3,F3_Mines_Flow_05_TwoBigLoops,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_05_TwoBigLoops,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_05_TwoBigLoops,EXIT,Exit_Room_Basic,1,N1,北,1门
+F3,F3_Mines_Flow_05_TwoBigLoops,HUB,HUB,4,N1S2W1,北+南×2+西,4门·一侧双门
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,3,N1S1E1,北+南+东,3门
+F3,F3_Mines_Flow_05_TwoBigLoops,CONNECTOR,CONNECTOR (1 - 2 rooms),2,S1E1,南+东,2门·相邻
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,1,N1,北,1门
+F3,F3_Mines_Flow_05_TwoBigLoops,REWARD,REWARD,1,N1,北,1门
+F3,F3_Mines_Flow_05_TwoBigLoops,SHOP,Shop Room Table,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_05_TwoBigLoops,HUB,HUB,3,N1S2,北+南×2,3门·一侧双门
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,3,N1S1E1,北+南+东,3门
+F3,F3_Mines_Flow_05_TwoBigLoops,REWARD,REWARD,2,N1W1,北+西,2门·相邻
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL (1 - 2 rooms),2,N1S1,北+南,2门·相对
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F3,F3_Mines_Flow_05_TwoBigLoops,NORMAL,NORMAL,1,N1,北,1门
+F4,F4_Catacomb_Flow_01,ENTRANCE,Elevator Entrance,1,S1,南,1门
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F4,F4_Catacomb_Flow_01,BOSS_FOYER,Boss Foyers,2,S1E1,南+东,2门·相邻
+F4,F4_Catacomb_Flow_01,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_01,EXIT,Exit_Room_Basic,1,N1,北,1门
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F4,F4_Catacomb_Flow_01,CONNECTOR,CONNECTOR,2,S1E1,南+东,2门·相邻
+F4,F4_Catacomb_Flow_01,REWARD,REWARD,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_01,HUB,HUB,3,N1S2,北+南×2,3门·一侧双门
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,4,N1S2W1,北+南×2+西,4门·一侧双门
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,2,N2,北×2,2门·同侧
+F4,F4_Catacomb_Flow_01,SHOP,Shop Room Table,1,N1,北,1门
+F4,F4_Catacomb_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_01,REWARD,REWARD,2,N2,北×2,2门·同侧
+F4,F4_Catacomb_Flow_02_AncientTomb,ENTRANCE,Elevator Entrance,1,S1,南,1门
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F4,F4_Catacomb_Flow_02_AncientTomb,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,EXIT,Exit_Room_Basic,1,N1,北,1门
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL (1 - 2 rooms),3,N1S2,北+南×2,3门·一侧双门
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,HUB,HUB,4,N2S2,北×2+南×2,4门·两侧各双
+F4,F4_Catacomb_Flow_02_AncientTomb,REWARD,REWARD,1,N1,北,1门
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_02_AncientTomb,REWARD,REWARD,2,N2,北×2,2门·同侧
+F4,F4_Catacomb_Flow_02_AncientTomb,SHOP,Shop Room Table,1,N1,北,1门
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,ENTRANCE,Elevator Entrance,1,S1,南,1门
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,BOSS_FOYER,Boss Foyers,2,S1E1,南+东,2门·相邻
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,EXIT,Exit_Room_Basic,1,N1,北,1门
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,CONNECTOR,CONNECTOR (2 - 3 rooms),2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,REWARD,REWARD,2,N2,北×2,2门·同侧
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,SHOP,Shop Room Table,1,N1,北,1门
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,REWARD,REWARD,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,HUB,HUB,3,N1S2,北+南×2,3门·一侧双门
+F4,F4_Catacomb_Flow_03_SpookyGauntlet,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_04_Maze,ENTRANCE,Elevator Entrance,1,S1,南,1门
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_04_Maze,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F4,F4_Catacomb_Flow_04_Maze,BOSS_FOYER,Boss Foyers,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_04_Maze,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_04_Maze,EXIT,Exit_Room_Basic,1,N1,北,1门
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,3,S1E1W1,南+东+西,3门
+F4,F4_Catacomb_Flow_04_Maze,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_04_Maze,HUB,HUB,3,N1S2,北+南×2,3门·一侧双门
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,3,N1S1E1,北+南+东,3门
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,1,N1,北,1门
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,3,S1W2,南+西×2,3门·一侧双门
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F4,F4_Catacomb_Flow_04_Maze,REWARD,REWARD,1,N1,北,1门
+F4,F4_Catacomb_Flow_04_Maze,SHOP,Shop Room Table,1,N1,北,1门
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,3,N2S1,北×2+南,3门·一侧双门
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F4,F4_Catacomb_Flow_04_Maze,NORMAL,NORMAL,1,W1,西,1门
+F4,F4_Catacomb_Flow_04_Maze,REWARD,REWARD,1,N1,北,1门
+F5,F5_Forge_Flow_00_CriticalBlacksmith,ENTRANCE,Elevator Entrance,1,S1,南,1门
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,BOSS_FOYER,Boss Foyer (final),2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,EXIT,Exit_Room_Forge,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,SPECIAL,EndTimes_Chamber,1,N1,北,1门
+F5,F5_Forge_Flow_00_CriticalBlacksmith,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL,1,E1,东,1门
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL (2 - 3 rooms),2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,HUB,HUB,4,N1S2E1,北+南×2+东,4门·一侧双门
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,SPECIAL,Blacksmith_TestRoom,2,S1W1,南+西,2门·相邻
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL,3,S1E1W1,南+东+西,3门
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL (2 - 3 rooms),2,S1W1,南+西,2门·相邻
+F5,F5_Forge_Flow_00_CriticalBlacksmith,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_00_CriticalBlacksmith,REWARD,REWARD,2,N2,北×2,2门·同侧
+F5,F5_Forge_Flow_00_CriticalBlacksmith,REWARD,REWARD,2,N2,北×2,2门·同侧
+F5,F5_Forge_Flow_01,ENTRANCE,Elevator Entrance,1,S1,南,1门
+F5,F5_Forge_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,BOSS_FOYER,Boss Foyer (final),2,S1E1,南+东,2门·相邻
+F5,F5_Forge_Flow_01,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,EXIT,Exit_Room_Forge,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,SPECIAL,EndTimes_Chamber,1,N1,北,1门
+F5,F5_Forge_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,HUB,HUB,4,N1S1E1W1,北+南+东+西,4门
+F5,F5_Forge_Flow_01,NORMAL,NORMAL (2 - 3 rooms),2,S1E1,南+东,2门·相邻
+F5,F5_Forge_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,NORMAL,NORMAL,3,S2W1,南×2+西,3门·一侧双门
+F5,F5_Forge_Flow_01,HUB,HUB,4,N1S2W1,北+南×2+西,4门·一侧双门
+F5,F5_Forge_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,SPECIAL,Blacksmith_TestRoom,1,N1,北,1门
+F5,F5_Forge_Flow_01,NORMAL,NORMAL (2 - 3 rooms),2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_01,REWARD,REWARD,2,N2,北×2,2门·同侧
+F5,F5_Forge_Flow_01,REWARD,REWARD,2,N2,北×2,2门·同侧
+F5,F5_Forge_Flow_02_TheChain,ENTRANCE,Elevator Entrance,2,S2,南×2,2门·同侧
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,BOSS_FOYER,Boss Foyer (final),2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,EXIT,Exit_Room_Forge,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,SPECIAL,EndTimes_Chamber,1,N1,北,1门
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,HUB,HUB,4,N2S1W1,北×2+南+西,4门·一侧双门
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,2,N2,北×2,2门·同侧
+F5,F5_Forge_Flow_02_TheChain,SPECIAL,Blacksmith_TestRoom,1,N1,北,1门
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL (2 - 3 rooms),2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,HUB,HUB,3,N1S1E1,北+南+东,3门
+F5,F5_Forge_Flow_02_TheChain,REWARD,REWARD,2,N1W1,北+西,2门·相邻
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F5,F5_Forge_Flow_02_TheChain,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_02_TheChain,REWARD,REWARD,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,ENTRANCE,Elevator Entrance,3,S1E1W1,南+东+西,3门
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,2,S1E1,南+东,2门·相邻
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,3,S2W1,南×2+西,3门·一侧双门
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,2,N2,北×2,2门·同侧
+F5,F5_Forge_Flow_03_ThreeWaysToGo,BOSS_FOYER,Boss Foyer (final),2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,EXIT,Exit_Room_Forge,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,SPECIAL,EndTimes_Chamber,1,N1,北,1门
+F5,F5_Forge_Flow_03_ThreeWaysToGo,SPECIAL,Blacksmith_TestRoom,1,N1,北,1门
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL (1 - 3 rooms),2,S1E1,南+东,2门·相邻
+F5,F5_Forge_Flow_03_ThreeWaysToGo,REWARD,REWARD,1,N1,北,1门
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,3,N1S1W1,北+南+西,3门
+F5,F5_Forge_Flow_03_ThreeWaysToGo,CONNECTOR,CONNECTOR,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,HUB,HUB,3,N1S1W1,北+南+西,3门
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,3,S2E1,南×2+东,3门·一侧双门
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_03_ThreeWaysToGo,REWARD,REWARD,2,N2,北×2,2门·同侧
+F5,F5_Forge_Flow_04_TwoGreatHalls,ENTRANCE,Elevator Entrance,2,S2,南×2,2门·同侧
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL,2,N1W1,北+西,2门·相邻
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,HUB,HUB,4,S2E2,南×2+东×2,4门·两侧各双
+F5,F5_Forge_Flow_04_TwoGreatHalls,HUB,HUB,3,N1S1E1,北+南+东,3门
+F5,F5_Forge_Flow_04_TwoGreatHalls,BOSS_FOYER,Boss Foyer (final),2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,BOSS,BOSS,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,EXIT,Exit_Room_Forge,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,SPECIAL,EndTimes_Chamber,1,N1,北,1门
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL,2,S1W1,南+西,2门·相邻
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL,3,N1S2,北+南×2,3门·一侧双门
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,SPECIAL,Blacksmith_TestRoom,1,N1,北,1门
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL (2 - 3 rooms),2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,REWARD,REWARD,2,N2,北×2,2门·同侧
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL (1 - 4 rooms),2,S1W1,南+西,2门·相邻
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL (1 - 3 rooms),2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,NORMAL,NORMAL,2,N1S1,北+南,2门·相对
+F5,F5_Forge_Flow_04_TwoGreatHalls,REWARD,REWARD,2,N2,北×2,2门·同侧

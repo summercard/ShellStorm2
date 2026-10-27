@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>远征03 白盒 · 房间 / 门 / 通道</title>
+<style>
+:root{--ink:#16181A;--sub:#5F6569;--line:#D8DBDC;--bg:#EFF0F0;--paper:#fff;--accent:#0E9C86}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.7 "PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+header{padding:30px 40px 22px;background:var(--paper);border-bottom:1px solid var(--line)}
+h1{margin:0 0 8px;font-size:25px}
+.sub{color:var(--sub);font-size:13px;max-width:1000px}
+.wrap{padding:10px 40px 70px;max-width:1500px;margin:0 auto}
+h2{font-size:17px;margin:36px 0 6px;padding-left:10px;border-left:3px solid var(--accent)}
+.note{margin:0 0 16px;padding-left:13px;font-size:12.5px;color:var(--sub);max-width:1050px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+figure{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+figure img{display:block;width:100%;height:auto;background:#f7f8f9;border-bottom:1px solid var(--line)}
+figure.door img{height:210px;object-fit:contain;padding:10px 0}
+figcaption{padding:10px 12px;font-size:12px;color:var(--sub)}
+figcaption b{color:var(--ink);font-weight:600;display:block;font-size:12.5px;margin-bottom:5px}
+.tag{display:inline-block;background:#F1EFE8;border:1px solid var(--line);border-radius:20px;padding:0 7px;font-size:11px;color:#444441;margin:0 4px 4px 0}
+figcaption p{margin:4px 0 6px;line-height:1.5}
+figcaption code{font-size:10.5px;color:#9AA0A4;word-break:break-all}
+.pol{color:#0E7A6B;font-family:ui-monospace,Menlo,monospace;font-size:11px}
+.egt{color:#8A8F93;font-size:11.5px}
+.warn{color:#B4531F}
+.banner{background:#FAEEDA;border:1px solid #EFC98A;border-radius:10px;padding:14px 18px;margin:18px 0 0;font-size:13px;line-height:1.8}
+.banner b{color:#7A3E0B}
+</style></head><body>
+<header><h1>远征03 白盒 · 房间 / 门 / 通道</h1>
+<div class="sub">全部由脚本从 <code>data/level_plans/expedition_03/</code> 的模板契约生成，几何是
+<b>契约的纯函数</b>（改 JSON → 重跑 → 几何跟着变）。三批产物共
+<b>10 房间 + 9 通道 + 5 门型</b>。</div>
+<div class="banner"><b>看这张图要看什么：</b>不是看好不好看（白盒没有美术），是看<b>形状对不对</b>。<br>
+橙框＝门洞位置，蓝点＝连接端口。标着「非矩形轮廓」的几张是这次重做的核心 ——
+L 形缺东南角、U 形有西侧内岛、宝箱房两变体各缺角、通道桥是「工」字。<br>
+<b>上一版把它们全做成了矩形</b>，缺角处多出了不存在的地面和墙。文本门禁查不出来，只有真加载 + 量几何才抓得到。</div></header>
+<div class="wrap">
+
+<h2>房间壳（10 份）</h2>
+<p class="note">端口数不是写死的：从六张骨架的节点度数反推，<code>NORMAL</code> 取四选一池里的最大值；入口安全屋另 +1 弃局门。</p>
+<div class="grid">
+<figure>
+<img src="rt_boss_50x40_static_layout.png" alt="rt_boss_50x40_static_layout" loading="lazy">
+<figcaption><b>boss_50x40</b>
+<span class="tag">50×40 m · 2000 m²</span>
+<span class="tag">2 端口 · 71 件</span>
+<p>矩形</p>
+<code>rt_boss_50x40</code></figcaption></figure>
+<figure>
+<img src="rt_bridge_60x50_static_layout.png" alt="rt_bridge_60x50_static_layout" loading="lazy">
+<figcaption><b>bridge_60x50</b>
+<span class="tag">30×60 m · 1800 m²</span>
+<span class="tag">2 端口 · 89 件</span>
+<p>矩形</p>
+<code>rt_bridge_60x50</code></figcaption></figure>
+<figure>
+<img src="rt_corridor_45x40_l_turn_static_layout.png" alt="rt_corridor_45x40_l_turn_static_layout" loading="lazy">
+<figcaption><b>corridor_45x40</b> · 变体 <code>l_turn</code>
+<span class="tag">45×40 m · 1050 m²</span>
+<span class="tag">4 端口 · 40 件</span>
+<p><b class="warn">非矩形轮廓</b></p>
+<code>rt_corridor_45x40_l_turn</code></figcaption></figure>
+<figure>
+<img src="rt_corridor_45x40_u_turn_static_layout.png" alt="rt_corridor_45x40_u_turn_static_layout" loading="lazy">
+<figcaption><b>corridor_45x40</b> · 变体 <code>u_turn</code>
+<span class="tag">45×40 m · 1500 m²</span>
+<span class="tag">4 端口 · 54 件</span>
+<p><b class="warn">非矩形轮廓</b></p>
+<code>rt_corridor_45x40_u_turn</code></figcaption></figure>
+<figure>
+<img src="rt_db_70x50_db_01_static_layout.png" alt="rt_db_70x50_db_01_static_layout" loading="lazy">
+<figcaption><b>db_70x50</b> · 变体 <code>db_01</code>
+<span class="tag">40×30 m · 1050 m²</span>
+<span class="tag">3 端口 · 43 件</span>
+<p><b class="warn">非矩形轮廓</b></p>
+<code>rt_db_70x50_db_01</code></figcaption></figure>
+<figure>
+<img src="rt_db_70x50_db_02_static_layout.png" alt="rt_db_70x50_db_02_static_layout" loading="lazy">
+<figcaption><b>db_70x50</b> · 变体 <code>db_02</code>
+<span class="tag">40×30 m · 975 m²</span>
+<span class="tag">3 端口 · 40 件</span>
+<p><b class="warn">非矩形轮廓</b></p>
+<code>rt_db_70x50_db_02</code></figcaption></figure>
+<figure>
+<img src="rt_extraction_25x25_static_layout.png" alt="rt_extraction_25x25_static_layout" loading="lazy">
+<figcaption><b>extraction_25x25</b>
+<span class="tag">25×25 m · 625 m²</span>
+<span class="tag">1 端口 · 22 件</span>
+<p>矩形</p>
+<code>rt_extraction_25x25</code></figcaption></figure>
+<figure>
+<img src="rt_office_60x70_static_layout.png" alt="rt_office_60x70_static_layout" loading="lazy">
+<figcaption><b>office_60x70</b>
+<span class="tag">30×40 m · 1200 m²</span>
+<span class="tag">3 端口 · 45 件</span>
+<p>矩形</p>
+<code>rt_office_60x70</code></figcaption></figure>
+<figure>
+<img src="rt_safe_15x15_static_layout.png" alt="rt_safe_15x15_static_layout" loading="lazy">
+<figcaption><b>safe_15x15</b>
+<span class="tag">15×15 m · 225 m²</span>
+<span class="tag">2 端口 · 12 件</span>
+<p>矩形</p>
+<code>rt_safe_15x15</code></figcaption></figure>
+<figure>
+<img src="rt_std_25x25_static_layout.png" alt="rt_std_25x25_static_layout" loading="lazy">
+<figcaption><b>std_25x25</b>
+<span class="tag">25×25 m · 625 m²</span>
+<span class="tag">3 端口 · 26 件</span>
+<p>矩形</p>
+<code>rt_std_25x25</code></figcaption></figure>
+</div>
+
+<h2>通道（9 份）</h2>
+<p class="note">走廊就是一间很窄的房间，与房间同契约（5m 格、2.2m 门洞、同一套 lane 槽），不是独立的连接件类型；生成顺序上它排在最后，用来补已摆好房间之间的缝。</p>
+<p class="note">净宽取 5m 而非更窄：门洞 2.2m 必须居中落在 5m 槽位上，两侧各留 1.4m 墙肩，才能与房间侧槽位逐米对齐。3~4m 宽的通道会让门位脱离 5m 格线。</p>
+<div class="grid">
+<figure>
+<img src="../expedition03_corridor_kit/cr_straight_05.png" alt="cr_straight_05" loading="lazy">
+<figcaption><b>cr_straight_05</b>
+<span class="tag">5×5 m</span>
+<span class="tag">2 端口</span>
+<p>straight</p>
+<code>cr_straight_05_static_layout.tscn</code></figcaption></figure>
+<figure>
+<img src="../expedition03_corridor_kit/cr_straight_10.png" alt="cr_straight_10" loading="lazy">
+<figcaption><b>cr_straight_10</b>
+<span class="tag">5×10 m</span>
+<span class="tag">2 端口</span>
+<p>straight</p>
+<code>cr_straight_10_static_layout.tscn</code></figcaption></figure>
+<figure>
+<img src="../expedition03_corridor_kit/cr_straight_15.png" alt="cr_straight_15" loading="lazy">
+<figcaption><b>cr_straight_15</b>
+<span class="tag">5×15 m</span>
+<span class="tag">2 端口</span>
+<p>straight</p>
+<code>cr_straight_15_static_layout.tscn</code></figcaption></figure>
+<figure>
+<img src="../expedition03_corridor_kit/cr_straight_20.png" alt="cr_straight_20" loading="lazy">
+<figcaption><b>cr_straight_20</b>
+<span class="tag">5×20 m</span>
+<span class="tag">2 端口</span>
+<p>straight</p>
+<code>cr_straight_20_static_layout.tscn</code></figcaption></figure>
+<figure>
+<img src="../expedition03_corridor_kit/cr_straight_30.png" alt="cr_straight_30" loading="lazy">
+<figcaption><b>cr_straight_30</b>
+<span class="tag">5×30 m</span>
+<span class="tag">2 端口</span>
+<p>straight</p>
+<code>cr_straight_30_static_layout.tscn</code></figcaption></figure>
+<figure>
+<img src="../expedition03_corridor_kit/cr_straight_45.png" alt="cr_straight_45" loading="lazy">
+<figcaption><b>cr_straight_45</b>
+<span class="tag">5×45 m</span>
+<span class="tag">2 端口</span>
+<p>straight</p>
+<code>cr_straight_45_static_layout.tscn</code></figcaption></figure>
+<figure>
+<img src="../expedition03_corridor_kit/cr_corner_05.png" alt="cr_corner_05" loading="lazy">
+<figcaption><b>cr_corner_05</b>
+<span class="tag">5×5 m</span>
+<span class="tag">2 端口</span>
+<p>straight</p>
+<code>cr_corner_05_static_layout.tscn</code></figcaption></figure>
+<figure>
+<img src="../expedition03_corridor_kit/cr_t_junction_05.png" alt="cr_t_junction_05" loading="lazy">
+<figcaption><b>cr_t_junction_05</b>
+<span class="tag">5×5 m</span>
+<span class="tag">3 端口</span>
+<p>junction_3</p>
+<code>cr_t_junction_05_static_layout.tscn</code></figcaption></figure>
+<figure>
+<img src="../expedition03_corridor_kit/cr_cross_05.png" alt="cr_cross_05" loading="lazy">
+<figcaption><b>cr_cross_05</b>
+<span class="tag">5×5 m</span>
+<span class="tag">4 端口</span>
+<p>junction_4</p>
+<code>cr_cross_05_static_layout.tscn</code></figcaption></figure>
+</div>
+
+<h2>门（5 型）</h2>
+<p class="note">门<b>不在</b>房间 TSCN 里 —— 房间只声明「这面能接」（<code>ConnectionPorts</code>），
+门由运行时按策略落上去。加一种门只改门表，不动任何房间文件。</p>
+<div class="grid">
+<figure class="door">
+<img src="../expedition03_door_kit/wb_door_normal.png" alt="normal" loading="lazy">
+<figcaption><b>普通门（战斗门）</b>
+<span class="tag">RoomDoor3D</span>
+<p class="pol">key=false · clear=true · triggers_fate=false</p>
+<p class="egt">挺进地牢：玩家进房后门自动关上，清完怪再开</p>
+<code>normal</code></figcaption></figure>
+<figure class="door">
+<img src="../expedition03_door_kit/wb_door_locked.png" alt="locked" loading="lazy">
+<figcaption><b>上锁门</b>
+<span class="tag">RoomDoor3D</span>
+<p class="pol">key=true · clear=false · triggers_fate=false</p>
+<p class="egt">挺进地牢：需要消耗一把钥匙</p>
+<code>locked</code></figcaption></figure>
+<figure class="door">
+<img src="../expedition03_door_kit/wb_door_boss.png" alt="boss" loading="lazy">
+<figcaption><b>首领门</b>
+<span class="tag">RoomDoor3D</span>
+<p class="pol">key=true · clear=true · triggers_fate=true</p>
+<p class="egt">挺进地牢：首领房唯一入口，常闭且带仪式演出</p>
+<code>boss</code></figcaption></figure>
+<figure class="door">
+<img src="../expedition03_door_kit/wb_door_secret.png" alt="secret" loading="lazy">
+<figcaption><b>隐藏门（可打碎的墙）</b>
+<span class="tag">SecretDoor3D</span>
+<p class="pol"><i>无开关语义（可打碎的墙）</i></p>
+<p class="egt">挺进地牢：外观与墙无异，用爆炸或特定手段打碎后进入</p>
+<code>secret</code></figcaption></figure>
+<figure class="door">
+<img src="../expedition03_door_kit/wb_door_cell.png" alt="cell" loading="lazy">
+<figcaption><b>牢房门</b>
+<span class="tag">RoomDoor3D</span>
+<p class="pol">key=true · clear=false · triggers_fate=false</p>
+<p class="egt">挺进地牢：本层出现牢房锁时，系统必定给某个敌人分配一把 Cell Key</p>
+<code>cell</code></figcaption></figure>
+</div>
+
+</div></body></html>

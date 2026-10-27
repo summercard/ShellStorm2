@@ -18,6 +18,16 @@ const TRAINING_SCENE_3D := "res://scenes/TrainingRange3D.tscn"
 ## （否则改场景会漏改某一跳，见 05.1 §3.0）。
 ##
 ## **新增一张远征关卡 = 往这里加一条 + 建一个场景文件 + 建一份设计源，不必改任何游戏逻辑。**
+##
+## `nav_order` 只决定它在 99F 远征情报室里的**排位**（小的在前），与解锁顺序、通关顺序无关。
+## 缺这个字段时排在最后。它存在的理由：清单的声明顺序是"设计/发布顺序"，而情报室的
+## 全息城站位是**视觉布局**，两者不该互相绑死（早期就是靠两张硬编码数组各写一份，加关就错位）。
+##
+## `nav_visibility` 决定它**要不要出现在情报室里**，缺省 `"always"`：
+## - `"always"`：恒列出。适用于"玩家随时该看到"的关卡，以及**设计已冻结、场景还在施工、
+##   需要在情报室里占位并明示"尚未开放"**的关卡（远征03 当前就属于这一档）。
+## - `"on_unlock"`：玩家解锁后才列出（远征02 的口径：没过 01 之前它不该出现在城里）。
+## 注意这与"能不能真的出发"是两件事 —— 后者由 `BaseManager` 的解锁状态 + 到达场景是否存在决定。
 const EXPEDITION_LEVELS: Array[Dictionary] = [
 	{
 		"level_id": "expedition_01",
@@ -27,6 +37,8 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"subtitle": "单层独立行动 · 入口安全屋 → 01—10 号房 → 撤离点",
 		"objective_line": "肃清 01—10 号房，穿过命运之门，抵达终点撤离点。",
 		"scene_3d": "res://scenes/ExpeditionLevel01_3D.tscn",
+		"nav_order": 10,
+		"nav_badge": "01  /  EXPEDITION",
 	},
 	{
 		"level_id": "expedition_02",
@@ -36,6 +48,20 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"subtitle": "单层独立行动 · 阳台安全屋 → 挑高前厅 → 旅馆长廊 → T 字路口 → 两条支廊（第 1 层）",
 		"objective_line": "穿过坍塌门洞进入旅馆长廊，沿主轴北进，在 T 字路口选择一条支廊深入。",
 		"scene_3d": "res://scenes/ExpeditionLevel02_3D.tscn",
+		"nav_order": 30,
+		"nav_badge": "02  /  EXPEDITION",
+		"nav_visibility": "on_unlock",
+	},
+	{
+		"level_id": "expedition_03",
+		"run_id": "expedition_03",
+		"display_name": "远征关卡03",
+		"setting_name": "断链回廊",
+		"subtitle": "单层独立行动 · 六张 flow 骨架每局抽一张 · 16~18 间房 + 0~3 间注入房",
+		"objective_line": "沿本局抽中的骨架推进，肃清战斗房，取走两处宝箱，穿过命运之门抵达撤离点。",
+		"scene_3d": "res://scenes/ExpeditionLevel03_3D.tscn",
+		"nav_order": 40,
+		"nav_badge": "03  /  EXPEDITION",
 	},
 	{
 		"level_id": "99",
@@ -45,6 +71,8 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"subtitle": "单层独立行动 · 入口安全屋 → 2 间内容房 → 撤离点",
 		"objective_line": "肃清两间内容房，穿过命运之门，抵达终点撤离点。",
 		"scene_3d": "res://scenes/ExpeditionLevel99_3D.tscn",
+		"nav_order": 20,
+		"nav_badge": "99  /  TEST SECTOR",
 	},
 ]
 
@@ -64,6 +92,31 @@ static func expedition_level_ids() -> Array[String]:
 	for entry in EXPEDITION_LEVELS:
 		result.append(str((entry as Dictionary).get("level_id", "")))
 	return result
+
+
+## 情报室排位：按 `nav_order` 升序排好的关卡 id（缺字段的排最后，同值按声明顺序）。
+## 只决定 99F 远征情报室里谁站前排，与解锁顺序、通关顺序无关。
+static func expedition_nav_order() -> Array[String]:
+	var entries: Array[Dictionary] = []
+	for entry in EXPEDITION_LEVELS:
+		entries.append(entry as Dictionary)
+	var slots: Array = []
+	for i in entries.size():
+		slots.append({"index": i, "order": int(entries[i].get("nav_order", 0x7fffffff))})
+	slots.sort_custom(func(a, b): return a["order"] < b["order"] if a["order"] != b["order"] else a["index"] < b["index"])
+	var result: Array[String] = []
+	for slot in slots:
+		result.append(str(entries[slot["index"]].get("level_id", "")))
+	return result
+
+
+## 关卡 id → 情报室标记牌上的编号行。缺字段时回退到关卡 id，保证牌面永远不为空。
+static func expedition_nav_badge(level_id: String) -> String:
+	var entry := expedition_level(level_id)
+	if entry.is_empty():
+		return level_id
+	var badge := str(entry.get("nav_badge", ""))
+	return badge if not badge.is_empty() else level_id
 
 
 ## 默认远征关卡 id（清单首条）。

@@ -1,0 +1,103 @@
+﻿flow,序号,kind,中文,原始标签,门数
+F1_Castle_Flow_01,1,ENTRANCE,入口,Gungeon Entrance,1
+F1_Castle_Flow_01,2,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_01,3,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_01,4,HUB,枢纽房,HUB,3
+F1_Castle_Flow_01,5,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_01,6,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_01,7,REWARD,宝箱房,REWARD,2
+F1_Castle_Flow_01,8,BOSS_FOYER,首领前厅,Boss Foyers,2
+F1_Castle_Flow_01,9,HUB,枢纽房,HUB,4
+F1_Castle_Flow_01,10,BOSS,首领,BOSS,2
+F1_Castle_Flow_01,11,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_01,12,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_01,13,EXIT,出口,Exit_Room_Basic,1
+F1_Castle_Flow_01,14,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_01,15,SHOP,商店,Shop Room Table,1
+F1_Castle_Flow_01,16,REWARD,宝箱房,REWARD,2
+F1_Castle_Flow_02_TwoBigWings,1,ENTRANCE,入口,Gungeon Entrance,1
+F1_Castle_Flow_02_TwoBigWings,2,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_02_TwoBigWings,3,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_02_TwoBigWings,4,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_02_TwoBigWings,5,CONNECTOR,连接房,CONNECTOR,2
+F1_Castle_Flow_02_TwoBigWings,6,SHOP,商店,Shop Room Table,2
+F1_Castle_Flow_02_TwoBigWings,7,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_02_TwoBigWings,8,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_02_TwoBigWings,9,HUB,枢纽房,HUB,3
+F1_Castle_Flow_02_TwoBigWings,10,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_02_TwoBigWings,11,REWARD,宝箱房,REWARD,2
+F1_Castle_Flow_02_TwoBigWings,12,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_02_TwoBigWings,13,BOSS_FOYER,首领前厅,Boss Foyers,2
+F1_Castle_Flow_02_TwoBigWings,14,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_02_TwoBigWings,15,BOSS,首领,BOSS,2
+F1_Castle_Flow_02_TwoBigWings,16,REWARD,宝箱房,REWARD,2
+F1_Castle_Flow_02_TwoBigWings,17,EXIT,出口,Exit_Room_Basic,1
+F1_Castle_Flow_03_TwoPathsToBoss,1,ENTRANCE,入口,Gungeon Entrance,1
+F1_Castle_Flow_03_TwoPathsToBoss,2,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_03_TwoPathsToBoss,3,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_03_TwoPathsToBoss,4,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_03_TwoPathsToBoss,5,CONNECTOR,连接房,CONNECTOR,2
+F1_Castle_Flow_03_TwoPathsToBoss,6,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_03_TwoPathsToBoss,7,HUB,枢纽房,HUB,3
+F1_Castle_Flow_03_TwoPathsToBoss,8,HUB,枢纽房,HUB,3
+F1_Castle_Flow_03_TwoPathsToBoss,9,REWARD,宝箱房,REWARD,1
+F1_Castle_Flow_03_TwoPathsToBoss,10,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_03_TwoPathsToBoss,11,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_03_TwoPathsToBoss,12,SHOP,商店,Shop Room Table,1
+F1_Castle_Flow_03_TwoPathsToBoss,13,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_03_TwoPathsToBoss,14,REWARD,宝箱房,REWARD,1
+F1_Castle_Flow_03_TwoPathsToBoss,15,BOSS_FOYER,首领前厅,Boss Foyers,2
+F1_Castle_Flow_03_TwoPathsToBoss,16,BOSS,首领,BOSS,2
+F1_Castle_Flow_03_TwoPathsToBoss,17,EXIT,出口,Exit_Room_Basic,1
+F1_Castle_Flow_04_FourSmallWings,1,ENTRANCE,入口,Gungeon Entrance,1
+F1_Castle_Flow_04_FourSmallWings,2,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_04_FourSmallWings,3,HUB,枢纽房,HUB,4
+F1_Castle_Flow_04_FourSmallWings,4,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_04_FourSmallWings,5,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_04_FourSmallWings,6,NORMAL,战斗房,NORMAL,1
+F1_Castle_Flow_04_FourSmallWings,7,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_04_FourSmallWings,8,REWARD,宝箱房,REWARD,1
+F1_Castle_Flow_04_FourSmallWings,9,HUB,枢纽房,HUB,5
+F1_Castle_Flow_04_FourSmallWings,10,BOSS_FOYER,首领前厅,Boss Foyers,2
+F1_Castle_Flow_04_FourSmallWings,11,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_04_FourSmallWings,12,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_04_FourSmallWings,13,BOSS,首领,BOSS,2
+F1_Castle_Flow_04_FourSmallWings,14,REWARD,宝箱房,REWARD,1
+F1_Castle_Flow_04_FourSmallWings,15,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_04_FourSmallWings,16,EXIT,出口,Exit_Room_Basic,1
+F1_Castle_Flow_04_FourSmallWings,17,SHOP,商店,Shop Room Table,2
+F1_Castle_Flow_05_QuickBoss,1,ENTRANCE,入口,Gungeon Entrance,1
+F1_Castle_Flow_05_QuickBoss,2,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_05_QuickBoss,3,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_05_QuickBoss,4,HUB,枢纽房,HUB,4
+F1_Castle_Flow_05_QuickBoss,5,BOSS_FOYER,首领前厅,Boss Foyers,2
+F1_Castle_Flow_05_QuickBoss,6,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_05_QuickBoss,7,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_05_QuickBoss,8,BOSS,首领,BOSS,2
+F1_Castle_Flow_05_QuickBoss,9,SHOP,商店,Shop Room Table,1
+F1_Castle_Flow_05_QuickBoss,10,CONNECTOR,连接房,CONNECTOR,2
+F1_Castle_Flow_05_QuickBoss,11,CONNECTOR,连接房,CONNECTOR,2
+F1_Castle_Flow_05_QuickBoss,12,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_05_QuickBoss,13,EXIT,出口,Exit_Room_Basic,1
+F1_Castle_Flow_05_QuickBoss,14,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_05_QuickBoss,15,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_05_QuickBoss,16,REWARD,宝箱房,REWARD,1
+F1_Castle_Flow_05_QuickBoss,17,REWARD,宝箱房,REWARD,1
+F1_Castle_Flow_06_StandardVariant,1,ENTRANCE,入口,Gungeon Entrance,1
+F1_Castle_Flow_06_StandardVariant,2,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_06_StandardVariant,3,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_06_StandardVariant,4,HUB,枢纽房,HUB,3
+F1_Castle_Flow_06_StandardVariant,5,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_06_StandardVariant,6,NORMAL,战斗房,NORMAL,3
+F1_Castle_Flow_06_StandardVariant,7,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_06_StandardVariant,8,NORMAL,战斗房,NORMAL,1
+F1_Castle_Flow_06_StandardVariant,9,HUB,枢纽房,HUB,4
+F1_Castle_Flow_06_StandardVariant,10,REWARD,宝箱房,REWARD,1
+F1_Castle_Flow_06_StandardVariant,11,BOSS_FOYER,首领前厅,Boss Foyers,2
+F1_Castle_Flow_06_StandardVariant,12,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_06_StandardVariant,13,CONNECTOR,连接房,CONNECTOR,2
+F1_Castle_Flow_06_StandardVariant,14,BOSS,首领,BOSS,2
+F1_Castle_Flow_06_StandardVariant,15,NORMAL,战斗房,NORMAL,2
+F1_Castle_Flow_06_StandardVariant,16,SHOP,商店,Shop Room Table,1
+F1_Castle_Flow_06_StandardVariant,17,EXIT,出口,Exit_Room_Basic,1
+F1_Castle_Flow_06_StandardVariant,18,REWARD,宝箱房,REWARD,2

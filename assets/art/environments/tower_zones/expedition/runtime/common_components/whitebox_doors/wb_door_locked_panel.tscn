@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_panel"]
+albedo_color = Color(0.62, 0.44, 0.16, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_panel"]
+size = Vector3(2.16, 2.5, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="Mat_key"]
+albedo_color = Color(0.95, 0.78, 0.35, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_key"]
+size = Vector3(0.22, 0.42, 0.05)
+
+[node name="WhiteboxDoorPanel" type="Node3D"]
+metadata/schema = "shellstorm2.expedition.door_panel.whitebox.v001"
+metadata/asset_id = "ENV-EXPEDITION-WB-DOOR-LOCKED"
+metadata/door_kind = "locked"
+metadata/display_name_zh = "上锁门"
+metadata/bounds_size_m = Vector3(2.2, 2.5, 0.18)
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/whitebox = true
+metadata/panel_marker = "keyhole"
+metadata/whitebox_excludes = ["final_art","materials","sfx_hooks","vfx"]
+metadata/source = "scripts/build_whitebox_door_kit.py"
+[node name="DoorPanel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("BoxMesh_panel")
+material_override = SubResource("Mat_panel")
+
+[node name="KeyholePlate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0.115)
+mesh = SubResource("BoxMesh_key")
+material_override = SubResource("Mat_key")
+

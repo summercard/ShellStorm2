@@ -1,0 +1,1032 @@
+{
+  "schema": "shellstorm2.egt_room_type.catalog.v001",
+  "schema_version": 1,
+  "source": "docs/v0.1/reference/挺进地牢/EGT房型种类.csv",
+  "source_note": "由 scripts/extract_egt_room_types.py 从官方 flow PDF（28 张 / 5 层 / 551 房间位）反推",
+  "total_room_positions": 551,
+  "kinds": [
+    "BOSS",
+    "BOSS_FOYER",
+    "CONNECTOR",
+    "ENTRANCE",
+    "EXIT",
+    "HUB",
+    "NORMAL",
+    "REWARD",
+    "SHOP",
+    "SPECIAL"
+  ],
+  "kind_count": 10,
+  "type_count": 56,
+  "size_rule": "宽 = max(房型基准宽, min_cells(北门数), min_cells(南门数))，深同理；min_cells(n) = 使该墙 lane 槽数 >= n 的最小格数（格数>=3 时槽数=格数-2）。CONNECTOR 额外保证窄边 <= 长边（保持细长）。⚠ 尺寸是推定值：EGT 真实格数不可从公开截图反推。",
+  "types": [
+    {
+      "shell_id": "egt_normal_N1S1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N1S1",
+      "door_count": 2,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 155,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N1S1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_boss_N1S1",
+      "egt_kind": "BOSS",
+      "egt_kind_zh": "首领",
+      "door_sides": "N1S1",
+      "door_count": 2,
+      "size_m": [
+        50.0,
+        40.0
+      ],
+      "size_cells": [
+        10,
+        8
+      ],
+      "egt_occurrences": 28,
+      "size_basis": "base=10x8 slots(w)=8 slots(d)=6 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_boss_N1S1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_reward_N1",
+      "egt_kind": "REWARD",
+      "egt_kind_zh": "宝箱房",
+      "door_sides": "N1",
+      "door_count": 1,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 27,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_reward_N1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_N1S2",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N1S2",
+      "door_count": 3,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 26,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(2,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N1S2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_exit_N1",
+      "egt_kind": "EXIT",
+      "egt_kind_zh": "出口",
+      "door_sides": "N1",
+      "door_count": 1,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 23,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_exit_N1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_connector_N1S1",
+      "egt_kind": "CONNECTOR",
+      "egt_kind_zh": "连接房",
+      "door_sides": "N1S1",
+      "door_count": 2,
+      "size_m": [
+        10.0,
+        20.0
+      ],
+      "size_cells": [
+        2,
+        4
+      ],
+      "egt_occurrences": 22,
+      "size_basis": "base=2x4 slots(w)=2 slots(d)=2 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_connector_N1S1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_boss_foyer_N1S1",
+      "egt_kind": "BOSS_FOYER",
+      "egt_kind_zh": "首领前厅",
+      "door_sides": "N1S1",
+      "door_count": 2,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 20,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_boss_foyer_N1S1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_entrance_S1",
+      "egt_kind": "ENTRANCE",
+      "egt_kind_zh": "入口",
+      "door_sides": "S1",
+      "door_count": 1,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 18,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_entrance_S1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_reward_N2",
+      "egt_kind": "REWARD",
+      "egt_kind_zh": "宝箱房",
+      "door_sides": "N2",
+      "door_count": 2,
+      "size_m": [
+        20.0,
+        15.0
+      ],
+      "size_cells": [
+        4,
+        3
+      ],
+      "egt_occurrences": 18,
+      "size_basis": "base=3x3 slots(w)=2 slots(d)=1 need=(2,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_reward_N2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_S1W1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "S1W1",
+      "door_count": 2,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 15,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_S1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_N1S1E1W1",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "N1S1E1W1",
+      "door_count": 4,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 14,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_N1S1E1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_S1E1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "S1E1",
+      "door_count": 2,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 14,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_S1E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_N1S1W1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N1S1W1",
+      "door_count": 3,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 11,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N1S1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_shop_N1",
+      "egt_kind": "SHOP",
+      "egt_kind_zh": "商店",
+      "door_sides": "N1",
+      "door_count": 1,
+      "size_m": [
+        20.0,
+        15.0
+      ],
+      "size_cells": [
+        4,
+        3
+      ],
+      "egt_occurrences": 11,
+      "size_basis": "base=4x3 slots(w)=2 slots(d)=1 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_shop_N1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_N1S2",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "N1S2",
+      "door_count": 3,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 9,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(2,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_N1S2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_special_N1",
+      "egt_kind": "SPECIAL",
+      "egt_kind_zh": "特殊房",
+      "door_sides": "N1",
+      "door_count": 1,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 9,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_special_N1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_boss_foyer_S1E1",
+      "egt_kind": "BOSS_FOYER",
+      "egt_kind_zh": "首领前厅",
+      "door_sides": "S1E1",
+      "door_count": 2,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 8,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_boss_foyer_S1E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_entrance_S2",
+      "egt_kind": "ENTRANCE",
+      "egt_kind_zh": "入口",
+      "door_sides": "S2",
+      "door_count": 2,
+      "size_m": [
+        20.0,
+        15.0
+      ],
+      "size_cells": [
+        4,
+        3
+      ],
+      "egt_occurrences": 8,
+      "size_basis": "base=3x3 slots(w)=2 slots(d)=1 need=(2,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_entrance_S2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_S1E1W1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "S1E1W1",
+      "door_count": 3,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 8,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_S1E1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_N1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N1",
+      "door_count": 1,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 6,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_N1S1E1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N1S1E1",
+      "door_count": 3,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 6,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N1S1E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_N1W1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N1W1",
+      "door_count": 2,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 6,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_N2",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N2",
+      "door_count": 2,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 6,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(2,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_connector_S1E1",
+      "egt_kind": "CONNECTOR",
+      "egt_kind_zh": "连接房",
+      "door_sides": "S1E1",
+      "door_count": 2,
+      "size_m": [
+        10.0,
+        20.0
+      ],
+      "size_cells": [
+        2,
+        4
+      ],
+      "egt_occurrences": 5,
+      "size_basis": "base=2x4 slots(w)=2 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_connector_S1E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_exit_N1S1",
+      "egt_kind": "EXIT",
+      "egt_kind_zh": "出口",
+      "door_sides": "N1S1",
+      "door_count": 2,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 5,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_exit_N1S1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_N1S1E1",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "N1S1E1",
+      "door_count": 3,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 5,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_N1S1E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_N1S2W1",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "N1S2W1",
+      "door_count": 4,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 5,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(2,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_N1S2W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_reward_N1S1",
+      "egt_kind": "REWARD",
+      "egt_kind_zh": "宝箱房",
+      "door_sides": "N1S1",
+      "door_count": 2,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 5,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_reward_N1S1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_reward_N1E1",
+      "egt_kind": "REWARD",
+      "egt_kind_zh": "宝箱房",
+      "door_sides": "N1E1",
+      "door_count": 2,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 4,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_reward_N1E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_reward_N1W1",
+      "egt_kind": "REWARD",
+      "egt_kind_zh": "宝箱房",
+      "door_sides": "N1W1",
+      "door_count": 2,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 4,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_reward_N1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_shop_N1S1",
+      "egt_kind": "SHOP",
+      "egt_kind_zh": "商店",
+      "door_sides": "N1S1",
+      "door_count": 2,
+      "size_m": [
+        20.0,
+        15.0
+      ],
+      "size_cells": [
+        4,
+        3
+      ],
+      "egt_occurrences": 4,
+      "size_basis": "base=4x3 slots(w)=2 slots(d)=1 need=(1,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_shop_N1S1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_shop_N2",
+      "egt_kind": "SHOP",
+      "egt_kind_zh": "商店",
+      "door_sides": "N2",
+      "door_count": 2,
+      "size_m": [
+        20.0,
+        15.0
+      ],
+      "size_cells": [
+        4,
+        3
+      ],
+      "egt_occurrences": 4,
+      "size_basis": "base=4x3 slots(w)=2 slots(d)=1 need=(2,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_shop_N2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_N1S2E1",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "N1S2E1",
+      "door_count": 4,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 3,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(2,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_N1S2E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_E1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "E1",
+      "door_count": 1,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 3,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(0,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_N1E1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N1E1",
+      "door_count": 2,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 3,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N1E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_N2S1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N2S1",
+      "door_count": 3,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 3,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(2,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N2S1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_S2E1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "S2E1",
+      "door_count": 3,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 3,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(2,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_S2E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_S2W1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "S2W1",
+      "door_count": 3,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 3,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(2,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_S2W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_W1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "W1",
+      "door_count": 1,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 3,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(0,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_connector_S1E1W1",
+      "egt_kind": "CONNECTOR",
+      "egt_kind_zh": "连接房",
+      "door_sides": "S1E1W1",
+      "door_count": 3,
+      "size_m": [
+        10.0,
+        20.0
+      ],
+      "size_cells": [
+        2,
+        4
+      ],
+      "egt_occurrences": 2,
+      "size_basis": "base=2x4 slots(w)=2 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_connector_S1E1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_N1S2E1W1",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "N1S2E1W1",
+      "door_count": 5,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 2,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(2,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_N1S2E1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_N2S1W1",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "N2S1W1",
+      "door_count": 4,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 2,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(2,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_N2S1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_shop_S1E1",
+      "egt_kind": "SHOP",
+      "egt_kind_zh": "商店",
+      "door_sides": "S1E1",
+      "door_count": 2,
+      "size_m": [
+        20.0,
+        15.0
+      ],
+      "size_cells": [
+        4,
+        3
+      ],
+      "egt_occurrences": 2,
+      "size_basis": "base=4x3 slots(w)=2 slots(d)=1 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_shop_S1E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_connector_S1W1",
+      "egt_kind": "CONNECTOR",
+      "egt_kind_zh": "连接房",
+      "door_sides": "S1W1",
+      "door_count": 2,
+      "size_m": [
+        10.0,
+        20.0
+      ],
+      "size_cells": [
+        2,
+        4
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=2x4 slots(w)=2 slots(d)=2 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_connector_S1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_entrance_E1W1",
+      "egt_kind": "ENTRANCE",
+      "egt_kind_zh": "入口",
+      "door_sides": "E1W1",
+      "door_count": 2,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(0,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_entrance_E1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_entrance_S1E1W1",
+      "egt_kind": "ENTRANCE",
+      "egt_kind_zh": "入口",
+      "door_sides": "S1E1W1",
+      "door_count": 3,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_entrance_S1E1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_N1S1W1",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "N1S1W1",
+      "door_count": 3,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_N1S1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_N2S2",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "N2S2",
+      "door_count": 4,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(2,0)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_N2S2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_S2E2",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "S2E2",
+      "door_count": 4,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(2,2)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_S2E2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_hub_S2W2",
+      "egt_kind": "HUB",
+      "egt_kind_zh": "枢纽房",
+      "door_sides": "S2W2",
+      "door_count": 4,
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "size_cells": [
+        6,
+        5
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=6x5 slots(w)=4 slots(d)=3 need=(2,2)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_hub_S2W2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_N1S2W1",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "N1S2W1",
+      "door_count": 4,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(2,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_N1S2W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_normal_S1W2",
+      "egt_kind": "NORMAL",
+      "egt_kind_zh": "战斗房",
+      "door_sides": "S1W2",
+      "door_count": 3,
+      "size_m": [
+        25.0,
+        20.0
+      ],
+      "size_cells": [
+        5,
+        4
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=5x4 slots(w)=3 slots(d)=2 need=(1,2)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_normal_S1W2_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_shop_E1",
+      "egt_kind": "SHOP",
+      "egt_kind_zh": "商店",
+      "door_sides": "E1",
+      "door_count": 1,
+      "size_m": [
+        20.0,
+        15.0
+      ],
+      "size_cells": [
+        4,
+        3
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=4x3 slots(w)=2 slots(d)=1 need=(0,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_shop_E1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_shop_S1W1",
+      "egt_kind": "SHOP",
+      "egt_kind_zh": "商店",
+      "door_sides": "S1W1",
+      "door_count": 2,
+      "size_m": [
+        20.0,
+        15.0
+      ],
+      "size_cells": [
+        4,
+        3
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=4x3 slots(w)=2 slots(d)=1 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_shop_S1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_special_N1W1",
+      "egt_kind": "SPECIAL",
+      "egt_kind_zh": "特殊房",
+      "door_sides": "N1W1",
+      "door_count": 2,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_special_N1W1_static_layout.tscn"
+    },
+    {
+      "shell_id": "egt_special_S1W1",
+      "egt_kind": "SPECIAL",
+      "egt_kind_zh": "特殊房",
+      "door_sides": "S1W1",
+      "door_count": 2,
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "size_cells": [
+        3,
+        3
+      ],
+      "egt_occurrences": 1,
+      "size_basis": "base=3x3 slots(w)=1 slots(d)=1 need=(1,1)",
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/egt_room_types/egt_special_S1W1_static_layout.tscn"
+    }
+  ]
+}

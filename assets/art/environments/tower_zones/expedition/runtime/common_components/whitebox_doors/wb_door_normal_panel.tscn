@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_panel"]
+albedo_color = Color(0.3, 0.33, 0.36, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_panel"]
+size = Vector3(2.2, 2.5, 0.18)
+
+[node name="WhiteboxDoorPanel" type="Node3D"]
+metadata/schema = "shellstorm2.expedition.door_panel.whitebox.v001"
+metadata/asset_id = "ENV-EXPEDITION-WB-DOOR-NORMAL"
+metadata/door_kind = "normal"
+metadata/display_name_zh = "普通门（战斗门）"
+metadata/bounds_size_m = Vector3(2.2, 2.5, 0.18)
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/whitebox = true
+metadata/panel_marker = "none"
+metadata/whitebox_excludes = ["final_art","materials","sfx_hooks","vfx"]
+metadata/source = "scripts/build_whitebox_door_kit.py"
+[node name="DoorPanel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("BoxMesh_panel")
+material_override = SubResource("Mat_panel")
+

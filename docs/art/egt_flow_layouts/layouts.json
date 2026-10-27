@@ -1,0 +1,3678 @@
+{
+  "flows": [
+    {
+      "corridors": [
+        {
+          "from": "entry",
+          "from_lane": 0.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "n01",
+          "to_lane": 0.0,
+          "to_side": "south"
+        },
+        {
+          "from": "n01",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "hub_01",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "hub_02",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "n07",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "n07",
+          "from_lane": -5.0,
+          "from_side": "east",
+          "length_m": 15.0,
+          "to": "shop",
+          "to_lane": -7.5,
+          "to_side": "west"
+        },
+        {
+          "from": "boss_foyer",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "boss",
+          "to_lane": -7.5,
+          "to_side": "south"
+        },
+        {
+          "from": "boss",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "exit",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "reward_01",
+          "from_lane": -12.5,
+          "from_side": "north",
+          "length_m": 15.0,
+          "to": "secret_room_inj1",
+          "to_lane": -12.5,
+          "to_side": "south"
+        }
+      ],
+      "edges": [
+        {
+          "corridor_length_m": 5.0,
+          "from": "entry",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n01"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n01",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "hub_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n03"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n05"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n03",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n04"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n05",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n06"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n04",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "reward_02"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "reward_02",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n06"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n02"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n02",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "reward_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "reward_02",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "hub_02"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "hub_02",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n07"
+        },
+        {
+          "corridor_length_m": 15.0,
+          "from": "n07",
+          "gap_m": 15.0,
+          "kind": "corridor",
+          "to": "shop"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "shop",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "boss_foyer"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "boss_foyer",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "boss"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "boss",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "exit"
+        },
+        {
+          "corridor_length_m": 15.0,
+          "from": "reward_01",
+          "gap_m": 15.0,
+          "kind": "corridor",
+          "to": "secret_room_inj1"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "exit",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "fireplace_room_inj2"
+        }
+      ],
+      "error": "",
+      "flow_file": "flow_01.json",
+      "flow_id": "flow_01",
+      "flow_name_zh": "基础版",
+      "loops": 1,
+      "ok": true,
+      "rooms": [
+        {
+          "center": [
+            157.5,
+            -207.5
+          ],
+          "node_id": "boss",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            50.0,
+            40.0
+          ],
+          "template_id": "boss_50x40"
+        },
+        {
+          "center": [
+            155.0,
+            -170.0
+          ],
+          "node_id": "boss_foyer",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "west": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "node_id": "entry",
+          "ports": {
+            "north": [
+              0.0
+            ]
+          },
+          "size": [
+            15.0,
+            15.0
+          ],
+          "template_id": "safe_15x15"
+        },
+        {
+          "center": [
+            155.0,
+            -245.0
+          ],
+          "node_id": "exit",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "extraction_25x25"
+        },
+        {
+          "center": [
+            155.0,
+            -270.0
+          ],
+          "node_id": "fireplace_room_inj2",
+          "ports": {
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            -62.5
+          ],
+          "node_id": "hub_01",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "north": [
+              -15.0
+            ],
+            "south": [
+              -5.0
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            85.0,
+            -132.5
+          ],
+          "node_id": "hub_02",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -15.0
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            0.0,
+            -25.0
+          ],
+          "node_id": "n01",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              0.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -42.5,
+            -62.5
+          ],
+          "node_id": "n02",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "north": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            37.5,
+            -62.5
+          ],
+          "node_id": "n03",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        },
+        {
+          "center": [
+            75.0,
+            -62.5
+          ],
+          "node_id": "n04",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            0.0,
+            -102.5
+          ],
+          "node_id": "n05",
+          "ports": {
+            "east": [
+              -2.5
+            ],
+            "south": [
+              -15.0
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            42.5,
+            -97.5
+          ],
+          "node_id": "n06",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            85.0,
+            -170.0
+          ],
+          "node_id": "n07",
+          "ports": {
+            "east": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -47.5,
+            -92.5
+          ],
+          "node_id": "reward_01",
+          "ports": {
+            "north": [
+              -12.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            82.5,
+            -97.5
+          ],
+          "node_id": "reward_02",
+          "ports": {
+            "north": [
+              -12.5
+            ],
+            "south": [
+              -12.5
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            -47.5,
+            -137.5
+          ],
+          "node_id": "secret_room_inj1",
+          "ports": {
+            "south": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            127.5,
+            -167.5
+          ],
+          "node_id": "shop",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        }
+      ],
+      "seed": 4100
+    },
+    {
+      "corridors": [
+        {
+          "from": "n07",
+          "from_lane": -5.0,
+          "from_side": "east",
+          "length_m": 10.0,
+          "to": "n03",
+          "to_lane": -12.5,
+          "to_side": "west"
+        },
+        {
+          "from": "hub_01",
+          "from_lane": -12.5,
+          "from_side": "west",
+          "length_m": 5.0,
+          "to": "n04",
+          "to_lane": -12.5,
+          "to_side": "east"
+        },
+        {
+          "from": "n04",
+          "from_lane": -15.0,
+          "from_side": "north",
+          "length_m": 10.0,
+          "to": "n05",
+          "to_lane": -15.0,
+          "to_side": "south"
+        },
+        {
+          "from": "n07",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "n08",
+          "to_lane": 7.5,
+          "to_side": "south"
+        },
+        {
+          "from": "n08",
+          "from_lane": -12.5,
+          "from_side": "west",
+          "length_m": 5.0,
+          "to": "shop",
+          "to_lane": 7.5,
+          "to_side": "east"
+        },
+        {
+          "from": "shop",
+          "from_lane": -12.5,
+          "from_side": "west",
+          "length_m": 5.0,
+          "to": "boss_foyer",
+          "to_lane": -5.0,
+          "to_side": "east"
+        },
+        {
+          "from": "boss_foyer",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 15.0,
+          "to": "boss",
+          "to_lane": -7.5,
+          "to_side": "south"
+        },
+        {
+          "from": "boss",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "exit",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "n05",
+          "from_lane": -7.5,
+          "from_side": "west",
+          "length_m": 5.0,
+          "to": "reward_02",
+          "to_lane": -7.5,
+          "to_side": "east"
+        },
+        {
+          "from": "n04",
+          "from_lane": -5.0,
+          "from_side": "south",
+          "length_m": 5.0,
+          "to": "conn_01",
+          "to_lane": -5.0,
+          "to_side": "north"
+        }
+      ],
+      "edges": [
+        {
+          "corridor_length_m": 0.0,
+          "from": "entry",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "hub_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n06"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n02"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n06",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n07"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n02",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n03"
+        },
+        {
+          "corridor_length_m": 10.0,
+          "from": "n07",
+          "gap_m": 10.0,
+          "kind": "corridor",
+          "to": "n03"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "hub_01",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n04"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n03",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "reward_01"
+        },
+        {
+          "corridor_length_m": 10.0,
+          "from": "n04",
+          "gap_m": 10.0,
+          "kind": "corridor",
+          "to": "n05"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n07",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n08"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n08",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "shop"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "shop",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "boss_foyer"
+        },
+        {
+          "corridor_length_m": 15.0,
+          "from": "boss_foyer",
+          "gap_m": 15.0,
+          "kind": "corridor",
+          "to": "boss"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "boss",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "exit"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n05",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "reward_02"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n04",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "conn_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "exit",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "secret_room_inj1"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "reward_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "fireplace_room_inj2"
+        }
+      ],
+      "error": "",
+      "flow_file": "flow_02.json",
+      "flow_id": "flow_02",
+      "flow_name_zh": "双翼",
+      "loops": 1,
+      "ok": true,
+      "rooms": [
+        {
+          "center": [
+            -47.5,
+            -197.5
+          ],
+          "node_id": "boss",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            50.0,
+            40.0
+          ],
+          "template_id": "boss_50x40"
+        },
+        {
+          "center": [
+            -50.0,
+            -150.0
+          ],
+          "node_id": "boss_foyer",
+          "ports": {
+            "east": [
+              -5.0
+            ],
+            "north": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -50.0,
+            -15.0
+          ],
+          "node_id": "conn_01",
+          "ports": {
+            "north": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "node_id": "entry",
+          "ports": {
+            "north": [
+              0.0
+            ]
+          },
+          "size": [
+            15.0,
+            15.0
+          ],
+          "template_id": "safe_15x15"
+        },
+        {
+          "center": [
+            -50.0,
+            -235.0
+          ],
+          "node_id": "exit",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "extraction_25x25"
+        },
+        {
+          "center": [
+            55.0,
+            -150.0
+          ],
+          "node_id": "fireplace_room_inj2",
+          "ports": {
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            -52.5
+          ],
+          "node_id": "hub_01",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "north": [
+              -15.0
+            ],
+            "south": [
+              -5.0
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            0.0,
+            -20.0
+          ],
+          "node_id": "n01",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              0.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            42.5,
+            -52.5
+          ],
+          "node_id": "n02",
+          "ports": {
+            "north": [
+              7.5
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            57.5,
+            -87.5
+          ],
+          "node_id": "n03",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        },
+        {
+          "center": [
+            -50.0,
+            -52.5
+          ],
+          "node_id": "n04",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "north": [
+              -15.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            -50.0,
+            -102.5
+          ],
+          "node_id": "n05",
+          "ports": {
+            "south": [
+              -15.0
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            -2.5,
+            -87.5
+          ],
+          "node_id": "n06",
+          "ports": {
+            "east": [
+              -2.5
+            ],
+            "south": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            30.0,
+            -85.0
+          ],
+          "node_id": "n07",
+          "ports": {
+            "east": [
+              -5.0
+            ],
+            "north": [
+              -5.0
+            ],
+            "west": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            17.5,
+            -122.5
+          ],
+          "node_id": "n08",
+          "ports": {
+            "south": [
+              7.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        },
+        {
+          "center": [
+            57.5,
+            -122.5
+          ],
+          "node_id": "reward_01",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            -97.5,
+            -102.5
+          ],
+          "node_id": "reward_02",
+          "ports": {
+            "east": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            -47.5,
+            -262.5
+          ],
+          "node_id": "secret_room_inj1",
+          "ports": {
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            -17.5,
+            -142.5
+          ],
+          "node_id": "shop",
+          "ports": {
+            "east": [
+              7.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        }
+      ],
+      "seed": 4100
+    },
+    {
+      "corridors": [
+        {
+          "from": "entry",
+          "from_lane": 0.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "n01",
+          "to_lane": 0.0,
+          "to_side": "south"
+        },
+        {
+          "from": "n01",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "hub_01",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "hub_02",
+          "from_lane": -12.5,
+          "from_side": "west",
+          "length_m": 10.0,
+          "to": "n06",
+          "to_lane": -7.5,
+          "to_side": "east"
+        },
+        {
+          "from": "n07",
+          "from_lane": -5.0,
+          "from_side": "east",
+          "length_m": 5.0,
+          "to": "boss_foyer",
+          "to_lane": -5.0,
+          "to_side": "west"
+        },
+        {
+          "from": "hub_02",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 15.0,
+          "to": "conn_01",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "boss",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "exit",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "exit",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "secret_room_inj1",
+          "to_lane": -7.5,
+          "to_side": "south"
+        },
+        {
+          "from": "n02",
+          "from_lane": -12.5,
+          "from_side": "north",
+          "length_m": 15.0,
+          "to": "reward_01",
+          "to_lane": -7.5,
+          "to_side": "south"
+        },
+        {
+          "from": "secret_room_inj1",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "fireplace_room_inj2",
+          "to_lane": -5.0,
+          "to_side": "south"
+        }
+      ],
+      "edges": [
+        {
+          "corridor_length_m": 5.0,
+          "from": "entry",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n01"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n01",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "hub_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n03"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n05"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n03",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n04"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n05",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n06"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n04",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "hub_02"
+        },
+        {
+          "corridor_length_m": 10.0,
+          "from": "hub_02",
+          "gap_m": 10.0,
+          "kind": "corridor",
+          "to": "n06"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n02"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_02",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "shop"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "shop",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n07"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n07",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "boss_foyer"
+        },
+        {
+          "corridor_length_m": 15.0,
+          "from": "hub_02",
+          "gap_m": 15.0,
+          "kind": "corridor",
+          "to": "conn_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "boss_foyer",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "boss"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "boss",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "exit"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "exit",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "secret_room_inj1"
+        },
+        {
+          "corridor_length_m": 15.0,
+          "from": "n02",
+          "gap_m": 15.0,
+          "kind": "corridor",
+          "to": "reward_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "conn_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "reward_02"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "secret_room_inj1",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "fireplace_room_inj2"
+        }
+      ],
+      "error": "",
+      "flow_file": "flow_03.json",
+      "flow_id": "flow_03",
+      "flow_name_zh": "双路通 Boss",
+      "loops": 1,
+      "ok": true,
+      "rooms": [
+        {
+          "center": [
+            182.5,
+            -137.5
+          ],
+          "node_id": "boss",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            50.0,
+            40.0
+          ],
+          "template_id": "boss_50x40"
+        },
+        {
+          "center": [
+            180.0,
+            -105.0
+          ],
+          "node_id": "boss_foyer",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "west": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            85.0,
+            -150.0
+          ],
+          "node_id": "conn_01",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "node_id": "entry",
+          "ports": {
+            "north": [
+              0.0
+            ]
+          },
+          "size": [
+            15.0,
+            15.0
+          ],
+          "template_id": "safe_15x15"
+        },
+        {
+          "center": [
+            180.0,
+            -175.0
+          ],
+          "node_id": "exit",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "extraction_25x25"
+        },
+        {
+          "center": [
+            180.0,
+            -240.0
+          ],
+          "node_id": "fireplace_room_inj2",
+          "ports": {
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            -62.5
+          ],
+          "node_id": "hub_01",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "north": [
+              -15.0
+            ],
+            "south": [
+              -5.0
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            85.0,
+            -102.5
+          ],
+          "node_id": "hub_02",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -15.0
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            0.0,
+            -25.0
+          ],
+          "node_id": "n01",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              0.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -42.5,
+            -62.5
+          ],
+          "node_id": "n02",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "north": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            37.5,
+            -62.5
+          ],
+          "node_id": "n03",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        },
+        {
+          "center": [
+            75.0,
+            -62.5
+          ],
+          "node_id": "n04",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            0.0,
+            -102.5
+          ],
+          "node_id": "n05",
+          "ports": {
+            "east": [
+              -2.5
+            ],
+            "south": [
+              -15.0
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            42.5,
+            -97.5
+          ],
+          "node_id": "n06",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            150.0,
+            -105.0
+          ],
+          "node_id": "n07",
+          "ports": {
+            "east": [
+              -5.0
+            ],
+            "west": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -47.5,
+            -107.5
+          ],
+          "node_id": "reward_01",
+          "ports": {
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            87.5,
+            -177.5
+          ],
+          "node_id": "reward_02",
+          "ports": {
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            182.5,
+            -207.5
+          ],
+          "node_id": "secret_room_inj1",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            122.5,
+            -102.5
+          ],
+          "node_id": "shop",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        }
+      ],
+      "seed": 4100
+    },
+    {
+      "corridors": [
+        {
+          "from": "hub_01",
+          "from_lane": -15.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "n02",
+          "to_lane": -12.5,
+          "to_side": "south"
+        },
+        {
+          "from": "reward_01",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 10.0,
+          "to": "fireplace_room_inj2",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "hub_01",
+          "from_lane": -12.5,
+          "from_side": "east",
+          "length_m": 5.0,
+          "to": "n05",
+          "to_lane": -12.5,
+          "to_side": "west"
+        },
+        {
+          "from": "n05",
+          "from_lane": -15.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "reward_02",
+          "to_lane": -12.5,
+          "to_side": "south"
+        },
+        {
+          "from": "hub_01",
+          "from_lane": -12.5,
+          "from_side": "west",
+          "length_m": 5.0,
+          "to": "n03",
+          "to_lane": -12.5,
+          "to_side": "east"
+        },
+        {
+          "from": "n07",
+          "from_lane": -5.0,
+          "from_side": "south",
+          "length_m": 20.0,
+          "to": "hub_02",
+          "to_lane": -15.0,
+          "to_side": "north"
+        },
+        {
+          "from": "hub_02",
+          "from_lane": -12.5,
+          "from_side": "west",
+          "length_m": 15.0,
+          "to": "n08",
+          "to_lane": -12.5,
+          "to_side": "east"
+        },
+        {
+          "from": "n08",
+          "from_lane": -12.5,
+          "from_side": "west",
+          "length_m": 5.0,
+          "to": "shop",
+          "to_lane": -12.5,
+          "to_side": "east"
+        },
+        {
+          "from": "shop",
+          "from_lane": -7.5,
+          "from_side": "west",
+          "length_m": 5.0,
+          "to": "boss_foyer",
+          "to_lane": -5.0,
+          "to_side": "east"
+        },
+        {
+          "from": "boss_foyer",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "boss",
+          "to_lane": -7.5,
+          "to_side": "south"
+        }
+      ],
+      "edges": [
+        {
+          "corridor_length_m": 0.0,
+          "from": "entry",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "hub_01"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "hub_01",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n02"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n02",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "reward_01"
+        },
+        {
+          "corridor_length_m": 10.0,
+          "from": "reward_01",
+          "gap_m": 10.0,
+          "kind": "corridor",
+          "to": "fireplace_room_inj2"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "hub_01",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n05"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n05",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "reward_02"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "hub_01",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n03"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n03",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n06"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n03",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n04"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n06",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n07"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n04",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "hub_02"
+        },
+        {
+          "corridor_length_m": 20.0,
+          "from": "n07",
+          "gap_m": 20.0,
+          "kind": "corridor",
+          "to": "hub_02"
+        },
+        {
+          "corridor_length_m": 15.0,
+          "from": "hub_02",
+          "gap_m": 15.0,
+          "kind": "corridor",
+          "to": "n08"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n08",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "shop"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "shop",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "boss_foyer"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "boss_foyer",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "boss"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "boss",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "exit"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "exit",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "secret_room_inj1"
+        }
+      ],
+      "error": "",
+      "flow_file": "flow_04.json",
+      "flow_id": "flow_04",
+      "flow_name_zh": "四小翼",
+      "loops": 1,
+      "ok": true,
+      "rooms": [
+        {
+          "center": [
+            -207.5,
+            -32.5
+          ],
+          "node_id": "boss",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            50.0,
+            40.0
+          ],
+          "template_id": "boss_50x40"
+        },
+        {
+          "center": [
+            -210.0,
+            5.0
+          ],
+          "node_id": "boss_foyer",
+          "ports": {
+            "east": [
+              -5.0
+            ],
+            "north": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "node_id": "entry",
+          "ports": {
+            "north": [
+              0.0
+            ]
+          },
+          "size": [
+            15.0,
+            15.0
+          ],
+          "template_id": "safe_15x15"
+        },
+        {
+          "center": [
+            -210.0,
+            -65.0
+          ],
+          "node_id": "exit",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "extraction_25x25"
+        },
+        {
+          "center": [
+            -5.0,
+            -160.0
+          ],
+          "node_id": "fireplace_room_inj2",
+          "ports": {
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            -52.5
+          ],
+          "node_id": "hub_01",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "north": [
+              -15.0
+            ],
+            "south": [
+              -5.0
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            -90.0,
+            7.5
+          ],
+          "node_id": "hub_02",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "north": [
+              -15.0
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            0.0,
+            -20.0
+          ],
+          "node_id": "n01",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              0.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -2.5,
+            -92.5
+          ],
+          "node_id": "n02",
+          "ports": {
+            "north": [
+              -12.5
+            ],
+            "south": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            -42.5,
+            -52.5
+          ],
+          "node_id": "n03",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "south": [
+              -7.5
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        },
+        {
+          "center": [
+            -45.0,
+            -12.5
+          ],
+          "node_id": "n04",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "west": [
+              7.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            50.0,
+            -52.5
+          ],
+          "node_id": "n05",
+          "ports": {
+            "north": [
+              -15.0
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            -77.5,
+            -52.5
+          ],
+          "node_id": "n06",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            -80.0,
+            -25.0
+          ],
+          "node_id": "n07",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -142.5,
+            7.5
+          ],
+          "node_id": "n08",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        },
+        {
+          "center": [
+            -2.5,
+            -122.5
+          ],
+          "node_id": "reward_01",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            47.5,
+            -92.5
+          ],
+          "node_id": "reward_02",
+          "ports": {
+            "south": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            -207.5,
+            -92.5
+          ],
+          "node_id": "secret_room_inj1",
+          "ports": {
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            -177.5,
+            7.5
+          ],
+          "node_id": "shop",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        }
+      ],
+      "seed": 4100
+    },
+    {
+      "corridors": [
+        {
+          "from": "entry",
+          "from_lane": 0.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "n01",
+          "to_lane": 0.0,
+          "to_side": "south"
+        },
+        {
+          "from": "n01",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "hub_01",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "n06",
+          "from_lane": -7.5,
+          "from_side": "west",
+          "length_m": 10.0,
+          "to": "n05",
+          "to_lane": -12.5,
+          "to_side": "east"
+        },
+        {
+          "from": "shop",
+          "from_lane": -7.5,
+          "from_side": "east",
+          "length_m": 5.0,
+          "to": "n07",
+          "to_lane": -5.0,
+          "to_side": "west"
+        },
+        {
+          "from": "n07",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 15.0,
+          "to": "boss_foyer",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "boss",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "exit",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "exit",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "secret_room_inj1",
+          "to_lane": -7.5,
+          "to_side": "south"
+        },
+        {
+          "from": "n02",
+          "from_lane": -12.5,
+          "from_side": "south",
+          "length_m": 15.0,
+          "to": "reward_01",
+          "to_lane": -7.5,
+          "to_side": "north"
+        },
+        {
+          "from": "secret_room_inj1",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "fireplace_room_inj2",
+          "to_lane": -5.0,
+          "to_side": "south"
+        }
+      ],
+      "edges": [
+        {
+          "corridor_length_m": 5.0,
+          "from": "entry",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n01"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n01",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "hub_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n03"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "conn_02"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n03",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n04"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "conn_02",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n05"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n04",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n06"
+        },
+        {
+          "corridor_length_m": 10.0,
+          "from": "n06",
+          "gap_m": 10.0,
+          "kind": "corridor",
+          "to": "n05"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "conn_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "conn_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n02"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n06",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "shop"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "shop",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n07"
+        },
+        {
+          "corridor_length_m": 15.0,
+          "from": "n07",
+          "gap_m": 15.0,
+          "kind": "corridor",
+          "to": "boss_foyer"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "boss_foyer",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "boss"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "boss",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "exit"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "exit",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "secret_room_inj1"
+        },
+        {
+          "corridor_length_m": 15.0,
+          "from": "n02",
+          "gap_m": 15.0,
+          "kind": "corridor",
+          "to": "reward_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n05",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "reward_02"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "secret_room_inj1",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "fireplace_room_inj2"
+        }
+      ],
+      "error": "",
+      "flow_file": "flow_05.json",
+      "flow_id": "flow_05",
+      "flow_name_zh": "快 Boss",
+      "loops": 1,
+      "ok": true,
+      "rooms": [
+        {
+          "center": [
+            112.5,
+            -207.5
+          ],
+          "node_id": "boss",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            50.0,
+            40.0
+          ],
+          "template_id": "boss_50x40"
+        },
+        {
+          "center": [
+            110.0,
+            -175.0
+          ],
+          "node_id": "boss_foyer",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -35.0,
+            -65.0
+          ],
+          "node_id": "conn_01",
+          "ports": {
+            "east": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            -95.0
+          ],
+          "node_id": "conn_02",
+          "ports": {
+            "east": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "node_id": "entry",
+          "ports": {
+            "north": [
+              0.0
+            ]
+          },
+          "size": [
+            15.0,
+            15.0
+          ],
+          "template_id": "safe_15x15"
+        },
+        {
+          "center": [
+            110.0,
+            -245.0
+          ],
+          "node_id": "exit",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "extraction_25x25"
+        },
+        {
+          "center": [
+            110.0,
+            -310.0
+          ],
+          "node_id": "fireplace_room_inj2",
+          "ports": {
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            -62.5
+          ],
+          "node_id": "hub_01",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            0.0,
+            -25.0
+          ],
+          "node_id": "n01",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              0.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -42.5,
+            -37.5
+          ],
+          "node_id": "n02",
+          "ports": {
+            "north": [
+              2.5
+            ],
+            "south": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            37.5,
+            -62.5
+          ],
+          "node_id": "n03",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        },
+        {
+          "center": [
+            75.0,
+            -62.5
+          ],
+          "node_id": "n04",
+          "ports": {
+            "north": [
+              -10.0
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            35.0,
+            -102.5
+          ],
+          "node_id": "n05",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "north": [
+              -15.0
+            ],
+            "west": [
+              2.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            77.5,
+            -97.5
+          ],
+          "node_id": "n06",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -12.5
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            110.0,
+            -135.0
+          ],
+          "node_id": "n07",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "west": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -47.5,
+            7.5
+          ],
+          "node_id": "reward_01",
+          "ports": {
+            "north": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            32.5,
+            -137.5
+          ],
+          "node_id": "reward_02",
+          "ports": {
+            "south": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            112.5,
+            -277.5
+          ],
+          "node_id": "secret_room_inj1",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            77.5,
+            -132.5
+          ],
+          "node_id": "shop",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        }
+      ],
+      "seed": 4100
+    },
+    {
+      "corridors": [
+        {
+          "from": "n06",
+          "from_lane": -12.5,
+          "from_side": "south",
+          "length_m": 30.0,
+          "to": "n04",
+          "to_lane": -15.0,
+          "to_side": "north"
+        },
+        {
+          "from": "hub_01",
+          "from_lane": -7.5,
+          "from_side": "west",
+          "length_m": 5.0,
+          "to": "n02",
+          "to_lane": -7.5,
+          "to_side": "east"
+        },
+        {
+          "from": "n06",
+          "from_lane": -12.5,
+          "from_side": "north",
+          "length_m": 10.0,
+          "to": "hub_02",
+          "to_lane": -15.0,
+          "to_side": "south"
+        },
+        {
+          "from": "hub_02",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "n07",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "n07",
+          "from_lane": -5.0,
+          "from_side": "east",
+          "length_m": 5.0,
+          "to": "n08",
+          "to_lane": -2.5,
+          "to_side": "west"
+        },
+        {
+          "from": "n08",
+          "from_lane": -12.5,
+          "from_side": "east",
+          "length_m": 5.0,
+          "to": "shop",
+          "to_lane": -12.5,
+          "to_side": "west"
+        },
+        {
+          "from": "shop",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 15.0,
+          "to": "reward_02",
+          "to_lane": -7.5,
+          "to_side": "south"
+        },
+        {
+          "from": "reward_02",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "boss_foyer",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "boss_foyer",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "boss",
+          "to_lane": -7.5,
+          "to_side": "south"
+        },
+        {
+          "from": "boss",
+          "from_lane": -7.5,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "exit",
+          "to_lane": -5.0,
+          "to_side": "south"
+        },
+        {
+          "from": "exit",
+          "from_lane": -5.0,
+          "from_side": "north",
+          "length_m": 5.0,
+          "to": "fireplace_room_inj2",
+          "to_lane": -5.0,
+          "to_side": "south"
+        }
+      ],
+      "edges": [
+        {
+          "corridor_length_m": 0.0,
+          "from": "entry",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "hub_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n05"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "hub_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n03"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n05",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n06"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n03",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "n04"
+        },
+        {
+          "corridor_length_m": 30.0,
+          "from": "n06",
+          "gap_m": 30.0,
+          "kind": "corridor",
+          "to": "n04"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "hub_01",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n02"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n04",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "conn_01"
+        },
+        {
+          "corridor_length_m": 10.0,
+          "from": "n06",
+          "gap_m": 10.0,
+          "kind": "corridor",
+          "to": "hub_02"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "hub_02",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n07"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n07",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "n08"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "n08",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "shop"
+        },
+        {
+          "corridor_length_m": 15.0,
+          "from": "shop",
+          "gap_m": 15.0,
+          "kind": "corridor",
+          "to": "reward_02"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "reward_02",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "boss_foyer"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "boss_foyer",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "boss"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "boss",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "exit"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "n02",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "reward_01"
+        },
+        {
+          "corridor_length_m": 0.0,
+          "from": "conn_01",
+          "gap_m": 0.0,
+          "kind": "direct",
+          "to": "secret_room_inj1"
+        },
+        {
+          "corridor_length_m": 5.0,
+          "from": "exit",
+          "gap_m": 5.0,
+          "kind": "corridor",
+          "to": "fireplace_room_inj2"
+        }
+      ],
+      "error": "",
+      "flow_file": "flow_06.json",
+      "flow_id": "flow_06",
+      "flow_name_zh": "标准变体",
+      "loops": 1,
+      "ok": true,
+      "rooms": [
+        {
+          "center": [
+            112.5,
+            -292.5
+          ],
+          "node_id": "boss",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            50.0,
+            40.0
+          ],
+          "template_id": "boss_50x40"
+        },
+        {
+          "center": [
+            110.0,
+            -255.0
+          ],
+          "node_id": "boss_foyer",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            75.0,
+            -20.0
+          ],
+          "node_id": "conn_01",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            0.0
+          ],
+          "node_id": "entry",
+          "ports": {
+            "north": [
+              0.0
+            ]
+          },
+          "size": [
+            15.0,
+            15.0
+          ],
+          "template_id": "safe_15x15"
+        },
+        {
+          "center": [
+            110.0,
+            -330.0
+          ],
+          "node_id": "exit",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "extraction_25x25"
+        },
+        {
+          "center": [
+            110.0,
+            -360.0
+          ],
+          "node_id": "fireplace_room_inj2",
+          "ports": {
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            0.0,
+            -52.5
+          ],
+          "node_id": "hub_01",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "north": [
+              -15.0
+            ],
+            "south": [
+              -5.0
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            45.0,
+            -132.5
+          ],
+          "node_id": "hub_02",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              -15.0
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            0.0,
+            -20.0
+          ],
+          "node_id": "n01",
+          "ports": {
+            "north": [
+              -5.0
+            ],
+            "south": [
+              0.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            -47.5,
+            -52.5
+          ],
+          "node_id": "n02",
+          "ports": {
+            "east": [
+              -7.5
+            ],
+            "north": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            37.5,
+            -52.5
+          ],
+          "node_id": "n03",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        },
+        {
+          "center": [
+            75.0,
+            -52.5
+          ],
+          "node_id": "n04",
+          "ports": {
+            "north": [
+              -15.0
+            ],
+            "south": [
+              -5.0
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            0.0,
+            -92.5
+          ],
+          "node_id": "n05",
+          "ports": {
+            "east": [
+              -2.5
+            ],
+            "south": [
+              -15.0
+            ]
+          },
+          "size": [
+            45.0,
+            40.0
+          ],
+          "template_id": "corridor_45x40"
+        },
+        {
+          "center": [
+            42.5,
+            -87.5
+          ],
+          "node_id": "n06",
+          "ports": {
+            "north": [
+              -12.5
+            ],
+            "south": [
+              -12.5
+            ],
+            "west": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            45.0,
+            -170.0
+          ],
+          "node_id": "n07",
+          "ports": {
+            "east": [
+              -5.0
+            ],
+            "south": [
+              -5.0
+            ]
+          },
+          "size": [
+            25.0,
+            25.0
+          ],
+          "template_id": "std_25x25"
+        },
+        {
+          "center": [
+            77.5,
+            -172.5
+          ],
+          "node_id": "n08",
+          "ports": {
+            "east": [
+              -12.5
+            ],
+            "west": [
+              -2.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        },
+        {
+          "center": [
+            -47.5,
+            -82.5
+          ],
+          "node_id": "reward_01",
+          "ports": {
+            "south": [
+              -12.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            112.5,
+            -222.5
+          ],
+          "node_id": "reward_02",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "south": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            77.5,
+            7.5
+          ],
+          "node_id": "secret_room_inj1",
+          "ports": {
+            "north": [
+              -7.5
+            ]
+          },
+          "size": [
+            40.0,
+            30.0
+          ],
+          "template_id": "db_70x50"
+        },
+        {
+          "center": [
+            112.5,
+            -172.5
+          ],
+          "node_id": "shop",
+          "ports": {
+            "north": [
+              -7.5
+            ],
+            "west": [
+              -12.5
+            ]
+          },
+          "size": [
+            30.0,
+            40.0
+          ],
+          "template_id": "office_60x70"
+        }
+      ],
+      "seed": 4100
+    }
+  ],
+  "level_id": "expedition_03",
+  "seed": 4100
+}

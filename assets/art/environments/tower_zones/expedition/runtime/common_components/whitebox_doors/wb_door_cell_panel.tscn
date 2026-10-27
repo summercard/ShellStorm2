@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_panel"]
+albedo_color = Color(0.26, 0.29, 0.32, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_panel"]
+size = Vector3(2.18, 2.5, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="Mat_bars"]
+albedo_color = Color(0.55, 0.58, 0.62, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_bar"]
+size = Vector3(0.10, 2.5, 0.26)
+
+[node name="WhiteboxDoorPanel" type="Node3D"]
+metadata/schema = "shellstorm2.expedition.door_panel.whitebox.v001"
+metadata/asset_id = "ENV-EXPEDITION-WB-DOOR-CELL"
+metadata/door_kind = "cell"
+metadata/display_name_zh = "牢房门"
+metadata/bounds_size_m = Vector3(2.2, 2.5, 0.18)
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/whitebox = true
+metadata/panel_marker = "bars"
+metadata/whitebox_excludes = ["final_art","materials","sfx_hooks","vfx"]
+metadata/source = "scripts/build_whitebox_door_kit.py"
+[node name="DoorPanel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("BoxMesh_panel")
+material_override = SubResource("Mat_panel")
+
+[node name="CellBar_0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.733333, 1.25, 0)
+mesh = SubResource("BoxMesh_bar")
+material_override = SubResource("Mat_bars")
+
+[node name="CellBar_1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.366667, 1.25, 0)
+mesh = SubResource("BoxMesh_bar")
+material_override = SubResource("Mat_bars")
+
+[node name="CellBar_2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("BoxMesh_bar")
+material_override = SubResource("Mat_bars")
+
+[node name="CellBar_3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.366667, 1.25, 0)
+mesh = SubResource("BoxMesh_bar")
+material_override = SubResource("Mat_bars")
+
+[node name="CellBar_4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.733333, 1.25, 0)
+mesh = SubResource("BoxMesh_bar")
+material_override = SubResource("Mat_bars")
+

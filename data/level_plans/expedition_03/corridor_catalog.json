@@ -1,0 +1,194 @@
+{
+  "schema": "shellstorm2.expedition.corridor_catalog.v001",
+  "schema_version": 1,
+  "level_id": "expedition_03",
+  "design_rule": "走廊就是一间很窄的房间，与房间同契约（5m 格、2.2m 门洞、同一套 lane 槽），不是独立的连接件类型；生成顺序上它排在最后，用来补已摆好房间之间的缝。",
+  "grid_unit_m": 5.0,
+  "net_width_m": 5.0,
+  "note_width": "净宽取 5m 而非更窄：门洞 2.2m 必须居中落在 5m 槽位上，两侧各留 1.4m 墙肩，才能与房间侧槽位逐米对齐。3~4m 宽的通道会让门位脱离 5m 格线。",
+  "shells": [
+    {
+      "shell_id": "cr_straight_05",
+      "size_m": [
+        5.0,
+        5.0
+      ],
+      "shape": "straight",
+      "ports": [
+        {
+          "side": "north",
+          "lane_m": 0.0
+        },
+        {
+          "side": "south",
+          "lane_m": 0.0
+        }
+      ],
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/cr_straight_05_static_layout.tscn"
+    },
+    {
+      "shell_id": "cr_straight_10",
+      "size_m": [
+        5.0,
+        10.0
+      ],
+      "shape": "straight",
+      "ports": [
+        {
+          "side": "north",
+          "lane_m": 0.0
+        },
+        {
+          "side": "south",
+          "lane_m": 0.0
+        }
+      ],
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/cr_straight_10_static_layout.tscn"
+    },
+    {
+      "shell_id": "cr_straight_15",
+      "size_m": [
+        5.0,
+        15.0
+      ],
+      "shape": "straight",
+      "ports": [
+        {
+          "side": "north",
+          "lane_m": 0.0
+        },
+        {
+          "side": "south",
+          "lane_m": 0.0
+        }
+      ],
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/cr_straight_15_static_layout.tscn"
+    },
+    {
+      "shell_id": "cr_straight_20",
+      "size_m": [
+        5.0,
+        20.0
+      ],
+      "shape": "straight",
+      "ports": [
+        {
+          "side": "north",
+          "lane_m": 0.0
+        },
+        {
+          "side": "south",
+          "lane_m": 0.0
+        }
+      ],
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/cr_straight_20_static_layout.tscn"
+    },
+    {
+      "shell_id": "cr_straight_30",
+      "size_m": [
+        5.0,
+        30.0
+      ],
+      "shape": "straight",
+      "ports": [
+        {
+          "side": "north",
+          "lane_m": 0.0
+        },
+        {
+          "side": "south",
+          "lane_m": 0.0
+        }
+      ],
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/cr_straight_30_static_layout.tscn"
+    },
+    {
+      "shell_id": "cr_straight_45",
+      "size_m": [
+        5.0,
+        45.0
+      ],
+      "shape": "straight",
+      "ports": [
+        {
+          "side": "north",
+          "lane_m": 0.0
+        },
+        {
+          "side": "south",
+          "lane_m": 0.0
+        }
+      ],
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/cr_straight_45_static_layout.tscn"
+    },
+    {
+      "shell_id": "cr_corner_05",
+      "size_m": [
+        5.0,
+        5.0
+      ],
+      "shape": "straight",
+      "ports": [
+        {
+          "side": "north",
+          "lane_m": 0.0
+        },
+        {
+          "side": "east",
+          "lane_m": 0.0
+        }
+      ],
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/cr_corner_05_static_layout.tscn"
+    },
+    {
+      "shell_id": "cr_t_junction_05",
+      "size_m": [
+        5.0,
+        5.0
+      ],
+      "shape": "junction_3",
+      "ports": [
+        {
+          "side": "north",
+          "lane_m": 0.0
+        },
+        {
+          "side": "south",
+          "lane_m": 0.0
+        },
+        {
+          "side": "east",
+          "lane_m": 0.0
+        }
+      ],
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/cr_t_junction_05_static_layout.tscn"
+    },
+    {
+      "shell_id": "cr_cross_05",
+      "size_m": [
+        5.0,
+        5.0
+      ],
+      "shape": "junction_4",
+      "ports": [
+        {
+          "side": "north",
+          "lane_m": 0.0
+        },
+        {
+          "side": "south",
+          "lane_m": 0.0
+        },
+        {
+          "side": "east",
+          "lane_m": 0.0
+        },
+        {
+          "side": "west",
+          "lane_m": 0.0
+        }
+      ],
+      "scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/cr_cross_05_static_layout.tscn"
+    }
+  ]
+}

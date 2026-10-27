@@ -1,0 +1,148 @@
+{
+  "schema": "shellstorm2.expedition.door_catalog.v001",
+  "schema_version": 1,
+  "level_id": "expedition_03",
+  "shared_opening": {
+    "width_m": 2.2,
+    "clear_height_m": 2.5,
+    "panel_thickness_m": 0.18,
+    "grid_unit_m": 5.0,
+    "note": "门洞尺寸取自 room_templates 的 door_contract，8 份模板一致；门扇原点为门洞底面中心。"
+  },
+  "design_rule": "房间模板只声明可接的出口槽（ConnectionPorts），门由运行时落上去。加一种门只改本表与一条装配规则，不改任何房间 TSCN —— 把门烘进模板会让「同一间房只能有一种开门方式」。",
+  "kinds": {
+    "normal": {
+      "kind": "normal",
+      "display_name_zh": "普通门（战斗门）",
+      "runtime_class": "RoomDoor3D",
+      "access_policy": {
+        "requires_key": false,
+        "requires_clear": true,
+        "triggers_fate": false
+      },
+      "egt": {
+        "door_type": "combat door",
+        "behaviour": "玩家进房后门自动关上，清完怪再开",
+        "mapped_by": "requires_clear = true"
+      },
+      "used_in_room_kinds": [
+        "NORMAL",
+        "HUB",
+        "CONNECTOR",
+        "REWARD",
+        "SHOP",
+        "BOSS_FOYER",
+        "ENTRANCE",
+        "EXIT"
+      ],
+      "panel_scene": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/whitebox_doors/wb_door_normal_panel.tscn",
+      "panel_marker": "none",
+      "panel_color": [
+        0.3,
+        0.33,
+        0.36
+      ]
+    },
+    "locked": {
+      "kind": "locked",
+      "display_name_zh": "上锁门",
+      "runtime_class": "RoomDoor3D",
+      "access_policy": {
+        "requires_key": true,
+        "requires_clear": false,
+        "triggers_fate": false
+      },
+      "egt": {
+        "door_type": "locked door",
+        "behaviour": "需要消耗一把钥匙",
+        "mapped_by": "requires_key = true",
+        "note": "挺进地牢用 chanceToLock 在注入阶段配概率；本工程按房间位显式指定。"
+      },
+      "used_in_room_kinds": [
+        "REWARD",
+        "SHOP"
+      ],
+      "panel_scene": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/whitebox_doors/wb_door_locked_panel.tscn",
+      "panel_marker": "keyhole",
+      "panel_color": [
+        0.62,
+        0.44,
+        0.16
+      ]
+    },
+    "boss": {
+      "kind": "boss",
+      "display_name_zh": "首领门",
+      "runtime_class": "RoomDoor3D",
+      "access_policy": {
+        "requires_key": true,
+        "requires_clear": true,
+        "triggers_fate": true
+      },
+      "egt": {
+        "door_type": "boss door",
+        "behaviour": "首领房唯一入口，常闭且带仪式演出",
+        "mapped_by": "requires_key + requires_clear + triggers_fate"
+      },
+      "used_in_room_kinds": [
+        "BOSS"
+      ],
+      "panel_scene": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/whitebox_doors/wb_door_boss_panel.tscn",
+      "panel_marker": "pillars",
+      "panel_color": [
+        0.55,
+        0.18,
+        0.18
+      ]
+    },
+    "secret": {
+      "kind": "secret",
+      "display_name_zh": "隐藏门（可打碎的墙）",
+      "runtime_class": "SecretDoor3D",
+      "access_policy": null,
+      "egt": {
+        "door_type": "secret door / breakable wall",
+        "behaviour": "外观与墙无异，用爆炸或特定手段打碎后进入",
+        "mapped_by": "SecretDoor3D 的 max_hp / BROKE 状态",
+        "note": "不复用 RoomDoor3D：隐藏门的核心行为是「被打碎」，门板的升降语义表达不了。"
+      },
+      "used_in_room_kinds": [
+        "REWARD"
+      ],
+      "note": "此型门扇与墙板同色同面 —— 这是**故意**的：隐藏门必须看起来不像门。",
+      "panel_scene": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/whitebox_doors/wb_door_secret_panel.tscn",
+      "panel_marker": "none",
+      "panel_color": [
+        0.52,
+        0.55,
+        0.6
+      ]
+    },
+    "cell": {
+      "kind": "cell",
+      "display_name_zh": "牢房门",
+      "runtime_class": "RoomDoor3D",
+      "access_policy": {
+        "requires_key": true,
+        "requires_clear": false,
+        "triggers_fate": false
+      },
+      "egt": {
+        "door_type": "cell door",
+        "behaviour": "本层出现牢房锁时，系统必定给某个敌人分配一把 Cell Key",
+        "mapped_by": "requires_key = true",
+        "note": "挺进地牢里这是唯一「门反向影响刷怪」的依赖；本工程刷怪侧尚未消费，只声明策略。"
+      },
+      "used_in_room_kinds": [
+        "REWARD"
+      ],
+      "panel_scene": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/whitebox_doors/wb_door_cell_panel.tscn",
+      "panel_marker": "bars",
+      "panel_color": [
+        0.26,
+        0.29,
+        0.32
+      ]
+    }
+  }
+}

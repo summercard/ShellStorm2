@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>挺进地牢 · 56 种房型白盒</title>
+<style>
+:root{--ink:#16181A;--sub:#5F6569;--line:#D8DBDC;--bg:#EFF0F0;--paper:#fff;--accent:#0E9C86}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.7 "PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+header{padding:30px 40px 22px;background:var(--paper);border-bottom:1px solid var(--line)}
+h1{margin:0 0 8px;font-size:25px}
+.sub{color:var(--sub);font-size:13px;max-width:1020px}
+.wrap{padding:10px 40px 70px;max-width:1500px;margin:0 auto}
+h2{font-size:17px;margin:36px 0 6px;padding-left:10px;border-left:3px solid var(--accent);
+   display:flex;align-items:baseline;gap:10px}
+h2 code{font-size:13px;color:#7A8186;font-weight:400}
+.cnt{margin-left:auto;font-size:12px;color:var(--sub);font-weight:400}
+.note{margin:0 0 14px;padding-left:13px;font-size:12.5px;color:var(--sub);max-width:1050px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:14px}
+figure{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+figure img{display:block;width:100%;height:auto;background:#f7f8f9;border-bottom:1px solid var(--line)}
+figcaption{padding:9px 11px;font-size:12px;color:var(--sub)}
+figcaption b{color:var(--ink);font-weight:600;display:block;font-size:13px;margin-bottom:5px;
+  font-family:ui-monospace,Menlo,monospace}
+.tag{display:inline-block;background:#F1EFE8;border:1px solid var(--line);border-radius:20px;
+  padding:0 6px;font-size:10.5px;color:#444441;margin:0 3px 3px 0}
+.tag.hot{background:#E3F4EF;border-color:#A9D9CD;color:#0E7A6B}
+figcaption code{font-size:9.5px;color:#A8ADB1;word-break:break-all;display:block;margin-top:3px}
+.banner{background:#FAEEDA;border:1px solid #EFC98A;border-radius:10px;padding:14px 18px;
+  margin:18px 0 0;font-size:13px;line-height:1.8}
+.banner b{color:#7A3E0B}
+</style></head><body>
+<header><h1>挺进地牢 · 全部 56 种房型白盒</h1>
+<div class="sub">口径不是估的：从官方 flow 骨架图 PDF（<b>28 张 / 5 层 / 551 个房间位</b>）
+反推每个房间「门开在哪几面、每面几扇」，按 <code>(房型, 门面组合)</code> 去重 = <b>56 种</b>。
+28 张骨架的门面数全部等于边数，自检通过。</div>
+<div class="banner"><b>看图看什么：</b>橙条＝门洞，格线＝5m。
+<b>「N1S2」读作「北 1 扇、南 2 扇」</b> —— 同侧多门是真实房型，不是重复计数。<br>
+<b>尺寸是推定值，不是 EGT 实测格数</b>：EGT 真实格数不可从公开截图反推（透视渲染图，拟合不收敛）。
+尺寸由「该面墙的合法门槽数 >= 该面门数」+ 房型基准档推出，规则写在
+<code>docs/v0.1/reference/挺进地牢/EGT房型种类.md</code>。<br>
+房型内部顺序按<b>实测出现次数</b>降序 —— 排前面的就是每局最常撞见的形状。</div></header>
+<div class="wrap">
+<h2>战斗房 · <code>NORMAL</code><span class="cnt">18 种 / 实测 273 处</span></h2>
+<p class="note">主干内容，占全部房间位最多</p>
+<div class="grid">
+<figure>
+<img src="egt_normal_N1S1.png" alt="egt_normal_N1S1" loading="lazy">
+<figcaption><b>N1S1</b><span class="tag">北 + 南</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">155 处</span>
+<code>egt_normal_N1S1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_N1S2.png" alt="egt_normal_N1S2" loading="lazy">
+<figcaption><b>N1S2</b><span class="tag">北 + 南×2</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">26 处</span>
+<code>egt_normal_N1S2</code></figcaption></figure>
+<figure>
+<img src="egt_normal_S1W1.png" alt="egt_normal_S1W1" loading="lazy">
+<figcaption><b>S1W1</b><span class="tag">南 + 西</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">15 处</span>
+<code>egt_normal_S1W1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_S1E1.png" alt="egt_normal_S1E1" loading="lazy">
+<figcaption><b>S1E1</b><span class="tag">南 + 东</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">14 处</span>
+<code>egt_normal_S1E1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_N1S1W1.png" alt="egt_normal_N1S1W1" loading="lazy">
+<figcaption><b>N1S1W1</b><span class="tag">北 + 南 + 西</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">11 处</span>
+<code>egt_normal_N1S1W1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_S1E1W1.png" alt="egt_normal_S1E1W1" loading="lazy">
+<figcaption><b>S1E1W1</b><span class="tag">南 + 东 + 西</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">8 处</span>
+<code>egt_normal_S1E1W1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_N1.png" alt="egt_normal_N1" loading="lazy">
+<figcaption><b>N1</b><span class="tag">北</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">6 处</span>
+<code>egt_normal_N1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_N1S1E1.png" alt="egt_normal_N1S1E1" loading="lazy">
+<figcaption><b>N1S1E1</b><span class="tag">北 + 南 + 东</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">6 处</span>
+<code>egt_normal_N1S1E1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_N1W1.png" alt="egt_normal_N1W1" loading="lazy">
+<figcaption><b>N1W1</b><span class="tag">北 + 西</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">6 处</span>
+<code>egt_normal_N1W1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_N2.png" alt="egt_normal_N2" loading="lazy">
+<figcaption><b>N2</b><span class="tag">北×2</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">6 处</span>
+<code>egt_normal_N2</code></figcaption></figure>
+<figure>
+<img src="egt_normal_E1.png" alt="egt_normal_E1" loading="lazy">
+<figcaption><b>E1</b><span class="tag">东</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">3 处</span>
+<code>egt_normal_E1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_N1E1.png" alt="egt_normal_N1E1" loading="lazy">
+<figcaption><b>N1E1</b><span class="tag">北 + 东</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">3 处</span>
+<code>egt_normal_N1E1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_N2S1.png" alt="egt_normal_N2S1" loading="lazy">
+<figcaption><b>N2S1</b><span class="tag">北×2 + 南</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">3 处</span>
+<code>egt_normal_N2S1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_S2E1.png" alt="egt_normal_S2E1" loading="lazy">
+<figcaption><b>S2E1</b><span class="tag">南×2 + 东</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">3 处</span>
+<code>egt_normal_S2E1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_S2W1.png" alt="egt_normal_S2W1" loading="lazy">
+<figcaption><b>S2W1</b><span class="tag">南×2 + 西</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">3 处</span>
+<code>egt_normal_S2W1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_W1.png" alt="egt_normal_W1" loading="lazy">
+<figcaption><b>W1</b><span class="tag">西</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">3 处</span>
+<code>egt_normal_W1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_N1S2W1.png" alt="egt_normal_N1S2W1" loading="lazy">
+<figcaption><b>N1S2W1</b><span class="tag">北 + 南×2 + 西</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">1 处</span>
+<code>egt_normal_N1S2W1</code></figcaption></figure>
+<figure>
+<img src="egt_normal_S1W2.png" alt="egt_normal_S1W2" loading="lazy">
+<figcaption><b>S1W2</b><span class="tag">南 + 西×2</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">1 处</span>
+<code>egt_normal_S1W2</code></figcaption></figure>
+</div>
+<h2>枢纽房 · <code>HUB</code><span class="cnt">11 种 / 实测 44 处</span></h2>
+<p class="note">出口更多的分叉点（原文：larger rooms with more exits）</p>
+<div class="grid">
+<figure>
+<img src="egt_hub_N1S1E1W1.png" alt="egt_hub_N1S1E1W1" loading="lazy">
+<figcaption><b>N1S1E1W1</b><span class="tag">北 + 南 + 东 + 西</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">14 处</span>
+<code>egt_hub_N1S1E1W1</code></figcaption></figure>
+<figure>
+<img src="egt_hub_N1S2.png" alt="egt_hub_N1S2" loading="lazy">
+<figcaption><b>N1S2</b><span class="tag">北 + 南×2</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">9 处</span>
+<code>egt_hub_N1S2</code></figcaption></figure>
+<figure>
+<img src="egt_hub_N1S1E1.png" alt="egt_hub_N1S1E1" loading="lazy">
+<figcaption><b>N1S1E1</b><span class="tag">北 + 南 + 东</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">5 处</span>
+<code>egt_hub_N1S1E1</code></figcaption></figure>
+<figure>
+<img src="egt_hub_N1S2W1.png" alt="egt_hub_N1S2W1" loading="lazy">
+<figcaption><b>N1S2W1</b><span class="tag">北 + 南×2 + 西</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">5 处</span>
+<code>egt_hub_N1S2W1</code></figcaption></figure>
+<figure>
+<img src="egt_hub_N1S2E1.png" alt="egt_hub_N1S2E1" loading="lazy">
+<figcaption><b>N1S2E1</b><span class="tag">北 + 南×2 + 东</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">3 处</span>
+<code>egt_hub_N1S2E1</code></figcaption></figure>
+<figure>
+<img src="egt_hub_N1S2E1W1.png" alt="egt_hub_N1S2E1W1" loading="lazy">
+<figcaption><b>N1S2E1W1</b><span class="tag">北 + 南×2 + 东 + 西</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">2 处</span>
+<code>egt_hub_N1S2E1W1</code></figcaption></figure>
+<figure>
+<img src="egt_hub_N2S1W1.png" alt="egt_hub_N2S1W1" loading="lazy">
+<figcaption><b>N2S1W1</b><span class="tag">北×2 + 南 + 西</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">2 处</span>
+<code>egt_hub_N2S1W1</code></figcaption></figure>
+<figure>
+<img src="egt_hub_N1S1W1.png" alt="egt_hub_N1S1W1" loading="lazy">
+<figcaption><b>N1S1W1</b><span class="tag">北 + 南 + 西</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">1 处</span>
+<code>egt_hub_N1S1W1</code></figcaption></figure>
+<figure>
+<img src="egt_hub_N2S2.png" alt="egt_hub_N2S2" loading="lazy">
+<figcaption><b>N2S2</b><span class="tag">北×2 + 南×2</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">1 处</span>
+<code>egt_hub_N2S2</code></figcaption></figure>
+<figure>
+<img src="egt_hub_S2E2.png" alt="egt_hub_S2E2" loading="lazy">
+<figcaption><b>S2E2</b><span class="tag">南×2 + 东×2</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">1 处</span>
+<code>egt_hub_S2E2</code></figcaption></figure>
+<figure>
+<img src="egt_hub_S2W2.png" alt="egt_hub_S2W2" loading="lazy">
+<figcaption><b>S2W2</b><span class="tag">南×2 + 西×2</span>
+<span class="tag">30×25 m</span><span class="tag">6×5 格</span><span class="tag hot">1 处</span>
+<code>egt_hub_S2W2</code></figcaption></figure>
+</div>
+<h2>宝箱房 · <code>REWARD</code><span class="cnt">5 种 / 实测 58 处</span></h2>
+<p class="note">奖励房，常见单门</p>
+<div class="grid">
+<figure>
+<img src="egt_reward_N1.png" alt="egt_reward_N1" loading="lazy">
+<figcaption><b>N1</b><span class="tag">北</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">27 处</span>
+<code>egt_reward_N1</code></figcaption></figure>
+<figure>
+<img src="egt_reward_N2.png" alt="egt_reward_N2" loading="lazy">
+<figcaption><b>N2</b><span class="tag">北×2</span>
+<span class="tag">20×15 m</span><span class="tag">4×3 格</span><span class="tag hot">18 处</span>
+<code>egt_reward_N2</code></figcaption></figure>
+<figure>
+<img src="egt_reward_N1S1.png" alt="egt_reward_N1S1" loading="lazy">
+<figcaption><b>N1S1</b><span class="tag">北 + 南</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">5 处</span>
+<code>egt_reward_N1S1</code></figcaption></figure>
+<figure>
+<img src="egt_reward_N1E1.png" alt="egt_reward_N1E1" loading="lazy">
+<figcaption><b>N1E1</b><span class="tag">北 + 东</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">4 处</span>
+<code>egt_reward_N1E1</code></figcaption></figure>
+<figure>
+<img src="egt_reward_N1W1.png" alt="egt_reward_N1W1" loading="lazy">
+<figcaption><b>N1W1</b><span class="tag">北 + 西</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">4 处</span>
+<code>egt_reward_N1W1</code></figcaption></figure>
+</div>
+<h2>商店 · <code>SHOP</code><span class="cnt">6 种 / 实测 23 处</span></h2>
+<p class="note">购物房</p>
+<div class="grid">
+<figure>
+<img src="egt_shop_N1.png" alt="egt_shop_N1" loading="lazy">
+<figcaption><b>N1</b><span class="tag">北</span>
+<span class="tag">20×15 m</span><span class="tag">4×3 格</span><span class="tag hot">11 处</span>
+<code>egt_shop_N1</code></figcaption></figure>
+<figure>
+<img src="egt_shop_N1S1.png" alt="egt_shop_N1S1" loading="lazy">
+<figcaption><b>N1S1</b><span class="tag">北 + 南</span>
+<span class="tag">20×15 m</span><span class="tag">4×3 格</span><span class="tag hot">4 处</span>
+<code>egt_shop_N1S1</code></figcaption></figure>
+<figure>
+<img src="egt_shop_N2.png" alt="egt_shop_N2" loading="lazy">
+<figcaption><b>N2</b><span class="tag">北×2</span>
+<span class="tag">20×15 m</span><span class="tag">4×3 格</span><span class="tag hot">4 处</span>
+<code>egt_shop_N2</code></figcaption></figure>
+<figure>
+<img src="egt_shop_S1E1.png" alt="egt_shop_S1E1" loading="lazy">
+<figcaption><b>S1E1</b><span class="tag">南 + 东</span>
+<span class="tag">20×15 m</span><span class="tag">4×3 格</span><span class="tag hot">2 处</span>
+<code>egt_shop_S1E1</code></figcaption></figure>
+<figure>
+<img src="egt_shop_E1.png" alt="egt_shop_E1" loading="lazy">
+<figcaption><b>E1</b><span class="tag">东</span>
+<span class="tag">20×15 m</span><span class="tag">4×3 格</span><span class="tag hot">1 处</span>
+<code>egt_shop_E1</code></figcaption></figure>
+<figure>
+<img src="egt_shop_S1W1.png" alt="egt_shop_S1W1" loading="lazy">
+<figcaption><b>S1W1</b><span class="tag">南 + 西</span>
+<span class="tag">20×15 m</span><span class="tag">4×3 格</span><span class="tag hot">1 处</span>
+<code>egt_shop_S1W1</code></figcaption></figure>
+</div>
+<h2>连接房 · <code>CONNECTOR</code><span class="cnt">4 种 / 实测 30 处</span></h2>
+<p class="note">细长的过渡房（原文：long, thin rooms）</p>
+<div class="grid">
+<figure>
+<img src="egt_connector_N1S1.png" alt="egt_connector_N1S1" loading="lazy">
+<figcaption><b>N1S1</b><span class="tag">北 + 南</span>
+<span class="tag">10×20 m</span><span class="tag">2×4 格</span><span class="tag hot">22 处</span>
+<code>egt_connector_N1S1</code></figcaption></figure>
+<figure>
+<img src="egt_connector_S1E1.png" alt="egt_connector_S1E1" loading="lazy">
+<figcaption><b>S1E1</b><span class="tag">南 + 东</span>
+<span class="tag">10×20 m</span><span class="tag">2×4 格</span><span class="tag hot">5 处</span>
+<code>egt_connector_S1E1</code></figcaption></figure>
+<figure>
+<img src="egt_connector_S1E1W1.png" alt="egt_connector_S1E1W1" loading="lazy">
+<figcaption><b>S1E1W1</b><span class="tag">南 + 东 + 西</span>
+<span class="tag">10×20 m</span><span class="tag">2×4 格</span><span class="tag hot">2 处</span>
+<code>egt_connector_S1E1W1</code></figcaption></figure>
+<figure>
+<img src="egt_connector_S1W1.png" alt="egt_connector_S1W1" loading="lazy">
+<figcaption><b>S1W1</b><span class="tag">南 + 西</span>
+<span class="tag">10×20 m</span><span class="tag">2×4 格</span><span class="tag hot">1 处</span>
+<code>egt_connector_S1W1</code></figcaption></figure>
+</div>
+<h2>入口 · <code>ENTRANCE</code><span class="cnt">4 种 / 实测 28 处</span></h2>
+<p class="note">每层唯一</p>
+<div class="grid">
+<figure>
+<img src="egt_entrance_S1.png" alt="egt_entrance_S1" loading="lazy">
+<figcaption><b>S1</b><span class="tag">南</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">18 处</span>
+<code>egt_entrance_S1</code></figcaption></figure>
+<figure>
+<img src="egt_entrance_S2.png" alt="egt_entrance_S2" loading="lazy">
+<figcaption><b>S2</b><span class="tag">南×2</span>
+<span class="tag">20×15 m</span><span class="tag">4×3 格</span><span class="tag hot">8 处</span>
+<code>egt_entrance_S2</code></figcaption></figure>
+<figure>
+<img src="egt_entrance_E1W1.png" alt="egt_entrance_E1W1" loading="lazy">
+<figcaption><b>E1W1</b><span class="tag">东 + 西</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">1 处</span>
+<code>egt_entrance_E1W1</code></figcaption></figure>
+<figure>
+<img src="egt_entrance_S1E1W1.png" alt="egt_entrance_S1E1W1" loading="lazy">
+<figcaption><b>S1E1W1</b><span class="tag">南 + 东 + 西</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">1 处</span>
+<code>egt_entrance_S1E1W1</code></figcaption></figure>
+</div>
+<h2>首领前厅 · <code>BOSS_FOYER</code><span class="cnt">2 种 / 实测 28 处</span></h2>
+<p class="note">首领房之前的整备间</p>
+<div class="grid">
+<figure>
+<img src="egt_boss_foyer_N1S1.png" alt="egt_boss_foyer_N1S1" loading="lazy">
+<figcaption><b>N1S1</b><span class="tag">北 + 南</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">20 处</span>
+<code>egt_boss_foyer_N1S1</code></figcaption></figure>
+<figure>
+<img src="egt_boss_foyer_S1E1.png" alt="egt_boss_foyer_S1E1" loading="lazy">
+<figcaption><b>S1E1</b><span class="tag">南 + 东</span>
+<span class="tag">25×20 m</span><span class="tag">5×4 格</span><span class="tag hot">8 处</span>
+<code>egt_boss_foyer_S1E1</code></figcaption></figure>
+</div>
+<h2>出口 · <code>EXIT</code><span class="cnt">2 种 / 实测 28 处</span></h2>
+<p class="note">通往下一层</p>
+<div class="grid">
+<figure>
+<img src="egt_exit_N1.png" alt="egt_exit_N1" loading="lazy">
+<figcaption><b>N1</b><span class="tag">北</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">23 处</span>
+<code>egt_exit_N1</code></figcaption></figure>
+<figure>
+<img src="egt_exit_N1S1.png" alt="egt_exit_N1S1" loading="lazy">
+<figcaption><b>N1S1</b><span class="tag">北 + 南</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">5 处</span>
+<code>egt_exit_N1S1</code></figcaption></figure>
+</div>
+<h2>首领房 · <code>BOSS</code><span class="cnt">1 种 / 实测 28 处</span></h2>
+<p class="note">每层唯一，尺寸最大</p>
+<div class="grid">
+<figure>
+<img src="egt_boss_N1S1.png" alt="egt_boss_N1S1" loading="lazy">
+<figcaption><b>N1S1</b><span class="tag">北 + 南</span>
+<span class="tag">50×40 m</span><span class="tag">10×8 格</span><span class="tag hot">28 处</span>
+<code>egt_boss_N1S1</code></figcaption></figure>
+</div>
+<h2>特殊房 · <code>SPECIAL</code><span class="cnt">3 种 / 实测 11 处</span></h2>
+<p class="note">只在第 2 / 5 层出现的特殊布局</p>
+<div class="grid">
+<figure>
+<img src="egt_special_N1.png" alt="egt_special_N1" loading="lazy">
+<figcaption><b>N1</b><span class="tag">北</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">9 处</span>
+<code>egt_special_N1</code></figcaption></figure>
+<figure>
+<img src="egt_special_N1W1.png" alt="egt_special_N1W1" loading="lazy">
+<figcaption><b>N1W1</b><span class="tag">北 + 西</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">1 处</span>
+<code>egt_special_N1W1</code></figcaption></figure>
+<figure>
+<img src="egt_special_S1W1.png" alt="egt_special_S1W1" loading="lazy">
+<figcaption><b>S1W1</b><span class="tag">南 + 西</span>
+<span class="tag">15×15 m</span><span class="tag">3×3 格</span><span class="tag hot">1 处</span>
+<code>egt_special_S1W1</code></figcaption></figure>
+</div>
+</div></body></html>

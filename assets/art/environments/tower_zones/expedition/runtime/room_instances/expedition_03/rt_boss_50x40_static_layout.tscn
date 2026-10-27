@@ -1,0 +1,518 @@
+[gd_scene format=3]
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(5, 0.1, 5)
+
+[sub_resource type="StandardMaterial3D" id="Mat_whitebox"]
+albedo_color = Color(0.76, 0.78, 0.8, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_whitebox_wall"]
+albedo_color = Color(0.52, 0.55, 0.6, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_whitebox_pit"]
+albedo_color = Color(0.30, 0.33, 0.36, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_4"]
+size = Vector3(21.55, 11.9, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_5"]
+size = Vector3(26.55, 11.9, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_6"]
+size = Vector3(0.3, 11.9, 40.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_7"]
+size = Vector3(21.55, 11.9, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_8"]
+size = Vector3(26.55, 11.9, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_9"]
+size = Vector3(0.3, 11.9, 40.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lintel_10"]
+size = Vector3(2.2, 9.1, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lintel_11"]
+size = Vector3(2.2, 9.1, 0.3)
+
+[node name="ExpeditionRoomStaticLayout" type="Node3D"]
+metadata/schema = "shellstorm2.expedition.room_whitebox.v002"
+metadata/shell_id = "rt_boss_50x40"
+metadata/template_id = "boss_50x40"
+metadata/variant = ""
+metadata/size_m = [50, 40]
+metadata/grid_unit_m = 5
+metadata/wall_height_m = 11.9
+metadata/door_width_m = 2.2
+metadata/door_clear_height_m = 2.8
+metadata/footprint_area_m2 = 2000
+metadata/footprint_is_rect = true
+metadata/footprint_polygon_m = [[0.0, 0.0], [50.0, 0.0], [50.0, 40.0], [0.0, 40.0]]
+metadata/layout_instance_total = 71
+metadata/connection_port_count = 2
+metadata/whitebox = true
+metadata/whitebox_excludes = ["floor_art","wall_art","props","traps","spawn_points","lights","doors"]
+metadata/walkable_navigation_polygons = [[[-25.0, 0.08, -20.0], [25.0, 0.08, -20.0], [25.0, 0.08, 20.0], [-25.0, 0.08, 20.0]], [[-3.6, 0.08, -20.6], [-1.4, 0.08, -20.6], [-1.4, 0.08, -19.400000000000002], [-3.6, 0.08, -19.400000000000002]], [[-3.6, 0.08, 19.4], [-1.4, 0.08, 19.4], [-1.4, 0.08, 20.599999999999998], [-3.6, 0.08, 20.599999999999998]]]
+metadata/source = "scripts/build_whitebox_room_tscn.py"
+
+[node name="RoomCeilingLight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.4, 0)
+metadata/pending = "whitebox 不含灯；建美术时替换为 WastelandLight3D"
+
+[node name="RoomLightSwitch3D" type="Area3D" parent="."]
+metadata/pending = "whitebox 不含开关；建美术时替换为 RoomLightSwitch3D"
+[node name="Floor_R00_C00" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.03, -17.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R00_C01" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0.03, -17.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R00_C02" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.03, -17.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R00_C03" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.03, -17.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R00_C04" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.03, -17.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R00_C05" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.03, -17.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R00_C06" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.03, -17.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R00_C07" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0.03, -17.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R00_C08" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.03, -17.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R01_C00" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.03, -12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R01_C01" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0.03, -12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R01_C02" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.03, -12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R01_C03" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.03, -12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R01_C04" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.03, -12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R01_C05" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.03, -12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R01_C06" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.03, -12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R01_C07" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0.03, -12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R01_C08" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.03, -12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R02_C00" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.03, -7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R02_C01" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0.03, -7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R02_C02" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.03, -7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R02_C03" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.03, -7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R02_C04" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.03, -7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R02_C05" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.03, -7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R02_C06" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.03, -7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R02_C07" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0.03, -7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R02_C08" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.03, -7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R03_C00" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.03, -2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R03_C01" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0.03, -2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R03_C02" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.03, -2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R03_C03" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.03, -2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R03_C04" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.03, -2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R03_C05" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.03, -2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R03_C06" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.03, -2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R03_C07" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0.03, -2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R03_C08" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.03, -2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R04_C00" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.03, 2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R04_C01" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0.03, 2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R04_C02" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.03, 2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R04_C03" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.03, 2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R04_C04" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.03, 2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R04_C05" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.03, 2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R04_C06" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.03, 2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R04_C07" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0.03, 2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R04_C08" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.03, 2.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R05_C00" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.03, 7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R05_C01" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0.03, 7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R05_C02" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.03, 7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R05_C03" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.03, 7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R05_C04" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.03, 7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R05_C05" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.03, 7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R05_C06" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.03, 7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R05_C07" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0.03, 7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R05_C08" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.03, 7.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R06_C00" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.03, 12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R06_C01" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0.03, 12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R06_C02" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.03, 12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R06_C03" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.03, 12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R06_C04" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.03, 12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R06_C05" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.03, 12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R06_C06" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.03, 12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R06_C07" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0.03, 12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Floor_R06_C08" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.03, 12.5)
+mesh = SubResource("BoxMesh_floor")
+material_override = SubResource("Mat_whitebox")
+metadata/walk_plane_snap_y = 0.08
+
+[node name="Wall_063" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.375, 5.95, -20.15)
+mesh = SubResource("BoxMesh_wall_4")
+material_override = SubResource("Mat_whitebox_wall")
+metadata/tower_wall_direction = "north"
+metadata/grid_unit_m = 5
+
+[node name="Wall_064" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.875, 5.95, -20.15)
+mesh = SubResource("BoxMesh_wall_5")
+material_override = SubResource("Mat_whitebox_wall")
+metadata/tower_wall_direction = "north"
+metadata/grid_unit_m = 5
+
+[node name="Wall_065" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.15, 5.95, 0)
+mesh = SubResource("BoxMesh_wall_6")
+material_override = SubResource("Mat_whitebox_wall")
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5
+
+[node name="Wall_066" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.375, 5.95, 20.15)
+mesh = SubResource("BoxMesh_wall_7")
+material_override = SubResource("Mat_whitebox_wall")
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5
+
+[node name="Wall_067" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.875, 5.95, 20.15)
+mesh = SubResource("BoxMesh_wall_8")
+material_override = SubResource("Mat_whitebox_wall")
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5
+
+[node name="Wall_068" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.15, 5.95, 0)
+mesh = SubResource("BoxMesh_wall_9")
+material_override = SubResource("Mat_whitebox_wall")
+metadata/tower_wall_direction = "west"
+metadata/grid_unit_m = 5
+
+[node name="Lintel_north_m2_5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 7.35, -20.15)
+mesh = SubResource("BoxMesh_lintel_10")
+material_override = SubResource("Mat_whitebox_wall")
+
+[node name="Lintel_south_m2_5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 7.35, 20.15)
+mesh = SubResource("BoxMesh_lintel_11")
+material_override = SubResource("Mat_whitebox_wall")
+
+[node name="ConnectionPorts" type="Node3D" parent="."]
+metadata/connection_port_count = 2
+
+[node name="Port_A" type="Marker3D" parent="ConnectionPorts"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -2.5, 0, -20)
+metadata/port_id = "A"
+metadata/side = "north"
+metadata/lane_m = -2.5
+metadata/outward = Vector2(0, -1)
+metadata/connected = false
+metadata/door_opening_m = [2.2, 2.8]
+
+[node name="Port_B" type="Marker3D" parent="ConnectionPorts"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 20)
+metadata/port_id = "B"
+metadata/side = "south"
+metadata/lane_m = -2.5
+metadata/outward = Vector2(0, 1)
+metadata/connected = false
+metadata/door_opening_m = [2.2, 2.8]
+

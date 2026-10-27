@@ -1,0 +1,355 @@
+{
+  "schema": "shellstorm2.battle.dungeon_flow",
+  "schema_version": 1,
+  "level_id": "expedition_03",
+  "flow_id": "flow_03",
+  "flow_name_zh": "双路通 Boss",
+  "design_feature": "中段分叉后两条路线都通向 Boss 前厅",
+  "node_count": 17,
+  "room_quota": {
+    "BOSS": 1,
+    "BOSS_FOYER": 1,
+    "CONNECTOR": 1,
+    "ENTRANCE": 1,
+    "EXIT": 1,
+    "HUB": 2,
+    "NORMAL": 7,
+    "REWARD": 2,
+    "SHOP": 1
+  },
+  "nodes": [
+    {
+      "node_id": "entry",
+      "kind": "ENTRANCE",
+      "template_id": "safe_15x15",
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "parent_node_id": ""
+    },
+    {
+      "node_id": "n01",
+      "kind": "NORMAL",
+      "template_id": "",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "entry",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
+    },
+    {
+      "node_id": "hub_01",
+      "kind": "HUB",
+      "template_id": "corridor_45x40",
+      "size_m": [
+        45.0,
+        40.0
+      ],
+      "parent_node_id": "n01"
+    },
+    {
+      "node_id": "n02",
+      "kind": "NORMAL",
+      "template_id": "",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "hub_01",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
+    },
+    {
+      "node_id": "reward_01",
+      "kind": "REWARD",
+      "template_id": "db_70x50",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "parent_node_id": "n02"
+    },
+    {
+      "node_id": "n03",
+      "kind": "NORMAL",
+      "template_id": "",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "hub_01",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
+    },
+    {
+      "node_id": "n04",
+      "kind": "NORMAL",
+      "template_id": "",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "n03",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
+    },
+    {
+      "node_id": "hub_02",
+      "kind": "HUB",
+      "template_id": "corridor_45x40",
+      "size_m": [
+        45.0,
+        40.0
+      ],
+      "parent_node_id": "n04"
+    },
+    {
+      "node_id": "n05",
+      "kind": "NORMAL",
+      "template_id": "",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "hub_01",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
+    },
+    {
+      "node_id": "n06",
+      "kind": "NORMAL",
+      "template_id": "",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "n05",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
+    },
+    {
+      "node_id": "shop",
+      "kind": "SHOP",
+      "template_id": "office_60x70",
+      "size_m": [
+        30.0,
+        40.0
+      ],
+      "parent_node_id": "hub_02"
+    },
+    {
+      "node_id": "n07",
+      "kind": "NORMAL",
+      "template_id": "",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "shop",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
+    },
+    {
+      "node_id": "boss_foyer",
+      "kind": "BOSS_FOYER",
+      "template_id": "std_25x25",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "n07"
+    },
+    {
+      "node_id": "boss",
+      "kind": "BOSS",
+      "template_id": "boss_50x40",
+      "size_m": [
+        50.0,
+        40.0
+      ],
+      "parent_node_id": "boss_foyer"
+    },
+    {
+      "node_id": "exit",
+      "kind": "EXIT",
+      "template_id": "extraction_25x25",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "boss"
+    },
+    {
+      "node_id": "conn_01",
+      "kind": "CONNECTOR",
+      "template_id": "std_25x25",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "hub_02"
+    },
+    {
+      "node_id": "reward_02",
+      "kind": "REWARD",
+      "template_id": "db_70x50",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "parent_node_id": "conn_01"
+    }
+  ],
+  "tree_edges": [
+    {
+      "from": "entry",
+      "to": "n01",
+      "kind": "tree"
+    },
+    {
+      "from": "n01",
+      "to": "hub_01",
+      "kind": "tree"
+    },
+    {
+      "from": "hub_01",
+      "to": "n02",
+      "kind": "tree"
+    },
+    {
+      "from": "n02",
+      "to": "reward_01",
+      "kind": "tree"
+    },
+    {
+      "from": "hub_01",
+      "to": "n03",
+      "kind": "tree"
+    },
+    {
+      "from": "n03",
+      "to": "n04",
+      "kind": "tree"
+    },
+    {
+      "from": "n04",
+      "to": "hub_02",
+      "kind": "tree"
+    },
+    {
+      "from": "hub_01",
+      "to": "n05",
+      "kind": "tree"
+    },
+    {
+      "from": "n05",
+      "to": "n06",
+      "kind": "tree"
+    },
+    {
+      "from": "hub_02",
+      "to": "shop",
+      "kind": "tree"
+    },
+    {
+      "from": "shop",
+      "to": "n07",
+      "kind": "tree"
+    },
+    {
+      "from": "n07",
+      "to": "boss_foyer",
+      "kind": "tree"
+    },
+    {
+      "from": "hub_02",
+      "to": "conn_01",
+      "kind": "tree"
+    },
+    {
+      "from": "conn_01",
+      "to": "reward_02",
+      "kind": "tree"
+    },
+    {
+      "from": "boss_foyer",
+      "to": "boss",
+      "kind": "tree"
+    },
+    {
+      "from": "boss",
+      "to": "exit",
+      "kind": "tree"
+    }
+  ],
+  "loop_edges": [
+    {
+      "from": "n06",
+      "to": "hub_02",
+      "kind": "loop"
+    }
+  ],
+  "injections": [
+    {
+      "inject_id": "inj_secret_room",
+      "kind": "SECRET_ROOM",
+      "anchor_policy": "dead_end_first",
+      "anchor_fallback_policy": "any_room",
+      "anchor_fallback_probability": 0.2,
+      "probability": 0.9,
+      "scope": "shared",
+      "condition": {},
+      "note": "普通隐藏房。90% 出现；优先挂死胡同，1/5 概率挂到任意房间。"
+    },
+    {
+      "inject_id": "inj_npc_secret_room",
+      "kind": "NPC_SECRET_ROOM",
+      "anchor_policy": "run_level_preroll",
+      "probability": 0.2,
+      "scope": "run",
+      "condition": {},
+      "note": "NPC 隐藏房。**开局抽一次**并预留给将来某一层，EMPTY 权重 0.8；与普通隐藏房互不占用。"
+    },
+    {
+      "inject_id": "inj_fireplace",
+      "kind": "FIREPLACE_ROOM",
+      "anchor_policy": "dead_end_first",
+      "probability": 1.0,
+      "scope": "shared",
+      "condition": {},
+      "note": "壁炉房（藏层入口）。每层 1 间，优先死胡同。"
+    }
+  ],
+  "design_note": "两条路在 hub_02 汇聚；宝箱藏在危险连接房之后的死路里。"
+}

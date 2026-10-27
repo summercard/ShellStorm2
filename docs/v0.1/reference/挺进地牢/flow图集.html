@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>挺进地牢 · 全部 28 张 flow 骨架图</title>
+<style>
+:root{--ink:#16181A;--sub:#5F6569;--line:#D8DBDC;--bg:#EFF0F0;--paper:#fff;--accent:#0E9C86;--warn:#B4531F}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.7 "PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+header{padding:32px 40px 22px;background:var(--paper);border-bottom:1px solid var(--line)}
+h1{margin:0 0 6px;font-size:26px;letter-spacing:.5px}
+.sub{color:var(--sub);font-size:13px;max-width:900px}
+.wrap{padding:24px 40px 70px;max-width:1400px;margin:0 auto}
+h2{font-size:17px;margin:36px 0 4px;padding-left:10px;border-left:3px solid var(--accent)}
+.cnt{font-size:12px;color:#9AA0A4;font-weight:400;margin-left:8px}
+.theme{margin:0 0 14px;padding-left:13px;font-size:12.5px;color:var(--sub)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+figure{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+figure img{display:block;width:100%;height:auto;background:#fff;border-bottom:1px solid var(--line)}
+figcaption{padding:10px 12px;font-size:12px;color:var(--sub)}
+figcaption b{color:var(--ink);font-weight:600;display:block;font-size:11.5px;word-break:break-all;margin-bottom:6px}
+.tag{display:inline-block;background:#F1EFE8;border:1px solid var(--line);border-radius:20px;padding:1px 8px;margin:0 4px 4px 0;font-size:11px;color:#444441}
+figcaption p{margin:6px 0 0;line-height:1.5}
+.note{background:#FAEEDA;border:1px solid #EFC98A;border-radius:10px;padding:14px 18px;margin:22px 0 8px;font-size:13px}
+</style></head><body>
+<header><h1>挺进地牢 · 全部 28 张 flow 骨架图</h1>
+<div class="sub">游戏内部的地牢生成骨架（flow）。图为 Boris the Brave 从反编译数据导出的 PDF，本机转 PNG。
+<b>箭头 = 单向连接</b>（只能顺箭头方向走，是"绕远路"设计的来源）。节点标签是游戏内部房型枚举。</div></header>
+<div class="wrap">
+<div class="note"><b>读图须知：</b>每张 flow 的房型配额几乎是硬约束——<b>恰好 1 个入口 + 1 个出口 + 1 个 Boss 前厅 + 1 个 Boss，2 个 REWARD（奖励房），1 个 SHOP</b>。
+真正变动的是 NORMAL（战斗房）数量，它逐层递增：第一层 7.5 → 第五层 11.0。</div>
+<h2>第一层 · Keep of the Lead Lord <span class="cnt">6 张 flow ／ 平均 17.0 间房</span></h2><p class="theme">城堡 / 图书馆</p><div class="grid"><figure>
+<img src="flows_img/F1_Castle_Flow_01.png" alt="F1_Castle_Flow_01" loading="lazy">
+<figcaption><b>F1_Castle_Flow_01</b>
+<span class="tag">n=16</span>
+<span class="tag">NORMAL 7</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 0</span>
+<span class="tag">SHOP 1</span>
+<p>01</p></figcaption></figure><figure>
+<img src="flows_img/F1_Castle_Flow_02_TwoBigWings.png" alt="F1_Castle_Flow_02_TwoBigWings" loading="lazy">
+<figcaption><b>F1_Castle_Flow_02_TwoBigWings</b>
+<span class="tag">n=17</span>
+<span class="tag">NORMAL 8</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>02_TwoBigWings</p></figcaption></figure><figure>
+<img src="flows_img/F1_Castle_Flow_03_TwoPathsToBoss.png" alt="F1_Castle_Flow_03_TwoPathsToBoss" loading="lazy">
+<figcaption><b>F1_Castle_Flow_03_TwoPathsToBoss</b>
+<span class="tag">n=17</span>
+<span class="tag">NORMAL 7</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>03_TwoPathsToBoss</p></figcaption></figure><figure>
+<img src="flows_img/F1_Castle_Flow_04_FourSmallWings.png" alt="F1_Castle_Flow_04_FourSmallWings" loading="lazy">
+<figcaption><b>F1_Castle_Flow_04_FourSmallWings</b>
+<span class="tag">n=17</span>
+<span class="tag">NORMAL 8</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 0</span>
+<span class="tag">SHOP 1</span>
+<p>04_FourSmallWings</p></figcaption></figure><figure>
+<img src="flows_img/F1_Castle_Flow_05_QuickBoss.png" alt="F1_Castle_Flow_05_QuickBoss" loading="lazy">
+<figcaption><b>F1_Castle_Flow_05_QuickBoss</b>
+<span class="tag">n=17</span>
+<span class="tag">NORMAL 7</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 2</span>
+<span class="tag">SHOP 1</span>
+<p>05_QuickBoss</p></figcaption></figure><figure>
+<img src="flows_img/F1_Castle_Flow_06_StandardVariant.png" alt="F1_Castle_Flow_06_StandardVariant" loading="lazy">
+<figcaption><b>F1_Castle_Flow_06_StandardVariant</b>
+<span class="tag">n=18</span>
+<span class="tag">NORMAL 8</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>06_StandardVariant</p></figcaption></figure></div><h2>第二层 · Gungeon Proper <span class="cnt">8 张 flow ／ 平均 18.9 间房</span></h2><p class="theme">枪牢正厅 / 矿道铁轨</p><div class="grid"><figure>
+<img src="flows_img/F2_Gungeon_Flow_01.png" alt="F2_Gungeon_Flow_01" loading="lazy">
+<figcaption><b>F2_Gungeon_Flow_01</b>
+<span class="tag">n=19</span>
+<span class="tag">NORMAL 9</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 0</span>
+<span class="tag">SHOP 1</span>
+<p>01</p></figcaption></figure><figure>
+<img src="flows_img/F2_Gungeon_Flow_02_SnowflakeLoopBranches.png" alt="F2_Gungeon_Flow_02_SnowflakeLoopBranches" loading="lazy">
+<figcaption><b>F2_Gungeon_Flow_02_SnowflakeLoopBranches</b>
+<span class="tag">n=18</span>
+<span class="tag">NORMAL 8</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>02_SnowflakeLoopBranches</p></figcaption></figure><figure>
+<img src="flows_img/F2_Gungeon_Flow_03_TripleCellBlock.png" alt="F2_Gungeon_Flow_03_TripleCellBlock" loading="lazy">
+<figcaption><b>F2_Gungeon_Flow_03_TripleCellBlock</b>
+<span class="tag">n=19</span>
+<span class="tag">NORMAL 10</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>03_TripleCellBlock</p></figcaption></figure><figure>
+<img src="flows_img/F2_Gungeon_Flow_04_BranchesOffBigLoop.png" alt="F2_Gungeon_Flow_04_BranchesOffBigLoop" loading="lazy">
+<figcaption><b>F2_Gungeon_Flow_04_BranchesOffBigLoop</b>
+<span class="tag">n=19</span>
+<span class="tag">NORMAL 10</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>04_BranchesOffBigLoop</p></figcaption></figure><figure>
+<img src="flows_img/F2_Gungeon_Flow_05_QuadCellBlock.png" alt="F2_Gungeon_Flow_05_QuadCellBlock" loading="lazy">
+<figcaption><b>F2_Gungeon_Flow_05_QuadCellBlock</b>
+<span class="tag">n=19</span>
+<span class="tag">NORMAL 11</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 0</span>
+<span class="tag">SHOP 1</span>
+<p>05_QuadCellBlock</p></figcaption></figure><figure>
+<img src="flows_img/F2_Gungeon_Flow_06_LongRewardChains.png" alt="F2_Gungeon_Flow_06_LongRewardChains" loading="lazy">
+<figcaption><b>F2_Gungeon_Flow_06_LongRewardChains</b>
+<span class="tag">n=19</span>
+<span class="tag">NORMAL 9</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>06_LongRewardChains</p></figcaption></figure><figure>
+<img src="flows_img/F2_Gungeon_Flow_07_StandardVariant.png" alt="F2_Gungeon_Flow_07_StandardVariant" loading="lazy">
+<figcaption><b>F2_Gungeon_Flow_07_StandardVariant</b>
+<span class="tag">n=19</span>
+<span class="tag">NORMAL 10</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 0</span>
+<span class="tag">SHOP 1</span>
+<p>07_StandardVariant</p></figcaption></figure><figure>
+<img src="flows_img/F2_Gungeon_Flow_08_ImmediateHubThreePaths.png" alt="F2_Gungeon_Flow_08_ImmediateHubThreePaths" loading="lazy">
+<figcaption><b>F2_Gungeon_Flow_08_ImmediateHubThreePaths</b>
+<span class="tag">n=19</span>
+<span class="tag">NORMAL 10</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>08_ImmediateHubThreePaths</p></figcaption></figure></div><h2>第三层 · Black Powder Mine <span class="cnt">5 张 flow ／ 平均 21.8 间房</span></h2><p class="theme">矿坑 / 炸药 / 铁轨</p><div class="grid"><figure>
+<img src="flows_img/F3_Mines_Flow_01.png" alt="F3_Mines_Flow_01" loading="lazy">
+<figcaption><b>F3_Mines_Flow_01</b>
+<span class="tag">n=20</span>
+<span class="tag">NORMAL 10</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>01</p></figcaption></figure><figure>
+<img src="flows_img/F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop.png" alt="F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop" loading="lazy">
+<figcaption><b>F3_Mines_Flow_02_LoopSeries_ExitThroughGiftShop</b>
+<span class="tag">n=24</span>
+<span class="tag">NORMAL 9</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 3</span>
+<span class="tag">CONNECTOR 5</span>
+<span class="tag">SHOP 1</span>
+<p>02_LoopSeries_ExitThroughGiftShop</p></figcaption></figure><figure>
+<img src="flows_img/F3_Mines_Flow_03_ManyShortChainsSpidering.png" alt="F3_Mines_Flow_03_ManyShortChainsSpidering" loading="lazy">
+<figcaption><b>F3_Mines_Flow_03_ManyShortChainsSpidering</b>
+<span class="tag">n=25</span>
+<span class="tag">NORMAL 14</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 3</span>
+<span class="tag">CONNECTOR 2</span>
+<span class="tag">SHOP 1</span>
+<p>03_ManyShortChainsSpidering</p></figcaption></figure><figure>
+<img src="flows_img/F3_Mines_Flow_04_BossFoyerLoop.png" alt="F3_Mines_Flow_04_BossFoyerLoop" loading="lazy">
+<figcaption><b>F3_Mines_Flow_04_BossFoyerLoop</b>
+<span class="tag">n=19</span>
+<span class="tag">NORMAL 9</span>
+<span class="tag">HUB 0</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 3</span>
+<span class="tag">SHOP 1</span>
+<p>04_BossFoyerLoop</p></figcaption></figure><figure>
+<img src="flows_img/F3_Mines_Flow_05_TwoBigLoops.png" alt="F3_Mines_Flow_05_TwoBigLoops" loading="lazy">
+<figcaption><b>F3_Mines_Flow_05_TwoBigLoops</b>
+<span class="tag">n=21</span>
+<span class="tag">NORMAL 11</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>05_TwoBigLoops</p></figcaption></figure></div><h2>第四层 · Hollow <span class="cnt">4 张 flow ／ 平均 20.2 间房</span></h2><p class="theme">墓穴 / 审判</p><div class="grid"><figure>
+<img src="flows_img/F4_Catacomb_Flow_01.png" alt="F4_Catacomb_Flow_01" loading="lazy">
+<figcaption><b>F4_Catacomb_Flow_01</b>
+<span class="tag">n=20</span>
+<span class="tag">NORMAL 11</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>01</p></figcaption></figure><figure>
+<img src="flows_img/F4_Catacomb_Flow_02_AncientTomb.png" alt="F4_Catacomb_Flow_02_AncientTomb" loading="lazy">
+<figcaption><b>F4_Catacomb_Flow_02_AncientTomb</b>
+<span class="tag">n=21</span>
+<span class="tag">NORMAL 13</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 0</span>
+<span class="tag">SHOP 1</span>
+<p>02_AncientTomb</p></figcaption></figure><figure>
+<img src="flows_img/F4_Catacomb_Flow_03_SpookyGauntlet.png" alt="F4_Catacomb_Flow_03_SpookyGauntlet" loading="lazy">
+<figcaption><b>F4_Catacomb_Flow_03_SpookyGauntlet</b>
+<span class="tag">n=19</span>
+<span class="tag">NORMAL 8</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 2</span>
+<span class="tag">SHOP 1</span>
+<p>03_SpookyGauntlet</p></figcaption></figure><figure>
+<img src="flows_img/F4_Catacomb_Flow_04_Maze.png" alt="F4_Catacomb_Flow_04_Maze" loading="lazy">
+<figcaption><b>F4_Catacomb_Flow_04_Maze</b>
+<span class="tag">n=21</span>
+<span class="tag">NORMAL 11</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 1</span>
+<p>04_Maze</p></figcaption></figure></div><h2>第五层 · Forge <span class="cnt">5 张 flow ／ 平均 21.6 间房</span></h2><p class="theme">熔炉 / 锻造</p><div class="grid"><figure>
+<img src="flows_img/F5_Forge_Flow_00_CriticalBlacksmith.png" alt="F5_Forge_Flow_00_CriticalBlacksmith" loading="lazy">
+<figcaption><b>F5_Forge_Flow_00_CriticalBlacksmith</b>
+<span class="tag">n=21</span>
+<span class="tag">NORMAL 10</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 0</span>
+<p>00_CriticalBlacksmith</p></figcaption></figure><figure>
+<img src="flows_img/F5_Forge_Flow_01.png" alt="F5_Forge_Flow_01" loading="lazy">
+<figcaption><b>F5_Forge_Flow_01</b>
+<span class="tag">n=21</span>
+<span class="tag">NORMAL 10</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 0</span>
+<p>01</p></figcaption></figure><figure>
+<img src="flows_img/F5_Forge_Flow_02_TheChain.png" alt="F5_Forge_Flow_02_TheChain" loading="lazy">
+<figcaption><b>F5_Forge_Flow_02_TheChain</b>
+<span class="tag">n=22</span>
+<span class="tag">NORMAL 11</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 0</span>
+<p>02_TheChain</p></figcaption></figure><figure>
+<img src="flows_img/F5_Forge_Flow_03_ThreeWaysToGo.png" alt="F5_Forge_Flow_03_ThreeWaysToGo" loading="lazy">
+<figcaption><b>F5_Forge_Flow_03_ThreeWaysToGo</b>
+<span class="tag">n=23</span>
+<span class="tag">NORMAL 13</span>
+<span class="tag">HUB 1</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 1</span>
+<span class="tag">SHOP 0</span>
+<p>03_ThreeWaysToGo</p></figcaption></figure><figure>
+<img src="flows_img/F5_Forge_Flow_04_TwoGreatHalls.png" alt="F5_Forge_Flow_04_TwoGreatHalls" loading="lazy">
+<figcaption><b>F5_Forge_Flow_04_TwoGreatHalls</b>
+<span class="tag">n=21</span>
+<span class="tag">NORMAL 11</span>
+<span class="tag">HUB 2</span>
+<span class="tag">REWARD 2</span>
+<span class="tag">CONNECTOR 0</span>
+<span class="tag">SHOP 0</span>
+<p>04_TwoGreatHalls</p></figcaption></figure></div>
+</div></body></html>

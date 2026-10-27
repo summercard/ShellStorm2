@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_panel"]
+albedo_color = Color(0.55, 0.18, 0.18, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_panel"]
+size = Vector3(2.14, 2.5, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="Mat_pillar"]
+albedo_color = Color(0.2, 0.14, 0.14, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar"]
+size = Vector3(0.30, 2.5, 0.28)
+
+[node name="WhiteboxDoorPanel" type="Node3D"]
+metadata/schema = "shellstorm2.expedition.door_panel.whitebox.v001"
+metadata/asset_id = "ENV-EXPEDITION-WB-DOOR-BOSS"
+metadata/door_kind = "boss"
+metadata/display_name_zh = "首领门"
+metadata/bounds_size_m = Vector3(2.2, 2.5, 0.18)
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/whitebox = true
+metadata/panel_marker = "pillars"
+metadata/whitebox_excludes = ["final_art","materials","sfx_hooks","vfx"]
+metadata/source = "scripts/build_whitebox_door_kit.py"
+[node name="DoorPanel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("BoxMesh_panel")
+material_override = SubResource("Mat_panel")
+
+[node name="BossPillar_0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 1.25, 0)
+mesh = SubResource("BoxMesh_pillar")
+material_override = SubResource("Mat_pillar")
+
+[node name="BossPillar_1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 1.25, 0)
+mesh = SubResource("BoxMesh_pillar")
+material_override = SubResource("Mat_pillar")
+

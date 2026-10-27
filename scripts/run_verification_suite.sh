@@ -103,6 +103,18 @@ if ! python3 "${project_root}/scripts/sync_runtime_design_data.py" --check; then
   printf 'RUNTIME_DESIGN_DATA_PROJECTION_FAILED\n' >&2
   exit 2
 fi
+# 白盒房间契约：文本自洽 + EGT 房型谱齐全。纯标准库、秒级，放在 preflight 里
+# 让「手改 TSCN 忘了重跑生成器」在套件第一分钟就红，而不是等场景跑到一半。
+if ! python3 "${project_root}/scripts/check_expedition03_room_layouts.py" > /dev/null; then
+  python3 "${project_root}/scripts/check_expedition03_room_layouts.py" >&2
+  printf 'EXPEDITION03_ROOM_LAYOUTS_FAILED\n' >&2
+  exit 2
+fi
+if ! python3 "${project_root}/scripts/check_egt_room_types.py" > /dev/null; then
+  python3 "${project_root}/scripts/check_egt_room_types.py" >&2
+  printf 'EGT_ROOM_TYPES_FAILED\n' >&2
+  exit 2
+fi
 verification_import_log="${verification_log_dir}/project_import.log"
 if ! "${godot_bin}" --headless --path "${isolated_project_root}" --fixed-fps 1000 --max-fps 0 --import \
   >"${verification_import_log}" 2>&1; then
@@ -227,6 +239,8 @@ core_scenes=(
   verify_expedition_level01_flow
   verify_secret_branch_flow
   verify_expedition_room_static_scenes
+  verify_expedition03_room_whitebox
+  verify_egt_flow_assembler
   verify_expedition_camera_door_proxies
   verify_expedition_room_type_component_replay
   verify_test_level_99_flow

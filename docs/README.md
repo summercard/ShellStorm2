@@ -19,3 +19,5 @@
 旧主题文件路径继续保留以免旧链接失效，但已建立功能设计页的规则主源在 `design/`；未迁移功能在跟踪表标记。开发记录已实际迁入 [development](v0.1/development/README.md)；原变更日志、推送摘要、成品化验收页只保留导航。
 
 `archive/` 仅供回溯。`docs/art/` 保存具体资产批次的验收证据，不能覆盖版本设计。工程**外**的产物一律走 `ShellStorm2-work/`（出口与分目录见[工作区与目录规范](WORKSPACE_LAYOUT.md)）；工程内不留 `outputs/`，必须长期追溯的审计摘要放入版本的 `audits/`。
+
+外部作品的公开资料整理放 [v0.1/reference](v0.1/reference/README.md)：只作写设计页时的**对照样本**，没有 FeatureID、不进 `MODULE_INDEX`、不被 `data/` 或 `src/` 引用，与本工程设计页冲突时一律以设计页为准。

@@ -5,7 +5,12 @@ const LOADING_SCENE := "res://scenes/ExpeditionLoadingScreen.tscn"
 const LEVEL_SCENE := GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D
 const CITY_SCENE = preload("res://assets/art/ui/expedition_city/hologram_city.tscn")
 const CITY_LAYER := 1 << 18
-var LEVEL_IDS: Array[String] = ["expedition_01", "99"]
+## 情报室里**本局可见**的入口，顺序 = 全息城里的站位顺序。
+##
+## 真源是 `GameDesignConfig.EXPEDITION_LEVELS`（+ `nav_order` 排位）与解锁状态，
+## 这里只是把它算出来 —— 不允许再手写一份关卡 id 数组（早期写死 `["expedition_01", "99"]`，
+## 结果加第三关时这行和 HologramCity3D 里的对应数组必须同时改，漏一处就是错位或漏关）。
+var LEVEL_IDS: Array[String] = []
 const RETURN_PICK := -2
 var _close_entry_from := 0.0
 const OPENING_SECONDS := 4.4
@@ -73,10 +78,11 @@ func _ready() -> void:
 	if _player != null:
 		_previous_input_lock = bool(_player.get("input_locked"))
 		_player.call("set_input_locked", true)
-	if BaseManager.is_expedition_level_unlocked("expedition_02"):
-		LEVEL_IDS.append("expedition_02")
+	_refresh_level_ids()
 	_city = CITY_SCENE.instantiate()
-	_city.expedition_02_unlocked = "expedition_02" in LEVEL_IDS
+	# 导航清单是唯一真源：城市按它决定"显示哪几个入口、各在哪"，
+	# 不再各自维护一份（早期两边各写一片数组，加关就会错位）。
+	_city.level_ids = LEVEL_IDS.duplicate()
 	get_parent().add_child(_city)
 	var anchor := _facility.global_position + Vector3.UP * 1.7
 	if _facility.has_method("get_hologram_anchor"):
@@ -281,6 +287,38 @@ func _on_close_pressed() -> void:
 func _on_teleport_pressed() -> void:
 	_enter_level(GameDesignConfig.default_expedition_level_id())
 
+
+## 把"本局情报室列出哪些入口"算出来，顺序按 `nav_order`。
+##
+## 可见性（`nav_visibility`）与可出发性是**两件事**，故意分层：
+## - 可见性回答"这个入口在不在全息城里"（表现层），由配置的 `nav_visibility` 决定：
+##   `always` = 恒列出（缺省值）；`on_unlock` = 玩家解锁后才列出（远征02 的旧口径）。
+## - 可出发性回答"点下去会不会真的走"（玩法权限），由 `BaseManager` 的解锁状态
+##   + 到达场景是否存在共同决定，见 `_enter_level()`。
+##
+## 为什么不用 `ResourceLoader.exists()` 来推可见性：验收套件在隔离工程副本里跑，
+## 场景"在不在"的判定会随导入状态变化 —— 一旦拿它决定可见性，
+## 同一份配置在头尾两次验收里会给出不同的入口数量，门禁就不稳了。
+func _refresh_level_ids() -> void:
+	LEVEL_IDS.clear()
+	for level_id in GameDesignConfig.expedition_nav_order():
+		var entry := GameDesignConfig.expedition_level(level_id)
+		if entry.is_empty():
+			continue
+		if str(entry.get("nav_visibility", "always")) == "on_unlock" \
+				and not BaseManager.is_expedition_level_unlocked(level_id):
+			continue
+		LEVEL_IDS.append(level_id)
+
+
+## 未开放/未解锁的入口，点下去要给准确回执，而不是静默不动。
+func _notify_entry_blocked(level_id: String, message: String) -> void:
+	if is_instance_valid(_city):
+		_city.status.text = message + "  ·  ESC 返回"
+		var index := LEVEL_IDS.find(level_id)
+		if index >= 0 and index < _city.entry_hints.size():
+			_city.entry_hints[index].text = "尚未开放"
+
 func _on_alternate_level_pressed(level_id: String) -> void:
 	_enter_level(level_id)
 
@@ -293,15 +331,15 @@ func confirm_selection() -> void:
 func _enter_level(level_id: String) -> void:
 	if _departing or _state == "closing":
 		return
-	if not BaseManager.is_expedition_level_unlocked(level_id):
-		return
 	var entry := GameDesignConfig.expedition_level(level_id)
+	# 顺序有意为之：先查"到达场景在不在"，再查解锁。
+	# 反过来（先查解锁就 return）会让"未解锁 + 场景没建"的关卡点下去毫无反应 ——
+	# 玩家分不清是没解锁还是没做完，也无从判断该等哪一样。
 	if entry.is_empty() or not ResourceLoader.exists(str(entry.get("scene_3d", ""))):
-		if is_instance_valid(_city):
-			_city.status.text = "远征关卡02尚未开放 · ESC 返回"
-			var index := LEVEL_IDS.find(level_id)
-			if index >= 0:
-				_city.entry_hints[index].text = "尚未开放"
+		_notify_entry_blocked(level_id, "%s尚未开放" % GameDesignConfig.expedition_level_display_name(level_id))
+		return
+	if not BaseManager.is_expedition_level_unlocked(level_id):
+		_notify_entry_blocked(level_id, "%s尚未解锁" % GameDesignConfig.expedition_level_display_name(level_id))
 		return
 	if not GameDesignConfig.select_expedition_level(level_id):
 		return
