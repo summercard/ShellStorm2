@@ -24,10 +24,20 @@ const TRAINING_SCENE_3D := "res://scenes/TrainingRange3D.tscn"
 ## 全息城站位是**视觉布局**，两者不该互相绑死（早期就是靠两张硬编码数组各写一份，加关就错位）。
 ##
 ## `nav_visibility` 决定它**要不要出现在情报室里**，缺省 `"always"`：
-## - `"always"`：恒列出。适用于"玩家随时该看到"的关卡，以及**设计已冻结、场景还在施工、
-##   需要在情报室里占位并明示"尚未开放"**的关卡（远征03 当前就属于这一档）。
+## - `"always"`：恒列出。适用于"玩家随时该看到"的关卡。远征03 从 2026-10-28 起
+##   归这一档 —— 它此前是"占位未开放"，现在场景、设计源、生成链路都已就位，可真进。
 ## - `"on_unlock"`：玩家解锁后才列出（远征02 的口径：没过 01 之前它不该出现在城里）。
-## 注意这与"能不能真的出发"是两件事 —— 后者由 `BaseManager` 的解锁状态 + 到达场景是否存在决定。
+## 注意这与"能不能真的出发"是两件事 —— 后者由 `unlock_policy` + 到达场景是否存在决定。
+##
+## `unlock_policy` 决定**能不能真的出发**，缺省 `"always"`：
+## - `"always"`：恒可进（远征01 / 99 / 目前的远征03）。
+## - `"on_clear"`：通关 `unlock_required_clear` 指定关卡后解锁（远征02 ← 通关远征01）。
+##
+## 为什么把解锁规则写在这里，而不是继续写死在 `BaseManager` 里：
+## 那一处原本是 `return level_id in ["expedition_01", "99"]` 的**硬编码白名单**，
+## 于是「新增一张远征关卡」必须同时改清单和 BaseManager —— 漏改第二处的表现是
+## **牌面写着"点击进入"、按下去却弹"尚未解锁"**，也就是远征03 从上线起就一直进不去的原因。
+## 清单本来就声明"新增一张关卡 = 往这里加一条"，那解锁规则就必须跟着一起声明。
 const EXPEDITION_LEVELS: Array[Dictionary] = [
 	{
 		"level_id": "expedition_01",
@@ -39,6 +49,7 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"scene_3d": "res://scenes/ExpeditionLevel01_3D.tscn",
 		"nav_order": 10,
 		"nav_badge": "01  /  EXPEDITION",
+		"unlock_policy": "always",
 	},
 	{
 		"level_id": "expedition_02",
@@ -51,6 +62,8 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"nav_order": 30,
 		"nav_badge": "02  /  EXPEDITION",
 		"nav_visibility": "on_unlock",
+		"unlock_policy": "on_clear",
+		"unlock_required_clear": "expedition_01",
 	},
 	{
 		"level_id": "expedition_03",
@@ -62,6 +75,11 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"scene_3d": "res://scenes/ExpeditionLevel03_3D.tscn",
 		"nav_order": 40,
 		"nav_badge": "03  /  EXPEDITION",
+		# 白盒阶段暂时恒可进：现在要的是「能进去走一遍、看卡不卡墙」。
+		# 等内容（刷怪 / 门扇 / 灯光）补齐、验收定稿后，改成
+		# `"unlock_policy": "on_clear", "unlock_required_clear": "expedition_02"` 即可 ——
+		# 只改这一行数据，不动任何代码。
+		"unlock_policy": "always",
 	},
 	{
 		"level_id": "99",
@@ -73,6 +91,7 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"scene_3d": "res://scenes/ExpeditionLevel99_3D.tscn",
 		"nav_order": 20,
 		"nav_badge": "99  /  TEST SECTOR",
+		"unlock_policy": "always",
 	},
 ]
 
@@ -144,6 +163,42 @@ static func expedition_level_scene(level_id: String) -> String:
 	if entry.is_empty():
 		return EXPEDITION_LEVEL_SCENE_3D
 	return str(entry.get("scene_3d", EXPEDITION_LEVEL_SCENE_3D))
+
+
+## 关卡 id → 解锁规则。缺字段或未登记一律按 `"always"`（宁可多开放，也不要静默进不去）。
+const UNLOCK_POLICY_ALWAYS := "always"
+const UNLOCK_POLICY_ON_CLEAR := "on_clear"
+
+static func expedition_unlock_policy(level_id: String) -> String:
+	var entry := expedition_level(level_id)
+	if entry.is_empty():
+		return UNLOCK_POLICY_ALWAYS
+	return str(entry.get("unlock_policy", UNLOCK_POLICY_ALWAYS))
+
+
+## `on_clear` 关卡的前置通关关卡 id。非 `on_clear` 返回空串。
+static func expedition_unlock_required_clear(level_id: String) -> String:
+	if expedition_unlock_policy(level_id) != UNLOCK_POLICY_ON_CLEAR:
+		return ""
+	return str(expedition_level(level_id).get("unlock_required_clear", ""))
+
+
+## 通关 `cleared_level_id` 之后应当解锁的关卡 id 列表。
+##
+## 由解锁规则**反查**得到，而不是在结算处写 `if level_id == "expedition_01"`。
+## 后者就是「新增关卡要改两处」的来源：结算支路漏改时，牌面可进、按下说未解锁。
+static func expedition_levels_unlocked_by_clearing(cleared_level_id: String) -> Array[String]:
+	var result: Array[String] = []
+	if cleared_level_id.is_empty():
+		return result
+	for entry_value in EXPEDITION_LEVELS:
+		var entry := entry_value as Dictionary
+		if str(entry.get("unlock_policy", UNLOCK_POLICY_ALWAYS)) != UNLOCK_POLICY_ON_CLEAR:
+			continue
+		if str(entry.get("unlock_required_clear", "")) != cleared_level_id:
+			continue
+		result.append(str(entry.get("level_id", "")))
+	return result
 
 
 ## 关卡 id → 玩家可见的关卡名。未登记回退到清单首条的显示名。

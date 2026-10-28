@@ -36,7 +36,7 @@ const ROOM_DOOR_LANE := preload("res://src/map/RoomDoorLane.gd")
 
 ## 整次布局的重试上限。原文的回溯是"重抽房间模板，最多 3 次"；这里放宽到 24，
 ## 因为一张骨架有 17 间房、任一间放不下都要重来，3 次远远不够。
-const LAYOUT_ATTEMPTS := 24
+const LAYOUT_ATTEMPTS := 128
 ## 单节点内层重试（已由 LAYOUT_ATTEMPTS 取代，保留供环拼装使用）。
 const TREE_BACKTRACK_LIMIT := 3
 ## 环拼装每个节点的候选出口对上限（防组合爆炸）。
@@ -53,6 +53,19 @@ const CORRIDOR_HARD_MIN_M := 4.0
 const CORRIDOR_HARD_MAX_M := 30.0
 ## 走廊长度的基本步长（= 一个 5m 格）。
 const CORRIDOR_GAP_STEP := 5.0
+## 连接房朝向加分的量级。必须**压过**所有基于距离的打分（距离项最大约 ±500），
+## 否则"窄长房的长轴要沿行进方向"这条会被距离偏好压掉，连接房就会横着摆。
+const CONNECTOR_ORIENTATION_BONUS := 1000.0
+## 补走廊时两门允许的横向错位上限（米）。超过要绕 L 形第二段，那一段会沿着
+## b 的墙横穿过去，容易压进第三个房间。
+##
+## 5.0 → 10.0：5 边以上的环（flow_05 的 hub_01→n03→conn_01→n04…n05）闭合时，
+## 两端常常错开 2 格而对不齐，卡在 5m 会让整张骨架 0/12。压房风险由
+## `_corridor_hits_rooms()` 正面拦（它按 5m 宽的包围矩形判，宁严不宽），
+## 所以这里可以放宽到 2 格。
+const CORRIDOR_LATERAL_MAX_M := 10.0
+## 走廊净宽（米）= 一个 5m 格。桥接层按它生成走廊房间，所以占位判定必须同宽。
+const CORRIDOR_WIDTH_M := 5.0
 
 ## 注入房的模板归属。**推定值** —— flow 只声明 kind，不声明用哪个模板。
 ## 选它们的原因：尺寸够放一个独立小房间，且已在远征03 的模板池里。
@@ -160,6 +173,9 @@ static func _reroll_pool_templates(flow: Dictionary, current: Dictionary,
 				pool.append(str(item))
 		if pool.size() < 2:
 			continue
+		# 连接房的重抽没有意义：它的模板在布局时才定，本来就每轮重选。
+		if str(node.get("kind", "")) == "CONNECTOR":
+			continue
 		var node_id := str(node.get("node_id", ""))
 		var picked := str(pool[rng.randi_range(0, pool.size() - 1)])
 		# 尽量换成与当前不同的
@@ -231,11 +247,17 @@ static func apply_injections(flow: Dictionary, node_templates: Dictionary,
 	for value in flow.get("nodes", []) as Array:
 		var node := value as Dictionary
 		var node_id := str(node.get("node_id", ""))
-		nodes[node_id] = {
-			"node_id": node_id,
-			"kind": str(node.get("kind", "")),
-			"template_id": str(mapping.get(node_id, "")),
-		}
+		# **整个节点原样保留**，只覆盖 template_id。
+		#
+		# 旧版只取 node_id / kind / template_id 三个字段，把 `template_pool` 丢了 ——
+		# 后果是连接房"布局时选模板"的判据（kind==CONNECTOR 且池非空）永远不成立，
+		# 连接房于是退回成开局随机定一个模板，长轴朝向完全不受控。
+		# 这个 bug 隐蔽在于：组装仍然成功、断言（当时还没这条）全绿，只是形状不对。
+		var entry := node.duplicate(true)
+		entry["node_id"] = node_id
+		entry["kind"] = str(node.get("kind", ""))
+		entry["template_id"] = str(mapping.get(node_id, ""))
+		nodes[node_id] = entry
 	var edges: Array = []
 	for value in flow.get("tree_edges", []) as Array:
 		var edge := value as Dictionary
@@ -456,18 +478,72 @@ static func _layout_all(split: Dictionary, templates: Dictionary,
 			loop_of[str(node_id)] = index
 	ctx["loop_of"] = loop_of
 
+	# 连接房：模板不在开局定，留到布局时按行进方向选（原文"picked later"）。
+	# 判据：kind == CONNECTOR 且池里至少 2 个可用模板（1 个就没有选的意义）。
+	var deferred := {}
+	var node_map := split["nodes"] as Dictionary
+	for node_key in node_map.keys():
+		var node := node_map[node_key] as Dictionary
+		if str(node.get("kind", "")) != "CONNECTOR":
+			continue
+		var pool: Array = []
+		for item in node.get("template_pool", []) as Array:
+			if templates.has(str(item)):
+				pool.append(str(item))
+		if pool.size() >= 2:
+			deferred[str(node_key)] = pool
+	ctx["deferred_pools"] = deferred
+
 	if not root_id.is_empty():
 		var tree_result := _layout_tree(root_id, ctx)
 		if not bool(tree_result["ok"]):
 			failures.append("树块: %s" % str(tree_result["error"]))
 
 	# 2. 环：从接点两端往中间合（原文 "adding entries alternately at either end"）
+	#
+	# **顺序不能照 cut_loops 的输出**：环之间会互相依赖接点。实测 flow_01 的
+	# 两个环是 [reward_02,n06,n05,hub_02] 和 [reward_01,n03,hub_01,n02,n01]，
+	# 前者要接到 n04 上，而 n04 是后者成员 hub_01 的子 —— 先处理前者必然
+	# "找不到接点"，然后退回原点自落、撞上 entry，64 轮重试全灭。
+	#
+	# 改成迭代：每轮只放**接点已就位**的环，放完再扫一遍，直到没有进展。
+	# 这与原文"总装时按连接最多的房间出发"是同一种思路，只是作用在复合对象层。
 	if failures.is_empty():
+		var pending: Array = []
 		for value in split["loops"] as Array:
-			var loop := value as Dictionary
-			var loop_result := _layout_loop(loop, ctx)
-			if not bool(loop_result["ok"]):
-				failures.append("环 %s: %s" % [str(loop["sequence"]), str(loop_result["error"])])
+			pending.append(value as Dictionary)
+		var progress_guard := 0
+		while not pending.is_empty() and progress_guard < 32:
+			progress_guard += 1
+			var progressed := false
+			# ① 环：能接上的先放
+			var still_pending: Array = []
+			for loop in pending:
+				var loop_result := _layout_loop(loop, ctx)
+				if bool(loop_result["ok"]):
+					progressed = true
+				elif bool(loop_result.get("retryable", false)):
+					still_pending.append(loop)
+				else:
+					failures.append("环 %s: %s" % [
+						str(loop["sequence"]), str(loop_result["error"])])
+			pending = still_pending
+			# ② 总装：补**非环成员**（它们可能就是下一个环的接点）
+			#
+			# 这一步不能等到所有环都放完再做。实测 flow_01：环 A 放下 hub_01 后，
+			# 环 B 的接点 n04 才可能就位；而 n04 是"父为环成员"的树节点，
+			# 只能由总装补。于是「环 → 总装 → 环」必须交替，否则环 B 永远等不到 n04。
+			# `_sweep_remaining` 会跳过 `excluded`（= 全部环成员），所以这里安全。
+			if not pending.is_empty() and failures.is_empty():
+				var before := (ctx["rooms"] as Dictionary).size()
+				_sweep_remaining(ctx)
+				if (ctx["rooms"] as Dictionary).size() > before:
+					progressed = true
+			if not progressed:
+				break
+		for loop in pending:
+			failures.append("环 %s: 接点始终未就位（%d 轮后放弃）" % [
+				str(loop["sequence"]), progress_guard])
 
 	# 3. 总装：环成员已就位，解除排除后把剩余子树铺完
 	if failures.is_empty():
@@ -566,17 +642,46 @@ static func _connect_edge(a_id: String, b_id: String, ctx: Dictionary) -> Dictio
 	if bool(_try_direct_close(a_id, b_id, ctx)["ok"]):
 		return {"ok": true}
 
-	# 2) 补走廊：取两房相对的那一侧，各占一个空闲门槽
-	var delta: Vector2 = (room_b["center"] as Vector2) - (room_a["center"] as Vector2)
-	var a_side := _nearest_open_side(room_a, delta)
-	var b_side := _nearest_open_side(room_b, -delta)
-	var a_lane := _free_lane(room_a, a_side)
-	var b_lane := _free_lane(room_b, b_side)
-	if is_nan(a_lane) or is_nan(b_lane):
-		return {"ok": false, "error": "两侧都没有空闲门槽"}
-	var gate_a := _gate_position(room_a, a_side, a_lane)
-	var gate_b := _gate_position(room_b, b_side, b_lane)
-	var gap := gate_a.distance_to(gate_b)
+	# 2) 补走廊：**遍历四面 × 空闲门槽的全部相向组合**，不按中心差方向硬选一侧。
+	#
+	# 旧版用 `_nearest_open_side` 各取一侧、再各取第一条空闲 lane —— 全局只有一个候选。
+	# 两房斜向共墙时（x 贴住、y 错开 30m），那个唯一候选的沿行进轴缺口是 0，
+	# 走廊跨度为 0：桥接层无从生成房间。而把四面都试一遍，往往能找到另一对
+	# 相向的面（例如 a 的南墙对 b 的北墙）真的存在 5m 缺口。
+	# 环闭合只有这一步有机会补救，所以必须**搜**，不能猜。
+	var best := {}
+	for a_side_value in ALL_SIDES:
+		var a_side := str(a_side_value)
+		var b_side := str(SIDE_OPPOSITE[a_side])
+		for a_lane_value in _free_lanes(room_a, a_side):
+			var gate_a := _gate_position(room_a, a_side, float(a_lane_value))
+			for b_lane_value in _free_lanes(room_b, b_side):
+				var gate_b := _gate_position(room_b, b_side, float(b_lane_value))
+				var along_x := a_side in ["east", "west"]
+				# 沿法线方向必须真的分开（缺口 > 0）。反向说明这两个面不是朝内的。
+				var span := (gate_b.x - gate_a.x) if along_x else (gate_b.y - gate_a.y)
+				if span < CORRIDOR_HARD_MIN_M or span > CORRIDOR_HARD_MAX_M:
+					continue
+				# 两门横向错开超过一格时，L 形走廊的第二段会横穿别的房间。
+				var lateral := absf((gate_b.y - gate_a.y) if along_x else (gate_b.x - gate_a.x))
+				if lateral > CORRIDOR_LATERAL_MAX_M:
+					continue
+				if _corridor_hits_rooms(a_side, gate_a, gate_b, rooms, a_id, b_id):
+					continue
+				if best.is_empty() or span < float(best["span"]):
+					best = {
+						"a_side": a_side, "a_lane": float(a_lane_value),
+						"b_side": b_side, "b_lane": float(b_lane_value),
+						"gap": gate_a.distance_to(gate_b), "span": span,
+					}
+	if best.is_empty():
+		return {"ok": false,
+			"error": "四面都找不到能补走廊的相向面（缺口/横向错位/压房均不满足）"}
+	var a_side := str(best["a_side"])
+	var b_side := str(best["b_side"])
+	var a_lane := float(best["a_lane"])
+	var b_lane := float(best["b_lane"])
+	var gap := float(best["gap"])
 	# 长度取**实际门距**，不做取整 —— 取整会让走廊比缺口长，visual 上压进房间。
 	# 两个门不共线时，这段走廊是 L 形的（原文 pathfind 出来的本就允许折）。
 	var length := gap
@@ -590,6 +695,47 @@ static func _connect_edge(a_id: String, b_id: String, ctx: Dictionary) -> Dictio
 		"to_side": b_side, "to_lane": b_lane,
 		"length_m": length, "raw_gap_m": gap, "kind": "pathfind_corridor",
 	}}
+
+
+## 这条走廊占的位置会不会压到第三间房。
+##
+## 走廊在运行时是**真实房间**（`EgtPlanBridge` 会给它 5m 净宽 + 墙），不是一条线
+## —— 所以组装器算位置时必须按 5m 宽的矩形来避让，否则桥接层会报 `room_overlap`。
+## 判定取 L 形第二段的**包围矩形**（略大于实际 L 形），宁严不宽。
+static func _corridor_hits_rooms(a_side: String, ga: Vector2, gb: Vector2,
+		rooms: Dictionary, a_id: String, b_id: String) -> bool:
+	var half := CORRIDOR_WIDTH_M * 0.5
+	var rects: Array = []
+	if a_side in ["east", "west"]:
+		rects.append(Rect2(Vector2(minf(ga.x, gb.x), ga.y - half),
+			Vector2(absf(gb.x - ga.x), CORRIDOR_WIDTH_M)))
+		if absf(gb.y - ga.y) > 0.01:
+			var dir := 1.0 if gb.x > ga.x else -1.0
+			rects.append(Rect2(
+				Vector2(minf(gb.x, gb.x - CORRIDOR_WIDTH_M * dir), minf(ga.y, gb.y) - half),
+				Vector2(CORRIDOR_WIDTH_M, absf(gb.y - ga.y) + CORRIDOR_WIDTH_M)))
+	else:
+		rects.append(Rect2(Vector2(ga.x - half, minf(ga.y, gb.y)),
+			Vector2(CORRIDOR_WIDTH_M, absf(gb.y - ga.y))))
+		if absf(gb.x - ga.x) > 0.01:
+			var dir := 1.0 if gb.y > ga.y else -1.0
+			rects.append(Rect2(
+				Vector2(minf(ga.x, gb.x) - half, minf(gb.y, gb.y - CORRIDOR_WIDTH_M * dir)),
+				Vector2(absf(gb.x - ga.x) + CORRIDOR_WIDTH_M, CORRIDOR_WIDTH_M)))
+	# **端点房间也要查**。走廊从门向外长，正常情况下它与端点房只共一条边
+	# （交集面积为 0，不会误判）；真判出面积 > 0 说明走廊侵进了端点房内部，
+	# 那是几何错误，正是要拦的东西。旧版跳过端点，于是
+	# `cr02_conn_01_n03_a` 压 `conn_01` 10×5 这种错静默通过。
+	for value in rooms.values():
+		var room := value as Dictionary
+		var room_id := str(room.get("node_id", ""))
+		var size := _size_of_room(room)
+		var rect := Rect2((room["center"] as Vector2) - size * 0.5, size)
+		for rect_value in rects:
+			var inter := (rect_value as Rect2).intersection(rect)
+			if inter.size.x > 0.01 and inter.size.y > 0.01:
+				return true
+	return false
 
 
 ## 树块：深度优先 + 回溯。
@@ -743,70 +889,144 @@ static func _place_child(child_id: String, parent_id: String, ctx: Dictionary) -
 	return {"ok": true, "error": ""}
 
 
-## 在指定锚点房上找一对门：锚点侧全部空闲槽 × 子房侧全部候选槽，取最紧凑的可行解。
+## 在指定锚点房上找一对门：锚点侧全部空闲槽 × 子房侧全部候选槽，取最优解。
+##
+## 子房可能有**多个候选模板**（连接房就是），所以最外层多一层模板循环：
+## 对每个候选模板各试一遍，取分最高者。选中的模板写进 `pair["room"]["template_id"]`，
+## 这就是原文说的"rooms picked later, while layout occurs"。
 static func _best_pair(child_id: String, anchor_id: String, anchor: Dictionary,
 		rooms: Dictionary, ctx: Dictionary, toward: Vector2 = Vector2.INF,
 		gap: float = 0.0) -> Dictionary:
-	var child_size := _size_of_template(ctx, child_id)
-	if child_size == Vector2.ZERO:
-		return {}
+	var templates := ctx["templates"] as Dictionary
+	var candidates := _candidate_templates(ctx, child_id)
 	var best: Dictionary = {}
 	var best_score := -INF
-	for anchor_side in ALL_SIDES:
-		for anchor_lane in _free_lanes(anchor, str(anchor_side)):
-			for child_side in ALL_SIDES:
-				if str(child_side) == str(anchor_side):
-					continue
-				for child_lane in _candidate_lanes(ctx, child_id, str(child_side)):
-					var center := _aligned_center(anchor, str(anchor_side), float(anchor_lane),
-						child_size, str(child_side), float(child_lane), gap)
-					var room := {
-						"node_id": child_id,
-						"template_id": str((ctx["node_templates"] as Dictionary).get(child_id, "")),
-						"center": center,
-						"size": child_size,
-						"ports": {},
-						"parents": {},
-					}
-					if _overlaps_any(room, rooms):
+	for tpl_id in candidates:
+		if not templates.has(str(tpl_id)):
+			continue
+		var child_size := _size_of(templates[str(tpl_id)] as Dictionary)
+		if child_size == Vector2.ZERO:
+			continue
+		for anchor_side in ALL_SIDES:
+			for anchor_lane in _free_lanes(anchor, str(anchor_side)):
+				for child_side in ALL_SIDES:
+					if str(child_side) == str(anchor_side):
 						continue
-					# 源头自检：算出的位置必须让两个门相距恰好 = gap（gap=0 即完全重合），
-					# 否则该候选从根上就是错的
-					var gate_a := _gate_position(anchor, str(anchor_side), float(anchor_lane))
-					var gate_b := _gate_position(room, str(child_side), float(child_lane))
-					if absf(gate_a.distance_to(gate_b) - gap) > 0.01:
-						(ctx["misaligned"] as Array).append("%s@%.1f->%s@%.1f" % [
-							anchor_side, float(anchor_lane), child_side, float(child_lane)])
-						continue
-					# 打分按原文两条要求：
-					#   1. 只接受"不与已有房间相交"的出口对（上面已经筛掉重叠）
-					#   2. 一般**偏好离已有房间远的出口** —— 但只是"偏好"，不是"越远越好"
-					#
-					# 试过把"远"放大到 2.0 权重，结果整张图被拉成一条斜线长蛇：
-					# 每个新房间都往最远处跑，地牢失去团块感。这里的做法是
-					# **紧凑为主**（绕锚点生长，像 EGT 那样成团），
-					# 再用 `_spread_score` 做一个上限内的轻微推开，
-					# 免得所有房间都挤在锚点同一侧。
-					var score := 0.0
-					if toward.is_finite():
-						# 环过半：优先把两个开口端拉近（原文 "bring the two unclosed ends closer"）
-						score = -center.distance_to(toward) * 4.0
-						# 环**前半段**偏好相对的两面墙（原文 "with preference for opposing
-						# walls, west-east or north-south"）—— 让环沿直线铺开再收口。
-						if str(child_side) == str(SIDE_OPPOSITE[str(anchor_side)]):
-							score += 6.0
-					else:
-						# 树：不奖励"对面墙"。奖励了会把整条链拉成笔直长蛇
-						# （实测 boss→foyer→reward→shop 排成一条竖线）。
-						# 原文对树的要求只有"别相交 + 偏好离已有房间远"，没有朝向偏好。
-						score = -center.distance_to(anchor["center"] as Vector2)
-						score += 0.35 * minf(45.0, _spread_score(room, rooms, anchor_id))
-					if score > best_score:
-						best_score = score
-						best = {"anchor_id": anchor_id, "anchor_side": str(anchor_side),
-							"anchor_lane": float(anchor_lane), "child_side": str(child_side),
-							"child_lane": float(child_lane), "room": room}
+					for child_lane in _candidate_lanes(templates, str(tpl_id), str(child_side)):
+						var center := _aligned_center(anchor, str(anchor_side), float(anchor_lane),
+							child_size, str(child_side), float(child_lane), gap)
+						var room := {
+							"node_id": child_id,
+							"kind": _kind_of(ctx, child_id),
+							"template_id": str(tpl_id),
+							"center": center,
+							"size": child_size,
+							"ports": {},
+							"parents": {},
+						}
+						if _overlaps_any(room, rooms):
+							continue
+						# 源头自检：算出的位置必须让两个门相距恰好 = gap
+						var gate_a := _gate_position(anchor, str(anchor_side), float(anchor_lane))
+						var gate_b := _gate_position(room, str(child_side), float(child_lane))
+						if absf(gate_a.distance_to(gate_b) - gap) > 0.01:
+							(ctx["misaligned"] as Array).append("%s@%.1f->%s@%.1f" % [
+								anchor_side, float(anchor_lane), child_side, float(child_lane)])
+							continue
+						# **走廊占位必须在这一步就拦**，不能等到补边阶段。
+						#
+						# 走廊是"边放房间边生成"的（`_corridor_gap` 决定间隙），它占的是
+						# anchor 与 child 之间那段空隙。旧版只检查新房间本身不重叠，
+						# 于是两个房间之间那条 5m 宽的通道可以横穿第三个房间 ——
+						# 桥接层把它变成真实走廊房之后就是 `room_overlap`（实测 12/120 局）。
+						# 到补边阶段才发现已经晚了：那时所有房间都定死，只能重排整层。
+						if gap > 0.0 and _corridor_hits_rooms(
+								str(anchor_side), gate_a, gate_b, rooms, anchor_id, child_id):
+							continue
+						var score := _pair_score(ctx, child_id, str(tpl_id), str(anchor_side),
+							str(child_side), room, anchor, anchor_id, rooms, toward)
+						if score > best_score:
+							best_score = score
+							best = {"anchor_id": anchor_id, "anchor_side": str(anchor_side),
+								"anchor_lane": float(anchor_lane), "child_side": str(child_side),
+								"child_lane": float(child_lane), "room": room,
+								"template_id": str(tpl_id)}
 	return best
+
+
+## 一对出口的得分。四项相加，量级递减：
+##
+## 1. **窄长房朝向**（+1000）—— 连接房的长轴必须沿行进方向，这一项必须压过全部距离项；
+## 2. **环后半段拉近**（toward × 4）—— 原文 "bring the two unclosed ends closer together"；
+## 3. **环前半段偏好对面墙**（+6）—— 原文 "with preference for opposing walls"；
+## 4. **树**：紧凑为主 + 上限内轻微推向空白（`_spread_score` 权重 0.35、封顶 45m）。
+static func _pair_score(ctx: Dictionary, child_id: String, tpl_id: String, anchor_side: String,
+		child_side: String, room: Dictionary, anchor: Dictionary, anchor_id: String,
+		rooms: Dictionary, toward: Vector2) -> float:
+	var center: Vector2 = room["center"]
+	var score := _connector_orientation_score(ctx, child_id, tpl_id, child_side)
+	# 锚点那侧也要管：如果锚点本身是连接房，下一个房间必须从它的**长轴端**接进来，
+	# 否则连接房会变成"从侧边岔出去的一间小房"，失去穿堂的意义。
+	# 只算子房一侧是不够的 —— 实测每张含连接房的骨架都栽在这里（0/2 或 1/2 扇门在长轴上）。
+	score += _anchor_connector_bonus(ctx, anchor_id, anchor_side, anchor)
+	if toward.is_finite():
+		score += -center.distance_to(toward) * 4.0
+		if child_side == str(SIDE_OPPOSITE[anchor_side]):
+			# 这一项是**恒真**的：两房要接上，child 的门必然开在 anchor 门的对面墙上
+			# （`_best_pair` 只枚举相向的组合）。所以它只是记账，不参与择优。
+			#
+			# 曾经把它当"偏好对面墙"抬到 400，想借此让环两端分向相反面 —— 无效，
+			# 因为真正的自由度在 `anchor_side`（从 anchor 的哪一面出去），不在这一项。
+			# 实测调 6 → 400 后 112/120 一位没变。
+			score += 6.0
+	else:
+		score += -center.distance_to(anchor["center"] as Vector2)
+		score += 0.35 * minf(45.0, _spread_score(room, rooms, anchor_id))
+	return score
+
+
+## 连接房的长轴要沿着**行进方向**。
+##
+## 从 `child_side` 那道墙进来的门，法线垂直于该墙；长轴应与法线平行 ——
+## 走进去是"穿过一条窄长空间"，而不是横着穿过它。
+## 非连接房（只有单一模板）恒返回 0，不受影响。
+static func _connector_orientation_score(ctx: Dictionary, node_id: String,
+		tpl_id: String, child_side: String) -> float:
+	var deferred := ctx.get("deferred_pools", {}) as Dictionary
+	if not deferred.has(node_id):
+		return 0.0
+	var templates := ctx["templates"] as Dictionary
+	if not templates.has(tpl_id):
+		return 0.0
+	var size := _size_of(templates[tpl_id] as Dictionary)
+	var long_along_y := size.y > size.x
+	var travel_along_y := str(child_side) in ["north", "south"]
+	return CONNECTOR_ORIENTATION_BONUS if long_along_y == travel_along_y else 0.0
+
+
+## 锚点是连接房时，优先从它**长轴两端**接出去。
+##
+## 连接房的语义是"穿过去"，两个门该在长轴两端。只约束子房一侧不够：
+## 实测 flow_02 / flow_03 / flow_05 / flow_06 里，连接房都是先被正确放置，
+## 然后下一间房从它的**短边**接进来，长轴上就只剩一个门 —— 穿堂变成了侧岔。
+static func _anchor_connector_bonus(ctx: Dictionary, anchor_id: String, anchor_side: String,
+		anchor: Dictionary) -> float:
+	var deferred := ctx.get("deferred_pools", {}) as Dictionary
+	if not deferred.has(anchor_id):
+		return 0.0
+	var size := _size_of_room(anchor)
+	var long_along_y := size.y > size.x
+	var side_along_y := str(anchor_side) in ["north", "south"]
+	return CONNECTOR_ORIENTATION_BONUS if long_along_y == side_along_y else 0.0
+
+
+## 某节点可用的候选模板。连接房返回整个池（布局时才定），其余返回唯一那个。
+static func _candidate_templates(ctx: Dictionary, node_id: String) -> Array:
+	var deferred := ctx.get("deferred_pools", {}) as Dictionary
+	if deferred.has(node_id):
+		return (deferred[node_id] as Array).duplicate()
+	var template_id := str((ctx["node_templates"] as Dictionary).get(node_id, ""))
+	return [template_id] if not template_id.is_empty() else []
 
 
 ## 环：从接点出发，两端往中间合。
@@ -836,26 +1056,45 @@ static func _layout_loop(loop: Dictionary, ctx: Dictionary) -> Dictionary:
 	#      （树 DFS 排除了环成员，所以这一步是必需的，否则环永远找不到落点）
 	#   3. 都没有 → 原点自落（重叠则报错，由外层重试兜底）
 	var attach_index := -1
+	# 已在场的环成员**全部**收进候选，最后从里面抽一个当起点。
+	#
+	# 环的几何完全由起点决定：固定取"第一个已在场的成员"，24 次重试就是同一张图
+	# ——重抽模板也救不回来。实测 flow_05 的 6 节点环 [n05,conn_02,hub_01,n03,n04,n06]
+	# 24 轮全部卡在同一条闭合边上。让起点也进 rng，重试才真的在换几何。
+	var attach_candidates: Array[int] = []
 	for i in range(sequence.size()):
 		if rooms.has(str(sequence[i])):
-			attach_index = i
-			break
-	if attach_index < 0:
+			attach_candidates.append(i)
+	if attach_candidates.is_empty():
+		# **遍历全部**「环成员 × 它的环外邻居」组合，不能试第一个就 break。
+		#
+		# 旧版在 for 循环末尾无条件 `break` —— 只试第一个环成员，贴不上就判定
+		# 「整个环找不到接点」，然后退回原点自落、撞上已有房间、整轮失败。
+		# 实测 flow_01 的环 [hub_02, n05, n06, reward_02] 因此 0/12 全灭：
+		# hub_02 的邻居 n04 周围已经放满，但换成 reward_02 的邻居就能贴。
 		for i in range(sequence.size()):
 			var node_id := str(sequence[i])
-			var anchor := ""
+			var placed_ok := false
 			for value in adjacency.get(node_id, []) as Array:
 				var other := str(value)
-				if rooms.has(other) and not members.has(other):
-					anchor = other
+				if not rooms.has(other) or members.has(other):
+					continue
+				if bool(_place_child(node_id, other, ctx)["ok"]):
+					placed_ok = true
 					break
-			if anchor.is_empty():
-				continue
-			var placed := _place_child(node_id, anchor, ctx)
-			if bool(placed["ok"]):
-				attach_index = i
-			break
+			if placed_ok:
+				attach_candidates.append(i)
+	if not attach_candidates.is_empty():
+		var pick := (ctx["rng"] as RandomNumberGenerator).randi_range(
+			0, attach_candidates.size() - 1)
+		attach_index = attach_candidates[pick]
 	if attach_index < 0:
+		# 已经有房间在场、但本环一个接点都贴不上 ⇒ **可能是别的环还没就位**
+		# （环之间会互相提供接点）。标成 retryable，交给 `_layout_all` 的迭代重扫；
+		# 直接判死会让 flow_01 那种「两个环共用主干」的骨架 100% 失败。
+		if not rooms.is_empty():
+			return {"ok": false, "retryable": true,
+				"error": "环 %s 的接点尚未就位" % str(sequence)}
 		attach_index = 0
 		var seed_id := str(sequence[0])
 		var seed_room := _make_room(seed_id, ctx, Vector2.ZERO)
@@ -876,14 +1115,40 @@ static func _layout_loop(loop: Dictionary, ctx: Dictionary) -> Dictionary:
 	var left_end := attach_id
 	var right_end := attach_id
 	var constructed := 1
+	# 本轮从哪一侧先长（0 = 先左，1 = 先右）。重试时 rng 前进，起手侧会变。
+	var flip := (ctx["rng"] as RandomNumberGenerator).randi_range(0, 1)
 
 	while left <= right:
-		var grow_left := (constructed % 2 == 1) or (left_end == right_end)
+		# 前半段先往哪侧长是**随机**的（原文 "exit pairs are picked randomly"）。
+		# 每轮重试换一个起手侧，形状才会变 —— 固定"先左"会让每次重试都得到
+		# 同一个几何，环闭合长度不变，重试 24 次等于重试 1 次。
+		# 实测 flow_05 有一个种子就是这样 24 轮全失败、闭合走廊 75m。
+		var grow_left := ((constructed + flip) % 2 == 1) or (left_end == right_end)
+		# —— 三角环专用：一侧连续长 ——
+		#
+		# 三条边的小环（A→B→C→A）若按"左右各放一个"来摆，B 挂 A 北侧、C 挂 A 东侧，
+		# 最后闭合 B–C 要横跨 A 的对角 —— 实测 47m 走廊，超出原文 4~30。
+		# 改成在一侧连续长（A→B→C），C 与 B 相邻，闭合边只剩 C–A，环自然是"紧环"。
+		#
+		# **这条只对三角环成立**（2026-10-28 修）。旧版无条件生效，于是 4~6 边环
+		# 也被拉成一条链，闭合边必然横跨整条链：flow_05 的 5 边环
+		# [hub_01→n03→conn_01→n04 … n05] 因此 0/12 全灭。
+		# 4 边以上必须**两端交替**长，两端才会保持接近、围成口字形。
+		if total <= 3:
+			if grow_left and left_end == attach_id and right_end != attach_id:
+				grow_left = false
+			elif not grow_left and right_end == attach_id and left_end != attach_id:
+				grow_left = true
 		var node_id := str(rotated[left] if grow_left else rotated[right])
 		var anchor_id := left_end if grow_left else right_end
 		# 后半段：朝另一侧开口拉近（原文 "bring the two unclosed ends closer together"）
+		#
+		# 阈值取 `>=` 而不是 `>`：4 节点环后半段只剩 1 次机会（节点 3）时太晚，
+		# 前面已经连成一条直线，闭合边只能横跨整条链 —— 实测 flow_01 的
+		# [hub_02 → n05 → n06 → reward_02] 闭合边 100m+，直接超原文 30 上限。
+		# 从「过半」就开始收（节点 2 起），环才有机会围成口字形而不是长条。
 		var toward := Vector2.INF
-		if constructed * 2 > total and left_end != right_end:
+		if constructed * 2 >= total and left_end != right_end:
 			var other_end := right_end if grow_left else left_end
 			if rooms.has(other_end):
 				toward = (rooms[other_end] as Dictionary)["center"] as Vector2
@@ -898,11 +1163,17 @@ static func _layout_loop(loop: Dictionary, ctx: Dictionary) -> Dictionary:
 			right -= 1
 		constructed += 1
 
-	# 两端相遇：补最后一条边（这是环的闭合）
+	# 两端相遇：尝试补最后一条边（这是环的闭合）
+	#
+	# **闭合不上不判死**，留给 `_connect_remaining_edges()` 在总装之后补。
+	#
+	# 原因是「看不见的未来房间」：环闭合时只有一部分房间在场，若闭合要拉走廊，
+	# 走廊的占位检查只能看到**此刻**已有的房间。实测 flow_05 的环边 conn_01–n03
+	# 在环阶段补了一条 L 形走廊，而 conn_02 还没放 —— 等 conn_02 落到那条走廊上，
+	# 桥接层就报 `room_overlap`（12/120 局）。等到补边阶段时全体房间都在场，
+	# 撞房检查才看得全；那一层真接不上会如实报错并触发整轮重排。
 	if left_end != right_end:
-		var closed := _connect_edge(left_end, right_end, ctx)
-		if not bool(closed["ok"]):
-			return {"ok": false, "error": "环闭合失败：%s" % str(closed["error"])}
+		_connect_edge(left_end, right_end, ctx)
 	return {"ok": true, "error": ""}
 
 
@@ -948,18 +1219,26 @@ static func _try_direct_close(a_id: String, b_id: String, ctx: Dictionary) -> Di
 		else:
 			a_side = "north"
 			b_side = "south"
-	var a_lane := _free_lane(room_a, a_side)
-	var b_lane := _free_lane(room_b, b_side)
-	if is_nan(a_lane) or is_nan(b_lane):
-		return {"ok": false}
-	# 两房必须已经贴合：用这对门反算出的位置要和 B 的现位置一致
-	var expect := _aligned_center(room_a, a_side, a_lane, _size_of_room(room_b), b_side, b_lane)
-	if expect.distance_to(room_b["center"] as Vector2) > OVERLAP_EPS:
-		return {"ok": false}
-	_commit_port(room_a, a_side, a_lane)
-	_commit_port(room_b, b_side, b_lane)
-	_record_connection(ctx, a_id, a_side, a_lane, b_id, b_side, b_lane, "direct", 0.0)
-	return {"ok": true}
+	# 必须**枚举两侧空闲 lane 的全部组合**，不能各取第一条就判死。
+	#
+	# 旧版各取 `_free_lane()` 的第一条，对不上就 `return false` —— 于是退回"补走廊"，
+	# 而两房其实已经贴住（共墙），走廊长度算出来是 **0**：桥接层拿到一条 0 长走廊，
+	# 实测 120 局里 21 局栽在这里（hub_01 与邻居）。换一条 lane 就能直接对开的边，
+	# 被误判成"必须拉走廊"，这是判据太窄，不是布局真的不行。
+	var b_center: Vector2 = room_b["center"]
+	for a_lane_value in _free_lanes(room_a, a_side):
+		for b_lane_value in _free_lanes(room_b, b_side):
+			# 两房必须已经贴合：用这对门反算出的位置要和 B 的现位置一致
+			var expect := _aligned_center(room_a, a_side, float(a_lane_value),
+				_size_of_room(room_b), b_side, float(b_lane_value))
+			if expect.distance_to(b_center) > OVERLAP_EPS:
+				continue
+			_commit_port(room_a, a_side, float(a_lane_value))
+			_commit_port(room_b, b_side, float(b_lane_value))
+			_record_connection(ctx, a_id, a_side, float(a_lane_value), b_id, b_side,
+				float(b_lane_value), "direct", 0.0)
+			return {"ok": true}
+	return {"ok": false}
 
 
 # ── 几何 ────────────────────────────────────────────────────────────────────
@@ -995,18 +1274,36 @@ static func _aligned_center(a: Dictionary, side_a: String, lane_a: float,
 
 static func _make_room(node_id: String, ctx: Dictionary, center: Vector2) -> Dictionary:
 	var templates := ctx["templates"] as Dictionary
-	var template_id := str((ctx["node_templates"] as Dictionary).get(node_id, ""))
+	# 延迟选模板的节点（连接房）此时还没定，先取池里第一个做落位兜底；
+	# 正常流程下它一定由 `_place_child` 放置，这里只服务根节点/孤立节点。
+	var template_id := _first_template_for(ctx, node_id)
 	if template_id.is_empty() or not templates.has(template_id):
 		return {}
 	var tpl := templates[template_id] as Dictionary
 	return {
 		"node_id": node_id,
+		"kind": _kind_of(ctx, node_id),
 		"template_id": template_id,
 		"center": center,
 		"size": _size_of(tpl),
 		"ports": {},
 		"parents": {},
 	}
+
+
+## 节点的房型（`ENTRANCE` / `BOSS` / `HUB` / …）。
+##
+## 房间字典**必须带它**：下游 `EgtPlanBridge.to_block()` 靠 `room["kind"]` 填
+## `room_meta`，`_generate_flow_floor()` 再靠它映射成 role / room_type / content_type。
+## 旧版房间字典里没有 `kind`，于是 `room_meta` 全是空串 ⇒ **整层房间都退化成
+## `role=main` / `type=COMBAT`**：BOSS 房变普通战斗房、入口失去安全屋身份、
+## 撤离点不触发终局。而当时所有断言都通过 —— 因为校验器只在「存在 boss 房」时
+## 才要求有 BOSS，全是 main 时它根本不检查。
+static func _kind_of(ctx: Dictionary, node_id: String) -> String:
+	var nodes := ctx.get("nodes", {}) as Dictionary
+	if nodes.has(node_id):
+		return str((nodes[node_id] as Dictionary).get("kind", ""))
+	return ""
 
 
 static func _size_of(tpl: Dictionary) -> Vector2:
@@ -1018,10 +1315,15 @@ static func _size_of(tpl: Dictionary) -> Vector2:
 
 static func _size_of_template(ctx: Dictionary, node_id: String) -> Vector2:
 	var templates := ctx["templates"] as Dictionary
-	var template_id := str((ctx["node_templates"] as Dictionary).get(node_id, ""))
+	var template_id := _first_template_for(ctx, node_id)
 	if not templates.has(template_id):
 		return Vector2.ZERO
 	return _size_of(templates[template_id] as Dictionary)
+
+
+static func _first_template_for(ctx: Dictionary, node_id: String) -> String:
+	var candidates := _candidate_templates(ctx, node_id)
+	return str(candidates[0]) if not candidates.is_empty() else ""
 
 
 static func _size_of_room(room: Dictionary) -> Vector2:
@@ -1111,9 +1413,9 @@ static func _free_lanes(room: Dictionary, side: String) -> Array:
 	return out
 
 
-static func _candidate_lanes(ctx: Dictionary, node_id: String, side: String) -> Array:
-	var templates := ctx["templates"] as Dictionary
-	var template_id := str((ctx["node_templates"] as Dictionary).get(node_id, ""))
+## 某个**具体模板**在某一面的合法门槽（直接读它的 `wall_lane_table`）。
+## 不传 node_id 是因为连接房的模板要到布局时才定，此时 `node_templates` 里还是空的。
+static func _candidate_lanes(templates: Dictionary, template_id: String, side: String) -> Array:
 	if not templates.has(template_id):
 		return []
 	var lanes_raw: Dictionary = (templates[template_id] as Dictionary).get("wall_lane_table", {})

@@ -230,9 +230,21 @@ def valid_lanes(tpl: dict, variant: str, side: str) -> list[float]:
 
 
 def choose_ports(tpl: dict, variant: str, want: int) -> list[tuple[str, float]]:
-    """按 north/south/east/west 顺序取离中心最近的合法槽，不够再往同侧加第二个。"""
+    """按 north/south/east/west 顺序取离中心最近的合法槽，不够再往同侧加第二个。
+
+    窄长房（长宽比 ≥ 2.5）例外：门要开在**长轴两端**，否则穿堂变成横穿。
+    这是《挺进地牢》"long, thin rooms … sensible orientation" 的落地 ——
+    `connector_10x30` 的门在南北，`connector_30x10` 的门在东西。
+    """
     tid = str(tpl["template_id"])
-    sides = SIDE_OVERRIDES.get(tid, ["north", "south", "east", "west"])
+    w, d = (float(v) for v in tpl["size_m"])
+    if tid in SIDE_OVERRIDES:
+        sides = SIDE_OVERRIDES[tid]
+    elif max(w, d) / max(1e-6, min(w, d)) >= 2.5:
+        # 长轴沿 y（南北）⇒ 门在南北两面；长轴沿 x（东西）⇒ 门在东西两面
+        sides = ["north", "south", "east", "west"] if d > w else ["east", "west", "north", "south"]
+    else:
+        sides = ["north", "south", "east", "west"]
     door_w = float(tpl["door_contract"]["width_m"])
     picked: list[tuple[str, float]] = []
     for side in sides:

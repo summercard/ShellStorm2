@@ -145,8 +145,10 @@ static func lane_count_for(span_m: float) -> int:
 ##   "room_id": String,                    # 唯一，用于 instance_id 与归属记录
 ##   "bounds_x_m": [x_min, x_max],         # Blender 世界坐标，落在 5m 格线上
 ##   "bounds_y_m": [y_min, y_max],         # 同上（south = 小端）
-##   "doors": {side: offset_m},            # 有门扇的门；offset 是**沿该边轴的绝对坐标**
-##   "exits": {side: offset_m},            # 只留门洞、不挂门扇（区块00 的 entry/exit）
+##   "doors": {side: offset_m | [offset_m, …]},
+##                                         # 有门扇的门；offset 是**沿该边轴的绝对坐标**。
+##                                         # 同一面墙开两扇门时给数组（EGT 式组装器会产出）。
+##   "exits": {side: offset_m | [offset_m, …]},  # 只留门洞、不挂门扇（区块00 的 entry/exit）
 ##   "use_corner_l": bool,                 # 默认 true；单 lane 宽的窄房应置 false
 ##   "footprint_vertices_m": [[vx, vy]],   # 可选：非矩形外轮廓，模板坐标系（口径见头注释）
 ##   "footprint_frame": String,            # 可选：必须等于 FOOTPRINT_FRAME
@@ -276,8 +278,8 @@ static func build_block(rooms: Array) -> Dictionary:
 		var door_lane_set: Dictionary = port_sets["door"]
 		var exit_lane_set: Dictionary = port_sets["exit"]
 		for side in SIDE_ORDER:
-			var door_offset: Variant = room["doors"].get(side, null)
-			var exit_offset: Variant = room["exits"].get(side, null)
+			var door_offsets := _port_offsets(room["doors"].get(side, null))
+			var exit_offsets := _port_offsets(room["exits"].get(side, null))
 			var door_found := false
 			var exit_found := false
 			for edge_value in edges_by_side.get(side, []):
@@ -331,10 +333,33 @@ static func build_block(rooms: Array) -> Dictionary:
 			# 门位必须落在本侧**某一段边界**的 lane 上。轮廓房里门位正好开在凹口上时，
 			# 本侧一段都没扫到它 ⇒ door_found 仍是 false ⇒ 在这里报错，
 			# 由调用方放弃接管（宁可不给轮廓壳，也不给一扇开在空处的门）。
-			if door_offset != null and not door_found:
-				errors.append("door_offset_off_lane:%s.%s=%s" % [room_id, side, str(door_offset)])
-			if exit_offset != null and not exit_found:
-				errors.append("exit_offset_off_lane:%s.%s=%s" % [room_id, side, str(exit_offset)])
+			if not door_offsets.is_empty() and not door_found:
+				errors.append("door_offset_off_lane:%s.%s=%s" % [room_id, side, str(door_offsets)])
+			if not exit_offsets.is_empty() and not exit_found:
+				errors.append("exit_offset_off_lane:%s.%s=%s" % [room_id, side, str(exit_offsets)])
+
+	# ③.5 周长覆盖自检：每条边界 lane 必须**要么有墙（实墙/门墙），要么被 L 臂占住**。
+	#
+	# 少一格就是一扇没门的洞 —— 玩家能走出去，外面是空的。这类缺口不会让上面任何
+	# 一条判据失败（lane 归属表里根本没这一条），属于"静默少墙"，只能这样正面点名。
+	# 只写进 `validation`、不进 `errors`：既有楼层若本来就有缺口，不能被它顺带判死。
+	var wall_gaps: Array = []
+	for room in normalized:
+		var gaps_room_id := str(room["room_id"])
+		var edges_by_side_gap: Dictionary = room["_boundary_edges_by_side"]
+		for side in SIDE_ORDER:
+			for edge_value in edges_by_side_gap.get(side, []):
+				var edge := edge_value as Dictionary
+				for lane_key in edge_lane_keys(
+					float(edge["span_min_m"]), float(edge["span_max_m"])
+				):
+					var lane_str := _lane_key_str(str(edge["axis"]), float(edge["line_m"]), lane_key)
+					if lane_claims.has(lane_str) or corner_reservations.has(lane_str):
+						continue
+					wall_gaps.append({
+						"room_id": gaps_room_id, "side": side,
+						"lane_key": lane_key, "center_m": lane_center_of(lane_key),
+					})
 
 	# ④ 出实例。
 	var instances: Array = []
@@ -477,6 +502,8 @@ static func build_block(rooms: Array) -> Dictionary:
 		"illegal_rotation_count": 0,
 		"missing_components": [],
 		"slot_role_counts": count_slot_roles(instances),
+		# 周长覆盖自检（见 ③.5）：空 = 每条边界 lane 都有墙或 L 臂。
+		"wall_gaps": wall_gaps,
 	}
 	result["errors"] = errors
 	return result
@@ -591,6 +618,20 @@ static func _bound_outer_edge(room: Dictionary, side: String) -> Variant:
 ## 互不重叠 ⇒ 凹口区域里不可能有邻房、也不可能在别的房间内部 ⇒ 恒为空洞。
 ## 门落在凹口段（或凹口对面的内墙段）上就是开向虚空。同一侧多条平行段上
 ## 同一个门偏移会同时命中 ⇒ lane 被重复计入、共享墙翻倍（实测 14 件门墙 vs 12 条边）。
+## 把 `doors` / `exits` 的某一侧值统一成偏移数组。
+##
+## 契约：该字典每侧的值可以是**单个 float**（历史口径，绝大多数房间如此），
+## 也可以是 **Array[float]**（同一面墙开两扇门）。EGT 式组装器产出的房间表里
+## 526 个门侧中有 2 个是同侧双门（17.6% 的骨架含这种房型），
+## 只认单个 float 会**静默丢掉第二扇门** —— 房间对外多一个通路，壳体却砌成实墙。
+static func _port_offsets(value: Variant) -> Array:
+	if value == null:
+		return []
+	if value is Array:
+		return value
+	return [value]
+
+
 static func _room_port_lane_key_sets(room: Dictionary) -> Dictionary:
 	var sets := {"door": {}, "exit": {}}
 	for side in SIDE_ORDER:
@@ -599,15 +640,16 @@ static func _room_port_lane_key_sets(room: Dictionary) -> Dictionary:
 			continue
 		var edge := edge_value as Dictionary
 		for kind in ["door", "exit"]:
-			var offset: Variant = (room["%ss" % kind] as Dictionary).get(side, null)
-			if offset == null:
+			var offsets := _port_offsets((room["%ss" % kind] as Dictionary).get(side, null))
+			if offsets.is_empty():
 				continue
 			var lane_keys := edge_lane_keys(float(edge["span_min_m"]), float(edge["span_max_m"]))
-			for lane_key in lane_keys:
-				if absf(lane_center_of(lane_key) - float(offset)) <= DOOR_OFFSET_TOLERANCE_M:
-					(sets[kind] as Dictionary)[_lane_key_str(
-						str(edge["axis"]), float(edge["line_m"]), lane_key
-					)] = true
+			for offset in offsets:
+				for lane_key in lane_keys:
+					if absf(lane_center_of(lane_key) - float(offset)) <= DOOR_OFFSET_TOLERANCE_M:
+						(sets[kind] as Dictionary)[_lane_key_str(
+							str(edge["axis"]), float(edge["line_m"]), lane_key
+						)] = true
 	return sets
 
 

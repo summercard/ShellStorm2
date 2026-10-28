@@ -425,8 +425,18 @@ func entry_available(level_id: String) -> bool:
 	return ResourceLoader.exists(GameDesignConfig.expedition_level_scene(level_id))
 
 
+## 入口牌面文案的外部真源（可选），由 `RogueMapSelectMenu` 在 `add_child` 之前注入。
+##
+## 本类只负责渲染，不该自己去问"解没解锁"（那是存档态，归 `BaseManager`）。
+## 而只按"场景在不在"渲染是不够的：场景已建、但关卡还锁着时，牌面会写
+## 「点击进入」，玩家按下去才被告知未解锁 —— 远征03 从上线起就是这个表现。
+## 所以文案交给唯一知道**两道门**的那一层算，本类只贴。
+var entry_hint_provider := Callable()
+
 ## 入口牌面文案。未开放的入口一进来就写明，不等玩家点了才说。
 func _entry_hint_text(level_id: String) -> String:
+	if entry_hint_provider.is_valid():
+		return str(entry_hint_provider.call(level_id))
 	return "点击进入  ·  ENTER" if entry_available(level_id) else "尚未开放"
 
 func _update_staging() -> void:

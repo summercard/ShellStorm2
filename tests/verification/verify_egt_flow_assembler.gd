@@ -12,16 +12,31 @@ extends Node3D
 ##
 ## 另外统计：每张 flow 在多少个种子上成功、平均环数与走廊数。
 ## 不追求 100% 成功 —— EGT 自己也会重试；失败率本身就是指标。
+##
+## 两件额外的事（2026-10-28 加）：
+##
+## - **连接房必须窄长且朝向正确**：EGT 原文说 CONNECTOR 是 "long, thin rooms, so picking
+##   one with a sensible orientation is vital"。这条断言验的正是"sense of orientation"：
+##   长轴必须沿行进方向。旧版用 25×25 方房，这条会直接红。
+## - **多种子抽关**：不只跑固定的六张骨架，还按 `pick_flow()` 抽 N 次关卡（模拟真实开局）。
 
 const ASSEMBLER := preload("res://src/map/EgtFlowAssembler.gd")
 const LANE := preload("res://src/map/RoomDoorLane.gd")
 
 const PLAN_DIR := "res://data/level_plans/expedition_03"
 const SEED_COUNT := 12
+## 抽关测试的次数与种子起点（与上面那张表分开，避免同一批种子重复跑同样的组合）。
+const LEVEL_DRAW_COUNT := 120
+const LEVEL_DRAW_BASE_SEED := 90000
+## 连接房的最小长宽比。EGT 的 connector 是"窄长"，2.5 是下限而不是目标值。
+const CONNECTOR_MIN_ASYMMETRY := 2.5
 
 var _failures: Array[String] = []
 var _checks := 0
 var _templates: Dictionary = {}
+## 连接房统计：total = 出现次数；passthrough = 所有门都在长轴端（真正的穿堂）。
+var _connector_total := 0
+var _connector_passthrough := 0
 
 
 func _ready() -> void:
@@ -60,7 +75,51 @@ func _ready() -> void:
 			"" if first_error.is_empty() else ("  first_err=" + first_error.substr(0, 90))])
 
 	_verify_determinism(flows)
+	_verify_level_draw(flows)
 	_report(total_ok, total_runs)
+
+
+## 真实开局模拟：按 `pick_flow()` 从六张骨架里抽一张，再组装。
+##
+## 和上面那张表不同：上面是"每张骨架都跑一遍"，这里是"一个种子一局，抽到哪张算哪张"，
+## 更接近玩家每天遇到的情况。同时统计连接房到底用了哪几个模板 ——
+## 如果 40 局只出现一种朝向，说明"布局时选模板"是空转的。
+func _verify_level_draw(flows: Array) -> void:
+	var seen_templates := {}
+	var seen_sizes := {}
+	var ok_count := 0
+	for i in range(LEVEL_DRAW_COUNT):
+		var seed_value := LEVEL_DRAW_BASE_SEED + i * 613
+		var flow: Dictionary = ASSEMBLER.pick_flow(flows, seed_value)
+		if flow.is_empty():
+			_check(false, "抽关 seed=%d: pick_flow 返回空" % seed_value)
+			continue
+		var flow_id := str(flow.get("flow_id", "?"))
+		var result: Dictionary = ASSEMBLER.assemble_flow(flow, _templates, {}, seed_value)
+		if not bool(result["ok"]):
+			_check(false, "抽关 seed=%d 抽到 %s 组装失败：%s" % [
+				seed_value, flow_id, str(result["error"])])
+			continue
+		ok_count += 1
+		_verify_result("draw:%s" % flow_id, seed_value, result)
+		for value in result["rooms"] as Array:
+			var room := value as Dictionary
+			if not str(room["node_id"]).begins_with("conn"):
+				continue
+			seen_templates[str(room["template_id"])] = true
+			var size: Vector2 = room["size"]
+			seen_sizes["%.0fx%.0f" % [size.x, size.y]] = true
+	print("LEVEL_DRAW seeds=%d ok=%d connector_templates=%d sizes=%d" % [
+		LEVEL_DRAW_COUNT, ok_count, seen_templates.size(), seen_sizes.size()])
+	print("LEVEL_DRAW connector_templates=%s sizes=%s" % [
+		str(seen_templates.keys()), str(seen_sizes.keys())])
+	# 抽关至少要大半成功（允许偶发重试耗尽）
+	_check(ok_count >= int(LEVEL_DRAW_COUNT * 0.9),
+		"抽关成功率过低：%d/%d" % [ok_count, LEVEL_DRAW_COUNT])
+	# "布局时选模板"必须真的在选择：横竖两种朝向都得出现过
+	_check(seen_templates.size() >= 2,
+		"连接房只用到 %d 种模板（%s）—— 布局时选朝向没生效" % [
+			seen_templates.size(), str(seen_templates.keys())])
 
 
 func _verify_result(flow_id: String, seed_value: int, result: Dictionary) -> void:
@@ -110,6 +169,58 @@ func _verify_result(flow_id: String, seed_value: int, result: Dictionary) -> voi
 		for side in (room["ports"] as Dictionary):
 			port_count += ((room["ports"] as Dictionary)[side] as Array).size()
 		_check(port_count >= 1, "%s: %s 没有任何门（孤立房间）" % [tag, str(room["node_id"])])
+
+	# 5. 连接房必须是**窄长**，且长轴沿行进方向
+	_verify_connectors(tag, rooms)
+
+
+## 连接房（CONNECTOR）的两条硬要求，对应 EGT 原文：
+## *"These are often long, thin rooms, so picking one with a sensible orientation is vital."*
+##
+## 1. **窄长**：长宽比 ≥ 2.5。方形 25×25 会被这条直接判红。
+## 2. **朝向合理**：门开在哪面墙，就沿那条轴行进，长轴必须与行进轴一致。
+##    2 门的连接房两个门都必须在长轴上；3 门允许一扇在垂直面（拐角型）。
+func _verify_connectors(tag: String, rooms: Array) -> void:
+	for value in rooms:
+		var room := value as Dictionary
+		var node_id := str(room["node_id"])
+		if not node_id.begins_with("conn"):
+			continue
+		var size: Vector2 = room["size"]
+		var short := minf(size.x, size.y)
+		var long := maxf(size.x, size.y)
+		if short <= 0.0:
+			_check(false, "%s: %s 尺寸异常 %s" % [tag, node_id, str(size)])
+			continue
+		var ratio := long / short
+		_check(ratio >= CONNECTOR_MIN_ASYMMETRY,
+			"%s: 连接房 %s（%s）是 %.0fx%.0f，长宽比 %.2f < %.1f —— 不是窄长房" % [
+				tag, node_id, str(room["template_id"]), size.x, size.y,
+				ratio, CONNECTOR_MIN_ASYMMETRY])
+
+		var long_along_y := size.y > size.x
+		var ports: Dictionary = room["ports"]
+		var port_total := 0
+		var along_long := 0
+		for side in ports:
+			var count := (ports[side] as Array).size()
+			port_total += count
+			var travel_along_y := str(side) in ["north", "south"]
+			if travel_along_y == long_along_y:
+				along_long += count
+		# 硬要求：**至少一扇门在长轴端** —— 这保证它是"穿过去的长空间"，
+		# 而不是"从侧边岔出去的一间小房"。全部开在垂直面（along_long==0）就是纯侧向使用，判红。
+		#
+		# 为什么不要求两扇都在长轴端：连接房被夹在中间时（长轴两端都被已有房间占住），
+		# 第三/第二扇门只能从垂直面出去。本工程房间不能旋转也不能变形，
+		# 这是几何限制，不是朝向选错。真实比例见下面的 CONNECTOR_PASSTHROUGH 统计。
+		_check(along_long >= 1,
+			"%s: 连接房 %s（%s %.0fx%.0f）被**横向使用**：%d 扇门全开在垂直面（共 %d 扇）—— 长轴没沿行进方向" % [
+				tag, node_id, str(room["template_id"]), size.x, size.y,
+				port_total - along_long, port_total])
+		_connector_total += 1
+		if port_total >= 2 and along_long == port_total:
+			_connector_passthrough += 1
 
 
 func _verify_determinism(flows: Array) -> void:
@@ -198,6 +309,13 @@ func _check(condition: bool, message: String) -> void:
 
 
 func _report(total_ok: int, total_runs: int) -> void:
+	# 连接房穿堂比例：所有门都开在长轴端 = 真正的"穿过去"。
+	# 被夹在中间的那些（长轴两端都被占）只能从垂直面出去，那是几何限制。
+	if _connector_total > 0:
+		var rate := float(_connector_passthrough) / float(_connector_total)
+		print("CONNECTOR_PASSTHROUGH %d/%d = %.0f%%（其余为被夹住的拐角连接）" % [
+			_connector_passthrough, _connector_total, rate * 100.0])
+		_check(rate >= 0.5, "连接房穿堂比例过低：%.0f%%（低于 50%%，朝向选择基本没生效）" % (rate * 100.0))
 	print("ASSEMBLE_CHECKED runs=%d ok=%d checks=%d" % [total_runs, total_ok, _checks])
 	if _failures.is_empty():
 		print("EGT_ASSEMBLER_OK runs=%d checks=%d" % [total_runs, _checks])

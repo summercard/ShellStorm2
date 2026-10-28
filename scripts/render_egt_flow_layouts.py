@@ -169,33 +169,52 @@ def render(flow: dict, out: Path) -> None:
                     dr.rectangle([X(gx) - 5, Y(gy) - 5, X(gx) + 5, Y(gy) + 5],
                                  fill=(226, 162, 36), outline=(150, 100, 30))
 
-    title = "%s  %s ｜ seed=%s  房间 %d  环 %d  走廊 %d" % (
-        flow["flow_id"], flow.get("flow_name_zh", ""), flow["seed"],
+    title = "%s%s ｜ seed=%s  房间 %d  环 %d  走廊 %d" % (
+        ("%s → " % flow["label"]) if flow.get("label") else "",
+        flow["flow_id"], flow["seed"],
         len(rooms), flow["loops"], len(flow.get("corridors", [])))
     dr.text((pad, 10), title, fill=(28, 32, 36))
     out.parent.mkdir(parents=True, exist_ok=True)
     im.save(out)
 
 
-def main() -> int:
-    data = json.loads(SRC.read_text(encoding="utf-8"))
-    cards: list[str] = []
-    for flow in data["flows"]:
-        name = flow["flow_id"]
-        png = OUT_DIR / ("%s.png" % name)
-        render(flow, png)
-        corridor_html = "".join(
-            f'<li>{html.escape(c["from"])} → {html.escape(c["to"])}：{c["length_m"]:.0f} m</li>'
-            for c in flow.get("corridors", [])
-        ) or "<li>无（全部直接贴合）</li>"
-        cards.append(f"""<figure>
+def card_html(flow: dict, name: str) -> str:
+    corridor_html = "".join(
+        f'<li>{html.escape(c["from"])} → {html.escape(c["to"])}：{c["length_m"]:.0f} m</li>'
+        for c in flow.get("corridors", [])
+    ) or "<li>无（全部直接贴合）</li>"
+    conn = flow.get("connector_sizes") or []
+    conn_html = (
+        '<p class="cor">连接房：</p><ul>'
+        + "".join(f"<li>{html.escape(str(c))}</li>" for c in conn)
+        + "</ul>"
+        if conn
+        else ""
+    )
+    return f"""<figure>
 <img src="{name}.png" alt="{name}" loading="lazy">
-<figcaption><b>{html.escape(name)} · {html.escape(flow.get("flow_name_zh", ""))}</b>
+<figcaption><b>{html.escape(flow["flow_id"])} · {html.escape(flow.get("flow_name_zh", ""))}</b>
 <span class="tag">{len(flow["rooms"])} 间房</span>
 <span class="tag">{flow["loops"]} 个环</span>
 <span class="tag">{len(flow.get("corridors", []))} 条走廊</span>
-<p class="cor">走廊闭合：</p><ul>{corridor_html}</ul>
-</figcaption></figure>""")
+<span class="tag">seed={flow["seed"]}</span>
+<p class="cor">走廊：</p><ul>{corridor_html}</ul>{conn_html}
+</figcaption></figure>"""
+
+
+def main() -> int:
+    data = json.loads(SRC.read_text(encoding="utf-8"))
+    skeleton_cards: list[str] = []
+    for flow in data["flows"]:
+        name = flow["flow_id"]
+        render(flow, OUT_DIR / ("%s.png" % name))
+        skeleton_cards.append(card_html(flow, name))
+
+    draw_cards: list[str] = []
+    for flow in data.get("draws", []):
+        name = flow.get("label") or ("draw_" + flow["flow_id"])
+        render(flow, OUT_DIR / ("%s.png" % name))
+        draw_cards.append(card_html(flow, name))
 
     page = f"""<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
@@ -223,17 +242,20 @@ li{{font-size:12px;line-height:1.6}}
 .banner{{background:#E6F1FB;border:1px solid #B5D4F4;border-radius:10px;padding:14px 18px;
 margin:16px 0 22px;font-size:13px;line-height:1.8;color:#0C447C}}
 .banner b{{color:#042C53}}
+h2{{font-size:17px;margin:34px 0 4px;padding-left:10px;border-left:3px solid var(--accent)}}
+.note{{margin:0 0 16px;padding-left:13px;font-size:12.5px;color:var(--sub);max-width:1050px}}
 </style></head><body>
 <header><h1>远征03 · EGT 式组装结果</h1>
 <div class="sub">由 <code>EgtFlowAssembler.assemble_flow()</code> 真实跑出来的坐标（seed={data["seed"]}），
 不是手绘示意。六张骨架共 <b>{sum(len(f["rooms"]) for f in data["flows"])}</b> 间房，
 全部通过「不重叠 / 每条边都落门 / 门位合法 / 同种子可复现」的断言。</div>
 <div class="banner"><b>看图看什么：</b><br>
-<span style="color:#8A5A1E">褐色通道</span>＝房间之间的走廊（5m 净宽，画成实体不是细线）；橙点＝门，成对出现在走廊两端。
-走廊长度贴在通道上。<br>
+<span style="color:#8A5A1E">褐色通道</span>＝房间之间的走廊（5m 净宽，画成实体不是细线）；橙点＝门，成对出现在走廊两端。<br>
 《挺进地牢》的地图和 flow 图<b>不是一一对应</b>的 —— Boris 原话 "there's these weird corridor rooms"，
 实际地图上会多出 flow 里没有的走廊房间；两房直接共墙、门对开的情况也存在，两种混着才像。<br>
-环内部是「紧环 + 短廊」：环成员直接贴合，只有闭合那一段补走廊。</div>
+<b>连接房（conn）是窄长房</b>：长轴沿行进方向，横向走廊式穿过去 —— 对应原文
+"often long, thin rooms, so picking one with a sensible orientation is vital"。
+它用的是哪份模板（横/竖）写在每张图的图注里。</div>
 <div class="legend">
 <span><i class="sw" style="background:#c8f0d2"></i>入口</span>
 <span><i class="sw" style="background:#dae0e8"></i>战斗</span>
@@ -247,7 +269,13 @@ margin:16px 0 22px;font-size:13px;line-height:1.8;color:#0C447C}}
 <span><i class="sw" style="background:#f0d6f0"></i>隐藏房</span>
 </div></header>
 <div class="wrap">
-{chr(10).join(cards)}
+<h2>一、六张骨架（固定 seed={data["seed"]}）</h2>
+<p class="note">逐张看形状：中部紧环、外围走廊、连接房是窄长条。</p>
+{chr(10).join(skeleton_cards)}
+<h2>二、随机抽关（{len(data.get("draws", []))} 局，seed 从 {data.get("draw_base_seed", 0)} 起）</h2>
+<p class="note">每局按 <code>pick_flow()</code> 抽一张骨架再组装，模拟真实开局。
+抽到哪张、长出什么形状都不一样 —— 这就是"多种子抽卡"的证据。</p>
+{chr(10).join(draw_cards)}
 </div></body></html>"""
     (OUT_DIR / "index.html").write_text(page, encoding="utf-8")
     print(f"rendered {len(data['flows'])} layouts -> {OUT_DIR.relative_to(ROOT)}")

@@ -71,16 +71,6 @@
       ]
     },
     {
-      "node_id": "reward_01",
-      "kind": "REWARD",
-      "template_id": "db_70x50",
-      "size_m": [
-        40.0,
-        30.0
-      ],
-      "parent_node_id": "n02"
-    },
-    {
       "node_id": "n03",
       "kind": "NORMAL",
       "template_id": "",
@@ -88,7 +78,7 @@
         25.0,
         25.0
       ],
-      "parent_node_id": "hub_01",
+      "parent_node_id": "n02",
       "template_pool": [
         "corridor_45x40",
         "db_70x50",
@@ -104,7 +94,7 @@
         25.0,
         25.0
       ],
-      "parent_node_id": "n03",
+      "parent_node_id": "hub_01",
       "template_pool": [
         "corridor_45x40",
         "db_70x50",
@@ -129,46 +119,14 @@
       ]
     },
     {
-      "node_id": "reward_02",
+      "node_id": "reward_01",
       "kind": "REWARD",
       "template_id": "db_70x50",
       "size_m": [
         40.0,
         30.0
       ],
-      "parent_node_id": "n05"
-    },
-    {
-      "node_id": "n06",
-      "kind": "NORMAL",
-      "template_id": "",
-      "size_m": [
-        25.0,
-        25.0
-      ],
-      "parent_node_id": "n03",
-      "template_pool": [
-        "corridor_45x40",
-        "db_70x50",
-        "office_60x70",
-        "std_25x25"
-      ]
-    },
-    {
-      "node_id": "n07",
-      "kind": "NORMAL",
-      "template_id": "",
-      "size_m": [
-        25.0,
-        25.0
-      ],
-      "parent_node_id": "n06",
-      "template_pool": [
-        "corridor_45x40",
-        "db_70x50",
-        "office_60x70",
-        "std_25x25"
-      ]
+      "parent_node_id": "n04"
     },
     {
       "node_id": "hub_02",
@@ -178,7 +136,59 @@
         45.0,
         40.0
       ],
-      "parent_node_id": "n07"
+      "parent_node_id": "n03"
+    },
+    {
+      "node_id": "boss_foyer",
+      "kind": "BOSS_FOYER",
+      "template_id": "std_25x25",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "hub_02"
+    },
+    {
+      "node_id": "n06",
+      "kind": "NORMAL",
+      "template_id": "",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "hub_02",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
+    },
+    {
+      "node_id": "reward_02",
+      "kind": "REWARD",
+      "template_id": "db_70x50",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "parent_node_id": "n06"
+    },
+    {
+      "node_id": "n07",
+      "kind": "NORMAL",
+      "template_id": "",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "parent_node_id": "hub_02",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
     },
     {
       "node_id": "n08",
@@ -188,7 +198,7 @@
         25.0,
         25.0
       ],
-      "parent_node_id": "hub_02",
+      "parent_node_id": "n07",
       "template_pool": [
         "corridor_45x40",
         "db_70x50",
@@ -205,16 +215,6 @@
         40.0
       ],
       "parent_node_id": "n08"
-    },
-    {
-      "node_id": "boss_foyer",
-      "kind": "BOSS_FOYER",
-      "template_id": "std_25x25",
-      "size_m": [
-        25.0,
-        25.0
-      ],
-      "parent_node_id": "shop"
     },
     {
       "node_id": "boss",
@@ -255,17 +255,22 @@
     },
     {
       "from": "n02",
-      "to": "reward_01",
-      "kind": "tree"
-    },
-    {
-      "from": "hub_01",
       "to": "n03",
       "kind": "tree"
     },
     {
       "from": "n03",
+      "to": "hub_02",
+      "kind": "tree"
+    },
+    {
+      "from": "hub_01",
       "to": "n04",
+      "kind": "tree"
+    },
+    {
+      "from": "n04",
+      "to": "reward_01",
       "kind": "tree"
     },
     {
@@ -274,37 +279,7 @@
       "kind": "tree"
     },
     {
-      "from": "n05",
-      "to": "reward_02",
-      "kind": "tree"
-    },
-    {
-      "from": "n03",
-      "to": "n06",
-      "kind": "tree"
-    },
-    {
-      "from": "n06",
-      "to": "n07",
-      "kind": "tree"
-    },
-    {
-      "from": "n07",
-      "to": "hub_02",
-      "kind": "tree"
-    },
-    {
       "from": "hub_02",
-      "to": "n08",
-      "kind": "tree"
-    },
-    {
-      "from": "n08",
-      "to": "shop",
-      "kind": "tree"
-    },
-    {
-      "from": "shop",
       "to": "boss_foyer",
       "kind": "tree"
     },
@@ -317,11 +292,36 @@
       "from": "boss",
       "to": "exit",
       "kind": "tree"
+    },
+    {
+      "from": "hub_02",
+      "to": "n06",
+      "kind": "tree"
+    },
+    {
+      "from": "n06",
+      "to": "reward_02",
+      "kind": "tree"
+    },
+    {
+      "from": "hub_02",
+      "to": "n07",
+      "kind": "tree"
+    },
+    {
+      "from": "n07",
+      "to": "n08",
+      "kind": "tree"
+    },
+    {
+      "from": "n08",
+      "to": "shop",
+      "kind": "tree"
     }
   ],
   "loop_edges": [
     {
-      "from": "n04",
+      "from": "shop",
       "to": "hub_02",
       "kind": "loop"
     }
@@ -357,5 +357,5 @@
       "note": "壁炉房（藏层入口）。每层 1 间，优先死胡同。"
     }
   ],
-  "design_note": "四条短翼扇出，只有第三条经回连边汇入 hub_02 才能推进。"
+  "design_note": "四条短翼扇出。第二枢纽 `hub_02` 是**全层唯一的 5 门房**（上游 1 + 首领前厅 1 + 两翼 2 + 商店回连 1），与参考 §5.2 一致。四面墙开不出第 5 个门，所以它必须允许**同侧双门**。`n05` 是单门死胡同（参考里 4 个 1 门战斗房之一）。"
 }

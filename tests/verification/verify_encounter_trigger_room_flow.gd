@@ -148,7 +148,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	var ring := tower._hud_countdown_ring
 	var expected_total := maxi(0, int(ceil(float(room.encounter.get("duration_sec", 60.0)))))
-	_check(ring != null and ring.visible, "遭遇已触发但右上角倒计时环没显示")
+	_check(ring != null and ring.visible, "遭遇已触发但左下角倒计时环没显示")
 	if ring != null:
 		var ring_row := ring.get_snapshot()
 		_check(

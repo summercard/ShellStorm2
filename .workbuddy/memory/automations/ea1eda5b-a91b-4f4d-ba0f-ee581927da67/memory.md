@@ -5,6 +5,27 @@
 
 ## 执行历史
 
+### 2026-10-28 14:34 — **成功**（常规全流程，一次跑通，无重试；C 盘已回落）
+- 首轮即通过：导出 359.4 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。耗时 3m11s。仍按经验把 `TMP/TEMP/TMPDIR` 指到 `I:\...\ShellStorm2-work\_tmp`（C: 今日 12 G 空闲，昨日仅 327 MB，先防一手）。
+- 包：`ShellStorm2.exe`，**376,905,928 B**（359.4 MiB），SHA256 `2f7cae3054c23c6802e579bfcb556d6f731f866760d1eafec8d346418a491905`。比 05:09 版 **+65,960 B**（同日二次打包，工作区又有推进）。
+- 线上独立复验：直链 HEAD 200 / Content-Length 376,905,928（＝本地）/ Last-Modified `28 Oct 2026 06:34:55 GMT`；**整包重下载 376,905,928 B（4.01s @94 MB/s），sha256 + `cmp` 逐字节一致**；更新页 200 / 11,967 B（＝本地），`<h1>弹壳风暴2</h1>`、**14 个 `<h3>`**、按钮 `href="ShellStorm2.exe"` 子路径 200 同大小；md 200 / 8,198 B（＝本地）；旧 `更新日志_2026-10-27.md`、`发布失败报告_2026-10-16.md` 均 **404**。站点 `shellstorm2-20261012-190519` 3 files / 376,926,093 B（＝exe+页+md）。未新建站点。
+- 更新内容：**CHANGELOG 14 条** / 提交 1 条 / 未提交 91 项（修改 41 / 删除 2 / 新增 48，集中在 `tests/verification` 26、`docs/art` 20、`data/level_plans` 10）。
+- **14 条里有 6 条是 10-27 的旧条目（昨日已发布过）**：窗口 `since=2026-10-27 14:34`，但 CHANGELOG 条目只带日期不带时刻，采集器按「日期 ≥ since 的日期」匹配 ⇒ 10-27 全天条目被重新计入。今天**真新增 6 条**＝10-28（三次）连接房改窄长房 + 多种子抽关、（四次）房间表→游戏楼层、五次对齐参考第一层+开放进图、六次修远征03 进不去、七次补连通拓扑与门洞、八次四条实测报单。属采集器粗粒度已知行为，非漏报。
+- 观察到渲染缺陷：`（二次）修图里没有通道` 那条正文含 Markdown 表格/引用，被压成一行超长文本塞进单个 `<li>`（第 52 行），页面观感差。非阻断，建议采集器对表格/引用做剥离或按段落切分。
+- 合规：`config/name="弹壳风暴2"` 未改（第 56 行，`git diff project.godot` 空）；HEAD 仍 `30ed1264`，**未执行 commit/push**；冒烟隔离 `APPDATA`；发布目录事前事后都只有 3 个发布物；临时下载文件已删。
+- 待业主处理：①昨日提的 `config/features=4.7` vs 实际用 4.6.3 导出**仍未定**，今日包同样由 4.6.3 产出；②CHANGELOG 已在 10-28 补回 10-23/24/25/26 四天条目（提交 `06de5c52`），连续四天的挂账问题**已结清**。
+
+### 2026-10-28 05:09 — **成功**（导出一次过，但连卡两处环境故障：C 盘满 + 服务器换 IP）
+- 首轮全流程：导出 359.4 MiB → 三道门禁全绿 → 生成文档 → **发布失败：`[WinError 112] 磁盘空间不足`**。根因：`publish.py` 用 `tempfile.TemporaryDirectory` 在 `%TEMP%`（C:）里 staging + 打 tar，359 MiB 包需要 ≈720 MB，而 **C: 仅剩 327 MB**。修法：把 `TMP/TEMP/TMPDIR` 指向 `I:\...\ShellStorm2-work\_tmp` 后 `--skip-build` 重跑（三道门禁重验，全部再绿）。**未删任何 C 盘文件。**
+- 二轮：卡在 `无法连接部署 API http://10.41.0.2:41740`（10060 超时）。排查发现 **服务器已迁址**：DNS 把 `sofunny-resource-sharing.hnfunny.com` 解析到 **10.30.40.131**，旧 `10.41.0.2` ping 全丢、41739/41740/443 全超时；新地址 daemon v1.6.1、`/api/v1/health` 200、token 归属与 6 个历史站点都在。修法：`publish.py config-server --base-url http://10.30.40.131:41740 --token <原 token>`（token 未变，同机迁移），再 `--skip-build` 三轮 → 发布成功。
+- 包：`ShellStorm2.exe`，**376,839,968 B**（359.4 MiB），SHA256 `0ec6bf0e9aef04c3c99f064885374787c426ceffeeebf683732349fa9f2432a5`。**比 10-27 版 +1,086,872 B**（EGT 关卡组装器/白盒真进包）。
+- 修了一个**静默漏报**：`collect_daily_changes.py` 的 `_ENTRY_RE` 要求「日期 + 空白」，而 CHANGELOG 有 `## 2026-10-28（二次）修「图里没有通道」` 这种**日期后紧跟全角括注、无空格**的写法 ⇒ 8 条里漏 3 条（含最新一条）。正则改为日期后允许可选 `（…）` 括注并并回标题，重采得 8 条。首轮生成的 5 条版已被三轮覆盖。
+- 线上独立复验：直链 HEAD 200 / Content-Length 376,839,968（＝本地）/ Last-Modified `27 Oct 2026 21:10:12 GMT`；**整包重下载 376,839,968 B（3.63s @103.8 MB/s），sha256 + `cmp` 逐字节一致**；更新页 200 / 8,676 B（＝本地），`<h1>弹壳风暴2</h1>`、**8 个 `<h3>`**、按钮 `href="ShellStorm2.exe"` 子路径 200 同大小；md 200 / 5,620 B（＝本地）；旧 `更新日志_2026-10-27/26.md`、`发布失败报告_2026-10-16.md` 均 **404**。站点列表 `shellstorm2-20261012-190519` 3 files / 376,854,264 B（＝exe+页+md 之和）。未新建站点。
+- 更新内容：**CHANGELOG 8 条**（10-27×6、10-28×2）/ 提交 2 条 / 未提交 11 项。主条目：EGT 式关卡组装器实现、远征03 骨架随机的设计契约、9/9 白盒 TSCN、按 EGT 房型谱做全 56 种白盒、房间按外轮廓重做 + 门/通道套件、参考资料入库 + 情报室加第三关入口，以及最新的「修图里没有通道」（三段式拼装 + 环内紧环外疏）。
+- 合规：`config/name="弹壳风暴2"` 未改（第 56 行，`git diff project.godot` 空）；HEAD 仍 `30ed1264`，**未执行 commit/push**；冒烟隔离 `APPDATA`；临时下载文件与 `_tmp` 已清。
+- 待业主处理：①**C: 只剩 327 MB（100% 满）**，这是本轮卡点，任何走 `%TEMP%` 的大文件操作都会崩；②昨天提的 `config/features=4.7` vs 实际用 4.6.3 导出**仍未定**，今日包同样由 4.6.3 产出。
+- 教训：**报错要读到第一因，不要按「网络抖」重试**。`WinError 112` 与 `10060` 是两个不同层的故障，各自都有确定解（临时目录换盘 / 客户端改指向），盲目重试只会浪费时间。
+
 ### 2026-10-27 05:04 — **成功**（常规全流程，一次跑通，无重试）
 - 首轮即通过：导出 358.3 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。总耗时 4m07s。
 - 包：`ShellStorm2.exe`，**375,753,096 B**（358.3 MiB），SHA256 `f3c0284c5369b9772ef1fb05d7f01349f4581bea2db2e06a768db4cf657ef959`。
@@ -158,7 +179,10 @@
 ## 关键坐标（复用）
 - 工程根：`I:\工作项目\shellstrom2\ShellStorm2`
 - 产物目录：`I:\工作项目\shellstrom2\ShellStorm2-work\outputs\daily_release`
-- Godot：`I:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe`（脚本自动回退定位）
+- 大文件临时目录（C 盘满时的外挂）：`I:\工作项目\shellstrom2\ShellStorm2-work\_tmp`
+  —— 跑发布前 `export TMP/TEMP/TMPDIR` 指到这里，否则 staging 会撑爆 C 盘
+- 部署 API：`http://10.30.40.131:41740`（2026-10-28 起；旧 `10.41.0.2` 已废弃）
+- Godot：`I:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe`（脚本自动回退定位；与 `config/features=4.7` 不一致，待定）
 - 发布 skill 客户端：`C:\Users\zhuangmenghong\.workbuddy\skills\sofunny-resource-sharing\scripts\publish.py`
 - 发布耗时约 3.5 分钟（导出占大部分），需后台运行。
 

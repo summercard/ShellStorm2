@@ -24,17 +24,20 @@ li{font-size:12px;line-height:1.6}
 .banner{background:#E6F1FB;border:1px solid #B5D4F4;border-radius:10px;padding:14px 18px;
 margin:16px 0 22px;font-size:13px;line-height:1.8;color:#0C447C}
 .banner b{color:#042C53}
+h2{font-size:17px;margin:34px 0 4px;padding-left:10px;border-left:3px solid var(--accent)}
+.note{margin:0 0 16px;padding-left:13px;font-size:12.5px;color:var(--sub);max-width:1050px}
 </style></head><body>
 <header><h1>远征03 · EGT 式组装结果</h1>
 <div class="sub">由 <code>EgtFlowAssembler.assemble_flow()</code> 真实跑出来的坐标（seed=4100），
 不是手绘示意。六张骨架共 <b>114</b> 间房，
 全部通过「不重叠 / 每条边都落门 / 门位合法 / 同种子可复现」的断言。</div>
 <div class="banner"><b>看图看什么：</b><br>
-<span style="color:#8A5A1E">褐色通道</span>＝房间之间的走廊（5m 净宽，画成实体不是细线）；橙点＝门，成对出现在走廊两端。
-走廊长度贴在通道上。<br>
+<span style="color:#8A5A1E">褐色通道</span>＝房间之间的走廊（5m 净宽，画成实体不是细线）；橙点＝门，成对出现在走廊两端。<br>
 《挺进地牢》的地图和 flow 图<b>不是一一对应</b>的 —— Boris 原话 "there's these weird corridor rooms"，
 实际地图上会多出 flow 里没有的走廊房间；两房直接共墙、门对开的情况也存在，两种混着才像。<br>
-环内部是「紧环 + 短廊」：环成员直接贴合，只有闭合那一段补走廊。</div>
+<b>连接房（conn）是窄长房</b>：长轴沿行进方向，横向走廊式穿过去 —— 对应原文
+"often long, thin rooms, so picking one with a sensible orientation is vital"。
+它用的是哪份模板（横/竖）写在每张图的图注里。</div>
 <div class="legend">
 <span><i class="sw" style="background:#c8f0d2"></i>入口</span>
 <span><i class="sw" style="background:#dae0e8"></i>战斗</span>
@@ -48,52 +51,135 @@ margin:16px 0 22px;font-size:13px;line-height:1.8;color:#0C447C}
 <span><i class="sw" style="background:#f0d6f0"></i>隐藏房</span>
 </div></header>
 <div class="wrap">
+<h2>一、六张骨架（固定 seed=4100）</h2>
+<p class="note">逐张看形状：中部紧环、外围走廊、连接房是窄长条。</p>
 <figure>
 <img src="flow_01.png" alt="flow_01" loading="lazy">
 <figcaption><b>flow_01 · 基础版</b>
 <span class="tag">18 间房</span>
-<span class="tag">1 个环</span>
-<span class="tag">7 条走廊</span>
-<p class="cor">走廊闭合：</p><ul><li>entry → n01：5 m</li><li>n01 → hub_01：5 m</li><li>hub_02 → n07：5 m</li><li>n07 → shop：15 m</li><li>boss_foyer → boss：5 m</li><li>boss → exit：5 m</li><li>reward_01 → secret_room_inj1：15 m</li></ul>
+<span class="tag">2 个环</span>
+<span class="tag">9 条走廊</span>
+<span class="tag">seed=4100</span>
+<p class="cor">走廊：</p><ul><li>entry → n01：5 m</li><li>hub_01 → n02：30 m</li><li>n04 → boss_foyer：5 m</li><li>boss → exit：10 m</li><li>exit → fireplace_room_inj2：5 m</li><li>n04 → hub_02：5 m</li><li>hub_02 → n07：5 m</li><li>n07 → shop：5 m</li><li>shop → secret_room_inj1：15 m</li></ul>
 </figcaption></figure>
 <figure>
 <img src="flow_02.png" alt="flow_02" loading="lazy">
 <figcaption><b>flow_02 · 双翼</b>
 <span class="tag">19 间房</span>
-<span class="tag">1 个环</span>
-<span class="tag">10 条走廊</span>
-<p class="cor">走廊闭合：</p><ul><li>n07 → n03：10 m</li><li>hub_01 → n04：5 m</li><li>n04 → n05：10 m</li><li>n07 → n08：5 m</li><li>n08 → shop：5 m</li><li>shop → boss_foyer：5 m</li><li>boss_foyer → boss：15 m</li><li>boss → exit：5 m</li><li>n05 → reward_02：5 m</li><li>n04 → conn_01：5 m</li></ul>
+<span class="tag">2 个环</span>
+<span class="tag">7 条走廊</span>
+<span class="tag">seed=4100</span>
+<p class="cor">走廊：</p><ul><li>entry → n01：5 m</li><li>n01 → n08：5 m</li><li>n05 → n07：5 m</li><li>n07 → boss_foyer：15 m</li><li>boss → exit：5 m</li><li>exit → secret_room_inj1：5 m</li><li>secret_room_inj1 → fireplace_room_inj2：15 m</li></ul><p class="cor">连接房：</p><ul><li>connector_10x30 10x30</li></ul>
 </figcaption></figure>
 <figure>
 <img src="flow_03.png" alt="flow_03" loading="lazy">
 <figcaption><b>flow_03 · 双路通 Boss</b>
 <span class="tag">19 间房</span>
 <span class="tag">1 个环</span>
-<span class="tag">9 条走廊</span>
-<p class="cor">走廊闭合：</p><ul><li>entry → n01：5 m</li><li>n01 → hub_01：5 m</li><li>hub_02 → n06：10 m</li><li>n07 → boss_foyer：5 m</li><li>hub_02 → conn_01：15 m</li><li>boss → exit：5 m</li><li>exit → secret_room_inj1：5 m</li><li>n02 → reward_01：15 m</li><li>secret_room_inj1 → fireplace_room_inj2：5 m</li></ul>
+<span class="tag">7 条走廊</span>
+<span class="tag">seed=4100</span>
+<p class="cor">走廊：</p><ul><li>entry → n01：10 m</li><li>hub_01 → shop：5 m</li><li>n02 → n03：15 m</li><li>n07 → boss_foyer：5 m</li><li>boss_foyer → boss：10 m</li><li>hub_02 → n06：5 m</li><li>exit → fireplace_room_inj2：15 m</li></ul><p class="cor">连接房：</p><ul><li>connector_30x10 30x10</li></ul>
 </figcaption></figure>
 <figure>
 <img src="flow_04.png" alt="flow_04" loading="lazy">
 <figcaption><b>flow_04 · 四小翼</b>
 <span class="tag">19 间房</span>
 <span class="tag">1 个环</span>
-<span class="tag">10 条走廊</span>
-<p class="cor">走廊闭合：</p><ul><li>hub_01 → n02：5 m</li><li>reward_01 → fireplace_room_inj2：10 m</li><li>hub_01 → n05：5 m</li><li>n05 → reward_02：5 m</li><li>hub_01 → n03：5 m</li><li>n07 → hub_02：20 m</li><li>hub_02 → n08：15 m</li><li>n08 → shop：5 m</li><li>shop → boss_foyer：5 m</li><li>boss_foyer → boss：5 m</li></ul>
+<span class="tag">8 条走廊</span>
+<span class="tag">seed=4100</span>
+<p class="cor">走廊：</p><ul><li>hub_01 → n02：15 m</li><li>n02 → n03：5 m</li><li>hub_01 → n04：10 m</li><li>hub_01 → n05：5 m</li><li>hub_02 → boss_foyer：10 m</li><li>boss_foyer → boss：5 m</li><li>boss → exit：5 m</li><li>n06 → reward_02：5 m</li></ul>
 </figcaption></figure>
 <figure>
 <img src="flow_05.png" alt="flow_05" loading="lazy">
 <figcaption><b>flow_05 · 快 Boss</b>
 <span class="tag">19 间房</span>
 <span class="tag">1 个环</span>
-<span class="tag">9 条走廊</span>
-<p class="cor">走廊闭合：</p><ul><li>entry → n01：5 m</li><li>n01 → hub_01：5 m</li><li>n06 → n05：10 m</li><li>shop → n07：5 m</li><li>n07 → boss_foyer：15 m</li><li>boss → exit：5 m</li><li>exit → secret_room_inj1：5 m</li><li>n02 → reward_01：15 m</li><li>secret_room_inj1 → fireplace_room_inj2：5 m</li></ul>
+<span class="tag">7 条走廊</span>
+<span class="tag">seed=4100</span>
+<p class="cor">走廊：</p><ul><li>n01 → n06：10 m</li><li>n06 → n02：10 m</li><li>hub_01 → boss_foyer：5 m</li><li>n04 → reward_01：5 m</li><li>n07 → conn_02：15 m</li><li>conn_02 → reward_02：15 m</li><li>reward_01 → secret_room_inj1：15 m</li></ul><p class="cor">连接房：</p><ul><li>connector_10x30 10x30</li><li>connector_10x30 10x30</li></ul>
 </figcaption></figure>
 <figure>
 <img src="flow_06.png" alt="flow_06" loading="lazy">
 <figcaption><b>flow_06 · 标准变体</b>
 <span class="tag">20 间房</span>
 <span class="tag">1 个环</span>
-<span class="tag">11 条走廊</span>
-<p class="cor">走廊闭合：</p><ul><li>n06 → n04：30 m</li><li>hub_01 → n02：5 m</li><li>n06 → hub_02：10 m</li><li>hub_02 → n07：5 m</li><li>n07 → n08：5 m</li><li>n08 → shop：5 m</li><li>shop → reward_02：15 m</li><li>reward_02 → boss_foyer：5 m</li><li>boss_foyer → boss：5 m</li><li>boss → exit：5 m</li><li>exit → fireplace_room_inj2：5 m</li></ul>
+<span class="tag">9 条走廊</span>
+<span class="tag">seed=4100</span>
+<p class="cor">走廊：</p><ul><li>entry → n01：5 m</li><li>n03 → n04：5 m</li><li>n04 → reward_01：15 m</li><li>hub_01 → n06：5 m</li><li>hub_02 → boss_foyer：5 m</li><li>boss_foyer → boss：5 m</li><li>boss → exit：5 m</li><li>shop → secret_room_inj1：5 m</li><li>exit → fireplace_room_inj2：5 m</li></ul><p class="cor">连接房：</p><ul><li>connector_30x10 30x10</li></ul>
+</figcaption></figure>
+<h2>二、随机抽关（8 局，seed 从 20261028 起）</h2>
+<p class="note">每局按 <code>pick_flow()</code> 抽一张骨架再组装，模拟真实开局。
+抽到哪张、长出什么形状都不一样 —— 这就是"多种子抽卡"的证据。</p>
+<figure>
+<img src="draw_01.png" alt="draw_01" loading="lazy">
+<figcaption><b>flow_01 · 基础版</b>
+<span class="tag">18 间房</span>
+<span class="tag">2 个环</span>
+<span class="tag">8 条走廊</span>
+<span class="tag">seed=20261028</span>
+<p class="cor">走廊：</p><ul><li>boss_foyer → boss：15 m</li><li>boss → exit：5 m</li><li>exit → secret_room_inj1：10 m</li><li>secret_room_inj1 → fireplace_room_inj2：15 m</li><li>n04 → hub_02：10 m</li><li>hub_02 → n07：5 m</li><li>n07 → shop：5 m</li><li>hub_01 → n03：7 m</li></ul>
+</figcaption></figure>
+<figure>
+<img src="draw_02.png" alt="draw_02" loading="lazy">
+<figcaption><b>flow_03 · 双路通 Boss</b>
+<span class="tag">19 间房</span>
+<span class="tag">1 个环</span>
+<span class="tag">3 条走廊</span>
+<span class="tag">seed=20268947</span>
+<p class="cor">走廊：</p><ul><li>boss_foyer → boss：10 m</li><li>hub_02 → n06：15 m</li><li>n03 → reward_01：5 m</li></ul><p class="cor">连接房：</p><ul><li>connector_30x10 30x10</li></ul>
+</figcaption></figure>
+<figure>
+<img src="draw_03.png" alt="draw_03" loading="lazy">
+<figcaption><b>flow_02 · 双翼</b>
+<span class="tag">19 间房</span>
+<span class="tag">2 个环</span>
+<span class="tag">9 条走廊</span>
+<span class="tag">seed=20276866</span>
+<p class="cor">走廊：</p><ul><li>n02 → conn_01：15 m</li><li>conn_01 → n05：5 m</li><li>n05 → n07：5 m</li><li>n07 → boss_foyer：5 m</li><li>boss_foyer → boss：5 m</li><li>exit → secret_room_inj1：5 m</li><li>secret_room_inj1 → fireplace_room_inj2：5 m</li><li>n02 → n03：5 m</li><li>shop → n04：7 m</li></ul><p class="cor">连接房：</p><ul><li>connector_10x30 10x30</li></ul>
+</figcaption></figure>
+<figure>
+<img src="draw_04.png" alt="draw_04" loading="lazy">
+<figcaption><b>flow_01 · 基础版</b>
+<span class="tag">18 间房</span>
+<span class="tag">2 个环</span>
+<span class="tag">5 条走廊</span>
+<span class="tag">seed=20284785</span>
+<p class="cor">走廊：</p><ul><li>hub_01 → n02：30 m</li><li>boss_foyer → boss：15 m</li><li>exit → fireplace_room_inj2：5 m</li><li>n06 → n05：7 m</li><li>shop → secret_room_inj1：5 m</li></ul>
+</figcaption></figure>
+<figure>
+<img src="draw_05.png" alt="draw_05" loading="lazy">
+<figcaption><b>flow_01 · 基础版</b>
+<span class="tag">18 间房</span>
+<span class="tag">2 个环</span>
+<span class="tag">5 条走廊</span>
+<span class="tag">seed=20292704</span>
+<p class="cor">走廊：</p><ul><li>n04 → boss_foyer：5 m</li><li>boss_foyer → boss：5 m</li><li>exit → secret_room_inj1：5 m</li><li>hub_02 → n07：10 m</li><li>n07 → shop：10 m</li></ul>
+</figcaption></figure>
+<figure>
+<img src="draw_06.png" alt="draw_06" loading="lazy">
+<figcaption><b>flow_05 · 快 Boss</b>
+<span class="tag">19 间房</span>
+<span class="tag">1 个环</span>
+<span class="tag">9 条走廊</span>
+<span class="tag">seed=20300623</span>
+<p class="cor">走廊：</p><ul><li>entry → n01：5 m</li><li>n06 → n02：5 m</li><li>boss_foyer → boss：10 m</li><li>n03 → shop：15 m</li><li>boss → exit：5 m</li><li>n05 → n07：15 m</li><li>conn_02 → reward_02：5 m</li><li>reward_02 → secret_room_inj1：15 m</li><li>shop → fireplace_room_inj2：5 m</li></ul><p class="cor">连接房：</p><ul><li>connector_10x30 10x30</li><li>connector_10x30 10x30</li></ul>
+</figcaption></figure>
+<figure>
+<img src="draw_07.png" alt="draw_07" loading="lazy">
+<figcaption><b>flow_03 · 双路通 Boss</b>
+<span class="tag">19 间房</span>
+<span class="tag">1 个环</span>
+<span class="tag">6 条走廊</span>
+<span class="tag">seed=20308542</span>
+<p class="cor">走廊：</p><ul><li>hub_01 → shop：15 m</li><li>hub_02 → n06：5 m</li><li>boss → exit：5 m</li><li>n06 → reward_02：10 m</li><li>reward_01 → secret_room_inj1：10 m</li><li>shop → fireplace_room_inj2：5 m</li></ul><p class="cor">连接房：</p><ul><li>connector_10x30 10x30</li></ul>
+</figcaption></figure>
+<figure>
+<img src="draw_08.png" alt="draw_08" loading="lazy">
+<figcaption><b>flow_05 · 快 Boss</b>
+<span class="tag">19 间房</span>
+<span class="tag">1 个环</span>
+<span class="tag">7 条走廊</span>
+<span class="tag">seed=20316461</span>
+<p class="cor">走廊：</p><ul><li>entry → n01：10 m</li><li>n01 → n06：5 m</li><li>n02 → hub_01：5 m</li><li>hub_01 → boss_foyer：5 m</li><li>n07 → conn_02：5 m</li><li>conn_02 → reward_02：15 m</li><li>secret_room_inj1 → fireplace_room_inj2：15 m</li></ul><p class="cor">连接房：</p><ul><li>connector_30x10 30x10</li><li>connector_30x10 30x10</li></ul>
 </figcaption></figure>
 </div></body></html>

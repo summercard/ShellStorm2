@@ -149,13 +149,14 @@ func _ready() -> void:
 	_expect(bool(generation.get("has_extraction", false)), "95层没有Boss撤离点", failures)
 	_expect(
 		str(minimap_snapshot.get("projection_mode", ""))
-			== "current_floor_holographic"
+			== "current_floor_tile_grid"
 		and bool(minimap_snapshot.get("realtime_player_state", false))
 		and int(minimap_snapshot.get("realtime_update_hz", 0)) >= 15
 		and bool(minimap_snapshot.get("player_marker", false))
 		and bool(minimap_snapshot.get("player_heading", false))
-		and bool(minimap_snapshot.get("holographic_scan", false)),
-		"小地图没有启用当前楼层实时全息玩家投影",
+		and bool(minimap_snapshot.get("fixed_scale", false))
+		and not bool(minimap_snapshot.get("holographic_scan", true)),
+		"小地图没有启用当前楼层的固定缩放矩形版图",
 		failures
 	)
 	_expect(

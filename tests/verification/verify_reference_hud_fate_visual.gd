@@ -41,7 +41,28 @@ func _ready() -> void:
 	var weapon_rebuilds := int(weapon_model.get("rebuild_count", 0))
 	dungeon.call("_on_ammo_changed", 11, 12)
 	_check(int(dungeon.get_hud_weapon_model_snapshot().get("rebuild_count", -1)) == weapon_rebuilds, "HUD weapon model rebuilds on ordinary ammo updates", failures)
-	_check(absf(minimap.size.x - minimap.size.y) <= 2.0 and minimap.size.x <= 225.0, "Tactical minimap is not circular or 80% scale", failures)
+	# 2026-10-28：小地图从"圆形雷达"改为"EGT 式矩形拼图"。
+	# 旧断言（正方形且 ≤225px）判的是已退役形态；新断言判新契约：
+	#   · 矩形、非居中、固定缩放（三条都在快照里点名）
+	#   · 尺寸仍落在右上角那一块 —— 不允许长成半个屏幕
+	var minimap_snapshot := minimap.get_snapshot()
+	_check(
+		str(minimap_snapshot.get("tile_style", "")) == "egt_room_tile"
+		and not bool(minimap_snapshot.get("player_centered", true))
+		and bool(minimap_snapshot.get("fixed_scale", false)),
+		"Minimap is not the EGT tile plan view (rect / non-centred / fixed scale)", failures
+	)
+	# 角落盒的设计尺寸是 458×346 设计 px（`_anchor_control(minimap, …, -466, 44, -8, 390)`），
+	# 经 `HUD_UI_SCALE = 0.80` 落到 canvas ⇒ 366.4×276.8。
+	# 这里按设计盒做**精确**断言而不是给一个宽区间 —— 2026-10-28 首版写成 300..420，
+	# 差 0.8px 就误判了一次；精确值才是对的判据。
+	var expected_box := Vector2(458.0, 346.0) * Dungeon3D.HUD_UI_SCALE
+	_check(
+		minimap.size.distance_to(expected_box) <= 2.0,
+		"Minimap corner box drifted from its 458×374 design box (actual %s, expected %s)"
+			% [minimap.size, expected_box],
+		failures
+	)
 	_check(minimap.get_snapshot().get("enemy_marker_count", 0) == 2, "Minimap enemy dots are not fed by runtime data", failures)
 	# —— 2026-10-15 玩家主界面血条延迟白段（与 Boss 屏条、小怪头顶条同一口径）——
 	# 白段是纯视觉层：真实 HP 立刻落到 `hp_bar.value`，白条随后按统一速度追赶。

@@ -532,9 +532,13 @@ static func _validate_room(room: Dictionary, templates: Dictionary) -> Array[Str
 			% [key, center.x, center.y, snapped_x, snapped_y]
 		)
 	var template_id := str(room.get("template_id", ""))
-	if template_id.is_empty():
+	# 走廊房（EGT 式组装器补出来的 `connector`）**不是模板族产物**：它的尺寸由两个
+	# 门之间的缺口长度决定（5×5 … 5×30 连续变化），不可能有对应模板，也不该为它
+	# 造几十个一次性模板。它仍要过其余几何契约（格线吸附、端口贴边、不重叠）。
+	var gate_spliced_room := role == "connector"
+	if template_id.is_empty() and not gate_spliced_room:
 		errors.append("room_template_id_empty:%s" % key)
-	elif not templates.is_empty():
+	elif not template_id.is_empty() and not templates.is_empty():
 		if not templates.has(template_id):
 			errors.append("room_template_unknown:%s:%s" % [key, template_id])
 		else:

@@ -29,7 +29,10 @@ const DATA_ROOT_OVERRIDES := {
 }
 
 const VALID_ROOM_TYPES := ["SAFE_ROOM", "COMMON_ROOM", "BOSS_ROOM", "EXTRACTION_ROOM"]
-const VALID_MODES := ["authored", "constrained"]
+## `flow` = EGT 式：L2 房表只是样例，几何由「抽骨架 + 组装 + 桥接」在开局时现算
+## （`FloorPlanGenerator._generate_flow_floor`）。远征03 的 `floor_00.json` 早已声明
+## `mode: "flow"`，但本白名单一直没有它 —— 于是那份设计源一读就被判 `floor_mode_invalid`。
+const VALID_MODES := ["authored", "constrained", "flow"]
 const VALID_RULES := ["normal", "boss"]
 ## 端口落在房间边界上的判定容差（米）。设计源按 5m 网格书写，1cm 足够吸收浮点误差，
 ## 又不会把"离边界 0.3m 的偏心门"误判成贴边门。
@@ -131,6 +134,29 @@ static func load_room_templates(level_id: String) -> Dictionary:
 			continue
 		templates[template_id] = template
 	return templates
+
+
+## 读取该关卡 L1 声明的全部 flow 骨架（`generation_policy.mode == "flow"` 用）。
+##
+## flow 只有拓扑（`nodes` / `tree_edges` / `loop_edges` / `injections`），**没有坐标** ——
+## 坐标由 `EgtFlowAssembler` 在开局时按种子算出来。顺序按 `flow_plans` 声明序，
+## 保证同一种子的「第 k 张」稳定（抽关靠索引，不靠目录遍历顺序）。
+static func load_flows(level_id: String) -> Array[Dictionary]:
+	var flows: Array[Dictionary] = []
+	var level_plan := load_level_plan(level_id)
+	if level_plan.is_empty():
+		return flows
+	var root := str(level_plan.get("_data_root", data_root_for(level_id)))
+	for value in level_plan.get("flow_plans", []) as Array:
+		var entry := value as Dictionary
+		var relative := str(entry.get("path", ""))
+		if relative.is_empty():
+			continue
+		var flow := read_json("%s/%s" % [root, relative])
+		if flow.is_empty():
+			continue
+		flows.append(flow)
+	return flows
 
 
 ## 把 L2 规范化：数值转 Vector2、字符串数组收敛类型、补全派生 ports。

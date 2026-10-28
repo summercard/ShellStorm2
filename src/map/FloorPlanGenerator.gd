@@ -13,6 +13,8 @@ const ROOM_DOOR_LANE := preload("res://src/map/RoomDoorLane.gd")
 ## 5m 通用壳体组合器（纯 RefCounted）。第 4 环在这里：本项目**唯一**的
 ## 「房间几何 → 5 类通用件实例清单」实现，设计期 dump 脚本与运行时共用同一份。
 const ROOM_SHELL_LAYOUT_BUILDER := preload("res://src/world3d/RoomShellLayoutBuilder3D.gd")
+const EGT_FLOW_ASSEMBLER := preload("res://src/map/EgtFlowAssembler.gd")
+const EGT_PLAN_BRIDGE := preload("res://src/map/EgtPlanBridge.gd")
 ## Boss 房 6 件专属件的摆位源（真源）。通用壳体件由组合器按每局现算的几何产出，
 ## 这 6 件是**设计死件**：在源竞技场里相对房间中心定死、与版图无关，只有坐标搬运。
 const BOSS_LAYOUT_SOURCE_PATH := (
@@ -137,7 +139,11 @@ const CONTENT_TYPES := [
 ## 功能房 role 全集 —— 这些房间的身份由 role 决定，不是「内容类型」，不参与内容洗牌、
 ## 不计入 content_room_count。它们的 type 缺省值见 `_default_type_for_role`。
 ## 断言方（tests/verification/verify_level_plan_design_source.gd）按同一张表逐值核对。
-const FUNCTIONAL_ROLES := ["stair_entry", "stair_exit", "extraction", "boss", "boss_prep"]
+## `connector` = EGT 的连接房（含走廊补出来的房间）：**enemyless**，没有内容，
+## 因此和功能房一样不参与内容洗牌、不计入内容房 —— 否则走廊里会刷怪。
+const FUNCTIONAL_ROLES := [
+	"stair_entry", "stair_exit", "extraction", "boss", "boss_prep", "connector",
+]
 
 ## —— 远征关卡01（独立单层关卡）——
 ## 一张入口安全屋（15×15，沿用塔楼安全房契约）+ 5 个 25×25 内容房（编号 01-05）
@@ -291,6 +297,11 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		"connection_ports": (
 			src.get("connection_ports", []) as Array
 		).duplicate(true),
+		# 走程序化壳体（不用 5m 模块壳）。flow 模式置真：
+		# 模块壳每面墙只留一个门模块、门位必须在模块中心，而 EGT 的门位在半个模块上、
+		# 枢纽还有同侧双门。**这个字段必须在这里登记**，否则会被本函数静默丢弃 ——
+		# 白名单式透传的典型坑：新字段忘了登记，消费方永远读到缺省值。
+		"procedural_shell": bool(src.get("procedural_shell", false)),
 		# 传送支线位点（支线秘密房间设计 §3.2）。与上面同样「设计源钉死优先」：
 		# 本层只透传，不推导坐标、不校验墙面。空字典 = 本房无位点。
 		# **不进 `_data_driven_layout_id`**（指纹只含几何与端口），故加它不会让既有存档失配。
@@ -382,6 +393,19 @@ static func generate_from_level_plan(
 			used_fallback = true
 		else:
 			floor_source = generated
+	# —— mode = "flow"：几何由「抽一张 flow 骨架 + EGT 式组装 + 壳体桥接」现算 ——
+	# 默认**不开**（`flow_assembly_enabled` 缺省 false）：L2 里的房表此时仍被当作
+	# 静态样例使用，行为与加本分支之前逐字节一致。
+	# 开启后会改变 `layout_id`，而存档按 `floor_layout_ids[floor_index]` 比对 ——
+	# 05.2 §9 的 D4（存档兼容策略）尚未裁决，故本分支只提供能力、不擅自启用。
+	elif mode == "flow" and bool(policy.get("flow_assembly_enabled", false)):
+		var assembled := _generate_flow_floor(
+			level_id, floor_number, run_seed, normalized, policy, templates
+		)
+		if assembled.is_empty():
+			used_fallback = true
+		else:
+			floor_source = assembled
 	# 校验必须打在「真正会用到的几何」上：constrained 时是生成结果，不是文件里的样例。
 	var errors := LEVEL_PLAN_VALIDATOR.validate_normalized(
 		level_id, floor_number, floor_source, policy, templates
@@ -454,6 +478,10 @@ static func generate_from_level_plan(
 		"layout_variant": "data_driven_%s" % mode,
 		"trigger": "level_plan_data",
 		"rooms": rooms,
+		# 连通边清单（key 对）。**不进 `_data_driven_layout_id` 的 canonical**
+		# （那里只读 rooms），所以加这个字段不会让既有存档的 layout_id 失配。
+		# 只有 flow 模式产出它；其余模式为空 ⇒ 运行时的边声明仍走 parent_key 老路。
+		"connections": (floor_source.get("connections", []) as Array).duplicate(true),
 		"main_path_keys": main_path,
 		"main_path_content_count": main_path.size(),
 		"branch_count": branch_count,
@@ -564,6 +592,433 @@ const CONSTRAINED_SEARCH_BUDGET := 3000
 ## 离场地中心近优先」排序），成功率不受影响。
 const CONSTRAINED_BRANCH_LIMIT := 6
 const CONSTRAINED_EPS := 0.01
+
+
+## flow 模式的角色映射：EGT 骨架节点 kind → 本工程 role。
+##
+## 写成常量而不是 if 链，是为了让「哪个 kind 是入口 / 首领 / 撤离」只在一处定义 ——
+## 校验器、内容分配、运行时都按 role 认人，这套对应关系错了会全线错。
+const FLOW_KIND_ROLE := {
+	"ENTRANCE": "stair_entry",
+	"EXIT": "extraction",
+	"BOSS": "boss",
+	"BOSS_FOYER": "boss_prep",
+	"CONNECTOR": "connector",
+	"SECRET_ROOM": "branch",
+	"NPC_SECRET_ROOM": "branch",
+	"FIREPLACE_ROOM": "branch",
+	"NORMAL": "main",
+	"HUB": "main",
+	"REWARD": "main",
+	"SHOP": "main",
+}
+## flow 模式的功能房 content_type（其余留空，由 `_assign_content_types_data_driven` 洗牌）。
+##
+## `NORMAL` / `HUB` 必须钉成 `COMBAT`：EGT 的普通房就是战斗房，HUB 是多出口的战斗房。
+## 留空会被内容洗牌随机成 TRAP / STORAGE / EVENT / SCAVENGE —— 实测 15 间"内容房"
+## 里只有 3 间是 COMBAT，其余不刷怪，于是「进房封门、清完开门」几乎从不发生，
+## 玩家看到的就是"门从来不关、怪也没有"。内容洗牌是塔楼的机制（一层里要摊开
+## 各种功能房），EGT 的骨架已经用 kind 指定了每间房的职责，不需要再洗一次。
+const FLOW_KIND_CONTENT := {
+	"ENTRANCE": "STAIR_LOBBY",
+	"EXIT": "EXTRACTION",
+	"BOSS": "BOSS",
+	"BOSS_FOYER": "UPGRADE",
+	"NORMAL": "COMBAT",
+	"HUB": "COMBAT",
+}
+
+
+## —— mode = "flow"：抽一张骨架 + EGT 式组装 + 壳体桥接 ——
+##
+## 与 "constrained" 的根本差别：constrained 的拓扑来自 L2 房表（主路 + 支线挂法），
+## flow 的拓扑来自 `flows/*.json`（只有节点与边的骨架图），几何由组装器按
+## 「出口对出口」拼出来 —— 也就是《挺进地牢》的做法。
+##
+## 三层职责，一层都不越界：
+##   1. `EgtFlowAssembler`：拓扑 → 带坐标的房间表（只管形状与连通）
+##   2. `EgtPlanBridge`：房间表 → 壳体区块输入（只管换算、平移、补走廊房）
+##   3. 本函数：区块 → `floor_source`（本工程运行时认的结构）
+##
+## **走廊是房间**：组装器把 gap 5~30m 的连接记成 `corridor`，桥接层把它补成真实的
+## 5m 宽房间。它们 role = `connector`、type 留空、不计入内容房 —— 原文里
+## connector 就是 enemyless 房（Boris: "connector rooms, which are enemyless rooms"）。
+##
+## 端口一律写 `connection_ports`（运行时真源），**不写 `declared_ports`**：
+## 后者会触发 `LevelPlanValidator._validate_port_derivation()` 与 `port_pair()`
+## 逐条比对，而 EGT 组装器选槽的语义与 `port_pair()` 不同源（实测 lane 仅 18.6% 相同，
+## 两侧错开 5m 时甚至不存在共享槽）。桥接层已用 `port_pair()` 盖章到 99%，
+## 剩下 0.5% 是几何上确实没有共享槽（门只能贴墙角）—— 这类不该被当成「写反了」。
+static func _generate_flow_floor(
+	level_id: String,
+	floor_number: int,
+	run_seed: int,
+	blueprint: Dictionary,
+	_policy: Dictionary,
+	templates: Dictionary
+) -> Dictionary:
+	var flows := LEVEL_PLAN_LOADER.load_flows(level_id)
+	if flows.is_empty() or templates.is_empty():
+		return {}
+	var seed_value := run_seed ^ absi(str(level_id).hash()) ^ (floor_number << 17)
+	var flow: Dictionary = EGT_FLOW_ASSEMBLER.pick_flow(flows, seed_value)
+	if flow.is_empty():
+		return {}
+	var assembled: Dictionary = EGT_FLOW_ASSEMBLER.assemble_flow(
+		flow, templates, {}, seed_value
+	)
+	if not bool(assembled.get("ok", false)):
+		return {}
+	var bridged: Dictionary = EGT_PLAN_BRIDGE.to_block(assembled)
+	if not (bridged["errors"] as Array).is_empty():
+		return {}
+	var block: Array = bridged["block"] as Array
+	var room_meta: Dictionary = bridged["room_meta"] as Dictionary
+	if block.is_empty():
+		return {}
+
+	# —— key 与运行时 id 是**两套**命名，别混用 ——
+	#
+	# `TowerDescent3D._build_expedition_records()` 有两条**按 key** 的硬约定：
+	#   ① 必须存在 `key == "entry"`（入口安全房）；
+	#   ② 必须存在 `key == "room_01"`（第一个内容房，前门指向它）。
+	# 但**玩家出生点走的是另一条、按运行时 id 的约定**：
+	#   `_room_by_id.get("start")` —— 运行时 id 取 `legacy_room_id` 优先，其次 `room_id`。
+	# 远征01/02 的入口房都是 `room_id = f00_entry` + `legacy_room_id = start`。
+	#
+	# 上一轮只改了 key、没给运行时 id。于是 key 那两条都过了（不再拒绝启动），
+	# 但 `_room_by_id` 里没有 `start` ⇒ 出生点那一步 `if entry_room != null` 直接假掉，
+	# 玩家停在原点 (0, 0.05, 0) 悬空、脚下没有地面。
+	# **启动没有报错、房间也全建出来了** —— 这个错只有"真的走进去"才看得见。
+	var entry_id := ""
+	var first_main_id := ""
+	for value in flow.get("tree_edges", []) as Array:
+		var edge := value as Dictionary
+		if str(edge.get("from", "")) == "entry" and first_main_id.is_empty():
+			first_main_id = str(edge.get("to", ""))
+	for value in block:
+		var record := value as Dictionary
+		var rid := str(record["room_id"])
+		if rid == "entry" or rid.begins_with("entry"):
+			entry_id = rid
+			break
+	var key_alias := {}
+	var runtime_id_alias := {}
+	if not entry_id.is_empty():
+		key_alias[entry_id] = "entry"
+		# 运行时 id 必须是 start：出生点、撤离返航、存档 `current_room_id` 都按它认人。
+		runtime_id_alias[entry_id] = "start"
+	if not first_main_id.is_empty():
+		key_alias[first_main_id] = "room_01"
+		runtime_id_alias[first_main_id] = "room_01"
+	# 门端口的 target 指向**运行时 id**（运行时按 id 找房），不能给 key。
+	var target_alias := key_alias.duplicate()
+	for raw_id in runtime_id_alias.keys():
+		target_alias[raw_id] = runtime_id_alias[raw_id]
+
+	# 门：每条门记成一个 dict `{side, lane, target}`，**用对象引用**把两侧连起来。
+	#
+	# 不用「拼字符串当键」：`"%.2f" % -0.0` 是 `"-0.00"`，而 `"%.2f" % 0.0` 是 `"0.00"`，
+	# 同一对门会因此算成两个不同的槽 —— 实测那样只有恰好一半的门能配上 target，
+	# 整层一半房间不可达。引用赋值没有这个问题。
+	var gates := {}
+	for value in block:
+		var record := value as Dictionary
+		var room_id := str(record["room_id"])
+		gates[room_id] = {}
+		for side_value in (record["doors"] as Dictionary).keys():
+			var side := str(side_value)
+			(gates[room_id] as Dictionary)[side] = []
+			for gate_value in ROOM_SHELL_LAYOUT_BUILDER._port_offsets(
+					(record["doors"] as Dictionary)[side_value]):
+				((gates[room_id] as Dictionary)[side] as Array).append({
+					"side": side,
+					"lane": _block_gate_lane(record, side, float(gate_value)),
+					# absolute = 该门沿墙轴的**世界坐标**。配对只能靠它：
+					# lane 是相对各房墙中心线的偏移，共墙两房的中心不同 ⇒ lane 必然不同。
+					"absolute": float(gate_value),
+					"target": "",
+				})
+
+	# target 只能从几何反查：桥接结果没带 target，按「同墙平面 + 同 lane」配对。
+	var by_plane := {}
+	for room_id in gates.keys():
+		var record := _block_room_by_id(block, str(room_id))
+		for side_value in (gates[room_id] as Dictionary).keys():
+			for gate_value in ((gates[room_id] as Dictionary)[str(side_value)] as Array):
+				var gate := gate_value as Dictionary
+				var key := _gate_plane_key(record, str(gate["side"]), float(gate["absolute"]))
+				if not by_plane.has(key):
+					by_plane[key] = []
+				(by_plane[key] as Array).append({"room_id": str(room_id), "gate": gate})
+	# 连通的**边清单**。运行时靠它声明拓扑（`parent_key` 只能表达树，
+	# 而 EGT 骨架是带环的图 —— 靠 `parent_key` 会漏掉所有回连边，见 §生成器注释）。
+	var connections: Array = []
+	var connection_seen := {}
+	for key_value in by_plane.keys():
+		var list: Array = by_plane[key_value]
+		for i in range(list.size()):
+			for j in range(i + 1, list.size()):
+				var a := list[i] as Dictionary
+				var b := list[j] as Dictionary
+				if str(a["room_id"]) == str(b["room_id"]):
+					continue
+				var gate_a := a["gate"] as Dictionary
+				var gate_b := b["gate"] as Dictionary
+				if str(gate_a["target"]).is_empty():
+					gate_a["target"] = str(b["room_id"])
+				if str(gate_b["target"]).is_empty():
+					gate_b["target"] = str(a["room_id"])
+				var pair_key := _edge_pair_key(str(a["room_id"]), str(b["room_id"]))
+				if connection_seen.has(pair_key):
+					continue
+				connection_seen[pair_key] = true
+				# 边存**运行时 id**（不是 key，也不是 block 原始 id）。
+				# 运行时按 `_find_record(id)` 认房间，用 key 或原始 id 都会查不到 ——
+				# 表现是"只有一部分边生效"：凡是改过名的房间（入口、第一间内容房）
+				# 的边全部静默丢失，那些房间的墙上一扇门都没有。
+				var runtime_first := str(runtime_id_alias.get(str(a["room_id"]), str(a["room_id"])))
+				var runtime_second := str(runtime_id_alias.get(str(b["room_id"]), str(b["room_id"])))
+				connections.append({"a": runtime_first, "b": runtime_second})
+
+	var rooms: Array[Dictionary] = []
+	for value in block:
+		var record := value as Dictionary
+		var room_id := str(record["room_id"])
+		var bx: Array = record["bounds_x_m"]
+		var by: Array = record["bounds_y_m"]
+		var size := Vector2(float(bx[1]) - float(bx[0]), float(by[1]) - float(by[0]))
+		# Blender（x 东 / y 北）→ 本工程平面（y 向南）：`plan.y = −by`。
+		var center := Vector2((float(bx[0]) + float(bx[1])) * 0.5,
+			-((float(by[0]) + float(by[1])) * 0.5))
+		var meta: Dictionary = room_meta.get(room_id, {})
+		var is_corridor := bool(meta.get("is_corridor", false))
+		var kind := "CONNECTOR" if is_corridor else str(meta.get("kind", "NORMAL"))
+		var role := "connector" if is_corridor else str(FLOW_KIND_ROLE.get(kind, "main"))
+		var connection_ports: Array[Dictionary] = []
+		var room_gates: Dictionary = gates.get(room_id, {})
+		var port_seq := 0
+		for side_value in room_gates.keys():
+			var side := str(side_value)
+			var wall_length := size.x if side in ["north", "south"] else size.y
+			for gate_value in room_gates[side] as Array:
+				var gate := gate_value as Dictionary
+				var lane := float(gate["lane"])
+				port_seq += 1
+				connection_ports.append({
+					# `port_id` 必须唯一：一墙多门时 `_door_nodes` 按方向只能存一扇，
+					# 下游要靠 port_id 认出"通向哪一间的那扇"（`get_door_node_by_port`）。
+					"port_id": "P%d" % port_seq,
+					"side": side,
+					"lane_m": lane,
+					"wall_length_m": wall_length,
+					# —— target 用 **key**，target_room_id 用**运行时 id** ——
+					# `TowerDescent3D._append_plan_room_record()` 拿 `target` 走
+					# `_plan_spec(plan, key)` 反查后**覆盖**写成 target_room_id。
+					# 只给 target_room_id 会被它覆盖成空串 ⇒ 端口全丢 target ⇒
+					# 边只能按"两房中心的方位"猜门侧，斜向相邻时猜错。
+					"target": str(key_alias.get(str(gate["target"]), str(gate["target"]))),
+					"target_room_id": str(target_alias.get(
+						str(gate["target"]), str(gate["target"]))),
+					# 门位声明（`_has_authoritative_door_ports()` 靠它）。
+					# 2.2m = 标准门宽，`_port_creates_door_leaf()` 会为它建**实体门扇** ——
+					# 「进房关门、清怪开门」的前提就是真有一扇门。
+					"door_axis": "h" if side in ["north", "south"] else "v",
+					"door_line_m": wall_length,
+					"door_center_m": lane,
+					"door_width_m": FLOW_DOOR_OPENING_M,
+					# `position_m` / `outward` 必须给：校验器靠它们做**跨房锚点比对**
+					# （两侧门锚点距离 ≤ 1cm、两侧外法线相对）。缺了会被当成原点，
+					# 于是每条父子边都退化成"净距不足"的走廊断言。
+					"position_m": _room_local_port_position(side, lane, size),
+					"outward": _port_outward(side),
+					"height_m": 0.0,
+				})
+		var runtime_key := str(key_alias.get(room_id, room_id))
+		var runtime_id := str(runtime_id_alias.get(room_id, room_id))
+		rooms.append({
+			"key": runtime_key,
+			"room_id": runtime_id,
+			# 新关卡没有历史 id 要兼容 —— 运行时 id 直接写进 `room_id` 即可，
+			# `legacy_room_id` 留空（它是给远征01/02 保老存档的兼容位）。
+			"legacy_room_id": "",
+			"room_type": _flow_room_type(role),
+			"role": role,
+			# **不填 parent_key**：EGT 的骨架是带环的图，本来就没有"父子"这层关系；
+			# 强行按 BFS 编一棵树，会让校验器的"父边净距 / 共轴"判据去检查一条
+			# 实际并不相邻的边（实测 boss 的 parent 被推成 boss_foyer，而两者之间
+			# 隔着一条 10m 走廊房）—— 那条判据在流式拓扑里没有意义。
+			# 连通性由组装器 `_verify_edges()` 与本层验收的 BFS 各自保证。
+			"parent_key": "",
+			"template_id": str(meta.get("template_id", "")),
+			"template_variant": "",
+			"center": center,
+			"size": size,
+			"floor_offset_m": 0.0,
+			"anchor_policy": "grid",
+			"rotation_deg": 0.0,
+			# 走廊房恒空 type：它没有内容，不能被内容洗牌分配成 COMBAT。
+			"content_type": "" if is_corridor else str(FLOW_KIND_CONTENT.get(kind, "")),
+			# 走程序化壳体，不用 5m 模块壳 —— 理由见
+			# `TowerDescent3D._append_plan_room_record()`：模块壳每面墙只留一个门模块、
+			# 且门位必须在模块中心，而 EGT 的门位在半个模块上、枢纽还有同侧双门。
+			"procedural_shell": true,
+			# 无怪房（EGT 的 enemyless）：走廊 / 入口 / 撤离 / 商店。
+			# 复用 `authored_layout_peaceful` 这条既有通道 —— 它在运行时的语义正是
+			# 「本房不刷怪、门策略全放行、开局即算已清」，与本处要的逐条重合。
+			# 不封门也就不会出现"把玩家关进一间没有怪的空房间"。
+			"authored_layout_peaceful": bool(is_corridor) or kind in FLOW_PEACEFUL_KINDS,
+			"declared_ports": [],
+			# **`ports` 留空**，几何端口只走 `connection_ports`（运行时真源）。
+			# 填了 `ports` 会触发 `_validate_port_derivation()` 拿 `parent_key` 反算
+			# `derived_ports` 与它逐条比对；而 flow 模式的父子关系是从门洞推出的
+			# 生成树、与 `port_pair()` 的"同轴邻房"语义不是一回事，必然对不上。
+			"ports": [],
+			"connection_ports": connection_ports,
+			"ports_derived": false,
+		})
+
+	var main_path: Array[String] = []
+	for value in flow.get("tree_edges", []) as Array:
+		var raw_child := str((value as Dictionary).get("to", ""))
+		var child := str(key_alias.get(raw_child, raw_child))
+		if not child.is_empty() and not main_path.has(child):
+			main_path.append(child)
+
+	return {
+		"level_id": str(blueprint.get("level_id", level_id)),
+		"mode": "flow",
+		"floor_number": int(blueprint.get("floor_number", floor_number)),
+		"floor_index": int(blueprint.get("floor_index", 0)),
+		"sequence_index": int(blueprint.get("sequence_index", 0)),
+		"entry_side": str(blueprint.get("entry_side", "east")),
+		"exit_side": str(blueprint.get("exit_side", "west")),
+		"reservations": blueprint.get("reservations", []),
+		"rooms": rooms,
+		# 连通的**边清单**（key 对）。运行时靠它声明拓扑与门 ——
+		# `parent_key` 只能表达一棵树，而 EGT 骨架带环：只给 parent_key 会丢掉
+		# 所有回连边，表现为"双环骨架少一个环、环上的房间互相走不到"。
+		"connections": connections,
+		"main_path": main_path,
+		"edge_policy": "generated",
+		"spawn_boxes_only": bool(blueprint.get("spawn_boxes_only", false)),
+		"geometry_authoritative": true,
+		"flow_id": str(flow.get("flow_id", "")),
+		"flow_seed": seed_value,
+		"bridge_stats": bridged["stats"],
+	}
+
+
+## 门在**房间局部坐标**里的位置（原点 = 房间中心，y 向南）。
+static func _room_local_port_position(side: String, lane: float, size: Vector2) -> Array:
+	match side:
+		"north":
+			return [lane, -size.y * 0.5]
+		"south":
+			return [lane, size.y * 0.5]
+		"west":
+			return [-size.x * 0.5, lane]
+		_:
+			return [size.x * 0.5, lane]
+
+
+## 门朝**房间外**的法线（平面坐标，y 向南）。
+static func _port_outward(side: String) -> Array:
+	match side:
+		"north":
+			return [0.0, -1.0]
+		"south":
+			return [0.0, 1.0]
+		"west":
+			return [-1.0, 0.0]
+		_:
+			return [1.0, 0.0]
+
+
+## flow 模式的门洞宽度（米）= 标准门宽 `DOOR_CLEAR_WIDTH_M`。
+##
+## 曾经给 5.0（一个格），理由是"白盒阶段没有刷怪，门扇打不开会卡死"。
+## 业主 2026-10-28 纠正：**要的正是"进房关门、清怪开门"**，所以门必须有门扇。
+## `_port_creates_door_leaf()` 只给 ≤3m 的端口建门扇 —— 2.2m 才会真的有一扇门。
+##
+## 这也更贴 EGT：原文的门是房间边缘上的窄门，而不是整格通洞；
+## 5m 是**走廊的宽度**，不是门的宽度（走廊由 `cr*` 走廊房承担）。
+const FLOW_DOOR_OPENING_M := 2.2
+
+
+## 无边序的边键（与 `EgtPlanBridge._edge_key()` 同式）。
+static func _edge_pair_key(a: String, b: String) -> String:
+	return "%s|%s" % [a, b] if a < b else "%s|%s" % [b, a]
+
+
+## flow 模式的**无怪房**（EGT 的 enemyless 房）：不刷怪、门不封锁、开局即放行。
+##
+## 依据《挺进地牢》原文："connector rooms, which are enemyless rooms, often with a
+## environmental hazard" —— 走廊是空的。入口安全屋、撤离点、商店同样不该有怪：
+## 前两个是交通与结算位，商店是单门死路（把人关在里面打完一波不合 EGT 的形态）。
+##
+## 其余房型（NORMAL / HUB / REWARD / BOSS / BOSS_FOYER）都有怪：
+## 进房封门、清完开门。
+##
+## ⚠️ 例外是 **REWARD 与 BOSS_FOYER**：Gungeon 的宝箱房与 Boss 前厅都是
+## enemyless 的（`第一层房间清单.md` 对 REWARD 的写法是"宝箱房"，前厅是整备间）。
+## 把它们当战斗房会得到"一间只有一个宝箱的房间把玩家关起来打一波"——
+## 既没有怪（内容表里它们本来就不配怪），又会把玩家锁在空屋子里。
+const FLOW_PEACEFUL_KINDS := [
+	"ENTRANCE", "EXIT", "SHOP", "CONNECTOR", "REWARD", "BOSS_FOYER",
+]
+
+
+## role → 本工程合法 room_type（白名单见 `LevelPlanLoader.VALID_ROOM_TYPES`）。
+static func _flow_room_type(role: String) -> String:
+	match role:
+		"stair_entry":
+			return "SAFE_ROOM"
+		"extraction":
+			return "EXTRACTION_ROOM"
+		"boss":
+			return "BOSS_ROOM"
+		_:
+			return "COMMON_ROOM"
+
+
+static func _block_room_by_id(block: Array, room_id: String) -> Dictionary:
+	for value in block:
+		var record := value as Dictionary
+		if str(record["room_id"]) == room_id:
+			return record
+	return {}
+
+
+## 区块门位（Blender 世界绝对坐标）→ 本工程 lane（相对墙中心线的偏移）。
+##
+## 南北墙沿 bx、lane 就是 `绝对 − 中心`；东西墙沿 by，而 `by = −plan.y`，
+## 所以是 `中心 − 绝对`。差一个号就会把门整体镜像到墙的另一头。
+static func _block_gate_lane(record: Dictionary, side: String, absolute: float) -> float:
+	var bx: Array = record["bounds_x_m"]
+	var by: Array = record["bounds_y_m"]
+	var cx := (float(bx[0]) + float(bx[1])) * 0.5
+	var cy_blender := (float(by[0]) + float(by[1])) * 0.5
+	return (absolute - cx) if side in ["north", "south"] else (cy_blender - absolute)
+
+
+## 门洞的「轴 + 墙平面 + 门的绝对坐标」键。同一条墙平面上同一个绝对位置，
+## 就是一对能走过去的洞。
+##
+## 两处都必须用**绝对值**，用相对量会静默失配：
+##   ① 键里不能带侧名 —— 共墙两房一侧是 `north`、另一侧是 `south`，用侧名当前缀就把
+##      同一对门算成两个键；
+##   ② 键里不能带 lane —— lane 是相对各房墙中心线的偏移，共墙两房中心不同，lane 必然
+##      不同（同一扇门在 a 是 `-2.5`、在 b 是 `0.0`），同样配上不。
+## 实测这两处合起来会让整层**一条 target 都配不上**（24 局全部房间不可达）。
+static func _gate_plane_key(record: Dictionary, side: String, absolute: float) -> String:
+	var bx: Array = record["bounds_x_m"]
+	var by: Array = record["bounds_y_m"]
+	if side in ["north", "south"]:
+		var line := float(by[1]) if side == "north" else float(by[0])
+		return "y@%.2f@%.2f" % [line, absolute]
+	var line_x := float(bx[0]) if side == "west" else float(bx[1])
+	return "x@%.2f@%.2f" % [line_x, absolute]
 
 
 static func _generate_constrained_floor(
@@ -3622,7 +4077,7 @@ static func _assign_content_types_data_driven(
 		# 其余功能性 role 保留 _default_type_for_role 给的缺省值，不参与内容洗牌
 		# （内置 _shuffle_content_types 的 skip 列表为 stair_entry/stair_exit/boss/boss_prep，
 		#  本处另加 extraction —— 它是终局房，不是内容房）。
-		if role in ["stair_entry", "stair_exit", "extraction", "boss_prep"]:
+		if role in ["stair_entry", "stair_exit", "extraction", "boss_prep", "connector"]:
 			continue
 		if not str(room.get("type", "")).is_empty():
 			continue

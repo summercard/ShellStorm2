@@ -539,6 +539,9 @@ var static_layout_scene_path := ""
 ## 房间局部连接端口：每项含稳定 port_id、目标房间、局部位置、朝外法线和最终 side/lane。
 ## 未连接端口 target_room_id=""，其墙槽必须保持实墙。
 var connection_ports: Array = []
+## 本房门扇的开合方式。缺省 `lift`（升降），与既有全部关卡逐字一致；
+## flow 关卡（远征03）由记录下发 `slide`（双扇对开，业主 2026-10-28 要求）。
+var door_opening_style := "lift"
 ## 仅由 expedition_02 的关卡数据提供；空字典表示沿用默认镜头。
 var camera_profile: Dictionary = {}
 ## side -> bool。显式端口关卡中一条边只有父端为 true；子端绑定同一扇共享门。
@@ -584,11 +587,49 @@ func configure(config: Dictionary) -> void:
 	authored_room_light_on = bool(config.get("authored_room_light_on", authored_room_light_on))
 	static_layout_scene_path = str(config.get("static_layout_scene_path", static_layout_scene_path))
 	connection_ports = (config.get("connection_ports", connection_ports) as Array).duplicate(true)
+	door_opening_style = str(config.get("door_opening_style", door_opening_style))
 	camera_profile = (config.get("camera_profile", camera_profile) as Dictionary).duplicate(true)
 	door_endpoint_owners = (
 		config.get("door_endpoint_owners", door_endpoint_owners) as Dictionary
 	).duplicate(true)
 	secret_site = (config.get("secret_site", secret_site) as Dictionary).duplicate(true)
+	_index_door_openings()
+	# 「本房墙体由房间自己生成」。静态布局与程序化壳体都满足这条，
+	# 统一打成一个 meta，供走廊连接器判断要不要补 5m 塔楼墙
+	# （`TowerDescent3D._room_walls_owned_by_static_layout()`）。
+	#
+	# 为什么必须显式标记、不能只看 `tower_module_shell == false`：
+	# 塔楼里也有非模块壳房间（constrained 关卡的房间），它们**需要**连接器补走廊；
+	# 而 flow 模式的房间不需要。两者的区别只有"几何归谁"这一件事。
+	if bool(config.get("procedural_shell", false)):
+		set_meta("room_owns_walls", true)
+
+
+## 把「带门位声明的端口」按侧归拢成每面墙的开口清单 `wall_door_openings_<side>`。
+##
+## 为什么要有这一层：程序化壳体每面墙**只挖一个洞**（`_build_wall()` 的
+## `opening_lane_m` 是单个 float），而 EGT 骨架的枢纽会出现「同一面墙两扇门」
+## （实测 40 局里 32 间房如此，最多 2 扇/侧）。只按单 lane 挖洞就会有门洞被墙封死 ——
+## 表现是"图上有门、走过去撞墙"。
+##
+## 判据是「端口声明了门宽」，与 `_has_authoritative_door_ports()` 同一口径：
+## 远征01 的 constrained 端口没有门宽，仍走按方向的旧路径，行为逐字不变。
+func _index_door_openings() -> void:
+	var by_side := {}
+	for port_value in connection_ports:
+		var port := port_value as Dictionary
+		if float(port.get("door_width_m", 0.0)) <= 0.0:
+			continue
+		var side := str(port.get("side", ""))
+		if side not in ["north", "south", "west", "east"]:
+			continue
+		if not by_side.has(side):
+			by_side[side] = []
+		(by_side[side] as Array).append(float(port.get("lane_m", 0.0)))
+	for side in by_side.keys():
+		var lanes: Array = by_side[side]
+		lanes.sort()
+		set_meta("wall_door_openings_%s" % str(side), lanes)
 
 
 ## 把关卡设计源里的 Boss 中心点与两侧增援点落成可见、可探测的运行时 Marker3D。
@@ -2247,7 +2288,17 @@ func _port_creates_door_leaf(width_m: float) -> bool:
 ##   FACILITY（99F 基地）/ 和平区（区块00）—— 滑升门，自带独立 logic_id 与状态灯，
 ##   不随楼层主题换材质；
 ##   其余（普通战斗房 / BOSS 房 / 入口安全房）—— 塔楼 A 套门扇，与门墙共用 +Z 约定。
+##
+## ⚠️ 双扇对开（`slide`）**不能用滑升门**：基地 99F 那套是"门体"不是"门板"，
+## 实测可视包络 1.12×2.34×**0.88**m —— 比程序化房间的墙厚（0.28m）大得多。
+## 两扇滑到门洞两侧时，凸出墙面的 0.31m 会在房间里露出一整块蓝色门体
+## （业主 2026-10-28 反馈"门看起来贴在墙外面"就是这个）。
+## 塔楼 A 套门扇厚 0.18m < 0.28m，滑出门洞后整块落在墙体内部，才是"滑进墙里"。
+##
+## 所以 `slide` 一律用塔楼门扇：语义上 EGT 的门本就是普通门，不是气闸。
 func _door_panel_visual(target_room_id: String) -> PackedScene:
+	if door_opening_style == RoomDoor3D.OPENING_STYLE_SLIDE:
+		return TOWER_DOOR_LEAF_PREFAB
 	if (
 		room_type == "FACILITY"
 		or (room_id == "start" and target_room_id == "facility")
@@ -2255,6 +2306,20 @@ func _door_panel_visual(target_room_id: String) -> PackedScene:
 	):
 		return BASE99_DOOR_LIFT_PREFAB
 	return TOWER_DOOR_LEAF_PREFAB
+
+
+## 清掉门扇视觉里可能内嵌的静态碰撞。
+##
+## A 套门扇声明 visual_only 且不自带碰撞，本函数对它是空跑。保留是廉价保险：
+## 门扇包一旦又带上静态碰撞（B 套那个包就带），它不会随门逻辑启用/禁用，
+## 必须让位给 RoomDoor3D 自己的碰撞，否则门永远开不了。
+##
+## 双扇对开（`slide`）有两块门板，两块都要清 —— 只清 `DoorPanel` 会漏掉右扇。
+func _strip_door_leaf_static_collision(door: RoomDoor3D) -> void:
+	for panel_name in ["DoorPanel", "DoorPanelRight"]:
+		var leaf := door.get_node_or_null("%s/ImportedDoorVisual" % panel_name)
+		if leaf != null:
+			_disable_static_collision_descendants(leaf)
 
 
 ## 按**连接端口**建一扇门扇。返回是否真的建成了。
@@ -2284,16 +2349,12 @@ func _build_door_for_port(port: Dictionary, dimensions: Vector2) -> bool:
 	if door == null:
 		push_error("通用RoomDoor3D Prefab实例化失败")
 		return false
+	door.set_opening_style(door_opening_style)
 	door.configure(side, target_id, theme.accent_color, _door_panel_visual(target_id))
 	door.set_access_policy(door_policies.get(side, {}) as Dictionary)
 	door.set_meta("camera_lower_wall", side in ["north", "south"])
 	door.set_meta("connection_port_id", port_id)
-	# A 套门扇声明 visual_only 且不自带碰撞，本段对它是空跑。
-	# 保留为廉价保险：门扇包一旦又带上静态碰撞（B 套那个包就带），它不会随升降门
-	# 逻辑启用/禁用，必须让位给 RoomDoor3D 自己的升降碰撞，否则门永远开不了。
-	var door_leaf := door.get_node_or_null("DoorPanel/ImportedDoorVisual")
-	if door_leaf != null:
-		_disable_static_collision_descendants(door_leaf)
+	_strip_door_leaf_static_collision(door)
 	door.position = Vector3(float(raw_position[0]), float(port.get("height_m", 0.0)), float(raw_position[1]))
 	if side in ["west", "east"]:
 		door.rotation.y = PI * 0.5
@@ -2557,6 +2618,70 @@ func _build_shell() -> void:
 		_spawn_prefab("CornerPost", CORNER_POST_PREFAB, corner, Vector3(0.42, 2.9, 0.42), _trim_material)
 	if size_class == "floor":
 		_build_floor_partitions(dimensions)
+
+
+## 一面墙开多个洞：按开口区间把整段墙切成若干实心段，逐口补过梁。
+##
+## 只在房间声明了 ≥2 个 `wall_door_openings_<side>` 时走这里（EGT 枢纽的同侧双门）。
+## 单开口/无开口完全不进本函数，既有房间的墙体几何逐字不变。
+func _build_wall_with_multiple_openings(
+	direction: String, center: Vector3, length: float, axis: Vector3, lanes: Array
+) -> void:
+	var thickness := 0.28
+	var height := 2.8
+	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
+	var span := length - opening
+	var half := length * 0.5
+	var used: Array = []
+	for value in lanes:
+		var lane := clampf(float(value), -span * 0.5, span * 0.5)
+		# 两个洞离得太近会切出退化的墙段；重叠的直接忽略（门洞本身已连通）。
+		var too_close := false
+		for taken in used:
+			if absf(float(taken) - lane) < opening:
+				too_close = true
+				break
+		if not too_close:
+			used.append(lane)
+	used.sort()
+	var cursor := -half
+	for lane in used:
+		var opening_from := float(lane) - opening * 0.5
+		var opening_to := float(lane) + opening * 0.5
+		_spawn_wall_segment(direction, center, axis, cursor, opening_from, thickness, height)
+		cursor = opening_to
+		var lintel_size := (
+			Vector3(opening, 0.45, thickness * 1.28) if axis.x > 0.0
+			else Vector3(thickness * 1.28, 0.45, opening)
+		)
+		var lintel := _spawn_prefab(
+			"DoorLintel_%s" % direction, DOOR_LINTEL_PREFAB,
+			center + axis * float(lane) + Vector3(0, 1.18, 0), lintel_size, _trim_material
+		)
+		if lintel != null and direction in ["north", "south"]:
+			_set_camera_lower_wall_on_static_bodies(lintel, true)
+	_spawn_wall_segment(direction, center, axis, cursor, half, thickness, height)
+
+
+## 在 `[from_along, to_along]` 区间建一段实心墙（长度为 0 的段不建）。
+func _spawn_wall_segment(
+	direction: String, center: Vector3, axis: Vector3,
+	from_along: float, to_along: float, thickness: float, height: float
+) -> void:
+	var segment_length := to_along - from_along
+	if segment_length <= 0.05:
+		return
+	var offset_along := (from_along + to_along) * 0.5
+	var size := (
+		Vector3(segment_length, height, thickness) if axis.x > 0.0
+		else Vector3(thickness, height, segment_length)
+	)
+	var segment := _spawn_prefab(
+		"Wall_%s" % direction, WALL_DOOR_SEGMENT_PREFAB,
+		center + axis * offset_along, size, _wall_material
+	)
+	if segment != null and direction in ["north", "south"]:
+		_set_camera_lower_wall_on_static_bodies(segment, true)
 
 
 func _build_rooftop_shell(dimensions: Vector2) -> void:
@@ -4835,6 +4960,14 @@ func _build_wall(
 	# 门位沿墙偏移：模板 `wall_lane_table` 的合法槽位（05.2 §3.5.2）。
 	# 默认 0 = 墙面中心，与既有全部程序化房间逐字等价 —— 只有声明了 lane 的
 	# 房间（子图）才会偏离中心，主路/塔楼行为不变。
+	var declared_openings: Array = get_meta("wall_door_openings_%s" % direction, [])
+	if declared_openings.size() >= 2:
+		# 同一面墙多扇门（EGT 枢纽）：按开口把整段墙切成若干实心段，逐口补过梁。
+		# 单开口仍走下面的老路径 —— 那条路径的分段算式与既有房间逐字一致，不动它。
+		_build_wall_with_multiple_openings(direction, center, length, axis, declared_openings)
+		return
+	if declared_openings.size() == 1:
+		opening_lane_m = float(declared_openings[0])
 	var lane := clampf(opening_lane_m, -(length - opening) * 0.5, (length - opening) * 0.5)
 	# 门洞两侧的墙段：按 lane 切成**不等长**两段（原实现恒为对称两段）。
 	var segment_lengths := [
@@ -4898,17 +5031,13 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 	#   不随楼层主题换材质；
 	#   其余（普通战斗房 / BOSS 房 / 入口安全房）—— 塔楼 A 套门扇，与门墙共用 +Z 约定。
 	# 原先战斗房传 null 走程序化深色方块门板；2026-09-19 起统一换成正式门扇。
+	door.set_opening_style(door_opening_style)
 	door.configure(
 		direction, target_room_id, theme.accent_color, _door_panel_visual(target_room_id)
 	)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
 	door.set_meta("camera_lower_wall", direction in ["north", "south"])
-	# A 套门扇声明 visual_only 且不自带碰撞，本段对它是空跑。
-	# 保留为廉价保险：门扇包一旦又带上静态碰撞（B 套那个包就带），它不会随升降门
-	# 逻辑启用/禁用，必须让位给 RoomDoor3D 自己的升降碰撞，否则门永远开不了。
-	var door_leaf := door.get_node_or_null("DoorPanel/ImportedDoorVisual")
-	if door_leaf != null:
-		_disable_static_collision_descendants(door_leaf)
+	_strip_door_leaf_static_collision(door)
 	# 与 _build_tower_wall_run 同步：门偏移到沿墙中心最近模块位置 (5m 网格偶数段是 ±2.5m)。
 	# 子图房按模板 lane 声明（`wall_door_lane_<side>`）优先；未声明的房间回退塔楼旧键，
 	# 两者都没有就是 0（墙面中心），与既有全部程序化房间一致。

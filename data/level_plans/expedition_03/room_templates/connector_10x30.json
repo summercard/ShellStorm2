@@ -1,0 +1,54 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "connector_10x30",
+  "room_type": "COMMON_ROOM",
+  "size_m": [
+    10.0,
+    30.0
+  ],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": [
+    "north",
+    "south",
+    "east",
+    "west"
+  ],
+  "wall_lane_table": {
+    "north": [
+      -2.5,
+      2.5
+    ],
+    "south": [
+      -2.5,
+      2.5
+    ],
+    "east": [
+      -7.5,
+      -2.5,
+      2.5,
+      7.5
+    ],
+    "west": [
+      -7.5,
+      -2.5,
+      2.5,
+      7.5
+    ]
+  },
+  "slots": [],
+  "variants": [],
+  "asset_ids": {
+    "room": "ENV-EXPEDITION-L01-ROOM-CONN-10X30",
+    "components": []
+  },
+  "note": "窄长连接房 · 长轴沿南北（z）。对应《挺进地牢》CONNECTOR 房型：\"often long, thin rooms, so picking one with a sensible orientation is vital\"。10×30 = 2×6 格，长宽比 3.0。南北两面各 2 个合法门槽，东西两面各 4 个。与 connector_30x10 成对：布局时按行进方向挑长轴朝向。白盒原型，未进场景账本。"
+}

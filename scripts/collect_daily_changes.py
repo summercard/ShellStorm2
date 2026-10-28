@@ -36,7 +36,12 @@ CHANGELOG = ROOT / "docs" / "v0.1" / "development" / "CHANGELOG.md"
 # CHANGELOG 条目：`## YYYY-MM-DD 标题`，正文是 `- ` 开头的要点。
 # 实际文件混用 `#` / `##` 两级标题（2026-10-20 起新条目写成 `#`），
 # 只认 `##` 会静默漏报整条 —— 2026-10-21 就因为这条正则把当日 4 条记成 0 条。
-_ENTRY_RE = re.compile(r"^#{1,3}\s+(\d{4}-\d{2}-\d{2})\s+(.+?)\s*$", re.M)
+# 日期后可能紧跟全角括注且**没有空格**（`## 2026-10-28（二次）修…`），
+# 旧正则要求 `日期 + 空白`，这类条目会被整条丢掉 —— 2026-10-28 当天
+# 8 条里漏了 3 条（含最新的一条）。括注允许可选，取到后并回标题。
+_ENTRY_RE = re.compile(
+    r"^#{1,3}\s+(\d{4}-\d{2}-\d{2})(（[^）\s]{1,10}）)?\s*(.+?)\s*$", re.M
+)
 # 另一种写法：直接以日期开头的列项 `- 2026-10-20 · 标题：正文`
 _DATED_BULLET_RE = re.compile(r"^-\s+(\d{4}-\d{2}-\d{2})\s*[·:：]\s*(.+?)\s*$", re.M)
 _BULLET_RE = re.compile(r"^-\s+(.+?)\s*$", re.M)
@@ -82,7 +87,8 @@ def parse_changelog(since_date: str) -> list[dict]:
     text = CHANGELOG.read_text(encoding="utf-8", errors="ignore")
     spans: list[tuple[int, int, str, str, str]] = []
     for m in _ENTRY_RE.finditer(text):
-        spans.append((m.start(), m.end(), m.group(1), m.group(2), "heading"))
+        qualifier = m.group(2) or ""          # 形如「（二次）」，无则空
+        spans.append((m.start(), m.end(), m.group(1), f"{qualifier}{m.group(3)}", "heading"))
     for m in _DATED_BULLET_RE.finditer(text):
         spans.append((m.start(), m.end(), m.group(1), m.group(2), "bullet"))
     spans.sort(key=lambda s: s[0])

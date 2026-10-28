@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>挺进地牢式小地图 · 规格样张</title>
+<style>
+  :root{
+    --bg:#0a0d14; --panel:#111722; --line:#1e2a3a;
+    --txt:#dbe6f2; --dim:#7d8ea6; --accent:#3ec8ff; --warn:#ffb648;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--txt);
+    font:14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif;
+    padding:28px 32px 60px;
+  }
+  h1{font-size:19px;margin:0 0 4px;font-weight:600;letter-spacing:.4px}
+  .sub{color:var(--dim);font-size:12.5px;margin-bottom:22px}
+  .sub code{color:var(--accent);background:#0d1520;padding:1px 5px;border-radius:3px}
+  .wrap{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+  .stage{
+    background:#000;border:1px solid var(--line);border-radius:6px;
+    padding:0;line-height:0;box-shadow:0 18px 50px rgba(0,0,0,.6);
+  }
+  canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+  .panel{
+    width:300px;background:var(--panel);border:1px solid var(--line);
+    border-radius:6px;padding:16px 16px 18px;font-size:12.5px;
+  }
+  .panel h2{font-size:12px;letter-spacing:1.2px;color:var(--dim);
+    text-transform:uppercase;margin:0 0 10px;font-weight:600}
+  .row{margin-bottom:16px}
+  .row:last-child{margin-bottom:0}
+  .seg{display:flex;gap:6px;margin-top:6px}
+  .seg button{
+    flex:1;background:#0d1520;color:var(--dim);border:1px solid var(--line);
+    border-radius:4px;padding:6px 4px;font-size:11.5px;cursor:pointer;
+    font-family:inherit;transition:.15s;
+  }
+  .seg button:hover{border-color:#2d425c;color:var(--txt)}
+  .seg button.on{background:#123044;border-color:var(--accent);color:#cdefff}
+  input[type=range]{width:100%;margin-top:8px;accent-color:var(--accent)}
+  .spec{font-size:11.5px;color:var(--dim);line-height:1.75}
+  .spec b{color:var(--txt);font-weight:500}
+  .spec span{color:var(--accent);font-variant-numeric:tabular-nums}
+  .note{margin-top:14px;padding:9px 11px;background:#0d1520;border-left:2px solid var(--warn);
+    border-radius:3px;color:#c8b58c;font-size:11.5px;line-height:1.65}
+  .legend{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px;margin-top:8px;font-size:11.5px;color:var(--dim)}
+  .legend i{display:inline-block;width:9px;height:9px;margin-right:5px;vertical-align:-1px;border-radius:1px}
+</style>
+</head>
+<body>
+
+<h1>挺进地牢式小地图 · 规格样张</h1>
+<div class="sub">
+  全部按 <code>docs/v0.1/reference/挺进地牢/minimap实现方式.md</code> 的实测值绘制：
+  逻辑分辨率 <code>480×270</code>，房间约 <code>23×28px</code>，描边 <code>1px</code>，门洞 <code>2px</code>，右上贴边 <code>4px</code>。
+</div>
+
+<div class="wrap">
+  <div class="stage"><canvas id="cv" width="480" height="270"></canvas></div>
+
+  <div class="panel">
+    <div class="row">
+      <h2>显示档位（游戏 OPTIONS_MINIMAP*）</h2>
+      <div class="seg" id="modeSeg">
+        <button data-m="always" class="on">总是</button>
+        <button data-m="noncombat">战斗之外</button>
+        <button data-m="never">从不</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <h2>探索进度</h2>
+      <input type="range" id="explore" min="0" max="100" value="46">
+      <div class="spec" style="margin-top:4px">已点亮 <b id="cnt">7</b> 间 · 地图不跟随玩家</div>
+    </div>
+
+    <div class="row">
+      <h2>实测规格</h2>
+      <div class="spec">
+        房间填充 <span>#2C3258</span><br>
+        墙体描边 <span>#C0C2C0 · 1px</span><br>
+        门洞缺口 <span>2px + 2px 角标</span><br>
+        走廊 <span>1px 同色线</span><br>
+        图标 <span>5–7px</span><br>
+        右上锚点 <span>距边 4px</span><br>
+        缩放 <span>全局固定</span>
+      </div>
+      <div class="legend">
+        <div><i style="background:#2C3258;border:1px solid #C0C2C0"></i>房间</div>
+        <div><i style="background:#E838C8"></i>未探索 ?</div>
+        <div><i style="background:#7CE03C"></i>已清理/传送</div>
+        <div><i style="background:#C81E28"></i>锁门</div>
+        <div><i style="background:#D8C04A"></i>Boss</div>
+        <div><i style="background:#4FA8E8"></i>商店</div>
+      </div>
+    </div>
+
+    <div class="note">
+      样张只复刻「观感与信息结构」。原作每间房是一张预制位图贴图；
+      本工程必须用矢量绘制（56 种房型 × 变体，出不起贴图），但两者看上去可以一致。
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const cv  = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+
+  const W = 480, H = 270;
+
+  /* ========== 规格常量（全部来自实机 480×270 原生像素测量） ========== */
+  const SPEC = {
+    fill  : [44, 50, 88],      // 房间填充
+    line  : [192, 194, 192],   // 墙体描边
+    corr  : [74, 83, 144],     // 走廊
+    qm    : [232, 56, 200],    // 未探索问号
+    lock  : [200, 30, 40],     // 锁门
+    anchor: 4,                 // 地图距屏幕右上角 4px
+    tick  : 2,                 // 门角标高 2px
+    gapPx : 5,                 // 样张取值：房间间隙（实测约 4~6px）
+  };
+  const rgb = a => `rgb(${a[0]},${a[1]},${a[2]})`;
+
+  /* ========== 版图：绝对像素坐标，普通房 21×28 ========== */
+  const ROOMS = {
+    entry : { x:  0, y: 33, w: 21, h: 28, doors:['east'],                        icons:['entry']  },
+    hub   : { x: 26, y: 33, w: 28, h: 28, doors:['west','north','east','south'], icons:['clean']  },
+    n1    : { x: 26, y:  0, w: 28, h: 28, doors:['south','east'],                icons:['gun']    },
+    secret: { x: 59, y:  0, w: 22, h: 28, doors:['west'],                        icons:['shrine'], hidden:true },
+    shop  : { x: 59, y: 33, w: 24, h: 28, doors:['west','east','south'],         icons:['shop']   },
+    reward: { x: 88, y: 33, w: 21, h: 28, doors:['west','east'],                 icons:['chest']  },
+    foyer : { x:114, y: 33, w: 22, h: 28, doors:['west','south','east'],         icons:[]         },
+    exit  : { x:141, y: 33, w: 21, h: 28, doors:['west'],                        icons:['clean']  },
+    n2    : { x: 59, y: 66, w: 24, h: 28, doors:['north','east'],                icons:['chest']  },
+    n4    : { x: 88, y: 66, w: 14, h: 28, doors:['west','east'],                 icons:['ammo']   },
+    boss  : { x:107, y: 66, w: 36, h: 35, doors:['north'],                       icons:['boss']   },
+    n3    : { x: 30, y: 66, w: 20, h: 28, doors:['north'],                       icons:['clean']  },
+  };
+
+  const LINKS = [
+    ['entry','hub','east','west'],
+    ['hub','n1','north','south'],
+    ['hub','shop','east','west'],
+    ['hub','n3','south','north'],
+    ['n1','secret','east','west'],
+    ['shop','n2','south','north'],
+    ['shop','reward','east','west'],
+    ['reward','foyer','east','west'],
+    ['foyer','exit','east','west'],
+    ['foyer','boss','south','north'],
+    ['n2','n4','east','west'],
+  ];
+  const LOCKED = new Set(['reward|foyer']);
+
+  // 探索顺序
+  const ORDER = ['entry','hub','n1','shop','n2','n4','boss','reward','foyer','exit','n3','secret'];
+
+  /* ========== 5–6px 图标点阵 ========== */
+  const SPR = {
+    clean : ['..g..','g.g.g','..g..','g.g.g','..g..'],
+    gun   : ['.ww..','.ww..','wwwww','.www.','..w..'],
+    chest : ['bbbbb','b...b','b.bbbb','b...b','bbbbb'],
+    boss  : ['.yy.y.','yyyyyy','y.yy.y','yyyyyy','.yyyy.','..yy..'],
+    shop  : ['.ssss.','ssssss','ss..ss','ssssss','.ssss.'],
+    ammo  : ['..w..','.www.','wwwww','.w.w.','..w..'],
+    shrine: ['..p..','.ppp.','ppppp','.ppp.','..p..'],
+    entry : ['..c..','.ccc.','ccccc','.ccc.','..c..'],
+  };
+  const COL = { g:'#7CE03C', w:'#E8EEF6', b:'#4FA8E8', y:'#E8C86A', s:'#4FA8E8', p:'#C88AE8', c:'#8FD8FF' };
+
+  function sprite(name, cx, cy){
+    const rows = SPR[name]; if(!rows) return;
+    const h = rows.length, w = rows[0].length;
+    const x0 = Math.round(cx - w/2), y0 = Math.round(cy - h/2);
+    for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+      const ch = rows[y][x]; if(ch === '.') continue;
+      ctx.fillStyle = COL[ch] || '#fff';
+      ctx.fillRect(x0+x, y0+y, 1, 1);
+    }
+  }
+
+  const doorPoint = (k, side) => {
+    const r = ROOMS[k];
+    if(side === 'north') return [r.x + (r.w>>1), r.y];
+    if(side === 'south') return [r.x + (r.w>>1), r.y + r.h - 1];
+    if(side === 'west')  return [r.x, r.y + (r.h>>1)];
+    return [r.x + r.w - 1, r.y + (r.h>>1)];
+  };
+
+  /* 一间房：填充 → 四边 1px 描边（门洞断开）→ 门两侧 2px 角标 */
+  function drawRoom(k){
+    const r = ROOMS[k];
+    ctx.fillStyle = rgb(SPEC.fill);
+    ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = rgb(SPEC.line);
+
+    const mx = r.x + (r.w>>1), my = r.y + (r.h>>1);
+    const g0x = mx - 1, g1x = mx;
+    const g0y = my - 1, g1y = my;
+
+    for(const s of ['north','south']){
+      const yy = (s === 'north') ? r.y : r.y + r.h - 1;
+      if(!r.doors.includes(s)){ ctx.fillRect(r.x, yy, r.w, 1); continue; }
+      if(g0x - r.x > 0) ctx.fillRect(r.x, yy, g0x - r.x, 1);
+      if(r.x + r.w - 1 >= g1x + 1) ctx.fillRect(g1x + 1, yy, r.x + r.w - 1 - g1x, 1);
+      if(s === 'north'){
+        ctx.fillRect(g0x - 1, yy, 1, SPEC.tick);
+        ctx.fillRect(g1x + 1, yy, 1, SPEC.tick);
+      } else {
+        ctx.fillRect(g0x - 1, yy - SPEC.tick + 1, 1, SPEC.tick);
+        ctx.fillRect(g1x + 1, yy - SPEC.tick + 1, 1, SPEC.tick);
+      }
+    }
+    for(const s of ['west','east']){
+      const xx = (s === 'west') ? r.x : r.x + r.w - 1;
+      if(!r.doors.includes(s)){ ctx.fillRect(xx, r.y, 1, r.h); continue; }
+      if(g0y - r.y > 0) ctx.fillRect(xx, r.y, 1, g0y - r.y);
+      if(r.y + r.h - 1 >= g1y + 1) ctx.fillRect(xx, g1y + 1, 1, r.y + r.h - 1 - g1y);
+      if(s === 'west'){
+        ctx.fillRect(xx, g0y - 1, SPEC.tick, 1);
+        ctx.fillRect(xx, g1y + 1, SPEC.tick, 1);
+      } else {
+        ctx.fillRect(xx - SPEC.tick + 1, g0y - 1, SPEC.tick, 1);
+        ctx.fillRect(xx - SPEC.tick + 1, g1y + 1, SPEC.tick, 1);
+      }
+    }
+  }
+
+  /* 走廊：1px 正交折线，两端落在门槽中心 */
+  function drawLink(a, b, sa, sb){
+    const p1 = doorPoint(a, sa), p2 = doorPoint(b, sb);
+    ctx.fillStyle = rgb(LOCKED.has(a+'|'+b) ? SPEC.lock : SPEC.corr);
+
+    if(sa === 'east' || sa === 'west'){
+      if(p1[1] === p2[1]){
+        const x0 = Math.min(p1[0], p2[0]);
+        ctx.fillRect(x0, p1[1], Math.abs(p2[0]-p1[0]) + 1, 1);
+      } else {
+        const xm = (p1[0] + p2[0]) >> 1;
+        ctx.fillRect(Math.min(p1[0],xm), p1[1], Math.abs(xm-p1[0]) + 1, 1);
+        ctx.fillRect(xm, Math.min(p1[1],p2[1]), 1, Math.abs(p2[1]-p1[1]) + 1);
+        ctx.fillRect(Math.min(xm,p2[0]), p2[1], Math.abs(p2[0]-xm) + 1, 1);
+      }
+    } else {
+      if(p1[0] === p2[0]){
+        const y0 = Math.min(p1[1], p2[1]);
+        ctx.fillRect(p1[0], y0, 1, Math.abs(p2[1]-p1[1]) + 1);
+      } else {
+        const ym = (p1[1] + p2[1]) >> 1;
+        ctx.fillRect(p1[0], Math.min(p1[1],ym), 1, Math.abs(ym-p1[1]) + 1);
+        ctx.fillRect(Math.min(p1[0],p2[0]), ym, Math.abs(p2[0]-p1[0]) + 1, 1);
+        ctx.fillRect(p2[0], Math.min(ym,p2[1]), 1, Math.abs(p2[1]-ym) + 1);
+      }
+    }
+  }
+
+  /* ========== 状态 ========== */
+  let mode = 'always';
+  let exploreT = 0.55;
+  let combat = false;
+
+  const revealedN = () => Math.max(1, Math.round(ORDER.length * exploreT));
+  const revealed   = k => { const i = ORDER.indexOf(k); return i >= 0 && i < revealedN(); };
+
+  /* ========== 绘制 ========== */
+  function bg(){
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#161d29'); g.addColorStop(1,'#0b0f17');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = 'rgba(70,105,140,.10)';
+    for(let x=0;x<W;x+=24) ctx.fillRect(x,0,1,H);
+    for(let y=0;y<H;y+=24) ctx.fillRect(0,y,W,1);
+    ctx.fillStyle = '#EAF4FF'; ctx.fillRect(104,210,5,5);   // 世界里的玩家
+  }
+
+  function drawMap(){
+    let mx0=Infinity, my0=Infinity, mx1=-Infinity, my1=-Infinity;
+    for(const k of ORDER){
+      if(!revealed(k)) continue;
+      const r = ROOMS[k];
+      mx0 = Math.min(mx0, r.x); my0 = Math.min(my0, r.y);
+      mx1 = Math.max(mx1, r.x + r.w); my1 = Math.max(my1, r.y + r.h);
+    }
+
+    // 右上锚定 · 缩放恒为 1（1px 描边必须落在整像素上）
+    const ox = W - SPEC.anchor - mx1;
+    const oy = SPEC.anchor - my0;
+
+    ctx.save();
+    ctx.translate(ox, oy);
+
+    for(const [a,b,sa,sb] of LINKS){
+      if(revealed(a) && revealed(b)) drawLink(a,b,sa,sb);
+    }
+    for(const k of ORDER) if(revealed(k)) drawRoom(k);
+
+    for(const k of ORDER){
+      if(!revealed(k)) continue;
+      const r = ROOMS[k];
+      const cx = r.x + r.w/2, cy = r.y + r.h/2 + 6;
+      const n = r.icons.length;
+      r.icons.forEach((ic,i)=> sprite(ic, cx + (i-(n-1)/2)*7, cy));
+    }
+    ctx.restore();
+
+    // 玩家小像 + 未探索问号
+    const here = ORDER[Math.min(revealedN()-1, ORDER.length-1)];
+    if(revealed(here)){
+      const r = ROOMS[here];
+      const cx = Math.round(r.x + r.w/2) + ox;
+      const cy = Math.round(r.y + r.h/2) - 2 + oy;
+      ctx.fillStyle = '#2A1A14'; ctx.fillRect(cx-2, cy-4, 5, 3);
+      ctx.fillStyle = '#E8BC88'; ctx.fillRect(cx-1, cy-1, 3, 3);
+      ctx.fillStyle = '#D2603A'; ctx.fillRect(cx-2, cy+2, 5, 3);
+    }
+    for(const k in ROOMS){
+      if(revealed(k) || ROOMS[k].hidden) continue;
+      const adj = LINKS.some(([a,b])=> (a===k && revealed(b)) || (b===k && revealed(a)));
+      if(!adj) continue;
+      const r = ROOMS[k];
+      const cx = r.x + (r.w>>1) + ox, cy = r.y + (r.h>>1) + oy;
+      ctx.fillStyle = rgb(SPEC.qm);
+      ctx.fillRect(cx-1, cy-2, 3, 1);
+      ctx.fillRect(cx+1, cy-1, 1, 1);
+      ctx.fillRect(cx,   cy,   1, 1);
+      ctx.fillRect(cx,   cy+2, 1, 1);
+    }
+  }
+
+  function tick(){
+    bg();
+    const show = (mode === 'always') || (mode === 'noncombat' && !combat);
+    if(show){
+      drawMap();
+    } else {
+      ctx.fillStyle = 'rgba(255,182,72,.6)';
+      ctx.font = '7px monospace';
+      ctx.textAlign = 'right'; ctx.textBaseline = 'top';
+      ctx.fillText('战斗中隐藏 · 清房后恢复', W-6, 6);
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  /* ========== 交互 ========== */
+  document.querySelectorAll('#modeSeg button').forEach(b=>{
+    b.onclick = () => {
+      document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      mode = b.dataset.m;
+      combat = (mode === 'noncombat');
+    };
+  });
+  const ex  = document.getElementById('explore');
+  const cnt = document.getElementById('cnt');
+  ex.oninput = () => { exploreT = ex.value/100; cnt.textContent = revealedN(); };
+  cnt.textContent = revealedN();
+})();
+</script>
+</body>
+</html>

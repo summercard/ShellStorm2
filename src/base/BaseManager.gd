@@ -756,6 +756,7 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	var insurance_saved := request.get("insurance_saved", []) as Array
 	var transaction_data := data
 	var old_expedition_02_unlocked := data.expedition_02_unlocked
+	var old_unlocked_levels := data.expedition_unlocked_levels.duplicate()
 	var old_total_runs := data.total_runs
 	var old_successful_extractions := data.successful_extractions
 	var old_total_kills := data.total_kills
@@ -772,8 +773,13 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 		else data.synthesis_pity.duplicate(true)
 	)
 
-	if success and str(request.get("expedition_level_id", "")) == "expedition_01":
-		data.expedition_02_unlocked = true
+	# 通关即解锁：由**解锁规则反查**「这一关通关后该开哪几关」，
+	# 不再写 `if level_id == "expedition_01": expedition_02_unlocked = true`。
+	# 原先那条硬编码支路漏掉了所有后来新增的关卡 —— 通关了也不解锁，且没有任何报错。
+	if success:
+		for unlocked_id in GameDesignConfig.expedition_levels_unlocked_by_clearing(
+				str(request.get("expedition_level_id", ""))):
+			_unlock_expedition_level_data(unlocked_id)
 	data.record_run(success, kills)
 	data.extraction_points += extraction_points
 	if success:
@@ -817,6 +823,7 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	# 并发冲突会让 save_base 重载权威档；只回滚仍是本次旧对象的情况。
 	if data == transaction_data:
 		data.expedition_02_unlocked = old_expedition_02_unlocked
+		data.expedition_unlocked_levels = old_unlocked_levels
 		data.total_runs = old_total_runs
 		data.successful_extractions = old_successful_extractions
 		data.total_kills = old_total_kills
@@ -1747,11 +1754,35 @@ func clear_extraction_loot() -> void:
 
 func is_expedition_level_unlocked(level_id: String) -> bool:
 	_ensure_data()
+	# 解锁规则**声明在关卡清单里**（`GameDesignConfig.EXPEDITION_LEVELS.unlock_policy`），
+	# 本函数只执行规则。
+	#
+	# 这里原先是 `return level_id in ["expedition_01", "99"]` 的硬编码白名单 ——
+	# 新增的远征03 不在白名单里，于是情报室的牌面写着「点击进入」，
+	# 按下去却被判「尚未解锁」，玩家完全看不出该改哪。加一张关卡要改两处，
+	# 就是这类"静默进不去"的固定来源。
+	if GameDesignConfig.expedition_unlock_policy(level_id) == GameDesignConfig.UNLOCK_POLICY_ALWAYS:
+		return true
+	if level_id in data.expedition_unlocked_levels:
+		return true
+	# 旧档兼容：远征02 的历史专用布尔。`BaseData.from_dict()` 已做过一次迁移，
+	# 这里再兜一次 —— 同项目其它实例可能按旧结构回写存档，把它冲回只带旧字段的形态。
+	if level_id == "expedition_02" and data.expedition_02_unlocked:
+		return true
+	return _is_debug_unlock_override(level_id)
+
+
+## 把某张关卡记入「已解锁」集合。
+##
+## `expedition_02_unlocked` 同步写：它是旧档与外部判定的既有读点
+## （`FlashlightColorTweaker` 也在读），不能只更集合不更它。
+func _unlock_expedition_level_data(level_id: String) -> void:
+	if level_id.is_empty():
+		return
+	if not data.expedition_unlocked_levels.has(level_id):
+		data.expedition_unlocked_levels.append(level_id)
 	if level_id == "expedition_02":
-		# 正式标志存存档；调试覆盖存独立文件。两者取或 —— 理由见
-		# DEBUG_UNLOCK_OVERRIDE_PATH 的注释（存档会被同项目的别的实例回写）。
-		return data.expedition_02_unlocked or _is_debug_unlock_override(level_id)
-	return level_id in ["expedition_01", "99"]
+		data.expedition_02_unlocked = true
 
 
 ## 调试直通用：远征关卡解锁的「覆盖」落点。
@@ -1801,42 +1832,45 @@ func _is_debug_unlock_override(level_id: String) -> bool:
 
 ## 调试直通：把某个远征关卡直接标记为已解锁，跳过正式前置条件。
 ##
-## 正式解锁路径只有一条 —— `commit_run_settlement()` 里
-## 「`success == true` 且 `expedition_level_id == "expedition_01"`」那一支，
-## 也就是必须先通关远征关卡01；本方法供 P 键调试面板「预留」页使用，
-## 不参与任何正式结算流程，也不改 `total_runs` / `successful_extractions`。
+## 正式解锁路径只有一条 —— `commit_run_settlement()` 里按
+## `GameDesignConfig` 的 `unlock_policy` 反查出的「通关后该开哪几关」，
+## 本方法供 P 键调试面板「预留」页使用，不参与任何正式结算流程，
+## 也不改 `total_runs` / `successful_extractions`。
+##
+## 对 `unlock_policy = "always"` 的关卡返回 false：那类关卡本来就是开的，
+## 「解锁」这件事对它们没有意义 —— 返回 true 会让调试面板显示一个假的成功回执。
 ##
 ## 同时写正式标志与调试覆盖：正式标志负责「存档干净时是对的」，
 ## 覆盖负责「存档被别的实例回写时仍然生效」。
 func debug_unlock_expedition_level(level_id: String) -> bool:
 	_ensure_data()
-	match level_id:
-		"expedition_02":
-			_set_debug_unlock_override(level_id, true)
-			if data.expedition_02_unlocked:
-				return true
-			data.expedition_02_unlocked = true
-			if save_base("debug_unlock_expedition:%s" % level_id):
-				return true
-			# 存档写失败不算失败 —— 覆盖已经生效；内存态保持与覆盖一致。
-			return _is_debug_unlock_override(level_id)
-	return false
+	if GameDesignConfig.expedition_unlock_policy(level_id) == GameDesignConfig.UNLOCK_POLICY_ALWAYS:
+		return false
+	_set_debug_unlock_override(level_id, true)
+	if is_expedition_level_unlocked(level_id):
+		return true
+	_unlock_expedition_level_data(level_id)
+	if save_base("debug_unlock_expedition:%s" % level_id):
+		return true
+	# 存档写失败不算失败 —— 覆盖已经生效；内存态保持与覆盖一致。
+	return _is_debug_unlock_override(level_id)
 
 
 ## 调试直通的反向操作：把关卡退回未解锁，方便重新走一遍真实解锁流程。
-## 只对走存档标志的关卡有意义；`expedition_01` / `99` 是常量放行，无法退回。
+## 只对 `unlock_policy = "on_clear"` 的关卡有意义；恒可进的关卡无法退回。
 func debug_relock_expedition_level(level_id: String) -> bool:
 	_ensure_data()
-	match level_id:
-		"expedition_02":
-			_set_debug_unlock_override(level_id, false)
-			if not data.expedition_02_unlocked:
-				return true
-			data.expedition_02_unlocked = false
-			if save_base("debug_relock_expedition:%s" % level_id):
-				return true
-			return not _is_debug_unlock_override(level_id)
-	return false
+	if GameDesignConfig.expedition_unlock_policy(level_id) == GameDesignConfig.UNLOCK_POLICY_ALWAYS:
+		return false
+	_set_debug_unlock_override(level_id, false)
+	if not is_expedition_level_unlocked(level_id):
+		return true
+	data.expedition_unlocked_levels.erase(level_id)
+	if level_id == "expedition_02":
+		data.expedition_02_unlocked = false
+	if save_base("debug_relock_expedition:%s" % level_id):
+		return true
+	return not _is_debug_unlock_override(level_id)
 
 
 func _set_debug_unlock_override(level_id: String, enabled: bool) -> void:

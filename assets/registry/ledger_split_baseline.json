@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-10-20T23:30:10",
+ "captured_at": "2026-10-28",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -5343,7 +5343,7 @@
    "d": "scenes"
   },
   "ENV-TOWER-DOOR-LEAF-5M": {
-   "v": "92ef2415c486c14a20712da8f4800aa1d35b77c57c6a7e24248a145282d389c3",
+   "v": "1d6fdc03a178e97d0ed49535c18d04180ee3fbc983da55aae5b7cab1298932b6",
    "c": "场景",
    "d": "scenes"
   },
@@ -6727,12 +6727,12 @@
   "6": "61631b8f78bd213290ab9df78dce037390cb0dec316d280e02c2633d45426561",
   "7": "3cf20178810eb5ff623c866ee09bb96763eec31a652c967d41412aa68579df6c",
   "8": "391f7923ed7aac1757939787611b3384ac711deae93ab4df73496bb2ddd9411a",
-  "9": "347a7674729b5fdcd057d9bea8e80eb5617103d0201e7401e9834013ce8e5fe3",
+  "9": "7f03a69fcb8ba10261de5bf95e40f07f2641f7cd8af17a12f61d2b9c68e6999f",
   "10": "bbbb479db9cdfc932282487353f12170dd571a7eefdce1b1d6dae4759eebc983",
   "11": "f70f5c6c4f75d3cc7ce155a4f274e5ef764762701fbdbec7ffa13fbf10a09281",
   "12": "be89384bac2addeb3babf36c08e69de9fbcc9d448888c5fcef1c9c64e5871c8d",
   "13": "9faaaa94a559697c346da24d679346387a9d56b6fd3d807b483b1021918230d5",
-  "14": "297376c04ef4e82d91dabbb3a301bfab74ad65d306c3403cdc740f0cdb6fcc35",
+  "14": "ee6e5868b2d9669bf74692bb4a8695740cb263324fcd63ef9a1ac33ec7794b72",
   "15": "b23b68cded7d67d66fb9b37d36830252a374c8b2a0e88018fb8b3f60d8658ec3",
   "16": "62918dce045f6cdef97b8e16114b285b4e509d0f98a188191a350b5638ac9005",
   "17": "2b5f376b515e64ad60ebb1e55cd388a84d7fb2d2dcb68edff75eda52879229ef",
@@ -6741,7 +6741,7 @@
   "22": "013758148bec7bfe3f83b426ae5b822474151fd94dd775f7dc3fb218646ddea2",
   "23": "070bf456a760e9d2132f08e8fb7a4ed964af75ea1d16f5620c8d15bc9a8ba9f9",
   "24": "357f4a3d71c845fa78ce45dbce32c97cc5e15756b3284c74e2c3f02d11359208",
-  "25": "9170b1a98bda9264e847aa60afe032153112680e197d20cc3694732566750a6e"
+  "25": "e89427dfaf2e3580817c4dbecc0dcd3d25ada412b566bb12238834a0f58d92c3"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -6761,18 +6761,18 @@
   "3D-特效": "9558f5992d9c3a0fcdf2d206856e3034621765c9d7d58157639ae1e0acbd3199"
  },
  "category_counts": {
-  "UI": 18,
+  "角色": 25,
+  "敌人": 15,
   "场景": 805,
   "场景道具": 49,
   "基地资产包": 114,
-  "子弹特效": 10,
-  "敌人": 15,
+  "道具": 39,
   "武器": 36,
   "特效": 38,
-  "角色": 25,
-  "道具": 39,
-  "音乐": 9,
-  "音效": 178
+  "子弹特效": 10,
+  "UI": 18,
+  "音效": 178,
+  "音乐": 9
  },
  "targeted_updates": [
   {

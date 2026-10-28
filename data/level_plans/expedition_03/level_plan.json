@@ -78,7 +78,9 @@
     "db_70x50",
     "office_60x70",
     "corridor_45x40",
-    "bridge_60x50"
+    "bridge_60x50",
+    "connector_10x30",
+    "connector_30x10"
   ],
   "generation_policy": {
     "mode": "flow",
@@ -109,11 +111,12 @@
     "pin_content_templates": false,
     "randomize_room_templates": true,
     "flow_pick": "seeded_uniform",
-    "runtime_enabled": false
+    "runtime_enabled": true,
+    "flow_assembly_enabled": true
   },
   "provenance": {
     "mode": "flow",
     "extracted_from": "scripts/build_expedition03_level_plan.py",
-    "note": "远征关卡03「骨架随机」设计源。**mode=flow ⇒ 每局先按种子抽一张 flow 骨架，再走注入与复合对象拼装**；floors/floor_00.json 只是 flow_01 的展开兜底样例。runtime_enabled=false：flow 模式生成器与关卡场景尚未施工，本关卡暂不可从选关菜单进入。房型配额逐张对照《挺进地牢》第一层 Castle 的 6 张 flow，断言见 scripts/check_expedition03_flow_quotas.py。"
+    "note": "远征关卡03「骨架随机」设计源。**mode=flow ⇒ 每局先按种子抽一张 flow 骨架，再走注入与复合对象拼装**；floors/floor_00.json 只是兜底样例，实际几何由 EgtFlowAssembler + EgtPlanBridge 在开局时按种子算。拓扑逐条对照《挺进地牢》第一层 Castle 的 6 张 flow 原图，门数分布逐张对照 第一层房间位清单.csv（见 EXPECTED_DEGREES 断言）。"
   }
 }

@@ -375,17 +375,31 @@ func _ready() -> void:
 	minimap.set_player_state(Vector3(8.0, 0.0, 0.0), Vector3.RIGHT)
 	var player_after := minimap.get_player_screen_position()
 	var start_after := minimap.get_room_screen_rect("start").get_center()
-	_check(player_after.is_equal_approx(player_before), "Minimap player marker is not fixed at radar center", failures)
-	_check(start_after.x < start_before.x, "Minimap map does not move opposite to player movement", failures)
+	# —— 2026-10-28：契约从「圆形雷达」改为「EGT 式固定版图」，两条断言方向整体反转 ——
+	# 旧契约：玩家恒居圆心、地图反向平移。新契约：房间钉死在绝对坐标、只有玩家标记在动。
+	# 这不是放宽阈值 —— 是**换了断言对象**：现在证明的是"地图不动"，和原来证明"地图动"同等严格。
+	_check(player_after.distance_to(player_before) > 0.5, "Minimap player marker did not move with the player", failures)
+	_check(start_after.is_equal_approx(start_before), "Minimap map shifted while the player moved (must be a fixed plan view)", failures)
 	minimap.set_enemy_positions([Vector3(3.0, 0.0, 2.0), Vector3(-4.0, 0.0, -2.0)])
 	var map_snapshot := minimap.get_snapshot()
 	_check(bool(map_snapshot.get("true_room_dimensions", false)), "Minimap snapshot does not declare true room dimensions", failures)
 	_check(
-		bool(map_snapshot.get("player_centered", false))
-		and bool(map_snapshot.get("map_moves_with_player", false))
-		and bool(map_snapshot.get("circular_content_clip", false))
+		not bool(map_snapshot.get("player_centered", true))
+		and not bool(map_snapshot.get("map_moves_with_player", true))
+		and not bool(map_snapshot.get("circular_content_clip", true))
+		and bool(map_snapshot.get("fixed_scale", false))
 		and not bool(map_snapshot.get("player_heading_line", true)),
-		"Minimap is not player-centered/circular-clipped or still exposes the heading line", failures
+		"Minimap is not a fixed-scale non-centred plan view or still exposes the heading line", failures
+	)
+	_check(str(map_snapshot.get("tile_style", "")) == "egt_room_tile", "Minimap is not using the EGT room-tile renderer", failures)
+	_check(float(map_snapshot.get("px_per_m", 0.0)) > 0.0, "Minimap does not report a fixed metres-to-pixels scale", failures)
+	# 缩放必须与玩家位置无关 —— 这是"固定缩放"的判据，不能只看快照里的布尔值。
+	minimap.set_player_state(Vector3(-24.0, 0.0, 15.0), Vector3.LEFT)
+	var px_per_m_after := float(minimap.get_snapshot().get("px_per_m", 0.0))
+	_check(
+		is_equal_approx(px_per_m_after, float(map_snapshot.get("px_per_m", 0.0))),
+		"Minimap rescaled when the player moved; scale must be constant per floor",
+		failures
 	)
 	_check(int(map_snapshot.get("enemy_marker_count", 0)) == 2, "Minimap does not expose enemy red-dot count", failures)
 	var start_rect := minimap.get_room_screen_rect("start")

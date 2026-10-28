@@ -2,45 +2,95 @@ class_name DungeonMinimap3D
 extends Control
 
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
-## 实时战术小地图：以当前楼层 AABB 为整张地图画布。
-## 房间/走廊/门全部按真实墙体位置画蓝色线段；玩家居中（雷达模式）或全图铺开。
-## 敌人红点、楼层堆叠、当前房间脉冲高亮保留。
+
+## 右上角小地图 · **挺进地牢（Enter the Gungeon）式**。
+##
+## 设计依据：`docs/v0.1/reference/挺进地牢/minimap实现方式.md`
+## 交互样张：`docs/v0.1/reference/挺进地牢/minimap样张.html`
+##
+## 与已退役的圆形雷达的三条本质区别，改动时不许倒退：
+##   1. **固定缩放**。整层的每米像素数是常量（`ROOM_PX_PER_M`），
+##      只受"满层上限"一次性夹紧，**不随探索进度、不随玩家位置变化**。
+##      理由是原作的两个缩放参数（`s_map_view_scale` / `_big`）都是全局常量。
+##   2. **地图不动**。房间出现在自己的绝对坐标上，玩家只是其中一个点。
+##      雷达那种"玩家恒居圆心、地图反向平移"的做法已删除。
+##   3. **矩形拼图**。房间是"填充 + 一周 1~2px 描边 + 门洞断开"的矩形块，
+##      不是四根独立线段；走廊是一根细线，不是通道房间。
+##
+## 信息层照原作：房型用图标表达（底下一律同色，不靠底色区分房型）、
+## 未探索只给问号、已清理给绿色弹夹标记。
+
+# ---------------------------------------------------------------------------
+# 显示模式（对应原作 OPTIONS_MINIMAPSTYLE 三档）
+# ---------------------------------------------------------------------------
+
+enum DisplayMode {
+	ALWAYS,      # OPTIONS_MINIMAPALWAYS：一直显示
+	NON_COMBAT,  # OPTIONS_MINIMAPNONCOMBAT：战斗中隐藏，清房后自动恢复（原作默认）
+	NEVER,       # OPTIONS_MINIMAPNEVER：完全不显示
+}
+
+var display_mode: int = DisplayMode.ALWAYS
 
 # 战术信息不参与瞄准判定；15Hz 足以保持移动/红点连续。
 const REDRAW_INTERVAL := 1.0 / 15.0
-const HEADER_HEIGHT := 24.0
+
 # 同层房间用严格容差；楼梯/电梯等垂直通道的 position.y 跟玩家脚底差几米，
-# 用更宽的容差避免它们被当层过滤掉而消失，造成"垂直通道歪掉"的视觉错觉。
+# 用更宽的容差避免它们被当层过滤掉而消失。
 const FLOOR_EPSILON_M := 0.45
 const VERTICAL_CHANNEL_EPSILON_M := 12.0
-const RADAR_CONTENT_MARGIN_PX := 10.0
 
-# 风格统一：所有墙体/门/走廊统一蓝色线段。
-const WALL_COLOR := Color(0.36, 0.78, 1.0, 0.92)
-const WALL_GLOW_COLOR := Color(0.36, 0.78, 1.0, 0.18)
-const WALL_WIDTH := 1.6
-const WALL_GLOW_WIDTH := 4.0
-# 门关闭时，门框短竖线颜色（仍然用蓝）。
-const DOOR_JAMB_COLOR := Color(0.36, 0.78, 1.0, 0.95)
-const DOOR_JAMB_LENGTH_M := 1.8
-const DOOR_GAP_HALF_M := 2.6
+# ---------------------------------------------------------------------------
+# 规格常量 —— 全部来自原作实机测量，换算到本工程 1920×1080 设计空间
+# ---------------------------------------------------------------------------
+# 设计密度：原作 480×270 原生下普通房约 21~24px 宽（≈ 屏宽 4.5%）。
+# 本工程普通房 32×26m，要落在同一档 ⇒ 约 3.0 px/m。
+const ROOM_PX_PER_M := 3.0
+# 角落态内容区留白（设计 px）。真正的缩放上限由**面板实测尺寸**决定，
+# 见 `_map_scale()`；不要在这里写死像素上限。
+const CORNER_MARGIN := Vector2(10.0, 8.0)
 
-# 当前房间高亮（仍走蓝色家族，避免破坏统一风格）。
-const CURRENT_ROOM_GLOW := Color(0.55, 0.95, 1.0, 0.55)
-const CURRENT_ROOM_EDGE := Color(0.85, 1.0, 1.0, 1.0)
-const ENEMY_COLOR := Color(1.0, 0.18, 0.22, 1.0)
-const ENEMY_HALO := Color(1.0, 0.18, 0.22, 0.32)
-const PLAYER_FILL := Color(0.92, 1.0, 1.0, 1.0)
-const PLAYER_EDGE := Color(0.20, 0.82, 0.96, 1.0)
-const FLOOR_DOT_ACTIVE := Color(1.0, 0.78, 0.30, 1.0)
-const FLOOR_DOT_INACTIVE := Color(0.30, 0.72, 0.88, 0.55)
-const FRAME_COLOR := Color(0.32, 0.78, 0.92, 0.75)
-const FRAME_BG := Color(0.0, 0.02, 0.04, 0.42)
-const RADAR_BG := Color(0.006, 0.020, 0.034, 0.78)
+# 配色：原作房间填充 (44,50,88)、描边 (192,194,192)，全房间统一，不按房型着色。
+const ROOM_FILL := Color(0.172, 0.196, 0.345, 0.92)      # #2C3258
+const ROOM_EDGE := Color(0.753, 0.761, 0.753, 0.95)      # #C0C2C0
+const ROOM_EDGE_CURRENT := Color(0.93, 0.97, 1.0, 1.0)   # 玩家所在房，提亮描边
+const CORRIDOR_COLOR := Color(0.29, 0.325, 0.565, 0.95)  # #4A5390
+const LOCKED_DOOR_COLOR := Color(0.784, 0.118, 0.157)    # #C81E28
+const UNEXPLORED_COLOR := Color(0.910, 0.220, 0.784)     # #E838C8 洋红问号
+const CLEARED_MARK := Color(0.486, 0.878, 0.235)         # #7CE03C 绿色弹夹
+const ENEMY_COLOR := Color(1.0, 0.22, 0.24, 1.0)
+const ENEMY_HALO := Color(1.0, 0.22, 0.24, 0.30)
+const PLAYER_FILL := Color(0.94, 0.98, 1.0, 1.0)
+const PLAYER_EDGE := Color(0.16, 0.72, 0.96, 1.0)
+
+# 线宽与缺口（设计 px）
+const WALL_PX := 2.0
+const CORRIDOR_PX := 2.0
+const DOOR_GAP_PX := 8.0
+const DOOR_TICK_PX := 3.0
+const ICON_PX := 9.0
+const FRAME_BG := Color(0.0, 0.02, 0.04, 0.34)
+const FRAME_COLOR := Color(0.32, 0.78, 0.92, 0.42)
+
+# 图标色（全部走同一套低饱和描线，不抢房型底色）
+const ICON_CHEST := Color(0.96, 0.76, 0.30)
+const ICON_BOSS := Color(0.92, 0.78, 0.36)
+const ICON_SHOP := Color(0.42, 0.78, 0.96)
+const ICON_EVENT := Color(0.78, 0.55, 0.94)
+const ICON_HEAL := Color(0.96, 0.36, 0.42)
+const ICON_KEY := Color(0.99, 0.86, 0.36)
+const ICON_STAIRS := Color(0.62, 0.90, 0.98)
+const ICON_EXTRACT := Color(0.42, 0.95, 0.72)
+const ICON_DANGER := Color(0.98, 0.52, 0.24)
+
+# ---------------------------------------------------------------------------
+# 状态
+# ---------------------------------------------------------------------------
 
 var _records: Array[Dictionary] = []
 var _edges: Dictionary = {}
 var _revealed: Dictionary = {}
+var _cleared: Dictionary = {}
 var _hidden_room_types: Dictionary = {}
 var _visited_room_types: Dictionary = {}
 var _current_room_id := ""
@@ -52,12 +102,11 @@ var _has_multiple_floors := false
 var _current_floor_y := 0.0
 var _player_world_position := Vector3.ZERO
 var _player_aim_direction := Vector3.FORWARD
-var _scan_phase := 0.0
-var _pulse_phase := 0.0
 var _redraw_accumulator := 0.0
 var _has_realtime_player_state := false
 var _enemy_world_positions: Array[Vector3] = []
 var _full_map_mode := false
+var _in_combat := false
 
 
 func _ready() -> void:
@@ -67,13 +116,15 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_scan_phase = fmod(_scan_phase + delta * 0.82, 1.0)
-	_pulse_phase = fmod(_pulse_phase + delta * 0.58, 1.0)
 	_redraw_accumulator += delta
 	if _redraw_accumulator >= REDRAW_INTERVAL:
 		_redraw_accumulator = 0.0
 		queue_redraw()
 
+
+# ---------------------------------------------------------------------------
+# 数据入口（契约不变）
+# ---------------------------------------------------------------------------
 
 func configure(records: Array[Dictionary], edge_states: Dictionary) -> void:
 	_records = records.duplicate(true)
@@ -100,11 +151,13 @@ func reset_exploration_for_new_run() -> void:
 	# configure() 也用于同一战局内追加新楼层，不能在那里清 revealed。
 	# 只有明确的新战局边界才清掉上一局的探索路径和实时敌人投影。
 	_revealed.clear()
+	_cleared.clear()
 	_hidden_room_types.clear()
 	_visited_room_types.clear()
 	_current_room_id = ""
 	_enemy_world_positions.clear()
 	_has_realtime_player_state = false
+	_in_combat = false
 	_current_floor_y = 0.0
 	queue_redraw()
 
@@ -115,12 +168,22 @@ func set_full_map_mode(enabled: bool) -> void:
 	queue_redraw()
 
 
+func set_display_mode(mode: int) -> void:
+	display_mode = mode
+	queue_redraw()
+
+
+func set_in_combat(value: bool) -> void:
+	_in_combat = value
+
+
 func copy_state_from(source: DungeonMinimap3D) -> void:
 	if source == null:
 		return
 	_records = source._records.duplicate(true)
 	_edges = source._edges.duplicate(true)
 	_revealed = source._revealed.duplicate(true)
+	_cleared = source._cleared.duplicate(true)
 	_hidden_room_types = source._hidden_room_types.duplicate(true)
 	_visited_room_types = source._visited_room_types.duplicate(true)
 	_current_room_id = source._current_room_id
@@ -134,6 +197,8 @@ func copy_state_from(source: DungeonMinimap3D) -> void:
 	_player_aim_direction = source._player_aim_direction
 	_has_realtime_player_state = source._has_realtime_player_state
 	_enemy_world_positions.assign(source._enemy_world_positions)
+	display_mode = source.display_mode
+	_in_combat = source._in_combat
 	queue_redraw()
 
 
@@ -142,6 +207,18 @@ func reveal_room(room_id: String, hide_type: bool = false) -> void:
 	if hide_type and not _visited_room_types.has(room_id):
 		_hidden_room_types[room_id] = true
 	queue_redraw()
+
+
+func mark_room_cleared(room_id: String) -> void:
+	# 支线子图房间不进 `_records`，也不该进地图的"已清"计数 —— 只认本层正式房间。
+	if not _record_by_id.has(room_id):
+		return
+	_cleared[room_id] = true
+	queue_redraw()
+
+
+func is_room_cleared(room_id: String) -> bool:
+	return _cleared.has(room_id)
 
 
 func get_visible_room_type(room_id: String) -> String:
@@ -167,10 +244,7 @@ func set_current_floor_height(world_y: float) -> void:
 	queue_redraw()
 
 
-func set_player_state(
-	world_position: Vector3,
-	aim_direction: Vector3
-) -> void:
+func set_player_state(world_position: Vector3, aim_direction: Vector3) -> void:
 	_player_world_position = world_position
 	var planar_aim := Vector3(aim_direction.x, 0.0, aim_direction.z)
 	if planar_aim.length_squared() > 0.0001:
@@ -193,14 +267,15 @@ func set_edge_open(a: String, b: String, opened: bool) -> void:
 func get_snapshot() -> Dictionary:
 	return {
 		"revealed_count": _revealed.size(),
+		"cleared_count": _cleared.size(),
 		"hidden_room_types": _hidden_room_types.keys(),
 		"current_room_id": _current_room_id,
 		"open_edge_count": _edges.values().count(true),
 		"room_count": _records.size(),
 		"projection_mode": (
-			"current_floor_floorplan"
+			"current_floor_tile_grid"
 			if _has_multiple_floors
-			else "planar_floorplan"
+			else "planar_tile_grid"
 		),
 		"current_floor_y": _current_floor_y,
 		"floor_count": _floor_heights.size(),
@@ -208,21 +283,35 @@ func get_snapshot() -> Dictionary:
 		"realtime_update_hz": int(round(1.0 / REDRAW_INTERVAL)),
 		"player_marker": true,
 		"player_heading": true,
-		"player_heading_line": false,
-		"player_centered": _has_realtime_player_state and not _full_map_mode,
-		"map_moves_with_player": _has_realtime_player_state and not _full_map_mode,
-		"circular_content_clip": not _full_map_mode,
+		# —— 以下四项是 EGT 式渲染的**契约断言点**，改动前先读文件头三条区别 ——
+		"player_centered": false,
+		"map_moves_with_player": false,
+		"circular_content_clip": false,
+		"fixed_scale": true,
+		"tile_style": "egt_room_tile",
+		"px_per_m": _map_scale(),
+		"display_mode": _display_mode_name(),
 		"radar_world_diameter_m": 0.0,
 		"true_room_dimensions": true,
 		"enemy_marker_count": _enemy_world_positions.size(),
 		"enemy_markers": true,
-		"holographic_scan": true,
+		"player_heading_line": false,
+		"holographic_scan": false,
 		"scan_beam_line": false,
 		"floor_stack_index": _has_multiple_floors,
 		"full_map_mode": _full_map_mode,
-		"wall_line_render": true,
-		"walls_color_uniform_blue": true,
+		"wall_line_render": false,
+		"walls_color_uniform_blue": false,
+		"room_fill_uniform": true,
+		"icons_by_room_type": true,
 	}
+
+
+func _display_mode_name() -> String:
+	match display_mode:
+		DisplayMode.NON_COMBAT: return "non_combat"
+		DisplayMode.NEVER: return "never"
+		_: return "always"
 
 
 # ---------------------------------------------------------------------------
@@ -230,184 +319,512 @@ func get_snapshot() -> Dictionary:
 # ---------------------------------------------------------------------------
 
 func _draw() -> void:
-	var full_rect := Rect2(Vector2.ZERO, size)
 	if _full_map_mode:
-		draw_rect(full_rect, FRAME_BG, true)
-		draw_rect(full_rect.grow(-3.0), FRAME_COLOR, false, 2.0)
-		draw_rect(full_rect.grow(-10.0), Color(0.12, 0.46, 0.62, 0.6), false, 1.0)
+		_draw_full_map_backdrop()
+	elif not _corner_map_visible():
+		return
 	else:
-		_draw_radar_frame(full_rect)
-	_draw_header()
+		# 角落态只画一层极淡背衬，让贴边的小地图不至于糊进场景
+		draw_rect(Rect2(Vector2(2.0, 2.0), size - Vector2(4.0, 4.0)), FRAME_BG, true)
+
 	if _records.is_empty():
 		return
-	var bounds := _bounds_for_current_floor()
-	var map_rect := _content_map_rect()
-	if _has_realtime_player_state and not _full_map_mode:
-		_draw_player_pulse_ring(map_rect)
-	_draw_walls_and_doors(bounds, map_rect)
-	_draw_enemies(bounds, map_rect)
-	_draw_player(bounds, map_rect)
-	if _has_multiple_floors:
+
+	_draw_corridors()
+	_draw_rooms()
+	_draw_room_icons()
+	_draw_unexplored_marks()
+	_draw_enemies()
+	_draw_player()
+
+	if _full_map_mode:
+		_draw_full_map_labels()
+	elif _has_multiple_floors:
 		_draw_floor_stack()
 
 
+func _corner_map_visible() -> bool:
+	if display_mode == DisplayMode.NEVER:
+		return false
+	if display_mode == DisplayMode.NON_COMBAT and _in_combat:
+		return false
+	return true
+
+
+func _draw_full_map_backdrop() -> void:
+	var full_rect := Rect2(Vector2.ZERO, size)
+	draw_rect(full_rect, FRAME_BG, true)
+	draw_rect(full_rect.grow(-3.0), FRAME_COLOR, false, 2.0)
+	draw_rect(full_rect.grow(-10.0), Color(0.12, 0.46, 0.62, 0.6), false, 1.0)
+	draw_string(
+		ThemeDB.fallback_font,
+		Vector2(0.0, 26.0),
+		"已探索楼层图 / %s" % _floor_label(),
+		HORIZONTAL_ALIGNMENT_CENTER,
+		size.x,
+		14,
+		Color(0.48, 0.94, 1.0, 0.84)
+	)
+
+
 # ---------------------------------------------------------------------------
-# 墙体 + 走廊 + 门 全部走蓝色线段
+# 走廊：房门中心 ↔ 邻房门中心，一根细线
 # ---------------------------------------------------------------------------
 
-func _draw_walls_and_doors(bounds: Rect2, map_rect: Rect2) -> void:
-	# 先画当前层所有已探索房间的 4 条墙（蓝色线段，门洞处中断）。
+func _draw_corridors() -> void:
 	for record in _records:
 		var room_id := str(record.get("id", ""))
 		if not _revealed.has(room_id):
 			continue
-		var world_position := record.get("position", Vector3.ZERO) as Vector3
-		if not _is_current_floor_y(world_position.y):
+		var room_pos := record.get("position", Vector3.ZERO) as Vector3
+		if not _is_current_floor_y(room_pos.y):
 			continue
-		var dimensions := _dimensions_by_id.get(room_id, Vector2(20.0, 18.0)) as Vector2
-		var rect_world := _room_world_rect(world_position, dimensions)
-		_draw_room_walls(room_id, rect_world, bounds, map_rect)
-		var visible_type := get_visible_room_type(room_id)
-		if _full_map_mode and not visible_type.is_empty():
-			var center := _map_position(world_position, bounds, map_rect)
-			draw_string(ThemeDB.fallback_font, center, visible_type, HORIZONTAL_ALIGNMENT_CENTER, -1, 12, WALL_COLOR)
+		var rect_world := _room_world_rect(room_pos, _dimensions_by_id.get(room_id, Vector2(20.0, 18.0)))
+		var door_targets: Dictionary = record.get("door_targets", {})
+		# 避免重复画（只画 id 字典序小的 → 大的）。
+		for side in door_targets.keys():
+			var neighbor_id := str(door_targets[side])
+			if neighbor_id.is_empty() or room_id >= neighbor_id:
+				continue
+			if not _revealed.has(neighbor_id):
+				continue
+			var neighbor_pos := _position_by_id.get(neighbor_id, Vector3.ZERO) as Vector3
+			if not _is_current_floor_y(neighbor_pos.y):
+				continue
+			var opened := _is_door_opened(room_id, str(side))
+			var other_side := _opposite_side(str(side))
+			if opened and not _is_door_opened(neighbor_id, other_side):
+				opened = false
+			var neighbor_rect := _room_world_rect(
+				neighbor_pos, _dimensions_by_id.get(neighbor_id, Vector2(20.0, 18.0))
+			)
+			var p0 := _to_map(_door_world_point(room_pos, rect_world, str(side)))
+			var p1 := _to_map(_door_world_point(neighbor_pos, neighbor_rect, other_side))
+			if not _segment_hits_map(p0) and not _segment_hits_map(p1):
+				continue
+			draw_line(p0, p1, LOCKED_DOOR_COLOR if not opened else CORRIDOR_COLOR,
+				CORRIDOR_PX, true)
 
-	# 再画走廊：把"两端房间在门洞位置的边缘点"用蓝色线段连起来。
-	_drawn_corridors(bounds, map_rect)
+
+# ---------------------------------------------------------------------------
+# 房间：填充 + 一周描边（门洞处断开）+ 门两侧短角标
+# ---------------------------------------------------------------------------
+
+func _draw_rooms() -> void:
+	for record in _records:
+		var room_id := str(record.get("id", ""))
+		if not _revealed.has(room_id):
+			continue
+		var room_pos := record.get("position", Vector3.ZERO) as Vector3
+		if not _is_current_floor_y(room_pos.y):
+			continue
+		_draw_room_tile(record, room_id)
 
 
-# 房间的 4 面墙：每面墙在"门洞"位置拆成两段（门洞宽度 DOOR_GAP_HALF_M * 2）。
-func _draw_room_walls(
-	room_id: String,
-	rect_world: Rect2,
-	bounds: Rect2,
-	map_rect: Rect2
-) -> void:
-	var doors: Array = _record_by_id.get(room_id, {}).get("doors", [])
+func _draw_room_tile(record: Dictionary, room_id: String) -> void:
+	var rect := _room_screen_rect_by_record(record)
+	if rect.size.x < 2.0 or rect.size.y < 2.0:
+		return
+	var is_current := room_id == _current_room_id
+	var edge_color := ROOM_EDGE_CURRENT if is_current else ROOM_EDGE
+
+	draw_rect(rect, ROOM_FILL, true)
+
+	var doors: Array = record.get("doors", [])
 	var door_set := {}
 	for d in doors:
 		door_set[str(d)] = true
 
-	var edges := [
-		{"side": "north", "p0": Vector2(rect_world.position.x, rect_world.position.y),
-			"p1": Vector2(rect_world.end.x, rect_world.position.y),
-			"normal": Vector2(0.0, -1.0)},
-		{"side": "south", "p0": Vector2(rect_world.position.x, rect_world.end.y),
-			"p1": Vector2(rect_world.end.x, rect_world.end.y),
-			"normal": Vector2(0.0, 1.0)},
-		{"side": "west", "p0": Vector2(rect_world.position.x, rect_world.position.y),
-			"p1": Vector2(rect_world.position.x, rect_world.end.y),
-			"normal": Vector2(-1.0, 0.0)},
-		{"side": "east", "p0": Vector2(rect_world.end.x, rect_world.position.y),
-			"p1": Vector2(rect_world.end.x, rect_world.end.y),
-			"normal": Vector2(1.0, 0.0)},
-	]
-	var is_current := room_id == _current_room_id
+	# 北 / 南（沿 x 轴的两条边）
+	for side in ["north", "south"]:
+		var y := rect.position.y if side == "north" else rect.end.y - WALL_PX
+		if not door_set.has(side):
+			draw_rect(Rect2(rect.position.x, y, rect.size.x, WALL_PX), edge_color, true)
+			continue
+		var mid_x := rect.position.x + rect.size.x * 0.5
+		var gap := minf(DOOR_GAP_PX, rect.size.x * 0.6)
+		var left_end := mid_x - gap * 0.5
+		var right_start := mid_x + gap * 0.5
+		if left_end - rect.position.x > 0.0:
+			draw_rect(Rect2(rect.position.x, y, left_end - rect.position.x, WALL_PX), edge_color, true)
+		if rect.end.x - right_start > 0.0:
+			draw_rect(Rect2(right_start, y, rect.end.x - right_start, WALL_PX), edge_color, true)
+		# 门角标：缺口两侧各一条向内短线
+		var tick_y := y + WALL_PX if side == "north" else y - DOOR_TICK_PX
+		draw_rect(Rect2(left_end, tick_y, WALL_PX, DOOR_TICK_PX), edge_color, true)
+		draw_rect(Rect2(right_start - WALL_PX, tick_y, WALL_PX, DOOR_TICK_PX), edge_color, true)
 
-	for edge in edges:
-		var side := str(edge["side"])
-		var p0: Vector2 = edge["p0"]
-		var p1: Vector2 = edge["p1"]
-		var has_door := door_set.has(side)
-		if has_door:
-			var opened := _is_door_opened(room_id, side)
-			_draw_wall_with_door(
-				p0, p1, opened, bounds, map_rect, side, is_current
-			)
-		else:
-			# 实墙：一条完整的蓝色线段 + 外发光。
-			_clip_and_draw_line(p0, p1, bounds, map_rect,
-				CURRENT_ROOM_EDGE if is_current else WALL_COLOR,
-				WALL_WIDTH,
-				CURRENT_ROOM_GLOW if is_current else WALL_GLOW_COLOR,
-				WALL_GLOW_WIDTH)
+	# 西 / 东（沿 y 轴的两条边）
+	for side in ["west", "east"]:
+		var x := rect.position.x if side == "west" else rect.end.x - WALL_PX
+		if not door_set.has(side):
+			draw_rect(Rect2(x, rect.position.y, WALL_PX, rect.size.y), edge_color, true)
+			continue
+		var mid_y := rect.position.y + rect.size.y * 0.5
+		var gap := minf(DOOR_GAP_PX, rect.size.y * 0.6)
+		var top_end := mid_y - gap * 0.5
+		var bottom_start := mid_y + gap * 0.5
+		if top_end - rect.position.y > 0.0:
+			draw_rect(Rect2(x, rect.position.y, WALL_PX, top_end - rect.position.y), edge_color, true)
+		if rect.end.y - bottom_start > 0.0:
+			draw_rect(Rect2(x, bottom_start, WALL_PX, rect.end.y - bottom_start), edge_color, true)
+		var tick_x := x + WALL_PX if side == "west" else x - DOOR_TICK_PX
+		draw_rect(Rect2(tick_x, top_end, DOOR_TICK_PX, WALL_PX), edge_color, true)
+		draw_rect(Rect2(tick_x, bottom_start - WALL_PX, DOOR_TICK_PX, WALL_PX), edge_color, true)
 
-
-# 墙带门：拆成"门左墙 + 门右墙 + （可选）门框竖线 + 走廊连过去的蓝线段"。
-func _draw_wall_with_door(
-	p0: Vector2, p1: Vector2,
-	opened: bool,
-	bounds: Rect2, map_rect: Rect2,
-	side: String,
-	is_current: bool
-) -> void:
-	var edge_len := p0.distance_to(p1)
-	if edge_len <= 0.0001:
-		return
-	var dir := (p1 - p0) / edge_len
-	var mid := (p0 + p1) * 0.5
-	var half_gap := DOOR_GAP_HALF_M
-	var left_end := mid - dir * half_gap
-	var right_start := mid + dir * half_gap
-
-	var wall_color := CURRENT_ROOM_EDGE if is_current else WALL_COLOR
-	var wall_glow := CURRENT_ROOM_GLOW if is_current else WALL_GLOW_COLOR
-	var wall_width := WALL_WIDTH
-	var wall_glow_width := WALL_GLOW_WIDTH
-
-	# 门左半墙 + 门右半墙。
-	_clip_and_draw_line(p0, left_end, bounds, map_rect, wall_color, wall_width, wall_glow, wall_glow_width)
-	_clip_and_draw_line(right_start, p1, bounds, map_rect, wall_color, wall_width, wall_glow, wall_glow_width)
-
-	if not opened:
-		# 关门：在门洞两侧画短竖线作为门框（蓝色）。
-		var perp := Vector2(-dir.y, dir.x) * (DOOR_JAMB_LENGTH_M * 0.5)
-		_clip_and_draw_line(left_end - perp, left_end + perp, bounds, map_rect,
-			DOOR_JAMB_COLOR, 1.4, DOOR_JAMB_COLOR, 2.6)
-		_clip_and_draw_line(right_start - perp, right_start + perp, bounds, map_rect,
-			DOOR_JAMB_COLOR, 1.4, DOOR_JAMB_COLOR, 2.6)
-	else:
-		# 开门：门洞位置向外延伸一段蓝线作为"通过门洞的视线"。
-		var extend := dir * half_gap * 0.4
-		_clip_and_draw_line(left_end, right_start, bounds, map_rect,
-			WALL_COLOR, wall_width, WALL_GLOW_COLOR, wall_glow_width)
+	# 已清理：绿色弹夹标记（原作"已清 + 可传送"的那个图形）
+	if _cleared.has(room_id):
+		var mark := Rect2(
+			rect.position.x + rect.size.x * 0.5 - 1.5,
+			rect.end.y - DOOR_TICK_PX - 7.0,
+			3.0, 6.0
+		)
+		if mark.position.y > rect.position.y + 3.0:
+			draw_rect(mark, CLEARED_MARK, true)
 
 
-# 走廊：对每个已探索房间的每个朝向门，若通向另一已探索房间，
-# 用蓝色线段把"本房间门洞中心点 → 邻房间门洞中心点"连起来。
-# 门关时不画走廊线（视觉上"墙堵住了"）。
-func _drawn_corridors(bounds: Rect2, map_rect: Rect2) -> void:
+# ---------------------------------------------------------------------------
+# 房型图标 —— 信息层照原作：底下一律同色，房型靠图标区分
+# ---------------------------------------------------------------------------
+
+func _draw_room_icons() -> void:
 	for record in _records:
 		var room_id := str(record.get("id", ""))
 		if not _revealed.has(room_id):
 			continue
-		var record_pos := record.get("position", Vector3.ZERO) as Vector3
-		if not _is_current_floor_y(record_pos.y):
+		var room_pos := record.get("position", Vector3.ZERO) as Vector3
+		if not _is_current_floor_y(room_pos.y):
 			continue
-		var door_targets_raw: Dictionary = record.get("door_targets", {})
-		var dimensions := _dimensions_by_id.get(room_id, Vector2(20.0, 18.0)) as Vector2
-		var rect_world := _room_world_rect(record_pos, dimensions)
-		# 避免重复画（只画 id 字典序小的 → 大的）。
-		for side in door_targets_raw.keys():
-			var neighbor_id := str(door_targets_raw[side])
-			if room_id >= neighbor_id:
+		# —— 房型 → 图标 ——
+		var kind := _icon_kind_for_type(get_visible_room_type(room_id))
+		if kind.is_empty():
+			continue
+		var rect := _room_screen_rect_by_record(record)
+		if rect.size.x < ICON_PX + 4.0 or rect.size.y < ICON_PX + 4.0:
+			continue
+		var center := rect.get_center()
+		# 有清理标记时把图标往上抬，别和绿色弹夹叠在一起
+		if _cleared.has(room_id):
+			center.y -= 3.0
+		_draw_icon(kind, center)
+
+
+func _icon_kind_for_type(type_id: String) -> String:
+	match type_id:
+		"BOSS": return "boss"
+		"ELITE": return "elite"
+		"STORAGE", "SCAVENGE", "TREASURE": return "chest"
+		"SHOP", "MERCHANT": return "shop"
+		"EVENT": return "event"
+		"UPGRADE": return "upgrade"
+		"TRAP": return "trap"
+		"EXTRACTION": return "extract"
+		"STAIRS_UP", "STAIRS_DOWN", "STAIR_LOBBY", "BASEMENT", "ELEVATOR": return "stairs"
+		"SAFE", "START", "ENTRANCE": return "start"
+		_: return ""
+
+
+func _draw_icon(kind: String, c: Vector2) -> void:
+	var h := ICON_PX * 0.5
+	match kind:
+		"chest":
+			draw_rect(Rect2(c.x - h, c.y - h * 0.8, ICON_PX, ICON_PX * 0.8), ICON_CHEST, true)
+			draw_rect(Rect2(c.x - h, c.y - h * 0.2, ICON_PX, ICON_PX * 0.6), ICON_CHEST.darkened(0.35), true)
+			draw_rect(Rect2(c.x - 1.0, c.y - h * 0.5, 2.0, ICON_PX * 0.7), ICON_CHEST.lightened(0.4), true)
+		"boss":
+			draw_circle(c, h, ICON_BOSS)
+			draw_circle(c + Vector2(-2.2, -1.0), 1.5, Color(0.1, 0.06, 0.02))
+			draw_circle(c + Vector2(2.2, -1.0), 1.5, Color(0.1, 0.06, 0.02))
+			draw_rect(Rect2(c.x - 1.0, c.y + 1.5, 2.0, 2.5), Color(0.1, 0.06, 0.02), true)
+		"elite":
+			draw_colored_polygon(PackedVector2Array([
+				c + Vector2(0.0, -h), c + Vector2(h, 0.0),
+				c + Vector2(0.0, h), c + Vector2(-h, 0.0),
+			]), ICON_DANGER)
+		"shop":
+			# 原作的商店图标是"光头商人的脸"。我们画一个柜台 + 招牌的形状，
+			# 但避免"圆 + 竖线"那种会被读成字母 i 的组合。
+			draw_rect(Rect2(c.x - h, c.y + h * 0.15, ICON_PX, ICON_PX * 0.35), ICON_SHOP.darkened(0.35), true)
+			draw_rect(Rect2(c.x - h * 0.75, c.y - h * 0.85, ICON_PX * 0.75, ICON_PX * 0.55), ICON_SHOP, true)
+			draw_rect(Rect2(c.x - h * 0.35, c.y - h * 0.65, 3.0, 3.0), ICON_SHOP.darkened(0.55), true)
+		"event":
+			draw_colored_polygon(PackedVector2Array([
+				c + Vector2(0.0, -h), c + Vector2(h, h * 0.6), c + Vector2(-h, h * 0.6),
+			]), ICON_EVENT)
+			draw_rect(Rect2(c.x - 1.0, c.y + 1.0, 2.0, h * 0.5), ICON_EVENT.lightened(0.3), true)
+		"upgrade":
+			draw_colored_polygon(PackedVector2Array([
+				c + Vector2(0.0, -h), c + Vector2(h, 0.0), c + Vector2(0.0, h),
+			]), ICON_KEY)
+		"trap":
+			draw_colored_polygon(PackedVector2Array([
+				c + Vector2(-h, h), c + Vector2(h, h), c + Vector2(0.0, -h),
+			]), ICON_DANGER)
+		"extract":
+			draw_rect(Rect2(c.x - h * 0.7, c.y - h, ICON_PX * 0.7, ICON_PX), ICON_EXTRACT, true)
+			draw_rect(Rect2(c.x + h * 0.1, c.y - h * 0.2, 2.0, 2.0), Color(0.04, 0.14, 0.10), true)
+		"stairs":
+			draw_rect(Rect2(c.x - h, c.y + h * 0.2, ICON_PX, 2.0), ICON_STAIRS, true)
+			draw_rect(Rect2(c.x - h * 0.4, c.y - h * 0.2, ICON_PX * 0.8, 2.0), ICON_STAIRS, true)
+			draw_rect(Rect2(c.x - 1.0, c.y - h, 2.0, ICON_PX * 0.7), ICON_STAIRS, true)
+		"start":
+			draw_arc(c, h * 0.9, 0.0, TAU, 16, Color(0.56, 0.85, 1.0), 2.0, true)
+			draw_circle(c, h * 0.3, Color(0.56, 0.85, 1.0))
+
+
+# ---------------------------------------------------------------------------
+# 未探索标记：已侦测但没进过的房间 —— 只给问号，不给轮廓
+# ---------------------------------------------------------------------------
+
+func _draw_unexplored_marks() -> void:
+	for record in _records:
+		var room_id := str(record.get("id", ""))
+		if _revealed.has(room_id):
+			continue
+		var room_pos := record.get("position", Vector3.ZERO) as Vector3
+		if not _is_current_floor_y(room_pos.y):
+			continue
+		# 只有"贴着已探索房间"的未知房才画问号 —— 远处的未知不提前暴露
+		var exposed := false
+		var door_targets: Dictionary = record.get("door_targets", {})
+		for side in door_targets.keys():
+			if _revealed.has(str(door_targets[side])):
+				exposed = true
+				break
+		if not exposed:
+			for other in _records:
+				var other_id := str(other.get("id", ""))
+				if not _revealed.has(other_id):
+					continue
+				var other_targets: Dictionary = other.get("door_targets", {})
+				for side in other_targets.keys():
+					if str(other_targets[side]) == room_id:
+						exposed = true
+						break
+				if exposed:
+					break
+		if not exposed:
+			continue
+		var rect := _room_screen_rect_by_record(record)
+		if not _rect_hits_map(rect):
+			continue
+		if _hidden_room_types.has(room_id):
+			continue
+		_draw_question_mark(rect.get_center())
+
+
+func _draw_question_mark(c: Vector2) -> void:
+	# 用 5×7 像素点阵画问号 —— 直接 draw_rect 拼几何形状在 3px 大小下会糊成散点，
+	# 原作就是一张 5~7px 的像素图标，照抄点阵反而更清楚。
+	const PATTERN := [
+		"01110",
+		"10001",
+		"00001",
+		"00110",
+		"00100",
+		"00000",
+		"00100",
+	]
+	var px := 1.4
+	var w := 5 * px
+	var h := 7 * px
+	var origin := c - Vector2(w * 0.5, h * 0.5)
+	for row in range(PATTERN.size()):
+		var line: String = PATTERN[row]
+		for col in range(line.length()):
+			if line[col] != "1":
 				continue
-			if not _revealed.has(neighbor_id):
-				continue
-			if not _is_current_floor_y(
-				(_position_by_id.get(neighbor_id, Vector3.ZERO) as Vector3).y
-			):
-				continue
-			# 门必须是双向开着的至少一侧（或两侧都已 revealed）。
-			if not _is_door_opened(room_id, side):
-				continue
-			var other_side := _opposite_side(side)
-			if not _is_door_opened(neighbor_id, other_side):
-				continue
-			var my_door := _door_world_point(record_pos, rect_world, side)
-			var neighbor_record: Dictionary = _record_by_id.get(neighbor_id, {})
-			var neighbor_pos := neighbor_record.get("position", Vector3.ZERO) as Vector3
-			var neighbor_dims := _dimensions_by_id.get(neighbor_id, Vector2(20.0, 18.0)) as Vector2
-			var neighbor_rect := _room_world_rect(neighbor_pos, neighbor_dims)
-			var neighbor_door := _door_world_point(neighbor_pos, neighbor_rect, other_side)
-			_clip_and_draw_line(
-				my_door, neighbor_door, bounds, map_rect,
-				WALL_COLOR, WALL_WIDTH, WALL_GLOW_COLOR, WALL_GLOW_WIDTH
-			)
+			draw_rect(Rect2(origin + Vector2(col * px, row * px), Vector2(px, px)), UNEXPLORED_COLOR, true)
+
+
+# ---------------------------------------------------------------------------
+# 玩家 / 敌人
+# ---------------------------------------------------------------------------
+
+func _draw_player() -> void:
+	if not _has_realtime_player_state:
+		return
+	var center := _to_map(Vector2(_player_world_position.x, _player_world_position.z))
+	if not _point_hits_map(center):
+		return
+	var heading := Vector2(_player_aim_direction.x, _player_aim_direction.z)
+	if heading.length_squared() <= 0.0001:
+		heading = Vector2.UP
+	heading = heading.normalized()
+	var perpendicular := Vector2(-heading.y, heading.x)
+	var points := PackedVector2Array([
+		center + heading * 7.0,
+		center - heading * 4.0 + perpendicular * 3.4,
+		center - heading * 4.0 - perpendicular * 3.4,
+	])
+	draw_colored_polygon(points, PLAYER_FILL)
+	draw_polyline(
+		PackedVector2Array([points[0], points[1], points[2], points[0]]),
+		PLAYER_EDGE, 1.4
+	)
+
+
+func _draw_enemies() -> void:
+	if _enemy_world_positions.is_empty():
+		return
+	for world_position in _enemy_world_positions:
+		if not _is_current_floor_y(world_position.y):
+			continue
+		var center := _to_map(Vector2(world_position.x, world_position.z))
+		if not _point_hits_map(center):
+			continue
+		draw_circle(center, 4.2, ENEMY_HALO)
+		draw_circle(center, 2.2, ENEMY_COLOR)
+
+
+func _draw_floor_stack() -> void:
+	var x := size.x - 8.0
+	var top := CORNER_MARGIN.y + 6.0
+	var bottom := size.y - 12.0
+	if bottom <= top:
+		return
+	draw_line(Vector2(x, top), Vector2(x, bottom), Color(0.20, 0.72, 0.82, 0.34), 1.0)
+	for index in range(_floor_heights.size()):
+		var ratio := (
+			0.5
+			if _floor_heights.size() <= 1
+			else float(index) / float(_floor_heights.size() - 1)
+		)
+		var point := Vector2(x, lerpf(top, bottom, ratio))
+		var active := is_equal_approx(_floor_heights[index], snappedf(_current_floor_y, 0.01))
+		draw_circle(point, 3.0 if active else 1.8,
+			Color(1.0, 0.78, 0.30) if active else Color(0.30, 0.72, 0.88, 0.55))
+
+
+func _draw_full_map_labels() -> void:
+	if not _full_map_mode:
+		return
+	var font := ThemeDB.fallback_font
+	for record in _records:
+		var room_id := str(record.get("id", ""))
+		if not _revealed.has(room_id):
+			continue
+		var room_pos := record.get("position", Vector3.ZERO) as Vector3
+		if not _is_current_floor_y(room_pos.y):
+			continue
+		var visible_type := get_visible_room_type(room_id)
+		if visible_type.is_empty():
+			continue
+		var rect := _room_screen_rect_by_record(record)
+		draw_string(font, rect.get_center() + Vector2(-40.0, rect.size.y * 0.5 + 14.0),
+			visible_type, HORIZONTAL_ALIGNMENT_CENTER, 80.0, 11, ROOM_EDGE)
+
+
+# ---------------------------------------------------------------------------
+# 坐标 / 几何 —— 固定缩放，右上锚定
+# ---------------------------------------------------------------------------
+
+func _room_world_rect(room_pos: Vector3, dimensions: Vector2) -> Rect2:
+	var half := dimensions * 0.5
+	return Rect2(Vector2(room_pos.x - half.x, room_pos.z - half.y), dimensions)
+
+
+func _room_dimensions(record: Dictionary) -> Vector2:
+	var custom := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+	if custom.x > 0.0 and custom.y > 0.0:
+		return custom
+	return DungeonRoom3D.ROOM_DIMENSIONS.get(
+		str(record.get("size", "medium")), DungeonRoom3D.ROOM_DIMENSIONS["medium"]
+	) as Vector2
+
+
+func _floor_bounds_world() -> Rect2:
+	# 当层**全部**房间（含未探索）的真实 AABB。
+	# 用全量而非"已探索"是刻意的：这样探索过程中地图不移动、不重新缩放，
+	# 只有房间逐间点亮 —— 与原作"固定版图"的观感一致。
+	var min_pos := Vector2(INF, INF)
+	var max_pos := Vector2(-INF, -INF)
+	var any := false
+	for record in _records:
+		var position := record.get("position", Vector3.ZERO) as Vector3
+		if not _is_current_floor_y(position.y):
+			continue
+		any = true
+		var rect := _room_world_rect(position, _room_dimensions(record))
+		min_pos.x = minf(min_pos.x, rect.position.x)
+		min_pos.y = minf(min_pos.y, rect.position.y)
+		max_pos.x = maxf(max_pos.x, rect.end.x)
+		max_pos.y = maxf(max_pos.y, rect.end.y)
+	if not any:
+		return Rect2(Vector2(-1.0, -1.0), Vector2(2.0, 2.0))
+	return Rect2(min_pos, max_pos - min_pos)
+
+
+func _content_map_rect() -> Rect2:
+	if _full_map_mode:
+		return Rect2(
+			Vector2(56.0, 64.0),
+			Vector2(maxf(1.0, size.x - 112.0), maxf(1.0, size.y - 116.0))
+		)
+	# 角落态：内容区就是控件本身（背衬以内）
+	return Rect2(CORNER_MARGIN, Vector2(
+		maxf(1.0, size.x - CORNER_MARGIN.x - 6.0),
+		maxf(1.0, size.y - CORNER_MARGIN.y - 6.0)
+	))
+
+
+func _map_scale() -> float:
+	var bounds := _floor_bounds_world()
+	var content := _content_map_rect()
+	if _full_map_mode:
+		var sx := content.size.x / maxf(0.001, bounds.size.x)
+		var sy := content.size.y / maxf(0.001, bounds.size.y)
+		return maxf(0.4, minf(sx, sy) * 0.94)
+	# 角落态：先取设计密度，再按**面板实际可用尺寸**夹一次。
+	# 不能写死像素上限 —— 面板经 HUD_UI_SCALE(0.80) 之后只有 366×277，
+	# 写死 430 会让满层直接溢出到面板外（2026-10-28 实测发现并修掉）。
+	var scale_px := ROOM_PX_PER_M
+	if bounds.size.x > 0.001:
+		scale_px = minf(scale_px, content.size.x / bounds.size.x)
+	if bounds.size.y > 0.001:
+		scale_px = minf(scale_px, content.size.y / bounds.size.y)
+	return maxf(0.6, scale_px)
+
+
+func _to_map(world_xz: Vector2) -> Vector2:
+	var bounds := _floor_bounds_world()
+	var s := _map_scale()
+	if _full_map_mode:
+		var content := _content_map_rect()
+		var used := bounds.size * s
+		var origin := content.position + (content.size - used) * 0.5
+		return origin + (world_xz - bounds.position) * s
+	# 右上锚定：地图块的右上角贴住控件右上角，向左下生长 —— 与原作一致。
+	# 贴顶是对的：原作小地图就是"贴着屏幕上沿的一团"，纵向居中反而会在上下
+	# 各留一条黑带（2026-10-28 出图对比过两种，贴顶更像原作）。
+	var origin := Vector2(
+		size.x - CORNER_MARGIN.x - bounds.size.x * s,
+		CORNER_MARGIN.y
+	)
+	return origin + (world_xz - bounds.position) * s
+
+
+func _room_screen_rect_by_record(record: Dictionary) -> Rect2:
+	var position := record.get("position", Vector3.ZERO) as Vector3
+	var rect_world := _room_world_rect(position, _room_dimensions(record))
+	var top_left := _to_map(rect_world.position)
+	var s := _map_scale()
+	return Rect2(top_left, rect_world.size * s)
+
+
+func _point_hits_map(point: Vector2) -> bool:
+	return _content_map_rect().grow(ICON_PX).has_point(point)
+
+
+func _rect_hits_map(rect: Rect2) -> bool:
+	return _content_map_rect().intersects(rect)
+
+
+func _segment_hits_map(point: Vector2) -> bool:
+	return _content_map_rect().grow(6.0).has_point(point)
 
 
 func _door_world_point(room_pos: Vector3, rect_world: Rect2, side: String) -> Vector2:
-	# 返回该朝向门洞中心点的世界 (x, z) 投影。
 	var mid := Vector2(room_pos.x, room_pos.z)
 	match side:
 		"north":
@@ -432,9 +849,6 @@ func _opposite_side(side: String) -> String:
 
 
 func _is_door_opened(room_id: String, side: String) -> bool:
-	# 1) record.doors 里有这个朝向但 door_targets 没值 → 视作"已开/可通"
-	# 2) door_targets 有值 → 查 _edges[a|b]
-	# 3) record.doors 里没有 → 返回 false（不该出现）
 	var record: Dictionary = _record_by_id.get(room_id, {})
 	var doors: Array = record.get("doors", [])
 	var has_side := false
@@ -458,301 +872,18 @@ func _is_door_opened(room_id: String, side: String) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# 玩家 / 敌人 / 楼层堆叠
-# ---------------------------------------------------------------------------
-
-func _draw_player_pulse_ring(map_rect: Rect2) -> void:
-	if not _has_realtime_player_state:
-		return
-	var center := map_rect.get_center()
-	var pulse_radius := 6.0 + _pulse_phase * 28.0
-	draw_arc(
-		center,
-		pulse_radius,
-		0.0,
-		TAU,
-		40,
-		Color(0.28, 0.94, 1.0, (1.0 - _pulse_phase) * 0.22),
-		1.0
-	)
-
-
-func _draw_enemies(bounds: Rect2, map_rect: Rect2) -> void:
-	for world_position in _enemy_world_positions:
-		if not _is_current_floor_y(world_position.y):
-			continue
-		var center := _map_position(world_position, bounds, map_rect)
-		if not _full_map_mode and not _point_inside_radar(center, 5.0):
-			continue
-		draw_circle(center, 5.2, ENEMY_HALO)
-		draw_circle(center, 2.8, ENEMY_COLOR)
-		draw_arc(center, 4.6, 0.0, TAU, 18, ENEMY_HALO, 1.0)
-
-
-func _draw_player(bounds: Rect2, map_rect: Rect2) -> void:
-	if not _has_realtime_player_state:
-		return
-	var center := _map_position(_player_world_position, bounds, map_rect)
-	# 雷达模式下永远居中，全图模式按真实位置落点。
-	if not _full_map_mode:
-		center = map_rect.get_center()
-	var heading := Vector2(
-		_player_aim_direction.x,
-		_player_aim_direction.z
-	).normalized()
-	if heading.length_squared() <= 0.0001:
-		heading = Vector2.UP
-	var perpendicular := Vector2(-heading.y, heading.x)
-	var points := PackedVector2Array([
-		center + heading * 9.0,
-		center - heading * 5.5 + perpendicular * 4.5,
-		center - heading * 5.5 - perpendicular * 4.5,
-	])
-	draw_colored_polygon(points, PLAYER_FILL)
-	draw_polyline(
-		PackedVector2Array([points[0], points[1], points[2], points[0]]),
-		PLAYER_EDGE,
-		1.3
-	)
-
-
-func _draw_floor_stack() -> void:
-	var x := size.x - 13.0
-	var top := HEADER_HEIGHT + 14.0
-	var bottom := size.y - 18.0
-	draw_line(
-		Vector2(x, top),
-		Vector2(x, bottom),
-		Color(0.20, 0.72, 0.82, 0.34),
-		1.0
-	)
-	for index in range(_floor_heights.size()):
-		var ratio := (
-			0.5
-			if _floor_heights.size() <= 1
-			else float(index) / float(_floor_heights.size() - 1)
-		)
-		var point := Vector2(x, lerpf(top, bottom, ratio))
-		var active := is_equal_approx(_floor_heights[index], snappedf(_current_floor_y, 0.01))
-		draw_circle(
-			point,
-			4.0 if active else 2.2,
-			FLOOR_DOT_ACTIVE if active else FLOOR_DOT_INACTIVE
-		)
-
-
-# ---------------------------------------------------------------------------
-# 坐标 / 几何
-# ---------------------------------------------------------------------------
-
-func _room_world_rect(room_pos: Vector3, dimensions: Vector2) -> Rect2:
-	# 房间 world 坐标 (x,z) 的真实矩形（无内缩，跟战斗盒一致）。
-	var half := dimensions * 0.5
-	return Rect2(
-		Vector2(room_pos.x - half.x, room_pos.z - half.y),
-		dimensions
-	)
-
-
-func _room_dimensions(record: Dictionary) -> Vector2:
-	var custom := record.get("custom_dimensions", Vector2.ZERO) as Vector2
-	if custom.x > 0.0 and custom.y > 0.0:
-		return custom
-	return DungeonRoom3D.ROOM_DIMENSIONS.get(
-		str(record.get("size", "medium")), DungeonRoom3D.ROOM_DIMENSIONS["medium"]
-	) as Vector2
-
-
-func _bounds_for_current_floor() -> Rect2:
-	# 当层所有房间的真实矩形 AABB，作为整张地图的画布。
-	var min_pos := Vector2(INF, INF)
-	var max_pos := Vector2(-INF, -INF)
-	var any := false
-	for record in _records:
-		var position := record.get("position", Vector3.ZERO) as Vector3
-		if not _is_current_floor_y(position.y):
-			continue
-		any = true
-		var dimensions := _room_dimensions(record)
-		var rect := _room_world_rect(position, dimensions)
-		min_pos.x = minf(min_pos.x, rect.position.x)
-		min_pos.y = minf(min_pos.y, rect.position.y)
-		max_pos.x = maxf(max_pos.x, rect.end.x)
-		max_pos.y = maxf(max_pos.y, rect.end.y)
-	if not any:
-		return Rect2(Vector2(-1.0, -1.0), Vector2(2.0, 2.0))
-	return Rect2(min_pos, max_pos - min_pos)
-
-
-func _map_position(
-	world_position: Vector3,
-	bounds: Rect2,
-	map_rect: Rect2
-) -> Vector2:
-	# 雷达模式：以玩家居中，地图按 scale 缩放后画布跟着玩家走。
-	if _has_realtime_player_state and not _full_map_mode:
-		var scale := _map_scale(bounds, map_rect)
-		var projected := Vector2(world_position.x, world_position.z)
-		var player_projected := Vector2(_player_world_position.x, _player_world_position.z)
-		return map_rect.get_center() + (projected - player_projected) * scale
-	# 全图模式：按 bounds 归一化铺满 map_rect。
-	var scale := _map_scale(bounds, map_rect)
-	var used_size := bounds.size * scale
-	var origin := map_rect.get_center() - used_size * 0.5
-	return origin + (Vector2(world_position.x, world_position.z) - bounds.position) * scale
-
-
-func _map_scale(bounds: Rect2, map_rect: Rect2) -> float:
-	# 雷达模式：固定把直径 = 长边 1.5 倍的世界范围塞进圆（保证整层至少能完整显示一次）。
-	if _has_realtime_player_state and not _full_map_mode:
-		var longest := maxf(bounds.size.x, bounds.size.y)
-		if longest < 1.0:
-			longest = 1.0
-		# 1.5 = 圆里装的是楼层长边的 1.5 倍范围；改为 1.0 让画面放大、可见范围缩小。
-		return minf(map_rect.size.x, map_rect.size.y) / (longest * 1.0)
-	# 全图模式：bounds 完整塞进 map_rect（留 6% 边距）。
-	var inset := 0.94
-	var sx := map_rect.size.x / maxf(1.0, bounds.size.x) * inset
-	var sy := map_rect.size.y / maxf(1.0, bounds.size.y) * inset
-	return minf(sx, sy)
-
-
-func _content_map_rect() -> Rect2:
-	if _full_map_mode:
-		return Rect2(
-			Vector2(64.0, 62.0),
-			Vector2(maxf(1.0, size.x - 128.0), maxf(1.0, size.y - 112.0))
-		)
-	# 雷达模式：圆形窗口，map_rect 取控件最大内接正方形。
-	var side := maxf(1.0, minf(size.x, size.y))
-	return Rect2(size * 0.5 - Vector2.ONE * side * 0.5, Vector2.ONE * side)
-
-
-# ---------------------------------------------------------------------------
-# 雷达 / 圆裁剪 / 框
-# ---------------------------------------------------------------------------
-
-func _draw_radar_frame(rect: Rect2) -> void:
-	var center := rect.get_center()
-	var radius := maxf(4.0, minf(rect.size.x, rect.size.y) * 0.5 - 7.0)
-	draw_circle(center, radius + 4.0, RADAR_BG)
-	draw_arc(center, radius, 0.0, TAU, 96, Color(0.18, 0.78, 0.92, 0.85), 1.4, true)
-	draw_arc(center, radius - 5.0, -0.72, 0.72, 22, Color(0.32, 0.92, 1.0, 0.55), 1.6, true)
-	for angle in [0.0, PI * 0.5, PI, PI * 1.5]:
-		var outer := center + Vector2.from_angle(angle) * (radius + 4.0)
-		var inner := center + Vector2.from_angle(angle) * (radius - 7.0)
-		draw_line(inner, outer, Color(0.55, 0.96, 1.0, 0.75), 1.4, true)
-
-
-func _draw_header() -> void:
-	var font := ThemeDB.fallback_font
-	draw_string(
-		font,
-		Vector2(0.0, 23.0),
-		("EXPLORED FLOOR PLAN / %s" if _full_map_mode else "TACTICAL / %s") % _floor_label(),
-		HORIZONTAL_ALIGNMENT_CENTER,
-		size.x,
-		12,
-		Color(0.48, 0.94, 1.0, 0.84)
-	)
-
-
-func _radar_center() -> Vector2:
-	return size * 0.5
-
-
-func _radar_radius(margin := 0.0) -> float:
-	return maxf(1.0, minf(size.x, size.y) * 0.5 - 7.0 - RADAR_CONTENT_MARGIN_PX - margin)
-
-
-func _point_inside_radar(point: Vector2, margin := 0.0) -> bool:
-	return point.distance_to(_radar_center()) <= _radar_radius(margin)
-
-
-# ---------------------------------------------------------------------------
-# 圆裁剪画线段：圆内整段画，部分在圆外则裁到交点，全在圆外则不画
-# ---------------------------------------------------------------------------
-
-func _clip_and_draw_line(
-	world_p0: Vector2,
-	world_p1: Vector2,
-	bounds: Rect2,
-	map_rect: Rect2,
-	color: Color,
-	width: float,
-	glow_color: Color,
-	glow_width: float
-) -> void:
-	var p0 := _map_position(
-		Vector3(world_p0.x, 0.0, world_p0.y), bounds, map_rect
-	)
-	var p1 := _map_position(
-		Vector3(world_p1.x, 0.0, world_p1.y), bounds, map_rect
-	)
-	if _full_map_mode:
-		# 全图模式不裁圆，直接画（外加发光）。
-		if glow_width > 0.0:
-			draw_line(p0, p1, glow_color, glow_width, true)
-		draw_line(p0, p1, color, width, true)
-		return
-	var clipped := _clip_segment_to_radar(p0, p1, 0.0)
-	if clipped.size() != 2:
-		return
-	if glow_width > 0.0:
-		draw_line(clipped[0], clipped[1], glow_color, glow_width, true)
-	draw_line(clipped[0], clipped[1], color, width, true)
-
-
-func _clip_segment_to_radar(from: Vector2, to: Vector2, margin := 0.0) -> PackedVector2Array:
-	var center := _radar_center()
-	var radius := _radar_radius(margin)
-	var from_inside := from.distance_squared_to(center) <= radius * radius
-	var to_inside := to.distance_squared_to(center) <= radius * radius
-	if from_inside and to_inside:
-		return PackedVector2Array([from, to])
-	var direction := to - from
-	var a := direction.dot(direction)
-	if a <= 0.000001:
-		return PackedVector2Array()
-	var relative := from - center
-	var b := 2.0 * relative.dot(direction)
-	var c := relative.dot(relative) - radius * radius
-	var discriminant := b * b - 4.0 * a * c
-	if discriminant < 0.0:
-		return PackedVector2Array()
-	var root := sqrt(discriminant)
-	var intersections: Array[float] = []
-	for value in [(-b - root) / (2.0 * a), (-b + root) / (2.0 * a)]:
-		if value >= 0.0 and value <= 1.0:
-			intersections.append(value)
-	intersections.sort()
-	var clipped_from: Vector2 = from if from_inside else (
-		from + direction * intersections[0] if not intersections.is_empty() else Vector2.INF
-	)
-	var clipped_to: Vector2 = to if to_inside else (
-		from + direction * intersections.back() if not intersections.is_empty() else Vector2.INF
-	)
-	if clipped_from == Vector2.INF or clipped_to == Vector2.INF:
-		return PackedVector2Array()
-	return PackedVector2Array([clipped_from, clipped_to])
-
-
-# ---------------------------------------------------------------------------
 # 杂项
 # ---------------------------------------------------------------------------
 
 func _is_current_floor_y(value: float) -> bool:
-	# 当层 = 严格容差
 	if absf(value - _current_floor_y) <= FLOOR_EPSILON_M:
 		return true
-	# 垂直通道（楼梯/电梯/垂直连接房间）= 宽容差，避免它们跨层消失
 	return _is_vertical_channel_y(value)
 
 
 func _is_vertical_channel_y(value: float) -> bool:
 	if absf(value - _current_floor_y) > VERTICAL_CHANNEL_EPSILON_M:
 		return false
-	# 只有 STAIRS_UP / STAIRS_DOWN / BASEMENT / ELEVATOR 等垂直类型房间按宽容差显示
 	for record in _records:
 		var position := record.get("position", Vector3.ZERO) as Vector3
 		if not is_equal_approx_snapped(position.y, value):
@@ -787,7 +918,10 @@ func _edge_key(a: String, b: String) -> String:
 	return "%s|%s" % [a, b] if a < b else "%s|%s" % [b, a]
 
 
-# 兼容旧调用：保留旧接口但内部走新绘制路径
+# ---------------------------------------------------------------------------
+# 对外查询（探针与存档用，语义随渲染一起改）
+# ---------------------------------------------------------------------------
+
 func get_room_screen_rect(room_id: String) -> Rect2:
 	if not _record_by_id.has(room_id):
 		return Rect2()
@@ -795,17 +929,11 @@ func get_room_screen_rect(room_id: String) -> Rect2:
 	var world_position := record.get("position", Vector3.ZERO) as Vector3
 	if not _is_current_floor_y(world_position.y):
 		return Rect2()
-	var bounds := _bounds_for_current_floor()
-	var map_rect := _content_map_rect()
-	var dimensions := _dimensions_by_id.get(room_id, Vector2(20.0, 18.0)) as Vector2
-	var rect_world := _room_world_rect(world_position, dimensions)
-	var center := _map_position(world_position, bounds, map_rect)
-	var room_size := rect_world.size * _map_scale(bounds, map_rect)
-	return Rect2(center - room_size * 0.5, room_size)
+	return _room_screen_rect_by_record(record)
 
 
 func get_player_screen_position() -> Vector2:
-	return _map_position(_player_world_position, _bounds_for_current_floor(), _content_map_rect())
+	return _to_map(Vector2(_player_world_position.x, _player_world_position.z))
 
 
 func get_floor_label() -> String:

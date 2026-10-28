@@ -246,6 +246,12 @@ var _edge_door_sides_by_key: Dictionary = {}
 var _stair_surface_snap_count := 0
 var _stair_support_surface_count := 0
 var _declared_edges: Array[Dictionary] = []
+## 纯通洞边（flow 模式 `connections` 声明的边）：几何上是永远通着的洞，没有门扇。
+##
+## 单独记一份而不只是写 `_open_edges[edge] = true`，是因为 `_build_topology()` 会
+## `_open_edges.clear()` 后整体重建 —— 直接写状态会被它冲掉（实测 26 条边全回到关闭）。
+## 这份集合是**声明**，`_build_topology()` 重建时按它决定"缺省是否已开"。
+var _open_passage_edges: Dictionary = {}
 var _edge_kind_by_key: Dictionary = {}
 var _room_floor_index: Dictionary = {}
 var _floor_room_ids: Dictionary = {}
@@ -294,6 +300,55 @@ var _boss_descent_gate_edges: Dictionary = {}
 var _airlock_front_edges: Dictionary = {}
 ## 远征关卡入口门（安全屋→01 号房）：与塔楼 floor_seed_gate 同语义，固定免费通行。
 var _expedition_entry_gate_edges: Dictionary = {}
+## 本层是否为「flow 规则」关卡（远征03 那种 EGT 式骨架关卡）。
+##
+## flow 关卡**规则独立**，不继承远征01 的钥匙/命运卡门槛：
+##   · 门不要房间钥匙（业主 2026-10-28：「不需要房间钥匙这个设定」）；
+##   · 门不弹命运卡（那是远征01 的局内经济，本关没有那套预算）；
+##   · 战斗房进房封门、清完自动开门（EGT 的房门语义）。
+##
+## 用成员态而不是每次查 `_floor_plan_snapshots`：`_door_policy_for_edge()` 是逐边
+## 热路径，且建门时 plan 不一定已就位。
+var _flow_rules_active := false
+
+## flow 关卡（远征03 起）的房门时序 —— 两段刻意留出的停顿。
+##
+## Gungeon 的手感不是「跨过门槛门就拍在脸上」：玩家先走两步，门才落下，
+## 然后**短暂静默**一下敌人才出场。三件事各有各的理由：
+##   · 落门延迟：门扇落下时碰撞是启用的，贴着门框关会把人夹住/弹出去；
+##   · 门洞等待：玩家慢一点（或网速/掉帧）时，宁可晚关也不夹人；
+##   · 关门→出怪的静默：给玩家一眼看清房间（Gungeon 靠这段时间做"落锁"的反馈）。
+## 后者由 `encounter.start_delay_sec` 控制（默认 1.0s），本文件只负责前两段。
+const FLOW_ROOM_SEAL_DELAY_S := 0.30
+const FLOW_ROOM_SEAL_DOORWAY_WAIT_S := 0.90
+## 门落之后的静默（秒）：Gungeon 里这段是"落锁"的反馈窗口，敌人在它之后才出场。
+## 太短则门和怪挤在同一帧，太长会让玩家以为漏刷。
+const FLOW_ROOM_SPAWN_PAUSE_S := 0.45
+## 房间外黑幕的高度：墙顶 2.8m + 0.08m。低于墙顶会被墙挡住（等于没挖洞），
+## 高出太多则从门洞看出去会看到"天花板压下来"。
+
+## 程序化房间的墙厚（`DungeonRoom3D._build_wall()` 里的 `thickness := 0.28`）。
+## 幕墙放在墙**外表面之外**，所以要用它算偏移；改墙厚时这里必须同步。
+const FLOW_ROOM_WALL_THICKNESS_M := 0.28
+## 幕墙与墙外表面之间留的空隙：贴太近会与墙面共面打架。
+const FLOW_VIEW_WALL_GAP_M := 0.02
+## 幕墙的竖直范围。下沿沉到地面以下（俯角压低时看得到地平面边缘），
+## 上沿远高于相机（相机在 10.26m），这样任何"向外看"的视线都必然穿过它。
+const FLOW_VIEW_WALL_BOTTOM_M := -1.0
+const FLOW_VIEW_WALL_TOP_M := 26.0
+## 黑幕向外扩出的余量。相机约 10m 高、俯角 60° 时，越过墙顶的视线最多再走
+## (10 − 2.8) / tan60° ≈ 4.2m 就落地；15m 足以覆盖任何屏幕边缘的余光。
+const FLOW_VIEW_MASK_MARGIN_M := 15.0
+## 远征03 的镜头允许贴到房间边界内多远。0.55m 大于墙厚 0.28m 的一半 + 门框余量，
+## 保证镜头不会穿进墙体、也不会在黑幕边缘露缝。
+const FLOW_CAMERA_ROOM_INSET_M := 0.55
+## 正在等待落门的房间（room_id → 已等待秒数）。用成员而不是 Timer 节点：
+## 房间可能在一帧内被流送换掉，协程里每帧都要重新判 `is_instance_valid`。
+var _pending_flow_seals: Dictionary = {}
+## 黑幕当前挖洞的房间。换房时重建（洞跟着玩家走）。
+var _flow_view_mask_room_id := ""
+## 允许穿过「刷怪推迟」覆盖的一次性放行（见 `_spawn_room_enemies()`）。
+var _flow_spawn_passthrough: Dictionary = {}
 var _boss_descent_key_count := 0
 var _level_elevator_edge := ""
 var _last_bundle_room_count := 0
@@ -776,6 +831,21 @@ func _report_expedition_loading(progress: float, status: String) -> void:
 func _complete_expedition_loading(failed: bool, status: String) -> void:
 	if not _expedition_loading_active or _expedition_loading_completed:
 		return
+	# 装配收尾：边状态与门扇状态在这里统一落到"与几何一致"。
+	#
+	# 放在这里（而不是 `_prepare_floor_bundle` 声明时）是因为 `_open_edges` 会被
+	# 后续的边注册整体重建，任何"顺手设一次"都会被冲掉 —— 实测 26 条边全部回到关闭。
+	# 这里是装配流程最后一个必经点，`loading_scene_ready` 之前。
+	if is_expedition():
+		_apply_open_passage_edge_states(
+			_floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary
+		)
+		# flow 关卡还要两件：门扇的开合初态（连通开、封闭关）与房间外黑幕
+		# （黑幕要所有房间足迹才能挖洞，只能在全部房间就位后建）。
+		if _flow_rules_active:
+			_open_all_flow_doors()
+			_refresh_flow_view_mask(true)
+		minimap.configure(_records, _open_edges)
 	_expedition_loading_completed = true
 	set_meta("loading_scene_ready", not failed)
 	set_meta("loading_scene_failed", failed)
@@ -1485,6 +1555,19 @@ func _stair_lobby_visual_holes(floor_index: int) -> Array[Rect2]:
 		var record := _find_record(str(room_id_value))
 		if record.is_empty() or bool(record.get("authored_layout_shell", false)):
 			continue
+		# 程序化壳房间（flow 关卡）**自带地砖**，必须按真实足迹从通用砖里挖掉。
+		#
+		# 不挖的后果就是业主 2026-10-28 报的「靠墙边缘闪面厉害」：
+		# 房间的 `Floor` 顶面与楼层通用地砖都在 Y=0，两套砖共面 z-fighting。
+		# 判据不能只看 `type == "STAIR_LOBBY"` —— flow 的入口房 type 是 `SAFE_ROOM`，
+		# 其余是 `COMMON_ROOM`，一个都命中不了（01/02 靠静态布局那条路绕开了这个坑）。
+		if bool(record.get("procedural_shell", false)):
+			var dims := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+			if dims.x > 0.0 and dims.y > 0.0:
+				var rp := record.get("position", Vector3.ZERO) as Vector3
+				holes.append(Rect2(
+					rp.x - dims.x * 0.5, rp.z - dims.y * 0.5, dims.x, dims.y))
+			continue
 		if str(record.get("type", "")) != "STAIR_LOBBY":
 			continue
 		var room_position := record.get("position", Vector3.ZERO) as Vector3
@@ -1837,6 +1920,7 @@ func _apply_indoor_camera_pose() -> void:
 			-CAMERA_LOOK_AHEAD_M
 		)
 		player.camera.look_at(look_target, Vector3.UP)
+		_clamp_flow_camera_into_room(look_target)
 		_apply_debug_camera_pose_adjustments(look_target)
 		return
 
@@ -1874,6 +1958,48 @@ func _apply_indoor_camera_pose() -> void:
 	var constrained := constrain_narrative_camera_pose(desired, player.global_position)
 	player.camera.global_transform = constrained
 	_apply_debug_camera_pose_adjustments(look_target)
+
+
+## 远征03（flow 关卡）专用：把镜头**水平夹在当前房间足迹内**。
+##
+## 为什么需要它：本轮去掉了"墙碰撞自动抬升/收拢"，镜头就严格按"角色 + 后方 3.1m"
+## 跟随。角色贴墙背对房间中心时，镜头会落到墙外 —— 而本轮又给房间外铺了黑幕
+## （`FlowViewMask`，只给当前房间挖洞），镜头一出房间就会看到一片黑。
+##
+## 这是**边界限制**，不是碰撞避让：不改高度、不改俯角、不改到角色的距离基准，
+## 也不探测墙体；相机只是被"房间地板边界"顶住，仍然平滑跟随（房间内移动连续，
+## 夹取也连续）。业主反对的是"撞墙就跳回去又弹回来"，不是"镜头顶在墙前"。
+func _clamp_flow_camera_into_room(look_target: Vector3) -> void:
+	if not _flow_rules_active or player == null or player.camera == null:
+		return
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(room):
+		return
+	var dims := room.get_dimensions()
+	if dims.x <= 0.0 or dims.y <= 0.0:
+		return
+	var rp := room.global_position
+	var min_x := rp.x - dims.x * 0.5 + FLOW_CAMERA_ROOM_INSET_M
+	var max_x := rp.x + dims.x * 0.5 - FLOW_CAMERA_ROOM_INSET_M
+	var min_z := rp.z - dims.y * 0.5 + FLOW_CAMERA_ROOM_INSET_M
+	var max_z := rp.z + dims.y * 0.5 - FLOW_CAMERA_ROOM_INSET_M
+	# 房间比两次内缩还窄时（极端小房），退化成房间中心，避免 min > max。
+	if min_x > max_x:
+		min_x = rp.x
+		max_x = rp.x
+	if min_z > max_z:
+		min_z = rp.z
+		max_z = rp.z
+	var current := player.camera.global_position
+	var clamped := Vector3(
+		clampf(current.x, min_x, max_x),
+		current.y,
+		clampf(current.z, min_z, max_z)
+	)
+	if clamped.is_equal_approx(current):
+		return
+	player.camera.global_position = clamped
+	player.camera.look_at(look_target, Vector3.UP)
 
 
 ## 调试面板的镜头姿态偏移：俯仰圆轴（绕角色水平轴）+ 世界空间整体平移。
@@ -1999,6 +2125,30 @@ func constrain_narrative_camera_pose(desired: Transform3D, focus: Vector3) -> Tr
 
 
 func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) -> void:
+	# —— 远征03（flow 关卡）：不做「墙进入镜头 → 抬高 + 收拢」的自动避让 ——
+	#
+	# 业主 2026-10-28：「摄像机会被自动复位（就是场景墙碰撞后）的那个功能。去掉。」
+	# 原行为是墙进镜头通道后镜头抬高 0.30m、并沿后方轴从 3.1m 收到 0.15m，
+	# 离开墙再弹回去 —— 玩家感知就是「贴墙镜头突然跳到头顶，走开又弹回来」。
+	# 这里把目标值锁死在基准值，**平滑仍在跑**，所以是"回到原位"而不是"瞬间跳"。
+	if _flow_rules_active:
+		_camera_lower_wall_detected = false
+		_camera_lower_wall_distance_m = -1.0
+		_camera_lift_target_m = 0.0
+		_camera_trailing_target_m = _camera_profile_trailing_current_m
+		var lift_blend := 1.0 - exp(-CAMERA_LOWER_WALL_LIFT_FALL_RATE * maxf(delta, 0.0))
+		_camera_lift_current_m = lerpf(_camera_lift_current_m, 0.0, lift_blend)
+		if absf(_camera_lift_current_m) <= 0.001:
+			_camera_lift_current_m = 0.0
+		var trail_blend := 1.0 - exp(-CAMERA_LOWER_WALL_EXTEND_RATE * maxf(delta, 0.0))
+		_camera_trailing_current_m = lerpf(
+			_camera_trailing_current_m, _camera_profile_trailing_current_m, trail_blend
+		)
+		if (
+			absf(_camera_trailing_current_m - _camera_profile_trailing_current_m) <= 0.001
+		):
+			_camera_trailing_current_m = _camera_profile_trailing_current_m
+		return
 	# 开门只改变通行碰撞，不得全局跳过后墙探针；否则角色站在开放的
 	# 门附近时，同一小房间处于镜头后方的水平墙也会被错误忽略。
 	if refresh_probe:
@@ -2112,6 +2262,18 @@ func _update_camera_stair_slab_drop(
 	delta: float,
 	refresh_probe: bool = true
 ) -> void:
+	if _flow_rules_active:
+		# 同上：远征03 不做"楼板/天花板压镜头"。单层 flow 关卡本来也碰不到楼板，
+		# 但把探针一并关掉可以省掉每帧的射线，且彻底切断这条自动改镜头的路径。
+		_camera_stair_slab_detected = false
+		_camera_stair_slab_drop_target_m = 0.0
+		var slab_blend := 1.0 - exp(-CAMERA_STAIR_SLAB_RECOVER_RATE * maxf(delta, 0.0))
+		_camera_stair_slab_drop_current_m = lerpf(
+			_camera_stair_slab_drop_current_m, 0.0, slab_blend
+		)
+		if absf(_camera_stair_slab_drop_current_m) <= 0.001:
+			_camera_stair_slab_drop_current_m = 0.0
+		return
 	var desired_height_m := _camera_profile_height_current_m + _camera_lift_current_m
 	if refresh_probe:
 		_camera_stair_slab_clearance_height_m = (
@@ -2412,6 +2574,8 @@ func _build_expedition_records() -> void:
 		return
 	var entry_spec := _plan_spec(plan, "entry")
 	var first_main := _plan_spec(plan, "room_01")
+	# flow 关卡判定要早于任何门策略查询（`_door_policies_for_record` 在建房间时就会用到）。
+	_flow_rules_active = str(plan.get("mode", "")) == "flow"
 	if (
 		entry_spec.is_empty()
 		or first_main.is_empty()
@@ -2457,6 +2621,15 @@ func _build_expedition_records() -> void:
 	(entry_record["door_targets"] as Dictionary)[arrival_direction] = ""
 	(entry_record["doors"] as Array).append(front_direction)
 	(entry_record["door_targets"] as Dictionary)[front_direction] = str(first_main.get("id", ""))
+	# 这扇「封闭抵达门」在 flow 关卡上还缺**门扇**。
+	#
+	# 程序化壳体只按端口建门扇（`_has_authoritative_door_ports()`），而这扇门不属于
+	# 任何拓扑边、只在上面两行写进了 `doors`/`door_targets` —— 于是
+	# `_get_configured_base_door_bindings()` 取 `get_door_node(side)` 拿到 null，
+	# 「[E] 退出战局」整条交互静默消失。远征01 因为门画在静态美术 TSCN 里，绕过了这个坑。
+	# 补一条**无目标端口**让它走正常门扇构建路径。
+	if _flow_rules_active:
+		_append_closed_arrival_door_port(entry_record, arrival_direction)
 	# 入口门是固定交通接口：不清房、不耗钥匙、不弹命运卡，保证开局动线不会被锁死。
 	# 其余 01→…→撤离 的门全部继承默认门策略，正常触发清房/钥匙/命运卡。
 	var entry_gate_edge := _edge_key(str(entry_spec.get("id", "")), str(first_main.get("id", "")))
@@ -2471,6 +2644,68 @@ func _build_expedition_records() -> void:
 	# 位点坐标只依赖房间记录（position + custom_dimensions），不需要房间实例已就绪，
 	# 所以放在 bootstrap 末尾即可；`_create_secret_branches` 自身幂等。
 	_create_secret_branches()
+
+
+## 给入口安全房补一扇「封闭抵达门」的端口（无目标、不参与拓扑）。
+##
+## 只补端口、不补边：它不连通任何房间，`connections` 里也不会出现它。
+## 端口存在的唯一目的是让程序化壳体把这扇门扇建出来（`_build_door_for_port`），
+## 从而让 `_get_configured_base_door_bindings()` 拿到节点、挂上「[E] 退出战局」。
+##
+## 为什么不能只写 `doors`：`_build_door()` 在 `_has_authoritative_door_ports()` 为真时
+## 只认端口，`doors` 里多出来的方向一个门扇都不会建 —— 这就是 flow 关卡上这扇门
+## 一直"存在却按不到"的原因。
+func _append_closed_arrival_door_port(record: Dictionary, side: String) -> void:
+	if side not in ["north", "south", "east", "west"]:
+		return
+	var dims := record.get("custom_dimensions", Vector2(15.0, 15.0)) as Vector2
+	if dims.x <= 0.0 or dims.y <= 0.0:
+		return
+	var ports: Array = record.get("connection_ports", []) as Array
+	# 该方向已被真门占用时不再补：同侧两门会与既有门洞重叠。
+	for value in ports:
+		if str((value as Dictionary).get("side", "")) == side:
+			return
+	var position := Vector2.ZERO
+	var outward := Vector2.ZERO
+	# 平面坐标口径与 `FloorPlanGenerator._room_local_port_position()` 完全一致：
+	# north = −Z、south = +Z、west = −X、east = +X（y 是平面上的 Z）。
+	var axis := "h"
+	var line := dims.x
+	match side:
+		"north":
+			position = Vector2(0.0, -dims.y * 0.5)
+			outward = Vector2(0.0, -1.0)
+		"south":
+			position = Vector2(0.0, dims.y * 0.5)
+			outward = Vector2(0.0, 1.0)
+		"west":
+			position = Vector2(-dims.x * 0.5, 0.0)
+			outward = Vector2(-1.0, 0.0)
+			axis = "v"
+			line = dims.y
+		"east":
+			position = Vector2(dims.x * 0.5, 0.0)
+			outward = Vector2(1.0, 0.0)
+			axis = "v"
+			line = dims.y
+	ports.append({
+		"port_id": "retreat_%s" % side,
+		"target": "",
+		"target_room_id": "",
+		"side": side,
+		"lane_m": 0.0,
+		"wall_length_m": line,
+		"position_m": [position.x, position.y],
+		"outward": [outward.x, outward.y],
+		"height_m": 0.0,
+		"door_axis": axis,
+		"door_line_m": line,
+		"door_center_m": 0.0,
+		"door_width_m": TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M,
+		"open_passage": false,
+	})
+	record["connection_ports"] = ports
 
 
 ## 未带朝向字段的进行中旧战局继续使用旧版，绝不迁移其世界坐标。
@@ -2672,6 +2907,31 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		spec.get("open_wall_directions", []) as Array
 	)
 	var record := _records.back() as Dictionary
+	# flow 模式房间走**程序化壳体**，不用 5m 模块壳。
+	#
+	# 原因是两套网格对不上，不是画质取舍：
+	#   · 模块壳把每面墙按 5m 模块铺，一扇门只能占**一个模块中心**，且每面墙只留一扇
+	#     （`_build_corner_aware_wall_run()` 的 `door_index` 是单个值）；
+	#   · EGT 的门位落在**半个模块**上（实测 15m 墙的门在 lane −2.5），且枢纽会出现
+	#     **同一面墙两扇门**（40 局里 32 间房如此）。
+	# 硬用模块壳的后果实测过：26 条门洞里 15 条被墙封死 —— 图上画着门，走过去撞墙。
+	# 程序化壳体按 lane 任意开门洞、支持同侧多门（`wall_openings_<side>`），
+	# 白盒阶段要的是"能走通"，不是模块拼接的观感。
+	if bool(spec.get("procedural_shell", false)):
+		record["tower_module_shell"] = false
+		# flow 关卡的门是**双扇对开**（业主 2026-10-28：「这个门，帮我做成左右打开的」）。
+		# 只对程序化白盒房生效：塔楼与远征01/02 的门仍走缺省升降，行为逐字不变。
+		record["door_opening_style"] = "slide"
+		# 标记「本房墙体由房间自己生成」。走廊连接器据此**不建几何** ——
+		# 见 `_room_walls_owned_by_static_layout()`。
+		record["procedural_shell"] = true
+	# 和平区（enemyless 房）：本房不刷怪、门策略全放行、开局即算已清。
+	#
+	# **必须与 `authored_layout_shell` 解耦**：那段分支是"整房组件清单"的入口，
+	# 而 flow 关卡的走廊 / 入口 / 撤离 / 商店同样是无怪房，却没有组件清单。
+	# 判定只按字段本身，未声明的房间一个字段都不多 —— 塔楼与远征01/02 行为不变。
+	if bool(spec.get("authored_layout_peaceful", false)):
+		record["authored_layout_peaceful"] = true
 	if str(spec.get("anchor_policy", "grid")) == "static_port_layout":
 		record["position"] = _plan_world_position(plan, spec)
 		record["grid_position_adjusted"] = false
@@ -2724,8 +2984,6 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		record["authored_layout_room_id"] = str(spec.get("authored_layout_room_id", ""))
 		# 和平区（区块00）：本房不刷怪、门只做普通开关、门扇走 99F 基地滑升门。
 		# 只在区域声明了才落字段 —— 未声明的楼层一个字段都不多，行为逐字不变。
-		if bool(spec.get("authored_layout_peaceful", false)):
-			record["authored_layout_peaceful"] = true
 		if spec.has("search_facilities_enabled"):
 			record["search_facilities_enabled"] = bool(spec.get("search_facilities_enabled", true))
 		# 初始灯亮：只在房表声明了才落字段，未声明的房间一个字段都不多。
@@ -2975,6 +3233,22 @@ func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dict
 			"requires_key": false,
 			"triggers_fate": false,
 		}
+	# —— flow 关卡（远征03）：规则独立，不继承远征01 的钥匙/命运卡门槛 ——
+	#
+	# 业主 2026-10-28：「不需要房间钥匙这个设定。这个关卡的规则独立，
+	# 不用走远征01 的逻辑。」三条都是 EGT 的口径：
+	#   · `requires_key = false` —— 挺进地牢第一层没有锁门，钥匙是更深层的机制；
+	#   · `triggers_fate = false` —— 命运卡是远征01 的局内经济，本关没有那套预算；
+	#   · `requires_clear = true`  —— 留清房门槛：战斗房清完才能推门出去，
+	#     这也是「进房关门、清怪开门」的另一半（封门由 `_on_room_entered` 负责）。
+	# 入口那一跳（entry→room_01）已在上面按 `_expedition_entry_gate_edges` 全放行，
+	# 所以开局永远不会被门卡住。
+	if _flow_rules_active:
+		return {
+			"requires_clear": true,
+			"requires_key": false,
+			"triggers_fate": false,
+		}
 	return super(from_room_id, target_room_id)
 
 
@@ -3140,7 +3414,10 @@ func _build_topology() -> void:
 		(_room_neighbors[child_id] as Array).append(parent_id)
 		# 100F↔99F西侧楼梯是固定建筑结构，不存在玩法授权。路线永久连通，
 		# 四扇普通门只控制自己的门板；98F入口及更深路线仍按玩法状态开启。
-		var opens_by_default := edge == _edge_key("start", "facility")
+		# 纯通洞边（flow 模式）：没有门扇，几何上永远通着，缺省即"已开"。
+		var opens_by_default := (
+			edge == _edge_key("start", "facility") or _open_passage_edges.has(edge)
+		)
 		if Block00MasterOfficeLayout3D.is_removed_door_pair(parent_id, child_id) and bool(parent.get("authored_layout_peaceful", false)):
 			opens_by_default = true
 		_open_edges[edge] = opens_by_default
@@ -3563,6 +3840,14 @@ func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
 func _room_walls_owned_by_static_layout(room: DungeonRoom3D) -> bool:
 	if room == null:
 		return false
+	# 两种「几何归房间自己」的情形，走同一个结论（不补 5m 塔楼墙）：
+	#   ① 静态布局场景已装载（远征02 的逐房烘焙壳体）；
+	#   ② 程序化壳体（远征03 的 flow 房间，`procedural_shell`）。
+	# 共同点是「门位不在 5m 模块中心上」—— 塔楼走廊模型按 5m 栅格铺墙，
+	# 硬补的结果就是在房间内部刷出 11.9m 高、带碰撞的塔楼墙（业主 2026-10-28
+	# 报的"进房后刷出 11.9 米的墙和空阻挡"）。
+	if bool(room.get_meta("room_owns_walls", false)):
+		return true
 	return (
 		bool(room.get_meta("static_layout_scene_loaded", false))
 		and not str(room.get_meta("static_layout_scene_path", "")).is_empty()
@@ -4959,6 +5244,180 @@ func _set_connector_collision_enabled(
 		_set_connector_collision_enabled(child, enabled, support_enabled)
 
 
+## flow 关卡（远征03）的房门语义：进战斗房即封门，清完自动开门。
+##
+## 与塔楼/远征01 的区别：那些关卡是"玩家按 E 开门 + `requires_clear` 门槛"，
+## 门在被清房之前**关着且开不了**；本关按 EGT 的口径 ——
+## 进房先把所有出口关上（把玩家和怪关在一起打完），清完自动重开。
+##
+## 不封的情形，逐条都是刻意的：
+##   · `authored_layout_peaceful`（走廊 / 入口 / 撤离 / 商店）：屋里本来没怪，
+##     封门只是把玩家关进一个空房间 —— EGT 里 connector 就明确是 enemyless；
+##   · `room.cleared` 已清：回头再进不该被关；
+##   · 没有门（`door_targets` 为空）：单门死路房，封不封都走不出去，白封。
+func _apply_flow_room_seal(room: DungeonRoom3D) -> void:
+	if not _flow_rules_active or room == null:
+		return
+	if room.authored_layout_peaceful or room.cleared:
+		return
+	if (room.door_targets as Dictionary).is_empty():
+		return
+	if _pending_flow_seals.has(room.room_id):
+		return
+	# **不是**立刻 `set_room_seal`：门扇落下时碰撞是启用的，贴着门框关会把人夹住；
+	# 而且 Gungeon 的节奏本来就是"先走进来、门再落"。
+	_stage_flow_room_entry(room)
+
+
+## 进房的完整时序（Gungeon 口径）：**走进来 → 门落 → 短暂停顿 → 出怪**。
+##
+## 三段各自的理由（业主 2026-10-28 明确要这一段手感）：
+##   ① 落门延迟 `FLOW_ROOM_SEAL_DELAY_S` —— 跨过门槛的瞬间关门会把玩家夹在门框里，
+##      也给玩家两步路看清房间（哪个方向有几扇门）；
+##   ② 关门→出怪的静默 `FLOW_ROOM_SPAWN_PAUSE_S` —— Gungeon 里这段是"落锁"的反馈窗口：
+##      门砸下来、房间静一下、敌人才出场。没有这段，怪和门同时出现会显得很挤；
+##   ③ 玩家若在这期间退出去（还站在门洞里），**不封锁** —— 只在房里才关。
+##
+## 本来 `_spawn_room_enemies()` 在 `super(room)` 里就刷完了，那时门还没落，顺序是反的。
+## 所以 flow 关卡的刷怪被 `_spawn_room_enemies()` 的覆盖挡在这里，由本函数在
+## 落门之后补上（`_flow_spawn_passthrough` 让那一次调用能穿过覆盖）。
+func _stage_flow_room_entry(room: DungeonRoom3D) -> void:
+	var room_id := room.room_id
+	if _pending_flow_seals.has(room_id):
+		return
+	_pending_flow_seals[room_id] = 0.0
+	var tree := get_tree()
+	var elapsed := 0.0
+	while elapsed < FLOW_ROOM_SEAL_DELAY_S:
+		await tree.process_frame
+		if not is_instance_valid(room) or not is_inside_tree():
+			_pending_flow_seals.erase(room_id)
+			return
+		elapsed += get_process_delta_time()
+	# 玩家贴着门洞时多等一会儿（最多 `FLOW_ROOM_SEAL_DOORWAY_WAIT_S`）：
+	# 关门时碰撞是启用的，夹住人比晚关一秒糟糕得多。
+	var extra := 0.0
+	var inside := _is_player_inside_room(room)
+	while inside and extra < FLOW_ROOM_SEAL_DOORWAY_WAIT_S and _player_near_room_door(room):
+		await tree.process_frame
+		if not is_instance_valid(room) or not is_inside_tree():
+			_pending_flow_seals.erase(room_id)
+			return
+		inside = _is_player_inside_room(room)
+		extra += get_process_delta_time()
+	_pending_flow_seals.erase(room_id)
+	if not is_instance_valid(room) or room.cleared:
+		return
+	var sealed_now := false
+	if inside and _is_player_inside_room(room):
+		set_room_seal(room_id, true, "flow_room")
+		sealed_now = true
+		status_label.text = "肃清本区 · 门已封锁"
+		if AudioManager != null:
+			AudioManager.play_sfx("door_locked", -4.0)
+	# ② 门落之后的静默：此时才轮到敌人出场。
+	var pause := 0.0
+	while pause < FLOW_ROOM_SPAWN_PAUSE_S:
+		await tree.process_frame
+		if not is_instance_valid(room) or not is_inside_tree():
+			return
+		pause += get_process_delta_time()
+	if not is_instance_valid(room) or room.cleared:
+		return
+	if _spawned_room_alive(room_id):
+		return
+	_flow_spawn_passthrough[room_id] = true
+	_spawn_room_enemies(room)
+	_flow_spawn_passthrough.erase(room_id)
+	if sealed_now:
+		_update_wave_hud(room_id)
+
+
+## 本房是否已经有敌人（存活账或已生成的节点）。避免重进房间时二次刷怪。
+func _spawned_room_alive(room_id: String) -> bool:
+	if int(_alive_by_room.get(room_id, 0)) > 0:
+		return true
+	var nodes: Array = _enemy_nodes_by_room.get(room_id, []) as Array
+	for value in nodes:
+		if is_instance_valid(value as Node):
+			return true
+	return false
+
+
+## flow 关卡把刷怪推迟到落门之后（见 `_stage_flow_room_entry`）。
+##
+## 这是**覆盖**基类的同名方法：`Dungeon3D._on_room_entered()` 里对
+## `HOSTILE_ROOM_TYPES` 的调用会动态派发到这里。
+func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
+	if (
+		_flow_rules_active
+		and room != null
+		and not room.authored_layout_peaceful
+		and room.room_type in HOSTILE_ROOM_TYPES
+		and not _flow_spawn_passthrough.has(room.room_id)
+	):
+		# 交给 `_stage_flow_room_entry()`；返回值表示"已接管"。
+		#
+		# ⚠️ 这里必须走**排程**而不是直接 `return true` 就算完：这条覆盖同时也被
+		# `_repair_hostile_room_progress()` 复用（重进未清的房时补刷）。若只是吞掉调用，
+		# 玩家在落门延迟窗口里快步走出去一次，该房就永远停在"无怪、未清、门也锁不上"，
+		# 之后每次重进都只是再吞一次 —— 一条路过的走廊就能把房间永久弄坏。
+		# `_apply_flow_room_seal()` 内部对"正在等待落门"做了去重，重入是安全的。
+		_apply_flow_room_seal(room)
+		return true
+	return super(room)
+
+
+## flow 关卡不在"房间刚可见"时预刷怪。
+##
+## 塔楼的做法是门一开就把下一间房的怪生出来（玩家靠近时它们已经站好了）。
+## EGT 不是：门落之后才出怪，这是"进房即被围住"这套节奏的一部分。
+## 预刷怪会让 `_spawned_rooms` 提前置真，真正的进房反而什么都不做。
+func _prepare_revealed_hostile_room(room: DungeonRoom3D) -> bool:
+	if _flow_rules_active and room != null and not room.authored_layout_peaceful:
+		return false
+	return super(room)
+
+
+## 玩家是否还贴着本房某扇门的门洞（关门会夹住他）。
+func _player_near_room_door(room: DungeonRoom3D) -> bool:
+	if player == null:
+		return false
+	for direction_value in (room.door_targets as Dictionary).keys():
+		var door := room.get_door_node(str(direction_value))
+		if door == null or not is_instance_valid(door):
+			continue
+		if player.global_position.distance_to(door.global_position) < 1.6:
+			return true
+	return false
+
+
+## 清房钩子（基类在解封之后调用）：flow 关卡把门**自动推开**。
+##
+## `set_room_seal(false)` 只恢复"可以开"，不替玩家推门（塔楼的语义：门该自己按 E）。
+## EGT 不是这样 —— 清完怪门就开了，玩家不会站在门口按交互键。
+## 只对 flow 关卡生效，且只推开本房的门（对端那扇由 `_open_edge_doors` 覆盖）。
+func _on_room_unsealed(room: DungeonRoom3D) -> void:
+	if not _flow_rules_active or room == null:
+		return
+	var opened := 0
+	for direction_value in (room.door_targets as Dictionary).keys():
+		var direction := str(direction_value)
+		room.set_door_open(direction, true)
+		opened += 1
+		# 共享边的门扇只在一端手里（另一端 `_door_nodes` 里没有节点，
+		# `set_door_open` 会静默空转）—— 必须按"通向哪一间"去对端推开同一扇。
+		var peer_id := str((room.door_targets as Dictionary)[direction_value])
+		var peer := _room_by_id.get(peer_id) as DungeonRoom3D
+		if peer == null or not is_instance_valid(peer):
+			continue
+		var peer_door := peer.get_door_node_towards(room.room_id)
+		if peer_door != null:
+			peer_door.set_open(true)
+	if opened > 0:
+		status_label.text = "本区肃清 · 通道已开启"
+
+
 func _on_room_entered(room: DungeonRoom3D) -> void:
 	if room != null and _is_locked_stair_arrival_room(room.room_id):
 		return
@@ -4972,6 +5431,10 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	super(room)
 	if room == null:
 		return
+	# 换房 ⇒ 黑幕的洞跟着换（Gungeon 的"一次只有一间房是舞台"）。
+	# 必须在 `super()` 之后：`_current_room_id` 由基类更新，早读会拿到上一间。
+	_refresh_flow_view_mask()
+	_apply_flow_room_seal(room)
 	var depth := int(_room_floor_index.get(room.room_id, maxi(0, -int(round(room.global_position.y / FLOOR_HEIGHT)))))
 	if is_expedition():
 		# 远征是单层独立关卡：既没有 100F 天台也没有 99F 基地，
@@ -5508,14 +5971,52 @@ func _prepare_floor_bundle(floor_index: int) -> Dictionary:
 	# 位点声明随这批记录一起到位。`_create_secret_branches` 幂等 ——
 	# 入口房那一轮调用会因 records 里还没有带位点的房间而提前返回。
 	_create_secret_branches()
+	# —— 拓扑边：优先用计划声明的 `connections`，否则回退 `parent_key` ——
+	#
+	# `parent_key` 只能表达**一棵树**：每个房间一个父，边数 = 房间数 − 1。
+	# 这对远征01/02（主路 + 挂法）成立，但对 EGT 式骨架不成立 —— 它是**带环的图**，
+	# flow_01/02 各有 2 个环。只按 parent_key 声明边，回连边一条都不会存在：
+	# 门不建、`_room_neighbors` 缺边、环闭合的那间房从入口走不到。
+	# 实测 25 间房、25 条边声明、`doors_total=0` —— 玩家卡死在入口房。
+	#
+	# 两条路都声明同一批「无向边」，`_declare_and_register_edge` 内部去重，
+	# 所以计划里两种信息都写也不会重复建边。
+	var declared_edges := 0
+	# `connections` 里存的是**运行时 id**（生成器已做过别名换算），
+	# 所以先按 id 直认，认不到再回退按 key 查 —— 两道都试过才不会静默丢边。
+	var plan_ids := {}
+	for value in plan.get("rooms", []):
+		plan_ids[str((value as Dictionary).get("id", ""))] = true
+	for value in plan.get("connections", []) as Array:
+		var connection := value as Dictionary
+		var raw_a := str(connection.get("a", ""))
+		var raw_b := str(connection.get("b", ""))
+		var a_id := raw_a if plan_ids.has(raw_a) else str(ids_by_key.get(raw_a, ""))
+		var b_id := raw_b if plan_ids.has(raw_b) else str(ids_by_key.get(raw_b, ""))
+		if a_id.is_empty() or b_id.is_empty() or a_id == b_id:
+			continue
+		_declare_and_register_edge(a_id, b_id, "horizontal")
+		# 纯通洞边：拓扑状态必须如实标成"已开"。
+		#
+		# `_open_edges` 缺省是 false（"要清房才开"），flow 模式的门**没有门扇**
+		# （端口是 `open_passage`，宽度 5m 只挖洞不建门），洞本身永远是通的。
+		# 若这里留 false，小地图 / 探索统计 / 后续"进门关人"之类的判据会把
+		# 一条明明通着的边当成锁着 —— 状态和几何不一致，是最难查的一类。
+		_open_edges[_edge_key(a_id, b_id)] = true
+		declared_edges += 1
 	for value in plan.get("rooms", []):
 		var spec := value as Dictionary
 		var parent_key := str(spec.get("parent_key", ""))
 		if parent_key.is_empty():
 			continue
-		_declare_and_register_edge(
-			str(ids_by_key.get(parent_key, "")), str(spec.get("id", "")), "horizontal"
-		)
+		var parent_id := str(ids_by_key.get(parent_key, ""))
+		var child_id := str(spec.get("id", ""))
+		if parent_id.is_empty() or child_id.is_empty() or parent_id == child_id:
+			continue
+		_declare_and_register_edge(parent_id, child_id, "horizontal")
+		declared_edges += 1
+	if declared_edges == 0 and not (plan.get("rooms", []) as Array).is_empty():
+		push_warning("[TowerDescent3D] 计划没有声明任何连通边：%s" % str(plan.get("rooms", []).size()))
 
 	var current_exit_id := str(ids_by_key.get("exit", ""))
 	var next_floor_index := floor_index + 1
@@ -5526,11 +6027,248 @@ func _prepare_floor_bundle(floor_index: int) -> Dictionary:
 	return {"plan": plan, "ids_by_key": ids_by_key, "current_exit_id": current_exit_id, "next_floor_index": next_floor_index}
 
 
+## 把计划里 `connections` 声明的边标成"已开"（纯通洞）。
+##
+## 独立成函数是因为要能被重复调用：`_open_edges` 会被 `_build_topology()` 整体重建，
+## 任何"在声明时顺手设一次"的写法都会在它之后失效。本函数只看计划，
+## 幂等、与调用时机无关。
+func _apply_open_passage_edge_states(plan: Dictionary) -> void:
+	for value in plan.get("connections", []) as Array:
+		var connection := value as Dictionary
+		var a := str(connection.get("a", ""))
+		var b := str(connection.get("b", ""))
+		if a.is_empty() or b.is_empty() or a == b:
+			continue
+		var edge := _edge_key(a, b)
+		_open_passage_edges[edge] = true
+		_open_edges[edge] = true
+
+
+## flow 关卡开局门态：**连通门全开、封闭门全关**。
+##
+## EGT 的门是"通道"，不是"需要按 E 的隔断"：玩家一路走过去，进战斗房时才落门，
+## 清完自动开。若连通门开局是关的，玩家会卡在入口房。
+##
+## 反过来，**封闭抵达门**（`door_targets` 该侧为空串）必须关着：它是退局气闸，
+## 打开等于在墙上开一个通向房间外的洞 —— 玩家直接走出地图。
+## `RoomDoor3D` 自身缺省就是开的，所以这里要**显式关**，不能靠默认值。
+func _open_all_flow_doors() -> void:
+	var opened := 0
+	var closed := 0
+	for room_value in _room_by_id.values():
+		var room := room_value as DungeonRoom3D
+		if room == null or not is_instance_valid(room):
+			continue
+		for direction_value in (room.door_targets as Dictionary).keys():
+			var direction := str(direction_value)
+			var door := room.get_door_node(direction)
+			if door == null or not is_instance_valid(door):
+				continue
+			if str((room.door_targets as Dictionary)[direction_value]).is_empty():
+				door.set_open(false, true)
+				closed += 1
+				continue
+			door.set_open(true, true)
+			opened += 1
+	set_meta("flow_doors_opened_on_start", opened)
+	set_meta("flow_doors_closed_on_start", closed)
+
+
+## 房间外「黑幕」：**只留当前房间可见**（Gungeon 的 room-as-stage）。
+##
+## 问题不是"墙太矮"，是相机视线越过了墙顶。房间壳体是 2.8m 白盒、且
+## `DungeonRoom3D.set_stream_state()` 明确规定壳体永久可见（流送契约，避免房间凭空消失）；
+## 相机在约 10m 高、俯角 −60°，于是站在 A 房能直接看到 B 房的墙与地砖
+## —— 业主截图里用红框圈出的就是隔壁房间与走廊。
+##
+## Gungeon 的做法是「一次只有一间房是舞台」：相机贴着当前房间，推进到下一间才切换。
+## 这里用同一观感的实现：一层**只给当前房间挖洞的纯黑水平面**。
+##   · 相机高于遮罩（10m > 2.88m），于是遮罩把其余房间的地面全部挡住；
+##   · 门洞看出去是黑的 —— 与 Gungeon 里"门后是暗的、进去才亮"一致；
+##   · 换房间时重建（洞跟着走），代价是一次网格重建，节点只有 1 个。
+##
+## 为什么不做"隐藏非当前房间"：壳体可见是流送的既有契约，改它会把走廊、
+## 隔壁门扇、相机门代理一起卷进来；而遮罩只影响**观感**，不动任何玩法状态。
+## 为什么不加高墙：业主已确认 2.8m 墙高没问题，这是相机视线问题。
+## 黑幕 / 幕墙挂在哪里：**直接挂场景根**，不挂 `Blocks/Expedition`。
+##
+## `Blocks/Expedition` 是楼层几何容器，它的 `visible` 归楼层流送管
+## （实测装配后 `is_visible_in_tree()` 为 false）。黑幕跟着它一起被隐藏时，
+## 房间外的遮挡就整块失效 —— 而观感这种东西最怕"有时候有效"。
+##
+## 两者顶点都是世界坐标 + `top_level = true`，挂哪里都不吃父变换，
+## 所以直接挂根最省事、也不受楼层切换影响。
+func _flow_view_mask_parent() -> Node:
+	return self
+
+
+## 当前房间变化后重建黑幕。幂等：只有房间真的变了才重建。
+##
+## 装配完成时 `_current_room_id` 还没被基类写过（玩家刚出生），此时按入口房
+## `start` 挖洞 —— 否则第一帧会是"整屏全黑"，玩家以为关卡坏了。
+func _refresh_flow_view_mask(force := false) -> void:
+	if not _flow_rules_active:
+		return
+	var room_id := _current_room_id
+	if room_id.is_empty() or not _room_by_id.has(room_id):
+		room_id = "start"
+	if not force and _flow_view_mask_room_id == room_id:
+		return
+	_flow_view_mask_room_id = room_id
+	_build_flow_view_mask(room_id)
+
+
+## 清掉所有黑幕 / 幕墙节点（包括历史遗留位置）。
+##
+## 两个坑叠在一起，必须都处理：
+##
+## ① **挂载点在历史上变过**（先 `Blocks/Expedition`，后场景根）。只清"当前 parent 下"
+##    会把旧位置那份留在树上 —— 它是 27m 高的墙，会一直被当成"塔楼高墙穿房"。
+##    所以按**名字前缀**全树扫描，不看 parent。
+## ② **`queue_free()` 是延迟的，名字要到帧末才释放**。先 free 旧节点、紧接着
+##    `add_child` 同名新节点，Godot 会因为重名把**新**节点自动改成匿名
+##    `@MeshInstance3D@NNN` —— 于是它在树里既搜不到名字、又被当成"塔楼高墙"。
+##    所以这里先 `remove_child()`（立刻释放名字），再 free。
+func _clear_flow_view_nodes() -> void:
+	for node in find_children("FlowViewWalls*", "", true, false):
+		var parent := node.get_parent()
+		if parent != null:
+			parent.remove_child(node)
+		node.queue_free()
+	for node in find_children("FlowViewMask*", "", true, false):
+		var parent := node.get_parent()
+		if parent != null:
+			parent.remove_child(node)
+		node.queue_free()
+
+
+func _build_flow_view_mask(hole_room_id: String) -> void:
+	## 房间外遮挡：**只建竖直幕墙**（见下方 `_build_flow_view_walls()`）。
+	##
+	## 早期版本还有一层"水平黑色平面 + 挖洞"（FlowViewMask）。它被删掉有两个原因：
+	##
+	## ① **视差**。平面在 Y = 2.88m、相机在 10.26m，视线穿过平面的交点比地面落点
+	##    更靠近相机（约 0.72 倍）。于是"世界坐标的洞"和"屏幕上的洞"永远对不上：
+	##    洞外扩一点就露出墙外地面（业主红框那条缝），洞内缩一点就把墙顶剖面也盖黑。
+	##    挪相机位置缝宽还会变 —— 这个形状无解。
+	## ② **观感**。业主 2026-10-28：「顶部横截面可以露出来，这样更有顶视角游戏的感觉」。
+	##    水平面在墙顶上方 0.08m，正好把房间四周的墙顶剖面整圈盖掉，
+	##    房间看着像个"顶被掀了的盒子"，反而没有顶视角厚度。
+	##
+	## 竖直幕墙没有这两个问题：它贴在**墙外表面**、从地面以下一直到 26m（远高于相机），
+	## 从房间内看向房间外的任何视线都必然穿过它，与相机位置无关；
+	## 而它是竖直的，俯视时完全不遮挡墙顶水平剖面。
+	##
+	## 留一个空壳函数是为了保留调用点与"换房重建"的语义（幕墙要跟着房间走）。
+	_clear_flow_view_nodes()
+	_build_flow_view_walls(hole_room_id)
+
+
+## 房间外「幕墙」：**当前房间四周**贴一圈纯黑竖直面，从地面以下一直到 26m 高。
+##
+## 为什么光有水平遮罩不够（业主 2026-10-28 第三次报单）：
+## 水平遮罩（`FlowViewMask`）是个**有视差的平面**。相机在 10m 高、俯角 −60°，
+## 一条射向房间外的视线与遮罩平面（Y = 2.88）的交点，比它在地面上的落点**更靠近相机**
+## （约 0.7 倍距离）。所以"世界坐标矩形挖洞"在遮罩平面上永远偏大一圈，
+## 墙根外侧就漏出一条能看见隔壁地面的缝。挪相机位置，缝的宽度还会变 —— 换几个内缩量都治不干净。
+##
+## 之前这条缝看不出来，是因为**门板一直挡在门洞里**（升降门只抬起 0.32m，视觉上门洞始终被盖住）。
+## 门改成双扇对开之后门洞真的通了，缝就从门洞透出来了。
+##
+## 竖直幕墙没有视差问题：从房间内射向房间外的任何一条视线，都必然穿过"墙外表面"那一圈；
+## 幕墙就贴在那里、且上沿远高于相机，于是必然挡住。与相机位置无关，只有换房才要重建。
+func _build_flow_view_walls(hole_room_id: String) -> void:
+	var room := _room_by_id.get(hole_room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(room):
+		return
+	var dims := room.get_dimensions()
+	if dims.x <= 0.0 or dims.y <= 0.0:
+		return
+	var rp := room.global_position
+	# 足迹 = 墙中线矩形；外推到**墙外表面**外一点点 gap。
+	# 贴着墙外表面是为了让墙顶剖面（footprint ± 半墙厚 那一圈水平面）完整露出来，
+	# 玩家看到的房间才有"墙有厚度"的顶视角感；再往外的一切都被这圈幕墙挡黑。
+	var off := FLOW_ROOM_WALL_THICKNESS_M * 0.5 + FLOW_VIEW_WALL_GAP_M
+	var x0 := rp.x - dims.x * 0.5 - off
+	var x1 := rp.x + dims.x * 0.5 + off
+	var z0 := rp.z - dims.y * 0.5 - off
+	var z1 := rp.z + dims.y * 0.5 + off
+	var bottom := FLOW_VIEW_WALL_BOTTOM_M
+	var top := FLOW_VIEW_WALL_TOP_M
+	var vertices := PackedVector3Array()
+	# 四面：每面两个三角形。相邻面在转角处各多铺 off，避免斜看时露出角缝。
+	var quads := [
+		# 北（z 最小）
+		[Vector3(x0 - off, bottom, z0), Vector3(x1 + off, bottom, z0),
+			Vector3(x1 + off, top, z0), Vector3(x0 - off, top, z0)],
+		# 南（z 最大）
+		[Vector3(x0 - off, bottom, z1), Vector3(x1 + off, bottom, z1),
+			Vector3(x1 + off, top, z1), Vector3(x0 - off, top, z1)],
+		# 西（x 最小）
+		[Vector3(x0, bottom, z0 - off), Vector3(x0, bottom, z1 + off),
+			Vector3(x0, top, z1 + off), Vector3(x0, top, z0 - off)],
+		# 东（x 最大）
+		[Vector3(x1, bottom, z0 - off), Vector3(x1, bottom, z1 + off),
+			Vector3(x1, top, z1 + off), Vector3(x1, top, z0 - off)],
+	]
+	for quad in quads:
+		var a: Vector3 = quad[0]
+		var b: Vector3 = quad[1]
+		var c: Vector3 = quad[2]
+		var d: Vector3 = quad[3]
+		vertices.append(a)
+		vertices.append(b)
+		vertices.append(c)
+		vertices.append(a)
+		vertices.append(c)
+		vertices.append(d)
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	mesh.surface_set_material(0, _flow_view_mask_material())
+	var walls := MeshInstance3D.new()
+	walls.name = "FlowViewWalls"
+	walls.mesh = mesh
+	walls.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	walls.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+	# 顶点是世界坐标：用 top_level 忽略父节点变换，避免被区块偏移一次。
+	walls.top_level = true
+	_flow_view_mask_parent().add_child(walls)
+	walls.global_transform = Transform3D.IDENTITY
+	walls.set_meta("view_wall_room_id", hole_room_id)
+	walls.set_meta("view_wall_bottom", bottom)
+	walls.set_meta("view_wall_top", top)
+	walls.set_meta("view_wall_offset", off)
+	walls.set_meta("view_wall_rect", Rect2(x0, z0, x1 - x0, z1 - z0))
+
+
+## 黑幕 / 幕墙共用的材质：纯黑、不吃光、不吃雾、双面、不投影。
+##
+## `disable_fog = true` 是硬要求：unshaded **不等于**"不参与环境雾"，
+## 漏掉它时远征场景的浓雾会把遮罩染成灰蓝（实测采样 56,68,78），
+## 看上去仍然像"墙外有一层可见的远景"。
+func _flow_view_mask_material() -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = Color(0.0, 0.0, 0.0, 1.0)
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.disable_receive_shadows = true
+	material.disable_fog = true
+	return material
+
+
 func _finish_floor_bundle(floor_index: int, reason: String, context: Dictionary) -> bool:
 	var plan: Dictionary = context["plan"]
 	var ids_by_key: Dictionary = context["ids_by_key"]
 	var current_exit_id: String = context["current_exit_id"]
 	var next_floor_index: int = context["next_floor_index"]
+	# 纯通洞边的"已开"状态**在这里再落一次**：`_prepare_floor_bundle()` 里设过一次，
+	# 但后续 `_build_topology()` 会 `_open_edges.clear()` 并按「缺省要清房才开」重建，
+	# 把那次设置冲掉（实测 26 条边全部回到 false）。
+	# 放在 `minimap.configure()` 之前，小地图读到的就是真实状态。
+	_apply_open_passage_edge_states(plan)
 	minimap.configure(_records, _open_edges)
 	_rebuild_floor_stage(floor_index)
 	if _floor_room_ids.has(next_floor_index):
@@ -5575,6 +6313,12 @@ func _finish_floor_bundle(floor_index: int, reason: String, context: Dictionary)
 	# （`_ready()` 那次只能覆盖开场就已在场的房间；98F 四房在标准流程里由到达门
 	# 事务才建）。安装器本身幂等，重复调用只会重新 configure 既有组件。
 	_install_simple_transit_door_components()
+	# `_ensure_floor_generated()` 会走 `_prepare_layout_rooms() → _build_topology()`，
+	# 那一步 `_open_edges.clear()` 之后按「缺省要清房才开」重建 —— 所以纯通洞边的
+	# "已开"状态必须在这里**最后一次**落，否则前面设过的都会被冲掉
+	# （实测 26 条边全部回到 false，与几何完全相反）。
+	_apply_open_passage_edge_states(plan)
+	minimap.configure(_records, _open_edges)
 	_update_floor_visibility_state()
 	return true
 
@@ -5804,6 +6548,10 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"connection_ports": record.get("connection_ports", []),
 		"camera_profile": record.get("camera_profile", {}),
 		"door_endpoint_owners": record.get("door_endpoint_owners", {}),
+		# 门扇开合方式：flow 关卡（远征03）下发 `slide`（双扇对开）；
+		# 其余关卡记录里没有这个键 ⇒ 空串 ⇒ RoomDoor3D 用缺省升降，逐字不变。
+		"door_opening_style": str(record.get("door_opening_style", "")),
+		"procedural_shell": bool(record.get("procedural_shell", false)),
 	})
 	room.position = record["position"]
 	room.set_meta("template_rotation_deg", float(record.get("rotation_deg", 0.0)))

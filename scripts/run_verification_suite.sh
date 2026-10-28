@@ -241,6 +241,12 @@ core_scenes=(
   verify_expedition_room_static_scenes
   verify_expedition03_room_whitebox
   verify_egt_flow_assembler
+  verify_egt_plan_bridge
+  verify_flow_floor_generation
+  probe_expedition03_runtime
+  probe_expedition_unlock
+  probe_expedition03_entry_chain
+  probe_expedition03_playable
   verify_expedition_camera_door_proxies
   verify_expedition_room_type_component_replay
   verify_test_level_99_flow

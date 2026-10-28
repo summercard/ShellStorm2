@@ -11,6 +11,14 @@ var total_kills: int = 0
 # 100F 天台只属于新手引导。玩家第一次进入 99F 基地后永久置为 true，
 # 后续启动、死亡回城和普通返航都从基地中点开始。
 var expedition_02_unlocked: bool = false
+# 通用解锁集合：由 `GameDesignConfig.EXPEDITION_LEVELS` 的 `unlock_policy = "on_clear"`
+# 声明驱动，通关前置关卡时按规则反查写入（见 `BaseManager.commit_run_settlement`）。
+#
+# 为什么在 `expedition_02_unlocked` 之外还要这一份：那个字段是**单个关卡的专用布尔**，
+# 每加一张 `on_clear` 关卡就得动一次存档结构（字段 + _to_dict + _from_dict + 三处判断），
+# 而漏掉任何一处都是"通关了却依然锁着"。这一份是集合，加关卡不再动存档。
+# `expedition_02_unlocked` 保留为**旧档兼容的读入口**：老存档里只有它。
+var expedition_unlocked_levels: Array[String] = []
 var tutorial_completed: bool = false
 var base99_rooftop_ladder_deployed: bool = false
 
@@ -114,6 +122,7 @@ func _to_dict() -> Dictionary:
 		"total_kills": total_kills,
 		"tutorial_completed": tutorial_completed,
 		"expedition_02_unlocked": expedition_02_unlocked,
+		"expedition_unlocked_levels": expedition_unlocked_levels,
 		"base99_rooftop_ladder_deployed": base99_rooftop_ladder_deployed,
 		"workshop_unlocked": workshop_unlocked,
 		"greenhouse_unlocked": greenhouse_unlocked,
@@ -165,6 +174,11 @@ func _to_dict() -> Dictionary:
 static func from_dict(d: Dictionary) -> BaseData:
 	var data := BaseData.new()
 	data.expedition_02_unlocked = bool(d.get("expedition_02_unlocked", false))
+	# 旧档只有 `expedition_02_unlocked`，没有集合 —— 迁移时补进去，
+	# 否则玩家在旧档里已经解锁的远征02 会重新变回锁住。
+	data.expedition_unlocked_levels.assign(d.get("expedition_unlocked_levels", []))
+	if data.expedition_02_unlocked and not data.expedition_unlocked_levels.has("expedition_02"):
+		data.expedition_unlocked_levels.append("expedition_02")
 	if d.has("total_runs"): data.total_runs = d["total_runs"]
 	if d.has("successful_extractions"): data.successful_extractions = d["successful_extractions"]
 	if d.has("total_kills"): data.total_kills = d["total_kills"]

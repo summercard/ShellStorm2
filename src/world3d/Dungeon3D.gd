@@ -1447,7 +1447,11 @@ func _process(delta: float) -> void:
 				player.global_position,
 				player.aim_direction
 			)
-			minimap.set_enemy_positions(_get_minimap_enemy_positions())
+			# 「战斗之外」档（原作默认）要靠这个开关判断当前该不该显示地图：
+			# 当前房还有活怪 = 战斗中。取数口与红点同一处，避免两套口径。
+			var live_enemies := _get_minimap_enemy_positions()
+			minimap.set_enemy_positions(live_enemies)
+			minimap.set_in_combat(not live_enemies.is_empty())
 			if _full_map_control != null and is_instance_valid(_full_map_control):
 				_full_map_control.copy_state_from(minimap)
 	_offscreen_indicator_accumulator += delta
@@ -1960,13 +1964,18 @@ func _build_reference_main_hud() -> void:
 	_anchor_control(seed_label, 0.0, 0.0, 0.0, 0.0, 22, 180, 360, 202)
 	_reference_hud_root.add_child(seed_label)
 
-	# 圆形小地图沿用真实房间/玩家/敌人数据，只替换视觉外壳。
-	# 2026-09-28 主人要求：右上角雷达不再显示。节点必须保留 —— 多枚探针直接
-	# get_node("HUD/DungeonMinimap3D") 并读 get_snapshot()/size/set_current_room，
-	# 因此只置 visible=false。M 键的全层地图入口与楼层标签、计时栏均不受影响。
+	# 右上角小地图：**2026-10-28 起改为"挺进地牢式"矩形拼图**（业主指令）。
+	# 与 2026-09-28 退役的圆形雷达不是同一个形态：不跟随玩家、不居中、不裁圆，
+	# 固定缩放、右上贴边、房间是"填充+描边+门洞"的矩形块，房型靠图标区分。
+	# 规格与依据：docs/v0.1/reference/挺进地牢/minimap实现方式.md
+	# 节点名与路径保持不变 —— 多枚探针直接读 get_node("HUD/DungeonMinimap3D")。
 	minimap.z_index = 105
-	_anchor_control(minimap, 1.0, 0.0, 1.0, 0.0, -292, 44, -18, 318)
-	minimap.visible = false
+	# 设计盒 458×346（×HUD_UI_SCALE 0.8 ⇒ 366×277 canvas）。
+	# 高度从最早的 374 收到 346 —— 我们的楼层偏"宽而扁"（远征01 是 6 间横排，
+	# 层高只有一条支线），374 会在底部留一大条空黑。这个盒是**上限**，
+	# 楼层更方时会自动填满（缩放按盒夹紧）。
+	_anchor_control(minimap, 1.0, 0.0, 1.0, 0.0, -466, 44, -8, 390)
+	minimap.visible = true
 	# tap 小地图 → 切换全层地图（键 M 等效）
 	minimap.mouse_filter = Control.MOUSE_FILTER_STOP
 	minimap.tooltip_text = "点击打开/关闭全层地图 [键 M]"
@@ -1980,11 +1989,17 @@ func _build_reference_main_hud() -> void:
 	# 位置按业主标注：右上角，落在世界时间（`WorldDateTimeHUD`，右缘 -18、y 48..98）
 	# 正下方。右缘与世界时间对齐同一列 —— 两块右边缘对齐才不会是"一高一低地飘"。
 	# 外径 = -126 到 -18 = 108 设计 px，与 `ENCOUNTER_COUNTDOWN_RING_DIAMETER_DESIGN` 同值。
-	# 与雷达（`minimap`，y 44..318 但已隐藏）区域重叠是安全的：那个节点只剩占位。
+	# 2026-10-28 业主裁定：**挪到画面左下方**。原位置（右上 1.0/0.0 锚点）与小地图矩形拼图
+	# 在 y 100..208 必叠，环压在地图上读数虽不被盖住，但两块 UI 抢同一块空间。
+	# 改锚 (0.0, 1.0, 0.0, 1.0) = 相对**左下角**定位，地图与环从此分居屏幕两侧，结构上不可能重叠。
+	# 落点 40..148 / -148..-40（设计 px）：距左边缘 40、距底边 40。
+	# 同区域核查过不撞：`hint` 是居中锚（x 280..1000），`extraction_panel` 居中（x 390..890），
+	# `weapon_panel` / `loot_label` 在右下，左侧 y 500 以下原本全空。
 	_hud_countdown_ring = ENCOUNTER_COUNTDOWN_RING_SCRIPT.new() as EncounterCountdownRing
 	_hud_countdown_ring.name = "EncounterCountdownRing"
 	_hud_countdown_ring.visible = false
-	_anchor_control(_hud_countdown_ring, 1.0, 0.0, 1.0, 0.0, -126, 100, -18, 208)
+	_hud_countdown_ring.z_index = 120
+	_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 40, -148, 148, -40)
 	_reference_hud_root.add_child(_hud_countdown_ring)
 	# 中间那行时间「用下方金币的字体」= 与右下 `RunLootReadout` **同一个** `_make_hud_label`
 	# 口径（同字号 26、同 `RUN_COIN_READOUT_COLOR`、同 `_outline_labels` 描边）。
@@ -2694,6 +2709,8 @@ func _prepare_layout_rooms() -> void:
 			"connection_ports": record.get("connection_ports", []),
 			"camera_profile": record.get("camera_profile", {}),
 			"door_endpoint_owners": record.get("door_endpoint_owners", {}),
+			# 门扇开合方式：未声明的关卡得到空串 ⇒ RoomDoor3D 用缺省升降，行为逐字不变。
+			"door_opening_style": str(record.get("door_opening_style", "")),
 			# 传送支线位点（支线秘密房间设计 §3.2）：与其余房间级字段同样逐级透传。
 			# 未声明位点的房间得到空字典 ⇒ 一个节点都不建，行为逐字不变。
 			"secret_site": record.get("secret_site", {}),
@@ -3784,6 +3801,15 @@ func set_room_seal(room_id: String, sealed: bool, reason: String = "") -> void:
 		var peer_door := peer.get_door_node_towards(room_id)
 		if peer_door != null:
 			peer_door.set_open(false)
+
+
+## 房间肃清、解封之后的关卡级收尾。基类什么都不做。
+##
+## 存在的理由：flow 关卡（远征03）要在这一刻**自动把门推开**，
+## 而 `_mark_room_cleared()` 是塔楼与远征共用的实现 —— 直接往里塞关卡分支
+## 会让两个玩法的清房语义互相污染。钩子只给需要定制的关卡一个落点。
+func _on_room_unsealed(_room: DungeonRoom3D) -> void:
+	pass
 
 
 func _room_is_sealed(room_id: String) -> bool:
@@ -6614,9 +6640,17 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 		return
 	var was_cleared := room.cleared
 	room.cleared = true
+	# 小地图的绿色弹夹标记（原作"已清 + 可传送"那个图形）只认这一处状态，
+	# 不另立一套"清理"口径 —— 否则地图上的"已清"和玩法里的"已清"会分叉。
+	if minimap != null:
+		minimap.mark_room_cleared(room.room_id)
 	# 踩点遭遇的房间：肃清即解封 —— 门扇恢复可交互，玩家可以开门离开。
 	_room_encounter_active.erase(room.room_id)
 	set_room_seal(room.room_id, false)
+	# 解封之后的关卡级收尾钩子（基类空实现）。
+	# flow 关卡在这里把门**自动推开** —— EGT 清完怪门就开，不需要玩家按 E。
+	# 放在 `set_room_seal(false)` 之后：钩子里要用"已解封"的状态去推门。
+	_on_room_unsealed(room)
 	if _boss_reinforcement_states.has(room.room_id):
 		(_boss_reinforcement_states[room.room_id] as Dictionary)["stopped"] = true
 	_cancel_room_wave_intermission(room.room_id)

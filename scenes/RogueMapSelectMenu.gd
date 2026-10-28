@@ -83,6 +83,10 @@ func _ready() -> void:
 	# 导航清单是唯一真源：城市按它决定"显示哪几个入口、各在哪"，
 	# 不再各自维护一份（早期两边各写一片数组，加关就会错位）。
 	_city.level_ids = LEVEL_IDS.duplicate()
+	# 牌面文案交给本菜单算 —— 只有这里同时知道「场景在不在」和「解没解锁」。
+	# 必须**在 add_child 之前**注入：城市在 `_ready` 里就把牌面标签建好了，
+	# 之后再给 provider 就改不到已经建出来的文字。
+	_city.entry_hint_provider = _entry_hint_text
 	get_parent().add_child(_city)
 	var anchor := _facility.global_position + Vector3.UP * 1.7
 	if _facility.has_method("get_hologram_anchor"):
@@ -312,12 +316,43 @@ func _refresh_level_ids() -> void:
 
 
 ## 未开放/未解锁的入口，点下去要给准确回执，而不是静默不动。
+##
+## 「准确」指的是**说对是哪一种**：场景没建（尚未开放）和还没解锁（尚未解锁）
+## 对玩家是两件事 —— 前者只能等，后者去通关前置关卡就行。
+## 旧版无论哪种都写「尚未开放」，而牌面（`HologramCity3D` 只看场景在不在）
+## 又会一直写「点击进入」，两处说法还互相矛盾。
 func _notify_entry_blocked(level_id: String, message: String) -> void:
 	if is_instance_valid(_city):
 		_city.status.text = message + "  ·  ESC 返回"
 		var index := LEVEL_IDS.find(level_id)
 		if index >= 0 and index < _city.entry_hints.size():
-			_city.entry_hints[index].text = "尚未开放"
+			_city.entry_hints[index].text = _entry_hint_text(level_id)
+
+
+## 入口状态：**唯一判定处**。「场景在不在」+「解没解锁」两道门都在这里。
+## 牌面文案与点击后的回执都由它派生，因此不会再出现「牌面说能进、按下去说进不去」。
+const ENTRY_OPEN := "open"
+const ENTRY_COMING_SOON := "coming_soon"
+const ENTRY_LOCKED := "locked"
+
+func entry_state(level_id: String) -> String:
+	var entry := GameDesignConfig.expedition_level(level_id)
+	if entry.is_empty():
+		return ENTRY_COMING_SOON
+	if not ResourceLoader.exists(str(entry.get("scene_3d", ""))):
+		return ENTRY_COMING_SOON
+	if not BaseManager.is_expedition_level_unlocked(level_id):
+		return ENTRY_LOCKED
+	return ENTRY_OPEN
+
+func _entry_hint_text(level_id: String) -> String:
+	match entry_state(level_id):
+		ENTRY_OPEN:
+			return "点击进入  ·  ENTER"
+		ENTRY_LOCKED:
+			return "尚未解锁  ·  LOCKED"
+		_:
+			return "尚未开放"
 
 func _on_alternate_level_pressed(level_id: String) -> void:
 	_enter_level(level_id)
@@ -331,16 +366,18 @@ func confirm_selection() -> void:
 func _enter_level(level_id: String) -> void:
 	if _departing or _state == "closing":
 		return
-	var entry := GameDesignConfig.expedition_level(level_id)
+	var display_name := GameDesignConfig.expedition_level_display_name(level_id)
 	# 顺序有意为之：先查"到达场景在不在"，再查解锁。
 	# 反过来（先查解锁就 return）会让"未解锁 + 场景没建"的关卡点下去毫无反应 ——
 	# 玩家分不清是没解锁还是没做完，也无从判断该等哪一样。
-	if entry.is_empty() or not ResourceLoader.exists(str(entry.get("scene_3d", ""))):
-		_notify_entry_blocked(level_id, "%s尚未开放" % GameDesignConfig.expedition_level_display_name(level_id))
-		return
-	if not BaseManager.is_expedition_level_unlocked(level_id):
-		_notify_entry_blocked(level_id, "%s尚未解锁" % GameDesignConfig.expedition_level_display_name(level_id))
-		return
+	# 两道门与牌面文案共用 `entry_state()`，因此点下去的提示与牌面永远一致。
+	match entry_state(level_id):
+		ENTRY_COMING_SOON:
+			_notify_entry_blocked(level_id, "%s尚未开放" % display_name)
+			return
+		ENTRY_LOCKED:
+			_notify_entry_blocked(level_id, "%s尚未解锁" % display_name)
+			return
 	if not GameDesignConfig.select_expedition_level(level_id):
 		return
 	_departing = true

@@ -1,3 +1,1083 @@
+## 2026-10-28（十一次）修掉墙外那条能看见隔壁房间的浅带
+
+业主报：「这个会有漏缝，填补其它地方的黑色区域……没改门之前的版本好像没有。」
+
+### 一、为什么"改门之前没有"
+
+不是门的问题，是**门把缝挡住了**。升降门只抬起 0.32m，视觉上门洞始终被门板盖住；
+墙根那条缝一直存在，只是从门洞透不出来。门改成双扇对开之后门洞真的通了，缝就露出来了。
+
+### 二、根因：水平遮罩有视差，这个形状无解
+
+原遮挡是一层带洞的**水平**平面（`FlowViewMask`，Y = 2.88m）。相机 10.26m、俯角 −60°，
+射向墙外地面的视线与该平面的交点比地面落点**更靠近相机**（约 0.72 倍）。
+于是"世界坐标的洞"与"屏幕上的洞"永不重合：
+
+| 洞口相对房间足迹 | 结果 |
+|---|---|
+| 外扩 0.35m（原实现） | 墙根外约 0.5m 的地面在屏幕上仍落在洞里 ⇒ **露出隔壁地砖** |
+| 外扩 0.05m | 缝变窄但仍在，相机一动缝宽就变 |
+| 内缩 0.35m | 缝没了，但**墙顶横截面被整圈盖黑**，房间成了"顶被掀的盒子" |
+
+三种都试过，都不对 —— 问题不在数值，在**这个遮挡面是水平的**。
+
+### 三、修法：改成竖直幕墙
+
+`FlowViewWalls`：贴当前房间**墙外表面**的一圈纯黑竖直面，Y 从 −1m 到 26m，换房重建。
+水平遮罩整体删除（`_build_flow_view_mask()` 现在只转发到 `_build_flow_view_walls()`）。
+
+- **没有视差**：从房间内看向房间外的任何视线都必然穿过"墙外表面"那一圈，与相机位置无关；
+- **不挡墙顶剖面**：它是竖直的，俯视时只在墙外立着，房间四周 0.28m 宽的墙顶横截面完整可见
+  —— 正是业主 2026-10-28 要的「这样更有顶视角游戏的感觉」。
+
+### 四、顺带挖出的三个坑
+
+| 坑 | 现象 | 原因 |
+|---|---|---|
+| 挂在 `Blocks/Expedition` 下 | 遮挡时灵时不灵 | 楼层几何容器，`visible` 归流送管，实测 `is_visible_in_tree() = false`。改挂场景根 |
+| `queue_free()` 后就建同名节点 | 新幕墙变成匿名 `@MeshInstance3D@NNN`，还被判成"塔楼高墙穿房" | `queue_free` 延迟、名字帧末才释放，Godot 因重名把**新**节点改名。改为先 `remove_child()` 再 `queue_free()` |
+| 清理只看当前 parent | 旧位置幕墙永远残留（27m 高，AABB 包住房间） | 挂载点在历史上变过。改为按名字前缀**全树扫描** |
+
+### 五、防回归：像素级判据（几何断言证明不了观感）
+
+`probe_expedition03_playable` 新增像素级测量：贴墙四个站位，逐像素从相机发物理射线
+（掩码 1 = 墙/地），一个像素算"漏"必须三条件同时成立：
+
+1. 射线终点在**房间足迹之外的地面**上（y ≤ 0.35m）；
+2. 该像素**不是黑的**；
+3. **关掉幕墙后该像素明显变亮**（Δ亮度 ≥ 0.05）。
+
+第 3 条不能省：墙顶剖面本来就该可见，它的射线会从墙顶边缘擦过去落在墙外地面，
+但显示的是房间自己的墙顶，幕墙开关对它毫无影响 —— 只看 ①② 会误报几千个像素（第一版就错了）。
+
+另加两条阈值，都是吃过亏才加的：
+
+| 阈值 | 值 | 为什么 |
+|---|---|---|
+| "视觉上算黑" | `on_lum ≤ 0.06`（≈15/255） | 幕墙顶边与远处交界那一圈被抗锯齿平均，实测稳定产生 0.027~0.031 的极暗像素。阈值取 0 会永久假红 |
+| 漏光像素上限 | `WALL_LEAK_LIMIT = 500` | 真漏缝是 **5000+** 个采样点、关幕墙后亮度涨 0.1~0.4；残余噪声是 <120 个、只涨 0.05~0.09。两档差一个数量级，500 对两头都有 4~10 倍余量 |
+
+实测 `wall_leak` 稳定在 **101~103**（全屏约 6400 个采样点）。
+
+```
+PLAYABLE view_curtain=true room=start
+PLAYABLE curtain rect=[P: (-5.16, -5.16), S: (15.32, 15.32)] y=[-1.00..26.00] cam_y=10.00
+PLAYABLE curtain_drift=0.160 (expect=[P: (-5.0, -5.0), S: (15.0, 15.0)])
+PLAYABLE wall_leak=103 limit=500
+PLAYABLE_OK
+```
+
+headless 下 `get_image()` 返回 null，这条自动 SKIP。
+
+另加几何断言：上沿必须高于相机、下沿必须沉到地面下、水平必须贴合当前房间足迹（漂移 ≤ 0.30m）。
+同时给既有的"塔楼高墙不得穿房"断言加了豁免：幕墙本身就是一堵 27m 高的墙，
+AABB 必然包住房间 —— 那是它的用途；`is_queued_for_deletion()` 的节点也豁免（旧幕墙改名后会伪装成匿名节点）。
+
+### 六、回归
+
+| 套件 | 结果 |
+|---|---|
+| `probe_expedition03_playable` | OK（连跑 6 次稳定，含与 `entry_chain` 交替跑） |
+| `probe_expedition03_entry_chain` / `probe_expedition_unlock` | OK |
+| `verify_expedition03_room_whitebox` / `probe_encounter_seal_door` | OK |
+| `probe_expedition02_door_coverage` / `probe_expedition_walls` | OK |
+
+### 七、测试侧修掉两条假红（这两条都会骗人）
+
+改完之后跑回归，`probe_expedition03_playable` 在 headless 与带渲染两种模式下**结论不同** ——
+这说明不是代码问题，是测试自身有时序竞态：
+
+| 假红 | 真因 |
+|---|---|
+| 带渲染时 `25/27 门洞被墙封死`、`只能走到 3/27 间房` | 门扇碰撞是 `set_deferred("disabled", ...)` 写的，**帧末才生效**。测试刚把所有门 `set_open(true)` 就同帧投射线，读到的还是"碰撞仍启用"。headless 与带窗口跑的帧率不同，所以一边红一边绿。**先试过"等两个 physics_frame"、也试过"轮询到通过为止"，两种都会偶发失败**（轮询还会因为多等几十帧把后续时序带偏）。最终改成确定性做法：这段要量的是"**墙上**的门洞通不通"，不是门扇开没开 —— 直接把门扇 `collision_layer = 0`（立即生效，非 deferred），量完还原。门扇开合另有 `slide_doors` 用例专门验 |
+| `落门之后没有刷怪` / `进内容房后没有封门` | 选样房时"先花 900ms 确认这间真的会刷怪、再回头量一次"。但**探查本身就把落门时序消耗掉了** —— 回头量到的自然是"进房瞬间已落门"。修法：把探查与测量合并成同一轮，进房那一刻就记时，边等边判；空房（会被正确放行的那种）直接换下一间 |
+
+另外 headless 下 `get_image()` 会先报 `ERROR: Parameter "t" is null` 再返回 null，
+不能靠"返回 null"判断无渲染 —— 现在直接按 `DisplayServer.get_name() == "headless"` 跳过像素判据。
+
+还有一处：像素测量里**每轮都必须现查幕墙节点**。把玩家瞬移到房间另一侧会触发换房 →
+`_refresh_flow_view_mask()` 重建幕墙 → 旧节点被 `remove_child` + `queue_free`；
+而 `is_instance_valid()` 对"已移除未释放"的节点仍返回 `true`，在旧引用上写 `.visible`
+就是 `previously freed`（实测必现）。这个坑一度让 `wall_leak` 假报 0 ——
+因为幕墙从没被真正隐藏，A/B 两张图一样，条件 ③ 永不成立。
+
+修完之后：headless 连跑 3 次、带渲染连跑 4 次，**全部 `PLAYABLE_OK`**。
+
+### 八、文档与账本
+
+- 《远征关卡03设计》：§2.1.2 重写（水平遮罩 → 竖直幕墙，含视差推导与三个坑）；
+  §2.1 实现落点表、§8 验收表同步；**新增附录 E** 逐条记根因。
+- 《EGT式关卡组装器》：§11 视野段重写，记"三轮返工"的教训。
+- 截图：`docs/art/egt_runtime/final_south_wall.png` / `final_south_mid.png` / `final_east_wall.png`
+  是改后实机图（墙外纯黑、墙顶剖面完整露出）。旧的 `expedition03_room_mask.png` /
+  `expedition03_sealed.png` / `ab_*.png` 是水平遮罩时代的证据，**已删除** ——
+  留着会让人以为现在的实现还是那个样子。
+- **账本不需要改**：幕墙是代码生成的运行时网格，没有资产 id、没有文件、不在任何账本登记范围内
+  （查过场景账本，`expedition_03` 与 `FlowViewMask/Walls` 均无登记行）。本轮也没动
+  `ENV-TOWER-DOOR-LEAF-5M`，上一轮的双扇对开登记保持不变。
+
+### 九、仍然没做
+
+- 幕墙只覆盖**当前房间**。换房瞬间（重建那一帧）理论上有一帧的空窗，实测抓不到。
+- 走廊里也建了门扇（EGT 原文 connector 通常没有门）。
+
+---
+## 2026-10-28（十次）门扇双扇对开 + 去掉镜头自动复位
+
+业主报两条，都是手感：门要左右开，镜头不要被墙弹。
+
+### 一、门扇改成双扇对开
+
+给 `RoomDoor3D` 加开合方式开关（`lift` / `slide`），**缺省仍是升降** ——
+塔楼、基地99F、远征01/02 逐字不变；远征03 由 `TowerDescent3D` 对 `procedural_shell`
+房间下发 `slide`。
+
+| 项 | 值 |
+|---|---|
+| 每扇可视宽度 | 门洞宽 × 0.55（= 1.21m），系数 `SLIDE_PANEL_WIDTH_SCALE = 1.10` |
+| 两扇中心初位 | ±0.55m（关门，中间重叠 0.11m） |
+| 开门行程 | 左右各 1.16m，门板内缘退出门洞 |
+| 右扇门厚偏移 | 0.008m（重叠区不同 z，避免共面闪烁） |
+| 碰撞 | 单块覆盖整个门洞，不跟门板走（开完立即放行） |
+
+**第一个坑**：整扇门按 50% 压扁后，两扇拼起来只有约 2.0m 可见板面，**中间露一条深色竖缝**
+（截图放大可见）。根因是门板美术四周有边框内缩 —— 几何算对了，观感还是错的。
+
+**第二个坑**：重叠区两扇同 z 会 z-fighting。右扇沿门厚让开 8mm。
+
+**第三个坑（最花时间，也是本轮真正的问题）**：改完之后门看起来**贴在墙外面**。
+根因不是开合逻辑，是**门板美术选错**：入口房属于 `authored_layout_peaceful`，
+`_door_panel_visual()` 原本给它基地 99F 的**滑升门体** —— 那是"门体"不是"门板"，
+可视厚度 **0.88m**，而程序化房间墙厚只有 **0.28m**。滑到门洞两侧时凸出 0.31m，
+房间里露出一整块蓝色门体。修法：`slide` 一律用塔楼 A 套门扇（厚 0.18m）。
+验收断言：`slide_panel_thickness worst=0.180 too_thick=0 wall=0.28`。
+
+**一个不是 bug 的现象**：关门时中间有一条亮竖线。把两扇材质换成纯色无光照后实测
+80 列全是纯色、非纯色 0 列 —— 几何完全覆盖。那条线是**门板美术自带的发光竖条**
+（原本在单扇门中央，压扁后落在每扇中央）。这条记进文档，避免后人再去调宽度系数"修缝"。
+
+**数值自证**：关门态两扇中心 `±0.55m`、开门态 `±1.71m`；验收
+`slide_doors=27 wrong_style=0 missing_second=0 bad_geometry=0`。
+
+### 二、去掉"墙碰撞后自动复位"的镜头
+
+只在 `_flow_rules_active` 时生效：
+
+| 函数 | 原行为 | 现在 |
+|---|---|---|
+| `_update_camera_lower_wall_lift()` | 墙进镜头 → 抬高 0.30m + 后方轴 3.1m→0.15m | 目标锁死基准值，平滑归零 |
+| `_update_camera_stair_slab_drop()` | 楼板/天花板压镜头 | 探针一并关掉 |
+
+**只删调用是不够的**：删掉后镜头严格跟随，贴墙时会落到房间外 —— 而房间外是黑幕，
+玩家会看到一片黑。所以补 `_clamp_flow_camera_into_room()`：**只夹水平 x/z** 到房间足迹
+内缩 0.55m 处，不改高度、不改俯角、不探测墙体。
+
+这是边界限制，不是碰撞避让 —— 业主反对的是「撞墙就跳回去又弹回来」，
+不是「镜头顶在墙前」。这条区别写进了函数注释。
+
+验收：`camera lift=0.000 trailing=4.914 base=4.914 wall_detected=false`、
+`camera_clamp ... inside=true/true`。
+
+### 三、账本
+
+《关卡场景账本》第 239 行 `ENV-TOWER-DOOR-LEAF-5M` **原地更新**（不新增资产、不改路径与 SHA）：
+
+| 列 | 改动 |
+|---|---|
+| I 状态/动画 | `godot_runtime` → `godot_runtime / lift / slide_dual` |
+| N 规格 | 补双扇对开的门板宽度与行程口径 |
+| Y 备注 | 追加本轮变更说明（含 1.10 系数的原因） |
+
+《域变更日志》追加 **v0.1.51**。基线只重算该行指纹与列 9/14/25 的列指纹；
+逐项断言 `sheet_digests` / `category_counts` / `asset_count` 与改前**完全相同**
+（证明没有误伤别的行、也没碰专表）。
+
+四个门禁：
+
+| 门禁 | 结果 |
+|---|---|
+| `check_asset_registry --scope structure` | OK（assets=1336 ledgers=9） |
+| `verify_ledger_split` | 1 条 `moved_sheet_mutated`（vfx / `3D-特效`）—— **既有红项**：`sheet_digests` 与 HEAD 逐字节相同、该账本 `git status` 为空 |
+| `check_asset_runtime_naming` | OK |
+| `check_ledger_refs` | OK（pending=0 allowed=2 dangling=0） |
+
+> 操作教训：第一版账本脚本不幂等，重跑一次就把备注写了两遍、日志多了一行。
+> 现在有「备注已含标记则跳过」「目标版本号已存在则终止」两道闸，并且版本号从历史里
+> 取下一个空号（`v0.1.49` 早在第 53 行用过，写死会撞号）。
+
+### 四、验收
+
+`probe_expedition03_playable` 新增两组断言（镜头 / 门扇开合）：
+
+```
+PLAYABLE camera lift=0.000 trailing=4.914 base=4.914 wall_detected=false
+PLAYABLE camera_clamp pos=(9.4, 10.0, 2.5) inside=true/true
+PLAYABLE slide_doors=27 wrong_style=0 missing_second=0 bad_geometry=0
+PLAYABLE_OK
+```
+
+### 五、回归
+
+| 套件 | 结果 |
+|---|---|
+| `probe_expedition03_playable` / `_entry_chain` / `probe_expedition_unlock` | OK |
+| `verify_expedition03_room_whitebox` / `probe_encounter_seal_door` / `probe_expedition02_door_coverage` / `probe_expedition_walls` | OK |
+| `verify_flow_floor_generation` / `verify_egt_plan_bridge` / `verify_tower03_expedition_entry` | OK |
+| `verify_unified_player_interaction_flow` / `verify_expedition_departure_carry` | OK |
+| `verify_arrival_gate_floor_bundle_flow` | 29 条失败，**与基线逐条相同**（回退 `src/` 到 HEAD 对照，同为 29 条） |
+| `verify_expedition_level01_flow` | 12 条失败，**与基线逐条相同**（`diff` 为空） |
+| `probe_door_leaf_placement` | 1 条（关卡99 `Door_East_P2` 悬空 12m），**既有** |
+
+### 六、文档
+
+- 《远征关卡03设计》：新增 **§2.1.5 门扇开合** / **§2.1.6 相机**，§8.3 验收表、
+  §9 边界、§11 落地表同步；**新增附录 D** 记本轮根因与账本改动。
+- 《EGT式关卡组装器》：新增 **§11.6 门扇开合与镜头**，§11.4 补一行指向它。
+
+### 七、仍然没做
+
+- 门板外观仍是一整扇门的 55% 压扁版。若后续要"真的有中缝、有把手"的双扇美术，
+  需要出一份左右半扇的门板资产，届时把 `SLIDE_PANEL_WIDTH_SCALE` 改回 1.0 即可。
+- 走廊里也建了门扇（EGT 原文 connector 通常没有门）。
+
+---
+## 2026-10-28（九次）视野封边 + 房门时序 + 退出战局
+
+业主第二轮报的是**观感与节奏**，不是"能不能走"。三条都只有真的玩起来才看得见。
+
+### 一、墙外可被观察
+
+截图红框圈出的是**隔壁房间与走廊**。不是墙矮（业主已确认 2.8m 没问题），是相机视线：
+房间壳体 `set_stream_state()` 明确**永久可见**（流送契约），相机在 10m 高、俯角 −60°，
+视线必然越过墙顶落到别处的地面上。
+
+按 Gungeon 的"一次只有一间房是舞台"，做了一层 **`FlowViewMask`**：
+只给**当前房间**挖洞的纯黑水平面（Y = 2.88m = 墙顶 + 0.08m），洞 = 当前房间足迹
+（含 0.35m 墙厚余量），其余区域全黑；换房时重建，洞跟着走。
+
+两个坑记在这里：
+
+| 坑 | 现象 |
+|---|---|
+| 遮罩材质没写 `disable_fog = true` | unshaded ≠ 不吃雾。遮罩被染成灰蓝（采样 56,68,78），看上去仍像"墙外有远景" |
+| 洞给了**所有**房间 | 等于没做。第一版就是全挖，整层房间全露着 |
+
+不选"隐藏非当前房间"（壳体可见是流送契约，改它会把走廊、隔壁门扇、相机门代理一起卷进来），
+也不选"加高墙"（业主已确认墙高没问题，这是相机视线问题）。
+
+### 二、进房时序：落门延迟 + 关门后的静默
+
+业主原话：「包括一些进门后多少时间产生关门，而且我记得还有带一个短暂的停顿。」
+
+| 段 | 常量 | 值 | 理由 |
+|---|---|---|---|
+| 进门 → 落门 | `FLOW_ROOM_SEAL_DELAY_S` | 0.30s | 门扇落下时碰撞启用，贴门框关会夹人；也给玩家两步路看清房间 |
+| 贴门洞时多等 | `FLOW_ROOM_SEAL_DOORWAY_WAIT_S` | 最多 0.90s | 宁可晚关也不夹人；走出房间则不锁 |
+| 落门 → 出怪 | `FLOW_ROOM_SPAWN_PAUSE_S` | 0.45s | "落锁"的反馈窗口：门砸下来、房间静一下、敌人才出场 |
+
+**原来的顺序是反的**：`super(room)` 里 `_spawn_room_enemies()` 立刻刷怪，封门在它之后 ——
+玩家看到"怪先出现、门才落"。修法是覆盖 `_spawn_room_enemies()`，把刷怪推迟到落门之后，
+并让 `_prepare_revealed_hostile_room()` 在 flow 关卡返回 false（塔楼的"门一开就预刷下一间"
+会提前置真 `_spawned_rooms`，真正的进房反倒什么都不做）。
+
+> 覆盖 `_spawn_room_enemies()` 时**不能只吞掉调用**：它同时被 `_repair_hostile_room_progress()`
+> 复用（重进未清房时补刷）。吞掉的话，玩家在落门延迟窗口里快步走出去一次，
+> 该房就永远停在**无怪、未清、门也锁不上** —— 一条路过的走廊能把房间永久弄坏。
+
+### 三、入口房的「[E] 退出战局」
+
+flow 关卡走程序化壳体，门扇只按 `connection_ports` 建（`_build_door_for_port`）。
+这扇"封闭抵达门"不属于任何拓扑边，只在 `doors` / `door_targets` 里登记过 ⇒ 一个门扇都不建
+⇒ `_get_configured_base_door_bindings()` 取 `get_door_node(side)` 得到 null ⇒
+整条交互**静默消失**。远征01 因为门画在静态美术 TSCN 里，绕过了这个坑。
+
+修法：`_append_closed_arrival_door_port()` 补一条**无目标端口**（`retreat_<side>`，
+不写进 `connections`），让它走正常门扇构建路径。开局门态改为
+"连通门全开、封闭门全关"（`_open_all_flow_doors()`）——气闸开着等于在墙上开个通向房间外的洞。
+
+契约不变（见 2026-09-19 离场契约）：物品全丢、保险格保留、返回 99F 基地。
+
+### 四、顺带修好：内容洗牌把战斗房洗没了
+
+`FLOW_KIND_CONTENT` 只钉了入口 / 撤离 / Boss / 前厅，`NORMAL` 与 `HUB` 留空 ⇒ 走塔楼的内容洗牌。
+实测 15 间"内容房"里只有 3 间是 `COMBAT`，其余是 TRAP / STORAGE / EVENT / SCAVENGE ——
+不刷怪，于是"进房封门"几乎从不发生，玩家看到的就是**门从来不关、怪也没有**。
+现在 `NORMAL` / `HUB` 钉成 `COMBAT`（EGT 骨架本来就用 `kind` 指定职责，不需要再洗）。
+同时 `REWARD` / `BOSS_FOYER` 加入无怪房清单（Gungeon 的宝箱房与前厅都是 enemyless）。
+
+### 五、验收
+
+`probe_expedition03_playable` 扩到五段：
+
+| 段 | 关键输出 |
+|---|---|
+| A 几何 | `doors_total=29 open=29 blocked=0 reachable=29/29`、`tall_wall_inside_room=0`、`uncovered_rooms=0` |
+| A 视野 | `view_mask hole=start others_blocked=28/28 hole_blocked=false` |
+| B 房门规则 | `key_locked=0 fate_gated=0`、`edges_without_leaf=0/31` |
+| B 退出门 | `mode=configured_expedition_retreat opened=true overlay=true` |
+| C 进房时序 | `immediate_sealed=false delay_ms≈100 sealed=true opened_after=0 alive_at_seal=0 alive_after=8` → 清房后 `sealed=false open_leaves=8` |
+
+一次运行截图对比（`ab_mask_on.png` / `ab_mask_off.png`）确证遮罩生效：
+屏幕角落像素 `(0,0,0)` vs 关掉遮罩后的 `(239,243,249)`。
+
+两个测试侧假红值得记：
+
+1. **瞬移进房会被物理纠正**：把玩家硬贴到门中心或房间中心后 `await physics_frame`，
+   位置权威会把他挪到别处（实测挪到 180m 外）。交互候选是纯距离判定，
+   设置位置后直接查即可；落门协程要连续几帧，则每帧把站位钉回房内。
+2. **存档恢复出来的"已清"会污染用例**：`_restore_runtime_world_state()` 会把
+   `_spawned_rooms` / `cleared` 写回，`_segment_runtime_state` 还会在流送切回 ACTIVE 时
+   再写一次。测"首次进房"必须连波次账与运行时快照一起清，否则永远走到
+   `_repair_hostile_room_progress()` 的"已判已清"分支。
+
+### 六、回归
+
+| 套件 | 结果 |
+|---|---|
+| `probe_expedition03_playable` | OK（连跑 3 次稳定） |
+| `probe_expedition03_entry_chain` / `probe_expedition_unlock` | OK |
+| `verify_expedition03_room_whitebox` | OK（12 房 / 56 房型 / 9 通道 / 5 门型） |
+| `probe_encounter_seal_door` / `probe_expedition02_door_coverage` | OK |
+| `verify_flow_floor_generation` | OK checks=327 |
+| `verify_egt_plan_bridge` | OK |
+| `verify_expedition_level01_flow` | 12 条失败，**与基线逐条相同**（`diff` 为空） |
+
+### 七、文档
+
+- 《远征关卡03设计》：§2.1 扩写为 2.1.1 进房时序 / 2.1.2 房间外不可观察 /
+  2.1.3 退出战局 / 2.1.4 内容洗牌；§8 验收表更新；**新增附录 C** 逐条记根因。
+- 《EGT式关卡组装器》：§11.5 改为「时序与视野」，§11.6 更新验收清单。
+
+### 八、仍然没做
+
+- 房间是程序化白盒壳体，不是官方美术；模板池 10 个（参考约 300），同局会复用。
+- 复合对象切分（阶段 C）未做 —— 当前骨架尺度不需要。
+- 走廊里也建了门扇（EGT 原文的 connector 通常没有门）。不影响游玩，但形态上与原作有差；
+  若要求一致，下一轮可以让走廊侧端口按 `open_passage` 不建门扇。
+
+---
+## 2026-10-28（八次）四条实测报单：11.9m 空墙 / 关门开门 / 闪面 / 钥匙
+
+业主带截图报四条。逐条都是「只有真的走进去才看得见」的问题，
+所以这一轮的验收全部改成**站在玩家位置**去验。
+
+### 一、进房后刷出 11.9m 的墙和空阻挡
+
+塔楼的走廊连接器与楼层外墙是 **5m 栅格 + 11.9m 高**的一套几何，
+按 `_room_door_world_position()` 取门位铺墙。而 flow 房间是 25m 级白盒、
+门位落在**半个模块**上 —— 塔楼模型表达不了，就在房间内部凭空铺出 11.9m 墙，
+还带 `CorridorWallCollision_*`（"空阻挡"）。
+
+改法：给"墙体由房间自己生成"立判据（静态布局 **或** 程序化壳），命中就
+**完全不建连接器几何**。实测 `ImportedCorridorWallGrid5M` 从 2 组降到 0，
+带大碰撞的 `StaticBody3D` 从 9 降到 5（剩下的是关卡外圈外墙与楼板）。
+
+### 二、进房关门 / 清怪开门
+
+机制在项目里本来就齐（`set_room_seal` / `_mark_room_cleared`），flow 关卡缺三样：
+
+| 缺什么 | 表现 |
+|---|---|
+| 门扇没建（门洞是 5m 通洞） | 根本没有门可以关 |
+| 没有封门触发 | 进屋不封锁 |
+| 清房不自动开门 | 就算锁了也要按 E，不是 EGT |
+
+改法：
+- 门宽 5.0 → **2.2m**（`DOOR_CLEAR_WIDTH_M`），`_port_creates_door_leaf()` 才会建实体门扇；
+- `TowerDescent3D._apply_flow_room_seal()`：进战斗房 ⇒ `set_room_seal(true)`；
+- `Dungeon3D._on_room_unsealed()`（新钩子）+ `TowerDescent3D` 实现：清房 ⇒
+  **自动把门推开**，包括共享边在**对端**的那扇（本房 `_door_nodes` 里没有它）。
+
+**无怪房不封锁**：走廊 / 入口 / 撤离 / 商店标 `authored_layout_peaceful`
+（不刷怪、门策略全放行、开局即算已清）。依据是 Gungeon 原文
+"connector rooms, which are enemyless rooms" —— 把玩家关进空屋子不是难，是坏掉。
+
+> 顺带修好一个**结构性问题**：`authored_layout_peaceful` 原来嵌在
+> `authored_layout_shell` 分支里，flow 房间没有组件清单 ⇒ 字段被静默丢弃。
+> 拆成独立判断后 13 间无怪房才认得出。
+
+### 三、靠墙边缘闪面
+
+房间自带 `Floor`（顶面 Y=0），楼层台座也铺一层通用砖（同样 Y=0）—— 两套砖共面 z-fighting。
+原挖洞判据只认 `type == "STAIR_LOBBY"`，而 flow 的入口房是 `SAFE_ROOM`、
+其余是 `COMMON_ROOM`，一个都命中不了（01/02 靠静态布局那条路绕开了这个坑）。
+
+改法：`_stair_lobby_visual_holes()` 增加一条 —— `procedural_shell` 房间按
+`custom_dimensions` **精确挖掉**通用砖。承重不受影响（它只吃 `_hole_rects()`）。
+实测 29 间房全部被洞覆盖（`uncovered_rooms=0`）。
+
+### 四、不要房间钥匙
+
+`Dungeon3D._door_policy_for_edge()` 默认 `requires_clear/requires_key/triggers_fate`
+全 true，flow 关卡没有任何覆盖。
+
+改法：`TowerDescent3D._flow_rules_active` 为真时返回
+`{clear: true, key: false, fate: false}` —— 只留"清房"（它是 EGT 的房门语义），
+钥匙与命运卡都关掉。入口那一跳仍按 `_expedition_entry_gate_edges` 全放行，开局不卡。
+
+实测 `key_locked=0 / fate_gated=0`。
+
+### 五、验收（全部改成"站在玩家位置"）
+
+`probe_expedition03_playable` 重写成三段：
+
+| 段 | 验什么 | 结果 |
+|---|---|---|
+| A 几何 | 玩家掩码打射线穿门洞、入口出发可达、>5m 高墙不压房、地砖洞覆盖 | 29/29 门可穿、29/29 房可达、高墙穿房 0、地砖缺口 0 |
+| B 房门规则 | 每条边两端至少 1 扇门扇、无钥匙、无命运卡 | 边缺扇 0/31、key 0、fate 0 |
+| C 封门/清房 | 真的进房 → 断言已封锁且 0 扇开着 → 清房 → 断言门自动打开 | 通过 |
+
+> 两个假红教训，都记进文档了：
+> ① 射线必须用 `player.collision_mask` —— 默认掩码会打到 `CameraOnlyDoorWall_*`
+>    这类"只给镜头用的低墙"，把"能过"全报成"挡住"（第一次实测 20/26 假红）；
+> ② 门扇可能挂在 `RuntimeDetail` 下，流送会卸载细节 —— 数门之前要先把房间
+>    逼成 `STREAM_ACTIVE`，否则永远数到 0。
+
+### 六、回归
+
+| 套件 | 结果 |
+|---|---|
+| `probe_expedition03_playable` | **OK**（三段全绿） |
+| `probe_expedition03_entry_chain` / `_runtime` / `_unlock` | OK |
+| `verify_expedition03_room_whitebox` | OK（12 房 / 56 房型 / 9 通道 / 5 门型） |
+| `verify_egt_flow_assembler` | 72/72 + 120/120，checks=47855 |
+| `verify_egt_plan_bridge` | 120 局 119 通过，拒绝 0.8%，6448 扇门零孤儿 |
+| `verify_flow_floor_generation` | OK checks=327 |
+| `probe_encounter_seal_door` / `probe_floor_outer_wall_overlap` / `probe_expedition_walls` / `probe_expedition_safe_room_contents` | OK |
+| `probe_expedition02_door_coverage` / `verify_expedition_departure_carry` | OK |
+| `verify_expedition_level01_flow` | 12 条失败，**与改动前逐条相同**（stash 对照） |
+| `verify_expedition_room_static_scenes` | 16 条失败，**与改动前逐条相同**（stash 对照） |
+| `probe_door_leaf_placement`（测关卡99） | 1 条失败（门扇悬空 12m），**改动前同样失败**（stash 对照，同一扇 `Door_East_P2`） |
+
+### 七、文档
+
+- 《远征关卡03设计》：新增 **§2.1 房门规则（本关独立）**、改写 §8 实现状态
+  （原写"停在阶段 A 之前"已作废）、§9 边界补四条、**附录 B** 逐条记四个根因。
+- 《EGT式关卡组装器》：新增 **§11 接进游戏后补的四层**。
+
+### 八、仍然没做
+
+- 房间是程序化白盒壳体，不是官方美术；
+- 模板池 10 个（参考约 300），同局会复用；
+- 复合对象切分（阶段 C）未做 —— 当前骨架尺度不需要。
+
+---
+## 2026-10-28（七次）从「进得去」到「走得通」：补上连通拓扑与门洞
+
+上一轮修完入口链，玩家能进图、能站在入口安全房地面上了。但**进去之后出不来**：
+26 条门洞里有 15 条被墙封死，从入口只能走到 1/25 间房。
+
+这一轮把四层缺失补齐，验收从"房间建出来了"改成"**用物理射线逐门测试 + 从入口算可达性**"。
+
+### 一、缺的第一层：运行时根本没有连通拓扑
+
+flow 模式当初为了保住环状拓扑，把 `parent_key` 留空了（理由正确：EGT 骨架是图不是树）。
+但运行时的边声明**只读 `parent_key`**：
+
+```gdscript
+for value in plan["rooms"]:
+    _declare_and_register_edge(ids_by_key[parent_key], spec["id"], "horizontal")
+```
+
+于是 flow 模式 `_declared_edges = 0`（01 是 12、02 是 25）。边不声明 ⇒
+`doors` 不填、`_room_neighbors` 空、`_open_edges` 空 ⇒ **一扇门都不建**。
+
+改法：计划新增 `connections`（边清单，**运行时 id**），`_prepare_floor_bundle()`
+先按它声明边，再回退 `parent_key`。两条路都走、`_declare_and_register_edge` 内部去重，
+所以 01/02 行为逐字不变。
+
+### 二、缺的第二层：端口字段不全，谁都不认
+
+`_append_plan_room_record()` 会拿端口的 `target`（**key**）去 `_plan_spec()` 反查，
+再用查到房间的 `id` **覆盖**写成 `target_room_id`。flow 的端口只给了 `target_room_id`、
+没给 `target`，于是被覆盖成空串 ⇒ 端口认不出对面是谁 ⇒ 门只能按"两房中心的方位"猜。
+
+补齐成与远征02 同一套 schema：`port_id` / `target`(key) / `target_room_id` /
+`door_axis` / `door_line_m` / `door_center_m` / `door_width_m` / `position_m` / `outward`。
+
+其中 `door_width_m = 5.0` 是刻意的：`_port_creates_door_leaf()` 只给 ≤3m 建**门扇**，
+而门扇默认关闭且 `requires_clear = true`。白盒阶段没有刷怪（业主："刷怪可以先放着"）⇒
+房间永远清不掉 ⇒ 门永远打不开。5m = **纯通洞**，与 EGT 的"门是通道"形态也一致。
+
+### 三、缺的第三层：5m 模块壳表达不了这些门位
+
+房间记录带 `tower_module_shell = true`，走的是 `_build_tower_wall_v2`：每面墙按 5m
+模块铺，**一扇门只能占一个模块中心，且每面墙只留一扇**（`door_index` 是单个值）。
+
+两处硬冲突：
+
+| 现实 | 模块壳的要求 |
+|---|---|
+| 门位落在**半个模块**上（实测 15m 墙的门在 lane −2.5） | 门必须落在 5m 模块中心 |
+| 枢纽会**同一面墙两扇门**（40 局里 32 间房如此） | 每面墙只有一个 `door_index` |
+
+改法：flow 房间改走**程序化壳体**（`procedural_shell: true` → `tower_module_shell = false`），
+它按 lane 任意开门洞。白盒阶段要的是"能走通"，不是模块拼接的观感。
+
+> 这个字段必须先登记进 `room_from_source()` 的白名单，否则会被**静默丢弃** ——
+> 我第一次就是这么改的：生成器写了 `procedural_shell: true`，运行时读到的却是缺省 false，
+> 26 条门洞依旧 15 条封死。白名单式透传的典型坑。
+
+### 四、缺的第四层：同一面墙两扇门
+
+程序化壳体每面墙也只挖一个洞（`_build_wall()` 的 `opening_lane_m` 是单个 float）。
+新增 `wall_openings_<side>`（端口里 `open_passage` 的 lane 清单）：
+≥2 个开口时按区间把整段墙切成若干实心段、逐口补过梁（`_build_wall_with_multiple_openings`）。
+单开口/无开口完全不进新函数，既有房间墙体几何逐字不变。
+
+### 五、状态要与几何一致
+
+`_open_edges` 缺省 false（"要清房才开"），而纯通洞**没有门扇**、永远是通的。
+留 false 会让小地图/探索统计/后续"进门关人"的判据把通着的边当锁着。
+
+坑在于：`_open_edges` 会被后续的边注册整体重建，任何"声明时顺手设一次"都会被冲掉
+（实测 26 条边全回到 false）。做法是记一份**声明** `_open_passage_edges`，
+并在装配最后一个必经点（`_complete_expedition_loading`）再落一次状态。
+
+### 六、验收
+
+| 套件 | 结果 |
+|---|---|
+| `probe_expedition03_playable`（新） | **25 间房、26 条门洞全部可穿、25/25 间房从入口可达**、边上没有多余门扇 |
+| `probe_expedition03_entry_chain` | OK |
+| `probe_expedition03_runtime` | OK（25 间房） |
+| `verify_expedition03_room_whitebox` | OK（12 房 / 56 房型 / 9 通道 / 5 门型） |
+| `verify_egt_flow_assembler` | 72/72 + 120/120，checks=47855 |
+| `verify_egt_plan_bridge` | 120 局 119 通过，拒绝 0.8%，6448 扇门零孤儿 |
+| `verify_flow_floor_generation` | OK checks=327，`unreachable=0` |
+| `verify_expedition_level01_flow` | 12 条失败，**与改动前逐条相同**（stash 对照） |
+| `verify_expedition_room_static_scenes` / `_camera_door_proxies` / `_room_type_component_replay` | 16 / 1 / 249 条失败，**与改动前逐条相同**（stash 对照） |
+| `probe_expedition_loading_runtime` | 1 条失败（"远征装配期间提前显示世界"），**改动前同样失败** |
+
+> 一个假红教训：探针最初用默认碰撞掩码打射线，打到大量**只给镜头用的低墙**
+> （`CameraOnlyDoorWall_*` / `WallCollisionShort|Long`），把"能过"误报成"挡住"。
+> 必须用 `player.collision_mask` 才测的是玩家能不能过。
+
+### 七、实机画面（`docs/art/egt_runtime/expedition03_entry.png`）
+
+走真实入口链（选关 → 读取界面 → 关卡）抓的图：HUD 显示「远征关卡03 · 入口安全屋」，
+15×15 安全屋、四面墙、北侧 5m 通洞、东侧保留的退局气闸门都在。
+
+两点说明：
+
+- 开局**只有入口房是亮的**（`STAIR_LOBBY` 默认点亮，其余房要靠墙面开关）。这是全工程
+  既有约定（塔楼程序化房同样如此），不是本次引入；截图看不清是抓图时序上
+  `RuntimeDetail` 尚未构建，实机走进去即亮。
+- 地面中央那块暗矩形是顶灯的灯体阴影（灯吊在 2.72m，灯罩挡住正下方），
+  与远征01/02 同一套壳体逻辑，不是地砖缺失。
+
+### 八、仍然没做
+
+- **没有刷怪**（业主要求先放着），所以门洞一律是通洞、没有门扇开合。
+- 房间是程序化白盒壳体（4 段墙 + 地砖），不是官方美术。
+- 撤离信标 / BOSS 房内容 / 宝箱内容仍走既有通用实现，没有按 EGT 逐房定制。
+
+---
+## 2026-10-28（六次）修「远征03 进不去」：两道门 + 一个悬空出生点
+
+业主截图：情报室里远征03 的牌面写「尚未开放」，点了进不去。
+
+上一轮我把 `ExpeditionLevel03_3D.tscn` 建好、`runtime_enabled` 打开，并验证了
+「场景能被加载、26 间房能建出来」。**但那是直接加载场景文件**，不是走玩家的入口链。
+真正卡住的地方在这条链上有四处，我上一轮只看了第一处的一半。
+
+### 一、牌面文案与实际判定不是同一件事
+
+牌面文案原先只看「场景在不在」（`HologramCity3D.entry_available()`），
+而点击判定还有第二道「解没解锁」（`BaseManager`）。两处各算一套，于是可以出现
+**牌面写「点击进入」、按下去说「尚未解锁」**。现在合成一处：
+
+- `RogueMapSelectMenu.entry_state(level_id)` → `open` / `coming_soon` / `locked`，唯一判定处；
+- 牌面文案与点击回执都由它派生（`entry_hint_provider` 注入给城市，城市只负责贴字）；
+- 被挡时的回执也分清了「尚未开放」和「尚未解锁」——原先无论哪种都写「尚未开放」。
+
+### 二、解锁白名单：加一张关卡要改两处
+
+```gdscript
+func is_expedition_level_unlocked(level_id):
+    return level_id in ["expedition_01", "99"]     # ← 远征03 永远进不去
+```
+
+新增关卡必须同时改清单和 `BaseManager`，漏改第二处的表现就是**静默进不去**。
+改为在关卡清单里声明：
+
+| 关卡 | `unlock_policy` |
+|---|---|
+| 01 / 99 / 03 | `always` |
+| 02 | `on_clear`，`unlock_required_clear = expedition_01` |
+
+结算处原本也写着 `if level_id == "expedition_01": expedition_02_unlocked = true`，
+现在改成**按规则反查**「通关这关该开哪几关」。存档侧新增通用集合
+`expedition_unlocked_levels`（旧档在读入时自动把 `expedition_02_unlocked` 迁移进去），
+以后加关卡不再动存档结构。
+
+### 三、玩家出生点按**运行时 id**，不是按 key
+
+房间命名有两套，混用会静默出错：
+
+| 谁 | 认什么 | 缺了会怎样 |
+|---|---|---|
+| `_build_expedition_records()` | `key == "entry"` / `key == "room_01"` | 直接拒绝启动（响亮） |
+| `_ready()` 出生点 | 运行时 id `"start"` | **玩家停在原点 (0, 0.05, 0) 悬空**（静默） |
+
+上一轮我只改了 key，没给运行时 id。于是启动不报错、28 间房全建出来、校验全绿，
+**只有真的走进去才看得见玩家悬在半空**。现在入口房的 `room_id` 写成 `start`。
+
+同一个坑还有一份兜底样例（`floors/floor_00.json`，只在生成失败时用），
+已一并修好并在生成脚本里加了三条断言 —— 这条路平时走不到，坏了也发现不了。
+
+### 四、验收：这次验的是"玩家能不能走进去"
+
+新增两条，都在真实运行环境（autoload 已加载）里跑：
+
+| 套件 | 内容 | 结果 |
+|---|---|---|
+| `probe_expedition_unlock` | 逐关卡核对**三道**判定：牌面文案 / `entry_state` / `select_expedition_level` | 4/4 全通过 |
+| `probe_expedition03_entry_chain` | 选关 → 读取界面 → 进关 → 等装配完成 → 判定落地 | **25 间房，玩家站在入口安全房地面 `(6.5, 0.03, 2.5)`，`current_room=start`** |
+
+`probe_expedition03_entry_chain` 里有两处"等"是必要的：房间数量稳定 ≠ 装配完成
+（碰撞体还在分批启用，此时打射线会得到"脚下没地面"的假红），所以等
+`loading_scene_ready` 再判、再跑 20 个物理帧。
+
+### 五、回归
+
+| 套件 | 结果 |
+|---|---|
+| `verify_egt_flow_assembler` | 72/72 + 120/120，checks=47855 |
+| `verify_egt_plan_bridge` | 120/120，checks=19807 |
+| `verify_flow_floor_generation` | OK checks=327 |
+| `probe_expedition03_runtime` | OK |
+| `probe_expedition_unlock` / `probe_expedition03_entry_chain` | OK（新增，已登记进套件） |
+| `verify_hologram_unlock` | OK（见下） |
+| `verify_run_settlement_transaction` | OK |
+| `verify_tower03_expedition_entry` | OK |
+| `verify_expedition_hologram_city` | 5 条失败，**改动前后完全相同**（stash 对照确认），是既有问题，见下 |
+
+`verify_hologram_unlock` 原本把「03 没有场景、点不进去」写成了断言。这条断言换过两次
+被测对象（02 → 03），每次都是因为"被测关卡其实已经能进了"。现在四张关卡全都能进，
+改成用**未登记的 id** 走同一条 `coming_soon` 分支 —— 契约照样被覆盖，且不会随关卡进度失效。
+同时补了用例隔离：P 键调试面板写的解锁覆盖文件会让"新存档应该锁着"假红。
+
+`verify_expedition_hologram_city` 的 5 条失败（`hover input failed` × 3、
+`mouse clicks routed to wrong levels`、`locked navigation entry count wrong`）
+在改动前同样存在，属于无头环境下鼠标事件派发的既有问题，本轮未动。
+
+---
+## 2026-10-28（五次）对齐参考第一层 + 开放进图游玩
+
+业主：「确认一下，是否和挺进地牢的第一层一致了」→ 核对发现 6 项偏差 →
+「先修，目标是可以进行拼接，并且功能齐全，让游戏内可以进入白盒进行游玩」。
+
+### 一、核对的结论：机制对齐，数据错
+
+上一轮的 120/120、19773 项检查**全部通过**，但那些验的是「能不能走通」，
+不验「像不像 EGT」。8 个死胡同 connector、少掉的环、2 门 HUB **全都通过了**。
+
+作业方式改了：不再凭印象，逐条对 `docs/v0.1/reference/挺进地牢/` 的
+**flow 原图 + 逐房间位门数 CSV**。
+
+### 二、拓扑按参考原图重建（6/6 全对齐）
+
+旧拓扑是**按房型配额凑的**（"NORMAL 7 个、HUB 2 个"对得上就收工），边怎么连随手画。
+后果是门数分布整体偏移，其中两处是功能错误：
+
+| 问题 | 后果 |
+|---|---|
+| CONNECTOR 接成叶子（8/28 处单门） | EGT 的 connector 是**穿堂**；单门成了一条死路尽头 |
+| flow_01 / flow_02 各少 1 环 | 这两个变体叫 TwoPathsToBoss / TwoBigWings，"双路"是它们的全部意义 |
+| SHOP 串在主线 | EGT 的 shop 是支线末端（多数 1 门） |
+| HUB 2 处只有 2 门 | HUB 定义即 "larger rooms with more exits" |
+
+重建后逐张对齐（节点/边/环）：
+
+| flow | 节点 | 边 | 环 | 门数分布 |
+|---|---|---|---|---|
+| flow_01 | 16 | 17 | **2** | 1×3, 2×9, 3×3, 4×1 |
+| flow_02 | 17 | 18 | **2** | 1×2, 2×11, 3×4 |
+| flow_03 | 17 | 17 | 1 | 1×5, 2×7, 3×5 |
+| flow_04 | 17 | 17 | 1 | 1×5, 2×10, 4×1, **5×1** |
+| flow_05 | 17 | 17 | 1 | 1×5, 2×8, 3×3, 4×1 |
+| flow_06 | 18 | 18 | 1 | 1×5, 2×9, 3×3, 4×1 |
+
+`flow_04` 那个 **5 门枢纽**回来了（参考 §5.2 全层唯一一处）。
+
+### 三、再加两条断言（防再退化）
+
+1. **`EXPECTED_DEGREES`**：把参考 CSV 的**门数多重集**逐张抄进代码，逐张比对。
+   逐房间对不上无所谓（CSV 序号不对应图的左右），但**分布**必须对上。
+2. **`DOOR_RANGE_BY_KIND`**：房型语义区间。`HUB (3,5)` / `CONNECTOR (2,3)` /
+   `REWARD (1,2)` —— 这类"少于 X 门就不是这个房型"的约束，原来的上限检查一条都管不到。
+
+`MAX_DOORS_BY_KIND.HUB` 从 4 放到 5：上限一度按「四面墙各一扇」算，
+但**同一面墙可以开两扇门**（`doors` 已支持每侧给数组）。
+
+### 四、组装器三处「只在复杂拓扑上暴露」的 bug
+
+| 问题 | 后果 | 改法 |
+|---|---|---|
+| 环接点只试第一个环成员（循环末尾无条件 `break`） | flow_01 的环 0/12 全灭 | 遍历「环成员 × 环外邻居」全部组合 |
+| 环与总装**严格分段** | 环 A 放的 hub 是环 B 接点的父，B 永远等不到 | 「环 → 总装 → 环」交替迭代 |
+| 三角环的"一侧连续长"对所有环生效 | 4~6 边环被拉成链，闭合边跨 100m+ | 只对 `total <= 3` 生效 |
+
+另两处：
+- **环闭合失败不判死**，交给补边阶段。原因是「看不见的未来房间」——环闭合时还没放的房间，
+  撞房检查看不见（实测 flow_05 的 12/120 局 `room_overlap` 全来自这里）。
+- **走廊占位前置拦截**：走廊是"边放房间边生成"的，旧版只查新房间本身不重叠，
+  5m 宽的通道可以横穿第三个房间。现在 `_best_pair()` 里就按 5m 宽判，且**端点房也查**。
+
+### 五、一个把整层身份抹掉的 bug
+
+组装器的房间字典**没有 `kind`**，而下游靠它映射 role ⇒ **整层房间退化成
+`role=main` / `type=COMBAT`**：BOSS 房变普通战斗房、入口失去安全屋身份、撤离点不触发。
+
+校验器不红 —— 它只在「存在 boss 房」时才要求有 BOSS，**全是 main 时根本不检查**。
+
+### 六、开放进图（这是本轮的目标）
+
+| 件 | 状态 |
+|---|---|
+| `scenes/ExpeditionLevel03_3D.tscn` | **新建**（此前不存在，配置里指向一个空路径） |
+| `generation_policy.runtime_enabled` | false → **true** |
+| `generation_policy.flow_assembly_enabled` | false → **true** |
+| `LevelPlanLoader.VALID_MODES` | 补 `flow`（远征03 的 floor_00 早已声明 mode=flow，却一直被判非法） |
+| `floor_00.json` 的 schema | 补 `_whitebox` 后缀（**漏了 → 这份设计源从来没被读过一次**） |
+| `FloorPlanGenerator._generate_flow_floor()` | 新增 |
+| key 别名 | flow 骨架的 `n01` → 运行时硬约定要的 `room_01` |
+
+打开是安全的：远征03 此前**没有任何一局能进入**（场景不存在 + runtime_enabled=false），
+不存在需要兼容的旧 `layout_id`。05.2 §9 的 D4 约束的是「把既有关卡切到数据驱动」。
+
+### 七、验收
+
+| 套件 | 结果 |
+|---|---|
+| `verify_egt_flow_assembler` | **72/72 + 120/120，checks=47855**；环数 2/2/1/1/1/1 正确；connector 穿堂率 **81%** |
+| `verify_egt_plan_bridge` | 120 局，**119 通过**，换算拒绝 **1 局（0.8%，上限 2%）**；6448 扇门**零孤儿** |
+| `verify_flow_floor_generation` | 24/24，`unreachable=0`，校验器 0 错误 |
+| `probe_expedition03_runtime`（新） | **真实加载场景：26 间房全建出，376 个网格 / 641 个碰撞体** |
+| `verify_expedition03_room_whitebox` | 12/12 房、56 房型 |
+| `verify_level_plan_design_source` | expedition_01 两条 `room_overlap` 是**既有遗留**（stash 对照确认），新增 0 |
+
+### 八、仍不一致 / 未做
+
+- **模板池 10 个 vs 约 300 个**，同局不去重（60/60 局有复用）。买的是多样性，不影响可玩性。
+- **房间是 5m 白盒**，不是官方美术。
+- **没有刷怪、没有门扇本体、没有灯**（业主要求"刷怪可以先放着"）。
+- 注入权重只做了 flow 声明的 3 条；跨层预算 `scope:"run"` 只记录不执行。
+
+---
+## 2026-10-28（四次）接上「房间表 → 游戏楼层」这一层
+
+上一轮文档 §7 写着「组装器输出的是房间表，还没转成 `Dungeon3D` 的 record，下一步做它」。
+这轮把这一层做完了，链路打通到 `FloorPlanGenerator`。
+
+### 一、新增桥接层 `src/map/EgtPlanBridge.gd`
+
+房间表 → 壳体区块输入。三条换算规则都是实测出来的：
+
+| 规则 | 依据 |
+|---|---|
+| 全局平移 **+2.5m** | 263 间房 × 4 边 = **1052 条边界全部落在 `5k+2.5`**；平移后 526 个门点**全部**正好落在 lane 中心。一个常量平移同时满足两个条件，不需要逐房吸附 |
+| 走廊**补成房间** | 组装器记的是连接，壳体组合器只认房间。直走廊 5m 宽矩形；横向错开时 = 两段直走廊拐角共墙 + 各开一门（不做凹多边形：绕向写反一次会让**整块**退回程序化壳体） |
+| 门槽**盖章** | 组装器与 `RoomDoorLane.port_pair()` 语义相反。实测 758 条连接：`side` **100%** 一致、`lane` 仅 **18.6%** 一致。布局归组装器、门槽归本工程唯一实现，实测 **2259/2272 = 99%** 采纳，且 758/758 盖章后门点仍重合 |
+
+盖章是**保守**的：`port_pair()` 的 `b_lane` 取自 a 侧候选槽，两墙不等长时（a 25m / b 45m）
+会落在 b 的合法槽之外 —— 13/2272 处如此，这些保留组装器原槽。
+
+### 二、`mode = "flow"` 真正能生成楼层
+
+`FloorPlanGenerator._generate_flow_floor()`，开关 `generation_policy.flow_assembly_enabled`
+**缺省 false**（开启会改 `layout_id`，05.2 §9 D4 未裁决）。缺省关闭时产物与加分支前逐字节相同，
+验收里有一条专门盯它。
+
+三处「不能照抄既有链路」：
+
+1. **不填 `parent_key`** —— EGT 骨架是带环的图，没有父子。强行 BFS 编树会让校验器去检查
+   一条实际不相邻的边（boss 的 parent 被推成 boss_foyer，中间隔着 10m 走廊房）。
+2. **不填 `ports`，只写 `connection_ports`** —— 填了会触发 `port_pair()` 逐条比对，必然对不上。
+3. **`connector` 进 `FUNCTIONAL_ROLES`** —— 走廊房 enemyless，不参与内容洗牌，否则走廊里刷怪。
+
+走廊房允许空 `template_id`：尺寸由两门缺口定（5×5 … 5×30 连续变化），不可能有对应模板。
+
+### 三、一个把「一半房间走不到」的 bug
+
+门配对时键里**不能带 lane**：lane 是相对各房墙中心线的偏移，共墙两房中心不同，
+同一扇门在 a 是 `-2.5`、在 b 是 `0.0`。用它当键 ⇒ 同一对门算成两个槽 ⇒ **恰好一半的门
+配上 target** ⇒ 整层一半房间不可达（24 局全如此）。键改用「轴 + 墙平面 + 门的**绝对**坐标」，
+且**不带侧名**（共墙一侧 north / 一侧 south）。`unreachable` 从 601 归零。
+
+### 四、组装器三处「重试等于没重试」（接桥接层才暴露）
+
+桥接层让这些缺陷有了可判定形态（走廊跨度为 0、走廊压房），于是三处全暴露：
+
+| 问题 | 改法 |
+|---|---|
+| 环的起点固定取"第一个已在场成员" ⇒ 24 轮同一张图 | 起点也进 rng |
+| `_try_direct_close()` 各侧只取第一条空闲 lane ⇒ 贴住却判成要补走廊 ⇒ **0 长走廊** | 枚举两侧 lane 全部组合 |
+| 补走廊按中心差硬选一侧 ⇒ 斜向共墙时沿行进轴缺口为 0 | 遍历四面 × lane，要求缺口 >0、横向 ≤5m、不压第三房 |
+
+另 `LAYOUT_ATTEMPTS` 24 → **64**。修完回到 **72/72 + 120/120，checks=47620**（与修前逐值相同）。
+
+### 五、`RoomShellLayoutBuilder3D` 两处增强
+
+- **周长覆盖自检 `wall_gaps`**：每条边界 lane 必须有墙或 L 臂。少一格就是一扇没门的洞，
+  而这类缺口**不会让原有任何一条判据失败**（lane 归属表里根本没这条）—— 属于"静默少墙"。
+  只写进 `validation`，不进 `errors`（既有楼层不能被顺带判死）。
+- **同侧多门**：`doors` 每侧允许 `[offset, …]`。原来只认单个 float，同侧双门会**静默丢掉第二扇**
+  （实测 526 个门侧里有 2 个是双门）。
+
+### 六、两处数据/白名单 bug
+
+- `expedition_03/floors/floor_00.json` 的 `schema` 少了 `_whitebox` 后缀。`load_floor_plan()`
+  是严格相等比较 ⇒ 这份设计源**从来没有被读过一次**（其余三个关卡都是对的）。
+- `LevelPlanLoader.VALID_MODES` 没有 `flow`，而远征03 的 `floor_00.json` 早就声明了
+  `mode: "flow"` ⇒ 一读就判 `floor_mode_invalid`。
+
+### 七、验收
+
+| 套件 | 结果 |
+|---|---|
+| `verify_egt_flow_assembler` | **72/72 + 120/120，checks=47620** |
+| `verify_egt_plan_bridge`（新） | **120/120，checks=19773**；6368 扇门**零孤儿**（每扇都有对门）；墙体缺口 **0** |
+| `verify_flow_floor_generation`（新） | **24/24，checks=334**；`unreachable=0`、校验器 0 错误 |
+| `verify_expedition03_room_whitebox` | 12/12 房、56 房型、9 通道、5 门型 |
+| `verify_level_plan_design_source` | expedition_01 有 **2 条既有遗留**（`room_overlap`），**改动前后同样报**（已 stash 对照确认），本次新增 0 |
+
+### 八、出图（形状只能靠图）
+
+新增 `docs/art/egt_shell_layouts/`：画的是**会进游戏的几何**（墙 / 门洞 / L 角件 / 地砖），
+不是房间表。看三件事：墙是否补齐、门洞是否对着邻房、走廊拐角是否真的通。
+
+---
+## 2026-10-28（三次）连接房改窄长房 + 多种子抽关测试
+
+业主：「需要修改，按照挺进地牢的方式进行复刻，并且进行多个随机关卡的抽取和测试。」
+
+上一轮末尾我留了一条"`CONNECTOR` 仍是方形、没擅自动设计源"的说明，这轮把它做掉了。
+
+### 一、连接房：从 25×25 方房改成 10×30 窄长房
+
+原文两条要求，旧版一条都没做到：
+
+> *"Nodes of type connector work differently. **They have their rooms picked later, while
+> layout occurs.** These are often **long, thin rooms**, so picking one with a sensible
+> orientation is vital."*
+
+**数据侧**新增两份模板（由 `build_expedition03_level_plan.py` 直接产出，幂等）：
+
+| 模板 | 尺寸 | 格数 | 长宽比 | 门在 |
+|---|---|---:|---:|---|
+| `connector_10x30` | 10×30 | 2×6 | 3.0 | 南北（长轴两端） |
+| `connector_30x10` | 30×10 | 6×2 | 3.0 | 东西（长轴两端） |
+
+两份而不是"一份加旋转"：本工程房间尺寸是轴对齐的，不支持运行时旋转，长轴方向只能由两份表达。
+flow 里的 `CONNECTOR` 节点改成 `template_pool`（不再写死 `template_id`），
+由组装器在**布局时**按行进方向二选一。
+
+**组装侧**：`_best_pair()` 最外层加了「候选模板循环」；
+打分加 `CONNECTOR_ORIENTATION_BONUS = 1000`，必须压过全部距离项（最大约 ±500）。
+只约束子房一侧不够 —— 连接房被正确放置后，**下一间房会从它的短边接进来**，
+长轴上只剩一个门。所以另加了「锚点侧也是连接房 +1000」，让下一间从长轴端接出去。
+
+### 二、挖出一个隐蔽 bug：`template_pool` 被丢掉了
+
+`apply_injections()` 重建节点时只取了 `node_id / kind / template_id` 三个字段，
+**把 `template_pool` 丢了** —— 于是"连接房延迟选模板"的判据从头到尾没成立过，
+连接房退回成开局随机定一个模板。
+
+这个 bug 特别隐蔽：组装成功、当时断言全绿，**只有形状不对**。
+第一版改完跑验收，看着"选了模板"，其实一直是开局那次随机的结果。
+修法：整个节点 `duplicate(true)` 原样保留，只覆盖 `template_id`。
+
+### 三、环的两个结构问题（抽关测试逼出来的）
+
+**① 重试等于没重试**：环的起手侧固定"先左"，每轮重试得到**同一个几何**，
+闭合走廊长度不变 —— 重试 24 次等于重试 1 次。实测 flow_05 有一个种子 24 轮全失败、走廊 75m。
+改成起手侧由 rng 决定，重试时 rng 前进，形状才真的会变。
+
+**② 三边小环横跨对角**：A→B→C→A 里若 B 挂 A 北侧、C 又挂 A 东侧，
+闭合 B–C 要横跨 A 的对角（实测 47m）。改成"在同一侧连续长"（A→B→C），
+闭合边只剩 C–A，环自然是紧环。
+
+### 四、多种子抽关测试（本轮新增）
+
+| 层 | 次数 | 结果 |
+|---|---:|---|
+| 骨架 × 种子 | 72 | **72/72** |
+| **随机抽关**（`pick_flow()`） | **120** | **120/120**，checks=47620 |
+| 压力测试（一次性） | **600** | **600/600，失败率 0.00%** |
+
+```
+LEVEL_DRAW seeds=120 ok=120
+CONNECTOR_PASSTHROUGH 109/162 = 67%
+STRESS corridor_max=30.0m over30=0
+```
+
+走廊最短 5m、最长 30.0m，全部落在原文 4~30 单位内。
+连接房穿堂率 67%（其余被夹在中间，只能从垂直面出去 —— 几何限制，不是选错）。
+
+**新增断言**（都进了日常门禁）：
+
+1. 连接房长宽比 ≥ 2.5（方形会被直接判红）；
+2. 至少一扇门在长轴端（拒绝"纯侧向使用"）；
+3. 穿堂比例 ≥ 50%；
+4. 抽关成功率 ≥ 90%；
+5. 横竖两种连接房模板都必须出现过（否则"布局时选"是空转）。
+
+### 五、白盒同步
+
+`room_instances/expedition_03/` 从 10 份增到 **12 份**（新增 `rt_connector_10x30` / `rt_connector_30x10`）。
+白盒生成器的 `choose_ports()` 也加了规则：**长宽比 ≥ 2.5 的房，门开在长轴两端**，
+否则穿堂会变成横穿。实测两份端口分别是 `north/south` 与 `east/west`。
+
+| 项 | 结果 |
+|---|---|
+| `check_expedition03_room_layouts.py` | ok: true，12/12，issues [] |
+| 真实加载 `verify_expedition03_room_whitebox` | **PASS** rooms=12 egt_types=56 corridors=9 doors=5 checks=1296 |
+| `check_expedition_room_footprints.py` | `EXPEDITION_FOOTPRINTS_OK templates=10` |
+| 解耦 / EGT房型 / 文档契约 | EXIT 0 / EXIT 0 / 16 条历史遗留（新增 0） |
+
+### 六、出图
+
+`docs/art/egt_flow_layouts/index.html` 现在有两部分：
+
+1. **六张骨架**（固定 seed）—— 逐张看形状；
+2. **8 局随机抽关**（seed 从 20261028 起）—— 证明换种子真的得到不同关卡。
+
+抽关图里能看到 `conn` 是明显的窄长条，要么竖着、要么横着，且长轴沿行进方向。
+
+### 七、改动的文件
+
+| 文件 | 改动 |
+|---|---|
+| `data/level_plans/expedition_03/room_templates/connector_10x30.json` | **新增** |
+| `data/level_plans/expedition_03/room_templates/connector_30x10.json` | **新增** |
+| `data/level_plans/expedition_03/flows/flow_0{2,3,5,6}.json` | CONNECTOR 节点改池（5 个节点） |
+| `data/level_plans/expedition_03/level_plan.json` | `room_templates` 登记两份新模板 |
+| `scripts/build_expedition03_level_plan.py` | CONNECTOR 走池；两份窄长模板由它直接产出 |
+| `scripts/build_whitebox_room_tscn.py` | 长宽比 ≥ 2.5 的房，门开在长轴两端 |
+| `src/map/EgtFlowAssembler.gd` | 延迟选模板、朝向加分、环起手侧随机、同侧连续长、`template_pool` 不再丢 |
+| `tests/verification/verify_egt_flow_assembler.gd` | 连接房断言 + 120 局抽关 |
+| `tests/verification/export_egt_layouts.gd` | 导出抽关组 |
+| `scripts/render_egt_flow_layouts.py` | 图集分"骨架 / 抽关"两部分；图注列出连接房模板 |
+
+### 八、仍然没做的
+
+- 组装器输出仍是**房间表**，没转成 `Dungeon3D` record 真的进游戏；
+- 没消费 `door_catalog.json`（哪种门落哪条边）；
+- 注入权重未对齐原作（只有 flow 声明的 3 条）；
+- 跨层预算（`scope:"run"`）只记录不执行。
+
+## 2026-10-28（二次）修「图里没有通道」
+
+业主：「这个图看起来没有通道的样子？和挺进地牢不是一样的？」
+
+### 一、业主说对了，而且指出了两处错
+
+出图一看：**整层摊成一整片方块阵，房间之间一道缝都没有**。远看是一大块灰色区域，
+完全看不出哪里是路。根因有两条，都在我这边：
+
+| # | 错 | 后果 |
+|---|---|---|
+| 1 | 每对门都强制 `gap = 0`（共墙贴死） | 房间紧贴成一片，**没有走廊** |
+| 2 | 树的选对打分里也加了"偏好对面墙" + 强"往远处长" | 整条链被拉成笔直长蛇 / 斜线 |
+
+### 二、依据：EGT 的地图本来就比 flow 图多一层
+
+Boris 原文第 13 行说得直接：
+
+> *"the flow diagram and the map don't actually correspond perfectly. There's an extra
+> room directly below the shopkeeper room that doesn't correspond, and **there's these
+> weird corridor rooms**."*
+
+**"这些奇怪的走廊房间"就是漏掉的东西。** flow 图上没有它们的节点，地图上却有。
+
+同时原文对形状的取舍是：
+
+> *"The generator emphasizes making **tight loops and short corridors** for the most
+> central parts, and then tries to fit everything else around that."*
+
+所以不是"处处拉长走廊"，是**中部紧、外围疏**。
+
+### 三、改法：三段式拼装 + 环内紧环外疏
+
+**拼装重写为原文的三段**（之前只有第 1 段）：
+
+1. **树**：从根 DFS，**跳过环成员**，只铺环外部分；
+2. **环**：每个环从接点出发，**两端往中间合**（`_layout_loop`）；
+3. **总装**：环就位后解除排除，把剩余子树接上（`_sweep_remaining`）。
+
+第 3 段是必需的。曾经试过"只排除不总装"，结果挂在环下面的子树（boss / shop / exit）
+全部走不到，flow_01 每次 7 间房不连通。
+
+**走廊 `_corridor_gap()`**：
+
+| 情形 | gap |
+|---|---|
+| 两端点同属一个环 | **0**（共墙 → 紧环） |
+| 其余 45% | 0（直接贴合） |
+| 其余 33% / 16% / 6% | 5 / 10 / 15 m |
+
+**树不再奖励"对面墙"**：这条原文只用于环的前半段。用在树上会把链拉成直线
+（实测 `boss → foyer → reward → shop` 排成一条竖线）。"往远处长"的权重也从 2.0 降到 0.35 并封顶 45m。
+
+**渲染也改了**：原来走廊画成 1px 中心细线（看起来更像"没有通道"），
+现在按 **5m 净宽画成实体通道**，不共线时画成 L 形。
+
+### 四、新增硬断言：走廊必须在 4~30 m
+
+原文：*"The corridor must be between 4 and 30 units long (50 in the mines)."*
+
+这条不是风格偏好 —— **走廊过长等于"环被拉直了"**。旧版那条 70m 长蛇就是靠这条能抓到的缺陷。
+实测现在六张骨架 **56 条走廊**：`5m×39 / 10m×6 / 15m×9 / 20m×1 / 30m×1`，全部在区间内。
+
+### 五、验收
+
+| 项 | 结果 |
+|---|---|
+| `verify_egt_flow_assembler` | **72/72 通过，checks=17797** |
+| 走廊长度断言 | 全部 ≤ 30 m |
+| 文档契约 / 解耦 / EGT房型 / 房间白盒 | 全过，新增 0 条 |
+
+反向对照（证明新断言会红）：
+
+| 注入的错 | 结果 |
+|---|---|
+| 走廊上限收到 6m | ✅ 报「走廊 10m 超出原文上限 6m（说明环被拉直了）」 |
+
+### 六、一个必须记住的教训
+
+**形状缺陷，17797 项断言一条都抓不到。**
+
+| 版本 | 断言 | 实际形状 |
+|---|---|---|
+| gap 全 0 | 全绿 | 一整片方块阵，**没有通道** |
+| 强"往远处长" | 全绿 | 一条斜线长蛇 |
+| 现在 | 全绿 | 房间成团 + 短廊连接 |
+
+三版都过同一套断言 —— 因为它验的是"能不能走通"（不重叠、门对齐、边都被连上），
+**不验"像不像挺进地牢"**。这类问题只有出图能发现。这条已写进设计页 §4.1。
+
+### 七、过程中一次自己造成的事故（记录）
+
+做反向对照时用 shell 串了 `注入 && 跑验收 ; cp 恢复`，验收超时被 SIGTERM 杀掉，
+**`cp` 恢复没执行，80m 的注入留在了源文件里**。下一轮才发现。
+
+现在这条已修回（`roll < 0.45 → return 0.0`，上限 30m），全部重新验收通过。
+教训：注入式对照不能把"恢复"放在同一条可能被超时打断的命令链里 —— 要么先备份再单独恢复，
+要么把断言的失败路径做成快速失败（把 `LAYOUT_ATTEMPTS` 临时降到 1）。
+
+### 八、仍未解决：`CONNECTOR` 应是窄长房
+
+英文原文：*"Nodes of type connector … are often **long, thin rooms**"*，且
+*"They have their rooms **picked later, while layout occurs**"*。
+
+现状：`conn_01` 用 `std_25x25`（25×25 方形），项目 8 个模板长宽比 1.0~2.0，**没有窄长房**。
+已有 `cr_straight_05..45`（5m 宽窄长房）但组装器没接。
+
+**没有擅自改**：设计页 §10 把 `std_25x25` 写成显式决定。要改需先改设计源
+（模板 + 设计页表），不能只在组装器里替换，否则数据与文档会走偏。改法见设计页 §8。
+
 ## 2026-10-28 EGT 式关卡组装器（实现）
 
 业主：「直接复刻挺进地牢的机制即可，帮我实现。」

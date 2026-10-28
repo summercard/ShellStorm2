@@ -45,14 +45,20 @@
       ]
     },
     {
-      "node_id": "hub_01",
-      "kind": "HUB",
-      "template_id": "corridor_45x40",
+      "node_id": "n08",
+      "kind": "NORMAL",
+      "template_id": "",
       "size_m": [
-        45.0,
-        40.0
+        25.0,
+        25.0
       ],
-      "parent_node_id": "n01"
+      "parent_node_id": "n01",
+      "template_pool": [
+        "corridor_45x40",
+        "db_70x50",
+        "office_60x70",
+        "std_25x25"
+      ]
     },
     {
       "node_id": "n02",
@@ -62,7 +68,7 @@
         25.0,
         25.0
       ],
-      "parent_node_id": "hub_01",
+      "parent_node_id": "n08",
       "template_pool": [
         "corridor_45x40",
         "db_70x50",
@@ -87,12 +93,12 @@
       ]
     },
     {
-      "node_id": "reward_01",
-      "kind": "REWARD",
-      "template_id": "db_70x50",
+      "node_id": "shop",
+      "kind": "SHOP",
+      "template_id": "office_60x70",
       "size_m": [
-        40.0,
-        30.0
+        30.0,
+        40.0
       ],
       "parent_node_id": "n03"
     },
@@ -104,12 +110,32 @@
         25.0,
         25.0
       ],
-      "parent_node_id": "hub_01",
+      "parent_node_id": "shop",
       "template_pool": [
         "corridor_45x40",
         "db_70x50",
         "office_60x70",
         "std_25x25"
+      ]
+    },
+    {
+      "node_id": "reward_01",
+      "kind": "REWARD",
+      "template_id": "db_70x50",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "parent_node_id": "n04"
+    },
+    {
+      "node_id": "conn_01",
+      "kind": "CONNECTOR",
+      "template_id": "",
+      "parent_node_id": "n02",
+      "template_pool": [
+        "connector_10x30",
+        "connector_30x10"
       ]
     },
     {
@@ -120,7 +146,7 @@
         25.0,
         25.0
       ],
-      "parent_node_id": "n04",
+      "parent_node_id": "conn_01",
       "template_pool": [
         "corridor_45x40",
         "db_70x50",
@@ -129,24 +155,14 @@
       ]
     },
     {
-      "node_id": "reward_02",
-      "kind": "REWARD",
-      "template_id": "db_70x50",
+      "node_id": "hub_01",
+      "kind": "HUB",
+      "template_id": "corridor_45x40",
       "size_m": [
-        40.0,
-        30.0
+        45.0,
+        40.0
       ],
       "parent_node_id": "n05"
-    },
-    {
-      "node_id": "conn_01",
-      "kind": "CONNECTOR",
-      "template_id": "std_25x25",
-      "size_m": [
-        25.0,
-        25.0
-      ],
-      "parent_node_id": "n04"
     },
     {
       "node_id": "n06",
@@ -165,6 +181,16 @@
       ]
     },
     {
+      "node_id": "reward_02",
+      "kind": "REWARD",
+      "template_id": "db_70x50",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "parent_node_id": "n06"
+    },
+    {
       "node_id": "n07",
       "kind": "NORMAL",
       "template_id": "",
@@ -172,39 +198,13 @@
         25.0,
         25.0
       ],
-      "parent_node_id": "n06",
+      "parent_node_id": "n05",
       "template_pool": [
         "corridor_45x40",
         "db_70x50",
         "office_60x70",
         "std_25x25"
       ]
-    },
-    {
-      "node_id": "n08",
-      "kind": "NORMAL",
-      "template_id": "",
-      "size_m": [
-        25.0,
-        25.0
-      ],
-      "parent_node_id": "n07",
-      "template_pool": [
-        "corridor_45x40",
-        "db_70x50",
-        "office_60x70",
-        "std_25x25"
-      ]
-    },
-    {
-      "node_id": "shop",
-      "kind": "SHOP",
-      "template_id": "office_60x70",
-      "size_m": [
-        30.0,
-        40.0
-      ],
-      "parent_node_id": "n08"
     },
     {
       "node_id": "boss_foyer",
@@ -214,7 +214,7 @@
         25.0,
         25.0
       ],
-      "parent_node_id": "shop"
+      "parent_node_id": "n07"
     },
     {
       "node_id": "boss",
@@ -245,11 +245,11 @@
     },
     {
       "from": "n01",
-      "to": "hub_01",
+      "to": "n08",
       "kind": "tree"
     },
     {
-      "from": "hub_01",
+      "from": "n08",
       "to": "n02",
       "kind": "tree"
     },
@@ -260,27 +260,32 @@
     },
     {
       "from": "n03",
-      "to": "reward_01",
+      "to": "shop",
       "kind": "tree"
     },
     {
-      "from": "hub_01",
+      "from": "shop",
       "to": "n04",
       "kind": "tree"
     },
     {
       "from": "n04",
+      "to": "reward_01",
+      "kind": "tree"
+    },
+    {
+      "from": "n02",
+      "to": "conn_01",
+      "kind": "tree"
+    },
+    {
+      "from": "conn_01",
       "to": "n05",
       "kind": "tree"
     },
     {
       "from": "n05",
-      "to": "reward_02",
-      "kind": "tree"
-    },
-    {
-      "from": "n04",
-      "to": "conn_01",
+      "to": "hub_01",
       "kind": "tree"
     },
     {
@@ -290,21 +295,16 @@
     },
     {
       "from": "n06",
+      "to": "reward_02",
+      "kind": "tree"
+    },
+    {
+      "from": "n05",
       "to": "n07",
       "kind": "tree"
     },
     {
       "from": "n07",
-      "to": "n08",
-      "kind": "tree"
-    },
-    {
-      "from": "n08",
-      "to": "shop",
-      "kind": "tree"
-    },
-    {
-      "from": "shop",
       "to": "boss_foyer",
       "kind": "tree"
     },
@@ -321,8 +321,13 @@
   ],
   "loop_edges": [
     {
-      "from": "n03",
-      "to": "n07",
+      "from": "reward_01",
+      "to": "n03",
+      "kind": "loop"
+    },
+    {
+      "from": "reward_02",
+      "to": "hub_01",
       "kind": "loop"
     }
   ],
@@ -357,5 +362,5 @@
       "note": "壁炉房（藏层入口）。每层 1 间，优先死胡同。"
     }
   ],
-  "design_note": "两翼在中段由一条回连边闭合成环；危险连接房挂在其一翼的尾端。"
+  "design_note": "单个岔点扇出两条长翼，每翼各带一个闭环（2 环，与参考一致）。连接房是**穿堂**（2 门）接在右翼入口处。"
 }
