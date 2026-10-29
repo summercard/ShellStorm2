@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_king_bullat",
+  "note": "爆炸族·子弹榴弹王。全向弹跳弹覆盖整间房（站远处也没用），死后同时产 2 只子弹榴弹与 2 只霰弹榴弹。它是第一层的「小 Boss 级」常规怪，必须优先处理。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_king_bullat",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_shotgat",
+      "count": 2,
+      "delay_sec": 0.3
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

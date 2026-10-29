@@ -1,0 +1,23 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_mimic_trap",
+  "note": "触发族·拟态怪。静止伪装成箱子，靠近或被打中才现形（现形后是环弹）。**这是本关唯一「你主动靠近才会触发」的敌人** —— 打法上等于给房间加了一个陷阱。",
+  "shape": "box",
+  "size_m": [
+    4.0,
+    3.0,
+    4.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_mimic",
+      "count": 1,
+      "delay_sec": 0.0
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

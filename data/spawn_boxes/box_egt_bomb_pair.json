@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_bomb_pair",
+  "note": "爆炸族·两种引爆。pinhead(走近自爆/被打死也炸) + nitra(死亡留伤害场)。两者都不该贴身打 —— 一个逼你打完立刻撤，一个死后留一片禁区。EGT 用这对组合教「击杀后也要走位」。",
+  "shape": "box",
+  "size_m": [
+    5.0,
+    3.0,
+    5.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_pinhead",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_nitra",
+      "count": 1,
+      "delay_sec": 0.5
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

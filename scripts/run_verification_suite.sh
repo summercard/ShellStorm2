@@ -402,6 +402,7 @@ core_scenes=(
   verify_synthesis_catalog
   verify_synthesis_gate
   verify_workbench_menu_entry
+  verify_battle_breakable_clutter
 )
 
 # These scenes read the viewport texture and therefore require a real renderer.

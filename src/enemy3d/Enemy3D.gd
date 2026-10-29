@@ -5,6 +5,11 @@ extends CharacterBody3D
 signal killed(enemy: Enemy3D, loot: Dictionary)
 signal escaped(enemy: Enemy3D, context: Dictionary)
 signal summon_requested(enemy: Enemy3D, count: int)
+## 死亡分裂（远征03 布洛布三阶）。与 `summon_requested` 分开是因为二者语义不同：
+## 召唤是「活着请求增援」，分裂是「死亡时留下子代」，且**必须指定子代怪种**——
+## `summon_requested` 的消费方只产出 `minion` 通用小怪，表达不了「Blobulon 必裂成 Blobuloid」。
+## 仍然走 `Dungeon3D._reserve_room_spawn()` 这条既有旁路，不新建实例化出口。
+signal split_requested(enemy: Enemy3D, child_kind: String, count: int)
 signal state_changed(previous: String, current: String)
 signal boss_phase_changed(enemy: Enemy3D, phase: int)
 ## 显示器 Boss 完整播放激活流程后只发一次；房间玩法不得轮询 MonitorBossCombat 私有状态。
@@ -130,6 +135,75 @@ const BODY_SCALE_BY_KIND := {
 	"shielded": 1.2,
 	"summoner": 1.2,
 	"boss": BOSS_SIZE_MULTIPLIER,
+	# =========================================================================
+	# 远征03 复刻怪：族内变种的区分体系（2026-10-29）
+	#
+	# 问题：这批怪复用别的怪资产，5 只远程怪同一个模型、同一个体型（1.0）、
+	# 同一个颜色 —— 玩家在战斗中无法分辨"三连发"和"预判弹"该用不同躲避方式。
+	#
+	# 解法：**每族选一个主区分维度**，不是所有族都堆体型：
+	#   远程族  → 体型阶梯（强度）+ 颜色（等于弹色，见 `EnemyAvatar3D.COLORS`）
+	#   分裂族  → 纯体型阶梯（就是同一个东西越裂越小，不该变色）
+	#   爆炸族  → 体型 + 颜色（三种不同的引爆方式，靠色温分）
+	#   辅助族  → 放大 + 高亮（独苗，必须一眼看出"这只不一样，先杀它"）
+	#
+	# ⚠ 这批**必须逐只显式登记，不能靠别名回退**：
+	#   回退会让 5 只远程全部 = `ranged_caster` 的 1.0，区分度归零。
+	# =========================================================================
+	# —— 远程族：0.86 → 1.18 严格递增，与血量/威胁同序 ——
+	# 玩家看到更大的就知道要更小心，这条梯度是直的、可预测的。
+	"egt_bullet_kin": 0.86,
+	"egt_bandana_kin": 0.94,
+	"egt_veteran_kin": 1.02,
+	"egt_red_shotgun": 1.10,
+	"egt_blue_shotgun": 1.18,
+	# —— 分裂族：纯体型阶梯。母体最大，两次分裂每次都明显小一圈。——
+	"egt_blobulon": 1.00,
+	"egt_blobuloid": 0.62,
+	"egt_blobulin": 0.40,
+	# —— 爆炸族：pinhead 是标准尺寸(1.00)，nitra 酸性略小，bullat 极小极快。——
+	# 注意：`exploder` 基类是 0.78，pinhead 显式写 1.00 是**刻意的** ——
+	# 否则它比 nitra 还小，会出现「血更多、威胁更大反而更小」的倒挂。
+	"egt_pinhead": 1.00,
+	"egt_nitra": 0.90,
+	"egt_bullat": 0.55,
+	# —— 辅助族：比借用的 summoner(1.2) 再大一档，让它成为房间里的视觉焦点。——
+	"egt_gunsinger": 1.30,
+	# =========================================================================
+	# 第二批 21 只（2026-10-29）：同样**逐只显式登记**，理由与上面一致 ——
+	# 靠别名回退会让同族全部拿到被借资产的 1.0（例如书怪三只全 1.0、冲撞三只全 0.78），
+	# 族内区分一次归零。顺序按族排，族内**严格单调**（体型随血量不下降）。
+	# =========================================================================
+	# —— 子弹族补完：cardinal(56) / hollowpoint(61) 都排在族内高端 ——
+	"egt_cardinal": 1.08,
+	"egt_hollowpoint": 1.12,
+	# —— 霰弹枪族补完：老兵 75 血夹在红(69)与蓝(85)之间，体型也必须夹在中间 ——
+	"egt_veteran_shotgun": 1.14,
+	# —— 爆炸族补完：按血量阶梯排，bullat(6) < shotgat(10) < grenat(13) < spirat(19)
+	#    < nitra(31) < pinhead(38) < king_bullat(62) —— 体型严格同序，没有倒挂 ——
+	"egt_king_bullat": 1.12,
+	"egt_shotgat": 0.62,
+	"egt_grenat": 0.70,
+	"egt_spirat": 0.78,
+	# —— 分裂族补完：Chancebulon 是本族最大（100 血、随机招式）——
+	"egt_chancebulon": 1.10,
+	# —— 书怪族：三只**同血 25**，体型只用来区分"哪一本"，不代表强度 ——
+	"egt_bookllet": 1.00,
+	"egt_blue_bookllet": 1.06,
+	"egt_green_bookllet": 1.12,
+	# —— 法术族：gunjurer(49) 比 gigi(36) 大，同为悬浮施法者 ——
+	"egt_gunjurer": 1.20,
+	"egt_gigi": 1.10,
+	# —— 触发 / 逃逸族：体型按血量排；钥匙小子最小（一直在跑）——
+	"egt_keybullet_kin": 0.86,
+	"egt_chance_kin": 0.90,
+	"egt_confirmed": 1.05,
+	"egt_mimic": 1.15,
+	"egt_gun_fairy": 0.78,
+	"egt_gripmaster": 0.98,
+	# —— 重型族：本层普通怪血量顶点，也是体型顶点 ——
+	"egt_chain_gunner": 1.14,
+	"egt_gun_nut": 1.20,
 }
 const HEALTH_BAR_SIZE_BY_KIND := {
 	"fat_zombie03": Vector2(1.8, 0.18),
@@ -140,6 +214,48 @@ const HEALTH_BAR_SIZE_BY_KIND := {
 	"shielded": Vector2(1.55, 0.17),
 	"summoner": Vector2(1.55, 0.17),
 	"boss": Vector2(2.65, 0.24),
+	# —— 远征03 复刻怪：血条宽度 = 基类宽度 × 本怪体型（2026-10-29）——
+	#
+	# 血条**不随父节点 scale 缩放**（`_position_overhead_health_bar()` 里显式
+	# `scale = Vector3.ONE`），所以这里乘体型不会被放大两遍。
+	# 条宽随体型走的意义：远距离看不清模型时，**条宽是最早能读出"这是哪个变种"的信号**。
+	#
+	# ⚠ 有可读性下限：体型 0.40 的 blobulin 若严格按比例只有 0.55 宽，
+	# 在 1080p 下看不清血条分段。低于 0.72 一律夹到 0.72。
+	"egt_bullet_kin": Vector2(1.19, 0.15),
+	"egt_bandana_kin": Vector2(1.30, 0.15),
+	"egt_veteran_kin": Vector2(1.41, 0.15),
+	"egt_red_shotgun": Vector2(1.52, 0.16),
+	"egt_blue_shotgun": Vector2(1.63, 0.16),
+	"egt_blobulon": Vector2(1.38, 0.15),
+	"egt_blobuloid": Vector2(1.00, 0.15),
+	"egt_blobulin": Vector2(0.72, 0.13),
+	"egt_pinhead": Vector2(1.15, 0.14),
+	"egt_nitra": Vector2(1.04, 0.14),
+	"egt_bullat": Vector2(0.72, 0.13),
+	"egt_gunsinger": Vector2(2.02, 0.18),
+	# —— 第二批（2026-10-29）：条宽 = 基类宽度 × 本怪体型，同族随体型递增 ——
+	"egt_cardinal": Vector2(1.49, 0.15),
+	"egt_hollowpoint": Vector2(1.55, 0.15),
+	"egt_veteran_shotgun": Vector2(1.57, 0.16),
+	"egt_king_bullat": Vector2(1.29, 0.15),
+	"egt_shotgat": Vector2(0.72, 0.13),
+	"egt_grenat": Vector2(0.81, 0.13),
+	"egt_spirat": Vector2(0.90, 0.14),
+	"egt_chancebulon": Vector2(1.52, 0.15),
+	"egt_bookllet": Vector2(1.55, 0.16),
+	"egt_blue_bookllet": Vector2(1.64, 0.16),
+	"egt_green_bookllet": Vector2(1.74, 0.16),
+	"egt_gunjurer": Vector2(1.86, 0.17),
+	"egt_gigi": Vector2(1.71, 0.16),
+	"egt_keybullet_kin": Vector2(1.19, 0.15),
+	"egt_chance_kin": Vector2(1.24, 0.15),
+	"egt_confirmed": Vector2(1.45, 0.15),
+	"egt_mimic": Vector2(2.07, 0.18),
+	"egt_gun_fairy": Vector2(1.08, 0.14),
+	"egt_gripmaster": Vector2(1.52, 0.16),
+	"egt_chain_gunner": Vector2(2.05, 0.18),
+	"egt_gun_nut": Vector2(2.16, 0.18),
 }
 const HEALTH_BAR_FRAME_COLOR := Color(0.12, 0.02, 0.04, 0.96)
 const HEALTH_BAR_EMPTY_COLOR := Color(0.018, 0.024, 0.034, 0.98)
@@ -167,6 +283,390 @@ const PROFILES := {
 	# 更高楼层由 MonsterInjector 的 FLOOR_SCALING.hp_mult 与 boss_scale 通过
 	# configure_from_enemy_data 的比例还原继续放大。改这一处 = 全楼层等比例放大。
 	"boss": {"hp": 5200, "speed": 1.72, "damage": 24, "range": 9.5, "cooldown": 1.45},
+	# —— 远征03：《挺进地牢》第一层复刻怪（2026-10-29）——
+	# `hp` 是 §T0.2 幂律换算后的**3D 基线**（运行时还会 ×NORMAL_HP_MULTIPLIER=3）。
+	# `speed` 是「目标 m/s ÷ 0.7」（apply_profile 里会再 ×GLOBAL_MOVE_SPEED_MULTIPLIER）。
+	#
+	# 【攻击方式全靠参数，不靠新分支】——见本表末尾 `volley` 键与 `_perform_volley_attack()`：
+	#   volley.count      一次攻击发几发（≥2 时按 spread_deg 均匀散开）
+	#   volley.spread_deg 扇形半角（度），0 = 全部同向
+	#   volley.interval   连发间隔（秒），0 = 齐射
+	#   volley.predict    预判系数 0~1（0 = 瞄当前位置，1 = 全量预测走位）
+	# 这四项足以表达 EGT 的「单发 / 连发 / 扇形 / 预判」四类差异，
+	# 因此五只远程怪共用 `ranged` 策略，符合 [AI 设计 §3.1]「参数优先」。
+	"egt_bullet_kin": {
+		"attack_style": "volley",
+		"hp": 150, "speed": 2.857, "damage": 17, "range": 8.8, "cooldown": 2.2,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"volley": {"count": 1, "spread_deg": 0.0, "interval": 0.0, "predict": 0.0},
+	},
+	"egt_bandana_kin": {
+		"attack_style": "volley",
+		"hp": 150, "speed": 2.857, "damage": 17, "range": 8.2, "cooldown": 1.05,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"volley": {"count": 3, "spread_deg": 0.0, "interval": 0.12, "predict": 0.0},
+	},
+	"egt_veteran_kin": {
+		"attack_style": "volley",
+		"hp": 150, "speed": 3.714, "damage": 17, "range": 9.6, "cooldown": 1.6,
+		"projectile_speed": 10.0, "projectile_range": 22.0,
+		# 原作（Wiki 逐字）："They fire **4 bullets in a row**" + 预判 + 跑得比普通小子快。
+		# 旧版写成 count=1 只加了预判 —— 那是把"狙击手"当成了"老兵"。
+		# interval 0.12 ⇒ 4 连发 0.36 秒打完，配合 1.6 秒冷却才是"持续压制"的节奏。
+		"volley": {"count": 4, "spread_deg": 1.5, "interval": 0.12, "predict": 0.62},
+	},
+	"egt_red_shotgun": {
+		"attack_style": "volley",
+		"hp": 300, "speed": 2.857, "damage": 17, "range": 6.4, "cooldown": 2.4,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"volley": {"count": 5, "spread_deg": 14.0, "interval": 0.0, "predict": 0.0},
+		# 死亡全向喷：EGT 红霰弹「有几率」全向 6 发。这里用 chance 表达「有几率」，
+		# 不写成 100% —— 原作三者里红的最安全，正因为它是"有几率"而非"必定"。
+		"death_burst": {"count": 6, "chance": 0.35, "damage_ratio": 1.0},
+	},
+	"egt_blue_shotgun": {
+		"attack_style": "volley",
+		"hp": 400, "speed": 2.857, "damage": 17, "range": 6.8, "cooldown": 2.4,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"volley": {
+			"count": 5, "spread_deg": 26.0, "interval": 0.16, "predict": 0.0,
+			# 原作是「宽 5 发 + **快速接**宽 4 发」—— 两段属于**同一次攻击**，
+			# 所以用 `followup` 接在主段之后，而不是当成"下一次攻击"（那样中间会隔一个冷却）。
+			"followup": {"count": 4, "spread_deg": 26.0, "interval": 0.07, "predict": 0.0, "delay": 0.18},
+		},
+		"death_burst": {"count": 6, "chance": 0.35, "damage_ratio": 1.0},
+	},
+	"egt_blobulon": {
+		"attack_style": "contact",
+		"hp": 200, "speed": 3.143, "damage": 17, "range": 2.05, "cooldown": 1.4,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"death_split": {"child": "egt_blobuloid", "count": 2},
+	},
+	"egt_blobuloid": {
+		"attack_style": "contact",
+		"hp": 100, "speed": 3.429, "damage": 17, "range": 1.95, "cooldown": 1.3,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"death_split": {"child": "egt_blobulin", "count": 2},
+	},
+	"egt_blobulin": {
+		"attack_style": "contact",
+		"hp": 10, "speed": 4.857, "damage": 17, "range": 1.8, "cooldown": 1.1,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+	},
+	"egt_pinhead": {
+		"attack_style": "explode",
+		"hp": 130, "speed": 3.429, "damage": 17, "range": 2.85, "cooldown": 3.0,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		# 原作："If the player gets too close, it will **leap** towards the player and explode"
+		# —— 先扑再炸。0.22s 的延迟就是"它扑过来了、快退"这个可读窗口。
+		"leap": {"leap_speed": 9.5, "leap_sec": 0.22},
+	},
+	"egt_nitra": {
+		"attack_style": "explode",
+		"hp": 100, "speed": 3.429, "damage": 17, "range": 2.6, "cooldown": 3.0,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		# 原作："If the player gets too close, it will **detonate itself**" —— 同样是先扑后炸。
+		"leap": {"leap_speed": 8.0, "leap_sec": 0.22},
+	},
+	"egt_bullat": {
+		"attack_style": "rush",
+		# 一次性冲撞：命中即自身死亡。`suicide_rush` 是**新策略**（见 §T2）——
+		# 常规 MeleeLunge 打完不死，这里"碰到就消失"改变的是行动拓扑而非参数。
+		"hp": 10, "speed": 3.429, "damage": 17, "range": 7.5, "cooldown": 99.0,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"suicide_rush": {"speed": 11.0, "max_lifetime": 4.0},
+	},
+	"egt_gunsinger": {
+		"attack_style": "support",
+		# 辅助：不攻击玩家，给同伴加血加速。`support_buff` 是新策略（目标类型变了）。
+		"hp": 150, "speed": 1.429, "damage": 0, "range": 7.2, "cooldown": 3.6,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"support_buff": {"radius_m": 12.0, "hp_ratio": 0.35, "speed_mult": 1.35, "duration": 5.0},
+		# 原作是「停留」，且**玩家靠太近或自己受伤就中断施法逃跑**。
+		# 两个键合起来才是完整的它：`immobile` 管常态不动，`interrupt` 管被打断。
+		"immobile": true,
+		"interrupt": {"flee_radius_m": 6.0, "hurt_window_sec": 2.5, "flee_sec": 2.5, "flee_speed_mult": 1.5},
+	},
+	# =========================================================================
+	# 远征03 第二批：EGT 第一层剩余 21 种（2026-10-29 补齐）
+	#
+	# 目标：**整层 33 种非 Boss 敌人都能用同一套规格表表达**，不出现"这个怪没做"。
+	# 设计依据：`docs/v0.1/reference/挺进地牢/第一层怪物数据表.md` 逐行。
+	#
+	# 这一批新增的关键键（全部可选，老怪一行都不用改）：
+	#   attack_style   攻击骨架（volley / contact / explode / rush / support / flee / grab / orbit / chance）
+	#   volley.pattern 弹道图形（line / fan / v / ring / cross / clover / compass / arrows / letter / dice / spiral）
+	#   volley.bounce  子弹反弹次数（子弹榴弹王的弹跳弹）
+	#   volley.homing  追踪强度 0~1（红衣主教 / 已确认者）
+	#   volley_alt + alt_every  每隔 N 次攻击改用另一套规格（蓝霰弹第二段 / 枪坚果箭头弹群）
+	#   blink          瞬移（空尖弹周期性、枪法师出手后）
+	#   flee           逃跑 + 超时消失（钥匙小子 / 运气小子）
+	#   disguise       伪装成宝箱，靠近或被打才现形（拟态怪）
+	#   grab           悬停抓取，不改血只改位置（抓握大师）
+	#   orbit          绕圈子弹链（链枪手）
+	#   chance_moves   随机借用同族招式 + 有几率不攻击直接死（Chancebulon）
+	#   death_split.children  死亡生成**多种**子代（子弹榴弹王同时产 Bullat 与 Shotgat）
+	#
+	# ⚠ 数值口径（2026-10-29 第二轮重定标，别再用旧口径）：
+	#   `hp`     = **进场绝对值** = EGT 血量 × 10。10 这个系数来自「保持击杀发数」：
+	#              EGT Bullet Kin 15 血 / 初始手枪约 6 伤 = 2.5~3 发；
+	#              本工程初始步枪 `bp_starter_rifle` 50 伤/发 ⇒ 150 血正好也是 3 发。
+	#              因此血量与原作**严格等比**（6.67 倍差就是 6.67 倍），不再做幂律压缩。
+	#   `damage` = **命中玩家的实际伤害**。普通子弹/接触统一 17 = 玩家 100 血的 1/6，
+	#              这正是原作「半颗心 = 6 颗心里的 1/6」；爆炸类 26（1.5×）。
+	#   `speed`  = 「目标 m/s ÷ 0.7」。目标 m/s 由原作定性分档：慢 2.0 / 中 2.4 / 快 3.4 /
+	#              浮空 1.8 / 停留 0.6。原作没有帧数据（见数据表 §8），这是**按定性排序的近似**。
+	#   `cooldown` 按「occasionally 2.2 / rapidly 1.05 / periodically 2.6」三档。
+	#   `projectile_speed` 以玩家移速（4.5 m/s）为锚：原作子弹约 3.5 倍移速 ⇒ 16 m/s；
+	#              原作注明 fast-moving 的用 18~20。`projectile_range = range × 1.4`
+	#              —— 原来不设射程时子弹只有 1 秒寿命、飞 7 米就自毁，那才是"看不到子弹"的真因。
+	# =========================================================================
+	# —— 2.1 子弹族补完：红衣主教（追踪弹簇）、空尖弹（瞬移连发）——
+	"egt_cardinal": {
+		"attack_style": "volley",
+		"hp": 225, "speed": 2.857, "damage": 17, "range": 9.0, "cooldown": 2.3,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.86, 0.30, 0.42),
+		# 主攻击：单发直射。每隔 3 次改为 5 发**追踪**弹簇 —— 原作「偶尔」，
+		# 用 alt_every 表达频率，不改攻击骨架。
+		"volley": {"count": 1, "spread_deg": 0.0, "interval": 0.0, "predict": 0.0},
+		"volley_alt": {
+			"pattern": "ring", "count": 5, "spread_deg": 0.0, "interval": 0.09,
+			"predict": 0.25, "homing": 0.45, "speed": 5.2, "home_lifetime": 3.0,
+		},
+		"alt_every": 3,
+	},
+	"egt_hollowpoint": {
+		"attack_style": "volley",
+		"hp": 250, "speed": 2.571, "damage": 17, "range": 9.6, "cooldown": 1.05,
+		"projectile_speed": 10.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.72, 0.48, 0.96),
+		# 高射速连发（单发伤害低、密度高），周期性消失并在房间他处重现。
+		"volley": {"count": 4, "spread_deg": 3.0, "interval": 0.09, "predict": 0.20},
+		"blink": {"interval": 2.8, "radius_m": 9.0},
+		# 浮空：不吃地面接触，走远程手位（`_is_ranged_style` 由 attack_style 推出）。
+		"hover": true,
+	},
+	# —— 2.2 霰弹枪族补完：老兵霰弹枪（V 型 + 预判，死必喷）——
+	"egt_veteran_shotgun": {
+		"attack_style": "volley",
+		"hp": 338, "speed": 2.857, "damage": 17, "range": 6.8, "cooldown": 2.2,
+		"projectile_speed": 10.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.96, 0.52, 0.24),
+		# 原作原文："a V-shaped spread of 5 fast-moving bullets with **100% predictive aim**"
+		# —— 是 100%，不是"高概率"。写成 0.55 等于把它降级成了普通老兵。
+		"volley": {"pattern": "v", "count": 5, "spread_deg": 22.0, "interval": 0.0, "predict": 1.0},
+		# 原作三只里「必定」全向喷大量子弹 —— chance = 1.0，这是它比蓝霰弹更强的原因。
+		"death_burst": {"count": 12, "chance": 1.0, "damage_ratio": 1.0},
+	},
+	# —— 2.3 爆炸族补完：子弹榴弹王（全向弹跳弹 + 死亡产子代）——
+	"egt_king_bullat": {
+		"attack_style": "volley",
+		"hp": 260, "speed": 0.857, "damage": 17, "range": 9.0, "cooldown": 2.6,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
+		# 原作全表对它的描述只有"周期向全向发射弹跳弹"，**没有"walks towards"**
+		# —— 它是原地漂浮的炮台。`immobile` 让它不进远程绕圈分支。
+		"immobile": true,
+		"bullet_color": Color(0.98, 0.76, 0.22),
+		# 周期性向全向发射**弹跳**弹：ring + bounce。弹跳让它覆盖整间房，
+		# 玩家不能靠"站远处"规避。
+		"volley": {"pattern": "ring", "count": 8, "interval": 0.05, "predict": 0.0, "bounce": 3},
+		# 死亡时生成若干 Bullat 与 Shotgat —— 这是**多种**子代，第一批的
+		# `child/count` 表达不了，故扩展为 `children[]`（旧的 child/count 仍然生效）。
+		"death_split": {
+			"children": [
+				{"child": "egt_bullat", "count": 2},
+				{"child": "egt_shotgat", "count": 2},
+			],
+		},
+	},
+	# —— 2.4 分裂族补完：Chancebulon（随机借用同族招式 + 有几率自杀）——
+	"egt_chancebulon": {
+		"attack_style": "chance",
+		"hp": 500, "speed": 3.429, "damage": 17, "range": 2.1, "cooldown": 1.5,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.86, 0.72, 0.30),
+		# 每 5 次里有 1 次**不攻击而是直接死亡**（原作的骰子感）。
+		"chance_moves": {
+			"self_destruct_chance": 0.20,
+			"moves": ["contact", "dice", "ring"],
+		},
+	},
+	# —— 2.5 书怪族：三色同血（25），只换弹形 ——
+	# 三只血量完全相同，差异**只在弹道图案**。这是全表最纯粹的"同血不同招"样本。
+	"egt_bookllet": {
+		"attack_style": "volley",
+		"hp": 250, "speed": 2.286, "damage": 17, "range": 9.2, "cooldown": 2.4,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.90, 0.88, 0.80),
+		# `count` 必须等于模板笔画数（R = 10 笔），否则只画出第一笔就结束。
+		"volley": {"pattern": "letter", "letter": "R", "count": 10, "interval": 0.06, "predict": 0.0},
+		"hover": true,
+	},
+	"egt_blue_bookllet": {
+		"attack_style": "volley",
+		"hp": 250, "speed": 2.286, "damage": 17, "range": 9.2, "cooldown": 2.5,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.44, 0.66, 0.98),
+		# 字母弹 + 来回脉动的环形弹：主攻击是脉动环（两圈环，间隔拉长读作"脉动"）。
+		# 8 发 × 2 圈、间隔 0.12 ⇒ 一轮约 1.8 秒，正好在 2.6 秒冷却内打完。
+		"volley": {"pattern": "ring", "count": 8, "interval": 0.12, "predict": 0.0, "pulse_rings": 2},
+		"volley_alt": {"pattern": "letter", "letter": "N", "count": 9, "interval": 0.06, "predict": 0.0},
+		"alt_every": 3,
+		"hover": true,
+	},
+	"egt_green_bookllet": {
+		"attack_style": "volley",
+		"hp": 250, "speed": 2.286, "damage": 17, "range": 9.2, "cooldown": 2.6,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.52, 0.88, 0.48),
+		# 大型四叶草形弹：4 个瓣 × 每瓣 4 发
+		"volley": {"pattern": "clover", "count": 4, "spread_deg": 12.0, "interval": 0.07, "predict": 0.0},
+		"hover": true,
+	},
+	# —— 2.6 法术 / 辅助族补完 ——
+	"egt_gunjurer": {
+		"attack_style": "volley",
+		"hp": 188, "speed": 2.143, "damage": 17, "range": 8.8, "cooldown": 2.2,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.72, 0.52, 1.0),
+		# 旋转图形弹（三角 / 圆 / X）：`spiral` 逐发旋进，形状随朝向轮转。
+		"volley": {"pattern": "spiral", "count": 9, "interval": 0.10, "step_deg": 40.0, "predict": 0.0},
+		# 攻击后瞬移换位 —— 与空尖弹同一套 blink，只是触发时机不同（出手后而不是定时）。
+		"blink": {"interval": 0.0, "radius_m": 8.0, "on_attack": true},
+		"hover": true,
+	},
+	"egt_gigi": {
+		"attack_style": "volley",
+		"hp": 120, "speed": 5.143, "damage": 17, "range": 7.6, "cooldown": 2.6,
+		"projectile_speed": 4.2, "projectile_range": 22.0,
+		"bullet_color": Color(0.96, 0.82, 0.42),
+		# 吐「蛋」：蛋飞到玩家附近后炸出一群涌动子弹。
+		# 用 `egg` 表达：先发一枚慢速蛋（视觉），再在落点炸一圈。
+		"volley": {"count": 1, "spread_deg": 0.0, "interval": 0.0, "predict": 0.25, "speed": 4.2},
+		"egg": {"hatch_sec": 0.85, "burst_count": 8, "burst_damage_ratio": 0.7, "homing": 0.25},
+	},
+	# —— 2.7 一次性冲撞族补完：三种"撞到即死 + 附加弹" ——
+	"egt_shotgat": {
+		"attack_style": "rush",
+		"hp": 20, "speed": 3.429, "damage": 17, "range": 8.0, "cooldown": 99.0,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.86, 0.60, 0.96),
+		"suicide_rush": {
+			"speed": 10.5, "max_lifetime": 4.0,
+			# 撞到/被打死时吐 V 型 2 发（原作「冲撞时附加 V 型 2 发」）
+			"on_hit": {"pattern": "v", "count": 2, "spread_deg": 14.0},
+		},
+	},
+	"egt_grenat": {
+		"attack_style": "rush",
+		"hp": 30, "speed": 3.429, "damage": 17, "range": 8.0, "cooldown": 99.0,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.96, 0.42, 0.18),
+		"suicide_rush": {
+			"speed": 10.0, "max_lifetime": 4.0,
+			"on_hit": {"pattern": "line", "count": 1, "explosive": true, "damage_ratio": 0.7},
+		},
+	},
+	"egt_spirat": {
+		"attack_style": "rush",
+		"hp": 50, "speed": 3.429, "damage": 17, "range": 8.5, "cooldown": 99.0,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.62, 0.92, 0.86),
+		# 多次中途重定位 + 预判走位，撞墙才停 —— `repositions` 是它与 bullat 的唯一差别。
+		"suicide_rush": {
+			"speed": 9.5, "max_lifetime": 5.0, "repositions": 3, "predict": 0.75,
+			"on_hit": {"pattern": "line", "count": 1},
+		},
+	},
+	# —— 2.8 触发 / 逃逸型（不主动攻击，靠"追不上"制造变数）——
+	"egt_keybullet_kin": {
+		"attack_style": "flee",
+		"hp": 150, "speed": 4.286, "damage": 17, "range": 2.0, "cooldown": 1.2,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		# 逃跑 + 超时**传送消失**（不是被打死）。掉落钥匙属局内经济，本关未接入，
+		# 见 `怪物设计.md §T6` 的已知差异 —— 这里只保证"打不死就白跑"这条行为。
+		"flee": {"speed_mult": 1.45, "vanish_after": 11.0},
+	},
+	"egt_chance_kin": {
+		"attack_style": "flee",
+		"hp": 150, "speed": 4.286, "damage": 17, "range": 2.0, "cooldown": 1.2,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"flee": {"speed_mult": 1.45, "vanish_after": 11.0},
+	},
+	"egt_confirmed": {
+		"attack_style": "volley",
+		"hp": 450, "speed": 3.143, "damage": 17, "range": 9.8, "cooldown": 2.3,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.56, 0.36, 0.72),
+		# 停下时从袍下射出 **4 条蛇形追踪弹**：4 条流，各带追踪。
+		"volley": {"pattern": "serpentine", "count": 4, "interval": 0.16, "predict": 0.3, "homing": 0.4, "home_lifetime": 2.8},
+	},
+	"egt_mimic": {
+		"attack_style": "volley",
+		"hp": 1000, "speed": 3.143, "damage": 17, "range": 9.0, "cooldown": 1.9,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.92, 0.74, 0.30),
+		# 被开箱或被射击才现形：没有宝箱系统时，用「靠近或被打才解除静态伪装」等价表达。
+		"disguise": {"reveal_radius_m": 3.4},
+		"volley": {"pattern": "ring", "count": 8, "interval": 0.06, "predict": 0.0},
+		"volley_alt": {"pattern": "ring", "count": 12, "interval": 0.05, "predict": 0.0},
+		"alt_every": 2,
+	},
+	"egt_gun_fairy": {
+		"attack_style": "volley",
+		"hp": 150, "speed": 4.286, "damage": 17, "range": 8.4, "cooldown": 1.35,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.98, 0.86, 0.52),
+		# 房间内游荡 + 高射速连发（不追人、乱飞，所以命中靠"她自己飘过来"）
+		"volley": {"count": 3, "spread_deg": 6.0, "interval": 0.08, "predict": 0.0},
+		"wander": {"radius_m": 8.0, "retarget_sec": 2.2},
+		"hover": true,
+	},
+	"egt_gripmaster": {
+		"attack_style": "grab",
+		"hp": 300, "speed": 2.857, "damage": 0, "range": 3.2, "cooldown": 6.0,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		# 悬在玩家上方、闪蓝后下压抓人。**不改血量、只改位置** —— 与原作一致：
+		# 「不造成伤害却改变关卡状态」。原作还会把已清房间重置，本工程缺"房间重置"
+		# 这条链路，暂以「抛回房间入口」表达，见 §T6 已知差异。
+		"grab": {"hover_height_m": 4.2, "telegraph_sec": 0.8, "dive_speed": 12.0, "throw_distance_m": 10.0},
+		# —— 原作两条硬规则（2026-10-29 第三轮补）——
+		# ① "Automatically **dies if all other enemies in the room are killed**"
+		#    ⇒ 清场后它**自己死**，玩家不需要打它。旧实现只做了"有别人时无敌"，
+		#    于是清完场还剩一只 300 血的打不动的在飘 —— 那不是原作的语义。
+		# ② "After unsuccessfully trying to grab the player **3 times**, it will vanish"
+		#    ⇒ 抓空 3 次就消失，**不是**无限重复。
+		"invulnerable_while_others_alive": true,
+		"die_when_others_dead": true,
+		"max_grab_misses": 3,
+		"hover": true,
+	},
+	# —— 2.9 重型（本层普通怪血量顶点，像"小 Boss"）——
+	"egt_gun_nut": {
+		"attack_style": "volley",
+		"hp": 1000, "speed": 2.571, "damage": 17, "range": 8.6, "cooldown": 2.9,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.78, 0.62, 0.36),
+		# 举剑砸地：90° 扇形 + 4 组箭头形弹群；**只能瞄 8 个罗盘方向**（snap_deg = 45）。
+		"volley": {"pattern": "compass", "count": 7, "spread_deg": 45.0, "snap_deg": 45.0, "interval": 0.0, "predict": 0.0},
+		"volley_alt": {"pattern": "arrows", "count": 4, "spread_deg": 42.0, "snap_deg": 45.0, "interval": 0.0, "predict": 0.0},
+		"alt_every": 2,
+		# 大 jammed 弹：撞到障碍炸成一圈（原作有，我们之前完全没有）。
+		# 速度 6.5 比普通 8 慢 —— 它是"看得到的大弹"，快了就变成突如其来的一圈。
+		"jammed": {"speed": 6.5, "predict": 0.0, "shatter_count": 8, "shatter_damage_ratio": 0.5, "shatter_speed": 6.0},
+	},
+	"egt_chain_gunner": {
+		"attack_style": "orbit",
+		"hp": 900, "speed": 3.0, "damage": 17, "range": 8.0, "cooldown": 3.4,
+		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"bullet_color": Color(0.72, 0.80, 0.92),
+		# 停下甩出子弹链：约 3 圈/秒转 2 秒，期间缓慢逼近；链可穿墙（子弹不下发射程判定）。
+		"orbit": {
+			"duration": 2.0, "rev_per_sec": 3.0, "bullets_per_rev": 6,
+			"radius_m": 3.2, "speed": 6.4,
+		},
+	},
 }
 # 「-强化怪」（`MonsterVariants`）**不在上表占行**。变种的 hp / damage / range /
 # 弹道全部由 `_profile_for()` 从基类实时派生，只把倍率作用一次。
@@ -200,7 +700,16 @@ const SOURCE_DAMAGE_BASE := {
 ## 列在这里只是为了场景里手动摆放时下拉选得到，它们的数值一律从基类派生。
 @export_enum(
 	"fat_zombie03", "melee_chaser", "ranged_caster", "summoner", "exploder", "ambusher", "boss",
-	"fat_zombie03_strong", "melee_chaser_strong", "ranged_caster_strong"
+	"fat_zombie03_strong", "melee_chaser_strong", "ranged_caster_strong",
+	"egt_bullet_kin", "egt_bandana_kin", "egt_veteran_kin",
+	"egt_red_shotgun", "egt_blue_shotgun",
+	"egt_blobulon", "egt_blobuloid", "egt_blobulin",
+	"egt_pinhead", "egt_nitra", "egt_bullat", "egt_gunsinger",
+	"egt_cardinal", "egt_hollowpoint", "egt_veteran_shotgun", "egt_king_bullat",
+	"egt_chancebulon", "egt_bookllet", "egt_blue_bookllet", "egt_green_bookllet",
+	"egt_gunjurer", "egt_gigi", "egt_shotgat", "egt_grenat", "egt_spirat",
+	"egt_keybullet_kin", "egt_chance_kin", "egt_confirmed", "egt_mimic",
+	"egt_gun_fairy", "egt_gripmaster", "egt_gun_nut", "egt_chain_gunner"
 ) var enemy_kind := "melee_chaser"
 @export var room_id := ""
 
@@ -215,6 +724,56 @@ var _state_time := 0.0
 var _attack_timer := 0.0
 var _slow_factor := 1.0
 var _slow_timer := 0.0
+# —— 远征03 复刻怪专用运行时状态（2026-10-29）——
+# 连发队列：存「延迟 + 散布 + 预判」，到点才算方向。见 `_tick_pending_volleys()`。
+var _pending_volleys: Array[Dictionary] = []
+# 一次性冲撞（`egt_bullat`）：激活后要么撞到人、要么超时自毁，两者都必须以 `_die()` 收场。
+var _suicide_rush_active := false
+var _suicide_rush_timer := 0.0
+# 加速 buff（`egt_gunsinger` 给的）。与 `_slow_factor` 对称，只乘有效速度，不改 `move_speed`。
+var _haste_factor := 1.0
+var _haste_timer := 0.0
+# —— 远征03 第二批（21 种）新增的运行时状态（2026-10-29）——
+# 攻击计数器：`volley_alt` + `alt_every` 靠它决定这一轮走主规格还是备用规格。
+# 用计数而不是计时，是为了让「每隔 3 次换招」在帧率波动下仍然精确可复现。
+var _egt_attack_count := 0
+# 瞬移（空尖弹定时 / 枪法师出手后）。`blink_timer` 到点执行，随后按 interval 重置。
+var _blink_timer := 0.0
+# 逃跑超时（钥匙小子 / 运气小子）：到点直接消失，**不是被打死**。
+var _flee_timer := 0.0
+# 施法被打断后的短暂逃跑（枪歌者）。与 `_flee_timer` 刻意分开：
+# `flee` 是「这一整局只逃不回头」，这里是「被打断 → 逃几秒 → 回来继续施法」。
+var _egt_interrupt_flee := 0.0
+# 最近一次受伤的剩余计时（秒）。`interrupt` 用它判断"自己受伤就中断"。
+var _egt_hurt_window := 0.0
+# 一次性冲撞的重定位（Spirat）：每次重定位都把朝向改成对玩家的新一轮预判。
+var _rush_repositions_left := 0
+# 抓握大师的下压状态机：idle → telegraph(闪蓝) → dive(下压) → recover。
+var _grab_state := "idle"
+# 抓空次数。原作 "After unsuccessfully trying to grab the player 3 times, it will vanish"
+# —— 没有这个计数，它就是一个无限抓的永动机。
+var _grab_miss_count := 0
+# 爆炸延迟：扑击到落地之间那段。>0 时 `_tick_egt_state` 递减，到 0 才真的炸。
+var _explode_pending := 0.0
+var _grab_timer := 0.0
+var _grab_dive_target := Vector3.ZERO
+# 链枪手的绕圈链：`_orbit_angle` 逐帧推进，`_orbit_timer` 到点收链。
+var _orbit_active := false
+var _orbit_angle := 0.0
+var _orbit_timer := 0.0
+var _orbit_emit_accumulator := 0.0
+# 拟态怪：`true` 时是"宝箱"状态（不动、不攻击、不吃伤害），靠近或被打才现形。
+var _disguised := false
+# 吉吉的「蛋」：蛋飞出去之后在落点炸开一群涌动子弹。
+# 用独立队列而不是给子弹加回调 —— 子弹池化复借后回调对象可能已经死了，
+# 而这只怪的蛋只需要"某个时刻在某个点炸一圈"，不需要真的挂在子弹上。
+var _pending_eggs: Array[Dictionary] = []
+# 游荡型（枪精灵）：绕着一个随机点飘，不主动贴脸。
+var _wander_target := Vector3.ZERO
+var _wander_timer := 0.0
+# 「消失」而不是「死亡」：逃跑超时的钥匙小子 / 运气小子用。
+# `_die()` 要负责清房记账，但**不该**喷死亡特效、掉掉落 —— 用这个标志把两者拆开。
+var _vanish_requested := false
 var _target: Node3D = null
 var _last_hit_direction := Vector3.ZERO
 # 命中击退强度（m/s）。子弹默认 0（不位移），霰弹=0.8（轻微），由 take_projectile_damage 写入。
@@ -398,6 +957,20 @@ func _table_kind() -> String:
 ## `static` 是刻意的：本函数只读常量，不碰实例状态。于是验收可以**直接调它**，
 ## 不必实例化一整只怪（裸 `Enemy3D.new()` 缺 Avatar/CollisionShape3D 子节点，
 ## 一 apply_profile 就刷 engine ERROR，会把「按 ERROR 计数判定」的跑法搅浑）。
+## 查 `BODY_SCALE_BY_KIND` / `HEALTH_BAR_SIZE_BY_KIND` 这类**按种分表**的统一入口。
+##
+## 顺序是「本体 → 借用的资产 → 兜底」：远征03 复刻怪（`egt_*`）的美术是借来的，
+## 体型与血条宽度默认也该跟着被借的那只走；只有明确想和"借来的那只"拉开差异的
+## （例如布洛布三阶必须看得出阶段）才在表里单独占一行。
+static func kind_table_lookup(table: Dictionary, kind: String, fallback: Variant) -> Variant:
+	if table.has(kind):
+		return table[kind]
+	var proxied := EnemyAvatar3D.resolve_asset_kind(kind)
+	if table.has(proxied):
+		return table[proxied]
+	return fallback
+
+
 static func profile_for(kind: String) -> Dictionary:
 	if not MonsterVariants.is_variant(kind):
 		return PROFILES.get(kind, PROFILES["melee_chaser"]) as Dictionary
@@ -427,7 +1000,7 @@ func apply_profile(kind: String) -> void:
 	# 体型 = 原怪的**物种层级** × 变种的**体型倍率**，两段分开乘。
 	# 这样物种层级仍只有一份真源：强化胖子跟随胖子的 1.0，
 	# 将来胖子调成 1.1，强化胖子自动跟着变 1.65 而不是停在 1.5。
-	var kind_scale := float(BODY_SCALE_BY_KIND.get(_table_kind(), 1.0))
+	var kind_scale := float(kind_table_lookup(BODY_SCALE_BY_KIND, _table_kind(), 1.0))
 	var variant_base := MonsterVariants.base_of(enemy_kind)
 	if not variant_base.is_empty():
 		kind_scale *= MonsterVariants.multiplier(variant_base, "scale_mult")
@@ -453,6 +1026,48 @@ func apply_profile(kind: String) -> void:
 	_apply_presentation_scale()
 	_ensure_overhead_health_bar()
 	_strafe_sign = -1.0 if get_instance_id() % 2 == 0 else 1.0
+	_reset_egt_state()
+
+
+## 复刻怪的第二批状态初始化。**换怪（`apply_profile`）时必须全部清干净** ——
+## 池化复用会把上一任的"正在冲撞 / 还在绕链 / 已现形"带过来，
+## 那种残留的症状是"新刷的怪一出生就在半空冲"。
+func _reset_egt_state() -> void:
+	_egt_attack_count = 0
+	_pending_volleys.clear()
+	_pending_eggs.clear()
+	_suicide_rush_active = false
+	_suicide_rush_timer = 0.0
+	_rush_repositions_left = 0
+	_orbit_active = false
+	_orbit_angle = 0.0
+	_orbit_timer = 0.0
+	_orbit_emit_accumulator = 0.0
+	_grab_state = "idle"
+	_grab_timer = attack_cooldown
+	_vanish_requested = false
+	_wander_target = Vector3.ZERO
+	_wander_timer = 0.0
+	# 池化复借时这两项必须归零：上一任若是"被打断正在逃的枪歌者"，
+	# 新刷出来会一出生就往反方向跑，读起来像出生点没摆好。
+	_egt_interrupt_flee = 0.0
+	_egt_hurt_window = 0.0
+	_explode_pending = 0.0
+	_grab_miss_count = 0
+	var blink_spec: Variant = _active_profile.get("blink", null)
+	_blink_timer = (
+		float((blink_spec as Dictionary).get("interval", 0.0))
+		if blink_spec is Dictionary
+		else 0.0
+	)
+	var flee_spec: Variant = _active_profile.get("flee", null)
+	_flee_timer = (
+		float((flee_spec as Dictionary).get("vanish_after", 0.0))
+		if flee_spec is Dictionary
+		else 0.0
+	)
+	# 拟态怪**出生即伪装**：这是它的定义，不是运行中触发的状态。
+	_disguised = _active_profile.has("disguise")
 
 
 func configure_from_enemy_data(data: Dictionary) -> void:
@@ -595,7 +1210,7 @@ func _apply_presentation_scale() -> void:
 
 func _ensure_overhead_health_bar() -> void:
 	var wanted_size := (
-		_elite_health_bar_profile.get("size", HEALTH_BAR_SIZE_BY_KIND.get(_table_kind(), Vector2(1.65, 0.16)))
+		_elite_health_bar_profile.get("size", kind_table_lookup(HEALTH_BAR_SIZE_BY_KIND, _table_kind(), Vector2(1.65, 0.16)))
 		as Vector2
 	)
 	# 只缩「普通小怪」：Boss 与精英各有独立契约（Boss 条是屏幕顶端条，
@@ -1073,6 +1688,19 @@ func _physics_process(delta: float) -> void:
 	_ambush_reburrow_cooldown = maxf(0.0, _ambush_reburrow_cooldown - delta)
 	_attack_timer = maxf(0.0, _attack_timer - delta * get_attack_frequency_multiplier())
 	_slow_timer = maxf(0.0, _slow_timer - delta)
+	# 远征03 复刻怪：连发队列 + 加速 buff + 冲撞超时，都挂在既有递减区，
+	# 不另开 `_process`（那会多一份每帧开销与一份时序真源）。
+	_tick_pending_volleys(delta)
+	# 第二批的行为状态机（瞬移/逃跑/伪装/游荡/抓取/绕圈/冲撞重定位/蛋）。
+	# 与连发队列同一个时序真源，不另开 `_process`。
+	_tick_egt_state(delta)
+	_haste_timer = maxf(0.0, _haste_timer - delta)
+	if _haste_timer <= 0.0:
+		_haste_factor = 1.0
+	if _suicide_rush_active:
+		_suicide_rush_timer = maxf(0.0, _suicide_rush_timer - delta)
+		if _suicide_rush_timer <= 0.0 and ai_state != "dead":
+			_die()
 	_external_timer = maxf(0.0, _external_timer - delta)
 	if _external_timer <= 0.0:
 		_external_velocity = Vector3.ZERO
@@ -1273,7 +1901,7 @@ func _physics_process(delta: float) -> void:
 func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	var monitor_facing_ready := monitor_combat == null or (not monitor_combat.turning and (-global_basis.z).normalized().dot(to_target.normalized()) >= 0.97)
 	if distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready:
-		var channel := "ranged" if enemy_kind in ["ranged_caster", "summoner", "boss"] else "melee"
+		var channel := "ranged" if _is_ranged_style() else "melee"
 		if MonsterAIManager == null or MonsterAIManager.request_attack_token(self, _target, channel):
 			_last_attack_result = "token_granted"
 			transition_to("telegraph")
@@ -1282,7 +1910,21 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	var effective_move_speed := get_effective_move_speed()
 	var desired_direction := _navigation_direction(_target.global_position, to_target)
 	var desired := desired_direction * effective_move_speed * _slow_factor
-	if enemy_kind in ["ranged_caster", "summoner", "boss"] and monitor_combat == null:
+	# —— 复刻怪里"不朝玩家推进"的三种（逃跑 / 游荡 / 抓取）——
+	# 它们的位移**完全由 `_tick_egt_state()` 写在 `_external_velocity` 上**。
+	# 不在这里掐掉的话会出现一半朝玩家、一半逃跑的折中位移 ——
+	# 表现上是"这只怪在发抖"，而数值上它既追不上也跑不掉。
+	if _is_egt_kind():
+		var style := _egt_attack_style()
+		if (
+			style == "flee" or style == "grab" or _active_profile.has("wander")
+			or bool(_active_profile.get("immobile", false))
+		):
+			_steer_planar(Vector3.ZERO, minf(1.0, delta * 5.5))
+			_push_planar(_external_velocity)
+			_commit_motion(delta)
+			return
+	if _is_ranged_style() and monitor_combat == null:
 		var radial := to_target.normalized()
 		var tangent := Vector3(-radial.z, 0, radial.x) * _strafe_sign
 		var ideal_distance := attack_range * (0.78 if enemy_kind != "summoner" else 0.86)
@@ -1376,11 +2018,66 @@ func _get_player_in_proximity(radius: float) -> Node3D:
 	return null
 
 
+## 这只怪用「远程/施法」手位还是「近战」手位？
+##
+## 原来的写法是内联 `enemy_kind in ["ranged_caster","summoner","boss"]`，散在两处（攻击令牌
+## 通道 + 走位方式）。远征03 复刻怪要加进来，如果继续内联就会变成两份要同步维护的白名单 ——
+## 抽成函数，**两份判定共用同一份真源**。
+func _is_ranged_style() -> bool:
+	if enemy_kind in ["ranged_caster", "summoner", "boss"]:
+		return true
+	# 复刻怪的"手位"由**攻击骨架**推出，不再逐个列举 —— 第二批加了 21 只，
+	# 继续用白名单就要维护 33 行，且漏一只的后果是"远程怪走上前来贴脸"（很难看出来）。
+	# 判定依据：会往远处投弹 / 施法的走远程手位；扑、炸、撞、逃走近战手位。
+	if _is_egt_kind():
+		return _egt_attack_style() in ["volley", "support", "grab", "orbit", "chance"]
+	return false
+
+
+## 本怪是不是远征03 复刻怪。**用前缀判**：这一族由设计文档整批引入，
+## 逐只列举只会制造"加了怪忘了改这里"的缺口。
+func _is_egt_kind() -> bool:
+	return _table_kind().begins_with("egt_")
+
+
+## 攻击骨架的唯一真源。老怪没写 `attack_style`，按它们已有的专属键反推，
+## 于是**表里写什么、运行时就走什么**，不会出现两套判定。
+func _egt_attack_style() -> String:
+	var declared := str(_active_profile.get("attack_style", ""))
+	if not declared.is_empty():
+		return declared
+	if _active_profile.has("grab"):
+		return "grab"
+	if _active_profile.has("orbit"):
+		return "orbit"
+	if _active_profile.has("support_buff"):
+		return "support"
+	if _active_profile.has("suicide_rush"):
+		return "rush"
+	if _active_profile.has("flee"):
+		return "flee"
+	if _active_profile.has("volley"):
+		return "volley"
+	if _table_kind() in ["egt_pinhead", "egt_nitra"]:
+		return "explode"
+	return "contact"
+
+
 func _perform_attack(to_target: Vector3, distance: float) -> void:
 	# 自动化与技能预演允许传入显式方向而不绑定目标；实际近战命中仍要求
 	# 当前目标有效，避免悬空引用造成重复结算。
 	_attack_timer = attack_cooldown
 	_last_attack_result = "committed"
+	# —— 远征03 复刻怪：**一次分派，永不逐只加分支** ——
+	# 第二批把复刻怪扩到 33 只。如果继续在 match 里逐只列举，这里会变成 33 行长名单，
+	# 而且每加一只都要改一次"攻击代码"——那正是 §T2「新增怪种只加一行数据」要避免的。
+	# 现在由 `_egt_attack_style()` 读表分派，老怪走下面那条一排未改的 match。
+	if _is_egt_kind():
+		_perform_egt_attack(to_target, distance)
+		_apply_unique_elite_attack_behavior(to_target)
+		if elite_modifier_id == "Elite.WeaponParasite" and _target != null and _target.has_method("apply_silence"):
+			_target.call("apply_silence", 1.8)
+		return
 	match _table_kind():
 		"fat_zombie03":
 			_last_attack_result = "miss"
@@ -1414,6 +2111,8 @@ func _perform_attack(to_target: Vector3, distance: float) -> void:
 				if _target.has_method("notify_attacked_by"):
 					_target.call("notify_attacked_by", self)
 				_target.call("take_damage", contact_damage, false, to_target.normalized())
+		# —— 远征03 复刻怪的五个旧分支已收进上面的 `_perform_egt_attack()`。
+		# 留这一段空档是为了让 diff 能读出「哪些行被搬走了」，不是还被引用。
 		_:
 			if distance <= attack_range + 0.65 and is_instance_valid(_target) and _target.has_method("take_damage"):
 				if _target.has_method("notify_attacked_by"):
@@ -1424,21 +2123,40 @@ func _perform_attack(to_target: Vector3, distance: float) -> void:
 		_target.call("apply_silence", 1.8)
 
 
-func _fire_projectile(to_target: Vector3, amount: int, color: Color, explosive := false) -> void:
+## 发一颗子弹。
+##
+## `behavior` 是**子弹自身的附加行为**（追踪 / 反弹 / 寿命），`speed_override` 覆盖弹速，
+## `origin` 覆盖出生点（Gigi 的蛋要在蛋的位置炸开，不能从怪身上炸）。
+## 后三个都是可选的：老调用点一行不用改，行为逐字不变。
+func _fire_projectile(
+	to_target: Vector3,
+	amount: int,
+	color: Color,
+	explosive := false,
+	behavior: Dictionary = {},
+	speed_override: float = 0.0,
+	origin: Variant = null
+) -> void:
 	if get_tree().current_scene == null:
 		return
+	var base_speed := float(_active_profile.get("projectile_speed", DEFAULT_ENEMY_PROJECTILE_SPEED))
+	if speed_override > 0.0:
+		base_speed = speed_override
 	var config := {
 		"direction": to_target.normalized(),
-		# 弹速与射程都按**当前怪种**下发。普通怪与 Boss 没有这两个键 ⇒ 取默认值，
-		# 子弹行为与「硬编码 7 / 无射程」时代逐字一致；强化远程怪在 `_profile_for()`
-		# 里拿到 9.1 m/s 与 14 m。改这里不会连带改 Boss 与精英的子弹。
-		"speed": float(_active_profile.get("projectile_speed", DEFAULT_ENEMY_PROJECTILE_SPEED)),
+		"speed": base_speed,
 		"range": float(_active_profile.get("projectile_range", 0.0)),
 		"damage": amount,
 		"hostile": true, "critical": false, "tags": ["explosive"] if explosive else [],
 		"color": color, "shooter": self,
 	}
-	var world_position := global_position + Vector3(0, 0.92, 0) + to_target.normalized() * 0.72
+	if not behavior.is_empty():
+		config["behavior"] = behavior.duplicate(true)
+	var world_position := (
+		global_position + Vector3(0, 0.92, 0) + to_target.normalized() * 0.72
+	)
+	if origin is Vector3:
+		world_position = origin as Vector3
 	var pools := get_tree().get_nodes_in_group("projectile_pool_3d")
 	if not pools.is_empty() and pools[0] is ProjectilePool3D:
 		(pools[0] as ProjectilePool3D).acquire(config, world_position)
@@ -1484,6 +2202,1054 @@ func _heal_nearby_allies() -> void:
 			lowest_ratio = health_ratio
 	if selected != null and lowest_ratio < 1.0:
 		selected.receive_healing(maxi(2, int(selected.max_hp * 0.08)))
+
+
+# =============================================================================
+# 远征03 复刻怪：数据驱动的攻击方式（2026-10-29）
+#
+# 设计依据：`docs/v0.1/design/怪物设计.md` §T2 与 [AI 设计 §3.1]「参数优先」。
+# 新增怪种**不允许**在这里长出一个 if 分支 —— 差异全部写在 `PROFILES[kind]` 的
+# `volley` / `death_burst` / `suicide_rush` / `support_buff` 键里，由下面这组函数统一消费。
+# 这样「加第 13 只怪」是一行数据，而不是一次改代码。
+# =============================================================================
+
+## 读本怪的攻击规格。缺键时返回单发直射的默认值 —— 也就是说
+## 一只没写 `volley` 的 `egt_*` 怪会退化成「普通单发远程」，不会静默不打人。
+func _egt_volley_spec() -> Dictionary:
+	var spec: Variant = _active_profile.get("volley", null)
+	if spec is Dictionary and not (spec as Dictionary).is_empty():
+		return spec as Dictionary
+	return {"count": 1, "spread_deg": 0.0, "interval": 0.0, "predict": 0.0}
+
+
+## 这一轮该用主规格还是备用规格。
+## `volley_alt` + `alt_every` 表达的是「每 N 次攻击换一次招」——
+## 蓝霰弹枪的「宽 5 发 + 快速接宽 4 发」、枪坚果的「扇形 + 4 组箭头弹群」都是这种结构。
+## 用**攻击计数**而不是随机：原作这两只是固定交替，不是掷骰。
+func _egt_active_volley_spec() -> Dictionary:
+	var alt: Variant = _active_profile.get("volley_alt", null)
+	var every := maxi(0, int(_active_profile.get("alt_every", 0)))
+	if every > 0 and alt is Dictionary and _egt_attack_count % every == 0:
+		return alt as Dictionary
+	return _egt_volley_spec()
+
+
+## 预算目标位置：`predict` 是**预判系数**（0 = 瞄当前位置，1 = 全量预测走位）。
+## 只读玩家自己的 `velocity`，不读未来的意图 —— 与「怪物不读全知坐标」的原则一致。
+func _predict_target_position(predict_ratio: float) -> Vector3:
+	if _target == null or not is_instance_valid(_target) or predict_ratio <= 0.0:
+		return _target.global_position if is_instance_valid(_target) else global_position
+	var aim := _target.global_position
+	if _target is CharacterBody3D:
+		aim += (_target as CharacterBody3D).velocity * predict_ratio
+	return aim
+
+
+# -----------------------------------------------------------------------------
+# 弹道图案（pattern）
+#
+# 第二批 21 只怪里有 9 只需要「不是简单扇形」的弹道：环形、V 型、四叶草、字母、
+# 罗盘 8 向、箭头群、螺旋、蛇形追踪流、骰子。
+# **全部由 `_pattern_directions()` 一个函数产出方向数组**，发射仍然走
+# `_fire_projectile()` —— 也就是说「加一种图案」是加一个 case，不是加一条攻击链。
+#
+# 方向一律在世界水平面上算（怪站在地上，EGT 的弹幕也是平面弹幕）。
+# -----------------------------------------------------------------------------
+
+## 字母弹模板：值是**角度序列**（度，0 = 正对玩家）。逐发按 interval 射出，
+## 因为弹是连续飞出的，轨迹才连成字母 —— 这和原作 Bookllet 的观感一致。
+const LETTER_PATTERNS := {
+	"R": [-88.0, -70.0, -52.0, -34.0, -16.0, -34.0, -50.0, -46.0, -30.0, -12.0],
+	"N": [-72.0, -52.0, -32.0, -12.0, 8.0, -72.0, -40.0, -8.0, 8.0],
+	"phi": [-84.0, -46.0, -12.0, 12.0, 46.0, 84.0, -22.0, 22.0],
+}
+
+
+## 一圈弹的方向：`count` 发均布 360°，第一发朝正前方。
+## 环形弹是「无论站哪都要动」的弹型，子弹榴弹王 / Chancebulon / 拟态怪都用它。
+static func ring_directions(forward: Vector3, count: int) -> Array[Vector3]:
+	var result: Array[Vector3] = []
+	var total := maxi(1, count)
+	for index in range(total):
+		result.append(forward.rotated(Vector3.UP, TAU * float(index) / float(total)))
+	return result
+
+
+## 一次「攻击事件」的全部方向。`shot_index` 用于**连发型图案**（字母、螺旋）：
+## 这类图案的整体形状要靠时间展开，每一次只发其中一发。
+func _pattern_directions(spec: Dictionary, forward: Vector3, shot_index: int) -> Array[Vector3]:
+	var pattern := str(spec.get("pattern", "line"))
+	var count := maxi(1, int(spec.get("count", 1)))
+	var spread := deg_to_rad(float(spec.get("spread_deg", 0.0)))
+	var result: Array[Vector3] = []
+	match pattern:
+		"ring":
+			return ring_directions(forward, count)
+		"cross":
+			var arms := maxi(2, count)
+			for index in range(arms):
+				result.append(forward.rotated(Vector3.UP, TAU * float(index) / float(arms)))
+			return result
+		"v":
+			# V 型：左右各半，从内向外张角递增 —— 中间留空，玩家能站在 V 的凹口里。
+			var half := maxi(1, int(ceil(float(count) / 2.0)))
+			for index in range(half):
+				var ratio := 0.42 + 0.58 * (float(index) / float(maxi(1, half - 1)))
+				result.append(forward.rotated(Vector3.UP, -spread * ratio))
+				result.append(forward.rotated(Vector3.UP, spread * ratio))
+			return result
+		"clover":
+			# 四叶草：4 个瓣，每瓣 `count` 发小扇形（原作"大型四叶草形弹"）。
+			var lobes := 4
+			var per_lobe := maxi(1, count)
+			for lobe in range(lobes):
+				var base := TAU * float(lobe) / float(lobes)
+				for index in range(per_lobe):
+					var t := 0.5 if per_lobe == 1 else float(index) / float(per_lobe - 1)
+					result.append(forward.rotated(Vector3.UP, base + lerpf(-spread, spread, t)))
+			return result
+		"compass":
+			# 罗盘：先把朝向**吸附到 45° 网格**（原作"只能瞄 8 个方向"），再在 ±spread 内散开。
+			var snapped := _snap_direction(forward, float(spec.get("snap_deg", 45.0)))
+			for index in range(count):
+				var t := 0.5 if count == 1 else float(index) / float(count - 1)
+				result.append(snapped.rotated(Vector3.UP, lerpf(-spread, spread, t)))
+			return result
+		"arrows":
+			# 箭头形弹群：`count` 组，每组 3 发组成一个尖头（中 + 左右各一），
+			# 整组沿 spread 排开 —— 原作 Gun Nut 的"4 组箭头形弹群"。
+			var groups := maxi(1, count)
+			var snapped_arrow := _snap_direction(forward, float(spec.get("snap_deg", 45.0)))
+			for group in range(groups):
+				var t := 0.5 if groups == 1 else float(group) / float(groups - 1)
+				var center := lerpf(-spread, spread, t)
+				for offset in [-9.0, 0.0, 9.0]:
+					result.append(snapped_arrow.rotated(Vector3.UP, center + deg_to_rad(offset)))
+			return result
+		"letter":
+			var template: Array = LETTER_PATTERNS.get(str(spec.get("letter", "R")), LETTER_PATTERNS["R"])
+			var index_clamped := clampi(shot_index, 0, (template as Array).size() - 1)
+			result.append(forward.rotated(Vector3.UP, deg_to_rad(float(template[index_clamped]))))
+			return result
+		"spiral":
+			# 螺旋：逐发旋进。`step_deg` 是每发转多少度。
+			var step := deg_to_rad(float(spec.get("step_deg", 30.0)))
+			result.append(forward.rotated(Vector3.UP, step * float(clampi(shot_index, 0, count - 1))))
+			return result
+		"serpentine":
+			# 蛇形追踪流：`count` 条平行流，每条各自带追踪（追踪由子弹行为负责）。
+			var lanes := maxi(1, count)
+			for index in range(lanes):
+				var t := 0.5 if lanes == 1 else float(index) / float(lanes - 1)
+				result.append(forward.rotated(Vector3.UP, lerpf(-spread, spread, t)))
+			return result
+		"dice":
+			# 骰子弹组：点数 1~6，按点数排成一圈 —— "掷出来几点就是几发"。
+			var pips := clampi(shot_index % 6 + 1, 1, 6) if shot_index > 0 else (randi() % 6 + 1)
+			return ring_directions(forward, pips)
+		_:
+			# line / fan：单发直射，或多发在 ±spread 内均匀展开。
+			if count == 1:
+				return [forward]
+			for index in range(count):
+				var t := float(index) / float(count - 1)
+				result.append(forward.rotated(Vector3.UP, lerpf(-spread, spread, t)))
+			return result
+
+
+## 把朝向吸附到最近的 `snap_deg` 网格上（默认 45° = 8 个罗盘方向）。
+## 只在水平面上做，且保持单位长度。
+static func _snap_direction(forward: Vector3, snap_deg: float) -> Vector3:
+	var planar := Vector3(forward.x, 0.0, forward.z)
+	if planar.length_squared() < 0.0001:
+		return Vector3.FORWARD
+	planar = planar.normalized()
+	if snap_deg <= 0.0:
+		return planar
+	var step := deg_to_rad(snap_deg)
+	var yaw := atan2(planar.x, planar.z)
+	var snapped := roundf(yaw / step) * step
+	return Vector3(sin(snapped), 0.0, cos(snapped))
+
+
+## 一发子弹的附加行为（追踪 / 反弹 / 弹速 / 延时寿命），由规格直接抄给子弹。
+## 只挑**通用**键，不去猜某个怪的名字 —— 于是任何怪都能用同一批能力。
+func _volley_bullet_behavior(spec: Dictionary) -> Dictionary:
+	var behavior := {}
+	if spec.has("homing"):
+		behavior["homing"] = true
+		behavior["homing_strength"] = clampf(float(spec.get("homing", 0.0)), 0.0, 1.0)
+	if spec.has("bounce"):
+		behavior["bounce_count"] = maxi(0, int(spec.get("bounce", 0)))
+	if spec.has("home_lifetime"):
+		behavior["home_lifetime"] = float(spec.get("home_lifetime", 1.0))
+	# 射程：追踪弹要飞得够久，否则半路就没了（追踪本来就要绕）。
+	if spec.has("homing"):
+		behavior["home_lifetime"] = maxf(float(behavior.get("home_lifetime", 1.0)), 2.6)
+	return behavior
+
+
+## 一次完整攻击：把「图案 → 若干次射击事件」算出来，按 `interval` 排队或当帧齐射。
+## `interval` 的语义分两种，靠图案是否为**逐发展开型**决定：
+##   字母 / 螺旋 → 每发一个事件，沿时间展开成形状
+##   其余        → 一次事件出全部发，`interval` 只做逐发微延迟（读作"连发"）
+func _perform_volley_attack(to_target: Vector3, _distance: float) -> void:
+	if _disguised:
+		return
+	var spec := _egt_active_volley_spec()
+	var interval := maxf(0.0, float(spec.get("interval", 0.0)))
+	var bullets := _pattern_bullet_count(spec)
+	# 双环/多环（蓝书怪的"来回脉动"）：整组图案重复 `pulse_rings` 次。
+	var rings := maxi(1, int(spec.get("pulse_rings", 1)))
+	var total := bullets * rings
+	# `interval > 0` ⇒ **逐发排期**（连发 / 环形顺次展开 / 字母逐笔画出）。
+	# `interval == 0` ⇒ 整组图案当帧齐射（霰弹扇形、十字、四叶草都是这一类）。
+	# 判据只认 interval，不认图案类型 —— 否则「同一图案换个节奏」又要加一个分支。
+	if interval > 0.0:
+		for index in range(total):
+			_queue_volley_shot(
+				interval * float(index), spec,
+				index % bullets, floori(float(index) / float(bullets)), true, index % bullets
+			)
+	else:
+		for ring in range(rings):
+			_queue_volley_shot(0.0, spec, 0, ring, false, 0)
+	# 第二段（原作蓝霰弹「宽 5 发 → 快速接宽 4 发」）。
+	# 接在**主段全部打完**之后，不是另一次攻击 —— 这一点决定玩家能不能把它们当成一波躲。
+	var follow: Variant = spec.get("followup", null)
+	if follow is Dictionary:
+		var fspec := follow as Dictionary
+		var fcount := _pattern_bullet_count(fspec)
+		var finterval := maxf(0.0, float(fspec.get("interval", 0.0)))
+		var offset := float(fspec.get("delay", 0.2))
+		offset += interval * float(maxi(0, total - 1))
+		if finterval > 0.0:
+			for index in range(fcount):
+				_queue_volley_shot(offset + finterval * float(index), fspec, index % fcount, 0, true, index % fcount)
+		else:
+			_queue_volley_shot(offset, fspec, 0, 0, false, 0)
+	# 大 jammed 弹（枪坚果）。原作原文：
+	#   "they also fire a **larger jammed bullet** that explodes into non-jammed bullets
+	#    in all directions **upon hitting an obstacle**"
+	# 它**不属于**扇形那 7 发 —— 是额外的一颗，且朝玩家瞄准（原作："always aimed
+	# towards the player, but can only be shot within the width of the burst"）。
+	# 所以这里不进队列，直接单发；飞行比普通弹慢，玩家有机会看到它脱队。
+	var jammed: Variant = spec.get("jammed", null)
+	if jammed is Dictionary:
+		var jspec := jammed as Dictionary
+		var aim := _predict_target_position(float(jspec.get("predict", 0.0)))
+		var aim_direction := aim - global_position
+		aim_direction.y = 0.0
+		if aim_direction.length_squared() > 0.0001:
+			_fire_projectile(
+				aim_direction.normalized(), contact_damage, _egt_projectile_color(),
+				false,
+				{
+					"shatter_on_wall": true,
+					"shatter_count": int(jspec.get("shatter_count", 8)),
+					"shatter_damage_ratio": float(jspec.get("shatter_damage_ratio", 0.5)),
+					"shatter_speed": float(jspec.get("shatter_speed", 6.0)),
+				},
+				float(jspec.get("speed", 6.5))
+			)
+	# 「蛋」（吉吉）：先发一枚慢速蛋，到点在落点炸一圈涌动子弹。
+	if _active_profile.has("egg"):
+		_schedule_egg(_active_profile["egg"] as Dictionary)
+
+
+## 排一颗蛋。落点按**玩家当前速度整段预判**：蛋飞行期间玩家会动，
+## 瞄当前位置会让蛋永远炸在身后 —— 那样这招就只是"延迟的直线弹"。
+func _schedule_egg(spec: Dictionary) -> void:
+	var hatch := maxf(0.1, float(spec.get("hatch_sec", 0.85)))
+	var aim := _predict_target_position(1.0)
+	aim.y = global_position.y + 0.4
+	_pending_eggs.append({"timer": hatch, "position": aim, "spec": spec.duplicate(true)})
+
+
+## 一次图案总共会产生几发子弹。**只用于排期**，不参与方向计算 ——
+## 方向仍由 `_pattern_directions()` 现算（玩家在动，方向必须每发重算）。
+static func _pattern_bullet_count(spec: Dictionary) -> int:
+	var pattern := str(spec.get("pattern", "line"))
+	var count := maxi(1, int(spec.get("count", 1)))
+	match pattern:
+		"v":
+			return 2 * maxi(1, int(ceil(float(count) / 2.0)))
+		"clover":
+			return 4 * count
+		"arrows":
+			return 3 * count
+		"dice":
+			return 6
+		_:
+			return count
+
+
+## 排队一次射击事件。**不存死的方向**，只存规格与序号 —— 到点那一刻才重新预算目标位置，
+## 所以连发期间玩家在动，后几发仍然会跟着修正（锁死第一帧会让连发退化成一次性扇形）。
+##
+## `slice` = 这次事件只发图案里的**第 `slice_index` 发**（连发/顺次展开），
+## 而不是整组。两种模式共用同一个队列，靠一个布尔区分，避免两套时序。
+func _queue_volley_shot(
+	delay: float, spec: Dictionary, shot_index: int, ring_index: int,
+	slice: bool = false, slice_index: int = 0
+) -> void:
+	_pending_volleys.append({
+		"delay": maxf(0.0, delay),
+		"spec": spec.duplicate(true),
+		"shot_index": shot_index,
+		"ring_index": ring_index,
+		"slice": slice,
+		"slice_index": slice_index,
+	})
+
+
+## 连发推进。挂在 `_physics_process` 的既有递减区旁边，逐帧检查到期。
+## 怪死亡时队列直接清空（`_die()` 里做），避免尸体还在开火。
+func _tick_pending_volleys(delta: float) -> void:
+	if _pending_volleys.is_empty():
+		return
+	var remaining: Array[Dictionary] = []
+	for shot in _pending_volleys:
+		var wait := float(shot.get("delay", 0.0)) - delta
+		if wait > 0.0:
+			shot["delay"] = wait
+			remaining.append(shot)
+			continue
+		if ai_state == "dead" or _disguised:
+			continue
+		var spec: Dictionary = shot.get("spec", {})
+		var predict := clampf(float(spec.get("predict", 0.0)), 0.0, 1.0)
+		var aim := _predict_target_position(predict)
+		var direction := aim - global_position
+		direction.y = 0.0
+		if direction.length_squared() < 0.0001:
+			continue
+		var forward := direction.normalized()
+		var dirs := _pattern_directions(spec, forward, int(shot.get("shot_index", 0)))
+		if bool(shot.get("slice", false)) and not dirs.is_empty():
+			dirs = [dirs[int(shot.get("slice_index", 0)) % dirs.size()]]
+		var damage := contact_damage
+		if spec.has("damage_ratio"):
+			damage = maxi(1, int(round(float(contact_damage) * float(spec["damage_ratio"]))))
+		var explosive := bool(spec.get("explosive", false))
+		var behavior := _volley_bullet_behavior(spec)
+		var bullet_speed := float(spec.get("speed", 0.0))
+		for dir in dirs:
+			_fire_projectile(
+				dir, damage, _egt_projectile_color(), explosive, behavior,
+				bullet_speed, global_position
+			)
+	_pending_volleys = remaining
+
+
+## 复刻怪的子弹颜色：**优先读表里的 `bullet_color`**，没写才回退到按种取。
+## 第一批用的是写死的 match（5 只远程）；第二批有 21 只，再堆 match 就没有底了。
+## 颜色规则仍是"身体色 = 弹色"（见设计 §T3.2），查表与染色表一一对应。
+func _egt_projectile_color() -> Color:
+	var declared: Variant = _active_profile.get("bullet_color", null)
+	if declared is Color:
+		return declared as Color
+	match _table_kind():
+		"egt_bandana_kin":
+			return Color(0.36, 0.62, 0.98)
+		"egt_veteran_kin":
+			return Color(0.98, 0.60, 0.28)
+		"egt_red_shotgun":
+			return Color(0.92, 0.26, 0.26)
+		"egt_blue_shotgun":
+			return Color(0.32, 0.52, 0.96)
+		_:
+			return Color(0.62, 0.82, 1.0)
+
+
+## 复刻怪的攻击分派。**唯一的分歧点** —— 其余全部由 `PROFILES` 的键决定。
+func _perform_egt_attack(to_target: Vector3, distance: float) -> void:
+	_egt_attack_count += 1
+	match _egt_attack_style():
+		"volley":
+			_perform_volley_attack(to_target, distance)
+		"contact":
+			_perform_egt_contact(to_target, distance)
+		"explode":
+			_perform_egt_explode(to_target)
+		"rush":
+			_perform_suicide_rush(to_target)
+		"support":
+			_perform_support_buff()
+		"orbit":
+			_begin_orbit()
+		"grab":
+			_begin_grab()
+		"chance":
+			_perform_chance_move(to_target, distance)
+		"flee":
+			# 逃跑型不攻击玩家（原作钥匙小子 / 运气小子只会跑）。
+			pass
+		_:
+			_perform_egt_contact(to_target, distance)
+
+
+## 接触型复刻怪（布洛布三阶）：贴身后短突进 + 命中结算，与 `melee_chaser` 同构，
+## **不新增策略** —— EGT 这三只本来就是"走向玩家、接触伤害"。
+func _perform_egt_contact(to_target: Vector3, distance: float) -> void:
+	_external_velocity = to_target.normalized() * 6.4
+	_external_timer = 0.16
+	if distance <= attack_range + 0.60 and is_instance_valid(_target) and _target.has_method("take_damage"):
+		if _target.has_method("notify_attacked_by"):
+			_target.call("notify_attacked_by", self)
+		_target.call("take_damage", contact_damage, false, to_target.normalized())
+
+
+## 爆炸族（保险销头 / 硝酸怪）。原作原文：
+##   Pinhead  "Walks towards the player and explodes upon death. **If the player gets too
+##             close, it will leap towards the player and explode.**"
+##   Nitra    "...If the player gets too close, it will **detonate itself**."
+## ⇒ 两者都不是"走到射程就原地炸"，而是**先扑上去再炸**。
+## 旧实现直接调 `_explode()`，玩家看到的是"它站在两米外突然爆了" —— 少了那个扑的动作，
+## 也就少了"这下该后退"的信号。
+##
+## 实现：给一个朝玩家的冲量（`leap_speed`），把爆炸延后 `leap_sec` 秒。
+## 延迟是**必须**的 —— 否则同一帧位移+爆炸，画面上等于没动。
+func _perform_egt_explode(to_target: Vector3) -> void:
+	var spec: Variant = _active_profile.get("leap", null)
+	if not (spec is Dictionary):
+		_explode()
+		return
+	var cfg := spec as Dictionary
+	if _explode_pending > 0.0:
+		return
+	_external_velocity = to_target.normalized() * float(cfg.get("leap_speed", 9.0))
+	_external_timer = float(cfg.get("leap_sec", 0.22))
+	_explode_pending = float(cfg.get("leap_sec", 0.22))
+	_spawn_effect("VFX-IMPACT-3D", 0.55)
+
+
+## 一次性冲撞（`egt_bullat`）：整只怪当一发子弹打出去，命中或超时都自毁。
+## 为什么必须新增而不是复用 MeleeLunge：常规突进**打完还活着**，
+## 而这只的语义是「撞到即死」——改变的是行动拓扑，属 §3.1 允许新增的范围。
+func _perform_suicide_rush(to_target: Vector3) -> void:
+	var spec: Variant = _active_profile.get("suicide_rush", null)
+	var rush_speed := 11.0
+	var predict := 0.0
+	var repositions := 0
+	var lifetime := 2.5
+	if spec is Dictionary:
+		var cfg := spec as Dictionary
+		rush_speed = float(cfg.get("speed", rush_speed))
+		predict = clampf(float(cfg.get("predict", 0.0)), 0.0, 1.0)
+		repositions = maxi(0, int(cfg.get("repositions", 0)))
+		lifetime = float(cfg.get("max_lifetime", 2.5))
+	var aim := _predict_target_position(predict)
+	var heading := aim - global_position
+	heading.y = 0.0
+	if heading.length_squared() < 0.0001:
+		heading = to_target
+	_external_velocity = heading.normalized() * rush_speed
+	_external_timer = 0.45
+	_suicide_rush_active = true
+	_suicide_rush_timer = lifetime
+	_rush_repositions_left = repositions
+	if is_instance_valid(_target) and _target.has_method("take_damage"):
+		var flat := _target.global_position - global_position
+		flat.y = 0.0
+		if flat.length() <= attack_range * 0.55:
+			if _target.has_method("notify_attacked_by"):
+				_target.call("notify_attacked_by", self)
+			_target.call("take_damage", contact_damage, false, to_target.normalized())
+			_fire_rush_payload(heading.normalized())
+			_die()
+
+
+## 冲撞的「撞到时附加弹」：Shotgat 的 V 型 2 发、Grenat 的 1 发爆炸弹。
+## 写在 `suicide_rush.on_hit` 里，三只冲撞族共用一段代码 —— 差别只是参数。
+func _fire_rush_payload(forward: Vector3) -> void:
+	var spec: Variant = _active_profile.get("suicide_rush", null)
+	if not (spec is Dictionary):
+		return
+	var payload: Variant = (spec as Dictionary).get("on_hit", null)
+	if not (payload is Dictionary):
+		return
+	var payload_spec := payload as Dictionary
+	var damage := contact_damage
+	if payload_spec.has("damage_ratio"):
+		damage = maxi(1, int(round(float(contact_damage) * float(payload_spec["damage_ratio"]))))
+	for dir in _pattern_directions(payload_spec, forward, 0):
+		_fire_projectile(
+			dir, damage, _egt_projectile_color(),
+			bool(payload_spec.get("explosive", false)),
+			_volley_bullet_behavior(payload_spec),
+			float(payload_spec.get("speed", 0.0)),
+			global_position
+		)
+
+
+## 冲撞途中的重定位（Spirat）：偏转航向追新的预判点。
+## 只在 `repositions > 0` 的冲撞族身上生效，bullat 那种一次性的不调用。
+func _tick_rush_reposition() -> void:
+	if _rush_repositions_left <= 0:
+		return
+	var spec: Variant = _active_profile.get("suicide_rush", null)
+	if not (spec is Dictionary):
+		return
+	var cfg := spec as Dictionary
+	var predict := clampf(float(cfg.get("predict", 0.0)), 0.0, 1.0)
+	var rush_speed := float(cfg.get("speed", 11.0))
+	var aim := _predict_target_position(predict)
+	var heading := aim - global_position
+	heading.y = 0.0
+	if heading.length_squared() < 0.0001:
+		return
+	_external_velocity = heading.normalized() * rush_speed
+	_external_timer = 0.45
+	_rush_repositions_left -= 1
+
+
+## 辅助（`egt_gunsinger`）：不攻击玩家，给半径内**血量比例最低的盟友**加血 + 提速。
+## 这是本批唯一「目标类型变成盟友」的策略，按 §3.1 必须独立。
+## 自己不受益（原作 Gunsinger 也不给自己 buff），且不治疗满血单位。
+func _perform_support_buff() -> void:
+	# —— 原作的中断条件（之前完全没实现，等于它可以站着把 buff 刷满）——
+	# "They will cancel their spell and **run away if the player is too close
+	#  or they take too much damage**."
+	# 两条触发条件共用同一段逃跑逻辑：被打断 → 逃 `flee_sec` 秒 → 回来继续施法。
+	if _support_interrupted():
+		_egt_interrupt_flee = float(_interrupt_spec().get("flee_sec", 2.5))
+		return
+	var spec: Variant = _active_profile.get("support_buff", null)
+	var radius := 12.0
+	var hp_ratio := 0.35
+	var speed_mult := 1.35
+	var duration := 5.0
+	if spec is Dictionary:
+		radius = float((spec as Dictionary).get("radius_m", radius))
+		hp_ratio = float((spec as Dictionary).get("hp_ratio", hp_ratio))
+		speed_mult = float((spec as Dictionary).get("speed_mult", speed_mult))
+		duration = float((spec as Dictionary).get("duration", duration))
+	var candidates: Array[Node3D] = (
+		GameplaySpatialRegistry3D.query_radius(
+			global_position, radius, [GameplaySpatialRegistry3D.KIND_ENEMY], [room_id]
+		)
+		if GameplaySpatialRegistry3D != null
+		else []
+	)
+	var selected: Enemy3D = null
+	var lowest_ratio := 1.01
+	for value in candidates:
+		var ally := value as Enemy3D
+		if ally == null or ally == self or ally.room_id != room_id or ally.ai_state == "dead":
+			continue
+		var ratio := float(ally.current_hp) / float(maxi(1, ally.max_hp))
+		if ratio < lowest_ratio:
+			selected = ally
+			lowest_ratio = ratio
+	if selected == null:
+		return
+	selected.receive_healing(maxi(2, int(selected.max_hp * hp_ratio)))
+	selected.apply_haste(speed_mult, duration)
+
+
+## 加速（Gunsinger 的 buff 落点）。与 `_slow_factor` 对称：
+## **只乘 `get_effective_move_speed()`，不改 `move_speed` 本体** ——
+## 否则 buff 结束得把原值算回来，一旦中途 `apply_profile` 就会算错。
+func apply_haste(multiplier: float, duration: float) -> void:
+	if ai_state == "dead":
+		return
+	_haste_factor = maxf(1.0, multiplier)
+	_haste_timer = maxf(_haste_timer, duration)
+
+
+## 死亡全向喷（红/蓝霰弹枪）。`chance` 表达原作的「有几率」——
+## 三只霰弹枪里红色的最安全，正因为它是概率而非必定（见设计 §T1）。
+func _perform_death_burst() -> void:
+	var spec: Variant = _active_profile.get("death_burst", null)
+	if not (spec is Dictionary):
+		return
+	var cfg := spec as Dictionary
+	if randf() > float(cfg.get("chance", 1.0)):
+		return
+	var count := maxi(2, int(cfg.get("count", 6)))
+	var damage := maxi(1, int(round(float(contact_damage) * float(cfg.get("damage_ratio", 0.75)))))
+	for index in range(count):
+		var angle := TAU * float(index) / float(count)
+		var direction := Vector3(cos(angle), 0.0, sin(angle))
+		_fire_projectile(direction, damage, _egt_projectile_color())
+
+
+## 死亡分裂（布洛布三阶）。子代由房间通过 `split_requested` 统一实例化，
+## **不在这里 new 敌人** —— 实例化出口只有 `Dungeon3D._spawn_enemy_batch` 一条。
+func _perform_death_split() -> void:
+	var spec: Variant = _active_profile.get("death_split", null)
+	if not (spec is Dictionary):
+		return
+	var cfg := spec as Dictionary
+	# 新写法 `children[]`：一次死亡生成**多种**子代（子弹榴弹王同时产 Bullat 与 Shotgat）。
+	# 旧写法 `child/count` 仍然生效 —— 布洛布三阶一行不用改。
+	var children: Variant = cfg.get("children", null)
+	if children is Array and not (children as Array).is_empty():
+		for entry_value in children as Array:
+			if not (entry_value is Dictionary):
+				continue
+			var entry := entry_value as Dictionary
+			var kind := str(entry.get("child", ""))
+			if kind.is_empty() or not PROFILES.has(kind):
+				continue
+			split_requested.emit(self, kind, maxi(1, int(entry.get("count", 1))))
+		return
+	var child := str(cfg.get("child", ""))
+	var count := maxi(1, int(cfg.get("count", 2)))
+	if child.is_empty() or not PROFILES.has(child):
+		return
+	split_requested.emit(self, child, count)
+
+
+# =============================================================================
+# 远征03 第二批：非弹道行为（瞬移 / 逃跑 / 伪装 / 抓取 / 绕圈链 / 随机招式）
+#
+# 这一组全部挂在 `_tick_egt_state()` 里按帧推进，只对**声明了对应键**的怪生效。
+# 没声明这些键的怪（包括第一批 12 只）连函数体都不会进 —— 行为逐字不变。
+# =============================================================================
+
+## 复刻怪的状态推进。挂在 `_physics_process` 的既有递减区，与连发队列同一个时序真源。
+func _tick_egt_state(delta: float) -> void:
+	if not _is_egt_kind() or ai_state == "dead":
+		return
+	_tick_egt_blink(delta)
+	_tick_egt_flee(delta)
+	_tick_egt_interrupt(delta)
+	_tick_egt_explode_pending(delta)
+	_tick_egt_disguise(delta)
+	_tick_egt_wander(delta)
+	_tick_egt_grab(delta)
+	_tick_egt_orbit(delta)
+	_tick_egt_eggs(delta)
+	_tick_rush_reposition()
+
+
+## 扑击延迟：到点才真的炸。放在 tick 里而不是 `await`，
+## 是为了让「怪死了 / 被冻结」时这条延迟自然失效。
+func _tick_egt_explode_pending(delta: float) -> void:
+	if _explode_pending <= 0.0:
+		return
+	_explode_pending = maxf(0.0, _explode_pending - delta)
+	if _explode_pending <= 0.0 and ai_state != "dead":
+		_explode()
+
+
+## 读这只怪的 `interrupt` 规格（目前只有枪歌者声明）。
+func _interrupt_spec() -> Dictionary:
+	var spec: Variant = _active_profile.get("interrupt", null)
+	return spec as Dictionary if spec is Dictionary else {}
+
+
+## 施法是否该被打断：玩家靠太近，或自己在 `hurt_window_sec` 内受过伤。
+## 两条都是原作明确写的条件 —— 少实现任何一条，它就会变成"站着把 buff 刷满"的靶子。
+func _support_interrupted() -> bool:
+	if _egt_hurt_window > 0.0:
+		return true
+	var radius := float(_interrupt_spec().get("flee_radius_m", 6.0))
+	return _get_player_in_proximity(radius) != null
+
+
+## 被打断后的短暂逃跑：沿远离玩家方向位移 `flee_sec` 秒。
+## **不改 `move_speed`**，只写 `_external_velocity` —— 与 `flee` / `grab` 同一套口径，
+## 这样被减速/加速时仍按比例生效，也不会污染 profile。
+func _tick_egt_interrupt(delta: float) -> void:
+	_egt_hurt_window = maxf(0.0, _egt_hurt_window - delta)
+	if _egt_interrupt_flee <= 0.0:
+		return
+	_egt_interrupt_flee = maxf(0.0, _egt_interrupt_flee - delta)
+	if not is_instance_valid(_target):
+		return
+	var away := global_position - _target.global_position
+	away.y = 0.0
+	if away.length_squared() < 0.0001:
+		return
+	var mult := float(_interrupt_spec().get("flee_speed_mult", 1.5))
+	_external_velocity = away.normalized() * get_effective_move_speed() * mult
+	_external_timer = 0.12
+
+
+## 蛋的孵化：到点在落点炸一圈，子弹带轻微追踪（"涌动"）。
+func _tick_egt_eggs(delta: float) -> void:
+	if _pending_eggs.is_empty():
+		return
+	var remaining: Array[Dictionary] = []
+	for egg in _pending_eggs:
+		var wait := float(egg.get("timer", 0.0)) - delta
+		if wait > 0.0:
+			egg["timer"] = wait
+			remaining.append(egg)
+			continue
+		if ai_state == "dead":
+			continue
+		var spec: Dictionary = egg.get("spec", {})
+		var point: Vector3 = egg.get("position", global_position)
+		var count := maxi(1, int(spec.get("burst_count", 8)))
+		var damage := maxi(1, int(round(float(contact_damage) * float(spec.get("burst_damage_ratio", 0.7)))))
+		var behavior := {}
+		if spec.has("homing"):
+			behavior["homing"] = true
+			behavior["homing_strength"] = clampf(float(spec.get("homing", 0.0)), 0.0, 1.0)
+			behavior["home_lifetime"] = 2.2
+		for dir in ring_directions(Vector3.FORWARD, count):
+			_fire_projectile(dir, damage, _egt_projectile_color(), false, behavior, 0.0, point)
+	_pending_eggs = remaining
+
+
+## 瞬移（空尖弹定时 / 枪法师出手后）。落在**原地半径内**的一个随机点，
+## 不直接传到房间对角：那会让玩家完全丢失目标，读起来像"卡了一下"。
+func _tick_egt_blink(delta: float) -> void:
+	var spec: Variant = _active_profile.get("blink", null)
+	if not (spec is Dictionary):
+		return
+	var cfg := spec as Dictionary
+	if bool(cfg.get("on_attack", false)):
+		return
+	var interval := float(cfg.get("interval", 0.0))
+	if interval <= 0.0:
+		return
+	_blink_timer = maxf(0.0, _blink_timer - delta)
+	if _blink_timer > 0.0:
+		return
+	_blink_timer = interval
+	_blink_to_random(float(cfg.get("radius_m", 8.0)))
+
+
+## 瞬移到「当前点周围 radius 内」的一个随机水平位置。
+## ⚠ 只做水平位移、不改 Y：怪必须继续贴地，否则会浮空或被塞进地板。
+func _blink_to_random(radius: float) -> void:
+	if radius <= 0.0:
+		return
+	var angle := randf() * TAU
+	var distance := radius * sqrt(randf())
+	var offset := Vector3(cos(angle), 0.0, sin(angle)) * distance
+	var target := global_position + offset
+	if not _is_point_inside_room_hint(target):
+		# 落点在房外（或算不出来）⇒ 朝房间中心折半，避免穿墙。
+		target = global_position + offset * 0.5
+	global_position = Vector3(target.x, global_position.y, target.z)
+	velocity = Vector3.ZERO
+	_external_velocity = Vector3.ZERO
+
+
+## 房内判定。**只作"别穿墙"的软约束**，不是精确碰撞：
+## 以出生点为房心、用「出生点到当前点的最远距离」当半径的近似。
+## 真正的墙判定由 `_track_stuck_recovery` 负责把卡住的怪推回来。
+func _is_point_inside_room_hint(point: Vector3) -> bool:
+	var limit := maxf(6.0, global_position.distance_to(_home_position) + 6.0)
+	return point.distance_to(_home_position) <= limit
+
+
+## 逃跑（钥匙小子 / 运气小子）：朝**远离玩家**的方向跑，超时直接消失。
+## 消失不是死亡 —— 但房间的清怪计数必须跟着减，否则门永远打不开，
+## 所以走 `_die()`，只是把掉落与死亡特效关上（见 `_vanish`）。
+func _tick_egt_flee(delta: float) -> void:
+	var spec: Variant = _active_profile.get("flee", null)
+	if not (spec is Dictionary):
+		return
+	var cfg := spec as Dictionary
+	var vanish_after := float(cfg.get("vanish_after", 0.0))
+	if vanish_after > 0.0:
+		_flee_timer = maxf(0.0, _flee_timer - delta)
+		if _flee_timer <= 0.0:
+			_vanish()
+			return
+	# 逃跑的位移指令写在 `_external_velocity` 上：不改 `move_speed`，
+	# 于是被减速/加速时仍然按比例生效，也不会污染 profile。
+	if not is_instance_valid(_target):
+		return
+	var away := global_position - _target.global_position
+	away.y = 0.0
+	if away.length_squared() < 0.0001:
+		return
+	var speed := get_effective_move_speed() * float(cfg.get("speed_mult", 1.4))
+	_external_velocity = away.normalized() * speed
+	_external_timer = 0.12
+
+
+## 伪装（拟态怪）：静止、不攻击、不吃伤害；玩家靠近或自己被打中才现形。
+func _tick_egt_disguise(delta: float) -> void:
+	var spec: Variant = _active_profile.get("disguise", null)
+	if not (spec is Dictionary) or not _disguised:
+		return
+	var cfg := spec as Dictionary
+	var player := _get_player_in_proximity(float(cfg.get("reveal_radius_m", 3.2)))
+	if player != null:
+		_reveal_disguise()
+		return
+	velocity = Vector3.ZERO
+	_external_velocity = Vector3.ZERO
+
+
+## 现形。只改一个标志位 —— 表现层（模型/血条）由既有通道自动跟上，
+## 不再额外做一套"宝箱模型"。占位期这是可接受的：玩家看到的是"一个箱子突然活了"。
+func _reveal_disguise() -> void:
+	if not _disguised:
+		return
+	_disguised = false
+	_blink_timer = 0.0
+	avatar.flash_hit()
+
+
+## 游荡（枪精灵）：不贴脸，绕着房间中心的一个随机点飘，到点换目标。
+func _tick_egt_wander(delta: float) -> void:
+	var spec: Variant = _active_profile.get("wander", null)
+	if not (spec is Dictionary):
+		return
+	var cfg := spec as Dictionary
+	_wander_timer = maxf(0.0, _wander_timer - delta)
+	if _wander_timer > 0.0 and _wander_target != Vector3.ZERO:
+		var offset := _wander_target - global_position
+		offset.y = 0.0
+		if offset.length() > 0.6:
+			_external_velocity = offset.normalized() * get_effective_move_speed() * 0.85
+			_external_timer = 0.12
+			return
+	_wander_timer = float(cfg.get("retarget_sec", 2.2))
+	var radius := float(cfg.get("radius_m", 8.0))
+	var angle := randf() * TAU
+	_wander_target = _home_position + Vector3(cos(angle), 0.0, sin(angle)) * radius * sqrt(randf())
+
+
+## 抓握大师：悬停 → 闪蓝预警 → 下压抓取 → 复位。
+##
+## **不改血量、只改位置**（原作这条是「不造成伤害却改变关卡状态」）。
+## 缺"房间重置"链路，所以抓到后是**把玩家抛回房间入口方向**，见设计 §T6 已知差异。
+func _tick_egt_grab(delta: float) -> void:
+	var spec: Variant = _active_profile.get("grab", null)
+	if not (spec is Dictionary):
+		return
+	var cfg := spec as Dictionary
+	var hover_height := float(cfg.get("hover_height_m", 4.2))
+	match _grab_state:
+		"idle":
+			# 清场后自动死亡：原作 "Automatically **dies if all other enemies in the room
+			# are killed**"。旧实现只有"有别人时无敌"，于是清完场还剩一只打不动的在飘。
+			if bool(_active_profile.get("die_when_others_dead", false)) and not _room_has_other_living_enemy():
+				_die()
+				return
+			# 悬停：保持在地面之上一个固定高度（重力对它是关掉的，见 `_egt_hover_lock`）。
+			_hold_hover(hover_height)
+			_grab_timer = maxf(0.0, _grab_timer - delta)
+			if _grab_timer <= 0.0 and is_instance_valid(_target):
+				_grab_state = "telegraph"
+				_grab_timer = float(cfg.get("telegraph_sec", 0.8))
+				avatar.flash_hit()
+		"telegraph":
+			_hold_hover(hover_height)
+			_grab_timer = maxf(0.0, _grab_timer - delta)
+			if _grab_timer <= 0.0:
+				_grab_state = "dive"
+				var aim := _target.global_position if is_instance_valid(_target) else global_position
+				_grab_dive_target = Vector3(aim.x, global_position.y, aim.z)
+		"dive":
+			var to_point := _grab_dive_target - global_position
+			to_point.y = 0.0
+			var step := float(cfg.get("dive_speed", 12.0)) * delta
+			global_position += to_point.normalized() * minf(step, to_point.length())
+			if to_point.length() <= 0.9:
+				# 原作是 "**attempts** to grab"：闪蓝之后玩家可以走开/翻滚躲掉。
+				# 旧实现无条件抛玩家 ⇒ 等于"必中"，玩家无从应对。
+				# 判据用「落点与玩家的水平距离 ≤ grab_radius_m」而不是"到达落点即成功"。
+				var grab_radius := float(cfg.get("grab_radius_m", 1.6))
+				var caught := (
+					is_instance_valid(_target)
+					and _flat_distance_to(_target) <= grab_radius
+				)
+				if caught:
+					_apply_grab_throw(float(cfg.get("throw_distance_m", 10.0)))
+				else:
+					_grab_miss_count += 1
+					if _grab_miss_count >= int(_active_profile.get("max_grab_misses", 3)):
+						_vanish()
+						return
+				_grab_state = "recover"
+				_grab_timer = 1.2
+		"recover":
+			_hold_hover(hover_height)
+			_grab_timer = maxf(0.0, _grab_timer - delta)
+			if _grab_timer <= 0.0:
+				_grab_state = "idle"
+				_grab_timer = attack_cooldown
+
+
+## 抓握大师起手：进入闪蓝预警。真正的下压由 `_tick_egt_grab()` 推进 ——
+## 攻击通道只负责"开始"，时序仍然只有一处真源。
+func _begin_grab() -> void:
+	var spec: Variant = _active_profile.get("grab", null)
+	if not (spec is Dictionary):
+		return
+	if _grab_state != "idle":
+		return
+	_grab_state = "telegraph"
+	_grab_timer = float((spec as Dictionary).get("telegraph_sec", 0.8))
+	avatar.flash_hit()
+
+
+## 把玩家从当前点**抛向远离抓握大师的方向**。伤害为 0，只做位移与击退。
+## 用 `take_damage(0, …)` 的 knockback 通道而不是直接改坐标：
+## 玩家自己的位移/碰撞/镜头都在那一条链上，绕过它会和相机打架。
+func _apply_grab_throw(throw_distance_m: float) -> void:
+	if not is_instance_valid(_target) or not _target.has_method("take_damage"):
+		return
+	var away := _target.global_position - global_position
+	away.y = 0.0
+	if away.length_squared() < 0.0001:
+		away = Vector3.FORWARD
+	if _target.has_method("notify_attacked_by"):
+		_target.call("notify_attacked_by", self)
+	_target.call("take_damage", 0, false, away.normalized(), true, throw_distance_m * 0.35)
+
+
+## 悬停：直接压住 Y 高度（抓握大师不落地）。
+func _hold_hover(height: float) -> void:
+	var floor_y := _home_position.y + height
+	global_position.y = lerpf(global_position.y, floor_y, 0.12)
+	velocity.y = 0.0
+
+
+## 链枪手起手：开始绕圈链。
+func _begin_orbit() -> void:
+	var spec: Variant = _active_profile.get("orbit", null)
+	if not (spec is Dictionary):
+		return
+	_orbit_active = true
+	_orbit_angle = randf() * TAU
+	_orbit_timer = float((spec as Dictionary).get("duration", 2.0))
+	_orbit_emit_accumulator = 0.0
+
+
+## 绕圈链推进：一边慢慢逼近玩家，一边按 `rev_per_sec` 转出一串弹。
+## 原作「约 3 圈/秒转 2 秒」—— 圈速 × 时长决定了总共几圈，是它压力的全部来源。
+func _tick_egt_orbit(delta: float) -> void:
+	if not _orbit_active:
+		return
+	var spec: Variant = _active_profile.get("orbit", null)
+	if not (spec is Dictionary):
+		_orbit_active = false
+		return
+	var cfg := spec as Dictionary
+	var rev_per_sec := float(cfg.get("rev_per_sec", 3.0))
+	var per_rev := maxi(1, int(cfg.get("bullets_per_rev", 6)))
+	_orbit_timer = maxf(0.0, _orbit_timer - delta)
+	if _orbit_timer <= 0.0:
+		_orbit_active = false
+		# 原作："If it's the **only enemy alive** in the room, the ball of the chain will
+		# **detach and launch** towards the player."
+		# 收链那一刻判定 —— 早判定会让"刚打死最后一只的下一轮"漏掉这一次脱手。
+		if not _room_has_other_living_enemy():
+			_launch_orbit_ball()
+		return
+	_orbit_angle += TAU * rev_per_sec * delta
+	# 按角度累积发射，保证"每圈 N 发"与帧率无关。
+	_orbit_emit_accumulator += TAU * rev_per_sec * delta / float(per_rev)
+	while _orbit_emit_accumulator >= 1.0:
+		_orbit_emit_accumulator -= 1.0
+		var direction := Vector3(sin(_orbit_angle), 0.0, cos(_orbit_angle))
+		_fire_projectile(
+			direction, contact_damage, _egt_projectile_color(), false, {},
+			float(cfg.get("speed", 6.4)), global_position
+		)
+	# 缓慢逼近：链在转的时候整只怪往前压，逼玩家在弹链里移动。
+	if is_instance_valid(_target):
+		var toward := _target.global_position - global_position
+		toward.y = 0.0
+		if toward.length() > 1.0:
+			_external_velocity = toward.normalized() * get_effective_move_speed() * 0.55
+			_external_timer = 0.12
+
+
+## 链球脱手：链枪手是房内最后一只时，收链瞬间把球甩向玩家。
+## 伤害沿用 `contact_damage`，但**弹速更快**（原作是"甩出去"而不是"链在转"），
+## 并且带 `explosive` 标签 —— 它是整颗球，不是链上的一节。
+func _launch_orbit_ball() -> void:
+	if not is_instance_valid(_target):
+		return
+	var direction := _target.global_position - global_position
+	direction.y = 0.0
+	if direction.length_squared() < 0.0001:
+		return
+	var spec: Variant = _active_profile.get("orbit", null)
+	var ball_speed := 11.0
+	if spec is Dictionary:
+		ball_speed = float((spec as Dictionary).get("ball_speed", ball_speed))
+	_fire_projectile(
+		direction.normalized(), contact_damage, _egt_projectile_color(),
+		true, {}, ball_speed, global_position + Vector3(0, 0.9, 0)
+	)
+
+
+## Chancebulon：随机借用同族招式，且**有几率不攻击而是直接死**（原作骰子感）。
+func _perform_chance_move(to_target: Vector3, distance: float) -> void:
+	var spec: Variant = _active_profile.get("chance_moves", null)
+	if not (spec is Dictionary):
+		_perform_egt_contact(to_target, distance)
+		return
+	var cfg := spec as Dictionary
+	if randf() < float(cfg.get("self_destruct_chance", 0.0)):
+		# 「有几率不攻击而直接死亡」—— 死法走正常死亡链，掉落照给。
+		_die()
+		return
+	var moves: Array = cfg.get("moves", [])
+	if moves.is_empty():
+		_perform_egt_contact(to_target, distance)
+		return
+	match str(moves[randi() % moves.size()]):
+		"contact":
+			_perform_egt_contact(to_target, distance)
+		"ring":
+			var forward := to_target
+			forward.y = 0.0
+			for dir in ring_directions(forward.normalized(), 8):
+				_fire_projectile(dir, contact_damage, _egt_projectile_color(), false, {}, 0.0, global_position)
+		"dice":
+			var forward2 := to_target
+			forward2.y = 0.0
+			for dir in _pattern_directions({"pattern": "dice", "count": 6}, forward2.normalized(), 1):
+				_fire_projectile(dir, contact_damage, _egt_projectile_color(), false, {}, 0.0, global_position)
+		_:
+			_perform_egt_contact(to_target, distance)
+
+
+## 抓握大师等"场上还有别人就打不动"的怪。敌人层唯一的无敌判定入口。
+## 水平距离（忽略 Y）。抓取判定必须用水平距离：抓握大师悬在 4.2m 高，
+## 用三维距离会把"正下方站着"判成很远，等于永远抓不到。
+func _flat_distance_to(target: Node3D) -> float:
+	var delta := target.global_position - global_position
+	delta.y = 0.0
+	return delta.length()
+
+
+## 同房间里是否还有**别的**活着的敌人。
+## 两处都用它：`_is_egt_invulnerable()`（有别人时无敌）与
+## 抓握大师的 `die_when_others_dead`（全死则自己死）。同一判据只能有一份实现。
+func _room_has_other_living_enemy() -> bool:
+	if GameplaySpatialRegistry3D == null:
+		return false
+	var neighbors: Array[Node3D] = GameplaySpatialRegistry3D.query_radius(
+		global_position, 60.0, [GameplaySpatialRegistry3D.KIND_ENEMY], [room_id]
+	)
+	for value in neighbors:
+		var other := value as Enemy3D
+		if other != null and other != self and other.room_id == room_id and other.ai_state != "dead":
+			return true
+	return false
+
+
+func _is_egt_invulnerable() -> bool:
+	if not bool(_active_profile.get("invulnerable_while_others_alive", false)):
+		return false
+	return _room_has_other_living_enemy()
+
+
+## 逃跑超时消失。**不是死亡**：不喷死亡特效、不结算掉落，但必须走完
+## `_die()` 的清房记账（否则房间永远清不掉，门打不开）。
+## 用一个标志让 `_die()` 跳过特效与掉落，语义与"被打死"分开。
+func _vanish() -> void:
+	if ai_state == "dead":
+		return
+	_vanish_requested = true
+	_die()
 
 
 func receive_healing(amount: int) -> void:
@@ -1619,6 +3385,18 @@ func _spawn_ground_blast_zone(radius: float) -> void:
 func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, hit_knockback := 0.0, interrupt_movement := true) -> void:
 	if ai_state == "dead":
 		return
+	# 拟态怪：伪装状态下**不吃伤害**，但挨打就现形（原作"被射击才现形"）。
+	# 顺序很重要：先现形、再照常结算这一发 —— 否则玩家打中箱子会读成"打空"。
+	if _disguised:
+		_reveal_disguise()
+	if _is_egt_invulnerable():
+		avatar.flash_hit()
+		_spawn_effect("VFX-IMPACT-3D", 0.82)
+		return
+	# 受伤窗口：`interrupt` 用它判断「自己受伤就中断施法」（枪歌者）。
+	# 放在无敌判定**之后** —— 打不动它的时候不该算"被打断"。
+	if _active_profile.has("interrupt"):
+		_egt_hurt_window = float(_interrupt_spec().get("hurt_window_sec", 2.5))
 	var applied := maxi(1, amount)
 	if elite_modifier_id == "Elite.Ricochet" and randf() < 0.30:
 		applied = maxi(1, int(applied * 0.5))
@@ -1667,6 +3445,14 @@ func take_projectile_damage(
 	hit_knockback := 0.0
 ) -> void:
 	if ai_state == "dead" or amount <= 0:
+		return
+	# 伪装 / 无敌同样在这一层先拦：子弹通道与近战通道必须给出**一致的结果**，
+	# 否则会出现"枪打不动、近战能砍"（或被反过来）的诡异判定。
+	if _disguised:
+		_reveal_disguise()
+	if _is_egt_invulnerable():
+		avatar.flash_hit()
+		_spawn_effect("VFX-IMPACT-3D", 0.82)
 		return
 	if is_instance_valid(attacker):
 		notify_attacked_by(attacker)
@@ -2127,7 +3913,7 @@ func get_illumination_move_multiplier() -> float:
 
 
 func get_effective_move_speed() -> float:
-	return move_speed * get_illumination_move_multiplier()
+	return move_speed * get_illumination_move_multiplier() * _haste_factor
 
 
 func get_attack_frequency_multiplier() -> float:
@@ -2259,11 +4045,36 @@ func _push_planar(vector: Vector3) -> void:
 
 
 func _apply_gravity(delta: float) -> void:
+	# 浮空怪（空尖弹 / 三色书怪 / 枪法师 / 枪精灵 / 抓握大师）不吃重力：
+	# 它们在世界里是"悬停"的，掉到地上会毁掉"浮空"这个形态语言。
+	# 只对**声明了 `hover`** 的复刻怪生效，其余怪的重力逐字不变。
+	if _is_egt_kind() and bool(_active_profile.get("hover", false)):
+		_pin_hover_height(delta)
+		return
 	if is_on_floor():
 		# 极小负值让 floor snap 保持接触；不会把无位移的怪沿斜坡推走。
 		velocity.y = FLOOR_STICK_MPS
 	else:
 		velocity.y = maxf(velocity.y - GRAVITY_MPS2 * delta, -TERMINAL_FALL_SPEED_MPS)
+
+
+## 悬停在「出生点上方 `hover_height_m`」（默认 1.6m）。
+## 用 lerp 而不是直接赋值：房间地板若不齐平，硬贴会让怪一半埋进地面。
+func _pin_hover_height(delta: float) -> void:
+	if not _home_initialized:
+		return
+	var target_y := _home_position.y + _egt_hover_height()
+	global_position.y = lerpf(global_position.y, target_y, minf(1.0, delta * 6.0))
+	velocity.y = 0.0
+
+
+## 悬停高度。抓握大师要悬在**玩家头顶**（更高），所以它走 `grab.hover_height_m`，
+## 其余浮空怪走 `hover_height_m`，都没写就按 1.6m。
+func _egt_hover_height() -> float:
+	var grab_spec: Variant = _active_profile.get("grab", null)
+	if grab_spec is Dictionary:
+		return float((grab_spec as Dictionary).get("hover_height_m", 4.2))
+	return float(_active_profile.get("hover_height_m", 1.6))
 
 
 ## 碰撞柱半径 × 当前缩放，与 `get_state_snapshot().world_collision_radius` 同源。
@@ -2544,6 +4355,23 @@ func _telegraph_duration() -> float:
 func _die() -> void:
 	if ai_state == "dead":
 		return
+	# —— 「消失」不是「死亡」（逃跑超时的钥匙小子 / 运气小子）——
+	# 仍然必须走完清房记账（`killed.emit`），但**不喷死亡特效、不掉掉落**：
+	# 玩家看到的是它传送走了，而不是被打爆。这两件事在同一函数里分岔，
+	# 是为了保证「房间能不能开门」只认一处记账，不会因为加了逃跑型而漏。
+	if _vanish_requested:
+		_clear_fate_visuals()
+		transition_to("dead")
+		_pending_volleys.clear()
+		collision_layer = 0
+		collision_mask = 0
+		_runtime_ai_active = false
+		set_physics_process(false)
+		if _overhead_health_root != null:
+			_overhead_health_root.visible = false
+		killed.emit(self, get_enemy_data())
+		queue_free()
+		return
 	_clear_fate_visuals()
 	transition_to("dead")
 	if AudioManager != null:
@@ -2563,6 +4391,16 @@ func _die() -> void:
 		_detonate_death_explosion()
 	elif enemy_kind == "fat_zombie03":
 		_spawn_fat_death_burst(1.0)
+	# —— 远征03 复刻怪的死亡行为（2026-10-29）——
+	# 三条都放在「关卡级死亡自爆」之后、`killed.emit` 之前：
+	# 子代与弹幕必须在「本怪还算活着」的窗口内发出，否则房间可能在
+	# `killed.emit` 之后立刻判清、把门放开，玩家还没看到分裂出来的小怪就走出去了。
+	# 连发队列先清 —— 尸体不该继续开火。
+	_pending_volleys.clear()
+	if _active_profile.has("death_burst"):
+		_perform_death_burst()
+	if _active_profile.has("death_split"):
+		_perform_death_split()
 	collision_layer = 0
 	collision_mask = 0
 	# 死亡表现分两路：僵尸三兄弟**没有尸体** ⇒ 不进死亡显隐组

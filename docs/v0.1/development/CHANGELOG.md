@@ -1,3 +1,72 @@
+## 2026-10-29 远征03 宝箱房：宝箱实体 + 开箱掉落 + 命运卡
+
+ENEMY-AI / REWARD-SERVICE：业主「宝箱房也需要放宝箱，还有宝箱房的宝箱开启后除了会掉落外，会出现一张命运卡」。**这不是加玩法，是补上一轮砍掉普通怪装备后断掉的经济链** —— 当时 `REWARD` 房在运行时没有任何处理，这一层没有第二个装备来源。链路五段：① `level_plan.json` 顶层新增 `treasure_chests`（每间 1 箱 / 需钥匙 / `quality_weights` 四档 / `reward_pool_id=loot_floor_1_2` / `drop_count=2` / `fate_card_per_open=1`）；② `FloorPlanGenerator._chest_placements_for()` 只给 `kind=="REWARD"` 的房写 `chest_placements`（沿中轴摆、品质按索引确定性轮转而不是抽签，保证同 seed 同位置且探针可复算）；③ **`room_from_source()` 白名单必须登记本字段**；④ 新增 `src/world3d/TreasureChest3D.gd`（复用 `PlayerInteractionController3D` 的 6 个交互协议方法 + `PROVIDER_GROUP`，视觉全程序化、盖子绕后缘上翻 104°、`priority=60` 高于家具的 40），`DungeonRoom3D._build_treasure_chests()` 进房实例化并上行 `chest_open_requested`；⑤ `Dungeon3D._on_chest_open_requested()` 按**扣钥匙 → 收口箱子形态 → 抽掉落 → 给命运卡**的顺序结算（顺序不可换：钥匙最前防"没钥匙也开了"、形态第二防"反复按 E 刷掉落"、掉落先于命运卡防 `fate_lucky_chest` 的时序竞态、命运卡最后因为它可能弹选来源窗口）。`TreasureChest3D.perform_interaction()` **故意不置 `_opened`**，状态由上层 `commit_opened()` 收口 —— 先置位再判定就会"没钥匙也把箱子标成已开"。命运卡走 `FateCardGameBridge.grant_random_card_from_character(0)` 而不是自己 `draw_offer`+`apply_card_instance`，因为前者已处理「枪械命运槽满 / 需要选来源 ⇒ 卡留在待领取而不是丢弃」。摆件避让清单加入 `TreasureChest3D`，宝箱构建顺序放在家具之后、摆件之前（否则罐子塞进箱子挡住交互圆点）。**踩坑**：`room_from_source()` 是出口白名单，不登记就静默丢弃（现象：生成期有 2 条、运行时 0 只箱子，查了三层才定位）；探针不能用 `room_type=="REWARD"` 找宝箱房（flow kind 不写进运行时 room_type，REWARD 是 `COMMON_ROOM`），判据要用 `chest_placements` 非空；flow 房间的细节是**进房才建**，探针必须先 `_enter_room()` 再数实例。验收：新增 `tools/_egt_chest_probe.gd`（2 间宝箱房各有箱 / 无钥匙不扣不掉且箱子保持可开 / 开箱掉 `drop_count` 件且必出 1 张命运卡 / 重复开箱无新增 / 已开箱不可交互），其余 10 个 EGT 探针与 4 项回归全绿。**未做**：宝箱品质池没拆（原作五档各有独立池，我们只做 `quality_tier()` 加成）、拟态没接（`egt_mimic` 已有但不在宝箱房）、钥匙供给偏紧（可支配约 1~1.5 把 vs 宝箱 2 间，EGT 亦然）。详见[开发记录](2026-10-29_expedition03_treasure_chest.md)与[怪物设计 §T9](../design/怪物设计.md)。
+
+## 2026-10-29 远征03 掉落对齐《挺进地牢》第一层
+
+ENEMY-AI / REWARD-SERVICE：业主问「掉落呢？」—— 此前三轮只对齐了怪物本身，**掉落从未核对过**。先实测再改：`tools/_egt_drop_probe.gd` 直接调 `RuntimeRewardCoordinator.resolve_kill()`，每只怪 4000 次。改前 33 只**逐只同数**（全走通用公式）：掉装备 **16%**（含蓝图/模块/配件）、掉弹药 **35%** 每只 30–50 发、铸币 100% 每只 3 个、**清房结算完全不存在**（房间无 `reward_plan`）。一层 ~68 只 × 16% ≈ **11 件白送的装备**，而原作一层是「2 宝箱 + 1 商店」。原作三条硬规则（见[普通怪掉落](../reference/挺进地牢/普通怪掉落.md)）：普通怪**不掉装备**、**自爆怪不掉铸币**（"All enemies that will self-destruct will not drop shells"）、**弹药是清房结算**（20% 拾取物 + 6% 弹药，两个独立判定，权重表照抄 wiki）。落地三处：① `MonsterDropTable` 新增 `legacy_fallback`（默认 true，远征01 逐字不变；远征03 置 false ⇒ 表即全量清单，未列出的普通怪**明确不掉物品**而不是回退通用公式），`compile()` 输出 `full_coverage` 由 `RewardService._monster_spec_for()` 消费；② 铸币按血量档进 `monster_rules.currency.per_kind`，**自爆族 6 只 base=0**（`_resolve_currency_entry` 在 `amount<=0` 时不生成 grant，地上不会出现 0 元球）；③ 清房结算走 `clear_rewards` → 生成期写 `room.reward_plan.clear`，**不给 Dungeon3D 加任何分支**（`_mark_room_cleared` → `resolve_clear` 本来就存在，远征03 只是第一次有房间声明 `clear` 槽位）。两只逃跑怪进入 `monster_drop_table`：钥匙小子必掉 1 钥匙、运气小子必掉 1 个随机拾取物（抽 `loot_floor_1_2`）。改后实测：31 只只掉铸币（3~9）、6 只自爆族全空手、钥匙小子 100% 钥匙、运气小子 93.3% 物品 + 6.7% 弹药（随机拾取物抽到弹药）、清房拾取物 17.1% / 弹药 7.3%（构成 血瓶 57.2% / 钥匙 33.1% / 货币 9.7%）。新增门禁 `_egt_drop_probe`（33 只逐只 + 清房两项独立判定）与 `_egt_clear_rewards_wiring_probe`（4 种子，断言 `reward_plan.clear` 真进房间记录、和平区不被误配）。**踩坑**：内联 spec 不能带 `spec_id`（`normalize_ref` 会拿它去命名表里查 ⇒ `UNKNOWN_SPEC` ⇒ 清房静默不掉，症状是"探针全绿但地上什么都没有"）。**已知缺口**：远征03 的 `REWARD` 房运行时无任何处理，普通怪停掉装备后这一层**没有第二个装备来源**，需要补宝箱房（开箱/钥匙/品质/拟态）。详见[开发记录](2026-10-29_egt_monster_drops.md)与[怪物设计 §T8](../design/怪物设计.md)。
+
+## 2026-10-29 远征03 重点对齐弹速 / 伤害 / 攻击方式（第三轮）
+
+ENEMY-AI：业主「敌人的子弹速度和伤害还有方式，要重点对齐」。**弹速从 16 降到 8 m/s，方向本来就是错的** —— 第二轮那个「玩家移速 3.5 倍」的锚点是我编的。查证后确认原作事实相反：**EGT 的子弹和玩家几乎同档速**（玩家 6.5 单位/秒、子弹约 8，wiki 甚至有 "an extremely slow pointy bullet"），这正是它作为弹幕游戏的基础：**靠走位躲，不是靠无敌帧穿**。改成按**可躲性反推**：`可横移 = 4.5 × (距离/弹速 − 0.25)` 必须大于 `距离 × tan(扩散半角)`；算式给出 16 m/s 在 8m 处只能移 1.12m < 扇形半宽 1.99m（**躲不掉**），8 m/s 可移 3.38m（舒适）。⇒ 分 8 基准 / 10 fast-moving / 6 追踪弹跳弹 / 4.2 吉吉的蛋；弹程 12→**22m**（覆盖整间房，撞墙自然消失）。**伤害统一 17，爆炸不再开特例**（撤回第二轮的 26 —— 原作 §1.2 是全体半颗心，wiki 没有为爆炸加档的记录）；**死亡弹幕也恢复 17**（撤回 0.30 折减，因为弹速降下来后可以躲，这本身就是对齐「方式」）。**攻击方式逐条对 wiki 改了 5 处**：老兵霰弹枪预判 0.55→**1.00**（原文 "100% predictive aim"）、老兵小子 4 连发 + 预判 0.62（反编译 `LeadAmount=0.62f`）、保险销头补**扑击**（"it will leap towards the player and explode"）、抓握大师补**清场自动死亡 + 抓空 3 次消失 + 抓取改为可躲**（原文 "attempts to grab"，旧实现是必中且清场后还剩一只打不动的）、链枪手补**弹球脱手**（"if it's the only enemy alive, the ball will detach and launch"）、枪坚果补**撞墙炸散的大弹**（新增 `Projectile3D.shatter_on_wall` 默认关闭分支）。新增门禁 `_egt_dodgeability_probe`：19 只会开火的怪逐只算可躲性，**判据按「窄弹判走位、宽扇形判翻滚」分开**（第一版混判会得出"90° 扇形设计有问题"的错误结论，实际原作也靠翻滚穿）。详见[开发记录](2026-10-29_egt_bullet_damage_and_behavior_alignment.md)。
+
+## 2026-10-29 远征03 怪物数值重定标 + 修「子弹飞不出来」
+
+ENEMY-AI：按业主要求把 33 只复刻怪的数值**改按玩家子弹伤害定标**。
+**血量 = EGT 血量 × 10** —— 系数不是拍的，是反推「击杀发数」：EGT Bullet Kin 15 血 ÷ 初始手枪约 6 伤 ≈ 3 发，本工程初始步枪 `bp_starter_rifle` 50 伤/发 ⇒ 150 血同样 3 发。线性关系意味着与原作**严格等比**（枪坚果 6.67 倍差就是 6.67 倍：150 → 1000），旧口径的指数 0.72 幂律压缩（6.67 压成 3.93）已废弃 —— 它会让同一只怪的手感直接变短，且让血量与威胁脱钩。**伤害统一为玩家 100 血的 1/6 = 17**（正好对应原作「半颗心 = 6 格里的 1 格」），爆炸 26，死亡弹幕单发按 0.30 折减到 ≈5（原作靠翻滚无敌帧穿弹幕，我们没有那套系统，12×17=204 是必死不是惩罚）。**速度/冷却/射程/弹速**：查了 wiki、EnemyAPI 反编译字段、中文数据库站，结论是**原作没有公开的绝对值**（`enemyAPI` 能看到 `MovementSpeed`/`LeadAmount=0.62f`/`Speed(6f)` 字段名，但无米·秒⁻¹ 换算），故按定性分档：速度慢 2.0/中 2.4/快 3.4/浮空 1.8/停留 0.6 m/s，冷却 occasionally 2.2/rapidly 1.05/periodically 2.6，弹速以玩家移速 4.5 m/s 的 3.5 倍为锚取 16（fast 18~20），射程 = range × 1.4。**顺手修掉三处「wiki 写明了、我们做错了」**：老兵小子改 4 连发（原文 "they fire 4 bullets in a row"）、子弹榴弹王与枪歌者改原地不动（原作描述里没有 walks towards）、枪歌者补「玩家靠近 6m 或自己受伤则中断施法逃跑 2.5s」。**「子弹飞不出来」的真因不是视觉而是射程**：33 只都没有 `projectile_range` ⇒ `range_m=0` ⇒ 子弹只有 1 秒寿命、7 m/s 飞 7 米就自毁，而远程怪 `attack_range` 是 8.8~9.8 m，等于"怪在射程边缘开火、子弹在离玩家 2 米处消失"。既有 9 个注册点探针全都只验"有没有**排队射击事件**"，所以"排队 8 发但一发看不见"能一路绿灯 —— 新增 `_egt_bullet_visual_probe`（逐只断言出弹+视觉非空可见+射程非零）与 `_egt_tuning_runtime_probe`（逐只比对进场 hp/damage 与设计表）。数值唯一生成器 `tools/retune_egt_monsters.py` 写入 PROFILES / BASE_ENEMY_TYPES / per_kind 三处。详见[开发记录](2026-10-29_egt_monster_tuning_and_bullet_visibility.md)。
+
+## 2026-10-29 远征03 怪物层补齐：《挺进地牢》第一层 33 种全实装
+
+ENEMY-AI：复刻怪由 12 只补到 **33 只**（第一层非 Boss 全量），AI 与攻击方式按原作逐只落地。攻击分派改结构：`_perform_attack()` 不再按 kind 长名单列举，改为「`egt_*` → `profile.attack_style`」走 **9 种骨架**（volley / contact / explode / rush / support / grab / orbit / chance / flee），第一批 12 只也补了显式 `attack_style`，图纸与运行时同源。新增能力全是参数，不是分支：**12 种弹道图案**（单发 / 连发 / 扇形 / V 型 / 环 / 脉动双环 / 四叶草 / 罗盘 8 向 / 箭头群 / 字母逐笔 / 螺旋 / 蛇形 / 骰子）、**`followup` 双段**（蓝霰弹「宽 5 发 + 快速接 4 发」属同一次攻击）、**`volley_alt` 换招**、敌方子弹**追踪**与**反弹**，以及 **9 个非弹道行为键**（死亡分裂含多种子代 / 死亡全向喷 / 自杀冲撞 / 辅助加血加速 / 瞬移 / 逃跑超时消失 / 伪装成箱 / 抓取投掷 / 绕圈压迫）。敌群盒由 8 个扩到 **22 个**，`spawn_roster` 覆盖 10 个 node + `NORMAL`/`HUB` 兜底，逐房难度推进（入门 → 瞬移首次登场 → 随机性首次登场 → `hub_02` 四组混编顶点 → 缓冲）。验收：`_egt_monster_registry_probe`（33 只 × 9 个注册点逐只发誓、按公式复算血量、逐只实发攻击）、`_egt_variant_visual_probe`（11 族族内体型/颜色不撞、跨族无同形同色）、`_egt_roster_probe`（6 种子全战斗房有编成）、`_egt_runtime_probe`（hub_01 连跑三次稳定 7 只全 `egt_*`），`verify_3d_enemy_behavior_flow`、`verify_strong_variant_monsters` 退出码 0。顺手修正文档错误：`stats.per_kind` 是**绝对进场血量**，旧页「×3 才是进场值」不成立（实测 `egt_bullet_kin` 进场 42），九张表头由「3D 基线 / ×3 后」改为「进场 HP」。账本：敌人账本 r33~r53 新增 21 行（r21~r53 共 33 行 egt_*），日志 v0.1.20 / v0.1.21，无损基线补录 33 个 AssetID（`scripts/refresh_ledger_baseline_egt_enemies.py`）。详见[开发记录](2026-10-29_egt_full_monster_roster.md)与[怪物设计 §T1~§T6](../design/怪物设计.md)。
+
+## 2026-10-29 远征03 逐房编成取代公式刷怪
+
+LEVEL-EXPEDITION-03 / ENEMY-AI：业主要求「按 EGT 设计把怪布置到对应房间、去掉原来的刷怪逻辑」。改成**逐房手作编成**：`level_plan.json` 新增顶层 `spawn_roster`（`by_node` 10 条 + `by_kind` 兜底），`FloorPlanGenerator` 按 `node_id` 查表、`_auto_lay_boxes()` 在房内可用区格心放盒。旧路径用四道闸门关死：`spawn_roster.spawn_boxes_only=true`（战斗房必须有盒，不回退公式）、**删除 `monster_rules.enemy_pool`**、`_apply_expedition_surplus()` 对该层返回 0（不再按比例混入原生怪）、生成期只按 roster 注入。踩坑留档：可用区重复扣盒半宽导致 25×25 房「放不下」→ 改为只扣 recess；盒尺寸不足（4×4 装 3 只）会**静默少出**；并发 headless 共用 user dir 会让刷怪数量少一只（先查并发实例，别改落位算法）。详见[开发记录](2026-10-29_expedition03_roster_spawn.md)。
+
+## 2026-10-29 远征03黑色覆盖还原（幕墙垂直密闭恒显；镜头夹取保留）
+
+LEVEL-EXPEDITION-03：业主先报「进门的时候会看到外边的房间。这个也不合理啊。黑色覆盖的时间还是先还原吧」，随后更正「别改了。这个黑幕是垂直的啊 摄像机碰撞这个别改了。保留」。**只动幕墙**：撤掉本日早间的门洞留口（`FLOW_VIEW_DOOR_HOLE_BLEED_M` / `_flow_view_side_quads()` / `DungeonRoom3D.get_wall_door_lanes()`）与"镜头出门整圈收起"（`_update_flow_view_visibility()`），回到**垂直、整圈密闭、恒显**、上沿 12m→26m、四面各一整块。`_clamp_flow_camera_into_room()`（房间边界夹取，只动 x/z、瞬时换框）**保留**——业主明确这是要留的，与 2026-10-28 否掉的「墙碰撞抬升/收拢」是两回事。过渡小间补光一并删除（幕墙密闭后门洞本就黑，补光无意义且会挤占 `gl_compatibility` 的 8 灯预算）。探针：`curtain_area==整面面积`、`curtain_always_on` 通过、`camera_clamp` 104 个站位全部在房间内且高度漂移 0.000m、`wall_leak=84`。附带修正漏光判据：原 `on_lum<0.06` 判黑过严，恢复夹取后幕墙在屏幕上变大、边缘抗锯齿带（亮度 0.090）被误判成漏光（1847 假红）；实测幕墙面本体是纯 `(0,0,0)`、真漏光为 0.40~0.50，阈值改为 0.12（两端余量≥3 倍）。详见[开发记录](2026-10-29_expedition03_blackout_restore.md)。
+
+## 2026-10-29 场景工坊r5：正常操作流程与大预览
+
+TOOL-SCENE-EDITOR：重排为顶部打开/新建/保存、八个模式小按钮、主体组件卡片与大3D预览，参考/灯光移入折叠选项，默认完整右侧栏目。后台资源读取与扫描提供阶段、耗时、取消、失败/重试；按活动场景根确认打开成功；检测旧UI构建标记并保留参数重建。详见[r5开发记录](2026-10-29_scene_builder_workbench.md)。
+
+## 2026-10-29 远征03入口安全屋补退出门 EXIT 灯牌
+
+LEVEL-EXPEDITION-03：业主红框圈出入口安全屋退出门报「没有退出关卡的功能」。排查结论：门扇与 `[E] 退出战局`（`configured_expedition_retreat`，含二次确认）**一直在**，缺的是门内侧地面的 `ENV-BATTLE-EXIT-NEON-SIGN` 灯牌 —— `_build_safe_room_exit_sign()` 原先只覆盖 v007 动态壳体与远征01/02 静态布局两条路径，远征03 走的**程序化壳体**分支从来没调用它。修法按 `room_type == "STAIR_LOBBY"` 补一次（不认关卡 ID），并把 `safe_room_exit_sign` 两条房间 meta 收进构造函数统一写。实测牌中心局部 `(6.67, 0.045, 0.00)`、门扇 `(7.50, 0.00, 0.00)`，切向偏差 0.00m、牌底 y=−0.000；`probe_expedition03_playable` 新增唯一性/visual_only/无碰撞/贴走行面/切向对齐五条断言。详见[开发记录](2026-10-29_expedition03_exit_sign.md)。
+
+## 2026-10-29 远征03白盒发现与参考加载修复
+
+TOOL-SCENE-EDITOR r4：补齐白盒入口漏收的cr通道和EGT共享参考，提供独立可搜索的新建白盒列表；EGT按共享来源标识，同时可检索“远征03”。新增加载/隐藏/未关联/失败状态、重载、透明度与可撤销关联；EGT美术输出进入远征03目录并保留壳ID，避免继承白盒标记。证据与验收见[开发记录](2026-10-29_component_scene_editor.md)。
+
+## 2026-10-29 场景编辑器资产浏览、自由放置与房间索引
+
+TOOL-SCENE-EDITOR：按套件/类型筛选图片卡片，提供可旋转3D预览；修复关掉格心仍强制网格取整的问题，增加独立吸附总开关与组件轮廓落点预览。已有美术场景按关卡/套件/房间名称浏览，常用控件置顶，预览区可折叠和调高。实现与本轮验收见[开发记录](2026-10-29_component_scene_editor.md)。
+
+## 2026-10-29 右上角小地图去半透明底并缩到红框大小
+
+UI-14 / `UI-WIDGET-MINIMAP`：按业主指令去掉右上角小地图背后的半透明底板（只改角落态，M 键全屏大地图的背板与双层边框保留），并把角落盒由 458×346 设计 px 缩到 **382×265**（canvas 305.6×212），锚点挪到业主截图红框处（实测矩形 x 961.6..1267.2 / y 40..252，误差 ≤0.4px）。三条 EGT 渲染契约（固定缩放 / 地图不跟随 / 矩形拼图）不变；全部楼层在新内容区下均不溢出、不触发硬夹紧。详见[开发记录](2026-10-29_minimap_no_backdrop_and_resize.md)。
+
+## 2026-10-29 易碎小物件 v002：放大 + 破碎重做
+
+WORLD-INTERACTIVE-CLUTTER v001→v002（业主反馈「动画不够明显、整体太小」）：椅子/罐子 +50%、木箱 +30%、书本与花瓶不变（纯统一缩放，三角面与拓扑不变 96/84/92/96/98）；椅子 1.29m 依业主指令放宽单件上限至 1.30m，其余仍守 1m。破碎 0.65s→0.95s，弧顶随本体放大且逐块抖动（≥0.55m）、散开半径 ≥0.75m、落点最小间隙 0.30m 松弛防粘连；碎片按材质分三类（陶片 20 面 / 木板 12 面 / 书页 12 面），配色取本体实际色盘格。详见[开发记录](2026-10-29_interactive_clutter.md) §9。
+
+## 2026-10-29 易碎小物件随机撒进远征03
+
+WORLD-INTERACTIVE-CLUTTER：`level_plan.json` 新增能力段 `interactive_clutter`，远征03 房间按 `room_seed` 确定性撒 3~6 件（实测 17 房 / 75 件 / 10 间 5×5 走廊房显式跳过 / 2 间安全房与 Boss 房排除）。离墙 0.9m、离门 2.4m、彼此 1.1m；流送重建后位置与朝向**零漂移**；真子弹可击碎；门通行回归 `blocked=0`、`reachable=27/27`。代码无关卡 ID 分支（`check_level_decoupling` violations=0），透传三段：plan 顶层 → 房间记录 → 两条建房路径。详见[开发记录](2026-10-29_interactive_clutter.md) §8。
+
+## 2026-10-29 五件场景可交互易碎小物件接入
+
+WORLD-INTERACTIVE-CLUTTER：罐子/书本堆/花瓶/椅子/木箱各一件独立组件，96/84/92/96/98 三角面、最大边 0.54~0.86m，1 套方向破碎动画（≤5 块碎片、0.65s、落地持续留存），完整与破碎态均不阻挡角色与子弹。投放在入口安全房 `STAIR_LOBBY` 的 `RuntimeDetail`，不重生成整房；破碎记录随房间流送重建恢复。验收发现并修掉三个真故障：房间 `PROCESS_MODE_DISABLED` 导致受击体不进物理空间（测试须走 `set_stream_state(ACTIVE)`）、碎片初版成「刀片带」且配色与本体无关、房间截图全黑。账本第 974–978 行 + 《3D-场景通用》801–805 行。详见[开发记录](2026-10-29_interactive_clutter.md)。
+
+## 2026-10-29 组件场景编辑器纳入工具类总设计
+
+TOOL-SCENE-EDITOR：归入 `TOOLING` / 工具类 / 场景美术制作。总设计新增§20与[工具类总索引](../TOOL_INDEX.md)，同步模块/机器登记、设计目录、关系跟踪、制作框架及工具登记规则；文档补充与校验见[开发记录](2026-10-29_component_scene_editor.md)。本轮只更新文档和登记元数据。
+
+## 2026-10-29 Godot组件场景编辑器
+
+TOOL-SCENE-EDITOR：新增共享组件拼装面板、白盒参考、地表笔刷与区域铺放、灯光和原生撤销。正式TSCN保留Prefab实例，组件更新沿稳定引用生效。范围与验收见[独立开发记录](2026-10-29_component_scene_editor.md)。
+
 ## 2026-10-28（十一次）修掉墙外那条能看见隔壁房间的浅带
 
 业主报：「这个会有漏缝，填补其它地方的黑色区域……没改门之前的版本好像没有。」

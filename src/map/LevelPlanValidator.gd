@@ -1083,6 +1083,12 @@ static func _validate_spawn_boxes(
 		var hostile := (
 			GAME_DESIGN_CONFIG.ROOM_TYPES_WITH_HOSTILES.has(content_type)
 			and not bool(room.get("authored_layout_peaceful", false))
+			# BOSS 房**不走盒子编成**：Boss 身份由 `BossContentCatalog` 名册解析，
+			# 增援由 `boss_reinforcement_plan` 声明，刷怪盒只管普通敌群。
+			# 不排除的后果（2026-10-29 实测）：`spawn_boxes_only` 层的远征03 被
+			# `spawn_boxes_missing_for_hostile_room:boss` 直接拒掉 —— **整层生成失败**，
+			# 启动日志只有那一行，看起来像"关卡数据坏了"，实际是判据与 Boss 机制冲突。
+			and content_type != GAME_DESIGN_CONFIG.BOSS_ROOM_TYPE
 		)
 		# 「可否摆盒」= 真敌对房 ＋ EVENT（见函数头判据 A）。⚠️ 与 `hostile` 是两件事：
 		# `hostile` 决定「**必须**有盒」，`box_authorable` 决定「**允许**有盒」。

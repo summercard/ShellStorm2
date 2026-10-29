@@ -333,20 +333,25 @@ const FLOW_ROOM_WALL_THICKNESS_M := 0.28
 ## 幕墙与墙外表面之间留的空隙：贴太近会与墙面共面打架。
 const FLOW_VIEW_WALL_GAP_M := 0.02
 ## 幕墙的竖直范围。下沿沉到地面以下（俯角压低时看得到地平面边缘），
-## 上沿远高于相机（相机在 10.26m），这样任何"向外看"的视线都必然穿过它。
+## 上沿远高于相机（10.26m）—— 任何"向外看"的视线都必然穿过它。
+##
+## ⚠️ 别再往低压。2026-10-29 曾按"dir.y < 0 的视线在墙平面上必然 ≤ 相机高度"
+## 把上沿降到 12m，道理没错，但当时同时把幕墙改成了"镜头出门就收起"，
+## 结果是玩家进门那几帧能看到**外面的房间和墙外地面**（业主截图红框）——
+## 黑色覆盖一旦有缝，观感就整个塌掉。上沿留足余量是这套遮挡的兜底。
 const FLOW_VIEW_WALL_BOTTOM_M := -1.0
 const FLOW_VIEW_WALL_TOP_M := 26.0
 ## 黑幕向外扩出的余量。相机约 10m 高、俯角 60° 时，越过墙顶的视线最多再走
 ## (10 − 2.8) / tan60° ≈ 4.2m 就落地；15m 足以覆盖任何屏幕边缘的余光。
 const FLOW_VIEW_MASK_MARGIN_M := 15.0
-## 远征03 的镜头允许贴到房间边界内多远。0.55m 大于墙厚 0.28m 的一半 + 门框余量，
-## 保证镜头不会穿进墙体、也不会在黑幕边缘露缝。
-const FLOW_CAMERA_ROOM_INSET_M := 0.55
 ## 正在等待落门的房间（room_id → 已等待秒数）。用成员而不是 Timer 节点：
 ## 房间可能在一帧内被流送换掉，协程里每帧都要重新判 `is_instance_valid`。
 var _pending_flow_seals: Dictionary = {}
 ## 黑幕当前挖洞的房间。换房时重建（洞跟着玩家走）。
 var _flow_view_mask_room_id := ""
+## 当前这圈幕墙的根节点（`_clear_flow_view_nodes()` 会置空）。
+## 存引用是为了换房重建时不必全树 `find_child`（幕墙**恒显**，不按镜头显隐）。
+var _flow_view_wall_root: Node3D
 ## 允许穿过「刷怪推迟」覆盖的一次性放行（见 `_spawn_room_enemies()`）。
 var _flow_spawn_passthrough: Dictionary = {}
 var _boss_descent_key_count := 0
@@ -1960,15 +1965,25 @@ func _apply_indoor_camera_pose() -> void:
 	_apply_debug_camera_pose_adjustments(look_target)
 
 
-## 远征03（flow 关卡）专用：把镜头**水平夹在当前房间足迹内**。
+## 远征03（flow 关卡）专用：把镜头**水平夹在当前房间足迹内**（业主指定保留）。
 ##
-## 为什么需要它：本轮去掉了"墙碰撞自动抬升/收拢"，镜头就严格按"角色 + 后方 3.1m"
-## 跟随。角色贴墙背对房间中心时，镜头会落到墙外 —— 而本轮又给房间外铺了黑幕
-## （`FlowViewMask`，只给当前房间挖洞），镜头一出房间就会看到一片黑。
+## 这不是"墙碰撞避让"（那条 2026-10-28 已关掉），而是维持"一次只有一间房是舞台"
+## 的构图：镜头始终在**当前这间房的框里**，过门就是换框。
 ##
-## 这是**边界限制**，不是碰撞避让：不改高度、不改俯角、不改到角色的距离基准，
-## 也不探测墙体；相机只是被"房间地板边界"顶住，仍然平滑跟随（房间内移动连续，
-## 夹取也连续）。业主反对的是"撞墙就跳回去又弹回来"，不是"镜头顶在墙前"。
+## 业主 2026-10-29 晚两次确认，别再折腾它：
+##   · 「我只要你把黑幕的出现时机还原……摄像机镜头碰撞这个怎么也给我加回来了」
+##     → 黑幕要还原成垂直密闭；镜头碰撞（本夹取）**要保留**，不是要删；
+##   · 「别改了。这个黑幕是垂直的啊 摄像机碰撞这个别改了。保留」
+##
+## 边界：只夹水平 x/z，高度 / 俯角 / 跟随距离基准一律不动。
+## 相关的是 `FlowViewWalls`（垂直整圈密闭幕墙）—— 幕墙恒显、无缺口，
+## 所以镜头贴边时看到的是自己这间，不会绕到黑墙背面去。
+##
+## ⚠️ 不要改成阻尼/插值：跨门槛那一帧房间换了、夹取边界整块搬家，
+## 阻尼会让镜头在旧框里多待 0.2~0.5s（实测过，观感更差），瞬时切框才是对的手感。
+const FLOW_CAMERA_ROOM_INSET_M := 0.55
+
+
 func _clamp_flow_camera_into_room(look_target: Vector3) -> void:
 	if not _flow_rules_active or player == null or player.camera == null:
 		return
@@ -3004,6 +3019,12 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	var reward_plan := spec.get("reward_plan", {}) as Dictionary
 	if not reward_plan.is_empty():
 		record["reward_plan"] = reward_plan.duplicate(true)
+	# 宝箱放置层（2026-10-29）：与 reward_plan 同一口径，没写就不落字段。
+	# **漏了这里 = 设计源写了却被静默丢弃**（本工程已经在 spawn_placements /
+	# reward_plan 上各踩过一次同形状的坑）。
+	var chests := spec.get("chest_placements", []) as Array
+	if not chests.is_empty():
+		record["chest_placements"] = chests.duplicate(true)
 	# —— 触发器刷怪（docs/v0.1/design/触发器刷怪设计.md §3.2 / §3.3）——
 	# 放置层 / 调用层 / 只认盒子标记：同样没写就不落字段（未迁移关卡行为逐字不变）。
 	# 漏了这里 = 设计源写了真源却被静默丢弃，运行时恒回退旧公式路径（2026-09-25 同类坑）。
@@ -3026,6 +3047,14 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 			record["boss_content_id"] = str(boss_profile["boss_content_id"])
 			record["arena_asset_id"] = str(boss_profile["arena_asset_id"])
 			record["arena_scene"] = str(boss_profile["arena_scene"])
+	# 场景可交互易碎小物件的随机布置计划（能力段，2026-10-29）。
+	# **只看关卡数据有没有写这一段**，不判断关卡 ID：任何关卡写同一段都同样生效。
+	# 房间类型排除表由数据给出（安全房已摆固定五件、Boss 房有自己的构图，都不该再撒）。
+	var clutter_plan := plan.get("interactive_clutter", {}) as Dictionary
+	if not clutter_plan.is_empty() and bool(clutter_plan.get("enabled", false)):
+		var clutter_excluded: Array = clutter_plan.get("exclude_room_types", []) as Array
+		if not clutter_excluded.has(str(spec.get("type", ""))):
+			record["interactive_clutter"] = clutter_plan.duplicate(true)
 
 
 func _append_tower_record(
@@ -4039,7 +4068,6 @@ func _build_tower_horizontal_corridor(
 		"south_camera_wall_count",
 		1 if horizontal_x else 0
 	)
-
 
 func _add_horizontal_corridor_multimesh(
 	connector: Node3D,
@@ -6130,6 +6158,7 @@ func _refresh_flow_view_mask(force := false) -> void:
 ##    `@MeshInstance3D@NNN` —— 于是它在树里既搜不到名字、又被当成"塔楼高墙"。
 ##    所以这里先 `remove_child()`（立刻释放名字），再 free。
 func _clear_flow_view_nodes() -> void:
+	_flow_view_wall_root = null
 	for node in find_children("FlowViewWalls*", "", true, false):
 		var parent := node.get_parent()
 		if parent != null:
@@ -6195,44 +6224,49 @@ func _build_flow_view_walls(hole_room_id: String) -> void:
 	var z1 := rp.z + dims.y * 0.5 + off
 	var bottom := FLOW_VIEW_WALL_BOTTOM_M
 	var top := FLOW_VIEW_WALL_TOP_M
-	var vertices := PackedVector3Array()
-	# 四面：每面两个三角形。相邻面在转角处各多铺 off，避免斜看时露出角缝。
-	var quads := [
-		# 北（z 最小）
-		[Vector3(x0 - off, bottom, z0), Vector3(x1 + off, bottom, z0),
-			Vector3(x1 + off, top, z0), Vector3(x0 - off, top, z0)],
-		# 南（z 最大）
-		[Vector3(x0 - off, bottom, z1), Vector3(x1 + off, bottom, z1),
-			Vector3(x1 + off, top, z1), Vector3(x0 - off, top, z1)],
-		# 西（x 最小）
-		[Vector3(x0, bottom, z0 - off), Vector3(x0, bottom, z1 + off),
-			Vector3(x0, top, z1 + off), Vector3(x0, top, z0 - off)],
-		# 东（x 最大）
-		[Vector3(x1, bottom, z0 - off), Vector3(x1, bottom, z1 + off),
-			Vector3(x1, top, z1 + off), Vector3(x1, top, z0 - off)],
-	]
-	for quad in quads:
-		var a: Vector3 = quad[0]
-		var b: Vector3 = quad[1]
-		var c: Vector3 = quad[2]
-		var d: Vector3 = quad[3]
+	var material := _flow_view_mask_material()
+	# 四面各建一个 MeshInstance3D：遮挡要能逐面开关（排障时只看一面），
+	# 而 4 个节点与换房重建的频率无关（换房才重建）。
+	#
+	# ⚠️ **门洞不许留口**。2026-10-29 上午曾按业主"过门直接看到下一间"的要求
+	# 在门洞处切口、并让镜头出门时把整圈收起；当天下午业主看到"进门时能看见外面
+	# 的房间"（截图红框），要求先把黑色覆盖还原。结论：
+	#   · 只要幕墙有任何缺口，镜头在门外/门洞里时就会漏出隔壁房间与墙外地面；
+	#   · 而"过门能看到下一间"在 EGT 里靠的是**房间切换时机**，不是遮挡留洞 ——
+	#     洞一留，房间边界就没了。
+	# 所以这里恢复整圈密闭：四面各自一整块，从上沿到下沿不留口。
+	var walls := Node3D.new()
+	walls.name = "FlowViewWalls"
+	for side_value in ["north", "south", "west", "east"]:
+		var side := str(side_value)
+		var along_x := side in ["north", "south"]
+		var fixed := z0 if side == "north" else (z1 if side == "south" else (x0 if side == "west" else x1))
+		var u_start := (x0 - off) if along_x else (z0 - off)
+		var u_end := (x1 + off) if along_x else (z1 + off)
+		var vertices := PackedVector3Array()
+		var a := _flow_view_point(along_x, fixed, u_start, bottom)
+		var b := _flow_view_point(along_x, fixed, u_end, bottom)
+		var c := _flow_view_point(along_x, fixed, u_end, top)
+		var d := _flow_view_point(along_x, fixed, u_start, top)
 		vertices.append(a)
 		vertices.append(b)
 		vertices.append(c)
 		vertices.append(a)
 		vertices.append(c)
 		vertices.append(d)
-	var arrays := []
-	arrays.resize(Mesh.ARRAY_MAX)
-	arrays[Mesh.ARRAY_VERTEX] = vertices
-	var mesh := ArrayMesh.new()
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	mesh.surface_set_material(0, _flow_view_mask_material())
-	var walls := MeshInstance3D.new()
-	walls.name = "FlowViewWalls"
-	walls.mesh = mesh
-	walls.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	walls.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+		var arrays := []
+		arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = vertices
+		var mesh := ArrayMesh.new()
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		mesh.surface_set_material(0, material)
+		var panel := MeshInstance3D.new()
+		panel.name = "FlowViewWalls%s" % side.capitalize()
+		panel.mesh = mesh
+		panel.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		panel.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+		panel.set_meta("view_wall_side", side)
+		walls.add_child(panel)
 	# 顶点是世界坐标：用 top_level 忽略父节点变换，避免被区块偏移一次。
 	walls.top_level = true
 	_flow_view_mask_parent().add_child(walls)
@@ -6242,13 +6276,13 @@ func _build_flow_view_walls(hole_room_id: String) -> void:
 	walls.set_meta("view_wall_top", top)
 	walls.set_meta("view_wall_offset", off)
 	walls.set_meta("view_wall_rect", Rect2(x0, z0, x1 - x0, z1 - z0))
+	_flow_view_wall_root = walls
 
 
-## 黑幕 / 幕墙共用的材质：纯黑、不吃光、不吃雾、双面、不投影。
-##
-## `disable_fog = true` 是硬要求：unshaded **不等于**"不参与环境雾"，
-## 漏掉它时远征场景的浓雾会把遮罩染成灰蓝（实测采样 56,68,78），
-## 看上去仍然像"墙外有一层可见的远景"。
+func _flow_view_point(along_x: bool, fixed: float, u: float, y: float) -> Vector3:
+	return Vector3(u, y, fixed) if along_x else Vector3(fixed, y, u)
+
+
 func _flow_view_mask_material() -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
@@ -6535,6 +6569,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"encounter": record.get("encounter", {}),
 		"spawn_boxes_only": bool(record.get("spawn_boxes_only", false)),
 		"reward_plan": record.get("reward_plan", {}),
+		"chest_placements": record.get("chest_placements", []),
 		"safe_room_corner_l": bool(record.get("safe_room_corner_l", false)),
 		"authored_layout_shell": bool(record.get("authored_layout_shell", false)),
 		"authored_layout_asset_id": str(record.get("authored_layout_asset_id", "")),
@@ -6552,6 +6587,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		# 其余关卡记录里没有这个键 ⇒ 空串 ⇒ RoomDoor3D 用缺省升降，逐字不变。
 		"door_opening_style": str(record.get("door_opening_style", "")),
 		"procedural_shell": bool(record.get("procedural_shell", false)),
+		"interactive_clutter": record.get("interactive_clutter", {}),
 	})
 	room.position = record["position"]
 	room.set_meta("template_rotation_deg", float(record.get("rotation_deg", 0.0)))

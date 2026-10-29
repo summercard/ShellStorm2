@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_shotgun_heavy",
+  "note": "霰弹族·双霰压场。blue_shotgun(宽扇双段，族内最强) + red_shotgun。整关最重的远程组合，只摆在中后段的枢纽房；蓝霰弹是全场最大最高血的普通怪，玩家该先解决它。",
+  "shape": "box",
+  "size_m": [
+    5.0,
+    3.0,
+    5.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_blue_shotgun",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_red_shotgun",
+      "count": 1,
+      "delay_sec": 0.35
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

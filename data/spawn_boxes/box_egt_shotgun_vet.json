@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_shotgun_vet",
+  "note": "霰弹族·老兵压场。老兵霰弹枪是 V 型 5 发 + 预判，而且**必定**全向喷 —— 它血量(33.8)比蓝霰弹(40)低却更危险，这是原作「用死亡惩罚平衡血量」的原样复刻。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_veteran_shotgun",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_red_shotgun",
+      "count": 1,
+      "delay_sec": 0.2
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

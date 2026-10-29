@@ -82,6 +82,22 @@
     "connector_10x30",
     "connector_30x10"
   ],
+  "interactive_clutter": {
+    "schema": "shellstorm2.battle.interactive_clutter",
+    "schema_version": 1,
+    "note": "场景可交互易碎小物件的随机布置（2026-10-29，用户要求「随机布置在远征03的房间里」）。**这是能力段不是关卡分支**：DungeonRoom3D 只认这段数据、不认识关卡 ID，任何关卡写同款段都一样生效。落点由 room_seed 确定性推导 ⇒ 流送卸载重建、读档后位置逐格不变，不会「离开再回来罐子换地方」。安全房已摆固定五件、Boss 房有自身构图，均排除在外。",
+    "enabled": true,
+    "per_room_min": 3,
+    "per_room_max": 6,
+    "exclude_room_types": [
+      "STAIR_LOBBY",
+      "BOSS"
+    ],
+    "min_room_size_m": 8.0,
+    "wall_margin_m": 0.9,
+    "door_clearance_m": 2.4,
+    "min_spacing_m": 1.1
+  },
   "generation_policy": {
     "mode": "flow",
     "min_main_content_rooms": 8,
@@ -118,5 +134,552 @@
     "mode": "flow",
     "extracted_from": "scripts/build_expedition03_level_plan.py",
     "note": "远征关卡03「骨架随机」设计源。**mode=flow ⇒ 每局先按种子抽一张 flow 骨架，再走注入与复合对象拼装**；floors/floor_00.json 只是兜底样例，实际几何由 EgtFlowAssembler + EgtPlanBridge 在开局时按种子算。拓扑逐条对照《挺进地牢》第一层 Castle 的 6 张 flow 原图，门数分布逐张对照 第一层房间位清单.csv（见 EXPECTED_DEGREES 断言）。"
+  },
+  "monster_rules": {
+    "schema": "shellstorm2.battle.monster_rules",
+    "schema_version": 1,
+    "note": "远征03 专属怪物规则（《挺进地牢》第一层复刻，2026-10-29 第三轮：重点对齐弹速/伤害/方式）。本段**不进 layout_id**（改它不会让既有存档失配）。stats.per_kind 是**绝对最终值**：hp=最终 max_hp、damage=最终接触伤害、speed=最终米/秒。**hp = EGT 血量 × 10**（系数由「保持击杀发数」反推：EGT 15 血 ÷ 手枪 6 伤 ≈ 3 发 ↔ 150 血 ÷ 步枪 50 伤 = 3 发）。**damage 统一 17 = 玩家 100 血的 1/6**，对应原作「半颗心 = 6 格里的 1 格」；**爆炸也是 17**，原作不为爆炸开特例。枪歌者与抓握大师为 0（原作明确 Gripmaster deal no damage）。弹速 8（基准）/10（wiki 标注 fast-moving）/6（追踪、弹跳弹），依据是**可躲性反推**：16 m/s 时玩家在 8m 处只能横移 1.12m < 扇形半宽 1.99m ⇒ 躲不掉；8 m/s 时可移 3.38m ⇒ 躲得掉。弹程统一 22m，覆盖整个房间，撞墙自然消失（不设射程会让子弹只有 1 秒寿命 —— 那是「子弹飞不出来」的根因）。依据见 docs/v0.1/design/怪物设计.md §T0.2 / §T2.5。**2026-10-29 起 `enemy_pool` 已删除**：实际编成全部走 `spawn_roster`（逐房手作敌群）。",
+    "stats": {
+      "per_kind": {
+        "egt_bullet_kin": {
+          "hp": 150,
+          "damage": 17,
+          "speed": 2.0
+        },
+        "egt_bandana_kin": {
+          "hp": 150,
+          "damage": 17,
+          "speed": 2.0
+        },
+        "egt_veteran_kin": {
+          "hp": 150,
+          "damage": 17,
+          "speed": 2.6
+        },
+        "egt_red_shotgun": {
+          "hp": 300,
+          "damage": 17,
+          "speed": 2.0
+        },
+        "egt_blue_shotgun": {
+          "hp": 400,
+          "damage": 17,
+          "speed": 2.0
+        },
+        "egt_blobulon": {
+          "hp": 200,
+          "damage": 17,
+          "speed": 2.2
+        },
+        "egt_blobuloid": {
+          "hp": 100,
+          "damage": 17,
+          "speed": 2.4
+        },
+        "egt_blobulin": {
+          "hp": 10,
+          "damage": 17,
+          "speed": 3.4
+        },
+        "egt_pinhead": {
+          "hp": 130,
+          "damage": 17,
+          "speed": 2.4
+        },
+        "egt_nitra": {
+          "hp": 100,
+          "damage": 17,
+          "speed": 2.4
+        },
+        "egt_bullat": {
+          "hp": 10,
+          "damage": 17,
+          "speed": 2.4
+        },
+        "egt_gunsinger": {
+          "hp": 150,
+          "damage": 0,
+          "speed": 1.0
+        },
+        "egt_cardinal": {
+          "hp": 225,
+          "damage": 17,
+          "speed": 2.0
+        },
+        "egt_hollowpoint": {
+          "hp": 250,
+          "damage": 17,
+          "speed": 1.8
+        },
+        "egt_veteran_shotgun": {
+          "hp": 338,
+          "damage": 17,
+          "speed": 2.0
+        },
+        "egt_king_bullat": {
+          "hp": 260,
+          "damage": 17,
+          "speed": 0.6
+        },
+        "egt_chancebulon": {
+          "hp": 500,
+          "damage": 17,
+          "speed": 2.4
+        },
+        "egt_bookllet": {
+          "hp": 250,
+          "damage": 17,
+          "speed": 1.6
+        },
+        "egt_blue_bookllet": {
+          "hp": 250,
+          "damage": 17,
+          "speed": 1.6
+        },
+        "egt_green_bookllet": {
+          "hp": 250,
+          "damage": 17,
+          "speed": 1.6
+        },
+        "egt_gunjurer": {
+          "hp": 188,
+          "damage": 17,
+          "speed": 1.5
+        },
+        "egt_gigi": {
+          "hp": 120,
+          "damage": 17,
+          "speed": 3.6
+        },
+        "egt_shotgat": {
+          "hp": 20,
+          "damage": 17,
+          "speed": 2.4
+        },
+        "egt_grenat": {
+          "hp": 30,
+          "damage": 17,
+          "speed": 2.4
+        },
+        "egt_spirat": {
+          "hp": 50,
+          "damage": 17,
+          "speed": 2.4
+        },
+        "egt_keybullet_kin": {
+          "hp": 150,
+          "damage": 17,
+          "speed": 3.0
+        },
+        "egt_chance_kin": {
+          "hp": 150,
+          "damage": 17,
+          "speed": 3.0
+        },
+        "egt_confirmed": {
+          "hp": 450,
+          "damage": 17,
+          "speed": 2.2
+        },
+        "egt_mimic": {
+          "hp": 1000,
+          "damage": 17,
+          "speed": 2.2
+        },
+        "egt_gun_fairy": {
+          "hp": 150,
+          "damage": 17,
+          "speed": 3.0
+        },
+        "egt_gripmaster": {
+          "hp": 300,
+          "damage": 0,
+          "speed": 2.0
+        },
+        "egt_gun_nut": {
+          "hp": 1000,
+          "damage": 17,
+          "speed": 1.8
+        },
+        "egt_chain_gunner": {
+          "hp": 900,
+          "damage": 17,
+          "speed": 2.1
+        }
+      }
+    },
+    "ai": {
+      "preactivation_range_m": 38.0,
+      "engage_distance_m": 13.5,
+      "lost_sight_sec": 1.15,
+      "vision_range_dark_m": 8.5,
+      "vision_range_artificial_m": 13.5,
+      "vision_range_sunlight_m": 15.5,
+      "proximity_awareness_m": 4.8,
+      "alert_share_radius_m": 10.0
+    },
+    "strong_variant": {
+      "chance": 0.0,
+      "note": "远征03 复刻怪**不启用强化怪**：EGT 第一层没有这套机制，开启会让「同一种怪」出现两档体型，与本关「复刻原作」的目标相冲。若后续要加，改这里的 chance 即可，无需动任何怪种定义。"
+    },
+    "death_explosion": {
+      "egt_pinhead": {
+        "enabled": true,
+        "damage": 17,
+        "radius_m": 2.6,
+        "sfx_radius_m": 16.0
+      },
+      "egt_nitra": {
+        "enabled": true,
+        "damage": 17,
+        "radius_m": 3.4,
+        "sfx_radius_m": 18.0,
+        "zone": {
+          "enabled": true,
+          "duration_sec": 2.0,
+          "damage_per_tick": 4,
+          "tick_interval_sec": 0.5
+        },
+        "note": "原作是「朝远离玩家方向炸成一条线」。当前为**圆形爆炸**（基础版）；线爆需要在 DeathBlastZone3D 上加方向性选区，属后续补齐项，见 docs/v0.1/design/怪物设计.md §T4。"
+      }
+    },
+    "currency": {
+      "note": "战利品（货币 `extraction_points`）独立掉落通道，2026-10-29 为远征03 配置。**按怪种分档，并按原作两条硬规则剪掉一类**：①「自爆的敌人不掉铸币」（pinhead / nitra / bullat / shotgat / grenat / spirat 全为 0，base=0 时 `_resolve_currency_entry` 直接不生成 grant，地上不会出现 0 元球）；② 血量越高掉得越多，与塔楼一致地用 base+per_floor 表达。本段不影响其它关卡（未配置 = 走物品规格自带那条）。",
+      "per_kind": {
+        "egt_bullet_kin": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_bandana_kin": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_veteran_kin": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_cardinal": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_hollowpoint": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_red_shotgun": {
+          "base": 3,
+          "per_floor": 1
+        },
+        "egt_blue_shotgun": {
+          "base": 3,
+          "per_floor": 1
+        },
+        "egt_veteran_shotgun": {
+          "base": 3,
+          "per_floor": 1
+        },
+        "egt_pinhead": {
+          "base": 0,
+          "per_floor": 0
+        },
+        "egt_nitra": {
+          "base": 0,
+          "per_floor": 0
+        },
+        "egt_king_bullat": {
+          "base": 3,
+          "per_floor": 1
+        },
+        "egt_blobulon": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_blobuloid": {
+          "base": 1,
+          "per_floor": 1
+        },
+        "egt_blobulin": {
+          "base": 1,
+          "per_floor": 1
+        },
+        "egt_chancebulon": {
+          "base": 3,
+          "per_floor": 1
+        },
+        "egt_bookllet": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_blue_bookllet": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_green_bookllet": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_gunjurer": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_gunsinger": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_gigi": {
+          "base": 1,
+          "per_floor": 1
+        },
+        "egt_bullat": {
+          "base": 0,
+          "per_floor": 0
+        },
+        "egt_shotgat": {
+          "base": 0,
+          "per_floor": 0
+        },
+        "egt_grenat": {
+          "base": 0,
+          "per_floor": 0
+        },
+        "egt_spirat": {
+          "base": 0,
+          "per_floor": 0
+        },
+        "egt_keybullet_kin": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_chance_kin": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_confirmed": {
+          "base": 3,
+          "per_floor": 1
+        },
+        "egt_mimic": {
+          "base": 8,
+          "per_floor": 1
+        },
+        "egt_gun_fairy": {
+          "base": 2,
+          "per_floor": 1
+        },
+        "egt_gripmaster": {
+          "base": 3,
+          "per_floor": 1
+        },
+        "egt_gun_nut": {
+          "base": 8,
+          "per_floor": 1
+        },
+        "egt_chain_gunner": {
+          "base": 8,
+          "per_floor": 1
+        }
+      }
+    }
+  },
+  "spawn_roster": {
+    "schema": "shellstorm2.battle.spawn_roster",
+    "schema_version": 1,
+    "spawn_boxes_only": true,
+    "note": "远征03 逐房怪物编成（《挺进地牢》第一层复刻，2026-10-29）。**本段取代 `monster_rules.enemy_pool`**：该关不再走「房型公式刷怪」，每个战斗房出什么怪完全由这里决定。依据：EGT 的房间是**手作敌群**而非公式产出（`reference/挺进地牢/随机关卡生成逻辑.md §7`、`第一层怪物数据表.md`）；`怪物设计.md §T0.1` 早已要求「正式编成必须落 spawn_placements」。`spawn_boxes_only = true` 是关键开关：打开后凡是真敌对房**必须**有盒，没盒就不刷怪（而不是回退到公式）—— 这就是「去掉旧刷怪逻辑」的落地方式。`by_node` 按 flow 的 node_id 索引；`by_kind` 是兜底（注入房被洗成 COMBAT 时用）。盒子实例**只写 box id，不写坐标**：落位由生成器按房间实际尺寸自动分格，天然满足「盒在房内、离墙≥5m、互不重叠」三条几何判据。 `by_kind` 刻意**不含 BOSS**：Boss 走 `BossContentCatalog` 专属链，不由盒子编成（盒子只管普通敌群）。 `SECRET_ROOM` / `NPC_SECRET_ROOM` 也不在表里 —— 它们已被`FLOW_PEACEFUL_KINDS` 归为无怪房（EGT 的隐藏房是拿东西的地方）。 `FIREPLACE_ROOM`（壁炉房）同样不摆盒：注入房当前 `content_type` 为空串，运行时本来就不刷怪；强行给它摆盒会被校验器判 `spawn_placement_on_non_hostile_room`。 **这是一处已知的原作差异**：EGT 的壁炉房要打赢才能进隐藏层，我们现在是纯入口 —— 要不要给它加战斗属另一个设计决定，见 `远征关卡03设计.md §8.3` 的待裁定项。",
+    "by_node": {
+      "n01": {
+        "label": "入门·子弹族巡逻",
+        "note": "第一间战斗房。纯单发 + 一只分裂母体：先教会「看到枪口亮就横移」，再让玩家亲眼看到布洛布死后裂开。EGT 第一层的首个战斗房就是这个量级。",
+        "boxes": [
+          "box_egt_kin_patrol",
+          "box_egt_blob_cluster"
+        ]
+      },
+      "n02": {
+        "label": "子弹族点射强化",
+        "note": "第二课：**同族三变种**（单发/三连发/预判）靠染色分辨，再加两只空尖弹 —— 它们会周期性瞬移，是本层第一种「会从视野里消失」的敌人。",
+        "boxes": [
+          "box_egt_kin_trio",
+          "box_egt_hollow_line"
+        ]
+      },
+      "hub_01": {
+        "label": "第一枢纽·混编主战场",
+        "note": "45×40 大房、多出口。三组分散摆、不留安全角：老兵预判逼走位、红衣主教的追踪弹会拐弯（绕侧面没用）、枪坚果的 90° 扇形只能靠走位躲。",
+        "boxes": [
+          "box_egt_shotgun_lead",
+          "box_egt_cardinal_guard",
+          "box_egt_nut_guard"
+        ]
+      },
+      "n03": {
+        "label": "冲撞线教学",
+        "note": "第一次出现子弹榴弹（撞到就自爆）。窄长盒把突进方向做出来，后面那只预判远程负责堵退路 —— EGT 用这类组合惩罚站桩。配上老兵霰弹枪（V 型 + 必定全向喷）就是「击杀之后也要走位」的第一课。",
+        "boxes": [
+          "box_egt_rush_line",
+          "box_egt_shotgun_vet"
+        ]
+      },
+      "n04": {
+        "label": "爆炸族 + 随机性引入",
+        "note": "保险销头 + 硝酸怪：一个逼你打完立刻撤，一个死后留一片禁区。旁边配一只骰子布洛布 —— 它的招式每一轮都不同，而且有 20% 概率不攻击直接死，用来教「这一层不是所有怪都可预测」。",
+        "boxes": [
+          "box_egt_bomb_pair",
+          "box_egt_chance_blob"
+        ]
+      },
+      "hub_02": {
+        "label": "第二枢纽·本关最重",
+        "note": "四组混编，全层压力顶点，Boss 前最后一次硬仗：双霰压场 + 辅助护卫班 + 子弹榴弹王（弹跳弹覆盖全房、死后产两种子代）+ 重型双人（枪坚果 + 链枪手，血量 100/90 的小 Boss 组合）。辅助怪（枪歌者）在这里第一次登场，先杀它是唯一正解。",
+        "boxes": [
+          "box_egt_shotgun_heavy",
+          "box_egt_support_cell",
+          "box_egt_king_bullat",
+          "box_egt_heavy_pair"
+        ]
+      },
+      "n05": {
+        "label": "爆炸 + 法术（缓冲房）",
+        "note": "回落到轻量，给玩家喘口气。EGT 的难度曲线不是单调上升，顶点前后都要有缓冲房，否则整层只剩疲惫感。这里第一次放枪法师与吉吉：一个是出手就瞬移的施法者，一个是低血高速的蛋射手。",
+        "boxes": [
+          "box_egt_bomb_pair",
+          "box_egt_jurer_pair"
+        ]
+      },
+      "n06": {
+        "label": "冲撞 + 霰弹 + 逃跑",
+        "note": "第二次突进线，配霰弹前压。这里放三种冲撞族同场（V 型弹 / 爆炸弹 / 三次重定位），再加一对逃跑型 —— 它们 11 秒内没打死就传送消失，房间照样清，但奖励拿不到。",
+        "boxes": [
+          "box_egt_rush_line",
+          "box_egt_rush_squad",
+          "box_egt_escape_pair"
+        ]
+      },
+      "n07": {
+        "label": "商店前·辅助班",
+        "note": "通往商店的支路。摆辅助护卫班 + 双霰压场：让玩家在买装备前先打一场需要**优先目标选择**的仗。另加一只拟态怪：它静止伪装成箱子，只有你主动靠近才会现形 —— 等于给房间加了一个陷阱。",
+        "boxes": [
+          "box_egt_support_cell",
+          "box_egt_shotgun_heavy",
+          "box_egt_mimic_trap"
+        ]
+      },
+      "n08": {
+        "label": "额外普通房（部分骨架才有）",
+        "note": "flow_02 / flow_04 / flow_06 比基础版多一间 NORMAL。编成表必须覆盖它 —— 否则抽到那三张骨架时这间房会变成空房。编成是三色书怪（同血 25、只换弹形）+ 已确认者（4 条蛇形追踪弹）。",
+        "boxes": [
+          "box_egt_kin_trio",
+          "box_egt_book_row",
+          "box_egt_confirmed_cell"
+        ]
+      }
+    },
+    "by_kind": {
+      "NORMAL": {
+        "label": "普通战斗房兜底",
+        "note": "未在 by_node 登记的 NORMAL 房（含被内容洗牌成 COMBAT 的注入房）。用最基础的一组，保证不会有「有门的空房」。",
+        "boxes": [
+          "box_egt_kin_patrol",
+          "box_egt_blob_cluster"
+        ]
+      },
+      "HUB": {
+        "label": "枢纽房兜底",
+        "note": "同上，枢纽按中量编成。抓握大师放在这一档：它「场上还有其它怪时无敌」这条规则需要护卫配合才成立。",
+        "boxes": [
+          "box_egt_kin_trio",
+          "box_egt_shotgun_lead",
+          "box_egt_grip_pair"
+        ]
+      }
+    }
+  },
+  "monster_drop_table": {
+    "schema": "shellstorm2.monster_drop_table",
+    "schema_version": 1,
+    "legacy_fallback": false,
+    "empty_chance": 0.0,
+    "note": "远征03《挺进地牢》第一层复刻的怪物掉落表（2026-10-29）。**legacy_fallback=false 是本表的核心**：它把「没登记的怪」从「还没配，走通用公式兜底」改成「明确不掉物品」。原因：通用公式给普通怪 16% 装备 + 34% 备弹，而原作一层普通怪只掉铸币，装备全部来自宝箱 / 商店 / Boss —— 两套口径不能并存。因此本表只列「掉落与普通怪不同」的两只，其余 31 只显式不掉物品，货币走 monster_rules.currency 的独立通道。原作依据见 docs/v0.1/reference/挺进地牢/普通怪掉落.md。",
+    "rows": [
+      {
+        "monster_id": "egt_keybullet_kin",
+        "item_id": "item_room_key",
+        "chance": 1.0,
+        "quantity": 1,
+        "note": "原作：Keybullet Kin 必定掉 1 把钥匙（jammed 变种 2 把）；掉进坑里则不结算"
+      },
+      {
+        "monster_id": "egt_chance_kin",
+        "item_id": "@pool:loot_floor_1_2",
+        "chance": 1.0,
+        "quantity": 1,
+        "note": "原作：Chance Kin 必定掉 1 个随机拾取物（jammed 变种有机会双倍）"
+      }
+    ]
+  },
+  "clear_rewards": {
+    "schema": "shellstorm2.battle.clear_rewards",
+    "schema_version": 1,
+    "note": "清房结算（2026-10-29）。原作一层有两个**独立**判定：① 20% 概率生成一个拾取物，从权重表抽；② 6% 概率生成弹药（两项分开掷）。两者都挂在「房间清空」上，不是每只怪身上 —— 这是原作与我们旧口径最大的差别。权重取自 enterhegungeon.wiki.gg/Pickups 的取值表，**只保留我们有对应物的类别**，其余（整心 / 护甲 / Blank / Map / Supply Drop / Silver·Gold Shell / Glass Guon Stone）因本工程无对应道具而移除；删掉后按剩余权重归一化，可映射部分的相对比例与原作一致：血瓶 ≈ 半心 36.06% + 整心 4.345%、钥匙 24.36%、弹药 3.045%、货币约 6.09%（Hegemony Credit）。只对「有怪的房」结算：走廊与和平区（入口 / 撤离 / 商店 / 宝箱）不进战斗结算。",
+    "applies_to_kinds": [
+      "NORMAL",
+      "HUB"
+    ],
+    "pickup": {
+      "chance": 0.2,
+      "pool": [
+        {
+          "item_id": "item_health_potion",
+          "count": 1,
+          "weight": 40.405
+        },
+        {
+          "item_id": "item_room_key",
+          "count": 1,
+          "weight": 24.36
+        },
+        {
+          "currency_id": "extraction_points",
+          "amount": {
+            "base": 8,
+            "per_floor": 1
+          },
+          "weight": 6.09
+        },
+        {
+          "item_id": "item_ammo_pack",
+          "count": {
+            "min": 30,
+            "max": 50
+          },
+          "weight": 3.045
+        }
+      ]
+    },
+    "ammo": {
+      "chance": 0.06,
+      "item_id": "item_ammo_pack",
+      "count": {
+        "min": 30,
+        "max": 50
+      }
+    }
+  },
+  "treasure_chests": {
+    "schema": "shellstorm2.battle.treasure_chests",
+    "schema_version": 1,
+    "note": "宝箱（2026-10-29）。《挺进地牢》一层固定 2 个宝箱房（flow 里的 REWARD 节点），每间 1 只箱子，用 1 把钥匙打开，开完给 1 件装备级物资。**这是普通怪不掉装备之后本层唯一的稳定装备来源**（见 怪物设计 §T8.5）——不做它，这一层的装备经济是断的。品质按确定性轮转而不是抽签：同 seed 同房间箱子品质一致，流送卸载重建不会变，探针也能复算。`drop_count = 2` 是业主口径「除了掉落」的下限：开箱至少 2 件，避免出现「花了钥匙只拿到 1 个电池」的亏本感。命运卡在开箱后单独发 1 张（`fate_card_per_open`），不属于掉落表。",
+    "chest_per_room": 1,
+    "requires_key": true,
+    "min_spacing_m": 3.2,
+    "quality_weights": {
+      "common": 62.0,
+      "uncommon": 26.0,
+      "rare": 10.0,
+      "epic": 2.0
+    },
+    "reward_pool_id": "loot_floor_1_2",
+    "drop_count": 2,
+    "fate_card_per_open": 1
   }
 }

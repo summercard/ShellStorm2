@@ -1,0 +1,12 @@
+{
+  "schema": "shellstorm2.battle.component_instances",
+  "schema_version": 1,
+  "library": "v001_interactive_clutter",
+  "purpose": "isolated gallery only; formal placement owned by Godot",
+  "instances": [],
+  "validation": {
+    "source_object_count": 5,
+    "instance_count": 0,
+    "coverage_ok": true
+  }
+}

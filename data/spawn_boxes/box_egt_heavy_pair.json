@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_heavy_pair",
+  "note": "重型族·双重型。枪坚果（90° 扇形 + 4 组箭头弹群，只瞄 8 个方向）与链枪手（子弹链 3 圈/秒转 2 秒）。两只都是本层普通怪血量顶点（100 / 90），放在一起就是「小 Boss 房」。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_gun_nut",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_chain_gunner",
+      "count": 1,
+      "delay_sec": 0.3
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

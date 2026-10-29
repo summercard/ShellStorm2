@@ -5,6 +5,9 @@ extends Node3D
 
 signal player_entered(room: DungeonRoom3D)
 signal prop_searched(room: DungeonRoom3D, loot: Dictionary)
+## 玩家在宝箱上按了 E。**请求**语义：房间不判断能不能开（钥匙在 Dungeon3D 手里），
+## 只把「谁在哪间房想开哪个箱子」告诉上层；上层结算成功后再回调 `commit_opened()`。
+signal chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D)
 signal service_activated(room: DungeonRoom3D, station: ServiceStation3D)
 ## 灯开关被玩家切换后上行一层。与 player_entered / service_activated 同一模式：
 ## 房间不自己决定"开灯后要发生什么"，只负责把事实告诉上层。
@@ -95,6 +98,21 @@ const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 const SAFE_ROOM_RUNTIME_ROOT := "res://assets/art/environments/tower_zones/battle/runtime/"
 const SAFE_ROOM_ART_VERSION := "v007"
 const SAFE_ROOM_ART_ASSET_ID := "ENV-BATTLE-L01-SAFE-ENTRY"
+const INTERACTIVE_CLUTTER_ROOT := "res://assets/art/environments/tower_zones/battle/runtime/common_components/"
+const INTERACTIVE_CLUTTER_SLUGS: Array[String] = [
+	"breakable_jar",
+	"breakable_book_stack",
+	"breakable_vase",
+	"breakable_chair",
+	"breakable_crate",
+]
+const INTERACTIVE_CLUTTER_PLACEMENTS: Dictionary = {
+	"breakable_jar": Vector3(-1.8, 0.0, 1.2),
+	"breakable_book_stack": Vector3(-0.9, 0.0, 1.6),
+	"breakable_vase": Vector3(0.0, 0.0, 1.9),
+	"breakable_chair": Vector3(0.9, 0.0, 1.6),
+	"breakable_crate": Vector3(1.8, 0.0, 1.2),
+}
 const SAFE_ROOM_PACKAGE_IDS: Array[String] = [
 	"floor_base",
 	"overhead_services",
@@ -490,6 +508,11 @@ var spawn_boxes_only := false
 ## 由 RewardService.resolve_dispatch 的覆盖链逐级回退（关卡 → 怪物表 → 全局默认）。
 ## **只承载不解释**：本类不解析规格、不抽表 —— 抽表只有 RewardService 一处。
 var reward_plan: Dictionary = {}
+## 宝箱放置层（2026-10-29）。`[{id, quality, requires_key, offset: [x, z], rotation_deg}]`。
+## 空数组 = 本房不放宝箱（绝大多数房都不放；只有 REWARD 房由生成器写入）。
+## **只承载不解释**：本类负责把 `TreasureChest3D` 建出来并接好信号，
+## 开箱后的奖励结算全部由 `Dungeon3D._on_chest_opened()` 处理。
+var chest_placements: Array = []
 ## 入口安全房四角是否补 L 型墙角（默认关：塔楼安全房保持 12 段直墙口径）。
 ## 只由「远征关卡」的房间记录置真，见 TowerDescent3D._build_expedition_records()。
 var safe_room_corner_l := false
@@ -552,6 +575,11 @@ var door_endpoint_owners: Dictionary = {}
 ## 本房**不建门、不管传送** —— 建门与传送都归 Dungeon3D；这里只承载声明，
 ## 让位点随房间节点一起流送/卸载。
 var secret_site: Dictionary = {}
+## 场景可交互易碎小物件的**随机布置计划**（能力级字段，不含任何关卡 ID）。
+## 空字典 = 不随机布置（入口安全房仍按 `INTERACTIVE_CLUTTER_PLACEMENTS` 固定摆五件）。
+## 非空 = 本房按 `room_seed` 确定性撒点：同一房间流送卸载重建后位置逐格不变。
+## 数据来源：关卡 plan 顶层 `interactive_clutter` 段 → 房间记录 → 本字段。
+var interactive_clutter_plan: Dictionary = {}
 
 
 func configure(config: Dictionary) -> void:
@@ -576,6 +604,7 @@ func configure(config: Dictionary) -> void:
 	encounter = (config.get("encounter", encounter) as Dictionary).duplicate(true)
 	spawn_boxes_only = bool(config.get("spawn_boxes_only", spawn_boxes_only))
 	reward_plan = (config.get("reward_plan", reward_plan) as Dictionary).duplicate(true)
+	chest_placements = (config.get("chest_placements", chest_placements) as Array).duplicate(true)
 	safe_room_corner_l = bool(config.get("safe_room_corner_l", safe_room_corner_l))
 	authored_layout_shell = bool(config.get("authored_layout_shell", authored_layout_shell))
 	authored_layout_instances = (config.get("authored_layout_instances", []) as Array).duplicate(true)
@@ -593,6 +622,9 @@ func configure(config: Dictionary) -> void:
 		config.get("door_endpoint_owners", door_endpoint_owners) as Dictionary
 	).duplicate(true)
 	secret_site = (config.get("secret_site", secret_site) as Dictionary).duplicate(true)
+	interactive_clutter_plan = (
+		config.get("interactive_clutter", interactive_clutter_plan) as Dictionary
+	).duplicate(true)
 	_index_door_openings()
 	# 「本房墙体由房间自己生成」。静态布局与程序化壳体都满足这条，
 	# 统一打成一个 meta，供走廊连接器判断要不要补 5m 塔楼墙
@@ -871,6 +903,7 @@ func get_room_snapshot() -> Dictionary:
 			+ _count_nodes_with_meta(self, "asset_id", "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02")
 		),
 		"safe_room_package_count": int(get_meta("safe_room_package_count", 0)),
+		"breakable_clutter_count": get_tree().get_nodes_in_group("breakable_clutter_3d").filter(func(node): return is_ancestor_of(node)).size(),
 		"tower_door_wall_module_count": (
 			_count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-DOOR-5M")
 			+ _count_nodes_with_meta_floor(
@@ -982,6 +1015,7 @@ func _apply_pending_detail_runtime_state() -> void:
 			var prop := value as RoomFurniture3D
 			if container_states.has(prop.prop_id):
 				prop.restore_searched_state(bool(container_states[prop.prop_id]))
+	_restore_interactive_clutter()
 
 
 func _unload_runtime_detail() -> void:
@@ -1577,6 +1611,9 @@ func _rotate_walk_polygons(polygons: Variant, delta_deg: float) -> Array:
 ##
 ## 一个实例都配不上时返回 0（保守：不转），宁可维持烘焙朝向也不瞎转。
 func _static_layout_alignment_delta_deg(static_layout: Node3D) -> float:
+	# Captured from this exact local geometry; no historical orientation inference.
+	if str(static_layout.get_meta("runtime_room_source_schema", "")) == "shellstorm2.runtime_room_art.v1":
+		return 0.0
 	# 安全屋没有实例清单；元数据记的是历史方位，实体门槽才是当前事实。
 	if authored_layout_instances.is_empty() and static_layout.has_meta("safe_room_orientation_steps"):
 		return _static_layout_door_alignment_delta_deg(static_layout)
@@ -2206,6 +2243,9 @@ func _get_service_stations() -> Array[ServiceStation3D]:
 func _expedition_static_layout_path() -> String:
 	if not use_expedition_static_layout_scenes or static_layout_scene_path.is_empty():
 		return ""
+	var runtime_art := preload("res://src/world3d/RuntimeRoomArtSource.gd").matching_path(self, static_layout_scene_path)
+	if not runtime_art.is_empty():
+		return runtime_art
 	return static_layout_scene_path if ResourceLoader.exists(static_layout_scene_path) else ""
 
 
@@ -2609,6 +2649,17 @@ func _build_shell() -> void:
 	_build_wall("east", Vector3(dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1), _wall_door_lane("east"))
 	for direction in doors:
 		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+	# 程序化安全房（没有静态布局 TSCN 的关卡走这条路径，例如远征03 的入口房）
+	# 同样要有退出门内侧的 EXIT 霓虹灯标牌。
+	#
+	# 另外两条路径各自摆过一块：v007 动态壳体在 `_build_safe_room_shell()` 里摆，
+	# 远征01/02 的静态布局在 `_build_shell()` 的静态分支里补摆。只有「程序化壳体 /
+	# 非模块壳」这条路径漏了 —— 表现是墙上有一扇门、地上没有 EXIT 灯牌，
+	# 玩家认不出那是出口（2026-10-29 业主指着远征03 入口安全房报的就是这个）。
+	#
+	# 判据只按房间类型，不认关卡 ID：任何走程序化壳体的 STAIR_LOBBY 都同样成立。
+	if room_type == "STAIR_LOBBY":
+		_build_safe_room_exit_sign(dimensions)
 	for corner in [
 		Vector3(-dimensions.x * 0.5, 1.45, -dimensions.y * 0.5),
 		Vector3(dimensions.x * 0.5, 1.45, -dimensions.y * 0.5),
@@ -3162,6 +3213,10 @@ func _build_safe_room_exit_sign(dimensions: Vector2) -> Node3D:
 	node.set_meta("exit_sign_direction", direction)
 	node.set_meta("exit_sign_asset_id", SAFE_ROOM_EXIT_SIGN_ASSET_ID)
 	add_child(node)
+	# 房间级事实在这里统一落，不在三条调用路径各写一份：
+	# 程序化壳体（远征03）那条路径原先不写 meta，快照里就看不到标牌存在。
+	set_meta("safe_room_exit_sign", true)
+	set_meta("safe_room_exit_sign_direction", direction)
 	return node
 
 
@@ -5065,6 +5120,9 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 
 
 func _sync_expedition_static_camera_door_proxies(static_layout: Node3D) -> void:
+	# Generated low-wall rooms never had the tower's full-height camera door proxy.
+	if str(static_layout.get_meta("runtime_room_source_schema", "")) == "shellstorm2.runtime_room_art.v1":
+		return
 	# 门槽在建壳前完成规划；这里只认已建好的唯一 owner 门，不使用烘焙门墙位置。
 	# 代理挂艺术根而非 DoorPanel，开门后仍覆盖原来的完整墙段。
 	var proxies: Dictionary = {}
@@ -5112,6 +5170,13 @@ func _sync_expedition_static_camera_door_proxies(static_layout: Node3D) -> void:
 
 
 func _restore_static_layout_camera_wall_contract(static_layout: Node) -> void:
+	if str(static_layout.get_meta("runtime_room_source_schema", "")) == "shellstorm2.runtime_room_art.v1":
+		var shell := static_layout.get_node_or_null("WhiteboxShell")
+		if shell != null:
+			for child in shell.get_children():
+				if child is Node3D and (str(child.scene_file_path).contains("prp_room_wall") or str(child.scene_file_path).contains("prp_room_door_lintel")):
+					_set_camera_lower_wall_on_static_bodies(child, _wall_runs_along_world_x(child))
+		return
 	# 静态房间 TSCN 保留顶层 PackedScene 边界；生成时写入 prefab 内部
 	# StaticBody3D 的运行时 metadata 不会被固化。加载后重放该契约，
 	# 只复用既有碰撞，不生成第二套墙体代理。
@@ -5404,6 +5469,252 @@ func _build_content() -> void:
 		)
 		hazard.position = Vector3(0, 0.06, 0)
 		_add_runtime_detail_child(hazard)
+	# 易碎小物件最后布置：此时家具/服务点/危害区都已落位，能读它们做避让，
+	# 不会把罐子塞进机柜里。
+	# 宝箱排在家具之后、**摆件之前**：摆件会读 `_interactive_clutter_blocked_centers()`
+	# 做避让，那个列表已经把 `TreasureChest3D` 算进去了（同家具/服务点/危害区一档），
+	# 所以顺序必须是「宝箱先落地、摆件再避开它」，否则罐子会塞进箱子里。
+	_build_treasure_chests()
+	_build_interactive_clutter()
+
+
+## 按 `chest_placements` 把宝箱建出来。空数组 ⇒ 什么也不做（绝大多数房）。
+##
+## 位置来自数据（生成器已按房间尺寸算好 `offset`），本函数只负责：
+## 贴地、按 `rotation_deg` 转向、接 `open_requested` 信号上行。
+## **不做避让计算** —— 生成期知道房型与门位，运行时只知道尺寸，两边都算一遍必然打架。
+func _build_treasure_chests() -> void:
+	if chest_placements.is_empty():
+		return
+	var floor_y := float(get_meta("walk_surface_y_m", 0.0))
+	for index in range(chest_placements.size()):
+		var entry := chest_placements[index] as Dictionary
+		if entry.is_empty():
+			continue
+		var chest := TreasureChest3D.new()
+		chest.configure(entry)
+		chest.name = "TreasureChest_%02d" % index
+		var offset_value: Variant = entry.get("offset", [0.0, 0.0])
+		var offset := Vector2.ZERO
+		if offset_value is Array and (offset_value as Array).size() >= 2:
+			offset = Vector2(
+				float((offset_value as Array)[0]), float((offset_value as Array)[1])
+			)
+		chest.position = Vector3(offset.x, floor_y, offset.y)
+		chest.rotation.y = deg_to_rad(float(entry.get("rotation_deg", 0.0)))
+		# 先建视觉再连信号：`_ready()` 里 `_build_visual()` 会建提示牌，
+		# 而 `open_requested` 一接上就可能被玩家按下 —— 半成品箱子不该进交互池。
+		_add_runtime_detail_child(chest)
+		chest.open_requested.connect(_on_chest_open_requested)
+
+
+func _on_chest_open_requested(chest: TreasureChest3D) -> void:
+	chest_open_requested.emit(self, chest)
+
+
+func get_treasure_chests() -> Array[TreasureChest3D]:
+	var out: Array[TreasureChest3D] = []
+	# 递归找而不是只看 `_detail_root`：`_add_runtime_detail_child` 在「非细节构建期」
+	# 会挂到房间自己身上（见该函数），只扫一层会漏掉那种情况的箱子。
+	for node in find_children("*", "", true, false):
+		var chest := node as TreasureChest3D
+		if chest != null and is_instance_valid(chest) and not chest.is_queued_for_deletion():
+			out.append(chest)
+	return out
+
+
+func _build_interactive_clutter() -> void:
+	var floor_y := float(get_meta("walk_surface_y_m", 0.0))
+	if _uses_random_interactive_clutter():
+		_build_random_interactive_clutter(floor_y)
+		return
+	if room_type != "STAIR_LOBBY":
+		return
+	for slug in INTERACTIVE_CLUTTER_PLACEMENTS:
+		var clutter := _instantiate_interactive_clutter(slug, slug)
+		if clutter == null:
+			continue
+		clutter.position = INTERACTIVE_CLUTTER_PLACEMENTS[slug] + Vector3(0.0, floor_y, 0.0)
+		_add_runtime_detail_child(clutter)
+
+
+## **唯一判据**：本房是否启用「随机布置易碎小物件」能力。
+## 只看数据段与房间类型排除表，不看关卡 ID —— 任何关卡写同一个段都同样生效。
+func _uses_random_interactive_clutter() -> bool:
+	if interactive_clutter_plan.is_empty():
+		return false
+	if not bool(interactive_clutter_plan.get("enabled", false)):
+		return false
+	var excluded: Array = interactive_clutter_plan.get("exclude_room_types", []) as Array
+	return not excluded.has(room_type)
+
+
+func _instantiate_interactive_clutter(slug: String, clutter_id: String) -> BreakableClutter3D:
+	var path := "%s%s/%s_root_top3d.tscn" % [INTERACTIVE_CLUTTER_ROOT, slug, slug]
+	if not ResourceLoader.exists(path):
+		push_error("DungeonRoom3D: missing breakable clutter prefab " + path)
+		return null
+	var clutter := (load(path) as PackedScene).instantiate() as BreakableClutter3D
+	if clutter == null:
+		push_error("DungeonRoom3D: invalid breakable clutter prefab " + path)
+		return null
+	clutter.name = "InteractiveClutter_" + clutter_id
+	clutter.set_meta("clutter_id", clutter_id)
+	clutter.broken.connect(_on_interactive_clutter_broken)
+	return clutter
+
+
+## 确定性随机撒点：种子只由 `room_seed` 派生，同一房间流送重建后位置逐格一致。
+## 约束依次为：房内留边、离门/端口净空、避开已摆设施、彼此最小间距。
+func _build_random_interactive_clutter(floor_y: float) -> void:
+	var dimensions := get_dimensions()
+	var margin := maxf(0.5, float(interactive_clutter_plan.get("wall_margin_m", 0.9)))
+	var clearance := maxf(1.0, float(interactive_clutter_plan.get("door_clearance_m", 2.4)))
+	var spacing := maxf(0.5, float(interactive_clutter_plan.get("min_spacing_m", 1.1)))
+	var minimum := maxi(0, int(interactive_clutter_plan.get("per_room_min", 2)))
+	var maximum := maxi(minimum, int(interactive_clutter_plan.get("per_room_max", 4)))
+	# 太小的房（5×5 十字路口）四面都是门，门净空会把整间房清空。
+	# 与其让它「碰巧过滤成 0 件」，不如按尺寸显式跳过 —— 行为可解释、可断言。
+	var min_room_size := float(interactive_clutter_plan.get("min_room_size_m", 0.0))
+	if min_room_size > 0.0 and minf(dimensions.x, dimensions.y) < min_room_size:
+		return
+	var rng := RandomNumberGenerator.new()
+	# 固定盐：与房间种子混合，保证「同一房同一位置」，也不污染玩法随机流。
+	rng.seed = hash([room_seed, "interactive_clutter", room_id])
+	var candidates := _interactive_clutter_candidates(dimensions, margin, clearance, spacing)
+	if candidates.is_empty():
+		return
+	for index in range(candidates.size() - 1, 0, -1):
+		var swap := rng.randi_range(0, index)
+		var held := candidates[index]
+		candidates[index] = candidates[swap]
+		candidates[swap] = held
+	var wanted := rng.randi_range(minimum, maximum)
+	var chosen: Array[Vector3] = []
+	for point in candidates:
+		if chosen.size() >= wanted:
+			break
+		var free := true
+		for other in chosen:
+			if Vector2(point.x - other.x, point.z - other.z).length() < spacing:
+				free = false
+				break
+		if free:
+			chosen.append(point)
+	for index in range(chosen.size()):
+		var slug: String = INTERACTIVE_CLUTTER_SLUGS[index % INTERACTIVE_CLUTTER_SLUGS.size()]
+		var clutter_id := "%s_%02d" % [slug, index]
+		var clutter := _instantiate_interactive_clutter(slug, clutter_id)
+		if clutter == null:
+			continue
+		clutter.position = chosen[index] + Vector3(0.0, floor_y, 0.0)
+		# 只转 90° 的整数倍：五个组件的正面契约是 -Z，斜放会让书脊/罐耳看起来歪掉。
+		clutter.rotation.y = float(rng.randi_range(0, 3)) * (PI * 0.5)
+		_add_runtime_detail_child(clutter)
+
+
+func _interactive_clutter_candidates(
+	dimensions: Vector2, margin: float, clearance: float, spacing: float
+) -> Array[Vector3]:
+	var result: Array[Vector3] = []
+	var half_x := dimensions.x * 0.5
+	var half_z := dimensions.y * 0.5
+	var usable_x := half_x - margin
+	var usable_z := half_z - margin
+	if usable_x <= 0.0 or usable_z <= 0.0:
+		return result
+	# 用半个间距做步长：既不漏掉贴边的空位，又保证候选点本身已满足最小间距。
+	var step := maxf(0.45, spacing * 0.75)
+	var blocked_centers := _interactive_clutter_blocked_centers(dimensions)
+	var x := -usable_x
+	while x <= usable_x + 0.001:
+		var z := -usable_z
+		while z <= usable_z + 0.001:
+			var point := Vector3(x, 0.0, z)
+			if _interactive_clutter_point_is_free(point, blocked_centers, clearance):
+				result.append(point)
+			z += step
+		x += step
+	return result
+
+
+## 需要保持净空的中心：门、连接端口、以及已摆好的设施/家具/服务点。
+func _interactive_clutter_blocked_centers(dimensions: Vector2) -> Array[Vector3]:
+	var centers: Array[Vector3] = []
+	var half_x := dimensions.x * 0.5
+	var half_z := dimensions.y * 0.5
+	for side in doors:
+		var direction := str(side)
+		match direction:
+			"north":
+				centers.append(Vector3(0.0, 0.0, -half_z))
+			"south":
+				centers.append(Vector3(0.0, 0.0, half_z))
+			"west":
+				centers.append(Vector3(-half_x, 0.0, 0.0))
+			"east":
+				centers.append(Vector3(half_x, 0.0, 0.0))
+	for port in connection_ports:
+		var position_value: Variant = (port as Dictionary).get("position", null)
+		if position_value is Vector3:
+			centers.append(position_value as Vector3)
+	if _detail_root == null:
+		return centers
+	for child in _detail_root.get_children():
+		var spatial := child as Node3D
+		if spatial == null or spatial.is_queued_for_deletion():
+			continue
+		if spatial is BreakableClutter3D:
+			continue
+		if spatial is NavigationRegion3D:
+			continue
+		# 只把有实际体积的东西当障碍：灯、门这类挂在墙上的不该把整片地面推开。
+		# 宝箱必须在这份清单里 —— 它占 1.28×0.92 的地面，罐子压上去会挡住交互圆点。
+		if not (
+			spatial is RoomFurniture3D
+			or spatial is ServiceStation3D
+			or spatial is HazardField3D
+			or spatial is TreasureChest3D
+		):
+			continue
+		centers.append(Vector3(to_local(spatial.global_position).x, 0.0, to_local(spatial.global_position).z))
+	return centers
+
+
+func _interactive_clutter_point_is_free(
+	point: Vector3, blocked: Array[Vector3], clearance: float
+) -> bool:
+	if not _inside_authored_footprint(point) and not _authored_tile_cells.is_empty():
+		return false
+	for center in blocked:
+		if Vector2(point.x - center.x, point.z - center.z).length() < clearance:
+			return false
+	return true
+
+
+func _on_interactive_clutter_broken(clutter: BreakableClutter3D, direction: Vector3) -> void:
+	var states := _pending_detail_runtime_state.get("breakable_clutter", {}) as Dictionary
+	states = states.duplicate(true)
+	states[str(clutter.get_meta("clutter_id", clutter.asset_id))] = {
+		"broken": true, "direction": [direction.x, direction.y, direction.z],
+	}
+	_pending_detail_runtime_state["breakable_clutter"] = states
+
+
+func _restore_interactive_clutter() -> void:
+	var states := _pending_detail_runtime_state.get("breakable_clutter", {}) as Dictionary
+	for value in get_tree().get_nodes_in_group("breakable_clutter_3d"):
+		var clutter := value as BreakableClutter3D
+		if clutter == null or _detail_root == null or not _detail_root.is_ancestor_of(clutter):
+			continue
+		var state := states.get(str(clutter.get_meta("clutter_id", "")), {}) as Dictionary
+		if not bool(state.get("broken", false)):
+			continue
+		var vector := state.get("direction", [0.0, 0.0, -1.0]) as Array
+		if vector.size() == 3:
+			clutter.restore_broken(Vector3(float(vector[0]), float(vector[1]), float(vector[2])))
+		else:
+			clutter.restore_broken()
 
 
 func _build_runtime_navigation_surface(dimensions: Vector2) -> void:

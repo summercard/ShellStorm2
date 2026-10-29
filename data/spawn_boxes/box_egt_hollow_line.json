@@ -1,0 +1,23 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_hollow_line",
+  "note": "子弹族·空尖弹连射线。两只空尖弹同时高射速，且会周期性瞬移换位 —— 练习「目标突然消失后重新找」这条，是本层唯一会瞬移的常规远程。",
+  "shape": "box",
+  "size_m": [
+    5.0,
+    3.0,
+    5.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_hollowpoint",
+      "count": 2,
+      "delay_sec": 0.0
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

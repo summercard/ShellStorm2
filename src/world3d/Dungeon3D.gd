@@ -1970,11 +1970,15 @@ func _build_reference_main_hud() -> void:
 	# 规格与依据：docs/v0.1/reference/挺进地牢/minimap实现方式.md
 	# 节点名与路径保持不变 —— 多枚探针直接读 get_node("HUD/DungeonMinimap3D")。
 	minimap.z_index = 105
-	# 设计盒 458×346（×HUD_UI_SCALE 0.8 ⇒ 366×277 canvas）。
-	# 高度从最早的 374 收到 346 —— 我们的楼层偏"宽而扁"（远征01 是 6 间横排，
-	# 层高只有一条支线），374 会在底部留一大条空黑。这个盒是**上限**，
-	# 楼层更方时会自动填满（缩放按盒夹紧）。
-	_anchor_control(minimap, 1.0, 0.0, 1.0, 0.0, -466, 44, -8, 390)
+	# 设计盒 382×265（×HUD_UI_SCALE 0.8 ⇒ 305.6×212 canvas）。
+	# 2026-10-29 业主指令：**去掉半透明底 + 整体缩到业主红框的大小**。
+	# 红框在实机截图（1280×720，与 canvas 1:1）上的包围盒是 x 962..1267、y 40..251，
+	# 反推设计 px：宽 306/0.8=382.5、高 212/0.8=265 ⇒ 取 382×265；
+	# 右缘距屏幕右 13 canvas px ⇒ offset_right=-16（设计 px）；
+	# 上缘 40 canvas px ⇒ offset_top=50。
+	# 上一版是 458×346（⇒366×277 canvas），因为面板太大糊掉半个右上角 ——
+	# 业主直接标了红框要求缩小。这个盒是**上限**，楼层更方时会自动填满（缩放按盒夹紧）。
+	_anchor_control(minimap, 1.0, 0.0, 1.0, 0.0, -398, 50, -16, 315)
 	minimap.visible = true
 	# tap 小地图 → 切换全层地图（键 M 等效）
 	minimap.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -2693,6 +2697,9 @@ func _prepare_layout_rooms() -> void:
 			"encounter": record.get("encounter", {}),
 			"spawn_boxes_only": bool(record.get("spawn_boxes_only", false)),
 			"reward_plan": record.get("reward_plan", {}),
+			# 宝箱放置层（2026-10-29）：与其余房间级字段同样逐级透传。
+			# 未写本段的关卡得到空数组 ⇒ 一个箱子都不建，行为逐字不变。
+			"chest_placements": record.get("chest_placements", []),
 			"safe_room_corner_l": bool(record.get("safe_room_corner_l", false)),
 			# 授权布局壳体（区块00 98F 入口房）：入口房由本路径在开局就实例化，
 			# 而其余房间在 FloorBundle 里走 TowerDescent3D._instantiate_dynamic_room。
@@ -2714,6 +2721,9 @@ func _prepare_layout_rooms() -> void:
 			# 传送支线位点（支线秘密房间设计 §3.2）：与其余房间级字段同样逐级透传。
 			# 未声明位点的房间得到空字典 ⇒ 一个节点都不建，行为逐字不变。
 			"secret_site": record.get("secret_site", {}),
+			# 易碎小物件随机布置计划：与其余房间级字段同样逐级透传。
+			# 未写本段的关卡得到空字典 ⇒ 房间只摆固定件，行为逐字不变。
+			"interactive_clutter": record.get("interactive_clutter", {}),
 		})
 		room.position = record["position"]
 		$GeneratedRooms.add_child(room)
@@ -2723,6 +2733,7 @@ func _prepare_layout_rooms() -> void:
 		room.prop_searched.connect(_on_prop_searched)
 		room.service_activated.connect(_on_service_activated)
 		room.light_toggled.connect(_on_room_light_toggled)
+		room.chest_open_requested.connect(_on_chest_open_requested)
 
 
 func _finish_layout_connections() -> void:
@@ -4386,6 +4397,20 @@ func _expedition_surplus_deficit(room: DungeonRoom3D, alive: int) -> int:
 		return 0
 	if room == null or alive <= 0:
 		return 0
+	# 「只认盒子」的关卡**不做编成外补齐**（2026-10-29）。
+	#
+	# 补齐的本意是「设计源只写了大致规模时，按比例多塞几只让房间别太空」。
+	# 但 `spawn_boxes_only` 层恰恰相反：那一层的编成是**逐房手作的精确敌群**
+	# （远征03 照《挺进地牢》第一层摆的族群搭配），按比例加怪会：
+	#   ① 打破精确编成 —— 每房多出 30% 的怪，难度曲线失控；
+	#   ② 补出来的是 `MonsterInjector` 的原生怪（melee_chaser 等），
+	#      于是「全 egt_* 的复刻房」里混进原生僵尸，复刻目标当场失效。
+	# 实测：hub_01 编成 7 只，被补齐成 9 只（多出 2 只 melee_chaser）。
+	#
+	# 判据用 `spawn_boxes_only` 而不是关卡 ID —— 与其余字段一致：
+	# 任何关卡写这一层都同样生效，不写就一个字节都不变。
+	if room.spawn_boxes_only:
+		return 0
 	if str(room.room_type) in EXPEDITION_SURPLUS_EXCLUDED_ROOM_TYPES:
 		return 0
 	var target := alive + clampi(
@@ -4648,6 +4673,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.killed.connect(_on_enemy_killed)
 		enemy.escaped.connect(_on_enemy_escaped)
 		enemy.summon_requested.connect(_on_summon_requested)
+		enemy.split_requested.connect(_on_split_requested)
 		enemy.boss_phase_changed.connect(_on_boss_phase_changed)
 		enemy.boss_activation_completed.connect(_on_boss_activation_completed)
 		enemy.health_changed.connect(_on_enemy_health_changed)
@@ -5103,6 +5129,47 @@ func _spawn_next_room_wave(room_id: String, token := -1) -> void:
 func _record_index(room_id: String) -> int:
 	var record := _find_record(room_id)
 	return int(record.get("index", 0))
+
+
+## 死亡分裂（远征03 布洛布三阶）。子代**类型由死者指定**，因此不能用 `_on_summon_requested`
+## （那条只产出 `minion` 通用小怪，表达不了「Blobulon 必裂成 Blobuloid」）。
+##
+## 仍然复用 `_reserve_room_spawn()` 这条既有旁路 —— 它是设计文档 §0.4 登记的
+## 「预约刷怪」，会正确计入 `_reserved_spawn_count`，于是**子代没出完之前房间不会被判清**。
+## 这一点必须靠它、不能直接实例化：否则玩家会看到门先开、小怪后冒出来。
+func _on_split_requested(source: Enemy3D, child_kind: String, count: int) -> void:
+	if _completed or not is_instance_valid(source):
+		return
+	var room_id := source.room_id
+	# 容量保护与召唤同源：本房同时存活上限 8，分裂子代也不能突破。
+	var live_count := 0
+	for value in _enemy_nodes_by_room.get(room_id, []):
+		if is_instance_valid(value) and value is Enemy3D and (value as Enemy3D).ai_state != "dead":
+			live_count += 1
+	var spawn_count := mini(mini(3, count), maxi(0, 8 - live_count))
+	if spawn_count <= 0:
+		return
+	var floor_value := maxi(1, visual_theme.difficulty_rank)
+	var configs: Array[Dictionary] = []
+	var positions: Array = []
+	for index in range(spawn_count):
+		var child_data := _monster_injector.generate_split_child(child_kind, floor_value, 1)
+		if child_data.is_empty():
+			continue
+		var spawn_data := child_data.duplicate(true)
+		spawn_data["spawn_index"] = index
+		# `persistent_id` 必须唯一：同一帧两只布洛布同时裂开会撞号，
+		# 撞号会让存档恢复把两只子代认成同一只。
+		spawn_data["persistent_id"] = "%s:split_%d:%d:%d" % [
+			room_id, Time.get_ticks_usec(), source.get_instance_id(), index
+		]
+		configs.append(spawn_data)
+		# 子代落在死者的两侧而不是正中心：中心会被玩家的下一发子弹立刻清掉。
+		var angle := TAU * float(index) / float(maxi(1, spawn_count)) + PI * 0.5
+		positions.append(
+			source.global_position + Vector3(cos(angle) * 1.4, 0.0, sin(angle) * 1.4)
+		)
+	_reserve_room_spawn(room_id, configs, positions)
 
 
 func _on_summon_requested(source: Enemy3D, count: int) -> void:
@@ -5712,6 +5779,118 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 		if not (delivery.get("granted", []) as Array).is_empty()
 		else "搜索完成 · 物资落地失败"
 	)
+
+
+## 宝箱开箱（2026-10-29）。玩家在 REWARD 房按 E 触发。
+##
+## **顺序是刻意的：扣钥匙 → 收口箱子形态 → 掉落 → 命运卡。**
+##   · 钥匙在最前：没有钥匙就什么都别发生，箱子保持可交互（玩家去拿了钥匙还能回来开）；
+##   · 收口形态在结算前：一旦扣了钥匙就必须把箱子标成已开，否则玩家能反复按 E
+##     白嫖多次掉落（`commit_opened()` 幂等，重复调用无副作用）；
+##   · 掉落先于命运卡：命运卡可能改变后续掉落品质（`fate_lucky_chest` 之类），
+##     先发卡再抽掉落会让"这一箱吃不吃得到卡的效果"变成时序竞态。
+func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
+	if room == null or chest == null or not is_instance_valid(chest):
+		return
+	if chest.is_opened():
+		return
+	if chest.requires_key:
+		if _get_total_room_keys() <= 0:
+			status_label.text = "宝箱上锁 · 需要 1 把房间钥匙"
+			# 不置 `_opened`、不扣任何东西：箱子留在原地等玩家带钥匙回来。
+			return
+		_consume_room_key()
+		_refresh_loot_label()
+	chest.commit_opened()
+	if _map_fate_triggers != null:
+		# 宝箱算一次"容器开启"。给独立的 size_class 值，方便将来按箱/罐分别计数：
+		# 传 "crate" 会让宝箱与普通箱子混在一起，统计再也分不开。
+		_map_fate_triggers.on_container_opened("treasure_chest")
+
+	var grants := _resolve_chest_grants(room, chest)
+	var delivered := 0
+	if not grants.is_empty():
+		var delivery := _deliver_ground_rewards(
+			room, grants,
+			chest.global_position + Vector3(0, 0.4, 0),
+			"chest:%s:%s" % [room.room_id, chest.chest_id]
+		)
+		delivered = (delivery.get("granted", []) as Array).size()
+
+	var fate := _grant_chest_fate_cards(chest.fate_card_per_open)
+	var parts: Array[String] = []
+	parts.append("宝箱开启 · %d 件物资" % delivered if delivered > 0 else "宝箱开启 · 箱内为空")
+	if not (fate.get("applied", []) as Array).is_empty():
+		parts.append("命运卡「%s」" % str((fate["applied"] as Array)[0]))
+	elif int(fate.get("pending", 0)) > 0:
+		# 卡没能当场生效（枪械命运槽满 / 需要选来源）——它已经被桥上记账，
+		# 玩家可以从 HUD 的待领取按钮处理。**不能静默**：那等于宝箱少给了一样东西。
+		parts.append("命运卡已暂存（槽位或来源不可用，见待领取）")
+	elif int(fate.get("drawn", 0)) == 0 and chest.fate_card_per_open > 0:
+		parts.append("命运卡发放失败")
+	status_label.text = " · ".join(parts)
+
+
+## 抽这一箱的掉落。**每件独立抽一次**（`drop_count` 次 `resolve_search`），
+## 而不是抽一次再复制 —— 复制会让"开一箱得两件同样的东西"，读起来像 bug。
+func _resolve_chest_grants(room: DungeonRoom3D, chest: TreasureChest3D) -> Array:
+	var floor_level := maxi(1, visual_theme.difficulty_rank)
+	var pool_id := str(chest.reward_pool_id)
+	if pool_id.is_empty():
+		pool_id = "loot_floor_1_2"
+	var grants: Array = []
+	for index in range(chest.drop_count):
+		var event_id := "chest:%s:%s:%d" % [room.room_id, chest.chest_id, index]
+		var report := _reward_coordinator.resolve_search(
+			room.reward_plan, pool_id, floor_level, event_id
+		)
+		if not bool(report.get("ok", false)):
+			push_warning("[Dungeon3D] Chest reward resolution failed (%s): %s" % [
+				event_id, str(report.get("errors", []))
+			])
+			continue
+		var candidates := _ground_reward_candidates(report.get("grants", []))
+		if candidates.is_empty():
+			continue
+		var grant := (candidates[0].get("grant", {}) as Dictionary).duplicate(true)
+		if str(grant.get("kind", "")) == "currency":
+			# 货币单件化：箱子里滚一堆小钱球没有意义，一个球就够表达"里面有钱"。
+			grant["amount"] = 1
+		else:
+			grant["count"] = 1
+			var item := grant.get("item", {}) as Dictionary
+			# 品质加成：箱子越好，抽出来的东西品质越高。**这是箱子品质唯一的作用**，
+			# 它不改变掉落数量（数量由 `drop_count` 决定，玩家读得懂）。
+			_apply_fate_item_quality(item, chest.quality_tier(), "")
+		grants.append(grant)
+	return grants
+
+
+## 开箱给命运卡。走 `FateCardGameBridge.grant_random_card_from_character()` ——
+## 而不是自己 `draw_offer` + `apply_card_instance`，因为那个函数已经处理了两件麻烦事：
+##   ① 用不了（枪械命运槽满 / 需要选来源）时把卡**留在待领取**而不是丢弃；
+##   ② 扣费与回滚。
+## 自己实现一遍就等于把这两条重新写错一次。
+func _grant_chest_fate_cards(count: int) -> Dictionary:
+	var result := {"drawn": 0, "applied": [], "pending": 0}
+	if count <= 0:
+		return result
+	var bridge := get_node_or_null("/root/FateCardGameBridge")
+	if bridge == null:
+		push_warning("[Dungeon3D] 宝箱命运卡失败：FateCardGameBridge 未注册")
+		return result
+	for _index in range(count):
+		result["drawn"] = int(result["drawn"]) + 1
+		var single: Dictionary = bridge.call("grant_random_card_from_character", 0)
+		if bool(single.get("success", false)):
+			var cards: Array = bridge.call("get_cards")
+			if not cards.is_empty():
+				var card := cards[cards.size() - 1] as FateCard
+				if card != null:
+					(result["applied"] as Array).append(card.card_name)
+		elif bool(single.get("pending", false)):
+			result["pending"] = int(result["pending"]) + 1
+	return result
 
 
 const FATE_RARITIES := ["common", "uncommon", "rare", "epic", "legendary"]
@@ -8491,6 +8670,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			enemy.killed.connect(_on_enemy_killed)
 			enemy.escaped.connect(_on_enemy_escaped)
 			enemy.summon_requested.connect(_on_summon_requested)
+			enemy.split_requested.connect(_on_split_requested)
 			enemy.boss_phase_changed.connect(_on_boss_phase_changed)
 			enemy.boss_activation_completed.connect(_on_boss_activation_completed)
 			enemy.health_changed.connect(_on_enemy_health_changed)

@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_chance_blob",
+  "note": "分裂族·骰子布洛布。随机借用同族招式（近身 / 环形 / 骰子点数弹），而且有 20% 概率**不攻击而是直接死** —— 玩家永远猜不到这一轮是什么，这就是它的设计意图。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_chancebulon",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_blobulon",
+      "count": 1,
+      "delay_sec": 0.2
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

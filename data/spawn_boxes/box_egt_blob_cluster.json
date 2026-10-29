@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_blob_cluster",
+  "note": "分裂族·裂解群。blobulon×1 + blobuloid×1。EGT 的分裂体是**死亡才裂**：母体死成 2 只幼体、幼体再死成微粒，目标数会翻到 4 倍以上。所以这个盒子的「初始 2 只」不等于实际压力，摆位要给足空间、别塞进死角。",
+  "shape": "box",
+  "size_m": [
+    5.0,
+    3.0,
+    5.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_blobulon",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_blobuloid",
+      "count": 1,
+      "delay_sec": 0.25
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

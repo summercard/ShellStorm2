@@ -30,19 +30,45 @@ const DEFAULT_WALL_RECESS_TILES := 1
 ## 三个 `_strong`（-强化怪）也允许点名：它们平时由 15% 概率自动升级产出
 ## （见 `MonsterInjector._roll_strong_kind`），但允许盒子直接摆，
 ## 好让「这一房固定放一只强化胖子」这种编排写得出来。
+##
+## `egt_*` 12 种（远征03 复刻怪，2026-10-29）同样允许点名。
+## 为什么必须显式列进白名单、不能靠"以 egt_ 开头就放过"：
+## 本表是**唯一**的出怪类型闸门（`LevelPlanValidator` 与加载器都读它）。
+## 用前缀通配会把拼写错误（`egt_bullet_kin_typo`）一起放过去，
+## 而运行时该 type 不在 `MonsterInjector.BASE_ENEMY_TYPES` 里 ⇒ 盒子整条失效、
+## 房间变成空房，且**不会报错** —— 这正是本文件反复警告的"静默失效"。
 const ALLOWED_BOX_TYPES: Array[String] = [
 	"fat_zombie03",
 	"melee_chaser", "ranged_caster", "summoner",
 	"exploder", "ambusher",
 	"fat_zombie03_strong", "melee_chaser_strong", "ranged_caster_strong",
 	"elite", "boss",
+	# —— 远征03 复刻怪（逐只列出，不用前缀通配）——
+	"egt_bullet_kin", "egt_bandana_kin", "egt_veteran_kin",
+	"egt_red_shotgun", "egt_blue_shotgun",
+	"egt_blobulon", "egt_blobuloid", "egt_blobulin",
+	"egt_pinhead", "egt_nitra", "egt_bullat",
+	"egt_gunsinger",
+	# —— 第二批 21 只（2026-10-29）：33 种非 Boss 敌人全部可被盒子点名 ——
+	"egt_cardinal", "egt_hollowpoint", "egt_veteran_shotgun", "egt_king_bullat",
+	"egt_chancebulon", "egt_bookllet", "egt_blue_bookllet", "egt_green_bookllet",
+	"egt_gunjurer", "egt_gigi", "egt_shotgat", "egt_grenat", "egt_spirat",
+	"egt_keybullet_kin", "egt_chance_kin", "egt_confirmed", "egt_mimic",
+	"egt_gun_fairy", "egt_gripmaster", "egt_gun_nut", "egt_chain_gunner",
 ]
 
 ## box_id → 相对 res:// 的盒子路径。新增盒子必须同时登记在本表，
 ## 否则 `has_id()` 为假、加载器直接拒绝（不静默兜底）。
 ## 通用盒一律**小型单位**（业主 2026-09-26 口径）：盒面 2~4 m、一盒出 1~4 只，
 ## 一房摆 3~5 盒以形成多个刷怪点。
-## 当前共 **7 个 box_id = 5 个小盒 ＋ 2 个大盒例外**。
+## 当前共 **29 个 box_id = 7 个塔楼通用盒（5 小 + 2 大盒例外） + 22 个远征03 EGT 敌群盒**。
+##
+## 塔楼通用盒（远征01/02 与塔楼用）：
+##   小盒 `box_corner_ambush` / `box_center_elite` / `box_corridor_column` /
+##        `box_wall_arc` / `box_room_spread`，
+##   大盒例外两个 `box_boss_arena` / `box_bridge_center`。
+## 远征03 EGT 敌群盒（`box_egt_*`，2026-10-29）：8 个，每个是一个手作族群小队，
+##   只给远征03 用 —— 该关**不再**走 `monster_rules.enemy_pool` 的房型公式。
 ##
 ## ⚠ **大盒例外目前有两个**（业主逐次点名，均须在 `触发器刷怪设计.md` §3.1.1 留档）：
 ##   · `box_boss_arena`（8×8 m，出 4 只）—— Boss 需要更大活动面；
@@ -65,6 +91,68 @@ const ENTRIES := {
 	"box_boss_arena": ROOT + "box_boss_arena.json",
 	# 桥心压制：10×14 m（大盒②，桥房专属），小僵尸×8 → 1s 胖子僵尸×4 → 2s 警察×4（共 16 只）。
 	"box_bridge_center": ROOT + "box_bridge_center.json",
+	# =========================================================================
+	# 远征03 · EGT 敌群盒（2026-10-29）
+	#
+	# 与上面 7 个「塔楼通用盒」的区别：这 8 个盒子是**照《挺进地牢》第一层的
+	# 房间编成**做的手作敌群单元 —— 每个盒子 = 一个族群搭配好的小队，
+	# 而不是"按房型公式算 N 只"。依据见
+	# `docs/v0.1/reference/挺进地牢/第一层怪物数据表.md` 与 `怪物设计.md §T5`。
+	#
+	# 只给远征03 用：`monster_rules` 的 `enemy_pool` 已从该关移除，
+	# 逐房编成写在 `level_plan.json` 的 `spawn_roster`。
+	# =========================================================================
+	# 子弹族·巡逻双人（单发×2）—— 最基础一组
+	"box_egt_kin_patrol": ROOT + "box_egt_kin_patrol.json",
+	# 子弹族·三变种同场（单发/三连发/预判）—— 视觉区分体系的验收点
+	"box_egt_kin_trio": ROOT + "box_egt_kin_trio.json",
+	# 霰弹族·前压（红霰弹 + 单发掩护）
+	"box_egt_shotgun_lead": ROOT + "box_egt_shotgun_lead.json",
+	# 霰弹族·双霰压场（蓝霰弹 + 红霰弹）—— 本关最重远程组合
+	"box_egt_shotgun_heavy": ROOT + "box_egt_shotgun_heavy.json",
+	# 分裂族·裂解群（母体 + 幼体，死亡会继续裂）
+	"box_egt_blob_cluster": ROOT + "box_egt_blob_cluster.json",
+	# 爆炸族·两种引爆（走近自爆 + 死亡留场）
+	"box_egt_bomb_pair": ROOT + "box_egt_bomb_pair.json",
+	# 一次性冲撞·突进线（子弹榴弹×2 + 预判远程）
+	"box_egt_rush_line": ROOT + "box_egt_rush_line.json",
+	# 辅助族·护卫班（枪歌者 + 护卫×2）—— 先杀辅助
+	"box_egt_support_cell": ROOT + "box_egt_support_cell.json",
+	# =========================================================================
+	# 远征03 · EGT 敌群盒 第二批 14 个（2026-10-29）
+	#
+	# 第一批 8 个只覆盖了 12 种怪（6 族各 1~2 只）。第二批把剩余 21 种也编成敌群盒，
+	# 于是**33 种非 Boss 敌人全部有落地编成**，不再是"表里有、关卡里见不到"。
+	# 命名规则不变：一个盒子 = 一个族群搭配好的小队，不是"按公式算 N 只"。
+	# =========================================================================
+	# 子弹族·红衣主教护卫（追踪弹簇 + 预判）
+	"box_egt_cardinal_guard": ROOT + "box_egt_cardinal_guard.json",
+	# 子弹族·空尖弹连射线（高射速 + 周期瞬移）
+	"box_egt_hollow_line": ROOT + "box_egt_hollow_line.json",
+	# 霰弹族·老兵压场（V 型 + 必定全向喷）
+	"box_egt_shotgun_vet": ROOT + "box_egt_shotgun_vet.json",
+	# 爆炸族·子弹榴弹王（全向弹跳弹 + 死亡产两种子代）
+	"box_egt_king_bullat": ROOT + "box_egt_king_bullat.json",
+	# 分裂族·骰子布洛布（随机招式 + 有几率自杀）
+	"box_egt_chance_blob": ROOT + "box_egt_chance_blob.json",
+	# 书怪族·三色同排（同血 25，只换弹形）
+	"box_egt_book_row": ROOT + "box_egt_book_row.json",
+	# 法术族·枪法师 + 吉吉
+	"box_egt_jurer_pair": ROOT + "box_egt_jurer_pair.json",
+	# 冲撞族·三连冲（三种附加弹）
+	"box_egt_rush_squad": ROOT + "box_egt_rush_squad.json",
+	# 触发族·逃跑双人（11s 不打就传送消失）
+	"box_egt_escape_pair": ROOT + "box_egt_escape_pair.json",
+	# 触发族·已确认者小队（蛇形追踪 + 枪精灵骚扰）
+	"box_egt_confirmed_cell": ROOT + "box_egt_confirmed_cell.json",
+	# 触发族·拟态怪陷阱（靠近才现形）
+	"box_egt_mimic_trap": ROOT + "box_egt_mimic_trap.json",
+	# 触发族·抓握大师 + 护卫（场上还有人就无敌）
+	"box_egt_grip_pair": ROOT + "box_egt_grip_pair.json",
+	# 重型族·双重型（枪坚果 + 链枪手，小 Boss 级）
+	"box_egt_heavy_pair": ROOT + "box_egt_heavy_pair.json",
+	# 重型族·枪坚果护卫
+	"box_egt_nut_guard": ROOT + "box_egt_nut_guard.json",
 }
 
 ## 解析结果缓存：同一 box_id 每局只读一次盘。

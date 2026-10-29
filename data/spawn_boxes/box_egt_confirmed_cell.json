@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_confirmed_cell",
+  "note": "触发族·已确认者小队。已确认者停下时射 4 条蛇形追踪弹，配两只枪精灵高速骚扰。45 血是这一族最硬的，必须边跑边打。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_confirmed",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_gun_fairy",
+      "count": 2,
+      "delay_sec": 0.2
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

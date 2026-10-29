@@ -1,0 +1,83 @@
+{
+  "schema": "shellstorm2.component_asset_manifest",
+  "asset_id": "ENV-BATTLE-INTERACTIVE-VASE",
+  "component_id": "ENV-BATTLE-INTERACTIVE-VASE",
+  "slug": "breakable_vase",
+  "name_zh": "低模易碎花瓶",
+  "version": "v002",
+  "supersedes_version": "v001",
+  "block_id": "battle",
+  "level_id": "tower_entry_safe_room",
+  "component_family": "breakable_vase",
+  "category": "scene_interactive_object",
+  "scope": "shared",
+  "serves_room_types": [
+    "STAIR_LOBBY",
+    "COMMON_ROOM"
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "instance_count": 1,
+  "source_blend": "art_source\\environments\\tower_zones\\battle\\source\\common_components\\v002_interactive_clutter\\battle_interactive_clutter_v002.blend",
+  "optimized_blend": "art_source\\environments\\tower_zones\\battle\\source\\common_components\\v002_interactive_clutter\\export\\v002\\battle_interactive_clutter_optimized_v002.blend",
+  "collection": "低模易碎花瓶_资产包",
+  "root_object": "ROOT_breakable_vase",
+  "object": "低模易碎花瓶_主体",
+  "bounds_size_m": [
+    0.4300000071525574,
+    0.4300000071525574,
+    0.7300000190734863
+  ],
+  "scale_from_v001": 1.0,
+  "max_dimension_m": 1.0,
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "origin_contract": "bottom_center",
+  "front_axis": "-Z",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "triangles_before": 92,
+  "triangles_after": 92,
+  "reduction_ratio": 0.0,
+  "optimization": {
+    "isolated_vertices_removed": 0,
+    "zero_area_faces_removed": 0,
+    "merge_distance": 0,
+    "decimation": "none; uniform scale only, topology identical to v001",
+    "preserved": "all silhouette, bottom/back faces, material boundaries and PaletteUV islands",
+    "triangle_budget": 100,
+    "budget_source": "user_request (per-piece <=100 triangles)",
+    "scale_from_v001": 1.0
+  },
+  "source_sha256_before": "12421bdce8384e48003b52c333c0fed9ad47d52331b45e037f3909f57c3f23dd",
+  "source_sha256_after": "12421bdce8384e48003b52c333c0fed9ad47d52331b45e037f3909f57c3f23dd",
+  "optimized_sha256": "995d32f019b2255ee6c034a2d29cf84f897659cd9d2957f1326e70a8a60bbbd3",
+  "glb_sha256": "0256a962ba04a11bf4adb188e0bc1b13b8f3ef91158f3e8f1b52aca4201a896d",
+  "staged_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-29_clutter_v002\\breakable_vase.glb",
+  "glb": "assets/art/environments/tower_zones/battle/components/common_components/breakable_vase/breakable_vase_visual_top3d.glb",
+  "prefab": "assets/art/environments/tower_zones/battle/runtime/common_components/breakable_vase/breakable_vase_root_top3d.tscn",
+  "asset_ledger": "resolved_by_ledger_index",
+  "room_owned_geometry": false,
+  "chair_embedded": false,
+  "exported": false,
+  "runtime_integrated": false,
+  "visual_acceptance": {
+    "gallery": "blender_component_gallery_v002.png",
+    "status": "pending_godot_and_human_review"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_shotgun_lead",
+  "note": "霰弹族·前压。red_shotgun(紧密扇形) + bullet_kin 掩护。霰弹会逼玩家拉开距离，而这只单发怪又把距离封住 —— EGT 常用的「一近一远」错位压迫。",
+  "shape": "box",
+  "size_m": [
+    5.0,
+    3.0,
+    5.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_red_shotgun",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_bullet_kin",
+      "count": 1,
+      "delay_sec": 0.2
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

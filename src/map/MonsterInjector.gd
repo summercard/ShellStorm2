@@ -21,6 +21,48 @@ const BASE_ENEMY_TYPES := {
 	"melee_chaser_strong": { "name": "小僵尸-强化怪", "hp_base": 25, "damage_base": 5, "speed": 80 },
 	"fat_zombie03_strong": { "name": "胖子僵尸-强化怪", "hp_base": 100, "damage_base": 8, "speed": 20.5714286 },
 	"ranged_caster_strong": { "name": "保安僵尸-强化怪", "hp_base": 15, "damage_base": 8, "speed": 50 },
+	# —— 远征03：《挺进地牢》第一层复刻怪（2026-10-29）——
+	# `hp_base` = **进场血量** = EGT 血量 × 10。系数 10 来自「保持击杀发数」：
+	# EGT Bullet Kin 15 血 / 初始手枪约 6 伤 ≈ 3 发；本工程初始步枪 50 伤/发 ⇒ 150 血同样 3 发。
+	# 故与原作**严格等比**（6.67 倍差就是 6.67 倍），不再做幂律压缩。依据见 `怪物设计.md §T0.2`。
+	# `damage_base` = 命中玩家的伤害 = 玩家 100 血的 **1/6 = 17**（对应原作「半颗心」），爆炸类 26。
+	# 原始 EGT 血量记在 `egt_hp` 键里，**只作追溯**，不参与任何计算 —— 避免两份血量被当成两个真源。
+	# `speed` 单位是 px/s（`Enemy3D` 里 ÷24 转 m/s 再 ×0.7），即「目标 m/s ÷ 0.7 × 24」。
+	"egt_bullet_kin": { "name": "子弹小子", "hp_base": 150, "damage_base": 17, "speed": 69, "egt_hp": 15 },
+	"egt_bandana_kin": { "name": "头巾小子", "hp_base": 150, "damage_base": 17, "speed": 69, "egt_hp": 15 },
+	"egt_veteran_kin": { "name": "老兵小子", "hp_base": 150, "damage_base": 17, "speed": 89, "egt_hp": 15 },
+	"egt_red_shotgun": { "name": "红霰弹枪小子", "hp_base": 300, "damage_base": 17, "speed": 69, "egt_hp": 30 },
+	"egt_blue_shotgun": { "name": "蓝霰弹枪小子", "hp_base": 400, "damage_base": 17, "speed": 69, "egt_hp": 40 },
+	"egt_blobulon": { "name": "布洛布", "hp_base": 200, "damage_base": 17, "speed": 75, "egt_hp": 20 },
+	"egt_blobuloid": { "name": "布洛布幼体", "hp_base": 100, "damage_base": 17, "speed": 82, "egt_hp": 10 },
+	"egt_blobulin": { "name": "布洛布微体", "hp_base": 10, "damage_base": 17, "speed": 117, "egt_hp": 1 },
+	"egt_pinhead": { "name": "保险销头", "hp_base": 130, "damage_base": 17, "speed": 82, "egt_hp": 13 },
+	"egt_nitra": { "name": "硝酸怪", "hp_base": 100, "damage_base": 17, "speed": 82, "egt_hp": 10 },
+	"egt_bullat": { "name": "子弹榴弹", "hp_base": 10, "damage_base": 17, "speed": 82, "egt_hp": 1 },
+	"egt_gunsinger": { "name": "枪歌者", "hp_base": 150, "damage_base": 0, "speed": 34, "egt_hp": 15 },
+	# —— 第二批 21 只（2026-10-29）：口径与上面完全一致 ——
+	# `hp_base` = 幂律换算后的 3D 基线；`speed` = 目标 m/s ÷ 0.7 × 24（px/s）。
+	"egt_cardinal": { "name": "红衣主教", "hp_base": 225, "damage_base": 17, "speed": 69, "egt_hp": 22.5 },
+	"egt_hollowpoint": { "name": "空尖弹", "hp_base": 250, "damage_base": 17, "speed": 62, "egt_hp": 25 },
+	"egt_veteran_shotgun": { "name": "老兵霰弹枪小子", "hp_base": 338, "damage_base": 17, "speed": 69, "egt_hp": 33.8 },
+	"egt_king_bullat": { "name": "子弹榴弹王", "hp_base": 260, "damage_base": 17, "speed": 21, "egt_hp": 26 },
+	"egt_chancebulon": { "name": "骰子布洛布", "hp_base": 500, "damage_base": 17, "speed": 82, "egt_hp": 50 },
+	"egt_bookllet": { "name": "书怪", "hp_base": 250, "damage_base": 17, "speed": 55, "egt_hp": 25 },
+	"egt_blue_bookllet": { "name": "蓝书怪", "hp_base": 250, "damage_base": 17, "speed": 55, "egt_hp": 25 },
+	"egt_green_bookllet": { "name": "绿书怪", "hp_base": 250, "damage_base": 17, "speed": 55, "egt_hp": 25 },
+	"egt_gunjurer": { "name": "学徒枪法师", "hp_base": 188, "damage_base": 17, "speed": 51, "egt_hp": 18.8 },
+	"egt_gigi": { "name": "吉吉", "hp_base": 120, "damage_base": 17, "speed": 123, "egt_hp": 12 },
+	"egt_shotgat": { "name": "霰弹榴弹", "hp_base": 20, "damage_base": 17, "speed": 82, "egt_hp": 2 },
+	"egt_grenat": { "name": "榴弹子", "hp_base": 30, "damage_base": 17, "speed": 82, "egt_hp": 3 },
+	"egt_spirat": { "name": "螺旋转弹", "hp_base": 50, "damage_base": 17, "speed": 82, "egt_hp": 5 },
+	"egt_keybullet_kin": { "name": "钥匙小子", "hp_base": 150, "damage_base": 17, "speed": 103, "egt_hp": 15 },
+	"egt_chance_kin": { "name": "运气小子", "hp_base": 150, "damage_base": 17, "speed": 103, "egt_hp": 15 },
+	"egt_confirmed": { "name": "已确认者", "hp_base": 450, "damage_base": 17, "speed": 75, "egt_hp": 45 },
+	"egt_mimic": { "name": "拟态怪", "hp_base": 1000, "damage_base": 17, "speed": 75, "egt_hp": 100 },
+	"egt_gun_fairy": { "name": "枪精灵", "hp_base": 150, "damage_base": 17, "speed": 103, "egt_hp": 15 },
+	"egt_gripmaster": { "name": "抓握大师", "hp_base": 300, "damage_base": 0, "speed": 69, "egt_hp": 30 },
+	"egt_gun_nut": { "name": "枪坚果", "hp_base": 1000, "damage_base": 17, "speed": 62, "egt_hp": 100 },
+	"egt_chain_gunner": { "name": "链枪手", "hp_base": 900, "damage_base": 17, "speed": 72, "egt_hp": 90 },
 }
 
 const ENEMY_PRESENTATION := {
@@ -36,6 +78,45 @@ const ENEMY_PRESENTATION := {
 	"melee_chaser_strong": { "emoji": "尸", "color": Color(0.95, 0.28, 0.24, 1.0), "ai_type": "chase" },
 	"fat_zombie03_strong": {"emoji": "尸", "color": Color(0.38, 0.43, 0.26), "ai_type": "chase"},
 	"ranged_caster_strong": { "emoji": "🍄", "color": Color(0.62, 0.35, 1.0, 1.0), "ai_type": "ranged" },
+	# —— 远征03：EGT 第一层复刻怪（2026-10-29）——
+	# `ai_type` 是**表现层标签**（掉落/诊断用）；真正决定行为的是 `Enemy3D.PROFILES` 的行。
+	# 五个远程共用 `ranged`（只差 `volley` 规格），三只布洛布共用 `chase`，
+	# 三只爆炸系共用 `bomber` —— 符合 [AI 设计 §3.1]「参数能表达的差异不新建策略」。
+	"egt_bullet_kin": { "emoji": "🔸", "color": Color(0.55, 0.72, 0.95, 1.0), "ai_type": "ranged" },
+	"egt_bandana_kin": { "emoji": "🔹", "color": Color(0.36, 0.62, 0.98, 1.0), "ai_type": "ranged" },
+	"egt_veteran_kin": { "emoji": "🔶", "color": Color(0.98, 0.60, 0.28, 1.0), "ai_type": "ranged" },
+	"egt_red_shotgun": { "emoji": "🔻", "color": Color(0.92, 0.26, 0.26, 1.0), "ai_type": "ranged" },
+	"egt_blue_shotgun": { "emoji": "🔷", "color": Color(0.32, 0.52, 0.96, 1.0), "ai_type": "ranged" },
+	"egt_blobulon": { "emoji": "🟢", "color": Color(0.46, 0.86, 0.42, 1.0), "ai_type": "chase" },
+	"egt_blobuloid": { "emoji": "🟡", "color": Color(0.82, 0.88, 0.40, 1.0), "ai_type": "chase" },
+	"egt_blobulin": { "emoji": "⚪", "color": Color(0.90, 0.94, 0.88, 1.0), "ai_type": "chase" },
+	"egt_pinhead": { "emoji": "💣", "color": Color(1.0, 0.58, 0.14, 1.0), "ai_type": "bomber" },
+	"egt_nitra": { "emoji": "🧨", "color": Color(1.0, 0.42, 0.12, 1.0), "ai_type": "bomber" },
+	"egt_bullat": { "emoji": "🟠", "color": Color(1.0, 0.70, 0.20, 1.0), "ai_type": "bomber" },
+	"egt_gunsinger": { "emoji": "🎵", "color": Color(0.86, 0.52, 0.96, 1.0), "ai_type": "summoner" },
+	# —— 第二批 21 只（2026-10-29）：`ai_type` 仍只是表现层标签，
+	# 真正的行为由 `Enemy3D.PROFILES[kind].attack_style` 决定（图纸与运行时同源）——
+	"egt_cardinal": { "emoji": "🟥", "color": Color(0.86, 0.30, 0.42, 1.0), "ai_type": "ranged" },
+	"egt_hollowpoint": { "emoji": "🟪", "color": Color(0.66, 0.42, 0.92, 1.0), "ai_type": "ranged" },
+	"egt_veteran_shotgun": { "emoji": "🟨", "color": Color(0.94, 0.72, 0.10, 1.0), "ai_type": "ranged" },
+	"egt_king_bullat": { "emoji": "👑", "color": Color(0.62, 0.42, 0.78, 1.0), "ai_type": "ranged" },
+	"egt_chancebulon": { "emoji": "🎲", "color": Color(0.86, 0.72, 0.30, 1.0), "ai_type": "chase" },
+	"egt_bookllet": { "emoji": "📖", "color": Color(0.90, 0.88, 0.80, 1.0), "ai_type": "ranged" },
+	"egt_blue_bookllet": { "emoji": "📘", "color": Color(0.44, 0.66, 0.98, 1.0), "ai_type": "ranged" },
+	"egt_green_bookllet": { "emoji": "📗", "color": Color(0.52, 0.88, 0.48, 1.0), "ai_type": "ranged" },
+	"egt_gunjurer": { "emoji": "🔯", "color": Color(0.72, 0.52, 1.0, 1.0), "ai_type": "ranged" },
+	"egt_gigi": { "emoji": "🥚", "color": Color(0.96, 0.82, 0.42, 1.0), "ai_type": "ranged" },
+	"egt_shotgat": { "emoji": "🟩", "color": Color(0.42, 0.78, 0.62, 1.0), "ai_type": "bomber" },
+	"egt_grenat": { "emoji": "🟧", "color": Color(0.90, 0.34, 0.12, 1.0), "ai_type": "bomber" },
+	"egt_spirat": { "emoji": "🌀", "color": Color(0.36, 0.86, 0.86, 1.0), "ai_type": "bomber" },
+	"egt_keybullet_kin": { "emoji": "🔑", "color": Color(0.98, 0.84, 0.24, 1.0), "ai_type": "chase" },
+	"egt_chance_kin": { "emoji": "🎰", "color": Color(0.40, 0.86, 0.90, 1.0), "ai_type": "chase" },
+	"egt_confirmed": { "emoji": "🕯", "color": Color(0.56, 0.36, 0.72, 1.0), "ai_type": "ranged" },
+	"egt_mimic": { "emoji": "🎁", "color": Color(0.70, 0.52, 0.26, 1.0), "ai_type": "ranged" },
+	"egt_gun_fairy": { "emoji": "🧚", "color": Color(0.98, 0.90, 0.60, 1.0), "ai_type": "ranged" },
+	"egt_gripmaster": { "emoji": "🖐", "color": Color(0.54, 0.48, 0.92, 1.0), "ai_type": "summoner" },
+	"egt_gun_nut": { "emoji": "🗡", "color": Color(0.66, 0.50, 0.28, 1.0), "ai_type": "ranged" },
+	"egt_chain_gunner": { "emoji": "⛓", "color": Color(0.62, 0.68, 0.80, 1.0), "ai_type": "ranged" },
 }
 
 ## 精英词缀配置
@@ -303,6 +384,20 @@ func generate_box_enemy(type_id: String, floor: int, floor_level: int, extra: Di
 		return _generate_basic_enemy(type_id, floor, floor_level)
 	return {}
 
+
+## 死亡分裂的子代（远征03 布洛布三阶）。
+##
+## 与 `generate_box_enemy` 的唯一差别是 **`allow_strong = false`**：
+## 分裂出来的子代必须**逐字是配置里写的那一只**。走默认出口的话，每只子代有
+## `monster_rules.strong_variant.chance`（缺省 15%）的概率被升级成强化怪 ——
+## 玩家会看到「打碎一个布洛布，掉出来两只体型 ×1.5 的强化变态」，
+## 而原作的分裂链是**严格逐级递减**的（Blobulon → Blobuloid → Blobulin）。
+## 关掉升级不是优化，是这条行为能否成立的前提。
+func generate_split_child(child_kind: String, floor: int, floor_level: int) -> Dictionary:
+	if not is_authorable_enemy_type(child_kind):
+		return {}
+	return _generate_basic_enemy(child_kind, floor, floor_level, false)
+
 ## 子图房间编成：**固定 5 只强化怪 + 2 只普通怪**，顺序「先强化、后普通」。
 ##
 ## `allow_strong = false` 是这条口径的关键：`_generate_basic_enemy` 的默认出口会按
@@ -471,6 +566,24 @@ func _generate_random_enemies(floor: int, floor_level: int) -> Array[Dictionary]
 ## floor_level: RoomData.FloorLevel 进度层级（SHALLOW/MEDIUM/DEEP/ABYSS）
 ## floor: 实际楼层数字（1-4），影响同进度层级下的怪物池大小
 func _get_available_types_for_level(floor_level: int, floor: int = 1) -> Array[String]:
+	# 关卡级池子（`level_plan.json` 的 `monster_rules.enemy_pool`）。
+	#
+	# ⚠ **必须在主题池之前**。第一版写在主题池之后，结果远征03 里
+	# `_theme_profile` 自己配了老三种（melee/ranged/exploder）⇒ 函数在主题那一步就
+	# `return` 了，关卡池**一次都没被读到**。探针实测：8 只怪全是老三种、`egt_` 0 只，
+	# 而 `monster_rules` 明明装载成功（pool=12）。这类"配了没生效"最难查，故记在此。
+	#
+	# 语义上也是关卡优先：主题是「同一套怪换皮」（视觉层），关卡池是
+	# 「这一关就这些怪」（内容层）。内容层覆盖视觉层，与 `stats.per_kind` 绝对覆盖同向。
+	# 远征01/02 未写本段 ⇒ 这里直接跳过，行为逐字不变。
+	var level_pool: Array = _level_rules.get("enemy_pool", [])
+	if not level_pool.is_empty():
+		var level_result: Array[String] = []
+		for enemy_type in level_pool:
+			if is_authorable_enemy_type(str(enemy_type)):
+				level_result.append(str(enemy_type))
+		if not level_result.is_empty():
+			return level_result
 	if _theme_profile != null:
 		var themed_pool: Array = _theme_profile.get_enemy_rule("enemy_pool", [])
 		if not themed_pool.is_empty():

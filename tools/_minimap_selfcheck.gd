@@ -1,10 +1,10 @@
 extends SceneTree
 
-## 开发期自检：真实尺寸（366×299 = 458×374 × HUD_UI_SCALE 0.8）下验证小地图不溢出。
+## 开发期自检：真实尺寸（305.6×212 = 382×265 × HUD_UI_SCALE 0.8）下验证小地图不溢出。
 ##   godot --headless --path <project> --script res://tools/_minimap_selfcheck.gd
 ## 不进验收套件；断言在 verify_tactical_inventory_minimap_flow 里。
 
-const REAL_SIZE := Vector2(366.4, 276.8)
+const REAL_SIZE := Vector2(305.6, 212.0)
 
 var _failures: Array[String] = []
 

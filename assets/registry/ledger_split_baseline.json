@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-10-28",
+ "captured_at": "2026-10-29T22:54:35",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1336,
+ "asset_count": 1374,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -6716,32 +6716,222 @@
    "v": "98e6d70dcf9e631ea34e3eab0f906f27c253b8c8fc59f1e5b41df6ec95d76111",
    "c": "特效",
    "d": "vfx"
+  },
+  "ENV-BATTLE-INTERACTIVE-JAR": {
+   "v": "1eb116e38430836db4342f1085a1e95f7f544468e3a183833aee27b0f5268d82",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-BATTLE-INTERACTIVE-BOOK-STACK": {
+   "v": "6f8a92ea15b2c4ff7c2e6c290b64b19946ace77b7b5cac512b70f501cc58f7c3",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-BATTLE-INTERACTIVE-VASE": {
+   "v": "4e0d0433df7288bed11d07853eff3af090eeffc92e26b8e9a18c2986a86041b3",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-BATTLE-INTERACTIVE-CHAIR": {
+   "v": "b43aa1f26bbd303ce1a0184ca678a2a6ae9276ce236e7106b84a5826b46256d3",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-BATTLE-INTERACTIVE-CRATE": {
+   "v": "312e85f7fd4bd172ed4a6ec8d002befc55ce80af279838e07f1bf3a1294674e0",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENM-RANGED-BULLETKIN01": {
+   "v": "33c2f2e71527658bcd76a263b4fff1b610e608af7af9899b97c486dee1568070",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-RANGED-BANDANAKIN01": {
+   "v": "a2cd921a2aa1b0845a3da28ef3d46268fcc5294e4af89b07468712603ee9ba38",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-RANGED-VETERANKIN01": {
+   "v": "762b84531f9f6455c701d651f93a1e63d320b4d356606593d763356af4f9a4c9",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-RANGED-REDSHOTGUN01": {
+   "v": "57241ddb23bdd6aaf35f9d30e8f01d1e72461cacbc42ccf6aabf2501aebaac18",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-RANGED-BLUESHOTGUN01": {
+   "v": "e267ad9538c881d07cf1a4cd631a3f0d55c83fb03f5f363055408037d000bb7a",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-MELEE-BLOBULON01": {
+   "v": "40f9ca4da1b87804ae39abeb62593da7bb2c4d933bf7173a516640cbaa79e02d",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-MELEE-BLOBULOID01": {
+   "v": "7e59b7b562334e8a1da7befeba3ee025d6fbdb8d83bd2c313ec6210e80374e27",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-MELEE-BLOBULIN01": {
+   "v": "4c485fca3e0d4fef40b77fe6f1674e4e9afc273107eebb84fc8ca2754dca651e",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-BOMBER-PINHEAD01": {
+   "v": "14413ae00bd0f187a33afe31cfbf6d6e20c6714efd7c311fba7db612c2f9fdf7",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-BOMBER-NITRA01": {
+   "v": "c21e71c88c97e3fa7d89ced7af2d5b3f5b2c141113836504d9ad4d1130db5135",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-BOMBER-BULLAT01": {
+   "v": "7219f830b3562cb4e4f3e6b2f36516792ec355240912f245545a63cb1649aec0",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-SUMMON-GUNSINGER01": {
+   "v": "029564e668c05215336ae1144367941fe813ae7c4c06807242ef3709987fb2ab",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-RANGED-CARDINAL01": {
+   "v": "bfbfdfa76a8b08282309bb7375f594061bb815fe09af056f27b27e257c9a2280",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-RANGED-HOLLOWPOINT01": {
+   "v": "25c8e4f3f70ce0dcd8d4faeb4576577c066b434a0693fd2c79a025ebc08ff5ea",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-RANGED-VETSHOTGUN01": {
+   "v": "179c575ae5669ffd7b6df17dc9ed65a555522ce479f15b0ff73ac9000c15050a",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-BOMBER-KINGBULLAT01": {
+   "v": "1fcf7acccf57aecfac37ebe02e4d406676d408111f635fd289031b11f006e878",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-MELEE-CHANCEBULON01": {
+   "v": "bc7509b97a2fd16cd27bebf525e448dca2ce8f653885c592aede36c69119c607",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-SUMMON-BOOKLLET01": {
+   "v": "292391d860e3184d62de63c4cf0095edafb5200a20dfe6ea066129a60105a370",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-SUMMON-BLUEBOOK01": {
+   "v": "70d0008cb69547d9a05af27ec1a2fb3a6e9b3ce8ee69d9b2b733a40c46a10316",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-SUMMON-GREENBOOK01": {
+   "v": "94b8abaeb58b43dd2218eda64f5d8fc10688b1d37535cbd5d129534f07c4243e",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-SUMMON-GUNJURER01": {
+   "v": "ee3aea428121db7735af70f446ea9721e8e272e71b3b3f640ce28115ebfd86f3",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-SUMMON-GIGI01": {
+   "v": "cb5a7a0e95d1f48a3105ad4f91ba4804e462a90caed512526f4d4e67afb9e182",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-BOMBER-SHOTGAT01": {
+   "v": "eba2df25d295d9f197aa54458d612dfd773f4dcf8e522e903ab75324436f5970",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-BOMBER-GRENAT01": {
+   "v": "af9208f859f8fead747533e196608b84a741b780d8104e4c9f651e22508c4463",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-BOMBER-SPIRAT01": {
+   "v": "840741ccff4306b1a6d46100d95711df4fc7d49ec3a6049b60d8c93f64e16efc",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-MELEE-KEYBULLET01": {
+   "v": "178421eda101b54584dc4aa9a9f4a124cace48698b515b7faf6c48a712f3598e",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-MELEE-CHANCEKIN01": {
+   "v": "a6a0e1303b06e4c85f08b52f68bbf12fbf59525087f939226afd34686e299030",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-RANGED-CONFIRMED01": {
+   "v": "c185a406453f718f5a9e4c1641039f1e27f237ae4aa728042d6b4c05e2e405f9",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-NORMAL-MIMIC01": {
+   "v": "4a13448eb9e783e5b76a9d2bd98db150c8e9527142d84e1900def528b8e49f3b",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-RANGED-GUNFAIRY01": {
+   "v": "5dc7ffd99b2f3a1becb70620e08c656403c36a43b8bd536618763c186e602299",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-SUMMON-GRIPMASTER01": {
+   "v": "4d31874cf0eb918bdbb1ddc9b1b565f1b3b47e81dd8ab1a092125abf6aa6892a",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-NORMAL-GUNNUT01": {
+   "v": "fbe3fddcc4b18d90a4af50b4805b808ec7ea7700447cce7c0d82037aae5dbcd5",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-NORMAL-CHAINGUNNER01": {
+   "v": "93523cbc660c64ef8fba410ff295e270586edef4332a2e26fd99980f640182e1",
+   "c": "敌人",
+   "d": "enemies"
   }
  },
  "column_digests": {
-  "1": "270b505502cf55ac45a7de6846d585e9890b8bc3971b5f51891aabb0b41f332d",
-  "2": "5e0084452d1869953bf941e4cf1fba7c2c5d6b461f71715865012c55bf0bffa7",
-  "3": "229670f02840542807229550741132b95daf383b8b0c930264d991c53f30d16b",
-  "4": "61786599697e4fefbe45809e927ef751778249fb9d733a4d53de31680c2c444e",
-  "5": "a3c79c1b2398c74b109f7998a34343813746f20894703953bb4cda27ebc1f43b",
-  "6": "61631b8f78bd213290ab9df78dce037390cb0dec316d280e02c2633d45426561",
-  "7": "3cf20178810eb5ff623c866ee09bb96763eec31a652c967d41412aa68579df6c",
-  "8": "391f7923ed7aac1757939787611b3384ac711deae93ab4df73496bb2ddd9411a",
-  "9": "7f03a69fcb8ba10261de5bf95e40f07f2641f7cd8af17a12f61d2b9c68e6999f",
-  "10": "bbbb479db9cdfc932282487353f12170dd571a7eefdce1b1d6dae4759eebc983",
-  "11": "f70f5c6c4f75d3cc7ce155a4f274e5ef764762701fbdbec7ffa13fbf10a09281",
-  "12": "be89384bac2addeb3babf36c08e69de9fbcc9d448888c5fcef1c9c64e5871c8d",
-  "13": "9faaaa94a559697c346da24d679346387a9d56b6fd3d807b483b1021918230d5",
-  "14": "ee6e5868b2d9669bf74692bb4a8695740cb263324fcd63ef9a1ac33ec7794b72",
-  "15": "b23b68cded7d67d66fb9b37d36830252a374c8b2a0e88018fb8b3f60d8658ec3",
-  "16": "62918dce045f6cdef97b8e16114b285b4e509d0f98a188191a350b5638ac9005",
-  "17": "2b5f376b515e64ad60ebb1e55cd388a84d7fb2d2dcb68edff75eda52879229ef",
-  "20": "214cd7ec4486d13df6463b31af1d838bf4e5c53bf5545782970802e72181b2bb",
-  "21": "5562601ab2db16e5385ec2c9db7d14b444089d784700b67fd157b5b2978a6416",
-  "22": "013758148bec7bfe3f83b426ae5b822474151fd94dd775f7dc3fb218646ddea2",
-  "23": "070bf456a760e9d2132f08e8fb7a4ed964af75ea1d16f5620c8d15bc9a8ba9f9",
-  "24": "357f4a3d71c845fa78ce45dbce32c97cc5e15756b3284c74e2c3f02d11359208",
-  "25": "e89427dfaf2e3580817c4dbecc0dcd3d25ada412b566bb12238834a0f58d92c3"
+  "1": "efbf0816b1d65dbeb9707f4a023251496c9b0bdd72fd0728526be23e17142a56",
+  "2": "ae16ee25e6f481b4a1ad14c42fafaf968e273a59e32d39c8e7a396986d93ac3e",
+  "3": "480ecc0223e43eb4e7bc1ff7387e67905a43f869130ab662dad84276a383f2bd",
+  "4": "8cb94b81500c8f7f66eb82ec263d184033fc54bd3011fa2929b93e664a7cceac",
+  "5": "dd9100b5a506c1ec140df48910b209a230306d8694bb869260d9c73bea2fed7e",
+  "6": "ab34a168058d857cf5a181cd0f62c14120895364b3222a104ce5a04421b135c4",
+  "7": "554d57c1d468b65dfa9d872424d02c1a2d41da6fe6292e66bb510d0d35ab8473",
+  "8": "dd401c9e95bd29fd471018df21ddbe7e5771a5f8c762304ed709e8d8c220f68e",
+  "9": "437517668663c08e02f884ce033f84a79222a700be25bcab2286c62e4801980f",
+  "10": "d6f5a59d00ebd208d082c6b39cc36c4ea1c06fe9ae30690a18a18f4aca2acfb9",
+  "11": "59ddca4a039834465f9be44e436665af3b88d886ec43e45a4f68f1b057d752ec",
+  "12": "784509ad1ec5c7079e1ce03b3aa6f3e4e054849fc6649d834b6fefefcf3adb1e",
+  "13": "6315a2305accf02b1f2113e783bb17f1f6e13f9edb08e239c00707d92f407945",
+  "14": "3e200d46814814c2ceb87a179c4c7e7ae20739a489dadf561f0aabdea3c25dd3",
+  "15": "0d746b63b732cd524121e2b94764421f8417c5a1cae6f36c52b30bc7a1efd6c5",
+  "16": "6c73e75ab54e6553bf0d9600e65219c9d64fd043b3ff83729a3b46c839062f0d",
+  "17": "363ec412485c8052ec3bbfe72fb59f27bef2b23a8cf93556c7894c33c33cafae",
+  "20": "4317045c3289ab6c9fdee2d07a39292d46f9c23d382b6b61776f47323bbdd515",
+  "21": "5dbdbc99c7307c0f939f2fa8a2d64e29d34b49de2a900e6023ab271ba4190851",
+  "22": "4b0b3df355f4cfc78d109ec9a26e01116e7b9c95f756d791320e58eba77e1570",
+  "23": "e4fff589be8297c6c7d961959cea00692722a0826e2e30abb7a9490539667fe5",
+  "24": "9075fdfa57d5db14b9807119b88bb5c75828907cd3e7cd643dbd10c26a41340a",
+  "25": "34b99b756c636cc6a293bd1865b311075085706297b7046b1ea8049c27b4185b"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -6751,7 +6941,7 @@
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
   "敌人动画与状态": "9a965b0f46a3e7506a04f96070abfe7c0beae1aed0a80e2ae9e99fcaf5c08552",
   "3D-敌人": "b3851d07c27edfb6fed4c01e87814bb8b1675b8b235e6558601925a866cb240b",
-  "3D-场景通用": "f88f3f82f64cc9d076d712d65d831608977116e3ce0c2f58e37b334513683465",
+  "3D-场景通用": "a26ad4bb1d2c1c6016ba856dcd367b9ec8f04292928b116e85c46ac2bbddb0d0",
   "3D-设施": "60949a4e4d892dc425a78abdf55ee776b8da45bae11b3cb9516bc8136c079871",
   "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
@@ -6761,18 +6951,18 @@
   "3D-特效": "9558f5992d9c3a0fcdf2d206856e3034621765c9d7d58157639ae1e0acbd3199"
  },
  "category_counts": {
-  "角色": 25,
-  "敌人": 15,
-  "场景": 805,
+  "UI": 18,
+  "场景": 810,
   "场景道具": 49,
   "基地资产包": 114,
-  "道具": 39,
+  "子弹特效": 10,
+  "敌人": 48,
   "武器": 36,
   "特效": 38,
-  "子弹特效": 10,
-  "UI": 18,
-  "音效": 178,
-  "音乐": 9
+  "角色": 25,
+  "道具": 39,
+  "音乐": 9,
+  "音效": 178
  },
  "targeted_updates": [
   {

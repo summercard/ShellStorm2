@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-10-19",
+  "updated_at": "2026-10-29",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -415,7 +415,15 @@
         "docs/v0.1/development/2026-10-03_fat_zombie03_runtime_binding.md",
         "docs/v0.1/development/2026-10-03_shielded_retirement.md",
         "docs/v0.1/development/2026-10-04_fat_zombie03_death_visibility.md",
-        "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md"
+        "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md",
+        "docs/v0.1/development/2026-10-29_expedition03_egt_monsters.md",
+        "docs/v0.1/development/2026-10-29_egt_variant_visual_differentiation.md",
+        "docs/v0.1/development/2026-10-29_expedition03_roster_spawn.md",
+        "docs/v0.1/development/2026-10-29_egt_full_monster_roster.md",
+        "docs/v0.1/development/2026-10-29_egt_monster_tuning_and_bullet_visibility.md",
+        "docs/v0.1/development/2026-10-29_egt_bullet_damage_and_behavior_alignment.md",
+        "docs/v0.1/development/2026-10-29_egt_monster_drops.md",
+        "docs/v0.1/development/2026-10-29_expedition03_treasure_chest.md"
       ],
       "verification": [
         {
@@ -1221,6 +1229,74 @@
         }
       ],
       "status": "partial"
+    },
+    {
+      "feature_id": "TOOL-SCENE-EDITOR",
+      "owner": "ShellStormSceneBuilder EditorPlugin",
+      "design_docs": [
+        "docs/v0.1/design/组件场景编辑器设计.md"
+      ],
+      "development_records": [
+        "docs/v0.1/development/2026-10-29_component_scene_editor.md",
+        "docs/v0.1/development/2026-10-29_scene_builder_workbench.md",
+        "docs/v0.1/development/2026-10-29_scene_builder_runtime_source.md"
+      ],
+      "verification": [
+        {
+          "kind": "command",
+          "path": "tools/scene_builder/test_layout_model.gd",
+          "args": [
+            "--headless",
+            "--script"
+          ]
+        },
+        {
+          "kind": "command",
+          "path": "tools/scene_builder/test_editor_actions.gd",
+          "args": [
+            "--editor",
+            "--",
+            "--scene-builder-test"
+          ]
+        },
+        {
+          "kind": "command",
+          "path": "tools/scene_builder/test_workbench.gd",
+          "args": [
+            "--headless",
+            "--script"
+          ]
+        },
+        {
+          "kind": "command",
+          "path": "tools/scene_builder/test_runtime_source.gd",
+          "args": [
+            "--headless",
+            "--script"
+          ]
+        }
+      ],
+      "status": "partial",
+      "category": "tooling",
+      "module_id": "TOOLING",
+      "tool_index": "docs/v0.1/TOOL_INDEX.md"
+    },
+    {
+      "feature_id": "WORLD-INTERACTIVE-CLUTTER",
+      "owner": "BreakableClutter3D",
+      "design_docs": [
+        "docs/v0.1/design/场景可交互低模物件设计.md"
+      ],
+      "development_records": [
+        "docs/v0.1/development/2026-10-29_interactive_clutter.md"
+      ],
+      "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_battle_breakable_clutter"
+        }
+      ],
+      "status": "complete"
     }
   ]
 }

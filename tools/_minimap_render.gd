@@ -10,9 +10,10 @@ extends SceneTree
 ## 不进验收套件 —— 它只负责"看得见"，断言在 verify_tactical_inventory_minimap_flow 里。
 
 const VIEW_SIZE := Vector2i(400, 310)
-# 真机面板尺寸：设计盒 458×346 × `HUD_UI_SCALE`(0.80)。出图必须照这个来，
+# 真机面板尺寸：设计盒 382×265 × `HUD_UI_SCALE`(0.80)。出图必须照这个来，
 # 否则看不出"满层会不会溢出面板"这类问题。
-const REAL_PANEL := Vector2(458.0, 346.0) * 0.80
+# 2026-10-29：业主要求小地图去掉半透明底 + 缩到红框大小，设计盒由 458×346 收到 382×265。
+const REAL_PANEL := Vector2(382.0, 265.0) * 0.80
 const OUT_DIR := "res://outputs/verification"
 
 var _vp: SubViewport

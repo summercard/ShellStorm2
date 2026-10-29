@@ -12,7 +12,122 @@ const COLORS := {
 	"exploder": Color(0.72, 0.30, 0.08),
 	"ambusher": Color(0.14, 0.20, 0.18),
 	"boss": Color(0.37, 0.12, 0.09),
+	# —— 远征03 复刻怪：**这一表只管"与借用基类不同色"的那几只**（2026-10-29）——
+	#
+	# 规则：颜色 = 它能伤害你的方式。远程族 5 只的身体色**与自己的弹幕色完全一致**
+	# （对比 `Enemy3D._egt_projectile_color()`），玩家看怪的颜色就知道要躲什么弹。
+	#
+	# ⚠ 未在此登记的复刻怪**刻意**沿用基类色，靠 `_rebuild()` 的 `COLORS.get(enemy_kind, …)` 回退：
+	#   egt_blobulon / egt_blobuloid / egt_blobulin → melee_chaser 暗红
+	#     （分裂体就该长得跟母体一样，变色反而破坏"这是同一只怪炸开的"这层信息）
+	#   egt_pinhead → exploder 橙
+	#     （它就是标准爆炸怪，橙是这一族的基准色；变异的 nitra/bullat 才换色）
+	"egt_bullet_kin": Color(0.20, 0.82, 0.92),
+	"egt_bandana_kin": Color(0.36, 0.62, 0.98),
+	"egt_veteran_kin": Color(0.98, 0.60, 0.28),
+	"egt_red_shotgun": Color(0.92, 0.26, 0.26),
+	"egt_blue_shotgun": Color(0.32, 0.52, 0.96),
+	"egt_nitra": Color(0.58, 0.68, 0.18),
+	"egt_bullat": Color(0.94, 0.80, 0.20),
+	# 保险销头**显式写成 exploder 的橙**，而不是靠回退。
+	# 理由：回退在数值上等价，但注册一致性探针无法区分「刻意同色」和「忘了登记」——
+	# 一旦有人后来改了 exploder 的橙色，pinhead 会静默跟着变，而它是这一族的**基准色**。
+	"egt_pinhead": Color(0.72, 0.30, 0.08),
+	"egt_gunsinger": Color(0.64, 0.30, 0.82),
+	# —— 第二批 21 只（2026-10-29）：全族覆盖，颜色仍守「身体色 = 弹色 = 伤你的方式」——
+	# 本表只对**程序化外壳**生效（exploder / summoner 借来的那批）。
+	# 借 melee_chaser / ranged_caster / fat_zombie03 的走 FORMAL_MODEL_TINT，原因见 §T3.4。
+	# —— 子弹族：青 → 蓝 → 橙 → 玫红 → 紫 ——
+	"egt_cardinal": Color(0.86, 0.30, 0.42),
+	"egt_hollowpoint": Color(0.66, 0.42, 0.92),
+	# —— 霰弹枪族：红 → 金黄 → 深蓝（老兵的金黄＝"必喷"警告色）——
+	"egt_veteran_shotgun": Color(0.94, 0.72, 0.10),
+	# —— 爆炸族：橙 → 黄绿 → 亮黄 → 红橙 → 紫金（王）——
+	"egt_king_bullat": Color(0.62, 0.42, 0.78),
+	"egt_grenat": Color(0.90, 0.34, 0.12),
+	# —— 冲撞族：青绿 / 青（它们不炸，所以不占用暖色）——
+	"egt_shotgat": Color(0.42, 0.78, 0.62),
+	"egt_spirat": Color(0.36, 0.86, 0.86),
+	# —— 书怪族：米白 / 蓝 / 绿，同血只换色（与弹形一一对应）——
+	"egt_bookllet": Color(0.90, 0.88, 0.80),
+	"egt_blue_bookllet": Color(0.44, 0.66, 0.98),
+	"egt_green_bookllet": Color(0.52, 0.88, 0.48),
+	# —— 法术族：淡紫 / 米黄 ——
+	"egt_gunjurer": Color(0.72, 0.52, 1.0),
+	"egt_gigi": Color(0.96, 0.82, 0.42),
+	# —— 触发 / 逃逸族：金（钥匙）→ 青（运气）→ 暗紫 → 棕金（拟态）→ 淡黄 → 蓝紫 ——
+	"egt_keybullet_kin": Color(0.98, 0.84, 0.24),
+	"egt_chance_kin": Color(0.40, 0.86, 0.90),
+	"egt_confirmed": Color(0.56, 0.36, 0.72),
+	"egt_mimic": Color(0.70, 0.52, 0.26),
+	"egt_gun_fairy": Color(0.98, 0.90, 0.60),
+	"egt_gripmaster": Color(0.54, 0.48, 0.92),
+	# —— 重型族：灰蓝 / 棕 ——
+	"egt_chain_gunner": Color(0.62, 0.68, 0.80),
+	"egt_gun_nut": Color(0.66, 0.50, 0.28),
 }
+
+## 远征03 复刻怪的**占位资产别名**（2026-10-29）。
+##
+## 业主指令：先用现有怪物资产把 EGT 第一层的怪做出来，美术后期再换。
+## 这张表就是「套入」的**唯一落点** —— 新 kind 在表现层解析成一只已有怪的资产，
+## 同时 `enemy_kind` **保留原名**（名字、血条、掉落、诊断仍按新 kind 走）。
+##
+## ⚠ 不加这张表的后果（本文件里已写过的同类坑）：`configure()` 开头是
+## `var known := COLORS.has(kind) ...`，未知 kind 会被**静默降级成 `melee_chaser`** ——
+## 表现退化成一只默认怪，日志一个字都不说。新怪种必须在这里登记，否则等于没做。
+##
+## 键 = 新怪种 ID，值 = 借用哪只怪的表现资产（必须是 `COLORS` 里已有的基类）。
+const PROXY_ASSET_KIND := {
+	# —— 远程五兄弟：借保安僵尸（有枪、有射击动作）——
+	"egt_bullet_kin": "ranged_caster",
+	"egt_bandana_kin": "ranged_caster",
+	"egt_veteran_kin": "ranged_caster",
+	"egt_red_shotgun": "ranged_caster",
+	"egt_blue_shotgun": "ranged_caster",
+	# —— 布洛布三阶：借小僵尸（近战扑击动作正好对应接触伤害）——
+	"egt_blobulon": "melee_chaser",
+	"egt_blobuloid": "melee_chaser",
+	"egt_blobulin": "melee_chaser",
+	# —— 爆炸/冲撞系：借炸弹果（自爆动作）——
+	"egt_pinhead": "exploder",
+	"egt_nitra": "exploder",
+	"egt_bullat": "exploder",
+	# —— 辅助系：借蜂巢怪（原地施法姿态）——
+	"egt_gunsinger": "summoner",
+	# —— 第二批 21 只（2026-10-29）——
+	# 选资产的唯一标准是**姿态对得上**：有枪的借保安僵尸、贴身的借小僵尸、
+	# 会炸的借炸弹果、悬浮施法的借蜂巢怪、笨重的借胖子僵尸。
+	# ⚠ 这张表是"这套占位会不会静默失效"的开关：漏登记 = 该 kind 在
+	# `configure()` 里被判未知、静默降级成小僵尸，日志一个字都不说。
+	"egt_cardinal": "ranged_caster",
+	"egt_hollowpoint": "ranged_caster",
+	"egt_veteran_shotgun": "ranged_caster",
+	"egt_confirmed": "ranged_caster",
+	"egt_gun_fairy": "ranged_caster",
+	"egt_chancebulon": "melee_chaser",
+	"egt_keybullet_kin": "melee_chaser",
+	"egt_chance_kin": "melee_chaser",
+	"egt_king_bullat": "exploder",
+	"egt_shotgat": "exploder",
+	"egt_grenat": "exploder",
+	"egt_spirat": "exploder",
+	"egt_bookllet": "summoner",
+	"egt_blue_bookllet": "summoner",
+	"egt_green_bookllet": "summoner",
+	"egt_gunjurer": "summoner",
+	"egt_gigi": "summoner",
+	"egt_gripmaster": "summoner",
+	"egt_mimic": "fat_zombie03",
+	"egt_gun_nut": "fat_zombie03",
+	"egt_chain_gunner": "fat_zombie03",
+}
+
+
+## 把怪种 ID 解析成**用于查表现资产**的基类。
+## 未登记别名的 kind 原样返回 —— 这样旧怪种的行为逐字不变。
+static func resolve_asset_kind(kind: String) -> String:
+	return str(PROXY_ASSET_KIND.get(kind, kind))
 
 # 与实际模块化模型的最大横向轮廓同源；Enemy3D 直接读取该表生成受击/物理体积。
 #
@@ -53,6 +168,47 @@ const FORMAL_MELEE_KIND := "melee_chaser"
 const FORMAL_MELEE_SCENE_PATH := FORMAL_NORMAL_SCENES[FORMAL_MELEE_KIND]
 const FORMAL_MELEE_VISUAL_HEIGHT := FORMAL_NORMAL_HEIGHTS[FORMAL_MELEE_KIND]
 
+## 正式 GLB 模型的**染色系数**（2026-10-29）。
+##
+## ## 为什么必须有这张表
+## `COLORS` 只作用于**程序化外壳**。而 `melee_chaser` / `ranged_caster` / `fat_zombie03`
+## 三个基类有正式 GLB（见 `FORMAL_NORMAL_SCENES`），加载时会把外壳、核心、附肢全部
+## `hide()` —— 于是 `COLORS` 对它们**一行都不生效**。
+##
+## 远征03 的 5 只远程怪全部借用 `ranged_caster`，即**同一个 GLB 模型**。
+## 不染色的后果：5 只长得一模一样，体型差 0.86~1.18 在实战距离下几乎看不出，
+## 玩家无法分辨"三连发"和"预判弹"该用不同躲避方式 —— 这是可读性硬伤，不是审美问题。
+##
+## ## 为什么值是"偏色近白"而不是纯饱和色
+## 实现是 `albedo_color *= tint`（见 `_apply_formal_tint()`）。纯饱和色会把贴图
+## 压成一块平色，丢掉全部明暗细节和材质感。用接近白、只做**色相偏移**的系数，
+## 既保留原模型细节，又能明显改变色相 —— 远看是"红的那只 / 蓝的那只"。
+##
+## ## 没登记的怪不染色
+## 分裂族三只刻意不染（同一只怪的分裂体应同貌，靠体型区分）；
+## 爆炸族与辅助族走程序化外壳，`COLORS` 已经生效，不需要这条通道。
+const FORMAL_MODEL_TINT := {
+	"egt_bullet_kin": Color(0.45, 1.00, 1.00),
+	"egt_bandana_kin": Color(0.52, 0.74, 1.00),
+	"egt_veteran_kin": Color(1.00, 0.72, 0.42),
+	"egt_red_shotgun": Color(1.00, 0.42, 0.40),
+	"egt_blue_shotgun": Color(0.40, 0.54, 1.00),
+	# —— 第二批：借**正式 GLB** 的那 11 只，必须在这里给染色系数 ——
+	# 借 ranged_caster 的 5 只 + 借 melee_chaser 的 3 只 + 借 fat_zombie03 的 3 只。
+	# 一个都不能漏：漏了那只就是"和同族另一只长得一模一样"，而 COLORS 对它完全无效。
+	"egt_cardinal": Color(1.00, 0.52, 0.62),
+	"egt_hollowpoint": Color(0.84, 0.62, 1.00),
+	"egt_veteran_shotgun": Color(1.00, 0.84, 0.42),
+	"egt_confirmed": Color(0.80, 0.60, 0.94),
+	"egt_gun_fairy": Color(1.00, 0.96, 0.72),
+	"egt_chancebulon": Color(1.00, 0.88, 0.58),
+	"egt_keybullet_kin": Color(1.00, 0.92, 0.46),
+	"egt_chance_kin": Color(0.62, 0.96, 0.96),
+	"egt_mimic": Color(1.00, 0.74, 0.40),
+	"egt_gun_nut": Color(1.00, 0.84, 0.64),
+	"egt_chain_gunner": Color(0.74, 0.84, 1.00),
+}
+
 var enemy_kind := "melee_chaser"
 ## 用于查表的**基类**：强化怪回退到原怪，普通怪等于自己。
 ##
@@ -92,10 +248,15 @@ const EYE_BONE_NAME := "Head"
 
 
 func configure(kind: String) -> void:
-	var known := COLORS.has(kind) or MonsterVariants.is_variant(kind)
+	# 别名先解析：`egt_*` 这类「借用别人资产的复刻怪」要在 `known` 判定之前落地，
+	# 否则会被下面的 else 分支静默换成 melee_chaser（本表存在的理由见 PROXY_ASSET_KIND 注释）。
+	var asset_kind := resolve_asset_kind(kind)
+	var known := COLORS.has(asset_kind) or MonsterVariants.is_variant(asset_kind)
 	enemy_kind = kind if known else "melee_chaser"
-	var base_kind := MonsterVariants.base_of(enemy_kind)
-	_base_kind = base_kind if not base_kind.is_empty() else enemy_kind
+	var base_kind := MonsterVariants.base_of(asset_kind)
+	_base_kind = base_kind if not base_kind.is_empty() else asset_kind
+	if not COLORS.has(_base_kind):
+		_base_kind = "melee_chaser"
 	_rebuild()
 
 
@@ -153,8 +314,12 @@ static func get_footprint_profile(kind: String) -> Dictionary:
 	# 强化怪回退基类：变种的碰撞体形状照抄原怪，**不在这里放大**。
 	# 世界尺寸由 `Enemy3D` 根节点的 `scale`（含变种体型倍率）统一放大，
 	# 碰撞柱是它的子节点 ⇒ 自动跟随。在表里再乘一次 1.5 会放大两遍。
-	var base_kind := MonsterVariants.base_of(kind)
-	var lookup := base_kind if not base_kind.is_empty() else kind
+	#
+	# 远征03 的复刻怪先过一层别名（`egt_*` → 借用的那只怪）：它们借的是**表现资产**，
+	# 碰撞柱也就该跟被借的那只一致 —— 否则「模型是保安僵尸、碰撞柱是默认小僵尸」。
+	var proxied := resolve_asset_kind(kind)
+	var base_kind := MonsterVariants.base_of(proxied)
+	var lookup := base_kind if not base_kind.is_empty() else proxied
 	return (FOOTPRINT_PROFILES.get(lookup, FOOTPRINT_PROFILES["melee_chaser"]) as Dictionary).duplicate()
 
 
@@ -251,7 +416,10 @@ func _rebuild() -> void:
 	_elite_presentation_asset_id = ""
 	_root.name = "VisualRoot"
 	add_child(_root)
-	_base_color = COLORS[_base_kind]
+	# 颜色优先取**怪种本身**，没登记才回退基类。
+	# 必须这样写：复刻怪的 `_base_kind` 是借用的资产（5 只远程全是 `ranged_caster`），
+	# 若直接 `COLORS[_base_kind]`，它们会共用一个颜色，体型之外的区分全部失效。
+	_base_color = COLORS.get(enemy_kind, COLORS[_base_kind])
 	_shell_material = _material(_base_color, 0.42, 0.66)
 	_core_material = _material(_base_color.lightened(0.42), 0.18, 0.32, true)
 	_appendages = Node3D.new()
@@ -499,6 +667,46 @@ func _load_formal_normal_model() -> void:
 	_shell.hide()
 	_core.hide()
 	_appendages.hide()
+	_apply_formal_tint()
+
+
+## 给正式 GLB 模型染色。见 `FORMAL_MODEL_TINT` 的表头注释说明「为什么必须有」。
+##
+## 实现要点：
+## ① **必须 duplicate 材质**。GLB 里的材质在多个实例间共享 —— 直接改 albedo
+##    会把场上所有借同一模型的怪一起染成同色（实测踩过：改一只，全变红）。
+## ② 逐 MeshInstance3D、逐 surface 处理。一个模型常有多段材质（身体/配件/枪）。
+## ③ 只处理 `BaseMaterial3D`。自定义 shader 材质没有 albedo_color，跳过并留日志 ——
+##    静默跳过等于"以为染了其实没染"，那是本文件反复警告过的同类坑。
+func _apply_formal_tint() -> void:
+	if not FORMAL_MODEL_TINT.has(enemy_kind):
+		return
+	if _formal_normal_root == null:
+		return
+	var tint: Color = FORMAL_MODEL_TINT[enemy_kind]
+	var meshes := _formal_normal_root.find_children("*", "MeshInstance3D", true, false)
+	var tinted := 0
+	var skipped := 0
+	for node in meshes:
+		var mi := node as MeshInstance3D
+		if mi == null or mi.mesh == null:
+			continue
+		for surface in range(mi.mesh.get_surface_count()):
+			var source := mi.get_active_material(surface)
+			var base := source as BaseMaterial3D
+			if base == null:
+				skipped += 1
+				continue
+			var clone := base.duplicate() as BaseMaterial3D
+			clone.albedo_color = base.albedo_color * tint
+			mi.set_surface_override_material(surface, clone)
+			tinted += 1
+	if tinted == 0:
+		push_warning(
+			"复刻怪 %s 染色失败：模型里没有可染的 BaseMaterial3D（跳过 %d 个 surface）。"
+			% [enemy_kind, skipped]
+			+ " 该怪将与同族其它变种共用外观。"
+		)
 
 
 func disable_formal_normal() -> void:

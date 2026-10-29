@@ -1,0 +1,33 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_rush_squad",
+  "note": "冲撞族·三连冲。三种「撞到即死 + 附加弹」一起上：霰弹榴弹吐 V 型 2 发、榴弹子吐 1 发爆炸弹、螺旋转弹会中途重定位三次。同族三种附加弹，逼玩家分辨该往哪闪。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_shotgat",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_grenat",
+      "count": 1,
+      "delay_sec": 0.12
+    },
+    {
+      "type": "egt_spirat",
+      "count": 1,
+      "delay_sec": 0.24
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

@@ -323,9 +323,13 @@ func _draw() -> void:
 		_draw_full_map_backdrop()
 	elif not _corner_map_visible():
 		return
-	else:
-		# 角落态只画一层极淡背衬，让贴边的小地图不至于糊进场景
-		draw_rect(Rect2(Vector2(2.0, 2.0), size - Vector2(4.0, 4.0)), FRAME_BG, true)
+	# 2026-10-29 业主指令：**角落态不要半透明底板**。
+	# 原先这里有一层 `draw_rect(..., FRAME_BG, true)` 的极淡背衬，
+	# 作用是让贴边的小地图不至于糊进场景；但它糊掉了大半个右上角，
+	# 实测截图里那半块灰蓝色方就是它。现在直接让房间块浮在场景上 ——
+	# 房间本身有实心填充 + 描边，图标不依赖背板也读得清。
+	# 注意：`FRAME_BG` / `FRAME_COLOR` 常量仍被**全层地图**（`_draw_full_map_backdrop`）使用，
+	# M 键大图的背板与边框必须保留 —— 业主只要求改角落态。
 
 	if _records.is_empty():
 		return
@@ -761,7 +765,7 @@ func _content_map_rect() -> Rect2:
 			Vector2(56.0, 64.0),
 			Vector2(maxf(1.0, size.x - 112.0), maxf(1.0, size.y - 116.0))
 		)
-	# 角落态：内容区就是控件本身（背衬以内）
+	# 角落态：内容区 = 控件自身去掉四周留白（背板已按业主要求去掉，留白仍保留）
 	return Rect2(CORNER_MARGIN, Vector2(
 		maxf(1.0, size.x - CORNER_MARGIN.x - 6.0),
 		maxf(1.0, size.y - CORNER_MARGIN.y - 6.0)
@@ -776,7 +780,7 @@ func _map_scale() -> float:
 		var sy := content.size.y / maxf(0.001, bounds.size.y)
 		return maxf(0.4, minf(sx, sy) * 0.94)
 	# 角落态：先取设计密度，再按**面板实际可用尺寸**夹一次。
-	# 不能写死像素上限 —— 面板经 HUD_UI_SCALE(0.80) 之后只有 366×277，
+	# 不能写死像素上限 —— 面板经 HUD_UI_SCALE(0.80) 之后只有 306×212，
 	# 写死 430 会让满层直接溢出到面板外（2026-10-28 实测发现并修掉）。
 	var scale_px := ROOM_PX_PER_M
 	if bounds.size.x > 0.001:

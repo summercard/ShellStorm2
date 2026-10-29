@@ -1,0 +1,23 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_kin_patrol",
+  "note": "子弹族·巡逻双人。bullet_kin×2，全是单发直射 —— EGT 第一层最基础的一组，教玩家「看到枪口亮就横移」。用于关内前半的入门房。",
+  "shape": "box",
+  "size_m": [
+    5.0,
+    3.0,
+    5.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_bullet_kin",
+      "count": 2,
+      "delay_sec": 0.0
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

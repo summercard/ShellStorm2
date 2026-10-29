@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bpxi3sgl3mg2d"]
+
+[node name="RoomArtLayout" type="Node3D" unique_id=1859547370]
+metadata/template_id = "std_25x25"
+metadata/variant = ""
+metadata/size_m = [25, 25]
+metadata/grid_unit_m = 5
+metadata/wall_height_m = 11.9
+metadata/footprint_polygon_m = [[0.0, 0.0], [25.0, 0.0], [25.0, 25.0], [0.0, 25.0]]
+metadata/footprint_area_m2 = 625
+metadata/footprint_is_rect = true
+metadata/walkable_navigation_polygons = [[[-12.5, 0.08, -12.5], [12.5, 0.08, -12.5], [12.5, 0.08, 12.5], [-12.5, 0.08, 12.5]], [[-1.1, 0.08, -13.1], [1.1, 0.08, -13.1], [1.1, 0.08, -11.9], [-1.1, 0.08, -11.9]], [[-1.1, 0.08, 11.9], [1.1, 0.08, 11.9], [1.1, 0.08, 13.1], [-1.1, 0.08, 13.1]], [[11.9, 0.08, -1.1], [13.1, 0.08, -1.1], [13.1, 0.08, 1.1], [11.9, 0.08, 1.1]]]
+metadata/door_width_m = 2.2
+metadata/scene_builder_schema = "shellstorm2.component_scene.v1"
+metadata/whitebox_reference = "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/rt_std_25x25_static_layout.tscn"
+metadata/room_owned_geometry = false
+
+[node name="ArtComponents" type="Node3D" parent="." unique_id=356872951]
+
+[node name="Lighting" type="Node3D" parent="." unique_id=865312910]
+
+[node name="ConnectionPorts" type="Node3D" parent="." unique_id=389338001]
+
+[node name="Port_A" type="Marker3D" parent="ConnectionPorts" unique_id=1678208158]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -12.5)
+metadata/port_id = "A"
+metadata/side = "north"
+metadata/lane_m = 0
+metadata/outward = Vector2(0, -1)
+metadata/connected = false
+metadata/door_opening_m = [2.2, 2.8]
+
+[node name="Port_B" type="Marker3D" parent="ConnectionPorts" unique_id=440147720]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.5)
+metadata/port_id = "B"
+metadata/side = "south"
+metadata/lane_m = 0
+metadata/outward = Vector2(0, 1)
+metadata/connected = false
+metadata/door_opening_m = [2.2, 2.8]
+
+[node name="Port_C" type="Marker3D" parent="ConnectionPorts" unique_id=602462826]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.5, 0, 0)
+metadata/port_id = "C"
+metadata/side = "east"
+metadata/lane_m = 0
+metadata/outward = Vector2(1, 0)
+metadata/connected = false
+metadata/door_opening_m = [2.2, 2.8]

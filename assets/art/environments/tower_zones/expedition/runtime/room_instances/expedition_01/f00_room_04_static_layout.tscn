@@ -23,6 +23,9 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_a/service_cart_a_root_top3d.tscn" id="19_mu2b1"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_b/service_cart_b_root_top3d.tscn" id="20_xdlw3"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_label/wall_label_root_top3d.tscn" id="21_xcknf"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_a/server_rack_a_root_top3d.tscn" id="26_hp6y2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/service_cart/service_cart_root_top3d.tscn" id="27_3byo6"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelving/shelving_root_top3d.tscn" id="28_bbqkw"]
 [ext_resource type="Script" uid="uid://dmwls48f10kdl" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
 [ext_resource type="Script" uid="uid://dgieqgeh1moll" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
@@ -957,3 +960,83 @@ metadata/side = "south"
 metadata/lane_m = -15.0
 metadata/outward = Vector2(0, 1)
 metadata/connected = false
+
+[node name="RoomTypeComponentServerRackA" parent="." unique_id=107582941 instance=ExtResource("26_hp6y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8919945, 0.07999992, 5.8412523)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
+
+[node name="RoomTypeComponentServerRackA2" parent="." unique_id=476842159 instance=ExtResource("26_hp6y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9930949, 0.07999992, 6.3179116)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
+
+[node name="RoomTypeComponentServerRackA3" parent="." unique_id=1154459344 instance=ExtResource("26_hp6y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.817164, 0.07999897, 6.5655966)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
+
+[node name="RoomTypeComponentServerRackA4" parent="." unique_id=131165939 instance=ExtResource("26_hp6y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0676107, 0.07999897, 6.327386)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
+
+[node name="RoomTypeComponentServerRackA5" parent="." unique_id=2074073234 instance=ExtResource("26_hp6y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5459533, 0.07999992, 19.034119)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
+
+[node name="RoomTypeComponentServerRackA6" parent="." unique_id=901623744 instance=ExtResource("26_hp6y2")]
+transform = Transform3D(-0.37795064, 0, 0.9258258, 0, 1, 0, -0.9258258, 0, -0.37795064, -7.6998734, 0.07999992, 17.527845)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
+
+[node name="RoomTypeComponentServerRackA7" parent="." unique_id=2127587121 instance=ExtResource("26_hp6y2")]
+transform = Transform3D(-0.9857726, 0, 0.1680844, 0, 1, 0, -0.1680844, 0, -0.9857726, -7.185787, 0.07999992, 15.307737)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
+
+[node name="RoomTypeComponentServiceCart" parent="." unique_id=1290790084 instance=ExtResource("27_3byo6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.209484, 0.07999992, 14.704564)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
+
+[node name="RoomTypeComponentServiceCart2" parent="." unique_id=1394692097 instance=ExtResource("27_3byo6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.164234, 0.07999992, 9.22477)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
+
+[node name="RoomTypeComponentServiceCart3" parent="." unique_id=1135578983 instance=ExtResource("27_3byo6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.700862, 0.07999992, 5.4490976)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
+
+[node name="RoomTypeComponentShelving" parent="." unique_id=1154724495 instance=ExtResource("28_bbqkw")]
+transform = Transform3D(0.999999, 0, -0.001434457, 0, 1, 0, 0.001434457, 0, 0.999999, -9.604601, 0.07999992, -4.6449184)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SHELVING"
+
+[node name="RoomTypeComponentShelving2" parent="." unique_id=1194722582 instance=ExtResource("28_bbqkw")]
+transform = Transform3D(0.19625391, 0, 0.9805531, 0, 1, 0, -0.9805531, 0, 0.19625391, -9.871649, 0.07999897, -1.3503442)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SHELVING"
+
+[node name="RoomTypeComponentShelving3" parent="." unique_id=777646710 instance=ExtResource("28_bbqkw")]
+transform = Transform3D(0.8801251, 0, 0.47474185, 0, 1, 0, -0.47474185, 0, 0.8801251, -10.404024, 0.07999992, 2.1926155)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SHELVING"
+
+[node name="RoomTypeComponentShelving4" parent="." unique_id=970602366 instance=ExtResource("28_bbqkw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.92389, 0.07999992, -3.8590527)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SHELVING"
+
+[node name="RoomTypeComponentShelving5" parent="." unique_id=1162352839 instance=ExtResource("28_bbqkw")]
+transform = Transform3D(0.6196662, 0, -0.78486544, 0, 1, 0, 0.78486544, 0, 0.6196662, -19.955818, 0.07999992, -1.7671175)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SHELVING"
+
+[node name="RoomTypeComponentShelving6" parent="." unique_id=1072750840 instance=ExtResource("28_bbqkw")]
+transform = Transform3D(0.16426055, 0, 0.986417, 0, 1, 0, -0.986417, 0, 0.16426055, -19.794615, 0.07999992, 2.4508905)
+metadata/scene_builder_component = true
+metadata/component_id = "ENV-EXPEDITION-L01-DB-SHELVING"

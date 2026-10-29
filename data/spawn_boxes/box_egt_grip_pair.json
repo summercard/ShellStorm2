@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_grip_pair",
+  "note": "触发族·抓握大师 + 护卫。抓握大师在**场上还有其它怪时无敌**，所以正确解法是先清护卫再打它 —— 这条规则本身就是这个编成的教学目的。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_gripmaster",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_bullet_kin",
+      "count": 2,
+      "delay_sec": 0.2
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

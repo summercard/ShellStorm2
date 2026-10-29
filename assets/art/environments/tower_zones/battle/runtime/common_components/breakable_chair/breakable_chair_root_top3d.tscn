@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/world3d/BreakableClutter3D.gd" id="1_logic"]
+[ext_resource type="Script" path="res://src/world3d/BreakableClutterHitReceiver3D.gd" id="2_hit"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/common_components/breakable_chair/breakable_chair_visual_top3d.glb" id="3_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_clutter"]
+size = Vector3(0.75, 1.29, 0.75)
+
+[node name="BreakableChair" type="Node3D"]
+script = ExtResource("1_logic")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+
+[node name="Visual" parent="." instance=ExtResource("3_visual")]
+
+[node name="HitReceiver" type="StaticBody3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("2_hit")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitReceiver"]
+position = Vector3(0, 0.645, 0)
+shape = SubResource("BoxShape3D_clutter")
+
+[node name="PlayerContact" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerContact"]
+position = Vector3(0, 0.645, 0)
+shape = SubResource("BoxShape3D_clutter")

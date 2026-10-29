@@ -1,0 +1,33 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_kin_trio",
+  "note": "子弹族·三变种同场。bullet_kin(单发) + bandana_kin(三连发) + veteran_kin(预判)。三只同族不同招，逼玩家靠**染色**分辨该用哪种躲法 —— 这是本批视觉区分体系的验收点。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_bullet_kin",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_bandana_kin",
+      "count": 1,
+      "delay_sec": 0.15
+    },
+    {
+      "type": "egt_veteran_kin",
+      "count": 1,
+      "delay_sec": 0.3
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

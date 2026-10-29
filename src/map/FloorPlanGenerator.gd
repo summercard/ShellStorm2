@@ -276,6 +276,10 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		# 空字典 = 本房在该 trigger 上不覆盖，逐级回退。**不进 layout_id**：
 		# 掉落是内容不是几何，改它不得让既有存档的房间进度失配。
 		"reward_plan": (src.get("reward_plan", {}) as Dictionary).duplicate(true),
+		# 宝箱放置层（2026-10-29）。**本函数是「出口白名单」**：不在这里登记的字段
+		# 会被静默丢弃 —— 生成期明明写了 `chest_placements`，运行时房间却一个箱子都不建，
+		# 且没有任何报错。同类坑已经在 spawn_placements / reward_plan 上各踩过一次。
+		"chest_placements": (src.get("chest_placements", []) as Array).duplicate(true),
 		# —— 授权布局壳体（区块00 / 远征01）——
 		# 整房 5m 组件实例清单（房间局部坐标）。与上列字段一样「设计源钉死优先」：
 		# 本层只透传，不解释 slot_role、不重算门位。声明点只在房表；
@@ -503,6 +507,12 @@ static func generate_from_level_plan(
 		"monster_rules": (
 			level_plan.get("monster_rules", {}) as Dictionary
 		).duplicate(true),
+		# 场景可交互易碎小物件的随机布置计划（能力段，2026-10-29）。
+		# 与 monster_rules 同处透传、同为顶层字段 ⇒ **不进 canonical**，改它不会让存档失配。
+		# 关卡不写本段 ⇒ 空字典 ⇒ 房间照旧只摆固定件，行为逐字不变。
+		"interactive_clutter": (
+			level_plan.get("interactive_clutter", {}) as Dictionary
+		).duplicate(true),
 	}
 	plan["valid"] = errors.is_empty()
 	plan["validation_errors"] = errors
@@ -660,6 +670,12 @@ static func _generate_flow_floor(
 	var flows := LEVEL_PLAN_LOADER.load_flows(level_id)
 	if flows.is_empty() or templates.is_empty():
 		return {}
+	# 逐房怪物编成表（level_plan 顶层的 `spawn_roster`）。空字典 = 本关不迁移，行为不变。
+	var roster := _spawn_roster_for(level_id)
+	# 清房结算（level_plan 顶层的 `clear_rewards`）。空字典 = 本关未配置，行为不变。
+	var clear_rewards := _clear_rewards_for(level_id)
+	# 宝箱（顶层 `treasure_chests`）。空字典 = 本关不放宝箱，行为不变。
+	var treasure_chests := _treasure_chests_for(level_id)
 	var seed_value := run_seed ^ absi(str(level_id).hash()) ^ (floor_number << 17)
 	var flow: Dictionary = EGT_FLOW_ASSEMBLER.pick_flow(flows, seed_value)
 	if flow.is_empty():
@@ -876,7 +892,43 @@ static func _generate_flow_floor(
 			"ports": [],
 			"connection_ports": connection_ports,
 			"ports_derived": false,
+			# 「只认盒子」标记必须**逐房**写：运行时消费方
+			# （`TowerDescent3D._append_plan_room_record()`）读的是房间记录，
+			# 不是楼层顶层。只写顶层 = 该字段在传递中被静默丢弃，
+			# 于是没盒的房间会回退房型公式 —— 正是本次要消灭的行为。
+			"spawn_boxes_only": bool(roster.get("spawn_boxes_only", false)),
 		})
+		# —— 逐房怪物编成（`spawn_roster`，2026-10-29）——
+		# 走廊与无怪房一律不摆盒：它们的 `authored_layout_peaceful` 已让运行时直接放行，
+		# 摆了盒反而会变成「和平区里凭空冒怪」——与 kind 语义打架。
+		if not is_corridor and not bool(FLOW_PEACEFUL_KINDS.has(kind)):
+			var roster_placements := _roster_placements(room_id, kind, size, roster)
+			if not roster_placements.is_empty():
+				# 只改刚 append 的那条：`record` 在外层循环已存在，这里必须换名，
+				# 否则 GDScript 报 "already a variable named record"（同作用域重复声明）。
+				var appended := rooms.back() as Dictionary
+				appended["spawn_placements"] = roster_placements
+				# 所有盒子一波出：EGT 是「进房即出」，没有波次概念。
+				# `stages` 只在这一层表达「这一房有几组」，不是「打几波」。
+				var stage_boxes: Array = []
+				for box_index in range(roster_placements.size()):
+					stage_boxes.append(box_index)
+				appended["encounter"] = {"stages": [{"boxes": stage_boxes}]}
+		# —— 清房结算（`clear_rewards`，2026-10-29）——
+		# 判据与上一段**故意相同**：只有"有怪的房"清完才结算。走廊与和平区
+		# （入口 / 撤离 / 商店 / 宝箱）在原作里不进战斗结算，给它们配掉落
+		# 等于白送 —— 而 EGT 的宝箱房产出走箱子本身，不走清房。
+		if not is_corridor and not bool(FLOW_PEACEFUL_KINDS.has(kind)):
+			var clear_spec := _clear_reward_spec_for(kind, clear_rewards)
+			if not clear_spec.is_empty():
+				(rooms.back() as Dictionary)["reward_plan"] = {"clear": clear_spec}
+		# —— 宝箱放置（`treasure_chests`，2026-10-29）——
+		# 只有 REWARD 房放箱子。原作 EGT 里宝箱房就是「打不开箱就白跑一趟」的那种房间：
+		# 没有怪、只有一只箱子，值不值得花钥匙全看品质。
+		if kind == "REWARD":
+			var chest_list := _chest_placements_for(size, treasure_chests)
+			if not chest_list.is_empty():
+				(rooms.back() as Dictionary)["chest_placements"] = chest_list
 
 	var main_path: Array[String] = []
 	for value in flow.get("tree_edges", []) as Array:
@@ -901,12 +953,322 @@ static func _generate_flow_floor(
 		"connections": connections,
 		"main_path": main_path,
 		"edge_policy": "generated",
-		"spawn_boxes_only": bool(blueprint.get("spawn_boxes_only", false)),
+		"spawn_boxes_only": (
+			bool(blueprint.get("spawn_boxes_only", false))
+			or bool(roster.get("spawn_boxes_only", false))
+		),
 		"geometry_authoritative": true,
 		"flow_id": str(flow.get("flow_id", "")),
 		"flow_seed": seed_value,
 		"bridge_stats": bridged["stats"],
 	}
+
+
+## 读本关的逐房怪物编成表（`level_plan.json` 顶层的 `spawn_roster`）。
+## 空字典 = 本关没迁移，`_generate_flow_floor` 逐字保持原行为。
+static func _spawn_roster_for(level_id: String) -> Dictionary:
+	var plan := LEVEL_PLAN_LOADER.load_level_plan(level_id)
+	var roster := plan.get("spawn_roster", {}) as Dictionary
+	if roster.is_empty():
+		return {}
+	if str(roster.get("schema", "")) != "shellstorm2.battle.spawn_roster":
+		push_error(
+			"[FloorPlanGenerator] %s 的 spawn_roster schema 不符（%s），已忽略"
+			% [level_id, str(roster.get("schema", ""))]
+		)
+		return {}
+	return roster
+
+
+## 读本关的清房结算配置（`level_plan.json` 顶层的 `clear_rewards`）。
+## 空字典 = 本关未配置，房间不写 `reward_plan`，运行时行为逐字不变。
+static func _clear_rewards_for(level_id: String) -> Dictionary:
+	var plan := LEVEL_PLAN_LOADER.load_level_plan(level_id)
+	var cfg := plan.get("clear_rewards", {}) as Dictionary
+	if cfg.is_empty():
+		return {}
+	if str(cfg.get("schema", "")) != "shellstorm2.battle.clear_rewards":
+		push_error(
+			"[FloorPlanGenerator] %s 的 clear_rewards schema 不符（%s），已忽略"
+			% [level_id, str(cfg.get("schema", ""))]
+		)
+		return {}
+	return cfg
+
+
+## 把 `clear_rewards` 编译成**内联 RewardSpec**，只给这一间战斗房用。
+##
+## 为什么要走 `reward_plan.clear` 而不是"清房时另外算一次"：
+## 覆盖链已是 `房间 reward_plan > 关卡 reward_plan > 怪物表 > 全局默认`，
+## 走房间级是**唯一**不需要给 Dungeon3D 加分支的位置 —— 清房那段代码
+## （`_mark_room_cleared` → `resolve_clear`）本来就存在，只是远征03 之前
+## 没有房间声明过 `clear` 槽位，于是每次都落到空报告。
+##
+## 返回空字典 = 本房不结算（走廊 / 和平区 / 本关未配置）。
+static func _clear_reward_spec_for(kind: String, cfg: Dictionary) -> Dictionary:
+	if cfg.is_empty():
+		return {}
+	var kinds := cfg.get("applies_to_kinds", []) as Array
+	if not kinds.is_empty() and not kinds.has(kind):
+		return {}
+	var entries: Array = []
+	# ① 拾取物判定（原作：清房后 20% 生成一个 pickup，从权重表抽）。
+	var pickup := cfg.get("pickup", {}) as Dictionary
+	if not pickup.is_empty():
+		var options: Array = []
+		for value in pickup.get("pool", []) as Array:
+			var option := _clear_pool_option(value as Dictionary)
+			if not option.is_empty():
+				options.append(option)
+		if not options.is_empty():
+			entries.append({
+				"kind": "weighted",
+				"chance": clampf(float(pickup.get("chance", 1.0)), 0.0, 1.0),
+				"draws": 1,
+				"options": options,
+			})
+	# ② 弹药独立判定（原作：清房单独掷一次，一层 6%；不是逐只怪掉）。
+	var ammo := cfg.get("ammo", {}) as Dictionary
+	if not ammo.is_empty():
+		entries.append({
+			"kind": "item",
+			"item_id": str(ammo.get("item_id", "item_ammo_pack")),
+			"count": ammo.get("count", 1),
+			"chance": clampf(float(ammo.get("chance", 1.0)), 0.0, 1.0),
+		})
+	if entries.is_empty():
+		return {}
+	# ⛔ **不能带 `spec_id`**：`RewardSpec.normalize_ref()` 先看 `spec_id`，
+	# 有它就去命名规格表里查（本例必然查不到 ⇒ `UNKNOWN_SPEC`，整条清房掉落作废）。
+	# 内联 spec 的判据是「有 `entries` 且没有 `spec_id`」，缺省名由 normalize 自动补。
+	return {"entries": entries}
+
+
+## 权重池的一行 → RewardSpec 选项。三类物品由字段名区分，与 `MonsterDropTable`
+## 的 `@currency:` / `@pool:` 前缀同义，只是这里写成显式字段（数据更易读）。
+static func _clear_pool_option(row: Dictionary) -> Dictionary:
+	if row.is_empty():
+		return {}
+	var weight := float(row.get("weight", 1.0))
+	if weight <= 0.0:
+		return {}
+	if row.has("currency_id"):
+		return {
+			"kind": "currency",
+			"currency_id": str(row.get("currency_id", "")),
+			"amount": row.get("amount", 0),
+			"weight": weight,
+		}
+	if row.has("pool_id"):
+		return {
+			"kind": "pool",
+			"pool_id": str(row.get("pool_id", "")),
+			"draws": int(row.get("draws", 1)),
+			"weight": weight,
+		}
+	if not row.has("item_id"):
+		return {}
+	return {
+		"kind": "item",
+		"item_id": str(row.get("item_id", "")),
+		"count": row.get("count", 1),
+		"weight": weight,
+	}
+
+
+## 读本关的宝箱配置（`level_plan.json` 顶层的 `treasure_chests`）。
+## 空字典 = 本关不放宝箱，`_generate_flow_floor` 逐字保持原行为。
+static func _treasure_chests_for(level_id: String) -> Dictionary:
+	var plan := LEVEL_PLAN_LOADER.load_level_plan(level_id)
+	var cfg := plan.get("treasure_chests", {}) as Dictionary
+	if cfg.is_empty():
+		return {}
+	if str(cfg.get("schema", "")) != "shellstorm2.battle.treasure_chests":
+		push_error(
+			"[FloorPlanGenerator] %s 的 treasure_chests schema 不符（%s），已忽略"
+			% [level_id, str(cfg.get("schema", ""))]
+		)
+		return {}
+	return cfg
+
+
+## 把宝箱配置编译成房间级的 `chest_placements`。
+##
+## 位置策略（不是随机撒点）：
+##   · **一箱 → 房间正中**。宝箱房只有一只箱子时，它就该在正中央 —— 玩家一进门就看见，
+##     "要不要花这把钥匙"这个决定在走进去的三秒内完成，不需要找。
+##   · **多箱 → 沿房间中轴（Z=0）左右分开**，间距 ≥ `min_spacing_m`。
+##     不用随机撒点是为了可复现：同一 seed 同一房，箱子位置逐格一致，
+##     流送卸载重建不会让箱子换地方。
+##
+## `requires_key` 在配置层统一给，逐箱不再覆写 —— EGT 的箱子「要么都锁、要么都不锁」，
+## 出现"这只能开那只不能"会让玩家以为是自己钥匙不够。
+static func _chest_placements_for(size: Vector2, cfg: Dictionary) -> Array:
+	if cfg.is_empty():
+		return []
+	var count := maxi(0, int(cfg.get("chest_per_room", 1)))
+	if count <= 0:
+		return []
+	var spacing := maxf(1.6, float(cfg.get("min_spacing_m", 3.2)))
+	# 宽度放不下就退化成单箱：宁可少放，也不要把箱子摆到墙外或门上。
+	var max_fit := maxi(1, int(floor((size.x - 2.4) / spacing)) + 1)
+	count = mini(count, max_fit)
+	var qualities := cfg.get("quality_weights", {}) as Dictionary
+	var requires_key := bool(cfg.get("requires_key", false))
+	# 掉落参数逐箱抄下去：箱子自己不读 level_plan（见 TreasureChest3D 同名字段注释）。
+	var pool_id := str(cfg.get("reward_pool_id", "loot_floor_1_2"))
+	var drop_count := maxi(1, int(cfg.get("drop_count", 1)))
+	var fate_count := maxi(0, int(cfg.get("fate_card_per_open", 0)))
+	var out: Array = []
+	var start_x := -spacing * float(count - 1) * 0.5
+	for index in range(count):
+		out.append({
+			"id": "chest_%02d" % index,
+			"quality": _chest_quality_for_index(qualities, index),
+			"requires_key": requires_key,
+			"reward_pool_id": pool_id,
+			"drop_count": drop_count,
+			"fate_card_per_open": fate_count,
+			# 只沿中轴摆：Z 恒 0，X 均匀分布。
+			"offset": [start_x + spacing * float(index), 0.0],
+			# 统一朝 +Z（房间"南"面）—— 与门无关，纯粹让玩家从任意方向进门看到正面。
+			"rotation_deg": 0.0,
+		})
+	return out
+
+
+## 宝箱品质。**按索引确定性轮转**而不是抽签：生成期抽签会让
+## "同 seed 同房间"在改配置后整体位移，且探针无法复算。
+## 权重表达的是"这一层里各品质各占多少"，用轮转 + 权重排序近似它。
+static func _chest_quality_for_index(weights: Dictionary, index: int) -> String:
+	if weights.is_empty():
+		return "common"
+	var ordered: Array = []
+	for quality in weights.keys():
+		ordered.append({"quality": str(quality), "weight": maxf(0.0, float(weights[quality]))})
+	ordered.sort_custom(
+		func(a: Dictionary, b: Dictionary) -> bool:
+			if is_equal_approx(float(a["weight"]), float(b["weight"])):
+				return str(a["quality"]) < str(b["quality"])
+			return float(a["weight"]) > float(b["weight"])
+	)
+	if ordered.is_empty() or float((ordered[0] as Dictionary)["weight"]) <= 0.0:
+		return "common"
+	return str((ordered[index % ordered.size()] as Dictionary)["quality"])
+
+
+## 按编成表给单间房生成放置层。
+##
+## 查表顺序：先 `by_node`（精确到 flow 的 node_id），再 `by_kind`（NORMAL/HUB 兜底）。
+## 兜底是必须的 —— 注入房（隐藏房 / 壁炉房）的 content_type 由内容洗牌决定，
+## 一旦洗成 COMBAT 就成了真敌对房；`spawn_boxes_only` 层下没盒子它会变成
+## 「有门、封门、但没有怪的锁死房」。兜底保证任何敌对房都有编成。
+static func _roster_placements(node_id: String, kind: String, size: Vector2,
+		roster: Dictionary) -> Array:
+	if roster.is_empty():
+		return []
+	var by_node := roster.get("by_node", {}) as Dictionary
+	var by_kind := roster.get("by_kind", {}) as Dictionary
+	var entry: Dictionary = {}
+	if by_node.has(node_id):
+		entry = by_node[node_id] as Dictionary
+	elif by_kind.has(kind):
+		entry = by_kind[kind] as Dictionary
+	if entry.is_empty():
+		return []
+	return _auto_lay_boxes(entry.get("boxes", []) as Array, size, node_id)
+
+
+## 把「摆哪几个盒」自动落成带坐标的放置层。
+##
+## ## 为什么编成表只写 box id、不写坐标
+## 房间的真实尺寸与位置在 flow 模式下是**运行时算的**（`EgtFlowAssembler` 出口对出口拼装），
+## 作者不可能预先知道某间房这一局在哪、多大。写死坐标只有两种下场：
+##   ① 房间小一点就越界（校验器判据 B 直接拒整层）；
+##   ② 侥幸放得下，但同一张骨架换个种子后盒子压进墙里。
+## 所以坐标必须由生成器算 —— 编成表负责「这房摆哪几个敌群」，几何负责「摆得下就摆」。
+##
+## ## 分格算法
+## 先算**可用区**：房间尺寸扣掉四周 `recess`（5m）= 业主口径「最外一圈不刷怪」，
+## 再扣掉最大盒的半宽/半深（保证最外侧的盒，其**盒边**也离墙 ≥5m，见校验器判据 H）。
+## 然后把可用区切成 cols×rows 格，每格中心放一个盒 —— 格心间距 ≥ 盒尺寸，
+## 于是同房盒必然不重叠（判据 I）。
+##
+## 盒子按编成表的顺序放进格子，顺序即「从房心向外」：第 0 个在左上格，
+## 但整行的格子都离房心等距，所以顺序实际表达的是**同一波**而不是优先级。
+static func _auto_lay_boxes(boxes: Array, size: Vector2, where: String) -> Array:
+	if boxes.is_empty():
+		return []
+	# ① 读盒尺寸（load_box 已把 [w,h,d] 规范化成 Vector2(w, d)）
+	var specs: Array = []
+	var max_half := Vector2.ZERO
+	for box_value in boxes:
+		var box_id := str(box_value)
+		var box := SpawnBoxCatalog.load_box(box_id)
+		if box.is_empty():
+			push_error(
+				"[FloorPlanGenerator] %s 的编成引用了未登记/损坏的盒 %s，已跳过"
+				% [where, box_id]
+			)
+			continue
+		var box_size := box.get("size_m", Vector2.ZERO) as Vector2
+		specs.append({"box": box_id, "size": box_size})
+		max_half.x = maxf(max_half.x, box_size.x * 0.5)
+		max_half.y = maxf(max_half.y, box_size.y * 0.5)
+	if specs.is_empty():
+		return []
+
+	# ② 可用区 = 房间扣掉四周 `recess`（业主口径「最外一圈不刷怪」）。
+	#
+	# **不要在这里再扣盒半宽**（第一版就错在这，2026-10-29 实测）：
+	#   `usable = size - 2*(recess + max_half)` 相当于假设「盒心必须离墙
+	#   recess + half 以上」，于是 25×25 房里两个 6m 盒算出可用区只剩 9m，
+	#   分格后每格 4.5m < 盒宽 6m ⇒ 判定「放不满」并**返回空** ⇒
+	#   整层校验 `spawn_boxes_missing_for_hostile_room` 直接启动失败。
+	# 正确关系：格宽 ≥ 盒宽时，把盒**居中放在格心**，盒边到墙自然 ≥ recess。
+	#   usable 只扣 recess，格子内居中即可，不需要预先扣半宽。
+	# `GRID_UNIT_M`(5.0) 与 `DungeonRoom3D.SPAWN_BOX_TILE_M` 同值：这里刻意用本文件的
+	# 网格常量而不是引用 World 层的那个 —— 本文件属数据层，不该为取一个 5.0
+	# 去依赖 `DungeonRoom3D`（02 架构总则的依赖方向）。
+	var recess := GRID_UNIT_M * float(SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES)
+	var usable := Vector2(size.x - 2.0 * recess, size.y - 2.0 * recess)
+	if usable.x <= 0.0 or usable.y <= 0.0:
+		push_error(
+			"[FloorPlanGenerator] 编成 %s：房间 %.1f×%.1f 扣掉四周 %.0fm 后没有可用区，无法摆盒"
+			% [where, size.x, size.y, recess]
+		)
+		return []
+
+	# ③ 分格：列数按可用区纵横比取，使格子尽量接近正方形
+	var count := specs.size()
+	var cols := int(ceil(sqrt(float(count) * usable.x / maxf(0.01, usable.y))))
+	cols = clampi(cols, 1, count)
+	var rows := int(ceil(float(count) / float(cols)))
+	var cell := Vector2(usable.x / float(cols), usable.y / float(rows))
+
+	# ④ 格心放盒。格宽必须 ≥ 该格盒宽，否则盒会越出格子、与邻盒互叠（判据 I）。
+	# 逐盒判（不是统一按最大盒判）：一格放小盒、另一格放大盒时，按最大盒判会误杀。
+	if cell.x + 0.01 < max_half.x * 2.0 or cell.y + 0.01 < max_half.y * 2.0:
+		push_error(
+			"[FloorPlanGenerator] 编成 %s：%d 个盒放不下（格 %.1f×%.1f < 最大盒 %.1f×%.1f）"
+			% [where, count, cell.x, cell.y, max_half.x * 2.0, max_half.y * 2.0]
+		)
+		return []
+
+	var placements: Array = []
+	for i in range(count):
+		var col := i % cols
+		var row := i / cols
+		# 最后一行可能不满，居中对齐（否则会全部偏左，玩家看到一侧空）
+		var in_row := mini(cols, count - row * cols)
+		var col_offset := (float(cols) - float(in_row)) * 0.5
+		var x := -usable.x * 0.5 + (col_offset + float(col) + 0.5) * cell.x
+		var y := -usable.y * 0.5 + (float(row) + 0.5) * cell.y
+		placements.append({
+			"box": str((specs[i] as Dictionary)["box"]),
+			"center_m": [snappedf(x, 0.1), snappedf(y, 0.1)],
+		})
+	return placements
 
 
 ## 门在**房间局部坐标**里的位置（原点 = 房间中心，y 向南）。
@@ -966,6 +1328,22 @@ static func _edge_pair_key(a: String, b: String) -> String:
 ## 既没有怪（内容表里它们本来就不配怪），又会把玩家锁在空屋子里。
 const FLOW_PEACEFUL_KINDS := [
 	"ENTRANCE", "EXIT", "SHOP", "CONNECTOR", "REWARD", "BOSS_FOYER",
+	# —— 隐藏房（2026-10-29）——
+	# EGT 的隐藏房是**拿东西的地方**，不是打怪的地方：进门看到宝箱 / NPC / 道具，
+	# 没有敌群。我们这两类注入房的 content_type 会走内容洗牌（可能被洗成
+	# COMBAT / STORAGE / TRAP），而 `spawn_boxes_only` 层下凡是敌对房都**强制**要有盒 ——
+	# 于是「一间本该空的隐藏房被迫配敌群」或「不配盒⇒封门后立刻开门」。
+	# 归到 peaceful 一次性解决两者：不封门、不刷怪、开局放行，与本作形态一致。
+	# `FIREPLACE_ROOM`（壁炉房 / 藏层入口）同样归此表。
+	#
+	# ⚠ **这是一处已知的原作差异**：EGT 的壁炉房要先打赢才能进隐藏层，我们现在是纯入口。
+	# 但"现在没有战斗语义"与"被内容洗牌随机成 COMBAT/TRAP/SCAVENGE"是两件事 ——
+	# 后者会触发 `spawn_boxes_only` 层的「敌对房必须有盒」判据，于是：
+	#   ① 给它编成 ⇒ 凭空给藏层入口加一场仗；
+	#   ② 不给 ⇒  整层校验失败（`spawn_boxes_missing_for_hostile_room`），**启动直接挂**。
+	# 归到 peaceful 是当前唯一自洽的选择：不封门、不刷怪、开局放行。
+	# 要不要给它加战斗属**另一个设计决定**，见 `远征关卡03设计.md §8.3` 的待裁定项。
+	"SECRET_ROOM", "NPC_SECRET_ROOM", "FIREPLACE_ROOM",
 ]
 
 

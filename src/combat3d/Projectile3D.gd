@@ -339,6 +339,15 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 
 
 func _hit_surface(normal: Vector3, hit_context: Dictionary = {}) -> void:
+	# 撞墙炸散（Gun Nut 的「大 jammed 弹」）。原作原文：
+	#   "they also fire a larger jammed bullet that **explodes into non-jammed bullets
+	#    in all directions upon hitting an obstacle**"
+	# 默认关闭：只有 `fate_behavior.shatter_on_wall = true` 的子弹走这条，
+	# 其余所有子弹（玩家武器、Boss、既有敌人）行为逐字不变。
+	if bool(fate_behavior.get("shatter_on_wall", false)):
+		_shatter_into_ring()
+		_retire()
+		return
 	if bool(fate_behavior.get("rock_shatter", false)):
 		_shatter_rock()
 		_retire()
@@ -713,6 +722,39 @@ func _tick_attached_gun(delta: float) -> void:
 	var muzzle := _carried_weapon._muzzle
 	var forward := -muzzle.global_basis.z.normalized() if is_instance_valid(muzzle) else -_weapon_socket.global_basis.z.normalized()
 	_carried_weapon.fire_mounted(shooter, forward)
+
+
+## 环形爆散：把这一发拆成 N 发朝各个方向的小弹（同一阵营、同一射手）。
+## 只在 `shatter_on_wall` 下调用；`shatter_count` / `shatter_damage_ratio` 可覆盖。
+func _shatter_into_ring() -> void:
+	var count := maxi(1, int(fate_behavior.get("shatter_count", 8)))
+	var ratio := float(fate_behavior.get("shatter_damage_ratio", 0.5))
+	var child_damage := maxi(1, int(round(float(maxi(1, damage)) * ratio)))
+	var child_speed := float(fate_behavior.get("shatter_speed", maxf(4.0, speed * 1.1)))
+	var pools := get_tree().get_nodes_in_group("projectile_pool_3d")
+	if pools.is_empty():
+		return
+	var pool := pools[0] as ProjectilePool3D
+	if pool == null:
+		return
+	var origin := global_position
+	for index in range(count):
+		var angle := TAU * float(index) / float(count)
+		var dir := Vector3(sin(angle), 0.0, cos(angle))
+		pool.acquire(
+			{
+				"direction": dir,
+				"speed": child_speed,
+				"range": maxf(6.0, range_m * 0.6),
+				"damage": child_damage,
+				"hostile": hostile,
+				"critical": false,
+				"tags": [],
+				"color": bullet_color,
+				"shooter": shooter,
+			},
+			origin + dir * 0.35
+		)
 
 
 func _shatter_rock() -> void:

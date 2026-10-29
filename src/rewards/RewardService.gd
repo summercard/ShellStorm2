@@ -199,6 +199,14 @@ static func _monster_spec_for(request: Dictionary, context: Dictionary) -> Dicti
 		var level_specs := request.get("monster_drop_specs", {}) as Dictionary
 		if level_specs.has(monster_id):
 			spec = (level_specs[monster_id] as Dictionary).duplicate(true)
+		elif bool(request.get("monster_drop_full_coverage", false)):
+			# 本表是全量清单（远征03）：**没写就是不掉**，绝不回退通用公式。
+			# 通用公式会给普通怪 16% 装备 + 34% 备弹，而《挺进地牢》一层普通怪
+			# 只掉铸币 —— 回退等于把整关经济换回另一套规则，而且是静默的。
+			# 未登记的怪种（将来新增）同样按「不掉物品」处理：宁可少给，
+			# 也不要让它静默继承一份完全不同的掉落。
+			# 货币不受影响 —— 它走 `_append_level_currency` 的独立通道。
+			return {}
 	if spec.is_empty():
 		var floor_level := int(request.get("floor_level", 0))
 		var floor := int(context.get("floor", 1))

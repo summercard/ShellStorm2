@@ -15,6 +15,10 @@ var _monster_drop_errors: Array[Dictionary] = []
 ## `MonsterInjector.drop_spec_for` 的旧公式兜底 —— 那条路够不着表级字段。
 ## 存本变量、随 kill 请求下发，才能让**同关所有普通怪**吃到同一概率。
 var _monster_drop_empty_chance := 0.0
+## 本关掉落表是否为**完整清单**（`monster_drop_table.legacy_fallback = false`）。
+## `true` ⇒ 未列出的普通怪**不掉物品**，而不是回退 `MonsterInjector.drop_spec_for`
+## 的通用公式（16% 装备 + 34% 备弹）。远征01 是 false 之外的默认值，行为逐字不变。
+var _monster_drop_full_coverage := false
 ## 关卡级货币分档（`monster_rules.currency`，2026-10-14）。
 ## 空字典 = 本关未配置 ⇒ 货币仍走物品规格自带的那条，且不摘货币条目
 ## ⇒ 塔楼与其余未配置关卡行为逐字不变。
@@ -31,11 +35,14 @@ func configure_level_drop_table(level_id: String, table: Dictionary) -> Dictiona
 	_monster_drop_specs.clear()
 	_monster_drop_errors.clear()
 	_monster_drop_empty_chance = clampf(float(table.get("empty_chance", 0.0)), 0.0, 1.0)
+	_monster_drop_full_coverage = false
 	if table.is_empty():
 		return {"ok": true, "level_id": level_id, "row_count": 0, "monster_count": 0, "errors": []}
 	var compiled := MONSTER_DROP_TABLE.compile(level_id, table)
 	if bool(compiled.get("ok", false)):
 		_monster_drop_specs = (compiled.get("specs", {}) as Dictionary).duplicate(true)
+		# 编译失败时会保持 false —— 宁可按旧口径兜底，也不要把整关的掉落打成空。
+		_monster_drop_full_coverage = bool(compiled.get("full_coverage", false))
 	else:
 		_monster_drop_errors = (compiled.get("errors", []) as Array).duplicate(true)
 	return compiled
@@ -107,6 +114,8 @@ func resolve_kill(
 		"monster_tier": tier,
 		"monster_drop_specs": _monster_drop_specs,
 		"monster_drop_empty_chance": _monster_drop_empty_chance,
+		# 本表是否全量声明 ⇒ 未列出的普通怪**不回退**通用公式（远征03）。
+		"monster_drop_full_coverage": _monster_drop_full_coverage,
 		# 配了关卡级货币分档 ⇒ 把货币从物品规格里摘掉，改由下方独立通道发放。
 		"strip_currency": not _level_currency_rules.is_empty(),
 		"floor_level": _floor_level_from_loot_table(str(enemy_data.get("loot_table", ""))),

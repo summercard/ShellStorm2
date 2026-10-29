@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_rush_line",
+  "note": "一次性冲撞·突进线。bullat×2 + veteran_kin。bullat 是最小的怪(体型0.55)、撞到就自爆，专门惩罚站桩；后面的预判远程把逃跑路线也堵住。盒形做成窄长(3×5)，让突进有方向感 —— 与 EGT「成串冲过来」的观感一致。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_bullat",
+      "count": 2,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_veteran_kin",
+      "count": 1,
+      "delay_sec": 0.4
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

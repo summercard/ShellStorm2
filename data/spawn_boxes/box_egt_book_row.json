@@ -1,0 +1,33 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_book_row",
+  "note": "书怪族·三色同排。三只**血量完全相同（各 25）**，差别只在弹形：字母弹 / 脉动环 / 四叶草。这是「同血不同招」最纯粹的样本 —— 打起来的差别全在读弹，不在读血条。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_bookllet",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_blue_bookllet",
+      "count": 1,
+      "delay_sec": 0.15
+    },
+    {
+      "type": "egt_green_bookllet",
+      "count": 1,
+      "delay_sec": 0.3
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

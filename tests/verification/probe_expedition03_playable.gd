@@ -26,6 +26,10 @@ var _failures: Array[String] = []
 ##     0.05~0.09**，而真漏缝会涨 0.1~0.4。
 ## 500 相对噪声（<120）有 4 倍余量，相对真漏缝（5000+）有 10 倍余量，两头都稳。
 const WALL_LEAK_LIMIT := 500
+## 门洞净宽/净高（幕墙开洞要与墙体切口同源，见 `DungeonRoom3D._build_wall()`）。
+const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
+## 与 `TowerDescent3D.CAMERA_HEIGHT_M` 同源：夹取只许动 x/z，高度必须仍是它。
+const CAMERA_HEIGHT_M := 10.262659
 
 var _tower: TowerDescent3D
 
@@ -276,34 +280,69 @@ func _verify_geometry(rooms: Dictionary) -> void:
 		_failures.append("镜头仍被墙收拢：trailing=%.3f base=%.3f" % [
 			trailing_m, base_trailing_m])
 
-	# 镜头被强行推出房间时，必须被夹回房间内（否则会看到墙外黑幕）。
-	var probe_room := rooms.get("start") as DungeonRoom3D
-	if probe_room != null and _tower.player != null:
-		var probe_dims := probe_room.get_dimensions()
-		var probe_center := probe_room.global_position
-		_tower.player.camera.global_position = Vector3(
-			probe_center.x + probe_dims.x, probe_center.y + 10.0, probe_center.z)
-		_tower._clamp_flow_camera_into_room(probe_center + Vector3.UP * 0.9)
-		var cam_pos := _tower.player.camera.global_position
-		var inside_x := absf(cam_pos.x - probe_center.x) <= probe_dims.x * 0.5 + 0.001
-		var inside_z := absf(cam_pos.z - probe_center.z) <= probe_dims.y * 0.5 + 0.001
-		print("PLAYABLE camera_clamp pos=%s inside=%s/%s" % [
-			str(cam_pos.snapped(Vector3.ONE * 0.1)), str(inside_x), str(inside_z)])
-		if not (inside_x and inside_z):
-			_failures.append("镜头被推到房间外后没有被夹回（会看到墙外黑幕）")
+	# —— 镜头必须夹在当前房间内（业主指定保留的「镜头碰撞」）——
+	#
+	# 业主 2026-10-29 晚两次确认：「摄像机镜头碰撞这个别改了。保留」。
+	# 那条就是 `_clamp_flow_camera_into_room()`：只夹水平 x/z，过门即换框。
+	#
+	# 判据用**几何**：27+ 间房 × 四角内缩 1.5m 的站位，镜头都不许越出该房足迹
+	# （允许半墙厚 0.14m 的墙面重叠）。高度必须仍是基准 —— 夹取只动 x/z。
+	var clamp_cases := 0
+	var outside_cases := 0
+	var height_drift := 0.0
+	for room_key in rooms.keys():
+		var room := rooms[room_key] as DungeonRoom3D
+		if room == null or not is_instance_valid(room):
+			continue
+		var dims := room.get_dimensions()
+		if dims.x <= 0.0 or dims.y <= 0.0:
+			continue
+		var rp := room.global_position
+		_tower._current_room_id = room.room_id
+		var probes: Array[Vector3] = [
+			Vector3(rp.x + dims.x * 0.5 - 1.5, rp.y + 0.05, rp.z + dims.y * 0.5 - 1.5),
+			Vector3(rp.x - dims.x * 0.5 + 1.5, rp.y + 0.05, rp.z + dims.y * 0.5 - 1.5),
+			Vector3(rp.x + dims.x * 0.5 - 1.5, rp.y + 0.05, rp.z - dims.y * 0.5 + 1.5),
+			Vector3(rp.x - dims.x * 0.5 + 1.5, rp.y + 0.05, rp.z - dims.y * 0.5 + 1.5),
+		]
+		for probe in probes:
+			_tower.player.global_position = probe
+			_tower.player.velocity = Vector3.ZERO
+			for i in range(4):
+				await get_tree().physics_frame
+			var cam := _tower.player.camera.global_position
+			var over_x := absf(cam.x - rp.x) - dims.x * 0.5
+			var over_z := absf(cam.z - rp.z) - dims.y * 0.5
+			if over_x > 0.14 or over_z > 0.14:
+				outside_cases += 1
+			# 基准取**玩家脚下**：探针把玩家摆在 `rp.y + 0.05`，用 `rp.y` 会白送 0.05m 假漂移。
+			height_drift = maxf(
+				height_drift,
+				absf(cam.y - (_tower.player.global_position.y + CAMERA_HEIGHT_M)))
+			clamp_cases += 1
+	_tower._current_room_id = rooms.keys()[0]
+	print("PLAYABLE camera_clamp cases=%d outside=%d height_drift=%.3f" % [
+		clamp_cases, outside_cases, height_drift])
+	if clamp_cases == 0:
+		_failures.append("镜头夹取用例没跑起来")
+	if outside_cases > 0:
+		_failures.append("%d 个站位镜头跑到房间外（会看见黑墙背面）" % outside_cases)
+	if height_drift > 0.02:
+		_failures.append("镜头夹取动了高度（漂移 %.3fm）" % height_drift)
 
 	# —— 房间外不可观察（Gungeon 的 room-as-stage）——
 	#
 	# 房间壳体永久可见，相机又在 10m 高、俯角 60°，视线必然越过 2.8m 墙顶看到隔壁房间。
-	# 现在用的是**竖直幕墙**（`FlowViewWalls`）：贴在当前房间墙外表面、从 -1m 到 26m，
+	# 现在用的是**竖直幕墙**（`FlowViewWalls*`）：贴在当前房间墙外表面、从 -1m 到 26m，
 	# 竖直形状没有视差，俯视时也不遮挡墙顶剖面（业主 2026-10-28 要的顶视角手感）。
 	#
 	# 历史上的水平遮罩（`FlowViewMask`，带洞的平面）已废弃：它自带视差 ——
 	# 洞外扩就露出墙外地面（业主红框那条缝），洞内缩就把墙顶剖面盖黑，无解。
-	var curtain := _tower.find_child("FlowViewWalls", true, false) as MeshInstance3D
-	var curtain_ok := curtain != null and curtain.mesh != null
-	print("PLAYABLE view_curtain=%s room=%s" % [
-		str(curtain_ok), str(curtain.get_meta("view_wall_room_id", "")) if curtain != null else "-"])
+	var curtain := _tower.find_child("FlowViewWalls", true, false) as Node3D
+	var curtain_ok := curtain != null and curtain.get_child_count() > 0
+	print("PLAYABLE view_curtain=%s sides=%d room=%s" % [
+		str(curtain_ok), 0 if curtain == null else curtain.get_child_count(),
+		str(curtain.get_meta("view_wall_room_id", "")) if curtain != null else "-"])
 	if not curtain_ok:
 		_failures.append("缺少房间外幕墙（FlowViewWalls）—— 站着能看到隔壁房间")
 	else:
@@ -340,6 +379,51 @@ func _verify_geometry(rooms: Dictionary) -> void:
 			# 允许的漂移 = 墙外表面（半墙厚）+ gap，再多就是贴错了。
 			if drift > 0.30:
 				_failures.append("幕墙没贴合房间足迹（漂移 %.3fm）" % drift)
+		# ④ 幕墙必须**整圈密闭**：每面三角形面积 == 一整面（长 × 高），一个洞都不许有。
+		#
+		# 业主 2026-10-29 晚报单：「进门的时候会看到外边的房间。这个也不合理啊。
+		# 黑色覆盖的时间还是先还原吧。」—— 上午那版在门洞处切口、并让镜头出门时
+		# 整圈收起，结果镜头在门外/门洞里时漏出隔壁房间与墙外地面。
+		#
+		# 判据取**面积**而不是"有没有 meta 标记"：网格真被切过才会小于整面。
+		if curtain_room_node != null:
+			var panel_area := 0.0
+			var expect_area := 0.0
+			for side_value in ["north", "south", "west", "east"]:
+				var side := str(side_value)
+				var panel := curtain.get_node_or_null(
+					"FlowViewWalls%s" % side.capitalize()) as MeshInstance3D
+				if panel == null or panel.mesh == null:
+					continue
+				panel_area += _panel_area_m2(panel)
+				var along_x := side in ["north", "south"]
+				var span := (
+					(curtain_rect.size.x + 0.32) if along_x
+					else (curtain_rect.size.y + 0.32))
+				expect_area += span * (curtain_top - curtain_bottom)
+			print("PLAYABLE curtain_area=%.1f expect=%.1f" % [panel_area, expect_area])
+			if absf(panel_area - expect_area) > 2.0:
+				_failures.append(
+					"幕墙面积 %.1f㎡ 小于整面 %.1f㎡（有缺口 ⇒ 能看见房间外）" % [
+						panel_area, expect_area])
+
+		# ⑤ 幕墙**恒显**：镜头跑到房间外也必须继续挡，不许按镜头位置收起。
+		#    收起过一次就会看到外面房间（业主截图的正是这个）。
+		if _tower.player != null and _tower.player.camera != null:
+			var cam := _tower.player.camera
+			var saved_cam := cam.global_position
+			cam.global_position = Vector3(
+				curtain_rect.get_center().x,
+				cam.global_position.y,
+				curtain_rect.position.y - 2.0)
+			_tower._apply_indoor_camera_pose()
+			var still_shown := curtain.visible
+			print("PLAYABLE curtain_always_on cam_outside_visible=%s" % [
+				str(still_shown)])
+			if not still_shown:
+				_failures.append("镜头在房间外时幕墙被收起了（会看见外面房间）")
+			cam.global_position = saved_cam
+			_tower._apply_indoor_camera_pose()
 
 	# ④ 像素级漏光测量**放到整个用例最后**做 —— 它会瞬移玩家去贴墙的四个角落。
 	#    插在这里会撞进后面「进房 → 等落门」的窗口：落门协程逐帧读玩家位置，
@@ -365,7 +449,7 @@ func _verify_wall_leak(rooms: Dictionary) -> void:
 	# 上面 `_refresh_flow_view_mask()` 会 remove_child + queue_free 旧幕墙，
 	# 而 `is_instance_valid()` 对"已移除但未释放"的节点**仍返回 true** ——
 	# 用旧引用会在下一帧撞上 `previously freed`。
-	var curtain := _tower.find_child("FlowViewWalls", true, false) as MeshInstance3D
+	var curtain := _tower.find_child("FlowViewWalls", true, false) as Node3D
 	var leak := await _measure_wall_leak(curtain, rooms)
 	if leak < 0:
 		print("PLAYABLE wall_leak=SKIP（无渲染，headless 下无法取图）")
@@ -388,10 +472,14 @@ func _verify_wall_leak(rooms: Dictionary) -> void:
 ##   ② 该像素不是黑的；
 ##   ③ **关掉幕墙后该像素明显变亮**（说明挡住它的正是幕墙，它确实在幕墙后面）。
 ##
+## ⚠️ ② 的阈值 0.12 不是随手定的：相机被夹到贴墙位置时，幕墙在屏幕上占掉大半，
+## 它的**边缘抗锯齿带**会贡献上千个 0.03~0.12 的过渡像素。这些像素肉眼即黑，
+## 若按 <0.06 判黑就会整片假红（实测 1847 vs 90）。真漏光像素则是 0.40~0.50。
+##
 ## 第 ③ 条不能省：墙顶剖面（0.28m 宽的一圈水平面）本来就该可见（业主 2026-10-28
 ## 「顶部横截面可以露出来，这样更有顶视角游戏的感觉」）。那些像素的射线会从墙顶边缘
 ## 擦过去落在墙外地面，但它显示的是房间自己的墙顶，幕墙开关对它毫无影响。
-func _measure_wall_leak(curtain: MeshInstance3D, rooms: Dictionary) -> int:
+func _measure_wall_leak(curtain: Node3D, rooms: Dictionary) -> int:
 	var room := rooms.get("start") as DungeonRoom3D
 	if room == null or _tower.player == null:
 		return -1
@@ -439,7 +527,7 @@ func _measure_wall_leak(curtain: MeshInstance3D, rooms: Dictionary) -> int:
 		# 上面把玩家瞬移到房间另一侧会触发换房 → `_refresh_flow_view_mask()` 重建幕墙 →
 		# 旧节点被 remove_child + queue_free。`is_instance_valid()` 对"已移除未释放"的
 		# 节点仍返回 true，所以在旧引用上写 `.visible` 会直接 `previously freed`（实测必现）。
-		var curtain_now := _tower.find_child("FlowViewWalls", true, false) as MeshInstance3D
+		var curtain_now := _tower.find_child("FlowViewWalls", true, false) as Node3D
 		if curtain_now == null:
 			continue
 		curtain_now.visible = false
@@ -447,7 +535,7 @@ func _measure_wall_leak(curtain: MeshInstance3D, rooms: Dictionary) -> int:
 			await get_tree().process_frame
 		var off_img := get_viewport().get_texture().get_image()
 		# 恢复前再确认一次：这几帧里可能又重建过。
-		curtain_now = _tower.find_child("FlowViewWalls", true, false) as MeshInstance3D
+		curtain_now = _tower.find_child("FlowViewWalls", true, false) as Node3D
 		if curtain_now != null:
 			curtain_now.visible = true
 		for i in range(2):
@@ -461,10 +549,29 @@ func _measure_wall_leak(curtain: MeshInstance3D, rooms: Dictionary) -> int:
 					str(curtain_now.get_meta("view_wall_room_id", "?"))])
 			total += spot_leak
 	_tower.player.global_position = saved
-	var restore := _tower.find_child("FlowViewWalls", true, false) as MeshInstance3D
+	var restore := _tower.find_child("FlowViewWalls", true, false) as Node3D
 	if restore != null:
 		restore.visible = true
 	return total
+
+
+## 单侧幕墙的三角形面积合计（㎡）。门洞判据用它 —— 只看节点/meta 计数是自证，
+## 面积对不上就说明网格没切（门洞里还是一片黑）。
+func _panel_area_m2(panel: MeshInstance3D) -> float:
+	var mesh := panel.mesh as ArrayMesh
+	if mesh == null or mesh.get_surface_count() == 0:
+		return 0.0
+	var arrays := mesh.surface_get_arrays(0)
+	var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
+	var area := 0.0
+	var index := 0
+	while index + 2 < vertices.size():
+		var a := vertices[index]
+		var b := vertices[index + 1]
+		var c := vertices[index + 2]
+		area += 0.5 * (b - a).cross(c - a).length()
+		index += 3
+	return area
 
 
 func _count_leak_pixels(
@@ -497,10 +604,16 @@ func _count_leak_pixels(
 				continue
 			var on_px := on_img.get_pixel(x, y)
 			var on_lum := maxf(on_px.r, maxf(on_px.g, on_px.b))
-			# "视觉上算黑"的阈值。0.06 ≈ 15/255 —— 低于它的像素在屏幕上就是黑的，
-			# 肉眼分不出。**不能取 0**：幕墙顶边与天空交界那一圈会被抗锯齿混合，
-			# 实测稳定产生 0.027~0.031 的极暗像素（约 7~8/255）。把它当漏光会永久假红。
-			if on_lum <= 0.06:
+			# "视觉上算黑"的阈值 = 0.12（≈ 30/255）。
+			#
+			# 取值依据是**实测两端**，不是凑数：
+			#   · 幕墙面本体：PNG 采样是纯 `(0,0,0)`（1600×1000 图上占 80% 采样点）；
+			#   · 幕墙**边缘**：与亮面（地板/墙顶剖面）交界的抗锯齿过渡带，
+			#     实测稳定落在 0.027~0.12。相机贴墙（夹取生效）时幕墙边缘在屏幕上很长，
+			#     这类像素会到一千多个 —— 它们肉眼看就是黑的，判成漏光会整片假红；
+			#   · 真漏光：像素显示的是**墙外地面**，亮度 0.40~0.50（与房间地面同档）。
+			# 0.12 与 0.40 差 3 倍以上，两头都留足余量。
+			if on_lum <= 0.12:
 				continue
 			var off_px := off_img.get_pixel(x, y)
 			var off_lum := maxf(off_px.r, maxf(off_px.g, off_px.b))
@@ -604,6 +717,79 @@ func _verify_door_rules(rooms: Dictionary) -> void:
 		_failures.append("入口安全房的退出门没有门扇（按了没反应）")
 	elif not retreat_prompt.contains("退出战局"):
 		_failures.append("退出门的提示不是「退出战局」：%s" % retreat_prompt)
+
+	# —— 退出门内侧的 EXIT 霓虹灯标牌（ENV-BATTLE-EXIT-NEON-SIGN）——
+	#
+	# 远征01/02 的入口房走静态布局 TSCN，标牌在那条分支里单独补过；
+	# 远征03 走**程序化壳体**，原先三条建壳路径都没有摆这块牌
+	# （业主 2026-10-29 指着入口安全屋的门报「没有摆放退出关卡的功能」）。
+	#
+	# 判据不能只看"节点在不在"：牌摆错位置一样等于没有 —— 它必须
+	# ① 是唯一一块（幂等）、② 声明 visual_only（不得在走行面造隐形台阶）、
+	# ③ 平铺在门内侧地面（发光面朝上、底边贴走行面）、
+	# ④ 切向中心对齐退出门扇，且比门更靠房内。
+	if start_room != null and not retreat_side.is_empty():
+		var sign_nodes: Array[Node] = []
+		for child in start_room.get_children():
+			if str(child.name) == "SafeRoomExitSign":
+				sign_nodes.append(child)
+		print("PLAYABLE exit_sign count=%d" % sign_nodes.size())
+		if sign_nodes.size() != 1:
+			_failures.append("入口安全房的 EXIT 灯牌节点数应为 1，实得 %d" % sign_nodes.size())
+		else:
+			var sign := sign_nodes[0] as Node3D
+			if str(sign.get_meta("exit_sign_direction", "")) != retreat_side:
+				_failures.append("EXIT 灯牌方位(%s) 与退出门(%s) 不一致" % [
+					str(sign.get_meta("exit_sign_direction", "")), retreat_side])
+			if not bool(sign.get_meta("visual_only", false)):
+				_failures.append("EXIT 灯牌未声明 visual_only")
+			if not sign.find_children("*", "StaticBody3D", true, false).is_empty():
+				_failures.append("EXIT 灯牌带 StaticBody3D（会在走行面制造隐形台阶）")
+			var facing := -(sign.global_transform.basis.z).normalized()
+			if absf(facing.y - 1.0) > 0.02:
+				_failures.append("EXIT 灯牌发光面未朝上：%s" % str(facing))
+			var sign_min := Vector3.INF
+			var sign_max := -Vector3.INF
+			var sign_meshes := 0
+			for value in sign.find_children("*", "MeshInstance3D", true, false):
+				var mi := value as MeshInstance3D
+				if mi == null or mi.mesh == null:
+					continue
+				sign_meshes += 1
+				var bb := mi.mesh.get_aabb()
+				for corner in range(8):
+					var world: Vector3 = sign.global_transform * bb.get_endpoint(corner)
+					sign_min = sign_min.min(world)
+					sign_max = sign_max.max(world)
+			if sign_meshes == 0:
+				_failures.append("EXIT 灯牌内没有网格")
+			else:
+				var room_origin := start_room.global_position
+				var normal := start_room.call("_direction_normal", retreat_side) as Vector3
+				var normal_along_x := absf(normal.x) > 0.99
+				var walk_y := float(start_room.get_meta("walk_surface_y_m", 0.0))
+				var center_local := (sign_min + sign_max) * 0.5 - room_origin
+				var bottom_y := sign_min.y - room_origin.y
+				var door_local := (
+					retreat_door.global_position - room_origin
+					if retreat_door != null else Vector3.ZERO
+				)
+				var tangential_sign := center_local.z if normal_along_x else center_local.x
+				var tangential_door := door_local.z if normal_along_x else door_local.x
+				var radial_sign := center_local.x if normal_along_x else center_local.z
+				var radial_door := door_local.x if normal_along_x else door_local.z
+				print("PLAYABLE exit_sign tangential sign=%.2f door=%.2f  radial sign=%.2f door=%.2f  bottom_y=%.3f" % [
+					tangential_sign, tangential_door, radial_sign, radial_door, bottom_y])
+				if absf(bottom_y - walk_y) > 0.02:
+					_failures.append("EXIT 灯牌未贴走行面：底面 y=%.3f，走行面 %.3f" % [bottom_y, walk_y])
+				if absf(tangential_sign - tangential_door) > 0.35:
+					_failures.append("EXIT 灯牌切向与门扇错开 %.3f m" % absf(tangential_sign - tangential_door))
+				# 沿门法向（normal 指向门外）：牌的投影必须比门更靠房内。
+				var sign_along_normal := center_local.dot(normal)
+				var door_along_normal := door_local.dot(normal)
+				if sign_along_normal >= door_along_normal:
+					_failures.append("EXIT 灯牌未落在门内侧：牌法向投影 %.3f ≥ 门 %.3f" % [
+						sign_along_normal, door_along_normal])
 
 	# —— 门扇是**双扇对开**（业主 2026-10-28：「这个门，帮我做成左右打开的」）——
 	#

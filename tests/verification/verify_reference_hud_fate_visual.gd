@@ -52,14 +52,16 @@ func _ready() -> void:
 		and bool(minimap_snapshot.get("fixed_scale", false)),
 		"Minimap is not the EGT tile plan view (rect / non-centred / fixed scale)", failures
 	)
-	# 角落盒的设计尺寸是 458×346 设计 px（`_anchor_control(minimap, …, -466, 44, -8, 390)`），
-	# 经 `HUD_UI_SCALE = 0.80` 落到 canvas ⇒ 366.4×276.8。
+	# 角落盒的设计尺寸是 382×265 设计 px（`_anchor_control(minimap, …, -398, 50, -16, 315)`），
+	# 经 `HUD_UI_SCALE = 0.80` 落到 canvas ⇒ 305.6×212。
+	# 2026-10-29 业主指令：小地图去掉半透明底 + 整体缩到业主截图红框的大小
+	# （红框在 1280×720 canvas 上的包围盒 x 962..1267、y 40..251 ⇒ 306×212 canvas）。
 	# 这里按设计盒做**精确**断言而不是给一个宽区间 —— 2026-10-28 首版写成 300..420，
 	# 差 0.8px 就误判了一次；精确值才是对的判据。
-	var expected_box := Vector2(458.0, 346.0) * Dungeon3D.HUD_UI_SCALE
+	var expected_box := Vector2(382.0, 265.0) * Dungeon3D.HUD_UI_SCALE
 	_check(
 		minimap.size.distance_to(expected_box) <= 2.0,
-		"Minimap corner box drifted from its 458×374 design box (actual %s, expected %s)"
+		"Minimap corner box drifted from its 382×265 design box (actual %s, expected %s)"
 			% [minimap.size, expected_box],
 		failures
 	)

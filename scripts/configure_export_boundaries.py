@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
-EXCLUDES='art_source/*,tests/*,tools/*,scripts/*,docs/*,skills_drafts/*,assets/registry/*,assets/*/qa/*,assets/*/reference/*,assets/*/references/*'
+EXCLUDES='addons/shellstorm_scene_builder/*,art_source/*,tests/*,tools/*,scripts/*,docs/*,skills_drafts/*,assets/registry/*,assets/*/qa/*,assets/*/reference/*,assets/*/references/*'
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)

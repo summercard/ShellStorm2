@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_escape_pair",
+  "note": "触发族·逃跑双人。钥匙小子与运气小子都只会跑，11 秒内没打死就**传送消失** —— 「追不上就白跑」是这一族存在的全部意义。",
+  "shape": "box",
+  "size_m": [
+    5.0,
+    3.0,
+    5.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_keybullet_kin",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_chance_kin",
+      "count": 1,
+      "delay_sec": 0.2
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

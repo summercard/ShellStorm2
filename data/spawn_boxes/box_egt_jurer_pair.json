@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_jurer_pair",
+  "note": "法术族·枪法师 + 吉吉。枪法师打出螺旋图形弹后瞬移换位（逼玩家不能站桩），吉吉低血高速、吐蛋炸出涌动子弹 —— 一慢一快，节奏互相掩护。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_gunjurer",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_gigi",
+      "count": 1,
+      "delay_sec": 0.25
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

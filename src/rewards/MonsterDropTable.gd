@@ -39,6 +39,17 @@ static func compile(level_id: String, table: Dictionary) -> Dictionary:
 		))
 		empty_chance = 0.0
 
+	# 全量声明开关（2026-10-29）。
+	#
+	# 默认 `true` = 旧语义：表只登记部分怪，**没登记的那只回退 `MonsterInjector.drop_spec_for`
+	# 的通用公式**（16% 装备 + 34% 备弹 + 铸币）。远征01 依赖这条，不能动。
+	#
+	# 置 `false` = 本表即**完整清单**：未列出的普通怪视为「明确不掉物品」，
+	# 不再是「还没登记」。远征03 需要它 —— 《挺进地牢》的普通怪本来就不掉装备，
+	# 而通用公式会给每只怪 16% 装备 + 34% 备弹，正好是相反的口径。
+	# 没有这个开关，33 只怪必须逐只写一行「不掉什么」，且新增怪种会静默继承错误口径。
+	var legacy_fallback := bool(table.get("legacy_fallback", true))
+
 	var grouped: Dictionary = {}
 	for index in range(rows.size()):
 		var path := "monster_drop_table.rows[%d]" % index
@@ -68,8 +79,8 @@ static func compile(level_id: String, table: Dictionary) -> Dictionary:
 		if not compiled.is_empty():
 			specs[monster_id] = compiled
 	if not errors.is_empty():
-		return _report({}, errors, rows.size())
-	return _report(specs, errors, rows.size())
+		return _report({}, errors, rows.size(), legacy_fallback)
+	return _report(specs, errors, rows.size(), legacy_fallback)
 
 
 static func spec_for(compiled: Dictionary, monster_id: String) -> Dictionary:
@@ -232,13 +243,17 @@ static func _parse_quantity(raw: Variant, path: String, errors: Array[Dictionary
 	return null
 
 
-static func _report(specs: Dictionary, errors: Array[Dictionary], row_count: int) -> Dictionary:
+static func _report(
+	specs: Dictionary, errors: Array[Dictionary], row_count: int, legacy_fallback: bool = true
+) -> Dictionary:
 	return {
 		"ok": errors.is_empty(),
 		"specs": specs,
 		"errors": errors,
 		"row_count": row_count,
 		"monster_count": specs.size(),
+		# `full_coverage = true` ⇒ 调用方**不得**把未列出的普通怪回退到通用公式。
+		"full_coverage": not legacy_fallback,
 	}
 
 

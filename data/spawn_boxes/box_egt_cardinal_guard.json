@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_egt_cardinal_guard",
+  "note": "子弹族·红衣主教护卫班。红衣主教（单发为主，每隔三次改为 5 发追踪弹簇）+ 老兵（预判）。追踪弹会拐弯，玩家不能靠「绕到侧面」躲 —— 必须靠横移甩开。",
+  "shape": "box",
+  "size_m": [
+    6.0,
+    3.0,
+    6.0
+  ],
+  "spawns": [
+    {
+      "type": "egt_cardinal",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "egt_veteran_kin",
+      "count": 1,
+      "delay_sec": 0.2
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

@@ -1,5 +1,33 @@
 # v0.1 开发记录
 
+- [远征03 宝箱房：宝箱 + 开箱掉落 + 命运卡](2026-10-29_expedition03_treasure_chest.md)：补上一轮砍掉普通怪装备后断掉的经济链。五段链路（配置 → 生成期 → 字段白名单 → 房间实例化 → 开箱结算）；新增 `TreasureChest3D`（程序化视觉、复用既有交互协议）；开箱顺序**扣钥匙 → 收口形态 → 掉落 → 命运卡**不可换。踩坑：`room_from_source()` 是出口白名单，不登记字段就静默丢弃（生成期有、运行时 0）；flow 房间细节进房才建，探针必须先 `_enter_room()`；不能用 `room_type=="REWARD"` 找宝箱房。
+
+- [远征03怪物掉落对齐 EGT 第一层](2026-10-29_egt_monster_drops.md)：先实测再改——33 只逐只都是「16% 掉装备 + 35% 掉弹药 + 100% 掉 3 铸币」，一层白送约 11 件装备，是原作的 4 倍。按原作三条硬规则改：普通怪**不掉装备**（新增 `legacy_fallback=false` 让表变成全量清单，未列出的怪不再回退通用公式）、**自爆族连铸币都不掉**（`currency.base=0`）、**弹药改清房 6%（拾取物 20%）**（新增 `clear_rewards` → `room.reward_plan.clear`，不给 Dungeon3D 加分支）。钥匙小子必掉钥匙、运气小子必掉随机拾取物。踩坑：内联 spec 带 `spec_id` 会被当成命名规格去查表 ⇒ `UNKNOWN_SPEC` ⇒ 清房静默不掉。**缺口**：REWARD 房运行时无处理，停掉怪物装备后这一层没有第二个装备来源，下一步要做宝箱房。
+
+- [远征03重点对齐弹速/伤害/攻击方式](2026-10-29_egt_bullet_damage_and_behavior_alignment.md)：弹速 16→**8 m/s**（第二轮那个「玩家移速 3.5 倍」的锚点是编的；原作子弹与玩家几乎同档速，靠走位躲而非无敌帧穿），按 `可横移 = 4.5×(距离/弹速−0.25) > 距离×tan(扩散角)` 反推；伤害统一 17 **爆炸不开特例**（撤回 26）；死亡弹幕恢复 17；攻击方式逐条对 wiki 改 5 处（老兵霰弹 100% 预判、保险销头扑击、抓握大师可躲+清场自动死+抓空 3 次消失、链枪手弹球脱手、枪坚果撞墙炸散大弹）。新增可躲性门禁。
+
+- [远征03怪物数值重定标与子弹可见性修复](2026-10-29_egt_monster_tuning_and_bullet_visibility.md)：血量改 EGT×10（由「保持击杀发数」反推：15 血 ÷ 手枪 6 伤 ≈ 3 发 ↔ 150 血 ÷ 步枪 50），伤害统一 17（玩家 1/6 血 = 原作半颗心）；查证速度/冷却/弹速**原作无公开绝对值**，按定性分档；修掉老兵 4 连发、子弹榴弹王与枪歌者应原地不动、枪歌者缺中断；定位「子弹飞不出来」真因是 `projectile_range=0` 导致 1 秒寿命、飞 7 米自毁，而非视觉。
+
+- [远征03怪物层补齐：EGT 第一层 33 种全实装](2026-10-29_egt_full_monster_roster.md)：复刻怪 12→33 只，攻击分派由 kind 长名单改为 9 种 `attack_style` 骨架，新增 12 种弹道图案、双段 `followup`、`volley_alt` 换招、子弹追踪/反弹与 9 个非弹道行为键；敌群盒 8→22 个；顺手修正「血量 ×3」的文档错误（`per_kind` 是绝对进场值，实测 bullet_kin 进场 42），并补录 33 个 AssetID 进无损基线。四类探针（registry / variant visual / roster / runtime）与两项既有回归全绿。
+
+- [远征03逐房编成取代公式刷怪](2026-10-29_expedition03_roster_spawn.md)：`level_plan.json` 顶层 `spawn_roster`（10 个 node + NORMAL/HUB 兜底），生成器按 `node_id` 查表并在可用区格心放盒；旧路径四道闸门关死（`spawn_boxes_only`、删 `enemy_pool`、surplus 归零、只按 roster 注入）。留档三个坑：可用区重复扣半宽、盒小静默少出、并发 headless 抢 user dir。
+
+- [EGT 变种视觉区分体系](2026-10-29_egt_variant_visual_differentiation.md)：每族选一个主区分维度（远程族染色=弹色、分裂族纯体型且刻意同色、爆炸族色温、辅助族放大高亮）；正式 GLB 不吃 `COLORS`，改走 `FORMAL_MODEL_TINT` 并 `duplicate()` 材质。
+
+- [EGT 式小地图完整复刻](2026-10-28_egt_minimap_replication.md)：右上角小地图由圆形雷达改为矩形拼图（固定缩放、地图不动、门洞断开、房型图标、洋红问号），并留三档显示模式接口。
+
+- [场景工坊r6：实际关卡房间与回接](2026-10-29_scene_builder_runtime_source.md)：修正静态参考与运行白盒不一致，从真实生成房间编辑并保存回接。
+
+- [场景工坊r5：布局与完整打开流程](2026-10-29_scene_builder_workbench.md)：场景优先、顶部模式按钮、大预览、后台读取反馈/取消/重试、旧UI自动重建，完整流程在原生编辑器验收。
+
+- [远征03入口安全屋补退出门EXIT灯牌](2026-10-29_expedition03_exit_sign.md)：业主红框圈出入口安全屋退出门报「没有退出关卡的功能」。实测门扇与 `[E] 退出战局` 交互一直在（`retreat_interact mode=configured_expedition_retreat`），真缺的是门内侧地面的 `ENV-BATTLE-EXIT-NEON-SIGN` 灯牌 —— `_build_safe_room_exit_sign()` 第三条建壳路径（程序化壳体，远征03 专用）从来没被调用。按 `room_type == "STAIR_LOBBY"` 补摆（不认关卡 ID），落位切向偏差 0.00m、牌底 y=−0.000 贴走行面；`probe_expedition03_playable` 新增五条 `exit_sign` 断言防回归。
+
+- [右上角小地图去半透明底并缩到业主红框大小](2026-10-29_minimap_no_backdrop_and_resize.md)：角落态不再画 `FRAME_BG` 背板（M 键全屏大地图的背板与边框保留），设计盒由 458×346 收到 **382×265**（canvas 305.6×212），锚点挪到业主截图红框处，实测矩形 x 961.6..1267.2 / y 40..252。小地图流程探针的 23 项拖拽失败与走廊端口预检红均为存量，基线对比无新增。
+
+- [五件场景可交互易碎小物件](2026-10-29_interactive_clutter.md)：罐子/书本堆/花瓶/椅子/木箱各一件独立组件，≤100三角、<1m、方向破碎≤5块并落地留存，完整与破碎均不阻挡；投放入口安全房并按 `clutter_id` 随流送恢复。挖出并修掉「房间 DISABLED 时受击体不进物理空间」「碎片成刀片带且配色与本体无关」「房间截图全黑」三个真故障。
+
+- [Godot组件场景编辑器](2026-10-29_component_scene_editor.md)：套件/类型两级组件索引、缩略图与旋转3D预览、自由放置/可选吸附、完整白盒来源检索/引用状态、笔刷、灯光、原生撤销与分组房名场景列表，正式TSCN保留Prefab引用；已纳入[总设计工具类章节](../README.md)与[工具类总索引](../TOOL_INDEX.md)。
+
 - [弹药模块手动更换关闭](2026-10-19_bullet_module_manual_swap_lock.md)：所有枪不能再从背包/装备界面/局内快捷装配换弹；掉落枪随机弹种保留，后续仅枪械工坊特殊流程可换。
 
 - [大世界 · 地下街区 Blender 源制作](2026-10-18_openworld_underground_street_source.md)：45 组件 / 187 实例 / 52×52×30m 地下街区；逐面 PaletteUV 与源审计全通过，仅 Blender 源阶段。
