@@ -69,6 +69,12 @@ __pycache__/
 # 一次性备份（如台账补丁前的 .xlsx.bak_b1_deversion）
 *.bak_*
 
+# 台账无损基线的「改前快照」（scripts/refresh_ledger_baseline_ugstreet*.py 自动生成）。
+# 基线本体 assets/registry/ledger_split_baseline.json 已入库，历次版本都能从 git 历史取回，
+# 快照是纯冗余（单个 ~220 KB，三个 ~660 KB）。不设规则的话，每日自动化的 `git add -A`
+# 会把它们扫进提交 —— 2026-10-29 前连续 9 天靠人工跳过，2026-10-29 补上此规则。
+assets/registry/ledger_split_baseline.json.before_*
+
 # 每批去版本化迁移的临时基线快照 / 中途工作副本（台账补丁前后对照等）
 _scratch/b2_baseline/
 _scratch/b2_work/
