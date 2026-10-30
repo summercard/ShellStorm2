@@ -3008,6 +3008,12 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		# 标记「本房墙体由房间自己生成」。走廊连接器据此**不建几何** ——
 		# 见 `_room_walls_owned_by_static_layout()`。
 		record["procedural_shell"] = true
+		# **远征03 特例**：允许美术层保留复古公馆的结构件（护墙 / 门墙 / 5m 地砖）。
+		# 业主 2026-10-31：「结构要进美术层，作为远征03的特例……让这些资产都能在远征03
+		# 使用拼装」。默认规则（结构件一律剥掉、壳体程序化重建）对别的关卡逐字不变。
+		# 放行范围见 `RuntimeRoomArtSource.ART_LAYER_STRUCTURE_ALLOWLIST`；是否真的跳过
+		# 程序化地板/某面墙，由 `DungeonRoom3D._art_layer_coverage()` 按实际覆盖决定。
+		record["art_layer_keep_structure"] = true
 		# 美术复用键：同一模板的美术套到所有同模板房间（场景工坊的存在意义）。
 		# **只对 flow 房间落这个键**：塔楼没有模板概念，多写一个字段会让
 		# `describe()` 从 room_id 换成模板名，签名跟着变 —— 那是无谓的漂移。
@@ -7060,6 +7066,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		# 其余关卡记录里没有这个键 ⇒ 空串 ⇒ RoomDoor3D 用缺省升降，逐字不变。
 		"door_opening_style": str(record.get("door_opening_style", "")),
 		"procedural_shell": bool(record.get("procedural_shell", false)),
+		"art_layer_keep_structure": bool(record.get("art_layer_keep_structure", false)),
 		"interactive_clutter": record.get("interactive_clutter", {}),
 	})
 	room.position = record["position"]

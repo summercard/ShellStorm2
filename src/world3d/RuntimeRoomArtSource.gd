@@ -316,3 +316,47 @@ static func is_structure_prefab(prefab_path: String) -> bool:
 ## 这一件 prefab 是不是**墙**（量墙高时只认这类，不能把角柱与门楣混进来）。
 static func is_wall_prefab(prefab_path: String) -> bool:
 	return structure_tag(prefab_path) == TAG_WALL
+
+
+# ── 远征03 特例：允许留在美术层里的结构件 ──────────────────────────────────────
+#
+# ## 为什么需要这个例外
+#
+# 默认规则是「结构件一律剥掉，壳体由程序化按本局 ports 重建」，理由见本节开头。
+# 但远征03 的美术方向是**用复古公馆模块拼装房间**（业主 2026-10-31：「结构要进美术层，
+# 作为远征03的特例，然后……让这些资产都能在远征03使用拼装」）—— 护墙模块、门墙模块、
+# 5m 地砖本身就是这套美术的一部分。剥掉它们，工坊里摆的东西会静默消失。
+#
+# ## 为什么这个例外是安全的
+#
+# ① **只放开指定名字族**，且**程序化壳体 `prp_room_*` 永远不放行** —— 后者是引擎自己铺的
+#    白盒，留着必然与程序化重建重复。
+# ② 只有美术层里**真的摆了**这些件，例外才起作用；没摆时行为与默认逐字一致。
+# ③ 放行之后由 `DungeonRoom3D` 按**实际覆盖**决定要不要跳过程序化的地板/某面墙 ——
+#    摆满就接管，摆不满就由程序化补齐，不会出现「一半墙是美术、一半是空白」。
+#
+# ## 代价（必须知道）
+#
+# 公馆墙模块是 5m 整数倍、按**保存那一局**的门位摆的。门位一变，墙不会自己挪。
+# 这与默认规则要解决的问题是同一件事，只是远征03 选择由**美术作者**承担它：
+# 装门的位置必须放 `manor_wall_door`，不能放实心护墙。
+
+## 允许进美术层的结构件名字族前缀。目前只有复古公馆套件。
+const ART_LAYER_STRUCTURE_ALLOWLIST: Array[String] = ["manor_"]
+
+
+## 这一件结构件是否**允许留在美术层**（而不是被剥掉）。
+##
+## 程序化壳体 prefab 一律 `false`：它们由 `_build_shell` 每次重建，留着就是重复几何。
+static func is_art_layer_structure(prefab_path: String) -> bool:
+	if structure_tag(prefab_path).is_empty():
+		return false
+	if prefab_path.contains(PROCEDURAL_SHELL_DIR):
+		return false
+	var slug := prefab_slug(prefab_path)
+	for value in ART_LAYER_STRUCTURE_ALLOWLIST:
+		# 走 `_matches_family`（词边界）而不是裸前缀：套件导出的文件名带前缀，
+		# 实际 slug 是 `env_manor_wall_standard`，`begins_with("manor_")` 匹配不到它。
+		if _matches_family(slug, str(value).trim_suffix("_")):
+			return true
+	return false

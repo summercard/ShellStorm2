@@ -619,6 +619,21 @@ var static_layout_scene_path := ""
 ## 本房是否走**程序化壳体**（flow 关卡 / 远征03）。这类房间的墙与门由本节点按
 ## 当前局端口现算，烘焙场景只提供美术层 —— 见 `_build_art_layer_only()`。
 var procedural_shell := false
+## 美术层是否**允许保留结构件**（远征03 特例）。
+##
+## 默认 `false`：结构件一律剥掉，壳体由程序化按本局端口重建。远征03 是例外 ——
+## 它用复古公馆模块（护墙 5m / 门墙 5m / 地砖 5m）拼装房间，那些件就属于美术本身。
+## 见 `RuntimeRoomArtSource.ART_LAYER_STRUCTURE_ALLOWLIST`。
+##
+## 打开之后**不会**无条件跳过程序化壳体：由 `_art_layer_coverage()` 按实际覆盖判定，
+## 摆满才接管，摆不满仍由程序化补齐。见 `_build_art_layer_only()`。
+var art_layer_keep_structure := false
+## 美术层已完整铺满地板 ⇒ 跳过程序化地板（`prp_room_floor` / inset / seam）。
+var _art_layer_floor_complete := false
+## 美术层已完整覆盖的墙面（`north` / `south` / `west` / `east`）⇒ 该面跳过程序化墙。
+var _art_layer_covered_sides: Array[String] = []
+## 美术层保留了的结构件数量（`_build_art_layer_only()` 写入，供探针与验收读取）。
+var _art_layer_structure_kept := 0
 ## 本房来自哪个房间模板（`std_25x25` / `corridor_45x40` / `boss_50x40` …）。
 ##
 ## 用途只有一个：美术复用键。场景工坊的意义是「同一模板的美术套到所有同模板房间」，
@@ -686,6 +701,7 @@ func configure(config: Dictionary) -> void:
 	static_layout_scene_path = str(config.get("static_layout_scene_path", static_layout_scene_path))
 	template_id = str(config.get("template_id", template_id))
 	procedural_shell = bool(config.get("procedural_shell", procedural_shell))
+	art_layer_keep_structure = bool(config.get("art_layer_keep_structure", art_layer_keep_structure))
 	connection_ports = (config.get("connection_ports", connection_ports) as Array).duplicate(true)
 	door_opening_style = str(config.get("door_opening_style", door_opening_style))
 	camera_profile = (config.get("camera_profile", camera_profile) as Dictionary).duplicate(true)
@@ -2701,7 +2717,124 @@ func _build_art_layer_only(static_layout: Node3D, art_path: String) -> void:
 	# 这里墙体归程序化，设了会让所有读它的判据误判。美术层用独立的 `art_layer_loaded`。
 	set_meta("art_layer_loaded", true)
 	set_meta("art_layer_geometry_stripped", stripped)
+	# 远征03 特例：按**实际覆盖**决定要不要跳过程序化地板/某面墙。
+	# 摆满就接管，摆不满由程序化补齐 —— 不假设「摆了结构件 = 整间房都归美术」。
+	_art_layer_coverage(static_layout, get_dimensions())
+	set_meta("art_layer_structure_kept", _art_layer_structure_kept)
+	set_meta("art_layer_floor_complete", _art_layer_floor_complete)
+	set_meta("art_layer_covered_sides", _art_layer_covered_sides.duplicate())
 	_adopt_authored_breakable_clutter(static_layout)
+
+
+## 量美术层里保留下来的结构件**到底覆盖了哪一部分壳体**。
+##
+## ## 为什么要量，而不是"有结构件就整套接管"
+##
+## 公馆套件按 5m 分块（护墙 5.0×2.8、地砖 5.0×0.1×5.0），而远征03 的房间都是 5m 整数倍。
+## 摆满一面墙要 5 块、铺满 25×25 要 25 块 —— 但美术可能先只摆了一半再存盘。
+## 这时若直接跳过整面程序化墙，房间就漏风；若一律不跳，摆满的墙又会和自己重叠。
+## 所以逐面判、逐格判：
+##   · 地板：**每个 5m 格的中心**都被某块地砖的 AABB 压住 ⇒ 才算铺满；
+##   · 墙面：该面**每个 5m 槽位**的中心都被某块墙件的 AABB 压住 ⇒ 才算覆盖。
+##
+## 采样点贴边内侧 0.12m：护墙厚 0.5（半厚 0.25）、铅条窗 0.61（半厚 0.305），
+## 都覆盖得到；而房间中央的陈设不可能被误算成墙。
+func _art_layer_coverage(root: Node3D, dimensions: Vector2) -> void:
+	const GRID := 5.0
+	_art_layer_floor_complete = false
+	_art_layer_covered_sides.clear()
+	if not art_layer_keep_structure:
+		return
+	var cols := int(round(dimensions.x / GRID))
+	var rows := int(round(dimensions.y / GRID))
+	if cols <= 0 or rows <= 0:
+		return
+	var floors: Array[AABB] = []
+	var walls: Array[AABB] = []
+	var inverse := root.global_transform.affine_inverse()
+	for node in root.find_children("*", "Node3D", true, false):
+		var prefab := str(node.scene_file_path)
+		if not ART_SOURCE.is_art_layer_structure(prefab):
+			continue
+		var tag := ART_SOURCE.structure_tag(prefab)
+		if tag != ART_SOURCE.TAG_FLOOR and tag != ART_SOURCE.TAG_WALL:
+			continue
+		var box := _art_layer_local_bounds(node, inverse)
+		if box.size == Vector3.ZERO:
+			continue
+		if tag == ART_SOURCE.TAG_FLOOR:
+			floors.append(box)
+		else:
+			walls.append(box)
+	var covered := 0
+	for row in range(rows):
+		for col in range(cols):
+			var point := Vector2(
+				-dimensions.x * 0.5 + (float(col) + 0.5) * GRID,
+				-dimensions.y * 0.5 + (float(row) + 0.5) * GRID
+			)
+			if _point_covered(floors, point, 0.05):
+				covered += 1
+	_art_layer_floor_complete = covered == cols * rows
+	# side → [贴边坐标, 槽位数, 是否沿 x 轴排布]
+	var sides := {
+		"north": [-dimensions.y * 0.5 + 0.12, cols, true],
+		"south": [dimensions.y * 0.5 - 0.12, cols, true],
+		"west": [-dimensions.x * 0.5 + 0.12, rows, false],
+		"east": [dimensions.x * 0.5 - 0.12, rows, false],
+	}
+	for side in sides.keys():
+		var spec: Array = sides[side]
+		var at := float(spec[0])
+		var slots := int(spec[1])
+		var horizontal := bool(spec[2])
+		if slots <= 0:
+			continue
+		var complete := true
+		for slot in range(slots):
+			var along := (float(slot) + 0.5) * GRID
+			var point := (
+				Vector2(-dimensions.x * 0.5 + along, at) if horizontal
+				else Vector2(at, -dimensions.y * 0.5 + along)
+			)
+			if not _point_covered(walls, point, 0.08):
+				complete = false
+				break
+		if complete:
+			_art_layer_covered_sides.append(str(side))
+
+
+## 一个节点子树的网格包围盒，换算到 `inverse` 所在空间。
+func _art_layer_local_bounds(node: Node3D, inverse: Transform3D) -> AABB:
+	var result := AABB()
+	var found := false
+	var meshes: Array[Node] = []
+	if node is MeshInstance3D:
+		meshes.append(node)
+	meshes.append_array(node.find_children("*", "MeshInstance3D", true, false))
+	for value in meshes:
+		var instance := value as MeshInstance3D
+		if instance == null or instance.mesh == null:
+			continue
+		var box: AABB = inverse * instance.global_transform * instance.mesh.get_aabb()
+		result = result.merge(box) if found else box
+		found = true
+	return result if found else AABB()
+
+
+## `point`（x, z）是否落在任一盒子的水平投影里（含容差）。
+func _point_covered(boxes: Array[AABB], point: Vector2, tolerance: float) -> bool:
+	for box in boxes:
+		if point.x < box.position.x - tolerance or point.x > box.position.x + box.size.x + tolerance:
+			continue
+		if point.y < box.position.z - tolerance or point.y > box.position.z + box.size.z + tolerance:
+			continue
+		return true
+	return false
+
+
+func _side_art_covered(side: String) -> bool:
+	return _art_layer_covered_sides.has(side)
 
 
 ## 剥掉美术层里的几何件，返回剥掉的顶层节点数。
@@ -2716,25 +2849,56 @@ func _build_art_layer_only(static_layout: Node3D, art_path: String) -> void:
 func _strip_art_layer_geometry(root: Node3D) -> int:
 	var tops: Array[Node] = []
 	for node in root.find_children("*", "Node3D", true, false):
-		if ART_SOURCE.is_structure_prefab(str(node.scene_file_path)):
-			tops.append(node)
+		var prefab := str(node.scene_file_path)
+		if not ART_SOURCE.is_structure_prefab(prefab):
+			continue
+		# 远征03 特例：复古公馆的结构件是**美术本身**，留在美术层。
+		# 程序化壳体 prefab（`prp_room_*`）永远不放行 —— 它们由下面的程序化分支重建。
+		if art_layer_keep_structure and ART_SOURCE.is_art_layer_structure(prefab):
+			# 只数**顶层**那一件：包装场景本身（`env_manor_wall_standard_root_top3d`）
+			# 与它内嵌的视觉 GLB（`env_manor_wall_standard_visual_top3d`）slug 同族，
+			# 不去重就会把一件算成两件（实测 45 件被数成 90）。
+			if not _has_allowlisted_ancestor(root, node):
+				_art_layer_structure_kept += 1
+			continue
+		tops.append(node)
 	var removed := 0
+	# 按**深度升序**处理：先 free 浅层的，深层随子树一起走。
+	#
+	# 原来靠「祖先也在 tops 里就跳过」判断，但那需要 `tops.has(parent)` —— 父节点已经
+	# 被 free 之后，这个比较本身就落在失效实例上，会抛
+	# `Cannot call method 'get_parent' on a previously freed instance` 并**中断整个剥离**
+	# （实测：美术层里存在「结构件嵌结构件」时，剥离一件都没做完）。
+	# 改成排序 + `is_instance_valid()`：父子顺序天然正确，失效实例直接跳过。
+	tops.sort_custom(func(a, b): return _node_depth(root, a) < _node_depth(root, b))
 	for node in tops:
-		# 祖先也在名单里就跳过：free 父节点时子树一起走，再 free 会报 "previously freed"。
-		var ancestor_listed := false
-		var parent := node.get_parent()
-		while parent != null and parent != root:
-			if tops.has(parent):
-				ancestor_listed = true
-				break
-			parent = parent.get_parent()
-		if ancestor_listed or node.get_parent() == null:
+		if not is_instance_valid(node) or node.get_parent() == null:
 			continue
 		node.get_parent().remove_child(node)
 		node.free()
 		removed += 1
 	_relocate_art_into_components(root)
 	return removed
+
+
+## `node` 相对 `root` 的深度（root 的直属子为 1）。
+func _node_depth(root: Node, node: Node) -> int:
+	var depth := 0
+	var current: Node = node
+	while current != null and current != root:
+		depth += 1
+		current = current.get_parent()
+	return depth
+
+
+## 从 `node` 往上到 `root`，有没有已经被放行的美术结构件祖先。
+func _has_allowlisted_ancestor(root: Node3D, node: Node) -> bool:
+	var current := node.get_parent()
+	while current != null and current != root:
+		if ART_SOURCE.is_art_layer_structure(str(current.scene_file_path)):
+			return true
+		current = current.get_parent()
+	return false
 
 
 ## 把 `WhiteboxShell` 里剩下的东西挪进 `ArtComponents`。
@@ -2883,17 +3047,41 @@ func _build_shell() -> void:
 		_build_tower_module_shell(dimensions)
 		return
 	# Floor：1×1×1 prefab + scale = (dim.x, 0.36, dim.y)
-	_spawn_prefab("Floor", FLOOR_PREFAB, Vector3(0, -0.18, 0), Vector3(dimensions.x, 0.36, dimensions.y), _floor_material)
-	_spawn_prefab("FloorInset", FLOOR_INSET_PREFAB, Vector3(0, 0.012, 0), Vector3(dimensions.x * 0.80, 0.025, dimensions.y * 0.80), _material(theme.floor_color.lightened(0.055), 0.04, 0.94))
-	for x in range(-int(dimensions.x * 0.4), int(dimensions.x * 0.4), 3):
-		_spawn_prefab("FloorSeam", FLOOR_SEAM_PREFAB, Vector3(float(x), 0.03, 0), Vector3(0.025, 0.018, dimensions.y * 0.76), _trim_material)
+	#
+	# 远征03 特例：美术层里已经把地板铺满（公馆 5m 地砖）时跳过整块程序化地板 ——
+	# 否则两层地板叠在一起，玩家会被抬到美术地砖顶上、而白盒地板仍在下面。
+	# 没铺满就照旧铺（美术地砖压在它上面，视觉正常）。
+	if _art_layer_floor_complete:
+		set_meta("procedural_floor_skipped", true)
+	else:
+		_spawn_prefab("Floor", FLOOR_PREFAB, Vector3(0, -0.18, 0), Vector3(dimensions.x, 0.36, dimensions.y), _floor_material)
+		_spawn_prefab("FloorInset", FLOOR_INSET_PREFAB, Vector3(0, 0.012, 0), Vector3(dimensions.x * 0.80, 0.025, dimensions.y * 0.80), _material(theme.floor_color.lightened(0.055), 0.04, 0.94))
+		for x in range(-int(dimensions.x * 0.4), int(dimensions.x * 0.4), 3):
+			_spawn_prefab("FloorSeam", FLOOR_SEAM_PREFAB, Vector3(float(x), 0.03, 0), Vector3(0.025, 0.018, dimensions.y * 0.76), _trim_material)
 	if size_class == "rooftop":
 		_build_rooftop_shell(dimensions)
 		return
-	_build_wall("north", Vector3(0, 1.4, -dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0), _wall_door_lane("north"))
-	_build_wall("south", Vector3(0, 1.4, dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0), _wall_door_lane("south"))
-	_build_wall("west", Vector3(-dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1), _wall_door_lane("west"))
-	_build_wall("east", Vector3(dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1), _wall_door_lane("east"))
+	# 远征03 特例：美术层已完整覆盖的那一面，跳过程序化墙（美术件自带碰撞）。
+	# 门扇仍按本局 doors 生成 —— 门墙模块（`manor_wall_door`）负责洞口，`_build_door` 负责门扇。
+	var skipped_sides: Array[String] = []
+	if not _side_art_covered("north"):
+		_build_wall("north", Vector3(0, 1.4, -dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0), _wall_door_lane("north"))
+	else:
+		skipped_sides.append("north")
+	if not _side_art_covered("south"):
+		_build_wall("south", Vector3(0, 1.4, dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0), _wall_door_lane("south"))
+	else:
+		skipped_sides.append("south")
+	if not _side_art_covered("west"):
+		_build_wall("west", Vector3(-dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1), _wall_door_lane("west"))
+	else:
+		skipped_sides.append("west")
+	if not _side_art_covered("east"):
+		_build_wall("east", Vector3(dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1), _wall_door_lane("east"))
+	else:
+		skipped_sides.append("east")
+	if not skipped_sides.is_empty():
+		set_meta("procedural_walls_skipped_sides", skipped_sides)
 	for direction in doors:
 		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
 	# 程序化安全房（没有静态布局 TSCN 的关卡走这条路径，例如远征03 的入口房）
@@ -2907,13 +3095,14 @@ func _build_shell() -> void:
 	# 判据只按房间类型，不认关卡 ID：任何走程序化壳体的 STAIR_LOBBY 都同样成立。
 	if room_type == "STAIR_LOBBY":
 		_build_safe_room_exit_sign(dimensions)
-	for corner in [
-		Vector3(-dimensions.x * 0.5, 1.45, -dimensions.y * 0.5),
-		Vector3(dimensions.x * 0.5, 1.45, -dimensions.y * 0.5),
-		Vector3(-dimensions.x * 0.5, 1.45, dimensions.y * 0.5),
-		Vector3(dimensions.x * 0.5, 1.45, dimensions.y * 0.5),
-	]:
-		_spawn_prefab("CornerPost", CORNER_POST_PREFAB, corner, Vector3(0.42, 2.9, 0.42), _trim_material)
+	if _art_layer_covered_sides.size() < 4:
+		for corner in [
+			Vector3(-dimensions.x * 0.5, 1.45, -dimensions.y * 0.5),
+			Vector3(dimensions.x * 0.5, 1.45, -dimensions.y * 0.5),
+			Vector3(-dimensions.x * 0.5, 1.45, dimensions.y * 0.5),
+			Vector3(dimensions.x * 0.5, 1.45, dimensions.y * 0.5),
+		]:
+			_spawn_prefab("CornerPost", CORNER_POST_PREFAB, corner, Vector3(0.42, 2.9, 0.42), _trim_material)
 	if size_class == "floor":
 		_build_floor_partitions(dimensions)
 

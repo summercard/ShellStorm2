@@ -184,6 +184,22 @@ func _run() -> void:
 		var actual := ART.is_structure_prefab("res://probe/%s.tscn" % slug)
 		check(actual == want, "名字族边界错判：%s 期望 %s 实得 %s" % [slug, want, actual])
 
+	# ── 方向五：远征03 特例 —— 公馆结构件放行，程序化壳体永不放行 ──────────────
+	#
+	# 这条例外的边界比它看起来窄：只放开 `manor_` 族，且只对结构件生效。
+	# 一旦有人把 `prp_room_*` 也放进去，房间会同时有程序化壳体和美术壳体（两层墙、两层地板）。
+	for slug in ["env_manor_wall_standard", "env_manor_wall_door", "env_manor_wall_window",
+			"env_manor_floor_wood", "env_manor_floor_stone", "env_manor_floor_bath"]:
+		check(ART.is_art_layer_structure("res://probe/%s_root_top3d.tscn" % slug),
+			"公馆结构件 %s 没有进美术层放行名单（工坊里摆了会消失）" % slug)
+	for slug in ["env_manor_sofa", "env_manor_rug_lounge", "env_manor_painting"]:
+		check(not ART.is_art_layer_structure("res://probe/%s_root_top3d.tscn" % slug),
+			"公馆陈设 %s 被判进了结构放行名单（它本来就该留在美术层，判成结构是错的）" % slug)
+	for slug in ["prp_room_floor", "prp_room_wall_segment", "prp_room_corner_post"]:
+		check(not ART.is_art_layer_structure(
+				"res://assets/art/props/dungeon_3d/%s.tscn" % slug),
+			"程序化壳体 %s 被放进了美术层（会与程序化重建重复）" % slug)
+
 	print("STRUCT_%s checks=%d failures=%d"
 		% ["OK" if failures.is_empty() else "FAILED", checks, failures.size()])
 	quit(0 if failures.is_empty() else 1)
