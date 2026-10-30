@@ -309,14 +309,23 @@ func configure(p_gun_id: String, p_bullet_id: String) -> bool:
 	bullet_id = "" if is_melee else p_bullet_id
 	var gun_stats := gun_node.get_base_stats()
 	var bullet_stats := bullet_node.get_base_stats() if bullet_node != null else {}
-	_configure_common_stats(gun_stats.merged(bullet_stats, true), is_melee)
+	# 弹速是**倍率相乘**：枪身可以声明自己的基础弹速倍率（豌豆手枪 25/23），弹种倍率再乘上去。
+	# `Dictionary.merged(..., true)` 会让子弹节点直接覆盖枪身值，与正式装配走的
+	# `AssemblyNode._combine_stats` 口径不一致 —— 同一把枪在预览/测试路径和实装路径上
+	# 弹速会不同，所以这里按后者的规则补齐（2026-10-30 对齐《挺进地牢》时发现）。
+	var merged_stats := gun_stats.merged(bullet_stats, true)
+	if gun_stats.has("bullet_speed") and bullet_stats.has("bullet_speed"):
+		merged_stats["bullet_speed"] = (
+			float(gun_stats["bullet_speed"]) * float(bullet_stats["bullet_speed"])
+		)
+	_configure_common_stats(merged_stats, is_melee)
 	bullet_tags.clear()
 	if bullet_node != null:
 		bullet_tags.assign(bullet_node.tags)
 	_copy_chance = 0.0
 	_critical_chance = 0.12 if is_melee else (0.28 if gun_id == "bp_sniper" else 0.10)
 	_critical_damage_multiplier = 1.5
-	_projectile_behavior = _extract_projectile_behavior(gun_stats.merged(bullet_stats, true))
+	_projectile_behavior = _extract_projectile_behavior(merged_stats)
 	_secondary_guns.clear()
 	_source_tree = null
 	_apply_gun_behavior_tags()

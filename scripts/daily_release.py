@@ -341,7 +341,14 @@ code {{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.86em;
 # ---------------------------------------------------------------- ⑤ 发布
 
 def publish(out_dir: Path, publish_py: Path, site_id: str) -> str:
-    """用 --site-id 显式覆盖同一站点（保证 URL 不变）。返回本次发布输出。"""
+    """用 --site-id 显式覆盖同一站点（保证 URL 不变）。返回本次发布输出。
+
+    不传 --public：服务端 1.9.7 起免登录链接只由管理员设置，普通身份带这个参数会被
+    立刻 403（「免登录链接由管理员设置」）。更糟的是服务端不等请求体收完就回 403 并
+    断开，urllib 在写 241 MB 时先撞上连接重置（WinError 10054），要白等两三分钟才报错，
+    客户端自带的「403 去掉 access 重发」兜底也走不到。所以这里直接不带 access，
+    原地更新会保留站点已有的访问策略。
+    """
     proc = run([sys.executable, str(publish_py), "server", str(out_dir), "--site-id", site_id],
                cwd=publish_py.parent.parent, timeout=3600)
     out = (proc.stdout or "") + (proc.stderr or "")
@@ -351,15 +358,41 @@ def publish(out_dir: Path, publish_py: Path, site_id: str) -> str:
 
 
 def verify_online(url: str, expect_bytes: int) -> str:
-    """实测线上链接：状态码、Content-Length 必须与本地一致。"""
+    """实测线上链接：状态码、Content-Length 必须与本地一致。
+
+    只接受 200。3xx 是「站点非公开 / 被跳去飞书登录」，玩家点直链下不到包；
+    以前这里放行 200~399，会把 302 判成成功 —— 等于给假闭环开门。
+
+    必须**不跟随跳转**：urllib 默认会跟着 302 跑到飞书登录页，把 302 变成登录页的
+    404/200，报错就只剩「404 Not Found」，看不出真因是访问门禁。
+    """
+    class _NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, req, fp, code, msg, headers, newurl):
+            return None  # 不生成新请求 ⇒ 302 原样抛出
+
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), _NoRedirect)
     req = urllib.request.Request(url, method="HEAD",
                                  headers={"User-Agent": "daily-release/1"})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        code = resp.status
-        length = resp.headers.get("Content-Length")
-    if not (200 <= code < 400):
-        raise RuntimeError(f"线上校验失败：HTTP {code}")
-    if length is not None and int(length) != expect_bytes:
+    location = ""
+    try:
+        with opener.open(req, timeout=30) as resp:
+            code = resp.status
+            length = resp.headers.get("Content-Length")
+            location = resp.headers.get("Location", "")
+    except urllib.error.HTTPError as exc:
+        code = exc.code
+        length = exc.headers.get("Content-Length") if exc.headers else None
+        location = (exc.headers.get("Location", "") if exc.headers else "")
+    if 300 <= code < 400:
+        raise RuntimeError(
+            f"线上校验失败：HTTP {code} 跳转到 {location or '未知'} —— "
+            f"站点是「需登录」，玩家点直链会被拦到飞书登录页，下载不可用。"
+            f"免登录链接只能由管理员设置（发布时带 --public 会被 403 拒绝）。链接 {url}")
+    if code != 200:
+        raise RuntimeError(f"线上校验失败：HTTP {code}，链接 {url}")
+    if length is None:
+        raise RuntimeError(f"线上校验失败：响应无 Content-Length，无法确认包完整，链接 {url}")
+    if int(length) != expect_bytes:
         raise RuntimeError(f"线上文件大小不一致：服务器 {length} ≠ 本地 {expect_bytes}")
     return f"HTTP {code}，Content-Length={length}"
 

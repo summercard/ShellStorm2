@@ -17,6 +17,11 @@ const VISION_TARGET_GROUPS := [
 	&"hazard_3d", &"service_station_3d", &"extraction_beacon_3d",
 ]
 const VISION_PLANE_HEIGHT := 0.82
+## 目标自身碰撞体 RID 的缓存键（见 `_target_collision_rids()`）。
+const RID_CACHE_KEY := "_vision_exclude_rids"
+const RID_STAMP_KEY := "_vision_exclude_stamp"
+## 空结果的重扫间隔（秒）。
+const RID_RESCAN_S := 2.0
 const GAMEPLAY_ANGLE_DEGREES := 360.0
 const SURFACE_HEIGHT_OFFSET := 0.14
 const HIT_EDGE_PADDING := 0.08
@@ -117,7 +122,7 @@ func force_refresh() -> void:
 	_refresh_target_visibility()
 
 
-func is_position_visible(world_position: Vector3) -> bool:
+func is_position_visible(world_position: Vector3, exclude_rids: Array[RID] = []) -> bool:
 	if _player == null:
 		return false
 	var offset := world_position - _player.global_position
@@ -127,7 +132,7 @@ func is_position_visible(world_position: Vector3) -> bool:
 		return false
 	if distance <= 0.001:
 		return true
-	return not _is_occluded(world_position)
+	return not _is_occluded(world_position, exclude_rids)
 
 
 func get_snapshot() -> Dictionary:
@@ -501,12 +506,49 @@ func _refresh_one_target_visibility(target: Node3D, visited: Dictionary) -> void
 			enemy.visible = false
 			_occluded_target_count += 1
 			return
-	var visible_to_player := is_position_visible(_get_target_sample_position(target))
+	# 目标自身的碰撞体必须排除在遮挡判定之外，否则「设施被自己挡住而隐形」。
+	# 详见 `_target_collision_rids()` 的注释。
+	var visible_to_player := is_position_visible(
+		_get_target_sample_position(target), _target_collision_rids(target))
 	target.visible = visible_to_player
 	if visible_to_player:
 		_visible_target_count += 1
 	else:
 		_occluded_target_count += 1
+
+
+## 目标自身（含其子孙）的碰撞体 RID —— 遮挡射线要把它们排除掉。
+##
+## 2026-10-30 业主报「房间中间有个空阻挡」。链路：
+##   ① `ServiceStation3D` 的 `StationBody`（改造台/交易台的实体体积）挂在 layer 1，
+##      与墙同层，属于 `occlusion_mask`；
+##   ② `_is_occluded()` 的射线从玩家眼睛水平射向**目标中心**，第一根被打中的就是
+##      目标自己；
+##   ③ 于是 `is_position_visible()` 恒为 false ⇒ `target.visible = false` ⇒ 整台不可见；
+##   ④ 但 `visible` 不影响物理，碰撞盒照挡。
+## 玩家看到的是「一片空地，走过去撞墙」。改造站、交易站、事件终端、撤离信标
+## 这类**有实体体积**的交互设施全部中招；敌人（layer 4）、掉落物与钥匙（layer 0）
+## 不在 `occlusion_mask` 里，所以只有设施类暴露了这个缺陷。
+##
+## 排除自身不影响正确性：墙、家具等第三方遮挡物仍在 mask 内，挡得住照样判被挡。
+## 结果按目标缓存在 meta 上（25Hz 刷新，不必每帧重扫子树）；空结果只保留
+## `RID_RESCAN_S` 秒，避免「首次刷新早于子体建成」被永久记住。
+func _target_collision_rids(target: Node3D) -> Array[RID]:
+	var now := Time.get_ticks_msec() / 1000.0
+	if target.has_meta(RID_CACHE_KEY):
+		var cached: Variant = target.get_meta(RID_CACHE_KEY)
+		if cached is Array:
+			var cached_rids := cached as Array[RID]
+			if not cached_rids.is_empty() or now - float(target.get_meta(RID_STAMP_KEY)) < RID_RESCAN_S:
+				return cached_rids
+	var result: Array[RID] = []
+	if target is CollisionObject3D:
+		result.append((target as CollisionObject3D).get_rid())
+	for child in target.find_children("*", "CollisionObject3D", true, false):
+		result.append((child as CollisionObject3D).get_rid())
+	target.set_meta(RID_CACHE_KEY, result)
+	target.set_meta(RID_STAMP_KEY, now)
+	return result
 
 
 func _get_target_sample_position(target: Node3D) -> Vector3:
@@ -516,7 +558,7 @@ func _get_target_sample_position(target: Node3D) -> Vector3:
 	return target.global_position + Vector3(0, height, 0)
 
 
-func _is_occluded(world_position: Vector3) -> bool:
+func _is_occluded(world_position: Vector3, exclude_rids: Array[RID] = []) -> bool:
 	var world := _player.get_world_3d()
 	if world == null:
 		return false
@@ -524,14 +566,25 @@ func _is_occluded(world_position: Vector3) -> bool:
 	var target := Vector3(world_position.x, start.y, world_position.z)
 	if start.distance_squared_to(target) <= 0.0001:
 		return false
-	var query := PhysicsRayQueryParameters3D.create(
+	if exclude_rids.is_empty():
+		var query := PhysicsRayQueryParameters3D.create(
+			start,
+			target,
+			occlusion_mask,
+			[_player.get_rid()]
+		)
+		query.collide_with_areas = false
+		return not world.direct_space_state.intersect_ray(query).is_empty()
+	var excluded: Array[RID] = [_player.get_rid()]
+	excluded.append_array(exclude_rids)
+	var query_ex := PhysicsRayQueryParameters3D.create(
 		start,
 		target,
 		occlusion_mask,
-		[_player.get_rid()]
+		excluded
 	)
-	query.collide_with_areas = false
-	return not world.direct_space_state.intersect_ray(query).is_empty()
+	query_ex.collide_with_areas = false
+	return not world.direct_space_state.intersect_ray(query_ex).is_empty()
 
 
 func _raycast_distance(direction: Vector3, max_distance: float) -> float:

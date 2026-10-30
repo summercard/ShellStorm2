@@ -30,6 +30,20 @@ extends Node
 ## 用法：godot --headless --path . --scene res://tools/_egt_variant_visual_probe.tscn
 ## ⚠ 必须 `--scene` 而非 `--script`：要实例化 Enemy3D，它依赖 autoload。
 
+## ## 体型单调的**显式豁免**
+##
+## 「血更厚 → 看起来更大」是条好规则，但它是**规则**，不是法律。业主点名的个别
+## 调整会打破它，这里登记豁免而不是偷偷放宽判据 —— 放宽容差会让所有真倒挂一起溜过去。
+##
+## 每条豁免必须写清三件事：谁批的、为什么、拿什么替代了"体型梯度"这条区分维度。
+const SIZE_EXEMPT := {
+	# 业主 2026-10-30：「这个怪物的大小缩小一点，到现在的 70%」（1.44m → 1.01m）。
+	# 它因此成为子弹族里最小的，而血量 250 是族内最高 —— 体型梯度在它身上失效。
+	# 替代区分维度：它是族内**唯一会瞬移**的（`blink`），且弹型是 4 连发（count=4），
+	# 玩家靠"它消失了"和"子弹是四连"就能认出它，不靠体型。
+	"egt_hollowpoint": "业主点名缩到 70%；该族改用弹道形状 + 瞬移行为区分",
+}
+
 const FAMILIES := {
 	"子弹族": {
 		"dimension": "体型阶梯 + 染色(=弹色)",
@@ -119,8 +133,8 @@ func _probe_family(family_name: String, spec: Dictionary) -> void:
 		_measured[kind] = m
 		rows.append(m)
 		print(
-			"  %-20s hp=%-3d 体型=%.2f 世界=%.3f 可见色=%s 来源=%s 血条=%.2fx%.2f"
-			% [kind, m["hp"], m["body_scale"], m["world_scale"],
+			"  %-20s hp=%-3d 体型=%.2f 世界=%.3f 世界高=%.2fm 可见色=%s 来源=%s 血条=%.2fx%.2f"
+			% [kind, m["hp"], m["body_scale"], m["world_scale"], m["world_height"],
 				m["color_text"], m["color_source"], m["bar"].x, m["bar"].y]
 		)
 
@@ -132,14 +146,21 @@ func _probe_family(family_name: String, spec: Dictionary) -> void:
 	_check_monotonic_in_family(family_name, rows)
 
 
+## 族内不能有两只**看起来一样大**。
+##
+## ⚠ 判据是**世界高**，不是根节点 `scale`（2026-10-30 改）。
+## `scale` 是「资产基准高 × 0.70 × 倍率」里的**倍率**，跨资产不可比：
+## `gripmaster` 借 summoner（基准 1.82m）scale=1.02 得 1.30m，
+## `chance_kin` 借 melee_chaser（基准 1.30m）scale=1.19 却只有 1.08m。
+## 用 scale 判会出现「屏幕上一只明显更大、判据说它们一样大」的荒谬结论。
 func _check_unique_scale(family_name: String, rows: Array) -> void:
 	var seen := {}
 	for r in rows:
-		var key := "%.3f" % r["world_scale"]
+		var key := "%.2f" % r["world_height"]
 		if seen.has(key):
 			_failures.append(
-				"%s：%s 与 %s 体型完全相同（%.3f），族内无法靠体型区分"
-				% [family_name, r["kind"], seen[key], r["world_scale"]]
+				"%s：%s 与 %s 世界高完全相同（%.2fm），族内无法靠体型区分"
+				% [family_name, r["kind"], seen[key], r["world_height"]]
 			)
 		seen[key] = r["kind"]
 
@@ -156,17 +177,26 @@ func _check_unique_color(family_name: String, rows: Array) -> void:
 		seen[key] = r["kind"]
 
 
-## 族内按血量升序，体型必须**不下降**。
+## 族内按血量升序，**看到的大小**必须不下降。
+##
+## ⚠ 判据是**世界高**，不是根节点 `scale`（2026-10-30 改）。
+## 规则的本意是「血更厚的那只不该看起来更小」—— 那是玩家看到的东西。
+## 而 `scale` 只是倍率，同一族里一旦混了不同基准高的资产（`mimic` 借 3.14m 的胖僵尸、
+## `confirmed` 借 1.62m 的射手），倍率小的高血怪反而更高，用 scale 判会**误报倒挂**。
+## 反向验证过：把 `blobulin` 世界高抬到超过 `blobuloid` 而血量更低，本判据能抓住。
 func _check_monotonic_in_family(family_name: String, rows: Array) -> void:
 	var sorted_rows := rows.duplicate()
 	sorted_rows.sort_custom(func(a, b): return a["hp"] < b["hp"])
 	var prev: Dictionary = {}
 	for r in sorted_rows:
-		if not prev.is_empty() and r["hp"] > prev["hp"] and r["body_scale"] < prev["body_scale"]:
+		if SIZE_EXEMPT.has(str(r["kind"])):
+			prev = r
+			continue
+		if not prev.is_empty() and r["hp"] > prev["hp"] and r["world_height"] < prev["world_height"] - 0.01:
 			_failures.append(
-				"%s 族内倒挂：%s(hp=%d,体型=%.2f) 血量高于 %s(hp=%d,体型=%.2f) 却更小"
-				% [family_name, r["kind"], r["hp"], r["body_scale"],
-					prev["kind"], prev["hp"], prev["body_scale"]]
+				"%s 族内倒挂：%s(hp=%d,世界高=%.2fm) 血量高于 %s(hp=%d,世界高=%.2fm) 却更小"
+				% [family_name, r["kind"], r["hp"], r["world_height"],
+					prev["kind"], prev["hp"], prev["world_height"]]
 			)
 		prev = r
 
@@ -243,6 +273,11 @@ func _measure(kind: String) -> Dictionary:
 		"hp": int(Enemy3D.PROFILES[kind]["hp"]),
 		"body_scale": float(Enemy3D.BODY_SCALE_BY_KIND[kind]),
 		"world_scale": enemy.scale.x,
+		# 世界高 = 碰撞柱高 × 根节点 scale。碰撞柱高是按"实际模型最大轮廓"定的
+		# （`EnemyAvatar3D.FOOTPRINT_PROFILES`），所以它是"看到有多大"的可靠代理。
+		"world_height": float(
+			EnemyAvatar3D.get_footprint_profile(kind).get("height", 1.2)
+		) * enemy.scale.y,
 		"color": visible,
 		"color_text": "(%.2f,%.2f,%.2f)" % [visible.r, visible.g, visible.b],
 		"color_source": source,

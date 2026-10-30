@@ -379,33 +379,76 @@ func _verify_geometry(rooms: Dictionary) -> void:
 			# 允许的漂移 = 墙外表面（半墙厚）+ gap，再多就是贴错了。
 			if drift > 0.30:
 				_failures.append("幕墙没贴合房间足迹（漂移 %.3fm）" % drift)
-		# ④ 幕墙必须**整圈密闭**：每面三角形面积 == 一整面（长 × 高），一个洞都不许有。
+		# ④ **门的位置不许有幕墙**（业主 2026-10-30：「想办法把门的位置不要有黑幕」）。
 		#
-		# 业主 2026-10-29 晚报单：「进门的时候会看到外边的房间。这个也不合理啊。
-		# 黑色覆盖的时间还是先还原吧。」—— 上午那版在门洞处切口、并让镜头出门时
-		# 整圈收起，结果镜头在门外/门洞里时漏出隔壁房间与墙外地面。
+		# 判据分三层，任一层不成立都会让玩家在门洞里看到一块黑：
+		#   a. 门洞数 == 墙体门洞数（该开的地方有没有开）；
+		#   b. 每个洞的区间要覆盖「门中心 ± 门洞净宽的一半」（开够宽，不是窄窄一条缝）；
+		#   c. 幕墙总面积 == 「整面 − 各洞面积」（网格真的被切了，不是只写了 meta）。
 		#
-		# 判据取**面积**而不是"有没有 meta 标记"：网格真被切过才会小于整面。
+		# 幕墙**其余方向仍然必须全挡**，所以 c 是等号两边都要对 ——
+		# 只查"小了"会漏掉"洞开过头、把该挡的地方也挖掉"。
 		if curtain_room_node != null:
+			var lane_total := 0
+			var hole_total := 0
+			var covered_bad := 0
 			var panel_area := 0.0
 			var expect_area := 0.0
+			var hole_area := 0.0
+			var cp := curtain_room_node.global_position
 			for side_value in ["north", "south", "west", "east"]:
 				var side := str(side_value)
+				var along_x := side in ["north", "south"]
+				var lanes := curtain_room_node.get_wall_door_lanes(side)
+				lane_total += lanes.size()
+				# 幕墙每片的沿墙跨度 = 足迹边长 + 两侧各 (半墙厚 + gap)。
+				var span := (
+					(curtain_rect.size.x + 0.32) if along_x
+					else (curtain_rect.size.y + 0.32))
+				expect_area += span * (curtain_top - curtain_bottom)
 				var panel := curtain.get_node_or_null(
 					"FlowViewWalls%s" % side.capitalize()) as MeshInstance3D
 				if panel == null or panel.mesh == null:
 					continue
 				panel_area += _panel_area_m2(panel)
-				var along_x := side in ["north", "south"]
-				var span := (
-					(curtain_rect.size.x + 0.32) if along_x
-					else (curtain_rect.size.y + 0.32))
-				expect_area += span * (curtain_top - curtain_bottom)
-			print("PLAYABLE curtain_area=%.1f expect=%.1f" % [panel_area, expect_area])
-			if absf(panel_area - expect_area) > 2.0:
+				var panel_holes: Array = panel.get_meta("view_wall_holes", [])
+				# 洞顶由幕墙自己写在 meta 上：门洞竖向挖到顶（见 `_build_flow_view_walls()`
+				# 里那段"为什么可以挖到顶"），所以这里不能硬编码 `DOOR_CLEAR_HEIGHT_M`。
+				var hole_top := float(panel.get_meta("view_wall_hole_top", curtain_top))
+				hole_total += panel_holes.size()
+				for hole_value in panel_holes:
+					var hole: Vector2 = hole_value
+					hole_area += (hole.y - hole.x) * (hole_top - curtain_bottom)
+				# 每扇门都必须被某个洞盖住「门中心 ± 净宽的一半」。
+				var axis_origin := cp.x if along_x else cp.z
+				for lane_value in lanes:
+					var center: float = axis_origin + float(lane_value)
+					var half := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.5
+					var covered := false
+					for hole_value2 in panel_holes:
+						var hole2: Vector2 = hole_value2
+						if hole2.x <= center - half + 0.02 and hole2.y >= center + half - 0.02:
+							covered = true
+							break
+					if not covered:
+						covered_bad += 1
+						if covered_bad <= 5:
+							print("PLAYABLE DOOR_HOLE_MISS room=%s side=%s lane=%.2f holes=%s" % [
+								curtain_room, side, center, str(panel_holes)])
+			print("PLAYABLE curtain_door_holes=%d lanes=%d covered_bad=%d" % [
+				hole_total, lane_total, covered_bad])
+			if hole_total != lane_total:
+				_failures.append("幕墙门洞数 %d 与墙体门洞数 %d 不一致（门洞里会是一块黑）" % [
+					hole_total, lane_total])
+			if covered_bad > 0:
+				_failures.append("%d 个门洞没被幕墙切开（门的位置还有黑幕）" % covered_bad)
+			var solid_expect := expect_area - hole_area
+			print("PLAYABLE curtain_area=%.1f expect=%.1f (full=%.1f hole=%.1f)" % [
+				panel_area, solid_expect, expect_area, hole_area])
+			if absf(panel_area - solid_expect) > 2.0:
 				_failures.append(
-					"幕墙面积 %.1f㎡ 小于整面 %.1f㎡（有缺口 ⇒ 能看见房间外）" % [
-						panel_area, expect_area])
+					"幕墙实面积 %.1f㎡ 与「整面 %.1f − 门洞 %.1f」= %.1f㎡ 不符" % [
+						panel_area, expect_area, hole_area, solid_expect])
 
 		# ⑤ 幕墙**恒显**：镜头跑到房间外也必须继续挡，不许按镜头位置收起。
 		#    收起过一次就会看到外面房间（业主截图的正是这个）。
@@ -899,6 +942,40 @@ func _verify_door_rules(rooms: Dictionary) -> void:
 		_failures.append(
 			"%d 扇 slide 门板厚 ≥ 墙厚 %.2fm（开门后会凸出墙面）" % [
 				thick_doors, WALL_THICKNESS_M])
+	# —— 开门后门板必须**留在视野里**（业主 2026-10-30）——
+	#
+	# 报单：「门应该是可打开和不可打开的状态，而不是直接消失」。
+	# 病根：门板只沿 x 滑出，整块退进 0.28m 厚的墙体内，被深度测试挡在墙后。
+	# 判据：开到位时门板沿门法线的偏移 |panel_z| 必须 ≥ 半个门板厚 ——
+	# 低于这个值就意味着门板有一半以上埋在墙体里，画面上读不出"这里有扇门"。
+	const MIN_VISIBLE_PANEL_Z := 0.09
+	var invisible_panels := 0
+	var min_panel_z := 999.0
+	for room_key in rooms.keys():
+		var room := rooms[room_key] as DungeonRoom3D
+		if room == null:
+			continue
+		for child in room.find_children("*", "Node3D", true, false):
+			if not (child is RoomDoor3D):
+				continue
+			var door := child as RoomDoor3D
+			if door.get_opening_style() != RoomDoor3D.OPENING_STYLE_SLIDE:
+				continue
+			var was_open := door.is_open
+			door.set_open(true, true)
+			var panel_z := absf(float((door.get_snapshot() as Dictionary).get("panel_z", 0.0)))
+			door.set_open(was_open, true)
+			min_panel_z = minf(min_panel_z, panel_z)
+			if panel_z < MIN_VISIBLE_PANEL_Z:
+				invisible_panels += 1
+				if invisible_panels <= 3:
+					print("PLAYABLE SLIDE_HIDDEN %s panel_z=%.3f" % [
+						str(door.name), panel_z])
+	print("PLAYABLE slide_park min_panel_z=%.3f hidden=%d limit=%.2f" % [
+		min_panel_z, invisible_panels, MIN_VISIBLE_PANEL_Z])
+	if invisible_panels > 0:
+		_failures.append(
+			"%d 扇 slide 门开到位后门板埋进墙里（画面上等于消失）" % invisible_panels)
 	# "有门扇 + 有提示"仍不等于"按 E 有用"：交互候选是**按距离**收集的，
 	# 门在房里但玩家站太远就收不到。这里真的把玩家挪到门口、走完整条交互链。
 	if retreat_door != null:
@@ -1053,17 +1130,101 @@ func _verify_seal_cycle(rooms: Dictionary) -> void:
 		_dump_open_leaves(target)
 		_failures.append("封门后仍有 %d 扇门是开的（%s）" % [opened_after, target.room_id])
 
-	# 清房：应当自动把门推开（EGT 不需要玩家按 E）。
+	# 清房：门恢复**可开启**（不是替玩家推开）。业主 2026-10-30：
+	# 「可开启状态，人走近了会自动打开，然后再关闭。」
 	_tower._mark_room_cleared(target, false)
 	await get_tree().process_frame
 	var still_sealed := bool(_tower._sealed_rooms.has(target.room_id))
+	var openable_end := _openable_leaf_count(target)
 	var opened_end := _open_leaf_count(target)
-	print("PLAYABLE unseal room=%s sealed=%s open_leaves=%d" % [
-		target.room_id, str(still_sealed), opened_end])
+	print("PLAYABLE unseal room=%s sealed=%s openable_leaves=%d open_leaves=%d" % [
+		target.room_id, str(still_sealed), openable_end, opened_end])
 	if still_sealed:
 		_failures.append("清房后仍然封锁（%s）" % target.room_id)
-	if opened_end == 0:
-		_failures.append("清房后门没有自动打开（%s）" % target.room_id)
+	if openable_end == 0:
+		_failures.append("清房后门没有恢复可开启（%s）" % target.room_id)
+	if opened_end != 0:
+		_failures.append(
+			"清房后门被直接推开（%d 扇）—— 可开启态应当关门待走近（%s）" % [
+				opened_end, target.room_id])
+
+	# —— 可开启 → 走近自动开 → 走远自动关 ——
+	await _verify_proximity_cycle(target)
+
+
+## 「可开启」的完整闭环：走近自动开、走远自动关。
+##
+## 判据走**真实感应**（把玩家真的放到门边 / 放回房心，让 `RoomDoor3D._process`
+## 自己判），不手工 `set_open` —— 手工开门验的是门，不是业主说的那条手感。
+func _verify_proximity_cycle(room: DungeonRoom3D) -> void:
+	var pick := _first_connected_leaf(room)
+	var door := pick.get("door") as RoomDoor3D
+	if door == null:
+		_failures.append("找不到可测的连通门（%s）" % room.room_id)
+		return
+	var room_center := room.global_position + Vector3(0.0, 0.05, 0.0)
+	var inward := room_center - door.global_position
+	inward.y = 0.0
+	inward = inward.normalized()
+	# 门边（距门 1.5m < 3.6m 开阈）：必须自动开。
+	var near := door.global_position + inward * 1.5 + Vector3.UP * 0.05
+	await _hold_player_at(near, 30)
+	var opened_near := door.is_open
+	# 房心（距门 > 4.4m 关阈 + 0.45s 延迟）：必须自动关。
+	var away_distance := room_center.distance_to(door.global_position)
+	await _hold_player_at(room_center, 90)
+	var still_open := door.is_open
+	print("PLAYABLE proximity room=%s door=%s dir=%s away_m=%.2f open_near=%s still_open_away=%s" % [
+		room.room_id, str(door.name), str(door.direction), away_distance,
+		str(opened_near), str(still_open)])
+	if not opened_near:
+		_failures.append("走近可开启门没有自动打开（%s）" % str(door.name))
+	if away_distance > RoomDoor3D.PROXIMITY_CLOSE_DISTANCE_M and still_open:
+		_failures.append("走远后门没有自动关上（%s）" % str(door.name))
+
+
+## 把玩家钉在一个位置上跑 `frames` 帧（门态由调用方读）。
+##
+## 必须逐帧钉：物理会把"边界附近的瞬移"纠正回房间中心（位置权威），
+## 不钉的话第一帧人就飞回去了，测到的永远是"走远了"。
+func _hold_player_at(position: Vector3, frames: int) -> void:
+	for i in range(frames):
+		_tower.player.global_position = position
+		_tower.player.velocity = Vector3.ZERO
+		await get_tree().process_frame
+
+
+## 本房（或共享边对端）第一个通向真实房间的门。
+func _first_connected_leaf(room: DungeonRoom3D) -> Dictionary:
+	for direction_value in (room.door_targets as Dictionary).keys():
+		var peer_id := str((room.door_targets as Dictionary)[direction_value])
+		if peer_id.is_empty():
+			continue
+		var door := room.get_door_node(str(direction_value))
+		if door == null:
+			var peer := _tower._room_by_id.get(peer_id) as DungeonRoom3D
+			if peer != null and is_instance_valid(peer):
+				door = peer.get_door_node_towards(room.room_id)
+		if door != null:
+			return {"door": door, "peer_id": peer_id}
+	return {}
+
+
+## 本房**可开启的**门扇数（共享边的门扇在对端，两边都数）。
+func _openable_leaf_count(room: DungeonRoom3D) -> int:
+	var count := 0
+	for child in room.find_children("*", "Node3D", true, false):
+		if child is RoomDoor3D and (child as RoomDoor3D).openable:
+			count += 1
+	for direction_value in (room.door_targets as Dictionary).keys():
+		var peer_id := str((room.door_targets as Dictionary)[direction_value])
+		var peer := _tower._room_by_id.get(peer_id) as DungeonRoom3D
+		if peer == null or not is_instance_valid(peer):
+			continue
+		var peer_door := peer.get_door_node_towards(room.room_id)
+		if peer_door != null and peer_door.openable:
+			count += 1
+	return count
 
 
 func _dump_open_leaves(room: DungeonRoom3D) -> void:

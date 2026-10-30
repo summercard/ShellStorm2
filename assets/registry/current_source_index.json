@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-20",
+  "date": "2026-10-30",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -9782,22 +9782,22 @@
       "sha256": "7f5c0fe228e8743ce99228c8478309bd957ecbca06b7df4983c635773e7b1119"
     },
     {
-      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v003.blend",
-      "bytes": 980208,
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v004.blend",
+      "bytes": 863061,
       "family": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_VERSION.blend",
-      "version": [
-        3
-      ],
-      "sha256": "9780a740e8c3a101b21d5d9f15b6c9e054f9f699d552b37ebebcc35d2c9823bb"
-    },
-    {
-      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v004.blend",
-      "bytes": 2991693,
-      "family": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_VERSION.blend",
       "version": [
         4
       ],
-      "sha256": "34ee453fa730596c8060a57082dcb0267d8ceaa288ed9c28035f0f0c2651b821"
+      "sha256": "0988c1f7fc011d56606b812f80f08010713bb4e2299cc221efbb1f595396e09b"
+    },
+    {
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v005.blend",
+      "bytes": 2470367,
+      "family": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_VERSION.blend",
+      "version": [
+        5
+      ],
+      "sha256": "879a6d315edfb43246f2c8f519af3b37acf68b6057f9f12c3442f0a6b2d368a0"
     },
     {
       "path": "art_source/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v004.blend",
@@ -11764,6 +11764,33 @@
         2
       ],
       "sha256": "cc312defc2e03fdeb16849161357b290192c1c469f77b8d2c02b604ecc58996f"
+    },
+    {
+      "path": "art_source/enemies/enemy_3d/enm_melee_expedition03_infected01/source/enm_melee_expedition03_infected01_model_v002.blend",
+      "bytes": 830023,
+      "family": "art_source/enemies/enemy_3d/enm_melee_expedition03_infected01/source/enm_melee_expedition03_infected01_model_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "791b163e57fea9f088d7ff9ed7523d132cec9685da9661b8d1017c5c868dbe92"
+    },
+    {
+      "path": "art_source/enemies/enemy_3d/enm_melee_expedition03_infected01/source/enm_melee_expedition03_infected01_animation_v002.blend",
+      "bytes": 534084,
+      "family": "art_source/enemies/enemy_3d/enm_melee_expedition03_infected01/source/enm_melee_expedition03_infected01_animation_VERSION.blend",
+      "version": [
+        2
+      ],
+      "sha256": "5b851072402a87c48dd05ee04cee02d5bd795ffea13f95dcb36c906b2480f125"
+    },
+    {
+      "path": "art_source/shared/palette/npc_palette_10x10_512_v001.psd",
+      "bytes": 1588618,
+      "family": "art_source/shared/palette/npc_palette_10x10_512_VERSION.psd",
+      "version": [
+        1
+      ],
+      "sha256": "28dfa804ebe219dbaa82e3f66395c7fa32ab74b5cc289759f9117b85abb86da2"
     }
   ],
   "authoring_root": "art_source",

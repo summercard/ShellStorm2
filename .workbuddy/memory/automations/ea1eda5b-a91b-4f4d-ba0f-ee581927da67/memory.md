@@ -5,6 +5,38 @@
 
 ## 执行历史
 
+### 2026-10-30 09:52 — **内容已发布上线，但免登录直链不通**（服务端登录门禁，仅管理员可放开）
+- 身份已绑定：飞书设备码授权完成，`/api/v1/me` = 庄孟鸿 / `u_ae23e4a811b703cd` / `role=0 基础用户` / `publish_policy=review`。
+- 发布成功两次（第一次用 05:03 旧包，第二次 09:50 重建包），最终线上：`shellstorm2-20261012-190519` **3 files / 377,162,059 B**，与本地三件之和**逐字节相等**。
+- 包：`ShellStorm2.exe` **377,135,376 B**，SHA256 `b81fb353cb0d7868af7df54f6c094b95bc869816d3d2890609919b7a16c12562`。三道门禁全绿。
+- **唯一未通过项：直链/更新页均 302 → `/oauth/feishu?src=site`。** 站点访问策略「需登录」。带 `--public` 直接 `403 {"error":"免登录链接由管理员设置"}`。全站所有站点同样 302 ⇒ 是服务端 1.9.7 全局策略，不是本站点问题。**要玩家能下载必须管理员设免登录。**
+- **踩坑1（关键）**：服务端遇 403 时不等请求体收完就断开，urllib 正在写 241 MB ⇒ 只报 `WinError 10054`，白等 2~3 分钟，客户端自带「403 去 access 重发」兜底永远走不到。诊断用 **179 B 小包 POST `site_id=__diag_not_exist__`**，0.01 秒出真因。
+- **踩坑2**：`--skip-build` 复用了 05:03 的包，而源码 08:07/09:26 还改过（`DungeonRoom3D.gd` / `TowerDescent3D.gd`），页面已列 10-30 新条目 ⇒ 页面承诺了包里没有的修复。**教训：`--skip-build` 前必须比对 exe mtime 与工作区最新源码 mtime，源码更新就重建。**
+- 脚本改动（未提交）：移除 `--public`（被 403）；`verify_online()` 收紧为只认 200 且**不跟随跳转**（原来跟随 302 到登录页只报 404，看不出真因），已实测输出准确诊断。
+- 更新内容 18 条（10-30 门洞黑幕 1 条 + 10-29×17）。未提交 21 项。HEAD 仍 `a72fc0e1`，未 commit/push；`config/name="弹壳风暴2"` 未动；未新建站点。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-10-30.md`。
+
+### 2026-10-30 07:50 — 重试：**仍未发布**，但根因已收敛到「只差一次飞书授权」
+- 复核：小包探测仍 403、`/api/v1/me` 的 `user_id` 仍空 ⇒ 服务器侧没变，**没有盲传 377 MB**。
+- **已升级客户端**：`git clone` 最新版覆盖 `scripts/publish.py`（54,246 → 112,805 B，旧版备份 `ShellStorm2-work\_tmp\rs_scripts_backup_0751`）。新版才有 `login` 子命令。`npx skills update` 认不到这份手工安装的副本，必须手工 clone 覆盖。
+- **飞书登录是设备码流程（RFC 8628）**：`login --feishu` 打印 `accounts.feishu.cn/oauth/v1/device/verify?...&user_code=XXXX-XXXX`，主人在任意设备确认即可，**无需账号密码、无需代操作浏览器**，10 分钟有效。本次码 `PLN2-DK5B` 未获授权已过期。
+- **修了 `scripts/daily_release.py` 两处（未提交，留工作区）**：① `publish()` 补 `--public` —— 服务端 1.7.0 起站点默认 `access=login`，不带就 302 跳登录页；② `verify_online()` 原判据 `200 <= code < 400` **会把 302 判成成功**，已收紧为只接受 200 + 必须有 Content-Length 且等于本地字节数。`py_compile` 通过。
+- 包未变：`377,134,880 B` / `f5e88a0e…`。授权后只需 `python scripts/daily_release.py --skip-build`（约 1 分钟）。
+- **两次设备码（`PLN2-DK5B` / `KDLD-GUSK`）均在 10 分钟内未被确认 ⇒ 410 过期**。结论：**这一步必须业主亲自点链接，自动化跑不通**。以后遇到身份未绑，直接报「需你授权」并把命令给出来，别再连续刷两个码白等 20 分钟。
+- **新版客户端兼容性已核对**：成功输出仍含「发布成功」字样（`daily_release.py` 靠它判成败，不受影响）；`--site-id` 更新路径 `maybe_enrich_listing` 里 `is_update` 直接 return ⇒ **不会触发 AIKey 命名、不会挂起**。
+- 旧版客户端备份 `ShellStorm2-work\_tmp\rs_scripts_backup_0751\publish.py`（回滚用）。
+- **下次运行前置检查（必做）**：`/api/v1/me` 的 `user_id` 为空就直接报告「需先 login --feishu」，不要跑完整流程白等 3 分钟。
+
+### 2026-10-30 05:08 — **失败：未发布**（打包+三道门禁全绿，卡在上传；服务器新增飞书身份门禁）
+- 导出 359.7 MiB 一次过 → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 文档生成成功（17 条）→ **上传失败**。首次与 `--skip-build` 重试**逐字同错**，确定性故障。
+- 包（未发布）：`ShellStorm2.exe`，**377,134,880 B**，SHA256 `f5e88a0e464b0eb9958e428172119247fa77bd0db7d2abccdad3765178594785`（比 10-29 版 +214,088 B）。留在产物目录，次日可 `--skip-build` 复用。
+- **根因不是网络**：daemon 已由 1.6.1 升到 **1.9.7**（`/api/v1/health` 的 `version` + 新 feature `feishu-login`）。用 179 B 小包探测 `POST /api/v1/deploy`（指向不存在的 site_id，零写入）⇒ **HTTP 403 `发布必须绑定飞书身份：请先执行 login --feishu 再发布`**。大包上传时服务器未读完请求体即 403 关连接 ⇒ 客户端只看到 `WinError 10054`。`/api/v1/me` 显示 `authenticated=true` 但 **`user_id=""`**（未绑定）。本机 `publish.py` 无 `login` 子命令（旧客户端），连补救命令都跑不了。
+- **线上未被破坏**：站点记录 `shellstorm2-20261012-190519` **3 files / 376,935,880 B** ＝ 10-29 版原样。但直链与更新页现在 **302 → `/oauth/feishu?…&src=site`** 再跳飞书登录页 ⇒ **v1.9.7 起公开链接也要登录才能下载**，内容仍在、未被删。
+- 更新内容（本应发布）：CHANGELOG **17 条**（全为 10-29 条目）/ 提交 1 条（`a72fc0e1`）/ 未提交 3 项（2 个 `tools/_egt_*.gd.uid` + `project.godot~RF…TMP`，无害）。主条目：远征03 宝箱房开箱掉落+命运卡、掉落对齐 EGT 一层（普通怪不掉装备/自爆不掉铸币/弹药改清房结算）、弹速 16→8 与伤害统一 17、33 只怪数值按玩家 50 伤重定标并修「子弹飞不出来」、33 种全实装、逐房编成、黑幕垂直密闭还原、场景工坊 r5、出口 EXIT 灯牌、小地图去底缩尺寸、易碎小物件 v002 与随机撒点。
+- 合规：`config/name="弹壳风暴2"` 未动（第 56 行，`git diff project.godot` 空）；HEAD 仍 `a72fc0e1`，未 commit/push；未新建站点；发布目录仍 3 个文件；探测临时文件已清。
+- 报告：`I:\工作项目\shellstrom2\ShellStorm2-work\_logs\发布失败报告_2026-10-30.md`（**放 _logs 不放发布目录**）。
+- 待业主：①更新 skill 到新版并 `login --feishu`，或请管理员为 `auto-zhuangmenghong` 补绑/豁免 `publish_policy`；②确认站点是否要对玩家开登录门禁（否则发了也下不了）。
+
 ### 2026-10-29 05:04 — **成功**（常规全流程，一次跑通，无重试）
 - 首轮即通过：导出 359.5 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档 → 覆盖发布（`server-api-update`，3 文件）→ 线上校验通过。耗时 3m34s。仍按经验把 `TMP/TEMP/TMPDIR` 指到 `I:\...\ShellStorm2-work\_tmp`（C: 今日 2.8 G 空闲，99% 占用，先防一手）。
 - 包：`ShellStorm2.exe`，**376,920,792 B**（359.5 MiB），SHA256 `c1802bd0f0f54b4dd91ab7d9fa999e6dd70b59465a45a011f1303db0b15a6e0c`。比 10-28 版 **+14,864 B**。
@@ -197,6 +229,10 @@
 - 发布耗时约 3.5 分钟（导出占大部分），需后台运行。
 
 ## 经验
+- **`--skip-build` 前必查源码是否比包新**：`exe` mtime vs `src/` 下最新 `.gd` mtime。源码更新还复用旧包，会发出去一份「页面写了、包里没有」的假更新（10-30 已踩）。
+- **免登录直链只归管理员**（服务端 1.9.7）：`--public` 会被 `403 免登录链接由管理员设置`。普通账号发布只能「需登录」，玩家下不到。判断访问状态别再靠 HEAD 猜，`server-sites` 直接有「访问策略」列。
+- **`WinError 10054` 别当网络抖**：先查 `/api/v1/health` 的 `version` 与 `/api/v1/me` 的 `user_id`。daemon 1.9.7 起发布要求飞书身份绑定，未绑定会 403 并无视请求体直接关连接；大包上传侧只表现成连接重置。判定法：用 **179 B 小包 POST `site_id=__diag_not_exist__`**（零写入、不建站）即可在 0.03s 内读到真实 403 文本。
+- **服务端 1.9.7 的第二个变化**：`/shellstorm2-…exe` 与 `/…/` 都 302 到 `/oauth/feishu?…&src=site`，即公开链接也要求飞书登录。核验线上版本改用 `GET /api/v1/sites`（看 files/bytes 是否与上一版一致）＋站点记录，**不能再靠 HEAD 直链判活**。
 - 线上校验不要只靠脚本的 HEAD：本次额外做了「整包下载 + SHA256 比对」才算真正闭环（成功日适用；失败日只需 HEAD 确认线上未被覆盖）。
 - 列站点用 `python publish.py server-sites`（没有 `list` 子命令，写错会直接 argparse 报错）。
 - `--skip-build` 可复用已有 exe，仅做验证+生成+发布。

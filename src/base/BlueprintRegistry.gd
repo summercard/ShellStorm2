@@ -488,12 +488,23 @@ func is_unlocked(item_id: String) -> bool:
 
 ## ========== 枪身工厂方法 ==========
 
+## 豌豆手枪（2026-10-30 弹匣/弹速对齐《挺进地牢》）。
+##
+## 对标对象是**陆战队员的军用佩枪 `Marine Sidearm`**（Magazine 10 / Shot Speed 25 /
+## Damage 5 / 0.25 s 每发 / 换弹 1.2 s）。本次只换业主指定的两项：
+##   · `magazine_size` 12 → **10**
+##   · 弹速 23 → **25 m/s**
+## 本作的弹速口径是 `弹速 = 23 × 枪身倍率 × 弹种倍率 × 命运倍率`，23 m/s 即原作的
+## Shot Speed 23，所以枪身只声明**倍率** `25 / 23 ≈ 1.0870`，不写 m/s。
+## 枪身倍率与弹种倍率是**相乘**（`AssemblyNode._combine_stats`），否则挂上标准弹
+## （倍率 1.0）会把枪身值覆盖掉——这条以前没人踩过，因为枪身从不声明弹速。
 func _create_gunbody_pistol() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Pistol")
 	node.tags = ["pistol", "semi_auto", "sidearm"]
 	node.set_base_stats({
 		"damage": 25, "fire_rate": 3.5, "bullet_count": 1, "range": 15,
-		"spread": 0.03, "reload_time": 1.5, "magazine_size": 12,
+		"spread": 0.03, "reload_time": 1.5, "magazine_size": 10,
+		"bullet_speed": 25.0 / 23.0,
 	})
 	return node
 

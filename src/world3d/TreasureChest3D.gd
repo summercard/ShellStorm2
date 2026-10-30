@@ -25,6 +25,9 @@ const CHEST_DIMENSIONS := Vector3(1.28, 1.02, 0.92)
 ## 开盖动画时长。取 0.42s 而不是 0.2 —— 开箱是这一层的「奖励时刻」，
 ## 太快会让玩家没看清里面出了什么就已经在跑了。
 const LID_OPEN_SECONDS := 0.42
+## 拟态的抖动时长。0.4s 是刻意的**预警窗口**：够玩家后撤半步，
+## 又短到不会让人在箱子前面站着等它变。
+const MIMIC_SHAKE_SECONDS := 0.40
 ## 品质 → 描边色。与 `Dungeon3D.FATE_RARITIES` 同序（common/uncommon/rare/epic/legendary），
 ## 但只用到前四档：宝箱品质在原作里是「棕/蓝/绿/红/黑」，不是五档品质。
 const QUALITY_COLORS := {
@@ -45,6 +48,12 @@ var requires_key := false
 var reward_pool_id := "loot_floor_1_2"
 var drop_count := 1
 var fate_card_per_open := 0
+## 这只箱子是不是**拟态**（开箱变怪）。由生成器掷骰后写进 `chest_placements`。
+## **箱子自己不知道也管不着结算** —— 它只负责「开箱时表现成被咬了一口再消失」，
+## 刷什么怪、掉什么全在 `Dungeon3D`。
+var mimic := false
+## 拟态变什么怪。同 `chest_placements.mimic_monster_kind`，缺省 `egt_mimic`。
+var mimic_monster_kind := "egt_mimic"
 
 var _opened := false
 var _player_in_range := false
@@ -54,6 +63,7 @@ var _prompt: Label3D
 var _body_material: StandardMaterial3D
 var _trim_material: StandardMaterial3D
 var _glow: MeshInstance3D
+var _collision: CollisionShape3D
 
 
 func configure(config: Dictionary) -> void:
@@ -63,6 +73,8 @@ func configure(config: Dictionary) -> void:
 	reward_pool_id = str(config.get("reward_pool_id", reward_pool_id))
 	drop_count = maxi(1, int(config.get("drop_count", drop_count)))
 	fate_card_per_open = maxi(0, int(config.get("fate_card_per_open", fate_card_per_open)))
+	mimic = bool(config.get("mimic", mimic))
+	mimic_monster_kind = str(config.get("mimic_monster_kind", mimic_monster_kind))
 
 
 func _ready() -> void:
@@ -193,6 +205,69 @@ func is_opened() -> bool:
 	return _opened
 
 
+# ---------------------------------------------------------------------------
+# 拟态（开箱变怪）
+# ---------------------------------------------------------------------------
+
+## 打开一只**拟态**箱子：抖动 → 咬开 → 整体消失。
+##
+## 为什么不复用 `commit_opened()`：那条路径的语义是「箱子开了、里面有东西」——
+## 盖子缓慢上翻、内部发光面亮起、提示牌写「已开启」。拟态正相反：**箱子吞了钥匙就跑**，
+## 玩家该看到的是「这箱子不是箱子」，而不是一盏温柔的奖励灯。
+##
+## 本函数**不发奖励、不刷怪**：钥匙已在 `Dungeon3D` 扣完，怪也由 `Dungeon3D` 生成。
+## 箱子只把「我没了」这件事演完，然后消失 —— 否则怪会跟箱子叠在同一个位置互相遮挡。
+func commit_mimic_reveal() -> void:
+	if _opened:
+		return
+	_opened = true
+	_player_in_range = false
+	# 提示牌直接隐藏而不是改写成「已开启」：接下来玩家要看的是那只怪，
+	# 一句状态文案留在半空只会挡住它。
+	if _prompt != null:
+		_prompt.visible = false
+	if _visual_root != null:
+		var shake := create_tween()
+		shake.set_loops(4)
+		shake.tween_property(_visual_root, "rotation:z", deg_to_rad(4.5), 0.05)
+		shake.tween_property(_visual_root, "rotation:z", deg_to_rad(-4.5), 0.05)
+		shake.chain().tween_property(_visual_root, "rotation:z", 0.0, 0.02)
+	if _lid_pivot != null:
+		var lid := create_tween()
+		lid.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		lid.tween_interval(MIMIC_SHAKE_SECONDS)
+		lid.tween_property(_lid_pivot, "rotation:x", deg_to_rad(-140.0), 0.16)
+	if AudioManager != null:
+		AudioManager.play_sfx("container_open", -2.0)
+	# 先发 `opened`：房间在这一刻就把「已开」记进账，之后无论 detail 重建多少次、
+	# 玩家读档重进多少次，这只箱子都不会再是可开的箱子。
+	opened.emit(self)
+	# 消失走 tween 回调，不用 `await` —— `Dungeon3D` 紧接着就要在同一帧刷怪，
+	# 把 `commit_*` 变成协程会让「先扣钥匙后刷怪」的顺序断在第一帧。
+	var vanish := create_tween()
+	vanish.tween_interval(MIMIC_SHAKE_SECONDS + 0.34)
+	vanish.tween_callback(_vanish_for_mimic)
+
+
+## 拟态的终态：视觉与碰撞一起收掉。
+## 只藏视觉不关碰撞，会在房间里留一块看不见的挡路石头（玩家会以为是 bug）。
+func _vanish_for_mimic() -> void:
+	if _visual_root != null:
+		_visual_root.visible = false
+	if _collision != null:
+		_collision.disabled = true
+	monitoring = false
+	if _prompt != null:
+		_prompt.visible = false
+
+
+## detail 重建 / 读档回灌已"咬过"的拟态箱：直接落到终态，不重播抖动。
+func restore_mimic_state() -> void:
+	_opened = true
+	_player_in_range = false
+	_vanish_for_mimic()
+
+
 ## 品质 → 掉落品质加成档数。`Dungeon3D._apply_fate_item_quality()` 吃这个值。
 ## 宝箱品质在原作里是「棕/蓝/绿/红/黑」五档，我们映射到 4 档品质加成（0~3）。
 func quality_tier() -> int:
@@ -213,6 +288,9 @@ func get_chest_snapshot() -> Dictionary:
 		"quality": quality,
 		"requires_key": requires_key,
 		"opened": _opened,
+		"mimic": mimic,
+		"visual_visible": _visual_root.visible if _visual_root != null else false,
+		"collision_disabled": _collision.disabled if _collision != null else false,
 		"prompt": _prompt.text if _prompt != null else "",
 		"dot_visible": is_interaction_dot_visible(),
 		"lid_open_deg": rad_to_deg(_lid_pivot.rotation.x) if _lid_pivot != null else 0.0,
@@ -305,10 +383,10 @@ func _build_visual() -> void:
 
 	var shape := BoxShape3D.new()
 	shape.size = Vector3(CHEST_DIMENSIONS.x + 0.3, CHEST_DIMENSIONS.y + 0.3, CHEST_DIMENSIONS.z + 0.3)
-	var collision := CollisionShape3D.new()
-	collision.position.y = CHEST_DIMENSIONS.y * 0.5
-	collision.shape = shape
-	add_child(collision)
+	_collision = CollisionShape3D.new()
+	_collision.position.y = CHEST_DIMENSIONS.y * 0.5
+	_collision.shape = shape
+	add_child(_collision)
 
 	# 提示文案。同家具/钥匙口径：不画描边（outline 8 相对 34 号字太粗），正对镜头。
 	_prompt = Label3D.new()

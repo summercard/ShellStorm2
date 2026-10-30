@@ -1238,6 +1238,10 @@ func get_interaction_candidate(interacting_player: Player3D) -> Dictionary:
 	var door := door_info.get("door") as RoomDoor3D
 	if door == null:
 		return {}
+	# 感应门（远征03 的「可开启」态）不按 E：玩家走近它就开。
+	# 这类门还给交互圆点/提示，会和自动开合打架，也会让玩家以为门卡住了。
+	if not door.is_manual_interaction_enabled():
+		return {}
 	return _make_door_interaction_candidate(
 		door,
 		"room_door",
@@ -4661,6 +4665,13 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		if not is_equal_approx(damage_multiplier, 1.0):
 			enemy.contact_damage = maxi(1, int(round(float(enemy.contact_damage) * damage_multiplier)))
 		enemy.global_position = spawn_positions[index]
+		# 房间矩形注入（2026-10-30）。瞬移/游荡的「别出房」判据必须用**矩形**，
+		# 不能用「离出生点不超过 R」的圆形近似 —— 那个近似的 R 会随当前位置自增，
+		# 于是怪能一路飘出房间（实测 25×25 房 84% 的瞬移落点在房外、最远 99.84m）。
+		# 出房后玩家子弹被墙挡、它的子弹也被墙挡，就是「瞬移后双向都打不中」。
+		# 这里只注入几何，不改任何 AI 决策：没声明 `blink`/`wander` 的怪一个字节都不变。
+		var room_half := room.get_dimensions() * 0.5
+		enemy.set_room_bounds(room.global_transform, room_half)
 		if launch_target is Vector3 and launch_speed > 0.0 and launch_duration > 0.0:
 			enemy.apply_melee_knockback(
 				(launch_target as Vector3) - enemy.global_position,
@@ -5261,6 +5272,10 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 	# 这里只是借用子图房自己的包围盒做散布与贴地，掉落表仍来自敌人数据。
 	if loot_room == null:
 		loot_room = _secret_branch_room_ids.get(enemy.room_id) as DungeonRoom3D
+	# 宝箱拟态：箱内的东西不在开箱时给，在**它肚子里**。放在击杀结算之前发 ——
+	# 击杀掉落可能因为掉落表为空而返回 0 条，箱内物资不该被一起吞掉。
+	if enemy.get_meta("chest_mimic", false) and loot_room != null:
+		_deliver_chest_mimic_loot(loot_room, enemy)
 	var reward_report := _reward_coordinator.resolve_kill(
 		loot_room.reward_plan if loot_room != null else {},
 		enemy_data,
@@ -5335,6 +5350,14 @@ func _claim_enemy_departure(enemy: Enemy3D) -> bool:
 
 
 func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data: Dictionary) -> void:
+	# 宝箱拟态**不是本房波次的一部分** —— 它死了不代表房间肃清。
+	#
+	# 不在这里拦一句，宝箱房会被 `_mark_room_cleared()` 记成「已清内容房」：白送一次
+	# 清房结算（宝箱房自己 `reward_plan` 是空的，但 `resolve_clear` 有全局兜底表），
+	# 还会让「已清内容房数」提前涨一格、把传送支线与撤离门的解锁条件提前满足。
+	# 实测这些副作用都不报错，只是数值悄悄变了 —— 属于最难被发现的那一类。
+	if enemy.get_meta("chest_mimic", false):
+		return
 	if not _alive_by_room.has(enemy.room_id) or _room_spawn_blocked.has(enemy.room_id):
 		return
 	if int(_alive_by_room[enemy.room_id]) > 0:
@@ -5801,6 +5824,11 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 			return
 		_consume_room_key()
 		_refresh_loot_label()
+	if chest.mimic:
+		# 拟态：钥匙照扣，然后箱子变成怪。**这一条不能挪到扣钥匙前面** ——
+		# 先现形再判钥匙，会出现「没钥匙也把拟态惊动了、箱子已经没了」。
+		_reveal_chest_mimic(room, chest)
+		return
 	chest.commit_opened()
 	if _map_fate_triggers != null:
 		# 宝箱算一次"容器开启"。给独立的 size_class 值，方便将来按箱/罐分别计数：
@@ -5828,6 +5856,126 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 		parts.append("命运卡已暂存（槽位或来源不可用，见待领取）")
 	elif int(fate.get("drawn", 0)) == 0 and chest.fate_card_per_open > 0:
 		parts.append("命运卡发放失败")
+	status_label.text = " · ".join(parts)
+
+
+## 拟态刷怪的最小离玩家距离。开箱那一刻玩家就贴在箱子前，直接在箱子位置刷怪
+## 会让怪与玩家重叠 —— 接触伤害在同帧结算，玩家连后撤的机会都没有。
+const CHEST_MIMIC_MIN_SPAWN_DISTANCE_M := 3.0
+
+
+## 宝箱拟态现形（2026-10-30 接回）。
+##
+## 与普通开箱只差两处：**箱子消失**、**奖励改成击杀后才掉**。钥匙照扣 ——
+## 这正是这条机制的全部恶意：宝箱房里那只箱子可能不是箱子，而你按 E 的时候无从分辨。
+## 想清楚「钥匙白花」这件事是有意的，别把它当 bug 修掉。
+func _reveal_chest_mimic(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
+	if room == null or chest == null:
+		return
+	chest.commit_mimic_reveal()
+	if _map_fate_triggers != null:
+		# 对命运卡系统来说「箱子被打开过」这件事仍然成立，统计口径保持一致。
+		_map_fate_triggers.on_container_opened("treasure_chest")
+	var kind := str(chest.mimic_monster_kind)
+	var base_type: Dictionary = MonsterInjector.BASE_ENEMY_TYPES.get(kind, {})
+	if base_type.is_empty():
+		# 钥匙已经扣了、箱子也没了。必须吼出来 —— 否则表现是「花了钥匙什么都没发生」，
+		# 排查时会被当成随机 bug。
+		push_error(
+			"[Dungeon3D] 宝箱拟态：未知怪物 kind『%s』（%s/%s），本箱无补偿"
+			% [kind, room.room_id, chest.chest_id]
+		)
+		status_label.text = "宝箱开启 · 箱内为空"
+		return
+	var presentation: Dictionary = MonsterInjector.ENEMY_PRESENTATION.get(kind, {})
+	var config := {
+		"enemy_type": kind,
+		"name": str(base_type.get("name", kind)),
+		"emoji": str(presentation.get("emoji", "\u5c38")),
+		"hp": int(base_type.get("hp_base", 20)),
+		"max_hp": int(base_type.get("hp_base", 20)),
+		"damage": int(base_type.get("damage_base", 5)),
+		"speed": float(base_type.get("speed", 60.0)),
+		"persistent_id": "chest_mimic:%s:%s" % [room.room_id, chest.chest_id],
+	}
+	var before: Array = (_enemy_nodes_by_room.get(room.room_id, []) as Array).duplicate()
+	var spawned := _spawn_enemy_batch(
+		room, [config], true, false, [_chest_mimic_spawn_position(room, chest)]
+	)
+	var mimicked: Enemy3D = null
+	for value in _enemy_nodes_by_room.get(room.room_id, []):
+		if before.has(value):
+			continue
+		if is_instance_valid(value) and value is Enemy3D:
+			mimicked = value as Enemy3D
+			break
+	if spawned <= 0 or mimicked == null:
+		push_error(
+			"[Dungeon3D] 宝箱拟态生成失败（%s/%s，spawned=%d）—— 钥匙已扣，玩家什么也没得到"
+			% [room.room_id, chest.chest_id, spawned]
+		)
+		status_label.text = "宝箱开启 · 箱内为空"
+		return
+	# 打两个标记：`chest_mimic` 用于「它死了不算清房」，`chest_mimic_loot` 是
+	# **开箱那一刻就抽好的**箱内物资 —— 击杀时直接落地，不再抽第二次（重抽会让
+	# 「拟态箱」的实际收益和普通箱不同，品质加成也就对不上了）。
+	mimicked.set_meta("chest_mimic", true)
+	mimicked.set_meta("chest_mimic_loot", _resolve_chest_grants(room, chest))
+	mimicked.set_meta("chest_mimic_fate_cards", chest.fate_card_per_open)
+	# 出生即现形。`egt_mimic` 的 profile 里带 `disguise`（伪装态静止 / 不攻击 / **不吃伤害**），
+	# 那是给它「在房间里蹲着装箱子」用的；而这里它已经当着玩家的面从箱子里咬出来了，
+	# 再伪装就等于刷出一只打不动的假箱子。
+	mimicked.reveal_disguise_now()
+	status_label.text = "宝箱是拟态！击破它才能拿回箱内物资"
+
+
+## 拟态的落点：箱子的位置，但**必须推开玩家**。
+func _chest_mimic_spawn_position(room: DungeonRoom3D, chest: TreasureChest3D) -> Vector3:
+	var floor_y := float(room.get_meta("walk_surface_y_m", 0.0))
+	var point := chest.global_position
+	point.y = floor_y
+	if player != null and is_instance_valid(player):
+		var away := point - player.global_position
+		away.y = 0.0
+		if away.length() < CHEST_MIMIC_MIN_SPAWN_DISTANCE_M:
+			away = away.normalized() if away.length() > 0.01 else Vector3.FORWARD
+			point = player.global_position + away * CHEST_MIMIC_MIN_SPAWN_DISTANCE_M
+			point.y = floor_y
+	# 夹进房间。箱子本来就在房里，这一句只是保险 —— 但少它就是「怪刷在墙外」。
+	var half := room.get_dimensions() * 0.5
+	var local := room.global_transform.affine_inverse() * point
+	local.x = clampf(local.x, -half.x + 1.2, half.x - 1.2)
+	local.z = clampf(local.z, -half.y + 1.2, half.y - 1.2)
+	var resolved := room.global_transform * local
+	resolved.y = floor_y
+	return resolved
+
+
+## 拟态被击杀：把开箱时抽好的那份物资与命运卡补给玩家。
+##
+## 为什么不在开箱时就给：那样「箱子是拟态」就只是多打一只怪，风险与回报无关。
+## 现在的结构是「你付了钥匙，物资在那只怪肚子里」—— 跑了就真的没了。
+func _deliver_chest_mimic_loot(room: DungeonRoom3D, enemy: Enemy3D) -> void:
+	var grants: Array = (enemy.get_meta("chest_mimic_loot", []) as Array).duplicate(true)
+	var delivered := 0
+	if not grants.is_empty():
+		var delivery := _deliver_ground_rewards(
+			room, grants,
+			enemy.global_position + Vector3(0, 0.4, 0),
+			"chest_mimic:%s:%s" % [room.room_id, enemy.get_persistent_id()]
+		)
+		delivered = (delivery.get("granted", []) as Array).size()
+	var fate := _grant_chest_fate_cards(int(enemy.get_meta("chest_mimic_fate_cards", 0)))
+	# 清掉标记：`_on_enemy_killed` 与 `escaped` 理论上只来一次，但这里不做幂等假设 ——
+	# 一份物资发两遍是最难被玩家原谅的那类 bug。
+	enemy.set_meta("chest_mimic_loot", [])
+	enemy.set_meta("chest_mimic_fate_cards", 0)
+	var parts: Array[String] = []
+	parts.append("拟态击破 · %d 件物资" % delivered if delivered > 0 else "拟态击破 · 腹中空空")
+	if not (fate.get("applied", []) as Array).is_empty():
+		parts.append("命运卡「%s」" % str((fate["applied"] as Array)[0]))
+	elif int(fate.get("pending", 0)) > 0:
+		parts.append("命运卡已暂存（见待领取）")
 	status_label.text = " · ".join(parts)
 
 
@@ -8530,6 +8678,10 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		if value is RoomFurniture3D and room.is_ancestor_of(value):
 			var prop := value as RoomFurniture3D
 			container_states[prop.prop_id] = prop.is_searched()
+	# 宝箱与易碎杂物读**房间自持的账**，不扫 group。理由见
+	# `DungeonRoom3D.get_persistent_detail_state()`：detail 已随流送卸载时，
+	# 组里一件实例都没有，扫出来是空表，会把「开过的箱子 / 砸碎的罐子」洗回未开。
+	# 这两本账跟着房间节点走，与 `visited` / `cleared` 同一权威层级。
 	_segment_runtime_state[room_id] = {
 		"visited": room.visited,
 		"cleared": room.cleared,
@@ -8538,6 +8690,8 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		"ground_items": ground_items,
 		"room_keys": room_keys,
 		"containers": container_states,
+		"treasure_chests": room.get_persistent_detail_state("treasure_chests"),
+		"breakable_clutter": room.get_persistent_detail_state("breakable_clutter"),
 		"alive_count": int(_alive_by_room.get(room_id, enemy_states.size())),
 		"spawn_blocked": _room_spawn_blocked.has(room_id),
 		"fate_wave_queued": _room_fate_wave_queued.has(room_id),
@@ -8629,10 +8783,17 @@ func _restore_room_runtime_state(room_id: String) -> void:
 		_room_wave_queues[room_id] = (state.get("wave_queue", []) as Array).duplicate(true)
 		_room_wave_numbers[room_id] = maxi(0, int(state.get("wave_number", 1)))
 		_room_wave_totals[room_id] = maxi(1, int(state.get("wave_total", 1)))
-	room.apply_runtime_detail_state({
+	# 宝箱/杂物只在**存档确实带了这个键**时才下发：旧存档两个键都没有，
+	# 传空字典会盖掉房间内存里的账（`apply_runtime_detail_state()` 是合并语义，
+	# 但空字典本身也是一次有效的写入）。缺席即"这局没有记录"，不动内存账。
+	var detail_state := {
 		"room_light_on": bool(state.get("room_light_on", false)),
 		"containers": (state.get("containers", {}) as Dictionary).duplicate(true),
-	})
+	}
+	for optional_key in ["treasure_chests", "breakable_clutter"]:
+		if state.has(optional_key):
+			detail_state[optional_key] = (state[optional_key] as Dictionary).duplicate(true)
+	room.apply_runtime_detail_state(detail_state)
 	var live_enemies: Array = []
 	for value in _enemy_nodes_by_room.get(room_id, []):
 		if is_instance_valid(value) and not (value as Node).is_queued_for_deletion() and value is Enemy3D:
@@ -8662,6 +8823,12 @@ func _restore_room_runtime_state(room_id: String) -> void:
 				continue
 			enemy.room_id = room_id
 			$ActiveEnemies.add_child(enemy)
+			# 与 `_spawn_enemy_batch()` **同一条注入**（2026-10-30）。
+			# 漏了它的话：读档恢复出来的怪 `_has_room_bounds` 恒为 false ⇒
+			# 瞬移退回「以出生点为圆心、半径随位置自增」的圆形近似 ⇒ 一路飘出房。
+			# 这正是"只有读档之后才会再次出现"的那类间歇性 bug。
+			var restore_half := room.get_dimensions() * 0.5
+			enemy.set_room_bounds(room.global_transform, restore_half)
 			enemy.configure_from_enemy_data(enemy_data)
 			if bool(enemy_data.get("narrative_spawned", false)):
 				enemy.set_meta("narrative_spawned", true)

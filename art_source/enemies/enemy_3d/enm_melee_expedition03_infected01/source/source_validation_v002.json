@@ -1,0 +1,65 @@
+{
+  "asset_id": "ENM-MELEE-EXPEDITION03-INFECTED01",
+  "date": "2026-10-30",
+  "blender_version": "4.5.0",
+  "scope": "Blender source T Pose only",
+  "status": "authored",
+  "exit_code": 0,
+  "passed_checks": 591,
+  "total_checks": 591,
+  "expected_faults": [],
+  "unexpected_script_errors": [],
+  "not_executed": [
+    "Godot import/PackedScene",
+    "12-state animation authoring and binding",
+    "runtime display/collision validation"
+  ],
+  "polygons": 475,
+  "evaluated_triangles": 475,
+  "vertices": 389,
+  "height_m": 1.6000000222027309,
+  "bounds_min": [
+    -0.56499994,
+    -0.33700004,
+    0.0
+  ],
+  "bounds_max": [
+    0.56499994,
+    0.27000001,
+    1.60000002
+  ],
+  "palette_uv": {
+    "valid_faces": 475,
+    "total_faces": 475,
+    "nonzero_area": true,
+    "one_cell_per_face": true,
+    "minimum_cell_margin": 0.1,
+    "active_edit_render_layer": "PaletteUV",
+    "external_unpacked": true,
+    "interpolation": "Closest"
+  },
+  "materials_face_usage": {
+    "NPC_02_细腻哑光": 393,
+    "NPC_01_精工金属": 8,
+    "NPC_03_清漆反光": 72,
+    "NPC_04_柔和自发光": 2
+  },
+  "skeleton_id": "SKEL-INFECTED01-002",
+  "bone_count": 20,
+  "skeleton_signature": "7c4b4dc76f0787b8afdd1f6073da65cf6d9a04496cc26a4539a3d58ab3aa2e92",
+  "pair_signatures_match": true,
+  "normalized_weight_vertices": 389,
+  "animation": "TPOSE_reference / frame 1 / neutral rest only",
+  "model_sha256": "791b163e57fea9f088d7ff9ed7523d132cec9685da9661b8d1017c5c868dbe92",
+  "animation_sha256": "5b851072402a87c48dd05ee04cee02d5bd795ffea13f95dcb36c906b2480f125",
+  "independent_audit_script": "scripts/blender/audit_expedition03_infected.py",
+  "full_audit_work_key": "sessions/2026-10-30_expedition03_infected/v002/independent_audit.json",
+  "version": "v002",
+  "arm_span_m": 1.13,
+  "arm_length_factor": 0.5,
+  "preservation_checks": {
+    "non_arm_geometry_materials_uv_unchanged": true,
+    "non_arm_bone_positions_unchanged": true,
+    "non_arm_geometry_after_disk_reload_unchanged": true
+  }
+}

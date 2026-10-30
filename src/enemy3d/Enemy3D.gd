@@ -152,55 +152,55 @@ const BODY_SCALE_BY_KIND := {
 	# =========================================================================
 	# —— 远程族：0.86 → 1.18 严格递增，与血量/威胁同序 ——
 	# 玩家看到更大的就知道要更小心，这条梯度是直的、可预测的。
-	"egt_bullet_kin": 0.86,
-	"egt_bandana_kin": 0.94,
-	"egt_veteran_kin": 1.02,
-	"egt_red_shotgun": 1.10,
-	"egt_blue_shotgun": 1.18,
+	"egt_bullet_kin": 1.076,
+	"egt_bandana_kin": 1.129,
+	"egt_veteran_kin": 1.182,
+	"egt_red_shotgun": 1.217,
+	"egt_blue_shotgun": 1.34,
 	# —— 分裂族：纯体型阶梯。母体最大，两次分裂每次都明显小一圈。——
-	"egt_blobulon": 1.00,
-	"egt_blobuloid": 0.62,
-	"egt_blobulin": 0.40,
+	"egt_blobulon": 1.648,
+	"egt_blobuloid": 1.341,
+	"egt_blobulin": 1.099,
 	# —— 爆炸族：pinhead 是标准尺寸(1.00)，nitra 酸性略小，bullat 极小极快。——
 	# 注意：`exploder` 基类是 0.78，pinhead 显式写 1.00 是**刻意的** ——
 	# 否则它比 nitra 还小，会出现「血更多、威胁更大反而更小」的倒挂。
-	"egt_pinhead": 1.00,
-	"egt_nitra": 0.90,
-	"egt_bullat": 0.55,
+	"egt_pinhead": 1.429,
+	"egt_nitra": 1.35,
+	"egt_bullat": 1.116,
 	# —— 辅助族：比借用的 summoner(1.2) 再大一档，让它成为房间里的视觉焦点。——
-	"egt_gunsinger": 1.30,
+	"egt_gunsinger": 1.334,
 	# =========================================================================
 	# 第二批 21 只（2026-10-29）：同样**逐只显式登记**，理由与上面一致 ——
 	# 靠别名回退会让同族全部拿到被借资产的 1.0（例如书怪三只全 1.0、冲撞三只全 0.78），
 	# 族内区分一次归零。顺序按族排，族内**严格单调**（体型随血量不下降）。
 	# =========================================================================
 	# —— 子弹族补完：cardinal(56) / hollowpoint(61) 都排在族内高端 ——
-	"egt_cardinal": 1.08,
-	"egt_hollowpoint": 1.12,
+	"egt_cardinal": 1.217,
+	"egt_hollowpoint": 0.891,
 	# —— 霰弹枪族补完：老兵 75 血夹在红(69)与蓝(85)之间，体型也必须夹在中间 ——
-	"egt_veteran_shotgun": 1.14,
+	"egt_veteran_shotgun": 1.279,
 	# —— 爆炸族补完：按血量阶梯排，bullat(6) < shotgat(10) < grenat(13) < spirat(19)
 	#    < nitra(31) < pinhead(38) < king_bullat(62) —— 体型严格同序，没有倒挂 ——
-	"egt_king_bullat": 1.12,
-	"egt_shotgat": 0.62,
-	"egt_grenat": 0.70,
-	"egt_spirat": 0.78,
+	"egt_king_bullat": 1.652,
+	"egt_shotgat": 1.172,
+	"egt_grenat": 1.228,
+	"egt_spirat": 1.283,
 	# —— 分裂族补完：Chancebulon 是本族最大（100 血、随机招式）——
-	"egt_chancebulon": 1.10,
+	"egt_chancebulon": 1.758,
 	# —— 书怪族：三只**同血 25**，体型只用来区分"哪一本"，不代表强度 ——
-	"egt_bookllet": 1.00,
-	"egt_blue_bookllet": 1.06,
-	"egt_green_bookllet": 1.12,
+	"egt_bookllet": 1.146,
+	"egt_blue_bookllet": 1.185,
+	"egt_green_bookllet": 1.224,
 	# —— 法术族：gunjurer(49) 比 gigi(36) 大，同为悬浮施法者 ——
-	"egt_gunjurer": 1.20,
-	"egt_gigi": 1.10,
+	"egt_gunjurer": 1.256,
+	"egt_gigi": 1.193,
 	# —— 触发 / 逃逸族：体型按血量排；钥匙小子最小（一直在跑）——
-	"egt_keybullet_kin": 0.86,
-	"egt_chance_kin": 0.90,
-	"egt_confirmed": 1.05,
+	"egt_keybullet_kin": 1.121,
+	"egt_chance_kin": 1.187,
+	"egt_confirmed": 1.411,
 	"egt_mimic": 1.15,
-	"egt_gun_fairy": 0.78,
-	"egt_gripmaster": 0.98,
+	"egt_gun_fairy": 0.935,
+	"egt_gripmaster": 1.02,
 	# —— 重型族：本层普通怪血量顶点，也是体型顶点 ——
 	"egt_chain_gunner": 1.14,
 	"egt_gun_nut": 1.20,
@@ -222,38 +222,38 @@ const HEALTH_BAR_SIZE_BY_KIND := {
 	#
 	# ⚠ 有可读性下限：体型 0.40 的 blobulin 若严格按比例只有 0.55 宽，
 	# 在 1080p 下看不清血条分段。低于 0.72 一律夹到 0.72。
-	"egt_bullet_kin": Vector2(1.19, 0.15),
-	"egt_bandana_kin": Vector2(1.30, 0.15),
-	"egt_veteran_kin": Vector2(1.41, 0.15),
-	"egt_red_shotgun": Vector2(1.52, 0.16),
-	"egt_blue_shotgun": Vector2(1.63, 0.16),
-	"egt_blobulon": Vector2(1.38, 0.15),
-	"egt_blobuloid": Vector2(1.00, 0.15),
-	"egt_blobulin": Vector2(0.72, 0.13),
-	"egt_pinhead": Vector2(1.15, 0.14),
-	"egt_nitra": Vector2(1.04, 0.14),
-	"egt_bullat": Vector2(0.72, 0.13),
-	"egt_gunsinger": Vector2(2.02, 0.18),
+	"egt_bullet_kin": Vector2(1.48, 0.15),
+	"egt_bandana_kin": Vector2(1.56, 0.15),
+	"egt_veteran_kin": Vector2(1.63, 0.15),
+	"egt_red_shotgun": Vector2(1.68, 0.15),
+	"egt_blue_shotgun": Vector2(1.85, 0.16),
+	"egt_blobulon": Vector2(2.27, 0.18),
+	"egt_blobuloid": Vector2(1.85, 0.16),
+	"egt_blobulin": Vector2(1.52, 0.15),
+	"egt_pinhead": Vector2(1.64, 0.14),
+	"egt_nitra": Vector2(1.55, 0.14),
+	"egt_bullat": Vector2(1.28, 0.14),
+	"egt_gunsinger": Vector2(2.07, 0.18),
 	# —— 第二批（2026-10-29）：条宽 = 基类宽度 × 本怪体型，同族随体型递增 ——
-	"egt_cardinal": Vector2(1.49, 0.15),
-	"egt_hollowpoint": Vector2(1.55, 0.15),
-	"egt_veteran_shotgun": Vector2(1.57, 0.16),
-	"egt_king_bullat": Vector2(1.29, 0.15),
-	"egt_shotgat": Vector2(0.72, 0.13),
-	"egt_grenat": Vector2(0.81, 0.13),
-	"egt_spirat": Vector2(0.90, 0.14),
-	"egt_chancebulon": Vector2(1.52, 0.15),
-	"egt_bookllet": Vector2(1.55, 0.16),
-	"egt_blue_bookllet": Vector2(1.64, 0.16),
-	"egt_green_bookllet": Vector2(1.74, 0.16),
-	"egt_gunjurer": Vector2(1.86, 0.17),
-	"egt_gigi": Vector2(1.71, 0.16),
-	"egt_keybullet_kin": Vector2(1.19, 0.15),
-	"egt_chance_kin": Vector2(1.24, 0.15),
-	"egt_confirmed": Vector2(1.45, 0.15),
+	"egt_cardinal": Vector2(1.68, 0.15),
+	"egt_hollowpoint": Vector2(1.23, 0.15),
+	"egt_veteran_shotgun": Vector2(1.76, 0.16),
+	"egt_king_bullat": Vector2(1.9, 0.14),
+	"egt_shotgat": Vector2(1.35, 0.14),
+	"egt_grenat": Vector2(1.41, 0.14),
+	"egt_spirat": Vector2(1.48, 0.14),
+	"egt_chancebulon": Vector2(2.43, 0.18),
+	"egt_bookllet": Vector2(1.78, 0.16),
+	"egt_blue_bookllet": Vector2(1.84, 0.16),
+	"egt_green_bookllet": Vector2(1.9, 0.16),
+	"egt_gunjurer": Vector2(1.95, 0.16),
+	"egt_gigi": Vector2(1.85, 0.16),
+	"egt_keybullet_kin": Vector2(1.55, 0.15),
+	"egt_chance_kin": Vector2(1.64, 0.15),
+	"egt_confirmed": Vector2(1.95, 0.16),
 	"egt_mimic": Vector2(2.07, 0.18),
-	"egt_gun_fairy": Vector2(1.08, 0.14),
-	"egt_gripmaster": Vector2(1.52, 0.16),
+	"egt_gun_fairy": Vector2(1.29, 0.15),
+	"egt_gripmaster": Vector2(1.58, 0.15),
 	"egt_chain_gunner": Vector2(2.05, 0.18),
 	"egt_gun_nut": Vector2(2.16, 0.18),
 }
@@ -443,7 +443,17 @@ const PROFILES := {
 		"bullet_color": Color(0.72, 0.48, 0.96),
 		# 高射速连发（单发伤害低、密度高），周期性消失并在房间他处重现。
 		"volley": {"count": 4, "spread_deg": 3.0, "interval": 0.09, "predict": 0.20},
-		"blink": {"interval": 2.8, "radius_m": 9.0},
+		# —— 瞬移（2026-10-30 第二轮重定标，业主「需要冷却时间，不然会一直闪」）——
+		# `interval` 5.0：旧值 2.8 是"考虑间隔"，但配合两只空尖弹同场（`box_egt_hollow_line`）
+		#   平均每 1.4 秒就有一只消失 —— 读起来是"一直在闪"。
+		#   按本工程的击杀节奏（250 血 ÷ 50 伤/发 ≈ 5 发 ≈ 2.5 秒）算，
+		#   5.0 秒 ≈ 一只怪整个生命周期只闪 0~1 次，正好是原作「周期性」的量。
+		# `cooldown` 2.5：闪完 2.5 秒内任何触发都丢弃（周期通道与出手通道共用）。
+		# `telegraph_sec` 0.35：先闪一下再消失 —— 瞬移是直接改 transform、没有轨迹，
+		#   不给前摇就只是"凭空消失又凭空出现"。
+		# `radius_m` 7.0：旧值 9.0 在 25×25 房里一次能跨过整个房间的一半以上，
+		#   玩家会彻底丢失目标；7.0 是"换位"而不是"消失"。
+		"blink": {"interval": 5.0, "radius_m": 7.0, "cooldown": 2.5, "telegraph_sec": 0.35},
 		# 浮空：不吃地面接触，走远程手位（`_is_ranged_style` 由 attack_style 推出）。
 		"hover": true,
 	},
@@ -533,7 +543,14 @@ const PROFILES := {
 		# 旋转图形弹（三角 / 圆 / X）：`spiral` 逐发旋进，形状随朝向轮转。
 		"volley": {"pattern": "spiral", "count": 9, "interval": 0.10, "step_deg": 40.0, "predict": 0.0},
 		# 攻击后瞬移换位 —— 与空尖弹同一套 blink，只是触发时机不同（出手后而不是定时）。
-		"blink": {"interval": 0.0, "radius_m": 8.0, "on_attack": true},
+		# ⚠ 这个键 2026-10-29 就写在这里了，但代码侧**从来没有消费点**
+		#   （`_tick_egt_blink` 开头是 `if on_attack: return`）—— 枪法师从上线起
+		#   就只会站着连射，"打完换位"是静默失效的。2026-10-30 补上
+		#   `request_blink_after_attack()`，并把冷却/前摇一并补齐。
+		"blink": {
+			"interval": 0.0, "radius_m": 7.0, "on_attack": true,
+			"cooldown": 2.5, "telegraph_sec": 0.35, "after_attack_delay": 0.12,
+		},
 		"hover": true,
 	},
 	"egt_gigi": {
@@ -608,7 +625,10 @@ const PROFILES := {
 		"projectile_speed": 8.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.92, 0.74, 0.30),
 		# 被开箱或被射击才现形：没有宝箱系统时，用「靠近或被打才解除静态伪装」等价表达。
-		"disguise": {"reveal_radius_m": 3.4},
+		# `max_sec` 12.0：**防房间卡死**的兜底。房间要「所有怪都死」才开门，
+		# 而没人靠近、没人打的箱子永远不会现形 —— 剩下的敌方信号就永远不消失。
+		# 12 秒 = 玩家清完其它怪、在门口找一圈的合理时长。
+		"disguise": {"reveal_radius_m": 3.4, "max_sec": 12.0},
 		"volley": {"pattern": "ring", "count": 8, "interval": 0.06, "predict": 0.0},
 		"volley_alt": {"pattern": "ring", "count": 12, "interval": 0.05, "predict": 0.0},
 		"alt_every": 2,
@@ -630,7 +650,11 @@ const PROFILES := {
 		# 悬在玩家上方、闪蓝后下压抓人。**不改血量、只改位置** —— 与原作一致：
 		# 「不造成伤害却改变关卡状态」。原作还会把已清房间重置，本工程缺"房间重置"
 		# 这条链路，暂以「抛回房间入口」表达，见 §T6 已知差异。
-		"grab": {"hover_height_m": 4.2, "telegraph_sec": 0.8, "dive_speed": 12.0, "throw_distance_m": 10.0},
+		# `hover_height_m` 2.2：旧值 4.2 **高过房间墙顶（约 2.8m）**，俯视相机会看到
+		# 它飘在墙外；而且玩家枪口只有 0.44m —— 4.2m 是"打不着的空气"。
+		# 它本身 `invulnerable_while_others_alive`（有别人时无敌），不需要被打到，
+		# 所以刻意留在枪口带**之上**；2.2m 是"在头顶、但还在屋里"。
+		"grab": {"hover_height_m": 2.2, "telegraph_sec": 0.8, "dive_speed": 12.0, "throw_distance_m": 10.0},
 		# —— 原作两条硬规则（2026-10-29 第三轮补）——
 		# ① "Automatically **dies if all other enemies in the room are killed**"
 		#    ⇒ 清场后它**自己死**，玩家不需要打它。旧实现只做了"有别人时无敌"，
@@ -739,6 +763,17 @@ var _haste_timer := 0.0
 var _egt_attack_count := 0
 # 瞬移（空尖弹定时 / 枪法师出手后）。`blink_timer` 到点执行，随后按 interval 重置。
 var _blink_timer := 0.0
+## 瞬移**冷却**（秒）。与 `interval` 是两个不同的东西，别合并：
+##   `interval`   = 「多久考虑一次」（周期节拍）
+##   `cooldown`   = 「刚瞬移完多久内禁止再瞬移」（硬闸门）
+## 分开的理由：周期触发 + 出手触发两条通道都汇到同一个出口，只靠 `interval` 的话，
+## 出手触发的那一次会把节拍打乱（出现"刚闪完又闪"）。业主报单「不然会一直闪」就是这个。
+var _blink_cooldown := 0.0
+## 瞬移前摇剩余（秒）。> 0 表示"已经决定要闪、正在闪给你看"。
+var _blink_telegraph := 0.0
+## 「出手后瞬移」的延迟（秒）。等这一轮 volley 打完再闪 —— 出手瞬间就消失的话，
+## 玩家看不到是谁打的，读作"子弹凭空出现"。
+var _blink_after_attack := 0.0
 # 逃跑超时（钥匙小子 / 运气小子）：到点直接消失，**不是被打死**。
 var _flee_timer := 0.0
 # 施法被打断后的短暂逃跑（枪歌者）。与 `_flee_timer` 刻意分开：
@@ -764,6 +799,10 @@ var _orbit_timer := 0.0
 var _orbit_emit_accumulator := 0.0
 # 拟态怪：`true` 时是"宝箱"状态（不动、不攻击、不吃伤害），靠近或被打才现形。
 var _disguised := false
+## 伪装已经持续了多久（秒）。**必须有上限**，否则会卡住房间：
+## 房间要用「所有怪都死了」才开门，而一只没人靠近、也没人打的箱子不会现形 ——
+## 玩家站在门口清完看得见的怪，剩下的"敌方信号"永远不消失，门永远不开。
+var _disguise_elapsed := 0.0
 # 吉吉的「蛋」：蛋飞出去之后在落点炸开一群涌动子弹。
 # 用独立队列而不是给子弹加回调 —— 子弹池化复借后回调对象可能已经死了，
 # 而这只怪的蛋只需要"某个时刻在某个点炸一圈"，不需要真的挂在子弹上。
@@ -789,6 +828,14 @@ var _lost_sight_time := 0.0
 var _last_known_target_position := Vector3.ZERO
 var _home_position := Vector3.ZERO
 var _home_initialized := false
+## 房间矩形（瞬移 / 游荡的「别出房」硬约束）。由 `Dungeon3D` 实例化时注入。
+##
+## 为什么必须注入而不是靠 `_home_position` 猜：房间是**矩形**，
+## 「离出生点不超过 R」是圆形 —— 两者在角落差得很远（25×25 房的半对角线 17.7m，
+## 而沿边只有 12.5m）。用圆形当"房内"判据会让怪从角落斜着飘出去。
+var _room_bounds_transform := Transform3D.IDENTITY
+var _room_bounds_half := Vector2.ZERO
+var _has_room_bounds := false
 var _runtime_ai_active := true
 var _patrol_target := Vector3.ZERO
 var elite_modifier_id := ""
@@ -945,6 +992,115 @@ func _table_kind() -> String:
 	return MonsterVariants.base_of(enemy_kind) if MonsterVariants.is_variant(enemy_kind) else enemy_kind
 
 
+## 碰撞柱半径的**通行上限**（2026-10-30）。
+##
+## ## 为什么必须有
+## `2026-10-30` 把复刻怪体型抬到 1.0~1.7m 之后，碰撞柱跟着放大：
+## `egt_gunsinger` 的半径从 0.987m 涨到 **1.139m，直径 2.278m**，
+## 而 flow 关卡的门洞只有 **2.2m**（`FloorPlanGenerator.FLOW_DOOR_OPENING_M`）——
+## **它物理上过不了门**。`_egt_roster_probe` 只验盒位几何、`_egt_enemy_motion_probe`
+## 只验"不出房"，两条都抓不到"过不了门"。
+##
+## ## ⚠ 只对 `egt_*` 生效，原生怪一个字节都不动
+## 原生怪（`melee_chaser` / `ranged_caster` / `fat_zombie03` / `summoner` / `exploder` /
+## `boss`）的 `FOOTPRINT_PROFILES.radius` 是**各自的玩法口径**，不是"模型宽度"：
+## `boss` 1.92 是为了让巨型目标好打中，`summoner` 1.22 是刻意留了防穿模余量。
+## 无差别夹会把这些设计意图一起改掉 —— 实测会直接打挂
+## `verify_3d_enemy_behavior_flow` 的 `Non-zombie collision radius must be …` 断言。
+## 本轮的越界是**放大体型引入的**，所以修也只修被放大的那批。
+##
+## ## 口径：以门洞为锚，不按体型比例夹
+## `MAX_DIAMETER = 门洞 × 0.85 = 1.87m` ⇒ 半径上限 0.935m。
+## 留 15% 余量是两个原因：① 门扇是双开推门，实际净宽略小于 2.2；
+## ② 怪贴着一侧过门时还要算上 `safe_margin = 0.035` 与转向擦碰。
+##
+## ## 视觉与碰撞的有意解耦
+## 夹过之后，模型会比碰撞柱宽（`gunsinger` 宽约 18%）。**这是刻意的取舍**：
+##   · 碰撞柱决定「能不能走通、能不能被打到」，它的硬约束是关卡几何；
+##   · 模型是观感，可以比碰撞柱大 —— 现实里怪兽的爪子、披风也常超出碰撞体。
+## 反过来的做法（让碰撞柱跟着模型任意放大）会造出"看得见、走不过门"的怪，
+## 那比"边缘打空"严重得多。
+const MAX_COLLISION_RADIUS_M := 0.935
+
+
+# =============================================================================
+# 战斗高度面 —— 「打得到」与「打得中」的唯一硬约束（2026-10-30 第二轮）
+#
+# ## 为什么高度是这套战斗里最硬的约束
+#
+# 本作的射击**没有俯仰**，双方子弹都是一条**固定高度的水平线**：
+#   · 玩家瞄准 `Player3D._update_aim_from_mouse()`：`flat_direction.y = 0.0`
+#     —— 鼠标射线只用来在水平面上定方向，**枪口不抬不压**；
+#   · 敌方齐射 `_tick_pending_volleys()`：`direction.y = 0.0`；
+#   · `Projectile3D` 用 `move_and_collide` 直线推进，**没有重力、没有下坠**。
+#
+# ⇒ 一只怪能不能被玩家打到，**只取决于它的碰撞柱在不在玩家枪口那条高度线上**；
+#   它能不能打到玩家，**只取决于它的弹道起点在不在玩家胶囊里**。
+#
+# ## 实测基线（`tools/_egt_combat_plane_probe.gd`，2026-10-30）
+#
+#   玩家胶囊带      y ∈ [0.00, 1.20]   （0.8 缩放后的真实值，不是场景里的 1.5）
+#   玩家枪口高度    y = 0.44 m          （读 `WeaponModel3D._muzzle` 的全局 y）
+#   ⇒ 玩家子弹高度带 y ∈ [0.26, 0.62]
+#
+# ## 原来错在哪
+#
+# `hover` 怪被 `_pin_hover_height()` 抬到 `出生点 + 1.60m`，碰撞柱于是落在
+# **[1.60, 3.04]** —— 比玩家头顶（1.20）还高 0.40m。同时它开火的弹道起点也是 1.60m。
+# **双向零重叠，从数学上永远打不中，和瞬移无关。**
+# 实测 7 只全员如此：空尖弹 / 三色书怪 / 学徒枪法师 / 枪精灵 / 抓握大师。
+#
+# ## 修法
+#
+#   ① 浮空怪的**脚底不得高于**枪口带下沿（留 0.04m 余量）⇒ `HOVER_BOTTOM_MAX_M = 0.22`
+#   ② 敌方弹道起点**必须落在玩家胶囊带里**（[0.45, 1.05]，避开脚踝与头顶）
+#
+# 这两条是**玩法规则**，不是美术参数。任何"让它飘高一点"的需求都会把怪变成无敌，
+# 所以下面写成常量 + 夹紧，而不是留在 profile 里任人改。
+# =============================================================================
+
+## 玩家枪口高度（米，相对脚底）。实测值；玩家换更长的枪会略变，但不会跨过 0.62。
+const PLAYER_MUZZLE_HEIGHT_M := 0.44
+## 枪口线上下这个范围内都算"这一枪可能打到"（子弹/碰撞体半径之和）。
+const PLAYER_MUZZLE_BAND_M := 0.18
+## 浮空怪脚底的**上限**。= 枪口带下沿 0.26 − 0.04 余量。
+## 高过它 ⇒ 怪的碰撞柱整只抬到枪口线之上 ⇒ 玩家永远打不中。
+const HOVER_BOTTOM_MAX_M := 0.22
+## 浮空怪的缺省悬停高度（秒表口径：脚底离地）。同样是上限值 ——
+## 再高一点点就开始脱离枪口带，而"浮空"这个形态语言 0.22m 已经读得出来。
+const HOVER_HEIGHT_M := 0.22
+## 抓握大师的悬停高度上限。它 `invulnerable_while_others_alive`（有别人时无敌），
+## 因此**不需要**被打到，可以悬在头顶；但 4.2m 会高过房间墙顶（约 2.8m），
+## 俯视相机会看到它飘在墙外 —— 2.2m 是"在头顶、但还在屋里"。
+const GRIP_HOVER_MAX_M := 2.20
+## 敌方弹道起点的世界 y 区间（相对脚底的地面）。上不过玩家头顶、下不过脚踝。
+const ENEMY_SHOT_MIN_Y_M := 0.45
+const ENEMY_SHOT_MAX_Y_M := 1.05
+## 瞬移落点最多重抽几次（每次半径 ×0.55）。角落实测 1 次内就能落到空地，
+## 给 4 次是给"房间里堆满掩体"的极端房间留余量；全失败就不闪（原地不动）。
+const BLINK_LANDING_ATTEMPTS := 4
+
+
+## `base_radius` 是**局部**半径（`FOOTPRINT_PROFILES` 的口径）。
+##
+## ⚠ 碰撞柱是根节点的子节点，**会继承父节点 scale**：
+##   世界半径 = shape.radius × (0.70 × kind_scale)
+## 所以上限要换算回局部才能比较 —— 直接拿局部半径跟世界上限比，会在大体型怪上
+## 恰好漏过去（局部 1.55 < 0.935 不成立，但换算后根本压不住）。
+func _clamp_collision_radius(base_radius: float, kind_scale: float) -> float:
+	if not enemy_kind.begins_with("egt_"):
+		return base_radius
+	var world_scale := _presentation_base() * maxf(kind_scale, 0.01)
+	if world_scale <= 0.0:
+		return base_radius
+	return minf(base_radius, MAX_COLLISION_RADIUS_M / world_scale)
+
+
+## 表现层的基础倍率（与 `_apply_presentation_scale()` 同源，抽出来避免两处写死 0.70）。
+func _presentation_base() -> float:
+	return DEFAULT_BASE_SIZE_MULTIPLIER
+
+
 ## 取某怪种的战斗基线。强化怪 = **原怪基线 × 变种倍率**，实时派生。
 ##
 ## 返回的是派生副本，不是 `PROFILES[base]` 的引用 —— 派生值不写回表，
@@ -1016,7 +1172,11 @@ func apply_profile(kind: String) -> void:
 	if collision_shape != null:
 		var footprint := EnemyAvatar3D.get_footprint_profile(enemy_kind)
 		var shape := CylinderShape3D.new()
-		shape.radius = float(footprint.get("radius", 0.8))
+		# 碰撞柱是根节点的子节点 ⇒ 会跟着 `scale` 一起放大。
+		# **但放大后的半径必须留一条能走通门洞的上限**，见 `_clamp_collision_radius()`。
+		shape.radius = _clamp_collision_radius(
+			float(footprint.get("radius", 0.8)), _kind_scale_multiplier
+		)
 		shape.height = float(footprint.get("height", 1.2))
 		collision_shape.shape = shape
 		collision_shape.position.y = shape.height * 0.5
@@ -1060,6 +1220,11 @@ func _reset_egt_state() -> void:
 		if blink_spec is Dictionary
 		else 0.0
 	)
+	# 换 profile（强化怪派生 / 存档恢复）时把瞬移的三个计时器一起归零，
+	# 否则上一只怪残留的冷却会带进新的一场。
+	_blink_cooldown = 0.0
+	_blink_telegraph = 0.0
+	_blink_after_attack = 0.0
 	var flee_spec: Variant = _active_profile.get("flee", null)
 	_flee_timer = (
 		float((flee_spec as Dictionary).get("vanish_after", 0.0))
@@ -1068,6 +1233,14 @@ func _reset_egt_state() -> void:
 	)
 	# 拟态怪**出生即伪装**：这是它的定义，不是运行中触发的状态。
 	_disguised = _active_profile.has("disguise")
+	_disguise_elapsed = 0.0
+	# 浮空怪必须**关掉贴地吸附**（2026-10-30）。
+	# `floor_snap_length = 0.32` 是给地面怪用的：走坡、跨接缝时保持贴地。
+	# 而悬停高度现在只有 0.22m，**小于吸附距离** —— 不关的话每帧 `move_and_slide`
+	# 都会把它按回地面，"浮空"这个形态语言会静默消失（而且探针也抓不到：
+	# 位置仍然合法、血量照掉，只是它贴地了）。地面怪保持 0.32 逐字不变。
+	var hovers := bool(_active_profile.get("hover", false)) or _active_profile.has("grab")
+	floor_snap_length = 0.0 if hovers else 0.32
 
 
 func configure_from_enemy_data(data: Dictionary) -> void:
@@ -2455,6 +2628,9 @@ func _perform_volley_attack(to_target: Vector3, _distance: float) -> void:
 	# 「蛋」（吉吉）：先发一枚慢速蛋，到点在落点炸一圈涌动子弹。
 	if _active_profile.has("egg"):
 		_schedule_egg(_active_profile["egg"] as Dictionary)
+	# 出手后瞬移（枪法师 `blink.on_attack`）：等这一轮弹幕**打完**才闪。
+	# 提前闪掉的话玩家看不到是谁开的火，子弹会读成"凭空出现"。
+	request_blink_after_attack(maxf(0.0, interval * float(maxi(0, total - 1))) + 0.15)
 
 
 ## 排一颗蛋。落点按**玩家当前速度整段预判**：蛋飞行期间玩家会动，
@@ -2534,10 +2710,14 @@ func _tick_pending_volleys(delta: float) -> void:
 		var explosive := bool(spec.get("explosive", false))
 		var behavior := _volley_bullet_behavior(spec)
 		var bullet_speed := float(spec.get("speed", 0.0))
+		# 弹道起点用 `egt_projectile_origin()`，**不是 `global_position`**。
+		# 后者是脚底：地面怪打在地面高度、浮空怪打在 1.6m —— 前者贴着玩家胶囊
+		# 的底切点擦过，后者从头顶飞过，两种都读作"它打不中你"。
+		var muzzle := egt_projectile_origin()
 		for dir in dirs:
 			_fire_projectile(
 				dir, damage, _egt_projectile_color(), explosive, behavior,
-				bullet_speed, global_position
+				bullet_speed, muzzle
 			)
 	_pending_volleys = remaining
 
@@ -2679,7 +2859,7 @@ func _fire_rush_payload(forward: Vector3) -> void:
 			bool(payload_spec.get("explosive", false)),
 			_volley_bullet_behavior(payload_spec),
 			float(payload_spec.get("speed", 0.0)),
-			global_position
+			egt_projectile_origin()
 		)
 
 
@@ -2896,15 +3076,40 @@ func _tick_egt_eggs(delta: float) -> void:
 	_pending_eggs = remaining
 
 
-## 瞬移（空尖弹定时 / 枪法师出手后）。落在**原地半径内**的一个随机点，
-## 不直接传到房间对角：那会让玩家完全丢失目标，读起来像"卡了一下"。
+## 瞬移（空尖弹定时 / 枪法师出手后）。
+##
+## ## 三条规则（2026-10-30 第二轮，业主报单「不然会一直闪」）
+##
+## ① **冷却**：`blink.cooldown` 秒内禁止任何瞬移。周期通道和出手通道共用这一道闸门 ——
+##    没有它的时候，"每 2.8 秒一次"和"每次攻击一次"会叠起来，两只空尖弹轮流闪，
+##    读起来就是"它一直在闪"。
+## ② **前摇**：`blink.telegraph_sec` 秒先闪一下 + 定格。瞬移是**直接改 transform**、
+##    不过碰撞求解，没有任何轨迹；不给前摇的话玩家只看到怪凭空消失再凭空出现，
+##    体感是"卡了一下"而不是"它闪走了"。
+## ③ **落点合法**：见 `_blink_to_random()` —— 除了夹进房间矩形，还要不和墙体/掩体相交。
 func _tick_egt_blink(delta: float) -> void:
 	var spec: Variant = _active_profile.get("blink", null)
 	if not (spec is Dictionary):
 		return
 	var cfg := spec as Dictionary
-	if bool(cfg.get("on_attack", false)):
+	_blink_cooldown = maxf(0.0, _blink_cooldown - delta)
+
+	# —— 前摇进行中：定格、到点位移 ——
+	if _blink_telegraph > 0.0:
+		_blink_telegraph = maxf(0.0, _blink_telegraph - delta)
+		velocity = Vector3.ZERO
+		_external_velocity = Vector3.ZERO
+		if _blink_telegraph <= 0.0:
+			_execute_blink(cfg)
 		return
+
+	# —— 出手后瞬移：等这一轮弹幕打完 ——
+	if _blink_after_attack > 0.0:
+		_blink_after_attack = maxf(0.0, _blink_after_attack - delta)
+		if _blink_after_attack <= 0.0:
+			_begin_blink_telegraph(cfg)
+		return
+
 	var interval := float(cfg.get("interval", 0.0))
 	if interval <= 0.0:
 		return
@@ -2912,32 +3117,151 @@ func _tick_egt_blink(delta: float) -> void:
 	if _blink_timer > 0.0:
 		return
 	_blink_timer = interval
+	_begin_blink_telegraph(cfg)
+
+
+## 决定要闪了：先播前摇。冷却没走完的直接丢弃 —— 这就是"一直闪"的刹车。
+func _begin_blink_telegraph(cfg: Dictionary) -> void:
+	if _blink_cooldown > 0.0 or ai_state == "dead":
+		return
+	var lead := maxf(0.0, float(cfg.get("telegraph_sec", 0.0)))
+	if lead <= 0.0:
+		_execute_blink(cfg)
+		return
+	_blink_telegraph = lead
+	# 复用受击闪白通道：模型闪一下 = "它要闪了"，不新增特效资产。
+	avatar.flash_hit()
+
+
+## 真正位移，并开始计冷却。
+func _execute_blink(cfg: Dictionary) -> void:
+	_blink_cooldown = maxf(0.0, float(cfg.get("cooldown", 0.0)))
 	_blink_to_random(float(cfg.get("radius_m", 8.0)))
 
 
+## 出手后瞬移的入口（`blink.on_attack`）。
+##
+## ⚠ 这个键在 2026-10-29 就写进了 `egt_gunjurer` 的 profile，但**代码里从来没有消费点** ——
+## `_tick_egt_blink` 开头是 `if on_attack: return`，于是枪法师的"打完就换位"
+## 从上线起就是**静默失效**的：它只会站着连射。本次补上。
+##
+## `volley_sec` 是这一轮弹幕还要打多久；闪现在它之后，玩家才看得到是谁开的火。
+func request_blink_after_attack(volley_sec: float) -> void:
+	var spec: Variant = _active_profile.get("blink", null)
+	if not (spec is Dictionary):
+		return
+	if not bool((spec as Dictionary).get("on_attack", false)):
+		return
+	if _blink_cooldown > 0.0 or _blink_telegraph > 0.0:
+		return
+	_blink_after_attack = maxf(0.0, volley_sec) + float((spec as Dictionary).get("after_attack_delay", 0.12))
+
+
 ## 瞬移到「当前点周围 radius 内」的一个随机水平位置。
-## ⚠ 只做水平位移、不改 Y：怪必须继续贴地，否则会浮空或被塞进地板。
+## ⚠ 只做水平位移、不改 Y：怪必须继续贴地（或贴着它自己的悬停高度），
+## 否则会浮空或被塞进地板。
+##
+## **落点必须同时满足两件事**（2026-10-30）：
+##   ① 落在房间矩形内 —— 旧实现是「随机点 + 出界则朝自身折半」，判据来自
+##      `_is_point_inside_room_hint()` 的圆形近似，而那个半径**随当前位置自增**：
+##      limit = max(6, 当前到出生点距离 + 6) ⇒ 每瞬移一次 limit 跟着涨，永远"在范围内"。
+##      实测 25×25 房瞬移 600 次，**84% 落在房外、最远超出 99.84m**。
+##   ② 不和墙体/掩体相交 —— 矩形只管四面墙，管不了房间里的箱子、柱子、掩体。
+##      闪进掩体里会立刻被物理挤出来（"抖一下"），闪进厚掩体会被卡死。
 func _blink_to_random(radius: float) -> void:
 	if radius <= 0.0:
 		return
-	var angle := randf() * TAU
-	var distance := radius * sqrt(randf())
-	var offset := Vector3(cos(angle), 0.0, sin(angle)) * distance
-	var target := global_position + offset
-	if not _is_point_inside_room_hint(target):
-		# 落点在房外（或算不出来）⇒ 朝房间中心折半，避免穿墙。
-		target = global_position + offset * 0.5
-	global_position = Vector3(target.x, global_position.y, target.z)
+	var origin := global_position
+	for attempt in range(BLINK_LANDING_ATTEMPTS):
+		# 每次重试收缩半径：角落里的怪第一次抽到的点常常整段在墙里，
+		# 收到 0.55 倍后基本都能落进空地。
+		var try_radius := radius * pow(0.55, float(attempt))
+		var angle := randf() * TAU
+		var distance := try_radius * sqrt(randf())
+		var offset := Vector3(cos(angle), 0.0, sin(angle)) * distance
+		var target := origin + offset
+		if _has_room_bounds:
+			target = _clamp_into_room(target)
+		elif not _is_point_inside_room_hint(target):
+			# 没有房间矩形时的旧兜底（尽力而为，仍可能出房）。
+			target = origin + offset * 0.5
+		# 夹进房间后**还要**验一次几何：夹紧本身可能把点推到墙根。
+		if not _is_blink_landing_free(target):
+			continue
+		global_position = Vector3(target.x, origin.y, target.z)
+		velocity = Vector3.ZERO
+		_external_velocity = Vector3.ZERO
+		return
+	# 四次都落不进去 ⇒ **原地不动**。宁可这次不闪，也不要闪进墙里。
 	velocity = Vector3.ZERO
 	_external_velocity = Vector3.ZERO
 
 
-## 房内判定。**只作"别穿墙"的软约束**，不是精确碰撞：
-## 以出生点为房心、用「出生点到当前点的最远距离」当半径的近似。
-## 真正的墙判定由 `_track_stuck_recovery` 负责把卡住的怪推回来。
+## 落点是否不与静态几何相交。
+##
+## 用**自身碰撞柱的 85%**做形状查询（mask 1 = 世界/墙/掩体）：
+## 100% 会在贴墙的合法落点上误报（碰撞柱贴着墙本来就允许），85% 留出的余量
+## 正好是"下一帧不会被挤开"的安全距离。
+## 高度做两处收边：底面抬 0.05（贴地圆柱的底面与地板面重合会误判为相交），
+## 顶面收掉 0.1（头顶擦到天花板不算卡住）。
+func _is_blink_landing_free(point: Vector3) -> bool:
+	var world := get_world_3d()
+	if world == null:
+		return true
+	var body_h := maxf(0.4, get_world_body_height())
+	var shape := CylinderShape3D.new()
+	shape.radius = maxf(0.18, get_world_body_radius() * 0.85)
+	shape.height = maxf(0.3, body_h - 0.1)
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = shape
+	query.transform = Transform3D(Basis(), point + Vector3.UP * (shape.height * 0.5 + 0.05))
+	query.collision_mask = 1
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	query.exclude = [get_rid()]
+	return world.direct_space_state.intersect_shape(query, 1).is_empty()
+
+
+## 把世界坐标夹进房间矩形（留出「墙厚 + 自身半径」的安全边距）。
+##
+## 边距取 `get_world_body_radius() + 0.6`：瞬移是**直接改 transform**，不走碰撞求解，
+## 落点离墙太近会立刻被下一帧的碰撞挤开（表现为"瞬移过去抖一下"），贴到墙上还会卡住。
+## 房太小（半边长 < 边距）时退化为房心 —— 宁可原地不动，也不要穿墙。
+func _clamp_into_room(point: Vector3) -> Vector3:
+	var local := _room_bounds_transform.affine_inverse() * point
+	var margin := get_world_body_radius() + 0.6
+	var limit_x := maxf(0.0, _room_bounds_half.x - margin)
+	var limit_z := maxf(0.0, _room_bounds_half.y - margin)
+	local.x = clampf(local.x, -limit_x, limit_x)
+	local.z = clampf(local.z, -limit_z, limit_z)
+	var clamped := _room_bounds_transform * local
+	return Vector3(clamped.x, point.y, clamped.z)
+
+
+## 房内判定。**只作"别穿墙"的软约束**，不是精确碰撞。
+## 有房间矩形时按矩形判（正确）；没有时退回「离出生点不超过 R」的近似
+## —— 那个近似有自促进缺陷（R 随当前位置增长），只在未注入矩形时兜底。
 func _is_point_inside_room_hint(point: Vector3) -> bool:
+	if _has_room_bounds:
+		var local := _room_bounds_transform.affine_inverse() * point
+		var margin := get_world_body_radius() + 0.6
+		return (
+			absf(local.x) <= maxf(0.0, _room_bounds_half.x - margin)
+			and absf(local.z) <= maxf(0.0, _room_bounds_half.y - margin)
+		)
 	var limit := maxf(6.0, global_position.distance_to(_home_position) + 6.0)
 	return point.distance_to(_home_position) <= limit
+
+
+## 注入房间矩形（由 `Dungeon3D` 在实例化敌人时调用）。
+## `center_transform` 是房间的 `global_transform`（房心 + 朝向），`half_extent` 是 x/z 半边长。
+## 只在**有值的房间**注入，未调用 ⇒ `_has_room_bounds` 保持 false，行为退回旧路径。
+func set_room_bounds(center_transform: Transform3D, half_extent: Vector2) -> void:
+	if half_extent.x <= 0.0 or half_extent.y <= 0.0:
+		return
+	_room_bounds_transform = center_transform
+	_room_bounds_half = half_extent
+	_has_room_bounds = true
 
 
 ## 逃跑（钥匙小子 / 运气小子）：朝**远离玩家**的方向跑，超时直接消失。
@@ -2968,11 +3292,18 @@ func _tick_egt_flee(delta: float) -> void:
 
 
 ## 伪装（拟态怪）：静止、不攻击、不吃伤害；玩家靠近或自己被打中才现形。
+## **还有第三条路：超时自动现形** —— 见 `_disguise_elapsed` 的说明（防房间卡死）。
 func _tick_egt_disguise(delta: float) -> void:
 	var spec: Variant = _active_profile.get("disguise", null)
 	if not (spec is Dictionary) or not _disguised:
 		return
 	var cfg := spec as Dictionary
+	var max_sec := float(cfg.get("max_sec", 0.0))
+	if max_sec > 0.0:
+		_disguise_elapsed += delta
+		if _disguise_elapsed >= max_sec:
+			_reveal_disguise()
+			return
 	var player := _get_player_in_proximity(float(cfg.get("reveal_radius_m", 3.2)))
 	if player != null:
 		_reveal_disguise()
@@ -2989,6 +3320,16 @@ func _reveal_disguise() -> void:
 	_disguised = false
 	_blink_timer = 0.0
 	avatar.flash_hit()
+
+
+## 立刻现形（外部调用口，2026-10-30 宝箱拟态用）。
+##
+## 伪装态的语义是「静止、不攻击、不吃伤害」—— 那是给「伪装成箱子的怪在房间里蹲着」
+## 用的。而宝箱拟态是**当着玩家的面从箱子里咬出来**的：出生即已暴露，
+## 再让它原地装成一只箱子，玩家会读成「怪卡住了、而且打不动」。
+## 生成方（`Dungeon3D._reveal_chest_mimic`）刷完怪立刻调这个。
+func reveal_disguise_now() -> void:
+	_reveal_disguise()
 
 
 ## 游荡（枪精灵）：不贴脸，绕着房间中心的一个随机点飘，到点换目标。
@@ -3008,7 +3349,16 @@ func _tick_egt_wander(delta: float) -> void:
 	_wander_timer = float(cfg.get("retarget_sec", 2.2))
 	var radius := float(cfg.get("radius_m", 8.0))
 	var angle := randf() * TAU
-	_wander_target = _home_position + Vector3(cos(angle), 0.0, sin(angle)) * radius * sqrt(randf())
+	var target := _home_position + Vector3(cos(angle), 0.0, sin(angle)) * radius * sqrt(randf())
+	# **目标点必须夹进房间矩形**（2026-10-30，与 `_blink_to_random` 同一次修复）。
+	#
+	# 旧实现以 `_home_position` 为圆心画圆，而出生点通常落在**房间角落**（刷怪盒按格心摆）。
+	# 8m 半径从角落画出去，一半圆在墙外 —— 怪会一直朝墙外那个点走，表现为
+	# 「贴着墙原地抽搐，再也不动」。它不会报错、血量照掉、但机制等于失效。
+	# 夹进矩形后目标点恒在房内，游荡才真的是"在房间里飘"。
+	if _has_room_bounds:
+		target = _clamp_into_room(target)
+	_wander_target = target
 
 
 ## 抓握大师：悬停 → 闪蓝预警 → 下压抓取 → 复位。
@@ -3148,7 +3498,7 @@ func _tick_egt_orbit(delta: float) -> void:
 		var direction := Vector3(sin(_orbit_angle), 0.0, cos(_orbit_angle))
 		_fire_projectile(
 			direction, contact_damage, _egt_projectile_color(), false, {},
-			float(cfg.get("speed", 6.4)), global_position
+			float(cfg.get("speed", 6.4)), egt_projectile_origin()
 		)
 	# 缓慢逼近：链在转的时候整只怪往前压，逼玩家在弹链里移动。
 	if is_instance_valid(_target):
@@ -3201,12 +3551,12 @@ func _perform_chance_move(to_target: Vector3, distance: float) -> void:
 			var forward := to_target
 			forward.y = 0.0
 			for dir in ring_directions(forward.normalized(), 8):
-				_fire_projectile(dir, contact_damage, _egt_projectile_color(), false, {}, 0.0, global_position)
+				_fire_projectile(dir, contact_damage, _egt_projectile_color(), false, {}, 0.0, egt_projectile_origin())
 		"dice":
 			var forward2 := to_target
 			forward2.y = 0.0
 			for dir in _pattern_directions({"pattern": "dice", "count": 6}, forward2.normalized(), 1):
-				_fire_projectile(dir, contact_damage, _egt_projectile_color(), false, {}, 0.0, global_position)
+				_fire_projectile(dir, contact_damage, _egt_projectile_color(), false, {}, 0.0, egt_projectile_origin())
 		_:
 			_perform_egt_contact(to_target, distance)
 
@@ -4058,8 +4408,12 @@ func _apply_gravity(delta: float) -> void:
 		velocity.y = maxf(velocity.y - GRAVITY_MPS2 * delta, -TERMINAL_FALL_SPEED_MPS)
 
 
-## 悬停在「出生点上方 `hover_height_m`」（默认 1.6m）。
+## 悬停在「出生点上方 `hover_height_m`」（默认 `HOVER_HEIGHT_M = 0.22m`）。
 ## 用 lerp 而不是直接赋值：房间地板若不齐平，硬贴会让怪一半埋进地面。
+##
+## ⚠ **这个高度有硬上限**（`HOVER_BOTTOM_MAX_M`）：玩家的射击没有俯仰，
+## 子弹是一条固定高度的水平线，怪一旦整只抬到那条线之上就**永远打不中**。
+## 见 §战斗高度面。
 func _pin_hover_height(delta: float) -> void:
 	if not _home_initialized:
 		return
@@ -4069,12 +4423,22 @@ func _pin_hover_height(delta: float) -> void:
 
 
 ## 悬停高度。抓握大师要悬在**玩家头顶**（更高），所以它走 `grab.hover_height_m`，
-## 其余浮空怪走 `hover_height_m`，都没写就按 1.6m。
+## 其余浮空怪走 `hover_height_m`，都没写就按 `HOVER_HEIGHT_M`。
+##
+## ⚠ **两条夹紧都是玩法规则，不是手感调参**（见 §战斗高度面）：
+##   · 普通浮空怪脚底夹在 `[0, HOVER_BOTTOM_MAX_M]` —— 再高它的碰撞柱就整只
+##     抬到玩家枪口线之上，玩家**永远**打不中它（2026-10-30 实测：7 只全中招）；
+##   · 抓握大师夹在 `[0, GRIP_HOVER_MAX_M]` —— 它按设计不需要被打到（有别人时无敌），
+##     但 4.2m 高过房间墙顶，俯视相机会看到它飘在墙外。
 func _egt_hover_height() -> float:
 	var grab_spec: Variant = _active_profile.get("grab", null)
 	if grab_spec is Dictionary:
-		return float((grab_spec as Dictionary).get("hover_height_m", 4.2))
-	return float(_active_profile.get("hover_height_m", 1.6))
+		return clampf(
+			float((grab_spec as Dictionary).get("hover_height_m", GRIP_HOVER_MAX_M)),
+			0.0,
+			GRIP_HOVER_MAX_M
+		)
+	return clampf(float(_active_profile.get("hover_height_m", HOVER_HEIGHT_M)), 0.0, HOVER_BOTTOM_MAX_M)
 
 
 ## 碰撞柱半径 × 当前缩放，与 `get_state_snapshot().world_collision_radius` 同源。
@@ -4083,6 +4447,36 @@ func get_world_body_radius() -> float:
 		return 0.8
 	var cylinder := collision_shape.shape as CylinderShape3D
 	return cylinder.radius * maxf(scale.x, scale.z)
+
+
+## 碰撞柱的**世界高度**（脚底到头顶），与 `get_world_body_radius()` 同源。
+## 齐射弹道起点的躯干比例、以及战斗高度面探针都用它，不各自复算 `shape.height × scale.y`。
+func get_world_body_height() -> float:
+	if collision_shape == null or not (collision_shape.shape is CylinderShape3D):
+		return 1.2
+	var cylinder := collision_shape.shape as CylinderShape3D
+	return cylinder.height * maxf(maxf(scale.x, scale.y), scale.z)
+
+
+## 敌方子弹的出生高度（**世界 y**）—— 齐射 / 绕圈 / 冲刺附加弹共用这一个口径。
+##
+## ## 为什么不能直接用 `global_position.y`
+## 那是怪的**脚底**。地面怪 = 地面上 0.00m，浮空怪 = 1.60m。前者会贴着玩家胶囊的
+## 底切点擦过去，后者直接从玩家头顶 0.40m 飞过 —— 两种都读作"它打不中你"。
+##
+## ## 口径
+## 从脚底往上 `躯干 55%` 处开枪（视觉上就是胸口举枪），再夹进
+## `[ENEMY_SHOT_MIN_Y_M, ENEMY_SHOT_MAX_Y_M]`（相对本怪地面）。夹紧保证了
+## **任何身高 / 任何悬停高度的怪，弹道起点都落在玩家胶囊带里**。
+func egt_projectile_origin_y() -> float:
+	var floor_y := _home_position.y if _home_initialized else global_position.y
+	var torso := global_position.y + get_world_body_height() * 0.55
+	return clampf(torso, floor_y + ENEMY_SHOT_MIN_Y_M, floor_y + ENEMY_SHOT_MAX_Y_M)
+
+
+## 齐射 / 绕圈用的弹道起点（含水平位置），见 `egt_projectile_origin_y()` 的口径。
+func egt_projectile_origin() -> Vector3:
+	return Vector3(global_position.x, egt_projectile_origin_y(), global_position.z)
 
 
 ## 掉出可行走层：判定为死亡，走标准死亡流程（掉落、死亡特效、房间计数、精英名册结算）。

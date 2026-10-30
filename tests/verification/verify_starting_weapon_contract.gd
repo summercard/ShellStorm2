@@ -60,6 +60,19 @@ const EXPECTED_RANGES := {
 	"bp_starter_rifle": 20.0,
 }
 
+## 豌豆手枪的弹匣与弹速（2026-10-30 业主指令：对齐《挺进地牢》陆战队员的军用佩枪
+## `Marine Sidearm`，Magazine 10 / Shot Speed 25）。
+##
+## 弹速在数据里是**倍率**（1.0 = 23 m/s，23 就是原作的 Shot Speed 23），所以这里
+## 同时钉三样：① 枪身声明的倍率；② 乘出来的 m/s；③ 挂上标准弹之后**仍然是** 25 m/s
+## —— 第三层是防回归的关键：`_combine_stats` 旧实现里子弹节点会**覆盖**枪身的
+## `bullet_speed`，那时枪身写多少都会被标准弹的 1.0 冲掉，而数值检查和效果看起来都"正常"。
+const PISTOL_ASSEMBLY_ID := "bp_pistol"
+const PISTOL_MAGAZINE := 10
+const BULLET_SPEED_BASE_MPS := 23.0
+const PISTOL_BULLET_SPEED_MULTIPLIER := 25.0 / 23.0
+const PISTOL_BULLET_SPEED_MPS := 25.0
+
 var _probe_completed := false
 
 
@@ -75,6 +88,7 @@ func _ready() -> void:
 	_check_retired_factory_guns(failures)
 	_check_weapon_ranges(failures)
 	_check_range_plumbing(failures)
+	_check_pistol_egt_baseline(failures)
 	_probe_completed = true
 	_report(failures)
 
@@ -309,6 +323,63 @@ func _check_range_plumbing(failures: Array[String]) -> void:
 			"缺省 range 应为 0（不启用距离上限），实得 %.1f" % projectile.range_m
 		)
 	projectile.queue_free()
+
+
+## ③ 豌豆手枪的弹匣与弹速：数据层、装配树层、武器模型层三处都要是 10 发 / 25 m/s。
+## 只核数据层会漏掉「枪身倍率被子弹节点覆盖」这种静默失效。
+func _check_pistol_egt_baseline(failures: Array[String]) -> void:
+	var node := BlueprintRegistry.create_assembly_node(PISTOL_ASSEMBLY_ID)
+	if node == null:
+		failures.append("豌豆手枪 %s 造不出装配节点" % PISTOL_ASSEMBLY_ID)
+		return
+	var stats := node.get_base_stats()
+	if int(stats.get("magazine_size", -1)) != PISTOL_MAGAZINE:
+		failures.append(
+			"豌豆手枪的弹匣是 %d，期望 %d（对标《挺进地牢》军用佩枪 Magazine 10）"
+			% [int(stats.get("magazine_size", -1)), PISTOL_MAGAZINE]
+		)
+	var multiplier := float(stats.get("bullet_speed", 1.0))
+	if not is_equal_approx(multiplier, PISTOL_BULLET_SPEED_MULTIPLIER):
+		failures.append(
+			"豌豆手枪的枪身弹速倍率是 %.4f，期望 %.4f（= 25/23）"
+			% [multiplier, PISTOL_BULLET_SPEED_MULTIPLIER]
+		)
+	node.free()
+	# 装配树层：挂标准弹后枪身倍率必须还在（子弹节点只能乘，不能覆盖）。
+	var tree := BlueprintRegistry.build_weapon_tree(PISTOL_ASSEMBLY_ID, "mod_bullet_standard")
+	var combined_speed := BULLET_SPEED_BASE_MPS * float(
+		tree.get_computed_stats().get("bullet_speed", 1.0)
+	)
+	if absf(combined_speed - PISTOL_BULLET_SPEED_MPS) > 0.05:
+		failures.append(
+			"豌豆手枪挂标准弹后的弹速是 %.2f m/s，期望 %.1f m/s（枪身弹速倍率被子弹节点覆盖了）"
+			% [combined_speed, PISTOL_BULLET_SPEED_MPS]
+		)
+	# 树与节点都不是 `add_child` 进来的，得逐个释放，否则整轮退出时留 ObjectDB 泄漏。
+	var tree_root := tree.get_root()
+	if tree_root != null:
+		for child in tree_root.get_all_descendants():
+			child.free()
+		tree_root.free()
+	tree.free()
+	# 武器模型层：真正用于开火的字段。
+	var model := WeaponModel3D.new()
+	add_child(model)
+	if not model.configure(PISTOL_ASSEMBLY_ID, "mod_bullet_standard"):
+		failures.append("豌豆手枪无法配置正式武器模型，弹速接线未验证")
+	else:
+		if absf(model.bullet_speed - PISTOL_BULLET_SPEED_MPS) > 0.05:
+			failures.append(
+				"豌豆手枪的 WeaponModel3D.bullet_speed 是 %.2f m/s，期望 %.1f m/s"
+				% [model.bullet_speed, PISTOL_BULLET_SPEED_MPS]
+			)
+		if model.magazine_size != PISTOL_MAGAZINE:
+			failures.append(
+				"豌豆手枪的 WeaponModel3D.magazine_size 是 %d，期望 %d"
+				% [model.magazine_size, PISTOL_MAGAZINE]
+			)
+	remove_child(model)
+	model.free()
 
 
 func _report(failures: Array[String]) -> void:

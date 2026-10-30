@@ -106,6 +106,27 @@ const INTERACTIVE_CLUTTER_SLUGS: Array[String] = [
 	"breakable_chair",
 	"breakable_crate",
 ]
+## 不布置**随机家具**的房型。
+##
+## 判据是"本房有专属陈设，随机家具会与它抢位置"，而不是"这房不重要"：
+##   · `FACILITY` / `STAIR_LOBBY`：基地与安全屋的固定陈设由专门分支建；
+##   · `BOSS`：竞技场资产自带可辨识掩体，随机家具会破坏走位与主题构图；
+##   · `MERCHANT`：服务台是交互主体，而 `_create_service_station()` 在家具之后
+##     调用、不做避让 —— 随机家具会直接挡在柜台前；
+##   · `EXTRACTION`：撤离信标同理，且撤离区要留出跑位空间。
+##
+## `STORAGE` / `SCAVENGE` / `BASEMENT` 不在此列：它们是"翻箱倒柜"的房型，
+## 额外 +2 件（见 `_build_content()`）。
+const FURNITURE_EXCLUDED_ROOM_TYPES: Array[String] = [
+	"FACILITY", "STAIR_LOBBY", "BOSS", "MERCHANT", "EXTRACTION",
+]
+
+## 房间短边低于此值就不布置家具/可搜容器。
+##
+## 5×5、5×10 的连接件房四面都是门，塞 3 件家具会把通道堵成迷宫。
+## 8m 的推导：最大家具 2.4m + 两侧各 1.4m 通行净宽 + 离墙间距 ≈ 7.8m。
+const MIN_FURNISHED_SHORT_SIDE_M := 8.0
+
 const INTERACTIVE_CLUTTER_PLACEMENTS: Dictionary = {
 	"breakable_jar": Vector3(-1.8, 0.0, 1.2),
 	"breakable_book_stack": Vector3(-0.9, 0.0, 1.6),
@@ -347,6 +368,29 @@ const ROOM_DIMENSIONS := {
 	"rooftop": Vector2(65.0, 65.0),
 	"tower_cell": Vector2(15.0, 15.0),
 }
+
+## 按**真实尺寸**推导四档房间档位（`small` / `medium` / `large` / `arena`）。
+##
+## 为什么需要它：`TowerDescent3D._append_plan_room_record()` 长期把计划房间一律
+## 传成 `tower_cell`（15m 塔楼格子）。塔楼的模块壳房确实就是 15m 格子，但远征03
+## 的房间真实尺寸从 5×5 到 70×50 都有 —— 一刀切的结果是「40×30 的大厅」与
+## 「5×10 的走廊」拿到同一个档位，家具数量、家具尺寸、房型标签全按 15m 小间算。
+##
+## 阈值取 `ROOM_DIMENSIONS` 相邻两档**面积的几何平均**（面积比才是等距的）：
+##   small 396㎡ | medium 832㎡ | large 1496㎡ | arena 2352㎡
+##   ⇒ 分割点 574 / 1115 / 1876
+static func size_class_for_dimensions(dimensions: Vector2) -> String:
+	var area := dimensions.x * dimensions.y
+	if area <= 0.0:
+		return "medium"
+	if area < 574.0:
+		return "small"
+	if area < 1115.0:
+		return "medium"
+	if area < 1876.0:
+		return "large"
+	return "arena"
+
 
 const STREAM_DATA_ONLY := 0
 const STREAM_SHELL_READY := 1
@@ -994,8 +1038,18 @@ func set_stream_state(state: int) -> void:
 	_set_room_light_runtime_state(self)
 
 
+## 应用一份房间细节状态（存档回灌 / 探针构造）。
+##
+## ⚠️ **是合并，不是整体替换**。调用方只该传它真的知道的那几个键：
+## 旧存档没有 `treasure_chests` / `breakable_clutter` 两个键，整体替换会把
+## 房间内存里已经记下的「刚开过的箱子」洗回未开 —— 而这两个字段的权威本来就是房间。
+## `containers` / `room_light_on` 每次恢复都会完整传，合并与替换对它们等价。
 func apply_runtime_detail_state(state: Dictionary) -> void:
-	_pending_detail_runtime_state = state.duplicate(true)
+	for key_value in state.keys():
+		var value: Variant = state[key_value]
+		_pending_detail_runtime_state[key_value] = (
+			(value as Dictionary).duplicate(true) if value is Dictionary else value
+		)
 	if _detail_built:
 		_apply_pending_detail_runtime_state()
 
@@ -1015,7 +1069,46 @@ func _apply_pending_detail_runtime_state() -> void:
 			var prop := value as RoomFurniture3D
 			if container_states.has(prop.prop_id):
 				prop.restore_searched_state(bool(container_states[prop.prop_id]))
+	_restore_treasure_chests()
 	_restore_interactive_clutter()
+
+
+## 房间自己持有的**跨 detail 生命周期**的细节账（宝箱已开 / 易碎杂物已碎）。
+##
+## 为什么必须有这么一本账：家具、摆件、宝箱都挂在 `RuntimeDetail` 下，
+## 流送出房时整棵卸载重建（`_unload_runtime_detail()`），实例状态全部归零。
+## 但「这个箱子开过了 / 这个罐子砸了」属于**房间进度**，不该因为走远再走回来就复原。
+## 所以状态由房间节点自己持有（与 `visited` / `cleared` 同一层级），
+## detail 重建后由 `_apply_pending_detail_runtime_state()` 回灌。
+##
+## 📌 存档采集必须读本函数，**不能扫 `treasure_chest_3d` / `breakable_clutter_3d` 组**：
+## detail 已卸载时那些组里一件都没有，扫出来是空表，会把这本账洗白。
+func get_persistent_detail_state(key: String) -> Dictionary:
+	var value: Variant = _pending_detail_runtime_state.get(key, {})
+	return (value as Dictionary).duplicate(true) if value is Dictionary else {}
+
+
+## 已开宝箱回灌。`TreasureChest3D.restore_opened_state()` 早就写好了，
+## 缺的一直是调用点 —— 本函数补上，让「开过的箱子」跨 detail 重建与跨存档都保持已开。
+##
+## 时机：由 `_apply_pending_detail_runtime_state()` 在 detail 建完之后调，
+## 必然晚于 `_build_treasure_chests()`，箱子实例一定在。
+func _restore_treasure_chests() -> void:
+	var states := _pending_detail_runtime_state.get("treasure_chests", {}) as Dictionary
+	if states.is_empty():
+		return
+	for chest in get_treasure_chests():
+		var value: Variant = states.get(chest.chest_id, null)
+		if value == null:
+			continue
+		# 兼容两种存档形态：旧档是 `true`，新档是 `{opened, mimic}`。
+		if value is Dictionary:
+			if bool((value as Dictionary).get("mimic", false)):
+				chest.restore_mimic_state()
+			elif bool((value as Dictionary).get("opened", false)):
+				chest.restore_opened_state(true)
+		elif bool(value):
+			chest.restore_opened_state(true)
 
 
 func _unload_runtime_detail() -> void:
@@ -4993,6 +5086,39 @@ func _wall_door_lane(direction: String) -> float:
 	return float(get_meta("wall_door_lane_%s" % direction, 0.0))
 
 
+## 某一侧墙上的**门洞位置清单**（沿墙偏移，米；0 = 墙面中心；空数组 = 这面没门）。
+##
+## 取的是**门扇的真实几何**，不是 `lane_m` 声明。这一点是踩过坑才定的：
+## 2026-10-30 幕墙按 `wall_door_lane_<side>` / `wall_door_openings_<side>` 切洞，
+## 实测一间 25×25 的 `boss_foyer` 声明的 lane 是 0（墙面中心），而门扇实际在
+## 中心偏 −5m 处 —— 于是幕墙把洞开在了空心，门洞正对的那块幕墙原封不动，
+## 玩家看到的仍然是「门的位置有黑幕」。
+##
+## 直接量门扇位置就绕过了这个问题：不管 lane 从哪个配置来、有没有被 clamp 过，
+## 洞一定落在门在哪里。同侧多门（EGT 枢纽）也天然覆盖 —— 全树扫描拿到全部门扇。
+##
+## 兜底：房间还没建门扇时（装配早期），退回 `wall_door_openings_<side>` /
+## `wall_door_lane_<side>` 的声明值，行为与旧实现一致。
+func get_wall_door_lanes(direction: String) -> Array:
+	var lanes: Array = []
+	var along_x := direction in ["north", "south"]
+	for value in find_children("*", "RoomDoor3D", true, false):
+		var door := value as RoomDoor3D
+		if door == null or str(door.direction) != direction:
+			continue
+		var local := to_local(door.global_position)
+		lanes.append(local.x if along_x else local.z)
+	if not lanes.is_empty():
+		lanes.sort()
+		return lanes
+	var declared: Array = get_meta("wall_door_openings_%s" % direction, [])
+	if declared.size() >= 2:
+		return declared.duplicate()
+	if doors.has(direction):
+		return [_wall_door_lane(direction)]
+	return []
+
+
 func _build_wall(
 	direction: String, center: Vector3, length: float, axis: Vector3, opening_lane_m: float = 0.0
 ) -> void:
@@ -5415,12 +5541,13 @@ func _build_content() -> void:
 	if size_class == "rooftop":
 		# 用户要求清空屋顶设施，包含程序生成的家具和可搜容器。
 		prop_count = 0
-	if room_type == "FACILITY":
+	if room_type in FURNITURE_EXCLUDED_ROOM_TYPES:
 		prop_count = 0
-	if room_type == "STAIR_LOBBY":
-		prop_count = 0
-	if room_type == "BOSS":
-		# Boss 场地资产自身已提供可辨识掩体；不叠加随机家具破坏走位与主题构图。
+	# 太小的房间不布置：5×5 / 5×10 的连接件房四面都是门，塞 3 件家具会把通道堵成迷宫。
+	# 判据用真实尺寸而不是档位 —— `tower_cell`（15m 格子）在塔楼里是准确的，
+	# 但 flow 关卡同一档里既有 10×30 的走廊也有 5×5 的十字路口。
+	# 8m 短边的依据：最大家具 2.4m，两侧各留 1.4m 过道，再算上离墙间距。
+	if minf(get_dimensions().x, get_dimensions().y) < MIN_FURNISHED_SHORT_SIDE_M:
 		prop_count = 0
 	if room_type in ["STORAGE", "SCAVENGE", "BASEMENT"]:
 		prop_count += 2
@@ -5506,6 +5633,22 @@ func _build_treasure_chests() -> void:
 		# 而 `open_requested` 一接上就可能被玩家按下 —— 半成品箱子不该进交互池。
 		_add_runtime_detail_child(chest)
 		chest.open_requested.connect(_on_chest_open_requested)
+		# `opened` 在 `commit_opened()` 里发（扣钥匙/抽奖都成功之后）。
+		# 只有这个时刻才算「真的开了」——`open_requested` 可能因为没钥匙被上层驳回。
+		chest.opened.connect(_on_treasure_chest_opened)
+
+
+## 开成之后立刻记进房间账。与 `_on_interactive_clutter_broken()` 完全同构：
+## 房间是这本账的所有者，所以 detail 卸载重建、流送进出、甚至下线重进都能还原。
+func _on_treasure_chest_opened(chest: TreasureChest3D) -> void:
+	if chest == null or chest.chest_id.is_empty():
+		return
+	var states := _pending_detail_runtime_state.get("treasure_chests", {}) as Dictionary
+	states = states.duplicate(true)
+	# 记成字典而不是 `true`：拟态箱重建后不能变回一只「已开启的空箱子」——
+	# 它应该**整体消失**（本体已经被怪吃掉了）。只存布尔就没法区分这两种终态。
+	states[chest.chest_id] = {"opened": true, "mimic": chest.mimic}
+	_pending_detail_runtime_state["treasure_chests"] = states
 
 
 func _on_chest_open_requested(chest: TreasureChest3D) -> void:

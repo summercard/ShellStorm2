@@ -104,7 +104,7 @@ ASSET-PIPELINE [塔4周边五组景观建筑当前v003](development/2026-10-03_t
 |---|---|---|---|---|---|
 | PLAYER-STATE | 八态、移动、受击、冲刺 | [03](03_技术施工_玩家与操作.md) | `src/player3d/Player3D.gd`、`states/` | `verify_player3d_animation_flow` | 手枪待机/移动/换弹/开火/gallery专项已按显式`bp_pistol`前置恢复并通过；原因码/回放待补 |
 | PLAYER-INTERACT | 门、灯、设施统一仲裁 | [03](03_技术施工_玩家与操作.md) | `PlayerInteractionController3D`→Tower | `verify_unified_player_interaction_flow` | 实现存在；原完成度“未统一”过期 |
-| PLAYER-LIGHT | 手电、电池、光照/可见性 | [03](03_技术施工_玩家与操作.md)、[15.1](15.1_技术施工_电力系统.md) | `PlayerFlashlight3D/PlayerVision3D`→ItemUseHandler | `verify_3d_flashlight_charge_flow` | 当前链已纳入电力系统；基地供电表现仍待完善 |
+| PLAYER-LIGHT | 手电、电池、光照/可见性 | [03](03_技术施工_玩家与操作.md)、[15.1](15.1_技术施工_电力系统.md) | `PlayerFlashlight3D/PlayerVision3D`→ItemUseHandler | `verify_3d_flashlight_charge_flow`、`verify_vision_target_self_occlusion` | 当前链已纳入电力系统；基地供电表现仍待完善。目标显隐的遮挡射线已排除**目标自身**碰撞体（2026-10-30，否则有实体体积的设施会被自己挡成隐形），见[开发记录](development/2026-10-30_vision_target_self_occlusion.md) |
 | WEAPON-COMBAT | 远程/近战、命中与反馈 | [玩法设计](design/战斗奖励与物品流转设计.md)；[04](04_技术施工_战斗与局内成长.md) | `src/combat3d/`、`src/player3d/melee/` | `verify_3d_melee_combat_flow`、`verify_3d_melee_feedback_flow` | 有设计与历史；反馈验收未通过 |
 | WEAPON-OWNERSHIP | 完整武器实例转移 | [玩法设计](design/战斗奖励与物品流转设计.md)；[04](04_技术施工_战斗与局内成长.md)、[09](09_技术施工_存档结算与复活.md) | `WeaponInstance`→`EquipmentTransactionService` | `verify_equipment_transaction_service`、`verify_weapon_instance_contract_matrix` | 可用替身验证；全局所有权仍待补 |
 | INVENTORY-SLOTS | 棋盘式背包、物品占格、保险、快捷物品、扩容 | [玩法设计](design/战斗奖励与物品流转设计.md)；[装备与棋盘式包裹](design/装备与棋盘式包裹设计.md)；[04](04_技术施工_战斗与局内成长.md) | `ItemRegistry`→`InventoryModule`→`GridInventoryBoard/InventoryUI`；装备事务独立 | `verify_grid_inventory_layout`、`verify_backpack_equipment_flow`、`verify_finite_ammo_flow`、`verify_guaranteed_loadout_ammo_flow` | 八列50px棋盘、8×2保险柜、中央丢弃、仓库定点转移与贩卖机买卖已接入；验收边界见[八列与基地仓储记录](development/2026-10-15_inventory_storage_r3.md) |
@@ -216,3 +216,5 @@ ASSET-ROOFTOP / WORLD-BLOCKS：[井口藤蔓破损矮墙](development/2026-10-19
 ASSET-ROOFTOP / WORLD-BLOCKS：[东门南侧发电机](development/2026-10-20_rooftop_generator.md)独立资产v002，主体1.5×2m、4条落地电缆（3条错落入墙、1条备用），布局v006/194实例；供电与玩家交互行为待设计。
 
 POWER-SYSTEM r2：[基地发电机总电源](design/base_generator_power.md)定义天台E键总开关、99F断电与复电、储能和存档规则；独立入口`verify_base_generator_power`。持续负载/燃料仍待完善。
+
+ASSET-PIPELINE 小僵尸表现资产已更新为 v005（800三角面/16骨，手/脚骨移除，腿仅大腿小腿）；契约与当前专项结果见[减面记录](development/2026-10-30_melee_zombie_800.md)。不提升整个资产链路总体完成状态。

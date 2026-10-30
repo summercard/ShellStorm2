@@ -240,6 +240,7 @@ core_scenes=(
   verify_secret_branch_flow
   verify_expedition_room_static_scenes
   verify_expedition03_room_whitebox
+  verify_vision_target_self_occlusion
   verify_egt_flow_assembler
   verify_egt_plan_bridge
   verify_flow_floor_generation

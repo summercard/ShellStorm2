@@ -2,9 +2,9 @@
   "asset_id": "ENM-MELEE-FUNGBOAR01",
   "display_name": "小僵尸",
   "status": "active",
-  "model": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v003.blend",
-  "animation": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v004.blend",
-  "skeleton_signature": "b22411f12ac9951333a33a35f2e5d66989d894d5d948a78a0cd78ea40ccce005",
+  "model": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v004.blend",
+  "animation": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v005.blend",
+  "skeleton_signature": "4b0767495dde049f663598129f285158dd04bdbe309ef2a66e042b8d6db033bb",
   "clips": [
     {
       "id": "idle",
@@ -12,7 +12,8 @@
       "frames": 96,
       "duration": 3.2,
       "loop": true,
-      "scene": "MeleeZombieActions"
+      "scene": "MeleeZombieActions",
+      "exported_channel_count": 48
     },
     {
       "id": "walking",
@@ -20,7 +21,8 @@
       "frames": 48,
       "duration": 1.6,
       "loop": true,
-      "scene": "MeleeZombieActions"
+      "scene": "MeleeZombieActions",
+      "exported_channel_count": 48
     },
     {
       "id": "running",
@@ -28,7 +30,8 @@
       "frames": 24,
       "duration": 0.8,
       "loop": true,
-      "scene": "MeleeZombieActions"
+      "scene": "MeleeZombieActions",
+      "exported_channel_count": 48
     },
     {
       "id": "attack",
@@ -36,7 +39,8 @@
       "frames": 51,
       "duration": 1.7,
       "loop": false,
-      "scene": "MeleeZombieActions"
+      "scene": "MeleeZombieActions",
+      "exported_channel_count": 48
     },
     {
       "id": "hurt",
@@ -44,7 +48,8 @@
       "frames": 24,
       "duration": 0.8,
       "loop": false,
-      "scene": "MeleeZombieActions"
+      "scene": "MeleeZombieActions",
+      "exported_channel_count": 48
     },
     {
       "id": "dead",
@@ -52,22 +57,23 @@
       "frames": 72,
       "duration": 2.4,
       "loop": false,
-      "scene": "MeleeZombieActions"
+      "scene": "MeleeZombieActions",
+      "exported_channel_count": 48
     }
   ],
   "outputs": {
-    "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb": "0d07ca9435d04b1a26028d2f84be88c19ce64fcfef578eba58805d8a873fb397"
+    "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb": "800f1be604c65de3c0b669d0082b4e434f70dcebf70aa0b46918d643844ef775"
   },
   "limitations": [
-    "源跑步亚帧约1.3mm穿地；未完成全程自穿插/支撑脚滑移质量审查",
-    "basecolor 已于 2026-10-08 由 2048 降为 512（包体优化，模型/骨架/6段动作未改动）；2K 原件与改动前 blend/GLB 备份于 ShellStorm2/_scratch/melee_chaser_tex2k_backup/（gitignore 覆盖的本地回滚副本，不入库）",
-    "v004按用户要求删除手指独立变形，固定自然弯曲轮廓；近景存在减面造成的局部轮廓简化。"
+    "800面版本简化近景轮廓；手腕和脚踝不再独立转动，手/脚分别跟随前臂/小腿。",
+    "未完成全程自穿插、支撑脚滑移及移动端性能验收；源四分之一帧地面检查已通过。",
+    "dead剪辑保留供资产完整性核对，现行玩法仍是死亡绿色爆开并同帧回收模型。"
   ],
   "source_sha256": {
-    "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v003.blend": "3bc447b046c45e9e5b499b6ee3bd6f7b65d1525d91fe991ac4c0add384b5a2aa",
-    "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v004.blend": "bb95bcc3e60b9b0e458934adc3107179097df2dc71a07f67a22f780d372020b7"
+    "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v004.blend": "0988c1f7fc011d56606b812f80f08010713bb4e2299cc221efbb1f595396e09b",
+    "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v005.blend": "879a6d315edfb43246f2c8f519af3b37acf68b6057f9f12c3442f0a6b2d368a0"
   },
-  "asset_version": "v004",
+  "asset_version": "v005",
   "presentation_only": true,
   "collision_owner": "Enemy3D",
   "forward_contract": {
@@ -78,18 +84,18 @@
   "runtime_prefab": "assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn",
   "presentation_script": "assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/melee_chaser_formal_visual.gd",
   "runtime_visual_height_m": 1.3,
-  "authoring_height_m": 1.857143,
+  "authoring_height_m": 1.893537163734436,
   "runtime_base_scale": 0.7,
   "files": [
     {
-      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v003.blend",
-      "sha256": "9780a740e8c3a101b21d5d9f15b6c9e054f9f699d552b37ebebcc35d2c9823bb",
-      "bytes": 980208
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v004.blend",
+      "sha256": "0988c1f7fc011d56606b812f80f08010713bb4e2299cc221efbb1f595396e09b",
+      "bytes": 863061
     },
     {
-      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v004.blend",
-      "sha256": "34ee453fa730596c8060a57082dcb0267d8ceaa288ed9c28035f0f0c2651b821",
-      "bytes": 2991693
+      "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v005.blend",
+      "sha256": "879a6d315edfb43246f2c8f519af3b37acf68b6057f9f12c3442f0a6b2d368a0",
+      "bytes": 2470367
     },
     {
       "path": "art_source/enemies/normal_enemy_3d/melee_chaser/source/model/textures/enm_melee_fungboar01_basecolor_v002.png",
@@ -98,8 +104,8 @@
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb",
-      "sha256": "0d07ca9435d04b1a26028d2f84be88c19ce64fcfef578eba58805d8a873fb397",
-      "bytes": 242572
+      "sha256": "800f1be604c65de3c0b669d0082b4e434f70dcebf70aa0b46918d643844ef775",
+      "bytes": 172668
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb.import",
@@ -115,15 +121,78 @@
   "runtime_files": [
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn",
-      "sha256": "6b88f60e398a204cc3d31719550138c7dad8866d0477fa41094ecb0c228b07c0"
+      "sha256": "454c59f3f495f6b90402ba2041f9ed80262d51ed4f16db59d825804e612e552c",
+      "bytes": 761
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/melee_chaser_formal_visual.gd",
-      "sha256": "2caeff88608fb2a6ce6e3a3f62d09e53bd8cbc6674ba24999f282c7656eaf1bc"
+      "sha256": "6cca661bac8961f50f3aca5384e240b2e13c02aaaf1019be18d5958e7cc2647c",
+      "bytes": 3496
     }
   ],
   "validation_status": "passed",
-  "validation": [
+  "registered_ledger": {
+    "path": "assets/registry/ledgers/ShellStorm2_敌人账本_v001.xlsx",
+    "sheet": "资产主表",
+    "row": 6,
+    "prefab_page_row": 7
+  },
+  "remaining_work": [
+    "移动端性能与全程自穿插/滑步专项未执行；仅有basecolor512贴图。"
+  ],
+  "duplicate_gate": {
+    "classification": "version_increment",
+    "passed": true,
+    "report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\asset_guard\\ENM-MELEE-FUNGBOAR01_melee_chaser.json",
+    "same_asset_id_count": 0,
+    "identical_registered_file_count": 0
+  },
+  "version": "v005",
+  "skeleton_id": "SKEL-MELEE-ZOMBIE01-004",
+  "geometry": {
+    "triangles": 800,
+    "vertices": 402,
+    "bones": 16,
+    "removed_bones": [
+      "L_Hand",
+      "R_Hand",
+      "L_Foot",
+      "R_Foot"
+    ],
+    "bone_names": [
+      "Root",
+      "Hip",
+      "Waist",
+      "Spine02",
+      "Neck",
+      "Head",
+      "L_Clavicle",
+      "L_Upperarm",
+      "L_Forearm",
+      "R_Clavicle",
+      "R_Upperarm",
+      "R_Forearm",
+      "L_Thigh",
+      "L_Calf",
+      "R_Thigh",
+      "R_Calf"
+    ],
+    "rest_bounds_blender": [
+      [
+        -0.6371877193450928,
+        0.632242739200592
+      ],
+      [
+        -0.4922255873680115,
+        0.48067545890808105
+      ],
+      [
+        0.0,
+        1.893537163734436
+      ]
+    ]
+  },
+  "historical_validation": [
     {
       "test": "verify_melee_zombie_presentation",
       "passed": true,
@@ -157,46 +226,438 @@
       "negative_budget_expected_exit": 1
     }
   ],
-  "registered_ledger": {
-    "path": "assets/registry/ledgers/ShellStorm2_敌人账本_v001.xlsx",
-    "sheet": "资产主表",
-    "row": 6,
-    "prefab_page_row": 7
-  },
-  "remaining_work": [
-    "碰撞 FOOTPRINT_PROFILES(radius 1.02/height 1.30) 与模型几何(0.641/1.857) 不一致，属玩法数值待拍板。",
-    "贴图仅 basecolor，无法线贴图。"
+  "validation": [
+    {
+      "test": "positive",
+      "exit_code": 0,
+      "seconds": 7.407971382141113,
+      "errors": [],
+      "markers": [
+        "MELEE_ZOMBIE_PRESENTATION_OK states=12 clips=6 bones=16 triangles=800 death=goo_immediate collision_unchanged=true"
+      ],
+      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-30_melee_800\\positive\\runtime.log",
+      "user_data_isolated_before_autoload": true,
+      "command": [
+        "I:/Godot_v4.6.3-stable_win64.exe/Godot_v4.6.3-stable_win64_console.exe",
+        "--path",
+        "I:\\工作项目\\shellstrom2\\ShellStorm2",
+        "--audio-driver",
+        "Dummy",
+        "--headless",
+        "res://tests/verification/verify_melee_zombie_presentation.tscn"
+      ],
+      "expected_exit_code": 0,
+      "passed": true
+    },
+    {
+      "test": "negative",
+      "exit_code": 1,
+      "seconds": 10.696567058563232,
+      "errors": [
+        "ERROR: small zombie triangle budget at most 800"
+      ],
+      "markers": [],
+      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-30_melee_800\\negative\\runtime.log",
+      "user_data_isolated_before_autoload": true,
+      "command": [
+        "I:/Godot_v4.6.3-stable_win64.exe/Godot_v4.6.3-stable_win64_console.exe",
+        "--path",
+        "I:\\工作项目\\shellstrom2\\ShellStorm2",
+        "--audio-driver",
+        "Dummy",
+        "--headless",
+        "res://tests/verification/verify_melee_zombie_presentation.tscn",
+        "--",
+        "--negative-budget"
+      ],
+      "expected_exit_code": 1,
+      "passed": true
+    },
+    {
+      "test": "living_final",
+      "exit_code": 0,
+      "seconds": 16.535857439041138,
+      "errors": [],
+      "markers": [
+        "MELEE_LIVING_GALLERY_OK samples=12 save_error=0"
+      ],
+      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-30_melee_800\\living_final\\runtime.log",
+      "user_data_isolated_before_autoload": true,
+      "command": [
+        "I:/Godot_v4.6.3-stable_win64.exe/Godot_v4.6.3-stable_win64_console.exe",
+        "--path",
+        "I:\\工作项目\\shellstrom2\\ShellStorm2",
+        "--audio-driver",
+        "Dummy",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1200x1280",
+        "--script",
+        "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-30_melee_800\\living_gallery.gd"
+      ],
+      "expected_exit_code": 0,
+      "passed": true
+    },
+    {
+      "test": "death_final",
+      "exit_code": 0,
+      "seconds": 20.81404161453247,
+      "errors": [],
+      "markers": [
+        "MELEE_ZOMBIE_DEATH_VISIBILITY_OK"
+      ],
+      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-30_melee_800\\death_final\\runtime.log",
+      "user_data_isolated_before_autoload": true,
+      "command": [
+        "I:/Godot_v4.6.3-stable_win64.exe/Godot_v4.6.3-stable_win64_console.exe",
+        "--path",
+        "I:\\工作项目\\shellstrom2\\ShellStorm2",
+        "--audio-driver",
+        "Dummy",
+        "--rendering-method",
+        "gl_compatibility",
+        "--resolution",
+        "1200x1280",
+        "res://tests/verification/verify_melee_zombie_death_visibility.tscn",
+        "--",
+        "--capture"
+      ],
+      "expected_exit_code": 0,
+      "passed": true
+    },
+    {
+      "test": "runtime_pose",
+      "exit_code": 0,
+      "seconds": 7.00875186920166,
+      "errors": [],
+      "markers": [
+        "MELEE_RUNTIME_POSE_AUDIT_OK minimum_y=0.00003319"
+      ],
+      "log": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-30_melee_800\\runtime_pose\\runtime.log",
+      "user_data_isolated_before_autoload": true,
+      "command": [
+        "I:/Godot_v4.6.3-stable_win64.exe/Godot_v4.6.3-stable_win64_console.exe",
+        "--path",
+        "I:\\工作项目\\shellstrom2\\ShellStorm2",
+        "--audio-driver",
+        "Dummy",
+        "--headless",
+        "--script",
+        "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-30_melee_800\\runtime_pose_audit.gd"
+      ],
+      "expected_exit_code": 0,
+      "passed": true
+    },
+    {
+      "test": "targeted_import_final",
+      "exit_code": 0,
+      "seconds": 18.552337646484375,
+      "errors": [],
+      "copied_asset_cache_only": [
+        "I:\\工作项目\\shellstrom2\\ShellStorm2\\.godot\\imported\\enm_melee_fungboar01_visual_top3d.glb-da89261a18e73f6528d6a9d0d2e3c710.md5",
+        "I:\\工作项目\\shellstrom2\\ShellStorm2\\.godot\\imported\\enm_melee_fungboar01_visual_top3d.glb-da89261a18e73f6528d6a9d0d2e3c710.scn"
+      ],
+      "glb_sha256": "800f1be604c65de3c0b669d0082b4e434f70dcebf70aa0b46918d643844ef775",
+      "expected_exit_code": 0,
+      "passed": true
+    },
+    {
+      "test": "source_reopen",
+      "passed": true,
+      "report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\2026-10-30_melee_800\\reopen.json",
+      "samples": 1266
+    }
   ],
-  "duplicate_gate": {
-    "classification": "version_increment",
-    "passed": true,
-    "report": "outputs\\asset_guard\\ENM-MELEE-FUNGBOAR01_melee_chaser.json",
-    "same_asset_id_count": 0,
-    "identical_registered_file_count": 0
+  "model_signature": "4b0767495dde049f663598129f285158dd04bdbe309ef2a66e042b8d6db033bb",
+  "animation_signature": "4b0767495dde049f663598129f285158dd04bdbe309ef2a66e042b8d6db033bb",
+  "skeleton_signature_schema": "SHA256 JSON ordered (bone_name,parent,rest_matrix_7dp)",
+  "rollback": "ShellStorm2-backup/2026-10-30_melee_800/before_edits",
+  "source_validation": {
+    "model": {
+      "skeleton_signature": "4b0767495dde049f663598129f285158dd04bdbe309ef2a66e042b8d6db033bb",
+      "images": [
+        {
+          "name": "enm_melee_fungboar01_basecolor_v002.png",
+          "size": [
+            512,
+            512
+          ],
+          "packed": true
+        }
+      ],
+      "clips": {}
+    },
+    "animation": {
+      "skeleton_signature": "4b0767495dde049f663598129f285158dd04bdbe309ef2a66e042b8d6db033bb",
+      "images": [
+        {
+          "name": "enm_melee_fungboar01_basecolor_v002.png",
+          "size": [
+            512,
+            512
+          ],
+          "packed": true
+        }
+      ],
+      "clips": {
+        "idle": {
+          "minimum_z": 0.0005000377423129976,
+          "maximum_z": 1.815539002418518,
+          "loop_seam_matrix_error": 0.0,
+          "quarter_frame_samples": 385
+        },
+        "walking": {
+          "minimum_z": 0.0005000174278393388,
+          "maximum_z": 1.8435008525848389,
+          "loop_seam_matrix_error": 0.0,
+          "quarter_frame_samples": 193
+        },
+        "running": {
+          "minimum_z": 0.0004999791854061186,
+          "maximum_z": 1.788398027420044,
+          "loop_seam_matrix_error": 0.0,
+          "quarter_frame_samples": 97
+        },
+        "attack": {
+          "minimum_z": 0.0004999482771381736,
+          "maximum_z": 1.8107671737670898,
+          "loop_seam_matrix_error": null,
+          "quarter_frame_samples": 205
+        },
+        "hurt": {
+          "minimum_z": 0.0004999394877813756,
+          "maximum_z": 1.821601390838623,
+          "loop_seam_matrix_error": null,
+          "quarter_frame_samples": 97
+        },
+        "dead": {
+          "minimum_z": 0.0004998977528885007,
+          "maximum_z": 1.9273515939712524,
+          "loop_seam_matrix_error": null,
+          "quarter_frame_samples": 289
+        }
+      },
+      "pose_bounds": {
+        "idle": [
+          [
+            -0.4633933901786804,
+            0.5447689294815063
+          ],
+          [
+            -0.38064977526664734,
+            0.6025086641311646
+          ],
+          [
+            0.00343391764909029,
+            1.804368495941162
+          ]
+        ],
+        "walking": [
+          [
+            -0.45119431614875793,
+            0.5591259598731995
+          ],
+          [
+            -0.36543071269989014,
+            0.621303915977478
+          ],
+          [
+            0.000734954432118684,
+            1.8330223560333252
+          ]
+        ],
+        "running": [
+          [
+            -0.45037713646888733,
+            0.5609557628631592
+          ],
+          [
+            -0.2833302617073059,
+            0.9189352989196777
+          ],
+          [
+            0.0008122280123643577,
+            1.7783875465393066
+          ]
+        ],
+        "attack": [
+          [
+            -0.5079208612442017,
+            0.5016371607780457
+          ],
+          [
+            -0.37800225615501404,
+            0.6090992093086243
+          ],
+          [
+            0.0005008126609027386,
+            1.808946967124939
+          ]
+        ],
+        "hurt": [
+          [
+            -0.5079208612442017,
+            0.5016371607780457
+          ],
+          [
+            -0.3561984598636627,
+            0.633952796459198
+          ],
+          [
+            0.000499993097037077,
+            1.7993137836456299
+          ]
+        ],
+        "dead": [
+          [
+            -0.5079209804534912,
+            0.5016372799873352
+          ],
+          [
+            -0.4094138443470001,
+            0.5665994882583618
+          ],
+          [
+            0.006836972665041685,
+            1.8852455615997314
+          ]
+        ]
+      }
+    },
+    "glb": {
+      "triangles": 800,
+      "bones": 16,
+      "clips": 6,
+      "sha256": "800f1be604c65de3c0b669d0082b4e434f70dcebf70aa0b46918d643844ef775"
+    }
   },
-  "version": "v004",
-  "skeleton_id": "SKEL-MELEE-ZOMBIE01-003",
-  "geometry": {
-    "triangles": 1790,
-    "vertices": 897,
-    "bones": 20,
-    "removed_bones": [
-      "L_Thumb1",
-      "L_Thumb2",
-      "L_Index1",
-      "L_Index2",
-      "L_Middle1",
-      "L_Middle2",
-      "L_Pinky1",
-      "L_Pinky2",
-      "R_Thumb1",
-      "R_Thumb2",
-      "R_Index1",
-      "R_Index2",
-      "R_Middle1",
-      "R_Middle2",
-      "R_Pinky1",
-      "R_Pinky2"
+  "optimization": {
+    "baseline_triangles": 1790,
+    "baseline_bones": 20,
+    "neutral_hand_foot_bind": true,
+    "hand_weight_target": "Forearm",
+    "foot_weight_target": "Calf",
+    "visual_hip_floor_correction": {
+      "idle": {
+        "minimum_z": 0.0004999557859264314,
+        "curves": 63,
+        "maximum_visual_hip_lift_m": 0.0004234308779705316
+      },
+      "walking": {
+        "minimum_z": 0.0004999698139727116,
+        "curves": 63,
+        "maximum_visual_hip_lift_m": 0.05135818586475216
+      },
+      "running": {
+        "minimum_z": 0.000499963469337672,
+        "curves": 63,
+        "maximum_visual_hip_lift_m": 0.08047143819183111
+      },
+      "attack": {
+        "minimum_z": 0.0004999557277187705,
+        "curves": 63,
+        "maximum_visual_hip_lift_m": 0.04115796177554876
+      },
+      "hurt": {
+        "minimum_z": 0.0004999692901037633,
+        "curves": 63,
+        "maximum_visual_hip_lift_m": 0.02326424260879867
+      },
+      "dead": {
+        "minimum_z": 0.0004998977528885007,
+        "curves": 63,
+        "maximum_visual_hip_lift_m": 0.042804039326962084
+      }
+    },
+    "bind_floor_rebase_m": 0.0395076610147953
+  },
+  "shared_runtime_texture": {
+    "path": "assets/art/shared/textures/enemies/tex_color_0fcad02b82d254f23eab.png",
+    "sha256": "068b6ab85d834a203ef371976ae83197e4c352a70a5b7758245a24814305d49c",
+    "reused": true
+  },
+  "validated_date": "2026-10-30",
+  "runtime_pose_validation": {
+    "bone_count": 16,
+    "bones": [
+      "Root",
+      "Hip",
+      "Waist",
+      "Spine02",
+      "Neck",
+      "Head",
+      "L_Clavicle",
+      "L_Upperarm",
+      "L_Forearm",
+      "R_Clavicle",
+      "R_Upperarm",
+      "R_Forearm",
+      "L_Thigh",
+      "L_Calf",
+      "R_Thigh",
+      "R_Calf"
+    ],
+    "clips": {
+      "attack": {
+        "max_root_offset": 0.0,
+        "max_world_y": 1.2674446105957,
+        "min_world_y": 3.31886112689972e-05,
+        "samples": 205,
+        "worst_time": 0.4
+      },
+      "dead": {
+        "max_root_offset": 0.0,
+        "max_world_y": 1.34914636611938,
+        "min_world_y": 0.000349521636962891,
+        "samples": 289,
+        "worst_time": 1.35
+      },
+      "hurt": {
+        "max_root_offset": 0.0,
+        "max_world_y": 1.27512121200562,
+        "min_world_y": 0.000342510640621185,
+        "samples": 97,
+        "worst_time": 0.716666666666667
+      },
+      "idle": {
+        "max_root_offset": 0.0,
+        "max_world_y": 1.27086675167084,
+        "min_world_y": 0.000150516629219055,
+        "samples": 385,
+        "worst_time": 2.36666666666667
+      },
+      "running": {
+        "max_root_offset": 0.0,
+        "max_world_y": 1.25187873840332,
+        "min_world_y": 0.000349676236510277,
+        "samples": 97,
+        "worst_time": 0.75
+      },
+      "walking": {
+        "max_root_offset": 0.0,
+        "max_world_y": 1.29045474529266,
+        "min_world_y": 0.000327430665493011,
+        "samples": 193,
+        "worst_time": 1.45
+      }
+    },
+    "errors": [],
+    "pose_source": "CPU linear skinning from Godot imported vertex arrays,skin inverse binds,and sampled Skeleton3D poses at120Hz",
+    "runtime_scale": 0.7,
+    "worst_world_y": 3.31886112689972e-05
+  },
+  "validation_policy": {
+    "expected_faults": [
+      "negative budget801 => exit1"
+    ],
+    "unexpected_script_errors": 0,
+    "not_executed": [
+      "full project gameplay suite",
+      "full self-intersection",
+      "support-foot sliding",
+      "mobile profiling",
+      "global art_source layout scan timed out; target hashes verified"
     ]
   }
 }

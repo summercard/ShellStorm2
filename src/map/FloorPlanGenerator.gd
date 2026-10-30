@@ -636,6 +636,17 @@ const FLOW_KIND_CONTENT := {
 	"BOSS_FOYER": "UPGRADE",
 	"NORMAL": "COMBAT",
 	"HUB": "COMBAT",
+	# `SHOP` 必须钉成 `MERCHANT`（2026-10-30）。此前这一项是空的 ——
+	# 于是商店房被内容洗牌成 COMBAT / STORAGE / TRAP 之类，`room_type` 一路
+	# 传到 `DungeonRoom3D` 时已经不是 MERCHANT，`_build_detail()` 里那句
+	# `if room_type in ["MERCHANT", "UPGRADE", "EVENT"]` 永远不成立，服务点不建、
+	# 商人链路从入口就断了。**实测每张 flow 都有 1 间 SHOP 房，但一间能用的都没有。**
+	#
+	# 注意：flow 房间的运行时 `room_type` **不是** `_flow_room_type()` 的结果 ——
+	# 后者写进 `room_type` 键，但 `room_from_source()` 的出口白名单里没有这个键，
+	# 会被静默丢弃；运行时真正取的是 `content_type`（经 `room_from_source` 的 `type`
+	# 字段 → `TowerDescent3D._append_tower_record()`）。所以要让它生效必须写在这里。
+	"SHOP": "MERCHANT",
 }
 
 
@@ -926,7 +937,11 @@ static func _generate_flow_floor(
 		# 只有 REWARD 房放箱子。原作 EGT 里宝箱房就是「打不开箱就白跑一趟」的那种房间：
 		# 没有怪、只有一只箱子，值不值得花钥匙全看品质。
 		if kind == "REWARD":
-			var chest_list := _chest_placements_for(size, treasure_chests)
+			# 盐里带层种子：同一张 flow 骨架换个种子就该换一批宝箱品质与拟态，
+			# 否则「这张骨架的 reward_01 永远是 epic 且永远是拟态」会被玩家背下来。
+			var chest_list := _chest_placements_for(
+				size, treasure_chests, "%s#%d" % [room_id, seed_value]
+			)
 			if not chest_list.is_empty():
 				(rooms.back() as Dictionary)["chest_placements"] = chest_list
 
@@ -1103,7 +1118,10 @@ static func _treasure_chests_for(level_id: String) -> Dictionary:
 ##
 ## `requires_key` 在配置层统一给，逐箱不再覆写 —— EGT 的箱子「要么都锁、要么都不锁」，
 ## 出现"这只能开那只不能"会让玩家以为是自己钥匙不够。
-static func _chest_placements_for(size: Vector2, cfg: Dictionary) -> Array:
+##
+## `salt` = 「房间 id + 层种子」。品质与拟态都用它掷骰 ⇒ **同 seed 同房间结果恒定**，
+## 流送卸载重建、存档重进都不会让箱子换品质或换身份。
+static func _chest_placements_for(size: Vector2, cfg: Dictionary, salt := "") -> Array:
 	if cfg.is_empty():
 		return []
 	var count := maxi(0, int(cfg.get("chest_per_room", 1)))
@@ -1119,16 +1137,25 @@ static func _chest_placements_for(size: Vector2, cfg: Dictionary) -> Array:
 	var pool_id := str(cfg.get("reward_pool_id", "loot_floor_1_2"))
 	var drop_count := maxi(1, int(cfg.get("drop_count", 1)))
 	var fate_count := maxi(0, int(cfg.get("fate_card_per_open", 0)))
+	var mimic_cfg := cfg.get("mimic", {}) as Dictionary
+	var mimic_chance := clampf(float(mimic_cfg.get("chance", 0.0)), 0.0, 1.0)
 	var out: Array = []
 	var start_x := -spacing * float(count - 1) * 0.5
 	for index in range(count):
+		# 每只箱子独立的盐：品质与拟态各自掷，互不牵连
+		# （否则「品质越高越容易是拟态」这种隐性相关会悄悄出现）。
+		var chest_salt := "%s#%d" % [salt, index]
 		out.append({
 			"id": "chest_%02d" % index,
-			"quality": _chest_quality_for_index(qualities, index),
+			"quality": _chest_quality_for_salt(qualities, chest_salt),
 			"requires_key": requires_key,
 			"reward_pool_id": pool_id,
 			"drop_count": drop_count,
 			"fate_card_per_open": fate_count,
+			# 拟态：开箱瞬间变怪。**只掷一次、写进数据**，运行时不重掷 ——
+			# 运行时掷骰会让同一只箱子「读档后再开就不是拟态了」。
+			"mimic": _roll_ratio(chest_salt + ":mimic") < mimic_chance,
+			"mimic_monster_kind": str(mimic_cfg.get("monster_kind", "egt_mimic")),
 			# 只沿中轴摆：Z 恒 0，X 均匀分布。
 			"offset": [start_x + spacing * float(index), 0.0],
 			# 统一朝 +Z（房间"南"面）—— 与门无关，纯粹让玩家从任意方向进门看到正面。
@@ -1137,24 +1164,58 @@ static func _chest_placements_for(size: Vector2, cfg: Dictionary) -> Array:
 	return out
 
 
-## 宝箱品质。**按索引确定性轮转**而不是抽签：生成期抽签会让
-## "同 seed 同房间"在改配置后整体位移，且探针无法复算。
-## 权重表达的是"这一层里各品质各占多少"，用轮转 + 权重排序近似它。
-static func _chest_quality_for_index(weights: Dictionary, index: int) -> String:
+## 宝箱品质：**按盐确定性掷骰**，不是按索引轮转。
+##
+## ⚠ 旧实现是 `ordered[index % size]` 的轮转，本意是「一房里多只箱子按权重轮流拿品质」。
+## 但 `chest_per_room = 1` ⇒ `index` 恒为 0 ⇒ **全层每只箱子都是 common**，
+## `rare`(10) / `epic`(2) 两档永远抽不到，`quality_weights` 整段是死配置。
+## 症状很隐蔽：箱子确实开了、确实掉了东西，只是「抽到史诗」这件事从没发生过。
+## 现在每只箱子用自己的盐掷一次，权重才真的等于出现概率。
+static func _chest_quality_for_salt(weights: Dictionary, salt: String) -> String:
 	if weights.is_empty():
 		return "common"
 	var ordered: Array = []
+	var total := 0.0
 	for quality in weights.keys():
-		ordered.append({"quality": str(quality), "weight": maxf(0.0, float(weights[quality]))})
+		var weight := maxf(0.0, float(weights[quality]))
+		if weight <= 0.0:
+			# 权重 0 = 本关**不许出这一档**，直接从候选里剔除。
+			# 留成 0 权重的候选会让 `roll < acc` 在浮点边界上偶尔命中它。
+			continue
+		ordered.append({"quality": str(quality), "weight": weight})
+		total += weight
+	if ordered.is_empty() or total <= 0.0:
+		return "common"
+	# 稳定排序：权重降序、同权重按名字，保证同盐同结果。
 	ordered.sort_custom(
 		func(a: Dictionary, b: Dictionary) -> bool:
 			if is_equal_approx(float(a["weight"]), float(b["weight"])):
 				return str(a["quality"]) < str(b["quality"])
 			return float(a["weight"]) > float(b["weight"])
 	)
-	if ordered.is_empty() or float((ordered[0] as Dictionary)["weight"]) <= 0.0:
-		return "common"
-	return str((ordered[index % ordered.size()] as Dictionary)["quality"])
+	var roll := _roll_ratio(salt) * total
+	var acc := 0.0
+	for entry_value in ordered:
+		var entry := entry_value as Dictionary
+		acc += float(entry["weight"])
+		if roll < acc:
+			return str(entry["quality"])
+	return str((ordered[ordered.size() - 1] as Dictionary)["quality"])
+
+
+## 「盐 → [0,1) 的确定性随机数」。FNV-1a，不依赖 `RandomNumberGenerator` ——
+## 后者要被 seed / 复位，一旦调用顺序变了结果就跟着变；这里纯函数，谁调都一样。
+static func _roll_ratio(salt: String) -> float:
+	var hash_value := _stable_hash(salt)
+	return float(hash_value % 100000) / 100000.0
+
+
+static func _stable_hash(text: String) -> int:
+	var hash_value := 2166136261
+	for byte in text.to_utf8_buffer():
+		hash_value = (hash_value ^ int(byte)) * 16777619
+		hash_value = hash_value & 0xFFFFFFFF
+	return hash_value
 
 
 ## 按编成表给单间房生成放置层。

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/capture_expedition03_upgrade_view.gd" id="1"]
+
+[node name="CaptureExpedition03UpgradeView" type="Node"]
+script = ExtResource("1")

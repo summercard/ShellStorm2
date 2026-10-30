@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-10-29",
+  "updated_at": "2026-10-30",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -372,7 +372,9 @@
       ],
       "development_records": [
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
-        "docs/v0.1/development/2026-09-24_combat_economy_handoff.md"
+        "docs/v0.1/development/2026-09-24_combat_economy_handoff.md",
+        "docs/v0.1/development/2026-10-30_expedition03_shop_and_currency.md",
+        "docs/v0.1/development/2026-10-30_expedition03_chest_mimic.md"
       ],
       "verification": [
         {
@@ -423,7 +425,12 @@
         "docs/v0.1/development/2026-10-29_egt_monster_tuning_and_bullet_visibility.md",
         "docs/v0.1/development/2026-10-29_egt_bullet_damage_and_behavior_alignment.md",
         "docs/v0.1/development/2026-10-29_egt_monster_drops.md",
-        "docs/v0.1/development/2026-10-29_expedition03_treasure_chest.md"
+        "docs/v0.1/development/2026-10-29_expedition03_treasure_chest.md",
+        "docs/v0.1/development/2026-10-30_expedition03_shop_and_currency.md",
+        "docs/v0.1/development/2026-10-30_expedition03_blink_out_of_room.md",
+        "docs/v0.1/development/2026-10-30_expedition03_enemy_body_size.md",
+        "docs/v0.1/development/2026-10-30_expedition03_chest_mimic.md",
+        "docs/v0.1/development/2026-10-30_expedition03_combat_plane.md"
       ],
       "verification": [
         {

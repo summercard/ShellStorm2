@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "asset_id": "ENM-MELEE-EXPEDITION03-INFECTED01",
+  "display_name": "远征03_普通感染者",
+  "slug": "enm_melee_expedition03_infected01",
+  "version": "v002",
+  "date": "2026-10-30",
+  "domain": "enemies",
+  "category": "敌人",
+  "subcategory": "normal_melee",
+  "intended_level": "expedition_03",
+  "production_status": "authored",
+  "asset_ledger": {
+    "registry": "assets/registry/ledger_index.json",
+    "domain": "enemies",
+    "sheet": "资产主表",
+    "asset_id": "ENM-MELEE-EXPEDITION03-INFECTED01"
+  },
+  "reference": {
+    "path": "art_source/enemies/enemy_3d/enm_melee_expedition03_infected01/source/reference_infected01.png",
+    "sha256": "20d78ec8cb45840675dc535a2e8b97e2c35594ea4371edb91bedc32864765b54",
+    "source": "User supplied infected concept; request authorizes derivative model; upstream license not supplied"
+  },
+  "visual_brief": [
+    "simple broad silhouette",
+    "pear-shaped torn ivory shirt",
+    "wide dark trousers",
+    "short legs",
+    "asymmetric bulging eyes",
+    "open recessed mouth",
+    "long hanging red tongue",
+    "T Pose"
+  ],
+  "files": {
+    "model": {
+      "path": "art_source/enemies/enemy_3d/enm_melee_expedition03_infected01/source/enm_melee_expedition03_infected01_model_v002.blend",
+      "sha256": "791b163e57fea9f088d7ff9ed7523d132cec9685da9661b8d1017c5c868dbe92"
+    },
+    "animation": {
+      "path": "art_source/enemies/enemy_3d/enm_melee_expedition03_infected01/source/enm_melee_expedition03_infected01_animation_v002.blend",
+      "sha256": "5b851072402a87c48dd05ee04cee02d5bd795ffea13f95dcb36c906b2480f125"
+    },
+    "palette_png": {
+      "path": "assets/art/shared/palette/npc_palette_10x10_512.png",
+      "sha256": "c8e09431ad6f8ca789764fc63a368d647d2c168540fb81e191a91b8871ad6f85"
+    },
+    "palette_psd": {
+      "path": "art_source/shared/palette/npc_palette_10x10_512_v001.psd",
+      "sha256": "28dfa804ebe219dbaa82e3f66395c7fa32ab74b5cc289759f9117b85abb86da2"
+    },
+    "palette_recipe": {
+      "path": "art_source/shared/palette/npc_palette_recipe_v001.json",
+      "sha256": "077788ed018f06cd71e2f527bed0658099981643993e32df77d833bc65854a75"
+    }
+  },
+  "source_contract": {
+    "units": "meter",
+    "height_m": 1.6,
+    "actual_bounds_min": [
+      -0.56499994,
+      -0.33700004,
+      0.0
+    ],
+    "actual_bounds_max": [
+      0.56499994,
+      0.27000001,
+      1.60000002
+    ],
+    "origin": "ground center (0,0,0)",
+    "forward_blender": "-Y",
+    "root_scale": [
+      1,
+      1,
+      1
+    ],
+    "pose": "T Pose",
+    "polygons": 475,
+    "evaluated_triangles": 475,
+    "vertices": 389,
+    "mesh_objects": 39,
+    "skeleton_id": "SKEL-INFECTED01-002",
+    "skeleton_signature": "7c4b4dc76f0787b8afdd1f6073da65cf6d9a04496cc26a4539a3d58ab3aa2e92",
+    "bone_count": 20,
+    "model_editable": true,
+    "animation_geometry": "relative linked mesh datablocks from model master",
+    "animation_clips": [
+      "TPOSE_reference"
+    ],
+    "animation_frames": [
+      1
+    ],
+    "palette": "shared NPC/monster 512x512 / 10x10, not the scene palette",
+    "uv_layer": "PaletteUV",
+    "material_count": 4,
+    "colors_owned_by": "per-face PaletteUV cell",
+    "material_roles": [
+      "精工金属",
+      "细腻哑光",
+      "清漆反光",
+      "柔和自发光"
+    ],
+    "collision_owner": "Enemy3D controller; no collision in Blender source",
+    "arm_span_m": 1.13,
+    "previous_arm_span_m": 1.9,
+    "arm_length_factor": 0.5,
+    "shoulder_anchor_m": 0.18
+  },
+  "consumer_contract": {
+    "controller": "src/enemy3d/Enemy3D.gd",
+    "presentation": "src/enemy3d/EnemyAvatar3D.gd",
+    "runtime_mapping": "unassigned; not added to expedition03 spawn roster",
+    "known_controller_scale": 0.7,
+    "unadjusted_nominal_runtime_height_m": 1.12,
+    "runtime_size_status": "future assembly must decide and validate actual display height; source is exactly 1.6m",
+    "states_reference": [
+      "dormant",
+      "idle",
+      "patrol",
+      "alert",
+      "chase",
+      "search",
+      "return",
+      "telegraph",
+      "attack",
+      "recovery",
+      "stagger",
+      "dead"
+    ],
+    "states_authored": false,
+    "godot_imported": false
+  },
+  "validation": {
+    "summary": "source_validation_v002.json",
+    "exit_code": 0,
+    "passed_checks": 591,
+    "total_checks": 591,
+    "preview_work_keys": [
+      "sessions/2026-10-30_expedition03_infected/v002/enm_melee_expedition03_infected01_front_v002.png",
+      "sessions/2026-10-30_expedition03_infected/v002/enm_melee_expedition03_infected01_overview_v002.png",
+      "sessions/2026-10-30_expedition03_infected/v002/enm_melee_expedition03_infected01_side_v002.png",
+      "sessions/2026-10-30_expedition03_infected/v002/enm_melee_expedition03_infected01_back_v002.png"
+    ]
+  },
+  "rebuild_script": "scripts/blender/build_expedition03_infected.py",
+  "revision_note": "User red-box reference: shorten shoulder-to-hand length by about half, preserving horizontal T Pose.",
+  "revision_reference": {
+    "path": "art_source/enemies/enemy_3d/enm_melee_expedition03_infected01/source/reference_arm_length_v002.png",
+    "sha256": "121989549a0bf969f4417568ef82ef31b5a4e60a18b450b4c1521ad0b4dbef66"
+  },
+  "revision_preservation": {
+    "non_arm_geometry_materials_uv_unchanged": true,
+    "non_arm_bone_positions_unchanged": true,
+    "non_arm_geometry_after_disk_reload_unchanged": true
+  }
+}

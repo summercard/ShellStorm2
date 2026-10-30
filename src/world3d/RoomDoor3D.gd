@@ -24,6 +24,35 @@ const OPENING_STYLE_SLIDE := "slide"
 const SLIDE_PANEL_WIDTH_SCALE := 1.10
 ## 右扇沿门厚方向让开 8mm。两扇在中间有重叠区，同 z 会 z-fighting（关闭时闪一条亮线）。
 const SLIDE_PANEL_DEPTH_OFFSET_M := 0.008
+## 开到位后，两扇门板沿门法线**向房间内侧**偏移的距离。
+##
+## 业主 2026-10-30：「远征03 的其它房间的门，应该是可打开和不可打开的状态，
+## 而不是直接消失」。滑门只走 x 方向时，门板整块退进门洞外的墙体
+## （墙厚 0.28 > 门板 0.18），深度测试把它挡在墙后 —— 玩家看到的是一个空洞，
+## 分不清"这里本来有门"还是"这只是一条通道"。
+##
+## 数值 = 墙半厚 0.14 + 门板半厚 0.09：门板背面正好贴在墙内表面，
+## 门洞全通不占宽度，同时两块门板始终留在视野里，开门/关门是两种可分辨的形态。
+##
+## ⚠️ 与 2026-10-28「门看起来贴在墙外面」不是同一件事：那次是基地 99F 的**滑升门体**
+## （可视厚度 0.88m）滑到门洞两侧时凸出 0.31m，露出一整块蓝门体；这里是 0.18m 厚的
+## 门板贴墙，凸出量只有门板自身厚度，观感是"门板收在墙边"。
+const SLIDE_PARKED_WALL_INSET_M := 0.23
+
+## —— 感应自动开合（远征03 房门的「可开启」态）——
+##
+## 业主 2026-10-30：「这个门的状态，使用可开启和不可开启。在可开启状态，
+## 人走近了会自动打开，然后再关闭。不可开启状态人走近了不会打开。」
+##
+## 于是门的**权限**（`openable`）与门的**位置**（`is_open`）拆成两件事：
+##   · `openable = true`  ⇒ 门关着但允许通行，玩家靠近即自动开、离开即自动关；
+##   · `openable = false` ⇒ 门关着且拒绝一切自动开启（战斗封锁 / 退局气闸）。
+## 原先"清了房就把门永远推开"的写法让「可开启」这个状态在画面上根本不存在 ——
+## 门要么开着、要么关死，玩家读不出"这扇门能不能过"。
+const PROXIMITY_OPEN_DISTANCE_M := 3.6
+const PROXIMITY_CLOSE_DISTANCE_M := 4.4
+## 离开后的关闭延迟：给玩家一个"已经过去了"的余量，也避免贴着门框反复开合。
+const PROXIMITY_CLOSE_DELAY_S := 0.45
 
 ## 门扇动画结束（开到位或关到底）。门不是 Area3D，交互靠距离判定，
 ## 因此"门关上了"这个事实只能从这里发出，供上层订阅。
@@ -31,6 +60,8 @@ signal motion_finished(is_open: bool)
 
 var direction := "east"
 var target_room_id := ""
+## 可开启 / 不可开启。**权限**，与 `is_open` 的位置状态正交。
+var openable := true
 var is_open := false
 var requires_key := true
 var requires_clear := true
@@ -51,6 +82,9 @@ var _motion_tween: Tween
 var _transitioning := false
 var _target_open := false
 var _presentation_clear_height_m := TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M
+## 感应开合的检测目标（本局玩家）。为 null = 本门不走感应，行为与旧版逐字一致。
+var _proximity_target: Node3D
+var _proximity_close_elapsed := 0.0
 
 ## Geometry-only adaptation; access policy and motion state stay owned by the map edge.
 func set_presentation_opening(width_m: float, height_m: float) -> void:
@@ -108,6 +142,70 @@ func set_motion_profile(duration_s: float, collision_tracks_panel := false) -> v
 func set_manual_close_enabled(enabled: bool) -> void:
 	_manual_close_enabled = enabled
 	_refresh_prompt()
+
+
+## 设置「可开启 / 不可开启」。
+##
+## 不可开启 ⇒ 立刻回到关闭态并保持（门板挡在门洞，玩家一眼读得出过不去）。
+## 可开启 ⇒ **不在这里开门**：开合交给感应（`_process`），否则又回到
+## 「清了房门就永远敞开」的老样子，玩家无从分辨两种状态。
+func set_openable(value: bool, immediate := false) -> void:
+	openable = value
+	_proximity_close_elapsed = 0.0
+	if not value:
+		set_open(false, immediate)
+	_refresh_prompt()
+
+
+func is_openable() -> bool:
+	return openable
+
+
+## 交给门自己去盯的玩家节点。**只有 flow 关卡的门**会被设上，
+## 其余关卡（塔楼 / 基地 / 远征01-02）保持 null ⇒ `_process` 不跑，行为不变。
+func set_proximity_target(target: Node3D) -> void:
+	_proximity_target = target
+	_proximity_close_elapsed = 0.0
+	set_process(target != null)
+
+
+## 感应门是否需要玩家按 E —— 玩家一走近它就开，交互圆点与提示都应让位。
+## 退役判定留在门自己手里，`Dungeon3D.get_interaction_candidate` 只读结果。
+func has_proximity_target() -> bool:
+	return _proximity_target != null
+
+
+func is_manual_interaction_enabled() -> bool:
+	return _proximity_target == null
+
+
+## 感应开合：近则开、远则关（带迟滞与延迟，避免门框上反复抽搐）。
+##
+## 只做表现与阻挡，不改任何门态账：`openable` 由上层（`TowerDescent3D`）按
+## 「封锁 / 可通行」推导，本函数只消费它。门态仍然不存档。
+func _process(delta: float) -> void:
+	if _proximity_target == null or not is_instance_valid(_proximity_target):
+		return
+	if not openable or _transitioning:
+		_proximity_close_elapsed = 0.0
+		return
+	var distance := _proximity_target.global_position.distance_to(global_position)
+	if distance <= PROXIMITY_OPEN_DISTANCE_M:
+		_proximity_close_elapsed = 0.0
+		if not is_open:
+			set_open(true)
+		return
+	if not is_open:
+		_proximity_close_elapsed = 0.0
+		return
+	if distance <= PROXIMITY_CLOSE_DISTANCE_M:
+		_proximity_close_elapsed = 0.0
+		return
+	_proximity_close_elapsed += delta
+	if _proximity_close_elapsed < PROXIMITY_CLOSE_DELAY_S:
+		return
+	_proximity_close_elapsed = 0.0
+	set_open(false)
 
 
 func set_prompt_override(text: String) -> void:
@@ -184,15 +282,17 @@ func set_open(opened: bool, immediate := false) -> void:
 		AudioManager.play_sfx("door_open", -3.0)
 
 
-## 双扇对开：两扇各占半个门洞，向左右滑出门洞。
+## 双扇对开：两扇各占半个门洞，向左右滑出门洞，开到位后贴到门墙内侧。
 ##
-## 为什么滑出门洞就"看不见了"：门洞两侧是 0.28m 厚的实墙，门扇只有 0.18m 厚，
-## 滑进门洞外的部分**整块落在墙体内部** —— 深度测试会把门扇正确挡在墙后面，
-## 于是观感就是"门滑进墙里"。不需要给墙开门槽，也不会与墙面共面打架。
+## 只走 x 方向时门板会整块没入墙体、在画面上"消失"（见 `SLIDE_PARKED_WALL_INSET_M`）。
+## 现在开到位后额外挪到墙内侧，门洞照旧全通，但两块门板始终可见 ——
+## 「可打开 / 不可打开」两种状态从画面上就能读出来。
 ##
 ## 碰撞仍是**单块覆盖整个门洞**（不跟门板走）：门开到一半时人钻不过去，
 ## 开完立即放行，与既有普通房门的放行语义一致（`_collision_tracks_panel_motion`
 ## 只服务于基地 99F 那种"碰撞随门板升降"的滑升门）。
+##
+## ⚠️ 贴墙是**纯表现**：行程、碰撞禁用时机、`is_open` 与门态判定逐字未动。
 func _set_open_slide(opened: bool, changed: bool, immediate: bool) -> void:
 	var y := _presentation_clear_height_m * 0.5
 	var half_width := _presentation_clear_width_m * 0.5
@@ -204,15 +304,17 @@ func _set_open_slide(opened: bool, changed: bool, immediate: bool) -> void:
 	var travel := half_width - quarter + panel_half
 	var left_target := -quarter - (travel if opened else 0.0)
 	var right_target := quarter + (travel if opened else 0.0)
+	# 开到位后整体挪到墙内侧；关着时回门洞中央。
+	var park_z := (SLIDE_PARKED_WALL_INSET_M * _slide_inward_sign()) if opened else 0.0
 	if _motion_tween != null and _motion_tween.is_valid():
 		_motion_tween.kill()
 	if immediate or not is_inside_tree() or not changed:
 		_transitioning = false
 		if _panel != null:
-			_panel.position = Vector3(left_target, y, 0.0)
+			_panel.position = Vector3(left_target, y, park_z)
 		if _panel_right != null:
 			_panel_right.position = Vector3(
-				right_target, y, SLIDE_PANEL_DEPTH_OFFSET_M
+				right_target, y, park_z + SLIDE_PANEL_DEPTH_OFFSET_M
 			)
 		if _collision != null:
 			_collision.set_deferred("disabled", opened)
@@ -225,30 +327,57 @@ func _set_open_slide(opened: bool, changed: bool, immediate: bool) -> void:
 	_motion_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	_motion_tween.set_parallel(true)
 	if _panel != null:
-		_motion_tween.tween_property(_panel, "position:x", left_target, _motion_duration_s)
+		_motion_tween.tween_property(
+			_panel, "position", Vector3(left_target, y, park_z), _motion_duration_s
+		)
 	if _panel_right != null:
 		_motion_tween.tween_property(
-			_panel_right, "position:x", right_target, _motion_duration_s
+			_panel_right,
+			"position",
+			Vector3(right_target, y, park_z + SLIDE_PANEL_DEPTH_OFFSET_M),
+			_motion_duration_s
 		)
 	_motion_tween.finished.connect(
-		_on_slide_finished.bind(opened, left_target, right_target)
+		_on_slide_finished.bind(opened, left_target, right_target, park_z)
 	)
 	_refresh_prompt()
 	if opened and AudioManager != null:
 		AudioManager.play_sfx("door_open", -3.0)
 
 
+## 门板"收进门墙内侧"的局部 z 符号。
+##
+## `_build_door()` / `_build_door_for_port()` 对 `west` / `east` 都设了
+## `rotation.y = +90°`，于是「局部 +z」在世界里统一落到 ±x / ±z 两个方向之一；
+## 再按门挂在哪面墙上判断哪边朝房间内：
+##
+## | 墙 | 门在房间的位置 | 房间内侧 | 局部 z 符号 |
+## |---|---|---|---|
+## | north | z = −half | +z | +1 |
+## | south | z = +half | −z | −1 |
+## | west  | x = −half（转 90°）| +x | +1 |
+## | east  | x = +half（转 90°）| −x | −1 |
+func _slide_inward_sign() -> float:
+	match direction:
+		"south", "east":
+			return -1.0
+		_:
+			return 1.0
+
+
 func _on_slide_finished(
-	opened: bool, left_target: float, right_target: float
+	opened: bool, left_target: float, right_target: float, park_z: float
 ) -> void:
 	if _target_open != opened:
 		return
 	_transitioning = false
 	motion_finished.emit(opened)
 	if _panel != null:
-		_panel.position.x = left_target
+		_panel.position = Vector3(left_target, _panel.position.y, park_z)
 	if _panel_right != null:
-		_panel_right.position.x = right_target
+		_panel_right.position = Vector3(
+			right_target, _panel_right.position.y, park_z + SLIDE_PANEL_DEPTH_OFFSET_M
+		)
 	if _collision != null:
 		_collision.set_deferred("disabled", opened)
 	_refresh_prompt()
@@ -298,6 +427,10 @@ func get_snapshot() -> Dictionary:
 		"direction": direction,
 		"target_room_id": target_room_id,
 		"is_open": is_open,
+		# 权限与位置分开报：`openable` 才是「可开启 / 不可开启」，
+		# 只看 `is_open` 会把「关着但能开」和「关着且开不了」混成一件事。
+		"openable": openable,
+		"proximity_auto": _proximity_target != null,
 		"requires_key": requires_key,
 		"requires_clear": requires_clear,
 		"triggers_fate": triggers_fate,
@@ -312,6 +445,9 @@ func get_snapshot() -> Dictionary:
 		"opening_style": _opening_style,
 		"panel_x": _panel.position.x if _panel != null else 0.0,
 		"second_panel_x": _panel_right.position.x if _panel_right != null else 0.0,
+		# 门板沿门法线的偏移。`slide` 开到位时它等于 `SLIDE_PARKED_WALL_INSET_M`，
+		# 是「门板没有埋进墙里、玩家看得见」的唯一可测判据。
+		"panel_z": _panel.position.z if _panel != null else 0.0,
 		"clear_width_m": TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M,
 		"clear_height_m": TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M,
 		"panel_size": Vector3(
@@ -334,6 +470,11 @@ func _refresh_prompt() -> void:
 	if _transitioning:
 		_prompt.text = "通道开启中…" if _target_open else "通道关闭中…"
 		_prompt.modulate = Color(0.52, 0.88, 1.0)
+	elif not openable:
+		# 不可开启：门扇落下、拒绝通行。文字只是数据载体（提示牌已退役），
+		# 但 `get_interaction_prompt_text()` 仍被探针读取，语义要如实。
+		_prompt.text = "门扇已落下 · 无法开启"
+		_prompt.modulate = Color(1.0, 0.42, 0.28)
 	elif is_open and _manual_close_enabled:
 		_prompt.text = "[E] 关闭通道"
 		_prompt.modulate = Color(0.52, 0.88, 1.0)
@@ -400,6 +541,9 @@ func _build(accent: Color) -> void:
 	_prompt.visible = false
 	add_child(_prompt)
 	set_open(false, true)
+	# 默认不跑感应：塔楼 / 基地 / 远征01-02 的门永远拿不到 `_proximity_target`，
+	# 关掉 process 以免几百扇门每帧各跑一次判空。flow 门由 `set_proximity_target()` 打开。
+	set_process(false)
 
 
 ## 给一扇门板挂视觉。`width_scale` < 1 用于双扇对开：把整扇门压成半宽。

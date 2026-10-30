@@ -83,12 +83,17 @@ func _ready() -> void:
 		_finish()
 		return
 	print(
-		"目标箱：%s quality=%s requires_key=%s drop_count=%d fate=%d"
+		"目标箱：%s quality=%s 拟态=%s requires_key=%s drop_count=%d fate=%d"
 		% [
-			chest.chest_id, chest.quality, str(chest.requires_key),
+			chest.chest_id, chest.quality, str(chest.mimic), str(chest.requires_key),
 			chest.drop_count, chest.fate_card_per_open,
 		]
 	)
+	# ⚠ **本探针只测「普通箱」的掉落分支**，拟态箱开箱是不掉东西的（物资在怪肚子里）。
+	# 每箱有 20% 是拟态，若不在这里清掉标记，这条断言会随种子随机红/绿 ——
+	# 那是探针里最坏的一种失败：同一个命令跑两次结论不同。
+	# 拟态全链路（现形 / 刷怪 / 击杀掉回 / 不算清房）在 `_egt_mimic_chest_probe` 单独验。
+	chest.mimic = false
 
 	# —— ③ 没钥匙：必须拒绝，且箱子保持未开 ——
 	_strip_room_keys(tower)

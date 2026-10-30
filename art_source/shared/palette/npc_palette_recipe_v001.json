@@ -1,0 +1,2230 @@
+{
+  "schema": "shellstorm2_npc_palette_v1",
+  "version": "v001",
+  "scope": "shared NPC and monster character assets",
+  "png": "assets/art/shared/palette/npc_palette_10x10_512.png",
+  "psd": "art_source/shared/palette/npc_palette_10x10_512_v001.psd",
+  "resolution": [
+    512,
+    512
+  ],
+  "grid": [
+    10,
+    10
+  ],
+  "row_origin": "top",
+  "uv_layer": "PaletteUV",
+  "interpolation": "Closest",
+  "packing": "external only; do not embed or duplicate",
+  "face_island_rule": "nonzero area; one cell per face; 45-65% cell extent; >=10% safety border",
+  "material_limit": 4,
+  "source": "User-authorized new NPC palette; infected swatches selected from supplied reference",
+  "named_colors": {
+    "shirt": {
+      "row": 0,
+      "col": 0,
+      "hex": "#D9CFB0"
+    },
+    "shirt_shadow": {
+      "row": 0,
+      "col": 1,
+      "hex": "#C4B99A"
+    },
+    "shirt_deep": {
+      "row": 0,
+      "col": 2,
+      "hex": "#A89A7F"
+    },
+    "skin": {
+      "row": 0,
+      "col": 3,
+      "hex": "#7E8873"
+    },
+    "skin_shadow": {
+      "row": 0,
+      "col": 4,
+      "hex": "#626F60"
+    },
+    "pants": {
+      "row": 0,
+      "col": 5,
+      "hex": "#393331"
+    },
+    "pants_light": {
+      "row": 0,
+      "col": 6,
+      "hex": "#4A4240"
+    },
+    "mouth": {
+      "row": 0,
+      "col": 7,
+      "hex": "#432326"
+    },
+    "tongue": {
+      "row": 0,
+      "col": 8,
+      "hex": "#AD514C"
+    },
+    "r01c10": {
+      "row": 0,
+      "col": 9,
+      "hex": "#1B2533"
+    },
+    "ivory": {
+      "row": 1,
+      "col": 0,
+      "hex": "#F2E5BC"
+    },
+    "pupil": {
+      "row": 1,
+      "col": 1,
+      "hex": "#302A28"
+    },
+    "iris": {
+      "row": 1,
+      "col": 2,
+      "hex": "#A84D3D"
+    },
+    "stain": {
+      "row": 1,
+      "col": 3,
+      "hex": "#877762"
+    },
+    "tongue_shadow": {
+      "row": 1,
+      "col": 4,
+      "hex": "#9D493F"
+    },
+    "belly": {
+      "row": 1,
+      "col": 5,
+      "hex": "#647065"
+    },
+    "khaki": {
+      "row": 1,
+      "col": 6,
+      "hex": "#AEA78B"
+    },
+    "cloth_light": {
+      "row": 1,
+      "col": 7,
+      "hex": "#ECE1C1"
+    },
+    "leather": {
+      "row": 1,
+      "col": 8,
+      "hex": "#5C4D43"
+    },
+    "r02c10": {
+      "row": 1,
+      "col": 9,
+      "hex": "#263242"
+    },
+    "r03c01": {
+      "row": 2,
+      "col": 0,
+      "hex": "#F0D4B8"
+    },
+    "r03c02": {
+      "row": 2,
+      "col": 1,
+      "hex": "#DDB99A"
+    },
+    "r03c03": {
+      "row": 2,
+      "col": 2,
+      "hex": "#C89C7D"
+    },
+    "r03c04": {
+      "row": 2,
+      "col": 3,
+      "hex": "#AC7C61"
+    },
+    "r03c05": {
+      "row": 2,
+      "col": 4,
+      "hex": "#8E604D"
+    },
+    "r03c06": {
+      "row": 2,
+      "col": 5,
+      "hex": "#704A3D"
+    },
+    "r03c07": {
+      "row": 2,
+      "col": 6,
+      "hex": "#53382F"
+    },
+    "r03c08": {
+      "row": 2,
+      "col": 7,
+      "hex": "#D59580"
+    },
+    "r03c09": {
+      "row": 2,
+      "col": 8,
+      "hex": "#AA6D64"
+    },
+    "r03c10": {
+      "row": 2,
+      "col": 9,
+      "hex": "#324052"
+    },
+    "r04c01": {
+      "row": 3,
+      "col": 0,
+      "hex": "#D6D2C0"
+    },
+    "r04c02": {
+      "row": 3,
+      "col": 1,
+      "hex": "#BBBFA7"
+    },
+    "r04c03": {
+      "row": 3,
+      "col": 2,
+      "hex": "#A0AD95"
+    },
+    "r04c04": {
+      "row": 3,
+      "col": 3,
+      "hex": "#85967D"
+    },
+    "r04c05": {
+      "row": 3,
+      "col": 4,
+      "hex": "#6B826D"
+    },
+    "r04c06": {
+      "row": 3,
+      "col": 5,
+      "hex": "#546B5C"
+    },
+    "r04c07": {
+      "row": 3,
+      "col": 6,
+      "hex": "#43574F"
+    },
+    "r04c08": {
+      "row": 3,
+      "col": 7,
+      "hex": "#918F9C"
+    },
+    "r04c09": {
+      "row": 3,
+      "col": 8,
+      "hex": "#726A80"
+    },
+    "r04c10": {
+      "row": 3,
+      "col": 9,
+      "hex": "#3F4F62"
+    },
+    "r05c01": {
+      "row": 4,
+      "col": 0,
+      "hex": "#E8DBBE"
+    },
+    "r05c02": {
+      "row": 4,
+      "col": 1,
+      "hex": "#D0BB95"
+    },
+    "r05c03": {
+      "row": 4,
+      "col": 2,
+      "hex": "#B39A72"
+    },
+    "r05c04": {
+      "row": 4,
+      "col": 3,
+      "hex": "#9E805B"
+    },
+    "r05c05": {
+      "row": 4,
+      "col": 4,
+      "hex": "#806646"
+    },
+    "r05c06": {
+      "row": 4,
+      "col": 5,
+      "hex": "#654F38"
+    },
+    "r05c07": {
+      "row": 4,
+      "col": 6,
+      "hex": "#B7956B"
+    },
+    "r05c08": {
+      "row": 4,
+      "col": 7,
+      "hex": "#A66F54"
+    },
+    "r05c09": {
+      "row": 4,
+      "col": 8,
+      "hex": "#855244"
+    },
+    "r05c10": {
+      "row": 4,
+      "col": 9,
+      "hex": "#4D5E72"
+    },
+    "r06c01": {
+      "row": 5,
+      "col": 0,
+      "hex": "#B2C5BD"
+    },
+    "r06c02": {
+      "row": 5,
+      "col": 1,
+      "hex": "#91AFA4"
+    },
+    "r06c03": {
+      "row": 5,
+      "col": 2,
+      "hex": "#6D9388"
+    },
+    "r06c04": {
+      "row": 5,
+      "col": 3,
+      "hex": "#50766D"
+    },
+    "r06c05": {
+      "row": 5,
+      "col": 4,
+      "hex": "#395B56"
+    },
+    "r06c06": {
+      "row": 5,
+      "col": 5,
+      "hex": "#8CA6B6"
+    },
+    "r06c07": {
+      "row": 5,
+      "col": 6,
+      "hex": "#6A879F"
+    },
+    "r06c08": {
+      "row": 5,
+      "col": 7,
+      "hex": "#4F6783"
+    },
+    "r06c09": {
+      "row": 5,
+      "col": 8,
+      "hex": "#374B63"
+    },
+    "r06c10": {
+      "row": 5,
+      "col": 9,
+      "hex": "#5D6E82"
+    },
+    "r07c01": {
+      "row": 6,
+      "col": 0,
+      "hex": "#C6958B"
+    },
+    "r07c02": {
+      "row": 6,
+      "col": 1,
+      "hex": "#B3766D"
+    },
+    "r07c03": {
+      "row": 6,
+      "col": 2,
+      "hex": "#955850"
+    },
+    "r07c04": {
+      "row": 6,
+      "col": 3,
+      "hex": "#75433F"
+    },
+    "r07c05": {
+      "row": 6,
+      "col": 4,
+      "hex": "#552F31"
+    },
+    "r07c06": {
+      "row": 6,
+      "col": 5,
+      "hex": "#A18DAB"
+    },
+    "r07c07": {
+      "row": 6,
+      "col": 6,
+      "hex": "#826D90"
+    },
+    "r07c08": {
+      "row": 6,
+      "col": 7,
+      "hex": "#65526F"
+    },
+    "r07c09": {
+      "row": 6,
+      "col": 8,
+      "hex": "#4A3A52"
+    },
+    "r07c10": {
+      "row": 6,
+      "col": 9,
+      "hex": "#718195"
+    },
+    "r08c01": {
+      "row": 7,
+      "col": 0,
+      "hex": "#A98666"
+    },
+    "r08c02": {
+      "row": 7,
+      "col": 1,
+      "hex": "#8C694D"
+    },
+    "r08c03": {
+      "row": 7,
+      "col": 2,
+      "hex": "#704F3A"
+    },
+    "r08c04": {
+      "row": 7,
+      "col": 3,
+      "hex": "#543A2D"
+    },
+    "r08c05": {
+      "row": 7,
+      "col": 4,
+      "hex": "#3C2A23"
+    },
+    "r08c06": {
+      "row": 7,
+      "col": 5,
+      "hex": "#D1C39F"
+    },
+    "r08c07": {
+      "row": 7,
+      "col": 6,
+      "hex": "#A79773"
+    },
+    "r08c08": {
+      "row": 7,
+      "col": 7,
+      "hex": "#6C6551"
+    },
+    "r08c09": {
+      "row": 7,
+      "col": 8,
+      "hex": "#37382F"
+    },
+    "r08c10": {
+      "row": 7,
+      "col": 9,
+      "hex": "#8998AA"
+    },
+    "r09c01": {
+      "row": 8,
+      "col": 0,
+      "hex": "#F8F0D9"
+    },
+    "r09c02": {
+      "row": 8,
+      "col": 1,
+      "hex": "#E4D8B4"
+    },
+    "r09c03": {
+      "row": 8,
+      "col": 2,
+      "hex": "#BDAD88"
+    },
+    "r09c04": {
+      "row": 8,
+      "col": 3,
+      "hex": "#B79C50"
+    },
+    "r09c05": {
+      "row": 8,
+      "col": 4,
+      "hex": "#B97144"
+    },
+    "r09c06": {
+      "row": 8,
+      "col": 5,
+      "hex": "#A64842"
+    },
+    "r09c07": {
+      "row": 8,
+      "col": 6,
+      "hex": "#72A8A0"
+    },
+    "r09c08": {
+      "row": 8,
+      "col": 7,
+      "hex": "#7A96BB"
+    },
+    "r09c09": {
+      "row": 8,
+      "col": 8,
+      "hex": "#9983AF"
+    },
+    "r09c10": {
+      "row": 8,
+      "col": 9,
+      "hex": "#A5B2C1"
+    },
+    "r10c01": {
+      "row": 9,
+      "col": 0,
+      "hex": "#E2DED0"
+    },
+    "r10c02": {
+      "row": 9,
+      "col": 1,
+      "hex": "#C7C2B3"
+    },
+    "r10c03": {
+      "row": 9,
+      "col": 2,
+      "hex": "#ABA596"
+    },
+    "r10c04": {
+      "row": 9,
+      "col": 3,
+      "hex": "#918A7B"
+    },
+    "r10c05": {
+      "row": 9,
+      "col": 4,
+      "hex": "#776F64"
+    },
+    "r10c06": {
+      "row": 9,
+      "col": 5,
+      "hex": "#5D574F"
+    },
+    "r10c07": {
+      "row": 9,
+      "col": 6,
+      "hex": "#49443F"
+    },
+    "r10c08": {
+      "row": 9,
+      "col": 7,
+      "hex": "#353332"
+    },
+    "r10c09": {
+      "row": 9,
+      "col": 8,
+      "hex": "#252626"
+    },
+    "r10c10": {
+      "row": 9,
+      "col": 9,
+      "hex": "#C5CED8"
+    }
+  },
+  "swatches": [
+    {
+      "name": "shirt",
+      "row": 0,
+      "column": 0,
+      "hex": "#D9CFB0",
+      "bounds_px": [
+        0,
+        0,
+        51,
+        51
+      ],
+      "uv_center": [
+        0.05,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "shirt_shadow",
+      "row": 0,
+      "column": 1,
+      "hex": "#C4B99A",
+      "bounds_px": [
+        51,
+        0,
+        102,
+        51
+      ],
+      "uv_center": [
+        0.15,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "shirt_deep",
+      "row": 0,
+      "column": 2,
+      "hex": "#A89A7F",
+      "bounds_px": [
+        102,
+        0,
+        154,
+        51
+      ],
+      "uv_center": [
+        0.25,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "skin",
+      "row": 0,
+      "column": 3,
+      "hex": "#7E8873",
+      "bounds_px": [
+        154,
+        0,
+        205,
+        51
+      ],
+      "uv_center": [
+        0.35,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "skin_shadow",
+      "row": 0,
+      "column": 4,
+      "hex": "#626F60",
+      "bounds_px": [
+        205,
+        0,
+        256,
+        51
+      ],
+      "uv_center": [
+        0.45,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "pants",
+      "row": 0,
+      "column": 5,
+      "hex": "#393331",
+      "bounds_px": [
+        256,
+        0,
+        307,
+        51
+      ],
+      "uv_center": [
+        0.55,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "pants_light",
+      "row": 0,
+      "column": 6,
+      "hex": "#4A4240",
+      "bounds_px": [
+        307,
+        0,
+        358,
+        51
+      ],
+      "uv_center": [
+        0.65,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "mouth",
+      "row": 0,
+      "column": 7,
+      "hex": "#432326",
+      "bounds_px": [
+        358,
+        0,
+        410,
+        51
+      ],
+      "uv_center": [
+        0.75,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "tongue",
+      "row": 0,
+      "column": 8,
+      "hex": "#AD514C",
+      "bounds_px": [
+        410,
+        0,
+        461,
+        51
+      ],
+      "uv_center": [
+        0.85,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "r01c10",
+      "row": 0,
+      "column": 9,
+      "hex": "#1B2533",
+      "bounds_px": [
+        461,
+        0,
+        512,
+        51
+      ],
+      "uv_center": [
+        0.95,
+        0.95
+      ],
+      "group": "01_Infected_Cloth_Skin_Mouth"
+    },
+    {
+      "name": "ivory",
+      "row": 1,
+      "column": 0,
+      "hex": "#F2E5BC",
+      "bounds_px": [
+        0,
+        51,
+        51,
+        102
+      ],
+      "uv_center": [
+        0.05,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "pupil",
+      "row": 1,
+      "column": 1,
+      "hex": "#302A28",
+      "bounds_px": [
+        51,
+        51,
+        102,
+        102
+      ],
+      "uv_center": [
+        0.15,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "iris",
+      "row": 1,
+      "column": 2,
+      "hex": "#A84D3D",
+      "bounds_px": [
+        102,
+        51,
+        154,
+        102
+      ],
+      "uv_center": [
+        0.25,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "stain",
+      "row": 1,
+      "column": 3,
+      "hex": "#877762",
+      "bounds_px": [
+        154,
+        51,
+        205,
+        102
+      ],
+      "uv_center": [
+        0.35,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "tongue_shadow",
+      "row": 1,
+      "column": 4,
+      "hex": "#9D493F",
+      "bounds_px": [
+        205,
+        51,
+        256,
+        102
+      ],
+      "uv_center": [
+        0.45,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "belly",
+      "row": 1,
+      "column": 5,
+      "hex": "#647065",
+      "bounds_px": [
+        256,
+        51,
+        307,
+        102
+      ],
+      "uv_center": [
+        0.55,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "khaki",
+      "row": 1,
+      "column": 6,
+      "hex": "#AEA78B",
+      "bounds_px": [
+        307,
+        51,
+        358,
+        102
+      ],
+      "uv_center": [
+        0.65,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "cloth_light",
+      "row": 1,
+      "column": 7,
+      "hex": "#ECE1C1",
+      "bounds_px": [
+        358,
+        51,
+        410,
+        102
+      ],
+      "uv_center": [
+        0.75,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "leather",
+      "row": 1,
+      "column": 8,
+      "hex": "#5C4D43",
+      "bounds_px": [
+        410,
+        51,
+        461,
+        102
+      ],
+      "uv_center": [
+        0.85,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "r02c10",
+      "row": 1,
+      "column": 9,
+      "hex": "#263242",
+      "bounds_px": [
+        461,
+        51,
+        512,
+        102
+      ],
+      "uv_center": [
+        0.95,
+        0.85
+      ],
+      "group": "02_Infected_Eyes_Dirt_Details"
+    },
+    {
+      "name": "r03c01",
+      "row": 2,
+      "column": 0,
+      "hex": "#F0D4B8",
+      "bounds_px": [
+        0,
+        102,
+        51,
+        154
+      ],
+      "uv_center": [
+        0.05,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r03c02",
+      "row": 2,
+      "column": 1,
+      "hex": "#DDB99A",
+      "bounds_px": [
+        51,
+        102,
+        102,
+        154
+      ],
+      "uv_center": [
+        0.15,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r03c03",
+      "row": 2,
+      "column": 2,
+      "hex": "#C89C7D",
+      "bounds_px": [
+        102,
+        102,
+        154,
+        154
+      ],
+      "uv_center": [
+        0.25,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r03c04",
+      "row": 2,
+      "column": 3,
+      "hex": "#AC7C61",
+      "bounds_px": [
+        154,
+        102,
+        205,
+        154
+      ],
+      "uv_center": [
+        0.35,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r03c05",
+      "row": 2,
+      "column": 4,
+      "hex": "#8E604D",
+      "bounds_px": [
+        205,
+        102,
+        256,
+        154
+      ],
+      "uv_center": [
+        0.45,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r03c06",
+      "row": 2,
+      "column": 5,
+      "hex": "#704A3D",
+      "bounds_px": [
+        256,
+        102,
+        307,
+        154
+      ],
+      "uv_center": [
+        0.55,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r03c07",
+      "row": 2,
+      "column": 6,
+      "hex": "#53382F",
+      "bounds_px": [
+        307,
+        102,
+        358,
+        154
+      ],
+      "uv_center": [
+        0.65,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r03c08",
+      "row": 2,
+      "column": 7,
+      "hex": "#D59580",
+      "bounds_px": [
+        358,
+        102,
+        410,
+        154
+      ],
+      "uv_center": [
+        0.75,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r03c09",
+      "row": 2,
+      "column": 8,
+      "hex": "#AA6D64",
+      "bounds_px": [
+        410,
+        102,
+        461,
+        154
+      ],
+      "uv_center": [
+        0.85,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r03c10",
+      "row": 2,
+      "column": 9,
+      "hex": "#324052",
+      "bounds_px": [
+        461,
+        102,
+        512,
+        154
+      ],
+      "uv_center": [
+        0.95,
+        0.75
+      ],
+      "group": "03_Human_Skin_Warm"
+    },
+    {
+      "name": "r04c01",
+      "row": 3,
+      "column": 0,
+      "hex": "#D6D2C0",
+      "bounds_px": [
+        0,
+        154,
+        51,
+        205
+      ],
+      "uv_center": [
+        0.05,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r04c02",
+      "row": 3,
+      "column": 1,
+      "hex": "#BBBFA7",
+      "bounds_px": [
+        51,
+        154,
+        102,
+        205
+      ],
+      "uv_center": [
+        0.15,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r04c03",
+      "row": 3,
+      "column": 2,
+      "hex": "#A0AD95",
+      "bounds_px": [
+        102,
+        154,
+        154,
+        205
+      ],
+      "uv_center": [
+        0.25,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r04c04",
+      "row": 3,
+      "column": 3,
+      "hex": "#85967D",
+      "bounds_px": [
+        154,
+        154,
+        205,
+        205
+      ],
+      "uv_center": [
+        0.35,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r04c05",
+      "row": 3,
+      "column": 4,
+      "hex": "#6B826D",
+      "bounds_px": [
+        205,
+        154,
+        256,
+        205
+      ],
+      "uv_center": [
+        0.45,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r04c06",
+      "row": 3,
+      "column": 5,
+      "hex": "#546B5C",
+      "bounds_px": [
+        256,
+        154,
+        307,
+        205
+      ],
+      "uv_center": [
+        0.55,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r04c07",
+      "row": 3,
+      "column": 6,
+      "hex": "#43574F",
+      "bounds_px": [
+        307,
+        154,
+        358,
+        205
+      ],
+      "uv_center": [
+        0.65,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r04c08",
+      "row": 3,
+      "column": 7,
+      "hex": "#918F9C",
+      "bounds_px": [
+        358,
+        154,
+        410,
+        205
+      ],
+      "uv_center": [
+        0.75,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r04c09",
+      "row": 3,
+      "column": 8,
+      "hex": "#726A80",
+      "bounds_px": [
+        410,
+        154,
+        461,
+        205
+      ],
+      "uv_center": [
+        0.85,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r04c10",
+      "row": 3,
+      "column": 9,
+      "hex": "#3F4F62",
+      "bounds_px": [
+        461,
+        154,
+        512,
+        205
+      ],
+      "uv_center": [
+        0.95,
+        0.65
+      ],
+      "group": "04_Human_Skin_Cool_Undead"
+    },
+    {
+      "name": "r05c01",
+      "row": 4,
+      "column": 0,
+      "hex": "#E8DBBE",
+      "bounds_px": [
+        0,
+        205,
+        51,
+        256
+      ],
+      "uv_center": [
+        0.05,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r05c02",
+      "row": 4,
+      "column": 1,
+      "hex": "#D0BB95",
+      "bounds_px": [
+        51,
+        205,
+        102,
+        256
+      ],
+      "uv_center": [
+        0.15,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r05c03",
+      "row": 4,
+      "column": 2,
+      "hex": "#B39A72",
+      "bounds_px": [
+        102,
+        205,
+        154,
+        256
+      ],
+      "uv_center": [
+        0.25,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r05c04",
+      "row": 4,
+      "column": 3,
+      "hex": "#9E805B",
+      "bounds_px": [
+        154,
+        205,
+        205,
+        256
+      ],
+      "uv_center": [
+        0.35,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r05c05",
+      "row": 4,
+      "column": 4,
+      "hex": "#806646",
+      "bounds_px": [
+        205,
+        205,
+        256,
+        256
+      ],
+      "uv_center": [
+        0.45,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r05c06",
+      "row": 4,
+      "column": 5,
+      "hex": "#654F38",
+      "bounds_px": [
+        256,
+        205,
+        307,
+        256
+      ],
+      "uv_center": [
+        0.55,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r05c07",
+      "row": 4,
+      "column": 6,
+      "hex": "#B7956B",
+      "bounds_px": [
+        307,
+        205,
+        358,
+        256
+      ],
+      "uv_center": [
+        0.65,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r05c08",
+      "row": 4,
+      "column": 7,
+      "hex": "#A66F54",
+      "bounds_px": [
+        358,
+        205,
+        410,
+        256
+      ],
+      "uv_center": [
+        0.75,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r05c09",
+      "row": 4,
+      "column": 8,
+      "hex": "#855244",
+      "bounds_px": [
+        410,
+        205,
+        461,
+        256
+      ],
+      "uv_center": [
+        0.85,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r05c10",
+      "row": 4,
+      "column": 9,
+      "hex": "#4D5E72",
+      "bounds_px": [
+        461,
+        205,
+        512,
+        256
+      ],
+      "uv_center": [
+        0.95,
+        0.55
+      ],
+      "group": "05_Clothing_Earth_Warm"
+    },
+    {
+      "name": "r06c01",
+      "row": 5,
+      "column": 0,
+      "hex": "#B2C5BD",
+      "bounds_px": [
+        0,
+        256,
+        51,
+        307
+      ],
+      "uv_center": [
+        0.05,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r06c02",
+      "row": 5,
+      "column": 1,
+      "hex": "#91AFA4",
+      "bounds_px": [
+        51,
+        256,
+        102,
+        307
+      ],
+      "uv_center": [
+        0.15,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r06c03",
+      "row": 5,
+      "column": 2,
+      "hex": "#6D9388",
+      "bounds_px": [
+        102,
+        256,
+        154,
+        307
+      ],
+      "uv_center": [
+        0.25,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r06c04",
+      "row": 5,
+      "column": 3,
+      "hex": "#50766D",
+      "bounds_px": [
+        154,
+        256,
+        205,
+        307
+      ],
+      "uv_center": [
+        0.35,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r06c05",
+      "row": 5,
+      "column": 4,
+      "hex": "#395B56",
+      "bounds_px": [
+        205,
+        256,
+        256,
+        307
+      ],
+      "uv_center": [
+        0.45,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r06c06",
+      "row": 5,
+      "column": 5,
+      "hex": "#8CA6B6",
+      "bounds_px": [
+        256,
+        256,
+        307,
+        307
+      ],
+      "uv_center": [
+        0.55,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r06c07",
+      "row": 5,
+      "column": 6,
+      "hex": "#6A879F",
+      "bounds_px": [
+        307,
+        256,
+        358,
+        307
+      ],
+      "uv_center": [
+        0.65,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r06c08",
+      "row": 5,
+      "column": 7,
+      "hex": "#4F6783",
+      "bounds_px": [
+        358,
+        256,
+        410,
+        307
+      ],
+      "uv_center": [
+        0.75,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r06c09",
+      "row": 5,
+      "column": 8,
+      "hex": "#374B63",
+      "bounds_px": [
+        410,
+        256,
+        461,
+        307
+      ],
+      "uv_center": [
+        0.85,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r06c10",
+      "row": 5,
+      "column": 9,
+      "hex": "#5D6E82",
+      "bounds_px": [
+        461,
+        256,
+        512,
+        307
+      ],
+      "uv_center": [
+        0.95,
+        0.44999999999999996
+      ],
+      "group": "06_Clothing_Cool_Blue_Green"
+    },
+    {
+      "name": "r07c01",
+      "row": 6,
+      "column": 0,
+      "hex": "#C6958B",
+      "bounds_px": [
+        0,
+        307,
+        51,
+        358
+      ],
+      "uv_center": [
+        0.05,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r07c02",
+      "row": 6,
+      "column": 1,
+      "hex": "#B3766D",
+      "bounds_px": [
+        51,
+        307,
+        102,
+        358
+      ],
+      "uv_center": [
+        0.15,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r07c03",
+      "row": 6,
+      "column": 2,
+      "hex": "#955850",
+      "bounds_px": [
+        102,
+        307,
+        154,
+        358
+      ],
+      "uv_center": [
+        0.25,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r07c04",
+      "row": 6,
+      "column": 3,
+      "hex": "#75433F",
+      "bounds_px": [
+        154,
+        307,
+        205,
+        358
+      ],
+      "uv_center": [
+        0.35,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r07c05",
+      "row": 6,
+      "column": 4,
+      "hex": "#552F31",
+      "bounds_px": [
+        205,
+        307,
+        256,
+        358
+      ],
+      "uv_center": [
+        0.45,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r07c06",
+      "row": 6,
+      "column": 5,
+      "hex": "#A18DAB",
+      "bounds_px": [
+        256,
+        307,
+        307,
+        358
+      ],
+      "uv_center": [
+        0.55,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r07c07",
+      "row": 6,
+      "column": 6,
+      "hex": "#826D90",
+      "bounds_px": [
+        307,
+        307,
+        358,
+        358
+      ],
+      "uv_center": [
+        0.65,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r07c08",
+      "row": 6,
+      "column": 7,
+      "hex": "#65526F",
+      "bounds_px": [
+        358,
+        307,
+        410,
+        358
+      ],
+      "uv_center": [
+        0.75,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r07c09",
+      "row": 6,
+      "column": 8,
+      "hex": "#4A3A52",
+      "bounds_px": [
+        410,
+        307,
+        461,
+        358
+      ],
+      "uv_center": [
+        0.85,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r07c10",
+      "row": 6,
+      "column": 9,
+      "hex": "#718195",
+      "bounds_px": [
+        461,
+        307,
+        512,
+        358
+      ],
+      "uv_center": [
+        0.95,
+        0.35
+      ],
+      "group": "07_Clothing_Red_Purple"
+    },
+    {
+      "name": "r08c01",
+      "row": 7,
+      "column": 0,
+      "hex": "#A98666",
+      "bounds_px": [
+        0,
+        358,
+        51,
+        410
+      ],
+      "uv_center": [
+        0.05,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r08c02",
+      "row": 7,
+      "column": 1,
+      "hex": "#8C694D",
+      "bounds_px": [
+        51,
+        358,
+        102,
+        410
+      ],
+      "uv_center": [
+        0.15,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r08c03",
+      "row": 7,
+      "column": 2,
+      "hex": "#704F3A",
+      "bounds_px": [
+        102,
+        358,
+        154,
+        410
+      ],
+      "uv_center": [
+        0.25,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r08c04",
+      "row": 7,
+      "column": 3,
+      "hex": "#543A2D",
+      "bounds_px": [
+        154,
+        358,
+        205,
+        410
+      ],
+      "uv_center": [
+        0.35,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r08c05",
+      "row": 7,
+      "column": 4,
+      "hex": "#3C2A23",
+      "bounds_px": [
+        205,
+        358,
+        256,
+        410
+      ],
+      "uv_center": [
+        0.45,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r08c06",
+      "row": 7,
+      "column": 5,
+      "hex": "#D1C39F",
+      "bounds_px": [
+        256,
+        358,
+        307,
+        410
+      ],
+      "uv_center": [
+        0.55,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r08c07",
+      "row": 7,
+      "column": 6,
+      "hex": "#A79773",
+      "bounds_px": [
+        307,
+        358,
+        358,
+        410
+      ],
+      "uv_center": [
+        0.65,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r08c08",
+      "row": 7,
+      "column": 7,
+      "hex": "#6C6551",
+      "bounds_px": [
+        358,
+        358,
+        410,
+        410
+      ],
+      "uv_center": [
+        0.75,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r08c09",
+      "row": 7,
+      "column": 8,
+      "hex": "#37382F",
+      "bounds_px": [
+        410,
+        358,
+        461,
+        410
+      ],
+      "uv_center": [
+        0.85,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r08c10",
+      "row": 7,
+      "column": 9,
+      "hex": "#8998AA",
+      "bounds_px": [
+        461,
+        358,
+        512,
+        410
+      ],
+      "uv_center": [
+        0.95,
+        0.25
+      ],
+      "group": "08_Leather_Hair_Dark"
+    },
+    {
+      "name": "r09c01",
+      "row": 8,
+      "column": 0,
+      "hex": "#F8F0D9",
+      "bounds_px": [
+        0,
+        410,
+        51,
+        461
+      ],
+      "uv_center": [
+        0.05,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r09c02",
+      "row": 8,
+      "column": 1,
+      "hex": "#E4D8B4",
+      "bounds_px": [
+        51,
+        410,
+        102,
+        461
+      ],
+      "uv_center": [
+        0.15,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r09c03",
+      "row": 8,
+      "column": 2,
+      "hex": "#BDAD88",
+      "bounds_px": [
+        102,
+        410,
+        154,
+        461
+      ],
+      "uv_center": [
+        0.25,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r09c04",
+      "row": 8,
+      "column": 3,
+      "hex": "#B79C50",
+      "bounds_px": [
+        154,
+        410,
+        205,
+        461
+      ],
+      "uv_center": [
+        0.35,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r09c05",
+      "row": 8,
+      "column": 4,
+      "hex": "#B97144",
+      "bounds_px": [
+        205,
+        410,
+        256,
+        461
+      ],
+      "uv_center": [
+        0.45,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r09c06",
+      "row": 8,
+      "column": 5,
+      "hex": "#A64842",
+      "bounds_px": [
+        256,
+        410,
+        307,
+        461
+      ],
+      "uv_center": [
+        0.55,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r09c07",
+      "row": 8,
+      "column": 6,
+      "hex": "#72A8A0",
+      "bounds_px": [
+        307,
+        410,
+        358,
+        461
+      ],
+      "uv_center": [
+        0.65,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r09c08",
+      "row": 8,
+      "column": 7,
+      "hex": "#7A96BB",
+      "bounds_px": [
+        358,
+        410,
+        410,
+        461
+      ],
+      "uv_center": [
+        0.75,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r09c09",
+      "row": 8,
+      "column": 8,
+      "hex": "#9983AF",
+      "bounds_px": [
+        410,
+        410,
+        461,
+        461
+      ],
+      "uv_center": [
+        0.85,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r09c10",
+      "row": 8,
+      "column": 9,
+      "hex": "#A5B2C1",
+      "bounds_px": [
+        461,
+        410,
+        512,
+        461
+      ],
+      "uv_center": [
+        0.95,
+        0.15000000000000002
+      ],
+      "group": "09_Eyes_Teeth_Accent"
+    },
+    {
+      "name": "r10c01",
+      "row": 9,
+      "column": 0,
+      "hex": "#E2DED0",
+      "bounds_px": [
+        0,
+        461,
+        51,
+        512
+      ],
+      "uv_center": [
+        0.05,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    },
+    {
+      "name": "r10c02",
+      "row": 9,
+      "column": 1,
+      "hex": "#C7C2B3",
+      "bounds_px": [
+        51,
+        461,
+        102,
+        512
+      ],
+      "uv_center": [
+        0.15,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    },
+    {
+      "name": "r10c03",
+      "row": 9,
+      "column": 2,
+      "hex": "#ABA596",
+      "bounds_px": [
+        102,
+        461,
+        154,
+        512
+      ],
+      "uv_center": [
+        0.25,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    },
+    {
+      "name": "r10c04",
+      "row": 9,
+      "column": 3,
+      "hex": "#918A7B",
+      "bounds_px": [
+        154,
+        461,
+        205,
+        512
+      ],
+      "uv_center": [
+        0.35,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    },
+    {
+      "name": "r10c05",
+      "row": 9,
+      "column": 4,
+      "hex": "#776F64",
+      "bounds_px": [
+        205,
+        461,
+        256,
+        512
+      ],
+      "uv_center": [
+        0.45,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    },
+    {
+      "name": "r10c06",
+      "row": 9,
+      "column": 5,
+      "hex": "#5D574F",
+      "bounds_px": [
+        256,
+        461,
+        307,
+        512
+      ],
+      "uv_center": [
+        0.55,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    },
+    {
+      "name": "r10c07",
+      "row": 9,
+      "column": 6,
+      "hex": "#49443F",
+      "bounds_px": [
+        307,
+        461,
+        358,
+        512
+      ],
+      "uv_center": [
+        0.65,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    },
+    {
+      "name": "r10c08",
+      "row": 9,
+      "column": 7,
+      "hex": "#353332",
+      "bounds_px": [
+        358,
+        461,
+        410,
+        512
+      ],
+      "uv_center": [
+        0.75,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    },
+    {
+      "name": "r10c09",
+      "row": 9,
+      "column": 8,
+      "hex": "#252626",
+      "bounds_px": [
+        410,
+        461,
+        461,
+        512
+      ],
+      "uv_center": [
+        0.85,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    },
+    {
+      "name": "r10c10",
+      "row": 9,
+      "column": 9,
+      "hex": "#C5CED8",
+      "bounds_px": [
+        461,
+        461,
+        512,
+        512
+      ],
+      "uv_center": [
+        0.95,
+        0.050000000000000044
+      ],
+      "group": "10_Neutral_Cloth_Stone"
+    }
+  ],
+  "sha256": {
+    "npc_palette_10x10_512.png": "c8e09431ad6f8ca789764fc63a368d647d2c168540fb81e191a91b8871ad6f85",
+    "npc_palette_10x10_512_v001.psd": "28dfa804ebe219dbaa82e3f66395c7fa32ab74b5cc289759f9117b85abb86da2"
+  }
+}

@@ -16,20 +16,25 @@ func _ready() -> void:
 	check(e.avatar.get_component_snapshot().component_count == 2, "component count")
 	var visual = e.avatar._formal_normal_root
 	var skeleton := visual.find_child("Skeleton3D", true, false) as Skeleton3D
-	check(skeleton != null and skeleton.get_bone_count() == 20, "optimized skeleton must have 20 bones")
+	var expected_bones := ["Root", "Hip", "Waist", "Spine02", "Neck", "Head",
+		"L_Clavicle", "L_Upperarm", "L_Forearm", "R_Clavicle", "R_Upperarm", "R_Forearm",
+		"L_Thigh", "L_Calf", "R_Thigh", "R_Calf"]
+	check(skeleton != null and skeleton.get_bone_count() == expected_bones.size(), "optimized skeleton must have 16 bones")
 	if skeleton != null:
-		check(skeleton.find_bone("L_Hand") >= 0 and skeleton.find_bone("R_Hand") >= 0, "single hand bones missing")
+		for bone_name in expected_bones:
+			check(skeleton.find_bone(bone_name) >= 0, "required body bone missing: " + bone_name)
 		for bone in range(skeleton.get_bone_count()):
 			var bone_name := skeleton.get_bone_name(bone)
-			for forbidden in ["Thumb", "Index", "Middle", "Pinky", "Ring"]:
-				check(not forbidden in bone_name, "finger bone remains: " + bone_name)
+			check(bone_name in expected_bones, "unexpected bone: " + bone_name)
+			for forbidden in ["Thumb", "Index", "Middle", "Pinky", "Ring", "Hand", "Foot", "Toe"]:
+				check(not forbidden in bone_name, "removed hand/foot/finger bone remains: " + bone_name)
 	var triangles := 0
 	for mesh_instance in visual.find_children("*", "MeshInstance3D", true, false):
 		for surface in range(mesh_instance.mesh.get_surface_count()):
 			triangles += mesh_instance.mesh.surface_get_array_index_len(surface) / 3
 	if OS.get_cmdline_user_args().has("--negative-budget"):
-		triangles = 1800
-	check(triangles > 0 and triangles < 1800, "small zombie triangle budget below 1800")
+		triangles = 801
+	check(triangles > 0 and triangles <= 800, "small zombie triangle budget at most 800")
 	var expected = {"idle":3.2,"walking":1.6,"running":0.8,"attack":1.7,"hurt":0.8,"dead":2.4}
 	for clip in expected:
 		check(visual._player.has_animation(clip), "missing clip " + clip)
@@ -63,10 +68,13 @@ func _ready() -> void:
 	var scale_before: Vector3 = e.scale
 	e._die()
 	check(not e.is_in_group("enemy_3d"), "dead still in enemy group")
-	await get_tree().create_timer(0.5).timeout
-	check(is_instance_valid(e) and e.scale.is_equal_approx(scale_before), "death squashed or freed too early")
-	await get_tree().create_timer(2.0).timeout
-	check(not is_instance_valid(e), "death not freed")
+	# Current goo-death contract: hide immediately and free at the end of the frame.
+	check(not e.avatar.visible, "death frame kept zombie model visible")
+	check(e.is_queued_for_deletion(), "goo death did not queue immediate removal")
+	check(e.scale.is_equal_approx(scale_before), "death changed enemy scale")
+	check(not e.is_in_group("enemy_death_visual_3d"), "goo death kept a corpse group member")
+	await get_tree().process_frame
+	check(not is_instance_valid(e), "goo death kept a corpse after the frame")
 	var elite = ENEMY.instantiate()
 	add_child(elite)
 	elite.set_physics_process(false)
@@ -76,7 +84,7 @@ func _ready() -> void:
 	elite.free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("MELEE_ZOMBIE_PRESENTATION_OK states=12 clips=6 death=2.4 collision_unchanged=true")
+		print("MELEE_ZOMBIE_PRESENTATION_OK states=12 clips=6 bones=16 triangles=%d death=goo_immediate collision_unchanged=true" % triangles)
 	else:
 		for failure in failures: push_error(failure)
 	get_tree().quit(0 if failures.is_empty() else 1)

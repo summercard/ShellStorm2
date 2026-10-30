@@ -133,7 +133,7 @@ def main() -> int:
             cx = float(member["screen_x"])
             lines = [
                 member["kind"].replace("egt_", ""),
-                f"体型 {member['body_scale']:.2f}  (世界 {member['world_scale']:.2f})",
+                f"体型 {member['body_scale']:.2f}  (世界高 {member['world_height']:.2f}m)",
                 color_label(member),
                 f"血条 {member['bar_width']:.2f} 宽",
             ]

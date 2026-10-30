@@ -192,9 +192,15 @@ func _combine_stats(target: Dictionary, source: Dictionary) -> void:
 		elif key == "speed":
 			# 速度取乘积
 			target[key] = target.get(key, 1.0) * source[key]
-		elif key in ["bullet_damage", "bullet_speed"]:
+		elif key == "bullet_damage":
 			# 子弹属性直接覆盖（子弹节点自有属性，不与枪身混加）
 			target[key] = source[key]
+		elif key == "bullet_speed":
+			# 弹速倍率**相乘**：枪身可声明自己的基础弹速倍率（豌豆手枪 25/23），
+			# 弹种倍率再乘上去。旧实现是子弹节点直接覆盖 ⇒ 枪身声明等于无效，
+			# 所以 2026-10-30 对齐《挺进地牢》时把它改成乘积。
+			# 注意：枪身没声明时 target 缺键 → 取 1.0，行为与旧版一致。
+			target[key] = float(target.get(key, 1.0)) * float(source[key])
 		elif key == "overheat_penalty":
 			# 过热惩罚取最大值（多个超频效果取最严格者）
 			target[key] = max(target.get(key, 1.0), source[key])

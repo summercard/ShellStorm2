@@ -252,6 +252,12 @@ func _write_manifest() -> String:
 				"screen_x": float(screen_map.get(k, 0.0)),
 				"body_scale": float(Enemy3D.BODY_SCALE_BY_KIND[k]),
 				"world_scale": float(Enemy3D.DEFAULT_BASE_SIZE_MULTIPLIER) * float(Enemy3D.BODY_SCALE_BY_KIND[k]),
+				# 世界高（米）—— 与玩家 1.8m 可直接比。图注用它而不是 `world_scale`：
+				# `world_scale` 是"根节点缩放"（0.7~1.9），写成「世界 0.75」会被读成 0.75 **米**，
+				# 而那只怪实际 1.22m。2026-10-30 出图时这个标注就有歧义。
+				"world_height": float(
+					EnemyAvatar3D.get_footprint_profile(k).get("height", 1.2)
+				) * (float(Enemy3D.DEFAULT_BASE_SIZE_MULTIPLIER) * float(Enemy3D.BODY_SCALE_BY_KIND[k])),
 				"hp": int(Enemy3D.PROFILES[k]["hp"]),
 				"bar_width": (Enemy3D.HEALTH_BAR_SIZE_BY_KIND.get(k, Vector2.ZERO) as Vector2).x,
 				"uses_formal": uses_formal,

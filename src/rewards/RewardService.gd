@@ -297,7 +297,13 @@ static func currency_spec_for(
 	}
 
 
-## 取某只怪的货币产出公式 `{base, per_floor}`。分档优先级 per_tier > per_kind > default。
+## 取某只怪的货币产出公式。分档优先级 per_tier > per_kind > default。
+## 两种合法形态：
+##   · `{base, per_floor}` —— 线性公式，实际值 `round(base + per_floor × floor)`；
+##   · `{min, max}` —— 逐次掷整数（2026-10-30 新增）。用于「每只掉 1~2 枚」这种
+##     均值不是整数的档位：远征03 若写死 1 枚，一层只有约 41 枚，是原作量级（≈59）
+##     的 69%；写死 2 枚又到 82 枚（139%）。1~2 枚的均值 1.5 正好落在 61 枚。
+##     求值仍走 `_eval_amount()`，它本来就支持 `{min,max}`（见该函数），此处只需放行。
 ## 三段都没命中（或字段非法）⇒ 回退 `MonsterInjector.drop_spec_for` 的既有常量，
 ## **不在这里再写第二套数**。
 static func _currency_amount_for(
@@ -310,6 +316,14 @@ static func _currency_amount_for(
 		if not (value is Dictionary):
 			continue
 		var entry := value as Dictionary
+		if entry.has("min") or entry.has("max"):
+			var lo := int(entry.get("min", 1))
+			var hi := int(entry.get("max", lo))
+			if lo < 0:
+				continue
+			if hi < lo:
+				hi = lo
+			return {"min": lo, "max": hi}
 		if not (entry.has("base") and entry.has("per_floor")):
 			continue
 		var base := int(entry.get("base", -1))

@@ -344,40 +344,22 @@
       }
     },
     "currency": {
-      "note": "战利品（货币 `extraction_points`）独立掉落通道，2026-10-29 为远征03 配置。**按怪种分档，并按原作两条硬规则剪掉一类**：①「自爆的敌人不掉铸币」（pinhead / nitra / bullat / shotgat / grenat / spirat 全为 0，base=0 时 `_resolve_currency_entry` 直接不生成 grant，地上不会出现 0 元球）；② 血量越高掉得越多，与塔楼一致地用 base+per_floor 表达。本段不影响其它关卡（未配置 = 走物品规格自带那条）。",
+      "note": "战利品（货币 `extraction_points`）独立掉落通道，**2026-10-30 统一为「每只 1~2 枚」**。改口径的原因：此前按血量分 2/3/8 三档，实测一层 53 只怪合计约 162 枚，是原作一层总量（社区统计 ≈59，非官方）的 2.7 倍，金币通胀会让商店与命运卡同时失效。取 1~2 枚（均值 1.5）而不是写死 1 枚，是因为**自爆怪按原作不掉铸币**、占我们编成的 25%（13/53 只），写死 1 枚时一层只有 41 枚（原作的 69%），写死 2 枚到 82 枚（139%）；1.5 枚的中位数 61 枚正好对上。**两处例外按原作保留**：①「自爆的敌人不掉铸币」（pinhead / nitra / bullat / shotgat / grenat / spirat 全为 0，base=0 时 `_resolve_currency_entry` 直接不生成 grant，地上不会出现 0 元球）；② 精英 / Boss 走 `per_tier`，数值与 `MonsterInjector.DROP_CURRENCY_*` 常量逐值一致（50/20、200/20），行为零变化 —— **不能只写 `default` 而不写 `per_tier`**：`_currency_amount_for` 的候选顺序是 per_tier → per_kind → default，缺 `per_tier` 会让精英与 Boss 一起掉进 default（Boss 从 220 掉到 1~2）。商店价格中位 113 枚（实测 `_egt_shop_price_probe`），一层 61 枚的实际含义是「攒一层买得起最便宜的 1 件、攒两层买得起中位价」—— 与原作节奏一致。",
+      "per_tier": {
+        "elite": {
+          "base": 50,
+          "per_floor": 20
+        },
+        "boss": {
+          "base": 200,
+          "per_floor": 20
+        }
+      },
+      "default": {
+        "min": 1,
+        "max": 2
+      },
       "per_kind": {
-        "egt_bullet_kin": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_bandana_kin": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_veteran_kin": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_cardinal": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_hollowpoint": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_red_shotgun": {
-          "base": 3,
-          "per_floor": 1
-        },
-        "egt_blue_shotgun": {
-          "base": 3,
-          "per_floor": 1
-        },
-        "egt_veteran_shotgun": {
-          "base": 3,
-          "per_floor": 1
-        },
         "egt_pinhead": {
           "base": 0,
           "per_floor": 0
@@ -385,50 +367,6 @@
         "egt_nitra": {
           "base": 0,
           "per_floor": 0
-        },
-        "egt_king_bullat": {
-          "base": 3,
-          "per_floor": 1
-        },
-        "egt_blobulon": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_blobuloid": {
-          "base": 1,
-          "per_floor": 1
-        },
-        "egt_blobulin": {
-          "base": 1,
-          "per_floor": 1
-        },
-        "egt_chancebulon": {
-          "base": 3,
-          "per_floor": 1
-        },
-        "egt_bookllet": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_blue_bookllet": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_green_bookllet": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_gunjurer": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_gunsinger": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_gigi": {
-          "base": 1,
-          "per_floor": 1
         },
         "egt_bullat": {
           "base": 0,
@@ -445,38 +383,6 @@
         "egt_spirat": {
           "base": 0,
           "per_floor": 0
-        },
-        "egt_keybullet_kin": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_chance_kin": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_confirmed": {
-          "base": 3,
-          "per_floor": 1
-        },
-        "egt_mimic": {
-          "base": 8,
-          "per_floor": 1
-        },
-        "egt_gun_fairy": {
-          "base": 2,
-          "per_floor": 1
-        },
-        "egt_gripmaster": {
-          "base": 3,
-          "per_floor": 1
-        },
-        "egt_gun_nut": {
-          "base": 8,
-          "per_floor": 1
-        },
-        "egt_chain_gunner": {
-          "base": 8,
-          "per_floor": 1
         }
       }
     }
@@ -557,11 +463,10 @@
       },
       "n07": {
         "label": "商店前·辅助班",
-        "note": "通往商店的支路。摆辅助护卫班 + 双霰压场：让玩家在买装备前先打一场需要**优先目标选择**的仗。另加一只拟态怪：它静止伪装成箱子，只有你主动靠近才会现形 —— 等于给房间加了一个陷阱。",
+        "note": "通往商店的支路。摆辅助护卫班 + 双霰压场：让玩家在买装备前先打一场需要**优先目标选择**的仗。**拟态怪已摘除**（2026-10-30，业主「宝箱还没做正式设计，先不做宝箱怪」）：原本这里有一只 `egt_mimic` 伪装成箱子，但宝箱本体仍是无正式设计的占位（品质池没拆、拟态触发协议没定），先做拟态等于把「箱子会咬人」这条规则钉在一个还要改的箱子上。`box_egt_mimic_trap.json` 与 `egt_mimic` 的 PROFILES 保留不动，接回时只需把这一项加回来。",
         "boxes": [
           "box_egt_support_cell",
-          "box_egt_shotgun_heavy",
-          "box_egt_mimic_trap"
+          "box_egt_shotgun_heavy"
         ]
       },
       "n08": {
@@ -668,7 +573,7 @@
   "treasure_chests": {
     "schema": "shellstorm2.battle.treasure_chests",
     "schema_version": 1,
-    "note": "宝箱（2026-10-29）。《挺进地牢》一层固定 2 个宝箱房（flow 里的 REWARD 节点），每间 1 只箱子，用 1 把钥匙打开，开完给 1 件装备级物资。**这是普通怪不掉装备之后本层唯一的稳定装备来源**（见 怪物设计 §T8.5）——不做它，这一层的装备经济是断的。品质按确定性轮转而不是抽签：同 seed 同房间箱子品质一致，流送卸载重建不会变，探针也能复算。`drop_count = 2` 是业主口径「除了掉落」的下限：开箱至少 2 件，避免出现「花了钥匙只拿到 1 个电池」的亏本感。命运卡在开箱后单独发 1 张（`fate_card_per_open`），不属于掉落表。",
+    "note": "宝箱（2026-10-29）。《挺进地牢》一层固定 2 个宝箱房（flow 里的 REWARD 节点），每间 1 只箱子，用 1 把钥匙打开，开完给 1 件装备级物资。**这是普通怪不掉装备之后本层唯一的稳定装备来源**（见 怪物设计 §T8.5）——不做它，这一层的装备经济是断的。`drop_count = 2` 是业主口径「除了掉落」的下限：开箱至少 2 件，避免出现「花了钥匙只拿到 1 个电池」的亏本感。命运卡在开箱后单独发 1 张（`fate_card_per_open`），不属于掉落表。**品质掷骰口径 2026-10-30 修正**：原实现是「按箱序号在权重排序表里轮转」，而 `chest_per_room = 1` ⇒ 序号恒为 0 ⇒ **全层每只箱子都是 common**，`rare`(10)/`epic`(2) 两档永远抽不到，`quality_weights` 整段是死配置；现改为「房间 id + 层种子」的确定性哈希掷骰，同 seed 同房间结果恒定（流送重建/读档不变），权重才真的等于出现概率。**拟态 2026-10-30 接回**：每箱独立掷 20%，`chance` 之下见 `mimic` 段。",
     "chest_per_room": 1,
     "requires_key": true,
     "min_spacing_m": 3.2,
@@ -680,6 +585,11 @@
     },
     "reward_pool_id": "loot_floor_1_2",
     "drop_count": 2,
-    "fate_card_per_open": 1
+    "fate_card_per_open": 1,
+    "mimic": {
+      "note": "宝箱拟态（2026-10-30）。原型：EGT 里「Mimic」是一只伪装成宝箱的怪，开箱才现形。触发口径：**每箱独立掷一次**，与品质各用各的盐（否则会出现「品质越高越可能是拟态」这种隐性相关）。`chance = 0.2` 的算术：一层 2 只箱子 ⇒ 36% 的局至少遇见 1 只；玩家受钥匙限制通常只开 1~1.5 只，实际期望 ≈0.4 只/层，约两三局一次——稀有到不会让人不敢开箱，又密到能被记住。**钥匙照扣**：这是机制的全部恶意所在，不是漏改；物资改为**击杀后掉**（`_on_enemy_killed` → `_deliver_chest_mimic_loot`），跑了就真没了。拟态死亡**不构成清房**（`_resolve_room_enemy_departure` 里挡掉），否则宝箱房会被记成「已清内容房」、白送清房结算并提前解锁撤离门。数值走 `MonsterInjector.BASE_ENEMY_TYPES.egt_mimic`（150/17 口径之外的单表真源），不在这里另写。",
+      "chance": 0.2,
+      "monster_kind": "egt_mimic"
+    }
   }
 }

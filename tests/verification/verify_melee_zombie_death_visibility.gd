@@ -18,6 +18,7 @@ extends Node3D
 var failures: Array[String] = []
 var killed_count := 0
 var capture := false
+var output_dir := ""
 
 
 func check(ok: bool, message: String) -> void:
@@ -29,12 +30,15 @@ func shot(name: String) -> void:
 	if not capture:
 		return
 	await RenderingServer.frame_post_draw
-	get_viewport().get_texture().get_image().save_png("res://outputs/melee_zombie_reduction/" + name + ".png")
+	get_viewport().get_texture().get_image().save_png(output_dir.path_join(name + ".png"))
 
 
 func _ready() -> void:
 	capture = OS.get_cmdline_user_args().has("--capture")
-	DirAccess.make_dir_recursive_absolute("res://outputs/melee_zombie_reduction")
+	output_dir = OS.get_environment("SHELLSTORM_VERIFICATION_OUTPUT")
+	if output_dir.is_empty():
+		output_dir = OS.get_user_data_dir().path_join("melee_zombie_death_visibility")
+	DirAccess.make_dir_recursive_absolute(output_dir)
 	var environment := WorldEnvironment.new()
 	environment.environment = Environment.new()
 	environment.environment.background_mode = Environment.BG_COLOR
@@ -85,6 +89,8 @@ func _ready() -> void:
 	check(enemy.visible, "live enemy not visible")
 	check(vision._tracked_enemy_ids.has(enemy.get_instance_id()), "live enemy not tracked before death")
 
+	await shot("living")
+
 	enemy.killed.connect(func(_enemy: Enemy3D, _data: Dictionary):
 		killed_count += 1
 		# 同步击杀订阅者可能切换房间激活；不能因此复活死亡流程。
@@ -113,7 +119,7 @@ func _ready() -> void:
 
 	var negative := OS.get_cmdline_user_args().has("--negative-untracked")
 	var name := "negative" if negative else "render" if capture else "logic"
-	FileAccess.open("res://outputs/melee_zombie_reduction/" + name + ".json", FileAccess.WRITE).store_string(
+	FileAccess.open(output_dir.path_join(name + ".json"), FileAccess.WRITE).store_string(
 		JSON.stringify({"passed": failures.is_empty(), "failures": failures, "real_renderer": capture}, "\t")
 	)
 	for failure in failures:
