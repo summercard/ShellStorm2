@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_jar/breakable_jar_root_top3d.tscn" id="1_jar"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_vase/breakable_vase_root_top3d.tscn" id="2_vase"]
+
+[node name="AuthoredClutterFixture" type="Node3D"]
+metadata/room_id = "clutter_fixture"
+metadata/walk_surface_y_m = 0.0
+metadata/scene_builder_schema = "shellstorm2.scene_builder.room_layout.v1"
+
+[node name="BreakableJar" parent="." instance=ExtResource("1_jar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="BreakableVase" parent="." instance=ExtResource("2_vase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0, -0.9)

@@ -62,7 +62,8 @@ func _ready() -> void:
 		failures.append("Invisible virtual capsule did not produce a real gameplay wall collision")
 	player.global_position = Vector3.ZERO
 
-	# 出厂枪已由豌豆手枪换成初始步枪（bp_starter_rifle），因此「手枪」不再等于「默认枪」。
+	# 2026-10-30 出厂枪又换回豌豆手枪（bp_pistol）。这里仍**显式装备**而不是依赖默认枪：
+	# 断言的对象是「手枪的单手姿势路径」，不该因为默认枪是哪把而被动成立/失效。
 	# 本段验的是手枪专用的单手持枪姿势路径（sidearm_hold/run/fire），必须显式装备，
 	# 否则这里量到的是机枪的 longgun 路径，断言会永远对不上。
 	if not player.equip_weapon("bp_pistol", "mod_bullet_standard"):

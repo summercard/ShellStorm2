@@ -1584,6 +1584,14 @@ func set_monster_rules(rules: Dictionary) -> void:
 	_monster_rules = rules.duplicate(true) if rules != null else {}
 	if _monster_injector != null:
 		_monster_injector.set_level_rules(_monster_rules)
+	# 房间级攻击节拍器：`monster_rules.ai.room_attack_gap_sec`。
+	# 未配置的关卡传 0 ⇒ 回到全局默认；**旧关卡一个字都不用改**。
+	# 依据见 `MonsterAIManager.ROOM_ATTACK_GAP_MSEC` 的注释（原作「错开攻击时机 + 喘息」）。
+	if MonsterAIManager != null:
+		var ai: Dictionary = _monster_rules.get("ai", {}) as Dictionary
+		MonsterAIManager.set_room_attack_gap_sec(
+			float(ai.get("room_attack_gap_sec", 0.0))
+		)
 	# 货币分档同步给奖励协调器：货币是**独立通道**，不经过 MonsterInjector。
 	if _reward_coordinator != null:
 		_reward_coordinator.configure_level_currency(
@@ -2714,6 +2722,8 @@ func _prepare_layout_rooms() -> void:
 			"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
 			"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
 			"search_facilities_enabled": bool(record.get("search_facilities_enabled", true)),
+			# 程序化随机家具总开关：记录里没有这个键 ⇒ true（未声明关卡行为逐字不变）。
+			"procedural_furniture_enabled": bool(record.get("procedural_furniture_enabled", true)),
 			"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 			"authored_layout_instances": record.get("authored_layout_instances", []),
 			"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),

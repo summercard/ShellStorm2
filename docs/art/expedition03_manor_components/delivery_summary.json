@@ -1,0 +1,23 @@
+{
+  "component_count": 40,
+  "raw_component_blends": 40,
+  "optimized_blends": 1,
+  "independent_glbs": 40,
+  "independent_prefabs": 40,
+  "source_master_sha256": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "source_protected": true,
+  "family_cap": 3,
+  "blender_package_validation": true,
+  "blender_master_validation": true,
+  "anchor_validation": true,
+  "godot_independent_validation": true,
+  "replay_instances": 140,
+  "blender_godot_bounds_equal": true,
+  "formal_room_assembly": false,
+  "runtime_integrated": false,
+  "existing_global_issues": {
+    "scene_ledger_hash_mismatches": 3,
+    "vfx_sheet_baseline_drift": 1,
+    "documentation": "Existing broken links and unregistered tests; see final log"
+  }
+}

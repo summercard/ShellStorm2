@@ -151,7 +151,38 @@ AssertionError: REWARD/N2: 宽 3 格只有 1 槽，放不下 north 的 2 门
 | 来源 | ShellStorm2 自己的 8 个模板 | EGT 实测房型谱 |
 | 数量 | 10（含 4 个非矩形变体） | 56（全部矩形） |
 | 轮廓 | 有 L 形 / 凹形 / 缺角 / 工字 | 全矩形 |
-| 用途 | 远征03 实际要用的壳 | 房型谱原型 / 美术与布局参考 |
+| 用途 | 离线白盒模板 / 美术与布局参考 | 房型谱原型 / 美术与布局参考 |
+| 运行时是否加载 | **否** | **否** |
+
+### 5.1 这两套 TSCN 都不进游戏（2026-10-31 实测更正）
+
+原文这里写的是「`rt_*` = 远征03 **实际要用的壳**」。**这句话是错的**，实测结论相反：
+
+`TowerDescent3D.expedition_static_layout_path()` 给每间房拼的是
+`room_instances/<level>/f00_<room_id>_static_layout.tscn` —— `rt_*` / `egt_*` / `cr_*`
+三种命名一条都对不上。`src/` 里对这两套目录**零引用**。跑探针
+`tools/_exp03_shell_source_probe.tscn` 实测 4 个种子共 115 间房：
+
+| 壳体来源 | 房间数 |
+|---|---:|
+| 程序化壳体（`procedural_shell = true`，按 lane 挖门洞） | 111 |
+| 安全房专用动态壳（`_build_safe_room_shell()`，仅 `start`） | 4 |
+| 静态 TSCN 加载（`static_layout_scene_loaded == true`） | **0** |
+
+所以这两套 TSCN 的真实定位是：
+
+- **`rt_*`**：白盒**几何参考**。验的是「模板 × 轮廓变体」的形状对不对，
+  `check_expedition03_room_layouts.py` + `verify_expedition03_room_whitebox.tscn` 读它。
+- **`egt_*`**：房型谱**原型**，56 种门面组合的形状样本。
+- 二者都只服务验收与图集，**改它们不会改变游戏里看到的东西**。
+
+想让美术改动进游戏，唯一通道是场景工坊烘焙出的
+`room_instances/<level>/runtime_rooms/<template_id>_<复用键前12>.tscn`（见
+[2026-10-31 烘焙美术复用键](../development/2026-10-31_runtime_room_signature_fix.md)）。
+
+**关键约束**：美术层里**不含墙 / 门墙 / 过梁 / 地板 / 角柱** —— 那些是玩法几何，
+加载时被剥离、由运行时按本局端口重建。在工坊里拖动墙或地砖**不会进游戏**；
+能让改动跨局生效的是装饰、陈设、灯与材质。
 
 非矩形轮廓是 ShellStorm2 自己的设计（远征01/02 已接入），EGT 的房间本身是矩形 ——
 所以两套并存，不合并。

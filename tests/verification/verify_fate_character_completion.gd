@@ -60,9 +60,11 @@ func _run() -> void:
 		player.remove_damage_buff("verification")
 		reset()
 		apply("fate_moon_stride", reversed)
-		# 默认出厂枪为 bp_starter_rifle（longgun 族），持枪移速惩罚 0.8m/s；移速 =（4.5 - 0.8）× 命运倍率。
-		check(player.get_active_weapon_gun_id() == "bp_starter_rifle", "隐者移速前置：默认持出厂步枪")
-		check(is_equal_approx(player.get_move_speed(), (Player3D.SPEED - Player3D.WEAPON_FAMILY_MOVE_PENALTY["longgun"]) * (0.92 if reversed else 1.12)), "隐者移速")
+		# 默认出厂枪自 2026-10-30 起是 bp_pistol（sidearm 族），持枪移速惩罚 0.5m/s；
+		# 移速 =（4.5 - 0.5）× 命运倍率。换枪前是 longgun（0.8）—— 出厂武器换族会连带改
+		# 「拿枪跑多快」，这条断言就是钉住这件事：它不是巧合，是必须跟着家族表算出来的。
+		check(player.get_active_weapon_gun_id() == "bp_pistol", "隐者移速前置：默认持出厂手枪")
+		check(is_equal_approx(player.get_move_speed(), (Player3D.SPEED - Player3D.WEAPON_FAMILY_MOVE_PENALTY["sidearm"]) * (0.92 if reversed else 1.12)), "隐者移速")
 		player.begin_fate_dash_invulnerability()
 		check(is_equal_approx(player._invincible_remaining, Player3D.DASH_DURATION + (0.12 if reversed else 0.0)), "隐者无敌")
 		reset()

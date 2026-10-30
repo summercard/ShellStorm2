@@ -8,8 +8,8 @@ extends Node
 ##   `BlueprintRegistry._build_registry()`        —— 装配节点名 / 工厂 / base_stats
 ##   `BlueprintRegistry.ASSEMBLY_NODE_ITEM_IDS`   —— 节点名 -> 内容 ID 反查
 ## 任何一处漏改都不会报错，只会静默地少一把枪、少一个槽位、或者把默认枪偷偷换回去。
-## 本场景把这三处钉在一起，并为原型枪（步枪）、原出厂枪（花洒机枪）各留一条
-## 「没被顺手改坏」的回归哨兵。
+## 本场景把这三处钉在一起，并为原型枪（步枪）、历任出厂枪（初始步枪 / 花洒机枪）
+## 各留一条「没被顺手改坏」的回归哨兵。
 ##
 ## ⚠️ 新档首局的**地面初始枪**不由本契约覆盖 —— 它是剧本
 ## `nar_tower_opening_01_wake` 的 `scene.spawn_item`（`item_id` 必须与本文件的
@@ -17,15 +17,21 @@ extends Node
 ##
 ## `_probe_completed` 是防假绿哨兵：脚本中途出错会静默中断本函数并留下空失败表。
 
-const EXPECTED_CONTENT_ID := "weapon_starter_rifle"
-const EXPECTED_ASSEMBLY_ID := "bp_starter_rifle"
-const EXPECTED_NODE_NAME := "GunBody_StarterRifle"
-const EXPECTED_DISPLAY_NAME := "初始步枪"
-const EXPECTED_PRICE := 120
-const EXPECTED_FATE_SLOTS := 4
-const EXPECTED_DAMAGE := 50
-const EXPECTED_FIRE_RATE := 5.0
-const EXPECTED_MAGAZINE := 30
+## 2026-10-30 业主：「初始武器从步枪改成豌豆手枪」。前一任 `bp_starter_rifle` 转入
+## `_check_retired_factory_guns()` 的回归哨兵（仍是正式内容，只是不再白送）。
+const EXPECTED_CONTENT_ID := "weapon_pistol"
+const EXPECTED_ASSEMBLY_ID := "bp_pistol"
+const EXPECTED_NODE_NAME := "GunBody_Pistol"
+const EXPECTED_DISPLAY_NAME := "豌豆手枪"
+const EXPECTED_PRICE := 70
+## ⚠ 豌豆手枪**没有**像前任出厂枪那样把命运槽砍到 4：它同时是合成目录里的正式枪
+## （`SYN-PISTOL`）与掉落池内容，用同一个 item id，砍槽会连带改掉它在掉落/合成里的价值。
+## 业主这轮只点了「换枪 / 弹速 / 模型大小」，故沿用默认容量 8 —— 要收回成 4 需先拆
+## 「白送实例」与「掉落实例」两套口径，属单独一项设计决定。
+const EXPECTED_FATE_SLOTS := 8
+const EXPECTED_DAMAGE := 25
+const EXPECTED_FIRE_RATE := 3.5
+const EXPECTED_MAGAZINE := 10
 ## 出厂树挂的子弹必须是标准弹。
 ##
 ## ⚠️ 2026-10-17 修的真 bug：`build_default_weapon_tree()` 旧实现「挑第一个不是标准弹的子弹」，
@@ -34,10 +40,15 @@ const EXPECTED_MAGAZINE := 30
 ## 玩家看到的是「打中怪物还在持续掉 4 点血」，实际是白送的特殊弹。这条断言就是防它复发。
 const EXPECTED_STARTING_BULLET := "Bullet_Standard"
 
-## 初始步枪以步枪为原型：配件槽位与步枪同套；步枪本体不得被顺手改坏。
+## 步枪（原型枪）本体不得被顺手改坏 —— 出厂枪从原型枪*移开*之后，它更没人盯着了。
 const RIFLE_ASSEMBLY_ID := "bp_rifle"
 const RIFLE_DAMAGE := 60
 const RIFLE_MAGAZINE := 30
+
+## 前一任出厂枪 = 初始步枪。换枪只能「换指针」，不得把它删掉或改数值。
+const RETIRED_STARTER_ASSEMBLY_ID := "bp_starter_rifle"
+const RETIRED_STARTER_DAMAGE := 50
+const RETIRED_STARTER_MAGAZINE := 30
 
 ## 蜂窝机枪：既有内容，出厂枪不该顶掉它。
 const MACHINEGUN_ASSEMBLY_ID := "bp_machinegun"
@@ -67,11 +78,19 @@ const EXPECTED_RANGES := {
 ## 同时钉三样：① 枪身声明的倍率；② 乘出来的 m/s；③ 挂上标准弹之后**仍然是** 25 m/s
 ## —— 第三层是防回归的关键：`_combine_stats` 旧实现里子弹节点会**覆盖**枪身的
 ## `bullet_speed`，那时枪身写多少都会被标准弹的 1.0 冲掉，而数值检查和效果看起来都"正常"。
+## ⚠ 2026-10-30 晚第二轮：上一轮把 `Marine Sidearm` 的 Shot Speed 25 **直接当 m/s** 写进
+## `bullet_speed = 25/23`，业主上手仍说「偏快」——因为原作单位不是米：
+## 原作玩家 6.5 单位/秒、本作玩家 4.5 m/s ⇒ **1 原作单位 = 4.5/6.5 ≈ 0.6923 m**。
+## 弹速目标因此是 `25 × 0.6923 = 17.31 m/s`，倍率 = `17.31 / 23 ≈ 0.7525`。
+## 本文件同时钉三层：① 枪身声明的倍率；② 乘出来的 m/s；③ 挂标准弹后仍是这个数
+## （第三层防的是 `_combine_stats` 里子弹节点覆盖枪身倍率那条老坑）。
 const PISTOL_ASSEMBLY_ID := "bp_pistol"
 const PISTOL_MAGAZINE := 10
 const BULLET_SPEED_BASE_MPS := 23.0
-const PISTOL_BULLET_SPEED_MULTIPLIER := 25.0 / 23.0
-const PISTOL_BULLET_SPEED_MPS := 25.0
+const EGT_UNIT_TO_METER := 4.5 / 6.5
+const EGT_MARINE_SHOT_SPEED := 25.0
+const PISTOL_BULLET_SPEED_MPS := EGT_MARINE_SHOT_SPEED * EGT_UNIT_TO_METER
+const PISTOL_BULLET_SPEED_MULTIPLIER := PISTOL_BULLET_SPEED_MPS / BULLET_SPEED_BASE_MPS
 
 var _probe_completed := false
 
@@ -153,22 +172,32 @@ func _check_int(stats: Dictionary, key: String, expected: int, failures: Array[S
 		)
 
 
-## 初始步枪与步枪共用一套配件槽位 —— 少一个槽位等于悄悄砍掉一条构筑路径。
+## 出厂枪的配件槽位（2026-10-30 起是手枪）。
+##
+## 旧版拿「初始步枪 vs 步枪」比，因为出厂枪是以步枪为原型做的；换枪之后这个比较失去意义
+## （手枪本来就不该有 stock / tactical）。现在钉三件事：
+##   ① 手枪必须开放它该有的 4 个槽（scope / muzzle / magazine / mutator）；
+##   ② 它开放的槽必须是统一槽位框架里的合法名（步枪那套的超集校验 ⇒ 不许凭空造槽名）；
+##   ③ 步枪（原型枪）自己的 6 个槽不得被顺手改坏。
 func _check_attachment_slots(failures: Array[String]) -> void:
 	var starter: Array = BlueprintRegistry.ROOT_ATTACHMENT_SUPPORT.get(EXPECTED_NODE_NAME, [])
 	if starter.is_empty():
 		failures.append("ROOT_ATTACHMENT_SUPPORT 里没有 %s" % EXPECTED_NODE_NAME)
 		return
+	for required in ["scope", "muzzle", "magazine", "mutator"]:
+		if required not in starter:
+			failures.append(
+				"%s 缺少手枪应开放的槽位 %s（实得 %s）"
+				% [EXPECTED_NODE_NAME, required, str(starter)]
+			)
 	var rifle: Array = BlueprintRegistry.ROOT_ATTACHMENT_SUPPORT.get("GunBody_Rifle", [])
-	if starter.size() != rifle.size():
-		failures.append(
-			"%s 开放 %d 个槽位，步枪开放 %d 个：%s vs %s"
-			% [EXPECTED_NODE_NAME, starter.size(), rifle.size(), str(starter), str(rifle)]
-		)
-		return
-	for slot in rifle:
-		if slot not in starter:
-			failures.append("%s 缺少步枪开放的槽位 %s" % [EXPECTED_NODE_NAME, str(slot)])
+	if rifle.size() != 6:
+		failures.append("GunBody_Rifle 开放 %d 个槽位，期望 6：原型枪槽位表被改了" % rifle.size())
+	for slot in starter:
+		if slot not in rifle:
+			failures.append(
+				"%s 开放了非法槽位 %s（不在统一槽位框架里）" % [EXPECTED_NODE_NAME, str(slot)]
+			)
 
 
 ## 命运槽容量必须能从物品定义一路走到实例，并且熬过存档往返。
@@ -204,13 +233,13 @@ func _check_starting_tree(failures: Array[String]) -> void:
 	var root := tree.get_root()
 	if root.node_name != EXPECTED_NODE_NAME:
 		failures.append(
-			"出厂装配树的根是 %s，期望 %s：豌豆手枪没有被替换掉"
+			"出厂装配树的根是 %s，期望 %s：出厂枪又被悄悄换回去了"
 			% [root.node_name, EXPECTED_NODE_NAME]
 		)
 	# 出厂枪只给枪、不给特殊弹：挂错弹会让「初始步枪」自带 DOT / 减速，玩家会当成 bug 报。
 	var bullet := root.slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode
 	if bullet == null:
-		failures.append("出厂装配树没有挂子弹模块：初始步枪开不了火")
+		failures.append("出厂装配树没有挂子弹模块：出厂枪开不了火")
 	elif bullet.node_name != EXPECTED_STARTING_BULLET:
 		failures.append(
 			"出厂装配树挂的子弹是 %s，期望 %s；特殊弹必须由玩家手动装配"
@@ -238,10 +267,14 @@ func _check_machinegun_regression(failures: Array[String]) -> void:
 	node.free()
 
 
-## 换出厂枪只能「加一把新枪」，不得把原型枪或前任出厂枪顺手改坏。
+## 换出厂枪只能「换指针」，不得把原型枪或历任前任出厂枪顺手改坏。
+## 2026-10-30 起历任出厂枪 = 初始步枪（上一任）+ 花洒机枪（再上一任）。
 func _check_retired_factory_guns(failures: Array[String]) -> void:
 	_check_gun_intact(RIFLE_ASSEMBLY_ID, RIFLE_DAMAGE, RIFLE_MAGAZINE, failures)
 	_check_gun_intact(SPRINKLER_ASSEMBLY_ID, SPRINKLER_DAMAGE, SPRINKLER_MAGAZINE, failures)
+	_check_gun_intact(
+		RETIRED_STARTER_ASSEMBLY_ID, RETIRED_STARTER_DAMAGE, RETIRED_STARTER_MAGAZINE, failures
+	)
 
 
 func _check_gun_intact(

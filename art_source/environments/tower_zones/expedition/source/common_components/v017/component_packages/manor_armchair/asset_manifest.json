@@ -1,0 +1,113 @@
+{
+  "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+  "slug": "manor_armchair",
+  "name_zh": "红丝绒扶手椅",
+  "component_family": "seating",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "category": "furnishing",
+  "scope": "shared",
+  "serves_room_types": [
+    "COMMON_ROOM",
+    "SAFE_ROOM"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "fixed_display_attachment": false,
+  "palette_uv_layer": "PaletteUV",
+  "bounds_size_m": [
+    1.23,
+    1.05,
+    1.09
+  ],
+  "collection": "Component_manor_armchair",
+  "root_object": "ROOT_manor_armchair",
+  "instance_count": 7,
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_armchair/manor_armchair_source_v017.blend",
+  "component_blend_sha256": "6d80dff756f057b8109c5827cbc490380ccbc3eb71d1a3a3620fcc6b41ba3a8c",
+  "geometry_fingerprint": "b9dec5ebbbad8c2e2e3b063c6f1672ecc103c7e9eeab3ad94dbf6974f179943f",
+  "vertex_count": 1074,
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_armchair/env_manor_armchair_visual_top3d.glb",
+  "glb_sha256": "6c0c0584a4adaf24397ea5ef7f5471bfb512d413a412066556d3e5191c139a20",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_armchair/env_manor_armchair_root_top3d.tscn",
+  "collision_policy": "visual_only",
+  "collision_shape_count": 0,
+  "prefab_sha256": "e101fd418a41dd604df8b56c59dae8b1d4a14c48ebf385651f3bc6e759188679",
+  "source_bounds_size_m": [
+    1.23,
+    1.05,
+    1.09
+  ],
+  "asset_id": "ENV-EXP03-MANOR-ARMCHAIR",
+  "asset_version": "v017",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+  "source_room_type_sha256": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "room_owned_geometry": false,
+  "export": {
+    "asset_id": "ENV-EXP03-MANOR-ARMCHAIR",
+    "slug": "manor_armchair",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+    "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+    "operations": {
+      "evaluate_bevels": true,
+      "merge_distance_m": 1e-06,
+      "merged_vertices": 134,
+      "zero_area_faces_removed": 0,
+      "recalculate_normals": true,
+      "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+    },
+    "triangles_before": 2116,
+    "triangles_after": 1974,
+    "reduction_ratio": 0.0671077504725898,
+    "budget": null,
+    "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+    "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+    "geometry_fingerprint": "b9dec5ebbbad8c2e2e3b063c6f1672ecc103c7e9eeab3ad94dbf6974f179943f",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/common_components/manor_armchair/env_manor_armchair_visual_top3d.glb",
+    "glb_sha256": "6c0c0584a4adaf24397ea5ef7f5471bfb512d413a412066556d3e5191c139a20",
+    "source_sha256_after": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+    "optimized_sha256": "1d41b3e27e56226e8f7ab2844e684d2b62254d33a836a76b6371ced66879523d",
+    "palette_sha256_before": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "palette_sha256_after": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "glb_triangles": 1974,
+    "fidelity_review": {
+      "passed": true,
+      "views": [
+        "front",
+        "back",
+        "side",
+        "game"
+      ],
+      "evidence": "docs/art/expedition03_manor_components/optimization_comparison.png",
+      "scope": "Fixed lighting/cameras; silhouettes, openings, trims and palette reviewed; no forced ratio Decimate."
+    }
+  },
+  "exported": true,
+  "runtime_integrated": false,
+  "asset_ledger": "resolved_by_ledger_index:scenes",
+  "godot_front_axis": "+Z",
+  "coordinate_mapping": "(bx,by,bz)->(bx,bz,-by)",
+  "import_status": "validated_independent_component",
+  "validation": {
+    "blender_material_uv_passed": true,
+    "godot_load_passed": true,
+    "godot_rendered": true,
+    "formal_scene_assembled": false
+  }
+}

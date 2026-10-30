@@ -16,6 +16,51 @@ const TARGET_SWITCH_MARGIN := 1.15
 const ALERT_SHARE_RADIUS := 10.0
 const MAX_MELEE_TOKENS_PER_TARGET := 2
 const MAX_RANGED_TOKENS_PER_TARGET := 2
+
+## —— 房间级攻击节拍器（2026-10-30）——
+##
+## ## 为什么需要这一层
+## 上面两个令牌是**按目标 × 通道**限流的（最多 2 近战 + 2 远程）。它解决的是
+## 「同一瞬间几只怪一起贴脸」，但**不解决「全房永远有人在开火」**：
+## 每条怪各有一个自己的 `attack_cooldown`，10 只怪错峰冷却完，屏幕上就永远有子弹。
+##
+## 实测（`tools/_egt_cadence_probe.gd`，远征03 `hub_02`，10 只怪、20 秒）：
+##   单只间隔 1.42~3.83 s（这条没问题）
+##   全房出手 1.25 次/秒
+##   **屏幕敌弹最小值 = 1 发 ⇒ 全程零空窗**
+## 业主的原话是「怪物会连续攻击玩家、没有间隔，很奇怪」—— 数字与体感完全对上。
+##
+## ## 原作依据（这是本条唯一的依据，不是自拟）
+## Dodge Roll 的 Dave Crooks 谈遭遇战设计，原文（GameRes / 篝火译稿，2026-10-30 采）：
+##   「游戏中的敌人也会**错开他们的攻击时机（stagger their attack timing）**，
+##     来防止……『那种他妈的可以完美干翻你的时刻』，即玩家刚刚翻滚了第一下、
+##     刚从无敌时间出来，马上又被背刺的时刻。**这也算有个喘息时间**。」
+##   「如果某个攻击 A 让你感到不公平或者绝对错误，不应该去削弱它，
+##     而是**调整攻击 A 之后的攻击 B，不让它直接就上来，给玩家一个喘息时间**。」
+##
+## ⇒ 原作**明确有**「错开攻击时机 + 留喘息窗口」这一层。我们没有。这就是缺口。
+##
+## ## 为什么不直接砍每只怪的 cooldown
+## 因为单只间隔实测是合理的（1.42 s 最短），砍它会把「单只怪的威胁」也削弱，
+## 而原作要保住的恰恰是「单只照打，但别叠加」。节拍器只压**并发总量**，不动个体手感。
+##
+## ## 口径
+## 470 ms 是**按玩家机动能力反推**的，不是拍脑袋：
+##   本作玩家翻滚后恢复攻击/移动的余量约 0.35 s，加 0.12 s 反应 ≈ 0.47 s。
+##   原作没有公开这个数值（`§T2.5` 已记录：速度/射速类字段公开渠道全无），
+##   所以这里只保证**语义对齐**（存在喘息窗口），不宣称数值对齐。
+## ⚠ 这与 `§T2.5` 里「移动速度/冷却绝对值没有原作依据」是同一条口径，
+##   不要把它写成「照抄原作 0.47 s」。
+const ROOM_ATTACK_GAP_MSEC := 470
+
+## `room_id` 为空的怪（塔楼早期内容、单元测试里的裸实例）**不参与节拍器** ——
+## 那些场景没有房间概念，硬塞一个全局节拍会让旧关卡的节奏一起变，属越界改动。
+var _room_next_slot_msec: Dictionary = {}
+var _room_attack_gap_msec := ROOM_ATTACK_GAP_MSEC
+## 被节拍器挡下的次数（诊断用：能区分「怪没进入射程」与「被节流」）
+var _room_gate_blocks := 0
+
+
 const SOUND_DEDUPE_MSEC := 500
 const MAX_EVALUATIONS_PER_TICK := 8
 const LIGHT_HUNTER_KINDS := ["melee_chaser", "fat_zombie03", "shielded", "exploder", "boss"]
@@ -252,11 +297,18 @@ func request_attack_token(enemy: Node3D, target: Node3D, channel := "melee") -> 
 		and str(existing.get("attack_token_channel", "")) == normalized_channel
 	):
 		return true
+	# —— 房间节拍器（见 `ROOM_ATTACK_GAP_MSEC` 的完整依据）——
+	# 位置必须在「已持有令牌 ⇒ 直接放行」之后：那条早退回的是「我已经被准入过」，
+	# 若也受节拍器约束，同一只怪在 telegraph 期间重入会把自己再挡一次。
+	# ⚠ 也必须放在「通道上限」判定**之后**：先占槽再被上限拒掉 =
+	#   白白吃掉一个喘息窗口（全房因此少一次出手），是那种「数字小幅偏移、没人会查」的错。
 	var target_tokens := _attack_tokens.get(target_id, {"melee": {}, "ranged": {}}) as Dictionary
 	var holders := target_tokens.get(normalized_channel, {}) as Dictionary
 	var limit := MAX_RANGED_TOKENS_PER_TARGET if normalized_channel == "ranged" else MAX_MELEE_TOKENS_PER_TARGET
 	_prune_token_holders(holders)
 	if holders.size() >= limit:
+		return false
+	if not _acquire_room_slot(enemy):
 		return false
 	release_attack_token(enemy)
 	holders[enemy_id] = weakref(enemy)
@@ -266,6 +318,51 @@ func request_attack_token(enemy: Node3D, target: Node3D, channel := "melee") -> 
 	existing["attack_token_channel"] = normalized_channel
 	_records[enemy_id] = existing
 	return true
+
+
+## 房间节拍器的一次「取号」。成功 = 这只怪获得本房间下一个攻击窗口。
+##
+## 语义是**节拍器**而不是限流器：
+## `_room_next_slot_msec[room]` 存的是「下一个可用窗口的时刻」，每次放行就往后推
+## `_room_attack_gap_msec`。所以哪怕 10 只怪在同一帧全部请求，也只有 1 只拿到，
+## 其余按 470 ms 的间隔依次放行 —— 这正是原作「错开攻击时机」的形态。
+##
+## `room_id` 为空的怪直接放行（不节流），见 `ROOM_ATTACK_GAP_MSEC` 的说明。
+func _acquire_room_slot(enemy: Node3D) -> bool:
+	var room := str(enemy.get("room_id"))
+	if room.is_empty():
+		return true
+	var now := Time.get_ticks_msec()
+	var next_slot := int(_room_next_slot_msec.get(room, 0))
+	if now < next_slot:
+		_room_gate_blocks += 1
+		return false
+	_room_next_slot_msec[room] = now + _room_attack_gap_msec
+	return true
+
+
+## 关卡级覆盖节拍间隔（秒）。由 `Dungeon3D` 装配时从 `monster_rules.ai` 下发。
+##
+## 为什么做成可覆盖而不是写死常量：不同关卡的空间尺度差很多 ——
+## 25×25 的小房与 45×40 的枢纽，同样的 470 ms 读起来完全不是一个密度。
+## 未配置的关卡沿用 `ROOM_ATTACK_GAP_MSEC`，行为不变。
+func set_room_attack_gap_sec(seconds: float) -> void:
+	if seconds <= 0.0:
+		_room_attack_gap_msec = ROOM_ATTACK_GAP_MSEC
+		_room_next_slot_msec.clear()
+		return
+	_room_attack_gap_msec = maxi(1, int(round(seconds * 1000.0)))
+	_room_next_slot_msec.clear()
+
+
+## 诊断读数。被节流挡下的次数是定位「怪站着不动」的关键：
+## 它与「没进射程」在表现上一样，只有这个计数能把两者分开。
+func get_room_gate_stats() -> Dictionary:
+	return {
+		"gap_msec": _room_attack_gap_msec,
+		"blocked": _room_gate_blocks,
+		"rooms_tracked": _room_next_slot_msec.size(),
+	}
 
 
 func release_attack_token(enemy: Node) -> void:

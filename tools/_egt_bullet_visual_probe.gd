@@ -111,9 +111,13 @@ func _probe_kind(kind: String) -> void:
 	# ③ 射程与弹速
 	# ③ 射程与弹速。
 	# 弹速这里**只校验配置层**（`profile.projectile_speed`），不校验单发实际值 ——
-	# 因为「吐蛋 4.2 m/s」「链球 6.4 m/s」是**刻意慢**的：蛋要慢慢飞过去才读得出"蛋"，
+	# 因为「吐蛋 3.15 m/s」「链球 4.8 m/s」是**刻意慢**的：蛋要慢慢飞过去才读得出"蛋"，
 	# 链要绕圈才形成"链"。拿单发值判"飘"会把这些设计意图当成 bug。
 	# 真正会露馅的是「配置层压根没设弹速」⇒ 落到全局默认 7 m/s 且没有射程。
+	#
+	# 下限 4.0（2026-10-30）：第四轮把弹速锚点换成反编译 `Speed(6f)` 后全域 ×0.75
+	# （基准 8→6、fast 10→7.5、慢弹 6→4.5），原来的 6.0 下限会把基准档本身判红。
+	# 取 4.0 = 慢弹档 4.5 之下留一点余量，仍能抓住"漏配 ⇒ 落默认 7 m/s"那类问题。
 	if spawned > 0:
 		if min_range <= 0.0:
 			_failures.append("%s 的子弹没有射程（只有 1 秒寿命，会半路消失）" % kind)
@@ -125,9 +129,9 @@ func _probe_kind(kind: String) -> void:
 			enemy._active_profile.get("volley", {}) is Dictionary
 			and (enemy._active_profile.get("volley", {}) as Dictionary).has("speed")
 		)
-		if profile_speed < 6.0 and not declares_slow:
+		if profile_speed < 4.0 and not declares_slow:
 			_failures.append(
-				"%s 配置层 projectile_speed=%.1f < 6（低于此会读成静止飘浮，而不是射击）" % [kind, profile_speed]
+				"%s 配置层 projectile_speed=%.1f < 4.0（低于此会读成静止飘浮，而不是射击）" % [kind, profile_speed]
 			)
 
 	enemy.queue_free()

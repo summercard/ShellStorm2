@@ -1,0 +1,1245 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "frozen": true,
+  "frozen_at": "2026-10-30",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "room_type": "MANOR_REFERENCE",
+  "source_version": "v017",
+  "room_owned_geometry": false,
+  "reference_image": "reference_manor.png",
+  "reference_sha256": "1a760c0cfe90d1f12fc97e5b8ce7c3c3e286610aa85ffaeeecfdb4108880d54c",
+  "scope": {
+    "new_assets_only": true,
+    "formal_scene_assembly": false,
+    "blender_reference_instances_only": true
+  },
+  "dimensions": {
+    "reference_bounds_m": [
+      25,
+      20
+    ],
+    "structural_grid_m": 5,
+    "wall_height_m": 2.8,
+    "wall_thickness_m": 0.3,
+    "door_opening_m": [
+      2.2,
+      2.8
+    ],
+    "floor_thickness_m": 0.1,
+    "bed_m": [
+      1.8,
+      2
+    ],
+    "bath_length_m": 1.7
+  },
+  "component_budget": {
+    "limit": 50,
+    "planned": 40,
+    "remaining": 10
+  },
+  "family_cap": 3,
+  "components": [
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "slug": "manor_wall_standard",
+      "name_zh": "实木护墙模块5m",
+      "component_family": "wall",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "slug": "manor_wall_door",
+      "name_zh": "通顶门墙模块5m",
+      "component_family": "wall",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "slug": "manor_wall_window",
+      "name_zh": "铅条窗护墙模块5m",
+      "component_family": "wall",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "slug": "manor_floor_wood",
+      "name_zh": "人字拼木地板5m",
+      "component_family": "floor",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "slug": "manor_floor_stone",
+      "name_zh": "深灰石材地板5m",
+      "component_family": "floor",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-BATH",
+      "slug": "manor_floor_bath",
+      "name_zh": "黑白瓷砖地板5m",
+      "component_family": "floor",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+      "slug": "manor_door_double",
+      "name_zh": "黄铜双开实木门",
+      "component_family": "door",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-ARCH",
+      "slug": "manor_door_arch",
+      "name_zh": "拱形装饰实木门",
+      "component_family": "door",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+      "slug": "manor_rug_lounge",
+      "name_zh": "金边会客地毯8x10m",
+      "component_family": "rug",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "slug": "manor_rug_runner",
+      "name_zh": "金纹走廊地毯2.4x5m",
+      "component_family": "rug",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-BEDROOM",
+      "slug": "manor_rug_bedroom",
+      "name_zh": "卧室地毯3x4m",
+      "component_family": "rug",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ENTRANCE-MAT",
+      "slug": "manor_entrance_mat",
+      "name_zh": "半圆入口地垫",
+      "component_family": "entrance_mat",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SOFA",
+      "slug": "manor_sofa",
+      "name_zh": "三人红丝绒沙发3m",
+      "component_family": "seating",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "slug": "manor_armchair",
+      "name_zh": "红丝绒扶手椅",
+      "component_family": "seating",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-OFFICE-CHAIR",
+      "slug": "manor_office_chair",
+      "name_zh": "前台办公椅",
+      "component_family": "seating",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-COFFEE-TABLE",
+      "slug": "manor_coffee_table",
+      "name_zh": "黑石圆形花几2m",
+      "component_family": "table",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "slug": "manor_side_table",
+      "name_zh": "黄铜圆边几0.6m",
+      "component_family": "table",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CONSOLE",
+      "slug": "manor_console",
+      "name_zh": "实木窄边桌",
+      "component_family": "table",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+      "slug": "manor_reception_desk",
+      "name_zh": "弧形格栅接待台",
+      "component_family": "reception_desk",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BED",
+      "slug": "manor_bed",
+      "name_zh": "标准双人床2x1.8m",
+      "component_family": "bed",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BENCH",
+      "slug": "manor_bench",
+      "name_zh": "红绒床尾凳",
+      "component_family": "bench",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-NIGHTSTAND",
+      "slug": "manor_nightstand",
+      "name_zh": "实木床头柜",
+      "component_family": "cabinet",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WARDROBE",
+      "slug": "manor_wardrobe",
+      "name_zh": "嵌入式衣柜",
+      "component_family": "cabinet",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BOOKCASE",
+      "slug": "manor_bookcase",
+      "name_zh": "开放式书架",
+      "component_family": "cabinet",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-LUGGAGE-CART",
+      "slug": "manor_luggage_cart",
+      "name_zh": "黄铜行李车",
+      "component_family": "luggage_cart",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PAINTING",
+      "slug": "manor_painting",
+      "name_zh": "黄铜框风景画",
+      "component_family": "painting",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-GRILLE",
+      "slug": "manor_wall_grille",
+      "name_zh": "接待区装饰格栅",
+      "component_family": "wall_grille",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "slug": "manor_wall_lamp",
+      "name_zh": "暖光黄铜壁灯",
+      "component_family": "lamp",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "slug": "manor_table_lamp",
+      "name_zh": "暖光黄铜台灯",
+      "component_family": "lamp",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "slug": "manor_plant_large",
+      "name_zh": "大型常绿盆栽",
+      "component_family": "plant",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-COMPACT",
+      "slug": "manor_plant_compact",
+      "name_zh": "小型常绿盆栽",
+      "component_family": "plant",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+      "slug": "manor_flower_arrangement",
+      "name_zh": "红花插花摆件",
+      "component_family": "plant",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": true,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BATHTUB",
+      "slug": "manor_bathtub",
+      "name_zh": "独立铸铁浴缸1.7m",
+      "component_family": "bathtub",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-VANITY",
+      "slug": "manor_vanity",
+      "name_zh": "双台盆洗手台2m",
+      "component_family": "vanity",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-MIRROR",
+      "slug": "manor_mirror",
+      "name_zh": "圆形黄铜梳妆镜",
+      "component_family": "mirror",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TOILET",
+      "slug": "manor_toilet",
+      "name_zh": "陶瓷马桶",
+      "component_family": "toilet",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TOWEL-RAIL",
+      "slug": "manor_towel_rail",
+      "name_zh": "黄铜毛巾架",
+      "component_family": "towel_rail",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CANDELABRA",
+      "slug": "manor_candelabra",
+      "name_zh": "三头烛台",
+      "component_family": "candelabra",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": true,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DESK-DOCUMENTS",
+      "slug": "manor_desk_documents",
+      "name_zh": "前台文件陈设",
+      "component_family": "desk_documents",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": true,
+      "palette_uv_layer": "PaletteUV"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BATH-SCREEN",
+      "slug": "manor_bath_screen",
+      "name_zh": "卫浴独立木隔断",
+      "component_family": "bath_screen",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV"
+    }
+  ]
+}

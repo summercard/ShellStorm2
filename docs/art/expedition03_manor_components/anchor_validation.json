@@ -1,0 +1,205 @@
+{
+  "passed": true,
+  "components": [
+    {
+      "slug": "manor_wall_standard",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_wall_door",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_wall_window",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_floor_wood",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_floor_stone",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_floor_bath",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_door_double",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_door_arch",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_rug_lounge",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_rug_runner",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_rug_bedroom",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_entrance_mat",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_sofa",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_armchair",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_office_chair",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_coffee_table",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_side_table",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_console",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_reception_desk",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_bed",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_bench",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_nightstand",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_wardrobe",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_bookcase",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_luggage_cart",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_painting",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_wall_grille",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_wall_lamp",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_table_lamp",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_plant_large",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_plant_compact",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_flower_arrangement",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_bathtub",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_vanity",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_mirror",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_toilet",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_towel_rail",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_candelabra",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_desk_documents",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    },
+    {
+      "slug": "manor_bath_screen",
+      "three_layer_anchors": true,
+      "evaluated_geometry_bottom_center": true
+    }
+  ]
+}

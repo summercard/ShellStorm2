@@ -583,6 +583,13 @@ var authored_layout_peaceful := false
 ## 是否允许本房程序生成可搜索设施；false 时仍按 prop_count 生成普通家具。
 ## 默认 true 保持未声明房间既有行为不变。
 var search_facilities_enabled := true
+## 是否允许本房生成**程序化随机家具**（含可搜索容器那一批）。
+## false ⇒ `_build_content()` 的家具循环一件都不跑。默认 true 保持既有行为。
+##
+## 与 `search_facilities_enabled` 的区别：那个只决定"能不能搜"，家具照样摆出来；
+## 这个是**整批不生成**。业主 2026-10-30 要的是后者的效果（房间里别再出现那些柜子箱子）。
+## 只认数据段 `furnishing`（见 `_record` 透传），不认关卡 ID。
+var procedural_furniture_enabled := true
 ## 本房**初始灯就亮**（不经玩家按开关、不播启动序列）。给「开局第一间房」用 ——
 ## 玩家一睁眼不该是黑的。默认 false = 老行为（只有 STAIR_LOBBY / BOSS 默认亮）。
 var authored_room_light_on := false
@@ -599,10 +606,25 @@ var authored_room_light_switch := true
 ## 主通行层地砖格心（房间局部 Y=0，与装配吸附规则一致），不含多层坑底砖。
 ## 房间归属仍兼容无清单的旧矩形房；刷怪对 authored_layout_shell 空地板则拒绝回退。
 var _authored_tile_cells: Array[Vector3] = []
+## 静态布局里**手摆的**易碎陈设（场景工坊刷进来的 `BreakableClutter3D`）。
+##
+## 与随机撒点那一批的区别：这批属于**美术布局**，随壳体常驻、不随 detail 卸载；
+## 它们的破碎进度必须照样进房间账，否则「砸了、走远、回来」或「存档重进」会复原。
+## 由 `_adopt_authored_breakable_clutter()` 在建壳时认领，id 见该函数。
+var _authored_clutter_nodes: Array[BreakableClutter3D] = []
 ## 生成房间 TSCN 时临时关闭静态场景消费，确保生成器从正式 JSON/代码链提取源壳体；
 ## 正式游戏保持 true，只加载已保存的房间场景，不再逐组件灌入静态视觉。
 static var use_expedition_static_layout_scenes := true
 var static_layout_scene_path := ""
+## 本房是否走**程序化壳体**（flow 关卡 / 远征03）。这类房间的墙与门由本节点按
+## 当前局端口现算，烘焙场景只提供美术层 —— 见 `_build_art_layer_only()`。
+var procedural_shell := false
+## 本房来自哪个房间模板（`std_25x25` / `corridor_45x40` / `boss_50x40` …）。
+##
+## 用途只有一个：美术复用键。场景工坊的意义是「同一模板的美术套到所有同模板房间」，
+## 所以烘焙文件的命名与匹配都以它为前提（`RuntimeRoomArtSource.describe()`）。
+## 塔楼房间没有模板概念，留空 —— 那时 `describe()` 退回 `room_id`，行为与旧版等价。
+var template_id := ""
 ## 房间局部连接端口：每项含稳定 port_id、目标房间、局部位置、朝外法线和最终 side/lane。
 ## 未连接端口 target_room_id=""，其墙槽必须保持实墙。
 var connection_ports: Array = []
@@ -657,8 +679,13 @@ func configure(config: Dictionary) -> void:
 	authored_layout_room_id = str(config.get("authored_layout_room_id", authored_layout_room_id))
 	authored_layout_peaceful = bool(config.get("authored_layout_peaceful", authored_layout_peaceful))
 	search_facilities_enabled = bool(config.get("search_facilities_enabled", search_facilities_enabled))
+	procedural_furniture_enabled = bool(
+		config.get("procedural_furniture_enabled", procedural_furniture_enabled)
+	)
 	authored_room_light_on = bool(config.get("authored_room_light_on", authored_room_light_on))
 	static_layout_scene_path = str(config.get("static_layout_scene_path", static_layout_scene_path))
+	template_id = str(config.get("template_id", template_id))
+	procedural_shell = bool(config.get("procedural_shell", procedural_shell))
 	connection_ports = (config.get("connection_ports", connection_ports) as Array).duplicate(true)
 	door_opening_style = str(config.get("door_opening_style", door_opening_style))
 	camera_profile = (config.get("camera_profile", camera_profile) as Dictionary).duplicate(true)
@@ -836,6 +863,8 @@ func get_room_snapshot() -> Dictionary:
 		"authored_layout_shell": authored_layout_shell,
 		"authored_layout_peaceful": authored_layout_peaceful,
 		"search_facilities_enabled": search_facilities_enabled,
+		"procedural_furniture_enabled": procedural_furniture_enabled,
+		"authored_clutter_count": get_authored_clutter().size(),
 		"shell_built": _shell_built, "detail_built": _detail_built, "stream_state": _stream_state,
 		"stream_state_name": get_stream_state_name(),
 		"stream_transition_count": _stream_transition_count,
@@ -2622,6 +2651,122 @@ func _apply_authored_runtime_door_contract(dimensions: Vector2) -> void:
 	set_meta("authored_layout_unresolved_instances", [])
 
 
+## 美术层 / 结构件的判定已统一到 `RuntimeRoomArtSource.is_structure_prefab()`。
+##
+## 2026-10-31 之前这里写的是 5 个**精确文件名**（`prp_room_floor` /
+## `prp_room_wall_segment` / …），而同一份名单在 `capture_runtime.gd` 与
+## `test_runtime_source.gd` 里各有一份近似的。三处只要漏改一处，
+## 判据就互相矛盾：换正式美术资产后，新 prefab 不在名单里 ⇒ 被当装饰留下 ⇒
+## 墙跟着美术走、门位一变就错位。现在只有一份判据，按「目录登记的角色 → 名字族」两条走。
+const ART_SOURCE := preload("res://src/world3d/RuntimeRoomArtSource.gd")
+
+
+## 烘焙场景在 flow 房间里的**唯一合法用法**：当美术层，不当壳体。
+##
+## ## 为什么不能整房接管
+##
+## 2026-10-31 之前，签名含 `ports`（side/lane/door_width/target）与 `doors`，
+## 于是**同一模板只要门位差 5m 就被判成另一个房间** —— 美术做一次，只有那一局能用。
+## 业主原话：「这个场景工坊的意义就是复用美术进行拼装房间，当然算同一个可复用的」。
+##
+## 要跨局复用就必须回答一个问题：烘焙场景里的墙是按**烘焙那一局**的门位摆的，
+## 换一局门位不同怎么办？两条路：
+##
+##   · 把墙沿墙平移到新 lane —— 只在「同侧门数不变」时成立，EGT 枢纽同侧双门
+##     （`N2` / `S2`）一来就破，且门墙件长度与 lane 强耦合；
+##   · **墙不进美术层** —— 壳体由程序化分支按本局 ports 重建。选这条。
+##
+## 依据：墙和门是**玩法几何**（决定通不通、往哪通、碰撞在哪），写进美术资产等于把
+## 玩法固化进资源，必然随布局变化失效。而「这间房长什么样」——装饰、陈设、灯、
+## 材质——才是可复用的那部分。
+##
+## ## 副作用（业主须知）
+##
+## 在工坊里**拖动墙或地砖不会进游戏**，那是几何层。想让改动跨局生效，改装饰/陈设/灯。
+## 这条已经写进 `docs/v0.1/development/2026-10-31_runtime_room_signature_fix.md`。
+func _build_art_layer_only(static_layout: Node3D, art_path: String) -> void:
+	var stripped := _strip_art_layer_geometry(static_layout)
+	# 门墙件被剥掉后，这份契约里记的节点名全部失效 —— 不清掉，
+	# `TowerDescent3D._bind_shared_edge_doors()` 会调 `_adopt_static_port_door_visuals()`
+	# 逐个 find_child，然后为每个找不到的名字 push_error。
+	if static_layout.has_meta("port_door_visuals"):
+		static_layout.remove_meta("port_door_visuals")
+	static_layout.name = (
+		"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
+	)
+	add_child(static_layout)
+	set_meta("static_layout_scene_path", art_path)
+	# **刻意不设 `static_layout_scene_loaded`**：那个 meta 的语义是「墙体由该场景接管」
+	# （`TowerDescent3D._room_walls_owned_by_static_layout()` 靠它决定跳过补走廊墙）。
+	# 这里墙体归程序化，设了会让所有读它的判据误判。美术层用独立的 `art_layer_loaded`。
+	set_meta("art_layer_loaded", true)
+	set_meta("art_layer_geometry_stripped", stripped)
+	_adopt_authored_breakable_clutter(static_layout)
+
+
+## 剥掉美术层里的几何件，返回剥掉的顶层节点数。
+##
+## 识别口径用 **prefab 路径**而不是节点名：节点名是运行时生成的
+## （`Wall_north` / `Floor` / `ShellPart_000`），跨版本会变；prefab 路径是资产契约。
+##
+## 剥完之后顺手把剩下的东西从 `WhiteboxShell` 挪进 `ArtComponents`：
+## 采集器把所有几何实例一律塞在 `WhiteboxShell` 下（它当时也不知道哪个是哪个），
+## 剥掉结构后那一组里剩下的**全是美术**。名字不改的话，工坊里打开看到的是
+## 「WhiteboxShell 里装着沙发和吊灯」，摆东西的人会找不到地方下手。
+func _strip_art_layer_geometry(root: Node3D) -> int:
+	var tops: Array[Node] = []
+	for node in root.find_children("*", "Node3D", true, false):
+		if ART_SOURCE.is_structure_prefab(str(node.scene_file_path)):
+			tops.append(node)
+	var removed := 0
+	for node in tops:
+		# 祖先也在名单里就跳过：free 父节点时子树一起走，再 free 会报 "previously freed"。
+		var ancestor_listed := false
+		var parent := node.get_parent()
+		while parent != null and parent != root:
+			if tops.has(parent):
+				ancestor_listed = true
+				break
+			parent = parent.get_parent()
+		if ancestor_listed or node.get_parent() == null:
+			continue
+		node.get_parent().remove_child(node)
+		node.free()
+		removed += 1
+	_relocate_art_into_components(root)
+	return removed
+
+
+## 把 `WhiteboxShell` 里剩下的东西挪进 `ArtComponents`。
+##
+## 采集器（`tools/scene_builder/capture_runtime.gd`）把所有几何实例统一塞进
+## `WhiteboxShell` —— 它当时只判断「这节点有没有脚本 / 是不是 Area3D / 有没有网格」，
+## 并不知道哪件将来会成为美术。剥掉结构件之后，那一组里剩下的**全是美术**，
+## 名字不改的话工坊里打开会看到「WhiteboxShell 里装着沙发和吊灯」，找不到下手的地方。
+##
+## **白盒阶段这一组必然是空的**（烘焙场景里除了墙地板没别的东西）。空组也要建出来并
+## 删掉 `WhiteboxShell`：业主打开房间时看到的应该是一个空着的 `ArtComponents`，
+## 而不是一个装着 21 件墙地板、被清空后仍然叫「白盒壳体」的空壳 —— 后者会让人以为
+## 「这间房没接上美术」。
+##
+## 只在 `WhiteboxShell` 真的存在时才动：工坊里已经手工整理过的场景
+## （美术直接建在 `ArtComponents` 下、或者根本没这两组）原样不动。
+func _relocate_art_into_components(root: Node3D) -> void:
+	var shell := root.get_node_or_null("WhiteboxShell") as Node3D
+	if shell == null:
+		return
+	var art := root.get_node_or_null("ArtComponents") as Node3D
+	if art == null:
+		art = Node3D.new()
+		art.name = "ArtComponents"
+		root.add_child(art)
+	for child in shell.get_children():
+		shell.remove_child(child)
+		art.add_child(child)
+	root.remove_child(shell)
+	shell.free()
+
+
 func _build_shell() -> void:
 	var expedition_static_path := _expedition_static_layout_path()
 	if not expedition_static_path.is_empty():
@@ -2632,6 +2777,11 @@ func _build_shell() -> void:
 			var static_layout := static_scene.instantiate() as Node3D
 			if static_layout == null:
 				push_error("DungeonRoom3D: 远征房间静态场景根节点不是 Node3D %s" % expedition_static_path)
+			elif procedural_shell:
+				# flow 房间（远征03）：烘焙场景**只当美术层**，壳体交给下面的程序化分支。
+				# 这条路径 **不 return** —— 墙和门必须按本局 ports 重建，理由见
+				# `_build_art_layer_only()` 与 `RuntimeRoomArtSource.describe()`。
+				_build_art_layer_only(static_layout, expedition_static_path)
 			else:
 				var static_room_id := str(static_layout.get_meta("room_id", ""))
 				var static_instance_total := int(static_layout.get_meta("layout_instance_total", -1))
@@ -2705,6 +2855,10 @@ func _build_shell() -> void:
 					# 静态布局的烘焙朝向由 `_align_static_layout_to_room()` 负责，标牌挂房间根、不受其影响。
 					if room_type == "STAIR_LOBBY":
 						_build_safe_room_exit_sign(get_dimensions())
+					# 美术里手摆的易碎陈设（场景工坊刷的）必须在这里认领：
+					# 它们随壳体常驻、不归 `_detail_root` 管，晚一步就会被当成"野节点"
+					# —— 不接线 ⇒ 砸了不记账；不登记位置 ⇒ 随机撒点会同位叠一件。
+					_adopt_authored_breakable_clutter(static_layout)
 					return
 	var dimensions := get_dimensions()
 	_floor_material = _material(theme.floor_color, 0.08, 0.90)
@@ -5549,8 +5703,15 @@ func _build_content() -> void:
 	# 8m 短边的依据：最大家具 2.4m，两侧各留 1.4m 过道，再算上离墙间距。
 	if minf(get_dimensions().x, get_dimensions().y) < MIN_FURNISHED_SHORT_SIDE_M:
 		prop_count = 0
+	# 关卡数据整体关闭程序化随机家具（远征03，2026-10-30）：一件都不生成。
+	# **只关"程序化来源"这一批**：安全房五件固定件、Boss 房构图、服务台、撤离信标
+	# 都不在本循环里建（各自的专门分支），易碎小物件走 `interactive_clutter` 另一段。
 	if room_type in ["STORAGE", "SCAVENGE", "BASEMENT"]:
 		prop_count += 2
+	# ⚠ 必须排在 `+2` **之后**：SCAVENGE / STORAGE 的追加名额同样属于程序化来源，
+	# 排在前面会被 +2 抵回来（第一版就踩了：reward_01 / STORAGE 房各留 2 件）。
+	if not procedural_furniture_enabled:
+		prop_count = 0
 	if authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D":
 		prop_count = 0
 	for index in range(prop_count):
@@ -5666,6 +5827,71 @@ func get_treasure_chests() -> Array[TreasureChest3D]:
 	return out
 
 
+## 本房**手摆的**易碎陈设（静态布局里那批）。随机撒点那批在 `RuntimeDetail` 下，不在本表。
+func get_authored_clutter() -> Array[BreakableClutter3D]:
+	var out: Array[BreakableClutter3D] = []
+	for clutter in _authored_clutter_nodes:
+		if clutter != null and is_instance_valid(clutter) and not clutter.is_queued_for_deletion():
+			out.append(clutter)
+	return out
+
+
+## 认领静态布局里**手摆的**易碎陈设（场景工坊刷进来的 `BreakableClutter3D`）。
+##
+## 三件事，缺一件都会静默错：
+##   ① 分配**稳定** `clutter_id` —— 读档/重建后必须还是同一个键，否则房间账对不上；
+##   ② 接 `broken` 信号 —— 不接就是「能打碎、但不进账」，走远回来或重进存档会复原；
+##   ③ 登记进 `_authored_clutter_nodes` —— 随机撒点要避让，否则同一位置会叠一件。
+##
+## id 取 `authored_` + 节点名。场景工坊放置沿用 prefab 根名，同名由 Godot 自动加序号，
+## 因此同一份布局每次实例化的节点名逐字一致 ⇒ id 稳定。
+func _adopt_authored_breakable_clutter(root: Node3D) -> void:
+	_authored_clutter_nodes.clear()
+	if root == null:
+		return
+	var used := {}
+	for node in root.find_children("*", "", true, false):
+		var clutter := node as BreakableClutter3D
+		if clutter == null or clutter.is_queued_for_deletion():
+			continue
+		var base_id := "authored_" + str(clutter.name)
+		var clutter_id := base_id
+		var serial := 1
+		while used.has(clutter_id):
+			serial += 1
+			clutter_id = "%s_%d" % [base_id, serial]
+		used[clutter_id] = true
+		clutter.set_meta("clutter_id", clutter_id)
+		clutter.set_meta("clutter_authored", true)
+		if not clutter.broken.is_connected(_on_interactive_clutter_broken):
+			clutter.broken.connect(_on_interactive_clutter_broken)
+		_authored_clutter_nodes.append(clutter)
+
+
+## 手摆易碎件的平面落点（房间局部）。随机撒点用它避让。
+func _authored_clutter_planar_points() -> Array[Vector3]:
+	var points: Array[Vector3] = []
+	for clutter in _authored_clutter_nodes:
+		if clutter == null or not is_instance_valid(clutter) or clutter.is_queued_for_deletion():
+			continue
+		var local := to_local(clutter.global_position) if clutter.is_inside_tree() else clutter.position
+		points.append(Vector3(local.x, 0.0, local.z))
+	return points
+
+
+## 探针入口：随机撒点实际会考虑的候选落点。
+##
+## 已经扣掉门/端口净空、已摆设施、**以及美术里手摆的易碎件**。
+## 探针用它做确定性断言（只数实际撒出的那几件是抽样，几乎恒绿 —— 没有牙齿）。
+func get_interactive_clutter_candidates() -> Array[Vector3]:
+	if not _uses_random_interactive_clutter():
+		return []
+	var margin := maxf(0.5, float(interactive_clutter_plan.get("wall_margin_m", 0.9)))
+	var clearance := maxf(1.0, float(interactive_clutter_plan.get("door_clearance_m", 2.4)))
+	var spacing := maxf(0.5, float(interactive_clutter_plan.get("min_spacing_m", 1.1)))
+	return _interactive_clutter_candidates(get_dimensions(), margin, clearance, spacing)
+
+
 func _build_interactive_clutter() -> void:
 	var floor_y := float(get_meta("walk_surface_y_m", 0.0))
 	if _uses_random_interactive_clutter():
@@ -5769,16 +5995,32 @@ func _interactive_clutter_candidates(
 	# 用半个间距做步长：既不漏掉贴边的空位，又保证候选点本身已满足最小间距。
 	var step := maxf(0.45, spacing * 0.75)
 	var blocked_centers := _interactive_clutter_blocked_centers(dimensions)
+	# 美术里手摆的易碎件占着位置：候选点就要排掉，否则同一处会叠出第二件
+	# （视觉上像"罐子穿模"，账上则是两条 id 抢同一个落点）。
+	var authored_points := _authored_clutter_planar_points()
 	var x := -usable_x
 	while x <= usable_x + 0.001:
 		var z := -usable_z
 		while z <= usable_z + 0.001:
 			var point := Vector3(x, 0.0, z)
-			if _interactive_clutter_point_is_free(point, blocked_centers, clearance):
+			if (
+				_interactive_clutter_point_is_free(point, blocked_centers, clearance)
+				and not _interactive_clutter_near_point(point, authored_points, spacing)
+			):
 				result.append(point)
 			z += step
 		x += step
 	return result
+
+
+## 候选点是否贴着某个已有落点（手摆件）。
+func _interactive_clutter_near_point(
+	point: Vector3, others: Array[Vector3], spacing: float
+) -> bool:
+	for other in others:
+		if Vector2(point.x - other.x, point.z - other.z).length() < spacing:
+			return true
+	return false
 
 
 ## 需要保持净空的中心：门、连接端口、以及已摆好的设施/家具/服务点。
@@ -5848,9 +6090,14 @@ func _restore_interactive_clutter() -> void:
 	var states := _pending_detail_runtime_state.get("breakable_clutter", {}) as Dictionary
 	for value in get_tree().get_nodes_in_group("breakable_clutter_3d"):
 		var clutter := value as BreakableClutter3D
-		if clutter == null or _detail_root == null or not _detail_root.is_ancestor_of(clutter):
+		# 归属判据是「本房的」而不是「在 RuntimeDetail 下的」：手摆在静态布局里那批
+		# 挂在壳体下、随壳体常驻，同样要按房间账恢复，否则砸碎后重进存档会复原。
+		if clutter == null or not is_ancestor_of(clutter):
 			continue
-		var state := states.get(str(clutter.get_meta("clutter_id", "")), {}) as Dictionary
+		var clutter_id := str(clutter.get_meta("clutter_id", ""))
+		if clutter_id.is_empty():
+			continue
+		var state := states.get(clutter_id, {}) as Dictionary
 		if not bool(state.get("broken", false)):
 			continue
 		var vector := state.get("direction", [0.0, 0.0, -1.0]) as Array

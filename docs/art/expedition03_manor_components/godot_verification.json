@@ -1,0 +1,20 @@
+{
+  "components": 40,
+  "errors": [],
+  "instances": 140,
+  "mesh_instances": 43,
+  "ok": true,
+  "replay_bbox": {
+    "position": [
+      -12.75,
+      -0.100000001490116,
+      -10.25
+    ],
+    "size": [
+      25.5550003051758,
+      2.89999985694885,
+      20.5
+    ]
+  },
+  "surfaces": 75
+}

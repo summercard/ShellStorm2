@@ -1,0 +1,478 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v017\\复古公馆_模块化组件母版_v017.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 43,
+  "polygon_count": 98454,
+  "valid_island_polygon_count": 98454,
+  "uv_reports": [
+    {
+      "object": "manor_armchair_主体",
+      "polygon_count": 1050,
+      "valid_island_polygon_count": 1050,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_bath_screen_主体",
+      "polygon_count": 42,
+      "valid_island_polygon_count": 42,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_bathtub_主体",
+      "polygon_count": 1807,
+      "valid_island_polygon_count": 1807,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_bed_主体",
+      "polygon_count": 2020,
+      "valid_island_polygon_count": 2020,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_bench_主体",
+      "polygon_count": 438,
+      "valid_island_polygon_count": 438,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_bookcase_主体",
+      "polygon_count": 612,
+      "valid_island_polygon_count": 612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_candelabra_主体",
+      "polygon_count": 282,
+      "valid_island_polygon_count": 282,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_candelabra_柔和自发光",
+      "polygon_count": 216,
+      "valid_island_polygon_count": 216,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_coffee_table_主体",
+      "polygon_count": 1230,
+      "valid_island_polygon_count": 1230,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_console_主体",
+      "polygon_count": 258,
+      "valid_island_polygon_count": 258,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_desk_documents_主体",
+      "polygon_count": 66,
+      "valid_island_polygon_count": 66,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_door_arch_主体",
+      "polygon_count": 532,
+      "valid_island_polygon_count": 532,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_door_double_主体",
+      "polygon_count": 146,
+      "valid_island_polygon_count": 146,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_entrance_mat_主体",
+      "polygon_count": 820,
+      "valid_island_polygon_count": 820,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_floor_bath_主体",
+      "polygon_count": 1206,
+      "valid_island_polygon_count": 1206,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_floor_stone_主体",
+      "polygon_count": 556,
+      "valid_island_polygon_count": 556,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_floor_wood_主体",
+      "polygon_count": 246,
+      "valid_island_polygon_count": 246,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_flower_arrangement_主体",
+      "polygon_count": 7186,
+      "valid_island_polygon_count": 7186,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_luggage_cart_主体",
+      "polygon_count": 370,
+      "valid_island_polygon_count": 370,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_mirror_主体",
+      "polygon_count": 1312,
+      "valid_island_polygon_count": 1312,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_nightstand_主体",
+      "polygon_count": 258,
+      "valid_island_polygon_count": 258,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_office_chair_主体",
+      "polygon_count": 986,
+      "valid_island_polygon_count": 986,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_painting_主体",
+      "polygon_count": 842,
+      "valid_island_polygon_count": 842,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_plant_compact_主体",
+      "polygon_count": 2555,
+      "valid_island_polygon_count": 2555,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_plant_large_主体",
+      "polygon_count": 3500,
+      "valid_island_polygon_count": 3500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_reception_desk_主体",
+      "polygon_count": 3286,
+      "valid_island_polygon_count": 3286,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_rug_bedroom_主体",
+      "polygon_count": 6824,
+      "valid_island_polygon_count": 6824,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_rug_lounge_主体",
+      "polygon_count": 43564,
+      "valid_island_polygon_count": 43564,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_rug_runner_主体",
+      "polygon_count": 7020,
+      "valid_island_polygon_count": 7020,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_side_table_主体",
+      "polygon_count": 1104,
+      "valid_island_polygon_count": 1104,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_sofa_主体",
+      "polygon_count": 2378,
+      "valid_island_polygon_count": 2378,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_table_lamp_主体",
+      "polygon_count": 984,
+      "valid_island_polygon_count": 984,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_table_lamp_柔和自发光",
+      "polygon_count": 48,
+      "valid_island_polygon_count": 48,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_toilet_主体",
+      "polygon_count": 742,
+      "valid_island_polygon_count": 742,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_towel_rail_主体",
+      "polygon_count": 74,
+      "valid_island_polygon_count": 74,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_vanity_主体",
+      "polygon_count": 652,
+      "valid_island_polygon_count": 652,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_wall_door_主体",
+      "polygon_count": 492,
+      "valid_island_polygon_count": 492,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_wall_grille_主体",
+      "polygon_count": 174,
+      "valid_island_polygon_count": 174,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_wall_lamp_主体",
+      "polygon_count": 992,
+      "valid_island_polygon_count": 992,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_wall_lamp_柔和自发光",
+      "polygon_count": 48,
+      "valid_island_polygon_count": 48,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_wall_standard_主体",
+      "polygon_count": 546,
+      "valid_island_polygon_count": 546,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_wall_window_主体",
+      "polygon_count": 630,
+      "valid_island_polygon_count": 630,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "manor_wardrobe_主体",
+      "polygon_count": 360,
+      "valid_island_polygon_count": 360,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

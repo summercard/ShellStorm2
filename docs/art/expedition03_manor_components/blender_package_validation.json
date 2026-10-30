@@ -1,0 +1,245 @@
+{
+  "components": [
+    {
+      "slug": "manor_wall_standard",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_wall_door",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_wall_window",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_floor_wood",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_floor_stone",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_floor_bath",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_door_double",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_door_arch",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_rug_lounge",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_rug_runner",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_rug_bedroom",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_entrance_mat",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_sofa",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_armchair",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_office_chair",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_coffee_table",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_side_table",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_console",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_reception_desk",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_bed",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_bench",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_nightstand",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_wardrobe",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_bookcase",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_luggage_cart",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_painting",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_wall_grille",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_wall_lamp",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_table_lamp",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_plant_large",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_plant_compact",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_flower_arrangement",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_bathtub",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_vanity",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_mirror",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_toilet",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_towel_rail",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_candelabra",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_desk_documents",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "slug": "manor_bath_screen",
+      "exit_code": 0,
+      "passed": true,
+      "failed_checks": []
+    }
+  ],
+  "passed": true
+}

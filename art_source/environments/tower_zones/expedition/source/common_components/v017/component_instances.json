@@ -1,0 +1,2280 @@
+{
+  "schema": "shellstorm2.battle.component_instances",
+  "schema_version": 1,
+  "library": "v017",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "room_owned_geometry": false,
+  "coordinate_contract": {
+    "source_space": "blender_room_local",
+    "origin_mode": "template_bounds_center_at_walk_plane",
+    "room_frame_world_translation_m": [
+      0,
+      0,
+      0
+    ],
+    "room_frame_world_rotation_z_deg": 0,
+    "source_bounds_xy_m": [
+      [
+        -12.5,
+        -10
+      ],
+      [
+        12.5,
+        10
+      ]
+    ],
+    "walk_plane_z_m": 0,
+    "blender_plane": "XY",
+    "blender_up": "+Z",
+    "rotation_y_deg_semantics": "rotation_about_blender_Z",
+    "godot_mapping": "(bx, by, bz) -> (bx, bz, -by)"
+  },
+  "instances": [
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "instance_id": "预览_floor_wood_0",
+      "position_m": [
+        -10,
+        -7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_0"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "instance_id": "预览_floor_wood_1",
+      "position_m": [
+        -10,
+        -2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_1"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "instance_id": "预览_floor_wood_2",
+      "position_m": [
+        -10,
+        2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_2"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "instance_id": "预览_floor_wood_3",
+      "position_m": [
+        -10,
+        7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_3"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_wood_4",
+      "position_m": [
+        -5,
+        -7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_4"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_wood_5",
+      "position_m": [
+        -5,
+        -2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_5"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_wood_6",
+      "position_m": [
+        -5,
+        2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_6"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_wood_7",
+      "position_m": [
+        -5,
+        7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_7"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_wood_8",
+      "position_m": [
+        0,
+        -7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_8"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_wood_9",
+      "position_m": [
+        0,
+        -2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_9"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_wood_10",
+      "position_m": [
+        0,
+        2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_10"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_wood_11",
+      "position_m": [
+        0,
+        7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_11"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_stone_12",
+      "position_m": [
+        5,
+        -7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_stone_12"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_stone_13",
+      "position_m": [
+        5,
+        -2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_stone_13"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_stone_14",
+      "position_m": [
+        5,
+        2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_stone_14"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "instance_id": "预览_floor_stone_15",
+      "position_m": [
+        5,
+        7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_stone_15"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-BATH",
+      "instance_id": "预览_floor_bath_16",
+      "position_m": [
+        10,
+        -7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_bath_16"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "instance_id": "预览_floor_wood_17",
+      "position_m": [
+        10,
+        -2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_17"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "instance_id": "预览_floor_wood_18",
+      "position_m": [
+        10,
+        2.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_18"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "instance_id": "预览_floor_wood_19",
+      "position_m": [
+        10,
+        7.5,
+        -0.1
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_floor_wood_19"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_20",
+      "position_m": [
+        -10,
+        -10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_20"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "instance_id": "预览_wall_door_21",
+      "position_m": [
+        -5,
+        -10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_door_21"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_22",
+      "position_m": [
+        0,
+        -10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_22"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_23",
+      "position_m": [
+        5,
+        -10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_23"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_24",
+      "position_m": [
+        10,
+        -10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_24"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "instance_id": "预览_wall_door_25",
+      "position_m": [
+        -10,
+        10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_door_25"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_26",
+      "position_m": [
+        -5,
+        10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_26"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "instance_id": "预览_wall_door_27",
+      "position_m": [
+        0,
+        10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_door_27"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_28",
+      "position_m": [
+        5,
+        10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_28"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_29",
+      "position_m": [
+        10,
+        10,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_29"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_30",
+      "position_m": [
+        -12.5,
+        -7.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_30"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_31",
+      "position_m": [
+        -12.5,
+        -2.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_31"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_32",
+      "position_m": [
+        -12.5,
+        2.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_32"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_33",
+      "position_m": [
+        -12.5,
+        7.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_33"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "instance_id": "预览_wall_window_34",
+      "position_m": [
+        12.5,
+        -7.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_window_34"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "instance_id": "预览_wall_window_35",
+      "position_m": [
+        12.5,
+        -2.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_window_35"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "instance_id": "预览_wall_window_36",
+      "position_m": [
+        12.5,
+        2.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_window_36"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "instance_id": "预览_wall_window_37",
+      "position_m": [
+        12.5,
+        7.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_window_37"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_38",
+      "position_m": [
+        2.5,
+        -7.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_38"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_39",
+      "position_m": [
+        2.5,
+        -2.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_39"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "instance_id": "预览_wall_door_40",
+      "position_m": [
+        2.5,
+        2.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_door_40"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_41",
+      "position_m": [
+        2.5,
+        7.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_41"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "instance_id": "预览_wall_door_42",
+      "position_m": [
+        7.5,
+        -7.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_door_42"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_43",
+      "position_m": [
+        7.5,
+        -2.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_43"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "instance_id": "预览_wall_door_44",
+      "position_m": [
+        7.5,
+        2.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_door_44"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_45",
+      "position_m": [
+        7.5,
+        7.5,
+        0
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_45"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_46",
+      "position_m": [
+        10,
+        -5,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_46"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "instance_id": "预览_wall_standard_47",
+      "position_m": [
+        10,
+        0,
+        0
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_standard_47"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+      "instance_id": "预览_door_double_48",
+      "position_m": [
+        -5,
+        -10,
+        0.01
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_door_double_48"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-ARCH",
+      "instance_id": "预览_door_arch_49",
+      "position_m": [
+        -10,
+        10,
+        0.01
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_door_arch_49"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-ARCH",
+      "instance_id": "预览_door_arch_50",
+      "position_m": [
+        0,
+        10,
+        0.01
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_door_arch_50"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+      "instance_id": "预览_door_double_51",
+      "position_m": [
+        7.5,
+        -7.5,
+        0.01
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_door_double_51"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+      "instance_id": "预览_door_double_52",
+      "position_m": [
+        7.5,
+        2.5,
+        0.01
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_door_double_52"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+      "instance_id": "预览_rug_lounge_53",
+      "position_m": [
+        -5,
+        -2.3,
+        0.015
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_rug_lounge_53"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "instance_id": "预览_rug_runner_54",
+      "position_m": [
+        5,
+        -7.5,
+        0.015
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_rug_runner_54"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "instance_id": "预览_rug_runner_55",
+      "position_m": [
+        5,
+        -2.5,
+        0.015
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_rug_runner_55"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "instance_id": "预览_rug_runner_56",
+      "position_m": [
+        5,
+        2.5,
+        0.015
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_rug_runner_56"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "instance_id": "预览_rug_runner_57",
+      "position_m": [
+        5,
+        7.5,
+        0.015
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_rug_runner_57"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ENTRANCE-MAT",
+      "instance_id": "预览_entrance_mat_58",
+      "position_m": [
+        -5,
+        -9.2,
+        0.015
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_entrance_mat_58"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SOFA",
+      "instance_id": "预览_sofa_59",
+      "position_m": [
+        -8,
+        -2.3,
+        0.05
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_sofa_59"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SOFA",
+      "instance_id": "预览_sofa_60",
+      "position_m": [
+        -2,
+        -2.3,
+        0.05
+      ],
+      "rotation_y_deg": 270,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_sofa_60"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "instance_id": "预览_armchair_61",
+      "position_m": [
+        -8,
+        2,
+        0.05
+      ],
+      "rotation_y_deg": 140,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_armchair_61"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "instance_id": "预览_armchair_62",
+      "position_m": [
+        -2,
+        2,
+        0.05
+      ],
+      "rotation_y_deg": 220,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_armchair_62"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "instance_id": "预览_armchair_63",
+      "position_m": [
+        -8,
+        -6.6,
+        0.05
+      ],
+      "rotation_y_deg": 40,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_armchair_63"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "instance_id": "预览_armchair_64",
+      "position_m": [
+        -2,
+        -6.6,
+        0.05
+      ],
+      "rotation_y_deg": 320,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_armchair_64"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "instance_id": "预览_plant_large_65",
+      "position_m": [
+        -9.4,
+        -7,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_large_65"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "instance_id": "预览_plant_large_66",
+      "position_m": [
+        -9.4,
+        2.4,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_large_66"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "instance_id": "预览_plant_large_67",
+      "position_m": [
+        -0.6,
+        -7,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_large_67"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "instance_id": "预览_plant_large_68",
+      "position_m": [
+        -0.6,
+        2.4,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_large_68"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "instance_id": "预览_side_table_69",
+      "position_m": [
+        -8,
+        -0.2,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_side_table_69"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "instance_id": "预览_table_lamp_70",
+      "position_m": [
+        -8,
+        -0.2,
+        0.68
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_table_lamp_70"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "instance_id": "预览_side_table_71",
+      "position_m": [
+        -8,
+        -4.4,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_side_table_71"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "instance_id": "预览_table_lamp_72",
+      "position_m": [
+        -8,
+        -4.4,
+        0.68
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_table_lamp_72"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "instance_id": "预览_side_table_73",
+      "position_m": [
+        -2,
+        -0.2,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_side_table_73"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "instance_id": "预览_table_lamp_74",
+      "position_m": [
+        -2,
+        -0.2,
+        0.68
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_table_lamp_74"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "instance_id": "预览_side_table_75",
+      "position_m": [
+        -2,
+        -4.4,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_side_table_75"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "instance_id": "预览_table_lamp_76",
+      "position_m": [
+        -2,
+        -4.4,
+        0.68
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_table_lamp_76"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-COFFEE-TABLE",
+      "instance_id": "预览_coffee_table_77",
+      "position_m": [
+        -5,
+        -2.3,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_coffee_table_77"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+      "instance_id": "预览_flower_arrangement_78",
+      "position_m": [
+        -5,
+        -2.2,
+        0.55
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_flower_arrangement_78"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CANDELABRA",
+      "instance_id": "预览_candelabra_79",
+      "position_m": [
+        -5.55,
+        -2.7,
+        0.55
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_candelabra_79"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CANDELABRA",
+      "instance_id": "预览_candelabra_80",
+      "position_m": [
+        -4.5,
+        -2.5,
+        0.55
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_candelabra_80"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+      "instance_id": "预览_reception_desk_81",
+      "position_m": [
+        -5,
+        6.1,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_reception_desk_81"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-OFFICE-CHAIR",
+      "instance_id": "预览_office_chair_82",
+      "position_m": [
+        -5,
+        7.1,
+        0.05
+      ],
+      "rotation_y_deg": 180,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_office_chair_82"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "instance_id": "预览_table_lamp_83",
+      "position_m": [
+        -7.25,
+        6.1,
+        1.32
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_table_lamp_83"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "instance_id": "预览_table_lamp_84",
+      "position_m": [
+        -2.75,
+        6.1,
+        1.32
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_table_lamp_84"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DESK-DOCUMENTS",
+      "instance_id": "预览_desk_documents_85",
+      "position_m": [
+        -6.3,
+        5.6,
+        1.32
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_desk_documents_85"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-GRILLE",
+      "instance_id": "预览_wall_grille_86",
+      "position_m": [
+        -5,
+        9.72,
+        1.3
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_grille_86"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_87",
+      "position_m": [
+        -7.7,
+        9.65,
+        1.6
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_87"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_88",
+      "position_m": [
+        -2.3,
+        9.65,
+        1.6
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_88"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_89",
+      "position_m": [
+        -11,
+        9.65,
+        1.6
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_89"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_90",
+      "position_m": [
+        0.9,
+        9.65,
+        1.6
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_90"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "instance_id": "预览_plant_large_91",
+      "position_m": [
+        -8.2,
+        8.5,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_large_91"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "instance_id": "预览_plant_large_92",
+      "position_m": [
+        -1.8,
+        8.5,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_large_92"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-LUGGAGE-CART",
+      "instance_id": "预览_luggage_cart_93",
+      "position_m": [
+        -11.3,
+        6.0,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_luggage_cart_93"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BOOKCASE",
+      "instance_id": "预览_bookcase_94",
+      "position_m": [
+        -12.15,
+        1.0,
+        0.05
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_bookcase_94"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CONSOLE",
+      "instance_id": "预览_console_95",
+      "position_m": [
+        -12,
+        -3,
+        0.05
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_console_95"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "instance_id": "预览_table_lamp_96",
+      "position_m": [
+        -11.8,
+        -3,
+        0.89
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_table_lamp_96"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "instance_id": "预览_armchair_97",
+      "position_m": [
+        -11,
+        -4.6,
+        0.05
+      ],
+      "rotation_y_deg": 60,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_armchair_97"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "instance_id": "预览_side_table_98",
+      "position_m": [
+        -11.5,
+        -4,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_side_table_98"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PAINTING",
+      "instance_id": "预览_painting_99",
+      "position_m": [
+        -12.15,
+        -7,
+        1.4
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_painting_99"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PAINTING",
+      "instance_id": "预览_painting_100",
+      "position_m": [
+        -12.15,
+        0,
+        1.4
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_painting_100"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PAINTING",
+      "instance_id": "预览_painting_101",
+      "position_m": [
+        -12.15,
+        7,
+        1.4
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_painting_101"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_102",
+      "position_m": [
+        2.8,
+        -7,
+        1.55
+      ],
+      "rotation_y_deg": 270,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_102"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_103",
+      "position_m": [
+        7.2,
+        -7,
+        1.55
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_103"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_104",
+      "position_m": [
+        2.8,
+        -0.2,
+        1.55
+      ],
+      "rotation_y_deg": 270,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_104"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_105",
+      "position_m": [
+        7.2,
+        -0.2,
+        1.55
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_105"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_106",
+      "position_m": [
+        2.8,
+        6.5,
+        1.55
+      ],
+      "rotation_y_deg": 270,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_106"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_107",
+      "position_m": [
+        7.2,
+        6.5,
+        1.55
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_107"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CONSOLE",
+      "instance_id": "预览_console_108",
+      "position_m": [
+        6.9,
+        -2.5,
+        0.05
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_console_108"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+      "instance_id": "预览_flower_arrangement_109",
+      "position_m": [
+        6.9,
+        -2.5,
+        0.9
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_flower_arrangement_109"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-BEDROOM",
+      "instance_id": "预览_rug_bedroom_110",
+      "position_m": [
+        10,
+        5,
+        0.02
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_rug_bedroom_110"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BED",
+      "instance_id": "预览_bed_111",
+      "position_m": [
+        10,
+        6,
+        0.055
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_bed_111"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BENCH",
+      "instance_id": "预览_bench_112",
+      "position_m": [
+        10,
+        4.5,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_bench_112"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-NIGHTSTAND",
+      "instance_id": "预览_nightstand_113",
+      "position_m": [
+        8.75,
+        6.4,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_nightstand_113"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "instance_id": "预览_table_lamp_114",
+      "position_m": [
+        8.75,
+        6.4,
+        0.65
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_table_lamp_114"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-NIGHTSTAND",
+      "instance_id": "预览_nightstand_115",
+      "position_m": [
+        11.25,
+        6.4,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_nightstand_115"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "instance_id": "预览_table_lamp_116",
+      "position_m": [
+        11.25,
+        6.4,
+        0.65
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_table_lamp_116"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WARDROBE",
+      "instance_id": "预览_wardrobe_117",
+      "position_m": [
+        10,
+        9.6,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wardrobe_117"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PAINTING",
+      "instance_id": "预览_painting_118",
+      "position_m": [
+        10,
+        9.27,
+        1.45
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_painting_118"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "instance_id": "预览_armchair_119",
+      "position_m": [
+        11.4,
+        8.0,
+        0.05
+      ],
+      "rotation_y_deg": 220,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_armchair_119"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "instance_id": "预览_side_table_120",
+      "position_m": [
+        10.5,
+        8.2,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_side_table_120"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "instance_id": "预览_plant_large_121",
+      "position_m": [
+        11.65,
+        1.3,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_large_121"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BATHTUB",
+      "instance_id": "预览_bathtub_122",
+      "position_m": [
+        10.5,
+        -8.8,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_bathtub_122"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-VANITY",
+      "instance_id": "预览_vanity_123",
+      "position_m": [
+        10.8,
+        -5.5,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_vanity_123"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-MIRROR",
+      "instance_id": "预览_mirror_124",
+      "position_m": [
+        10.3,
+        -5.26,
+        1.2
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_mirror_124"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-MIRROR",
+      "instance_id": "预览_mirror_125",
+      "position_m": [
+        11.3,
+        -5.26,
+        1.2
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_mirror_125"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TOILET",
+      "instance_id": "预览_toilet_126",
+      "position_m": [
+        8.65,
+        -6.3,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_toilet_126"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BATH-SCREEN",
+      "instance_id": "预览_bath_screen_127",
+      "position_m": [
+        9.3,
+        -6.3,
+        0.05
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_bath_screen_127"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TOWEL-RAIL",
+      "instance_id": "预览_towel_rail_128",
+      "position_m": [
+        12.2,
+        -7.4,
+        0.65
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_towel_rail_128"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-COMPACT",
+      "instance_id": "预览_plant_compact_129",
+      "position_m": [
+        11.65,
+        -7.1,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_compact_129"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "instance_id": "预览_plant_large_130",
+      "position_m": [
+        -8.2,
+        -8.9,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_large_130"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "instance_id": "预览_plant_large_131",
+      "position_m": [
+        -1.8,
+        -8.9,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_large_131"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CONSOLE",
+      "instance_id": "预览_console_132",
+      "position_m": [
+        11.9,
+        -2.6,
+        0.05
+      ],
+      "rotation_y_deg": 270,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_console_132"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-COMPACT",
+      "instance_id": "预览_plant_compact_133",
+      "position_m": [
+        11.9,
+        -2.6,
+        0.9
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_plant_compact_133"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PAINTING",
+      "instance_id": "预览_painting_134",
+      "position_m": [
+        10,
+        -0.26,
+        1.35
+      ],
+      "rotation_y_deg": 180,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_painting_134"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "instance_id": "预览_side_table_135",
+      "position_m": [
+        8.8,
+        1.25,
+        0.05
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_side_table_135"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "instance_id": "预览_armchair_136",
+      "position_m": [
+        9.1,
+        2.1,
+        0.05
+      ],
+      "rotation_y_deg": 135,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_armchair_136"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-BEDROOM",
+      "instance_id": "预览_rug_bedroom_137",
+      "position_m": [
+        10,
+        -2.5,
+        0.01
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_rug_bedroom_137"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_138",
+      "position_m": [
+        12.15,
+        5,
+        1.5
+      ],
+      "rotation_y_deg": 270,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_138"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "instance_id": "预览_wall_lamp_139",
+      "position_m": [
+        12.15,
+        -8,
+        1.5
+      ],
+      "rotation_y_deg": 270,
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "source_object": "预览_wall_lamp_139"
+    }
+  ],
+  "validation": {
+    "instance_count": 140,
+    "source_object_count": 140,
+    "coverage_ok": true
+  }
+}

@@ -47,14 +47,14 @@ static func scan(extra_paths: Array = []) -> Array[Dictionary]:
 			aliases = "远征03 expedition_03 EGT共享白盒"
 			template = str(meta.get("shell_id", template))
 		elif level == "expedition_03" and whitebox:
-			source_label = "远征03旧静态参考 · 11.9m；非实际运行房间"
+			source_label = "远征03白盒模板 · 2.8m；非实际运行房间"
 		var kit := str(meta.get("kit_tag", ""))
 		if kit.is_empty():
 			kit = _suite(str(meta.get("asset_id", "")) + " " + template + " " + file)
 		if egt:
 			kit = "旧静态参考 11.9m / " + str(meta.get("egt_kind_zh", meta.get("egt_kind", "房型")))
 		elif level == "expedition_03" and whitebox:
-			kit = "旧静态参考 11.9m / " + kit
+			kit = "白盒模板 2.8m / " + kit
 		var title := str(meta.get("display_name", meta.get("room_name", "")))
 		if title.is_empty():
 			if egt:

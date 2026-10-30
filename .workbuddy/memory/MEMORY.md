@@ -128,3 +128,14 @@
 - **量「命中精度」要瞄看得见的模型顶点，不要瞄碰撞盒中心**：倾斜姿态下盒中心可能悬空中，
   那是过度悲观（也过乐观）的测法。判据用**中位数**（真回归会整体位移），尾部另查明来源。
 
+## 工具链的坑（2026-10-30 实测）
+- **`tools/retune_egt_monsters.py --apply` 会写出重复的 `projectile_speed` 行**：它的契约是
+  「把 `hp` 那一行替换成 `stat` + `projectile_speed` 两行」，而 `Enemy3D.PROFILES` 里该项**本来就独立成行**
+  ⇒ 落盘后每个怪块会同时有两行 `"projectile_speed"`。**GDScript 字典字面量重复键不报错、只取后者**，
+  表现是「改了没生效」。跑之前先 dry-run 看行数，落盘后按「相邻两行只留第一行」清一遍。
+- **探针脚本解析失败 ⇒ 永远不会 `quit()` ⇒ headless 挂死**（实测 `add_child(RefCounted)` 让整份脚本
+  加载失败，进程跑了 7 分钟零输出）。跑 `godot --headless --scene res://tools/xxx.tscn` 一律带
+  `--quit-after 600`，卡住时至少能看到 `SCRIPT ERROR: Parse Error`。
+- **换出厂枪不是改一个常量**：`DEFAULT_STARTING_GUN_ID` + 剧本 `nar_tower_opening_01_wake` 的
+  `spawn_item.item_id` 是两处；且持枪移速惩罚按枪族取（sidearm 0.5 / longgun 0.8 / machinegun 1.1），
+  换族会连带改「拿枪跑多快」，`verify_fate_character_completion` 会跟着红。

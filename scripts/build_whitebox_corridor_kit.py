@@ -53,7 +53,7 @@ GRID = 5.0
 WALK_Y = 0.08
 FLOOR_THICKNESS = 0.10
 WALL_THICKNESS = 0.30
-WALL_HEIGHT = 11.9      # 与 room_templates 的 wall_height_m 一致
+WALL_HEIGHT = 2.8      # 与 room_templates 的 wall_height_m 一致
 DOOR_W = 2.2
 DOOR_CLEAR_H = 2.5
 
@@ -170,6 +170,8 @@ def build(name: str, width: float, depth: float,
         # 门洞过梁
         lintel_h = WALL_HEIGHT - DOOR_CLEAR_H
         for i, (g0, g1) in enumerate(gaps):
+            if lintel_h <= 1e-6:
+                continue
             center_local = (g0 + g1) / 2.0 - length / 2.0
             mesh_id = f"BoxMesh_lintel_{side}_{i}"
             if geo["axis"] == "x":

@@ -7,6 +7,10 @@ static func kit(row: Dictionary) -> String:
 		return str(row["kit_tag"])
 	var path := str(row.get("prefab_path", ""))
 	var prefix := "远征01 / " if path.contains("/expedition/") else "共享 / "
+	# 易碎陈设单独成组：它们不是建筑构件，玩家要打碎、房间要记账，
+	# 与墙体/地砖混在同一套件里会被当成"结构件"随手刷在走道中间。
+	if str(row.get("slot_role", "")) == "breakable_clutter":
+		return prefix + "易碎陈设"
 	for pair in [["boss_room_02", "Boss房02"], ["boss_room", "Boss房01"], ["office_room", "办公室"],
 		["db_room", "数据库"], ["l_corridor", "拐角走廊"], ["bridge_room", "通道桥"]]:
 		if path.contains(pair[0]):
@@ -17,6 +21,8 @@ static func type_tag(row: Dictionary) -> String:
 	if not str(row.get("type_tag", "")).is_empty():
 		return str(row["type_tag"])
 	var role := str(row.get("slot_role", ""))
+	if role == "breakable_clutter":
+		return "易碎陈设"
 	if role == "solid_wall":
 		return "墙体"
 	if role in ["door_wall", "door_leaf_preview"]:

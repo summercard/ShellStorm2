@@ -39,7 +39,11 @@ func _run() -> void:
 		var descriptor := CONTRACT.describe(room)
 		check(str(descriptor["signature"]) == str(snapshot.get_meta("runtime_room_signature", "")), "room signature differs from actual level")
 		check(is_equal_approx(float(row["wall_height_m"]), 2.8), "actual wall height differs from 2.8m")
-		check(snapshot.get_node("ConnectionPorts").get_child_count() == (room.get("connection_ports") as Array).size(), "runtime ports lost")
+		# 快照不再承载连接端口（2026-10-31）：端口是几何层，由运行时按本局算。
+		# 同一份美术会被不同门位的房间复用，快照里的端口必然互相矛盾。
+		var ports_container := snapshot.get_node_or_null("ConnectionPorts")
+		check(ports_container == null or ports_container.get_child_count() == 0,
+			"art snapshot must not carry connection ports")
 		check(snapshot.get_node("WhiteboxShell").get_child_count() > 4, "runtime shell missing")
 		check(snapshot.find_children("*", "Area3D", true, false).is_empty(), "gameplay trigger leaked into art")
 		check(snapshot.find_children("*", "RoomDoor3D", true, false).is_empty(), "door FSM leaked into art")
@@ -70,18 +74,19 @@ func _shell_bounds(node: Node3D) -> AABB:
 	var result := AABB()
 	var found := false
 	for mesh in node.find_children("*", "MeshInstance3D", true, false):
-		# Exclude doors, UI signs, details and scripted gameplay trees, just like capture.
+		# 结构件判据统一走契约（2026-10-31）：原来这里自带一份
+		# `contains("prp_room_wall")` 的名单，与运行时那份不是同一个 —— 换正式
+		# 美术资产后两份会分叉，而分叉的表现是"包围盒对不上"这种看不出根因的红。
 		var parent: Node = mesh
 		var safe := true
-		var wall_or_floor := false
+		var structural := false
 		while parent != node and parent != null:
 			if parent.get_script() != null or parent is Area3D or parent is Light3D:
 				safe = false
-			var path := str(parent.scene_file_path)
-			if path.contains("prp_room_floor") or path.contains("prp_room_wall") or path.contains("prp_room_corner") or path.contains("prp_room_door_lintel"):
-				wall_or_floor = true
+			if CONTRACT.is_structure_prefab(str(parent.scene_file_path)):
+				structural = true
 			parent = parent.get_parent()
-		if not safe or not wall_or_floor:
+		if not safe or not structural:
 			continue
 		var box: AABB = node.global_transform.affine_inverse() * mesh.global_transform * mesh.get_aabb()
 		result = result.merge(box) if found else box
@@ -116,25 +121,42 @@ func _verify_binding(original: Node3D, snapshot: Node3D) -> void:
 	root.add_child(test_room)
 	check(CONTRACT.matching_path(test_room, base) == target, "runtime failed to resolve saved art")
 	test_room.ensure_shell_built()
-	check(bool(test_room.get_meta("static_layout_scene_loaded", false)), "real room build did not load saved art")
+	# 2026-10-31 语义变更：flow 房间里烘焙场景**只当美术层**，不再整房接管。
+	# 判据从 `static_layout_scene_loaded` 换成 `art_layer_loaded` —— 前者表示
+	# "墙体由该场景接管"，现在墙体归程序化分支，设它会误导
+	# `_room_walls_owned_by_static_layout()` 等判据。
+	check(bool(test_room.get_meta("art_layer_loaded", false)), "real room build did not load saved art")
+	check(not bool(test_room.get_meta("static_layout_scene_loaded", false)),
+		"flow room took over the shell instead of layering art")
 	check(test_room.find_child("ArtRoundtripReceipt", true, false) != null, "edited art was not present in actual runtime room")
 	var loaded_art := test_room.get_node_or_null("AuthoredLayoutArtRoot") as Node3D
 	if loaded_art == null:
 		loaded_art = test_room.get_node_or_null("SafeRoomArtRoot") as Node3D
 	check(loaded_art != null, "runtime art root missing after real build")
+	# 几何层必须由运行时重建：墙在、且美术层里一份几何件都不剩。
+	# 这两条是「跨局复用」的前提 —— 墙若跟着美术走，换一局门位就错位。
+	check(test_room.get_node_or_null("Wall_north") != null, "procedural wall missing after art layer load")
+	check(int(test_room.get_meta("art_layer_geometry_stripped", 0)) > 0, "art layer kept geometry parts")
 	if loaded_art != null:
-		check(_shell_bounds(loaded_art).is_equal_approx(_shell_bounds(snapshot.get_node("WhiteboxShell"))), "runtime reattachment changed original low-wall geometry")
-		print("RUNTIME_COLLISION_COUNTS room=", original.get("room_id"), " loaded=", _collision_layers(loaded_art), " source=", _collision_layers(snapshot))
-		check(loaded_art.find_children("*", "CollisionShape3D", true, false).size() == snapshot.find_children("*", "CollisionShape3D", true, false).size(), "runtime reattachment changed structural collision count")
+		var leftover := _shell_bounds(loaded_art)
+		check(leftover.size.is_zero_approx() or leftover.size.y < 0.05,
+			"art layer still carries structural geometry " + str(leftover))
+		print("RUNTIME_ART_LAYER room=", original.get("room_id"),
+			" stripped=", int(test_room.get_meta("art_layer_geometry_stripped", 0)),
+			" art_bounds=", leftover)
 	check(is_zero_approx(test_room._static_layout_alignment_delta_deg(snapshot)), "captured local geometry was rotated again")
+	# 复用键的**正向**断言（2026-10-31 反转）：门位不同**必须**还能命中同一份美术。
+	# 旧断言是 `matching_path(...).is_empty()`（不同端口就拒绝复用），那正是
+	# "美术做一次只有一局能用"的根因 —— 业主明确要求同模板算同一个可复用的。
 	var ports: Array = test_room.connection_ports.duplicate(true)
 	if not ports.is_empty():
 		ports[0]["lane_m"] = float(ports[0].get("lane_m", 0)) + 5.0
 		test_room.connection_ports = ports
-		check(CONTRACT.matching_path(test_room, base).is_empty(), "different port geometry incorrectly reused art")
+		check(CONTRACT.matching_path(test_room, base) == target,
+			"same template with a different door lane must reuse the art")
 	test_room.free()
 	DirAccess.remove_absolute(target)
-	print("RUNTIME_SOURCE_BINDING actual_room_loaded=1 mismatched_ports_rejected=1")
+	print("RUNTIME_SOURCE_BINDING actual_room_loaded=1 same_template_reuses_art=1 art_layer_only=1")
 
 func _collision_layers(node: Node) -> Dictionary:
 	var result := {}

@@ -1,0 +1,113 @@
+{
+  "component_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+  "slug": "manor_wall_window",
+  "name_zh": "铅条窗护墙模块5m",
+  "component_family": "wall",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "category": "architecture",
+  "scope": "shared",
+  "serves_room_types": [
+    "COMMON_ROOM",
+    "SAFE_ROOM"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "fixed_display_attachment": false,
+  "palette_uv_layer": "PaletteUV",
+  "bounds_size_m": [
+    5.0,
+    0.61,
+    2.8
+  ],
+  "collection": "Component_manor_wall_window",
+  "root_object": "ROOT_manor_wall_window",
+  "instance_count": 4,
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend",
+  "component_blend_sha256": "312aea49f375a46f79ff1cbc324bd1771f32fbf785af3131d9c9a1164f2ad667",
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_wall_window/env_manor_wall_window_visual_top3d.glb",
+  "glb_sha256": "1ebc78e0f28c6bb375b762382e0884e35132857316737f8dddb37a9b17156b63",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_window/env_manor_wall_window_root_top3d.tscn",
+  "collision_policy": "structural_box",
+  "collision_shape_count": 1,
+  "prefab_sha256": "d519558d3837325b26afa7c1dca4cc0ed34b8268c9942f13c572a9a541802621",
+  "source_bounds_size_m": [
+    5.0,
+    0.61,
+    2.8
+  ],
+  "geometry_fingerprint": "7b10e84840bb202b1ad926e6a474b55b761308c996b2aa8d5bfd001f98212bf2",
+  "vertex_count": 824,
+  "asset_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+  "asset_version": "v017",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+  "source_room_type_sha256": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "room_owned_geometry": false,
+  "export": {
+    "asset_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+    "slug": "manor_wall_window",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+    "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+    "operations": {
+      "evaluate_bevels": true,
+      "merge_distance_m": 1e-06,
+      "merged_vertices": 16,
+      "zero_area_faces_removed": 0,
+      "recalculate_normals": true,
+      "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+    },
+    "triangles_before": 1260,
+    "triangles_after": 1256,
+    "reduction_ratio": 0.0031746031746031746,
+    "budget": null,
+    "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+    "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+    "geometry_fingerprint": "7b10e84840bb202b1ad926e6a474b55b761308c996b2aa8d5bfd001f98212bf2",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/common_components/manor_wall_window/env_manor_wall_window_visual_top3d.glb",
+    "glb_sha256": "1ebc78e0f28c6bb375b762382e0884e35132857316737f8dddb37a9b17156b63",
+    "source_sha256_after": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+    "optimized_sha256": "1d41b3e27e56226e8f7ab2844e684d2b62254d33a836a76b6371ced66879523d",
+    "palette_sha256_before": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "palette_sha256_after": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "glb_triangles": 1256,
+    "fidelity_review": {
+      "passed": true,
+      "views": [
+        "front",
+        "back",
+        "side",
+        "game"
+      ],
+      "evidence": "docs/art/expedition03_manor_components/optimization_comparison.png",
+      "scope": "Fixed lighting/cameras; silhouettes, openings, trims and palette reviewed; no forced ratio Decimate."
+    }
+  },
+  "exported": true,
+  "runtime_integrated": false,
+  "asset_ledger": "resolved_by_ledger_index:scenes",
+  "godot_front_axis": "+Z",
+  "coordinate_mapping": "(bx,by,bz)->(bx,bz,-by)",
+  "import_status": "validated_independent_component",
+  "validation": {
+    "blender_material_uv_passed": true,
+    "godot_load_passed": true,
+    "godot_rendered": true,
+    "formal_scene_assembled": false
+  }
+}

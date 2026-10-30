@@ -248,6 +248,7 @@ core_scenes=(
   probe_expedition_unlock
   probe_expedition03_entry_chain
   probe_expedition03_playable
+  probe_authored_breakable_clutter
   verify_expedition_camera_door_proxies
   verify_expedition_room_type_component_replay
   verify_test_level_99_flow

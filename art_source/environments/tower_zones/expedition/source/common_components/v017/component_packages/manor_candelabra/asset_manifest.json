@@ -1,0 +1,113 @@
+{
+  "component_id": "ENV-EXP03-MANOR-CANDELABRA",
+  "slug": "manor_candelabra",
+  "name_zh": "三头烛台",
+  "component_family": "candelabra",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "category": "furnishing",
+  "scope": "shared",
+  "serves_room_types": [
+    "COMMON_ROOM",
+    "SAFE_ROOM"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "fixed_display_attachment": true,
+  "palette_uv_layer": "PaletteUV",
+  "bounds_size_m": [
+    0.56,
+    0.32,
+    0.64
+  ],
+  "collection": "Component_manor_candelabra",
+  "root_object": "ROOT_manor_candelabra",
+  "instance_count": 2,
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_candelabra/manor_candelabra_source_v017.blend",
+  "component_blend_sha256": "0f138f0de3aa8b5f1d711b0fa2397dcdbd20ba0e90c4254a2685f9294e1a8131",
+  "geometry_fingerprint": "033caccc23471b0a5a8bcd51e11390b8fb4af5fb17555d6be3369acfc30ca8af",
+  "vertex_count": 519,
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_candelabra/env_manor_candelabra_visual_top3d.glb",
+  "glb_sha256": "25efee37596c1e0d81300205ef3da995be5d7f147a2498da5fecb14e007e9acd",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_candelabra/env_manor_candelabra_root_top3d.tscn",
+  "collision_policy": "visual_only",
+  "collision_shape_count": 0,
+  "prefab_sha256": "300dcec3e8c95db2f47a4edcc54134bd5ab6b56579b4a41777c9fb8cd079806a",
+  "source_bounds_size_m": [
+    0.56,
+    0.32,
+    0.64
+  ],
+  "asset_id": "ENV-EXP03-MANOR-CANDELABRA",
+  "asset_version": "v017",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+  "source_room_type_sha256": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "room_owned_geometry": false,
+  "export": {
+    "asset_id": "ENV-EXP03-MANOR-CANDELABRA",
+    "slug": "manor_candelabra",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+    "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+    "operations": {
+      "evaluate_bevels": true,
+      "merge_distance_m": 1e-06,
+      "merged_vertices": 93,
+      "zero_area_faces_removed": 0,
+      "recalculate_normals": true,
+      "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+    },
+    "triangles_before": 1020,
+    "triangles_after": 924,
+    "reduction_ratio": 0.09411764705882353,
+    "budget": null,
+    "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+    "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+    "geometry_fingerprint": "033caccc23471b0a5a8bcd51e11390b8fb4af5fb17555d6be3369acfc30ca8af",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/common_components/manor_candelabra/env_manor_candelabra_visual_top3d.glb",
+    "glb_sha256": "25efee37596c1e0d81300205ef3da995be5d7f147a2498da5fecb14e007e9acd",
+    "source_sha256_after": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+    "optimized_sha256": "1d41b3e27e56226e8f7ab2844e684d2b62254d33a836a76b6371ced66879523d",
+    "palette_sha256_before": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "palette_sha256_after": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "glb_triangles": 924,
+    "fidelity_review": {
+      "passed": true,
+      "views": [
+        "front",
+        "back",
+        "side",
+        "game"
+      ],
+      "evidence": "docs/art/expedition03_manor_components/optimization_comparison.png",
+      "scope": "Fixed lighting/cameras; silhouettes, openings, trims and palette reviewed; no forced ratio Decimate."
+    }
+  },
+  "exported": true,
+  "runtime_integrated": false,
+  "asset_ledger": "resolved_by_ledger_index:scenes",
+  "godot_front_axis": "+Z",
+  "coordinate_mapping": "(bx,by,bz)->(bx,bz,-by)",
+  "import_status": "validated_independent_component",
+  "validation": {
+    "blender_material_uv_passed": true,
+    "godot_load_passed": true,
+    "godot_rendered": true,
+    "formal_scene_assembled": false
+  }
+}

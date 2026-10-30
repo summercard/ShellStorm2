@@ -305,7 +305,7 @@ def _connector_template(tid: str, w: float, d: float, note: str) -> dict:
         "room_type": "COMMON_ROOM",
         "size_m": [w, d],
         "grid_unit_m": GRID,
-        "wall_height_m": 11.9,
+        "wall_height_m": 2.8,
         "door_contract": {
             "width_m": 2.2,
             "height_m": 2.5,
@@ -686,7 +686,11 @@ def main() -> None:
         "safe_15x15", "extraction_25x25", "boss_50x40", "std_25x25",
         "db_70x50", "office_60x70", "corridor_45x40", "bridge_60x50",
     ]:
-        shutil.copyfile(SRC_TEMPLATES / f"{name}.json", OUT / "room_templates" / f"{name}.json")
+        template = json.loads((SRC_TEMPLATES / f"{name}.json").read_text(encoding="utf-8"))
+        template["wall_height_m"] = 2.8  # Expedition03 does not inherit expedition01 wall height.
+        (OUT / "room_templates" / f"{name}.json").write_text(
+            json.dumps(template, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
 
     # 窄长连接房是本关**独有**的（远征01 的模板池里没有），所以由这里直接生成，
     # 而不是从 SRC_TEMPLATES 拷 —— 否则源码与数据会各说一套。
@@ -705,7 +709,7 @@ def main() -> None:
         "grid_unit_m": 5.0,
         "wall_thickness_m": 0.3,
         "floor_height_m": 12.0,
-        "visible_wall_height_m": 11.9,
+        "visible_wall_height_m": 2.8,
         "site": {"size_m": [250.0, 250.0], "center_m": [2.5, 2.5]},
         "core": {"size_m": [65.0, 65.0], "center_m": [2.5, 2.5]},
         "floors": [

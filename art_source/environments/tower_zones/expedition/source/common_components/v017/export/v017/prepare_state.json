@@ -1,0 +1,3048 @@
+{
+  "catalog": [
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "slug": "manor_wall_standard",
+      "name_zh": "实木护墙模块5m",
+      "component_family": "wall",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        5.0,
+        0.5,
+        2.8
+      ],
+      "collection": "Component_manor_wall_standard",
+      "root_object": "ROOT_manor_wall_standard",
+      "instance_count": 18,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend",
+      "component_blend_sha256": "10094f82dda717763ac230824e1795372ae3f6e8412eadefa6cabc95dae14687",
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_wall_standard/env_manor_wall_standard_visual_top3d.glb",
+      "glb_sha256": "879fc09603381f72885184df54667569a64ee60c0ce3bf8083a59f45643263c1",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn",
+      "collision_policy": "structural_box",
+      "collision_shape_count": 1,
+      "prefab_sha256": "e91bf47c6a44b8388e07af4e975d68559e5eec57c574a9b3e9c3ad80473f7135",
+      "source_bounds_size_m": [
+        5.0,
+        0.5,
+        2.8
+      ],
+      "geometry_fingerprint": "c82ec0ac6255ea27c312726fc68cd8a092bb9f243453da8b4ba17d196aecde56",
+      "vertex_count": 712
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "slug": "manor_wall_door",
+      "name_zh": "通顶门墙模块5m",
+      "component_family": "wall",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        5.0,
+        0.5,
+        2.8
+      ],
+      "collection": "Component_manor_wall_door",
+      "root_object": "ROOT_manor_wall_door",
+      "instance_count": 6,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_door/manor_wall_door_source_v017.blend",
+      "component_blend_sha256": "0d0852d1999da72b238bb1c9fe9c2356d5bd1c3a4db5d54676b2790cdaab47b2",
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_wall_door/env_manor_wall_door_visual_top3d.glb",
+      "glb_sha256": "c3a9764eb6d4fd36986558dff2b12a5ac344d5e1e7902349784ceaba717e6f70",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_door/env_manor_wall_door_root_top3d.tscn",
+      "collision_policy": "segmented_door_piers",
+      "collision_shape_count": 2,
+      "prefab_sha256": "2674c33e7b4933f9b83711189822de26427251ab88c2da3d4b070d48dad24b6a",
+      "source_bounds_size_m": [
+        5.0,
+        0.5,
+        2.8
+      ],
+      "geometry_fingerprint": "40f2b25719c8eee2ef56704cc75c4a47b4b26df68b1296209e6552aad9acf49f",
+      "vertex_count": 624
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "slug": "manor_wall_window",
+      "name_zh": "铅条窗护墙模块5m",
+      "component_family": "wall",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        5.0,
+        0.61,
+        2.8
+      ],
+      "collection": "Component_manor_wall_window",
+      "root_object": "ROOT_manor_wall_window",
+      "instance_count": 4,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend",
+      "component_blend_sha256": "0e5462d9bc22ab52abe1074f3420a3b745a57cb04a6b4c988944147a1e687ec5",
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_wall_window/env_manor_wall_window_visual_top3d.glb",
+      "glb_sha256": "c7f42ec8e5e6fe1127df9220c4c9a0fc0db7923578584453504a5fe5d2d60460",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_window/env_manor_wall_window_root_top3d.tscn",
+      "collision_policy": "structural_box",
+      "collision_shape_count": 1,
+      "prefab_sha256": "32a05ea813c3a89558130178b548b694624210f6146c6a922ddc74ecab4cfeca",
+      "source_bounds_size_m": [
+        5.0,
+        0.61,
+        2.8
+      ],
+      "geometry_fingerprint": "7b10e84840bb202b1ad926e6a474b55b761308c996b2aa8d5bfd001f98212bf2",
+      "vertex_count": 824
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "slug": "manor_floor_wood",
+      "name_zh": "人字拼木地板5m",
+      "component_family": "floor",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "collection": "Component_manor_floor_wood",
+      "root_object": "ROOT_manor_floor_wood",
+      "instance_count": 7,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend",
+      "component_blend_sha256": "575e49e5b593352f8fa5b83eebb6541b34ad93f5a4148f0e8a6d1a4433c26c68",
+      "geometry_fingerprint": "c6a2b60bf5fc5b51f55ad0d792d73dc8ed520a0c1761ae54c3ad422ef2ca41cd",
+      "vertex_count": 965,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_floor_wood/env_manor_floor_wood_visual_top3d.glb",
+      "glb_sha256": "cd3293fa754cd07d77d7e9795c91766f3da6c2a4d10986746c520aea803f5966",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_floor_wood/env_manor_floor_wood_root_top3d.tscn",
+      "collision_policy": "structural_box",
+      "collision_shape_count": 1,
+      "prefab_sha256": "3080f7976392db62c75add669f22a87b0c68a301bdca69a17737fb1dfd0e217b",
+      "source_bounds_size_m": [
+        5.0,
+        5.0,
+        0.1
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "slug": "manor_floor_stone",
+      "name_zh": "深灰石材地板5m",
+      "component_family": "floor",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        5.065508,
+        5.284511,
+        0.104598
+      ],
+      "collection": "Component_manor_floor_stone",
+      "root_object": "ROOT_manor_floor_stone",
+      "instance_count": 12,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_stone/manor_floor_stone_source_v017.blend",
+      "component_blend_sha256": "9215447b04ef6716c3c0ba0e4a8bbbfb91e2487a2daf8987b44e24228df60702",
+      "geometry_fingerprint": "5d9944d068b504825fd73ed5cb3329dadbcdd03e90571ce5c1b238eab45694b4",
+      "vertex_count": 658,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_floor_stone/env_manor_floor_stone_visual_top3d.glb",
+      "glb_sha256": "5037185b90f46d9060c8bba11f7576c7539cdee2ea1aba12b80107b1c86159bc",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_floor_stone/env_manor_floor_stone_root_top3d.tscn",
+      "collision_policy": "structural_box",
+      "collision_shape_count": 1,
+      "prefab_sha256": "d42fb52d7c0f3f146d6194738e2a66cc76fd8d1bde19b9a6f6d578590f940541",
+      "source_bounds_size_m": [
+        5.065508,
+        5.284511,
+        0.104598
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-BATH",
+      "slug": "manor_floor_bath",
+      "name_zh": "黑白瓷砖地板5m",
+      "component_family": "floor",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "architecture",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "collection": "Component_manor_floor_bath",
+      "root_object": "ROOT_manor_floor_bath",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_bath/manor_floor_bath_source_v017.blend",
+      "component_blend_sha256": "ffa309b164ee0614d6daaad341bbc43b21dbbd396336724abe06bafc29a536a6",
+      "geometry_fingerprint": "1321e3439d1a56083a9b21845e09105144b55ed8a0d61ca7a15da1eb020a41c3",
+      "vertex_count": 1606,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_floor_bath/env_manor_floor_bath_visual_top3d.glb",
+      "glb_sha256": "08b264a0b752440b1e5593884d6bde8acbea7fcafb84dfa6a68a3b5d92da05ee",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_floor_bath/env_manor_floor_bath_root_top3d.tscn",
+      "collision_policy": "structural_box",
+      "collision_shape_count": 1,
+      "prefab_sha256": "ab9dcc7a484871051c2ee50b38e7ef13bcfa63302ef80e2d98189686025545aa",
+      "source_bounds_size_m": [
+        5.0,
+        5.0,
+        0.1
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+      "slug": "manor_door_double",
+      "name_zh": "黄铜双开实木门",
+      "component_family": "door",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        2.2,
+        0.202855,
+        2.5
+      ],
+      "collection": "Component_manor_door_double",
+      "root_object": "ROOT_manor_door_double",
+      "instance_count": 3,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_door_double/manor_door_double_source_v017.blend",
+      "component_blend_sha256": "544d643e262793fbc18010b85ae90a6e17f55c89b23df819e72786278a098e84",
+      "geometry_fingerprint": "485606c8aa15c80b502ca0dde0c429ebb00ae66537ae9e52e864b0670659d268",
+      "vertex_count": 1368,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_door_double/env_manor_door_double_visual_top3d.glb",
+      "glb_sha256": "bda23a1d0b2acb21395d66cd0f1aabe00de0c7a3844e8c8c622b74f172ea5502",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_door_double/env_manor_door_double_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "d852da2af68ce1f2b946ee20f8d5ae0f8626f3c6c2a1b916ad9d9629f63506f7",
+      "source_bounds_size_m": [
+        2.2,
+        0.202855,
+        2.5
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-ARCH",
+      "slug": "manor_door_arch",
+      "name_zh": "拱形装饰实木门",
+      "component_family": "door",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        2.2,
+        0.208484,
+        2.5
+      ],
+      "collection": "Component_manor_door_arch",
+      "root_object": "ROOT_manor_door_arch",
+      "instance_count": 2,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_door_arch/manor_door_arch_source_v017.blend",
+      "component_blend_sha256": "87ee58699681e24f4a86a7d50b5ae6655bb3c11cb762bc44f36dde6dcd8e2ce2",
+      "geometry_fingerprint": "e40dc71a93c5d5eec48c98617c55b526297fd81af94f33222c95775e4ed9cc18",
+      "vertex_count": 2608,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_door_arch/env_manor_door_arch_visual_top3d.glb",
+      "glb_sha256": "2c03d15017ed9113dde56c7101b05b973fb8268fe57c88701f33cc044984ab5a",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_door_arch/env_manor_door_arch_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "55905a354490f12d86559e74547741dbafcee70abc235cb14e17ff1e647bfa84",
+      "source_bounds_size_m": [
+        2.2,
+        0.208484,
+        2.5
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+      "slug": "manor_rug_lounge",
+      "name_zh": "金边会客地毯8x10m",
+      "component_family": "rug",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        8.0,
+        10.0,
+        0.053
+      ],
+      "collection": "Component_manor_rug_lounge",
+      "root_object": "ROOT_manor_rug_lounge",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_lounge/manor_rug_lounge_source_v017.blend",
+      "component_blend_sha256": "a7f4d7d5f0d8177d61a7846162a67490e1e762bc184f941b07ae9350e2b3bcf3",
+      "geometry_fingerprint": "ab59d27ffd46f466974ed095284fe6a2f5c188550f50f5ee90e17f10b13bdd93",
+      "vertex_count": 44206,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_rug_lounge/env_manor_rug_lounge_visual_top3d.glb",
+      "glb_sha256": "a255aa22629f1e71e913798479092a736d38e13c82222cc65837e5a9db44adfd",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_lounge/env_manor_rug_lounge_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "b903de31ff931e7d7f022834d9d88516d5bfb7b36a19cf93be6a5757fb38bb31",
+      "source_bounds_size_m": [
+        8.0,
+        10.0,
+        0.053
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "slug": "manor_rug_runner",
+      "name_zh": "金纹走廊地毯2.4x5m",
+      "component_family": "rug",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        2.4,
+        5.0,
+        0.053
+      ],
+      "collection": "Component_manor_rug_runner",
+      "root_object": "ROOT_manor_rug_runner",
+      "instance_count": 4,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_runner/manor_rug_runner_source_v017.blend",
+      "component_blend_sha256": "65442ae14d74f0139002b787b892ce1737623788456a83e51ec871d10fe68c00",
+      "geometry_fingerprint": "4362d1e8281b3fb084e3a34c903602bc31b877d3b35be7bbee0e719b48ebdcdd",
+      "vertex_count": 7054,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_rug_runner/env_manor_rug_runner_visual_top3d.glb",
+      "glb_sha256": "103bb57c18d54d05ea92bf76e627fab91e93b3843d07b7f6f5c2183eb16d5ee4",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_runner/env_manor_rug_runner_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "5b1e0ef13c1292c43ede00dd766160757e9f2921dd15a2651597a8bc4e46530c",
+      "source_bounds_size_m": [
+        2.4,
+        5.0,
+        0.053
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-BEDROOM",
+      "slug": "manor_rug_bedroom",
+      "name_zh": "卧室地毯3x4m",
+      "component_family": "rug",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        3.0,
+        4.0,
+        0.053
+      ],
+      "collection": "Component_manor_rug_bedroom",
+      "root_object": "ROOT_manor_rug_bedroom",
+      "instance_count": 2,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend",
+      "component_blend_sha256": "8fad732b349b2f3eacfc261bd71dbb7396bee3458e05272fda9235c95a6cfcf2",
+      "geometry_fingerprint": "0b5687cd32c6c5166d6d68d9acd72c25f3a0c184868c5b1ab5f6e7f1b44381f1",
+      "vertex_count": 6888,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_rug_bedroom/env_manor_rug_bedroom_visual_top3d.glb",
+      "glb_sha256": "abbeb0c4a7e9cfcf70042fe4c68ba2eca915fd1e68359818249030d544121636",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_bedroom/env_manor_rug_bedroom_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "dee489c79df9a1032c159e56774e6491810e53ab636287688ead9c36f523aa17",
+      "source_bounds_size_m": [
+        3.0,
+        4.0,
+        0.053
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ENTRANCE-MAT",
+      "slug": "manor_entrance_mat",
+      "name_zh": "半圆入口地垫",
+      "component_family": "entrance_mat",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        3.0,
+        1.500393,
+        0.024
+      ],
+      "collection": "Component_manor_entrance_mat",
+      "root_object": "ROOT_manor_entrance_mat",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_entrance_mat/manor_entrance_mat_source_v017.blend",
+      "component_blend_sha256": "95c1327979011d2b2858e4d4c766ac1672970193c2759094418bc725f7c42d7c",
+      "geometry_fingerprint": "e44678fd6e71a384bc22b7c615e2d0cf2826d22d07860f7327f6e2d51d0ec17a",
+      "vertex_count": 834,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_entrance_mat/env_manor_entrance_mat_visual_top3d.glb",
+      "glb_sha256": "894af8837b77bc29bc584b9b12f249e098d8166d0ce2d7a5b3847578e3fea157",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_entrance_mat/env_manor_entrance_mat_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "f9e22c5654201e18351ea16ad0cdc27e03479d745a53200c6696d748155845e5",
+      "source_bounds_size_m": [
+        3.0,
+        1.500393,
+        0.024
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SOFA",
+      "slug": "manor_sofa",
+      "name_zh": "三人红丝绒沙发3m",
+      "component_family": "seating",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        3.13,
+        1.0,
+        1.09
+      ],
+      "collection": "Component_manor_sofa",
+      "root_object": "ROOT_manor_sofa",
+      "instance_count": 2,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_sofa/manor_sofa_source_v017.blend",
+      "component_blend_sha256": "97a1485c97fea2249eb29e9bd484dbe751e993408a69ad091d5a0f1924e2e329",
+      "geometry_fingerprint": "d6ddb39d3d9d453edc4fe53cc16b6906846996b5abc3561f5f16b2709f234f59",
+      "vertex_count": 2311,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_sofa/env_manor_sofa_visual_top3d.glb",
+      "glb_sha256": "de6c8a80d6ee0752fa4aae0dfc5a2c6591c920dc3804c575d721e9988e151599",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_sofa/env_manor_sofa_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "b49542dd0041a0f1caf43c7f9c5b5281d07375fa04bfa5295a240e62b1a29450",
+      "source_bounds_size_m": [
+        3.13,
+        1.0,
+        1.09
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "slug": "manor_armchair",
+      "name_zh": "红丝绒扶手椅",
+      "component_family": "seating",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.23,
+        1.05,
+        1.09
+      ],
+      "collection": "Component_manor_armchair",
+      "root_object": "ROOT_manor_armchair",
+      "instance_count": 7,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_armchair/manor_armchair_source_v017.blend",
+      "component_blend_sha256": "6dfac268af96738f5c79925c95e6cf3fb9ff26d35e8392f7ea3ab7eb5c4c6ae7",
+      "geometry_fingerprint": "b9dec5ebbbad8c2e2e3b063c6f1672ecc103c7e9eeab3ad94dbf6974f179943f",
+      "vertex_count": 1074,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_armchair/env_manor_armchair_visual_top3d.glb",
+      "glb_sha256": "6c0c0584a4adaf24397ea5ef7f5471bfb512d413a412066556d3e5191c139a20",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_armchair/env_manor_armchair_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "e101fd418a41dd604df8b56c59dae8b1d4a14c48ebf385651f3bc6e759188679",
+      "source_bounds_size_m": [
+        1.23,
+        1.05,
+        1.09
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-OFFICE-CHAIR",
+      "slug": "manor_office_chair",
+      "name_zh": "前台办公椅",
+      "component_family": "seating",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.75,
+        0.795,
+        1.09
+      ],
+      "collection": "Component_manor_office_chair",
+      "root_object": "ROOT_manor_office_chair",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_office_chair/manor_office_chair_source_v017.blend",
+      "component_blend_sha256": "814458a54dffc177e16bdba7c360498784430aebc8ee3307341e52b5502d1f78",
+      "geometry_fingerprint": "496aa3c620d06ec49b3b6be7d63d5e13ebad6e24d802fc50242dcd2b89e4fa66",
+      "vertex_count": 1011,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_office_chair/env_manor_office_chair_visual_top3d.glb",
+      "glb_sha256": "4520edab207aee730a781cef477cf085689dbca424f354d037b8a3774e0a30f8",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_office_chair/env_manor_office_chair_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "eb08ac72131bee54f1029aa5cf5afea994eff1fc1c816e236a94abc665b5ca71",
+      "source_bounds_size_m": [
+        0.75,
+        0.795,
+        1.09
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-COFFEE-TABLE",
+      "slug": "manor_coffee_table",
+      "name_zh": "黑石圆形花几2m",
+      "component_family": "table",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        2.031112,
+        2.031112,
+        0.495555
+      ],
+      "collection": "Component_manor_coffee_table",
+      "root_object": "ROOT_manor_coffee_table",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_coffee_table/manor_coffee_table_source_v017.blend",
+      "component_blend_sha256": "f29886e52f0506d698e7998a5b8f5a3d5ca6cbf7daa7edc5bf4f231b6876bbf2",
+      "geometry_fingerprint": "0c12a64285ff7f823cdc8e7b16637d32fe7fe0ee432a3521784e128146a8f708",
+      "vertex_count": 4106,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_coffee_table/env_manor_coffee_table_visual_top3d.glb",
+      "glb_sha256": "cf0f5bdc2be2c35550d55c1755aeaacf9fb93283172b33725f9703863656c62f",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_coffee_table/env_manor_coffee_table_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "bf17af9541d1b052af8c34f7f91c103a9302738b625e1d2be5657e09e99a4be7",
+      "source_bounds_size_m": [
+        2.031112,
+        2.031112,
+        0.495555
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "slug": "manor_side_table",
+      "name_zh": "黄铜圆边几0.6m",
+      "component_family": "table",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.629259,
+        0.629259,
+        0.644627
+      ],
+      "collection": "Component_manor_side_table",
+      "root_object": "ROOT_manor_side_table",
+      "instance_count": 7,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_side_table/manor_side_table_source_v017.blend",
+      "component_blend_sha256": "dfda7a2b27a542ccd3cf547d441acbf4b86ba160f983ef1dc6d66533570b043c",
+      "geometry_fingerprint": "a185d5b95e4dd8271f0f9c96d804cf9d83a72fc596c629cd8459fdde8a1f2502",
+      "vertex_count": 2786,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_side_table/env_manor_side_table_visual_top3d.glb",
+      "glb_sha256": "103f098ea4145c3f4d845c9bf4c7c2aaca36cdc7561b23a46810c70c778eca66",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_side_table/env_manor_side_table_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "5457f1b5f84effd99af3531e60bbcb2f87e5d000785b3ddccc267781ece228e9",
+      "source_bounds_size_m": [
+        0.629259,
+        0.629259,
+        0.644627
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CONSOLE",
+      "slug": "manor_console",
+      "name_zh": "实木窄边桌",
+      "component_family": "table",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.34,
+        0.4925,
+        0.85
+      ],
+      "collection": "Component_manor_console",
+      "root_object": "ROOT_manor_console",
+      "instance_count": 3,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend",
+      "component_blend_sha256": "e09d9085065974f705280e741cb0c36dabd92fdd8bef2be672dd7a72f945d30e",
+      "geometry_fingerprint": "12efb0254f9e2f52569ad55b3d6a7da7c515c21b53085afaf00e924ceaf19251",
+      "vertex_count": 846,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_console/env_manor_console_visual_top3d.glb",
+      "glb_sha256": "d20ce33f4fe31b528fdaec7980ec923c3462738b590dde9ee781278801aa4d21",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_console/env_manor_console_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "1058619a13ffeea6304211669fc950cec039881a9fef0520b960e4a8694931b8",
+      "source_bounds_size_m": [
+        1.34,
+        0.4925,
+        0.85
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+      "slug": "manor_reception_desk",
+      "name_zh": "弧形格栅接待台",
+      "component_family": "reception_desk",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        5.580289,
+        1.3175,
+        1.266835
+      ],
+      "collection": "Component_manor_reception_desk",
+      "root_object": "ROOT_manor_reception_desk",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_reception_desk/manor_reception_desk_source_v017.blend",
+      "component_blend_sha256": "b3ea4c48df66b44ad8a3fa22b0d4ca4dfefd842d430a2a14541126b07a23370c",
+      "geometry_fingerprint": "0a1354b7fc7d2864e0357708c53acacd896b194355868fb7b97c2ebf497105af",
+      "vertex_count": 13592,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_reception_desk/env_manor_reception_desk_visual_top3d.glb",
+      "glb_sha256": "ef44fa6e4325ed1d9991258e286ae6cd89583b9f74f733fc11106bab077c4ac9",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_reception_desk/env_manor_reception_desk_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "1fe9afc3ceb78a1547ddb7ad83e271725747a0b2d8a395d91e975636fdceeb7e",
+      "source_bounds_size_m": [
+        5.580289,
+        1.3175,
+        1.266835
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BED",
+      "slug": "manor_bed",
+      "name_zh": "标准双人床2x1.8m",
+      "component_family": "bed",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        2.04,
+        2.13,
+        1.25
+      ],
+      "collection": "Component_manor_bed",
+      "root_object": "ROOT_manor_bed",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bed/manor_bed_source_v017.blend",
+      "component_blend_sha256": "a3de1ca154bed9e78831d29b4467112adfad8c0de601502ffc87d107c4028b4a",
+      "geometry_fingerprint": "eeb0cf6c0aa379779bf81f3cb064c50881a873b966b024c57f6b4a98318f83bf",
+      "vertex_count": 2093,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_bed/env_manor_bed_visual_top3d.glb",
+      "glb_sha256": "1294eeab2f0766064d622293bff42a07dc1659a29b0b788ff399801e764789fb",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bed/env_manor_bed_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "992057393567e224bf9136deb079d2e54ccc013fc0e3ee3089868baaf2f6cc9e",
+      "source_bounds_size_m": [
+        2.04,
+        2.13,
+        1.25
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BENCH",
+      "slug": "manor_bench",
+      "name_zh": "红绒床尾凳",
+      "component_family": "bench",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.5,
+        0.45,
+        0.57
+      ],
+      "collection": "Component_manor_bench",
+      "root_object": "ROOT_manor_bench",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bench/manor_bench_source_v017.blend",
+      "component_blend_sha256": "0b5c5c72599b0b7742249e20876e9ed00fb8e752cf3f395bda3ef00207573ad3",
+      "geometry_fingerprint": "d036c9d042b516eb0eac579b9eae1833001ab0b87a0b1346ead02c26c3e0c673",
+      "vertex_count": 485,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_bench/env_manor_bench_visual_top3d.glb",
+      "glb_sha256": "d870ea016220e0f9012eefb1e701bfb1f6fbaf542e9a3f657291f4df1c1d89b1",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bench/env_manor_bench_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "51742d6c2c924889bda99f33e18ca90b312241917693e0012a141ff3bcb5184f",
+      "source_bounds_size_m": [
+        1.5,
+        0.45,
+        0.57
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-NIGHTSTAND",
+      "slug": "manor_nightstand",
+      "name_zh": "实木床头柜",
+      "component_family": "cabinet",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.6,
+        0.5925,
+        0.61
+      ],
+      "collection": "Component_manor_nightstand",
+      "root_object": "ROOT_manor_nightstand",
+      "instance_count": 2,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_nightstand/manor_nightstand_source_v017.blend",
+      "component_blend_sha256": "fbbfa174314abab4985795c255e26a78ca41eb91cb026fb245858d99a668b282",
+      "geometry_fingerprint": "f3e2884c796e49d40e4868ded7092c774bace89e7d9d1683dfc92993ae59ddae",
+      "vertex_count": 846,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_nightstand/env_manor_nightstand_visual_top3d.glb",
+      "glb_sha256": "e93e4e2291490a38a561f6b8818aa5db8549d81ae91a6472f179e886882f7d73",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_nightstand/env_manor_nightstand_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "e2ad401517ae78ba25c601b188690df4411db040bcb8a9c0f9909c0a86c0f490",
+      "source_bounds_size_m": [
+        0.6,
+        0.5925,
+        0.61
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WARDROBE",
+      "slug": "manor_wardrobe",
+      "name_zh": "嵌入式衣柜",
+      "component_family": "cabinet",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.84,
+        0.6925,
+        2.53
+      ],
+      "collection": "Component_manor_wardrobe",
+      "root_object": "ROOT_manor_wardrobe",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wardrobe/manor_wardrobe_source_v017.blend",
+      "component_blend_sha256": "77baea9405940cecb1de255257a54b05a27a546883a7194cf36a2fb60384d3c6",
+      "geometry_fingerprint": "2a4574cca1cf7bfd82df30ed6cc68589790d7b4aaffb247f6706847a22f0dd7b",
+      "vertex_count": 1196,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_wardrobe/env_manor_wardrobe_visual_top3d.glb",
+      "glb_sha256": "ae087a0b5a5be8c0a1bc37adb56282dd4beb033c5abdabcffd2f22427ca94759",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wardrobe/env_manor_wardrobe_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "5851ec0bf32ef0730e69654266c2c25a5b9f415bd99d1cca6a9c65599b7349e8",
+      "source_bounds_size_m": [
+        1.84,
+        0.6925,
+        2.53
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BOOKCASE",
+      "slug": "manor_bookcase",
+      "name_zh": "开放式书架",
+      "component_family": "cabinet",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.34,
+        0.4975,
+        2.174724
+      ],
+      "collection": "Component_manor_bookcase",
+      "root_object": "ROOT_manor_bookcase",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bookcase/manor_bookcase_source_v017.blend",
+      "component_blend_sha256": "7577d78759d24d12e627179779bfd038c6701b56fddb696814724e2b9a24faaa",
+      "geometry_fingerprint": "5995f12144088596392cc2348542c93fc468c142879b915e0fc2ba27da23a332",
+      "vertex_count": 4320,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_bookcase/env_manor_bookcase_visual_top3d.glb",
+      "glb_sha256": "765c51393c3a32b0be9841c1de3b12179bcef9b5ecf8a5ce553606c30f3ed9bb",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bookcase/env_manor_bookcase_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "d4ee0ccfd2ce8dd421b571dda4388fc6cdc875b59f7fb8b8a69b7ebb9543bf6f",
+      "source_bounds_size_m": [
+        1.34,
+        0.4975,
+        2.174724
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-LUGGAGE-CART",
+      "slug": "manor_luggage_cart",
+      "name_zh": "黄铜行李车",
+      "component_family": "luggage_cart",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.05,
+        0.65,
+        1.66958
+      ],
+      "collection": "Component_manor_luggage_cart",
+      "root_object": "ROOT_manor_luggage_cart",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_luggage_cart/manor_luggage_cart_source_v017.blend",
+      "component_blend_sha256": "06ef0b627db2155be49404483fa99a1e4d5e4a758712aa9dab87389c28adf15c",
+      "geometry_fingerprint": "aa8aa19d25a8be26df7d6f8a3cac4465793aad2a988a93f6eb71807ad845d9da",
+      "vertex_count": 1190,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_luggage_cart/env_manor_luggage_cart_visual_top3d.glb",
+      "glb_sha256": "91c2575e4089e5fb5a20fd9688c5de07f862d6a95e412d65493213eb1c1e6354",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_luggage_cart/env_manor_luggage_cart_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "728f3de77454c059fccb8a3dae3724632df013d2e7dacccb9b03647d035a4d94",
+      "source_bounds_size_m": [
+        1.05,
+        0.65,
+        1.66958
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PAINTING",
+      "slug": "manor_painting",
+      "name_zh": "黄铜框风景画",
+      "component_family": "painting",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.455,
+        0.152,
+        0.96
+      ],
+      "collection": "Component_manor_painting",
+      "root_object": "ROOT_manor_painting",
+      "instance_count": 5,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_painting/manor_painting_source_v017.blend",
+      "component_blend_sha256": "b87e9eacf34bf48028f4b960dd742697ce265c7ca88de9638eb9055f91724383",
+      "geometry_fingerprint": "fc2e491ecc2c416c7136318909267a413636f2769ec2e2670f5ee14028b23744",
+      "vertex_count": 750,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_painting/env_manor_painting_visual_top3d.glb",
+      "glb_sha256": "0b44b187b7ca21cf300caef4227317504a301d396a29a2d2c9b57373a9b20aac",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_painting/env_manor_painting_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "5fcb55b516840973cc6be1a5f32c099401e0cb6f65320f3680e005fc68e7b16e",
+      "source_bounds_size_m": [
+        1.455,
+        0.152,
+        0.96
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-GRILLE",
+      "slug": "manor_wall_grille",
+      "name_zh": "接待区装饰格栅",
+      "component_family": "wall_grille",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        2.6,
+        0.17,
+        1.2
+      ],
+      "collection": "Component_manor_wall_grille",
+      "root_object": "ROOT_manor_wall_grille",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_grille/manor_wall_grille_source_v017.blend",
+      "component_blend_sha256": "5ba85edbb31cb733bb7492f2ae665494877cb11cd9b5db5d09b49a6742a7f2c0",
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_wall_grille/env_manor_wall_grille_visual_top3d.glb",
+      "glb_sha256": "b255e1a3a253a33351d70a717946a6a95a9ca98ed74e698c8992da2390cd766f",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_grille/env_manor_wall_grille_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "0e5927485fbcf625f0748a9b540738d115c8169ce05169886202bef7621b9b8b",
+      "source_bounds_size_m": [
+        2.6,
+        0.17,
+        1.2
+      ],
+      "geometry_fingerprint": "e0e11757b16d3378bdb0bcae100bc04f7153a7198ac2b9f24065a5637f37a672",
+      "vertex_count": 232
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "slug": "manor_wall_lamp",
+      "name_zh": "暖光黄铜壁灯",
+      "component_family": "lamp",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.384,
+        0.542,
+        0.7175
+      ],
+      "collection": "Component_manor_wall_lamp",
+      "root_object": "ROOT_manor_wall_lamp",
+      "instance_count": 12,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_lamp/manor_wall_lamp_source_v017.blend",
+      "component_blend_sha256": "d35f139e38b0e04c80093a7a2e414ec8d5ca7715399e11659e078b371ea053ee",
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_wall_lamp/env_manor_wall_lamp_visual_top3d.glb",
+      "glb_sha256": "12654198b711a1ab86bf876852c28dc575991851b7a5d90defce23b841e9085a",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_lamp/env_manor_wall_lamp_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "bb6c71f5ec0142b49e6ad0b99bd606fb30f3d1853268fd5eae2e1df9fdbcfe20",
+      "source_bounds_size_m": [
+        0.384,
+        0.542,
+        0.7175
+      ],
+      "geometry_fingerprint": "bd25836f4e9328146755517c95628e827b26b2b46d78561f78cd638353e0428a",
+      "vertex_count": 1048
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "slug": "manor_table_lamp",
+      "name_zh": "暖光黄铜台灯",
+      "component_family": "lamp",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.384,
+        0.384,
+        0.6975
+      ],
+      "collection": "Component_manor_table_lamp",
+      "root_object": "ROOT_manor_table_lamp",
+      "instance_count": 9,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend",
+      "component_blend_sha256": "9af5bd7ce5254e0231f8c28d04503d377f358696d8cbf977115e9f64e4d9c8d6",
+      "geometry_fingerprint": "aa3d06b4b530c90929cef05e76a7c35fd94d24098410a2d29b509c043c8cf993",
+      "vertex_count": 1047,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_table_lamp/env_manor_table_lamp_visual_top3d.glb",
+      "glb_sha256": "044fa0e9d2a871c5f71133ca54edb2943d7eb6cca1ed9a746a599013d2b9cb26",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_table_lamp/env_manor_table_lamp_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "1cf655e03d88784e0bb30c0edd1fd91bca3df5d36495383a511419a1b01010fb",
+      "source_bounds_size_m": [
+        0.384,
+        0.384,
+        0.6975
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "slug": "manor_plant_large",
+      "name_zh": "大型常绿盆栽",
+      "component_family": "plant",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.543802,
+        1.511668,
+        1.609846
+      ],
+      "collection": "Component_manor_plant_large",
+      "root_object": "ROOT_manor_plant_large",
+      "instance_count": 9,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_large/manor_plant_large_source_v017.blend",
+      "component_blend_sha256": "bbb8953a5120765af7047e429c9bd371b3a256358a032f8664b79c9bd9c720f4",
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_plant_large/env_manor_plant_large_visual_top3d.glb",
+      "glb_sha256": "369dbadb3c0d47a6b0ea74773bf5a904b32611bf4c23314d6918075ca6cede37",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_plant_large/env_manor_plant_large_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "a89c91c93a2fc0184b5d8a65c53af7a88b08bd6735d1b70104b4953b12455fa3",
+      "source_bounds_size_m": [
+        1.543802,
+        1.511668,
+        1.609846
+      ],
+      "geometry_fingerprint": "42fe2f2376e5f5424c9b165c8b389b0f7d0908964efa6f05ba9c8d3002b9ae2c",
+      "vertex_count": 4071
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-COMPACT",
+      "slug": "manor_plant_compact",
+      "name_zh": "小型常绿盆栽",
+      "component_family": "plant",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.968996,
+        0.996497,
+        1.375723
+      ],
+      "collection": "Component_manor_plant_compact",
+      "root_object": "ROOT_manor_plant_compact",
+      "instance_count": 2,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend",
+      "component_blend_sha256": "cf425cb0fb45daad182e4ff76be3249ca7d1cfb1da7b8659245c01d7ddd55090",
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_plant_compact/env_manor_plant_compact_visual_top3d.glb",
+      "glb_sha256": "8116d1d31347779e9394d60a930a856a28fea2cbff21fffcdd59ab7a7aae2dc6",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_plant_compact/env_manor_plant_compact_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "3b68018ceef1342a6a602e0ddbdc5c46669a2e072513feacb64adca3f9c268db",
+      "source_bounds_size_m": [
+        0.968996,
+        0.996497,
+        1.375723
+      ],
+      "geometry_fingerprint": "c9ada05ad87954fbb71a6ab370ff6313789b999fa1f544b5be4dbb5ee263e634",
+      "vertex_count": 2856
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+      "slug": "manor_flower_arrangement",
+      "name_zh": "红花插花摆件",
+      "component_family": "plant",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": true,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.497855,
+        0.585129,
+        1.166766
+      ],
+      "collection": "Component_manor_flower_arrangement",
+      "root_object": "ROOT_manor_flower_arrangement",
+      "instance_count": 2,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v017.blend",
+      "component_blend_sha256": "a5a9f15b4684692e545914b1e77cb7cecc62f99e1cf8239ed5172a746c35b90e",
+      "geometry_fingerprint": "458e7414bb68b7be5c267d2ab1cc3769176f4c8498159a6a28c4867db41f39f6",
+      "vertex_count": 6167,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_flower_arrangement/env_manor_flower_arrangement_visual_top3d.glb",
+      "glb_sha256": "def3c47e7febf4e26be835cbe9b86364d6555a200713e6e76b332ea1e7e0931e",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_flower_arrangement/env_manor_flower_arrangement_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "f375a3da6af0d64f2b966a89880e673a673f915b86ec4418bf1c8f001762734a",
+      "source_bounds_size_m": [
+        0.497855,
+        0.585129,
+        1.166766
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BATHTUB",
+      "slug": "manor_bathtub",
+      "name_zh": "独立铸铁浴缸1.7m",
+      "component_family": "bathtub",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.7,
+        0.843,
+        0.800426
+      ],
+      "collection": "Component_manor_bathtub",
+      "root_object": "ROOT_manor_bathtub",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bathtub/manor_bathtub_source_v017.blend",
+      "component_blend_sha256": "94271a86ace8cbd064f65830c9e7aa6e7d2888313a55a33b22ef56aa3cff4b72",
+      "geometry_fingerprint": "b8b6b6b699b4a15f8d52e1341bf6a504e7592f0d0b0b07f6b7262170e23ce5eb",
+      "vertex_count": 1848,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_bathtub/env_manor_bathtub_visual_top3d.glb",
+      "glb_sha256": "27f2371aede4295d530ef3ae36dfc44c2d0139f13ac300e0a20dc56fb576492b",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bathtub/env_manor_bathtub_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "8816ad856b91d58ffd0bcccab538e4869491bd778f7e2652931136a59fa31269",
+      "source_bounds_size_m": [
+        1.7,
+        0.843,
+        0.800426
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-VANITY",
+      "slug": "manor_vanity",
+      "name_zh": "双台盆洗手台2m",
+      "component_family": "vanity",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        2.04,
+        0.6708,
+        1.17707
+      ],
+      "collection": "Component_manor_vanity",
+      "root_object": "ROOT_manor_vanity",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_vanity/manor_vanity_source_v017.blend",
+      "component_blend_sha256": "e12a97abc67d1b43af5bc721422ba29ffb7e2989e254348fe629f337d14de0f8",
+      "geometry_fingerprint": "913068e93855d42843ed617401c1b450ce8dd56f393bd2c7c58dd1565ad7a6f7",
+      "vertex_count": 2264,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_vanity/env_manor_vanity_visual_top3d.glb",
+      "glb_sha256": "60f468223f3f54276ebab11a85a0294404b46abe21ad6617a6a71ff7244b8d0a",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_vanity/env_manor_vanity_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "dfe4d36dad07e47da3f7c84f895bb0fe4f077db67320e370334741c7ccdb71dd",
+      "source_bounds_size_m": [
+        2.04,
+        0.6708,
+        1.17707
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-MIRROR",
+      "slug": "manor_mirror",
+      "name_zh": "圆形黄铜梳妆镜",
+      "component_family": "mirror",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.948,
+        0.0715,
+        0.948
+      ],
+      "collection": "Component_manor_mirror",
+      "root_object": "ROOT_manor_mirror",
+      "instance_count": 2,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_mirror/manor_mirror_source_v017.blend",
+      "component_blend_sha256": "922eb8266d01efd46c4487e2d122cacb4eb125ddbae10e64472b8c860bc24edf",
+      "geometry_fingerprint": "269e46d769f1ddc41a0bb8600c786daf0adf7fecc74ab8206e308b1ec1e3de0d",
+      "vertex_count": 1274,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_mirror/env_manor_mirror_visual_top3d.glb",
+      "glb_sha256": "fdca80ef6bab67f3b20dfe9a929eee936ec3b89670531fa91c6cc7cd96d3caa6",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_mirror/env_manor_mirror_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "1031ffa43bc2d678a36a3db93dd3e9e0193e9121ff383867e62421a30fe2ebd2",
+      "source_bounds_size_m": [
+        0.948,
+        0.0715,
+        0.948
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TOILET",
+      "slug": "manor_toilet",
+      "name_zh": "陶瓷马桶",
+      "component_family": "toilet",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.42,
+        0.63,
+        0.81
+      ],
+      "collection": "Component_manor_toilet",
+      "root_object": "ROOT_manor_toilet",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_toilet/manor_toilet_source_v017.blend",
+      "component_blend_sha256": "b1326ba37f5f9fd8c089987951000b2621ae971192ded960c2dbd8e3572547be",
+      "geometry_fingerprint": "68a473c2a848e58d6aae447e91434405cdd1b9a093ef725ca2e51316623a3da3",
+      "vertex_count": 755,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_toilet/env_manor_toilet_visual_top3d.glb",
+      "glb_sha256": "c5fe9ae06238c1d4355374a1d3cf9c48da0e1b1f15c7080e81e92626ae4e8d70",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_toilet/env_manor_toilet_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "5ca72ecfeffeaa5730ee34dbeb482aa40f3ce68f139492997f8411bfce1f2e8b",
+      "source_bounds_size_m": [
+        0.42,
+        0.63,
+        0.81
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TOWEL-RAIL",
+      "slug": "manor_towel_rail",
+      "name_zh": "黄铜毛巾架",
+      "component_family": "towel_rail",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.676,
+        0.25,
+        0.616
+      ],
+      "collection": "Component_manor_towel_rail",
+      "root_object": "ROOT_manor_towel_rail",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_towel_rail/manor_towel_rail_source_v017.blend",
+      "component_blend_sha256": "e792f749a3da8c2e9a5437ef676d375ba0b6aedc6070a35434641864772ba1d1",
+      "geometry_fingerprint": "91ab8f675e56e6c39e55877e4560b83ff9e28fe019450207c0e7cf6f3f15b92a",
+      "vertex_count": 96,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_towel_rail/env_manor_towel_rail_visual_top3d.glb",
+      "glb_sha256": "906077fb58e69277d9725a74d93993bf2b600beb48170bc468d66d10bbbaaef1",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_towel_rail/env_manor_towel_rail_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "3b047e580f04a1b8985c3464ce3d5bbbf272daeca3721750de520719fd937002",
+      "source_bounds_size_m": [
+        0.676,
+        0.25,
+        0.616
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CANDELABRA",
+      "slug": "manor_candelabra",
+      "name_zh": "三头烛台",
+      "component_family": "candelabra",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": true,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.56,
+        0.32,
+        0.64
+      ],
+      "collection": "Component_manor_candelabra",
+      "root_object": "ROOT_manor_candelabra",
+      "instance_count": 2,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_candelabra/manor_candelabra_source_v017.blend",
+      "component_blend_sha256": "51c70abf5675cdc120bf8a0bcb08ea1406edae5c7ead233f25331f0045803945",
+      "geometry_fingerprint": "033caccc23471b0a5a8bcd51e11390b8fb4af5fb17555d6be3369acfc30ca8af",
+      "vertex_count": 519,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_candelabra/env_manor_candelabra_visual_top3d.glb",
+      "glb_sha256": "25efee37596c1e0d81300205ef3da995be5d7f147a2498da5fecb14e007e9acd",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_candelabra/env_manor_candelabra_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "300dcec3e8c95db2f47a4edcc54134bd5ab6b56579b4a41777c9fb8cd079806a",
+      "source_bounds_size_m": [
+        0.56,
+        0.32,
+        0.64
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DESK-DOCUMENTS",
+      "slug": "manor_desk_documents",
+      "name_zh": "前台文件陈设",
+      "component_family": "desk_documents",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": true,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        0.400506,
+        0.281344,
+        0.0505
+      ],
+      "collection": "Component_manor_desk_documents",
+      "root_object": "ROOT_manor_desk_documents",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend",
+      "component_blend_sha256": "12a92a9e68280b825f1abd66a637ca23e038c65dcf6668e30bb7d5f894a0680c",
+      "geometry_fingerprint": "14a6bb415202c2729a1bb05bdc689f362d25709f8df55b9404016c4eb383872e",
+      "vertex_count": 88,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_desk_documents/env_manor_desk_documents_visual_top3d.glb",
+      "glb_sha256": "cc43aa55c6e0496873827e1ee2faf621271df753e96bb7d294b829f38d5a3eb1",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_desk_documents/env_manor_desk_documents_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "4d7110d6285f784cb45008c6e970d309fc412c9f742f445cc7f0f58419e6b995",
+      "source_bounds_size_m": [
+        0.400506,
+        0.281344,
+        0.0505
+      ]
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BATH-SCREEN",
+      "slug": "manor_bath_screen",
+      "name_zh": "卫浴独立木隔断",
+      "component_family": "bath_screen",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
+      "category": "furnishing",
+      "scope": "shared",
+      "serves_room_types": [
+        "COMMON_ROOM",
+        "SAFE_ROOM"
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "fixed_display_attachment": false,
+      "palette_uv_layer": "PaletteUV",
+      "bounds_size_m": [
+        1.19,
+        0.12,
+        1.4
+      ],
+      "collection": "Component_manor_bath_screen",
+      "root_object": "ROOT_manor_bath_screen",
+      "instance_count": 1,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bath_screen/manor_bath_screen_source_v017.blend",
+      "component_blend_sha256": "633db4e8c7b739255de8a66a9a6c7ff95c53efb83faaac5975188aad5ee8137f",
+      "geometry_fingerprint": "bb94379b754fd1847e6d80172ab7e87384ef8d7f92cb3fcddc7c0aafcc6156f6",
+      "vertex_count": 344,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_bath_screen/env_manor_bath_screen_visual_top3d.glb",
+      "glb_sha256": "9ae50144ab554efc6e08850c8cb0d119c447f091e098e58c7af8d6f3f8be0fee",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bath_screen/env_manor_bath_screen_root_top3d.tscn",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "46b247a3cad8c737733fed07ac8885868604775c48bae839d1ed559435f58f49",
+      "source_bounds_size_m": [
+        1.19,
+        0.12,
+        1.4
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "asset_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "slug": "manor_wall_standard",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 16,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1092,
+      "triangles_after": 1088,
+      "reduction_ratio": 0.003663003663003663,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "c82ec0ac6255ea27c312726fc68cd8a092bb9f243453da8b4ba17d196aecde56"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "slug": "manor_wall_door",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 32,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 984,
+      "triangles_after": 976,
+      "reduction_ratio": 0.008130081300813009,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "40f2b25719c8eee2ef56704cc75c4a47b4b26df68b1296209e6552aad9acf49f"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "slug": "manor_wall_window",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 16,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1260,
+      "triangles_after": 1256,
+      "reduction_ratio": 0.0031746031746031746,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "7b10e84840bb202b1ad926e6a474b55b761308c996b2aa8d5bfd001f98212bf2"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "slug": "manor_floor_wood",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 0,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 489,
+      "triangles_after": 489,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "c6a2b60bf5fc5b51f55ad0d792d73dc8ed520a0c1761ae54c3ad422ef2ca41cd"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "slug": "manor_floor_stone",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 0,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1012,
+      "triangles_after": 1012,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "5d9944d068b504825fd73ed5cb3329dadbcdd03e90571ce5c1b238eab45694b4"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-FLOOR-BATH",
+      "slug": "manor_floor_bath",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 2,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 2412,
+      "triangles_after": 2408,
+      "reduction_ratio": 0.001658374792703151,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "1321e3439d1a56083a9b21845e09105144b55ed8a0d61ca7a15da1eb020a41c3"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+      "slug": "manor_door_double",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 32,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 2708,
+      "triangles_after": 2644,
+      "reduction_ratio": 0.023633677991137372,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "485606c8aa15c80b502ca0dde0c429ebb00ae66537ae9e52e864b0670659d268"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-DOOR-ARCH",
+      "slug": "manor_door_arch",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 32,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 5184,
+      "triangles_after": 5120,
+      "reduction_ratio": 0.012345679012345678,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "e40dc71a93c5d5eec48c98617c55b526297fd81af94f33222c95775e4ed9cc18"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+      "slug": "manor_rug_lounge",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 1278,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 87128,
+      "triangles_after": 87128,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "ab59d27ffd46f466974ed095284fe6a2f5c188550f50f5ee90e17f10b13bdd93"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "slug": "manor_rug_runner",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 174,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 14040,
+      "triangles_after": 14040,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "4362d1e8281b3fb084e3a34c903602bc31b877d3b35be7bbee0e719b48ebdcdd"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-RUG-BEDROOM",
+      "slug": "manor_rug_bedroom",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 156,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 13648,
+      "triangles_after": 13648,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "0b5687cd32c6c5166d6d68d9acd72c25f3a0c184868c5b1ab5f6e7f1b44381f1"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-ENTRANCE-MAT",
+      "slug": "manor_entrance_mat",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 0,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1608,
+      "triangles_after": 1608,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "e44678fd6e71a384bc22b7c615e2d0cf2826d22d07860f7327f6e2d51d0ec17a"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-SOFA",
+      "slug": "manor_sofa",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 377,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 4772,
+      "triangles_after": 4371,
+      "reduction_ratio": 0.08403185247275775,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "d6ddb39d3d9d453edc4fe53cc16b6906846996b5abc3561f5f16b2709f234f59"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "slug": "manor_armchair",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 134,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 2116,
+      "triangles_after": 1974,
+      "reduction_ratio": 0.0671077504725898,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "b9dec5ebbbad8c2e2e3b063c6f1672ecc103c7e9eeab3ad94dbf6974f179943f"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-OFFICE-CHAIR",
+      "slug": "manor_office_chair",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 117,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1988,
+      "triangles_after": 1867,
+      "reduction_ratio": 0.06086519114688129,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "496aa3c620d06ec49b3b6be7d63d5e13ebad6e24d802fc50242dcd2b89e4fa66"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-COFFEE-TABLE",
+      "slug": "manor_coffee_table",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 94,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 8268,
+      "triangles_after": 8172,
+      "reduction_ratio": 0.011611030478955007,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "0c12a64285ff7f823cdc8e7b16637d32fe7fe0ee432a3521784e128146a8f708"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "slug": "manor_side_table",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 478,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 6432,
+      "triangles_after": 5568,
+      "reduction_ratio": 0.13432835820895522,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "a185d5b95e4dd8271f0f9c96d804cf9d83a72fc596c629cd8459fdde8a1f2502"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-CONSOLE",
+      "slug": "manor_console",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 30,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1604,
+      "triangles_after": 1564,
+      "reduction_ratio": 0.02493765586034913,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "12efb0254f9e2f52569ad55b3d6a7da7c515c21b53085afaf00e924ceaf19251"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+      "slug": "manor_reception_desk",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 128,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 27184,
+      "triangles_after": 26928,
+      "reduction_ratio": 0.009417304296645085,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "0a1354b7fc7d2864e0357708c53acacd896b194355868fb7b97c2ebf497105af"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-BED",
+      "slug": "manor_bed",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 167,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 4040,
+      "triangles_after": 3868,
+      "reduction_ratio": 0.04257425742574258,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "eeb0cf6c0aa379779bf81f3cb064c50881a873b966b024c57f6b4a98318f83bf"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-BENCH",
+      "slug": "manor_bench",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 27,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 876,
+      "triangles_after": 848,
+      "reduction_ratio": 0.0319634703196347,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "d036c9d042b516eb0eac579b9eae1833001ab0b87a0b1346ead02c26c3e0c673"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-NIGHTSTAND",
+      "slug": "manor_nightstand",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 30,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1604,
+      "triangles_after": 1564,
+      "reduction_ratio": 0.02493765586034913,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "f3e2884c796e49d40e4868ded7092c774bace89e7d9d1683dfc92993ae59ddae"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-WARDROBE",
+      "slug": "manor_wardrobe",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 60,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 2320,
+      "triangles_after": 2240,
+      "reduction_ratio": 0.034482758620689655,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "2a4574cca1cf7bfd82df30ed6cc68589790d7b4aaffb247f6706847a22f0dd7b"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-BOOKCASE",
+      "slug": "manor_bookcase",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 432,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 9096,
+      "triangles_after": 8232,
+      "reduction_ratio": 0.09498680738786279,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "5995f12144088596392cc2348542c93fc468c142879b915e0fc2ba27da23a332"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-LUGGAGE-CART",
+      "slug": "manor_luggage_cart",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 90,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 2436,
+      "triangles_after": 2340,
+      "reduction_ratio": 0.03940886699507389,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "aa8aa19d25a8be26df7d6f8a3cac4465793aad2a988a93f6eb71807ad845d9da"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-PAINTING",
+      "slug": "manor_painting",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 242,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1688,
+      "triangles_after": 1424,
+      "reduction_ratio": 0.15639810426540285,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "fc2e491ecc2c416c7136318909267a413636f2769ec2e2670f5ee14028b23744"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-WALL-GRILLE",
+      "slug": "manor_wall_grille",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 0,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 348,
+      "triangles_after": 348,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "e0e11757b16d3378bdb0bcae100bc04f7153a7198ac2b9f24065a5637f37a672"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "slug": "manor_wall_lamp",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 52,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 2088,
+      "triangles_after": 2032,
+      "reduction_ratio": 0.02681992337164751,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "bd25836f4e9328146755517c95628e827b26b2b46d78561f78cd638353e0428a"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "slug": "manor_table_lamp",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 45,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 2064,
+      "triangles_after": 2016,
+      "reduction_ratio": 0.023255813953488372,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "aa3d06b4b530c90929cef05e76a7c35fd94d24098410a2d29b509c043c8cf993"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "slug": "manor_plant_large",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 85,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 6800,
+      "triangles_after": 6712,
+      "reduction_ratio": 0.012941176470588235,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "42fe2f2376e5f5424c9b165c8b389b0f7d0908964efa6f05ba9c8d3002b9ae2c"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-PLANT-COMPACT",
+      "slug": "manor_plant_compact",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 85,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 5000,
+      "triangles_after": 4912,
+      "reduction_ratio": 0.0176,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "c9ada05ad87954fbb71a6ab370ff6313789b999fa1f544b5be4dbb5ee263e634"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+      "slug": "manor_flower_arrangement",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 2549,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 14416,
+      "triangles_after": 11512,
+      "reduction_ratio": 0.20144284128745837,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "458e7414bb68b7be5c267d2ab1cc3769176f4c8498159a6a28c4867db41f39f6"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-BATHTUB",
+      "slug": "manor_bathtub",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 88,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 3698,
+      "triangles_after": 3602,
+      "reduction_ratio": 0.025959978366684695,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "b8b6b6b699b4a15f8d52e1341bf6a504e7592f0d0b0b07f6b7262170e23ce5eb"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-VANITY",
+      "slug": "manor_vanity",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 0,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 4248,
+      "triangles_after": 4248,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "913068e93855d42843ed617401c1b450ce8dd56f393bd2c7c58dd1565ad7a6f7"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-MIRROR",
+      "slug": "manor_mirror",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 78,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 2624,
+      "triangles_after": 2544,
+      "reduction_ratio": 0.03048780487804878,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "269e46d769f1ddc41a0bb8600c786daf0adf7fecc74ab8206e308b1ec1e3de0d"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-TOILET",
+      "slug": "manor_toilet",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 69,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1484,
+      "triangles_after": 1412,
+      "reduction_ratio": 0.04851752021563342,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "68a473c2a848e58d6aae447e91434405cdd1b9a093ef725ca2e51316623a3da3"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-TOWEL-RAIL",
+      "slug": "manor_towel_rail",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 0,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 172,
+      "triangles_after": 172,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "91ab8f675e56e6c39e55877e4560b83ff9e28fe019450207c0e7cf6f3f15b92a"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-CANDELABRA",
+      "slug": "manor_candelabra",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 93,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 1020,
+      "triangles_after": 924,
+      "reduction_ratio": 0.09411764705882353,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "033caccc23471b0a5a8bcd51e11390b8fb4af5fb17555d6be3369acfc30ca8af"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-DESK-DOCUMENTS",
+      "slug": "manor_desk_documents",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 0,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 132,
+      "triangles_after": 132,
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "14a6bb415202c2729a1bb05bdc689f362d25709f8df55b9404016c4eb383872e"
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-BATH-SCREEN",
+      "slug": "manor_bath_screen",
+      "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/复古公馆_模块化组件母版_v017.blend",
+      "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "source_sha256_before": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+      "operations": {
+        "evaluate_bevels": true,
+        "merge_distance_m": 1e-06,
+        "merged_vertices": 48,
+        "zero_area_faces_removed": 0,
+        "recalculate_normals": true,
+        "internal_faces_preserved": "Reusable module sides, undersides, leaves and occluded furniture may be seen from other angles; retained."
+      },
+      "triangles_before": 756,
+      "triangles_after": 660,
+      "reduction_ratio": 0.12698412698412698,
+      "budget": null,
+      "budget_source": "No explicit triangle budget supplied; no fabricated cap.",
+      "zero_reduction_reason": "Only safe topology cleanup; no forced Decimate on furniture silhouettes or architectural interfaces.",
+      "geometry_fingerprint": "bb94379b754fd1847e6d80172ab7e87384ef8d7f92cb3fcddc7c0aafcc6156f6"
+    }
+  ],
+  "source_hash": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "palette_hash": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3"
+}

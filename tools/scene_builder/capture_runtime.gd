@@ -77,7 +77,7 @@ func _run() -> void:
 		var kind := str(room.get("room_type"))
 		var title := "远征%s-%s（%s）" % [level_id.trim_prefix("expedition_"), types.get(kind, kind), descriptor["room_id"]]
 		rows.append({"path": reference_path, "art_path": art_path, "runtime_source": true,
-			"room_id": descriptor["room_id"], "template_id": str(record.get("floor_plan_key", "")),
+			"room_id": descriptor["room_id"], "template_id": str(descriptor.get("template_id", "")),
 			"signature": descriptor["signature"], "level": "远征" + level_id.trim_prefix("expedition_"),
 			"kit": "游戏内房间 · 种子 %s" % str(level.get("run_seed")),
 			"label": title,
@@ -103,7 +103,7 @@ func _snapshot(room: Node3D, descriptor: Dictionary, level_id: String, scene_pat
 		["runtime_source_room_id", descriptor["room_id"]], ["level_id", level_id], ["room_id", descriptor["room_id"]],
 		["display_name", "远征%s-%s房" % [level_id.trim_prefix("expedition_"), descriptor["room_id"]]],
 		["size_m", dimensions], ["grid_unit_m", 5.0], ["wall_height_m", wall_height],
-		["template_id", str(record.get("floor_plan_key", descriptor["room_id"]))], ["footprint_is_rect", true],
+		["template_id", str(descriptor.get("template_id", descriptor["room_id"]))], ["footprint_is_rect", true],
 		["footprint_polygon_m", [[0, 0], [dimensions[0], 0], dimensions, [0, dimensions[1]]]]]:
 		result.set_meta(pair[0], pair[1])
 	for name in ["WhiteboxShell", "ArtComponents", "Lighting", "ConnectionPorts"]:
@@ -122,31 +122,25 @@ func _snapshot(room: Node3D, descriptor: Dictionary, level_id: String, scene_pat
 		copy.name = "ShellPart_%03d" % result.get_node("WhiteboxShell").get_child_count()
 		result.get_node("WhiteboxShell").add_child(copy)
 		_own(copy, result)
-	for value in room.get("connection_ports"):
-		var port := value as Dictionary
-		var marker := Marker3D.new()
-		marker.name = "Port_" + str(port.get("port_id", "P"))
-		var point: Array = port.get("position_m", [0, 0])
-		marker.position = Vector3(float(point[0]), float(port.get("height_m", 0)), float(point[1]))
-		var outward: Array = port.get("outward", [0, 1])
-		marker.rotation.y = atan2(float(outward[0]), float(outward[1]))
-		for key in port:
-			marker.set_meta(key, port[key])
-		result.get_node("ConnectionPorts").add_child(marker)
-		marker.owner = result
+	# **不写连接端口**：端口是几何层（决定门开在哪、通向谁），由运行时按本局算。
+	# 2026-10-31 之前这里把端口写进快照，于是同一份美术被不同门位的房间复用时，
+	# 端口必然互相矛盾 —— 而端口已经不进复用键，写进来只会误导。
 	return result
 
 func _wall_height(room: Node3D) -> float:
 	var height := 0.0
 	for mesh in room.find_children("*", "MeshInstance3D", true, false):
+		# 结构件判据统一走契约（2026-10-31）。**只认墙**：
+		# 角柱做到 2.9m、门楣在墙顶之上，混进来量出来的就不是墙高。
+		# 原来这里靠「名字里含 wall」绕开，那是随资产改名就失效的判据。
 		var node: Node = mesh
-		var wall := false
+		var is_wall := false
 		while node != room and node != null:
-			if str(node.name).to_lower().contains("wall") or str(node.scene_file_path).contains("prp_room_wall"):
-				wall = true
+			if CONTRACT.is_wall_prefab(str(node.scene_file_path)):
+				is_wall = true
 				break
 			node = node.get_parent()
-		if wall:
+		if is_wall:
 			var bounds: AABB = room.global_transform.affine_inverse() * mesh.global_transform * mesh.get_aabb()
 			height = maxf(height, bounds.end.y)
 	return height

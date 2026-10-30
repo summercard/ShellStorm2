@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/common_components/manor_painting/env_manor_painting_visual_top3d.glb" id="1"]
+
+[node name="manor_painting" type="Node3D"]
+metadata/asset_id = "ENV-EXP03-MANOR-PAINTING"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "黄铜框风景画"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_painting/manor_painting_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.455, 0.96, 0.152)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "painting"
+metadata/grid_unit_m = 0.0
+
+[node name="Visual" parent="." instance=ExtResource("1")]

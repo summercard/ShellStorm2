@@ -256,6 +256,23 @@ func _ai_overrides() -> Dictionary:
 	return {"monster_ai": ai.duplicate(true)}
 
 
+## 把关卡级「敌弹观感」参数塞进怪物配置（`monster_rules.projectile`）。
+##
+## 目前只有一项：`visual_scale`（弹体纯视觉尺寸倍率，远征03 = 2.0 —— 业主
+## 「怪物的子弹大小也放大一倍」）。**不写弹速**：弹速是怪种级属性，住在 `Enemy3D.PROFILES`，
+## 关层级只放「这一关看起来怎么样」，免得同一只怪在两张表里各有一份速度。
+##
+## 缺省（无本段或本段为空）不写任何键 ⇒ `Enemy3D` 回退 1.0，其余关卡逐字不变。
+func _projectile_look_overrides() -> Dictionary:
+	var section: Variant = _level_rules.get("projectile", null)
+	if not (section is Dictionary):
+		return {}
+	var cfg := section as Dictionary
+	if not cfg.has("visual_scale"):
+		return {}
+	return {"projectile_visual_scale": maxf(0.05, float(cfg["visual_scale"]))}
+
+
 ## 强化怪升级概率（读 `monster_rules.strong_variant`）。
 ##
 ## 返回 `0.0` = 本关不启用强化怪。此时 `_roll_strong_kind` **一次随机数都不掷**，
@@ -656,6 +673,7 @@ func _generate_basic_enemy(
 	# 强化怪在这三处都走「从原怪派生」，所以策划只需要维护原怪那一行。
 	result.merge(_stat_override(resolved_type), true)
 	result.merge(_ai_overrides(), true)
+	result.merge(_projectile_look_overrides(), true)
 	result.merge(_death_explosion_overrides(resolved_type), true)
 	return result
 
@@ -721,6 +739,7 @@ func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> 
 		)
 	base.merge(stat_override, true)
 	base.merge(_ai_overrides(), true)
+	base.merge(_projectile_look_overrides(), true)
 	base.merge(_death_explosion_overrides(base_type), true)
 	return base
 
@@ -794,6 +813,7 @@ func _generate_boss(floor: int, floor_level: int, request: Dictionary = {}) -> D
 	# 关卡级覆盖必须放**最后**：盖掉上面那条显示器Boss 身份基线，写 32000 就是 32000。
 	result.merge(_stat_override("boss"), true)
 	result.merge(_ai_overrides(), true)
+	result.merge(_projectile_look_overrides(), true)
 	result.merge(_death_explosion_overrides("boss"), true)
 	return result
 

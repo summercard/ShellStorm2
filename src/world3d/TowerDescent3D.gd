@@ -156,6 +156,33 @@ const NEW_GAME_OPENING_DROP_OFFSET := Vector3(5.3, 0.05, -0.7)
 ## ⚠️ 与 `authored_layout_peaceful` 无关：和平区只管门策略/刷怪/门扇，不碰这条。
 const INITIAL_LOOP_GATE_SEAL_ENABLED := false
 
+## —— 99F 基地西侧楼梯门（→ 100F 天台）= 不可开启（2026-10-30 主人要求）——
+## 「基地西边那个门，就是通往 100 层天台的那个门，做成不可开启的状态。
+##   过去点击后显示无法开启，需要钥匙。」
+##
+## 位置口径：`_declare_edge("start", "facility", "vertical", "west", "west", "west")`
+## —— 99F `facility` 的 west 门与 100F `start`（天台）的 west 门，是同一条垂直边
+## 两端的门板，中间由 `Stair_A` 连接。
+##
+## 锁**两端**，不是只锁基地那侧：只锁一侧等于单向放行 —— 玩家从天台推门下来
+## 照样能过，画面上的锁就只是装饰。门板两端同锁才叫「这条路封了」。
+##
+## 与既有门策略的区别：清房 / 房间钥匙 / 命运卡那套是「条件满足就能开」的
+## **局内门槛**；这里要的是**绝对拒绝**。`requires_key` 仅用于文案与快照语义，
+## 本局没有任何地方会发放这把钥匙 —— 以后要接钥匙，把 `_lock_..._door()`
+## 里的 `set_openable(false)` 改成按持有状态推导即可，门牌与合作交互都不用动。
+##
+## ⚠️ 不碰 `_base_rooftop_transit_door`（东侧阁楼门，100F 东侧上层门墙的外梯接口）。
+## 那是另一条上天台的路，本需求只封西侧楼梯，别顺手一起封。
+const BASE99_ROOFTOP_STAIR_DOOR_LOCKED := true
+const BASE99_ROOFTOP_STAIR_DOOR_LOCKED_REASON := "无法开启 · 需要钥匙"
+## 锁定状态的门牌：常驻在门顶上方，是玩家唯一能读到的整句文案 ——
+## `status_label` 所在面板自 10-17 起就整体隐藏，`DoorPrompt` 也已在
+## 圆点接管后退役（`RoomDoor3D.set_prompt_visible` 是空实现），
+## 圆点按键牌只显示「(e) 动词」，装不下「需要钥匙」这半句。
+const BASE99_ROOFTOP_STAIR_DOOR_SIGN_LIFT_M := 1.55
+const BASE99_ROOFTOP_STAIR_DOOR_SIGN_FONT_SIZE := 30
+
 const STAIR_WIDTH := TOWER_GEOMETRY.PASSAGE_WIDTH_M
 const STAIR_RUN := TOWER_GEOMETRY.RUN_LENGTH_M
 const STAIR_LANE_SPACING := TOWER_GEOMETRY.LANE_CENTER_SPACING_M
@@ -2981,6 +3008,10 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		# 标记「本房墙体由房间自己生成」。走廊连接器据此**不建几何** ——
 		# 见 `_room_walls_owned_by_static_layout()`。
 		record["procedural_shell"] = true
+		# 美术复用键：同一模板的美术套到所有同模板房间（场景工坊的存在意义）。
+		# **只对 flow 房间落这个键**：塔楼没有模板概念，多写一个字段会让
+		# `describe()` 从 room_id 换成模板名，签名跟着变 —— 那是无谓的漂移。
+		record["template_id"] = str(spec.get("template_id", ""))
 	# 和平区（enemyless 房）：本房不刷怪、门策略全放行、开局即算已清。
 	#
 	# **必须与 `authored_layout_shell` 解耦**：那段分支是"整房组件清单"的入口，
@@ -3096,6 +3127,11 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		var clutter_excluded: Array = clutter_plan.get("exclude_room_types", []) as Array
 		if not clutter_excluded.has(str(spec.get("type", ""))):
 			record["interactive_clutter"] = clutter_plan.duplicate(true)
+	# 程序化随机家具总开关（能力段，2026-10-30）：同样只看关卡数据有没有写这一段。
+	# 没写 / `enabled` 缺省 ⇒ 不落字段 ⇒ DungeonRoom3D 用缺省 true，行为逐字不变。
+	var furnishing_plan := plan.get("furnishing", {}) as Dictionary
+	if not furnishing_plan.is_empty() and not bool(furnishing_plan.get("enabled", true)):
+		record["procedural_furniture_enabled"] = false
 
 
 func _append_tower_record(
@@ -3418,6 +3454,17 @@ func _open_bound_simple_room_edge_door(
 ) -> bool:
 	if door == null or owner_room_id.is_empty() or target_room_id.is_empty():
 		return false
+	# 「不可开启」先于一切：不写 edge、不流送、不开门，只回一句拒绝理由。
+	# 放在 `_open_edges` 之前是必须的 —— 否则门没开、路线却被标成已开，
+	# 房间流送状态会与门板实际挡路的状态对不上。
+	if not door.openable:
+		status_label.text = str(
+			door.get_meta("lock_reason", BASE99_ROOFTOP_STAIR_DOOR_LOCKED_REASON)
+		)
+		_flash_locked_door_sign(door)
+		# 返回 true = 这次交互**被处理了**（有明确反馈），不是"玩家按错键"。
+		# 返回 false 会让上层（圆点/输入）当成没命中，玩家反而得不到任何回应。
+		return true
 	# start|facility是永久结构，门交互不得读写它；其他路线继续按各自流程。
 	if edge != _edge_key("start", "facility") and not bool(_open_edges.get(edge, false)):
 		_open_edges[edge] = true
@@ -4831,6 +4878,15 @@ func _activate_stair_arrival(candidate: Dictionary) -> bool:
 		_pending_airlock_candidate = candidate.duplicate()
 		_show_airlock_warning()
 		return true
+	# 权限判定必须在任何门态 / 路线态写入之前：不可开启的门连
+	# `_vertical_arrival_open` 都不能标 —— 那是"已到达"的账，
+	# 门板没开却把账做了，后续判定会以为这条路已经通了。
+	if not lower_door.openable:
+		status_label.text = str(
+			lower_door.get_meta("lock_reason", BASE99_ROOFTOP_STAIR_DOOR_LOCKED_REASON)
+		)
+		_flash_locked_door_sign(lower_door)
+		return true
 	var floor_index := int(_room_floor_index.get(lower_room.room_id, 0))
 	var bundle_floor_index := int(_floor_seed_gate_edges.get(edge, -1))
 	if bundle_floor_index >= 0 and not _commit_floor_bundle(bundle_floor_index, "arrival_gate"):
@@ -5747,6 +5803,107 @@ func _install_simple_transit_door_components() -> void:
 			door.add_child(component)
 		component.call("configure", door, player)
 		_simple_transit_door_components.append(component)
+	# 全部普通交通门就位后再上锁：`configure()` 会重设运动档位与手动关闭开关，
+	# 但不会碰 `openable` —— 顺序放这里是为了让「组件已挂、门已关」的状态一体化，
+	# 而不是先上一把锁再被组件初始化刷一遍。
+	_apply_base99_rooftop_stair_door_lock()
+
+
+## 给 99F↔100F 西侧楼梯门（两端）上锁。见 `BASE99_ROOFTOP_STAIR_DOOR_LOCKED`。
+##
+## 幂等：重复调用只会重复写同一份状态，不会叠出第二块门牌。
+func _apply_base99_rooftop_stair_door_lock() -> void:
+	if not BASE99_ROOFTOP_STAIR_DOOR_LOCKED or is_expedition():
+		return
+	var candidates: Array[RoomDoor3D] = []
+	var rooftop := _room_by_id.get("start") as DungeonRoom3D
+	if rooftop != null:
+		candidates.append(rooftop.get_door_node("west"))
+	var facility := _room_by_id.get("facility") as DungeonRoom3D
+	if facility != null:
+		for side_value in facility.door_targets.keys():
+			var side := str(side_value)
+			if _edge_key("facility", str(facility.door_targets[side_value])) != _edge_key("start", "facility"):
+				continue
+			candidates.append(facility.get_door_node(side))
+	for door in candidates:
+		if door == null or not is_instance_valid(door):
+			continue
+		_lock_base99_rooftop_stair_door(door)
+
+
+func _lock_base99_rooftop_stair_door(door: RoomDoor3D) -> void:
+	# `immediate = true`：门板**当场**落到底。进场时门若正在升降会读成"能开"，
+	# 这扇门要的状态是"从第一帧起就是关的"。
+	door.set_openable(false, true)
+	# 三条 access policy 全部按"不设局内门槛、只拒绝"写：requires_key 只服务文案与快照。
+	door.set_access_policy({
+		"requires_clear": false,
+		"requires_key": true,
+		"triggers_fate": false,
+	})
+	# 圆点按键牌从 `[E] …` 里抽功能词，所以文案必须保留 `[E]` 前缀，
+	# 否则 `extract_action_verb()` 判定为"状态文案"、连圆点牌都不显示。
+	door.set_prompt_override("[E] %s" % BASE99_ROOFTOP_STAIR_DOOR_LOCKED_REASON)
+	door.set_meta("base99_rooftop_stair_door_locked", true)
+	door.set_meta("lock_reason", BASE99_ROOFTOP_STAIR_DOOR_LOCKED_REASON)
+	_install_locked_door_sign(door)
+
+
+## 门顶常驻门牌。唯一目的：把「需要钥匙」这半句完整交到玩家眼前。
+##
+## 不复用 `RoomDoor3D` 自己的 `DoorPrompt`：那块 Label3D 的显隐自 2026-10-02
+## 圆点接管后已整体退役（`set_prompt_visible()` 是空实现，且位置正好落在圆点锚点上，
+## 硬打开会与圆点叠字）。本牌挂在自己的节点名下，只挂在本扇门，不改变其它门的行为。
+func _install_locked_door_sign(door: RoomDoor3D) -> void:
+	if door.get_node_or_null("LockedDoorSign") != null:
+		return
+	var sign_label := Label3D.new()
+	sign_label.name = "LockedDoorSign"
+	sign_label.text = BASE99_ROOFTOP_STAIR_DOOR_LOCKED_REASON
+	sign_label.font_size = BASE99_ROOFTOP_STAIR_DOOR_SIGN_FONT_SIZE
+	sign_label.pixel_size = 0.0105
+	sign_label.outline_size = 7
+	sign_label.modulate = Color(1.0, 0.42, 0.28)
+	# 门牌是状态说明，不是场景道具：不该被门框/墙体深度裁掉，也不该投影。
+	sign_label.no_depth_test = true
+	sign_label.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	sign_label.position = Vector3(
+		0.0,
+		TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M + BASE99_ROOFTOP_STAIR_DOOR_SIGN_LIFT_M,
+		0.0
+	)
+	door.add_child(sign_label)
+
+
+## 玩家对一扇"不可开启"的门按 E 时的可见反馈：门牌亮一下、字号涨一档再回落。
+##
+## 为什么需要它：门不会动、碰撞不会变，如果什么反馈都没有，玩家的第一反应是
+## "按键没响应 / 卡了"，而不是"这扇门锁着"。这段是纯表现，不写任何门态。
+##
+## ⚠️ 不用 `scale` 做放大：Label3D 默认开 billboard，着色器会把基向量归一化、
+## 连带吃掉 node.scale（`InteractionDot3D._apply_placement` 那段注释记的是同一个坑）。
+## 改字号与颜色是能稳定落到画面上的两个通道。
+func _flash_locked_door_sign(door: RoomDoor3D) -> void:
+	var sign_label := door.get_node_or_null("LockedDoorSign") as Label3D
+	if sign_label == null or not is_instance_valid(sign_label):
+		return
+	if sign_label.has_meta("flash_tween_running"):
+		return
+	sign_label.set_meta("flash_tween_running", true)
+	var base_font_size := sign_label.font_size
+	sign_label.font_size = int(round(float(base_font_size) * 1.30))
+	sign_label.modulate = Color(1.0, 0.88, 0.45)
+	var tween := create_tween()
+	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(sign_label, "font_size", base_font_size, 0.24)
+	tween.parallel().tween_property(
+		sign_label, "modulate", Color(1.0, 0.42, 0.28), 0.24
+	)
+	tween.finished.connect(func() -> void:
+		if is_instance_valid(sign_label):
+			sign_label.remove_meta("flash_tween_running")
+	)
 
 
 func _simple_transit_component_for(door: RoomDoor3D) -> Node:
@@ -5941,6 +6098,15 @@ func _activate_stair_return_interaction(candidate: Dictionary) -> bool:
 	var upper_door := candidate.get("upper_door") as RoomDoor3D
 	if upper_door == null:
 		return false
+	# 兜底 `set_open(true)` 必须排在权限判定之后：`request_open()` 在不可开启时
+	# 返回 false（如实汇报"没开"），若这里不看 openable 就直接硬开，等于从天台
+	# 一侧绕过锁 —— 西侧楼梯门两端同锁的意义就没了。
+	if not upper_door.openable:
+		status_label.text = str(
+			upper_door.get_meta("lock_reason", BASE99_ROOFTOP_STAIR_DOOR_LOCKED_REASON)
+		)
+		_flash_locked_door_sign(upper_door)
+		return true
 	if not _request_simple_transit_door_open(upper_door):
 		upper_door.set_open(true)
 	status_label.text = "上行交通门已开启"
@@ -6879,9 +7045,14 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
 		"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
 		"search_facilities_enabled": bool(record.get("search_facilities_enabled", true)),
+		# 程序化随机家具总开关：记录里没有这个键 ⇒ true（未声明关卡行为逐字不变）。
+		"procedural_furniture_enabled": bool(record.get("procedural_furniture_enabled", true)),
 		"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 		"authored_layout_instances": record.get("authored_layout_instances", []),
 		"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),
+		# 美术复用键的主体（`RuntimeRoomArtSource.describe()` 拿它当文件名前缀）。
+		# 未声明模板的楼层（塔楼）为空的 ⇒ describe() 退回 room_id，行为与旧版等价。
+		"template_id": str(record.get("template_id", "")),
 		"connection_ports": record.get("connection_ports", []),
 		"camera_profile": record.get("camera_profile", {}),
 		"door_endpoint_owners": record.get("door_endpoint_owners", {}),

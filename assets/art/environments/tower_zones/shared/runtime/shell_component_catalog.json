@@ -17,7 +17,7 @@
     "prefab_asset_id": "prefab 根节点 metadata/asset_id 的期望值，由 qa/probe_shell_component_catalog.gd 逐件比对。",
     "alias_policy": "专属件不设 alias（只属一个房间种类、只有一条来源链）；alias 只用于通用件的批次号兼容。"
   },
-  "component_count": 218,
+  "component_count": 263,
   "components": [
     {
       "component_id": "ENV-SHARED-GENERIC-WALL-STANDARD-5M",
@@ -4452,6 +4452,876 @@
       "collision_policy": "visual_only",
       "source_version": "v027",
       "note": "Dedicated reusable Boss room02 component; placement owned by formal room TSCN."
+    },
+    {
+      "component_id": "ENV-SHARED-BREAKABLE-JAR",
+      "aliases": [
+        "ENV-BATTLE-INTERACTIVE-JAR"
+      ],
+      "kind": "generic",
+      "slug": "breakable_jar",
+      "category": "易碎陈设",
+      "slot_role": "breakable_clutter",
+      "source_package_id": "ENV-BATTLE-INTERACTIVE-JAR",
+      "prefab_asset_id": "ENV-BATTLE-INTERACTIVE-JAR",
+      "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_jar/breakable_jar_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.66,
+        0.81,
+        0.645
+      ],
+      "collision_owner": "self",
+      "collision_policy": "projectile_hit_only_no_player_blocking",
+      "note": "可打碎陈设（低模易碎罐子，陶瓷碎块）。prefab 自带 HitReceiver(layer 4) 与 PlayerContact，摆进静态布局后由 DungeonRoom3D 认领并记账；原点在底面中心、正面朝 -Z。",
+      "display_name": "易碎罐子"
+    },
+    {
+      "component_id": "ENV-SHARED-BREAKABLE-BOOK-STACK",
+      "aliases": [
+        "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+      ],
+      "kind": "generic",
+      "slug": "breakable_book_stack",
+      "category": "易碎陈设",
+      "slot_role": "breakable_clutter",
+      "source_package_id": "ENV-BATTLE-INTERACTIVE-BOOK-STACK",
+      "prefab_asset_id": "ENV-BATTLE-INTERACTIVE-BOOK-STACK",
+      "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_book_stack/breakable_book_stack_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.6376,
+        0.314,
+        0.5031
+      ],
+      "collision_owner": "self",
+      "collision_policy": "projectile_hit_only_no_player_blocking",
+      "note": "可打碎陈设（低模散落书本堆，纸张碎块）。prefab 自带 HitReceiver(layer 4) 与 PlayerContact，摆进静态布局后由 DungeonRoom3D 认领并记账；原点在底面中心、正面朝 -Z。",
+      "display_name": "散落书本堆"
+    },
+    {
+      "component_id": "ENV-SHARED-BREAKABLE-VASE",
+      "aliases": [
+        "ENV-BATTLE-INTERACTIVE-VASE"
+      ],
+      "kind": "generic",
+      "slug": "breakable_vase",
+      "category": "易碎陈设",
+      "slot_role": "breakable_clutter",
+      "source_package_id": "ENV-BATTLE-INTERACTIVE-VASE",
+      "prefab_asset_id": "ENV-BATTLE-INTERACTIVE-VASE",
+      "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_vase/breakable_vase_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.43,
+        0.73,
+        0.43
+      ],
+      "collision_owner": "self",
+      "collision_policy": "projectile_hit_only_no_player_blocking",
+      "note": "可打碎陈设（低模易碎花瓶，陶瓷碎块）。prefab 自带 HitReceiver(layer 4) 与 PlayerContact，摆进静态布局后由 DungeonRoom3D 认领并记账；原点在底面中心、正面朝 -Z。",
+      "display_name": "易碎花瓶"
+    },
+    {
+      "component_id": "ENV-SHARED-BREAKABLE-CHAIR",
+      "aliases": [
+        "ENV-BATTLE-INTERACTIVE-CHAIR"
+      ],
+      "kind": "generic",
+      "slug": "breakable_chair",
+      "category": "易碎陈设",
+      "slot_role": "breakable_clutter",
+      "source_package_id": "ENV-BATTLE-INTERACTIVE-CHAIR",
+      "prefab_asset_id": "ENV-BATTLE-INTERACTIVE-CHAIR",
+      "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_chair/breakable_chair_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.75,
+        1.29,
+        0.75
+      ],
+      "collision_owner": "self",
+      "collision_policy": "projectile_hit_only_no_player_blocking",
+      "note": "可打碎陈设（低模易碎椅子，木质碎块）。prefab 自带 HitReceiver(layer 4) 与 PlayerContact，摆进静态布局后由 DungeonRoom3D 认领并记账；原点在底面中心、正面朝 -Z。",
+      "display_name": "易碎椅子"
+    },
+    {
+      "component_id": "ENV-SHARED-BREAKABLE-CRATE",
+      "aliases": [
+        "ENV-BATTLE-INTERACTIVE-CRATE"
+      ],
+      "kind": "generic",
+      "slug": "breakable_crate",
+      "category": "易碎陈设",
+      "slot_role": "breakable_clutter",
+      "source_package_id": "ENV-BATTLE-INTERACTIVE-CRATE",
+      "prefab_asset_id": "ENV-BATTLE-INTERACTIVE-CRATE",
+      "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_crate/breakable_crate_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.8385,
+        0.884,
+        0.9003
+      ],
+      "collision_owner": "self",
+      "collision_policy": "projectile_hit_only_no_player_blocking",
+      "note": "可打碎陈设（低模易碎木箱，木质碎块）。prefab 自带 HitReceiver(layer 4) 与 PlayerContact，摆进静态布局后由 DungeonRoom3D 认领并记账；原点在底面中心、正面朝 -Z。",
+      "display_name": "易碎木箱"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "aliases": [],
+      "slug": "manor_wall_standard",
+      "category": "实木护墙模块5m",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "prefab_asset_id": "ENV-EXP03-MANOR-WALL-STANDARD",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        2.8,
+        0.5
+      ],
+      "collision_owner": "self",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "aliases": [],
+      "slug": "manor_wall_door",
+      "category": "通顶门墙模块5m",
+      "slot_role": "door_wall",
+      "source_package_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "prefab_asset_id": "ENV-EXP03-MANOR-WALL-DOOR",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_door/env_manor_wall_door_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        2.8,
+        0.5
+      ],
+      "collision_owner": "self",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "aliases": [],
+      "slug": "manor_wall_window",
+      "category": "铅条窗护墙模块5m",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "prefab_asset_id": "ENV-EXP03-MANOR-WALL-WINDOW",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_window/env_manor_wall_window_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        2.8,
+        0.61
+      ],
+      "collision_owner": "self",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "aliases": [],
+      "slug": "manor_floor_wood",
+      "category": "人字拼木地板5m",
+      "slot_role": "floor",
+      "source_package_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "prefab_asset_id": "ENV-EXP03-MANOR-FLOOR-WOOD",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_floor_wood/env_manor_floor_wood_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.1,
+        5.0
+      ],
+      "collision_owner": "self",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "aliases": [],
+      "slug": "manor_floor_stone",
+      "category": "深灰石材地板5m",
+      "slot_role": "floor",
+      "source_package_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-FLOOR-STONE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_floor_stone/env_manor_floor_stone_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.065508,
+        0.104598,
+        5.284511
+      ],
+      "collision_owner": "self",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOOR-BATH",
+      "aliases": [],
+      "slug": "manor_floor_bath",
+      "category": "黑白瓷砖地板5m",
+      "slot_role": "floor",
+      "source_package_id": "ENV-EXP03-MANOR-FLOOR-BATH",
+      "prefab_asset_id": "ENV-EXP03-MANOR-FLOOR-BATH",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_floor_bath/env_manor_floor_bath_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.1,
+        5.0
+      ],
+      "collision_owner": "self",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+      "aliases": [],
+      "slug": "manor_door_double",
+      "category": "黄铜双开实木门",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_door_double/env_manor_door_double_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.2,
+        2.5,
+        0.202855
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DOOR-ARCH",
+      "aliases": [],
+      "slug": "manor_door_arch",
+      "category": "拱形装饰实木门",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-DOOR-ARCH",
+      "prefab_asset_id": "ENV-EXP03-MANOR-DOOR-ARCH",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_door_arch/env_manor_door_arch_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.2,
+        2.5,
+        0.208484
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+      "aliases": [],
+      "slug": "manor_rug_lounge",
+      "category": "金边会客地毯8x10m",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-RUG-LOUNGE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_lounge/env_manor_rug_lounge_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        8.0,
+        0.053,
+        10.0
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "aliases": [],
+      "slug": "manor_rug_runner",
+      "category": "金纹走廊地毯2.4x5m",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "prefab_asset_id": "ENV-EXP03-MANOR-RUG-RUNNER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_runner/env_manor_rug_runner_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.4,
+        0.053,
+        5.0
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RUG-BEDROOM",
+      "aliases": [],
+      "slug": "manor_rug_bedroom",
+      "category": "卧室地毯3x4m",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-RUG-BEDROOM",
+      "prefab_asset_id": "ENV-EXP03-MANOR-RUG-BEDROOM",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_bedroom/env_manor_rug_bedroom_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.0,
+        0.053,
+        4.0
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ENTRANCE-MAT",
+      "aliases": [],
+      "slug": "manor_entrance_mat",
+      "category": "半圆入口地垫",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-ENTRANCE-MAT",
+      "prefab_asset_id": "ENV-EXP03-MANOR-ENTRANCE-MAT",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_entrance_mat/env_manor_entrance_mat_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.0,
+        0.024,
+        1.500393
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SOFA",
+      "aliases": [],
+      "slug": "manor_sofa",
+      "category": "三人红丝绒沙发3m",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-SOFA",
+      "prefab_asset_id": "ENV-EXP03-MANOR-SOFA",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_sofa/env_manor_sofa_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.13,
+        1.09,
+        1.0
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "aliases": [],
+      "slug": "manor_armchair",
+      "category": "红丝绒扶手椅",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "prefab_asset_id": "ENV-EXP03-MANOR-ARMCHAIR",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_armchair/env_manor_armchair_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.23,
+        1.09,
+        1.05
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-OFFICE-CHAIR",
+      "aliases": [],
+      "slug": "manor_office_chair",
+      "category": "前台办公椅",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-OFFICE-CHAIR",
+      "prefab_asset_id": "ENV-EXP03-MANOR-OFFICE-CHAIR",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_office_chair/env_manor_office_chair_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.75,
+        1.09,
+        0.795
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-COFFEE-TABLE",
+      "aliases": [],
+      "slug": "manor_coffee_table",
+      "category": "黑石圆形花几2m",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-COFFEE-TABLE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-COFFEE-TABLE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_coffee_table/env_manor_coffee_table_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.031112,
+        0.495555,
+        2.031112
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "aliases": [],
+      "slug": "manor_side_table",
+      "category": "黄铜圆边几0.6m",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-SIDE-TABLE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_side_table/env_manor_side_table_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.629259,
+        0.644627,
+        0.629259
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CONSOLE",
+      "aliases": [],
+      "slug": "manor_console",
+      "category": "实木窄边桌",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-CONSOLE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-CONSOLE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_console/env_manor_console_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.34,
+        0.85,
+        0.4925
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+      "aliases": [],
+      "slug": "manor_reception_desk",
+      "category": "弧形格栅接待台",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+      "prefab_asset_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_reception_desk/env_manor_reception_desk_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.580289,
+        1.266835,
+        1.3175
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BED",
+      "aliases": [],
+      "slug": "manor_bed",
+      "category": "标准双人床2x1.8m",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-BED",
+      "prefab_asset_id": "ENV-EXP03-MANOR-BED",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bed/env_manor_bed_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.04,
+        1.25,
+        2.13
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BENCH",
+      "aliases": [],
+      "slug": "manor_bench",
+      "category": "红绒床尾凳",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-BENCH",
+      "prefab_asset_id": "ENV-EXP03-MANOR-BENCH",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bench/env_manor_bench_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.5,
+        0.57,
+        0.45
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-NIGHTSTAND",
+      "aliases": [],
+      "slug": "manor_nightstand",
+      "category": "实木床头柜",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-NIGHTSTAND",
+      "prefab_asset_id": "ENV-EXP03-MANOR-NIGHTSTAND",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_nightstand/env_manor_nightstand_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.6,
+        0.61,
+        0.5925
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WARDROBE",
+      "aliases": [],
+      "slug": "manor_wardrobe",
+      "category": "嵌入式衣柜",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-WARDROBE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-WARDROBE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wardrobe/env_manor_wardrobe_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.84,
+        2.53,
+        0.6925
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BOOKCASE",
+      "aliases": [],
+      "slug": "manor_bookcase",
+      "category": "开放式书架",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-BOOKCASE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-BOOKCASE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bookcase/env_manor_bookcase_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.34,
+        2.174724,
+        0.4975
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-LUGGAGE-CART",
+      "aliases": [],
+      "slug": "manor_luggage_cart",
+      "category": "黄铜行李车",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-LUGGAGE-CART",
+      "prefab_asset_id": "ENV-EXP03-MANOR-LUGGAGE-CART",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_luggage_cart/env_manor_luggage_cart_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.05,
+        1.66958,
+        0.65
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PAINTING",
+      "aliases": [],
+      "slug": "manor_painting",
+      "category": "黄铜框风景画",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-PAINTING",
+      "prefab_asset_id": "ENV-EXP03-MANOR-PAINTING",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_painting/env_manor_painting_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.455,
+        0.96,
+        0.152
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-GRILLE",
+      "aliases": [],
+      "slug": "manor_wall_grille",
+      "category": "接待区装饰格栅",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-WALL-GRILLE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-WALL-GRILLE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_grille/env_manor_wall_grille_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.6,
+        1.2,
+        0.17
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "aliases": [],
+      "slug": "manor_wall_lamp",
+      "category": "暖光黄铜壁灯",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "prefab_asset_id": "ENV-EXP03-MANOR-WALL-LAMP",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_lamp/env_manor_wall_lamp_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.384,
+        0.7175,
+        0.542
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "aliases": [],
+      "slug": "manor_table_lamp",
+      "category": "暖光黄铜台灯",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "prefab_asset_id": "ENV-EXP03-MANOR-TABLE-LAMP",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_table_lamp/env_manor_table_lamp_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.384,
+        0.6975,
+        0.384
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "aliases": [],
+      "slug": "manor_plant_large",
+      "category": "大型常绿盆栽",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "prefab_asset_id": "ENV-EXP03-MANOR-PLANT-LARGE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_plant_large/env_manor_plant_large_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.543802,
+        1.609846,
+        1.511668
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-PLANT-COMPACT",
+      "aliases": [],
+      "slug": "manor_plant_compact",
+      "category": "小型常绿盆栽",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-PLANT-COMPACT",
+      "prefab_asset_id": "ENV-EXP03-MANOR-PLANT-COMPACT",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_plant_compact/env_manor_plant_compact_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.968996,
+        1.375723,
+        0.996497
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+      "aliases": [],
+      "slug": "manor_flower_arrangement",
+      "category": "红花插花摆件",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+      "prefab_asset_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_flower_arrangement/env_manor_flower_arrangement_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.497855,
+        1.166766,
+        0.585129
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BATHTUB",
+      "aliases": [],
+      "slug": "manor_bathtub",
+      "category": "独立铸铁浴缸1.7m",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-BATHTUB",
+      "prefab_asset_id": "ENV-EXP03-MANOR-BATHTUB",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bathtub/env_manor_bathtub_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.7,
+        0.800426,
+        0.843
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-VANITY",
+      "aliases": [],
+      "slug": "manor_vanity",
+      "category": "双台盆洗手台2m",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-VANITY",
+      "prefab_asset_id": "ENV-EXP03-MANOR-VANITY",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_vanity/env_manor_vanity_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.04,
+        1.17707,
+        0.6708
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-MIRROR",
+      "aliases": [],
+      "slug": "manor_mirror",
+      "category": "圆形黄铜梳妆镜",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-MIRROR",
+      "prefab_asset_id": "ENV-EXP03-MANOR-MIRROR",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_mirror/env_manor_mirror_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.948,
+        0.948,
+        0.0715
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TOILET",
+      "aliases": [],
+      "slug": "manor_toilet",
+      "category": "陶瓷马桶",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-TOILET",
+      "prefab_asset_id": "ENV-EXP03-MANOR-TOILET",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_toilet/env_manor_toilet_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.42,
+        0.81,
+        0.63
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-TOWEL-RAIL",
+      "aliases": [],
+      "slug": "manor_towel_rail",
+      "category": "黄铜毛巾架",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-TOWEL-RAIL",
+      "prefab_asset_id": "ENV-EXP03-MANOR-TOWEL-RAIL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_towel_rail/env_manor_towel_rail_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.676,
+        0.616,
+        0.25
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-CANDELABRA",
+      "aliases": [],
+      "slug": "manor_candelabra",
+      "category": "三头烛台",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-CANDELABRA",
+      "prefab_asset_id": "ENV-EXP03-MANOR-CANDELABRA",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_candelabra/env_manor_candelabra_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.56,
+        0.64,
+        0.32
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-DESK-DOCUMENTS",
+      "aliases": [],
+      "slug": "manor_desk_documents",
+      "category": "前台文件陈设",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-DESK-DOCUMENTS",
+      "prefab_asset_id": "ENV-EXP03-MANOR-DESK-DOCUMENTS",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_desk_documents/env_manor_desk_documents_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.400506,
+        0.0505,
+        0.281344
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+    },
+    {
+      "component_id": "ENV-EXP03-MANOR-BATH-SCREEN",
+      "aliases": [],
+      "slug": "manor_bath_screen",
+      "category": "卫浴独立木隔断",
+      "slot_role": "furnishing",
+      "source_package_id": "ENV-EXP03-MANOR-BATH-SCREEN",
+      "prefab_asset_id": "ENV-EXP03-MANOR-BATH-SCREEN",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bath_screen/env_manor_bath_screen_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.19,
+        1.4,
+        0.12
+      ],
+      "collision_owner": "none",
+      "kind": "generic",
+      "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
+      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
     }
   ],
   "room_type_sources": [

@@ -132,7 +132,14 @@ func _verify_chest_roundtrip() -> void:
 	# 走真实收口路径：`commit_opened()` 发 `opened` → 房间记账。
 	chest.call("commit_opened")
 	var ledger: Dictionary = chest_room.call("get_persistent_detail_state", "treasure_chests")
-	_check(bool(ledger.get(chest_id, false)), "B3 开箱后房间账必须记下（ledger=%s）" % str(ledger))
+	# 账里存的是字典 `{"opened": true, "mimic": false}`，不是布尔。
+	# Godot 4.6 起 `bool(Dictionary)` 无构造函数（`Nonexistent 'bool' constructor`），
+	# 这里显式判"这条记录在且非空"。
+	var ledger_entry: Variant = ledger.get(chest_id, false)
+	_check(
+		ledger_entry is Dictionary and not (ledger_entry as Dictionary).is_empty(),
+		"B3 开箱后房间账必须记下（ledger=%s）" % str(ledger)
+	)
 	# 采集入口与 `_capture_loaded_runtime_rooms()` 对当前房调的是同一个函数。
 	_scene.call("_capture_room_runtime_state", str(chest_room.get("room_id")))
 

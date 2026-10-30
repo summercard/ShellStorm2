@@ -297,19 +297,19 @@ const PROFILES := {
 	"egt_bullet_kin": {
 		"attack_style": "volley",
 		"hp": 150, "speed": 2.857, "damage": 17, "range": 8.8, "cooldown": 2.2,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"volley": {"count": 1, "spread_deg": 0.0, "interval": 0.0, "predict": 0.0},
 	},
 	"egt_bandana_kin": {
 		"attack_style": "volley",
 		"hp": 150, "speed": 2.857, "damage": 17, "range": 8.2, "cooldown": 1.05,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"volley": {"count": 3, "spread_deg": 0.0, "interval": 0.12, "predict": 0.0},
 	},
 	"egt_veteran_kin": {
 		"attack_style": "volley",
 		"hp": 150, "speed": 3.714, "damage": 17, "range": 9.6, "cooldown": 1.6,
-		"projectile_speed": 10.0, "projectile_range": 22.0,
+		"projectile_speed": 7.5, "projectile_range": 22.0,
 		# 原作（Wiki 逐字）："They fire **4 bullets in a row**" + 预判 + 跑得比普通小子快。
 		# 旧版写成 count=1 只加了预判 —— 那是把"狙击手"当成了"老兵"。
 		# interval 0.12 ⇒ 4 连发 0.36 秒打完，配合 1.6 秒冷却才是"持续压制"的节奏。
@@ -318,7 +318,7 @@ const PROFILES := {
 	"egt_red_shotgun": {
 		"attack_style": "volley",
 		"hp": 300, "speed": 2.857, "damage": 17, "range": 6.4, "cooldown": 2.4,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"volley": {"count": 5, "spread_deg": 14.0, "interval": 0.0, "predict": 0.0},
 		# 死亡全向喷：EGT 红霰弹「有几率」全向 6 发。这里用 chance 表达「有几率」，
 		# 不写成 100% —— 原作三者里红的最安全，正因为它是"有几率"而非"必定"。
@@ -327,7 +327,7 @@ const PROFILES := {
 	"egt_blue_shotgun": {
 		"attack_style": "volley",
 		"hp": 400, "speed": 2.857, "damage": 17, "range": 6.8, "cooldown": 2.4,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"volley": {
 			"count": 5, "spread_deg": 26.0, "interval": 0.16, "predict": 0.0,
 			# 原作是「宽 5 发 + **快速接**宽 4 发」—— 两段属于**同一次攻击**，
@@ -339,24 +339,24 @@ const PROFILES := {
 	"egt_blobulon": {
 		"attack_style": "contact",
 		"hp": 200, "speed": 3.143, "damage": 17, "range": 2.05, "cooldown": 1.4,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"death_split": {"child": "egt_blobuloid", "count": 2},
 	},
 	"egt_blobuloid": {
 		"attack_style": "contact",
 		"hp": 100, "speed": 3.429, "damage": 17, "range": 1.95, "cooldown": 1.3,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"death_split": {"child": "egt_blobulin", "count": 2},
 	},
 	"egt_blobulin": {
 		"attack_style": "contact",
 		"hp": 10, "speed": 4.857, "damage": 17, "range": 1.8, "cooldown": 1.1,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 	},
 	"egt_pinhead": {
 		"attack_style": "explode",
 		"hp": 130, "speed": 3.429, "damage": 17, "range": 2.85, "cooldown": 3.0,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		# 原作："If the player gets too close, it will **leap** towards the player and explode"
 		# —— 先扑再炸。0.22s 的延迟就是"它扑过来了、快退"这个可读窗口。
 		"leap": {"leap_speed": 9.5, "leap_sec": 0.22},
@@ -364,7 +364,7 @@ const PROFILES := {
 	"egt_nitra": {
 		"attack_style": "explode",
 		"hp": 100, "speed": 3.429, "damage": 17, "range": 2.6, "cooldown": 3.0,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		# 原作："If the player gets too close, it will **detonate itself**" —— 同样是先扑后炸。
 		"leap": {"leap_speed": 8.0, "leap_sec": 0.22},
 	},
@@ -373,14 +373,14 @@ const PROFILES := {
 		# 一次性冲撞：命中即自身死亡。`suicide_rush` 是**新策略**（见 §T2）——
 		# 常规 MeleeLunge 打完不死，这里"碰到就消失"改变的是行动拓扑而非参数。
 		"hp": 10, "speed": 3.429, "damage": 17, "range": 7.5, "cooldown": 99.0,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"suicide_rush": {"speed": 11.0, "max_lifetime": 4.0},
 	},
 	"egt_gunsinger": {
 		"attack_style": "support",
 		# 辅助：不攻击玩家，给同伴加血加速。`support_buff` 是新策略（目标类型变了）。
 		"hp": 150, "speed": 1.429, "damage": 0, "range": 7.2, "cooldown": 3.6,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"support_buff": {"radius_m": 12.0, "hp_ratio": 0.35, "speed_mult": 1.35, "duration": 5.0},
 		# 原作是「停留」，且**玩家靠太近或自己受伤就中断施法逃跑**。
 		# 两个键合起来才是完整的它：`immobile` 管常态不动，`interrupt` 管被打断。
@@ -417,29 +417,35 @@ const PROFILES := {
 	#   `speed`  = 「目标 m/s ÷ 0.7」。目标 m/s 由原作定性分档：慢 2.0 / 中 2.4 / 快 3.4 /
 	#              浮空 1.8 / 停留 0.6。原作没有帧数据（见数据表 §8），这是**按定性排序的近似**。
 	#   `cooldown` 按「occasionally 2.2 / rapidly 1.05 / periodically 2.6」三档。
-	#   `projectile_speed` 以玩家移速（4.5 m/s）为锚：原作子弹约 3.5 倍移速 ⇒ 16 m/s；
-	#              原作注明 fast-moving 的用 18~20。`projectile_range = range × 1.4`
-	#              —— 原来不设射程时子弹只有 1 秒寿命、飞 7 米就自毁，那才是"看不到子弹"的真因。
+	#   `projectile_speed` = **6 基准 / 7.5 fast / 4.5 慢弹**（2026-10-30 第四轮）。
+	#              锚点是反编译实锤 `new Speed(6f, SpeedType.Absolute)`（EnemyAPI）：
+	#              通用敌弹 6，fast-moving ×1.25、追踪/弹跳 ×0.75。相对第三轮的 8/10/6
+	#              是全域 ×0.75，**序关系不变**，只是绝对速度降一档。
+	#              第三轮曾按「可躲性」反推出 8（16 m/s 时 8m 处只能横移 1.12m < 扇形半宽 1.99m
+	#              ⇒ 躲不掉；8 时可横移 3.38m ⇒ 躲得掉）—— 那个算式仍是可躲性的判据来源，
+	#              见 `docs/v0.1/design/怪物设计.md §T2.5` 与 `tools/_egt_dodgeability_probe.gd`。
+	#              `projectile_range` 恒 22m：覆盖整个房间、撞墙自然消失
+	#              （不设射程时子弹只有 1 秒寿命、飞 7 米就自毁，那才是"看不到子弹"的真因）。
 	# =========================================================================
 	# —— 2.1 子弹族补完：红衣主教（追踪弹簇）、空尖弹（瞬移连发）——
 	"egt_cardinal": {
 		"attack_style": "volley",
 		"hp": 225, "speed": 2.857, "damage": 17, "range": 9.0, "cooldown": 2.3,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.86, 0.30, 0.42),
 		# 主攻击：单发直射。每隔 3 次改为 5 发**追踪**弹簇 —— 原作「偶尔」，
 		# 用 alt_every 表达频率，不改攻击骨架。
 		"volley": {"count": 1, "spread_deg": 0.0, "interval": 0.0, "predict": 0.0},
 		"volley_alt": {
 			"pattern": "ring", "count": 5, "spread_deg": 0.0, "interval": 0.09,
-			"predict": 0.25, "homing": 0.45, "speed": 5.2, "home_lifetime": 3.0,
+			"predict": 0.25, "homing": 0.45, "speed": 3.9, "home_lifetime": 3.0,
 		},
 		"alt_every": 3,
 	},
 	"egt_hollowpoint": {
 		"attack_style": "volley",
 		"hp": 250, "speed": 2.571, "damage": 17, "range": 9.6, "cooldown": 1.05,
-		"projectile_speed": 10.0, "projectile_range": 22.0,
+		"projectile_speed": 7.5, "projectile_range": 22.0,
 		"bullet_color": Color(0.72, 0.48, 0.96),
 		# 高射速连发（单发伤害低、密度高），周期性消失并在房间他处重现。
 		"volley": {"count": 4, "spread_deg": 3.0, "interval": 0.09, "predict": 0.20},
@@ -461,7 +467,7 @@ const PROFILES := {
 	"egt_veteran_shotgun": {
 		"attack_style": "volley",
 		"hp": 338, "speed": 2.857, "damage": 17, "range": 6.8, "cooldown": 2.2,
-		"projectile_speed": 10.0, "projectile_range": 22.0,
+		"projectile_speed": 7.5, "projectile_range": 22.0,
 		"bullet_color": Color(0.96, 0.52, 0.24),
 		# 原作原文："a V-shaped spread of 5 fast-moving bullets with **100% predictive aim**"
 		# —— 是 100%，不是"高概率"。写成 0.55 等于把它降级成了普通老兵。
@@ -473,7 +479,7 @@ const PROFILES := {
 	"egt_king_bullat": {
 		"attack_style": "volley",
 		"hp": 260, "speed": 0.857, "damage": 17, "range": 9.0, "cooldown": 2.6,
-		"projectile_speed": 6.0, "projectile_range": 22.0,
+		"projectile_speed": 4.5, "projectile_range": 22.0,
 		# 原作全表对它的描述只有"周期向全向发射弹跳弹"，**没有"walks towards"**
 		# —— 它是原地漂浮的炮台。`immobile` 让它不进远程绕圈分支。
 		"immobile": true,
@@ -494,7 +500,7 @@ const PROFILES := {
 	"egt_chancebulon": {
 		"attack_style": "chance",
 		"hp": 500, "speed": 3.429, "damage": 17, "range": 2.1, "cooldown": 1.5,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.86, 0.72, 0.30),
 		# 每 5 次里有 1 次**不攻击而是直接死亡**（原作的骰子感）。
 		"chance_moves": {
@@ -507,7 +513,7 @@ const PROFILES := {
 	"egt_bookllet": {
 		"attack_style": "volley",
 		"hp": 250, "speed": 2.286, "damage": 17, "range": 9.2, "cooldown": 2.4,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.90, 0.88, 0.80),
 		# `count` 必须等于模板笔画数（R = 10 笔），否则只画出第一笔就结束。
 		"volley": {"pattern": "letter", "letter": "R", "count": 10, "interval": 0.06, "predict": 0.0},
@@ -516,7 +522,7 @@ const PROFILES := {
 	"egt_blue_bookllet": {
 		"attack_style": "volley",
 		"hp": 250, "speed": 2.286, "damage": 17, "range": 9.2, "cooldown": 2.5,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.44, 0.66, 0.98),
 		# 字母弹 + 来回脉动的环形弹：主攻击是脉动环（两圈环，间隔拉长读作"脉动"）。
 		# 8 发 × 2 圈、间隔 0.12 ⇒ 一轮约 1.8 秒，正好在 2.6 秒冷却内打完。
@@ -528,7 +534,7 @@ const PROFILES := {
 	"egt_green_bookllet": {
 		"attack_style": "volley",
 		"hp": 250, "speed": 2.286, "damage": 17, "range": 9.2, "cooldown": 2.6,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.52, 0.88, 0.48),
 		# 大型四叶草形弹：4 个瓣 × 每瓣 4 发
 		"volley": {"pattern": "clover", "count": 4, "spread_deg": 12.0, "interval": 0.07, "predict": 0.0},
@@ -538,7 +544,7 @@ const PROFILES := {
 	"egt_gunjurer": {
 		"attack_style": "volley",
 		"hp": 188, "speed": 2.143, "damage": 17, "range": 8.8, "cooldown": 2.2,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.72, 0.52, 1.0),
 		# 旋转图形弹（三角 / 圆 / X）：`spiral` 逐发旋进，形状随朝向轮转。
 		"volley": {"pattern": "spiral", "count": 9, "interval": 0.10, "step_deg": 40.0, "predict": 0.0},
@@ -556,18 +562,18 @@ const PROFILES := {
 	"egt_gigi": {
 		"attack_style": "volley",
 		"hp": 120, "speed": 5.143, "damage": 17, "range": 7.6, "cooldown": 2.6,
-		"projectile_speed": 4.2, "projectile_range": 22.0,
+		"projectile_speed": 3.15, "projectile_range": 22.0,
 		"bullet_color": Color(0.96, 0.82, 0.42),
 		# 吐「蛋」：蛋飞到玩家附近后炸出一群涌动子弹。
 		# 用 `egg` 表达：先发一枚慢速蛋（视觉），再在落点炸一圈。
-		"volley": {"count": 1, "spread_deg": 0.0, "interval": 0.0, "predict": 0.25, "speed": 4.2},
+		"volley": {"count": 1, "spread_deg": 0.0, "interval": 0.0, "predict": 0.25, "speed": 3.15},
 		"egg": {"hatch_sec": 0.85, "burst_count": 8, "burst_damage_ratio": 0.7, "homing": 0.25},
 	},
 	# —— 2.7 一次性冲撞族补完：三种"撞到即死 + 附加弹" ——
 	"egt_shotgat": {
 		"attack_style": "rush",
 		"hp": 20, "speed": 3.429, "damage": 17, "range": 8.0, "cooldown": 99.0,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.86, 0.60, 0.96),
 		"suicide_rush": {
 			"speed": 10.5, "max_lifetime": 4.0,
@@ -578,7 +584,7 @@ const PROFILES := {
 	"egt_grenat": {
 		"attack_style": "rush",
 		"hp": 30, "speed": 3.429, "damage": 17, "range": 8.0, "cooldown": 99.0,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.96, 0.42, 0.18),
 		"suicide_rush": {
 			"speed": 10.0, "max_lifetime": 4.0,
@@ -588,7 +594,7 @@ const PROFILES := {
 	"egt_spirat": {
 		"attack_style": "rush",
 		"hp": 50, "speed": 3.429, "damage": 17, "range": 8.5, "cooldown": 99.0,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.62, 0.92, 0.86),
 		# 多次中途重定位 + 预判走位，撞墙才停 —— `repositions` 是它与 bullat 的唯一差别。
 		"suicide_rush": {
@@ -600,7 +606,7 @@ const PROFILES := {
 	"egt_keybullet_kin": {
 		"attack_style": "flee",
 		"hp": 150, "speed": 4.286, "damage": 17, "range": 2.0, "cooldown": 1.2,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		# 逃跑 + 超时**传送消失**（不是被打死）。掉落钥匙属局内经济，本关未接入，
 		# 见 `怪物设计.md §T6` 的已知差异 —— 这里只保证"打不死就白跑"这条行为。
 		"flee": {"speed_mult": 1.45, "vanish_after": 11.0},
@@ -608,13 +614,13 @@ const PROFILES := {
 	"egt_chance_kin": {
 		"attack_style": "flee",
 		"hp": 150, "speed": 4.286, "damage": 17, "range": 2.0, "cooldown": 1.2,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"flee": {"speed_mult": 1.45, "vanish_after": 11.0},
 	},
 	"egt_confirmed": {
 		"attack_style": "volley",
 		"hp": 450, "speed": 3.143, "damage": 17, "range": 9.8, "cooldown": 2.3,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.56, 0.36, 0.72),
 		# 停下时从袍下射出 **4 条蛇形追踪弹**：4 条流，各带追踪。
 		"volley": {"pattern": "serpentine", "count": 4, "interval": 0.16, "predict": 0.3, "homing": 0.4, "home_lifetime": 2.8},
@@ -622,7 +628,7 @@ const PROFILES := {
 	"egt_mimic": {
 		"attack_style": "volley",
 		"hp": 1000, "speed": 3.143, "damage": 17, "range": 9.0, "cooldown": 1.9,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.92, 0.74, 0.30),
 		# 被开箱或被射击才现形：没有宝箱系统时，用「靠近或被打才解除静态伪装」等价表达。
 		# `max_sec` 12.0：**防房间卡死**的兜底。房间要「所有怪都死」才开门，
@@ -636,7 +642,7 @@ const PROFILES := {
 	"egt_gun_fairy": {
 		"attack_style": "volley",
 		"hp": 150, "speed": 4.286, "damage": 17, "range": 8.4, "cooldown": 1.35,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.98, 0.86, 0.52),
 		# 房间内游荡 + 高射速连发（不追人、乱飞，所以命中靠"她自己飘过来"）
 		"volley": {"count": 3, "spread_deg": 6.0, "interval": 0.08, "predict": 0.0},
@@ -646,7 +652,7 @@ const PROFILES := {
 	"egt_gripmaster": {
 		"attack_style": "grab",
 		"hp": 300, "speed": 2.857, "damage": 0, "range": 3.2, "cooldown": 6.0,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		# 悬在玩家上方、闪蓝后下压抓人。**不改血量、只改位置** —— 与原作一致：
 		# 「不造成伤害却改变关卡状态」。原作还会把已清房间重置，本工程缺"房间重置"
 		# 这条链路，暂以「抛回房间入口」表达，见 §T6 已知差异。
@@ -670,25 +676,25 @@ const PROFILES := {
 	"egt_gun_nut": {
 		"attack_style": "volley",
 		"hp": 1000, "speed": 2.571, "damage": 17, "range": 8.6, "cooldown": 2.9,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.78, 0.62, 0.36),
 		# 举剑砸地：90° 扇形 + 4 组箭头形弹群；**只能瞄 8 个罗盘方向**（snap_deg = 45）。
 		"volley": {"pattern": "compass", "count": 7, "spread_deg": 45.0, "snap_deg": 45.0, "interval": 0.0, "predict": 0.0},
 		"volley_alt": {"pattern": "arrows", "count": 4, "spread_deg": 42.0, "snap_deg": 45.0, "interval": 0.0, "predict": 0.0},
 		"alt_every": 2,
 		# 大 jammed 弹：撞到障碍炸成一圈（原作有，我们之前完全没有）。
-		# 速度 6.5 比普通 8 慢 —— 它是"看得到的大弹"，快了就变成突如其来的一圈。
-		"jammed": {"speed": 6.5, "predict": 0.0, "shatter_count": 8, "shatter_damage_ratio": 0.5, "shatter_speed": 6.0},
+		# 速度 4.875 比普通 6 慢 —— 它是"看得到的大弹"，快了就变成突如其来的一圈。
+		"jammed": {"speed": 4.875, "predict": 0.0, "shatter_count": 8, "shatter_damage_ratio": 0.5, "shatter_speed": 4.5},
 	},
 	"egt_chain_gunner": {
 		"attack_style": "orbit",
 		"hp": 900, "speed": 3.0, "damage": 17, "range": 8.0, "cooldown": 3.4,
-		"projectile_speed": 8.0, "projectile_range": 22.0,
+		"projectile_speed": 6.0, "projectile_range": 22.0,
 		"bullet_color": Color(0.72, 0.80, 0.92),
 		# 停下甩出子弹链：约 3 圈/秒转 2 秒，期间缓慢逼近；链可穿墙（子弹不下发射程判定）。
 		"orbit": {
 			"duration": 2.0, "rev_per_sec": 3.0, "bullets_per_rev": 6,
-			"radius_m": 3.2, "speed": 6.4,
+			"radius_m": 3.2, "speed": 4.8,
 		},
 	},
 }
@@ -885,6 +891,10 @@ var _variant_scale_multiplier := 1.0
 ## 强化怪是 `_profile_for()` 派生出来的副本（不写回表）。
 ## 每帧读它而不是反复查表/派生，避免在 `_physics_process` 里重复构造字典。
 var _active_profile: Dictionary = {}
+## 敌弹弹体的**纯视觉**尺寸倍率（1.0 = 基准）。由关卡 `monster_rules.projectile.visual_scale`
+## 经 `MonsterInjector` 随配置下发；未配置的关卡一次都不写这个键 ⇒ 其余关卡逐字不变。
+## ⚠ 只放大看得见的弹体，**不动判定半径**（判定仍是 `Projectile3D` 的 0.12 基准球）。
+var _projectile_visual_scale := 1.0
 var illumination_sensor: EnemyIllumination3D
 var _illumination_damage_accumulator := 0.0
 
@@ -1345,6 +1355,9 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 		contact_damage = maxi(0, int(data["override_damage"]))
 	if data.has("override_speed"):
 		move_speed = maxf(0.05, float(data["override_speed"]))
+	# —— 关卡级「敌弹观感」覆盖（远征03 `monster_rules.projectile.visual_scale`）——
+	# 只改弹体视觉尺寸，不改弹速 / 伤害 / 判定。未配置本键的关卡保持 1.0。
+	_projectile_visual_scale = maxf(0.05, float(data.get("projectile_visual_scale", 1.0)))
 	_apply_presentation_scale()
 	_ensure_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
@@ -2073,7 +2086,16 @@ func _physics_process(delta: float) -> void:
 
 func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	var monitor_facing_ready := monitor_combat == null or (not monitor_combat.turning and (-global_basis.z).normalized().dot(to_target.normalized()) >= 0.97)
-	if distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready:
+	# ⚠ `_has_line_of_sight` 必须放在**最后一个条件**：它是射线，放在前面会让每帧每只怪
+	# 都打一条射线（30 只怪 = 30 条/帧）。短路到最后时，只有「已进射程 + 冷却已好」
+	# 那几帧才会真的投射 —— 也就是「正要开火」的那一瞬。
+	#
+	# 为什么必须有这条：没有它，怪只要**水平距离**够就会开火，隔着墙也照打。
+	# 子弹撞墙消失，玩家看不到弹道，只会觉得「怪在墙后面莫名其妙一直放技能」。
+	# 原作对此有明确行为（`Bullet Kin` 会翻桌找掩体、`Confirmed` 强调 "stopping to fire"），
+	# 且弹幕游戏的公平性原则要求「看不见的火力不该存在」。
+	if distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready \
+			and _has_line_of_sight(_target):
 		var channel := "ranged" if _is_ranged_style() else "melee"
 		if MonsterAIManager == null or MonsterAIManager.request_attack_token(self, _target, channel):
 			_last_attack_result = "token_granted"
@@ -2236,10 +2258,35 @@ func _egt_attack_style() -> String:
 	return "contact"
 
 
+## 本次出手后要等多久才能再出手。
+##
+## ## 为什么需要抖动（这一条是 2026-10-30 补的字段，之前完全没有）
+## 之前是 `_attack_timer = attack_cooldown` —— 一个**恒定值**。这导致同一只怪
+## 每次出手的间隔逐秒一致（实测标准差 < 0.02 s），读起来是节拍器而不是「偶尔」。
+## 原作对这批怪的措辞全是**不定频**的：`occasionally firing`（子弹小子 / 霰弹枪三只 /
+## 已确认者）、`periodically`（子弹榴弹王 / 枪坚果 / 空尖弹的瞬移）。
+## 「偶尔」在行为上就是**间隔不均等** —— 恒定间隔不是 that word 的实现。
+##
+## ## 口径
+## `cooldown_jitter` 是**比例**（±x），不是秒。默认 0.20 ⇒ 1.05 s 的冷却落在 0.84~1.26 s。
+## 上限刻意压在 0.35：再大就会出现「同一只怪这次连打两次、下次站很久」，
+## 玩家会读成"卡了"而不是"随机"。
+## ⚠ 0.20 这个数是**自拟**，原作没有公开抖动参数（`§T2.5` 已记录该类字段全无）。
+## 它保证的是**语义**（间隔不均等），不是数值对齐 —— 与 `ROOM_ATTACK_GAP_MSEC` 同一条口径。
+func _resolve_attack_cooldown() -> float:
+	var cooled := attack_cooldown
+	if not _is_egt_kind():
+		return cooled
+	var jitter := clampf(float(_active_profile.get("cooldown_jitter", 0.20)), 0.0, 0.35)
+	if jitter <= 0.0:
+		return cooled
+	return cooled * randf_range(1.0 - jitter, 1.0 + jitter)
+
+
 func _perform_attack(to_target: Vector3, distance: float) -> void:
 	# 自动化与技能预演允许传入显式方向而不绑定目标；实际近战命中仍要求
 	# 当前目标有效，避免悬空引用造成重复结算。
-	_attack_timer = attack_cooldown
+	_attack_timer = _resolve_attack_cooldown()
 	_last_attack_result = "committed"
 	# —— 远征03 复刻怪：**一次分派，永不逐只加分支** ——
 	# 第二批把复刻怪扩到 33 只。如果继续在 match 里逐只列举，这里会变成 33 行长名单，
@@ -2322,6 +2369,8 @@ func _fire_projectile(
 		"damage": amount,
 		"hostile": true, "critical": false, "tags": ["explosive"] if explosive else [],
 		"color": color, "shooter": self,
+		# 纯视觉尺寸（远征03 业主：怪物子弹放大一倍）。缺省 1.0 ⇒ 其余关卡/旧内容不变。
+		"visual_scale": _projectile_visual_scale,
 	}
 	if not behavior.is_empty():
 		config["behavior"] = behavior.duplicate(true)

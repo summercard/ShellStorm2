@@ -12,40 +12,40 @@ albedo_color = Color(0.46, 0.50, 0.56, 1)
 roughness = 0.9
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_north_0"]
-size = Vector3(1.4, 11.9, 0.3)
+size = Vector3(1.4, 2.8, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_north_1"]
-size = Vector3(1.4, 11.9, 0.3)
+size = Vector3(1.4, 2.8, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_lintel_north_0"]
-size = Vector3(2.2, 9.4, 0.3)
+size = Vector3(2.2, 0.3, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_south_0"]
-size = Vector3(1.4, 11.9, 0.3)
+size = Vector3(1.4, 2.8, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_south_1"]
-size = Vector3(1.4, 11.9, 0.3)
+size = Vector3(1.4, 2.8, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_lintel_south_0"]
-size = Vector3(2.2, 9.4, 0.3)
+size = Vector3(2.2, 0.3, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_west_0"]
-size = Vector3(0.3, 11.9, 1.4)
+size = Vector3(0.3, 2.8, 1.4)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_west_1"]
-size = Vector3(0.3, 11.9, 1.4)
+size = Vector3(0.3, 2.8, 1.4)
 
 [sub_resource type="BoxMesh" id="BoxMesh_lintel_west_0"]
-size = Vector3(0.3, 9.4, 2.2)
+size = Vector3(0.3, 0.3, 2.2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_east_0"]
-size = Vector3(0.3, 11.9, 1.4)
+size = Vector3(0.3, 2.8, 1.4)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_east_1"]
-size = Vector3(0.3, 11.9, 1.4)
+size = Vector3(0.3, 2.8, 1.4)
 
 [sub_resource type="BoxMesh" id="BoxMesh_lintel_east_0"]
-size = Vector3(0.3, 9.4, 2.2)
+size = Vector3(0.3, 0.3, 2.2)
 
 [node name="ExpeditionCorridorStaticLayout" type="Node3D"]
 metadata/schema = "shellstorm2.expedition.corridor_whitebox.v001"
@@ -53,7 +53,7 @@ metadata/shell_id = "cr_cross_05"
 metadata/corridor_shape = "junction_4"
 metadata/size_m = [5, 5]
 metadata/grid_unit_m = 5
-metadata/wall_height_m = 11.9
+metadata/wall_height_m = 2.8
 metadata/door_width_m = 2.2
 metadata/door_clear_height_m = 2.5
 metadata/layout_instance_total = 13
@@ -65,7 +65,7 @@ metadata/walkable_navigation_polygons = [[[-2.5, 0.08, -2.5], [2.5, 0.08, -2.5],
 metadata/source = "scripts/build_whitebox_corridor_kit.py"
 
 [node name="RoomCeilingLight" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 metadata/pending = "whitebox 不含灯；建美术时替换为 WastelandLight3D"
 
 [node name="RoomLightSwitch3D" type="Area3D" parent="."]
@@ -77,78 +77,78 @@ material_override = SubResource("Mat_whitebox")
 metadata/walk_plane_snap_y = 0.08
 
 [node name="Wall_North_00" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 5.95, -2.65)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 1.4, -2.65)
 mesh = SubResource("BoxMesh_wall_north_0")
 material_override = SubResource("Mat_whitebox_wall")
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5
 
 [node name="Wall_North_01" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 5.95, -2.65)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.4, -2.65)
 mesh = SubResource("BoxMesh_wall_north_1")
 material_override = SubResource("Mat_whitebox_wall")
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5
 
 [node name="Lintel_North_00" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, -2.65)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.65, -2.65)
 mesh = SubResource("BoxMesh_lintel_north_0")
 material_override = SubResource("Mat_whitebox_wall")
 
 [node name="Wall_South_00" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 5.95, 2.65)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 1.4, 2.65)
 mesh = SubResource("BoxMesh_wall_south_0")
 material_override = SubResource("Mat_whitebox_wall")
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5
 
 [node name="Wall_South_01" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 5.95, 2.65)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.4, 2.65)
 mesh = SubResource("BoxMesh_wall_south_1")
 material_override = SubResource("Mat_whitebox_wall")
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5
 
 [node name="Lintel_South_00" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 2.65)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.65, 2.65)
 mesh = SubResource("BoxMesh_lintel_south_0")
 material_override = SubResource("Mat_whitebox_wall")
 
 [node name="Wall_West_00" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65, 5.95, -1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65, 1.4, -1.8)
 mesh = SubResource("BoxMesh_wall_west_0")
 material_override = SubResource("Mat_whitebox_wall")
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5
 
 [node name="Wall_West_01" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65, 5.95, 1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65, 1.4, 1.8)
 mesh = SubResource("BoxMesh_wall_west_1")
 material_override = SubResource("Mat_whitebox_wall")
 metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5
 
 [node name="Lintel_West_00" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65, 7.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65, 2.65, 0)
 mesh = SubResource("BoxMesh_lintel_west_0")
 material_override = SubResource("Mat_whitebox_wall")
 
 [node name="Wall_East_00" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 5.95, -1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 1.4, -1.8)
 mesh = SubResource("BoxMesh_wall_east_0")
 material_override = SubResource("Mat_whitebox_wall")
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5
 
 [node name="Wall_East_01" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 5.95, 1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 1.4, 1.8)
 mesh = SubResource("BoxMesh_wall_east_1")
 material_override = SubResource("Mat_whitebox_wall")
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5
 
 [node name="Lintel_East_00" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 7.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 2.65, 0)
 mesh = SubResource("BoxMesh_lintel_east_0")
 material_override = SubResource("Mat_whitebox_wall")
 

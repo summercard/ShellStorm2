@@ -413,6 +413,8 @@ def build_layout(tpl: dict, variant: str, ports: list[tuple[str, float]]) -> tup
     # ── 门洞过梁 ────────────────────────────────────────────────────────────
     lintel_h = wall_h - clear_h
     for side, lane in ports:
+        if lintel_h <= 1e-6:
+            continue
         axis_center = half_w if side in ("north", "south") else half_d
         c = axis_center + lane
         # 找到承载这个门洞的那条轮廓边，取其外法线

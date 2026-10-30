@@ -187,6 +187,10 @@ def check_room_shell(path: Path, tpl: dict, variant: str, want_ports: int) -> li
     metas = p["metas"]
     tid = str(tpl["template_id"])
     label = f"{path.name}"
+    if metas.get("wall_height_m") != "2.8":
+        errs.append(f"{label}: wall_height_m must be 2.8")
+    if tpl.get("wall_height_m") != 2.8:
+        errs.append(f"{label}: template wall_height_m must be 2.8")
 
     if "room_id" in metas:
         errs.append(f"{label}: 根节点写了 metadata/room_id —— 共享壳不得绑定具体房间")
@@ -265,6 +269,8 @@ def check_corridor(path: Path, spec: dict) -> list[str]:
     p = parse_tscn(path)
     metas = p["metas"]
     label = path.name
+    if metas.get("wall_height_m") != "2.8":
+        errs.append(f"{label}: wall_height_m must be 2.8")
     if "room_id" in metas:
         errs.append(f"{label}: 通道壳不得绑定具体房间（写了 metadata/room_id）")
     if str(metas.get("shell_id", "")).strip('"') != spec["shell_id"]:
@@ -280,6 +286,165 @@ def check_corridor(path: Path, spec: dict) -> list[str]:
     if "walkable_navigation_polygons" not in metas:
         errs.append(f"{label}: 缺 walkable_navigation_polygons")
     return errs
+
+
+def extract_braced(text: str, key: str) -> str:
+    """取 `metadata/<key> = {…}` 的整段 JSON，**支持跨行**。
+
+    为什么需要：`metadata/runtime_room_geometry` 是字典，Godot 存盘时会写成多行。
+    上面那个逐行 `META_RE` 只能拿单行值，对这种字段会静默拿空 —— 而"拿空"
+    与"字段真缺失"在检查里看起来一样，是最容易放过错误的那种失效。
+    """
+    marker = f"metadata/{key} = "
+    at = text.find(marker)
+    if at < 0:
+        return ""
+    start = text.find("{", at + len(marker))
+    if start < 0:
+        return ""
+    depth = 0
+    in_str = False
+    escaped = False
+    for i in range(start, len(text)):
+        ch = text[i]
+        if in_str:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if ch == '"':
+            in_str = True
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start : i + 1]
+    return ""
+
+
+def check_runtime_rooms() -> tuple[list[str], int]:
+    """场景工坊烘焙出来的「游戏内房间美术」自洽性。
+
+    ## 为什么这条门禁存在
+
+    `runtime_rooms/<template>_<复用键前12>.tscn` 是**运行时真正会加载**的那一层。
+    它的失效方式是**静默**的：钥匙对不上就退回程序化，不报错、不提示。
+    2026-10-29 的 `size_class` 漂移让正式目录里唯一的烘焙房间永久失效，
+    而没有任何检查发现它 —— 这条就是为此补的。
+
+    ## 2026-10-31 语义变更：从「每局每房」改成「每模板一份」
+
+    业主原话：「这个场景工坊的意义就是复用美术进行拼装房间，当然算同一个可复用的」。
+    文件名从 `<room_id>_<签名前20>` 改为 `<template_id>_<复用键前12>`，
+    复用键 = `size + type + safe_corner`（门位与门向**不进键**）。
+    一局 28 间房因此收敛到十几份美术（实测 17 / 14）。
+
+    ## 查什么（都在文件内部，不需要跑引擎）
+
+    1. **文件名 ↔ 键一致**：`<template>_<12位十六进制>.tscn`，后缀必须等于
+       根节点 `runtime_room_signature` 的前 12 位。手工改名、改内容都会被抓。
+    2. **键完整**：必须是 64 位十六进制（sha256）。
+    3. **尺寸自洽**：`runtime_room_geometry.size` 与 `size_m` 逐值一致。
+    4. **前缀非空**：模板名不能为空（空前缀等于把不同模板混进同一批文件名）。
+
+    ## 不查什么
+
+    **"这份文件在当前代码下还算不算有效"** —— 那取决于运行时算出的复用键，
+    文本门禁算不出（要读房间的尺寸与房型，那是运行时状态）。这一条由运行时承担：
+    失配时 `RuntimeRoomArtSource.matching_path()` 会在存在过期同名前缀文件时
+    push_warning 点名。
+    """
+    errs: list[str] = []
+    runtime_dir = LAYOUT_DIR / "runtime_rooms"
+    if not runtime_dir.is_dir():
+        return errs, 0
+    count = 0
+    hex_re = re.compile(r"^[0-9a-f]{64}$")
+    for path in sorted(runtime_dir.glob("*.tscn")):
+        count += 1
+        label = f"runtime_rooms/{path.name}"
+        p = parse_tscn(path)
+        raw_sig = p["metas"].get("runtime_room_signature", "").strip('"')
+        if not raw_sig:
+            errs.append(f"{label}: 缺 metadata/runtime_room_signature")
+            continue
+        if not hex_re.match(raw_sig):
+            errs.append(f"{label}: 签名不是 64 位十六进制（{raw_sig[:24]}…）")
+            continue
+        stem = path.stem
+        template_id, _, suffix = stem.rpartition("_")
+        if not template_id:
+            errs.append(f"{label}: 文件名不是 <template_id>_<键前12> 形态")
+            continue
+        if raw_sig[:12] != suffix:
+            errs.append(
+                f"{label}: 文件名后缀 {suffix} != 复用键前12位 {raw_sig[:12]}（改名或内容被改过）"
+            )
+        try:
+            geometry = json.loads(extract_braced(p["text"], "runtime_room_geometry") or "{}")
+        except json.JSONDecodeError:
+            geometry = {}
+        try:
+            size_m = json.loads(p["metas"].get("size_m", "[]"))
+        except json.JSONDecodeError:
+            size_m = []
+        geo_size = geometry.get("size") if isinstance(geometry, dict) else None
+        if isinstance(geo_size, list) and isinstance(size_m, list):
+            try:
+                if [float(v) for v in geo_size] != [float(v) for v in size_m]:
+                    errs.append(
+                        f"{label}: geometry.size {geo_size} != size_m {size_m}"
+                    )
+            except (TypeError, ValueError):
+                errs.append(f"{label}: geometry.size / size_m 不是数值数组")
+        elif geo_size is None:
+            errs.append(f"{label}: 缺 metadata/runtime_room_geometry.size")
+    return errs, count
+
+
+def check_runtime_reuse_budget() -> tuple[list[str], dict]:
+    """复用率体检：一局 28 间房应该只落成少数几份美术。
+
+    ## 为什么要有这条（而不是只查文件自洽）
+
+    2026-10-31 之前复用键含门位，于是**每间房一个键**（实测 28 键 / 28 房），
+    美术做一次只有那一局能用 —— 工坊的核心价值等于零，而当时没有任何门禁
+    会因此变红（每个文件都合法，只是永远不命中）。
+    「键没有收敛」是这种失效**唯一可见的形态**，所以必须单独断言。
+
+    期望值从数据源推，不写死：房间数取六张 flow 里内容房最多的那张（含注入房）。
+    同一个「尺寸 × 房型」组合至少应该出现 2 次，否则说明键里混进了每局都变的字段。
+    """
+    errs: list[str] = []
+    # 六张 flow 的 (尺寸, 房型) 组合统计 —— 与运行时 `describe()` 的键同构（不含门位）。
+    combos: dict[tuple[float, float, str], int] = {}
+    total = 0
+    for path in sorted(FLOW_DIR.glob("flow_*.json")):
+        flow = json.loads(path.read_text(encoding="utf-8"))
+        for node in flow.get("nodes", []):
+            size = node.get("size_m")
+            if not size:
+                continue  # 连接房尺寸由池决定，不计
+            kind = str(node.get("kind", ""))
+            # 只统计内容房：ENTRANCE/EXIT/SHOP/REWARD 各只有一间，天然不收敛。
+            if kind not in ("NORMAL", "HUB"):
+                continue
+            key = (float(size[0]), float(size[1]), kind)
+            combos[key] = combos.get(key, 0) + 1
+            total += 1
+    if total == 0:
+        return errs, {"rooms": 0, "keys": 0}
+    multi = sum(1 for count in combos.values() if count >= 2)
+    if multi == 0:
+        errs.append(
+            "复用键没有任何收敛：%d 间内容房落成了 %d 个不同组合"
+            "（同一「尺寸 × 房型」必须能共用一份美术）" % (total, len(combos))
+        )
+    return errs, {"rooms": total, "keys": len(combos), "shared_keys": multi}
 
 
 def check_door_catalog() -> tuple[list[str], int]:
@@ -375,6 +540,12 @@ def main(argv: list[str]) -> int:
     door_errors, door_count = check_door_catalog()
     issues.extend(door_errors)
 
+    # ── 场景工坊烘焙房间（运行时真正会加载的那一层）──────────────────────────
+    runtime_errors, runtime_count = check_runtime_rooms()
+    issues.extend(runtime_errors)
+    reuse_errors, reuse_stats = check_runtime_reuse_budget()
+    issues.extend(reuse_errors)
+
     # ── 多余产物：目录里存在但没有任何清单认领的 rt_/cr_ 壳 ──────────────────
     known = set(expected_rooms) | {f"{s['shell_id']}_static_layout.tscn" for s in corridor_specs}
     if LAYOUT_DIR.is_dir():
@@ -390,11 +561,15 @@ def main(argv: list[str]) -> int:
         "room_shells": {"required": len(expected_rooms), "present": len(present) - len(corridor_specs)},
         "corridor_shells": {"required": len(corridor_specs)},
         "door_kinds": door_count,
+        "runtime_rooms": runtime_count,
+        "reuse_budget": reuse_stats,
         "missing": missing,
         "issues": issues,
         "limit": (
-            "只校验契约字段与几何描述的自洽（轮廓、端口数、门位合法性、实例计数）。"
-            "不判断几何是否真的对 —— 那要真跑 Godot 加载与出图，文本门禁证明不了。"
+            "只校验契约字段与几何描述的自洽（轮廓、端口数、门位合法性、实例计数、"
+            "烘焙美术文件名↔复用键一致、复用键是否收敛）。不判断几何是否真的对，"
+            "也不判断烘焙美术在当前代码下还算不算有效 —— 前者要真跑 Godot 加载与出图，"
+            "后者由运行时 RuntimeRoomArtSource.matching_path() 失配告警承担。"
         ),
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))

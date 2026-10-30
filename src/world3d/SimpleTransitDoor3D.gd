@@ -32,6 +32,14 @@ func configure(p_door: RoomDoor3D, p_player: Node3D) -> void:
 func request_open() -> bool:
 	if door == null or not is_instance_valid(door):
 		return false
+	# 权限（`openable`）先于动作：99F 基地西侧那扇通 100F 天台的楼梯门被钉成
+	# 「不可开启」后，这里必须如实返回 false。调用方两处兜底
+	# （`_activate_stair_arrival` / `_activate_stair_return_interaction`）会
+	# 在 false 时直接 `set_open(true)` 硬开门 —— 所以本函数返回 false 只是
+	# 事实汇报，**不构成**拦截；真正的拦截在调用方（见 TowerDescent3D 的
+	# `_open_bound_simple_room_edge_door` 与两处兜底的 openable 检查）。
+	if not door.openable:
+		return false
 	# 普通交通门只有“E键开门”；开启中或已开启时重复交互不切换为关闭。
 	if door.is_open:
 		return true

@@ -513,6 +513,12 @@ static func generate_from_level_plan(
 		"interactive_clutter": (
 			level_plan.get("interactive_clutter", {}) as Dictionary
 		).duplicate(true),
+		# 程序化随机家具（含可搜索容器）总开关（能力段，2026-10-30）。
+		# 与 interactive_clutter 同处透传、同为顶层字段 ⇒ 不进 canonical，改它不会让存档失配。
+		# 关卡不写本段 ⇒ 空字典 ⇒ 运行时按缺省 true 处理，行为逐字不变。
+		"furnishing": (
+			level_plan.get("furnishing", {}) as Dictionary
+		).duplicate(true),
 	}
 	plan["valid"] = errors.is_empty()
 	plan["validation_errors"] = errors

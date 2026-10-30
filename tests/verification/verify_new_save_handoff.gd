@@ -4,7 +4,8 @@ extends Node
 const TEST_PATH := "user://new_save_handoff_probe.json"
 const TOWER_SCENE := preload("res://scenes/TowerDescent3D.tscn")
 const ROOM_ID := "floor_01_exit"
-const ITEM_ID := "weapon_starter_rifle"
+## 2026-10-30 起开场地面枪 = 豌豆手枪（与 BlueprintRegistry.DEFAULT_STARTING_GUN_ID 同值）。
+const ITEM_ID := "weapon_pistol"
 const SPAWN_KEY := "nar_tower_opening_01_wake:starter_weapon"
 const SEED := 990098
 

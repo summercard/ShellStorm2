@@ -73,6 +73,13 @@ var _visual_id := ""
 ## 键见 WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG；空字典 = 中性档（不改观感）。
 ## 只影响弹体纯视觉的尺寸/拉伸/生长包络，不影响碰撞半径、伤害与射程。
 var _gun_bullet_geometry: Dictionary = {}
+## 调用方直给的**纯视觉**尺寸倍率（2026-10-30，敌弹用）。
+##
+## 敌弹没有「枪身档位」这一层，尺寸只能由发射方声明；远征03 的业主指令是「怪物子弹放大一倍」
+## ⇒ 关卡 `monster_rules.projectile.visual_scale = 2.0` 由 `Enemy3D` 随 config 下发。
+## **刻意不进碰撞半径**：敌弹判定球 0.12 是既可读又不误伤的可玩性基准，放大视觉只让子弹看得更清，
+## 不让它更难躲（同时避免把 `_egt_dodgeability_probe` 的可躲性判据一起改掉）。
+var visual_scale := 1.0
 var shooter: Node3D = null
 var fate_behavior: Dictionary = {}
 # 命中击退强度（m/s）。默认 0 = 不让怪物位移；霰弹枪=0.8（轻微）。
@@ -122,6 +129,8 @@ func configure(config: Dictionary) -> void:
 	fate_behavior = (config.get("behavior", {}) as Dictionary).duplicate(true)
 	# 每次 configure 一律重取（缺省空字典 ⇒ 中性档），池化复借不得残留上一发的枪身档位。
 	_gun_bullet_geometry = (config.get("gun_bullet_geometry", {}) as Dictionary).duplicate(true)
+	# 同上：敌弹的纯视觉倍率也必须逐发重取，否则池化复借会把上一只怪的放大档带过来。
+	visual_scale = maxf(0.05, float(config.get("visual_scale", 1.0)))
 	var source_tree_value: Variant = fate_behavior.get("source_weapon_tree")
 	var source_weapon_value: Variant = fate_behavior.get("source_weapon")
 	source_weapon_tree = source_tree_value as WeaponAssemblyTree if is_instance_valid(source_tree_value) else null
@@ -565,9 +574,14 @@ func _sync_visual_route(config: Dictionary) -> void:
 	_ensure_visual(_visual_scene_for(_visual_id))
 
 
-## 弹体视觉总尺寸 = 弹种/命运倍率 × 枪身档位倍率（枪身维度：榴弹更大 / 霰弹更大等）。
+## 弹体视觉总尺寸 = 弹种/命运倍率 × 枪身档位倍率（枪身维度：榴弹更大 / 霰弹更大等）
+## × 调用方直给的纯视觉倍率（敌弹的关卡档，见 `visual_scale`）。
 func _visual_scale_factor() -> float:
-	return _base_scale_factor() * float(_gun_bullet_geometry.get("scale", 1.0))
+	return (
+		_base_scale_factor()
+		* float(_gun_bullet_geometry.get("scale", 1.0))
+		* visual_scale
+	)
 
 
 ## 碰撞半径倍率 = 弹种/命运倍率 —— **刻意不含枪身档位**。

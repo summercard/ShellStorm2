@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1375,
+ "asset_count": 1415,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -6911,32 +6911,232 @@
    "v": "5ed40b726290f953947b2894b5b05450437cacc12a32e4ad8a55030477f52214",
    "c": "敌人",
    "d": "enemies"
+  },
+  "ENV-EXP03-MANOR-WALL-STANDARD": {
+   "v": "3988d3cf61f3ba273f31f2f3f0829afd5adfc57687b766429e3189d0723484db",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-WALL-DOOR": {
+   "v": "c99a6f22e0c651288be446fc0fdaf4b1823d1f7b5f2fbfd0b4602bab80c2732d",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-WALL-WINDOW": {
+   "v": "17dc892080273702112b1e6028aa46062136c4b38fd8640fbc85e51665e7b5b3",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-FLOOR-WOOD": {
+   "v": "316e3fe07160594152ba1ffc0ebea105a72826c785ceb0e94a6bb3aad5b87c5b",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-FLOOR-STONE": {
+   "v": "617044b4e72456ae141fa4c9eec91e290eb85e5e7e89f573a52b8c13c77e2af6",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-FLOOR-BATH": {
+   "v": "d524b2c414179472a67394f559425871b3db5037f3a6ee885f2b91a74b06ea3e",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-DOOR-DOUBLE": {
+   "v": "6331f71c330db79609070a51e2c3fd21cbc289d2ddd09fb387b2c9f711674a92",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-DOOR-ARCH": {
+   "v": "6e10fbfe8ba900e0b34739b14e7081501b4707ef3b3f7dce818e98e76f1d90cd",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-RUG-LOUNGE": {
+   "v": "30d5d912b87775007a58bed12abbe3d826aff895b2d1e3ee241e4fd5e3175063",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-RUG-RUNNER": {
+   "v": "db40b0f055e56fb57715652ff7a2f594af2a2e71cc7c296a45c2de2aef4a7f64",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-RUG-BEDROOM": {
+   "v": "cee2b4bbc32d29f8b29beac93997b664d5a00993146769724ed36ab5da76eb29",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-ENTRANCE-MAT": {
+   "v": "67d9a237aeb57094a9b9301d523df95161a15295161aef225a9e84243b76898a",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-SOFA": {
+   "v": "786bcf7a874568a445d0d8a44202e6f1df70247fba2fe1c1696fe6db19ccc153",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-ARMCHAIR": {
+   "v": "5ab251a5ab52d53b2068930b7e33e8f49214143939026ab09382cddd6ffcb0ea",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-OFFICE-CHAIR": {
+   "v": "512f06b6d4d0ec8c4ad55c89f953a159cac225564b118e5226540951d45d93cc",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-COFFEE-TABLE": {
+   "v": "939fbf32836fc79d2446b2792bb826619ccd82710b446bf7ac532dd90519da86",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-SIDE-TABLE": {
+   "v": "967af382b7c15eeb6dfc70e4ceeb849948e95889a55a561dfd45359704f0db54",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-CONSOLE": {
+   "v": "e2f3271642758038ffa862ce465f6e26f444cd206c72bd853ec0a299cbd0e87f",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-RECEPTION-DESK": {
+   "v": "ea83779d0fab3b9c076d261dc05fe0b4c21b246b7e51b1ac32bae51d999a72e8",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-BED": {
+   "v": "4cc640ea796c53988a558ff3e7aa4a8f609af5354f1c5b71c634dcb160a8f6fc",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-BENCH": {
+   "v": "122fddccb8deb1c795912e645194ca8bd62067ee02fa225f1019e60345af8882",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-NIGHTSTAND": {
+   "v": "204beda3d69a1f60f30e91d0ace539daa498edcd83fc71e01643f403858f8f89",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-WARDROBE": {
+   "v": "a52351a95532572d9ffac9ba2ac081897f37c49afe6cfb05cc6a14b1172864ca",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-BOOKCASE": {
+   "v": "b5f0d044c6d6a77eb73cad6c846912aed860fa4c80120cf21936d6ff67865af1",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-LUGGAGE-CART": {
+   "v": "8eb2131ca64ab813558346b5ef63c7461bc413a2e238290d06d62becd340fecc",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-PAINTING": {
+   "v": "89dfc144fd14de34fa8ad28db4b36bc08efa03ffe8273b9000f20cd54bd0d101",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-WALL-GRILLE": {
+   "v": "b6b84106abf23fd80c5590fcea93610b2e82beaf4bbafd3fa7333c8fc71f3beb",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-WALL-LAMP": {
+   "v": "9cd30ea1da28a08be6cadb6086a021219416647757173085b03448158ec05478",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-TABLE-LAMP": {
+   "v": "0dc10d690bf8d8e15bda89f15d9838fde8f340565dcbb7f8d003d87cb8f1df6b",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-PLANT-LARGE": {
+   "v": "cd88bde99311878ec6afd03950d137a15566fb55bdddde55d52e1b474113c615",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-PLANT-COMPACT": {
+   "v": "df36f33c5cab613b3e4069c6019cc91601313f2e56eab4b1d84f276dcbe0de6b",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT": {
+   "v": "1bdafae50c36d4df6ae291de49f9314c54e91feeedeccbba982144bbc56b3d77",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-BATHTUB": {
+   "v": "fb0aa98378b5636e167f84ceffdacbe977ef40b1d3affcf82c5c6b34c415604e",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-VANITY": {
+   "v": "ae9f891c7233b39745057c93c604d026ca515ae30091b15e860e3b3f05acb90f",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-MIRROR": {
+   "v": "6ea5db22a9f6612633520c0924b0853274b3ed1f6a4917d422baba88fdd7e245",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-TOILET": {
+   "v": "f0a29b5d0b759ad2c0f5731972e0e022889955f4928ce3fb61176b67388cb2c7",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-TOWEL-RAIL": {
+   "v": "a42a7056f3b4f7ef0efbda47152eba76171e80b8c1ed87a99debe0c9acbc08a6",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-CANDELABRA": {
+   "v": "568e90c64f11c89a1e91ffac83ba8e8a1d3035af8d0b00e372c6d4d3d5e3c0d2",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-DESK-DOCUMENTS": {
+   "v": "8194ef9e8ba9a34366136ebbb53da1e6bbd18d4146cc7bbfa7acbae352cb809d",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-EXP03-MANOR-BATH-SCREEN": {
+   "v": "437690c93e0b2976827ded5cbd8009827f477f5ad08e67a949450a20a271c779",
+   "c": "场景",
+   "d": "scenes"
   }
  },
  "column_digests": {
-  "1": "af7ccfbdf9a99ce3bb332bb7db24887b1a384a56dc2c35f365ba9ff32eaa6888",
-  "2": "3dde0e3c00885f60a67e09fe59a85e811cd1bebee939fc29b778df3b83aeb6bb",
-  "3": "2f09998fa5b9309f2d9be86b5e6acf43a543dea5c7d6b4b92ffcae14e08ac977",
-  "4": "4404911ed7f1e4a82e91b5d97195d4a47751aa336f584ddbdf1a3508b8bc157b",
-  "5": "1bcaf09da5f780bb3b5dcfe541763fce6fbc0ed16cbaaf855a8524d701bc7cf2",
-  "6": "ca15baca905531d2c6a8523711c8449b988d7abd4e3584acd6d7eef30093911a",
-  "7": "15abb953f752c542e2d92e40e114ab5e1d55c12d68901e065ada9d49cbf35d6a",
-  "8": "55ed7fae2ab8c08b6b38a553cc0f14d2114195a29c1b960bab5caa798189b5ab",
-  "9": "b44282762cddc96bf63c23de5edcd732663705ee79139685b710e3c32a532ac0",
-  "10": "d4f4fe6dd7574f82c6ef6414f64b62ce798c45e4edd328def892b862d8054ad2",
-  "11": "f976395d11603bf409e62b61ef516643d86093338fef86c8a4f885dbfac3a254",
-  "12": "263384dd1f188625adab9c45842790b11ea5f3e6bd8b94ac960755e526cd21c6",
-  "13": "3838ba08489856f7149d3c8a7369ea656b073ed7223cb65bb5bdcf28d7b32684",
-  "14": "abcfc9d20bbf5d464eead60664b2586143ff3ca5d69b7ec150cdcefa7b79e0ac",
-  "15": "18afb0682d6c6e6b66f085d9fca212d261a6f2c8da8afedc3d4d53e84665ef93",
-  "16": "b147f821e9166b53466ec345c4229628f39ff8649c2e0a09acb7822a8e968fa5",
-  "17": "e2ccac1ff329c684e3c0253aaf84de16032e5e1443deb754a986ffee046699cf",
-  "20": "0b9a41004fdf83f90704341bf64246cd1e4261f63cb9b86e2836e6613f013451",
-  "21": "e6525d11eec63df40ec3fcafa4051df0092494fbad162cec18631a26350a609c",
-  "22": "6ad72392c2f5d376a00b18fd025d14455b21e4ab4c996e5e7dd9eeac57a49ff9",
-  "23": "d3e299e0ae0e9250d79aa39da95a26465dfbdcd348e5abadbd98f4ee8f7b9741",
-  "24": "9d13059f43e06ef18789996e180118876c76ef39ab28ac89ddf37115683d5a34",
-  "25": "7e13bca0c25dbe8b4219d966ecc51487b27cdd91591b2bb1afe032be3fcb636e"
+  "1": "9b5fee2d3a132365dab8bb69da9f071289156d1ebba4e1e014108736fa360dd9",
+  "2": "f98ab5fdb6a23ace159477163119f1aec21c1e30bbc9a11f20b937eb88faff9c",
+  "3": "0e645b32466aa4ec9280eb7f5195a313a05af96f79de97a40155281be22832b7",
+  "4": "75c29a8f104457a6d860d5071c2b3e75187b56c18e5709670b2ee3b88088d6df",
+  "5": "8404130b9bfe4d5c39743e26a49dc3d678f5478801bb6cf7138d135e5ddf0c55",
+  "6": "f571c919c03780e475d1f80a292e4a5b58f35410c9918a138b1a4273d92a4999",
+  "7": "7be3779abd8c50c41af7bf1a1179a82c641afa3ba2cc68b5ce3162d4461b4853",
+  "8": "63137b835abe054fe78b7bfada38168ec38b312c9490bd717b35f466e5c27328",
+  "9": "752c4c13b4d22bade2fce41d46debcda00da1b655627333a8504311e8146931d",
+  "10": "56abe8ad422fd3f816d7b64ce204452179bdb31dc0c9702a1d5132e3d2af6423",
+  "11": "49d93906c5e9c58a9f9599ecf8b652af24a6c8b94681ac8ca6dd2b4483131e24",
+  "12": "d3b09b1ad1e8073c78dbf8b9599b2bbb36647dda154c978445f228718afc93e7",
+  "13": "9cb254e52f931e42a4449244dd5f16ae6f4d50ccd61cf5ab069d65859d70ea52",
+  "14": "5bf566013b9b9e93d1e4bda109a82c9f0d4d97e94424ae995f1639a7d1cee5c5",
+  "15": "9409634f07e2bf5a4eed488d8231605153a6136bfd86f7ea87a35df1717066bb",
+  "16": "76d3085871f77d9e3ebf566daa4bc61e43805173bb82c6afc181a7746dc13801",
+  "17": "1b3d6191c6baed631cbe43803965e673cf81f6feeec76e60ed3545b0bd10058f",
+  "20": "5fc2bd6af7fb5ef986a384cca9e2a874e1a7577fbef76822b93c170126951b19",
+  "21": "203baf3ca1fbc4325aeff95e146f4c8e811217d7a5c0419d9ac275791420ea75",
+  "22": "8f0da07aa83d2d2ab5fc5d4829712aa364801855b017c29ee0429506b3eb356f",
+  "23": "436dd50587f886ec841b362087f28859ed0b06685f5722416a76ae2576112c05",
+  "24": "d5eb10e6db2984dc8cea2f914a361bfaf4ebbf3cdc3d2617dd144d6cb429b76a",
+  "25": "ede60bf5b04ce83ac26e04951de254ad3e6673a708dd87209499587e3beb487e"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -6946,9 +7146,9 @@
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
   "敌人动画与状态": "983b022d1142354f3c2e3ba7798e192f040f8a7de64747c0c885555cc928fc49",
   "3D-敌人": "0bd334804b4d8f68ee0a76095e1eb7a88c8e19a5a83b6eca96b692c9d3a2ba37",
-  "3D-场景通用": "a26ad4bb1d2c1c6016ba856dcd367b9ec8f04292928b116e85c46ac2bbddb0d0",
-  "3D-设施": "60949a4e4d892dc425a78abdf55ee776b8da45bae11b3cb9516bc8136c079871",
-  "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
+  "3D-场景通用": "a7671682c489e59375fd6398e97a24dafd3cf525008c9f2386d431ffb47820be",
+  "3D-设施": "0aa1ec2d3dcea117a7f46bbef91de30419d6b18e3ea46b0f8bedffd72cebadb0",
+  "3D-其他": "ab234cb2b953c09e5c8e0d92f32f8a3fe28ded72ef1a8ffc0bbeac1b6e07aca8",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
   "3D-物品": "0bba6748006c5b75fefd481d2406d12691ea639b33437364bccb53d0cff5be58",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
@@ -6956,18 +7156,18 @@
   "3D-特效": "9558f5992d9c3a0fcdf2d206856e3034621765c9d7d58157639ae1e0acbd3199"
  },
  "category_counts": {
-  "角色": 25,
-  "敌人": 49,
-  "场景": 810,
+  "UI": 18,
+  "场景": 850,
   "场景道具": 49,
   "基地资产包": 114,
-  "道具": 39,
+  "子弹特效": 10,
+  "敌人": 49,
   "武器": 36,
   "特效": 38,
-  "子弹特效": 10,
-  "UI": 18,
-  "音效": 178,
-  "音乐": 9
+  "角色": 25,
+  "道具": 39,
+  "音乐": 9,
+  "音效": 178
  },
  "targeted_updates": [
   {

@@ -8,7 +8,7 @@
   "grid_unit_m": 5.0,
   "wall_thickness_m": 0.3,
   "floor_height_m": 12.0,
-  "visible_wall_height_m": 11.9,
+  "visible_wall_height_m": 2.8,
   "site": {
     "size_m": [
       250.0,
@@ -98,6 +98,12 @@
     "door_clearance_m": 2.4,
     "min_spacing_m": 1.1
   },
+  "furnishing": {
+    "schema": "shellstorm2.battle.room_furnishing",
+    "schema_version": 1,
+    "note": "程序化随机家具（含可搜索容器）总开关（2026-10-30，主人要求「把程序生成的这些箱子每个房间都去掉」）。**能力段不是关卡分支**：DungeonRoom3D 只认本段、不认识关卡 ID。enabled=false ⇒ 一间房都不再生成随机家具/可搜容器；固定陈设（安全房五件易碎件、Boss 房构图、服务台、撤离信标）不在随机循环里建，不受影响；易碎小物件走另一段 interactive_clutter。未写本段的关卡默认 true，行为逐字不变。",
+    "enabled": false
+  },
   "generation_policy": {
     "mode": "flow",
     "min_main_content_rooms": 8,
@@ -138,7 +144,7 @@
   "monster_rules": {
     "schema": "shellstorm2.battle.monster_rules",
     "schema_version": 1,
-    "note": "远征03 专属怪物规则（《挺进地牢》第一层复刻，2026-10-29 第三轮：重点对齐弹速/伤害/方式）。本段**不进 layout_id**（改它不会让既有存档失配）。stats.per_kind 是**绝对最终值**：hp=最终 max_hp、damage=最终接触伤害、speed=最终米/秒。**hp = EGT 血量 × 10**（系数由「保持击杀发数」反推：EGT 15 血 ÷ 手枪 6 伤 ≈ 3 发 ↔ 150 血 ÷ 步枪 50 伤 = 3 发）。**damage 统一 17 = 玩家 100 血的 1/6**，对应原作「半颗心 = 6 格里的 1 格」；**爆炸也是 17**，原作不为爆炸开特例。枪歌者与抓握大师为 0（原作明确 Gripmaster deal no damage）。弹速 8（基准）/10（wiki 标注 fast-moving）/6（追踪、弹跳弹），依据是**可躲性反推**：16 m/s 时玩家在 8m 处只能横移 1.12m < 扇形半宽 1.99m ⇒ 躲不掉；8 m/s 时可移 3.38m ⇒ 躲得掉。弹程统一 22m，覆盖整个房间，撞墙自然消失（不设射程会让子弹只有 1 秒寿命 —— 那是「子弹飞不出来」的根因）。依据见 docs/v0.1/design/怪物设计.md §T0.2 / §T2.5。**2026-10-29 起 `enemy_pool` 已删除**：实际编成全部走 `spawn_roster`（逐房手作敌群）。",
+    "note": "远征03 专属怪物规则（《挺进地牢》第一层复刻，2026-10-29 第三轮：重点对齐弹速/伤害/方式）。本段**不进 layout_id**（改它不会让既有存档失配）。stats.per_kind 是**绝对最终值**：hp=最终 max_hp、damage=最终接触伤害、speed=最终米/秒。**hp = EGT 血量 × 10**（系数由「保持击杀发数」反推：EGT 15 血 ÷ 手枪 6 伤 ≈ 3 发 ↔ 150 血 ÷ 步枪 50 伤 = 3 发）。**damage 统一 17 = 玩家 100 血的 1/6**，对应原作「半颗心 = 6 格里的 1 格」；**爆炸也是 17**，原作不为爆炸开特例。枪歌者与抓握大师为 0（原作明确 Gripmaster deal no damage）。弹速 8（基准）/10（wiki 标注 fast-moving）/6（追踪、弹跳弹），依据是**可躲性反推**：16 m/s 时玩家在 8m 处只能横移 1.12m < 扇形半宽 1.99m ⇒ 躲不掉；8 m/s 时可移 3.38m ⇒ 躲得掉。弹程统一 22m，覆盖整个房间，撞墙自然消失（不设射程会让子弹只有 1 秒寿命 —— 那是「子弹飞不出来」的根因）。**2026-10-30 第四轮（业主「怪物子弹速度对标原作、1:1 匹配」）**：弹速锚点从「可躲性反推的 8」换成反编译实锤 `new Speed(6f, SpeedType.Absolute)`，全域 ×0.75 ⇒ 基准 **6** / fast **7.5** / 慢弹 **4.5** m/s，序关系不变。依据见 docs/v0.1/design/怪物设计.md §T0.2 / §T2.5。**2026-10-29 起 `enemy_pool` 已删除**：实际编成全部走 `spawn_roster`（逐房手作敌群）。",
     "stats": {
       "per_kind": {
         "egt_bullet_kin": {
@@ -316,7 +322,8 @@
       "vision_range_artificial_m": 13.5,
       "vision_range_sunlight_m": 15.5,
       "proximity_awareness_m": 4.8,
-      "alert_share_radius_m": 10.0
+      "alert_share_radius_m": 10.0,
+      "room_attack_gap_sec": 0.47
     },
     "strong_variant": {
       "chance": 0.0,
@@ -342,6 +349,11 @@
         },
         "note": "原作是「朝远离玩家方向炸成一条线」。当前为**圆形爆炸**（基础版）；线爆需要在 DeathBlastZone3D 上加方向性选区，属后续补齐项，见 docs/v0.1/design/怪物设计.md §T4。"
       }
+    },
+    "projectile": {
+      "schema": "storm2.battle.enemy_projectile_look",
+      "note": "敌弹的**观感**段（2026-10-30 业主「怪物的子弹大小也放大一倍」）。只放这一关看起来怎么样，不放速度：**弹速住在 Enemy3D.PROFILES 的怪种行**（第四轮 6/7.5/4.5 m/s，锚点反编译 Speed(6f)），免得同一只怪在两张表里各有一份速度。`visual_scale` 由 MonsterInjector._projectile_look_overrides() 随怪物配置下发到 Enemy3D，再随每发 config 传给 Projectile3D.visual_scale。**只放大看得见的弹体**：命中判定仍是 0.12 m 基准球（既让子弹看得清、又不偷偷提高难度，也不动 _egt_dodgeability_probe 的可躲性判据）。未配置本段的关卡 = 1.0，其余关卡逐字不变。",
+      "visual_scale": 2.0
     },
     "currency": {
       "note": "战利品（货币 `extraction_points`）独立掉落通道，**2026-10-30 统一为「每只 1~2 枚」**。改口径的原因：此前按血量分 2/3/8 三档，实测一层 53 只怪合计约 162 枚，是原作一层总量（社区统计 ≈59，非官方）的 2.7 倍，金币通胀会让商店与命运卡同时失效。取 1~2 枚（均值 1.5）而不是写死 1 枚，是因为**自爆怪按原作不掉铸币**、占我们编成的 25%（13/53 只），写死 1 枚时一层只有 41 枚（原作的 69%），写死 2 枚到 82 枚（139%）；1.5 枚的中位数 61 枚正好对上。**两处例外按原作保留**：①「自爆的敌人不掉铸币」（pinhead / nitra / bullat / shotgat / grenat / spirat 全为 0，base=0 时 `_resolve_currency_entry` 直接不生成 grant，地上不会出现 0 元球）；② 精英 / Boss 走 `per_tier`，数值与 `MonsterInjector.DROP_CURRENCY_*` 常量逐值一致（50/20、200/20），行为零变化 —— **不能只写 `default` 而不写 `per_tier`**：`_currency_amount_for` 的候选顺序是 per_tier → per_kind → default，缺 `per_tier` 会让精英与 Boss 一起掉进 default（Boss 从 220 掉到 1~2）。商店价格中位 113 枚（实测 `_egt_shop_price_probe`），一层 61 枚的实际含义是「攒一层买得起最便宜的 1 件、攒两层买得起中位价」—— 与原作节奏一致。",

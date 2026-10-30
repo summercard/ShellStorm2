@@ -118,6 +118,12 @@ func _ready() -> void:
 		for direction in facility._door_nodes.keys():
 			test_door = facility._door_nodes[direction] as RoomDoor3D
 			break
+	# 99F 基地通 100F 天台的西侧楼梯门自 2026-10-30 起是**不可开启**的
+	# （`BASE99_ROOFTOP_STAIR_DOOR_LOCKED`）：它的文案被 `set_prompt_override`
+	# 钉死成「无法开启 · 需要钥匙」，不再参与下面「按 access_policy 切文案」
+	# 的状态机。测试 3/4/5 需要一扇**普通门**当样本，这里换掉锁定门。
+	if test_door != null and not test_door.openable:
+		test_door = _pick_openable_door(room_by_id)
 	if test_door == null:
 		# fallback: 任何一扇门
 		for room_id in room_by_id.keys():
@@ -344,22 +350,25 @@ func _ready() -> void:
 		print("❌ 有失败项")
 
 	# ============================================================
-	# 测试 8: 默认开 vertical edge （rooftop→facility）首次 E 键门是否打开
-	# 这就是主人口中“门没打开”的 bug：有边 edge=true 但门 mesh 还是关
+	# 测试 8: 99F↔100F 西侧楼梯门「不可开启」
+	# 口径变更（2026-10-30 主人要求）：这条路从「默认开门」改成「钉死不可开启，
+	# 交互只回一句需要钥匙」。原用例断言「edge=true 但门 mesh 关 ⇒ 首次 E 要把门打开」，
+	# 现在正确的行为是**反过来**：E 被消费、门纹丝不动、碰撞继续挡路。
 	# ============================================================
-	print("\n=== 测试 8: rooftop→facility 默认开门的首次 E 触发 ===")
+	print("\n=== 测试 8: rooftop→facility 西侧楼梯门不可开启 ===")
 	var rooftop := room_by_id.get("start") as DungeonRoom3D
 	if rooftop != null:
 		rooftop.ensure_shell_built()
 		await _settle_short()
 		var west_door: RoomDoor3D = rooftop._door_nodes.get("west") as RoomDoor3D
 		if west_door != null:
-			# 重置为关门状态（模拟该 bug：edge=true 但门 mesh=关）
 			west_door.set_open(false, true)
 			# 续上轮测试 6 的调用遗留下来 _door_fate_active=true，需在 rooftop 早期 E 触之前重置
 			tower._door_fate_active = false
 			await _settle_short()
-			print("  重置后: is_open=%s collision.disabled=%s" % [west_door.is_open, west_door._collision.disabled])
+			print("  重置后: is_open=%s collision.disabled=%s openable=%s" % [
+				west_door.is_open, west_door._collision.disabled, west_door.openable
+			])
 			# 玩家站在门附近
 			tower.player.global_position = west_door.global_position + Vector3(0, 0, 1.5)
 			tower._current_room_id = "start"
@@ -369,16 +378,22 @@ func _ready() -> void:
 				tower._open_edges.get(tower._edge_key("start", "facility"), "MISSING"),
 				tower._door_fate_active
 			])
-			# 调 try_open（该 edge 默认 true，会走 early-return path）
+			# 调 try_open：本轮期望它被消费（有反馈），但门**不开**
 			var opened_v := tower.try_open_room_door("facility")
 			await get_tree().create_timer(0.80).timeout
 			await get_tree().physics_frame
-			if opened_v and west_door.is_open and west_door._collision.disabled:
-				print("  ✅ 首次 E 后门 mesh 已打开 + collision 禁用")
+			var kept_closed := (
+				opened_v
+				and not west_door.is_open
+				and not west_door._collision.disabled
+				and not west_door.openable
+			)
+			if kept_closed:
+				print("  ✅ 首次 E 被拒：门仍关闭、碰撞仍阻挡、openable 仍为 false")
 				tests_passed += 1
 			else:
-				print("  ❌ 首次 E 后门未开: opened=%s is_open=%s collision.disabled=%s" % [
-					opened_v, west_door.is_open, west_door._collision.disabled
+				print("  ❌ 锁定门被打开或漏了反馈: opened=%s is_open=%s collision.disabled=%s openable=%s" % [
+					opened_v, west_door.is_open, west_door._collision.disabled, west_door.openable
 				])
 				tests_failed += 1
 		else:
@@ -472,6 +487,25 @@ func _settle_long() -> void:
 		await get_tree().process_frame
 		await get_tree().physics_frame
 	await get_tree().create_timer(0.3).timeout
+
+
+## 挑一扇「普通门」当样本：`openable == true` 且没有文案 override。
+##
+## 锁定门（99F→100F 西侧楼梯门）的 prompt 被 override 钉死，也不接受开门请求，
+## 拿它测「按 access_policy 切文案」只会得到永远一样的一句。
+func _pick_openable_door(room_by_id: Dictionary) -> RoomDoor3D:
+	for room_id in room_by_id.keys():
+		var room = room_by_id[room_id] as DungeonRoom3D
+		if room == null:
+			continue
+		for direction in room._door_nodes.keys():
+			var door = room._door_nodes[direction] as RoomDoor3D
+			if door == null or not door.openable:
+				continue
+			if not str(door.get_meta("lock_reason", "")).is_empty():
+				continue
+			return door
+	return null
 
 
 func _settle_short() -> void:
