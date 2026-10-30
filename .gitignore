@@ -318,3 +318,6 @@ art_source/**/*.blend1
 
 # Item palette import settings are part of the reproducible material contract.
 !assets/art/shared/palette/item_high_visibility_palette_10x10_512.png.import
+
+# Godot 临时文件
+project.godot~RF*
