@@ -139,3 +139,44 @@
 - **换出厂枪不是改一个常量**：`DEFAULT_STARTING_GUN_ID` + 剧本 `nar_tower_opening_01_wake` 的
   `spawn_item.item_id` 是两处；且持枪移速惩罚按枪族取（sidearm 0.5 / longgun 0.8 / machinegun 1.1），
   换族会连带改「拿枪跑多快」，`verify_fate_character_completion` 会跟着红。
+
+## 探针/验收的坑（2026-10-31 补）
+- **裸 `Enemy3D.new()` 造出来的怪没有碰撞体**：`@onready var collision_shape = $CollisionShape3D` 解析成 null，
+  `apply_profile()` 里 `if collision_shape != null` 整段跳过 ⇒ 怪穿地板、自由落体到 `FALL_DEATH_DROP_M` 以下
+  ⇒ `_die_from_fall_out()` 把它搬回出生点判死。**表现极具欺骗性：血量满、位置就在出生点、只跑了 26 帧**。
+  造怪一律 `instantiate()` 自 `assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn`。
+- **探针的假玩家必须提供 `current_hp`**，否则 `MonsterAIManager._target_is_legal()` 与
+  `MonsterVisionSystem3D.find_proximity_player()` 抛 `Nonexistent 'float' constructor`，目标恒非法。
+- **周期/间隔类指标只能用墙钟**（`Time.get_ticks_msec()`）。按 `await physics_frame` 累加固定步长会快 N 倍
+  （帧率 60 而步长写 1/30 ⇒ 读数翻倍），据此得出的"周期膨胀 X 倍"全是假的。帧数只用来算占比。
+- **`_egt_cadence_probe` / `_egt_enemy_motion_probe` 目前刷不出怪却仍报 OK**（本次实测：hub_02 刷 0 只、
+  12 个房全部「无怪（跳过）」）。拿它们的绿当"AI 没问题"会误判；逐只体检改用 `tools/_egt_ai_flow_probe.gd`。
+- `verify_monster_ai_system_complete` 有 2 条**既有红项**（`Attack token budget ... 1/0`、
+  `Released melee token was not reusable`）：该用例没把 470 ms 房间节拍器算进去。HEAD 版本同样红。
+
+### 速度算术的坑（2026-10-31 实测，会重犯）
+- **`_steer_planar(ZERO, delta×k)` + `_push_planar(v)` 是稳态放大器**：每帧衰减 k·dt、
+  却每帧加一次完整 v ⇒ 稳态速度 ≈ v / (k·dt)。`delta×5.5` 在 60fps 下 ≈ 0.09，
+  于是**放大 11 倍**。实测枪精灵（`move_speed` 4.29）6 秒跑出 90 m（≈15 m/s）。
+  「位移完全由外推决定」的四种型态（flee / grab / wander / immobile）应**直接赋值**
+  `velocity.x/z = _external_velocity.x/z`，不要再衰减叠加。
+- 同类错：把"当前速度"当 `_steer_planar` 的目标（`clampf(len, floor, max(floor,len))` 恒等于 len），
+  再叠外推 ⇒ 每帧 +v、永不收敛。前摇踱步这类"限速移动"必须用**独立上限**
+  （`get_effective_move_speed() × ratio`），不能引用当前速度。
+- **这两类错只有逐只量"路程"才暴露**：只问"有没有动/有没有出弹"的探针全绿。
+
+## VFX 与账本的坑（2026-10-31 实测）
+- **`VfxPool3D.create_unpooled()` 返回的是 `Node`，只丢弃引用不会回收**：会打印
+  `Leaked instance: Node3D - Node path: (空)` + `resources still in use: <脚本>.gd`。
+  本项目把退出时资源泄漏算 **exit 4 红项**，探针里试完必须 `probe.free()`。
+- **`queue_free()` 排在帧末，而 `quit()` 不等最后一帧** ⇒ 探针自建的场地/测试怪要用 `free()` 立即销毁。
+- **给特效账本加资产要改 4 个地方**，漏一处就红：
+  ① 《资产主表》行（**T 列 SHA-256 必填**，取 Prefab `.tscn` 文件的 sha256）；
+  ② 《3D-特效》分页（分组标题行 + 数据行）；
+  ③ 《总览》公式区间 —— **共 8 处**：`A6/C6/E6/G6` + `B10/C10/B11/C11`（后四条是 SUMPRODUCT 分类统计，
+     `check_asset_registry` 的 `overview_formula_scope_wrong` 专门抓这个，只改前四条会被抓出来）；
+  ④ 基线 `assets/registry/ledger_split_baseline.json` —— 新增行必触发 `asset_not_in_baseline`，
+     要写一个 `scripts/refresh_ledger_baseline_<tag>.py`（抄 `refresh_ledger_baseline_egt_enemies.py`），
+     `sheet_digests` 只刷真正改过的那一页。
+- **`verify_ledger_split.py` 的 `moved_sheet_mutated` 可能是"已提交但没刷基线"的历史遗留**：
+  先 `git status` 看该 xlsx 有没有未提交改动，没有的话就是旧账，刷新时顺带对齐即可（要在文档里写明）。

@@ -56,6 +56,9 @@ const ROOM_ATTACK_GAP_MSEC := 470
 ## `room_id` 为空的怪（塔楼早期内容、单元测试里的裸实例）**不参与节拍器** ——
 ## 那些场景没有房间概念，硬塞一个全局节拍会让旧关卡的节奏一起变，属越界改动。
 var _room_next_slot_msec: Dictionary = {}
+## 房间上一个拿到窗口的怪，以及它被连挡的次数（见 `_acquire_room_slot` 的轮转说明）。
+var _room_last_holder: Dictionary = {}
+var _room_holder_skip: Dictionary = {}
 var _room_attack_gap_msec := ROOM_ATTACK_GAP_MSEC
 ## 被节拍器挡下的次数（诊断用：能区分「怪没进入射程」与「被节流」）
 var _room_gate_blocks := 0
@@ -337,8 +340,50 @@ func _acquire_room_slot(enemy: Node3D) -> bool:
 	if now < next_slot:
 		_room_gate_blocks += 1
 		return false
+	# —— 轮转：同一只怪不得连续吃两个窗口（2026-10-31）——
+	#
+	# ## 为什么要这一条
+	# 节拍器原本是「先到先得」：窗口一开放，谁先调到这里谁拿。而 `_tick_chase` 里
+	# 这段检查**每帧都会重试**，于是同一帧内谁先被 `_physics_process` 处理就成了排序规则
+	# —— 也就是**节点树的顺序**。表现是某几只（树里靠前的）反复拿到窗口，
+	# 另几只整场开不了一次火；房间越挤越明显，业主读到的正是「有的怪一直打、
+	# 有的一直不打」，而不是「总量太多」。
+	#
+	# ## 为什么只挡一次
+	# 挡两次以上会让"房里只剩下这只怪"时它自己也被饿住。所以：
+	# ① 只在房里还有别的活怪时生效；② 同一只最多连挡 1 次。
+	# 挡下**不推进** `_room_next_slot_msec`，所以别的怪下一帧立刻能拿，总密度不变。
+	var my_id := enemy.get_instance_id()
+	if my_id == int(_room_last_holder.get(room, 0)) \
+			and _living_enemies_in_room(room) > 1 \
+			and int(_room_holder_skip.get(room, 0)) < 1:
+		_room_holder_skip[room] = int(_room_holder_skip.get(room, 0)) + 1
+		_room_gate_blocks += 1
+		return false
+	_room_holder_skip[room] = 0
+	_room_last_holder[room] = my_id
 	_room_next_slot_msec[room] = now + _room_attack_gap_msec
 	return true
+
+
+## 本房还活着几只怪。只用 `_records`（全部已注册的怪都在里面），
+## 不遍历场景树 —— 每次窗口开放（约 2 次/秒）算一次，几十条记录的线性扫描可以忽略。
+func _living_enemies_in_room(room: String) -> int:
+	var alive := 0
+	for key in _records.keys():
+		var data := _records[key] as Dictionary
+		if str(data.get("room_id", "")) != room:
+			continue
+		# 记录本身不含节点引用 ⇒ 用 instance_id 反查。**必须查真实 `ai_state`**：
+		# 死掉的怪不会被 `unregister_enemy` 立刻摘掉（`_die()` 只停 AI、不 free），
+		# 只数记录会把尸体算进"房里还有别人"，于是唯一那只活怪被自己饿住。
+		var node := instance_from_id(int(key))
+		if node == null or not is_instance_valid(node):
+			continue
+		if str(node.get("ai_state")) == "dead":
+			continue
+		alive += 1
+	return alive
 
 
 ## 关卡级覆盖节拍间隔（秒）。由 `Dungeon3D` 装配时从 `monster_rules.ai` 下发。
@@ -353,6 +398,12 @@ func set_room_attack_gap_sec(seconds: float) -> void:
 		return
 	_room_attack_gap_msec = maxi(1, int(round(seconds * 1000.0)))
 	_room_next_slot_msec.clear()
+
+
+func _clear_room_gate_state() -> void:
+	_room_next_slot_msec.clear()
+	_room_last_holder.clear()
+	_room_holder_skip.clear()
 
 
 ## 诊断读数。被节流挡下的次数是定位「怪站着不动」的关键：

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://fx0135"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxTeleport3D.gd" id="1_teleport"]
+
+[node name="VfxTeleportIn3D" type="Node3D"]
+script = ExtResource("1_teleport")
+mode = "in"
+metadata/asset_id = "VFX-TELEPORT-IN-3D"
+metadata/asset_version = "v001"

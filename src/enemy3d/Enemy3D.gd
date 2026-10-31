@@ -646,7 +646,7 @@ const PROFILES := {
 		"bullet_color": Color(0.98, 0.86, 0.52),
 		# 房间内游荡 + 高射速连发（不追人、乱飞，所以命中靠"她自己飘过来"）
 		"volley": {"count": 3, "spread_deg": 6.0, "interval": 0.08, "predict": 0.0},
-		"wander": {"radius_m": 8.0, "retarget_sec": 2.2},
+		"wander": {"radius_m": 4.5, "retarget_sec": 2.2},
 		"hover": true,
 	},
 	"egt_gripmaster": {
@@ -819,6 +819,11 @@ var _wander_timer := 0.0
 # 「消失」而不是「死亡」：逃跑超时的钥匙小子 / 运气小子用。
 # `_die()` 要负责清房记账，但**不该**喷死亡特效、掉掉落 —— 用这个标志把两者拆开。
 var _vanish_requested := false
+## 瞬移特效的播出计数（`_play_teleport_fx` / `_vanish` 累加）。
+## 只给门禁与巡检读：`tools/_egt_teleport_fx_probe.gd` 用它断言"位移时真的播了特效"，
+## 而不是只断言"常量拼写正确"。不参与任何玩法判断。
+var _teleport_fx_out_count := 0
+var _teleport_fx_in_count := 0
 var _target: Node3D = null
 var _last_hit_direction := Vector3.ZERO
 # 命中击退强度（m/s）。子弹默认 0（不位移），霰弹=0.8（轻微），由 take_projectile_damage 写入。
@@ -895,6 +900,11 @@ var _active_profile: Dictionary = {}
 ## 经 `MonsterInjector` 随配置下发；未配置的关卡一次都不写这个键 ⇒ 其余关卡逐字不变。
 ## ⚠ 只放大看得见的弹体，**不动判定半径**（判定仍是 `Projectile3D` 的 0.12 基准球）。
 var _projectile_visual_scale := 1.0
+## 逃跑型的方向粘性状态（见 `_tick_egt_flee`）：朝向、朝向剩余保持时间、顶墙累计、上次采样位置。
+var _flee_heading := Vector3.ZERO
+var _flee_heading_timer := 0.0
+var _flee_stall_time := 0.0
+var _flee_probe_position := Vector3.ZERO
 var illumination_sensor: EnemyIllumination3D
 var _illumination_damage_accumulator := 0.0
 
@@ -1216,6 +1226,9 @@ func _reset_egt_state() -> void:
 	_grab_state = "idle"
 	_grab_timer = attack_cooldown
 	_vanish_requested = false
+	# 特效计数器跟着"一只怪的一次生命"走：池化复借时归零，门禁才不会读到上一任的数。
+	_teleport_fx_out_count = 0
+	_teleport_fx_in_count = 0
 	_wander_target = Vector3.ZERO
 	_wander_timer = 0.0
 	# 池化复借时这两项必须归零：上一任若是"被打断正在逃的枪歌者"，
@@ -2003,7 +2016,7 @@ func _physics_process(delta: float) -> void:
 		if ai_state == "return":
 			_tick_return(delta)
 			return
-		if ai_state == "idle" and _state_time > 2.2:
+		if ai_state == "idle" and _state_time > _idle_patrol_delay():
 			transition_to("patrol")
 		if ai_state == "patrol":
 			_tick_patrol(delta)
@@ -2027,7 +2040,7 @@ func _physics_process(delta: float) -> void:
 		_lost_sight_time = 0.0
 	else:
 		_lost_sight_time += delta
-		if ai_state == "idle" and _state_time > 2.2:
+		if ai_state == "idle" and _state_time > _idle_patrol_delay():
 			transition_to("patrol")
 	var engage_distance := float(_ai_param("engage_distance_m", 13.5))
 	if (distance < engage_distance or stimulus_tracking) and ai_state in ["idle", "patrol", "search"] and (target_visible or stimulus_tracking):
@@ -2056,8 +2069,14 @@ func _physics_process(delta: float) -> void:
 		"patrol":
 			_tick_patrol(delta)
 		"telegraph":
-			_brake_planar(delta * 18.0)
-			_push_planar(_external_velocity)
+			if _is_egt_kind():
+				_tick_egt_windup(delta)
+				# 外部推力（逃跑 / 游荡 / 击退）在前摇期间同样压到 35%，
+				# 否则复刻怪的"踱步"会被外推直接盖掉。
+				_push_planar(_external_velocity * EGT_WINDUP_SPEED_RATIO)
+			else:
+				_brake_planar(delta * 18.0)
+				_push_planar(_external_velocity)
 			_commit_motion(delta)
 			if _state_time >= _telegraph_duration():
 				transition_to("attack")
@@ -2081,7 +2100,15 @@ func _physics_process(delta: float) -> void:
 	if monitor_combat != null:
 		monitor_combat.face_target(to_target,delta)
 	elif to_target.length_squared() > 0.01 and not clap_locked:
-		rotation.y = lerp_angle(rotation.y, atan2(-to_target.x, -to_target.z), minf(1.0, delta * 8.0))
+		# 前摇期间**慢转**：通用 8.0/s 是"边跑边盯人"的跟瞄速度，
+		# 放在举枪阶段会让怪跟着玩家平滑绕圈 —— 玩家横移时枪口一直贴着他转，
+		# 前摇就失去了"这段时间它瞄的是刚才那个点"的可读性。
+		# 复刻怪在 telegraph 里降到 2.6/s（约 150°/s ⇒ 0.22 s 只转 33°），
+		# 玩家能读出"它在锁定、还没跟上"，而那正好是本作唯一的"绕侧"窗口。
+		var turn_rate := 8.0
+		if _is_egt_kind() and ai_state == "telegraph":
+			turn_rate = 2.6
+		rotation.y = lerp_angle(rotation.y, atan2(-to_target.x, -to_target.z), minf(1.0, delta * turn_rate))
 
 
 func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
@@ -2094,8 +2121,11 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	# 子弹撞墙消失，玩家看不到弹道，只会觉得「怪在墙后面莫名其妙一直放技能」。
 	# 原作对此有明确行为（`Bullet Kin` 会翻桌找掩体、`Confirmed` 强调 "stopping to fire"），
 	# 且弹幕游戏的公平性原则要求「看不见的火力不该存在」。
-	if distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready \
-			and _has_line_of_sight(_target):
+	if (
+		distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready
+		and not _egt_skips_attack_window()
+		and _has_line_of_sight(_target)
+	):
 		var channel := "ranged" if _is_ranged_style() else "melee"
 		if MonsterAIManager == null or MonsterAIManager.request_attack_token(self, _target, channel):
 			_last_attack_result = "token_granted"
@@ -2115,14 +2145,34 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 			style == "flee" or style == "grab" or _active_profile.has("wander")
 			or bool(_active_profile.get("immobile", false))
 		):
-			_steer_planar(Vector3.ZERO, minf(1.0, delta * 5.5))
-			_push_planar(_external_velocity)
+			# —— 位移由外推**直接接管**（2026-10-31 修）——
+			# 旧写法是 `_steer_planar(ZERO, delta*5.5)` 再把 `_external_velocity` **加**上去。
+			# 那是个稳态放大器：每帧衰减 9%、却每帧加一次完整外推 ⇒
+			# 稳态速度 ≈ 外推 / 0.09 ≈ **11 倍**。实测枪精灵 6 秒跑出 83~90 m
+			# （它自己的移速只有 4.3 m/s），逃跑型也因此贴着墙乱窜。
+			# 这四种型态的语义本来就是「位移完全由 `_tick_egt_state()` 决定」，
+			# 所以这里直接赋值，不再衰减也不叠加。
+			velocity.x = _external_velocity.x
+			velocity.z = _external_velocity.z
 			_commit_motion(delta)
 			return
 	if _is_ranged_style() and monitor_combat == null:
 		var radial := to_target.normalized()
 		var tangent := Vector3(-radial.z, 0, radial.x) * _strafe_sign
-		var ideal_distance := attack_range * (0.78 if enemy_kind != "summoner" else 0.86)
+		# 绕圈的**站位半径**。这直接决定「它能不能开火」：
+		# `_tick_chase` 的开火判据是 `distance <= attack_range`，而绕圈是切向运动，
+		# 径向只会被 `radial_weight` 弱拉回 ⇒ 站位一旦贴着射程边缘，绕半圈就飘出去了。
+		# 飘出去的那 1~2 秒里冷却早就好了，表现是「它明明该开枪却在等你」——
+		# 实测 33 只里有 6 只能跑出周期，且全部是配置值的 2~3 倍，主因就是这段空等。
+		#
+		# 复刻怪取 **0.70**（塔楼老怪保持 0.78 / 召唤师 0.86 不动）：
+		# 8.2 m 射程的站位从 6.4 m 收到 5.7 m，绕圈留出 ~30% 余量。
+		var ideal_ratio := 0.78
+		if enemy_kind == "summoner":
+			ideal_ratio = 0.86
+		elif _is_egt_kind():
+			ideal_ratio = 0.70
+		var ideal_distance := attack_range * ideal_ratio
 		var radial_weight := clampf((distance - ideal_distance) / maxf(1.0, ideal_distance), -1.0, 1.0)
 		desired = (tangent * 0.78 + radial * radial_weight).normalized() * effective_move_speed * _slow_factor
 		if distance < attack_range * 0.52:
@@ -2132,6 +2182,55 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	_push_planar(_external_velocity)
 	_commit_motion(delta)
 	_track_stuck_recovery(delta, desired)
+
+
+## 这只怪**要不要占用房间攻击窗口**。
+##
+## 逃跑型（钥匙小子 / 运气小子）的 `_perform_egt_attack` 是空分支 —— 它们从不攻击玩家，
+## 但 `_perform_attack()` 已经在调它之前把 `_attack_timer` 设好、`request_attack_token()`
+## 也已经从房间节拍器取走了一个窗口。于是每 1.2 s 就有一只逃跑怪**白吃一个出手档位**，
+## 把真正要开火的怪挡在 470 ms 的进度条后面。房间越挤，这条越致命。
+func _egt_skips_attack_window() -> bool:
+	return _is_egt_kind() and _egt_attack_style() == "flee"
+
+
+## 复刻怪前摇期间的位移：**不刹死**，只把速度压到 35% 并保持原方向。
+##
+## ## 为什么不能沿用通用分支的 `_brake_planar(delta * 18.0)`
+## 那是给塔楼近战怪"抡完刹住"用的，18/s 的衰减意味着 0.1 s 内速度归零 ——
+## 视觉上是"滑行急停 → 定住 0.38 s → 开枪 → 再起跑"。33 只复刻怪每 1.4~3 s
+## 来一次，整场读起来就是"一顿一顿地走"。
+##
+## 压到 35% 而不是 0：前摇 0.2 s × 0.35 × 2.5 m/s ≈ 0.18 m 的位移，
+## 既是"边举枪边踱半步"的动感，又不会把玩家已经算好的躲避位置甩掉。
+const EGT_WINDUP_SPEED_RATIO := 0.35
+
+
+func _tick_egt_windup(delta: float) -> void:
+	var planar := Vector3(velocity.x, 0.0, velocity.z)
+	if planar.length_squared() < 0.0001:
+		# 本来就没在动（`immobile` 的枪坚果 / 刚被击退停住的）⇒ 不硬塞位移，
+		# 否则会变成"原地来回蹭"。
+		_brake_planar(delta * 12.0)
+		return
+	# ⚠ 目标速度必须是一个**独立上限**，不能拿"当前速度"当目标。
+	# 第一版写成 `keep = clampf(planar.length(), floor, max(floor, planar.length()))`
+	# —— 那个 clamp 恒等于当前速度，`_steer_planar` 于是变成"保持原速"，
+	# 再加上调用方每帧 `_push_planar(_external_velocity)` 的 +=，
+	# 速度**每帧加一次外部推力、永远拉不回来**。实测游荡型 6 秒跑出 90 m（≈15 m/s，
+	# 而它的移速只有 4.3 m/s）—— 画面上是"越走越飞快"，而不是踱步。
+	var cap := get_effective_move_speed() * EGT_WINDUP_SPEED_RATIO
+	_steer_planar(planar.normalized() * minf(planar.length(), cap), minf(1.0, delta * 10.0))
+
+
+## 站着不动多久之后转巡逻（秒）。
+##
+## 通用 2.2 s 是塔楼守卫的"驻守感"：玩家绕过去它还站着，符合楼道怪的行为。
+## 但复刻怪是**交战中**的敌人，丢一下目标就僵 2.2 s 会被读成"卡住了" ——
+## 实测逃跑型 / 冲撞型在 6 秒里有 38~53% 的帧处于 `idle`，其中 2.2 s 一段是纯静止。
+## 复刻怪收到 **0.9 s**：够它读一次"人呢"，又不会让画面停住。
+func _idle_patrol_delay() -> float:
+	return 0.9 if _is_egt_kind() else 2.2
 
 
 func _tick_search(delta: float) -> void:
@@ -3217,6 +3316,24 @@ func request_blink_after_attack(volley_sec: float) -> void:
 ##      实测 25×25 房瞬移 600 次，**84% 落在房外、最远超出 99.84m**。
 ##   ② 不和墙体/掩体相交 —— 矩形只管四面墙，管不了房间里的箱子、柱子、掩体。
 ##      闪进掩体里会立刻被物理挤出来（"抖一下"），闪进厚掩体会被卡死。
+## 瞬移特效的尺寸（基类 `effect_size` 口径：1.0 ≈ 直径 1.4 m 的能量环）。
+## 标准怪直径约 1.0~1.5 m，取 1.0 让环刚好套住身体；枪坚果那种大件不闪，无需分档。
+const TELEPORT_FX_SIZE := 1.0
+
+
+## 在位移两端播「消失 / 出现」配对特效。
+##
+## 一件也不播的后果见 `VfxTeleport3D` 头注：blink 是直接改 transform，
+## 没有轨迹、没有中间帧 —— 玩家的眼睛接不上，只能读成「它消失了」。
+func _play_teleport_fx(from_pos: Vector3, to_pos: Vector3) -> void:
+	var lift := Vector3(0.0, EFFECT_SPAWN_LIFT, 0.0)
+	_spawn_effect_at(VfxPool3D.FX01_TELEPORT_OUT, TELEPORT_FX_SIZE, from_pos + lift)
+	_spawn_effect_at(VfxPool3D.FX01_TELEPORT_IN, TELEPORT_FX_SIZE, to_pos + lift)
+	# 诊断读数：门禁靠它确认"真的播了"，而不是只确认"常量存在"。
+	_teleport_fx_out_count += 1
+	_teleport_fx_in_count += 1
+
+
 func _blink_to_random(radius: float) -> void:
 	if radius <= 0.0:
 		return
@@ -3240,6 +3357,10 @@ func _blink_to_random(radius: float) -> void:
 		global_position = Vector3(target.x, origin.y, target.z)
 		velocity = Vector3.ZERO
 		_external_velocity = Vector3.ZERO
+		# —— 位移两端各播一件（业主 2026-10-31：「怪物突然消失出现很奇怪」）——
+		# 只有一端有特效是读不出来的：只播"消失"会被当成逃跑（玩家去追一个不在那的敌人），
+		# 只播"出现"会被当成凭空刷新（尤其在一只怪已经贴到脸前时）。
+		_play_teleport_fx(origin, global_position)
 		return
 	# 四次都落不进去 ⇒ **原地不动**。宁可这次不闪，也不要闪进墙里。
 	velocity = Vector3.ZERO
@@ -3336,7 +3457,31 @@ func _tick_egt_flee(delta: float) -> void:
 	if away.length_squared() < 0.0001:
 		return
 	var speed := get_effective_move_speed() * float(cfg.get("speed_mult", 1.4))
-	_external_velocity = away.normalized() * speed
+	# —— 方向粘性（2026-10-31）——
+	# 旧实现每帧都取 `当前位置 − 玩家位置` 当逃跑方向。玩家小幅横移 + 自己贴墙停住，
+	# 这个方向就会在两个值之间反复翻 —— 实测 6 秒内**航向反转 6 次**，
+	# 画面上是"贴着墙来回抽搐、谁也躲不开"。现在：
+	#   ① 朝向最多每 0.30 s 更新一次（玩家挪两步不会立刻换向）；
+	#   ② 连续 0.25 s "有指令但几乎没位移" 判定为顶墙 ⇒ 沿墙 90° 侧向溜。
+	if _flee_probe_position == Vector3.ZERO:
+		_flee_probe_position = global_position
+	var moved := Vector3(
+		global_position.x - _flee_probe_position.x, 0.0,
+		global_position.z - _flee_probe_position.z
+	).length()
+	_flee_probe_position = global_position
+	_flee_stall_time = _flee_stall_time + delta if moved < 0.002 else 0.0
+	_flee_heading_timer = maxf(0.0, _flee_heading_timer - delta)
+	if _flee_heading_timer <= 0.0 or _flee_heading.is_zero_approx():
+		_flee_heading = away.normalized()
+		_flee_heading_timer = 0.30
+	if _flee_stall_time >= 0.25:
+		# 沿墙溜：固定往实例 id 决定的同一侧拐，避免在两侧之间来回换手。
+		var side := 1.0 if get_instance_id() % 2 == 0 else -1.0
+		_flee_heading = away.normalized().rotated(Vector3.UP, side * PI * 0.5)
+		_flee_heading_timer = 0.30
+		_flee_stall_time = 0.0
+	_external_velocity = _flee_heading * speed
 	_external_timer = 0.12
 
 
@@ -3398,7 +3543,16 @@ func _tick_egt_wander(delta: float) -> void:
 	_wander_timer = float(cfg.get("retarget_sec", 2.2))
 	var radius := float(cfg.get("radius_m", 8.0))
 	var angle := randf() * TAU
-	var target := _home_position + Vector3(cos(angle), 0.0, sin(angle)) * radius * sqrt(randf())
+	# —— 圆心跟着**当前目标**走（2026-10-31）——
+	# 枪精灵是"绕着玩家飞"的怪，不是"在房间里随便飘"的怪。旧实现以出生点为圆心，
+	# 而出生点常落在房角/远端 ⇒ 半径 8 m 的圆一大半在视野（黑暗 8.5 m）之外。
+	# 实测 6 秒里只有 52/360 帧看得到玩家（≈14%），玩家读到的是「它消失了又出现」，
+	# 而且它自己有一半时间在 `patrol/idle`（45% 静止）。改成绕玩家、半径收到 4.5 m
+	# 之后，它会在玩家周围持续可见地飘 —— 那才是「游荡型」该有的样子。
+	var anchor := _home_position
+	if is_instance_valid(_target):
+		anchor = _target.global_position
+	var target := anchor + Vector3(cos(angle), 0.0, sin(angle)) * radius * sqrt(randf())
 	# **目标点必须夹进房间矩形**（2026-10-30，与 `_blink_to_random` 同一次修复）。
 	#
 	# 旧实现以 `_home_position` 为圆心画圆，而出生点通常落在**房间角落**（刷怪盒按格心摆）。
@@ -3648,6 +3802,14 @@ func _vanish() -> void:
 	if ai_state == "dead":
 		return
 	_vanish_requested = true
+	# 逃跑型超时消失 / 抓握大师连抓空 3 次 —— 这两条都是**原地蒸发**，
+	# 和 blink 一样没有轨迹。只播「消失」不播「出现」是对的：它是真的走了（`_die()`）。
+	_spawn_effect_at(
+		VfxPool3D.FX01_TELEPORT_OUT,
+		TELEPORT_FX_SIZE,
+		global_position + Vector3(0, EFFECT_SPAWN_LIFT, 0)
+	)
+	_teleport_fx_out_count += 1
 	_die()
 
 
@@ -4651,6 +4813,8 @@ func _track_stuck_recovery(delta: float, intended_velocity: Vector3) -> void:
 func _recovery_duration() -> float:
 	if _active_profile.has("recovery"):
 		return float(_active_profile["recovery"])
+	if _is_egt_kind():
+		return _egt_recovery_seconds()
 	return 0.62 if enemy_kind == "boss" else 0.48 if enemy_kind in ["shielded", "exploder"] else 0.34
 
 
@@ -4786,6 +4950,8 @@ func _behavior_role() -> String:
 func _telegraph_duration() -> float:
 	if _active_profile.has("telegraph"):
 		return float(_active_profile["telegraph"])
+	if _is_egt_kind():
+		return _egt_telegraph_seconds()
 	if enemy_kind == "exploder":
 		return 0.9
 	if enemy_kind == "ambusher":
@@ -4793,6 +4959,77 @@ func _telegraph_duration() -> float:
 	if enemy_kind == "boss":
 		return 0.62
 	return 0.38
+
+
+## 远征03 复刻怪的前摇（秒）。**表里声明优先**，这里只是族级缺省。
+##
+## ## 为什么必须给这一族单独定档（2026-10-31）
+## 33 只复刻怪**没有一只**声明 `telegraph` / `recovery`，于是全部落到通用缺省
+## 0.38 / 0.34。加上 `周期 = telegraph + max(cooldown, recovery)` 这条关系，
+## 每轮有 **0.72 s 完全不动的死时间**：冷却 1.05 s 的怪（子弹头巾 / 空尖弹）
+## 实测周期 2.6~3.2 s，其中一半时间是站着。体感就是「动作一顿一顿的」。
+##
+## ## 数值口径（自拟，但要能解释）
+## 前摇 = **玩家从"它举起枪"到"子弹真的出来"的可读窗口**。下限取 0.15 s：
+## 再短人眼读不出起手，怪会变成"凭空喷弹"。上限按这一招的**信息量**递增 ——
+## 单发直射最省心（0.20），连发要多 0.02/发（3 连 = 0.24、4 连 = 0.26），
+## 宽扇形（≥20°）再加 0.02：扇形要在前摇结束时才看得出覆盖哪一片。
+## 接触/自爆族给 0.14 / 0.26：前者是"贴上来"，后者是"要炸了"必须留足后退窗口。
+func _egt_telegraph_seconds() -> float:
+	match _egt_attack_style():
+		"volley":
+			var spec := _egt_active_volley_spec()
+			var count := maxi(1, int(spec.get("count", 1)))
+			var spread := float(spec.get("spread_deg", 0.0))
+			var seconds := 0.20 + 0.02 * float(count - 1)
+			if spread >= 20.0:
+				seconds += 0.02
+			return seconds
+		"explode":
+			return 0.26
+		"rush":
+			return 0.26
+		"contact":
+			return 0.14
+		"support":
+			return 0.24
+		"orbit":
+			return 0.22
+		"chance":
+			return 0.18
+		"grab":
+			# 抓握大师走自己的 `_grab_state` 状态机（含 0.8 s 闪蓝），
+			# 这里的通用前摇只是它进 attack 那一帧的过场，越短越好。
+			return 0.10
+		"flee":
+			# 逃跑型不攻击，前摇只用于 `_perform_egt_attack` 的空分支。
+			return 0.10
+		_:
+			return 0.20
+
+
+## 远征03 复刻怪的后摇（秒）。口径：**打完就走**。
+##
+## 通用缺省 0.34 s 是给塔楼近战怪收力用的（它们要看得出"这一下抡完了"）。
+## 复刻怪的射击后摇只需要让枪口复位：0.12 s 就够，霰弹族（射程 ≤ 7 m 的近距重击）
+## 留 0.18 s 让它读出"这枪很沉"。自爆/冲撞族 0.08 s —— 它们下一步是扑上来，
+## 后摇只会拖慢那个"该后退了"的信号。
+func _egt_recovery_seconds() -> float:
+	match _egt_attack_style():
+		"volley":
+			return 0.18 if attack_range <= 7.0 else 0.12
+		"explode", "rush":
+			return 0.08
+		"contact":
+			return 0.10
+		"support":
+			return 0.16
+		"orbit":
+			return 0.10
+		"grab", "flee":
+			return 0.08
+		_:
+			return 0.12
 
 
 func _die() -> void:
@@ -5336,9 +5573,17 @@ func _update_boss_phase() -> void:
 
 
 func _spawn_effect(asset_id: StringName, size: float) -> void:
+	_spawn_effect_at(asset_id, size, global_position + Vector3(0, EFFECT_SPAWN_LIFT, 0))
+
+
+## 同 `_spawn_effect`，但**指定世界坐标**。
+##
+## 为什么必须分开：瞬移的"消失点"与"出现点"都不在 `global_position` 上 ——
+## 位移是直接改 transform 的，函数返回时 `global_position` 只剩落点，
+## 原点已经丢了。硬用 `_spawn_effect` 就只能在落点连播两件，等于没表达"从哪走的"。
+func _spawn_effect_at(asset_id: StringName, size: float, world_position: Vector3) -> void:
 	if get_tree().current_scene == null:
 		return
-	var world_position := global_position + Vector3(0, EFFECT_SPAWN_LIFT, 0)
 	var color: Color = EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE)
 	# FX01-* 战斗反馈特效：走 VfxPool3D 新体系
 	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")

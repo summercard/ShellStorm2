@@ -45,6 +45,14 @@ const FX01_FATE_ROCK_SHATTER := "VFX-FATE-ROCK-SHATTER-3D"
 ## 抛出物同族：**不绑 follow**、无碰撞体、程序化落地（见 `VfxBoardDebris3D`）。
 const FX01_BOARD_DEBRIS := "VFX-BOARD-DEBRIS-3D"
 
+## 瞬移「消失 / 出现」配对特效（FX01-34 / FX01-35）。由 `Enemy3D` 的
+## `_play_teleport_fx()` 在 blink 位移的两端（原点 + 落点）与 `_vanish()` 时借出。
+##
+## 两件**必须成对**理解：它们回答的是同一个问题「它刚才去了哪」，
+## 只有「消失」会让玩家以为怪跑掉了，只有「出现」会让人以为怪是凭空刷的。
+const FX01_TELEPORT_OUT := "VFX-TELEPORT-OUT-3D"
+const FX01_TELEPORT_IN := "VFX-TELEPORT-IN-3D"
+
 const FX01_AXE_CHARGE := "VFX-MELEE-AXE-CHARGE-3D"
 const FX01_AXE_CLEAVE := "VFX-MELEE-AXE-CLEAVE-3D"
 const FX01_AXE_IMPACT := "VFX-MELEE-AXE-IMPACT-3D"
@@ -64,6 +72,8 @@ const _REGISTRY := {
 	FX01_FATE_LIGHTNING: preload("res://assets/art/vfx/combat_3d/vfx_fate_lightning_root_top3d.tscn"),
 	FX01_FATE_ROCK_SHATTER: preload("res://assets/art/vfx/combat_3d/vfx_fate_rock_shatter_root_top3d.tscn"),
 	FX01_BOARD_DEBRIS: preload("res://assets/art/vfx/combat_3d/vfx_board_debris_root_top3d.tscn"),
+	FX01_TELEPORT_OUT: preload("res://assets/art/vfx/combat_3d/vfx_teleport_out_root_top3d.tscn"),
+	FX01_TELEPORT_IN: preload("res://assets/art/vfx/combat_3d/vfx_teleport_in_root_top3d.tscn"),
 	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d.tscn"),
 	FX01_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d.tscn"),
 	FX01_EXPLOSION: preload("res://assets/art/vfx/combat_3d/vfx_explosion_root_top3d.tscn"),
