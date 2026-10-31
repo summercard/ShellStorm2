@@ -4,6 +4,7 @@
 > 适用：ShellStorm2 v0.1.0（`project.godot` → `config/name="弹壳风暴2"`，`config/features=PackedStringArray("4.6","Forward Plus")`，主场景 `res://scenes/StartupLoadingScreen.tscn`）
 > 统计口径：2026-10-20 14:20 在 2 号机（`I:\工作项目\shellstrom2\ShellStorm2`）实测，`src/**/*.gd` 递归统计文件数与行数
 > 与既有文档的关系：`docs/v0.1/MODULE_INDEX.md`（43,146 字符）按 FeatureID 记「交付了什么」；本文补「每个模块怎么造、用什么工具、核心逻辑落在哪几个文件、验收怎么判」。两份不重复，一起看。
+> **关卡专项链路另见** [19 远征03 专项工作链路](19_远征03专项工作链路.md)：本文按「模块」切，那份按「关卡」切。做远征03 的房间美术、AI 节奏、位移反馈时先读那份 —— 它给的是从报单到可提交的完整路径与门禁清单，本文给的是模块内部构成。
 
 ---
 
