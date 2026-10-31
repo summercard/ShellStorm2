@@ -18,13 +18,26 @@ var _state := "idle"
 var _clip := "armed_idle"
 var _sample := 0.0
 var _clock := 0.0
-var _hurt_time := 1.0
+var _hurt_time := 10.0
 var _flash_time := 0.0
+## 本帧实际水平速度（由 `Enemy3D` 用 `get_real_velocity()` 传入）。
+var _locomotion_speed := 0.0
+## 这只怪的满速，用来把实际速度换算成比例（见 `_locomotion_clip()`）。
+var _base_speed := 0.0
+## 本次受击是否允许播受击姿态。太阳伤害传 false。
+var _hurt_pose_allowed := true
 var _materials: Array[StandardMaterial3D] = []
 ## 闪白基线。见 `HitFlashMaterial3D` 头注：自发光开关是 shader 变体不是 uniform，
 ## 每翻一次要重建管线（实测 +80~100ms/次），闪白恰好每次受击翻两次 ⇒ 每打中一下卡一下。
 var _flash_baseline: Array = []
 const FLASH_DURATION := 0.12
+## 受击姿态时长。旧值 0.8 s 且不判移动 ⇒ 追击中的怪边跑边播 hurt，读起来是滑步。
+const HURT_POSE_DURATION := 0.28
+## 超过这个水平速度只闪白、不播 hurt。见 `melee_chaser_formal_visual.gd` 同名字段。
+const HURT_POSE_MAX_SPEED := 0.45
+const HURT_POSE_STATES := ["idle", "alert", "patrol"]
+## 走路 / 跑步分界（相对满速）。见 `_locomotion_clip()`。
+const RUN_SPEED_RATIO := 0.62
 
 func _ready() -> void:
 	_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
@@ -70,9 +83,15 @@ func _process(delta: float) -> void:
 	# 只推能量，不碰 `emission_enabled`。
 	HitFlash.apply(_materials, _flash_baseline, _flash_time / FLASH_DURATION)
 
-func sync_state(state: String, state_time: float, _speed: float, telegraph_duration: float, recovery_duration: float) -> void:
+func sync_state(
+	state: String, state_time: float, speed: float,
+	telegraph_duration: float, recovery_duration: float, base_speed := 0.0
+) -> void:
 	_state = state
-	_clip = str(CLIP_BY_STATE.get(state, "armed_idle"))
+	_locomotion_speed = absf(speed)
+	if base_speed > 0.0:
+		_base_speed = base_speed
+	_clip = _locomotion_clip(str(CLIP_BY_STATE.get(state, "armed_idle")))
 	if _player == null or not _player.has_animation(_clip):
 		return
 	var length := _player.get_animation(_clip).length
@@ -84,20 +103,60 @@ func sync_state(state: String, state_time: float, _speed: float, telegraph_durat
 		"recovery": _sample = length * lerpf(0.48, 1.0, clampf(state_time / maxf(recovery_duration, 0.001), 0.0, 1.0))
 		"stagger": _sample = length * clampf(state_time / 0.16, 0.0, 1.0)
 		"dead": _sample = minf(state_time, length)
-	if _hurt_time < 0.8 and state not in ["dead", "telegraph", "attack", "recovery", "stagger", "dormant"]:
+	# 三条闸门同小僵尸：允许播 + 姿态计时内 + **速度低于阈值** + 站定型状态。
+	if (
+		_hurt_pose_allowed
+		and _hurt_time < HURT_POSE_DURATION
+		and _locomotion_speed <= HURT_POSE_MAX_SPEED
+		and state in HURT_POSE_STATES
+	):
 		_clip = "hurt"
 		_sample = _hurt_time
 	_player.play(_clip)
 	_player.seek(_sample, true)
 
-func flash_hit() -> void:
-	if _state != "dead":
+## 按实际速度在走路/跑步之间改判，理由与 `melee_chaser_formal_visual.gd` 逐字相同：
+## 复刻怪的突进 / 逃跑 / 游荡都靠外推位移，`ai_state` 可能仍是 patrol 甚至 idle，
+## 只按状态名给段就会"高速移动却播走路 / 站立"。
+func _locomotion_clip(clip: String) -> String:
+	var ratio := _speed_ratio()
+	if ratio < 0.0:
+		return clip
+	if clip == "walking_armed":
+		return "running_armed" if ratio >= RUN_SPEED_RATIO else clip
+	if clip == "armed_idle" and _state in ["idle", "patrol"]:
+		if ratio >= RUN_SPEED_RATIO:
+			return "running_armed"
+		if ratio >= RUN_SPEED_RATIO * 0.5:
+			return "walking_armed"
+	return clip
+
+
+func _speed_ratio() -> float:
+	if _base_speed > 0.01:
+		return _locomotion_speed / _base_speed
+	if _locomotion_speed <= 0.01:
+		return 0.0
+	return _locomotion_speed / 1.4
+
+
+func flash_hit(play_hit_pose := true) -> void:
+	if _state == "dead":
+		return
+	_flash_time = FLASH_DURATION
+	if play_hit_pose:
+		_hurt_pose_allowed = true
 		_hurt_time = 0.0
-		_flash_time = FLASH_DURATION
+	else:
+		_hurt_pose_allowed = false
 
 func get_presentation_snapshot() -> Dictionary:
 	return {"state": _state, "clip": _clip, "sample_time": _sample,
 		"visual_height": VISUAL_HEIGHT, "death_duration": DEATH_DURATION,
 		"animations": Array(_player.get_animation_list()) if _player != null else [],
 		"source": "blender_v002", "collision_owned": false, "procedural_pose": false,
-		"shotgun_visual": true, "shotgun_bone": "L_Hand"}
+		"shotgun_visual": true, "shotgun_bone": "L_Hand",
+		"hurt_pose_allowed": _hurt_pose_allowed,
+		"hurt_pose": _clip == "hurt",
+		"hurt_time": _hurt_time,
+		"locomotion_speed": _locomotion_speed}

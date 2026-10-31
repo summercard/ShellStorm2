@@ -27,6 +27,7 @@ extends Node
 ##   godot --headless --path . --scene res://tools/_exp03_manor_geom_verify.tscn
 
 const SCENE: PackedScene = preload("res://scenes/ExpeditionLevel03_3D.tscn")
+const ART_SOURCE := preload("res://src/world3d/RuntimeRoomArtSource.gd")
 const SEED := 77003244
 const GRID := 5.0
 ## 沿墙采样步长：5m 墙段上取 20 个点，0.2m 级窄缝也能抓到。
@@ -199,6 +200,15 @@ func _collect(room: DungeonRoom3D, art_root: Node3D, keyword: String) -> Array:
 		var node := value as Node3D
 		var path := str(node.scene_file_path)
 		if not path.contains(keyword):
+			continue
+		# **关键字前缀会误收装饰**：`env_manor_wall` 同时命中 `env_manor_wall_lamp`（壁灯）
+		# 和 `env_manor_wall_grille`（格栅）。壁灯顶只到 2.24m，被当成墙后
+		# 「层高一致」判据当场判红（实测 7 间房全中）。
+		# 所以墙体/地砖一律走**结构件角色**判定，不靠名字前缀。
+		var tag := ART_SOURCE.structure_tag(path)
+		if keyword.contains("wall") and tag != ART_SOURCE.TAG_WALL:
+			continue
+		if keyword.contains("floor") and tag != ART_SOURCE.TAG_FLOOR:
 			continue
 		# 包装件（*_root_top3d）与内嵌件（*_visual_top3d）会同时命中关键字，
 		# 只取最外层，否则同一件会被数两遍、包围盒也重复。

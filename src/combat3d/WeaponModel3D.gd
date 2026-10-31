@@ -10,6 +10,10 @@ signal reload_started(duration: float)
 signal reload_progress_changed(progress: float, remaining: float)
 signal reload_ended(completed: bool)
 
+## 材质管线 keeper：武器每换一次视图就新建 3 份材质（含 1 份自发光），
+## 不留长命引用的话，换枪时每次都要重编译变体（实测单变体 ~100ms）。
+const PipelineKeeper := preload("res://src/enemy3d/MaterialPipelineKeeper.gd")
+
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 ## 枪口花火视觉体积基准（业主 2026-09-21 观感定档：取 v002 基准的 80%）。
@@ -1306,6 +1310,7 @@ func _material(color: Color, metallic: float, roughness: float, emission := fals
 		material.emission_enabled = true
 		material.emission = color
 		material.emission_energy_multiplier = 1.6
+	PipelineKeeper.pin(material)
 	return material
 
 

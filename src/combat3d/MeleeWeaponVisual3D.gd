@@ -157,4 +157,8 @@ func _material(
 		material.emission_enabled = true
 		material.emission = color
 		material.emission_energy_multiplier = 1.8
+	PipelineKeeper.pin(material)
 	return material
+## 材质管线 keeper（同 WeaponModel3D：每建一次视图就新建一批材质）。
+const PipelineKeeper := preload("res://src/enemy3d/MaterialPipelineKeeper.gd")
+

@@ -25,6 +25,9 @@ class_name ExpeditionLoadingScreen
 ## 本常量只是**默认终点**（远征关卡01）；实际去向由选关菜单写入的待进入关卡 id 决定，
 ## 见 `_destination_level_id()`。
 const RESOURCE_WARMUP := preload("res://src/world3d/LoadingResourceWarmup.gd")
+## 怪物表现层预热。用 preload 而非裸类名：裸类名依赖 `.godot` 全局类缓存，
+## 新脚本刚落地时缓存还没扫到会直接编译失败（本轮实测踩过一次）。
+const ENEMY_WARMUP := preload("res://src/enemy3d/EnemyWarmup.gd")
 const LEVEL_SCENE := GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D
 ## 旧探针常量仍保留；真实进度不再由固定时长驱动。
 const TOTAL_DURATION_S := 1.35
@@ -33,7 +36,15 @@ const TOTAL_DURATION_S := 1.35
 const MIN_LOADING_SCREEN_SECONDS := 2.0
 ## 战斗特效预热的最多等待帧数。见 `_drain_vfx_prewarm()`：队列只有 8 个，
 ## 这个上限只是防止队列异常把玩家锁在加载页里。
-const VFX_PREWARM_MAX_FRAMES := 48
+## 预热的最多等待帧数。见 `_drain_warmup()`：VFX 11 件 + 怪 3 种，正常 11 帧排空。
+## 这个上限只是防止某个队列异常把玩家锁在加载页里。
+const WARMUP_MAX_FRAMES := 48
+## 允许预热把加载页延长多少毫秒（在 `MIN_LOADING_SCREEN_SECONDS` 之外）。
+##
+## 实测预热总耗时约 0.85 s（怪 3 基类 0.40 + VFX 11 件 0.13 + 逐帧开销），
+## 而它换掉的是「进门第一只怪 460 ms 的一顿」。这里给 700 ms 是取舍上限：
+## 加载本身已经超过最短时长时，最多再多等 0.7 s，超了就少预热几个 —— 剩余的留给场景内。
+const WARMUP_EXTRA_BUDGET_MS := 700
 const STEP_TEXTS: Array[String] = [
 	"正在同步远征情报…",
 	"正在规划房间序列…",
@@ -422,26 +433,59 @@ func _wait_for_basic_scene_ready(target: Node) -> void:
 			return
 
 
-## 在加载页背后把「进关卡后第一次打中 / 第一刀」会用到的那批特效各真画一次。
+## 在加载页背后，把「进关卡后第一时间会用到的东西」各预热一次。
 ##
-## 见 `VfxPool3D.prewarm()` 的实测表：首次绘制 20~65 ms，第二次 0.4 ms。
-## 这段差价不挪走就会落进玩家的第一枪里。
+## 三件事，都在同一条逐帧循环里推进（不是串行三段，否则加载会多等一倍）：
 ##
-## 上限 `VFX_PREWARM_MAX_FRAMES` 是硬保险：队列只有 8 个，正常 8 帧排空；
-## 一旦相机缺失或队列异常，绝不能把玩家锁在加载页等一个永不结束的循环。
-func _drain_vfx_prewarm() -> void:
-	if VfxPool == null or not VfxPool.has_method("prewarm"):
-		return
+## 1. **战斗特效**：`VfxPool3D.prewarm()` —— 首次装配 20~65 ms / 件，共 11 件 134 ms。
+## 2. **怪物的正式模型与材质变体**：`EnemyWarmup` —— 每个怪种**本局第一次**生成要 460 ms
+##    （读盘 + 变体编译），而它必然落在"玩家刚进门、正要开打"那一帧。
+##    远征03 的 33 只复刻怪全部借用三种正式 GLB，所以预热三个基类就等于覆盖全场。
+## 3. 两者交错推进：`VfxPool3D` 自己每帧排空一件，本函数每帧再挂一个影子怪，
+##    总等待 ≈ max(11 帧 VFX, 3 帧怪) 而不是两者相加。
+##
+## ## 为什么放在这里
+##
+## 这段代码跑在 `IrisTransition.cover_now()` 之后（屏幕全黑、玩家操作锁着、没有战斗），
+## 是全流程里唯一的空档。放这里的好处不是"快一点"，是**玩家根本看不到**：
+## 怪的刷新时机、数量、位置一个字节都没动，材质与模型也是同一套 —— 只是提前被画过一次。
+##
+## `WARMUP_MAX_FRAMES` 是硬保险：一旦某个队列异常，绝不能把玩家锁在加载页里等死循环。
+func _drain_warmup(target: Node) -> void:
 	# headless 里没有渲染管线可预热，而测试会断言特效池的**绝对**计数
 	# （`verify_3d_melee_feedback_flow` 就查 `active_count(...) != 1`）——
-	# 在那边插 8 个预热实例只会制造假红。
+	# 在那边插预热实例只会制造假红。
 	if _should_skip_delay():
 		return
-	VfxPool.prewarm(VfxPool3D.COMBAT_PREWARM)
+	var stage := target as Node3D
+	var kinds: Array = ENEMY_WARMUP.BASE_KINDS.duplicate()
+	var kind_index := 0
+	var probe: Node3D = null
+	var vfx_enabled := VfxPool != null and VfxPool.has_method("prewarm") and VfxPool.has_method("has_pending_prewarm")
+	if vfx_enabled:
+		VfxPool.prewarm(VfxPool3D.COMBAT_PREWARM)
 	var frames := 0
-	while VfxPool.has_pending_prewarm() and frames < VFX_PREWARM_MAX_FRAMES:
+	var deadline := _loading_started_msec + int(MIN_LOADING_SCREEN_SECONDS * 1000.0) + WARMUP_EXTRA_BUDGET_MS
+	while frames < WARMUP_MAX_FRAMES:
+		var vfx_pending: bool = vfx_enabled and VfxPool.has_pending_prewarm()
+		if not vfx_pending and kind_index >= kinds.size() and probe == null:
+			break
+		# 超时保护：加载本身已经很慢时，宁可少预热一点，也不要把玩家按在加载页里。
+		# `frames == 0` 不检查 —— 最贵的那一项（第一个基类，~330 ms）必须让它跑完，
+		# 否则这次预热就白做了。
+		if frames > 0 and Time.get_ticks_msec() > deadline:
+			break
+		if probe != null:
+			if is_instance_valid(probe):
+				probe.free()
+			probe = null
+		if kind_index < kinds.size():
+			probe = ENEMY_WARMUP.spawn_probe(stage, str(kinds[kind_index]))
+			kind_index += 1
 		await get_tree().process_frame
 		frames += 1
+	if probe != null and is_instance_valid(probe):
+		probe.free()
 
 
 func _finish_loaded_scene(target: Node) -> void:
@@ -488,13 +532,8 @@ func _finish_loaded_scene(target: Node) -> void:
 	if target.has_method("prepare_loading_render"):
 		target.call("prepare_loading_render")
 	_restore_world_render()
-	# 战斗反馈特效的「首次绘制」管线也在这里编译掉。
-	#
-	# 为什么必须做：`VFX-IMPACT-3D` 第一次借出要 **65 ms**（`VFX-MELEE-IMPACT-3D` 33 ms、
-	# `VFX-MELEE-SLASH-3D` 21 ms），第二次只要 0.4 ms —— 差价是首次绘制时的管线编译。
-	# 不挪走的话，玩家进关卡打出的**第一枪**就要顿一下。
-	# 逐帧预热（`VfxPool3D.prewarm()` 的队列）而不是一次做完，避免这里出现 120 ms 硬冻结。
-	_drain_vfx_prewarm()
+	# 把「进关卡后第一时间要付的冷启动」全部挪到这里编译掉 —— 详见 `_drain_warmup()`。
+	_drain_warmup(target)
 	await _wait_for_basic_scene_ready(target)
 	if tree.current_scene != target or not _target_is_ready(target):
 		_finalizing = false

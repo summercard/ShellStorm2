@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://cf0r2q76lcrmh"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_floor_wood/env_manor_floor_wood_root_top3d.tscn" id="1_vywbw"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn" id="9_n70h4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_door/env_manor_wall_door_root_top3d.tscn" id="10_8l7n1"]
+
+[node name="Room_start" type="Node3D" unique_id=1182083480]
+metadata/scene_builder_schema = "shellstorm2.component_scene.v1"
+metadata/runtime_room_source_schema = "shellstorm2.runtime_room_art.v1"
+metadata/runtime_room_signature = "703e12bd9aa87b4246fb512bb752f74442c6c3ea1136a72993735b60891d7d59"
+metadata/runtime_room_geometry = {
+"safe_corner": true,
+"schema": "shellstorm2.runtime_room_art.v1",
+"size": [15.0, 15.0],
+"type": "STAIR_LOBBY"
+}
+metadata/size_m = [15.0, 15.0]
+metadata/grid_unit_m = 5.0
+metadata/level_id = "expedition_03"
+metadata/room_id = "start"
+metadata/template_id = "stair_lobby_15x15"
+metadata/portal_fingerprint = "8059ee"
+metadata/built_by = "manor_shell_builder"
+metadata/archetype = "楼梯厅"
+metadata/floor_mode = "full"
+metadata/window_mode = "blind"
+metadata/layout_instance_total = 0
+
+[node name="ArtComponents" type="Node3D" parent="." unique_id=1361208629]
+
+[node name="Floor_00_00" parent="ArtComponents" unique_id=38288271 instance=ExtResource("1_vywbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -5)
+
+[node name="Floor_01_00" parent="ArtComponents" unique_id=1474171562 instance=ExtResource("1_vywbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="Floor_02_00" parent="ArtComponents" unique_id=1226563868 instance=ExtResource("1_vywbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
+
+[node name="Floor_00_01" parent="ArtComponents" unique_id=416320571 instance=ExtResource("1_vywbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
+
+[node name="Floor_01_01" parent="ArtComponents" unique_id=242627169 instance=ExtResource("1_vywbw")]
+
+[node name="Floor_02_01" parent="ArtComponents" unique_id=670332395 instance=ExtResource("1_vywbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+
+[node name="Floor_00_02" parent="ArtComponents" unique_id=1291509855 instance=ExtResource("1_vywbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 5)
+
+[node name="Floor_01_02" parent="ArtComponents" unique_id=1035831022 instance=ExtResource("1_vywbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="Floor_02_02" parent="ArtComponents" unique_id=1188214379 instance=ExtResource("1_vywbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
+
+[node name="Wall_north_00" parent="ArtComponents" unique_id=264698125 instance=ExtResource("9_n70h4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -7.5)
+
+[node name="Wall_north_01" parent="ArtComponents" unique_id=1272913484 instance=ExtResource("9_n70h4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Wall_north_02" parent="ArtComponents" unique_id=59729619 instance=ExtResource("9_n70h4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -7.5)
+
+[node name="Wall_south_00" parent="ArtComponents" unique_id=270552230 instance=ExtResource("9_n70h4")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5, 0, 7.5)
+
+[node name="DoorWall_south_01" parent="ArtComponents" unique_id=498417970 instance=ExtResource("10_8l7n1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 7.5)
+
+[node name="Wall_south_02" parent="ArtComponents" unique_id=1923505417 instance=ExtResource("9_n70h4")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5, 0, 7.5)
+
+[node name="Wall_west_00" parent="ArtComponents" unique_id=1060659923 instance=ExtResource("9_n70h4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, 0, -5)
+
+[node name="Wall_west_01" parent="ArtComponents" unique_id=1949378789 instance=ExtResource("9_n70h4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, 0, 0)
+
+[node name="Wall_west_02" parent="ArtComponents" unique_id=511480185 instance=ExtResource("9_n70h4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, 0, 5)
+
+[node name="Wall_east_00" parent="ArtComponents" unique_id=1302497997 instance=ExtResource("9_n70h4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 0, -5)
+
+[node name="DoorWall_east_01" parent="ArtComponents" unique_id=1303812399 instance=ExtResource("10_8l7n1")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 0, 0)
+
+[node name="Wall_east_02" parent="ArtComponents" unique_id=2021997760 instance=ExtResource("9_n70h4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 0, 5)

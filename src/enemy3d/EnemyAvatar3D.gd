@@ -161,6 +161,8 @@ const FOOTPRINT_PROFILES := {
 ## 材质管线缓存 keeper。用 preload 而非裸类名：裸类名依赖 `.godot` 全局类缓存，
 ## 新脚本刚落地时缓存还没扫到，会直接编译失败（本轮实测）。
 const PipelineKeeper := preload("res://src/enemy3d/MaterialPipelineKeeper.gd")
+## 远征03 逐只标识件。用 preload 而非裸类名：理由同 PipelineKeeper。
+const Distinction := preload("res://src/enemy3d/EnemyDistinction3D.gd")
 
 ## 正式模型 / Boss / 精英表现层的 **PackedScene 强引用缓存**。
 ##
@@ -263,6 +265,10 @@ var _elite_content_id := ""
 var _elite_presentation_asset_id := ""
 var _formal_normal_root: Node3D
 var _formal_normal_scene_path := ""
+## 逐只标识件容器（远征03 专用）。没有标识设计的怪为 null。
+var _distinction_root: Node3D
+## 该容器用的锚点表（诊断与验收读取，确认"按哪个模型摆的"）。
+var _distinction_anchors: Dictionary = {}
 var _formal_elite_root: Node3D
 ## 普通与强化僵尸的双眼红光。
 var _eye_glow: StrongVariantEyeGlow3D
@@ -352,10 +358,15 @@ static func get_footprint_profile(kind: String) -> Dictionary:
 	return (FOOTPRINT_PROFILES.get(lookup, FOOTPRINT_PROFILES["melee_chaser"]) as Dictionary).duplicate()
 
 
-func flash_hit() -> void:
+## 受击反馈。`play_hit_pose = false` 时**只闪白、不播受击姿态**。
+##
+## 存在这个开关的唯一理由：太阳伤害是每秒结算的环境消耗，不是"挨了一下"。
+## 给它播受击姿态会让怪在跑动中反复被塞进 hurt 段 ⇒ 表现为整只怪漂移
+## （见 `Enemy3D._tick_illumination_effects` 的注释与 2026-10-31 业主报单）。
+func flash_hit(play_hit_pose := true) -> void:
 	if has_animated_boss():_formal_boss_root.flash_hit()
 	if has_formal_normal():
-		_formal_normal_root.flash_hit()
+		_formal_normal_root.flash_hit(play_hit_pose)
 	if _shell_material != null:
 		_shell_material.albedo_color = Color(1.0, 0.78, 0.60)
 
@@ -389,6 +400,17 @@ func get_component_snapshot() -> Dictionary:
 		"formal_elite_asset": _formal_elite_root != null,
 		"eye_glow": _eye_glow.get_presentation_snapshot() if _eye_glow != null else {},
 		"eye_socket_bone": _eye_socket.bone_name if _eye_socket != null else "",
+		# 逐只标识：族 + 形状名。验收据此断言"每只都有自己的标识"，
+		# 而不是只数一遍节点在不在。
+		"distinction": {
+			"family": Distinction.family_of(enemy_kind),
+			"shape": str(Distinction.DESIGN.get(enemy_kind, {}).get("shape", "")),
+			"anchor": str(Distinction.DESIGN.get(enemy_kind, {}).get("anchor", "")),
+			"attached": _distinction_root != null,
+			# 零件数：0 = 只有容器没内容（微体 blobulin 是设计如此，其他怪为 0 就是漏建）。
+			"piece_count": _distinction_root.get_child_count() if _distinction_root != null else 0,
+			"anchors_from": str(_distinction_anchors.get("__source__", _base_kind if has_formal_normal() else "program")),
+		},
 		"is_3d": true,
 	}
 
@@ -436,6 +458,7 @@ func _rebuild() -> void:
 	_formal_elite_root = null
 	_formal_normal_root = null
 	_formal_normal_scene_path = ""
+	_distinction_root = null
 	# 重建等于换一只怪：上一任的发光眼与绑点必须一起走，
 	# 否则残留的 BoneAttachment3D 会挂在新骨架的名字上（骨名相同，静默错挂）。
 	_eye_glow = null
@@ -499,15 +522,42 @@ func _rebuild() -> void:
 	_root.add_child(_tell_ring)
 	# 正式普通怪分支：非精英 melee_chaser 在程序化外壳之后挂载独立小僵尸包装，
 	# 隐藏壳/核/附肢、保留 tell ring；动画由包装自驱动，避免旧 bob/appendage 程序姿势叠加。
-	var _ta := Time.get_ticks_usec()
 	if FORMAL_NORMAL_SCENES.has(_base_kind) and _root != null:
 		_load_formal_normal_model()
-		print("  SPLIT formal_load=%d" % ((Time.get_ticks_usec() - _ta) / 1000))
 		# 按配方为普通与强化僵尸挂接红眼。
 		if monster_has_eye_glow():
-			var _tb := Time.get_ticks_usec()
 			_setup_eye_socket()
-			print("  SPLIT eye_socket=%d" % ((Time.get_ticks_usec() - _tb) / 1000))
+	_apply_distinction(body_size)
+
+
+## 挂上"这是哪一只"的标识件（远征03 专用，见 `EnemyDistinction3D`）。
+##
+## 挂点选择：
+##   · 有正式 GLB ⇒ 挂在 `FormalNormal_*` 下。标识件随模型走（含 `_kind_scale_multiplier`），
+##     且**不受**程序化分支的 bob / 附肢旋转影响 —— 那套姿势对 GLB 是关掉的。
+##   · 程序化外壳 ⇒ 挂在 `VisualRoot` 下，跟外壳一起呼吸。
+##
+## 零件**延到下一帧再建**：位置要靠实测包围盒（GLB 的数字与
+## `FORMAL_NORMAL_HEIGHTS` 那套旧口径差了 30%，见 `EnemyDistinction3D.apply` 头注），
+## 而 GLB 刚实例化时世界矩阵还没解析完（与 `_setup_eye_socket` 同一个坑）。
+func _apply_distinction(body_size: Vector3) -> void:
+	_distinction_root = null
+	_distinction_anchors = {}
+	if _root == null or not Distinction.has_design(enemy_kind):
+		return
+	var host: Node3D = _root
+	if has_formal_normal():
+		host = _formal_normal_root
+		# 有 GLB ⇒ 用该模型的实测语义锚点（见 `EnemyDistinction3D.ANCHORS` 头注：
+		# 身高百分比 / 骨骼 / get_aabb 三种做法都不能用）。
+		_distinction_anchors = Distinction.anchors_for(_base_kind)
+	else:
+		# 程序化外壳 ⇒ 锚点按 `body_size` 现算。
+		_distinction_anchors = Distinction.program_anchors(body_size)
+	_distinction_root = Distinction.apply(host, enemy_kind)
+	if _distinction_root != null:
+		# 身体色传进去：标识件的 albedo 要按它算对比度（见 `resolve_albedo`）。
+		Distinction.build(_distinction_root, enemy_kind, _distinction_anchors, _base_color)
 
 
 ## 是否有已标定的僵尸眼位配方；普通版和强化版均可用。
@@ -691,16 +741,11 @@ func _find_formal_normal_skeleton() -> Skeleton3D:
 
 func _load_formal_normal_model() -> void:
 	var scene_path := str(FORMAL_NORMAL_SCENES.get(_base_kind, ""))
-	var _fa := Time.get_ticks_usec()
 	var scene := _cached_scene(scene_path)
-	var _fb := Time.get_ticks_usec()
 	assert(scene != null, "Formal normal scene missing for %s" % enemy_kind)
 	_formal_normal_root = scene.instantiate() as Node3D
-	var _fc := Time.get_ticks_usec()
 	_formal_normal_root.name = "FormalNormal_%s" % enemy_kind
 	_root.add_child(_formal_normal_root)
-	var _fd := Time.get_ticks_usec()
-	print("  FSPLIT load=%d inst=%d add=%d" % [(_fb-_fa)/1000, (_fc-_fb)/1000, (_fd-_fc)/1000])
 	_formal_normal_scene_path = scene_path
 	_shell.hide()
 	_core.hide()
@@ -770,6 +815,8 @@ func disable_formal_normal() -> void:
 		_formal_normal_root.queue_free()
 	_formal_normal_root = null
 	_formal_normal_scene_path = ""
+	_distinction_root = null
+	_distinction_anchors = {}
 	_shell.show()
 	_core.show()
 	_appendages.show()
@@ -790,9 +837,17 @@ func get_animated_boss_root() -> Node3D:
 func sync_boss_presentation(context: Dictionary) -> void:
 	if has_animated_boss():_formal_boss_root.sync_context(context)
 
-func sync_presentation(state: String, state_time: float, speed: float, telegraph_duration: float, recovery_duration: float) -> void:
+## `base_speed` = 这只怪的**满速**（`get_effective_move_speed()`）。
+## 表现层用它把"当前速度"换算成比例，从而决定放走路还是跑步 ——
+## 只靠状态名选段是不够的，见 `melee_chaser_formal_visual.gd` 的 `_locomotion_clip()`。
+func sync_presentation(
+	state: String, state_time: float, speed: float,
+	telegraph_duration: float, recovery_duration: float, base_speed := 0.0
+) -> void:
 	if has_formal_normal() and _formal_normal_root.has_method("sync_state"):
-		_formal_normal_root.call("sync_state", state, state_time, speed, telegraph_duration, recovery_duration)
+		_formal_normal_root.call(
+			"sync_state", state, state_time, speed, telegraph_duration, recovery_duration, base_speed
+		)
 
 
 func _add_claws(radius: float, height: float) -> void:

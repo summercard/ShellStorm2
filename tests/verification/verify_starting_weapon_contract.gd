@@ -30,9 +30,9 @@ const EXPECTED_PRICE := 70
 ## 「白送实例」与「掉落实例」两套口径，属单独一项设计决定。
 const EXPECTED_FATE_SLOTS := 8
 const EXPECTED_DAMAGE := 25
-## 2026-10-31 业主：「射速改成 1.2 发/秒」。原 3.5 发/秒（0.286 s 一发）对手枪太快，
-## 这把枪现在是节奏慢、单发重的定位。
-const EXPECTED_FIRE_RATE := 1.2
+## 2026-10-31 业主：「射速改成 1.2 发/秒」→ 当天下午再定 **1.6 发/秒**。原 3.5 发/秒（0.286 s 一发）
+## 对手枪太快，这把枪现在的定位是节奏慢、单发重。
+const EXPECTED_FIRE_RATE := 1.6
 ## 2026-10-31 业主：「换弹改成 1.8 秒」。原 1.5 s。
 const EXPECTED_RELOAD_TIME := 1.8
 const EXPECTED_MAGAZINE := 10
@@ -86,7 +86,7 @@ const EXPECTED_RANGES := {
 ##   · 2026-10-30 晚：发现原作单位不是米（原作玩家 6.5 单位/秒 vs 本作 4.5 m/s
 ##     ⇒ 1 单位 ≈ 0.6923 m），换算成 **17.31 m/s**（倍率 0.7525）。
 ##   · 2026-10-31：业主直接点名 **15 m/s**（倍率 15/23 ≈ 0.6522），不再走跨作换算。
-## 射速 1.2 发/秒、换弹 1.8 s 同在 2026-10-31 定。
+## 射速 1.6 发/秒、换弹 1.8 s 同在 2026-10-31 定。
 const PISTOL_ASSEMBLY_ID := "bp_pistol"
 const PISTOL_MAGAZINE := 10
 const BULLET_SPEED_BASE_MPS := 23.0

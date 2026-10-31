@@ -47,6 +47,9 @@ const CONTRACT := preload("res://src/world3d/RuntimeRoomArtSource.gd")
 ## 两份表只要漂一格，烘焙文件名（用这里的指纹）就和运行时（用同一份）
 ## 对不上，表现是"刚烘焙完还是白盒"。
 const MANOR_PLAN := preload("res://src/world3d/ManorShellPlan.gd")
+## 陈设配方：主题表 + 摆位算法。**与原型表分开**，因为原型管「壳子什么颜色」，
+## 陈设管「里面住着谁」—— 两者改动频率不同，混在一起会让布局评审很难做。
+const FURNISH := preload("res://src/world3d/ManorFurnishing.gd")
 const MANOR := "res://assets/art/environments/tower_zones/expedition/runtime/common_components"
 
 const WALL := MANOR + "/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn"
@@ -173,6 +176,12 @@ func _build(room: DungeonRoom3D) -> void:
 	canvas.set_meta("archetype", str(style["note"]))
 	canvas.set_meta("floor_mode", str(style["floor"]))
 	canvas.set_meta("window_mode", str(style["windows"]))
+	# 主题写进根节点：工坊打开一眼知道这间房打算当什么用，也供陈设验收读。
+	var theme_id := FURNISH.theme_for_style(style)
+	canvas.set_meta("furnishing_theme", theme_id)
+	if FURNISH.THEMES.has(theme_id):
+		canvas.set_meta("furnishing_theme_label", str(
+			(FURNISH.THEMES[theme_id] as Dictionary).get("label", "")))
 
 	var art := Node3D.new()
 	art.name = "ArtComponents"
@@ -182,6 +191,7 @@ func _build(room: DungeonRoom3D) -> void:
 	var door_map := _door_cells(room, cols, rows)
 	var floor_stats := _floor_grid(art, canvas, dim, cols, rows, style)
 	var wall_stats := _walls(art, canvas, dim, cols, rows, door_map, str(style["windows"]))
+	var furn_stats := _furnish(room, art, canvas, dim, style)
 
 	var packed := PackedScene.new()
 	var error := packed.pack(canvas)
@@ -196,11 +206,109 @@ func _build(room: DungeonRoom3D) -> void:
 		_fail("%s: 保存失败 %s" % [room.room_id, error_string(error)])
 		return
 	_written.append(target)
-	print("BUILD %-20s %-6s %-9s %-11s %-11s cells=%dx%d tiles=%d walls=%d(win=%d) doors=%d"
+	print("BUILD %-20s %-6s %-9s %-11s %-11s cells=%dx%d tiles=%d walls=%d(win=%d) doors=%d furn=%d/%dcol(%s)"
 		% [room.room_id, str(room.room_type), str(style["note"]), str(style["floor"]),
 			str(style["windows"]), cols, rows, int(floor_stats["total"]),
 			int(wall_stats["total"]), int(wall_stats["windows"]),
-			int(door_map.get("_door_count", 0))])
+			int(door_map.get("_door_count", 0)),
+			int(furn_stats["count"]), int(furn_stats.get("collided", 0)),
+			str(furn_stats["theme"])])
+
+
+## 按主题铺陈设。返回 `{count, theme}`。
+##
+## `connection_ports` 传本局的端口，`ManorFurnishing.layout()` 会据此跳过挡门的件 ——
+## 所以同一份配方在不同种子下摆出来的件数可能不同，但**永远不会挡门**。
+func _furnish(room: DungeonRoom3D, art: Node3D, canvas: Node3D, dim: Vector2,
+		style: Dictionary) -> Dictionary:
+	var theme_id := FURNISH.theme_for_style(style)
+	if theme_id.is_empty():
+		push_warning("壳铺装：原型 %s 没有登记主题，本房不铺陈设"
+			% MANOR_PLAN.style_label(style))
+		return {"count": 0, "theme": ""}
+	var ports: Array = room.get("connection_ports")
+	var plan := FURNISH.layout(theme_id, dim, ports)
+	# ── 最终校验：带碰撞的家具不得与门洞通道盒相交 ──
+	# 这是「烘焙后可静态复核」的最后一道闸。布局算法里已经避让过，但避让依赖
+	# 半尺寸推算，一旦某件尺寸/旋转与我预期不符，就会静默漏掉 ——
+	# 玩家推开门撞家具，而所有其它验收全绿。
+	var half_x := dim.x * 0.5
+	var half_y := dim.y * 0.5
+	var door_boxes := FURNISH._door_boxes(ports, half_x, half_y)
+	for item_value in plan:
+		var item := item_value as Dictionary
+		if not bool(item.get("collide", false)):
+			continue
+		var pos := item["position"] as Vector3
+		var slug2 := str(item.get("slug", ""))
+		var fp2 := FURNISH.footprint(slug2)
+		var yaw2 := float(item.get("yaw", 0.0))
+		var bhx := fp2.x * 0.5
+		var bhz := fp2.y * 0.5
+		if FURNISH._quarter_turned(yaw2):
+			bhx = fp2.y * 0.5
+			bhz = fp2.x * 0.5
+		for box_value in door_boxes:
+			var box := box_value as Dictionary
+			if absf(pos.x - float(box["x"])) < bhx + float(box["hx"]) \
+					and absf(pos.z - float(box["z"])) < bhz + float(box["hz"]):
+				_fail("%s: 家具 %s 挡住门洞（pos=%.1f,%.1f 门盒=%.1f,%.1f hx=%.1f hz=%.1f bhx=%.1f bhz=%.1f）"
+					% [room.room_id, slug2, pos.x, pos.z,
+						float(box["x"]), float(box["z"]),
+						float(box["hx"]), float(box["hz"]), bhx, bhz])
+				break
+	var built := 0
+	var collided := 0
+	for item_value in plan:
+		var item := item_value as Dictionary
+		var node := _add(
+			str(item["prefab"]), art, canvas,
+			item["position"] as Vector3, float(item["yaw"]), str(item["name"])
+		)
+		if node == null:
+			continue
+		# **占地面积 ×3、高度压到墙内**（业主 2026-10-31：「至少放大三倍」）。
+		# 非等比缩放是刻意的：等比 3× 会让书柜变成 6.5m 高、从 2.8m 的墙顶戳出去。
+		node.scale = item["scale"] as Vector3
+		node.set_meta("furnishing_generated", true)
+		node.set_meta("furnishing_theme", theme_id)
+		built += 1
+		# **落地家具加碰撞**（业主：「组件也没有阻挡」）。
+		# 地毯/挂画/桌面小件不加 —— 它们要么该能踩过去，要么在高处玩家撞不到。
+		#
+		# 层用 1（静态世界），与护墙/地砖一致：`DungeonRoom3D._collect_spawn_blockers()`
+		# 只收 `collision_layer & 1` 的 StaticBody3D，所以家具会自动成为刷怪障碍
+		# —— 这正是想要的（怪不该刷在家具里），但会减少可用刷怪点，
+		# 铺完必须跑 `probe_expedition03_playable` 确认还刷得出怪。
+		if bool(item.get("collide", false)):
+			_add_collision(node, canvas, item)
+			collided += 1
+	return {"count": built, "theme": theme_id, "collided": collided}
+
+
+## 给一件家具挂一个 BoxShape3D 碰撞体。
+##
+## 盒子尺寸填**原始尺寸**（`SIZES` 里的值），不是放大后的尺寸 ——
+## 因为碰撞体是节点的子节点，节点自身的 `scale`（3× / 高度比）会自动叠乘上去。
+## 填成放大后尺寸会被乘两次，盒子里外差 3 倍，实测表现是「人离家具一米就撞墙」。
+## 盒心抬到「原始高的一半」同理：乘完节点缩放正好落在放大后高度的中点。
+func _add_collision(node: Node3D, canvas: Node3D, item: Dictionary) -> void:
+	var slug := str(item.get("slug", ""))
+	var base: Vector3 = FURNISH.SIZES.get(slug, Vector3.ONE)
+	var body := StaticBody3D.new()
+	body.name = "CollisionBody"
+	body.collision_layer = 1
+	body.collision_mask = 0
+	node.add_child(body)
+	var shape_node := CollisionShape3D.new()
+	shape_node.name = "Collision_0"
+	var box := BoxShape3D.new()
+	box.size = base
+	shape_node.position = Vector3(0.0, base.y * 0.5, 0.0)
+	shape_node.shape = box
+	body.add_child(shape_node)
+	body.owner = canvas
+	shape_node.owner = canvas
 
 
 ## 按「房型 + 短边」取原型 —— **已迁到 `ManorShellPlan.style_for()`**。
@@ -433,21 +541,22 @@ func _symmetric_pair(cells: Array, door_indices: Array) -> Array:
 
 
 func _add(prefab_path: String, parent: Node3D, canvas: Node3D, position: Vector3,
-		yaw_degrees: float, node_name: String) -> void:
+		yaw_degrees: float, node_name: String) -> Node3D:
 	var packed := load(prefab_path) as PackedScene
 	if packed == null:
 		_fail("加载不了 %s" % prefab_path)
-		return
+		return null
 	var instance := packed.instantiate() as Node3D
 	if instance == null:
 		_fail("prefab 根不是 Node3D: %s" % prefab_path)
-		return
+		return null
 	instance.name = node_name
 	instance.position = position
 	instance.rotation.y = deg_to_rad(yaw_degrees)
 	parent.add_child(instance)
 	# 不设 owner 就进不了 PackedScene —— 保存出来是空的。
 	instance.owner = canvas
+	return instance
 
 
 func _spawn(seed_override: int = -1) -> Node:

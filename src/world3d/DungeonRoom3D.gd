@@ -2692,6 +2692,8 @@ func _apply_authored_runtime_door_contract(dimensions: Vector2) -> void:
 const ART_SOURCE := preload("res://src/world3d/RuntimeRoomArtSource.gd")
 ## 公馆壳体配方（原型表 + 逐格摆位）。与烘焙器共用同一份，保证两边逐格一致。
 const MANOR_PLAN := preload("res://src/world3d/ManorShellPlan.gd")
+## 陈设配方：与烘焙器共用同一份主题表（`ManorFurnishing.THEMES`）。
+const FURNISH_MANOR := preload("res://src/world3d/ManorFurnishing.gd")
 
 
 ## 远征03：把美术层里的公馆结构件**按本局门位重铺一遍**。
@@ -2764,7 +2766,84 @@ func _rebuild_manor_shell(art_root: Node3D) -> int:
 	var built := MANOR_PLAN.instantiate_plan(plan, container)
 	set_meta("manor_shell_rebuilt", built)
 	set_meta("manor_shell_style", MANOR_PLAN.style_label(style))
+	# ── ④ 陈设同样按本局门位重铺 ──────────────────────────────────────────
+	_rebuild_manor_furnishing(container, dim, style)
 	return built
+
+
+## 远征03：把家具也按**本局门位**重铺一遍。
+##
+## ## 为什么家具必须一起重算
+##
+## 复用键让**同一份烘焙文件服务多间房**（`combat_45x40` 一份文件同时给 hub_01、
+## hub_02、n07 用）。而每间房的门位不同 —— 家具在烘焙时避开了**当次那间房**的门，
+## 换一间房加载，同一张沙发就正好压在新门位上。实测
+## `probe_expedition03_playable` 报 5/25 条门洞被 `CollisionBody` 封死，
+## 可达房间从 25 掉到 8 —— 关卡的连通性直接被家具切碎。
+##
+## 结构件早就走运行时重铺（`_rebuild_manor_shell`），家具是同一条道理的延伸：
+## **凡是依赖本局几何的东西都不能烘焙进共享文件**。
+##
+## ## 副作用
+##
+## 工坊里手工摆的家具会在加载时被删掉重铺。这与「工坊里拖墙不生效」同源：
+## 想让改动生效，改 `ManorFurnishing.THEMES` 的配方，不是改某一间房的实例。
+func _rebuild_manor_furnishing(container: Node3D, dim: Vector2, style: Dictionary) -> void:
+	if container == null:
+		return
+	# 删掉烘焙文件带来的 AND 上一次重建的家具
+	var doomed: Array[Node] = []
+	for node in container.find_children("Furn_*", "Node3D", true, false):
+		doomed.append(node)
+	for node in doomed:
+		if not is_instance_valid(node) or node.get_parent() == null:
+			continue
+		node.get_parent().remove_child(node)
+		node.free()
+	var theme_id := FURNISH_MANOR.theme_for_style(style)
+	if theme_id.is_empty():
+		return
+	var plan := FURNISH_MANOR.layout(theme_id, dim, connection_ports)
+	var built := 0
+	for item_value in plan:
+		var item := item_value as Dictionary
+		var packed := load(str(item.get("prefab", ""))) as PackedScene
+		if packed == null:
+			continue
+		var node := packed.instantiate() as Node3D
+		if node == null:
+			continue
+		node.name = str(item.get("name", "Furn"))
+		node.position = item["position"] as Vector3
+		node.rotation.y = deg_to_rad(float(item.get("yaw", 0.0)))
+		node.scale = item["scale"] as Vector3
+		node.set_meta("furnishing_generated", true)
+		node.set_meta("furnishing_theme", theme_id)
+		container.add_child(node)
+		if bool(item.get("collide", false)):
+			_add_furniture_collision(node, str(item.get("slug", "")))
+		built += 1
+	set_meta("manor_furnishing_rebuilt", built)
+	set_meta("manor_furnishing_theme", theme_id)
+
+
+## 家具碰撞体：尺寸填**原始值**，靠节点 scale 自动叠乘（填放大后会被乘两次）。
+func _add_furniture_collision(node: Node3D, slug: String) -> void:
+	var base: Vector3 = FURNISH_MANOR.SIZES.get(slug, Vector3.ZERO)
+	if base == Vector3.ZERO:
+		return
+	var body := StaticBody3D.new()
+	body.name = "CollisionBody"
+	body.collision_layer = 1
+	body.collision_mask = 0
+	node.add_child(body)
+	var shape_node := CollisionShape3D.new()
+	shape_node.name = "Collision_0"
+	var box := BoxShape3D.new()
+	box.size = base
+	shape_node.position = Vector3(0.0, base.y * 0.5, 0.0)
+	shape_node.shape = box
+	body.add_child(shape_node)
 
 
 ## 烘焙场景在 flow 房间里的**唯一合法用法**：当美术层，不当壳体。

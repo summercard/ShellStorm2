@@ -3,8 +3,37 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_floor_stone/env_manor_floor_stone_root_top3d.tscn" id="1_eqf1n"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn" id="2_n0ay4"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_door/env_manor_wall_door_root_top3d.tscn" id="3_34ijh"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bookcase/env_manor_bookcase_root_top3d.tscn" id="4_68ke6"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_bedroom/env_manor_rug_bedroom_root_top3d.tscn" id="5_5ij5j"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_console/env_manor_console_root_top3d.tscn" id="6_a3hmg"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_office_chair/env_manor_office_chair_root_top3d.tscn" id="7_o7hdj"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_table_lamp/env_manor_table_lamp_root_top3d.tscn" id="8_hhdt4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_desk_documents/env_manor_desk_documents_root_top3d.tscn" id="9_nkcyq"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_painting/env_manor_painting_root_top3d.tscn" id="10_lntvl"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_plant_compact/env_manor_plant_compact_root_top3d.tscn" id="11_0serd"]
 
-[node name="Room_secret_room_inj1" type="Node3D" unique_id=964449257]
+[sub_resource type="BoxShape3D" id="BoxShape3D_68ke6"]
+size = Vector3(1.34, 2.17, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5ij5j"]
+size = Vector3(1.34, 2.17, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a3hmg"]
+size = Vector3(1.34, 2.17, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o7hdj"]
+size = Vector3(1.34, 0.85, 0.49)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hhdt4"]
+size = Vector3(0.75, 1.09, 0.795)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nkcyq"]
+size = Vector3(1.34, 0.85, 0.49)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lntvl"]
+size = Vector3(0.97, 1.38, 1)
+
+[node name="Room_secret_room_inj1" type="Node3D" unique_id=418829119]
 metadata/scene_builder_schema = "shellstorm2.component_scene.v1"
 metadata/runtime_room_source_schema = "shellstorm2.runtime_room_art.v1"
 metadata/runtime_room_signature = "29d67dbb9bda9c45fe1c96a9174a55eff7b6426c94df135cb8a4a70e79258bf0"
@@ -24,10 +53,12 @@ metadata/built_by = "manor_shell_builder"
 metadata/archetype = "陷阱厅"
 metadata/floor_mode = "full"
 metadata/window_mode = "blind"
+metadata/furnishing_theme = "study"
+metadata/furnishing_theme_label = "书房"
 
-[node name="ArtComponents" type="Node3D" parent="." unique_id=1392678242]
+[node name="ArtComponents" type="Node3D" parent="." unique_id=1965963408]
 
-[node name="Floor_00_00" type="Node3D" parent="ArtComponents" unique_id=177343120 instance=ExtResource("1_eqf1n")]
+[node name="Floor_00_00" type="Node3D" parent="ArtComponents" unique_id=817337097 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -46,7 +77,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_01_00" type="Node3D" parent="ArtComponents" unique_id=1847936220 instance=ExtResource("1_eqf1n")]
+[node name="Floor_01_00" type="Node3D" parent="ArtComponents" unique_id=503538301 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -65,7 +96,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_02_00" type="Node3D" parent="ArtComponents" unique_id=33395412 instance=ExtResource("1_eqf1n")]
+[node name="Floor_02_00" type="Node3D" parent="ArtComponents" unique_id=1926033524 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -84,7 +115,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_03_00" type="Node3D" parent="ArtComponents" unique_id=1913823204 instance=ExtResource("1_eqf1n")]
+[node name="Floor_03_00" type="Node3D" parent="ArtComponents" unique_id=2043139029 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -103,7 +134,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_04_00" type="Node3D" parent="ArtComponents" unique_id=745353081 instance=ExtResource("1_eqf1n")]
+[node name="Floor_04_00" type="Node3D" parent="ArtComponents" unique_id=1637853145 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -122,7 +153,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_05_00" type="Node3D" parent="ArtComponents" unique_id=1928443125 instance=ExtResource("1_eqf1n")]
+[node name="Floor_05_00" type="Node3D" parent="ArtComponents" unique_id=578981315 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -141,7 +172,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_06_00" type="Node3D" parent="ArtComponents" unique_id=775914483 instance=ExtResource("1_eqf1n")]
+[node name="Floor_06_00" type="Node3D" parent="ArtComponents" unique_id=55090670 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -160,7 +191,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_07_00" type="Node3D" parent="ArtComponents" unique_id=524598763 instance=ExtResource("1_eqf1n")]
+[node name="Floor_07_00" type="Node3D" parent="ArtComponents" unique_id=1825533308 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -179,7 +210,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_00_01" type="Node3D" parent="ArtComponents" unique_id=2067551952 instance=ExtResource("1_eqf1n")]
+[node name="Floor_00_01" type="Node3D" parent="ArtComponents" unique_id=938666949 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -198,7 +229,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_01_01" type="Node3D" parent="ArtComponents" unique_id=1514544755 instance=ExtResource("1_eqf1n")]
+[node name="Floor_01_01" type="Node3D" parent="ArtComponents" unique_id=1864515087 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -217,7 +248,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_02_01" type="Node3D" parent="ArtComponents" unique_id=1082317016 instance=ExtResource("1_eqf1n")]
+[node name="Floor_02_01" type="Node3D" parent="ArtComponents" unique_id=1786022021 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -236,7 +267,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_03_01" type="Node3D" parent="ArtComponents" unique_id=1824745537 instance=ExtResource("1_eqf1n")]
+[node name="Floor_03_01" type="Node3D" parent="ArtComponents" unique_id=1501323310 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -255,7 +286,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_04_01" type="Node3D" parent="ArtComponents" unique_id=455763807 instance=ExtResource("1_eqf1n")]
+[node name="Floor_04_01" type="Node3D" parent="ArtComponents" unique_id=1800149351 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -274,7 +305,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_05_01" type="Node3D" parent="ArtComponents" unique_id=1285949895 instance=ExtResource("1_eqf1n")]
+[node name="Floor_05_01" type="Node3D" parent="ArtComponents" unique_id=1750434641 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -293,7 +324,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_06_01" type="Node3D" parent="ArtComponents" unique_id=45401680 instance=ExtResource("1_eqf1n")]
+[node name="Floor_06_01" type="Node3D" parent="ArtComponents" unique_id=471425517 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -312,7 +343,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_07_01" type="Node3D" parent="ArtComponents" unique_id=872238638 instance=ExtResource("1_eqf1n")]
+[node name="Floor_07_01" type="Node3D" parent="ArtComponents" unique_id=1166728267 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -331,7 +362,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_00_02" type="Node3D" parent="ArtComponents" unique_id=837638115 instance=ExtResource("1_eqf1n")]
+[node name="Floor_00_02" type="Node3D" parent="ArtComponents" unique_id=1433398072 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -350,7 +381,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_01_02" type="Node3D" parent="ArtComponents" unique_id=32712370 instance=ExtResource("1_eqf1n")]
+[node name="Floor_01_02" type="Node3D" parent="ArtComponents" unique_id=365481071 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -369,7 +400,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_02_02" type="Node3D" parent="ArtComponents" unique_id=1513886867 instance=ExtResource("1_eqf1n")]
+[node name="Floor_02_02" type="Node3D" parent="ArtComponents" unique_id=1911443527 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -388,7 +419,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_03_02" type="Node3D" parent="ArtComponents" unique_id=1856861027 instance=ExtResource("1_eqf1n")]
+[node name="Floor_03_02" type="Node3D" parent="ArtComponents" unique_id=1199567331 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -407,7 +438,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_04_02" type="Node3D" parent="ArtComponents" unique_id=1040028405 instance=ExtResource("1_eqf1n")]
+[node name="Floor_04_02" type="Node3D" parent="ArtComponents" unique_id=1755739398 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -426,7 +457,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_05_02" type="Node3D" parent="ArtComponents" unique_id=677623392 instance=ExtResource("1_eqf1n")]
+[node name="Floor_05_02" type="Node3D" parent="ArtComponents" unique_id=584265012 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -445,7 +476,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_06_02" type="Node3D" parent="ArtComponents" unique_id=782158777 instance=ExtResource("1_eqf1n")]
+[node name="Floor_06_02" type="Node3D" parent="ArtComponents" unique_id=952885668 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -464,7 +495,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_07_02" type="Node3D" parent="ArtComponents" unique_id=1430018872 instance=ExtResource("1_eqf1n")]
+[node name="Floor_07_02" type="Node3D" parent="ArtComponents" unique_id=394414381 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -483,7 +514,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_00_03" type="Node3D" parent="ArtComponents" unique_id=1192948924 instance=ExtResource("1_eqf1n")]
+[node name="Floor_00_03" type="Node3D" parent="ArtComponents" unique_id=1017397317 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -502,7 +533,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_01_03" type="Node3D" parent="ArtComponents" unique_id=717521895 instance=ExtResource("1_eqf1n")]
+[node name="Floor_01_03" type="Node3D" parent="ArtComponents" unique_id=302390818 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -521,7 +552,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_02_03" type="Node3D" parent="ArtComponents" unique_id=252870676 instance=ExtResource("1_eqf1n")]
+[node name="Floor_02_03" type="Node3D" parent="ArtComponents" unique_id=845409791 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -540,7 +571,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_03_03" type="Node3D" parent="ArtComponents" unique_id=684991889 instance=ExtResource("1_eqf1n")]
+[node name="Floor_03_03" type="Node3D" parent="ArtComponents" unique_id=332092716 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -559,7 +590,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_04_03" type="Node3D" parent="ArtComponents" unique_id=1238062567 instance=ExtResource("1_eqf1n")]
+[node name="Floor_04_03" type="Node3D" parent="ArtComponents" unique_id=1284160043 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -578,7 +609,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_05_03" type="Node3D" parent="ArtComponents" unique_id=1693271680 instance=ExtResource("1_eqf1n")]
+[node name="Floor_05_03" type="Node3D" parent="ArtComponents" unique_id=1611807029 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -597,7 +628,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_06_03" type="Node3D" parent="ArtComponents" unique_id=647876250 instance=ExtResource("1_eqf1n")]
+[node name="Floor_06_03" type="Node3D" parent="ArtComponents" unique_id=1955372855 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -616,7 +647,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_07_03" type="Node3D" parent="ArtComponents" unique_id=3089445 instance=ExtResource("1_eqf1n")]
+[node name="Floor_07_03" type="Node3D" parent="ArtComponents" unique_id=1506368987 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -635,7 +666,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_00_04" type="Node3D" parent="ArtComponents" unique_id=310523552 instance=ExtResource("1_eqf1n")]
+[node name="Floor_00_04" type="Node3D" parent="ArtComponents" unique_id=1342562248 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -654,7 +685,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_01_04" type="Node3D" parent="ArtComponents" unique_id=1520213924 instance=ExtResource("1_eqf1n")]
+[node name="Floor_01_04" type="Node3D" parent="ArtComponents" unique_id=447476466 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -673,7 +704,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_02_04" type="Node3D" parent="ArtComponents" unique_id=1037159941 instance=ExtResource("1_eqf1n")]
+[node name="Floor_02_04" type="Node3D" parent="ArtComponents" unique_id=1762404679 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -692,7 +723,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_03_04" type="Node3D" parent="ArtComponents" unique_id=1575649448 instance=ExtResource("1_eqf1n")]
+[node name="Floor_03_04" type="Node3D" parent="ArtComponents" unique_id=610829831 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -711,7 +742,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_04_04" type="Node3D" parent="ArtComponents" unique_id=1263389215 instance=ExtResource("1_eqf1n")]
+[node name="Floor_04_04" type="Node3D" parent="ArtComponents" unique_id=1681888114 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -730,7 +761,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_05_04" type="Node3D" parent="ArtComponents" unique_id=1105867091 instance=ExtResource("1_eqf1n")]
+[node name="Floor_05_04" type="Node3D" parent="ArtComponents" unique_id=1772520574 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -749,7 +780,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_06_04" type="Node3D" parent="ArtComponents" unique_id=1590318433 instance=ExtResource("1_eqf1n")]
+[node name="Floor_06_04" type="Node3D" parent="ArtComponents" unique_id=363412408 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -768,7 +799,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_07_04" type="Node3D" parent="ArtComponents" unique_id=1187301011 instance=ExtResource("1_eqf1n")]
+[node name="Floor_07_04" type="Node3D" parent="ArtComponents" unique_id=965882627 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -787,7 +818,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_00_05" type="Node3D" parent="ArtComponents" unique_id=1709207910 instance=ExtResource("1_eqf1n")]
+[node name="Floor_00_05" type="Node3D" parent="ArtComponents" unique_id=1300728359 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -806,7 +837,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_01_05" type="Node3D" parent="ArtComponents" unique_id=1309438825 instance=ExtResource("1_eqf1n")]
+[node name="Floor_01_05" type="Node3D" parent="ArtComponents" unique_id=724328100 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -825,7 +856,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_02_05" type="Node3D" parent="ArtComponents" unique_id=1039602858 instance=ExtResource("1_eqf1n")]
+[node name="Floor_02_05" type="Node3D" parent="ArtComponents" unique_id=1798194433 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -844,7 +875,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_03_05" type="Node3D" parent="ArtComponents" unique_id=205703257 instance=ExtResource("1_eqf1n")]
+[node name="Floor_03_05" type="Node3D" parent="ArtComponents" unique_id=587665920 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -863,7 +894,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_04_05" type="Node3D" parent="ArtComponents" unique_id=1444937886 instance=ExtResource("1_eqf1n")]
+[node name="Floor_04_05" type="Node3D" parent="ArtComponents" unique_id=1447498331 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -882,7 +913,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_05_05" type="Node3D" parent="ArtComponents" unique_id=692209325 instance=ExtResource("1_eqf1n")]
+[node name="Floor_05_05" type="Node3D" parent="ArtComponents" unique_id=712422323 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -901,7 +932,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_06_05" type="Node3D" parent="ArtComponents" unique_id=355581826 instance=ExtResource("1_eqf1n")]
+[node name="Floor_06_05" type="Node3D" parent="ArtComponents" unique_id=317181635 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -920,7 +951,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Floor_07_05" type="Node3D" parent="ArtComponents" unique_id=1472302427 instance=ExtResource("1_eqf1n")]
+[node name="Floor_07_05" type="Node3D" parent="ArtComponents" unique_id=670086299 instance=ExtResource("1_eqf1n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-STONE"
 metadata/asset_version = "v017"
@@ -939,7 +970,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "floor"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_north_00" type="Node3D" parent="ArtComponents" unique_id=183433203 instance=ExtResource("2_n0ay4")]
+[node name="Wall_north_00" type="Node3D" parent="ArtComponents" unique_id=889668566 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, -15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -958,7 +989,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_north_01" type="Node3D" parent="ArtComponents" unique_id=1275092580 instance=ExtResource("2_n0ay4")]
+[node name="Wall_north_01" type="Node3D" parent="ArtComponents" unique_id=2031331591 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -977,7 +1008,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_north_02" type="Node3D" parent="ArtComponents" unique_id=1963017521 instance=ExtResource("2_n0ay4")]
+[node name="Wall_north_02" type="Node3D" parent="ArtComponents" unique_id=737282949 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -996,7 +1027,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_north_03" type="Node3D" parent="ArtComponents" unique_id=2129684177 instance=ExtResource("2_n0ay4")]
+[node name="Wall_north_03" type="Node3D" parent="ArtComponents" unique_id=1620859884 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1015,7 +1046,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_north_04" type="Node3D" parent="ArtComponents" unique_id=650236435 instance=ExtResource("2_n0ay4")]
+[node name="Wall_north_04" type="Node3D" parent="ArtComponents" unique_id=1367554491 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1034,7 +1065,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_north_05" type="Node3D" parent="ArtComponents" unique_id=2045095984 instance=ExtResource("2_n0ay4")]
+[node name="Wall_north_05" type="Node3D" parent="ArtComponents" unique_id=1994863341 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1053,7 +1084,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_north_06" type="Node3D" parent="ArtComponents" unique_id=1038936735 instance=ExtResource("2_n0ay4")]
+[node name="Wall_north_06" type="Node3D" parent="ArtComponents" unique_id=1676179162 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1072,7 +1103,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_north_07" type="Node3D" parent="ArtComponents" unique_id=1275781406 instance=ExtResource("2_n0ay4")]
+[node name="Wall_north_07" type="Node3D" parent="ArtComponents" unique_id=675681076 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, -15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1091,7 +1122,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_south_00" type="Node3D" parent="ArtComponents" unique_id=244287252 instance=ExtResource("2_n0ay4")]
+[node name="Wall_south_00" type="Node3D" parent="ArtComponents" unique_id=363917874 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.5, 0, 15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1110,7 +1141,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_south_01" type="Node3D" parent="ArtComponents" unique_id=771054216 instance=ExtResource("2_n0ay4")]
+[node name="Wall_south_01" type="Node3D" parent="ArtComponents" unique_id=1648462514 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.5, 0, 15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1129,7 +1160,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_south_02" type="Node3D" parent="ArtComponents" unique_id=116419029 instance=ExtResource("2_n0ay4")]
+[node name="Wall_south_02" type="Node3D" parent="ArtComponents" unique_id=651480938 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.5, 0, 15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1148,7 +1179,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="DoorWall_south_03" type="Node3D" parent="ArtComponents" unique_id=43042730 instance=ExtResource("3_34ijh")]
+[node name="DoorWall_south_03" type="Node3D" parent="ArtComponents" unique_id=2078466533 instance=ExtResource("3_34ijh")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, 0, 15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-DOOR"
 metadata/asset_version = "v017"
@@ -1167,7 +1198,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_south_04" type="Node3D" parent="ArtComponents" unique_id=930158113 instance=ExtResource("2_n0ay4")]
+[node name="Wall_south_04" type="Node3D" parent="ArtComponents" unique_id=1495450399 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5, 0, 15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1186,7 +1217,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_south_05" type="Node3D" parent="ArtComponents" unique_id=175471734 instance=ExtResource("2_n0ay4")]
+[node name="Wall_south_05" type="Node3D" parent="ArtComponents" unique_id=1736067415 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5, 0, 15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1205,7 +1236,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_south_06" type="Node3D" parent="ArtComponents" unique_id=65424944 instance=ExtResource("2_n0ay4")]
+[node name="Wall_south_06" type="Node3D" parent="ArtComponents" unique_id=469545627 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.5, 0, 15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1224,7 +1255,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_south_07" type="Node3D" parent="ArtComponents" unique_id=1987553369 instance=ExtResource("2_n0ay4")]
+[node name="Wall_south_07" type="Node3D" parent="ArtComponents" unique_id=689039394 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.5, 0, 15)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1243,7 +1274,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_west_00" type="Node3D" parent="ArtComponents" unique_id=2096860818 instance=ExtResource("2_n0ay4")]
+[node name="Wall_west_00" type="Node3D" parent="ArtComponents" unique_id=36035843 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1262,7 +1293,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_west_01" type="Node3D" parent="ArtComponents" unique_id=1392894168 instance=ExtResource("2_n0ay4")]
+[node name="Wall_west_01" type="Node3D" parent="ArtComponents" unique_id=2038886183 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1281,7 +1312,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_west_02" type="Node3D" parent="ArtComponents" unique_id=431588275 instance=ExtResource("2_n0ay4")]
+[node name="Wall_west_02" type="Node3D" parent="ArtComponents" unique_id=1574097870 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1300,7 +1331,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_west_03" type="Node3D" parent="ArtComponents" unique_id=1550215291 instance=ExtResource("2_n0ay4")]
+[node name="Wall_west_03" type="Node3D" parent="ArtComponents" unique_id=1123938954 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1319,7 +1350,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_west_04" type="Node3D" parent="ArtComponents" unique_id=662822903 instance=ExtResource("2_n0ay4")]
+[node name="Wall_west_04" type="Node3D" parent="ArtComponents" unique_id=1726425870 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1338,7 +1369,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_west_05" type="Node3D" parent="ArtComponents" unique_id=1660264771 instance=ExtResource("2_n0ay4")]
+[node name="Wall_west_05" type="Node3D" parent="ArtComponents" unique_id=9865114 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1357,7 +1388,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_east_00" type="Node3D" parent="ArtComponents" unique_id=694229801 instance=ExtResource("2_n0ay4")]
+[node name="Wall_east_00" type="Node3D" parent="ArtComponents" unique_id=870437998 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, -12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1376,7 +1407,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_east_01" type="Node3D" parent="ArtComponents" unique_id=1240477621 instance=ExtResource("2_n0ay4")]
+[node name="Wall_east_01" type="Node3D" parent="ArtComponents" unique_id=615881902 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1395,7 +1426,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_east_02" type="Node3D" parent="ArtComponents" unique_id=394599602 instance=ExtResource("2_n0ay4")]
+[node name="Wall_east_02" type="Node3D" parent="ArtComponents" unique_id=73695967 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, -2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1414,7 +1445,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_east_03" type="Node3D" parent="ArtComponents" unique_id=2077596988 instance=ExtResource("2_n0ay4")]
+[node name="Wall_east_03" type="Node3D" parent="ArtComponents" unique_id=1201936685 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, 2.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1433,7 +1464,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_east_04" type="Node3D" parent="ArtComponents" unique_id=276623037 instance=ExtResource("2_n0ay4")]
+[node name="Wall_east_04" type="Node3D" parent="ArtComponents" unique_id=308525145 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1452,7 +1483,7 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Wall_east_05" type="Node3D" parent="ArtComponents" unique_id=1365314817 instance=ExtResource("2_n0ay4")]
+[node name="Wall_east_05" type="Node3D" parent="ArtComponents" unique_id=564581159 instance=ExtResource("2_n0ay4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, 12.5)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
 metadata/asset_version = "v017"
@@ -1470,3 +1501,304 @@ metadata/room_owned_geometry = false
 metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
+
+[node name="Furn_01_bookcase" type="Node3D" parent="ArtComponents" unique_id=1541661672 instance=ExtResource("4_68ke6")]
+transform = Transform3D(1.7689124, 0, -0.33308962, 0, 1.1892165, 0, 0.33308962, 0, 1.7689124, -9, 0, -14.3)
+metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "开放式书架"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bookcase/manor_bookcase_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 2.17472, 0.4975)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_01_bookcase" unique_id=1036490364]
+collision_mask = 0
+
+[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_01_bookcase/CollisionBody" unique_id=1746477601]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
+shape = SubResource("BoxShape3D_68ke6")
+
+[node name="Furn_02_bookcase" type="Node3D" parent="ArtComponents" unique_id=433374241 instance=ExtResource("4_68ke6")]
+transform = Transform3D(1.8, 0, 0, 0, 1.1892165, 0, 0, 0, 1.8, -2, 0, -14.3)
+metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "开放式书架"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bookcase/manor_bookcase_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 2.17472, 0.4975)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_02_bookcase" unique_id=442074757]
+collision_mask = 0
+
+[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_02_bookcase/CollisionBody" unique_id=1723722282]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
+shape = SubResource("BoxShape3D_5ij5j")
+
+[node name="Furn_03_bookcase" type="Node3D" parent="ArtComponents" unique_id=1870531129 instance=ExtResource("4_68ke6")]
+transform = Transform3D(1.8, 0, 0, 0, 1.1892165, 0, 0, 0, 1.8, 5, 0, -14.3)
+metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "开放式书架"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bookcase/manor_bookcase_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 2.17472, 0.4975)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_03_bookcase" unique_id=1923906388]
+collision_mask = 0
+
+[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_03_bookcase/CollisionBody" unique_id=794518618]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
+shape = SubResource("BoxShape3D_a3hmg")
+
+[node name="Furn_04_rug_bedroom" type="Node3D" parent="ArtComponents" unique_id=1482669233 instance=ExtResource("5_5ij5j")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0, 0.002, 3)
+metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "卧室地毯3x4m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(3, 0.053, 4)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "rug"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="Furn_05_console" type="Node3D" parent="ArtComponents" unique_id=904426595 instance=ExtResource("6_a3hmg")]
+transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.8454117, 0, -1.8, 0, -7.86805e-08, -19.309, 0, 2)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_05_console" unique_id=503955409]
+collision_mask = 0
+
+[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_05_console/CollisionBody" unique_id=596044725]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_o7hdj")
+
+[node name="Furn_06_office_chair" type="Node3D" parent="ArtComponents" unique_id=1160485611 instance=ExtResource("7_o7hdj")]
+transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.6711926, 0, -1.8, 0, -7.86805e-08, -7, 0, 2)
+metadata/asset_id = "ENV-EXP03-MANOR-OFFICE-CHAIR"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台办公椅"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_office_chair/manor_office_chair_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.75, 1.09, 0.795)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "seating"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_06_office_chair" unique_id=1486272991]
+collision_mask = 0
+
+[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_06_office_chair/CollisionBody" unique_id=1764054975]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
+shape = SubResource("BoxShape3D_hhdt4")
+
+[node name="Furn_07_table_lamp" type="Node3D" parent="ArtComponents" unique_id=491400993 instance=ExtResource("8_hhdt4")]
+transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.6625714, 0, -1.8, 0, -7.86805e-08, -19.408, 1.5685999, 3.8)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="Furn_08_desk_documents" type="Node3D" parent="ArtComponents" unique_id=428649497 instance=ExtResource("9_nkcyq")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 1.518, 0, -2, 0, -8.742278e-08, -19.47, 1.5685999, 0.4)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="Furn_09_console" type="Node3D" parent="ArtComponents" unique_id=1101598146 instance=ExtResource("6_a3hmg")]
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.8454117, 0, 1.8, 0, 2.1464784e-08, 19.309, 0, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_09_console" unique_id=2069974355]
+collision_mask = 0
+
+[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_09_console/CollisionBody" unique_id=167818646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_nkcyq")
+
+[node name="Furn_10_table_lamp" type="Node3D" parent="ArtComponents" unique_id=1185582163 instance=ExtResource("8_hhdt4")]
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.6625714, 0, 1.8, 0, 2.1464784e-08, 19.408, 1.5685999, -4.2)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="Furn_11_painting" type="Node3D" parent="ArtComponents" unique_id=1681827503 instance=ExtResource("10_lntvl")]
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.8, 0, 1.8, 0, 2.1464784e-08, 19.615, 0.75, 4)
+metadata/asset_id = "ENV-EXP03-MANOR-PAINTING"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "黄铜框风景画"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_painting/manor_painting_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.455, 0.96, 0.152)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "painting"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="Furn_12_plant_compact" type="Node3D" parent="ArtComponents" unique_id=1166307980 instance=ExtResource("11_0serd")]
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.1366667, 0, 1.8, 0, 2.1464784e-08, 18.85, 0, 10)
+metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "小型常绿盆栽"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.968996, 1.37572, 0.996497)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "plant"
+metadata/grid_unit_m = 0.0
+metadata/furnishing_generated = true
+metadata/furnishing_theme = "study"
+
+[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_12_plant_compact" unique_id=394426925]
+collision_mask = 0
+
+[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_12_plant_compact/CollisionBody" unique_id=152012512]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.69, 0)
+shape = SubResource("BoxShape3D_lntvl")

@@ -22,10 +22,22 @@ var _sample := 0.0
 var _clock := 0.0
 var _locomotion_phase := 0.0
 var _speed := 0.0
+## 满速，用来把当前速度换算成比例（走还是跑）。
+var _base_speed := 0.0
 var _light_time := 1.0
 var _flash_time := 0.0
 var _event := ""
 var _event_time := 0.0
+## 事件开始时的 `state_time`。事件进度取「_process 计时」与「state_time 增量」的最大值。
+##
+## 为什么要两条时钟：`_event_time` 只在 `_process` 里涨，而 `sync_state` 是
+## `Enemy3D._process` 调进来的 —— 正常运行时两条同步。但**冻结帧 / 探针 / 暂停**时
+## `_process` 可能不跑，而调用方仍在按状态推进 `state_time`，
+## 于是事件永远停在第一帧（实测：探针里胖子永远卡在 `move_start`，看起来"不会跑步"）。
+var _event_anchor := 0.0
+## 本次受击是否允许播受击姿态。太阳伤害传 false —— 它每秒结算一次，
+## 反复播 hit_light 会让"被晒"读成"被连续射击"。
+var _hurt_pose_allowed := true
 var _heading := 0.0
 var _blend_time := 1.0
 var _previous_pose: Array[Transform3D] = []
@@ -67,9 +79,14 @@ func _process(delta: float) -> void:
 	# 只推能量，不碰 `emission_enabled`。
 	HitFlash.apply(_materials, _flash_baseline, _flash_time / FLASH_DURATION)
 
-func sync_state(state: String, state_time: float, speed: float, telegraph_duration: float, recovery_duration: float) -> void:
+func sync_state(
+	state: String, state_time: float, speed: float,
+	telegraph_duration: float, recovery_duration: float, base_speed := 0.0
+) -> void:
 	if _player == null:
 		return
+	if base_speed > 0.0:
+		_base_speed = base_speed
 	if state != _state:
 		_previous_pose.clear()
 		for bone in _skeleton.get_bone_count():
@@ -77,23 +94,31 @@ func sync_state(state: String, state_time: float, speed: float, telegraph_durati
 		_blend_time = 0.0
 		_event = ""
 		_event_time = 0.0
+		_event_anchor = state_time
 		_locomotion_phase = 0.0
 		if _state == "dormant" and state == "idle":
 			_event = "awaken"
+			_event_anchor = state_time
 		elif state == "patrol":
 			_event = "move_start"
+			_event_anchor = state_time
 		elif _state == "patrol" and state == "idle":
 			_event = "move_stop"
+			_event_anchor = state_time
 	var yaw_change := wrapf(global_rotation.y - _heading, -PI, PI)
 	if state == "idle" and _event.is_empty() and absf(yaw_change) > 0.25:
 		_event = "turn_l" if yaw_change > 0.0 else "turn_r"
 		_event_time = 0.0
+		_event_anchor = state_time
 		_heading = global_rotation.y
 	elif state != "idle":
 		_heading = global_rotation.y
 	_state = state
 	_speed = maxf(0.0, speed)
-	_clip = str(CLIP_BY_STATE.get(state, "idle"))
+	# 按实际速度改判走路/跑步，理由见 `melee_chaser_formal_visual.gd` 的 `_locomotion_clip()`：
+	# 复刻怪的突进 / 逃跑靠外推位移，`ai_state` 可能仍是 patrol / idle，
+	# 只按状态名给段就会"高速移动却播走路"。
+	_clip = _locomotion_clip(str(CLIP_BY_STATE.get(state, "idle")))
 	var length := _player.get_animation(_clip).length
 	_sample = fmod(_clock, length)
 	if state in ["patrol", "chase", "search", "return"]:
@@ -106,9 +131,11 @@ func sync_state(state: String, state_time: float, speed: float, telegraph_durati
 		"recovery": _sample = lerpf(1.2, 2.5, clampf(state_time / maxf(recovery_duration, 0.001), 0.0, 1.0))
 		"stagger", "dead": _sample = minf(state_time, length)
 	if not _event.is_empty():
-		if _event_time < _player.get_animation(_event).length:
+		# 取两条时钟的较大者：`_process` 停摆时（冻结 / 探针）仍能被 `state_time` 推完。
+		var event_progress := maxf(_event_time, maxf(0.0, state_time - _event_anchor))
+		if event_progress < _player.get_animation(_event).length:
 			_clip = _event
-			_sample = _event_time
+			_sample = event_progress
 		else:
 			_event = ""
 	# 所有非死亡状态先清理形变，防止复用实例残留压扁肚子。
@@ -126,7 +153,12 @@ func sync_state(state: String, state_time: float, speed: float, telegraph_durati
 			var blended := _previous_pose[bone].interpolate_with(sampled, weight)
 			_skeleton.set_bone_pose_position(bone, blended.origin)
 			_skeleton.set_bone_pose_rotation(bone, blended.basis.get_rotation_quaternion())
-	if _light_time < 0.3 and state not in ["dormant", "dead", "stagger", "telegraph", "attack", "recovery"]:
+	if (
+		_hurt_pose_allowed
+		and _light_time < 0.3
+		and _speed <= HURT_POSE_MAX_SPEED
+		and state in ["idle", "alert", "patrol"]
+	):
 		_apply_upper_hit()
 
 func _apply_upper_hit() -> void:
@@ -154,15 +186,55 @@ func _apply_upper_hit() -> void:
 	for bone in base:
 		_skeleton.set_bone_pose_rotation(bone, (base[bone] as Quaternion).slerp(upper[bone], weight))
 
-func flash_hit() -> void:
-	if _state != "dead":
+## 按实际速度在 walking / running 之间改判。与另两只同口径（见小僵尸同名函数）。
+func _locomotion_clip(clip: String) -> String:
+	var ratio := _speed_ratio()
+	if ratio < 0.0:
+		return clip
+	if clip == "walking":
+		return "running" if ratio >= RUN_SPEED_RATIO else clip
+	if clip == "idle" and _state in ["idle", "patrol"]:
+		if ratio >= RUN_SPEED_RATIO:
+			return "running"
+		if ratio >= RUN_SPEED_RATIO * 0.5:
+			return "walking"
+	return clip
+
+
+func _speed_ratio() -> float:
+	if _base_speed > 0.01:
+		return _speed / _base_speed
+	if _speed <= 0.01:
+		return 0.0
+	return _speed / 1.4
+
+
+## 闪白一定给；受击姿态（上半身 hit_light 混合）由 `play_hit_pose` 决定。
+##
+## 胖子是"只混上半身"的，理论上腿还在跑主段，但它仍然**不能边跑边抽**：
+## 半个身子被打一下、下半身照旧跑步，读起来是"卡了两帧"，比整段 hurt 更像故障。
+## 所以它也走和小僵尸同一套闸门：允许 + 站定才演。
+const HURT_POSE_MAX_SPEED := 0.45
+## 走路 / 跑步分界（相对满速）。与其他两只同口径。
+const RUN_SPEED_RATIO := 0.62
+func flash_hit(play_hit_pose := true) -> void:
+	if _state == "dead":
+		return
+	_flash_time = FLASH_DURATION
+	_hurt_pose_allowed = play_hit_pose
+	if play_hit_pose:
 		_light_time = 0.0
-		_flash_time = FLASH_DURATION
 
 func get_presentation_snapshot() -> Dictionary:
 	return {"state":_state, "clip":_clip, "sample_time":_sample,
 		"visual_height":VISUAL_HEIGHT, "death_duration":DEATH_DURATION,
 		"animations":Array(_player.get_animation_list()) if _player != null else [],
 		"source":"blender_model_v003_animation_v008", "collision_owned":false,
-		"procedural_pose":false, "hit_light_active":_light_time < 0.3,
+		"procedural_pose":false,
+		# 判据必须带上 `_hurt_pose_allowed` 与速度闸门：`_light_time` 是 _process 推的计时器，
+		# 太阳伤害把它置 0 又被闸门拦下时，若只看计时器会永远报"正在受击" ——
+		# 那是把"没播"报成"播了"，比遗漏更难查。
+		"hit_light_active": _hurt_pose_allowed and _light_time < 0.3 and _speed <= HURT_POSE_MAX_SPEED,
+		"hurt_pose_allowed": _hurt_pose_allowed,
+		"locomotion_speed": _speed,
 		"supplemental_event":_event}

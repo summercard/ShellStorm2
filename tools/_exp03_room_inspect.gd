@@ -10,6 +10,7 @@ extends Node
 
 const SCENE: PackedScene = preload("res://scenes/ExpeditionLevel03_3D.tscn")
 const CONTRACT := preload("res://src/world3d/RuntimeRoomArtSource.gd")
+const ART_SOURCE := preload("res://src/world3d/RuntimeRoomArtSource.gd")
 var SEED := 3893044740
 var TARGET := "start"
 
@@ -93,6 +94,18 @@ func _dump_art(room: DungeonRoom3D) -> void:
 	print("    结构件/美术件合计 %d（可见 %d）" % [total, visible])
 	for key in by_family.keys():
 		print("      %-40s %d" % [key, int(by_family[key])])
+	# 装饰件明细：证明「工坊里摆的位置与旋转」是否原样进了游戏。
+	print("    装饰件明细（name | 相对位置 | 绕Y角度）：")
+	for node in root.find_children("*", "Node3D", true, false):
+		var prefab2 := str(node.scene_file_path)
+		if not prefab2.contains("env_manor_"):
+			continue
+		if ART_SOURCE.is_art_layer_structure(prefab2):
+			continue
+		var n := node as Node3D
+		print("      %-24s pos=(%.2f, %.2f, %.2f) yaw=%.1f° visible=%s"
+			% [str(n.name), n.position.x, n.position.y, n.position.z,
+				rad_to_deg(n.rotation.y), str(n.is_visible_in_tree())])
 
 
 func _spawn() -> Node:

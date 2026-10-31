@@ -509,7 +509,8 @@ func is_unlocked(item_id: String) -> bool:
 ## Damage 5 / 0.25 s 每发 / 换弹 1.2 s）。本作落地的只有业主点名的项目：
 ##   · `magazine_size` 12 → **10**（2026-10-30）
 ##   · 弹速 → **15 m/s**（2026-10-31 业主第三轮：跳过跨作换算，直接点名米数）
-##   · `fire_rate` 3.5 → **1.2 发/秒**、`reload_time` 1.5 → **1.8 s**（2026-10-31 同批）
+##   · `fire_rate` 3.5 → **1.6 发/秒**、`reload_time` 1.5 → **1.8 s**（2026-10-31 同批；
+##     射速当天先在 1.2 落了一版，业主看过再定 1.6）
 ##   · 弹体视觉 ×2（业主：「出去那个特效大小，就那个模型帮我放大一倍」；
 ##     落在 `WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG["pistol"]`，**判定半径不动**）
 ##
@@ -522,7 +523,7 @@ func _create_gunbody_pistol() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Pistol")
 	node.tags = ["pistol", "semi_auto", "sidearm"]
 	node.set_base_stats({
-		"damage": 25, "fire_rate": 1.2, "bullet_count": 1, "range": 15,
+		"damage": 25, "fire_rate": 1.6, "bullet_count": 1, "range": 15,
 		"spread": 0.03, "reload_time": 1.8, "magazine_size": 10,
 		"bullet_speed": PISTOL_BULLET_SPEED_MPS / BULLET_SPEED_BASE_MPS,
 	})

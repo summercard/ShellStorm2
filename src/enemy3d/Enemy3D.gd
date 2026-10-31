@@ -826,6 +826,19 @@ var _teleport_fx_out_count := 0
 var _teleport_fx_in_count := 0
 var _target: Node3D = null
 var _last_hit_direction := Vector3.ZERO
+## 本帧**真实**水平位移方向（由 `_commit_motion` 在 `move_and_slide()` 之后写入）。
+##
+## 为什么不能用 `velocity`：撞墙时 `velocity` 仍指墙外，而实际位移是零或沿墙；
+## 切向绕行、分离推挤也会让两者不一致。转身要跟"真的移动了"的方向，不是"想移动"的方向。
+var _last_move_direction := Vector3.ZERO
+## 上一条方向的**实际速度**（m/s）。低于 `FACE_MOVE_MIN_SPEED` 视为"没在走"。
+var _last_move_speed := 0.0
+## `_last_move_direction` 距今多久（秒）。超过 `FACE_MOVE_STALE_SEC` 视为过期。
+var _last_move_age := 999.0
+## 当前朝向模式：`target`（盯玩家）/ `movement`（朝位移方向）。见 `_update_facing()`。
+var _face_mode := "target"
+## `_face_mode` 已保持多久，用于切换迟滞。
+var _face_mode_time := 999.0
 # 命中击退强度（m/s）。子弹默认 0（不位移），霰弹=0.8（轻微），由 take_projectile_damage 写入。
 var _hit_knockback := 0.0
 var _summon_count := 0
@@ -1001,6 +1014,13 @@ func _ready() -> void:
 	health_changed.emit(self, current_hp, max_hp)
 	transition_to("idle")
 	_last_motion_position = global_position
+	# 转身状态跟着归零：换一只怪（或重载存档）时，上一任的"朝移动方向"不许继承 ——
+	# 否则新怪第一帧就会朝着旧怪的最后位移方向站着。
+	_last_move_direction = Vector3.ZERO
+	_last_move_speed = 0.0
+	_last_move_age = 999.0
+	_face_mode = "target"
+	_face_mode_time = 999.0
 
 
 ## 查表用的怪种 key：**强化怪一律回退到它的基类**。
@@ -1753,7 +1773,7 @@ func _process(delta: float) -> void:
 			if _ensure_monitor_hit_volumes():
 				_sync_monitor_hit_volumes()
 		else:
-			avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration())
+			avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration(), get_effective_move_speed())
 	_tick_overhead_health_bar_delay(delta)
 	# 已加载但尚未进入近距离 AI 圈的怪物仍需低成本监听真实受光刺激。
 	# 否则其 physics_process 被暂停后，探照灯永远不可能将它唤醒。
@@ -2099,16 +2119,101 @@ func _physics_process(delta: float) -> void:
 	var clap_locked := enemy_kind == "fat_zombie03" and (ai_state in ["attack", "recovery"] or (ai_state == "telegraph" and _state_time >= 1.0))
 	if monitor_combat != null:
 		monitor_combat.face_target(to_target,delta)
-	elif to_target.length_squared() > 0.01 and not clap_locked:
-		# 前摇期间**慢转**：通用 8.0/s 是"边跑边盯人"的跟瞄速度，
-		# 放在举枪阶段会让怪跟着玩家平滑绕圈 —— 玩家横移时枪口一直贴着他转，
-		# 前摇就失去了"这段时间它瞄的是刚才那个点"的可读性。
-		# 复刻怪在 telegraph 里降到 2.6/s（约 150°/s ⇒ 0.22 s 只转 33°），
-		# 玩家能读出"它在锁定、还没跟上"，而那正好是本作唯一的"绕侧"窗口。
-		var turn_rate := 8.0
-		if _is_egt_kind() and ai_state == "telegraph":
-			turn_rate = 2.6
-		rotation.y = lerp_angle(rotation.y, atan2(-to_target.x, -to_target.z), minf(1.0, delta * turn_rate))
+	elif not clap_locked:
+		_update_facing(to_target, delta)
+
+
+## 转身：「朝玩家」还是「朝移动方向」。
+##
+## ## 为什么必须分两种（2026-10-31 业主："有些怪物会横着移动，非常奇怪，
+## ## 怪物没有向着自己的移动方向"）
+##
+## 旧实现每帧无条件朝 `to_target`（玩家）转。这对"直线追击"没问题，
+## 但复刻怪里有一大批**位移方向与朝玩家方向无关**的形态：
+##
+## | 形态 | 位移方向 | 旧表现 |
+## |---|---|---|
+## | 逃跑（钥匙/运气小子） | `away.rotated(90°)` 沿墙溜 | **纯 90° 横移** |
+## | 游荡（枪精灵） | 玩家周围随机点 | 随机角度横移 |
+## | 远程后撤 | 背离玩家 | 倒退走 |
+## | 搜索 / 归位 / 巡逻 | 朝失踪点 / 家 / 巡逻点 | 横移 |
+##
+## 它们的身体一律朝着玩家 ⇒ 画面上是"侧着平移"。这跟"高速移动却播走路动画"
+## 是同一类毛病：**位移由 A 决定、表现由 B 决定，中间没有对齐**。
+##
+## ## 判据：按**真实位移方向**与朝玩家的夹角分模式，带迟滞
+##
+## - 夹角 > 55°（小侧移不算）⇒ 进入 `movement`，转身朝位移方向；
+## - 夹角 < 40° ⇒ 退回 `target`（阈值差 15°，防止在边界上每帧翻）；
+## - 模式切换后至少保持 `FACE_MODE_HOLD_SEC`。
+##
+## 夹角 < 55° 的侧移**刻意保留**朝玩家：那是弹幕游戏里"边瞄边挪"的标准姿态，
+## 幅度小、看起来是原地微调，不是平移。
+##
+## ## 三种状态**永远**盯玩家（不管走成什么样）
+##
+## `telegraph` / `attack` / `recovery` 是枪口要对准弹道的窗口；
+## `stagger` / `dead` 是被外力推着走，不该假装是自己转的身。
+
+## 进入 `movement` 的夹角阈值（度）。
+const FACE_MOVEMENT_DEG := 55.0
+## 退出 `movement` 的夹角阈值（度）。与上面差 15° 构成迟滞。
+const FACE_TARGET_DEG := 40.0
+## 认定为"真的在走"的最低实际速度（m/s）。低于它视为站定，盯玩家。
+const FACE_MOVE_MIN_SPEED := 0.40
+## 位移方向的有效期（秒）。超时说明本帧没走 `_commit_motion`（如纯刹车分支）。
+const FACE_MOVE_STALE_SEC := 0.12
+## 模式切换后的最短保持时间（秒）。
+const FACE_MODE_HOLD_SEC := 0.28
+## `movement` 模式的转身速率。比盯玩家的 8.0 快 —— 走路转身拖沓会读成"打滑"。
+const FACE_MOVE_TURN_RATE := 14.0
+## 这几个状态里朝向是**玩法信息**，不许被位移方向带走。
+const FACING_LOCKED_STATES := ["telegraph", "attack", "recovery", "stagger", "dead", "dormant"]
+
+
+func _update_facing(to_target: Vector3, delta: float) -> void:
+	# 时间是**在这里推**的，不在 `_physics_process` 里 —— 这样"每帧恰好一次"只有
+	# 一个真源：验收直接调本函数就能量到与实机相同的时序，不必手抄一遍。
+	# `_last_move_age` 由 `_commit_motion` 置 0，所以"本帧走过"恒为新鲜值。
+	_last_move_age += delta
+	_face_mode_time += delta
+	var has_target := to_target.length_squared() > 0.01
+	var facing_locked := ai_state in FACING_LOCKED_STATES
+	var move_ok := (
+		not facing_locked
+		and _last_move_age <= FACE_MOVE_STALE_SEC
+		and _last_move_speed >= FACE_MOVE_MIN_SPEED
+		and _last_move_direction.length_squared() > 0.01
+	)
+	# 位移方向与"朝玩家"的夹角。没有目标时按 180°（永远算在走位）。
+	var move_angle := 180.0
+	if move_ok and has_target:
+		var move_dir := Vector3(_last_move_direction.x, 0.0, _last_move_direction.z).normalized()
+		var target_dir := Vector3(to_target.x, 0.0, to_target.z).normalized()
+		move_angle = rad_to_deg(acos(clampf(move_dir.dot(target_dir), -1.0, 1.0)))
+	var switch_threshold := FACE_TARGET_DEG if _face_mode == "movement" else FACE_MOVEMENT_DEG
+	var want_movement := move_ok and move_angle > switch_threshold
+	# 最短保持：刚切换过的 `FACE_MODE_HOLD_SEC` 内不许翻回去。
+	if want_movement != (_face_mode == "movement") and _face_mode_time < FACE_MODE_HOLD_SEC:
+		want_movement = _face_mode == "movement"
+	if want_movement != (_face_mode == "movement"):
+		_face_mode = "movement" if want_movement else "target"
+		_face_mode_time = 0.0
+	if _face_mode == "movement" and move_ok:
+		var desired := atan2(-_last_move_direction.x, -_last_move_direction.z)
+		rotation.y = lerp_angle(rotation.y, desired, minf(1.0, delta * FACE_MOVE_TURN_RATE))
+		return
+	if not has_target:
+		return
+	# 前摇期间**慢转**：通用 8.0/s 是"边跑边盯人"的跟瞄速度，
+	# 放在举枪阶段会让怪跟着玩家平滑绕圈 —— 玩家横移时枪口一直贴着他转，
+	# 前摇就失去了"这段时间它瞄的是刚才那个点"的可读性。
+	# 复刻怪在 telegraph 里降到 2.6/s（约 150°/s ⇒ 0.22 s 只转 33°），
+	# 玩家能读出"它在锁定、还没跟上"，而那正好是本作唯一的"绕侧"窗口。
+	var turn_rate := 8.0
+	if _is_egt_kind() and ai_state == "telegraph":
+		turn_rate = 2.6
+	rotation.y = lerp_angle(rotation.y, atan2(-to_target.x, -to_target.z), minf(1.0, delta * turn_rate))
 
 
 func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
@@ -2173,10 +2278,37 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 		elif _is_egt_kind():
 			ideal_ratio = 0.70
 		var ideal_distance := attack_range * ideal_ratio
-		var radial_weight := clampf((distance - ideal_distance) / maxf(1.0, ideal_distance), -1.0, 1.0)
-		desired = (tangent * 0.78 + radial * radial_weight).normalized() * effective_move_speed * _slow_factor
-		if distance < attack_range * 0.52:
-			desired = (-radial * 0.82 + tangent * 0.35).normalized() * effective_move_speed * _slow_factor
+		# 站位「容差带」：±18% 站位半径（最少 0.9 m）。带内算"已经到位"。
+		var band := maxf(0.9, ideal_distance * 0.18)
+		#
+		# ⚠ 2026-10-31 业主："有几只怪会环绕角色走，不会直着对着角色过来，就很怪"。
+		#
+		# 旧写法是 `tangent * 0.78 + radial * radial_weight`，其中
+		# `radial_weight = clamp((distance - ideal) / ideal, -1, 1)`。
+		# 问题在**站位附近 `radial_weight ≈ 0`**，切向项 0.78 成了唯一分量 ⇒
+		# 归一化后就是**纯切向、满速绕圈**。也就是说：怪一旦走到理想距离，
+		# 它就再也不靠近、也不后退，永远绕着玩家转 —— 而且因为切向是满速，
+		# 转得比它靠近时还快。远程怪整场合计 20+ 只，画面就是一群怪在跳圆舞。
+		#
+		# 现在按"三段"分流，**逼近段完全不带侧移**：
+		#   远（> 站位 + 容差）→ 直线逼近；
+		#   近（< 站位 − 容差）→ 后撤，带 30% 侧移免得和同伴撞在一起；
+		#   带内           → 只做归位微调；偏差小于容差 1/4 就**站住**开枪。
+		# 侧移从"主运动"降级成"错位修正"，这才是原作「走过来、停下、开枪」的形状。
+		if distance > ideal_distance + band:
+			desired = radial * effective_move_speed * _slow_factor
+		elif distance < ideal_distance - band:
+			desired = (-radial * 0.94 + tangent * 0.30).normalized() * effective_move_speed * _slow_factor
+		else:
+			var error := (distance - ideal_distance) / band
+			if absf(error) < 0.25:
+				# 已到站位：站住，把速度交给 `_steer_planar` 平滑收掉。
+				desired = Vector3.ZERO
+			else:
+				desired = (
+					(radial * error + tangent * 0.18).normalized()
+					* effective_move_speed * 0.35 * _slow_factor
+				)
 	desired = _apply_local_avoidance(desired, to_target)
 	_steer_planar(desired, minf(1.0, delta * 5.5))
 	_push_planar(_external_velocity)
@@ -2248,6 +2380,9 @@ func _tick_search(delta: float) -> void:
 	else:
 		_brake_planar(delta * 8.0)
 		_commit_motion(delta)
+	# 无目标分支里 `_physics_process` 会提前 return，到不了末尾那次转身 ——
+	# 不在这里补一次，它就会**沿上一次的朝向横着走**（搜索/归家/巡逻都是这条）。
+	_update_facing(Vector3.ZERO, delta)
 	if _state_time > 2.4:
 		_target = null
 		transition_to("return")
@@ -2268,6 +2403,7 @@ func _tick_return(delta: float) -> void:
 	_steer_planar(desired, minf(1.0, delta * 4.0))
 	_commit_motion(delta)
 	_track_stuck_recovery(delta, desired)
+	_update_facing(Vector3.ZERO, delta)
 
 
 func _tick_patrol(delta: float) -> void:
@@ -2281,6 +2417,7 @@ func _tick_patrol(delta: float) -> void:
 	offset.y = 0.0
 	_steer_planar(offset.normalized() * get_effective_move_speed() * float(_active_profile.get("patrol_multiplier", 0.32)), minf(1.0, delta * 3.2))
 	_commit_motion(delta)
+	_update_facing(Vector3.ZERO, delta)
 
 
 func _has_line_of_sight(target: Node3D) -> bool:
@@ -4497,7 +4634,11 @@ func _tick_illumination_effects(delta: float) -> void:
 		var applied := maxi(1, int(ceil(float(max_hp) * SUNLIGHT_MAX_HP_DAMAGE_PER_SECOND)))
 		current_hp = maxi(0, current_hp - applied)
 		health_changed.emit(self, current_hp, max_hp)
-		avatar.flash_hit()
+		# 太阳伤害**不播受击反馈**（2026-10-31 业主）。
+		# 它不是"被打了一下"，而是每秒结算一次的环境消耗；播受击动画的后果是
+		# 怪一边在跑一边每 1 s 被塞一段 hurt 段 ⇒ 视觉上整只怪在**漂移**，
+		# 而且玩家读不出"这是被哪一发打中的"。要读的信息由血条 + 头顶「太阳」状态给。
+		# 只对真正挨打（`take_damage` 路径）留闪白与硬直。
 		_spawn_damage_number(applied, false)
 		if current_hp <= 0:
 			_die()
@@ -4763,12 +4904,25 @@ func _compute_separation_push() -> Vector3:
 
 
 ## 推进的唯一出口：先让同伴把水平速度推开，再由重力决定垂直速度。
+##
+## 顺带记录**本帧真实位移方向**（`_last_move_direction`）—— 这是"它到底往哪走了"的
+## 唯一真源，`_update_facing()` 靠它决定转身，见那里的说明。
+## 记在 `move_and_slide()` **之后**（用位置差）而不是之前用 `velocity`：
+## 撞墙时 `velocity` 指墙外、实际位移为零或沿墙，两者差得远。
 func _commit_motion(delta: float) -> void:
 	var planar := _apply_separation(Vector3(velocity.x, 0.0, velocity.z))
 	velocity.x = planar.x
 	velocity.z = planar.z
 	_apply_gravity(delta)
+	var before := global_position
 	move_and_slide()
+	var moved := Vector3(global_position.x - before.x, 0.0, global_position.z - before.z)
+	if moved.length_squared() > 0.000001:
+		_last_move_direction = moved.normalized()
+		_last_move_speed = moved.length() / maxf(delta, 0.0001)
+	else:
+		_last_move_speed = 0.0
+	_last_move_age = 0.0
 
 
 func _apply_local_avoidance(desired_velocity: Vector3, target_offset: Vector3) -> Vector3:
@@ -5069,7 +5223,7 @@ func _die() -> void:
 	# （见 `_detonate_death_explosion`：视觉那一行不受 damage 影响）。
 	if not _death_explosion.is_empty():
 		_detonate_death_explosion()
-	elif enemy_kind == "fat_zombie03":
+	elif _asset_kind() == "fat_zombie03":
 		_spawn_fat_death_burst(1.0)
 	# —— 远征03 复刻怪的死亡行为（2026-10-29）——
 	# 三条都放在「关卡级死亡自爆」之后、`killed.emit` 之前：
@@ -5097,7 +5251,7 @@ func _die() -> void:
 		_overhead_health_root.visible = false
 	if goo_death:
 		_spawn_goo_death_burst()
-	elif enemy_kind != "fat_zombie03":
+	elif _asset_kind() != "fat_zombie03":
 		# 胖子僵尸的死亡表现已在上面的自爆分支里出过（表现 ≠ 玩法：不管有没有伤害规格）
 		_spawn_effect("VFX-EXPLOSION-3D" if enemy_kind == "boss" else "VFX-IMPACT-3D", 1.4 if enemy_kind == "boss" else 0.8)
 	killed.emit(self, get_enemy_data())
@@ -5125,9 +5279,25 @@ func _die() -> void:
 		tween.tween_callback(queue_free)
 
 
+## 本怪**实际使用的表现资产基类**（小僵尸 / 警察僵尸 / 胖子 / 程序壳）。
+##
+## ## 为什么死亡与命中判定必须读它，而不是 `enemy_kind`
+## 2026-10-31 业主："被干掉后也不需要倒地动画，直接使用小僵尸的死亡特效"。
+## 那条规则在 `ZOMBIE_KINDS` 上本来就有 —— 但它按 `enemy_kind` 判，
+## 而远征03 的 33 只复刻怪 `enemy_kind` 是 `egt_*`（它们只是**借用**了僵尸模型），
+## 于是 `uses_no_corpse_death()` 一律 false ⇒ 每只 egt 怪死亡仍播 2.4~2.6 s 的倒地段、
+## 还会留一具尸体。这条缺口只有"按资产判"能补上：
+## 长得像僵尸的，就该按僵尸的规矩死。
+func _asset_kind() -> String:
+	var proxied := EnemyAvatar3D.resolve_asset_kind(enemy_kind)
+	var base := MonsterVariants.base_of(proxied)
+	return base if not base.is_empty() else proxied
+
+
 ## 本怪是否走「绿色方块爆开」死亡表现（小僵尸 / 警察僵尸，见 `GOO_DEATH_KINDS`）。
+## 判据走 `_asset_kind()`：借了僵尸模型的复刻怪同样适用。
 func uses_goo_death_burst() -> bool:
-	return GOO_DEATH_KINDS.has(enemy_kind)
+	return GOO_DEATH_KINDS.has(_asset_kind())
 
 
 ## 本怪死亡后**没有尸体、也不播倒地动画**（僵尸三兄弟，见 `ZOMBIE_KINDS`）。
@@ -5135,7 +5305,7 @@ func uses_goo_death_burst() -> bool:
 ##   前者管「用哪个特效」，本函数管「要不要留一具躯干」。
 ## 胖子僵尸两条都为真值之一（自爆表现 + 不留尸体）。
 func uses_no_corpse_death() -> bool:
-	return ZOMBIE_KINDS.has(enemy_kind)
+	return ZOMBIE_KINDS.has(_asset_kind())
 
 
 ## 本怪是否为**战斗命中特效**的分流对象：打中它时用 FX01-20（`VFX-GOO-HIT-3D`，
@@ -5143,7 +5313,7 @@ func uses_no_corpse_death() -> bool:
 ## 调用方是 `Projectile3D._spawn_hit_effect()` 与 `PlayerMeleeCombat3D._spawn_hit_feedback()`
 ## —— 两边都读这一个入口，避免「枪击是一种读法、近战又是另一种」。
 func uses_goo_hit_burst() -> bool:
-	return ZOMBIE_KINDS.has(enemy_kind)
+	return ZOMBIE_KINDS.has(_asset_kind())
 
 
 ## 把碰撞壳上的命中点**摆到模型面上**：`hit_point` 是物理相交点（落在碰撞壳表面），

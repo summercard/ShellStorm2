@@ -287,6 +287,8 @@ static func floor_plan(dim: Vector2, style: Dictionary) -> Array[Dictionary]:
 				"position": Vector3(cell_x[col], 0.0, cell_z[row]),
 				"name": "Floor_%02d_%02d" % [col, row],
 				"part": part,
+				# 标记「这是地砖」⇒ `instantiate_plan` 会给它套 UV 修正材质。
+				"floor": true,
 			})
 	return out
 
@@ -336,9 +338,10 @@ static func instantiate_plan(plan: Array, parent: Node3D, owner_node: Node = nul
 	var built := 0
 	for item in plan:
 		var entry := item as Dictionary
-		var packed := load(str(entry.get("prefab", ""))) as PackedScene
+		var prefab := str(entry.get("prefab", ""))
+		var packed := load(prefab) as PackedScene
 		if packed == null:
-			push_warning("[ManorShellPlan] 加载不了 %s" % str(entry.get("prefab", "")))
+			push_warning("[ManorShellPlan] 加载不了 %s" % prefab)
 			continue
 		var instance := packed.instantiate() as Node3D
 		if instance == null:
@@ -346,8 +349,102 @@ static func instantiate_plan(plan: Array, parent: Node3D, owner_node: Node = nul
 		instance.name = str(entry.get("name", "Part"))
 		instance.position = entry.get("position", Vector3.ZERO) as Vector3
 		instance.rotation.y = deg_to_rad(float(entry.get("yaw", 0.0)))
+		# 地砖：套一份**收进单色盘格**的材质（见 `floor_texture_override()`）。
+		if bool(entry.get("floor", false)):
+			_apply_floor_texture_fix(instance, prefab)
 		parent.add_child(instance)
 		if owner_node != null:
 			instance.owner = owner_node
 		built += 1
 	return built
+
+
+## ── 地砖贴图密度修复 ────────────────────────────────────────────────────
+##
+## ## 问题
+##
+## 公馆套件用的是 **10×10 纯色色盘图集**（`设施低亮多巴胺色盘_10x10_512.png`，
+## 512×512，Nearest 过滤），每个格就是一块纯色。制作规范要求
+## 「所有面使用有面积且**不跨格**的 PaletteUV 面岛」。
+##
+## 实测三块地砖的 UV 跨度（`_exp03_floor_texel_probe`）：
+##
+##   木地板 u=0.1455 v=0.1477 ⇒ 跨 1.5 × 1.5 格  （尚可）
+##   石地板 u=0.7442 v=0.2442 ⇒ 跨 **7.4 × 2.4 格**
+##   瓷砖   u=0.9442 v=0.8442 ⇒ 跨 **9.4 × 8.4 格**（几乎整张色盘）
+##
+## 也就是说一块 5m 石砖的面上横跨 7 种颜色。远处 mipmap + Nearest 采样把这些
+## 格的边界采成断续细虚线 —— 业主看到的「地板密度太细、像满屏小砖」就是它，
+## 不是地砖摆得太密（摆放实测精确 5m，25×25 房正好 25 块）。
+##
+## ## 修法
+##
+## 不动美术源（UV 在 .blend 里，改它要重导资产），而是在**实例层**把 UV 压缩到
+## 单格内：`uv' = uv * s + offset`，让 (min..max) 映射成「围绕原中心、跨度 0.06」
+## （色盘格宽 0.1，留余量保证不跨格）。这样每块砖读到的是**单一纯色**，
+## 正是色盘美术要的效果。
+##
+## 材质按 prefab 路径缓存**共用一份**：80 块地砖共用一个材质对象，不会让
+## `material_unique` 涨 80 倍（那会拖垮性能，见记忆里「管线缓存」那条）。
+const FLOOR_UV_SPAN := 0.06
+static var _floor_mat_cache: Dictionary = {}
+
+
+static func floor_texture_override(prefab_path: String) -> Material:
+	if _floor_mat_cache.has(prefab_path):
+		return _floor_mat_cache[prefab_path] as Material
+	var result: Material = null
+	var packed := load(prefab_path) as PackedScene
+	if packed != null:
+		var probe := packed.instantiate() as Node3D
+		if probe != null:
+			var mi := _first_mesh(probe)
+			if mi != null and mi.mesh != null and mi.mesh.get_surface_count() > 0:
+				var uvs: Variant = mi.mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV]
+				var base := mi.mesh.surface_get_material(0) as BaseMaterial3D
+				if base != null and uvs is PackedVector2Array and (uvs as PackedVector2Array).size() > 0:
+					var u_min := 1e9
+					var u_max := -1e9
+					var v_min := 1e9
+					var v_max := -1e9
+					for uv in uvs as PackedVector2Array:
+						u_min = minf(u_min, uv.x); u_max = maxf(u_max, uv.x)
+						v_min = minf(v_min, uv.y); v_max = maxf(v_max, uv.y)
+					var span_u := u_max - u_min
+					var span_v := v_max - v_min
+					if span_u > FLOOR_UV_SPAN + 0.001 or span_v > FLOOR_UV_SPAN + 0.001:
+						var copy := base.duplicate() as BaseMaterial3D
+						var sx := FLOOR_UV_SPAN / span_u if span_u > 0.0 else 1.0
+						var sy := FLOOR_UV_SPAN / span_v if span_v > 0.0 else 1.0
+						var cu := (u_min + u_max) * 0.5
+						var cv := (v_min + v_max) * 0.5
+						copy.uv1_scale = Vector3(sx, sy, 1.0)
+						copy.uv1_offset = Vector3(cu * (1.0 - sx), cv * (1.0 - sy), 0.0)
+						copy.resource_name = "%s_uvfix" % base.resource_name
+						result = copy
+			probe.free()
+	_floor_mat_cache[prefab_path] = result
+	return result
+
+
+static func _apply_floor_texture_fix(instance: Node3D, prefab_path: String) -> void:
+	var mat := floor_texture_override(prefab_path)
+	if mat == null:
+		return
+	var meshes: Array[Node] = instance.find_children("*", "MeshInstance3D", true, false)
+	if instance is MeshInstance3D:
+		meshes.append(instance)
+	for value in meshes:
+		var mi := value as MeshInstance3D
+		if mi == null or mi.mesh == null:
+			continue
+		for s in range(mi.mesh.get_surface_count()):
+			mi.set_surface_override_material(s, mat)
+
+
+static func _first_mesh(root: Node) -> MeshInstance3D:
+	if root is MeshInstance3D:
+		return root as MeshInstance3D
+	for value in root.find_children("*", "MeshInstance3D", true, false):
+		return value as MeshInstance3D
+	return null
