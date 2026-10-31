@@ -1,21 +1,39 @@
 extends Node
-## 远征03 公馆壳体铺装器：按房间功能铺「墙 + 地板」两件结构。
+## 远征03 公馆壳体铺装器：按「空间原型」给 17 间房铺墙 + 地板。
 ##
-## ## 审美方案（本器唯一的设计判断，改这里就是改风格）
+## ## 设计原则（本器唯一的设计判断，改这里就是改风格）
 ##
-## 用光与材质区分「危险」与「安全」，而不是每间房一样：
+## **亮度 = 逃生希望，尺度 = 呼吸空间。**
 ##
-##   · 深灰石材 + 无窗 → 战斗、Boss、陷阱（冷、封闭、看不清边界）
-##   · 人字木地板 + 铅条窗 → 准备、撤离、宝箱、商店、枢纽（暖、有光、有归属感）
+## 一个人在公馆里转，靠两件事判断"这里危不危险"：光多不多、地方多大。
+## 所以差异化不按 room_id 随机，也不靠贴花，而是用**光**和**尺度**两条轴：
 ##
-## 枢纽（hub）虽然是 COMBAT，但用木地板 + 窗 —— 多门交汇的大堂，与普通战斗房
-## 在视觉上立刻分开。这是给玩家的方向感：亮的是通道，暗的是要打的地方。
+##   小房 + 无窗  → 逼仄、压迫（25×25 战斗房，玩家只想快走）
+##   中房 + 高窗  → 有光斑拉在地上，能读方向（30×40 / 40×30 战斗房）
+##   大房 + 通窗  → 开阔、但空得能听见脚步（45×40 回廊）
+##   枢纽       → 最亮 + 地板分区，唯一"可以停下"的地方
+##   Boss       → 无窗 + 中央石台，把玩家逼到光下的舞台中央
+##
+## ## 三种地板，四种墙
+##
+## 地板不只"三选一"，还做**分区拼接**（全是现有 6 件资产，不需要新件）：
+##
+##   `full`        单材质满铺
+##   `stone_ring`  外圈石 + 内心木 → 走道感，大堂用（石质沿廊围出木质中庭）
+##   `wood_ring`   外圈木 + 内心石 → 舞台感，Boss 用（木质围廊包住中央石台）
+##
+## 墙有四种开窗节奏：
+##
+##   `blind`       只放实心墙（门位放门墙）—— 最暗
+##   `pair`        每面挑对称一对开铅条窗 —— 有光斑，仍有墙垛节奏
+##   `clerestory`  除门位及其两侧墙垛外全开窗 —— 近乎连续高窗，最亮
+##   `single_side` 只有北面一对 —— 单向采光，明暗拉开，适合陈列
 ##
 ## ## 门墙必须跟门位走
 ##
 ## `manor_wall_door` 洞口固定 2.2m 居中，只能摆在「本局门位所在的那一格」。
-## 摆错就是把门堵死（实心件 `collision_owner: self` 带碰撞）。
-## 复用键不含门位，所以文件名带门位指纹（见 `_portal_fingerprint`）。
+## 摆错就是把门堵死（实心件带碰撞）。复用键不含门位，所以文件名带门位指纹
+## （见 `RuntimeRoomArtSource.describe()` 的 `portal_fingerprint`）。
 ##
 ## ## 覆盖判定
 ##
@@ -32,30 +50,47 @@ const WALL_DOOR := MANOR + "/manor_wall_door/env_manor_wall_door_root_top3d.tscn
 const WALL_WINDOW := MANOR + "/manor_wall_window/env_manor_wall_window_root_top3d.tscn"
 const FLOOR_WOOD := MANOR + "/manor_floor_wood/env_manor_floor_wood_root_top3d.tscn"
 const FLOOR_STONE := MANOR + "/manor_floor_stone/env_manor_floor_stone_root_top3d.tscn"
+## `manor_floor_bath`（黑白瓷砖）**刻意不用**，虽然它在目录里标的是"黑白瓷砖地板5m"。
+##
+## 实测出图后量化过：按 5m 网格铺 2×2 后，中心区亮度 p05=205 / p50=217 / p95=218
+## —— 95% 的像素挤在 205~218 这一窄条里，只剩零星黑点，**棋盘格没有出来**，
+## 远处看就是一块白板。同批对比：木地板 p50=28、石地板 p50=16，都明显更暗。
+##
+## 成因在资产侧（UV 把 5m 铺面映射到色盘上一小块偏白区域，格纹被压成噪点），
+## 不是打光能修的 —— 调暗只会得到"灰板"，格子依然没有。
+## 已作为资产缺陷记录在 docs/v0.1/development/2026-10-31_expedition03_manor_shell_build.md，
+## 修好资产前不要拿它铺地面。
+const FLOOR_BATH := MANOR + "/manor_floor_bath/env_manor_floor_bath_root_top3d.tscn"
 
 const GRID := 5.0
 const SEED := 77003244
 
-## 房型 → 风格。键是 room_type，值含地板 prefab 与是否开窗。
+## 房型 → 原型。**不用 room_id 做键**：换种子后房间尺寸会变，
+## 而"这间房是干什么用"才决定它该长什么样，这个跨种子稳定。
 ##
-## 为什么按 room_type 而不是 room_id：换种子后房间 id 不变但尺寸会变，
-## 而"这间房是干什么用"才决定它该长什么样。
-const STYLE_BY_TYPE := {
-	# 危险 / 战斗：冷石，无窗
-	"COMBAT": {"floor": FLOOR_STONE, "windows": false},
-	"BOSS": {"floor": FLOOR_STONE, "windows": false},
-	"TRAP": {"floor": FLOOR_STONE, "windows": false},
-	# 功能 / 安全：暖木，开窗
-	"UPGRADE": {"floor": FLOOR_WOOD, "windows": true},
-	"EXTRACTION": {"floor": FLOOR_WOOD, "windows": false},
-	"EVENT": {"floor": FLOOR_WOOD, "windows": true},
-	"SCAVENGE": {"floor": FLOOR_WOOD, "windows": true},
-	"MERCHANT": {"floor": FLOOR_WOOD, "windows": true},
-	"SAFE_ROOM": {"floor": FLOOR_WOOD, "windows": false},
-	"STAIR_LOBBY": {"floor": FLOOR_WOOD, "windows": false},
+## `max_short_side`：房间短边不超过这个值时用"小"档（更暗、更封闭）。
+## 这样同一房型的不同尺寸会自然分档，不需要为每间房写一条。
+const ARCHETYPES := {
+	"COMBAT": {
+		"small": {"floor": "full", "mat": FLOOR_STONE, "windows": "blind", "note": "逼仄空厅"},
+		"mid": {"floor": "full", "mat": FLOOR_STONE, "windows": "pair", "note": "中庭回廊"},
+		"large": {"floor": "full", "mat": FLOOR_STONE, "windows": "double_pair", "note": "大回廊"},
+		"max_short_side": {"small": 25.0, "mid": 30.0},
+	},
+	"BOSS": {"floor": "wood_ring", "mat": FLOOR_WOOD, "ring": FLOOR_STONE, "windows": "blind", "note": "王座间"},
+	"TRAP": {"floor": "full", "mat": FLOOR_STONE, "windows": "blind", "note": "陷阱厅"},
+	"UPGRADE": {"floor": "full", "mat": FLOOR_WOOD, "windows": "pair", "note": "更衣前厅"},
+	"MERCHANT": {"floor": "full", "mat": FLOOR_WOOD, "windows": "pair", "note": "铺面"},
+	"EVENT": {"floor": "full", "mat": FLOOR_WOOD, "windows": "single_side", "note": "陈列室"},
+	"SCAVENGE": {"floor": "stone_ring", "mat": FLOOR_WOOD, "ring": FLOOR_STONE, "windows": "pair", "note": "操作间"},
+	"EXTRACTION": {"floor": "full", "mat": FLOOR_WOOD, "windows": "blind", "note": "撤离舱"},
+	"SAFE_ROOM": {"floor": "full", "mat": FLOOR_WOOD, "windows": "blind", "note": "安全屋"},
+	"STAIR_LOBBY": {"floor": "full", "mat": FLOOR_WOOD, "windows": "blind", "note": "楼梯厅"},
 }
 
-## 枢纽单独一条：虽然是 COMBAT，但要用"大堂"气质。
+## 枢纽：虽然 room_type 是 COMBAT，但多门交汇要"大堂"气质 —— 单独一条，
+## 与同尺寸的普通战斗房（n07，45×40）必须一眼分开。
+## 手段是地板分区（石沿廊 + 木中庭）+ 通窗，两处同时不同。
 const HUB_IDS := ["hub_01", "hub_02"]
 
 var _failures: Array[String] = []
@@ -69,6 +104,7 @@ func _ready() -> void:
 		var room := value as DungeonRoom3D
 		if room == null or not room.procedural_shell:
 			continue
+		# 走廊连接器不铺：它们是通行管道，不是可停留的房间。
 		if room.room_id.begins_with("cr") or room.room_id.begins_with("conn_"):
 			continue
 		rooms.append(room)
@@ -76,8 +112,7 @@ func _ready() -> void:
 	print("BUILD_ROOMS %d" % rooms.size())
 
 	for value in rooms:
-		var room := value as DungeonRoom3D
-		_build(room)
+		_build(value as DungeonRoom3D)
 	tower.queue_free()
 	await get_tree().process_frame
 
@@ -102,6 +137,8 @@ func _build(room: DungeonRoom3D) -> void:
 	if cols <= 0 or rows <= 0:
 		_fail("%s: 尺寸 %.1fx%.1f 不是 5m 整数倍" % [room.room_id, dim.x, dim.y])
 		return
+	var style := _style_for(room, dim)
+
 	var canvas := Node3D.new()
 	canvas.name = "Room_" + room.room_id
 	# 工坊靠这个 schema 认「已授权的美术场景」，不设就在列表里消失。
@@ -111,7 +148,6 @@ func _build(room: DungeonRoom3D) -> void:
 	# 直接存 Dictionary，**不要 JSON.stringify**：后者会变成单行字符串，
 	# TSCN 序列化时把 `{` 转义成 `\"{\"`，而门禁 `extract_braced()` 是按未转义的
 	# 括号配对找的 —— 结果是「字段存在却读不到」，看起来像缺字段。
-	# 存 Dictionary 时 Godot 写成多行 `{ ... }`，与采集器（capture_runtime）一致。
 	canvas.set_meta("runtime_room_geometry", descriptor["geometry"])
 	canvas.set_meta("size_m", [dim.x, dim.y])
 	canvas.set_meta("grid_unit_m", GRID)
@@ -120,16 +156,19 @@ func _build(room: DungeonRoom3D) -> void:
 	canvas.set_meta("template_id", str(descriptor["template_id"]))
 	canvas.set_meta("portal_fingerprint", str(descriptor["portal_fingerprint"]))
 	canvas.set_meta("built_by", "manor_shell_builder")
+	# 供验收与后续美术工序读的"设计意图"，避免看图猜这是哪种原型。
+	canvas.set_meta("archetype", str(style["note"]))
+	canvas.set_meta("floor_mode", str(style["floor"]))
+	canvas.set_meta("window_mode", str(style["windows"]))
 
 	var art := Node3D.new()
 	art.name = "ArtComponents"
 	canvas.add_child(art)
 	art.owner = canvas
 
-	var style := _style_for(room)
-	_floor_grid(art, canvas, dim, cols, rows, str(style["floor"]))
 	var door_map := _door_cells(room, cols, rows)
-	var wall_stats := _walls(art, canvas, dim, cols, rows, door_map, bool(style["windows"]))
+	var floor_stats := _floor_grid(art, canvas, dim, cols, rows, style)
+	var wall_stats := _walls(art, canvas, dim, cols, rows, door_map, str(style["windows"]))
 
 	var packed := PackedScene.new()
 	var error := packed.pack(canvas)
@@ -144,34 +183,47 @@ func _build(room: DungeonRoom3D) -> void:
 		_fail("%s: 保存失败 %s" % [room.room_id, error_string(error)])
 		return
 	_written.append(target)
-	print("BUILD %-22s %-6s size=%.0fx%.0f floor=%-5s doors=%d windows=%d walls=%d"
-		% [room.room_id, str(room.room_type), dim.x, dim.y,
-			"stone" if str(style["floor"]).contains("stone") else "wood",
-			int(door_map.get("_door_count", 0)), int(wall_stats.get("windows", 0)),
-			int(wall_stats.get("total", 0))])
+	print("BUILD %-20s %-6s %-9s %-11s %-11s cells=%dx%d tiles=%d walls=%d(win=%d) doors=%d"
+		% [room.room_id, str(room.room_type), str(style["note"]), str(style["floor"]),
+			str(style["windows"]), cols, rows, int(floor_stats["total"]),
+			int(wall_stats["total"]), int(wall_stats["windows"]),
+			int(door_map.get("_door_count", 0))])
 
 
-func _style_for(room: DungeonRoom3D) -> Dictionary:
-	# 枢纽优先：多门交汇需要"大堂"气质，与普通战斗房分开。
+## 按「房型 + 短边」取原型。短边分档而不是长边：房间的"压迫感"取决于
+## 最窄那一维 —— 10m 宽的房间不管多长都逼仄。
+func _style_for(room: DungeonRoom3D, dim: Vector2) -> Dictionary:
 	for hub in HUB_IDS:
 		if room.room_id == hub:
-			return {"floor": FLOOR_WOOD, "windows": true}
+			return {
+				"floor": "stone_ring", "mat": FLOOR_WOOD, "ring": FLOOR_STONE,
+				"windows": "clerestory", "note": "大堂",
+			}
 	var type_id := str(room.room_type)
-	if STYLE_BY_TYPE.has(type_id):
-		return STYLE_BY_TYPE[type_id]
-	# 未知房型按"安全侧"处理：暖木无窗，至少不难看。
-	return {"floor": FLOOR_WOOD, "windows": false}
+	var entry: Variant = ARCHETYPES.get(type_id)
+	if entry is Dictionary and (entry as Dictionary).has("small"):
+		var short_side := minf(dim.x, dim.y)
+		var tiers: Dictionary = entry["max_short_side"]
+		if short_side <= float(tiers["small"]):
+			return (entry["small"] as Dictionary).duplicate()
+		if short_side <= float(tiers["mid"]):
+			return (entry["mid"] as Dictionary).duplicate()
+		return (entry["large"] as Dictionary).duplicate()
+	if entry is Dictionary:
+		return (entry as Dictionary).duplicate()
+	# 未知房型按"安全侧"处理：暖木有窗，至少不难看。
+	return {"floor": "full", "mat": FLOOR_WOOD, "windows": "pair", "note": "未登记房型"}
 
 
 ## 把每个 side 上的门位换成「第几格」。
 ## lane 必须与某个格心精确对齐（<0.01）—— 对不齐说明这个种子把门放在了半格上，
-## 那时 gate 会拒绝整面铺装（避免门墙错位），并报出来。
+## 那时该面不开窗（避免门墙错位），并报出来。
 func _door_cells(room: DungeonRoom3D, cols: int, rows: int) -> Dictionary:
 	var dim: Vector2 = room.call("get_dimensions")
 	var cell_x := _cells(dim.x, cols)
 	var cell_z := _cells(dim.y, rows)
 	var result := {"north": [], "south": [], "west": [], "east": [], "_door_count": 0}
-	# 同一面可能多门（EGT 枢纽同侧双门）。
+	# 同一面可能多门（hub 同侧双门）。
 	for value in room.get("connection_ports"):
 		var port := value as Dictionary
 		var side := str(port.get("side", ""))
@@ -205,22 +257,50 @@ func _cells(length: float, count: int) -> Array[float]:
 	return out
 
 
-func _floor_grid(art: Node3D, canvas: Node3D, dim: Vector2, cols: int, rows: int, prefab: String) -> void:
+## 铺地板。三种模式：
+##   full        — 每格都用 `mat`
+##   stone_ring  — 最外圈用 `ring`（石），内心用 `mat`（木）
+##   wood_ring   — 最外圈用 `mat`（木），内心用 `ring`（石）
+##
+## 分区时**外圈恒为 1 格**：5×5 的房间外圈吃掉 1 格还剩 3×3 内心，仍然成立；
+## 但 3×3 及更小的房间退化为满铺（外圈 = 全部，分区没有意义）。
+func _floor_grid(art: Node3D, canvas: Node3D, dim: Vector2, cols: int, rows: int,
+		style: Dictionary) -> Dictionary:
 	var cell_x := _cells(dim.x, cols)
 	var cell_z := _cells(dim.y, rows)
+	var mode := str(style["floor"])
+	var main_mat := str(style["mat"])
+	var ring_mat := str(style.get("ring", main_mat))
+	var stats := {"total": 0, "ring": 0, "core": 0}
 	for row in range(rows):
 		for col in range(cols):
+			var prefab := main_mat
+			var part := "core"
+			if mode != "full" and cols >= 4 and rows >= 4:
+				var is_ring := col == 0 or row == 0 or col == cols - 1 or row == rows - 1
+				if is_ring:
+					# stone_ring: 外圈石、内心木 → 外圈取 ring
+					# wood_ring : 外圈木、内心石 → 外圈取 mat，内心取 ring
+					prefab = ring_mat if mode == "stone_ring" else main_mat
+					part = "ring"
+				else:
+					prefab = main_mat if mode == "stone_ring" else ring_mat
+			elif mode != "full":
+				# 太小的房间分区无意义，退化为满铺主材质。
+				prefab = main_mat
 			_add(prefab, art, canvas, Vector3(cell_x[col], 0.0, cell_z[row]), 0.0,
 				"Floor_%02d_%02d" % [col, row])
+			stats["total"] = int(stats["total"]) + 1
+			stats[part] = int(stats[part]) + 1
+	return stats
 
 
 func _walls(art: Node3D, canvas: Node3D, dim: Vector2, cols: int, rows: int,
-		door_map: Dictionary, windows: bool) -> Dictionary:
+		door_map: Dictionary, window_mode: String) -> Dictionary:
 	var total := 0
 	var window_count := 0
 	var cell_x := _cells(dim.x, cols)
 	var cell_z := _cells(dim.y, rows)
-	# 每面：沿墙方向的格心列表 + 该面门位格 + 放置位置与朝向
 	var sides := [
 		{"side": "north", "cells": cell_x, "axis": "x", "at": -dim.y * 0.5, "yaw": 0.0},
 		{"side": "south", "cells": cell_x, "axis": "x", "at": dim.y * 0.5, "yaw": 180.0},
@@ -234,9 +314,7 @@ func _walls(art: Node3D, canvas: Node3D, dim: Vector2, cols: int, rows: int,
 		var yaw := float(spec["yaw"])
 		var along_x := str(spec["axis"]) == "x"
 		var door_indices: Array = door_map.get(side, [])
-		var window_indices: Array = []
-		if windows:
-			window_indices = _window_cells(cells, door_indices)
+		var window_indices: Array = _window_cells(cells, door_indices, window_mode, side)
 		for index in range(cells.size()):
 			var along := float(cells[index])
 			var position := Vector3(along, 0.0, at) if along_x else Vector3(at, 0.0, along)
@@ -254,10 +332,90 @@ func _walls(art: Node3D, canvas: Node3D, dim: Vector2, cols: int, rows: int,
 	return {"total": total, "windows": window_count}
 
 
-## 每面挑「关于房间中心对称、且两端都不是门位」的一对格子开窗，取最靠中心的那对。
-## 对称是为了视觉平衡；靠中心是为了避开墙角的挤碰。
-## 找不到对称对就退而取最近中心的单个非门位格；连这个都没有就不开窗。
-func _window_cells(cells: Array, door_indices: Array) -> Array:
+## 决定这一面哪几格开窗。
+##
+## `pair`：挑「关于房间中心对称、且两端都不是门位」的一对格子，取最靠中心的那对。
+##   对称是为了视觉平衡；靠中心是为了避开墙角的挤碰。
+##
+## `double_pair`：两对，形成"长窗廊"节奏。
+##   **这是为大空间准备的手段** —— 45×40 这类 9 格长的墙面只开一对窗会显得空，
+##   开满通窗又变成"玻璃幕墙"、失去墙垛。两对（4 窗）间距均匀，才是公馆长廊的做法。
+##   与同尺寸枢纽的区分就落在窗数上：本档 16 窗，枢纽通窗 25 窗。
+##
+## `clerestory`：除门位、以及门位**相邻的墙垛**外全开。留一格墙垛是刻意的 ——
+##   门两侧裸着通窗会像"玻璃幕墙接了个洞"，有墙垛才是公馆的门厅做法。
+##
+## `single_side`：只有北面给一对，其余全实心。单向采光把光压在一面，
+##   明暗差最大，适合陈列（宝箱/事件房的视线引导）。
+##
+## `blind`：一格都不开。
+func _window_cells(cells: Array, door_indices: Array, mode: String, side: String) -> Array:
+	if mode == "blind" or cells.is_empty():
+		return []
+	if mode == "single_side":
+		if side != "north":
+			return []
+		return _symmetric_pair(cells, door_indices)
+	if mode == "double_pair":
+		return _double_pair(cells, door_indices)
+	if mode == "clerestory":
+		var blocked := {}
+		for index in door_indices:
+			blocked[index] = true
+			blocked[index - 1] = true
+			blocked[index + 1] = true
+		var out: Array = []
+		for index in range(cells.size()):
+			if blocked.has(index):
+				continue
+			out.append(index)
+		# 全被挡住（例如 2 格宽的门廊）就退化成一对，至少有一线光。
+		if out.is_empty():
+			return _symmetric_pair(cells, door_indices)
+		return out
+	return _symmetric_pair(cells, door_indices)
+
+
+## 两对对称窗：先按"到中心的距离"由近到远枚举对称对，再挑出**互不相邻**的两对。
+##
+## 必须互不相邻（`|i-j| > 1`）：相邻两格都开窗等于合成一个 10m 宽的洞，
+## 那不是"长窗廊"，是"拆了半面墙"。
+## 找不到两对就退回一对 —— 小房间（6 格宽）本来也只能容下一对。
+func _double_pair(cells: Array, door_indices: Array) -> Array:
+	var count := cells.size()
+	var pairs: Array = []
+	for i in range(count):
+		for j in range(i + 1, count):
+			if absf(float(cells[i]) + float(cells[j])) < 0.01:
+				if door_indices.has(i) or door_indices.has(j):
+					continue
+				pairs.append({"first": i, "second": j, "dist": absf(float(cells[i]))})
+	pairs.sort_custom(func(a, b): return float(a["dist"]) < float(b["dist"]))
+	if pairs.size() < 2:
+		return _symmetric_pair(cells, door_indices)
+	var best: Array = []
+	for pair in pairs:
+		var pick: Array = [int(pair["first"]), int(pair["second"])]
+		for other in pairs:
+			if other == pair:
+				continue
+			# 内层对的跨度必须比外层小，否则两对会交叉或重叠
+			if float(other["dist"]) >= float(pair["dist"]):
+				continue
+			var candidate: Array = [int(other["first"]), int(other["second"])]
+			var disjoint := true
+			for a in pick:
+				for b in candidate:
+					if absi(a - b) <= 1:
+						disjoint = false
+			if disjoint:
+				best = pick + candidate
+				best.sort()
+				return best
+	return _symmetric_pair(cells, door_indices)
+
+
+func _symmetric_pair(cells: Array, door_indices: Array) -> Array:
 	var count := cells.size()
 	var pairs: Array = []
 	for i in range(count):
