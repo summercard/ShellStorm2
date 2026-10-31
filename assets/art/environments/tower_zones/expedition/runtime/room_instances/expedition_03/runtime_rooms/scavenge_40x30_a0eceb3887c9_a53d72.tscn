@@ -1,0 +1,1470 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_floor_wood/env_manor_floor_wood_root_top3d.tscn" id="1_g0b7b"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn" id="2_dbo1i"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_window/env_manor_wall_window_root_top3d.tscn" id="3_j3vvd"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_door/env_manor_wall_door_root_top3d.tscn" id="4_bxpiy"]
+
+[node name="Room_reward_02" type="Node3D" unique_id=44830069]
+metadata/scene_builder_schema = "shellstorm2.component_scene.v1"
+metadata/runtime_room_source_schema = "shellstorm2.runtime_room_art.v1"
+metadata/runtime_room_signature = "a0eceb3887c9ab15a816951e69258ab30970fa4ac6c5a5be36d6c0507499b4a5"
+metadata/runtime_room_geometry = {
+"safe_corner": false,
+"schema": "shellstorm2.runtime_room_art.v1",
+"size": [40.0, 30.0],
+"type": "SCAVENGE"
+}
+metadata/size_m = [40.0, 30.0]
+metadata/grid_unit_m = 5.0
+metadata/level_id = "expedition_03"
+metadata/room_id = "reward_02"
+metadata/template_id = "scavenge_40x30"
+metadata/portal_fingerprint = "a53d72"
+metadata/built_by = "manor_shell_builder"
+
+[node name="ArtComponents" type="Node3D" parent="." unique_id=502811133]
+
+[node name="Floor_00_00" type="Node3D" parent="ArtComponents" unique_id=2103958239 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_01_00" type="Node3D" parent="ArtComponents" unique_id=1409650075 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_02_00" type="Node3D" parent="ArtComponents" unique_id=798677802 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_03_00" type="Node3D" parent="ArtComponents" unique_id=1578944558 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_04_00" type="Node3D" parent="ArtComponents" unique_id=1123698442 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_05_00" type="Node3D" parent="ArtComponents" unique_id=1053097852 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_06_00" type="Node3D" parent="ArtComponents" unique_id=906971982 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_07_00" type="Node3D" parent="ArtComponents" unique_id=129968003 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_00_01" type="Node3D" parent="ArtComponents" unique_id=149561703 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_01_01" type="Node3D" parent="ArtComponents" unique_id=551111825 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_02_01" type="Node3D" parent="ArtComponents" unique_id=1600471939 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_03_01" type="Node3D" parent="ArtComponents" unique_id=2079607081 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_04_01" type="Node3D" parent="ArtComponents" unique_id=2128329076 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_05_01" type="Node3D" parent="ArtComponents" unique_id=923106923 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_06_01" type="Node3D" parent="ArtComponents" unique_id=2061877173 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_07_01" type="Node3D" parent="ArtComponents" unique_id=646669983 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_00_02" type="Node3D" parent="ArtComponents" unique_id=74029011 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_01_02" type="Node3D" parent="ArtComponents" unique_id=400574775 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_02_02" type="Node3D" parent="ArtComponents" unique_id=1826885379 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_03_02" type="Node3D" parent="ArtComponents" unique_id=1691339293 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_04_02" type="Node3D" parent="ArtComponents" unique_id=286484384 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_05_02" type="Node3D" parent="ArtComponents" unique_id=21452457 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_06_02" type="Node3D" parent="ArtComponents" unique_id=1455993545 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_07_02" type="Node3D" parent="ArtComponents" unique_id=2090633102 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_00_03" type="Node3D" parent="ArtComponents" unique_id=348091493 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_01_03" type="Node3D" parent="ArtComponents" unique_id=1182003473 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_02_03" type="Node3D" parent="ArtComponents" unique_id=138067885 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_03_03" type="Node3D" parent="ArtComponents" unique_id=228245438 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_04_03" type="Node3D" parent="ArtComponents" unique_id=1696130755 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_05_03" type="Node3D" parent="ArtComponents" unique_id=1490786655 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_06_03" type="Node3D" parent="ArtComponents" unique_id=1860581952 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_07_03" type="Node3D" parent="ArtComponents" unique_id=781184956 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_00_04" type="Node3D" parent="ArtComponents" unique_id=748259556 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_01_04" type="Node3D" parent="ArtComponents" unique_id=1785737139 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_02_04" type="Node3D" parent="ArtComponents" unique_id=732853530 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_03_04" type="Node3D" parent="ArtComponents" unique_id=1163120463 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_04_04" type="Node3D" parent="ArtComponents" unique_id=911854190 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_05_04" type="Node3D" parent="ArtComponents" unique_id=946283335 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_06_04" type="Node3D" parent="ArtComponents" unique_id=2069408399 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_07_04" type="Node3D" parent="ArtComponents" unique_id=1657452494 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_00_05" type="Node3D" parent="ArtComponents" unique_id=1624962749 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_01_05" type="Node3D" parent="ArtComponents" unique_id=472812741 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_02_05" type="Node3D" parent="ArtComponents" unique_id=540501503 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_03_05" type="Node3D" parent="ArtComponents" unique_id=79724655 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_04_05" type="Node3D" parent="ArtComponents" unique_id=2082453616 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_05_05" type="Node3D" parent="ArtComponents" unique_id=1498833967 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_06_05" type="Node3D" parent="ArtComponents" unique_id=787974513 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Floor_07_05" type="Node3D" parent="ArtComponents" unique_id=1284835962 instance=ExtResource("1_g0b7b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-FLOOR-WOOD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "人字拼木地板5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_floor_wood/manor_floor_wood_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 0.1, 5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "floor"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_north_00" type="Node3D" parent="ArtComponents" unique_id=2051494444 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, -15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_north_01" type="Node3D" parent="ArtComponents" unique_id=1874433297 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_north_02" type="Node3D" parent="ArtComponents" unique_id=274546334 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="WindowWall_north_03" type="Node3D" parent="ArtComponents" unique_id=207842331 instance=ExtResource("3_j3vvd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-WINDOW"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "铅条窗护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.61)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="WindowWall_north_04" type="Node3D" parent="ArtComponents" unique_id=1095278469 instance=ExtResource("3_j3vvd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-WINDOW"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "铅条窗护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.61)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_north_05" type="Node3D" parent="ArtComponents" unique_id=590438176 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_north_06" type="Node3D" parent="ArtComponents" unique_id=64524276 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_north_07" type="Node3D" parent="ArtComponents" unique_id=174411694 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, -15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_south_00" type="Node3D" parent="ArtComponents" unique_id=69674880 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.5, 0, 15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_south_01" type="Node3D" parent="ArtComponents" unique_id=1539905211 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.5, 0, 15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="WindowWall_south_02" type="Node3D" parent="ArtComponents" unique_id=650372044 instance=ExtResource("3_j3vvd")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.5, 0, 15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-WINDOW"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "铅条窗护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.61)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="DoorWall_south_03" type="Node3D" parent="ArtComponents" unique_id=1473046581 instance=ExtResource("4_bxpiy")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, 0, 15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-DOOR"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "通顶门墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_door/manor_wall_door_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "segmented_door_piers"
+metadata/collision_shape_count = 2
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_south_04" type="Node3D" parent="ArtComponents" unique_id=1570952958 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5, 0, 15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="WindowWall_south_05" type="Node3D" parent="ArtComponents" unique_id=1092642992 instance=ExtResource("3_j3vvd")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5, 0, 15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-WINDOW"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "铅条窗护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.61)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_south_06" type="Node3D" parent="ArtComponents" unique_id=1795647695 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.5, 0, 15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_south_07" type="Node3D" parent="ArtComponents" unique_id=1430801036 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.5, 0, 15)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_west_00" type="Node3D" parent="ArtComponents" unique_id=524768084 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_west_01" type="Node3D" parent="ArtComponents" unique_id=245522401 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="WindowWall_west_02" type="Node3D" parent="ArtComponents" unique_id=1250843831 instance=ExtResource("3_j3vvd")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-WINDOW"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "铅条窗护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.61)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="WindowWall_west_03" type="Node3D" parent="ArtComponents" unique_id=443714109 instance=ExtResource("3_j3vvd")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-WINDOW"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "铅条窗护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.61)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_west_04" type="Node3D" parent="ArtComponents" unique_id=1727685506 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_west_05" type="Node3D" parent="ArtComponents" unique_id=651224278 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_east_00" type="Node3D" parent="ArtComponents" unique_id=1240669023 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, -12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_east_01" type="Node3D" parent="ArtComponents" unique_id=39152627 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, -7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="WindowWall_east_02" type="Node3D" parent="ArtComponents" unique_id=1203424061 instance=ExtResource("3_j3vvd")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, -2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-WINDOW"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "铅条窗护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.61)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="WindowWall_east_03" type="Node3D" parent="ArtComponents" unique_id=1860242378 instance=ExtResource("3_j3vvd")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, 2.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-WINDOW"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "铅条窗护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_window/manor_wall_window_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.61)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_east_04" type="Node3D" parent="ArtComponents" unique_id=1812390098 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, 7.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Wall_east_05" type="Node3D" parent="ArtComponents" unique_id=222124357 instance=ExtResource("2_dbo1i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, 12.5)
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-STANDARD"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木护墙模块5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wall_standard/manor_wall_standard_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "structural_box"
+metadata/collision_shape_count = 1
+metadata/bounds_size_m = Vector3(5, 2.8, 0.5)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0

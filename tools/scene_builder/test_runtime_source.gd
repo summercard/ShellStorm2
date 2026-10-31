@@ -28,12 +28,28 @@ func _run() -> void:
 		await process_frame
 	var measured := 0
 	var binding_cases: Array = []
+	var landed := 0
 	for row in data["rows"]:
 		var room: Node3D = (level.get("_room_by_id") as Dictionary).get(str(row["room_id"]))
 		check(room != null, "runtime room missing " + str(row["room_id"]))
 		if room == null:
 			continue
 		room.call("ensure_shell_built")
+		# ── 已落地美术的房间走另一条路 ────────────────────────────────────
+		#
+		# `path` 指向 `runtime_rooms/` 时，说明这间房已有正式美术（工坊保存过），
+		# 采集器就不会再拍白盒快照 —— 它直接把这间房指向正式场景。
+		# 那种情况下 `WhiteboxShell` 根本不存在（正式美术的容器是 `ArtComponents`），
+		# 下面这整套「白盒快照往返」的断言**不适用**，硬跑只会得到假红
+		# （2026-10-31 实测 17 项 "captured shell bounds differ"，全部是这个原因）。
+		#
+		# 已落地美术的正确验收在 `tools/_exp03_manor_shell_verify.tscn`：
+		# 它按房间逐项查「美术层是否接管、地板是否满、四面是否覆盖、每个门位格
+		# 放的是不是门墙模块」，比这里的 bounds 对照严格得多。
+		# 本测试只保留对**尚未落地美术**的房间做白盒往返，并把跳过的数量打出来。
+		if str(row.get("path", "")).contains("/runtime_rooms/"):
+			landed += 1
+			continue
 		var snapshot := (load(str(row["path"])) as PackedScene).instantiate() as Node3D
 		root.add_child(snapshot)
 		var descriptor := CONTRACT.describe(room)
@@ -61,13 +77,16 @@ func _run() -> void:
 			binding_cases.append([room, snapshot])
 		else:
 			snapshot.free()
-	check(measured == (level.get("_rooms") as Array).size(), "some actual rooms omitted from capture")
+	# `measured` 只统计走了白盒快照往返的房间；已落地美术的跳过，
+	# 所以总数要对上 `房间数 - landed`，否则说明有房间既没测也没跳过。
+	check(measured == (level.get("_rooms") as Array).size() - landed,
+		"some actual rooms omitted from capture")
 	for pair in binding_cases:
 		await _verify_binding(pair[0], pair[1])
 		pair[1].free()
 	level.queue_free()
 	await process_frame
-	print("RUNTIME_SOURCE_MEASURED rooms=", measured)
+	print("RUNTIME_SOURCE_MEASURED rooms=", measured, " landed_skipped=", landed)
 	_finish()
 
 func _shell_bounds(node: Node3D) -> AABB:
@@ -145,15 +164,24 @@ func _verify_binding(original: Node3D, snapshot: Node3D) -> void:
 			" stripped=", int(test_room.get_meta("art_layer_geometry_stripped", 0)),
 			" art_bounds=", leftover)
 	check(is_zero_approx(test_room._static_layout_alignment_delta_deg(snapshot)), "captured local geometry was rotated again")
-	# 复用键的**正向**断言（2026-10-31 反转）：门位不同**必须**还能命中同一份美术。
-	# 旧断言是 `matching_path(...).is_empty()`（不同端口就拒绝复用），那正是
-	# "美术做一次只有一局能用"的根因 —— 业主明确要求同模板算同一个可复用的。
+	# 复用键的**第三次**语义演进（每次都是设计变更，不是修 bug）：
+	#
+	#   ① 2026-10-31 之前：门位进签名 → 每房一键 → 断言「不同端口拒绝复用」。
+	#      那正是「美术做一次只有一局能用」的根因，业主明确要求同模板算可复用。
+	#   ② 2026-10-31 中：门位不进签名 → 一局收敛到十几份 → 断言「不同门位必须复用」。
+	#      复用成立了，但**墙和地板也被当装饰留在美术层**，套到门位不同的房间就错位堵门。
+	#   ③ 2026-10-31 晚（当前）：门位不进**签名**（保持收敛），但进**文件名**
+	#      （`<template>_<sig12>_<门位指纹>`）。结构件（护墙 / 门墙 / 地砖）进了美术层，
+	#      门墙模块洞口固定 2.2m 居中，只能摆在本局门位那一格。
+	#
+	# 所以「不同门位必须复用同一份美术」在③已不成立 —— 复用粒度是
+	# 「同模板 + 同门位」，装饰仍可跨种子共享（门位恰好相同时命中同一份）。
 	var ports: Array = test_room.connection_ports.duplicate(true)
 	if not ports.is_empty():
 		ports[0]["lane_m"] = float(ports[0].get("lane_m", 0)) + 5.0
 		test_room.connection_ports = ports
-		check(CONTRACT.matching_path(test_room, base) == target,
-			"same template with a different door lane must reuse the art")
+		check(CONTRACT.matching_path(test_room, base) != target,
+			"different door lane must NOT reuse the same structural art (门墙会错位堵门)")
 	test_room.free()
 	DirAccess.remove_absolute(target)
 	print("RUNTIME_SOURCE_BINDING actual_room_loaded=1 same_template_reuses_art=1 art_layer_only=1")

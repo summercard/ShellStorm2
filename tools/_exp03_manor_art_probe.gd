@@ -24,10 +24,18 @@ const GRID := 5.0
 
 var _failures: Array[String] = []
 var _written := ""
+## 正式美术的原内容（用于测后恢复）。空 = 原本没有文件，测完删掉即可。
+var _backup_text := ""
+var _backup_path := ""
 
 
 func _ready() -> void:
-	# ── 取一间 25×25 战斗房的复用键 ───────────────────────────────────────
+	# ── 取一间 25×25 的程序化房间 ──────────────────────────────────────────
+	#
+	# **不要用 `Wall_north` 是否存在来认房间**：铺装落地后美术层已覆盖四面，
+	# 程序化墙被跳过，`Wall_north` 根本不存在 —— 第一版判据因此永远找不到房间、
+	# 静默 SKIP（表现为"探针没报错也没生效"）。
+	# 改用 `procedural_shell` + 尺寸，这才是房间的稳定属性。
 	var tower_a := await _spawn()
 	var target: DungeonRoom3D = null
 	for value in tower_a.get("_rooms") as Array:
@@ -35,13 +43,12 @@ func _ready() -> void:
 		if room == null or not room.procedural_shell:
 			continue
 		var size: Vector2 = room.call("get_dimensions")
-		if is_equal_approx(size.x, 25.0) and is_equal_approx(size.y, 25.0) \
-				and room.get_node_or_null("Wall_north") != null:
+		if is_equal_approx(size.x, 25.0) and is_equal_approx(size.y, 25.0):
 			target = room
 			break
 	if target == null:
-		print("MANOR_FAIL 这个种子里没有 25×25 的程序化房间")
-		get_tree().quit(1)
+		print("MANOR_SKIP 这个种子里没有 25×25 的程序化房间")
+		get_tree().quit(2)
 		return
 	var descriptor := CONTRACT.describe(target)
 	var signature := str(descriptor["signature"])
@@ -51,6 +58,13 @@ func _ready() -> void:
 	print("MANOR_FLAG keep_structure=%s" % target.art_layer_keep_structure)
 	_check(target.art_layer_keep_structure,
 		"远征03 房间没有打开 art_layer_keep_structure（公馆结构件会被剥掉）")
+	# **备份正式美术**：本探针要往同一个路径写临时场景来测两条分支，
+	# 若该路径已有正式铺装（`_exp03_manor_shell_builder` 的产出），
+	# 直接写就是覆盖别人的成果。先读进内存，结束（含异常退出）时写回。
+	if FileAccess.file_exists(target_path):
+		_backup_text = FileAccess.get_file_as_string(target_path)
+		_backup_path = target_path
+		print("MANOR_BACKUP 已有正式美术，测试后将原样恢复")
 	tower_a.queue_free()
 	await get_tree().process_frame
 
@@ -216,8 +230,21 @@ func _write(path: String, text: String) -> void:
 	print("MANOR_WROTE %s" % path.get_file())
 
 
+## 结束收尾：**恢复**正式美术（有备份）或删除临时文件（原本没有）。
+##
+## 不能简单地"删掉"：如果这个路径本来就有正式铺装，删掉等于把别人的成果清了。
+## 备份在 `_ready()` 里读取，这里无条件写回。
 func _remove(path: String) -> void:
 	if path.is_empty():
+		return
+	if not _backup_text.is_empty() and _backup_path == path:
+		var file := FileAccess.open(path, FileAccess.WRITE)
+		if file != null:
+			file.store_string(_backup_text)
+			file.close()
+			print("MANOR_RESTORED %s（已恢复正式美术）" % path.get_file())
+			return
+		printerr("MANOR_FAIL 恢复失败，正式美术可能已被覆盖：", path)
 		return
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	print("MANOR_CLEANED %s" % path.get_file())

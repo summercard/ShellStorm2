@@ -59,10 +59,42 @@ static func describe(room: Node3D) -> Dictionary:
 		"geometry": geometry,
 		"room_id": str(room.get("room_id")),
 		"template_id": template_id,
+		"portal_fingerprint": _portal_fingerprint(room),
 		"size_m": [dimensions.x, dimensions.y],
 	}
 
-## 美术文件名 = `<template_id>_<签名前12>.tscn`。
+
+## 门位指纹：四个侧面上「哪一面、偏移多少」的有序摘要，**只进文件名，不进签名**。
+##
+## ## 为什么结构层必须按门位分文件
+##
+## 复用键（`describe()` 的 geometry）**刻意不含门位** —— 那是为了「美术做一次，所有局生效」。
+## 但墙与地板是**结构件**：门墙模块（`manor_wall_door`）的洞口是固定的 2.2m 居中，
+## 只能摆在「本局门位所在的那一格」。实测同一复用键下有 5 间房门位各不相同：
+##
+##   combat_25x25_38083aa33b1a ← n02(east@-5,north@0,south@0) / n04(north@5,west@0)
+##                                n05(east@-5,north@-5) / n06(north@0,south@0)
+##                                fireplace(west@0)
+##
+## 若这 5 间共用一份含门墙的场景，4 间的门会被实心护墙堵死。所以**结构层按门位分文件**：
+## 文件名 = `<template>_<签名前12>_<门位指纹前6>`。同门位仍可复用（跨种子有机会命中）。
+##
+## ## 代价（写进文档）
+##
+## 装饰层与结构层在同一份场景里，所以装饰也随之按门位分文件 —— 跨门位不再复用。
+## 要让装饰独立复用，得把结构层与装饰层拆成两份文件分别匹配，那是另一套机制。
+static func _portal_fingerprint(room: Node3D) -> String:
+	var parts: Array[String] = []
+	for value in room.get("connection_ports"):
+		var port := value as Dictionary
+		# 只用 side + lane：门宽与门高在远征03 恒为 2.2 / 2.8，不构成区分度。
+		parts.append("%s@%.2f" % [str(port.get("side", "")), float(port.get("lane_m", 0.0))])
+	parts.sort()
+	if parts.is_empty():
+		return ""
+	return ",".join(parts).sha256_text().substr(0, 6)
+
+## 美术文件名 = `<template_id>_<签名前12>[_<门位指纹前6>].tscn`。
 ##
 ## 前缀用**模板 id** 而不是 room_id：工坊里一眼能看出"这是 std_25x25 的美术"，
 ## 也不会因为每局房间 id 不同（注入房 `secret_room_inj1`、走廊 `cr00_entry_n01`）
@@ -74,8 +106,11 @@ static func art_path(base_static_path: String, descriptor: Dictionary) -> String
 	template_id = template_id.validate_filename()
 	if template_id.is_empty():
 		return ""
-	return base_static_path.get_base_dir().path_join("runtime_rooms/%s_%s.tscn" %
-		[template_id, str(descriptor["signature"]).substr(0, 12)])
+	var stem := "%s_%s" % [template_id, str(descriptor["signature"]).substr(0, 12)]
+	var portal := str(descriptor.get("portal_fingerprint", ""))
+	if not portal.is_empty():
+		stem = "%s_%s" % [stem, portal]
+	return base_static_path.get_base_dir().path_join("runtime_rooms/%s.tscn" % stem)
 
 static func matching_path(room: Node3D, base_static_path: String) -> String:
 	if not supports(room):
@@ -133,7 +168,7 @@ static func stale_siblings(descriptor: Dictionary, base_static_path: String) -> 
 	template_id = template_id.validate_filename()
 	if template_id.is_empty():
 		return result
-	var want := "%s_%s.tscn" % [template_id, str(descriptor["signature"]).substr(0, 12)]
+	var want := art_path(base_static_path, descriptor).get_file()
 	var folder := base_static_path.get_base_dir().path_join("runtime_rooms")
 	if not DirAccess.dir_exists_absolute(folder):
 		return result
