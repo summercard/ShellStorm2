@@ -1,5 +1,10 @@
 extends Node3D
 ## 保安僵尸表现层：复用 ranged_caster 玩法状态，枪械仅为视觉附件。
+## 用 `preload` 而非裸类名，理由见 `melee_chaser_formal_visual.gd` 头注。
+const HitFlash := preload("res://src/enemy3d/HitFlashMaterial3D.gd")
+## 管线缓存挂在使用中的材质上：不留一份长命引用，这只怪一回收，
+## 同变体的材质下次又要重编译（实测每只 100ms 量级）。见 keeper 头注。
+const Keeper := preload("res://src/enemy3d/MaterialPipelineKeeper.gd")
 const DEATH_DURATION := 2.4
 const VISUAL_HEIGHT := 1.857143
 const CLIP_BY_STATE := {
@@ -16,6 +21,10 @@ var _clock := 0.0
 var _hurt_time := 1.0
 var _flash_time := 0.0
 var _materials: Array[StandardMaterial3D] = []
+## 闪白基线。见 `HitFlashMaterial3D` 头注：自发光开关是 shader 变体不是 uniform，
+## 每翻一次要重建管线（实测 +80~100ms/次），闪白恰好每次受击翻两次 ⇒ 每打中一下卡一下。
+var _flash_baseline: Array = []
+const FLASH_DURATION := 0.12
 
 func _ready() -> void:
 	_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
@@ -31,6 +40,8 @@ func _ready() -> void:
 				var material := source.duplicate() as StandardMaterial3D
 				mesh.set_surface_override_material(index, material)
 				_materials.append(material)
+				Keeper.pin(material)
+	_flash_baseline = HitFlash.prepare(_materials)
 	_attach_shotgun()
 	sync_state("idle", 0.0, 0.0, 0.38, 0.34)
 
@@ -56,10 +67,8 @@ func _process(delta: float) -> void:
 	_clock += delta
 	_hurt_time += delta
 	_flash_time = maxf(0.0, _flash_time - delta)
-	for material in _materials:
-		material.emission_enabled = _flash_time > 0.0
-		material.emission = Color(1.0, 0.65, 0.45)
-		material.emission_energy_multiplier = 0.6 * _flash_time / 0.12
+	# 只推能量，不碰 `emission_enabled`。
+	HitFlash.apply(_materials, _flash_baseline, _flash_time / FLASH_DURATION)
 
 func sync_state(state: String, state_time: float, _speed: float, telegraph_duration: float, recovery_duration: float) -> void:
 	_state = state
@@ -84,7 +93,7 @@ func sync_state(state: String, state_time: float, _speed: float, telegraph_durat
 func flash_hit() -> void:
 	if _state != "dead":
 		_hurt_time = 0.0
-		_flash_time = 0.12
+		_flash_time = FLASH_DURATION
 
 func get_presentation_snapshot() -> Dictionary:
 	return {"state": _state, "clip": _clip, "sample_time": _sample,

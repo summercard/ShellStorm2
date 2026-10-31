@@ -158,6 +158,35 @@ const FOOTPRINT_PROFILES := {
 
 # 正式普通怪表现按逻辑 ID 路由；这里只替换视觉，不改变 Enemy3D 的 AI、碰撞、伤害与掉落。
 # 碰撞 FOOTPRINT 仍由各 kind 的既有玩法口径提供，不随美术替换自动收紧。
+## 材质管线缓存 keeper。用 preload 而非裸类名：裸类名依赖 `.godot` 全局类缓存，
+## 新脚本刚落地时缓存还没扫到，会直接编译失败（本轮实测）。
+const PipelineKeeper := preload("res://src/enemy3d/MaterialPipelineKeeper.gd")
+
+## 正式模型 / Boss / 精英表现层的 **PackedScene 强引用缓存**。
+##
+## ⚠ 必须缓存，不能每次 `load()`：Godot 的资源缓存是**弱引用** —— 场上最后一只
+## `melee_chaser` 被回收后，那份 `PackedScene` 就没人持有了，下一次生成又要**从磁盘重新
+## 解析**。实测（真渲染，`--disable-vsync`）单次 `load()` 100~118 ms，而它就在
+## `apply_profile()` 里、在**刷怪那一帧**同步执行。
+##
+## 用 `static` 而不是 `preload`：preload 会在**启动时**把三种怪的 GLB 全部读进内存，
+## 而这个缓存只在真用到时才留，既不拖慢启动，也不会在怪物全灭后再回落。
+static var _scene_cache: Dictionary = {}
+
+
+## 取一份常驻的 PackedScene。命中缓存时是字典查找（微秒级）。
+func _cached_scene(path: String) -> PackedScene:
+	if path.is_empty():
+		return null
+	var cached: Variant = _scene_cache.get(path)
+	if cached != null:
+		return cached as PackedScene
+	var scene := load(path) as PackedScene
+	if scene != null:
+		_scene_cache[path] = scene
+	return scene
+
+
 const FORMAL_NORMAL_SCENES := {
 	"fat_zombie03": "res://assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn",
 	"melee_chaser": "res://assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn",
@@ -265,7 +294,7 @@ func configure_boss_content(content_id: String) -> bool:
 	if enemy_kind != "boss" or content_id.is_empty() or _root == null:
 		return false
 	var profile := BossContentCatalog.get_by_content_id(content_id)
-	var scene := load(str(profile.get("presentation_scene", ""))) as PackedScene
+	var scene := _cached_scene(str(profile.get("presentation_scene", "")))
 	if scene == null:
 		return false
 	if _formal_boss_root != null and is_instance_valid(_formal_boss_root):
@@ -286,7 +315,7 @@ func configure_elite_content(content_id: String, asset_id: String, scene_path: S
 	_elite_presentation_asset_id = asset_id
 	if content_id.is_empty() or asset_id.is_empty() or scene_path.is_empty() or _root == null:
 		return false
-	var scene := load(scene_path) as PackedScene
+	var scene := _cached_scene(scene_path)
 	if scene == null:
 		return false
 	if _formal_elite_root != null and is_instance_valid(_formal_elite_root):
@@ -470,11 +499,15 @@ func _rebuild() -> void:
 	_root.add_child(_tell_ring)
 	# 正式普通怪分支：非精英 melee_chaser 在程序化外壳之后挂载独立小僵尸包装，
 	# 隐藏壳/核/附肢、保留 tell ring；动画由包装自驱动，避免旧 bob/appendage 程序姿势叠加。
+	var _ta := Time.get_ticks_usec()
 	if FORMAL_NORMAL_SCENES.has(_base_kind) and _root != null:
 		_load_formal_normal_model()
+		print("  SPLIT formal_load=%d" % ((Time.get_ticks_usec() - _ta) / 1000))
 		# 按配方为普通与强化僵尸挂接红眼。
 		if monster_has_eye_glow():
+			var _tb := Time.get_ticks_usec()
 			_setup_eye_socket()
+			print("  SPLIT eye_socket=%d" % ((Time.get_ticks_usec() - _tb) / 1000))
 
 
 ## 是否有已标定的僵尸眼位配方；普通版和强化版均可用。
@@ -658,11 +691,16 @@ func _find_formal_normal_skeleton() -> Skeleton3D:
 
 func _load_formal_normal_model() -> void:
 	var scene_path := str(FORMAL_NORMAL_SCENES.get(_base_kind, ""))
-	var scene := load(scene_path) as PackedScene
+	var _fa := Time.get_ticks_usec()
+	var scene := _cached_scene(scene_path)
+	var _fb := Time.get_ticks_usec()
 	assert(scene != null, "Formal normal scene missing for %s" % enemy_kind)
 	_formal_normal_root = scene.instantiate() as Node3D
+	var _fc := Time.get_ticks_usec()
 	_formal_normal_root.name = "FormalNormal_%s" % enemy_kind
 	_root.add_child(_formal_normal_root)
+	var _fd := Time.get_ticks_usec()
+	print("  FSPLIT load=%d inst=%d add=%d" % [(_fb-_fa)/1000, (_fc-_fb)/1000, (_fd-_fc)/1000])
 	_formal_normal_scene_path = scene_path
 	_shell.hide()
 	_core.hide()
@@ -678,6 +716,22 @@ func _load_formal_normal_model() -> void:
 ## ② 逐 MeshInstance3D、逐 surface 处理。一个模型常有多段材质（身体/配件/枪）。
 ## ③ 只处理 `BaseMaterial3D`。自定义 shader 材质没有 albedo_color，跳过并留日志 ——
 ##    静默跳过等于"以为染了其实没染"，那是本文件反复警告过的同类坑。
+## ④ **染色必须改「已经装在面上的那份 override」，不能换一份新的**。
+##
+## ## ④ 是 2026-10-31 修的一个静默失效
+##
+## 表现层的受击闪白在它自己的 `_ready()` 里收集 `_materials`（逐面 duplicate + 设 override），
+## 而本函数在 `_load_formal_normal_model()` 之后才跑 —— 那时表现层的 `_ready` 已经跑完了。
+## 旧的写法在这里又 `duplicate()` 了一份**新的** override 盖上去，于是：
+##   · 表现层手里那批材质成了没人用的孤儿，闪白写的是死对象；
+##   · 场上真实渲染的那份从来没被闪过。
+## 实测（`_flash_bind_check_tmp`）：`_materials` 只有 1 个实例 id，而 4 个 surface 的
+## `get_surface_override_material` 全是**别的** id ⇒ **远征03 所有复刻怪的受击闪白都是空的**。
+## 因为受伤瞬间除了"卡一下"没有任何画面反馈，这条一直没人报。
+##
+## 修法：优先复用面已有的 override（就是表现层那份），只改它的 albedo。
+## 取原色走 `mesh.surface_get_material()`（资产原材质），不要走 `get_active_material()`
+## —— 后者会返回 override，重复调用会把色重复乘一遍。
 func _apply_formal_tint() -> void:
 	if not FORMAL_MODEL_TINT.has(enemy_kind):
 		return
@@ -692,14 +746,15 @@ func _apply_formal_tint() -> void:
 		if mi == null or mi.mesh == null:
 			continue
 		for surface in range(mi.mesh.get_surface_count()):
-			var source := mi.get_active_material(surface)
-			var base := source as BaseMaterial3D
-			if base == null:
+			var source := mi.mesh.surface_get_material(surface) as BaseMaterial3D
+			if source == null:
 				skipped += 1
 				continue
-			var clone := base.duplicate() as BaseMaterial3D
-			clone.albedo_color = base.albedo_color * tint
-			mi.set_surface_override_material(surface, clone)
+			var applied := mi.get_surface_override_material(surface) as BaseMaterial3D
+			if applied == null:
+				applied = source.duplicate() as BaseMaterial3D
+			applied.albedo_color = source.albedo_color * tint
+			mi.set_surface_override_material(surface, applied)
 			tinted += 1
 	if tinted == 0:
 		push_warning(
@@ -811,4 +866,7 @@ func _material(color: Color, metallic: float, roughness: float, emission := fals
 		material.emission_energy_multiplier = 1.7
 	if alpha:
 		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	# 留一份长命引用，别让管线缓存随这只怪一起消失（否则**每只怪**都要重编译，
+	# 实测每次生成 200~320 ms）。见 `MaterialPipelineKeeper` 头注的实测表。
+	PipelineKeeper.pin(material)
 	return material

@@ -1,5 +1,10 @@
 extends Node3D
 ## 表现单向消费 Enemy3D 状态，位移和命中始终归玩法层。
+## 用 `preload` 而非裸类名，理由见 `melee_chaser_formal_visual.gd` 头注。
+const HitFlash := preload("res://src/enemy3d/HitFlashMaterial3D.gd")
+## 管线缓存挂在使用中的材质上：不留一份长命引用，这只怪一回收，
+## 同变体的材质下次又要重编译（实测每只 100ms 量级）。见 keeper 头注。
+const Keeper := preload("res://src/enemy3d/MaterialPipelineKeeper.gd")
 const DEATH_DURATION := 2.6
 const VISUAL_HEIGHT := 3.142857
 const CLIP_BY_STATE := {
@@ -26,6 +31,10 @@ var _blend_time := 1.0
 var _previous_pose: Array[Transform3D] = []
 var _materials: Array[StandardMaterial3D] = []
 var _meshes: Array[MeshInstance3D] = []
+## 闪白基线。见 `HitFlashMaterial3D` 头注：自发光开关是 shader 变体不是 uniform，
+## 每翻一次要重建管线（实测 +80~100ms/次），闪白恰好每次受击翻两次 ⇒ 每打中一下卡一下。
+var _flash_baseline: Array = []
+const FLASH_DURATION := 0.12
 
 func _ready() -> void:
 	_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
@@ -42,6 +51,8 @@ func _ready() -> void:
 				var material := source.duplicate() as StandardMaterial3D
 				mesh.set_surface_override_material(index, material)
 				_materials.append(material)
+				Keeper.pin(material)
+	_flash_baseline = HitFlash.prepare(_materials)
 	sync_state("idle", 0.0, 0.0, 1.2, 1.3)
 
 func _process(delta: float) -> void:
@@ -53,10 +64,8 @@ func _process(delta: float) -> void:
 	_blend_time += delta
 	_locomotion_phase += delta * _speed / (0.3 if _state == "patrol" else 0.6)
 	_flash_time = maxf(0.0, _flash_time - delta)
-	for material in _materials:
-		material.emission_enabled = _flash_time > 0.0
-		material.emission = Color(1.0, 0.65, 0.45)
-		material.emission_energy_multiplier = 0.6 * _flash_time / 0.12
+	# 只推能量，不碰 `emission_enabled`。
+	HitFlash.apply(_materials, _flash_baseline, _flash_time / FLASH_DURATION)
 
 func sync_state(state: String, state_time: float, speed: float, telegraph_duration: float, recovery_duration: float) -> void:
 	if _player == null:
@@ -148,7 +157,7 @@ func _apply_upper_hit() -> void:
 func flash_hit() -> void:
 	if _state != "dead":
 		_light_time = 0.0
-		_flash_time = 0.12
+		_flash_time = FLASH_DURATION
 
 func get_presentation_snapshot() -> Dictionary:
 	return {"state":_state, "clip":_clip, "sample_time":_sample,

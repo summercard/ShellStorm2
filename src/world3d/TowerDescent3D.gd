@@ -3068,6 +3068,12 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 				% [runtime_room_id, layout_path]
 			)
 		record["static_layout_scene_path"] = layout_path
+		# 远征03：**所有**房间都允许公馆结构件留在美术层，不只 `procedural_shell` 那批。
+		# 安全房（`start`）走 `procedural_shell = false` 的「整个静态场景照常用」分支，
+		# 它的墙同样由公馆件提供 —— 不设这个开关，`_rebuild_manor_shell()` 会直接返回，
+		# 于是烘焙文件里那套按旧门位摆的墙原样进游戏（门位一变就错位）。
+		if get_expedition_level_id() == "expedition_03":
+			record["art_layer_keep_structure"] = true
 	# 授权布局壳体（区块00）：把整房组件清单随记录带到 DungeonRoom3D.configure。
 	# 只在房表写了 authored_layout_shell 时才落字段，未接管的房间一个字段都不多。
 	if bool(spec.get("authored_layout_shell", false)):

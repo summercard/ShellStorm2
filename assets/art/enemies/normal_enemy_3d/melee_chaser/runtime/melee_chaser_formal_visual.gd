@@ -1,5 +1,14 @@
 extends Node3D
 ## 仅采样美术骨动画。攻击事件与位移仍由 Enemy3D 拥有。
+##
+## 用 `preload` 而不是直接写全局类名：美术资产脚本随时可能被单独实例化
+## （编辑器预览 / 探针 / 离线出图），那时 `.godot` 的全局类缓存不一定已扫到新脚本，
+## 裸类名会报 `Identifier ... not declared`，且报错发生在解析期 ——
+## 表现为"闪白整段消失、怪一动不动"，很难一眼看出是类解析问题（本轮实测踩过）。
+const HitFlash := preload("res://src/enemy3d/HitFlashMaterial3D.gd")
+## 管线缓存挂在使用中的材质上：不留一份长命引用，这只怪一回收，
+## 同变体的材质下次又要重编译（实测每只 100ms 量级）。见 keeper 头注。
+const Keeper := preload("res://src/enemy3d/MaterialPipelineKeeper.gd")
 const DEATH_DURATION := 2.4
 const VISUAL_HEIGHT := 1.857143
 ## 走路动画只服务巡逻；只要朝玩家方向移动（追击、搜寻、归位）一律用跑步，不按速度切档。
@@ -17,6 +26,11 @@ var _clock := 0.0
 var _hurt_time := 1.0
 var _flash_time := 0.0
 var _materials: Array[StandardMaterial3D] = []
+## 闪白基线（逐材质记下原始 emission 色与能量）。见 `HitFlashMaterial3D` 头注：
+## 自发光开关是 shader 变体而不是 uniform，每翻一次要重建管线（实测 +80~100ms/次），
+## 而闪白是"受击翻上去、0.12s 后翻回来"⇒ **每打中一下卡一下**（2026-10-31 业主报单）。
+var _flash_baseline: Array = []
+const FLASH_DURATION := 0.12
 
 func _ready() -> void:
 	_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
@@ -30,16 +44,16 @@ func _ready() -> void:
 				var material := source.duplicate() as StandardMaterial3D
 				mesh.set_surface_override_material(index, material)
 				_materials.append(material)
+				Keeper.pin(material)
+	_flash_baseline = HitFlash.prepare(_materials)
 	sync_state("idle", 0.0, 0.0, 0.38, 0.34)
 
 func _process(delta: float) -> void:
 	_clock += delta
 	_hurt_time += delta
 	_flash_time = maxf(0.0, _flash_time - delta)
-	for material in _materials:
-		material.emission_enabled = _flash_time > 0.0
-		material.emission = Color(1.0, 0.65, 0.45)
-		material.emission_energy_multiplier = 0.6 * _flash_time / 0.12
+	# 只推能量，**不碰 `emission_enabled`**（见 `_flash_baseline` 注释与 HitFlashMaterial3D 头注）。
+	HitFlash.apply(_materials, _flash_baseline, _flash_time / FLASH_DURATION)
 
 ## speed 仍按契约保留在参数位（调用方按顺序传入），但不再参与选段。
 func sync_state(state: String, state_time: float, _speed: float, telegraph_duration: float, recovery_duration: float) -> void:
@@ -67,7 +81,7 @@ func sync_state(state: String, state_time: float, _speed: float, telegraph_durat
 func flash_hit() -> void:
 	if _state != "dead":
 		_hurt_time = 0.0
-		_flash_time = 0.12
+		_flash_time = FLASH_DURATION
 
 func get_presentation_snapshot() -> Dictionary:
 	return {"state": _state, "clip": _clip, "sample_time": _sample,

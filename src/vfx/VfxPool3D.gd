@@ -102,9 +102,19 @@ static func has_effect(asset_id: StringName) -> bool:
 @export var max_per_kind: int = 32
 @export var spawn_parent_path: NodePath
 
+## 预热件的尺寸（世界米）。**亚像素**：1.5 m 处约 0.8 mm，任何分辨率下都不足一个像素，
+## 所以哪怕遮挡没跟上也出不了可见的闪点。见 `prewarm()`。
+const PREWARM_SIZE := 0.0008
+## 预热件摆在相机前多远。必须**在视锥内** —— 视锥外会被裁掉，裁掉就不绘制，
+## 不绘制就不编译管线，预热等于没做（这是本函数唯一容易写错的地方）。
+const PREWARM_DISTANCE := 1.5
+
 var _active: Dictionary = {}    # asset_id -> Array[VfxEffectBase3D]
 var _inactive: Dictionary = {}  # asset_id -> Array[VfxEffectBase3D]
 var _spawn_parent: Node3D
+## 待预热队列。每帧只取一个 —— 单个特效的首次绘制要 20~65 ms，
+## 一次全做等于在加载末尾塞一个 120 ms 的硬冻结。
+var _prewarm_queue: Array[StringName] = []
 
 func _ready() -> void:
 	add_to_group("vfx_pool_3d")
@@ -117,6 +127,98 @@ func _ready() -> void:
 	for asset_id in _REGISTRY.keys():
 		_active[asset_id] = []
 		_inactive[asset_id] = []
+	set_process(false)
+
+## 把一批特效「提前造一次」，把首次装配的编译代价挪到加载期。
+##
+## ## 为什么必须有
+##
+## 2026-10-31 实测（`tools/_vfx_cold_start_probe`，真渲染 / `--disable-vsync`）：
+##
+## | 特效 | 第一次借出 | 第二次 |
+## |---|---:|---:|
+## | VFX-IMPACT-3D | **64.97 ms** | 0.39 ms |
+## | VFX-MELEE-IMPACT-3D | **32.87 ms** | — |
+## | VFX-MELEE-SLASH-3D | **20.75 ms** | — |
+## | 其余 5 种 | 0.3~1.3 ms | — |
+##
+## 8 种合计 **121.8 ms**，同批第二次只要 2.8 ms ⇒ 差价是**首次装配时的着色器/管线准备**。
+## 它每局只发生一次，所以"平均帧时"永远看不见它；玩家感受是「进关卡后第一枪顿一下」。
+##
+## ## 代价到底落在哪一步（拆过，别猜）
+##
+## ```
+## instantiate 0.04ms / add_child 0.01ms / activate 64.36ms / 首帧渲染 14.68ms
+## 把第一次摆在相机**背后**（必然被视锥剔除、根本不绘制）⇒ activate 仍 64.65ms，第二次 0.37ms
+## 单独 new 一个同款 StandardMaterial3D ⇒ 0.03ms
+## ```
+##
+## ⇒ 贵的是「**节点带材质实例化进渲染场景**」这一下，不是 `new` 材质、也不是"画"。
+## 所以预热只需要让它进一次场景树；`draw` 不是必要条件。
+##
+## 仍摆在镜头前（有相机时）是**保险**：万一将来某个驱动/版本把编译推迟到首绘，
+## 这里已经覆盖到。没有相机就退回池自身位置，照样能省 —— 不因为"没相机"就什么都不做。
+##
+## ## 为什么尺寸是 0.0008
+##
+## 亚像素（1.5 m 处约 0.8 mm）。预热发生在加载过场背后，玩家看不到；万一遮挡没跟上，
+## 这个尺寸也出不了可见的闪点。**它是"以防万一"，不是"必需"**。
+##
+## ## 队列而不是一把梭
+##
+## 单个首次装配 20~65 ms，8 个一次做完就是一个 120 ms 的硬冻结。
+## 每帧只做一个，把同样的总代价摊到 8 帧，加载末尾不会突然卡死。
+func prewarm(asset_ids: Array) -> void:
+	for value in asset_ids:
+		var asset_id := StringName(value)
+		if not _REGISTRY.has(asset_id) or _prewarm_queue.has(asset_id):
+			continue
+		_prewarm_queue.append(asset_id)
+	if not _prewarm_queue.is_empty():
+		set_process(true)
+
+
+func _process(_delta: float) -> void:
+	if _prewarm_queue.is_empty():
+		set_process(false)
+		return
+	var asset_id: StringName = _prewarm_queue.pop_front()
+	# 有相机就摆在它前方（覆盖"编译推迟到首绘"的可能）；没有就用池自身位置。
+	var origin := global_position
+	var camera := get_viewport().get_camera_3d()
+	if camera != null:
+		origin = camera.global_position - camera.global_basis.z * PREWARM_DISTANCE
+	acquire(asset_id, origin, Color.WHITE, PREWARM_SIZE)
+	if _prewarm_queue.is_empty():
+		set_process(false)
+
+
+## 还有没有排队中的预热件。给加载页判断"能不能开圈"用。
+func has_pending_prewarm() -> bool:
+	return not _prewarm_queue.is_empty()
+
+
+## 进关卡后第一批战斗反馈会用到的那批。顺序按"最先被撞上"的概率排。
+##
+## 只暖这 11 个，不暖全表：全表里另一半是低频事件件（暗门碎片、命运元素、收音机音符），
+## 把它们的首次装配也塞进加载期只会拉长过场，而它们第一次出现时玩家本来就在看别的地方。
+##
+## 三个死亡件必须算进来：第一次打死怪就在第一次命中后几秒内，
+## 实测 `ZOMBIE-GOO-DEATH` 33.1 / `EXPLOSION` 31.9 / `DEATH-BLAST` 33.9 ms ——
+## 不预热的话「第一杀」会连顿三下（复刻怪的死亡就是换这三个里的一个）。
+const COMBAT_PREWARM := [
+	FX01_IMPACT,
+	FX01_METAL_SPARK_HIT,
+	FX01_GOO_HIT,
+	FX02_DAMAGE_NUMBER,
+	FX01_MUZZLE_FLASH,
+	FX01_SHELL_CASING,
+	FX01_MELEE_SLASH,
+	FX01_MELEE_IMPACT,
+	FX01_ZOMBIE_GOO_DEATH,
+	FX01_EXPLOSION,
+	FX01_DEATH_BLAST,
+]
 
 ## 按 AssetID 借出特效
 func acquire(asset_id: StringName, world_pos: Vector3, color: Color, size: float = 1.0, context: Dictionary = {}) -> VfxEffectBase3D:

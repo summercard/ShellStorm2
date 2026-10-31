@@ -136,6 +136,17 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 					"%s delayed white health segment does not catch up toward real HP: %.4f -> %.4f (real %.4f)"
 					% [kind, delayed_ratio, settled, actual_ratio]
 				)
+		# 先等上一只怪的飘字**自然退池**（FX02 寿命 0.56 s）再取基准。
+		#
+		# 为什么必须等：飘字退池与新建可能落在同一帧 —— 旧的这一帧 retire、新的这一帧
+		# acquire，`active_count` 前后相等 ⇒ 判据 `after <= before` 成立 ⇒ 假红。
+		# 这是本用例原有的竞态：同一份代码连跑两次会一次红（`Enemy damage does not create
+		# a 3D floating number: boss`）一次绿。不是放宽阈值 —— 判据仍是"必须多出一个"，
+		# 只是把基准取在一个稳定的 0 上。
+		var drain_frames := 0
+		while _count_damage_numbers() > 0 and drain_frames < 120:
+			await get_tree().process_frame
+			drain_frames += 1
 		var damage_numbers_before := _count_damage_numbers()
 		# 这里只验证飘字，不验证护盾格挡；零方向避免 shielded 的 15% 随机
 		# 完全格挡让整套回归产生非确定性。

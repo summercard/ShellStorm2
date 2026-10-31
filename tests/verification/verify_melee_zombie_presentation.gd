@@ -62,7 +62,13 @@ func _ready() -> void:
 	e.avatar.sync_presentation("idle", 0.0, 0.0, 0.38, 0.34)
 	visual.flash_hit()
 	visual._process(0.01)
-	check(not visual._materials.is_empty() and visual._materials[0].emission_enabled, "hit flash missing")
+	# 判据是「闪白真的点亮了」= 自发光**能量**被推上去，不是「自发光开关被翻过」。
+	# 后者在 Godot 里是 shader 变体切换（USE_EMISSION），每翻一次要重建 GPU 管线
+	# （实测 +98ms），而闪白每次受击翻两次 ⇒ 每打中一下卡一下（2026-10-31 定位）。
+	check(
+		not visual._materials.is_empty() and visual._materials[0].emission_energy_multiplier > 0.1,
+		"hit flash missing"
+	)
 	e.avatar.sync_presentation("idle", 0.0, 0.0, 0.38, 0.34)
 	check(visual.get_presentation_snapshot().clip == "hurt", "non-stagger hurt overlay missing")
 	var scale_before: Vector3 = e.scale

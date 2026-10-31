@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://n1esrgs17no2"]
+
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_floor.tscn" id="1_3bdcc"]
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_floor_inset.tscn" id="2_22eeq"]
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_floor_seam_strip.tscn" id="3_e7hs7"]
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_wall_segment.tscn" id="4_15nnu"]
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_wall_door_segment.tscn" id="5_onvc2"]
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_door_lintel.tscn" id="6_mt4is"]
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_room_corner_post.tscn" id="7_hs7lo"]
+
+[node name="Room_cr01_hub_01_shop" type="Node3D" unique_id=1422692314]
+metadata/scene_builder_schema = "shellstorm2.component_scene.v1"
+metadata/runtime_room_source_schema = "shellstorm2.runtime_room_art.v1"
+metadata/runtime_room_signature = "e715d2f554c135eb3069af47ed53d5bd3b5bc3af3261e21f887c58cab30d5d9a"
+metadata/runtime_room_geometry = {
+"safe_corner": false,
+"schema": "shellstorm2.runtime_room_art.v1",
+"size": [5.0, 5.0],
+"type": ""
+}
+metadata/runtime_source_scene = "res://scenes/ExpeditionLevel03_3D.tscn"
+metadata/runtime_source_seed = 77003244
+metadata/runtime_source_room_id = "cr01_hub_01_shop"
+metadata/level_id = "expedition_03"
+metadata/room_id = "cr01_hub_01_shop"
+metadata/display_name = "远征03-cr01_hub_01_shop房"
+metadata/size_m = [5.0, 5.0]
+metadata/grid_unit_m = 5.0
+metadata/wall_height_m = 2.8
+metadata/template_id = "room_5x5"
+metadata/footprint_is_rect = true
+metadata/footprint_polygon_m = [[0, 0], [5.0, 0], [5.0, 5.0], [0, 5.0]]
+
+[node name="WhiteboxShell" type="Node3D" parent="." unique_id=443238368]
+
+[node name="ShellPart_000" type="Node3D" parent="WhiteboxShell" unique_id=1309260103 instance=ExtResource("1_3bdcc")]
+transform = Transform3D(5, 0, 0, 0, 0.36, 0, 0, 0, 5, 0, -0.18, 0)
+
+[node name="ShellPart_001" type="Node3D" parent="WhiteboxShell" unique_id=1053737388 instance=ExtResource("2_22eeq")]
+transform = Transform3D(4, 0, 0, 0, 0.025, 0, 0, 0, 4, 0, 0.012, 0)
+
+[node name="ShellPart_002" type="Node3D" parent="WhiteboxShell" unique_id=305686370 instance=ExtResource("3_e7hs7")]
+transform = Transform3D(0.025, 0, 0, 0, 0.018, 0, 0, 0, 3.8, -2, 0.03, 0)
+
+[node name="ShellPart_003" type="Node3D" parent="WhiteboxShell" unique_id=1399269667 instance=ExtResource("3_e7hs7")]
+transform = Transform3D(0.025, 0, 0, 0, 0.018, 0, 0, 0, 3.8, 1, 0.03, 0)
+
+[node name="ShellPart_004" type="Node3D" parent="WhiteboxShell" unique_id=1314331647 instance=ExtResource("4_15nnu")]
+transform = Transform3D(5, 0, 0, 0, 2.8, 0, 0, 0, 0.28, 0, 1.4, -2.5)
+
+[node name="ShellPart_005" type="Node3D" parent="WhiteboxShell" unique_id=1690741739 instance=ExtResource("4_15nnu")]
+transform = Transform3D(5, 0, 0, 0, 2.8, 0, 0, 0, 0.28, 0, 1.4, 2.5)
+
+[node name="ShellPart_006" type="Node3D" parent="WhiteboxShell" unique_id=102518748 instance=ExtResource("5_onvc2")]
+transform = Transform3D(0.28, 0, 0, 0, 2.8, 0, 0, 0, 1.4, -2.5, 1.4, -1.8)
+
+[node name="ShellPart_007" type="Node3D" parent="WhiteboxShell" unique_id=910388680 instance=ExtResource("5_onvc2")]
+transform = Transform3D(0.28, 0, 0, 0, 2.8, 0, 0, 0, 1.4, -2.5, 1.4, 1.8)
+
+[node name="ShellPart_008" type="Node3D" parent="WhiteboxShell" unique_id=407446144 instance=ExtResource("6_mt4is")]
+transform = Transform3D(0.3584, 0, 0, 0, 0.45, 0, 0, 0, 2.2, -2.5, 2.58, 0)
+
+[node name="ShellPart_009" type="Node3D" parent="WhiteboxShell" unique_id=973360734 instance=ExtResource("5_onvc2")]
+transform = Transform3D(0.28, 0, 0, 0, 2.8, 0, 0, 0, 1.4, 2.5, 1.4, -1.8)
+
+[node name="ShellPart_010" type="Node3D" parent="WhiteboxShell" unique_id=207976486 instance=ExtResource("5_onvc2")]
+transform = Transform3D(0.28, 0, 0, 0, 2.8, 0, 0, 0, 1.4, 2.5, 1.4, 1.8)
+
+[node name="ShellPart_011" type="Node3D" parent="WhiteboxShell" unique_id=1480125493 instance=ExtResource("6_mt4is")]
+transform = Transform3D(0.3584, 0, 0, 0, 0.45, 0, 0, 0, 2.2, 2.5, 2.58, 0)
+
+[node name="ShellPart_012" type="Node3D" parent="WhiteboxShell" unique_id=23069645 instance=ExtResource("7_hs7lo")]
+transform = Transform3D(0.42, 0, 0, 0, 2.9, 0, 0, 0, 0.42, -2.5, 1.45, -2.5)
+
+[node name="ShellPart_013" type="Node3D" parent="WhiteboxShell" unique_id=727568252 instance=ExtResource("7_hs7lo")]
+transform = Transform3D(0.42, 0, 0, 0, 2.9, 0, 0, 0, 0.42, 2.5, 1.45, -2.5)
+
+[node name="ShellPart_014" type="Node3D" parent="WhiteboxShell" unique_id=1260678485 instance=ExtResource("7_hs7lo")]
+transform = Transform3D(0.42, 0, 0, 0, 2.9, 0, 0, 0, 0.42, -2.5, 1.45, 2.5)
+
+[node name="ShellPart_015" type="Node3D" parent="WhiteboxShell" unique_id=1440230539 instance=ExtResource("7_hs7lo")]
+transform = Transform3D(0.42, 0, 0, 0, 2.9, 0, 0, 0, 0.42, 2.5, 1.45, 2.5)
+
+[node name="ArtComponents" type="Node3D" parent="." unique_id=1865239156]
+
+[node name="Lighting" type="Node3D" parent="." unique_id=1721504183]
+
+[node name="ConnectionPorts" type="Node3D" parent="." unique_id=844885294]

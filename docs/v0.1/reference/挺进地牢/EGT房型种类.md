@@ -177,12 +177,22 @@ AssertionError: REWARD/N2: 宽 3 格只有 1 槽，放不下 north 的 2 门
 - 二者都只服务验收与图集，**改它们不会改变游戏里看到的东西**。
 
 想让美术改动进游戏，唯一通道是场景工坊烘焙出的
-`room_instances/<level>/runtime_rooms/<template_id>_<复用键前12>.tscn`（见
-[2026-10-31 烘焙美术复用键](../development/2026-10-31_runtime_room_signature_fix.md)）。
+`room_instances/<level>/runtime_rooms/<template_id>_<复用键前12>_<原型指纹6>.tscn`（见
+[2026-10-31 烘焙美术复用键](../../development/2026-10-31_runtime_room_signature_fix.md)）。
 
-**关键约束**：美术层里**不含墙 / 门墙 / 过梁 / 地板 / 角柱** —— 那些是玩法几何，
+> **文件名的第三段是「原型指纹」，不是门位指纹**（2026-10-31 更正）。
+> 门位每局都变（`_shared_door_lane()` 几何求交），拿它当键等于美术只对一局有效 ——
+> 实测跨 5 个种子命中仅 1.4/17。现在第三段取 `archetype/window_mode/floor_mode/材质`
+> 的摘要，跨种子恒定。
+
+**关键约束**：默认规则下美术层**不含墙 / 门墙 / 过梁 / 地板 / 角柱** —— 那些是玩法几何，
 加载时被剥离、由运行时按本局端口重建。在工坊里拖动墙或地砖**不会进游戏**；
 能让改动跨局生效的是装饰、陈设、灯与材质。
+
+> **远征03 是唯一例外**：那套公馆的护墙/门墙/5m 地砖**就是美术主体**，剥掉等于把公馆做没了，
+> 所以 `ART_LAYER_STRUCTURE_ALLOWLIST` 放行了 `manor_*`。但它的**摆位仍由运行时按本局门位重算**
+> （`DungeonRoom3D._rebuild_manor_shell()` + `ManorShellPlan`）—— 烘焙文件里的结构件会被删掉重建，
+> 所以"美术做一次、所有局生效"成立，而"工坊里拖墙生效"在远征03 同样不成立。
 
 非矩形轮廓是 ShellStorm2 自己的设计（远征01/02 已接入），EGT 的房间本身是矩形 ——
 所以两套并存，不合并。

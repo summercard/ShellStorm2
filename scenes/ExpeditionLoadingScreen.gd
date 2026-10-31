@@ -31,6 +31,9 @@ const TOTAL_DURATION_S := 1.35
 ## 真实运行时读取页的最低可见时长。即使资源与地图装配提前完成，
 ## 也要让黑底、兔子、进度条和完整开圈过场至少稳定展示 2 秒。
 const MIN_LOADING_SCREEN_SECONDS := 2.0
+## 战斗特效预热的最多等待帧数。见 `_drain_vfx_prewarm()`：队列只有 8 个，
+## 这个上限只是防止队列异常把玩家锁在加载页里。
+const VFX_PREWARM_MAX_FRAMES := 48
 const STEP_TEXTS: Array[String] = [
 	"正在同步远征情报…",
 	"正在规划房间序列…",
@@ -419,6 +422,28 @@ func _wait_for_basic_scene_ready(target: Node) -> void:
 			return
 
 
+## 在加载页背后把「进关卡后第一次打中 / 第一刀」会用到的那批特效各真画一次。
+##
+## 见 `VfxPool3D.prewarm()` 的实测表：首次绘制 20~65 ms，第二次 0.4 ms。
+## 这段差价不挪走就会落进玩家的第一枪里。
+##
+## 上限 `VFX_PREWARM_MAX_FRAMES` 是硬保险：队列只有 8 个，正常 8 帧排空；
+## 一旦相机缺失或队列异常，绝不能把玩家锁在加载页等一个永不结束的循环。
+func _drain_vfx_prewarm() -> void:
+	if VfxPool == null or not VfxPool.has_method("prewarm"):
+		return
+	# headless 里没有渲染管线可预热，而测试会断言特效池的**绝对**计数
+	# （`verify_3d_melee_feedback_flow` 就查 `active_count(...) != 1`）——
+	# 在那边插 8 个预热实例只会制造假红。
+	if _should_skip_delay():
+		return
+	VfxPool.prewarm(VfxPool3D.COMBAT_PREWARM)
+	var frames := 0
+	while VfxPool.has_pending_prewarm() and frames < VFX_PREWARM_MAX_FRAMES:
+		await get_tree().process_frame
+		frames += 1
+
+
 func _finish_loaded_scene(target: Node) -> void:
 	var tree: SceneTree = get_tree()
 	var settle_frames: int = 2 if _requires_loading_scene_ready_contract else 0
@@ -463,6 +488,13 @@ func _finish_loaded_scene(target: Node) -> void:
 	if target.has_method("prepare_loading_render"):
 		target.call("prepare_loading_render")
 	_restore_world_render()
+	# 战斗反馈特效的「首次绘制」管线也在这里编译掉。
+	#
+	# 为什么必须做：`VFX-IMPACT-3D` 第一次借出要 **65 ms**（`VFX-MELEE-IMPACT-3D` 33 ms、
+	# `VFX-MELEE-SLASH-3D` 21 ms），第二次只要 0.4 ms —— 差价是首次绘制时的管线编译。
+	# 不挪走的话，玩家进关卡打出的**第一枪**就要顿一下。
+	# 逐帧预热（`VfxPool3D.prewarm()` 的队列）而不是一次做完，避免这里出现 120 ms 硬冻结。
+	_drain_vfx_prewarm()
 	await _wait_for_basic_scene_ready(target)
 	if tree.current_scene != target or not _target_is_ready(target):
 		_finalizing = false

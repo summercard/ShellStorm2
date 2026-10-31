@@ -3,6 +3,10 @@ extends RefCounted
 ## Shared identity for a generated room and its editable local-space art scene.
 const SCHEMA := "shellstorm2.runtime_room_art.v1"
 
+## 公馆壳体配方（原型表 + 逐格摆位）。复用键与运行时建壳都从这里取，
+## 保证「烘焙器算的」与「游戏里建的」是同一套结果。
+const MANOR_PLAN := preload("res://src/world3d/ManorShellPlan.gd")
+
 static func supports(room: Node3D) -> bool:
 	if bool(room.get("tower_module_shell")) or str(room.get("static_layout_scene_path")).is_empty():
 		return false
@@ -54,12 +58,20 @@ static func describe(room: Node3D) -> Dictionary:
 			type_id.to_lower() if not type_id.is_empty() else "room",
 			int(round(dimensions.x)), int(round(dimensions.y)),
 		]
+	# 空间原型：由 `(room_type, 短边尺寸)` 纯函数算出，**跨种子稳定**。
+	# 2026-10-31 起它取代门位成为复用键的第二个维度 —— 门位每局都变，
+	# 拿它做键等于"美术只对烘那一刻的那一局有效"（实测跨 5 种子命中 1.4/17）。
+	var style := MANOR_PLAN.style_for(room, dimensions)
 	return {
 		"signature": JSON.stringify(geometry, "", true).sha256_text(),
 		"geometry": geometry,
 		"room_id": str(room.get("room_id")),
 		"template_id": template_id,
 		"portal_fingerprint": _portal_fingerprint(room),
+		# 只在诊断/日志里用；**不进文件名**（见 `art_path()`）。
+		"style": style,
+		"style_label": MANOR_PLAN.style_label(style),
+		"style_fingerprint": MANOR_PLAN.style_fingerprint(style),
 		"size_m": [dimensions.x, dimensions.y],
 	}
 
@@ -94,11 +106,22 @@ static func _portal_fingerprint(room: Node3D) -> String:
 		return ""
 	return ",".join(parts).sha256_text().substr(0, 6)
 
-## 美术文件名 = `<template_id>_<签名前12>[_<门位指纹前6>].tscn`。
+## 美术文件名 = `<template_id>_<签名前12>_<原型指纹6>.tscn`。
 ##
 ## 前缀用**模板 id** 而不是 room_id：工坊里一眼能看出"这是 std_25x25 的美术"，
 ## 也不会因为每局房间 id 不同（注入房 `secret_room_inj1`、走廊 `cr00_entry_n01`）
 ## 而散成一堆只差前缀的重复文件。
+##
+## ## 2026-10-31 变更：第三段从「门位指纹」换成「原型指纹」
+##
+## 旧文件名是 `<template>_<签名前12>_<门位指纹前6>`。门位是几何求交的产物
+## （`TowerDescent3D._shared_door_lane()`），**每局都不同** —— 于是同一份美术
+## 隔一局就认不出来。实测跨 5 个种子，按门位命中只有 **1.4/17**；
+## 业主那局（种子 3893044740）17 间房只有 3 间加载了公馆美术，其余是白盒。
+##
+## 换成原型指纹后实测命中 **15.8/17**：原型是 `(room_type, 短边)` 的纯函数，
+## 跨种子恒定。墙体与地砖改由 `ManorShellPlan` 在运行时按**本局门位**生成，
+## 所以美术做一次，所有局都生效。
 static func art_path(base_static_path: String, descriptor: Dictionary) -> String:
 	if base_static_path.is_empty() or descriptor.is_empty():
 		return ""
@@ -107,9 +130,9 @@ static func art_path(base_static_path: String, descriptor: Dictionary) -> String
 	if template_id.is_empty():
 		return ""
 	var stem := "%s_%s" % [template_id, str(descriptor["signature"]).substr(0, 12)]
-	var portal := str(descriptor.get("portal_fingerprint", ""))
-	if not portal.is_empty():
-		stem = "%s_%s" % [stem, portal]
+	var fingerprint := str(descriptor.get("style_fingerprint", ""))
+	if not fingerprint.is_empty():
+		stem = "%s_%s" % [stem, fingerprint]
 	return base_static_path.get_base_dir().path_join("runtime_rooms/%s.tscn" % stem)
 
 static func matching_path(room: Node3D, base_static_path: String) -> String:

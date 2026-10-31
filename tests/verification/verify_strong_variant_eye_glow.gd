@@ -475,7 +475,12 @@ func _check_fat_basecolor() -> void:
 	for mesh in visual._meshes:
 		for surface in mesh.mesh.get_surface_count():
 			var material := mesh.get_active_material(surface) as StandardMaterial3D
-			_expect(material != null and not material.emission_enabled, "fat body must not emit in idle")
+			# 判「不发亮」用能量，不用 `emission_enabled`：开关只是 shader 变体，
+			# 常开 + 能量 0 同样是"不发光"，而常开才省掉每次受击翻转的管线重建。
+			_expect(
+				material != null and is_zero_approx(material.emission_energy_multiplier),
+				"fat body must not emit in idle"
+			)
 			if material == null or material.albedo_texture == null:
 				continue
 			var imported := material.albedo_texture.get_image()

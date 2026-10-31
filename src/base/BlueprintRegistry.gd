@@ -44,15 +44,16 @@ var _registry: Dictionary = {
 ## `verify_starting_weapon_contract` 的 `_check_retired_factory_guns()` 里盯着。
 const DEFAULT_STARTING_GUN_ID := "bp_pistol"
 
-## 《挺进地牢》的「单位」不是本作的「米」。
+## 豌豆手枪的弹速目标（米/秒）。**业主 2026-10-31 直接指定 15 m/s**，不再由
+## 《挺进地牢》口径推算，所以这里写死米数、由它除基准 23 得到枪身倍率。
 ##
-## 原作玩家移速 6.5 单位/秒（`第一层怪物数据表.md §8.1` 记的反编译量级），本作玩家 4.5 m/s
-## （`Player3D.SPEED`）⇒ **1 原作单位 = 4.5 / 6.5 ≈ 0.6923 m**。
-## 跨作换算如果直接把原作数字当 m/s 抄，就会整体快 44%（25 抄成 25 m/s，实际应对应 17.3 m/s）。
-## 这正是「按 Shot Speed 25 一比一抄完，手感还是偏快」的根因。
-const EGT_UNIT_TO_METER := 4.5 / 6.5
-## 陆战队员军用佩枪 `Marine Sidearm` 的 Shot Speed（参考页 §2）。
-const PISTOL_EGT_SHOT_SPEED := 25.0
+## 历史（别重复踩）：2026-10-30 先按 `Marine Sidearm` Shot Speed 25 直接当 25 m/s，
+## 业主说「偏快」；后来发现原作单位不是米（原作玩家 6.5 单位/秒 vs 本作 4.5 m/s
+## ⇒ 1 单位 ≈ 0.6923 m），换算成 17.31 m/s；2026-10-31 业主再点名 15 m/s。
+## 三段数字的换算过程记在 `docs/v0.1/reference/挺进地牢/初始手枪数据.md` §4。
+const PISTOL_BULLET_SPEED_MPS := 15.0
+## 弹速基准：枪身/弹种倍率都乘在它上面（`WeaponModel3D._configure_common_stats`）。
+const BULLET_SPEED_BASE_MPS := 23.0
 
 ## PUBG式统一槽位框架：界面位置固定，枪型只声明开放的槽位子集。
 const ROOT_ATTACHMENT_SUPPORT := {
@@ -505,16 +506,15 @@ func is_unlocked(item_id: String) -> bool:
 ## 豌豆手枪 —— 2026-10-30 起**同时是出厂枪**。
 ##
 ## 对标对象是**陆战队员的军用佩枪 `Marine Sidearm`**（Magazine 10 / Shot Speed 25 /
-## Damage 5 / 0.25 s 每发 / 换弹 1.2 s）。本作落地的只有业主点名的三项：
-##   · `magazine_size` 12 → **10**（当天上午第一轮）
-##   · 弹速 → **17.31 m/s**（当天晚上第二轮：原先把 25 直接当 m/s 是错的，见下）
+## Damage 5 / 0.25 s 每发 / 换弹 1.2 s）。本作落地的只有业主点名的项目：
+##   · `magazine_size` 12 → **10**（2026-10-30）
+##   · 弹速 → **15 m/s**（2026-10-31 业主第三轮：跳过跨作换算，直接点名米数）
+##   · `fire_rate` 3.5 → **1.2 发/秒**、`reload_time` 1.5 → **1.8 s**（2026-10-31 同批）
 ##   · 弹体视觉 ×2（业主：「出去那个特效大小，就那个模型帮我放大一倍」；
 ##     落在 `WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG["pistol"]`，**判定半径不动**）
 ##
 ## 弹速公式：`弹速 = 23 × 枪身倍率 × 弹种倍率 × 命运倍率`，所以枪身只声明**倍率**：
-##   `PISTOL_EGT_SHOT_SPEED × EGT_UNIT_TO_METER / 23` = 25 × 0.6923 / 23 ≈ **0.7525**
-## 乘出来 = 17.31 m/s。上一轮写的是 `25/23`（直接拿 25 当 m/s）—— 那等于把原作的
-## 「单位」当成了「米」，整体快 44%，业主上手说「还是偏快」就是在说这件事。
+## 15 / 23 ≈ **0.6522**，挂上标准弹（倍率 1.0）后仍是 15 m/s。
 ##
 ## 枪身倍率与弹种倍率是**相乘**（`AssemblyNode._combine_stats`），否则挂上标准弹
 ## （倍率 1.0）会把枪身值覆盖掉——这条以前没人踩过，因为枪身从不声明弹速。
@@ -522,9 +522,9 @@ func _create_gunbody_pistol() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Pistol")
 	node.tags = ["pistol", "semi_auto", "sidearm"]
 	node.set_base_stats({
-		"damage": 25, "fire_rate": 3.5, "bullet_count": 1, "range": 15,
-		"spread": 0.03, "reload_time": 1.5, "magazine_size": 10,
-		"bullet_speed": PISTOL_EGT_SHOT_SPEED * EGT_UNIT_TO_METER / 23.0,
+		"damage": 25, "fire_rate": 1.2, "bullet_count": 1, "range": 15,
+		"spread": 0.03, "reload_time": 1.8, "magazine_size": 10,
+		"bullet_speed": PISTOL_BULLET_SPEED_MPS / BULLET_SPEED_BASE_MPS,
 	})
 	return node
 

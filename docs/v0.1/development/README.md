@@ -34,6 +34,8 @@
 
 - [EGT 式小地图完整复刻](2026-10-28_egt_minimap_replication.md)：右上角小地图由圆形雷达改为矩形拼图（固定缩放、地图不动、门洞断开、房型图标、洋红问号），并留三档显示模式接口。
 
+- [右上角小地图撤掉点击热区，只保留键 M](2026-10-31_minimap_click_hotzone_removed.md)：业主指出鼠标点右上角会开小地图（应与 M 键等效），要求只留快捷键。删掉 `DungeonMinimap3D` 上的 `MOUSE_FILTER_STOP` + tooltip + `gui_input` 连接（及已无引用的 `_on_radar_gui_input`），小地图回到类默认 `IGNORE` 纯展示、鼠标事件穿透回战斗；键 M 走 `_unhandled_input` 的 `toggle_floor_map`，未受影响。
+
 - [场景工坊r6：实际关卡房间与回接](2026-10-29_scene_builder_runtime_source.md)：修正静态参考与运行白盒不一致，从真实生成房间编辑并保存回接。
 
 - [场景工坊r5：布局与完整打开流程](2026-10-29_scene_builder_workbench.md)：场景优先、顶部模式按钮、大预览、后台读取反馈/取消/重试、旧UI自动重建，完整流程在原生编辑器验收。

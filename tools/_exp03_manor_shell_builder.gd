@@ -43,6 +43,10 @@ extends Node
 
 const SCENE: PackedScene = preload("res://scenes/ExpeditionLevel03_3D.tscn")
 const CONTRACT := preload("res://src/world3d/RuntimeRoomArtSource.gd")
+## 原型表与逐格摆位的**唯一真源**。烘焙器不再自己维护一份 ——
+## 两份表只要漂一格，烘焙文件名（用这里的指纹）就和运行时（用同一份）
+## 对不上，表现是"刚烘焙完还是白盒"。
+const MANOR_PLAN := preload("res://src/world3d/ManorShellPlan.gd")
 const MANOR := "res://assets/art/environments/tower_zones/expedition/runtime/common_components"
 
 const WALL := MANOR + "/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn"
@@ -70,28 +74,8 @@ const SEED := 77003244
 ##
 ## `max_short_side`：房间短边不超过这个值时用"小"档（更暗、更封闭）。
 ## 这样同一房型的不同尺寸会自然分档，不需要为每间房写一条。
-const ARCHETYPES := {
-	"COMBAT": {
-		"small": {"floor": "full", "mat": FLOOR_STONE, "windows": "blind", "note": "逼仄空厅"},
-		"mid": {"floor": "full", "mat": FLOOR_STONE, "windows": "pair", "note": "中庭回廊"},
-		"large": {"floor": "full", "mat": FLOOR_STONE, "windows": "double_pair", "note": "大回廊"},
-		"max_short_side": {"small": 25.0, "mid": 30.0},
-	},
-	"BOSS": {"floor": "wood_ring", "mat": FLOOR_WOOD, "ring": FLOOR_STONE, "windows": "blind", "note": "王座间"},
-	"TRAP": {"floor": "full", "mat": FLOOR_STONE, "windows": "blind", "note": "陷阱厅"},
-	"UPGRADE": {"floor": "full", "mat": FLOOR_WOOD, "windows": "pair", "note": "更衣前厅"},
-	"MERCHANT": {"floor": "full", "mat": FLOOR_WOOD, "windows": "pair", "note": "铺面"},
-	"EVENT": {"floor": "full", "mat": FLOOR_WOOD, "windows": "single_side", "note": "陈列室"},
-	"SCAVENGE": {"floor": "stone_ring", "mat": FLOOR_WOOD, "ring": FLOOR_STONE, "windows": "pair", "note": "操作间"},
-	"EXTRACTION": {"floor": "full", "mat": FLOOR_WOOD, "windows": "blind", "note": "撤离舱"},
-	"SAFE_ROOM": {"floor": "full", "mat": FLOOR_WOOD, "windows": "blind", "note": "安全屋"},
-	"STAIR_LOBBY": {"floor": "full", "mat": FLOOR_WOOD, "windows": "blind", "note": "楼梯厅"},
-}
-
-## 枢纽：虽然 room_type 是 COMBAT，但多门交汇要"大堂"气质 —— 单独一条，
-## 与同尺寸的普通战斗房（n07，45×40）必须一眼分开。
-## 手段是地板分区（石沿廊 + 木中庭）+ 通窗，两处同时不同。
-const HUB_IDS := ["hub_01", "hub_02"]
+## 原型表已迁到 `src/world3d/ManorShellPlan.gd`（运行时与烘焙器共用）。
+## **不要在这里重新加一份** —— 两份只要漂一格，文件名与运行时期望就对不上。
 
 var _failures: Array[String] = []
 var _written: Array[String] = []
@@ -99,13 +83,42 @@ var _written: Array[String] = []
 
 func _ready() -> void:
 	var tower := await _spawn()
+	var only := ""
+	var sweep := false
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--only="):
+			only = arg.substr(7)
+		elif arg == "--sweep":
+			sweep = true
+	if sweep:
+		tower.queue_free()
+		await get_tree().process_frame
+		await _sweep_all_archetypes()
+		return
 	var rooms: Array = []
 	for value in tower.get("_rooms") as Array:
 		var room := value as DungeonRoom3D
-		if room == null or not room.procedural_shell:
+		if room == null:
 			continue
 		# 走廊连接器不铺：它们是通行管道，不是可停留的房间。
 		if room.room_id.begins_with("cr") or room.room_id.begins_with("conn_"):
+			continue
+		# **不再按 `procedural_shell` 过滤**：安全房（start）走的是
+		# `procedural_shell=false` 分支 —— 那份静态场景会被「整个照常使用」，
+		# 所以给它铺一份纯公馆件同样有效，而且正是工坊里要打开来编辑的那份。
+		# 判据换成 `CONTRACT.supports()`：有门位声明 + 有静态布局，就能铺。
+		# 铺装条件：有静态布局可写 + 不是 5m 模块壳房间。
+		#
+		# **不用 `CONTRACT.supports()`**：那条判据要求 `connection_ports` 里带
+		# `door_width_m`，而运行时注入房（`*_inj1/2`、`reward_*`）的端口由注入器
+		# 现场造，实测拿不到该字段 —— 用它过滤会把注入房整批漏掉，于是
+		# `storage_*` / `trap_25x25` 这些只在注入房里出现的模板永远烘不出美术。
+		if not CONTRACT.supports(room):
+			if str(room.get("static_layout_scene_path")).is_empty():
+				continue
+			if bool(room.get("tower_module_shell")):
+				continue
+		if not only.is_empty() and room.room_id != only:
 			continue
 		rooms.append(room)
 	rooms.sort_custom(func(a, b): return str(a.room_id) < str(b.room_id))
@@ -137,7 +150,7 @@ func _build(room: DungeonRoom3D) -> void:
 	if cols <= 0 or rows <= 0:
 		_fail("%s: 尺寸 %.1fx%.1f 不是 5m 整数倍" % [room.room_id, dim.x, dim.y])
 		return
-	var style := _style_for(room, dim)
+	var style := MANOR_PLAN.style_for(room, dim)
 
 	var canvas := Node3D.new()
 	canvas.name = "Room_" + room.room_id
@@ -190,29 +203,8 @@ func _build(room: DungeonRoom3D) -> void:
 			int(door_map.get("_door_count", 0))])
 
 
-## 按「房型 + 短边」取原型。短边分档而不是长边：房间的"压迫感"取决于
-## 最窄那一维 —— 10m 宽的房间不管多长都逼仄。
-func _style_for(room: DungeonRoom3D, dim: Vector2) -> Dictionary:
-	for hub in HUB_IDS:
-		if room.room_id == hub:
-			return {
-				"floor": "stone_ring", "mat": FLOOR_WOOD, "ring": FLOOR_STONE,
-				"windows": "clerestory", "note": "大堂",
-			}
-	var type_id := str(room.room_type)
-	var entry: Variant = ARCHETYPES.get(type_id)
-	if entry is Dictionary and (entry as Dictionary).has("small"):
-		var short_side := minf(dim.x, dim.y)
-		var tiers: Dictionary = entry["max_short_side"]
-		if short_side <= float(tiers["small"]):
-			return (entry["small"] as Dictionary).duplicate()
-		if short_side <= float(tiers["mid"]):
-			return (entry["mid"] as Dictionary).duplicate()
-		return (entry["large"] as Dictionary).duplicate()
-	if entry is Dictionary:
-		return (entry as Dictionary).duplicate()
-	# 未知房型按"安全侧"处理：暖木有窗，至少不难看。
-	return {"floor": "full", "mat": FLOOR_WOOD, "windows": "pair", "note": "未登记房型"}
+## 按「房型 + 短边」取原型 —— **已迁到 `ManorShellPlan.style_for()`**。
+## 这里只保留一个转发，避免调用点判断两套名字。
 
 
 ## 把每个 side 上的门位换成「第几格」。
@@ -458,10 +450,10 @@ func _add(prefab_path: String, parent: Node3D, canvas: Node3D, position: Vector3
 	instance.owner = canvas
 
 
-func _spawn() -> Node:
+func _spawn(seed_override: int = -1) -> Node:
 	var tower := SCENE.instantiate()
 	tower.set("test_mode", true)
-	tower.set("run_seed_override", SEED)
+	tower.set("run_seed_override", SEED if seed_override < 0 else seed_override)
 	add_child(tower)
 	for _frame in 20:
 		await get_tree().process_frame
@@ -474,6 +466,68 @@ func _spawn() -> Node:
 	for _frame in 3:
 		await get_tree().process_frame
 	return tower
+
+
+## 跨种子补齐：把所有 flow 模板下出现过的「原型组合」各铺一份。
+##
+## ## 为什么需要它
+##
+## 单种子只能看到那一条 flow 骨架抽到的房型。实测 24 个种子并集里还有
+## `storage_25x25` / `storage_40x30` / `trap_25x25` / `scavenge_25x25` / `event_25x25`
+## 五个模板从未被烘焙过 —— 玩家抽到就是白盒。这里把 24 个种子扫一遍，
+## 每个 `(模板, 签名, 原型指纹)` 只铺一次（同键后写会覆盖前写，没有意义）。
+##
+## 门位由运行时按本局重算，所以"用哪个种子的门位烘焙"不影响最终画面。
+const SWEEP_SEEDS := [
+	77003244, 100990, 42, 123456, 7, 99, 2026, 31415, 55555, 808080,
+	9173, 6060, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13,
+]
+
+
+func _sweep_all_archetypes() -> void:
+	var seen := {}
+	var unknown_types := {}
+	for seed_value in SWEEP_SEEDS:
+		var tower := await _spawn(seed_value)
+		for value in tower.get("_rooms") as Array:
+			var room := value as DungeonRoom3D
+			if room == null:
+				continue
+			if room.room_id.begins_with("cr") or room.room_id.begins_with("conn_"):
+				continue
+			if str(room.get("static_layout_scene_path")).is_empty():
+				continue
+			if bool(room.get("tower_module_shell")):
+				continue
+			var d := CONTRACT.describe(room)
+			var style: Dictionary = d.get("style", {})
+			if str(style.get("note", "")) == "未登记原型":
+				unknown_types[str(room.room_type)] = true
+			var key := "%s|%s|%s" % [
+				str(d.get("template_id", "")),
+				str(d.get("signature", "")).substr(0, 12),
+				str(d.get("style_fingerprint", "")),
+			]
+			if seen.has(key):
+				continue
+			seen[key] = seed_value
+			_build(room)
+		tower.queue_free()
+		await get_tree().process_frame
+		await get_tree().process_frame
+	print("SWEEP_SEEDS %d  SWEEP_KEYS %d" % [SWEEP_SEEDS.size(), seen.size()])
+	if not unknown_types.is_empty():
+		var names: Array[String] = []
+		for key in unknown_types.keys():
+			names.append(str(key))
+		names.sort()
+		push_warning("ARCHETYPES 未登记这些 room_type，已按中性原型烘焙：%s" % ", ".join(names))
+		print("SWEEP_UNKNOWN_TYPES %s" % ", ".join(names))
+	print("BUILD_WRITTEN %d" % _written.size())
+	print("BUILD_%s failures=%d" % ["OK" if _failures.is_empty() else "FAILED", _failures.size()])
+	for reason in _failures:
+		printerr("BUILD_FAIL ", reason)
+	get_tree().quit(0 if _failures.is_empty() else 1)
 
 
 func _fail(message: String) -> void:

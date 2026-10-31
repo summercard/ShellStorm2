@@ -30,7 +30,11 @@ const EXPECTED_PRICE := 70
 ## 「白送实例」与「掉落实例」两套口径，属单独一项设计决定。
 const EXPECTED_FATE_SLOTS := 8
 const EXPECTED_DAMAGE := 25
-const EXPECTED_FIRE_RATE := 3.5
+## 2026-10-31 业主：「射速改成 1.2 发/秒」。原 3.5 发/秒（0.286 s 一发）对手枪太快，
+## 这把枪现在是节奏慢、单发重的定位。
+const EXPECTED_FIRE_RATE := 1.2
+## 2026-10-31 业主：「换弹改成 1.8 秒」。原 1.5 s。
+const EXPECTED_RELOAD_TIME := 1.8
 const EXPECTED_MAGAZINE := 10
 ## 出厂树挂的子弹必须是标准弹。
 ##
@@ -71,25 +75,22 @@ const EXPECTED_RANGES := {
 	"bp_starter_rifle": 20.0,
 }
 
-## 豌豆手枪的弹匣与弹速（2026-10-30 业主指令：对齐《挺进地牢》陆战队员的军用佩枪
-## `Marine Sidearm`，Magazine 10 / Shot Speed 25）。
+## 豌豆手枪的弹匣与弹速/射速/换弹。
 ##
-## 弹速在数据里是**倍率**（1.0 = 23 m/s，23 就是原作的 Shot Speed 23），所以这里
-## 同时钉三样：① 枪身声明的倍率；② 乘出来的 m/s；③ 挂上标准弹之后**仍然是** 25 m/s
-## —— 第三层是防回归的关键：`_combine_stats` 旧实现里子弹节点会**覆盖**枪身的
-## `bullet_speed`，那时枪身写多少都会被标准弹的 1.0 冲掉，而数值检查和效果看起来都"正常"。
-## ⚠ 2026-10-30 晚第二轮：上一轮把 `Marine Sidearm` 的 Shot Speed 25 **直接当 m/s** 写进
-## `bullet_speed = 25/23`，业主上手仍说「偏快」——因为原作单位不是米：
-## 原作玩家 6.5 单位/秒、本作玩家 4.5 m/s ⇒ **1 原作单位 = 4.5/6.5 ≈ 0.6923 m**。
-## 弹速目标因此是 `25 × 0.6923 = 17.31 m/s`，倍率 = `17.31 / 23 ≈ 0.7525`。
-## 本文件同时钉三层：① 枪身声明的倍率；② 乘出来的 m/s；③ 挂标准弹后仍是这个数
-## （第三层防的是 `_combine_stats` 里子弹节点覆盖枪身倍率那条老坑）。
+## 弹速在数据里是**倍率**（1.0 = 23 m/s），所以这里同时钉三样：① 枪身声明的倍率；
+## ② 乘出来的 m/s；③ 挂上标准弹之后**仍然是**同一 m/s —— 第三层是防回归的关键：
+## `_combine_stats` 旧实现里子弹节点会**覆盖**枪身的 `bullet_speed`，那时枪身写多少
+## 都会被标准弹的 1.0 冲掉，而数值检查和效果看起来都"正常"。
+## ⚠ 口径沿革（别把历史数字当现行值）：
+##   · 2026-10-30 上午：`Shot Speed 25` 直接当 25 m/s → 业主说偏快。
+##   · 2026-10-30 晚：发现原作单位不是米（原作玩家 6.5 单位/秒 vs 本作 4.5 m/s
+##     ⇒ 1 单位 ≈ 0.6923 m），换算成 **17.31 m/s**（倍率 0.7525）。
+##   · 2026-10-31：业主直接点名 **15 m/s**（倍率 15/23 ≈ 0.6522），不再走跨作换算。
+## 射速 1.2 发/秒、换弹 1.8 s 同在 2026-10-31 定。
 const PISTOL_ASSEMBLY_ID := "bp_pistol"
 const PISTOL_MAGAZINE := 10
 const BULLET_SPEED_BASE_MPS := 23.0
-const EGT_UNIT_TO_METER := 4.5 / 6.5
-const EGT_MARINE_SHOT_SPEED := 25.0
-const PISTOL_BULLET_SPEED_MPS := EGT_MARINE_SHOT_SPEED * EGT_UNIT_TO_METER
+const PISTOL_BULLET_SPEED_MPS := 15.0
 const PISTOL_BULLET_SPEED_MULTIPLIER := PISTOL_BULLET_SPEED_MPS / BULLET_SPEED_BASE_MPS
 
 var _probe_completed := false
@@ -358,7 +359,7 @@ func _check_range_plumbing(failures: Array[String]) -> void:
 	projectile.queue_free()
 
 
-## ③ 豌豆手枪的弹匣与弹速：数据层、装配树层、武器模型层三处都要是 10 发 / 25 m/s。
+## ③ 豌豆手枪的弹匣/弹速/换弹：数据层、装配树层、武器模型层三处都要对得上。
 ## 只核数据层会漏掉「枪身倍率被子弹节点覆盖」这种静默失效。
 func _check_pistol_egt_baseline(failures: Array[String]) -> void:
 	var node := BlueprintRegistry.create_assembly_node(PISTOL_ASSEMBLY_ID)
@@ -371,10 +372,16 @@ func _check_pistol_egt_baseline(failures: Array[String]) -> void:
 			"豌豆手枪的弹匣是 %d，期望 %d（对标《挺进地牢》军用佩枪 Magazine 10）"
 			% [int(stats.get("magazine_size", -1)), PISTOL_MAGAZINE]
 		)
+	var reload := float(stats.get("reload_time", -1.0))
+	if absf(reload - EXPECTED_RELOAD_TIME) > 0.001:
+		failures.append(
+			"豌豆手枪的换弹是 %.2f s，期望 %.2f s（2026-10-31 业主定值）"
+			% [reload, EXPECTED_RELOAD_TIME]
+		)
 	var multiplier := float(stats.get("bullet_speed", 1.0))
 	if not is_equal_approx(multiplier, PISTOL_BULLET_SPEED_MULTIPLIER):
 		failures.append(
-			"豌豆手枪的枪身弹速倍率是 %.4f，期望 %.4f（= 25/23）"
+			"豌豆手枪的枪身弹速倍率是 %.4f，期望 %.4f（= 15/23）"
 			% [multiplier, PISTOL_BULLET_SPEED_MULTIPLIER]
 		)
 	node.free()
@@ -410,6 +417,16 @@ func _check_pistol_egt_baseline(failures: Array[String]) -> void:
 			failures.append(
 				"豌豆手枪的 WeaponModel3D.magazine_size 是 %d，期望 %d"
 				% [model.magazine_size, PISTOL_MAGAZINE]
+			)
+		if absf(model.reload_time - EXPECTED_RELOAD_TIME) > 0.001:
+			failures.append(
+				"豌豆手枪的 WeaponModel3D.reload_time 是 %.2f s，期望 %.2f s"
+				% [model.reload_time, EXPECTED_RELOAD_TIME]
+			)
+		if absf(model.fire_rate - EXPECTED_FIRE_RATE) > 0.001:
+			failures.append(
+				"豌豆手枪的 WeaponModel3D.fire_rate 是 %.2f 发/秒，期望 %.2f 发/秒"
+				% [model.fire_rate, EXPECTED_FIRE_RATE]
 			)
 	remove_child(model)
 	model.free()

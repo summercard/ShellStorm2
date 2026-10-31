@@ -1992,10 +1992,11 @@ func _build_reference_main_hud() -> void:
 	# 业主直接标了红框要求缩小。这个盒是**上限**，楼层更方时会自动填满（缩放按盒夹紧）。
 	_anchor_control(minimap, 1.0, 0.0, 1.0, 0.0, -398, 50, -16, 315)
 	minimap.visible = true
-	# tap 小地图 → 切换全层地图（键 M 等效）
-	minimap.mouse_filter = Control.MOUSE_FILTER_STOP
-	minimap.tooltip_text = "点击打开/关闭全层地图 [键 M]"
-	minimap.gui_input.connect(_on_radar_gui_input.bind(minimap))
+	# 2026-10-31 业主指令：**撤掉右上小地图的点击热区**，打开/关闭全层地图只保留键 M。
+	# 原先这里挂 MOUSE_FILTER_STOP + tooltip + gui_input，鼠标划过右上角会被小地图吃掉，
+	# 战斗中贴边瞄准时误触就弹出全图。现在小地图纯展示：不接管鼠标、无 tooltip、无点击回调，
+	# 鼠标事件穿透回战斗（`DungeonMinimap3D._ready()` 本身就把 mouse_filter 设成 IGNORE，
+	# 这里不再覆写即恢复该默认）。键 M 走 `_unhandled_input` 的 toggle_floor_map，未受影响。
 	_hud_floor_label = _make_hud_label("高塔外层", 15, Color(0.90, 0.94, 0.96))
 	_hud_floor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_anchor_control(_hud_floor_label, 1.0, 0.0, 1.0, 0.0, -300, 12, -12, 38)
@@ -2224,14 +2225,6 @@ func _is_panel_press(event: InputEvent) -> bool:
 		var st := event as InputEventScreenTouch
 		return st.pressed
 	return false
-
-func _on_radar_gui_input(event: InputEvent, panel: Control) -> void:
-	# tap 右上小地图 = M 键
-	if not _is_panel_press(event):
-		return
-	_toggle_full_map()
-	_flash_action_key(panel)
-	get_viewport().set_input_as_handled()
 
 func _on_player_status_gui_input(event: InputEvent, panel: PanelContainer) -> void:
 	# tap 头像面板 = I / Tab 键

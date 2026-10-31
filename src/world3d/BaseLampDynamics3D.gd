@@ -153,6 +153,9 @@ var _events_active := 0
 var _last_event_start := -1000.0
 var _needs_resync := true
 var _was_active := false
+## self_owned 面（显示器屏幕）的开关**授权**状态。材质上的 `emission_enabled` 常开，
+## 不再拿它当状态（shader 变体，翻转 +100ms/次，见 `_set_self_owned_emission`）。
+var _self_owned_allowed := true
 var _missing: Array[String] = []
 ## 自带随机源，不用全局 randf()。
 ## 理由：全局 RNG 会被别的系统消耗，导致「同一时刻进基地」的节奏每次都不同，
@@ -326,18 +329,16 @@ func get_managed_base_energies() -> Array[float]:
 	return out
 
 
-## self_owned 的屏幕面在关灯态必须 emission_enabled=false（否则关灯后屏幕还亮）。
+## self_owned 的屏幕面在关灯态必须**不亮**。
+##
+## ⚠ 这里的「亮」是**授权状态**，不是材质上的某个值：屏幕的常态能量本来就是 0
+## （`_update_channel` 会把 factor 压到 0，只在事件里闪一下），所以不能拿
+## `emission_energy_multiplier > 0` 当判据。也不能再拿 `emission_enabled` 当判据 ——
+## 那个开关是 shader 变体（USE_EMISSION），每翻一次要重建 GPU 管线，实测 +100ms/次
+## （见 `tools/_material_variant_cost_probe.gd`），而按一下基地灯开关会逐面翻它。
+## ⇒ 材质上的开关**常开**，开关语义记在 `_self_owned_allowed` 里。
 func are_self_owned_lit() -> bool:
-	for key in _channels:
-		var channel := _channels[key] as Channel
-		for slot in channel.slots:
-			if not slot.self_owned:
-				continue
-			if slot.material == null or not is_instance_valid(slot.material):
-				continue
-			if slot.material.emission_enabled:
-				return true
-	return false
+	return _self_owned_allowed
 
 
 
@@ -464,7 +465,11 @@ func _apply() -> void:
 
 
 ## self_owned 的面不在 BaseFixtureGlow3D 的受控表里，开关状态要自己跟。
+##
+## ⚠ 不翻 `emission_enabled`（shader 变体，+100ms/次）：材质创建时就把它置 true，
+## 之后只推能量。开关语义记在 `_self_owned_allowed`，供 `are_self_owned_lit()` 读。
 func _set_self_owned_emission(enabled: bool) -> void:
+	_self_owned_allowed = enabled
 	for key in _channels:
 		var channel := _channels[key] as Channel
 		for slot in channel.slots:
@@ -472,8 +477,10 @@ func _set_self_owned_emission(enabled: bool) -> void:
 				continue
 			if slot.material == null or not is_instance_valid(slot.material):
 				continue
-			if slot.material.emission_enabled != enabled:
-				slot.material.emission_enabled = enabled
+			# 熄灯时把能量压 0；亮灯时交回 `_apply()` 按 factor 算（屏幕常态就是 0，
+			# 只在事件里闪），所以这里只需要处理"灭"。
+			if not enabled:
+				slot.material.emission_energy_multiplier = 0.0
 
 
 func _update_channel(channel: Channel) -> void:

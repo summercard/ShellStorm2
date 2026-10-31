@@ -3,6 +3,9 @@ extends Node3D
 ## 可复用废土灯具：支持室外路灯与室内中央顶灯两种装配。
 
 const FORWARD_PLUS_ENERGY_MULTIPLIER := 3.0
+## 灯罩自发光基线能量。`_update_lens_state()` 只在 0 与本值之间推，**不翻 `emission_enabled`**
+## （那是 shader 变体开关，每翻一次 +100ms，见该函数注释）。
+const LENS_EMISSION_ENERGY := 0.72
 
 @export var light_color := Color(0.34, 0.75, 1.0)
 @export_range(0.2, 48.0, 0.1) var energy := 4.6
@@ -253,7 +256,14 @@ func _get_render_energy() -> float:
 func _update_lens_state() -> void:
 	if _lens_material == null:
 		return
-	_lens_material.emission_enabled = light_enabled and _runtime_active
+	# 灯罩的「灭」只能用**能量归零**表达，不能翻 `emission_enabled`。
+	# 这个属性在 Godot 里是 shader define（USE_EMISSION），不是 uniform：
+	# 每翻一次要重建 GPU 管线，实测 **+100ms/次**（RTX 3060 / Forward+，
+	# 见 `tools/_material_variant_cost_probe.gd`）。而本函数在**每次房间流送状态切换**
+	# 时会被逐灯调用（`DungeonRoom3D._set_room_light_runtime_state`）——
+	# 走一间有 8 盏灯的房间就是 8 次翻转。
+	# 能量 0 与「自发光关闭」的出图逐像素等价，所以视觉零变化。
+	_lens_material.emission_energy_multiplier = LENS_EMISSION_ENERGY if light_enabled and _runtime_active else 0.0
 	_lens_material.albedo_color = light_color if light_enabled and _runtime_active else Color(0.10, 0.12, 0.12)
 
 
@@ -297,7 +307,7 @@ func _material(color: Color, metallic: float, roughness: float, emission := fals
 		material.emission_enabled = true
 		material.emission = Color(color.r, color.g, color.b, 1.0)
 		# 灯罩只负责可读性，不再用高发光值把附近地砖推成过曝色块。
-		material.emission_energy_multiplier = 0.72
+		material.emission_energy_multiplier = LENS_EMISSION_ENERGY
 	if unshaded:
 		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	return material

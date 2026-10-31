@@ -414,6 +414,21 @@ const ROOM_OWNERSHIP_MAX_LOCAL_Y_M := 2.50
 const SPAWN_CLEARANCE_M := 1.15
 const SPAWN_BOSS_CLEARANCE_M := 2.2
 const SPAWN_BODY_HEIGHT_M := 2.6
+## 刷怪障碍的「地面豁免」高度：盒顶低于这个值的碰撞体**不算障碍**。
+##
+## ## 为什么不是 0.05
+##
+## 原判据是硬编码 `bounds.end.y <= 0.05`，写法假设"地面碰撞盒恰好在地面以下"。
+## 而远征03 公馆地砖厚 **0.104598m**、原点在底面中心（`origin_contract = bottom_center`）
+## ⇒ 盒顶落在 **0.1046**，刚越过 0.05 —— 于是**整间房的地面被当成一面障碍**，
+## `_spawn_available` 一个候选点都不剩，`_resolve_spawn_position()` 返回非有限值，
+## `_spawn_enemy_batch()` 直接 `return -1`，表现是「落门之后一只怪都不刷」。
+##
+## 这个坑长期潜伏：美术接管率只有 ~8% 时，90% 的房间用的是程序化地板（更薄），
+## 撞不上阈值。2026-10-31 复用键修好、接管率提到 100% 后才稳定复现。
+##
+## 取 0.15 = 玩家/怪都能直接跨过去的高度：低于它的东西本来就不该挡路。
+const SPAWN_GROUND_TOP_MAX_M := 0.15
 const SPAWN_MAX_POINTS := 64
 ## 盒内候选采样步长（米）。盒是独立采样域，密度不跟地砖走 —— 见 `_box_sample_points`。
 ## 定 1.0 而非 1.5：异形房（L 型缺角、U 形空腔、非矩形凹口）里盒常只有一小片压在可通行区上，
@@ -2675,6 +2690,81 @@ func _apply_authored_runtime_door_contract(dimensions: Vector2) -> void:
 ## 判据就互相矛盾：换正式美术资产后，新 prefab 不在名单里 ⇒ 被当装饰留下 ⇒
 ## 墙跟着美术走、门位一变就错位。现在只有一份判据，按「目录登记的角色 → 名字族」两条走。
 const ART_SOURCE := preload("res://src/world3d/RuntimeRoomArtSource.gd")
+## 公馆壳体配方（原型表 + 逐格摆位）。与烘焙器共用同一份，保证两边逐格一致。
+const MANOR_PLAN := preload("res://src/world3d/ManorShellPlan.gd")
+
+
+## 远征03：把美术层里的公馆结构件**按本局门位重铺一遍**。
+##
+## ## 为什么必须重建，而不是信烘焙文件里的墙
+##
+## 烘焙文件里的墙/地砖是按**烘焙那一局**的门位摆的。而窗位由门位算出
+## （`ManorShellPlan.window_cells()` 要避开门位格），所以门位一变，
+## 同一面墙的「实墙 / 窗 / 门」整条序列都变 —— **不是挪一块门墙能补的**。
+##
+## 复用键（`RuntimeRoomArtSource.art_path()`）从 2026-10-31 起只含
+## 「模板 + 签名 + 原型指纹」，门位不进键。于是同一份美术要服务所有种子，
+## 结构件就必须在加载时按当前 q 局重算。业主原话：「美术包装按固定房间进行，
+## 包装完就应该在游戏内呈现」。
+##
+## ## 幂等
+##
+## 先把美术层里所有公馆结构件删掉，再建一遍。所以工坊里保存的旧门位不会把
+## 过时布局带回来 —— 同一个房间反复进出，结果逐格相同。
+##
+## ## 副作用（业主已知）
+##
+## 工坊里**拖动墙或地砖不会进游戏**，那是几何层；改装饰/陈设/灯才跨局生效。
+## 这条与 `_build_art_layer_only()` 的头注一致。
+func _rebuild_manor_shell(art_root: Node3D) -> int:
+	if not art_layer_keep_structure or art_root == null:
+		return 0
+	var dim := get_dimensions()
+	if dim.x <= 0.0 or dim.y <= 0.0:
+		return 0
+	# ── ① 删掉现有公馆结构件（含烘焙文件带来的、也含上一次重建的）──────────
+	#
+	# 只取**顶层**件：包装场景 `env_manor_wall_standard_root_top3d` 与它内嵌的
+	# `..._visual_top3d` 同族，两件都收进列表就会出现「父节点已 free、子节点还在
+	# 列表里」，下一轮 `get_parent()` 直接抛 `previously freed instance` 并中断重建。
+	# 排序 + `is_instance_valid()` 与 `_strip_art_layer_geometry()` 同一套写法。
+	var doomed: Array[Node] = []
+	for node in art_root.find_children("*", "Node3D", true, false):
+		var prefab := str(node.scene_file_path)
+		if prefab.is_empty():
+			continue
+		if not ART_SOURCE.is_art_layer_structure(prefab):
+			continue
+		if _has_allowlisted_ancestor(art_root, node):
+			continue
+		doomed.append(node)
+	doomed.sort_custom(func(a, b): return _node_depth(art_root, a) < _node_depth(art_root, b))
+	for node in doomed:
+		if not is_instance_valid(node) or node.get_parent() == null:
+			continue
+		node.get_parent().remove_child(node)
+		node.free()
+	# ── ② 按本局门位重算配方 ────────────────────────────────────────────
+	var style := MANOR_PLAN.style_for(self, dim)
+	var door_map := MANOR_PLAN.door_cells(connection_ports, dim)
+	if not (door_map.get("_offgrid", []) as Array).is_empty():
+		push_warning(
+			"[DungeonRoom3D] %s 的门位不在 5m 格心：%s —— 该面不铺公馆门墙（会被实墙堵住）"
+			% [room_id, ", ".join(door_map["_offgrid"] as Array)]
+		)
+	# ── ③ 建到 ArtComponents（工坊约定的美术容器）；没有就在根下建一个 ──────
+	var container := art_root.get_node_or_null("ArtComponents") as Node3D
+	if container == null:
+		container = Node3D.new()
+		container.name = "ArtComponents"
+		art_root.add_child(container)
+	var plan: Array = []
+	plan.append_array(MANOR_PLAN.floor_plan(dim, style))
+	plan.append_array(MANOR_PLAN.wall_plan(dim, door_map, str(style.get("windows", "blind"))))
+	var built := MANOR_PLAN.instantiate_plan(plan, container)
+	set_meta("manor_shell_rebuilt", built)
+	set_meta("manor_shell_style", MANOR_PLAN.style_label(style))
+	return built
 
 
 ## 烘焙场景在 flow 房间里的**唯一合法用法**：当美术层，不当壳体。
@@ -2717,6 +2807,10 @@ func _build_art_layer_only(static_layout: Node3D, art_path: String) -> void:
 	# 这里墙体归程序化，设了会让所有读它的判据误判。美术层用独立的 `art_layer_loaded`。
 	set_meta("art_layer_loaded", true)
 	set_meta("art_layer_geometry_stripped", stripped)
+	# **按本局门位重铺结构件**。必须在 `_art_layer_coverage()` 之前 ——
+	# 那条判据量的是"美术层里结构件覆盖了多少格"，量旧布局会得出错误结论
+	# （烘焙那一局铺满 ⇒ 判"已满" ⇒ 程序化壳体让位 ⇒ 本局门位其实没墙）。
+	_rebuild_manor_shell(static_layout)
 	# 远征03 特例：按**实际覆盖**决定要不要跳过程序化地板/某面墙。
 	# 摆满就接管，摆不满由程序化补齐 —— 不假设「摆了结构件 = 整间房都归美术」。
 	_art_layer_coverage(static_layout, get_dimensions())
@@ -2933,6 +3027,15 @@ func _relocate_art_into_components(root: Node3D) -> void:
 
 func _build_shell() -> void:
 	var expedition_static_path := _expedition_static_layout_path()
+	# 远征03：公馆结构件一律按本局门位重建，**不依赖上游是否下发开关**。
+	#
+	# 为什么在这里推导，而不是只信 `config["art_layer_keep_structure"]`：
+	# 安全房（`start`）不走 `TowerDescent3D._instantiate_dynamic_room()`，它那条
+	# config 构造路径根本不带这个键 —— 实测 `config.has()` 为 false，于是
+	# `_rebuild_manor_shell()` 直接返回，烘焙文件里按**旧门位**摆的墙原样进游戏。
+	# 判据改成"这份静态布局是不是远征03 的"，与开关来源解耦。
+	if not art_layer_keep_structure and static_layout_scene_path.contains("/expedition_03/"):
+		art_layer_keep_structure = true
 	if not expedition_static_path.is_empty():
 		var static_scene := load(expedition_static_path) as PackedScene
 		if static_scene == null:
@@ -2976,6 +3079,21 @@ func _build_shell() -> void:
 							(child as Node3D).visible = false
 					set_meta("static_layout_scene_path", expedition_static_path)
 					set_meta("static_layout_scene_loaded", true)
+					# 远征03：静态场景里的公馆结构件同样按**本局门位**重铺。
+					#
+					# 走这条分支的房间（`procedural_shell = false`，实测是安全房 start）
+					# 原本是"整个场景照常用"——连烘焙时的白盒件一起用。但白盒件是
+					# 采集器抓的运行时快照（`prp_room_*`），既不是美术、也不会随门位变，
+					# 留着就是玩家看到的那层白盒。所以这里先剥结构件再重铺公馆件。
+					if art_layer_keep_structure and static_layout_scene_path.contains("/expedition_03/"):
+						var stripped_static := _strip_art_layer_geometry(static_layout)
+						set_meta("art_layer_geometry_stripped", stripped_static)
+						_rebuild_manor_shell(static_layout)
+						_art_layer_coverage(static_layout, get_dimensions())
+						set_meta("art_layer_loaded", true)
+						set_meta("art_layer_structure_kept", _art_layer_structure_kept)
+						set_meta("art_layer_floor_complete", _art_layer_floor_complete)
+						set_meta("art_layer_covered_sides", _art_layer_covered_sides.duplicate())
 					for key in [
 						"authored_layout_shell", "authored_layout_asset_id", "authored_layout_version",
 						"authored_layout_room_id", "authored_layout_corner_count", "authored_layout_solid_wall_count",
@@ -6972,7 +7090,7 @@ func _collect_spawn_blockers() -> void:
 		if body == null or (body.collision_layer & 1) == 0 or collision.disabled or collision.shape == null:
 			continue
 		var bounds := global_transform.affine_inverse() * collision.global_transform * collision.shape.get_debug_mesh().get_aabb()
-		if bounds.end.y <= 0.05 or bounds.position.y >= SPAWN_BODY_HEIGHT_M or not room_bounds.intersects(bounds):
+		if bounds.end.y <= SPAWN_GROUND_TOP_MAX_M or bounds.position.y >= SPAWN_BODY_HEIGHT_M or not room_bounds.intersects(bounds):
 			continue
 		_spawn_blockers.append(bounds)
 
