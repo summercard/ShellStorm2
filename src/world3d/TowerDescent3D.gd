@@ -2966,6 +2966,39 @@ static func expedition_static_layout_path(
 	)
 
 
+## 该锚点目录下是否已有「房型模板 + 复用键」烘焙美术（`runtime_rooms/*.tscn`）。
+##
+## 远征03 起，房间美术按复用键落盘，锚点 `f00_<room_id>_static_layout.tscn`
+## **只作为目录锚点**参与拼路径（`RuntimeRoomArtSource.art_path()` 只取它的父目录），
+## 文件本身不必存在。因此"锚点文件不存在"≠"没有美术"。
+static func has_runtime_room_art(layout_path: String) -> bool:
+	if layout_path.is_empty():
+		return false
+	var dir := DirAccess.open(layout_path.get_base_dir().path_join("runtime_rooms"))
+	if dir == null:
+		return false
+	dir.list_dir_begin()
+	var found := false
+	while true:
+		var entry := dir.get_next()
+		if entry.is_empty():
+			break
+		if entry.begins_with("."):
+			continue
+		# 导出包里场景可能落成 `.tscn` / `.scn` / `.res`，也可能只留 `.remap` 存根；
+		# 判据放宽到这几类，避免「导出时转二进制资源」把这条告警又放回来。
+		if (
+			entry.ends_with(".tscn")
+			or entry.ends_with(".scn")
+			or entry.ends_with(".res")
+			or entry.ends_with(".remap")
+		):
+			found = true
+			break
+	dir.list_dir_end()
+	return found
+
+
 func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: String) -> void:
 	var plan_dimensions: Vector2 = spec.get("dimensions", Vector2(30.0, 25.0)) as Vector2
 	# 档位：**flow 房间按真实尺寸取档，其余继续 `tower_cell`**。
@@ -3057,12 +3090,18 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	# 路径随 record 显式下发，禁止按 AssetID 或同名房间猜测，避免塔楼房间误用。
 	# 路径不存在时仍由 `DungeonRoom3D._expedition_static_layout_path()` 检查后回退，
 	# 但这里先告警一次，避免再次无声降级到程序化生成。
+	#
+	# **判据不能只看锚点文件**：远征03 的美术按复用键落在锚点同目录的
+	# `runtime_rooms/` 下，锚点 `f00_<room>_static_layout.tscn` 只是路径锚点、
+	# 本身不必存在。只查锚点会让远征03 每一间房都误报（实测 641 条/局），
+	# 而美术其实全命中（同批日志 `COV_OK 缺口=0 未接管=0`）。
+	# 锚点文件仍优先覆盖远征01/02 的原有行为，逐字不变。
 	if is_expedition():
 		var runtime_room_id := str(spec.get("id", ""))
 		var layout_path := expedition_static_layout_path(
 			get_expedition_level_id(), runtime_room_id
 		)
-		if not ResourceLoader.exists(layout_path):
+		if not ResourceLoader.exists(layout_path) and not has_runtime_room_art(layout_path):
 			push_warning(
 				"[TowerDescent3D] 远征房间 `%s` 缺静态布局 %s —— 将回退到程序化生成（不是本关的美术）"
 				% [runtime_room_id, layout_path]
