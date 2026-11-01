@@ -11,7 +11,7 @@
 - **`*.import` 引擎改写不入库**：Godot 4.7.2 常驻全量重导入，给每个 glb 加三行默认键。判据 `numstat` 得 `+3N/−0`。提交用 `git add -A -- . ':(exclude)**/*.import'`；**别 `checkout --` 洗**（mtime 一变触发全量重导入）。
 - `.gd.uid` 挡拉取：`diff --diff-filter=A ... | grep '\.uid$'` ∩ `status --porcelain`，`git show origin/<b>:<f>` 比内容，**一致直接删**；孤儿 uid（宿主已删）备份后清。
 - 跨夜记忆可能丢：04:00 前写的段落若被 `reset --hard`/远端覆盖会静默消失，判据 `git log --oneline -- <file>`。
-- `.workbuddy/` 除 `tmp/` 都入库；技能三处镜像必须逐字相同＝`.codex/skills` + `skills_drafts` + `.workbuddy/skills`。改前备份 `.workbuddy/backup/<YYYYMMDD>_<主题>/`。
+- `.workbuddy/` 除 `tmp/` **和 `backup/`** 都入库；技能三处镜像必须逐字相同＝`.codex/skills` + `skills_drafts` + `.workbuddy/skills`。改前备份 `.workbuddy/backup/<YYYYMMDD>_<主题>/`（**备份本身不入库**，2026-10-17 已整批移出跟踪）。
 
 ## 本机（两台，别混）
 - **macOS**：Godot **`~/Applications/Godot.app/Contents/MacOS/Godot`**（4.7.2.stable）。**`/Applications` 下没有 Godot**，写绝对路径会 `no such file or directory`（2026-11-01 实测踩过）。**无 git-lfs/brew/sudo** ⇒ `art_source/**/*.blend|*.psd` 全是 131B 指针（1284 个），`assets/` 运行资产不受影响。判伪别用 `git lfs ls-files`（未装时静默返 0），用 `head -c 20 <f> | grep git-lfs`（不能 grep 整串）。
