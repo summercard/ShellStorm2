@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/Dungeon3D.tscn" id="1_base"]
 [ext_resource type="Script" path="res://src/world3d/TowerDescent3D.gd" id="2_tower"]
 [ext_resource type="Resource" path="res://data/map_themes/iron_frontier.tres" id="3_gameplay"]
-[ext_resource type="Resource" path="res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres" id="4_visual"]
+[ext_resource type="Resource" path="res://assets/art/environments/dungeon_3d/env_expedition03_manor_kit_top3d.tres" id="4_visual"]
+[ext_resource type="Script" path="res://src/presentation/Expedition03IndoorLightEnvelope.gd" id="5_indoor_light"]
 
 [sub_resource type="Environment" id="Environment_editor_runtime_match"]
 background_mode = 1
@@ -51,3 +52,8 @@ metadata/source_blends = Array[String]([])
 metadata/production_stage = "whitebox"
 metadata/design_source = "res://data/level_plans/expedition_03/level_plan.json"
 metadata/design_mode = "flow（拓扑手作骨架 + 几何运行期组装）"
+
+[node name="IndoorLightEnvelope" type="Node3D" parent="."]
+script = ExtResource("5_indoor_light")
+metadata/runtime_owner = "ExpeditionLevel03_3D presentation"
+metadata/visual_only = true

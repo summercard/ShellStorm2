@@ -5,36 +5,142 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn" id="3_bbu1q"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_window/env_manor_wall_window_root_top3d.tscn" id="4_rh0hi"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_door/env_manor_wall_door_root_top3d.tscn" id="5_selh0"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wardrobe/env_manor_wardrobe_root_top3d.tscn" id="6_p08do"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_console/env_manor_console_root_top3d.tscn" id="6_selh0"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_candelabra/env_manor_candelabra_root_top3d.tscn" id="7_hfhr7"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_vanity/env_manor_vanity_root_top3d.tscn" id="8_lgpyx"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_towel_rail/env_manor_towel_rail_root_top3d.tscn" id="9_13lrb"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bench/env_manor_bench_root_top3d.tscn" id="9_lgpyx"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_desk_documents/env_manor_desk_documents_root_top3d.tscn" id="8_1x518"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_table_lamp/env_manor_table_lamp_root_top3d.tscn" id="9_rp004"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_plant_compact/env_manor_plant_compact_root_top3d.tscn" id="11_13lrb"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_lgpyx"]
-size = Vector3(1.34, 0.85, 0.49)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_13lrb"]
-size = Vector3(1.34, 0.85, 0.49)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_3426e"]
-size = Vector3(2.04, 1.18, 0.67)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ehysf"]
-size = Vector3(1.34, 0.85, 0.49)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_l7b81"]
-size = Vector3(1.34, 0.85, 0.49)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_rn15y"]
-size = Vector3(1.5, 0.57, 0.45)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_p08do"]
-size = Vector3(1.5, 0.57, 0.45)
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_office_chair/env_manor_office_chair_root_top3d.tscn" id="11_mk3bh"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_rug_bedroom/env_manor_rug_bedroom_root_top3d.tscn" id="12_pukqh"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_crate/breakable_crate_root_top3d.tscn" id="13_qm1lh"]
+[ext_resource type="Script" path="res://src/world3d/BreakableClutter3D.gd" id="14_wqjus"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_jar/breakable_jar_root_top3d.tscn" id="15_0qblu"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_chair/breakable_chair_root_top3d.tscn" id="16_xet08"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_book_stack/breakable_book_stack_root_top3d.tscn" id="17_ndhns"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_luggage_cart/env_manor_luggage_cart_root_top3d.tscn" id="18_1x518"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1x518"]
-size = Vector3(0.97, 1.38, 1)
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rp004"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mk3bh"]
+size = Vector3(0.968996, 1.37572, 0.996497)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pukqh"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qm1lh"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wqjus"]
+size = Vector3(0.968996, 1.37572, 0.996497)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0qblu"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xet08"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ndhns"]
+size = Vector3(0.968996, 1.37572, 0.996497)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gctti"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5mvd7"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kd4fv"]
+size = Vector3(0.968996, 1.37572, 0.996497)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dbbuv"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1j7j3"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wl26a"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7yynp"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w0ey1"]
+size = Vector3(0.968996, 1.37572, 0.996497)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sw6cb"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xvkgt"]
+size = Vector3(0.75, 1.09, 0.795)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6qmoh"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qcv07"]
+size = Vector3(0.75, 1.09, 0.795)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_siaqw"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jkn80"]
+size = Vector3(0.75, 1.09, 0.795)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hnfww"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_objp7"]
+size = Vector3(0.75, 1.09, 0.795)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qymqh"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w67x3"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gqit7"]
+size = Vector3(1.05, 1.66958, 0.65)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iap65"]
+size = Vector3(0.968996, 1.37572, 0.996497)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lp7ps"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sgpu8"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_51cc7"]
+size = Vector3(1.05, 1.66958, 0.65)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ide6m"]
+size = Vector3(0.968996, 1.37572, 0.996497)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vr6vg"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gm6gk"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gaicc"]
+size = Vector3(1.05, 1.66958, 0.65)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wrh75"]
+size = Vector3(0.968996, 1.37572, 0.996497)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r2ggl"]
+size = Vector3(1.34, 0.85, 0.4925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rr2qr"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_81tjy"]
+size = Vector3(1.05, 1.66958, 0.65)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hlgjw"]
+size = Vector3(0.968996, 1.37572, 0.996497)
 
 [node name="Room_reward_02" type="Node3D" unique_id=49191424]
 metadata/scene_builder_schema = "shellstorm2.component_scene.v1"
@@ -58,6 +164,8 @@ metadata/floor_mode = "stone_ring"
 metadata/window_mode = "pair"
 metadata/furnishing_theme = "kitchen"
 metadata/furnishing_theme_label = "厨房"
+metadata/authored_theme = "物资整备库"
+metadata/authored_layout_batch = "2026-11-01_remaining_themed"
 
 [node name="ArtComponents" type="Node3D" parent="." unique_id=1185183232]
 
@@ -1505,8 +1613,36 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "wall"
 metadata/grid_unit_m = 5.0
 
-[node name="Furn_01_console" type="Node3D" parent="ArtComponents" unique_id=1232918003 instance=ExtResource("6_selh0")]
-transform = Transform3D(1.760759, 0, 0.37380165, 0, 1.8454117, 0, -0.37380165, 0, 1.760759, -6.5, 0, -11.559)
+[node name="ThemedLayout" type="Node3D" parent="ArtComponents" unique_id=1592881906]
+
+[node name="Theme_001_Wall_wardrobe" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1085523523 instance=ExtResource("6_p08do")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.8, 0.1, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "嵌入式衣柜"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wardrobe/manor_wardrobe_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.84, 2.53, 0.6925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_001_Wall_wardrobe" unique_id=310135923]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_001_Wall_wardrobe/LayoutCollision" unique_id=1352801044]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
+shape = SubResource("BoxShape3D_1x518")
+
+[node name="Theme_002_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=360835827 instance=ExtResource("6_selh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0.1, -14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1523,249 +1659,56 @@ metadata/room_owned_geometry = false
 metadata/preserve_authored_palette = true
 metadata/component_family = "table"
 metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
+metadata/theme_placement = "物资整备库"
 
-[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_01_console" unique_id=536466609]
-collision_mask = 0
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_002_Wall_console" unique_id=1108652811]
 
-[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_01_console/CollisionBody" unique_id=1631302678]
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_002_Wall_console/LayoutCollision" unique_id=1444748300]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
-shape = SubResource("BoxShape3D_lgpyx")
+shape = SubResource("BoxShape3D_rp004")
 
-[node name="Furn_02_candelabra" type="Node3D" parent="ArtComponents" unique_id=99261436 instance=ExtResource("7_hfhr7")]
-transform = Transform3D(1.8, 0, 0, 0, 1.5812501, 0, 0, 0, 1.8, -4.7, 1.5685999, -11.712)
-metadata/asset_id = "ENV-EXP03-MANOR-CANDELABRA"
+[node name="Theme_003_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1224120874 instance=ExtResource("8_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0.95, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
-metadata/display_name_zh = "三头烛台"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_candelabra/manor_candelabra_source_v017.blend"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
 metadata/up_axis = "+Y"
 metadata/collision_owner = "godot_wrapper"
 metadata/collision_policy = "visual_only"
 metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(0.56, 0.64, 0.32)
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
 metadata/room_owned_geometry = false
 metadata/preserve_authored_palette = true
-metadata/component_family = "candelabra"
+metadata/component_family = "desk_documents"
 metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
+metadata/theme_placement = "物资整备库"
 
-[node name="Furn_03_console" type="Node3D" parent="ArtComponents" unique_id=780538577 instance=ExtResource("6_selh0")]
-transform = Transform3D(1.8, 0, 0, 0, 1.8454117, 0, 0, 0, 1.8, 7, 0, -11.559)
-metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+[node name="Theme_004_WallLamp_02" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=452138473 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0.95, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
-metadata/display_name_zh = "实木窄边桌"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
 metadata/up_axis = "+Y"
 metadata/collision_owner = "godot_wrapper"
 metadata/collision_policy = "visual_only"
 metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
 metadata/room_owned_geometry = false
 metadata/preserve_authored_palette = true
-metadata/component_family = "table"
+metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
+metadata/theme_placement = "物资整备库"
 
-[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_03_console" unique_id=1845909094]
-collision_mask = 0
-
-[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_03_console/CollisionBody" unique_id=57892898]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
-shape = SubResource("BoxShape3D_13lrb")
-
-[node name="Furn_04_candelabra" type="Node3D" parent="ArtComponents" unique_id=1485261474 instance=ExtResource("7_hfhr7")]
-transform = Transform3D(1.8, 0, 0, 0, 1.5812501, 0, 0, 0, 1.8, 8.8, 1.5685999, -11.712)
-metadata/asset_id = "ENV-EXP03-MANOR-CANDELABRA"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "三头烛台"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_candelabra/manor_candelabra_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(0.56, 0.64, 0.32)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "candelabra"
-metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
-
-[node name="Furn_05_vanity" type="Node3D" parent="ArtComponents" unique_id=913097748 instance=ExtResource("8_lgpyx")]
-transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.5437288, 0, -1.8, 0, -7.86805e-08, -16.397, 0, -6)
-metadata/asset_id = "ENV-EXP03-MANOR-VANITY"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "双台盆洗手台2m"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_vanity/manor_vanity_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(2.04, 1.17707, 0.6708)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "vanity"
-metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
-
-[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_05_vanity" unique_id=11976449]
-collision_mask = 0
-
-[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_05_vanity/CollisionBody" unique_id=603386540]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.59, 0)
-shape = SubResource("BoxShape3D_3426e")
-
-[node name="Furn_06_console" type="Node3D" parent="ArtComponents" unique_id=1565848059 instance=ExtResource("6_selh0")]
-transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.8454117, 0, -1.8, 0, -7.86805e-08, -16.559, 0, 4)
-metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "实木窄边桌"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "table"
-metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
-
-[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_06_console" unique_id=680034629]
-collision_mask = 0
-
-[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_06_console/CollisionBody" unique_id=1440802916]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
-shape = SubResource("BoxShape3D_ehysf")
-
-[node name="Furn_07_console" type="Node3D" parent="ArtComponents" unique_id=1364383196 instance=ExtResource("6_selh0")]
-transform = Transform3D(0.31704137, 0, -1.771859, 0, 1.8454117, 0, 1.771859, 0, 0.31704137, 16.809, 0, -5.25)
-metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "实木窄边桌"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "table"
-metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
-
-[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_07_console" unique_id=1548243461]
-collision_mask = 0
-
-[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_07_console/CollisionBody" unique_id=1990712963]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
-shape = SubResource("BoxShape3D_l7b81")
-
-[node name="Furn_08_bench" type="Node3D" parent="ArtComponents" unique_id=2060357453 instance=ExtResource("9_lgpyx")]
-transform = Transform3D(-1.8, 0, -1.57361e-07, 0, 2.7519298, 0, 1.57361e-07, 0, -1.8, -7, 0, 11.595)
-metadata/asset_id = "ENV-EXP03-MANOR-BENCH"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "红绒床尾凳"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bench/manor_bench_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(1.5, 0.57, 0.45)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "bench"
-metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
-
-[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_08_bench" unique_id=954192631]
-collision_mask = 0
-
-[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_08_bench/CollisionBody" unique_id=1690842163]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.285, 0)
-shape = SubResource("BoxShape3D_rn15y")
-
-[node name="Furn_09_bench" type="Node3D" parent="ArtComponents" unique_id=1717564418 instance=ExtResource("9_lgpyx")]
-transform = Transform3D(-1.8, 0, -1.57361e-07, 0, 2.7519298, 0, 1.57361e-07, 0, -1.8, 7, 0, 11.595)
-metadata/asset_id = "ENV-EXP03-MANOR-BENCH"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "红绒床尾凳"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_bench/manor_bench_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(1.5, 0.57, 0.45)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "bench"
-metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
-
-[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_09_bench" unique_id=1987823147]
-collision_mask = 0
-
-[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_09_bench/CollisionBody" unique_id=443454803]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.285, 0)
-shape = SubResource("BoxShape3D_p08do")
-
-[node name="Furn_10_towel_rail" type="Node3D" parent="ArtComponents" unique_id=348524853 instance=ExtResource("9_13lrb")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.8, 0, 1.8, 0, 2.1464784e-08, 19.525, 0.95, 6)
-metadata/asset_id = "ENV-EXP03-MANOR-TOWEL-RAIL"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "黄铜毛巾架"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_towel_rail/manor_towel_rail_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(0.676, 0.616, 0.25)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "towel_rail"
-metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
-
-[node name="Furn_11_plant_compact" type="Node3D" parent="ArtComponents" unique_id=540119596 instance=ExtResource("11_13lrb")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.1366667, 0, 1.8, 0, 2.1464784e-08, 18.85, 0, 12)
+[node name="Theme_005_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1697692951 instance=ExtResource("11_13lrb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.54924, 0.1, -13.202203)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1782,12 +1725,2674 @@ metadata/room_owned_geometry = false
 metadata/preserve_authored_palette = true
 metadata/component_family = "plant"
 metadata/grid_unit_m = 0.0
-metadata/furnishing_generated = true
-metadata/furnishing_theme = "kitchen"
+metadata/theme_placement = "物资整备库"
 
-[node name="CollisionBody" type="StaticBody3D" parent="ArtComponents/Furn_11_plant_compact" unique_id=1675443846]
-collision_mask = 0
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_005_WallGreen" unique_id=901729989]
 
-[node name="Collision_0" type="CollisionShape3D" parent="ArtComponents/Furn_11_plant_compact/CollisionBody" unique_id=1725719420]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.69, 0)
-shape = SubResource("BoxShape3D_1x518")
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_005_WallGreen/LayoutCollision" unique_id=1836933606]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
+shape = SubResource("BoxShape3D_mk3bh")
+
+[node name="Theme_006_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1091329660 instance=ExtResource("6_selh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.1, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_006_Wall_console" unique_id=303954407]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_006_Wall_console/LayoutCollision" unique_id=186657362]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_pukqh")
+
+[node name="Theme_007_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2021117172 instance=ExtResource("8_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.95, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_008_WallLamp_03" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1140559737 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.95, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_009_Wall_wardrobe" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1999316863 instance=ExtResource("6_p08do")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.1, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "嵌入式衣柜"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wardrobe/manor_wardrobe_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.84, 2.53, 0.6925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_009_Wall_wardrobe" unique_id=74585449]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_009_Wall_wardrobe/LayoutCollision" unique_id=1772608216]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
+shape = SubResource("BoxShape3D_qm1lh")
+
+[node name="Theme_010_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1569526281 instance=ExtResource("11_13lrb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4686, 0.1, -12.690824)
+metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "小型常绿盆栽"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.968996, 1.37572, 0.996497)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "plant"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_010_WallGreen" unique_id=938099437]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_010_WallGreen/LayoutCollision" unique_id=1809303999]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
+shape = SubResource("BoxShape3D_wqjus")
+
+[node name="Theme_011_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=243631916 instance=ExtResource("6_selh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_011_Wall_console" unique_id=846792447]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_011_Wall_console/LayoutCollision" unique_id=1424720783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_0qblu")
+
+[node name="Theme_012_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=682256508 instance=ExtResource("8_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_013_WallLamp_05" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=293292033 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="WallLamp_05_Light" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=863429344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -14.2)
+light_color = Color(0.88, 0.83, 0.64, 1)
+light_energy = 2.5
+omni_range = 6.75
+omni_attenuation = 1.45
+
+[node name="Theme_014_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1661945274 instance=ExtResource("6_selh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.1, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_014_Wall_console" unique_id=1968027667]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_014_Wall_console/LayoutCollision" unique_id=392743384]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_xet08")
+
+[node name="Theme_015_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=851995711 instance=ExtResource("8_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.95, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_016_WallLamp_06" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=116585443 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.95, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_017_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1561648375 instance=ExtResource("11_13lrb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4686, 0.1, -12.690824)
+metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "小型常绿盆栽"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.968996, 1.37572, 0.996497)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "plant"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_017_WallGreen" unique_id=1896151692]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_017_WallGreen/LayoutCollision" unique_id=426141241]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
+shape = SubResource("BoxShape3D_ndhns")
+
+[node name="Theme_018_Wall_wardrobe" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1529301468 instance=ExtResource("6_p08do")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.1, -14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "嵌入式衣柜"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wardrobe/manor_wardrobe_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.84, 2.53, 0.6925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_018_Wall_wardrobe" unique_id=1161546150]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_018_Wall_wardrobe/LayoutCollision" unique_id=206452801]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
+shape = SubResource("BoxShape3D_gctti")
+
+[node name="Theme_019_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2076578814 instance=ExtResource("6_selh0")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.8, 0.1, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_019_Wall_console" unique_id=234304716]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_019_Wall_console/LayoutCollision" unique_id=947169663]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_5mvd7")
+
+[node name="Theme_020_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=365347523 instance=ExtResource("8_1x518")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.8, 0.95, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_021_WallLamp_08" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=291246424 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.8, 0.95, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_022_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1136373235 instance=ExtResource("11_13lrb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.54924, 0.1, 13.202203)
+metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "小型常绿盆栽"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.968996, 1.37572, 0.996497)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "plant"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_022_WallGreen" unique_id=1084842198]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_022_WallGreen/LayoutCollision" unique_id=667484885]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
+shape = SubResource("BoxShape3D_kd4fv")
+
+[node name="Theme_023_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1827365611 instance=ExtResource("6_selh0")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.8, 0.1, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_023_Wall_console" unique_id=399525865]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_023_Wall_console/LayoutCollision" unique_id=1391928978]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_dbbuv")
+
+[node name="Theme_024_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=143719100 instance=ExtResource("8_1x518")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.8, 0.95, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_025_WallLamp_09" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2092539236 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0.95, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_026_Wall_wardrobe" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=406667781 instance=ExtResource("6_p08do")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10, 0.1, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "嵌入式衣柜"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wardrobe/manor_wardrobe_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.84, 2.53, 0.6925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_026_Wall_wardrobe" unique_id=56080443]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_026_Wall_wardrobe/LayoutCollision" unique_id=1020969463]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
+shape = SubResource("BoxShape3D_1j7j3")
+
+[node name="Theme_027_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1789078691 instance=ExtResource("6_selh0")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5, 0.1, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_027_Wall_console" unique_id=1680073484]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_027_Wall_console/LayoutCollision" unique_id=282742293]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_wl26a")
+
+[node name="Theme_028_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1577686442 instance=ExtResource("8_1x518")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5, 0.95, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_029_WallLamp_11" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=504121587 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.95, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_030_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=767737512 instance=ExtResource("6_selh0")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.1, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_030_Wall_console" unique_id=696166820]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_030_Wall_console/LayoutCollision" unique_id=594891909]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_7yynp")
+
+[node name="Theme_031_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1360641360 instance=ExtResource("8_1x518")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.95, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_032_WallLamp_12" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1190364192 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 14.2)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="WallLamp_12_Light" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=518944627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 14.2)
+light_color = Color(0.88, 0.83, 0.64, 1)
+light_energy = 2.5
+omni_range = 6.75
+omni_attenuation = 1.45
+
+[node name="Theme_033_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1566946101 instance=ExtResource("11_13lrb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 12.6)
+metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "小型常绿盆栽"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.968996, 1.37572, 0.996497)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "plant"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_033_WallGreen" unique_id=456383389]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_033_WallGreen/LayoutCollision" unique_id=248034707]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
+shape = SubResource("BoxShape3D_w0ey1")
+
+[node name="Theme_034_InventoryDesk" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1533684261 instance=ExtResource("6_selh0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_034_InventoryDesk" unique_id=607423185]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_034_InventoryDesk/LayoutCollision" unique_id=729673061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_sw6cb")
+
+[node name="Theme_035_InventoryDesk_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=716352016 instance=ExtResource("8_1x518")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.7, 0.95, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_036_InventoryDesk_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=72921245 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.3, 0.95, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_037_InventorySeat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1112265748 instance=ExtResource("11_mk3bh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.7, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-OFFICE-CHAIR"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台办公椅"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_office_chair/manor_office_chair_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.75, 1.09, 0.795)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "seating"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_037_InventorySeat" unique_id=2112975763]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_037_InventorySeat/LayoutCollision" unique_id=1810768558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
+shape = SubResource("BoxShape3D_xvkgt")
+
+[node name="Theme_038_WorkMat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1825625426 instance=ExtResource("12_pukqh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14, 0.112, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "卧室地毯3x4m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(3, 0.053, 4)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "rug"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_039_InventoryDesk" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1700259910 instance=ExtResource("6_selh0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_039_InventoryDesk" unique_id=737989033]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_039_InventoryDesk/LayoutCollision" unique_id=817217705]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_6qmoh")
+
+[node name="Theme_040_InventoryDesk_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=324032537 instance=ExtResource("8_1x518")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.7, 0.95, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_041_InventoryDesk_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=485585172 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.3, 0.95, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_042_InventorySeat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=923368059 instance=ExtResource("11_mk3bh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.7, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-OFFICE-CHAIR"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台办公椅"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_office_chair/manor_office_chair_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.75, 1.09, 0.795)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "seating"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_042_InventorySeat" unique_id=745448268]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_042_InventorySeat/LayoutCollision" unique_id=2142811594]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
+shape = SubResource("BoxShape3D_qcv07")
+
+[node name="Theme_043_WorkMat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=955550633 instance=ExtResource("12_pukqh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14, 0.112, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "卧室地毯3x4m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(3, 0.053, 4)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "rug"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_044_InventoryDesk" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1727317372 instance=ExtResource("6_selh0")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_044_InventoryDesk" unique_id=962200356]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_044_InventoryDesk/LayoutCollision" unique_id=1376440948]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_siaqw")
+
+[node name="Theme_045_InventoryDesk_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=688581330 instance=ExtResource("8_1x518")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14.3, 0.95, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_046_InventoryDesk_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1965166896 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.7, 0.95, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_047_InventorySeat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=881811184 instance=ExtResource("11_mk3bh")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 12.7, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-OFFICE-CHAIR"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台办公椅"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_office_chair/manor_office_chair_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.75, 1.09, 0.795)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "seating"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_047_InventorySeat" unique_id=106777423]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_047_InventorySeat/LayoutCollision" unique_id=2035288262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
+shape = SubResource("BoxShape3D_jkn80")
+
+[node name="Theme_048_WorkMat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2099512012 instance=ExtResource("12_pukqh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 14, 0.112, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "卧室地毯3x4m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(3, 0.053, 4)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "rug"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_049_InventoryDesk" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1308631442 instance=ExtResource("6_selh0")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_049_InventoryDesk" unique_id=909929307]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_049_InventoryDesk/LayoutCollision" unique_id=1491362757]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_hnfww")
+
+[node name="Theme_050_InventoryDesk_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=284550399 instance=ExtResource("8_1x518")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14.3, 0.95, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_051_InventoryDesk_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1609234322 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.7, 0.95, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_052_InventorySeat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=530051713 instance=ExtResource("11_mk3bh")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 12.7, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-OFFICE-CHAIR"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台办公椅"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_office_chair/manor_office_chair_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.75, 1.09, 0.795)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "seating"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_052_InventorySeat" unique_id=576455218]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_052_InventorySeat/LayoutCollision" unique_id=1624113804]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
+shape = SubResource("BoxShape3D_objp7")
+
+[node name="Theme_053_WorkMat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=940873110 instance=ExtResource("12_pukqh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 14, 0.112, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "卧室地毯3x4m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(3, 0.053, 4)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "rug"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_054_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=176223797 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -17, 0.1, -13)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_055_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=248714985 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, 10, 0.1, -12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_056_Fragile_chair" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1299818294 instance=ExtResource("16_xet08")]
+transform = Transform3D(-1.25, 0, -1.09278474e-07, 0, 1.25, 0, 1.09278474e-07, 0, -1.25, -15, 0.1, 12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_057_Fragile_book_stack" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1289039526 instance=ExtResource("17_ndhns")]
+transform = Transform3D(1.4906101e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, 1.4906101e-08, -18, 0.1, -12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+bounds_size = Vector3(0.6376, 0.314, 0.5031)
+clutter_kind = "book_stack"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模散落书本堆"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_book_stack/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.6376, 0.314, 0.5031)
+metadata/scale_from_v001 = 1.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "paper"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_058_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1001034062 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 18, 0.1, -10)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_059_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=367582358 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, 17, 0.1, 5)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_060_Fragile_chair" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=538597118 instance=ExtResource("16_xet08")]
+transform = Transform3D(-1.25, 0, -1.09278474e-07, 0, 1.25, 0, 1.09278474e-07, 0, -1.25, -17, 0.1, 5)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_061_Fragile_book_stack" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=888548045 instance=ExtResource("17_ndhns")]
+transform = Transform3D(1.4906101e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, 1.4906101e-08, -18, 0.1, -10)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+bounds_size = Vector3(0.6376, 0.314, 0.5031)
+clutter_kind = "book_stack"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模散落书本堆"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_book_stack/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.6376, 0.314, 0.5031)
+metadata/scale_from_v001 = 1.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "paper"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_062_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=870332433 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 18, 0.1, -12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_063_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1670941432 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, 15, 0.1, 12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_064_Fragile_chair" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=826345430 instance=ExtResource("16_xet08")]
+transform = Transform3D(-1.25, 0, -1.09278474e-07, 0, 1.25, 0, 1.09278474e-07, 0, -1.25, -10, 0.1, -12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_065_Fragile_book_stack" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1280227487 instance=ExtResource("17_ndhns")]
+transform = Transform3D(1.4906101e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, 1.4906101e-08, 5, 0.1, 13)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+bounds_size = Vector3(0.6376, 0.314, 0.5031)
+clutter_kind = "book_stack"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模散落书本堆"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_book_stack/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.6376, 0.314, 0.5031)
+metadata/scale_from_v001 = 1.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "paper"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_066_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=500276512 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 17, 0.1, 12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_067_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1311122319 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, -19, 0.1, 10)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_068_Fragile_chair" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=331797954 instance=ExtResource("16_xet08")]
+transform = Transform3D(-1.25, 0, -1.09278474e-07, 0, 1.25, 0, 1.09278474e-07, 0, -1.25, 15, 0.1, -13)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_069_Fragile_book_stack" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=998225732 instance=ExtResource("17_ndhns")]
+transform = Transform3D(1.4906101e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, 1.4906101e-08, -18, 0.1, -5)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+bounds_size = Vector3(0.6376, 0.314, 0.5031)
+clutter_kind = "book_stack"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模散落书本堆"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_book_stack/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.6376, 0.314, 0.5031)
+metadata/scale_from_v001 = 1.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "paper"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_070_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2115172864 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -15, 0.1, -14)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_071_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=572335728 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, 19, 0.1, -5)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_072_Fragile_chair" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=825062868 instance=ExtResource("16_xet08")]
+transform = Transform3D(-1.25, 0, -1.09278474e-07, 0, 1.25, 0, 1.09278474e-07, 0, -1.25, 17, 0.1, 10)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_073_Fragile_book_stack" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1217360831 instance=ExtResource("17_ndhns")]
+transform = Transform3D(1.4906101e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, 1.4906101e-08, -19, 0.1, 12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+bounds_size = Vector3(0.6376, 0.314, 0.5031)
+clutter_kind = "book_stack"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模散落书本堆"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_book_stack/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.6376, 0.314, 0.5031)
+metadata/scale_from_v001 = 1.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "paper"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_074_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1112951141 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 10, 0.1, 13)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_075_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=969770825 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, -5, 0.1, 12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_076_Fragile_chair" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1986529799 instance=ExtResource("16_xet08")]
+transform = Transform3D(-1.25, 0, -1.09278474e-07, 0, 1.25, 0, 1.09278474e-07, 0, -1.25, -19, 0.1, -13)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_077_Fragile_book_stack" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1144373116 instance=ExtResource("17_ndhns")]
+transform = Transform3D(1.4906101e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, 1.4906101e-08, 19, 0.1, 5)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+bounds_size = Vector3(0.6376, 0.314, 0.5031)
+clutter_kind = "book_stack"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模散落书本堆"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_book_stack/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.6376, 0.314, 0.5031)
+metadata/scale_from_v001 = 1.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "paper"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_078_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=366120191 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -15, 0.1, 14)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_079_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=40618459 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, -19, 0.1, -11)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_080_Fragile_chair" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=992774430 instance=ExtResource("16_xet08")]
+transform = Transform3D(-1.25, 0, -1.09278474e-07, 0, 1.25, 0, 1.09278474e-07, 0, -1.25, -10, 0.1, 12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_081_Fragile_book_stack" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=840365198 instance=ExtResource("17_ndhns")]
+transform = Transform3D(1.4906101e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, 1.4906101e-08, 18, 0.1, 13)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+bounds_size = Vector3(0.6376, 0.314, 0.5031)
+clutter_kind = "book_stack"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模散落书本堆"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_book_stack/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.6376, 0.314, 0.5031)
+metadata/scale_from_v001 = 1.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "paper"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_082_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1971618091 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 17, 0.1, -5)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_083_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1047601324 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, -18, 0.1, 13)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_084_Fragile_chair" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1180363936 instance=ExtResource("16_xet08")]
+transform = Transform3D(-1.25, 0, -1.09278474e-07, 0, 1.25, 0, 1.09278474e-07, 0, -1.25, -15, 0.1, -12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_085_Fragile_book_stack" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1770971626 instance=ExtResource("17_ndhns")]
+transform = Transform3D(1.4906101e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, 1.4906101e-08, -17, 0.1, -11)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+bounds_size = Vector3(0.6376, 0.314, 0.5031)
+clutter_kind = "book_stack"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模散落书本堆"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_book_stack/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.6376, 0.314, 0.5031)
+metadata/scale_from_v001 = 1.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "paper"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_086_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1622873459 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 15, 0.1, 14)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_087_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1256834 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, -19, 0.1, 5)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_088_Fragile_chair" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1653634789 instance=ExtResource("16_xet08")]
+transform = Transform3D(-1.25, 0, -1.09278474e-07, 0, 1.25, 0, 1.09278474e-07, 0, -1.25, 19, 0.1, 12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CHAIR"
+bounds_size = Vector3(0.75, 1.29, 0.75)
+clutter_kind = "chair"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎椅子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_chair/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.75, 1.29, 0.75)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_089_Fragile_book_stack" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1989291045 instance=ExtResource("17_ndhns")]
+transform = Transform3D(1.4906101e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, 1.4906101e-08, -17, 0.1, 10)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-BOOK-STACK"
+bounds_size = Vector3(0.6376, 0.314, 0.5031)
+clutter_kind = "book_stack"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模散落书本堆"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_book_stack/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.6376, 0.314, 0.5031)
+metadata/scale_from_v001 = 1.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "paper"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_090_Fragile_crate" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1026929830 instance=ExtResource("13_qm1lh")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 19, 0.1, 10)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-CRATE"
+bounds_size = Vector3(0.8385, 0.884, 0.9003)
+clutter_kind = "crate"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎木箱"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_crate/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.8385, 0.884, 0.9003)
+metadata/scale_from_v001 = 1.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "wood"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_091_Fragile_jar" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=380001349 instance=ExtResource("15_0qblu")]
+transform = Transform3D(-5.4639237e-08, 0, 1.25, 0, 1.25, 0, -1.25, 0, -5.4639237e-08, -17, 0.1, 12)
+script = ExtResource("14_wqjus")
+asset_id = "ENV-BATTLE-INTERACTIVE-JAR"
+bounds_size = Vector3(0.66, 0.81, 0.645)
+clutter_kind = "jar"
+metadata/asset_version = "v002"
+metadata/display_name_zh = "低模易碎罐子"
+metadata/category = "scene_interactive_object"
+metadata/source_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/battle_interactive_clutter_v002.blend"
+metadata/optimized_blend = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/export/v002/battle_interactive_clutter_optimized_v002.blend"
+metadata/source_manifest = "res://art_source/environments/tower_zones/battle/source/common_components/v002_interactive_clutter/component_packages/breakable_jar/asset_manifest.json"
+metadata/bounds_size_m = Vector3(0.66, 0.81, 0.645)
+metadata/scale_from_v001 = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/collision_policy = "projectile_hit_only_no_player_blocking"
+metadata/fragment_count_max = 5
+metadata/fragment_material = "ceramic"
+metadata/break_animation = "directional_scatter_arc_settle_persistent"
+metadata/theme_placement = "物资整备库"
+metadata/authored_prop_scale = 1.25
+
+[node name="Theme_092_SupplyStation_Mat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1957187926 instance=ExtResource("12_pukqh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7, 0.112, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "卧室地毯3x4m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(3, 0.053, 4)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "rug"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_093_SupplyStation_Counter" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=966592822 instance=ExtResource("6_selh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_093_SupplyStation_Counter" unique_id=1487606020]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_093_SupplyStation_Counter/LayoutCollision" unique_id=973057557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_qymqh")
+
+[node name="Theme_094_SupplyStation_Counter_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=626494154 instance=ExtResource("8_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7, 0.95, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_095_SupplyStation_Counter_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1536026771 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3, 0.95, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="SupplyStation_Counter_Lamp_Light" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=1278851899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3, 1.4, -6)
+light_color = Color(0.88, 0.83, 0.64, 1)
+light_energy = 2.5
+omni_range = 6.75
+omni_attenuation = 1.45
+
+[node name="Theme_096_SupplyStation_Cabinet" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1708615659 instance=ExtResource("6_p08do")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -9.5, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "嵌入式衣柜"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wardrobe/manor_wardrobe_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.84, 2.53, 0.6925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_096_SupplyStation_Cabinet" unique_id=1360414760]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_096_SupplyStation_Cabinet/LayoutCollision" unique_id=884376980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
+shape = SubResource("BoxShape3D_w67x3")
+
+[node name="Theme_097_SupplyStation_Cart" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1498474548 instance=ExtResource("18_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.8, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "黄铜行李车"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_luggage_cart/manor_luggage_cart_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.05, 1.66958, 0.65)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "luggage_cart"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_097_SupplyStation_Cart" unique_id=1385941485]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_097_SupplyStation_Cart/LayoutCollision" unique_id=397610354]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83479, 0)
+shape = SubResource("BoxShape3D_gqit7")
+
+[node name="Theme_098_SupplyStation_Green" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=695377697 instance=ExtResource("11_13lrb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.1, -7.8)
+metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "小型常绿盆栽"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.968996, 1.37572, 0.996497)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "plant"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_098_SupplyStation_Green" unique_id=551918501]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_098_SupplyStation_Green/LayoutCollision" unique_id=1408095022]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
+shape = SubResource("BoxShape3D_iap65")
+
+[node name="Theme_099_SupplyStation_Mat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1582733870 instance=ExtResource("12_pukqh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7, 0.112, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "卧室地毯3x4m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(3, 0.053, 4)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "rug"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_100_SupplyStation_Counter" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=76167994 instance=ExtResource("6_selh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_100_SupplyStation_Counter" unique_id=1273402851]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_100_SupplyStation_Counter/LayoutCollision" unique_id=1963886046]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_lp7ps")
+
+[node name="Theme_101_SupplyStation_Counter_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1298392371 instance=ExtResource("8_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7, 0.95, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_102_SupplyStation_Counter_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1155278173 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3, 0.95, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="SupplyStation_Counter_Lamp_Light2" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=17916006]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3, 1.4, 6)
+light_color = Color(0.88, 0.83, 0.64, 1)
+light_energy = 2.5
+omni_range = 6.75
+omni_attenuation = 1.45
+
+[node name="Theme_103_SupplyStation_Cabinet" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=211038838 instance=ExtResource("6_p08do")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -9.5, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "嵌入式衣柜"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wardrobe/manor_wardrobe_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.84, 2.53, 0.6925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_103_SupplyStation_Cabinet" unique_id=733967569]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_103_SupplyStation_Cabinet/LayoutCollision" unique_id=260097163]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
+shape = SubResource("BoxShape3D_sgpu8")
+
+[node name="Theme_104_SupplyStation_Cart" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2005613551 instance=ExtResource("18_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.8, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "黄铜行李车"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_luggage_cart/manor_luggage_cart_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.05, 1.66958, 0.65)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "luggage_cart"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_104_SupplyStation_Cart" unique_id=521316698]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_104_SupplyStation_Cart/LayoutCollision" unique_id=1176384045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83479, 0)
+shape = SubResource("BoxShape3D_51cc7")
+
+[node name="Theme_105_SupplyStation_Green" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1707378468 instance=ExtResource("11_13lrb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.1, 4.2)
+metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "小型常绿盆栽"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.968996, 1.37572, 0.996497)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "plant"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_105_SupplyStation_Green" unique_id=888328043]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_105_SupplyStation_Green/LayoutCollision" unique_id=669767772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
+shape = SubResource("BoxShape3D_ide6m")
+
+[node name="Theme_106_SupplyStation_Mat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2092874005 instance=ExtResource("12_pukqh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7, 0.112, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "卧室地毯3x4m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(3, 0.053, 4)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "rug"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_107_SupplyStation_Counter" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=549155712 instance=ExtResource("6_selh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_107_SupplyStation_Counter" unique_id=811266275]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_107_SupplyStation_Counter/LayoutCollision" unique_id=36367403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_vr6vg")
+
+[node name="Theme_108_SupplyStation_Counter_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1248410714 instance=ExtResource("8_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3, 0.95, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_109_SupplyStation_Counter_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1276440621 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 0.95, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="SupplyStation_Counter_Lamp_Light3" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=712299472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 1.4, -6)
+light_color = Color(0.88, 0.83, 0.64, 1)
+light_energy = 2.5
+omni_range = 6.75
+omni_attenuation = 1.45
+
+[node name="Theme_110_SupplyStation_Cabinet" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1451255505 instance=ExtResource("6_p08do")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.5, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "嵌入式衣柜"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wardrobe/manor_wardrobe_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.84, 2.53, 0.6925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_110_SupplyStation_Cabinet" unique_id=1045300452]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_110_SupplyStation_Cabinet/LayoutCollision" unique_id=1842354460]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
+shape = SubResource("BoxShape3D_gm6gk")
+
+[node name="Theme_111_SupplyStation_Cart" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1188701822 instance=ExtResource("18_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2, 0.1, -6)
+metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "黄铜行李车"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_luggage_cart/manor_luggage_cart_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.05, 1.66958, 0.65)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "luggage_cart"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_111_SupplyStation_Cart" unique_id=1655664776]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_111_SupplyStation_Cart/LayoutCollision" unique_id=1506844458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83479, 0)
+shape = SubResource("BoxShape3D_gaicc")
+
+[node name="Theme_112_SupplyStation_Green" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1346690666 instance=ExtResource("11_13lrb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.4, 0.1, -7.8)
+metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "小型常绿盆栽"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.968996, 1.37572, 0.996497)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "plant"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_112_SupplyStation_Green" unique_id=1599096938]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_112_SupplyStation_Green/LayoutCollision" unique_id=387055541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
+shape = SubResource("BoxShape3D_wrh75")
+
+[node name="Theme_113_SupplyStation_Mat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1030869551 instance=ExtResource("12_pukqh")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7, 0.112, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "卧室地毯3x4m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_rug_bedroom/manor_rug_bedroom_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(3, 0.053, 4)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "rug"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_114_SupplyStation_Counter" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=997133746 instance=ExtResource("6_selh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "实木窄边桌"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_console/manor_console_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.34, 0.85, 0.4925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "table"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_114_SupplyStation_Counter" unique_id=1523839502]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_114_SupplyStation_Counter/LayoutCollision" unique_id=1832702886]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+shape = SubResource("BoxShape3D_r2ggl")
+
+[node name="Theme_115_SupplyStation_Counter_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=787898259 instance=ExtResource("8_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3, 0.95, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "前台文件陈设"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_desk_documents/manor_desk_documents_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.400506, 0.0505, 0.281344)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "desk_documents"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="Theme_116_SupplyStation_Counter_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1836535025 instance=ExtResource("9_rp004")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 0.95, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "暖光黄铜台灯"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "lamp"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="SupplyStation_Counter_Lamp_Light4" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=1803032390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 1.4, 6)
+light_color = Color(0.88, 0.83, 0.64, 1)
+light_energy = 2.5
+omni_range = 6.75
+omni_attenuation = 1.45
+
+[node name="Theme_117_SupplyStation_Cabinet" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=471344912 instance=ExtResource("6_p08do")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.5, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "嵌入式衣柜"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_wardrobe/manor_wardrobe_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.84, 2.53, 0.6925)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "cabinet"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_117_SupplyStation_Cabinet" unique_id=1141893841]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_117_SupplyStation_Cabinet/LayoutCollision" unique_id=1231414053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
+shape = SubResource("BoxShape3D_rr2qr")
+
+[node name="Theme_118_SupplyStation_Cart" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1789741980 instance=ExtResource("18_1x518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2, 0.1, 6)
+metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "黄铜行李车"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_luggage_cart/manor_luggage_cart_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(1.05, 1.66958, 0.65)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "luggage_cart"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_118_SupplyStation_Cart" unique_id=1096692645]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_118_SupplyStation_Cart/LayoutCollision" unique_id=1372462610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83479, 0)
+shape = SubResource("BoxShape3D_81tjy")
+
+[node name="Theme_119_SupplyStation_Green" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=462406915 instance=ExtResource("11_13lrb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.4, 0.1, 4.2)
+metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
+metadata/asset_version = "v017"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "小型常绿盆栽"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_plant_compact/manor_plant_compact_source_v017.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(0.968996, 1.37572, 0.996497)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "plant"
+metadata/grid_unit_m = 0.0
+metadata/theme_placement = "物资整备库"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_119_SupplyStation_Green" unique_id=1791556731]
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_119_SupplyStation_Green/LayoutCollision" unique_id=1879916413]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
+shape = SubResource("BoxShape3D_hlgjw")

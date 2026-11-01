@@ -228,3 +228,9 @@ ASSET-PIPELINE 小僵尸表现资产已更新为 v005（800三角面/16骨，手
 - WORLD-PLAN / ASSET-PIPELINE：[远征03易碎设施与墙边丰富度](development/2026-11-01_expedition03_destructible_facilities.md)：新增168易碎设施（墙边角落约92%）、40组柜架和50陈列细节；480真实子弹命中/三房玩家开火与接触/24种子净空专项通过。游戏逻辑不改；测试隔离遗漏及后续修正独立记录，整体partial不变。
 
 - TOOL-SCENE-EDITOR / WORLD-PLAN / ASSET-PIPELINE：[11 远征03场景工坊布局与陈设流程](11_远征03场景工坊布局与陈设流程.md)，对应编号Skill `11-expedition03-scene-workshop-layout`。范围限定03正式TSCN，墙边柜架/易碎设施/实机验收和用户数据隔离；不改远征01或通用00–04链路。[安装与验证记录](development/2026-11-01_expedition03_layout_skill.md)。
+
+- WORLD-PLAN / ASSET-PIPELINE / TOOL-SCENE-EDITOR：[远征03其余房间与通道主题](design/远征03其余房间与通道陈设.md)及[本批验收](development/2026-11-01_remaining_themed_rooms.md)。15份原房间+7连接原型完成主题陈设，原3房默认保留；当前正式池25份、工坊65份，格式均TSCN format=3 / Node3D。03场景独立室内遮光表现不改关卡生产或远征01；整关仍partial。
+
+- WORLD-PLAN / ASSET-PIPELINE：[远征03公馆门正式接入](development/2026-11-01_expedition03_manor_doors.md)，主题门外观显式覆写，空值保留原选择；03以黄铜实木门替换装甲门，门态/碰撞驱动和01不改。
+
+- WORLD-PLAN / ASSET-PIPELINE：[远征03顶灯外壳与室内投影](development/2026-11-01_exp03_light_shell_shadow.md)：03表现层隐藏中央灯壳但保留灯/开关，室内基础光启用阴影；房间文件与其他关卡不改。

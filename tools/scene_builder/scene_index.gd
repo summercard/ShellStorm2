@@ -148,7 +148,7 @@ static func _runtime_art_row(candidate: Dictionary) -> Dictionary:
 	var type_label := str(type_names.get(str(source["type"]), "连接房"))
 	var style: Dictionary = descriptor["style"]
 	var title := "%s-%s %d×%dm · %s" % [row["level"], type_label,
-		int(round(float(dimensions[0]))), int(round(float(dimensions[1]))), str(style.get("note", ""))]
+		int(round(float(dimensions[0]))), int(round(float(dimensions[1]))), str(meta.get("authored_theme", style.get("note", "")))]
 	row["source_room_id"] = str(meta.get("room_id", meta.get("runtime_source_room_id", "")))
 	row["room_id"] = str(descriptor["template_id"])
 	row["template_id"] = str(descriptor["template_id"])

@@ -1,0 +1,15 @@
+{
+  "ceiling_lights": 26,
+  "checks": 340,
+  "failures": [],
+  "rooms": 26,
+  "shadow_ab": {
+    "changed_pixels_over10": 436774,
+    "mean_abs_rgb_difference": [
+      9.161015625,
+      2.6086393229166664,
+      0.3735105613425926
+    ]
+  },
+  "source_sha256": "2e2702cae7ab2927ae563c23df14cd995b70500c42fba6c2e15c909101e2c3c3"
+}

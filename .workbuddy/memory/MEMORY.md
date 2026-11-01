@@ -14,7 +14,7 @@
 - `.workbuddy/` 除 `tmp/` 都入库；技能三处镜像必须逐字相同＝`.codex/skills` + `skills_drafts` + `.workbuddy/skills`。改前备份 `.workbuddy/backup/<YYYYMMDD>_<主题>/`。
 
 ## 本机（两台，别混）
-- **macOS**：Godot `/Applications/Godot.app/Contents/MacOS/Godot`（4.7.2.stable）。**无 git-lfs/brew/sudo** ⇒ `art_source/**/*.blend|*.psd` 全是 131B 指针（1284 个），`assets/` 运行资产不受影响。判伪别用 `git lfs ls-files`（未装时静默返 0），用 `head -c 20 <f> | grep git-lfs`（不能 grep 整串）。
+- **macOS**：Godot **`~/Applications/Godot.app/Contents/MacOS/Godot`**（4.7.2.stable）。**`/Applications` 下没有 Godot**，写绝对路径会 `no such file or directory`（2026-11-01 实测踩过）。**无 git-lfs/brew/sudo** ⇒ `art_source/**/*.blend|*.psd` 全是 131B 指针（1284 个），`assets/` 运行资产不受影响。判伪别用 `git lfs ls-files`（未装时静默返 0），用 `head -c 20 <f> | grep git-lfs`（不能 grep 整串）。
 - **Windows**：Godot `F:/Godot/4.7.2-stable/...win64_console.exe`；单跑 `--headless --path . res://tests/verification/<case>.tscn --quit-after 900`，`APPDATA`/`LOCALAPPDATA` 指 `F:/wxgame/ShellStorm2-work/verify_appdata`。
 - 两台都**无 `timeout`**；`ps` 被禁，查端口用 `lsof -nP -iTCP:<port> -sTCP:LISTEN`。
 - 系统 `python3` 缺 `openpyxl`（`check_documentation_contracts.py` 用裸 `python3`）⇒ 造 ASCII 目录放 wrapper（**独立普通文件**，绝不能 `>` 写到符号链接）；`ln -s` 无效。

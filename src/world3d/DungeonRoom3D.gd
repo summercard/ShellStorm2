@@ -2488,8 +2488,10 @@ func _port_creates_door_leaf(width_m: float) -> bool:
 ## （业主 2026-10-28 反馈"门看起来贴在墙外面"就是这个）。
 ## 塔楼 A 套门扇厚 0.18m < 0.28m，滑出门洞后整块落在墙体内部，才是"滑进墙里"。
 ##
-## 所以 `slide` 一律用塔楼门扇：语义上 EGT 的门本就是普通门，不是气闸。
+## 主题显式声明门扇时优先使用它；未声明仍按以下历史规则选择。
 func _door_panel_visual(target_room_id: String) -> PackedScene:
+	if theme != null and theme.door_panel_visual_scene != null:
+		return theme.door_panel_visual_scene
 	if door_opening_style == RoomDoor3D.OPENING_STYLE_SLIDE:
 		return TOWER_DOOR_LEAF_PREFAB
 	if (

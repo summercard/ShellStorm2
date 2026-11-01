@@ -43,6 +43,7 @@ func art_root(room: Node) -> Node3D:
 
 func _run() -> void:
 	var level_scene := load("res://scenes/ExpeditionLevel03_3D.tscn") as PackedScene
+	_verify_door_theme_contract()
 	var formal_rows := INDEX.game_rooms()
 	var paths := {}
 	for row in formal_rows:
@@ -74,7 +75,14 @@ func _run() -> void:
 			check(not CONTRACT.furnishing_conflicts(source).is_empty(), "clearance query missed an author collider")
 			body.free()
 		source.free()
-	check(expected.size() == 18, "expected canonical pool of 18 rooms")
+	var content_files := 0
+	for path in expected:
+		var source := (load(path) as PackedScene).instantiate() as Node3D
+		var geometry: Dictionary = source.get_meta("runtime_room_geometry", {})
+		if not str(geometry.get("type", "")).is_empty():
+			content_files += 1
+		source.free()
+	check(content_files == 18, "expected original 18 content-room resources plus optional connector art")
 	var seed_values: Array = SEEDS
 	if "--quick" in OS.get_cmdline_user_args():
 		seed_values = [77003244, 42]
@@ -85,6 +93,12 @@ func _run() -> void:
 		root.add_child(level)
 		for frame in 16:
 			await process_frame
+		_verify_indoor_envelope(level)
+		for room in level.get("_rooms"):
+			room.ensure_shell_built()
+			for door in room.get_children():
+				if door.get_script() != null and door.get_script().resource_path == "res://src/world3d/RoomDoor3D.gd":
+					check(door.get_snapshot()["visual_asset_id"] == "ENV-EXP03-MANOR-DOOR-DOUBLE", "expedition03 still uses an armored door")
 		var content := 0
 		for value in level.get("_rooms"):
 			var room := value as Node3D
@@ -115,9 +129,46 @@ func _run() -> void:
 		print("FIXED_SEED ", seed_value, " authored_rooms=", content)
 		level.queue_free()
 		await process_frame
-	check(used.size() == 18 if seed_values.size() == SEEDS.size() else used.size() > 10, "canonical pool not exercised")
+	check(used.size() == expected.size() if seed_values.size() == SEEDS.size() else used.size() > 10, "canonical pool not exercised")
 	print("FIXED_FURNISHING_%s checks=%d failures=%d files=%d used=%d door_samples=%d" % ["OK" if failures.is_empty() else "FAILED", checks, failures.size(), formal_rows.size(), used.size(), door_shapes])
 	quit(0 if failures.is_empty() else 1)
+
+func _verify_door_theme_contract() -> void:
+	# MainLoop scripts compile before Autoload globals exist; load this gameplay
+	# class only after _run starts, as with the other room fixtures in this test.
+	var room = load("res://src/world3d/DungeonRoom3D.gd").new()
+	room.room_type = "COMBAT"
+	room.theme = load("res://assets/art/environments/dungeon_3d/env_expedition03_manor_kit_top3d.tres")
+	for style in ["slide", "lift"]:
+		room.door_opening_style = style
+		check(room._door_panel_visual("").resource_path.contains("/manor_door_double/"), "explicit theme door ignored")
+	room.theme = load("res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres")
+	for style in ["slide", "lift"]:
+		room.door_opening_style = style
+		check(room._door_panel_visual("") == room.TOWER_DOOR_LEAF_PREFAB, "default door visual changed")
+	room.room_type = "FACILITY"
+	check(room._door_panel_visual("") == room.BASE99_DOOR_LIFT_PREFAB, "default facility lift changed")
+	room.free()
+
+func _verify_indoor_envelope(level: Node3D) -> void:
+	var envelope := level.get_node_or_null("IndoorLightEnvelope")
+	check(envelope != null, "indoor light envelope missing")
+	if envelope == null:
+		return
+	var state: Dictionary = envelope.call("get_snapshot")
+	check(state["built"] and state["blockers"] == 5, "indoor ceiling and four walls not ready")
+	var rooms: Array = level.get("_rooms")
+	check(state["room_count"] == rooms.size() and state["room_bounces"] == rooms.size(), "indoor coverage / bounce count mismatch")
+	var bounds: AABB = state["bounds"]
+	for room in rooms:
+		var dimensions: Vector2 = room.call("get_dimensions")
+		var footprint: AABB = envelope.global_transform.affine_inverse() * room.global_transform * AABB(Vector3(-dimensions.x / 2, 0, -dimensions.y / 2), Vector3(dimensions.x, 0.01, dimensions.y))
+		check(bounds.encloses(footprint), "indoor envelope misses room " + str(room.get("room_id")))
+		check(room.get_node_or_null("IndoorEnvelopeBounce") != null, "room has no indoor bounce")
+	for blocker in envelope.get_children():
+		check(blocker is MeshInstance3D and blocker.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY, "indoor blocker hides gameplay camera")
+		check(blocker.layers & GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER != 0, "indoor blocker cannot cast sun shadow")
+	check(envelope.find_children("*", "CollisionObject3D", true, false).is_empty(), "visual envelope added gameplay collision")
 
 func _fixture(original: Node3D, procedural: bool) -> void:
 	var directory := OS.get_cmdline_user_args()[0].path_join("expedition_03")

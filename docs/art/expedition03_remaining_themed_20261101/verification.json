@@ -1,0 +1,669 @@
+{
+  "date": "2026-11-01",
+  "source_audit": [
+    {
+      "blocking_colliders": 40,
+      "breakables": 48,
+      "carpets": 8,
+      "components": 260,
+      "furniture": 144,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/boss_50x40_b7446dc46356_c6c134.tscn",
+      "size_m": [
+        50.0,
+        40.0
+      ],
+      "theme": "仪式厅"
+    },
+    {
+      "blocking_colliders": 24,
+      "breakables": 24,
+      "carpets": 3,
+      "components": 111,
+      "furniture": 66,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/upgrade_25x25_2154658c5c32_1b559c.tscn",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "theme": "更衣客房"
+    },
+    {
+      "blocking_colliders": 9,
+      "breakables": 12,
+      "carpets": 6,
+      "components": 71,
+      "furniture": 43,
+      "lights": 6,
+      "new": true,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_30x10_cf3d5a630a1c_30c1c2.tscn",
+      "size_m": [
+        30.0,
+        10.0
+      ],
+      "theme": "档案过廊"
+    },
+    {
+      "blocking_colliders": 20,
+      "breakables": 24,
+      "carpets": 2,
+      "components": 105,
+      "furniture": 60,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/extraction_25x25_6f808c2e0839_ea81ed.tscn",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "theme": "撤离候车厅"
+    },
+    {
+      "blocking_colliders": 19,
+      "breakables": 21,
+      "carpets": 2,
+      "components": 99,
+      "furniture": 54,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_25x25_38083aa33b1a_897612.tscn",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "theme": "行李搬运侧厅"
+    },
+    {
+      "blocking_colliders": 41,
+      "breakables": 43,
+      "carpets": 6,
+      "components": 178,
+      "furniture": 102,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_30x40_5fbbae7662fe_e86e98.tscn",
+      "size_m": [
+        30.0,
+        40.0
+      ],
+      "theme": "阅读回廊"
+    },
+    {
+      "blocking_colliders": 33,
+      "breakables": 42,
+      "carpets": 4,
+      "components": 187,
+      "furniture": 111,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_40x30_18c0881f3934_e86e98.tscn",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "theme": "宴会侧厅"
+    },
+    {
+      "blocking_colliders": 39,
+      "breakables": 53,
+      "carpets": 14,
+      "components": 260,
+      "furniture": 154,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_45x40_6351962d84c2_007418.tscn",
+      "size_m": [
+        45.0,
+        40.0
+      ],
+      "theme": "长画廊"
+    },
+    {
+      "blocking_colliders": 35,
+      "breakables": 40,
+      "carpets": 8,
+      "components": 203,
+      "furniture": 127,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/event_40x30_24e9d88c229b_a653bb.tscn",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "theme": "馆藏陈列室"
+    },
+    {
+      "blocking_colliders": 41,
+      "breakables": 38,
+      "carpets": 8,
+      "components": 195,
+      "furniture": 119,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/scavenge_40x30_a0eceb3887c9_23641e.tscn",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "theme": "物资整备库"
+    },
+    {
+      "blocking_colliders": 28,
+      "breakables": 36,
+      "carpets": 2,
+      "components": 172,
+      "furniture": 96,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/trap_40x30_29d67dbb9bda_d2426a.tscn",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "theme": "废弃宴席封锁厅"
+    },
+    {
+      "blocking_colliders": 33,
+      "breakables": 40,
+      "carpets": 6,
+      "components": 181,
+      "furniture": 105,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/merchant_30x40_f2a374f5465f_d77c54.tscn",
+      "size_m": [
+        30.0,
+        40.0
+      ],
+      "theme": "接待铺面"
+    },
+    {
+      "blocking_colliders": 0,
+      "breakables": 0,
+      "carpets": 1,
+      "components": 10,
+      "furniture": 5,
+      "lights": 4,
+      "new": true,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_5x5_e715d2f554c1_30c1c2.tscn",
+      "size_m": [
+        5.0,
+        5.0
+      ],
+      "theme": "金边导引廊"
+    },
+    {
+      "blocking_colliders": 0,
+      "breakables": 0,
+      "carpets": 2,
+      "components": 14,
+      "furniture": 6,
+      "lights": 4,
+      "new": true,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_5x10_d4a53812df19_30c1c2.tscn",
+      "size_m": [
+        5.0,
+        10.0
+      ],
+      "theme": "金边导引廊"
+    },
+    {
+      "blocking_colliders": 0,
+      "breakables": 0,
+      "carpets": 3,
+      "components": 18,
+      "furniture": 7,
+      "lights": 4,
+      "new": true,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_5x15_834885ac6f21_30c1c2.tscn",
+      "size_m": [
+        5.0,
+        15.0
+      ],
+      "theme": "金边导引廊"
+    },
+    {
+      "blocking_colliders": 0,
+      "breakables": 0,
+      "carpets": 2,
+      "components": 14,
+      "furniture": 6,
+      "lights": 4,
+      "new": true,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_10x5_33335543dae5_30c1c2.tscn",
+      "size_m": [
+        10.0,
+        5.0
+      ],
+      "theme": "金边导引廊"
+    },
+    {
+      "blocking_colliders": 38,
+      "breakables": 38,
+      "carpets": 0,
+      "components": 164,
+      "furniture": 88,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/storage_40x30_ef3f827636f7_3e5f15.tscn",
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "theme": "档案库"
+    },
+    {
+      "blocking_colliders": 18,
+      "breakables": 23,
+      "carpets": 2,
+      "components": 98,
+      "furniture": 53,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/storage_25x25_95769e85e209_3e5f15.tscn",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "theme": "行李寄存间"
+    },
+    {
+      "blocking_colliders": 22,
+      "breakables": 20,
+      "carpets": 4,
+      "components": 109,
+      "furniture": 64,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/scavenge_25x25_7fda840577df_23641e.tscn",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "theme": "清点工作间"
+    },
+    {
+      "blocking_colliders": 9,
+      "breakables": 12,
+      "carpets": 6,
+      "components": 71,
+      "furniture": 43,
+      "lights": 6,
+      "new": true,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_10x30_a81bd0123e9c_30c1c2.tscn",
+      "size_m": [
+        10.0,
+        30.0
+      ],
+      "theme": "档案过廊"
+    },
+    {
+      "blocking_colliders": 17,
+      "breakables": 21,
+      "carpets": 2,
+      "components": 101,
+      "furniture": 56,
+      "lights": 6,
+      "new": false,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/trap_25x25_99212e763067_d2426a.tscn",
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "theme": "封存警戒厅"
+    },
+    {
+      "blocking_colliders": 0,
+      "breakables": 0,
+      "carpets": 3,
+      "components": 18,
+      "furniture": 7,
+      "lights": 4,
+      "new": true,
+      "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_15x5_9c66fb907802_30c1c2.tscn",
+      "size_m": [
+        15.0,
+        5.0
+      ],
+      "theme": "金边导引廊"
+    }
+  ],
+  "native": {
+    "failures": [],
+    "files": [
+      {
+        "breakables": 48,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/boss_50x40_b7446dc46356_c6c134.tscn",
+        "player_shot": true,
+        "room": "boss",
+        "seed": 77003244,
+        "theme": "仪式厅"
+      },
+      {
+        "breakables": 24,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/upgrade_25x25_2154658c5c32_1b559c.tscn",
+        "player_shot": true,
+        "room": "boss_foyer",
+        "seed": 77003244,
+        "theme": "更衣客房"
+      },
+      {
+        "breakables": 12,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_30x10_cf3d5a630a1c_30c1c2.tscn",
+        "player_shot": true,
+        "room": "conn_01",
+        "seed": 77003244,
+        "theme": "档案过廊"
+      },
+      {
+        "breakables": 24,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/extraction_25x25_6f808c2e0839_ea81ed.tscn",
+        "player_shot": true,
+        "room": "exit",
+        "seed": 77003244,
+        "theme": "撤离候车厅"
+      },
+      {
+        "breakables": 21,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_25x25_38083aa33b1a_897612.tscn",
+        "player_shot": true,
+        "room": "fireplace_room_inj2",
+        "seed": 77003244,
+        "theme": "行李搬运侧厅"
+      },
+      {
+        "breakables": 43,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_30x40_5fbbae7662fe_e86e98.tscn",
+        "player_shot": true,
+        "room": "room_01",
+        "seed": 77003244,
+        "theme": "阅读回廊"
+      },
+      {
+        "breakables": 42,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_40x30_18c0881f3934_e86e98.tscn",
+        "player_shot": true,
+        "room": "n03",
+        "seed": 77003244,
+        "theme": "宴会侧厅"
+      },
+      {
+        "breakables": 53,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_45x40_6351962d84c2_007418.tscn",
+        "player_shot": true,
+        "room": "n07",
+        "seed": 77003244,
+        "theme": "长画廊"
+      },
+      {
+        "breakables": 40,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/event_40x30_24e9d88c229b_a653bb.tscn",
+        "player_shot": true,
+        "room": "reward_01",
+        "seed": 77003244,
+        "theme": "馆藏陈列室"
+      },
+      {
+        "breakables": 38,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/scavenge_40x30_a0eceb3887c9_23641e.tscn",
+        "player_shot": true,
+        "room": "reward_02",
+        "seed": 77003244,
+        "theme": "物资整备库"
+      },
+      {
+        "breakables": 36,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/trap_40x30_29d67dbb9bda_d2426a.tscn",
+        "player_shot": true,
+        "room": "secret_room_inj1",
+        "seed": 77003244,
+        "theme": "废弃宴席封锁厅"
+      },
+      {
+        "breakables": 40,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/merchant_30x40_f2a374f5465f_d77c54.tscn",
+        "player_shot": true,
+        "room": "shop",
+        "seed": 77003244,
+        "theme": "接待铺面"
+      },
+      {
+        "breakables": 0,
+        "contact": false,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_5x5_e715d2f554c1_30c1c2.tscn",
+        "player_shot": false,
+        "room": "cr00_entry_n01",
+        "seed": 77003244,
+        "theme": "金边导引廊"
+      },
+      {
+        "breakables": 0,
+        "contact": false,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_5x10_d4a53812df19_30c1c2.tscn",
+        "player_shot": false,
+        "room": "cr02_n02_n03",
+        "seed": 77003244,
+        "theme": "金边导引廊"
+      },
+      {
+        "breakables": 0,
+        "contact": false,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_5x15_834885ac6f21_30c1c2.tscn",
+        "player_shot": false,
+        "room": "cr07_exit_secret_room_inj1",
+        "seed": 77003244,
+        "theme": "金边导引廊"
+      },
+      {
+        "breakables": 0,
+        "contact": false,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_10x5_33335543dae5_30c1c2.tscn",
+        "player_shot": false,
+        "room": "cr08_shop_fireplace_room_inj2",
+        "seed": 77003244,
+        "theme": "金边导引廊"
+      },
+      {
+        "breakables": 38,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/storage_40x30_ef3f827636f7_3e5f15.tscn",
+        "player_shot": true,
+        "room": "secret_room_inj1",
+        "seed": 99,
+        "theme": "档案库"
+      },
+      {
+        "breakables": 23,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/storage_25x25_95769e85e209_3e5f15.tscn",
+        "player_shot": true,
+        "room": "fireplace_room_inj1",
+        "seed": 42,
+        "theme": "行李寄存间"
+      },
+      {
+        "breakables": 20,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/scavenge_25x25_7fda840577df_23641e.tscn",
+        "player_shot": true,
+        "room": "fireplace_room_inj2",
+        "seed": 123456,
+        "theme": "清点工作间"
+      },
+      {
+        "breakables": 12,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_10x30_a81bd0123e9c_30c1c2.tscn",
+        "player_shot": true,
+        "room": "conn_01",
+        "seed": 7,
+        "theme": "档案过廊"
+      },
+      {
+        "breakables": 21,
+        "contact": true,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/trap_25x25_99212e763067_d2426a.tscn",
+        "player_shot": true,
+        "room": "fireplace_room_inj2",
+        "seed": 7,
+        "theme": "封存警戒厅"
+      },
+      {
+        "breakables": 0,
+        "contact": false,
+        "path": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_15x5_9c66fb907802_30c1c2.tscn",
+        "player_shot": false,
+        "room": "cr00_entry_n01",
+        "seed": 11,
+        "theme": "金边导引廊"
+      }
+    ]
+  },
+  "projectile_confirmations": 535,
+  "source_and_game_checks": 28728,
+  "fixed24_checks": 9625,
+  "door_samples": 3888,
+  "route_checks": 61,
+  "source_file_sha256": {
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/boss_50x40_b7446dc46356_c6c134.tscn": "a4b7f16123810878763b7ce0698c4b9b7436df79611fb383332b5c76728599a4",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/upgrade_25x25_2154658c5c32_1b559c.tscn": "55b0d78aac7fc477b546f32236430a34693ba832db179fafd8d4359e5defaef3",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_30x10_cf3d5a630a1c_30c1c2.tscn": "bbbfb986e214339aeaedd70160b90eb3f630932ae06f10102d2905707b2053aa",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/extraction_25x25_6f808c2e0839_ea81ed.tscn": "32402d7dca4fb9c1d551d40347d52793cca0e1185dd71ae4dd85d564c67bd9e4",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_25x25_38083aa33b1a_897612.tscn": "0d7b9afbef8b34df6a6a749f61d11d6ea9e084de6532e5ab64c19e6307562bb6",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_30x40_5fbbae7662fe_e86e98.tscn": "82b4f4e660a0ba00e9fa89c86c26b70af7123b8ecacda327053349404130b532",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_40x30_18c0881f3934_e86e98.tscn": "c734acfc75c8b6ccda5e511e6e36bdd6b8c5918db72078430e26087d6f0c528a",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_45x40_6351962d84c2_007418.tscn": "49e7463926775a7fe9e8f1f97737f6e43ffe062a7a3a04b5443265acc7ffb190",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/event_40x30_24e9d88c229b_a653bb.tscn": "0d5ebfc40c89eff831021a02d1762218de214309f9454c7b67028f09e9649b5b",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/scavenge_40x30_a0eceb3887c9_23641e.tscn": "3dd4fbd7c4052f18868c4e693e8acb9686efa9043e513e7dc6e6969dcfda4e95",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/trap_40x30_29d67dbb9bda_d2426a.tscn": "b7060ced42e72607ad5f741fa945ca009e2d92a32e229e26c084cc5f959f0eb9",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/merchant_30x40_f2a374f5465f_d77c54.tscn": "42e3a6706e77932a6104d9dcebe476aaa34fd9b6bf5ca9fc9b269f41968f3832",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_5x5_e715d2f554c1_30c1c2.tscn": "a1e0195e8672036736318b5a44ac5a99bb5a8ef30036cfdb8c5cb4a7f16db2ef",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_5x10_d4a53812df19_30c1c2.tscn": "682691d2b88bb17349947bf1357cce186be0759f5cfceb16ba1b94eb5c4c7507",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_5x15_834885ac6f21_30c1c2.tscn": "f86c7108bcdb44e478f71407b574ab8dc3f3a09da944a4774b82b7a03698852f",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_10x5_33335543dae5_30c1c2.tscn": "3486b9b946aabe9005ddad2edd8c97ea7846d55d95aba13d9867c681585fe7ee",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/storage_40x30_ef3f827636f7_3e5f15.tscn": "834fe10e773da8fd3adb09ce3781df6eb351d0ae653ce2bf5503bea09d7ead02",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/storage_25x25_95769e85e209_3e5f15.tscn": "766a291a789129f7a509d43bcfc33fd0b2889341606f170f6ea77734a2f43217",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/scavenge_25x25_7fda840577df_23641e.tscn": "1e29094649746f97d997e66edaa517f3174423e314963d1af6576802fa2d8b83",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_10x30_a81bd0123e9c_30c1c2.tscn": "1f2cead50762e34ba9644581cfc128318d807ae388a4e2980abdda1b519edd23",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/trap_25x25_99212e763067_d2426a.tscn": "0946c51e615ee3acbeb83641b9264e0c29770aac6ef6441c5cbeffeb3d2f5dd8",
+    "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_15x5_9c66fb907802_30c1c2.tscn": "6be25429dcc3b0a1a3cfc880891c3451ae54831deecd2ad8c6183aacdc70c925"
+  },
+  "shadow_control": {
+    "roi_xyxy": [
+      350,
+      300,
+      1100,
+      850
+    ],
+    "mean_luma_without_envelope": 0.5545149281045751,
+    "mean_luma_with_envelope": 0.18606954248366012,
+    "mean_drop_ratio": 0.6644462880022419,
+    "source": "Controlled additional vertical directional light; same final scene, camera and room lights; separate from gameplay screenshots"
+  },
+  "protected_file_sha256": {
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_45x40_6351962d84c2_68065f.tscn": "1603a2ff8759505b12e8ca122535b001074576748423e794dd7b818e4c7afb50",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/event_25x25_ba83cdc666fb_a653bb.tscn": "55643e38ba7b5d430c0718c8ed13a96f76746b4e6108b5a1be0641706418ea5e",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/stair_lobby_15x15_703e12bd9aa8_4955df.tscn": "2d0ab609549b4eaa6b95bafdc32b864a8dc3ad4f743cfec4ea51ebb06fce212b",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/boss_room_02_walk_surface.tscn": "9848d282f7b19c73d98f39641b06fff16c5d88199ba3255bae00b6ea26aeca09",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_01_static_layout.tscn": "e2abc5ddeb2a99ae5fdab4100db45a86724c61fc62703955d7d0551902c84d36",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_secret_shared_corridor_45x40_static_layout.tscn": "b6216041b33c77e537bef6c2c37e673fe5b0b29f2ec03e01cdd61df00a645b61",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_02_static_layout.tscn": "ea844cd3df332f5676efc052a107dc4840f262ed4a6de67dfb63872fc0f438b5",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_extraction_static_layout.tscn": "79cc2dcff676828bdd6c9e24dbdcf140ebb92acfd840df0fafab064a02f8acc3",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_09_static_layout.tscn": "b63c9d565a5aaae3e2cacc74d6f50917a7df9d8507d6e10519fab53e19f91861",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_04_static_layout.tscn": "7bba22f831869fdb1425af449b6b67c85127535dccef4e860abeb29c78a2e83a",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_07_static_layout.tscn": "a259ec748f6a08016e3b19e58819aab3f9e35d951ab51207de2829446486f2e1",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_start_static_layout.tscn": "bb86ece1425a23531f10af153a88bbd9125cb35502686080ef99a0ee49c8b400",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_secret_shared_office_60x70_static_layout.tscn": "65185f1fe5bd81665fbc44d65440168d1ac8485451fa68d456b5753106290356",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_secret_shared_bridge_60x50_static_layout.tscn": "d29759c79e301d62f8ef81d8f7d56da994ccaea6513855e9735f1d2e221d154a",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_06_static_layout.tscn": "40b558278ff38fe39a7d979bcdb32f80d12bcf08f1cd2345d8bb9c40c0792eab",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_08_static_layout.tscn": "a0c1c01f86a75a7cd256da2f9fbd759c144e1c15aa4b45b5c3b5c387313ef367",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_05_static_layout.tscn": "9a5e1e260b53ce838219771acabf170d2d6bfb18a9a06109ff3c7c409ad7b34b",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_03_static_layout.tscn": "6c40ba34c10d5e8fcd4b2a1e66c2530346e8eb75b28f6b8bd65c9c78dbce6ed2",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_static_layout.tscn": "11ae7faedb4601aa1466fcfc4d61986f71f5b466e3a0a06c9ffdcc7a84560afb",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_boss_room_02_static_layout.tscn": "a45c7b105b314942e6b54ec43a59bfd9f753f6a77a6500b5835f436bb1e1c862",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_secret_shared_extraction_25x25_static_layout.tscn": "34ed8feb92b3c96888be0fabe7d2a2caaea46f910c158f9e288db0aa7e6b6ad8",
+    "assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_10_static_layout.tscn": "d5ede558af5a8cca6f62709f957a11fae10365c474753fa288ee4275b2da57c0"
+  },
+  "gate_exits": {
+    "docs": 1,
+    "decoupling": 0,
+    "naming": 1,
+    "registry": 0,
+    "split": 0,
+    "skill": 0,
+    "diff": 0
+  },
+  "images_sha256": {
+    "boss_50x40_b7446dc46356_c6c134_interior.png": "cbbdcc2e34bd8f051b0307eb7b1781449e8afe509b6ef961a9932920ce10f259",
+    "boss_50x40_b7446dc46356_c6c134_gameplay.png": "ab81fdd068770e1a14e38e60e12c4c6c47341d7fb6df97715ee5318c7aa16b2a",
+    "upgrade_25x25_2154658c5c32_1b559c_interior.png": "387e59ad9610b555201e592b3a04d8f16502d041204f0cf7166539bf34c9f751",
+    "upgrade_25x25_2154658c5c32_1b559c_gameplay.png": "1dc2d4e7958d2c67ede1af547e25a9702feb97c0af5a6c439eb1d82a5ebf8f0c",
+    "room_30x10_cf3d5a630a1c_30c1c2_interior.png": "549fd1a2a3a2c2f3aa69576bcca4e5e8f3fb02d0d2fb1755569905b43f4bd7db",
+    "room_30x10_cf3d5a630a1c_30c1c2_gameplay.png": "ed568231c43f4f091ca346f21245ee86d48f9e7e2c691fc7f10e5cfe356b3fc3",
+    "extraction_25x25_6f808c2e0839_ea81ed_interior.png": "d2883055795029ce516c1f9c84f0d4775bfc2c4147bf64126f3aeb00d5d21382",
+    "extraction_25x25_6f808c2e0839_ea81ed_gameplay.png": "7541563a85945cfc64f8e7b905a0e60237734139ec0bd1e61d8dffedfc65932c",
+    "combat_25x25_38083aa33b1a_897612_interior.png": "517b78795ce72fcaeee0340ebc275e7d8e74062a2522a7ce65b7b52b5ecdffde",
+    "combat_25x25_38083aa33b1a_897612_gameplay.png": "40d6ba368df521679560bacf3a8ca62657605d145eb2627b16dc750082987f3a",
+    "combat_30x40_5fbbae7662fe_e86e98_interior.png": "991b786c449a2b69ec748206310af4a4400c265704c634d5a309954eaf0d910e",
+    "combat_30x40_5fbbae7662fe_e86e98_gameplay.png": "1470145ad4748ff6ff89d7f6e52abca3c0b64bff1a60278b21ba7aff7ee1b68f",
+    "combat_40x30_18c0881f3934_e86e98_interior.png": "86f84b1c5bf57abfbb631409919dd8eda97e351b41fd740b3175031f69be7e32",
+    "combat_40x30_18c0881f3934_e86e98_gameplay.png": "c42c264a7312b9ae215ad1e7862a76cfbde71fe0af82ee4f79ab6d6a615d88ac",
+    "combat_45x40_6351962d84c2_007418_interior.png": "ef0d3c8d034be188a817f187487436ebf9855adf9bde9e95bd3c3e38f28a2793",
+    "combat_45x40_6351962d84c2_007418_gameplay.png": "73345ca89c8bf817cc6759bb745c4a7c15477ab9d8e5cecccb6060196d0aba18",
+    "event_40x30_24e9d88c229b_a653bb_interior.png": "c107d08a0f9e39d813d2ca0c8f938f4cdb5da7f0753a08bbfb46329468708772",
+    "event_40x30_24e9d88c229b_a653bb_gameplay.png": "04c584142e94df2884104de8364e98555d8322d5504967532958088623da7d58",
+    "scavenge_40x30_a0eceb3887c9_23641e_interior.png": "05f8e82536cd674f0023aa201ee7455b8af5f3e45c6f276cb1be2f2507365e2d",
+    "scavenge_40x30_a0eceb3887c9_23641e_gameplay.png": "47ea51ae9027efd09da5072875130cd05c680f7043dfc8e71466559dc2a862f3",
+    "trap_40x30_29d67dbb9bda_d2426a_interior.png": "ffc130da84ba60cd36651e9bb5b2476a756bbc02fbfabe827191e2efbbe2d203",
+    "trap_40x30_29d67dbb9bda_d2426a_gameplay.png": "8a3fb9605edd8a06c52427665a40565e007f33b9f4f8e3f4405b8f357e472b07",
+    "merchant_30x40_f2a374f5465f_d77c54_interior.png": "f8bc32a0eb886495902634918309d43a0851bb3b3638ccb228c067f9cd8bf523",
+    "merchant_30x40_f2a374f5465f_d77c54_gameplay.png": "3182d08f540482814f9461a423ddc84f002ff368fafc2ced1c5bc023feb77b9a",
+    "room_5x5_e715d2f554c1_30c1c2_detail.png": "cf826aa0726cfb7036fbd45e28f9fdf81f7fecdd3cf15b790a519b0b1141f49f",
+    "room_5x5_e715d2f554c1_30c1c2_gameplay.png": "0a3b8e6a0ac5130c72d2acbe373f08085dcf4cee155c19129e3551679c4681b2",
+    "room_5x10_d4a53812df19_30c1c2_detail.png": "50d08399c68f80db29c4b400463d84dc8c190793b2efb870820df98b77273470",
+    "room_5x10_d4a53812df19_30c1c2_gameplay.png": "2c3dcbdecac8e4f262a2dc2bd41478a4578958e4479c214d0ed1c9d065eb635b",
+    "room_5x15_834885ac6f21_30c1c2_detail.png": "778a4e34ba80ba8ffa6d8e5e7ff2dc57cb5939d3ce3b0c965a2baea12c438656",
+    "room_5x15_834885ac6f21_30c1c2_gameplay.png": "f0f76942221474c0edf4690e22b70ba9621defeb65f119ddf8d4094f29be882c",
+    "room_10x5_33335543dae5_30c1c2_detail.png": "8fa65c8047a70281eced14f9e1e0761d4e79350f1f1adb394f518b4a19f4a60a",
+    "room_10x5_33335543dae5_30c1c2_gameplay.png": "c8f91d97502b94d17c310d92136eba721c44badfa4c89649cf2d9bf3e14e7a43",
+    "storage_40x30_ef3f827636f7_3e5f15_interior.png": "3fbea959e0a81ad6e8c93889090cd90944633d4d970aabb178ae76171f8468ec",
+    "storage_40x30_ef3f827636f7_3e5f15_gameplay.png": "9c8b5ee7d048d9f3ca8c98281fc4228b230efea0e8d83f69f8aa8cdc20ad67a7",
+    "storage_25x25_95769e85e209_3e5f15_interior.png": "cb754343640521432a353c1442d404a849ef173d64aed296b6ccb6eb0c767c47",
+    "storage_25x25_95769e85e209_3e5f15_gameplay.png": "33f23fb75a8a3614f5137f0d85edd521f4ca86ac9a6198f0470e47ce9f7d1949",
+    "scavenge_25x25_7fda840577df_23641e_interior.png": "f03f773ba00de08af7b543f83876bd473c371ff9f2c2f23ac86658ab81a9db13",
+    "scavenge_25x25_7fda840577df_23641e_gameplay.png": "fa3bbe169a1be2efa4e6b5994b24cbf1ff282362164cb566ba579f977873b7ef",
+    "room_10x30_a81bd0123e9c_30c1c2_interior.png": "ad21a8d9fabaf8233800337c420d59ced922fccf2f990f7d6e0eab1b25af0c0f",
+    "room_10x30_a81bd0123e9c_30c1c2_gameplay.png": "28bccf14b62292e26e57ba2a71561fff885c6a7420bc30e568b8db6aa07228aa",
+    "trap_25x25_99212e763067_d2426a_interior.png": "21fc7ee780f9d2c0b4bd7beb20617cb5701293bbd9b4c6e4ae9e120a6e9eb3da",
+    "trap_25x25_99212e763067_d2426a_gameplay.png": "31db3c4777acc4aed9623efec2451aeb9ba167687c57ed417f878be5b8ddc989",
+    "room_15x5_9c66fb907802_30c1c2_detail.png": "192f3098ece10ce5e3b9e4c53235821ce6a65bdd51bc8b4112b181151ec30388",
+    "room_15x5_9c66fb907802_30c1c2_gameplay.png": "2b858db5f3e07e9b9c84888fcbacd4dfd6a67b8e1bb22850cb217f90321aaece",
+    "boss_50x40_b7446dc46356_c6c134_layout.png": "a83c3e00fa92900d3152d1fc92b2bfe970deb8d9707f5150135ed68f3f7f68ec",
+    "combat_45x40_6351962d84c2_007418_layout.png": "3dcabf388049b760b9eb0b720e5afbd9524e1fccaad71ca96a36160698dc9983",
+    "storage_40x30_ef3f827636f7_3e5f15_layout.png": "bb47d4875d20cf4eee4c514bf9207a6f6f97402154e46876d6cba64a1f4b0742",
+    "roof_control_off.png": "a07bda0fb45201871db67050bb299e7231e45ad7a94c944a8f766b58379611a9",
+    "roof_control_on.png": "37d0cb65a6cd089b4021a88ceb79b904d99bebfa4c848456324302950791d0bd",
+    "preserved_stair_lobby_15x15_703e12bd9aa8_4955df.png": "7c0464f7bfaa7773d65d363caf71e8b89c5f82f0f9f56204dc93223cf663d1f5",
+    "preserved_event_25x25_ba83cdc666fb_a653bb.png": "f3c4e65a667bf0e87b9290435e78f66db5b2c4d0eab40b5b71cf337e5304f388",
+    "preserved_combat_45x40_6351962d84c2_68065f.png": "341dcf104af06016ebd5448b83570b7717d5ff9b44c7889d319946e3e773f315",
+    "combat_45x40_6351962d84c2_007418_facilities.png": "d6d00808b5982401b926858063026662e25fc19eeebe7536e696be3c5f67c7aa",
+    "combat_45x40_6351962d84c2_007418_burst.png": "b5b1869355de1a6ead41dc6dbfd5a3bd941aa5a617e8dadd6ae51c426434ce42",
+    "combat_45x40_6351962d84c2_007418_broken.png": "49862a6e826adbaacee6f6805583e489bcccc9c04bca31adc527333176cb8686"
+  }
+}

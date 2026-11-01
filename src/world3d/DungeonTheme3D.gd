@@ -29,6 +29,10 @@ extends Resource
 @export var room_sequence: Array[String] = ["COMBAT", "SCAVENGE", "COMBAT", "EVENT"]
 @export var furniture_bias: Array[String] = ["crate", "locker", "desk"]
 
+@export_group("Door Presentation")
+## 可选门扇外观；空值沿用房间原有的塔楼/基地选择，不改变门态与开合方式。
+@export var door_panel_visual_scene: PackedScene
+
 
 func get_snapshot() -> Dictionary:
 	return {
