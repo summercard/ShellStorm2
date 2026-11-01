@@ -5,6 +5,16 @@
 
 ## 执行历史
 
+### 2026-11-01 05:05 — **内容已上线，线上校验不通过（第三天同一卡点：需登录门禁）**
+- 全流程一次过：导出 365.9 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（18 条）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。耗时 4m45s，无重试。
+- 包：**383,693,024 B / 365.9 MiB**，SHA256 `348a7018433058692ed62a805526350c7369ef7ce21de0479b17a3689e0fbe8a`，比 10-31 版 +223,768 B。exe mtime 今日 05:04（真导出）。
+- 线上已被本版覆盖：`/api/v1/sites` 3 files / **383,713,640 B** ＝ 本地三件之和（exe + index 12,051 + md 8,565）**逐字节相等**；对昨日 +217,450 B 可由三件增减完全解释。
+- **卡点不变**：直链与更新页均 302 → `/oauth/feishu?src=site`；内网 41739 同路径 302；**Bearer token 与 `rs_token` cookie 均不生效**；`/api/v1/sites/<id>/files` 不存在（not found）⇒ **无法做整包重下载 SHA256**，本日线上校验只能靠字节总和比对。
+- 18 条＝13 条 `##` 主条目 + 5 条同日期子项链接（采集器 `_DATED_BULLET_RE` 设计行为，题目如「重铺记录」「铺装记录」）；其中 2 条昨日已发布，今日真新增约 16 条。提交 6 条（HEAD `13d06bc1`，10-31 18:48，非本次产生），未提交 8 项（全为 `.gd.uid` 附属文件）。
+- 合规：`config/name="弹壳风暴2"` 未动；未 commit/push；未新建站点；发布目录 3 件；冒烟隔离 `APPDATA`。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-01.md`；日志 `_logs\daily_release_2026-11-01.log`。
+- **待业主（连续第三天）**：请管理员把本站 `access` 改 `public`，否则每天都是「发了但玩家下不到」。
+
 ### 2026-10-31 05:04 — **内容已上线，线上校验不通过（仍是「需登录」门禁）**
 - 全流程一次过：导出 365.7 MiB（源码比 10-30 包新，未用 `--skip-build`）→ 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（20 条）→ 覆盖发布 `server-api-update` 3 文件 → **`verify_online` 判 302 失败，退出码 1**。耗时 2m06s。
 - 包：**383,469,256 B / 365.7 MiB**，SHA256 `afacd97fbefb79d083366612a7fcff32924b7495d760b62b2c70e431a64ff136`，比 10-30 版 +2,333,880 B。
