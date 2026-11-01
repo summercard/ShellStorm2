@@ -263,6 +263,8 @@ core_scenes=(
   verify_player3d_weapon_pose_collision_flow
   verify_3d_enemy_behavior_flow
   verify_enemy_illumination_states
+  verify_enemy_light_motion_regression
+  verify_enemy_spawn_boundary
   verify_monster_ai_light_effects
   verify_monster_ai_system_complete
   verify_vfx_pool_lifecycle
@@ -451,6 +453,7 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  verify_player_camera_defeat_feedback
   verify_expedition03_indoor_lighting
   verify_block00_facilities
   verify_debug_camera_hotkeys

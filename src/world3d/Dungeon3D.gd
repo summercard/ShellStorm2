@@ -278,6 +278,8 @@ var _kills := 0
 var _completed := false
 var _death_dialog: Control = null
 var _death_animation_ready := false
+var _death_filter_ready := false
+var _defeat_transition: CanvasLayer
 ## 行动代际：每次「本次行动已终局结算并把世界复位成新一轮」时 +1。
 ## 死亡动画 1.35s 比成功撤离的 0.8s 返航窗口更长，复位之后才结束的那次死亡
 ## 属于上一代行动，必须作废 —— 否则同一次行动会先判撤离成功、再判阵亡结算。
@@ -4348,12 +4350,35 @@ func _pending_delayed_spawn_count(room_id: String) -> int:
 func _resolve_spawn_position(
 	room: DungeonRoom3D, config: Dictionary, index: int, positions: Array
 ) -> Vector3:
+	var bound_to_room := _uses_room_bound_spawn(config)
 	if index < positions.size():
-		return positions[index] as Vector3
+		var point := positions[index] as Vector3
+		return room.resolve_enemy_spawn_position(point) if bound_to_room else point
 	var embedded: Variant = config.get("spawn_position", null)
 	if embedded is Vector3:
-		return embedded as Vector3
+		return room.resolve_enemy_spawn_position(embedded as Vector3) if bound_to_room else embedded as Vector3
 	return room.spawn_point_for_index(index)
+
+
+func _uses_room_bound_spawn(config: Dictionary) -> bool:
+	# 楼梯/天台剧情使用世界锚点，授权空间由剧情适配器拥有；它不是房间战斗落点。
+	return not bool(config.get("narrative_spawned", false)) or str(config.get("narrative_placement", "")) == "room_floor"
+
+
+func _repair_restored_enemy_room_position(enemy: Enemy3D, room: DungeonRoom3D) -> bool:
+	if not _uses_room_bound_spawn(enemy.enemy_data):
+		return false
+	if room.contains_world_position(enemy.global_position):
+		return false
+	var repaired := room.resolve_enemy_spawn_position(enemy.global_position)
+	if not repaired.is_finite():
+		push_warning("[Dungeon3D] 无法修复越界怪物快照落点：%s" % enemy.get_persistent_id())
+		return false
+	if repaired.is_equal_approx(enemy.global_position):
+		return false
+	enemy.global_position = repaired
+	enemy.velocity = Vector3.ZERO
+	return true
 
 
 ## ==================== 编成外增援（远征） ====================
@@ -8798,6 +8823,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			detail_state[optional_key] = (state[optional_key] as Dictionary).duplicate(true)
 	room.apply_runtime_detail_state(detail_state)
 	var live_enemies: Array = []
+	var repaired_enemy_position := false
 	for value in _enemy_nodes_by_room.get(room_id, []):
 		if is_instance_valid(value) and not (value as Node).is_queued_for_deletion() and value is Enemy3D:
 			live_enemies.append(value)
@@ -8807,6 +8833,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 				if str(enemy_state.get("persistent_id", "")) == persistent_id:
 					_normalize_narrative_02_stationary_data((value as Enemy3D).enemy_data, room_id)
 					(value as Enemy3D).import_runtime_state(enemy_state)
+					repaired_enemy_position = _repair_restored_enemy_room_position(value as Enemy3D, room) or repaired_enemy_position
 					break
 	if live_enemies.is_empty():
 		for runtime_value in state.get("enemies", []):
@@ -8845,6 +8872,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			enemy.boss_activation_completed.connect(_on_boss_activation_completed)
 			enemy.health_changed.connect(_on_enemy_health_changed)
 			enemy.import_runtime_state(enemy_state)
+			repaired_enemy_position = _repair_restored_enemy_room_position(enemy, room) or repaired_enemy_position
 			live_enemies.append(enemy)
 			if enemy.enemy_kind == "boss":
 				_show_boss_hud(enemy)
@@ -8871,7 +8899,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 		else:
 			push_warning("[Dungeon3D] 无法修复剧情怪快照落点：%s" % enemy.get_persistent_id())
 	_alive_by_room[room_id] = live_enemies.size() + _reserved_spawn_count(room_id)
-	if repaired_narrative_position:
+	if repaired_narrative_position or repaired_enemy_position:
 		_capture_room_runtime_state(room_id)
 	call_deferred("_flush_reserved_room_spawns", room_id)
 	if room_id == _current_room_id and not room.cleared:
@@ -10005,7 +10033,7 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 	hp_bar.max_value = maxi(1, maximum)
 	hp_bar.value = clampi(current, 0, maximum)
 	var hp_ratio := float(current) / float(maxi(1, maximum))
-	var vignette_intensity := clampf((0.34 - hp_ratio) / 0.34, 0.0, 1.0)
+	var vignette_intensity := clampf((0.34 - hp_ratio) / 0.34, 0.0, 1.0) if current > 0 else 0.0
 	var vignette_material := low_health_vignette.material as ShaderMaterial
 	if vignette_material != null:
 		vignette_material.set_shader_parameter("intensity", vignette_intensity)
@@ -10019,6 +10047,7 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 	# 自由撤离：玩家可以被打但不被中断。
 	# 只要 HP 不归零就读条继续。
 	if current <= 0:
+		_start_defeat_transition()
 		# 阵亡必须中断撤离读条。信标只认 _remaining <= 0，不看玩家死活，
 		# 读条期间被打死本来就会被判「撤离成功」（塔楼双结算、独立副本吞掉死亡）。
 		# 注意调用顺序：先作废信标，再写状态文案 —— abort 会同步触发
@@ -10234,16 +10263,40 @@ func _on_player_death_animation_finished() -> void:
 	_show_death_confirmation_dialog()
 
 
+func _start_defeat_transition() -> void:
+	if _completed or is_instance_valid(_defeat_transition):
+		return
+	_death_filter_ready = false
+	_defeat_transition = preload("res://src/postfx/DefeatTransition.gd").new()
+	_defeat_transition.name = "DefeatTransition"
+	_defeat_transition.connect("finished", _on_defeat_transition_finished.bind(_run_generation), CONNECT_ONE_SHOT)
+	add_child(_defeat_transition)
+
+
+func _on_defeat_transition_finished(generation: int) -> void:
+	if _completed or generation != _run_generation or player == null or player.current_hp > 0:
+		return
+	_death_filter_ready = true
+	_show_death_confirmation_dialog()
+
+
 ## 清除上一轮行动遗留的死亡状态。终局复位（塔楼成功返航）后必须调用，
 ## 否则新一轮再阵亡时 `_death_animation_ready` 仍是 true，死亡框不会再弹。
 func _reset_death_settlement_state() -> void:
 	_death_animation_ready = false
+	_death_filter_ready = false
+	if is_instance_valid(_defeat_transition):
+		_defeat_transition.hide()
+		_defeat_transition.queue_free()
+	_defeat_transition = null
 	if _death_dialog != null and is_instance_valid(_death_dialog):
 		_death_dialog.queue_free()
 	_death_dialog = null
 
 
 func _show_death_confirmation_dialog() -> void:
+	if _completed or not _death_animation_ready or not _death_filter_ready:
+		return
 	if _death_dialog != null and is_instance_valid(_death_dialog):
 		return
 	# 「棱镜线框」死亡结算确认：冷蓝压暗 + 四角括号模态卡 + 黑徽章标题（含下折角）
@@ -10284,7 +10337,7 @@ func _death_return_button_text() -> String:
 
 
 func _confirm_death_return() -> void:
-	if _completed or not _death_animation_ready:
+	if _completed or not _death_animation_ready or not _death_filter_ready:
 		return
 	if _death_dialog != null and is_instance_valid(_death_dialog):
 		_death_dialog.queue_free()

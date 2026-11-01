@@ -121,8 +121,10 @@ func _process(delta: float) -> void:
 		# 淡化期由引擎推进，同小僵尸。
 		if _player != null:
 			_player.advance(delta)
-	if _looping and _clip_length > 0.0:
-		var rate := 1.0 if _blend_left > 0.0 else _playback_rate()
+		if _clip_length > 0.0:
+			_phase = fposmod(_player.current_animation_position / _clip_length, 1.0)
+	elif _looping and _clip_length > 0.0:
+		var rate := _playback_rate()
 		_phase = fmod(_phase + delta * rate / _clip_length, 1.0)
 	# 只推能量，不碰 `emission_enabled`。
 	HitFlash.apply(_materials, _flash_baseline, _flash_time / FLASH_DURATION)
@@ -182,7 +184,8 @@ func sync_state(
 		_phase = 0.0
 		_sample = 0.0
 		_player.play(_clip, CLIP_BLEND_SEC)
-	elif _blend_left <= 0.0:
+	elif _clip != previous_clip or _blend_left <= 0.0:
+		_blend_left = 0.0
 		# play + seek 必须成对：MANUAL 回调模式下单独 seek 不驱动骨架。同小僵尸。
 		_player.play(_clip)
 		_player.seek(_sample, true)

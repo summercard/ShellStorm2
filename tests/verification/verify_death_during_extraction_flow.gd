@@ -19,7 +19,7 @@ extends Node
 
 const TOWER_SCENE := "res://scenes/TowerDescent3D.tscn"
 const EXPEDITION_SCENE := "res://scenes/ExpeditionLevel99_3D.tscn"
-const DEATH_ANIM_S := 1.35
+const DEATH_PRESENTATION_S := 2.0 # parallel 1.35s fall and 2s defeat filter
 const SETTLE_WAIT_S := 0.6
 
 var _events: Array[String] = []
@@ -91,7 +91,7 @@ func _check_case(failures: Array[String], label: String, scene_path: String, rem
 		await _despawn(scene)
 		return
 	# 等足「死亡动画 + 信标原本读完的时刻」，让两条路径都有机会抢跑。
-	await get_tree().create_timer(DEATH_ANIM_S + remaining + 1.0).timeout
+	await get_tree().create_timer(DEATH_PRESENTATION_S + remaining + 1.0).timeout
 	scene.call("_confirm_death_return")
 	await get_tree().create_timer(SETTLE_WAIT_S).timeout
 	if bool(beacon.get("_active")):
@@ -132,7 +132,7 @@ func _check_death_without_extraction(failures: Array[String]) -> void:
 		await _despawn(scene)
 		return
 	player.take_damage(99999)
-	await get_tree().create_timer(DEATH_ANIM_S + 0.6).timeout
+	await get_tree().create_timer(DEATH_PRESENTATION_S + 0.6).timeout
 	scene.call("_confirm_death_return")
 	await get_tree().create_timer(SETTLE_WAIT_S).timeout
 	_assert_only_death_settlement(failures, "反向对照②无撤离阵亡")
@@ -161,7 +161,7 @@ func _check_new_run_death_after_return(failures: Array[String]) -> void:
 		await _despawn(scene)
 		return
 	player.take_damage(99999)
-	await get_tree().create_timer(DEATH_ANIM_S + 0.6).timeout
+	await get_tree().create_timer(DEATH_PRESENTATION_S + 0.6).timeout
 	if scene.get("_death_dialog") == null:
 		failures.append("反向对照③：成功返航之后新一轮阵亡没有弹出死亡确认框")
 		await _despawn(scene)

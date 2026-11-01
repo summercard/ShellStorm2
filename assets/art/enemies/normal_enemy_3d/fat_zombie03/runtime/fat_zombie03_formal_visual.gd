@@ -24,6 +24,9 @@ var _locomotion_phase := 0.0
 var _speed := 0.0
 ## 满速，用来把当前速度换算成比例（走还是跑）。
 var _base_speed := 0.0
+var _base_speed_clock := 0.0
+const BASE_SPEED_SMOOTH_SEC := 0.30
+const RUN_EXIT_RATIO := 0.50
 var _light_time := 1.0
 var _flash_time := 0.0
 var _event := ""
@@ -85,8 +88,8 @@ func sync_state(
 ) -> void:
 	if _player == null:
 		return
-	if base_speed > 0.0:
-		_base_speed = base_speed
+	_smooth_base_speed(base_speed)
+	var previous_clip := _clip
 	if state != _state:
 		_previous_pose.clear()
 		for bone in _skeleton.get_bone_count():
@@ -138,6 +141,12 @@ func sync_state(
 			_sample = event_progress
 		else:
 			_event = ""
+	# 不只状态变化，速度选段/启动事件结束也会换剪辑；从当前姿势过渡，防止硬切。
+	if _clip != previous_clip and state not in ["dormant", "telegraph", "attack", "recovery", "stagger", "dead"]:
+		_previous_pose.clear()
+		for bone in _skeleton.get_bone_count():
+			_previous_pose.append(_skeleton.get_bone_pose(bone))
+		_blend_time = 0.0
 	# 所有非死亡状态先清理形变，防止复用实例残留压扁肚子。
 	if state != "dead":
 		for mesh in _meshes:
@@ -146,7 +155,7 @@ func sync_state(
 				mesh.set_blend_shape_value(key, 0.0)
 	_player.play(_clip)
 	_player.seek(_sample, true)
-	if _blend_time < 0.1 and state_time < 0.1 and state not in ["dormant", "attack", "recovery"]:
+	if _blend_time < 0.1 and state not in ["dormant", "attack", "recovery"]:
 		var weight := clampf(_blend_time / 0.1, 0.0, 1.0)
 		for bone in _previous_pose.size():
 			var sampled := _skeleton.get_bone_pose(bone)
@@ -192,13 +201,26 @@ func _locomotion_clip(clip: String) -> String:
 	if ratio < 0.0:
 		return clip
 	if clip == "walking":
-		return "running" if ratio >= RUN_SPEED_RATIO else clip
+		var threshold := RUN_EXIT_RATIO if _clip == "running" else RUN_SPEED_RATIO
+		return "running" if ratio >= threshold else clip
 	if clip == "idle" and _state in ["idle", "patrol"]:
 		if ratio >= RUN_SPEED_RATIO:
 			return "running"
 		if ratio >= RUN_SPEED_RATIO * 0.5:
 			return "walking"
 	return clip
+
+
+func _smooth_base_speed(base_speed: float) -> void:
+	if base_speed <= 0.0:
+		return
+	if _base_speed <= 0.0:
+		_base_speed = base_speed
+		_base_speed_clock = _clock
+		return
+	var step := clampf(_clock - _base_speed_clock, 0.0, 0.25)
+	_base_speed_clock = _clock
+	_base_speed = lerpf(_base_speed, base_speed, 1.0 - exp(-step / BASE_SPEED_SMOOTH_SEC))
 
 
 func _speed_ratio() -> float:

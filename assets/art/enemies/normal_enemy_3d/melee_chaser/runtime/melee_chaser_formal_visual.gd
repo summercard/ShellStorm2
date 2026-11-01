@@ -122,8 +122,11 @@ func _process(delta: float) -> void:
 		# 手动 `seek()` 会把姿势直接钉到新段，淡化等于没做。
 		if _player != null:
 			_player.advance(delta)
-	if _looping and _clip_length > 0.0:
-		var rate := 1.0 if _blend_left > 0.0 else _playback_rate()
+		# 直接读取引擎推进后的相位，含淡化结束的最后一帧；不能另算一条时钟。
+		if _clip_length > 0.0:
+			_phase = fposmod(_player.current_animation_position / _clip_length, 1.0)
+	elif _looping and _clip_length > 0.0:
+		var rate := _playback_rate()
 		_phase = fmod(_phase + delta * rate / _clip_length, 1.0)
 	# 只推能量，**不碰 `emission_enabled`**（见 `_flash_baseline` 注释与 HitFlashMaterial3D 头注）。
 	HitFlash.apply(_materials, _flash_baseline, _flash_time / FLASH_DURATION)
@@ -207,7 +210,9 @@ func sync_state(
 		_phase = 0.0
 		_sample = 0.0
 		_player.play(_clip, CLIP_BLEND_SEC)
-	elif _blend_left <= 0.0:
+	elif _clip != previous_clip or _blend_left <= 0.0:
+		# 战斗/死亡/受击打断移动淡化时，必须当帧取消淡化并采样权威进度。
+		_blend_left = 0.0
 		# 淡化结束后回到"每帧 play + seek"。⚠ 这两句不能只留 seek：
 		# `callback_mode_process = MANUAL` 下单独 `seek()` **不会驱动骨架**
 		# （本轮实测踩过：以为已经修好，实际画面定格，髋部高度恒定 0.3980）。

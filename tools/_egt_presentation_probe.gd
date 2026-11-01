@@ -2,7 +2,7 @@ extends Node
 ## 远征03 怪物「表现层三件事」专项验收（2026-10-31 业主报单）。
 ##
 ## 三件事各自独立，失败互不掩盖：
-##   ① **逐只可辨识**：33 只都要挂上自己的标识件，且同族不撞标识；
+##   ① **移除附加几何**：33只均不生成程序化变种标识件（2026-11-02用户修订）；
 ##   ② **受击不漂移**：受击姿态只在「站定」时播；太阳伤害这类环境结算**完全不播**；
 ##   ③ **不绕圈**：远程怪在远处**直线逼近**、到位**站住**、太近才后撤，而不是满速绕玩家转。
 ##
@@ -10,14 +10,13 @@ extends Node
 ## ⚠ 必须 `--scene`（要 autoload 与 `Enemy3D` 的依赖）。
 ##
 ## ## 判据为什么是这三条
-## ①② 来自业主原话「每个怪物进行区分」「一边移动一边受到反馈动画，就变成漂移」。
+## ①来自业主要求去掉球/方块附加件；②来自「一边移动一边受到反馈动画，就变成漂移」。
 ## ③ 来自「有几只怪会环绕角色走，不会直着对着角色过来」。三条都能被**数值**证伪：
 ##   · ② 断言的是 `clip != "hurt"` 而不是"看起来没飘"——旧实现 0.8 s 内 chase 也被覆盖；
 ##   · ③ 断言的是速度与径向的**点积**与**平面速度**：绕圈时点积 ≈ 0 且速度是满速，
 ##     旧的 `tangent * 0.78 + radial * radial_weight` 就是这个形状，改动前后数值会翻面。
 
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
-const Distinction := preload("res://src/enemy3d/EnemyDistinction3D.gd")
 const INJECTOR := preload("res://src/map/MonsterInjector.gd")
 
 ## 站定判据：平面速度低于它算"已经到位"。
@@ -31,7 +30,6 @@ const RETREAT_DOT_MAX := -0.55
 
 var _failures: Array[String] = []
 var _rows: Array[String] = []
-var _rows_contrast: Array[String] = []
 
 
 func _check(condition: bool, message: String) -> void:
@@ -41,7 +39,6 @@ func _check(condition: bool, message: String) -> void:
 
 func _ready() -> void:
 	print("=== EGT_PRESENTATION_PROBE 表现层三件事 ===")
-	_check_distinction_table()
 	_check_distinction_attached()
 	_check_hurt_pose()
 	_check_sunlight_no_feedback()
@@ -51,19 +48,7 @@ func _ready() -> void:
 	_finish()
 
 
-# ── ① 标识表自身 ───────────────────────────────────────────────────────────
-func _check_distinction_table() -> void:
-	var report: Dictionary = Distinction.verify_design()
-	_check(bool(report.get("ok", false)), "标识表自检失败：%s" % str(report.get("problems", [])))
-	_check(int(report.get("total", 0)) == 33, "标识表应覆盖 33 只，实际 %d" % int(report.get("total", 0)))
-	var families: Dictionary = report.get("families", {})
-	_check(families.size() == 9, "应覆盖 9 个族，实际 %d（%s）" % [families.size(), str(families)])
-	print("[表] 标识设计 %d 只 / %d 族 %s" % [int(report.get("total", 0)), families.size(), str(families)])
-	for problem in report.get("problems", []):
-		print("  ✗ %s" % str(problem))
-
-
-# ── ② 逐只真的挂上了 ───────────────────────────────────────────────────────
+# ── ① 逐只确认附加标识件已移除 ───────────────────────────────────────────
 func _check_distinction_attached() -> void:
 	var injector := INJECTOR.new()
 	var kinds: Array[String] = []
@@ -71,7 +56,6 @@ func _check_distinction_attached() -> void:
 		if str(kind).begins_with("egt_"):
 			kinds.append(str(kind))
 	kinds.sort()
-	var seen_signature: Dictionary = {}
 	for kind in kinds:
 		var data: Dictionary = injector.generate_box_enemy(kind, 1, 1)
 		if data.is_empty():
@@ -85,51 +69,12 @@ func _check_distinction_attached() -> void:
 		enemy.configure_from_enemy_data(data)
 		var info: Dictionary = enemy.avatar.get_component_snapshot()
 		var distinction: Dictionary = info.get("distinction", {})
-		_check(bool(distinction.get("attached", false)), "%s 没有挂上标识件" % kind)
-		var shape := str(distinction.get("shape", ""))
-		_check(not shape.is_empty(), "%s 的标识形状为空" % kind)
-		# 零件必须真的建出来（微体 blobulin 是设计如此：0 件）。
-		var pieces := int(distinction.get("piece_count", 0))
-		_check(
-			pieces > 0 or kind == "egt_blobulin",
-			"%s 标识容器是空的（%d 件）—— 等于没挂" % [kind, pieces]
-		)
-		# 对比度：标识件必须与身体色拉开，否则"挂了但看不见"。
-		var body: Color = EnemyAvatar3D.COLORS.get(kind, Color.WHITE)
-		var mark: Dictionary = Distinction.DESIGN.get(kind, {})
-		var resolved: Color = Distinction.resolve_albedo(mark.get("color", Color.WHITE) as Color, body)
-		var contrast := Distinction.contrast_with(kind, body)
-		_check(
-			Distinction._distance(resolved, body) >= Distinction.MIN_CONTRAST,
-			"%s 标识件与身体色不可辨（解算后仍只有 %.2f）" % [kind, Distinction._distance(resolved, body)]
-		)
-		_rows_contrast.append("%-24s 原色差=%.2f 解算后=%.2f" % [
-			kind, contrast, Distinction._distance(resolved, body)
-		])
-		var family := str(distinction.get("family", ""))
-		_rows.append("%-24s %-10s %-10s" % [kind, family, shape])
-		# 撞标识的判据 = 形状 + 组数 + 颜色。**形状相同但数量/颜色不同不算撞**：
-		# 分裂族三阶本来就只有"鼓包 2/1/0"这一条差别（同一只怪炸开的），
-		# 冲撞族三只也只有"尖刺 1/2/3"。若强行要求形状全不同，就得为它们各造一种几何，
-		# 那是把"同一族"的读法拆散 —— 与"族内统一"的诉求相反。
-		var spec: Dictionary = Distinction.DESIGN.get(kind, {})
-		var signature := "%s/%s/%d/%s" % [
-			family, shape,
-			int(spec.get("count", 1)),
-			(spec.get("color", Color.WHITE) as Color).to_html(),
-		]
-		_check(
-			not seen_signature.has(signature),
-			"同族撞标识：%s 与 %s 都是 %s" % [str(seen_signature.get(signature, "")), kind, signature]
-		)
-		seen_signature[signature] = kind
+		_check(not bool(distinction.get("attached", false)), "%s仍挂着程序化变种件" % kind)
+		_check(int(distinction.get("piece_count", -1)) == 0, "%s仍有程序化球/方块标识件" % kind)
+		_check(enemy.avatar.find_children("Distinction*", "Node3D", true, false).is_empty(), "%s节点树仍有标识容器" % kind)
+		_rows.append("%-24s 无附加标识件" % kind)
 		enemy.queue_free()
-	print("[对比] 标识件 vs 身体")
-	for row in _rows_contrast:
-		print(row)
-	_rows_contrast.clear()
-	print("[挂载] 逐只标识")
-	print("%-24s %-10s %-10s" % ["怪", "族", "标识"])
+	print("[附加几何] 33只均应无标识件")
 	for row in _rows:
 		print(row)
 	_rows.clear()

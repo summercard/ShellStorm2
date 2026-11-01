@@ -2,7 +2,7 @@ extends Node3D
 ## 远征03场景自持的室内光照包络。只读实际房间足迹，不拥有或修改关卡布局。
 ## 顶盖与外侧四壁仅投影；layer1静态盒同时阻断怪物日照射线，不遮俯视相机。
 
-@export var ceiling_height_m := 6.0
+@export var ceiling_height_m := 12.0
 @export var thickness_m := 1.0
 @export var perimeter_margin_m := 3.0
 

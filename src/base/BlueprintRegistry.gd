@@ -514,6 +514,8 @@ func is_unlocked(item_id: String) -> bool:
 ##   · `fire_rate` 1.6 → **1.8 发/秒**（2026-11-01 业主：「射速帮我调快一点……现在是1.5发/s，
 ##     改成1.8发/s」。账本/注释里 1.5 是**换弹时间**的旧值，射速改前实际是 1.6；
 ##     按业主点名的目标值 1.8 落地，两发间隔 0.625 → 0.556 s）
+##   · `fire_rate` 1.8 → **1.7 发/秒**（2026-11-02 业主：「改成1.7」。往回退一档，
+##     两发间隔 0.556 → 0.588 s；换弹仍是 1.8 s，两个 1.7/1.8 是不同的字段别混）
 ##   · 弹体视觉 ×2（业主：「出去那个特效大小，就那个模型帮我放大一倍」；
 ##     落在 `WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG["pistol"]`，**判定半径不动**）
 ##
@@ -526,7 +528,7 @@ func _create_gunbody_pistol() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Pistol")
 	node.tags = ["pistol", "semi_auto", "sidearm"]
 	node.set_base_stats({
-		"damage": 25, "fire_rate": 1.8, "bullet_count": 1, "range": 15,
+		"damage": 25, "fire_rate": 1.7, "bullet_count": 1, "range": 15,
 		"spread": 0.03, "reload_time": 1.8, "magazine_size": 10,
 		"bullet_speed": PISTOL_BULLET_SPEED_MPS / BULLET_SPEED_BASE_MPS,
 	})

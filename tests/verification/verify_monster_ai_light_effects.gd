@@ -29,7 +29,7 @@ func _ready() -> void:
 
 	player.queue_free()
 	if failures.is_empty():
-		print("MONSTER_AI_LIGHT_EFFECTS_OK: 40% lit-state multipliers, sunlight DOT, shared overhead marker, managed vision, flashlight pursuit, darkness seeking and room-light search pass")
+		print("MONSTER_AI_LIGHT_EFFECTS_OK: 40% lit movement, unchanged attack timing, sunlight DOT, shared overhead marker, managed vision and light reactions pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -60,15 +60,15 @@ func _verify_state_effects_and_ui(failures: Array[String]) -> void:
 	if (
 		str(lit.get("illumination_state", "")) != EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT
 		or not is_equal_approx(float(lit.get("illumination_move_multiplier", 0.0)), 0.40)
-		or not is_equal_approx(float(lit.get("illumination_attack_frequency_multiplier", 0.0)), 0.40)
+		or not is_equal_approx(float(lit.get("illumination_attack_frequency_multiplier", 0.0)), 1.00)
 		or not is_equal_approx(enemy.get_effective_move_speed(), enemy.move_speed * 0.40)
 		or str(lit.get("illumination_ui_text", "")) != "亮"
 	):
-		failures.append("Artificial light does not apply the exact 40%% movement/attack frequency multipliers: %s" % str(lit))
+		failures.append("Artificial light must apply 40%% movement and 100%% attack frequency: %s" % str(lit))
 	enemy.set("_attack_timer", 1.0)
 	enemy.call("_physics_process", 1.0)
-	if not is_equal_approx(float(enemy.get("_attack_timer")), 0.60):
-		failures.append("Artificial light attack frequency does not advance a 1s timer by exactly 0.40")
+	if not is_equal_approx(float(enemy.get("_attack_timer")), 0.0):
+		failures.append("Artificial light must advance a 1s attack timer by exactly 1s")
 	lamp.light_energy = 0.0
 	enemy.force_refresh_illumination()
 	if not is_equal_approx(enemy.get_effective_move_speed(), enemy.move_speed):

@@ -473,7 +473,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_qiq20")
 
 [node name="NorthCollection_DisplayLeft" parent="ArtComponents/AuthoredSalon" unique_id=1063225209 instance=ExtResource("8_b0de1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1, 0, -9.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1, 0, -11.797894)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/NorthCollection_DisplayLeft" unique_id=2042551405]
@@ -483,7 +483,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_v6521")
 
 [node name="NorthCollection_DisplayRight" parent="ArtComponents/AuthoredSalon" unique_id=1674989940 instance=ExtResource("8_b0de1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.9, 0, -9.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5733805, 0, -11.690255)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/NorthCollection_DisplayRight" unique_id=586095853]
@@ -517,7 +517,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_5csp2")
 
 [node name="SouthCollection_DisplayLeft" parent="ArtComponents/AuthoredSalon" unique_id=1023724309 instance=ExtResource("8_b0de1")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 4.1, 0, 7.5)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 4.1, 0, 11.94479)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/SouthCollection_DisplayLeft" unique_id=1434155594]
@@ -527,7 +527,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_5vukg")
 
 [node name="SouthCollection_DisplayRight" parent="ArtComponents/AuthoredSalon" unique_id=1386627165 instance=ExtResource("8_b0de1")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.9, 0, 7.5)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5.7755394, 0, 11.95527)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/SouthCollection_DisplayRight" unique_id=1075930781]
@@ -563,7 +563,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.012, 5)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="ExhibitLibrary-4_5" parent="ArtComponents/AuthoredSalon" unique_id=143242927 instance=ExtResource("8_b0de1")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 8.6, 0, -4.5)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 11.680818, 0, -4.5)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/ExhibitLibrary-4_5" unique_id=1966585353]
@@ -583,7 +583,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.804925, 0)
 shape = SubResource("BoxShape3D_1um8o")
 
 [node name="ExhibitLibrary4_5" parent="ArtComponents/AuthoredSalon" unique_id=94871604 instance=ExtResource("8_b0de1")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 8.6, 0, 4.5)
+transform = Transform3D(-4.371139e-08, 0, -1, -0.9996743, -0.025518425, 4.3697153e-08, -0.025518425, 0.9996743, 1.1154455e-09, 11.858508, 0.748353, 4.5)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/ExhibitLibrary4_5" unique_id=448388947]
@@ -812,7 +812,7 @@ metadata/facility_arrangement = "wall_corner_05"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_004_breakable_chair" parent="ArtComponents/AuthoredDestructibles" unique_id=845848210 instance=ExtResource("24_wfs5y")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 8.75, 0.1, 11.7)
+transform = Transform3D(-0.9168957, 0, -0.39912698, 0, 1, 0, 0.39912698, 0, -0.9168957, 8.75, 0.1, 11.7)
 metadata/facility_arrangement = "wall_corner_06"
 metadata/layout_design = "authored_destructible_facilities"
 
@@ -837,7 +837,7 @@ metadata/facility_arrangement = "wall_corner_14"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_009_breakable_chair" parent="ArtComponents/AuthoredDestructibles" unique_id=620568969 instance=ExtResource("24_wfs5y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.7, 0.1, -2.5)
+transform = Transform3D(0.27687865, 0, -0.9609049, 0, 1, 0, 0.9609049, 0, 0.27687865, 11.7, 0.1, -1.9732995)
 metadata/facility_arrangement = "wall_corner_15"
 metadata/layout_design = "authored_destructible_facilities"
 
@@ -932,7 +932,7 @@ metadata/facility_arrangement = "wall_corner_05"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_028_breakable_vase" parent="ArtComponents/AuthoredDestructibles" unique_id=1876134313 instance=ExtResource("23_wqfqi")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 8.75, 0.1, 10.5)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 10.543477, 0.1, 11.124663)
 metadata/facility_arrangement = "wall_corner_06"
 metadata/layout_design = "authored_destructible_facilities"
 
@@ -982,17 +982,17 @@ metadata/facility_arrangement = "wall_corner_13"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_038_breakable_vase" parent="ArtComponents/AuthoredDestructibles" unique_id=318592046 instance=ExtResource("23_wqfqi")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 10.5, 0.1, 8.75)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 11.21086, 0.1, 8.75)
 metadata/facility_arrangement = "wall_corner_14"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_039_breakable_chair" parent="ArtComponents/AuthoredDestructibles" unique_id=1615487362 instance=ExtResource("24_wfs5y")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 10.5, 0.1, -2.5)
+transform = Transform3D(0.030339247, 0, -0.9995397, 0, 1, 0, 0.9995397, 0, 0.030339247, 11.569194, 0.1, -3.2631922)
 metadata/facility_arrangement = "wall_corner_15"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_040_breakable_crate" parent="ArtComponents/AuthoredDestructibles" unique_id=1107299736 instance=ExtResource("25_qiq20")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 10.5, 0.1, 2.5)
+transform = Transform3D(-0.7020023, 0, -0.71217465, 0, 1, 0, 0.71217465, 0, -0.7020023, 11.529139, 0.1, 3.7195654)
 metadata/facility_arrangement = "wall_corner_16"
 metadata/layout_design = "authored_destructible_facilities"
 

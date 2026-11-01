@@ -34,6 +34,13 @@ func _run() -> void:
 	sun.rotation_degrees = Vector3(-60, -32, 0)
 	sun.light_energy = 1.0
 	var rooms: Array = level.get("_rooms")
+	await _verify_camera_occlusion(level, envelope, rooms[0])
+	if "--camera-only" in OS.get_cmdline_user_args():
+		level.queue_free()
+		await settle()
+		print("INDOOR_CAMERA_RESULT checks=%d failures=%d" % [checks, failures.size()])
+		get_tree().quit(0 if failures.is_empty() else 1)
+		return
 	if "--capture-only" in OS.get_cmdline_user_args():
 		await _capture(level, rooms[0], envelope, sun)
 		level.queue_free()
@@ -100,6 +107,81 @@ func _run() -> void:
 	await settle()
 	print("INDOOR_RESULT ", JSON.stringify({"checks":checks,"failures":failures.size(),"rooms":rooms.size(),"sun_samples":samples,"rendered":DisplayServer.get_name() != "headless"}))
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+func _verify_camera_occlusion(level: TowerDescent3D, envelope: Node3D, room: DungeonRoom3D) -> void:
+	var player: Player3D = level.player
+	var camera: Camera3D = player.camera
+	var was_processing := level.is_processing()
+	var was_physics_processing := player.is_physics_processing()
+	var player_pose := player.transform
+	var camera_pose := camera.transform
+	level.set_process(false)
+	player.set_physics_process(false)
+	player.global_position = room.global_position + Vector3(0, 0.15, 0)
+	camera.global_position = player.global_position + Vector3(0, level.CAMERA_HEIGHT_M, 4.914455)
+	camera.look_at(player.global_position + Vector3(0, 0.72, 0))
+	camera.make_current()
+	room.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
+	room.set_room_light_on(true)
+	await settle()
+	var body := envelope.get_node("Ceiling/SunOcclusionBody") as StaticBody3D
+	var collider := body.get_node("SunOcclusionShape") as CollisionShape3D
+	var box := collider.shape as BoxShape3D
+	var bounds := collider.global_transform * AABB(-box.size / 2.0, box.size)
+	print("INDOOR_HEIGHTS ", JSON.stringify({"cover_bottom":bounds.position.y,"cover_top":bounds.end.y,"camera_y":camera.global_position.y,"player_feet_y":player.global_position.y}))
+	check(is_equal_approx(bounds.position.y - room.global_position.y, 12.0), "sun cover bottom must be 12m above room")
+	check(bounds.position.y > camera.global_position.y, "sun cover is below the normal camera")
+	level._update_camera_occlusion_silhouette()
+	check(not bool(level.get("_player_occluded")), "invisible sun cover incorrectly enables player X-ray")
+	await _camera_shot("camera_normal")
+	# 只把顶盖临时降回6m，证明能重现之前的角色透视；随后恢复12m。
+	var roof := envelope.get_node("Ceiling") as Node3D
+	var roof_y := roof.position.y
+	roof.position.y -= 6.0
+	await settle()
+	level._update_camera_occlusion_silhouette()
+	check(bool(level.get("_player_occluded")), "negative control did not reproduce sun-cover X-ray")
+	await _camera_shot("camera_old_regression_control")
+	roof.position.y = roof_y
+	await settle()
+	# 顶盖升高后，真实阻挡仍须触发原有轮廓。
+	var wall := StaticBody3D.new()
+	wall.name = "CameraRealWallControl"
+	wall.collision_layer = 1
+	wall.collision_mask = 0
+	add_child(wall)
+	wall.global_position = camera.global_position.lerp(player.global_position + Vector3(0, 0.72, 0), 0.70)
+	var wall_shape := CollisionShape3D.new()
+	var wall_box := BoxShape3D.new()
+	wall_box.size = Vector3(4, 1, 4)
+	wall_shape.shape = wall_box
+	wall.add_child(wall_shape)
+	var wall_visual := MeshInstance3D.new()
+	var wall_mesh := BoxMesh.new()
+	wall_mesh.size = wall_box.size
+	wall_visual.mesh = wall_mesh
+	wall.add_child(wall_visual)
+	await settle()
+	level._update_camera_occlusion_silhouette()
+	check(bool(level.get("_player_occluded")), "real wall no longer enables original X-ray")
+	await _camera_shot("camera_real_wall_control")
+	wall.free()
+	await settle()
+	level._update_camera_occlusion_silhouette()
+	check(not bool(level.get("_player_occluded")), "X-ray did not clear after real wall removal")
+	check(body.collision_layer == 1, "camera fix disabled gameplay sun occlusion")
+	player.transform = player_pose
+	camera.transform = camera_pose
+	player.set_physics_process(was_physics_processing)
+	level.set_process(was_processing)
+
+func _camera_shot(label: String) -> void:
+	if DisplayServer.get_name() == "headless" or OS.get_cmdline_user_args().is_empty():
+		return
+	var directory := OS.get_cmdline_user_args()[0]
+	DirAccess.make_dir_recursive_absolute(directory)
+	await RenderingServer.frame_post_draw
+	get_viewport().get_texture().get_image().save_png(directory.path_join(label + ".png"))
 
 func _capture(level: TowerDescent3D, room: DungeonRoom3D, envelope: Node, sun: DirectionalLight3D) -> void:
 	var args := OS.get_cmdline_user_args()

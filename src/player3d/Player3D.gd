@@ -25,6 +25,9 @@ signal backpack_equipment_changed(snapshot: Dictionary)
 signal flashlight_module_changed(snapshot: Dictionary)
 signal debug_scale_changed(snapshot: Dictionary)
 signal death_animation_finished()
+signal damage_received(damage: int, maximum: int)
+
+var camera_feedback := preload("res://src/player3d/PlayerCameraFeedback3D.gd").new()
 
 const SPEED := 4.5
 ## 持枪移速惩罚（m/s，对基础速度的减法项）。三类枪械动画族与
@@ -278,6 +281,12 @@ var _character_fate: Dictionary = CHARACTER_FATE_DEFAULTS.duplicate(true)
 @onready var virtual_collision_capsule: CollisionShape3D = $VirtualCollisionCapsule
 
 
+func _init() -> void:
+	# Own the feedback node even when a test instantiates/frees us before _ready.
+	camera_feedback.name = "PlayerCameraFeedback3D"
+	add_child(camera_feedback)
+
+
 func _ready() -> void:
 	current_hp = max_hp
 	# v0.1：坡面由真实承重盒负责。短距离吸附只跨越数厘米接缝，
@@ -294,6 +303,7 @@ func _ready() -> void:
 	add_child(interaction_controller)
 	interaction_controller.configure(self)
 	_init_state_machine()
+	camera_feedback.configure(self)
 	_init_expression_system()
 	_init_melee_combat()
 	_ensure_weapon_tree()
@@ -1331,6 +1341,9 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO,
 			_character_fate["last_stand_charges"] = rescues.size()
 			break
 	current_hp = maxi(0, next_hp)
+	if actual_damage > 0 and not fate_health_loss:
+		camera_feedback.request_hit(actual_damage, max_hp)
+		damage_received.emit(actual_damage, max_hp)
 	var reflected := 0 if fate_health_loss else roundi(actual_damage * float(_character_fate["reflect_ratio"]))
 	if reflected > 0 and is_instance_valid(damage_source) and damage_source != self:
 		if damage_source.has_method("take_projectile_damage"):
@@ -3154,6 +3167,12 @@ func release_post_settlement_invulnerability() -> void:
 	_invincible_remaining = 0.0
 
 
+func uses_pointer_camera_aim() -> bool:
+	# The virtual input Autoloads also exist on desktop. Their presence does not
+	# identify the active device; InputDevice owns that fact.
+	return InputDevice.get_active_device() == InputDevice.DEVICE_KEYBOARD_MOUSE
+
+
 func _update_aim_from_mouse() -> void:
 	if camera == null or not camera.is_inside_tree():
 		return
@@ -3188,8 +3207,13 @@ func _update_aim_from_mouse() -> void:
 	var mouse_position := viewport.get_mouse_position()
 	if not mouse_position.is_finite():
 		return
+	var shake_offset := Vector2(camera.h_offset, camera.v_offset)
+	camera.h_offset = 0.0
+	camera.v_offset = 0.0
 	var ray_origin := camera.project_ray_origin(mouse_position)
 	var ray_direction := camera.project_ray_normal(mouse_position)
+	camera.h_offset = shake_offset.x
+	camera.v_offset = shake_offset.y
 	if (
 		not ray_origin.is_finite()
 		or not ray_direction.is_finite()

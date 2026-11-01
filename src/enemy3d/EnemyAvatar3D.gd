@@ -404,10 +404,10 @@ func get_component_snapshot() -> Dictionary:
 		# 而不是只数一遍节点在不在。
 		"distinction": {
 			"family": Distinction.family_of(enemy_kind),
-			"shape": str(Distinction.DESIGN.get(enemy_kind, {}).get("shape", "")),
-			"anchor": str(Distinction.DESIGN.get(enemy_kind, {}).get("anchor", "")),
+			"shape": "",
+			"anchor": "",
 			"attached": _distinction_root != null,
-			# 零件数：0 = 只有容器没内容（微体 blobulin 是设计如此，其他怪为 0 就是漏建）。
+			# 当前契约：所有变种均应为0，不再生成附加几何。
 			"piece_count": _distinction_root.get_child_count() if _distinction_root != null else 0,
 			"anchors_from": str(_distinction_anchors.get("__source__", _base_kind if has_formal_normal() else "program")),
 		},
@@ -527,37 +527,7 @@ func _rebuild() -> void:
 		# 按配方为普通与强化僵尸挂接红眼。
 		if monster_has_eye_glow():
 			_setup_eye_socket()
-	_apply_distinction(body_size)
-
-
-## 挂上"这是哪一只"的标识件（远征03 专用，见 `EnemyDistinction3D`）。
-##
-## 挂点选择：
-##   · 有正式 GLB ⇒ 挂在 `FormalNormal_*` 下。标识件随模型走（含 `_kind_scale_multiplier`），
-##     且**不受**程序化分支的 bob / 附肢旋转影响 —— 那套姿势对 GLB 是关掉的。
-##   · 程序化外壳 ⇒ 挂在 `VisualRoot` 下，跟外壳一起呼吸。
-##
-## 零件**延到下一帧再建**：位置要靠实测包围盒（GLB 的数字与
-## `FORMAL_NORMAL_HEIGHTS` 那套旧口径差了 30%，见 `EnemyDistinction3D.apply` 头注），
-## 而 GLB 刚实例化时世界矩阵还没解析完（与 `_setup_eye_socket` 同一个坑）。
-func _apply_distinction(body_size: Vector3) -> void:
-	_distinction_root = null
-	_distinction_anchors = {}
-	if _root == null or not Distinction.has_design(enemy_kind):
-		return
-	var host: Node3D = _root
-	if has_formal_normal():
-		host = _formal_normal_root
-		# 有 GLB ⇒ 用该模型的实测语义锚点（见 `EnemyDistinction3D.ANCHORS` 头注：
-		# 身高百分比 / 骨骼 / get_aabb 三种做法都不能用）。
-		_distinction_anchors = Distinction.anchors_for(_base_kind)
-	else:
-		# 程序化外壳 ⇒ 锚点按 `body_size` 现算。
-		_distinction_anchors = Distinction.program_anchors(body_size)
-	_distinction_root = Distinction.apply(host, enemy_kind)
-	if _distinction_root != null:
-		# 身体色传进去：标识件的 albedo 要按它算对比度（见 `resolve_albedo`）。
-		Distinction.build(_distinction_root, enemy_kind, _distinction_anchors, _base_color)
+	# 2026-11-02 用户要求移除变种球/方块等附加件；保留模型本体、染色和体型。
 
 
 ## 是否有已标定的僵尸眼位配方；普通版和强化版均可用。

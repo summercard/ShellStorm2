@@ -1804,7 +1804,9 @@ func _physics_process(delta: float) -> void:
 	if player == null or not is_instance_valid(player):
 		return
 	_update_base_fog_transition(delta)
+	player.camera_feedback.suspended = _has_camera_presentation_override()
 	if _has_camera_presentation_override():
+		player.camera_feedback.reset()
 		return
 	var planar_velocity := Vector2(player.velocity.x, player.velocity.z)
 	var player_is_moving := planar_velocity.length_squared() > 0.01
@@ -1822,13 +1824,13 @@ func _physics_process(delta: float) -> void:
 		_camera_probe_accumulator, _camera_probe_interval_s
 		)
 		_camera_probe_refresh_count += 1
-	# v0.1：只允许画面下方墙体驱动固定后方轴上的抬升收拢；禁止侧移与旋转。
+	# 环境避障仍沿既定后方轴抬升收拢；光标前视由独立反馈层叠加。
 	_update_camera_profile(delta)
 	_update_camera_lower_wall_lift(delta, refresh_camera_probes)
 	_update_camera_stair_slab_drop(delta, refresh_camera_probes)
 	_apply_indoor_camera_pose()
 	# v0.1：墙体透明淡化会在摄像机碰撞时留下概率性消失状态。
-	# 摄像机现在只沿固定轴缩短距离，墙材质永不被运行时改写。
+	# 避障沿既定轴缩短距离，墙材质永不被运行时改写。
 	_update_floor_visibility_state()
 	if refresh_camera_probes:
 		_update_camera_occlusion_silhouette()
@@ -1931,7 +1933,7 @@ func _camera_profile_right_direction() -> Vector3:
 func _camera_profile_planar_position() -> Vector3:
 	if player == null:
 		return Vector3.ZERO
-	return player.global_position + _camera_profile_trailing_direction() * _camera_trailing_current_m
+	return player.global_position + _camera_profile_trailing_direction() * _camera_trailing_current_m + player.camera_feedback.look_offset
 
 
 func _current_camera_profile_id() -> String:
@@ -1944,6 +1946,8 @@ func _current_camera_profile_id() -> String:
 func _apply_indoor_camera_pose() -> void:
 	if player == null or player.camera == null:
 		return
+	player.camera_feedback.world_pose_managed = true
+	var feedback_offset: Vector3 = player.camera_feedback.look_offset
 	if not _uses_expedition_camera_profiles():
 		# 非远征02保持版本库原始相机：玩家局部坐标、坐姿下沉、debug trailing/yaw
 		# 均不改变；远征02专属 profile 不得污染远征01、塔楼和全局默认镜头。
@@ -1977,6 +1981,9 @@ func _apply_indoor_camera_pose() -> void:
 			CAMERA_LOOK_HEIGHT_M - seat_drop_m,
 			-CAMERA_LOOK_AHEAD_M
 		)
+		var safe_feedback := _constrain_camera_feedback_offset(player.camera.global_position, feedback_offset)
+		player.camera.global_position += safe_feedback
+		look_target += safe_feedback
 		player.camera.look_at(look_target, Vector3.UP)
 		_clamp_flow_camera_into_room(look_target)
 		_apply_debug_camera_pose_adjustments(look_target)
@@ -2004,6 +2011,9 @@ func _apply_indoor_camera_pose() -> void:
 		+ Vector3.UP * camera_height_m
 		+ trailing_direction * trailing_m
 	)
+	var safe_feedback := _constrain_camera_feedback_offset(camera_position, feedback_offset)
+	look_target += safe_feedback
+	camera_position += safe_feedback
 	var debug_trailing_offset_m := _read_debug_camera_trailing_offset_m()
 	if not is_zero_approx(debug_trailing_offset_m):
 		camera_position = look_target + (camera_position - look_target).normalized() * maxf(
@@ -2016,6 +2026,22 @@ func _apply_indoor_camera_pose() -> void:
 	var constrained := constrain_narrative_camera_pose(desired, player.global_position)
 	player.camera.global_transform = constrained
 	_apply_debug_camera_pose_adjustments(look_target)
+
+
+func _constrain_camera_feedback_offset(origin: Vector3, offset: Vector3) -> Vector3:
+	if offset.length_squared() < 0.000001:
+		return Vector3.ZERO
+	var sphere := SphereShape3D.new()
+	sphere.radius = 0.18
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = sphere
+	query.transform = Transform3D(Basis.IDENTITY, origin)
+	query.motion = offset
+	query.collision_mask = CAMERA_WALL_COLLISION_MASK
+	query.collide_with_areas = false
+	query.exclude = [player.get_rid()]
+	var fractions := get_world_3d().direct_space_state.cast_motion(query)
+	return offset * maxf(0.0, fractions[0] - 0.02 / offset.length()) if fractions[0] < 1.0 else offset
 
 
 ## 远征03（flow 关卡）专用：把镜头**水平夹在当前房间足迹内**（业主指定保留）。
@@ -2281,12 +2307,14 @@ func _find_lower_camera_wall_distance() -> float:
 		var lateral_offset := lateral * float(lateral_offset_value)
 		var probe_origin := (
 			player.global_position
+			+ player.camera_feedback.look_offset
 			+ Vector3.UP * CAMERA_LOWER_WALL_PROBE_HEIGHT_M
 			+ trailing * CAMERA_LOWER_WALL_PROBE_START_M
 			+ lateral_offset
 		)
 		var probe_end := (
 			player.global_position
+			+ player.camera_feedback.look_offset
 			+ Vector3.UP * CAMERA_LOWER_WALL_PROBE_HEIGHT_M
 			+ trailing * CAMERA_LOWER_WALL_PROBE_LENGTH_M
 			+ lateral_offset
@@ -8761,7 +8789,9 @@ func get_tower_snapshot() -> Dictionary:
 		),
 		"camera_collision_enabled": true,
 		"camera_fixed_pose": false,
-		"camera_horizontal_pose_fixed": true,
+		"camera_horizontal_pose_fixed": player.camera_feedback.look_offset.is_zero_approx(),
+		"camera_look_offset": player.camera_feedback.look_offset,
+		"camera_look_max_m": player.camera_feedback.LOOK_MAX_M,
 		"camera_yaw_locked": true,
 		"camera_floor_cutaway_enabled": false,
 		"camera_cutaway_mode": "occluded_player_silhouette",

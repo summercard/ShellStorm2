@@ -7142,6 +7142,32 @@ func _spawn_obstacle_free(point: Vector3) -> bool:
 	return true
 
 
+## 显式敌人落点：保留合法原位，越界时取既有安全池中最近点；不改请求高度。
+func resolve_enemy_spawn_position(requested_world: Vector3) -> Vector3:
+	if not requested_world.is_finite():
+		return Vector3.INF
+	var requested := to_local(requested_world)
+	var planar := Vector3(requested.x, 0.0, requested.z)
+	if _spawn_floor_contains(planar, _spawn_clearance()):
+		return requested_world
+	# 显式坐标不等于已校验：分裂/召唤在墙边产生的偏移可直接跨过房墙。
+	# 只修非法边界点；合法剧情/多标高Boss站位保持原值与原高度。
+	if _spawn_candidates.is_empty():
+		_build_spawn_points()
+	_ensure_spawn_reach()
+	_collect_spawn_blockers()
+	var nearest := Vector3.INF
+	var nearest_distance := INF
+	for point in _spawn_candidates:
+		if not _spawn_floor_contains(point, _spawn_clearance()) or not _spawn_obstacle_free(point):
+			continue
+		var distance := Vector2(point.x - requested.x, point.z - requested.z).length_squared()
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest = to_global(Vector3(point.x, requested.y, point.z))
+	return nearest
+
+
 ## 剧情主层落点：复用地砖覆盖和实际设施障碍，额外验证同层物理承重。
 ## 搜索仅在请求附近进行；绝不把楼下地面或房间中心当作兜底。
 func resolve_narrative_floor_positions(

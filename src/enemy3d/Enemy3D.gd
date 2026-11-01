@@ -119,7 +119,7 @@ const FALL_DEATH_DROP_M := 15.0
 const DEFAULT_BASE_SIZE_MULTIPLIER := 0.70
 const BOSS_SIZE_MULTIPLIER := 1.5
 const ARTIFICIAL_LIGHT_MOVE_MULTIPLIER := 0.40
-const ARTIFICIAL_LIGHT_ATTACK_FREQUENCY_MULTIPLIER := 0.40
+const ARTIFICIAL_LIGHT_ATTACK_FREQUENCY_MULTIPLIER := 1.00
 const SUNLIGHT_MAX_HP_DAMAGE_PER_SECOND := 0.02
 const ILLUMINATION_UI_COLORS := {
 	"darkness": Color(0.42, 0.20, 0.62, 1.0),
@@ -2295,8 +2295,9 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 		#   近（< 站位 − 容差）→ 后撤，带 30% 侧移免得和同伴撞在一起；
 		#   带内           → 只做归位微调；偏差小于容差 1/4 就**站住**开枪。
 		# 侧移从"主运动"降级成"错位修正"，这才是原作「走过来、停下、开枪」的形状。
-		if distance > ideal_distance + band:
-			desired = radial * effective_move_speed * _slow_factor
+		# 隔墙时即使已到理想射程也必须沿导航绕行，不能在墙后原地等待。
+		if distance > ideal_distance + band or not _has_line_of_sight(_target):
+			desired = desired_direction * effective_move_speed * _slow_factor
 		elif distance < ideal_distance - band:
 			desired = (-radial * 0.94 + tangent * 0.30).normalized() * effective_move_speed * _slow_factor
 		else:
@@ -3059,7 +3060,7 @@ func _perform_egt_attack(to_target: Vector3, distance: float) -> void:
 func _perform_egt_contact(to_target: Vector3, distance: float) -> void:
 	_external_velocity = to_target.normalized() * 6.4
 	_external_timer = 0.16
-	if distance <= attack_range + 0.60 and is_instance_valid(_target) and _target.has_method("take_damage"):
+	if distance <= attack_range + 0.60 and is_instance_valid(_target) and _target.has_method("take_damage") and _has_line_of_sight(_target):
 		if _target.has_method("notify_attacked_by"):
 			_target.call("notify_attacked_by", self)
 		_target.call("take_damage", contact_damage, false, to_target.normalized())
@@ -4939,16 +4940,19 @@ func _apply_local_avoidance(desired_velocity: Vector3, target_offset: Vector3) -
 	if get_world_3d().direct_space_state.intersect_ray(query).is_empty():
 		return desired_velocity
 	var tangent := Vector3(-direction.z, 0.0, direction.x) * _avoidance_sign
-	if _stuck_time > 0.38:
-		_avoidance_sign *= -1.0
+	# 绕行侧由0.8秒卡住恢复统一切换；这里每帧翻转会在慢速下左右抽动。
 	var target_direction := target_offset.normalized()
 	return (tangent * 0.88 + target_direction * 0.22).normalized() * desired_velocity.length()
 
 
 func _track_stuck_recovery(delta: float, intended_velocity: Vector3) -> void:
-	var moved := global_position.distance_to(_last_motion_position)
+	var offset := global_position - _last_motion_position
+	var moved := Vector2(offset.x, offset.z).length()
 	_last_motion_position = global_position
-	if intended_velocity.length() < 0.2 or moved > 0.025:
+	var expected := Vector2(intended_velocity.x, intended_velocity.z).length() * delta
+	# 与帧率和受光速度无关：有至少20%的期望水平进度就算在前进。
+	# 旧0.025m/帧在60Hz把所有低于1.5m/s的正常慢走都判成卡住。
+	if expected <= 0.00001 or moved >= expected * 0.20:
 		_stuck_time = maxf(0.0, _stuck_time - delta * 2.0)
 		return
 	_stuck_time += delta

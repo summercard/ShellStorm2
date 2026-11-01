@@ -140,8 +140,8 @@ func _probe(kind: String) -> void:
 	# 默认 basis 朝 -Z；目标在 +X ⇒ 朝 +X 就是绕 Y 转 -90°。
 	enemy.rotation.y = -PI * 0.5
 	await get_tree().physics_frame
-	enemy.apply_profile(kind)
-	enemy.configure_from_enemy_data({})
+	# enemy_kind已在入树前指定，_ready已应用该Profile。重复重建会把待释放的
+	# Label3D/材质带入渲染队列，制造与AI无关的material null错误。
 	enemy.set_runtime_active(true)
 	# 伪装型不现形就永远是"静止"的 —— 那测的是伪装机制，不是 AI。
 	if enemy._active_profile.has("disguise"):
@@ -150,6 +150,7 @@ func _probe(kind: String) -> void:
 	# 单只探针永远满足"没有别人" ⇒ 第 1 帧就 `_die()`，一个数据都测不到。
 	# 这里临时摘掉这个键，等价于"房里还有同伴"，才能看到它真正的抓取节奏。
 	if enemy._active_profile.has("die_when_others_dead"):
+		enemy._active_profile = enemy._active_profile.duplicate(true)
 		enemy._active_profile.erase("die_when_others_dead")
 	# `_target` 是 AI 的目标缓存；`MonsterAIManager` 每 110ms 重算并写回，
 	# 这里先手动给一次，避免第一帧空转。
