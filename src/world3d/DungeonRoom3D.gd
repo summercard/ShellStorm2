@@ -536,6 +536,8 @@ var _door_nodes: Dictionary = {}
 var _door_nodes_by_port: Dictionary = {}
 var _central_light: WastelandLight3D
 var _room_lights: Array[WastelandLight3D] = []
+## 显式登记的作者Light3D/室内补光；能量只缓存作者基线，开关事实仍归原灯组。
+var _supplemental_room_lights: Dictionary = {}
 var _light_switch: RoomLightSwitch3D
 # 99F基地的常驻开关全集（西墙→100F、东墙→98F）。其他房型本数组为空，
 # 只走 _light_switch 单开关路径。见 FACILITY_SWITCH_SIDES 与
@@ -843,6 +845,36 @@ func is_room_light_on() -> bool:
 	return false
 
 
+## 不重包/移动作者灯。调用者拥有实例，房间负责开关、流送和怪物光源登记。
+func register_supplemental_room_light(light: Light3D) -> void:
+	if light == null or light is DirectionalLight3D or not is_ancestor_of(light):
+		return
+	if _supplemental_room_lights.has(light):
+		return
+	_supplemental_room_lights[light] = light.light_energy
+	light.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.register_node(light, GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT, room_id)
+	light.tree_exiting.connect(_unregister_supplemental_room_light.bind(light), CONNECT_ONE_SHOT)
+	_sync_supplemental_room_lights()
+
+
+func _unregister_supplemental_room_light(light: Light3D) -> void:
+	_supplemental_room_lights.erase(light)
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.unregister_node(light)
+
+
+func _sync_supplemental_room_lights() -> void:
+	var enabled := is_room_light_on() or not authored_room_light_switch
+	var active := _stream_state in [STREAM_SHELL_READY, STREAM_ACTIVE]
+	for value in _supplemental_room_lights:
+		var light := value as Light3D
+		if is_instance_valid(light):
+			# 不翻visible，保留作者可见性且避免Compatibility重开灯丢渲染实例。
+			light.light_energy = float(_supplemental_room_lights[light]) if enabled and active else 0.0
+
+
 ## 统一控制房间灯光。FACILITY 的两个开关已通过 link_switch 并联，
 ## 因此只从一个有效开关发起变更，避免重复播放启动表现；普通房间沿用单开关。
 ## 该接口是剧情与房间灯光状态之间的稳定边界，也会同步 Art 自发光。
@@ -1054,6 +1086,7 @@ func ensure_detail_built() -> void:
 	_building_detail = false
 	_apply_pending_detail_runtime_state()
 	_set_room_light_runtime_state(self)
+	_sync_supplemental_room_lights()
 
 
 func ensure_shell_built() -> void:
@@ -1096,6 +1129,7 @@ func set_stream_state(state: int) -> void:
 			if door != null:
 				door.set_open(door.is_open, true)
 	_set_room_light_runtime_state(self)
+	_sync_supplemental_room_lights()
 
 
 ## 应用一份房间细节状态（存档回灌 / 探针构造）。
@@ -1489,6 +1523,7 @@ func _bind_light_switch_signal() -> void:
 
 
 func _on_light_switch_toggled(is_on: bool) -> void:
+	_sync_supplemental_room_lights()
 	light_toggled.emit(self, is_on)
 
 

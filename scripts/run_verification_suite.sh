@@ -451,6 +451,7 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  verify_expedition03_indoor_lighting
   verify_block00_facilities
   verify_debug_camera_hotkeys
 )

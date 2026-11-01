@@ -1,6 +1,6 @@
 extends Node3D
 ## 远征03场景自持的室内光照包络。只读实际房间足迹，不拥有或修改关卡布局。
-## 顶盖与外侧四壁仅投影；不遮俯视相机，不新增物理/导航/受击面。
+## 顶盖与外侧四壁仅投影；layer1静态盒同时阻断怪物日照射线，不遮俯视相机。
 
 @export var ceiling_height_m := 6.0
 @export var thickness_m := 1.0
@@ -27,6 +27,8 @@ func _ready() -> void:
 func _on_node_added(node: Node) -> void:
 	if node is WastelandLight3D and get_parent().is_ancestor_of(node):
 		_hide_ceiling_fixture.call_deferred(node)
+	elif node is Light3D and not node is DirectionalLight3D and get_parent().is_ancestor_of(node):
+		_register_room_light.call_deferred(node)
 
 
 func _hide_ceiling_fixture(node: Node) -> void:
@@ -58,6 +60,7 @@ func _on_gameplay_started(_room_id: String) -> void:
 		found = true
 		_room_count += 1
 		_add_room_bounce(room)
+		_register_authored_lights(room)
 	if not found:
 		push_error("IndoorLightEnvelope: no committed room footprints")
 		return
@@ -79,21 +82,46 @@ func _on_gameplay_started(_room_id: String) -> void:
 
 
 func _add_blocker(label: String, size_m: Vector3, center: Vector3) -> void:
-	var mesh := BoxMesh.new()
-	mesh.size = size_m
 	var material := StandardMaterial3D.new()
 	material.albedo_color = Color.BLACK
 	material.roughness = 1.0
 	material.disable_fog = true
-	mesh.material = material
 	var visual := MeshInstance3D.new()
 	visual.name = label
-	visual.mesh = mesh
 	visual.position = center
 	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 	visual.layers = GameDesignConfig.RENDER_LAYER_WORLD
-	visual.set_meta("visual_only", true)
+	visual.set_meta("top_cover_occluder", label == "Ceiling")
 	add_child(visual)
+	# 巨型单Mesh在方向光级联阴影中会丢失覆盖；分块使每块独立进入阴影裁剪。
+	# 覆盖完整地图（包括房间之间空隙），四壁一起分块，低角度太阳仍被封闭。
+	var counts := Vector3i(ceili(size_m.x / 20.0), ceili(size_m.y / 20.0), ceili(size_m.z / 20.0))
+	var patch_size := size_m / Vector3(counts)
+	for x in counts.x:
+		for y in counts.y:
+			for z in counts.z:
+				var mesh := BoxMesh.new()
+				mesh.size = patch_size
+				mesh.material = material
+				var patch := MeshInstance3D.new()
+				patch.mesh = mesh
+				patch.position = -size_m / 2.0 + patch_size * (Vector3(x, y, z) + Vector3.ONE * 0.5)
+				patch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+				patch.layers = GameDesignConfig.RENDER_LAYER_WORLD
+				visual.add_child(patch)
+	# 与远征01封顶模块相同：渲染阴影不参与EnemyIllumination的物理查询。
+	var body := StaticBody3D.new()
+	body.name = "SunOcclusionBody"
+	body.collision_layer = 1
+	body.collision_mask = 0
+	body.set_meta("runtime_owner", "IndoorLightEnvelope")
+	visual.add_child(body)
+	var shape := BoxShape3D.new()
+	shape.size = size_m
+	var collider := CollisionShape3D.new()
+	collider.name = "SunOcclusionShape"
+	collider.shape = shape
+	body.add_child(collider)
 
 
 func _add_room_bounce(room: DungeonRoom3D) -> void:
@@ -114,6 +142,26 @@ func _add_room_bounce(room: DungeonRoom3D) -> void:
 	fill.set_meta("runtime_owner", "IndoorLightEnvelope")
 	room.add_child(fill)
 	_room_bounces.append(fill)
+	room.register_supplemental_room_light(fill)
+
+
+func _register_authored_lights(room: DungeonRoom3D) -> void:
+	for light in room.find_children("*", "Light3D", true, false):
+		_register_room_light(light)
+
+
+func _register_room_light(light: Light3D) -> void:
+	if not is_instance_valid(light):
+		return
+	# 包含后建的FlowPassageFill；Wasteland自有登记/闪烁/品质管理。
+	var cursor := light.get_parent()
+	while cursor != null:
+		if cursor is WastelandLight3D:
+			return
+		if cursor is DungeonRoom3D:
+			cursor.register_supplemental_room_light(light)
+			return
+		cursor = cursor.get_parent()
 
 
 func _exit_tree() -> void:

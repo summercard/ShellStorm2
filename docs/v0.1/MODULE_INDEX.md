@@ -10,6 +10,8 @@ ASSET-PIPELINE / WORLD-BLOCKS：[远征Boss房02装配](design/远征关卡01_Bo
 
 # v0.1 模块、功能与工程契约索引
 
+WORLD-PLAN / ENEMY-AI / ASSET-PIPELINE：[远征03遮光与灯开关修复](development/2026-11-02_expedition03_indoor_lighting.md)。地图顶盖/四壁分块投影并补layer1静态盒；作者灯、通道补光与室内基础光由房间原开关/流送/状态恢复控制。28房/通道1197检查、252太阳射线及原生渲染A/B通过；账本25行同步。远征01对照复现12条旧失败，文档/命名既有红项单列；整关partial不变。
+
 ASSET-PIPELINE / WORLD-BLOCKS / PLAYER-STATE / ENEMY-AI：[美术制作源分离](development/2026-10-11_art_source_split.md)。当前源统一 `art_source/`，Git/LFS 管理且不入包；保留 1,095 份 Blend，原位资源 5,011 文件保真，39 份运行 JSON 投影通过，正式资源路径与版本不变。目录规则见 [制作源规范](../ART_SOURCE_LAYOUT.md)。
 
 ASSET-PIPELINE / PLAYER-STATE / ENEMY-AI：[贴图去重与尺寸优化](development/2026-10-11_runtime_texture_optimization.md)，依据[运行贴图预算](design/runtime_texture_budget.md)。玩家≤1024、怪物（含Boss）≤512、其他≤1024；正式PCK502.73→267.12MiB，玩家272.70→63.44MiB，完全重复CTEX已清零。104模型几何/骨架/动画保真、资源包加载及角色/怪物专项通过，真实玩家握枪渲染通过；完整流程及APK未执行，历史门禁红项保留。

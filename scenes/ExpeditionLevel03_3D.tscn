@@ -56,4 +56,4 @@ metadata/design_mode = "flow（拓扑手作骨架 + 几何运行期组装）"
 [node name="IndoorLightEnvelope" type="Node3D" parent="."]
 script = ExtResource("5_indoor_light")
 metadata/runtime_owner = "ExpeditionLevel03_3D presentation"
-metadata/visual_only = true
+metadata/sun_occlusion_contract = "shadow mesh + layer1 static collision; room-owned supplemental lights"

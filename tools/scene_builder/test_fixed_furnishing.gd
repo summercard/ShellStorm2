@@ -168,7 +168,10 @@ func _verify_indoor_envelope(level: Node3D) -> void:
 	for blocker in envelope.get_children():
 		check(blocker is MeshInstance3D and blocker.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY, "indoor blocker hides gameplay camera")
 		check(blocker.layers & GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER != 0, "indoor blocker cannot cast sun shadow")
-	check(envelope.find_children("*", "CollisionObject3D", true, false).is_empty(), "visual envelope added gameplay collision")
+	var occluders := envelope.find_children("*", "StaticBody3D", true, false)
+	check(occluders.size() == 5, "indoor envelope lacks physical sun occluders")
+	for body in occluders:
+		check(body.collision_layer == 1 and body.collision_mask == 0, "indoor sun occluder layer mismatch")
 
 func _fixture(original: Node3D, procedural: bool) -> void:
 	var directory := OS.get_cmdline_user_args()[0].path_join("expedition_03")

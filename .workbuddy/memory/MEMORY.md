@@ -19,6 +19,11 @@
 - 两台都**无 `timeout`**；`ps` 被禁，查端口用 `lsof -nP -iTCP:<port> -sTCP:LISTEN`。
 - 系统 `python3` 缺 `openpyxl`（`check_documentation_contracts.py` 用裸 `python3`）⇒ 造 ASCII 目录放 wrapper（**独立普通文件**，绝不能 `>` 写到符号链接）；`ln -s` 无效。
 - **门禁本就常红**：判据是改动前后逐项数值相同 = 0 新增，不看退出码。
+- **Windows 端 git 走哪个代理看端口活没活**：环境变量 `http_proxy=127.0.0.1:5599` 经常已死（`Connection refused`），
+  git 于是报 `CONNECT tunnel failed, response 502`；直连 github 443 在国内基本不通（TCP 都建不起来）。
+  实测可用的混合端口是 **`127.0.0.1:7897`**。姿势：
+  `env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY git -c http.proxy=http://127.0.0.1:7897 <cmd>`
+  （只对单条命令生效，别写进配置）。**别把 502 当偶发直接重试到底** —— 先 `netstat | grep LISTENING | grep 127.0.0.1` 看端口在不在。
 
 ## 自动化接力
 23:50 写记忆 → **04:00 先提交推送、再清回收站**（不可逆排后）→ 05:00 打包。回收站残余永不为 0 不是失败；`E:/G:/H:` 报 `OSError(22)` 正常；`scan -o <中文>` 曾无声 SIGTERM ⇒ 走 stdout。
