@@ -171,6 +171,7 @@ func _verify_clutter_roundtrip() -> void:
 	var clutter_id := str(clutter.get_meta("clutter_id", ""))
 	_check(not clutter_id.is_empty(), "C1 杂物必须有 clutter_id")
 
+	var authored_clutter := bool(clutter.get_meta("clutter_authored", false))
 	clutter.call("shatter", Vector3.FORWARD)
 	var ledger: Dictionary = room.call("get_persistent_detail_state", "breakable_clutter")
 	_check(bool((ledger.get(clutter_id, {}) as Dictionary).get("broken", false)),
@@ -183,7 +184,10 @@ func _verify_clutter_roundtrip() -> void:
 	var restored := _clutter_by_id(room, clutter_id)
 	_check(restored != null, "C3 重建后必须重新建出同一 clutter_id 的物件")
 	if restored != null:
-		_check(restored != clutter, "C4 重建后必须是新实例")
+		if authored_clutter:
+			_check(restored == clutter, "C4a 作者易碎件随壳体常驻，detail重建应保留同一实例")
+		else:
+			_check(restored != clutter, "C4b 随机detail易碎件重建后必须是新实例")
 		_check(bool(restored.call("is_broken")), "C5 重建后杂物必须仍是已碎")
 	# 与宝箱同一条采集入口：`_capture_loaded_runtime_rooms()` 对"当前房"就是调它。
 	_scene.call("_capture_room_runtime_state", str(room.get("room_id")))

@@ -954,7 +954,7 @@ metadata/furnishing_generated = true
 metadata/furnishing_theme = "gatehouse"
 
 [node name="Furn_03_bench" type="Node3D" parent="ArtComponents" unique_id=1786795304 instance=ExtResource("6_sujn3")]
-transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 2.7519298, 0, -1.8, 0, -7.86805e-08, -11.845, 0, -5)
+transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 2.7519298, 0, -1.8, 0, -7.86805e-08, -9.095, 0, -5)
 metadata/asset_id = "ENV-EXP03-MANOR-BENCH"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -982,7 +982,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.285, 0)
 shape = SubResource("BoxShape3D_sujn3")
 
 [node name="Furn_04_bench" type="Node3D" parent="ArtComponents" unique_id=1641396502 instance=ExtResource("6_sujn3")]
-transform = Transform3D(-0.3345153, 0, 1.7686434, 0, 2.7519298, 0, -1.7686434, 0, -0.3345153, -11.845, 0, 3)
+transform = Transform3D(-0.3345153, 0, 1.7686434, 0, 2.7519298, 0, -1.7686434, 0, -0.3345153, -9.095, 0, 3)
 metadata/asset_id = "ENV-EXP03-MANOR-BENCH"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1010,7 +1010,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.285, 0)
 shape = SubResource("BoxShape3D_wxix2")
 
 [node name="Furn_05_luggage_cart" type="Node3D" parent="ArtComponents" unique_id=1105920741 instance=ExtResource("7_wxix2")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.0301796, 0, 1.8, 0, 2.1464784e-08, 11.665, 0, -5)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.0301796, 0, 1.8, 0, 2.1464784e-08, 11.665, 0, -7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1038,7 +1038,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.835, 0)
 shape = SubResource("BoxShape3D_am3cd")
 
 [node name="Furn_06_plant_compact" type="Node3D" parent="ArtComponents" unique_id=91078690 instance=ExtResource("8_am3cd")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.1366667, 0, 1.8, 0, 2.1464784e-08, 11.35, 0, 6)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.1366667, 0, 1.8, 0, 2.1464784e-08, 11.35, 0, 7.5)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"

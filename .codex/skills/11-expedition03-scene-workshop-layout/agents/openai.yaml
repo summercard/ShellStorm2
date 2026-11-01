@@ -1,0 +1,4 @@
+interface:
+  display_name: "11 远征03｜场景工坊布局与陈设"
+  short_description: "仅为远征03设计墙边柜架、会客陈列与易碎设施，在正式TSCN编辑并完成实机验收"
+  default_prompt: "使用 $11-expedition03-scene-workshop-layout，为远征03指定房间设计墙边陈列与易碎设施，保留门前净空并完成隔离的游戏内验收。"

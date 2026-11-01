@@ -2,6 +2,9 @@ extends Node3D
 ## 怪物/Boss 三态受光、太阳投影、局部灯范围/锥体/遮挡与优先级专项。
 
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
+## 表现层预制体（小僵尸）。手电阶跃 → 步态那条判据直接驱动它，理由见
+## `_verify_light_step_does_not_flip_gait()` 的头注。
+const ZOMBIE_VISUAL: PackedScene = preload("res://assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn")
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
 const WASTELAND_LIGHT_SCRIPT := preload("res://src/world3d/WastelandLight3D.gd")
 
@@ -141,9 +144,12 @@ func _ready() -> void:
 	_verify_all_enemy_kinds_share_contract(failures)
 	await _verify_boss_phase_is_independent(failures)
 	_verify_raycast_budget(enemy, failures)
-	await _verify_thirty_enemy_budget(failures)
-
 	enemy.queue_free()
+	await _verify_thirty_enemy_budget(failures)
+	# 放在最后：这条用例要连跑 90 个物理帧，而无地面的用例怪会被判落地失败回收，
+	# 先跑会把后面还依赖同一只怪的用例打空。
+	await _verify_light_step_does_not_flip_gait(failures)
+
 	if failures.is_empty():
 		print("ENEMY_ILLUMINATION_STATES_OK: darkness, window sunlight, seam rejection, physical shadow, flashlight cone, priority, hysteresis and Boss isolation pass")
 		get_tree().quit(0)
@@ -151,6 +157,115 @@ func _ready() -> void:
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+## 手电扫到怪物时，`get_effective_move_speed()` 会**阶跃**乘上 0.40，而真实速度
+## 由 `_steer_planar()` 以 3.2~5.5/s 的权重指数衰减。分子分母不同步时，
+## 表现层比值会在光扫到的那几帧冲过 0.62 阈值再落回来 ⇒ 段名在走路/跑步之间翻两次，
+## 而换段时 `_sample = fmod(_clock, 新段长)` 且无混合 ⇒ **一帧内骨骼被硬拽 34~83°**。
+## 业主报的原话是"走路动画向着一个方向抽搐一下，好像是在阴影下受到手电光照时"，
+## 15 秒实测 8 次、全部落在手电扫到的瞬间。
+##
+## 这里直接驱动**表现层预制体**而不是整只 Enemy3D：后者在被照亮时会
+## `set_runtime_active(true)` 并重建 Avatar，缓存下来的 Skeleton3D 指针会变成
+## 已释放实例（实测 headless 直接 signal 11）。表现层才是这条判据的所有者。
+##
+## 判据三条：① 阶跃那一刻不许出现跑步段；② 单帧骨骼跳变 < 12°；
+## ③ 稳态读数不变（暗处巡逻走路、被照巡逻走路、被照满速追击仍是跑步）——
+## ③ 是为了防止"用把跑步段整体禁掉"的方式把①②蒙绿。
+func _verify_light_step_does_not_flip_gait(failures: Array[String]) -> void:
+	var visual := ZOMBIE_VISUAL.instantiate() as Node3D
+	if visual == null:
+		failures.append("gait-under-light: melee zombie visual failed to instantiate")
+		return
+	add_child(visual)
+	await get_tree().process_frame
+	var skeleton := visual.find_child("Skeleton3D", true, false) as Skeleton3D
+	if skeleton == null:
+		failures.append("gait-under-light: skeleton missing")
+		visual.queue_free()
+		return
+	# 实机数值：小僵尸满速 2.590，手电照到后 `get_effective_move_speed()` = 1.036。
+	var unlit_speed := 2.590
+	var lit_speed := unlit_speed * 0.40
+	const PATROL_MULTIPLIER := 0.32
+	var speed := unlit_speed * PATROL_MULTIPLIER
+	var base := unlit_speed
+	var previous: Array = []
+	var worst_jump := 0.0
+	var run_frames := 0
+	var lit_frames := 0
+	for frame in range(90):
+		# 前 30 帧在暗处走满一个循环，第 30 帧手电扫到（阶跃，与实机同）。
+		if frame == 30:
+			base = lit_speed
+		# 实际速度按 `_tick_patrol` 的 `_steer_planar(delta*3.2)` 逼向新目标。
+		speed = lerpf(speed, base * PATROL_MULTIPLIER, (1.0 / 60.0) * 3.2)
+		visual.call("sync_state", "patrol", float(frame) / 60.0, speed, 0.38, 0.34, base)
+		skeleton.force_update_all_bone_transforms()
+		var current: Array = []
+		for bone in range(skeleton.get_bone_count()):
+			current.append(skeleton.get_bone_global_pose(bone).basis.get_rotation_quaternion())
+		if previous.size() == current.size():
+			for bone in range(current.size()):
+				worst_jump = maxf(worst_jump, rad_to_deg((previous[bone] as Quaternion).angle_to(current[bone])))
+		previous = current
+		if str(visual.get_presentation_snapshot().get("clip", "")) != "walking":
+			run_frames += 1
+		if base < unlit_speed * 0.5:
+			lit_frames += 1
+		await get_tree().physics_frame
+	if lit_frames == 0:
+		failures.append("gait-under-light: 没有进入被照阶段的帧，这条判据什么都没证明")
+	if run_frames > 0:
+		failures.append("手电扫到后走路段被切成跑步段 %d 帧（移速阶跃被当成步态变化）" % run_frames)
+	if worst_jump >= 12.0:
+		failures.append("手电扫到时单帧骨骼跳变 %.1f°，超过 12° 上限（换段硬拽）" % worst_jump)
+	# 稳态读数：被照着的巡逻仍走路、暗处满速追击仍跑步。
+	visual.call("sync_state", "patrol", 2.0, lit_speed * PATROL_MULTIPLIER, 0.38, 0.34, lit_speed)
+	if str(visual.get_presentation_snapshot().get("clip", "")) != "walking":
+		failures.append("被手电照着的巡逻不再用走路段（稳态语义被改坏）")
+	visual.call("sync_state", "chase", 2.0, lit_speed, 0.38, 0.34, lit_speed)
+	if str(visual.get_presentation_snapshot().get("clip", "")) != "running":
+		failures.append("被手电照着的满速追击不再用跑步段（稳态语义被改坏）")
+	# ② 换段本身不许抽（业主："走路动画为什么向着一个方向抽搐一下"）。
+	#    走路段手臂自然垂摆、跑步段抬起，**相位对齐消不掉**这 35~67° 的差，
+	#    只能靠 `play(name, blend)` 淡入。这里来回切 walking↔running，
+	#    单帧跳变必须留在步态量级（旧实现 67°，硬化成 12° 上限）。
+	var switch_worst := 0.0
+	var switch_prev: Array = []
+	for index in range(80):
+		# 每 20 帧（0.33 s）切一次：必须长于 `CLIP_BLEND_SEC=0.16 s`，
+		# 否则上一段淡化还没结束就被再次打断，量到的是叠加态而不是换段本身。
+		var fast := (index / 20) % 2 == 1
+		visual.call(
+			"sync_state", "patrol", float(index) / 60.0,
+			2.590 if fast else 0.829, 0.38, 0.34, 2.590
+		)
+		var mixing := visual.find_child("AnimationPlayer", true, false) as AnimationPlayer
+		if mixing != null:
+			mixing.advance(0.0)
+		if skeleton != null:
+			skeleton.force_update_all_bone_transforms()
+			var pose: Array = []
+			for bone in range(skeleton.get_bone_count()):
+				pose.append(skeleton.get_bone_global_pose(bone).basis.get_rotation_quaternion())
+			if switch_prev.size() == pose.size():
+				for bone in range(pose.size()):
+					switch_worst = maxf(
+						switch_worst, rad_to_deg((switch_prev[bone] as Quaternion).angle_to(pose[bone]))
+					)
+			switch_prev = pose
+		await get_tree().physics_frame
+	if switch_worst >= 12.0:
+		failures.append(
+			"走路/跑步换段时单帧骨骼跳变 %.1f°，超过 12° 上限（缺交叉淡化）" % switch_worst
+		)
+	# 立即释放而不是排帧末：本用例后面还要用同一棵树做光照刷新，
+	# 延迟释放会让已释放的骨架仍在渲染命令里被摸到（实测 headless signal 11）。
+	remove_child(visual)
+	visual.free()
+	await get_tree().process_frame
 
 
 func _verify_all_enemy_kinds_share_contract(failures: Array[String]) -> void:

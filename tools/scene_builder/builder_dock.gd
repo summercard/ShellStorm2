@@ -9,8 +9,8 @@ signal list_refreshed
 
 const PREVIEW := preload("res://tools/scene_builder/asset_preview.gd")
 const COLORS := preload("res://tools/scene_builder/workbench_theme.gd")
-const UI_REVISION := "r6"
-const UI_BUILD := "r6-runtime-20261029-1.2.0"
+const UI_REVISION := "r8"
+const UI_BUILD := "r8-authored-20261101-1.4.0"
 
 var rows: Array[Dictionary] = []
 var visible_rows: Array[Dictionary] = []
@@ -100,7 +100,7 @@ func _init() -> void:
 	revision.custom_minimum_size.x = 22
 	revision.add_theme_color_override("font_color", COLORS.ACCENT)
 	open_button = _button(heading, "打开", "open_scene")
-	open_button.tooltip_text = "打开已有场景 · 也可浏览白盒模板"
+	open_button.tooltip_text = "打开游戏使用的正式房间文件"
 	open_button.add_theme_stylebox_override("normal", COLORS.box(Color("245e5b"), COLORS.ACCENT.darkened(0.3)))
 	new_button = _button(heading, "新建", "browse_whiteboxes")
 	new_button.tooltip_text = "从白盒模板新建美术场景"

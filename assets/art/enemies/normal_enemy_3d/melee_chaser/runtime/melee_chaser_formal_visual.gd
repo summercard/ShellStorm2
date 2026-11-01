@@ -20,6 +20,27 @@ const CLIP_BY_STATE := {
 }
 ## 走路 / 跑步的分界（相对满速的比例）。见 `_locomotion_clip()`。
 const RUN_SPEED_RATIO := 0.62
+## 退出跑步段的比值。与 `RUN_SPEED_RATIO` 差 0.12 构成**迟滞**：
+## 只在阈值单侧抖动时不会来回换段（换段本身是"抽一下"的唯一来源）。
+const RUN_EXIT_RATIO := 0.50
+## 归一化用的满速跟随实际速度的时间常数（秒）。见 `_smooth_base_speed()`。
+const BASE_SPEED_SMOOTH_SEC := 0.30
+## 循环段的播放速率上下限（实际速度 ÷ 该段标称速度）。见 `_playback_rate()`。
+const PLAYBACK_RATE_MIN := 0.25
+const PLAYBACK_RATE_MAX := 2.0
+## 循环移动段之间的交叉淡化时长（秒）。见 `sync_state()` 的换段段。
+##
+## 走路段和跑步段**手臂姿势本来就不同**（走路自然垂摆、跑步抬起），
+## 所以"相位对齐"消不掉换段那一跳（实测仍差 35~67°，落在 `L/R_Upperarm`）。
+## 用 `AnimationPlayer.play(name, blend)` 做淡入后，实测当帧跳变 **60.4° → 0.0°**。
+## 0.16 s 是走路周期（1.6 s）的 1/10：够吸收，又不至于让"进入追击"读起来发软。
+const CLIP_BLEND_SEC := 0.16
+## 参与交叉淡化的段。攻击/受击/死亡有玩法时序（判定帧靠 `seek` 钉死），
+## 一律不淡化 —— 混进去会让前摇读不出来，也会把判定帧推开。
+const BLENDABLE_CLIPS := [
+	"idle", "walking", "running",
+	"armed_idle", "walking_armed", "running_armed",
+]
 var _player: AnimationPlayer
 var _state := "idle"
 var _clip := "idle"
@@ -32,6 +53,20 @@ var _flash_time := 0.0
 var _locomotion_speed := 0.0
 ## 这只怪的满速（`get_effective_move_speed()`）。用来把实际速度换算成比例。
 var _base_speed := 0.0
+## `_base_speed` 上一次被平滑的时刻（秒，取自 `_clock`）。见 `_smooth_base_speed()`。
+var _base_speed_clock := 0.0
+## 循环段的**归一化播放相位**（0..1）。跨段保留 —— 这是"换段不再抽一下"的关键，
+## 推导见 `sync_state()` 里 `_phase` 的注释。
+var _phase := 0.0
+## 当前段长度（秒），`_process` 推进相位要用。
+var _clip_length := 1.0
+## 当前段是否是循环段（走路/跑步/站立）。只有循环段才按 `_phase` 播放。
+var _looping := false
+## 进这一段时"它本来该走多快"（m/s）。之后减速不再换段，只按它把动画放慢。
+## 见 `_playback_rate()`。
+var _nominal_speed := 0.0
+## 交叉淡化剩余时间（秒）。> 0 时不 `seek()`，让引擎自己把两段淡开。见 `sync_state()`。
+var _blend_left := 0.0
 ## 本次受击是否允许播受击姿态。太阳伤害传 false：它每秒结算一次，
 ## 播姿态会让怪在跑动中反复被塞 hurt 段（= 漂移）。
 var _hurt_pose_allowed := true
@@ -55,6 +90,12 @@ func _ready() -> void:
 	_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
 	assert(_player != null, "Zombie animation player missing")
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+	# 循环语义双保险：导入脚本（`melee_chaser_post_import.gd`）已经设过一次，
+	# 但这里也钉一遍 —— 表现层靠 `_looping` 决定是否推进相位，判错就定格。
+	# 警察僵尸那份 GLB 没有导入脚本，靠的就是这一行。
+	for clip_name in _player.get_animation_list():
+		if str(clip_name) in BLENDABLE_CLIPS:
+			_player.get_animation(clip_name).loop_mode = Animation.LOOP_LINEAR
 	for node in find_children("*", "MeshInstance3D", true, false):
 		var mesh := node as MeshInstance3D
 		for index in range(mesh.mesh.get_surface_count()):
@@ -71,6 +112,19 @@ func _process(delta: float) -> void:
 	_clock += delta
 	_hurt_time += delta
 	_flash_time = maxf(0.0, _flash_time - delta)
+	# 循环段的相位按「实际速度 ÷ 该段标称速度」推进：
+	# 被手电照到减速时动画跟着变慢（脚不打滑），不再靠换段表达速度变化。
+	# 淡化期强制 1×：此时引擎自己在推进新段，相位必须和它同步，
+	# 否则淡化结束恢复 `seek()` 会把姿势弹回别处。
+	if _blend_left > 0.0:
+		_blend_left = maxf(0.0, _blend_left - delta)
+		# 淡化期由引擎推进：这是 `play(name, blend)` 的权重真正生效的唯一方式。
+		# 手动 `seek()` 会把姿势直接钉到新段，淡化等于没做。
+		if _player != null:
+			_player.advance(delta)
+	if _looping and _clip_length > 0.0:
+		var rate := 1.0 if _blend_left > 0.0 else _playback_rate()
+		_phase = fmod(_phase + delta * rate / _clip_length, 1.0)
 	# 只推能量，**不碰 `emission_enabled`**（见 `_flash_baseline` 注释与 HitFlashMaterial3D 头注）。
 	HitFlash.apply(_materials, _flash_baseline, _flash_time / FLASH_DURATION)
 
@@ -81,20 +135,45 @@ func sync_state(
 ) -> void:
 	_state = state
 	_locomotion_speed = absf(speed)
-	if base_speed > 0.0:
-		_base_speed = base_speed
-	_clip = _locomotion_clip(str(CLIP_BY_STATE.get(state, "idle")))
+	_smooth_base_speed(base_speed)
+	var previous_clip := _clip
+	_clip = _locomotion_clip(str(CLIP_BY_STATE.get(state, "idle")), previous_clip)
 	if _player == null or not _player.has_animation(_clip):
 		return
-	var length := _player.get_animation(_clip).length
-	_sample = fmod(_clock, maxf(length, 0.001))
-	match state:
-		"dormant": _sample = 0.0
-		"telegraph": _sample = length * 0.48 * clampf(state_time / maxf(telegraph_duration, 0.001), 0.0, 1.0)
-		"attack": _sample = length * 0.48
-		"recovery": _sample = length * lerpf(0.48, 1.0, clampf(state_time / maxf(recovery_duration, 0.001), 0.0, 1.0))
-		"stagger": _sample = length * clampf(state_time / 0.16, 0.0, 1.0)
-		"dead": _sample = minf(state_time, length)
+	var anim := _player.get_animation(_clip)
+	var length := maxf(anim.length, 0.001)
+	_looping = anim.loop_mode != Animation.LOOP_NONE
+	if _clip != previous_clip:
+		# 换段只更新"这一段该走多快"。之后减速由 `_playback_rate()` 放慢动画表达，
+		# **不再**因此换段 —— 业主："受到光照正常来说只会缩短移动速度和动画播放速度"。
+		_nominal_speed = maxf(_locomotion_speed, 0.001)
+	var sample := 0.0
+	if _looping:
+		# ## 相位跨段保留（本次修复的核心）
+		#
+		# 旧写法 `_sample = fmod(_clock, length)` 用**绝对时钟**取模。走路段 1.6 s、
+		# 跑步段 0.8 s，同一个 `_clock` 在两段里落在**完全不同的姿势**上
+		# （实测同一时刻相差 34~83°，是中位帧的 21~50 倍），且 `play()+seek()`
+		# 没有混合 ⇒ 只要换段就"抽一下"，换回来又抽一下。
+		#
+		# 改成归一化相位后，走路与跑步都是左右腿循环、相位语义一致，
+		# 在同一个 `_phase` 处两段姿势接近 ⇒ 换段时姿势连续。
+		# 这条与光照无关：任何原因（状态切换、速度档切换）导致的换段都不会再抽。
+		sample = _phase * length
+		if state == "dormant":
+			sample = 0.0
+			_phase = 0.0
+	else:
+		# 非循环段（攻击/受击/死亡/硬直）必须钉在各自的显式相位上，
+		# 播完把 `_phase` 同步成末帧比例，回到循环段时不会从别处突然开始。
+		match state:
+			"telegraph": sample = length * 0.48 * clampf(state_time / maxf(telegraph_duration, 0.001), 0.0, 1.0)
+			"attack": sample = length * 0.48
+			"recovery": sample = length * lerpf(0.48, 1.0, clampf(state_time / maxf(recovery_duration, 0.001), 0.0, 1.0))
+			"stagger": sample = length * clampf(state_time / 0.16, 0.0, 1.0)
+			"dead": sample = minf(state_time, length)
+			_: sample = 0.0
+		_phase = clampf(sample / length, 0.0, 1.0)
 	# 非硬直受击只覆盖表现，不延迟攻击与伤害事件。
 	#
 	# ⚠ 三条闸门缺一不可（2026-10-31 业主"受击后整只怪漂移"）：
@@ -110,9 +189,30 @@ func sync_state(
 		and state in HURT_POSE_STATES
 	):
 		_clip = "hurt"
-		_sample = _hurt_time
-	_player.play(_clip)
-	_player.seek(_sample, true)
+		anim = _player.get_animation(_clip)
+		length = maxf(anim.length, 0.001)
+		_looping = false
+		sample = _hurt_time
+		_phase = clampf(sample / length, 0.0, 1.0)
+	_sample = sample
+	_clip_length = length
+	# 循环移动段之间做交叉淡化：这是"换段不抽一下"的第二半（第一半是相位连续）。
+	# `AnimationPlayer.play(name, custom_blend)` 会把**当前姿势**淡入新段，
+	# 实测把换段当帧的骨骼跳变从 60.4° 压到 0.0°。
+	var blend := _clip != previous_clip and previous_clip in BLENDABLE_CLIPS and _clip in BLENDABLE_CLIPS
+	if blend:
+		_blend_left = CLIP_BLEND_SEC
+		# `play()` 从新段的 0 秒开始播，相位必须跟着归零；否则淡化结束恢复 seek
+		# 时会按旧相位把姿势弹回去（又变成一次硬切）。
+		_phase = 0.0
+		_sample = 0.0
+		_player.play(_clip, CLIP_BLEND_SEC)
+	elif _blend_left <= 0.0:
+		# 淡化结束后回到"每帧 play + seek"。⚠ 这两句不能只留 seek：
+		# `callback_mode_process = MANUAL` 下单独 `seek()` **不会驱动骨架**
+		# （本轮实测踩过：以为已经修好，实际画面定格，髋部高度恒定 0.3980）。
+		_player.play(_clip)
+		_player.seek(_sample, true)
 
 ## 受击。闪白一定给（0.12 s，纯 uniform 能量，不重建管线）；
 ## 受击姿态由 `play_hit_pose` 决定，且**还要过速度闸门**才真的播。
@@ -130,19 +230,43 @@ func sync_state(
 ##   30~62%  ⇒ walking（巡逻）
 ##   < 30%   ⇒ 保留状态名给的段（多半是 idle，正常）
 ## 老怪的速度分布本来就满足这条：追击 ≈ 100%、巡逻 = 50%，改判后与原来逐字一致。
-func _locomotion_clip(clip: String) -> String:
+##
+## ## 加迟滞（本轮）：`previous` 已经是跑步段时，要掉到 `RUN_EXIT_RATIO` 以下才退回走路
+##
+## 没有迟滞时，只要比值在 0.62 附近抖一下就会换段、再换回来。而**换段本身**
+## 在旧实现里就是"抽一下"的唯一来源（相位被重置，见 `sync_state()` 的 `_phase` 注释）。
+## 现在相位已经连续，迟滞是第二道保险：让瞬态减速（手电扫到、被击退、贴墙推挤）
+## 根本不去碰段名。
+func _locomotion_clip(clip: String, previous: String) -> String:
 	var ratio := _speed_ratio()
 	if ratio < 0.0:
 		return clip
+	var running_now := previous.contains("running")
 	if clip == "walking":
+		if running_now:
+			return "walking" if ratio < RUN_EXIT_RATIO else "running"
 		return "running" if ratio >= RUN_SPEED_RATIO else clip
 	if clip == "idle" and _state in ["idle", "patrol"]:
 		# 状态说"站着"，人却在位移 ⇒ 必须换成移动段，否则就是滑行。
+		if running_now:
+			return "running" if ratio >= RUN_EXIT_RATIO else "walking"
 		if ratio >= RUN_SPEED_RATIO:
 			return "running"
 		if ratio >= RUN_SPEED_RATIO * 0.5:
 			return "walking"
 	return clip
+
+
+## 循环段的播放速率 = 实际速度 ÷ 进段时的标称速度。
+##
+## 业主："受到光照正常来说只会缩短角色的移动速度和动画播放速度"。
+## 手电照到会让移速掉到 0.40×，位移变慢而动画照旧全速播 = 脚往前滑。
+## 所以减速时按比例把动画也放慢，速度回到标称值就回到 1.0。
+## 上下钳制防止极端值把相位推飞（0.25× 仍能看出在动，2.0× 不至于抽搐）。
+func _playback_rate() -> float:
+	if _nominal_speed <= 0.01:
+		return 1.0
+	return clampf(_locomotion_speed / _nominal_speed, PLAYBACK_RATE_MIN, PLAYBACK_RATE_MAX)
 
 
 ## 实际速度 / 满速。满速缺失（调用方没传）时按绝对阈值兜底，
@@ -153,6 +277,39 @@ func _speed_ratio() -> float:
 	if _locomotion_speed <= 0.01:
 		return 0.0
 	return _locomotion_speed / 1.4
+
+
+## 满速要**跟着实际速度一起衰减**，不能阶跃。
+##
+## ## 业主："好像是在阴影下，受到手电光照的情况下，表现会有异常"
+##
+## 手电照到怪物会让 `Enemy3D.get_effective_move_speed()` 立刻乘上
+## `ARTIFICIAL_LIGHT_MOVE_MULTIPLIER = 0.40`。那是**阶跃**；
+## 而真实速度由 `_steer_planar()` 以 `delta * 3.2~5.5` 的权重指数衰减，
+## 要走 0.13 s（巡逻）到 0.5 s（半速档）才跟上。
+##
+## 两者不同步时，比值 `_locomotion_speed / _base_speed` 会在光扫到的那几帧里
+## **冲过 0.62 阈值再落回来**（实测：0.32 → 0.77 → 0.61），于是段名在
+## 走路/跑步之间翻两次。而换段时 `_sample = fmod(_clock, 新段长)` ——
+## 1.6 s 的走路段与 0.8 s 的跑步段把同一个绝对时刻映射到完全不同的姿势，
+## 且没有混合 ⇒ **一帧内骨骼被硬拽 34~83°**（中位 1.6°，即 21~50 倍），
+## 读起来就是"走路走着突然抽一下"。15 秒内实测 8 次，全部发生在手电扫到的瞬间。
+##
+## 让分母用同一个时间常数指数跟随即可：比值在手电扫到的整个过渡期里
+## 稳定等于真实档位（0.32 / 1.0），稳态读数与改前逐字相同。
+func _smooth_base_speed(base_speed: float) -> void:
+	if base_speed <= 0.0:
+		return
+	if _base_speed <= 0.0:
+		_base_speed = base_speed
+		_base_speed_clock = _clock
+		return
+	var step := clampf(_clock - _base_speed_clock, 0.0, 0.25)
+	_base_speed_clock = _clock
+	if step <= 0.0:
+		return
+	var weight := 1.0 - exp(-step / BASE_SPEED_SMOOTH_SEC)
+	_base_speed = lerpf(_base_speed, base_speed, weight)
 
 
 func flash_hit(play_hit_pose := true) -> void:
@@ -174,4 +331,9 @@ func get_presentation_snapshot() -> Dictionary:
 		"hurt_pose_allowed": _hurt_pose_allowed,
 		"hurt_pose": _clip == "hurt",
 		"hurt_time": _hurt_time,
-		"locomotion_speed": _locomotion_speed}
+		"locomotion_speed": _locomotion_speed,
+		# 平滑后的归一化满速。验收要判"手电扫到时比值不冲阈值"，必须能看到分母。
+		"base_speed": _base_speed,
+		"speed_ratio": _speed_ratio(),
+		"phase": _phase,
+		"playback_rate": _playback_rate()}

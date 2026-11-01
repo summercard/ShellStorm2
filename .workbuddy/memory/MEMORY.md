@@ -10,6 +10,9 @@
 - `.git/index.lock` 陈旧锁只会在首次写操作时暴露。删前需：无 git 进程 + `status --porcelain` 第一列全空。
 - Godot 常驻会把 `.glb.import` 批量改写（新增 `mesh_library/use_node_names_as_mesh_names` 等）——引擎版本差异，**不要提交**。
 - Godot `.gd.uid` 跨机器不一致：以仓库已跟踪版本为准；本机那份未跟踪会挡 rebase，先移走。本项目 `.tscn` 多用 `path=` 引用，uid 差异通常无影响。
+  挡拉取时的正确姿势：`git diff --name-only --diff-filter=A HEAD origin/<b> | grep '\.uid$'` ∩ `git status --porcelain`，逐个 `git show origin/<b>:<f>` 比内容，**一致就直接删**（checkout 会写回同值）。
+- **写记忆后跨夜可能丢**：04:00 自动提交前写的段落，若中途被 `git reset --hard` 或远端同文件覆盖，会静默消失。判据 `git log --oneline -- <file>` 里能否看到自己那段。
+- **本机（macOS）无 git-lfs**（无 Homebrew/sudo，`filter.lfs` 全空）⇒ `art_source/**/*.blend|*.psd` 在工作区全是 131 字节指针，共 1284 个；`assets/` 运行资产不受影响。别用 `git lfs ls-files` 判（未装时静默返回 0 行）；用 `head -c 20 <f> | grep git-lfs`，且不能用完整串 grep（只出 `version https://git-`）。
 - 改前备份：`.workbuddy/backup/<YYYYMMDD>_<主题>/`（`before_edits/` + 重放脚本）。
 
 ## 本机环境
@@ -30,6 +33,10 @@
 - 实测 AABB 当碰撞盒要**每轴外扩 3 cm**（否则表面顶点落在边界被舍入判出，残余 1.85%）。
 - 动画包络必须**逐帧**求（抽帧漏极值）；「单骨且权重恰 1.0」的刚性顶点才能定骨局部盒子（混合权重会把 `hand.L` 撑到 9.5 倍体积）。伸缩件例外。
 - 验收探针要**冻结被测对象**：`set_physics_process(false)` + 手动 `_process` 同步，否则怪边走位边挨打量出 3 m 假误差。量命中精度瞄模型顶点、用**中位数**判回归。
+- **「动画抽一下」先分类再改**：① 数据（首末帧逐值相同≠曲线平滑，要量**单帧步长**与 `Hip.dY` 峰值）；② **换段无过渡**（最常见，见下）；③ 归一化分母被玩法阶跃改写（`get_effective_move_speed()` 在手电照到 `artificial_light` 时**阶跃**乘 0.40，与指数衰减的真实速度不同步 ⇒ 比值瞬穿 `RUN_SPEED_RATIO=0.62`）。
+- **② 换段无过渡才是"走路抽一下"的主因，修它要三件套**：ⓐ `_sample = fmod(_clock, 段长)` 用绝对时钟 ⇒ 走路 1.6s / 跑步 0.8s 把同一时刻映射到差 35~67° 的姿势 ⇒ 必须换成**跨段保留的归一化相位**；ⓑ 走路手臂垂摆、跑步抬起，相位对齐**消不掉**这几十度 ⇒ 必须 `AnimationPlayer.play(name, blend)` 交叉淡化（实测 60.4°→0.0°），但攻击/受击/死亡不能参与（判定帧靠 seek 钉）；ⓒ 迟滞（进 0.62 / 出 0.50）挡住瞬态减速。
+- **`callback_mode_process = MANUAL` 下单独 `seek()` 不驱动骨架**：必须 `play() + seek()` 成对，或 `advance()`。踩过：以为修好了、实际画面定格（髋部高度恒定 `0.3980`）。同段时**不能每帧 `play()`**（打断淡化，60°→64°）；淡化期**不能 `seek()`**（一 seek 就钉到新段），要 `advance(delta)`。
+- **别信"看着像冻结"的探针读数**：0.04° 的中位跳变不是"完美平滑"，而是骨架没被驱动。判活要读一根骨的具体位置（如 `Hip` 的 Y 在走路段应有 0.40~0.44 波动），或真渲染抓帧。
 
 ## 远征03 美术层（2026-10-31 重构后的口径）
 - **复用键 = `<模板>_<签名前12>_<原型指纹6>`**。第三段**不是门位**：门位来自

@@ -8,7 +8,6 @@ const EXPORT_GUARD := preload("res://tools/scene_builder/export_guard.gd")
 const THUMBNAILS := preload("res://tools/scene_builder/thumbnail_service.gd")
 const SCENE_BROWSER := preload("res://tools/scene_builder/scene_browser.gd")
 const PREVIEW_STAGE := preload("res://tools/scene_builder/preview_stage.gd")
-const RUNTIME_SOURCE := preload("res://tools/scene_builder/runtime_source_service.gd")
 const MODE_SELECT := 0
 const MODE_SINGLE := 1
 const MODE_BRUSH := 2
@@ -60,8 +59,6 @@ var _pending_output := ""
 var _rebuilding := false
 var _queued_command := ""
 var _focus_after_layout := true
-var _runtime_source: RUNTIME_SOURCE
-var _pending_runtime: Dictionary = {}
 var _editor_test_runner: RefCounted
 
 
@@ -157,15 +154,13 @@ func _restore_ui_state(state: Dictionary) -> void:
 	dock.refresh_list()
 
 func _ensure_services() -> void:
-	if not is_instance_valid(_runtime_source):
-		_runtime_source = RUNTIME_SOURCE.new()
-		_runtime_source.changed.connect(func(entries):
-			if is_instance_valid(_scene_browser):
-				_scene_browser.set_runtime_source(entries, _runtime_source.scene_path, _runtime_source.seed_value))
-		_runtime_source.status.connect(func(label, busy, failed):
-			if is_instance_valid(_scene_browser):
-				_scene_browser.set_runtime_status(label, busy, failed))
-		add_child(_runtime_source)
+	# Retire an in-memory r6 capture service when the plugin hot reloads.
+	for child in get_children():
+		var script := child.get_script() as Script
+		if script != null and script.resource_path == "res://tools/scene_builder/runtime_source_service.gd":
+			child.call("cancel")
+			remove_child(child)
+			child.queue_free()
 	if not is_instance_valid(_loader):
 		_loader = LOADER.new()
 		add_child(_loader)
@@ -190,11 +185,7 @@ func _ensure_services() -> void:
 		_scene_browser.scene_requested.connect(_open_scene)
 		_scene_browser.file_requested.connect(_browser_file_requested)
 		_scene_browser.whitebox_requested.connect(_whitebox_chosen)
-		_scene_browser.runtime_requested.connect(_open_runtime_room)
-		_scene_browser.runtime_read_requested.connect(_runtime_source.refresh)
-		_scene_browser.runtime_cancel_requested.connect(_runtime_source.cancel)
 		EditorInterface.get_base_control().add_child(_scene_browser)
-		_scene_browser.set_runtime_source(_runtime_source.rows, _runtime_source.scene_path, _runtime_source.seed_value)
 	var filesystem := EditorInterface.get_resource_filesystem()
 	if not filesystem.resources_reimported.is_connected(_assets_reimported):
 		filesystem.resources_reimported.connect(_assets_reimported)
@@ -276,8 +267,6 @@ func _exit_tree() -> void:
 	if is_instance_valid(_scene_browser):
 		_scene_browser.queue_free()
 	# These services are children of this plugin; Node owns their destruction.
-	if is_instance_valid(_runtime_source):
-		_runtime_source.cancel()
 	if is_instance_valid(dock):
 		remove_control_from_docks(dock)
 		dock.queue_free()
@@ -417,7 +406,7 @@ func _reload_reference(source: PackedScene = null) -> void:
 	_loader.cancel("reference")
 	if path.is_empty():
 		if _root.has_meta("runtime_room_source_schema"):
-			_reference_status("游戏内实际壳体 · %.2fm · 种子%s" % [float(_root.get_meta("wall_height_m", 0)), _root.get_meta("runtime_source_seed", "")])
+			_reference_status("正式房间文件 · 同路径编辑与保存")
 			return
 		var is_whitebox := bool(_root.get_meta("whitebox", false)) or str(_root.get_meta("schema", "")).contains("whitebox")
 		_reference_status("当前场景就是白盒" if is_whitebox else "未关联 · 在选项中关联参考")
@@ -930,6 +919,10 @@ func _command(command: String) -> void:
 			_save_dialog.popup_centered_ratio(0.7)
 		"save":
 			if is_instance_valid(_root):
+				var clearance := MODEL.ROOM_ART.furnishing_conflicts(_root)
+				if not clearance.is_empty():
+					dock.message("保存前请修正门前净空：\n" + "\n".join(clearance.slice(0, 5)), true)
+					return
 				var path := _root.scene_file_path
 				if path.is_empty():
 					dock.message("当前场景未命名，请使用更多中的另存为。", true)
@@ -993,50 +986,7 @@ func _show_browser(purpose: String) -> void:
 		_retry_task = {"channel": "browser", "path": "", "purpose": purpose}
 		dock.finish_task("请先处理Godot弹窗“%s”，然后重试打开。" % blocking.title, true, true)
 		return
-	_scene_browser.set_runtime_source(_runtime_source.rows, _runtime_source.scene_path, _runtime_source.seed_value)
 	_scene_browser.open_browser(_extra_scenes, purpose)
-	if purpose == "open" and _scene_browser.runtime_view and _runtime_source.rows.is_empty() and not _runtime_source.busy:
-		_runtime_source.refresh(_runtime_source.scene_path, _runtime_source.seed_value)
-
-func _open_runtime_room(row: Dictionary) -> void:
-	var target := str(row.get("art_path", ""))
-	if target.is_empty() or not target.begins_with(MODEL.SCENE_INDEX.ROOT + "/") or not target.contains("/runtime_rooms/"):
-		dock.message("关卡房间来源无效，请重新读取关卡。", true)
-		return
-	if FileAccess.file_exists(target):
-		_open_scene(target)
-		return
-	_pending_runtime = row.duplicate(true)
-	_begin_load("runtime_room", str(row["path"]), "打开实际关卡房间")
-
-func _finish_runtime_room(source: PackedScene) -> void:
-	var target := str(_pending_runtime.get("art_path", ""))
-	if target.is_empty():
-		return
-	# A second editor may have created the same formal scene while reading.
-	if FileAccess.file_exists(target):
-		_open_scene(target)
-		return
-	var room := source.instantiate() as Node3D
-	if room == null or str(room.get_meta("runtime_room_signature", "")) != str(_pending_runtime.get("signature", "")):
-		if room != null:
-			room.free()
-		_load_failed("runtime_room", target, "关卡缓存已过期，请重新读取关卡。")
-		return
-	var error := DirAccess.make_dir_recursive_absolute(target.get_base_dir())
-	var packed := PackedScene.new()
-	if error == OK:
-		error = packed.pack(room)
-	if error == OK:
-		error = ResourceSaver.save(packed, target)
-	room.free()
-	if error != OK:
-		_load_failed("runtime_room", target, "正式房间保存失败：" + error_string(error))
-		return
-	EditorInterface.get_resource_filesystem().update_file(target)
-	_remember_scene(target)
-	dock.set_mode(MODE_SELECT)
-	_open_scene(target)
 
 func _whitebox_chosen(path: String) -> void:
 	if _scene_browser.purpose == "bind_whitebox":
@@ -1085,6 +1035,11 @@ func _remember_scene(path: String) -> void:
 	_scene_browser.invalidate_index()
 
 func _save_file(path: String) -> void:
+	if is_instance_valid(_root) and _file_task == "save_variant":
+		var clearance := MODEL.ROOM_ART.furnishing_conflicts(_root)
+		if not clearance.is_empty():
+			dock.message("保存前请修正门前净空：\n" + "\n".join(clearance.slice(0, 5)), true)
+			return
 	if FileAccess.file_exists(path):
 		dock.message("该文件已存在，请换个名字；当前场景可直接保存。", true)
 		return
@@ -1191,8 +1146,6 @@ func _load_completed(channel: String, path: String, resource: Resource) -> void:
 			_finish_foreground(channel, "已关联白盒参考 · Ctrl+Z撤销")
 		"new_room":
 			_finish_new_room(packed)
-		"runtime_room":
-			_finish_runtime_room(packed)
 
 func _perform_open(path: String) -> void:
 	# Yield two frames so feedback is drawn before Godot's native scene instantiation.

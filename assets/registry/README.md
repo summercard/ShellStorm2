@@ -163,3 +163,7 @@ python tools/asset_pipeline/split_asset_ledger.py --source <单体账本>
 - 二进制 xlsx 冲突处理：Skill `xlsx-git-conflict-resolution`
 
 物品专用色板：`ITM-PALETTE-ITEM-HIGH-VISIBILITY`登记在道具分账本；正式贴图为`assets/art/shared/palette/item_high_visibility_palette_10x10_512.png`，HSV S/V各×1.61（1.40基础上再增15%）。31个物品资产使用独立四材质，图标采用本色补光副本；，场景继续使用原场景色板；绑定证据见`art_source/shared/palette/item_palette_binding_manifest.json`。
+
+## 正式房间布局登记
+
+场景分账本新增《房间运行登记》，入口由 `ledger_index.json` 场景域的 `room_layout_sheet` 指定。当前登记远征03的18份唯一正式TSCN，包含尺寸、format=3/Node3D、Prefab/陈设/碰撞数量、所有权、实际加载状态、SHA-256与设计验证依据。它是房间布局追溯表，不新增组件AssetID，不替代《资产主表》，游戏不读取此工作簿。布局调整后定点核对本表文件哈希，不批量接受其他资产漂移。

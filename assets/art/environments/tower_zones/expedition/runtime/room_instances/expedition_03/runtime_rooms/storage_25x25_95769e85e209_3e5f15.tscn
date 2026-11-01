@@ -952,7 +952,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
 shape = SubResource("BoxShape3D_vyd4e")
 
 [node name="Furn_02_bookcase" type="Node3D" parent="ArtComponents" unique_id=1525551625 instance=ExtResource("4_d8qvj")]
-transform = Transform3D(1.8, 0, 0, 0, 1.1892165, 0, 0, 0, 1.8, -5, 0, -11.8)
+transform = Transform3D(1.8, 0, 0, 0, 1.1892165, 0, 0, 0, 1.8, -7.75, 0, -11.8)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -980,7 +980,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
 shape = SubResource("BoxShape3D_d8qvj")
 
 [node name="Furn_03_bookcase" type="Node3D" parent="ArtComponents" unique_id=314025101 instance=ExtResource("4_d8qvj")]
-transform = Transform3D(1.8, 0, 0, 0, 1.1892165, 0, 0, 0, 1.8, 2, 0, -11.8)
+transform = Transform3D(1.8, 0, 0, 0, 1.1892165, 0, 0, 0, 1.8, 2, 0, -9.05)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1064,7 +1064,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
 shape = SubResource("BoxShape3D_tby5s")
 
 [node name="Furn_06_bookcase" type="Node3D" parent="ArtComponents" unique_id=416860364 instance=ExtResource("4_d8qvj")]
-transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.1892165, 0, -1.8, 0, -7.86805e-08, -11.8, 0, 0)
+transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.1892165, 0, -1.8, 0, -7.86805e-08, -9.05, 0, 0)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1120,7 +1120,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.085, 0)
 shape = SubResource("BoxShape3D_m8rkm")
 
 [node name="Furn_08_wardrobe" type="Node3D" parent="ArtComponents" unique_id=1590700859 instance=ExtResource("5_plcnu")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.02, 0, 1.8, 0, 2.1464784e-08, 11.629, 0, -6)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.02, 0, 1.8, 0, 2.1464784e-08, 11.629, 0, -8.25)
 metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1148,7 +1148,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_xxdk3")
 
 [node name="Furn_09_wardrobe" type="Node3D" parent="ArtComponents" unique_id=1089896532 instance=ExtResource("5_plcnu")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.02, 0, 1.8, 0, 2.1464784e-08, 11.629, 0, 4)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.02, 0, 1.8, 0, 2.1464784e-08, 8.879, 0, 4)
 metadata/asset_id = "ENV-EXP03-MANOR-WARDROBE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1176,7 +1176,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_s5p6i")
 
 [node name="Furn_10_luggage_cart" type="Node3D" parent="ArtComponents" unique_id=542262159 instance=ExtResource("6_qdrdr")]
-transform = Transform3D(-1.7524679, 0, -0.4109209, 0, 1.0301796, 0, 0.4109209, 0, -1.7524679, -7, 0, 11.665)
+transform = Transform3D(-1.7524679, 0, -0.4109209, 0, 1.0301796, 0, 0.4109209, 0, -1.7524679, -7.75, 0, 11.415)
 metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1204,7 +1204,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.835, 0)
 shape = SubResource("BoxShape3D_xjvjw")
 
 [node name="Furn_11_luggage_cart" type="Node3D" parent="ArtComponents" unique_id=246588723 instance=ExtResource("6_qdrdr")]
-transform = Transform3D(-1.8, 0, -1.57361e-07, 0, 1.0301796, 0, 1.57361e-07, 0, -1.8, 7, 0, 11.665)
+transform = Transform3D(-1.8, 0, -1.57361e-07, 0, 1.0301796, 0, 1.57361e-07, 0, -1.8, 7.5, 0, 11.665)
 metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"

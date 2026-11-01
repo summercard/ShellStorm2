@@ -50,6 +50,7 @@ const MANOR_PLAN := preload("res://src/world3d/ManorShellPlan.gd")
 ## 陈设配方：主题表 + 摆位算法。**与原型表分开**，因为原型管「壳子什么颜色」，
 ## 陈设管「里面住着谁」—— 两者改动频率不同，混在一起会让布局评审很难做。
 const FURNISH := preload("res://src/world3d/ManorFurnishing.gd")
+const LAYOUT_CONTRACT := preload("res://src/world3d/RoomArtLayoutContract.gd")
 const MANOR := "res://assets/art/environments/tower_zones/expedition/runtime/common_components"
 
 const WALL := MANOR + "/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn"
@@ -147,6 +148,10 @@ func _build(room: DungeonRoom3D) -> void:
 	if target.is_empty():
 		_fail("%s: art_path 算不出来" % room.room_id)
 		return
+	# Initialization only. Formal rooms are authored files, never regeneration targets.
+	if FileAccess.file_exists(target):
+		print("BUILD_PRESERVED ", target)
+		return
 	var dim: Vector2 = room.call("get_dimensions")
 	var cols := int(round(dim.x / GRID))
 	var rows := int(round(dim.y / GRID))
@@ -192,6 +197,11 @@ func _build(room: DungeonRoom3D) -> void:
 	var floor_stats := _floor_grid(art, canvas, dim, cols, rows, style)
 	var wall_stats := _walls(art, canvas, dim, cols, rows, door_map, str(style["windows"]))
 	var furn_stats := _furnish(room, art, canvas, dim, style)
+	var conflicts := LAYOUT_CONTRACT.furnishing_conflicts(canvas)
+	if not conflicts.is_empty():
+		_fail("%s: 初始化陈设未通过全部合法门位净空：%s" % [room.room_id, conflicts])
+		canvas.free()
+		return
 
 	var packed := PackedScene.new()
 	var error := packed.pack(canvas)
@@ -217,8 +227,7 @@ func _build(room: DungeonRoom3D) -> void:
 
 ## 按主题铺陈设。返回 `{count, theme}`。
 ##
-## `connection_ports` 传本局的端口，`ManorFurnishing.layout()` 会据此跳过挡门的件 ——
-## 所以同一份配方在不同种子下摆出来的件数可能不同，但**永远不会挡门**。
+## 初始化按全部合法门位预留净空；正式TSCN成立后不再覆盖作者编辑。
 func _furnish(room: DungeonRoom3D, art: Node3D, canvas: Node3D, dim: Vector2,
 		style: Dictionary) -> Dictionary:
 	var theme_id := FURNISH.theme_for_style(style)
@@ -226,7 +235,7 @@ func _furnish(room: DungeonRoom3D, art: Node3D, canvas: Node3D, dim: Vector2,
 		push_warning("壳铺装：原型 %s 没有登记主题，本房不铺陈设"
 			% MANOR_PLAN.style_label(style))
 		return {"count": 0, "theme": ""}
-	var ports: Array = room.get("connection_ports")
+	var ports: Array = LAYOUT_CONTRACT.candidate_ports(dim)
 	var plan := FURNISH.layout(theme_id, dim, ports)
 	# ── 最终校验：带碰撞的家具不得与门洞通道盒相交 ──
 	# 这是「烘焙后可静态复核」的最后一道闸。布局算法里已经避让过，但避让依赖

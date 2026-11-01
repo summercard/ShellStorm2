@@ -211,9 +211,18 @@
       "development_records": [
         "docs/v0.1/development/2026-09-13_world_level_blocks.md",
         "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md",
-        "docs/v0.1/development/CHANGELOG.md"
+        "docs/v0.1/development/CHANGELOG.md",
+        "docs/v0.1/development/2026-11-01_fixed_room_furnishing.md"
       ],
       "verification": [
+        {
+          "kind": "command",
+          "path": "tools/scene_builder/test_fixed_furnishing.gd",
+          "args": [
+            "--headless",
+            "--script"
+          ]
+        },
         {
           "kind": "scene",
           "id": "verify_expedition_camera_door_proxies"
@@ -1246,9 +1255,19 @@
       "development_records": [
         "docs/v0.1/development/2026-10-29_component_scene_editor.md",
         "docs/v0.1/development/2026-10-29_scene_builder_workbench.md",
-        "docs/v0.1/development/2026-10-29_scene_builder_runtime_source.md"
+        "docs/v0.1/development/2026-10-29_scene_builder_runtime_source.md",
+        "docs/v0.1/development/2026-11-01_scene_workshop_unique_rooms.md",
+        "docs/v0.1/development/2026-11-01_fixed_room_furnishing.md"
       ],
       "verification": [
+        {
+          "kind": "command",
+          "path": "tools/scene_builder/test_fixed_furnishing.gd",
+          "args": [
+            "--headless",
+            "--script"
+          ]
+        },
         {
           "kind": "command",
           "path": "tools/scene_builder/test_layout_model.gd",

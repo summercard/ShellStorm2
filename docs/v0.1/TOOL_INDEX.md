@@ -14,7 +14,7 @@
 
 | 工具 | FeatureID | 分类与Owner | 主设计与使用入口 | 开发记录 | 当前范围与状态 |
 |---|---|---|---|---|---|
-| Godot组件场景编辑器 | `TOOL-SCENE-EDITOR` | 工具类 / 场景美术制作；`ShellStormSceneBuilder EditorPlugin` | [独立设计](design/组件场景编辑器设计.md)、[使用说明](../../tools/scene_builder/README.md)；Godot右侧“场景工坊” | [初版记录](development/2026-10-29_component_scene_editor.md)、[r5工作台重构](development/2026-10-29_scene_builder_workbench.md)、[r6实际房间](development/2026-10-29_scene_builder_runtime_source.md) | 已具备正式关卡/种子采集实际房间、保留2.8m壳体及门位、正式TSCN编辑与几何匹配回接，以及打开/新建/保存主流程、顶部模式按钮、可调大预览、后台读取/进度/重试与旧UI重建，以及房间/通道/EGT共享白盒检索、参考加载状态与可撤销关联、套件/类型两级组件索引、缩略图与旋转3D预览、自由放置/可选吸附、地面笔刷、灯光与原生撤销，以及关卡/套件/房名场景列表；验收收口状态保留为 `partial`，工具外错误见开发记录。运行房间来源与回接契约见r6；全种子、跨关卡和完整游戏验收未覆盖。 |
+| Godot组件场景编辑器 | `TOOL-SCENE-EDITOR` | 工具类 / 场景美术制作；`ShellStormSceneBuilder EditorPlugin` | [独立设计](design/组件场景编辑器设计.md)、[使用说明](../../tools/scene_builder/README.md)；Godot右侧“场景工坊” | [初版](development/2026-10-29_component_scene_editor.md)、[r5工作台](development/2026-10-29_scene_builder_workbench.md)、[r6历史采集](development/2026-10-29_scene_builder_runtime_source.md)、[r7唯一房间列表](development/2026-11-01_scene_workshop_unique_rooms.md)、[r8固定陈设](development/2026-11-01_fixed_room_furnishing.md) | r7默认打开只读列出现行游戏绑定的正式房间TSCN，同路径唯一，不要求种子或Python；新建/关联白盒使用专用选择器。共享组件检索、预览、摆放、笔刷、灯光、撤销和原生保存沿用。工具状态保持 `partial`；r7统计与验收见原记录。r8冻结固定陈设归正式TSCN、全部合法门位制作净空；58份文本PackedScene格式统一，旧组/metadata兼容；r8陈设保持、全门位制作净空、编辑器保存负测与4房画面专项已通过；额外可玩回归失败/超时及守卫覆盖限制见r8记录，不升级整关验收。 |
 
 ## 3. 场景编辑器的事实所有者
 
@@ -22,7 +22,8 @@
 |---|---|---|
 | 组件ID与稳定Prefab路径 | [共享组件catalog](../../assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json) | 读取和检索已有登记；刷新目录 |
 | 模型、材质、碰撞与原点 | 共享组件Prefab及其制作源 | 实例化稳定引用，沿组件更新链迭代 |
-| 组件摆位、房内灯光与作者编辑 | 正式美术TSCN | 原生选择、移动、旋转、保存、另存变体 |
+| 组件摆位、房内灯光与作者编辑 | 正式美术TSCN；远征03固定陈设（含Furn_*）按r8契约禁止运行时覆盖 | 打开同一正式文件，原生编辑；制作时校验全部合法门位前净空 |
+| 正式房间身份与可用资源路径 | 现行关卡绑定及共享运行资源契约 | 只读发现、按路径去重，不另建种子房间或替代登记 |
 | 画笔、吸附参数、白盒参考与编辑辅助 | EditorPlugin / Godot编辑器会话 | 编辑交互、整笔撤销、辅助不入盘 |
 | 关卡骨架、动态门位与房间生成 | `WORLD-PLAN`及运行时装配器 | 作为布局制作约束与接入交接依据 |
 

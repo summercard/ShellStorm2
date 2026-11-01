@@ -2150,7 +2150,7 @@ metadata/furnishing_generated = true
 metadata/furnishing_theme = "banquet_gallery"
 
 [node name="Furn_04_console" type="Node3D" parent="ArtComponents" unique_id=730848023 instance=ExtResource("6_djuua")]
-transform = Transform3D(-0.4344747, 0, 1.7467775, 0, 1.8454117, 0, -1.7467775, 0, -0.4344747, -21.809, 0, -11)
+transform = Transform3D(-0.4344747, 0, 1.7467775, 0, 1.8454117, 0, -1.7467775, 0, -0.4344747, -19.309, 0, -9.75)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2178,7 +2178,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_e3u8n")
 
 [node name="Furn_05_candelabra" type="Node3D" parent="ArtComponents" unique_id=1300953807 instance=ExtResource("7_e3u8n")]
-transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.5812501, 0, -1.8, 0, -7.86805e-08, -21.962, 1.5685999, -9.2)
+transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.5812501, 0, -1.8, 0, -7.86805e-08, -19.462, 1.5685999, -7.95)
 metadata/asset_id = "ENV-EXP03-MANOR-CANDELABRA"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2199,7 +2199,7 @@ metadata/furnishing_generated = true
 metadata/furnishing_theme = "banquet_gallery"
 
 [node name="Furn_06_console" type="Node3D" parent="ArtComponents" unique_id=912763947 instance=ExtResource("6_djuua")]
-transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.8454117, 0, -1.8, 0, -7.86805e-08, -21.809, 0, -4)
+transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.8454117, 0, -1.8, 0, -7.86805e-08, -19.059, 0, -4)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2227,7 +2227,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_jv2rm")
 
 [node name="Furn_07_candelabra" type="Node3D" parent="ArtComponents" unique_id=353023497 instance=ExtResource("7_e3u8n")]
-transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.5812501, 0, -1.8, 0, -7.86805e-08, -21.962, 1.5685999, -2.2)
+transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.5812501, 0, -1.8, 0, -7.86805e-08, -19.212, 1.5685999, -2.2)
 metadata/asset_id = "ENV-EXP03-MANOR-CANDELABRA"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2248,7 +2248,7 @@ metadata/furnishing_generated = true
 metadata/furnishing_theme = "banquet_gallery"
 
 [node name="Furn_08_console" type="Node3D" parent="ArtComponents" unique_id=1749900194 instance=ExtResource("6_djuua")]
-transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.8454117, 0, -1.8, 0, -7.86805e-08, -21.809, 0, 5.4)
+transform = Transform3D(-7.86805e-08, 0, 1.8, 0, 1.8454117, 0, -1.8, 0, -7.86805e-08, -19.059, 0, 5.4)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2297,7 +2297,7 @@ metadata/furnishing_generated = true
 metadata/furnishing_theme = "banquet_gallery"
 
 [node name="Furn_10_console" type="Node3D" parent="ArtComponents" unique_id=411544281 instance=ExtResource("6_djuua")]
-transform = Transform3D(0.46236786, 0, 1.7396022, 0, 1.8454117, 0, -1.7396022, 0, 0.46236786, -21.809, 0, 10)
+transform = Transform3D(0.46236786, 0, 1.7396022, 0, 1.8454117, 0, -1.7396022, 0, 0.46236786, -19.309, 0, 9.75)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2325,7 +2325,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_shvhg")
 
 [node name="Furn_11_console" type="Node3D" parent="ArtComponents" unique_id=232709756 instance=ExtResource("6_djuua")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.8454117, 0, 1.8, 0, 2.1464784e-08, 21.809, 0, -11)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.8454117, 0, 1.8, 0, 2.1464784e-08, 19.059, 0, -11)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2353,7 +2353,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_4rtgo")
 
 [node name="Furn_12_candelabra" type="Node3D" parent="ArtComponents" unique_id=1484790475 instance=ExtResource("7_e3u8n")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.5812501, 0, 1.8, 0, 2.1464784e-08, 21.962, 1.5685999, -9.2)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.5812501, 0, 1.8, 0, 2.1464784e-08, 19.212, 1.5685999, -9.2)
 metadata/asset_id = "ENV-EXP03-MANOR-CANDELABRA"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2374,7 +2374,7 @@ metadata/furnishing_generated = true
 metadata/furnishing_theme = "banquet_gallery"
 
 [node name="Furn_13_console" type="Node3D" parent="ArtComponents" unique_id=1793642222 instance=ExtResource("6_djuua")]
-transform = Transform3D(-0.40016544, 0, -1.7549552, 0, 1.8454117, 0, 1.7549552, 0, -0.40016544, 21.809, 0, -4)
+transform = Transform3D(-0.40016544, 0, -1.7549552, 0, 1.8454117, 0, 1.7549552, 0, -0.40016544, 19.309, 0, -4.5)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2402,7 +2402,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_d442d")
 
 [node name="Furn_14_candelabra" type="Node3D" parent="ArtComponents" unique_id=1922620121 instance=ExtResource("7_e3u8n")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.5812501, 0, 1.8, 0, 2.1464784e-08, 21.962, 1.5685999, -2.2)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.5812501, 0, 1.8, 0, 2.1464784e-08, 19.462, 1.5685999, -2.7)
 metadata/asset_id = "ENV-EXP03-MANOR-CANDELABRA"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2423,7 +2423,7 @@ metadata/furnishing_generated = true
 metadata/furnishing_theme = "banquet_gallery"
 
 [node name="Furn_15_console" type="Node3D" parent="ArtComponents" unique_id=1067034356 instance=ExtResource("6_djuua")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.8454117, 0, 1.8, 0, 2.1464784e-08, 21.809, 0, 3)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.8454117, 0, 1.8, 0, 2.1464784e-08, 19.059, 0, 3)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2451,7 +2451,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_0wlra")
 
 [node name="Furn_16_candelabra" type="Node3D" parent="ArtComponents" unique_id=707017456 instance=ExtResource("7_e3u8n")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.5812501, 0, 1.8, 0, 2.1464784e-08, 21.962, 1.5685999, 4.8)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.5812501, 0, 1.8, 0, 2.1464784e-08, 19.212, 1.5685999, 4.8)
 metadata/asset_id = "ENV-EXP03-MANOR-CANDELABRA"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2472,7 +2472,7 @@ metadata/furnishing_generated = true
 metadata/furnishing_theme = "banquet_gallery"
 
 [node name="Furn_17_console" type="Node3D" parent="ArtComponents" unique_id=784491826 instance=ExtResource("6_djuua")]
-transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.8454117, 0, 1.8, 0, 2.1464784e-08, 21.809, 0, 10)
+transform = Transform3D(2.1464784e-08, 0, -1.8, 0, 1.8454117, 0, 1.8, 0, 2.1464784e-08, 19.059, 0, 10)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2500,7 +2500,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_wv6w6")
 
 [node name="Furn_18_bench" type="Node3D" parent="ArtComponents" unique_id=1564749523 instance=ExtResource("8_djuua")]
-transform = Transform3D(1.8, 0, 0, 0, 2.7519298, 0, 0, 0, 1.8, -13, 0, -19.345)
+transform = Transform3D(1.8, 0, 0, 0, 2.7519298, 0, 0, 0, 1.8, -13, 0, -16.595)
 metadata/asset_id = "ENV-EXP03-MANOR-BENCH"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2528,7 +2528,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.285, 0)
 shape = SubResource("BoxShape3D_jjqpj")
 
 [node name="Furn_19_bench" type="Node3D" parent="ArtComponents" unique_id=261514687 instance=ExtResource("8_djuua")]
-transform = Transform3D(1.7572188, 0, 0.3901048, 0, 2.7519298, 0, -0.3901048, 0, 1.7572188, 13, 0, -19.345)
+transform = Transform3D(1.7572188, 0, 0.3901048, 0, 2.7519298, 0, -0.3901048, 0, 1.7572188, 12, 0, -16.845)
 metadata/asset_id = "ENV-EXP03-MANOR-BENCH"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2556,7 +2556,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.285, 0)
 shape = SubResource("BoxShape3D_lowg7")
 
 [node name="Furn_20_plant_large" type="Node3D" parent="ArtComponents" unique_id=386949929 instance=ExtResource("9_jv2rm")]
-transform = Transform3D(1.8, 0, 0, 0, 1.3357142, 0, 0, 0, 1.8, -17, 0, -18.391)
+transform = Transform3D(1.8, 0, 0, 0, 1.3357142, 0, 0, 0, 1.8, -18, 0, -18.391)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-LARGE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2584,7 +2584,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.805, 0)
 shape = SubResource("BoxShape3D_hmjx4")
 
 [node name="Furn_21_plant_large" type="Node3D" parent="ArtComponents" unique_id=1131355573 instance=ExtResource("9_jv2rm")]
-transform = Transform3D(1.8, 0, 0, 0, 1.3357142, 0, 0, 0, 1.8, 17, 0, -18.391)
+transform = Transform3D(1.8, 0, 0, 0, 1.3357142, 0, 0, 0, 1.8, 18, 0, -18.391)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-LARGE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"

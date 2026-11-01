@@ -257,15 +257,11 @@ func _verify_open_flow(plugin: EditorPlugin) -> void:
 	plugin._retry_load()
 	check(plugin._scene_browser.visible, "top Open button did not show scene browser")
 	await _settle_browser(plugin)
-	plugin._scene_browser._set_runtime_view(false)
-	await _settle_browser(plugin)
 	plugin._scene_browser.search.text = path.get_file()
 	plugin._scene_browser.rebuild()
-	check(plugin._scene_browser.displayed_count == 1, "scene opening search did not isolate the fixture")
-	var tree: Tree = plugin._scene_browser.tree
-	var leaf: TreeItem = tree.get_root().get_first_child().get_first_child().get_first_child()
-	leaf.select(0)
-	plugin._scene_browser._open_selected()
+	check(plugin._scene_browser.displayed_count == 0, "unregistered fixture leaked into formal room list")
+	plugin._scene_browser.hide()
+	plugin._open_scene(path)
 	check(plugin.dock.progress_bar.visible and not plugin._opening_path.is_empty(), "scene selection supplied no immediate loading feedback")
 	await _settle_open(plugin)
 	check(plugin._root != null and plugin._root.scene_file_path == path and plugin._root.name == "SceneOpenProbe", "scene browser did not actually open the selected scene")
@@ -305,68 +301,57 @@ func _mouse(plugin: EditorPlugin, camera: Camera3D, point: Vector3, pressed: boo
 	plugin._forward_3d_gui_input(camera, event)
 
 func _verify_runtime_flow(plugin: EditorPlugin) -> void:
-	print("SCENE_BUILDER_RUNTIME_STAGE list")
+	# Formal files are selected directly; this flow never captures a seeded level.
 	var original: String = plugin._root.scene_file_path
-	var target_id := "hub_01" if "--scene-builder-runtime-first-create" in OS.get_cmdline_user_args() else "boss_foyer"
 	plugin.dock.open_button.emit_signal("pressed")
-	check(plugin._scene_browser.runtime_view, "Open did not default to actual level rooms")
-	check(plugin._scene_browser.displayed_count == 28, "actual level list includes old templates or misses rooms")
-	plugin._scene_browser.search.text = target_id
-	plugin._scene_browser.rebuild()
-	# Partial-name search also includes the two connected corridors; select the exact room ID.
-	check(plugin._scene_browser.displayed_count == (2 if target_id == "hub_01" else 3), "actual room search lost the room or its connected corridors")
-	var leaf: TreeItem = plugin._scene_browser.tree.get_root()
-	while leaf != null:
-		var entry: Dictionary = leaf.get_meta("runtime_row", {})
-		if str(entry.get("room_id", "")) == target_id:
-			break
-		leaf = leaf.get_next_in_tree()
-	check(leaf != null, "exact actual room ID not selectable")
-	if leaf == null:
+	await _settle_browser(plugin)
+	var target := ""
+	for row in plugin._scene_browser.rows:
+		if row["level"] == "远征03" and str(row["template_id"]).begins_with("upgrade_"):
+			target = str(row["path"])
+	check(not target.is_empty(), "formal expedition03 room missing from browser")
+	if target.is_empty():
 		plugin._scene_browser.hide()
 		return
-	var row: Dictionary = leaf.get_meta("runtime_row")
-	print("SCENE_BUILDER_RUNTIME_STAGE selected ", row["room_id"])
+	plugin._scene_browser.search.text = target.get_file()
+	plugin._scene_browser.rebuild()
+	check(plugin._scene_browser.displayed_count == 1, "formal room path did not isolate one file")
+	var leaf: TreeItem = plugin._scene_browser.tree.get_root().get_first_child().get_first_child().get_first_child()
 	leaf.select(0)
 	plugin._scene_browser._open_selected()
-	print("SCENE_BUILDER_RUNTIME_STAGE opening")
-	await _settle_load(plugin, "runtime_room")
 	await _settle_open(plugin)
-	print("SCENE_BUILDER_RUNTIME_STAGE opened")
-	check(plugin._root.scene_file_path == str(row["art_path"]), "actual room was not opened as the formal game-readable scene")
-	check(plugin._root.has_node("WhiteboxShell") and plugin._root.has_node("ArtComponents"), "actual editable shell or art group missing")
-	check(is_equal_approx(float(plugin._root.get_meta("wall_height_m", 0)), 2.8), "editor opened tall legacy walls again")
-	check(plugin.dock.reference_info.text.contains("游戏内"), "actual source was mislabeled as missing whitebox")
+	check(plugin._root.scene_file_path == target, "browser opened a copy instead of the formal game file")
+	check(plugin._root.has_node("ArtComponents"), "formal room components missing")
+	var before_save := FileAccess.get_file_as_string(target)
+	var box: Dictionary = MODEL.ROOM_ART.door_boxes(MODEL.ROOM_ART.dimensions(plugin._root))[0]
+	var blocker := StaticBody3D.new()
+	blocker.name = "InvalidDoorBlocker"
+	blocker.position = Vector3(float(box["x"]), 0.5, float(box["z"]))
+	blocker.collision_layer = 1
+	plugin._root.add_child(blocker)
+	blocker.owner = plugin._root
+	var shape_node := CollisionShape3D.new()
+	shape_node.shape = BoxShape3D.new()
+	blocker.add_child(shape_node)
+	shape_node.owner = plugin._root
+	plugin.dock.save_button.emit_signal("pressed")
+	check(FileAccess.get_file_as_string(target) == before_save and plugin.dock.status.text.contains("净空"), "invalid furniture saved without a clearance failure")
+	blocker.free()
 	var receipt := Marker3D.new()
-	receipt.name = "NativeOpenPreserveProbe"
+	var receipt_name := "NativeOpenPreserveProbe_%d" % OS.get_process_id()
+	receipt.name = receipt_name
 	plugin._root.get_node("ArtComponents").add_child(receipt)
 	receipt.owner = plugin._root
 	plugin.dock.save_button.emit_signal("pressed")
-	check(FileAccess.get_file_as_string(plugin._root.scene_file_path).contains("NativeOpenPreserveProbe"), "actual room edit could not save")
-	if DisplayServer.get_name() != "headless":
-		receipt.set_meta("shortcut_receipt", "saved_by_ctrl_s")
-		EditorInterface.set_main_screen_editor("3D")
-		var shortcut := InputEventKey.new()
-		shortcut.keycode = KEY_S
-		shortcut.physical_keycode = KEY_S
-		shortcut.ctrl_pressed = true
-		shortcut.pressed = true
-		Input.parse_input_event(shortcut)
-		await plugin.get_tree().create_timer(0.2).timeout
-		shortcut.pressed = false
-		Input.parse_input_event(shortcut)
-		check(FileAccess.get_file_as_string(plugin._root.scene_file_path).contains("saved_by_ctrl_s"), "Ctrl+S did not dispatch the stable native save")
-	print("SCENE_BUILDER_RUNTIME_STAGE saved")
+	check(FileAccess.get_file_as_string(target).contains(receipt_name), "formal room edit did not save to the same file")
 	plugin._open_scene(original)
 	await _settle_open(plugin)
-	print("SCENE_BUILDER_RUNTIME_STAGE returned")
-	plugin._open_runtime_room(row)
+	plugin._open_scene(target)
 	await _settle_open(plugin)
-	print("SCENE_BUILDER_RUNTIME_STAGE reopened")
-	check(plugin._root.find_child("NativeOpenPreserveProbe", true, false) != null, "reopen recreated actual room and lost edits")
+	check(plugin._root.find_child(receipt_name, true, false) != null, "formal room reopen lost the saved edit")
 	plugin._open_scene(original)
 	await _settle_open(plugin)
-	print("SCENE_BUILDER_RUNTIME_FLOW actual_open=1 saved=1 reopened_preserved=1")
+	print("SCENE_BUILDER_FORMAL_FLOW same_file=1 saved=1 reopened_preserved=1")
 
 func _capture_render(plugin: EditorPlugin) -> void:
 	var arguments := OS.get_cmdline_user_args()
@@ -408,6 +393,11 @@ func _capture_render(plugin: EditorPlugin) -> void:
 	plugin.dock.open_button.emit_signal("pressed")
 	await _settle_browser(plugin)
 	check(plugin._scene_browser.visible and plugin._scene_browser.displayed_count > 0, "scene list did not open")
+	for i in plugin._scene_browser.level_filter.item_count:
+		if str(plugin._scene_browser.level_filter.get_item_metadata(i)) == "远征03":
+			plugin._scene_browser.level_filter.select(i)
+	plugin._scene_browser.rebuild()
+	check(plugin._scene_browser.displayed_count == 18, "rendered formal expedition03 list is not unique")
 	for i in range(3):
 		await _draw_frame(plugin)
 	var browser_image: Image = plugin._scene_browser.get_texture().get_image()

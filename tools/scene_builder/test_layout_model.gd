@@ -116,8 +116,17 @@ func _run() -> void:
 	root.add_child(browser)
 	browser.refresh_index()
 	var art_count: int = browser.displayed_count
-	browser.show_whiteboxes.button_pressed = true
-	_check(browser.displayed_count > art_count, "whitebox toggle does not distinguish references")
+	var unique_paths := {}
+	var expedition03 := 0
+	for entry in browser.rows:
+		_check(not unique_paths.has(entry["path"]), "formal room file appears twice")
+		unique_paths[entry["path"]] = true
+		_check(not entry["whitebox"] and not str(entry["path"]).contains("/.godot/"), "reference/cache leaked into formal room list")
+		if entry["level"] == "远征03":
+			expedition03 += 1
+	_check(expedition03 == 18, "expedition03 formal room pool changed or includes stale files")
+	_check(not unique_paths.has("res://tools/scene_builder/examples/component_room_demo.tscn"), "unregistered authoring example is labeled as a game room")
+	_check(browser.find_children("*", "SpinBox", true, false).is_empty(), "opening formal rooms still requires a map seed")
 	browser.search.text = "远征01-走廊01房"
 	browser.rebuild()
 	_check(browser.displayed_count == 1, "room name search not unique")

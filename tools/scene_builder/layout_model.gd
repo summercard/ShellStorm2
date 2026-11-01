@@ -8,6 +8,7 @@ const MAX_BATCH := 4096
 const EPS := 0.015
 const TAGS := preload("res://tools/scene_builder/catalog_tags.gd")
 const SCENE_INDEX := preload("res://tools/scene_builder/scene_index.gd")
+const ROOM_ART := preload("res://src/world3d/RoomArtLayoutContract.gd")
 
 static func catalog() -> Dictionary:
 	var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(CATALOG_PATH))
@@ -205,6 +206,13 @@ static func surface_component(row: Dictionary) -> bool:
 static func blocks_port(root: Node3D, point: Vector3, row: Dictionary, yaw: float) -> bool:
 	if surface_component(row) or str(row.get("slot_role", "")) in ["door_wall", "door_leaf_preview"] or point.y >= 3.0:
 		return false
+	if ROOM_ART.applies(root):
+		var size := component_size(row)
+		var tf := Transform3D(Basis(Vector3.UP, yaw), point + Vector3(0, size.y * 0.5, 0))
+		for box in ROOM_ART.door_boxes(ROOM_ART.dimensions(root)):
+			if ROOM_ART.overlaps_box(ROOM_ART.footprint(tf, size), box):
+				return true
+		return false
 	var ports := root.get_node_or_null("ConnectionPorts")
 	if ports == null:
 		return false
@@ -270,7 +278,7 @@ static func nearby(index: Dictionary, point: Vector3) -> Array[Node3D]:
 	return result
 
 static func validate(root: Node3D) -> Array[String]:
-	var issues: Array[String] = []
+	var issues: Array[String] = ROOM_ART.furnishing_conflicts(root)
 	var seen := {}
 	for node in managed_components(root):
 		if node.scene_file_path.is_empty() or not ResourceLoader.exists(node.scene_file_path):
