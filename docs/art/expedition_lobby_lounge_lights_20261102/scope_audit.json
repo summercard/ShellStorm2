@@ -1,0 +1,10 @@
+{
+  "rooms": 20,
+  "target_transforms": 500,
+  "tabletop_flowers_halved": 108,
+  "lounge_furniture_1_5x": 64,
+  "lamp_contacts": 218,
+  "replaced_legacy_warm_lights": 19,
+  "other_node_content_unchanged": true,
+  "source_meshes_unchanged": true
+}

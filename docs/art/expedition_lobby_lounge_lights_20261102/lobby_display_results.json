@@ -1,0 +1,24 @@
+{
+  "levels": [
+    {
+      "authored_clutter_preserved": 0,
+      "central_fixed_clutter": 0,
+      "floor_ids": {
+        "0": "f00_3ff7aa857e15f422"
+      },
+      "furniture_enabled": true,
+      "level": "expedition_01"
+    },
+    {
+      "authored_clutter_preserved": 24,
+      "central_fixed_clutter": 0,
+      "floor_ids": {
+        "0": "f00_f56334052d73b77a"
+      },
+      "furniture_enabled": false,
+      "level": "expedition_03"
+    }
+  ],
+  "ok": true,
+  "user_dir": "C:/Users/zhuangmenghong/AppData/Roaming/ShellStorm2_verification_lobby_displays_20261102"
+}

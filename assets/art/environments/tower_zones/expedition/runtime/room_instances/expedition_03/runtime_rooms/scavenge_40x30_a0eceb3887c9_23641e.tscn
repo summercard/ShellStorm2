@@ -1642,7 +1642,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_1x518")
 
 [node name="Theme_002_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=360835827 instance=ExtResource("6_selh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0.1, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 17.8, 0.1, -14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1668,7 +1668,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_rp004")
 
 [node name="Theme_003_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1224120874 instance=ExtResource("8_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0.95, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 17.8, 1.8, -14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1688,7 +1688,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_004_WallLamp_02" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=452138473 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0.95, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 17.8, 1.8, -14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1708,7 +1708,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_005_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1697692951 instance=ExtResource("11_13lrb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.54924, 0.1, -13.202203)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 16.34924, 0.1, -11.402203)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1734,7 +1734,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_mk3bh")
 
 [node name="Theme_006_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1091329660 instance=ExtResource("6_selh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.1, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.2, 0.1, -11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1760,7 +1760,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_pukqh")
 
 [node name="Theme_007_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2021117172 instance=ExtResource("8_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.95, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.2, 1.8, -11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1780,7 +1780,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_008_WallLamp_03" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1140559737 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.95, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.2, 1.8, -11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1826,7 +1826,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_qm1lh")
 
 [node name="Theme_010_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1569526281 instance=ExtResource("11_13lrb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4686, 0.1, -12.690824)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -5.0685997, 0.1, -12.690824)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1852,7 +1852,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_wqjus")
 
 [node name="Theme_011_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=243631916 instance=ExtResource("6_selh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.1, -11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1878,7 +1878,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_0qblu")
 
 [node name="Theme_012_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=682256508 instance=ExtResource("8_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.8, -11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1898,7 +1898,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_013_WallLamp_05" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=293292033 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.8, -11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1925,7 +1925,7 @@ omni_range = 6.75
 omni_attenuation = 1.45
 
 [node name="Theme_014_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1661945274 instance=ExtResource("6_selh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.1, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5, 0.1, -11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1951,7 +1951,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_xet08")
 
 [node name="Theme_015_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=851995711 instance=ExtResource("8_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.95, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5, 1.8, -11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1971,7 +1971,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_016_WallLamp_06" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=116585443 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.95, -14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5, 1.8, -11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1991,7 +1991,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_017_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1561648375 instance=ExtResource("11_13lrb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4686, 0.1, -12.690824)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.0685997, 0.1, -13.090823)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2043,7 +2043,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_gctti")
 
 [node name="Theme_019_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2076578814 instance=ExtResource("6_selh0")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.8, 0.1, 14.2)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -17.8, 0.1, 14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2069,7 +2069,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_5mvd7")
 
 [node name="Theme_020_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=365347523 instance=ExtResource("8_1x518")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.8, 0.95, 14.2)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -17.8, 1.8, 14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2089,7 +2089,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_021_WallLamp_08" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=291246424 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.8, 0.95, 14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -17.8, 1.8, 14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2109,7 +2109,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_022_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1136373235 instance=ExtResource("11_13lrb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.54924, 0.1, 13.202203)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -15.54924, 0.1, 10.402203)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2135,7 +2135,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_kd4fv")
 
 [node name="Theme_023_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1827365611 instance=ExtResource("6_selh0")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.8, 0.1, 14.2)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 17.8, 0.1, 14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2161,7 +2161,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_dbbuv")
 
 [node name="Theme_024_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=143719100 instance=ExtResource("8_1x518")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.8, 0.95, 14.2)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 17.8, 1.8, 14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2181,7 +2181,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_025_WallLamp_09" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2092539236 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.8, 0.95, 14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 17.8, 1.8, 14.2)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2227,7 +2227,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_1j7j3")
 
 [node name="Theme_027_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1789078691 instance=ExtResource("6_selh0")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5, 0.1, 14.2)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -3.1999998, 0.1, 11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2253,7 +2253,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_wl26a")
 
 [node name="Theme_028_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1577686442 instance=ExtResource("8_1x518")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5, 0.95, 14.2)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -3.1999998, 1.8, 11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2273,7 +2273,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_029_WallLamp_11" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=504121587 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.95, 14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3.1999998, 1.8, 11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2293,7 +2293,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_030_Wall_console" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=767737512 instance=ExtResource("6_selh0")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.1, 14.2)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 0.1, 11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2319,7 +2319,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_7yynp")
 
 [node name="Theme_031_WallDocuments" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1360641360 instance=ExtResource("8_1x518")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.95, 14.2)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 1.8, 11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2339,7 +2339,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_032_WallLamp_12" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1190364192 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 14.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.8, 11.599999)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2366,7 +2366,7 @@ omni_range = 6.75
 omni_attenuation = 1.45
 
 [node name="Theme_033_WallGreen" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1566946101 instance=ExtResource("11_13lrb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 12.6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.1, 13.200001)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2392,7 +2392,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_w0ey1")
 
 [node name="Theme_034_InventoryDesk" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1533684261 instance=ExtResource("6_selh0")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14, 0.1, -6)
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -14, 0.1, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2418,7 +2418,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_sw6cb")
 
 [node name="Theme_035_InventoryDesk_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=716352016 instance=ExtResource("8_1x518")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.7, 0.95, -6)
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -13.4, 1.8, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2438,7 +2438,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_036_InventoryDesk_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=72921245 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.3, 0.95, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -14.6, 1.8, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2458,7 +2458,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_037_InventorySeat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1112265748 instance=ExtResource("11_mk3bh")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.7, 0.1, -6)
+transform = Transform3D(-8.7422780e-08, 0, 2, 0, 2, 0, -2, 0, -8.7422780e-08, -11.468656, 0.1, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-OFFICE-CHAIR"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2504,7 +2504,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_039_InventoryDesk" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1700259910 instance=ExtResource("6_selh0")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14, 0.1, 6)
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -14, 0.1, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2530,7 +2530,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_6qmoh")
 
 [node name="Theme_040_InventoryDesk_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=324032537 instance=ExtResource("8_1x518")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.7, 0.95, 6)
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -13.4, 1.8, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2550,7 +2550,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_041_InventoryDesk_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=485585172 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.3, 0.95, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -14.6, 1.8, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2570,7 +2570,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_042_InventorySeat" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=923368059 instance=ExtResource("11_mk3bh")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.7, 0.1, 6)
+transform = Transform3D(-8.7422780e-08, 0, 2, 0, 2, 0, -2, 0, -8.7422780e-08, -11.468656, 0.1, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-OFFICE-CHAIR"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2616,7 +2616,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_044_InventoryDesk" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1727317372 instance=ExtResource("6_selh0")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14, 0.1, -6)
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 14.2, 0.1, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2642,7 +2642,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_siaqw")
 
 [node name="Theme_045_InventoryDesk_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=688581330 instance=ExtResource("8_1x518")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14.3, 0.95, -6)
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 14.8, 1.8, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2662,7 +2662,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_046_InventoryDesk_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1965166896 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.7, 0.95, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 13.599999, 1.8, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2728,7 +2728,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_049_InventoryDesk" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1308631442 instance=ExtResource("6_selh0")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14, 0.1, 6)
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 14.2, 0.1, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2754,7 +2754,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_hnfww")
 
 [node name="Theme_050_InventoryDesk_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=284550399 instance=ExtResource("8_1x518")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14.3, 0.95, 6)
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 14.8, 1.8, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2774,7 +2774,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_051_InventoryDesk_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1609234322 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.7, 0.95, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 13.599999, 1.8, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3734,7 +3734,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_093_SupplyStation_Counter" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=966592822 instance=ExtResource("6_selh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.1, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0.1, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3760,7 +3760,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_qymqh")
 
 [node name="Theme_094_SupplyStation_Counter_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=626494154 instance=ExtResource("8_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7, 0.95, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -6.3999996, 1.8, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3780,7 +3780,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_095_SupplyStation_Counter_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1536026771 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3, 0.95, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.6000004, 1.8, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3833,7 +3833,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_w67x3")
 
 [node name="Theme_097_SupplyStation_Cart" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1498474548 instance=ExtResource("18_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.8, 0.1, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.6000004, 0.1, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3859,7 +3859,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83479, 0)
 shape = SubResource("BoxShape3D_gqit7")
 
 [node name="Theme_098_SupplyStation_Green" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=695377697 instance=ExtResource("11_13lrb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.1, -7.8)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.6, 0.1, -7.8)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3905,7 +3905,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_100_SupplyStation_Counter" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=76167994 instance=ExtResource("6_selh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.1, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0.1, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3931,7 +3931,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_lp7ps")
 
 [node name="Theme_101_SupplyStation_Counter_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1298392371 instance=ExtResource("8_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7, 0.95, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -6.3999996, 1.8, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3951,7 +3951,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_102_SupplyStation_Counter_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1155278173 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3, 0.95, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.6000004, 1.8, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4004,7 +4004,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_sgpu8")
 
 [node name="Theme_104_SupplyStation_Cart" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2005613551 instance=ExtResource("18_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.8, 0.1, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.6000004, 0.1, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4030,7 +4030,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83479, 0)
 shape = SubResource("BoxShape3D_51cc7")
 
 [node name="Theme_105_SupplyStation_Green" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1707378468 instance=ExtResource("11_13lrb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.1, 4.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.6, 0.1, 4.2)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4076,7 +4076,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_107_SupplyStation_Counter" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=549155712 instance=ExtResource("6_selh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.1, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7, 0.1, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4102,7 +4102,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_vr6vg")
 
 [node name="Theme_108_SupplyStation_Counter_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1248410714 instance=ExtResource("8_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3, 0.95, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.6000004, 1.8, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4122,7 +4122,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_109_SupplyStation_Counter_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1276440621 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 0.95, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.3999996, 1.8, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4175,7 +4175,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_gm6gk")
 
 [node name="Theme_111_SupplyStation_Cart" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1188701822 instance=ExtResource("18_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2, 0.1, -6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.4, 0.1, -6)
 metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4201,7 +4201,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83479, 0)
 shape = SubResource("BoxShape3D_gaicc")
 
 [node name="Theme_112_SupplyStation_Green" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1346690666 instance=ExtResource("11_13lrb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.4, 0.1, -7.8)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.4, 0.1, -7.8)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4247,7 +4247,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_114_SupplyStation_Counter" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=997133746 instance=ExtResource("6_selh0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.1, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7, 0.1, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4273,7 +4273,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_r2ggl")
 
 [node name="Theme_115_SupplyStation_Counter_Documents" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=787898259 instance=ExtResource("8_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3, 0.95, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.6000004, 1.8, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4293,7 +4293,7 @@ metadata/grid_unit_m = 0.0
 metadata/theme_placement = "物资整备库"
 
 [node name="Theme_116_SupplyStation_Counter_Lamp" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1836535025 instance=ExtResource("9_rp004")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 0.95, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.3999996, 1.8, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4346,7 +4346,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_rr2qr")
 
 [node name="Theme_118_SupplyStation_Cart" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1789741980 instance=ExtResource("18_1x518")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2, 0.1, 6)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.4, 0.1, 6)
 metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4372,7 +4372,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83479, 0)
 shape = SubResource("BoxShape3D_81tjy")
 
 [node name="Theme_119_SupplyStation_Green" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=462406915 instance=ExtResource("11_13lrb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.4, 0.1, 4.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.4, 0.1, 4.2)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"

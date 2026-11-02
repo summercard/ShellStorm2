@@ -1,0 +1,8 @@
+{
+  "documentation": 1,
+  "decoupling": 0,
+  "runtime_naming": 0,
+  "ledger_structure": 0,
+  "ledger_split": 0,
+  "git_diff_check": 0
+}

@@ -1,0 +1,14 @@
+{
+  "authored": 24,
+  "center": [
+    "InteractiveClutter_breakable_jar",
+    "InteractiveClutter_breakable_book_stack",
+    "InteractiveClutter_breakable_vase",
+    "InteractiveClutter_breakable_chair",
+    "InteractiveClutter_breakable_crate"
+  ],
+  "floor_ids": {
+    "0": "f00_b5641fb3a7ead30d"
+  },
+  "user_dir": "C:/Users/zhuangmenghong/AppData/Roaming/ShellStorm2_verification_manor_adjustments_20261102"
+}

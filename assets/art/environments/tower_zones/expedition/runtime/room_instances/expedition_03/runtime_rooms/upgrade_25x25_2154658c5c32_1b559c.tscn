@@ -270,7 +270,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_8wa6a")
 
 [node name="Theme_002_Wall_console" parent="ArtComponents/ThemedLayout" unique_id=768125237 instance=ExtResource("6_3chit")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3, 0.1, -11.7)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.3, 0.1, -11.7)
 metadata/theme_placement = "更衣客房"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_002_Wall_console" unique_id=1798707032]
@@ -280,15 +280,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_lesrb")
 
 [node name="Theme_003_WallDocuments" parent="ArtComponents/ThemedLayout" unique_id=1468491616 instance=ExtResource("7_8wa6a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3, 0.95, -11.7)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.3, 1.8, -11.7)
 metadata/theme_placement = "更衣客房"
 
 [node name="Theme_004_WallLamp_02" parent="ArtComponents/ThemedLayout" unique_id=847514097 instance=ExtResource("6_7t74b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3, 0.95, -11.7)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.3, 1.8, -11.7)
 metadata/theme_placement = "更衣客房"
 
 [node name="Theme_005_WallGreen" parent="ArtComponents/ThemedLayout" unique_id=2140153296 instance=ExtResource("9_7t74b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2427635, 0.1, -10.499062)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.2427635, 0.1, -10.099062)
 metadata/theme_placement = "更衣客房"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_005_WallGreen" unique_id=215491324]
@@ -298,7 +298,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_x8csg")
 
 [node name="Theme_006_Wall_console" parent="ArtComponents/ThemedLayout" unique_id=1660187632 instance=ExtResource("6_3chit")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.1, -11.7)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.5, 0.1, -9.099999)
 metadata/theme_placement = "更衣客房"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_006_Wall_console" unique_id=113805438]
@@ -308,11 +308,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_31dxh")
 
 [node name="Theme_007_WallDocuments" parent="ArtComponents/ThemedLayout" unique_id=1848360500 instance=ExtResource("7_8wa6a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.95, -11.7)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.5, 1.8, -9.099999)
 metadata/theme_placement = "更衣客房"
 
 [node name="Theme_008_WallLamp_03" parent="ArtComponents/ThemedLayout" unique_id=153692252 instance=ExtResource("6_7t74b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.95, -11.7)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.5, 1.8, -9.099999)
 metadata/theme_placement = "更衣客房"
 
 [node name="WallLamp_03_Light" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=704404973]
@@ -333,7 +333,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_e2a5n")
 
 [node name="Theme_010_WallGreen" parent="ArtComponents/ThemedLayout" unique_id=1616989799 instance=ExtResource("9_7t74b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1656668, 0.1, -10.135321)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.565667, 0.1, -9.735321)
 metadata/theme_placement = "更衣客房"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_010_WallGreen" unique_id=1063589769]
@@ -343,7 +343,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_w686d")
 
 [node name="Theme_011_Wall_console" parent="ArtComponents/ThemedLayout" unique_id=1189079819 instance=ExtResource("6_3chit")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10.3, 0.1, 11.7)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -10.3, 0.1, 11.7)
 metadata/theme_placement = "更衣客房"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_011_Wall_console" unique_id=1143666857]
@@ -353,15 +353,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_t7ccu")
 
 [node name="Theme_012_WallDocuments" parent="ArtComponents/ThemedLayout" unique_id=1828246012 instance=ExtResource("7_8wa6a")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10.3, 0.95, 11.7)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -10.3, 1.8, 11.7)
 metadata/theme_placement = "更衣客房"
 
 [node name="Theme_013_WallLamp_05" parent="ArtComponents/ThemedLayout" unique_id=633724954 instance=ExtResource("6_7t74b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3, 0.95, 11.7)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.3, 1.8, 11.7)
 metadata/theme_placement = "更衣客房"
 
 [node name="Theme_014_Wall_console" parent="ArtComponents/ThemedLayout" unique_id=477424584 instance=ExtResource("6_3chit")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 10.3, 0.1, 11.7)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 9.3, 0.1, 11.7)
 metadata/theme_placement = "更衣客房"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_014_Wall_console" unique_id=61978586]
@@ -371,15 +371,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_4uaae")
 
 [node name="Theme_015_WallDocuments" parent="ArtComponents/ThemedLayout" unique_id=1641176392 instance=ExtResource("7_8wa6a")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 10.3, 0.95, 11.7)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 9.3, 1.8, 11.7)
 metadata/theme_placement = "更衣客房"
 
 [node name="Theme_016_WallLamp_06" parent="ArtComponents/ThemedLayout" unique_id=40769671 instance=ExtResource("6_7t74b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3, 0.95, 11.7)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.3, 1.8, 11.7)
 metadata/theme_placement = "更衣客房"
 
 [node name="Theme_017_WallGreen" parent="ArtComponents/ThemedLayout" unique_id=20156996 instance=ExtResource("9_7t74b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2427635, 0.1, 10.499062)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.442763, 0.1, 10.099062)
 metadata/theme_placement = "更衣客房"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_017_WallGreen" unique_id=1869437847]
@@ -1122,7 +1122,7 @@ metadata/theme_placement = "更衣客房"
 metadata/authored_prop_scale = 1.25
 
 [node name="Theme_062_BedroomWritingDesk" parent="ArtComponents/ThemedLayout" unique_id=1907180492 instance=ExtResource("6_3chit")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.1, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0.1, 0)
 metadata/theme_placement = "更衣客房"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_062_BedroomWritingDesk" unique_id=131108876]
@@ -1132,11 +1132,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_8230u")
 
 [node name="Theme_063_BedroomWritingDesk_Documents" parent="ArtComponents/ThemedLayout" unique_id=554600977 instance=ExtResource("7_8wa6a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7, 0.95, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -6.3999996, 1.8, 0)
 metadata/theme_placement = "更衣客房"
 
 [node name="Theme_064_BedroomWritingDesk_Lamp" parent="ArtComponents/ThemedLayout" unique_id=1877356556 instance=ExtResource("6_7t74b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3, 0.95, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.6000004, 1.8, 0)
 metadata/theme_placement = "更衣客房"
 
 [node name="BedroomWritingDesk_Lamp_Light" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=1707807219]
@@ -1157,7 +1157,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.265, 0)
 shape = SubResource("BoxShape3D_y8orq")
 
 [node name="Theme_066_GuestLuggage" parent="ArtComponents/ThemedLayout" unique_id=1890365183 instance=ExtResource("21_8wa6a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.1, 11.531432)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7, 0.1, 8.931432)
 metadata/theme_placement = "更衣客房"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/ThemedLayout/Theme_066_GuestLuggage" unique_id=1750812161]

@@ -1,0 +1,19 @@
+{
+  "checks": 2732,
+  "errors": [],
+  "ok": true,
+  "real_warm_fixtures": 259,
+  "scale_counts": {
+    "manor_armchair@1.5": 29,
+    "manor_candelabra@1.0": 2,
+    "manor_candelabra@1.5": 1,
+    "manor_coffee_table@1.5": 14,
+    "manor_desk_documents@1.0": 107,
+    "manor_flower_arrangement@0.5": 108,
+    "manor_side_table@1.5": 14,
+    "manor_sofa@1.5": 7,
+    "manor_table_lamp@1.0": 205,
+    "manor_table_lamp@1.5": 13
+  },
+  "table_lamps_aligned": 218
+}

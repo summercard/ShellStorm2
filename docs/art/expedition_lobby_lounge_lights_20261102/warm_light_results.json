@@ -1,0 +1,17 @@
+{
+  "checks": 50,
+  "errors": [],
+  "ok": true,
+  "receiver_off": [
+    0.07450982183218,
+    0.07450982183218,
+    0.07450982183218
+  ],
+  "receiver_on": [
+    0.319577574729919,
+    0.220420122146606,
+    0.127129301428795
+  ],
+  "runtime_fixtures": 11,
+  "user_dir": "C:/Users/zhuangmenghong/AppData/Roaming/ShellStorm2_verification_lobby_displays_20261102"
+}

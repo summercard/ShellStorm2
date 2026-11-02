@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "lobbies_without_fixed_samples": [
+    "expedition_01",
+    "expedition_03"
+  ],
+  "tabletop_flower_instances_at_half_current_size": 108,
+  "lounge_furniture_instances_1_5x": 64,
+  "table_lamps_aligned": 218,
+  "warm_fixture_categories": 3,
+  "receiver_lighting_verified": true,
+  "switch_stream_restore_verified": true,
+  "new_collider_overlaps": 0,
+  "ledger_sha_verified": 23,
+  "gates": {
+    "documentation": 1,
+    "decoupling": 0,
+    "runtime_naming": 0,
+    "ledger_structure": 0,
+    "ledger_split": 0,
+    "git_diff_check": 0
+  }
+}

@@ -2350,7 +2350,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
 shape = SubResource("BoxShape3D_6e2wq")
 
 [node name="ReceptionLibraryLeft" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=430545530 instance=ExtResource("9_1un2e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -14)
+transform = Transform3D(1.5, 0, 0, 0, 1.250736, 0, 0, 0, 1, -2, 0, -14)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2376,7 +2376,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_1un2e")
 
 [node name="ReceptionLibraryRight" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=729567899 instance=ExtResource("9_1un2e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -14)
+transform = Transform3D(1.5, 0, 0, 0, 1.250736, 0, 0, 0, 1, 2, 0, -14)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2402,7 +2402,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_r74vm")
 
 [node name="ReceptionCentralArchive" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1464181023 instance=ExtResource("9_1un2e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+transform = Transform3D(1.5, 0, 0, 0, 1.250736, 0, 0, 0, 1, 0, 0, -14)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2428,7 +2428,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_gmdjp")
 
 [node name="ReceptionDocuments" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=169602333 instance=ExtResource("11_gmdjp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.27, -11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.2728299, -11)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2448,7 +2448,7 @@ metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="ReceptionDeskLamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=57676038 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.27, -11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.2728299, -11)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2466,12 +2466,6 @@ metadata/preserve_authored_palette = true
 metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
-
-[node name="ReceptionDeskLamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1742211947]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.75, -11)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
 
 [node name="ReceptionGreen-4_0" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1022456084 instance=ExtResource("13_bgjhg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -12.8)
@@ -2526,7 +2520,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.804925, 0)
 shape = SubResource("BoxShape3D_2boom")
 
 [node name="ReceptionLuggage" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=23225833 instance=ExtResource("14_2boom")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -9.3)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4, 0, -9.3)
 metadata/asset_id = "ENV-EXP03-MANOR-LUGGAGE-CART"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2552,7 +2546,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83479, 0)
 shape = SubResource("BoxShape3D_ktby6")
 
 [node name="WestSalon_BurgundyCarpet" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1039013384 instance=ExtResource("6_whov6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.012, -1)
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, -13.5, 0.012, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-RUG-LOUNGE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2572,7 +2566,7 @@ metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="WestSalon_SofaWest" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=130747913 instance=ExtResource("9_ir4is")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.45, 0, -1)
+transform = Transform3D(-6.556708e-08, 0, 1.5, 0, 1.5, 0, -1.5, 0, -6.556708e-08, -13.45, 0, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-SOFA"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2598,7 +2592,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
 shape = SubResource("BoxShape3D_xqvsj")
 
 [node name="WestSalon_SofaEast" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=380311641 instance=ExtResource("9_ir4is")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -8.55, 0, -1)
+transform = Transform3D(-6.556708e-08, 0, -1.5, 0, 1.5, 0, 1.5, 0, -6.556708e-08, -8.55, 0, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-SOFA"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2624,7 +2618,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
 shape = SubResource("BoxShape3D_wl5f5")
 
 [node name="WestSalon_RoundTable" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1025379378 instance=ExtResource("10_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, -1)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -11, 0, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-COFFEE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2650,7 +2644,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2477775, 0)
 shape = SubResource("BoxShape3D_aihxu")
 
 [node name="WestSalon_FloralCentre" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=130648046 instance=ExtResource("11_83xy8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.5, -1)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -11, 0.7493325, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2670,7 +2664,7 @@ metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="WestSalon_ArmchairNorth" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=675207700 instance=ExtResource("9_whov6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -11, 0, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-ARMCHAIR"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2696,7 +2690,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
 shape = SubResource("BoxShape3D_2tch4")
 
 [node name="WestSalon_ArmchairSouth" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1996203106 instance=ExtResource("9_whov6")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -11, 0, 2.25)
+transform = Transform3D(-1.5, 0, -1.3113416e-07, 0, 1.5, 0, 1.3113416e-07, 0, -1.5, -11, 0, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-ARMCHAIR"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2722,7 +2716,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
 shape = SubResource("BoxShape3D_x4y2q")
 
 [node name="WestSalon_Side-1-1" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=16375149 instance=ExtResource("12_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -13.3, 0, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-SIDE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2748,7 +2742,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3223135, 0)
 shape = SubResource("BoxShape3D_umhrr")
 
 [node name="WestSalon_Side-1-1_Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1322085751 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0.65, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -13.3, 0.97294044, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2767,14 +2761,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="WestSalon_Side-1-1_Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=176915743]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 1.13, -4.25)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="WestSalon_Side-11" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1886524114 instance=ExtResource("12_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0, 2.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -13.5, 0, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-SIDE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2800,7 +2788,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3223135, 0)
 shape = SubResource("BoxShape3D_xryml")
 
 [node name="WestSalon_Side-11_Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=212473786 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0.65, 2.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -13.5, 0.97294044, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2819,14 +2807,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="WestSalon_Side-11_Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1370153649]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 1.13, 2.25)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="WestSalon_Side1-1" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=2015123706 instance=ExtResource("12_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8.7, 0, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-SIDE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2852,7 +2834,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3223135, 0)
 shape = SubResource("BoxShape3D_k1e24")
 
 [node name="WestSalon_Side1-1_Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1148637276 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0.65, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8.7, 0.97294044, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2871,14 +2853,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="WestSalon_Side1-1_Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1456668300]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 1.13, -4.25)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="WestSalon_Side11" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1946694442 instance=ExtResource("12_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, 2.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8.5, 0, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-SIDE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2904,7 +2880,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3223135, 0)
 shape = SubResource("BoxShape3D_aroly")
 
 [node name="WestSalon_Side11_Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=462466416 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0.65, 2.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8.5, 0.97294044, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2923,14 +2899,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="WestSalon_Side11_Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1047175688]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 1.13, 2.25)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="WestSalon_Green-14_2" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=756148280 instance=ExtResource("13_orckh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2, 0, -5.1)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -14.8, 0, -5.1)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2956,7 +2926,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_6w5cr")
 
 [node name="WestSalon_Green-7_8" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=476187921 instance=ExtResource("13_orckh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8, 0, -5.1)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.2000003, 0, -5.1)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -2982,7 +2952,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_co1op")
 
 [node name="EastSalon_BurgundyCarpet" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=931931871 instance=ExtResource("6_whov6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0.012, -1)
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 13.5, 0.012, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-RUG-LOUNGE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3002,7 +2972,7 @@ metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="EastSalon_SofaWest" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=372784419 instance=ExtResource("9_ir4is")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 8.55, 0, -1)
+transform = Transform3D(-6.556708e-08, 0, 1.5, 0, 1.5, 0, -1.5, 0, -6.556708e-08, 8.55, 0, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-SOFA"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3028,7 +2998,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
 shape = SubResource("BoxShape3D_ostef")
 
 [node name="EastSalon_SofaEast" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=2014968219 instance=ExtResource("9_ir4is")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 13.45, 0, -1)
+transform = Transform3D(-6.556708e-08, 0, -1.5, 0, 1.5, 0, 1.5, 0, -6.556708e-08, 13.45, 0, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-SOFA"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3054,7 +3024,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
 shape = SubResource("BoxShape3D_u78rg")
 
 [node name="EastSalon_RoundTable" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=2021990605 instance=ExtResource("10_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, -1)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 11, 0, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-COFFEE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3080,7 +3050,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2477775, 0)
 shape = SubResource("BoxShape3D_oy8ft")
 
 [node name="EastSalon_FloralCentre" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=667546674 instance=ExtResource("11_83xy8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0.5, -1)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 11, 0.7493325, -1)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3100,7 +3070,7 @@ metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="EastSalon_ArmchairNorth" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=763655648 instance=ExtResource("9_whov6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 11, 0, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-ARMCHAIR"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3126,7 +3096,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
 shape = SubResource("BoxShape3D_liq60")
 
 [node name="EastSalon_ArmchairSouth" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=635295070 instance=ExtResource("9_whov6")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 11, 0, 2.25)
+transform = Transform3D(-1.5, 0, -1.3113416e-07, 0, 1.5, 0, 1.3113416e-07, 0, -1.5, 11, 0, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-ARMCHAIR"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3152,7 +3122,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, 0)
 shape = SubResource("BoxShape3D_2i0iw")
 
 [node name="EastSalon_Side-1-1" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=2036389357 instance=ExtResource("12_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8.7, 0, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-SIDE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3178,7 +3148,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3223135, 0)
 shape = SubResource("BoxShape3D_5rthy")
 
 [node name="EastSalon_Side-1-1_Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1150524260 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0.65, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8.7, 0.97294044, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3197,14 +3167,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="EastSalon_Side-1-1_Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1373887566]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 1.13, -4.25)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="EastSalon_Side-11" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1152881183 instance=ExtResource("12_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, 2.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8.5, 0, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-SIDE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3230,7 +3194,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3223135, 0)
 shape = SubResource("BoxShape3D_s77g4")
 
 [node name="EastSalon_Side-11_Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=351081875 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0.65, 2.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8.5, 0.97294044, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3249,14 +3213,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="EastSalon_Side-11_Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=909879969]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 1.13, 2.25)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="EastSalon_Side1-1" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1351244818 instance=ExtResource("12_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 13.3, 0, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-SIDE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3282,7 +3240,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3223135, 0)
 shape = SubResource("BoxShape3D_6fpp6")
 
 [node name="EastSalon_Side1-1_Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1866458734 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0.65, -4.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 13.3, 0.97294044, -4.25)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3301,14 +3259,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="EastSalon_Side1-1_Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1079756399]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 1.13, -4.25)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="EastSalon_Side11" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=911988800 instance=ExtResource("12_g3nc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0, 2.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 13.5, 0, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-SIDE-TABLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3334,7 +3286,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3223135, 0)
 shape = SubResource("BoxShape3D_pdqon")
 
 [node name="EastSalon_Side11_Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1211373742 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0.65, 2.25)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 13.5, 0.97294044, 2.25)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3353,14 +3305,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="EastSalon_Side11_Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1320951898]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 1.13, 2.25)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="EastSalon_Green7_8" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=899102556 instance=ExtResource("13_orckh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 0, -5.1)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.2000003, 0, -5.1)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3386,7 +3332,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_03wy7")
 
 [node name="EastSalon_Green14_2" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1909073404 instance=ExtResource("13_orckh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2, 0, -5.1)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 14.8, 0, -5.1)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3412,7 +3358,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_f74op")
 
 [node name="Archive-12Carpet" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1057706011 instance=ExtResource("21_ktby6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.012, 12.5)
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, -12, 0.012, 13.5)
 metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3458,7 +3404,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_yl0vf")
 
 [node name="Archive-12Console" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=41659152 instance=ExtResource("22_xqvsj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, 0, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3484,7 +3430,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_el0r4")
 
 [node name="Archive-12Files" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=15281946 instance=ExtResource("11_gmdjp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.7, 0.85, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -11.4, 1.706, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3504,7 +3450,7 @@ metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="Archive-12Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=702920413 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.35, 0.85, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12.700001, 1.706, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3523,14 +3469,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="Archive-12Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1297436441]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.35, 1.33, 11.5)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="Archive-12Green" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=337505269 instance=ExtResource("13_orckh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.2, 0, 13)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.2, 0, 13)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3556,7 +3496,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_doo5u")
 
 [node name="Archive-6Carpet" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1056436931 instance=ExtResource("21_ktby6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.012, 12.5)
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, -6, 0.012, 13.5)
 metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3602,7 +3542,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_b8exc")
 
 [node name="Archive-6Console" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=507938485 instance=ExtResource("22_xqvsj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -6, 0, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3628,7 +3568,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_2jeh0")
 
 [node name="Archive-6Files" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=90844670 instance=ExtResource("11_gmdjp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7, 0.85, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -5.3999996, 1.706, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3648,7 +3588,7 @@ metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="Archive-6Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1965335146 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35, 0.85, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -6.7, 1.706, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3667,14 +3607,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="Archive-6Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1632213097]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35, 1.33, 11.5)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="Archive-6Green" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1003475304 instance=ExtResource("13_orckh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2, 0, 13)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.2, 0, 13)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3700,7 +3634,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_utbe6")
 
 [node name="Archive6Carpet" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=164768387 instance=ExtResource("21_ktby6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.012, 12.5)
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 6, 0.012, 13.5)
 metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3746,7 +3680,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_2r3t4")
 
 [node name="Archive6Console" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=54222676 instance=ExtResource("22_xqvsj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6, 0, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3772,7 +3706,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_0658g")
 
 [node name="Archive6Files" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1143677724 instance=ExtResource("11_gmdjp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3, 0.85, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6000004, 1.706, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3792,7 +3726,7 @@ metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="Archive6Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=190105016 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65, 0.85, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.3, 1.706, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3811,14 +3745,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="Archive6Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=177718326]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65, 1.33, 11.5)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="Archive6Green" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1080031695 instance=ExtResource("13_orckh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 0, 13)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.8, 0, 13)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3844,7 +3772,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_y8msa")
 
 [node name="Archive12Carpet" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1687828013 instance=ExtResource("21_ktby6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.012, 12.5)
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 12, 0.012, 13.5)
 metadata/asset_id = "ENV-EXP03-MANOR-RUG-BEDROOM"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3890,7 +3818,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_3jpwe")
 
 [node name="Archive12Console" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1916987933 instance=ExtResource("22_xqvsj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 12, 0, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3916,7 +3844,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_g7j2p")
 
 [node name="Archive12Files" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=278743339 instance=ExtResource("11_gmdjp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3, 0.85, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 12.6, 1.706, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-DESK-DOCUMENTS"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3936,7 +3864,7 @@ metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="Archive12Lamp" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=1272935047 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.65, 0.85, 11.5)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 11.299999, 1.706, 11.5)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -3955,14 +3883,8 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 metadata/layout_design = "manor_reference_three_rooms"
 
-[node name="Archive12Lamp_WarmLight" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1964958835]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.65, 1.33, 11.5)
-light_color = Color(1, 0.69, 0.36, 1)
-light_energy = 1.4
-omni_attenuation = 1.35
-
 [node name="Archive12Green" type="Node3D" parent="ArtComponents/AuthoredSalon" unique_id=266651746 instance=ExtResource("13_orckh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8, 0, 13)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 13.8, 0, 13)
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-COMPACT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4239,7 +4161,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_02_north_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=337823439 instance=ExtResource("9_1un2e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.3, 0.1, -19.43125)
+transform = Transform3D(1.5, 0, 0, 0, 1.250736, 0, 0, 0, 1, 20.3, 0.1, -19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4264,7 +4186,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_3rar4")
 
 [node name="Collection_02_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=796308368 instance=ExtResource("30_aihxu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.24, 1.9300001, -19.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.684, 1.93, -19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4283,7 +4205,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_03_north_console" type="Node3D" parent="ArtComponents/WallCollections" unique_id=700118462 instance=ExtResource("22_xqvsj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.1, -19.43375)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.7, 0.1, -16.63375)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4308,7 +4230,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_mi4md")
 
 [node name="Collection_03_DeskLamp" type="Node3D" parent="ArtComponents/WallCollections" unique_id=587132971 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0.95000005, -19.43375)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -10.7, 1.806, -16.63375)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4346,7 +4268,7 @@ metadata/component_family = "painting"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_04_north_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=150389989 instance=ExtResource("9_1un2e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.1, -19.43125)
+transform = Transform3D(1.5, 0, 0, 0, 1.250736, 0, 0, 0, 1, -7.5, 0.1, -19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4371,7 +4293,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_xbk5b")
 
 [node name="Collection_04_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=183319851 instance=ExtResource("30_aihxu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.56, 1.9300001, -19.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.116, 1.93, -19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4390,7 +4312,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_05_north_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1411930607 instance=ExtResource("9_1un2e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.1, -19.43125)
+transform = Transform3D(1.5, 0, 0, 0, 1.250736, 0, 0, 0, 1, -2.5, 0.1, -19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4415,7 +4337,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_gggw3")
 
 [node name="Collection_05_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1015479252 instance=ExtResource("30_aihxu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.56, 1.9300001, -19.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.116, 1.93, -19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4434,7 +4356,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_06_north_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1079985882 instance=ExtResource("9_1un2e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.1, -19.43125)
+transform = Transform3D(1.5, 0, 0, 0, 1.250736, 0, 0, 0, 1, 2.5, 0.1, -19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4459,7 +4381,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_rru0p")
 
 [node name="Collection_06_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1491452859 instance=ExtResource("30_aihxu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.44, 1.9300001, -19.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.884, 1.93, -19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4478,7 +4400,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_07_north_console" type="Node3D" parent="ArtComponents/WallCollections" unique_id=752801787 instance=ExtResource("22_xqvsj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.1, -19.43375)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.5, 0.1, -16.63375)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4503,7 +4425,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_jk332")
 
 [node name="Collection_07_DeskLamp" type="Node3D" parent="ArtComponents/WallCollections" unique_id=774210794 instance=ExtResource("12_kttmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.95000005, -19.43375)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.5, 1.806, -16.63375)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4541,7 +4463,7 @@ metadata/component_family = "painting"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_08_north_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=2022402504 instance=ExtResource("9_1un2e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0.1, -19.43125)
+transform = Transform3D(1.5, 0, 0, 0, 1.250736, 0, 0, 0, 1, 12.5, 0.1, -19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4566,7 +4488,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_7x42e")
 
 [node name="Collection_08_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=2002990874 instance=ExtResource("30_aihxu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.44, 1.9300001, -19.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.884, 1.93, -19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4629,7 +4551,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_10_south_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=200626463 instance=ExtResource("9_1un2e")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 20.3, 0.1, 19.43125)
+transform = Transform3D(-1.5, 0, 0, 0, 1.250736, 0, 0, 0, -1, 20.3, 0.1, 19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4654,7 +4576,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_fj256")
 
 [node name="Collection_10_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1624945310 instance=ExtResource("30_aihxu")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 19.359999, 1.9300001, 19.6)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 18.915999, 1.93, 19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4673,7 +4595,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_11_south_console" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1226510935 instance=ExtResource("22_xqvsj")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.5, 0.1, 19.43375)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -12.5, 0.1, 16.63375)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4698,7 +4620,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_0ydgf")
 
 [node name="Collection_11_DeskLamp" type="Node3D" parent="ArtComponents/WallCollections" unique_id=338114730 instance=ExtResource("12_kttmt")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.5, 0.95000005, 19.43375)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -12.5, 1.806, 16.63375)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4736,7 +4658,7 @@ metadata/component_family = "painting"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_12_south_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1169959309 instance=ExtResource("9_1un2e")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.5, 0.1, 19.43125)
+transform = Transform3D(-1.5, 0, 0, 0, 1.250736, 0, 0, 0, -1, -7.5, 0.1, 19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4761,7 +4683,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_06ina")
 
 [node name="Collection_12_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1574337268 instance=ExtResource("30_aihxu")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -8.44, 1.9300001, 19.6)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -8.884, 1.93, 19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4780,7 +4702,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_13_south_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=890539432 instance=ExtResource("9_1un2e")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, 0.1, 19.43125)
+transform = Transform3D(-1.5, 0, 0, 0, 1.250736, 0, 0, 0, -1, -2.5, 0.1, 19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4805,7 +4727,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_rmhfp")
 
 [node name="Collection_13_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=307220186 instance=ExtResource("30_aihxu")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3.44, 1.9300001, 19.6)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -3.884, 1.93, 19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4824,7 +4746,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_14_south_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1833892715 instance=ExtResource("9_1un2e")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5, 0.1, 19.43125)
+transform = Transform3D(-1.5, 0, 0, 0, 1.250736, 0, 0, 0, -1, 2.5, 0.1, 19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4849,7 +4771,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_f33ul")
 
 [node name="Collection_14_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1845555038 instance=ExtResource("30_aihxu")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.56, 1.9300001, 19.6)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 1.116, 1.93, 19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4868,7 +4790,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_15_south_console" type="Node3D" parent="ArtComponents/WallCollections" unique_id=363276819 instance=ExtResource("22_xqvsj")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5, 0.1, 19.43375)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 7.5, 0.1, 16.63375)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4893,7 +4815,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_hxccr")
 
 [node name="Collection_15_DeskLamp" type="Node3D" parent="ArtComponents/WallCollections" unique_id=858246136 instance=ExtResource("12_kttmt")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5, 0.95000005, 19.43375)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 7.5, 1.806, 16.63375)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4931,7 +4853,7 @@ metadata/component_family = "painting"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_16_south_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1939321994 instance=ExtResource("9_1un2e")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.5, 0.1, 19.43125)
+transform = Transform3D(-1.5, 0, 0, 0, 1.250736, 0, 0, 0, -1, 12.5, 0.1, 19.43125)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -4956,7 +4878,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_o3laj")
 
 [node name="Collection_16_BrassSconce" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1057158994 instance=ExtResource("30_aihxu")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 11.56, 1.9300001, 19.6)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 11.116, 1.93, 19.6)
 metadata/asset_id = "ENV-EXP03-MANOR-WALL-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -5063,7 +4985,7 @@ metadata/component_family = "lamp"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_19_west_console" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1113407051 instance=ExtResource("22_xqvsj")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -21.93375, 0.1, -10)
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -19.13375, 0.1, -8.2)
 metadata/asset_id = "ENV-EXP03-MANOR-CONSOLE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -5088,7 +5010,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_jyjv8")
 
 [node name="Collection_19_DeskLamp" type="Node3D" parent="ArtComponents/WallCollections" unique_id=1574233719 instance=ExtResource("12_kttmt")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -21.93375, 0.95000005, -10)
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -19.13375, 1.806, -8.2)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -5126,7 +5048,7 @@ metadata/component_family = "painting"
 metadata/grid_unit_m = 0.0
 
 [node name="Collection_20_west_bookcase" type="Node3D" parent="ArtComponents/WallCollections" unique_id=227816377 instance=ExtResource("9_1un2e")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -21.93125, 0.1, -5)
+transform = Transform3D(0, 0, 1.5, 0, 1.250736, 0, -1, 0, 0, -21.93125, 0.1, -5)
 metadata/asset_id = "ENV-EXP03-MANOR-BOOKCASE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"

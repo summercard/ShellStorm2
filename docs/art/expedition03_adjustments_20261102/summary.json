@@ -1,0 +1,16 @@
+{
+  "safe_center_before": 5,
+  "safe_center_after": 0,
+  "safe_authored_preserved": 24,
+  "uniform_scale_relative": 2,
+  "room_files": 20,
+  "affected_base_props": 327,
+  "all_transforms_with_attachments": 727,
+  "rug_finish": "matte",
+  "checks": 2209,
+  "new_blocked_doors": 0,
+  "new_collider_overlaps": 0,
+  "layout_id_preserved": true,
+  "ledger_room_sha_matches": 20,
+  "documentation_existing_issues": 17
+}

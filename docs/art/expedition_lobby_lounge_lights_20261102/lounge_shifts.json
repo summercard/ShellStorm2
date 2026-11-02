@@ -1,0 +1,180 @@
+{
+  "adjusted": [
+    {
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/boss_50x40_b7446dc46356_c6c134.tscn",
+      "shifts": [
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_114_CeremonialWing_Table",
+          "offset": [
+            0.0,
+            2.60000014305115
+          ]
+        },
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_122_CeremonialWing_Table",
+          "offset": [
+            0.0,
+            2.60000014305115
+          ]
+        },
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_130_CeremonialWing_Table",
+          "offset": [
+            0.0,
+            2.60000014305115
+          ]
+        },
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_138_CeremonialWing_Table",
+          "offset": [
+            0.0,
+            2.60000014305115
+          ]
+        }
+      ]
+    },
+    {
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/event_25x25_ba83cdc666fb_a653bb.tscn",
+      "shifts": [
+        {
+          "group": "ArtComponents/AuthoredSalon/VelvetSalon_SofaWest",
+          "offset": [
+            4.20000028610229,
+            -6.20000028610229
+          ]
+        },
+        {
+          "group": "ArtComponents/AuthoredSalon/VelvetSalon_Side1-1",
+          "offset": [
+            -0.200000002980232,
+            0.0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/stair_lobby_15x15_703e12bd9aa8_4955df.tscn",
+      "shifts": [
+        {
+          "group": "ArtComponents/AuthoredSalon/VelvetWelcomeSofa",
+          "offset": [
+            -1.39999997615814,
+            0.0
+          ]
+        },
+        {
+          "group": "ArtComponents/AuthoredSalon/SouthReadingTable",
+          "offset": [
+            0.0,
+            -0.200000002980232
+          ]
+        }
+      ]
+    },
+    {
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/upgrade_25x25_2154658c5c32_1b559c.tscn",
+      "shifts": [
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_032_RestCorner_Table",
+          "offset": [
+            0.0,
+            -2.60000014305115
+          ]
+        }
+      ]
+    },
+    {
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_40x30_18c0881f3934_e86e98.tscn",
+      "shifts": [
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_042_BanquetTable_Table",
+          "offset": [
+            0.0,
+            -2.60000014305115
+          ]
+        },
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_047_BanquetTable_Table",
+          "offset": [
+            0.0,
+            -2.60000014305115
+          ]
+        },
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_052_BanquetTable_Table",
+          "offset": [
+            0.0,
+            -2.60000014305115
+          ]
+        },
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_057_BanquetTable_Table",
+          "offset": [
+            0.0,
+            -2.60000014305115
+          ]
+        }
+      ]
+    },
+    {
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_45x40_6351962d84c2_68065f.tscn",
+      "shifts": [
+        {
+          "group": "ArtComponents/AuthoredSalon/WestSalon_Side-1-1",
+          "offset": [
+            0.200000002980232,
+            0.0
+          ]
+        },
+        {
+          "group": "ArtComponents/AuthoredSalon/WestSalon_Side1-1",
+          "offset": [
+            -0.200000002980232,
+            0.0
+          ]
+        },
+        {
+          "group": "ArtComponents/AuthoredSalon/EastSalon_Side-1-1",
+          "offset": [
+            0.200000002980232,
+            0.0
+          ]
+        },
+        {
+          "group": "ArtComponents/AuthoredSalon/EastSalon_Side1-1",
+          "offset": [
+            -0.200000002980232,
+            0.0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/trap_40x30_29d67dbb9bda_d2426a.tscn",
+      "shifts": [
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_036_AbandonedSeats_Table",
+          "offset": [
+            4.0,
+            -3.79999995231628
+          ]
+        },
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_038_AbandonedSeats_SeatA",
+          "offset": [
+            0.0,
+            0.200000002980232
+          ]
+        },
+        {
+          "group": "ArtComponents/ThemedLayout/Theme_041_AbandonedSeats_Table",
+          "offset": [
+            1.60000002384186,
+            2.60000014305115
+          ]
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

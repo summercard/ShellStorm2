@@ -1,0 +1,188 @@
+{
+  "rooms": [
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/boss_50x40_b7446dc46356_c6c134.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/NorthCollection_DisplayLeft/LayoutCollision/Shape · north@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/NorthCollection_DisplayRight/LayoutCollision/Shape · north@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/SouthCollection_DisplayLeft/LayoutCollision/Shape · south@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/SouthCollection_DisplayRight/LayoutCollision/Shape · south@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/ExhibitLibrary-4_5/LayoutCollision/Shape · east@-5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/ExhibitLibrary4_5/LayoutCollision/Shape · east@5.00m"
+      ],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/event_25x25_ba83cdc666fb_a653bb.tscn",
+      "final": [
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/NorthCollection_DisplayLeft/LayoutCollision/Shape · north@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/NorthCollection_DisplayRight/LayoutCollision/Shape · north@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/SouthCollection_DisplayLeft/LayoutCollision/Shape · south@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/SouthCollection_DisplayRight/LayoutCollision/Shape · south@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/ExhibitLibrary-4_5/LayoutCollision/Shape · east@-5.00m",
+        "陈设挡住合法门前净空：ArtComponents/AuthoredSalon/ExhibitLibrary4_5/LayoutCollision/Shape · east@5.00m"
+      ],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/event_40x30_24e9d88c229b_a653bb.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/storage_25x25_95769e85e209_3e5f15.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/storage_40x30_ef3f827636f7_3e5f15.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/stair_lobby_15x15_703e12bd9aa8_4955df.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [
+        "陈设挡住合法门前净空：ArtComponents/ThemedLayout/Theme_037_DressingCabinet/LayoutCollision/Shape · east@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/ThemedLayout/Theme_065_BedroomWardrobe/LayoutCollision/Shape · east@0.00m"
+      ],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/upgrade_25x25_2154658c5c32_1b559c.tscn",
+      "final": [
+        "陈设挡住合法门前净空：ArtComponents/ThemedLayout/Theme_037_DressingCabinet/LayoutCollision/Shape · east@5.00m",
+        "陈设挡住合法门前净空：ArtComponents/ThemedLayout/Theme_065_BedroomWardrobe/LayoutCollision/Shape · east@0.00m"
+      ],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/merchant_30x40_f2a374f5465f_d77c54.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_25x25_38083aa33b1a_897612.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_30x40_5fbbae7662fe_e86e98.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_40x30_18c0881f3934_e86e98.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_45x40_6351962d84c2_007418.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/combat_45x40_6351962d84c2_68065f.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/scavenge_25x25_7fda840577df_23641e.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/scavenge_40x30_a0eceb3887c9_23641e.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [
+        {
+          "group": "Theme_026_ExitLuggage",
+          "offset": [
+            -0.2,
+            -0.2
+          ]
+        },
+        {
+          "group": "Theme_031_ExitLuggage",
+          "offset": [
+            -0.2,
+            -0.2
+          ]
+        }
+      ],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/extraction_25x25_6f808c2e0839_ea81ed.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_10x30_a81bd0123e9c_30c1c2.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/room_30x10_cf3d5a630a1c_30c1c2.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/trap_25x25_99212e763067_d2426a.tscn",
+      "final": [],
+      "new_issues": []
+    },
+    {
+      "adjusted": [
+        {
+          "group": "Theme_028_WallGreen",
+          "offset": [
+            0.0,
+            -0.2
+          ]
+        }
+      ],
+      "baseline": [],
+      "file": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_03/runtime_rooms/trap_40x30_29d67dbb9bda_d2426a.tscn",
+      "final": [],
+      "new_issues": []
+    }
+  ],
+  "unresolved": []
+}

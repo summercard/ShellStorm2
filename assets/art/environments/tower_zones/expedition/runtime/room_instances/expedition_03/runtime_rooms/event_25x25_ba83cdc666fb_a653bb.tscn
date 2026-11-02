@@ -443,7 +443,7 @@ light_energy = 1.4
 omni_attenuation = 1.35
 
 [node name="VelvetSalon_Green-8_7" parent="ArtComponents/AuthoredSalon" unique_id=51638225 instance=ExtResource("9_c06iu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.7, 0, -4.1)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.5, 0, -4.8999996)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/VelvetSalon_Green-8_7" unique_id=74083057]
@@ -453,7 +453,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_wqfqi")
 
 [node name="VelvetSalon_Green-2_3" parent="ArtComponents/AuthoredSalon" unique_id=962514680 instance=ExtResource("9_c06iu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 0, -4.1)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.6999999, 0, -4.1)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/VelvetSalon_Green-2_3" unique_id=974830080]
@@ -463,7 +463,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_wfs5y")
 
 [node name="NorthCollection_Console" parent="ArtComponents/AuthoredSalon" unique_id=488210965 instance=ExtResource("6_b0de1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, -8.4)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.5, 0, -8.4)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/NorthCollection_Console" unique_id=778084570]
@@ -493,11 +493,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_ncblp")
 
 [node name="NorthCollection_Candelabra" parent="ArtComponents/AuthoredSalon" unique_id=539118073 instance=ExtResource("7_g4yah")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.14, 0.85, -8.4)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 4.7799997, 1.7, -8.4)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="NorthCollection_GuestBook" parent="ArtComponents/AuthoredSalon" unique_id=911511185 instance=ExtResource("16_f443s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.82, 0.85, -8.4)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.1400003, 1.7, -8.4)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="NorthCollection_WarmPool" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=402241134]
@@ -507,7 +507,7 @@ light_energy = 1.3
 omni_attenuation = 1.35
 
 [node name="SouthCollection_Console" parent="ArtComponents/AuthoredSalon" unique_id=641030126 instance=ExtResource("6_b0de1")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5.5, 0, 8.4)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 5.5, 0, 8.4)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/SouthCollection_Console" unique_id=2098686660]
@@ -537,11 +537,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08736, 0)
 shape = SubResource("BoxShape3D_yljnq")
 
 [node name="SouthCollection_Candelabra" parent="ArtComponents/AuthoredSalon" unique_id=755777753 instance=ExtResource("7_g4yah")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5.14, 0.85, 8.4)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 4.7799997, 1.7, 8.4)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="SouthCollection_GuestBook" parent="ArtComponents/AuthoredSalon" unique_id=945788429 instance=ExtResource("16_f443s")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5.82, 0.85, 8.4)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 6.1400003, 1.7, 8.4)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="SouthCollection_WarmPool" type="OmniLight3D" parent="ArtComponents/AuthoredSalon" unique_id=1601665338]
@@ -666,7 +666,7 @@ shape = SubResource("BoxShape3D_h2b2b")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.24, 1.9300001, -12.099999)
 
 [node name="Collection_03_north_console" parent="ArtComponents/WallCollections" unique_id=586904862 instance=ExtResource("6_b0de1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.1, -11.93375)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.5, 0.1, -9.13375)
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WallCollections/Collection_03_north_console" unique_id=288135136]
 
@@ -675,7 +675,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_tjkli")
 
 [node name="Collection_03_DeskLamp" parent="ArtComponents/WallCollections" unique_id=603099653 instance=ExtResource("11_cfx6h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.95000005, -11.93375)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.5, 1.8000001, -9.13375)
 
 [node name="Collection_03_BrassFrame" parent="ArtComponents/WallCollections" unique_id=69289357 instance=ExtResource("28_v6521")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1.25, -12.14)
@@ -717,7 +717,7 @@ shape = SubResource("BoxShape3D_wdl38")
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 9.360001, 1.9300001, 12.099999)
 
 [node name="Collection_07_south_console" parent="ArtComponents/WallCollections" unique_id=2143349729 instance=ExtResource("6_b0de1")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, 0.1, 11.93375)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -2.5, 0.1, 9.13375)
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WallCollections/Collection_07_south_console" unique_id=1437951873]
 
@@ -726,7 +726,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_ysf3l")
 
 [node name="Collection_07_DeskLamp" parent="ArtComponents/WallCollections" unique_id=61574284 instance=ExtResource("11_cfx6h")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, 0.95000005, 11.93375)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -2.5, 1.8000001, 9.13375)
 
 [node name="Collection_07_BrassFrame" parent="ArtComponents/WallCollections" unique_id=505225740 instance=ExtResource("28_v6521")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, 1.25, 12.14)
@@ -768,7 +768,7 @@ shape = SubResource("BoxShape3D_bshpa")
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.099999, 1.9300001, 9.360001)
 
 [node name="Collection_11_west_console" parent="ArtComponents/WallCollections" unique_id=1161603018 instance=ExtResource("6_b0de1")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.93375, 0.1, -2.5)
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -9.13375, 0.1, -2.3)
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WallCollections/Collection_11_west_console" unique_id=2121580104]
 
@@ -777,7 +777,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_3uv1q")
 
 [node name="Collection_11_DeskLamp" parent="ArtComponents/WallCollections" unique_id=2004656184 instance=ExtResource("11_cfx6h")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.93375, 0.95000005, -2.5)
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -9.13375, 1.8000001, -2.3)
 
 [node name="Collection_11_BrassFrame" parent="ArtComponents/WallCollections" unique_id=2013628220 instance=ExtResource("28_v6521")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.14, 1.25, -2.5)

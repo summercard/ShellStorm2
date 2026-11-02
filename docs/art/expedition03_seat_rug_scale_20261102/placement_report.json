@@ -1,0 +1,114 @@
+{
+ "bookcase_kept": 50,
+ "bookcase_skipped": 20,
+ "bookcase_skip_detail": [
+  {
+   "room": "combat_30x40_5fbbae7662fe_e86e98.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_008_Wall_bookcase",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_30x40_5fbbae7662fe_e86e98.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_010_Wall_bookcase",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_30x40_5fbbae7662fe_e86e98.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_017_Wall_bookcase",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_30x40_5fbbae7662fe_e86e98.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_095_ReadingPartition",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_30x40_5fbbae7662fe_e86e98.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_097_ReadingPartition",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_30x40_5fbbae7662fe_e86e98.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_099_ReadingPartition",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_30x40_5fbbae7662fe_e86e98.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_101_ReadingPartition",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_45x40_6351962d84c2_68065f.tscn",
+   "path": "ArtComponents/AuthoredSalon/Archive-12Library",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_45x40_6351962d84c2_68065f.tscn",
+   "path": "ArtComponents/AuthoredSalon/Archive-6Library",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_45x40_6351962d84c2_68065f.tscn",
+   "path": "ArtComponents/AuthoredSalon/Archive6Library",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_45x40_6351962d84c2_68065f.tscn",
+   "path": "ArtComponents/AuthoredSalon/Archive12Library",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "combat_45x40_6351962d84c2_68065f.tscn",
+   "path": "ArtComponents/WallCollections/Collection_18_west_bookcase",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "stair_lobby_15x15_703e12bd9aa8_4955df.tscn",
+   "path": "ArtComponents/WallCollections/Collection_02_north_bookcase",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "storage_40x30_ef3f827636f7_3e5f15.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_011_Wall_bookcase",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "storage_40x30_ef3f827636f7_3e5f15.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_013_Wall_bookcase",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "storage_40x30_ef3f827636f7_3e5f15.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_021_Wall_bookcase",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "storage_40x30_ef3f827636f7_3e5f15.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_023_ArchiveRow",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "storage_40x30_ef3f827636f7_3e5f15.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_025_ArchiveRow",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "storage_40x30_ef3f827636f7_3e5f15.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_026_ArchiveRow",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  },
+  {
+   "room": "storage_40x30_ef3f827636f7_3e5f15.tscn",
+   "path": "ArtComponents/ThemedLayout/Theme_028_ArchiveRow",
+   "why": "紧邻不可推家具（书柜/边柜/衣柜），无净空"
+  }
+ ],
+ "small_seat_kept": 12,
+ "small_seat_skipped": 4,
+ "small_seat_skip_detail": [
+  "merchant_30x40_f2a374f5465f_d77c54 :: Theme_030_SalesClerkSeat",
+  "scavenge_40x30_a0eceb3887c9_23641e :: Theme_047_InventorySeat",
+  "scavenge_40x30_a0eceb3887c9_23641e :: Theme_052_InventorySeat",
+  "boss_50x40_b7446dc46356_c6c134 :: Theme_055_PrincipalSeat"
+ ]
+}
