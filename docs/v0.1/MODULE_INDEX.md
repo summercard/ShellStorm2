@@ -240,3 +240,11 @@ ASSET-PIPELINE 小僵尸表现资产已更新为 v005（800三角面/16骨，手
 - WORLD-PLAN / ASSET-PIPELINE：[远征03公馆门正式接入](development/2026-11-01_expedition03_manor_doors.md)，主题门外观显式覆写，空值保留原选择；03以黄铜实木门替换装甲门，门态/碰撞驱动和01不改。
 
 - WORLD-PLAN / ASSET-PIPELINE：[远征03顶灯外壳与室内投影](development/2026-11-01_exp03_light_shell_shadow.md)：03表现层隐藏中央灯壳但保留灯/开关，室内基础光启用阴影；房间文件与其他关卡不改。
+
+PLAYER-STATE / RUN-SETTLE / GRAPHICS-POSTFX：[第二轮反馈调整](development/2026-11-02_feedback_revision.md)，前视上限1.65m、震屏增强约1.7倍；死亡先倒地2秒，再进行2秒滤镜，约4秒出现结算。
+
+- WORLD-PLAN / ASSET-PIPELINE：[远征03商人改用99F贩卖机](development/2026-11-02_merchant_vending_visual.md)，主题显式覆写，局内交易归属不变；加载/交互专项通过，原生画面与房内净空待验，整关partial。
+
+- BOSS-STAGES / WORLD-PLAN：[远征03接入01显示器Boss](development/2026-11-02_expedition03_monitor_boss.md)，同内容ID与控制器、三波/三阶段/递增增援；03竞技场中心适配，STANDARD终点按角色定位。独立入口`verify_expedition03_monitor_boss_flow`；整关partial不变。
+
+- WORLD-ENTRY / WORLD-PLAN：[远征入口轮换与正式名称](development/2026-11-02_expedition_names_and_positions.md)：01=CloseAI数据库、03=无限公馆；原99→01、原01→03、原03→99，代号/ID/账本原行保留；真实窗口双解锁状态专项通过，整关partial不变。

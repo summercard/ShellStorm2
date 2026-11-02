@@ -931,6 +931,9 @@ static func _generate_flow_floor(
 				for box_index in range(roster_placements.size()):
 					stage_boxes.append(box_index)
 				appended["encounter"] = {"stages": [{"boxes": stage_boxes}]}
+		# Topology owns placement; the floor blueprint owns explicitly authored encounters.
+		# Match stable keys after aliases so every flow can share one boss/encounter declaration.
+		_apply_flow_authored_encounter(rooms.back() as Dictionary, blueprint)
 		# —— 清房结算（`clear_rewards`，2026-10-29）——
 		# 判据与上一段**故意相同**：只有"有怪的房"清完才结算。走廊与和平区
 		# （入口 / 撤离 / 商店 / 宝箱）在原作里不进战斗结算，给它们配掉落
@@ -1425,6 +1428,27 @@ static func _flow_room_type(role: String) -> String:
 			return "BOSS_ROOM"
 		_:
 			return "COMMON_ROOM"
+
+
+## Explicit encounter payloads use the same floor-room schema as constrained generation.
+## Geometry stays owned by the flow assembler; absent fields preserve the generated roster.
+static func _apply_flow_authored_encounter(room: Dictionary, blueprint: Dictionary) -> void:
+	for value in blueprint.get("rooms", []) as Array:
+		var source := value as Dictionary
+		if str(source.get("key", "")) != str(room.get("key", "")):
+			continue
+		for field in ["boss_content_id", "boss_reinforcement_plan", "spawn_placements", "encounter"]:
+			if not source.has(field):
+				continue
+			var payload: Variant = source[field]
+			# normalize_floor supplies empty defaults even when the JSON omitted these keys.
+			# Those defaults must not erase the generated roster of ordinary rooms.
+			if payload is String and payload.is_empty():
+				continue
+			if (payload is Array or payload is Dictionary) and payload.is_empty():
+				continue
+			room[field] = payload.duplicate(true) if payload is Array or payload is Dictionary else payload
+		return
 
 
 static func _block_room_by_id(block: Array, room_id: String) -> Dictionary:

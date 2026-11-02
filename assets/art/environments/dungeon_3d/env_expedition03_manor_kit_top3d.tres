@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="DungeonTheme3D" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="DungeonTheme3D" load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://src/world3d/DungeonTheme3D.gd" id="1_theme"]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_door_double/env_manor_door_double_root_top3d.tscn" id="2_door"]
 
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d.tscn" id="3_vending"]
+
 [resource]
 script = ExtResource("1_theme")
+merchant_visual_scene = ExtResource("3_vending")
 theme_id = "iron_frontier"
 display_name = "冷钢边境"
 fantasy = "废弃防线与冷却管道组成的边境哨站；冷白维修灯与钢蓝导航灯勉强维持秩序。"

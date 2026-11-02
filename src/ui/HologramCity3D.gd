@@ -35,10 +35,10 @@ const BORDER_WIDTH := 0.05
 ## 03 首次就是断言全绿、截图里却只剩三个入口。视廊只剔除挡在两者之间的方块，
 ## 既不移动任何入口，也不消耗随机数。
 const SITE_ANCHORS := {
-	"expedition_01": {"position": Vector3(-5, 2.7, 2), "clear_radius": 2.8, "marker_x": 0.0, "marker_scale": 1.0, "clear_stage": "grid"},
-	"99": {"position": Vector3(5, 2.9, 1), "clear_radius": 2.8, "marker_x": 0.0, "marker_scale": 1.0, "clear_stage": "grid"},
+	"expedition_03": {"position": Vector3(-5, 2.7, 2), "clear_radius": 2.8, "marker_x": 0.0, "marker_scale": 1.0, "clear_stage": "grid"},
+	"expedition_01": {"position": Vector3(5, 2.9, 1), "clear_radius": 2.8, "marker_x": 0.0, "marker_scale": 1.0, "clear_stage": "grid"},
 	"expedition_02": {"position": Vector3(-4, 2.7, -5), "clear_radius": 2.5, "marker_x": -0.6, "marker_scale": 0.78, "clear_stage": "post"},
-	"expedition_03": {"position": Vector3(4.4, 2.8, -5.2), "clear_radius": 2.5, "marker_x": -0.6, "marker_scale": 0.78, "clear_stage": "post", "sightline": 1.9},
+	"99": {"position": Vector3(4.4, 2.8, -5.2), "clear_radius": 2.5, "marker_x": -0.6, "marker_scale": 0.78, "clear_stage": "post", "sightline": 1.9},
 }
 ## 情报室近景镜头在**全息城局部坐标**里的位置。
 ##

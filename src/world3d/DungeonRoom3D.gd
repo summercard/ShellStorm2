@@ -6634,6 +6634,8 @@ func _create_service_station(type_id: String, dimensions: Vector2) -> ServiceSta
 		"event": "异常信号终端",
 	}.get(type_id, "废土终端"))
 	station.configure(type_id, title, theme.accent_color)
+	if type_id == "merchant" and theme.merchant_visual_scene != null:
+		station.visual_scene = theme.merchant_visual_scene
 	# 必做目标不能贴在镜头会裁切的北墙。事件终端放到房间中部安全区，
 	# 同时避开出生点圆环和两侧家具，保证所有 30×25m 以上房型都可接近。
 	var forward_offset := minf(4.5, dimensions.y * 0.18)

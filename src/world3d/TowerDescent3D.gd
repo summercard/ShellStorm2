@@ -6871,9 +6871,16 @@ func _finish_floor_bundle(floor_index: int, reason: String, context: Dictionary)
 	# 远征关卡的终点就是撤离房：不生成 Boss 门、不生成楼层电梯，
 	# 只在尽头那间 25×25 撤离房里放一座常驻可用的 STANDARD 撤离信标。
 	if is_expedition() and _extraction == null:
-		var extraction_room := _room_by_id.get(
-			str(ids_by_key.get("extraction", ""))
-		) as DungeonRoom3D
+		# The terminal is identified by its role, not a particular blueprint key.
+		# Authored and flow plans may use different keys for the same extraction capability.
+		var extraction_room: DungeonRoom3D = null
+		for terminal_value in plan.get("rooms", []) as Array:
+			var terminal := terminal_value as Dictionary
+			if str(terminal.get("role", "")) == "extraction":
+				extraction_room = _room_by_id.get(
+					str(ids_by_key.get(str(terminal.get("key", "")), ""))
+				) as DungeonRoom3D
+				break
 		if extraction_room != null:
 			var expedition_beacon := _create_extraction_beacon(
 				extraction_room, "STANDARD", 30.0, false, Vector3.ZERO

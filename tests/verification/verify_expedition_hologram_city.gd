@@ -95,9 +95,9 @@ func _ready() -> void:
 	_expect(menu._city.sites.size() == menu.LEVEL_IDS.size(), "city entry count drifted from navigation list")
 	if _is_unlocked_run():
 		_expect(menu._city.sites.size() == 4, "unlocked 02 (plus pending 03) missing")
-		var front: Vector2 = menu._camera.unproject_position(menu._city.markers[0].global_position)
+		var front: Vector2 = menu._camera.unproject_position(menu._city.markers[menu.LEVEL_IDS.find("expedition_03")].global_position)
 		var rear: Vector2 = menu._camera.unproject_position(menu._city.markers[2].global_position)
-		_expect(rear.y < front.y and rear.x > front.x, "02 not behind 01 in reference region")
+		_expect(rear.y < front.y and rear.x > front.x, "02 not behind left-front slot in reference region")
 	else:
 		# 未解锁 02 ⇒ 只剩 01 / 99 / 待开放的 03
 		_expect(menu._city.sites.size() == 3, "locked navigation entry count wrong")
@@ -107,7 +107,7 @@ func _ready() -> void:
 	# 于是"牌面被楼群整个挡住"这种缺陷会让上面每条断言都绿 —— 03 首次上线正是如此：
 	# 断言全过，截图里却找不到它。这里直接数"挡在镜头与牌面之间"的方块实例。
 	#
-	# 只约束**声明了 `sightline` 的入口**（当前是 03）。01/99 走主循环挖空的老路径、
+	# 只约束**声明了 `sightline` 的入口**（当前是 99）。01/99 走主循环挖空的老路径、
 	# 02 是历史上就有遮挡的既有观感，给它们补硬数量断言等于顺手改既有画面。
 	for i in menu.LEVEL_IDS.size():
 		var sightline := float(menu._city._anchors[i].get("sightline", 0.0))

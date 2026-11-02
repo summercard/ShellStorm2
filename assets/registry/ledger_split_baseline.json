@@ -1573,7 +1573,7 @@
    "d": "enemies"
   },
   "ENM-BOSS-MONITOR002-3D": {
-   "v": "cddd6c10888bcaa11ba291c4874ead0a1e3dcb3aaae8d523e0f5111b2f23091f",
+   "v": "9bde05c87e6c61df9a8d9619e6cce54631c88e7f87f5693d300cec422ad35eac",
    "c": "敌人",
    "d": "enemies"
   },
@@ -5893,7 +5893,7 @@
    "d": "ui"
   },
   "UI-SCREEN-LEVEL-SELECT": {
-   "v": "a8944939863e0576119f340d4359394030d7b7c07e1b3cebb15f03748517fb53",
+   "v": "9234c282beb94cccbb7d17c7d0eb613d88077acb402089f2acbf2711d4b91ef4",
    "c": "UI",
    "d": "ui"
   },
@@ -7133,20 +7133,20 @@
   "7": "4d578afdd698872ffd725344c1bdc22b122fe8293f0f012318d40e8ea18897f1",
   "8": "e361a887dd5aa5cc0ed32583228a8aa61bf1c727cd613679efcb2cd3ccf0029e",
   "9": "a06bf5977bfbe24edd104e02c35da2c065fb028297463e3c29a36d1811692c6e",
-  "10": "33e62bbc02099310c697cacba8ecf43d69f269c80c3e5682d2025ffc2e7d30e8",
+  "10": "b52503fba7cac254c325ddcbdc231ea0cbc38be48b436513eaf116b73dcbdb5c",
   "11": "a845c00808946656583255c0d057cde0972af87f2c248d4e9c8800b03c49c599",
   "12": "c3e314f243fc7715542d58cd779f7ac31ef648f900b2dd870a1515d409d89a58",
   "13": "f11ef82bab73f92ccc97592183a2412314ad19d935254e33573995691a731d96",
-  "14": "fa386a14f9bac11a24c584cc4875bbd8d79a77d00cdd4fa1fba89aa4a0dbaa18",
+  "14": "92c48dbb14d7c8339b50bd57695603c7f9bbaa4db1904d6bfdccfef20af9f24d",
   "15": "0bdc71a533726effee9d19099b4ae8aa5673ff4e0e7ffe9fbe2b9acfaf63692f",
   "16": "9edde0a30712f1aab1c189069b1bd103eb248a76ba39868e976135ce73fc17ad",
-  "17": "4f8edddacbce4ca81580107b6e0b40dcc5e4b72de4dab0d5b2ded0c6ce603d2f",
+  "17": "cb33a2b632c7574b25e7c355a0a535538912c6b4b6448b2bcdc9f2242a757801",
   "20": "70fad8cd6b8f530a65222cc4fedfd61117d69e58d4fc4be530b8970ef154b259",
   "21": "a5f576ceab26ae3f8b92a4a3f63669a37fda2f6f016c787cbd9ba67ffe940cc1",
-  "22": "bb06c895a9a5450e495cdea039f2593386da765d339f4db01aa89ef5793284b4",
+  "22": "cbe1dd488c0dfec44641732e21239712ae35ba856d6668a5ff1575fa5e6cbeec",
   "23": "2af2de55172ddfb2b4978a89d882ffad3650506da8ffe3f5c608498d3231ec78",
   "24": "abc405ae4fe850610be3b51e8a0e92749d38d812462a4f082eee82fd284b38dc",
-  "25": "310994541708e3b194a67cfabe3aa630b63e3fbeb005d54094a077743ca6f867"
+  "25": "2ea1d2f28f4382d1e6328437d6743db478fc23895f31bc96f5b4f9c8552ccb0e"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -7155,7 +7155,7 @@
   "角色中转记录": "4554d93d33461dcb875297c9145ff8d42800ad47c57d20f6ee6734bb54f9be85",
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
   "敌人动画与状态": "983b022d1142354f3c2e3ba7798e192f040f8a7de64747c0c885555cc928fc49",
-  "3D-敌人": "0bd334804b4d8f68ee0a76095e1eb7a88c8e19a5a83b6eca96b692c9d3a2ba37",
+  "3D-敌人": "92ccb860c9640a62dcf936e2aa1ada83f3c2ac90cd4c78cdb21c3c473e053cc3",
   "3D-场景通用": "44022580ca4a94ca908f8986a65e3b2dffb71647247e1b91e5975918f4763461",
   "3D-设施": "0aa1ec2d3dcea117a7f46bbef91de30419d6b18e3ea46b0f8bedffd72cebadb0",
   "3D-其他": "ab234cb2b953c09e5c8e0d92f32f8a3fe28ded72ef1a8ffc0bbeac1b6e07aca8",
@@ -7279,6 +7279,12 @@
    "asset_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
    "operation": "Formal expedition03 door usage only; preserve source/optimized/GLB/Prefab, version and CRLF-recorded SHA; all unrelated asset digests and room registry verified unchanged",
    "record": "docs/v0.1/development/2026-11-01_expedition03_manor_doors.md"
+  },
+  {
+   "date": "2026-11-02",
+   "asset_id": "ENM-BOSS-MONITOR002-3D",
+   "reason": "Existing monitor boss reused in expedition_03; only deployment cells J20/M10 changed, asset files and version unchanged",
+   "record": "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md"
   }
  ],
  "controlled_updates": [

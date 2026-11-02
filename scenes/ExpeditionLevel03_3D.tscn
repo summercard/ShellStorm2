@@ -41,7 +41,7 @@ metadata/runtime_owner = "TowerDescent3D"
 
 [node name="Expedition" type="Node3D" parent="Blocks" index="0"]
 metadata/block_id = "expedition"
-metadata/display_name = "远征关卡03"
+metadata/display_name = "无限公馆"
 metadata/level_code = "远征关卡03"
 metadata/level_number = 3
 metadata/setting_name = "断链回廊"

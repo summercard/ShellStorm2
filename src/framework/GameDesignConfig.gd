@@ -42,8 +42,8 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 	{
 		"level_id": "expedition_01",
 		"run_id": "expedition_01",
-		"display_name": "远征关卡01",
-		"setting_name": "远征前哨站",
+		"display_name": "CloseAI数据库",
+		"setting_name": "CloseAI数据库",
 		"subtitle": "单层独立行动 · 入口安全屋 → 01—10 号房 → 撤离点",
 		"objective_line": "肃清 01—10 号房，穿过命运之门，抵达终点撤离点。",
 		"scene_3d": "res://scenes/ExpeditionLevel01_3D.tscn",
@@ -68,8 +68,8 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 	{
 		"level_id": "expedition_03",
 		"run_id": "expedition_03",
-		"display_name": "远征关卡03",
-		"setting_name": "断链回廊",
+		"display_name": "无限公馆",
+		"setting_name": "无限公馆",
 		"subtitle": "单层独立行动 · 六张 flow 骨架每局抽一张 · 16~18 间房 + 0~3 间注入房",
 		"objective_line": "沿本局抽中的骨架推进，肃清战斗房，取走两处宝箱，穿过命运之门抵达撤离点。",
 		"scene_3d": "res://scenes/ExpeditionLevel03_3D.tscn",

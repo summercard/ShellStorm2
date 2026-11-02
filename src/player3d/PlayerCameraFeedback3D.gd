@@ -4,9 +4,9 @@ extends Node
 
 const LOOK_DEAD_ZONE := 0.18 # fraction of half the shorter viewport dimension
 const LOOK_FULL_DISTANCE := 0.90
-const LOOK_MAX_M := 1.25
+const LOOK_MAX_M := 1.65
 const LOOK_RESPONSE := 7.5
-const SHAKE_DURATION := 0.24
+const SHAKE_DURATION := 0.5
 
 var look_offset := Vector3.ZERO
 var world_pose_managed := false
@@ -28,7 +28,7 @@ func request_hit(damage: int, maximum: int) -> void:
 	if damage <= 0:
 		return
 	var severity := clampf(float(damage) / float(maxi(maximum, 1)), 0.0, 1.0)
-	_shake_amplitude = maxf(_shake_amplitude, lerpf(0.065, 0.11, severity))
+	_shake_amplitude = maxf(_shake_amplitude, lerpf(0.11, 0.19, severity))
 	_shake_remaining = SHAKE_DURATION
 	_shake_clock = 0.0
 

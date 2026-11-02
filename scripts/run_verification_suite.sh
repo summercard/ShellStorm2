@@ -352,6 +352,7 @@ core_scenes=(
   verify_dungeon_wave_intermission
   verify_expedition_wave_chain
   verify_expedition_monitor_boss_flow
+  verify_expedition03_monitor_boss_flow
   verify_3d_parity_core
   verify_3d_reload_state_flow
   verify_3d_vision_input_flow

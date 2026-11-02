@@ -39,7 +39,7 @@ metadata/runtime_owner = "TowerDescent3D"
 
 [node name="Expedition" type="Node3D" parent="Blocks" index="0"]
 metadata/block_id = "expedition"
-metadata/display_name = "远征关卡01"
+metadata/display_name = "CloseAI数据库"
 metadata/level_code = "远征关卡01"
 metadata/level_number = 1
 metadata/setting_name = "远征前哨站"

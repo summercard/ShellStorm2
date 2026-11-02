@@ -13,7 +13,8 @@
       ],
       "development_records": [
         "docs/v0.1/development/history/03_玩家与操作_历史记录.md",
-        "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md"
+        "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md",
+        "docs/v0.1/development/2026-11-02_feedback_revision.md"
       ],
       "verification": [
         {
@@ -218,7 +219,8 @@
         "docs/v0.1/development/2026-09-13_world_level_blocks.md",
         "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md",
         "docs/v0.1/development/CHANGELOG.md",
-        "docs/v0.1/development/2026-11-01_fixed_room_furnishing.md"
+        "docs/v0.1/development/2026-11-01_fixed_room_furnishing.md",
+        "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md"
       ],
       "verification": [
         {
@@ -248,6 +250,10 @@
         {
           "kind": "scene",
           "id": "verify_tower_level_blocks"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition03_monitor_boss_flow"
         }
       ],
       "status": "partial"
@@ -527,7 +533,8 @@
         "docs/v0.1/development/2026-10-06_boss002_runtime_import.md",
         "docs/v0.1/development/2026-10-08_boss002_reduced_lift.md",
         "docs/v0.1/development/2026-10-08_boss002_activation.md",
-        "docs/v0.1/development/2026-10-14_boss002_monitor_hit_volume.md"
+        "docs/v0.1/development/2026-10-14_boss002_monitor_hit_volume.md",
+        "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md"
       ],
       "verification": [
         {
@@ -545,6 +552,10 @@
         {
           "kind": "scene",
           "id": "verify_monitor_boss_visual"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition03_monitor_boss_flow"
         }
       ],
       "status": "partial"
@@ -757,7 +768,8 @@
       "development_records": [
         "docs/v0.1/development/2026-09-12_e05_e06_run_settlement_transaction.md",
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
-        "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md"
+        "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md",
+        "docs/v0.1/development/2026-11-02_feedback_revision.md"
       ],
       "verification": [
         {
@@ -1051,7 +1063,8 @@
         "docs/v0.1/development/2026-09-12_discrepancy_table.md",
         "docs/v0.1/development/2026-09-23_p2_media_and_traceability_repair.md",
         "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
-        "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md"
+        "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md",
+        "docs/v0.1/development/2026-11-02_feedback_revision.md"
       ],
       "verification": [
         {

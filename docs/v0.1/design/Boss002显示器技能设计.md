@@ -2,7 +2,7 @@
 
 FeatureID：BOSS-STAGES / ENEMY-AI / ASSET-PIPELINE；游戏版本0.1.0；设计r6。来源：用户2026-10-06要求正式导入、完成状态机与技能；2026-10-07要求按正式流程投放远征01 Boss房；2026-10-14要求「子弹要打在模型实体上」（见 §动画受击体积，共两轮：第二轮把圆柱移出子弹层）。以下数值为初始平衡设计，可独立调整。
 
-内容ID `boss_monitor002`，资产ID `ENM-BOSS-MONITOR002-3D`。在怪物设计表独立登记，远征 expedition_01 Boss房指派此ID；不替换95/90/85层既有Boss。生命、碰撞、AI状态、伤害、死亡和掉落唯一所有者为Enemy3D；MonitorBossCombat为该控制器持有的技能策略，Prefab仅采样动作并显示特效。
+内容ID `boss_monitor002`，资产ID `ENM-BOSS-MONITOR002-3D`。在怪物设计表独立登记，远征 expedition_01 与 expedition_03 Boss房指派此ID；不替换95/90/85层既有Boss。生命、碰撞、AI状态、伤害、死亡和掉落唯一所有者为Enemy3D；MonitorBossCombat为该控制器持有的技能策略，Prefab仅采样动作并显示特效。
 
 ## 战斗设计
 
@@ -105,3 +105,7 @@ FeatureID：BOSS-STAGES / ENEMY-AI / ASSET-PIPELINE；游戏版本0.1.0；设计
 ### Boss出生位置与移动速度
 
 显示器Boss由正式触发盒生成于房间中心（局部X/Z=0），初始面向南方（世界+Z）。移动速度由1.204提高至3.612米/秒（3倍；内容speed=123.84）。10米激活及6.4秒出场规则保持。
+
+### 远征03复用（2026-11-02）
+
+用户要求复用01显示器Boss及战斗阶段。03同样指派`boss_monitor002`、引用同一Prefab与MonitorBossCombat；三个阶段与首波/后两波、出场后递增增援沿01现行配置。03局部出生锚点统一平移到50×40竞技场中心，生命覆盖取01当前32000，不沿用本页历史初始52000。清房仍保留03无钥匙感应门策略，终点STANDARD撤离；部署与验收见[独立记录](../development/2026-11-02_expedition03_monitor_boss.md)。

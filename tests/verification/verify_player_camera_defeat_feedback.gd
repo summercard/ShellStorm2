@@ -134,7 +134,8 @@ func _verify_runtime(path: String) -> void:
 	check(_damage_events == 1, "accepted damage emits once")
 	feedback._physics_process(1.0 / 60.0)
 	check(absf(camera.h_offset) + absf(camera.v_offset) > 0.001, "accepted hit must shake current camera")
-	check(absf(camera.h_offset) <= 0.11 and absf(camera.v_offset) <= 0.11, "shake amplitude must be bounded")
+	check(absf(camera.h_offset) <= 0.19 and absf(camera.v_offset) <= 0.19, "shake amplitude must be bounded")
+	check(float(feedback.get("_shake_amplitude")) >= 0.11, "hit shake must use the increased amplitude")
 	player.call("_update_aim_from_mouse")
 	var shaken_aim := player.aim_direction
 	var saved_shake := Vector2(camera.h_offset, camera.v_offset)
@@ -164,14 +165,18 @@ func _verify_runtime(path: String) -> void:
 	check(level.get("_defeat_transition") == transition, "duplicate death must not restart transition")
 	level.call("_confirm_death_return")
 	check(not bool(level.get("_completed")), "early return command must be rejected")
+	await get_tree().create_timer(1.5).timeout
+	check(not transition.visible and level.get("_death_dialog") == null, "fall animation must play before any filter or settlement")
+	await _capture("fall_1500ms", path)
 	await get_tree().create_timer(0.5).timeout
-	await _capture("defeat_0500ms", path)
 	await get_tree().create_timer(0.5).timeout
-	await _capture("defeat_1000ms", path)
+	await _capture("defeat_2500ms", path)
+	await get_tree().create_timer(0.5).timeout
+	await _capture("defeat_3000ms", path)
 	await get_tree().create_timer(0.65).timeout
-	check(level.get("_death_dialog") == null, "return button must remain absent before 2s")
+	check(level.get("_death_dialog") == null, "return button must remain absent before 4s")
 	await get_tree().create_timer(0.5).timeout
-	check(bool(transition.get("complete")), "2s filter must complete")
+	check(bool(transition.get("complete")), "delayed 2s filter must complete after 4s")
 	check(level.get("_death_dialog") != null, "settlement UI appears after filter and fall")
 	if not capture_dir.is_empty():
 		# Modal dimming belongs to HUD and intentionally covers the world. Hide it
@@ -190,7 +195,7 @@ func _verify_runtime(path: String) -> void:
 		check(Vector3(actual.r, actual.g, actual.b).distance_to(Vector3(expected.r, expected.g, expected.b)) < 0.025, "real rendered grade must be saturation 0.5 / contrast 1.2")
 		check(image.get_pixel(110, 20).is_equal_approx(base_image.get_pixel(110, 20)), "HUD layer must retain its original pixels")
 		hud.show()
-	await _capture("defeat_2150ms", path)
+	await _capture("defeat_4150ms", path)
 	level.call("_reset_death_settlement_state")
 	check(level.get("_defeat_transition") == null and not bool(level.get("_death_filter_ready")), "new run clears filter and gate")
 	level.call("_on_defeat_transition_finished", int(level.get("_run_generation")) - 1)

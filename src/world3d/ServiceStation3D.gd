@@ -6,6 +6,8 @@ signal activated(station: ServiceStation3D)
 @export_enum("merchant", "upgrade", "event", "reset") var station_type := "event"
 @export var display_name := "废土终端"
 @export var accent_color := Color(0.40, 0.82, 0.92)
+## Base facility wrapper used only as a source of visual, body and interaction geometry.
+@export var visual_scene: PackedScene
 
 var _player_in_range := false
 var _prompt: Label3D
@@ -72,6 +74,9 @@ func _on_body_exited(body: Node3D) -> void:
 
 
 func _build_visual() -> void:
+	if visual_scene != null:
+		_build_facility_visual()
+		return
 	var metal := _material(Color(0.08, 0.11, 0.12), 0.72, 0.44)
 	var trim := _material(accent_color.darkened(0.18), 0.42, 0.38)
 	var glow := _material(accent_color, 0.12, 0.22, true)
@@ -116,6 +121,21 @@ func _build_visual() -> void:
 	add_child(_prompt)
 	if station_type == "event":
 		_build_event_objective_marker(glow)
+
+
+func _build_facility_visual() -> void:
+	# Do not add the BaseFacility root to the tree: its base menu and signals must not run.
+	var source := visual_scene.instantiate()
+	for child_name in ["Visual", "StaticBody3D", "InteractionShape"]:
+		var child := source.get_node(NodePath(child_name))
+		source.remove_child(child)
+		add_child(child)
+	_physical_collision = get_node("StaticBody3D/CollisionShape3D") as CollisionShape3D
+	_prompt = source.get_node("PromptLabel").duplicate() as Label3D
+	_prompt.text = "[E] %s" % display_name
+	_prompt.visible = false
+	add_child(_prompt)
+	source.free()
 
 
 func get_snapshot() -> Dictionary:

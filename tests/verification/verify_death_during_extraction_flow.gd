@@ -19,7 +19,7 @@ extends Node
 
 const TOWER_SCENE := "res://scenes/TowerDescent3D.tscn"
 const EXPEDITION_SCENE := "res://scenes/ExpeditionLevel99_3D.tscn"
-const DEATH_PRESENTATION_S := 2.0 # parallel 1.35s fall and 2s defeat filter
+const DEATH_PRESENTATION_S := 4.0 # 2s fall window followed by 2s defeat filter
 const SETTLE_WAIT_S := 0.6
 
 var _events: Array[String] = []

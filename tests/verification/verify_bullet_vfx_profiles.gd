@@ -83,14 +83,15 @@ const EXPECTED_TRIS := {
 ## 弹体视觉基准尺寸以 `WeaponModel3D.BULLET_GEOMETRY_NEUTRAL` 的 1.00 为标尺。
 ##
 ## ⚠ 2026-10-30 起**手枪不再等于中性档**：业主「子弹出去那个特效大小，就那个模型帮我放大一倍」
-## ⇒ `pistol` 档 = 2.00。下面所有「相对判据」因此改为与中性 1.00 比，而不是与手枪比
-## —— 拿手枪当分母会让霰弹/榴弹/狙击三条判据一起失去意义（手枪变 2 倍后，榴弹 1.55 反而"更小"）。
+## ⇒ `pistol` 档 = 2.00；**2026-11-02 再改为 1.80**（业主「角色的子弹从原来的 2 倍改成 1.8 倍」）。
+## 下面所有「相对判据」因此改为与中性 1.00 比，而不是与手枪比
+## —— 拿手枪当分母会让霰弹/榴弹/狙击三条判据一起失去意义。
 const NEUTRAL_SCALE := 1.00
 const EXPECTED_GUN_GEOMETRY := {
 	"bp_shotgun": {"scale": 2.00, "axial": 1.0, "grow_from": 0.42, "grow_duration": 0.30},
 	"bp_launcher": {"scale": 1.55, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
 	"bp_sniper": {"scale": 0.95, "axial": 2.0, "grow_from": 1.00, "grow_duration": 0.00},
-	"bp_pistol": {"scale": 2.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
+	"bp_pistol": {"scale": 1.80, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
 	"bp_rifle": {"scale": 1.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
 	"bp_machinegun": {"scale": 1.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
 	"bp_starter_rifle": {"scale": 1.00, "axial": 1.0, "grow_from": 1.00, "grow_duration": 0.00},
@@ -382,10 +383,11 @@ func _check_gun_size_differentiation() -> void:
 		var sniper_ratio := float(measured["bp_sniper"]) / NEUTRAL_SCALE
 		_expect(sniper_ratio < 1.0,
 			"狙击弹横向应细于中性基准（实测 " + str(sniper_ratio) + "）")
-		# 豌豆手枪 = 中性 ×2（2026-10-30 业主「模型放大一倍」）；单独钉一条，防它被顺手改回 1.0。
+		# 豌豆手枪 = 中性 ×1.8（2026-11-02 业主「角色的子弹从原来的 2 倍改成 1.8 倍」；
+		# 前身是 2026-10-30 的 ×2）；单独钉一条，防它被顺手改回 1.0 或 2.0。
 		var pistol_ratio := float(measured["bp_pistol"]) / NEUTRAL_SCALE
-		_expect(absf(pistol_ratio - 2.0) < 0.02,
-			"豌豆手枪弹体应为中性基准的 2 倍（应 ≈2.00，实测 " + str(pistol_ratio) + "）")
+		_expect(absf(pistol_ratio - 1.8) < 0.02,
+			"豌豆手枪弹体应为中性基准的 1.8 倍（应 ≈1.80，实测 " + str(pistol_ratio) + "）")
 
 	# 枪族档位是**纯视觉**：霰弹 ×2 不得把碰撞半径一起放大（18 发/秒级的命中率会被悄悄改掉）。
 	# 期望值硬编码 0.12（基准球半径）—— standard 弹无 balloon tag、无命运缩放 ⇒ 倍率恒为 1.0。

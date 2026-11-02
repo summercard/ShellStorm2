@@ -293,7 +293,102 @@
         40.0
       ],
       "template_rotation_deg": 0,
-      "content_type": "BOSS"
+      "content_type": "BOSS",
+      "boss_content_id": "boss_monitor002",
+      "boss_reinforcement_plan": {
+        "enabled": true,
+        "boss_spawn_local_m": [
+          0,
+          0.0
+        ],
+        "activation_delay_sec": 10.0,
+        "spawn_rows": [
+          {
+            "side": "west",
+            "x_m": -10,
+            "z_m": [
+              -10.0,
+              -5.0,
+              0.0,
+              5.0,
+              10.0
+            ],
+            "height_m": 3.0
+          },
+          {
+            "side": "east",
+            "x_m": 10,
+            "z_m": [
+              -10.0,
+              -5.0,
+              0.0,
+              5.0,
+              10.0
+            ],
+            "height_m": 3.0
+          }
+        ],
+        "enemy_request_type": "ambush",
+        "initial_count": 3,
+        "count_step": 1,
+        "max_count_per_round": 8,
+        "initial_interval_sec": 6.0,
+        "interval_step_sec": -0.35,
+        "min_interval_sec": 2.5,
+        "max_reinforcement_alive": 18,
+        "launch_speed_mps": 8.5,
+        "launch_duration_sec": 0.38
+      },
+      "spawn_placements": [
+        {
+          "box": "box_boss_arena",
+          "center_m": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            -7.5,
+            7.5
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            7.5,
+            0.0
+          ]
+        },
+        {
+          "box": "box_wall_arc",
+          "center_m": [
+            0.0,
+            -10.0
+          ]
+        }
+      ],
+      "encounter": {
+        "stages": [
+          {
+            "boxes": [
+              0
+            ]
+          },
+          {
+            "boxes": [
+              1,
+              2
+            ]
+          },
+          {
+            "boxes": [
+              3
+            ]
+          }
+        ]
+      }
     },
     {
       "key": "exit",

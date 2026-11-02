@@ -9,8 +9,8 @@ var _departing := false
 func _ready() -> void:
 	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	_dialog = ConfirmationDialog.new()
-	_dialog.title = "远征关卡01"
-	_dialog.dialog_text = "是否进入远征关卡01？"
+	_dialog.title = GameDesignConfig.expedition_level_display_name("expedition_01")
+	_dialog.dialog_text = "是否进入%s？" % _dialog.title
 	_dialog.ok_button_text = "是"
 	_dialog.cancel_button_text = "否"
 	_dialog.confirmed.connect(_confirm)
@@ -31,7 +31,7 @@ func get_interaction_candidate(player: Player3D) -> Dictionary:
 	if absf(player.global_position.y - global_position.y) > 1.5 or Vector2(player.global_position.x - global_position.x, player.global_position.z - global_position.z).length() > 3.2:
 		return {}
 	return {"available": true, "interaction_id": "tower03_expedition01", "position": global_position,
-		"priority": 85, "prompt": "进入远征关卡01", "dot_anchor": global_position + Vector3.UP * 1.7}
+		"priority": 85, "prompt": "进入%s" % GameDesignConfig.expedition_level_display_name("expedition_01"), "dot_anchor": global_position + Vector3.UP * 1.7}
 
 func get_interaction_dot_anchor() -> Vector3:
 	return global_position + Vector3.UP * 1.7

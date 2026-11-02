@@ -64,7 +64,7 @@
       "file": "ShellStorm2_场景账本_v001.xlsx",
       "categories": ["场景", "场景道具", "基地资产包"],
       "id_prefixes": ["ART", "ENV", "BPK", "PRP"],
-      "sheet_scope": ["3D-场景通用", "3D-设施", "3D-其他", "房间运行登记"],
+      "sheet_scope": ["3D-场景通用", "3D-设施", "3D-其他", "房间运行登记", "关卡名称对照"],
       "room_layout_sheet": "房间运行登记",
       "prefab_pages": ["3D-场景通用", "3D-设施", "3D-其他"],
       "animation_sheets": [],
