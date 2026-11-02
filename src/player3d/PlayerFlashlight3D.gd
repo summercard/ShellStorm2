@@ -28,8 +28,10 @@ const FLASHLIGHT_TIER_THRESHOLDS := [0.60, 0.30, 0.10, 0.01]
 @export var start_enabled := false
 
 @export_group("Beam")
-@export var beam_color := Color("#f17554")
-@export_range(0.0, 32.0, 0.1) var beam_energy := 10.80
+# 2026-11-02 业主定稿：三盏灯只抬 G 通道（R/B 逐位不变），前向主灯 10.80 → 13.60，
+# 环境泛光 1.50 → 1.25，角色补光 8.40 不动。范围/角度/衰减/分层/阴影一律未动。
+@export var beam_color := Color("#f1c254")
+@export_range(0.0, 32.0, 0.1) var beam_energy := 13.60
 @export_range(4.0, 40.0, 0.5) var beam_range := 25.0
 @export_range(20.0, 110.0, 1.0) var beam_angle_degrees := 66.0
 @export_range(0.1, 2.0, 0.05) var beam_attenuation := 0.48
@@ -48,14 +50,14 @@ const FLASHLIGHT_TIER_THRESHOLDS := [0.60, 0.30, 0.10, 0.01]
 @export_range(0.0, 2.0, 0.05) var target_height := 0.38
 
 @export_group("Environment Spill")
-@export var spill_color := Color("#fa7e34")
-@export_range(0.0, 8.0, 0.05) var spill_energy := 1.50
+@export var spill_color := Color("#fab134")
+@export_range(0.0, 8.0, 0.05) var spill_energy := 1.25
 @export_range(1.0, 10.0, 0.25) var spill_range := 4.8
 @export_range(0.1, 4.0, 0.05) var spill_attenuation := 2.0
 @export_range(0.2, 2.0, 0.05) var spill_height := 0.65
 
 @export_group("Avatar Front Fill")
-@export var front_fill_color := Color("#ec8e55")
+@export var front_fill_color := Color("#ecb855")
 @export_range(0.0, 16.0, 0.05) var front_fill_energy := 8.40
 @export_range(1.0, 8.0, 0.25) var front_fill_range := 4.0
 @export_range(20.0, 110.0, 1.0) var front_fill_angle_degrees := 74.0
