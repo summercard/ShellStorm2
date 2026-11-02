@@ -1,3 +1,32 @@
+## 2026-11-02 99F 基地 NPC r4：气泡抬高 + 半透明底板 + 白点彻底移除
+
+业主要「对话框会遮住整个角色，往上放一些，黑色背景半透明」，紧接着「这个白色的交谈和白点不要了」。
+
+1. **气泡中心 2.05 → 2.80 → 3.40**（两轮才够）。基地相机俯角约 **53°**，世界 Y 抬 1m 屏幕上只走 `cos53° ≈ 0.60` 倍：
+   2.05 时屏幕间隙 3~4px（直接糊在头上）；2.80 时实拍只有 **0.34 个角色高**（气泡下缘压头顶、还盖住黄色提示）；
+   3.40 时气泡底边 **y=289px**、角色头顶 **y=322px**，屏幕间隙 **33px ≈ 0.7 个角色高**，终于彻底分开。
+   经验值：俯视角下要「看得出空隙」，**世界间隙至少 ≈ 1.3 倍角色身高**。验收 A14b 按屏幕等效量守门（≥0.45 个角色屏幕高），不再只比米数 —— 只比米数会放过 2.80 那种「数值够了、看着还贴着」。
+
+2. **底板改半透明黑**：`SpeechBubble3D.fill_color` `Color(0.010,0.032,0.045,1.0)` → **`Color(0.012,0.018,0.026,0.55)`**。
+   ⚠️ 连锁改动：底板材质改 `TRANSPARENCY_ALPHA`；文字 `Label3D.alpha_cut` 必须从 `ALPHA_CUT_DISCARD` 改 `ALPHA_CUT_DISABLED` —— 否则文字走**不透明队列**、永远先渲染，随后半透明底板叠上去把白字压到 45% 亮度。排序靠 `render_priority`：底板 0 < 文字 2。
+   **实测校验用 A/B 同机位**：拍一张说话帧、一张不说话帧，同像素解 `result=(1-a)·bg+a·fill`，两点 `bg/result = 78/59` 与 `54/46` 联立得 `fill≈36`、`a≈0.46`（配置 0.55，差值来自 tonemap/glow），确认 alpha 混合真的生效。单点估会得 0.12 的错误结论 —— 因为把 `fill` 误当成 `(3,5,7)` 了。
+
+3. **白点与白色「(e) 交谈」彻底移除**：原来只靠 `is_interaction_dot_visible() = false` 让圆点**淡出**，插值期间白点和白字会闪。现在把 `res://src/npc/NpcCharacter3D.gd` 列进 `PlayerInteractionController3D.DOT_EXCLUDED_PROVIDER_SCRIPTS` ⇒ 控制器**根本不创建**圆点节点（与基地设施同一套机制），`is_interaction_dot_visible()=false` 降为二次兜底。头顶只剩黄色 `[E] 交谈`。验收 A20c 改判「圆点快照为空」+ 断言路径在排除表里。
+
+4. **说话时黄色提示一并收起**：条件从 `_talk_engaged` 扩到 `_talk_engaged or _dialogue_visible`。气泡可能由 `advance_dialogue()` 直接推进（剧情/测试），那条路径不经过 `perform_interaction`，光看 `_talk_engaged` 会让提示压在气泡下缘上。
+
+验收：`verify_base_npc_flow` **exit 0**（新增 A14b 屏幕间隙、A24c 三条半透明断言、A20c 改判）；`verify_speech_bubble_3d` **exit 0**（口径改写：`TRANSPARENCY_ALPHA` + `ALPHA_CUT_DISABLED` + 底板 priority < 文字，并明确「读 `fill_color.a` 而非材质 `albedo_color.a`」—— 后者 = 配置 × 淡入进度，pop-in 瞬间就是 0，会假红）；`verify_interaction_dot_presentation` **exit 0**。
+
+证据图新增 `base99_npc_talk.png`（说话帧：间隙 + 半透明 + 无白字），重拍 noon / night / prompt。⚠️ 截图必须 `APPDATA=<临时目录>` 隔离：正式存档有另一个进程在写 `BaseManager` revision，抢写会 `Refusing stale save` 并把截图进程卡死。见[开发记录](2026-11-02_base99_npc_green.md)。
+
+## 2026-11-02 角色随身三盏灯配色与能量定稿
+
+VISUAL-LIGHT：业主「我角色身上的三个灯，数值帮我调整成这个」，附调试面板四张截图（一张能量读数 + 三张拾取器 Hex）。只动 `PlayerFlashlight3D` 的 6 个 export 默认值：主灯 `#f17554`→`#f1c254`、10.80→**13.60**；环境泛光 `#fa7e34`→`#fab134`、1.50→**1.25**；角色补光 `#ec8e55`→`#ecb855`、8.40 不动。**归属不是猜的**：三个新 Hex 与三个旧默认值的 R、B 通道逐位相同，只有 G 变了，因此「哪张截图属于哪盏灯」由旧值唯一确定。范围/角度/衰减/分层/阴影一条未动（截图没有这些读数，不推定）。
+
+**落点澄清（业主一度以为没改）**：三盏灯的值**不在** `user://graphics_settings.cfg` 里。那份文件只存 `debug_postfx_*` + 基地雾气 + `hue_shift`，即业主贴出来的那段 JSON；灯光每次从 export 默认值来，面板改灯只影响当前会话、不落盘。查证方式是只读探针实例化 `Player3D.tscn` 直接打印真实灯节点。
+
+**本轮踩到的真故障**：17:07 一次 `git pull --rebase` 把上一轮未提交的 `.gd` 改动连同 README 索引、CHANGELOG 条目一起冲掉（开发记录 md 是 untracked，反而幸存）。已重新落地并用探针复验：运行时读到 `f1c254 / 13.6`、`fab134 / 1.25`、`ecb855 / 8.4`，与定稿一致。验收同上一轮：`verify_enemy_illumination_states`、`verify_3d_vision_input_flow`、`verify_3d_flashlight_charge_flow`、`verify_debug_camera_fog_panel` 全 OK；`verify_tower_lighting_wall_combat_regressions` 仍退出 1 且 6 条全为既有债务（本文件复跑时未变的既有红项），未放宽阈值。见[开发记录](2026-11-02_flashlight_three_light_tuning.md)。
+
 ## 2026-11-02 99F 基地 NPC「绿苔」（BASE-NPC）：六条观感返工
 
 业主一次给出六条实机截图反馈，逐条落地：
@@ -15,19 +44,23 @@
 
 账本：《资产主表》第 31 行 `CHR-PLY-BUNNY01-NPC-GREEN` 重建、《域变更日志》v0.1.27；`CHR-PLY-CAPSULE01-3D-BUNNY01` 补 `suit_green` 记法记 v0.1.28；查重公式 R/S 列区间按新增行重写到 `$R$6:$R$31`；基线各只刷新对应行与列指纹。`check_asset_registry` structure(1418/26)/full、`verify_ledger_split`、`check_asset_runtime_naming`(gd 23 / tscn 93)、`check_feature_traceability`(44)、`check_level_decoupling` 全绿。**真实渲染四张新图**（12:00 / 22:00 / 正面近景 / `[E] 交谈` 提示）见 `docs/v0.1/audits/evidence/2026-11-02_base99_npc/`。未做：导航避障、对话分支、面饰表情接入，整功能仍 partial。见[开发记录](2026-11-02_base99_npc_green.md)。
 
-## 2026-11-02 易碎陈设破碎掉币接入（60% · 1–10 金币 · 落地后锁 0.5 秒）
+## 2026-11-02 易碎陈设破碎掉币接入（10% · 1–10 金币 · 落地后锁 0.5 秒）
 
-WORLD-INTERACTIVE-CLUTTER：业主第一轮要 8%，第二轮「奇怪为什么我都没掉落金币？概率帮我调成60%」。**一枚都没掉的原因是当时只有设计、没有代码**（运行期概率实为 0），与 8% 无关；本轮把实现补齐并按 60% 落地。
+WORLD-INTERACTIVE-CLUTTER：业主要求演进 8% → 60% → **10%（定稿）**。**「一枚都没掉」的原因是当时只有设计、没有代码**（运行期概率实为 0），与 8% 无关；实现补齐后先按 60% 落地，业主上手确认后当日收回 10%。60% 只存活不到两小时：存档/资产行/SHA 一概没碰，只在《场景账本》变更日志留了 v0.1.61 一行，随后 v0.1.63 更正为 10%。
 
 实现：`DungeonRoom3D` 新增 `clutter_broken(room, world_position, clutter_id)` 上行事件（只在 `shatter()` 成功那一次发）+ `note_clutter_coin_dropped()` 记 `coin_dropped`；`Dungeon3D` 新增纯函数掷骰 `resolve_clutter_coin_drop(seed, chance, min, max)`，种子 `hash(run_seed|clutter_coin|clutter_id)`（不吃全局随机流、重建可复算），落点 = 破碎点 + ≤0.30 m 确定性偏移，发放只走 `_deliver_ground_rewards(..., spread=false, pickup_delay_after_spawn=0.5)`（零金币房不产出、房间倍率生效）；接线两处（`Dungeon3D` 与 `TowerDescent3D` 房间创建处），漏一处即「远征里永远不掉币且无日志」。
 
 可拾取延迟：原弹跳动画本身就锁 0.81 s（0.12+0.18+0.29+0.22），**0.5 s 若从生成时刻起算会被完全吞掉**，故定义为「落地稳定后再锁 0.5 s」，总不可拾取 1.31 s。`GroundLootPickup3D` 新增 `lock_pickup_after_spawn()`：⛔ 不能复用 `set_pickup_grace_seconds()`，后者连带把 `_pickup_requires_player_exit` 设 true，会变成「站在原地永远捡不到、必须先走开 2 m」；无视觉掉落的提前 return 分支同样应用锁。怪物/宝箱/剧情掉落延迟默认 0.0，行为零变化。
 
-验收：新增 `tests/verification/probe_clutter_coin_drop.tscn` → **CLUTTER_COIN_DROP_PROBE_OK**（exit 0）：10000 次命中率 **0.5947**、金额 1–10 十档齐全、偏移最大 **0.281 m**、同件重复破碎只发 1 次信号、`restore_broken()` 不重掷、锁 0.5 s 期间不可拾取且到期后无需离场即可拾取、控制组（延迟 0）即时可拾、端到端 5 件碎 → 1 枚落地且账实相符。探针运行前已把 `APPDATA` 指向临时目录隔离用户存档。**未验**：真实渲染观感、进游戏手打一轮体感。
+验收：新增 `tests/verification/probe_clutter_coin_drop.tscn` → **CLUTTER_COIN_DROP_PROBE_OK**（exit 0）：10000 次命中率 **0.1002**、金额 1–10 十档齐全、偏移最大 **0.281 m**、同件重复破碎只发 1 次信号、`restore_broken()` 不重掷、锁 0.5 s 期间不可拾取且到期后无需离场即可拾取、控制组（延迟 0）即时可拾、端到端 5 件碎 → **1 枚**落地、与按种子预算的命中件数**恰好相等**。探针运行前已把 `APPDATA` 指向临时目录隔离用户存档。
 
-**平衡**：535 件 × 60% × 均值 5.5 ≈ **1766 枚/全清**，是同层怪物掉落（约 61 枚）的 **29 倍**（破击率 25% 时约 442 枚）。这是业主明确指定值，已按指令落地；要收回只改 `CLUTTER_COIN_DROP_CHANCE` 或关卡 `interactive_clutter.coin_drop_chance`。
+探针同时改成**读常量**：概率/区间/锁时长全部取 `Dungeon3D` 的 const，命中率容差按二项分布 3σ 现算，金额档位阈值取期望的 60%。理由是概率一天内改了三次 —— 硬编码阈值的测试每次都要跟着改，而「测试自己写错阈值」是最容易把真故障放过去的一种绿。端到端也不再赌「5 件至少中一件」（10% 下 5 件全不中还有 59%），改为先扫 `run_seed` 找到必中的种子，再断言**枚数精确相等**。
 
-账本：《资产主表》974–978 备注补契约、《域变更日志》v0.1.61；资产 ID/几何/SHA/《3D-场景通用》均未动，基线已按最小外科补录。见[开发记录](2026-11-02_clutter_coin_drop_design.md)。
+**平衡（10%）**：535 件 × 10% × 均值 5.5 ≈ **294 枚/全清**（怪物掉落约 61 枚/层，×4.8）；破击率 25% ≈ 74 枚（×1.2）、15% ≈ 44 枚（×0.72）—— 瓦砾能补贴、不抢主线。
+
+**未验**：真实渲染观感、进游戏手打一轮体感。
+
+账本：《资产主表》974–978 备注补契约、《域变更日志》v0.1.61 / v0.1.62（10% 调整）；资产 ID/几何/SHA/《3D-场景通用》均未动，基线已按最小外科补录。见[开发记录](2026-11-02_clutter_coin_drop_design.md)。
 
 ## 2026-11-02 枪械开火反馈：后坐回弹 + 弹性压扁（两轮返工）
 

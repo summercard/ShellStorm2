@@ -587,6 +587,23 @@
       "status": "partial"
     },
     {
+      "feature_id": "BASE-NPC",
+      "owner": "NpcCharacter3D",
+      "design_docs": [
+        "docs/v0.1/20_技术施工_基地NPC.md"
+      ],
+      "development_records": [
+        "docs/v0.1/development/2026-11-02_base99_npc_green.md"
+      ],
+      "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_base_npc_flow"
+        }
+      ],
+      "status": "partial"
+    },
+    {
       "feature_id": "BASE-SHOP",
       "owner": "BaseManager",
       "design_docs": [

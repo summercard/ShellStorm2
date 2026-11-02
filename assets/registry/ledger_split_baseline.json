@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-10-31T14:31:27",
+ "captured_at": "2026-11-02T17:51:12",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1417,
+ "asset_count": 1418,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -1478,7 +1478,7 @@
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01": {
-   "v": "54a3296a266681fa551dc71c5f4ce91f60581b6f9c76a5d6d2addffd0f291db9",
+   "v": "427d743280cf49e274edc2c6b5bdf0c03ae476a156cd85bdf398ebc25f9ed732",
    "c": "角色",
    "d": "characters"
   },
@@ -6718,27 +6718,27 @@
    "d": "vfx"
   },
   "ENV-BATTLE-INTERACTIVE-JAR": {
-   "v": "1eb116e38430836db4342f1085a1e95f7f544468e3a183833aee27b0f5268d82",
+   "v": "338c07f4124ebdf020f5e7e8da2a5718fdfba01b774f8c7a89e305ba694638a4",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-BATTLE-INTERACTIVE-BOOK-STACK": {
-   "v": "6f8a92ea15b2c4ff7c2e6c290b64b19946ace77b7b5cac512b70f501cc58f7c3",
+   "v": "2477ab9b30cc406cc02f2c0f5737ef919de040f7326255c64bcc82bfae8664b2",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-BATTLE-INTERACTIVE-VASE": {
-   "v": "4e0d0433df7288bed11d07853eff3af090eeffc92e26b8e9a18c2986a86041b3",
+   "v": "a6e5ff156c07a2a59622e87c7ae21c16326c0e0e025d2cfbadb5b05288c02550",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-BATTLE-INTERACTIVE-CHAIR": {
-   "v": "b43aa1f26bbd303ce1a0184ca678a2a6ae9276ce236e7106b84a5826b46256d3",
+   "v": "3c44d193c28e9be5a9b754f566ab8eb57baf9c8dcdc59f65c9bb7ee32b401120",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-BATTLE-INTERACTIVE-CRATE": {
-   "v": "312e85f7fd4bd172ed4a6ec8d002befc55ce80af279838e07f1bf3a1294674e0",
+   "v": "c0c29e8fd16e62405c8078567918bae147725616ed4ef927d1ebbfb290e3d2dd",
    "c": "场景",
    "d": "scenes"
   },
@@ -7121,32 +7121,37 @@
    "v": "d20e99ca6ffaba0df725a19ee2414ebf1488bea27e5ec24177bf458ad3ca4b78",
    "c": "特效",
    "d": "vfx"
+  },
+  "CHR-PLY-BUNNY01-NPC-GREEN": {
+   "v": "6710388eca53bb2edb2fa8ea3f5b8983575d93581fb858f69369fce9d48f13d2",
+   "c": "角色",
+   "d": "characters"
   }
  },
  "column_digests": {
-  "1": "a469f7ce3fa3c73eb62a960717a36d8d24fd32e292f09ec10dfc902a06f4e7fd",
-  "2": "ba80b74427a6e7bbeb1ca1c2b0d07a38d4573010c7ee031e3ea99b306b3ac38d",
-  "3": "8bdcdf21613266c490e47767a1a60ff0ef7b0964f2771ee1dd73409d05c38387",
-  "4": "51371cd15408aad29a4845f14dd32e4213f5480b3da8e4840de69b7ba9a384f3",
-  "5": "eecedf7679c8b23b4a4dbeff3248cb59a4f7a04a7de7b245d4fb0d058e2d7d19",
-  "6": "5d40219a43b657e2a3780aaa0b5be2bc5056ce990179db6b10dcdc0b7768780c",
-  "7": "4d578afdd698872ffd725344c1bdc22b122fe8293f0f012318d40e8ea18897f1",
-  "8": "e361a887dd5aa5cc0ed32583228a8aa61bf1c727cd613679efcb2cd3ccf0029e",
-  "9": "a06bf5977bfbe24edd104e02c35da2c065fb028297463e3c29a36d1811692c6e",
-  "10": "b52503fba7cac254c325ddcbdc231ea0cbc38be48b436513eaf116b73dcbdb5c",
-  "11": "a845c00808946656583255c0d057cde0972af87f2c248d4e9c8800b03c49c599",
-  "12": "c3e314f243fc7715542d58cd779f7ac31ef648f900b2dd870a1515d409d89a58",
-  "13": "f11ef82bab73f92ccc97592183a2412314ad19d935254e33573995691a731d96",
-  "14": "92c48dbb14d7c8339b50bd57695603c7f9bbaa4db1904d6bfdccfef20af9f24d",
-  "15": "0bdc71a533726effee9d19099b4ae8aa5673ff4e0e7ffe9fbe2b9acfaf63692f",
-  "16": "9edde0a30712f1aab1c189069b1bd103eb248a76ba39868e976135ce73fc17ad",
-  "17": "cb33a2b632c7574b25e7c355a0a535538912c6b4b6448b2bcdc9f2242a757801",
-  "20": "70fad8cd6b8f530a65222cc4fedfd61117d69e58d4fc4be530b8970ef154b259",
-  "21": "a5f576ceab26ae3f8b92a4a3f63669a37fda2f6f016c787cbd9ba67ffe940cc1",
-  "22": "cbe1dd488c0dfec44641732e21239712ae35ba856d6668a5ff1575fa5e6cbeec",
-  "23": "2af2de55172ddfb2b4978a89d882ffad3650506da8ffe3f5c608498d3231ec78",
-  "24": "abc405ae4fe850610be3b51e8a0e92749d38d812462a4f082eee82fd284b38dc",
-  "25": "2ea1d2f28f4382d1e6328437d6743db478fc23895f31bc96f5b4f9c8552ccb0e"
+  "1": "d851783d718251e692e5f629f994895d0a003601a70f12539ceda00e4dca254a",
+  "2": "4dd70da8af0c5842486286c9456c4b084e964e028b002f2d9cc1d92e72577a00",
+  "3": "f69342ee34a18a114e6597a36192c21f8a4042cf543c562cf7b1188dd127cfbc",
+  "4": "90ed996489cd8a6de9d4c7ff665bdfe30540528ee41ce7e2b685509c058f5965",
+  "5": "2ccd5e807f0613f68a3ca99fe7e6ab853fbd7cad0399357e466c6955ceb9cf9a",
+  "6": "589d7ad0369cdf0be16f0ee693a7dc4a1476acecdbb31a597b47f1c5a8e8c7d6",
+  "7": "585437ac7af260a751acc09b4ad79a48a3831939e0f9ae5185f059e60a7e00b4",
+  "8": "46f5e6294add1bc02356b30d5682ae8b4fbe68753b686774e85888b8858ce011",
+  "9": "24f0ab4b2186b05ff696089b44bfe15b0bfabedc188ce29f9ee8d4d8aee5b1ba",
+  "10": "29bc5c84ec99da8599f2d47f9e89eb4b9b33986edf9d11d705828c9100fb6547",
+  "11": "f6e9e155ea86252fa68bcf838f1722f7bd316659951fd6b93817518b43bc6876",
+  "12": "047d84272d82bcddc19c4cb55c14552d1b76343e18901a7038d47fdf7cddf11d",
+  "13": "37945a8989d3abde72b0e4ca13b1e321fd5f62c2c2a128483e95cfde2677e2e8",
+  "14": "32ce86ddf5d6d3e7e792f707650f8a5bf30b7ed67720972532e92085dbb5443a",
+  "15": "8a748999a876f9c4c9c1d81a118a20f5cd2c4c5cef45ca87e68b84d959928c3d",
+  "16": "8b1a22fc443958058bf20d31b71859ba9fa6945a0ecd86bc7d16abc4446598ca",
+  "17": "dfbd4462064327f087dec6ea489a475fd61ec2229020b3ce3fcf6f295fc16a5f",
+  "20": "a83678f69a4e58200ea779423d204f9128fc0a3646eb2ae141dffec5c61842e6",
+  "21": "74a396d25e5105d654289f2102852606283fb61bc8109b47ecf68fbc6364f8cf",
+  "22": "416666ddda6344731698af5781cc014497765e84107c1de4eb0084fa1ed0639c",
+  "23": "7dcaa6ab19c37a2ba0e35cc917012fcc532472f090e55409ff80327c763e1f02",
+  "24": "9664800560851a6c023c052d298d49e20b77f050338cb6b065d3ed39642d43a0",
+  "25": "85e853f97518e8a7b8e16ef259552362c99fa09b795a278a76b505531065f323"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -7164,7 +7169,7 @@
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
   "背包物品调用索引": "586212c8949d6e45d26a9e7f00c1e9150e7575df4606bfa545bbf86327f0162e",
   "3D-特效": "ce88f25ce7195422e872117ffda04421304437bf9426feea96745b4cb3dd072e",
-  "房间运行登记": "9275b3eab8340746bf0084402a7b7093184f89065e8e6f643e0d3edea0d65d1e"
+  "房间运行登记": "044f4f1caf6cf02b883ceaac9aee74f9687b44aa28cf10b68592e80a82528131"
  },
  "category_counts": {
   "UI": 18,
@@ -7175,7 +7180,7 @@
   "敌人": 49,
   "武器": 36,
   "特效": 40,
-  "角色": 25,
+  "角色": 26,
   "道具": 39,
   "音乐": 9,
   "音效": 178
