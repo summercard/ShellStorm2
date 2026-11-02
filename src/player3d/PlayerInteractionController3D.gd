@@ -23,6 +23,13 @@ const DOT_ANCHOR_FALLBACK_HEIGHT_M := 1.7
 ## 「基地设施家族不挂圆点」断言盯着（父类与子类各钉一条）—— 谁动了这条路径，测试当场变红。
 const DOT_EXCLUDED_PROVIDER_SCRIPTS := [
 	"res://src/base3d/BaseFacility3D.gd",
+	# 基地 NPC（2026-11-02 业主：「这个白色的交谈和白点不要了」）。
+	#
+	# NPC 自己有一块**黄色** `[E] 交谈`（`NpcCharacter3D.PromptLabel`，与基地设施同款
+	# 50 号字 / 暖黄），再叠一个白点 + 白色「(e) 交谈」就是两套提示抢同一处。
+	# `is_interaction_dot_visible() = false` 只是把圆点**淡出**（还要等插值、期间按键牌
+	# 仍可能闪一下）；列进这张表是**根本不创建**节点，行为上更干净。
+	"res://src/npc/NpcCharacter3D.gd",
 ]
 
 var player: Player3D

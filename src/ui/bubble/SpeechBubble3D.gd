@@ -33,7 +33,12 @@ const FADE_SECONDS := 0.14
 @export var hold_seconds := 3.4
 @export var max_lines := 3
 @export_range(40, 120) var wrap_width_px := 620
-@export var fill_color := Color(0.010, 0.032, 0.045, 1.0)
+## 填充色。**半透明黑**（2026-11-02 业主「黑色背景半透明」）。
+##
+## 原来是 `Color(0.010, 0.032, 0.045, 1.0)` —— 不透明深青，压住角色时像一块死板。
+## 现在 alpha 0.55：能看清身后是谁，字仍然读得清（文字走透明队列、画在底板之上，
+## 见 `_build_nodes` 与 `_make_material` 的注释）。
+@export var fill_color := Color(0.012, 0.018, 0.026, 0.55)
 @export var border_color := Color(0.12, 0.66, 0.76, 1.0)
 @export var text_color := Color(0.88, 0.95, 0.98, 1.0)
 @export var always_on_top := false
@@ -150,8 +155,8 @@ func set_visible_state(shown: bool, immediate: bool) -> void:
 func _build_nodes() -> void:
 	if _panel != null:
 		return
-	_panel_material = _make_material(border_color, always_on_top)
-	_fill_material = _make_material(fill_color, always_on_top)
+	_panel_material = _make_material(border_color, always_on_top, true)
+	_fill_material = _make_material(fill_color, always_on_top, true)
 	_panel = MeshInstance3D.new()
 	_panel.name = "Panel"
 	# 面向摄像机：材质层求解，不依赖父节点旋转。
@@ -172,9 +177,17 @@ func _build_nodes() -> void:
 	_label.modulate = text_color
 	_label.pixel_size = DEFAULT_PIXEL_SIZE
 	_label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
-	# alpha **裁剪**而不是 alpha 混合：同样是为了让文字走不透明管线、拿到正确的
-	# 运动矢量，否则移动时 TAA 会在文字上拖出残影。
-	_label.alpha_cut = Label3D.ALPHA_CUT_DISCARD
+	# **必须走透明队列**（2026-11-02 改）。
+	#
+	# 原设计用 `ALPHA_CUT_DISCARD` 让文字进不透明管线、拿正确的运动矢量，代价是
+	# **不透明永远先渲染、透明永远后渲染** —— 半透明底板会把文字盖住压暗
+	# （0.55 的黑叠在白字上，白字只剩 45% 亮度）。
+	#
+	# 现在底板是半透明，文字必须排在它之后：`ALPHA_CUT_DISABLED` 让 Label3D 进透明池，
+	# 再靠 `render_priority = 2 > 底板材质的 0` 保证「先底板、后文字」。
+	# TAA 拖影风险：气泡位移来自父节点、速度极低，`_face_camera` 每帧把朝向对齐相机
+	# 不产生位移，实测（含 `capture_base99_npc` 走动帧）未见可辨拖影。
+	_label.alpha_cut = Label3D.ALPHA_CUT_DISABLED
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_label.no_depth_test = always_on_top
@@ -294,14 +307,22 @@ static func _arrays(vertices: PackedVector3Array, indices: PackedInt32Array) -> 
 	return arrays
 
 
-static func _make_material(color: Color, on_top: bool) -> StandardMaterial3D:
+static func _make_material(color: Color, on_top: bool, transparent: bool = false) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
 	# 不受光照影响：气泡是叙事 UI，不该随房间灯光明暗。
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	# **不透明**渲染：透明物体不写运动矢量，TAA 会把它当静止物体、把历史帧混进来，
-	# 移动时拖出一串原地淡影（2026-09-21 主人实测"每帧都在原地刷新 + 拖尾"）。
-	# 气泡是盖在场景上的实心 UI，本来就不需要 alpha 混合。
-	material.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+	if transparent:
+		# 半透明底板（2026-11-02 业主「黑色背景半透明」）。
+		# ⚠️ 透明物体**不写运动矢量**，TAA 会把它们当静止几何混历史帧 ⇒ 移动时可能拖影。
+		# 这里底板的位移来自父节点、速度很低，且文字单独在上层渲染
+		# （见 `_build_nodes` 的 `ALPHA_CUT_DISABLED`），实测未出现可辨拖影。
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		# 环带与内填充互不重叠，但会和文字同池排序 ⇒ 优先级压到 0，
+		# 文字固定 priority 2，保证「先底板、后文字」。
+		material.render_priority = 0
+	else:
+		# 不透明：透明物体不写运动矢量，TAA 会把它当静止物体、把历史帧混进来。
+		material.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	# 朝向由气泡节点统一驱动（见 _face_camera），**不用材质级 billboard**：
 	# 材质 billboard 与 Label3D 的内置 billboard 更新时机不同步，移动时会差一帧。

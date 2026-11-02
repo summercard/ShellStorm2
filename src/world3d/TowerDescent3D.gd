@@ -13,6 +13,13 @@ const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3
 const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn"
 )
+## 99F 常驻 NPC 的场景（内容与表现全在 `src/npc/`，见 20 号文档）。
+## 只在正式 99F 基地装一个；远征关卡不装。
+const BASE_NPC_SCENE: PackedScene = preload("res://scenes/BaseNpc3D.tscn")
+const BASE_NPC_ID := "npc_base99_green"
+## 布置层里的两个巡逻锚点。**代码不写死坐标** —— 美术挪锚点即换位置。
+const BASE_NPC_ANCHOR_START := "99层基地NPC起点锚点"
+const BASE_NPC_ANCHOR_END := "99层基地NPC巡逻终点锚点"
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d.tscn"
 )
@@ -266,6 +273,8 @@ var _facility_nodes: Array[BaseFacility3D] = []
 var _facility_decor_nodes: Array[Node3D] = []
 var _facility_art_layout: Node3D
 var _base_rooftop_transit_door: RoomDoor3D
+## 99F 常驻 NPC。与设施同父级（`Art`），房间流送/隐藏时一起走。
+var _base_npc: NpcCharacter3D
 var _simple_transit_door_components: Array[Node] = []
 var _descent_side_sequence: Array[String] = []
 var _edge_side_by_key: Dictionary = {}
@@ -708,6 +717,7 @@ func _ready() -> void:
 	player.camera.fov = CAMERA_FOV_DEG
 	_install_player_occlusion_silhouette()
 	_install_facilities()
+	_install_base_npc()
 	_install_simple_transit_door_components()
 	_install_elevator_facility()
 	_install_tower_hud()
@@ -7165,6 +7175,10 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 	room.prop_searched.connect(_on_prop_searched)
 	room.service_activated.connect(_on_service_activated)
 	room.light_toggled.connect(_on_room_light_toggled)
+	# 破碎掉币的路由与 Dungeon3D 房间创建处同款。远征房间走这条路径，
+	# 漏这一行就等于「远征里砸罐子永远不掉币」，而且不打任何日志。
+	if not room.clutter_broken.is_connected(_on_clutter_broken):
+		room.clutter_broken.connect(_on_clutter_broken)
 
 
 func generate_through_floor_for_test(target_floor_number: int) -> bool:
@@ -7368,6 +7382,73 @@ func _install_facilities() -> void:
 	_install_base_rooftop_transit_door(facility_floor)
 	if _facility_nodes.size() != 8:
 		push_error("基地美术布置层应包含8个交互设施，当前为%d个" % _facility_nodes.size())
+
+
+## 99F 基地常驻 NPC（`BASE-NPC`，见 `docs/v0.1/20_技术施工_基地NPC.md`）。
+##
+## 装在哪里：挂在 `_facility_art_layout`（`Art` 布置层）下，与 8 个设施同一个父级 ——
+## 房间流送/隐藏时它跟着一起走。**不装进 `BaseWorld3D.tscn`**：那个场景是
+## "基地与荒野"旧兼容场景，不是 99F 室内基地（2026-11-02 第一版就装错了）。
+##
+## 位置：读布置层上两个作者锚点（起点 / 巡逻终点），**代码不写死坐标**。
+## 锚点缺失时只警告、不装 —— 宁可没有 NPC，也不要让它站到墙里。
+func _install_base_npc() -> void:
+	if _base_npc != null:
+		return
+	# 远征关卡没有 99F 基地，跳过。
+	if _room_by_id.get("facility") == null:
+		return
+	if _facility_art_layout == null:
+		push_warning("[TowerDescent3D] 基地布置层未就绪，NPC 未装配。")
+		return
+	var anchor_root := _facility_art_layout.get_node_or_null("玩法锚点_只移动不删除") as Node3D
+	if anchor_root == null:
+		push_warning("[TowerDescent3D] 布置层缺少锚点容器，NPC 未装配。")
+		return
+	var start_anchor := anchor_root.get_node_or_null(BASE_NPC_ANCHOR_START) as Node3D
+	var end_anchor := anchor_root.get_node_or_null(BASE_NPC_ANCHOR_END) as Node3D
+	if start_anchor == null or end_anchor == null:
+		push_warning("[TowerDescent3D] 布置层缺少 NPC 巡逻锚点，NPC 未装配。")
+		return
+	var npc := BASE_NPC_SCENE.instantiate() as NpcCharacter3D
+	if npc == null:
+		push_error("[TowerDescent3D] NPC 场景实例化失败")
+		return
+	npc.name = "BaseNpc99F"
+	npc.npc_id = BASE_NPC_ID
+	_facility_art_layout.add_child(npc)
+	# 世界坐标交给 NPC 自己缓存：房间本身有位置/旋转，这里把锚点的世界点直接给它，
+	# 避免"房间旋转算两遍"。
+	npc.set_patrol_world([start_anchor.global_position, end_anchor.global_position])
+	_base_npc = npc
+
+
+## 基地层的**只读** NPC 投影。巡逻/对话状态归 `NpcCharacter3D` 自己持有，
+## 基地只做"数一下、拿个快照" —— 与设施同样的单向投影，不复制第二份状态。
+func get_npc_count() -> int:
+	var count := 0
+	for value in get_tree().get_nodes_in_group(NpcCharacter3D.INTERACTION_GROUP):
+		var npc := value as NpcCharacter3D
+		if npc != null and is_ancestor_of(npc):
+			count += 1
+	return count
+
+
+func get_npc_snapshots() -> Array[Dictionary]:
+	var snapshots: Array[Dictionary] = []
+	for value in get_tree().get_nodes_in_group(NpcCharacter3D.INTERACTION_GROUP):
+		var npc := value as NpcCharacter3D
+		if npc != null and is_ancestor_of(npc):
+			snapshots.append(npc.get_snapshot())
+	return snapshots
+
+
+func find_npc(npc_id: String) -> NpcCharacter3D:
+	for value in get_tree().get_nodes_in_group(NpcCharacter3D.INTERACTION_GROUP):
+		var npc := value as NpcCharacter3D
+		if npc != null and is_ancestor_of(npc) and npc.npc_id == npc_id:
+			return npc
+	return null
 
 
 func _install_base_rooftop_transit_door(facility_floor: DungeonRoom3D) -> void:

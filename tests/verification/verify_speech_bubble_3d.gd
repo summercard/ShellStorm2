@@ -101,14 +101,34 @@ func _check_facing_camera(stage: Node3D) -> void:
 			"底板 surface %d 启用了 billboard（会与文字更新不同步，造成走路重影）" % surface)
 		_expect(material.shading_mode == BaseMaterial3D.SHADING_MODE_UNSHADED,
 			"底板 surface %d 未设为 UNSHADED（会被房间灯光影响）" % surface)
-		# 防 TAA 残影：必须走**不透明**管线。透明物体不写运动矢量，TAA 会把它当
-		# 静止物体把历史帧混进来 —— 移动时表现为"每帧都在原地刷新 + 拖尾"。
-		_expect(material.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED,
-			"底板 surface %d 不是不透明管线（移动时 TAA 会拖出残影）" % surface)
+		# 底板**半透明**（2026-11-02 业主「黑色背景半透明」）。
+		#
+		# 原来的口径是"必须不透明，防 TAA 残影"；改成半透明后，防拖影的责任
+		# 转交给「位移来自父节点、速度极低」+ 文字排在底板之后（见下一条）。
+		# 这里断言的是**alpha 混合确实开了、且底色确实半透**，否则业主看到的就是
+		# 一块死板；同时守一条下限，太透（<0.15）字会压不住背景。
+		_expect(material.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA,
+			"底板 surface %d 没有开 alpha 混合（半透明背景会退化成不透明）" % surface)
+		if surface == 1:
+			# ⚠️ 读**配置值** `fill_color.a`，不要读材质的 `albedo_color.a`：
+			# 后者 = `fill_color.a × 淡入淡出进度`，刚 pop-in 时就是 0，断言会假红。
+			var fill_alpha := bubble.fill_color.a
+			_expect(fill_alpha < 0.9 and fill_alpha > 0.15,
+				"气泡填充 alpha=%.2f，应落在 0.15–0.9（业主口径：黑色背景半透明）" % fill_alpha)
+			# ⚠️ 半透明底板必须**先于**文字渲染，否则 0.55 的黑会把白字压掉一半亮度。
+			# 排序靠 render_priority：底板 0 < 文字 2。
+			var text_node := bubble.get_node_or_null("Text") as Label3D
+			if text_node != null:
+				_expect(material.render_priority < text_node.render_priority,
+					"填充 render_priority %d 不小于文字的 %d —— 半透明底板会盖在字上"
+						% [material.render_priority, text_node.render_priority])
 	_expect(label.billboard == BaseMaterial3D.BILLBOARD_DISABLED,
 		"Label3D 启用了 billboard（会与底板更新不同步，造成走路重影）")
-	_expect(label.alpha_cut == Label3D.ALPHA_CUT_DISCARD,
-		"Label3D 未启用 alpha 裁剪（移动时 TAA 会在文字上拖出残影）")
+	# 文字**必须**走透明队列（2026-11-02 起）：不透明永远先渲染，再叠半透明底板
+	# 就会把字压暗。`ALPHA_CUT_DISCARD` 会让它进不透明管线 —— 那是旧口径，
+	# 现在是 `ALPHA_CUT_DISABLED`。
+	_expect(label.alpha_cut == Label3D.ALPHA_CUT_DISABLED,
+		"Label3D 仍用 alpha 裁剪（文字会先进不透明队列，被半透明底板压暗）")
 	# 气泡是贴在角色头上的 UI，**不许在世界里投影**（2026-09-22 主人：「头上的对话框会投射投影」）。
 	# 面板与文字**两件都要关**：`Label3D` 也是 `GeometryInstance3D`，默认同样投影。
 	_expect(panel.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF,

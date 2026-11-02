@@ -57,7 +57,7 @@ const BUNNY_EARS_HAT_VARIANT := "bunny_ears"
 const ELECTRONIC_MASK_VARIANT := "electronic_mask"
 const ELECTRONIC_MASK_SCENE: PackedScene = preload("res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/runtime/chr_bunny01_electronic_mask_root.tscn")
 const CUSTOMIZATION_OPTIONS := {
-	"body": ["bunny_white", "cat_orange", "suit_olive", "suit_sand", "suit_cobalt"],
+	"body": ["bunny_white", "cat_orange", "suit_olive", "suit_sand", "suit_cobalt", "suit_green"],
 	"head": ["bunny_white", "cat_orange", "sensor_olive", "visor_cyan", "plated_amber", CHIBI_ANIME_HEAD_VARIANT],
 	"hand": ["bunny_white", "cat_orange", "grip_olive", "safety_orange", "gauntlet_teal"],
 	"feet": ["bunny_white", "cat_orange", "boot_sand", "boot_cobalt", "boot_teal"],
@@ -70,6 +70,10 @@ const BODY_COLORS := {
 	"suit_olive": Color(0.46, 0.49, 0.31),
 	"suit_sand": Color(0.66, 0.50, 0.30),
 	"suit_cobalt": Color(0.20, 0.42, 0.56),
+	## 苔绿作业服。99F 基地 NPC「绿苔」的皮肤色源就是这一档 —— NPC 不另存色值，
+	## 转调 `AvatarCustomizationCatalog.get_variant_color("suit_green")`。
+	## 玩家在衣柜里选它，拿到的绿与 NPC 身上完全相同。
+	"suit_green": Color(0.16, 0.68, 0.30),
 }
 const HEAD_COLORS := {
 	"bunny_white": Color.WHITE,
