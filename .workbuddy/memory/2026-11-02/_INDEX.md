@@ -7,5 +7,6 @@
 | 17:55 | 99F 基地 NPC 观感返工（自发光/体型/气泡/提示/白点/名字/定住转向） | [1755_base99_npc_visual_polish.md](1755_base99_npc_visual_polish.md) |
 | 18:55 | 99F NPC 气泡抬高 + 半透明底板 + 白点彻底移除（r4） | [1855_base99_npc_bubble_polish.md](1855_base99_npc_bubble_polish.md) |
 | 21:57 | 推送 1c14dc1b（6 提交）+ 发现 4 篇孤儿开发记录 | [2157_push_round2.md](2157_push_round2.md) |
+| 23:35 | 推送 88fd67bc，清空工作区（备份入库 + 孤儿文档标注入库） | [2335_clean_workspace_push.md](2335_clean_workspace_push.md) |
 
 > 本目录按「一次事务 = 一个文件」存放；旧的单文件日记 `../2026-11-02.md` 保留历史，不再追加。
