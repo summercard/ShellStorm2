@@ -12,6 +12,11 @@ signal service_activated(room: DungeonRoom3D, station: ServiceStation3D)
 ## 灯开关被玩家切换后上行一层。与 player_entered / service_activated 同一模式：
 ## 房间不自己决定"开灯后要发生什么"，只负责把事实告诉上层。
 signal light_toggled(room: DungeonRoom3D, is_on: bool)
+## 易碎陈设**首次**被打碎。与 `chest_open_requested` 同形：房间只报事实
+## （在哪间房、哪个点、哪一件碎了），发不发金币由玩法层 `Dungeon3D` 决定。
+## ⛔ 掷骰不能写进 `BreakableClutter3D`：它是几何/受击/碎片状态机，
+##    拿不到 `run_seed`，也没法被独立复算。见设计 r7。
+signal clutter_broken(room: DungeonRoom3D, world_position: Vector3, clutter_id: String)
 
 const LIGHT_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn")
 const LIGHT_SWITCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d.tscn")
@@ -6424,12 +6429,40 @@ func _interactive_clutter_point_is_free(
 
 
 func _on_interactive_clutter_broken(clutter: BreakableClutter3D, direction: Vector3) -> void:
+	var clutter_id := str(clutter.get_meta("clutter_id", clutter.asset_id))
 	var states := _pending_detail_runtime_state.get("breakable_clutter", {}) as Dictionary
 	states = states.duplicate(true)
-	states[str(clutter.get_meta("clutter_id", clutter.asset_id))] = {
+	states[clutter_id] = {
 		"broken": true, "direction": [direction.x, direction.y, direction.z],
 	}
 	_pending_detail_runtime_state["breakable_clutter"] = states
+	# 上行动作放在记账之后：上层收到事件时房间账里已经有这一件「已碎」，
+	# 即使它当场就往下发金币，也不依赖本函数的执行顺序。
+	clutter_broken.emit(self, clutter.global_position, clutter_id)
+
+
+## 记录「这一件碎掉时到底有没有出金币」。由 `Dungeon3D` 掷骰后回调。
+##
+## 为什么值得单独存一笔：掷骰由 `run_seed + clutter_id` 唯一确定、重算结果相同，
+## 所以这笔**不是**用来防重掷的（防重掷靠「`restore_broken()` 不发 `broken` 信号」）。
+## 它的价值是让「碎了但没出币」在存档里可读 —— 否则事后分不清
+## 「没命中」和「命中了但被零金币房吞掉」，也断不了 C1。
+func note_clutter_coin_dropped(clutter_id: String, dropped: bool) -> void:
+	if clutter_id.is_empty():
+		return
+	var states := _pending_detail_runtime_state.get("breakable_clutter", {}) as Dictionary
+	states = states.duplicate(true)
+	var state: Dictionary = states.get(clutter_id, {}) as Dictionary
+	state = state.duplicate(true)
+	state["coin_dropped"] = dropped
+	states[clutter_id] = state
+	_pending_detail_runtime_state["breakable_clutter"] = states
+
+
+## 探针入口：某件易碎物在房间账里的当前记录（未登记过则返回空字典）。
+func get_clutter_runtime_state(clutter_id: String) -> Dictionary:
+	var states := _pending_detail_runtime_state.get("breakable_clutter", {}) as Dictionary
+	return (states.get(clutter_id, {}) as Dictionary).duplicate(true)
 
 
 func _restore_interactive_clutter() -> void:

@@ -101,6 +101,20 @@ const LOOT_SCATTER_CLEARANCE_HEIGHT_M := 0.45
 const LOOT_SCATTER_CLEARANCE_RADIUS_M := 0.30
 ## 候选点被占时按这个比例向原点方向收缩重试。
 const LOOT_SCATTER_FALLBACK_SHRINK := [0.66, 0.33]
+
+## —— 易碎陈设破碎掉币（设计 r7，2026-11-02）——
+## 单件 · 单次 · 独立同分布。业主要求演进：8% → 60%（因当时未实现、误以为概率太小）→ **10%**（手感确认后收回）。
+## ⚠ 体量口径：远征03 现有 535 件，全清期望 535 × 0.10 × 5.5 ≈ **294 枚**，
+##    是同层怪物掉落（约 61 枚）的 4.8 倍。业主指定的手感值，不是经济基准线；
+##    要再调只需改本常量或关卡 `interactive_clutter.coin_drop_chance`，不动一行逻辑。
+const CLUTTER_COIN_DROP_CHANCE := 0.1
+const CLUTTER_COIN_DROP_MIN := 1
+const CLUTTER_COIN_DROP_MAX := 10
+## 落地稳定后再锁这么久才能捡。总不可拾取 = 弹跳动画 0.81 s（在
+## `GroundLootPickup3D` 内部实算）+ 本值。⛔ 不许把 0.81 抄到这里相加 —— 那是第二处真源。
+const CLUTTER_COIN_PICKUP_LOCKOUT_S := 0.5
+## 「原地」= 破碎点邻域，不是散布：水平偏移上限 0.30 m，避免金币正压在碎片堆中心被遮住。
+const CLUTTER_COIN_OFFSET_RADIUS_M := 0.30
 const MINIMAP_RUNTIME_INTERVAL := 1.0 / 15.0
 const OFFSCREEN_INDICATOR_SCRIPT := preload("res://src/ui/OffscreenEnemyIndicator3D.gd")
 ## 屏幕外怪物指示箭头的喂数节奏。比小地图快一档：相机一转，整屏的"屏幕外"就全变了。
@@ -2743,6 +2757,11 @@ func _prepare_layout_rooms() -> void:
 		room.service_activated.connect(_on_service_activated)
 		room.light_toggled.connect(_on_room_light_toggled)
 		room.chest_open_requested.connect(_on_chest_open_requested)
+		# 破碎掉币：房间只报「哪一件碎了」，掷骰与发放都在本类。
+		# 接线放在与其余房间信号同一处；另一条房间创建路径（TowerDescent3D）也要接，
+		# 漏接的表现是「房间里有罐子但永远不掉币」，且不打任何日志。
+		if not room.clutter_broken.is_connected(_on_clutter_broken):
+			room.clutter_broken.connect(_on_clutter_broken)
 
 
 func _finish_layout_connections() -> void:
@@ -6099,9 +6118,99 @@ func _ground_reward_candidates(grants: Array) -> Array[Dictionary]:
 	return candidates
 
 
+## —— 易碎陈设破碎掉币：掷骰与发放（设计 r7）——
+##
+## 触发源是 `DungeonRoom3D.clutter_broken`，只在 `shatter()` 成功那一次发；
+## `restore_broken()` 刻意不发信号，所以读档/流送重建不会重掷 —— 这条不靠注释保证，
+## 由 `tests/verification/probe_clutter_coin_drop.tscn` 的 B2 断言盯着。
+func _on_clutter_broken(room: DungeonRoom3D, world_position: Vector3, clutter_id: String) -> void:
+	if room == null or not is_instance_valid(room) or clutter_id.is_empty():
+		return
+	var settings := _clutter_coin_settings(room)
+	var drop := resolve_clutter_coin_drop(
+		clutter_coin_seed(clutter_id),
+		float(settings["chance"]), int(settings["min"]), int(settings["max"])
+	)
+	var dropped := false
+	if bool(drop.get("hit", false)) and int(drop.get("amount", 0)) > 0:
+		# 零金币房不产出：命卡诅咒写的是「这房间没有金币」，掉落口开例外会让诅咒不可信。
+		# 注意仍要记 `coin_dropped=false` —— 否则事后分不清「没命中」和「被诅咒吞掉」。
+		if not bool(_room_zero_currency.get(room.room_id, false)):
+			var origin := world_position + clutter_coin_planar_offset(clutter_id)
+			var delivery := _deliver_ground_rewards(
+				room,
+				[{"kind": "currency", "amount": int(drop["amount"])}],
+				origin,
+				"clutter:%s" % clutter_id,
+				false,
+				float(settings["lockout"])
+			)
+			dropped = not (delivery.get("granted", []) as Array).is_empty()
+	room.note_clutter_coin_dropped(clutter_id, dropped)
+
+
+## 掉率 / 区间 / 拾取锁的能力级覆盖。缺省值只在本文件顶部有真源，
+## 关卡通过 `interactive_clutter` 段覆盖即可，**不按关卡 ID 分支**。
+func _clutter_coin_settings(room: DungeonRoom3D) -> Dictionary:
+	var plan: Dictionary = room.interactive_clutter_plan if room != null else {}
+	var min_amount := maxi(1, int(plan.get("coin_drop_min", CLUTTER_COIN_DROP_MIN)))
+	var max_amount := maxi(
+		min_amount, int(plan.get("coin_drop_max", CLUTTER_COIN_DROP_MAX))
+	)
+	return {
+		"chance": clampf(
+			float(plan.get("coin_drop_chance", CLUTTER_COIN_DROP_CHANCE)), 0.0, 1.0
+		),
+		"min": min_amount,
+		"max": max_amount,
+		"lockout": maxf(
+			0.0, float(plan.get("coin_pickup_lockout_s", CLUTTER_COIN_PICKUP_LOCKOUT_S))
+		),
+	}
+
+
+## 本件的掷骰种子。与 `RuntimeRewardCoordinator` 同一口径（run_seed + 事件名 + id）。
+func clutter_coin_seed(clutter_id: String) -> int:
+	return hash("%d|clutter_coin|%s" % [run_seed, clutter_id])
+
+
+## 纯函数：给定种子与参数，返回 `{hit, roll, amount}`。
+## ⛔ 不用 `randi()` / `randf()` —— 吃掉全局随机流会让怪物掉落与房间撒点的
+## 既有序列整体漂移，表现为「只加了个掉币，别处数值却变了」。
+## 做成 static 是为了让探针能直接复算期望值，不必搭一整个关卡。
+static func resolve_clutter_coin_drop(
+	seed_value: int, chance: float, min_amount: int, max_amount: int
+) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	var roll := rng.randf()
+	var hit := roll < clampf(chance, 0.0, 1.0)
+	var amount := 0
+	if hit:
+		amount = rng.randi_range(min_amount, maxi(min_amount, max_amount))
+	return {"hit": hit, "roll": roll, "amount": amount}
+
+
+## 「原地」的水平偏移：确定性黄金角派生，半径 ≤ `CLUTTER_COIN_OFFSET_RADIUS_M`。
+## 不读件数、不按 index 分布 —— 这不是散布。
+static func clutter_coin_planar_offset(
+	clutter_id: String, radius: float = CLUTTER_COIN_OFFSET_RADIUS_M
+) -> Vector3:
+	var raw := absi(hash("clutter_coin_offset|" + clutter_id))
+	var angle := float(raw % 62832) / 10000.0
+	var unit := float((raw / 7) % 1000) / 1000.0
+	var distance := radius * (0.35 + 0.65 * unit)
+	return Vector3(cos(angle), 0.0, sin(angle)) * distance
+
+
 ## 唯一的一次性地面发放回调：场景负责房间/落点，Sink 负责结果账。
+##
+## `spread` / `pickup_delay_after_spawn` 是 2026-11-02 新增的可选参数（破碎掉币用）：
+## 前者关掉「按第几件散布」（金币要落在破碎点原地），后者让金币落地后还锁一小段。
+## 既有调用方（剧情 / 宝箱 / 击杀）不传即默认 `spread=true` / 延迟 0.0，行为逐帧不变。
 func _deliver_ground_rewards(
-	room: DungeonRoom3D, grants: Array, origin: Vector3, context: String
+	room: DungeonRoom3D, grants: Array, origin: Vector3, context: String,
+	spread: bool = true, pickup_delay_after_spawn: float = 0.0
 ) -> Dictionary:
 	var adjusted: Array = []
 	for value in grants:
@@ -6125,7 +6234,7 @@ func _deliver_ground_rewards(
 					if int(rule["count"]) % int(rule["every"]) == 0:
 						tiers += int(rule["tiers"])
 				_apply_fate_item_quality(item, tiers, str(item.get("fate_rarity_cap", "")))
-			return _spawn_loot_items(room, items, origin)
+			return _spawn_loot_items(room, items, origin, 0.0, spread, pickup_delay_after_spawn)
 	)
 	var rejected := delivery.get("rejected", []) as Array
 	if not rejected.is_empty():
@@ -6139,12 +6248,16 @@ func _deliver_ground_rewards(
 ## 会让「指那个常量点」与「枪实际在哪」对不上（2026-09-22 开场那把枪）。
 ## 散开范围与曲线见 `loot_scatter_half_extent_m`；落点仍逐件过贴地校位 + 净空校验，
 ## 目的是「散得开」，不是「散进墙里」。
+## `pickup_delay_after_spawn`：落地动画结束**之后**再锁多久（秒）。0 = 不额外锁。
+## 破碎掉币传 0.5，让玩家撞碎的罐子里的金币先在地上躺一会儿再被吸走；
+## 其余来源（击杀 / 宝箱 / 剧情）保持 0.0，手感与既有验收基线零变化。
 func _spawn_loot_items(
 	room: DungeonRoom3D,
 	items: Array,
 	world_position: Vector3,
 	pickup_grace_seconds: float = 0.0,
-	spread: bool = true
+	spread: bool = true,
+	pickup_delay_after_spawn: float = 0.0
 ) -> int:
 	if room == null or not is_instance_valid(room):
 		return 0
@@ -6176,6 +6289,9 @@ func _spawn_loot_items(
 			world_position
 		)
 		pickup.pickup_requested.connect(_on_ground_loot_requested)
+		# 锁必须在 `begin_spawn_animation()` **之前**挂上：动画结束时会读这个字段
+		# 把保护期往后推。顺序反了就变成「动画放完才设锁」，落地那一帧仍可被吸走。
+		pickup.lock_pickup_after_spawn(pickup_delay_after_spawn)
 		# 怪物掉落、搜索产出和主动落地都先经过“抛高→落地→两次弹跳”；
 		# 存档恢复不走这里，避免读档时把已经稳定的物品再次弹起。
 		pickup.begin_spawn_animation()

@@ -16,6 +16,9 @@ var _pickup_unlocked := true
 var _pickup_requires_player_exit := false
 var _player_exit_observed := false
 var _pickup_request_cooldown_until_msec := 0
+## 生成动画**结束后**再锁多久才允许拾取（秒）。0 = 只受动画本身约束。
+## 与 `_pickup_requires_player_exit` 是两件事：这里只推迟时间，不要求玩家离开。
+var _post_spawn_lockout_s := 0.0
 var _collecting := false
 var _collection_target: Node3D
 var _collection_start := Vector3.ZERO
@@ -126,6 +129,31 @@ func get_pickup_distance_m() -> float:
 	return pickup_distance_m
 
 
+## 生成落地后再锁 `seconds` 秒才可拾取。
+##
+## ⛔ **不要用 `set_pickup_grace_seconds()` 代替它。** 那个函数把两件事绑在一起：
+##     `_pickup_grace_until_msec = now + seconds`
+##     `_pickup_requires_player_exit = seconds > 0`
+## 后一项要求玩家先离开拾取范围、再回来才能捡 —— 那是「玩家主动丢下物品」的防回包保护。
+## 破碎掉币的场景正好相反：玩家站在金币上把它打碎，若照搬就会变成
+## 「站在原地永远捡不到，必须先走开 2 m 再走回来」。本函数只推迟时间，绝不碰离场标志。
+func lock_pickup_after_spawn(seconds: float) -> void:
+	_post_spawn_lockout_s = maxf(0.0, seconds)
+
+
+func get_post_spawn_lockout_s() -> float:
+	return _post_spawn_lockout_s
+
+
+## 把「落地后再等 T 秒」写进同一个 `_pickup_grace_until_msec`：
+## 只延后、不提前（取 max），因此与任何既有保护期取交集而非互相覆盖。
+func _apply_post_spawn_lockout() -> void:
+	if _post_spawn_lockout_s <= 0.0:
+		return
+	var until_msec := Time.get_ticks_msec() + int(round(_post_spawn_lockout_s * 1000.0))
+	_pickup_grace_until_msec = maxi(_pickup_grace_until_msec, until_msec)
+
+
 func _process(delta: float) -> void:
 	if _collecting:
 		_process_collection(delta)
@@ -142,7 +170,12 @@ func _process(delta: float) -> void:
 ## 生成后的真实掉落表现：先抛高，落地后连续弹两下；第二次落地前不允许拾取。
 ## 落点由 Dungeon3D 先做贴地与净空校验，动画只负责表现，不改变存档坐标。
 func begin_spawn_animation() -> void:
-	if _visual == null or _spawn_animating or _accepted:
+	if _spawn_animating or _accepted:
+		return
+	if _visual == null:
+		# 没有视觉就没有动画可等：锁立刻起算。
+		# 这里绝不能静默 return —— 否则「无视觉掉落」会整段绕过延迟。
+		_apply_post_spawn_lockout()
 		return
 	_spawn_animating = true
 	_pickup_unlocked = false
@@ -161,6 +194,9 @@ func begin_spawn_animation() -> void:
 func _finish_spawn_animation() -> void:
 	_spawn_animating = false
 	_pickup_unlocked = true
+	# 落地稳定之后才起算「看得见但暂时捡不了」的窗口。
+	# 起算点必须在这里，不能在生成侧写 `动画时长 + T` —— 那是第二处真源。
+	_apply_post_spawn_lockout()
 	if _player_in_range and not _accepted:
 		_pickup_request_cooldown_until_msec = 0
 
@@ -405,6 +441,12 @@ func get_model_snapshot() -> Dictionary:
 		"collecting": _collecting,
 		"collection_target_valid": _collection_target != null and is_instance_valid(_collection_target),
 		"pickup_grace_active": Time.get_ticks_msec() < _pickup_grace_until_msec,
+		"post_spawn_lockout_s": _post_spawn_lockout_s,
+		"pickup_grace_remaining_s": maxf(
+			0.0, float(_pickup_grace_until_msec - Time.get_ticks_msec()) / 1000.0
+		),
+		"pickup_requires_player_exit": _pickup_requires_player_exit,
+		"pickup_available": is_pickup_available(),
 		"size_baseline_id": "entity_size_baseline_v2",
 		"legacy_visual_scale": legacy_scale,
 		"base_size_multiplier": CURRENT_BASE_SIZE_MULTIPLIER,
