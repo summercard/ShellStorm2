@@ -1,0 +1,81 @@
+# 2026-11-02 豌豆手枪枪身伤害 25 → 30
+
+> 业主原话：「枪身伤害加到30」。口径是**枪身那一段**，不是单发最终值。
+> 只动 `bp_pistol` 的 `damage`，其余字段一条没动。
+
+> ⚠ **实现状态（2026-11-02 23:30 复核：未落地）**：本文描述的改动在当前工作区**不存在**。
+> 判据：`src/base/BlueprintRegistry.gd:531` 仍是 `"damage": 25`（不是 30），`git status` 该文件无改动。
+> 疑似被当日 17:07 的 `git pull --rebase` 洗掉（CHANGELOG 记有同名事故：被跟踪的 `.gd` 被冲、untracked 的 md 反而幸存）。
+> 改前快照见 `ShellStorm2-backup/`，重做时按本文复跑并复验，**不要凭本文的"已通过"判定完成**。
+
+## 1. 落地值
+
+| 字段 | 改前 | 改后 | 说明 |
+|---|---:|---:|---|
+| 枪身 `damage` | 25 | **30** | `BlueprintRegistry.gd::_create_gunbody_pistol()` |
+| 标准弹 `bullet_damage` | 8 | 8 | **不动**，`_create_bullet_standard()` |
+| 单发最终伤害 | 33 | **38** | `damage + bullet_damage` |
+| 裸 DPS（1.7 发/秒） | 56.1 | **64.6** | `38 × 1.7 = 64.6` |
+| 其余字段 | — | — | `fire_rate 1.7` / 弹匣 10 / 换弹 1.8 s / 扩散 0.03 / 射程 15 m / 弹速 0.6522（15 m/s） |
+
+**远程最终伤害是两段相加**，不是单看 `damage`（`WeaponAssemblyTree.gd` 聚合、`WeaponModel3D._configure_common_stats` 消费）。
+所以内容表写 `damage=30` 时，玩家实际看到的是 **38**。
+
+品质倍率对两个键**同时乘**（`WeaponAssemblyTree._scale_stat` 分支对 `damage` 与 `bullet_damage` 各乘一次）：
+
+| 品质 | × | 单发 |
+|---|---:|---:|
+| 蓝 | 1.00 | **38** |
+| 紫 | 1.10 | **41.8** |
+| 金 | 1.15 | **43.7** |
+
+## 2. 门禁同步
+
+`tests/verification/verify_starting_weapon_contract.gd`：`EXPECTED_DAMAGE` 25 → **30**，
+注释补上本次沿革（枪身段 vs 单发值的区别）。不改就会直接红：
+
+```
+ERROR: gunbody damage 是 30，期望 25
+```
+
+## 3. 账本同步
+
+### 3.1 内容数据库 `docs/v0.1/data/ShellStorm2_游戏内容数据库_v010.xlsx`
+
+- 《武器》`G22`：`damage=25` → **`damage=30`**，该格其余数值原样
+  （`bullet_count=1；fire_rate=1.7；magazine_size=10；reload_time=1.8；spread=0.03；range=15；
+  bullet_speed=0.6522`）。
+- 《武器》`N22` 备注：追加 2026-11-02 伤害一段（口径是枪身段、标准弹 8 不跟、单发与 DPS 变化、
+  品质三档单发、以及「只读 damage=30 会少算 8」的提醒），前面各段沿革保持原文。
+
+### 3.2 武器账本 `assets/registry/ledgers/ShellStorm2_武器账本_v001.xlsx`
+
+《域变更日志》追加第 21 行 `v0.1.113 / 2026-11-02 / 数值调整（内容侧）`：
+记 `damage 25 → 30`、单发与 DPS 变化、品质三档、业主原话、落地函数位置。
+
+兼容性列写明：**本账本《资产主表》与《3D-武器》不持玩法数值** —— AssetID、Prefab/GLB 路径与
+SHA-256 全部不变，资产行无需复核；只有运行时 `base_stats` 变，旧存档
+`WeaponInstance.assembly_snapshot` 下次装配按新值重算（老枪不自动变强）。
+
+### 3.3 文档
+
+- `docs/v0.1/04_技术施工_战斗与局内成长.md` §6.1：手感四项那句「伤害 25」改「伤害 25 → 30，
+  + 标准弹 8 ⇒ 单发 33 → 38」；对标依据那句的自定值列表 25 → **枪身 30**。
+- `docs/v0.1/reference/挺进地牢/初始手枪数据.md`：沿革表 `damage` 行改为 **30**，
+  新增 §4.5 记本轮（含品质三档表与「别把 30 当单发」的提醒）。
+
+## 4. 验收
+
+| 用例 | 命令（headless，Godot 4.7.2） | 结果 |
+|---|---|---|
+| 出厂武器契约 | `verify_starting_weapon_contract.tscn` | `STARTING_WEAPON_CONTRACT_OK: … 10 发弹匣 / 30 伤害 / 命运槽 8 …`，退出码 0 |
+
+用户数据目录已用 `APPDATA` 重定向到工程外临时目录，未触碰正式存档。
+
+## 5. 未做 / 待观察
+
+- **实机手感未验**：单发 33 → 38 是 +15.2%，对小怪击杀的子弹数会变（例如原需 4 发、现在可能 3 发），
+  这属于平衡观察项，需要真机打一轮远征才知道够不够。
+- **价格 / 掉落权重 / 合成成本未联动**：`price 70`、`SYN-PISTOL` 的 25 金币与 6 点熔炼值均未动。
+  伤害 +20% 之后这把枪的性价比相对其它 L0 枪抬高了一档，是否要一起调由业主决定。
+- 射速 1.7 的 11-02 那轮（`2026-11-02_pistol_fire_rate_1p7.md`）仍是当前射速，本轮未回改。
