@@ -1,4 +1,37 @@
-- [远征入口轮换与正式名称](2026-11-02_expedition_names_and_positions.md)：01=CloseAI数据库、03=无限公馆，代号与ID保留，场景账本新增名称对照；真实窗口双解锁状态专项通过。
+## 2026-11-02 99F 基地 NPC「绿苔」（BASE-NPC）：六条观感返工
+
+业主一次给出六条实机截图反馈，逐条落地：
+
+1. **「为什么是自发光的绿色？荧光感太强了」** ⇒ `NpcCatalog.SKIN_EMISSION` 0.30 → **0**，材质不再 `emission_enabled`。顺带解释同轮的「行走的时候会有残影」：99F 的 `WorldEnvironment` 开着 `glow`（bloom 档、`glow_intensity 0.72`），自发光体移动时会在身后拖光晕，与本条同一根因，一起消失。
+2. **「头要和角色一样大，现在大了很多」** ⇒ 第一版漏了玩家运行时那一步缩放。`Player3D` 在 `_initialize_debug_scale_contract()` 里把 `Avatar3D.scale` 乘 `DEFAULT_BASE_SIZE_MULTIPLIER = 0.80`，而 `Player3D.tscn` 的场景实例是原始尺寸；NPC 不跑 `Player3D`，于是整只大 25%。改为引用同一个常量，玩家调体型时自动跟随。
+3. **「对话框也太小了」→「还是需要大一点太小了，大一倍先」** ⇒ 气泡 `Text.pixel_size` 0.0026(r1) → 0.0042(r2) → **0.0084(r3)**。⛔ `wrap_width_px` **没有**跟着翻倍：翻到 1120 时那句 20 字台词刚好塞进一行，气泡变成 **8.27 m 宽的横幅**横跨整个屏幕（实拍确认）；保持 560（≈11 字一行）才是两行、4.7 m × 1.21 m 的正常比例。气泡中心随之 1.62 → 1.88 → **2.05**，否则底边压在兔耳上。
+4. **「e 交谈这个提示要接近才出来」** ⇒ 交互半径 2.4 m → **1.5 m**，球形热区中心 0.9 → 0.6（角色只有 1.2 m 高）。
+5. **「上面的白点去掉」「名字也去掉」** ⇒ NPC 实现 `is_interaction_dot_visible() -> false` 让控制器那枚常驻白点整体淡出；撤除 `NameLabel` / `RoleLabel`。头顶只剩黄色 `[E] 交谈`（复刻 `BaseFacility3D.PromptLabel` 的 50 号字 / `Color(1,0.82,0.28)`）与台词气泡，两者互斥（`focused and in_range and not talk_engaged`）。名字与身份仍留在 `NpcCatalog` 与快照里，给剧情/日志认人。
+6. **「点击交谈后，角色要立刻停下来，面对角色」** ⇒ 新增 `_talk_engaged`：`perform_interaction` 里立刻停步、清到点计时，并把 `_yaw` / `_yaw_target` / `rotation.y` **一次性吸附**到玩家方向（不插值——按 E 那一帧就该看到脸）；之后以 `TALK_TURN_SPEED = 14`（巡逻的 2 倍）持续对准，玩家绕着走它跟着转。解除条件是**玩家离开交互范围**，不是气泡消失——气泡 6 s 自动收起，若以气泡为准 NPC 会在玩家还站着时自己走开。
+
+验收同步扩到 **A01–A26 含 8 组新断言**：A13b 体型（`NPC.VisualRoot.scale == 玩家 Avatar3D.scale` 且可见高度比 1.0±10%）、A14b 无自发光、A14 头顶不许有非 `PromptLabel` 的常驻 `Label3D`、A20b 2.0 m 处不给候选且不显示提示、A20c 圆点 `visible_amount ≈ 0`、A22b 按下 E 后 `moving=false` 且朝向误差 < 0.15 rad 且提示收起、A22c 把巡逻重新打开站 0.5 s 位移 < 0.02 m、A24b 气泡 `pixel_size` 一致且**底板世界宽 ≥ 3.0 m**（只比常量抓不住 `bubble_scale` 被改小）、A25b 玩家走出 8 m 后 3 s 内位置重新变化。`verify_base_npc_flow` **exit 0**；换装 `verify_player3d_diy_flow`、衣柜 `verify_wardrobe_preview_fill_flow` 两条回归通过。
+
+⚠️ 本轮期间另有并行会话把 `TowerDescent3D` 的 NPC 装配、`suit_green` 衣柜变体、账本行、`MODULE_INDEX` / `feature_registry` / 本文件条目与套件注册**整批回滚到 HEAD**（表现为 NPC 渲染成 `Color.MAGENTA` 失败色——这正是 `NpcCatalog` 取不到衣柜变体时的设计行为，反而成了有效的自检）。已全部重建，并补了 `scripts/refresh_ledger_baseline_npc_polish.py` 只刷新基线逐列指纹（不改资产行）。
+
+账本：《资产主表》第 31 行 `CHR-PLY-BUNNY01-NPC-GREEN` 重建、《域变更日志》v0.1.27；`CHR-PLY-CAPSULE01-3D-BUNNY01` 补 `suit_green` 记法记 v0.1.28；查重公式 R/S 列区间按新增行重写到 `$R$6:$R$31`；基线各只刷新对应行与列指纹。`check_asset_registry` structure(1418/26)/full、`verify_ledger_split`、`check_asset_runtime_naming`(gd 23 / tscn 93)、`check_feature_traceability`(44)、`check_level_decoupling` 全绿。**真实渲染四张新图**（12:00 / 22:00 / 正面近景 / `[E] 交谈` 提示）见 `docs/v0.1/audits/evidence/2026-11-02_base99_npc/`。未做：导航避障、对话分支、面饰表情接入，整功能仍 partial。见[开发记录](2026-11-02_base99_npc_green.md)。
+
+## 2026-11-02 易碎陈设破碎掉币接入（60% · 1–10 金币 · 落地后锁 0.5 秒）
+
+WORLD-INTERACTIVE-CLUTTER：业主第一轮要 8%，第二轮「奇怪为什么我都没掉落金币？概率帮我调成60%」。**一枚都没掉的原因是当时只有设计、没有代码**（运行期概率实为 0），与 8% 无关；本轮把实现补齐并按 60% 落地。
+
+实现：`DungeonRoom3D` 新增 `clutter_broken(room, world_position, clutter_id)` 上行事件（只在 `shatter()` 成功那一次发）+ `note_clutter_coin_dropped()` 记 `coin_dropped`；`Dungeon3D` 新增纯函数掷骰 `resolve_clutter_coin_drop(seed, chance, min, max)`，种子 `hash(run_seed|clutter_coin|clutter_id)`（不吃全局随机流、重建可复算），落点 = 破碎点 + ≤0.30 m 确定性偏移，发放只走 `_deliver_ground_rewards(..., spread=false, pickup_delay_after_spawn=0.5)`（零金币房不产出、房间倍率生效）；接线两处（`Dungeon3D` 与 `TowerDescent3D` 房间创建处），漏一处即「远征里永远不掉币且无日志」。
+
+可拾取延迟：原弹跳动画本身就锁 0.81 s（0.12+0.18+0.29+0.22），**0.5 s 若从生成时刻起算会被完全吞掉**，故定义为「落地稳定后再锁 0.5 s」，总不可拾取 1.31 s。`GroundLootPickup3D` 新增 `lock_pickup_after_spawn()`：⛔ 不能复用 `set_pickup_grace_seconds()`，后者连带把 `_pickup_requires_player_exit` 设 true，会变成「站在原地永远捡不到、必须先走开 2 m」；无视觉掉落的提前 return 分支同样应用锁。怪物/宝箱/剧情掉落延迟默认 0.0，行为零变化。
+
+验收：新增 `tests/verification/probe_clutter_coin_drop.tscn` → **CLUTTER_COIN_DROP_PROBE_OK**（exit 0）：10000 次命中率 **0.5947**、金额 1–10 十档齐全、偏移最大 **0.281 m**、同件重复破碎只发 1 次信号、`restore_broken()` 不重掷、锁 0.5 s 期间不可拾取且到期后无需离场即可拾取、控制组（延迟 0）即时可拾、端到端 5 件碎 → 1 枚落地且账实相符。探针运行前已把 `APPDATA` 指向临时目录隔离用户存档。**未验**：真实渲染观感、进游戏手打一轮体感。
+
+**平衡**：535 件 × 60% × 均值 5.5 ≈ **1766 枚/全清**，是同层怪物掉落（约 61 枚）的 **29 倍**（破击率 25% 时约 442 枚）。这是业主明确指定值，已按指令落地；要收回只改 `CLUTTER_COIN_DROP_CHANCE` 或关卡 `interactive_clutter.coin_drop_chance`。
+
+账本：《资产主表》974–978 备注补契约、《域变更日志》v0.1.61；资产 ID/几何/SHA/《3D-场景通用》均未动，基线已按最小外科补录。见[开发记录](2026-11-02_clutter_coin_drop_design.md)。
+
+## 2026-11-02 枪械开火反馈：后坐回弹 + 弹性压扁（两轮返工）
+
+WEAPON-COMBAT：业主「增加枪开枪的时候的向后弹一下 然后扩大压缩的动画，让枪更加有反馈」，第二轮「目前没有看到变化，是不是动画速度太快了？我希望的是一个由弹性压扁然后弹回去的动画」。**第一版失败的原因是量纲，不是速度**：实测实战相机（43°/−52°/1920×1080）下枪口→枪根只有 **15.8 px**，第一版 `punch=0.09` 只把枪压短 **0.9 px**、位移 2 px、压扁相位 30~60 ms ⇒ 再慢也看不见。本轮按「屏幕 ≥3 px 变化、≥3 帧持续」反推幅值与时长：`punch` 提到 0.34~0.82（手枪 0.62 ⇒ 缩短 **9.4 px / −59%**）、`punch_hz` 压到 2.7~4.8（压扁相位 100 ms ≈ **6 帧**）；压扁也改为欠阻尼弹簧（ζ=0.50、过冲 16.3%），会越过零点变成「拉长变细」再回正，即业主要的「弹性」。连射语义改为**刷新到至少峰值**（不是累加封顶）—— 实测旧累加语义在 12 发/秒下稳态只有 `0.695×peak`，连射比单发还弱。新增常驻探针 `tools/probe_weapon_fire_feedback.tscn`（实战像素度量 + 近景 6 帧拼图），新增硬门禁 `punch ≥ 0.31`（低于即报红，杜绝第三次「看不见」）。`verify_weapon_fire_feedback` **465 断言全绿**，四项既有武器用例回归通过。边界不变：不动伤害/弹速/射速/冷却/命中/存档。详见[开发记录](2026-11-02_weapon_fire_feedback.md)。
 
 ## 2026-11-02 远征03敌弹弹速全域−1、弹体视觉逐只1.30~1.80
 
@@ -5796,6 +5829,8 @@ WORLD-ENTRY：入口楼最后阶段展开，标记和交互同步；01成功撤�
 业主「怪物会连续攻击玩家没有间隔」。找到原作开发者原话（Crooks：敌人会**错开攻击时机**，留喘息窗口）作为唯一依据，实测定位病根**不是单只冷却短**（1.42 s 起），而是 10 只怪各自独立计冷却、从不错开。补三样：房间级节拍器 470 ms（同屏并发 2→1、挡下 182 次/20 s）、冷却 ±20% 抖动（间隔抖动 1.35×→3.1×）、开火前视线检查（隔墙不得开火）。移动速度序关系全对、文档「五档」表述过时已改。内容数据库补 32 行 EGT 怪 + 3 行字段字典。见[专项开发记录](2026-10-30_expedition03_attack_cadence_alignment.md)。
 
 - 2026-11-01：[设计与远征03房间账本同步](2026-11-01_room_ledger_sync.md)：18份正式布局路径/SHA登记，既有组件资产行不变。
+
+- 2026-11-02：[远征03小沙发、地毯与书柜放大](2026-11-02_expedition03_seat_and_rug_scale.md)：小沙发×2（12件）、书柜宽×1.5（50件）、地毯平面×2（17块），两处圆桌改桌居中两椅分列；净空不足24件保留原样；五类结构门禁新增0。
 
 - 2026-11-01：[远征03大中小三房美化与运行验收](2026-11-01_expedition03_three_room_styling.md)：正式TSCN定点布局、固定陈设/暖灯/地毯，复用已有组件；专项结果及整关限制分列。
 

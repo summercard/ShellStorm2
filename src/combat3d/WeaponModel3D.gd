@@ -95,6 +95,71 @@ const GUN_PROFILES := {
 	"bp_charge": {"length": 1.12, "barrel": 0.62, "width": 0.32, "height": 0.34, "color": Color(0.28, 0.18, 0.34)},
 }
 
+## —— 枪械开火反馈：后坐位移 + 弹性压扁回弹（2026-11-02 业主）——
+##
+## 业主第一版原话：「增加枪开枪的时候的向后弹一下 然后扩大压缩的动画，让枪更加有反馈」。
+## 业主第二版反馈：「目前没有看到变化……我希望的是一个由弹性压扁然后弹回去的动画」。
+## 业主追问：「是不是动画速度太快了？」—— 是，而且是两个问题同时成立。
+##
+## 第二版把第一版的数值全部作废，原因是**幅度按错尺子量了**：俯视镜头下约 18 px/m，
+## 手枪长 0.72 m ≈ 13 px，第一版 `punch = 0.09` 只把枪压短 5.4% ⇒ **不到 1 个像素**，
+## 位移 0.115 m ⇒ 2 px。看不见跟快慢无关，就是幅度不够。本版一律放大 3~4 倍。
+##
+## 两个通道互相独立，都只写 `_visual_root` 的局部变换：不写 Player3D、不写弹道、
+## 不写冷却/射速/伤害，也不参与命中判定。
+##   · `kick_m`   —— 沿 +Z（枪口 −Z 的反向）的位移峰值，米。
+##   · `hz`       —— 位移回弹弹簧频率（Hz）。轻枪快、重枪慢。
+##   · `punch`    —— 压扁振幅（无量纲）。`scale = (1+a, 1+a, 1−0.62a)`：
+##                   横向鼓出来、沿枪轴被压短 ⇒ 读成「枪被弹簧压扁」。
+##   · `punch_hz` —— 压扁回弹弹簧频率（Hz）。决定「压扁→弹回」这一记有多长。
+##   · `roll`     —— 压扁同时的枪身侧倾（弧度，乘以 `punch`）。俯视下只靠缩放仍然弱，
+##                   加一点点倾斜，屏幕上的枪身轮廓立刻能看出在动。
+##
+## 两个通道都是欠阻尼弹簧，所以都会**越过零点回弹**：位移过零后反向缩一下；
+## 压扁过零后变成「拉长变细」（squash → stretch），这正是业主说的「弹性」。
+const GUN_FIRE_FEEDBACK := {
+	# 手枪：单手轻枪，节奏最快。
+	"bp_pistol": {"kick_m": 0.130, "hz": 7.0, "punch": 0.62, "punch_hz": 3.4, "roll": 0.40},
+	# 霰弹：单发最重，压得最扁、弹得最慢。
+	"bp_shotgun": {"kick_m": 0.205, "hz": 5.0, "punch": 0.78, "punch_hz": 2.8, "roll": 0.52},
+	"bp_rifle": {"kick_m": 0.145, "hz": 6.2, "punch": 0.55, "punch_hz": 3.6, "roll": 0.34},
+	"bp_starter_rifle": {"kick_m": 0.135, "hz": 6.4, "punch": 0.52, "punch_hz": 3.7, "roll": 0.32},
+	# 机枪：12 发/秒 ⇒ 每 83 ms 重新拉满一次。压幅取到可见下限之上、频率压低，
+	# 读成「持续强脉动」而不是「每发一记独立弹」。压幅再大在这么快节奏下只会糊成常量。
+	"bp_machinegun": {"kick_m": 0.110, "hz": 7.6, "punch": 0.36, "punch_hz": 4.6, "roll": 0.20},
+	"bp_sprinkler": {"kick_m": 0.100, "hz": 7.6, "punch": 0.34, "punch_hz": 4.8, "roll": 0.18},
+	# 狙击：重枪慢回弹，压幅大、节奏拖（贴腮稳，倾斜给小）。
+	"bp_sniper": {"kick_m": 0.200, "hz": 4.6, "punch": 0.72, "punch_hz": 2.7, "roll": 0.28},
+	"bp_launcher": {"kick_m": 0.210, "hz": 4.8, "punch": 0.82, "punch_hz": 2.8, "roll": 0.46},
+	"bp_charge": {"kick_m": 0.185, "hz": 5.0, "punch": 0.70, "punch_hz": 3.0, "roll": 0.38},
+}
+
+## 未登记的枪身回落这一条（与 `GUN_PROFILES` 的 `bp_pistol` 兜底口径一致）。
+const DEFAULT_FIRE_FEEDBACK := {
+	"kick_m": 0.130, "hz": 7.0, "punch": 0.62, "punch_hz": 3.4, "roll": 0.40,
+}
+
+## 两个弹簧的阻尼比 ζ。欠阻尼才会在回位时越过零点一次再收住。
+## 过冲率 = exp(−πζ / √(1−ζ²))：
+##   位移 ζ = 0.42 ⇒ **23.6%**（0.130 m 会反向过冲到 −0.031 m 再归零）
+##   压扁 ζ = 0.50 ⇒ **16.3%**（压扁 62% 会反向过冲到「拉长 10%」再回正）
+## ζ ≥ 1 就是旧的单调衰减，别调回去。
+const RECOIL_DAMPING := 0.42
+const PUNCH_DAMPING := 0.50
+
+## 弹簧积分的最长单步（秒）。半隐式欧拉在 `ω·dt` 过大时会发散：机枪位移弹簧 7.6 Hz ⇒
+## ω≈47.8，20 fps（dt=0.05）下 ω·dt≈2.4 就会冲成负位移爆炸。固定子步到 ≤1/240 后任何帧率都稳。
+const RECOIL_MAX_INTEGRATION_STEP := 1.0 / 240.0
+
+## 压扁阶段沿枪轴的压缩比例：轴向缩短量 = `0.62 ×` 横向鼓出量。
+## 取 >0.5 是因为枪是细长件 —— 只鼓粗不缩短，在俯视里几乎看不出来。
+const PUNCH_AXIAL_RATIO := 0.62
+
+## 连射语义：每次开火把压扁**拉到至少峰值**（`punch = max(punch, peak)`），永不累加超过峰值。
+## 不用「累加 + 封顶」是因为算出来是反的：机枪 12 发/秒、每 83 ms 衰减到 20.9%，
+## 稳态只有 `0.695 × peak` —— 连射比单发还弱。刷新语义下稳态恒等于峰值，且数学上
+## 不可能鼓成气球（上界就是 `peak`）。单发枪两发相隔远，效果与「给到峰值后回弹」相同。
+
 const BULLET_COLORS := {
 	"mod_bullet_standard": Color(0.76, 0.86, 0.92),
 	"mod_bullet_sticky": Color(0.32, 0.92, 0.62),
@@ -192,6 +257,18 @@ var _reload_remaining := 0.0
 var _active_reload_duration := 0.0
 var _reload_ammo_provider: Callable
 var _recoil := 0.0
+## 弹簧状态量：`_recoil` 是当前位移（米，+Z 为后退），这是它的速度（m/s）。
+## 外部（测试/调试）可以直接 set `_recoil`，速度保持 0 ⇒ 弹簧会把它拉回 0 并过冲一次。
+var _recoil_velocity := 0.0
+## 本次使用的弹簧频率，开火时按枪型刷新；只影响回弹快慢，不改位移峰值。
+var _recoil_hz := 7.0
+## 压扁量。0 = 原尺寸；每次开火抬升到峰值，按 `PUNCH_DAMPING` 的弹簧回弹。
+var _punch := 0.0
+## 压扁的速度（1/s）。负值 = 正在弹回（枪在被拉长）。
+var _punch_velocity := 0.0
+var _punch_peak := 0.34
+var _punch_hz := 7.2
+var _punch_roll := 0.26
 var _charge_active := false
 var _charge_elapsed := 0.0
 var _charge_aim := Vector3.FORWARD
@@ -272,7 +349,7 @@ func _process(delta: float) -> void:
 			reload_progress_changed.emit(get_reload_progress(), _reload_remaining)
 	if _charge_active:
 		_charge_elapsed = minf(charge_time, _charge_elapsed + delta)
-	_recoil = lerpf(_recoil, 0.0, minf(1.0, delta * 15.0))
+	_tick_fire_feedback(delta)
 	if _visual_root != null:
 		var reload_progress := get_reload_progress()
 		var reload_arch := sin(reload_progress * PI) if is_reloading() and not character_authored_reload else 0.0
@@ -281,11 +358,22 @@ func _process(delta: float) -> void:
 		_visual_root.rotation = Vector3(
 			reload_arch * 0.24,
 			0.0,
-			-reload_arch * 0.16 + service_tick * 0.035
+			-reload_arch * 0.16 + service_tick * 0.035 - _punch * _punch_roll
+		)
+		# 形变写在 fate 基准之上，不改 `_fate_visual_multiplier` 本身（命运换装仍只有一份基准）。
+		# 无形变时 `_punch == 0` ⇒ 三个分量相等，与原「各向同性 fate 缩放」逐字一致。
+		var punch_lateral := 1.0 + _punch
+		var punch_axial := 1.0 - PUNCH_AXIAL_RATIO * _punch
+		_visual_root.scale = Vector3(
+			_fate_visual_multiplier * punch_lateral,
+			_fate_visual_multiplier * punch_lateral,
+			_fate_visual_multiplier * punch_axial
 		)
 	if _mounted_melee_time > 0.0 and _visual_root != null:
 		_visual_root.rotation.y = sin((1.0 - _mounted_melee_time / 0.45) * PI) * 1.8 - 0.9
 	# 没有冷却/换弹/蓄力/明显后坐力时，整把枪没在动，关闭 process 节省 CPU。
+	# 弹簧的速度量也要一起判：位移恰好过零那一帧 velocity 仍非零，只看 `_recoil`
+	# 会提前停机、把回弹的过冲后半段砍掉。
 	if (
 		_cooldown <= 0.0
 		and _fate_mounts.is_empty()
@@ -293,11 +381,96 @@ func _process(delta: float) -> void:
 		and _reload_remaining <= 0.0
 		and not _charge_active
 		and absf(_recoil) < 0.001
+		and absf(_recoil_velocity) < 0.005
+		and absf(_punch) < 0.003
+		and absf(_punch_velocity) < 0.02
 		and _pending_copy_waves.is_empty()
 		and _pending_secondary_shots.is_empty()
 	):
 		set_process(false)
+		_recoil = 0.0
+		_recoil_velocity = 0.0
+		_punch = 0.0
+		_punch_velocity = 0.0
+		if _visual_root != null:
+			# 停机时把缩放写回纯 fate 基准，避免最后一帧的残留形变被冻结在画面上。
+			_visual_root.scale = Vector3.ONE * _fate_visual_multiplier
 
+
+## 后坐位移 + 压扁回弹的一次积分。两个通道都是欠阻尼弹簧，所以都会过零反冲：
+## 位移反向缩一下、压扁反向拉长一下（squash → stretch）。只写表现量：
+## 不写 Player3D、不写弹道、不改冷却/射速/伤害、不参与命中判定。
+func _tick_fire_feedback(delta: float) -> void:
+	if delta <= 0.0:
+		return
+	# —— 位移弹簧 ——
+	if absf(_recoil) < 0.0005 and absf(_recoil_velocity) < 0.005:
+		# 收敛判据：位移与速度同时够小就归零，避免永远停在 1e-6 之间反复唤醒。
+		_recoil = 0.0
+		_recoil_velocity = 0.0
+	else:
+		var recoil_step := _integrate_spring(
+			_recoil, _recoil_velocity, TAU * maxf(1.0, _recoil_hz), RECOIL_DAMPING, delta
+		)
+		_recoil = recoil_step.x
+		_recoil_velocity = recoil_step.y
+	# —— 压扁弹簧 ——
+	if absf(_punch) < 0.0005 and absf(_punch_velocity) < 0.005:
+		_punch = 0.0
+		_punch_velocity = 0.0
+	else:
+		var punch_step := _integrate_spring(
+			_punch, _punch_velocity, TAU * maxf(1.0, _punch_hz), PUNCH_DAMPING, delta
+		)
+		_punch = punch_step.x
+		_punch_velocity = punch_step.y
+
+
+## `x'' + 2ζωx' + ω²x = 0` 的半隐式欧拉，固定子步（见 `RECOIL_MAX_INTEGRATION_STEP`）。
+## 返回 `Vector2(位移, 速度)`。
+func _integrate_spring(x: float, v: float, omega: float, damping_ratio: float, delta: float) -> Vector2:
+	var damping := 2.0 * damping_ratio * omega
+	var remaining := delta
+	while remaining > 0.0:
+		var step := minf(remaining, RECOIL_MAX_INTEGRATION_STEP)
+		v += (-omega * omega * x - damping * v) * step
+		x += v * step
+		remaining -= step
+	return Vector2(x, v)
+
+
+## 开火瞬间抬升两个通道。位移是**直接赋值**而不是给初速度：
+## 保持 `_recoil` = 当前位移（米）这一语义，外部 set("_recoil", x) 的调试与既有
+## 验收用例（画枪口对齐线时手动摆一个后坐位）仍然成立。
+##
+## 压扁是**拉到至少峰值**（`max(punch, peak)`）：单发看是一记完整的「压扁→弹回」，
+## 连射看是每发重新拉满的持续脉动。上界恒为 `peak`，不会随射速累加。
+func _apply_fire_feedback() -> void:
+	var feedback: Dictionary = GUN_FIRE_FEEDBACK.get(gun_id, DEFAULT_FIRE_FEEDBACK)
+	_recoil_hz = maxf(1.0, float(feedback.get("hz", 7.0)))
+	_recoil = maxf(0.0, float(feedback.get("kick_m", 0.130)))
+	_recoil_velocity = 0.0
+	if is_melee_weapon():
+		# 近战挥击由 PlayerMeleeCombat3D 的动作子状态机负责，枪身后坐/压扁不适用。
+		_punch = 0.0
+		_punch_velocity = 0.0
+		_punch_peak = 0.0
+		return
+	_punch_peak = maxf(0.0, float(feedback.get("punch", 0.34)))
+	_punch_hz = maxf(1.0, float(feedback.get("punch_hz", 7.2)))
+	_punch_roll = float(feedback.get("roll", 0.26))
+	# 刷新到至少峰值：单发枪等价于「给到峰值」，连射枪每发重新拉满 ⇒ 持续强脉动。
+	_punch = maxf(_punch, _punch_peak)
+	_punch_velocity = 0.0
+
+
+func _reset_fire_feedback() -> void:
+	_recoil = 0.0
+	_recoil_velocity = 0.0
+	_punch = 0.0
+	_punch_velocity = 0.0
+	_punch_peak = 0.0
+	_punch_roll = 0.0
 
 func configure(p_gun_id: String, p_bullet_id: String) -> bool:
 	_pending_copy_waves.clear()
@@ -307,7 +480,7 @@ func configure(p_gun_id: String, p_bullet_id: String) -> bool:
 	cancel_reload()
 	cancel_charge()
 	_cooldown = 0.0
-	_recoil = 0.0
+	_reset_fire_feedback()
 	var gun_node := BlueprintRegistry.create_assembly_node(p_gun_id)
 	if gun_node == null:
 		return false
@@ -358,7 +531,7 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 	cancel_reload()
 	cancel_charge()
 	_cooldown = 0.0
-	_recoil = 0.0
+	_reset_fire_feedback()
 	if tree == null or tree.get_root() == null:
 		clear_weapon()
 		return false
@@ -481,6 +654,7 @@ func _build_melee_profile(stats: Dictionary) -> Dictionary:
 func clear_weapon() -> void:
 	cancel_reload()
 	cancel_charge()
+	_reset_fire_feedback()
 	gun_id = ""
 	bullet_id = ""
 	bullet_geometry = BULLET_GEOMETRY_NEUTRAL.duplicate()
@@ -550,7 +724,7 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 	_fire_sequence += 1
 	_mount_pulse = 0.14
 	_update_fate_mounts()
-	_recoil = 0.16 if gun_id == "bp_shotgun" or gun_id == "bp_launcher" else 0.09
+	_apply_fire_feedback()
 	# 开火触发后坐力衰减，重新打开 process。
 	set_process(true)
 	var behavior := _projectile_behavior.duplicate(true)
@@ -947,6 +1121,17 @@ func get_snapshot() -> Dictionary:
 		"fate_visual_multiplier": _fate_visual_multiplier,
 		"visual_local_scale": _visual_root.scale if _visual_root != null else Vector3.ZERO,
 		"visual_global_scale": _visual_root.global_basis.get_scale() if _visual_root != null and _visual_root.is_inside_tree() else Vector3.ZERO,
+		# 开火反馈（2026-11-02）：后坐位移/速度/弹簧频率与形变振幅，只读暴露给验收。
+		# `recoil_offset` 单位米（+Z 为后退），`visual_punch` 无量纲（见 GUN_FIRE_FEEDBACK）。
+		"recoil_offset": _recoil,
+		"recoil_velocity": _recoil_velocity,
+		"recoil_hz": _recoil_hz,
+		"visual_punch": _punch,
+		"visual_punch_velocity": _punch_velocity,
+		"visual_punch_peak": _punch_peak,
+		"visual_punch_hz": _punch_hz,
+		"visual_punch_roll": _punch_roll,
+		"fire_feedback_id": gun_id,
 		"fate_scale_is_relative_to_mount": true,
 		"render_layers": render_layers,
 		"is_3d": true,
@@ -1037,6 +1222,11 @@ func _rebuild_visual() -> void:
 	# 只乘不可变的当前挂点基础，绝不把命运倍率写成旧资产绝对尺寸。
 	_visual_root.scale = Vector3.ONE * _fate_visual_multiplier
 	_visual_root.set_meta("fate_scale_space", "current_mount_baseline")
+	# 重建视觉时清掉开火反馈状态：旧节点带着压扁被释放，新节点的 scale 必须是纯 fate 基准，
+	# 否则换枪那一帧会继承上一把枪没弹回的压扁。
+	_punch = 0.0
+	_punch_velocity = 0.0
+	_punch_peak = 0.0
 	if is_melee_weapon():
 		var melee_scene := MELEE_VISUAL_SCENES.get(gun_id) as PackedScene
 		if melee_scene != null:

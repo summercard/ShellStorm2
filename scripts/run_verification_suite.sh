@@ -199,6 +199,7 @@ core_scenes=(
   verify_hologram_unlock
   verify_player3d_directional_motion
   verify_player3d_firing_motion
+  verify_weapon_fire_feedback
   verify_player3d_weapon_switch
   verify_player3d_reload_motion
   verify_base99_radio_sound
@@ -362,6 +363,7 @@ core_scenes=(
   verify_base99_stair_walkable_v021
   verify_base99_wall_visual_replacement
   verify_base_facility_interaction_zones
+  verify_base_npc_flow
   verify_base_optional_facilities_removed
   verify_base_overhaul_flow
   verify_block00_floor98_assembly
