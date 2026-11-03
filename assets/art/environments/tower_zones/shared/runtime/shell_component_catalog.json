@@ -4862,10 +4862,10 @@
         0.495555,
         2.031112
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "受击弹性抖动，1.25秒间隔内3次连续命中后震落实际承载的小物，一次释放、不重复震落，不销毁家具；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-SIDE-TABLE",
@@ -4881,10 +4881,10 @@
         0.644627,
         0.629259
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "受击弹性抖动，1.25秒间隔内3次连续命中后震落实际承载的小物，一次释放、不重复震落，不销毁家具；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-CONSOLE",
@@ -4900,10 +4900,10 @@
         0.85,
         0.4925
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "受击弹性抖动，1.25秒间隔内3次连续命中后震落实际承载的小物，一次释放、不重复震落，不销毁家具；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-RECEPTION-DESK",
@@ -4919,10 +4919,10 @@
         1.266835,
         1.3175
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "受击弹性抖动，1.25秒间隔内3次连续命中后震落实际承载的小物，一次释放、不重复震落，不销毁家具；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-BED",
@@ -4976,10 +4976,10 @@
         0.61,
         0.5925
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "受击弹性抖动，1.25秒间隔内3次连续命中后震落实际承载的小物，一次释放、不重复震落，不销毁家具；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-WARDROBE",
@@ -5014,10 +5014,10 @@
         2.174724,
         0.4975
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "受击弹性抖动、连击掉书、耐久/连击倒塌，一次压伤并挤出存活者；如顶面有物件则连击/倒塌震落；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-LUGGAGE-CART",
@@ -5109,10 +5109,10 @@
         0.6975,
         0.384
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "直接子弹命中或从家具掉落落地均爆裂；同一火焰伤害场持续5秒真实时间，半径1.25m，每0.5秒基础伤害10，关闭原灯；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-PLANT-LARGE",
@@ -5128,10 +5128,10 @@
         1.609846,
         1.511668
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "仅有效伤害受击抖动/耐久耗尽碎裂，走路接触不碎；如位于桌上可随家具受击震落并摔碎；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-PLANT-COMPACT",
@@ -5147,10 +5147,10 @@
         1.375723,
         0.996497
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "仅有效伤害受击抖动/耐久耗尽碎裂，走路接触不碎；如位于桌上可随家具受击震落并摔碎；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
@@ -5166,10 +5166,10 @@
         1.166766,
         0.585129
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "仅有效伤害受击抖动/耐久耗尽碎裂，走路接触不碎；如位于桌上可随家具受击震落并摔碎；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-BATHTUB",
@@ -5204,10 +5204,10 @@
         1.17707,
         0.6708
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "受击弹性抖动，1.25秒间隔内3次连续命中后震落实际承载的小物，一次释放、不重复震落，不销毁家具；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-MIRROR",
@@ -5280,10 +5280,10 @@
         0.64,
         0.32
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "实际桌面物件由支撑家具连击震落，落地倒伏留存，无拾取或奖励；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-DESK-DOCUMENTS",
@@ -5299,10 +5299,10 @@
         0.0505,
         0.281344
       ],
-      "collision_owner": "none",
+      "collision_owner": "ReactiveProp3D",
       "kind": "generic",
       "source_catalog": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_catalog.json",
-      "note": "远征03复古公馆组件；墙高2.8m；独立导入验收，未装配正式房间。"
+      "note": "实际桌面物件由支撑家具连击震落，落地倒伏留存，无拾取或奖励；r8+r9正式状态化/房间账；docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
     },
     {
       "component_id": "ENV-EXP03-MANOR-BATH-SCREEN",

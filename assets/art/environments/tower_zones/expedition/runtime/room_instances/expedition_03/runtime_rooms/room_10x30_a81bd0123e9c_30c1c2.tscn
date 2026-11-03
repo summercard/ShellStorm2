@@ -821,7 +821,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_wx7hs")
 
 [node name="Theme_012_ExhibitFlower" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=819290288 instance=ExtResource("7_drcjx")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 1.8, -11.4)
+transform = Transform3D(1.25,0,0,0,1.25,0,0,0,1.25,0,1.8,-11.4)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -840,26 +840,6 @@ metadata/component_family = "plant"
 metadata/grid_unit_m = 0.0
 metadata/theme_placement = "档案过廊"
 metadata/authored_prop_scale = 1.25
-
-[node name="Theme_013_WallLamp_01" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2109875080 instance=ExtResource("8_om6wr")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.8, -11.4)
-metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "暖光黄铜台灯"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "lamp"
-metadata/grid_unit_m = 0.0
-metadata/theme_placement = "档案过廊"
 
 [node name="WallLamp_01_Light" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=1075760802]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -14.2)
@@ -893,27 +873,6 @@ metadata/theme_placement = "档案过廊"
 [node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_014_Wall_console/LayoutCollision" unique_id=921370647]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_qb0pw")
-
-[node name="Theme_015_ExhibitFlower" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1971167311 instance=ExtResource("7_drcjx")]
-transform = Transform3D(-2.5, 0, -2.1855695e-07, 0, 2.5, 0, 2.1855695e-07, 0, -2.5, 0, 1.8, 11.4)
-metadata/asset_id = "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "红花插花摆件"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(0.497855, 1.16677, 0.585129)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "plant"
-metadata/grid_unit_m = 0.0
-metadata/theme_placement = "档案过廊"
-metadata/authored_prop_scale = 1.25
 
 [node name="Theme_016_WallLamp_02" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=2146557004 instance=ExtResource("8_om6wr")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.8, 11.4)
@@ -995,7 +954,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_b4d0s")
 
 [node name="Theme_019_ExhibitFlower" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=130062786 instance=ExtResource("7_drcjx")]
-transform = Transform3D(-1.09278474e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278474e-07, -0.59999967, 1.8, -9.2)
+transform = Transform3D(-5.4639237e-08,0,1.25,0,1.25,0,-1.25,0,-5.4639237e-08,-0.599999666,1.79999995,-9.67399979)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1016,7 +975,7 @@ metadata/theme_placement = "档案过廊"
 metadata/authored_prop_scale = 1.25
 
 [node name="Theme_020_WallLamp_03" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1025906781 instance=ExtResource("8_om6wr")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.59999967, 1.8, -9.2)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2,-0.599999607,1.79999995,-8.48768139)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1069,7 +1028,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_oxxw2")
 
 [node name="Theme_022_ExhibitFlower" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=901089731 instance=ExtResource("7_drcjx")]
-transform = Transform3D(-1.09278474e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278474e-07, -3.7999997, 1.8, 10.8)
+transform = Transform3D(-5.4639237e-08,0,1.25,0,1.25,0,-1.25,0,-5.4639237e-08,-3.7999997,1.8,10.8)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1088,26 +1047,6 @@ metadata/component_family = "plant"
 metadata/grid_unit_m = 0.0
 metadata/theme_placement = "档案过廊"
 metadata/authored_prop_scale = 1.25
-
-[node name="Theme_023_WallLamp_04" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1790799399 instance=ExtResource("8_om6wr")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3.7999997, 1.8, 10.8)
-metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "暖光黄铜台灯"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_table_lamp/manor_table_lamp_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(0.384, 0.6975, 0.384)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "lamp"
-metadata/grid_unit_m = 0.0
-metadata/theme_placement = "档案过廊"
 
 [node name="WallLamp_04_Light" type="OmniLight3D" parent="ArtComponents/ThemedLayout" unique_id=1571805391]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2, 1.4, 12.8)
@@ -1168,27 +1107,6 @@ metadata/theme_placement = "档案过廊"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_om6wr")
 
-[node name="Theme_026_ExhibitFlower" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1838295033 instance=ExtResource("7_drcjx")]
-transform = Transform3D(-1.09278474e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278474e-07, -1.3999999, 1.8, -3)
-metadata/asset_id = "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT"
-metadata/asset_version = "v017"
-metadata/level_id = "expedition_03"
-metadata/display_name_zh = "红花插花摆件"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_flower_arrangement/manor_flower_arrangement_source_v017.blend"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "+Z"
-metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(0.497855, 1.16677, 0.585129)
-metadata/room_owned_geometry = false
-metadata/preserve_authored_palette = true
-metadata/component_family = "plant"
-metadata/grid_unit_m = 0.0
-metadata/theme_placement = "档案过廊"
-metadata/authored_prop_scale = 1.25
-
 [node name="Theme_027_WallLamp_05" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=540239379 instance=ExtResource("8_om6wr")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.3999999, 1.8, -3)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
@@ -1243,7 +1161,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("BoxShape3D_2h4o5")
 
 [node name="Theme_029_ExhibitFlower" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=504931546 instance=ExtResource("7_drcjx")]
-transform = Transform3D(-1.09278474e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278474e-07, -1.3999999, 1.8, 0)
+transform = Transform3D(-5.4639237e-08,0,1.25,0,1.25,0,-1.25,0,-5.4639237e-08,-1.39999986,1.79999995,-0.474000037)
 metadata/asset_id = "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -1264,7 +1182,7 @@ metadata/theme_placement = "档案过廊"
 metadata/authored_prop_scale = 1.25
 
 [node name="Theme_030_WallLamp_06" type="Node3D" parent="ArtComponents/ThemedLayout" unique_id=1374879243 instance=ExtResource("8_om6wr")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.3999999, 1.8, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2,-1.39999986,1.79999995,0.712318599)
 metadata/asset_id = "ENV-EXP03-MANOR-TABLE-LAMP"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"

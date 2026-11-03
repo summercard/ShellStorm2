@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-31",
+  "date": "2026-11-03",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -12169,6 +12169,114 @@
         17
       ],
       "sha256": "766e6a793f31867b5557121e27a3f93b2ef73ab6a7b86d8f49f1607c3d626350"
+    },
+    {
+      "path": "art_source/items_weapons/props/special_grenade/source/itm_special_grenade_source_v001.blend",
+      "bytes": 115031,
+      "family": "ITM-SPECIAL-GRENADE:preview",
+      "version": [
+        1
+      ],
+      "sha256": "f55aaddeefe89946b2ef04ac85eb9fcdb4f0cb11da3009e715f74582517162d7"
+    },
+    {
+      "path": "art_source/items_weapons/props/special_grenade/source/itm_special_grenade_ground_source_v001.blend",
+      "bytes": 109804,
+      "family": "ITM-SPECIAL-GRENADE:ground",
+      "version": [
+        1
+      ],
+      "sha256": "5663ee85441457af81991eba9d58d7a49487f99153a0301e9dbb997369c32b78"
+    },
+    {
+      "path": "art_source/items_weapons/props/special_molotov/source/itm_special_molotov_source_v001.blend",
+      "bytes": 108088,
+      "family": "ITM-SPECIAL-MOLOTOV:preview",
+      "version": [
+        1
+      ],
+      "sha256": "26811f6a227a23d7f7e7890d6cafe3662e34e1df936719ba4fdc71471ca402db"
+    },
+    {
+      "path": "art_source/items_weapons/props/special_molotov/source/itm_special_molotov_ground_source_v001.blend",
+      "bytes": 105550,
+      "family": "ITM-SPECIAL-MOLOTOV:ground",
+      "version": [
+        1
+      ],
+      "sha256": "f2c2cef3d90493789871c8c34bcd263043357d543b92c650541fb6cc7950f7b5"
+    },
+    {
+      "path": "art_source/items_weapons/props/special_gasoline/source/itm_special_gasoline_source_v001.blend",
+      "bytes": 112714,
+      "family": "ITM-SPECIAL-GASOLINE:preview",
+      "version": [
+        1
+      ],
+      "sha256": "50d3d2d908941955c592d9942024c744061284264dd97cd319e7fe7220a17e3a"
+    },
+    {
+      "path": "art_source/items_weapons/props/special_gasoline/source/itm_special_gasoline_ground_source_v001.blend",
+      "bytes": 103991,
+      "family": "ITM-SPECIAL-GASOLINE:ground",
+      "version": [
+        1
+      ],
+      "sha256": "31f25d7be98bde0d5593977d833f4e4a3265593967c5a5157c800684ee875728"
+    },
+    {
+      "path": "art_source/audio/sfx/AUD-SFX-SPECIAL-THROW/source/special_throw_master_v001.wav",
+      "bytes": 31796,
+      "family": "AUD-SFX-SPECIAL-THROW",
+      "version": [
+        1
+      ],
+      "sha256": "2753f9440adfd02a594f3ab1cc0afa5377d893719bb523e6289c58c85bcc0825"
+    },
+    {
+      "path": "art_source/audio/sfx/AUD-SFX-SPECIAL-BLAST/source/special_blast_master_v001.wav",
+      "bytes": 112499,
+      "family": "AUD-SFX-SPECIAL-BLAST",
+      "version": [
+        1
+      ],
+      "sha256": "caae67bdaff7cc87ee263644e3d56a4cb194cd09514e643e03d2692f853c3c89"
+    },
+    {
+      "path": "art_source/audio/sfx/AUD-SFX-SPECIAL-GLASS/source/special_glass_master_v001.wav",
+      "bytes": 82070,
+      "family": "AUD-SFX-SPECIAL-GLASS",
+      "version": [
+        1
+      ],
+      "sha256": "776b238a32e4819a6bc1d0228a9428fef4ff3b36577fe61f0320319f708e99af"
+    },
+    {
+      "path": "art_source/audio/sfx/AUD-SFX-SPECIAL-POUR/source/special_pour_master_v001.wav",
+      "bytes": 42380,
+      "family": "AUD-SFX-SPECIAL-POUR",
+      "version": [
+        1
+      ],
+      "sha256": "047f5e31881c483afd04304e530d9010a6ea913e21614c29df1d8ad0133e0191"
+    },
+    {
+      "path": "art_source/audio/sfx/AUD-SFX-SPECIAL-IGNITE/source/special_ignite_master_v001.wav",
+      "bytes": 55610,
+      "family": "AUD-SFX-SPECIAL-IGNITE",
+      "version": [
+        1
+      ],
+      "sha256": "69d962e0fabc3713e538d7fe0bef1081d9fa10abff873e346c1f5414eeb82068"
+    },
+    {
+      "path": "art_source/audio/sfx/AUD-SFX-SPECIAL-FIRE-LOOP/source/special_fire_loop_master_v001.wav",
+      "bytes": 187910,
+      "family": "AUD-SFX-SPECIAL-FIRE-LOOP",
+      "version": [
+        1
+      ],
+      "sha256": "3f2353fa6152d1e8866f8dad39025bf6528c72bf9f7a251ebccad16708c521aa"
     }
   ],
   "authoring_root": "art_source",
