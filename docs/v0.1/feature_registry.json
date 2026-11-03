@@ -654,10 +654,15 @@
         "docs/v0.1/04_技术施工_战斗与局内成长.md"
       ],
       "development_records": [
+        "docs/v0.1/development/2026-11-03_expedition_interaction_ui.md",
         "docs/v0.1/development/2026-09-12_g02_g04_independent_feature_docs.md",
         "docs/v0.1/development/2026-09-24_combat_economy_handoff.md"
       ],
       "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_expedition_interaction_ui"
+        },
         {
           "kind": "scene",
           "id": "verify_run_merchant_transaction"

@@ -1,3 +1,19 @@
+- 2026-11-03 · WORLD-PLAN：[远征03 安全屋出生点归中与中央五件撤除](2026-11-03_expedition03_safe_room_center.md)。出生点落房心（`expedition_03` 加入 `_expedition_entry_spawn_offset` 的 ID 名单，02 及后续新关仍走「偏 4 m」默认分支）；中央五件经新能力段 `furnishing.fixed_lobby_clutter_enabled=false` 整批不摆（代码只认键、不认关卡 ID）。改前 4 条红（偏移 4.000 m、中央 5 件、流送重建复现）、改后全绿；随机撒点 713 件 / 18 间房与作者件 24 件均未误伤；`layout_id=f00_b5641fb3a7ead30d` 与 11-02 记录逐字相同 ⇒ 既有存档不失配。**同轮记下一处文档与实现的漂移：11-02 记录声称已加 `fixed_lobby_clutter_enabled` 并实测 `central_fixed_clutter: 0`，而全仓 grep 与全历史 `git log -S` 均无此键 —— 记录写了、实现没落地，故业主一直看得见那五件。**
+
+- 2026-11-03 · ELITE / EXPEDITION99：[收租人投放到远征99 boss 前置房](2026-11-03_expedition99_pre_boss_elite.md)。`room_01` 新增房间级 `elite_id` 能力（**追加**而非替换，普通战斗保留）；`MonsterInjector` 支持点名精英绕过楼层窗口；跨 5 文件的字段透传链补齐。实测该房「普通怪 3 + 收租人 1」。关卡解耦门禁 violations 0。
+
+- 2026-11-03 · ELITE / ASSET-PIPELINE：[第二只正式精英夺械者“收租人”](2026-11-03_second_elite_arms_taker.md)。`ENM-ELITE-ARMS-TAKER-3D` 正式定名并归位（原执行方自拟 slug `enm_elite_tvone01`，tscn 引用断链 + 布局不符规范）；18 条单状态动作合并为 41 骨/18 剪辑动画母版（精英首次真骨骼动画）；`EnemyAvatar3D.sync_presentation` 新增精英分支，判据为「表现根有无 `sync_state`」而非写死 `elite_id`；投放 94—92F，与首只 98—96F 窗口互不重叠。账本三处登记 + 总览 8 条公式范围同步扩行。`verify_second_elite_arms_taker` 与首只验收回归均 exit 0。
+
+- 2026-11-03 · WORLD-BLOCKS：[远征03场景雾定值](2026-11-03_expedition03_scene_fog.md)。整关常驻距离雾 0.0200 / 体积雾 0.0057（全塔基准 0.030/0.009）；`atmosphere_*_override` 这条从未生效的关卡级雾通道修复——关卡值与房型雾档拆成两组变量，换房不再抹掉关卡值；新增 `verify_expedition03_scene_fog` 盯住该契约。其他关卡逐字不变。
+
+- 2026-11-03 · SAVE-PROFILE / WORLD-INTERACTIVE-CLUTTER：[默认灯态回归修复](2026-11-03_default_lights_regression.md)。基地/安全屋的默认灯态不再被空陈设账覆盖，旧档缺灯态字段不按false补齐；明确保存或主线关灯保持原行为。
+
+- 2026-11-03 · RUN-MERCHANT / UI-HUD：[远征贩卖机共用99F页面与真实交互验证](2026-11-03_expedition_interaction_ui.md)。局内库存/价格/金币与事务不变；修复旧占位页面，补原生GUI验收。
+
+- 2026-11-03 · SAVE-PROFILE / WORLD-INTERACTIVE-CLUTTER：[场景退出存档红字修复](2026-11-03_checkpoint_teardown.md)。修复 `capture_reactive_prop_states` 的空树查询与离树全局坐标读取；保留最终家具位置与退出的一次提交。
+
+- 2026-11-03 · SPECIAL-ITEMS r7：[特殊道具HUD图标缩至36px，数量/余量统一弹药字体](2026-11-03_special_items.md)。手雷/汽油原生截图与HUD专项通过。
+
 - 2026-11-03 · SPECIAL-ITEMS：[三个特殊道具、系统与UI](2026-11-03_special_items.md)。独立数据与资产链，99F贩卖机接入。
 
 - [书柜落地反馈与桌面盆栽减半](2026-11-03_bookcase_dust_tabletop_scale.md)：3团烟尘、轻震屏；76个桌面盆栽减半，地面保持。

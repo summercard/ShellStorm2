@@ -86,3 +86,11 @@ Godot 4.7.2 Windows，Blender 4.5。Runner在Autoload之前隔离APPDATA/LOCALAP
 ## 用户反馈修订 r6
 
 修复特殊道具伤害仅遍历角色而遗漏交互物的问题：易碎物、家具和已有受伤接口的交互物纳入去重目标列表；用实际视觉边界命中并排除自身阻挡。真实花瓶手雷破碎、家具单次反馈、火焰破坏及隔墙保护专项通过。汽油启用局部暖光；共享火苗/灯光和油迹在最后0.6秒平滑淡出，5秒伤害规则保持。85项核心、19项正式接线、10项交互/照明/淡出专项通过，Windows原生暗场亮灯与渐隐截图通过，非预期脚本/引擎错误0。
+
+## 用户反馈修订 r7
+
+按用户截图缩小右下特殊道具图标：渲染区域从62×62px改为36×36px，保持原左侧起点；透明布局区拓宽到96px，让数字位于图标右侧。数量与汽油余量直接复用正式弹药Label的字体、21px字号、白色和5px描边；汽油余量/容量与瓶数分两行，不与模型叠放。UI-SPECIAL-ITEM-HUD升级v002；设计r7、UI分账本、独立XLSX/JSON、资产SHA与无损基线只更新此目标资产。
+
+Windows原生1280×720手雷/汽油HUD截图通过；verify_hud_presenter_3d和19项verify_special_items_integration均exit0，非预期脚本/引擎错误0。媒体域、45项功能追溯、1433条九分账本无损核对及运行资产命名门禁exit0。UI完整账本exit1：保留5条既有哈希差异，目标HUD条目无差异；反向核对仅M24/N24/T24/Y24改值及新增日志行，其余旧登记单元格与未涉及资产文件均未修改。文档总门禁exit1：15处历史断链和4个既有未注册场景；本次新增链接无问题，详见同目录documentation.log。
+
+本次证据位于工程外sessions/2026-11-03_special_items/hud_checks/及visual/special_items_hud.png、special_items_hud_gasoline.png。未执行Android、手柄、其他分辨率及全量战斗套件；本次修改仅HUD排版和字体。

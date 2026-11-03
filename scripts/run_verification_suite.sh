@@ -245,6 +245,7 @@ core_scenes=(
   verify_secret_branch_flow
   verify_expedition_room_static_scenes
   verify_expedition03_room_whitebox
+  verify_expedition03_scene_fog
   verify_vision_target_self_occlusion
   verify_egt_flow_assembler
   verify_egt_plan_bridge
@@ -254,6 +255,8 @@ core_scenes=(
   probe_expedition03_entry_chain
   probe_expedition03_playable
   probe_authored_breakable_clutter
+  probe_second_elite_motion
+  probe_expedition99_pre_boss_elite
   verify_expedition_camera_door_proxies
   verify_expedition_room_type_component_replay
   verify_test_level_99_flow
@@ -377,6 +380,8 @@ core_scenes=(
   verify_enemy_stimulus_activation
   verify_first_elite_deployment_flow
   verify_first_elite_growth_flow
+  verify_second_elite_arms_taker
+  verify_expedition99_pre_boss_elite
   verify_formal_3d_asset_import
   verify_main_entry_cinematic_flow
   verify_main_entry_realtime_sun_flow
@@ -420,6 +425,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+	verify_expedition_interaction_ui
   verify_rooftop_guidance_clutter
   verify_player3d_melee_special_visual
   verify_inventory_experience_visual
