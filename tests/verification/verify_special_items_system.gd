@@ -150,8 +150,9 @@ func _run() -> void:
 	actor.position = Vector3(0, 0, 0)
 	_check(bool(controller.request_use().success), "molotov actual throw")
 	world.advance(1.0)
-	_check(world.fires.size() == 1 and float(world.fires[0].radius) == 2.4, "molotov impacts and creates configured fire field")
+	_check(world.fires.size() == 1 and float(world.fires[0].radius) == LampFirePatch3D.DEFAULT_RADIUS, "molotov impacts and creates configured fire field")
 	_check(world.fires.size() == 1 and float(world.fires[0].until) - world.clock > 4.6 and float(world.fires[0].until) - world.clock <= 5.0, "molotov lifetime independently remains five seconds")
+	_check((world.fires[0].visual as Array).size() == 5 and str((world.fires[0].visual[0] as Node).get_meta("asset_id", "")) == "VFX-FATE-FIRE-3D", "molotov shares the lamp flame prefab and composition")
 	world.clear()
 	await get_tree().process_frame
 	# Purchase through the real save/transaction owner; repeated transaction is idempotent.

@@ -1,8 +1,93 @@
 {
   "schema": "special_item_catalog_v1",
   "items": [
-    {"id":"special_grenade","name":"手雷","description":"特殊槽装备 · 右键抛掷 · 落地爆炸，3米内90伤害。","type":"special_item","subtype":"grenade","rarity":"uncommon","stack_max":10,"grid_size":[1,1],"asset_id":"ITM-SPECIAL-GRENADE","price":60,"base_buy_price":60,"base_sell_price":30,"base_shelf_order":8,"cooldown":1.2,"throw_distance":8.0,"flight_time":0.8,"radius":3.0,"damage":90,"dimensions_m":[0.16,0.16,0.24]},
-    {"id":"special_molotov","name":"燃烧瓶","description":"特殊槽装备 · 右键抛掷 · 2.4米范围燃烧5秒，每秒12伤害，可点燃汽油。","type":"special_item","subtype":"molotov","rarity":"uncommon","stack_max":10,"grid_size":[1,1],"asset_id":"ITM-SPECIAL-MOLOTOV","price":50,"base_buy_price":50,"base_sell_price":25,"base_shelf_order":9,"cooldown":1.5,"throw_distance":8.0,"flight_time":0.8,"radius":2.4,"damage_per_tick":6,"duration":5.0,"dimensions_m":[0.15,0.15,0.36]},
-    {"id":"special_gasoline","name":"汽油瓶","description":"特殊槽装备 · 按住右键沿路铺油 · 每瓶25份。遇火连片依次点燃，每片燃烧5秒。","type":"special_item","subtype":"gasoline","rarity":"uncommon","stack_max":10,"grid_size":[1,1],"asset_id":"ITM-SPECIAL-GASOLINE","price":45,"base_buy_price":45,"base_sell_price":22,"base_shelf_order":10,"cooldown":0.15,"fuel_capacity":25,"spacing":0.7,"radius":0.58,"dry_duration":45.0,"duration":5.0,"damage_per_tick":8,"spread_delay":0.12,"dimensions_m":[0.24,0.13,0.30]}
+    {
+      "id": "special_grenade",
+      "name": "手雷",
+      "description": "特殊槽装备 · 右键抛掷 · 落地爆炸，3米内90伤害。",
+      "type": "special_item",
+      "subtype": "grenade",
+      "rarity": "uncommon",
+      "stack_max": 10,
+      "grid_size": [
+        1,
+        1
+      ],
+      "asset_id": "ITM-SPECIAL-GRENADE",
+      "price": 60,
+      "base_buy_price": 60,
+      "base_sell_price": 30,
+      "base_shelf_order": 8,
+      "cooldown": 1.2,
+      "throw_distance": 8.0,
+      "flight_time": 0.8,
+      "radius": 3.0,
+      "damage": 90,
+      "dimensions_m": [
+        0.16,
+        0.16,
+        0.24
+      ]
+    },
+    {
+      "id": "special_molotov",
+      "name": "燃烧瓶",
+      "description": "特殊槽装备 · 右键抛掷 · 1.25米范围燃烧5秒，每秒12伤害，可点燃汽油。",
+      "type": "special_item",
+      "subtype": "molotov",
+      "rarity": "uncommon",
+      "stack_max": 10,
+      "grid_size": [
+        1,
+        1
+      ],
+      "asset_id": "ITM-SPECIAL-MOLOTOV",
+      "price": 50,
+      "base_buy_price": 50,
+      "base_sell_price": 25,
+      "base_shelf_order": 9,
+      "cooldown": 1.5,
+      "throw_distance": 8.0,
+      "flight_time": 0.8,
+      "radius": 1.25,
+      "damage_per_tick": 6,
+      "duration": 5.0,
+      "dimensions_m": [
+        0.15,
+        0.15,
+        0.36
+      ]
+    },
+    {
+      "id": "special_gasoline",
+      "name": "汽油瓶",
+      "description": "特殊槽装备 · 按住右键沿路铺油 · 每瓶25份。遇火连片依次点燃，每片燃烧5秒。",
+      "type": "special_item",
+      "subtype": "gasoline",
+      "rarity": "uncommon",
+      "stack_max": 10,
+      "grid_size": [
+        1,
+        1
+      ],
+      "asset_id": "ITM-SPECIAL-GASOLINE",
+      "price": 45,
+      "base_buy_price": 45,
+      "base_sell_price": 22,
+      "base_shelf_order": 10,
+      "cooldown": 0.15,
+      "fuel_capacity": 25,
+      "spacing": 0.7,
+      "radius": 0.58,
+      "dry_duration": 45.0,
+      "duration": 5.0,
+      "damage_per_tick": 8,
+      "spread_delay": 0.12,
+      "dimensions_m": [
+        0.24,
+        0.13,
+        0.3
+      ]
+    }
   ]
 }

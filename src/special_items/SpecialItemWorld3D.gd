@@ -86,7 +86,7 @@ func deposit_oil(at: Vector3, attacker: Node3D) -> Dictionary:
 func add_fire(at: Vector3, radius: float, duration: float, damage: int, attacker: Node3D) -> bool:
 	if fires.size() >= MAX_FIRE:
 		return false
-	var visual := _effect(VfxPool3D.FX01_SPECIAL_FIRE, at + Vector3.UP * 0.035, radius, duration)
+	var visual := LampFirePatch3D.create_ground_flames(_acquire_ground_flame, at)
 	fires.append({"position": at, "radius": radius, "until": clock + duration, "damage": damage, "attacker": attacker, "visual": visual})
 	_ignite_audio(at)
 	return true
@@ -267,6 +267,10 @@ func _effect(asset_id: StringName, at: Vector3, radius: float, duration: float) 
 	return effect
 
 func _finish(effect: Variant) -> void:
+	if effect is Array:
+		for child: Variant in effect:
+			_finish(child)
+		return
 	if is_instance_valid(effect):
 		(effect as VfxEffectBase3D).finish()
 
@@ -312,3 +316,10 @@ func ignite_bullet_segment(start: Vector3, end: Vector3) -> void:
 		if (a+segment*t).distance_to(Vector2(point.x,point.z)) <= radius:
 			patch.ignite_at = clock
 	_step_fire_and_oil()
+
+func _acquire_ground_flame(asset_id: StringName, at: Vector3, size: float, context: Dictionary) -> VfxEffectBase3D:
+	var effect := VfxPool3D.create_unpooled(asset_id)
+	if effect != null:
+		add_child(effect)
+		effect.activate(at, Color("ff7b27"), size, context)
+	return effect

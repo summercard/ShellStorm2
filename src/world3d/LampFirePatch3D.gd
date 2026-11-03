@@ -6,7 +6,8 @@ signal extinguished
 
 const BURN_SECONDS := 5.0
 const TICK_SECONDS := 0.5
-var radius := 1.25
+const DEFAULT_RADIUS := 1.25
+var radius := DEFAULT_RADIUS
 var damage := 10
 var expires_at := 0.0
 var _effects: Array[VfxEffectBase3D] = []
@@ -26,12 +27,18 @@ func _ready() -> void:
 	add_child(collision)
 	if expires_at <= 0.0:
 		expires_at = Time.get_unix_time_from_system() + BURN_SECONDS
+	_effects = create_ground_flames(_acquire, global_position, radius)
+
+## Shared lamp/molotov composition: same prefab, flame size and placement.
+static func create_ground_flames(acquire: Callable, point: Vector3, area_radius: float = DEFAULT_RADIUS) -> Array[VfxEffectBase3D]:
+	var effects: Array[VfxEffectBase3D] = []
 	for index in 5:
 		var angle := (index - 1) * TAU / 4.0
-		var offset := Vector3.ZERO if index == 0 else Vector3(cos(angle), 0, sin(angle)) * radius * 0.62
-		var effect := _acquire(VfxPool3D.FX01_FATE_FIRE, global_position + offset, 1.25, {"ground_fire": true, "illuminate": index == 0})
+		var offset := Vector3.ZERO if index == 0 else Vector3(cos(angle), 0, sin(angle)) * area_radius * 0.62
+		var effect := acquire.call(VfxPool3D.FX01_FATE_FIRE, point + offset, 1.25, {"ground_fire": true, "illuminate": index == 0}) as VfxEffectBase3D
 		if effect != null:
-			_effects.append(effect)
+			effects.append(effect)
+	return effects
 
 func _acquire(asset_id: StringName, point: Vector3, size: float, context: Dictionary = {}) -> VfxEffectBase3D:
 	var pool := get_tree().get_first_node_in_group("vfx_pool_3d") as VfxPool3D

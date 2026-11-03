@@ -21,6 +21,9 @@ environment['SHELLSTORM_VERIFICATION_OUTPUT'] = str(base / 'visual')
 (base / 'visual').mkdir(parents=True, exist_ok=True)
 failed = False
 for name in (['import'] if args.import_only else args.scenes):
+    if name == 'verify_lamp_furniture_chain':
+        environment['LAMP_QA_DIR'] = str(base)
+        environment['APPDATA'] = str(base / 'userdata')
     command = [godot, '--path', str(ROOT)]
     if not args.visual:
         command.append('--headless')
