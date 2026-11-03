@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1418,
+ "asset_count": 1433,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -5888,7 +5888,7 @@
    "d": "ui"
   },
   "UI-SCREEN-INVENTORY-3D": {
-   "v": "16c5b5fc36e544a21e4730fb9152a2c0e88dfaffc1a79056edcf7cff849fcd58",
+   "v": "adea7636778d6ed8bf39bc5127576c341b960399ee41f339547404fe513be375",
    "c": "UI",
    "d": "ui"
   },
@@ -6503,7 +6503,7 @@
    "d": "scenes"
   },
   "VFX-FATE-FIRE-3D": {
-   "v": "72d03d1680211ec11ff19710f43a0ab6f32c736393167d7d177ac64cdb5cf44b",
+   "v": "bd31253b2b2a31986ddcd2055680ad52beea891a6fc68fd0b6e77eec1bf28baf",
    "c": "特效",
    "d": "vfx"
   },
@@ -6988,22 +6988,22 @@
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-COFFEE-TABLE": {
-   "v": "939fbf32836fc79d2446b2792bb826619ccd82710b446bf7ac532dd90519da86",
+   "v": "3769973176eba4f5c2894f6240961c39802975d999fe8efec45d1a66e4ca9060",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-SIDE-TABLE": {
-   "v": "967af382b7c15eeb6dfc70e4ceeb849948e95889a55a561dfd45359704f0db54",
+   "v": "62030c416514e34f8ef109b1b9f2269cc72918f8af16db8611ddf816929887df",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-CONSOLE": {
-   "v": "e2f3271642758038ffa862ce465f6e26f444cd206c72bd853ec0a299cbd0e87f",
+   "v": "2aa6a38d2fdb03957a24880ae648b504af1f72fbee88ba4883620e521168556c",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-RECEPTION-DESK": {
-   "v": "ea83779d0fab3b9c076d261dc05fe0b4c21b246b7e51b1ac32bae51d999a72e8",
+   "v": "5d43a0e56a349a1dba1919bf05d45242c259f87f880856209cf188dbe400c4b9",
    "c": "场景",
    "d": "scenes"
   },
@@ -7018,7 +7018,7 @@
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-NIGHTSTAND": {
-   "v": "204beda3d69a1f60f30e91d0ace539daa498edcd83fc71e01643f403858f8f89",
+   "v": "2308bf2412c2603ed63a0cd2d18c94fd469dc7104abee1239deaea9db9c2a144",
    "c": "场景",
    "d": "scenes"
   },
@@ -7028,7 +7028,7 @@
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-BOOKCASE": {
-   "v": "b5f0d044c6d6a77eb73cad6c846912aed860fa4c80120cf21936d6ff67865af1",
+   "v": "ad7ff8f75e7a85065143e7c9b8582f839d5f9cece4b8162eed10278f91ebde82",
    "c": "场景",
    "d": "scenes"
   },
@@ -7053,22 +7053,22 @@
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-TABLE-LAMP": {
-   "v": "0dc10d690bf8d8e15bda89f15d9838fde8f340565dcbb7f8d003d87cb8f1df6b",
+   "v": "b9cab7a04354ad177d2e9ef759893bcde8f17ff82ca4004512c6f42a3429acbf",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-PLANT-LARGE": {
-   "v": "cd88bde99311878ec6afd03950d137a15566fb55bdddde55d52e1b474113c615",
+   "v": "49a293900e68a479ac3b113ca39fbfc83a91925408defd90f1a1caadc7d79c86",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-PLANT-COMPACT": {
-   "v": "df36f33c5cab613b3e4069c6019cc91601313f2e56eab4b1d84f276dcbe0de6b",
+   "v": "2d6fccd9f9147a44350597a1bcc31cfcad27a9b9f254ba1d200a4209276ea1ef",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT": {
-   "v": "1bdafae50c36d4df6ae291de49f9314c54e91feeedeccbba982144bbc56b3d77",
+   "v": "68e547a8ef7d593927d7420d545e43d4093c5d62410619588c19a686792e1977",
    "c": "场景",
    "d": "scenes"
   },
@@ -7078,7 +7078,7 @@
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-VANITY": {
-   "v": "ae9f891c7233b39745057c93c604d026ca515ae30091b15e860e3b3f05acb90f",
+   "v": "8580c848ae369d9059b935cb37c308da2da1971825c1d92721a1df54a39a1b1f",
    "c": "场景",
    "d": "scenes"
   },
@@ -7098,12 +7098,12 @@
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-CANDELABRA": {
-   "v": "568e90c64f11c89a1e91ffac83ba8e8a1d3035af8d0b00e372c6d4d3d5e3c0d2",
+   "v": "c37147637a21195e2aea1bfe018c59398f6ed4767fed3f58a6a940ce139679d5",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-EXP03-MANOR-DESK-DOCUMENTS": {
-   "v": "8194ef9e8ba9a34366136ebbb53da1e6bbd18d4146cc7bbfa7acbae352cb809d",
+   "v": "10319da6d5fa07dc2630459624362eedab30ed43a34e457430810245094cfc03",
    "c": "场景",
    "d": "scenes"
   },
@@ -7126,32 +7126,107 @@
    "v": "6710388eca53bb2edb2fa8ea3f5b8983575d93581fb858f69369fce9d48f13d2",
    "c": "角色",
    "d": "characters"
+  },
+  "VFX-BOOKCASE-LANDING-DUST-3D": {
+   "v": "c90309150277448988d08792d48ed452a79442d2ec9fe34a0ac97805fb768f12",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "ITM-SPECIAL-GRENADE": {
+   "v": "194f3c8f3e9480ccc7979ecbdec4d9583fcaa1cb5a0c98ed70285901d28380c0",
+   "c": "道具",
+   "d": "props"
+  },
+  "ITM-SPECIAL-MOLOTOV": {
+   "v": "30884d7c9429b92fcdab01111951fc8434a860d827a3014f14a2e9118c35fae4",
+   "c": "道具",
+   "d": "props"
+  },
+  "ITM-SPECIAL-GASOLINE": {
+   "v": "7f4f5117346e55787a6761d28aa015cfb9693da7c9f0b6685abbb781f980b960",
+   "c": "道具",
+   "d": "props"
+  },
+  "VFX-SPECIAL-FIRE-3D": {
+   "v": "6e3b26bf96aba8191d0c27b07acd0c1bcd608bea1174d5d143e64fa38b3c45fd",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-SPECIAL-OIL-3D": {
+   "v": "c9dd983ba0a1dd8192ce9888da028a9b632d6abf0cec04ed193d21ca6e5760a6",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-SPECIAL-BLAST-3D": {
+   "v": "58f7d992ccd08473ef409ef056e042f801de9c30cfaf8e82ebd43aba70184bd9",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "UI-SPECIAL-ITEM-HUD": {
+   "v": "f296b5ef5677b00858672f8089dfd5304a16c56852b3d33ff2152f53f2f0c0f0",
+   "c": "UI",
+   "d": "ui"
+  },
+  "UI-SPECIAL-ITEM-EQUIPMENT-SLOT": {
+   "v": "de47db97c7190c02e755cbe1237f8dab1c2a4694aa59e3a3c22008b73198bf91",
+   "c": "UI",
+   "d": "ui"
+  },
+  "AUD-SFX-SPECIAL-THROW": {
+   "v": "84837cf269aa1f2c59580a086d96a9366b20a1a408fc03ab152385bac4e6a168",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-SPECIAL-BLAST": {
+   "v": "5fa8300906caa14a3d3d303a7429105a8a095885309d337d76e22be7be749958",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-SPECIAL-GLASS": {
+   "v": "f0a711c6ad899e180ff799d2e814a4a0c519053581d054dd0d46582ed7be8bf9",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-SPECIAL-POUR": {
+   "v": "6a0d3fd58c7c1209abf065142734bfc6dea37d5e546a2177285f4bf687f9cd60",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-SPECIAL-IGNITE": {
+   "v": "59c23cb486725e4447a8d1a200860cfa533132e982a646863706993250514798",
+   "c": "音效",
+   "d": "audio"
+  },
+  "AUD-SFX-SPECIAL-FIRE-LOOP": {
+   "v": "e384e03308dcf01942c7235a40ed424278213d8252b05c6224634b41a23b1058",
+   "c": "音效",
+   "d": "audio"
   }
  },
  "column_digests": {
-  "1": "d851783d718251e692e5f629f994895d0a003601a70f12539ceda00e4dca254a",
-  "2": "4dd70da8af0c5842486286c9456c4b084e964e028b002f2d9cc1d92e72577a00",
-  "3": "f69342ee34a18a114e6597a36192c21f8a4042cf543c562cf7b1188dd127cfbc",
-  "4": "90ed996489cd8a6de9d4c7ff665bdfe30540528ee41ce7e2b685509c058f5965",
-  "5": "2ccd5e807f0613f68a3ca99fe7e6ab853fbd7cad0399357e466c6955ceb9cf9a",
-  "6": "589d7ad0369cdf0be16f0ee693a7dc4a1476acecdbb31a597b47f1c5a8e8c7d6",
-  "7": "585437ac7af260a751acc09b4ad79a48a3831939e0f9ae5185f059e60a7e00b4",
-  "8": "46f5e6294add1bc02356b30d5682ae8b4fbe68753b686774e85888b8858ce011",
-  "9": "24f0ab4b2186b05ff696089b44bfe15b0bfabedc188ce29f9ee8d4d8aee5b1ba",
-  "10": "29bc5c84ec99da8599f2d47f9e89eb4b9b33986edf9d11d705828c9100fb6547",
-  "11": "f6e9e155ea86252fa68bcf838f1722f7bd316659951fd6b93817518b43bc6876",
-  "12": "047d84272d82bcddc19c4cb55c14552d1b76343e18901a7038d47fdf7cddf11d",
-  "13": "37945a8989d3abde72b0e4ca13b1e321fd5f62c2c2a128483e95cfde2677e2e8",
-  "14": "32ce86ddf5d6d3e7e792f707650f8a5bf30b7ed67720972532e92085dbb5443a",
-  "15": "8a748999a876f9c4c9c1d81a118a20f5cd2c4c5cef45ca87e68b84d959928c3d",
-  "16": "8b1a22fc443958058bf20d31b71859ba9fa6945a0ecd86bc7d16abc4446598ca",
-  "17": "dfbd4462064327f087dec6ea489a475fd61ec2229020b3ce3fcf6f295fc16a5f",
-  "20": "a83678f69a4e58200ea779423d204f9128fc0a3646eb2ae141dffec5c61842e6",
-  "21": "74a396d25e5105d654289f2102852606283fb61bc8109b47ecf68fbc6364f8cf",
-  "22": "416666ddda6344731698af5781cc014497765e84107c1de4eb0084fa1ed0639c",
-  "23": "7dcaa6ab19c37a2ba0e35cc917012fcc532472f090e55409ff80327c763e1f02",
-  "24": "9664800560851a6c023c052d298d49e20b77f050338cb6b065d3ed39642d43a0",
-  "25": "85e853f97518e8a7b8e16ef259552362c99fa09b795a278a76b505531065f323"
+  "1": "5ef1465897d9feb8a38792653e007cf5cd3f088303c3d70febc3ed3b5dbb25c2",
+  "2": "4ab565586a7bfa85c6775e582d62ca3380eb60fd6a38c4b3c10fec2dd1ede46a",
+  "3": "1636d15c146503387b2df16ab445aaa2878291babeb71eea5ed489e9ea04b276",
+  "4": "d11ab5e9b7d59279b776f1f6137fdd1a8042b2d5f97b0942ded6b697c6463ae6",
+  "5": "0df0e40e2fc08753fab73ae0f178f61c231ef19485b18fe6c0564bde492bab3f",
+  "6": "f638bc7127cb0b54388e1e78a339a00b1a95067dc9556b1159258a068844f478",
+  "7": "676049f3ba118eb07a6070f1968d1e6623dc2c27f0d197ef38cdf3ea52460516",
+  "8": "9f8a645d86a7ac069ef5fac6897463811dffb5fa78e0b731f103bc75fe44892b",
+  "9": "25fbeef085f5c7a8c726f8f9c7259f6f60ec3466bb9271644188888b973d2eec",
+  "10": "93d2c133e09bc00ba0eadc4ff20d853f1ae82483514eb0c3c9d642a3af0a7b90",
+  "11": "edff0d37849342328b0e4cec2f852ac3e7274b22fa77a595ca85c2bcb767cd87",
+  "12": "7ba475ce7658676ca3311c4c49c733881100e3fc8c4f42bb01a672f202aceb50",
+  "13": "68f71463da135a014392dd26ccfda4887cb549b916100113954947f7053e4287",
+  "14": "0a6fd2ee293c1950e89609eddd26c6169d41782eacc261fe35757f34b590fe16",
+  "15": "6d72e94fe010e6f4131cc481d47796fe5953e6f9fb03eeee52080032847fe707",
+  "16": "e1afc9fae2ade3bd466258b35fd1fb7222743426c05ecf2eb5a6e115beed9415",
+  "17": "a80069afa4473c288686ea1869e94f38310a04798b5230965bca9ca6e36ac529",
+  "20": "ac0d317f3c6902409d298fb63c011bd61a894d7e251657d2fe3f432c073a037e",
+  "21": "26991333982a50df2955ee6ac8288f4868d4f2b89725039bf7a15ac373efbfdd",
+  "22": "53ebc8a83ee4fb71f8d82682a83bfd30fca6e16515051cd468f95ccdbad410b0",
+  "23": "c071c1e5f76ec9e628ebdac722316b195e8ac6f6edb96648f5b9b50c899ce08c",
+  "24": "aba360c3fcb441e234d0e3468e70f201b2fb2a44e9f2b450344daabb4d94bc2b",
+  "25": "073963e5d1419a58081ec159df249b373302c657f089109894c2e00d749a2d07"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -7162,28 +7237,28 @@
   "敌人动画与状态": "983b022d1142354f3c2e3ba7798e192f040f8a7de64747c0c885555cc928fc49",
   "3D-敌人": "92ccb860c9640a62dcf936e2aa1ada83f3c2ac90cd4c78cdb21c3c473e053cc3",
   "3D-场景通用": "44022580ca4a94ca908f8986a65e3b2dffb71647247e1b91e5975918f4763461",
-  "3D-设施": "0aa1ec2d3dcea117a7f46bbef91de30419d6b18e3ea46b0f8bedffd72cebadb0",
-  "3D-其他": "ab234cb2b953c09e5c8e0d92f32f8a3fe28ded72ef1a8ffc0bbeac1b6e07aca8",
+  "3D-设施": "94bd1d2d97bf3f324e0ea4ad45213945bb87cb44b73accaf71b58314b3ee5a77",
+  "3D-其他": "dcfaaf667850374ed3c56a3cce0fc337734c84a50b9e8502a9170ce020e07743",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
-  "3D-物品": "0bba6748006c5b75fefd481d2406d12691ea639b33437364bccb53d0cff5be58",
+  "3D-物品": "d75a9b57543be40f765c6125f3ca6366e5c34647c34161e5dd34451faa6c6637",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
   "背包物品调用索引": "586212c8949d6e45d26a9e7f00c1e9150e7575df4606bfa545bbf86327f0162e",
-  "3D-特效": "ce88f25ce7195422e872117ffda04421304437bf9426feea96745b4cb3dd072e",
-  "房间运行登记": "044f4f1caf6cf02b883ceaac9aee74f9687b44aa28cf10b68592e80a82528131"
+  "3D-特效": "aaa463018630c5db07d438ebc3a3b3637a8d3754ecb5df281fa4b5b550bca6f4",
+  "房间运行登记": "3bac27e419161a4bb5f97ca5a25131b58288dcb044f417b116789114f3b08067"
  },
  "category_counts": {
-  "UI": 18,
+  "UI": 20,
   "场景": 850,
   "场景道具": 49,
   "基地资产包": 114,
   "子弹特效": 10,
   "敌人": 49,
   "武器": 36,
-  "特效": 40,
+  "特效": 44,
   "角色": 26,
-  "道具": 39,
+  "道具": 42,
   "音乐": 9,
-  "音效": 178
+  "音效": 184
  },
  "targeted_updates": [
   {
@@ -7290,6 +7365,111 @@
    "asset_id": "ENM-BOSS-MONITOR002-3D",
    "reason": "Existing monitor boss reused in expedition_03; only deployment cells J20/M10 changed, asset files and version unchanged",
    "record": "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md"
+  },
+  {
+   "date": "2026-11-03",
+   "asset_id": [
+    "ENV-EXP03-MANOR-BOOKCASE",
+    "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+    "ENV-EXP03-MANOR-PLANT-COMPACT",
+    "ENV-EXP03-MANOR-PLANT-LARGE"
+   ],
+   "operation": "Four reactive furnishing runtime wrappers only; GLB/source/version and specialized sheets unchanged",
+   "old_row_digests": {
+    "ENV-EXP03-MANOR-BOOKCASE": "b5f0d044c6d6a77eb73cad6c846912aed860fa4c80120cf21936d6ff67865af1",
+    "ENV-EXP03-MANOR-PLANT-LARGE": "cd88bde99311878ec6afd03950d137a15566fb55bdddde55d52e1b474113c615",
+    "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT": "1bdafae50c36d4df6ae291de49f9314c54e91feeedeccbba982144bbc56b3d77",
+    "ENV-EXP03-MANOR-PLANT-COMPACT": "df36f33c5cab613b3e4069c6019cc91601313f2e56eab4b1d84f276dcbe0de6b"
+   },
+   "record": "docs/v0.1/development/2026-11-03_reactive_manor_props.md"
+  },
+  {
+   "date": "2026-11-03",
+   "asset_id": [
+    "ENV-EXP03-MANOR-BOOKCASE",
+    "ENV-EXP03-MANOR-CANDELABRA",
+    "ENV-EXP03-MANOR-COFFEE-TABLE",
+    "ENV-EXP03-MANOR-CONSOLE",
+    "ENV-EXP03-MANOR-DESK-DOCUMENTS",
+    "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+    "ENV-EXP03-MANOR-NIGHTSTAND",
+    "ENV-EXP03-MANOR-PLANT-COMPACT",
+    "ENV-EXP03-MANOR-PLANT-LARGE",
+    "ENV-EXP03-MANOR-RECEPTION-DESK",
+    "ENV-EXP03-MANOR-SIDE-TABLE",
+    "ENV-EXP03-MANOR-TABLE-LAMP",
+    "ENV-EXP03-MANOR-VANITY",
+    "VFX-FATE-FIRE-3D"
+   ],
+   "old_row_digests": {
+    "ENV-EXP03-MANOR-COFFEE-TABLE": "939fbf32836fc79d2446b2792bb826619ccd82710b446bf7ac532dd90519da86",
+    "ENV-EXP03-MANOR-SIDE-TABLE": "967af382b7c15eeb6dfc70e4ceeb849948e95889a55a561dfd45359704f0db54",
+    "ENV-EXP03-MANOR-CONSOLE": "e2f3271642758038ffa862ce465f6e26f444cd206c72bd853ec0a299cbd0e87f",
+    "ENV-EXP03-MANOR-RECEPTION-DESK": "ea83779d0fab3b9c076d261dc05fe0b4c21b246b7e51b1ac32bae51d999a72e8",
+    "ENV-EXP03-MANOR-NIGHTSTAND": "204beda3d69a1f60f30e91d0ace539daa498edcd83fc71e01643f403858f8f89",
+    "ENV-EXP03-MANOR-BOOKCASE": "784cf0ad318689aed3b5cc38be7e0b0b87a2bc50c17f6176af11d2ad5254758b",
+    "ENV-EXP03-MANOR-TABLE-LAMP": "0dc10d690bf8d8e15bda89f15d9838fde8f340565dcbb7f8d003d87cb8f1df6b",
+    "ENV-EXP03-MANOR-PLANT-LARGE": "fbbd4ca622a3db0c21a004a2d2d34b42f07d234c5dfa04af5cd400efe80493d4",
+    "ENV-EXP03-MANOR-PLANT-COMPACT": "2478698c32334411549378f3cc6ca1701343ae6d99c305445f06cffd3e06b9a9",
+    "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT": "8f920cec5afc7f31dd2b9e2352ca154bf4a434defde00e697d74aee5f45e1d71",
+    "ENV-EXP03-MANOR-VANITY": "ae9f891c7233b39745057c93c604d026ca515ae30091b15e860e3b3f05acb90f",
+    "ENV-EXP03-MANOR-CANDELABRA": "568e90c64f11c89a1e91ffac83ba8e8a1d3035af8d0b00e372c6d4d3d5e3c0d2",
+    "ENV-EXP03-MANOR-DESK-DOCUMENTS": "8194ef9e8ba9a34366136ebbb53da1e6bbd18d4146cc7bbfa7acbae352cb809d",
+    "VFX-FATE-FIRE-3D": "72d03d1680211ec11ff19710f43a0ab6f32c736393167d7d177ac64cdb5cf44b"
+   },
+   "operation": "r8+r9 targeted asset-row updates plus separate sparse existing-prefab-page transaction; all unrelated cells compared unchanged",
+   "changed_prefab_sheets": [
+    [
+     "scenes",
+     "3D-设施"
+    ],
+    [
+     "scenes",
+     "3D-其他"
+    ],
+    [
+     "vfx",
+     "3D-特效"
+    ]
+   ],
+   "record": "docs/v0.1/development/2026-11-03_lamp_furniture_chain.md"
+  },
+  {
+   "date": "2026-11-03",
+   "asset_id": "VFX-FATE-FIRE-3D",
+   "operation": "v002 optional lamp fire light and rising embers; targeted row and prefab sheet only"
+  },
+  {
+   "date": "2026-11-03",
+   "asset_id": [
+    "ENV-EXP03-MANOR-BOOKCASE",
+    "ENV-EXP03-MANOR-CANDELABRA",
+    "ENV-EXP03-MANOR-COFFEE-TABLE",
+    "ENV-EXP03-MANOR-CONSOLE",
+    "ENV-EXP03-MANOR-DESK-DOCUMENTS",
+    "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT",
+    "ENV-EXP03-MANOR-NIGHTSTAND",
+    "ENV-EXP03-MANOR-PLANT-COMPACT",
+    "ENV-EXP03-MANOR-PLANT-LARGE",
+    "ENV-EXP03-MANOR-RECEPTION-DESK",
+    "ENV-EXP03-MANOR-SIDE-TABLE",
+    "ENV-EXP03-MANOR-TABLE-LAMP",
+    "ENV-EXP03-MANOR-VANITY"
+   ],
+   "operation": "94处台灯/插花重叠：29处并排、33处仅花、32处仅台灯；8份正式布局修订。家具每次受击令实际桌面物弹性晃动，不扣小物耐久/引爆，达到3连击再震落。",
+   "record": "docs/v0.1/development/2026-11-03_lamp_flower_layout_shake.md"
+  },
+  {
+   "date": "2026-11-03",
+   "asset_id": [
+    "VFX-BOOKCASE-LANDING-DUST-3D",
+    "ENV-EXP03-MANOR-BOOKCASE",
+    "ENV-EXP03-MANOR-PLANT-LARGE",
+    "ENV-EXP03-MANOR-PLANT-COMPACT",
+    "ENV-EXP03-MANOR-FLOWER-ARRANGEMENT"
+   ],
+   "record": "docs/v0.1/development/2026-11-03_bookcase_dust_tabletop_scale.md",
+   "operation": "Add one 3-puff dust VFX; targeted bookcase/tabletop size registration"
   }
  ],
  "controlled_updates": [
@@ -7340,5 +7520,26 @@
    "after_sheet_digest": "62d1792a492b8356312a0b30100f74c3bd0f5714785ed3afdef1c4da9ff1aa42",
    "record": "docs/v0.1/development/2026-11-01_remaining_themed_rooms.md"
   }
- ]
+ ],
+ "special_items_registration": {
+  "date": "2026-11-03",
+  "assets": [
+   "AUD-SFX-SPECIAL-BLAST",
+   "AUD-SFX-SPECIAL-FIRE-LOOP",
+   "AUD-SFX-SPECIAL-GLASS",
+   "AUD-SFX-SPECIAL-IGNITE",
+   "AUD-SFX-SPECIAL-POUR",
+   "AUD-SFX-SPECIAL-THROW",
+   "ITM-SPECIAL-GASOLINE",
+   "ITM-SPECIAL-GRENADE",
+   "ITM-SPECIAL-MOLOTOV",
+   "UI-SCREEN-INVENTORY-3D",
+   "UI-SPECIAL-ITEM-EQUIPMENT-SLOT",
+   "UI-SPECIAL-ITEM-HUD",
+   "VFX-SPECIAL-BLAST-3D",
+   "VFX-SPECIAL-FIRE-3D",
+   "VFX-SPECIAL-OIL-3D"
+  ],
+  "note": "Only named asset row fingerprints and the two deliberately extended prefab pages were accepted."
+ }
 }

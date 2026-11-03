@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-11-02",
+  "updated_at": "2026-11-03",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -1369,17 +1369,62 @@
     },
     {
       "feature_id": "WORLD-INTERACTIVE-CLUTTER",
-      "owner": "BreakableClutter3D",
+      "owner": "DungeonRoom3D (room state); BreakableClutter3D / ReactiveProp3D (instance transitions)",
       "design_docs": [
         "docs/v0.1/design/场景可交互低模物件设计.md"
       ],
       "development_records": [
-        "docs/v0.1/development/2026-10-29_interactive_clutter.md"
+        "docs/v0.1/development/2026-10-29_interactive_clutter.md",
+        "docs/v0.1/development/2026-11-03_reactive_manor_props.md",
+        "docs/v0.1/development/2026-11-03_lamp_furniture_chain.md",
+        "docs/v0.1/development/2026-11-03_lamp_flower_layout_shake.md",
+        "docs/v0.1/development/2026-11-03_bookcase_dust_tabletop_scale.md"
       ],
       "verification": [
         {
           "kind": "scene",
           "id": "verify_battle_breakable_clutter"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_reactive_manor_props"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_lamp_furniture_chain"
+        }
+      ],
+      "status": "complete"
+    },
+    {
+      "feature_id": "SPECIAL-ITEMS",
+      "owner": "SpecialItemController3D / SpecialItemWorld3D",
+      "design_docs": [
+        "docs/v0.1/design/特殊道具系统设计.md"
+      ],
+      "development_records": [
+        "docs/v0.1/development/2026-11-03_special_items.md"
+      ],
+      "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_special_items_system"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_special_items_integration"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_special_item_assets"
+        },
+        {
+          "kind": "command",
+          "path": "scripts/verify_special_items.py",
+          "args": [
+            "--visual",
+            "preview_special_items"
+          ]
         }
       ],
       "status": "complete"

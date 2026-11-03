@@ -361,78 +361,10 @@
     "preview_special_items"
   ],
   "status": "verified_desktop_mouse_path",
+  "design_revision": "r2",
   "verification_results": {
-    "verify_special_items_system": {
-      "exit_code": 0,
-      "unexpected_errors": 0,
-      "markers": [
-        "SPECIAL_ITEMS_SYSTEM_OK: 75 checks"
-      ]
-    },
-    "verify_special_items_integration": {
-      "exit_code": 0,
-      "unexpected_errors": 0,
-      "markers": [
-        "SPECIAL_ITEMS_INTEGRATION_OK: 14 checks; actual inventory, HUD, mouse input, modal and runtime save"
-      ]
-    },
-    "verify_special_item_assets": {
-      "exit_code": 0,
-      "unexpected_errors": 0,
-      "markers": [
-        "SPECIAL_ITEM_ASSETS_OK"
-      ]
-    },
-    "preview_special_items": {
-      "exit_code": 0,
-      "unexpected_errors": 0,
-      "markers": [
-        "SPECIAL_ITEMS_VISUAL_OK: actual HUD, equipment, vending and imported asset frames"
-      ]
-    },
-    "verify_audio_library_flow": {
-      "exit_code": 0,
-      "unexpected_errors": 0,
-      "markers": [
-        "AUDIO_LIBRARY_FLOW_OK: 172 OGGs, 114 sets, 9 gun IDs / 7 families, 57 natural world sets, 9 ambient loops, preserved system/weapon hashes; mode=Windows"
-      ]
-    },
-    "verify_base_shop_save_flow": {
-      "exit_code": 0,
-      "unexpected_errors": 0,
-      "markers": [
-        "BASE_SHOP_SAVE_OK: database-backed catalog, checksum fallback, idempotent atomic buy/sell, restart restore, 3D icons and vending model pass"
-      ]
-    },
-    "verify_pause_game_save_reset_flow": {
-      "exit_code": 0,
-      "unexpected_errors": 0,
-      "markers": [
-        "PAUSE_GAME_SAVE_RESET_OK: reusable ESC button, confirmation gate, fresh validated profile, no stale backup, graphics preserved"
-      ]
-    },
-    "verify_training_range_equipment_ui": {
-      "exit_code": 0,
-      "unexpected_errors": 0,
-      "markers": [
-        "TRAINING_RANGE_EQUIPMENT_UI_OK: InventoryUI and WeaponAssemblyTreePanel reused from the run, backpack capacity 40 matches outside, slot round trip works, bullet swap locked, panel follows weapon tree, drop spawns ground loot, BaseData untouched"
-      ]
-    },
-    "verify_hud_presenter_3d": {
-      "exit_code": 0,
-      "unexpected_errors": 0,
-      "markers": [
-        "HUD_PRESENTER_3D_OK: read-only weapon snapshots produce stable text and model commands"
-      ]
-    }
-  },
-  "attributions": "data/special_items/audio_credits.txt",
-  "verification_limits": [
-    "Android",
-    "controller/touch-specific special input",
-    "full game suite",
-    "release PCK",
-    "large-scale field performance",
-    "human listening review"
-  ]
+    "core_checks": 77,
+    "integration_checks": 16,
+    "native_visual": "passed"
+  }
 }

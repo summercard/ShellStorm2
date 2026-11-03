@@ -221,6 +221,9 @@ core_scenes=(
   verify_room_graph_persistence_services
   verify_verification_runner_contract
   verify_hud_presenter_3d
+  verify_special_items_system
+  verify_special_items_integration
+  verify_special_item_assets
   verify_offscreen_enemy_indicator
   verify_postfx_overlay_runtime
   verify_speech_bubble_3d
@@ -456,6 +459,10 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  # Requires LAMP_QA_DIR and isolated APPDATA before Autoload; includes a 5s burn.
+  verify_lamp_furniture_chain
+  # Requires REACTIVE_PROP_QA_DIR and an isolated APPDATA before Autoload.
+  verify_reactive_manor_props
   verify_player_camera_defeat_feedback
   verify_expedition03_indoor_lighting
   verify_block00_facilities
