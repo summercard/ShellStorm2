@@ -155,7 +155,7 @@ func verify_locomotion() -> void:
 
 func verify_death() -> void:
 	var enemy := make_enemy()
-	var reference := weakref(enemy)
+	var reference: WeakRef = weakref(enemy)
 	enemy._die()
 	present(enemy)
 	check(not enemy.is_queued_for_deletion() and enemy.avatar.visible,"Elite death is removed before its authored clip")

@@ -381,6 +381,7 @@ core_scenes=(
   verify_first_elite_deployment_flow
   verify_first_elite_growth_flow
   verify_second_elite_arms_taker
+  verify_second_elite_state_flow
   verify_expedition99_pre_boss_elite
   verify_formal_3d_asset_import
   verify_main_entry_cinematic_flow
@@ -430,6 +431,7 @@ visual_scenes=(
   verify_player3d_melee_special_visual
   verify_inventory_experience_visual
   verify_monitor_boss_visual
+  verify_second_elite_state_visual
   verify_base99_radio
   verify_base99_radio_music_notes
   verify_expedition_hologram_city
