@@ -504,6 +504,8 @@ var _runtime_carry_restore_snapshot: Dictionary = {}
 ## `MISSION_OPERATIONS_DEPARTURE_CARRY_KEY`）。
 var _runtime_departure_carry_snapshot: Dictionary = {}
 var _runtime_persistence_active := false
+var _runtime_checkpoint_exit_guard: Node
+var _runtime_checkpoint_guard_reordering := false
 var _pending_run_settlement_transaction_id := ""
 var _pending_insurance_return_restore := false
 var _segment_runtime_state: Dictionary = {}
@@ -652,9 +654,41 @@ func _exit_tree() -> void:
 		_encounter_event_director.cancel_all("scene_unloaded")
 	for room_id in _wave_spawn_pending.keys():
 		_cancel_room_wave_intermission(str(room_id))
+	# Children have already exited here. The exit guard performs the final live capture.
+	_unregister_runtime_persistence(false)
+
+
+func _unregister_runtime_persistence(flush_before_unregister: bool) -> void:
 	if not test_mode and BaseManager != null and _runtime_persistence_active:
-		BaseManager.unregister_runtime_checkpoint_provider(self, true)
+		BaseManager.unregister_runtime_checkpoint_provider(self, flush_before_unregister)
 	_runtime_persistence_active = false
+
+
+## Tree exit follows reverse insertion order, independently of move_child().
+## Reinsert this plain Node after runtime root children so it saves before them.
+func _install_runtime_checkpoint_exit_guard() -> void:
+	if not is_instance_valid(_runtime_checkpoint_exit_guard):
+		_runtime_checkpoint_exit_guard = Node.new()
+		_runtime_checkpoint_exit_guard.name = "RuntimeCheckpointExitGuard"
+		_runtime_checkpoint_exit_guard.tree_exiting.connect(_on_runtime_checkpoint_guard_exiting)
+		add_child(_runtime_checkpoint_exit_guard)
+	if not child_entered_tree.is_connected(_keep_runtime_checkpoint_exit_guard_last):
+		child_entered_tree.connect(_keep_runtime_checkpoint_exit_guard_last)
+	_keep_runtime_checkpoint_exit_guard_last(self)
+
+
+func _keep_runtime_checkpoint_exit_guard_last(child: Node) -> void:
+	if child == _runtime_checkpoint_exit_guard or not _runtime_persistence_active:
+		return
+	_runtime_checkpoint_guard_reordering = true
+	remove_child(_runtime_checkpoint_exit_guard)
+	add_child(_runtime_checkpoint_exit_guard)
+	_runtime_checkpoint_guard_reordering = false
+
+
+func _on_runtime_checkpoint_guard_exiting() -> void:
+	if not _runtime_checkpoint_guard_reordering:
+		_unregister_runtime_persistence(true)
 
 
 func _activate_runtime_persistence() -> void:
@@ -688,6 +722,7 @@ func _activate_runtime_persistence() -> void:
 	if _door_fate_active:
 		call_deferred("_restore_pending_door_fate_overlay")
 	BaseManager.register_runtime_checkpoint_provider(self)
+	_install_runtime_checkpoint_exit_guard()
 	var special_controller := player.get_special_item_controller()
 	if not special_controller.persistent_state_changed.is_connected(_on_runtime_special_item_changed):
 		special_controller.persistent_state_changed.connect(_on_runtime_special_item_changed)
@@ -2109,7 +2144,7 @@ func _build_reference_main_hud() -> void:
 	special_hud.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
 	special_hud.offset_left = -336.0
 	special_hud.offset_top = -76.0
-	special_hud.offset_right = -274.0
+	special_hud.offset_right = -240.0
 	special_hud.offset_bottom = -14.0
 	_reference_hud_root.add_child(special_hud)
 	special_hud.configure(player.get_special_item_controller())
@@ -2157,6 +2192,7 @@ func _build_reference_main_hud() -> void:
 	_hud_weapon_meta_label.visible = false
 	weapon_panel.add_child(_hud_weapon_meta_label)
 	_outline_labels([ammo_label, _hud_weapon_fate_label])
+	special_hud.match_readout_style(ammo_label)
 	# 有效信息三（2026-10-15）：右下角只显示本局金币（保持字号26与右对齐契约）。
 	loot_label = _make_hud_label("金币 0", 26, RUN_COIN_READOUT_COLOR)
 	loot_label.name = "RunLootReadout"
@@ -2735,6 +2771,9 @@ func _prepare_layout_rooms() -> void:
 			"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
 			"spawn_placements": record.get("spawn_placements", []),
 			"encounter": record.get("encounter", {}),
+			# 房间级「额外追加一只指定精英」（2026-11-03）。与其余房间级字段同样逐级透传。
+			# 未写本段的关卡得到空串 ⇒ 不追加任何精英，行为逐字不变。
+			"elite_id": str(record.get("elite_id", "")),
 			"spawn_boxes_only": bool(record.get("spawn_boxes_only", false)),
 			"reward_plan": record.get("reward_plan", {}),
 			# 宝箱放置层（2026-10-29）：与其余房间级字段同样逐级透传。
@@ -2752,6 +2791,8 @@ func _prepare_layout_rooms() -> void:
 			"search_facilities_enabled": bool(record.get("search_facilities_enabled", true)),
 			# 程序化随机家具总开关：记录里没有这个键 ⇒ true（未声明关卡行为逐字不变）。
 			"procedural_furniture_enabled": bool(record.get("procedural_furniture_enabled", true)),
+			# 入口安全房中央五件固定易碎陈设：与上一条同一口径，记录里没有这个键 ⇒ true。
+			"fixed_lobby_clutter_enabled": bool(record.get("fixed_lobby_clutter_enabled", true)),
 			"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 			"authored_layout_instances": record.get("authored_layout_instances", []),
 			"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),
@@ -4550,6 +4591,46 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 		_next_room_enemy_count = 0
 		_next_room_elite_configs.clear()
 		_note_room_enemy_modifiers(room)
+	# —— 房间级「额外追加一只指定精英」（2026-11-03）——
+	#
+	# 落在这里而不是 `_spawn_room_enemies` 的房型分支里，是因为那个函数有**四条早退**：
+	# 触发式遭遇、和平区、`spawn_placements` 盒子、`spawn_boxes_only` 空房。
+	# 实测踩到：`room_01` 走的是盒子路径（`box_waves` 非空直接 return），
+	# 追加逻辑放在房型分支后面 = 永远走不到，且不报错。
+	# `_commit_room_waves` 是**唯一提交点**（盒子 / 授权编成 / 普通编成三条路都过它），
+	# 在这里追加才对所有路径生效。
+	#
+	# 语义是**追加**：本房原有编成照旧，生成完再额外落一只点名的精英。
+	# 与「把本房改成精英房」是两件事 —— 后者会替换整房编成。
+	#
+	# 只对普通战斗房生效：`ELITE` / `BASEMENT` 房上面已经出过精英，
+	# `BOSS` 房自带精英随从，这三类再追加会出两只。判据是房型（能力），不是关卡 ID。
+	if not room.elite_id.is_empty() \
+			and room.room_type not in ["ELITE", "BASEMENT", "BOSS"] \
+			and not room.has_meta("_extra_elite_appended"):
+		# 防重：`_commit_room_waves` 对同一房若被调用两次（重试 / 补刷），
+		# 不加这个标记就会出两只 —— 而「同 ID 全局单例」本该拦住第二只，
+		# 拦住了又会让第二波少一只怪，两种结果都不对。
+		room.set_meta("_extra_elite_appended", true)
+		var extra_elite := _monster_injector.generate_enemies({
+			"type": "elite",
+			"floor": maxi(1, visual_theme.difficulty_rank),
+			"floor_level": 0,
+			"floor_number": _elite_floor_number(room),
+			"encounter_id": _elite_encounter_id(room),
+			"seed": run_seed,
+			# 点名：绕过楼层窗口的三选一，直接指派这一只。
+			"elite_id": room.elite_id,
+		})
+		if extra_elite.is_empty():
+			# 点名的精英没生成出来（ID 写错 / 同局已被别处占用）必须留痕：
+			# 静默跳过会让「设计源写了 elite_id，房里却没有这只怪」变成查不出的哑弹。
+			push_warning(
+				"Room %s declared elite_id '%s' but it produced no enemy (unknown id or already reserved)"
+				% [room.room_id, room.elite_id]
+			)
+		else:
+			(waves[0] as Array).append_array(extra_elite)
 	var wave_count := waves.size()
 	var first_wave: Array[Dictionary] = waves.pop_front() as Array[Dictionary]
 	_cancel_room_wave_intermission(room.room_id)
@@ -6612,13 +6693,9 @@ func _open_merchant(merchant_id: String = "") -> void:
 			return
 	_merchant_ui = MerchantUI.new()
 	_merchant_ui.name = "MerchantUI3D"
-	_merchant_ui.set_anchors_preset(Control.PRESET_CENTER)
-	_merchant_ui.offset_left = -300
-	_merchant_ui.offset_top = -220
-	_merchant_ui.offset_right = 300
-	_merchant_ui.offset_bottom = 220
 	_merchant_ui.set_tier(maxi(1, visual_theme.difficulty_rank))
-	_merchant_ui.set_shop_name("%s · 废土拾荒商" % gameplay_theme.display_name)
+	_merchant_ui.set_shop_name("贩卖机")
+	_merchant_ui.set_inventory_module(_inventory)
 	$HUD.add_child(_merchant_ui)
 	_merchant_ui.purchase_command_requested.connect(_on_merchant_purchase_command)
 	_merchant_ui.merchant_closed.connect(_on_merchant_closed)
@@ -6640,10 +6717,19 @@ func _on_merchant_purchase_command(
 	)
 	if not bool(result.get("success", false)):
 		status_label.text = "商人交易失败：%s" % str(result.get("code", "unknown"))
+		if is_instance_valid(_merchant_ui):
+			var reasons := {
+				"insufficient_currency": "本局金币不足", "inventory_full": "背包没有足够的连续空间",
+				"save_failed": "保存失败，金币、背包和货架已恢复，请重试",
+				"offer_missing": "商品已售出", "stale_offer": "商品已变化，请重新选择",
+				"session_closed": "交易会话已关闭", "inventory_rejected": "物品无法放入背包",
+			}
+			_merchant_ui.show_purchase_result("购买失败：%s" % reasons.get(str(result.get("code", "")), "请重试"))
 		return
 	var item := result.get("item", {}) as Dictionary
 	if _merchant_ui != null and is_instance_valid(_merchant_ui):
 		_merchant_ui.update_offers(_merchant_service.get_offers_snapshot())
+		_merchant_ui.show_purchase_result("购买成功：%s 已进入背包" % item.get("name", "物品"))
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	_ensure_conditional_extraction("TRADE", room, Vector3(-4.0, 0.0, 3.0))
 	status_label.text = "购入 %s · 交易撤离条件已解锁" % item.get("name", "物品")
@@ -6687,8 +6773,7 @@ func _on_merchant_closed() -> void:
 	if _merchant_service != null:
 		_merchant_service.close_session()
 	if _merchant_ui != null and is_instance_valid(_merchant_ui):
-		var closing := _merchant_ui
-		get_tree().create_timer(0.3).timeout.connect(closing.queue_free)
+		_merchant_ui.queue_free()
 	_merchant_ui = null
 	_sync_player_input_lock()
 
@@ -8809,7 +8894,8 @@ func _hibernate_room_entities(room_id: String) -> void:
 
 func _capture_room_runtime_state(room_id: String) -> void:
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
-	if room == null or not is_instance_valid(room):
+	# A detached room has no live groups or world transforms; keep its last snapshot.
+	if not is_inside_tree() or not is_instance_valid(room) or not room.is_inside_tree():
 		return
 	room.capture_reactive_prop_states()
 	var enemy_states: Array[Dictionary] = []
@@ -8952,9 +9038,11 @@ func _restore_room_runtime_state(room_id: String) -> void:
 	# 传空字典会盖掉房间内存里的账（`apply_runtime_detail_state()` 是合并语义，
 	# 但空字典本身也是一次有效的写入）。缺席即"这局没有记录"，不动内存账。
 	var detail_state := {
-		"room_light_on": bool(state.get("room_light_on", false)),
 		"containers": (state.get("containers", {}) as Dictionary).duplicate(true),
 	}
+	# Missing legacy fields are not commands to turn off the room's default lights.
+	if state.has("room_light_on"):
+		detail_state["room_light_on"] = bool(state["room_light_on"])
 	for optional_key in ["treasure_chests", "breakable_clutter", "reactive_props"]:
 		if state.has(optional_key):
 			detail_state[optional_key] = (state[optional_key] as Dictionary).duplicate(true)

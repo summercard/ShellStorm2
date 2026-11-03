@@ -101,8 +101,9 @@
   "furnishing": {
     "schema": "shellstorm2.battle.room_furnishing",
     "schema_version": 1,
-    "note": "程序化随机家具（含可搜索容器）总开关（2026-10-30，主人要求「把程序生成的这些箱子每个房间都去掉」）。**能力段不是关卡分支**：DungeonRoom3D 只认本段、不认识关卡 ID。enabled=false ⇒ 一间房都不再生成随机家具/可搜容器；固定陈设（安全房五件易碎件、Boss 房构图、服务台、撤离信标）不在随机循环里建，不受影响；易碎小物件走另一段 interactive_clutter。未写本段的关卡默认 true，行为逐字不变。",
-    "enabled": false
+    "note": "程序化随机家具（含可搜索容器）总开关（2026-10-30，主人要求「把程序生成的这些箱子每个房间都去掉」）。**能力段不是关卡分支**：DungeonRoom3D 只认本段、不认识关卡 ID。enabled=false ⇒ 一间房都不再生成随机家具/可搜容器；固定陈设（安全房五件易碎件、Boss 房构图、服务台、撤离信标）不在随机循环里建，不受影响；易碎小物件走另一段 interactive_clutter。未写本段的关卡默认 true，行为逐字不变。同一段还有 `fixed_lobby_clutter_enabled`（2026-11-03，主人要求「安全屋中间五个易碎物品拿掉」）：false ⇒ 入口安全房中央那五件固定易碎陈设整批不摆（`DungeonRoom3D.INTERACTIVE_CLUTTER_PLACEMENTS`），**随机撒点那一段不受影响**；缺省 true = 塔楼与远征01 的安全房照旧是五件。",
+    "enabled": false,
+    "fixed_lobby_clutter_enabled": false
   },
   "generation_policy": {
     "mode": "flow",

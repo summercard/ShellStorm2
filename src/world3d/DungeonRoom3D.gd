@@ -565,6 +565,20 @@ var spawn_placements: Array = []
 ## 调用层：第 N 波调用哪几个盒子实例。`{stages: [{boxes: [int...]}], intermission_sec: float}`。
 ## 空字典 = 全部实例并进一波（运行时口径）。推进仍复用既有波次机制。
 var encounter: Dictionary = {}
+## 房间级「额外追加一只指定精英」（能力声明，非关卡 ID 分支）。
+##
+## 语义是**追加，不是替换**：本房原有编成（普通刷怪 / 盒子 / 触发遭遇）照旧，
+## 生成完之后再额外落一只点名的精英。空串 = 本房不追加，行为逐字不变。
+##
+## 为什么不用 `encounter.stages[].monsters` 指定 elite：那是**触发式遭遇**，
+## 声明它会走「只认编成」路径，把本房的普通编成整体替换掉 —— 与「保留普通战斗、
+## 另加一只精英」是两件事。
+##
+## 为什么不用 `spawn_placements` 里的 `box`：同理，声明盒子后本房「只认盒子」。
+##
+## 名义上任何房型都能声明；但 `ELITE` / `BASEMENT` 房本身就会出精英，
+## `BOSS` 房已自带精英随从 —— 这三类再声明会出两只，故消费端只在普通战斗房生效。
+var elite_id: String = ""
 ## 「只认盒子」层标记（层里写一次、逐房下发）：置真时本房**没摆盒子就不刷怪**，
 ## 绝不回退旧的公式/房型/设计源路径。业主裁定 2026-09-26「全废弃，没盒子就不刷」。
 ## 缺省 false ⇒ 未迁移关卡（塔楼各层）行为逐字不变。
@@ -678,6 +692,18 @@ var door_endpoint_owners: Dictionary = {}
 ## 本房**不建门、不管传送** —— 建门与传送都归 Dungeon3D；这里只承载声明，
 ## 让位点随房间节点一起流送/卸载。
 var secret_site: Dictionary = {}
+## 是否允许本房摆放**入口安全房中央那五件固定易碎陈设**（`INTERACTIVE_CLUTTER_PLACEMENTS`）。
+##
+## false ⇒ `_build_interactive_clutter()` 的 STAIR_LOBBY 固定分支一件都不摆。
+## 默认 true 保持既有行为（塔楼与远征01 的安全房照旧是五件）。
+##
+## 为什么需要这个开关：那五件的落点全在房心附近（|x| ≤ 1.8 / |z| ≤ 1.9），
+## 而入口安全房又正是玩家每局落地站着的地方 —— 想清干净中央、又不想动
+## 随机撒点那一段（`interactive_clutter`）时，只能单独关这一批。
+##
+## 只认数据段 `furnishing.fixed_lobby_clutter_enabled`（见 `_record` 透传），
+## **不认关卡 ID**：任何关卡写同一个键都同样生效。
+var fixed_lobby_clutter_enabled := true
 ## 场景可交互易碎小物件的**随机布置计划**（能力级字段，不含任何关卡 ID）。
 ## 空字典 = 不随机布置（入口安全房仍按 `INTERACTIVE_CLUTTER_PLACEMENTS` 固定摆五件）。
 ## 非空 = 本房按 `room_seed` 确定性撒点：同一房间流送卸载重建后位置逐格不变。
@@ -705,6 +731,7 @@ func configure(config: Dictionary) -> void:
 	_build_boss_reinforcement_markers()
 	spawn_placements = (config.get("spawn_placements", spawn_placements) as Array).duplicate(true)
 	encounter = (config.get("encounter", encounter) as Dictionary).duplicate(true)
+	elite_id = str(config.get("elite_id", elite_id))
 	spawn_boxes_only = bool(config.get("spawn_boxes_only", spawn_boxes_only))
 	reward_plan = (config.get("reward_plan", reward_plan) as Dictionary).duplicate(true)
 	chest_placements = (config.get("chest_placements", chest_placements) as Array).duplicate(true)
@@ -734,6 +761,9 @@ func configure(config: Dictionary) -> void:
 	interactive_clutter_plan = (
 		config.get("interactive_clutter", interactive_clutter_plan) as Dictionary
 	).duplicate(true)
+	fixed_lobby_clutter_enabled = bool(config.get(
+		"fixed_lobby_clutter_enabled", fixed_lobby_clutter_enabled
+	))
 	_index_door_openings()
 	# 「本房墙体由房间自己生成」。静态布局与程序化壳体都满足这条，
 	# 统一打成一个 meta，供走廊连接器判断要不要补 5m 塔楼墙
@@ -936,6 +966,7 @@ func get_room_snapshot() -> Dictionary:
 		"authored_layout_peaceful": authored_layout_peaceful,
 		"search_facilities_enabled": search_facilities_enabled,
 		"procedural_furniture_enabled": procedural_furniture_enabled,
+		"fixed_lobby_clutter_enabled": fixed_lobby_clutter_enabled,
 		"authored_clutter_count": get_authored_clutter().size(),
 		"shell_built": _shell_built, "detail_built": _detail_built, "stream_state": _stream_state,
 		"stream_state_name": get_stream_state_name(),
@@ -1146,7 +1177,7 @@ func set_stream_state(state: int) -> void:
 ## ⚠️ **是合并，不是整体替换**。调用方只该传它真的知道的那几个键：
 ## 旧存档没有 `treasure_chests` / `breakable_clutter` 两个键，整体替换会把
 ## 房间内存里已经记下的「刚开过的箱子」洗回未开 —— 而这两个字段的权威本来就是房间。
-## `containers` / `room_light_on` 每次恢复都会完整传，合并与替换对它们等价。
+## 灯态仅在明确带有 `room_light_on` 时回灌，缺席保留房间默认或当前开关状态。
 func apply_runtime_detail_state(state: Dictionary) -> void:
 	for key_value in state.keys():
 		var value: Variant = state[key_value]
@@ -1160,12 +1191,12 @@ func apply_runtime_detail_state(state: Dictionary) -> void:
 func _apply_pending_detail_runtime_state() -> void:
 	if _pending_detail_runtime_state.is_empty() or not _detail_built:
 		return
-		# 默认值必须跟着房间声明走：写死 false 会把「初始灯亮」在重建时顶掉。
-	var wanted_light_on := bool(
-		_pending_detail_runtime_state.get("room_light_on", authored_room_light_on)
-	)
-	if is_room_light_on() != wanted_light_on:
-		set_room_light_on(wanted_light_on)
+	# Furnishing/container state does not own lighting. Without an explicit light
+	# record, retain the room/prefab default or the current switch/narrative state.
+	if _pending_detail_runtime_state.has("room_light_on"):
+		var wanted_light_on := bool(_pending_detail_runtime_state["room_light_on"])
+		if is_room_light_on() != wanted_light_on:
+			set_room_light_on(wanted_light_on)
 	var container_states := _pending_detail_runtime_state.get("containers", {}) as Dictionary
 	for value in get_tree().get_nodes_in_group("room_prop_3d"):
 		if value is RoomFurniture3D and _detail_root != null and _detail_root.is_ancestor_of(value):
@@ -1216,6 +1247,8 @@ func _restore_treasure_chests() -> void:
 
 
 func _unload_runtime_detail() -> void:
+	# Moving furnishings must be sampled before their subtree leaves the SceneTree.
+	capture_reactive_prop_states()
 	if _detail_root != null and is_instance_valid(_detail_root):
 		remove_child(_detail_root)
 		_detail_root.queue_free()
@@ -6241,12 +6274,16 @@ func _adopt_authored_reactive_props(root: Node3D) -> void:
 
 ## Capture moving/fading instances before saving; never discard unloaded room records.
 func capture_reactive_prop_states() -> void:
+	if not is_inside_tree():
+		return
 	var states := get_persistent_detail_state("reactive_props")
 	for node in get_tree().get_nodes_in_group("reactive_prop_3d"):
 		var prop := node as ReactiveProp3D
-		if is_ancestor_of(prop) and prop.has_meta("reactive_prop_id"):
+		if is_instance_valid(prop) and prop.is_inside_tree() and not prop.is_queued_for_deletion() and is_ancestor_of(prop) and prop.has_meta("reactive_prop_id"):
 			states[str(prop.get_meta("reactive_prop_id"))] = prop.export_prop_state()
-	_pending_detail_runtime_state["reactive_props"] = states
+	# Initial DATA_ONLY rooms have no instances or history to capture.
+	if not states.is_empty():
+		_pending_detail_runtime_state["reactive_props"] = states
 
 
 func _on_reactive_prop_changed(prop: ReactiveProp3D) -> void:
@@ -6298,6 +6335,11 @@ func _build_interactive_clutter() -> void:
 		_build_random_interactive_clutter(floor_y)
 		return
 	if room_type != "STAIR_LOBBY":
+		return
+	# 入口安全房中央那五件固定陈设。关卡可用 `furnishing.fixed_lobby_clutter_enabled=false`
+	# 整批关掉（远征03，2026-11-03 业主要求「中间五个易碎物品拿掉」）——
+	# 判据只看字段，不认关卡 ID；未声明本键的关卡缺省 true，行为逐字不变。
+	if not fixed_lobby_clutter_enabled:
 		return
 	for slug in INTERACTIVE_CLUTTER_PLACEMENTS:
 		var clutter := _instantiate_interactive_clutter(slug, slug)

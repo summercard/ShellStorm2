@@ -1150,17 +1150,26 @@ func _organize_existing_rooms_by_block() -> void:
 
 
 ## 远征关卡出生点（房间局部偏移；房间原点 = 规划中心，Y = 该层楼面）。
-## 远征关卡01（2026-10-13 业主指定）：**落在房间正中**（四块地砖交汇处）。
+##
+## `expedition_01`（2026-10-13 业主指定）与 `expedition_03`（2026-11-03 业主指定）
+## 都**落在房间正中**（四块地砖交汇处）。
 ## 旧口径是「朝前门方向偏 4 m」，玩家一睁眼就贴在通往 01 号房的门洞上（距门 3.5 m），
 ## 业主已明确改为正中。实测该点地面承重正常、无实体阻挡（0 命中）。
-## 其它远征关卡沿用旧口径「朝前门方向偏 4 m」（业主未裁定，勿擅动）。
+##
+## 03 与 01 同口径的**另一半原因**：正中原本正好摆着那五件固定易碎陈设
+## （`DungeonRoom3D.INTERACTIVE_CLUTTER_PLACEMENTS`，落点 |x| ≤ 1.8 / |z| ≤ 1.9），
+## 现已随 `furnishing.fixed_lobby_clutter_enabled=false` 一并拿掉 ——
+## 两件事占的是同一处空间，只改一件会让玩家落地时和罐子重叠。
+##
+## 其余远征关卡（现仅关02）沿用旧口径「朝前门方向偏 4 m」—— 这是**默认分支**，
+## 新关卡不写代码即得到旧行为（业主未裁定其安全房构图，勿擅动）。
 func _expedition_entry_spawn_offset(entry_room: DungeonRoom3D) -> Vector3:
 	var front := ""
 	for side_value in entry_room.door_targets.keys():
 		if not str(entry_room.door_targets[side_value]).is_empty():
 			front = str(side_value)
 			break
-	if get_expedition_level_id() == "expedition_01":
+	if get_expedition_level_id() in ["expedition_01", "expedition_03"]:
 		return Vector3(0.0, 0.05, 0.0)
 	# 其它远征关卡（现仅关02）沿用旧口径：朝前门方向偏 4 m。
 	return {
@@ -3195,6 +3204,11 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	var encounter := spec.get("encounter", {}) as Dictionary
 	if not encounter.is_empty():
 		record["encounter"] = encounter.duplicate(true)
+	# 房间级「额外追加一只指定精英」（2026-11-03）：没写就不落字段 ⇒ 未声明关卡行为逐字不变。
+	# 与上面两段是同一形状的坑：**漏了这里 = 设计源写了却被静默丢弃**。
+	var extra_elite := str(spec.get("elite_id", ""))
+	if not extra_elite.is_empty():
+		record["elite_id"] = extra_elite
 	if bool(spec.get("spawn_boxes_only", false)):
 		record["spawn_boxes_only"] = true
 	if str(spec.get("type", "")) == "BOSS":
@@ -3219,8 +3233,16 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	# 程序化随机家具总开关（能力段，2026-10-30）：同样只看关卡数据有没有写这一段。
 	# 没写 / `enabled` 缺省 ⇒ 不落字段 ⇒ DungeonRoom3D 用缺省 true，行为逐字不变。
 	var furnishing_plan := plan.get("furnishing", {}) as Dictionary
-	if not furnishing_plan.is_empty() and not bool(furnishing_plan.get("enabled", true)):
-		record["procedural_furniture_enabled"] = false
+	if not furnishing_plan.is_empty():
+		if not bool(furnishing_plan.get("enabled", true)):
+			record["procedural_furniture_enabled"] = false
+		# 入口安全房中央五件固定易碎陈设（能力段，2026-11-03）：与 `enabled` 同段、
+		# 同一口径 —— **只在数据段显式写了 false 时**才落字段。
+		# 未声明 / 写 true 的房间一个字段都不多，DungeonRoom3D 保持缺省 true。
+		# 🔴 漏了这一行 = 设计源写了 false 却被静默丢弃（本工程已在 spawn_placements /
+		# reward_plan / chest_placements 上各踩过一次同形状的坑）。
+		if not bool(furnishing_plan.get("fixed_lobby_clutter_enabled", true)):
+			record["fixed_lobby_clutter_enabled"] = false
 
 
 func _append_tower_record(
@@ -7134,6 +7156,9 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"boss_reinforcement_plan": record.get("boss_reinforcement_plan", {}),
 		"spawn_placements": record.get("spawn_placements", []),
 		"encounter": record.get("encounter", {}),
+		# 房间级「额外追加一只指定精英」（2026-11-03）。与其余房间级字段同样逐级透传；
+		# 未写本段的关卡得到空串 ⇒ 不追加，行为逐字不变。
+		"elite_id": str(record.get("elite_id", "")),
 		"spawn_boxes_only": bool(record.get("spawn_boxes_only", false)),
 		"reward_plan": record.get("reward_plan", {}),
 		"chest_placements": record.get("chest_placements", []),
@@ -7146,6 +7171,8 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"search_facilities_enabled": bool(record.get("search_facilities_enabled", true)),
 		# 程序化随机家具总开关：记录里没有这个键 ⇒ true（未声明关卡行为逐字不变）。
 		"procedural_furniture_enabled": bool(record.get("procedural_furniture_enabled", true)),
+		# 入口安全房中央五件固定易碎陈设：与上一条同一口径，记录里没有这个键 ⇒ true。
+		"fixed_lobby_clutter_enabled": bool(record.get("fixed_lobby_clutter_enabled", true)),
 		"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 		"authored_layout_instances": record.get("authored_layout_instances", []),
 		"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),

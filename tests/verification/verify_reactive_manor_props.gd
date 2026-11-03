@@ -79,6 +79,16 @@ func _ready() -> void:
 		push_error("REACTIVE isolation must precede Autoload")
 		get_tree().quit(1)
 		return
+	if OS.get_cmdline_user_args().has("--lighting-only"):
+		await _default_light_persistence()
+		print("REACTIVE_DEFAULT_LIGHTS_OK" if failures.is_empty() else "REACTIVE_DEFAULT_LIGHTS_FAILED", " checks=", checks)
+		get_tree().quit(0 if failures.is_empty() else 1)
+		return
+	if OS.get_cmdline_user_args().has("--checkpoint-only"):
+		await _exit_checkpoint()
+		print("REACTIVE_CHECKPOINT_OK" if failures.is_empty() else "REACTIVE_CHECKPOINT_FAILED", " checks=", checks)
+		get_tree().quit(0 if failures.is_empty() else 1)
+		return
 	if OS.get_cmdline_user_args().has("--gallery-only"):
 		await _render()
 		get_tree().quit()
@@ -87,6 +97,8 @@ func _ready() -> void:
 	await _shelves()
 	await _blocked_ejection()
 	await _persistence()
+	await _exit_checkpoint()
+	await _default_light_persistence()
 	await _formal_layouts()
 	if DisplayServer.get_name() != "headless":
 		await _render()
@@ -244,6 +256,112 @@ func _persistence() -> void:
 			var prop := value as ReactiveProp3D
 			check(prop.current_hp == prop.max_hp - 7, "serialized state restores hp " + str(prop.name))
 	copy.queue_free()
+	await settle()
+
+
+## A partial furnishing/container ledger must never supply an implicit light command.
+func _default_light_persistence() -> void:
+	var dungeon := (load("res://scenes/Dungeon3D.tscn") as PackedScene).instantiate() as Dungeon3D
+	dungeon.test_mode = true
+	add_child(dungeon)
+	dungeon.process_mode = Node.PROCESS_MODE_DISABLED
+	var cases: Array[Dictionary] = [
+		{"type": "FACILITY", "authored_on": false, "expected_on": true},
+		{"type": "STAIR_LOBBY", "authored_on": false, "expected_on": true},
+		{"type": "BOSS", "authored_on": false, "expected_on": true},
+		{"type": "COMBAT", "authored_on": true, "expected_on": true},
+		{"type": "COMBAT", "authored_on": false, "expected_on": false},
+	]
+	for index in cases.size():
+		var sample := cases[index]
+		var source := DungeonRoom3D.new()
+		var id := "default_light_%d" % index
+		source.configure({"room_id": id, "room_type": sample.type,
+			"size_class": "large", "custom_dimensions": Vector2(25, 25),
+			"procedural_shell": true, "authored_room_light_on": sample.authored_on})
+		add_child(source)
+		check(source.get_persistent_detail_state("reactive_props").is_empty(), "no furnishing state before detail " + id)
+		source.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
+		await settle()
+		var expected_on: bool = sample.expected_on
+		check(source.is_room_light_on() == expected_on, "room kind/authored default survives initial capture " + id)
+		source.apply_runtime_detail_state({"reactive_props": {}})
+		check(source.is_room_light_on() == expected_on, "empty furnishing ledger preserves default " + id)
+		dungeon._room_by_id[id] = source
+		dungeon._segment_runtime_state[id] = {"containers": {}}
+		dungeon._restore_room_runtime_state(id)
+		check(source.is_room_light_on() == expected_on, "legacy snapshot without light key preserves default " + id)
+		source.set_room_light_on(not expected_on)
+		source.apply_runtime_detail_state({"containers": {}})
+		check(source.is_room_light_on() == not expected_on, "unrelated partial restore preserves live switch " + id)
+		source.apply_runtime_detail_state({"room_light_on": false})
+		check(not source.is_room_light_on(), "explicit saved blackout remains off " + id)
+		source.set_stream_state(DungeonRoom3D.STREAM_DATA_ONLY)
+		source.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
+		await settle()
+		check(not source.is_room_light_on(), "saved blackout survives detail rebuild " + id)
+		source.apply_runtime_detail_state({"room_light_on": true})
+		check(source.is_room_light_on(), "explicit saved on state is restored " + id)
+		check(dungeon.apply_narrative_light_state(id, false), "narrative light command accepted " + id)
+		source.apply_runtime_detail_state({"reactive_props": {}})
+		check(not source.is_room_light_on(), "narrative blackout survives furnishing restore " + id)
+		dungeon._restore_room_runtime_state(id)
+		check(not source.is_room_light_on(), "narrative blackout survives room snapshot restore " + id)
+		source.queue_free()
+		await settle()
+	dungeon.queue_free()
+	await settle()
+
+
+## Exercise real scene removal with persistence enabled, before the debounce fires.
+func _exit_checkpoint() -> void:
+	var original_path := BaseManager.save_path
+	var original_data := BaseManager.data
+	BaseManager.save_path = "user://reactive_exit_checkpoint.json"
+	BaseManager.data = BaseData.new()
+	var dungeon := (load("res://scenes/Dungeon3D.tscn") as PackedScene).instantiate() as Dungeon3D
+	dungeon.test_mode = true
+	add_child(dungeon)
+	dungeon.process_mode = Node.PROCESS_MODE_DISABLED
+	dungeon.test_mode = false
+	dungeon._activate_runtime_persistence()
+	# Add a persistent subtree after activation: runtime additions also exit after the save.
+	var source: DungeonRoom3D = await room()
+	source.reparent(dungeon)
+	dungeon._rooms.append(source)
+	dungeon._room_by_id[source.room_id] = source
+	dungeon._spawned_rooms[source.room_id] = true
+	var prop := source.find_child("LargePlant", true, false) as ReactiveProp3D
+	check(prop != null, "exit fixture has a reactive furnishing")
+	var expected_checkpoint: Dictionary = {}
+	if prop != null:
+		prop.take_damage(7)
+		check(BaseManager.flush_runtime_checkpoint("exit_probe_initial"), "initial checkpoint commits")
+		var revision := BaseManager.data.save_revision
+		# A moving prop's pose changes without another state_changed signal.
+		prop.position.x += 0.375
+		var expected := prop.export_prop_state()
+		var key := str(prop.get_meta("reactive_prop_id"))
+		remove_child(dungeon)
+		var stored := BaseManager.get_active_run_checkpoint()
+		expected_checkpoint = stored.duplicate(true)
+		var world: Dictionary = stored.get("world_state", {})
+		var rooms: Dictionary = world.get("segment_runtime_state", {})
+		var detail: Dictionary = (rooms.get(source.room_id, {}) as Dictionary).get("reactive_props", {})
+		check(detail.get(key, {}) == expected, "scene unload commits final live furnishing pose")
+		check(BaseManager.data.save_revision == revision + 1, "scene unload writes exactly once")
+		var ledger := source.get_persistent_detail_state("reactive_props")
+		source.capture_reactive_prop_states()
+		check(source.get_persistent_detail_state("reactive_props") == ledger, "detached capture preserves cached ledger")
+		dungeon._capture_room_runtime_state(source.room_id)
+		check(dungeon._segment_runtime_state[source.room_id].get("reactive_props", {}) == ledger, "detached room preserves last runtime snapshot")
+	else:
+		remove_child(dungeon)
+	dungeon.free()
+	BaseManager.load_base()
+	check(not expected_checkpoint.is_empty() and BaseManager.get_active_run_checkpoint() == JSON.parse_string(JSON.stringify(expected_checkpoint)), "unload checkpoint reloads from disk")
+	BaseManager.save_path = original_path
+	BaseManager.data = original_data
 	await settle()
 
 
