@@ -38,6 +38,10 @@ func _run() -> void:
 	_check(dungeon._inventory_ui.special_equipment_slot.controller == controller, "actual equipment slot binds same owner")
 	var hud := dungeon.get_node("HUD/ReferenceCombatHUD/SpecialItemHUD") as SpecialItemHUD
 	_check(hud.controller == controller, "actual HUD binds same owner")
+	dungeon.player.set_combat_enabled(false)
+	_check(not controller.can_use() and not bool(controller.request_use().success) and inventory.get_item_count(SpecialItemCatalog.GRENADE) == 3, "same combat lock as 99F shooting prevents special use without consumption")
+	dungeon.player.set_combat_enabled(true)
+	_check(str(hud.get_ui_snapshot().name).is_empty() and str(hud.get_ui_snapshot().info) == "×3", "HUD contains only icon and numeric quantity")
 	await _right(true)
 	for _frame in 6:
 		await get_tree().physics_frame

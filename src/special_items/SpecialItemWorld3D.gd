@@ -21,6 +21,9 @@ var _shape := SphereShape3D.new()
 var _fire_voice: Node
 var _last_ignite_cue := -1.0
 
+func _ready() -> void:
+	add_to_group("special_item_world_3d")
+
 func _init() -> void:
 	_shape.radius = 0.09
 
@@ -290,3 +293,22 @@ func _stop_fire_audio() -> void:
 	if is_instance_valid(_fire_voice):
 		AudioManager.stop_voice(_fire_voice)
 	_fire_voice = null
+
+
+## Bullets test their actual traveled segment, clipped by world collision. Oil
+## is gameplay data, never a blocking collider; existing projectile physics stays authoritative.
+func ignite_bullet_segment(start: Vector3, end: Vector3) -> void:
+	var a := Vector2(start.x, start.z)
+	var b := Vector2(end.x, end.z)
+	var segment := b - a
+	var radius := float(SpecialItemCatalog.get_item(SpecialItemCatalog.GASOLINE).radius)
+	for patch: Dictionary in oil:
+		if float(patch.burn_until) > 0.0:
+			continue
+		var point: Vector3 = patch.position
+		var t := clampf((Vector2(point.x,point.z)-a).dot(segment)/maxf(segment.length_squared(),0.000001),0.0,1.0)
+		if absf(lerpf(start.y,end.y,t)-point.y) > 1.2:
+			continue
+		if (a+segment*t).distance_to(Vector2(point.x,point.z)) <= radius:
+			patch.ignite_at = clock
+	_step_fire_and_oil()

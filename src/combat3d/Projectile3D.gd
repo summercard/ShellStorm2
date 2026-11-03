@@ -262,7 +262,11 @@ func _physics_process(delta: float) -> void:
 				expired.emit()
 			_retire()
 			return
+	var previous_position := global_position
 	var collision := move_and_collide(step)
+	if damage > 0:
+		for oil_world: Node in get_tree().get_nodes_in_group("special_item_world_3d"):
+			oil_world.call("ignite_bullet_segment", previous_position, global_position)
 	if collision == null:
 		return
 	# 物理命中上下文（先于反弹方向变化），供命中特效读取法线/接触点。

@@ -2107,10 +2107,10 @@ func _build_reference_main_hud() -> void:
 	var special_hud := preload("res://assets/art/ui/special_items/ui_special_item_hud_root.tscn").instantiate() as SpecialItemHUD
 	special_hud.name = "SpecialItemHUD"
 	special_hud.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-	special_hud.offset_left = -300.0
-	special_hud.offset_top = -150.0
-	special_hud.offset_right = -18.0
-	special_hud.offset_bottom = -82.0
+	special_hud.offset_left = -336.0
+	special_hud.offset_top = -76.0
+	special_hud.offset_right = -274.0
+	special_hud.offset_bottom = -14.0
 	_reference_hud_root.add_child(special_hud)
 	special_hud.configure(player.get_special_item_controller())
 	# 右下武器栏：tap 在主武器 / 副武器 之间切换（_on_ammo_changed 里 [N] 会自动反映新槽位）

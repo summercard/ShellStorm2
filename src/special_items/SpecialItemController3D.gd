@@ -71,7 +71,7 @@ func _notification(what: int) -> void:
 func can_use() -> bool:
 	if not is_instance_valid(_player) or _inventory == null or not is_instance_valid(world):
 		return false
-	if int(_player.get("current_hp")) <= 0 or bool(_player.get("input_locked")):
+	if (_player is Player3D and not (_player as Player3D).combat_enabled) or int(_player.get("current_hp")) <= 0 or bool(_player.get("input_locked")):
 		return false
 	if _player.has_method("get_state_machine_state") and str(_player.call("get_state_machine_state")) not in ["idle", "moving"]:
 		return false

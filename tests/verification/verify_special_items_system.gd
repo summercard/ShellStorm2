@@ -124,6 +124,10 @@ func _run() -> void:
 	_check(float(world.oil[4].burn_until) < 0.0, "disconnected oil stays unlit")
 	world.advance(5.1)
 	_check(world.oil.size() == 1, "each burning patch has five-second lifetime")
+	world.ignite_bullet_segment(start + Vector3(0, 12, 2), start + Vector3(0, 12, 4))
+	_check(float(world.oil[0].burn_until) < 0.0, "bullets on other floors cannot ignite oil")
+	world.ignite_bullet_segment(start + Vector3(0, 0.7, 2), start + Vector3(0, 0.7, 4))
+	_check(float(world.oil[0].burn_until) > world.clock, "ordinary bullet path ignites oil immediately")
 	world.clear()
 	await get_tree().process_frame
 	controller.cooldown_remaining = 0.0
