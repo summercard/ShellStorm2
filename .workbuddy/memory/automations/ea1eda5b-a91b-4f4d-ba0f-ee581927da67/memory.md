@@ -5,6 +5,16 @@
 
 ## 执行历史
 
+### 2026-11-03 05:05 — **内容已上线，线上校验不通过（第四天同一卡点：需登录门禁）**
+- 全流程一次过：导出 366.6 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（14 条）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。耗时 4m49s，无重试。
+- 包：**384,376,424 B / 366.6 MiB**，SHA256 `f029cd798f0b25244db5aba668b8fc9109d1c75309edbe8e2e4ed35324fcd4db`，比 11-01 版 +683,400 B。exe mtime 今日 05:04（真导出）。工作区开工时**完全干净**（`git status` 0 项），HEAD `8cd75bac`（11-02 23:32）。
+- 线上已被本版覆盖：`/api/v1/sites` 3 files / **384,397,321 B** ＝ 本地三件之和（exe + index 12,062 + md 8,835）**逐字节相等**；站点 `created_at` 仍是 2026-10-12T19:05:19 ⇒ 未新建站点。
+- **卡点不变**：直链、更新页、`更新日志_2026-11-03.md` 三条路径均 302 → `/oauth/feishu?rd=…&src=site`；`server-sites` 显示本站「访问=需登录」。未改访问策略、未删校验。
+- 14 条**全为 2026-11-02、全为真新增**（窗口 since=11-02 05:05，昨日那轮收的是 10-31/11-01 条目，无重叠）。提交 10 条（折叠 2），未提交 2 项（`tests/verification` 两个 `.gd.uid`）。页面 14 个 `<h3>`、`<h1>弹壳风暴2</h1>`、按钮 `href="ShellStorm2.exe"`；最长行 798 字符（条目正文压成一段，非阻断）。
+- 合规：`config/name="弹壳风暴2"` 未动；未 commit/push（工作区仅新增 2 个 `.gd.uid`，系导出产物）；未新建站点；未跑 web_release；冒烟隔离 `APPDATA`。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-03.md`；日志 `_logs\daily_release_2026-11-03.log`。
+- **待业主（连续第四天）**：请管理员把本站 `access` 改 `public`，否则每天都是「发了但玩家下不到」。
+
 ### 2026-11-01 05:05 — **内容已上线，线上校验不通过（第三天同一卡点：需登录门禁）**
 - 全流程一次过：导出 365.9 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（18 条）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。耗时 4m45s，无重试。
 - 包：**383,693,024 B / 365.9 MiB**，SHA256 `348a7018433058692ed62a805526350c7369ef7ce21de0479b17a3689e0fbe8a`，比 10-31 版 +223,768 B。exe mtime 今日 05:04（真导出）。

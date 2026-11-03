@@ -37,7 +37,7 @@
     {
       "id": "special_molotov",
       "name": "燃烧瓶",
-      "description": "特殊槽装备 · 右键抛掷 · 2.4米范围燃烧5秒，每秒12伤害，可点燃汽油。",
+      "description": "特殊槽装备 · 右键抛掷 · 1.25米范围燃烧5秒，每秒12伤害，可点燃汽油。",
       "type": "special_item",
       "subtype": "molotov",
       "rarity": "uncommon",
@@ -54,7 +54,7 @@
       "cooldown": 1.5,
       "throw_distance": 8.0,
       "flight_time": 0.8,
-      "radius": 2.4,
+      "radius": 1.25,
       "damage_per_tick": 6,
       "duration": 5.0,
       "dimensions_m": [
@@ -361,10 +361,12 @@
     "preview_special_items"
   ],
   "status": "verified_desktop_mouse_path",
-  "design_revision": "r2",
+  "design_revision": "r3",
   "verification_results": {
-    "core_checks": 77,
+    "core_checks": 78,
     "integration_checks": 16,
-    "native_visual": "passed"
+    "lamp_chain_checks": 419,
+    "native_visual": "passed",
+    "lamp_chain_unexpected_errors": 1
   }
 }
