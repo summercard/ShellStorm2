@@ -190,6 +190,11 @@ output/
 Godot/
 NVIDIA Corporation/
 
+# tests/rec/ 的逐帧截图目录：`record_elite.gd` 录完 mp4 后 ffmpeg 拆出的 120 张 PNG
+# （单轮 ~23 MB）。**mp4 本身入库**，帧可从 mp4 无损重出，属可再生的中间产物。
+# 不设这条的话 `git add` 会把 120 张 2048 级 PNG 一次塞进提交。
+tests/rec/out/
+
 # Runtime texture import contracts: budgets and normal/VRAM settings.
 # BEGIN runtime_texture_policy
 !assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v007_Normal.jpg.import

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/rec/probe_level_elite4.gd" id="1_probe4"]
+
+[node name="ProbeLevelElite4" type="Node3D"]
+script = ExtResource("1_probe4")
