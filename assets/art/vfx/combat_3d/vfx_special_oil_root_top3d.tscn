@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Script" path="res://src/vfx/VfxSpecialOil3D.gd" id="1"]
+[ext_resource type="Shader" path="res://assets/art/vfx/special_items/oil_surface.gdshader" id="2"]
+[sub_resource type="ShaderMaterial" id="oil"]
+shader = ExtResource("2")
+[sub_resource type="PlaneMesh" id="surface"]
+material = SubResource("oil")
+size = Vector2(2, 2)
+[node name="VfxSpecialOil3D" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-SPECIAL-OIL-3D"
+metadata/asset_version = "v001"
+[node name="OilSurface" type="MeshInstance3D" parent="."]
+mesh = SubResource("surface")
+cast_shadow = 0

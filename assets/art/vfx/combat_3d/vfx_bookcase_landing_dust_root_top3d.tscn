@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3]
+[ext_resource type="Script" path="res://src/vfx/VfxBookcaseLandingDust3D.gd" id="1"]
+[sub_resource type="StandardMaterial3D" id="DustMaterial"]
+transparency = 1
+albedo_color = Color(0.55,0.47,0.36,0)
+roughness = 1.0
+shading_mode = 0
+[sub_resource type="SphereMesh" id="DustMesh"]
+material = SubResource("DustMaterial")
+radius = 0.5
+height = 1.0
+radial_segments = 8
+rings = 4
+[node name="VfxBookcaseLandingDust3D" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-BOOKCASE-LANDING-DUST-3D"
+metadata/asset_version = "v001"
+lifetime = 0.7
+[node name="Puff0" type="MeshInstance3D" parent="."]
+mesh = SubResource("DustMesh")
+cast_shadow = 0
+[node name="Puff1" type="MeshInstance3D" parent="."]
+mesh = SubResource("DustMesh")
+cast_shadow = 0
+[node name="Puff2" type="MeshInstance3D" parent="."]
+mesh = SubResource("DustMesh")
+cast_shadow = 0

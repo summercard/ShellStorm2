@@ -1,0 +1,30 @@
+[gd_scene load_steps=7 format=3]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_console/env_manor_console_root_top3d.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_table_lamp/env_manor_table_lamp_root_top3d.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_flower_arrangement/env_manor_flower_arrangement_root_top3d.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_desk_documents/env_manor_desk_documents_root_top3d.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_side_table/env_manor_side_table_root_top3d.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_candelabra/env_manor_candelabra_root_top3d.tscn" id="6"]
+
+[node name="LampFixture" type="Node3D"]
+[node name="Table" parent="." instance=ExtResource("1")]
+position = Vector3(0, 0.1, 0)
+scale = Vector3(2, 1.5, 2)
+[node name="Lamp" parent="." instance=ExtResource("2")]
+position = Vector3(-0.5, 1.375, 0)
+[node name="Flower" parent="." instance=ExtResource("3")]
+position = Vector3(0.5, 1.375, 0)
+[node name="Documents" parent="." instance=ExtResource("4")]
+position = Vector3(0.0, 1.375, 0.1)
+[node name="Candle" parent="." instance=ExtResource("6")]
+position = Vector3(0.0, 1.375, -0.2)
+[node name="OtherTable" parent="." instance=ExtResource("5")]
+position = Vector3(4, 0.1, 0)
+[node name="OtherLamp" parent="." instance=ExtResource("2")]
+position = Vector3(4, 0.74, 0)
+[node name="GroundFlower" parent="." instance=ExtResource("3")]
+position = Vector3(1, 0.1, 1.4)
+[node name="LampLight" type="OmniLight3D" parent="."]
+position = Vector3(-0.5, 1.8, 0)
+light_energy = 2.0
+omni_range = 3.0

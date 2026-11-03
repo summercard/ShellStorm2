@@ -1,8 +1,13 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/common_components/manor_plant_large/env_manor_plant_large_visual_top3d.glb" id="1"]
 
+[ext_resource type="Script" path="res://src/world3d/ReactiveProp3D.gd" id="2_reactive"]
+
 [node name="manor_plant_large" type="Node3D"]
+script = ExtResource("2_reactive")
+prop_kind = "planter"
+max_hp = 90
 metadata/asset_id = "ENV-EXP03-MANOR-PLANT-LARGE"
 metadata/asset_version = "v017"
 metadata/level_id = "expedition_03"
@@ -11,9 +16,9 @@ metadata/source_blend = "res://art_source/environments/tower_zones/expedition/so
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
 metadata/up_axis = "+Y"
-metadata/collision_owner = "godot_wrapper"
-metadata/collision_policy = "visual_only"
-metadata/collision_shape_count = 0
+metadata/collision_owner = "ReactiveProp3D"
+metadata/collision_policy = "reactive_prop"
+metadata/collision_shape_count = 1
 metadata/bounds_size_m = Vector3(1.5438, 1.60985, 1.51167)
 metadata/room_owned_geometry = false
 metadata/preserve_authored_palette = true

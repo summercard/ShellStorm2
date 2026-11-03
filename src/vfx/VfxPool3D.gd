@@ -7,6 +7,7 @@ const VfxEffectBase3D = preload("res://src/vfx/VfxEffectBase3D.gd")
 ## 调用方按 AssetID（如 "VFX-MUZZLE-FLASH-3D"）路由到对应 bucket
 
 const FX01_FATE_FIRE := "VFX-FATE-FIRE-3D"
+const FX01_BOOKCASE_LANDING_DUST := "VFX-BOOKCASE-LANDING-DUST-3D"
 const FX01_FATE_FROST := "VFX-FATE-FROST-3D"
 const FX01_FATE_POISON := "VFX-FATE-POISON-3D"
 const FX01_FATE_LIGHTNING := "VFX-FATE-LIGHTNING-3D"
@@ -59,7 +60,15 @@ const FX01_AXE_IMPACT := "VFX-MELEE-AXE-IMPACT-3D"
 const FX01_BLADE_SWEEP := "VFX-MELEE-BLADE-SWEEP-3D"
 const FX01_BLADE_WHIRLWIND := "VFX-MELEE-BLADE-WHIRLWIND-3D"
 
+const FX01_SPECIAL_FIRE := &"VFX-SPECIAL-FIRE-3D"
+const FX01_SPECIAL_OIL := &"VFX-SPECIAL-OIL-3D"
+const FX01_SPECIAL_BLAST := &"VFX-SPECIAL-BLAST-3D"
+
 const _REGISTRY := {
+	FX01_SPECIAL_FIRE: preload("res://assets/art/vfx/combat_3d/vfx_special_fire_root_top3d.tscn"),
+	FX01_SPECIAL_OIL: preload("res://assets/art/vfx/combat_3d/vfx_special_oil_root_top3d.tscn"),
+	FX01_SPECIAL_BLAST: preload("res://assets/art/vfx/combat_3d/vfx_special_blast_root_top3d.tscn"),
+	FX01_BOOKCASE_LANDING_DUST: preload("res://assets/art/vfx/combat_3d/vfx_bookcase_landing_dust_root_top3d.tscn"),
 	FX01_AXE_CHARGE: preload("res://assets/art/vfx/combat_3d/vfx_axe_charge_root_top3d.tscn"),
 	FX01_AXE_CLEAVE: preload("res://assets/art/vfx/combat_3d/vfx_axe_cleave_root_top3d.tscn"),
 	FX01_AXE_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_axe_impact_root_top3d.tscn"),

@@ -875,6 +875,10 @@ func _sync_supplemental_room_lights() -> void:
 	var active := _stream_state in [STREAM_SHELL_READY, STREAM_ACTIVE]
 	for value in _supplemental_room_lights:
 		var light := value as Light3D
+		if is_instance_valid(light) and bool(light.get_meta("reactive_light_disabled", false)):
+			light.visible = false
+			light.light_energy = 0.0
+			continue
 		if is_instance_valid(light):
 			# 不翻visible，保留作者可见性且避免Compatibility重开灯丢渲染实例。
 			light.light_energy = float(_supplemental_room_lights[light]) if enabled and active else 0.0
@@ -1170,6 +1174,7 @@ func _apply_pending_detail_runtime_state() -> void:
 				prop.restore_searched_state(bool(container_states[prop.prop_id]))
 	_restore_treasure_chests()
 	_restore_interactive_clutter()
+	_restore_reactive_props()
 
 
 ## 房间自己持有的**跨 detail 生命周期**的细节账（宝箱已开 / 易碎杂物已碎）。
@@ -6200,6 +6205,7 @@ func _adopt_authored_breakable_clutter(root: Node3D) -> void:
 	_authored_clutter_nodes.clear()
 	if root == null:
 		return
+	_adopt_authored_reactive_props(root)
 	var used := {}
 	for node in root.find_children("*", "", true, false):
 		var clutter := node as BreakableClutter3D
@@ -6217,6 +6223,49 @@ func _adopt_authored_breakable_clutter(root: Node3D) -> void:
 		if not clutter.broken.is_connected(_on_interactive_clutter_broken):
 			clutter.broken.connect(_on_interactive_clutter_broken)
 		_authored_clutter_nodes.append(clutter)
+
+
+## Stateful furnishings share the authored-layout discovery point, with a separate ledger.
+func _adopt_authored_reactive_props(root: Node3D) -> void:
+	preload("res://src/world3d/FurnishingSupport3D.gd").bind_layout(root)
+	for value in root.find_children("*", "", true, false):
+		var prop := value as ReactiveProp3D
+		if prop == null:
+			continue
+		# Relative paths distinguish repeated names under different furnishing groups.
+		prop.set_meta("reactive_prop_id", str(root.get_path_to(prop)))
+		if not prop.state_changed.is_connected(_on_reactive_prop_changed):
+			prop.state_changed.connect(_on_reactive_prop_changed)
+	_restore_reactive_props()
+
+
+## Capture moving/fading instances before saving; never discard unloaded room records.
+func capture_reactive_prop_states() -> void:
+	var states := get_persistent_detail_state("reactive_props")
+	for node in get_tree().get_nodes_in_group("reactive_prop_3d"):
+		var prop := node as ReactiveProp3D
+		if is_ancestor_of(prop) and prop.has_meta("reactive_prop_id"):
+			states[str(prop.get_meta("reactive_prop_id"))] = prop.export_prop_state()
+	_pending_detail_runtime_state["reactive_props"] = states
+
+
+func _on_reactive_prop_changed(prop: ReactiveProp3D) -> void:
+	var states := get_persistent_detail_state("reactive_props")
+	states[str(prop.get_meta("reactive_prop_id"))] = prop.export_prop_state()
+	_pending_detail_runtime_state["reactive_props"] = states
+
+
+func _restore_reactive_props() -> void:
+	var states := get_persistent_detail_state("reactive_props")
+	if states.is_empty():
+		return
+	for value in get_tree().get_nodes_in_group("reactive_prop_3d"):
+		var prop := value as ReactiveProp3D
+		if not is_ancestor_of(prop):
+			continue
+		var key := str(prop.get_meta("reactive_prop_id", ""))
+		if states.has(key):
+			prop.restore_prop_state(states[key])
 
 
 ## 手摆易碎件的平面落点（房间局部）。随机撒点用它避让。

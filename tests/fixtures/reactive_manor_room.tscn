@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bookcase/env_manor_bookcase_root_top3d.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_plant_large/env_manor_plant_large_root_top3d.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_plant_compact/env_manor_plant_compact_root_top3d.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_flower_arrangement/env_manor_flower_arrangement_root_top3d.tscn" id="4"]
+
+[node name="ReactiveFixture" type="Node3D"]
+
+[node name="Shelf" parent="." instance=ExtResource("1")]
+position = Vector3(0, 0.1, 0)
+scale = Vector3(1.5, 1.2507, 1)
+
+[node name="LargePlant" parent="." instance=ExtResource("2")]
+position = Vector3(-4, 0.1, 0)
+
+[node name="CompactPlant" parent="." instance=ExtResource("3")]
+position = Vector3(4, 0.1, 0)
+
+[node name="Flowers" parent="." instance=ExtResource("4")]
+position = Vector3(6, 0.1, 0)

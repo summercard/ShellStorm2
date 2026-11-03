@@ -33,6 +33,14 @@ func request_hit(damage: int, maximum: int) -> void:
 	_shake_clock = 0.0
 
 
+func request_environment_impact(strength: float = 1.0) -> void:
+	if suspended or _player == null or _player.current_hp <= 0:
+		return
+	_shake_amplitude = maxf(_shake_amplitude, 0.035 * clampf(strength,0,1))
+	_shake_remaining = maxf(_shake_remaining, SHAKE_DURATION)
+	_shake_clock = 0.0
+
+
 func advance_look(delta: float, screen_delta: Vector2, viewport_size: Vector2,
 		right: Vector3, up: Vector3, enabled: bool) -> void:
 	var target := Vector3.ZERO

@@ -1,0 +1,148 @@
+[gd_scene load_steps=8 format=3]
+[ext_resource type="Script" path="res://src/vfx/VfxSpecialFire3D.gd" id="1"]
+[sub_resource type="StandardMaterial3D" id="outer"]
+shading_mode = 0
+albedo_color = Color(1, 0.19, 0.015, 1)
+emission_enabled = true
+emission = Color(1, 0.09, 0.005, 1)
+emission_energy_multiplier = 1.8
+[sub_resource type="StandardMaterial3D" id="inner"]
+shading_mode = 0
+albedo_color = Color(1, 0.82, 0.18, 1)
+emission_enabled = true
+emission = Color(1, 0.56, 0.04, 1)
+emission_energy_multiplier = 1.6
+[sub_resource type="StandardMaterial3D" id="char"]
+transparency = 1
+albedo_color = Color(0.055, 0.022, 0.008, 0.72)
+roughness = 1.0
+[sub_resource type="CylinderMesh" id="flame"]
+material = SubResource("outer")
+top_radius = 0.025
+bottom_radius = 0.22
+height = 0.85
+radial_segments = 7
+[sub_resource type="SphereMesh" id="core"]
+material = SubResource("inner")
+radius = 0.15
+height = 0.48
+radial_segments = 8
+rings = 4
+[sub_resource type="CylinderMesh" id="scorch"]
+material = SubResource("char")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.006
+radial_segments = 24
+[node name="VfxSpecialFire3D" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-SPECIAL-FIRE-3D"
+metadata/asset_version = "v001"
+[node name="Scorch" type="MeshInstance3D" parent="."]
+mesh = SubResource("scorch")
+cast_shadow = 0
+[node name="Flames" type="Node3D" parent="."]
+[node name="Flame0" type="Node3D" parent="Flames"]
+position = Vector3(0.64000, 0, 0.00000)
+[node name="Tongue" type="MeshInstance3D" parent="Flames/Flame0"]
+position = Vector3(0, 0.43, 0)
+rotation = Vector3(0.1, 0.00000, 0.17)
+mesh = SubResource("flame")
+cast_shadow = 0
+[node name="HotCore" type="MeshInstance3D" parent="Flames/Flame0"]
+position = Vector3(0, 0.22, -0.025)
+mesh = SubResource("core")
+cast_shadow = 0
+[node name="Flame1" type="Node3D" parent="Flames"]
+position = Vector3(0.45255, 0, 0.45255)
+[node name="Tongue" type="MeshInstance3D" parent="Flames/Flame1"]
+position = Vector3(0, 0.43, 0)
+rotation = Vector3(0.1, 0.78540, 0.17)
+mesh = SubResource("flame")
+cast_shadow = 0
+[node name="HotCore" type="MeshInstance3D" parent="Flames/Flame1"]
+position = Vector3(0, 0.22, -0.025)
+mesh = SubResource("core")
+cast_shadow = 0
+[node name="Flame2" type="Node3D" parent="Flames"]
+position = Vector3(0.00000, 0, 0.64000)
+[node name="Tongue" type="MeshInstance3D" parent="Flames/Flame2"]
+position = Vector3(0, 0.43, 0)
+rotation = Vector3(0.1, 1.57080, 0.17)
+mesh = SubResource("flame")
+cast_shadow = 0
+[node name="HotCore" type="MeshInstance3D" parent="Flames/Flame2"]
+position = Vector3(0, 0.22, -0.025)
+mesh = SubResource("core")
+cast_shadow = 0
+[node name="Flame3" type="Node3D" parent="Flames"]
+position = Vector3(-0.45255, 0, 0.45255)
+[node name="Tongue" type="MeshInstance3D" parent="Flames/Flame3"]
+position = Vector3(0, 0.43, 0)
+rotation = Vector3(0.1, 2.35619, 0.17)
+mesh = SubResource("flame")
+cast_shadow = 0
+[node name="HotCore" type="MeshInstance3D" parent="Flames/Flame3"]
+position = Vector3(0, 0.22, -0.025)
+mesh = SubResource("core")
+cast_shadow = 0
+[node name="Flame4" type="Node3D" parent="Flames"]
+position = Vector3(-0.64000, 0, 0.00000)
+[node name="Tongue" type="MeshInstance3D" parent="Flames/Flame4"]
+position = Vector3(0, 0.43, 0)
+rotation = Vector3(0.1, 3.14159, 0.17)
+mesh = SubResource("flame")
+cast_shadow = 0
+[node name="HotCore" type="MeshInstance3D" parent="Flames/Flame4"]
+position = Vector3(0, 0.22, -0.025)
+mesh = SubResource("core")
+cast_shadow = 0
+[node name="Flame5" type="Node3D" parent="Flames"]
+position = Vector3(-0.45255, 0, -0.45255)
+[node name="Tongue" type="MeshInstance3D" parent="Flames/Flame5"]
+position = Vector3(0, 0.43, 0)
+rotation = Vector3(0.1, 3.92699, 0.17)
+mesh = SubResource("flame")
+cast_shadow = 0
+[node name="HotCore" type="MeshInstance3D" parent="Flames/Flame5"]
+position = Vector3(0, 0.22, -0.025)
+mesh = SubResource("core")
+cast_shadow = 0
+[node name="Flame6" type="Node3D" parent="Flames"]
+position = Vector3(-0.00000, 0, -0.64000)
+[node name="Tongue" type="MeshInstance3D" parent="Flames/Flame6"]
+position = Vector3(0, 0.43, 0)
+rotation = Vector3(0.1, 4.71239, 0.17)
+mesh = SubResource("flame")
+cast_shadow = 0
+[node name="HotCore" type="MeshInstance3D" parent="Flames/Flame6"]
+position = Vector3(0, 0.22, -0.025)
+mesh = SubResource("core")
+cast_shadow = 0
+[node name="Flame7" type="Node3D" parent="Flames"]
+position = Vector3(0.45255, 0, -0.45255)
+[node name="Tongue" type="MeshInstance3D" parent="Flames/Flame7"]
+position = Vector3(0, 0.43, 0)
+rotation = Vector3(0.1, 5.49779, 0.17)
+mesh = SubResource("flame")
+cast_shadow = 0
+[node name="HotCore" type="MeshInstance3D" parent="Flames/Flame7"]
+position = Vector3(0, 0.22, -0.025)
+mesh = SubResource("core")
+cast_shadow = 0
+[node name="Flame8" type="Node3D" parent="Flames"]
+position = Vector3(0.00000, 0, -0.00000)
+[node name="Tongue" type="MeshInstance3D" parent="Flames/Flame8"]
+position = Vector3(0, 0.43, 0)
+rotation = Vector3(0.1, 6.28319, 0.17)
+mesh = SubResource("flame")
+cast_shadow = 0
+[node name="HotCore" type="MeshInstance3D" parent="Flames/Flame8"]
+position = Vector3(0, 0.22, -0.025)
+mesh = SubResource("core")
+cast_shadow = 0
+[node name="FireLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 0.55, 0)
+light_color = Color(1, 0.33, 0.035, 1)
+light_energy = 0.0
+shadow_enabled = false
