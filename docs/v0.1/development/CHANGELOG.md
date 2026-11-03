@@ -1,3 +1,5 @@
+- 2026-11-04 · ELITE-ROSTER / ENEMY-AI / ASSET-PIPELINE：[收租人状态接线r2](2026-11-04_arms_taker_state_binding.md)。参照显示器Boss的行动上下文接线；消除walk/run根位移循环回跳和正面反向，动作连续采样、1.33秒一次判定、2.67秒完整收招，hit2秒、death4.6秒。802逻辑检查/590真实帧与普通怪、精英和显示器Boss回归通过；独立登记门禁与未执行项。
+
 - 2026-11-03 · WORLD-PLAN：[远征03 安全屋出生点归中与中央五件撤除](2026-11-03_expedition03_safe_room_center.md)。出生点落房心（`expedition_03` 加入 `_expedition_entry_spawn_offset` 的 ID 名单，02 及后续新关仍走「偏 4 m」默认分支）；中央五件经新能力段 `furnishing.fixed_lobby_clutter_enabled=false` 整批不摆（代码只认键、不认关卡 ID）。改前 4 条红（偏移 4.000 m、中央 5 件、流送重建复现）、改后全绿；随机撒点 713 件 / 18 间房与作者件 24 件均未误伤；`layout_id=f00_b5641fb3a7ead30d` 与 11-02 记录逐字相同 ⇒ 既有存档不失配。**同轮记下一处文档与实现的漂移：11-02 记录声称已加 `fixed_lobby_clutter_enabled` 并实测 `central_fixed_clutter: 0`，而全仓 grep 与全历史 `git log -S` 均无此键 —— 记录写了、实现没落地，故业主一直看得见那五件。**
 
 - 2026-11-03 · ELITE / EXPEDITION99：[收租人投放到远征99 boss 前置房](2026-11-03_expedition99_pre_boss_elite.md)。`room_01` 新增房间级 `elite_id` 能力（**追加**而非替换，普通战斗保留）；`MonsterInjector` 支持点名精英绕过楼层窗口；跨 5 文件的字段透传链补齐。实测该房「普通怪 3 + 收租人 1」。关卡解耦门禁 violations 0。
@@ -1416,7 +1418,7 @@ Boris 原文第 13 行说得直接：
 
 | 项 | 结果 |
 |---|---|
-| `verify_egt_flow_assembler` | **72/72 通过，checks=17797** |
+| `verify_egt_flow_assembler` | **72/72 通过，checks=17802** |
 | 走廊长度断言 | 全部 ≤ 30 m |
 | 文档契约 / 解耦 / EGT房型 / 房间白盒 | 全过，新增 0 条 |
 
@@ -1428,7 +1430,7 @@ Boris 原文第 13 行说得直接：
 
 ### 六、一个必须记住的教训
 
-**形状缺陷，17797 项断言一条都抓不到。**
+**形状缺陷，17802 项断言一条都抓不到。**
 
 | 版本 | 断言 | 实际形状 |
 |---|---|---|
@@ -1500,7 +1502,7 @@ Boris 原文第 13 行说得直接：
 
 | 项 | 结果 |
 |---|---|
-| `verify_egt_flow_assembler` | **72/72 通过**（6 张骨架 × 12 种子），**checks=17797** |
+| `verify_egt_flow_assembler` | **72/72 通过**（6 张骨架 × 12 种子），**checks=17802** |
 
 断言：不重叠 / 每条边都落门 / 门位必在 `lane_offsets` 里 / direct 连接两门坐标差 ≤1cm /
 corridor 连接走廊长度盖得住门距 / 无孤立房 / 同 seed 可复现 + 换 seed 必须变。

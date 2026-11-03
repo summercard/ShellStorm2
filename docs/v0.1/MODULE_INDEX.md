@@ -256,3 +256,5 @@ PLAYER-STATE / RUN-SETTLE / GRAPHICS-POSTFX：[第二轮反馈调整](developmen
 - BOSS-STAGES / WORLD-PLAN：[远征03接入01显示器Boss](development/2026-11-02_expedition03_monitor_boss.md)，同内容ID与控制器、三波/三阶段/递增增援；03竞技场中心适配，STANDARD终点按角色定位。独立入口`verify_expedition03_monitor_boss_flow`；整关partial不变。
 
 - WORLD-ENTRY / WORLD-PLAN：[远征入口轮换与正式名称](development/2026-11-02_expedition_names_and_positions.md)：01=CloseAI数据库、03=无限公馆；原99→01、原01→03、原03→99，代号/ID/账本原行保留；真实窗口双解锁状态专项通过，整关partial不变。
+
+- ELITE-ROSTER / ENEMY-AI：[精英02收租人状态与动作契约](design/精英02收租人状态与动作契约.md)；Enemy3D拥有独立行动时间轴，原地步态、源+Z→Godot-Z、命中/收招/硬直/死亡同源采样。[状态接线r2记录](development/2026-11-04_arms_taker_state_binding.md)包含802逻辑检查、590真实帧与回归；名册整体partial/2项投放不变。

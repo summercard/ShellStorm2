@@ -45,9 +45,7 @@ func on_transition(previous: String, current: String) -> void:
 
 func tick(delta: float) -> bool:
 	if owner_enemy.ai_state == "stagger":
-		owner_enemy._brake_planar(delta * 18.0)
-		owner_enemy._push_planar(owner_enemy._external_velocity)
-		owner_enemy._commit_motion(delta)
+		commit_motion(delta, true)
 		if owner_enemy._state_time >= HURT_DURATION:
 			owner_enemy.transition_to("chase" if is_instance_valid(owner_enemy._target) else "idle", "arms_taker_hurt_finished")
 		return true
@@ -61,9 +59,7 @@ func tick(delta: float) -> bool:
 		owner_enemy.transition_to("search", "arms_taker_target_lost")
 		return true
 	elapsed = minf(ACTION_DURATION, elapsed + maxf(0.0, delta))
-	owner_enemy._brake_planar(delta * 18.0)
-	owner_enemy._push_planar(owner_enemy._external_velocity)
-	owner_enemy._commit_motion(delta)
+	commit_motion(delta)
 	if elapsed >= HIT_TIME and not committed:
 		owner_enemy.transition_to("attack", "arms_taker_active_frames")
 		committed = true
@@ -73,6 +69,14 @@ func tick(delta: float) -> bool:
 	if elapsed >= ACTION_DURATION:
 		owner_enemy.transition_to("chase" if is_instance_valid(owner_enemy._target) else "idle", "arms_taker_action_finished")
 	return true
+
+func commit_motion(delta: float, hurt := false) -> void:
+	# External velocity is a velocity, not a per-frame impulse to accumulate.
+	var motion := owner_enemy._external_velocity
+	if hurt and owner_enemy._state_time < float(owner_enemy._active_profile.get("stagger", 0.16)):
+		motion += owner_enemy._last_hit_direction * owner_enemy._hit_knockback
+	owner_enemy._steer_planar(motion, 1.0)
+	owner_enemy._commit_motion(delta)
 
 func commit_attack() -> void:
 	attack_attempts += 1

@@ -247,6 +247,29 @@ func _check_runtime_wiring(failures: Array[String]) -> void:
 	var base_footprint := EnemyAvatar3D.get_footprint_profile("melee_chaser")
 	if not is_equal_approx(float(collision.get("radius", 0.0)), float(base_footprint.get("radius", -1.0))):
 		failures.append("Presentation asset changed the gameplay collision radius")
+	# In-place conversion must edit an instance library, never the cached imported clip.
+	var raw_scene := load(ELITE_GLB) as PackedScene
+	var raw_root := raw_scene.instantiate()
+	var raw_player := _find_first(raw_root, "AnimationPlayer") as AnimationPlayer
+	var runtime_player := _find_first(enemy.avatar._formal_elite_root, "AnimationPlayer") as AnimationPlayer
+	for clip_name in ["walk", "run"]:
+		var source_animation := raw_player.get_animation(clip_name)
+		var runtime_animation := runtime_player.get_animation(clip_name)
+		if source_animation == runtime_animation:
+			failures.append("In-place animation is shared with imported source: " + clip_name)
+		for track in source_animation.get_track_count():
+			var track_path := source_animation.track_get_path(track)
+			if source_animation.track_get_type(track) != Animation.TYPE_POSITION_3D \
+					or track_path.get_subname_count() == 0 or str(track_path.get_subname(0)) != "Hip":
+				continue
+			var end := source_animation.track_get_key_count(track)-1
+			var source_first: Vector3 = source_animation.track_get_key_value(track,0)
+			var source_last: Vector3 = source_animation.track_get_key_value(track,end)
+			var runtime_first: Vector3 = runtime_animation.track_get_key_value(track,0)
+			var runtime_last: Vector3 = runtime_animation.track_get_key_value(track,end)
+			if source_first.distance_to(source_last) < 0.9 or runtime_first.distance_to(runtime_last) > 0.00001:
+				failures.append("Root-motion source/runtime isolation failed: " + clip_name)
+	raw_root.free()
 	EliteRosterService.settle(
 		str(snapshot.get("elite_id", "")),
 		str(snapshot.get("elite_encounter_instance_id", "")),

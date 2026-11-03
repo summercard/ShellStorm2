@@ -142,13 +142,13 @@
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/enm_elite_arms_taker_root_top3d.tscn",
-      "bytes": 794,
-      "sha256": "4c8274fd94e37d203eb7a02a4c737e8d2f3cfad86e5eb6bffb6ceb1a0d289f45"
+      "bytes": 830,
+      "sha256": "5e11849d37cb2c4d0a4abbcf5d9f2f5ee7a648be0ccd92ce0a6b6f5dbefb0710"
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/elite_arms_taker_formal_visual.gd",
-      "bytes": 13203,
-      "sha256": "25b917dcbf541b1f36caf500dde7deaba64b40cf9fcc9085f33d518057228f70"
+      "bytes": 7711,
+      "sha256": "2ccb4b536e0977b1aa3bdc9ec2c739ef9c9168092f068f8b478497de5ea246c8"
     }
   ],
   "animations": [
@@ -422,5 +422,31 @@
       "loop": false,
       "loop_basis": "one_shot"
     }
-  ]
+  ],
+  "state_binding": {
+    "revision": "r2",
+    "verified_on": "2026-11-04",
+    "controller": "res://src/enemy3d/EliteArmsTakerCombat.gd",
+    "context_schema": 1,
+    "source_forward": "+Z",
+    "godot_forward": "-Z",
+    "in_place_locomotion": [
+      "walk",
+      "run"
+    ],
+    "action_timing": {
+      "clip": "attack_light",
+      "hit": 1.3333333333333333,
+      "recovery": 1.4666666666666666,
+      "end": 2.6666666666666665,
+      "hurt": 2.0,
+      "death": 4.6
+    },
+    "verification": [
+      "verify_second_elite_state_flow",
+      "verify_second_elite_state_visual"
+    ],
+    "record": "docs/v0.1/development/2026-11-04_arms_taker_state_binding.md",
+    "controller_sha256": "45ad8931774958f837d525e82f2ce4b468053a1b85fe901187c4f3e624172efa"
+  }
 }

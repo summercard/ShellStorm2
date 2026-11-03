@@ -363,28 +363,27 @@ SelectEligibleElite(seed, floor, history)
 
 **这是精英首次使用真骨骼动画。** 首只 `rift_boar_armed` 的表现 GLB 是**纯静态**（`skins=0`、`animations=0`），
 完全靠 `EnemyAvatar3D` 的程序化外壳演；本只带 **41 骨 + 18 剪辑**，必须由表现层自己驱动
-`AnimationPlayer` —— 否则模型会僵在 bind pose。因此 `EnemyAvatar3D.sync_presentation()` 新增了精英分支：
+`AnimationPlayer`。现行接线按[精英02状态与动作契约](design/精英02收租人状态与动作契约.md)使用行动上下文：
 
 ```text
-Enemy3D._physics_process → avatar.sync_presentation(state, state_time, speed, ...)
-  ├─ has_formal_normal()  → _formal_normal_root.sync_state(...)     # 普通怪（既有）
-  └─ _formal_elite_root.has_method("sync_state") → 精英 .sync_state(...)  # 新增
+Enemy3D._physics_process → EliteArmsTakerCombat.tick() → 状态/命中/取消
+Enemy3D._process → presentation_context() → EnemyAvatar3D.sync_elite_presentation()
+  └─ 表现根.sync_context() → 唯一play+seek采样点
 ```
 
-判据是**「表现根有没有 `sync_state`」**，不是按 `elite_id` 写死分支 —— 纯静态的精英没有这个方法，
-自然被挡在外面，`EnemyAvatar3D` 不需要知道哪些精英有动画。
+`EnemyAvatar3D` 按表现根是否暴露 `sync_context` 判断骨骼精英能力，并退役外壳bob；内容控制器由Enemy3D按ID组装。纯静态首只精英不挂该控制器。旧 `sync_state` 只保留给资产预览与兼容探针。
 
-**18 条动作 → 12 态映射**（事实源 `elite_arms_taker_formal_visual.gd` 的 `CLIP_BY_STATE`）：
+**18 条源动作 → 12 态现行映射**（事实源 `EliteArmsTakerCombat.presentation_context()` 与表现采样器）：
 
 | 状态 | 剪辑 | 说明 |
 |---|---|---|
-| `dormant` | idle（钉 0） | 未激活不消耗视觉预算 |
+| `dormant` | idle | 玩法暂停；可见邻房保持呼吸 |
 | `idle` / `alert` | idle | 待机与锁定共用 |
-| `patrol` | walk | **唯一用走路的移动状态** |
+| `patrol` | walk / run / idle | 真实速度与步幅驱动；停止时idle |
 | `chase` / `search` / `return` | run | 按**实际速度**改判走/跑，带 0.62 进 / 0.50 出的迟滞 |
-| `telegraph` / `attack` / `recovery` | attack_light | 前摇取前段、命中钉中段、收招走尾段 |
-| `stagger` | hit | 受击打断 |
-| `dead` | death | 倒地保留 `DEATH_DURATION` |
+| `telegraph` / `attack` / `recovery` | attack_light | 同一行动时钟0–80/30秒；40/30秒判定一次，44/30秒起收招 |
+| `stagger` | hit | 受击打断并完整播放2秒 |
+| `dead` | death | 立即退出战斗，保留视觉4.6秒后回收 |
 
 **动画母版由 18 条单状态 GLB 合并而成**，不是逐状态挂 18 个场景。
 合并脚本 `art_source/.../source/animation/author_merge_animation_v001.py` 自带四条会失败的断言：
@@ -406,7 +405,7 @@ Enemy3D._physics_process → avatar.sync_presentation(state, state_time, speed, 
 18 剪辑动画母版（**时长逐条硬编码对源清单**，不是与自己自洽）、41 骨、
 **12 态逐态驱动且每态都落到一条真实存在的剪辑**、94—92F 窗口与 98—96F 不重叠、95F 不侵入、
 每局三选一覆盖三层、表现场景零碰撞、玩法碰撞半径仍是 `melee_chaser` 基线。
-实测 `SECOND_ELITE_ARMS_TAKER_OK`。
+另由 `verify_second_elite_state_flow` 验证真实行动时钟、命中、中断、朝向、循环连续性与回收；`verify_second_elite_state_visual` 使用真实渲染录制移动/攻击/受击/死亡。实测记录见[状态接线r2](development/2026-11-04_arms_taker_state_binding.md)。
 
 #### 5.7.1 定点追加：远征关卡 99 boss 前置房（2026-11-03）
 

@@ -2243,6 +2243,7 @@ func _update_facing(to_target: Vector3, delta: float) -> void:
 
 func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	var monitor_facing_ready := monitor_combat == null or (not monitor_combat.turning and (-global_basis.z).normalized().dot(to_target.normalized()) >= 0.97)
+	var elite_facing_ready := arms_taker_combat == null or (-global_basis.z).normalized().dot(to_target.normalized()) >= 0.9
 	# ⚠ `_has_line_of_sight` 必须放在**最后一个条件**：它是射线，放在前面会让每帧每只怪
 	# 都打一条射线（30 只怪 = 30 条/帧）。短路到最后时，只有「已进射程 + 冷却已好」
 	# 那几帧才会真的投射 —— 也就是「正要开火」的那一瞬。
@@ -2252,7 +2253,7 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	# 原作对此有明确行为（`Bullet Kin` 会翻桌找掩体、`Confirmed` 强调 "stopping to fire"），
 	# 且弹幕游戏的公平性原则要求「看不见的火力不该存在」。
 	if (
-		distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready
+		distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready and elite_facing_ready
 		and not _egt_skips_attack_window()
 		and _has_line_of_sight(_target)
 	):

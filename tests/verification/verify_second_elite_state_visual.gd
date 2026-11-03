@@ -16,7 +16,7 @@ func _ready() -> void:
 	setup_ground()
 	setup_visual_stage()
 	await get_tree().physics_frame
-	for spec in [["walk",150],["run",150],["attack",162],["hurt",118],["death",270]]:
+	for spec in [["walk",420],["run",210],["attack",162],["hurt",118],["death",270]]:
 		await record_stage(str(spec[0]),int(spec[1]))
 	clean_effects()
 	await get_tree().process_frame
@@ -120,7 +120,7 @@ func record_stage(stage: String, frames: int) -> void:
 			var size := get_viewport().get_visible_rect().size
 			check(center.x>size.x*0.05 and center.x<size.x*0.95 and center.y>size.y*0.05 and center.y<size.y*0.95,"Actor is outside the visual frame")
 			check(get_viewport().get_texture().get_image().save_png(output+"/frames/%04d.png"%frame_index)==OK,"Cannot save visual frame")
-			if frame==frames/2:
+			if frame==int(frames/4.0)*2:
 				get_viewport().get_texture().get_image().save_png(output+"/"+stage+".png")
 			frame_index+=1
 	if stage in ["walk","run"]:

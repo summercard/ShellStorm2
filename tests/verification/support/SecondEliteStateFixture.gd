@@ -41,7 +41,8 @@ func make_enemy() -> Enemy3D:
 	enemy.configure_from_enemy_data({"enemy_type":"melee_chaser", "is_elite":true,
 		"elite_id":"elite_arms_taker", "elite_behavior_id":"weapon_phase_swap", "elite_level":1,
 		"modifier_id_en":"Elite.WeaponParasite", "persistent_id":"arms_qa_%d"%serial,
-		"presentation_asset_id":definition.presentation_asset_id, "presentation_scene":definition.presentation_scene})
+		"presentation_asset_id":definition.presentation_asset_id, "presentation_scene":definition.presentation_scene,
+		"elite_health_bar_profile":definition.health_bar_profile})
 	enemy.position = Vector3(0,0.05,0)
 	enemy.set_physics_process(false)
 	enemy.set_process(false)

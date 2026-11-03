@@ -15,7 +15,7 @@ const ENEMY_SCENE: PackedScene = preload(
 )
 const TEMP_SAVE := "user://probe_second_elite_motion.json"
 ## 逐态采样：每态推进这么多帧，看骨骼姿势是否真的发生了变化。
-const FRAMES_PER_STATE := 8
+const FRAMES_PER_STATE := 60
 const VALID_STATES := [
 	"dormant", "idle", "patrol", "alert", "chase", "search", "return",
 	"telegraph", "attack", "recovery", "stagger", "dead",
@@ -25,11 +25,11 @@ const VALID_STATES := [
 func _ready() -> void:
 	var failures: Array[String] = []
 	await get_tree().process_frame
-	_run(failures)
+	await _run(failures)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(TEMP_SAVE))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(TEMP_SAVE + ".bak"))
 	if failures.is_empty():
-		print("SECOND_ELITE_MOTION_OK: real loop drives all 12 states with changing bone poses")
+		print("SECOND_ELITE_MOTION_OK: all 12 authoritative context routes and authored bone samples pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -73,17 +73,27 @@ func _run(failures: Array[String]) -> void:
 		failures.append("Elite presentation has no AnimationPlayer/Skeleton3D to probe")
 		enemy.queue_free()
 		return
+	enemy.set_physics_process(false)
 
 	for state in VALID_STATES:
+		# Check the formal Enemy3D -> action context -> avatar route before inspecting clips.
+		enemy.transition_to(state)
+		enemy._process(0.0)
+		var routed: Dictionary = elite_root.call("get_presentation_snapshot")
+		if str(routed.get("state", "")) != state:
+			failures.append("Formal action context did not reach presentation state: " + str(state))
 		# 逐态驱动：每态先喂一次 sync_state，再推若干帧，看骨骼是否在动。
 		var poses: Array[float] = []
+		var initial_rotations: Array[Quaternion] = []
+		for bone in skeleton.get_bone_count():
+			initial_rotations.append(skeleton.get_bone_pose_rotation(bone))
 		for frame in range(FRAMES_PER_STATE):
-			elite_root.call("sync_state", state, 0.05 * float(frame), 3.0, 0.5, 0.5, 4.0)
+			elite_root.call("sync_state", state, float(frame)/60.0, 3.0, 0.5, 0.5, 4.0)
 			elite_root.call("_process", 1.0 / 60.0)
-			# 取 3 根代表骨（骨盆/脊柱/头）的旋转四元数模长之和作为"姿势指纹"。
+			# Measure every authored bone; summed Euler magnitudes can cancel each other.
 			var fingerprint := 0.0
-			for bone_index in [1, 2, mini(10, skeleton.get_bone_count() - 1)]:
-				fingerprint += skeleton.get_bone_pose_rotation(bone_index).get_euler().length()
+			for bone_index in skeleton.get_bone_count():
+				fingerprint = maxf(fingerprint,initial_rotations[bone_index].angle_to(skeleton.get_bone_pose_rotation(bone_index)))
 			poses.append(fingerprint)
 		var clip := str(
 			(elite_root.call("get_presentation_snapshot") as Dictionary).get("clip", "")

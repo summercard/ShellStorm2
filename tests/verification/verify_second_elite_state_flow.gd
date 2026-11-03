@@ -5,6 +5,8 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	await verify_action()
 	await verify_interrupts()
+	await verify_forced_motion()
+	await verify_facing_and_escape()
 	await verify_locomotion()
 	await verify_death()
 	clean_effects()
@@ -151,6 +153,54 @@ func verify_locomotion() -> void:
 	visual.call("sync_context",{"state":"chase","action_id":"locomotion","speed":0.0,"base_speed":3.0},false)
 	check(visual.get_presentation_snapshot().clip == "idle","Stopped/blocked movement keeps walking in place")
 	enemy.free()
+	await get_tree().process_frame
+
+func verify_forced_motion() -> void:
+	var enemy := make_enemy()
+	var target := make_target(Vector3(0,0.05,-1.8))
+	bind_target(enemy,target)
+	enemy.transition_to("telegraph")
+	enemy.apply_melee_knockback(Vector3.RIGHT,5.0,0.2)
+	var peak := 0.0
+	for frame in 6:
+		step(enemy)
+		peak=maxf(peak,enemy.velocity.x)
+	check(peak<=5.001 and peak>=4.999,"Action multiplies or swallows externally applied velocity")
+	for frame in 10:step(enemy)
+	check(absf(enemy.velocity.x)<0.001,"Expired external velocity keeps accelerating the cast")
+	check(enemy.ai_state=="telegraph","Forced motion silently skips the action state")
+	enemy.take_damage(1,false,Vector3.RIGHT,4.0)
+	step(enemy)
+	check(is_equal_approx(enemy.velocity.x,4.0),"Hurt state swallowed projectile knockback")
+	for frame in 12:step(enemy)
+	check(absf(enemy.velocity.x)<0.001,"Full hurt clip incorrectly extends the old short knockback impulse")
+	enemy.free()
+	target.free()
+	clean_effects()
+	await get_tree().process_frame
+
+func verify_facing_and_escape() -> void:
+	var enemy := make_enemy()
+	var target := make_target(Vector3(0,0.05,-1.8))
+	bind_target(enemy,target)
+	enemy.rotation.y = PI
+	enemy.transition_to("chase")
+	enemy._attack_timer = 0.0
+	step(enemy)
+	check(enemy.ai_state == "chase" and not enemy.arms_taker_combat.active,"Elite begins an attack while facing backwards")
+	for frame in 40:
+		step(enemy)
+		if enemy.arms_taker_combat.active:break
+	check(enemy.arms_taker_combat.active,"Elite cannot attack after turning towards the target")
+	enemy._elite_growth_profile = {"escape_enabled":true,"escape_health_ratio":0.2,"escape_duration":4.2}
+	enemy.current_hp = int(enemy.max_hp*0.2)+1
+	enemy.take_damage(2)
+	step(enemy)
+	check(enemy.ai_state == "return" and enemy._elite_escape_active and not enemy.arms_taker_combat.active,"Low-health escape did not cancel the cast")
+	check(enemy.avatar._formal_elite_root.get_presentation_snapshot().clip in ["walk","run"],"Escape is moving without a locomotion clip")
+	enemy.free()
+	target.free()
+	clean_effects()
 	await get_tree().process_frame
 
 func verify_death() -> void:
