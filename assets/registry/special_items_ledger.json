@@ -37,7 +37,7 @@
     {
       "id": "special_molotov",
       "name": "燃烧瓶",
-      "description": "特殊槽装备 · 右键抛掷 · 1.25米范围燃烧5秒，每秒12伤害，可点燃汽油。",
+      "description": "特殊槽装备 · 右键抛掷 · 1.25米范围燃烧5秒，每秒24伤害，可点燃汽油。 火焰也会伤害玩家。",
       "type": "special_item",
       "subtype": "molotov",
       "rarity": "uncommon",
@@ -55,7 +55,7 @@
       "throw_distance": 8.0,
       "flight_time": 0.8,
       "radius": 1.25,
-      "damage_per_tick": 6,
+      "damage_per_tick": 12,
       "duration": 5.0,
       "dimensions_m": [
         0.15,
@@ -66,7 +66,7 @@
     {
       "id": "special_gasoline",
       "name": "汽油瓶",
-      "description": "特殊槽装备 · 按住右键沿路铺油 · 每瓶25份。遇火连片依次点燃，每片燃烧5秒。",
+      "description": "特殊槽装备 · 按住右键沿路铺油 · 每瓶25份。遇火或枪击点燃，每片燃烧5秒，每秒32伤害，也会伤害玩家。",
       "type": "special_item",
       "subtype": "gasoline",
       "rarity": "uncommon",
@@ -86,7 +86,7 @@
       "radius": 0.58,
       "dry_duration": 45.0,
       "duration": 5.0,
-      "damage_per_tick": 8,
+      "damage_per_tick": 16,
       "spread_delay": 0.12,
       "dimensions_m": [
         0.24,
@@ -361,12 +361,27 @@
     "preview_special_items"
   ],
   "status": "verified_desktop_mouse_path",
-  "design_revision": "r3",
+  "design_revision": "r6",
   "verification_results": {
-    "core_checks": 78,
-    "integration_checks": 16,
-    "lamp_chain_checks": 419,
+    "core_checks": 85,
+    "integration_checks": 19,
+    "props_light_fade_checks": 10,
     "native_visual": "passed",
-    "lamp_chain_unexpected_errors": 1
+    "feature_traceability": "passed",
+    "ledger_split": "passed"
+  },
+  "world_damage_targets": [
+    "enemy_3d",
+    "player_3d (fire)",
+    "reactive_prop_3d",
+    "breakable_clutter_3d",
+    "damageable interaction providers"
+  ],
+  "fire_visual_contract": {
+    "shared_prefab": "VFX-FATE-FIRE-3D",
+    "oil_light_energy": 1.5,
+    "oil_light_range_m": 2.2,
+    "fade_last_seconds": 0.6,
+    "damage_duration_seconds": 5.0
   }
 }
