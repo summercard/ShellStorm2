@@ -967,6 +967,7 @@ var _patrol_step := 0
 var _boss_skill_bag: Array[String] = []
 var _boss_skill_index := 0
 var monitor_combat: MonitorBossCombat
+var arms_taker_combat: EliteArmsTakerCombat
 ## 显示器 Boss 的子弹受击层（3D 第 3 层，与敌人层的值相同）。
 ## **只有动画受击盒在这个层上。**
 ## 根节点那个圆柱（半径 1.92×根倍率 = 2.016 m）比可见屏幕宽得多（屏幕半宽仅 0.85 m），
@@ -1303,6 +1304,9 @@ func _reset_egt_state() -> void:
 func configure_from_enemy_data(data: Dictionary) -> void:
 	if monitor_combat != null:monitor_combat.cancel()
 	monitor_combat = null
+	if arms_taker_combat != null:
+		arms_taker_combat.cancel()
+	arms_taker_combat = null
 	# 重新配置等于换一只怪：上一任的动画受击盒必须一起走，
 	# 否则残留形状会在这个位置凭空挡子弹。
 	_clear_monitor_hit_volumes()
@@ -1383,6 +1387,8 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 				str(data.get("presentation_asset_id", "")),
 				str(data.get("presentation_scene", ""))
 			)
+		if elite_id == EliteArmsTakerCombat.ID:
+			arms_taker_combat = EliteArmsTakerCombat.new(self)
 	if enemy_kind == "boss":
 		_variant_scale_multiplier *= float(data.get("boss_scale", 1.0))
 		if avatar != null:
@@ -1724,6 +1730,8 @@ func import_runtime_state(state: Dictionary) -> bool:
 		monitor_combat.activation_completed = bool(state.get("monitor_activation_completed",true))
 		monitor_combat.activation_elapsed = clampf(float(state.get("monitor_activation_elapsed",0.0)),0.0,MonitorBossCombat.ACTIVATION_DURATION)
 		monitor_combat.activation_started = bool(state.get("monitor_activation_started",monitor_combat.activation_completed or monitor_combat.activation_elapsed > 0.0))
+	if arms_taker_combat != null:
+		arms_taker_combat.cancel()
 	var saved_ai_state := str(state.get("ai_state", "idle"))
 	# 生效帧不能跨卸载边界继续伤害；重新进房时退回可读的警戒状态。
 	if saved_ai_state in ["telegraph", "attack", "recovery", "stagger"]:
@@ -1786,6 +1794,8 @@ func _process(delta: float) -> void:
 			# 反过来说，盒子再也不会「停在上一帧该在的地方」而和画面错开。
 			if _ensure_monitor_hit_volumes():
 				_sync_monitor_hit_volumes()
+		elif arms_taker_combat != null:
+			avatar.sync_elite_presentation(arms_taker_combat.presentation_context())
 		else:
 			avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration(), get_effective_move_speed())
 	_tick_overhead_health_bar_delay(delta)
@@ -1984,6 +1994,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		_disengage_elapsed = 0.0
 	if monitor_combat != null and monitor_combat.tick(delta):return
+	if arms_taker_combat != null and arms_taker_combat.tick(delta):return
 	if enemy_kind == "ambusher" and _ambush_triggered:
 		var target_distance := global_position.distance_to(_target.global_position) if _target != null and is_instance_valid(_target) else INF
 		if not bool(_ai_decision.get("target_visible", false)) and target_distance > 5.0:
@@ -4360,6 +4371,8 @@ func transition_to(state_id: String, reason := "") -> bool:
 	if monitor_combat != null:
 		if state_id == "telegraph":monitor_combat.begin()
 		elif state_id in ["dead","dormant"]:monitor_combat.cancel()
+	if arms_taker_combat != null:
+		arms_taker_combat.on_transition(previous, state_id)
 	_last_state_reason = reason if not reason.is_empty() else "%s_to_%s" % [previous, state_id]
 	_state_time = 0.0
 	if avatar != null:
@@ -4548,6 +4561,7 @@ func get_state_snapshot() -> Dictionary:
 		"elite_escape_active": _elite_escape_active,
 		"elite_escape_elapsed": _elite_escape_elapsed,
 		"elite_sidearm_attack_interval": _elite_sidearm_attack_interval(),
+		"elite_action": arms_taker_combat.presentation_context() if arms_taker_combat != null else {},
 		"elite_attack_counter": _elite_attack_counter,
 		"elite_behavior_trigger_count": _elite_behavior_trigger_count,
 		"elite_encounter_instance_id": elite_encounter_instance_id,
@@ -5296,7 +5310,7 @@ func _die() -> void:
 		# 不再等 `get_formal_death_duration()` 把「dead」段（倒地）播完、也不再留尸体
 		# —— 模型本帧即收起、节点本帧回收，死亡表现完全交给各自的特效。
 		_retire_goo_death_visual()
-	elif avatar != null and (avatar.has_formal_normal() or monitor_combat != null):
+	elif avatar != null and (avatar.has_formal_normal() or avatar.has_animated_elite() or monitor_combat != null):
 		if MonsterAIManager != null:
 			MonsterAIManager.unregister_enemy(self)
 		remove_from_group("enemy_3d")
@@ -5320,6 +5334,8 @@ func _die() -> void:
 ## 还会留一具尸体。这条缺口只有"按资产判"能补上：
 ## 长得像僵尸的，就该按僵尸的规矩死。
 func _asset_kind() -> String:
+	if arms_taker_combat != null:
+		return EliteArmsTakerCombat.ID
 	var proxied := EnemyAvatar3D.resolve_asset_kind(enemy_kind)
 	var base := MonsterVariants.base_of(proxied)
 	return base if not base.is_empty() else proxied
@@ -5937,4 +5953,6 @@ func _clear_fate_visuals() -> void:
 	_fate_visuals.clear()
 
 func _exit_tree() -> void:
+	if arms_taker_combat != null:
+		arms_taker_combat.cancel()
 	_clear_fate_visuals()
