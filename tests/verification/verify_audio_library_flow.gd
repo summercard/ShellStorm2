@@ -5,7 +5,7 @@ func _ready() -> void:
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(AudioManager.CATALOG_PATH))
 	var report: Dictionary = AudioManager.validate_sound_library()
 	_verify_world_style_policy(catalog, failures)
-	if report.asset_count != 166 or report.sound_set_count != 108 or not report.missing.is_empty():
+	if report.asset_count != 172 or report.sound_set_count != 114 or not report.missing.is_empty():
 		failures.append("Library coverage or resource presence failed")
 	for asset in catalog.assets:
 		var stream := load(str(asset.runtime_path)) as AudioStreamOggVorbis
@@ -61,7 +61,7 @@ func _ready() -> void:
 			failures.append("Playback nodes leaked after explicit stop")
 	AudioManager.reset_feedback_debug()
 	if failures.is_empty():
-		print("AUDIO_LIBRARY_FLOW_OK: 166 OGGs, 108 sets, 9 gun IDs / 7 families, 51 natural world sets, 9 ambient loops, preserved system/weapon hashes; mode=", DisplayServer.get_name())
+		print("AUDIO_LIBRARY_FLOW_OK: 172 OGGs, 114 sets, 9 gun IDs / 7 families, 57 natural world sets, 9 ambient loops, preserved system/weapon hashes; mode=", DisplayServer.get_name())
 	else:
 		for failure in failures:
 			push_error(failure)
@@ -198,12 +198,12 @@ func _verify_gun_identity_routes(catalog: Dictionary, failures: Array[String]) -
 
 func _verify_world_style_policy(catalog: Dictionary, failures: Array[String]) -> void:
 	var policy: Dictionary = catalog.get("world_style_policy", {})
-	if int(policy.get("changed_assets", 0)) != 93:
+	if int(policy.get("changed_assets", 0)) != 99:
 		failures.append("Natural world replacement coverage missing")
 	var world: Array = policy.get("natural_world_sets", [])
 	var systems: Array = policy.get("system_sets", [])
 	var weapons: Array = policy.get("weapon_sets", [])
-	if world.size() != 51 or systems.size() != 29 or weapons.size() != 28:
+	if world.size() != 57 or systems.size() != 29 or weapons.size() != 28:
 		failures.append("World/system/weapon style coverage changed")
 	var seen: Array[String] = []
 	for group in [world, systems, weapons]:
@@ -218,7 +218,7 @@ func _verify_world_style_policy(catalog: Dictionary, failures: Array[String]) ->
 	for asset in catalog.assets:
 		if str(asset.key) in world:
 			changed += 1
-			if str(asset.get("production_revision", "")) not in ["natural-world-r5", "world-environment-r6"] or not str(asset.get("source_method", "")).begins_with("Sourced recordings"):
+			if str(asset.get("production_revision", "")) not in ["natural-world-r5", "world-environment-r6", "special-items-r1"] or not str(asset.get("source_method", "")).begins_with("Sourced recordings"):
 				failures.append("World sound still uses legacy tone synthesis: " + str(asset.asset_id))
 			if str(asset.key).begins_with("amb_"):
 				loops += 1
@@ -228,5 +228,5 @@ func _verify_world_style_policy(catalog: Dictionary, failures: Array[String]) ->
 			var original := str((policy.get("preserved_asset_hashes", {}) as Dictionary).get(asset.asset_id, ""))
 			if original.is_empty() or original != str(asset.sha256):
 				failures.append("Preserved system or weapon sound changed: " + str(asset.asset_id))
-	if changed != 93 or loops != 9:
+	if changed != 99 or loops != 9:
 		failures.append("Natural recordings or ambient beds are incomplete")

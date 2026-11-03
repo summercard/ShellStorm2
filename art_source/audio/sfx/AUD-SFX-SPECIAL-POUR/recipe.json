@@ -1,0 +1,29 @@
+{
+  "asset_id": "AUD-SFX-SPECIAL-POUR",
+  "kind": "pour",
+  "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-POUR/source/special_pour_master_v001.wav",
+  "path": "src/assets/audio/sfx/special_pour_v001.ogg",
+  "duration_seconds": 0.32,
+  "sample_rate": 44100,
+  "channels": 1,
+  "peak_dbfs": -6.02,
+  "source_sha256": "047f5e31881c483afd04304e530d9010a6ea913e21614c29df1d8ad0133e0191",
+  "sha256": "858e4e4931e467f0048c3c012e6adf629b795c6aa95ff51af06f0f1ff0e4dc34",
+  "license": "CC0-1.0",
+  "license_source": "https://opengameart.org/content/water-splash-and-sand-footsteps",
+  "inputs": [
+    {
+      "path": "art_source/audio/sfx/special_items_recordings/source/water_splash_recording.wav",
+      "source_url": "https://opengameart.org/content/water-splash-and-sand-footsteps",
+      "download_url": "https://opengameart.org/sites/default/files/splash1_0.wav",
+      "license": "CC0-1.0",
+      "sha256": "e45d466f7e63e5d566f8a822a7a1a3f7d5131319d17ca0436dcc615b251e9277"
+    }
+  ],
+  "recipe": {
+    "builder": "scripts/build_special_item_audio.py",
+    "offset_seconds": 0.0,
+    "crossfade_seconds": 0.0,
+    "edits": "linear layering, trim/pad, fades, peak normalization"
+  }
+}

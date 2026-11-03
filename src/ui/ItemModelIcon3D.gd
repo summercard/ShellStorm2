@@ -42,6 +42,7 @@ var _model: Node3D
 var _configured := false
 var _camera_size_multiplier := 1.0
 var _rebuild_count := 0
+var _icon_material_cache: Dictionary = {}
 var _custom_model_factory := Callable()
 var _custom_model_kind := ""
 ## 最近一次取景实测（世界空间）。供 get_snapshot() 与验收读取，不参与渲染。
@@ -177,7 +178,7 @@ func _rebuild_model() -> void:
 		visible = false
 		return
 	_model.name = "ProjectedItemModel"
-	ITEM_ICON_MATERIAL_PRESET.apply(_model, {})
+	ITEM_ICON_MATERIAL_PRESET.apply(_model, _icon_material_cache)
 	var kind := _resolved_model_kind()
 	_model.rotation_degrees = Vector3(0, 180, 0) if kind.begins_with("avatar_") else Vector3(-8, 18, 0)
 	_viewport.add_child(_model)

@@ -1,0 +1,53 @@
+{
+  "id": "special_gasoline",
+  "name": "汽油瓶",
+  "description": "特殊槽装备 · 按住右键沿路铺油 · 每瓶25份。遇火连片依次点燃，每片燃烧5秒。",
+  "type": "special_item",
+  "subtype": "gasoline",
+  "rarity": "uncommon",
+  "stack_max": 10,
+  "grid_size": [
+    1,
+    1
+  ],
+  "asset_id": "ITM-SPECIAL-GASOLINE",
+  "price": 45,
+  "base_buy_price": 45,
+  "base_sell_price": 22,
+  "base_shelf_order": 10,
+  "cooldown": 0.15,
+  "fuel_capacity": 25,
+  "spacing": 0.7,
+  "radius": 0.58,
+  "dry_duration": 45.0,
+  "duration": 5.0,
+  "damage_per_tick": 8,
+  "spread_delay": 0.12,
+  "dimensions_m": [
+    0.24,
+    0.13,
+    0.3
+  ],
+  "display_name_zh": "汽油瓶",
+  "category": "道具",
+  "subclass": "special_item",
+  "logical_id": "special_gasoline",
+  "domain_ledger": "props",
+  "animation_tier": "tier_0_static",
+  "source_collection": "ITM_汽油瓶_中文资产管理",
+  "anchor_contract": [
+    "HoldAnchor"
+  ],
+  "material_roles": [
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
+  ],
+  "origin": "bottom_center",
+  "front_axis": "-Z",
+  "collision_intent": "external_projectile_sweep_and_ground_loot",
+  "source_dir": "art_source/items_weapons/props/special_gasoline/source",
+  "stable_glb": "assets/art/items_weapons/props/special_gasoline/components/itm_special_gasoline_ground_visual_top3d.glb",
+  "stable_prefab": "assets/art/items_weapons/props/special_gasoline/runtime/itm_special_gasoline_ground_root_top3d.tscn"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "special_molotov",
+  "name": "燃烧瓶",
+  "description": "特殊槽装备 · 右键抛掷 · 2.4米范围燃烧5秒，每秒12伤害，可点燃汽油。",
+  "type": "special_item",
+  "subtype": "molotov",
+  "rarity": "uncommon",
+  "stack_max": 10,
+  "grid_size": [
+    1,
+    1
+  ],
+  "asset_id": "ITM-SPECIAL-MOLOTOV",
+  "price": 50,
+  "base_buy_price": 50,
+  "base_sell_price": 25,
+  "base_shelf_order": 9,
+  "cooldown": 1.5,
+  "throw_distance": 8.0,
+  "flight_time": 0.8,
+  "radius": 2.4,
+  "damage_per_tick": 6,
+  "duration": 5.0,
+  "dimensions_m": [
+    0.15,
+    0.15,
+    0.36
+  ],
+  "display_name_zh": "燃烧瓶",
+  "category": "道具",
+  "subclass": "special_item",
+  "logical_id": "special_molotov",
+  "domain_ledger": "props",
+  "animation_tier": "tier_0_static",
+  "source_collection": "ITM_燃烧瓶_中文资产管理",
+  "anchor_contract": [
+    "HoldAnchor"
+  ],
+  "material_roles": [
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
+  ],
+  "origin": "bottom_center",
+  "front_axis": "-Z",
+  "collision_intent": "external_projectile_sweep_and_ground_loot",
+  "source_dir": "art_source/items_weapons/props/special_molotov/source",
+  "stable_glb": "assets/art/items_weapons/props/special_molotov/components/itm_special_molotov_ground_visual_top3d.glb",
+  "stable_prefab": "assets/art/items_weapons/props/special_molotov/runtime/itm_special_molotov_ground_root_top3d.tscn"
+}

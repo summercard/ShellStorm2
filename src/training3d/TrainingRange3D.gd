@@ -252,6 +252,7 @@ func _build_equipment_ui() -> void:
 	_inventory_ui.accept_tab_shortcut = false
 	_inventory_ui.shortcut_enabled = true
 	$HUD.add_child(_inventory_ui)
+	player.get_special_item_controller().configure(player, _inventory, func() -> bool: return not _inventory_ui.is_inventory_open())
 	_inventory_ui.set_inventory_module(_inventory)
 	_inventory_ui.set_insurance_module(_insurance)
 	_inventory_ui.set_weapon_tree(player.get_weapon_tree())

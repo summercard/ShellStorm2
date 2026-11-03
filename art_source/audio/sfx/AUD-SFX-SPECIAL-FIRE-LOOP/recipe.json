@@ -1,0 +1,29 @@
+{
+  "asset_id": "AUD-SFX-SPECIAL-FIRE-LOOP",
+  "kind": "fire_loop",
+  "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-FIRE-LOOP/source/special_fire_loop_master_v001.wav",
+  "path": "src/assets/audio/sfx/special_fire_loop_v001.ogg",
+  "duration_seconds": 1.42,
+  "sample_rate": 44100,
+  "channels": 1,
+  "peak_dbfs": -6.02,
+  "source_sha256": "3f2353fa6152d1e8866f8dad39025bf6528c72bf9f7a251ebccad16708c521aa",
+  "sha256": "824c0cc3431e526a54707e8ba16ac5f02db56f7a79a7cdc7664d822ceac16697",
+  "license": "CC0-1.0",
+  "license_source": "https://opengameart.org/content/fireplace-sound-loop",
+  "inputs": [
+    {
+      "path": "art_source/audio/sfx/special_items_recordings/source/fire_recording.wav",
+      "source_url": "https://opengameart.org/content/fireplace-sound-loop",
+      "download_url": "https://opengameart.org/sites/default/files/fire.wav",
+      "license": "CC0-1.0",
+      "sha256": "85ca0cc60d0c037fff8b185e31ad1fcdbda6ce45eee17c3ee1318d1b8f59e330"
+    }
+  ],
+  "recipe": {
+    "builder": "scripts/build_special_item_audio.py",
+    "offset_seconds": 2.0,
+    "crossfade_seconds": 0.08,
+    "edits": "linear layering, trim/pad, fades, peak normalization"
+  }
+}

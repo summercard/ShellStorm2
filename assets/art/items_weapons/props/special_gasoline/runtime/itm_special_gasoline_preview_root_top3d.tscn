@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/props/special_gasoline/components/itm_special_gasoline_preview_visual_top3d.glb" id="1_visual"]
+
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "ITM-SPECIAL-GASOLINE"
+metadata/logical_id = "special_gasoline"
+metadata/asset_version = "v001"
+metadata/model_role = "preview"
+metadata/triangle_count = 1452
+metadata/dimensions_m = Vector3(0.24, 0.3, 0.13)
+metadata/front_axis = "-Z"
+metadata/collision_intent = "external_projectile_sweep_and_ground_loot"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

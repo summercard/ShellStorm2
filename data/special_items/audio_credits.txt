@@ -1,0 +1,11 @@
+Special item audio attributions
+
+Blast edit includes explosions by Michel Baradari (CC-BY 3.0) and tree/debris by Blender Foundation (CC0).
+License: https://creativecommons.org/licenses/by/3.0/ . Edits: trim, fades, mono conversion, normalization.
+
+throw: https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch ; CC0; CC0-1.0
+blast: https://opengameart.org/content/2-high-quality-explosions | Michel Baradari; https://opengameart.org/content/tree-falling-yo-frankie | Blender Foundation ; CC-BY 3.0; CC0
+glass: https://kenney.nl/assets/impact-sounds ; CC0-1.0
+pour: https://opengameart.org/content/water-splash-and-sand-footsteps ; CC0-1.0
+ignite: https://opengameart.org/content/fireplace-sound-loop; https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch ; CC0-1.0; CC0; CC0-1.0
+fire_loop: https://opengameart.org/content/fireplace-sound-loop ; CC0-1.0

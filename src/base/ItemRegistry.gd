@@ -27,6 +27,8 @@ func _register_all_items() -> void:
 	_register_consumables()
 	_register_flashlight_modules()
 	_apply_base_shop_catalog()
+	for definition: Dictionary in SpecialItemCatalog.definitions():
+		_items[str(definition.id)] = definition
 
 
 ## ————————————————————————————————

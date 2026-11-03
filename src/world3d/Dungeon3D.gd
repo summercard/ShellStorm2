@@ -688,6 +688,9 @@ func _activate_runtime_persistence() -> void:
 	if _door_fate_active:
 		call_deferred("_restore_pending_door_fate_overlay")
 	BaseManager.register_runtime_checkpoint_provider(self)
+	var special_controller := player.get_special_item_controller()
+	if not special_controller.persistent_state_changed.is_connected(_on_runtime_special_item_changed):
+		special_controller.persistent_state_changed.connect(_on_runtime_special_item_changed)
 	if _inventory != null and not _inventory.inventory_changed.is_connected(_on_runtime_inventory_changed):
 		_inventory.inventory_changed.connect(_on_runtime_inventory_changed)
 	if _insurance != null and not _insurance.insurance_changed.is_connected(_on_runtime_insurance_changed):
@@ -704,6 +707,10 @@ func _activate_runtime_persistence() -> void:
 
 func _on_runtime_inventory_changed() -> void:
 	_queue_runtime_autosave("inventory_changed")
+
+
+func _on_runtime_special_item_changed() -> void:
+	_queue_runtime_autosave("special_item_changed")
 
 
 func _on_runtime_insurance_changed() -> void:
@@ -768,6 +775,7 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"active_weapon_slot": player.get_active_weapon_slot(),
 		"weapon_holstered": player.weapon_holstered,
 		"equipped_backpack_item": player.get_equipped_backpack_item(),
+		"special_items": player.get_special_item_controller().export_state(),
 		"flashlight_module_id": flashlight.get_module_id() if flashlight != null else "basic",
 		"flashlight_charge_ratio": flashlight.get_charge_ratio() if flashlight != null else 1.0,
 		"quick_item_slots": _quick_inventory.get_slots_snapshot(),
@@ -1048,6 +1056,7 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 	var inventory_slots: Variant = snapshot.get("inventory_slots", [])
 	if inventory_slots is Array:
 		_inventory.restore_slots_snapshot(inventory_slots as Array)
+	player.get_special_item_controller().restore_state(snapshot.get("special_items", {}) as Dictionary)
 	_insurance.set_max_slots(maxi(16, int(snapshot.get("insurance_capacity", _insurance.get_max_slots()))))
 	var insurance_slots: Variant = snapshot.get("insurance_slots", [])
 	if insurance_slots is Array:
@@ -1749,6 +1758,7 @@ func _setup_run_modules() -> void:
 		_grant_guaranteed_loadout_ammo()
 	_inventory.inventory_changed.connect(_refresh_loot_label)
 	GameManager.currency_changed.connect(_on_run_currency_changed)
+	player.get_special_item_controller().configure(player, _inventory, _can_use_special_item)
 	_inventory_ui = InventoryUI.new()
 	_inventory_ui.name = "InventoryUI3D"
 	_inventory_ui.accept_tab_shortcut = true
@@ -2094,6 +2104,15 @@ func _build_reference_main_hud() -> void:
 	# 落在 verify_finite_ammo_flow 的「250..312 × 44..59」尺寸契约内（内容更小 ⇒ 由锚框决定）。
 	_anchor_control(weapon_panel, 1.0, 1.0, 1.0, 1.0, -368, -90, -18, -20)
 	_reference_hud_root.add_child(weapon_panel)
+	var special_hud := preload("res://assets/art/ui/special_items/ui_special_item_hud_root.tscn").instantiate() as SpecialItemHUD
+	special_hud.name = "SpecialItemHUD"
+	special_hud.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	special_hud.offset_left = -300.0
+	special_hud.offset_top = -150.0
+	special_hud.offset_right = -18.0
+	special_hud.offset_bottom = -82.0
+	_reference_hud_root.add_child(special_hud)
+	special_hud.configure(player.get_special_item_controller())
 	# 右下武器栏：tap 在主武器 / 副武器 之间切换（_on_ammo_changed 里 [N] 会自动反映新槽位）
 	weapon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	weapon_panel.tooltip_text = "点击切换主/副武器 [键 1 / 2]"
@@ -8792,6 +8811,7 @@ func _capture_room_runtime_state(room_id: String) -> void:
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or not is_instance_valid(room):
 		return
+	room.capture_reactive_prop_states()
 	var enemy_states: Array[Dictionary] = []
 	for value in _enemy_nodes_by_room.get(room_id, []):
 		if not is_instance_valid(value) or not value is Enemy3D:
@@ -8836,6 +8856,7 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		"containers": container_states,
 		"treasure_chests": room.get_persistent_detail_state("treasure_chests"),
 		"breakable_clutter": room.get_persistent_detail_state("breakable_clutter"),
+		"reactive_props": room.get_persistent_detail_state("reactive_props"),
 		"alive_count": int(_alive_by_room.get(room_id, enemy_states.size())),
 		"spawn_blocked": _room_spawn_blocked.has(room_id),
 		"fate_wave_queued": _room_fate_wave_queued.has(room_id),
@@ -8934,7 +8955,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 		"room_light_on": bool(state.get("room_light_on", false)),
 		"containers": (state.get("containers", {}) as Dictionary).duplicate(true),
 	}
-	for optional_key in ["treasure_chests", "breakable_clutter"]:
+	for optional_key in ["treasure_chests", "breakable_clutter", "reactive_props"]:
 		if state.has(optional_key):
 			detail_state[optional_key] = (state[optional_key] as Dictionary).duplicate(true)
 	room.apply_runtime_detail_state(detail_state)
@@ -9202,6 +9223,10 @@ func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void
 	if slot.is_empty():
 		return
 	var item := slot.get("item", {}) as Dictionary
+	if SpecialItemCatalog.contains(str(item.get("id", ""))):
+		var result := player.get_special_item_controller().equip(str(item.id))
+		status_label.text = "已装备%s · 右键使用" % item.name if bool(result.success) else "特殊道具装备失败"
+		return
 	if str(item.get("id", "")) == "item_ammo_pack":
 		status_label.text = (
 			"开始装填 · 完成后按弹匣缺口扣除备弹"
@@ -11004,3 +11029,7 @@ func _tick_battery_blink(delta: float) -> void:
 		var flashlight := player.get_node_or_null("PlayerFlashlight3D")
 		if flashlight != null:
 			_refresh_battery_time_label(flashlight)
+
+
+func _can_use_special_item() -> bool:
+	return not _completed and _can_switch_weapon_slot()

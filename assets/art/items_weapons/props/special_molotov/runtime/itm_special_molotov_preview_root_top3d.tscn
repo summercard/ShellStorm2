@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/props/special_molotov/components/itm_special_molotov_preview_visual_top3d.glb" id="1_visual"]
+
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "ITM-SPECIAL-MOLOTOV"
+metadata/logical_id = "special_molotov"
+metadata/asset_version = "v001"
+metadata/model_role = "preview"
+metadata/triangle_count = 1068
+metadata/dimensions_m = Vector3(0.15, 0.36, 0.15)
+metadata/front_axis = "-Z"
+metadata/collision_intent = "external_projectile_sweep_and_ground_loot"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

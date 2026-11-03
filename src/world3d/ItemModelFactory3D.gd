@@ -8,6 +8,9 @@ const MODEL_ROLE_ICON := &"icon"
 const GROUND_DISPLAY_SCALE := {"item_battery_l": 1.30, "item_health_potion": 1.30}
 ## 同一AssetID的地面派生模型；新批次预览高模由PREVIEW_SCENES独立路由。
 const GROUND_SCENES := {
+	"special_grenade": preload("res://assets/art/items_weapons/props/special_grenade/runtime/itm_special_grenade_ground_root_top3d.tscn"),
+	"special_molotov": preload("res://assets/art/items_weapons/props/special_molotov/runtime/itm_special_molotov_ground_root_top3d.tscn"),
+	"special_gasoline": preload("res://assets/art/items_weapons/props/special_gasoline/runtime/itm_special_gasoline_ground_root_top3d.tscn"),
 	"item_beacon": preload("res://assets/art/items_weapons/props/beacon/runtime/itm_beacon_ground_root_top3d.tscn"),
 	"item_room_key": preload("res://assets/art/items_weapons/props/room_key/runtime/itm_room_key_ground_root_top3d.tscn"),
 	"item_cell_pack": preload("res://assets/art/items_weapons/props/cell_pack/runtime/itm_cell_pack_ground_root_top3d.tscn"),
@@ -36,6 +39,9 @@ const GROUND_SCENES := {
 }
 
 const PREVIEW_SCENES := {
+	"special_grenade": preload("res://assets/art/items_weapons/props/special_grenade/runtime/itm_special_grenade_preview_root_top3d.tscn"),
+	"special_molotov": preload("res://assets/art/items_weapons/props/special_molotov/runtime/itm_special_molotov_preview_root_top3d.tscn"),
+	"special_gasoline": preload("res://assets/art/items_weapons/props/special_gasoline/runtime/itm_special_gasoline_preview_root_top3d.tscn"),
 	"item_beacon": preload("res://assets/art/items_weapons/props/beacon/runtime/itm_beacon_preview_root_top3d.tscn"),
 	"item_room_key": preload("res://assets/art/items_weapons/props/room_key/runtime/itm_room_key_preview_root_top3d.tscn"),
 	"item_cell_pack": preload("res://assets/art/items_weapons/props/cell_pack/runtime/itm_cell_pack_preview_root_top3d.tscn"),
@@ -144,6 +150,8 @@ static func get_item_color(item: Dictionary) -> Color:
 
 
 static func get_model_kind(item: Dictionary) -> String:
+	if str(item.get("type", "")) == "special_item":
+		return "special_item"
 	var item_id := str(item.get("id", ""))
 	var item_type := str(item.get("type", ""))
 	var subtype := str(item.get("subtype", ""))

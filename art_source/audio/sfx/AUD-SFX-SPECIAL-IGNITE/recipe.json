@@ -1,0 +1,35 @@
+{
+  "asset_id": "AUD-SFX-SPECIAL-IGNITE",
+  "kind": "ignite",
+  "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-IGNITE/source/special_ignite_master_v001.wav",
+  "path": "src/assets/audio/sfx/special_ignite_v001.ogg",
+  "duration_seconds": 0.42,
+  "sample_rate": 44100,
+  "channels": 1,
+  "peak_dbfs": -6.02,
+  "source_sha256": "69d962e0fabc3713e538d7fe0bef1081d9fa10abff873e346c1f5414eeb82068",
+  "sha256": "68e6b994195c6474e46a57b63e1590185474dd4e19485d4a0158259de8c0976c",
+  "license": "CC0-1.0; CC0; CC0-1.0",
+  "license_source": "https://opengameart.org/content/fireplace-sound-loop; https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+  "inputs": [
+    {
+      "path": "art_source/audio/sfx/special_items_recordings/source/fire_recording.wav",
+      "source_url": "https://opengameart.org/content/fireplace-sound-loop",
+      "download_url": "https://opengameart.org/sites/default/files/fire.wav",
+      "license": "CC0-1.0",
+      "sha256": "85ca0cc60d0c037fff8b185e31ad1fcdbda6ce45eee17c3ee1318d1b8f59e330"
+    },
+    {
+      "path": "art_source/audio/sfx/AUD-SFX-MELEE-SWING/source/melee_swing_v003.wav",
+      "source_url": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+      "license": "CC0; CC0-1.0",
+      "sha256": "482246ba50f95efd9c4163ecd52f57a1dbb4a6c7be4f3a55be03df22070a776d"
+    }
+  ],
+  "recipe": {
+    "builder": "scripts/build_special_item_audio.py",
+    "offset_seconds": 0.5,
+    "crossfade_seconds": 0.0,
+    "edits": "linear layering, trim/pad, fades, peak normalization"
+  }
+}

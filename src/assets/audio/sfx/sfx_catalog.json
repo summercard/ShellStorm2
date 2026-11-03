@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": "world-environment-r6 + natural-world-r5 + gun-families-r4 + system cues",
+  "revision": "world-environment-r6 + natural-world-r5 + gun-families-r4 + system cues + special-items-r1",
   "sample_rate": 44100,
   "sound_sets": {
     "pistol_fire": {
@@ -1248,6 +1248,72 @@
       "bus": "Ambience",
       "max_voices": 6,
       "priority": "P2"
+    },
+    "special_throw": {
+      "id": "SFXSET-SPECIAL-THROW",
+      "paths": [
+        "res://src/assets/audio/sfx/special_throw_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "world_3d",
+      "bus": "WorldSFX",
+      "max_voices": 4,
+      "priority": "P2"
+    },
+    "special_blast": {
+      "id": "SFXSET-SPECIAL-BLAST",
+      "paths": [
+        "res://src/assets/audio/sfx/special_blast_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "world_3d",
+      "bus": "WorldSFX",
+      "max_voices": 4,
+      "priority": "P1"
+    },
+    "special_glass": {
+      "id": "SFXSET-SPECIAL-GLASS",
+      "paths": [
+        "res://src/assets/audio/sfx/special_glass_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "world_3d",
+      "bus": "WorldSFX",
+      "max_voices": 4,
+      "priority": "P2"
+    },
+    "special_pour": {
+      "id": "SFXSET-SPECIAL-POUR",
+      "paths": [
+        "res://src/assets/audio/sfx/special_pour_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "world_3d",
+      "bus": "WorldSFX",
+      "max_voices": 2,
+      "priority": "P2"
+    },
+    "special_ignite": {
+      "id": "SFXSET-SPECIAL-IGNITE",
+      "paths": [
+        "res://src/assets/audio/sfx/special_ignite_v001.ogg"
+      ],
+      "loop": false,
+      "spatial_mode": "world_3d",
+      "bus": "WorldSFX",
+      "max_voices": 4,
+      "priority": "P2"
+    },
+    "special_fire_loop": {
+      "id": "SFXSET-SPECIAL-FIRE-LOOP",
+      "paths": [
+        "res://src/assets/audio/sfx/special_fire_loop_v001.ogg"
+      ],
+      "loop": true,
+      "spatial_mode": "world_3d",
+      "bus": "WorldSFX",
+      "max_voices": 1,
+      "priority": "P2"
     }
   },
   "events": {
@@ -2208,6 +2274,66 @@
       "owner": "WorldAudioEnvironment3D",
       "binding_status": "domain_bound",
       "acceptance_case": "verify_world_environment_audio_flow"
+    },
+    "special.throw": {
+      "sound_set": "special_throw",
+      "cue_id": "CUE-SPECIAL-THROW",
+      "owner": "SpecialItemWorld3D",
+      "trigger_fact": "successful special item domain edge",
+      "ai_signal": "domain_owned_unchanged",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_special_items_system",
+      "binding_status": "active"
+    },
+    "special.blast": {
+      "sound_set": "special_blast",
+      "cue_id": "CUE-SPECIAL-BLAST",
+      "owner": "SpecialItemWorld3D",
+      "trigger_fact": "successful special item domain edge",
+      "ai_signal": "domain_owned_unchanged",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_special_items_system",
+      "binding_status": "active"
+    },
+    "special.glass": {
+      "sound_set": "special_glass",
+      "cue_id": "CUE-SPECIAL-GLASS",
+      "owner": "SpecialItemWorld3D",
+      "trigger_fact": "successful special item domain edge",
+      "ai_signal": "domain_owned_unchanged",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_special_items_system",
+      "binding_status": "active"
+    },
+    "special.pour": {
+      "sound_set": "special_pour",
+      "cue_id": "CUE-SPECIAL-POUR",
+      "owner": "SpecialItemController3D",
+      "trigger_fact": "successful special item domain edge",
+      "ai_signal": "domain_owned_unchanged",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_special_items_system",
+      "binding_status": "active"
+    },
+    "special.ignite": {
+      "sound_set": "special_ignite",
+      "cue_id": "CUE-SPECIAL-IGNITE",
+      "owner": "SpecialItemWorld3D",
+      "trigger_fact": "successful special item domain edge",
+      "ai_signal": "domain_owned_unchanged",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_special_items_system",
+      "binding_status": "active"
+    },
+    "special.fire_loop": {
+      "sound_set": "special_fire_loop",
+      "cue_id": "CUE-SPECIAL-FIRE-LOOP",
+      "owner": "SpecialItemWorld3D",
+      "trigger_fact": "successful special item domain edge",
+      "ai_signal": "domain_owned_unchanged",
+      "fallback_policy": "silence_and_report_once",
+      "acceptance_case": "verify_special_items_system",
+      "binding_status": "active"
     }
   },
   "legacy": {
@@ -6825,6 +6951,174 @@
         "amb.blower"
       ],
       "sound_set_id": "SFXSET-AMB-BLOWER"
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-THROW",
+      "key": "special_throw",
+      "variant": 0,
+      "source_path": "art_source/audio/sfx/AUD-SFX-SPECIAL-THROW/source/special_throw_master_v001.wav",
+      "runtime_path": "res://src/assets/audio/sfx/special_throw_v001.ogg",
+      "version": 1,
+      "duration_sec": 0.24,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q5",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "6ab8ea7565f19d8a40a509acad76121cef9874b6a5fa3d56695b35fea367dc4c",
+      "source_sha256": "2753f9440adfd02a594f3ab1cc0afa5377d893719bb523e6289c58c85bcc0825",
+      "production_revision": "special-items-r1",
+      "source_method": "Sourced recordings / Foley edits and linear layering; no tone synthesis",
+      "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+      "license_scope": "CC0; CC0-1.0",
+      "status": "imported_pending_listening",
+      "spatial_mode": "world_3d",
+      "loop": false,
+      "peak_target_db": -6.02,
+      "event_ids": [
+        "special.throw"
+      ],
+      "sound_set_id": "SFXSET-SPECIAL-THROW"
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-BLAST",
+      "key": "special_blast",
+      "variant": 0,
+      "source_path": "art_source/audio/sfx/AUD-SFX-SPECIAL-BLAST/source/special_blast_master_v001.wav",
+      "runtime_path": "res://src/assets/audio/sfx/special_blast_v001.ogg",
+      "version": 1,
+      "duration_sec": 0.85,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q5",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "61e2be35d30142c1c3bc6da7a2fa298f34a9bf81d2da4df57e134bc7bbbb2c56",
+      "source_sha256": "caae67bdaff7cc87ee263644e3d56a4cb194cd09514e643e03d2692f853c3c89",
+      "production_revision": "special-items-r1",
+      "source_method": "Sourced recordings / Foley edits and linear layering; no tone synthesis",
+      "license_source": "https://opengameart.org/content/2-high-quality-explosions | Michel Baradari; https://opengameart.org/content/tree-falling-yo-frankie | Blender Foundation",
+      "license_scope": "CC-BY 3.0; CC0",
+      "status": "imported_pending_listening",
+      "spatial_mode": "world_3d",
+      "loop": false,
+      "peak_target_db": -6.02,
+      "event_ids": [
+        "special.blast"
+      ],
+      "sound_set_id": "SFXSET-SPECIAL-BLAST"
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-GLASS",
+      "key": "special_glass",
+      "variant": 0,
+      "source_path": "art_source/audio/sfx/AUD-SFX-SPECIAL-GLASS/source/special_glass_master_v001.wav",
+      "runtime_path": "res://src/assets/audio/sfx/special_glass_v001.ogg",
+      "version": 1,
+      "duration_sec": 0.62,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q5",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "6d64ab081cd0de83c225920ec3e3cb732a48fab6a6fdb1900b61cbb90aed9ad9",
+      "source_sha256": "776b238a32e4819a6bc1d0228a9428fef4ff3b36577fe61f0320319f708e99af",
+      "production_revision": "special-items-r1",
+      "source_method": "Sourced recordings / Foley edits and linear layering; no tone synthesis",
+      "license_source": "https://kenney.nl/assets/impact-sounds",
+      "license_scope": "CC0-1.0",
+      "status": "imported_pending_listening",
+      "spatial_mode": "world_3d",
+      "loop": false,
+      "peak_target_db": -6.02,
+      "event_ids": [
+        "special.glass"
+      ],
+      "sound_set_id": "SFXSET-SPECIAL-GLASS"
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-POUR",
+      "key": "special_pour",
+      "variant": 0,
+      "source_path": "art_source/audio/sfx/AUD-SFX-SPECIAL-POUR/source/special_pour_master_v001.wav",
+      "runtime_path": "res://src/assets/audio/sfx/special_pour_v001.ogg",
+      "version": 1,
+      "duration_sec": 0.32,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q5",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "858e4e4931e467f0048c3c012e6adf629b795c6aa95ff51af06f0f1ff0e4dc34",
+      "source_sha256": "047f5e31881c483afd04304e530d9010a6ea913e21614c29df1d8ad0133e0191",
+      "production_revision": "special-items-r1",
+      "source_method": "Sourced recordings / Foley edits and linear layering; no tone synthesis",
+      "license_source": "https://opengameart.org/content/water-splash-and-sand-footsteps",
+      "license_scope": "CC0-1.0",
+      "status": "imported_pending_listening",
+      "spatial_mode": "world_3d",
+      "loop": false,
+      "peak_target_db": -6.02,
+      "event_ids": [
+        "special.pour"
+      ],
+      "sound_set_id": "SFXSET-SPECIAL-POUR"
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-IGNITE",
+      "key": "special_ignite",
+      "variant": 0,
+      "source_path": "art_source/audio/sfx/AUD-SFX-SPECIAL-IGNITE/source/special_ignite_master_v001.wav",
+      "runtime_path": "res://src/assets/audio/sfx/special_ignite_v001.ogg",
+      "version": 1,
+      "duration_sec": 0.42,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q5",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "68e6b994195c6474e46a57b63e1590185474dd4e19485d4a0158259de8c0976c",
+      "source_sha256": "69d962e0fabc3713e538d7fe0bef1081d9fa10abff873e346c1f5414eeb82068",
+      "production_revision": "special-items-r1",
+      "source_method": "Sourced recordings / Foley edits and linear layering; no tone synthesis",
+      "license_source": "https://opengameart.org/content/fireplace-sound-loop; https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+      "license_scope": "CC0-1.0; CC0; CC0-1.0",
+      "status": "imported_pending_listening",
+      "spatial_mode": "world_3d",
+      "loop": false,
+      "peak_target_db": -6.02,
+      "event_ids": [
+        "special.ignite"
+      ],
+      "sound_set_id": "SFXSET-SPECIAL-IGNITE"
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-FIRE-LOOP",
+      "key": "special_fire_loop",
+      "variant": 0,
+      "source_path": "art_source/audio/sfx/AUD-SFX-SPECIAL-FIRE-LOOP/source/special_fire_loop_master_v001.wav",
+      "runtime_path": "res://src/assets/audio/sfx/special_fire_loop_v001.ogg",
+      "version": 1,
+      "duration_sec": 1.42,
+      "source_format": "PCM24 WAV",
+      "runtime_format": "OGG Vorbis q5",
+      "sample_rate_hz": 44100,
+      "source_channels": 1,
+      "runtime_channels": 1,
+      "sha256": "824c0cc3431e526a54707e8ba16ac5f02db56f7a79a7cdc7664d822ceac16697",
+      "source_sha256": "3f2353fa6152d1e8866f8dad39025bf6528c72bf9f7a251ebccad16708c521aa",
+      "production_revision": "special-items-r1",
+      "source_method": "Sourced recordings / Foley edits and linear layering; no tone synthesis",
+      "license_source": "https://opengameart.org/content/fireplace-sound-loop",
+      "license_scope": "CC0-1.0",
+      "status": "imported_pending_listening",
+      "spatial_mode": "world_3d",
+      "loop": true,
+      "peak_target_db": -6.02,
+      "event_ids": [
+        "special.fire_loop"
+      ],
+      "sound_set_id": "SFXSET-SPECIAL-FIRE-LOOP"
     }
   ],
   "weapon_profiles": {
@@ -6884,7 +7178,7 @@
     }
   },
   "world_style_policy": {
-    "revision": "natural-world-r5 + world-environment-r6",
+    "revision": "natural-world-r5 + world-environment-r6 + special-items-r1",
     "system_sets": [
       "fate_card",
       "extraction_start",
@@ -6997,7 +7291,13 @@
       "footstep_wood",
       "outdoor_bird",
       "amb_fan",
-      "amb_blower"
+      "amb_blower",
+      "special_throw",
+      "special_blast",
+      "special_glass",
+      "special_pour",
+      "special_ignite",
+      "special_fire_loop"
     ],
     "preserved_asset_hashes": {
       "AUD-SFX-PISTOL-FIRE": "2d1576d7c3c9084d3346db4d9cc1d13d430b1c76f94dcdac37c6e213fc052ce1",
@@ -7074,7 +7374,7 @@
       "AUD-SFX-PICKUP-LAUNCHER": "698d604186ed82c729b73aae12ae714ce65976a4247a0a27c26694c1ab9bab64",
       "AUD-SFX-PICKUP-CHARGE": "8f854b54bac7100f467ab63ad385172780ff3aa53915968598a869b8c7662a8f"
     },
-    "changed_assets": 93,
+    "changed_assets": 99,
     "environment_loops": 9
   }
 }

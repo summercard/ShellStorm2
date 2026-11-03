@@ -1,0 +1,438 @@
+{
+  "schema": "special_items_delivery_v1",
+  "feature_id": "SPECIAL-ITEMS",
+  "date": "2026-11-03",
+  "design": "docs/v0.1/design/特殊道具系统设计.md",
+  "catalog": "data/special_items/catalog.json",
+  "owner": "src/special_items/",
+  "items": [
+    {
+      "id": "special_grenade",
+      "name": "手雷",
+      "description": "特殊槽装备 · 右键抛掷 · 落地爆炸，3米内90伤害。",
+      "type": "special_item",
+      "subtype": "grenade",
+      "rarity": "uncommon",
+      "stack_max": 10,
+      "grid_size": [
+        1,
+        1
+      ],
+      "asset_id": "ITM-SPECIAL-GRENADE",
+      "price": 60,
+      "base_buy_price": 60,
+      "base_sell_price": 30,
+      "base_shelf_order": 8,
+      "cooldown": 1.2,
+      "throw_distance": 8.0,
+      "flight_time": 0.8,
+      "radius": 3.0,
+      "damage": 90,
+      "dimensions_m": [
+        0.16,
+        0.16,
+        0.24
+      ]
+    },
+    {
+      "id": "special_molotov",
+      "name": "燃烧瓶",
+      "description": "特殊槽装备 · 右键抛掷 · 2.4米范围燃烧5秒，每秒12伤害，可点燃汽油。",
+      "type": "special_item",
+      "subtype": "molotov",
+      "rarity": "uncommon",
+      "stack_max": 10,
+      "grid_size": [
+        1,
+        1
+      ],
+      "asset_id": "ITM-SPECIAL-MOLOTOV",
+      "price": 50,
+      "base_buy_price": 50,
+      "base_sell_price": 25,
+      "base_shelf_order": 9,
+      "cooldown": 1.5,
+      "throw_distance": 8.0,
+      "flight_time": 0.8,
+      "radius": 2.4,
+      "damage_per_tick": 6,
+      "duration": 5.0,
+      "dimensions_m": [
+        0.15,
+        0.15,
+        0.36
+      ]
+    },
+    {
+      "id": "special_gasoline",
+      "name": "汽油瓶",
+      "description": "特殊槽装备 · 按住右键沿路铺油 · 每瓶25份。遇火连片依次点燃，每片燃烧5秒。",
+      "type": "special_item",
+      "subtype": "gasoline",
+      "rarity": "uncommon",
+      "stack_max": 10,
+      "grid_size": [
+        1,
+        1
+      ],
+      "asset_id": "ITM-SPECIAL-GASOLINE",
+      "price": 45,
+      "base_buy_price": 45,
+      "base_sell_price": 22,
+      "base_shelf_order": 10,
+      "cooldown": 0.15,
+      "fuel_capacity": 25,
+      "spacing": 0.7,
+      "radius": 0.58,
+      "dry_duration": 45.0,
+      "duration": 5.0,
+      "damage_per_tick": 8,
+      "spread_delay": 0.12,
+      "dimensions_m": [
+        0.24,
+        0.13,
+        0.3
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "id": "ITM-SPECIAL-GRENADE",
+      "name": "手雷",
+      "domain": "props",
+      "category": "道具",
+      "subclass": "special_item",
+      "logical_id": "special_grenade",
+      "path": "assets/art/items_weapons/props/special_grenade/runtime/itm_special_grenade_ground_root_top3d.tscn",
+      "source": "art_source/items_weapons/props/special_grenade/source/itm_special_grenade_ground_source_v001.blend",
+      "glb": "assets/art/items_weapons/props/special_grenade/components/itm_special_grenade_ground_visual_top3d.glb",
+      "script": "src/special_items/SpecialItemController3D.gd",
+      "collection": "ITM_手雷_中文资产管理",
+      "spec": "宽深高 [0.16, 0.16, 0.24]m; ground 176 triangles; tier_0_static",
+      "notes": "preview=art_source/items_weapons/props/special_grenade/source/itm_special_grenade_source_v001.blend; source_manifest=art_source/items_weapons/props/special_grenade/source_manifest.json; material=物品独立四材质; PaletteUV; 原创; 五秒效果由规则拥有",
+      "ledger": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+      "ledger_row": 45,
+      "sha256": "d2ccb6d5e7663620551cabd7c2cfc7627f537119c6f13e67fb24fc8db3252c03"
+    },
+    {
+      "id": "ITM-SPECIAL-MOLOTOV",
+      "name": "燃烧瓶",
+      "domain": "props",
+      "category": "道具",
+      "subclass": "special_item",
+      "logical_id": "special_molotov",
+      "path": "assets/art/items_weapons/props/special_molotov/runtime/itm_special_molotov_ground_root_top3d.tscn",
+      "source": "art_source/items_weapons/props/special_molotov/source/itm_special_molotov_ground_source_v001.blend",
+      "glb": "assets/art/items_weapons/props/special_molotov/components/itm_special_molotov_ground_visual_top3d.glb",
+      "script": "src/special_items/SpecialItemController3D.gd",
+      "collection": "ITM_燃烧瓶_中文资产管理",
+      "spec": "宽深高 [0.15, 0.15, 0.36]m; ground 180 triangles; tier_0_static",
+      "notes": "preview=art_source/items_weapons/props/special_molotov/source/itm_special_molotov_source_v001.blend; source_manifest=art_source/items_weapons/props/special_molotov/source_manifest.json; material=物品独立四材质; PaletteUV; 原创; 五秒效果由规则拥有",
+      "ledger": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+      "ledger_row": 46,
+      "sha256": "dc014e2fc2b948ac8f855026e63d2fe21209196e7adc34c8bdc5d064af07736a"
+    },
+    {
+      "id": "ITM-SPECIAL-GASOLINE",
+      "name": "汽油瓶",
+      "domain": "props",
+      "category": "道具",
+      "subclass": "special_item",
+      "logical_id": "special_gasoline",
+      "path": "assets/art/items_weapons/props/special_gasoline/runtime/itm_special_gasoline_ground_root_top3d.tscn",
+      "source": "art_source/items_weapons/props/special_gasoline/source/itm_special_gasoline_ground_source_v001.blend",
+      "glb": "assets/art/items_weapons/props/special_gasoline/components/itm_special_gasoline_ground_visual_top3d.glb",
+      "script": "src/special_items/SpecialItemController3D.gd",
+      "collection": "ITM_汽油瓶_中文资产管理",
+      "spec": "宽深高 [0.24, 0.13, 0.3]m; ground 180 triangles; tier_0_static",
+      "notes": "preview=art_source/items_weapons/props/special_gasoline/source/itm_special_gasoline_source_v001.blend; source_manifest=art_source/items_weapons/props/special_gasoline/source_manifest.json; material=物品独立四材质; PaletteUV; 原创; 五秒效果由规则拥有",
+      "ledger": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+      "ledger_row": 47,
+      "sha256": "3a4a8e375938a42c9e8d0d3c387a2964824937210dc0d4ff98f77defdc7f1519"
+    },
+    {
+      "id": "VFX-SPECIAL-FIRE-3D",
+      "name": "特殊道具地面火焰",
+      "domain": "vfx",
+      "category": "特效",
+      "subclass": "combat_3d",
+      "logical_id": "special_fire",
+      "path": "assets/art/vfx/combat_3d/vfx_special_fire_root_top3d.tscn",
+      "source": "",
+      "glb": "",
+      "script": "src/vfx/VfxSpecialFire3D.gd",
+      "collection": "",
+      "spec": "参数化世界半径；纯视觉，无碰撞；自动灭灯/回收",
+      "notes": "场景拥有生命周期；VfxPool3D AssetID注册，create_unpooled挂所属世界，卸载无常驻池残留",
+      "ledger": "assets/registry/ledgers/ShellStorm2_特效账本_v001.xlsx",
+      "ledger_row": 57,
+      "sha256": "a752178b8eb9e8679cd1311badf33d6713045a7f53ccf999d6a612d99cf59f91"
+    },
+    {
+      "id": "VFX-SPECIAL-OIL-3D",
+      "name": "汽油油迹",
+      "domain": "vfx",
+      "category": "特效",
+      "subclass": "combat_3d",
+      "logical_id": "special_oil",
+      "path": "assets/art/vfx/combat_3d/vfx_special_oil_root_top3d.tscn",
+      "source": "",
+      "glb": "",
+      "script": "src/vfx/VfxSpecialOil3D.gd",
+      "collection": "",
+      "spec": "参数化世界半径；纯视觉，无碰撞；自动灭灯/回收",
+      "notes": "场景拥有生命周期；VfxPool3D AssetID注册，create_unpooled挂所属世界，卸载无常驻池残留",
+      "ledger": "assets/registry/ledgers/ShellStorm2_特效账本_v001.xlsx",
+      "ledger_row": 58,
+      "sha256": "703677dfdb4e57f424a083ac873278818169098657600cb0537d434c620f5f65"
+    },
+    {
+      "id": "VFX-SPECIAL-BLAST-3D",
+      "name": "手雷爆炸",
+      "domain": "vfx",
+      "category": "特效",
+      "subclass": "combat_3d",
+      "logical_id": "special_blast",
+      "path": "assets/art/vfx/combat_3d/vfx_special_blast_root_top3d.tscn",
+      "source": "",
+      "glb": "",
+      "script": "src/vfx/VfxSpecialBlast3D.gd",
+      "collection": "",
+      "spec": "参数化世界半径；纯视觉，无碰撞；自动灭灯/回收",
+      "notes": "场景拥有生命周期；VfxPool3D AssetID注册，create_unpooled挂所属世界，卸载无常驻池残留",
+      "ledger": "assets/registry/ledgers/ShellStorm2_特效账本_v001.xlsx",
+      "ledger_row": 59,
+      "sha256": "6e2e88f71e07b71c621d901753794c730846e381739fb17c578120854a35cef2"
+    },
+    {
+      "id": "UI-SPECIAL-ITEM-HUD",
+      "name": "特殊道具右下HUD",
+      "domain": "ui",
+      "category": "UI",
+      "subclass": "hud",
+      "logical_id": "special_item_hud",
+      "path": "assets/art/ui/special_items/ui_special_item_hud_root.tscn",
+      "source": "",
+      "glb": "",
+      "script": "src/special_items/ui/SpecialItemHUD.gd",
+      "collection": "",
+      "spec": "1280x720及缩放；模型图标、数量、冷却/油量",
+      "notes": "UI只读快照，装备命令不复制物品；原创，复用UIPalette/UIStyleFactory",
+      "ledger": "assets/registry/ledgers/ShellStorm2_UI账本_v001.xlsx",
+      "ledger_row": 24,
+      "sha256": "1c1d3439b5d35555f69716d61a2ffa8611a0f852269c9c83b2dc3e2a411b5a1e"
+    },
+    {
+      "id": "UI-SPECIAL-ITEM-EQUIPMENT-SLOT",
+      "name": "特殊道具装备槽",
+      "domain": "ui",
+      "category": "UI",
+      "subclass": "equipment",
+      "logical_id": "special_item_equipment_slot",
+      "path": "assets/art/ui/special_items/ui_special_item_equipment_slot_root.tscn",
+      "source": "",
+      "glb": "",
+      "script": "src/special_items/ui/SpecialItemEquipmentSlot.gd",
+      "collection": "",
+      "spec": "1280x720及缩放；模型图标、数量、冷却/油量",
+      "notes": "UI只读快照，装备命令不复制物品；原创，复用UIPalette/UIStyleFactory",
+      "ledger": "assets/registry/ledgers/ShellStorm2_UI账本_v001.xlsx",
+      "ledger_row": 25,
+      "sha256": "8d20eed8e4d0b4ba5e542e225286f70d8ee3c6935780131f13555b7360e4efc8"
+    },
+    {
+      "id": "AUD-SFX-SPECIAL-THROW",
+      "name": "特殊道具投掷",
+      "domain": "audio",
+      "category": "音效",
+      "subclass": "sfx",
+      "logical_id": "special.throw",
+      "path": "src/assets/audio/sfx/special_throw_v001.ogg",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-THROW/source/special_throw_master_v001.wav",
+      "glb": "",
+      "script": "src/special_items/SpecialItemWorld3D.gd",
+      "collection": "",
+      "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+      "spec": "44.1kHz mono; 0.240s; PCM24 master / OGG q5; -6dBFS peak",
+      "notes": "CC0; CC0-1.0; semantic event=special.throw; source=art_source/audio/sfx/AUD-SFX-SPECIAL-THROW/source/special_throw_master_v001.wav; source_sha256=2753f9440adfd02a594f3ab1cc0afa5377d893719bb523e6289c58c85bcc0825",
+      "ledger": "assets/registry/ledgers/ShellStorm2_音效账本_v001.xlsx",
+      "ledger_row": 184,
+      "sha256": "6ab8ea7565f19d8a40a509acad76121cef9874b6a5fa3d56695b35fea367dc4c"
+    },
+    {
+      "id": "AUD-SFX-SPECIAL-BLAST",
+      "name": "手雷爆炸声",
+      "domain": "audio",
+      "category": "音效",
+      "subclass": "sfx",
+      "logical_id": "special.blast",
+      "path": "src/assets/audio/sfx/special_blast_v001.ogg",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-BLAST/source/special_blast_master_v001.wav",
+      "glb": "",
+      "script": "src/special_items/SpecialItemWorld3D.gd",
+      "collection": "",
+      "license_source": "https://opengameart.org/content/2-high-quality-explosions | Michel Baradari; https://opengameart.org/content/tree-falling-yo-frankie | Blender Foundation",
+      "spec": "44.1kHz mono; 0.850s; PCM24 master / OGG q5; -6dBFS peak",
+      "notes": "CC-BY 3.0; CC0; semantic event=special.blast; source=art_source/audio/sfx/AUD-SFX-SPECIAL-BLAST/source/special_blast_master_v001.wav; source_sha256=caae67bdaff7cc87ee263644e3d56a4cb194cd09514e643e03d2692f853c3c89",
+      "ledger": "assets/registry/ledgers/ShellStorm2_音效账本_v001.xlsx",
+      "ledger_row": 185,
+      "sha256": "61e2be35d30142c1c3bc6da7a2fa298f34a9bf81d2da4df57e134bc7bbbb2c56"
+    },
+    {
+      "id": "AUD-SFX-SPECIAL-GLASS",
+      "name": "燃烧瓶碎裂",
+      "domain": "audio",
+      "category": "音效",
+      "subclass": "sfx",
+      "logical_id": "special.glass",
+      "path": "src/assets/audio/sfx/special_glass_v001.ogg",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-GLASS/source/special_glass_master_v001.wav",
+      "glb": "",
+      "script": "src/special_items/SpecialItemWorld3D.gd",
+      "collection": "",
+      "license_source": "https://kenney.nl/assets/impact-sounds",
+      "spec": "44.1kHz mono; 0.620s; PCM24 master / OGG q5; -6dBFS peak",
+      "notes": "CC0-1.0; semantic event=special.glass; source=art_source/audio/sfx/AUD-SFX-SPECIAL-GLASS/source/special_glass_master_v001.wav; source_sha256=776b238a32e4819a6bc1d0228a9428fef4ff3b36577fe61f0320319f708e99af",
+      "ledger": "assets/registry/ledgers/ShellStorm2_音效账本_v001.xlsx",
+      "ledger_row": 186,
+      "sha256": "6d64ab081cd0de83c225920ec3e3cb732a48fab6a6fdb1900b61cbb90aed9ad9"
+    },
+    {
+      "id": "AUD-SFX-SPECIAL-POUR",
+      "name": "汽油倾倒",
+      "domain": "audio",
+      "category": "音效",
+      "subclass": "sfx",
+      "logical_id": "special.pour",
+      "path": "src/assets/audio/sfx/special_pour_v001.ogg",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-POUR/source/special_pour_master_v001.wav",
+      "glb": "",
+      "script": "src/special_items/SpecialItemController3D.gd",
+      "collection": "",
+      "license_source": "https://opengameart.org/content/water-splash-and-sand-footsteps",
+      "spec": "44.1kHz mono; 0.320s; PCM24 master / OGG q5; -6dBFS peak",
+      "notes": "CC0-1.0; semantic event=special.pour; source=art_source/audio/sfx/AUD-SFX-SPECIAL-POUR/source/special_pour_master_v001.wav; source_sha256=047f5e31881c483afd04304e530d9010a6ea913e21614c29df1d8ad0133e0191",
+      "ledger": "assets/registry/ledgers/ShellStorm2_音效账本_v001.xlsx",
+      "ledger_row": 187,
+      "sha256": "858e4e4931e467f0048c3c012e6adf629b795c6aa95ff51af06f0f1ff0e4dc34"
+    },
+    {
+      "id": "AUD-SFX-SPECIAL-IGNITE",
+      "name": "汽油点燃",
+      "domain": "audio",
+      "category": "音效",
+      "subclass": "sfx",
+      "logical_id": "special.ignite",
+      "path": "src/assets/audio/sfx/special_ignite_v001.ogg",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-IGNITE/source/special_ignite_master_v001.wav",
+      "glb": "",
+      "script": "src/special_items/SpecialItemWorld3D.gd",
+      "collection": "",
+      "license_source": "https://opengameart.org/content/fireplace-sound-loop; https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+      "spec": "44.1kHz mono; 0.420s; PCM24 master / OGG q5; -6dBFS peak",
+      "notes": "CC0-1.0; CC0; CC0-1.0; semantic event=special.ignite; source=art_source/audio/sfx/AUD-SFX-SPECIAL-IGNITE/source/special_ignite_master_v001.wav; source_sha256=69d962e0fabc3713e538d7fe0bef1081d9fa10abff873e346c1f5414eeb82068",
+      "ledger": "assets/registry/ledgers/ShellStorm2_音效账本_v001.xlsx",
+      "ledger_row": 188,
+      "sha256": "68e6b994195c6474e46a57b63e1590185474dd4e19485d4a0158259de8c0976c"
+    },
+    {
+      "id": "AUD-SFX-SPECIAL-FIRE-LOOP",
+      "name": "地面火焰持续燃烧",
+      "domain": "audio",
+      "category": "音效",
+      "subclass": "sfx",
+      "logical_id": "special.fire_loop",
+      "path": "src/assets/audio/sfx/special_fire_loop_v001.ogg",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-FIRE-LOOP/source/special_fire_loop_master_v001.wav",
+      "glb": "",
+      "script": "src/special_items/SpecialItemWorld3D.gd",
+      "collection": "",
+      "license_source": "https://opengameart.org/content/fireplace-sound-loop",
+      "spec": "44.1kHz mono; 1.420s; PCM24 master / OGG q5; -6dBFS peak",
+      "notes": "CC0-1.0; semantic event=special.fire_loop; source=art_source/audio/sfx/AUD-SFX-SPECIAL-FIRE-LOOP/source/special_fire_loop_master_v001.wav; source_sha256=3f2353fa6152d1e8866f8dad39025bf6528c72bf9f7a251ebccad16708c521aa",
+      "ledger": "assets/registry/ledgers/ShellStorm2_音效账本_v001.xlsx",
+      "ledger_row": 189,
+      "sha256": "824c0cc3431e526a54707e8ba16ac5f02db56f7a79a7cdc7664d822ceac16697"
+    }
+  ],
+  "verification": [
+    "verify_special_items_system",
+    "verify_special_item_assets",
+    "preview_special_items"
+  ],
+  "status": "verified_desktop_mouse_path",
+  "verification_results": {
+    "verify_special_items_system": {
+      "exit_code": 0,
+      "unexpected_errors": 0,
+      "markers": [
+        "SPECIAL_ITEMS_SYSTEM_OK: 75 checks"
+      ]
+    },
+    "verify_special_items_integration": {
+      "exit_code": 0,
+      "unexpected_errors": 0,
+      "markers": [
+        "SPECIAL_ITEMS_INTEGRATION_OK: 14 checks; actual inventory, HUD, mouse input, modal and runtime save"
+      ]
+    },
+    "verify_special_item_assets": {
+      "exit_code": 0,
+      "unexpected_errors": 0,
+      "markers": [
+        "SPECIAL_ITEM_ASSETS_OK"
+      ]
+    },
+    "preview_special_items": {
+      "exit_code": 0,
+      "unexpected_errors": 0,
+      "markers": [
+        "SPECIAL_ITEMS_VISUAL_OK: actual HUD, equipment, vending and imported asset frames"
+      ]
+    },
+    "verify_audio_library_flow": {
+      "exit_code": 0,
+      "unexpected_errors": 0,
+      "markers": [
+        "AUDIO_LIBRARY_FLOW_OK: 172 OGGs, 114 sets, 9 gun IDs / 7 families, 57 natural world sets, 9 ambient loops, preserved system/weapon hashes; mode=Windows"
+      ]
+    },
+    "verify_base_shop_save_flow": {
+      "exit_code": 0,
+      "unexpected_errors": 0,
+      "markers": [
+        "BASE_SHOP_SAVE_OK: database-backed catalog, checksum fallback, idempotent atomic buy/sell, restart restore, 3D icons and vending model pass"
+      ]
+    },
+    "verify_pause_game_save_reset_flow": {
+      "exit_code": 0,
+      "unexpected_errors": 0,
+      "markers": [
+        "PAUSE_GAME_SAVE_RESET_OK: reusable ESC button, confirmation gate, fresh validated profile, no stale backup, graphics preserved"
+      ]
+    },
+    "verify_training_range_equipment_ui": {
+      "exit_code": 0,
+      "unexpected_errors": 0,
+      "markers": [
+        "TRAINING_RANGE_EQUIPMENT_UI_OK: InventoryUI and WeaponAssemblyTreePanel reused from the run, backpack capacity 40 matches outside, slot round trip works, bullet swap locked, panel follows weapon tree, drop spawns ground loot, BaseData untouched"
+      ]
+    },
+    "verify_hud_presenter_3d": {
+      "exit_code": 0,
+      "unexpected_errors": 0,
+      "markers": [
+        "HUD_PRESENTER_3D_OK: read-only weapon snapshots produce stable text and model commands"
+      ]
+    }
+  },
+  "attributions": "data/special_items/audio_credits.txt",
+  "verification_limits": [
+    "Android",
+    "controller/touch-specific special input",
+    "full game suite",
+    "release PCK",
+    "large-scale field performance",
+    "human listening review"
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "schema": "special_items_audio_v1",
+  "assets": [
+    {
+      "asset_id": "AUD-SFX-SPECIAL-THROW",
+      "kind": "throw",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-THROW/source/special_throw_master_v001.wav",
+      "path": "src/assets/audio/sfx/special_throw_v001.ogg",
+      "duration_seconds": 0.24,
+      "sample_rate": 44100,
+      "channels": 1,
+      "peak_dbfs": -6.02,
+      "source_sha256": "2753f9440adfd02a594f3ab1cc0afa5377d893719bb523e6289c58c85bcc0825",
+      "sha256": "6ab8ea7565f19d8a40a509acad76121cef9874b6a5fa3d56695b35fea367dc4c",
+      "license": "CC0; CC0-1.0",
+      "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+      "inputs": [
+        {
+          "path": "art_source/audio/sfx/AUD-SFX-MELEE-SWING/source/melee_swing_v003.wav",
+          "source_url": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+          "license": "CC0; CC0-1.0",
+          "sha256": "482246ba50f95efd9c4163ecd52f57a1dbb4a6c7be4f3a55be03df22070a776d"
+        }
+      ],
+      "recipe": {
+        "builder": "scripts/build_special_item_audio.py",
+        "offset_seconds": 0.0,
+        "crossfade_seconds": 0.0,
+        "edits": "linear layering, trim/pad, fades, peak normalization"
+      }
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-BLAST",
+      "kind": "blast",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-BLAST/source/special_blast_master_v001.wav",
+      "path": "src/assets/audio/sfx/special_blast_v001.ogg",
+      "duration_seconds": 0.85,
+      "sample_rate": 44100,
+      "channels": 1,
+      "peak_dbfs": -6.02,
+      "source_sha256": "caae67bdaff7cc87ee263644e3d56a4cb194cd09514e643e03d2692f853c3c89",
+      "sha256": "61e2be35d30142c1c3bc6da7a2fa298f34a9bf81d2da4df57e134bc7bbbb2c56",
+      "license": "CC-BY 3.0; CC0",
+      "license_source": "https://opengameart.org/content/2-high-quality-explosions | Michel Baradari; https://opengameart.org/content/tree-falling-yo-frankie | Blender Foundation",
+      "inputs": [
+        {
+          "path": "art_source/audio/sfx/AUD-SFX-ENEMY-EXPLOSION/source/enemy_explosion_v002.wav",
+          "source_url": "https://opengameart.org/content/2-high-quality-explosions | Michel Baradari; https://opengameart.org/content/tree-falling-yo-frankie | Blender Foundation",
+          "license": "CC-BY 3.0; CC0",
+          "sha256": "033b4b83c99f0c55e431c5a97a4f407e4626ef02a5c75a77ebf06e4109063540"
+        }
+      ],
+      "recipe": {
+        "builder": "scripts/build_special_item_audio.py",
+        "offset_seconds": 0.0,
+        "crossfade_seconds": 0.0,
+        "edits": "linear layering, trim/pad, fades, peak normalization"
+      }
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-GLASS",
+      "kind": "glass",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-GLASS/source/special_glass_master_v001.wav",
+      "path": "src/assets/audio/sfx/special_glass_v001.ogg",
+      "duration_seconds": 0.62,
+      "sample_rate": 44100,
+      "channels": 1,
+      "peak_dbfs": -6.02,
+      "source_sha256": "776b238a32e4819a6bc1d0228a9428fef4ff3b36577fe61f0320319f708e99af",
+      "sha256": "6d64ab081cd0de83c225920ec3e3cb732a48fab6a6fdb1900b61cbb90aed9ad9",
+      "license": "CC0-1.0",
+      "license_source": "https://kenney.nl/assets/impact-sounds",
+      "inputs": [
+        {
+          "path": "art_source/audio/sfx/special_items_recordings/source/kenney_impactGlass_heavy_002.ogg",
+          "source_url": "https://kenney.nl/assets/impact-sounds",
+          "license": "CC0-1.0",
+          "credit": "Kenney",
+          "sha256": "4978654ac840ad519692d5d5ba48a8101cabce13b9a577be73ad589185e5e9ed"
+        }
+      ],
+      "recipe": {
+        "builder": "scripts/build_special_item_audio.py",
+        "offset_seconds": 0.0,
+        "crossfade_seconds": 0.0,
+        "edits": "linear layering, trim/pad, fades, peak normalization"
+      }
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-POUR",
+      "kind": "pour",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-POUR/source/special_pour_master_v001.wav",
+      "path": "src/assets/audio/sfx/special_pour_v001.ogg",
+      "duration_seconds": 0.32,
+      "sample_rate": 44100,
+      "channels": 1,
+      "peak_dbfs": -6.02,
+      "source_sha256": "047f5e31881c483afd04304e530d9010a6ea913e21614c29df1d8ad0133e0191",
+      "sha256": "858e4e4931e467f0048c3c012e6adf629b795c6aa95ff51af06f0f1ff0e4dc34",
+      "license": "CC0-1.0",
+      "license_source": "https://opengameart.org/content/water-splash-and-sand-footsteps",
+      "inputs": [
+        {
+          "path": "art_source/audio/sfx/special_items_recordings/source/water_splash_recording.wav",
+          "source_url": "https://opengameart.org/content/water-splash-and-sand-footsteps",
+          "download_url": "https://opengameart.org/sites/default/files/splash1_0.wav",
+          "license": "CC0-1.0",
+          "sha256": "e45d466f7e63e5d566f8a822a7a1a3f7d5131319d17ca0436dcc615b251e9277"
+        }
+      ],
+      "recipe": {
+        "builder": "scripts/build_special_item_audio.py",
+        "offset_seconds": 0.0,
+        "crossfade_seconds": 0.0,
+        "edits": "linear layering, trim/pad, fades, peak normalization"
+      }
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-IGNITE",
+      "kind": "ignite",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-IGNITE/source/special_ignite_master_v001.wav",
+      "path": "src/assets/audio/sfx/special_ignite_v001.ogg",
+      "duration_seconds": 0.42,
+      "sample_rate": 44100,
+      "channels": 1,
+      "peak_dbfs": -6.02,
+      "source_sha256": "69d962e0fabc3713e538d7fe0bef1081d9fa10abff873e346c1f5414eeb82068",
+      "sha256": "68e6b994195c6474e46a57b63e1590185474dd4e19485d4a0158259de8c0976c",
+      "license": "CC0-1.0; CC0; CC0-1.0",
+      "license_source": "https://opengameart.org/content/fireplace-sound-loop; https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+      "inputs": [
+        {
+          "path": "art_source/audio/sfx/special_items_recordings/source/fire_recording.wav",
+          "source_url": "https://opengameart.org/content/fireplace-sound-loop",
+          "download_url": "https://opengameart.org/sites/default/files/fire.wav",
+          "license": "CC0-1.0",
+          "sha256": "85ca0cc60d0c037fff8b185e31ad1fcdbda6ce45eee17c3ee1318d1b8f59e330"
+        },
+        {
+          "path": "art_source/audio/sfx/AUD-SFX-MELEE-SWING/source/melee_swing_v003.wav",
+          "source_url": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+          "license": "CC0; CC0-1.0",
+          "sha256": "482246ba50f95efd9c4163ecd52f57a1dbb4a6c7be4f3a55be03df22070a776d"
+        }
+      ],
+      "recipe": {
+        "builder": "scripts/build_special_item_audio.py",
+        "offset_seconds": 0.5,
+        "crossfade_seconds": 0.0,
+        "edits": "linear layering, trim/pad, fades, peak normalization"
+      }
+    },
+    {
+      "asset_id": "AUD-SFX-SPECIAL-FIRE-LOOP",
+      "kind": "fire_loop",
+      "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-FIRE-LOOP/source/special_fire_loop_master_v001.wav",
+      "path": "src/assets/audio/sfx/special_fire_loop_v001.ogg",
+      "duration_seconds": 1.42,
+      "sample_rate": 44100,
+      "channels": 1,
+      "peak_dbfs": -6.02,
+      "source_sha256": "3f2353fa6152d1e8866f8dad39025bf6528c72bf9f7a251ebccad16708c521aa",
+      "sha256": "824c0cc3431e526a54707e8ba16ac5f02db56f7a79a7cdc7664d822ceac16697",
+      "license": "CC0-1.0",
+      "license_source": "https://opengameart.org/content/fireplace-sound-loop",
+      "inputs": [
+        {
+          "path": "art_source/audio/sfx/special_items_recordings/source/fire_recording.wav",
+          "source_url": "https://opengameart.org/content/fireplace-sound-loop",
+          "download_url": "https://opengameart.org/sites/default/files/fire.wav",
+          "license": "CC0-1.0",
+          "sha256": "85ca0cc60d0c037fff8b185e31ad1fcdbda6ce45eee17c3ee1318d1b8f59e330"
+        }
+      ],
+      "recipe": {
+        "builder": "scripts/build_special_item_audio.py",
+        "offset_seconds": 2.0,
+        "crossfade_seconds": 0.08,
+        "edits": "linear layering, trim/pad, fades, peak normalization"
+      }
+    }
+  ]
+}

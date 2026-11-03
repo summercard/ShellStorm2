@@ -5082,6 +5082,9 @@ func _confirm_initial_loop_retreat() -> void:
 
 
 func _discard_run_carry_for_retreat() -> Dictionary:
+	if player != null:
+		player.get_special_item_controller().restore_state({})
+		player.get_special_item_controller().clear_world()
 	# 98F 首门反向撤退的物品契约：背包、装备枪、装备背包全部丢失；保险格按
 	# 保险规则保留。独立副本退出战局沿用同一契约，差异只在落点，因此两条
 	# 路径共用这一份清空实现，避免两份契约漂移。
@@ -7987,6 +7990,11 @@ func _expedition_objective() -> String:
 
 
 func _announce_floor_arrival(floor_number: int) -> void:
+	if player != null:
+		var special_controller := player.get_special_item_controller()
+		if is_instance_valid(special_controller.world) and special_controller.world.floor_number != floor_number:
+			special_controller.clear_world()
+			special_controller.world.floor_number = floor_number
 	if _announced_floors.has(floor_number) or _tower_floor_label == null:
 		return
 	_announced_floors[floor_number] = true

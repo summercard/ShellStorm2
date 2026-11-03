@@ -1,0 +1,28 @@
+{
+  "asset_id": "AUD-SFX-SPECIAL-THROW",
+  "kind": "throw",
+  "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-THROW/source/special_throw_master_v001.wav",
+  "path": "src/assets/audio/sfx/special_throw_v001.ogg",
+  "duration_seconds": 0.24,
+  "sample_rate": 44100,
+  "channels": 1,
+  "peak_dbfs": -6.02,
+  "source_sha256": "2753f9440adfd02a594f3ab1cc0afa5377d893719bb523e6289c58c85bcc0825",
+  "sha256": "6ab8ea7565f19d8a40a509acad76121cef9874b6a5fa3d56695b35fea367dc4c",
+  "license": "CC0; CC0-1.0",
+  "license_source": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+  "inputs": [
+    {
+      "path": "art_source/audio/sfx/AUD-SFX-MELEE-SWING/source/melee_swing_v003.wav",
+      "source_url": "https://kenney.nl/assets/rpg-audio | Kenney; https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes | Iwan Gabovitch",
+      "license": "CC0; CC0-1.0",
+      "sha256": "482246ba50f95efd9c4163ecd52f57a1dbb4a6c7be4f3a55be03df22070a776d"
+    }
+  ],
+  "recipe": {
+    "builder": "scripts/build_special_item_audio.py",
+    "offset_seconds": 0.0,
+    "crossfade_seconds": 0.0,
+    "edits": "linear layering, trim/pad, fades, peak normalization"
+  }
+}

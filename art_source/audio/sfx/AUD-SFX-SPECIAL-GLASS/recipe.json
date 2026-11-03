@@ -1,0 +1,29 @@
+{
+  "asset_id": "AUD-SFX-SPECIAL-GLASS",
+  "kind": "glass",
+  "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-GLASS/source/special_glass_master_v001.wav",
+  "path": "src/assets/audio/sfx/special_glass_v001.ogg",
+  "duration_seconds": 0.62,
+  "sample_rate": 44100,
+  "channels": 1,
+  "peak_dbfs": -6.02,
+  "source_sha256": "776b238a32e4819a6bc1d0228a9428fef4ff3b36577fe61f0320319f708e99af",
+  "sha256": "6d64ab081cd0de83c225920ec3e3cb732a48fab6a6fdb1900b61cbb90aed9ad9",
+  "license": "CC0-1.0",
+  "license_source": "https://kenney.nl/assets/impact-sounds",
+  "inputs": [
+    {
+      "path": "art_source/audio/sfx/special_items_recordings/source/kenney_impactGlass_heavy_002.ogg",
+      "source_url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "credit": "Kenney",
+      "sha256": "4978654ac840ad519692d5d5ba48a8101cabce13b9a577be73ad589185e5e9ed"
+    }
+  ],
+  "recipe": {
+    "builder": "scripts/build_special_item_audio.py",
+    "offset_seconds": 0.0,
+    "crossfade_seconds": 0.0,
+    "edits": "linear layering, trim/pad, fades, peak normalization"
+  }
+}

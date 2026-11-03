@@ -1,0 +1,28 @@
+{
+  "asset_id": "AUD-SFX-SPECIAL-BLAST",
+  "kind": "blast",
+  "source": "art_source/audio/sfx/AUD-SFX-SPECIAL-BLAST/source/special_blast_master_v001.wav",
+  "path": "src/assets/audio/sfx/special_blast_v001.ogg",
+  "duration_seconds": 0.85,
+  "sample_rate": 44100,
+  "channels": 1,
+  "peak_dbfs": -6.02,
+  "source_sha256": "caae67bdaff7cc87ee263644e3d56a4cb194cd09514e643e03d2692f853c3c89",
+  "sha256": "61e2be35d30142c1c3bc6da7a2fa298f34a9bf81d2da4df57e134bc7bbbb2c56",
+  "license": "CC-BY 3.0; CC0",
+  "license_source": "https://opengameart.org/content/2-high-quality-explosions | Michel Baradari; https://opengameart.org/content/tree-falling-yo-frankie | Blender Foundation",
+  "inputs": [
+    {
+      "path": "art_source/audio/sfx/AUD-SFX-ENEMY-EXPLOSION/source/enemy_explosion_v002.wav",
+      "source_url": "https://opengameart.org/content/2-high-quality-explosions | Michel Baradari; https://opengameart.org/content/tree-falling-yo-frankie | Blender Foundation",
+      "license": "CC-BY 3.0; CC0",
+      "sha256": "033b4b83c99f0c55e431c5a97a4f407e4626ef02a5c75a77ebf06e4109063540"
+    }
+  ],
+  "recipe": {
+    "builder": "scripts/build_special_item_audio.py",
+    "offset_seconds": 0.0,
+    "crossfade_seconds": 0.0,
+    "edits": "linear layering, trim/pad, fades, peak normalization"
+  }
+}

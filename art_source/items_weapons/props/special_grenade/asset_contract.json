@@ -1,0 +1,50 @@
+{
+  "id": "special_grenade",
+  "name": "手雷",
+  "description": "特殊槽装备 · 右键抛掷 · 落地爆炸，3米内90伤害。",
+  "type": "special_item",
+  "subtype": "grenade",
+  "rarity": "uncommon",
+  "stack_max": 10,
+  "grid_size": [
+    1,
+    1
+  ],
+  "asset_id": "ITM-SPECIAL-GRENADE",
+  "price": 60,
+  "base_buy_price": 60,
+  "base_sell_price": 30,
+  "base_shelf_order": 8,
+  "cooldown": 1.2,
+  "throw_distance": 8.0,
+  "flight_time": 0.8,
+  "radius": 3.0,
+  "damage": 90,
+  "dimensions_m": [
+    0.16,
+    0.16,
+    0.24
+  ],
+  "display_name_zh": "手雷",
+  "category": "道具",
+  "subclass": "special_item",
+  "logical_id": "special_grenade",
+  "domain_ledger": "props",
+  "animation_tier": "tier_0_static",
+  "source_collection": "ITM_手雷_中文资产管理",
+  "anchor_contract": [
+    "HoldAnchor"
+  ],
+  "material_roles": [
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
+  ],
+  "origin": "bottom_center",
+  "front_axis": "-Z",
+  "collision_intent": "external_projectile_sweep_and_ground_loot",
+  "source_dir": "art_source/items_weapons/props/special_grenade/source",
+  "stable_glb": "assets/art/items_weapons/props/special_grenade/components/itm_special_grenade_ground_visual_top3d.glb",
+  "stable_prefab": "assets/art/items_weapons/props/special_grenade/runtime/itm_special_grenade_ground_root_top3d.tscn"
+}

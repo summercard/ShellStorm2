@@ -63,6 +63,7 @@ var equipment_attachment_slots: Array = []
 ## （`AssemblyNode.PUBLIC_ATTACHMENT_SLOTS` 不含 BULLET），所以单独一套控件。
 var equipment_bullet_slots: Array[Control] = []
 var equipment_bullet_labels: Array[Label] = []
+var special_equipment_slot: SpecialItemEquipmentSlot
 var equipment_backpack_slot: Control
 var equipment_backpack_label: Label
 var quick_item_slots: Array[Control] = []
@@ -469,6 +470,8 @@ func _setup_standalone_panels() -> void:
 		_connect_slot_signals(quick_slot, quick_index, false)
 		quick_row.add_child(quick_slot)
 		quick_item_slots.append(quick_slot)
+	special_equipment_slot = preload("res://assets/art/ui/special_items/ui_special_item_equipment_slot_root.tscn").instantiate() as SpecialItemEquipmentSlot
+	equipment_support_row.add_child(special_equipment_slot)
 	var reserved := Label.new()
 	reserved.text = "防具 / 战术 / 护符　·　尚未开放"
 	reserved.add_theme_color_override("font_color", UIPalette.TEXT_DISABLED)
@@ -673,6 +676,8 @@ func set_weapon_owner(owner: Node) -> void:
 		if _weapon_owner.hp_changed.is_connected(_on_owner_hp_changed):
 			_weapon_owner.hp_changed.disconnect(_on_owner_hp_changed)
 	_weapon_owner = owner
+	if special_equipment_slot != null and owner != null and owner.has_method("get_special_item_controller"):
+		special_equipment_slot.configure(owner.call("get_special_item_controller") as SpecialItemController3D)
 	if _weapon_owner != null and _weapon_owner.has_signal("weapon_instance_changed"):
 		if not _weapon_owner.weapon_instance_changed.is_connected(_on_equipped_weapon_instance_changed):
 			_weapon_owner.weapon_instance_changed.connect(_on_equipped_weapon_instance_changed)

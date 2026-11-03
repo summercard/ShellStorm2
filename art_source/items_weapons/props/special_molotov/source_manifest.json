@@ -1,0 +1,43 @@
+{
+  "asset_id": "ITM-SPECIAL-MOLOTOV",
+  "version": "v001",
+  "logical_id": "special_molotov",
+  "palette": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+  "roles": {
+    "preview": {
+      "glb": "assets/art/items_weapons/props/special_molotov/components/itm_special_molotov_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/special_molotov/runtime/itm_special_molotov_preview_root_top3d.tscn",
+      "triangles": 1068,
+      "dimensions_m": [
+        0.15,
+        0.15,
+        0.36
+      ],
+      "glb_sha256": "ede557c268592ac94376950b70dc0982bdc934a08cb22e969b6426867affdf2e",
+      "source": "art_source/items_weapons/props/special_molotov/source/itm_special_molotov_source_v001.blend",
+      "source_sha256": "26811f6a227a23d7f7e7890d6cafe3662e34e1df936719ba4fdc71471ca402db"
+    },
+    "ground": {
+      "glb": "assets/art/items_weapons/props/special_molotov/components/itm_special_molotov_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/special_molotov/runtime/itm_special_molotov_ground_root_top3d.tscn",
+      "triangles": 180,
+      "dimensions_m": [
+        0.15,
+        0.15,
+        0.36
+      ],
+      "glb_sha256": "bb59f98b092eeb4b16d30702d9f34224ad4adc2a562da492a48bcd0da090a6ca",
+      "source": "art_source/items_weapons/props/special_molotov/source/itm_special_molotov_ground_source_v001.blend",
+      "source_sha256": "f2c2cef3d90493789871c8c34bcd263043357d543b92c650541fb6cc7950f7b5",
+      "derived_from": "art_source/items_weapons/props/special_molotov/source/itm_special_molotov_source_v001.blend"
+    }
+  },
+  "materials": [
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
+  ],
+  "uv": "PaletteUV; nonzero single-cell islands",
+  "license": "Original project art; authored for this feature"
+}

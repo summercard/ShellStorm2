@@ -1,0 +1,43 @@
+{
+  "asset_id": "ITM-SPECIAL-GRENADE",
+  "version": "v001",
+  "logical_id": "special_grenade",
+  "palette": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+  "roles": {
+    "preview": {
+      "glb": "assets/art/items_weapons/props/special_grenade/components/itm_special_grenade_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/special_grenade/runtime/itm_special_grenade_preview_root_top3d.tscn",
+      "triangles": 1404,
+      "dimensions_m": [
+        0.16,
+        0.16,
+        0.24
+      ],
+      "glb_sha256": "09cc60876bba341e12aa99b1ea522eab2a8a7643144ca5e2235da50e47739fa6",
+      "source": "art_source/items_weapons/props/special_grenade/source/itm_special_grenade_source_v001.blend",
+      "source_sha256": "f55aaddeefe89946b2ef04ac85eb9fcdb4f0cb11da3009e715f74582517162d7"
+    },
+    "ground": {
+      "glb": "assets/art/items_weapons/props/special_grenade/components/itm_special_grenade_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/special_grenade/runtime/itm_special_grenade_ground_root_top3d.tscn",
+      "triangles": 176,
+      "dimensions_m": [
+        0.16,
+        0.16,
+        0.24
+      ],
+      "glb_sha256": "d03d70ee7dc27fe395702ef2d2cc8bb3b6a6c40441a0c09154fadeb7ac097e60",
+      "source": "art_source/items_weapons/props/special_grenade/source/itm_special_grenade_ground_source_v001.blend",
+      "source_sha256": "5663ee85441457af81991eba9d58d7a49487f99153a0301e9dbb997369c32b78",
+      "derived_from": "art_source/items_weapons/props/special_grenade/source/itm_special_grenade_source_v001.blend"
+    }
+  },
+  "materials": [
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
+  ],
+  "uv": "PaletteUV; nonzero single-cell islands",
+  "license": "Original project art; authored for this feature"
+}

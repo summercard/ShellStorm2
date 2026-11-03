@@ -1,0 +1,43 @@
+{
+  "asset_id": "ITM-SPECIAL-GASOLINE",
+  "version": "v001",
+  "logical_id": "special_gasoline",
+  "palette": "assets/art/shared/palette/item_high_visibility_palette_10x10_512.png",
+  "roles": {
+    "preview": {
+      "glb": "assets/art/items_weapons/props/special_gasoline/components/itm_special_gasoline_preview_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/special_gasoline/runtime/itm_special_gasoline_preview_root_top3d.tscn",
+      "triangles": 1452,
+      "dimensions_m": [
+        0.24,
+        0.13,
+        0.3
+      ],
+      "glb_sha256": "8c52554ebe3eab1d7b2cb6d85e2695e6b9ac4c9b4b87a83f0089f837634f116c",
+      "source": "art_source/items_weapons/props/special_gasoline/source/itm_special_gasoline_source_v001.blend",
+      "source_sha256": "50d3d2d908941955c592d9942024c744061284264dd97cd319e7fe7220a17e3a"
+    },
+    "ground": {
+      "glb": "assets/art/items_weapons/props/special_gasoline/components/itm_special_gasoline_ground_visual_top3d.glb",
+      "prefab": "assets/art/items_weapons/props/special_gasoline/runtime/itm_special_gasoline_ground_root_top3d.tscn",
+      "triangles": 180,
+      "dimensions_m": [
+        0.24,
+        0.13,
+        0.3
+      ],
+      "glb_sha256": "12e02d1b2f95c73cdbf107229b429575a07e3e4755b00769731d2c754eb8301c",
+      "source": "art_source/items_weapons/props/special_gasoline/source/itm_special_gasoline_ground_source_v001.blend",
+      "source_sha256": "31f25d7be98bde0d5593977d833f4e4a3265593967c5a5157c800684ee875728",
+      "derived_from": "art_source/items_weapons/props/special_gasoline/source/itm_special_gasoline_source_v001.blend"
+    }
+  },
+  "materials": [
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
+  ],
+  "uv": "PaletteUV; nonzero single-cell islands",
+  "license": "Original project art; authored for this feature"
+}

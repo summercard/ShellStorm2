@@ -147,6 +147,7 @@ var _stowed_weapon_model: WeaponModel3D = null
 var _stowed_weapon_instance_id := ""
 var equipped_backpack_item: Dictionary = {}
 var equipped_flashlight_module: Dictionary = {}
+var _special_items: SpecialItemController3D
 var interaction_controller: PlayerInteractionController3D
 var _mounted_chair: PushableSeat3D = null
 var _seat_saved_collision_layer := 0
@@ -1003,6 +1004,8 @@ func tick_narrative_walk(delta: float) -> bool:
 
 func set_input_locked(locked: bool) -> void:
 	if locked:
+		if is_instance_valid(_special_items):
+			_special_items.stop_pouring()
 		_dash_input_buffer = 0.0
 		_force_leave_chair()
 	if input_locked == locked or current_hp <= 0:
@@ -3293,3 +3296,12 @@ func _init_melee_combat() -> void:
 	melee_combat.configure(self)
 	melee_combat.action_changed.connect(_on_melee_action_changed)
 	melee_combat.hit_resolved.connect(_on_melee_hit_resolved)
+
+
+## SPECIAL-ITEMS owns its state in a separate child; the player supplies aim/locks.
+func get_special_item_controller() -> SpecialItemController3D:
+	if not is_instance_valid(_special_items):
+		_special_items = SpecialItemController3D.new()
+		_special_items.name = "SpecialItemController3D"
+		add_child(_special_items)
+	return _special_items
