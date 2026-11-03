@@ -261,6 +261,10 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		# 同样**必须在此登记**，否则设计源写了也被静默丢弃（出口白名单）。
 		"spawn_placements": (src.get("spawn_placements", []) as Array).duplicate(true),
 		"encounter": (src.get("encounter", {}) as Dictionary).duplicate(true),
+		# 房间级「额外追加一只指定精英」（2026-11-03）。与上列字段同样「设计源钉死优先」：
+		# 本层只透传，不解释、不校验内容是否存在。空串 = 本房不追加。
+		# **必须在此登记**，否则设计源写了也被静默丢弃（出口白名单，同类坑已踩过三次）。
+		"elite_id": str(src.get("elite_id", "")),
 		# 「只认盒子」标记（触发器刷怪设计 §7-A）：由层下发到每间房，运行时据此判定
 		# 「没盒子就不刷」。未声明 = false ⇒ 未迁移关卡行为逐字不变。
 		"spawn_boxes_only": bool(src.get("spawn_boxes_only", false)),
@@ -1437,7 +1441,7 @@ static func _apply_flow_authored_encounter(room: Dictionary, blueprint: Dictiona
 		var source := value as Dictionary
 		if str(source.get("key", "")) != str(room.get("key", "")):
 			continue
-		for field in ["boss_content_id", "boss_reinforcement_plan", "spawn_placements", "encounter"]:
+		for field in ["boss_content_id", "boss_reinforcement_plan", "spawn_placements", "encounter", "elite_id"]:
 			if not source.has(field):
 				continue
 			var payload: Variant = source[field]

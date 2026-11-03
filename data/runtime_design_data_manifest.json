@@ -4,7 +4,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/99/floors/floor_00.json",
-      "sha256": "196b1c0899d55833991b224cea0ea131a6b9eeca890f2d259b1e33d70d4628e1"
+      "sha256": "7b091c242791f2af451a9396106a22fd0e66eceffa3d798ea5ba2415933baf24"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/level_plan.json",
@@ -94,7 +94,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/expedition_01/floors/floor_00.json",
-      "sha256": "d0885e345533b5447746decf9fa5eaca1fc46acd93914d7be0991e9d88e4871a"
+      "sha256": "1505e3ac348fed67cda53ced22ab742538ca8492a3752210aec0df54cd041a75"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",

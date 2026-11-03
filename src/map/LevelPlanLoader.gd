@@ -300,6 +300,9 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"enemy_spawn_plan": spawn_plan,
 			"spawn_placements": spawn_placements,
 			"encounter": encounter,
+			# 房间级「额外追加一只指定精英」（2026-11-03）：只做类型守卫 + 透传。
+			# 空串 = 本房不追加。与上面几个字段同一形状的坑：**漏登记 = 设计源写了被静默丢弃**。
+			"elite_id": str(raw.get("elite_id", "")),
 			"reward_plan": reward_plan,
 			"declared_ports": raw.get("ports", []),
 			"ports": [],

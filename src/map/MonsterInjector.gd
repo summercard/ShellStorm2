@@ -678,17 +678,32 @@ func _generate_basic_enemy(
 	return result
 
 ## 生成精英敌人
+##
+## 两种来源，判据是**请求里有没有点名 `elite_id`**（能力分支，不是关卡 ID 分支）：
+## - **点名**（`request.elite_id` 非空）：走 `EliteRosterService.reserve()` 直接指派，
+##   **不看楼层窗口**。用于「这间房就是要出这一只」的定点投放（关卡设计源声明、
+##   测试关卡的 boss 前置房等）。点到不存在的 ID 或已被别的遭遇占用 ⇒ 返回 {}。
+## - **不点名**：走 `select_and_reserve()`，按楼层窗口 + run_seed 在候选里三选一。
 func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> Dictionary:
 	var encounter_id := str(request.get(
 		"encounter_id", "legacy:%d:%d:%d" % [_rng.seed, floor, _rng.randi()]
 	))
+	var floor_number := int(request.get("floor_number", floor))
+	var requested_elite_id := str(request.get("elite_id", ""))
 	var elite_snapshot: Dictionary = {}
 	if EliteRosterService != null:
-		elite_snapshot = EliteRosterService.select_and_reserve(
-			int(request.get("seed", _rng.seed)),
-			int(request.get("floor_number", floor)),
-			encounter_id
-		)
+		if requested_elite_id.is_empty():
+			elite_snapshot = EliteRosterService.select_and_reserve(
+				int(request.get("seed", _rng.seed)),
+				floor_number,
+				encounter_id
+			)
+		else:
+			# 点名路径必须**同样走 reserve**：不走就会绕过「同 ID 全局单例 / 预约唯一性」
+			# 那套跨局约束，同一局里同一只精英可以被刷出两只。
+			if not EliteRosterService.reserve(requested_elite_id, encounter_id, floor_number):
+				return {}
+			elite_snapshot = EliteRosterService.get_record(requested_elite_id)
 	if elite_snapshot.is_empty() or bool(elite_snapshot.get("success", true)) == false:
 		return {}
 	var base_type := str(elite_snapshot.get(

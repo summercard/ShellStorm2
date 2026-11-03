@@ -72,7 +72,8 @@
           "door_center_m": 0
         }
       ],
-      "floor_offset_m": 0
+      "floor_offset_m": 0,
+      "elite_id": "elite_arms_taker"
     },
     {
       "key": "boss",
