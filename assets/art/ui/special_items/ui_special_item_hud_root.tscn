@@ -3,4 +3,4 @@
 [node name="SpecialItemHUD" type="PanelContainer"]
 script = ExtResource("1")
 metadata/asset_id = "UI-SPECIAL-ITEM-HUD"
-metadata/asset_version = "v001"
+metadata/asset_version = "v002"

@@ -1,6 +1,10 @@
 class_name BaseVendingMenu
 extends CanvasLayer
 ## 基地自动贩卖机：左侧无限固定货架，右侧出售随身背包/保险柜物品。
+## 局内适配器复用同一页面，通过快照与命令连接 RunMerchantService。
+
+signal run_purchase_requested(offer_id: String, weapon_instance_id: String)
+signal run_shop_closed
 
 const ITEM_ICON_SCENE := preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 
@@ -17,6 +21,11 @@ var _sell_owner := "inventory"
 var _sell_model: InventoryModule
 var _selected_anchor := -1
 var _source_tabs: Dictionary = {}
+var _run_shop := false
+var _run_offers: Array[Dictionary] = []
+var _run_currency := 0
+var _run_shop_name := "贩卖机"
+var _closing := false
 const STORAGE_BOARD := preload("res://src/ui/StorageBoardView.gd")
 
 
@@ -37,6 +46,33 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause") or event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
+		_close_menu()
+
+
+func configure_run_shop(module: InventoryModule, shop_title: String) -> void:
+	_run_shop = true
+	_inventory_module = module
+	_run_shop_name = shop_title
+
+
+func present_run_offers(offers: Array[Dictionary], currency: int) -> void:
+	_run_offers = offers.duplicate(true)
+	_run_currency = currency
+	if is_node_ready():
+		_refresh()
+
+
+func show_run_result(message: String) -> void:
+	_status_label.text = message
+
+
+func _close_menu() -> void:
+	if _closing:
+		return
+	_closing = true
+	if _run_shop:
+		run_shop_closed.emit()
+	else:
 		queue_free()
 
 
@@ -63,7 +99,7 @@ func _build_interface() -> void:
 	var heading := HBoxContainer.new()
 	buy.add_child(heading)
 	_buy_title_label = Label.new()
-	_buy_title_label.text = "贩卖机"
+	_buy_title_label.text = _run_shop_name if _run_shop else "贩卖机"
 	UIStyleFactory.apply_prism_label(_buy_title_label, "value", 4, 22)
 	_buy_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_child(_buy_title_label)
@@ -86,6 +122,7 @@ func _build_interface() -> void:
 	columns.add_child(center)
 	var sell := _column(columns)
 	var tabs := HBoxContainer.new()
+	tabs.visible = not _run_shop
 	sell.add_child(tabs)
 	for source in ["inventory", "vault"]:
 		var tab := Button.new()
@@ -113,7 +150,7 @@ func _build_interface() -> void:
 	_status_label = Label.new()
 	_status_label.custom_minimum_size.y = 42
 	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_status_label.text = "选择物品查看售价"
+	_status_label.text = "使用本局金币购买，物品进入右侧背包" if _run_shop else "选择物品查看售价"
 	UIStyleFactory.apply_prism_label(_status_label, "faint", 1, 13)
 	sell.add_child(_status_label)
 	var close := Button.new()
@@ -121,7 +158,7 @@ func _build_interface() -> void:
 	close.text = "返回游戏    [Esc]"
 	close.custom_minimum_size.y = 36
 	_style_action(close)
-	close.pressed.connect(queue_free)
+	close.pressed.connect(_close_menu)
 	sell.add_child(close)
 
 func _column(parent: HBoxContainer) -> VBoxContainer:
@@ -150,10 +187,14 @@ func _refresh() -> void:
 		var tab: Button = _source_tabs[owner_key]
 		var active: bool = owner_key == _sell_owner
 		UIStyleFactory.apply_prism_button(tab, "primary" if active else "ghost", 2, 15, 2, "none")
-	_points_label.text = "金币  %d" % BaseManager.get_extraction_points()
+	_points_label.text = "本局金币  %d" % _run_currency if _run_shop else "金币  %d" % BaseManager.get_extraction_points()
 	_clear_children(_buy_list)
-	for item in BaseManager.get_base_shop_goods():
-		_buy_list.add_child(_make_buy_row(item))
+	if _run_shop:
+		for offer in _run_offers:
+			_buy_list.add_child(_make_run_buy_row(offer))
+	else:
+		for item in BaseManager.get_base_shop_goods():
+			_buy_list.add_child(_make_buy_row(item))
 	var owner := "loadout" if _sell_owner == "inventory" and _inventory_module == null else _sell_owner
 	_sell_model = _inventory_module if owner == "inventory" else BaseManager.get_storage_grid(owner)
 	_sell_board.present(_sell_model, owner)
@@ -163,6 +204,12 @@ func _refresh() -> void:
 	_capacity_label.text = "%s  %d/%d 格" % ["仓库" if owner == "vault" else "背包", _sell_model.get_used_area(), _sell_model.get_capacity()]
 	_selected_anchor = -1
 	_clear_children(_sell_actions)
+	if _run_shop:
+		for cell in _sell_board.cells:
+			cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			cell.focus_mode = Control.FOCUS_NONE
+		if get_viewport().gui_get_focus_owner() == null:
+			UiMenuFocus.ensure_focus(self)
 
 func _clear_children(node: Node) -> void:
 	for child in node.get_children():
@@ -170,6 +217,8 @@ func _clear_children(node: Node) -> void:
 		child.queue_free()
 
 func _select_sell(anchor: int) -> void:
+	if _run_shop:
+		return
 	if _selected_anchor >= 0:
 		_sell_board._set_item_hover(_selected_anchor, false)
 	_selected_anchor = anchor
@@ -210,6 +259,28 @@ func _make_buy_row(item: Dictionary) -> PanelContainer:
 	button.pressed.connect(_on_buy_pressed.bind(str(item.get("id", ""))))
 	_style_action(button)
 	box.add_child(button)
+	return row
+
+
+func _make_run_buy_row(offer: Dictionary) -> PanelContainer:
+	var item := offer.get("item", {}) as Dictionary
+	var row := _make_item_row(item, "本局库存 1")
+	var button := Button.new()
+	button.name = "BuyButton"
+	var price := int(item.get("price", 0))
+	button.text = "购买  ◈ %d" % price
+	button.custom_minimum_size = Vector2(0, 42)
+	var no_space := _inventory_module == null or _inventory_module.plan_purchase_add(item, 1).is_empty()
+	button.disabled = _run_currency < price or no_space
+	if no_space:
+		button.tooltip_text = "背包没有足够的连续空间"
+	elif button.disabled:
+		button.tooltip_text = "本局金币不足，还差 %d" % (price - _run_currency)
+		button.text = "金币不足 · 需 %d" % price
+	button.pressed.connect(func() -> void:
+		run_purchase_requested.emit(str(offer.get("offer_id", "")), str(item.get("weapon_instance_id", ""))))
+	_style_action(button)
+	(row.get_meta("actions") as VBoxContainer).add_child(button)
 	return row
 
 

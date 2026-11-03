@@ -216,11 +216,11 @@
       "glb": "",
       "script": "src/special_items/ui/SpecialItemHUD.gd",
       "collection": "",
-      "spec": "1280x720及缩放；模型图标、数量、冷却/油量",
-      "notes": "UI只读快照，装备命令不复制物品；原创，复用UIPalette/UIStyleFactory",
+      "spec": "1280x720基准；36x36px模型图标；数字与弹药栏同字体/21px/5px描边；汽油余量与瓶数分两行",
+      "notes": "HUD只读快照；图标左、数字右，透明96x62布局；数字样式由正式弹药Label注入；原生手雷/汽油画面验收",
       "ledger": "assets/registry/ledgers/ShellStorm2_UI账本_v001.xlsx",
       "ledger_row": 24,
-      "sha256": "1c1d3439b5d35555f69716d61a2ffa8611a0f852269c9c83b2dc3e2a411b5a1e"
+      "sha256": "ceea7977ab6a29a2049098cd2fb85fc6ce444354bc5854a88774262e3e3ddae7"
     },
     {
       "id": "UI-SPECIAL-ITEM-EQUIPMENT-SLOT",
@@ -361,7 +361,7 @@
     "preview_special_items"
   ],
   "status": "verified_desktop_mouse_path",
-  "design_revision": "r6",
+  "design_revision": "r7",
   "verification_results": {
     "core_checks": 85,
     "integration_checks": 19,
@@ -383,5 +383,21 @@
     "oil_light_range_m": 2.2,
     "fade_last_seconds": 0.6,
     "damage_duration_seconds": 5.0
+  },
+  "hud_visual_contract": {
+    "icon_size_px": [
+      36,
+      36
+    ],
+    "layout_size_px": [
+      96,
+      62
+    ],
+    "readout_style": "Dungeon3D.ammo_label",
+    "gasoline_readout": "fuel/capacity above bottle count",
+    "native_resolution": [
+      1280,
+      720
+    ]
   }
 }

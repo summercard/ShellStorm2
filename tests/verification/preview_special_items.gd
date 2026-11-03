@@ -32,6 +32,9 @@ func _run() -> void:
 	var controller := player.get_special_item_controller()
 	controller.equip(SpecialItemCatalog.GRENADE)
 	await _capture("special_items_hud.png")
+	controller.equip(SpecialItemCatalog.GASOLINE)
+	await _capture("special_items_hud_gasoline.png")
+	controller.equip(SpecialItemCatalog.GRENADE)
 	dungeon._inventory_ui.set_inventory_panel_open(true)
 	for _frame in 6:
 		await get_tree().process_frame
