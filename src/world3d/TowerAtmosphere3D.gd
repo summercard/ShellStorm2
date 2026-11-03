@@ -69,6 +69,14 @@ var _distance_fog_quality_multiplier := 1.0
 var _base_interior_fog_density := BASE_INTERIOR_FOG_DENSITY
 var _base_interior_volumetric_fog_density := BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY
 var _expedition_dark_distant_enabled := false
+## 关卡级常驻雾值（`TowerDescent3D.atmosphere_*_override` export 注入）。-1 = 未声明，
+## 本关沿用全塔数值。**与下面的 `_authored_*` 是两件事，不许共用变量**：
+##   `_level_*`  = 本关的「普通区域」基准，进/出任何房间都不变，整关常驻；
+##   `_authored_*` = 单间房型自带雾档（Boss 房那类），只在该房生效、离开即撤。
+## 历史缺陷：两者曾共用一个变量，于是空档房间的每帧 `set_room_fog_profile({})`
+## 会把关卡级值一起复位掉 —— 那条 export 通道存在但从没生效过。
+var _level_distance_fog_override := -1.0
+var _level_volumetric_fog_override := -1.0
 var _authored_distance_fog_override := -1.0
 var _authored_volumetric_fog_override := -1.0
 ## 调试面板「当前场景雾气」的临时覆盖（-1 = 未启用）。最终优先级最高，
@@ -90,8 +98,9 @@ func set_room_fog_profile(profile: Dictionary, immediate := false) -> void:
 		return
 	if _room_fog_tween != null and _room_fog_tween.is_valid():
 		_room_fog_tween.kill()
-	var normal_distance := lerpf(FOG_DENSITY, _base_interior_fog_density, _base_interior_fog_blend)
-	var normal_volume := lerpf(VOLUMETRIC_FOG_DENSITY, _base_interior_volumetric_fog_density, _base_interior_fog_blend)
+	var ordinary := _ordinary_fog_density()
+	var normal_distance := float(ordinary["distance"])
+	var normal_volume := float(ordinary["volumetric"])
 	var distance_target := float(profile.get("distance_density", normal_distance))
 	var volume_target := float(profile.get("volumetric_density", normal_volume))
 	var color_target: Color = profile.get("fog_color", FOG_LIGHT_COLOR)
@@ -119,11 +128,31 @@ func set_room_fog_profile(profile: Dictionary, immediate := false) -> void:
 			_authored_volumetric_fog_override = -1.0
 			_apply_base_fog_density())
 
-## Optional authored scene parameter; negative keeps the existing tower atmosphere.
+## 关卡级常驻雾值：本关「普通区域」的两套基准（距离雾 / 体积雾）。
+##
+## 这是**关卡装配层**（`TowerDescent3D.atmosphere_fog_density_override`）的正式注入点，
+## 与「单间房型自带雾档」（`set_room_fog_profile`）分工明确：
+## 前者整关常驻、进出任何房间都不变；后者只在该房生效、离开即撤。
+## 负值 = 本关未声明，落入全塔数值（含 99F 基地室内插值）。
 func set_fog_profile_override(density: float, volumetric_density: float) -> void:
-	_authored_distance_fog_override = density
-	_authored_volumetric_fog_override = volumetric_density
+	_level_distance_fog_override = density
+	_level_volumetric_fog_override = volumetric_density
 	_apply_base_fog_density()
+
+
+## 本关「普通区域」此刻的两套雾值：全塔基准（或基地室内插值）叠加关卡级常驻覆盖。
+## 基地室内混合只在主塔有意义 —— 远征关卡没有 `facility` 房间、
+## `_base_interior_fog_blend` 恒为 0，这里等价于纯关卡值。
+func _ordinary_fog_density() -> Dictionary:
+	var distance := lerpf(FOG_DENSITY, _base_interior_fog_density, _base_interior_fog_blend)
+	var volumetric := lerpf(
+		VOLUMETRIC_FOG_DENSITY, _base_interior_volumetric_fog_density, _base_interior_fog_blend
+	)
+	if _level_distance_fog_override >= 0.0:
+		distance = _level_distance_fog_override
+	if _level_volumetric_fog_override >= 0.0:
+		volumetric = _level_volumetric_fog_override
+	return {"distance": distance, "volumetric": volumetric}
 
 
 ## 调试面板「当前场景雾气」：临时覆盖距离雾 / 体积雾两套值。
@@ -456,16 +485,14 @@ func update_base_interior_fog(inside: bool, delta: float, immediate := false) ->
 func _apply_base_fog_density() -> void:
 	if _environment == null:
 		return
-	var distance_density := lerpf(
-		FOG_DENSITY,
-		_base_interior_fog_density,
-		_base_interior_fog_blend
-	) * _distance_fog_quality_multiplier
-	var volumetric_density := lerpf(
-		VOLUMETRIC_FOG_DENSITY,
-		_base_interior_volumetric_fog_density,
-		_base_interior_fog_blend
-	)
+	# 优先级（低 → 高）：
+	#   全塔基准 / 99F 基地室内插值
+	#   → 关卡级常驻覆盖（本关普通区域）
+	#   → 单间房型雾档（只在该房期间）
+	#   → 调试面板临时覆盖（不落盘、随场景销毁复原）
+	var ordinary := _ordinary_fog_density()
+	var distance_density := float(ordinary["distance"]) * _distance_fog_quality_multiplier
+	var volumetric_density := float(ordinary["volumetric"])
 	if _authored_volumetric_fog_override >= 0.0:
 		volumetric_density = _authored_volumetric_fog_override
 	_environment.fog_density = (
