@@ -105,6 +105,7 @@ func _run() -> void:
 	var fire_world := SpecialItemWorld3D.new()
 	studio.add_child(fire_world)
 	fire_world.add_fire(Vector3(0, 0.02, 3.0), LampFirePatch3D.DEFAULT_RADIUS, 5.0, 6, null)
+	fire_world.add_fire(Vector3(4.2, 0.04, 3.0), 0.58, 5.0, 8, null)
 	var blast := VfxPool3D.create_unpooled(VfxPool3D.FX01_SPECIAL_BLAST)
 	studio.add_child(blast)
 	blast.activate(Vector3(-4.4, 0.02, 3.0), Color.WHITE, 1.5, {"duration": 20.0})

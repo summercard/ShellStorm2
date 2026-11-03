@@ -14,6 +14,8 @@ const MODEL_SCENES := {
 var projectiles: Array[Dictionary] = []
 var oil: Array[Dictionary] = []
 var fires: Array[Dictionary] = []
+var pending_fires: Array[Dictionary] = []
+const IMPACT_IGNITION_DELAY := 0.12
 var clock := 0.0
 var floor_number := -1
 var _next_damage_tick := TICK
@@ -38,7 +40,7 @@ func launch(definition: Dictionary, attacker: Node3D, forward: Vector3) -> bool:
 	for projectile: Dictionary in projectiles:
 		if str(projectile.definition.id) == SpecialItemCatalog.MOLOTOV:
 			reserved_fire += 1
-	if projectiles.size() >= MAX_PROJECTILES or (content_id == SpecialItemCatalog.MOLOTOV and fires.size() + reserved_fire >= MAX_FIRE):
+	if projectiles.size() >= MAX_PROJECTILES or (content_id == SpecialItemCatalog.MOLOTOV and fires.size() + pending_fires.size() + reserved_fire >= MAX_FIRE):
 		return false
 	var body := (MODEL_SCENES[content_id] as PackedScene).instantiate() as Node3D
 	add_child(body)
@@ -78,7 +80,7 @@ func deposit_oil(at: Vector3, attacker: Node3D) -> Dictionary:
 		if (patch.position as Vector3).distance_to(point) < 0.4:
 			return {"success": false, "reason": "already_oiled"}
 	var definition := SpecialItemCatalog.get_item(SpecialItemCatalog.GASOLINE)
-	var visual := _effect(VfxPool3D.FX01_SPECIAL_OIL, point + Vector3.UP * 0.025, float(definition.radius), 3600.0)
+	var visual := _effect(VfxPool3D.FX01_SPECIAL_OIL, point + Vector3.UP * 0.025, float(definition.radius), float(definition.dry_duration))
 	var patch := {"position": point, "born": clock, "ignite_at": -1.0, "burn_until": -1.0, "visual": visual, "fire_visual": null, "attacker": attacker}
 	oil.append(patch)
 	return {"success": true, "position": point}
@@ -86,7 +88,7 @@ func deposit_oil(at: Vector3, attacker: Node3D) -> Dictionary:
 func add_fire(at: Vector3, radius: float, duration: float, damage: int, attacker: Node3D) -> bool:
 	if fires.size() >= MAX_FIRE:
 		return false
-	var visual := LampFirePatch3D.create_ground_flames(_acquire_ground_flame, at)
+	var visual := LampFirePatch3D.create_ground_flames(_acquire_ground_flame, at, radius)
 	fires.append({"position": at, "radius": radius, "until": clock + duration, "damage": damage, "attacker": attacker, "visual": visual})
 	_ignite_audio(at)
 	return true
@@ -97,6 +99,11 @@ func advance(delta: float) -> void:
 	while remaining > 0.000001:
 		var step := minf(remaining, minf(1.0 / 60.0, maxf(0.000001, _next_damage_tick - clock)))
 		clock += step
+		for index in range(pending_fires.size() - 1, -1, -1):
+			var pending := pending_fires[index]
+			if clock >= float(pending.start_at):
+				add_fire(pending.position, float(pending.radius), float(pending.duration), int(pending.damage), pending.attacker as Node3D if is_instance_valid(pending.attacker) else null)
+				pending_fires.remove_at(index)
 		_step_projectiles(step)
 		_step_fire_and_oil()
 		if clock + 0.00001 >= _next_damage_tick:
@@ -158,18 +165,21 @@ func _detonate(projectile: Dictionary, at: Vector3) -> void:
 	if str(definition.id) == SpecialItemCatalog.GRENADE:
 		_cue("special.blast", at, -3.0)
 		_effect(VfxPool3D.FX01_SPECIAL_BLAST, at, float(definition.radius), 0.65)
-		for candidate: Node in get_tree().get_nodes_in_group("enemy_3d"):
+		for candidate: Node in _damage_targets(false):
 			if _in_range(candidate, at, float(definition.radius)):
 				_hit(candidate, int(definition.damage), at, attacker, false)
 	else:
 		_cue("special.glass", at, -5.0)
 		var floor_hit := _ray(at + Vector3.UP * 0.2, at - Vector3.UP * 1.0)
 		if not floor_hit.is_empty() and (floor_hit.normal as Vector3).y >= 0.65:
-			add_fire(floor_hit.position, float(definition.radius), float(definition.duration), int(definition.damage_per_tick), attacker)
+			_acquire_ground_flame(VfxPool3D.FX01_EXPLOSION, (floor_hit.position as Vector3) + Vector3.UP * 0.15, 0.9, {})
+			pending_fires.append({"position":floor_hit.position, "radius":float(definition.radius), "duration":float(definition.duration), "damage":int(definition.damage_per_tick), "attacker":attacker, "start_at":clock + IMPACT_IGNITION_DELAY})
 
 func _step_fire_and_oil() -> void:
 	var definition := SpecialItemCatalog.get_item(SpecialItemCatalog.GASOLINE)
 	for patch: Dictionary in oil:
+		if float(patch.burn_until) > 0.0 and is_instance_valid(patch.visual):
+			(patch.visual as Node).call("set_fade_ratio", smoothstep(0.0, 0.6, maxf(0.0, float(patch.burn_until) - clock)))
 		if float(patch.burn_until) > 0.0:
 			continue
 		if float(patch.ignite_at) < 0.0:
@@ -190,7 +200,7 @@ func _step_fire_and_oil() -> void:
 					break
 		if float(patch.ignite_at) >= 0.0 and clock + 0.00001 >= float(patch.ignite_at):
 			patch.burn_until = clock + float(definition.duration)
-			patch.fire_visual = _effect(VfxPool3D.FX01_SPECIAL_FIRE, patch.position + Vector3.UP * 0.04, float(definition.radius), float(definition.duration))
+			patch.fire_visual = LampFirePatch3D.create_ground_flames(_acquire_ground_flame, patch.position, float(definition.radius))
 			_ignite_audio(patch.position)
 	# Tick the last boundary before expiry, then free visuals/state.
 	for index in range(fires.size() - 1, -1, -1):
@@ -216,7 +226,8 @@ func _step_fire_and_oil() -> void:
 
 func _damage_fire_tick() -> void:
 	var definition := SpecialItemCatalog.get_item(SpecialItemCatalog.GASOLINE)
-	for candidate: Node in get_tree().get_nodes_in_group("enemy_3d"):
+	var targets := _damage_targets(true)
+	for candidate: Node in targets:
 		var amount := 0
 		var origin := Vector3.ZERO
 		var attacker: Node3D = null
@@ -246,7 +257,48 @@ func _hit(candidate: Node, amount: int, origin: Vector3, attacker: Node3D, fire:
 func _in_range(candidate: Node, at: Vector3, radius: float) -> bool:
 	if not is_instance_valid(candidate) or not candidate is Node3D or candidate.is_queued_for_deletion():
 		return false
+	if candidate.is_in_group("reactive_prop_3d") or candidate.is_in_group("breakable_clutter_3d") or candidate is SecretDoor3D:
+		return _prop_in_range(candidate as Node3D, at, radius)
 	return _connected((candidate as Node3D).global_position, at, radius)
+
+func _damage_targets(include_players: bool) -> Array[Node]:
+	var result: Array[Node] = []
+	var groups := ["enemy_3d", "reactive_prop_3d", "breakable_clutter_3d", PlayerInteractionController3D.PROVIDER_GROUP]
+	if include_players:
+		groups.append("player_3d")
+	for group: String in groups:
+		for candidate: Node in get_tree().get_nodes_in_group(group):
+			if candidate is Node3D and (candidate.has_method("take_damage") or candidate.has_method("take_projectile_damage")) and candidate not in result:
+				result.append(candidate)
+	return result
+
+func _prop_in_range(target: Node3D, origin: Vector3, radius: float) -> bool:
+	# Use the visible shape, so a large bookcase or elevated tabletop object is
+	# hit at its nearest exposed surface. Exclude its own bodies from occlusion.
+	var bounds := AABB()
+	var found := false
+	for node: Node in target.find_children("*", "MeshInstance3D", true, false):
+		var mesh := node as MeshInstance3D
+		if mesh.mesh == null or not mesh.is_visible_in_tree():
+			continue
+		var box := mesh.global_transform * mesh.get_aabb()
+		bounds = bounds.merge(box) if found else box
+		found = true
+	if not found:
+		return false
+	if bounds.position.y > origin.y + 1.6 or bounds.end.y < origin.y - 0.6:
+		return false
+	var point := Vector3(clampf(origin.x, bounds.position.x, bounds.end.x), clampf(origin.y + 0.4, bounds.position.y, bounds.end.y), clampf(origin.z, bounds.position.z, bounds.end.z))
+	if Vector2(point.x-origin.x, point.z-origin.z).length() > radius:
+		return false
+	var query := PhysicsRayQueryParameters3D.create(origin + Vector3.UP * 0.3, point, GROUND_MASK)
+	var excluded: Array[RID] = []
+	if target is CollisionObject3D:
+		excluded.append((target as CollisionObject3D).get_rid())
+	for body: Node in target.find_children("*", "CollisionObject3D", true, false):
+		excluded.append((body as CollisionObject3D).get_rid())
+	query.exclude = excluded
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 func _connected(a: Vector3, b: Vector3, radius: float) -> bool:
 	if absf(a.y - b.y) > 0.6:
@@ -281,6 +333,7 @@ func clear() -> void:
 	projectiles.clear()
 	oil.clear()
 	fires.clear()
+	pending_fires.clear()
 	_next_damage_tick = clock + TICK
 
 func _cue(event_id: String, at: Vector3, volume_db: float) -> Node:

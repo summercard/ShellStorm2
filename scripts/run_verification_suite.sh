@@ -224,6 +224,7 @@ core_scenes=(
   verify_special_items_system
   verify_special_items_integration
   verify_special_item_assets
+  verify_special_items_props
   verify_offscreen_enemy_indicator
   verify_postfx_overlay_runtime
   verify_speech_bubble_3d

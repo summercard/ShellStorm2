@@ -1425,6 +1425,10 @@
             "--visual",
             "preview_special_items"
           ]
+        },
+        {
+          "kind": "scene",
+          "id": "verify_special_items_props"
         }
       ],
       "status": "complete"

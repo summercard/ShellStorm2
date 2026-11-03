@@ -128,6 +128,8 @@ func _run() -> void:
 	_check(float(world.oil[0].burn_until) < 0.0, "bullets on other floors cannot ignite oil")
 	world.ignite_bullet_segment(start + Vector3(0, 0.7, 2), start + Vector3(0, 0.7, 4))
 	_check(float(world.oil[0].burn_until) > world.clock, "ordinary bullet path ignites oil immediately")
+	var oil_flames := world.oil[0].fire_visual as Array
+	_check(oil_flames.size() == 1 and is_equal_approx((oil_flames[0] as VfxEffectBase3D).effect_size, 1.25), "small oil area uses one full-sized shared flame")
 	world.clear()
 	await get_tree().process_frame
 	controller.cooldown_remaining = 0.0
@@ -149,13 +151,31 @@ func _run() -> void:
 	controller.cooldown_remaining = 0.0
 	actor.position = Vector3(0, 0, 0)
 	_check(bool(controller.request_use().success), "molotov actual throw")
-	world.advance(1.0)
+	world.advance(0.82)
+	_check(world.fires.is_empty() and world.pending_fires.size() == 1, "molotov ground impact bursts before ignition")
+	var impact_seen := false
+	for child: Node in world.get_children():
+		if child is VfxExplosion3D:
+			impact_seen = true
+	_check(impact_seen, "molotov actual impact spawns shared explosion prefab")
+	world.advance(0.18)
 	_check(world.fires.size() == 1 and float(world.fires[0].radius) == LampFirePatch3D.DEFAULT_RADIUS, "molotov impacts and creates configured fire field")
 	_check(world.fires.size() == 1 and float(world.fires[0].until) - world.clock > 4.6 and float(world.fires[0].until) - world.clock <= 5.0, "molotov lifetime independently remains five seconds")
 	_check((world.fires[0].visual as Array).size() == 5 and str((world.fires[0].visual[0] as Node).get_meta("asset_id", "")) == "VFX-FATE-FIRE-3D", "molotov shares the lamp flame prefab and composition")
+	_check(is_equal_approx((world.fires[0].visual[0] as VfxEffectBase3D).effect_size, 1.25), "molotov and oil share the identical flame size")
 	world.clear()
 	await get_tree().process_frame
 	# Purchase through the real save/transaction owner; repeated transaction is idempotent.
+	_check(int(SpecialItemCatalog.get_item(SpecialItemCatalog.MOLOTOV).damage_per_tick) == 12, "molotov damage doubled to twelve per half second")
+	_check(int(SpecialItemCatalog.get_item(SpecialItemCatalog.GASOLINE).damage_per_tick) == 16, "gasoline damage doubled to sixteen per half second")
+	target.add_to_group("player_3d")
+	target.position = Vector3(0, 0, 3)
+	target.damage_taken = 0
+	world.add_fire(target.global_position, 1.25, 5.0, 12, actor)
+	world._damage_fire_tick()
+	_check(target.damage_taken == 12, "player/enemy group overlap is deduplicated")
+	world.clear()
+	target.remove_from_group("player_3d")
 	var old_data = BaseManager.data
 	var old_save_path := BaseManager.save_path
 	BaseManager.save_path = "user://special_items_purchase_%s.json" % Time.get_ticks_usec()

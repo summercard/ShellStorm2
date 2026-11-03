@@ -1,7 +1,7 @@
 {
   "id": "special_gasoline",
   "name": "汽油瓶",
-  "description": "特殊槽装备 · 按住右键沿路铺油 · 每瓶25份。遇火连片依次点燃，每片燃烧5秒。",
+  "description": "特殊槽装备 · 按住右键沿路铺油 · 每瓶25份。遇火或枪击点燃，每片燃烧5秒，每秒32伤害，也会伤害玩家。",
   "type": "special_item",
   "subtype": "gasoline",
   "rarity": "uncommon",
@@ -21,7 +21,7 @@
   "radius": 0.58,
   "dry_duration": 45.0,
   "duration": 5.0,
-  "damage_per_tick": 8,
+  "damage_per_tick": 16,
   "spread_delay": 0.12,
   "dimensions_m": [
     0.24,

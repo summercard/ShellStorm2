@@ -72,6 +72,22 @@ func _run() -> void:
 	controller._notification(NOTIFICATION_PAUSED)
 	_check(not controller.pouring, "tree pause cancels held pouring and requires a new press")
 	controller.clear_world()
+	var player := dungeon.player
+	player.is_invincible = false
+	var health_before := player.current_hp
+	controller.world.add_fire(player.global_position, 1.25, 5.0, 12, player)
+	controller.world._damage_fire_tick()
+	_check(player.current_hp == health_before - 12, "own molotov fire damages actual player through take_damage")
+	player.is_invincible = false
+	controller.world.oil.append({"position":player.global_position,"burn_until":controller.world.clock + 5.0,"attacker":player})
+	health_before = player.current_hp
+	controller.world._damage_fire_tick()
+	_check(player.current_hp == health_before - 16, "gasoline damages actual player and overlapping fire uses the higher tick only")
+	player.is_invincible = true
+	health_before = player.current_hp
+	controller.world._damage_fire_tick()
+	_check(player.current_hp == health_before, "fire respects player invincibility")
+	controller.clear_world()
 	_check(controller.world.oil.is_empty() and controller.world.fires.is_empty() and controller.world.projectiles.is_empty(), "scene/floor cleanup owns all temporary fields")
 	dungeon.queue_free()
 	await get_tree().process_frame

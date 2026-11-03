@@ -7,6 +7,7 @@ signal extinguished
 const BURN_SECONDS := 5.0
 const TICK_SECONDS := 0.5
 const DEFAULT_RADIUS := 1.25
+const FLAME_SIZE := 1.25
 var radius := DEFAULT_RADIUS
 var damage := 10
 var expires_at := 0.0
@@ -32,10 +33,11 @@ func _ready() -> void:
 ## Shared lamp/molotov composition: same prefab, flame size and placement.
 static func create_ground_flames(acquire: Callable, point: Vector3, area_radius: float = DEFAULT_RADIUS) -> Array[VfxEffectBase3D]:
 	var effects: Array[VfxEffectBase3D] = []
-	for index in 5:
+	var count := 1 if area_radius < DEFAULT_RADIUS * 0.65 else 5
+	for index in count:
 		var angle := (index - 1) * TAU / 4.0
 		var offset := Vector3.ZERO if index == 0 else Vector3(cos(angle), 0, sin(angle)) * area_radius * 0.62
-		var effect := acquire.call(VfxPool3D.FX01_FATE_FIRE, point + offset, 1.25, {"ground_fire": true, "illuminate": index == 0}) as VfxEffectBase3D
+		var effect := acquire.call(VfxPool3D.FX01_FATE_FIRE, point + offset, FLAME_SIZE, {"ground_fire": true, "illuminate": index == 0, "duration": BURN_SECONDS, "light_energy": 4.0 if count > 1 else 1.5, "light_range": 5.625 if count > 1 else 2.2}) as VfxEffectBase3D
 		if effect != null:
 			effects.append(effect)
 	return effects
