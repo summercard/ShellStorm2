@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/elite_arms_taker_formal_visual.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb" id="2_glb"]
+
+[node name="EliteArmsTakerRoot" type="Node3D"]
+script = ExtResource("1_script")
+metadata/asset_id = "ENM-ELITE-ARMS-TAKER-3D"
+metadata/asset_version = "v001"
+metadata/content_id = "elite_arms_taker"
+metadata/skeleton_id = "SKEL-ELITE-TVONE01-001"
+metadata/presentation_only = true
+metadata/collision_owner = "Enemy3D"
+metadata/godot_forward = "-Z"
+
+[node name="VisualGLB" parent="." instance=ExtResource("2_glb")]
+rotation = Vector3(0, 3.1415927, 0)

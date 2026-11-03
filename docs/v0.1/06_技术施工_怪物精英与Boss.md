@@ -6,7 +6,7 @@
 上级设计：[游戏设计文档 §9](README.md#9-核心系统四怪物唯一精英与-boss)  
 内容表：[游戏内容数据库](data/ShellStorm2_游戏内容数据库_v010.xlsx) 的 `怪物与Boss`、`精英怪`
 
-怪物 AI 的完整目标设计、运行时实现边界和验收结果见：[怪物 AI 系统完整设计与验收](06A_怪物AI系统完整设计_评审稿.md)。文件名保留“评审稿”仅为兼容历史链接；P0/P1 AI、12只唯一精英跨局名册，以及当前发布候选范围95/90/85层的逐五层独立Boss内容均已于2026-08-13实装。精英“系统能力完成”不等同于“12只内容生产完成”：截至2026-08-27只有首只“背枪的裂口爬虫”完成独立模型、命名血条、正式楼层投放和成长/逃脱/夺械/悬赏闭环，其余11只保留定义、档案与行为雏形但不进入随机池。
+怪物 AI 的完整目标设计、运行时实现边界和验收结果见：[怪物 AI 系统完整设计与验收](06A_怪物AI系统完整设计_评审稿.md)。文件名保留“评审稿”仅为兼容历史链接；P0/P1 AI、12只唯一精英跨局名册，以及当前发布候选范围95/90/85层的逐五层独立Boss内容均已于2026-08-13实装。精英“系统能力完成”不等同于“12只内容生产完成”：截至2026-09-30只有首只“背枪的裂口爬虫”完成独立模型、命名血条、正式楼层投放和成长/逃脱/夺械/悬赏闭环，其余11只保留定义、档案与行为雏形但不进入随机池。**2026-11-03 起为 2/12**：第二只「夺械者“收租人”」（`elite_arms_taker`）已完成正式资产、18 剪辑真骨骼动画、状态机接线与 94—92F 投放（见 §5.7）。
 
 ## 1. 职责与边界
 
@@ -346,7 +346,6 @@ SelectEligibleElite(seed, floor, history)
 精英头顶条不从 `elite_id` 写死分支，而读取定义中的 `health_bar_profile`：2.05m宽橙框、青色满血/红色低血填充，并在血条上方显示“背枪的裂口爬虫”。普通怪血条与受光文字接口保持不变。后续精英只需扩展 `EliteContentCatalog` 的投放、表现和血条配置，不得复制 `Enemy3D`、`EliteRosterService` 或头顶UI实现。
 
 ### 5.6 首只精英成长闭环（2026-08-27）
-
 - “背枪的裂口爬虫”生命降至20%及以下且没有受到致死伤害时进入4.2秒撤离窗；名字变为“背枪的裂口爬虫 · 撤离中”，停止攻击并远离玩家。撤离期间仍可受击和被击杀，不获得锁血或无敌。
 - 成功撤离后不产生击杀掉落或精英击杀撤离点，但正常释放精英房清房计数和通路；如果它直接造成玩家死亡，也按成功撤离结算，并记录一次击杀玩家历史。
 - 每次成功逃脱只成长一级，上限12级；每级累计生命+8%、接触/技能伤害+4.5%。状态按等级和逃脱次数推进为 `Escaped / Equipped / Growing / RevengeHunter / RegionalBoss / QuasiBoss`。
@@ -354,6 +353,85 @@ SelectEligibleElite(seed, floor, history)
 - 逃脱时读取玩家当前枪械快照，只保存稳定枪身内容ID、1—3发弹数预算和白名单弹丸特征，最多保留最近3件；不保存玩家 `weapon_instance_id`、Node、Resource或原始DPS。下次遭遇转译为副枪追射弹数与爆炸特征。
 - 悬赏按逃脱次数提升至1—5级，对应45/75/115/165/230金币。再次遭遇并击杀后，悬赏作为地面金币掉落，仍需玩家拾取，继续经过当前房间/世界金币倍率。
 - 玩家最后伤害来源保存 `elite_id + encounter_instance_id`；只有造成死亡的有效精英来源才获得击杀玩家与逃脱成长，普通怪、环境伤害和过期来源不会误记。
+
+### 5.7 第二只正式精英：夺械者“收租人”（2026-11-03）
+
+`elite_arms_taker / 夺械者“收租人”` 是第二只从 `design_only` 转为 `deployed` 的精英，
+每次行动以稳定 `run_seed` 从 94F、93F、92F 中确定一个目标层，再出现在该层首个合法 `ELITE` 房。
+**与首只的窗口互不重叠**（首只占 98—96F，本只占 94—92F，95F 是 Boss 层、两只都不进），
+由 `verify_second_elite_arms_taker` 与 `verify_first_elite_deployment_flow` 双向钉住。
+
+**这是精英首次使用真骨骼动画。** 首只 `rift_boar_armed` 的表现 GLB 是**纯静态**（`skins=0`、`animations=0`），
+完全靠 `EnemyAvatar3D` 的程序化外壳演；本只带 **41 骨 + 18 剪辑**，必须由表现层自己驱动
+`AnimationPlayer` —— 否则模型会僵在 bind pose。因此 `EnemyAvatar3D.sync_presentation()` 新增了精英分支：
+
+```text
+Enemy3D._physics_process → avatar.sync_presentation(state, state_time, speed, ...)
+  ├─ has_formal_normal()  → _formal_normal_root.sync_state(...)     # 普通怪（既有）
+  └─ _formal_elite_root.has_method("sync_state") → 精英 .sync_state(...)  # 新增
+```
+
+判据是**「表现根有没有 `sync_state`」**，不是按 `elite_id` 写死分支 —— 纯静态的精英没有这个方法，
+自然被挡在外面，`EnemyAvatar3D` 不需要知道哪些精英有动画。
+
+**18 条动作 → 12 态映射**（事实源 `elite_arms_taker_formal_visual.gd` 的 `CLIP_BY_STATE`）：
+
+| 状态 | 剪辑 | 说明 |
+|---|---|---|
+| `dormant` | idle（钉 0） | 未激活不消耗视觉预算 |
+| `idle` / `alert` | idle | 待机与锁定共用 |
+| `patrol` | walk | **唯一用走路的移动状态** |
+| `chase` / `search` / `return` | run | 按**实际速度**改判走/跑，带 0.62 进 / 0.50 出的迟滞 |
+| `telegraph` / `attack` / `recovery` | attack_light | 前摇取前段、命中钉中段、收招走尾段 |
+| `stagger` | hit | 受击打断 |
+| `dead` | death | 倒地保留 `DEATH_DURATION` |
+
+**动画母版由 18 条单状态 GLB 合并而成**，不是逐状态挂 18 个场景。
+合并脚本 `art_source/.../source/animation/author_merge_animation_v001.py` 自带四条会失败的断言：
+骨架一致性（18 条逐条比对 41 个 joints 名）、产物 clip 名齐备、**无多余 clip**、时长误差 ≤1 帧。
+
+**两个实测踩到的坑**（都留在脚本注释里）：
+
+| 坑 | 现象 | 正解 |
+|---|---|---|
+| `export_force_sampling=True` | 按**整数帧**重采样 ⇒ run 从 0.867s 变成 0.833s，逐条对不上源清单 | 关掉采样，直接导出关键帧，时间戳原样保留 |
+| slam 源含**两条** clip | 只有一条挂到 `animation_data.action`，另一条留在 `bpy.data.actions` 被一并导出 ⇒ 产物多一个 `ArmatureAction` | 导出前按名单清理 `bpy.data.actions` |
+
+**资产身份**：`ENM-ELITE-ARMS-TAKER-3D` / slug `enm_elite_arms_taker`，正式目录
+`assets/art/enemies/elite_3d/enm_elite_arms_taker/{components,runtime}/<slug>/`，
+路径不含版本号（版本号只记在清单、Prefab 根 `metadata/asset_version` 与账本版本列）。
+表现场景无碰撞，`Enemy3D` 继续持有 `melee_chaser` 的碰撞、AI、生命、伤害与掉落。
+
+**验收**：`tests/verification/verify_second_elite_arms_taker.gd` —— 目录布局（含"路径不得带版本号"）、
+18 剪辑动画母版（**时长逐条硬编码对源清单**，不是与自己自洽）、41 骨、
+**12 态逐态驱动且每态都落到一条真实存在的剪辑**、94—92F 窗口与 98—96F 不重叠、95F 不侵入、
+每局三选一覆盖三层、表现场景零碰撞、玩法碰撞半径仍是 `melee_chaser` 基线。
+实测 `SECOND_ELITE_ARMS_TAKER_OK`。
+
+#### 5.7.1 定点追加：远征关卡 99 boss 前置房（2026-11-03）
+
+除名册窗口外，房间还能**点名**追加一只精英。远征 99（测试关卡）的 `room_01`
+（`start → room_01 → boss`，`boss.parent_key = room_01`，即 boss 前那间）声明了
+`"elite_id": "elite_arms_taker"`。
+
+**为什么不用现成机制**：`ELITE` 房型、`spawn_placements` 刷怪盒、`encounter` 触发遭遇
+三条路都会**替换**本房编成，而本需求是「保留普通战斗，另加一只」。
+
+**楼层窗口**：远征是单层，`floor_number = 100 - floor_index = 100`，不在 94—92 窗口内。
+所以 `MonsterInjector._generate_elite` 增加了**点名**路径 ——
+请求带 `elite_id` 时走 `EliteRosterService.reserve()` 直接指派，不查窗口；
+**仍受**「同 ID 全局单例 / 预约唯一性」约束。窗口本身没有被放宽。
+
+**消费点**：`Dungeon3D._commit_room_waves`（唯一提交点）。
+⚠ 不能放在 `_spawn_room_enemies` 的房型分支里 —— 那个函数有**四条早退**
+（触发遭遇 / 和平区 / 只认盒子 / 无盒子不刷），实测 `room_01` 走盒子路径，
+放在分支末尾会让追加代码一次都不执行且不报错。
+
+**跨文件契约**（缺一环即静默失效）：设计源 → `LevelPlanLoader.normalize_floor` 白名单 →
+`FloorPlanGenerator` 出口白名单 → 房间 `configure`（`Dungeon3D` / `TowerDescent3D`）→ `_commit_room_waves`。
+
+**验收**：`verify_expedition99_pre_boss_elite`（契约，含"不点名时 100 层出不来"的反证）
++ `probe_expedition99_pre_boss_elite`（真实加载关卡，实测 `total=4 ordinary=3 elites=[收租人]`）。
 
 ## 6. Boss 与下行解锁
 

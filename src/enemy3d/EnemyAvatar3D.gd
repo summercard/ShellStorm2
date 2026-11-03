@@ -367,6 +367,9 @@ func flash_hit(play_hit_pose := true) -> void:
 	if has_animated_boss():_formal_boss_root.flash_hit()
 	if has_formal_normal():
 		_formal_normal_root.flash_hit(play_hit_pose)
+	# 真骨骼动画的精英（`elite_arms_taker`）同样需要受击反馈；
+	# 纯静态表现的精英（`rift_boar_armed`）没有 `flash_hit`，会被方法探测挡掉。
+	flash_elite_hit(play_hit_pose)
 	if _shell_material != null:
 		_shell_material.albedo_color = Color(1.0, 0.78, 0.60)
 
@@ -375,6 +378,9 @@ func get_formal_death_duration() -> float:
 	if has_animated_boss():return 2.0
 	if has_formal_normal():
 		return float(_formal_normal_root.get_presentation_snapshot().get("death_duration", 2.4))
+	if _formal_elite_root != null and is_instance_valid(_formal_elite_root) \
+			and _formal_elite_root.has_method("get_presentation_snapshot"):
+		return float(_formal_elite_root.get_presentation_snapshot().get("death_duration", 2.4))
 	return 0.34
 
 
@@ -389,7 +395,13 @@ func get_component_snapshot() -> Dictionary:
 		"component_count": 2 if has_formal_normal() else 4,
 		"formal_normal_asset": has_formal_normal(),
 		"presentation": _formal_normal_root.get_presentation_snapshot() if has_formal_normal() else {},
-		"procedural_pose": not has_formal_normal() and not has_animated_boss(),
+		"elite_presentation": (
+			_formal_elite_root.get_presentation_snapshot()
+			if _formal_elite_root != null and is_instance_valid(_formal_elite_root)
+				and _formal_elite_root.has_method("get_presentation_snapshot")
+			else {}
+		),
+		"procedural_pose": not has_formal_normal() and not has_animated_boss() and not has_animated_elite(),
 		"boss_presentation": _formal_boss_root.get_presentation_snapshot() if has_animated_boss() else {},
 		"footprint": get_footprint_profile(enemy_kind),
 		"ambush_revealed": _ambush_revealed,
@@ -423,7 +435,7 @@ func _process(delta: float) -> void:
 		_finalize_eye_glow()
 	if _root == null:
 		return
-	if has_formal_normal() or has_animated_boss():
+	if has_formal_normal() or has_animated_boss() or has_animated_elite():
 		_root.position = Vector3.ZERO
 		_root.scale = Vector3.ONE
 		_tell_ring.visible = ai_state == "telegraph" and not has_animated_boss()
@@ -799,6 +811,15 @@ func has_formal_normal() -> bool:
 func has_animated_boss() -> bool:
 	return is_instance_valid(_formal_boss_root) and _formal_boss_root.has_method("sync_context")
 
+
+func has_animated_elite() -> bool:
+	return is_instance_valid(_formal_elite_root) and _formal_elite_root.has_method("sync_context")
+
+
+func sync_elite_presentation(context: Dictionary) -> void:
+	if has_animated_elite():
+		_formal_elite_root.call("sync_context", context)
+
 ## 已挂载的正式 Boss 表现根；没有则返回 null。
 ## 给 `Enemy3D` 读骨姿态用（受击体积要跟着骨骼走），不交出物理所有权。
 func get_animated_boss_root() -> Node3D:
@@ -810,6 +831,11 @@ func sync_boss_presentation(context: Dictionary) -> void:
 ## `base_speed` = 这只怪的**满速**（`get_effective_move_speed()`）。
 ## 表现层用它把"当前速度"换算成比例，从而决定放走路还是跑步 ——
 ## 只靠状态名选段是不够的，见 `melee_chaser_formal_visual.gd` 的 `_locomotion_clip()`。
+##
+## 精英（`elite_arms_taker` 这类**真骨骼动画**的精英）走同一条驱动链：
+## 首只精英 `rift_boar_armed` 的 GLB 是纯静态（0 骨 / 0 动画）所以不需要，
+## 但新精英带了 41 骨 + 18 剪辑，不驱动就会僵在 bind pose。
+## 判据是"表现根有没有 `sync_state`"，而不是按 `elite_id` 写死分支。
 func sync_presentation(
 	state: String, state_time: float, speed: float,
 	telegraph_duration: float, recovery_duration: float, base_speed := 0.0
@@ -818,6 +844,19 @@ func sync_presentation(
 		_formal_normal_root.call(
 			"sync_state", state, state_time, speed, telegraph_duration, recovery_duration, base_speed
 		)
+	if _formal_elite_root != null and is_instance_valid(_formal_elite_root) \
+			and _formal_elite_root.has_method("sync_state"):
+		_formal_elite_root.call(
+			"sync_state", state, state_time, speed, telegraph_duration, recovery_duration, base_speed
+		)
+
+
+## 精英受击闪白 / 受击姿态。`play_hit_pose=false` 用于太阳伤害
+## （每秒结算一次，插姿态会让怪反复被塞受击段而看起来在漂移）。
+func flash_elite_hit(play_hit_pose := true) -> void:
+	if _formal_elite_root != null and is_instance_valid(_formal_elite_root) \
+			and _formal_elite_root.has_method("flash_hit"):
+		_formal_elite_root.call("flash_hit", play_hit_pose)
 
 
 func _add_claws(radius: float, height: float) -> void:

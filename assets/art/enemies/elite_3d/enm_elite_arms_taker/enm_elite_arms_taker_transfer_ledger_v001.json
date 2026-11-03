@@ -1,0 +1,266 @@
+{
+  "ledger_kind": "asset_transfer_ledger",
+  "schema_version": 1,
+  "asset_id": "ENM-ELITE-ARMS-TAKER-3D",
+  "slug": "enm_elite_arms_taker",
+  "asset_version": "v001",
+  "generated_at": "2026-11-03T18:30:00+08:00",
+  "generated_by": "elite asset formalization (rename tvone01 -> arms_taker)",
+  "self_reference_note": "本文件不登记自身哈希。",
+  "source_machine": "3号机 sc@100.117.192.4:/home/sc/动作库/04_临时/精英怪01",
+  "source_stability": "源机已不可达（Connection refused）；本地工作区为唯一副本。",
+  "source_hashes": [
+    {
+      "source_file": "idle.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 5.3
+    },
+    {
+      "source_file": "walk.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 1.433
+    },
+    {
+      "source_file": "run.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 0.867
+    },
+    {
+      "source_file": "turn_left.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 1.333
+    },
+    {
+      "source_file": "turn_right.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 1.333
+    },
+    {
+      "source_file": "attack_light.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 2.667
+    },
+    {
+      "source_file": "attack_heavy.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 1.1
+    },
+    {
+      "source_file": "attack_jump.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 3.7
+    },
+    {
+      "source_file": "block.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 1.333
+    },
+    {
+      "source_file": "dodge.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 1.633
+    },
+    {
+      "source_file": "hit.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 2.0
+    },
+    {
+      "source_file": "stagger.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 4.933
+    },
+    {
+      "source_file": "stunned.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 2.133
+    },
+    {
+      "source_file": "death.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 4.6
+    },
+    {
+      "source_file": "spawn_standup.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 3.1
+    },
+    {
+      "source_file": "roar.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 5.4
+    },
+    {
+      "source_file": "kneel.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 4.267
+    },
+    {
+      "source_file": "slam.glb",
+      "note": "源清单只记状态名，未提供逐文件源哈希。",
+      "duration_s": 7.567
+    }
+  ],
+  "outputs": [
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/previews/front_negY.png",
+      "bytes": 190806,
+      "sha256": "fa7ae9188568edf5ab9ca14fedf9cecd5c03c457e76c80c857198ea9fb7493ab"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/previews/back_posY.png",
+      "bytes": 185843,
+      "sha256": "1835a908fb22c70395f4642d7a553f237e6e18cb55760b3f60a2ee6b922e3484"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/previews/side_negX.png",
+      "bytes": 204188,
+      "sha256": "02d4d0f191e095e42083c2e9d027f6d600c3bfd5088c3dfff742e1dd0e42bac4"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/状态机动画清单.md",
+      "bytes": 3498,
+      "sha256": "ee6dc9286c696fea7fe32e84b48b03a4c5936c43e1f86fc6df2363656b95b633"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/idle.glb",
+      "bytes": 243452,
+      "sha256": "218cb6b46e5e5c73c449b696144014fc837a34d9f87325077194769959a0c528"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/walk.glb",
+      "bytes": 199176,
+      "sha256": "434805e4d82682a53b229ce7fd7c4db1575606926d26f1f898a0b1ed9f9abaab"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/run.glb",
+      "bytes": 192312,
+      "sha256": "fe021dfa7aa1a8d6350c7bb130ba6ac770526957bf147f8fe4c25843e1e00d74"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/turn_left.glb",
+      "bytes": 198360,
+      "sha256": "a8551f1cdde4e0efa043c947f897e1e32b856dc1ac58e0c4cb1f63de851f54e6"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/turn_right.glb",
+      "bytes": 198220,
+      "sha256": "c77c7e151e41ddfca9a338fda0d0d8298f34abce85bf375bc5c4f5adc04275cc"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/attack_light.glb",
+      "bytes": 213580,
+      "sha256": "770ca76dbdfd713d0764c328cd86f91bb528ea4ef248ba94226fab3edb0fa896"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/attack_heavy.glb",
+      "bytes": 194876,
+      "sha256": "e169d13f26d7779ca6b8afc4c9b5ef5f44c1f68c69a8f63a57b945f1e62a0dad"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/attack_jump.glb",
+      "bytes": 225356,
+      "sha256": "869b7919c760698d408633fa1378167bd3575551ea93dd69483bbbd31b95c2cf"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/block.glb",
+      "bytes": 198312,
+      "sha256": "78fdadaa84a0a13c34b5c2a6c1f02a4ab3d0fb7751fa0111eaf3039081caf1be"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/dodge.glb",
+      "bytes": 201368,
+      "sha256": "0af283687a01a290063cc5cb7d87ab88e684fd33ddd75dbe23c4584b4417bb96"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/hit.glb",
+      "bytes": 204672,
+      "sha256": "da7ef01f0f204db25b6310dacf126cf5e323211d657783bb2f3ef4702e12dc61"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/stagger.glb",
+      "bytes": 239300,
+      "sha256": "550c4719d7b4a840d3358610abd562f08da1431169d1e87754390b18b146ee4c"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/stunned.glb",
+      "bytes": 207492,
+      "sha256": "068757eedfc7f657c0b16f995ffdc1dc0d0aa959af218de8840a843520f78d0e"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/death.glb",
+      "bytes": 235604,
+      "sha256": "4ab2afee38712bac318b2b8c703ba1b1398c2f91d4f664a8d4ebad524aa560ce"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/spawn_standup.glb",
+      "bytes": 218352,
+      "sha256": "8737f3603a90f9ba42d8d113cb03bf50f439de4a5ec1160e6585bf497fa4ecd7"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/roar.glb",
+      "bytes": 242004,
+      "sha256": "c862452b1f3b454c106598fff11098dbefee0a1df01f71e90855ee4e533bf6ba"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/kneel.glb",
+      "bytes": 228124,
+      "sha256": "74f5b8ec37f9baf2fdbd5e32657aafa0b15ab5c7000eb7498f711401f354631e"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/slam.glb",
+      "bytes": 292252,
+      "sha256": "ef7ced91410e074828a826b816790bf17f0b1220d6353557127af43add609eee"
+    },
+    {
+      "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb",
+      "bytes": 1230900,
+      "sha256": "074fac37e635d6d4b73c5e274b5ec61e1611a5ed07f3c38d8436d5b0abf91449"
+    },
+    {
+      "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/enm_elite_arms_taker_root_top3d.tscn",
+      "bytes": 794,
+      "sha256": "4c8274fd94e37d203eb7a02a4c737e8d2f3cfad86e5eb6bffb6ceb1a0d289f45"
+    },
+    {
+      "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/elite_arms_taker_formal_visual.gd",
+      "bytes": 13203,
+      "sha256": "25b917dcbf541b1f36caf500dde7deaba64b40cf9fcc9085f33d518057228f70"
+    }
+  ],
+  "animations": [
+    "idle",
+    "walk",
+    "run",
+    "turn_left",
+    "turn_right",
+    "attack_light",
+    "attack_heavy",
+    "attack_jump",
+    "block",
+    "dodge",
+    "hit",
+    "stagger",
+    "stunned",
+    "death",
+    "spawn_standup",
+    "roar",
+    "kneel",
+    "slam"
+  ],
+  "skeleton": {
+    "bone_count": 41,
+    "root_bone": "Root"
+  },
+  "consumers": [
+    "src/enemy3d/EliteContentCatalog.gd",
+    "src/enemy3d/EnemyAvatar3D.gd",
+    "assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/elite_arms_taker_formal_visual.gd"
+  ],
+  "rollback": "本次为新增资产；回滚即移除本目录。3 号机源不可达，本地无第二份副本。",
+  "compliance": [
+    "GLB 只含表现网格与材质，无碰撞、无脚本、无灯光、无相机。",
+    "正式运行路径（components/ 与 runtime/）不含版本号。",
+    "源（3 号机）只读，未修改。"
+  ]
+}

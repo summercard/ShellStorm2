@@ -20,14 +20,29 @@ func _ready() -> void:
 	var deployed := all_definitions.filter(func(definition: Dictionary) -> bool:
 		return str(definition.get("deployment_status", "")) == EliteContentCatalog.DEPLOYED
 	)
-	if all_definitions.size() != 12 or deployed.size() != 1:
-		failures.append("Expected 12 preserved definitions with exactly one deployed elite")
+	# 2026-11-03：第二只正式精英「夺械者“收租人”」（`elite_arms_taker`）上线后，
+	# 投放数由 1 变 2。这里断言的是**名册规模固定 12** + **投放集合恰好是这两只**，
+	# 而不是写死某个计数 —— 写死计数会在每次投放新精英时假红。
+	if all_definitions.size() != 12:
+		failures.append("Expected 12 preserved elite definitions, got %d" % all_definitions.size())
+	var deployed_ids: Array[String] = []
+	for definition in deployed:
+		deployed_ids.append(str(definition.get("elite_id", "")))
+	deployed_ids.sort()
+	if deployed_ids != ["elite_arms_taker", "elite_rift_boar_armed"]:
+		failures.append("Unexpected deployed elite set: %s" % str(deployed_ids))
+	# 两只精英的楼层窗口必须互不重叠：首只占 98-96，第二只占 94-92。
 	for floor_number in [98, 97, 96]:
 		var eligible := EliteContentCatalog.get_deployable_for_floor(floor_number)
 		if eligible.size() != 1 or str(eligible[0].get("elite_id", "")) != "elite_rift_boar_armed":
 			failures.append("Floor %d does not deploy only elite_rift_boar_armed" % floor_number)
-	if not EliteContentCatalog.get_deployable_for_floor(95).is_empty():
-		failures.append("The first elite leaked into the 95F boss floor")
+	for floor_number in [94, 93, 92]:
+		var eligible := EliteContentCatalog.get_deployable_for_floor(floor_number)
+		if eligible.size() != 1 or str(eligible[0].get("elite_id", "")) != "elite_arms_taker":
+			failures.append("Floor %d does not deploy only elite_arms_taker" % floor_number)
+	for floor_number in [95, 91]:
+		if not EliteContentCatalog.get_deployable_for_floor(floor_number).is_empty():
+			failures.append("Floor %d must not deploy any elite (boundary/Boss floor)" % floor_number)
 	var selected_floors: Dictionary = {}
 	for seed_value in range(30):
 		selected_floors[EliteContentCatalog.get_selected_floor_for_seed("elite_rift_boar_armed", seed_value)] = true

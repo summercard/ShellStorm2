@@ -1,0 +1,426 @@
+{
+  "manifest_kind": "asset_manifest",
+  "schema_version": 1,
+  "asset_id": "ENM-ELITE-ARMS-TAKER-3D",
+  "slug": "enm_elite_arms_taker",
+  "asset_version": "v001",
+  "domain": "enemies",
+  "family": "elite_3d",
+  "status": "connected_and_verified",
+  "elite_id": "elite_arms_taker",
+  "display_name": "夺械者“收租人”",
+  "generated_at": "2026-11-03T18:30:00+08:00",
+  "generated_by": "elite asset formalization (rename tvone01 -> arms_taker, 18-clip master merge)",
+  "self_reference_note": "本文件不登记自身哈希；其哈希见同目录 <slug>_transfer_ledger_v001.json 的 outputs。",
+  "runtime_visual_glb": {
+    "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb",
+    "bytes": 1230900,
+    "sha256": "074fac37e635d6d4b73c5e274b5ec61e1611a5ed07f3c38d8436d5b0abf91449",
+    "note": "动画母版：网格 + 41 骨骨架 + 18 条 animation clip 合并在同一份 GLB 内，对齐现有普通怪（小僵尸 6 剪辑 / 胖子僵尸 13 剪辑）的规格。合并脚本见 art_source/.../source/animation/author_merge_animation_v001.py。"
+  },
+  "skeleton": {
+    "bone_count": 41,
+    "root_bone": "Root",
+    "note": "18 条动作的 joints 名与基础模型逐位一致，合并脚本内已断言。"
+  },
+  "clip_count": 18,
+  "runtime_files": [
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/previews/front_negY.png",
+      "bytes": 190806,
+      "sha256": "fa7ae9188568edf5ab9ca14fedf9cecd5c03c457e76c80c857198ea9fb7493ab"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/previews/back_posY.png",
+      "bytes": 185843,
+      "sha256": "1835a908fb22c70395f4642d7a553f237e6e18cb55760b3f60a2ee6b922e3484"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/previews/side_negX.png",
+      "bytes": 204188,
+      "sha256": "02d4d0f191e095e42083c2e9d027f6d600c3bfd5088c3dfff742e1dd0e42bac4"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/状态机动画清单.md",
+      "bytes": 3498,
+      "sha256": "ee6dc9286c696fea7fe32e84b48b03a4c5936c43e1f86fc6df2363656b95b633"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/idle.glb",
+      "bytes": 243452,
+      "sha256": "218cb6b46e5e5c73c449b696144014fc837a34d9f87325077194769959a0c528"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/walk.glb",
+      "bytes": 199176,
+      "sha256": "434805e4d82682a53b229ce7fd7c4db1575606926d26f1f898a0b1ed9f9abaab"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/run.glb",
+      "bytes": 192312,
+      "sha256": "fe021dfa7aa1a8d6350c7bb130ba6ac770526957bf147f8fe4c25843e1e00d74"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/turn_left.glb",
+      "bytes": 198360,
+      "sha256": "a8551f1cdde4e0efa043c947f897e1e32b856dc1ac58e0c4cb1f63de851f54e6"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/turn_right.glb",
+      "bytes": 198220,
+      "sha256": "c77c7e151e41ddfca9a338fda0d0d8298f34abce85bf375bc5c4f5adc04275cc"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/attack_light.glb",
+      "bytes": 213580,
+      "sha256": "770ca76dbdfd713d0764c328cd86f91bb528ea4ef248ba94226fab3edb0fa896"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/attack_heavy.glb",
+      "bytes": 194876,
+      "sha256": "e169d13f26d7779ca6b8afc4c9b5ef5f44c1f68c69a8f63a57b945f1e62a0dad"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/attack_jump.glb",
+      "bytes": 225356,
+      "sha256": "869b7919c760698d408633fa1378167bd3575551ea93dd69483bbbd31b95c2cf"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/block.glb",
+      "bytes": 198312,
+      "sha256": "78fdadaa84a0a13c34b5c2a6c1f02a4ab3d0fb7751fa0111eaf3039081caf1be"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/dodge.glb",
+      "bytes": 201368,
+      "sha256": "0af283687a01a290063cc5cb7d87ab88e684fd33ddd75dbe23c4584b4417bb96"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/hit.glb",
+      "bytes": 204672,
+      "sha256": "da7ef01f0f204db25b6310dacf126cf5e323211d657783bb2f3ef4702e12dc61"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/stagger.glb",
+      "bytes": 239300,
+      "sha256": "550c4719d7b4a840d3358610abd562f08da1431169d1e87754390b18b146ee4c"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/stunned.glb",
+      "bytes": 207492,
+      "sha256": "068757eedfc7f657c0b16f995ffdc1dc0d0aa959af218de8840a843520f78d0e"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/death.glb",
+      "bytes": 235604,
+      "sha256": "4ab2afee38712bac318b2b8c703ba1b1398c2f91d4f664a8d4ebad524aa560ce"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/spawn_standup.glb",
+      "bytes": 218352,
+      "sha256": "8737f3603a90f9ba42d8d113cb03bf50f439de4a5ec1160e6585bf497fa4ecd7"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/roar.glb",
+      "bytes": 242004,
+      "sha256": "c862452b1f3b454c106598fff11098dbefee0a1df01f71e90855ee4e533bf6ba"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/kneel.glb",
+      "bytes": 228124,
+      "sha256": "74f5b8ec37f9baf2fdbd5e32657aafa0b15ab5c7000eb7498f711401f354631e"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/slam.glb",
+      "bytes": 292252,
+      "sha256": "ef7ced91410e074828a826b816790bf17f0b1220d6353557127af43add609eee"
+    },
+    {
+      "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb",
+      "bytes": 1230900,
+      "sha256": "074fac37e635d6d4b73c5e274b5ec61e1611a5ed07f3c38d8436d5b0abf91449"
+    },
+    {
+      "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/enm_elite_arms_taker_root_top3d.tscn",
+      "bytes": 794,
+      "sha256": "4c8274fd94e37d203eb7a02a4c737e8d2f3cfad86e5eb6bffb6ceb1a0d289f45"
+    },
+    {
+      "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/elite_arms_taker_formal_visual.gd",
+      "bytes": 13203,
+      "sha256": "25b917dcbf541b1f36caf500dde7deaba64b40cf9fcc9085f33d518057228f70"
+    }
+  ],
+  "animations": [
+    {
+      "state": "idle",
+      "source_file": "idle.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/idle.glb",
+      "bytes": 243452,
+      "sha256": "218cb6b46e5e5c73c449b696144014fc837a34d9f87325077194769959a0c528",
+      "clips": [
+        {
+          "name": "idle",
+          "duration_s": 5.3
+        }
+      ],
+      "loop": true,
+      "loop_basis": "authored"
+    },
+    {
+      "state": "walk",
+      "source_file": "walk.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/walk.glb",
+      "bytes": 199176,
+      "sha256": "434805e4d82682a53b229ce7fd7c4db1575606926d26f1f898a0b1ed9f9abaab",
+      "clips": [
+        {
+          "name": "walk",
+          "duration_s": 1.433
+        }
+      ],
+      "loop": true,
+      "loop_basis": "authored"
+    },
+    {
+      "state": "run",
+      "source_file": "run.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/run.glb",
+      "bytes": 192312,
+      "sha256": "fe021dfa7aa1a8d6350c7bb130ba6ac770526957bf147f8fe4c25843e1e00d74",
+      "clips": [
+        {
+          "name": "run",
+          "duration_s": 0.867
+        }
+      ],
+      "loop": true,
+      "loop_basis": "authored"
+    },
+    {
+      "state": "turn_left",
+      "source_file": "turn_left.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/turn_left.glb",
+      "bytes": 198360,
+      "sha256": "a8551f1cdde4e0efa043c947f897e1e32b856dc1ac58e0c4cb1f63de851f54e6",
+      "clips": [
+        {
+          "name": "turn_left",
+          "duration_s": 1.333
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "turn_right",
+      "source_file": "turn_right.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/turn_right.glb",
+      "bytes": 198220,
+      "sha256": "c77c7e151e41ddfca9a338fda0d0d8298f34abce85bf375bc5c4f5adc04275cc",
+      "clips": [
+        {
+          "name": "turn_right",
+          "duration_s": 1.333
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "attack_light",
+      "source_file": "attack_light.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/attack_light.glb",
+      "bytes": 213580,
+      "sha256": "770ca76dbdfd713d0764c328cd86f91bb528ea4ef248ba94226fab3edb0fa896",
+      "clips": [
+        {
+          "name": "attack_light",
+          "duration_s": 2.667
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "attack_heavy",
+      "source_file": "attack_heavy.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/attack_heavy.glb",
+      "bytes": 194876,
+      "sha256": "e169d13f26d7779ca6b8afc4c9b5ef5f44c1f68c69a8f63a57b945f1e62a0dad",
+      "clips": [
+        {
+          "name": "attack_heavy",
+          "duration_s": 1.1
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "attack_jump",
+      "source_file": "attack_jump.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/attack_jump.glb",
+      "bytes": 225356,
+      "sha256": "869b7919c760698d408633fa1378167bd3575551ea93dd69483bbbd31b95c2cf",
+      "clips": [
+        {
+          "name": "attack_jump",
+          "duration_s": 3.7
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "block",
+      "source_file": "block.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/block.glb",
+      "bytes": 198312,
+      "sha256": "78fdadaa84a0a13c34b5c2a6c1f02a4ab3d0fb7751fa0111eaf3039081caf1be",
+      "clips": [
+        {
+          "name": "block",
+          "duration_s": 1.333
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "dodge",
+      "source_file": "dodge.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/dodge.glb",
+      "bytes": 201368,
+      "sha256": "0af283687a01a290063cc5cb7d87ab88e684fd33ddd75dbe23c4584b4417bb96",
+      "clips": [
+        {
+          "name": "dodge",
+          "duration_s": 1.633
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "hit",
+      "source_file": "hit.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/hit.glb",
+      "bytes": 204672,
+      "sha256": "da7ef01f0f204db25b6310dacf126cf5e323211d657783bb2f3ef4702e12dc61",
+      "clips": [
+        {
+          "name": "hit",
+          "duration_s": 2.0
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "stagger",
+      "source_file": "stagger.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/stagger.glb",
+      "bytes": 239300,
+      "sha256": "550c4719d7b4a840d3358610abd562f08da1431169d1e87754390b18b146ee4c",
+      "clips": [
+        {
+          "name": "stagger",
+          "duration_s": 4.933
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "stunned",
+      "source_file": "stunned.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/stunned.glb",
+      "bytes": 207492,
+      "sha256": "068757eedfc7f657c0b16f995ffdc1dc0d0aa959af218de8840a843520f78d0e",
+      "clips": [
+        {
+          "name": "stunned",
+          "duration_s": 2.133
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "death",
+      "source_file": "death.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/death.glb",
+      "bytes": 235604,
+      "sha256": "4ab2afee38712bac318b2b8c703ba1b1398c2f91d4f664a8d4ebad524aa560ce",
+      "clips": [
+        {
+          "name": "death",
+          "duration_s": 4.6
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "spawn_standup",
+      "source_file": "spawn_standup.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/spawn_standup.glb",
+      "bytes": 218352,
+      "sha256": "8737f3603a90f9ba42d8d113cb03bf50f439de4a5ec1160e6585bf497fa4ecd7",
+      "clips": [
+        {
+          "name": "spawn_standup",
+          "duration_s": 3.1
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "roar",
+      "source_file": "roar.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/roar.glb",
+      "bytes": 242004,
+      "sha256": "c862452b1f3b454c106598fff11098dbefee0a1df01f71e90855ee4e533bf6ba",
+      "clips": [
+        {
+          "name": "roar",
+          "duration_s": 5.4
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "kneel",
+      "source_file": "kneel.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/kneel.glb",
+      "bytes": 228124,
+      "sha256": "74f5b8ec37f9baf2fdbd5e32657aafa0b15ab5c7000eb7498f711401f354631e",
+      "clips": [
+        {
+          "name": "kneel",
+          "duration_s": 4.267
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    },
+    {
+      "state": "slam",
+      "source_file": "slam.glb",
+      "source_rel": "art_source/enemies/elite_3d/enm_elite_arms_taker/source/animations/slam.glb",
+      "bytes": 292252,
+      "sha256": "ef7ced91410e074828a826b816790bf17f0b1220d6353557127af43add609eee",
+      "clips": [
+        {
+          "name": "slam",
+          "duration_s": 7.567
+        }
+      ],
+      "loop": false,
+      "loop_basis": "one_shot"
+    }
+  ]
+}
