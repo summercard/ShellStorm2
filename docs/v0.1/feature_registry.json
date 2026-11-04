@@ -505,7 +505,14 @@
       "development_records": [
         "docs/v0.1/development/history/14.5_推送更新摘要_2026-08-27.md",
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
-        "docs/v0.1/development/2026-11-04_arms_taker_state_binding.md"
+        "docs/v0.1/development/2026-11-04_arms_taker_state_binding.md",
+        "docs/v0.1/development/2026-11-04_arms_taker_roaming.md",
+        "docs/v0.1/development/2026-11-04_arms_taker_bar_archive_audit.md",
+        "docs/v0.1/development/2026-11-04_monster_archive_and_spawn_isolation.md",
+        "docs/v0.1/development/2026-11-04_arms_taker_tactics.md",
+        "docs/v0.1/development/2026-11-04_arms_taker_electric_followup.md",
+        "docs/v0.1/development/2026-11-04_elite_archive_preview.md",
+        "docs/v0.1/development/2026-11-04_arms_taker_scale_250.md"
       ],
       "verification": [
         {
@@ -523,6 +530,18 @@
         {
           "kind": "scene",
           "id": "verify_second_elite_state_visual"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_arms_taker_roaming"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_arms_taker_tactics"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_monster_archive_facility"
         }
       ],
       "status": "partial"
@@ -578,7 +597,8 @@
       ],
       "development_records": [
         "docs/v0.1/development/history/07_基地设施_历史记录.md",
-        "docs/v0.1/development/2026-10-19_workbench_facility_entry.md"
+        "docs/v0.1/development/2026-10-19_workbench_facility_entry.md",
+        "docs/v0.1/development/2026-11-04_monster_archive_and_spawn_isolation.md"
       ],
       "verification": [
         {
@@ -592,6 +612,10 @@
         {
           "kind": "scene",
           "id": "verify_workbench_menu_entry"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_monster_archive_facility"
         }
       ],
       "status": "partial"
@@ -603,12 +627,17 @@
         "docs/v0.1/20_技术施工_基地NPC.md"
       ],
       "development_records": [
-        "docs/v0.1/development/2026-11-02_base99_npc_green.md"
+        "docs/v0.1/development/2026-11-02_base99_npc_green.md",
+        "docs/v0.1/development/2026-11-04_base_npc_elite_arms_taker_greeting.md"
       ],
       "verification": [
         {
           "kind": "scene",
           "id": "verify_base_npc_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_base_npc_story_beat"
         }
       ],
       "status": "partial"

@@ -1,3 +1,25 @@
+- 2026-11-04 · BASE-NPC / ELITE-ROSTER · 首遇收租人后回 99F，绿苔站到迎宾锚点、玩家进 4m 自动说出用户原话（两句轮播）并指向二楼档案终端，整段播完才落盘、重进不重复。判定只读 `encounter_count`（预约不算），落盘复用 `narrative_history` 的 `npc_beat:` 前缀、不新增存档字段。新增 `NpcStoryBeatService`、`verify_base_npc_story_beat` 与两张真实渲染对照。[设计与验收记录](2026-11-04_base_npc_elite_arms_taker_greeting.md)
+
+- 2026-11-04 · ELITE-ROSTER / ENEMY-AI · 收租人体型倍率由2.0调整到2.5，模型、移动圆柱和跟骨受击盒同步缩放，更新尺寸登记。[验收记录](2026-11-04_arms_taker_scale_250.md)
+
+- 2026-11-04 · UI-HUD / ELITE-ROSTER / ENEMY-AI / VFX-POOL · 档案右栏展示精英正式待机模型、状态和上次记录生命，收租人体型系数改为2.0。电弹与定身电弧可见尺寸翻倍并加青蓝局部光，同步三份分账本与内容数据库。[开发与验收](2026-11-04_elite_archive_preview.md)
+
+- 2026-11-04 · ELITE-ROSTER / ENEMY-AI · 收租人屏幕放电冷却改为 8 秒，施法水平射程为 4–12 米，闪现显形后符合条件可立即衔接放电。同步内容数据库。[验收记录](2026-11-04_arms_taker_electric_followup.md)
+
+- 2026-11-04 · ELITE-ROSTER / ENEMY-AI / VFX-POOL · 收租人新增重击、屏幕对地放电和追击失联重现。八向电弹实伤后定身1秒。更新敌人、特效账本和内容数据库。[开发与验收](2026-11-04_arms_taker_tactics.md)
+
+- 2026-11-04 · BASE-FACILITY / UI-HUD / ELITE-ROSTER / WORLD-PLAN · 99F二楼双屏电脑改为怪物档案，修正正面热区和提示，接通首次遭遇及持有资产展示。修复远征03独立精英跳过普通敌群的回归。[实测记录](2026-11-04_monster_archive_and_spawn_isolation.md)
+
+- 2026-11-04 · ELITE-ROSTER / UI-HUD / BASE-FACILITY · 收租人血条由0.23m收细为0.12m，旧快照采用当前显示规格；档案室实测发现列表绑定、已遭遇过滤、持有物品/货币展示和刷新缺口，核对现有49号设施实际为武器改造台。[审计与渲染记录](2026-11-04_arms_taker_bar_archive_audit.md)
+
+- 2026-11-04 · ELITE-ROSTER / ENEMY-AI / SAVE-PROFILE / WORLD-PLAN · 收租人初始HP×20、每次现身损失10%最大HP撤离；无限公馆同局3–5次共享生命，50%夺物或10%货币并原子存档；唯一精英独立于清房/波次/开门，脚盒小幅增大。[设计与验收记录](2026-11-04_arms_taker_roaming.md)
+
+- 2026-11-04 · ELITE-ROSTER / ENEMY-AI · 收租人接地时逐帧将最低靴底压入支撑面 1 毫米，覆盖跑步双脚离地的源姿势。移动圆柱底缘上提世界距离 1 毫米。[接地修正记录](2026-11-04_arms_taker_ground_lock.md)
+
+- 2026-11-04 · ELITE-ROSTER / ENEMY-AI · 收租人以支撑脚回摆曲线调整走跑播放速度，真实场景量测支撑脚滑动减少。[步态验收](2026-11-04_arms_taker_gait_speed.md)
+
+- 2026-11-04 · ELITE-ROSTER / ENEMY-AI / ASSET-PIPELINE · 收租人 v002 接入新版蒙皮、UV 和三张 PBR 贴图，重定向 18 段动作并校正接地。玩家子弹命中独立的 16 个骨骼盒，双脚盒底分别对齐靴底。[开发与验收记录](2026-11-04_arms_taker_v002.md)
+
 - 2026-11-04 · ELITE-ROSTER / ENEMY-AI / ASSET-PIPELINE：[收租人状态接线r2](2026-11-04_arms_taker_state_binding.md)。参照显示器Boss的行动上下文接线；消除walk/run根位移循环回跳和正面反向，动作连续采样、1.33秒一次判定、2.67秒完整收招，hit2秒、death4.6秒。802逻辑检查/590真实帧与普通怪、精英和显示器Boss回归通过；独立登记门禁与未执行项。
 
 - 2026-11-03 · WORLD-PLAN：[远征03 安全屋出生点归中与中央五件撤除](2026-11-03_expedition03_safe_room_center.md)。出生点落房心（`expedition_03` 加入 `_expedition_entry_spawn_offset` 的 ID 名单，02 及后续新关仍走「偏 4 m」默认分支）；中央五件经新能力段 `furnishing.fixed_lobby_clutter_enabled=false` 整批不摆（代码只认键、不认关卡 ID）。改前 4 条红（偏移 4.000 m、中央 5 件、流送重建复现）、改后全绿；随机撒点 713 件 / 18 间房与作者件 24 件均未误伤；`layout_id=f00_b5641fb3a7ead30d` 与 11-02 记录逐字相同 ⇒ 既有存档不失配。**同轮记下一处文档与实现的漂移：11-02 记录声称已加 `fixed_lobby_clutter_enabled` 并实测 `central_fixed_clutter: 0`，而全仓 grep 与全历史 `git log -S` 均无此键 —— 记录写了、实现没落地，故业主一直看得见那五件。**
@@ -5910,3 +5932,4 @@ WORLD-ENTRY：入口楼最后阶段展开，标记和交互同步；01成功撤�
 - [2026-11-02 远征03商人复用99F贩卖机](2026-11-02_merchant_vending_visual.md)：模型/碰撞/交互专项通过，原生画面及房内净空待验。
 
 - [2026-11-02 远征03接入显示器Boss](2026-11-02_expedition03_monitor_boss.md)：复用01三阶段、三波与递增增援；按角色定位正式撤离。专项结果见记录，整关仍partial。
+- 2026-11-04 · ELITE-ROSTER [收租人体型与夺取](2026-11-04_arms_taker_confiscation.md)。整体放大至原来的 1.6 倍。近战扣血后有 30% 概率夺取一件随身物品。

@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1434,
+ "asset_count": 1436,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -1028,7 +1028,7 @@
    "d": "scenes"
   },
   "BPK-BASE99-LOFT-COMPUTER-WORKSTATION": {
-   "v": "91511460525b341d30ccfc40b39281fb63f4817c46f2deeca7bcba3a1e4a1093",
+   "v": "f0f33d10fe4045bb61da4a53edeaf192621787443f512ad800215e0dca38cc31",
    "c": "基地资产包",
    "d": "scenes"
   },
@@ -1643,7 +1643,7 @@
    "d": "scenes"
   },
   "ENV-BASE99-ART-LAYOUT-3D": {
-   "v": "d174ed35ba529306a2f72becdd5c99b57b5a3db3d9a3a44c18510ac0798fe3b5",
+   "v": "c757c475caecc37690518eaffd0cae79ae95b7d4972429184fbe8e311d6b3653",
    "c": "场景",
    "d": "scenes"
   },
@@ -5908,7 +5908,7 @@
    "d": "ui"
   },
   "UI-SCREEN-MONSTER-ARCHIVE": {
-   "v": "5f95e89b7dfaff89c5b5344a47fa14133cc6ccb0af70500ac3ee579aec98524d",
+   "v": "70aaa197c7b61a95cc9a7b2bf6f07d877d63833ed8824560327dd4e949e68a6a",
    "c": "UI",
    "d": "ui"
   },
@@ -7123,7 +7123,7 @@
    "d": "vfx"
   },
   "CHR-PLY-BUNNY01-NPC-GREEN": {
-   "v": "6710388eca53bb2edb2fa8ea3f5b8983575d93581fb858f69369fce9d48f13d2",
+   "v": "55888720c94efce6a43b304978c02900a53ff4103a771592baf679a6a94b9d64",
    "c": "角色",
    "d": "characters"
   },
@@ -7203,35 +7203,45 @@
    "d": "audio"
   },
   "ENM-ELITE-ARMS-TAKER-3D": {
-   "v": "fb3dd67ee6791158bda96b78d301dd084122c7946e9dc1c0c1d3d9004becf62a",
+   "v": "c27e2378e01e10aea8f27ab8ebda659092b146a58683c69ea8baf3b2cac6e597",
    "c": "敌人",
    "d": "enemies"
+  },
+  "VFX-BULLET-ELECTRIC-3D": {
+   "v": "e1f1113040cb0a6f4fe0ee3cf60bbe69a717e9623693e995e7ea7f91dd33c9b7",
+   "c": "子弹特效",
+   "d": "vfx"
+  },
+  "VFX-ARMS-TAKER-FLOOR-CAST-3D": {
+   "v": "d2efca5e8a446e2f265a7ff7a27643e9afcfb0299bb0974488f1d2e9eba05cff",
+   "c": "特效",
+   "d": "vfx"
   }
  },
  "column_digests": {
-  "1": "331433eba909247dc62da926af7f3f734096f18283770ab5f65bae2358f2c00e",
-  "2": "22f2605f38ea0a10d4b328764790f158b956f2992bc21ef8a3f770e938133306",
-  "3": "ec874f2d1e65965db5bf053616c46aa8e874685e766a65f08f05067f0bacbc42",
-  "4": "82929ee2b69ce7df8f8594ebb52783489ca1686fae975195e897908d251a945d",
-  "5": "794b10ebccd33083a18dbe5def9b4ea5978cc8aa8d68a492d47f196b43514917",
-  "6": "955bc307fabd1fb815ee4bdd2b358f4cb3a1ff193c7099ff838e60d2666c9053",
-  "7": "baaf7533154b296920dc79cdc7a87bd4d092c53a46601353e9af9ef3669b5403",
-  "8": "860194ac3de1bf78b36d37962465f006c172df0119fbc99520850512c1e30d92",
-  "9": "379b5e31c4bde69d82aac851b3e8bea9598d846ffbec78f1ec7d0141015944ed",
-  "10": "fc6947a6c161217b2f298417156180288fb6cdfd46ab77d6f781e0c9269f9037",
-  "11": "2b275114b49cef290e8c385b816e293f2a5598f40d0b7c93ff029d8095029a02",
-  "12": "031d04c62e12edd0b4e2da3dd97741e66c6cce8ad77dee2d5d04941bc29ee19f",
-  "13": "74e56bea1d9f43b10aaa9e9b5289d56cc1f1ffa7d3953e57b48c1e3afd3a715e",
-  "14": "6d9d9a3130009aaffc85df4630e97c762835f9095ecb8b58ed0844b81bf141f3",
-  "15": "e6a183e4833e34c93599fd4330dbb906be5a310412396011432a49e5ddee77ba",
-  "16": "40da393e28fa251dc4ed14fdf874eae971f980e89077ac1c7fbb506b857af71a",
-  "17": "91987df1b7a01c9503e0e42bf0a0e00c24aeb026322197a07a36a27c5ee0b779",
-  "20": "8bda9a4cb20bbe21ec68c91db152afd04fb3be1261d5ab3f1775fa51dc0bb4aa",
-  "21": "ef110531f6dd21f16b15d96c8464a84d5e7eb2ff2acf3d019095d90ee16a4c98",
-  "22": "067e54b5364c852955623c3b860f01091ef68d9309e56f7756f7d06c8b585adc",
-  "23": "6861914703d187162266cac689685d10d0c83bde78be071e13d66c73241d2214",
-  "24": "a979bb27e68bf18663eeffab42ec32cc40b5f35f21c64f1f2d1df9bef275e361",
-  "25": "013fd5fa7d14e5c20754791c6c2702fa0ad96bbdcb517f56eb59484ec3292411"
+  "1": "0d747ace9e260c9af153803bc63c44ad3c3c8a43734e00ff341e3c903e756b77",
+  "2": "efc916e7072e3d77386ed62c1d269e52a7f5c65e43aa091fd521e9c58707497b",
+  "3": "cee0636ae017cb7c5be0ba883137ef47e0c791a18a456e4d71a117b27557ef66",
+  "4": "aed8650aed7f7262e6efcdbcb1fb5d7d20d856aa91a085419338b847ee495448",
+  "5": "9b94be2f9163cb5d65f1f9ed97a09316bcd255054de58446619ba91f07ae3694",
+  "6": "86c2f4401fa2fc35c830afa47b2e1b7eadcfdef4a7fbe8402d8a3d4af5a816f5",
+  "7": "17d96745618cdf8423adddcb4bca9721f46d790af249b990172ebfc822f0957f",
+  "8": "989817a756ddb6631a8b391423fef6d02a03508a3936aec2dd6c53f67ebee093",
+  "9": "e66b97cebae4ffa28ee8672a8e2be659752427e11efd9ae0dec6bc973973aaa3",
+  "10": "30c74ff56db7fcc54f76f1cdb372049665f160d00bd78f885ca8ab82bdb23f66",
+  "11": "b8b77c0882fa7a0de66dcf7f6ddccd3fb0df0d6b48326000db71e6166e956eb9",
+  "12": "f29adba05cf0f7ae2c8e5ca426323b90f0280787572bad4dc758b95e6923502b",
+  "13": "aa3997ec0267dc1dae92bedc9ea8f2463d40edf3200de6ca8eacd7b106f082dc",
+  "14": "120e00de7bf55c04771e1cbe5b9fc6f887e5c40b5bf551dc07bebcbf351dba40",
+  "15": "fe2fd464a58eb0f0ea36fef0032ac3141a04ce2238a1de16d0eed67450490136",
+  "16": "f24b050e46887fb5dc038e262b573e0dbee0fec936e140427597bd2f4e61a90e",
+  "17": "ce8287597dfc3f011cfea523ef7d22a05af070d9cf94b7b6b13b5a16efb8b902",
+  "20": "30595cbeab2a7f85139cd0ea7e2bd80319d1a27f84296b3046fcaf81a7b6213c",
+  "21": "79e148c9468eec8ec8368c558fc7d1d3a4876ddef17795309f919aa50ab32f31",
+  "22": "0de2d5ce49b1c598a94a303381c32b09dbaf191ad12b8dff313f50617f827aac",
+  "23": "418b3edc1cdff607f03c34e857c6bb184a4a37988a033068edf9e92c103f3493",
+  "24": "9bd64bb5e4011edb44305c6a6cddad6bc69b48d5e645096734814960e69f1624",
+  "25": "b6d5a62c4f030b485def96ec772893a08409175ce47d3ad6a212e532bccd39ae"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -7239,32 +7249,32 @@
   "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
   "角色中转记录": "4554d93d33461dcb875297c9145ff8d42800ad47c57d20f6ee6734bb54f9be85",
   "3D-角色": "3f2ee8eb49eab5f4986a636dce574020c47599ec49bd6e5525a914f334cb9411",
-  "敌人动画与状态": "a25e30769395fa88c37b3fcf4b0b6c3e06cefc38d9c7762b9f3ac8014bd2b9ba",
-  "3D-敌人": "48a1f61fc25cbb50d5b92213c397bdf2e76868e339e9baeac7800a5c23542905",
+  "敌人动画与状态": "90f97cdc38de06161b3d737f3289b2e199f592ec8ef8ab991e6676a501e7ebcf",
+  "3D-敌人": "3d542b37469db52159a67c3c7d24315841e412e8f50b76e5c4b963c44a2b4cd6",
   "3D-场景通用": "44022580ca4a94ca908f8986a65e3b2dffb71647247e1b91e5975918f4763461",
-  "3D-设施": "94bd1d2d97bf3f324e0ea4ad45213945bb87cb44b73accaf71b58314b3ee5a77",
+  "3D-设施": "5f1fd3edf6df3cb2942757b7ab01679f1b5153a13c0480485145b60f962c613f",
   "3D-其他": "dcfaaf667850374ed3c56a3cce0fc337734c84a50b9e8502a9170ce020e07743",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
   "3D-物品": "d75a9b57543be40f765c6125f3ca6366e5c34647c34161e5dd34451faa6c6637",
   "3D-武器": "507f387042335d14fc4782386a2c083e509e0f530ba4997293cebf0b925c19f2",
   "背包物品调用索引": "586212c8949d6e45d26a9e7f00c1e9150e7575df4606bfa545bbf86327f0162e",
-  "3D-特效": "aaa463018630c5db07d438ebc3a3b3637a8d3754ecb5df281fa4b5b550bca6f4",
+  "3D-特效": "3223aeb7bf0bc5be38ec479d2f19d72080bafcc0cab6cc2c245e4e25e6d87e96",
   "房间运行登记": "3bac27e419161a4bb5f97ca5a25131b58288dcb044f417b116789114f3b08067",
   "关卡名称对照": "1590dd70f6a2890baf8cd327daa25e97670e2baa18e04071894ff8995d1452e5"
  },
  "category_counts": {
-  "UI": 20,
+  "角色": 26,
+  "敌人": 50,
   "场景": 850,
   "场景道具": 49,
   "基地资产包": 114,
-  "子弹特效": 10,
-  "敌人": 50,
-  "武器": 36,
-  "特效": 44,
-  "角色": 26,
   "道具": 42,
-  "音乐": 9,
-  "音效": 184
+  "武器": 36,
+  "特效": 45,
+  "子弹特效": 11,
+  "UI": 20,
+  "音效": 184,
+  "音乐": 9
  },
  "targeted_updates": [
   {
