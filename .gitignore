@@ -2,6 +2,7 @@
 .godot/
 *.import
 !assets/art/enemies/normal_enemy_3d/melee_chaser/components/*.glb.import
+!assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb.import
 # Scene/facility GLB import contracts carry the shared-palette post-import hook.
 # 规则族：**每个组件库分区各一条**（<zone>/components/**/*.glb.import）。新增分区
 # （如 tower_zones/expedition）时必须同步加一条，否则该区 GLB 的 .import 会被上面的
@@ -74,6 +75,12 @@ __pycache__/
 # 快照是纯冗余（单个 ~220 KB，三个 ~660 KB）。不设规则的话，每日自动化的 `git add -A`
 # 会把它们扫进提交 —— 2026-10-29 前连续 9 天靠人工跳过，2026-10-29 补上此规则。
 assets/registry/ledger_split_baseline.json.before_*
+
+# 分域账本本体（.xlsx）的「改前快照」，由 scripts/register_*_ledger.py 里的 `_backup()` 生成
+# （命名 `ShellStorm2_<域>账本_v001.xlsx.before_<tag>`）。与上面基线的快照同性质：
+# 账本本体已入库、改前版本随时能从 git 历史取回，快照是纯冗余（单对约 570 KB）。
+# 2026-11-04 base_npc_greeting 那轮生成的一对就撞在这里。
+assets/registry/ledgers/*.before_*
 
 # 每批去版本化迁移的临时基线快照 / 中途工作副本（台账补丁前后对照等）
 _scratch/b2_baseline/

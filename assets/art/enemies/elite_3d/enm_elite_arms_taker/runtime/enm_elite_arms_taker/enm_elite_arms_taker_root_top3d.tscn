@@ -6,9 +6,9 @@
 [node name="EliteArmsTakerRoot" type="Node3D"]
 script = ExtResource("1_script")
 metadata/asset_id = "ENM-ELITE-ARMS-TAKER-3D"
-metadata/asset_version = "v001"
+metadata/asset_version = "v003"
 metadata/content_id = "elite_arms_taker"
-metadata/skeleton_id = "SKEL-ELITE-TVONE01-001"
+metadata/skeleton_id = "SKEL-ELITE-TVONE01-002"
 metadata/presentation_only = true
 metadata/collision_owner = "Enemy3D"
 metadata/godot_forward = "-Z"

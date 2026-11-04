@@ -3,12 +3,12 @@
   "schema_version": 1,
   "asset_id": "ENM-ELITE-ARMS-TAKER-3D",
   "slug": "enm_elite_arms_taker",
-  "asset_version": "v001",
-  "generated_at": "2026-11-03T18:30:00+08:00",
-  "generated_by": "elite asset formalization (rename tvone01 -> arms_taker)",
+  "asset_version": "v002",
+  "generated_at": "2026-11-04T10:40:17+08:00",
+  "generated_by": "Codex / Blender 5.2 and Godot 4.7.2",
   "self_reference_note": "本文件不登记自身哈希。",
-  "source_machine": "3号机 sc@100.117.192.4:/home/sc/动作库/04_临时/精英怪01",
-  "source_stability": "源机已不可达（Connection refused）；本地工作区为唯一副本。",
+  "source_machine": "用户提供的本地 GLB 与项目原动作母版",
+  "source_stability": "原始模型与动作供体已归入 art_source。",
   "source_hashes": [
     {
       "source_file": "idle.glb",
@@ -214,18 +214,43 @@
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb",
-      "bytes": 1230900,
-      "sha256": "074fac37e635d6d4b73c5e274b5ec61e1611a5ed07f3c38d8436d5b0abf91449"
+      "bytes": 19377992,
+      "sha256": "c7b1997928c8098911359ab3aaae551c548c3b6ff05863bcd25d096929c4e5e9"
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/enm_elite_arms_taker_root_top3d.tscn",
       "bytes": 830,
-      "sha256": "5e11849d37cb2c4d0a4abbcf5d9f2f5ee7a648be0ccd92ce0a6b6f5dbefb0710"
+      "sha256": "92dfd166f5fd36a4322dc089bebd24d13eec21108581e6a3d1dc026a392458c8"
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/elite_arms_taker_formal_visual.gd",
-      "bytes": 7711,
-      "sha256": "2ccb4b536e0977b1aa3bdc9ec2c739ef9c9168092f068f8b478497de5ea246c8"
+      "bytes": 14753,
+      "sha256": "dfc152dec99b91070d5240da7b9531c9f786a4e49f50dc4111cb6732ad7100d2"
+    },
+    {
+      "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb.import",
+      "bytes": 1295,
+      "sha256": "f708b75985ebaeaa7848b5b4a49046dae70e73e43d794aa5ce63a51da2e5a4b8"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/model/enm_elite_arms_taker_model_v002.glb",
+      "bytes": 18243320,
+      "sha256": "97d700ff8395203689a131cdf31e717443683f3c636cb0d69670b5e3bbfbe178"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animation/enm_elite_arms_taker_animation_v001.glb",
+      "bytes": 1230900,
+      "sha256": "074fac37e635d6d4b73c5e274b5ec61e1611a5ed07f3c38d8436d5b0abf91449"
+    },
+    {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animation/retarget_arms_taker_v002.py",
+      "bytes": 17186,
+      "sha256": "abbf484ce6c57f19dc84cd236f3dff8e8745f9256d7c561d832e1b1d2af3c752"
+    },
+    {
+      "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/enm_elite_arms_taker_manifest_v002.json",
+      "bytes": 21351,
+      "sha256": "e0718441552211c37dce38a2424b8887ffb20f20478e18bc48aa0dc297b813f9"
     }
   ],
   "animations": [
@@ -249,8 +274,11 @@
     "slam"
   ],
   "skeleton": {
+    "id": "SKEL-ELITE-TVONE01-002",
+    "root_bone": "Root",
     "bone_count": 41,
-    "root_bone": "Root"
+    "model_and_runtime_bind_sha256": "f7ca2872c805d773e5fb72501218665ee962db2b65c5fe4baab0f9e482275c50",
+    "animation_donor_id": "SKEL-ELITE-TVONE01-001"
   },
   "consumers": [
     "src/enemy3d/EliteContentCatalog.gd",
@@ -258,14 +286,14 @@
     "assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/elite_arms_taker_formal_visual.gd",
     "src/enemy3d/EliteArmsTakerCombat.gd"
   ],
-  "rollback": "本次为新增资产；回滚即移除本目录。3 号机源不可达，本地无第二份副本。",
+  "rollback": "v001 原组件、导入设置与包装保存在本轮工程外备份。",
   "compliance": [
     "GLB 只含表现网格与材质，无碰撞、无脚本、无灯光、无相机。",
     "正式运行路径（components/ 与 runtime/）不含版本号。",
     "源（3 号机）只读，未修改。"
   ],
   "state_binding": {
-    "revision": "r2",
+    "revision": "r5",
     "verified_on": "2026-11-04",
     "controller": "res://src/enemy3d/EliteArmsTakerCombat.gd",
     "context_schema": 1,
@@ -285,9 +313,178 @@
     },
     "verification": [
       "verify_second_elite_state_flow",
-      "verify_second_elite_state_visual"
+      "verify_second_elite_state_visual",
+      "verify_arms_taker_roaming"
     ],
-    "record": "docs/v0.1/development/2026-11-04_arms_taker_state_binding.md",
-    "controller_sha256": "45ad8931774958f837d525e82f2ce4b468053a1b85fe901187c4f3e624172efa"
+    "record": "docs/v0.1/development/2026-11-04_arms_taker_roaming.md",
+    "controller_sha256": "80d7418f4616ba7914439447564d3c2c467931414f3d4dab17c1c559cf03ad5a",
+    "grounded_contact": {
+      "foot_inset_m": 0.001,
+      "cylinder_base_raise_m": 0.001,
+      "after_pose_blend": true,
+      "floor_source": "Enemy3D floor collision",
+      "clips": "all living grounded states",
+      "record": "docs/v0.1/development/2026-11-04_arms_taker_ground_lock.md"
+    }
+  },
+  "duplicate_gate": {
+    "classification": "version_increment",
+    "passed": true,
+    "report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\sessions\\asset_guard\\ENM-ELITE-ARMS-TAKER-3D_enm_elite_arms_taker.json",
+    "same_asset_id_count": 1,
+    "identical_registered_file_count": 0
+  },
+  "v002_sources": {
+    "model": {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/model/enm_elite_arms_taker_model_v002.glb",
+      "bytes": 18243320,
+      "sha256": "97d700ff8395203689a131cdf31e717443683f3c636cb0d69670b5e3bbfbe178"
+    },
+    "animation_donor": {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animation/enm_elite_arms_taker_animation_v001.glb",
+      "bytes": 1230900,
+      "sha256": "074fac37e635d6d4b73c5e274b5ec61e1611a5ed07f3c38d8436d5b0abf91449"
+    },
+    "builder": {
+      "res_path": "res://art_source/enemies/elite_3d/enm_elite_arms_taker/source/animation/retarget_arms_taker_v002.py",
+      "bytes": 17186,
+      "sha256": "abbf484ce6c57f19dc84cd236f3dff8e8745f9256d7c561d832e1b1d2af3c752"
+    },
+    "method": "global bind-space rotational correction; preserves the new inverse binds, mesh, weights, UV and PBR",
+    "ground_contact": {
+      "planted": [
+        "idle",
+        "walk",
+        "attack_light",
+        "hit"
+      ],
+      "source_clearance": [
+        "run",
+        "death"
+      ],
+      "idle_dual_sole_contact": true
+    }
+  },
+  "runtime_clips": {
+    "attack_heavy": {
+      "duration_s": 1.1,
+      "track_count": 124,
+      "loop": false
+    },
+    "attack_jump": {
+      "duration_s": 3.7,
+      "track_count": 124,
+      "loop": false
+    },
+    "attack_light": {
+      "duration_s": 2.666667,
+      "track_count": 124,
+      "loop": false
+    },
+    "block": {
+      "duration_s": 1.333333,
+      "track_count": 124,
+      "loop": false
+    },
+    "death": {
+      "duration_s": 4.6,
+      "track_count": 124,
+      "loop": false
+    },
+    "dodge": {
+      "duration_s": 1.633333,
+      "track_count": 124,
+      "loop": false
+    },
+    "hit": {
+      "duration_s": 2.0,
+      "track_count": 124,
+      "loop": false
+    },
+    "idle": {
+      "duration_s": 5.3,
+      "track_count": 124,
+      "loop": true
+    },
+    "kneel": {
+      "duration_s": 4.266667,
+      "track_count": 124,
+      "loop": false
+    },
+    "roar": {
+      "duration_s": 5.4,
+      "track_count": 124,
+      "loop": false
+    },
+    "run": {
+      "duration_s": 0.866667,
+      "track_count": 124,
+      "loop": true
+    },
+    "slam": {
+      "duration_s": 7.566667,
+      "track_count": 123,
+      "loop": false
+    },
+    "spawn_standup": {
+      "duration_s": 3.1,
+      "track_count": 124,
+      "loop": false
+    },
+    "stagger": {
+      "duration_s": 4.933333,
+      "track_count": 124,
+      "loop": false
+    },
+    "stunned": {
+      "duration_s": 2.133333,
+      "track_count": 124,
+      "loop": false
+    },
+    "turn_left": {
+      "duration_s": 1.333333,
+      "track_count": 124,
+      "loop": false
+    },
+    "turn_right": {
+      "duration_s": 1.333333,
+      "track_count": 124,
+      "loop": false
+    },
+    "walk": {
+      "duration_s": 1.433333,
+      "track_count": 124,
+      "loop": true
+    }
+  },
+  "bullet_hit_volumes": {
+    "count": 16,
+    "owner": "Enemy3D",
+    "proxy": "EnemyHitVolume3D",
+    "moving_body": "CylinderShape3D",
+    "verification": "docs/v0.1/development/2026-11-04_arms_taker_v002.md",
+    "foot_base": "lowest weighted vertex per boot in current pose",
+    "foot_box_sizes_bone_local": {
+      "L_Foot": [
+        0.058,
+        0.142,
+        0.049
+      ],
+      "R_Foot": [
+        0.058,
+        0.143,
+        0.049
+      ]
+    },
+    "foot_fit_note": "r5: each foot slightly enlarged; dynamic lower edge still aligned to its own mesh sole"
+  },
+  "gait_timing": {
+    "method": "support-foot travel profile",
+    "clips": [
+      "walk",
+      "run"
+    ],
+    "phase_samples": 12,
+    "verification": "docs/v0.1/development/2026-11-04_arms_taker_gait_speed.md"
   }
 }

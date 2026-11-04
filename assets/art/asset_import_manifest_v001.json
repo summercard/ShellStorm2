@@ -1599,24 +1599,26 @@
         "interaction_shape": "3.18×4.82×2.39m"
       },
       {
-        "facility_id": "monster_archive",
-        "display_name": "怪物档案室",
-        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v003.tscn",
-        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_facility_top3d_v001.tscn",
-        "menu_scene": "res://scenes/MonsterArchiveMenu.tscn",
+        "facility_id": "weapon_forge",
+        "display_name": "武器改造台",
+        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/weapon_workshop_station/weapon_workshop_station_root_top3d.tscn",
+        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/weapon_workshop_station/weapon_workshop_station_facility_top3d.tscn",
+        "menu_scene": "res://scenes/WorkbenchMenu.tscn",
         "source_collection": "49_02_游戏输出_整合模型_v020",
         "source_number": "49",
         "interaction_shape": "3.523101×5.31×7.35m"
       },
       {
-        "facility_id": "fate_collection",
-        "display_name": "命运卡收藏室",
-        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_root_top3d_v002.tscn",
-        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_facility_top3d_v001.tscn",
-        "menu_scene": "res://scenes/FateCardCollectionMenu.tscn",
+        "facility_id": "monster_archive",
+        "display_name": "怪物档案",
+        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_computer_workstation/loft_computer_workstation_root_top3d.tscn",
+        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_computer_workstation/loft_computer_workstation_facility_top3d.tscn",
+        "menu_scene": "res://scenes/MonsterArchiveMenu.tscn",
         "source_collection": "42__02_游戏输出_整合模型",
         "source_number": "42",
-        "interaction_shape": "9.134999×4.64×3.005m"
+        "interaction_shape": "3.8×1.9×1.8m",
+        "interaction_center_local_m": [2.15, -0.7, 1.72],
+        "interaction_layout": "loft_front_standing_zone"
       },
       {
         "facility_id": "base_recovery",
