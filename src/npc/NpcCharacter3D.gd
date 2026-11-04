@@ -26,6 +26,10 @@ signal interaction_changed(visible: bool, text: String)
 signal configured(npc_id: String)
 ## 每推进一步对话发一次。当前无订阅者，留给剧情/任务系统接"NPC 听过什么"。
 signal npc_spoke(npc_id: String, line_index: int, text: String, finished_cycle: bool)
+## 一次性剧情节拍：第一句出口。
+signal story_beat_started(npc_id: String, beat_id: String, first_line: String)
+## 一次性剧情节拍：整段说完并已落盘。（半路被打断不会发，见 `_finish_story_beat`。）
+signal story_beat_finished(npc_id: String, beat_id: String)
 
 ## 模型来源：**玩家角色场景本身**（`scenes/Player3D.tscn`），不是硬编码的
 ## `..._v021.tscn` 版本路径。两条理由：
@@ -82,6 +86,11 @@ const DWELL_SECONDS := 1.6
 
 ## 一句台词的停留时间：够读完一句 20 字左右的中文，期间按 E 可提前推进。
 const BUBBLE_HOLD_SECONDS := 6.0
+
+## 迎宾招呼的判定半径。**比交互半径大**：节拍是"迎上来提醒你"，不该要求玩家先贴脸。
+## 4.0m ≈ 3.3 个角色身高，玩家从归航点走两步就进圈；仍小于一个房间的尺度，
+## 不会出现"刚进基地、人在对面墙角就被隔空喊话"。
+const HAIL_RADIUS := 4.0
 
 ## 气泡尺寸。`SpeechBubble3D` 默认按 48px 字 / `pixel_size 0.0055` 调，
 ## **世界字高约 0.264m、底板宽约 3.4m**。挂在一个 1.2m 高的小型角色头上会糊满半个屏幕
@@ -187,6 +196,29 @@ var _gait_phase := 0.0
 var _yaw := 0.0
 var _yaw_target := 0.0
 
+# —— 剧情节拍（一次性迎宾，见 `NpcStoryBeatService`）——
+#
+# 数据流向：`NpcCatalog`（说什么）→ `NpcStoryBeatService`（该不该说 / 说过没有）→
+# 本节点（站在哪、什么时候开口、说完回巡逻线）。本节点**不判断游戏事实、不写存档**。
+
+## 迎宾站位（世界坐标）与"面朝哪里等"。由 `TowerDescent3D` 按作者锚点传入。
+var _standby_world := Vector3.ZERO
+var _standby_look_world := Vector3.ZERO
+var _has_standby := false
+## 当前待播节拍（`get_pending_beat` 的结论，含 `beat_id`）。空 = 没有要说的。
+var _pending_beat: Dictionary = {}
+## 正在"站在边上等玩家"。
+var _story_standby := false
+## 节拍已经开始播（第一句已出口）。
+var _story_beat_delivered := false
+## 节拍台词逐句轮播：当前句与总句数。全部播完才落盘并收工。
+var _story_lines: Array[String] = []
+var _story_line_index := 0
+## 迎宾期间记住的玩家引用（由 `_resolve_hail_player()` 写入，见该函数注释）。
+var _story_player: Node3D = null
+## "装配方没给迎宾站位"的警告只打一次。
+var _standby_warned := false
+
 
 func _ready() -> void:
 	add_to_group(INTERACTION_GROUP)
@@ -201,12 +233,14 @@ func _ready() -> void:
 	_build_patrol()
 	_yaw = rotation.y
 	_yaw_target = _yaw
+	_apply_story_state()
 
 
 func configure(config: Dictionary) -> void:
 	npc_id = str(config.get("npc_id", npc_id))
 	_resolve_content()
 	configured.emit(npc_id)
+	refresh_story_state()
 
 
 # —— 内容 ——
@@ -239,6 +273,21 @@ func get_current_line() -> String:
 	if _line_index < 0:
 		return ""
 	return NpcCatalog.get_line(npc_id, _line_index)
+
+
+## 当前待播节拍（副本，含 `beat_id`）。空字典 = 没有要说的。
+## 验收与调试入口；正常播放不需要外部调用。
+func get_pending_story_beat() -> Dictionary:
+	return _pending_beat.duplicate(true)
+
+
+func get_story_beat_id() -> String:
+	return str(_pending_beat.get("beat_id", ""))
+
+
+## 是否正"站在边上等玩家"。
+func is_story_standby() -> bool:
+	return _story_standby
 
 
 # —— 构建 ——
@@ -480,8 +529,207 @@ func _adopt_patrol_points(points: Array[Vector3]) -> void:
 		_patrol_target = 1
 
 
+# —— 剧情节拍（一次性迎宾）——
+#
+# 分工见 `NpcStoryBeatService` 的文件头：内容在 `NpcCatalog`、判定与落盘在服务、
+# 这里只管"站在哪、什么时候开口、说完怎么回到巡逻线"。
+
+## 指定迎宾站位（世界坐标）与"等待时面朝哪一点"。由 `TowerDescent3D` 按作者锚点传入 ——
+## 本节点不写死坐标，美术挪锚点即换位置。
+func set_standby_world(point: Vector3, look_world: Vector3) -> void:
+	_standby_world = point
+	_standby_look_world = look_world
+	_has_standby = true
+	if is_node_ready():
+		_apply_story_state()
+
+
+## 重新求值"有没有该播的节拍"。基地房间每次被进入时由 `TowerDescent3D` 调一次：
+## 它兜住"同一份塔楼场景里出去打完再回来"的路径（那条路不会重建 NPC）。
+func refresh_story_state() -> void:
+	_apply_story_state()
+
+
+func _apply_story_state() -> void:
+	# 正在处理中的节拍不重算。
+	#
+	# 玩家走进基地会触发一次 `refresh_story_state()`，而那一刻节拍可能**刚好**已经
+	# 说出口、`get_pending_beat()` 已经返回空（因为已落盘）。若照常重算，会把
+	# `_pending_beat` 清空、`_story_standby` 关掉 —— 气泡还挂着、人却走回巡逻线了
+	# （2026-11-04 首轮验收 S06 实测就是这个现象）。
+	if not _pending_beat.is_empty() and (_story_standby or _story_beat_delivered):
+		return
+	_pending_beat = NpcStoryBeatService.get_pending_beat(npc_id)
+	if _pending_beat.is_empty():
+		_exit_story_standby()
+		return
+	_story_beat_delivered = false
+	if not _has_standby:
+		# 装配顺序问题，不是错误：`_ready()` 里求值时 `set_standby_world()` 还没被调用，
+		# 真正"锚点缺失"由 `TowerDescent3D` 自己警告。这里只在**第一帧之后**还没拿到
+		# 站位时才提醒一次（见 `_tick_story_beat`），避免每次开档都打一条假警告。
+		_story_standby = false
+		return
+	_story_standby = true
+	# 只改水平位置：y 沿用当前地面高度（本节点本来就贴地）。
+	global_position = Vector3(_standby_world.x, global_position.y, _standby_world.z)
+	_moving = false
+	_dwelling = false
+	_dwell_left = 0.0
+	var to_look := _standby_look_world - global_position
+	to_look.y = 0.0
+	if to_look.length() > 0.01:
+		_yaw_target = atan2(-to_look.x, -to_look.z)
+		_yaw = _yaw_target
+		rotation.y = _yaw
+	_refresh_prompt_visibility()
+
+
+## 站到边上等玩家：停巡、不动，玩家进 `HAIL_RADIUS` 就开口。
+##
+## ⚠️ 找玩家**不能只看 `_player`**：那个引用由 1.5m 交互热区写入，是"能不能按 E"的口径；
+## 迎宾要的是"走进 4m 就招呼"，用它会变成必须贴脸才开口。这里另取场景里的
+## `player_3d` 组成员（基地里只有一个玩家），两套半径各自独立。
+func _tick_story_beat() -> void:
+	if _pending_beat.is_empty():
+		return
+	if _story_beat_delivered:
+		# 逐句轮播：上一句气泡放完就接下一句；全部放完才收工回巡逻线。
+		if is_speaking() or _talk_engaged:
+			return
+		if _story_line_index + 1 < _story_lines.size():
+			_story_line_index += 1
+			_say_story_line(true)
+			return
+		_finish_story_beat()
+		return
+	var target := _resolve_hail_player()
+	if target == null:
+		return
+	var to_player := target.global_position - global_position
+	to_player.y = 0.0
+	if to_player.length() <= HAIL_RADIUS:
+		speak_pending_story_beat()
+
+
+## 装配方一直没给迎宾站位时提醒一次：节拍照播，只是不站定。
+## 放在这里（而不是 `_ready`）是因为 `_ready` 时 `set_standby_world()` 尚未被调用。
+func _warn_missing_standby_once() -> void:
+	if _has_standby or _standby_warned or _pending_beat.is_empty():
+		return
+	_standby_warned = true
+	push_warning("[NpcCharacter3D] 未设置迎宾站位，NPC『%s』将在巡逻线上打招呼。" % npc_id)
+
+
+## 迎宾判定用的玩家引用：优先交互热区里那个，否则按组取（进门前也要能读距离）。
+func _resolve_hail_player() -> Node3D:
+	if _player != null and is_instance_valid(_player):
+		return _player
+	var tree := get_tree()
+	if tree == null:
+		return null
+	var candidate := tree.get_first_node_in_group("player_3d") as Node3D
+	if candidate != null and is_instance_valid(candidate):
+		_story_player = candidate
+		return candidate
+	return null
+
+
+## 把待播节拍的第 0 句说出口。返回是否真的说了（没有待播 / 已经说过 ⇒ false）。
+##
+## 台词**逐句轮播**，每句一个气泡。不合并成一整段的原因见 `NpcCatalog.STORY_BEATS`
+## 的注释：40 字整句会排成 4 行、把气泡顶出画面上缘，而挂高 3.40m 是按两行定的口径。
+## 玩家不需要连按 E —— 上一句气泡自然放完后自动接下一句，全部说完才落盘收工。
+func speak_pending_story_beat() -> bool:
+	if _pending_beat.is_empty() or _story_beat_delivered:
+		return false
+	var beat_id := str(_pending_beat.get("beat_id", ""))
+	_story_lines = NpcCatalog.get_story_beat_lines(npc_id, beat_id)
+	if _story_lines.is_empty():
+		push_warning("[NpcCharacter3D] 节拍『%s』没有台词，跳过。" % beat_id)
+		_pending_beat = {}
+		_exit_story_standby()
+		return false
+	_story_beat_delivered = true
+	_story_line_index = 0
+	_moving = false
+	_dwelling = false
+	_dwell_left = 0.0
+	_say_story_line(true)
+	return true
+
+
+## 播出当前句。`announce` 只在第一句为真（`story_beat_started` 每条节拍只发一次）。
+func _say_story_line(announce: bool) -> void:
+	if _story_line_index < 0 or _story_line_index >= _story_lines.size():
+		return
+	var text := _story_lines[_story_line_index]
+	var target := _resolve_hail_player()
+	if target != null:
+		var to_player := target.global_position - global_position
+		to_player.y = 0.0
+		if to_player.length() > 0.01:
+			_yaw_target = atan2(-to_player.x, -to_player.z)
+	_dialogue_visible = true
+	if _bark != null:
+		_bark.say_text(text, BUBBLE_HOLD_SECONDS)
+	_refresh_prompt_visibility()
+	interaction_changed.emit(true, text)
+	if announce:
+		var beat_id := str(_pending_beat.get("beat_id", ""))
+		story_beat_started.emit(npc_id, beat_id, text)
+
+
+func _finish_story_beat() -> void:
+	var beat_id := str(_pending_beat.get("beat_id", ""))
+	_pending_beat = {}
+	_story_beat_delivered = false
+	_story_line_index = 0
+	_story_lines.clear()
+	# 玩家没在按 E 聊天时把气泡状态一并收掉，让黄色 `[E] 交谈` 重新可用
+	# （提醒说完了，接下来想聊就聊）。
+	if not _talk_engaged and _dialogue_visible:
+		_dialogue_visible = false
+		interaction_changed.emit(false, "")
+	_exit_story_standby()
+	if not beat_id.is_empty():
+		# 落盘放在这里而不是第一句出口时：节拍的定义是"这段话听完了"。
+		# 半路被玩家打断（走出去、按 E 聊天）不算听完 —— 下次进基地会重播一遍。
+		NpcStoryBeatService.mark_beat_played(npc_id, beat_id)
+		story_beat_finished.emit(npc_id, beat_id)
+
+
+## 结束站定并回到巡逻线。从当前位置重新选**最近**的巡逻点，不倒着走回起点。
+func _exit_story_standby() -> void:
+	if not _story_standby:
+		_story_beat_delivered = false
+		_refresh_prompt_visibility()
+		return
+	_story_standby = false
+	_story_beat_delivered = false
+	if _patrol_world.size() >= 2:
+		_patrol_target = _nearest_patrol_index()
+		_dwelling = false
+		_dwell_left = 0.0
+	_refresh_prompt_visibility()
+
+
+func _nearest_patrol_index() -> int:
+	var best := 0
+	var best_distance := INF
+	for index in _patrol_world.size():
+		var distance := _patrol_world[index].distance_to(global_position)
+		if distance < best_distance:
+			best_distance = distance
+			best = index
+	return best
+
+
 func _process(delta: float) -> void:
 	_elapsed += delta
+	if _elapsed > 0.5:
+		_warn_missing_standby_once()
+	_tick_story_beat()
 	_tick_patrol(delta)
 	_tick_pose(delta)
 
@@ -489,6 +737,10 @@ func _process(delta: float) -> void:
 func _tick_patrol(delta: float) -> void:
 	# 搭话中一律钉住：位置不动，也不消耗停留计时（谈完继续从原地走）。
 	if _talk_engaged:
+		_moving = false
+		return
+	# 迎宾站定同理：站在边上等人，不该自己走开。
+	if _story_standby:
 		_moving = false
 		return
 	if not patrol_enabled or _patrol_world.size() < 2:
@@ -517,13 +769,16 @@ func _tick_patrol(delta: float) -> void:
 ## 朝向插值 + 关节姿态。`_yaw` 独立保存，见字段注释。
 func _tick_pose(delta: float) -> void:
 	var turn_speed := TURN_SPEED
-	if face_player_when_talking and _talk_engaged and _player != null and is_instance_valid(_player):
-		# 搭话期间持续对准玩家：玩家绕着走，它也跟着转。
-		var to_player := _player.global_position - global_position
-		to_player.y = 0.0
-		if to_player.length() > 0.01:
-			_yaw_target = atan2(-to_player.x, -to_player.z)
-		turn_speed = TALK_TURN_SPEED
+	# 搭话中、以及迎宾站定时都持续对准玩家：玩家绕着走，它跟着转。
+	var facing_player := face_player_when_talking and (_talk_engaged or _story_standby)
+	if facing_player:
+		var target := _resolve_hail_player()
+		if target != null:
+			var to_player := target.global_position - global_position
+			to_player.y = 0.0
+			if to_player.length() > 0.01:
+				_yaw_target = atan2(-to_player.x, -to_player.z)
+			turn_speed = TALK_TURN_SPEED
 	_yaw = lerp_angle(_yaw, _yaw_target, clampf(turn_speed * delta, 0.0, 1.0))
 	rotation.y = _yaw
 
@@ -718,6 +973,13 @@ func get_snapshot() -> Dictionary:
 		"prompt_visible": _prompt_label != null and _prompt_label.visible,
 		"has_name_label": _find_label("NameLabel") != null,
 		"has_model": _visual_root != null,
+		# 剧情节拍（一次性迎宾）。验收靠这些键判断"站住了 / 说过了 / 恢复巡逻了"。
+		"story_beat_id": get_story_beat_id(),
+		"story_beat_pending": not _pending_beat.is_empty(),
+		"story_beat_delivered": _story_beat_delivered,
+		"story_standby": _story_standby,
+		"standby_world": _standby_world,
+		"hail_radius": HAIL_RADIUS,
 	}
 
 

@@ -181,3 +181,8 @@ metadata/bridge_id = "base_npc_patrol_start"
 [node name="99层基地NPC巡逻终点锚点" type="Marker3D" parent="玩法锚点_只移动不删除" unique_id=771204154]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 1)
 metadata/bridge_id = "base_npc_patrol_end"
+
+[node name="99层基地NPC迎宾锚点" type="Marker3D" parent="玩法锚点_只移动不删除" unique_id=771204155]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, -0.2)
+metadata/bridge_id = "base_npc_standby"
+

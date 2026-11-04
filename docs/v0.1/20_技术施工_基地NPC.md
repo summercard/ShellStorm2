@@ -1,6 +1,6 @@
 # 技术施工｜基地 NPC v0.1
 
-系统编号：横向（基地域）；功能ID：`BASE-NPC`；工程版本：`0.1.0`；设计修订：r4（2026-11-02）；
+系统编号：横向（基地域）；功能ID：`BASE-NPC`；工程版本：`0.1.0`；设计修订：r5（2026-11-04）；
 来源：<span style="color:#1565C0">**[用户设计]**</span> 2026-11-02 主人要求「在 99F 基地增加一个 NPC，先用主角的模型换上全绿色的皮肤，放在场景中，会自己移动，可以对话，按照 NPC 的系统制作」；同轮追加「绿色直接从可以更换的衣柜里去找，可以直接用的」⇒ 绿皮必须是衣柜里的一个可选项，不许另存一份色值；并指出第一版拍的是「基地与荒野」兼容场景，不是 99F 室内基地 ⇒ 装配点从 `BaseWorld3D` 移到 `TowerDescent3D.facility`。
 
 r2 同日晚些时候的观感返工（同一批口径，逐条落到本文与验收里）：
@@ -12,6 +12,10 @@ r2 同日晚些时候的观感返工（同一批口径，逐条落到本文与�
 「点击交谈后，角色要立刻停下来，面对角色」⇒ 搭话即定住并瞬时转向；
 r4（同日再一轮）「对话框会遮住整个角色，往上放一些，黑色背景半透明」⇒ 气泡中心 2.05 → **3.40**（俯角压缩，见 §5.1），底板改 **0.55 alpha 半透明黑**；
 「这个白色的交谈和白点不要了」⇒ NPC 列入控制器**圆点排除表**（根本不建节点），白色「(e) 交谈」彻底消失，只留黄色 `[E] 交谈`。
+
+r5（2026-11-04，本轮）<span style="color:#1565C0">**[用户设计]**</span> 主人要求：「我不是增加了一个收租人的精英怪吗，当我第一次遇到精英怪后，我再次回到 99F 基地，我 99F 基地的绿色 NPC，会站在边上，说：你遇到收租人啦？有没有被夺走东西呀？你可以去二楼的档案室里看看它的信息哦。需要按照正常的链路完成这个任务，并且更新设计文档和账本。」
+⇒ 本节新增**一次性剧情节拍**（§13）：条件、站位、开口时机、跨局落盘、说完回巡逻；台词由内容目录持有，实体不写台词字面量；落盘复用现有跨局剧情历史，**不新增存档字段**。
+
 状态：<span style="color:#EF6C00">**[部分完成]**</span> 逻辑链、专项验收与真实渲染对照均已通过；未做的部分是导航避障、对话分支、表情系统接入等扩展能力，见 §12。
 
 上级设计：[游戏设计文档](README.md)；相关系统：[基地设施](07_技术施工_基地设施.md)（同在 99F，但两者所有权互不覆盖）、[UI 与对话系统](18_技术施工_UI与对话系统.md)（气泡载体）、[玩家与操作](03_技术施工_玩家与操作.md)（统一交互仲裁）、[资产与内容规范](10_资产与内容规范.md)（台账）。
@@ -24,11 +28,12 @@ r4（同日再一轮）「对话框会遮住整个角色，往上放一些，黑
 
 | 包含 | 不包含 |
 |---|---|
-| NPC 内容目录（ID/名称/身份/皮肤/台词） | 任务、商店、奖励、存档字段 |
+| NPC 内容目录（ID/名称/身份/皮肤/台词） | 任务系统、任务面板、奖励发放 |
 | 复用玩家 bunny01 几何 + 运行时全绿材质 | 新增美术母版、新增 GLB、改源模型 |
 | 巡逻（多点往返 + 到点停留）、朝向、待机/步行动画 | 导航网格 A*、避障、寻路失败重试 |
 | 统一交互协议（`PlayerInteractionController3D` provider） | 新开一套输入或按键 |
 | 头顶气泡逐句对话、环回、离场收起 | 分支对话树、选项、立绘、语音 |
+| **一次性剧情节拍**：按游戏事实成立 → 站到边上 → 走近自动开口 → 落盘一次（§13） | **新增存档字段**（复用 `narrative_history`，见 §13.5） |
 | 基地侧只读投影 `get_npc_count() / get_npc_snapshots() / find_npc()` | 第二个状态所有者；基地不持有 NPC 巡逻状态 |
 
 ## 2. 与既有 NPC / 对话系统的分工
@@ -83,15 +88,21 @@ r4（同日再一轮）「对话框会遮住整个角色，往上放一些，黑
 
 | 类型 | 名称 | 说明 |
 |---|---|---|
-| 命令 | `configure(Dictionary)` | 运行期换内容；不改模型与皮肤 |
-| 命令 | `advance_dialogue() -> Dictionary` | 推进一句；返回 `spoken/line_index/text/finished_cycle` |
+| 命令 | `configure(Dictionary)` | 运行期换内容；不改模型与皮肤；会重新求值节拍 |
+| 命令 | `advance_dialogue() -> Dictionary` | 推进一句；返回 `spoken/line_index/text/finished_cycle`（循环台词，不含节拍） |
 | 命令 | `hide_dialogue()` | 收起气泡并清进度 |
+| 命令 | `set_standby_world(point, look_world)` | 迎宾站位（世界坐标）+ 等待时朝向的参考点；由 `TowerDescent3D` 按锚点调用（§13.3） |
+| 命令 | `refresh_story_state() -> void` | 重新求值"有没有该播的节拍"；回基地时调一次（§13.4） |
+| 命令 | `speak_pending_story_beat() -> bool` | 把第 0 句说出口；正常流程由 `HAIL_RADIUS` 自动触发，此入口供剧情/验收 |
 | 查询 | `get_snapshot() -> Dictionary` | 见 4.3 |
+| 查询 | `get_pending_story_beat() / get_story_beat_id() / is_story_standby()` | 节拍只读（§13） |
 | 查询 | `get_interaction_candidate / get_interaction_dot_anchor / is_interaction_dot_visible` | 统一 provider 协议；`is_interaction_dot_visible()` **恒 false**（白点退役） |
 | 查询 | `get_display_name / get_role / get_current_line / get_line_count / is_dialogue_visible / is_speaking` | 只读 |
-| 事件 | `interaction_changed(visible, text)` | 气泡开合 |
+| 事件 | `interaction_changed(visible, text)` | 气泡开合（节拍台词也走这条，每句一次） |
 | 事件 | `configured(npc_id)` | 内容变更 |
-| 事件 | `npc_spoke(npc_id, line_index, text, finished_cycle)` | 每推进一句一次；当前无订阅者，留给任务/剧情系统 |
+| 事件 | `npc_spoke(npc_id, line_index, text, finished_cycle)` | 每推进一句**循环台词**一次；当前无订阅者，留给任务/剧情系统 |
+| 事件 | `story_beat_started(npc_id, beat_id, first_line)` | 一次性节拍第一句出口；当前无订阅者 |
+| 事件 | `story_beat_finished(npc_id, beat_id)` | 一次性节拍整段说完并已落盘；半路被打断不发 |
 
 ### 4.3 快照 schema
 
@@ -99,9 +110,12 @@ r4（同日再一轮）「对话框会遮住整个角色，往上放一些，黑
 `dialogue_visible` / `speaking` / `moving` / `talk_engaged` / `patrol_enabled` / `patrol_target` /
 `patrol_point_count` / `dwelling` / `position` / `yaw` / `painted_mesh_count` / `visual_scale` /
 `prompt_visible` / `has_name_label` / `has_face_mask` /
-`skin_variant` / `skin_albedo` / `skin_emission` / `skin_material_name` / `has_model`。
+`skin_variant` / `skin_albedo` / `skin_emission` / `skin_material_name` / `has_model` /
+`story_beat_id` / `story_beat_pending` / `story_beat_delivered` / `story_standby` /
+`standby_world` / `hail_radius`。
 
 `line_index = -1` 表示「没在对话中」，不是「第 0 句还没说」以外的第三种状态。
+`story_beat_id` 为空字符串表示"当前没有待播节拍"，与 `line_index = -1` 同一种"没有"的写法。
 
 ## 5. 模型与全绿皮肤
 
@@ -221,6 +235,7 @@ r4（同日再一轮）「对话框会遮住整个角色，往上放一些，黑
 | 父级 | `_facility_art_layout`（即 `Art` 布置层），与 8 个设施同一个父级 ⇒ 房间流送/隐藏时一起走 |
 | 位置 | 读布置层锚点 `玩法锚点_只移动不删除/99层基地NPC起点锚点`（局部 `(-10, 0, -2)` ⇒ 世界 `(-10, -12, 3)`）与 `…巡逻终点锚点`（局部 `(-10, 0, 1)` ⇒ 世界 `(-10, -12, 6)`）；**代码不写死坐标**，挪锚点即换位。`Art` 布置层的世界原点在 `(0, -12, 5)`，所以局部 z 与世界 z 差 5m —— 改锚点时按局部值改。 |
 | 净空依据 | 起点离最近设施（SUPPLY24H 自动补给机）**6.55m**、终点离最近设施（武器工作台）**5.98m**，均远大于交互半径 1.5m 与 A19 的 2.4m 门槛；两个锚点横向相距 **3.0m**，配 `WALK_SPEED 1.05` 单程约 2.9s + 到点停留 1.6s。 |
+| 迎宾锚点（r5） | `玩法锚点_只移动不删除/99层基地NPC迎宾锚点`，局部 `(-3.2, 0, -0.2)` ⇒ 世界 `(-3.2, -12, 4.8)`。选点依据：离归航点 `FACILITY_LOGOUT_SPAWN (0, -11.95, 5)` **3.2m**（落在 `HAIL_RADIUS 4.0` 内 ⇒ 玩家一落回基地就会被招呼），离西侧 MEDICAL/TOOLS 设备墙约 1m 的原空走道上、不挡中央主通道；0.45m 球体物理查询实测重叠 0 件。锚点缺失时装配器 `push_warning` 并退回巡逻起点，**节拍照样会播**（不站定而已）。 |
 | 查询 | `TowerDescent3D.get_npc_count()` / `get_npc_snapshots()` / `find_npc(npc_id)` |
 
 ⚠️ **不要装到 `scenes/BaseWorld3D.tscn`**。那是「基地与荒野」旧兼容场景（破败公路广场 + 四个路边副本入口），不是 99F 室内基地。
@@ -234,15 +249,121 @@ r4（同日再一轮）「对话框会遮住整个角色，往上放一些，黑
 | 断言组 | A01–A05 真实 99F 基地接入与内容（A02 含「旧 `BaseWorld3D` 不得带 NPC」反向断言）；A06–A14b 模型/衣柜绿/面饰/落地/**体型与玩家同口径**/头顶只剩提示与气泡/无自发光；A15–A18 巡逻与朝向；A19 设施净空；A20–A25b 交互半径与提示时机/白点退役/搭话定住与转向/对话环回与收起/恢复巡逻；A26 塔楼只读投影 |
 | 场景口径 | 加载 `scenes/TowerDescent3D.tscn`（正式 99F）。**不是** `BaseWorld3D.tscn` |
 | 渲染对照 | `docs/v0.1/audits/evidence/2026-11-02_base99_npc/`：`base99_npc_noon.png`（12:00）、`base99_npc_night.png`（22:00）、`base99_npc_closeup.png`（正面近景，看面饰与哑光绿）、`base99_npc_prompt.png`（站进 1.5m 内的黄色 `[E] 交谈`，确认无白点、无名字牌）、`base99_npc_talk.png`（**说话帧**：气泡抬高后的实际间隙 + 半透明底板 + 无白色「(e) 交谈」）。都是真实渲染器拍的，不是无头。三个脚本：`capture_base99_npc.gd`（正午/夜间/近景）、`capture_base99_npc_prompt.gd`（提示）、`capture_base99_npc_talk.gd`（说话帧 + 打印圆点快照是否为空）。⚠️ 三个脚本都**不要**套 `timeout` —— 本机 Git Bash 的 `timeout` 会吞掉 `NPC_SHOT_*` 环境变量，脚本会退回默认路径/时间。⚠️ 并且要用 `APPDATA=<临时目录>` 隔离用户数据目录：正式存档里另一个进程正在写 `BaseManager` revision，抢写会 `Refusing stale save` 并把截图进程卡住。 |
-| 已知未覆盖 | NPC 与玩家/NPC 之间的避让；多 NPC 并发；存档（本系统无存档面）；面饰表情不进表情系统（固定 `mask_idle`） |
+| 已知未覆盖 | NPC 与玩家/NPC 之间的避让；多 NPC 并发；面饰表情不进表情系统（固定 `mask_idle`） |
+
+### 11.1 一次性剧情节拍（r5）
+
+| 项 | 内容 |
+|---|---|
+| 验收入口 | `tests/verification/verify_base_npc_story_beat.gd` / `.tscn`，注册在 `scripts/run_verification_suite.sh` 的 `core_scenes`（紧随 `verify_base_npc_flow`） |
+| 断言组 | S01 内容契约（全文逐字 == 用户口径、首句、单句 ≤ 24 字以免排到三行）；S02 台词里指路的设施 ID 已登记；S03 未遭遇时**没有**待播节拍、NPC 不站定；S04 **预约不算遇到**、首次生成确认后才成立；S05 回 99F 后站在迎宾锚点上、`moving=false`、待播 ID 正确、1s 内不漂移；S06 玩家走进 4m 自动开口、第一句逐字一致、面向玩家（yaw 误差 < 0.20rad）；S07 第一句放完**自动**接第二句（不要玩家按 E）；S08 整段说完才落盘（`npc_beat:` 命名空间、`has_narrative_completed` 为真）；S09 播完恢复巡逻、不再挂待播；S10 重进基地**不再重复**；S12 台词指向的二楼档案终端真实存在（离地 ≥ 3m，即真在二楼）且档案里能查到收租人 |
+| 渲染对照 | `docs/v0.1/audits/evidence/2026-11-04_base_npc_greeting/`：`base99_npc_greeting_standby.png`（合成机位：NPC 站在归航点**边上**、还没开口）、`base99_npc_greeting_talk.png`（玩家自带相机：站在归航点被迎面提醒的那一帧，看气泡是否被画面上缘裁切）。脚本 `capture_base99_npc_greeting.gd`，`NPC_SHOT_GAME=1` 切玩家相机，其余同 §11 的三条注意事项（不要套 `timeout`、要隔离 `APPDATA`、必须真渲染器） |
+| 已知未覆盖 | 中途玩家走出去打断 → 下次重播（设计如此，未单独断言）；多节拍排队；真实存档跨进程读档（验收用内存态与一次落盘断言代替） |
 
 ## 12. 当前实现事实与未完成项
 
 - 已实装：内容目录、实体、体型与玩家同口径、衣柜绿皮肤（**无自发光**）、巡逻、搭话定住并转向、步态/待机、统一交互、黄色 `[E] 交谈` 提示（白点退役、名字牌撤除）、气泡对话环回、塔楼只读投影、独立验收入口、面饰补挂、真实渲染四张对照图。
-- 未实现（明确保留）：导航寻路与避障、对话选项/分支、任务与商店挂钩、多 NPC 管理、贴地采样、面饰表情接入表情系统。
+- **r5 已实装**：一次性剧情节拍（§13）—— 首遇收租人后回 99F，绿苔站到迎宾锚点、玩家进 4m 自动逐句说明、说完回巡逻、跨局只播一次；台词与"指哪个终端"都在内容目录，落盘复用 `narrative_history`。
+- 未实现（明确保留）：导航寻路与避障、对话选项/分支、任务与商店挂钩、多 NPC 管理、贴地采样、面饰表情接入表情系统、**节拍专用的任务面板/日志**（当前只是一句话提醒，不是任务系统）。
 - 与 `ThemedNPC3D` 的关系：**并存**，不互相替代。正式基地只用 `NpcCharacter3D`。
 - 资产账本：**没有新增美术源文件**（复用玩家 bunny01 几何 + 运行时材质覆盖），但登记了一行可独立加载的 PackedScene：
   `CHR-PLY-BUNNY01-NPC-GREEN`（子类 `player_variant`，制作状态「原型已接入」，路径 `scenes/BaseNpc3D.tscn`，SHA 取该场景）。
   理由：它能在账本里被查到、被追责；不登记的话下次有人改 NPC 外观时账本里没有任何一行告诉他这东西存在。
   变更日志 `v0.1.27`，基线已补录（`scripts/register_base_npc_ledger.py`）。
   同批给角色账本 `CHR-PLY-CAPSULE01-3D-BUNNY01` 行的「状态/动画」与备注补了 `suit_green` 记号，日志 `v0.1.28`。
+
+## 13. 一次性剧情节拍（r5）
+
+### 13.1 目标
+
+<span style="color:#1565C0">**[用户设计 2026-11-04]**</span> 「当我第一次遇到精英怪后，我再次回到 99F 基地，我 99F 基地的绿色 NPC，**会站在边上**，说：『你遇到收租人啦？有没有被夺走东西呀？你可以去二楼的档案室里看看它的信息哦。』」
+
+拆成四条可验收的规则：
+
+| # | 规则 |
+|---|---|
+| R1 | **条件**：玩家**真正遇见过**收租人（首次生成且确认遭遇），不是"这局抽到了" |
+| R2 | **站位**：回到 99F 时 NPC 站在**归航点边上**等，不在巡逻线上自己走 |
+| R3 | **开口**：玩家走近就**自动**说，不需要按 E；说完两句（用户原话是一整句，拆成两个气泡，见 13.6）后回巡逻线 |
+| R4 | **一次性**：跨存档只播一次；重进基地、重开游戏都不重复 |
+
+这是"提醒"，不是"任务"：没有接取、没有奖励、没有任务面板（明确不做的部分见 §12）。
+
+### 13.2 所有权与分工
+
+| 项 | 所有者 | 说明 |
+|---|---|---|
+| 说什么 / 靠什么事实成立 / 指哪个终端 | `NpcCatalog.STORY_BEATS`（内容） | 台词、`requires_elite_encountered`、`archive_facility_id` 全在这里；代码里**没有**台词字面量 |
+| 该不该说 / 说过没有 | `NpcStoryBeatService`（判定+落盘） | 只读别人的事实（`EliteRosterService` 的遭遇计数、`BaseManager` 的跨局历史），自己不留第二份状态 |
+| 站在哪 / 何时开口 / 说完怎么回巡逻 | `NpcCharacter3D`（表现） | 只消费服务的结论；不判断游戏事实、不写存档 |
+| 迎宾锚点（世界坐标） | `zone_base.tscn` 的作者锚点 → `TowerDescent3D` 传给 NPC | 代码不写死坐标 |
+| 回基地时重新求值 | `TowerDescent3D._on_room_entered()` 的 `facility` 分支 | 同一次塔楼运行里"出去打完再回来"不会重建 NPC，只在 `_ready` 判一次会漏 |
+
+**为什么判定要单独成服务**：`NpcCharacter3D` 是场景节点，把"读精英档案 + 读跨局历史 + 决定说不说"塞进去，等于在表现层里长出一份玩法判定，验收时无法单独跑，也没法给第二个 NPC 复用。与 `EliteRosterService` 同规格：内容在目录、事实在服务、实体只消费。
+
+### 13.3 内容契约（`NpcCatalog.STORY_BEATS`）
+
+`npc_id → beat_id → 节拍定义`。当前只有一条：
+
+| 字段 | 值 |
+|---|---|
+| npc_id | `npc_base99_green` |
+| beat_id | `elite_arms_taker_first_seen` |
+| `requires_elite_encountered` | `elite_arms_taker`（夺械者"收租人"） |
+| `archive_facility_id` | `monster_archive`（99F 二楼 42 号双屏电脑终端） |
+| `lines` | ① `你遇到收租人啦？有没有被夺走东西呀？` ② `你可以去二楼的档案室里看看它的信息哦。` |
+
+- `archive_facility_id` 不是装饰字段：验收 S12 用它去基地里找那个设施，断言"**NPC 让你去看的那个终端真的存在、真的在二楼**"。不登记它，这句话就是一句无法核对的空话。
+- `lines` 每句上限按 24 字管（S01 断言）。理由见 13.6。
+- 加新节拍 = 在 `STORY_BEATS` 里加一条 + 在 `NpcStoryBeatService._requirements_met()` 里加对应事实分支 + 补验收。不需要动实体。
+
+### 13.4 判定
+
+- **"遇到"的口径**：`EliteRosterService.get_record(elite_id).encounter_count > 0`。
+  - 不是 `reserved_encounter_id` 非空 —— 预约发生在**这局抽到它**的时候，人还没见到；拿它判会让刚出发的玩家就收到"你遇到收租人啦"。
+  - 不是 `last_encounter_at_unix > 0` —— 残留旧记录可能只剩时间戳。
+  - 兜底：老档只有 `escape_count`/`death_count` 而没有 `encounter_count` 时也算遇到过（历史数据不完整，但不该让这句话永远不出现）。
+- **求值顺序**：多条节拍按目录书写顺序，先满足条件的先播；一条播完后下次上线才轮到下一条，**不连播**（玩家站在基地里被连续说三段很怪）。
+- **重新求值**：`_ready()` 一次、`TowerDescent3D` 每次进入 `facility` 房间一次、`configure()` 一次。
+
+### 13.5 落盘（复用 `narrative_history`，不新增存档字段）
+
+- 键：`npc_beat:<npc_id>:<beat_id>`，写在 `BaseData.narrative_history` 里，走 `BaseManager.commit_narrative_completion(key, "duration")`。
+- **为什么不新开字段**：新增 `BaseData` 字段就是存档 schema 变更，收益只是一句迎宾提醒；`narrative_history` 本来就是"跨局剧情事实"的唯一容器（09 号存档文档登记、`once = "run"` 剧本在用）。代价是这张表里会混进非剧本键，因此**键前缀是硬约定**（`NpcStoryBeatService.HISTORY_KEY_PREFIX`），验收 S08 专门断言前缀，文档也在 09 号页登记了这个命名空间。
+- **什么时候算"说过"**：整段**播完**（第二句气泡放完）才落盘。半路被玩家走出去或按 E 聊天打断，不算说完 —— 下次进基地会重播一遍。理由：用户要的是"被提醒到"，不是"播放器执行过"。
+- **写盘失败**：`mark_beat_played()` 返回 false 并 `push_warning`，但进程内的 `_session_played` 内存表**仍然压住本局重播**；下次启动可能再提醒一次。与 08 号文档对 `once` 剧本的处置同一量级，不静默吞失败。
+
+### 13.6 站位、开口与气泡
+
+| 项 | 值 | 依据 |
+|---|---|---|
+| 迎宾锚点 | 局部 `(-3.2, 0, -0.2)` ⇒ 世界 `(-3.2, -12, 4.8)` | 离归航点 3.2m、在走道一侧、不挡主通道；0.45m 球体物理查询重叠 0 |
+| 停巡 | `_story_standby` 为真时 `_tick_patrol` 直接 return | 站在边上等人，不该自己走开 |
+| 朝向 | 持续对准玩家（与搭话同一套 `TALK_TURN_SPEED`） | 玩家绕着走它跟着转 |
+| 招呼半径 | `HAIL_RADIUS = 4.0m` | **必须大于交互半径 1.5m**：迎宾是"迎上来"，不该要求贴脸。4m ≈ 3.3 个角色身高，玩家从归航点走两步就进圈，也不会隔空喊话 |
+| 找玩家的口径 | 优先交互热区里的 `_player`，否则按 `player_3d` 组取 | `_player` 由 1.5m 热区写入，只在里面才非空 —— 只看它就会退化成"必须贴脸" |
+| 气泡 | 复用 `CharacterBark3D` + `SpeechBubble3D`，挂高 **3.40m**、`pixel_size 0.0084`、`wrap_width_px 560` | 与循环台词同一套观感，不另开一套 UI |
+| 逐句轮播 | 每句一个气泡，上一句自然放完（6s）自动接下一句 | 见下 |
+
+**为什么不把用户那句话当成一个气泡一次说完**：整句 40 字在 `wrap_width_px 560`（≈11 汉字/行）下排 **4 行**，气泡世界高 1.81m，挂高 3.40m 时顶边顶到画面上缘被裁掉（2026-11-04 真实渲染实测，`base99_npc_greeting_talk.png` 第一版就是那样）。挂高 3.40m 是业主三轮调出来的"两行口径"（§5.1），**不该为了一句台词再抬一次**（再抬就会离开视线中心）。所以内容按两句存、每句两行、连续播放；台词文本与用户原话逐字一致（S01 比对拼接全文）。
+
+**为什么不让玩家连按 E**：连按会把"提醒"变成"手续"。轮播是自动的，玩家站着就能读完两句。
+
+### 13.7 失败收口
+
+| 情形 | 行为 |
+|---|---|
+| `NpcStoryBeatService` 找不到 `EliteRosterService` / `BaseManager` | 视为"没遇到过 / 没播过"，不崩；`mark_beat_played` 返回 false 并警告 |
+| 迎宾锚点缺失 | `TowerDescent3D` `push_warning`，退回巡逻起点；节拍照播（不站定） |
+| 节拍 `lines` 为空 | `push_warning`，跳过该节拍并退出站定，不阻塞巡逻 |
+| 写盘失败 | 本局内存表压住重播；下次启动可能重复一次，留 warning |
+| 玩家走出 4m 前就离开基地 | 没有开口 ⇒ 没有落盘 ⇒ 下次回来还说 |
+| 玩家在半路按 E 聊天 | 节拍暂停在站定状态；聊完气泡放完继续；整段结束才落盘 |
+| 同一次运行内再次进入 facility | `refresh_story_state()` **不会**清掉进行中的节拍（`_pending_beat` 非空且站定/已开口时直接 return）—— 否则气泡还挂着、人却走回巡逻线 |
+
+### 13.8 新增一条节拍要做什么
+
+1. `NpcCatalog.STORY_BEATS` 加条目（台词、`requires_*`、`archive_facility_id`）。
+2. `NpcStoryBeatService._requirements_met()` 加对应事实分支（新增 `requires_*` 字段）。
+3. 若需要专属站位，加一个作者锚点并让 `TowerDescent3D` 传入（多条节拍共用同一个迎宾锚点时不用改）。
+4. 验收里加断言：内容逐字、条件成立/不成立两侧、站定、开口、落盘、一次性、设施指向。
