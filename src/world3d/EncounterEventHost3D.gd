@@ -90,7 +90,7 @@ func encounter_event_live_count(instance_id: String) -> int:
 		var room_count := 0
 		for node in dungeon._enemy_nodes_by_room[room_id] as Array:
 			var enemy := node as Enemy3D
-			if enemy != null and is_instance_valid(enemy) and _encounter_owner_id(enemy.get_enemy_data()) == instance_id:
+			if enemy != null and is_instance_valid(enemy) and dungeon._counts_for_room_clear(enemy.enemy_data) and _encounter_owner_id(enemy.get_enemy_data()) == instance_id:
 				room_count += 1
 		if room_count > 0:
 			instantiated_rooms[room_id] = true
@@ -102,17 +102,17 @@ func encounter_event_live_count(instance_id: String) -> int:
 			for enemy_state_value in runtime_state.get("enemies", []) as Array:
 				var enemy_state := enemy_state_value as Dictionary
 				var enemy_data := enemy_state.get("enemy_data", {}) as Dictionary
-				if _encounter_owner_id(enemy_data) == instance_id:
+				if dungeon._counts_for_room_clear(enemy_data) and _encounter_owner_id(enemy_data) == instance_id:
 					count += 1
 	for request_value in dungeon._reserved_room_spawns.values():
 			for request in request_value as Array:
 				for config in (request as Dictionary).get("configs", []) as Array:
-					if _encounter_owner_id(config as Dictionary) == instance_id:
+					if dungeon._counts_for_room_clear(config as Dictionary) and _encounter_owner_id(config as Dictionary) == instance_id:
 						count += 1
 	for entry_value in dungeon._pending_delayed_spawns.values():
 			for entry in entry_value as Array:
 				var payload := (entry as Dictionary).get("config", {}) as Dictionary
-				if _encounter_owner_id(payload) == instance_id:
+				if dungeon._counts_for_room_clear(payload) and _encounter_owner_id(payload) == instance_id:
 					count += 1
 	return count
 

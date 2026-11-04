@@ -339,7 +339,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2477775, 0)
 shape = SubResource("BoxShape3D_bf4ky")
 
 [node name="VelvetSalon_FloralCentre" parent="ArtComponents/AuthoredSalon" unique_id=2125329931 instance=ExtResource("8_bisfe")]
-transform = Transform3D(0.5,0,0,0,0.5,0,0,0,0.5,-5.5,0.5,0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -5.5, 0.5, 0)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="VelvetSalon_ArmchairNorth" parent="ArtComponents/AuthoredSalon" unique_id=1817027779 instance=ExtResource("9_760qt")]
@@ -603,7 +603,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.804925, 0)
 shape = SubResource("BoxShape3D_ghdl6")
 
 [node name="GalleryBench" parent="ArtComponents/AuthoredSalon" unique_id=1011747658 instance=ExtResource("20_qiq20")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.6, 0, 0)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.163083, 0, 0)
 metadata/layout_design = "manor_reference_three_rooms"
 
 [node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/AuthoredSalon/GalleryBench" unique_id=530900592]
@@ -887,7 +887,7 @@ metadata/facility_arrangement = "wall_corner_08"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_019_breakable_chair" parent="ArtComponents/AuthoredDestructibles" unique_id=581236843 instance=ExtResource("24_wfs5y")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, 0.1, -11.099999)
+transform = Transform3D(0.99825704, 0, 0.059016008, 0, 1, 0, -0.059016008, 0, 0.99825704, -2.5, 0.1, -11.099999)
 metadata/facility_arrangement = "wall_corner_03"
 metadata/layout_design = "authored_destructible_facilities"
 
@@ -1017,21 +1017,21 @@ metadata/facility_arrangement = "wall_corner_05"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_045_breakable_crate" parent="ArtComponents/AuthoredDestructibles" unique_id=1884408978 instance=ExtResource("25_qiq20")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0.1, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3759835, 0.1, -0.5615051)
 metadata/facility_arrangement = "interior_01"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_046_breakable_jar" parent="ArtComponents/AuthoredDestructibles" unique_id=1459620835 instance=ExtResource("20_ihdk2")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.8, 0.1, 4)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.4373782, 0.1, 8.121136)
 metadata/facility_arrangement = "interior_02"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_047_breakable_book_stack" parent="ArtComponents/AuthoredDestructibles" unique_id=307900539 instance=ExtResource("22_f443s")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.8, 0.1, -2.8)
+transform = Transform3D(0.5911902, 0, -0.80653214, 0, 1, 0, 0.80653214, 0, 0.5911902, -0.6602626, 0.1, -1.158451)
 metadata/facility_arrangement = "interior_01"
 metadata/layout_design = "authored_destructible_facilities"
 
 [node name="Facility_048_breakable_vase" parent="ArtComponents/AuthoredDestructibles" unique_id=149940229 instance=ExtResource("23_wqfqi")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.8, 0.1, 5.2)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -0.6329701, 0.1, 8.493168)
 metadata/facility_arrangement = "interior_02"
 metadata/layout_design = "authored_destructible_facilities"

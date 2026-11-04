@@ -157,6 +157,11 @@
       "sha256": "eef1f6b5eeb97e3545aa18c8c744af24d4b7d68932766b003e54c9cddb2c98c0"
     },
     {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/level_plan.json",
+      "runtime": "data/level_plans/expedition_03/level_plan.json",
+      "sha256": "c062f86e49da1598f5eb317572be68b6279829d2e1bc83421054eb8b701ccec1"
+    },
+    {
       "source": "art_source/design/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json",
       "runtime": "data/layouts/block_00_master_office_layout.json",
       "sha256": "48277c4872793f40b6483b4c43690c79b0e644cda5dea9a579dafadc19a2df8f"

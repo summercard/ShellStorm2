@@ -20,6 +20,9 @@ const BASE_NPC_ID := "npc_base99_green"
 ## 布置层里的两个巡逻锚点。**代码不写死坐标** —— 美术挪锚点即换位置。
 const BASE_NPC_ANCHOR_START := "99层基地NPC起点锚点"
 const BASE_NPC_ANCHOR_END := "99层基地NPC巡逻终点锚点"
+## 迎宾站位锚点：只有存在"该播的一次性节拍"时才会被使用（见 20 号文档 §13）。
+## 位点取在归航点侧边 —— 玩家一落进基地就在视野里，又不挡主通道。
+const BASE_NPC_ANCHOR_STANDBY := "99层基地NPC迎宾锚点"
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d.tscn"
 )
@@ -5684,24 +5687,15 @@ func _stage_flow_room_entry(room: DungeonRoom3D) -> void:
 		pause += get_process_delta_time()
 	if not is_instance_valid(room) or room.cleared:
 		return
-	if _spawned_room_alive(room_id):
+	# A returning player can enter during a regular wave intermission.
+	# Only the room's own combat progress can suppress its initial spawn.
+	if _room_has_pending_combat(room) or _has_room_clear_actor(room_id):
 		return
 	_flow_spawn_passthrough[room_id] = true
 	_spawn_room_enemies(room)
 	_flow_spawn_passthrough.erase(room_id)
 	if sealed_now:
 		_update_wave_hud(room_id)
-
-
-## 本房是否已经有敌人（存活账或已生成的节点）。避免重进房间时二次刷怪。
-func _spawned_room_alive(room_id: String) -> bool:
-	if int(_alive_by_room.get(room_id, 0)) > 0:
-		return true
-	var nodes: Array = _enemy_nodes_by_room.get(room_id, []) as Array
-	for value in nodes:
-		if is_instance_valid(value as Node):
-			return true
-	return false
 
 
 ## flow 关卡把刷怪推迟到落门之后（见 `_stage_flow_room_entry`）。
@@ -5815,6 +5809,10 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		room_label.text = "99F · 归航基地 · 安全区"
 		if not test_mode and BaseManager != null:
 			BaseManager.mark_tutorial_completed()
+		# 回到基地时重新求值 NPC 的一次性迎宾节拍：同一次塔楼运行里"出去打完再回来"
+		# 不会重建 NPC，只在 `_ready` 判一次就会漏掉这条提醒。
+		if _base_npc != null and is_instance_valid(_base_npc):
+			_base_npc.refresh_story_state()
 	else:
 		var role := str(_find_record(room.room_id).get("tower_role", "room"))
 		var floor_number := 100 - depth
@@ -7450,6 +7448,16 @@ func _install_base_npc() -> void:
 	# 世界坐标交给 NPC 自己缓存：房间本身有位置/旋转，这里把锚点的世界点直接给它，
 	# 避免"房间旋转算两遍"。
 	npc.set_patrol_world([start_anchor.global_position, end_anchor.global_position])
+	# 迎宾站位：锚点缺失时退回巡逻起点（NPC 仍会站定并招呼，只是位置不在归航点旁）。
+	var standby_anchor := anchor_root.get_node_or_null(BASE_NPC_ANCHOR_STANDBY) as Node3D
+	if standby_anchor == null:
+		push_warning(
+			"[TowerDescent3D] 布置层缺少迎宾锚点『%s』，NPC 将退到巡逻起点站定。"
+				% BASE_NPC_ANCHOR_STANDBY
+		)
+		npc.set_standby_world(start_anchor.global_position, FACILITY_LOGOUT_SPAWN)
+	else:
+		npc.set_standby_world(standby_anchor.global_position, FACILITY_LOGOUT_SPAWN)
 	_base_npc = npc
 
 
@@ -8547,6 +8555,7 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 		world_state["expedition_global_rotation_deg"] = int(
 			(_floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary).get("expedition_global_rotation_deg", 0)
 		)
+	world_state["roaming_elite"] = _roaming_elite.export_snapshot()
 	return world_state
 
 
@@ -8619,6 +8628,8 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 	_initial_loop_gate_armed = bool(world_state.get("initial_loop_gate_armed", false))
 	_initial_loop_gate_sealed = bool(world_state.get("initial_loop_gate_sealed", false))
 	_segment_runtime_state = RUN_PERSISTENCE_SERVICE.read_segment_runtime_state(snapshot)
+	_ensure_roaming_elite()
+	_roaming_elite.import_snapshot(world_state.get("roaming_elite", {}) as Dictionary)
 	if _encounter_event_director != null:
 		# 显式标 Variant：`Dictionary.get()` 返回 Variant，用 `:=` 推断会被
 		# 「警告即错误」拦下，整份脚本编译失败（连带塔楼/远征回归全红）。

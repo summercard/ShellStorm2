@@ -401,6 +401,18 @@
           "per_floor": 0
         }
       }
+    },
+    "roaming_elite": {
+      "enabled": true,
+      "elite_id": "elite_arms_taker",
+      "room_types": [
+        "COMBAT",
+        "TRAP",
+        "STORAGE",
+        "SCAVENGE",
+        "ELITE",
+        "BASEMENT"
+      ]
     }
   },
   "spawn_roster": {

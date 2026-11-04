@@ -363,6 +363,8 @@ var _monster_injector: MonsterInjector
 ## 关卡级怪物规则（`level_plan.json` 顶层 `monster_rules`，远征01 专属）。
 ## 空字典 = 未配置 ⇒ 数值与 AI 全部走原常量，未配置关卡逐字不变。
 var _monster_rules: Dictionary = {}
+var _roaming_elite := preload("res://src/enemy3d/RoamingEliteRunDirector.gd").new()
+var _roaming_retry_scheduled := false
 var _inventory: InventoryModule
 var _insurance: InsuranceModule
 var _quick_inventory: InventoryModule
@@ -921,6 +923,7 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 	world_state["encounter_events"] = _encounter_event_director.export_snapshot() if _encounter_event_director != null else {
 		"schema_version": 1, "next_instance_number": 1, "instances": [],
 	}
+	world_state["roaming_elite"] = _roaming_elite.export_snapshot()
 	return world_state
 
 
@@ -1176,6 +1179,8 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 
 func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 	_segment_runtime_state = RUN_PERSISTENCE_SERVICE.read_segment_runtime_state(snapshot)
+	_ensure_roaming_elite()
+	_roaming_elite.import_snapshot((snapshot.get("world_state", {}) as Dictionary).get("roaming_elite", {}) as Dictionary)
 	if _encounter_event_director != null:
 		var encounter_world_state: Dictionary = snapshot.get("world_state", {}) as Dictionary
 		var encounter_state: Variant = encounter_world_state.get("encounter_events", {})
@@ -1472,7 +1477,7 @@ func _on_encounter_event_finished(snapshot: Dictionary) -> void:
 func _try_settle_encounter_room_clear(room_id: String) -> void:
 	if int(_alive_by_room.get(room_id, 0)) > 0 or _reserved_spawn_count(room_id) > 0:
 		return
-	if not (_enemy_nodes_by_room.get(room_id, []) as Array).is_empty():
+	if _has_room_clear_actor(room_id):
 		return
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or room.cleared:
@@ -3593,6 +3598,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		_capture_room_runtime_state(previous_runtime_room_id)
 	_current_room_id = room.room_id
 	_last_main_room_id = room.room_id
+	_observe_roaming_elite_room(room)
 	room_entered.emit(room)
 	if _runtime_persistence_active and BaseManager != null:
 		BaseManager.flush_runtime_checkpoint("room_transition")
@@ -4406,7 +4412,8 @@ func _on_delayed_spawn_timeout(room_id: String, serial: int) -> void:
 		# The timer callback has already removed the entry. The reservation was
 		# counted when queued, so release that count even when the room vanished
 		# before the delayed spawn became eligible.
-		_alive_by_room[room_id] = maxi(0, int(_alive_by_room.get(room_id, 0)) - 1)
+		if _counts_for_room_clear(entry.get("config", {}) as Dictionary):
+			_alive_by_room[room_id] = maxi(0, int(_alive_by_room.get(room_id, 0)) - 1)
 		if room_id == _current_room_id:
 			_update_wave_hud(room_id)
 		return
@@ -4421,7 +4428,11 @@ func _on_delayed_spawn_timeout(room_id: String, serial: int) -> void:
 
 
 func _pending_delayed_spawn_count(room_id: String) -> int:
-	return (_pending_delayed_spawns.get(room_id, []) as Array).size()
+	var count := 0
+	for entry: Dictionary in _pending_delayed_spawns.get(room_id, []):
+		if _counts_for_room_clear(entry.get("config", {}) as Dictionary):
+			count += 1
+	return count
 
 
 ## 落点解析优先级：**显式 positions 数组** > 配置内嵌 `spawn_position`（触发盒落点）
@@ -4436,6 +4447,19 @@ func _resolve_spawn_position(
 	var embedded: Variant = config.get("spawn_position", null)
 	if embedded is Vector3:
 		return room.resolve_enemy_spawn_position(embedded as Vector3) if bound_to_room else embedded as Vector3
+	if not _counts_for_room_clear(config):
+		var members := _enemy_nodes_by_room.get(room.room_id, []) as Array
+		for candidate_index in range(members.size() + index, DungeonRoom3D.SPAWN_MAX_POINTS):
+			var candidate := room.spawn_point_for_index(candidate_index)
+			if not candidate.is_finite():
+				return candidate
+			var occupied := is_instance_valid(player) and candidate.distance_to(player.global_position) < 2.0
+			for value in members:
+				if is_instance_valid(value) and value is Enemy3D and candidate.distance_to(value.global_position) < 2.0:
+					occupied = true
+			if not occupied:
+				return candidate
+		return Vector3.INF
 	return room.spawn_point_for_index(index)
 
 
@@ -4631,14 +4655,36 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 			)
 		else:
 			(waves[0] as Array).append_array(extra_elite)
+	# Unique elites are independent actors, never room wave requirements.
+	var independent: Array[Dictionary] = []
+	var combat_waves: Array = []
+	for wave: Array in waves:
+		var combat: Array[Dictionary] = []
+		for config: Dictionary in wave:
+			if _counts_for_room_clear(config):
+				combat.append(config)
+			else:
+				independent.append(config)
+		if not combat.is_empty():
+			combat_waves.append(combat)
+	waves = combat_waves
+	if waves.is_empty():
+		if not independent.is_empty():
+			_spawn_enemy_batch(room, independent, true)
+		_room_wave_queues[room.room_id] = []
+		_room_wave_totals[room.room_id] = 0
+		_alive_by_room[room.room_id] = 0
+		_mark_room_cleared(room, true)
+		return true
 	var wave_count := waves.size()
 	var first_wave: Array[Dictionary] = waves.pop_front() as Array[Dictionary]
 	_cancel_room_wave_intermission(room.room_id)
 	_room_wave_queues[room.room_id] = waves
 	_room_wave_numbers[room.room_id] = 1
 	_room_wave_totals[room.room_id] = wave_count
-	_enemy_nodes_by_room[room.room_id] = []
 	var spawned := _spawn_enemy_batch(room, first_wave, false)
+	if not independent.is_empty():
+		_spawn_enemy_batch(room, independent, true)
 	if spawned < 0:
 		waves.push_front(first_wave)
 		_room_wave_numbers[room.room_id] = 0
@@ -4667,6 +4713,134 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 func _elite_encounter_id(room: DungeonRoom3D) -> String:
 	var run_id := str(build_runtime_save_snapshot().get("run_id", "run:%d" % run_seed))
 	return "%s:%s:elite" % [run_id, room.room_id]
+
+
+func _counts_for_room_clear(config: Dictionary) -> bool:
+	return not bool(config.get("is_elite", false))
+
+
+func _combat_config_count(configs: Array) -> int:
+	var count := 0
+	for config: Dictionary in configs:
+		if _counts_for_room_clear(config):
+			count += 1
+	return count
+
+
+func _has_room_clear_actor(room_id: String) -> bool:
+	for value in _enemy_nodes_by_room.get(room_id, []):
+		if is_instance_valid(value) and value is Enemy3D and not value.is_queued_for_deletion() and value.ai_state != "dead" and _counts_for_room_clear(value.enemy_data):
+			return true
+	return false
+
+
+func _ensure_roaming_elite() -> void:
+	if not _roaming_elite.state.is_empty() and str(_roaming_elite.state.session_id).begins_with(_run_id + ":roaming:"):
+		return
+	_roaming_elite.state.clear()
+	var rules := _monster_rules.get("roaming_elite", {}) as Dictionary
+	if not bool(rules.get("enabled", false)):
+		return
+	var budget := 0
+	for record: Dictionary in _records:
+		if record.get("type", "") in rules.get("room_types", []) and not bool(record.get("authored_layout_peaceful", false)):
+			budget += 1
+	_roaming_elite.configure(rules, run_seed, _run_id, budget)
+	if not _roaming_elite.state.is_empty() and EliteRosterService.get_record(str(rules.elite_id)).get("state", "") == "Killed":
+		_roaming_elite.state.status = "killed"
+
+
+func _observe_roaming_elite_room(room: DungeonRoom3D) -> void:
+	_ensure_roaming_elite()
+	if _roaming_elite.state.is_empty():
+		return
+	if room.room_type in _roaming_elite.rules.get("room_types", []) and not room.authored_layout_peaceful:
+		_roaming_elite.observe_room(room.room_id)
+	call_deferred("_retry_roaming_elite")
+
+
+func _schedule_roaming_retry() -> void:
+	if _roaming_retry_scheduled or not is_inside_tree() or _completed:
+		return
+	_roaming_retry_scheduled = true
+	get_tree().create_timer(0.8, false).timeout.connect(_retry_roaming_elite)
+
+
+func _retry_roaming_elite() -> void:
+	_roaming_retry_scheduled = false
+	if _completed or _roaming_elite.state.is_empty():
+		return
+	if _roaming_elite.state.has("pending_outcome"):
+		_commit_roaming_outcome()
+		return
+	if not _roaming_elite.pending_in(_current_room_id):
+		return
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null or not room.is_streamed():
+		_schedule_roaming_retry()
+		return
+	# The roaming actor must not advance the room's ordinary spawn RNG.
+	var injector := MonsterInjector.new()
+	injector.set_seed(run_seed ^ room.room_id.hash() ^ 0x41524d53)
+	injector.set_theme_profile(gameplay_theme)
+	injector.set_level_rules(_monster_rules)
+	var configs := injector.generate_enemies({
+		"type": "elite", "elite_id": _roaming_elite.state.elite_id,
+		"floor": maxi(1, visual_theme.difficulty_rank), "floor_level": 0,
+		"floor_number": _elite_floor_number(room), "seed": run_seed,
+		"encounter_id": _roaming_elite.state.session_id,
+	})
+	if configs.is_empty():
+		_schedule_roaming_retry()
+		return
+	for config: Dictionary in configs:
+		config["roaming_elite_session_id"] = _roaming_elite.state.session_id
+		config["roaming_appearance"] = int(_roaming_elite.state.appearances) + 1
+		config["persistent_id"] = "%s:appearance:%d" % [_roaming_elite.state.session_id, config.roaming_appearance]
+	if _spawn_enemy_batch(room, configs, true) <= 0:
+		_schedule_roaming_retry()
+	elif _runtime_persistence_active:
+		BaseManager.flush_runtime_checkpoint("roaming_elite_spawn")
+
+
+func commit_roaming_elite_escape(enemy: Enemy3D, context: Dictionary) -> bool:
+	if not _roaming_elite.owns(enemy.enemy_data):
+		return false
+	var previous: Dictionary = _roaming_elite.export_snapshot()
+	_roaming_elite.stage_escape(enemy)
+	if bool(context.get("killed_player", false)):
+		_roaming_elite.state.status = "finished"
+	context = context.duplicate(true)
+	context["roaming_encounter"] = _roaming_elite.export_snapshot()
+	var snapshot := build_runtime_save_snapshot()
+	var committed: bool
+	if _roaming_elite.state.status == "finished":
+		committed = EliteRosterService.settle(enemy.elite_id, enemy.elite_encounter_instance_id, "escaped", context, snapshot)
+	else:
+		committed = EliteRosterService.commit_run_record(enemy.elite_id, _roaming_elite.export_snapshot(), snapshot)
+	if not committed:
+		_roaming_elite.state = previous
+	return committed
+
+
+func commit_roaming_elite_death(enemy: Enemy3D, context: Dictionary) -> void:
+	if not _roaming_elite.owns(enemy.enemy_data):
+		return
+	_roaming_elite.stage_death(enemy)
+	_roaming_elite.state["pending_outcome"] = context.duplicate(true)
+	_commit_roaming_outcome()
+
+
+func _commit_roaming_outcome() -> void:
+	var pending := _roaming_elite.state.get("pending_outcome", {}) as Dictionary
+	if pending.is_empty():
+		return
+	var context := pending.duplicate(true)
+	_roaming_elite.state.erase("pending_outcome")
+	context["roaming_encounter"] = _roaming_elite.export_snapshot()
+	if not EliteRosterService.settle(str(_roaming_elite.state.elite_id), str(_roaming_elite.state.session_id), "killed", context, build_runtime_save_snapshot()):
+		_roaming_elite.state["pending_outcome"] = pending
+		_schedule_roaming_retry()
 
 
 func _elite_floor_number(room: DungeonRoom3D) -> int:
@@ -4727,6 +4901,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 	# 摘走的条目**不参与本次实例化**，也不计入本批实到数；它们由待生成账兜着，
 	# 本波因此不会被提前判清。`positions` 是并行数组，摘的时候必须同步撇掉。
 	var queued_delayed := 0
+	var queued_total := 0
 	if not count_reserved:
 		var kept_configs: Array[Dictionary] = []
 		var kept_positions: Array = []
@@ -4737,7 +4912,9 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 				_queue_delayed_spawn(
 					room, candidate, _resolve_spawn_position(room, candidate, index, positions), delay
 				)
-				queued_delayed += 1
+				queued_total += 1
+				if _counts_for_room_clear(candidate):
+					queued_delayed += 1
 				continue
 			kept_configs.append(candidate)
 			if index < positions.size():
@@ -4747,12 +4924,15 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		# 整批都是延迟：本批实到 0 只，交由既有空批分支处理（见 _spawn_box_waves 的
 		# 「每波至少一条立刻出怪」不变量 —— 触发盒路径不会走到这里）。
 		if enemy_configs.is_empty():
-			return -1
+			_alive_by_room[room.room_id] = (int(_alive_by_room.get(room.room_id, 0)) if additive else 0) + queued_delayed
+			return queued_total
 	# 整批预检先于实例化，任何非法点都不能形成半波或写入实体transform。
 	var spawn_positions: Array[Vector3] = []
 	for index in enemy_configs.size():
 		var point := _resolve_spawn_position(room, enemy_configs[index], index, positions)
 		if not point.is_finite():
+			if _combat_config_count(enemy_configs) == 0:
+				return -1
 			_room_spawn_blocked[room.room_id] = true
 			_cancel_room_wave_intermission(room.room_id)
 			_update_wave_hud(room.room_id)
@@ -4760,11 +4940,13 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 				status_label.text = "刷怪暂停：无合法落点，波次保留"
 			return -1
 		spawn_positions.append(point)
-	_cancel_room_wave_intermission(room.room_id)
+	if _combat_config_count(enemy_configs) > 0 or queued_delayed > 0:
+		_cancel_room_wave_intermission(room.room_id)
 	_update_wave_hud(room.room_id)
 	if not _enemy_nodes_by_room.has(room.room_id):
 		_enemy_nodes_by_room[room.room_id] = []
 	var spawned_count := 0
+	var spawned_combat := 0
 	for index in range(enemy_configs.size()):
 		var enemy := ENEMY_SCENE.instantiate() as Enemy3D
 		if enemy == null:
@@ -4811,6 +4993,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		var damage_multiplier := float(_room_enemy_damage_multipliers.get(room.room_id, 1.0))
 		if not is_equal_approx(damage_multiplier, 1.0):
 			enemy.contact_damage = maxi(1, int(round(float(enemy.contact_damage) * damage_multiplier)))
+		_roaming_elite.bind_actor(enemy)
 		enemy.global_position = spawn_positions[index]
 		# 房间矩形注入（2026-10-30）。瞬移/游荡的「别出房」判据必须用**矩形**，
 		# 不能用「离出生点不超过 R」的圆形近似 —— 那个近似的 R 会随当前位置自增，
@@ -4837,6 +5020,8 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.health_changed.connect(_on_enemy_health_changed)
 		(_enemy_nodes_by_room[room.room_id] as Array).append(enemy)
 		spawned_count += 1
+		if _counts_for_room_clear(spawn_data):
+			spawned_combat += 1
 		var room_visible := room.is_streamed()
 		enemy.set_runtime_active(room.room_id == _current_room_id, room_visible)
 		if enemy.enemy_kind == "boss":
@@ -4854,12 +5039,12 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 	#    这里把「摘出去挂定时器的那几只」当场记进存活账，到点补位时账不再动。
 	if not count_reserved:
 		var base_alive := int(_alive_by_room.get(room.room_id, 0)) if additive else 0
-		_alive_by_room[room.room_id] = base_alive + spawned_count + queued_delayed
-	elif spawned_count < enemy_configs.size():
+		_alive_by_room[room.room_id] = base_alive + spawned_combat + queued_delayed
+	elif spawned_combat < _combat_config_count(enemy_configs):
 		_alive_by_room[room.room_id] = maxi(
 			0,
 			int(_alive_by_room.get(room.room_id, 0))
-			- (enemy_configs.size() - spawned_count)
+			- (_combat_config_count(enemy_configs) - spawned_combat)
 		)
 	return spawned_count
 
@@ -5142,7 +5327,8 @@ func _repair_hostile_room_progress(room: DungeonRoom3D, allow_event_combat := fa
 		if enemy == null or enemy.is_queued_for_deletion():
 			continue
 		live_references.append(enemy)
-		live_count += 1
+		if _counts_for_room_clear(enemy.enemy_data):
+			live_count += 1
 	_enemy_nodes_by_room[room.room_id] = live_references
 	_alive_by_room[room.room_id] = live_count
 	if live_count > 0:
@@ -5185,7 +5371,7 @@ func _can_advance_room_wave(room_id: String) -> bool:
 		and not _room_spawn_blocked.has(room_id)
 		and int(_alive_by_room.get(room_id, 0)) == 0
 		and _reserved_spawn_count(room_id) == 0
-		and (_enemy_nodes_by_room.get(room_id, []) as Array).is_empty()
+		and not _has_room_clear_actor(room_id)
 	)
 
 
@@ -5282,6 +5468,9 @@ func _spawn_next_room_wave(room_id: String, token := -1) -> void:
 	_update_wave_hud(room_id)
 	if AudioManager != null:
 		AudioManager.play_sfx("wave_start", -3.0)
+	# Legacy queues can contain an elite-only wave. Its actors do not hold the room.
+	if int(_alive_by_room.get(room_id, 0)) == 0:
+		_repair_hostile_room_progress(room, true)
 
 
 func _record_index(room_id: String) -> int:
@@ -5302,7 +5491,7 @@ func _on_split_requested(source: Enemy3D, child_kind: String, count: int) -> voi
 	# 容量保护与召唤同源：本房同时存活上限 8，分裂子代也不能突破。
 	var live_count := 0
 	for value in _enemy_nodes_by_room.get(room_id, []):
-		if is_instance_valid(value) and value is Enemy3D and (value as Enemy3D).ai_state != "dead":
+		if is_instance_valid(value) and value is Enemy3D and value.ai_state != "dead" and _counts_for_room_clear(value.enemy_data):
 			live_count += 1
 	var spawn_count := mini(mini(3, count), maxi(0, 8 - live_count))
 	if spawn_count <= 0:
@@ -5337,7 +5526,7 @@ func _on_summon_requested(source: Enemy3D, count: int) -> void:
 		return
 	var live_count := 0
 	for value in _enemy_nodes_by_room.get(source.room_id, []):
-		if is_instance_valid(value) and value is Enemy3D and (value as Enemy3D).ai_state != "dead":
+		if is_instance_valid(value) and value is Enemy3D and value.ai_state != "dead" and _counts_for_room_clear(value.enemy_data):
 			live_count += 1
 	var reserved_count := mini(mini(3, count), maxi(0, 8 - live_count))
 	if reserved_count <= 0:
@@ -5359,7 +5548,7 @@ func _on_summon_requested(source: Enemy3D, count: int) -> void:
 func _reserved_spawn_count(room_id: String) -> int:
 	var count := 0
 	for request in _reserved_room_spawns.get(room_id, []):
-		count += (request.get("configs", []) as Array).size()
+		count += _combat_config_count(request.get("configs", []) as Array)
 	# 延迟出怪（触发盒 delay_sec）也算「在途」：本波没到齐就不许判清房，
 	# 否则会先解锁房间、再凭空冒出一波，观感与逻辑都是错的。
 	count += _pending_delayed_spawn_count(room_id)
@@ -5369,7 +5558,8 @@ func _reserved_spawn_count(room_id: String) -> int:
 func _reserve_room_spawn(room_id: String, configs: Array[Dictionary], positions: Array = []) -> void:
 	if configs.is_empty():
 		return
-	_cancel_room_wave_intermission(room_id)
+	if _combat_config_count(configs) > 0:
+		_cancel_room_wave_intermission(room_id)
 	if not _reserved_room_spawns.has(room_id):
 		_reserved_room_spawns[room_id] = []
 	var saved_positions: Array = []
@@ -5377,7 +5567,7 @@ func _reserve_room_spawn(room_id: String, configs: Array[Dictionary], positions:
 		var point := position_value as Vector3
 		saved_positions.append([point.x, point.y, point.z])
 	(_reserved_room_spawns[room_id] as Array).append({"configs": configs, "positions": saved_positions})
-	_alive_by_room[room_id] = int(_alive_by_room.get(room_id, 0)) + configs.size()
+	_alive_by_room[room_id] = int(_alive_by_room.get(room_id, 0)) + _combat_config_count(configs)
 	_update_wave_hud(room_id)
 	call_deferred("_flush_reserved_room_spawns", room_id)
 
@@ -5466,6 +5656,8 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 		_encounter_event_director.notify_enemy_departed(
 			_encounter_owner_id(enemy_data), "killed"
 		)
+	if bool(enemy_data.get("is_elite", false)) and loot_room != null:
+		call_deferred("_ensure_conditional_extraction", "ELITE_KILL", loot_room, Vector3(4.0, 0.0, 3.0))
 	_resolve_room_enemy_departure(enemy, false, enemy_data)
 
 
@@ -5492,7 +5684,8 @@ func _claim_enemy_departure(enemy: Enemy3D) -> bool:
 		return false
 	# 先原子提交成员与计数，再发布击杀事件；同步订阅者可能重入房间修复。
 	members.erase(enemy)
-	_alive_by_room[enemy.room_id] = maxi(0, int(_alive_by_room.get(enemy.room_id, 0)) - 1)
+	if _counts_for_room_clear(enemy.enemy_data):
+		_alive_by_room[enemy.room_id] = maxi(0, int(_alive_by_room.get(enemy.room_id, 0)) - 1)
 	return true
 
 
@@ -5503,7 +5696,7 @@ func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data:
 	# 清房结算（宝箱房自己 `reward_plan` 是空的，但 `resolve_clear` 有全局兜底表），
 	# 还会让「已清内容房数」提前涨一格、把传送支线与撤离门的解锁条件提前满足。
 	# 实测这些副作用都不报错，只是数值悄悄变了 —— 属于最难被发现的那一类。
-	if enemy.get_meta("chest_mimic", false):
+	if enemy.get_meta("chest_mimic", false) or not _counts_for_room_clear(enemy_data):
 		return
 	if not _alive_by_room.has(enemy.room_id) or _room_spawn_blocked.has(enemy.room_id):
 		return
@@ -5552,8 +5745,6 @@ func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data:
 		if AudioManager != null:
 			AudioManager.play_sfx("boss_defeat", -1.0)
 		status_label.text = "Boss 已清除 · 撤离信标已解锁"
-	if not did_escape and bool(enemy_data.get("is_elite", false)) and room != null:
-		call_deferred("_ensure_conditional_extraction", "ELITE_KILL", room, Vector3(4.0, 0.0, 3.0))
 	_refresh_loot_label()
 
 
@@ -5753,6 +5944,10 @@ func _spawn_boss_reinforcement_round(room: DungeonRoom3D, state: Dictionary) -> 
 
 
 func _on_enemy_health_changed(enemy: Enemy3D, current: int, maximum: int) -> void:
+	if _roaming_elite.owns(enemy.enemy_data):
+		_roaming_elite.capture_actor(enemy)
+		if _runtime_persistence_active:
+			BaseManager.queue_runtime_checkpoint("roaming_elite_health")
 	if enemy != _active_boss or _boss_bar == null:
 		return
 	_boss_bar.max_value = maxi(1, maximum)
@@ -8905,6 +9100,9 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		var enemy := value as Enemy3D
 		if enemy.ai_state == "dead":
 			continue
+		if not _roaming_elite.keeps_actor(enemy.enemy_data):
+			continue
+		_roaming_elite.capture_actor(enemy)
 		enemy_states.append(enemy.export_runtime_state())
 	var ground_items: Array[Dictionary] = []
 	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
@@ -9032,8 +9230,12 @@ func _restore_room_runtime_state(room_id: String) -> void:
 		room.cleared = bool(state.get("cleared", room.cleared))
 		_alive_by_room[room_id] = maxi(0, int(state.get("alive_count", _alive_by_room.get(room_id, 0))))
 		_room_wave_queues[room_id] = (state.get("wave_queue", []) as Array).duplicate(true)
-		_room_wave_numbers[room_id] = maxi(0, int(state.get("wave_number", 1)))
-		_room_wave_totals[room_id] = maxi(1, int(state.get("wave_total", 1)))
+		if snapshot_established_waves:
+			_room_wave_numbers[room_id] = maxi(0, int(state.get("wave_number", 1)))
+			_room_wave_totals[room_id] = maxi(0, int(state.get("wave_total", 1)))
+		else:
+			_room_wave_numbers.erase(room_id)
+			_room_wave_totals.erase(room_id)
 	# 宝箱/杂物只在**存档确实带了这个键**时才下发：旧存档两个键都没有，
 	# 传空字典会盖掉房间内存里的账（`apply_runtime_detail_state()` 是合并语义，
 	# 但空字典本身也是一次有效的写入）。缺席即"这局没有记录"，不动内存账。
@@ -9048,24 +9250,39 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			detail_state[optional_key] = (state[optional_key] as Dictionary).duplicate(true)
 	room.apply_runtime_detail_state(detail_state)
 	var live_enemies: Array = []
+	var live_partitions := {}
+	var restored_ids := {}
 	var repaired_enemy_position := false
 	for value in _enemy_nodes_by_room.get(room_id, []):
 		if is_instance_valid(value) and not (value as Node).is_queued_for_deletion() and value is Enemy3D:
+			if not _roaming_elite.keeps_actor((value as Enemy3D).enemy_data):
+				(value as Enemy3D).queue_free()
+				continue
 			live_enemies.append(value)
+			live_partitions[_counts_for_room_clear((value as Enemy3D).enemy_data)] = true
 			var persistent_id := (value as Enemy3D).get_persistent_id()
+			restored_ids[persistent_id] = true
 			for runtime_value in state.get("enemies", []):
 				var enemy_state := runtime_value as Dictionary
 				if str(enemy_state.get("persistent_id", "")) == persistent_id:
 					_normalize_narrative_02_stationary_data((value as Enemy3D).enemy_data, room_id)
 					(value as Enemy3D).import_runtime_state(enemy_state)
+					_roaming_elite.bind_actor(value as Enemy3D)
 					repaired_enemy_position = _repair_restored_enemy_room_position(value as Enemy3D, room) or repaired_enemy_position
 					break
-	if live_enemies.is_empty():
+	# A live roamer does not mean the ordinary roster has already been restored,
+	# and a freshly spawned normal wave does not replace a saved roamer.
+	if live_partitions.size() < 2:
 		for runtime_value in state.get("enemies", []):
 			var enemy_state := runtime_value as Dictionary
 			var enemy_data := (enemy_state.get("enemy_data", {}) as Dictionary).duplicate(true)
+			var saved_id := str(enemy_state.get("persistent_id", ""))
+			if restored_ids.has(saved_id) or live_partitions.has(_counts_for_room_clear(enemy_data)):
+				continue
 			_normalize_narrative_02_stationary_data(enemy_data, room_id)
-			if room.cleared and not bool(enemy_data.get("narrative_spawned", false)):
+			if room.cleared and _counts_for_room_clear(enemy_data) and not bool(enemy_data.get("narrative_spawned", false)):
+				continue
+			if not _roaming_elite.keeps_actor(enemy_data):
 				continue
 			if enemy_data.is_empty():
 				enemy_data = {
@@ -9097,8 +9314,10 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			enemy.boss_activation_completed.connect(_on_boss_activation_completed)
 			enemy.health_changed.connect(_on_enemy_health_changed)
 			enemy.import_runtime_state(enemy_state)
+			_roaming_elite.bind_actor(enemy)
 			repaired_enemy_position = _repair_restored_enemy_room_position(enemy, room) or repaired_enemy_position
 			live_enemies.append(enemy)
+			restored_ids[saved_id] = true
 			if enemy.enemy_kind == "boss":
 				_show_boss_hud(enemy)
 	_enemy_nodes_by_room[room_id] = live_enemies
@@ -9123,7 +9342,12 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			repaired_narrative_position = true
 		else:
 			push_warning("[Dungeon3D] 无法修复剧情怪快照落点：%s" % enemy.get_persistent_id())
-	_alive_by_room[room_id] = live_enemies.size() + _reserved_spawn_count(room_id)
+	var combat_alive := 0
+	for enemy: Enemy3D in live_enemies:
+		if _counts_for_room_clear(enemy.enemy_data):
+			combat_alive += 1
+		_roaming_elite.capture_actor(enemy)
+	_alive_by_room[room_id] = combat_alive + _reserved_spawn_count(room_id)
 	if repaired_narrative_position or repaired_enemy_position:
 		_capture_room_runtime_state(room_id)
 	call_deferred("_flush_reserved_room_spawns", room_id)
@@ -10086,6 +10310,77 @@ func get_inventory_module() -> InventoryModule:
 	return _inventory
 
 
+func confiscate_player_carried_item(target: Node3D) -> Dictionary:
+	if target != player or not is_instance_valid(player):
+		return {}
+	var candidates: Array[Dictionary] = []
+	for inventory: InventoryModule in [_inventory, _quick_inventory]:
+		if inventory == null:
+			continue
+		for slot in inventory.get_occupied_slots():
+			candidates.append({"inventory": inventory, "slot": slot})
+	if candidates.is_empty():
+		return {}
+	var selected: Dictionary = candidates.pick_random()
+	var inventory: InventoryModule = selected["inventory"]
+	var slot: Dictionary = selected["slot"]
+	if inventory.remove_from_slot(int(slot["slot"]), 1):
+		if inventory == _quick_inventory:
+			_sync_quick_item_state()
+		status_label.text = "收租人夺走了 1 件%s" % slot["item"].get("name", "物品")
+		return (slot["item"] as Dictionary).duplicate(true)
+	return {}
+
+
+func collect_elite_rent(enemy: Enemy3D, target: Node3D, forced_kind := "") -> bool:
+	if target != player or not is_instance_valid(player) or enemy.elite_id.is_empty():
+		return false
+	var branches: Array[String] = []
+	if (_inventory != null and not _inventory.get_occupied_slots().is_empty()) or (_quick_inventory != null and not _quick_inventory.get_occupied_slots().is_empty()):
+		branches.append("item")
+	if GameManager.currency > 0:
+		branches.append("currency")
+	if branches.is_empty() or (not forced_kind.is_empty() and forced_kind not in branches):
+		return false
+	var kind: String = branches.pick_random() if forced_kind.is_empty() else forced_kind
+	var old_slots: Array = _inventory.get_slots_snapshot() if _inventory != null else []
+	var old_quick: Array = _quick_inventory.get_slots_snapshot() if _quick_inventory != null else []
+	var old_currency := GameManager.currency
+	var old_serial := enemy._elite_confiscation_serial
+	var old_status := status_label.text
+	var receipt := {"kind": kind}
+	if kind == "item":
+		var item := confiscate_player_carried_item(target)
+		if item.is_empty():
+			return false
+		receipt["item"] = item
+	else:
+		var amount := maxi(1, int(floor(float(old_currency) * 0.1)))
+		if not GameManager.spend_currency(amount):
+			return false
+		receipt["amount"] = amount
+	enemy._elite_confiscation_serial += 1
+	receipt["receipt_id"] = "%s:%s:%d:rent:%d" % [_run_id, enemy.get_persistent_id(), int(enemy.enemy_data.get("roaming_appearance", 0)), enemy._elite_confiscation_serial]
+	_roaming_elite.capture_actor(enemy)
+	var journal: Dictionary = _roaming_elite.export_snapshot() if _roaming_elite.owns(enemy.enemy_data) else {}
+	if not EliteRosterService.commit_run_record(enemy.elite_id, journal, build_runtime_save_snapshot(), receipt):
+		if _inventory != null:
+			_inventory.restore_slots_snapshot(old_slots)
+		if _quick_inventory != null:
+			_quick_inventory.restore_slots_snapshot(old_quick)
+		GameManager.currency = old_currency
+		GameManager.currency_changed.emit(old_currency)
+		enemy._elite_confiscation_serial = old_serial
+		status_label.text = old_status
+		_sync_quick_item_state()
+		return false
+	if kind == "currency":
+		status_label.text = "收租人夺走了 %d 货币" % int(receipt.amount)
+	_sync_quick_item_state()
+	_refresh_loot_label()
+	return true
+
+
 func get_insurance_module() -> InsuranceModule:
 	return _insurance
 
@@ -10458,6 +10753,15 @@ func _settle_player_killer_elite() -> void:
 		"killed_player": true,
 		"weapon_snapshot": player.get_weapon_snapshot(),
 	}
+	for value in _enemy_nodes_by_room.get(str(source.get("room_id", _current_room_id)), []):
+		if not is_instance_valid(value) or not value is Enemy3D:
+			continue
+		var actor := value as Enemy3D
+		if actor.elite_id == elite_id and actor.elite_encounter_instance_id == encounter_id and _roaming_elite.owns(actor.enemy_data):
+			_player_killer_elite_settled = commit_roaming_elite_escape(actor, settlement_context)
+			if _player_killer_elite_settled:
+				actor.complete_elite_escape_after_external_settlement(settlement_context)
+			return
 	_player_killer_elite_settled = EliteRosterService != null and EliteRosterService.settle(
 		elite_id,
 		encounter_id,
