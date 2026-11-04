@@ -502,7 +502,7 @@ func _refresh_one_target_visibility(target: Node3D, visited: Dictionary) -> void
 		var enemy := target as Enemy3D
 		if enemy.ai_state == "dead" and not enemy.is_in_group(Enemy3D.GROUP_DEATH_VISUAL_3D):
 			return
-		if enemy.process_mode == Node.PROCESS_MODE_DISABLED:
+		if enemy.process_mode == Node.PROCESS_MODE_DISABLED or (enemy.arms_taker_combat != null and enemy.arms_taker_combat.phased_out):
 			enemy.visible = false
 			_occluded_target_count += 1
 			return

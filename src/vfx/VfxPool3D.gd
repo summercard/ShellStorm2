@@ -53,6 +53,8 @@ const FX01_BOARD_DEBRIS := "VFX-BOARD-DEBRIS-3D"
 ## 只有「消失」会让玩家以为怪跑掉了，只有「出现」会让人以为怪是凭空刷的。
 const FX01_TELEPORT_OUT := "VFX-TELEPORT-OUT-3D"
 const FX01_TELEPORT_IN := "VFX-TELEPORT-IN-3D"
+const FX01_BULLET_ELECTRIC := "VFX-BULLET-ELECTRIC-3D"
+const FX01_ARMS_TAKER_FLOOR_CAST := "VFX-ARMS-TAKER-FLOOR-CAST-3D"
 
 const FX01_AXE_CHARGE := "VFX-MELEE-AXE-CHARGE-3D"
 const FX01_AXE_CLEAVE := "VFX-MELEE-AXE-CLEAVE-3D"
@@ -83,6 +85,8 @@ const _REGISTRY := {
 	FX01_BOARD_DEBRIS: preload("res://assets/art/vfx/combat_3d/vfx_board_debris_root_top3d.tscn"),
 	FX01_TELEPORT_OUT: preload("res://assets/art/vfx/combat_3d/vfx_teleport_out_root_top3d.tscn"),
 	FX01_TELEPORT_IN: preload("res://assets/art/vfx/combat_3d/vfx_teleport_in_root_top3d.tscn"),
+	FX01_BULLET_ELECTRIC: preload("res://assets/art/vfx/combat_3d/vfx_bullet_electric_root_top3d.tscn"),
+	FX01_ARMS_TAKER_FLOOR_CAST: preload("res://assets/art/vfx/combat_3d/vfx_arms_taker_floor_cast_root_top3d.tscn"),
 	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d.tscn"),
 	FX01_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d.tscn"),
 	FX01_EXPLOSION: preload("res://assets/art/vfx/combat_3d/vfx_explosion_root_top3d.tscn"),

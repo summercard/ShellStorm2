@@ -1,10 +1,10 @@
 extends Node
 
 const TOWER := preload("res://scenes/TowerDescent3D.tscn")
-const VENDING_OUTPUT := "res://outputs/verification/formal_vending_in_base.png"
-const FACILITY_ROW_OUTPUT := "res://outputs/verification/formal_mission_workshop_in_base.png"
-const VAULT_OUTPUT := "res://outputs/verification/formal_vault_locker_station.png"
-const FATE_COLLECTION_OUTPUT := "res://outputs/verification/formal_fate_collection_retro_tv.png"
+const VENDING_OUTPUT := "formal_vending_in_base.png"
+const FACILITY_ROW_OUTPUT := "formal_mission_workshop_in_base.png"
+const VAULT_OUTPUT := "formal_vault_locker_station.png"
+const ARCHIVE_TERMINAL_OUTPUT := "formal_monster_archive_terminal.png"
 
 
 func _ready() -> void:
@@ -24,7 +24,7 @@ func _ready() -> void:
 	var mission := _find_facility(world, "mission_operations")
 	var workshop := _find_facility(world, "weapon_workshop")
 	var vault := _find_facility(world, "vault")
-	var fate_collection := _find_facility(world, "fate_collection")
+	var monster_archive := _find_facility(world, "monster_archive")
 	# 2026-10-19：这个位点（西侧下方）的功能按业主要求从怪物档案室换成武器改造台。
 	# 美术没动 —— 断言的仍然是同一个资产包 `weapon_workshop_station`，
 	# 所以这条检查的语义（这个位点绑对了模型）不变，只是设施 id 跟着功能走。
@@ -35,14 +35,14 @@ func _ready() -> void:
 	var mission_chair := world.find_child("战术指挥椅_独立装饰", true, false) as Node3D
 	var art_layout := world.find_child("Art", true, false) as Node3D
 	_check(
-		vending != null and mission != null and workshop != null and vault != null and fate_collection != null and recovery != null and wardrobe != null,
+		vending != null and mission != null and workshop != null and vault != null and monster_archive != null and recovery != null and wardrobe != null,
 		"基础基地设施未全部实例化",
 		failures
 	)
 	if vault != null:
 		_check("narrow_battery_cabinet" in str(vault.get_meta("asset_source", "")), "保险柜未绑定47_窄型电池柜资产包", failures)
-	if fate_collection != null:
-		_check("loft_computer_workstation" in str(fate_collection.get_meta("asset_source", "")), "命运卡收藏室未绑定42__02_游戏输出整合模型", failures)
+	if monster_archive != null:
+		_check("loft_computer_workstation" in str(monster_archive.get_meta("asset_source", "")), "怪物档案未绑定42__02_游戏输出整合模型", failures)
 	if recovery != null:
 		_check("medical_cabinet" in str(recovery.get_meta("asset_source", "")), "状态恢复舱未绑定45_MEDICAL医疗柜资产包", failures)
 	if wardrobe != null:
@@ -95,15 +95,15 @@ func _ready() -> void:
 		_place_player_for_view(world, middle + _forward(mission) * 3.1)
 		await _settle()
 		_save(FACILITY_ROW_OUTPUT, "情报台/工作台基地实景验收图保存失败", failures)
-	if vault != null and fate_collection != null:
+	if vault != null and monster_archive != null:
 		_frame_facility(vault, 9.0)
 		await _settle()
 		_save(VAULT_OUTPUT, "储物站保险柜验收图保存失败", failures)
-		_frame_facility(fate_collection, 10.0)
+		_frame_facility(monster_archive, 10.0)
 		await _settle()
-		_save(FATE_COLLECTION_OUTPUT, "电视站命运卡收藏室验收图保存失败", failures)
+		_save(ARCHIVE_TERMINAL_OUTPUT, "二楼怪物档案终端验收图保存失败", failures)
 	if failures.is_empty():
-		print("FORMAL_ASSET_PLACEMENT_VISUAL_OK: 储物站保险柜、电视收藏室、三既有模型设施与两把独立座椅验收图已生成")
+		print("FORMAL_ASSET_PLACEMENT_VISUAL_OK: 储物站保险柜、怪物档案终端、三既有模型设施与两把独立座椅验收图已生成")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -166,7 +166,7 @@ func _settle() -> void:
 
 func _save(path: String, message: String, failures: Array[String]) -> void:
 	var image := get_viewport().get_texture().get_image()
-	if image == null or image.is_empty() or image.save_png(path) != OK:
+	if image == null or image.is_empty() or image.save_png(VerificationOutput.path(path)) != OK:
 		failures.append(message)
 
 

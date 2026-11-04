@@ -206,6 +206,8 @@ const BACKPACK_WORN_TOP_Y := BACKPACK_WORN_HEAD_BOTTOM_Y - BACKPACK_WORN_HEAD_CL
 ## BodyJoint 局部空间里的地面高度（BodyJoint 静止离地 0.155 m）。包底不得低于 地面 + 0.02。
 const BACKPACK_WORN_FLOOR_Y := -0.155
 var _silence_remaining := 0.0
+var _electric_root_remaining := 0.0
+var _electric_root_fx: VfxEffectBase3D
 var _named_damage_multipliers: Dictionary = {}
 var _fire_animation_remaining := 0.0
 var _fire_animation_duration := FIRE_ANIMATION_DURATION
@@ -669,6 +671,10 @@ func _physics_process(delta: float) -> void:
 		_state_machine.physics_update(delta)
 	if melee_combat != null:
 		melee_combat.physics_update(delta)
+	if _electric_root_remaining > 0.0:
+		_electric_root_remaining = maxf(0.0, _electric_root_remaining - delta)
+		if _electric_root_remaining <= 0.0001:
+			_clear_electric_root()
 	_tick_dash_input_buffer(delta)
 	_tick_footstep_sound(delta)
 	var flashlight := get_node_or_null("PlayerFlashlight3D")
@@ -681,6 +687,8 @@ func is_seated_on_chair(chair: PushableSeat3D = null) -> bool:
 
 
 func try_start_ladder_climb(ladder: Base99TelescopicLadder3D, upward: bool) -> bool:
+	if _electric_root_remaining > 0.0:
+		return false
 	if ladder == null or not is_instance_valid(ladder) or not ladder.deployed or _active_ladder != null:
 		return false
 	if input_locked or current_hp <= 0 or get_state_machine_state() not in ["idle", "moving"]:
@@ -900,6 +908,8 @@ func _on_mobile_shoot_released() -> void:
 
 
 func _get_input_direction_3d() -> Vector3:
+	if _electric_root_remaining > 0.0:
+		return Vector3.ZERO
 	if _test_move_direction is Vector3:
 		return (_test_move_direction as Vector3).normalized()
 	# 移动端优先：在摇杆活动时使用虚拟摇杆
@@ -1113,7 +1123,7 @@ func get_grounded_velocity(planar_velocity: Vector3) -> Vector3:
 
 
 func move_grounded(planar_velocity: Vector3, delta: float, allow_fall_transition := true) -> bool:
-	var next_velocity := planar_velocity
+	var next_velocity := Vector3.ZERO if _electric_root_remaining > 0.0 else planar_velocity
 	if is_on_floor():
 		# 极小负值让 floor snap 保持接触，但不会把无输入角色沿斜坡推下。
 		next_velocity.y = -0.01
@@ -1143,6 +1153,8 @@ func move_airborne(target_planar_velocity: Vector3, delta: float) -> bool:
 		Vector3(target_planar_velocity.x, 0.0, target_planar_velocity.z),
 		AIR_CONTROL_ACCEL_MPS2 * maxf(delta, 0.0)
 	)
+	if _electric_root_remaining > 0.0:
+		planar = Vector3.ZERO
 	var impact_speed := maxf(0.0, -velocity.y)
 	velocity = Vector3(
 		planar.x,
@@ -1369,6 +1381,7 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO,
 	is_invincible = true
 	_invincible_remaining = INVINCIBLE_DURATION
 	if current_hp <= 0:
+		_clear_electric_root()
 		if weapon != null:
 			weapon.cancel_reload()
 		_clear_action_overlays()
@@ -1558,6 +1571,7 @@ func on_fate_kill_recorded() -> Array[Dictionary]:
 
 
 func reset_character_fate_state() -> void:
+	_clear_electric_root()
 	max_hp = maxi(1, max_hp - int(_character_fate["max_hp_delta"]))
 	current_hp = mini(current_hp, max_hp)
 	_character_fate = CHARACTER_FATE_DEFAULTS.duplicate(true)
@@ -1726,7 +1740,7 @@ func request_dash() -> void:
 
 ## 受击击退是短时动作覆盖层；它让 hurt 状态延长到冲量结束，但不增加第七个顶层状态。
 func apply_knockback(direction: Vector3, strength := 5.4, duration := 0.24, trigger_hurt := true) -> bool:
-	if current_hp <= 0:
+	if current_hp <= 0 or _electric_root_remaining > 0.0:
 		return false
 	var planar_direction := direction
 	planar_direction.y = 0.0
@@ -2757,6 +2771,29 @@ func _apply_named_damage_multipliers() -> void:
 		weapon.set_damage_multiplier(final_multiplier)
 
 
+func apply_electric_root(duration: float) -> void:
+	if current_hp <= 0 or duration <= 0.0:
+		return
+	_electric_root_remaining = maxf(_electric_root_remaining, duration)
+	velocity.x = 0.0
+	velocity.z = 0.0
+	_dash_input_buffer = 0.0
+	_knockback_remaining = 0.0
+	if is_instance_valid(_electric_root_fx):
+		_electric_root_fx.activate(global_position, Color.CYAN, 1.0, {"follow": self, "duration": _electric_root_remaining})
+		return
+	_electric_root_fx = VfxPool3D.create_unpooled(VfxPool3D.FX01_BULLET_ELECTRIC)
+	if _electric_root_fx != null:
+		_electric_root_fx.top_level = true
+		add_child(_electric_root_fx)
+		_electric_root_fx.activate(global_position, Color.CYAN, 1.0, {"follow": self, "duration": _electric_root_remaining})
+
+func _clear_electric_root() -> void:
+	_electric_root_remaining = 0.0
+	if is_instance_valid(_electric_root_fx):
+		_electric_root_fx.finish()
+	_electric_root_fx = null
+
 func apply_silence(duration: float) -> void:
 	_silence_remaining = maxf(_silence_remaining, duration)
 
@@ -3000,6 +3037,8 @@ func _tick_dash_input_buffer(delta: float) -> void:
 
 
 func _begin_dash() -> bool:
+	if _electric_root_remaining > 0.0:
+		return false
 	if (
 		not input_locked and current_hp > 0
 		and get_state_machine_state() in ["idle", "moving"]

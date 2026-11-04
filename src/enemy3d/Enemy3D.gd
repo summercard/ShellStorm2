@@ -884,6 +884,8 @@ var _elite_growth_profile: Dictionary = {}
 var _elite_escape_active := false
 var _elite_escape_elapsed := 0.0
 var _elite_escape_origin := Vector3.ZERO
+var _elite_encounter_damage_taken := 0
+var _elite_confiscation_serial := 0
 var _elite_attack_counter := 0
 var _elite_behavior_trigger_count := 0
 var _absorb_cooldown := 0.0
@@ -968,23 +970,14 @@ var _boss_skill_bag: Array[String] = []
 var _boss_skill_index := 0
 var monitor_combat: MonitorBossCombat
 var arms_taker_combat: EliteArmsTakerCombat
-## 显示器 Boss 的子弹受击层（3D 第 3 层，与敌人层的值相同）。
-## **只有动画受击盒在这个层上。**
-## 根节点那个圆柱（半径 1.92×根倍率 = 2.016 m）比可见屏幕宽得多（屏幕半宽仅 0.85 m），
-## 若它继续留在子弹层，子弹会在屏幕**前方 1.0–1.3 m** 处就被它拦下 ——
-## 实测子弹撞到的 collider 名字就叫 `Enemy3D`，命中特效落在模型前面的空气里，
-## 这正是业主看到的「隔空击中」（2026-10-14 第二轮反馈）。
-## 圆柱的**移动/阻挡口径一格未动**（自身移动只看 `collision_mask = 1`），
-## 只是不再接子弹：接子弹的职责整份交给跟骨走的受击盒。
-const MONITOR_BULLET_LAYER := 4
+## 3D 第 3 层。挂有动画受击盒的敌人将此层从移动圆柱交给独立代理。
+const ENEMY_BULLET_LAYER := 4
+const MONITOR_BULLET_LAYER := ENEMY_BULLET_LAYER
 
-## 显示器 Boss 的**动画受击盒**。根节点那个固定圆柱跟不上屏幕的前倾/扑砸/自转，
-## 而且比可见模型宽得多；受击盒挂在**独立代理体** `EnemyHitVolume3D` 上，
-## 而不是挂在怪物自己身上 —— 盒子会伸进地面与墙里，挂在身上 `move_and_slide`
-## 会把怪顶起来（实测坐地抬高 0.42 m）。
-var _monitor_hit_body: EnemyHitVolume3D = null
-var _monitor_hit_shapes: Array[CollisionShape3D] = []
-var _monitor_hit_presentation: MonitorBossPresentation = null
+## 骨骼盒可能随动作穿过地面或墙面，独立代理使它们脱离 move_and_slide。
+var _animated_hit_body: EnemyHitVolume3D = null
+var _animated_hit_shapes: Array[CollisionShape3D] = []
+var _animated_hit_presentation: Node3D = null
 var _last_attack_result := "none"
 var _last_state_reason := "spawned"
 var _ambush_reburrow_cooldown := 0.0
@@ -1004,7 +997,7 @@ var _separation_phase := -1
 func _ready() -> void:
 	add_to_group(GROUP_ENEMY_3D)
 	add_to_group(GROUP_DAMAGEABLE_3D)
-	collision_layer = 4
+	collision_layer = ENEMY_BULLET_LAYER
 	collision_mask = 1
 	# 与 Player3D 同一套地面口径：44° 以内算可走的坡，更陡的算墙。
 	# floor_snap 只跨数厘米的接缝，不用它模拟楼梯，所以怪不会顺着阻挡爬上顶面。
@@ -1309,7 +1302,7 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 	arms_taker_combat = null
 	# 重新配置等于换一只怪：上一任的动画受击盒必须一起走，
 	# 否则残留形状会在这个位置凭空挡子弹。
-	_clear_monitor_hit_volumes()
+	_clear_animated_hit_volumes()
 	enemy_data = data.duplicate(true)
 	_death_explosion = (data.get("death_explosion", {}) as Dictionary).duplicate(true)
 	if not bool(data.get("is_elite", false)):
@@ -1340,7 +1333,13 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 	_elite_growth_profile = (data.get("elite_growth_profile", {}) as Dictionary).duplicate(true)
 	_elite_escape_active = false
 	_elite_escape_elapsed = 0.0
+	_elite_encounter_damage_taken = 0
+	_elite_confiscation_serial = 0
 	_elite_health_bar_profile = (data.get("elite_health_bar_profile", {}) as Dictionary).duplicate(true)
+	# Presentation dimensions come from current content, including restored actors.
+	var current_bar_profile := EliteContentCatalog.get_by_id(elite_id).get("health_bar_profile", {}) as Dictionary
+	if not current_bar_profile.is_empty() and current_bar_profile.has("size"):
+		_elite_health_bar_profile["size"] = current_bar_profile["size"]
 	_elite_attack_counter = 0
 	_elite_behavior_trigger_count = 0
 	_variant_scale_multiplier = 1.0
@@ -1388,6 +1387,7 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 				str(data.get("presentation_scene", ""))
 			)
 		if elite_id == EliteArmsTakerCombat.ID:
+			_variant_scale_multiplier *= EliteArmsTakerCombat.BODY_SCALE_MULTIPLIER
 			arms_taker_combat = EliteArmsTakerCombat.new(self)
 	if enemy_kind == "boss":
 		_variant_scale_multiplier *= float(data.get("boss_scale", 1.0))
@@ -1408,10 +1408,16 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 		contact_damage = maxi(0, int(data["override_damage"]))
 	if data.has("override_speed"):
 		move_speed = maxf(0.05, float(data["override_speed"]))
+	if arms_taker_combat != null:
+		max_hp *= EliteArmsTakerCombat.INITIAL_HP_MULTIPLIER
+		current_hp *= EliteArmsTakerCombat.INITIAL_HP_MULTIPLIER
 	# —— 关卡级「敌弹观感」覆盖（远征03 `monster_rules.projectile.visual_scale`）——
 	# 只改弹体视觉尺寸，不改弹速 / 伤害 / 判定。未配置本键的关卡保持 1.0。
 	_projectile_visual_scale = maxf(0.05, float(data.get("projectile_visual_scale", 1.0)))
 	_apply_presentation_scale()
+	if arms_taker_combat != null and avatar != null:
+		avatar.sync_elite_presentation(arms_taker_combat.presentation_context())
+		_ensure_elite_hit_volumes()
 	_ensure_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
 
@@ -1443,6 +1449,9 @@ func _apply_presentation_scale() -> void:
 		* _kind_scale_multiplier
 		* _variant_scale_multiplier
 	)
+	if arms_taker_combat != null and collision_shape != null:
+		var cylinder := collision_shape.shape as CylinderShape3D
+		collision_shape.position.y = cylinder.height * 0.5 + EliteArmsTakerCombat.FOOT_INSET_M / scale.y
 	if _overhead_health_root != null:
 		_position_overhead_health_bar()
 
@@ -1511,7 +1520,8 @@ func _ensure_overhead_health_bar() -> void:
 		_elite_name_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		_elite_name_label.no_depth_test = true
 		_elite_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_elite_name_label.position = Vector3(0.0, _overhead_health_size.y * 0.92, 0.02)
+		# Thin bars still need enough room for the name and its outline.
+		_elite_name_label.position = Vector3(0.0, maxf(_overhead_health_size.y * 0.92, 0.24), 0.02)
 		_overhead_health_root.add_child(_elite_name_label)
 	_illumination_status_label = Label3D.new()
 	_illumination_status_label.name = "IlluminationStatusText"
@@ -1666,6 +1676,8 @@ func export_runtime_state() -> Dictionary:
 		"elite_modifier_id": elite_modifier_id,
 		"elite_escape_active": _elite_escape_active,
 		"elite_escape_elapsed": _elite_escape_elapsed,
+		"elite_encounter_damage_taken": _elite_encounter_damage_taken,
+		"elite_confiscation_serial": _elite_confiscation_serial,
 		"elite_escape_origin": [_elite_escape_origin.x, _elite_escape_origin.y, _elite_escape_origin.z],
 		"attack_timer": _attack_timer,
 		"slow_factor": _slow_factor,
@@ -1674,6 +1686,7 @@ func export_runtime_state() -> Dictionary:
 		"boss_skill_index": _boss_skill_index,
 		"monitor_poise_damage": monitor_combat.poise_damage if monitor_combat != null else 0.0,
 		"monitor_electric_cooldown": monitor_combat.electric_cooldown if monitor_combat != null else 0.0,
+		"arms_taker_electric_cooldown": arms_taker_combat.electric_cooldown if arms_taker_combat != null else 0.0,
 		"monitor_activation_completed": monitor_combat.activation_completed if monitor_combat != null else true,
 		"monitor_activation_started": monitor_combat.activation_started if monitor_combat != null else true,
 		"monitor_activation_elapsed": monitor_combat.activation_elapsed if monitor_combat != null else 0.0,
@@ -1707,6 +1720,8 @@ func import_runtime_state(state: Dictionary) -> bool:
 	_ambush_triggered = bool(state.get("ambush_triggered", _ambush_triggered))
 	_elite_escape_active = bool(state.get("elite_escape_active", false))
 	_elite_escape_elapsed = maxf(0.0, float(state.get("elite_escape_elapsed", 0.0)))
+	_elite_encounter_damage_taken = maxi(0, int(state.get("elite_encounter_damage_taken", 0)))
+	_elite_confiscation_serial = maxi(0, int(state.get("elite_confiscation_serial", 0)))
 	var saved_escape_origin: Variant = state.get("elite_escape_origin", [])
 	if saved_escape_origin is Array and (saved_escape_origin as Array).size() >= 3:
 		_elite_escape_origin = Vector3(
@@ -1732,6 +1747,7 @@ func import_runtime_state(state: Dictionary) -> bool:
 		monitor_combat.activation_started = bool(state.get("monitor_activation_started",monitor_combat.activation_completed or monitor_combat.activation_elapsed > 0.0))
 	if arms_taker_combat != null:
 		arms_taker_combat.cancel()
+		arms_taker_combat.electric_cooldown = clampf(float(state.get("arms_taker_electric_cooldown", 0.0)), 0.0, EliteArmsTakerCombat.ELECTRIC_COOLDOWN)
 	var saved_ai_state := str(state.get("ai_state", "idle"))
 	# 生效帧不能跨卸载边界继续伤害；重新进房时退回可读的警戒状态。
 	if saved_ai_state in ["telegraph", "attack", "recovery", "stagger"]:
@@ -1780,7 +1796,7 @@ func is_runtime_ai_active() -> bool:
 ## 屏幕外指示箭头据此不给它画箭头 —— 否则玩家还没走到跟前，箭头就把伏击点报出来了。
 ## 与 `_ambush_triggered` 是同一事实，只是对外给一个只读名字。
 func is_concealed_in_world() -> bool:
-	return enemy_kind == "ambusher" and not _ambush_triggered
+	return (enemy_kind == "ambusher" and not _ambush_triggered) or (arms_taker_combat != null and arms_taker_combat.phased_out)
 
 
 func _process(delta: float) -> void:
@@ -1790,14 +1806,13 @@ func _process(delta: float) -> void:
 	if avatar != null:
 		if monitor_combat != null:
 			avatar.sync_boss_presentation(monitor_combat.presentation_context())
-			# 受击盒必须与**本帧渲染出来的**姿态一致：紧跟表现层同步、用同一份骨姿态。
-			# 反过来说，盒子再也不会「停在上一帧该在的地方」而和画面错开。
-			if _ensure_monitor_hit_volumes():
-				_sync_monitor_hit_volumes()
+			_ensure_monitor_hit_volumes()
 		elif arms_taker_combat != null:
 			avatar.sync_elite_presentation(arms_taker_combat.presentation_context())
+			_ensure_elite_hit_volumes()
 		else:
 			avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration(), get_effective_move_speed())
+		_sync_animated_hit_volumes()
 	_tick_overhead_health_bar_delay(delta)
 	# 已加载但尚未进入近距离 AI 圈的怪物仍需低成本监听真实受光刺激。
 	# 否则其 physics_process 被暂停后，探照灯永远不可能将它唤醒。
@@ -1806,83 +1821,90 @@ func _process(delta: float) -> void:
 	illumination_sensor.tick(delta)
 
 
-## 显示器 Boss：按表现层给出的骨局部盒子建一组**跟骨走**的受击形状。
-## 形状挂在独立代理体上（`collision_layer` 与本体同层 ⇒ 玩家子弹打得中；
-## `collision_mask = 0` ⇒ 谁也不挡），因此子弹拿到的 `collider` 是代理，
-## 伤害由 `EnemyHitVolume3D` 转交本体。只在表现层就绪后建一次；
-## 非本 Boss（`monitor_combat == null`）永不建。
-func _ensure_monitor_hit_volumes() -> bool:
-	if monitor_combat == null or avatar == null:
-		return false
-	if _monitor_hit_body != null and is_instance_valid(_monitor_hit_body):
-		return true
+func _ensure_monitor_hit_volumes() -> void:
+	if is_instance_valid(_animated_hit_body):
+		return
 	var presentation := avatar.get_animated_boss_root() as MonitorBossPresentation
-	if presentation == null or presentation.skeleton == null:
-		return false
-	var spec := MonitorBossPresentation.get_hit_volume_spec()
-	if spec.is_empty():
-		return false
+	if presentation != null and presentation.skeleton != null:
+		_build_animated_hit_volumes(presentation, MonitorBossPresentation.get_hit_volume_spec(), "MonitorHitVolumes")
+
+
+func _ensure_elite_hit_volumes() -> void:
+	if is_instance_valid(_animated_hit_body):
+		return
+	var presentation := avatar.get_animated_elite_root()
+	if presentation != null and presentation.has_method("get_hit_volume_spec") and presentation.has_method("hit_volume_transforms"):
+		_build_animated_hit_volumes(presentation, presentation.call("get_hit_volume_spec"), "ArmsTakerHitVolumes")
+
+
+## 代理进入子弹层，原圆柱继续按自己的 mask 执行移动碰撞。
+func _build_animated_hit_volumes(presentation: Node3D, spec: Array, body_name: String) -> void:
+	var transforms: Array[Transform3D] = presentation.call("hit_volume_transforms")
+	if spec.is_empty() or transforms.size() != spec.size():
+		return
 	var body := EnemyHitVolume3D.new()
-	body.name = "MonitorHitVolumes"
-	body.collision_layer = MONITOR_BULLET_LAYER
+	body.name = body_name
+	body.collision_layer = ENEMY_BULLET_LAYER if ai_state != "dead" and (arms_taker_combat == null or not arms_taker_combat.phase_intangible) else 0
 	body.collision_mask = 0
 	body.bind(self)
 	add_child(body)
-	# 圆柱退出子弹层：它半径 2.016 m、比可见屏幕宽 1 m 以上，留着会把子弹拦在屏幕前 1 m 处。
-	# 自身移动只看 `collision_mask`，所以这一步不改变走位、阻挡或任何别的口径。
-	collision_layer = 0
-	var shapes: Array[CollisionShape3D] = []
-	for entry in spec:
+	for index in range(spec.size()):
+		var entry: Dictionary = spec[index]
 		var box := BoxShape3D.new()
 		box.size = entry["size"] as Vector3
 		var shape := CollisionShape3D.new()
 		shape.name = "Volume_%s" % str(entry["bone"]).replace(".", "_")
 		shape.shape = box
 		body.add_child(shape)
-		shapes.append(shape)
-	_monitor_hit_body = body
-	_monitor_hit_shapes = shapes
-	_monitor_hit_presentation = presentation
-	_sync_monitor_hit_volumes()
-	return true
+		shape.global_transform = transforms[index]
+		_animated_hit_shapes.append(shape)
+	_animated_hit_body = body
+	_animated_hit_presentation = presentation
+	collision_layer = 0
 
 
-## 把受击形状搬到本帧骨姿态上。必须在 `sync_boss_presentation` 之后调用 ——
-## 否则盒子会停在上一帧的位置，等于把「隔空命中」换个方向重演一遍。
-## 顺带把代理体的碰撞层与本体对齐：本体死掉变 layer 0 时，盒子必须一起失效，
-## 否则会留下一组「打得到、但怪已经死了」的幽灵体积。
-func _sync_monitor_hit_volumes() -> void:
-	if _monitor_hit_shapes.is_empty() or _monitor_hit_presentation == null:
+## 采样表现之后再同步，受击盒跟随刚应用的骨姿态。
+func _sync_animated_hit_volumes() -> void:
+	if ai_state == "dead" or not is_instance_valid(_animated_hit_presentation):
 		return
-	if not is_instance_valid(_monitor_hit_presentation):
-		return
-	if _monitor_hit_body != null and is_instance_valid(_monitor_hit_body):
-		# 死亡后受击盒必须一起失效，否则会留下一组「打得到、但怪已经死了」的幽灵体积。
-		# 不能读 `collision_layer` —— 它已被置 0 让出子弹层（见 `_ensure_monitor_hit_volumes`），
-		# 读它会让受击盒一建出来就失效。看状态而不是看层。
-		_monitor_hit_body.collision_layer = MONITOR_BULLET_LAYER if ai_state != "dead" else 0
-	var transforms := _monitor_hit_presentation.hit_volume_transforms()
-	var count := mini(transforms.size(), _monitor_hit_shapes.size())
+	var transforms: Array[Transform3D] = _animated_hit_presentation.call("hit_volume_transforms")
+	var count := mini(transforms.size(), _animated_hit_shapes.size())
 	for index in range(count):
-		_monitor_hit_shapes[index].global_transform = transforms[index]
+		_animated_hit_shapes[index].global_transform = transforms[index]
+
+
+func get_animated_hit_volume_body() -> EnemyHitVolume3D:
+	return _animated_hit_body
+
+
+func get_animated_hit_volumes() -> Array[CollisionShape3D]:
+	return _animated_hit_shapes
+
+
+func _sync_monitor_hit_volumes() -> void:
+	if monitor_combat != null:
+		_sync_animated_hit_volumes()
 
 
 ## 供验收读取：本怪当前的动画受击盒容器（null = 非本 Boss 或表现层未就绪）。
 func get_monitor_hit_volume_body() -> EnemyHitVolume3D:
-	return _monitor_hit_body
+	return _animated_hit_body if monitor_combat != null else null
 
 
 ## 供验收读取：本怪当前的动画受击形状。
 func get_monitor_hit_volumes() -> Array[CollisionShape3D]:
-	return _monitor_hit_shapes
+	return _animated_hit_shapes if monitor_combat != null else []
 
 
-func _clear_monitor_hit_volumes() -> void:
-	if _monitor_hit_body != null and is_instance_valid(_monitor_hit_body):
-		_monitor_hit_body.queue_free()
-	_monitor_hit_body = null
-	_monitor_hit_shapes.clear()
-	_monitor_hit_presentation = null
+func _clear_animated_hit_volumes() -> void:
+	if is_instance_valid(_animated_hit_body):
+		_animated_hit_body.collision_layer = 0
+		_animated_hit_body.queue_free()
+		if ai_state != "dead":
+			collision_layer = ENEMY_BULLET_LAYER
+	_animated_hit_body = null
+	_animated_hit_shapes.clear()
+	_animated_hit_presentation = null
 
 
 func activate_from_player_proximity(player_node: Node3D, activation_range: float) -> bool:
@@ -2243,7 +2265,8 @@ func _update_facing(to_target: Vector3, delta: float) -> void:
 
 func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	var monitor_facing_ready := monitor_combat == null or (not monitor_combat.turning and (-global_basis.z).normalized().dot(to_target.normalized()) >= 0.97)
-	var elite_facing_ready := arms_taker_combat == null or (-global_basis.z).normalized().dot(to_target.normalized()) >= 0.9
+	if arms_taker_combat != null and arms_taker_combat.try_chase_action(to_target, distance, delta):
+		return
 	# ⚠ `_has_line_of_sight` 必须放在**最后一个条件**：它是射线，放在前面会让每帧每只怪
 	# 都打一条射线（30 只怪 = 30 条/帧）。短路到最后时，只有「已进射程 + 冷却已好」
 	# 那几帧才会真的投射 —— 也就是「正要开火」的那一瞬。
@@ -2253,7 +2276,7 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	# 原作对此有明确行为（`Bullet Kin` 会翻桌找掩体、`Confirmed` 强调 "stopping to fire"），
 	# 且弹幕游戏的公平性原则要求「看不见的火力不该存在」。
 	if (
-		distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready and elite_facing_ready
+		arms_taker_combat == null and distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready
 		and not _egt_skips_attack_window()
 		and _has_line_of_sight(_target)
 	):
@@ -2649,7 +2672,8 @@ func _fire_projectile(
 		"visual_scale": _effective_projectile_visual_scale(),
 	}
 	if not behavior.is_empty():
-		config["behavior"] = behavior.duplicate(true)
+		config["behavior"] = behavior
+		config["visual_id"] = behavior.get("visual_id", "")
 	var world_position := (
 		global_position + Vector3(0, 0.92, 0) + to_target.normalized() * 0.72
 	)
@@ -2660,9 +2684,8 @@ func _fire_projectile(
 		(pools[0] as ProjectilePool3D).acquire(config, world_position)
 	else:
 		var projectile := PROJECTILE_SCRIPT.new() as Projectile3D
-		projectile.configure(config)
 		get_tree().current_scene.add_child(projectile)
-		projectile.global_position = world_position
+		projectile.activate(config, world_position)
 
 
 func _fire_projectile_volley(
@@ -3574,9 +3597,9 @@ func _is_blink_landing_free(point: Vector3) -> bool:
 ## 边距取 `get_world_body_radius() + 0.6`：瞬移是**直接改 transform**，不走碰撞求解，
 ## 落点离墙太近会立刻被下一帧的碰撞挤开（表现为"瞬移过去抖一下"），贴到墙上还会卡住。
 ## 房太小（半边长 < 边距）时退化为房心 —— 宁可原地不动，也不要穿墙。
-func _clamp_into_room(point: Vector3) -> Vector3:
+func _clamp_into_room(point: Vector3, extra_margin := 0.0) -> Vector3:
 	var local := _room_bounds_transform.affine_inverse() * point
-	var margin := get_world_body_radius() + 0.6
+	var margin := get_world_body_radius() + 0.6 + extra_margin
 	var limit_x := maxf(0.0, _room_bounds_half.x - margin)
 	var limit_z := maxf(0.0, _room_bounds_half.y - margin)
 	local.x = clampf(local.x, -limit_x, limit_x)
@@ -4121,7 +4144,7 @@ func _spawn_ground_blast_zone(radius: float) -> void:
 
 
 func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, hit_knockback := 0.0, interrupt_movement := true) -> void:
-	if ai_state == "dead":
+	if ai_state == "dead" or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
 		return
 	# 拟态怪：伪装状态下**不吃伤害**，但挨打就现形（原作"被射击才现形"）。
 	# 顺序很重要：先现形、再照常结算这一发 —— 否则玩家打中箱子会读成"打空"。
@@ -4148,6 +4171,7 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 		applied = maxi(1, int(applied * 0.32))
 	if critical:
 		applied = maxi(1, int(applied * 1.5))
+	_elite_encounter_damage_taken += mini(current_hp, applied)
 	current_hp = maxi(0, current_hp - applied)
 	health_changed.emit(self, current_hp, max_hp)
 	_update_boss_phase()
@@ -4182,7 +4206,7 @@ func take_projectile_damage(
 	attacker: Node3D = null,
 	hit_knockback := 0.0
 ) -> void:
-	if ai_state == "dead" or amount <= 0:
+	if ai_state == "dead" or amount <= 0 or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
 		return
 	# 伪装 / 无敌同样在这一层先拦：子弹通道与近战通道必须给出**一致的结果**，
 	# 否则会出现"枪打不动、近战能砍"（或被反过来）的诡异判定。
@@ -4369,6 +4393,8 @@ func transition_to(state_id: String, reason := "") -> bool:
 		if MonsterAIManager != null:
 			MonsterAIManager.release_attack_token(self)
 	ai_state = state_id
+	if state_id == "dead" and is_instance_valid(_animated_hit_body):
+		_animated_hit_body.collision_layer = 0
 	if monitor_combat != null:
 		if state_id == "telegraph":monitor_combat.begin()
 		elif state_id in ["dead","dormant"]:monitor_combat.cancel()
@@ -4921,7 +4947,7 @@ func _compute_separation_push() -> Vector3:
 		if counted >= SEPARATION_NEIGHBOR_LIMIT:
 			break
 		var other := node as Enemy3D
-		if other == null or other == self or other.ai_state == "dead":
+		if other == null or other == self or other.ai_state == "dead" or (other.arms_taker_combat != null and other.arms_taker_combat.phase_intangible):
 			continue
 		var offset := global_position - other.global_position
 		offset.y = 0.0
@@ -5115,9 +5141,6 @@ func _apply_unique_elite_attack_behavior(to_target: Vector3) -> void:
 		"mirror_sector":
 			if _elite_attack_counter % 2 == 1:
 				_fire_projectile_volley(to_target, int(contact_damage * 0.60), Color(0.66, 0.92, 1.0), 5, 0.22)
-		"weapon_phase_swap":
-			var phase_count: int = [1, 3, 5][_elite_attack_counter % 3]
-			_fire_projectile_volley(to_target, int(contact_damage * level_scale), Color(1.0, 0.22, 0.42), phase_count, 0.12, phase_count >= 5)
 		"seven_attack_rule":
 			if _elite_attack_counter % 7 == 0:
 				_fire_projectile_volley(to_target, int(contact_damage * 0.75 * level_scale), Color(0.98, 0.84, 0.18), 7, 0.24, true)
@@ -5302,10 +5325,15 @@ func _die() -> void:
 		_spawn_effect("VFX-EXPLOSION-3D" if enemy_kind == "boss" else "VFX-IMPACT-3D", 1.4 if enemy_kind == "boss" else 0.8)
 	killed.emit(self, get_enemy_data())
 	if not elite_id.is_empty() and EliteRosterService != null:
-		EliteRosterService.settle(elite_id, elite_encounter_instance_id, "killed", {
+		var death_context := {
 			"floor_number": int(enemy_data.get("floor_number", enemy_data.get("floor", 0))),
 			"room_id": room_id,
-		})
+		}
+		var scene := get_tree().current_scene
+		if not str(enemy_data.get("roaming_elite_session_id", "")).is_empty() and scene != null and scene.has_method("commit_roaming_elite_death"):
+			scene.call("commit_roaming_elite_death", self, death_context)
+		else:
+			EliteRosterService.settle(elite_id, elite_encounter_instance_id, "killed", death_context)
 	if no_corpse:
 		# **去掉倒地动画**（业主 2026-10-14，两轮点名：先小僵尸/警察僵尸，再胖子僵尸）：
 		# 不再等 `get_formal_death_duration()` 把「dead」段（倒地）播完、也不再留尸体
@@ -5632,6 +5660,8 @@ func _retire_goo_death_visual() -> void:
 
 
 func _should_begin_elite_escape() -> bool:
+	if arms_taker_combat != null:
+		return not _elite_escape_active and current_hp > 0 and _elite_encounter_damage_taken >= ceili(max_hp * EliteArmsTakerCombat.RETREAT_DAMAGE_RATIO)
 	return (
 		not elite_id.is_empty()
 		and not _elite_escape_active
@@ -5684,9 +5714,12 @@ func _complete_elite_escape() -> void:
 		"weapon_snapshot": weapon_snapshot,
 		"distance_travelled": global_position.distance_to(_elite_escape_origin),
 	}
+	var managed := not str(enemy_data.get("roaming_elite_session_id", "")).is_empty()
+	var scene := get_tree().current_scene
 	var settled: bool = (
 		EliteRosterService == null
-		or EliteRosterService.settle(elite_id, elite_encounter_instance_id, "escaped", context)
+		or (bool(scene.call("commit_roaming_elite_escape", self, context)) if managed and scene != null and scene.has_method("commit_roaming_elite_escape")
+		else EliteRosterService.settle(elite_id, elite_encounter_instance_id, "escaped", context))
 	)
 	if not settled:
 		# 长期档案保存失败时精英不能从世界消失；保留撤离态并按短间隔重试，

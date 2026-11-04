@@ -196,6 +196,23 @@ func commit_elite_archive_record(elite_id: String, record: Dictionary, reason: S
 	return commit_elite_archive_records(records, reason)
 
 
+func commit_elite_and_runtime_checkpoint(elite_id: String, record: Dictionary, snapshot: Dictionary, reason: String) -> bool:
+	if elite_id.is_empty() or record.is_empty() or not bool(snapshot.get("valid", false)):
+		return false
+	if str(snapshot.get("checkpoint_id", snapshot.get("layout_id", ""))).is_empty():
+		return false
+	_ensure_data()
+	var old_records := data.elite_archive_records.duplicate(true)
+	var old_checkpoint := data.active_run_snapshot.duplicate(true)
+	data.elite_archive_records[elite_id] = record.duplicate(true)
+	data.active_run_snapshot = snapshot.duplicate(true)
+	if save_base(reason):
+		return true
+	data.elite_archive_records = old_records
+	data.active_run_snapshot = old_checkpoint
+	return false
+
+
 func replace_elite_archive_records_for_test(records: Dictionary) -> void:
 	_ensure_data()
 	if data != null:

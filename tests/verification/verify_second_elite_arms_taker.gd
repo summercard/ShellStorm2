@@ -113,6 +113,8 @@ func _check_asset_layout(failures: Array[String]) -> void:
 		failures.append("Elite scene root metadata/asset_id drifted")
 	if str(root.get_meta("content_id", "")) != "elite_arms_taker":
 		failures.append("Elite scene root metadata/content_id drifted")
+	if str(root.get_meta("asset_version", "")) != "v003" or not root.scale.is_equal_approx(Vector3.ONE):
+		failures.append("Elite runtime wrapper lost its v003 version or unit scale")
 	root.queue_free()
 
 
@@ -137,6 +139,13 @@ func _check_animation_master(failures: Array[String]) -> void:
 		return
 	if skeleton.get_bone_count() != BONE_COUNT:
 		failures.append("Elite skeleton bone count drifted: %d != %d" % [skeleton.get_bone_count(), BONE_COUNT])
+	var model := _find_first(root, "MeshInstance3D") as MeshInstance3D
+	var geometry := model.mesh as ArrayMesh if model != null else null
+	var material := model.get_active_material(0) as StandardMaterial3D if geometry != null else null
+	if geometry == null or (geometry.surface_get_format(0) & Mesh.ARRAY_FORMAT_TEX_UV) == 0:
+		failures.append("Textured elite lost its authored UVs")
+	if material == null or material.albedo_texture == null or material.normal_texture == null or material.metallic_texture == null or material.roughness_texture == null:
+		failures.append("Textured elite lost an imported material map")
 	var listed := player.get_animation_list()
 	var missing: Array[String] = []
 	for clip_name in CLIP_DURATIONS.keys():

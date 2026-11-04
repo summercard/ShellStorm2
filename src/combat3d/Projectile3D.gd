@@ -12,6 +12,7 @@ const BULLET_VISUAL_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d
 ## 八个弹种一条 Prefab 一个类，见 src/vfx/VfxBullet<Type>3D.gd 与账本「子弹特效」大类。
 const BULLET_VISUAL_REGISTRY: Dictionary = {
 	"fate_rock": preload("res://assets/art/vfx/combat_3d/vfx_fate_rock_root_top3d.tscn"),
+	VfxPool3D.FX01_BULLET_ELECTRIC: preload("res://assets/art/vfx/combat_3d/vfx_bullet_electric_root_top3d.tscn"),
 	"mod_bullet_standard": preload("res://assets/art/vfx/combat_3d/vfx_bullet_standard_root_top3d.tscn"),
 	"mod_bullet_sticky": preload("res://assets/art/vfx/combat_3d/vfx_bullet_sticky_root_top3d.tscn"),
 	"mod_bullet_bounce": preload("res://assets/art/vfx/combat_3d/vfx_bullet_bounce_root_top3d.tscn"),
@@ -179,6 +180,9 @@ func activate(config: Dictionary, world_position: Vector3) -> void:
 	_tracked_collision_exceptions.clear()
 	if shooter is PhysicsBody3D:
 		_add_tracked_collision_exception(shooter as PhysicsBody3D)
+	var ignored: Variant = fate_behavior.get("ignore_body")
+	if is_instance_valid(ignored) and ignored is PhysicsBody3D and ignored != shooter:
+		_add_tracked_collision_exception(ignored)
 	_active = true
 	visible = true
 	process_mode = Node.PROCESS_MODE_INHERIT
@@ -274,6 +278,10 @@ func _physics_process(delta: float) -> void:
 	var collider := collision.get_collider() as Node
 	if collider == shooter:
 		return
+	if fate_behavior.has("floor_burst"):
+		_land_floor_burst(collision.get_normal(), collision.get_position(), collider)
+		_retire()
+		return
 	if collider != null and collider.has_method("take_damage"):
 		_hit_target(collider, hit_context)
 		return
@@ -312,12 +320,17 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 		_hit_any = true
 		if _returning:
 			_return_hit_ids[collider.get_instance_id()] = true
+		var shock_target := collider as Player3D
+		var root_seconds := float(fate_behavior.get("electric_root_seconds", 0.0))
+		var previous_hp := shock_target.current_hp if shock_target != null and root_seconds > 0.0 else 0
 		if collider.has_method("take_projectile_damage"):
 			collider.call("take_projectile_damage", damage, critical, direction, bullet_tags, fate_behavior, shooter, hit_knockback)
 		else:
-			if shooter != null and collider.has_method("notify_attacked_by"):
+			if is_instance_valid(shooter) and collider.has_method("notify_attacked_by"):
 				collider.call("notify_attacked_by", shooter)
 			collider.call("take_damage", damage, critical, direction, hit_knockback)
+		if previous_hp > 0 and is_instance_valid(shock_target) and shock_target.current_hp < previous_hp:
+			shock_target.apply_electric_root(root_seconds)
 		_apply_secondary_effect(collider)
 		_apply_fate_on_hit(collider)
 		if bool(fate_behavior.get("rock_shatter", false)):
@@ -609,6 +622,7 @@ func _bullet_visual_context() -> Dictionary:
 		"axial_scale": float(_gun_bullet_geometry.get("axial", 1.0)),
 		"grow_from": float(_gun_bullet_geometry.get("grow_from", 1.0)),
 		"grow_duration": float(_gun_bullet_geometry.get("grow_duration", 0.0)),
+		"projectile": true,
 	}
 
 func _apply_visual_configuration() -> void:
@@ -683,6 +697,9 @@ func _spawn_hit_effect(
 		spawn_position = (collider as Enemy3D).hit_effect_anchor(
 			spawn_position, hit_context.get("normal", Vector3.ZERO) as Vector3
 		)
+	elif collider is EnemyHitVolume3D and world_position == null:
+		# 骨骼受击盒贴着肢体，火花落在接触点，避免留在弹体中心外侧。
+		spawn_position = hit_context.get("position", spawn_position)
 	_spawn_effect(asset_id, spawn_position, bullet_color, size, hit_context)
 
 
@@ -773,6 +790,32 @@ func _shatter_into_ring() -> void:
 			},
 			origin + dir * 0.35
 		)
+
+
+func _land_floor_burst(normal: Vector3, point: Vector3, collider: Node) -> void:
+	var burst: Dictionary = fate_behavior["floor_burst"]
+	if normal.y < 0.65 or collider is CharacterBody3D or absf(point.y - float(burst["floor_y"])) > 0.22:
+		_spawn_effect(VfxPool3D.FX01_METAL_SPARK_HIT, point, bullet_color, METAL_SPARK_SIZE_SURFACE, {"normal": normal})
+		return
+	_spawn_effect(VfxPool3D.FX01_ARMS_TAKER_FLOOR_CAST, point + Vector3.UP * 0.035, bullet_color, 1.15, {"duration": 0.30, "impact": true})
+	var count := int(burst["count"])
+	var child_damage := maxi(1, roundi(damage * float(burst["damage_ratio"])))
+	var pool := _resolve_projectile_pool()
+	var origin := point + Vector3.UP * 0.26
+	for index in count:
+		var angle := TAU * float(index) / float(count)
+		var config := {
+			"direction": Vector3(sin(angle), 0.0, cos(angle)), "speed": burst["speed"],
+			"damage": child_damage, "hostile": hostile, "shooter": shooter,
+			"color": bullet_color, "tags": ["electric"], "visual_id": VfxPool3D.FX01_BULLET_ELECTRIC,
+			"behavior": {"home_lifetime": burst["lifetime"], "electric_root_seconds": burst["root_seconds"]},
+		}
+		if pool != null:
+			pool.acquire(config, origin)
+		elif get_tree().current_scene != null:
+			var projectile := Projectile3D.new()
+			get_tree().current_scene.add_child(projectile)
+			projectile.activate(config, origin)
 
 
 func _shatter_rock() -> void:

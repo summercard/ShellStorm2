@@ -820,6 +820,9 @@ func sync_elite_presentation(context: Dictionary) -> void:
 	if has_animated_elite():
 		_formal_elite_root.call("sync_context", context)
 
+func get_animated_elite_root() -> Node3D:
+	return _formal_elite_root if has_animated_elite() else null
+
 ## 已挂载的正式 Boss 表现根；没有则返回 null。
 ## 给 `Enemy3D` 读骨姿态用（受击体积要跟着骨骼走），不交出物理所有权。
 func get_animated_boss_root() -> Node3D:

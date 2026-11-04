@@ -301,12 +301,14 @@ enemy_data["encounter_instance_id"]        # 精英的预约号，用于结算�
 
 ## 5. 12 只唯一精英
 
+2026-11-04 用户修订后，唯一精英独立于房间清怪与开门计数。普通敌群清空即可推进波次或完成房间，精英继续作为独立实体运行。收租人在无限公馆的重复现身、生命与夺取档案规则以[收租人契约 r5](design/精英02收租人状态与动作契约.md)为准。
+
 ### 5.1 已冻结规则
 
 - <span style="color:#1565C0">**[用户设计]** 全游戏固定 12 只，每只有稳定 ID、独立名字、功能与档案。</span>
 - <span style="color:#1565C0">**[用户设计]** 精英可随机出现、成长、逃脱、获取玩家枪械；同一时间最多存在一只同名精英。</span>
 - <span style="color:#2E7D32">**[已实装｜代码核对至2026-08-27]** `EliteRosterService` 以当前 `BaseData 2.0` 的 `elite_archive_records` 为唯一持久化事实源，固定12个稳定ID；预约、确认、死亡/逃脱/反生成结算均原子保存，同一名册成员不能同时进入两个遭遇，加载时会释放不属于有效行动的陈旧预约。</span>
-- <span style="color:#2E7D32">**[系统骨架已实装｜首只闭环完成于2026-08-27]** 12只精英分别保留 `armed_rush / bullet_devourer / rotating_carapace / hive_network / renewing_mines / false_burrow_routes / mirror_sector / weapon_phase_swap / seven_attack_rule / attachment_echo / escape_route / three_crowns` 行为挂点；当前仅正式投放的“背枪的裂口爬虫”完成了游戏内逃脱触发、玩家死亡归因、跨局成长、夺械再现和悬赏兑现。其余11只仍是行为雏形，不把通用测试等同于内容完成。</span>
+- <span style="color:#2E7D32">**[系统骨架已实装]** 12 只精英各有独立行为挂点。“背枪的裂口爬虫”与夺械者“收租人”已正式投放。收租人的独立战术使用 `arms_taker_tactics`，由 `EliteArmsTakerCombat` 持有。其余 10 只为设计保留或行为雏形。</span>
 - <span style="color:#2E7D32">**[首只正式投放｜2026-08-27]** `elite_rift_boar_armed / 背枪的裂口爬虫` 是当前唯一 `deployed` 精英；每次行动以稳定 `run_seed` 从98F、97F、96F中确定一个目标层，再出现在该层随地图种子随机排布出的首个合法 `ELITE` 房。同一行动不会在三层各刷一只。95F及更深楼层不会从未完成名册生成通用外壳；无可投放精英的精英房降级为普通战斗，Boss房保持Boss单独生成。</span>
 
 ### 5.2 精英定义与档案分离
@@ -314,6 +316,12 @@ enemy_data["encounter_instance_id"]        # 精英的预约号，用于结算�
 `EliteDefinition` 是数据库内容：名字、基础种类、核心机制、成长方向、夺械转译、投放状态、合法楼层和表现。代码事实源为 `EliteContentCatalog`。`EliteArchiveRecord` 是玩家存档：等级、状态、历史、最近出现、夺取模块、悬赏、成长残留和当前预约，事实源为 `EliteRosterService + BaseData 2.0.elite_archive_records`。
 
 禁止把存档记录直接放在场景节点元数据里；场景节点只保存 `elite_id + encounter_instance_id`。
+
+### 5.2.1 档案室首次遭遇登记
+
+`get_encountered_elites()` 由 EliteRosterService 提供已遭遇档案投影：encounter_count/escape_count/death_count 任一为正即公开。reserve 只预约，不解锁；confirm_reservation 成功保存后才计入遭遇并发 roster_changed，失败保持原档案。既有 get_all_elites 保留完整12名册供系统使用。MonsterArchiveMenu 只读已遭遇投影，展示当前等级、状态、stolen_items 的名称/数量、stolen_currency 和 stolen_modules；界面打开时加载，档案变化后刷新。物品与成长的存档和回滚仍由精英档案服务负责。
+
+**遭遇事实的下游用途（2026-11-04）**：`encounter_count > 0` 不只决定档案公开，也是 99F 基地 NPC 首遇提醒的触发条件 —— 首次确认遭遇收租人后回基地，绿苔会站到归航点边上说出用户原话并指向本节的档案终端，跨存档只播一次（判定只读本表，预约不算）。精英侧不拥有这句提醒，出口在[基地NPC §13](20_技术施工_基地NPC.md)，验收 `verify_base_npc_story_beat`。
 
 ### 5.3 唯一生成事务
 
@@ -406,6 +414,8 @@ Enemy3D._process → presentation_context() → EnemyAvatar3D.sync_elite_present
 **12 态逐态驱动且每态都落到一条真实存在的剪辑**、94—92F 窗口与 98—96F 不重叠、95F 不侵入、
 每局三选一覆盖三层、表现场景零碰撞、玩法碰撞半径仍是 `melee_chaser` 基线。
 另由 `verify_second_elite_state_flow` 验证真实行动时钟、命中、中断、朝向、循环连续性与回收；`verify_second_elite_state_visual` 使用真实渲染录制移动/攻击/受击/死亡。实测记录见[状态接线r2](development/2026-11-04_arms_taker_state_binding.md)。
+
+r9 的 `EliteArmsTakerCombat` 在追击中按距离与节奏选择轻扫、重击和屏幕放电，满 6 秒未启动攻击时尝试失联。该控制器管理碰撞暂时关闭、相机外安全落点和显形，并在显形完成帧检查是否衔接屏幕放电。`Projectile3D` 处理母弹落地后的八向电弹，`Player3D` 持有短时定身。实体房间快照保存 8 秒放电冷却的余量，未完成行动恢复到警戒。验收入口为 `verify_arms_taker_tactics`。时序与落点规则见[收租人状态与动作契约](design/精英02收租人状态与动作契约.md)。
 
 #### 5.7.1 定点追加：远征关卡 99 boss 前置房（2026-11-03）
 

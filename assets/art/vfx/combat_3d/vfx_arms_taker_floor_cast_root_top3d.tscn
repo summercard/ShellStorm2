@@ -1,0 +1,80 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxArmsTakerFloorCast3D.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="Ion"]
+shading_mode = 0
+albedo_color = Color(0.16, 0.82, 1, 1)
+emission_enabled = true
+emission = Color(0.11, 0.69, 1, 1)
+emission_energy_multiplier = 1.65
+
+[sub_resource type="TorusMesh" id="Ring"]
+material = SubResource("Ion")
+inner_radius = 0.59
+outer_radius = 0.63
+rings = 32
+ring_segments = 4
+
+[sub_resource type="BoxMesh" id="Tick"]
+material = SubResource("Ion")
+size = Vector3(0.045, 0.014, 0.16)
+
+[node name="VfxArmsTakerFloorCast3D" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "VFX-ARMS-TAKER-FLOOR-CAST-3D"
+metadata/asset_version = "v001"
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("Ring")
+
+[node name="Ticks" type="Node3D" parent="."]
+
+[node name="Tick0" type="MeshInstance3D" parent="Ticks"]
+position = Vector3(0.00000, 0.015, 0.78000)
+rotation = Vector3(0, 0.00000, 0)
+cast_shadow = 0
+mesh = SubResource("Tick")
+
+[node name="Tick1" type="MeshInstance3D" parent="Ticks"]
+position = Vector3(0.55154, 0.015, 0.55154)
+rotation = Vector3(0, 0.78540, 0)
+cast_shadow = 0
+mesh = SubResource("Tick")
+
+[node name="Tick2" type="MeshInstance3D" parent="Ticks"]
+position = Vector3(0.78000, 0.015, 0.00000)
+rotation = Vector3(0, 1.57080, 0)
+cast_shadow = 0
+mesh = SubResource("Tick")
+
+[node name="Tick3" type="MeshInstance3D" parent="Ticks"]
+position = Vector3(0.55154, 0.015, -0.55154)
+rotation = Vector3(0, 2.35619, 0)
+cast_shadow = 0
+mesh = SubResource("Tick")
+
+[node name="Tick4" type="MeshInstance3D" parent="Ticks"]
+position = Vector3(0.00000, 0.015, -0.78000)
+rotation = Vector3(0, 3.14159, 0)
+cast_shadow = 0
+mesh = SubResource("Tick")
+
+[node name="Tick5" type="MeshInstance3D" parent="Ticks"]
+position = Vector3(-0.55154, 0.015, -0.55154)
+rotation = Vector3(0, 3.92699, 0)
+cast_shadow = 0
+mesh = SubResource("Tick")
+
+[node name="Tick6" type="MeshInstance3D" parent="Ticks"]
+position = Vector3(-0.78000, 0.015, -0.00000)
+rotation = Vector3(0, 4.71239, 0)
+cast_shadow = 0
+mesh = SubResource("Tick")
+
+[node name="Tick7" type="MeshInstance3D" parent="Ticks"]
+position = Vector3(-0.55154, 0.015, 0.55154)
+rotation = Vector3(0, 5.49779, 0)
+cast_shadow = 0
+mesh = SubResource("Tick")

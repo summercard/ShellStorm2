@@ -49,6 +49,18 @@ func get_record(elite_id: String) -> Dictionary:
 	return merged
 
 
+func get_encountered_elites() -> Array[Dictionary]:
+	var encountered: Array[Dictionary] = []
+	for record in get_all_elites():
+		if (
+			int(record.get("encounter_count", 0)) > 0
+			or int(record.get("escape_count", 0)) > 0
+			or int(record.get("death_count", 0)) > 0
+		):
+			encountered.append(record)
+	return encountered
+
+
 func get_bounty_currency(elite_id: String) -> int:
 	var definition := get_definition(elite_id)
 	var record := _get_record(elite_id)
@@ -88,9 +100,13 @@ func reserve(elite_id: String, encounter_id: String, floor_number: int) -> bool:
 	if not _definitions_by_id.has(elite_id) or encounter_id.is_empty():
 		return false
 	var record := _get_record(elite_id)
+	if str(record.get("state", "Newborn")) == "Killed":
+		return false
 	var current := str(record.get("reserved_encounter_id", ""))
 	if not current.is_empty() and current != encounter_id:
 		return false
+	if current == encounter_id:
+		return true
 	record["reserved_encounter_id"] = encounter_id
 	record["reservation_confirmed"] = false
 	record["last_floor_number"] = floor_number
@@ -103,6 +119,8 @@ func reserve(elite_id: String, encounter_id: String, floor_number: int) -> bool:
 
 
 func confirm_reservation(elite_id: String, encounter_id: String) -> bool:
+	if encounter_id.is_empty() or not _definitions_by_id.has(elite_id):
+		return false
 	var record := _get_record(elite_id)
 	if str(record.get("reserved_encounter_id", "")) != encounter_id:
 		return false
@@ -113,11 +131,12 @@ func confirm_reservation(elite_id: String, encounter_id: String) -> bool:
 	record["last_encounter_at_unix"] = int(Time.get_unix_time_from_system())
 	record["last_outcome"] = "active"
 	if _commit_record(elite_id, record, "elite_confirm:%s" % elite_id):
+		roster_changed.emit(elite_id, get_record(elite_id))
 		return true
 	return false
 
 
-func settle(elite_id: String, encounter_id: String, outcome: String, context: Dictionary = {}) -> bool:
+func settle(elite_id: String, encounter_id: String, outcome: String, context: Dictionary = {}, runtime_snapshot: Dictionary = {}) -> bool:
 	if outcome not in ["killed", "escaped", "despawned"]:
 		return false
 	var record := _get_record(elite_id)
@@ -137,6 +156,8 @@ func settle(elite_id: String, encounter_id: String, outcome: String, context: Di
 		_capture_stolen_module(record, context.get("weapon_snapshot", {}) as Dictionary)
 	else:
 		record["state"] = str(record.get("state", "Newborn"))
+	if context.get("roaming_encounter", null) is Dictionary:
+		record["roaming_encounter"] = (context["roaming_encounter"] as Dictionary).duplicate(true)
 	record["last_outcome"] = outcome
 	record["last_settled_at_unix"] = int(Time.get_unix_time_from_system())
 	record["reserved_encounter_id"] = ""
@@ -146,11 +167,38 @@ func settle(elite_id: String, encounter_id: String, outcome: String, context: Di
 		history["killed_player_count"] = int(history.get("killed_player_count", 0)) + 1
 	history["last_context"] = _sanitize_context(context)
 	record["history"] = history
-	if not _commit_record(elite_id, record, "elite_settle:%s:%s" % [elite_id, outcome]):
+	var reason := "elite_settle:%s:%s" % [elite_id, outcome]
+	var committed := _commit_record(elite_id, record, reason) if runtime_snapshot.is_empty() else BaseManager.commit_elite_and_runtime_checkpoint(elite_id, record, runtime_snapshot, reason)
+	if not committed:
 		return false
 	_reservations_by_encounter.erase(encounter_id)
 	roster_changed.emit(elite_id, get_record(elite_id))
 	elite_settled.emit(elite_id, outcome, get_record(elite_id))
+	return true
+
+
+func commit_run_record(elite_id: String, run_state: Dictionary, snapshot: Dictionary, receipt: Dictionary = {}) -> bool:
+	if not _definitions_by_id.has(elite_id):
+		return false
+	var record := _get_record(elite_id)
+	if not run_state.is_empty():
+		record["roaming_encounter"] = run_state.duplicate(true)
+	if not receipt.is_empty():
+		var receipt_id := str(receipt.get("receipt_id", ""))
+		var receipts: Array = (record.get("rent_receipts", []) as Array).duplicate(true)
+		if receipt_id.is_empty() or receipts.has(receipt_id):
+			return false
+		receipts.append(receipt_id)
+		record["rent_receipts"] = receipts
+		if receipt.get("kind", "") == "item":
+			var items: Array = (record.get("stolen_items", []) as Array).duplicate(true)
+			items.append({"item": (receipt["item"] as Dictionary).duplicate(true), "count": 1, "receipt_id": receipt_id})
+			record["stolen_items"] = items
+		elif receipt.get("kind", "") == "currency":
+			record["stolen_currency"] = int(record.get("stolen_currency", 0)) + int(receipt["amount"])
+	if not BaseManager.commit_elite_and_runtime_checkpoint(elite_id, record, snapshot, "elite_run:%s" % elite_id):
+		return false
+	roster_changed.emit(elite_id, get_record(elite_id))
 	return true
 
 
@@ -233,7 +281,7 @@ func _clear_stale_reservations() -> void:
 	if BaseManager == null:
 		return
 	var active_checkpoint := BaseManager.get_active_run_checkpoint()
-	var active_run_id := str(active_checkpoint.get("checkpoint_id", ""))
+	var active_run_id := str(active_checkpoint.get("run_id", active_checkpoint.get("checkpoint_id", "")))
 	var changed := false
 	var records := BaseManager.get_elite_archive_records_snapshot()
 	for definition in DEFINITIONS:
