@@ -302,8 +302,14 @@ func _apply_fixed_lighting() -> void:
 	set_process(_time_source == null and time_scale > 0.0)
 
 
-## 远征02专属：远景是封闭建筑外的纯黑，不使用全塔的灰蓝背景、环境抬光或屋顶无影补光。
+## 远征专属：远景是封闭建筑外的纯黑，不使用全塔的灰蓝背景或屋顶无影补光。
 ## 方向光仍保留给近景真实遮挡；因此不会把近景材质和房间局部灯一起压黑。
+##
+## **注意（2026-11-04 实测）**：抬高本函数的 `ambient_light_energy` 对远征03 画面
+## 没有任何作用 —— 在 0 / 0.8 / 5 / 20 四档下，画面中位亮度与 90 分位逐档不变，
+## 且把 ambient 设成纯红 20 也不会让画面变红。03 的「关灯不全黑」因此**不走这里**，
+## 改由 `Expedition03IndoorLightEnvelope` 的常亮室内弱光承担（OmniLight 通道实测有效）。
+## 不要把室内补光重新塞回 ambient，那条路在本工程里是死的。
 func set_expedition_dark_distant(enabled: bool) -> void:
 	_expedition_dark_distant_enabled = enabled
 	_apply_expedition_dark_distant()

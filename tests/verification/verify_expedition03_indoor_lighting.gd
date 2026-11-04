@@ -34,6 +34,7 @@ func _run() -> void:
 	sun.rotation_degrees = Vector3(-60, -32, 0)
 	sun.light_energy = 1.0
 	var rooms: Array = level.get("_rooms")
+	_audit_dark_fill_candidates(level, rooms)
 	await _verify_camera_occlusion(level, envelope, rooms[0])
 	if "--camera-only" in OS.get_cmdline_user_args():
 		level.queue_free()
@@ -61,15 +62,35 @@ func _run() -> void:
 		room.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
 		await settle()
 		var raw: Array[Light3D] = []
+		var dark_fills: Array[Light3D] = []
 		for node in room.find_children("*", "Light3D", true, false):
 			if node.get_parent() is WastelandLight3D:
 				continue
+			# 关灯底光不归房间开关管，单独一列断言（下列 check 组）。
+			if node.has_meta("indoor_envelope_dark_fill"):
+				dark_fills.append(node)
+				continue
 			raw.append(node)
 		check(not raw.is_empty(), "no authored/bounce lights " + room.room_id)
+		check(not dark_fills.is_empty(), "no dark fill light " + room.room_id)
 		room.set_room_light_on(false)
 		await settle()
 		for light in raw:
 			check(is_zero_approx(light.light_energy), "switch off ignored " + str(light.get_path()))
+		# 底光契约（2026-11-04）：关灯后必须仍亮，但不参与怪物受光判定、不投影。
+		for light in dark_fills:
+			check(
+				light.light_energy > 0.0,
+				"dark fill went dark with the switch off " + str(light.get_path())
+			)
+			check(
+				not light.is_in_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP),
+				"dark fill joined enemy local-light group " + str(light.get_path())
+			)
+			check(
+				not light.shadow_enabled,
+				"dark fill casts shadow " + str(light.get_path())
+			)
 		var dims := room.get_dimensions()
 		for u in [-0.40, 0.0, 0.40]:
 			for v in [-0.40, 0.0, 0.40]:
@@ -107,6 +128,38 @@ func _run() -> void:
 	await settle()
 	print("INDOOR_RESULT ", JSON.stringify({"checks":checks,"failures":failures.size(),"rooms":rooms.size(),"sun_samples":samples,"rendered":DisplayServer.get_name() != "headless"}))
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+## 关灯底光必须在**怪物受光判定的两个候选源里都不存在**：光组与空间注册表。
+## `EnemyIllumination3D._refresh_light_cache` 走注册表 `KIND_LOCAL_LIGHT`，降级路径才走组；
+## 只要任一条命中，关灯房间就会被判人造光，潜行规则整体失效。
+## 这条断言存在的理由：底光挂在房间子树下，未来谁把它当普通作者灯"顺手"注册一次，
+## 画面不会有任何变化，只有关灯潜行的规则悄悄坏掉 —— 必须有一条会失败的断言盯着。
+func _audit_dark_fill_candidates(level: TowerDescent3D, rooms: Array) -> void:
+	var registered: Array[Node3D] = (
+		GameplaySpatialRegistry3D.query_kind(GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT)
+		if GameplaySpatialRegistry3D != null
+		else []
+	)
+	var total := 0
+	for value in rooms:
+		for node in (value as DungeonRoom3D).find_children("*", "Light3D", true, false):
+			if not node.has_meta("indoor_envelope_dark_fill"):
+				continue
+			total += 1
+			check(
+				not node.is_in_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP),
+				"dark fill registered in enemy local-light group"
+			)
+			check(
+				not registered.has(node),
+				"dark fill registered as spatial-registry local light " + str(node.get_path())
+			)
+			check(
+				not node.is_in_group(EnemyIllumination3D.SUN_GROUP),
+				"dark fill registered as sun " + str(node.get_path())
+			)
+	check(total > 0, "no dark fill lights found for candidate audit")
+
 
 func _verify_camera_occlusion(level: TowerDescent3D, envelope: Node3D, room: DungeonRoom3D) -> void:
 	var player: Player3D = level.player
