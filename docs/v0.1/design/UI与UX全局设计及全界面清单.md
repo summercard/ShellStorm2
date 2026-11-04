@@ -381,7 +381,7 @@
 - **场景与脚本**：`src/ui/WorkbenchPanel.gd`（功能本体）+ `src/ui/WorkbenchMenu.gd` + `scenes/WorkbenchMenu.tscn`（设施入口包装）+ `src/weapons/WeaponForge.gd` + `src/weapons/SynthesisCatalog.gd` + `src/ui/SynthesisGateVeil.gd`（合成表现）
 - **账本 ID**：*待补录（建议 `UI-MODAL-WORKBENCH`）*
 - **层级**：`TowerDescent3D` 下由 `_open_facility_menu()` 实例化的 `CanvasLayer`（`WorkbenchMenu`），面板本体是铺满视口的 `Control`
-- **触发方式**：**99F 基地左下角（西侧门下方）那台「武器改造台」按 `E`**。该位点在 2026-10-19 之前是「怪物档案室」，按业主要求"同样的设置换一个功能"——位点、`49_武器工作台与弹药附件` 模型、E 键交互全部不动，只把打开的界面换成改造台。`facility_id = "weapon_forge"`，`action_path = res://scenes/WorkbenchMenu.tscn`；怪物档案室的 catalog 条目与菜单场景仍保留（下线的是入口，不是能力）。
+- **触发方式**：**99F 基地左下角（西侧门下方）那台「武器改造台」按 `E`**。该位点在 2026-10-19 之前是「怪物档案室」，按业主要求"同样的设置换一个功能"——位点、`49_武器工作台与弹药附件` 模型、E 键交互全部不动，只把打开的界面换成改造台。`facility_id = "weapon_forge"`，`action_path = res://scenes/WorkbenchMenu.tscn`；怪物档案入口位于99F二楼的42号双屏电脑，见 UI-39。
 - **打开期间必须让位**：基地 HUD 是另一个 `CanvasLayer`、层号与菜单相同，不会被 0.58 的遮罩盖住。`WorkbenchMenu._ready()` 必须 `HUD.visible = false`、关闭（含 `_exit_tree` 兜底）恢复 —— 否则血条/金币/小地图会与炼炉叠成一团。与 `WardrobeMenu3D` 同一套做法。
 - **两个页签**：`熔炼`（默认）/ `合成目录`。合成目录是"钥匙 → 武器"的九条配方清单，见[合成目录与兴趣曲线](../07.3_玩法系统_合成目录与兴趣曲线.md)；页签用棱镜 1px 下划线标记当前页，不用按钮底色。
 - **合成表现（兔子闸门）**：点击熔炼后，一块带兔子封印的闸门**只在炼炉那一栏的矩形内**落下 → 0.12s 后兔子双眼转红并脉动 → 3.00s 处开始上升 → 3.60s 升到底 → 停留 1.40s 展示产物。**播放期间不得剧透**：不刷新背包、状态栏只写「内容置换中」，背包另加不透明封条；刷新与结果文案在闸门收起后一次性换掉。详见[记录](../development/2026-10-19_synthesis_gate_veil.md)。
@@ -542,6 +542,10 @@
 - **账本 ID**：`UI-SCREEN-MONSTER-ARCHIVE`
 - **层级**：`CanvasLayer (layer = 100)`
 - **布局与功能**：按普通怪、精英怪、首领 Boss 分类展示已遭遇敌人的档案卡、击杀统计、弱点抗性说明、行为特征与掉落物清单。
+
+- **精英档案交付范围（2026-11-04）**：首次确认遭遇后公开卡片，未遭遇的精英不提前列出详情；当前等级、状态、全部持有物品及数量、夺取货币、转译装备由 EliteRosterService 提供，提交成功后刷新。普通怪/Boss分类、弱点与掉落说明仍保留上面的目标设计，本次不将其标记已完成。
+
+- **正式入口与表现**：99F基地二楼42号双屏电脑工位按 E 或手柄交互打开怪物档案。热区仅覆盖电脑正前方二楼可站立区，提示锚定电脑，首次遭遇和持有资产以档案服务为准。沿用主界面棱镜字形、冷色背衬、分割线与选中按钮，键鼠和手柄都能选条目、滚动详情和返回。右栏展示所选精英的正式 3D 模型，有待机动作时持续采样。状态区使用档案服务的成长阶段、最近结局与有记录时的上次遭遇生命；无档案时保留空态。模型视口独立、只读，随条目切换。
 
 #### UI-40 命运塔罗牌组全图鉴（`FateCardCollectionMenu`）
 - **场景与脚本**：`scenes/FateCardCollectionMenu.tscn` + `src/ui/FateCardCollectionMenu.gd`

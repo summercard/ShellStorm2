@@ -1,63 +1,172 @@
-[gd_scene load_steps=2 format=3 uid="uid://monster_archive_menu_scene"]
+[gd_scene load_steps=3 format=3 uid="uid://monster_archive_menu_scene"]
 
 [ext_resource type="Script" path="res://src/ui/MonsterArchiveMenu.gd" id="1_archive"]
 
-[node name="MonsterArchiveMenu" type="CanvasLayer"]
-script = ExtResource("1_archive")
+[sub_resource type="Environment" id="Environment_preview"]
+background_mode = 0
+ambient_light_source = 2
+ambient_light_color = Color(0.73, 0.82, 1, 1)
+ambient_light_energy = 0.60
+reflected_light_source = 2
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="MonsterArchiveMenu" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_archive")
+metadata/asset_id = "UI-SCREEN-MONSTER-ARCHIVE"
+metadata/asset_version = "v002"
+
+[node name="Backdrop" type="ColorRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.05, 0.06, 0.1, 0.97)
 
-[node name="Panel" type="PanelContainer" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -380.0
-offset_top = -320.0
-offset_right = 380.0
-offset_bottom = 320.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = 42.0
+offset_right = -60.0
+offset_bottom = -38.0
 
-[node name="VBox" type="VBoxContainer" parent="Panel"]
+[node name="Layout" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Summary" type="Label" parent="Margin/Layout"]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="Panel/VBox"]
-layout_mode = 2
-text = "怪物档案室"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="Panel/VBox"]
-layout_mode = 2
-
-[node name="StatusLabel" type="Label" parent="Panel/VBox"]
-layout_mode = 2
-text = ""
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBox"]
-custom_minimum_size = Vector2(700, 520)
+[node name="Body" type="HBoxContainer" parent="Margin/Layout"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 26
 
-[node name="Content" type="VBoxContainer" parent="Panel/VBox/ScrollContainer"]
+[node name="List" type="ScrollContainer" parent="Margin/Layout/Body"]
+custom_minimum_size = Vector2(290, 0)
+layout_mode = 2
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="Entries" type="VBoxContainer" parent="Margin/Layout/Body/List"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Divider" type="VSeparator" parent="Margin/Layout/Body"]
+layout_mode = 2
+
+[node name="Detail" type="ScrollContainer" parent="Margin/Layout/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="Margin/Layout/Body/Detail"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="Preview" type="PanelContainer" parent="Margin/Layout/Body"]
+custom_minimum_size = Vector2(272, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Padding" type="MarginContainer" parent="Margin/Layout/Body/Preview"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Layout" type="VBoxContainer" parent="Margin/Layout/Body/Preview/Padding"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 9
+
+[node name="Heading" type="Label" parent="Margin/Layout/Body/Preview/Padding/Layout"]
+layout_mode = 2
+text = "精英状态"
+
+[node name="Stage" type="Control" parent="Margin/Layout/Body/Preview/Padding/Layout"]
+layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 
-[node name="HSeparator2" type="HSeparator" parent="Panel/VBox"]
+[node name="ViewportHost" type="SubViewportContainer" parent="Margin/Layout/Body/Preview/Padding/Layout/Stage"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="ModelViewport" type="SubViewport" parent="Margin/Layout/Body/Preview/Padding/Layout/Stage/ViewportHost"]
+own_world_3d = true
+transparent_bg = true
+gui_disable_input = true
+msaa_3d = 1
+size = Vector2i(240, 340)
+render_target_update_mode = 0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Margin/Layout/Body/Preview/Padding/Layout/Stage/ViewportHost/ModelViewport"]
+environment = SubResource("Environment_preview")
+
+[node name="Camera" type="Camera3D" parent="Margin/Layout/Body/Preview/Padding/Layout/Stage/ViewportHost/ModelViewport"]
+current = true
+projection = 1
+
+[node name="KeyLight" type="DirectionalLight3D" parent="Margin/Layout/Body/Preview/Padding/Layout/Stage/ViewportHost/ModelViewport"]
+rotation_degrees = Vector3(-28, 152, 0)
+light_color = Color(0.91, 0.96, 1, 1)
+light_energy = 1.30
+
+[node name="RimLight" type="DirectionalLight3D" parent="Margin/Layout/Body/Preview/Padding/Layout/Stage/ViewportHost/ModelViewport"]
+rotation_degrees = Vector3(-32, -35, 0)
+light_color = Color(0.33, 0.68, 1, 1)
+light_energy = 1.05
+
+[node name="Model" type="Node3D" parent="Margin/Layout/Body/Preview/Padding/Layout/Stage/ViewportHost/ModelViewport"]
+
+[node name="Placeholder" type="Label" parent="Margin/Layout/Body/Preview/Padding/Layout/Stage"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Rule" type="HSeparator" parent="Margin/Layout/Body/Preview/Padding/Layout"]
 layout_mode = 2
 
-[node name="CloseButton" type="Button" parent="Panel/VBox"]
-custom_minimum_size = Vector2(700, 48)
+[node name="State" type="Label" parent="Margin/Layout/Body/Preview/Padding/Layout"]
 layout_mode = 2
-text = "关闭"
+autowrap_mode = 3
+
+[node name="Outcome" type="Label" parent="Margin/Layout/Body/Preview/Padding/Layout"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Health" type="Label" parent="Margin/Layout/Body/Preview/Padding/Layout"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="HealthBar" type="ProgressBar" parent="Margin/Layout/Body/Preview/Padding/Layout"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+mouse_filter = 2
+show_percentage = false
+
+[node name="CloseButton" type="Button" parent="Margin/Layout"]
+custom_minimum_size = Vector2(144, 42)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "返回"

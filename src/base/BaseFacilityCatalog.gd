@@ -63,8 +63,8 @@ const DEFINITIONS: Array[Dictionary] = [
 	},
 	{
 		"facility_id": "monster_archive",
-		"display_name": "怪物档案室",
-		"description": "查看成长中的精英与悬赏情报",
+		"display_name": "怪物档案",
+		"description": "查询已遭遇精英的等级、状态与持有物",
 		"action_kind": ACTION_MENU,
 		"action_path": "res://scenes/MonsterArchiveMenu.tscn",
 		"legacy_building_type": 6,

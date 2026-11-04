@@ -1,227 +1,317 @@
 class_name MonsterArchiveMenu
 extends CanvasLayer
 
-## 怪物档案室 — 基地建筑界面
-## 展示玩家遭遇过的所有精英怪记录（名字/等级/状态/词缀/持有装备）
-## 精英档案服务通过 elite_archive 组注入，展示正式12只跨局唯一名册。
+@onready var _background: ColorRect = $Backdrop
+@onready var _layout: VBoxContainer = $Margin/Layout
+@onready var _summary: Label = $Margin/Layout/Summary
+@onready var _list_scroll: ScrollContainer = $Margin/Layout/Body/List
+@onready var _list: VBoxContainer = $Margin/Layout/Body/List/Entries
+@onready var _detail_scroll: ScrollContainer = $Margin/Layout/Body/Detail
+@onready var _detail: VBoxContainer = $Margin/Layout/Body/Detail/Content
+@onready var _close: Button = $Margin/Layout/CloseButton
+@onready var _body: HBoxContainer = $Margin/Layout/Body
+@onready var _preview: PanelContainer = $Margin/Layout/Body/Preview
+@onready var _preview_layout: VBoxContainer = $Margin/Layout/Body/Preview/Padding/Layout
+@onready var _preview_host: SubViewportContainer = _preview_layout.get_node("Stage/ViewportHost")
+@onready var _preview_viewport: SubViewport = _preview_host.get_node("ModelViewport")
+@onready var _preview_camera: Camera3D = _preview_viewport.get_node("Camera")
+@onready var _preview_slot: Node3D = _preview_viewport.get_node("Model")
+@onready var _preview_placeholder: Label = _preview_layout.get_node("Stage/Placeholder")
+@onready var _preview_state: Label = _preview_layout.get_node("State")
+@onready var _preview_outcome: Label = _preview_layout.get_node("Outcome")
+@onready var _preview_health: Label = _preview_layout.get_node("Health")
+@onready var _preview_health_bar: ProgressBar = _preview_layout.get_node("HealthBar")
 
-@onready var content: VBoxContainer
-@onready var status_label: Label
-@onready var close_button: Button
-@onready var scroll_container: ScrollContainer
+const PREVIEW_IDLE := {"state": "idle", "action_id": "idle"}
 
-## 档案服务引用
-var _elite_archive = null
+var _records: Array[Dictionary] = []
+var _selected_id := ""
+var _entry_buttons := ButtonGroup.new()
+var _preview_id := ""
+var _preview_model: Node3D
+var _preview_bounds := AABB()
+
 
 func _ready() -> void:
-	content = get_node_or_null("Panel/VBox/Content")
-	status_label = get_node_or_null("Panel/VBox/StatusLabel")
-	close_button = get_node_or_null("Panel/VBox/CloseButton")
-	scroll_container = get_node_or_null("Panel/VBox/ScrollContainer")
-	if close_button:
-		close_button.pressed.connect(_on_close_pressed)
-	_find_elite_archive()
-	_build_archive_view()
-	UIStyleFactory.apply_prism_tree(self, {"button_role": "auto"})
-	# 精英行的"状态语义色"必须在通用树皮之后重刷，否则会被通用面板样式抹平。
-	_prism_tint_elite_rows()
-	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
-	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
+	_background.color = Color(UIPalette.PRISM_DIM.r, UIPalette.PRISM_DIM.g, UIPalette.PRISM_DIM.b, 0.96)
+	var header := UIStyleFactory.make_prism_header("怪物档案", "99F  /  精英名录", UIPalette.PRISM_ACCENT, 26)
+	_layout.add_child(header)
+	_layout.move_child(header, 0)
+	UIStyleFactory.apply_prism_label(_summary, "label", 1, 15)
+	UIStyleFactory.apply_prism_scrollbar(_list_scroll)
+	UIStyleFactory.apply_prism_scrollbar(_detail_scroll)
+	_detail_scroll.gui_input.connect(_on_detail_input)
+	UIStyleFactory.apply_prism_button(_close, "ghost", 2, 17, 2)
+	_close.pressed.connect(request_close)
+	_setup_preview()
+	EliteRosterService.roster_changed.connect(_on_roster_changed)
+	_refresh()
 	UiMenuFocus.ensure_focus(self)
 
 
-## 通用树皮把所有面板刷成同一款无描边底衬；精英行需要按状态保留语义线色，
-## 因此在树皮之后按 meta 记录的 state 重刷一遍（棱镜语言：只改线的颜色，不改填充）。
-func _prism_tint_elite_rows() -> void:
-	if content == null:
-		return
-	for child in content.get_children():
-		if child is PanelContainer and child.has_meta("elite_state"):
-			var panel := child as PanelContainer
-			panel.add_theme_stylebox_override(
-				"panel", _elite_state_prism_style(str(panel.get_meta("elite_state")))
-			)
+func _on_roster_changed(_elite_id: String, _record: Dictionary) -> void:
+	_refresh()
 
-func _find_elite_archive() -> void:
-	_elite_archive = get_tree().get_first_node_in_group("elite_archive")
-	if _elite_archive == null:
-		push_warning("[MonsterArchiveMenu] EliteRosterService 未注册")
 
-func _build_archive_view() -> void:
-	if content == null:
-		return
-	# 清理旧内容
-	for child in content.get_children():
+func _refresh() -> void:
+	var focus := get_viewport().gui_get_focus_owner()
+	var focused_id := str(focus.get_meta("elite_id", "")) if is_instance_valid(focus) else ""
+	_records = EliteRosterService.get_encountered_elites()
+	_summary.text = "已记录  %02d" % _records.size()
+	for child in _list.get_children():
+		_list.remove_child(child)
 		child.queue_free()
+	if _records.is_empty():
+		_close.focus_neighbor_top = NodePath()
+		_detail_scroll.focus_neighbor_left = NodePath()
+		_selected_id = ""
+		_add_text(_list, "暂无档案", "faint", 16)
+		_show_detail({})
+		return
+	var selected: Dictionary = _records[0]
+	for record in _records:
+		if str(record.elite_id) == _selected_id:
+			selected = record
+	_selected_id = str(selected.elite_id)
+	for record in _records:
+		var button := Button.new()
+		var elite_id := str(record.elite_id)
+		button.set_meta("elite_id", elite_id)
+		button.text = "%s  ·  Lv.%d" % [record.name, int(record.get("level", 1))]
+		button.tooltip_text = button.text
+		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		button.toggle_mode = true
+		button.button_group = _entry_buttons
+		button.custom_minimum_size.y = 46.0
+		UIStyleFactory.apply_prism_row_button(button, "ghost", 16, 1, 12.0, false)
+		_list.add_child(button)
+		button.set_pressed_no_signal(elite_id == _selected_id)
+		button.focus_neighbor_right = button.get_path_to(_detail_scroll)
+		button.pressed.connect(_select.bind(record))
+		if elite_id == focused_id:
+			button.grab_focus()
+	_detail_scroll.focus_neighbor_left = _detail_scroll.get_path_to(_list.get_child(0))
+	_close.focus_neighbor_top = _close.get_path_to(_list.get_child(0))
+	_show_detail(selected)
 
-	var title := Label.new()
-	title.text = "怪物档案室"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(title)
 
-	if _elite_archive == null or not _elite_archive.has_method("get_all_elites"):
-		var no_data_lbl := Label.new()
-		no_data_lbl.text = "精英名册服务暂不可用"
-		no_data_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		content.add_child(no_data_lbl)
-		_add_close_hint()
+func _select(record: Dictionary) -> void:
+	_selected_id = str(record.elite_id)
+	_detail_scroll.scroll_vertical = 0
+	_show_detail(record)
+
+
+func _on_detail_input(event: InputEvent) -> void:
+	var step := 0
+	if event.is_action_pressed("ui_down", true):
+		step = 44
+	elif event.is_action_pressed("ui_up", true):
+		step = -44
+	if step != 0 and _detail_scroll.get_v_scroll_bar().visible:
+		_detail_scroll.scroll_vertical += step
+		_detail_scroll.accept_event()
+
+
+func _show_detail(record: Dictionary) -> void:
+	_show_preview(record)
+	for child in _detail.get_children():
+		_detail.remove_child(child)
+		child.queue_free()
+	if record.is_empty():
+		_add_text(_detail, "尚未遭遇精英", "value", 28)
+		_add_text(_detail, "在行动中首次遭遇精英后，档案会在这里登记。", "label", 17)
 		return
 
-	var all_elites: Array = _elite_archive.get_all_elites()
-	if all_elites.is_empty():
-		var empty_lbl := Label.new()
-		empty_lbl.text = "暂无精英怪记录\n进入游戏后遭遇的精英怪会显示在这里"
-		empty_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		content.add_child(empty_lbl)
-		_add_close_hint()
-		return
+	_add_text(_detail, str(record.name), "value", 28)
+	_add_text(_detail, "Lv.%d" % int(record.get("level", 1)), "accent", 18)
+	var bounty := EliteRosterService.get_bounty_currency(_selected_id)
+	var stats := "遭遇 %d 次  ·  逃脱 %d 次" % [int(record.get("encounter_count", 0)), int(record.get("escape_count", 0))]
+	var player_kills := int((record.get("history", {}) as Dictionary).get("killed_player_count", 0))
+	if player_kills > 0:
+		stats += "  ·  击杀玩家 %d 次" % player_kills
+	if bounty > 0 and str(record.get("state", "")) != "Killed":
+		stats += "  ·  悬赏 %d 金币" % bounty
+	_add_text(_detail, stats, "label", 15)
+	var growth := str(record.get("growth", ""))
+	if not growth.is_empty():
+		_add_text(_detail, "成长特性  " + growth, "label", 15)
 
-	# 统计信息
-	var total_count: int = all_elites.size()
-	var killed_count: int = 0
-	var active_count: int = 0
-	for e in all_elites:
-		var state: String = e.state if "state" in e else "Unknown"
-		if state == "Killed":
-			killed_count += 1
-		else:
-			active_count += 1
-
-	var stats_lbl := Label.new()
-	stats_lbl.text = "总记录: %d | 存活: %d | 已击杀: %d" % [total_count, active_count, killed_count]
-	stats_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(stats_lbl)
-
-	content.add_child(_make_hsep())
-
-	# 按状态分组显示
-	var states := ["RevengeHunter", "RegionalBoss", "QuasiBoss", "Escaped", "Equipped", "Growing", "Newborn", "Killed"]
-	for st in states:
-		var in_state: Array = []
-		for e in all_elites:
-			var state: String = e.state if "state" in e else "Unknown"
-			if state == st:
-				in_state.append(e)
-		if in_state.is_empty():
+	_add_section("持有物品")
+	var quantities := {}
+	for entry: Dictionary in record.get("stolen_items", []):
+		var item := entry.get("item", {}) as Dictionary
+		var count := int(entry.get("count", 0))
+		if item.is_empty() or count <= 0:
 			continue
-		var state_hdr := Label.new()
-		state_hdr.text = "—— %s ——" % _translate_state(st)
-		state_hdr.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		content.add_child(state_hdr)
-		for elite in in_state:
-			content.add_child(_make_elite_row(elite))
-		content.add_child(_make_hsep())
+		var item_name := str(item.get("name", item.get("id", "未知物品")))
+		if item_name.is_empty():
+			item_name = str(item.get("id", "未知物品"))
+		quantities[item_name] = int(quantities.get(item_name, 0)) + count
+	if quantities.is_empty():
+		_add_text(_detail, "暂无持有物品", "faint", 16)
+	else:
+		for item_name in quantities:
+			_add_text(_detail, "%s  ×%d" % [item_name, quantities[item_name]], "value", 17)
+	_add_text(_detail, "夺取货币  %d" % int(record.get("stolen_currency", 0)), "warn", 16)
 
-	_add_close_hint()
+	var modules := record.get("stolen_modules", []) as Array
+	if not modules.is_empty():
+		_add_section("转译装备")
+		for module: Dictionary in modules:
+			var item_id := str(module.get("module_id", ""))
+			var item := ItemRegistry.get_instance().get_item(item_id)
+			_add_text(_detail, "%s  →  %s" % [str(item.get("name", "未识别装备")), _shorten_translation(str(module.get("translated_skill_id", "")))], "label", 16)
 
-func _translate_state(state: String) -> String:
+
+func _setup_preview() -> void:
+	var panel := UIStyleFactory.make_prism_panel(false, 0.47)
+	panel.border_color = UIPalette.PRISM_LINE_FAINT
+	panel.set_border_width_all(1)
+	_preview.add_theme_stylebox_override("panel", panel)
+	UIStyleFactory.apply_prism_label(_preview_layout.get_node("Heading"), "label", 1, 15)
+	UIStyleFactory.apply_prism_label(_preview_placeholder, "faint", 1, 15)
+	UIStyleFactory.apply_prism_label(_preview_state, "accent", 1, 18)
+	UIStyleFactory.apply_prism_label(_preview_outcome, "label", 1, 14)
+	UIStyleFactory.apply_prism_label(_preview_health, "label", 1, 14)
+	_preview_layout.get_node("Rule").add_theme_stylebox_override("separator", UIStyleFactory.make_prism_separator_style())
+	_preview_health_bar.add_theme_stylebox_override("background", UIStyleFactory.make_prism_progress_background())
+	_preview_health_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_prism_progress_fill(UIPalette.PRISM_ACCENT))
+	_body.resized.connect(_fit_columns)
+	_preview_viewport.size_changed.connect(_fit_preview_camera)
+	_fit_columns()
+	set_process(false)
+
+
+func _fit_columns() -> void:
+	_list_scroll.custom_minimum_size.x = clampf(_body.size.x * 0.25, 140.0, 290.0)
+	_preview.custom_minimum_size.x = clampf(_body.size.x * 0.235, 160.0, 272.0)
+
+
+func _show_preview(record: Dictionary) -> void:
+	var elite_id := str(record.get("elite_id", ""))
+	_preview_state.text = "档案状态  " + _state_text(str(record.get("state", ""))) if not elite_id.is_empty() else "档案状态  未登记"
+	var outcome := str(record.get("last_outcome", ""))
+	var outcome_text := str({
+		"active": "已确认遭遇", "escaped": "精英逃脱", "killed": "精英已击杀", "despawned": "精英离场",
+	}.get(outcome, "暂无结局记录"))
+	_preview_outcome.text = "最近结果  " + outcome_text
+	_preview_outcome.visible = not elite_id.is_empty()
+	var encounter := record.get("roaming_encounter", {}) as Dictionary
+	var max_hp := int(encounter.get("max_hp", 0))
+	var hp := clampi(int(encounter.get("hp", 0)), 0, maxi(0, max_hp))
+	_preview_health.visible = max_hp > 0
+	_preview_health_bar.visible = max_hp > 0
+	_preview_health.text = "上次记录生命  %d / %d" % [hp, max_hp]
+	_preview_health_bar.max_value = maxi(1, max_hp)
+	_preview_health_bar.value = hp
+	if elite_id == _preview_id:
+		_preview_placeholder.text = "尚无可预览的精英" if elite_id.is_empty() else "暂无可用模型"
+		return
+	_preview_id = elite_id
+	if is_instance_valid(_preview_model):
+		_preview_slot.remove_child(_preview_model)
+		_preview_model.queue_free()
+	_preview_model = null
+	_preview_bounds = AABB()
+	_preview_host.hide()
+	_preview_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+	_preview_placeholder.show()
+	_preview_placeholder.text = "尚无可预览的精英" if elite_id.is_empty() else "暂无可用模型"
+	set_process(false)
+
+	var definition := EliteRosterService.get_definition(elite_id)
+	var scene_path := str(definition.get("presentation_scene", ""))
+	if scene_path.is_empty() or not ResourceLoader.exists(scene_path, "PackedScene"):
+		return
+	var scene := load(scene_path) as PackedScene
+	if scene == null:
+		return
+	var model := scene.instantiate()
+	if not model is Node3D:
+		model.free()
+		return
+	_preview_model = model as Node3D
+	_preview_slot.add_child(_preview_model)
+	_preview_bounds = _measure_preview_bounds(_preview_model)
+	_preview_placeholder.hide()
+	_preview_host.show()
+	_fit_preview_camera()
+	_preview_viewport.render_target_update_mode = SubViewport.UPDATE_WHEN_VISIBLE
+	set_process(_preview_model.has_method("sync_context"))
+
+
+func _measure_preview_bounds(model: Node3D) -> AABB:
+	# A skinned mesh's imported bounds describe its bind pose. Frame the sampled
+	# standing pose with the same fitted volumes the visual already provides.
+	var bounds := AABB()
+	if model.has_method("hit_volume_transforms") and model.has_method("get_hit_volume_spec"):
+		var transforms: Array = model.call("hit_volume_transforms")
+		var spec: Array = model.call("get_hit_volume_spec")
+		for index in mini(transforms.size(), spec.size()):
+			var size: Vector3 = spec[index]["size"]
+			var transform: Transform3D = transforms[index]
+			var segment := transform * AABB(-size * 0.5, size)
+			bounds = bounds.merge(segment) if bounds.has_volume() else segment
+		if bounds.has_volume():
+			return bounds.grow(bounds.size.y * 0.055)
+	for child in model.find_children("*", "MeshInstance3D", true, false):
+		var mesh := child as MeshInstance3D
+		if mesh.mesh != null:
+			var segment := mesh.global_transform * mesh.get_aabb()
+			bounds = bounds.merge(segment) if bounds.has_volume() else segment
+	return bounds
+
+
+func _fit_preview_camera() -> void:
+	if not _preview_bounds.has_volume():
+		return
+	var center := _preview_bounds.get_center()
+	var distance := _preview_bounds.size.length() + 3.0
+	_preview_camera.position = center + Vector3(0.32, 0.16, -1.0).normalized() * distance
+	_preview_camera.look_at(center)
+	var basis := _preview_camera.global_basis.inverse()
+	var viewport_size := _preview_viewport.size
+	var aspect := float(maxi(1, viewport_size.x)) / float(maxi(1, viewport_size.y))
+	var half_width := 0.0
+	var half_height := 0.0
+	for index in 8:
+		var corner := basis * (_preview_bounds.get_endpoint(index) - center)
+		half_width = maxf(half_width, absf(corner.x))
+		half_height = maxf(half_height, absf(corner.y))
+	_preview_camera.size = maxf(half_height, half_width / aspect) * 2.28
+
+
+func _process(_delta: float) -> void:
+	if is_instance_valid(_preview_model):
+		_preview_model.call("sync_context", PREVIEW_IDLE, false)
+
+
+func _add_text(parent: VBoxContainer, value: String, role: String, size: int) -> void:
+	var label := Label.new()
+	label.text = value
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	UIStyleFactory.apply_prism_label(label, role, 1, size)
+	parent.add_child(label)
+
+
+func _add_section(title: String) -> void:
+	var line := HSeparator.new()
+	line.add_theme_stylebox_override("separator", UIStyleFactory.make_prism_separator_style(0.24))
+	_detail.add_child(line)
+	_add_text(_detail, title, "label", 15)
+
+
+func _state_text(state: String) -> String:
 	match state:
-		"Newborn": return "新生精英"
-		"Escaped": return "逃脱中"
+		"Newborn": return "已登记"
+		"Escaped": return "已逃脱"
 		"Equipped": return "装备中"
 		"Growing": return "成长中"
 		"RevengeHunter": return "复仇猎手"
 		"RegionalBoss": return "区域霸主"
-		"QuasiBoss": return "准Boss"
+		"QuasiBoss": return "准首领"
 		"Killed": return "已击杀"
-		_: return state
-
-func _make_elite_row(elite) -> PanelContainer:
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(620, 60)
-	panel.set_meta("elite_state", str(elite.state if "state" in elite else "?"))
-	panel.add_theme_stylebox_override("panel", _get_elite_panel_style(elite))
-
-	var hbox := HBoxContainer.new()
-	panel.add_child(hbox)
-
-	# 左侧：名字 + 等级
-	var info_vbox := VBoxContainer.new()
-	info_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-
-	var name_lbl := Label.new()
-	name_lbl.text = elite.name if "name" in elite else "未知精英"
-	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info_vbox.add_child(name_lbl)
-
-	var level_lbl := Label.new()
-	var lvl: int = elite.level if "level" in elite else 1
-	var base_id: String = elite.base_enemy_id if "base_enemy_id" in elite else "?"
-	level_lbl.text = "Lv.%d | %s" % [lvl, base_id]
-	level_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info_vbox.add_child(level_lbl)
-
-	hbox.add_child(info_vbox)
-
-	# 中间：状态标签
-	var state_lbl := Label.new()
-	var state: String = elite.state if "state" in elite else "?"
-	state_lbl.text = _translate_state(state)
-	state_lbl.custom_minimum_size = Vector2(80, 0)
-	state_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hbox.add_child(state_lbl)
-
-	# 右侧：词缀 + 持有装备
-	var right_vbox := VBoxContainer.new()
-	right_vbox.custom_minimum_size = Vector2(200, 0)
-
-	# 词缀显示
-	var mod_list: Array = elite.modifiers if "modifiers" in elite else []
-	if not mod_list.is_empty():
-		var mod_lbl := Label.new()
-		var mod_texts: Array = []
-		for m in mod_list:
-			var s: String = m as String
-			mod_texts.append(_shorten_modifier(s))
-		mod_lbl.text = "词缀: " + ", ".join(mod_texts.slice(0, 3))
-		mod_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		right_vbox.add_child(mod_lbl)
-
-	# 持有装备
-	var stolen: Array = elite.stolen_modules if "stolen_modules" in elite else []
-	if not stolen.is_empty():
-		var stolen_lbl := Label.new()
-		var stolen_names: Array = []
-		for sm in stolen:
-			var mid: String = sm.get("module_id", "?") as String
-			var translated := str(sm.get("translated_skill_id", ""))
-			stolen_names.append("%s→%s" % [_shorten_module_id(mid), _shorten_translation(translated)])
-		stolen_lbl.text = "持有: " + ", ".join(stolen_names.slice(0, 2))
-		stolen_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		right_vbox.add_child(stolen_lbl)
-
-	# 击杀玩家次数
-	var history: Dictionary = elite.history if "history" in elite else {}
-	var kills: int = history.get("killed_player_count", 0) as int
-	if kills > 0:
-		var kills_lbl := Label.new()
-		kills_lbl.text = "击杀玩家: %d次" % kills
-		kills_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		right_vbox.add_child(kills_lbl)
-
-	hbox.add_child(right_vbox)
-
-	# 悬赏等级
-	var bounty: int = elite.bounty_reward_level if "bounty_reward_level" in elite else 0
-	if bounty > 0:
-		var bounty_lbl := Label.new()
-		var bounty_currency := EliteRosterService.get_bounty_currency(str(elite.get("elite_id", ""))) if EliteRosterService != null else 0
-		bounty_lbl.text = "悬赏%d\n%d金币" % [bounty, bounty_currency]
-		bounty_lbl.custom_minimum_size = Vector2(72, 0)
-		bounty_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		hbox.add_child(bounty_lbl)
-
-	return panel
-
-func _shorten_modifier(mod: String) -> String:
-	# 缩短词缀名称用于UI显示
-	var m: String = mod as String
-	if m.begins_with("Elite."):
-		m = m.substr(6)
-	# 截断过长名称
-	if m.length() > 8:
-		return m.substr(0, 6) + ".."
-	return m
+		_: return "状态未知"
 
 
 func _shorten_translation(translation_id: String) -> String:
@@ -240,57 +330,11 @@ func _shorten_translation(translation_id: String) -> String:
 		"assembly_to_three_phase_bag": "三阶段技能",
 	}.get(translation_id, "未知转译"))
 
-func _shorten_module_id(module_id: String) -> String:
-	# 缩短模块ID用于UI显示
-	var m: String = module_id as String
-	if m.length() > 12:
-		return m.substr(0, 10) + ".."
-	return m
-
-func _get_elite_panel_style(elite) -> StyleBoxFlat:
-	var state: String = elite.state if "state" in elite else "?"
-	return _elite_state_prism_style(state)
-
-
-## 状态语义线色（棱镜语言：只换线的颜色 + 底衬厚薄，不做渐变、不做投影）。
-func _elite_state_prism_style(state: String) -> StyleBoxFlat:
-	var line := UIPalette.PRISM_LINE_SOFT
-	var fill_alpha := 0.32
-	match state:
-		"Killed":
-			line = Color(1.0, 1.0, 1.0, 0.18)
-			fill_alpha = 0.20
-		"RegionalBoss", "QuasiBoss":
-			line = UIPalette.PRISM_DANGER
-		"RevengeHunter":
-			line = UIPalette.PRISM_ACCENT
-		"Escaped", "Equipped", "Growing":
-			line = Color(1.0, 1.0, 1.0, 0.46)
-		_:
-			line = UIPalette.PRISM_LINE_SOFT
-	var style := UIStyleFactory.make_prism_slot_style(false)
-	style.bg_color = Color(
-		UIPalette.PRISM_SURFACE.r, UIPalette.PRISM_SURFACE.g, UIPalette.PRISM_SURFACE.b, fill_alpha
-	)
-	style.border_color = line
-	return style
-
-func _make_hsep() -> HSeparator:
-	var sep := HSeparator.new()
-	sep.custom_minimum_size = Vector2(0, 4)
-	sep.add_theme_stylebox_override("separator", UIStyleFactory.make_prism_separator_style(0.20))
-	return sep
-
-func _add_close_hint() -> void:
-	content.add_child(_make_hsep())
-	var hint := Label.new()
-	hint.text = "按 Esc 或点击关闭"
-	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(hint)
-
-func _on_close_pressed() -> void:
+func request_close() -> void:
 	queue_free()
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-		queue_free()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		request_close()
