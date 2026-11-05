@@ -231,6 +231,10 @@ const FATE_SPEND_POPUP_RISE := 42
 ## 这段时长要足够让翻面被看见，但不能让退出像卡住；减少动效时直接跳过。
 const FATE_OVERLAY_EXIT_DURATION := 0.42
 const FATE_OVERLAY_EXIT_FLIP_DURATION := 0.16
+## 弹窗**入场**淡入时长。业主 2026-11-05「不要突然……完全没有过渡」：
+## 开箱的前置过渡在箱子上（抖动→砰），后置过渡就是这层淡入 ——
+## 暗化层与三张卡整体从 0 淡到 1，玩家的眼睛不用在「看箱子」和「看弹窗」之间硬切。
+const FATE_OVERLAY_INTRO_DURATION := 0.18
 ## 门后购卡弹窗（含全屏暗化层）的 `z_index`，写在 `HUD` 下。
 const FATE_OVERLAY_Z_INDEX := 900
 ## 弹窗打开期间给金币读数的 `z_index`（`loot_label` 挂在 `ReferenceCombatHUD` 下，父 z=100）。
@@ -636,7 +640,11 @@ func _ready() -> void:
 	_on_ammo_changed(int(weapon_snapshot.get("current_ammo", 0)), int(weapon_snapshot.get("magazine_size", 0)))
 	title_label.text = "%s · 3D行动区" % gameplay_theme.display_name
 	seed_label.text = "SEED %d" % run_seed
-	status_label.text = "%s · 初始钥匙 1，把战利品安全带到撤离点" % gameplay_theme.fantasy
+	status_label.text = (
+		"%s · 初始钥匙 1，把战利品安全带到撤离点" % gameplay_theme.fantasy
+		if _room_key_economy_enabled()
+		else "%s · 把战利品安全带到撤离点" % gameplay_theme.fantasy
+	)
 	_refresh_loot_label()
 	generation_completed.emit(get_generation_snapshot())
 	var world_audio := preload("res://src/audio/WorldAudioEnvironment3D.gd").new()
@@ -1483,7 +1491,11 @@ func _try_settle_encounter_room_clear(room_id: String) -> void:
 	if room == null or room.cleared:
 		return
 	_mark_room_cleared(room, true)
-	status_label.text = "遭遇结束 · 房间肃清，钥匙已掉落"
+	status_label.text = (
+		"遭遇结束 · 房间肃清，钥匙已掉落"
+		if _room_key_economy_enabled() and _room_produces_room_key(room)
+		else "遭遇结束 · 房间肃清"
+	)
 
 
 func _process(delta: float) -> void:
@@ -2821,7 +2833,10 @@ func _prepare_layout_rooms() -> void:
 		room.prop_searched.connect(_on_prop_searched)
 		room.service_activated.connect(_on_service_activated)
 		room.light_toggled.connect(_on_room_light_toggled)
-		room.chest_open_requested.connect(_on_chest_open_requested)
+		# 加固：房间可能同时被两条创建路径处理（`TowerDescent3D` 有自己的建房间循环），
+		# 重复连接会让一次开箱起两条协程。虽有 `is_opened()` 早退挡着，但那是兜底不是设计。
+		if not room.chest_open_requested.is_connected(_on_chest_open_requested):
+			room.chest_open_requested.connect(_on_chest_open_requested)
 		# 破碎掉币：房间只报「哪一件碎了」，掷骰与发放都在本类。
 		# 接线放在与其余房间信号同一处；另一条房间创建路径（TowerDescent3D）也要接，
 		# 漏接的表现是「房间里有罐子但永远不掉币」，且不打任何日志。
@@ -5723,11 +5738,14 @@ func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data:
 		_on_secret_branch_room_cleared(enemy.room_id)
 		return
 	_mark_room_cleared(room, true)
-	status_label.text = (
-		"精英已逃脱并记入跨局档案 · 房间通路恢复"
-		if did_escape
-		else "房间肃清 · 钥匙已掉落，可继续搜索或推进"
-	)
+	if did_escape:
+		status_label.text = "精英已逃脱并记入跨局档案 · 房间通路恢复"
+	else:
+		status_label.text = (
+			"房间肃清 · 钥匙已掉落，可继续搜索或推进"
+			if _room_key_economy_enabled() and _room_produces_room_key(room)
+			else "房间肃清 · 可继续搜索或推进"
+		)
 	if AudioManager != null:
 		AudioManager.play_sfx("wave_clear", -3.0)
 	if (
@@ -6146,48 +6164,92 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 	)
 
 
-## 宝箱开箱（2026-10-29）。玩家在 REWARD 房按 E 触发。
+## 宝箱开箱（2026-10-29；2026-11-05 改为免钥匙直开 + 弹命运卡购买 + 前置/后置过渡）。
 ##
-## **顺序是刻意的：扣钥匙 → 收口箱子形态 → 掉落 → 命运卡。**
-##   · 钥匙在最前：没有钥匙就什么都别发生，箱子保持可交互（玩家去拿了钥匙还能回来开）；
-##   · 收口形态在结算前：一旦扣了钥匙就必须把箱子标成已开，否则玩家能反复按 E
-##     白嫖多次掉落（`commit_opened()` 幂等，重复调用无副作用）；
-##   · 掉落先于命运卡：命运卡可能改变后续掉落品质（`fate_lucky_chest` 之类），
-##     先发卡再抽掉落会让"这一箱吃不吃得到卡的效果"变成时序竞态。
+## 业主 2026-11-05：「开启方式是直接开启……不需要使用钥匙」；
+## 同日追加：「需要有前置动画，点击之后宝箱会抖两下，然后箱子砰的一下打开，
+## 然后才会弹出命运卡界面。整个过程中需要有前置和后置，不要突然打开完全没有过渡。」
+##
+## **时间轴（总长 ≈1.1s，全部由箱子自己演，本函数只对齐结算点）**
+## ```
+## 0.00 按下 E ── 立刻认领 + 记账（`commit_opened`）→ 状态栏「开启中…」
+## 0.00 ▸ 0.42  箱子抖两下
+## 0.42 ▸ 0.54  蓄力下压
+## 0.54         ◆ 砰 —— 盖子弹开、箱体上跳、内部光爆、音效  ← **本函数在这里落地掉落**
+## 0.54 ▸ 0.92  余韵（盖子回稳、箱子落回）
+## 0.84         ◆ 购买界面开始淡入（≈0.18s 淡入 + 卡片翻牌进场）  ← 后置过渡
+## ```
+##
+## **为什么掉落要等「砰」**：在关着的箱子里先冒出物品，是最容易读出"程序在糊弄"的一种错。
+## 掉落物必须从箱口飞出，所以结算点绑在 `chest.get_open_burst_delay()` 上，
+## 而不是按下 E 的那一帧。
+##
+## **为什么抽奖不等**：`_resolve_chest_grants()` 是纯数据（读池、掷权重），
+## 提前抽好可以保证「动画期间箱子被流送卸载 → 奖励不会跟着丢」。
+##
+## **为什么命运卡不再自动发**：`fate_card_per_open` 配 0，一切命运卡走购买，
+## 否则同一个箱子里同时有「送」和「卖」两套口径。
 func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
 	if room == null or chest == null or not is_instance_valid(chest):
 		return
 	if chest.is_opened():
 		return
-	if chest.requires_key:
-		if _get_total_room_keys() <= 0:
-			status_label.text = "宝箱上锁 · 需要 1 把房间钥匙"
-			# 不置 `_opened`、不扣任何东西：箱子留在原地等玩家带钥匙回来。
-			return
-		_consume_room_key()
-		_refresh_loot_label()
 	if chest.mimic:
-		# 拟态：钥匙照扣，然后箱子变成怪。**这一条不能挪到扣钥匙前面** ——
-		# 先现形再判钥匙，会出现「没钥匙也把拟态惊动了、箱子已经没了」。
+		# 拟态：箱子变怪，物资挂在那只怪肚子里（击杀才掉）。**不要在这里弹购买界面** ——
+		# 玩家正要打怪，全屏模态会把战斗直接卡在背后。
 		_reveal_chest_mimic(room, chest)
 		return
+
+	# —— 按下 E 的当帧：先认领 + 抽奖 + 给一句"正在开"的即时回应 ——
+	# 抽奖、坐标、文案全部先快照下来：await 期间箱子可能被流送卸载，届时读 `chest.xxx` 会崩。
+	var grants := _resolve_chest_grants(room, chest)
+	var fate_cards := chest.fate_card_per_open
+	var chest_id := chest.chest_id
+	var burst_origin := chest.global_position + Vector3(0, 0.4, 0)
+	var burst_delay := chest.get_open_burst_delay()
 	chest.commit_opened()
 	if _map_fate_triggers != null:
 		# 宝箱算一次"容器开启"。给独立的 size_class 值，方便将来按箱/罐分别计数：
 		# 传 "crate" 会让宝箱与普通箱子混在一起，统计再也分不开。
 		_map_fate_triggers.on_container_opened("treasure_chest")
+	status_label.text = "宝箱开启中…"
 
-	var grants := _resolve_chest_grants(room, chest)
+	# —— 等「砰」——
+	# `process_always = false`：暂停时计时器与箱子 tween 一起停，
+	# 否则会出现"游戏暂停着、箱内物资照样落地并弹出购买界面"。
+	await get_tree().create_timer(burst_delay, false).timeout
+
+	# 动画期间玩家可能撤离/死亡/切场景。掉落无处可落时如实吼一声，
+	# 不能静默 —— 否则这只箱子的收益就凭空消失了。
+	if not is_inside_tree() or not is_instance_valid(room):
+		push_warning(
+			"[Dungeon3D] 宝箱「%s」的开箱结算被打断（房间已卸载），%d 件箱内物资没有落地"
+			% [chest_id, grants.size()]
+		)
+		return
+
 	var delivered := 0
 	if not grants.is_empty():
 		var delivery := _deliver_ground_rewards(
-			room, grants,
-			chest.global_position + Vector3(0, 0.4, 0),
-			"chest:%s:%s" % [room.room_id, chest.chest_id]
+			room, grants, burst_origin, "chest:%s:%s" % [room.room_id, chest_id]
 		)
 		delivered = (delivery.get("granted", []) as Array).size()
+	# 「砰」的触觉：音效之外再给一次短促的镜头冲击。
+	# 时长取 `TreasureChest3D.BURST_SECONDS`，**不传 0.5**：弹开只有 0.14s，
+	# 拖 0.5s 会读成"地震"而不是"箱子弹开"。
+	# 减少动效时整段跳过（前庭刺激，同 `_animate_fate_overlay_exit` 的口径）。
+	if (
+		player != null
+		and is_instance_valid(player)
+		and player.camera_feedback != null
+		and not bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
+	):
+		player.camera_feedback.request_environment_impact(
+			CHEST_BURST_CAMERA_STRENGTH, TreasureChest3D.BURST_SECONDS
+		)
 
-	var fate := _grant_chest_fate_cards(chest.fate_card_per_open)
+	# 保留代码路径供其它关卡配置：本关 `fate_card_per_open = 0` ⇒ 这里不抽卡。
+	var fate := _grant_chest_fate_cards(fate_cards)
 	var parts: Array[String] = []
 	parts.append("宝箱开启 · %d 件物资" % delivered if delivered > 0 else "宝箱开启 · 箱内为空")
 	if not (fate.get("applied", []) as Array).is_empty():
@@ -6196,9 +6258,26 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 		# 卡没能当场生效（枪械命运槽满 / 需要选来源）——它已经被桥上记账，
 		# 玩家可以从 HUD 的待领取按钮处理。**不能静默**：那等于宝箱少给了一样东西。
 		parts.append("命运卡已暂存（槽位或来源不可用，见待领取）")
-	elif int(fate.get("drawn", 0)) == 0 and chest.fate_card_per_open > 0:
+	elif int(fate.get("drawn", 0)) == 0 and fate_cards > 0:
 		parts.append("命运卡发放失败")
+	# 弹窗文案由 `_show_door_fate_choices()` 自己写：这里若也写「可购买命运卡」，
+	# 一旦抽不出报价（offer 为空）就会出现「说有得买、界面上什么都没有」。
 	status_label.text = " · ".join(parts)
+
+	# —— 后置：先让玩家看清东西落在哪，再让购买界面淡入 ——
+	# 不等这 0.3s 的话，「砰」的下一帧整屏就被暗化层压住，掉落物等于没露过面。
+	await get_tree().create_timer(CHEST_BURST_TO_OVERLAY_SECONDS, false).timeout
+	if not is_inside_tree():
+		return
+	_show_door_fate_choices("chest")
+
+
+## 「砰」到购买界面开始淡入之间的间隔。0.30s 刚好够看清 2 件掉落物落地并读一眼名字，
+## 再长会让「开箱」和「买卡」被玩家当成两件事。
+const CHEST_BURST_TO_OVERLAY_SECONDS := 0.30
+## 开箱「砰」的镜头冲击强度（0~1，`PlayerCameraFeedback3D` 会乘 0.035 得到米数）。
+## 0.62 ⇒ 约 2.2cm 位移：够让画面"顿"一下，又不至于让人以为在挨打（挨打是 11~19cm）。
+const CHEST_BURST_CAMERA_STRENGTH := 0.62
 
 
 ## 拟态刷怪的最小离玩家距离。开箱那一刻玩家就贴在箱子前，直接在箱子位置刷怪
@@ -6208,9 +6287,10 @@ const CHEST_MIMIC_MIN_SPAWN_DISTANCE_M := 3.0
 
 ## 宝箱拟态现形（2026-10-30 接回）。
 ##
-## 与普通开箱只差两处：**箱子消失**、**奖励改成击杀后才掉**。钥匙照扣 ——
+## 与普通开箱只差两处：**箱子消失**、**奖励改成击杀后才掉**。
 ## 这正是这条机制的全部恶意：宝箱房里那只箱子可能不是箱子，而你按 E 的时候无从分辨。
-## 想清楚「钥匙白花」这件事是有意的，别把它当 bug 修掉。
+## （2026-11-05 起开箱不再消耗钥匙，所以「钥匙白花」的痛感换成「白跑一趟」：
+## 箱子没了、物资在那只怪肚子里，击杀才拿得到。）
 func _reveal_chest_mimic(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
 	if room == null or chest == null:
 		return
@@ -6221,7 +6301,7 @@ func _reveal_chest_mimic(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
 	var kind := str(chest.mimic_monster_kind)
 	var base_type: Dictionary = MonsterInjector.BASE_ENEMY_TYPES.get(kind, {})
 	if base_type.is_empty():
-		# 钥匙已经扣了、箱子也没了。必须吼出来 —— 否则表现是「花了钥匙什么都没发生」，
+		# 箱子已经没了、物资也没落地。必须吼出来 —— 否则表现是「开了个空箱」，
 		# 排查时会被当成随机 bug。
 		push_error(
 			"[Dungeon3D] 宝箱拟态：未知怪物 kind『%s』（%s/%s），本箱无补偿"
@@ -6253,7 +6333,7 @@ func _reveal_chest_mimic(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
 			break
 	if spawned <= 0 or mimicked == null:
 		push_error(
-			"[Dungeon3D] 宝箱拟态生成失败（%s/%s，spawned=%d）—— 钥匙已扣，玩家什么也没得到"
+			"[Dungeon3D] 宝箱拟态生成失败（%s/%s，spawned=%d）—— 箱子已消失，箱内物资丢失"
 			% [room.room_id, chest.chest_id, spawned]
 		)
 		status_label.text = "宝箱开启 · 箱内为空"
@@ -6293,10 +6373,10 @@ func _chest_mimic_spawn_position(room: DungeonRoom3D, chest: TreasureChest3D) ->
 	return resolved
 
 
-## 拟态被击杀：把开箱时抽好的那份物资与命运卡补给玩家。
+## 拟态被击杀：把开箱时抽好的那份物资（与配置了的命运卡）补给玩家。
 ##
 ## 为什么不在开箱时就给：那样「箱子是拟态」就只是多打一只怪，风险与回报无关。
-## 现在的结构是「你付了钥匙，物资在那只怪肚子里」—— 跑了就真的没了。
+## 现在的结构是「物资在那只怪肚子里」—— 它跑掉/被卡掉，这一箱就真的没了。
 func _deliver_chest_mimic_loot(room: DungeonRoom3D, enemy: Enemy3D) -> void:
 	var grants: Array = (enemy.get_meta("chest_mimic_loot", []) as Array).duplicate(true)
 	var delivered := 0
@@ -7483,6 +7563,7 @@ func _ensure_room_key_reward(room: DungeonRoom3D) -> void:
 		room == null
 		or not is_instance_valid(room)
 		or not room.cleared
+		or not _room_key_economy_enabled()
 		or not _room_produces_room_key(room)
 		or room.room_type in ["START", "EXTRACTION", "FACILITY", "ELEVATOR"]
 		or _spawned_key_rooms.has(room.room_id)
@@ -7642,7 +7723,9 @@ func try_open_room_door(target_room_id: String) -> bool:
 	return _try_open_room_door(target_room_id)
 
 
-func _show_door_fate_choices() -> void:
+## `source` 只影响状态栏文案与归属说明：两家入口（门后 / 宝箱）用的是**同一套**
+## 三选一购买界面、同一份报价与同一套购买事务 —— 不允许为宝箱抄第二套弹窗。
+func _show_door_fate_choices(source := "door") -> void:
 	if _door_fate_active:
 		return
 	var offer: Array[FateCard] = (
@@ -7681,7 +7764,11 @@ func _show_door_fate_choices() -> void:
 	_sync_player_input_lock()
 	_build_door_fate_overlay()
 	_queue_runtime_autosave("fate_door_offer_opened")
-	status_label.text = "门已开启 · 用本局金币购买命运卡，买好后退出"
+	status_label.text = (
+		"宝箱已开启 · 用本局金币购买命运卡，买好后退出"
+		if source == "chest"
+		else "门已开启 · 用本局金币购买命运卡，买好后退出"
+	)
 
 
 func _build_door_fate_overlay() -> void:
@@ -7757,6 +7844,15 @@ func _build_door_fate_overlay() -> void:
 	# 底部信息条已移除：选择反馈通过卡片的放大/缩小动画、价格行和状态栏完成。
 	_fate_feedback_label = null
 	_refresh_door_fate_prices()
+
+	# 入场淡入（后置过渡）。**必须放在最后**：先把卡片、价格、焦点链都填好再整体淡入，
+	# 否则会看到"空弹窗先亮、卡再一张张冒出来"。
+	# `TWEEN_PAUSE_PROCESS`：暂停时弹窗自身照常淡入完，不会停在半透明。
+	_fate_overlay.modulate.a = 0.0
+	var intro := _fate_overlay.create_tween()
+	intro.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	intro.tween_property(_fate_overlay, "modulate:a", 1.0, FATE_OVERLAY_INTRO_DURATION)
+	_fate_overlay.set_meta("fate_intro_tween", intro)
 
 
 ## 门后购卡层的单张命运卡：**塔罗图卡**（卡面贴图 + 卡下功能文字 + 卡下购买价）。
@@ -8518,6 +8614,10 @@ func _gate_expedition_fate_offer() -> Array[FateCard]:
 	var ids: Dictionary = {}
 	for card in FateCardPresets.door_reward_presets():
 		var stable_id := card.get_stable_card_id()
+		# 本层没有钥匙经济时，「太阳钥印」这类「获得房间钥匙」的卡是纯空卡：
+		# 玩家付了金币、卡也生效了，却什么都不发生。直接不出现在报价里。
+		if not _room_key_economy_enabled() and _card_grants_room_key(card):
+			continue
 		if not ids.has(stable_id) and preload("res://src/weapons/FateOfferPolicy.gd").allows(get_runtime_map_id(), stable_id):
 			pool.append(card)
 			ids[stable_id] = true
@@ -8533,6 +8633,16 @@ func _gate_expedition_fate_offer() -> Array[FateCard]:
 		preload("res://src/weapons/FateOfferPolicy.gd").orient(card, orientation_rng.randf(), get_runtime_map_id())
 		offer.append(card)
 	return offer
+
+
+## 这张卡是不是「发房间钥匙」。只读效果键，不看中文名 —— 名字会改，键不会。
+func _card_grants_room_key(card: FateCard) -> bool:
+	if card == null:
+		return false
+	var effect_value: Variant = card.effect
+	if not effect_value is Dictionary:
+		return false
+	return str((effect_value as Dictionary).get("modifier", "")) == "grant_room_key"
 
 
 func _fate_choice_button(choice_index: int) -> Button:
@@ -8823,6 +8933,14 @@ func _animate_fate_overlay_exit(bought: int) -> void:
 	if _fate_feedback_dispatch != null and _fate_feedback_dispatch.is_valid():
 		_fate_feedback_dispatch.kill()
 	_fate_feedback_dispatch = null
+	# 入场淡入可能还在跑（玩家在 0.18s 内就点了退出）：它也在写 `modulate:a`，
+	# 不 kill 就会和退场的淡出抢同一个属性，表现为"点退出后弹窗闪一下才消失"。
+	if overlay.has_meta("fate_intro_tween"):
+		var intro_tween := overlay.get_meta("fate_intro_tween") as Tween
+		if intro_tween != null and intro_tween.is_valid():
+			intro_tween.kill()
+		overlay.remove_meta("fate_intro_tween")
+	overlay.modulate.a = 1.0
 	_set_fate_feedback_buttons_disabled(true)
 	if _fate_exit_button != null and is_instance_valid(_fate_exit_button):
 		_fate_exit_button.disabled = true
@@ -8989,6 +9107,18 @@ func resolve_fate_choice_for_test(_choice_index := 0) -> void:
 	if not _door_fate_active:
 		return
 	_close_door_fate_overlay()
+
+
+## 本层是否还存在「房间钥匙」这条局内经济。
+##
+## **业主 2026-11-05：远征03 的钥匙全部去掉。** 该关卡由 `TowerDescent3D` 在
+## flow 规则下覆写为 `false` ⇒ 不刷清房钥匙、不发钥匙奖励、不把「钥匙已掉落」
+## 写进状态栏、命运卡池里也不发「获得房间钥匙」这类空卡。
+##
+## 这是**能力**判据，不是关卡 ID 判据（见 [关卡接入规范](../../docs/v0.1/关卡接入规范.md) §3）：
+## 其它关卡不覆写 ⇒ 恒为 `true`，行为逐字不变。
+func _room_key_economy_enabled() -> bool:
+	return true
 
 
 func _get_total_room_keys() -> int:

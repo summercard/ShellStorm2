@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/common_components/boss_door_ritual/env_boss_door_ritual_visual_top3d.glb" id="1_visual"]
+
+[node name="boss_door_ritual" type="Node3D"]
+metadata/asset_id = "ENV-EXP03-BOSS-DOOR-RITUAL"
+metadata/asset_version = "v018"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "Boss房仪式封印门"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v018/component_packages/boss_door_ritual/boss_door_ritual_source_v018.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/bounds_size_m = Vector3(2.2, 2.5, 0.315)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "door"
+metadata/variant_axis = "door_role"
+metadata/variant_value = "boss_room_front"
+metadata/runtime_logic_owner = "RoomDoor3D"
+metadata/grid_unit_m = 0.0
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

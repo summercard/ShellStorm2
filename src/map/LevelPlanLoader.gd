@@ -279,6 +279,8 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 					"door_axis": str(port.get("door_axis", "")),
 					"door_line_m": float(port.get("door_line_m", 0.0)),
 					"door_center_m": float(port.get("door_center_m", 0.0)),
+					# 端口级视觉覆写只影响门板外观；门状态、权限与碰撞仍由 RoomDoor3D/地图边拥有。
+					"door_visual_scene": str(port.get("door_visual_scene", "")),
 				})
 		var room := {
 			"key": str(raw.get("key", "")),

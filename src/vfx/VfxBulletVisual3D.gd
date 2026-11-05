@@ -139,6 +139,9 @@ func _build_visual() -> void:
 	_trail.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_trail.rotation_degrees.x = 90.0
 	_trail.position.z = 0.25
+	# 尾迹默认可见性由总开关决定（`GameDesignConfig.BULLET_TRAIL_VISIBLE`）。
+	# 只藏不删：节点与材质照建，开关改回 true 即恢复。
+	_trail.visible = GameDesignConfig.BULLET_TRAIL_VISIBLE
 	_root.add_child(_trail)
 
 	# 每弹一盏灯：无阴影、能量 1.2、范围 1.8；回收必须归零。
@@ -194,7 +197,8 @@ func activate(world_position: Vector3, color: Color, size: float, context: Dicti
 		_light.light_energy = _LIGHT_ENERGY
 	if _root != null:
 		_root.visible = true
-	set_trail_visible(true)
+	# 复借按总开关复位：关着的时候不得被重新点亮。
+	set_trail_visible(GameDesignConfig.BULLET_TRAIL_VISIBLE)
 
 
 func deactivate() -> void:
@@ -262,6 +266,7 @@ func get_presentation_snapshot() -> Dictionary:
 		"light_shadows": false,
 		"trail_local_position": trail_pos,
 		"trail_is_behind": trail_behind,
+		"trail_visible": _trail.visible if _trail != null else false,
 		"forward": (-global_basis.z) if is_inside_tree() else Vector3(0.0, 0.0, -1.0),
 		"base_scale": _base_scale,
 		"node_count": get_child_count(),

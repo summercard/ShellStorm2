@@ -154,7 +154,11 @@ func _print_table(rows: Array[Dictionary]) -> void:
 const SELF_DESTRUCT := [
 	"egt_pinhead", "egt_nitra", "egt_bullat", "egt_shotgat", "egt_grenat", "egt_spirat",
 ]
-const SPECIAL_DROP := ["egt_keybullet_kin", "egt_chance_kin"]
+## 唯一享受「招牌掉落」豁免的怪。
+## ⚠ 2026-11-05 起 `egt_keybullet_kin` **不在豁免名单里**：业主裁定本关钥匙全退役
+## （「远征03 的钥匙掉落可以全部去掉，不需要钥匙掉落」）⇒ 它与其他普通怪同口径，
+## 由下面第 ⑤' 条反过来钉死「一只钥匙都不许掉」。
+const SPECIAL_DROP := ["egt_chance_kin"]
 
 func _verify(rows: Array[Dictionary]) -> void:
 	var failures: Array[String] = []
@@ -180,20 +184,22 @@ func _verify(rows: Array[Dictionary]) -> void:
 		if not is_self_destruct and float(row["currency_rate"]) < 0.999:
 			failures.append("%s 货币必掉率只有 %.1f%%（本工程裁定 100%%）"
 				% [kind, float(row["currency_rate"]) * 100.0])
-		# ⑤ 两只逃跑怪的招牌掉落必须垄断各自的那一格。
-		if kind == "egt_keybullet_kin":
-			var top := (row["top_items"] as Array)
-			var ok := not top.is_empty() and str((top[0] as Dictionary)["id"]) == "item_room_key"
-			if not ok or float(row["item_rate"]) < 0.999:
-				failures.append("钥匙小子没有 100%% 掉钥匙（实际 %.1f%%）"
-					% (float(row["item_rate"]) * 100.0))
+		# ⑤ 运气小子的招牌掉落必须垄断它那一格。
 		if kind == "egt_chance_kin":
 			if float(row["item_rate"]) + float(row["ammo_rate"]) < 0.999:
 				failures.append("运气小子没有 100%% 掉随机拾取物（物品 %.1f%% + 弹药 %.1f%%）"
 					% [float(row["item_rate"]) * 100.0, float(row["ammo_rate"]) * 100.0])
+		# ⑤' 钥匙小子**一把钥匙都不许掉**（业主 2026-11-05：本关钥匙全退役）。
+		if kind == "egt_keybullet_kin":
+			if float(row["item_rate"]) > 0.0:
+				failures.append("钥匙小子还在掉物品 %.1f%%（本关钥匙已退役，应与其他普通怪同口径）"
+					% (float(row["item_rate"]) * 100.0))
+			for entry_value in (row["top_items"] as Array):
+				if str((entry_value as Dictionary)["id"]) == "item_room_key":
+					failures.append("钥匙小子仍在掉落 item_room_key")
 
 	if failures.is_empty():
-		print("\nEGT_DROP_PROBE_OK 33 只普通怪掉落结构与原作对齐")
+		print("\nEGT_DROP_PROBE_OK 33 只普通怪掉落结构与本关裁定对齐（含钥匙全退役）")
 		return
 	print("\nEGT_DROP_PROBE_FAIL 共 %d 项不符：" % failures.size())
 	for line in failures:
@@ -229,7 +235,11 @@ func _verify_clear_rewards(plan: Dictionary) -> void:
 		var has_ammo := false
 		for value in grants:
 			var grant := value as Dictionary
-			var gid := str(grant.get("item_id", grant.get("currency_id", "")))
+			# 货币条目的 `item_id` 是空串而不是缺键 ⇒ 只用 `.get("item_id", fallback)`
+			# 会把它显示成一个空名字（曾经在构成里出现 "": 13.6%）。
+			var gid := str(grant.get("item_id", ""))
+			if gid.is_empty():
+				gid = str(grant.get("currency_id", ""))
 			if gid == "item_ammo_pack":
 				has_ammo = true
 				ammo += 1
@@ -237,20 +247,53 @@ func _verify_clear_rewards(plan: Dictionary) -> void:
 			pickups += 1
 			comp[gid] = int(comp.get(gid, 0)) + 1
 
+	# **期望值必须从配置算，不能写死 20%**：这里的「拾取物」是「池子抽到非弹药」，
+	# 而弹药本身也是池里的一个选项 ⇒ 期望 = chance × (1 - 弹药权重占池比)。
+	# 2026-11-05 删掉钥匙行后池子只剩 3 项，弹药占比从 4.0% 升到 6.1%，
+	# 这条期望也从 19.2% 变成 18.8% —— 写死 20% 会把正常结果判红。
+	var pickup_cfg: Dictionary = cfg.get("pickup", {}) as Dictionary
+	var pool_weight := 0.0
+	var ammo_weight := 0.0
+	for value in pickup_cfg.get("pool", []) as Array:
+		var row := value as Dictionary
+		var weight := maxf(0.0, float(row.get("weight", 0.0)))
+		pool_weight += weight
+		if str(row.get("item_id", "")) == "item_ammo_pack":
+			ammo_weight += weight
+	var chance := clampf(float(pickup_cfg.get("chance", 1.0)), 0.0, 1.0)
+	var ammo_share := 0.0 if pool_weight <= 0.0 else ammo_weight / pool_weight
+	var expected_pickup := chance * (1.0 - ammo_share)
+	var ammo_entry_chance := 0.0
+	var ammo_cfg: Dictionary = cfg.get("ammo", {}) as Dictionary
+	if not ammo_cfg.is_empty():
+		ammo_entry_chance = clampf(float(ammo_cfg.get("chance", 1.0)), 0.0, 1.0)
+	var expected_ammo := ammo_entry_chance + chance * ammo_share * (1.0 - ammo_entry_chance)
+
 	var pickup_rate := float(pickups) / float(SAMPLES)
 	var ammo_rate := float(ammo) / float(SAMPLES)
 	var rounded := {}
 	for gid in comp.keys():
 		rounded[gid] = "%.1f%%" % (float(comp[gid]) / float(pickups) * 100.0)
-	print("  拾取物率 %.1f%%（原作 20%%）｜弹药率 %.1f%%（原作 6%%）" % [pickup_rate * 100.0, ammo_rate * 100.0])
+	print(
+		"  拾取物率 %.1f%%（期望 %.1f%%）｜弹药率 %.1f%%（期望 %.1f%%）"
+		% [pickup_rate * 100.0, expected_pickup * 100.0, ammo_rate * 100.0, expected_ammo * 100.0]
+	)
 	print("  拾取物构成：", JSON.stringify(rounded))
 
-	if absf(pickup_rate - 0.20) > 0.03:
-		failures.append("拾取物率 %.1f%% 与配置 20%% 偏离过大" % (pickup_rate * 100.0))
-	if absf(ammo_rate - 0.06) > 0.02:
-		failures.append("弹药率 %.1f%% 与配置 6%% 偏离过大" % (ammo_rate * 100.0))
-	if not comp.has("item_room_key"):
-		failures.append("清房拾取物里没有钥匙（原作权重 24.36%，必须存在）")
+	if absf(pickup_rate - expected_pickup) > 0.03:
+		failures.append(
+			"拾取物率 %.1f%% 与配置期望 %.1f%% 偏离过大"
+			% [pickup_rate * 100.0, expected_pickup * 100.0]
+		)
+	if absf(ammo_rate - expected_ammo) > 0.02:
+		failures.append(
+			"弹药率 %.1f%% 与配置期望 %.1f%% 偏离过大"
+			% [ammo_rate * 100.0, expected_ammo * 100.0]
+		)
+	if not comp.has("item_health_potion"):
+		failures.append("清房拾取物里没有血瓶（权重 40.405，剩余池的主项，必须存在）")
+	if comp.has("item_room_key"):
+		failures.append("清房拾取物里还有钥匙（业主 2026-11-05：本关钥匙全退役）")
 
 	if failures.is_empty():
 		print("EGT_CLEAR_REWARDS_PROBE_OK 清房结算与原作两项独立判定一致")

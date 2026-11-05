@@ -159,7 +159,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/level_plan.json",
       "runtime": "data/level_plans/expedition_03/level_plan.json",
-      "sha256": "c062f86e49da1598f5eb317572be68b6279829d2e1bc83421054eb8b701ccec1"
+      "sha256": "ce319df8ea7bb25bf78082ff4c65cd4c1c74d3bd85bbad1fd285cc1e5baa1083"
     },
     {
       "source": "art_source/design/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json",

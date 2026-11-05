@@ -296,6 +296,9 @@ func _build_trail() -> void:
 		piece.set_meta("trail_base_z", offset.z)
 		_trail_root.add_child(piece)
 		_trail_parts.append(piece)
+	# 尾迹默认可见性由总开关决定（`GameDesignConfig.BULLET_TRAIL_VISIBLE`）。
+	# 几何照建、只藏不管：开关改回 true 后无需重建任何节点即恢复原状。
+	_trail_root.visible = GameDesignConfig.BULLET_TRAIL_VISIBLE
 
 
 ## 尾迹锥段构图（子类覆写或经 profile 声明）。缺省三段渐缩锥。
@@ -349,7 +352,8 @@ func activate(world_position: Vector3, color: Color, size: float, context: Dicti
 		_light.light_energy = float(_profile.get("light_energy", 1.2))
 	if _body_root != null:
 		_body_root.visible = true
-	set_trail_visible(true)
+	# 复借按总开关复位：关着的时候不得被重新点亮（否则池化复借会把尾巴带回来）。
+	set_trail_visible(GameDesignConfig.BULLET_TRAIL_VISIBLE)
 
 
 func deactivate() -> void:
@@ -388,6 +392,9 @@ func _process(delta: float) -> void:
 func _animate_trail() -> void:
 	var anim := String(_profile.get("trail_anim", "none"))
 	if anim == "none" or _trail_root == null:
+		return
+	# 尾迹被整体隐藏时跳过动画计算（隐藏节点上的 transform 改动看不见，纯属逐帧浪费）。
+	if not _trail_root.visible:
 		return
 	if anim == "spin":
 		_trail_root.rotation.z += 0.18
@@ -484,6 +491,8 @@ func get_presentation_snapshot() -> Dictionary:
 		"trail_parts": _trail_parts.size(),
 		"trail_local_z": trail_z,
 		"trail_is_behind": trail_behind,
+		# 仅可见性开关的真相（几何一直存在）；受影响方一眼能查出尾巴是藏了还是丢了。
+		"trail_visible": _trail_root.visible if _trail_root != null else false,
 		"core_shape": String(_profile.get("core_shape", "capsule")),
 		"core_radius": float(_profile.get("core_radius", 0.045)),
 		"base_scale": _base_scale,

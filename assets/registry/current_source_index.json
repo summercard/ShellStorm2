@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-03",
+  "date": "2026-11-05",
   "sources": [
     {
       "path": "art_source/legacy_design/卧室/左墙区域深化_v4.blend",
@@ -12277,6 +12277,24 @@
         1
       ],
       "sha256": "3f2353fa6152d1e8866f8dad39025bf6528c72bf9f7a251ebccad16708c521aa"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v018/component_packages/boss_door_ritual/boss_door_ritual_source_v018.blend",
+      "bytes": 102211,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/_VERSION/component_packages/boss_door_ritual/boss_door_ritual_source_VERSION.blend",
+      "version": [
+        18
+      ],
+      "sha256": "4dacca79e5ee32aef4ec61cfb3443c350f9a20b967a147be3864c8e18a71c4f1"
+    },
+    {
+      "path": "art_source/environments/tower_zones/expedition/source/common_components/v018/export/v018/Boss房仪式封印门_优化输出_v018.blend",
+      "bytes": 102211,
+      "family": "art_source/environments/tower_zones/expedition/source/common_components/_VERSION/component_packages/boss_door_ritual/boss_door_ritual_source_VERSION.blend",
+      "version": [
+        18
+      ],
+      "sha256": "4dacca79e5ee32aef4ec61cfb3443c350f9a20b967a147be3864c8e18a71c4f1"
     }
   ],
   "authoring_root": "art_source",

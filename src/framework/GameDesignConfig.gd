@@ -279,6 +279,13 @@ const SHADOW_MASK_WORLD_ONLY := RENDER_LAYER_WORLD
 const SHADOW_MASK_WORLD_AND_PLAYER := RENDER_LAYER_WORLD | RENDER_LAYER_PLAYER
 const COLLISION_LAYER_CAMERA_ONLY := 16
 
+## 子弹尾迹（弹体身后那条渐缩小尾巴）总开关。
+## 2026-11-05 业主：先隐藏起来看效果，**不要删实现** —— 回头把这里改回 `true` 即完整恢复。
+## 只控制可见性：`VfxBulletBody3D` / `VfxBulletVisual3D` 的尾迹几何照旧建造，
+## 面数、快照字段（`trail_parts` / `trail_is_behind` / `trail_local_z`）与玩法数据一律不变，
+## 所以既有验证脚本不需要跟着改。
+const BULLET_TRAIL_VISIBLE := false
+
 const ROOM_TYPES_WITH_HOSTILES: Array[String] = [
 	"COMBAT",
 	"ELITE",

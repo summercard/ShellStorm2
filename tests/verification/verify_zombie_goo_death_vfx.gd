@@ -62,7 +62,6 @@ const SPAWN_LIFT := 0.65
 const FLOOR_SHIFT := -0.30
 
 const MIN_SAMPLES := 12
-
 var _failures: Array[String] = []
 var _samples := 0
 var _steps: Array[Callable] = []
@@ -191,6 +190,10 @@ func _check_prefab_contract() -> void:
 	# 三部分按名存在（避免「数量对上但名字换了、别处按名取件取不到」）
 	for node_name in ["Burst0", "Burst11", "Splat0", "Splat13", "Puddle0", "Puddle3", "GooLight"]:
 		_expect(fx.get_node_or_null(node_name) != null, "缺少节点：%s" % node_name)
+
+	# 地面液体 = **贴图面片**（业主 2026-11-05：「用 Image 2 做一张贴图，贴在那个绿色方块上面」）。
+	# 这条是这次改动的核心，必须正面判：只看「有 Puddle0」会假绿 —— 换回纯色方块它也在。
+	_check_puddle_texture(fx)
 	# 反向对照：冲击波那两个节点**必须不存在**（业主口径），存在即说明切换没生效
 	for node_name in ["Shockwave0", "Shockwave2"]:
 		_expect(fx.get_node_or_null(node_name) == null,
@@ -209,7 +212,187 @@ func _check_prefab_contract() -> void:
 	fx.free()
 
 
-# ---------------------------------------------------------------- A2 灯光真源
+# ---------------------------------------------------------------- A1b 地面液体贴图
+## 业主 2026-11-05：「那个绿色方块的面片是用来替代用的，做一张贴图贴在这个方块上面」。
+##
+## 判据分四层，缺一层都能被别的实现蒙过去：
+##   ① 材质上真的挂了贴图（不是纯色）；
+##   ② 贴图**真的带 alpha**，且轮廓是「外面一圈深、里面一片中绿」——
+##      这正是业主口述的「不要写实、轮廓感强一些」的可量化形态。
+##      纯色方块 / 全不透明贴图 / 反过来（里深外浅）都会红；
+##   ③ 四块液体共用同一张贴图（不是每块各画一张，也不是只有第一块有贴图）；
+##   ④ 深度写模式必须是 OPAQUE_ONLY —— 贴图面片的透明区域不能写深度，
+##      否则四块之间会互相裁出方形空洞（贴图的方形包围盒会显形）。
+const PUDDLE_TEXTURE_PATH := "res://assets/art/vfx/textures/vfx_zombie_goo_puddle_floor.png"
+## 贴图边长下限：512 是「缩到 0.7m 面片上仍读得出描边」的最低档（实测 512 时 24px 描边
+## 压到约 2px、1024 时约 5px）。低于这条说明有人为了省显存把贴图压小了。
+const PUDDLE_TEXTURE_MIN_SIDE := 512
+## 描边/填充的亮度比上限：<1 表示外圈确实比中段暗（有描边）。
+const PUDDLE_OUTLINE_RATIO_MAX := 0.75
+## 透明边必须有：四角（贴图方形包围盒的四角）应当是透明的，
+## 否则「轮廓感」无从谈起 —— 它就是个满幅方块。
+const PUDDLE_CORNER_ALPHA_MAX := 32
+## 探「边缘」的探测距离（占贴图短边的比例）。取 2.5%：1024 的贴图上约 26px，
+## 略大于脚本扩出的 24px 描边宽度 ⇒ 量到的正好是描边环，不会滑进填充里。
+const RIM_PROBE_RATIO := 0.025
+
+
+func _check_puddle_texture(fx: VfxEffectBase3D) -> void:
+	_samples += 1
+	var puddle_nodes: Array[Node] = []
+	var textures: Array[Texture2D] = []
+	for index in EXPECTED_PUDDLE_COUNT:
+		var plate := fx.get_node_or_null("Puddle%d" % index) as MeshInstance3D
+		if plate == null:
+			_failures.append("缺少 Puddle%d，贴图契约未执行" % index)
+			return
+		puddle_nodes.append(plate)
+		# ① 材质真的带贴图
+		var mat := plate.material_override as StandardMaterial3D
+		if mat == null:
+			_failures.append("Puddle%d 未用 StandardMaterial3D（无法承载贴图）" % index)
+			return
+		if mat.albedo_texture == null:
+			_failures.append("Puddle%d 材质上没有贴图 —— 地面液体退回纯色方块了" % index)
+			return
+		textures.append(mat.albedo_texture)
+		# ④ 透明区域不写深度
+		_expect(mat.depth_draw_mode == BaseMaterial3D.DEPTH_DRAW_OPAQUE_ONLY,
+			"Puddle%d 深度写模式应为 OPAQUE_ONLY（当前 %d）：贴图透明区写深度会裁穿地面"
+			% [index, mat.depth_draw_mode])
+		_expect(mat.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA,
+			"Puddle%d 未开启 alpha 混合，贴图的透明边缘会变成黑边" % index)
+
+	# ③ 四块共用同一张贴图
+	for index in textures.size():
+		_expect(textures[index] == textures[0],
+			"Puddle%d 用的贴图与 Puddle0 不是同一张（应共用一份）" % index)
+	_expect(String(textures[0].resource_path) == PUDDLE_TEXTURE_PATH,
+		"地面液体贴图不是约定的那一张：%s" % textures[0].resource_path)
+
+	# 贴图**内容**判据从 PNG 源字节解码，而不是 `texture.get_image()`：
+	# 后者在 `--headless` 下会去等渲染线程读回像素，实测把整个用例挂死 8 分钟以上
+	# （本仓验收的经典假死形态）。解码源文件既与运行时用的是同一份数据，又不依赖 GPU。
+	var bytes := FileAccess.get_file_as_bytes(PUDDLE_TEXTURE_PATH)
+	if bytes.is_empty():
+		_failures.append("读不到地面液体贴图源文件：%s" % PUDDLE_TEXTURE_PATH)
+		return
+	var image := Image.new()
+	if image.load_png_from_buffer(bytes) != OK:
+		_failures.append("地面液体贴图不是合法 PNG：%s" % PUDDLE_TEXTURE_PATH)
+		return
+	_expect(maxi(image.get_width(), image.get_height()) >= PUDDLE_TEXTURE_MIN_SIDE,
+		"贴图边长 %d 低于 %d：缩到占屏尺寸后描边会糊掉"
+		% [maxi(image.get_width(), image.get_height()), PUDDLE_TEXTURE_MIN_SIDE])
+
+	# ② 真的有 alpha 轮廓（而不是满幅不透明）
+	var w := image.get_width()
+	var h := image.get_height()
+	var corner_max := 0.0
+	for corner in [Vector2i(1, 1), Vector2i(w - 2, 1), Vector2i(1, h - 2), Vector2i(w - 2, h - 2)]:
+		corner_max = maxf(corner_max, image.get_pixel(corner.x, corner.y).a)
+	_expect(corner_max * 255.0 <= PUDDLE_CORNER_ALPHA_MAX,
+		"贴图四角不透明（最大 alpha %.0f）：液体仍有方形包围盒的硬边" % (corner_max * 255.0))
+
+	# ② 边缘比中段暗 = 有描边（「轮廓感」的可量化形态）。
+	# ⚠ 不能用固定半径分环：贴图的图形占满整幅（content 横向 71..955/1024），
+	# 0.44~0.50 半径的环带落在**填充内部**，量出来的比是 0.95、判据恒假（实测）。
+	# 改成按「离透明区有多近」定义边缘 —— 与构图、贴图尺寸都无关。
+	var center_lum := _region_luminance(image, 0.0, 0.18)
+	var edge_lum := _rim_luminance(image)
+	_expect(center_lum > 0.05, "贴图中心几乎是空的（亮度 %.3f），不像一摊液体" % center_lum)
+	_expect(edge_lum < center_lum * PUDDLE_OUTLINE_RATIO_MAX,
+		"贴图边缘不够暗（中段 %.3f vs 边缘 %.3f，比 %.2f）：轮廓感不足"
+		% [center_lum, edge_lum, edge_lum / maxf(center_lum, 0.001)])
+
+	# 绿色主导（口径与 A/B 两段一致）
+	var center_color := image.get_pixel(w / 2, h / 2)
+	_expect(center_color.g > center_color.r and center_color.g > center_color.b,
+		"贴图中心不是绿色主导：%s" % str(center_color))
+
+	# 面片不是方块：Puddle 用的是平面（无厚度），仍按名可读、仍贴地
+	for index in puddle_nodes.size():
+		var plate := puddle_nodes[index] as MeshInstance3D
+		_expect(plate.mesh is PlaneMesh,
+			"Puddle%d 的 mesh 不是平面（%s）：贴图液体应该是单层面片" % [index, plate.mesh])
+
+
+## 采样「以中心为圆心、按半径比例取圆域」的平均亮度（只统计可见像素）。
+func _region_luminance(image: Image, inner_ratio: float, outer_ratio: float) -> float:
+	var w := image.get_width()
+	var h := image.get_height()
+	var cx := float(w) * 0.5
+	var cy := float(h) * 0.5
+	var half := float(mini(w, h)) * 0.5
+	var inner := inner_ratio * half
+	var outer := outer_ratio * half
+	var total := 0.0
+	var count := 0
+	var step := maxi(1, mini(w, h) / 128)
+	var y := 0
+	while y < h:
+		var x := 0
+		while x < w:
+			var dx := float(x) + 0.5 - cx
+			var dy := float(y) + 0.5 - cy
+			var r := sqrt(dx * dx + dy * dy)
+			if r >= inner and r <= outer:
+				var c := image.get_pixel(x, y)
+				if c.a > 0.5:
+					total += (c.r + c.g + c.b) / 3.0
+					count += 1
+			x += step
+		y += step
+	if count == 0:
+		return 0.0
+	return total / float(count)
+
+
+## 「边缘像素」的平均亮度：可见、且 8 个方向在 `RIM_PROBE_RATIO` 距离内能探到透明像素。
+##
+## 用「离透明区的距离」而不是「离中心的半径」来定义边缘 —— 这才是「轮廓」的定义，
+## 也自动适配贴图的构图（图形不必居中、不必是圆形）。
+func _rim_luminance(image: Image) -> float:
+	var w := image.get_width()
+	var h := image.get_height()
+	var probe := maxi(4, int(round(float(mini(w, h)) * RIM_PROBE_RATIO)))
+	var total := 0.0
+	var count := 0
+	var step := maxi(1, mini(w, h) / 256)
+	var y := 0
+	while y < h:
+		var x := 0
+		while x < w:
+			if image.get_pixel(x, y).a > 0.5 and _touches_transparent(image, x, y, probe):
+				var c := image.get_pixel(x, y)
+				total += (c.r + c.g + c.b) / 3.0
+				count += 1
+			x += step
+		y += step
+	if count == 0:
+		return 0.0
+	return total / float(count)
+
+
+func _touches_transparent(image: Image, x: int, y: int, probe: int) -> bool:
+	var w := image.get_width()
+	var h := image.get_height()
+	var offsets: Array[Vector2i] = [
+		Vector2i(probe, 0), Vector2i(-probe, 0), Vector2i(0, probe), Vector2i(0, -probe),
+		Vector2i(probe, probe), Vector2i(-probe, probe),
+		Vector2i(probe, -probe), Vector2i(-probe, -probe),
+	]
+	for offset: Vector2i in offsets:
+		var nx: int = x + offset.x
+		var ny: int = y + offset.y
+		if nx < 0 or ny < 0 or nx >= w or ny >= h:
+			return true
+		if image.get_pixel(nx, ny).a <= 0.5:
+			return true
+	return false
+
+
+
 func _check_light_truth() -> void:
 	var fx := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
 	if fx == null:

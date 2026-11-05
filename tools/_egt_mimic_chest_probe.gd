@@ -7,7 +7,7 @@ extends Node
 ## |---|---|---|
 ## | A 生成器掷骰（不建地牢） | 品质按权重真的出现、拟态率 ≈ `chance`、同盐幂等 | 一层里每只箱子都是 common（旧实现就是这样，且**不报错**） |
 ## | B 字段透传 | `chest_placements` 的 `mimic` 能活着穿过 `room_from_source()` 白名单 | 数据里有、运行时全是 false（宝箱那次就栽在这一步） |
-## | C 运行时全链路 | 开箱 → 箱子消失 / 钥匙照扣 / 不掉物 / 刷怪 → 击杀掉回 / **不算清房** | 开箱直接掉东西（拟态等于白送一只怪）；或宝箱房被记成「已清」 |
+## | C 运行时全链路 | 开箱 → 箱子消失 / 不扣钥匙 / 不掉物 / 刷怪 → 击杀掉回 / **不算清房** | 开箱直接掉东西（拟态等于白送一只怪）；或宝箱房被记成「已清」 |
 ##
 ## 用法：godot --headless --path . --scene res://tools/_egt_mimic_chest_probe.tscn
 
@@ -186,7 +186,8 @@ func _verify_runtime() -> void:
 	chest.mimic = true
 	chest.mimic_monster_kind = "egt_mimic"
 
-	tower._room_key_count = 1
+	# 2026-11-05 业主裁定本关钥匙全退役 ⇒ 开局就是 0 把，开箱也不该扣。
+	tower._room_key_count = 0
 	tower._temporary_room_keys = 0
 	var loot_before := _count_ground_loot()
 	var cards_before := _fate_card_count()
@@ -219,7 +220,10 @@ func _verify_runtime() -> void:
 	await get_tree().process_frame
 
 	_check(chest.is_opened(), "拟态箱没有进入已开状态（会变成无限次触发的刷怪点）")
-	_check(tower._get_total_room_keys() == 0, "开拟态箱没有扣钥匙（这条机制的恶意就在这，别顺手改掉）")
+	_check(
+		tower._get_total_room_keys() == 0,
+		"开拟态箱凭空多出钥匙（本关钥匙已退役，不该有任何钥匙变动）"
+	)
 	_check(
 		_count_ground_loot() == loot_before,
 		"开拟态箱就直接掉了物资（%d → %d）—— 物资应该在怪肚子里"
@@ -308,7 +312,7 @@ func _verify_runtime() -> void:
 	if not rebuilt_list.is_empty():
 		var rebuilt := rebuilt_list[0]
 		var rebuilt_snapshot := rebuilt.get_chest_snapshot()
-		_check(rebuilt.is_opened(), "detail 重建后拟态箱变回未开（可以再开一次 = 刷钥匙 / 刷怪的漏洞）")
+		_check(rebuilt.is_opened(), "detail 重建后拟态箱变回未开（可以再开一次 = 刷怪的漏洞）")
 		_check(
 			not bool(rebuilt_snapshot.get("visual_visible", true)),
 			"detail 重建后箱子视觉又出现了（房间里凭空多出一只箱子）"
@@ -325,7 +329,7 @@ func _verify_runtime() -> void:
 			]
 		)
 
-	# —— 击杀：物资与命运卡这时才该出现 ——
+	# —— 击杀：箱内物资这时才该出现（命运卡不走这里，本关一律靠买）——
 	var loot_at_kill := _count_ground_loot()
 	var cards_at_kill := _fate_card_count()
 	for _index in range(6):
@@ -351,7 +355,10 @@ func _verify_runtime() -> void:
 		loot_gained >= expected_drops,
 		"拟态击杀只掉了 %d 件，箱内配置 %d 件 —— 箱内物资没补齐" % [loot_gained, expected_drops]
 	)
-	_check(cards_gained >= 1, "拟态击杀没有给命运卡")
+	_check(
+		cards_gained == 0,
+		"拟态击杀自动发了 %d 张命运卡（本关命运卡一律走购买，不再白送）" % cards_gained
+	)
 
 	# —— 关键：拟态死了**不算清房** ——
 	_check(

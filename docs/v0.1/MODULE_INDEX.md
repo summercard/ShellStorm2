@@ -1,3 +1,7 @@
+WORLD-LOOT / UI-HUD / PLAYER-STATE：[宝箱开箱前置与后置过渡](development/2026-11-05_expedition03_chest_keyless.md#追加开箱前置--后置过渡同日第二轮)。抖动两周期 0.42s → 回正 → 蓄力 0.12s → 砰（盖子 −122° 过冲 / 箱体上跳 / 光爆 / 音效 / 0.14s 镜头冲击）→ 余韵；掉落绑在**砰**那一帧，购买界面再等 0.30s 并 0.18s 淡入。新增 `OpenPhase` 与阶段快照，探针四时刻断言 + 变异测试按预期报红 2 条；真实渲染出六帧序列图。顺带修 `PlayerCameraFeedback3D` 包络分母写死导致短震动被压掉 92%。整关 partial 不变。
+
+WORLD-PLAN / WORLD-LOOT / REWARD-SERVICE / FATE-RULES：[远征03 宝箱免钥匙直开 + 命运卡购买 + 钥匙经济退役](development/2026-11-05_expedition03_chest_keyless.md)。开箱改为**直接开启**：2 件物资落地 + 弹出与门后同一套三选一命运卡**购买**界面，**不再自动发卡**；拟态箱不扣钥匙、不发卡、不弹窗。钥匙小子必掉钥匙、清房池 24.36 权重、开局初始钥匙、命运卡「太阳钥印」全部移除；判据为能力 `_room_key_economy_enabled()`（仅 flow 关卡 false，远征01/塔楼不变，解耦 violations 0）。三只探针通过；套件场景被既有 27 项房间门位指纹漂移预检阻断，未执行项已单列。整关 partial 不变。
+
 SAVE-PROFILE / WORLD-INTERACTIVE-CLUTTER：[默认灯态回归修复](development/2026-11-03_default_lights_regression.md)。修正空陈设账触发缺省false关灯；缺席灯态保留基地/安全屋/作者默认，明确关灯仍恢复。主线时间轴、触发条件与灯光命令不改。
 
 SAVE-PROFILE / WORLD-INTERACTIVE-CLUTTER：[场景退出存档红字修复](development/2026-11-03_checkpoint_teardown.md)。补存移至子树退出前，离树采集保留缓存；最终家具姿态、一次提交与磁盘重载专项通过，相关回归和既有红项分列。

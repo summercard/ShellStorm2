@@ -842,7 +842,14 @@ static func _generate_flow_floor(
 				var gate := gate_value as Dictionary
 				var lane := float(gate["lane"])
 				port_seq += 1
-				connection_ports.append({
+				var target_block_id := str(gate.get("target", ""))
+				var target_meta := room_meta.get(target_block_id, {}) as Dictionary
+				var door_visual_scene := ""
+				# 视觉覆写是端口数据，不是关卡ID分支：只有通向 BOSS 角色的门使用
+				# Boss 专用视觉；RoomDoor3D 仍拥有开合、碰撞和 openable。
+				if str(target_meta.get("kind", "")) == "BOSS":
+					door_visual_scene = "res://assets/art/environments/tower_zones/expedition/runtime/common_components/boss_door_ritual/env_boss_door_ritual_root_top3d.tscn"
+				var port := {
 					# `port_id` 必须唯一：一墙多门时 `_door_nodes` 按方向只能存一扇，
 					# 下游要靠 port_id 认出"通向哪一间的那扇"（`get_door_node_by_port`）。
 					"port_id": "P%d" % port_seq,
@@ -870,7 +877,10 @@ static func _generate_flow_floor(
 					"position_m": _room_local_port_position(side, lane, size),
 					"outward": _port_outward(side),
 					"height_m": 0.0,
-				})
+				}
+				if not door_visual_scene.is_empty():
+					port["door_visual_scene"] = door_visual_scene
+				connection_ports.append(port)
 		var runtime_key := str(key_alias.get(room_id, room_id))
 		var runtime_id := str(runtime_id_alias.get(room_id, room_id))
 		rooms.append({
@@ -1124,13 +1134,14 @@ static func _treasure_chests_for(level_id: String) -> Dictionary:
 ##
 ## 位置策略（不是随机撒点）：
 ##   · **一箱 → 房间正中**。宝箱房只有一只箱子时，它就该在正中央 —— 玩家一进门就看见，
-##     "要不要花这把钥匙"这个决定在走进去的三秒内完成，不需要找。
+##     "开不开、什么时候开"这个决定在走进去的三秒内完成，不需要找。
 ##   · **多箱 → 沿房间中轴（Z=0）左右分开**，间距 ≥ `min_spacing_m`。
 ##     不用随机撒点是为了可复现：同一 seed 同一房，箱子位置逐格一致，
 ##     流送卸载重建不会让箱子换地方。
 ##
-## `requires_key` 在配置层统一给，逐箱不再覆写 —— EGT 的箱子「要么都锁、要么都不锁」，
-## 出现"这只能开那只不能"会让玩家以为是自己钥匙不够。
+## **宝箱不吃钥匙**（业主 2026-11-05）：`treasure_chests.requires_key` 已退役，
+## 这里不再把它抄进 `chest_placements`；`TreasureChest3D` 也没有对应字段。
+## 旧数据里残留该键不会报错，只是被忽略。
 ##
 ## `salt` = 「房间 id + 层种子」。品质与拟态都用它掷骰 ⇒ **同 seed 同房间结果恒定**，
 ## 流送卸载重建、存档重进都不会让箱子换品质或换身份。
@@ -1145,7 +1156,6 @@ static func _chest_placements_for(size: Vector2, cfg: Dictionary, salt := "") ->
 	var max_fit := maxi(1, int(floor((size.x - 2.4) / spacing)) + 1)
 	count = mini(count, max_fit)
 	var qualities := cfg.get("quality_weights", {}) as Dictionary
-	var requires_key := bool(cfg.get("requires_key", false))
 	# 掉落参数逐箱抄下去：箱子自己不读 level_plan（见 TreasureChest3D 同名字段注释）。
 	var pool_id := str(cfg.get("reward_pool_id", "loot_floor_1_2"))
 	var drop_count := maxi(1, int(cfg.get("drop_count", 1)))
@@ -1161,7 +1171,6 @@ static func _chest_placements_for(size: Vector2, cfg: Dictionary, salt := "") ->
 		out.append({
 			"id": "chest_%02d" % index,
 			"quality": _chest_quality_for_salt(qualities, chest_salt),
-			"requires_key": requires_key,
 			"reward_pool_id": pool_id,
 			"drop_count": drop_count,
 			"fate_card_per_open": fate_count,

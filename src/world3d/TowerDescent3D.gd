@@ -2694,6 +2694,10 @@ func _build_expedition_records() -> void:
 	var first_main := _plan_spec(plan, "room_01")
 	# flow 关卡判定要早于任何门策略查询（`_door_policies_for_record` 在建房间时就会用到）。
 	_flow_rules_active = str(plan.get("mode", "")) == "flow"
+	# 本层没有钥匙经济 ⇒ 开局也不发初始钥匙（业主 2026-11-05）。
+	# 读档时 `_restore_carried_ownership()` 会按快照覆盖这个值，不会吞掉玩家的携带钥匙。
+	if not _room_key_economy_enabled():
+		_room_key_count = 0
 	if (
 		entry_spec.is_empty()
 		or first_main.is_empty()
@@ -3470,6 +3474,20 @@ func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dict
 			"triggers_fate": false,
 		}
 	return super(from_room_id, target_room_id)
+
+
+## flow 关卡（远征03）：**整条房间钥匙经济退役**（业主 2026-11-05「远征03 的钥匙
+## 掉落全部去掉，不需要钥匙掉落」）。
+##
+## 覆盖面比「不掉钥匙」更宽，因为只要还有一把钥匙能被拿到、却没有任何消费口，
+## 它就只是永远花不掉的垃圾道具（同 `_room_produces_room_key()` 里 2026-09-22 的结论）：
+##   · 不刷清房钥匙（`_ensure_room_key_reward` 前置拦掉）；
+##   · 开局不发初始钥匙（`_build_expedition_records` 清零）；
+##   · 状态栏不再写「钥匙已掉落」；
+##   · 命运卡池不提供「获得房间钥匙」的空卡。
+## 门策略本来就不吃钥匙（见 `_door_policy_for_edge` 的 flow 分支），所以没有消费口。
+func _room_key_economy_enabled() -> bool:
+	return not _flow_rules_active
 
 
 func _try_open_room_door(target_room_id: String) -> bool:
@@ -7207,6 +7225,16 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 	# 漏这一行就等于「远征里砸罐子永远不掉币」，而且不打任何日志。
 	if not room.clutter_broken.is_connected(_on_clutter_broken):
 		room.clutter_broken.connect(_on_clutter_broken)
+	# 宝箱开启的路由：**同一个坑，2026-11-05 实测又踩了一次**。
+	# 远征房间由本函数创建（不走 Dungeon3D 的建房间循环），此处漏连的后果是
+	# 「按 E 之后箱子抖动一下、然后什么都不发生」—— 信号发出去了，但
+	# `chest_open_requested` 一个监听者都没有，`_on_chest_open_requested()` 从没被调用。
+	# 而且不报任何错：箱子照常可交互、`perform_interaction()` 照常返回 true。
+	# ⚠ 之前几轮宝箱验收全绿，是因为探针直接调 `tower._on_chest_open_requested()` ——
+	# 绕过了信号，正好绕过了这条断链。`_egt_chest_probe` 现在有一条走
+	# `perform_interaction()` 的真实链路断言盯着它。
+	if not room.chest_open_requested.is_connected(_on_chest_open_requested):
+		room.chest_open_requested.connect(_on_chest_open_requested)
 
 
 func generate_through_floor_for_test(target_floor_number: int) -> bool:

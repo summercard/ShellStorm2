@@ -588,10 +588,11 @@ var spawn_boxes_only := false
 ## 由 RewardService.resolve_dispatch 的覆盖链逐级回退（关卡 → 怪物表 → 全局默认）。
 ## **只承载不解释**：本类不解析规格、不抽表 —— 抽表只有 RewardService 一处。
 var reward_plan: Dictionary = {}
-## 宝箱放置层（2026-10-29）。`[{id, quality, requires_key, offset: [x, z], rotation_deg}]`。
+## 宝箱放置层（2026-10-29）。`[{id, quality, reward_pool_id, drop_count, fate_card_per_open, mimic, offset: [x, z], rotation_deg}]`。
 ## 空数组 = 本房不放宝箱（绝大多数房都不放；只有 REWARD 房由生成器写入）。
 ## **只承载不解释**：本类负责把 `TreasureChest3D` 建出来并接好信号，
-## 开箱后的奖励结算全部由 `Dungeon3D._on_chest_opened()` 处理。
+## 开箱后的奖励结算全部由 `Dungeon3D._on_chest_open_requested()` 处理。
+## （2026-11-05 起 `requires_key` 已从放置层退役，宝箱一律直接开启。）
 var chest_placements: Array = []
 ## 入口安全房四角是否补 L 型墙角（默认关：塔楼安全房保持 12 段直墙口径）。
 ## 只由「远征关卡」的房间记录置真，见 TowerDescent3D._build_expedition_records()。
@@ -2567,7 +2568,11 @@ func _port_creates_door_leaf(width_m: float) -> bool:
 ## 塔楼 A 套门扇厚 0.18m < 0.28m，滑出门洞后整块落在墙体内部，才是"滑进墙里"。
 ##
 ## 主题显式声明门扇时优先使用它；未声明仍按以下历史规则选择。
-func _door_panel_visual(target_room_id: String) -> PackedScene:
+func _door_panel_visual(target_room_id: String, visual_scene_path := "") -> PackedScene:
+	if not visual_scene_path.is_empty() and ResourceLoader.exists(visual_scene_path):
+		var port_scene := load(visual_scene_path) as PackedScene
+		if port_scene != null:
+			return port_scene
 	if theme != null and theme.door_panel_visual_scene != null:
 		return theme.door_panel_visual_scene
 	if door_opening_style == RoomDoor3D.OPENING_STYLE_SLIDE:
@@ -2623,7 +2628,12 @@ func _build_door_for_port(port: Dictionary, dimensions: Vector2) -> bool:
 		push_error("通用RoomDoor3D Prefab实例化失败")
 		return false
 	door.set_opening_style(door_opening_style)
-	door.configure(side, target_id, theme.accent_color, _door_panel_visual(target_id))
+	door.configure(
+		side,
+		target_id,
+		theme.accent_color,
+		_door_panel_visual(target_id, str(port.get("door_visual_scene", "")))
+	)
 	door.set_access_policy(door_policies.get(side, {}) as Dictionary)
 	door.set_meta("camera_lower_wall", side in ["north", "south"])
 	door.set_meta("connection_port_id", port_id)
@@ -6183,8 +6193,8 @@ func _build_treasure_chests() -> void:
 		# 而 `open_requested` 一接上就可能被玩家按下 —— 半成品箱子不该进交互池。
 		_add_runtime_detail_child(chest)
 		chest.open_requested.connect(_on_chest_open_requested)
-		# `opened` 在 `commit_opened()` 里发（扣钥匙/抽奖都成功之后）。
-		# 只有这个时刻才算「真的开了」——`open_requested` 可能因为没钥匙被上层驳回。
+		# `opened` 在 `commit_opened()` 里发（抽奖与掉落都成功之后）。
+		# 只有这个时刻才算「真的开了」。
 		chest.opened.connect(_on_treasure_chest_opened)
 
 

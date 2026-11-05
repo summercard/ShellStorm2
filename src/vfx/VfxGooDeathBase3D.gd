@@ -24,8 +24,9 @@ extends VfxEffectBase3D
 ##      （「打击力度感」的主要来源：一帧内铺满视野再迅速收掉）。
 ##   B. `Splat0..13` —— **飞溅粒子**：同样从胸口抛出，按抛物线飞出、落地后压扁（squash）
 ##      再缩没。落点由**解析式**求出（起抛高度取自 `context.floor_y`），不接物理引擎、无碰撞体。
-##   C. `Puddle0..3` —— **地上的液体**：落在**飞溅粒子真实落点**上的扁平方块（「方形」读法），
-##      出现 → **严格停留 0.50s** → 慢慢下沉 0.30m 并淡出。四块错峰出现 ⇒ 有节奏。
+##   C. `Puddle0..3` —— **地上的液体**：落在**飞溅粒子真实落点**上的贴地面片（2026-11-05 起
+##      由「纯色扁方块」换成卡通黏液贴图，见 `PUDDLE_TEXTURE`），出现 → **严格停留 0.50s** →
+##      慢慢下沉 0.30m 并淡出。四块错峰出现 ⇒ 有节奏。
 ##   D. `Shockwave0..2` —— **绿色冲击波**（**仅 `_shockwave_enabled()` 为真的子类**）：
 ##      贴地平铺、向外扫的 3 层错峰环，0.45s 后收、0.60s 收干净。
 ##
@@ -73,6 +74,10 @@ const SPAWN_CENTER_LIFT := 0.65
 ## ── 颜色（僵尸绿）────────────────────────────────────────────────────────
 const GOO_GREEN := Color(0.36, 0.78, 0.26, 1.0)
 const GOO_GREEN_LIGHT := Color(0.63, 0.96, 0.40, 1.0)
+## ⚠ 2026-11-05 起代码里**不再有用到这档深绿的地方**：原来只有地面液体的纯色方块用它。
+## 液体改成贴图后，深绿（描边）已经画在 `vfx_zombie_goo_puddle_floor.png` 里。
+## 保留这条常量是为了留一份「描边该是什么绿」的代码侧基准 —— 重做贴图时照它校色，
+## 不要改成别的绿，否则贴图与 A/B 两段的方块粒子会分裂成两套配色。
 const GOO_GREEN_DARK := Color(0.16, 0.44, 0.12, 1.0)
 ## 调用方本色只作这么多比例的偏移（0 = 完全忽略调用方颜色）
 const CALLER_COLOR_BLEND := 0.25
@@ -124,9 +129,24 @@ const PUDDLE_POP_OVERSHOOT := 1.18
 const PUDDLE_HOLD_SEC := 0.50
 const PUDDLE_SINK_SEC := 0.36
 const PUDDLE_SIDE_BASE := 0.72
-const PUDDLE_THICKNESS := 0.05
 const PUDDLE_LIFT := 0.035
 const PUDDLE_SINK_DEPTH := 0.30
+
+## 地面液体的贴图（业主 2026-11-05：「用 Image 2 做一张贴图，贴在那个绿色方块上面」）。
+##
+## 这张贴图**替代原先的纯色扁方块**：一张俯视的卡通黏液摊，粗深绿描边 + 平涂中绿 +
+## 几粒浅色高光与气泡 + 外圈离散小飞点。选择这套风格的三个理由（业主原话
+## 「不要是那种太写实的，轮廓感强一些」）：
+##   · 描边是**单色硬边**，缩到 0.7m 的贴地面片上仍然读得出轮廓；
+##   · 平涂不渐变 ⇒ 与 A/B 两段的 unshaded 纯色方块同族，不会变成两块风格；
+##   · 飞溅小点让「一摊液体」自带边缘破碎感，不必再叠第二层粒子。
+## 原图留 `art_source/vfx/combat_3d/vfx_zombie_goo_puddle/source/v001/`（`gpt-image-2` 绘制，
+## 生成器实际输出**白底 RGB**，由同目录 `build_puddle_texture.py` 本地抠白 + 裁方 + 压到 512²）。
+const PUDDLE_TEXTURE: Texture2D = preload("res://assets/art/vfx/textures/vfx_zombie_goo_puddle_floor.png")
+## 贴图染色：贴图自带配色，所以 albedo 只做很轻的偏绿乘色。
+## 保留 `_reset_state` 里「调用方本色 25% 偏移」这条口径的**可见痕迹**（四块液体仍会随
+## 小僵尸暗红 / 警察青 / 胖子橄榄绿轻微偏色），但强度压到不破坏贴图本身的绿。
+const PUDDLE_TINT_BLEND := 0.18
 
 ## ── D 绿色冲击波（**仅 `_shockwave_enabled()` 为真的子类**）────────────────
 ## 贴地平铺的 3 层错峰环。`ToonVfx.ring_mesh()` 的 `outer_radius = 0.72`
@@ -160,6 +180,8 @@ const LIGHT_DECAY_SEC := 0.34
 const LIGHT_COLOR := Color(0.55, 1.0, 0.42)
 
 var _cube_mesh: BoxMesh
+## 地面液体用的单面平面（1×1，躺在 XZ、法线 +Y）—— 贴图铺在它上面
+var _puddle_mesh: PlaneMesh
 
 var _burst: Array[MeshInstance3D] = []
 var _splat: Array[MeshInstance3D] = []
@@ -213,6 +235,10 @@ func _build() -> void:
 	_cube_mesh = BoxMesh.new()
 	_cube_mesh.size = Vector3.ONE
 
+	# 地面液体的承载面：1×1 平面，默认就躺在 XZ（法线 +Y）⇒ 不需要旋转
+	_puddle_mesh = PlaneMesh.new()
+	_puddle_mesh.size = Vector2.ONE
+
 	# UNSHADED + ALPHA：卡通纯色、不受场景光照影响 ⇒ 暗处也读得出「绿」。
 	_mat_burst = ToonVfx.toon_material(GOO_GREEN_LIGHT)
 	_mat_splat = ToonVfx.toon_material(GOO_GREEN)
@@ -242,9 +268,13 @@ func _build() -> void:
 		_splat.append(cube)
 
 	# ── C 地上的液体（每块一份材质：可各自错峰出现与淡出）──
+	# 从「纯色扁方块」换成「贴图平面」(业主 2026-11-05)。**只有这一段换**，A/B 的方块粒子
+	# 与尺寸、节奏、落点数学逐字不动 —— 业主这次要的是「那块地上的绿色方块换成一张贴图」，
+	# 不是重做整条死亡特效。厚度因此不再是几何（平面片没有侧面），但「停留 → 下沉」的
+	# 观感不受影响：下沉 0.30m 会穿过地板被地面吃掉，本来就读作「渗下去」。
 	for index in PUDDLE_COUNT:
-		var mat := ToonVfx.toon_material(GOO_GREEN)
-		var plate := _add_cube("Puddle%d" % index, mat)
+		var mat := ToonVfx.toon_texture_material(PUDDLE_TEXTURE)
+		var plate := _add_plate("Puddle%d" % index, mat)
 		_puddle_mats.append(mat)
 		_puddle.append(plate)
 
@@ -286,6 +316,18 @@ func _add_cube(node_name: String, mat: StandardMaterial3D) -> MeshInstance3D:
 	return cube
 
 
+## 地面液体的面片：贴图铺在 1×1 的 XZ 平面上，靠 `scale.x/z` 摊到实际边长。
+## ⚠ 与方块件共用「节点名 / 不投影 / 贴在父节点原点」这套契约，验收按名取件不受影响。
+func _add_plate(node_name: String, mat: StandardMaterial3D) -> MeshInstance3D:
+	var plate := MeshInstance3D.new()
+	plate.name = node_name
+	plate.mesh = _puddle_mesh
+	plate.material_override = mat
+	plate.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(plate)
+	return plate
+
+
 ## 爆炸粒子的放射方向：等角分布 + 交替俯仰（避免全挤在同一平面显得单薄）。
 func _burst_direction(index: int, count: int) -> Vector3:
 	var angle := float(index) / float(count) * TAU
@@ -311,8 +353,13 @@ func _reset_state(caller_color: Color, size: float) -> void:
 	_mat_burst.albedo_color.a = 1.0
 	_mat_splat.albedo_color = _goo_color
 	_mat_splat.albedo_color.a = 1.0
+	# 地面液体现在由贴图自带配色（中绿填充 + 深绿描边 + 浅绿高光），乘色必须接近白，
+	# 否则会把贴图压暗、把描边和填充糊成一片，业主在意的「轮廓感」就没了。
+	# 只留一点点偏色：业主那道「调用方本色 25% 偏移」的设计约束在 C 段仍看得见，
+	# 但强度降到 PUDDLE_TINT_BLEND，不动贴图本身的读法。
+	var tint_white := Color(1.0, 1.0, 1.0).lerp(_goo_color, PUDDLE_TINT_BLEND)
 	for index in _puddle_mats.size():
-		_puddle_mats[index].albedo_color = GOO_GREEN_DARK.lerp(_goo_color, 0.7)
+		_puddle_mats[index].albedo_color = tint_white
 		_puddle_mats[index].albedo_color.a = 1.0
 
 	# 冲击波（仅在启用时存在）：贴地平铺 + 不复用上一轮的缩放（tick 会立刻按相位重算）
@@ -465,7 +512,8 @@ func _tick_puddle(elapsed: float, size: float) -> void:
 			scale_mul = lerpf(1.0, 0.84, t)
 			lift = PUDDLE_LIFT - PUDDLE_SINK_DEPTH * t
 			alpha = 1.0 - t
-		plate.scale = Vector3(side * scale_mul, PUDDLE_THICKNESS, side * scale_mul)
+		# Y 不缩放：平面片没有厚度，只有 XZ 边长有意义（保留 `puddle_scale_x` 这条验收口径）
+		plate.scale = Vector3(side * scale_mul, 1.0, side * scale_mul)
 		plate.position = Vector3(source.x, _floor_local_y + lift, source.z)
 		plate.rotation = Vector3(0.0, float(index) * 0.62 + 0.18, 0.0)
 		_puddle_mats[index].albedo_color.a = alpha

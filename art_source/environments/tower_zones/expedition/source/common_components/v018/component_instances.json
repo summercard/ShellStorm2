@@ -1,0 +1,39 @@
+{
+  "schema": "shellstorm2.battle.component_instances",
+  "schema_version": 1,
+  "library": "v018",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v018/component_packages/boss_door_ritual/boss_door_ritual_source_v018.blend",
+  "source_room_type_sha256": "4dacca79e5ee32aef4ec61cfb3443c350f9a20b967a147be3864c8e18a71c4f1",
+  "coordinate_contract": {
+    "source_space": "component_local",
+    "origin_mode": "bottom_center",
+    "walk_plane_z_m": 0.0,
+    "blender_plane": "XY",
+    "blender_up": "+Z",
+    "rotation_y_deg_semantics": "rotation_about_blender_Z",
+    "godot_mapping": "(bx,by,bz)->(bx,bz,-by)"
+  },
+  "instances": [
+    {
+      "component_id": "ENV-EXP03-BOSS-DOOR-RITUAL",
+      "instance_id": "boss_front_door_panel",
+      "position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_object": "ROOT_boss_door_ritual"
+    }
+  ],
+  "validation": {
+    "source_object_count": 1,
+    "instance_count": 1,
+    "coverage_ok": true
+  }
+}

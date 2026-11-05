@@ -1,0 +1,72 @@
+{
+  "component_id": "ENV-EXP03-BOSS-DOOR-RITUAL",
+  "slug": "boss_door_ritual",
+  "name_zh": "Boss房仪式封印门",
+  "component_family": "door",
+  "variant_axis": "door_role",
+  "variant_value": "boss_room_front",
+  "variant_reason": "Boss前门视觉变体；不改变RoomDoor3D状态/碰撞。",
+  "category": "furnishing",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_FOYER"
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-Y",
+  "godot_front_axis": "+Z",
+  "up_axis": "+Z",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "collision_policy": "visual_only",
+  "collision_shape_count": 0,
+  "palette_uv_layer": "PaletteUV",
+  "bounds_size_m": [
+    2.2,
+    0.315,
+    2.5
+  ],
+  "source_bounds_size_m": [
+    2.2,
+    0.18,
+    2.5
+  ],
+  "collection": "Component_boss_door_ritual",
+  "root_object": "ROOT_boss_door_ritual",
+  "instance_count": 1,
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v018/component_packages/boss_door_ritual/boss_door_ritual_source_v018.blend",
+  "component_blend_sha256": "4dacca79e5ee32aef4ec61cfb3443c350f9a20b967a147be3864c8e18a71c4f1",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v018/export/v018/Boss房仪式封印门_优化输出_v018.blend",
+  "optimized_blend_sha256": "4dacca79e5ee32aef4ec61cfb3443c350f9a20b967a147be3864c8e18a71c4f1",
+  "geometry_fingerprint": "5341084e04fe364a3d67806b161abd671ed708cfd303bff42d10ed02667b9ddc",
+  "vertex_count": 294,
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/boss_door_ritual/env_boss_door_ritual_visual_top3d.glb",
+  "glb_sha256": "01634a0189fa2a26d83fe39c8b3fba94d75ee89e4888523d92be4982a8bde300",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/boss_door_ritual/env_boss_door_ritual_root_top3d.tscn",
+  "prefab_sha256": "3da62df59385fbb635a8fbe27baa78e3d7d21aba986984be804198d10f1da695",
+  "asset_id": "ENV-EXP03-BOSS-DOOR-RITUAL",
+  "asset_version": "v018",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v018/component_packages/boss_door_ritual/boss_door_ritual_source_v018.blend",
+  "room_owned_geometry": false,
+  "runtime_integrated": true,
+  "asset_ledger": "resolved_by_ledger_index:scenes",
+  "coordinate_mapping": "(bx,by,bz)->(bx,bz,-by)",
+  "import_status": "validated_runtime_component",
+  "validation": {
+    "blender_material_uv_passed": true,
+    "godot_load_passed": true,
+    "godot_rendered": false,
+    "formal_scene_assembled": false
+  },
+  "notes": "视觉专用门扇；已通过 boss_foyer→boss 端口接入运行时。RoomDoor3D仍拥有门扇开合、碰撞、openable和感应逻辑；未复制为整屋正式房间。"
+}

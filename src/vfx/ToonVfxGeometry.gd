@@ -103,6 +103,26 @@ static func unit_cube_mesh() -> Mesh:
 	return _unit_cube_mesh
 
 
+## 生成一份「卡通无光照 + 贴图 + alpha」材质（地面液体这类贴图面片用）。
+##
+## 与 `toon_material()` 的关键差别：**不透写深度**（`DEPTH_DRAW_OPAQUE_ONLY`）。
+## `toon_material()` 用的是 `DEPTH_DRAW_ALWAYS` —— 那对**实心方块**没问题，但用到带透明边的
+## 贴图面片上就会出事：透明像素照样写深度，四块液体互相之间、以及被它们盖住的其它地面件
+## 会被裁掉一块方形空洞（贴图的方形包围盒会「显形」）。
+## 另外双面渲染：贴图面片是单层平面，从下方/斜掠视角不该整片消失。
+static func toon_texture_material(texture: Texture2D, base_color: Color = Color.WHITE) -> StandardMaterial3D:
+	var m := StandardMaterial3D.new()
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.albedo_texture = texture
+	m.albedo_color = base_color
+	m.disable_receive_shadows = true
+	m.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_OPAQUE_ONLY
+	m.no_depth_test = false
+	m.cull_mode = BaseMaterial3D.CULL_DISABLED
+	return m
+
+
 ## 生成一份卡通无光照半透明材质（调用方持有并复用）。
 ## emission_boost>0 时开启自发光以提升亮芯/火星的通透感，但保持不泛白的饱和层次。
 static func toon_material(base_color: Color, emission_boost: float = 0.0) -> StandardMaterial3D:

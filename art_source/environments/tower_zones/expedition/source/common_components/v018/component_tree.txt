@@ -1,0 +1,4 @@
+Component_boss_door_ritual
+  ROOT_boss_door_ritual
+    boss_door_ritual_主体
+    boss_door_ritual_自发光
