@@ -45,7 +45,7 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"display_name": "CloseAI数据库",
 		"setting_name": "CloseAI数据库",
 		"subtitle": "单层独立行动 · 入口安全屋 → 01—10 号房 → 撤离点",
-		"objective_line": "肃清 01—10 号房，穿过命运之门，抵达终点撤离点。",
+		"objective_line": "肃清 01—10 号房，开启宝箱构筑命运，抵达终点撤离点。",
 		"scene_3d": "res://scenes/ExpeditionLevel01_3D.tscn",
 		"nav_order": 10,
 		"nav_badge": "01  /  EXPEDITION",

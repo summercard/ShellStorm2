@@ -523,11 +523,27 @@ static func generate_from_level_plan(
 		"furnishing": (
 			level_plan.get("furnishing", {}) as Dictionary
 		).duplicate(true),
+		# —— 门策略 / 钥匙经济 / 清房掉落（能力段，2026-11-06）——
+		# 三段都只做**透传**：真正的语义在 `TowerDescent3D._door_policy_for_edge`、
+		# `_room_key_economy_enabled` 与 `Dungeon3D.configure_clear_drops`。
+		# 与 monster_rules 同一处、同一写法 ⇒ 不进 canonical，改它不会让既有存档失配；
+		# 关卡不写这三段 ⇒ 空字典 / 缺省 true ⇒ 行为逐字不变。
+		"door_policy": (
+			level_plan.get("door_policy", {}) as Dictionary
+		).duplicate(true),
+		"economy": (
+			level_plan.get("economy", {}) as Dictionary
+		).duplicate(true),
+		"clear_drops": (
+			level_plan.get("clear_drops", {}) as Dictionary
+		).duplicate(true),
 	}
 	plan["valid"] = errors.is_empty()
 	plan["validation_errors"] = errors
 	plan["attempt_count"] = 1
 	plan["used_fallback"] = used_fallback
+	if floor_source.has("flow_id"):
+		plan["flow_id"] = floor_source["flow_id"]
 	if level_id == "expedition_01":
 		plan["expedition_global_rotation_deg"] = 180 if north_revision else 0
 	return plan
@@ -646,6 +662,7 @@ const FLOW_KIND_CONTENT := {
 	"BOSS_FOYER": "UPGRADE",
 	"NORMAL": "COMBAT",
 	"HUB": "COMBAT",
+	"REWARD": "STORAGE",
 	# `SHOP` 必须钉成 `MERCHANT`（2026-10-30）。此前这一项是空的 ——
 	# 于是商店房被内容洗牌成 COMBAT / STORAGE / TRAP 之类，`room_type` 一路
 	# 传到 `DungeonRoom3D` 时已经不是 MERCHANT，`_build_detail()` 里那句
@@ -701,8 +718,10 @@ static func _generate_flow_floor(
 	var flow: Dictionary = EGT_FLOW_ASSEMBLER.pick_flow(flows, seed_value)
 	if flow.is_empty():
 		return {}
+	var validate_bridge := func(candidate: Dictionary) -> Array:
+		return EGT_PLAN_BRIDGE.to_block(candidate)["errors"] as Array
 	var assembled: Dictionary = EGT_FLOW_ASSEMBLER.assemble_flow(
-		flow, templates, {}, seed_value
+		flow, templates, {}, seed_value, validate_bridge
 	)
 	if not bool(assembled.get("ok", false)):
 		return {}
@@ -844,11 +863,9 @@ static func _generate_flow_floor(
 				port_seq += 1
 				var target_block_id := str(gate.get("target", ""))
 				var target_meta := room_meta.get(target_block_id, {}) as Dictionary
-				var door_visual_scene := ""
-				# 视觉覆写是端口数据，不是关卡ID分支：只有通向 BOSS 角色的门使用
-				# Boss 专用视觉；RoomDoor3D 仍拥有开合、碰撞和 openable。
-				if str(target_meta.get("kind", "")) == "BOSS":
-					door_visual_scene = "res://assets/art/environments/tower_zones/expedition/runtime/common_components/boss_door_ritual/env_boss_door_ritual_root_top3d.tscn"
+				# Only the edge entering the arena from its foyer gets the ritual gate.
+				# Mark both physical endpoints, regardless of which one owns the moving leaf.
+				var boss_gate := _is_flow_boss_entry(meta, target_meta, room_meta)
 				var port := {
 					# `port_id` 必须唯一：一墙多门时 `_door_nodes` 按方向只能存一扇，
 					# 下游要靠 port_id 认出"通向哪一间的那扇"（`get_door_node_by_port`）。
@@ -870,7 +887,7 @@ static func _generate_flow_floor(
 					"door_axis": "h" if side in ["north", "south"] else "v",
 					"door_line_m": wall_length,
 					"door_center_m": lane,
-					"door_width_m": FLOW_DOOR_OPENING_M,
+					"door_width_m": 3.0 if boss_gate else FLOW_DOOR_OPENING_M,
 					# `position_m` / `outward` 必须给：校验器靠它们做**跨房锚点比对**
 					# （两侧门锚点距离 ≤ 1cm、两侧外法线相对）。缺了会被当成原点，
 					# 于是每条父子边都退化成"净距不足"的走廊断言。
@@ -878,8 +895,8 @@ static func _generate_flow_floor(
 					"outward": _port_outward(side),
 					"height_m": 0.0,
 				}
-				if not door_visual_scene.is_empty():
-					port["door_visual_scene"] = door_visual_scene
+				if boss_gate:
+					port["door_visual_scene"] = "res://assets/art/environments/tower_zones/expedition/runtime/common_components/boss_door_ritual/env_boss_door_ritual_root_top3d.tscn"
 				connection_ports.append(port)
 		var runtime_key := str(key_alias.get(room_id, room_id))
 		var runtime_id := str(runtime_id_alias.get(room_id, room_id))
@@ -1389,6 +1406,18 @@ static func _port_outward(side: String) -> Array:
 ## 这也更贴 EGT：原文的门是房间边缘上的窄门，而不是整格通洞；
 ## 5m 是**走廊的宽度**，不是门的宽度（走廊由 `cr*` 走廊房承担）。
 const FLOW_DOOR_OPENING_M := 2.2
+
+
+static func _is_flow_boss_entry(a: Dictionary, b: Dictionary, rooms: Dictionary) -> bool:
+	var peer := b if a.get("kind") == "BOSS" else a
+	if a.get("kind") != "BOSS" and b.get("kind") != "BOSS":
+		return false
+	if peer.get("kind") == "BOSS_FOYER":
+		return true
+	for room_id in peer.get("edge_rooms", []):
+		if (rooms.get(room_id, {}) as Dictionary).get("kind") == "BOSS_FOYER":
+			return true
+	return false
 
 
 ## 无边序的边键（与 `EgtPlanBridge._edge_key()` 同式）。

@@ -498,6 +498,7 @@ var _spawn_reach_evaluated := false
 ## 未落锁时（家具碰撞还没进树）同一帧只试一次 —— 否则 `_build_spawn_points()` 的
 ## 每个候选点都会触发一次 `_collect_spawn_blockers()`，白扫整棵子树 4800 遍。
 var _spawn_reach_probe_frame := -1
+var _furnishing_navigation_refresh_queued := false
 # 区块壳体地砖格心（5m 模数格）的半宽与命中容差。非矩形房（L / U / 工字桥）的凹口在
 # 摆位阶段就被 `point_in_polygon` 剔掉了砖，「格心集合」因此就是房内可用点的真源；
 # 触发盒的盒心吸附（`snap_box_center_to_tile`）也依赖这套格心：
@@ -1128,6 +1129,8 @@ func ensure_detail_built() -> void:
 	_apply_pending_detail_runtime_state()
 	_set_room_light_runtime_state(self)
 	_sync_supplemental_room_lights()
+	if bool(get_meta("authored_collision_navigation", false)):
+		_request_furnishing_navigation_refresh()
 
 
 func ensure_shell_built() -> void:
@@ -1233,6 +1236,8 @@ func _restore_treasure_chests() -> void:
 	var states := _pending_detail_runtime_state.get("treasure_chests", {}) as Dictionary
 	if states.is_empty():
 		return
+	# 运行期掉落的箱子不在 `chest_placements` 里 ⇒ 必须**先按账重造**，才谈得上「恢复成已开」。
+	_rebuild_runtime_chests(states)
 	for chest in get_treasure_chests():
 		var value: Variant = states.get(chest.chest_id, null)
 		if value == null:
@@ -2628,6 +2633,8 @@ func _build_door_for_port(port: Dictionary, dimensions: Vector2) -> bool:
 		push_error("通用RoomDoor3D Prefab实例化失败")
 		return false
 	door.set_opening_style(door_opening_style)
+	if str(port.get("door_visual_scene", "")) == MANOR_PLAN.BOSS_PANEL:
+		door.set_presentation_opening(width, TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M)
 	door.configure(
 		side,
 		target_id,
@@ -2825,6 +2832,10 @@ func _rebuild_manor_shell(art_root: Node3D) -> int:
 			continue
 		if not ART_SOURCE.is_art_layer_structure(prefab):
 			continue
+		# Interior partitions belong to the authored layout, independently of the
+		# exterior shell whose doors are rebuilt for the current run.
+		if bool(node.get_meta("authored_interior_structure", false)):
+			continue
 		if _has_allowlisted_ancestor(art_root, node):
 			continue
 		doomed.append(node)
@@ -2883,6 +2894,9 @@ func _rebuild_manor_shell(art_root: Node3D) -> int:
 ## 在工坊里**拖动墙或地砖不会进游戏**，那是几何层。想让改动跨局生效，改装饰/陈设/灯。
 ## 这条已经写进 `docs/v0.1/development/2026-10-31_runtime_room_signature_fix.md`。
 func _build_art_layer_only(static_layout: Node3D, art_path: String) -> void:
+	preload("res://src/world3d/RoomAuthoredPortAccess.gd").configure(static_layout, connection_ports, get_dimensions())
+	if static_layout.get_meta("perimeter_bay_layout", false):
+		preload("res://src/world3d/RoomPerimeterFurnishing.gd").configure(static_layout, connection_ports, get_dimensions())
 	var stripped := _strip_art_layer_geometry(static_layout)
 	# 门墙件被剥掉后，这份契约里记的节点名全部失效 —— 不清掉，
 	# `TowerDescent3D._bind_shared_edge_doors()` 会调 `_adopt_static_port_door_visuals()`
@@ -2894,6 +2908,12 @@ func _build_art_layer_only(static_layout: Node3D, art_path: String) -> void:
 	)
 	add_child(static_layout)
 	set_meta("static_layout_scene_path", art_path)
+	var authored_navigation: Variant = _find_static_layout_meta(static_layout, "furnishing_navigation_polygons")
+	if authored_navigation != null:
+		set_meta("furnishing_navigation_polygons", authored_navigation)
+	if bool(static_layout.get_meta("authored_collision_navigation", false)):
+		set_meta("authored_collision_navigation", true)
+		_request_furnishing_navigation_refresh()
 	# **刻意不设 `static_layout_scene_loaded`**：那个 meta 的语义是「墙体由该场景接管」
 	# （`TowerDescent3D._room_walls_owned_by_static_layout()` 靠它决定跳过补走廊墙）。
 	# 这里墙体归程序化，设了会让所有读它的判据误判。美术层用独立的 `art_layer_loaded`。
@@ -6171,31 +6191,141 @@ func _build_content() -> void:
 ## 贴地、按 `rotation_deg` 转向、接 `open_requested` 信号上行。
 ## **不做避让计算** —— 生成期知道房型与门位，运行时只知道尺寸，两边都算一遍必然打架。
 func _build_treasure_chests() -> void:
-	if chest_placements.is_empty():
-		return
-	var floor_y := float(get_meta("walk_surface_y_m", 0.0))
-	for index in range(chest_placements.size()):
-		var entry := chest_placements[index] as Dictionary
+	var placements := chest_placements.duplicate(true)
+	# Workshop markers use the same chest owner, signals and persistence as
+	# generated placements. A stable ID prevents duplication on detail rebuild.
+	var art := get_node_or_null("AuthoredLayoutArtRoot")
+	if art != null:
+		for marker in art.find_children("*", "Marker3D", true, false):
+			var config: Variant = marker.get_meta("treasure_chest_config", null)
+			if not config is Dictionary or str(config.get("id", "")).is_empty():
+				continue
+			var entry := (config as Dictionary).duplicate(true)
+			var offset := to_local((marker as Marker3D).global_position)
+			entry["offset"] = [offset.x, offset.z]
+			placements.append(entry)
+	for index in range(placements.size()):
+		var entry := placements[index] as Dictionary
 		if entry.is_empty():
 			continue
-		var chest := TreasureChest3D.new()
-		chest.configure(entry)
-		chest.name = "TreasureChest_%02d" % index
+		if find_chest_by_id(str(entry.get("id", ""))) != null:
+			continue
+		_instantiate_chest_node(
+			entry, _chest_offset_of(entry), float(entry.get("rotation_deg", 0.0)),
+			"TreasureChest_%02d" % index
+		)
+
+
+## 生成一只宝箱节点：贴地、按 `rotation_deg` 转向、接两条信号。**不记账**。
+##
+## `_build_treasure_chests()`（数据摆位）与 `spawn_runtime_chest()`（清房掉落）共用它，
+## 避免出现「两只箱子行为不一样」—— 开箱协议只能有一套。
+func _instantiate_chest_node(
+	entry: Dictionary, offset: Vector2, rotation_deg: float, node_name: String
+) -> TreasureChest3D:
+	var floor_y := float(get_meta("walk_surface_y_m", 0.0))
+	var chest := TreasureChest3D.new()
+	chest.configure(entry)
+	chest.name = node_name
+	chest.position = Vector3(offset.x, floor_y, offset.y)
+	chest.rotation.y = deg_to_rad(rotation_deg)
+	# 先建视觉再连信号：`_ready()` 里 `_build_visual()` 会建提示牌，
+	# 而 `open_requested` 一接上就可能被玩家按下 —— 半成品箱子不该进交互池。
+	_add_runtime_detail_child(chest)
+	chest.open_requested.connect(_on_chest_open_requested)
+	# `opened` 在 `commit_opened()` 里发（抽奖与掉落都成功之后）。
+	# 只有这个时刻才算「真的开了」。
+	chest.opened.connect(_on_treasure_chest_opened)
+	return chest
+
+
+## 从摆位条目里取房间局部偏移。缺省 (0,0) = 房心。
+func _chest_offset_of(entry: Dictionary) -> Vector2:
+	var offset_value: Variant = entry.get("offset", [0.0, 0.0])
+	if offset_value is Array and (offset_value as Array).size() >= 2:
+		return Vector2(float((offset_value as Array)[0]), float((offset_value as Array)[1]))
+	return Vector2.ZERO
+
+
+## 运行期掉落一只宝箱（清房 / 首领阵亡）。
+##
+## 与 `chest_placements` 摆位的箱子**共用同一套实例、同一本房间账**，区别只有两处：
+##   1. 账里多一个 `spawned: true` 与重建所需的 `config/offset/rotation_deg`；
+##   2. 因为它不在 `chest_placements` 里，`_build_treasure_chests()` 重建时不会自动出现，
+##      必须由 `_restore_treasure_chests()` 按账重建 —— 否则「清房掉的箱子走远再回来就没了」。
+##
+## 幂等：同 `chest_id` 已存在则直接返回那只，不重复建。
+func spawn_runtime_chest(
+	config: Dictionary, offset: Vector2, rotation_deg := 0.0
+) -> TreasureChest3D:
+	var chest_id := str(config.get("id", ""))
+	if chest_id.is_empty():
+		push_error("[DungeonRoom3D] 运行期宝箱缺少 id，已丢弃（房间 %s）" % room_id)
+		return null
+	var existing := find_chest_by_id(chest_id)
+	if existing != null:
+		return existing
+	var chest := _instantiate_chest_node(
+		config, offset, rotation_deg, "TreasureChest_%s" % chest_id
+	)
+	if chest == null:
+		return null
+	# 细节树已经建好时把它挂进去（而不是留在房间根上）：这样它和家具/摆件同一生命周期，
+	# 走远整棵卸载、回来由 `_rebuild_runtime_chests()` 按账重造。
+	# 留在房间根上的后果是「家具都消失了，这只箱子还孤零零立在那里」。
+	# `keep_global_transform=false`：局部坐标本就相对房间算好，保留局部值。
+	if _detail_root != null and is_instance_valid(_detail_root):
+		chest.reparent(_detail_root, false)
+	var states := get_persistent_detail_state("treasure_chests")
+	states[chest_id] = {
+		"spawned": true,
+		"opened": chest.is_opened(),
+		"config": config.duplicate(true),
+		"offset": [offset.x, offset.y],
+		"rotation_deg": rotation_deg,
+	}
+	_pending_detail_runtime_state["treasure_chests"] = states
+	return chest
+
+
+## 按 `chest_id` 找本房在册的箱子（含数据摆位与运行期掉落两种）。
+func find_chest_by_id(chest_id: String) -> TreasureChest3D:
+	if chest_id.is_empty():
+		return null
+	for chest in get_treasure_chests():
+		if chest.chest_id == chest_id:
+			return chest
+	return null
+
+
+## 运行期掉落的箱子在 detail 重建后**必须先重造出来**，再接下面那步「已开/拟态」状态。
+## 只重建 `spawned == true` 且当前不在场的那些 —— 数据摆位的箱子由
+## `_build_treasure_chests()` 负责，这里重复建会得到两只同名同 id 的箱子。
+func _rebuild_runtime_chests(states: Dictionary) -> void:
+	for chest_id_value in states.keys():
+		var chest_id := str(chest_id_value)
+		var value: Variant = states[chest_id_value]
+		if not (value is Dictionary):
+			continue
+		var entry := value as Dictionary
+		if not bool(entry.get("spawned", false)):
+			continue
+		if find_chest_by_id(chest_id) != null:
+			continue
+		var config := (entry.get("config", {}) as Dictionary).duplicate(true)
+		if config.is_empty():
+			push_warning("[DungeonRoom3D] 运行期宝箱 %s 缺少重建配置，已跳过" % chest_id)
+			continue
+		config["id"] = chest_id
 		var offset_value: Variant = entry.get("offset", [0.0, 0.0])
 		var offset := Vector2.ZERO
 		if offset_value is Array and (offset_value as Array).size() >= 2:
 			offset = Vector2(
 				float((offset_value as Array)[0]), float((offset_value as Array)[1])
 			)
-		chest.position = Vector3(offset.x, floor_y, offset.y)
-		chest.rotation.y = deg_to_rad(float(entry.get("rotation_deg", 0.0)))
-		# 先建视觉再连信号：`_ready()` 里 `_build_visual()` 会建提示牌，
-		# 而 `open_requested` 一接上就可能被玩家按下 —— 半成品箱子不该进交互池。
-		_add_runtime_detail_child(chest)
-		chest.open_requested.connect(_on_chest_open_requested)
-		# `opened` 在 `commit_opened()` 里发（抽奖与掉落都成功之后）。
-		# 只有这个时刻才算「真的开了」。
-		chest.opened.connect(_on_treasure_chest_opened)
+		_instantiate_chest_node(
+			config, offset, float(entry.get("rotation_deg", 0.0)), "TreasureChest_%s" % chest_id
+		)
 
 
 ## 开成之后立刻记进房间账。与 `_on_interactive_clutter_broken()` 完全同构：
@@ -6207,7 +6337,13 @@ func _on_treasure_chest_opened(chest: TreasureChest3D) -> void:
 	states = states.duplicate(true)
 	# 记成字典而不是 `true`：拟态箱重建后不能变回一只「已开启的空箱子」——
 	# 它应该**整体消失**（本体已经被怪吃掉了）。只存布尔就没法区分这两种终态。
-	states[chest.chest_id] = {"opened": true, "mimic": chest.mimic}
+	#
+	# **合并而不是覆盖**：清房掉落的箱子在账里还有 `spawned / config / offset`
+	# 三项重建信息，写成整条新字典会把它们冲掉 —— 表现是「开过的宝箱走远再回来整个消失」。
+	var entry := (states.get(chest.chest_id, {}) as Dictionary).duplicate(true)
+	entry["opened"] = true
+	entry["mimic"] = chest.mimic
+	states[chest.chest_id] = entry
 	_pending_detail_runtime_state["treasure_chests"] = states
 
 
@@ -6300,6 +6436,8 @@ func _on_reactive_prop_changed(prop: ReactiveProp3D) -> void:
 	var states := get_persistent_detail_state("reactive_props")
 	states[str(prop.get_meta("reactive_prop_id"))] = prop.export_prop_state()
 	_pending_detail_runtime_state["reactive_props"] = states
+	if prop.state in ["fallen", "broken"]:
+		_request_furnishing_navigation_refresh()
 
 
 func _restore_reactive_props() -> void:
@@ -6313,6 +6451,30 @@ func _restore_reactive_props() -> void:
 		var key := str(prop.get_meta("reactive_prop_id", ""))
 		if states.has(key):
 			prop.restore_prop_state(states[key])
+			if prop.state in ["fallen", "broken"]:
+				_request_furnishing_navigation_refresh()
+
+
+func _request_furnishing_navigation_refresh() -> void:
+	if not has_meta("furnishing_navigation_polygons") or _furnishing_navigation_refresh_queued:
+		return
+	_furnishing_navigation_refresh_queued = true
+	_refresh_furnishing_navigation.call_deferred()
+
+
+func _refresh_furnishing_navigation() -> void:
+	# Reactive props defer their final collider shape/layer until the physics sync.
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	_furnishing_navigation_refresh_queued = false
+	if not is_inside_tree() or not _detail_built:
+		return
+	_collect_spawn_blockers()
+	set_meta("furnishing_navigation_polygons", preload("res://src/world3d/RoomFurnishingNavigation.gd").rebuild(get_dimensions(), _spawn_blockers, connection_ports))
+	_spawn_reach_evaluated = false
+	_spawn_reach_probe_frame = -1
+	_build_runtime_navigation_surface(get_dimensions())
+	set_meta("furnishing_navigation_refresh_count", int(get_meta("furnishing_navigation_refresh_count", 0)) + 1)
 
 
 ## 手摆易碎件的平面落点（房间局部）。随机撒点用它避让。
@@ -6588,8 +6750,9 @@ func _restore_interactive_clutter() -> void:
 
 
 func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
-	var authored_polygons := get_meta("walkable_navigation_polygons", []) as Array
-	if not authored_polygons.is_empty():
+	# Furniture cutouts affect pathfinding; the room's ownership footprint stays intact.
+	var authored_polygons := get_meta("furnishing_navigation_polygons", get_meta("walkable_navigation_polygons", [])) as Array
+	if not authored_polygons.is_empty() or has_meta("furnishing_navigation_polygons"):
 		var authored_mesh := NavigationMesh.new()
 		var vertices := PackedVector3Array()
 		for polygon_value in authored_polygons:
@@ -6599,11 +6762,15 @@ func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
 				vertices.append(Vector3(point[0], point[1], point[2]))
 			authored_mesh.vertices = vertices
 			authored_mesh.add_polygon(polygon)
-		var authored_region := NavigationRegion3D.new()
-		authored_region.name = "RuntimeNavigationRegion3D"
-		authored_region.use_edge_connections = false
-		authored_region.navigation_mesh = authored_mesh
-		_add_runtime_detail_child(authored_region)
+		var authored_region := get_node_or_null("RuntimeDetail/RuntimeNavigationRegion3D") as NavigationRegion3D
+		if authored_region == null:
+			authored_region = NavigationRegion3D.new()
+			authored_region.name = "RuntimeNavigationRegion3D"
+			authored_region.use_edge_connections = false
+			authored_region.navigation_mesh = authored_mesh
+			_add_runtime_detail_child(authored_region)
+		else:
+			authored_region.navigation_mesh = authored_mesh
 		return
 	# 每个 ACTIVE 房只保留一块轻量导航面；正式门/跨房授权仍由房间系统拥有。
 	# 家具的短距避障交给 Enemy3D 射线兜底，避免运行时烘焙造成主线程尖峰。

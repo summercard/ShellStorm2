@@ -362,6 +362,8 @@ func _verify_expedition_level(failures: Array[String]) -> void:
 	_verify_extraction(tower, failures)
 	_verify_spawn_and_search(tower, failures)
 	await _verify_fate_on_door(tower, failures)
+	await _verify_clear_drops(tower, failures)
+	await _verify_boss_chest(tower, failures)
 
 	_expedition_snapshot = tower.build_runtime_save_snapshot()
 	if str(_expedition_snapshot.get("scope", "")) != "combat":
@@ -1133,19 +1135,35 @@ func _verify_safe_room_facility_blocking(
 
 
 func _verify_door_policies(tower: TowerDescent3D, failures: Array[String]) -> void:
-	# 入口门是固定交通接口：免费开启，不弹命运卡。
+	# 入口门是固定交通接口：免费开启。
 	var entry_policy := tower._door_policy_for_edge("start", "room_01")
 	for key in ["requires_clear", "requires_key", "triggers_fate"]:
 		if bool(entry_policy.get(key, true)):
 			failures.append("安全屋→01 号房入口门应为免费通行：%s" % entry_policy)
-	# 01 之后恢复默认清房 / 钥匙 / 命运卡（含通道桥房 room_05→room_06 这一段）。
+	# 2026-11-06 业主裁定：01 之后到撤离屋的每一扇门都**不要钥匙、不弹命运卡**，
+	# 只保留「清完怪才能开」。这段断言替代了旧版「三项都必须为 true」的口径。
+	#
+	# ⚠️ 旧断言只扫 room_01…room_10 这 9 条边，boss→撤离屋那扇门**从未被检查** ——
+	# 上一版「第 11 次命运门」就是这么漏掉的（设计写 10 次、实际 11 次）。
+	# 这里显式把 boss→extraction 补进同一条链。
+	var edges: Array = []
 	for edge_index in range(PLAN_MAIN_ROOM_IDS.size() - 1):
-		var from_id := PLAN_MAIN_ROOM_IDS[edge_index]
-		var to_id := PLAN_MAIN_ROOM_IDS[edge_index + 1]
+		edges.append([PLAN_MAIN_ROOM_IDS[edge_index], PLAN_MAIN_ROOM_IDS[edge_index + 1]])
+	edges.append(["room_10", "boss"])
+	edges.append(["boss", "extraction"])
+	for edge: Array in edges:
+		var from_id := str(edge[0])
+		var to_id := str(edge[1])
 		var policy := tower._door_policy_for_edge(from_id, to_id)
-		for key in ["requires_clear", "requires_key", "triggers_fate"]:
-			if not bool(policy.get(key, false)):
-				failures.append("%s→%s 门策略应保留默认：%s" % [from_id, to_id, policy])
+		if not bool(policy.get("requires_clear", false)):
+			failures.append("%s→%s 应保留清房门槛：%s" % [from_id, to_id, policy])
+		if bool(policy.get("requires_key", true)):
+			failures.append("%s→%s 不应再消耗房间钥匙：%s" % [from_id, to_id, policy])
+		if bool(policy.get("triggers_fate", true)):
+			failures.append("%s→%s 不应再弹命运卡：%s" % [from_id, to_id, policy])
+	# 钥匙经济整体退役：连「本层有钥匙经济」这个判据都必须是假。
+	if tower._room_key_economy_enabled():
+		failures.append("远征01 的钥匙经济应已退役（_room_key_economy_enabled 仍为 true）")
 
 
 func _verify_extraction(tower: TowerDescent3D, failures: Array[String]) -> void:
@@ -1221,28 +1239,89 @@ func _verify_spawn_and_search(tower: TowerDescent3D, failures: Array[String]) ->
 
 
 func _verify_fate_on_door(tower: TowerDescent3D, failures: Array[String]) -> void:
-	# 过门命运卡：清空 01 号房、给足钥匙后开门，必须弹出命运卡三选一。
+	# 2026-11-06 业主裁定：**开门不弹命运卡**（命运卡改由宝箱的购买界面发放），
+	# **开门不吃钥匙**（清完怪门就是可开启状态）。
 	var from_room := tower._room_by_id.get("room_01") as DungeonRoom3D
 	if from_room == null:
-		failures.append("命运卡检查缺少 01 号房")
+		failures.append("门策略检查缺少 01 号房")
 		return
 	from_room.cleared = true
-	tower._room_key_count = maxi(tower._room_key_count, 3)
 	tower._current_room_id = "room_01"
+	var keys_before := tower._get_total_room_keys()
 	if not tower._try_open_room_door("room_02"):
-		failures.append("01→02 门未开启（命运卡无法触发）：%s" % tower.status_label.text)
+		failures.append("01→02 门未开启：%s" % tower.status_label.text)
 		return
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if not tower._door_fate_active:
-		failures.append("过门后没有进入命运卡选择")
-	else:
-		if tower._door_fate_choices.size() != 3:
-			failures.append("命运卡不是三选一：%d" % tower._door_fate_choices.size())
-		if tower.get_node_or_null("HUD/DoorFateOverlay3D") == null:
-			failures.append("命运卡选择界面未构建")
+	if tower._door_fate_active:
+		failures.append("开门仍弹出命运卡：本关命运卡已改为宝箱购买入口")
 		tower._cancel_door_fate_selection()
 		await get_tree().process_frame
+	if tower._get_total_room_keys() != keys_before:
+		failures.append(
+			"开门消耗了房间钥匙：%d → %d" % [keys_before, tower._get_total_room_keys()]
+		)
+	# 清房**不再掉钥匙**：显式再结算一次钥匙奖励，场上仍不应出现钥匙实体。
+	tower.call("_ensure_room_key_reward", from_room)
+	await get_tree().process_frame
+	for node in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+		if node is RoomKeyPickup3D and from_room.is_ancestor_of(node):
+			failures.append("钥匙经济退役后清房仍掉出房间钥匙")
+			break
+
+
+## 清房掉落（2026-11-06）：掷骰结果与世界状态必须**逐房一致**。
+## 只断言「有东西掉」会漏掉「配置生效但落错房 / 掉错种类」这类偏差，
+## 所以拿服务的同一份掷骰当期望值，逐房比对箱子有没有建出来。
+func _verify_clear_drops(tower: TowerDescent3D, failures: Array[String]) -> void:
+	var service: RefCounted = tower.get("_clear_drop_service") as RefCounted
+	if service == null or not bool(service.call("is_configured")):
+		failures.append("远征01 的清房掉落服务未配置（clear_drops 段未生效）")
+		return
+	var observed_chests := 0
+	for room_id in ["room_01", "room_02", "room_03"]:
+		var room := tower._room_by_id.get(room_id) as DungeonRoom3D
+		if room == null:
+			failures.append("清房掉落检查缺少 %s" % room_id)
+			continue
+		room.cleared = true
+		tower._current_room_id = room_id
+		tower.call("_ensure_room_clear_drop", room)
+		await get_tree().process_frame
+		var expected: Dictionary = service.call("roll_room_drop", room_id, "content", tower.run_seed)
+		var chest := room.find_chest_by_id("drop_%s" % room_id)
+		if str(expected.get("kind", "")) == "chest":
+			observed_chests += 1
+			if chest == null:
+				failures.append("%s 掷骰为宝箱，场上却没有生成" % room_id)
+				continue
+			# 房间账必须记下「运行期生成」——否则流送重建后这只箱子会凭空消失。
+			var states := room.get_persistent_detail_state("treasure_chests")
+			var entry := states.get(chest.chest_id, {}) as Dictionary
+			if not bool(entry.get("spawned", false)):
+				failures.append("%s 的清房宝箱没有写进房间账（重建后会丢）" % room_id)
+		elif chest != null:
+			failures.append("%s 掷骰不是宝箱，场上却生成了 drop_%s" % [room_id, room_id])
+	# 三间房都不出箱是合法的（0.55³ ≈ 17%），但那样这条用例等于没测到箱子路径 ——
+	# 与其静默空过，不如把样本数打到日志里，让人一眼看出这次跑没跑到。
+	print("CLEAR_DROP_SAMPLE rooms=3 chests=%d seed=%d" % [observed_chests, tower.run_seed])
+
+
+## 首领箱（2026-11-06）：Boss 阵亡必掉一只，品质不低于 `min_quality`。
+func _verify_boss_chest(tower: TowerDescent3D, failures: Array[String]) -> void:
+	var room := tower._room_by_id.get("boss") as DungeonRoom3D
+	if room == null:
+		failures.append("Boss 箱检查缺少 boss 房")
+		return
+	tower.call("_mark_room_boss_defeated", "boss")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var chest := room.find_chest_by_id("drop_boss")
+	if chest == null:
+		failures.append("首领阵亡后没有掉落宝箱")
+		return
+	if not (chest.quality in ["rare", "epic"]):
+		failures.append("Boss 箱品质低于计划下限 rare：%s" % chest.quality)
 
 
 # —— 4) 默认塔楼回归 ——

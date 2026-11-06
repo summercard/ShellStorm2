@@ -350,6 +350,17 @@ var _expedition_entry_gate_edges: Dictionary = {}
 ## 热路径，且建门时 plan 不一定已就位。
 var _flow_rules_active := false
 
+## 关卡计划声明的门策略（`door_policy` 段）。非空 ⇒ 本关**所有边**都按它开门。
+##
+## 与 `_flow_rules_active` 是两件事，别混：
+##   · flow 规则是「骨架关卡内置的 EGT 口径」（写死在代码里，远征03 用）；
+##   · 这一段是「关卡数据自己声明的口径」（远征01 2026-11-06 用它关掉钥匙与命运卡）。
+## 计划声明优先于 flow 分支 —— 关卡数据永远比代码默认更该说话。
+var _plan_door_policy: Dictionary = {}
+## 关卡计划声明是否保留「房间钥匙」这条局内经济（`economy.room_keys_enabled`）。
+## 缺省 true ⇒ 未声明的关卡（塔楼、远征02/03 之外的旧数据）行为逐字不变。
+var _plan_room_keys_enabled := true
+
 ## 玩家是否已经交给 flow 门的感应器（见 `_bind_flow_door_proximity`）。
 ## 只在「确实还有门没绑上」时为假，随后由 `_process` 兜底补一次。
 var _flow_door_proximity_bound := false
@@ -2250,6 +2261,7 @@ func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) ->
 	if _flow_rules_active:
 		_camera_lower_wall_detected = false
 		_camera_lower_wall_distance_m = -1.0
+		player.camera_feedback.set_look_blocked_direction(Vector3.ZERO)
 		_camera_lift_target_m = 0.0
 		_camera_trailing_target_m = _camera_profile_trailing_current_m
 		var lift_blend := 1.0 - exp(-CAMERA_LOWER_WALL_LIFT_FALL_RATE * maxf(delta, 0.0))
@@ -2287,6 +2299,13 @@ func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) ->
 		# 直接沿固定后方轴收至角色正上方附近，保证整个视锥也回到墙内侧。
 		if _camera_lower_wall_distance_m < CAMERA_LOWER_WALL_RETRACT_TRIGGER_M:
 			_camera_trailing_target_m = CAMERA_LOWER_WALL_MIN_TRAILING_M
+	# Wall retraction wins over looking toward that wall. Detection is anchored to
+	# the player, so the mouse cannot move its own constraint across the wall.
+	player.camera_feedback.set_look_blocked_direction(
+		_camera_profile_trailing_direction()
+		if _camera_trailing_target_m < _camera_profile_trailing_current_m
+		else Vector3.ZERO
+	)
 	var response_rate := (
 		CAMERA_LOWER_WALL_LIFT_RISE_RATE
 		if _camera_lift_target_m > _camera_lift_current_m
@@ -2329,14 +2348,12 @@ func _find_lower_camera_wall_distance() -> float:
 		var lateral_offset := lateral * float(lateral_offset_value)
 		var probe_origin := (
 			player.global_position
-			+ player.camera_feedback.look_offset
 			+ Vector3.UP * CAMERA_LOWER_WALL_PROBE_HEIGHT_M
 			+ trailing * CAMERA_LOWER_WALL_PROBE_START_M
 			+ lateral_offset
 		)
 		var probe_end := (
 			player.global_position
-			+ player.camera_feedback.look_offset
 			+ Vector3.UP * CAMERA_LOWER_WALL_PROBE_HEIGHT_M
 			+ trailing * CAMERA_LOWER_WALL_PROBE_LENGTH_M
 			+ lateral_offset
@@ -2694,6 +2711,13 @@ func _build_expedition_records() -> void:
 	var first_main := _plan_spec(plan, "room_01")
 	# flow 关卡判定要早于任何门策略查询（`_door_policies_for_record` 在建房间时就会用到）。
 	_flow_rules_active = str(plan.get("mode", "")) == "flow"
+	# —— 关卡计划声明的门策略 / 钥匙经济 / 清房掉落（能力段，2026-11-06）——
+	# 三段都「不写不变」：缺段 ⇒ 空字典 / 缺省 true ⇒ 与接入前逐字相同。
+	_plan_door_policy = (plan.get("door_policy", {}) as Dictionary).duplicate(true)
+	_plan_room_keys_enabled = bool(
+		(plan.get("economy", {}) as Dictionary).get("room_keys_enabled", true)
+	)
+	configure_clear_drops(plan.get("clear_drops", {}) as Dictionary)
 	# 本层没有钥匙经济 ⇒ 开局也不发初始钥匙（业主 2026-11-05）。
 	# 读档时 `_restore_carried_ownership()` 会按快照覆盖这个值，不会吞掉玩家的携带钥匙。
 	if not _room_key_economy_enabled():
@@ -3467,6 +3491,13 @@ func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dict
 	#     这也是「进房关门、清怪开门」的另一半（封门由 `_on_room_entered` 负责）。
 	# 入口那一跳（entry→room_01）已在上面按 `_expedition_entry_gate_edges` 全放行，
 	# 所以开局永远不会被门卡住。
+	# —— 关卡数据声明的门策略（`door_policy` 段，2026-11-06）——
+	#
+	# 放在固定交通接口之后、flow 默认之前：入口那一跳仍然免费通行（上面已返回），
+	# 其余每一扇门按关卡自己写的口径开。远征01 用它把「钥匙」与「命运卡」两项
+	# 从门上一并摘掉 —— 命运卡改由宝箱购买界面发放，钥匙经济整体退役。
+	if not _plan_door_policy.is_empty():
+		return _plan_door_policy.duplicate()
 	if _flow_rules_active:
 		return {
 			"requires_clear": true,
@@ -3487,7 +3518,11 @@ func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dict
 ##   · 命运卡池不提供「获得房间钥匙」的空卡。
 ## 门策略本来就不吃钥匙（见 `_door_policy_for_edge` 的 flow 分支），所以没有消费口。
 func _room_key_economy_enabled() -> bool:
-	return not _flow_rules_active
+	# 两重判据都是**能力**口径，不写关卡 ID：
+	#   · flow 关卡（远征03）没有钥匙经济；
+	#   · 关卡计划 `economy.room_keys_enabled = false`（远征01，2026-11-06）。
+	# 未声明的关卡两处都为默认 ⇒ 塔楼与远征02 逐字不变。
+	return not _flow_rules_active and _plan_room_keys_enabled
 
 
 func _try_open_room_door(target_room_id: String) -> bool:
@@ -6737,11 +6772,18 @@ func _build_flow_view_walls(hole_room_id: String) -> void:
 		var axis_origin := rp.x if along_x else rp.z
 		for lane_value in room.get_wall_door_lanes(side):
 			var center: float = axis_origin + float(lane_value)
+			var opening_half := hole_half
+			for value in room.connection_ports:
+				var port := value as Dictionary
+				if str(port.get("side", "")) == side and is_equal_approx(float(port.get("lane_m", 0.0)), float(lane_value)):
+					var width := float(port.get("door_width_m", 0.0))
+					opening_half += maxf(0.0, width - TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M) * 0.5
+					break
 			# clamp 进本侧幕墙范围：小房间上门洞本就贴墙（`lane` 被建墙侧 clamp 到
 			# ±(length − opening)/2），再把余量加上去就会伸出幕墙两端，
 			# 那一段没有墙垛兜着，等于直接对外开天窗。
-			var from := clampf(center - hole_half, u_start, u_end)
-			var to := clampf(center + hole_half, u_start, u_end)
+			var from := clampf(center - opening_half, u_start, u_end)
+			var to := clampf(center + opening_half, u_start, u_end)
 			if to - from <= 0.01:
 				continue
 			holes.append(Vector2(from, to))

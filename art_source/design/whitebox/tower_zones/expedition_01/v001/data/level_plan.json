@@ -272,5 +272,67 @@
       }
     ],
     "empty_chance": 0.4
+  },
+  "door_policy": {
+    "schema": "shellstorm2.door_policy",
+    "schema_version": 1,
+    "note": "业主 2026-11-06：「玩家开门不会弹命运卡」「门不需要钥匙，只要清理怪物完成自动变成可以开启状态」。本关所有门（含 room_10→boss、boss→撤离屋）统一走这一段；安全屋→room_01 的入口交通门仍由 TowerDescent3D 的固定接口全放行（requires_clear 也为 false），不受本段影响。requires_clear 保留 = 清完怪门才可开，只是不再消耗钥匙、不再弹三选一。命运卡改由宝箱的购买界面发放（见 clear_drops）。",
+    "requires_clear": true,
+    "requires_key": false,
+    "triggers_fate": false
+  },
+  "economy": {
+    "schema": "shellstorm2.level_economy",
+    "schema_version": 1,
+    "note": "钥匙经济整体退役（2026-11-06）。判据是能力 `_room_key_economy_enabled()`：本段 false ⇒ 开局不发初始钥匙、清房不再掉钥匙、状态栏不再写「钥匙已掉落」、命运卡池剔除「太阳钥印」这类只发钥匙的空卡。清房那一格改由 clear_drops 掉宝箱/补给。",
+    "room_keys_enabled": false
+  },
+  "clear_drops": {
+    "schema": "shellstorm2.battle.clear_drops",
+    "schema_version": 1,
+    "note": "清房掉落（2026-11-06），取代原来的「清房掉一把房间钥匙」。掷骰是 (run_seed, room_id) 的稳定哈希，不是运行时 RNG —— 同一局同一间房读档/流送重建前后结果恒定。两档结果：宝箱 或 一件清房补给，二者互斥且必有其一。",
+    "content_room": {
+      "chest_chance": 0.45,
+      "note": "0.45 的算术：10 间内容房 × 0.45 = 期望 4.5 只，加 Boss 保底 1 只 ⇒ 5.5 次/局购买机会（改前是 10~11 次门后三选一）。取一半而不是等量：宝箱还额外给 2 件物资，单次价值高于门后三选一；等量会让命运构筑强度原地不动、等于这次改动只改了入口形态。要调就只改这一个数。"
+    },
+    "boss": {
+      "chest_count": 1,
+      "min_quality": "rare",
+      "note": "Boss 箱是保底，不掷概率，挂在「首领阵亡」而不是「房间肃清」上（倒下后增援可能还在跑）。min_quality=rare 只提下限、不改权重：同一份权重下 common+uncommon 占 88%，打了 Boss 却开出一只普通箱和体感不符；剔除后按 rare 10 / epic 2 归一 ⇒ 83% / 17%。不想要这层保底就把 min_quality 设为空串。"
+    },
+    "chest": {
+      "note": "与远征03 的宝箱完全同一口径（业主：「和远征03的宝箱一致」）。开箱三件事：drop_count 件物资落地、弹出与门后同一套三选一命运卡购买界面、不自动发卡（fate_card_per_open=0）。mimic 的期望需要留意：本关清房箱 + Boss 箱共 5.5 只/局，chance 0.2 ⇒ 期望 1.1 只拟态；远征03 只有 2 只箱（期望 0.4）。要压回 0.4 就把 chance 设 0.07。",
+      "quality_weights": {
+        "common": 62.0,
+        "uncommon": 26.0,
+        "rare": 10.0,
+        "epic": 2.0
+      },
+      "reward_pool_id": "loot_floor_1_2",
+      "drop_count": 2,
+      "fate_card_per_open": 0,
+      "mimic": {
+        "chance": 0.2,
+        "monster_kind": "egt_mimic"
+      }
+    },
+    "fallback_pool": [
+      {
+        "item_id": "item_health_potion",
+        "count": 1,
+        "weight": 40.405,
+        "note": "权重沿用远征03 清房权重池（删掉钥匙行后的相对值），只保留有对应物的两类"
+      },
+      {
+        "item_id": "item_ammo_pack",
+        "count": {
+          "min": 30,
+          "max": 50
+        },
+        "weight": 3.045,
+        "note": "备弹·数量区间与怪物掉落表同口径"
+      }
+    ],
+    "fallback_pool_note": "**刻意不含货币**：本关金币由击杀收益单独决定，FateEconomyService 的报价基准就是按这个收益算的；清房再掺货币会把基准抬高，卡价整体上浮。远征01 的金币口径不动。"
   }
 }

@@ -99,7 +99,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
       "runtime": "data/level_plans/expedition_01/level_plan.json",
-      "sha256": "a8fb2e985758e9c067313f73a9935191bac7b20c7e1d8ccb8e2262c9cc2d4eba"
+      "sha256": "4470e43417cac2d83be057d7eacbabef970d9bc247cce30b5e7e15b44559752a"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/boss_50x40.json",
@@ -157,9 +157,59 @@
       "sha256": "eef1f6b5eeb97e3545aa18c8c744af24d4b7d68932766b003e54c9cddb2c98c0"
     },
     {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/door_catalog.json",
+      "runtime": "data/level_plans/expedition_03/door_catalog.json",
+      "sha256": "2e23adac362866fe034e227b017669daa6807f132d4ab2b992e7843bc1f9ffa1"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/floors/floor_00.json",
+      "runtime": "data/level_plans/expedition_03/floors/floor_00.json",
+      "sha256": "f4f6ccefe678d91ee5ddaf0e1725fc3b230fb8f6f1eb8ac3d9b696df37cdd68a"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/flows/flow_01.json",
+      "runtime": "data/level_plans/expedition_03/flows/flow_01.json",
+      "sha256": "55711246f86a0ef8008215357d70d4bcb7d0aa82f94550dc7e9bc01b967bf34d"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/flows/flow_02.json",
+      "runtime": "data/level_plans/expedition_03/flows/flow_02.json",
+      "sha256": "6f4cc9eaca3a2ffd25d1e86f9896fb0441fb0c84b635be61f1f9da7bdf8e46de"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/flows/flow_03.json",
+      "runtime": "data/level_plans/expedition_03/flows/flow_03.json",
+      "sha256": "bef5c301d586fd1d27185204ba37753e30f7521784af7e71c2ffd97cdb704237"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/flows/flow_04.json",
+      "runtime": "data/level_plans/expedition_03/flows/flow_04.json",
+      "sha256": "f77451448160c1fac7fd76ff98be58ef73d1cc863f9602e55a0d8dab87b28202"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/flows/flow_05.json",
+      "runtime": "data/level_plans/expedition_03/flows/flow_05.json",
+      "sha256": "dba6750d5dea939a8ccbc14e6bbf6f22fe6a48076d58e34448e2011e2aa751a0"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/flows/flow_06.json",
+      "runtime": "data/level_plans/expedition_03/flows/flow_06.json",
+      "sha256": "8b502aa6bfdc685189d5d65cc6b195d45d3faaff5b486a8e72d0a99c0692da21"
+    },
+    {
       "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/level_plan.json",
       "runtime": "data/level_plans/expedition_03/level_plan.json",
-      "sha256": "ce319df8ea7bb25bf78082ff4c65cd4c1c74d3bd85bbad1fd285cc1e5baa1083"
+      "sha256": "ab53f9bded500c1b5c050f32caad532d9a3f687d3e401af87ffd42d9352c1262"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/room_templates/reward_15x15.json",
+      "runtime": "data/level_plans/expedition_03/room_templates/reward_15x15.json",
+      "sha256": "fb509cf400342d87fbd81dc03085375334d8fa8b617117900ddd6051509dc229"
+    },
+    {
+      "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/room_templates/shop_20x15.json",
+      "runtime": "data/level_plans/expedition_03/room_templates/shop_20x15.json",
+      "sha256": "049ee9a898f223183d2300b9db4ba444ca270d619995b9a72779c74d98b02b84"
     },
     {
       "source": "art_source/design/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json",

@@ -11,6 +11,7 @@ const RUNTIME_REWARD_COORDINATOR_SCRIPT = preload("res://src/rewards/RuntimeRewa
 const REWARD_SINK_SCRIPT = preload("res://src/rewards/RewardSink.gd")
 const RUN_MERCHANT_SERVICE_SCRIPT = preload("res://src/game/RunMerchantService.gd")
 const FATE_ECONOMY_SERVICE_SCRIPT = preload("res://src/game/FateEconomyService.gd")
+const CLEAR_DROP_SERVICE_SCRIPT = preload("res://src/game/ClearDropService.gd")
 const SPAWN_BOX_CATALOG_SCRIPT = preload("res://src/map/SpawnBoxCatalog.gd")
 const ENCOUNTER_EVENT_DIRECTOR_SCRIPT = preload("res://src/world3d/EncounterEventDirector3D.gd")
 const ENCOUNTER_EVENT_HOST_SCRIPT = preload("res://src/world3d/EncounterEventHost3D.gd")
@@ -143,7 +144,17 @@ const FATE_PRICE_BY_RARITY := [30, 60, 110, 180, 270]
 var _fate_economy = FATE_ECONOMY_SERVICE_SCRIPT.new()
 var _fate_door_quote: Dictionary = {}
 var _fate_door_offer_id := 0
+## 报价用的「进度序号」。0 = 用 `_fate_door_offer_id`（门后入口的历史口径）。
+## 宝箱入口必须**显式**给这个值：宝箱出现在第几间房与它是第几次报价无关，
+## 拿报价次数当门序号会让 room_09 的箱子按 room_02 的价格卖卡。
+var _fate_offer_price_index := 0
 var _fate_door_snapshot_to_restore: Dictionary = {}
+
+## 清房掉落纯服务（2026-11-06）。未配置 ⇒ 不发宝箱、不发补给，房间清理逐字走原路径。
+var _clear_drop_service = CLEAR_DROP_SERVICE_SCRIPT.new()
+## 本局已经结算过掉落的房间（含 Boss）。只防重复，不入存档：
+## 恢复时由「房间已清 + 房间账里有没有这只箱子」重新确定，不依赖这张表。
+var _clear_drop_settled: Dictionary = {}
 
 ## 已购买卡的整体缩小倍率（业主 2026-10-14 指定 70%）。
 ## ⚠️ 这一档是**基准缩放**，不是悬停反馈 —— `_tween_fate_card_scale` 收到的所有 target
@@ -1016,6 +1027,7 @@ func _export_door_fate_snapshot() -> Dictionary:
 		"policy": _fate_offer_policy_snapshot.duplicate(true),
 		"active": _door_fate_active,
 		"offer_id": _fate_door_offer_id,
+		"price_index": _fate_offer_price_index,
 		"from_id": _pending_fate_door_from_id,
 		"target_id": _pending_fate_door_target_id,
 		"closing": false,
@@ -1052,6 +1064,8 @@ func _import_door_fate_snapshot(value: Variant) -> bool:
 	_door_fate_choices.assign(restored_cards)
 	_door_fate_purchased.assign(restored_purchased)
 	_fate_door_offer_id = maxi(0, int(snapshot.get("offer_id", 0)))
+	# 旧档没有这一项 ⇒ 0 ⇒ 报价序号退回「用门序号」（历史口径，报价本身仍是冻结值）。
+	_fate_offer_price_index = maxi(0, int(snapshot.get("price_index", 0)))
 	_fate_door_quote = (snapshot.get("quotes", {}) as Dictionary).duplicate(true)
 	_pending_fate_door_from_id = str(snapshot.get("from_id", ""))
 	_pending_fate_door_target_id = str(snapshot.get("target_id", ""))
@@ -1719,6 +1733,18 @@ func configure_expedition_fate_economy(plan: Dictionary) -> void:
 ## 形成"永远走不到"的死分支。见 [关卡接入规范](../../docs/v0.1/关卡接入规范.md) §3。
 func uses_dynamic_fate_economy() -> bool:
 	return _fate_economy.is_configured()
+
+
+## 配置「清房掉落」段（`clear_drops`）。空字典 ⇒ 服务关闭，房间清理与
+## 首领阵亡两条链**逐字保持**旧行为（钥匙时代与无掉落关卡都走这条）。
+##
+## 与命运经济同一口径：只看能力、不看关卡 ID；配什么由关卡计划决定。
+func configure_clear_drops(config: Dictionary) -> Dictionary:
+	_clear_drop_settled.clear()
+	var report := _clear_drop_service.configure(config)
+	if not bool(report.get("ok", false)):
+		push_error("[Dungeon3D] clear_drops 配置失败：%s" % str(report.get("errors", [])))
+	return report
 
 
 ## 取关卡级 AI 参数（`monster_rules.ai.<key>`）。键不存在 ⇒ 回退传入的全局常量，
@@ -7483,6 +7509,9 @@ func _mark_room_boss_defeated(room_id: String) -> void:
 		return
 	_boss_defeated_rooms[room_id] = true
 	room_boss_defeated.emit(room_id)
+	# 首领箱挂在「首领阵亡」而不是「房间肃清」上：Boss 倒下后增援可能还在跑，
+	# `room.cleared` 要等它们全清 —— 玩家会在原地等一只永远不该决定奖励的杂兵。
+	call_deferred("_ensure_boss_chest_drop", room_id)
 
 
 func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
@@ -7528,6 +7557,12 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 		_refresh_loot_label()
 	if spawn_key and not was_cleared:
 		call_deferred("_ensure_room_key_reward", room)
+	# 清房掉落（2026-11-06）：钥匙时代结束后，这一格改掉宝箱/补给。
+	# 与钥匙**互斥**：本关配了 `clear_drops` 就不再发钥匙（见计划段的 `economy`），
+	# 两条都开会给同一间房发两份清房奖励。摆放间隔交给 deferred —— 奖励协调器、
+	# 房间细节树、玩家位置都要在本帧末才稳定。
+	if not was_cleared:
+		call_deferred("_ensure_room_clear_drop", room)
 
 
 ## 本房该不该产出「房间钥匙」奖励（= 本房的门是否消耗钥匙）。
@@ -7638,6 +7673,93 @@ func _on_room_key_collected(_room_id: String) -> void:
 	_refresh_loot_label()
 
 
+## 清房掉落（2026-11-06）：本房清完，按 `clear_drops` 掷一次 —— 宝箱或补给。
+##
+## 三个判据，缺一条都会出错：
+##   · 服务未配置 ⇒ 什么都不做（塔楼 / 未声明该段的关卡逐字不变）；
+##   · **Boss 房不走这里**：首领箱挂在 `_mark_room_boss_defeated` 上（见那条注释），
+##     否则「Boss 阵亡但增援未清」时会先不发，等杂兵清完才补一只，位置也在那时才定；
+##   · 非内容房（入口 / 撤离 / 走廊）不结算 —— 那些房没有「怪物清空」这件事。
+func _ensure_room_clear_drop(room: DungeonRoom3D) -> void:
+	if not _clear_drop_service.is_configured():
+		return
+	if room == null or not is_instance_valid(room) or not room.cleared:
+		return
+	if room.room_type == "BOSS" or not _is_content_room(room):
+		return
+	if _clear_drop_settled.has(room.room_id):
+		return
+	_clear_drop_settled[room.room_id] = true
+	var drop: Dictionary = _clear_drop_service.roll_room_drop(room.room_id, "content", run_seed)
+	_apply_clear_drop(room, drop, "clear_drop:%s" % room.room_id)
+
+
+## 首领箱：**保底一只**，不掷概率。挂在首领阵亡上，见 `_mark_room_boss_defeated`。
+func _ensure_boss_chest_drop(room_id: String) -> void:
+	if not _clear_drop_service.is_configured() or _clear_drop_settled.has(room_id):
+		return
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(room):
+		return
+	_clear_drop_settled[room_id] = true
+	var drop: Dictionary = _clear_drop_service.roll_room_drop(room.room_id, "boss", run_seed)
+	_apply_clear_drop(room, drop, "boss_drop:%s" % room_id)
+
+
+## 把一次清房掉落落地。本体只有两件事：**摆一只箱子** 或 **走正常地面掉落通道发一件补给**。
+## 不做第三种：奖励来源越少，验收断言越能穷举。
+func _apply_clear_drop(room: DungeonRoom3D, drop: Dictionary, context: String) -> void:
+	if drop.is_empty() or room == null:
+		return
+	var kind := str(drop.get("kind", "none"))
+	if kind == "chest":
+		var chest_config := (drop.get("chest", {}) as Dictionary).duplicate(true)
+		if chest_config.is_empty():
+			return
+		var chest := room.spawn_runtime_chest(chest_config, _clear_drop_offset(room))
+		if chest == null:
+			push_warning("[Dungeon3D] 清房宝箱建立失败（%s），本房只剩补给" % context)
+			return
+		status_label.text = "房间肃清 · 掉落宝箱 · 开启即购买命运卡"
+		return
+	if kind == "item":
+		var item := drop.get("item", {}) as Dictionary
+		var item_id := str(item.get("item_id", ""))
+		if item_id.is_empty() or _reward_coordinator == null:
+			return
+		var report := _reward_coordinator.resolve_fixed_item(
+			item_id, maxi(1, int(item.get("count", 1))), context, maxi(1, visual_theme.difficulty_rank)
+		)
+		if not bool(report.get("ok", false)):
+			push_error("[Dungeon3D] 清房补给被奖励服务拒绝：%s" % str(report.get("errors", [])))
+			return
+		_deliver_ground_rewards(room, report.get("grants", []) as Array, room.global_position, context)
+
+
+## 清房箱子的落点：**玩家身前的房内空位**，与钥匙时代的落点同一套算法。
+##
+## 直接摆房心不行 —— 房心常常是刷怪盒中心、也是玩家走位穿过的地方，箱子会立在
+## 一群怪中间或人脚下。取「玩家 → 房心」方向退 2.2 m 后夹回房内，玩家一转身就看得到，
+## 又不会被墙吞掉。玩家不在本房（例如被击退到隔壁）时退回房心。
+func _clear_drop_offset(room: DungeonRoom3D) -> Vector2:
+	var spawn_offset := Vector2.ZERO
+	if player != null and is_instance_valid(player) and _current_room_id == room.room_id:
+		var player_local := room.to_local(player.global_position)
+		var toward_center := Vector2(-player_local.x, -player_local.z)
+		if toward_center.length_squared() <= 0.001:
+			var fallback_angle := fmod(float(room.room_seed) * 0.731, TAU)
+			toward_center = Vector2(cos(fallback_angle), sin(fallback_angle))
+		toward_center = toward_center.normalized() * 2.2
+		spawn_offset = Vector2(player_local.x, player_local.z) + toward_center
+	var dimensions := room.get_dimensions()
+	# 2.1 m 留白 = 箱子半宽 (~0.64) + 玩家胶囊半径 + 一条能绕过去的过道。
+	var safe_half_x := maxf(1.0, dimensions.x * 0.5 - 2.1)
+	var safe_half_z := maxf(1.0, dimensions.y * 0.5 - 2.1)
+	spawn_offset.x = clampf(spawn_offset.x, -safe_half_x, safe_half_x)
+	spawn_offset.y = clampf(spawn_offset.y, -safe_half_z, safe_half_z)
+	return spawn_offset
+
+
 ## 取「从 `room_id` 走向 `target_room_id` 这扇门」的策略：**优先房间声明的那份**，
 ## 缺失才回落到 `_door_policy_for_edge()`。`door_policies` 是按**门方向**存的，
 ## 所以这里先用 `door_targets` 把目标房反查回方向。
@@ -7739,6 +7861,19 @@ func _show_door_fate_choices(source := "door") -> void:
 	_door_fate_choices.clear()
 	_door_fate_purchased.clear()
 	_fate_door_offer_id += 1
+	# 报价基准取「进度序号」，不是「第几次报价」。
+	# 门后入口两者恒等（每开门一次 = 前进一间）；**由清房掉落的宝箱**不等 ——
+	# 它出现在第几间房与它是本局第几次报价无关，用报价次数当门序号会让
+	# room_09 的箱子按 room_02 的收益基准卖卡（实测会便宜一半以上）。
+	#
+	# 只在「本关配置了 `clear_drops`」时启用：那种关卡的箱子是**按房间进度掉**的。
+	# 远征03 的箱子是数据摆位（每关固定几只），它的报价次数本身就等于进度，
+	# 保持历史口径不动 —— 不把一次未请求的定价改动带进另一关。
+	_fate_offer_price_index = (
+		maxi(1, _count_cleared_content_rooms())
+		if source == "chest" and _clear_drop_service.is_configured()
+		else _fate_door_offer_id
+	)
 	_fate_door_quote.clear()
 	for card_value in offer:
 		var offered_card := card_value as FateCard
@@ -7746,7 +7881,8 @@ func _show_door_fate_choices(source := "door") -> void:
 			continue
 		_fate_door_quote[offered_card.get_stable_card_id()] = (
 			_fate_economy.frozen_quote_for_card(
-				int(offered_card.card_rarity), _fate_door_offer_id, offered_card.get_stable_card_id(), run_seed
+				int(offered_card.card_rarity), _fate_offer_price_index,
+				offered_card.get_stable_card_id(), run_seed
 			)
 			if _fate_economy.is_configured()
 			else int(FATE_PRICE_BY_RARITY[clampi(int(offered_card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)])
@@ -8567,8 +8703,16 @@ func _fate_price(card: FateCard) -> int:
 		return int(_fate_door_quote[stable_id])
 	var rarity := clampi(int(card.card_rarity), 0, FATE_PRICE_BY_RARITY.size() - 1)
 	if uses_dynamic_fate_economy():
-		return _fate_economy.frozen_quote_for_card(rarity, _fate_door_offer_id, stable_id, run_seed)
+		return _fate_economy.frozen_quote_for_card(
+			rarity, _fate_price_door_index(), stable_id, run_seed
+		)
 	return int(FATE_PRICE_BY_RARITY[rarity])
+
+
+## 报价用的「进度序号」。0 = 沿用本门序号（门后历史口径，旧档恢复也走这条）。
+## 宝箱入口在 `_show_door_fate_choices()` 里显式填「已清内容房数」。
+func _fate_price_door_index() -> int:
+	return _fate_offer_price_index if _fate_offer_price_index > 0 else _fate_door_offer_id
 
 
 func _fate_price_bounds(card: FateCard) -> Dictionary:
@@ -8576,7 +8720,7 @@ func _fate_price_bounds(card: FateCard) -> Dictionary:
 		return {"min": 0, "quote": 0, "max": 0}
 	if uses_dynamic_fate_economy():
 		return _fate_economy.price_bounds_for_card(
-			int(card.card_rarity), card.get_stable_card_id(), _fate_door_offer_id
+			int(card.card_rarity), card.get_stable_card_id(), _fate_price_door_index()
 		)
 	var price := _fate_price(card)
 	return {"min": price, "quote": price, "max": price}

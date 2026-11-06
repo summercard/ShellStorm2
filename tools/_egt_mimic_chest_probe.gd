@@ -332,13 +332,21 @@ func _verify_runtime() -> void:
 	# —— 击杀：箱内物资这时才该出现（命运卡不走这里，本关一律靠买）——
 	var loot_at_kill := _count_ground_loot()
 	var cards_at_kill := _fate_card_count()
+	var killed := false
 	for _index in range(6):
-		if mimicked.ai_state == "dead":
+		if not is_instance_valid(mimicked):
 			break
 		mimicked.take_damage(999999)
+		if mimicked.ai_state == "dead":
+			killed = true
+			# Replay the kill before deferred enemy cleanup releases the instance.
+			var before_duplicate := _count_ground_loot()
+			tower._on_enemy_killed(mimicked, mimicked.get_enemy_data())
+			_check(_count_ground_loot() == before_duplicate, "重复结算又掉了一份物资")
+			break
 		for _frame in 3:
 			await get_tree().process_frame
-	_check(mimicked.ai_state == "dead", "拟态打不死（take_damage 后状态仍是 %s）" % mimicked.ai_state)
+	_check(killed, "拟态未进入死亡状态")
 	await get_tree().process_frame
 	await get_tree().process_frame
 
@@ -369,15 +377,6 @@ func _verify_runtime() -> void:
 		tower._count_cleared_content_rooms() == cleared_rooms_before,
 		"击杀拟态让「已清内容房数」涨了（%d → %d）—— 会提前满足撤离门 / 支线的解锁条件"
 		% [cleared_rooms_before, tower._count_cleared_content_rooms()]
-	)
-
-	# —— 重复结算：再调一次击杀不得再掉一遍 ——
-	var loot_after := _count_ground_loot()
-	tower._on_enemy_killed(mimicked, mimicked.get_enemy_data())
-	await get_tree().process_frame
-	_check(
-		_count_ground_loot() == loot_after,
-		"重复结算又掉了一份物资（%d → %d）" % [loot_after, _count_ground_loot()]
 	)
 
 	tower.queue_free()

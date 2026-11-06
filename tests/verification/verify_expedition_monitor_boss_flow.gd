@@ -115,14 +115,23 @@ func _ready() -> void:
 	check(not tower._conditional_extractions.has("BOSS_KILL"), "远征不额外生成塔楼 Boss 撤离信标")
 	var beacon := tower._conditional_extractions.get("STANDARD") as ExtractionBeacon3D
 	check(beacon != null and beacon.beacon_type == "STANDARD", "终点保留正式 STANDARD 撤离")
-	# 清房钥匙仍按原正式拾取/开门规则，不免费越过钥匙或命运卡。
-	check(bool(tower._door_policy_towards(room.room_id, "extraction").get("requires_clear", false)), "撤离方向门保留清房门策略")
+	# 2026-11-06：撤离方向门只保留清房门槛 —— 不吃钥匙、不弹命运卡（业主裁定）。
+	var extraction_policy: Dictionary = tower._door_policy_towards(room.room_id, "extraction")
+	check(bool(extraction_policy.get("requires_clear", false)), "撤离方向门保留清房门策略")
+	check(not bool(extraction_policy.get("requires_key", true)), "远征01 撤离方向门不再消耗钥匙")
+	check(not bool(extraction_policy.get("triggers_fate", true)), "远征01 撤离方向门不再弹命运卡")
 	tower._on_room_entered(room)
 	await get_tree().process_frame
 	check(enemies().is_empty() and clear_count == 1, "重进已清 Boss 房不重复生成和结算")
+	var key_pickups := 0
 	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
-		if value.room_id == room.room_id: value._on_body_entered(tower.player)
-	check(tower._try_open_room_door("extraction"), "清房并拾取正式奖励钥匙后可开启撤离方向门")
+		if value.room_id == room.room_id:
+			key_pickups += 1
+	check(key_pickups == 0, "钥匙经济退役后 Boss 房不掉房间钥匙")
+	check(tower._get_total_room_keys() == 0, "开门前手上没有钥匙（门不需要钥匙）")
+	# 首领箱挂在「首领阵亡」上：Boss 倒下时就该在，不等随从与后续波次清完。
+	check(room.find_chest_by_id("drop_boss") != null, "首领阵亡掉落一只宝箱")
+	check(tower._try_open_room_door("extraction"), "清房后无需钥匙即可开启撤离方向门")
 	check(bool(tower._open_edges.get(tower._edge_key(room.room_id, "extraction"), false)), "撤离连接实际开启")
 	finish()
 

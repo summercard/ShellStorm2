@@ -230,7 +230,12 @@ func _check_formal_expedition() -> void:
 	dungeon.set("_room_key_count", 10)
 	_expect(dungeon.try_open_room_door("room_02"), "真实清房后第二门未开启")
 	await get_tree().process_frame
-	_expect(bool(dungeon.get("_door_fate_active")), "正式第二门未显示报价")
+	# 2026-11-06：远征01 的开门不再弹命运卡，报价入口只剩宝箱。
+	# 本段直接走宝箱入口（`source="chest"`），并反向验证「开门确实不再弹卡」。
+	_expect(not bool(dungeon.get("_door_fate_active")), "开门仍弹出了命运卡")
+	dungeon.call("_show_door_fate_choices", "chest")
+	await get_tree().process_frame
+	_expect(bool(dungeon.get("_door_fate_active")), "宝箱入口未显示报价")
 	var earned_offer: Dictionary = dungeon.call("_export_door_fate_snapshot")
 	_expect(earned_offer["offer_id"] == sample_offer_id + 2, "门序号未顺序推进")
 	print("FATE_FORMAL_OFFER phase=early actual=%d wallet=%d cards=%s" % [economy.actual_kill_income(), GameManager.currency, JSON.stringify(earned_offer["cards"])])
