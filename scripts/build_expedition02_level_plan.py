@@ -431,6 +431,38 @@ def _level_plan():
                 "房间模板 6 档均属新增（不在 2026-09-25 锁定的 8 个模板内），见设计页 §13 L02-5。"
             ),
         },
+        # 门策略与钥匙经济（2026-11-06 业主裁定，与远征01 同一套能力段）：
+        # 清完本房怪即可开门，不消耗钥匙、不弹命运卡。
+        #
+        # ⚠️ 这两个段必须写在生成器里，否则重新生成会把它们从
+        # `data/level_plans/expedition_02/level_plan.json` 里抹掉，而运行时
+        # 会静默退回「门要钥匙 + 开门弹命运卡」的老口径（不报错）。
+        "door_policy": {
+            "schema": "shellstorm2.door_policy",
+            "schema_version": 1,
+            "note": (
+                "业主 2026-11-06：「远征02的关卡的方案也改成这种，以后不掉落那种大钥匙，"
+                "开门逻辑不需要身上有钥匙，只要本房间怪物清理后即可。」本关所有门统一走这一段："
+                "清完本房怪即可开门，不消耗钥匙、不弹命运卡。安全屋→room_01 的入口交通门仍由 "
+                "TowerDescent3D 的固定接口全放行（requires_clear 也为 false），不受本段影响。"
+            ),
+            "requires_clear": True,
+            "requires_key": False,
+            "triggers_fate": False,
+        },
+        "economy": {
+            "schema": "shellstorm2.level_economy",
+            "schema_version": 1,
+            "note": (
+                "钥匙经济整体退役（2026-11-06）。判据是能力 `_room_key_economy_enabled()`："
+                "本段 false ⇒ 开局不发初始钥匙、清房不再掉钥匙、状态栏不再写「钥匙已掉落」、"
+                "命运卡池剔除「太阳钥印」这类只发钥匙的空卡。⚠️ 本关没有 monster_rules / "
+                "monster_drop_table ⇒ 击杀同样不产金币，所以**本轮不加 clear_drops 宝箱**："
+                "宝箱会弹命运卡购买界面，而本关钱包恒为 0，三张全买不起时会被保底压到 0 元 ⇒ "
+                "等于白送卡。宝箱与本关命运卡入口待货币口径确定后再接，见设计页 §14。"
+            ),
+            "room_keys_enabled": False,
+        },
     }
 
 
