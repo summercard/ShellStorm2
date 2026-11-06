@@ -4,17 +4,17 @@
 
 [node name="boss_door_ritual" type="Node3D"]
 metadata/asset_id = "ENV-EXP03-BOSS-DOOR-RITUAL"
-metadata/asset_version = "v018"
+metadata/asset_version = "v020"
 metadata/level_id = "expedition_03"
-metadata/display_name_zh = "Boss房仪式封印门"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v018/component_packages/boss_door_ritual/boss_door_ritual_source_v018.blend"
+metadata/display_name_zh = "Boss房金框钢门·门扇"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v020/component_packages/boss_door_ritual/boss_door_ritual_source_v020.blend"
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
 metadata/up_axis = "+Y"
 metadata/collision_owner = "godot_wrapper"
 metadata/collision_policy = "visual_only"
 metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(2.2, 2.5, 0.315)
+metadata/bounds_size_m = Vector3(3, 2.5, 0.2408)
 metadata/room_owned_geometry = false
 metadata/preserve_authored_palette = true
 metadata/component_family = "door"

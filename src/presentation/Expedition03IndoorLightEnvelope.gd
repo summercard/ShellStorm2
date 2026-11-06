@@ -26,6 +26,8 @@ var _room_count := 0
 var _built := false
 var _room_bounces: Array[OmniLight3D] = []
 var _dark_fills: Array[OmniLight3D] = []
+var _shared_wall_roots: Array[WeakRef] = []
+var _shared_wall_refresh_queued := false
 
 
 func _ready() -> void:
@@ -38,9 +40,12 @@ func _ready() -> void:
 	get_tree().node_added.connect(_on_node_added)
 	for node in level.find_children("*", "Node3D", true, false):
 		_hide_ceiling_fixture(node)
+		_track_shared_wall(node)
 
 
 func _on_node_added(node: Node) -> void:
+	if _is_manor_wall(node) and get_parent().is_ancestor_of(node):
+		_track_shared_wall_later.call_deferred(weakref(node))
 	# 本节点自建的常亮底光不得进入房间开关体系，否则关灯会被 `_sync_supplemental_room_lights`
 	# 归零，等于没加。判据是灯上的 meta，而不是节点归属 —— 两盏灯都挂在 room 下。
 	if node.has_meta(DARK_FILL_META):
@@ -49,6 +54,86 @@ func _on_node_added(node: Node) -> void:
 		_hide_ceiling_fixture.call_deferred(node)
 	elif node is Light3D and not node is DirectionalLight3D and get_parent().is_ancestor_of(node):
 		_register_room_light.call_deferred(node)
+
+
+func _is_manor_wall(node: Node) -> bool:
+	return node is Node3D and str(node.get_meta("asset_id", "")).begins_with("ENV-EXP03-MANOR-WALL-")
+
+
+func _track_shared_wall_later(ref: WeakRef) -> void:
+	# A baked wall may be freed by the procedural shell rebuild before this call.
+	# Resolve the weak reference here instead of queuing a typed, possibly freed Node.
+	var node := ref.get_ref() as Node
+	if node != null:
+		_track_shared_wall(node)
+
+
+func _track_shared_wall(node: Node) -> void:
+	if not is_instance_valid(node) or not _is_manor_wall(node) or not node.is_inside_tree():
+		return
+	if node.get_node_or_null("Visual") == null:
+		return
+	if node.visibility_changed.is_connected(_queue_shared_wall_refresh):
+		return
+	_shared_wall_roots.append(weakref(node))
+	node.visibility_changed.connect(_queue_shared_wall_refresh)
+	node.tree_exiting.connect(_queue_shared_wall_refresh)
+	_queue_shared_wall_refresh()
+
+
+func _queue_shared_wall_refresh() -> void:
+	if _shared_wall_refresh_queued or not is_inside_tree():
+		return
+	_shared_wall_refresh_queued = true
+	_refresh_shared_walls.call_deferred()
+
+
+func _shared_wall_key(wall: Node3D) -> String:
+	# Whole 5m modules share a boundary. Quantize measured world placement to 1mm;
+	# 0/180 and 90/270 degrees describe the same double-sided physical wall.
+	var p := wall.global_position
+	var axis := wall.global_basis.x
+	return "%d:%d:%d:%d:%d" % [roundi(p.x * 1000), roundi(p.y * 1000),
+		roundi(p.z * 1000), roundi(absf(axis.x) * 1000), roundi(absf(axis.z) * 1000)]
+
+
+func _shared_wall_rank(wall: Node3D) -> String:
+	var id := str(wall.get_meta("asset_id", ""))
+	# Never let a solid module hide a doorway. Window styling is retained when a
+	# neighboring room contributes a plain wall at that same physical boundary.
+	var priority := "0" if id.ends_with("-DOOR") else "1" if id.ends_with("-WINDOW") else "2"
+	return priority + str(wall.get_path())
+
+
+func _refresh_shared_walls() -> void:
+	_shared_wall_refresh_queued = false
+	if not is_inside_tree():
+		return
+	var groups: Dictionary = {}
+	var live: Array[WeakRef] = []
+	for ref in _shared_wall_roots:
+		var wall := ref.get_ref() as Node3D
+		if wall == null or not wall.is_inside_tree() or wall.is_queued_for_deletion():
+			continue
+		live.append(ref)
+		var key := _shared_wall_key(wall)
+		if not groups.has(key):
+			groups[key] = []
+		groups[key].append(wall)
+	_shared_wall_roots = live
+	for key in groups:
+		var owner: Node3D
+		for value in groups[key]:
+			var wall := value as Node3D
+			if wall.is_visible_in_tree() and (owner == null or _shared_wall_rank(wall) < _shared_wall_rank(owner)):
+				owner = wall
+		for value in groups[key]:
+			var wall := value as Node3D
+			var visual := wall.get_node_or_null("Visual") as Node3D
+			if visual != null:
+				visual.visible = wall == owner
+			wall.set_meta("shared_wall_visual_owner", wall == owner)
+			wall.set_meta("shared_wall_key", key)
 
 func _hide_ceiling_fixture(node: Node) -> void:
 	if not is_instance_valid(node) or not node is WastelandLight3D:

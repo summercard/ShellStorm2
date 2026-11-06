@@ -1,0 +1,53 @@
+{
+  "asset_id": "ENV-EXP03-BOSS-DOOR-RITUAL",
+  "slug": "boss_door_ritual",
+  "family": "door",
+  "geometry": "3m dark metal panel with stepped brass accents",
+  "collision_owner": "RoomDoor3D",
+  "component_id": "ENV-EXP03-BOSS-DOOR-RITUAL",
+  "asset_version": "v020",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "room_owned_geometry": false,
+  "coordinate_mapping": "(bx, by, bz) -> (bx, bz, -by)",
+  "origin_contract": "bottom_center",
+  "palette_uv_layer": "PaletteUV",
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "bounds_size_m": [
+    3.0,
+    2.5,
+    0.2408
+  ],
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v020/component_packages/boss_door_ritual/boss_door_ritual_source_v020.blend",
+  "component_blend_sha256": "3c953e20382c0d74f7b40720201a712c0dbdb9c0fc29c9a51d77216bd1622254",
+  "source_sha256_after": "3c953e20382c0d74f7b40720201a712c0dbdb9c0fc29c9a51d77216bd1622254",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v020/component_packages/boss_door_ritual/export/v020/boss_door_ritual_optimized_v020.blend",
+  "optimized_blend_sha256": "0156fcfc73587282e07bc22a5c4666cb6b29521ed74a7629fff43de9285367b4",
+  "optimization": "Merge coincident vertices, dissolve degenerate edges, recalculate normals, triangulate. Visible hard edges retained.",
+  "triangles_before": 396,
+  "triangles_after": 396,
+  "reduction_ratio": 0.0,
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/boss_door_ritual/env_boss_door_ritual_visual_top3d.glb",
+  "glb_sha256": "58b2ab3e794e6e15005637c7dca8e0c12c4e8d38c63cd76edcffb549b968c9b1",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/boss_door_ritual/env_boss_door_ritual_root_top3d.tscn",
+  "runtime_integrated": true,
+  "name_zh": "Boss房金框钢门·门扇",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "BOSS_FOYER",
+    "BOSS"
+  ],
+  "component_family": "door",
+  "variant_axis": "door_role",
+  "variant_value": "boss_room_front",
+  "godot_front_axis": "+Z",
+  "collision_policy": "visual_only",
+  "collision_shape_count": 0,
+  "prefab_sha256": "21504bd3abb1a1239df056d04f62ae173e38ececcf3cbfd6f9b1eb234ae30c3e",
+  "validation": {
+    "engine": "Godot 4.7.2",
+    "formal_scene_loaded": true,
+    "native_rendered": true,
+    "geometry_probe": "tests/verification/verify_expedition03_special_room_relayout.tscn"
+  }
+}

@@ -109,5 +109,7 @@
     "godot_load_passed": true,
     "godot_rendered": true,
     "formal_scene_assembled": false
-  }
+  },
+  "superseded_by": "art_source/environments/tower_zones/expedition/source/common_components/v019/component_packages/manor_door_double/asset_manifest.json",
+  "current_asset_version": "v019"
 }

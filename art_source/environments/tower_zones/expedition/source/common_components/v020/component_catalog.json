@@ -1,0 +1,110 @@
+{
+  "components": [
+    {
+      "asset_id": "ENV-EXP03-BOSS-DOOR-RITUAL",
+      "slug": "boss_door_ritual",
+      "family": "door",
+      "geometry": "3m dark metal panel with stepped brass accents",
+      "collision_owner": "RoomDoor3D",
+      "component_id": "ENV-EXP03-BOSS-DOOR-RITUAL",
+      "asset_version": "v020",
+      "block_id": "expedition",
+      "level_id": "expedition_03",
+      "room_owned_geometry": false,
+      "coordinate_mapping": "(bx, by, bz) -> (bx, bz, -by)",
+      "origin_contract": "bottom_center",
+      "palette_uv_layer": "PaletteUV",
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "bounds_size_m": [
+        3.0,
+        2.5,
+        0.2408
+      ],
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v020/component_packages/boss_door_ritual/boss_door_ritual_source_v020.blend",
+      "component_blend_sha256": "3c953e20382c0d74f7b40720201a712c0dbdb9c0fc29c9a51d77216bd1622254",
+      "source_sha256_after": "3c953e20382c0d74f7b40720201a712c0dbdb9c0fc29c9a51d77216bd1622254",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v020/component_packages/boss_door_ritual/export/v020/boss_door_ritual_optimized_v020.blend",
+      "optimized_blend_sha256": "0156fcfc73587282e07bc22a5c4666cb6b29521ed74a7629fff43de9285367b4",
+      "optimization": "Merge coincident vertices, dissolve degenerate edges, recalculate normals, triangulate. Visible hard edges retained.",
+      "triangles_before": 396,
+      "triangles_after": 396,
+      "reduction_ratio": 0.0,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/boss_door_ritual/env_boss_door_ritual_visual_top3d.glb",
+      "glb_sha256": "58b2ab3e794e6e15005637c7dca8e0c12c4e8d38c63cd76edcffb549b968c9b1",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/boss_door_ritual/env_boss_door_ritual_root_top3d.tscn",
+      "runtime_integrated": true,
+      "name_zh": "Boss房金框钢门·门扇",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_FOYER",
+        "BOSS"
+      ],
+      "component_family": "door",
+      "variant_axis": "door_role",
+      "variant_value": "boss_room_front",
+      "godot_front_axis": "+Z",
+      "collision_policy": "visual_only",
+      "collision_shape_count": 0,
+      "prefab_sha256": "21504bd3abb1a1239df056d04f62ae173e38ececcf3cbfd6f9b1eb234ae30c3e",
+      "validation": {
+        "engine": "Godot 4.7.2",
+        "formal_scene_loaded": true,
+        "native_rendered": true,
+        "geometry_probe": "tests/verification/verify_expedition03_special_room_relayout.tscn"
+      }
+    },
+    {
+      "asset_id": "ENV-EXP03-MANOR-WALL-DOOR-BOSS",
+      "slug": "manor_wall_door_boss",
+      "family": "wall",
+      "geometry": "5m slot, dark wall wings, gold columns and crest",
+      "collision_owner": "godot_wrapper",
+      "component_id": "ENV-EXP03-MANOR-WALL-DOOR-BOSS",
+      "asset_version": "v020",
+      "block_id": "expedition",
+      "level_id": "expedition_03",
+      "room_owned_geometry": false,
+      "coordinate_mapping": "(bx, by, bz) -> (bx, bz, -by)",
+      "origin_contract": "bottom_center",
+      "palette_uv_layer": "PaletteUV",
+      "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+      "bounds_size_m": [
+        5.0,
+        3.67,
+        1.09
+      ],
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v020/component_packages/manor_wall_door_boss/manor_wall_door_boss_source_v020.blend",
+      "component_blend_sha256": "2a02559d27bb210e994866ea3d0f3eb030813c258969e329a93b305f3159d9b2",
+      "source_sha256_after": "2a02559d27bb210e994866ea3d0f3eb030813c258969e329a93b305f3159d9b2",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v020/component_packages/manor_wall_door_boss/export/v020/manor_wall_door_boss_optimized_v020.blend",
+      "optimized_blend_sha256": "20e0859f25af60694c19c81bc49251c636aedc171d945a178f46069abf226a48",
+      "optimization": "Merge coincident vertices, dissolve degenerate edges, recalculate normals, triangulate. Visible hard edges retained.",
+      "triangles_before": 304,
+      "triangles_after": 304,
+      "reduction_ratio": 0.0,
+      "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_wall_door_boss/env_manor_wall_door_boss_visual_top3d.glb",
+      "glb_sha256": "50d59d0cb705a847266ece7aba2d8ce1183ea6b6c6c851bf4fa3913ee7abb2b4",
+      "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wall_door_boss/env_manor_wall_door_boss_root_top3d.tscn",
+      "runtime_integrated": true,
+      "name_zh": "Boss房鎏金冠饰门墙5m",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "BOSS_FOYER",
+        "BOSS"
+      ],
+      "component_family": "wall",
+      "variant_axis": "door_role",
+      "variant_value": "boss_room_front",
+      "godot_front_axis": "+Z",
+      "collision_policy": "segmented_door_piers",
+      "collision_shape_count": 5,
+      "prefab_sha256": "0049e724c57a37291363367b8265ce43d35e5ed83b5725faa812b9aee4ac020b",
+      "validation": {
+        "engine": "Godot 4.7.2",
+        "formal_scene_loaded": true,
+        "native_rendered": true,
+        "geometry_probe": "tests/verification/verify_expedition03_special_room_relayout.tscn"
+      }
+    }
+  ]
+}

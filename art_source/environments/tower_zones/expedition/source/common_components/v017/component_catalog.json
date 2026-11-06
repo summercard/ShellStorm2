@@ -355,28 +355,31 @@
       "palette_uv_layer": "PaletteUV",
       "bounds_size_m": [
         2.2,
-        0.202855,
-        2.5
+        0.626967,
+        2.8
       ],
       "collection": "Component_manor_door_double",
       "root_object": "ROOT_manor_door_double",
       "instance_count": 3,
-      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_door_double/manor_door_double_source_v017.blend",
-      "component_blend_sha256": "748a062346a85360c915d3768e81b861f4b19ba2c8b6642fc4fc989e2847eca7",
-      "geometry_fingerprint": "485606c8aa15c80b502ca0dde0c429ebb00ae66537ae9e52e864b0670659d268",
-      "vertex_count": 1368,
+      "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v019/component_packages/manor_door_double/manor_door_double_source_v019.blend",
+      "component_blend_sha256": "4dfa5fa2a0ea0276f31931f34a0d20c06ed7ea6a17c470d7480367a426642b80",
+      "geometry_fingerprint": "8a668c0488c0101d697e73562c6ea687765568b0fef227614b75040522574bde",
+      "vertex_count": 4408,
       "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_door_double/env_manor_door_double_visual_top3d.glb",
-      "glb_sha256": "de4ca0d5d4ca11cb410aef1507f88ac4dffac374e5a5c5a9debd495e49f11ce3",
-      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v017/export/v017/复古公馆_组件优化输出_v017.blend",
+      "glb_sha256": "135ab08fb9d70de877c8022da851c0ba9abbb8192e47179a552b48ad75706c93",
+      "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v019/export/v019/manor_door_double_optimized_v019.blend",
       "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_door_double/env_manor_door_double_root_top3d.tscn",
       "collision_policy": "visual_only",
       "collision_shape_count": 0,
-      "prefab_sha256": "d852da2af68ce1f2b946ee20f8d5ae0f8626f3c6c2a1b916ad9d9629f63506f7",
+      "prefab_sha256": "28fd89a036777dada3301c883014d62ab83cb1b361dfb4d540f288da0df827f1",
       "source_bounds_size_m": [
         2.2,
-        0.202855,
-        2.5
-      ]
+        0.626967,
+        2.8
+      ],
+      "asset_version": "v019",
+      "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v019/复古公馆_模块化组件母版_v019.blend",
+      "asset_manifest": "art_source/environments/tower_zones/expedition/source/common_components/v019/component_packages/manor_door_double/asset_manifest.json"
     },
     {
       "component_id": "ENV-EXP03-MANOR-DOOR-ARCH",

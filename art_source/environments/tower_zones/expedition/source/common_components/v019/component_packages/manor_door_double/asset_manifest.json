@@ -1,0 +1,153 @@
+{
+  "component_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+  "slug": "manor_door_double",
+  "name_zh": "黄铜双开实木门",
+  "component_family": "door",
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "category": "furnishing",
+  "scope": "shared",
+  "serves_room_types": [
+    "COMMON_ROOM",
+    "SAFE_ROOM"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "fixed_display_attachment": false,
+  "palette_uv_layer": "PaletteUV",
+  "bounds_size_m": [
+    2.2,
+    0.626967,
+    2.8
+  ],
+  "collection": "Component_manor_door_double",
+  "root_object": "ROOT_manor_door_double",
+  "instance_count": 3,
+  "component_blend": "art_source/environments/tower_zones/expedition/source/common_components/v019/component_packages/manor_door_double/manor_door_double_source_v019.blend",
+  "component_blend_sha256": "4dfa5fa2a0ea0276f31931f34a0d20c06ed7ea6a17c470d7480367a426642b80",
+  "geometry_fingerprint": "8a668c0488c0101d697e73562c6ea687765568b0fef227614b75040522574bde",
+  "vertex_count": 4408,
+  "visual_glb": "assets/art/environments/tower_zones/expedition/components/common_components/manor_door_double/env_manor_door_double_visual_top3d.glb",
+  "glb_sha256": "135ab08fb9d70de877c8022da851c0ba9abbb8192e47179a552b48ad75706c93",
+  "optimized_blend": "art_source/environments/tower_zones/expedition/source/common_components/v019/export/v019/manor_door_double_optimized_v019.blend",
+  "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/common_components/manor_door_double/env_manor_door_double_root_top3d.tscn",
+  "collision_policy": "visual_only",
+  "collision_shape_count": 0,
+  "prefab_sha256": "28fd89a036777dada3301c883014d62ab83cb1b361dfb4d540f288da0df827f1",
+  "source_bounds_size_m": [
+    2.2,
+    0.626967,
+    2.8
+  ],
+  "asset_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+  "asset_version": "v019",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "source_room_type_blend": "art_source/environments/tower_zones/expedition/source/common_components/v019/复古公馆_模块化组件母版_v019.blend",
+  "source_room_type_sha256": "5df3c220ce0b33a4dcc40c179e339ddc59b6ae02a6e41151a45467a1c2db846e",
+  "room_owned_geometry": false,
+  "export": {
+    "asset_id": "ENV-EXP03-MANOR-DOOR-DOUBLE",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v019/component_packages/manor_door_double/manor_door_double_source_v019.blend",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v019/export/v019/manor_door_double_optimized_v019.blend",
+    "source_sha256_before": "4dfa5fa2a0ea0276f31931f34a0d20c06ed7ea6a17c470d7480367a426642b80",
+    "source_sha256_after": "4dfa5fa2a0ea0276f31931f34a0d20c06ed7ea6a17c470d7480367a426642b80",
+    "optimized_sha256": "96ec36db22d9ec37c0a810b1c07e78e754d7d057993d195be0c6f330afc03f70",
+    "operations": {
+      "evaluate_bevels": true,
+      "merge_distance_m": 1e-06,
+      "merged_vertices": 64,
+      "zero_area_faces_removed": 0,
+      "loose_vertices_removed": 0,
+      "recalculate_normals": true,
+      "restore_bevel_cap_palette_islands": true,
+      "internal_faces_preserved": "Both sides, core and shadow-casting surfaces retained."
+    },
+    "triangles_before": 8764,
+    "triangles_after": 8636,
+    "reduction_ratio": 0.01460520310360566,
+    "budget": null,
+    "budget_source": "No user triangle budget; safe topology cleanup only.",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/common_components/manor_door_double/env_manor_door_double_visual_top3d.glb",
+    "glb_sha256": "135ab08fb9d70de877c8022da851c0ba9abbb8192e47179a552b48ad75706c93",
+    "palette_sha256_before": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "palette_sha256_after": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "fidelity_review": {
+      "passed": true,
+      "views": [
+        "front",
+        "back",
+        "side",
+        "game"
+      ],
+      "evidence": "docs/art/expedition03_wood_door_20261106/README.md",
+      "scope": "Front/back/side/game visually reviewed. Same-camera source/optimized mean channel differences {'front': 2.2583559168925024e-05, 'back': 4.065040650406504e-05, 'side': 2.5971093044263777e-05, 'game': 2.4841915085817524e-05}"
+    },
+    "glb_triangles": 8636
+  },
+  "exported": true,
+  "runtime_integrated": true,
+  "asset_ledger": "resolved_by_ledger_index:scenes",
+  "godot_front_axis": "+Z",
+  "coordinate_mapping": "(bx,by,bz)->(bx,bz,-by)",
+  "import_status": "validated_runtime_component",
+  "validation": {
+    "blender_material_uv_passed": true,
+    "godot_load_passed": true,
+    "godot_rendered": true,
+    "formal_scene_assembled": true
+  },
+  "superseded_by": "art_source/environments/tower_zones/expedition/source/common_components/v019/component_packages/manor_door_double/asset_manifest.json",
+  "current_asset_version": "v019",
+  "double_sided_design": true,
+  "door_core_thickness_m": 0.32,
+  "color_contract": {
+    "carpet_main_cell": [
+      3,
+      8
+    ],
+    "door_main_cell": [
+      0,
+      8
+    ],
+    "door_inset_cell": [
+      0,
+      1
+    ],
+    "main_srgb": "#29070E",
+    "inset_srgb": "#240310"
+  },
+  "relief_contract": {
+    "raised_field_projection_m": 0.085,
+    "brass_flower_thickness_m": 0.018,
+    "handle_additional_clearance_m": 0.07
+  },
+  "geometry_fingerprint_space": "glTF X/Y-up/Z; unique POSITION accessor coordinates, 1e-6 m",
+  "runtime_verification": {
+    "date": "2026-11-06",
+    "seeds": [
+      77003244,
+      77003242
+    ],
+    "checks": 1767,
+    "doors": 58,
+    "failures": 0,
+    "renderer": "Vulkan Forward+ / RTX 4060 Ti",
+    "shared_wall_groups": [
+      72,
+      76
+    ]
+  }
+}

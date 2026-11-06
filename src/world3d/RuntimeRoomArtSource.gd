@@ -264,7 +264,7 @@ const STRUCTURE_FAMILIES := {
 	"base_floor_base": TAG_FLOOR, "ceiling_deck": TAG_TRIM,
 	# 复古公馆套件（已登记的结构件）
 	"manor_wall_standard": TAG_WALL, "manor_wall_window": TAG_WALL,
-	"manor_wall_door": TAG_WALL,
+	"manor_wall_door": TAG_WALL, "manor_wall_door_boss": TAG_WALL,
 	"manor_floor_wood": TAG_FLOOR, "manor_floor_stone": TAG_FLOOR,
 	"manor_floor_bath": TAG_FLOOR,
 }

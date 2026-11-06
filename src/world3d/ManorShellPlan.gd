@@ -27,6 +27,8 @@ const GRID := 5.0
 const MANOR := "res://assets/art/environments/tower_zones/expedition/runtime/common_components"
 const WALL := MANOR + "/manor_wall_standard/env_manor_wall_standard_root_top3d.tscn"
 const WALL_DOOR := MANOR + "/manor_wall_door/env_manor_wall_door_root_top3d.tscn"
+const WALL_BOSS_DOOR := MANOR + "/manor_wall_door_boss/env_manor_wall_door_boss_root_top3d.tscn"
+const BOSS_PANEL := MANOR + "/boss_door_ritual/env_boss_door_ritual_root_top3d.tscn"
 const WALL_WINDOW := MANOR + "/manor_wall_window/env_manor_wall_window_root_top3d.tscn"
 const FLOOR_WOOD := MANOR + "/manor_floor_wood/env_manor_floor_wood_root_top3d.tscn"
 const FLOOR_STONE := MANOR + "/manor_floor_stone/env_manor_floor_stone_root_top3d.tscn"
@@ -137,7 +139,7 @@ static func door_cells(connection_ports: Array, dim: Vector2) -> Dictionary:
 	var cell_x := cells(dim.x, cols)
 	var cell_z := cells(dim.y, rows)
 	var result := {"north": [], "south": [], "west": [], "east": [], "_door_count": 0,
-		"_offgrid": []}
+		"_offgrid": [], "_boss": {}}
 	for value in connection_ports:
 		var port := value as Dictionary
 		var side := str(port.get("side", ""))
@@ -157,6 +159,8 @@ static func door_cells(connection_ports: Array, dim: Vector2) -> Dictionary:
 		if not list.has(found):
 			list.append(found)
 			result["_door_count"] = int(result["_door_count"]) + 1
+		if str(port.get("door_visual_scene", "")) == BOSS_PANEL:
+			(result["_boss"] as Dictionary)["%s:%d" % [side, found]] = true
 	for side in ["north", "south", "west", "east"]:
 		(result[side] as Array).sort()
 	return result
@@ -322,6 +326,8 @@ static func wall_plan(dim: Vector2, door_map: Dictionary, window_mode: String) -
 			var node_name := "Wall_%s_%02d" % [side, index]
 			if door_indices.has(index):
 				prefab = WALL_DOOR
+				if (door_map.get("_boss", {}) as Dictionary).has("%s:%d" % [side, index]):
+					prefab = WALL_BOSS_DOOR
 				node_name = "DoorWall_%s_%02d" % [side, index]
 			elif window_indices.has(index):
 				prefab = WALL_WINDOW

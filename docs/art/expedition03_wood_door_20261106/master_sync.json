@@ -1,0 +1,10 @@
+{
+  "old_master": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v017\\复古公馆_模块化组件母版_v017.blend",
+  "new_master": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v019\\复古公馆_模块化组件母版_v019.blend",
+  "old_sha256": "411bebae8599f6f22a02ee84bbe99508991ae2408648dbb0082cc2766a75c903",
+  "new_sha256": "5df3c220ce0b33a4dcc40c179e339ddc59b6ae02a6e41151a45467a1c2db846e",
+  "locked_before": "edd7799c27bef36c273f962c89068429c91be83beda87de46d26ef833cd3e37b",
+  "locked_after": "edd7799c27bef36c273f962c89068429c91be83beda87de46d26ef833cd3e37b",
+  "locked_match": true,
+  "scope": "Only Component_manor_door_double mesh replaced; all other objects locked."
+}

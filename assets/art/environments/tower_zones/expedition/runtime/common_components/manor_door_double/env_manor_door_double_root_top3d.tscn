@@ -4,20 +4,23 @@
 
 [node name="manor_door_double" type="Node3D"]
 metadata/asset_id = "ENV-EXP03-MANOR-DOOR-DOUBLE"
-metadata/asset_version = "v017"
+metadata/asset_version = "v019"
 metadata/level_id = "expedition_03"
 metadata/display_name_zh = "黄铜双开实木门"
-metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v017/component_packages/manor_door_double/manor_door_double_source_v017.blend"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v019/component_packages/manor_door_double/manor_door_double_source_v019.blend"
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
 metadata/up_axis = "+Y"
 metadata/collision_owner = "godot_wrapper"
 metadata/collision_policy = "visual_only"
 metadata/collision_shape_count = 0
-metadata/bounds_size_m = Vector3(2.2, 2.5, 0.202855)
+metadata/bounds_size_m = Vector3(2.2, 2.8, 0.626967)
 metadata/room_owned_geometry = false
 metadata/preserve_authored_palette = true
 metadata/component_family = "door"
 metadata/grid_unit_m = 0.0
+metadata/double_sided_design = true
+metadata/door_core_thickness_m = 0.32
+metadata/door_palette_main = "#29070E"
 
 [node name="Visual" parent="." instance=ExtResource("1")]

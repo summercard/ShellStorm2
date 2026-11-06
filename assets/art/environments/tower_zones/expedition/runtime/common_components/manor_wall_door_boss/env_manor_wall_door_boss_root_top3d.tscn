@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/common_components/manor_wall_door_boss/env_manor_wall_door_boss_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Box_pier"]
+size = Vector3(1, 2.8, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_header"]
+size = Vector3(3, 0.3, 0.68)
+
+[sub_resource type="BoxShape3D" id="Box_column"]
+size = Vector3(0.5, 2.65, 0.86)
+
+[node name="manor_wall_door_boss" type="Node3D"]
+metadata/asset_id = "ENV-EXP03-MANOR-WALL-DOOR-BOSS"
+metadata/asset_version = "v020"
+metadata/level_id = "expedition_03"
+metadata/display_name_zh = "Boss房鎏金冠饰门墙5m"
+metadata/source_blend = "res://art_source/environments/tower_zones/expedition/source/common_components/v020/component_packages/manor_wall_door_boss/manor_wall_door_boss_source_v020.blend"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/collision_owner = "godot_wrapper"
+metadata/collision_policy = "segmented_door_piers"
+metadata/collision_shape_count = 5
+metadata/bounds_size_m = Vector3(5, 3.67, 1.09)
+metadata/room_owned_geometry = false
+metadata/preserve_authored_palette = true
+metadata/component_family = "wall"
+metadata/grid_unit_m = 5.0
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="LeftPier" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-2, 1.4, 0)
+shape = SubResource("Box_pier")
+
+[node name="RightPier" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(2, 1.4, 0)
+shape = SubResource("Box_pier")
+
+[node name="Header" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 2.65, 0)
+shape = SubResource("Box_header")
+
+[node name="LeftColumn" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-1.75, 1.325, 0)
+shape = SubResource("Box_column")
+
+[node name="RightColumn" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(1.75, 1.325, 0)
+shape = SubResource("Box_column")

@@ -1,0 +1,17 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "frozen": true,
+  "frozen_at": "2026-11-06",
+  "block_id": "expedition",
+  "level_id": "expedition_03",
+  "room_type": "BOSS_FRONT_DOOR_PRESENTATION",
+  "source_version": "v020",
+  "room_owned_geometry": false,
+  "component_budget": {"limit": 50, "planned": 2, "remaining": 48},
+  "dimensions": {"grid_slot_m": 5, "clear_opening_m": [3, 2.5], "wall_height_m": 2.8},
+  "components": [
+    {"asset_id": "ENV-EXP03-BOSS-DOOR-RITUAL", "slug": "boss_door_ritual", "family": "door", "geometry": "3m dark metal panel with stepped brass accents", "collision_owner": "RoomDoor3D"},
+    {"asset_id": "ENV-EXP03-MANOR-WALL-DOOR-BOSS", "slug": "manor_wall_door_boss", "family": "wall", "geometry": "5m slot, dark wall wings, gold columns and crest", "collision_owner": "godot_wrapper"}
+  ]
+}
