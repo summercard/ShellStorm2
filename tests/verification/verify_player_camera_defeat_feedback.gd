@@ -26,7 +26,14 @@ func check(ok: bool, reason: String) -> void:
 func _run() -> void:
 	RuntimePerformanceManager.set_verification_frame_budget_override(60)
 	_verify_look_model()
-	for path in ["res://scenes/TowerDescent3D.tscn", "res://scenes/ExpeditionLevel03_3D.tscn"]:
+	if "--look-model-only" in OS.get_cmdline_user_args():
+		print("PLAYER_CAMERA_LOOK_MODEL checks=%d failures=%d" % [checks, failures.size()])
+		get_tree().quit(0 if failures.is_empty() else 1)
+		return
+	var paths := ["res://scenes/TowerDescent3D.tscn", "res://scenes/ExpeditionLevel03_3D.tscn"]
+	if "--expedition01-only" in OS.get_cmdline_user_args():
+		paths = ["res://scenes/ExpeditionLevel01_3D.tscn"]
+	for path in paths:
 		if "--tower-only" in OS.get_cmdline_user_args() and "Expedition" in path:
 			continue
 		await _verify_runtime(path)
@@ -62,6 +69,40 @@ func _verify_look_model() -> void:
 	check(feedback.look_offset.distance_to(fast.look_offset) < 0.0001, "look response must be frame rate independent")
 	fast.advance_look(0.1, Vector2(NAN, 0), size, Vector3.RIGHT, Vector3.BACK, true)
 	check(fast.look_offset.is_finite(), "invalid pointer must never poison camera")
+	if feedback.has_method("set_look_blocked_direction"):
+		feedback.reset()
+		feedback.look_offset = Vector3(0.4, 0.0, 1.0)
+		feedback.set_look_blocked_direction(Vector3.BACK)
+		check(feedback.look_offset.is_equal_approx(Vector3(0.4, 0, 0)), "entering wall constraint clears only existing toward-wall look")
+		for i in 120:
+			feedback.advance_look(1.0 / 60.0, Vector2(0, 600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		check(feedback.look_offset.is_zero_approx(), "wall blocks downward look target and residual offset")
+		feedback.advance_look(1.0, Vector2(600, 600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		check(feedback.look_offset.x > 0.5 and is_zero_approx(feedback.look_offset.z), "diagonal down preserves lateral look")
+		feedback.advance_look(1.0, Vector2(0, -600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		check(feedback.look_offset.z < -1.6, "wall still allows upward look")
+		feedback.set_look_blocked_direction(Vector3.ZERO)
+		feedback.advance_look(1.0, Vector2(0, 600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		check(feedback.look_offset.z > 1.6, "leaving wall restores downward look")
+		feedback.set_look_blocked_direction(Vector3.RIGHT * 5.0)
+		feedback.advance_look(1.0, Vector2(600, 0), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		check(is_zero_approx(feedback.look_offset.x), "profile constraint uses normalized world direction")
+		feedback.reset()
+		feedback.advance_look(1.0, Vector2(600, 0), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		check(feedback.look_offset.x > 1.6, "reset releases stale wall constraint")
+	else:
+		check(false, "feedback must accept world-owned directional wall constraint")
+	# Exercise the real flow branch without assembling an unrelated full level.
+	var flow := TowerDescent3D.new()
+	flow.player = Player3D.new()
+	flow.add_child(flow.player)
+	flow.set("_flow_rules_active", true)
+	if flow.player.camera_feedback.has_method("set_look_blocked_direction"):
+		flow.player.camera_feedback.set_look_blocked_direction(Vector3.BACK)
+		flow.call("_update_camera_lower_wall_lift", 1.0, true)
+		flow.player.camera_feedback.advance_look(1.0, Vector2(0, 600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		check(flow.player.camera_feedback.look_offset.z > 1.6, "flow branch must clear a stale directional wall constraint")
+	flow.free()
 	feedback.free()
 	fast.free()
 
@@ -105,6 +146,13 @@ func _verify_runtime(path: String) -> void:
 		feedback._physics_process(0.1)
 		check(feedback.look_offset.length() < prior_length, "modal input lock must return actual look toward center")
 		player.set_input_locked(false)
+	feedback.reset()
+	await _verify_lower_wall_look(level, path)
+	if "--wall-look-only" in OS.get_cmdline_user_args():
+		level.queue_free()
+		for i in 6:
+			await get_tree().process_frame
+		return
 	feedback.reset()
 	level.call("_apply_indoor_camera_pose")
 	var base := camera.global_transform
@@ -206,6 +254,90 @@ func _verify_runtime(path: String) -> void:
 	check(get_tree().get_nodes_in_group("player_3d").is_empty(), "scene unload must release player and feedback")
 
 
+func _verify_lower_wall_look(level: TowerDescent3D, path: String) -> void:
+	var player := level.player
+	var feedback: Node = player.camera_feedback
+	var original_position := player.global_position
+	var original_room := str(level.get("_current_room_id"))
+	var player_physics := player.is_physics_processing()
+	level.set_physics_process(false)
+	player.set_physics_process(false)
+	var is_flow := bool(level.get("_flow_rules_active"))
+	var room := (level.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
+	if room == null:
+		room = (level.get("_room_by_id") as Dictionary).get(original_room) as DungeonRoom3D
+	check(room != null, path + " wall regression needs a real room")
+	if room != null:
+		level.force_enter_room_for_test(room.room_id)
+		var center := room.global_position + Vector3.UP * 0.05
+		var half_depth := room.get_dimensions().y * 0.5
+		player.global_position = center + Vector3.BACK * (half_depth - 0.5)
+		await get_tree().physics_frame
+		var wall_distance: float = level.call("_find_lower_camera_wall_distance")
+		# Arrive at the wall with a full downward look already in flight.
+		feedback.look_offset = Vector3.BACK * FEEDBACK.LOOK_MAX_M
+		var shifted_distance: float = level.call("_find_lower_camera_wall_distance")
+		if not is_flow:
+			check(wall_distance >= 0.0, path + " real south wall must be tagged")
+			check(is_equal_approx(shifted_distance, wall_distance), path + " mouse look cannot move wall probe through the wall")
+		var min_height := INF
+		var max_height := -INF
+		var detections := 0
+		for frame in 180:
+			level.call("_update_camera_lower_wall_lift", 1.0 / 60.0, true)
+			feedback.advance_look(1.0 / 60.0, Vector2(0, 600), Vector2(1280, 720),
+				Vector3.RIGHT, Vector3.FORWARD, true)
+			level.call("_apply_indoor_camera_pose")
+			if bool(level.get("_camera_lower_wall_detected")):
+				detections += 1
+			if frame >= 120:
+				min_height = minf(min_height, player.camera.global_position.y)
+				max_height = maxf(max_height, player.camera.global_position.y)
+		check(max_height - min_height < 0.001, path + " sustained down look must not oscillate camera height")
+		if is_flow:
+			check(detections == 0 and feedback.look_offset.z > 1.6, "flow without wall lift must retain downward look")
+		else:
+			check(detections == 180, path + " wall must stay detected every frame while dragging down")
+			check(is_zero_approx(feedback.look_offset.z), path + " downward look is blocked against lower wall")
+			check(float(level.get("_camera_trailing_current_m")) < 0.16, path + " wall retraction remains active")
+			check(float(level.get("_camera_lift_current_m")) > 0.29, path + " wall lift remains active")
+			if not capture_dir.is_empty():
+				get_viewport().warp_mouse(get_viewport().get_visible_rect().size * Vector2(0.5, 0.95))
+				await get_tree().process_frame
+				for frame in 60:
+					level.call("_update_camera_lower_wall_lift", 1.0 / 60.0, true)
+					feedback._physics_process(1.0 / 60.0)
+					level.call("_apply_indoor_camera_pose")
+					await get_tree().process_frame
+				check(is_zero_approx(feedback.look_offset.z), path + " actual mouse down stays blocked at wall")
+			await _capture("wall_look_down", path)
+			for screen_delta in [Vector2(-600, 0), Vector2(600, 600), Vector2(0, -600)]:
+				feedback.advance_look(1.0, screen_delta, Vector2(1280, 720), Vector3.RIGHT, Vector3.FORWARD, true)
+				if screen_delta.x < 0:
+					check(feedback.look_offset.x < -1.6, path + " wall preserves left look")
+				elif screen_delta.y > 0:
+					check(feedback.look_offset.x > 0.5 and is_zero_approx(feedback.look_offset.z), path + " diagonal down preserves lateral look")
+				else:
+					check(feedback.look_offset.z < -1.6, path + " wall preserves upward look")
+			player.global_position = center
+			await get_tree().physics_frame
+			for frame in 180:
+				level.call("_update_camera_lower_wall_lift", 1.0 / 60.0, true)
+				feedback.advance_look(1.0 / 60.0, Vector2(0, 600), Vector2(1280, 720), Vector3.RIGHT, Vector3.FORWARD, true)
+				level.call("_apply_indoor_camera_pose")
+			check(feedback.look_offset.z > 1.6, path + " walking away restores downward look")
+			check(float(level.get("_camera_lift_current_m")) < 0.001, path + " walking away releases wall lift")
+			await _capture("away_look_down", path)
+		print("CAMERA_WALL_LOOK ", {"path": path, "probe": wall_distance, "shifted_probe": shifted_distance,
+			"detected_frames": detections, "settled_height_span": max_height - min_height})
+	level.force_enter_room_for_test(original_room)
+	player.global_position = original_position
+	feedback.reset()
+	level.call("_update_camera_lower_wall_lift", 5.0, true)
+	player.set_physics_process(player_physics)
+	level.set_physics_process(true)
+
+
 func _make_pixel_patches(level: Node) -> Node:
 	for layer_id in [0, 1]:
 		var canvas := CanvasLayer.new()
@@ -224,6 +356,6 @@ func _capture(label: String, path: String) -> void:
 	if capture_dir.is_empty():
 		return
 	await RenderingServer.frame_post_draw
-	var prefix := "expedition03" if "03_3D" in path else "tower"
+	var prefix := "expedition03" if "03_3D" in path else "expedition01" if "01_3D" in path else "tower"
 	var error := get_viewport().get_texture().get_image().save_png(capture_dir.path_join(prefix + "_" + label + ".png"))
 	check(error == OK, "capture " + label)

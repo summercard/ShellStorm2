@@ -11,6 +11,7 @@ const SHAKE_DURATION := 0.5
 var look_offset := Vector3.ZERO
 var world_pose_managed := false
 var suspended := false
+var _look_blocked_direction := Vector3.ZERO
 var _player: Player3D
 var _base_pose: Transform3D
 var _shake_remaining := 0.0
@@ -54,6 +55,18 @@ func request_environment_impact(strength: float = 1.0, duration: float = SHAKE_D
 	_shake_clock = 0.0
 
 
+## The world camera owner supplies its wall constraint; feedback owns the offset.
+func set_look_blocked_direction(direction: Vector3) -> void:
+	direction.y = 0.0
+	_look_blocked_direction = direction.normalized()
+	# On wall entry an existing look must not push the camera through the wall.
+	look_offset = _constrain_look_offset(look_offset)
+
+
+func _constrain_look_offset(offset: Vector3) -> Vector3:
+	return offset - _look_blocked_direction * maxf(offset.dot(_look_blocked_direction), 0.0)
+
+
 func advance_look(delta: float, screen_delta: Vector2, viewport_size: Vector2,
 		right: Vector3, up: Vector3, enabled: bool) -> void:
 	var target := Vector3.ZERO
@@ -65,6 +78,7 @@ func advance_look(delta: float, screen_delta: Vector2, viewport_size: Vector2,
 		direction.y = 0.0
 		if direction.length_squared() > 0.0001:
 			target = direction.normalized() * LOOK_MAX_M * weight
+	target = _constrain_look_offset(target)
 	look_offset = look_offset.lerp(target, 1.0 - exp(-LOOK_RESPONSE * maxf(delta, 0.0)))
 	if look_offset.length_squared() < 0.0000001:
 		look_offset = Vector3.ZERO
@@ -106,6 +120,7 @@ func _physics_process(delta: float) -> void:
 
 func reset() -> void:
 	look_offset = Vector3.ZERO
+	_look_blocked_direction = Vector3.ZERO
 	_shake_remaining = 0.0
 	_shake_amplitude = 0.0
 	_shake_duration = SHAKE_DURATION
