@@ -64,6 +64,21 @@
 
 ⚠ **没有改 `toon_material()` 的深度模式**。它被全部已有特效共用，改它会波及整条特效链。
 
+## 账本（2026-11-06 补录）
+
+原记录只写了代码、贴图与正文，**特效账本当时没动** —— 这是本件唯一的落档缺口，已补齐：
+
+| 位置 | 改动 |
+|---|---|
+| 《资产主表》FX01-19（A38） | 规格列「4 块扁平方形地面液体」→「4 块贴图面片地面液体（PlaneMesh + `vfx_zombie_goo_puddle_floor.png`）」；关键词补 `血泊 / 黏液贴图 / puddle / 贴图面片`；更新时间 2026-11-05；备注追加本件全部改动、贴图路径与 SHA-256 |
+| 《资产主表》FX01-17（A36） | 同上（共用 `VfxGooDeathBase3D` 身体，自动同步），备注写明「同步换贴图」 |
+| 《3D-特效》FX01-19 / FX01-17 | 表现描述与尺寸列同步；备注追加贴图路径与 SHA |
+| 《域变更日志》 | `v0.1.36` 条目更新（表现改版 + 内嵌贴图登记） |
+| `ledger_split_baseline.json` | `scripts/refresh_ledger_baseline_goo_puddle_20261105.py` 白名单只放这两行指纹 + `3D-特效` 分页摘要；`LEDGER_SPLIT_VERIFY_OK assets=1437` |
+
+**贴图不单开 AssetID 行**：按 FX01-16 吼叫图标 `vfx_monster_roar_icon_atlas_v001.png` 的先例，
+贴图视为所属特效的**内嵌资产**，路径与 SHA 记在 FX 行备注里 —— 因此资产总数（1437）与查重范围不变。
+
 ## 验收
 
 `verify_zombie_goo_death_vfx` 新增 `_check_puddle_texture`，`samples` **16 → 17**：

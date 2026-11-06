@@ -48,6 +48,18 @@ const EXPECTED_PUDDLE_SINK_DEPTH := 0.30
 const EXPECTED_PUDDLE_SINK_SEC := 0.36
 const EXPECTED_PUDDLE_LIFT := 0.035
 
+## ── 地面液体的尺寸（业主 2026-11-06）──────────────────────────────────────
+## 「贴图太小了，放大到现在的 2 倍，然后要在 1.5-2 之间做随机值缩放」
+## ⇒ 世界边长 = size × BASE × SCALE × roll，roll ∈ [ROLL_MIN, ROLL_MAX]。
+## 三个数字**硬编码在验收侧**（不引用被测脚本常量，防自印证）。
+const EXPECTED_PUDDLE_SIDE_BASE := 0.72
+const EXPECTED_PUDDLE_SIDE_SCALE := 2.0
+const EXPECTED_PUDDLE_ROLL_MIN := 1.5
+const EXPECTED_PUDDLE_ROLL_MAX := 2.0
+## 四块的极差下限：随机若退化成常量表（四块同值），这条会红。
+## 取 0.10 —— 可用区间 0.5 的五分之一，四块真随机时实测极差 0.26~0.47。
+const PUDDLE_ROLL_SPREAD_MIN := 0.10
+
 ## 尺寸线性：size 1.0 与 0.8 的同一子节点 scale 比值 = 1.25
 const SIZE_A := 1.0
 const SIZE_B := 0.8
@@ -81,6 +93,7 @@ func _ready() -> void:
 		_check_rhythm_burst,
 		_check_rhythm_splat,
 		_check_rhythm_puddle,
+		_check_puddle_size_roll,
 		_check_ground_flatness,
 		_check_floor_contract,
 		_check_size_linearity,
@@ -137,7 +150,10 @@ func _count_collision_nodes(node: Node) -> int:
 
 
 ## 造一个「手动步进」的实例：关掉基类 `_process`，只由用例显式调 `_on_tick`。
-func _make_manual(world_y: float, floor_y: Variant, size: float) -> VfxEffectBase3D:
+## `xz` 默认沿用 v001 的固定机位；液体随机尺寸用例靠改它来验证「位置 → 形状」的派生关系。
+func _make_manual(
+	world_y: float, floor_y: Variant, size: float, xz: Vector2 = Vector2(4.0, -3.0)
+) -> VfxEffectBase3D:
 	var fx := GOO_SCENE.instantiate() as VfxEffectBase3D
 	if fx == null:
 		return null
@@ -147,7 +163,7 @@ func _make_manual(world_y: float, floor_y: Variant, size: float) -> VfxEffectBas
 	if floor_y != null:
 		context["floor_y"] = floor_y
 	fx.activate(
-		Vector3(4.0, world_y, -3.0), Color(0.58, 0.19, 0.12), size, context
+		Vector3(xz.x, world_y, xz.y), Color(0.58, 0.19, 0.12), size, context
 	)
 	return fx
 
@@ -552,7 +568,10 @@ func _check_rhythm_puddle() -> void:
 	# 对照：停留段与下沉段的 y 必须不同（证明「下沉」这条不是恒真）
 	_expect(mid_y < hold_y - 0.05, "对照失效：停留段与下沉段的 y 一致")
 
-	# 液体落在飞溅粒子的**真实落点**上（不是另立一份散布口径）
+	# 液体落在飞溅粒子的**真实落点**上（不是另立一份散布口径）。
+	# ⚠ 2026-11-06 放大 2 倍后四块会互相重叠（中心距 1.17~1.95m vs 边长 2.16~2.88m），
+	# 业主明确「可以接受两块贴图有重叠」⇒ 落点刻意保持原值，不许为了「不重叠」偷偷推开 ——
+	# 这条断言就是钉住它的：一旦有人加了外扩倍数，XZ 会立刻对不上。
 	var landed := _snap(fx, 1.0)
 	var splat_positions: Array = landed.get("splat_land_positions", [])
 	var puddle_positions: Array = landed.get("puddle_positions", [])
@@ -565,17 +584,145 @@ func _check_rhythm_puddle() -> void:
 		var plate := puddle_positions[0] as Vector3
 		_expect(
 			absf(source.x - plate.x) < 0.001 and absf(source.z - plate.z) < 0.001,
-			"液体未落在飞溅粒子落点上：落点(%.3f,%.3f) vs 液体(%.3f,%.3f)"
+			"液体未落在飞溅粒子落点上：落点(%.3f,%.3f) vs 液体(%.3f,%.3f)（业主已接受重叠，落点不该被推开）"
 			% [source.x, source.z, plate.x, plate.z]
 		)
 		# 对照：不同来源的飞溅粒子落点彼此不同 ⇒ 上一条不是「都在原点」的巧合
 		var other := splat_positions[4] as Vector3
-		_expect(
-			Vector2(source.x - other.x, source.z - other.z).length() > 0.20,
-			"对照失效：不同飞溅落点几乎重合（%.3f m）"
-			% Vector2(source.x - other.x, source.z - other.z).length()
-		)
+		var gap := Vector2(source.x - other.x, source.z - other.z).length()
+		_expect(gap > 0.20,
+			"对照失效：不同飞溅落点几乎重合（%.3f m）" % gap)
 	fx.free()
+
+
+# ---------------------------------------------------------------- A5b 液体尺寸与随机缩放
+## 业主 2026-11-06：「贴图太小了，放大到现在的 2 倍，然后要在 1.5-2 之间做随机值缩放」。
+##
+## 六条判据，缺一条都能被别的实现蒙过去：
+##   ① 逻辑常量就是 2.0 倍 / 1.5~2.0 区间（防「文档写 2 倍、代码实际 1.5 倍」）；
+##   ② 四块**每一块**的系数都落在 [1.5, 2.0]（不是只有第 0 块）；
+##   ③ 四块不能一样大（随机退化成常量表会红）；
+##   ④ 停留段的实际边长 = size × 0.72 × 2.0 × 该块系数（尺寸公式真的被消费）；
+##   ⑤ 同一出生点重复激活 → 系数**逐位相同**（确定性；池化复借不会每帧换形状）；
+##   ⑥ 换一个出生点 → 系数不同（真的是「位置派生」，不是写死的一张常量表）。
+##
+## ⑤ 与 ⑥ 是一对：只验 ⑤ 会漏掉「永远同一套值」（等于没随机）；只验 ⑥ 会漏掉「每次重算都变」
+## （停留段 scale 会抖，`_check_rhythm_puddle` 的冻结窗口也会跟着红）。
+func _check_puddle_size_roll() -> void:
+	var fx := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
+	if fx == null:
+		_failures.append("液体尺寸用例实例化失败")
+		return
+	_samples += 1
+
+	var snap := _snap(fx, 0.60)
+	# ① 逻辑常量
+	_expect(is_equal_approx(float(snap.get("puddle_side_scale", 0.0)), EXPECTED_PUDDLE_SIDE_SCALE),
+		"液体整体放大倍数应为 %.1f 倍：%.3f"
+		% [EXPECTED_PUDDLE_SIDE_SCALE, float(snap.get("puddle_side_scale", 0.0))])
+	_expect(is_equal_approx(float(snap.get("puddle_side_base", 0.0)), EXPECTED_PUDDLE_SIDE_BASE),
+		"液体基准边长系数应为 %.2f：%.3f"
+		% [EXPECTED_PUDDLE_SIDE_BASE, float(snap.get("puddle_side_base", 0.0))])
+	_expect(is_equal_approx(float(snap.get("puddle_size_roll_min", 0.0)), EXPECTED_PUDDLE_ROLL_MIN),
+		"随机系数下限应为 %.1f：%.3f"
+		% [EXPECTED_PUDDLE_ROLL_MIN, float(snap.get("puddle_size_roll_min", 0.0))])
+	_expect(is_equal_approx(float(snap.get("puddle_size_roll_max", 0.0)), EXPECTED_PUDDLE_ROLL_MAX),
+		"随机系数上限应为 %.1f：%.3f"
+		% [EXPECTED_PUDDLE_ROLL_MAX, float(snap.get("puddle_size_roll_max", 0.0))])
+
+	var rolls: Array = snap.get("puddle_size_rolls", [])
+	if rolls.size() != EXPECTED_PUDDLE_COUNT:
+		_failures.append("液体随机系数数组长度应为 %d：%d"
+			% [EXPECTED_PUDDLE_COUNT, rolls.size()])
+		fx.free()
+		return
+
+	# ② 每一块都落在区间内
+	var roll_min := INF
+	var roll_max := -INF
+	for index in rolls.size():
+		var value := float(rolls[index])
+		roll_min = minf(roll_min, value)
+		roll_max = maxf(roll_max, value)
+		_expect(value >= EXPECTED_PUDDLE_ROLL_MIN - 0.0001
+			and value <= EXPECTED_PUDDLE_ROLL_MAX + 0.0001,
+			"第 %d 块液体的尺寸系数 %.4f 不在 [%.1f, %.1f] 内"
+			% [index, value, EXPECTED_PUDDLE_ROLL_MIN, EXPECTED_PUDDLE_ROLL_MAX])
+	# ③ 四块不能一样大
+	_expect(roll_max - roll_min >= PUDDLE_ROLL_SPREAD_MIN,
+		"四块液体尺寸几乎相同（极差 %.4f < %.2f）：随机缩放没生效，退化成常量表了"
+		% [roll_max - roll_min, PUDDLE_ROLL_SPREAD_MIN])
+
+	# ④ 停留段边长 = size × 基准 × 放大 × 该块系数
+	var side_now := float(snap.get("puddle_scale_x", 0.0))
+	var side_expect: float = (
+		SIZE_A * EXPECTED_PUDDLE_SIDE_BASE * EXPECTED_PUDDLE_SIDE_SCALE * float(rolls[0])
+	)
+	_expect(absf(side_now - side_expect) < 0.001,
+		"停留段边长为 %.4f，按公式应为 %.4f（%.2f × %.2f × %.2f）"
+		% [side_now, side_expect, SIZE_A, EXPECTED_PUDDLE_SIDE_BASE * EXPECTED_PUDDLE_SIDE_SCALE,
+			float(rolls[0])])
+	# 业主「太小了」的量化底线：第 0 块至少是原规格（0.72 × 1.0）的 3 倍
+	# （= 2 倍放大 × 1.5 随机下限）。低于这条说明放大或随机有一头没吃上。
+	_expect(side_now >= EXPECTED_PUDDLE_SIDE_BASE * 3.0 - 0.001,
+		"液体边长 %.3f 未达到「2 倍放大 × 1.5 随机下限」= %.3f"
+		% [side_now, EXPECTED_PUDDLE_SIDE_BASE * 3.0])
+
+	# ⑤ 同一出生点重复激活 ⇒ 逐位相同
+	fx.call("activate", Vector3(4.0, FLOOR_DEEP + SPAWN_LIFT, -3.0),
+		Color(0.58, 0.19, 0.12), SIZE_A, {"floor_y": FLOOR_DEEP})
+	var again := _snap(fx, 0.60)
+	var rolls_again: Array = again.get("puddle_size_rolls", [])
+	_expect(rolls_again.size() == rolls.size(),
+		"重复激活后随机系数数组长度变了：%d -> %d" % [rolls.size(), rolls_again.size()])
+	for index in mini(rolls.size(), rolls_again.size()):
+		_expect(is_equal_approx(float(rolls[index]), float(rolls_again[index])),
+			"重复激活后第 %d 块系数变了（%.6f -> %.6f）：不再是确定性的，停留段会抖"
+			% [index, float(rolls[index]), float(rolls_again[index])])
+	fx.free()
+
+	# ⑥ 换出生点 ⇒ 系数不同
+	var other := _make_manual(
+		FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A, Vector2(12.5, 3.25)
+	)
+	if other == null:
+		_failures.append("液体尺寸用例：换机位实例化失败")
+		return
+	_samples += 1
+	var rolls_other: Array = _snap(other, 0.60).get("puddle_size_rolls", [])
+	_expect(rolls_other.size() == rolls.size(),
+		"换机位后随机系数数组长度不对：%d" % rolls_other.size())
+	var matched := 0
+	for index in mini(rolls.size(), rolls_other.size()):
+		if absf(float(rolls[index]) - float(rolls_other[index])) < 0.0001:
+			matched += 1
+	_expect(matched < rolls.size(),
+		"换出生点后四块系数与原来完全相同：说明是写死的常量表，不是按位置派生")
+	other.free()
+
+	# ⑦ 落点**不许**被推开（业主 2026-11-06：「可以接受两块贴图有重叠」）。
+	# 放大 2 倍后四块确实会重叠（中心距 1.17~1.95m vs 边长 2.16~2.88m）。这里正面钉住
+	# 「重叠是允许的、落点保持原值」：谁若为了消重叠去乘一个外扩系数，这条会红。
+	# 判据用**几何关系**而不是读常量：四块中心到「胸口正下方」的距离，必须与飞溅落点一致。
+	var spot := _make_manual(FLOOR_DEEP + SPAWN_LIFT, FLOOR_DEEP, SIZE_A)
+	if spot == null:
+		_failures.append("液体尺寸用例：落点对照实例化失败")
+		return
+	_samples += 1
+	var spot_snap := _snap(spot, 1.0)
+	var splat_pts: Array = spot_snap.get("splat_land_positions", [])
+	var plate_pts: Array = spot_snap.get("puddle_positions", [])
+	var worst := 0.0
+	for index in mini(plate_pts.size(), 4):
+		var plate := plate_pts[index] as Vector3
+		var src_index: int = [1, 4, 7, 10][index]
+		if src_index >= splat_pts.size():
+			continue
+		var splat := splat_pts[src_index] as Vector3
+		worst = maxf(worst, Vector2(plate.x - splat.x, plate.z - splat.z).length())
+	_expect(worst < 0.001,
+		"液体落点被推开了 %.3f m（最大偏差）：业主已接受重叠，落点必须保持飞溅原落点" % worst)
+	spot.free()
 
 
 ## 扫描出「alpha=1 且 scale / y 完全冻结」的连续窗口（行为测量）。
