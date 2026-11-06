@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-11-04",
+  "updated_at": "2026-11-06",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -14,7 +14,8 @@
       "development_records": [
         "docs/v0.1/development/history/03_玩家与操作_历史记录.md",
         "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md",
-        "docs/v0.1/development/2026-11-02_feedback_revision.md"
+        "docs/v0.1/development/2026-11-02_feedback_revision.md",
+        "docs/v0.1/development/2026-11-06_camera_lower_wall_mouse_look.md"
       ],
       "verification": [
         {
@@ -156,7 +157,8 @@
         "docs/v0.1/development/2026-10-08_fate_runtime_completion.md",
         "docs/v0.1/development/2026-10-08_fate_persistence_completion.md",
         "docs/v0.1/development/2026-10-18_fate_progression.md",
-        "docs/v0.1/development/2026-10-18_fate_elements.md"
+        "docs/v0.1/development/2026-10-18_fate_elements.md",
+        "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md"
       ],
       "verification": [
         {
@@ -212,7 +214,10 @@
       "design_docs": [
         "docs/v0.1/design/远征关卡01设计.md",
         "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
-        "docs/v0.1/05.1_关卡区块设计.md"
+        "docs/v0.1/05.1_关卡区块设计.md",
+        "docs/v0.1/design/远征03房间类型制作计划.md",
+        "docs/v0.1/design/远征03房间动线重排.md",
+        "docs/v0.1/design/远征关卡03设计.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-11-02_enemy_spawn_boundary.md",
@@ -220,7 +225,10 @@
         "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md",
         "docs/v0.1/development/CHANGELOG.md",
         "docs/v0.1/development/2026-11-01_fixed_room_furnishing.md",
-        "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md"
+        "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md",
+        "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
+        "docs/v0.1/development/2026-11-06_expedition02_no_key_doors.md",
+        "docs/v0.1/development/2026-11-06_expedition03_workshop_layouts.md"
       ],
       "verification": [
         {
@@ -254,6 +262,22 @@
         {
           "kind": "scene",
           "id": "verify_expedition03_monitor_boss_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition_level01_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition03_workshop_layouts"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition03_room_interactions"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition03_special_room_relayout"
         }
       ],
       "status": "partial"
@@ -312,12 +336,22 @@
       ],
       "development_records": [
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
-        "docs/v0.1/development/2026-09-23_hidden_tower_priority_adjudication.md"
+        "docs/v0.1/development/2026-09-23_hidden_tower_priority_adjudication.md",
+        "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
+        "docs/v0.1/development/2026-11-06_expedition02_no_key_doors.md"
       ],
       "verification": [
         {
           "kind": "scene",
           "id": "verify_arrival_gate_floor_bundle_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition_level01_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition02_door_policy"
         }
       ],
       "status": "partial"
@@ -359,7 +393,9 @@
         "docs/v0.1/development/2026-09-23_feature_relationship_pull_alignment.md",
         "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md",
         "docs/v0.1/development/2026-09-24_combat_economy_handoff.md",
-        "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md"
+        "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md",
+        "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
+        "docs/v0.1/development/2026-11-06_expedition02_no_key_doors.md"
       ],
       "verification": [
         {
@@ -381,6 +417,10 @@
         {
           "kind": "scene",
           "id": "verify_new_save_handoff"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition_level01_flow"
         }
       ],
       "status": "partial",
@@ -1206,7 +1246,10 @@
         "docs/v0.1/design/怪物设计.md",
         "docs/v0.1/design/胖子僵尸03动作设计.md",
         "docs/v0.1/design/胖子僵尸03运行配置.md",
-        "docs/v0.1/design/rooftop_first_visit_guidance.md"
+        "docs/v0.1/design/rooftop_first_visit_guidance.md",
+        "docs/v0.1/design/远征03房间类型制作计划.md",
+        "docs/v0.1/design/远征03房间动线重排.md",
+        "docs/v0.1/design/远征03复古公馆组件制作规范.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-09-30_rooftop_cross_tower_route.md",
@@ -1231,7 +1274,8 @@
         "docs/v0.1/development/2026-10-18_rooftop_guidance_clutter.md",
         "docs/v0.1/development/2026-10-18_rooftop_formal_interactive_assets.md",
         "docs/v0.1/development/2026-10-19_rooftop_ivy_low_wall.md",
-        "docs/v0.1/development/2026-10-20_rooftop_generator.md"
+        "docs/v0.1/development/2026-10-20_rooftop_generator.md",
+        "docs/v0.1/development/2026-11-06_expedition03_workshop_layouts.md"
       ],
       "verification": [
         {
@@ -1276,6 +1320,18 @@
         {
           "kind": "scene",
           "id": "verify_rooftop_guidance_clutter"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition03_workshop_layouts"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition03_room_interactions"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition03_special_room_relayout"
         }
       ],
       "status": "partial"

@@ -361,6 +361,9 @@ core_scenes=(
   verify_expedition_wave_chain
   verify_expedition_monitor_boss_flow
   verify_expedition03_monitor_boss_flow
+  verify_expedition03_special_room_relayout
+  verify_expedition03_room_interactions
+  verify_expedition03_workshop_layouts
   verify_3d_parity_core
   verify_3d_reload_state_flow
   verify_3d_vision_input_flow
@@ -422,6 +425,14 @@ core_scenes=(
   verify_synthesis_gate
   verify_workbench_menu_entry
   verify_battle_breakable_clutter
+  # 2026-11-06 补登记（此前一直是「写了没登记」的孤儿用例）：
+  # 收招状态机按当前 AI 节奏重写、折返平台护栏改按楼梯间局部坐标量、99F 台灯动态。
+  verify_enemy_action_recovery
+  verify_stairwell_turn_rail
+  verify_base_lamp_dynamics
+  # 2026-11-06：远征02 门策略 / 钥匙经济。判据全在 level_plan.json 的两段数据上，
+  # 抹掉它们时运行时**静默**回退到「门要钥匙 + 开门弹命运卡」，没有任何日志。
+  verify_expedition02_door_policy
 )
 
 # These scenes read the viewport texture and therefore require a real renderer.
@@ -468,6 +479,8 @@ visual_scenes=(
   verify_formal_3d_asset_gallery_visual
   verify_outdoor_clouds
   verify_formal_asset_placement_visual
+  # 2026-11-06 补登记：真渲染量化「灯具动起来看得见 / 关灯是纯黑」。
+  verify_base_lamp_visual
 )
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。

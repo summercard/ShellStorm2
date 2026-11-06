@@ -1,6 +1,26 @@
+- WORLD-PLAN / ASSET-PIPELINE：[远征03工坊布局返修](development/2026-11-06_expedition03_workshop_layouts.md)，正式房型C/D/B与双区域围挡、原交互、内部墙保留、紧凑房壳体预览；命令行/离屏验证，整关partial。
+
+WORLD-PLAN / ASSET-PIPELINE：[远征03穿越房四边封闭](development/2026-11-06_expedition03_passage_perimeter.md)。正式陈设按真实门口选择接入段，柜组封闭外围自由绕行，中央书架截断横穿，保留公馆会客组合。
+
+WORLD-PLAN / WORLD-GATE / WORLD-LOOT：[远征02 开门免钥匙 + 钥匙经济退役](development/2026-11-06_expedition02_no_key_doors.md)。与远征01 同一套能力段：计划加 `door_policy`（清房门槛保留、免钥匙、不弹命运卡）与 `economy.room_keys_enabled=false`，**零代码改动**；生成器同步这两段，否则下次重跑即静默回退。真场景门禁扫 35 条边（已登记 `core`） + 清房/开门/不掉钥匙。**刻意不加宝箱**：本关无 `monster_rules.currency` ⇒ 钱包恒 0，宝箱会把保底压成 0 元白送卡（设计页 L02-14）。解耦 violations 0。
+
+WORLD-PLAN / WORLD-GATE / WORLD-LOOT / FATE-RULES：[远征01 开门不弹命运卡 + 钥匙经济退役 + 清房/Boss 宝箱](development/2026-11-06_expedition01_no_key_chest_drops.md)。全门 `requires_key=false` / `triggers_fate=false`（只留清房），命运卡改由宝箱购买界面发放；清房钥匙掉落换成 `clear_drops`：45% 掉宝箱、否则一件补给，Boss 阵亡必掉一只（品质下限 rare）。宝箱参数与远征03 一致；掷骰按 `(run_seed, room_id)` 稳定哈希；运行期宝箱写进房间账，detail 重建原样重造。三段均为能力段（`door_policy` / `economy` / `clear_drops`），解耦 violations 0；远征01 门禁新增 `room_10→boss`、`boss→extraction` 两条边断言与逐房掉落比对。整关 partial 不变。
+
+WORLD-PLAN / ASSET-PIPELINE：[远征03警戒房门前灯柜清理](development/2026-11-06_expedition03_cabinet_doors.md)。四份正式房间移除28个低柜及其台面摆件，另清理1个南门前盆栽；三种子7236次胶囊采样无家具阻挡，原照明保留，整关partial。
+
+PLAYER-STATE：[贴下墙鼠标前视冲突修复](development/2026-11-06_camera_lower_wall_mouse_look.md)。下墙探针固定以角色位置为基准；收镜范围内屏蔽朝墙前视，保留横向与向上，离墙恢复。专项与旧回归结果分列，整体partial不变。
+
+WORLD-PLAN / ASSET-PIPELINE：[远征03暗红双面通顶木门与共享墙闪面修复](development/2026-11-06_expedition03_wood_door.md)。v019门高2.8m、门芯0.32m，双面立体木饰/黄铜菱花，暗红加深；相邻房间共享位置只显示一份墙并支持可见性接替。
+
 WORLD-LOOT / UI-HUD / PLAYER-STATE：[宝箱开箱前置与后置过渡](development/2026-11-05_expedition03_chest_keyless.md#追加开箱前置--后置过渡同日第二轮)。抖动两周期 0.42s → 回正 → 蓄力 0.12s → 砰（盖子 −122° 过冲 / 箱体上跳 / 光爆 / 音效 / 0.14s 镜头冲击）→ 余韵；掉落绑在**砰**那一帧，购买界面再等 0.30s 并 0.18s 淡入。新增 `OpenPhase` 与阶段快照，探针四时刻断言 + 变异测试按预期报红 2 条；真实渲染出六帧序列图。顺带修 `PlayerCameraFeedback3D` 包络分母写死导致短震动被压掉 92%。整关 partial 不变。
 
 WORLD-PLAN / WORLD-LOOT / REWARD-SERVICE / FATE-RULES：[远征03 宝箱免钥匙直开 + 命运卡购买 + 钥匙经济退役](development/2026-11-05_expedition03_chest_keyless.md)。开箱改为**直接开启**：2 件物资落地 + 弹出与门后同一套三选一命运卡**购买**界面，**不再自动发卡**；拟态箱不扣钥匙、不发卡、不弹窗。钥匙小子必掉钥匙、清房池 24.36 权重、开局初始钥匙、命运卡「太阳钥印」全部移除；判据为能力 `_room_key_economy_enabled()`（仅 flow 关卡 false，远征01/塔楼不变，解耦 violations 0）。三只探针通过；套件场景被既有 27 项房间门位指纹漂移预检阻断，未执行项已单列。整关 partial 不变。
+
+WORLD-PLAN / ASSET-PIPELINE / ASSET-LEDGER：[远征03 Boss 前门仪式封印门](development/2026-11-05_expedition03_boss_front_door.md)。原 Boss 前门虽有 `boss` 白盒/策略语义，正式视觉仍是普通 `ENV-EXP03-MANOR-DOOR-DOUBLE`。新增组件 `ENV-EXP03-BOSS-DOOR-RITUAL`（源/优化 Blend、GLB、Prefab、manifest），**只**通过端口级 `door_visual_scene` 覆写 `boss_foyer→boss` 的门板；`RoomDoor3D` 继续持有碰撞、可开启、自动开合、战斗封锁与存档派生语义，不改钥匙/清房/门状态机。场景账本资产主表第 1019 行 + 3D-场景通用第 814 行 + 域变更日志 v0.1.71。**未做**：正式画面渲染验收、整屋场景重装配（manifest 保留 `godot_rendered=false` / `formal_scene_assembled=false`）；端口运行时探针被既有 `MonsterInjector` 全局类解析错误阻断。
+
+VFX-POOL：[子弹尾迹先整体隐藏，不删代码](development/2026-11-05_bullet_trail_hidden.md)。新增总开关 `GameDesignConfig.BULLET_TRAIL_VISIBLE=false`，`VfxBulletBody3D` 与 `VfxBulletVisual3D` 的**建造期**与 **`activate()` 复借复位**两处都按开关赋值（只改建建造期会留下「池里复用后尾巴又冒出来」的间歇性 bug）；尾迹整组隐藏时跳过逐帧动画。几何、材质、构图参数、面数、`trail_parts` 快照全部保留，改回 `true` 即完整恢复。八弹种专属弹体与通用回落弹体全覆盖；`verify_bullet_vfx_profiles`（samples=69）与 `verify_combat_vfx_toon_v002`（samples=16）全绿。
+
+VFX-POOL / ASSET-LEDGER：[僵尸死亡地面液体改贴图面片](development/2026-11-05_zombie_goo_puddle_texture.md)。`Puddle0..3` 由纯色 `BoxMesh` 换成 `PlaneMesh` + 贴图（`vfx_zombie_goo_puddle_floor.png`，1024² RGBA），材质新增 `ToonVfx.toon_texture_material()`（`DEPTH_DRAW_OPAQUE_ONLY` + 双面，避免透明区写深度裁穿地面）；A/B 两段粒子、时间轴、落点数学、`GooLight` 逐字不动。`verify_zombie_goo_death_vfx` 新增 `_check_puddle_texture`（samples 16→17，反向对照两组精准变红）；FX01-17 共用身体自动同步。特效账本 FX01-19 / FX01-17 行与域变更日志 v0.1.36 已补录。
 
 SAVE-PROFILE / WORLD-INTERACTIVE-CLUTTER：[默认灯态回归修复](development/2026-11-03_default_lights_regression.md)。修正空陈设账触发缺省false关灯；缺席灯态保留基地/安全屋/作者默认，明确关灯仍恢复。主线时间轴、触发条件与灯光命令不改。
 
@@ -23,6 +43,8 @@ PLAYER-STATE / ENTRY-AVATAR / ASSET-PIPELINE：[跑步与待机增强v039](devel
 ASSET-PIPELINE / WORLD-BLOCKS：[远征Boss房02装配](design/远征关卡01_Boss房02装配.md)。v027，46组件/652实例；01原Boss房01保留，02独立TSCN已导入；测试关卡99 boss正式引用02。组件承重、门表现与走行空间按场景契约接线。见[交付记录](development/2026-10-13_boss_room02_godot_import.md)。
 
 # v0.1 模块、功能与工程契约索引
+
+TEST-REGISTRY / ENEMY-AI：[四个孤儿验收登记 + 收招两处缺陷修复](development/2026-11-06_verification_registry_backfill.md)。`verify_base_lamp_dynamics` / `verify_base_lamp_visual` / `verify_stairwell_turn_rail` / `verify_enemy_action_recovery` 全部登记（core×3 + visual×1，`scenes=277`）。护栏改按楼梯间局部坐标量高度（旧稿世界常量 `-6.0` 在 12m 层高下把护栏高算成 -10.845m）；收招判据按当前 AI 节奏重写（EGT 收招 0.08~0.18s，旧「人人 0.34」表作废；快照键 `skill_effect_active` 已删除）。顺带修：收招段外部推力逐帧叠加（击退 5.0 → 9.7 → 14+）、死亡/硬直后仍打排期连发。未改：近战不看视线、体型缩放放大 `move_and_slide` 位移（P1 候选）。
 
 WORLD-PLAN / ENEMY-AI / ASSET-PIPELINE：[远征03遮光与灯开关修复](development/2026-11-02_expedition03_indoor_lighting.md)。地图顶盖/四壁分块投影并补layer1静态盒；作者灯、通道补光与室内基础光由房间原开关/流送/状态恢复控制。28房/通道1197检查、252太阳射线及原生渲染A/B通过；账本25行同步。远征01对照复现12条旧失败，文档/命名既有红项单列；整关partial不变。
 
@@ -250,6 +272,8 @@ ASSET-PIPELINE 小僵尸表现资产已更新为 v005（800三角面/16骨，手
 - TOOL-SCENE-EDITOR / WORLD-PLAN / ASSET-PIPELINE：[11 远征03场景工坊布局与陈设流程](11_远征03场景工坊布局与陈设流程.md)，对应编号Skill `11-expedition03-scene-workshop-layout`。范围限定03正式TSCN，墙边柜架/易碎设施/实机验收和用户数据隔离；不改远征01或通用00–04链路。[安装与验证记录](development/2026-11-01_expedition03_layout_skill.md)。
 
 - WORLD-PLAN / ASSET-PIPELINE / TOOL-SCENE-EDITOR：[远征03其余房间与通道主题](design/远征03其余房间与通道陈设.md)及[本批验收](development/2026-11-01_remaining_themed_rooms.md)。15份原房间+7连接原型完成主题陈设，原3房默认保留；当前正式池25份、工坊65份，格式均TSCN format=3 / Node3D。03场景独立室内遮光表现不改关卡生产或远征01；整关仍partial。
+
+- WORLD-PLAN / ASSET-PIPELINE：[远征03动线重排设计](design/远征03房间动线重排.md)。15×15 m 宝库、20×15 m 小商店与 3 m 净宽 Boss 金框门已进入正式场景。[开发记录](development/2026-11-06_expedition03_room_relayout.md)。
 
 - WORLD-PLAN / ASSET-PIPELINE：[远征03公馆门正式接入](development/2026-11-01_expedition03_manor_doors.md)，主题门外观显式覆写，空值保留原选择；03以黄铜实木门替换装甲门，门态/碰撞驱动和01不改。
 
