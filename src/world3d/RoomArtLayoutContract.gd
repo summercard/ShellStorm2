@@ -72,7 +72,7 @@ static func overlaps_box(points: PackedVector2Array, box: Dictionary) -> bool:
 			return false
 	return true
 
-static func furnishing_conflicts(root: Node3D) -> Array[String]:
+static func furnishing_conflicts(root: Node3D, actual_ports: Array = []) -> Array[String]:
 	var issues: Array[String] = []
 	if not applies(root):
 		return issues
@@ -80,8 +80,8 @@ static func furnishing_conflicts(root: Node3D) -> Array[String]:
 	if dim.x <= 0.0 or dim.y <= 0.0:
 		issues.append("正式房间缺少有效尺寸，无法检查全部合法门位")
 		return issues
-	var ports := candidate_ports(dim)
-	var boxes := door_boxes(dim)
+	var ports: Array = candidate_ports(dim) if actual_ports.is_empty() else actual_ports
+	var boxes := FURNISH._door_boxes(ports, dim.x * .5, dim.y * .5)
 	for value in root.find_children("*", "CollisionShape3D", true, false):
 		var shape_node := value as CollisionShape3D
 		if shape_node.disabled or shape_node.shape == null or is_structure(root, shape_node):

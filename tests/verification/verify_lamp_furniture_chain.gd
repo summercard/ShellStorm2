@@ -246,8 +246,9 @@ func _formal_layouts() -> void:
 				check(lamp.state == "dropping", "formal furniture drops actual lamp")
 		layout.queue_free()
 		await settle()
-	# Layout revision removes 33 lamps from stacked/intersecting flower/lamp pairs.
-	check(lamps == 185 and types.size() == 4, "all 185 current table lamps and four real support types")
+	# Source inventory 2026-11-06: 178 before this repair; B rooms change 6/10 to
+	# 32/32 authored lamps, giving 226. Every one must retain support and drop behavior.
+	check(lamps == 226 and types.size() == 4, "all 226 current table lamps and four real support types")
 	print("LAMP_FORMAL_INSTANCES ",lamps," supports=",types.size())
 
 func _capture(room: DungeonRoom3D, lamp: ReactiveLamp3D, name: String) -> void:

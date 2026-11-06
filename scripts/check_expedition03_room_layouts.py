@@ -345,23 +345,19 @@ def check_runtime_rooms() -> tuple[list[str], int]:
 
     ## 查什么（都在文件内部，不需要跑引擎）
 
-    1. **文件名 ↔ 键一致**：`<template>_<12位十六进制>[_<6位门位指纹>].tscn`，
+    1. **文件名 ↔ 键一致**：`<template>_<12位十六进制>[_<6位原型指纹>].tscn`，
        12 位那段必须等于根节点 `runtime_room_signature` 的前 12 位。
        手工改名、改内容都会被抓。
     2. **键完整**：必须是 64 位十六进制（sha256）。
     3. **尺寸自洽**：`runtime_room_geometry.size` 与 `size_m` 逐值一致。
     4. **前缀非空**：模板名不能为空（空前缀等于把不同模板混进同一批文件名）。
-    5. **门位指纹自洽**（2026-10-31 新增）：若文件名带第三段，必须等于
-       `metadata/portal_fingerprint`，且该字段必须在场。
+    5. **已声明的原型指纹自洽**：`metadata/style_fingerprint` 存在时必须等于第三段。
+       运行时重新计算原型指纹并检查正式资源命中。
 
     ## 为什么文件名多了第三段
 
-    复用键**刻意不含门位**（为了「美术做一次，所有局生效」），但墙与地板是结构件：
-    `manor_wall_door` 洞口固定 2.2m 居中，只能摆在「本局门位那一格」。
-    实测同一复用键下 `combat_25x25_38083aa33b1a` 有 5 间房、门位各不相同
-    （n02 东+北+南 / n04 北+西 / n05 东+北 / n06 北+南 / fireplace 西）——
-    共用一份含门墙的场景会让 4 间的门被实心墙堵死。
-    所以**结构层按门位分文件**，第三段就是门位指纹（`side@lane` 排序后的 sha256 前 6 位）。
+    `ManorShellPlan.style_fingerprint()` 按地板、窗与原型决定第三段。
+    门墙随本局端口重铺，`metadata/portal_fingerprint` 记录样本门位。
 
     ## 不查什么
 
@@ -387,36 +383,27 @@ def check_runtime_rooms() -> tuple[list[str], int]:
         if not hex_re.match(raw_sig):
             errs.append(f"{label}: 签名不是 64 位十六进制（{raw_sig[:24]}…）")
             continue
-        # 文件名形如 <template>_<sig12> 或 <template>_<sig12>_<portal6>
+        # 文件名形如 <template>_<sig12> 或 <template>_<sig12>_<style6>
         parts = path.stem.split("_")
         if len(parts) < 2:
-            errs.append(f"{label}: 文件名不是 <template>_<键前12>[_<门位指纹>] 形态")
+            errs.append(f"{label}: 文件名不是 <template>_<键前12>[_<原型指纹>] 形态")
             continue
-        portal = ""
+        style = ""
         if len(parts) >= 3 and re.fullmatch(r"[0-9a-f]{6}", parts[-1]):
-            portal = parts[-1]
+            style = parts[-1]
             parts = parts[:-1]
         sig12 = parts[-1]
         template_id = "_".join(parts[:-1])
         if not template_id:
-            errs.append(f"{label}: 文件名不是 <template>_<键前12>[_<门位指纹>] 形态")
+            errs.append(f"{label}: 文件名不是 <template>_<键前12>[_<原型指纹>] 形态")
             continue
         if raw_sig[:12] != sig12:
             errs.append(
                 f"{label}: 文件名里的复用键 {sig12} != 签名前12位 {raw_sig[:12]}（改名或内容被改过）"
             )
-        meta_portal = p["metas"].get("portal_fingerprint", "").strip('"')
-        if portal:
-            if meta_portal != portal:
-                errs.append(
-                    f"{label}: 文件名门位指纹 {portal} != metadata/portal_fingerprint "
-                    f"{meta_portal or '(缺)'}（结构层与门位不一致，会堵门）"
-                )
-        elif meta_portal:
-            errs.append(
-                f"{label}: 有门位指纹 metadata/{meta_portal} 但文件名没带第三段"
-                "（同键不同门位会互相覆盖）"
-            )
+        declared_style = p["metas"].get("style_fingerprint", "").strip('"')
+        if declared_style and declared_style != style:
+            errs.append(f"{label}: 文件名原型指纹 {style or '(缺)'} != 声明 {declared_style}")
         try:
             geometry = json.loads(extract_braced(p["text"], "runtime_room_geometry") or "{}")
         except json.JSONDecodeError:

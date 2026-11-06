@@ -23,12 +23,14 @@ KIND_SPEC = {
     "EXIT":       {"template_id": "extraction_25x25", "size": [25.0, 25.0], "content_type": "EXTRACTION",  "role": "extraction",   "room_type": "EXTRACTION_ROOM"},
     "BOSS":       {"template_id": "boss_50x40",       "size": [50.0, 40.0], "content_type": "BOSS",       "role": "boss",         "room_type": "BOSS_ROOM"},
     "BOSS_FOYER": {"template_id": "std_25x25",        "size": [25.0, 25.0], "content_type": "EVENT",      "role": "boss_prep",    "room_type": "COMMON_ROOM"},
-    "REWARD":     {"template_id": "db_70x50",         "size": [40.0, 30.0], "content_type": "STORAGE",    "role": "main",         "room_type": "COMMON_ROOM"},
-    "SHOP":       {"template_id": "office_60x70",     "size": [30.0, 40.0], "content_type": "EVENT",      "role": "main",         "room_type": "COMMON_ROOM"},
+    "REWARD":     {"template_id": "reward_15x15",     "size": [15.0, 15.0], "content_type": "STORAGE",    "role": "main",         "room_type": "COMMON_ROOM"},
+    "SHOP":       {"template_id": "shop_20x15",       "size": [20.0, 15.0], "content_type": "MERCHANT",   "role": "main",         "room_type": "COMMON_ROOM"},
     "NORMAL":     {"template_id": "std_25x25",        "size": [25.0, 25.0], "content_type": "COMBAT",     "role": "main",         "room_type": "COMMON_ROOM"},
     "HUB":        {"template_id": "corridor_45x40",   "size": [45.0, 40.0], "content_type": "COMBAT",     "role": "main",         "room_type": "COMMON_ROOM"},
     "CONNECTOR":  {"template_id": "std_25x25",        "size": [25.0, 25.0], "content_type": "TRAP",       "role": "main",         "room_type": "COMMON_ROOM"},
 }
+
+LARGE_SHOP_FLOWS = {"flow_02", "flow_04"}
 
 # 《挺进地牢》第一层 Castle 的 6 张 flow 实测配额（本机解包 10A_flow清单.csv）。
 # 键 = Gungeon 原始标签；值 = 本关房型 kind 的数量。
@@ -475,6 +477,13 @@ def build_flow_file(flow_id: str) -> dict:
         if kind == "NORMAL":
             entry["template_pool"] = TEMPLATE_POOL_NORMAL
             entry["template_id"] = ""
+            if key in ("n03", "n06"):
+                passage_id = "db_70x50" if key == "n03" else "office_60x70"
+                entry["template_pool"] = [passage_id]
+                entry["size_m"] = [40.0, 30.0] if key == "n03" else [30.0, 40.0]
+        elif kind == "SHOP" and flow_id in LARGE_SHOP_FLOWS:
+            entry["template_id"] = "office_60x70"
+            entry["size_m"] = [30.0, 40.0]
         elif kind == "CONNECTOR":
             # 连接房是**窄长房**，且**布局时才选**（长轴要沿行进方向）——
             # 《挺进地牢》原文："Nodes of type connector work differently. They have
@@ -622,9 +631,9 @@ def build_floor_file(flow: dict) -> dict:
             "room_type": spec["room_type"],
             "role": spec["role"],
             "parent_key": key_alias.get(parent_of.get(key, ""), ""),
-            "template_id": spec["template_id"],
+            "template_id": node["template_id"] or (node["template_pool"][0] if len(node.get("template_pool", [])) == 1 else spec["template_id"]),
             "center_m": [round(cx, 2), round(cy, 2)],
-            "size_m": spec["size"],
+            "size_m": node["size_m"],
             "template_rotation_deg": 0,
             "content_type": spec["content_type"],
         }
@@ -699,6 +708,17 @@ def main() -> None:
             json.dumps(tpl, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
 
+    for kind, note in [
+        ("REWARD", "15m 紧凑宝库，中央单箱，四侧可接门。"),
+        ("SHOP", "20×15m 紧凑铺面，中央偏北为商人终端。"),
+    ]:
+        spec = KIND_SPEC[kind]
+        tpl = _connector_template(spec["template_id"], *spec["size"], note)
+        tpl["asset_ids"]["room"] = "ENV-EXP03-ROOM-" + spec["template_id"].upper().replace("_", "-")
+        (OUT / "room_templates" / f"{tpl['template_id']}.json").write_text(
+            json.dumps(tpl, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+
     level_plan = {
         "schema": "shellstorm2.battle.level_plan",
         "schema_version": 1,
@@ -726,6 +746,7 @@ def main() -> None:
             "db_70x50", "office_60x70", "corridor_45x40", "bridge_60x50",
             # 窄长连接房（横竖两向）。不登记的话门槽表不会被加载，运行时必红。
             "connector_10x30", "connector_30x10",
+            "reward_15x15", "shop_20x15",
         ],
         "generation_policy": {
             "mode": "flow",

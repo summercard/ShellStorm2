@@ -88,7 +88,7 @@ const ALL_SIDES: Array[String] = ["north", "south", "east", "west"]
 ## - `templates`：`template_id -> 模板字典`（含 `size_m` / `wall_lane_table` / `door_contract`）
 ## - `node_templates`：`node_id -> template_id`（省略时用 `assign_templates` 现算）
 static func assemble_flow(flow: Dictionary, templates: Dictionary, node_templates: Dictionary,
-		seed_value: int) -> Dictionary:
+		seed_value: int, validate_candidate: Callable = Callable()) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 	var diagnostics := {
@@ -141,10 +141,7 @@ static func assemble_flow(flow: Dictionary, templates: Dictionary, node_template
 		if not bool(edge_check["ok"]):
 			last_error = str(edge_check["error"])
 			continue
-		diagnostics["stages"].append("layout: 第 %d 次尝试成功, 放置 %d 间" % [
-			attempt + 1, (layout["rooms"] as Array).size()])
-		diagnostics["stages"].append("edges: %d 条全部落门" % (edge_check["edges"] as Array).size())
-		return {
+		var candidate := {
 			"ok": true,
 			"error": "",
 			"rooms": layout["rooms"],
@@ -155,6 +152,17 @@ static func assemble_flow(flow: Dictionary, templates: Dictionary, node_template
 			"attempts": attempt + 1,
 			"diagnostics": diagnostics,
 		}
+		# The bridge may relocate a door onto a shared lane and invalidate the corridor.
+		# Retry the geometry while retaining the chosen flow and its injection rolls.
+		if validate_candidate.is_valid():
+			var errors := validate_candidate.call(candidate) as Array
+			if not errors.is_empty():
+				last_error = str(errors)
+				continue
+		diagnostics["stages"].append("layout: 第 %d 次尝试成功, 放置 %d 间" % [
+			attempt + 1, (layout["rooms"] as Array).size()])
+		diagnostics["stages"].append("edges: %d 条全部落门" % (edge_check["edges"] as Array).size())
+		return candidate
 
 	diagnostics["stages"].append("layout: %d 次尝试全部失败" % LAYOUT_ATTEMPTS)
 	return _fail("拼装失败（%d 次重试）：%s" % [LAYOUT_ATTEMPTS, last_error.substr(0, 200)],

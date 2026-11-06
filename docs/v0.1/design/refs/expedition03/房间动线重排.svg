@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1110" viewBox="0 0 1080 1110" role="img" aria-labelledby="title desc">
+  <title id="title">远征 03 · 四种房内动线</title>
+  <desc id="desc">开厅生存、折线穿越、环形书廊和田字档案室的俯视平面图，含路线、实体障碍、敌人刷新及陷阱。</desc>
+  <defs>
+    <pattern id="grid" width="35" height="35" patternUnits="userSpaceOnUse"><path d="M 35 0 H 0 V 35" fill="none" stroke="#293a48" stroke-width="1"/></pattern>
+    <pattern id="trap" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#3b304d"/><path d="M 0 0 V 7" stroke="#cd99e7" stroke-width="3"/></pattern>
+    <pattern id="furniture" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#40576c"/><path d="M 0 0 V 14" stroke="#607c92" stroke-width="2"/></pattern>
+    <marker id="fast" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ffbf66"/></marker>
+    <marker id="safe" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7adad0"/></marker>
+    <g id="enemy"><circle r="8" fill="#ee7773" stroke="#171e28" stroke-width="2"/><path d="M -2.8 0 H 2.8 M 0 -2.8 V 2.8" stroke="#191e27" stroke-width="1.3"/></g>
+    <style>
+      text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#e6eef3}.title{font-size:35px;font-weight:700}.sub{font-size:15px;fill:#a6b8c6}.head{font-size:23px;font-weight:700}.caption{font-size:15px;fill:#d0dbe3}.note{font-size:13px;fill:#a6b8c6}.small{font-size:12px;fill:#d0dbe3}.card{fill:#17232e;stroke:#2a3e4d}.plan{fill:#14202a;stroke:#8498a9;stroke-width:2}.cover{fill:#536b80;stroke:#8da6ba;stroke-width:1.3}.route{fill:none;stroke:#7adad0;stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#safe)}.quick{stroke:#ffbf66;marker-end:url(#fast)}.door{stroke:#e9edf3;stroke-width:4;stroke-linecap:round}.danger{fill:none;stroke:#ee7773;stroke-width:1.4;stroke-dasharray:4 5}.warn{fill:url(#trap);stroke:#cd99e7;stroke-width:1}
+    </style>
+  </defs>
+  <rect width="1080" height="1110" fill="#101922"/>
+  <text x="36" y="61" class="title">远征 03 · 房间动线重排</text>
+  <text x="38" y="91" class="sub">平面施工草案  /  5 m 网格  /  上方为示例出口，实际门位随骨架变化</text>
+  <g transform="translate(39 126)">
+    <path d="M 0 0 H 31" class="route quick"/><text x="43" y="5" class="caption">快线 / 高风险</text>
+    <path d="M 188 0 H 219" class="route"/><text x="231" y="5" class="caption">迂回 / 可选走位</text>
+    <rect x="395" y="-8" width="21" height="16" class="cover"/><text x="427" y="5" class="caption">实体阻挡</text>
+    <use href="#enemy" x="553"/><text x="572" y="5" class="caption">刷怪点</text>
+    <rect x="674" y="-8" width="21" height="16" class="warn"/><text x="705" y="5" class="caption">预警陷阱</text>
+    <path d="M 821 0 H 845" class="door"/><text x="855" y="5" class="caption">示例门位</text>
+  </g>
+
+  <g transform="translate(36 161)">
+    <rect width="492" height="435" rx="11" class="card"/>
+    <text x="22" y="37" class="head">A · 开厅生存</text><text x="469" y="35" class="caption" text-anchor="end">45 × 40 m</text>
+    <text x="22" y="63" class="note">hub_02  /  四侧错峰刷怪，留中场转向</text>
+    <g transform="translate(88.5 88)">
+      <rect width="315" height="280" class="plan"/><rect width="315" height="280" fill="url(#grid)"/>
+      <rect x="38.5" y="63" width="28" height="14" class="cover"/><rect x="248.5" y="63" width="28" height="14" class="cover"/>
+      <rect x="38.5" y="203" width="28" height="14" class="cover"/><rect x="248.5" y="203" width="28" height="14" class="cover"/>
+      <rect x="70" y="77" width="175" height="126" rx="20" fill="#1e383c" stroke="#45716e" stroke-dasharray="6 6"/>
+      <path d="M 157.5 271 V 224 Q 157.5 198 180 190 L 210 170 Q 240 135 211 105 L 182 83 Q 155 61 157.5 9" class="route"/>
+      <path d="M 154 235 Q 99 215 92 165 Q 82 108 135 94" class="route"/>
+      <use href="#enemy" x="30" y="106"/><use href="#enemy" x="30" y="145"/><use href="#enemy" x="63" y="169"/>
+      <use href="#enemy" x="287" y="99"/><use href="#enemy" x="287" y="145"/><use href="#enemy" x="265" y="172"/>
+      <use href="#enemy" x="110" y="42"/><use href="#enemy" x="205" y="239"/>
+      <path d="M 148 0 H 167 M 148 280 H 167" class="door"/>
+      <text x="-10" y="110" class="small" text-anchor="end">①</text><text x="325" y="104" class="small">②</text>
+      <text x="111" y="27" class="small" text-anchor="middle">③</text><text x="205" y="260" class="small" text-anchor="middle">③</text>
+    </g>
+    <text x="22" y="407" class="caption">目标 · 生存到点，趁开门穿出</text>
+  </g>
+
+  <g transform="translate(552 161)">
+    <rect width="492" height="435" rx="11" class="card"/>
+    <text x="22" y="37" class="head">B · 封边穿越</text><text x="469" y="35" class="caption" text-anchor="end">40 × 30 m</text>
+    <text x="22" y="63" class="note">n03 / n06  /  四边陈列区封闭，仅实际门口接入</text>
+    <g transform="translate(106 123)">
+      <rect width="280" height="210" class="plan"/><rect width="280" height="210" fill="url(#grid)"/>
+      <path d="M 0 0 H 140 V 35 H 35 V 175 H 105 V 210 H 0 Z M 175 0 H 280 V 210 H 140 V 175 H 245 V 35 H 175 Z" fill="url(#furniture)" stroke="#9cb1c1" stroke-width="1.2"/>
+      <rect x="133" y="58" width="14" height="94" class="cover"/><rect x="130.6" y="28" width="18.8" height="7" class="cover"/><rect x="130.6" y="175" width="18.8" height="7" class="cover"/>
+      <rect x="28" y="35" width="70" height="56" fill="#472d38" stroke="#946251"/>
+      <circle cx="63" cy="63" r="10" fill="#47515c" stroke="#a5a4a0"/>
+      <rect x="39" y="57" width="10" height="12" rx="2" fill="#925d68"/><rect x="77" y="57" width="10" height="12" rx="2" fill="#925d68"/>
+      <rect x="35" y="36" width="56" height="6" class="cover"/>
+      <rect x="28" y="119" width="70" height="56" fill="#472d38" stroke="#946251"/>
+      <circle cx="63" cy="147" r="10" fill="#47515c" stroke="#a5a4a0"/>
+      <rect x="39" y="141" width="10" height="12" rx="2" fill="#925d68"/><rect x="77" y="141" width="10" height="12" rx="2" fill="#925d68"/>
+      <rect x="35" y="168" width="56" height="6" class="cover"/>
+      <rect x="182" y="35" width="70" height="56" fill="#472d38" stroke="#946251"/>
+      <circle cx="217" cy="63" r="10" fill="#47515c" stroke="#a5a4a0"/>
+      <rect x="193" y="57" width="10" height="12" rx="2" fill="#925d68"/><rect x="231" y="57" width="10" height="12" rx="2" fill="#925d68"/>
+      <rect x="189" y="36" width="56" height="6" class="cover"/>
+      <rect x="182" y="119" width="70" height="56" fill="#472d38" stroke="#946251"/>
+      <circle cx="217" cy="147" r="10" fill="#47515c" stroke="#a5a4a0"/>
+      <rect x="193" y="141" width="10" height="12" rx="2" fill="#925d68"/><rect x="231" y="141" width="10" height="12" rx="2" fill="#925d68"/>
+      <rect x="189" y="168" width="56" height="6" class="cover"/>
+      <rect x="47" y="101" width="20" height="8" class="cover"/><rect x="213" y="101" width="20" height="8" class="cover"/>
+      <path d="M 125 201 V 168 H 172 V 44 L 158 24 V 9" class="route quick"/>
+      <path d="M 118 201 V 168 H 110 V 44 H 157 V 9" class="route"/>
+      <path d="M 174 61 L 160 101 M 174 61 L 182 101" class="danger"/>
+      <use href="#enemy" x="174" y="59"/><use href="#enemy" x="174" y="113"/><use href="#enemy" x="174" y="148"/>
+      <path d="M 150 0 H 165 M 115 210 H 130" class="door"/>
+      <text x="157.5" y="-8" class="small" text-anchor="middle">示例出口</text>
+      <text x="122.5" y="231" class="small" text-anchor="middle">示例入口</text>
+      <text x="126" y="30" class="small" text-anchor="middle">5 m</text>
+    </g>
+    <text x="22" y="407" class="caption">外圈断开 · 单次只能沿两翼转折 · 净宽 ≤ 7 m</text>
+  </g>
+
+  <g transform="translate(36 616)">
+    <rect width="492" height="435" rx="11" class="card"/>
+    <text x="22" y="37" class="head">C · 环形书廊</text><text x="469" y="35" class="caption" text-anchor="end">45 × 40 m</text>
+    <text x="22" y="63" class="note">hub_01 / n07  /  中央封闭，左右两翼背侧汇合</text>
+    <g transform="translate(88.5 88)">
+      <rect width="315" height="280" class="plan"/><rect width="315" height="280" fill="url(#grid)"/>
+      <rect x="94.5" y="98" width="126" height="84" rx="4" class="cover"/>
+      <text x="157.5" y="145" class="small" text-anchor="middle">中央书架展岛</text>
+      <rect x="225" y="110" width="19" height="47" class="warn"/>
+      <path d="M 152 271 L 152 235 H 52 V 53 H 145 L 153 8" class="route"/>
+      <path d="M 163 271 L 163 235 H 268 V 53 H 170 L 162 8" class="route quick"/>
+      <use href="#enemy" x="255" y="188"/><use href="#enemy" x="278" y="79"/><use href="#enemy" x="39" y="161"/>
+      <path d="M 148 0 H 167 M 148 280 H 167" class="door"/>
+    </g>
+    <text x="22" y="407" class="caption">目标 · 读懂环线，从另一翼换路或甩开追击</text>
+  </g>
+
+  <g transform="translate(552 616)">
+    <rect width="492" height="435" rx="11" class="card"/>
+    <text x="22" y="37" class="head">D · 田字档案室</text><text x="469" y="35" class="caption" text-anchor="end">40 × 30 m</text>
+    <text x="22" y="63" class="note">n04 / n08  /  四岛分道，中央十字与外围互通</text>
+    <g transform="translate(106 123)">
+      <rect width="280" height="210" class="plan"/><rect width="280" height="210" fill="url(#grid)"/>
+      <rect x="49" y="42" width="70" height="49" class="cover"/><rect x="161" y="42" width="70" height="49" class="cover"/>
+      <rect x="49" y="119" width="70" height="49" class="cover"/><rect x="161" y="119" width="70" height="49" class="cover"/>
+      <rect x="20" y="62" width="22" height="28" class="warn"/><rect x="182" y="96" width="37" height="16" class="warn"/>
+      <path d="M 140 201 V 9" class="route quick"/>
+      <path d="M 145 190 H 253 V 24 H 153 L 147 8" class="route"/>
+      <path d="M 30 187 V 105 H 121" class="route"/>
+      <use href="#enemy" x="35" y="36"/><use href="#enemy" x="244" y="148"/>
+      <path d="M 131 0 H 149 M 131 210 H 149" class="door"/>
+    </g>
+    <text x="22" y="407" class="caption">目标 · 根据危险位置，切换中央或外圈</text>
+  </g>
+
+  <text x="37" y="1085" class="note">SHELLSTORM2  /  EXPEDITION 03  /  2026-11-06</text>
+  <path d="M 929 1080 H 964 M 929 1076 V 1084 M 964 1076 V 1084" stroke="#9ab1c1"/>
+  <text x="976" y="1085" class="note">5 m</text>
+</svg>

@@ -16,6 +16,55 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_jar/breakable_jar_root_top3d.tscn" id="14_ddjda"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/breakable_book_stack/breakable_book_stack_root_top3d.tscn" id="15_kipa2"]
 
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_bookcase/env_manor_bookcase_root_top3d.tscn" id="workshop_manor_bookcase"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/common_components/manor_wardrobe/env_manor_wardrobe_root_top3d.tscn" id="workshop_manor_wardrobe"]
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_16"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_17"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_20"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_21"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_24"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_25"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_28"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_29"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_45"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_46"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_49"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_50"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_53"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_54"]
+size = Vector3(1.84, 2.53, 0.6925)
+
+[sub_resource type="BoxShape3D" id="WorkshopShape_57"]
+size = Vector3(1.84, 2.53, 0.6925)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_rixdj"]
 size = Vector3(1.34, 0.85, 0.4925)
 
@@ -100,6 +149,14 @@ metadata/furnishing_theme = "gatehouse"
 metadata/furnishing_theme_label = "门房"
 metadata/authored_theme = "撤离候车厅"
 metadata/authored_layout_batch = "2026-11-01_remaining_themed"
+
+metadata/authored_layout_version = "v005"
+metadata/authored_spatial_type = "B"
+metadata/authored_collision_navigation = true
+metadata/workshop_block_regions = []
+metadata/traversal_route_max_width_m = 7.0
+
+metadata/furnishing_navigation_polygons = [[[-8.0,0.08,11.0],[-7.5,0.08,11.0],[-7.5,0.08,11.5],[-8.0,0.08,11.5]],[[-7.5,0.08,11.0],[-7.0,0.08,11.0],[-7.0,0.08,11.5],[-7.5,0.08,11.5]],[[-7.0,0.08,11.0],[-6.5,0.08,11.0],[-6.5,0.08,11.5],[-7.0,0.08,11.5]],[[-6.5,0.08,11.0],[-6.0,0.08,11.0],[-6.0,0.08,11.5],[-6.5,0.08,11.5]],[[-6.0,0.08,11.0],[-5.5,0.08,11.0],[-5.5,0.08,11.5],[-6.0,0.08,11.5]],[[-5.5,0.08,11.0],[-5.0,0.08,11.0],[-5.0,0.08,11.5],[-5.5,0.08,11.5]],[[-5.0,0.08,11.0],[-4.5,0.08,11.0],[-4.5,0.08,11.5],[-5.0,0.08,11.5]],[[-4.5,0.08,11.0],[-4.0,0.08,11.0],[-4.0,0.08,11.5],[-4.5,0.08,11.5]],[[-4.0,0.08,11.0],[-3.5,0.08,11.0],[-3.5,0.08,11.5],[-4.0,0.08,11.5]],[[-3.5,0.08,11.0],[-3.0,0.08,11.0],[-3.0,0.08,11.5],[-3.5,0.08,11.5]],[[-3.0,0.08,11.0],[-2.5,0.08,11.0],[-2.5,0.08,11.5],[-3.0,0.08,11.5]],[[-2.5,0.08,11.0],[-2.0,0.08,11.0],[-2.0,0.08,11.5],[-2.5,0.08,11.5]],[[-2.0,0.08,11.0],[-1.5,0.08,11.0],[-1.5,0.08,11.5],[-2.0,0.08,11.5]],[[-1.5,0.08,11.0],[-1.0,0.08,11.0],[-1.0,0.08,11.5],[-1.5,0.08,11.5]],[[-1.0,0.08,11.0],[-0.5,0.08,11.0],[-0.5,0.08,11.5],[-1.0,0.08,11.5]],[[-1.5,0.08,10.5],[-1.0,0.08,10.5],[-1.0,0.08,11.0],[-1.5,0.08,11.0]],[[-0.5,0.08,11.0],[0.0,0.08,11.0],[0.0,0.08,11.5],[-0.5,0.08,11.5]],[[-1.0,0.08,10.5],[-0.5,0.08,10.5],[-0.5,0.08,11.0],[-1.0,0.08,11.0]],[[-1.5,0.08,10.0],[-1.0,0.08,10.0],[-1.0,0.08,10.5],[-1.5,0.08,10.5]],[[0.0,0.08,11.0],[0.5,0.08,11.0],[0.5,0.08,11.5],[0.0,0.08,11.5]],[[-0.5,0.08,10.5],[0.0,0.08,10.5],[0.0,0.08,11.0],[-0.5,0.08,11.0]],[[-1.0,0.08,10.0],[-0.5,0.08,10.0],[-0.5,0.08,10.5],[-1.0,0.08,10.5]],[[-1.5,0.08,9.5],[-1.0,0.08,9.5],[-1.0,0.08,10.0],[-1.5,0.08,10.0]],[[0.5,0.08,11.0],[1.0,0.08,11.0],[1.0,0.08,11.5],[0.5,0.08,11.5]],[[0.0,0.08,10.5],[0.5,0.08,10.5],[0.5,0.08,11.0],[0.0,0.08,11.0]],[[-0.5,0.08,10.0],[0.0,0.08,10.0],[0.0,0.08,10.5],[-0.5,0.08,10.5]],[[-1.0,0.08,9.5],[-0.5,0.08,9.5],[-0.5,0.08,10.0],[-1.0,0.08,10.0]],[[-1.5,0.08,9.0],[-1.0,0.08,9.0],[-1.0,0.08,9.5],[-1.5,0.08,9.5]],[[1.0,0.08,11.0],[1.5,0.08,11.0],[1.5,0.08,11.5],[1.0,0.08,11.5]],[[0.5,0.08,10.5],[1.0,0.08,10.5],[1.0,0.08,11.0],[0.5,0.08,11.0]],[[0.0,0.08,10.0],[0.5,0.08,10.0],[0.5,0.08,10.5],[0.0,0.08,10.5]],[[-0.5,0.08,9.5],[0.0,0.08,9.5],[0.0,0.08,10.0],[-0.5,0.08,10.0]],[[-1.0,0.08,9.0],[-0.5,0.08,9.0],[-0.5,0.08,9.5],[-1.0,0.08,9.5]],[[-1.5,0.08,8.5],[-1.0,0.08,8.5],[-1.0,0.08,9.0],[-1.5,0.08,9.0]],[[1.5,0.08,11.0],[2.0,0.08,11.0],[2.0,0.08,11.5],[1.5,0.08,11.5]],[[1.0,0.08,10.5],[1.5,0.08,10.5],[1.5,0.08,11.0],[1.0,0.08,11.0]],[[0.5,0.08,10.0],[1.0,0.08,10.0],[1.0,0.08,10.5],[0.5,0.08,10.5]],[[0.0,0.08,9.5],[0.5,0.08,9.5],[0.5,0.08,10.0],[0.0,0.08,10.0]],[[-0.5,0.08,9.0],[0.0,0.08,9.0],[0.0,0.08,9.5],[-0.5,0.08,9.5]],[[-1.0,0.08,8.5],[-0.5,0.08,8.5],[-0.5,0.08,9.0],[-1.0,0.08,9.0]],[[-1.5,0.08,8.0],[-1.0,0.08,8.0],[-1.0,0.08,8.5],[-1.5,0.08,8.5]],[[2.0,0.08,11.0],[2.5,0.08,11.0],[2.5,0.08,11.5],[2.0,0.08,11.5]],[[1.0,0.08,10.0],[1.5,0.08,10.0],[1.5,0.08,10.5],[1.0,0.08,10.5]],[[0.5,0.08,9.5],[1.0,0.08,9.5],[1.0,0.08,10.0],[0.5,0.08,10.0]],[[0.0,0.08,9.0],[0.5,0.08,9.0],[0.5,0.08,9.5],[0.0,0.08,9.5]],[[-0.5,0.08,8.5],[0.0,0.08,8.5],[0.0,0.08,9.0],[-0.5,0.08,9.0]],[[-1.0,0.08,8.0],[-0.5,0.08,8.0],[-0.5,0.08,8.5],[-1.0,0.08,8.5]],[[-1.5,0.08,7.5],[-1.0,0.08,7.5],[-1.0,0.08,8.0],[-1.5,0.08,8.0]],[[2.5,0.08,11.0],[3.0,0.08,11.0],[3.0,0.08,11.5],[2.5,0.08,11.5]],[[1.0,0.08,9.5],[1.5,0.08,9.5],[1.5,0.08,10.0],[1.0,0.08,10.0]],[[0.5,0.08,9.0],[1.0,0.08,9.0],[1.0,0.08,9.5],[0.5,0.08,9.5]],[[0.0,0.08,8.5],[0.5,0.08,8.5],[0.5,0.08,9.0],[0.0,0.08,9.0]],[[-0.5,0.08,8.0],[0.0,0.08,8.0],[0.0,0.08,8.5],[-0.5,0.08,8.5]],[[-1.0,0.08,7.5],[-0.5,0.08,7.5],[-0.5,0.08,8.0],[-1.0,0.08,8.0]],[[-1.5,0.08,7.0],[-1.0,0.08,7.0],[-1.0,0.08,7.5],[-1.5,0.08,7.5]],[[3.0,0.08,11.0],[3.5,0.08,11.0],[3.5,0.08,11.5],[3.0,0.08,11.5]],[[1.0,0.08,9.0],[1.5,0.08,9.0],[1.5,0.08,9.5],[1.0,0.08,9.5]],[[0.5,0.08,8.5],[1.0,0.08,8.5],[1.0,0.08,9.0],[0.5,0.08,9.0]],[[0.0,0.08,8.0],[0.5,0.08,8.0],[0.5,0.08,8.5],[0.0,0.08,8.5]],[[-0.5,0.08,7.5],[0.0,0.08,7.5],[0.0,0.08,8.0],[-0.5,0.08,8.0]],[[-1.0,0.08,7.0],[-0.5,0.08,7.0],[-0.5,0.08,7.5],[-1.0,0.08,7.5]],[[-1.5,0.08,6.5],[-1.0,0.08,6.5],[-1.0,0.08,7.0],[-1.5,0.08,7.0]],[[3.5,0.08,11.0],[4.0,0.08,11.0],[4.0,0.08,11.5],[3.5,0.08,11.5]],[[1.0,0.08,8.5],[1.5,0.08,8.5],[1.5,0.08,9.0],[1.0,0.08,9.0]],[[0.5,0.08,8.0],[1.0,0.08,8.0],[1.0,0.08,8.5],[0.5,0.08,8.5]],[[0.0,0.08,7.5],[0.5,0.08,7.5],[0.5,0.08,8.0],[0.0,0.08,8.0]],[[-0.5,0.08,7.0],[0.0,0.08,7.0],[0.0,0.08,7.5],[-0.5,0.08,7.5]],[[-1.0,0.08,6.5],[-0.5,0.08,6.5],[-0.5,0.08,7.0],[-1.0,0.08,7.0]],[[-1.5,0.08,6.0],[-1.0,0.08,6.0],[-1.0,0.08,6.5],[-1.5,0.08,6.5]],[[4.0,0.08,11.0],[4.5,0.08,11.0],[4.5,0.08,11.5],[4.0,0.08,11.5]],[[1.0,0.08,8.0],[1.5,0.08,8.0],[1.5,0.08,8.5],[1.0,0.08,8.5]],[[0.5,0.08,7.5],[1.0,0.08,7.5],[1.0,0.08,8.0],[0.5,0.08,8.0]],[[0.0,0.08,7.0],[0.5,0.08,7.0],[0.5,0.08,7.5],[0.0,0.08,7.5]],[[-0.5,0.08,6.5],[0.0,0.08,6.5],[0.0,0.08,7.0],[-0.5,0.08,7.0]],[[-1.0,0.08,6.0],[-0.5,0.08,6.0],[-0.5,0.08,6.5],[-1.0,0.08,6.5]],[[-1.5,0.08,5.5],[-1.0,0.08,5.5],[-1.0,0.08,6.0],[-1.5,0.08,6.0]],[[4.5,0.08,11.0],[5.0,0.08,11.0],[5.0,0.08,11.5],[4.5,0.08,11.5]],[[1.0,0.08,7.5],[1.5,0.08,7.5],[1.5,0.08,8.0],[1.0,0.08,8.0]],[[0.5,0.08,7.0],[1.0,0.08,7.0],[1.0,0.08,7.5],[0.5,0.08,7.5]],[[0.0,0.08,6.5],[0.5,0.08,6.5],[0.5,0.08,7.0],[0.0,0.08,7.0]],[[-0.5,0.08,6.0],[0.0,0.08,6.0],[0.0,0.08,6.5],[-0.5,0.08,6.5]],[[-1.0,0.08,5.5],[-0.5,0.08,5.5],[-0.5,0.08,6.0],[-1.0,0.08,6.0]],[[-1.5,0.08,5.0],[-1.0,0.08,5.0],[-1.0,0.08,5.5],[-1.5,0.08,5.5]],[[5.0,0.08,11.0],[5.5,0.08,11.0],[5.5,0.08,11.5],[5.0,0.08,11.5]],[[1.0,0.08,7.0],[1.5,0.08,7.0],[1.5,0.08,7.5],[1.0,0.08,7.5]],[[0.5,0.08,6.5],[1.0,0.08,6.5],[1.0,0.08,7.0],[0.5,0.08,7.0]],[[0.0,0.08,6.0],[0.5,0.08,6.0],[0.5,0.08,6.5],[0.0,0.08,6.5]],[[-0.5,0.08,5.5],[0.0,0.08,5.5],[0.0,0.08,6.0],[-0.5,0.08,6.0]],[[-1.0,0.08,5.0],[-0.5,0.08,5.0],[-0.5,0.08,5.5],[-1.0,0.08,5.5]],[[-1.5,0.08,4.5],[-1.0,0.08,4.5],[-1.0,0.08,5.0],[-1.5,0.08,5.0]],[[5.5,0.08,11.0],[6.0,0.08,11.0],[6.0,0.08,11.5],[5.5,0.08,11.5]],[[1.0,0.08,6.5],[1.5,0.08,6.5],[1.5,0.08,7.0],[1.0,0.08,7.0]],[[0.5,0.08,6.0],[1.0,0.08,6.0],[1.0,0.08,6.5],[0.5,0.08,6.5]],[[0.0,0.08,5.5],[0.5,0.08,5.5],[0.5,0.08,6.0],[0.0,0.08,6.0]],[[-0.5,0.08,5.0],[0.0,0.08,5.0],[0.0,0.08,5.5],[-0.5,0.08,5.5]],[[-1.0,0.08,4.5],[-0.5,0.08,4.5],[-0.5,0.08,5.0],[-1.0,0.08,5.0]],[[-1.5,0.08,4.0],[-1.0,0.08,4.0],[-1.0,0.08,4.5],[-1.5,0.08,4.5]],[[6.0,0.08,11.0],[6.5,0.08,11.0],[6.5,0.08,11.5],[6.0,0.08,11.5]],[[1.0,0.08,6.0],[1.5,0.08,6.0],[1.5,0.08,6.5],[1.0,0.08,6.5]],[[0.5,0.08,5.5],[1.0,0.08,5.5],[1.0,0.08,6.0],[0.5,0.08,6.0]],[[0.0,0.08,5.0],[0.5,0.08,5.0],[0.5,0.08,5.5],[0.0,0.08,5.5]],[[-0.5,0.08,4.5],[0.0,0.08,4.5],[0.0,0.08,5.0],[-0.5,0.08,5.0]],[[-1.0,0.08,4.0],[-0.5,0.08,4.0],[-0.5,0.08,4.5],[-1.0,0.08,4.5]],[[-1.5,0.08,3.5],[-1.0,0.08,3.5],[-1.0,0.08,4.0],[-1.5,0.08,4.0]],[[6.5,0.08,11.0],[7.0,0.08,11.0],[7.0,0.08,11.5],[6.5,0.08,11.5]],[[1.0,0.08,5.5],[1.5,0.08,5.5],[1.5,0.08,6.0],[1.0,0.08,6.0]],[[0.5,0.08,5.0],[1.0,0.08,5.0],[1.0,0.08,5.5],[0.5,0.08,5.5]],[[0.0,0.08,4.5],[0.5,0.08,4.5],[0.5,0.08,5.0],[0.0,0.08,5.0]],[[-0.5,0.08,4.0],[0.0,0.08,4.0],[0.0,0.08,4.5],[-0.5,0.08,4.5]],[[-1.0,0.08,3.5],[-0.5,0.08,3.5],[-0.5,0.08,4.0],[-1.0,0.08,4.0]],[[-1.5,0.08,3.0],[-1.0,0.08,3.0],[-1.0,0.08,3.5],[-1.5,0.08,3.5]],[[1.0,0.08,5.0],[1.5,0.08,5.0],[1.5,0.08,5.5],[1.0,0.08,5.5]],[[0.5,0.08,4.5],[1.0,0.08,4.5],[1.0,0.08,5.0],[0.5,0.08,5.0]],[[0.0,0.08,4.0],[0.5,0.08,4.0],[0.5,0.08,4.5],[0.0,0.08,4.5]],[[-0.5,0.08,3.5],[0.0,0.08,3.5],[0.0,0.08,4.0],[-0.5,0.08,4.0]],[[-1.0,0.08,3.0],[-0.5,0.08,3.0],[-0.5,0.08,3.5],[-1.0,0.08,3.5]],[[-1.5,0.08,2.5],[-1.0,0.08,2.5],[-1.0,0.08,3.0],[-1.5,0.08,3.0]],[[1.0,0.08,4.5],[1.5,0.08,4.5],[1.5,0.08,5.0],[1.0,0.08,5.0]],[[0.5,0.08,4.0],[1.0,0.08,4.0],[1.0,0.08,4.5],[0.5,0.08,4.5]],[[0.0,0.08,3.5],[0.5,0.08,3.5],[0.5,0.08,4.0],[0.0,0.08,4.0]],[[-0.5,0.08,3.0],[0.0,0.08,3.0],[0.0,0.08,3.5],[-0.5,0.08,3.5]],[[-1.0,0.08,2.5],[-0.5,0.08,2.5],[-0.5,0.08,3.0],[-1.0,0.08,3.0]],[[-1.5,0.08,2.0],[-1.0,0.08,2.0],[-1.0,0.08,2.5],[-1.5,0.08,2.5]],[[1.0,0.08,4.0],[1.5,0.08,4.0],[1.5,0.08,4.5],[1.0,0.08,4.5]],[[0.5,0.08,3.5],[1.0,0.08,3.5],[1.0,0.08,4.0],[0.5,0.08,4.0]],[[0.0,0.08,3.0],[0.5,0.08,3.0],[0.5,0.08,3.5],[0.0,0.08,3.5]],[[-0.5,0.08,2.5],[0.0,0.08,2.5],[0.0,0.08,3.0],[-0.5,0.08,3.0]],[[-1.0,0.08,2.0],[-0.5,0.08,2.0],[-0.5,0.08,2.5],[-1.0,0.08,2.5]],[[-1.5,0.08,1.5],[-1.0,0.08,1.5],[-1.0,0.08,2.0],[-1.5,0.08,2.0]],[[1.0,0.08,3.5],[1.5,0.08,3.5],[1.5,0.08,4.0],[1.0,0.08,4.0]],[[0.5,0.08,3.0],[1.0,0.08,3.0],[1.0,0.08,3.5],[0.5,0.08,3.5]],[[0.0,0.08,2.5],[0.5,0.08,2.5],[0.5,0.08,3.0],[0.0,0.08,3.0]],[[-0.5,0.08,2.0],[0.0,0.08,2.0],[0.0,0.08,2.5],[-0.5,0.08,2.5]],[[-1.0,0.08,1.5],[-0.5,0.08,1.5],[-0.5,0.08,2.0],[-1.0,0.08,2.0]],[[-1.5,0.08,1.0],[-1.0,0.08,1.0],[-1.0,0.08,1.5],[-1.5,0.08,1.5]],[[1.0,0.08,3.0],[1.5,0.08,3.0],[1.5,0.08,3.5],[1.0,0.08,3.5]],[[0.5,0.08,2.5],[1.0,0.08,2.5],[1.0,0.08,3.0],[0.5,0.08,3.0]],[[0.0,0.08,2.0],[0.5,0.08,2.0],[0.5,0.08,2.5],[0.0,0.08,2.5]],[[-0.5,0.08,1.5],[0.0,0.08,1.5],[0.0,0.08,2.0],[-0.5,0.08,2.0]],[[-1.0,0.08,1.0],[-0.5,0.08,1.0],[-0.5,0.08,1.5],[-1.0,0.08,1.5]],[[-1.5,0.08,0.5],[-1.0,0.08,0.5],[-1.0,0.08,1.0],[-1.5,0.08,1.0]],[[1.0,0.08,2.5],[1.5,0.08,2.5],[1.5,0.08,3.0],[1.0,0.08,3.0]],[[0.5,0.08,2.0],[1.0,0.08,2.0],[1.0,0.08,2.5],[0.5,0.08,2.5]],[[0.0,0.08,1.5],[0.5,0.08,1.5],[0.5,0.08,2.0],[0.0,0.08,2.0]],[[-0.5,0.08,1.0],[0.0,0.08,1.0],[0.0,0.08,1.5],[-0.5,0.08,1.5]],[[-1.0,0.08,0.5],[-0.5,0.08,0.5],[-0.5,0.08,1.0],[-1.0,0.08,1.0]],[[-1.5,0.08,0.0],[-1.0,0.08,0.0],[-1.0,0.08,0.5],[-1.5,0.08,0.5]],[[1.0,0.08,2.0],[1.5,0.08,2.0],[1.5,0.08,2.5],[1.0,0.08,2.5]],[[0.5,0.08,1.5],[1.0,0.08,1.5],[1.0,0.08,2.0],[0.5,0.08,2.0]],[[0.0,0.08,1.0],[0.5,0.08,1.0],[0.5,0.08,1.5],[0.0,0.08,1.5]],[[-0.5,0.08,0.5],[0.0,0.08,0.5],[0.0,0.08,1.0],[-0.5,0.08,1.0]],[[-1.0,0.08,0.0],[-0.5,0.08,0.0],[-0.5,0.08,0.5],[-1.0,0.08,0.5]],[[-1.5,0.08,-0.5],[-1.0,0.08,-0.5],[-1.0,0.08,0.0],[-1.5,0.08,0.0]],[[1.0,0.08,1.5],[1.5,0.08,1.5],[1.5,0.08,2.0],[1.0,0.08,2.0]],[[0.5,0.08,1.0],[1.0,0.08,1.0],[1.0,0.08,1.5],[0.5,0.08,1.5]],[[0.0,0.08,0.5],[0.5,0.08,0.5],[0.5,0.08,1.0],[0.0,0.08,1.0]],[[-0.5,0.08,0.0],[0.0,0.08,0.0],[0.0,0.08,0.5],[-0.5,0.08,0.5]],[[-1.0,0.08,-0.5],[-0.5,0.08,-0.5],[-0.5,0.08,0.0],[-1.0,0.08,0.0]],[[-1.5,0.08,-1.0],[-1.0,0.08,-1.0],[-1.0,0.08,-0.5],[-1.5,0.08,-0.5]],[[1.0,0.08,1.0],[1.5,0.08,1.0],[1.5,0.08,1.5],[1.0,0.08,1.5]],[[0.5,0.08,0.5],[1.0,0.08,0.5],[1.0,0.08,1.0],[0.5,0.08,1.0]],[[0.0,0.08,0.0],[0.5,0.08,0.0],[0.5,0.08,0.5],[0.0,0.08,0.5]],[[-0.5,0.08,-0.5],[0.0,0.08,-0.5],[0.0,0.08,0.0],[-0.5,0.08,0.0]],[[-1.0,0.08,-1.0],[-0.5,0.08,-1.0],[-0.5,0.08,-0.5],[-1.0,0.08,-0.5]],[[-1.5,0.08,-1.5],[-1.0,0.08,-1.5],[-1.0,0.08,-1.0],[-1.5,0.08,-1.0]],[[1.0,0.08,0.5],[1.5,0.08,0.5],[1.5,0.08,1.0],[1.0,0.08,1.0]],[[0.5,0.08,0.0],[1.0,0.08,0.0],[1.0,0.08,0.5],[0.5,0.08,0.5]],[[0.0,0.08,-0.5],[0.5,0.08,-0.5],[0.5,0.08,0.0],[0.0,0.08,0.0]],[[-0.5,0.08,-1.0],[0.0,0.08,-1.0],[0.0,0.08,-0.5],[-0.5,0.08,-0.5]],[[-1.0,0.08,-1.5],[-0.5,0.08,-1.5],[-0.5,0.08,-1.0],[-1.0,0.08,-1.0]],[[-1.5,0.08,-2.0],[-1.0,0.08,-2.0],[-1.0,0.08,-1.5],[-1.5,0.08,-1.5]],[[1.0,0.08,0.0],[1.5,0.08,0.0],[1.5,0.08,0.5],[1.0,0.08,0.5]],[[0.5,0.08,-0.5],[1.0,0.08,-0.5],[1.0,0.08,0.0],[0.5,0.08,0.0]],[[0.0,0.08,-1.0],[0.5,0.08,-1.0],[0.5,0.08,-0.5],[0.0,0.08,-0.5]],[[-0.5,0.08,-1.5],[0.0,0.08,-1.5],[0.0,0.08,-1.0],[-0.5,0.08,-1.0]],[[-1.0,0.08,-2.0],[-0.5,0.08,-2.0],[-0.5,0.08,-1.5],[-1.0,0.08,-1.5]],[[-1.5,0.08,-2.5],[-1.0,0.08,-2.5],[-1.0,0.08,-2.0],[-1.5,0.08,-2.0]],[[1.0,0.08,-0.5],[1.5,0.08,-0.5],[1.5,0.08,0.0],[1.0,0.08,0.0]],[[0.5,0.08,-1.0],[1.0,0.08,-1.0],[1.0,0.08,-0.5],[0.5,0.08,-0.5]],[[0.0,0.08,-1.5],[0.5,0.08,-1.5],[0.5,0.08,-1.0],[0.0,0.08,-1.0]],[[-0.5,0.08,-2.0],[0.0,0.08,-2.0],[0.0,0.08,-1.5],[-0.5,0.08,-1.5]],[[-1.0,0.08,-2.5],[-0.5,0.08,-2.5],[-0.5,0.08,-2.0],[-1.0,0.08,-2.0]],[[-1.5,0.08,-3.0],[-1.0,0.08,-3.0],[-1.0,0.08,-2.5],[-1.5,0.08,-2.5]],[[1.0,0.08,-1.0],[1.5,0.08,-1.0],[1.5,0.08,-0.5],[1.0,0.08,-0.5]],[[0.5,0.08,-1.5],[1.0,0.08,-1.5],[1.0,0.08,-1.0],[0.5,0.08,-1.0]],[[0.0,0.08,-2.0],[0.5,0.08,-2.0],[0.5,0.08,-1.5],[0.0,0.08,-1.5]],[[-0.5,0.08,-2.5],[0.0,0.08,-2.5],[0.0,0.08,-2.0],[-0.5,0.08,-2.0]],[[-1.0,0.08,-3.0],[-0.5,0.08,-3.0],[-0.5,0.08,-2.5],[-1.0,0.08,-2.5]],[[-1.5,0.08,-3.5],[-1.0,0.08,-3.5],[-1.0,0.08,-3.0],[-1.5,0.08,-3.0]],[[1.0,0.08,-1.5],[1.5,0.08,-1.5],[1.5,0.08,-1.0],[1.0,0.08,-1.0]],[[0.5,0.08,-2.0],[1.0,0.08,-2.0],[1.0,0.08,-1.5],[0.5,0.08,-1.5]],[[0.0,0.08,-2.5],[0.5,0.08,-2.5],[0.5,0.08,-2.0],[0.0,0.08,-2.0]],[[-0.5,0.08,-3.0],[0.0,0.08,-3.0],[0.0,0.08,-2.5],[-0.5,0.08,-2.5]],[[-1.0,0.08,-3.5],[-0.5,0.08,-3.5],[-0.5,0.08,-3.0],[-1.0,0.08,-3.0]],[[-1.5,0.08,-4.0],[-1.0,0.08,-4.0],[-1.0,0.08,-3.5],[-1.5,0.08,-3.5]],[[1.0,0.08,-2.0],[1.5,0.08,-2.0],[1.5,0.08,-1.5],[1.0,0.08,-1.5]],[[0.5,0.08,-2.5],[1.0,0.08,-2.5],[1.0,0.08,-2.0],[0.5,0.08,-2.0]],[[0.0,0.08,-3.0],[0.5,0.08,-3.0],[0.5,0.08,-2.5],[0.0,0.08,-2.5]],[[-0.5,0.08,-3.5],[0.0,0.08,-3.5],[0.0,0.08,-3.0],[-0.5,0.08,-3.0]],[[-1.0,0.08,-4.0],[-0.5,0.08,-4.0],[-0.5,0.08,-3.5],[-1.0,0.08,-3.5]],[[-1.5,0.08,-4.5],[-1.0,0.08,-4.5],[-1.0,0.08,-4.0],[-1.5,0.08,-4.0]],[[1.0,0.08,-2.5],[1.5,0.08,-2.5],[1.5,0.08,-2.0],[1.0,0.08,-2.0]],[[0.5,0.08,-3.0],[1.0,0.08,-3.0],[1.0,0.08,-2.5],[0.5,0.08,-2.5]],[[0.0,0.08,-3.5],[0.5,0.08,-3.5],[0.5,0.08,-3.0],[0.0,0.08,-3.0]],[[-0.5,0.08,-4.0],[0.0,0.08,-4.0],[0.0,0.08,-3.5],[-0.5,0.08,-3.5]],[[-1.0,0.08,-4.5],[-0.5,0.08,-4.5],[-0.5,0.08,-4.0],[-1.0,0.08,-4.0]],[[-1.5,0.08,-5.0],[-1.0,0.08,-5.0],[-1.0,0.08,-4.5],[-1.5,0.08,-4.5]],[[1.0,0.08,-3.0],[1.5,0.08,-3.0],[1.5,0.08,-2.5],[1.0,0.08,-2.5]],[[0.5,0.08,-3.5],[1.0,0.08,-3.5],[1.0,0.08,-3.0],[0.5,0.08,-3.0]],[[0.0,0.08,-4.0],[0.5,0.08,-4.0],[0.5,0.08,-3.5],[0.0,0.08,-3.5]],[[-0.5,0.08,-4.5],[0.0,0.08,-4.5],[0.0,0.08,-4.0],[-0.5,0.08,-4.0]],[[-1.0,0.08,-5.0],[-0.5,0.08,-5.0],[-0.5,0.08,-4.5],[-1.0,0.08,-4.5]],[[-1.5,0.08,-5.5],[-1.0,0.08,-5.5],[-1.0,0.08,-5.0],[-1.5,0.08,-5.0]],[[1.0,0.08,-3.5],[1.5,0.08,-3.5],[1.5,0.08,-3.0],[1.0,0.08,-3.0]],[[0.5,0.08,-4.0],[1.0,0.08,-4.0],[1.0,0.08,-3.5],[0.5,0.08,-3.5]],[[0.0,0.08,-4.5],[0.5,0.08,-4.5],[0.5,0.08,-4.0],[0.0,0.08,-4.0]],[[-0.5,0.08,-5.0],[0.0,0.08,-5.0],[0.0,0.08,-4.5],[-0.5,0.08,-4.5]],[[-1.0,0.08,-5.5],[-0.5,0.08,-5.5],[-0.5,0.08,-5.0],[-1.0,0.08,-5.0]],[[-1.5,0.08,-6.0],[-1.0,0.08,-6.0],[-1.0,0.08,-5.5],[-1.5,0.08,-5.5]],[[1.0,0.08,-4.0],[1.5,0.08,-4.0],[1.5,0.08,-3.5],[1.0,0.08,-3.5]],[[0.5,0.08,-4.5],[1.0,0.08,-4.5],[1.0,0.08,-4.0],[0.5,0.08,-4.0]],[[0.0,0.08,-5.0],[0.5,0.08,-5.0],[0.5,0.08,-4.5],[0.0,0.08,-4.5]],[[-0.5,0.08,-5.5],[0.0,0.08,-5.5],[0.0,0.08,-5.0],[-0.5,0.08,-5.0]],[[-1.0,0.08,-6.0],[-0.5,0.08,-6.0],[-0.5,0.08,-5.5],[-1.0,0.08,-5.5]],[[-1.5,0.08,-6.5],[-1.0,0.08,-6.5],[-1.0,0.08,-6.0],[-1.5,0.08,-6.0]],[[1.0,0.08,-4.5],[1.5,0.08,-4.5],[1.5,0.08,-4.0],[1.0,0.08,-4.0]],[[0.5,0.08,-5.0],[1.0,0.08,-5.0],[1.0,0.08,-4.5],[0.5,0.08,-4.5]],[[0.0,0.08,-5.5],[0.5,0.08,-5.5],[0.5,0.08,-5.0],[0.0,0.08,-5.0]],[[-0.5,0.08,-6.0],[0.0,0.08,-6.0],[0.0,0.08,-5.5],[-0.5,0.08,-5.5]],[[-1.0,0.08,-6.5],[-0.5,0.08,-6.5],[-0.5,0.08,-6.0],[-1.0,0.08,-6.0]],[[-1.5,0.08,-7.0],[-1.0,0.08,-7.0],[-1.0,0.08,-6.5],[-1.5,0.08,-6.5]],[[1.0,0.08,-5.0],[1.5,0.08,-5.0],[1.5,0.08,-4.5],[1.0,0.08,-4.5]],[[0.5,0.08,-5.5],[1.0,0.08,-5.5],[1.0,0.08,-5.0],[0.5,0.08,-5.0]],[[0.0,0.08,-6.0],[0.5,0.08,-6.0],[0.5,0.08,-5.5],[0.0,0.08,-5.5]],[[-0.5,0.08,-6.5],[0.0,0.08,-6.5],[0.0,0.08,-6.0],[-0.5,0.08,-6.0]],[[-1.0,0.08,-7.0],[-0.5,0.08,-7.0],[-0.5,0.08,-6.5],[-1.0,0.08,-6.5]],[[-1.5,0.08,-7.5],[-1.0,0.08,-7.5],[-1.0,0.08,-7.0],[-1.5,0.08,-7.0]],[[1.0,0.08,-5.5],[1.5,0.08,-5.5],[1.5,0.08,-5.0],[1.0,0.08,-5.0]],[[0.5,0.08,-6.0],[1.0,0.08,-6.0],[1.0,0.08,-5.5],[0.5,0.08,-5.5]],[[0.0,0.08,-6.5],[0.5,0.08,-6.5],[0.5,0.08,-6.0],[0.0,0.08,-6.0]],[[-0.5,0.08,-7.0],[0.0,0.08,-7.0],[0.0,0.08,-6.5],[-0.5,0.08,-6.5]],[[-1.0,0.08,-7.5],[-0.5,0.08,-7.5],[-0.5,0.08,-7.0],[-1.0,0.08,-7.0]],[[1.0,0.08,-6.0],[1.5,0.08,-6.0],[1.5,0.08,-5.5],[1.0,0.08,-5.5]],[[0.5,0.08,-6.5],[1.0,0.08,-6.5],[1.0,0.08,-6.0],[0.5,0.08,-6.0]],[[0.0,0.08,-7.0],[0.5,0.08,-7.0],[0.5,0.08,-6.5],[0.0,0.08,-6.5]],[[-0.5,0.08,-7.5],[0.0,0.08,-7.5],[0.0,0.08,-7.0],[-0.5,0.08,-7.0]],[[1.0,0.08,-6.5],[1.5,0.08,-6.5],[1.5,0.08,-6.0],[1.0,0.08,-6.0]],[[0.5,0.08,-7.0],[1.0,0.08,-7.0],[1.0,0.08,-6.5],[0.5,0.08,-6.5]],[[0.0,0.08,-7.5],[0.5,0.08,-7.5],[0.5,0.08,-7.0],[0.0,0.08,-7.0]],[[1.0,0.08,-7.0],[1.5,0.08,-7.0],[1.5,0.08,-6.5],[1.0,0.08,-6.5]],[[0.5,0.08,-7.5],[1.0,0.08,-7.5],[1.0,0.08,-7.0],[0.5,0.08,-7.0]],[[1.0,0.08,-7.5],[1.5,0.08,-7.5],[1.5,0.08,-7.0],[1.0,0.08,-7.0]]]
 
 [node name="ArtComponents" type="Node3D" parent="." unique_id=1110201959]
 
@@ -2316,3 +2373,419 @@ metadata/theme_placement = "撤离候车厅"
 [node name="Shape" type="CollisionShape3D" parent="ArtComponents/ThemedLayout/Theme_060_WaitingDivider/LayoutCollision" unique_id=1800412258]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68786, 0)
 shape = SubResource("BoxShape3D_mftan")
+
+[node name="WorkshopLayout" type="Node3D" parent="ArtComponents"]
+
+[node name="Layout_000_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, -7.99714286)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": -7.997142857142856, "half_span_m": 2.2}, {"side": "north", "lane_m": -5, "half_span_m": 1.0}]
+
+[node name="Layout_001_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, -6.66428571)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": -6.664285714285715, "half_span_m": 2.2}, {"side": "north", "lane_m": -5, "half_span_m": 1.0}]
+
+[node name="Layout_002_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, -5.33142857)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": -5.331428571428571, "half_span_m": 2.2}]
+
+[node name="Layout_003_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, -3.99857143)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": -3.998571428571428, "half_span_m": 2.2}]
+
+[node name="Layout_004_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, -2.66571429)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": -2.6657142857142855, "half_span_m": 2.2}]
+
+[node name="Layout_005_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, -1.33285714)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": -1.3328571428571419, "half_span_m": 2.2}]
+
+[node name="Layout_006_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, 0)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": 0.0, "half_span_m": 2.2}]
+
+[node name="Layout_007_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, 1.33285714)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": 1.3328571428571436, "half_span_m": 2.2}]
+
+[node name="Layout_008_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, 2.66571429)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": 2.6657142857142873, "half_span_m": 2.2}]
+
+[node name="Layout_009_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, 3.99857143)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": 3.998571428571429, "half_span_m": 2.2}]
+
+[node name="Layout_010_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, 5.33142857)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": 5.331428571428573, "half_span_m": 2.2}]
+
+[node name="Layout_011_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, 6.66428571)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": 6.664285714285718, "half_span_m": 2.2}]
+
+[node name="Layout_012_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, 7.99714286)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": 7.997142857142862, "half_span_m": 2.2}, {"side": "south", "lane_m": -5, "half_span_m": 1.0}]
+
+[node name="Layout_013_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, 1, 0, 1, 0, -1, 0, 6.123234e-17, -2.5, 0.1, 9.33)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "west", "lane_m": 9.330000000000002, "half_span_m": 2.2}, {"side": "south", "lane_m": -5, "half_span_m": 1.0}]
+
+[node name="Layout_014_wall_standard" parent="ArtComponents/WorkshopLayout" instance=ExtResource("2_rwsjb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -5, 0, -6)
+metadata/slot_role = "facility"
+metadata/authored_interior_structure = true
+
+[node name="Layout_015_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -8.1, 0.1, -6)
+metadata/slot_role = "facility"
+
+[node name="Layout_016_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -9.65, 0.1, -6)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_016_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_016_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_16")
+
+[node name="Layout_017_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -11.48, 0.1, -6)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_017_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_017_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_17")
+
+[node name="Layout_018_wall_standard" parent="ArtComponents/WorkshopLayout" instance=ExtResource("2_rwsjb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -5, 0, -2.5)
+metadata/slot_role = "facility"
+metadata/authored_interior_structure = true
+
+[node name="Layout_019_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -8.1, 0.1, -2.5)
+metadata/slot_role = "facility"
+
+[node name="Layout_020_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -9.65, 0.1, -2.5)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_020_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_020_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_20")
+
+[node name="Layout_021_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -11.48, 0.1, -2.5)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_021_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_021_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_21")
+
+[node name="Layout_022_wall_standard" parent="ArtComponents/WorkshopLayout" instance=ExtResource("2_rwsjb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -5, 0, 2.5)
+metadata/slot_role = "facility"
+metadata/authored_interior_structure = true
+
+[node name="Layout_023_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -8.1, 0.1, 2.5)
+metadata/slot_role = "facility"
+
+[node name="Layout_024_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -9.65, 0.1, 2.5)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_024_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_024_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_24")
+
+[node name="Layout_025_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -11.48, 0.1, 2.5)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_025_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_025_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_25")
+
+[node name="Layout_026_wall_standard" parent="ArtComponents/WorkshopLayout" instance=ExtResource("2_rwsjb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -5, 0, 10)
+metadata/slot_role = "facility"
+metadata/authored_interior_structure = true
+
+[node name="Layout_027_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -8.1, 0.1, 10)
+metadata/slot_role = "facility"
+
+[node name="Layout_028_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -9.65, 0.1, 10)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_028_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_028_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_28")
+
+[node name="Layout_029_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, -11.48, 0.1, 10)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_029_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_029_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_29")
+
+[node name="Layout_030_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, -6.66428571)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": -6.664285714285715, "half_span_m": 2.2}, {"side": "north", "lane_m": 5, "half_span_m": 1.0}]
+
+[node name="Layout_031_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, -5.33142857)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": -5.331428571428571, "half_span_m": 2.2}]
+
+[node name="Layout_032_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, -3.99857143)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": -3.998571428571428, "half_span_m": 2.2}]
+
+[node name="Layout_033_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, -2.66571429)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": -2.6657142857142855, "half_span_m": 2.2}]
+
+[node name="Layout_034_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, -1.33285714)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": -1.3328571428571419, "half_span_m": 2.2}]
+
+[node name="Layout_035_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, 0)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": 0.0, "half_span_m": 2.2}]
+
+[node name="Layout_036_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, 1.33285714)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": 1.3328571428571436, "half_span_m": 2.2}]
+
+[node name="Layout_037_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, 2.66571429)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": 2.6657142857142873, "half_span_m": 2.2}]
+
+[node name="Layout_038_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, 3.99857143)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": 3.998571428571429, "half_span_m": 2.2}]
+
+[node name="Layout_039_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, 5.33142857)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": 5.331428571428573, "half_span_m": 2.2}]
+
+[node name="Layout_040_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, 6.66428571)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": 6.664285714285718, "half_span_m": 2.2}]
+
+[node name="Layout_041_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, 7.99714286)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": 7.997142857142862, "half_span_m": 2.2}, {"side": "south", "lane_m": 5, "half_span_m": 1.0}]
+
+[node name="Layout_042_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(6.123234e-17, 0, -1, 0, 1, 0, 1, 0, 6.123234e-17, 2.5, 0.1, 9.33)
+metadata/slot_role = "facility"
+metadata/port_clearance_candidate = true
+metadata/port_access_rules = [{"side": "east", "lane_m": 9.330000000000002, "half_span_m": 2.2}, {"side": "south", "lane_m": 5, "half_span_m": 1.0}]
+
+[node name="Layout_043_wall_standard" parent="ArtComponents/WorkshopLayout" instance=ExtResource("2_rwsjb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 5, 0, -6)
+metadata/slot_role = "facility"
+metadata/authored_interior_structure = true
+
+[node name="Layout_044_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 8.1, 0.1, -6)
+metadata/slot_role = "facility"
+
+[node name="Layout_045_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 9.65, 0.1, -6)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_045_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_045_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_45")
+
+[node name="Layout_046_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 11.48, 0.1, -6)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_046_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_046_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_46")
+
+[node name="Layout_047_wall_standard" parent="ArtComponents/WorkshopLayout" instance=ExtResource("2_rwsjb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 5, 0, -2.5)
+metadata/slot_role = "facility"
+metadata/authored_interior_structure = true
+
+[node name="Layout_048_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 8.1, 0.1, -2.5)
+metadata/slot_role = "facility"
+
+[node name="Layout_049_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 9.65, 0.1, -2.5)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_049_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_049_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_49")
+
+[node name="Layout_050_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 11.48, 0.1, -2.5)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_050_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_050_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_50")
+
+[node name="Layout_051_wall_standard" parent="ArtComponents/WorkshopLayout" instance=ExtResource("2_rwsjb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 5, 0, 2.5)
+metadata/slot_role = "facility"
+metadata/authored_interior_structure = true
+
+[node name="Layout_052_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 8.1, 0.1, 2.5)
+metadata/slot_role = "facility"
+
+[node name="Layout_053_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 9.65, 0.1, 2.5)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_053_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_053_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_53")
+
+[node name="Layout_054_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 11.48, 0.1, 2.5)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_054_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_054_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_54")
+
+[node name="Layout_055_wall_standard" parent="ArtComponents/WorkshopLayout" instance=ExtResource("2_rwsjb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 5, 0, 10)
+metadata/slot_role = "facility"
+metadata/authored_interior_structure = true
+
+[node name="Layout_056_bookcase" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_bookcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 8.1, 0.1, 10)
+metadata/slot_role = "facility"
+
+[node name="Layout_057_wardrobe" parent="ArtComponents/WorkshopLayout" instance=ExtResource("workshop_manor_wardrobe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 11.48, 0.1, 10)
+metadata/slot_role = "facility"
+
+[node name="LayoutCollision" type="StaticBody3D" parent="ArtComponents/WorkshopLayout/Layout_057_wardrobe"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="ArtComponents/WorkshopLayout/Layout_057_wardrobe/LayoutCollision"]
+position = Vector3(0, 1.265, 0)
+shape = SubResource("WorkshopShape_57")

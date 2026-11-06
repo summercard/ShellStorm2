@@ -1,0 +1,520 @@
+{
+  "schema": "shellstorm2.battle.floor_plan_whitebox",
+  "schema_version": 1,
+  "level_id": "expedition_03",
+  "mode": "flow",
+  "floor_number": 0,
+  "floor_index": 0,
+  "sequence_index": 0,
+  "entry_side": "east",
+  "exit_side": "west",
+  "reservations": [],
+  "rooms": [
+    {
+      "key": "entry",
+      "room_id": "start",
+      "legacy_room_id": "",
+      "room_type": "SAFE_ROOM",
+      "role": "stair_entry",
+      "parent_key": "",
+      "template_id": "safe_15x15",
+      "center_m": [
+        2.5,
+        2.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STAIR_LOBBY"
+    },
+    {
+      "key": "room_01",
+      "room_id": "room_01",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "std_25x25",
+      "center_m": [
+        22.5,
+        2.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "n02",
+      "room_id": "n02",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "room_01",
+      "template_id": "std_25x25",
+      "center_m": [
+        47.5,
+        2.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "hub_01",
+      "room_id": "hub_01",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "corridor_45x40",
+      "center_m": [
+        82.5,
+        5.0
+      ],
+      "size_m": [
+        45.0,
+        40.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "n03",
+      "room_id": "n03",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "db_70x50",
+      "center_m": [
+        125.0,
+        5.0
+      ],
+      "size_m": [
+        40.0,
+        30.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "n04",
+      "room_id": "n04",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "std_25x25",
+      "center_m": [
+        82.5,
+        37.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "reward_01",
+      "room_id": "reward_01",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "reward_15x15",
+      "center_m": [
+        152.5,
+        7.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE"
+    },
+    {
+      "key": "reward_02",
+      "room_id": "reward_02",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "reward_15x15",
+      "center_m": [
+        202.5,
+        52.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "STORAGE"
+    },
+    {
+      "key": "hub_02",
+      "room_id": "hub_02",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "corridor_45x40",
+      "center_m": [
+        117.5,
+        45.0
+      ],
+      "size_m": [
+        45.0,
+        40.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "n05",
+      "room_id": "n05",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "std_25x25",
+      "center_m": [
+        152.5,
+        47.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "n06",
+      "room_id": "n06",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "office_60x70",
+      "center_m": [
+        180.0,
+        50.0
+      ],
+      "size_m": [
+        30.0,
+        40.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "n07",
+      "room_id": "n07",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "std_25x25",
+      "center_m": [
+        117.5,
+        77.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "shop",
+      "room_id": "shop",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "",
+      "template_id": "shop_20x15",
+      "center_m": [
+        140.0,
+        77.5
+      ],
+      "size_m": [
+        20.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "MERCHANT"
+    },
+    {
+      "key": "boss_foyer",
+      "room_id": "boss_foyer",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "boss_prep",
+      "parent_key": "",
+      "template_id": "std_25x25",
+      "center_m": [
+        82.5,
+        62.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "EVENT"
+    },
+    {
+      "key": "boss",
+      "room_id": "boss",
+      "legacy_room_id": "",
+      "room_type": "BOSS_ROOM",
+      "role": "boss",
+      "parent_key": "",
+      "template_id": "boss_50x40",
+      "center_m": [
+        80.0,
+        95.0
+      ],
+      "size_m": [
+        50.0,
+        40.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "BOSS",
+      "boss_content_id": "boss_monitor002",
+      "boss_reinforcement_plan": {
+        "enabled": true,
+        "boss_spawn_local_m": [
+          0,
+          0.0
+        ],
+        "activation_delay_sec": 10.0,
+        "spawn_rows": [
+          {
+            "side": "west",
+            "x_m": -10,
+            "z_m": [
+              -10.0,
+              -5.0,
+              0.0,
+              5.0,
+              10.0
+            ],
+            "height_m": 3.0
+          },
+          {
+            "side": "east",
+            "x_m": 10,
+            "z_m": [
+              -10.0,
+              -5.0,
+              0.0,
+              5.0,
+              10.0
+            ],
+            "height_m": 3.0
+          }
+        ],
+        "enemy_request_type": "ambush",
+        "initial_count": 3,
+        "count_step": 1,
+        "max_count_per_round": 8,
+        "initial_interval_sec": 6.0,
+        "interval_step_sec": -0.35,
+        "min_interval_sec": 2.5,
+        "max_reinforcement_alive": 18,
+        "launch_speed_mps": 8.5,
+        "launch_duration_sec": 0.38
+      },
+      "spawn_placements": [
+        {
+          "box": "box_boss_arena",
+          "center_m": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            -7.5,
+            7.5
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            7.5,
+            0.0
+          ]
+        },
+        {
+          "box": "box_wall_arc",
+          "center_m": [
+            0.0,
+            -10.0
+          ]
+        }
+      ],
+      "encounter": {
+        "stages": [
+          {
+            "boxes": [
+              0
+            ]
+          },
+          {
+            "boxes": [
+              1,
+              2
+            ]
+          },
+          {
+            "boxes": [
+              3
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "key": "exit",
+      "room_id": "exit",
+      "legacy_room_id": "",
+      "room_type": "EXTRACTION_ROOM",
+      "role": "extraction",
+      "parent_key": "",
+      "template_id": "extraction_25x25",
+      "center_m": [
+        117.5,
+        102.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "content_type": "EXTRACTION"
+    }
+  ],
+  "main_path": [
+    "entry",
+    "n01",
+    "n02",
+    "hub_01",
+    "n04",
+    "boss_foyer",
+    "boss",
+    "exit"
+  ],
+  "edge_policy": [
+    {
+      "a": "entry",
+      "b": "n01",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "n01",
+      "b": "n02",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "n02",
+      "b": "hub_01",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "hub_01",
+      "b": "n03",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "n03",
+      "b": "reward_01",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "hub_01",
+      "b": "n04",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "n04",
+      "b": "hub_02",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "n04",
+      "b": "boss_foyer",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "boss_foyer",
+      "b": "boss",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "boss",
+      "b": "exit",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "hub_02",
+      "b": "n05",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "n05",
+      "b": "n06",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "n06",
+      "b": "reward_02",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "hub_02",
+      "b": "n07",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    },
+    {
+      "a": "n07",
+      "b": "shop",
+      "allow_zero_length": true,
+      "note": "flow_01 兜底样例：墙贴墙"
+    }
+  ],
+  "provenance": {
+    "mode": "flow_fallback_sample",
+    "generated_by": "scripts/build_expedition03_level_plan.py",
+    "note": "本文件是 flow_01 的展开兜底样例，仅用于生成器失败回退与文档对照；实跑版图由 flow 骨架按种子现算。"
+  }
+}

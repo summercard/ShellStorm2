@@ -103,6 +103,7 @@ static func to_block(result: Dictionary) -> Dictionary:
 		corridor_ids.append(str(record["room_id"]))
 		room_meta[str(record["room_id"])] = {
 			"kind": "CORRIDOR_ROOM", "template_id": "", "is_corridor": true,
+			"edge_rooms": record["edge_rooms"],
 		}
 
 	_overlap_report(block, errors)
@@ -374,6 +375,8 @@ static func _corridor_rooms(room_by_id: Dictionary, connections: Array, shift: V
 			continue
 		var bucket := "straight" if pieces.size() == 1 else "l_shape"
 		stats[bucket] = int(stats[bucket]) + 1
+		for piece in pieces:
+			(piece as Dictionary)["edge_rooms"] = [a_id, b_id]
 		out.append_array(pieces)
 	return out
 

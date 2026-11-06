@@ -93,7 +93,18 @@
         0.55,
         0.18,
         0.18
-      ]
+      ],
+      "manor_entry_variant": {
+        "clear_opening_m": [
+          3.0,
+          2.5
+        ],
+        "wall_slot_m": 5.0,
+        "frame_height_m": 3.67,
+        "panel_asset_id": "ENV-EXP03-BOSS-DOOR-RITUAL",
+        "frame_asset_id": "ENV-EXP03-MANOR-WALL-DOOR-BOSS",
+        "note": "用于 Boss 前厅路径进入 Boss 竞技场的实体门边，Boss 至撤离仍为普通门。权限取当前房间状态。"
+      }
     },
     "secret": {
       "kind": "secret",

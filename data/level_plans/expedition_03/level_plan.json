@@ -80,7 +80,9 @@
     "corridor_45x40",
     "bridge_60x50",
     "connector_10x30",
-    "connector_30x10"
+    "connector_30x10",
+    "reward_15x15",
+    "shop_20x15"
   ],
   "interactive_clutter": {
     "schema": "shellstorm2.battle.interactive_clutter",

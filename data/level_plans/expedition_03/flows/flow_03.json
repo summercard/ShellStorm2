@@ -83,10 +83,10 @@
     {
       "node_id": "shop",
       "kind": "SHOP",
-      "template_id": "office_60x70",
+      "template_id": "shop_20x15",
       "size_m": [
-        30.0,
-        40.0
+        20.0,
+        15.0
       ],
       "parent_node_id": "hub_01"
     },
@@ -95,24 +95,21 @@
       "kind": "NORMAL",
       "template_id": "",
       "size_m": [
-        25.0,
-        25.0
+        40.0,
+        30.0
       ],
       "parent_node_id": "n02",
       "template_pool": [
-        "corridor_45x40",
-        "db_70x50",
-        "office_60x70",
-        "std_25x25"
+        "db_70x50"
       ]
     },
     {
       "node_id": "reward_01",
       "kind": "REWARD",
-      "template_id": "db_70x50",
+      "template_id": "reward_15x15",
       "size_m": [
-        40.0,
-        30.0
+        15.0,
+        15.0
       ],
       "parent_node_id": "n03"
     },
@@ -163,15 +160,12 @@
       "kind": "NORMAL",
       "template_id": "",
       "size_m": [
-        25.0,
-        25.0
+        30.0,
+        40.0
       ],
       "parent_node_id": "hub_02",
       "template_pool": [
-        "corridor_45x40",
-        "db_70x50",
-        "office_60x70",
-        "std_25x25"
+        "office_60x70"
       ]
     },
     {
@@ -193,10 +187,10 @@
     {
       "node_id": "reward_02",
       "kind": "REWARD",
-      "template_id": "db_70x50",
+      "template_id": "reward_15x15",
       "size_m": [
-        40.0,
-        30.0
+        15.0,
+        15.0
       ],
       "parent_node_id": "n06"
     },

@@ -1,0 +1,48 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "shop_20x15",
+  "room_type": "COMMON_ROOM",
+  "size_m": [
+    20.0,
+    15.0
+  ],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 2.8,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": [
+    "north",
+    "south",
+    "east",
+    "west"
+  ],
+  "wall_lane_table": {
+    "north": [
+      -2.5,
+      2.5
+    ],
+    "south": [
+      -2.5,
+      2.5
+    ],
+    "east": [
+      0.0
+    ],
+    "west": [
+      0.0
+    ]
+  },
+  "slots": [],
+  "variants": [],
+  "asset_ids": {
+    "room": "ENV-EXP03-ROOM-SHOP-20X15",
+    "components": []
+  },
+  "note": "20×15m 紧凑铺面，中央偏北为商人终端。"
+}
