@@ -2151,8 +2151,16 @@ func _physics_process(delta: float) -> void:
 			_perform_attack(to_target, distance)
 			transition_to("recovery")
 		"recovery":
-			_brake_planar(delta * 18.0)
-			_push_planar(_external_velocity)
+			# 收招段的位移只有两种来源：**外部推力**（玩家近战击退 / 突进余速）与
+			# 刹车后的残速。这里**不能**先刹车再 `_push_planar(_external_velocity)` ——
+			# 那是本仓反复踩过的「稳态放大器」：外推每帧完整体加一次，衰减永远追不上，
+			# 实测击退 5.0 m/s 一帧后变成 **9.7**、再一帧 14+，玩家一拳把怪打飞出房间。
+			# 外推还在生效时直接赋值（它就是这一段的唯一真源），失效后才刹车收尾。
+			if _external_timer > 0.0:
+				velocity.x = _external_velocity.x
+				velocity.z = _external_velocity.z
+			else:
+				_brake_planar(delta * 18.0)
 			_commit_motion(delta)
 			if _state_time >= _recovery_duration():
 				if MonsterAIManager != null:
@@ -4392,6 +4400,13 @@ func transition_to(state_id: String, reason := "") -> bool:
 	if previous in ["telegraph", "attack", "recovery"] and state_id not in ["telegraph", "attack", "recovery"]:
 		if MonsterAIManager != null:
 			MonsterAIManager.release_attack_token(self)
+	# 硬直 / 休眠 / 死亡必须把**排期弹丸**（连发队列、蛋）一起断掉：
+	# 它们由 `_tick_pending_volleys()` 按延迟无条件开火，不看状态 ——
+	# 不清就会看到「已经被打死的怪在半空中继续打三连发」。
+	# 只清这三种：`recovery → chase` 期间连发本来就要打完，那条不能动。
+	if state_id in ["stagger", "dormant", "dead"]:
+		_pending_volleys.clear()
+		_pending_eggs.clear()
 	ai_state = state_id
 	if state_id == "dead" and is_instance_valid(_animated_hit_body):
 		_animated_hit_body.collision_layer = 0
