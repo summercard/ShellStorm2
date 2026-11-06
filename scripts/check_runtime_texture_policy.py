@@ -52,7 +52,7 @@ def main():
             # 相邻色格会互相插值 ⇒ 全项目引用它的模型集体串色。这两项都是引擎在
             # 「全新 APPDATA / 缓存失配」下重导时按默认值回归的，必须由断言盯着。
             if rel=='assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import':
-                for want_key,want_value in (('compress/mode','0'),('mipmaps/generate','false')):
+                for want_key,want_value in (('compress/mode','0'),('mipmaps/generate','false'),('detect_3d/compress_to','0')):
                     found=re.search(r'^'+re.escape(want_key)+r'=(\S+)',text,re.M)
                     got=found.group(1) if found else None
                     if got!=want_value:

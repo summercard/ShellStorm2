@@ -5,6 +5,7 @@ const SHARED_PALETTE_IMPORT_PATH := SHARED_PALETTE_PATH + ".import"
 const PALETTE_IMPORT_CONTRACT := {
 	"compress/mode": "0",
 	"mipmaps/generate": "false",
+	"detect_3d/compress_to": "0",
 }
 const SHARED_PALETTE_POST_IMPORT_SCRIPT := "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
 const DOOR_PALETTE_POST_IMPORT_SCRIPT := "res://tools/asset_pipeline/scene_facility_door_visual_post_import.gd"
@@ -14,6 +15,8 @@ const COMPONENT_ROOTS := [
 	"res://assets/art/environments/base_facility_3d/components",
 	"res://assets/art/props/base_world_3d/components",
 	"res://assets/art/environments/tower_zones/battle/components/common_components",
+	"res://assets/art/environments/tower_zones/expedition/components/common_components/boss_door_ritual",
+	"res://assets/art/environments/tower_zones/expedition/components/common_components/manor_door_double",
 ]
 ## 只有这批目录强制「GLB 必须外链公共色盘 + 不内嵌图片」，
 ## 因为它们全部出自 v003 之后的统一流水线；更早的基地/道具 GLB 走各自的历史机制，
@@ -24,6 +27,7 @@ const PALETTE_CONTRACT_ROOTS := [
 func _ready() -> void:
 	var failures: Array[String] = []
 	_validate_palette_import_contract(failures)
+	_validate_runtime_palette(failures)
 	var glbs: Array[String] = []
 	for root in COMPONENT_ROOTS:
 		_collect_glbs(root, glbs)
@@ -71,6 +75,20 @@ func _validate_palette_import_contract(failures: Array[String]) -> void:
 			failures.append("公共色盘导入契约缺少 %s" % key)
 		elif str(params[key]) != expected:
 			failures.append("公共色盘 %s=%s，要求 %s（否则色块会串色）" % [key, params[key], expected])
+
+
+## 文本参数正确不代表旧缓存已刷新；必须读取实际导入 Image。
+func _validate_runtime_palette(failures: Array[String]) -> void:
+	var palette := load(SHARED_PALETTE_PATH) as Texture2D
+	_expect(palette != null, "公共色盘运行资源无法加载", failures)
+	if palette == null:
+		return
+	var image := palette.get_image()
+	_expect(image != null, "公共色盘运行资源没有Image", failures)
+	if image == null:
+		return
+	_expect(not image.has_mipmaps(), "公共色盘运行缓存仍含MipMap，必须重新导入", failures)
+	_expect(not image.is_compressed(), "公共色盘运行缓存仍为块压缩格式", failures)
 
 
 ## 每个组件 GLB 必须留下 .glb.import，且该文件本身要能进版本控制，
@@ -131,7 +149,8 @@ func _validate_materials(root: Node, asset_path: String, failures: Array[String]
 				_expect(material.albedo_texture != null, "材质缺少公共色盘: %s" % asset_path, failures)
 				if material.albedo_texture != null:
 					_expect(material.albedo_texture.resource_path == SHARED_PALETTE_PATH, "材质仍指向模型私有贴图: %s -> %s" % [asset_path, material.albedo_texture.resource_path], failures)
-				_expect(material.texture_filter == BaseMaterial3D.TEXTURE_FILTER_NEAREST, "色盘不是最近邻采样: %s" % asset_path, failures)
+				_expect(material.texture_filter == BaseMaterial3D.TEXTURE_FILTER_NEAREST, "色盘不是无MipMap最近邻采样: %s" % asset_path, failures)
+				_expect(not material.texture_repeat, "色盘不允许重复采样: %s" % asset_path, failures)
 	for child in root.get_children():
 		count += _validate_materials(child, asset_path, failures)
 	return count
