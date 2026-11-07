@@ -1848,7 +1848,8 @@ func _ensure_weapon_model() -> void:
 		weapon = scene.instantiate() as WeaponModel3D
 		weapon.gun_id = ""
 		weapon.render_layers = 2
-		weapon.character_authored_reload = str(avatar.get_meta("assembly_version", "")) == "v021"
+		## "clip" = 女仆/查克2 这类整块蒙皮角色，用 GLB 自带剪辑驱动，同样要按角色动作走换弹时序。
+		weapon.character_authored_reload = str(avatar.get_meta("assembly_version", "")) in ["v021", "clip"]
 		avatar.weapon_socket.add_child(weapon)
 		weapon.ammo_changed.connect(_on_weapon_ammo_changed)
 		weapon.loadout_changed.connect(_on_weapon_loadout_changed)

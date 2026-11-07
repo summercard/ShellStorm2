@@ -1,0 +1,85 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn" id="1_base"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/external/maid01/maid_char.glb" id="2_model"]
+
+[node name="CapsuleAvatar3D" instance=ExtResource("1_base")]
+metadata/assembly_version = "clip"
+metadata/motion_driver = "clip"
+metadata/asset_version = "v001"
+metadata/source_model = "res://assets/art/characters/player/external/maid01/maid_char.glb"
+
+[node name="Body" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="Head" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="Scarf" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="Hand" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="Feet" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="BunnyRig" type="Node3D" parent="VisualRoot"]
+
+[node name="BodyJoint" type="Node3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(-0.00293, 0.495113, -0.032228)
+
+[node name="LowerBodySocket" type="Marker3D" parent="VisualRoot/BunnyRig/BodyJoint"]
+position = Vector3(0, 0.14, 0)
+metadata/attachment_slot = "lower_body"
+metadata/attachment_examples = "skirt, waist_armor, lower_body_accessory"
+metadata/presentation_only = true
+
+[node name="HeadJoint" type="Node3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(-0.00293, 0.899435, 0.014646)
+
+[node name="Ears" type="Node3D" parent="VisualRoot/BunnyRig/HeadJoint"]
+
+[node name="EarSocketL" type="Node3D" parent="VisualRoot/BunnyRig/HeadJoint/Ears"]
+position = Vector3(-0.10, 0.02, 0)
+metadata/anchor_contract = "presentation_only_no_ears_on_clip_avatar"
+
+[node name="EarSocketR" type="Node3D" parent="VisualRoot/BunnyRig/HeadJoint/Ears"]
+position = Vector3(0.10, 0.02, 0)
+metadata/anchor_contract = "presentation_only_no_ears_on_clip_avatar"
+
+[node name="HandRoot" type="Node3D" parent="VisualRoot/BunnyRig"]
+
+[node name="HandJointL" type="Node3D" parent="VisualRoot/BunnyRig/HandRoot"]
+position = Vector3(-0.412202, 0.721326, 0.004788)
+metadata/pivot_contract = "cuff_ring_center"
+
+[node name="HandJointR" type="Node3D" parent="VisualRoot/BunnyRig/HandRoot"]
+position = Vector3(0.414046, 0.721327, 0.010439)
+metadata/pivot_contract = "cuff_ring_center"
+
+[node name="FeetRoot" type="Node3D" parent="VisualRoot/BunnyRig"]
+
+[node name="FootJointL" type="Node3D" parent="VisualRoot/BunnyRig/FeetRoot"]
+position = Vector3(-0.108398, 0.026368, -0.073241)
+
+[node name="FootJointR" type="Node3D" parent="VisualRoot/BunnyRig/FeetRoot"]
+position = Vector3(0.102537, 0.026367, -0.073241)
+
+[node name="WeaponSocket" type="Marker3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(0.414046, 0.721327, 0.010439)
+
+[node name="StowedWeaponSocketPrimary" type="Marker3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(-0.36, 0.82, 0.54)
+rotation = Vector3(-1.5708, 0, 0)
+
+[node name="StowedWeaponSocketSecondary" type="Marker3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(0.36, 0.82, 0.54)
+rotation = Vector3(-1.5708, 0, 0)
+
+[node name="BackpackSocket" type="Marker3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(0, 0.74, 0.30)
+
+[node name="Model" parent="VisualRoot/BunnyRig" instance=ExtResource("2_model")]
+rotation = Vector3(0, 3.14159265, 0)
+scale = Vector3(1.50073, 1.50073, 1.50073)

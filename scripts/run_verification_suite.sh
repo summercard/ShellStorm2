@@ -269,6 +269,7 @@ core_scenes=(
   verify_player3d_debug_scale_flow
   verify_player3d_vertical_physics_flow
   verify_player3d_weapon_pose_collision_flow
+  verify_player3d_clip_loop_behavior
   verify_3d_enemy_behavior_flow
   verify_enemy_illumination_states
   verify_enemy_light_motion_regression

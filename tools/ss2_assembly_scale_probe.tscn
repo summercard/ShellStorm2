@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tools/ss2_assembly_scale_probe.gd" id="1_probe"]
+
+[node name="AssemblyScaleProbe" type="Node3D"]
+script = ExtResource("1_probe")

@@ -312,6 +312,9 @@ const RELOAD_RING_REBUILD_EPSILON := 0.004
 const IDLE_LOOP_HZ := 0.42
 const IDLE_LOOP_DURATION := 1.0 / IDLE_LOOP_HZ
 const BUNNY_LINEAR_SCALE := 1.5 / 2.475
+## 由「作者化动作通道」驱动的装配版本（Blender 采样库或 GLB 剪辑库）。
+## "clip" = 女仆 / 查克2 这类整块蒙皮 + GLB AnimationPlayer 的装配。
+const AUTHORED_ASSEMBLY_VERSIONS := ["v009", "v010", "v011", "v021", "clip"]
 const SIDEARM_SOCKET_OFFSET := Vector3(0.24, -0.01, 0.0)
 const SIDEARM_HOLD_SOCKET_OFFSET := Vector3(0.12, -0.23, -0.22)
 const SIDEARM_HOLD_SOCKET_ROTATION := Vector3.ZERO
@@ -431,13 +434,69 @@ func _motion_offset(value: Vector3) -> Vector3:
 	return value * (BUNNY_LINEAR_SCALE if _is_bunny_avatar() else 1.0)
 
 
-func _apply_bunny_attachment_scale() -> void:
-	if not _is_bunny_avatar():
-		return
+## 挂载类装饰（武器/收纳武器/背包）的**尺度真源**。
+##
+## 为什么不是常数而是函数：武器与装饰资产统一按「2.475 m 高角色」空间建模，
+## 挂到 1.5 m 量级的角色身上必须乘 `BUNNY_LINEAR_SCALE ≈ 0.6061`。
+## 这条适配**与是哪个装配无关**（兔子、女仆、查克2 都要），
+## 因为「角色高 1.5 m」是玩法契约（碰撞胶囊 1.2 m × 体型倍率），不是美术偏好。
+##
+## 2026-11-07 修复：原先只有 `_apply_bunny_attachment_scale()` 一处做这件事，
+## 而它的入口就 `if not _is_bunny_avatar(): return` —— clip 装配（女仆/查克2）
+## 整条路径没有缩放。实测枪长/角色高 = 0.853（手枪）/ 1.072（长枪）/ 1.241（机枪），
+## 应为 0.517 / 0.650 / 0.752 ⇒ **整整大了 1/0.6061 = 1.65 倍**，
+## 出图上枪横跨两个身位。同口径的收纳武器（`Player3D` 里的 0.52 / 0.70 硬编码）
+## 是另一套旧标定，见那边的常量注释。
+func get_attachment_scale() -> float:
+	return BUNNY_LINEAR_SCALE
+
+
+## 近战武器单独一档：0.78 是近战资产的既有标定（与枪不同源），
+## 兔子与 clip 装配共用同一个值，保证「换角色不换武器手感」。
+static func near_melee_attachment_scale() -> float:
+	return 0.78
+
+
+## 把**手里那件武器**缩到角色空间。原实现只在兔子装配下执行，
+## 于是换角色后武器按 2.475 m 空间原样挂在 1.5 m 角色上（大 1.65 倍）。
+##
+## 现在改成：任何装配都执行，尺度由 `get_attachment_scale()` 回答
+## （当前全是 BUNNY_LINEAR_SCALE，将来某个装配要别的值就改那个函数）。
+func _apply_attachment_scale() -> void:
 	var held_weapon := weapon_socket.get_node_or_null("WeaponModel3D") as Node3D
-	if held_weapon != null:
-		var held_scale := 0.78 if held_weapon.get("weapon_kind") == "melee" else BUNNY_LINEAR_SCALE
-		held_weapon.scale = Vector3.ONE * held_scale
+	if held_weapon == null:
+		return
+	var held_scale := (
+		near_melee_attachment_scale()
+		if str(held_weapon.get("weapon_kind")) == "melee"
+		else get_attachment_scale()
+	)
+	held_weapon.scale = Vector3.ONE * held_scale
+
+
+## 兼容旧名：历史调用点与外部脚本仍在引用这个函数名。
+func _apply_bunny_attachment_scale() -> void:
+	_apply_attachment_scale()
+
+
+## 装配级装饰缩放：换弹环 / 挂件根 / 状态 VFX / 手里的武器。
+##
+## 与 `_apply_attachment_scale()` 分开的原因：那个只管「手里那把武器」，
+## 每帧要重设（换枪会换模型）；这一组是**装配一次**的静态装饰根，
+## 只在 `_ready()` 里做一次。
+##
+## ⚠️ `_wearable_root.scale` 这一条有连带契约：`_ensure_wearable_nodes()` 里把
+## 兔耳 reparent 进来时按 `1.0 / BUNNY_LINEAR_SCALE` 反向抵消。两侧必须同值，
+## 改这里就要一起看那边 —— 否则耳朵会缩回头里（那是 2026-xx 修过的老 bug）。
+func _apply_attachment_scale_group() -> void:
+	var attachment_scale := get_attachment_scale()
+	reload_progress_root.scale = Vector3.ONE * attachment_scale
+	if _wearable_root != null:
+		_wearable_root.scale = Vector3.ONE * attachment_scale
+	var state_vfx := get_node_or_null("VisualRoot/StateVFX") as Node3D
+	if state_vfx != null:
+		state_vfx.scale = Vector3.ONE * attachment_scale
+	_apply_attachment_scale()
 
 
 func _ready() -> void:
@@ -489,17 +548,15 @@ func _ready() -> void:
 	_prepare_unique_materials()
 	_fix_left_ear_mirror_tangent_space()
 	_ensure_wearable_nodes()
-	if _is_bunny_avatar():
-		reload_progress_root.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
-		if _wearable_root != null:
-			_wearable_root.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
-		var state_vfx := get_node_or_null("VisualRoot/StateVFX") as Node3D
-		if state_vfx != null:
-			state_vfx.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
-		_apply_bunny_attachment_scale()
+	## 挂载类装饰（武器 / 帽子 / 状态环 / 换弹环）统一按 `get_attachment_scale()` 缩。
+	## 2026-11-07 修复：原判断只有 `_is_bunny_avatar()`，换角色后**整组装饰都不缩**，
+	## 于是 2.475 m 空间建模的武器原样挂在 1.5 m 角色上（1.65 倍大）。
+	_apply_attachment_scale_group()
 	_setup_reload_ring()
 	_apply_customization()
-	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011", "v021"]:
+	if _is_clip_avatar():
+		_authored_motion = ClipMotionLibrary3D.new()
+	if str(get_meta("assembly_version", "")) in AUTHORED_ASSEMBLY_VERSIONS:
 		_authored_motion.bind(self)
 
 
@@ -538,13 +595,13 @@ func _process(delta: float) -> void:
 		return
 	_update_orientation(delta)
 	var assembly_version := str(get_meta("assembly_version", ""))
-	if assembly_version == "v021":
+	if assembly_version == "v021" or _is_clip_avatar():
 		_update_authored_motion_progress(delta)
 	else:
 		_update_state_motion(delta)
 	_authored_motion.pose_lock_enabled = _narrative_pose_active and _narrative_pose_frozen
 	_authored_motion.pose_lock_phase = _narrative_pose_phase
-	if assembly_version in ["v009", "v010", "v011", "v021"]:
+	if assembly_version in AUTHORED_ASSEMBLY_VERSIONS:
 		_authored_motion.apply(self, delta)
 	if _player != null and _player.has_method("_sync_backpack_body_follow"):
 		_player.call("_sync_backpack_body_follow")
@@ -554,7 +611,7 @@ func _process(delta: float) -> void:
 
 func get_component_snapshot() -> Dictionary:
 	var is_bunny := _is_bunny_avatar()
-	var rebased := str(get_meta("assembly_version", "")) in ["v009", "v010", "v011", "v021"]
+	var rebased := str(get_meta("assembly_version", "")) in AUTHORED_ASSEMBLY_VERSIONS
 	var right_ring := Vector3.ZERO if rebased else RIGHT_HAND_RING_CENTER_LOCAL
 	var left_ring := Vector3.ZERO if rebased else LEFT_HAND_RING_CENTER_LOCAL
 	var ear_root := Vector3.ZERO if rebased else EAR_ROOT_CENTER_LOCAL
@@ -574,8 +631,15 @@ func get_component_snapshot() -> Dictionary:
 		"motion_reference_speed_mps": _authored_motion.reference_speed_mps,
 		"weapon_support_error_m": _get_authored_support_error(),
 		"right_hand_palm_to_socket_global_distance": _authored_motion.palm_global(self, "r").distance_to(weapon_socket.global_position),
-		"animation_driver": "blender_v021_only" if str(get_meta("assembly_version", "")) == "v021" else "legacy_compatible",
-		"legacy_procedural_motion_enabled": str(get_meta("assembly_version", "")) != "v021",
+		"animation_driver": (
+			"blender_v021_only" if str(get_meta("assembly_version", "")) == "v021"
+			else "glb_clip" if _is_clip_avatar()
+			else "legacy_compatible"
+		),
+		## 程序姿势是否仍在参与。判据从「是不是 v021」改成「在不在作者化通道」——
+		## clip 装配同样**不跑** `_update_state_motion()`（见 `_process()` 的分支），
+		## 所以它的读数必须是 false；沿用旧判据会给验收一个假阳性。
+		"legacy_procedural_motion_enabled": str(get_meta("assembly_version", "")) not in AUTHORED_ASSEMBLY_VERSIONS,
 		"weapon_animation_fallback": _authored_motion.fallback_reason,
 		"missing_authored_action": _get_missing_authored_action(),
 		"rig_type": "rigid_node_skeleton" if is_bunny else "legacy_component_nodes",
@@ -740,7 +804,14 @@ func get_component_snapshot() -> Dictionary:
 
 
 func _is_bunny_avatar() -> bool:
+	# 剪辑装配（"clip"）不是兔子：它走 GLB AnimationPlayer，不参与兔子的线性缩放与配饰分支。
+	if _is_clip_avatar():
+		return false
 	return bunny_head_model != null and bunny_ears != null and bunny_hand_l != null and bunny_hand_r != null
+
+
+func _is_clip_avatar() -> bool:
+	return str(get_meta("motion_driver", "")) == "clip"
 
 
 static func has_customization_variant(slot_id: String, variant_id: String) -> bool:
@@ -878,13 +949,29 @@ func _get_weapon_animation_profile() -> Dictionary:
 	) as Dictionary)
 
 
+## 「本帧该有、但没有」的作者化动作名（空 = 齐的）。
+##
+## 判据入口原先写死 `assembly_version == "v021"`，于是 clip 装配
+## （女仆 / 查克2）恒返空 —— 这个字段就成了「永远没问题」的假绿灯，
+## 而它恰恰是验收用来抓「开火/换弹/近战缺剪辑」的那根线。
+## 现在改成按**是否走作者化通道**判断（`AUTHORED_ASSEMBLY_VERSIONS`），
+## 与 `_process()` 里那条分支同一口径。
 func _get_missing_authored_action() -> String:
-	if str(get_meta("assembly_version", "")) != "v021" or not _weapon_grip_pose_active:
+	if str(get_meta("assembly_version", "")) not in AUTHORED_ASSEMBLY_VERSIONS:
+		return ""
+	if not _weapon_grip_pose_active:
 		return ""
 	if _weapon_class == "heavy_melee" and _melee_animation_active:
 		return "" if _authored_motion.active_clip.begins_with("melee_") else "heavy_melee_%s" % _melee_phase
 	if _reload_animation_active:
-		return "" if _authored_motion.active_overlay == "%s_reload" % _weapon_class else "%s_reload" % _weapon_class
+		# 换弹在剪辑通道里是**整段剪辑**（`<family>_reload`），老通道才是 overlay。
+		# 两个字段任一命中都算「有」（否则 clip 装配会被误报缺动作）。
+		var reload_name := "%s_reload" % _weapon_class
+		if _authored_motion.active_overlay == reload_name:
+			return ""
+		if _authored_motion.active_clip == reload_name:
+			return ""
+		return reload_name
 	if _charging_animation_active:
 		return "%s_charge" % _weapon_class
 	if _firing_animation_active:
@@ -1949,7 +2036,7 @@ func _set_node_render_layer(root: Node, layer_mask: int) -> void:
 
 
 func _fix_left_ear_mirror_tangent_space() -> void:
-	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011", "v021"]:
+	if str(get_meta("assembly_version", "")) in AUTHORED_ASSEMBLY_VERSIONS:
 		return # v009 exports a baked left mesh; no negative-scale tangent repair.
 	# 左耳用 scale = (-1, 1, 1) 复用右耳 GLB。负行列式变换会改变切线空间
 	# 的手性；顶点法线本身会由逆转置矩阵正确变换，不能再额外取反。这里只把
@@ -2082,6 +2169,29 @@ func _prepare_unique_materials() -> void:
 		_register_bunny_slot_materials("head", head)
 		_register_bunny_slot_materials("hand", hand)
 		_register_bunny_slot_materials("feet", feet)
+	elif _is_clip_avatar():
+		_register_clip_model_materials()
+
+
+## 把 GLB 蒙皮的表面材质登记进 `_materials`，这样受伤/死亡/开火的整体变色
+## （`_update_state_materials`）对女仆 / 查克2 一样生效。自定义配色不写这些键。
+func _register_clip_model_materials() -> void:
+	var model_root := get_node_or_null("VisualRoot/BunnyRig/Model")
+	if model_root == null:
+		return
+	for child in model_root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := child as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		for surface_index in range(mesh_instance.mesh.get_surface_count()):
+			var source := mesh_instance.get_active_material(surface_index) as StandardMaterial3D
+			if source == null:
+				continue
+			var material := source.duplicate() as StandardMaterial3D
+			mesh_instance.set_surface_override_material(surface_index, material)
+			var material_key := "clip_slot/%s/%d" % [str(mesh_instance.get_path()), surface_index]
+			_materials[material_key] = material
+			_base_colors[material_key] = material.albedo_color
 
 
 func _register_bunny_slot_materials(slot_id: String, slot_root: Node) -> void:
