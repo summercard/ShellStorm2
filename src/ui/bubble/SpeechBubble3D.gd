@@ -28,9 +28,16 @@ const CORNER_SEGMENTS := 6
 const POP_FROM_SCALE := 0.88
 const POP_SECONDS := 0.16
 const FADE_SECONDS := 0.14
+## 打字机速度（字/秒）。与底栏 `DialogueUI.DEFAULT_CHARS_PER_SEC` 同值，
+## 于是"头顶气泡"和"底栏对话"读起来是同一个语速（业主 2026-11-08：对话文字要打字机一样顺序出现）。
+const DEFAULT_CHARS_PER_SEC := 30.0
 
 @export var bubble_scale := 1.0
 @export var hold_seconds := 3.4
+## 打字机开关与速度。`chars_per_sec <= 0` 也等于关掉（一次性全出）。
+## 关掉只影响"逐字出现的节奏"，不影响气泡尺寸/停留/淡出。
+@export var typewriter_enabled := true
+@export_range(0.0, 200.0, 1.0) var chars_per_sec := DEFAULT_CHARS_PER_SEC
 @export var max_lines := 3
 @export_range(40, 120) var wrap_width_px := 620
 ## 填充色。**半透明黑**（2026-11-02 业主「黑色背景半透明」）。
@@ -50,6 +57,22 @@ var _fill_material: StandardMaterial3D
 var _hold_left := 0.0
 var _active := false
 var _tween: Tween
+## 打字机进度。`_typed_chars` 是浮点：每帧按 `delta * chars_per_sec` 累加再取整，
+## 否则低速档（如 12 字/秒）在低帧率下每次 `int(delta*speed)` 都舍成 0，永远打不完。
+##
+## ⚠️ **不能用 `Label3D.visible_characters`**（那是 2D `Label` 的属性，Label3D 没有）：
+## Godot 4 的 Label3D 不支持"部分可见"，只能重写 `text` 本身。所以这里保存整句
+## 与逐字前缀，每帧把前缀写回 `_label.text`，并补偿垂直居中造成的上移，
+## 让文字始终从**气泡顶部**开始往下长，而不是在框中间上下对涨。
+var _typing := false
+var _typed_chars := 0.0
+var _total_chars := 0
+## 整句原文。`get_bubble_text()` 返回它（不是当前前缀）——
+## "说的是哪一句"是身份，打字进度另由 `get_visible_char_count()` 表达。
+var _full_text := ""
+## 整句排版后的像素尺寸与每像素的世界尺寸，用于算垂直补偿。
+var _full_text_px := Vector2.ZERO
+var _layout_unit := 0.0055
 
 
 func _ready() -> void:
@@ -61,9 +84,86 @@ func _process(delta: float) -> void:
 	_face_camera()
 	if not _active:
 		return
+	# 打字机：边打边停住停留计时 —— 否则长句还没打完就开始倒计时，
+	# 玩家读到一半气泡自己消失。
+	if _typing:
+		_advance_typing(delta)
+		return
 	_hold_left -= delta
 	if _hold_left <= 0.0:
 		hide_bubble()
+
+
+## 逐字推进。
+func _advance_typing(delta: float) -> void:
+	if _label == null:
+		_typing = false
+		return
+	var speed := chars_per_sec if typewriter_enabled else 0.0
+	if speed <= 0.0:
+		_finish_typing()
+		return
+	var next := minf(float(_total_chars), _typed_chars + delta * speed)
+	if int(next) == int(_typed_chars):
+		_typed_chars = next
+		return
+	_typed_chars = next
+	_apply_prefix()
+	if _typed_chars >= float(_total_chars):
+		_finish_typing()
+
+
+func _finish_typing() -> void:
+	_typing = false
+	_typed_chars = float(_total_chars)
+	_apply_prefix()
+
+
+## 把"已显示的部分"写回 Label3D，并补偿垂直居中。
+##
+## 补偿的来历：`_relayout()` 是按**整句**定的底板高度，Label3D 又垂直居中，
+## 于是只显示第一行时文字会贴在框的中间、后面几行像从中间往外涨。
+## 这里把文字整体上移 `(整句高 - 当前高) / 2`，等价于"顶对齐"，
+## 打完时位移归零 —— 终态与改动前完全一致。
+func _apply_prefix() -> void:
+	if _label == null:
+		return
+	var count := clampi(int(_typed_chars), 0, _full_text.length())
+	if count >= _full_text.length():
+		_label.text = _full_text
+		_label.position = Vector3.ZERO
+		return
+	_label.text = _full_text.substr(0, count)
+	var font: Font = _label.font
+	if font == null:
+		font = ThemeDB.fallback_font
+	var current_px := font.get_multiline_string_size(
+		_label.text, HORIZONTAL_ALIGNMENT_CENTER, float(wrap_width_px), _label.font_size
+	)
+	var shift_px := maxf(0.0, (_full_text_px.y - current_px.y) * 0.5)
+	_label.position = Vector3(0.0, shift_px * _layout_unit, 0.0)
+
+
+## 立刻显示整句（玩家按 E 跳过、或验收要读全文时用）。
+func reveal_all() -> void:
+	if not _typing:
+		return
+	_finish_typing()
+
+
+func is_typing() -> bool:
+	return _typing
+
+
+## 已显示的字数 —— 验收用它断言"确实是一字一字出来的"，不是一次全出。
+func get_visible_char_count() -> int:
+	if _label == null or not _active:
+		return 0
+	return clampi(int(_typed_chars), 0, _total_chars)
+
+
+func get_total_char_count() -> int:
+	return _total_chars
 
 
 ## 朝向：整体复制相机的全局 basis，底板与文字由**同一个节点变换**驱动。
@@ -94,6 +194,18 @@ func _face_camera() -> void:
 	transform = Transform3D(wanted, transform.origin)
 
 
+## 改换行宽度并**按整句重排**。
+##
+## 直接写 `wrap_width_px` 只改了属性，底板与 `_full_text_px` 还是旧值 ——
+## 打字机算垂直补偿时用的是旧整句高度，文字会偏。两者必须一起更新。
+func set_wrap_width(px: int) -> void:
+	wrap_width_px = maxi(40, px)
+	if _full_text.is_empty():
+		return
+	_relayout(_full_text)
+	_apply_prefix()
+
+
 ## 显示一句台词；hold < 0 时使用 hold_seconds。
 func say(text: String, hold := -1.0) -> void:
 	var clean := text.strip_edges()
@@ -103,7 +215,10 @@ func say(text: String, hold := -1.0) -> void:
 	if _panel == null or _label == null:
 		_build_nodes()
 	_label.text = clean
+	# 尺寸按**整句**算（`_relayout` 拿的是全文）：底板一次到位，打字过程中不再变宽。
+	# 反过来做（按可见字符算）会让气泡每打一个字就跳一下尺寸，非常晃。
 	_relayout(clean)
+	_start_typing(clean)
 	_hold_left = hold if hold >= 0.0 else hold_seconds
 	if not _active:
 		_active = true
@@ -115,11 +230,30 @@ func say(text: String, hold := -1.0) -> void:
 	bubble_shown.emit(clean)
 
 
+## 开始逐字显示。空串/关闭打字机/速度为 0 ⇒ 直接全显。
+func _start_typing(text: String) -> void:
+	_full_text = text
+	_total_chars = text.length()
+	_typed_chars = 0.0
+	_typing = typewriter_enabled and chars_per_sec > 0.0 and _total_chars > 0
+	if _label == null:
+		_typing = false
+		return
+	if _typing:
+		_apply_prefix()
+	else:
+		_finish_typing()
+
+
 func hide_bubble() -> void:
 	if not _active:
 		return
 	_active = false
 	_hold_left = 0.0
+	_typing = false
+	_typed_chars = 0.0
+	if _label != null:
+		_label.position = Vector3.ZERO
 	_kill_tween()
 	_tween = create_tween()
 	_tween.tween_method(_apply_alpha, 1.0, 0.0, FADE_SECONDS)
@@ -133,7 +267,14 @@ func is_bubble_active() -> bool:
 	return _active
 
 
+## 气泡里**正在说的那句**（全文，不是已显示的部分）。
+##
+## 刻意不返回"已显示的部分"：这是"说哪一句"的身份，被 NPC 的台词指针、
+## 剧情节拍判定和既有验收（`verify_speech_bubble_3d` / `verify_base_npc_*`）
+## 当作整句比对；打字进度另有 `get_visible_char_count()`。
 func get_bubble_text() -> String:
+	if not _full_text.is_empty():
+		return _full_text
 	return _label.text if _label != null else ""
 
 
@@ -210,11 +351,13 @@ func _relayout(text: String) -> void:
 		_label.font_size
 	)
 	text_px.x = minf(text_px.x, float(wrap_width_px))
+	_full_text_px = text_px
 	var inner_px := Vector2(
 		maxf(text_px.x + TEXT_PAD_X * 2.0, TEXT_PAD_Y * 2.0 + 40.0),
 		text_px.y + TEXT_PAD_Y * 2.0
 	)
 	var unit := _label.pixel_size * bubble_scale
+	_layout_unit = unit
 	var inner := inner_px * unit
 	var border := BORDER_WIDTH * unit
 	var half := inner * 0.5

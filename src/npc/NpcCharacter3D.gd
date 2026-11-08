@@ -362,7 +362,7 @@ func set_bubble_wrap_width(px: int) -> void:
 	var bubble := _bark.get_bubble()
 	if bubble == null:
 		return
-	bubble.wrap_width_px = BUBBLE_WRAP_PX if px <= 0 else px
+	bubble.set_wrap_width(BUBBLE_WRAP_PX if px <= 0 else px)
 
 
 ## 立刻朝向某点（不插值）。与 `_engage_talk()` 同一口径：这一帧就该看到脸。
@@ -949,6 +949,11 @@ func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 	if not _player_in_range:
 		return false
 	_engage_talk()
+	# 打字机没打完时先按 E = 「跳过这一句的逐字显示」，而不是直接翻到下一句。
+	# 与底栏 `DialogueUI.advance()` 同一套手感（先全显、已全显才推进）。
+	if _bark != null and _bark.is_typing():
+		_bark.reveal_all()
+		return true
 	advance_dialogue()
 	return true
 

@@ -378,12 +378,12 @@ r5（2026-11-04，本轮）<span style="color:#1565C0">**[用户设计]**</span>
 |---|---|---|
 | 抽哪几件 / 补哪种补给 / 随机多少件 | `Dungeon3D._plan_rescue_items()` | 在**死亡结算之前**抽（结算会把未保险物资按比例清掉） |
 | 暂存与连败计数 | `BaseData.rescue_cache` / `rescue_defeat_streak`，由 `BaseManager.commit_run_settlement()` **随同一次事务**写盘 | 塔楼死亡请求里不带 `rescue_items`，不动这两份数据 |
-| 台词 | `NpcCatalog.RESCUE_LINES` / `RESCUE_STREAK_LINES` / `RESCUE_POOL_LINES` | 代码里没有台词字面量 |
+| 台词 | `NpcCatalog.RESCUE_SCRIPTS`（候选段池，**整段随机**）/ `RESCUE_STREAK_SCRIPTS`（连败专属段） | 代码里没有台词字面量；**没有固定开场白**，见 §14.8 |
 | 趴下 / 起身 | `PlayerAvatar3D.set_narrative_pose()`（`dead` 剪辑，相位 1.0 ⇄ 0.0） | 演出方只推相位，不自己摆骨骼 |
 | 站位 / 停巡 / 转头 / 逐句气泡 | `NpcCharacter3D.begin_scripted_appearance()` / `say_scripted_line()` / `end_scripted_appearance()` | 新增的三个演出入口，**不进节拍历史、不写盘** |
 | 演出时序 / 箱子生命周期 | `src/base3d/Base99Rescue3D.gd`（`BASE-RESCUE`） | 装配点 `TowerDescent3D._install_base_rescue()` |
 | 开箱链 | `Dungeon3D._on_chest_open_requested()` | 与普通宝箱同一套：认领 → 冻结 → 砰 → 落地 → 房间账 |
-| 输入独占 | `Dungeon3D.set_scripted_input_hold()` | 并入 `_narrative_holds_player_input()`，否则会被逐帧锁同步顶掉 |
+| 输入独占 | `Dungeon3D.set_scripted_input_hold()` | 并入 `_narrative_holds_player_input()`，否则会被逐帧锁同步顶掉；同时置 `Player3D.aim_locked` 停掉鼠标朝向，见 §14.9 |
 
 `Base99Rescue3D` **不写台词、不抽奖励、不碰存档字段**：它只按时间和阶段驱动上面四家。
 
@@ -415,6 +415,9 @@ r5（2026-11-04，本轮）<span style="color:#1565C0">**[用户设计]**</span>
 | 趴下姿势 | `dead` 剪辑相位 1.0（冻结） | 与开场剧本 `nar_tower_opening_01_wake` 同一口径 |
 | 起身 | 相位 1.0 → 0.0，1.1s | 开场用 1.5s（慢慢爬起来），这里是"跳起来" |
 | 每句停留 | 3.2s | 够读完 26 字，两句 6.4s |
+| 台词来源 | `Base99Rescue3D.plan_script_lines(streak)` → `NpcCatalog.get_rescue_script()` | 演出与验收共用同一份实现，验收才抓得住"演出写死某段" |
+| 逐字显示 | `SpeechBubble3D` 打字机（默认 30 字/秒，与底栏同速） | 业主 2026-11-08：对话文字要打字机一样顺序出现；口径见 [18 §11.6](18_技术施工_UI与对话系统.md) |
+| 每句等待 | `_wait_until_line_done()`：等气泡自己收起（打字 + 停留），上限 `3.2 + 4.0s` | 死等固定秒数会在长句打完之前就把下一句顶上来 |
 | 气泡换行 | 演出期间放宽到 **700px**，结束后复位 560 | 26 字在 560px 下排三行会顶出画面上缘；抬高挂点会离开视线中心，改字号会与其他台词不一致 |
 | 消失延迟 | 10.0s | 业主口径 |
 | 消失特效 | `VFX-TELEPORT-OUT-3D`，尺寸 1.6 | 收租人撤退同一件；1.6 略大于箱体，环把箱子包住 |
@@ -445,8 +448,45 @@ BaseData.rescue_cache: [
 | 暂存清空写盘失败 | 内存已清、磁盘仍旧 ⇒ 重启可能重复给一箱，留 warning |
 | 箱子生成失败 | `push_error`，暂存保留 |
 
-### 14.8 验收
+### 14.8 台词：整段随机，没有固定开场
+
+业主 2026-11-08 二次澄清：「对话并不是一定要出现『啧啧，太危险了……』这句，这句也是随机出现的选择，
+不是固定的两句」。
+
+| 档位 | 取法 |
+|---|---|
+| 连败 2 次 / 3 次 | 只播 `RESCUE_STREAK_SCRIPTS` 对应专属段 |
+| 其余（1 次 / ≥ 4 次） | 从 `RESCUE_SCRIPTS` 四段候选里**随机挑一整段** |
+
+- 候选四段：①「啧啧…捞回来了 / 感谢我吧…捞回了点东西」（2 句）②「别泄气…」③「世上无难事…」④「这次还不错…」。
+- 掷骰只在 `NpcCatalog.get_rescue_script()` 里发生；演出方与实体都不掷，验收可用 `pick_index` 定值。
+- `Base99Rescue3D.plan_script_lines()` 是演出真正调用的入口，**验收也走它** ——
+  直接撩 `NpcCatalog` 的断言测不到"演出是不是随机抽的"。
+
+### 14.9 演出期间的操作锁（2026-11-08 r3）
+
+业主：「这个时候需要玩家无法操作，鼠标旋转也不行，这个就是剧情过程」。
+
+| 维度 | 机制 | 为什么不能省 |
+|---|---|---|
+| 移动/开火/交互 | `input_locked`（既有） | —— |
+| 残余速度与物理推移 | `Base99Rescue3D._enforce_hold()` 每帧钉水平位置、清水平速度 | 锁只拦输入，进锁前的速度仍会把人推走几十厘米 |
+| 锁掉线 | `set_scripted_input_hold(true, force)` 每帧兜底重锁 | `set_input_locked()` 在 `hp<=0` 时**静默不生效**，而血量回填发生在锁之后 |
+| 鼠标朝向 | `Player3D.set_aim_locked(true)` → `_narrative_holds_aim()` 早退 | `input_locked` 按设计**不拦瞄准**（那是给剧本 `actor.face` 留的口子），不补这条玩家晃鼠标就能把趴着的人转过来 |
+| 玩法按键 | `Dungeon3D._unhandled_input` 在演出期间整段返回 | 换枪 / 快捷物品 / M 大地图 / K 展示面板都算"操作" |
+| 背包 | `InventoryUI._player_control_fully_locked()`（= `input_locked and aim_locked`） | 只锁移动的流程（主页面/衣柜/工坊）不受影响 |
+| ESC / 暂停 | **不挡** | 演出万一卡住，玩家仍能呼出菜单退出 |
+
+起身时两个锁一起放开，验收 R14b 实测按键立刻能动。
+
+### 14.10 验收
 
 `tests/verification/verify_base99_rescue.gd` / `.tscn`，注册在 `core_scenes`（紧随 `verify_base_npc_story_beat` 之后）。
-断言组 R01–R13：内容逐字（固定两句 / 2 次 / 3 次 / 随机池）、无暂存不演、抽签规则（含保险格排除与实例去重）、塔楼不抽、趴下+锁输入+站位+浅灰箱、逐句台词、起身归还、开箱清空并落地、10 秒消失且播出离场特效、连败计数三条边界。
-反向对照（已实测会红）：去掉连败台词 → R08b 3 条；不调 `set_narrative_pose` → R06 1 条；去掉浅灰配色 → R06 2 条。
+断言组 R01–R14：候选段池与连败段逐字、无暂存不演、抽签规则（含保险格排除与实例去重）、塔楼不抽、
+趴下+锁输入+站位+浅灰箱、播出的整段必须是候选段之一且逐句按序进气泡、**演出方随机 60 次四段都要出现**、
+连败 2 次真实归航走专属段、起身归还、开箱清空并落地、10 秒消失且播出离场特效、连败计数三条边界、
+演出期间完全无法操作（鼠标锁 + 按键 24 帧不位移 + 状态机 locked）与起身后恢复。
+
+反向对照（已实测会红）：演出写死第 0 段 → R08c 4 条；去掉鼠标锁（两处都去）→ R14 3 条；
+只去掉 hold 那处、保留逐帧兜底 → R14b 1 条（说明兜底真的在起作用）；不调 `set_narrative_pose` → R06 1 条；
+去掉浅灰配色 → R06 2 条。

@@ -23,6 +23,7 @@ func _ready() -> void:
 
 	_check_bubble_basics(stage)
 	_check_text_scaling(stage)
+	_check_typewriter(stage)
 	await _check_facing_camera(stage)
 	await _check_vertical_offset_only(stage)
 	await _check_follows_parent_motion(stage)
@@ -61,6 +62,70 @@ func _check_bubble_basics(stage: Node3D) -> void:
 
 	bubble.hide_bubble()
 	_expect(not bubble.is_bubble_active(), "hide_bubble() 之后仍处于激活态")
+
+
+## 打字机（业主 2026-11-08：对话文字要打字机一样顺序出现）。
+##
+## 手动步进 `_process(delta)` 而不是等真实时间：headless 下帧率不受控，
+## 用 `create_timer` 等出来的可见字数会随机 —— 那种断言只能证明"最后会全显"，
+## 证明不了"是一字一字出来的"。这里用固定 delta 精确对齐每一档字数。
+func _check_typewriter(stage: Node3D) -> void:
+	var bubble := _make_bubble(stage, "Typewriter")
+	# 关掉引擎自动 `_process`：本段全靠手动步进，否则真实帧也在推进，
+	# 每次读数都会多出"这一帧打了几个字"，分档断言变成随机红。
+	bubble.set_process(false)
+	bubble.chars_per_sec = 20.0
+	bubble.typewriter_enabled = true
+	bubble.hold_seconds = 0.4
+	# 7 个字，20 字/秒 ⇒ 0.1s 一格正好 2 个字，0.4s 打完。
+	const LINE := "打字机效果测试"
+	_expect(LINE.length() == 7, "打字机测试句长度变了（%d），后续分档断言要同步" % LINE.length())
+
+	bubble.say(LINE, 0.4)
+	_expect(bubble.is_typing(), "say() 之后没有进入打字机状态")
+	_expect(bubble.get_visible_char_count() == 0, "第一帧之前就已经显示了字")
+	_expect(bubble.get_total_char_count() == LINE.length(), "总字数与句子不符")
+	# 尺寸按整句算：打字过程中底板就是最终宽度（否则每打一个字都跳一下）。
+	var full_width := bubble.get_bubble_width_m()
+
+	bubble._process(0.1)
+	_expect(bubble.get_visible_char_count() == 2, "0.1s @20字/秒 应显示 2 字，实际 %d" % bubble.get_visible_char_count())
+	_expect(is_equal_approx(bubble.get_bubble_width_m(), full_width), "打字过程中气泡宽度变了（应一次到位）")
+	bubble._process(0.1)
+	var mid_count := bubble.get_visible_char_count()
+	_expect(mid_count == 4, "0.2s 应显示 4 字，实际 %d" % mid_count)
+	_expect(bubble.is_typing(), "打到一半就退出了打字机状态")
+	# 停留计时不该在打字期间偷跑：hold 只有 0.4s，打了 0.2s 仍必须活着。
+	_expect(bubble.is_bubble_active(), "打字期间停留计时提前把气泡关掉了")
+
+	bubble._process(0.1)
+	bubble._process(0.1)
+	_expect(not bubble.is_typing(), "打完 7 字后仍处于打字机状态")
+	_expect(bubble.get_visible_char_count() == LINE.length(), "打完后没有全显：%d/%d" % [
+		bubble.get_visible_char_count(), LINE.length()
+	])
+	_expect(bubble.is_bubble_active(), "打字刚结束气泡就消失了（停留计时起算点不对）")
+
+	# 跳过打字机：立刻全显。
+	bubble.say(LINE, 4.0)
+	_expect(bubble.is_typing(), "第二次 say() 没有重新开始打字")
+	bubble.reveal_all()
+	_expect(not bubble.is_typing(), "reveal_all() 之后仍在打字")
+	_expect(bubble.get_visible_char_count() == LINE.length(), "reveal_all() 没有全显")
+
+	# 关掉打字机 ⇒ 一次性全出。
+	bubble.typewriter_enabled = false
+	bubble.say(LINE, 4.0)
+	_expect(not bubble.is_typing(), "关掉打字机后仍逐字显示")
+	_expect(bubble.get_visible_char_count() == LINE.length(), "关掉打字机后没有一次全显")
+
+	# 速度为 0 也等于关掉（避免出现"配 0 就永远打不完"的死状态）。
+	bubble.typewriter_enabled = true
+	bubble.chars_per_sec = 0.0
+	bubble.say(LINE, 4.0)
+	_expect(not bubble.is_typing(), "速度为 0 时仍进入打字机状态")
+	bubble.chars_per_sec = SpeechBubble3D.DEFAULT_CHARS_PER_SEC
+	bubble.hide_bubble()
 
 
 func _check_text_scaling(stage: Node3D) -> void:

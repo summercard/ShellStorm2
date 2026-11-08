@@ -110,6 +110,11 @@ var dash_cooldown_timer := 0.0
 var is_dashing := false
 var is_invincible := false
 var input_locked := false
+## 演出期间禁止**鼠标改写朝向**。与 `input_locked` 分开的两个开关，理由见
+## `_narrative_holds_aim()` 上方那段注释：`input_locked` 刻意不拦瞄准，
+## 否则剧本的 `actor.face` 会与鼠标打架；但"整段剧情不许玩家操作"这种演出
+## 需要连鼠标一起停，于是单开这一个。
+var aim_locked := false
 var _narrative_walk_target := Vector3.ZERO
 var _narrative_walk_remaining := 0.0
 var _narrative_walk_speed := 2.8
@@ -3356,12 +3361,36 @@ func _update_aim_from_mouse() -> void:
 
 
 ## 叙事是否正在接管角色朝向（见 NarrativeDirector.is_actor_facing_overridden）。
+##
+## 两条来源：
+##   ① 剧本的 `actor.face`（时间轴）—— 它只接管**朝向**，玩家仍可转身看别处，
+##      所以那条路径只由导演声明；
+##   ② `aim_locked`（`set_aim_locked()`）—— 整段演出"不许玩家操作"，
+##      连鼠标转身一起停。基地战败救援走这条（`Base99Rescue3D`）。
 func _narrative_holds_aim() -> bool:
+	if aim_locked:
+		return true
 	return (
 		NarrativeDirector != null
 		and NarrativeDirector.has_method("is_actor_facing_overridden")
 		and bool(NarrativeDirector.is_actor_facing_overridden())
 	)
+
+
+## 锁 / 解锁鼠标瞄准。锁住期间 `_update_aim_from_mouse()` 直接返回，
+## `aim_yaw` 保持锁住那一刻的值 —— 角色不会随鼠标转身，准星也不动。
+func set_aim_locked(locked: bool) -> void:
+	aim_locked = locked
+
+
+## 是否处于"整段演出、玩家完全不能操作"的状态（移动 + 鼠标 + 玩法按键全停）。
+##
+## 判据是**两个锁同时成立**：`input_locked`（移动/开火/交互）与 `aim_locked`（鼠标朝向）。
+## 只在 `Dungeon3D.set_scripted_input_hold(true)` 期间成立；其他只锁移动的流程
+## （主页面、衣柜、工坊面板、训练场）`aim_locked` 仍是 false，因此不受影响。
+## 背包 UI 用它决定"这次按 I 要不要理会"。
+func is_control_fully_locked() -> bool:
+	return input_locked and aim_locked
 
 
 func _init_state_machine() -> void:

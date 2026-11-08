@@ -99,6 +99,29 @@ func get_current_text() -> String:
 	return _bubble.get_bubble_text() if _bubble != null else ""
 
 
+## 打字机相关（2026-11-08 业主：对话文字要像打字机一样顺序出现）。
+## 全都转给 `SpeechBubble3D`，本节点不持有第二份进度。
+
+## 这句话是不是还在逐字往外冒。
+func is_typing() -> bool:
+	return _bubble != null and _bubble.is_typing()
+
+
+## 已显示的字数 / 整句字数 —— 验收用（证明真的是一字一字出来的）。
+func get_visible_char_count() -> int:
+	return _bubble.get_visible_char_count() if _bubble != null else 0
+
+
+func get_total_char_count() -> int:
+	return _bubble.get_total_char_count() if _bubble != null else 0
+
+
+## 立刻显示整句（说话时按 E 跳过打字机）。
+func reveal_all() -> void:
+	if _bubble != null:
+		_bubble.reveal_all()
+
+
 func _ensure_bubble() -> void:
 	if _bubble != null and is_instance_valid(_bubble):
 		return

@@ -989,8 +989,29 @@ func _input(event: InputEvent) -> void:
 	if accept_tab_shortcut:
 		inventory_pressed = inventory_pressed or event.is_action_pressed("ui_tab")
 	if inventory_pressed:
+		# 整段演出（基地战败救援等）期间按 I 不理会：那时玩家该看戏，
+		# 一按就弹出一张满屏面板会被读成"这段剧情坏了"。
+		# 判据用 `is_control_fully_locked()`（移动锁 + 鼠标锁同时成立），
+		# 只锁移动的流程（主页面/衣柜/工坊）照旧能开背包。
+		if _player_control_fully_locked():
+			return
 		toggle_inventory_panel()
 		get_viewport().set_input_as_handled()
+
+
+## 场上是否有玩家处于"完全不能操作"的演出状态。
+## 只在 `_input` 的开关背包路径上使用，不参与任何玩法判定。
+func _player_control_fully_locked() -> bool:
+	var tree := get_tree()
+	if tree == null:
+		return false
+	for value in tree.get_nodes_in_group("player_3d"):
+		var player := value as Node
+		if player == null or not player.has_method("is_control_fully_locked"):
+			continue
+		if bool(player.call("is_control_fully_locked")):
+			return true
+	return false
 
 ## 用物品数据更新格子
 func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:

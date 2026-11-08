@@ -1295,6 +1295,11 @@ func _apply_persisted_flashlight_module() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# 脚本化演出（基地战败救援）期间不接受任何玩法按键：换枪、快捷物品、大地图、
+	# 武器展示面板都算"操作"。暂停/ESC 属系统动作，不在这里拦 ——
+	# 万一段演出卡住，玩家仍能呼出菜单退出。
+	if _scripted_input_hold:
+		return
 	# 这一组走 InputMap action 而不是硬比 keycode：project.godot 里
 	# toggle_floor_map / select_primary_weapon / select_secondary_weapon /
 	# use_quick_item_1 / use_quick_item_2 已经绑好 M 与 1/2/3/4；手柄侧由
@@ -2380,6 +2385,9 @@ func _on_player_status_gui_input(event: InputEvent, panel: PanelContainer) -> vo
 	# tap 头像面板 = I / Tab 键
 	if not _is_panel_press(event):
 		return
+	# 演出期间点 HUD 也不开背包（与键盘 I 同一判据）。
+	if _scripted_input_hold:
+		return
 	if _inventory_ui != null:
 		_inventory_ui.toggle_inventory_panel()
 	_flash_action_key(panel)
@@ -2641,11 +2649,27 @@ func _narrative_holds_player_input() -> bool:
 
 
 ## 脚本化演出登记/释放输入独占。重复调用幂等（同值不重算）。
-func set_scripted_input_hold(held: bool) -> void:
-	if _scripted_input_hold == held:
+##
+## `force = true` 用于**逐帧兜底**：`set_input_locked()` 在 `current_hp <= 0` 时会
+## 静默不生效，而血量可能在锁之后再被回填。演出方每帧发现"锁没落下"就强制重来一次，
+## 不能指望那一发一定成功。
+##
+## 除了 `input_locked`，这里**同时停掉鼠标朝向**（`Player3D.set_aim_locked()`）：
+## `input_locked` 按设计只拦移动/开火/交互，鼠标仍能转身 —— 那是给剧本 `actor.face`
+## 留的口子。整段演出要求"玩家完全无法操作"时，必须把这条也关掉，否则玩家
+## 晃一下鼠标就能把趴着的人转过来（2026-11-08 业主反馈）。
+func set_scripted_input_hold(held: bool, force := false) -> void:
+	if _scripted_input_hold == held and not force:
 		return
 	_scripted_input_hold = held
 	_sync_player_input_lock()
+	if player == null or not is_instance_valid(player):
+		return
+	if player.has_method("set_aim_locked"):
+		player.call("set_aim_locked", held)
+	if held:
+		# 锁只拦输入；进锁前那一帧的残余速度仍会把人推走几十厘米。
+		player.velocity = Vector3.ZERO
 
 
 ## 供叙事收口时要求重算（08 文档 §5.5）。归还独占权后必须再裁决一次 ——

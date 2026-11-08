@@ -93,23 +93,43 @@ const STORY_BEATS := {
 # `npc_beat:` 历史压住，第二次战败就变成哑巴。
 #
 # 内容仍然只存在本文件：演出方（`Base99Rescue3D`）不写任何台词字面量。
-# 拆句口径见 `NpcCharacter3D.BUBBLE_WRAP_PX`：两句各占一个气泡，
-# 第二句较长，由演出方临时放宽换行宽度让它仍是两行（不抬高气泡、不改字号）。
-const RESCUE_LINES := {
+#
+# ## 关键口径：**没有"固定台词"**
+#
+# 业主 2026-11-08 二次澄清：「对话并不是一定要出现『啧啧，太危险了……』这句，
+# 这句也是随机出现的选择，不是固定的两句」。
+# ⇒ 每次战败从下面整组候选里**随机挑一整段**，那段讲几句就播几句。
+#    "啧啧…捞回来了 + 感谢我吧…捞回了点东西"只是其中一段（两句），
+#    不是必说的开场白。连败专属段优先于随机（见 `RESCUE_STREAK_SCRIPTS`）。
+
+## 候选段池：每个元素是"一整段台词"（1~2 句），随机挑一段整段播。
+##
+## 拆句口径见 `NpcCharacter3D.BUBBLE_WRAP_PX`：单句 26 字在默认 560px 下会排三行、
+## 顶出画面上缘，所以长段拆成两口气说；演出期间换行临时放宽到 700px。
+const RESCUE_SCRIPTS := {
 	NPC_BASE99_GREEN: [
-		"啧啧，太危险了，看我把你捞回来了。",
-		"感谢我吧，我还帮你捞回了点东西，下次去可要小心了。",
+		[
+			"啧啧，太危险了，看我把你捞回来了。",
+			"感谢我吧，我还帮你捞回了点东西，下次去可要小心了。",
+		],
+		[
+			"别泄气，这点小问题难不住你。",
+		],
+		[
+			"世上无难事，只要肯攀登，以前一个很伟大的人说的。",
+		],
+		[
+			"这次还不错，零件一个没少。",
+		],
 	],
 }
 
-## 连败专属台词：键 = 连续战败次数。
+## 连败专属段：键 = 连续战败次数，值 = 该次数专属的整段台词。
 ##
-## 业主 2026-11-08：「对话可以多做几套」，并给了三档语气：
-##   2 次 —— 开始拿你打趣；3 次 —— 已经无话可说；其余次数走随机池。
-##
-## 放在这里而不是写进 `Base99Rescue3D`：台词只有一处来源（与 `STORY_BEATS` 同规格），
-## 演出方只认「第几次」这个整数，换文案不动代码。
-const RESCUE_STREAK_LINES := {
+## 业主 2026-11-08：「对话可以多做几套」，并给了两档语气：
+##   2 次 —— 开始拿你打趣；3 次 —— 已经无话可说。
+## 命中这些次数时**只播专属段**，不再叠随机段（说得越多越像在念台词）。
+const RESCUE_STREAK_SCRIPTS := {
 	2: [
 		"看见那只僵尸了吗？接下来换你咬它了！",
 		"但是你首先得先长上牙齿，啧啧。",
@@ -118,14 +138,6 @@ const RESCUE_STREAK_LINES := {
 		"…………，你……",
 	],
 }
-
-## 其余次数的随机池（业主原话三条）。1 次与 4 次以上都从这里抽一句，
-## 不至于让玩家第 5 次死亡还听同一句。
-const RESCUE_POOL_LINES := [
-	"别泄气，这点小问题难不住你。",
-	"世上无难事，只要肯攀登，以前一个很伟大的人说的。",
-	"这次还不错，零件一个没少。",
-]
 
 
 static func has_npc(npc_id: String) -> bool:
@@ -237,51 +249,68 @@ static func get_story_beat_archive_facility(npc_id: String, beat_id: String) -> 
 
 # —— 战败归航救援台词 ——
 
-## 该 NPC 的战败救援台词（逐句，每句一个气泡）。没登记 ⇒ 空数组（演出方跳过演出）。
-static func get_rescue_lines(npc_id: String) -> Array[String]:
-	var lines: Array[String] = []
-	for line: Variant in (RESCUE_LINES.get(npc_id, []) as Array):
-		var text := str(line).strip_edges()
-		if not text.is_empty():
-			lines.append(text)
-	return lines
-
-
-## 救援台词全文（逐句首尾相接）。用于日志与"台词被悄悄改过"的比对。
-static func get_rescue_full_text(npc_id: String) -> String:
-	return "".join(get_rescue_lines(npc_id))
-
-
-## 按**连续战败次数**挑这段演出额外要说的话（0 句=不说 / 1–2 句=追加在固定两句之后）。
-##
-## `pick_index >= 0` 时从随机池确定性取第几条（验收用）；缺省 -1 = 真随机。
-## 随机池只在本函数里取，实体与演出方都不掷骰 —— 与 `BarkCatalog.pick_random` 同口径。
-static func get_rescue_streak_lines(
-	npc_id: String, streak: int, pick_index := -1
-) -> Array[String]:
-	var lines: Array[String] = []
-	var streak_value := maxi(0, streak)
-	var fixed := RESCUE_STREAK_LINES.get(streak_value, []) as Array
-	if not fixed.is_empty():
-		for line: Variant in fixed:
+## 候选段原文（每段是若干句）。`index` 越界时环回。
+## 验收与调试用；演出走 `get_rescue_script()`。
+static func get_rescue_scripts(npc_id: String) -> Array:
+	var scripts: Array = []
+	for raw_script: Variant in (RESCUE_SCRIPTS.get(npc_id, []) as Array):
+		var lines: Array[String] = []
+		for line: Variant in (raw_script as Array):
 			var text := str(line).strip_edges()
 			if not text.is_empty():
 				lines.append(text)
-		return lines
-	# 1 次与 4 次以上共用一个池子：不把"没专门写过"的档位变成沉默。
-	var pool := get_rescue_pool_lines(npc_id)
-	if pool.is_empty():
-		return lines
-	var index := pick_index if pick_index >= 0 else randi() % pool.size()
-	lines.append(pool[posmod(index, pool.size())])
-	return lines
+		if not lines.is_empty():
+			scripts.append(lines)
+	return scripts
 
 
-## 随机池原文（逐条，供验收比对与调试）。空数组 = 该 NPC 没有随机池。
-static func get_rescue_pool_lines(_npc_id: String) -> Array[String]:
+static func get_rescue_script_count(npc_id: String) -> int:
+	return get_rescue_scripts(npc_id).size()
+
+
+## 本次演出要说的一整段台词。
+##
+## 优先级：
+##   ① 连续战败次数命中 `RESCUE_STREAK_SCRIPTS` ⇒ 只播该次数专属段；
+##   ② 否则从 `RESCUE_SCRIPTS` 里**随机挑一整段**（业主口径：没有固定台词）。
+##
+## `pick_index >= 0` 时确定性取第几段（验收用）；缺省 -1 = 真随机。
+## 掷骰只发生在这里，实体与演出方都不掷 —— 与 `BarkCatalog.pick_random` 同口径。
+static func get_rescue_script(npc_id: String, streak: int, pick_index := -1) -> Array[String]:
 	var lines: Array[String] = []
-	for line: Variant in RESCUE_POOL_LINES:
+	var streak_value := maxi(0, streak)
+	for line: Variant in (RESCUE_STREAK_SCRIPTS.get(streak_value, []) as Array):
 		var text := str(line).strip_edges()
 		if not text.is_empty():
 			lines.append(text)
-	return lines
+	if not lines.is_empty():
+		return lines
+	var scripts := get_rescue_scripts(npc_id)
+	if scripts.is_empty():
+		return lines
+	var index := pick_index if pick_index >= 0 else randi() % scripts.size()
+	var picked: Array[String] = scripts[posmod(index, scripts.size())]
+	return picked.duplicate()
+
+
+## 该 NPC 是否有任何救援台词（演出方据此决定要不要开口）。
+static func has_rescue_script(npc_id: String) -> bool:
+	return (
+		not get_rescue_scripts(npc_id).is_empty()
+		or not RESCUE_STREAK_SCRIPTS.is_empty()
+	)
+
+
+## 全部候选段拼起来的全文（日志与"台词被悄悄改过"的比对用）。
+static func get_rescue_full_text(npc_id: String) -> String:
+	var joined := ""
+	for lines: Array[String] in get_rescue_scripts(npc_id):
+		joined += "".join(lines)
+	return joined
+
+
+static func get_rescue_streak_text(streak: int) -> String:
+	var joined := ""
+	for line: Variant in (RESCUE_STREAK_SCRIPTS.get(maxi(0, streak), []) as Array):
+		joined += str(line).strip_edges()
+	return joined

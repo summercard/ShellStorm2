@@ -4840,8 +4840,3 @@ metadata/cache_entrance = true
 transform = Transform3D(-1, 0, 1.2246468e-16, 0, 1, 0, -1.2246468e-16, 0, -1, 0, 0.1, 1.8)
 metadata/slot_role = "facility"
 metadata/central_toppleable_bookcase = true
-
-[node name="GalleryCache" type="Marker3D" parent="ArtComponents/WorkshopLayout"]
-position = Vector3(0, 0, -2)
-metadata/slot_role = "treasure_chest"
-metadata/treasure_chest_config = {"id": "gallery_cache", "quality": "common", "reward_pool_id": "loot_floor_1_2", "drop_count": 2, "fate_card_per_open": 0}

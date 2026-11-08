@@ -201,6 +201,12 @@ light.light_energy = float(_supplemental_room_lights[light]) if enabled and acti
 
 **下一个该动的是事件帧尖峰**（进房建 detail、首波同帧刷怪），不是稳态帧时 —— 稳态已经有 3.5 ms 余量。
 
+> 同日第二轮复测（见[落点归因](2026-11-08_expedition03_hitch_trace.md)）把这一格量化了：
+> 跨门帧 p95 **354.6 ms** / max 1174.7，第二遍 p95 190.6；拆分为
+> `ensure_detail_built` 12~97 ms（均值 30）+ `_update_room_streaming` 其余 20~60 ms
+> + 其上再一帧 79~217 ms + 首进额外 380~1175 ms。稳态复测 p50 10.4 / p95 16.4，
+> 表中「7 帧 > 50 ms」是首轮混入并行会话干扰的读数，干净复跑为 77/3720。
+
 ---
 
 ## 七、探针口径备忘（防重犯）

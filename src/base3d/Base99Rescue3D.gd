@@ -52,8 +52,11 @@ const CHEST_ROTATION_DEG := 18.0
 const PRONE_CLIP := "dead"
 ## 起身时长。1.1s 比开场那 1.5s 短一档：这是"跳起来"，不是"慢慢爬起来"。
 const RISE_SECONDS := 1.1
-## 每句台词的停留时间。3.2s 够读完 26 字，又不会让玩家干等（两句共 6.4s）。
+## 每句台词的停留时间（**打完字之后**再留这么久）。3.2s 够读完 26 字，又不会让玩家干等。
 const LINE_HOLD_SECONDS := 3.2
+## 打字机最多允许额外占用的秒数（等气泡收起的兜底上限）。
+## 30 字/秒打一句 26 字约 0.87s，留 4s 余量足够；超时就当气泡异常，继续往下走。
+const MAX_TYPEWRITER_EXTRA_SECONDS := 4.0
 ## 演出期间的气泡换行宽度。默认 560px（≈11 汉字/行）会把第二句 26 字排成三行、
 ## 顶出画面上缘；放宽到 700px 后两句都还是两行，字号与挂高都不动。
 const SCRIPTED_WRAP_PX := 700
@@ -82,6 +85,8 @@ var _vanish_pending := false
 var _streak := 0
 ## 本次要说的整段台词（固定两句 + 连败/随机变体），演出开始那一刻定格。
 var _script_lines: Array[String] = []
+## 演出期间玩家的钉点（世界坐标）。见 `_enforce_hold()`。
+var _pinned_world := Vector3.INF
 
 
 ## 装配。必须在 `begin()` 之前调用；四个引用缺任何一个都按"不演"处理。
@@ -122,6 +127,15 @@ func begin() -> void:
 	await _play_cutscene()
 
 
+## 排本次要说的整段台词。**演出与验收共用这一份实现** —— 验收若直连
+## `NpcCatalog.get_rescue_script()` 就测不到"演出方到底是不是随机抽的"：
+## 把这里改成永远取第 0 段，验收必须跟着红。
+##
+## `pick_index >= 0` 是验收用的确定性入口；缺省 -1 = 真随机。
+func plan_script_lines(streak: int, pick_index := -1) -> Array[String]:
+	return NpcCatalog.get_rescue_script(NpcCatalog.NPC_BASE99_GREEN, streak, pick_index)
+
+
 func _should_play_cutscene() -> bool:
 	if _tower == null or not _tower.has_method("get_entry_context_snapshot"):
 		return false
@@ -132,12 +146,13 @@ func _should_play_cutscene() -> bool:
 func _play_cutscene() -> void:
 	_place_player_prone()
 	_place_npc()
-	# 说两句用户原话，再按**连续战败次数**追加一句语气不同的台词（2 次打趣 / 3 次无语 /
-	# 其余随机池，见 `NpcCatalog.RESCUE_STREAK_LINES`）。台词为空就跳过说话、直接起身
-	# 交还操作（内容缺失不该把人钉死）。
+	# 台词**整段随机**：命中连败档就是专属段，否则从候选池随机挑一段
+	# （见 `NpcCatalog.RESCUE_SCRIPTS`）。没有必说的开场白。
+	# 台词为空就跳过说话、直接起身交还操作（内容缺失不该把人钉死）。
 	_streak = BaseManager.get_rescue_defeat_streak()
-	var lines := NpcCatalog.get_rescue_lines(NpcCatalog.NPC_BASE99_GREEN)
-	lines.append_array(NpcCatalog.get_rescue_streak_lines(NpcCatalog.NPC_BASE99_GREEN, _streak))
+	# 一段**整段随机**：命中连败档就是专属段，否则从候选池随机挑一段。
+	# 没有"必说的开场白"——业主 2026-11-08 明确那句也是随机项之一。
+	var lines := plan_script_lines(_streak)
 	_script_lines.assign(lines)
 	if _npc != null:
 		_npc.set_bubble_wrap_width(SCRIPTED_WRAP_PX)
@@ -146,12 +161,18 @@ func _play_cutscene() -> void:
 	else:
 		for line in lines:
 			if not _is_alive():
+				# 玩家被释放但本节点还活着（换场景的中间帧）⇒ 必须自己交还两个锁：
+				# 这时不会走 `_exit_tree()`，锁一旦留着，下一个场景的玩家会动不了。
+				_release_player_input()
 				return
 			if _npc != null:
 				_npc.say_scripted_line(line, LINE_HOLD_SECONDS)
-			await _wait(LINE_HOLD_SECONDS)
+			await _wait_until_line_done()
 	if _npc != null:
 		_npc.set_bubble_wrap_width(0)
+	if not _is_alive():
+		_release_player_input()
+		return
 	await _rise_player()
 	if _npc != null:
 		_npc.end_scripted_appearance()
@@ -159,19 +180,57 @@ func _play_cutscene() -> void:
 	cutscene_finished.emit()
 
 
-## 趴下：钉回归航点、锁玩法输入、把表现钉在 `dead` 终点帧。
+## 趴下：钉回归航点、锁玩法输入与鼠标朝向、把表现钉在 `dead` 终点帧。
 func _place_player_prone() -> void:
 	if not _is_alive():
 		return
 	var spawn := _spawn_world_point()
 	_player.global_position = spawn
 	_player.velocity = Vector3.ZERO
+	# 钉点留一份：锁只拦输入，残留速度与物理求解仍会把人推走几厘米；
+	# `_enforce_hold()` 每帧按这一份把水平位置拉回来。
+	_pinned_world = spawn
 	if _tower != null and _tower.has_method("set_scripted_input_hold"):
 		_tower.call("set_scripted_input_hold", true)
 		_holds_input = true
 	var avatar: Variant = _player.get("avatar")
 	if avatar is Object and (avatar as Object).has_method("set_narrative_pose"):
 		(avatar as Object).call("set_narrative_pose", PRONE_CLIP, 1.0, true)
+
+
+## 演出期间**逐帧**兜底（业主 2026-11-08：「这个时候需要玩家无法操作，鼠标旋转也不行」）。
+##
+## 三件事每帧都做，缺一条就有一条真实可走通的漏洞：
+##   ① 锁掉了就重新锁 —— `Player3D.set_input_locked()` 在 `current_hp <= 0` 时会静默
+##      不生效，而血量回填发生在锁之后；只靠开演那一发，运气不好就是"人能动"。
+##   ② 鼠标朝向归演出方 —— `set_scripted_input_hold(true)` 已经把 `aim_locked` 置上，
+##      这里再确认一次（别处若把它清掉，鼠标晃一下就能把趴着的人转过来）。
+##   ③ 水平位置钉死、竖直速度清零 —— 锁不拦重力与残余冲量。
+##
+## 只在 `_holds_input` 为真时跑，起身后立刻停，不会影响正常操作。
+func _process(_delta: float) -> void:
+	if not _holds_input:
+		return
+	_enforce_hold()
+
+
+func _enforce_hold() -> void:
+	if not _is_alive():
+		return
+	if not bool(_player.get("input_locked")):
+		if _tower != null and is_instance_valid(_tower) and _tower.has_method("set_scripted_input_hold"):
+			_tower.call("set_scripted_input_hold", true, true)
+	if not bool(_player.get("aim_locked")):
+		if _player.has_method("set_aim_locked"):
+			_player.call("set_aim_locked", true)
+	var current := _player.global_position
+	if not _pinned_world.is_finite():
+		return
+	if Vector2(current.x - _pinned_world.x, current.z - _pinned_world.z).length() > 0.0005:
+		_player.global_position = Vector3(_pinned_world.x, current.y, _pinned_world.z)
+	var velocity := _player.velocity
+	if absf(velocity.x) > 0.0005 or absf(velocity.z) > 0.0005:
+		_player.velocity = Vector3(0.0, velocity.y, 0.0)
 
 
 func _place_npc() -> void:
@@ -322,6 +381,24 @@ func _spawn_world_point() -> Vector3:
 	if _tower != null and is_instance_valid(_tower) and _tower.has_method("get_facility_spawn_point"):
 		return _tower.call("get_facility_spawn_point") as Vector3
 	return global_position
+
+
+## 等这一句真正说完（打字机打完 + 停留时长走完），而不是死等固定秒数。
+##
+## 为什么要等气泡而不是等常量：文字是**逐字冒出来**的（`SpeechBubble3D` 打字机），
+## 26 字按 30 字/秒要 0.87s，固定的 `LINE_HOLD_SECONDS` 只盖住停留段 ——
+## 死等的话句子会在打完之前被下一句顶掉。上限兜底防止气泡异常不消失时卡死演出。
+func _wait_until_line_done() -> void:
+	if _npc == null:
+		await _wait(LINE_HOLD_SECONDS)
+		return
+	var deadline := LINE_HOLD_SECONDS + MAX_TYPEWRITER_EXTRA_SECONDS
+	var elapsed := 0.0
+	while elapsed < deadline:
+		if not _npc.is_speaking():
+			return
+		await _wait(0.05)
+		elapsed += 0.05
 
 
 func _wait(seconds: float) -> void:

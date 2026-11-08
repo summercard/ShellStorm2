@@ -90,9 +90,9 @@ func _ready() -> void:
 		if file.begins_with("extraction"):
 			_check(reached.has(Vector2i.ZERO), "extraction centre remains reachable")
 		if file.begins_with("combat_45"):
-			_check(room.get_treasure_chests().size() == 1, "gallery has exactly one authored chest")
-			var chest := room.find_chest_by_id("gallery_cache")
-			_check(chest != null and chest.open_requested.is_connected(room._on_chest_open_requested), "gallery chest uses real room opening protocol")
+			# 2026-11-08 业主裁定：通道/大回廊房不放宝箱。作者美术不再携带宝箱标记，
+			# 这里守住「没有箱子」，避免以后重烘焙布局时又被带回来。
+			_check(room.get_treasure_chests().is_empty(), "gallery has no authored chest")
 			var gate := _prop_with_meta(art, "cache_entrance")
 			_check(gate != null, "gallery cache entrance has interactive shelf")
 			if render: await _capture(room,dim,file + "_runtime")
@@ -103,12 +103,9 @@ func _ready() -> void:
 				room._collect_spawn_blockers()
 				var opened := _walk_grid(dim, room.get("_spawn_blockers"))
 				var after := _flood(opened, [starts[0]])
-				_check(after.has(Vector2i(0,-8)), "gallery chest reachable after shelf topples")
+				_check(after.has(Vector2i(0,-8)), "gallery cache interior reachable after shelf topples")
 				room.capture_reactive_prop_states()
 				_check(room.get_persistent_detail_state("reactive_props").has(str(gate.get_meta("reactive_prop_id"))), "gallery fallen shelf persists")
-				if chest != null:
-					chest.commit_opened()
-					_check(bool(room.get_persistent_detail_state("treasure_chests").get("gallery_cache",{}).get("opened",false)), "gallery chest open state persists")
 		else:
 			var shelf := _first_shelf(art)
 			if shelf != null:
