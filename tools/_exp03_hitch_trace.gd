@@ -58,6 +58,13 @@ func _process(_delta: float) -> void:
 	if _tower != null and is_instance_valid(_tower):
 		for value in (_tower.get("_alive_by_room") as Dictionary).values():
 			enemies += int(value)
+	# `OBJECT_RESOURCE_COUNT` / `OBJECT_NODE_COUNT` 要遍历对象池，逐帧读会把探针自己
+	# 变成瓶颈（实测 p50 从 10.4 抬到 33.1）。只在跨门那几帧采，且只在需要时。
+	var res_count := -1
+	var node_count := -1
+	if _stage.begins_with("teleport"):
+		res_count = Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)
+		node_count = Performance.get_monitor(Performance.OBJECT_NODE_COUNT)
 	_samples.append({
 		"frame": _frame_index,
 		"t_ms": float(now) / 1000.0,
@@ -65,6 +72,8 @@ func _process(_delta: float) -> void:
 		"gpu_ms": gpu_ms,
 		"cpu_ms": cpu_ms,
 		"draw": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+		"res": res_count,
+		"nodes": node_count,
 		"room": _stage_room,
 		"stage": _stage,
 		"enemies": enemies,
@@ -73,6 +82,10 @@ func _process(_delta: float) -> void:
 
 
 func _run() -> void:
+	# `--warm` 走加载页同一条逐房渲染预热（`Dungeon3D.warm_room_materials`），
+	# 用来验证它到底把跨门压到多少。
+	var want_warm := "--warm" in OS.get_cmdline_user_args()
+	print("HITCH warm=%s" % str(want_warm))
 	_tower = SCENE.instantiate() as TowerDescent3D
 	_tower.set("test_mode", true)
 	add_child(_tower)
@@ -113,6 +126,11 @@ func _run() -> void:
 		await get_tree().process_frame
 	print("HITCH max_fps=%d physics_tick=%d" % [
 		Engine.max_fps, Engine.physics_ticks_per_second])
+
+	# ── 可选：走加载页同一条逐房渲染预热 ──
+	if want_warm:
+		var warm_report: Dictionary = await _tower.warm_room_materials(self, Vector2i(480, 270), 1, 4000)
+		print("HITCH warm=%s" % str(warm_report))
 
 	# ── 基线 ──
 	_stage = "baseline"
@@ -311,12 +329,23 @@ func _fire_segment() -> void:
 	_mark("FIRE_END")
 
 
+## 把玩家送到房间中心**地面上**。
+##
+## ⚠ 不能直接写 `room.global_position + y`：房间原点是地板中心，但中心可能正落在家具
+## 或隔断上，硬塞进去会让物理引擎在那一帧做穿透恢复（实测出过 1.2 s 的假尖峰）。
+## 所以从上方 4 m 打一条射线，落到真实地面上；打不到才退回原点上方 0.6 m。
 func _move_player_to(room: DungeonRoom3D) -> void:
-	var dims := room.get_dimensions()
-	var center := room.global_position + Vector3(0, maxf(0.2, float(dims.y) * 0.05), 0)
-	if _player.is_inside_tree():
-		_player.global_position = center
-		_player.velocity = Vector3.ZERO
+	if not _player.is_inside_tree():
+		return
+	var from := room.global_position + Vector3(0, 4.0, 0)
+	var query := PhysicsRayQueryParameters3D.create(from, from + Vector3.DOWN * 12.0)
+	query.exclude = [_player.get_rid()] if _player is CollisionObject3D else []
+	var hit := room.get_world_3d().direct_space_state.intersect_ray(query)
+	var landing := room.global_position + Vector3(0, 0.6, 0)
+	if not hit.is_empty():
+		landing = (hit["position"] as Vector3) + Vector3(0, 0.15, 0)
+	_player.global_position = landing
+	_player.velocity = Vector3.ZERO
 
 
 ## BFS 房间序列：从当前房出发沿邻接扩展，保证每一跳都是"隔壁那间"。
@@ -383,12 +412,12 @@ func _write_csv() -> void:
 	if file == null:
 		printerr("HITCH_FAIL 写不了 %s" % OUT_CSV)
 		return
-	file.store_line("frame,wall_ms,gpu_ms,cpu_ms,draw,enemies,stage,room")
+	file.store_line("frame,wall_ms,gpu_ms,cpu_ms,draw,res,nodes,enemies,stage,room")
 	for s in _samples:
-		file.store_line("%d,%.3f,%.3f,%.3f,%d,%d,%s,%s" % [
+		file.store_line("%d,%.3f,%.3f,%.3f,%d,%d,%d,%d,%s,%s" % [
 			int(s["frame"]), float(s["wall_ms"]), float(s["gpu_ms"]),
-			float(s["cpu_ms"]), int(s["draw"]), int(s["enemies"]),
-			str(s["stage"]), str(s["room"])])
+			float(s["cpu_ms"]), int(s["draw"]), int(s["res"]), int(s["nodes"]),
+			int(s["enemies"]), str(s["stage"]), str(s["room"])])
 	file.close()
 	print("HITCH csv=%s frames=%d" % [OUT_CSV, _samples.size()])
 	# 事件表另存，方便与逐帧对齐。

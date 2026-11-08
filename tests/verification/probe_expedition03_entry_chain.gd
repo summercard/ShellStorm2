@@ -94,6 +94,31 @@ func _run() -> void:
 	if warmup_report is Dictionary:
 		_check(bool((warmup_report as Dictionary).get("completed", false)),
 			"开圈前预热没做完：%s" % str(warmup_report))
+	# 逐房渲染预热（2026-11-09 新增）也必须在开圈前做完，否则它等于没做。
+	var room_warm_deadline := Time.get_ticks_msec() + 30000
+	while not tower.has_meta("loading_room_warm_report") and Time.get_ticks_msec() < room_warm_deadline:
+		await tree.process_frame
+	var room_warm: Variant = tower.get_meta("loading_room_warm_report", null)
+	print("ENTRY03_CHAIN room_warm=%s" % str(room_warm))
+	_check(room_warm is Dictionary, "加载页没有写出逐房渲染预热报告")
+	if room_warm is Dictionary:
+		var room_report := room_warm as Dictionary
+		# headless 走 `skipped`；真渲染必须真的把房间都画过一遍。
+		if not bool(room_report.get("skipped", false)):
+			_check(int(room_report.get("rooms", 0)) > 0,
+				"逐房渲染预热一间房都没画：%s" % str(room_report))
+			_check(str(room_report.get("truncated", "")).is_empty(),
+				"逐房渲染预热被截断：%s" % str(room_report))
+	# 🔴 必须等**加载页交接完成**再判落地。
+	# 交接前加载页把目标树 `process_mode` 设成 DISABLED，Godot 的
+	# `CollisionObject3D.disable_mode` 默认是 REMOVE ⇒ 碰撞体暂时不在物理空间里，
+	# 这时候打射线必然"脚下没地面"。这不是卡在空中，只是还没交棒。
+	var released_deadline := Time.get_ticks_msec() + 60000
+	while Time.get_ticks_msec() < released_deadline:
+		if tower.can_process() and (tower.player == null or tower.player.can_process()):
+			break
+		await tree.process_frame
+	print("ENTRY03_CHAIN released=%s" % str(tower.can_process()))
 	# 再让物理跑几帧，碰撞体启用与玩家落地稳定下来。
 	for i in range(20):
 		await tree.physics_frame

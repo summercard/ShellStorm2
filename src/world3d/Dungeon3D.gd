@@ -2871,6 +2871,78 @@ func _generate_layout_for_loading() -> void:
 	await _prebuild_entry_room_details()
 
 
+## 加载页「逐房渲染预热」的取数口：本局所有可游玩房间，按装配顺序。
+##
+## 为什么需要它：跨门那一帧墙钟 200~1100 ms，但 GPU 只有 7~9 ms、draw call 不变、
+## `OBJECT_RESOURCE_COUNT` 恒定 —— 资源早在装配期随壳体一起 load 完了。剩下的是
+## **渲染管线第一次遇到这间房的材质组合时同步编译**（同一间房第二遍就快一半）。
+## 解法是在加载页把每间房各画一帧，让这笔编译在玩家看不到的时候付掉。
+##
+## 只读：不建细节、不改流送、不刷怪。加载页自己建临时视口与相机取景。
+func get_room_warmup_targets() -> Array[DungeonRoom3D]:
+	var targets: Array[DungeonRoom3D] = []
+	for room in _rooms:
+		var typed := room as DungeonRoom3D
+		if typed != null and is_instance_valid(typed):
+			targets.append(typed)
+	return targets
+
+
+## 逐房各画一帧，把渲染管线的首次编译提前付掉。**加载页与验收探针共用这一份实现**，
+## 免得探针里另写一份复制品、量到的不是正式路径。
+##
+## `parent` 用来挂临时视口，必须已在场景树里；`budget_ms <= 0` 表示不限时。
+## 返回 `{skipped, rooms, total, elapsed_ms, truncated}`。
+##
+## 取景：房间中心抬高 2.6 m、俯 12°、偏 35°，一帧里同时看到两面墙与角落陈设。
+## 相机走独立 `SubViewport`（继承根视口的 `World3D`）⇒ 不动玩家、不触发房间切换、
+## 不建 `RuntimeDetail`、不刷怪，玩法时序一个字节都没改。
+func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int, budget_ms: int) -> Dictionary:
+	var report := {"skipped": false, "rooms": 0, "total": 0, "elapsed_ms": 0, "truncated": ""}
+	var targets := get_room_warmup_targets()
+	report["total"] = targets.size()
+	if parent == null or not is_instance_valid(parent) or not parent.is_inside_tree() or targets.is_empty():
+		report["skipped"] = true
+		return report
+
+	var viewport := SubViewport.new()
+	viewport.name = "RoomWarmViewport"
+	viewport.size = view_size
+	# 不建自己的 World3D：继承父视口 ⇒ 画的就是关卡本身。
+	viewport.own_world_3d = false
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	viewport.msaa_3d = Viewport.MSAA_DISABLED
+	parent.add_child(viewport)
+	var camera := Camera3D.new()
+	camera.name = "RoomWarmCamera"
+	camera.fov = 70.0
+	camera.near = 0.05
+	camera.far = 160.0
+	camera.rotation_degrees = Vector3(-12.0, 35.0, 0.0)
+	camera.current = true
+	viewport.add_child(camera)
+
+	var started := Time.get_ticks_msec()
+	var done := 0
+	for room in targets:
+		if not is_instance_valid(room) or not room.is_inside_tree():
+			continue
+		if budget_ms > 0 and Time.get_ticks_msec() - started > budget_ms:
+			report["truncated"] = "budget"
+			break
+		camera.global_position = room.global_position + Vector3(0, 2.6, 0)
+		for _i in maxi(1, frames_per_room):
+			await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+		done += 1
+	report["rooms"] = done
+	report["elapsed_ms"] = Time.get_ticks_msec() - started
+	if is_instance_valid(viewport):
+		viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+		viewport.queue_free()
+	return report
+
+
 ## 加载期把「开局第一眼就要走进去的房间」的细节一起建好。
 ##
 ## 为什么只建 start 与其开门邻房、而不是全部：

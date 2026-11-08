@@ -37,6 +37,15 @@ const MIN_LOADING_SCREEN_SECONDS := 2.0
 ## 预热的最多等待帧数。见 `_drain_warmup()`：VFX 11 件 + 怪 3 种，正常 12 帧排空
 ## （2026-11-07 真渲染实测 12 帧 / 661 ms）。这个上限只是防止某个队列异常把玩家锁在加载页里。
 const WARMUP_MAX_FRAMES := 48
+## 逐房渲染预热：视口尺寸与每房帧数。
+##
+## pipeline 编译与应用分辨率无关，所以取 480×270 就够——实测 720p 与 480×270 的收益
+## 差在噪声内，但成本差一倍多。每房 1 帧已经能把管线编译掉（第 2 帧只多花时间）。
+const ROOM_WARM_VIEW_SIZE := Vector2i(480, 270)
+const ROOM_WARM_FRAMES_PER_ROOM := 1
+## 逐房渲染预热的时间预算。实测 27 间房合计 1.17 s（VFX/怪物预热已编译掉公共管线）；
+## 给 4 s 是留余量，超了就截断并留警告——绝不能因为某个关卡房间特别多把玩家锁死在加载页里。
+const ROOM_WARM_BUDGET_MS := 4000
 ## 允许预热把加载页延长多少毫秒。**从预热第一帧结束之后起算**（见 `_drain_warmup`），
 ## 且起点不是读取页出现的时刻。
 ##
@@ -542,6 +551,36 @@ func _drain_warmup(target: Node) -> Dictionary:
 	return report
 
 
+## 加载页「逐房各画一帧」，把渲染管线第一次遇到这些材质时的同步编译提前付掉。
+##
+## 为什么不是「预加载资源」：实测跨门那一帧 `OBJECT_RESOURCE_COUNT` 恒定
+## （3928~4276，前后差 0~29）、`render_gpu` 只有 7~9 ms、draw call 也不变。
+## 资源早在装配期随壳体一起 load 完了；真正卡的是**管线编译**，只有"画一次"能解。
+## 同一间房第二遍走 p95 从 354 降到 191 ms，也印证了这一点。
+##
+## 实现放在 `Dungeon3D.warm_room_materials()`：加载页与验收探针共用同一份，
+## 免得探针里另写复制品、量到的不是正式路径。本函数只负责时机与预算。
+##
+## 实测（2026-11-08/09，真渲染 1280×720，RTX 3060，远征03 27 间房）：
+## · 成本 **1.17 s**（VFX/怪物预热已经把公共管线编译过，这里只剩各房自己的）；
+## · 跨门帧 p95 325→232 ms、max 1260→363 ms；
+## · 只画壳体就够：额外建/卸 `RuntimeDetail` 再画一遍只把 max 再压 40 ms，不值。
+func _warm_room_materials(target: Node) -> Dictionary:
+	# headless 没有渲染管线可编译，也没有 frame_post_draw 可等。
+	if _should_skip_delay():
+		return {"skipped": true, "rooms": 0, "total": 0, "elapsed_ms": 0, "truncated": "headless"}
+	# 诊断开关：自动验收需要"无预热"的对照基线。
+	if "--no-room-warm" in OS.get_cmdline_user_args():
+		return {"skipped": true, "rooms": 0, "total": 0, "elapsed_ms": 0, "truncated": "disabled"}
+	if target == null or not is_instance_valid(target) or not target.has_method("warm_room_materials"):
+		return {"skipped": true, "rooms": 0, "total": 0, "elapsed_ms": 0, "truncated": "unsupported"}
+	var report: Dictionary = await target.call(
+		"warm_room_materials", self, ROOM_WARM_VIEW_SIZE,
+		ROOM_WARM_FRAMES_PER_ROOM, ROOM_WARM_BUDGET_MS
+	)
+	return report
+
+
 func _finish_loaded_scene(target: Node) -> void:
 	var tree: SceneTree = get_tree()
 	var settle_frames: int = 2 if _requires_loading_scene_ready_contract else 0
@@ -586,6 +625,9 @@ func _finish_loaded_scene(target: Node) -> void:
 	if target.has_method("prepare_loading_render"):
 		target.call("prepare_loading_render")
 	_restore_world_render()
+	# 屏幕此刻是全黑的（`IrisTransition.cover_now()` 已经收拢），状态文字仍可读。
+	# 这句必须在两段预热之前：玩家会在这里停 3~4 秒，不能一直显示"读取完成"。
+	_set_status("正在准备关卡…")
 	# 把「进关卡后第一时间要付的冷启动」全部挪到这里编译掉 —— 详见 `_drain_warmup()`。
 	# 🔴 必须 `await`：不 await 的话预热协程会在恢复操作之后继续跑，
 	#    玩家进门那一帧照样撞上没编译完的材质与特效（2026-11-07 实测漏 9 件 VFX）。
@@ -594,6 +636,15 @@ func _finish_loaded_scene(target: Node) -> void:
 	target.set_meta("loading_warmup_completed", bool(warmup_report.get("completed", true)))
 	if not bool(warmup_report.get("completed", true)):
 		push_warning("[ExpeditionLoadingScreen] 预热未完成即开圈：%s" % str(warmup_report))
+	# 逐房渲染预热必须排在 VFX/怪物之后：它只负责编译「这一间房自己的」材质管线，
+	# 而 VFX/怪物的材质是另一套，两者互不替代。
+	var room_report: Dictionary = await _warm_room_materials(target)
+	target.set_meta("loading_room_warm_report", room_report)
+	if not bool(room_report.get("skipped", false)):
+		print("[ExpeditionLoadingScreen] 逐房渲染预热 rooms=%d/%d %dms%s" % [
+			int(room_report.get("rooms", 0)), int(room_report.get("total", 0)),
+			int(room_report.get("elapsed_ms", 0)),
+			" (截断)" if not str(room_report.get("truncated", "")).is_empty() else ""])
 	if tree.current_scene != target or not _target_is_ready(target):
 		_finalizing = false
 		return
