@@ -5,6 +5,29 @@
 
 ## 执行历史
 
+### 2026-11-08 05:01 — **内容已上线，线上校验不通过（第九天同一卡点：需登录门禁）**
+- 全流程一次过：导出 419.1 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（**CHANGELOG 0 条**）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。耗时 5m04s，无重试。
+- 包：**439,509,248 B / 419.1 MiB**，SHA256 `7b99e498c44b7eda042c1e6c1e41468e1131c4a58eea23912a955bc99357e7bb`，比 11-07 版 **+17,804,584 B（+16.98 MiB）**。exe mtime 今日 05:05。工作区开工/收工均 **1 项**（`_check_console.txt` 未跟踪），HEAD `2ce6cf19`（11-08 04:04，45 files）。
+- 线上已被本版覆盖：发布输出 `Bytes: 439512913` ＝ 本地三件（exe 439,509,248 + index 2,908 + md 757）**逐字节相等**；`/api/v1/sites` 报 `files=3 / bytes=439512913`，`created_at` 仍 `2026-10-12T19:05:19` ⇒ 未新建站点。全站仍 6 个资源。
+- **卡点不变**：直链 / 更新页 / index.html / `更新日志_2026-11-08.md` / `更新日志_2026-11-07.md` 五条均 302 → `/oauth/feishu?…&src=site`。未改策略、未删校验、未再试 `--public`。
+- **CHANGELOG 0 条已回源核实**：`CHANGELOG.md` mtime 停在 11-06 21:53，全文检索 `2026-11-07`/`2026-11-08` 零命中 ⇒ 真没写。提交 1 条（45 项），未提交 1 项。页面因此历史最薄（md 757 B / html 2,908 B / 0 个 `<h3>`）。
+- 包内实际携带的 11-07 工作（据开发记录＋记忆）：主角 Avatar3D 由 bunny01 v021 换 maid01（clip 装配，65 骨/128 剪辑，另备 chuck201）＋新增 `ClipMotionLibrary3D.gd`（378 行）＋武器挂点缩放 4 处缺陷修复（0.853→0.517 等）＋叙事钉帧/换弹上报＋**GLB 循环标记丢失导致跑步定格**（`_apply_loop_flags()` 0→75 段 LOOP_LINEAR）＋新验收 `verify_player3d_clip_loop_behavior`。
+- 环境观察：05:07 真实存档 `base_save.json` mtime 变化，经查为另一外部 Godot 实例（PID 251068，05:07:02 启动，749 MB）所致；本流水线 05:06:36 已结束，冒烟为隔离 `APPDATA` + `--headless`，**非本流程所为**。
+- 合规：`config/name="弹壳风暴2"` 未动；未 commit/push；未新建站点；`scripts/web_release.py` 已不存在、未跑；发布目录仅 3 件。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-08.md`；日志 `_logs\daily_release_2026-11-08.log`。
+- **待业主（连续第九天）**：请管理员把本站 `access` 改 `public`；另请补一条 11-07 的 CHANGELOG 条目（素材现成，否则更新页持续显示「没有更新」）。
+
+### 2026-11-07 05:00 — **内容已上线，线上校验不通过（第八天同一卡点：需登录门禁）**
+- 全流程一次过：导出 402.2 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（6 条）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。耗时 5m15s，无重试。
+- 包：**421,704,664 B / 402.2 MiB**，SHA256 `555074f37e2ed5ed56e8e2f2a684ab63dd20c61adefa8dbea6d8844dc6b4278c`，比 11-06 版 **+2,022,336 B（+1.93 MiB）**。exe mtime 今日 05:04。工作区开工/收工均 **0 项**，HEAD `2a1a1aa6`（11-06 22:58）。
+- 线上已被本版覆盖：`server-sites` 本站 **402.2 MiB**，`/api/v1/sites` 报 **421,717,645 B / 3 files** ＝ 本地三件（exe 421,704,664 + index 7,853 + md 5,128）**逐字节相等**；`created_at` 仍 `2026-10-12T19:05:19` ⇒ 未新建站点。
+- **卡点不变**：直链 / 更新页 / index.html / `更新日志_2026-11-07.md` / `更新日志_2026-11-06.md` 五条均 302 → `/oauth/feishu?…&src=site`。未改策略、未删校验、未再试 `--public`。
+- 6 条**全为 2026-11-06**，昨日那轮发的是 11-05 的 5 条，**无重叠**。提交 9 条（折叠 1），未提交 0 项。主体＝四个孤儿验收登记并顺带修两处真缺陷（收招段稳态击退放大器 5.0→9.7→14+ m/s、`_pending_volleys` 死后仍补完弹丸）、公共场景色盘去 Mipmap、远征03 动线重排/四紧凑特殊房/木门 v019、贴墙禁鼠标前视、警戒房家具清理。
+- **内容质量观察（非阻断）**：「远征03穿越房四边封闭」被采集器当成上一条的正文 bullet 吞掉，未单独成 `<h3>`；第 2 条 `<h3>` 标题含整段说明（最长行 1,569 字符）。
+- 合规：`config/name="弹壳风暴2"` 未动；未 commit/push；未新建站点；`scripts/web_release.py` 已不存在、未跑；冒烟隔离 `APPDATA`。发布目录仅 3 件。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-07.md`；日志 `_logs\daily_release_2026-11-07.log`。
+- **待业主（连续第八天）**：请管理员把本站 `access` 改 `public`，否则每天都是「发了但玩家下不到」。
+
 ### 2026-11-06 05:01 — **内容已上线，线上校验不通过（第七天同一卡点：需登录门禁）**
 - 全流程一次过：导出 400.25 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（5 条）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。耗时 5m08s，无重试。
 - 包：**419,682,328 B / 400.25 MiB**，SHA256 `7f3789ad319669ba2915e502ec175008cbdc6ec6cabff3c0813f8778d2d9923b`，比 11-05 版仅 **+542,072 B（+529 KiB）**。exe mtime 今日 05:06。工作区开工/收工均 **0 项**，HEAD `50628623`（11-06 04:05，57 项）。
