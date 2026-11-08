@@ -709,6 +709,24 @@
       "status": "partial"
     },
     {
+      "feature_id": "BASE-RESCUE",
+      "owner": "Base99Rescue3D",
+      "design_docs": [
+        "docs/v0.1/design/战败归航救援与绿苔台词.md",
+        "docs/v0.1/20_技术施工_基地NPC.md"
+      ],
+      "development_records": [
+        "docs/v0.1/development/2026-11-08_base99_defeat_rescue.md"
+      ],
+      "verification": [
+        {
+          "kind": "scene",
+          "id": "verify_base99_rescue"
+        }
+      ],
+      "status": "partial"
+    },
+    {
       "feature_id": "BASE-SHOP",
       "owner": "BaseManager",
       "design_docs": [

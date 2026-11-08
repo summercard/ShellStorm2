@@ -367,3 +367,86 @@ r5（2026-11-04，本轮）<span style="color:#1565C0">**[用户设计]**</span>
 2. `NpcStoryBeatService._requirements_met()` 加对应事实分支（新增 `requires_*` 字段）。
 3. 若需要专属站位，加一个作者锚点并让 `TowerDescent3D` 传入（多条节拍共用同一个迎宾锚点时不用改）。
 4. 验收里加断言：内容逐字、条件成立/不成立两侧、站定、开口、落盘、一次性、设施指向。
+
+## 14. 战败归航救援（r6，2026-11-08）
+
+玩法口径（触发条件、台词全集、箱子规则、不做的部分）见[设计页](design/战败归航救援与绿苔台词.md)。本节只写工程契约。
+
+### 14.1 所有权
+
+| 项 | 所有者 | 说明 |
+|---|---|---|
+| 抽哪几件 / 补哪种补给 / 随机多少件 | `Dungeon3D._plan_rescue_items()` | 在**死亡结算之前**抽（结算会把未保险物资按比例清掉） |
+| 暂存与连败计数 | `BaseData.rescue_cache` / `rescue_defeat_streak`，由 `BaseManager.commit_run_settlement()` **随同一次事务**写盘 | 塔楼死亡请求里不带 `rescue_items`，不动这两份数据 |
+| 台词 | `NpcCatalog.RESCUE_LINES` / `RESCUE_STREAK_LINES` / `RESCUE_POOL_LINES` | 代码里没有台词字面量 |
+| 趴下 / 起身 | `PlayerAvatar3D.set_narrative_pose()`（`dead` 剪辑，相位 1.0 ⇄ 0.0） | 演出方只推相位，不自己摆骨骼 |
+| 站位 / 停巡 / 转头 / 逐句气泡 | `NpcCharacter3D.begin_scripted_appearance()` / `say_scripted_line()` / `end_scripted_appearance()` | 新增的三个演出入口，**不进节拍历史、不写盘** |
+| 演出时序 / 箱子生命周期 | `src/base3d/Base99Rescue3D.gd`（`BASE-RESCUE`） | 装配点 `TowerDescent3D._install_base_rescue()` |
+| 开箱链 | `Dungeon3D._on_chest_open_requested()` | 与普通宝箱同一套：认领 → 冻结 → 砰 → 落地 → 房间账 |
+| 输入独占 | `Dungeon3D.set_scripted_input_hold()` | 并入 `_narrative_holds_player_input()`，否则会被逐帧锁同步顶掉 |
+
+`Base99Rescue3D` **不写台词、不抽奖励、不碰存档字段**：它只按时间和阶段驱动上面四家。
+
+### 14.2 阶段
+
+`Base99Rescue3D.Phase`：`idle → cutscene → chest_waiting → chest_opened → vanished`
+（另有 `skipped`：装配不到位 / 清单转不成奖励）。
+
+- `idle`：没有暂存，什么都不做（99F 每次进基地都会装配一次）。
+- `cutscene`：钉住玩家、锁输入、绿苔站定、逐句说完、起身。**起身之后才发 `cutscene_finished`**。
+- `chest_waiting`：玩家已可操作，箱子待开。
+- `chest_opened`：`TreasureChest3D.opened`（= `commit_opened()`）那一刻清暂存、起 10 秒计时。
+- `vanished`：播 `VFX-TELEPORT-OUT-3D` 后同帧 `despawn()`（视觉 + 碰撞 + 交互一起收），1.2s 后释放节点。
+
+### 14.3 站位（相对归航点，不加作者锚点）
+
+| 项 | 偏移 | 依据 |
+|---|---|---|
+| 绿苔 | `(-1.55, 0, -0.55)` | 归航点侧后方 1.6m，在原有空走道上，玩家趴着抬眼就能看到 |
+| 宝箱 | `(-2.45, 0, 0.15)` | 离绿苔约 1.0m（验收 ≤ 1.4m），离归航点 2.5m |
+
+归航点取 `TowerDescent3D.get_facility_spawn_point()`（= `FACILITY_LOGOUT_SPAWN`）。
+不新加锚点的理由：这两个点语义上就是「玩家在哪醒来，绿苔就站哪边」，归航点一改它们自动跟随；加锚点会多两个几乎重合的点，还要改场景账本 SHA。
+
+### 14.4 演出参数
+
+| 项 | 值 | 理由 |
+|---|---|---|
+| 趴下姿势 | `dead` 剪辑相位 1.0（冻结） | 与开场剧本 `nar_tower_opening_01_wake` 同一口径 |
+| 起身 | 相位 1.0 → 0.0，1.1s | 开场用 1.5s（慢慢爬起来），这里是"跳起来" |
+| 每句停留 | 3.2s | 够读完 26 字，两句 6.4s |
+| 气泡换行 | 演出期间放宽到 **700px**，结束后复位 560 | 26 字在 560px 下排三行会顶出画面上缘；抬高挂点会离开视线中心，改字号会与其他台词不一致 |
+| 消失延迟 | 10.0s | 业主口径 |
+| 消失特效 | `VFX-TELEPORT-OUT-3D`，尺寸 1.6 | 收租人撤退同一件；1.6 略大于箱体，环把箱子包住 |
+
+### 14.5 救援暂存的数据形状
+
+```text
+BaseData.rescue_cache: [
+  { kind: "item", item_id: "<item.id>", item: {...}, count: n, rescue_source: "run" | "supply" }
+]
+```
+
+- `item_id` 必须与 `item.id` 同值：`RewardSink.materialize_ground_items()` 用它做一致性校验，缺一个整批退回（表现为"箱子开了、地上什么都没有"）。
+- 开箱前由 `Dungeon3D.build_rescue_chest_grants()` 翻成 grant（`sink: ground`）交给箱子；箱子的 `explicit_grants` 非空时 `_resolve_chest_grants()` **跳过池子解析、也不套命运品质加成**（"捡回来的还是原来那把枪"）。
+
+### 14.6 连败计数
+
+`commit_run_settlement()` 内：`success` ⇒ 归零；`failure` 且请求带 `rescue_items` ⇒ +1；其余（塔楼死亡）⇒ 不变。
+与暂存在同一事务内提交，写盘失败一起回滚 —— 台词说的"这是第几次"必须与箱子里装的东西是同一次死亡。
+
+### 14.7 失败收口
+
+| 情形 | 行为 |
+|---|---|
+| 基地房 / 玩家 / NPC 缺失 | 不演，`skipped`；不 push_error（远征与工具场景本来就没有 99F 基地） |
+| 清单转不成 grant | `push_warning` + `skipped`，暂存保留（下次归航再给） |
+| 演出被打断（切场景） | `_exit_tree()` 归还输入独占并复位气泡换行 |
+| 暂存清空写盘失败 | 内存已清、磁盘仍旧 ⇒ 重启可能重复给一箱，留 warning |
+| 箱子生成失败 | `push_error`，暂存保留 |
+
+### 14.8 验收
+
+`tests/verification/verify_base99_rescue.gd` / `.tscn`，注册在 `core_scenes`（紧随 `verify_base_npc_story_beat` 之后）。
+断言组 R01–R13：内容逐字（固定两句 / 2 次 / 3 次 / 随机池）、无暂存不演、抽签规则（含保险格排除与实例去重）、塔楼不抽、趴下+锁输入+站位+浅灰箱、逐句台词、起身归还、开箱清空并落地、10 秒消失且播出离场特效、连败计数三条边界。
+反向对照（已实测会红）：去掉连败台词 → R08b 3 条；不调 `set_narrative_pose` → R06 1 条；去掉浅灰配色 → R06 2 条。

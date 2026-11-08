@@ -105,6 +105,15 @@ const LOOT_SCATTER_CLEARANCE_HEIGHT_M := 0.45
 const LOOT_SCATTER_CLEARANCE_RADIUS_M := 0.30
 ## 候选点被占时按这个比例向原点方向收缩重试。
 const LOOT_SCATTER_FALLBACK_SHRINK := [0.66, 0.33]
+## 宝箱奖励专用外围环带：排除箱体及箱体近身区域，避免物品继续堆在绿框内。
+## 这些值只作用于 `presentation_context.mode == "chest_arc"`，普通掉落不变。
+const CHEST_SCATTER_INNER_RADIUS_M := 1.75
+const CHEST_SCATTER_OUTER_RADIUS_M := 3.80
+const CHEST_SCATTER_MIN_PAIR_DISTANCE_M := 0.88
+const CHEST_SCATTER_MAX_CANDIDATE_ATTEMPTS := 28
+const CHEST_SCATTER_CLEARANCE_RADIUS_M := 0.34
+const CHEST_SCATTER_CLEARANCE_HEIGHT_M := 0.52
+const CHEST_SPAWN_ROLL_VECTOR := Vector3(1.45, 0.72, 0.90)
 
 ## —— 易碎陈设破碎掉币（设计 r7，2026-11-02）——
 ## 单件 · 单次 · 独立同分布。业主要求演进：8% → 60%（因当时未实现、误以为概率太小）→ **10%**（手感确认后收回）。
@@ -315,6 +324,9 @@ var _completed := false
 var _death_dialog: Control = null
 var _death_animation_ready := false
 var _death_filter_ready := false
+## 脚本化演出（不走时间轴剧本的短演出，如基地战败救援）是否独占玩家输入。
+## 与叙事导演的独占同一优先级，见 `_narrative_holds_player_input()`。
+var _scripted_input_hold := false
 var _defeat_transition: CanvasLayer
 ## 行动代际：每次「本次行动已终局结算并把世界复位成新一轮」时 +1。
 ## 死亡动画 1.35s 比成功撤离的 0.8s 返航窗口更长，复位之后才结束的那次死亡
@@ -2614,12 +2626,26 @@ func _sync_player_input_lock() -> void:
 ## 剧情演出期间的输入独占归叙事导演（08 文档 §5.5）。本函数被 15+ 处调用，
 ## 不加这一条就会逐帧把演出的锁顶掉 —— 表现为"剧本说了停住，角色照常能动"，
 ## 且运行时没有任何报错。所以这里显式让权。
+##
+## `_scripted_input_hold` 是**同一优先级的第二条来源**：不走时间轴剧本的短演出
+## （基地战败救援，见 `Base99Rescue3D`）也要独占输入。它必须并入本函数而不是
+## 让演出方直接 `player.set_input_locked(true)` —— 直接写会被这里逐帧覆盖。
 func _narrative_holds_player_input() -> bool:
+	if _scripted_input_hold:
+		return true
 	return (
 		NarrativeDirector != null
 		and NarrativeDirector.has_method("is_player_input_locked")
 		and bool(NarrativeDirector.is_player_input_locked())
 	)
+
+
+## 脚本化演出登记/释放输入独占。重复调用幂等（同值不重算）。
+func set_scripted_input_hold(held: bool) -> void:
+	if _scripted_input_hold == held:
+		return
+	_scripted_input_hold = held
+	_sync_player_input_lock()
 
 
 ## 供叙事收口时要求重算（08 文档 §5.5）。归还独占权后必须再裁决一次 ——
@@ -6570,7 +6596,17 @@ func _deliver_pending_chest_grants(
 		room.clear_pending_chest_grants(chest_id)
 		return 0
 	var delivery := _deliver_ground_rewards(
-		room, remaining, origin, "chest:%s:%s" % [room.room_id, chest_id]
+		room,
+		remaining,
+		origin,
+		"chest:%s:%s" % [room.room_id, chest_id],
+		true,
+		0.0,
+		{
+			"mode": "chest_arc",
+			"origin": origin,
+			"chest_id": chest_id,
+		}
 	)
 	var rejected := (delivery.get("rejected", []) as Array).duplicate(true)
 	if rejected.is_empty():
@@ -6726,6 +6762,11 @@ func _deliver_chest_mimic_loot(room: DungeonRoom3D, enemy: Enemy3D) -> void:
 
 ## 两档规则只由独立服务解析，品质加成不作用于命运卡世界凭据。
 func _resolve_chest_grants(room: DungeonRoom3D, chest: TreasureChest3D) -> Array:
+	# 明确清单优先：基地救援箱装的是「上一局捞回来的东西」，不是任何一张掉落表能表达的。
+	# 这条路**不套命运品质加成** —— 清单里的每一件都该原样还给玩家，
+	# 随机提升稀有度会让"捡回来的还是原来那把枪"这句话不成立。
+	if chest.has_explicit_grants():
+		return chest.get_explicit_grants()
 	var report := CHEST_REWARD_SERVICE_SCRIPT.resolve(
 		chest.get_reward_config(), run_seed, room.room_id, maxi(1, visual_theme.difficulty_rank)
 	)
@@ -6877,7 +6918,8 @@ static func clutter_coin_planar_offset(
 ## 既有调用方（剧情 / 宝箱 / 击杀）不传即默认 `spread=true` / 延迟 0.0，行为逐帧不变。
 func _deliver_ground_rewards(
 	room: DungeonRoom3D, grants: Array, origin: Vector3, context: String,
-	spread: bool = true, pickup_delay_after_spawn: float = 0.0
+	spread: bool = true, pickup_delay_after_spawn: float = 0.0,
+	presentation_context: Dictionary = {}
 ) -> Dictionary:
 	var adjusted: Array = []
 	for value in grants:
@@ -6901,7 +6943,9 @@ func _deliver_ground_rewards(
 					if int(rule["count"]) % int(rule["every"]) == 0:
 						tiers += int(rule["tiers"])
 				_apply_fate_item_quality(item, tiers, str(item.get("fate_rarity_cap", "")))
-			return _spawn_loot_items(room, items, origin, 0.0, spread, pickup_delay_after_spawn)
+			return _spawn_loot_items(
+				room, items, origin, 0.0, spread, pickup_delay_after_spawn, presentation_context
+			)
 	)
 	var rejected := delivery.get("rejected", []) as Array
 	if not rejected.is_empty():
@@ -7080,23 +7124,39 @@ func _on_fate_pickup_interacted(pickup: GroundLootPickup3D) -> bool:
 ## `pickup_delay_after_spawn`：落地动画结束**之后**再锁多久（秒）。0 = 不额外锁。
 ## 破碎掉币传 0.5，让玩家撞碎的罐子里的金币先在地上躺一会儿再被吸走；
 ## 其余来源（击杀 / 宝箱 / 剧情）保持 0.0，手感与既有验收基线零变化。
+## `presentation_context.mode == "chest_arc"` 时改用**箱外环带**散布（见 `_build_chest_spawn_positions`）：
+## 奖励落在箱体周围 1.75~3.80m 的环上，而不是全堆在箱子的绿框里。
+## 缺省空字典 ⇒ 走原来的方形小散布，其他调用方行为逐帧不变。
 func _spawn_loot_items(
 	room: DungeonRoom3D,
 	items: Array,
 	world_position: Vector3,
 	pickup_grace_seconds: float = 0.0,
 	spread: bool = true,
-	pickup_delay_after_spawn: float = 0.0
+	pickup_delay_after_spawn: float = 0.0,
+	presentation_context: Dictionary = {}
 ) -> int:
 	if room == null or not is_instance_valid(room):
 		return 0
 	var spawned := 0
+	var chest_arc := str(presentation_context.get("mode", "")) == "chest_arc"
 	var scatter_max_radius := _loot_scatter_max_radius(room, items.size())
+	var chest_positions: Array = []
+	if chest_arc:
+		chest_positions = _build_chest_spawn_positions(
+			room,
+			world_position,
+			items.size(),
+			str(presentation_context.get("chest_id", ""))
+		)
 	for index in range(items.size()):
 		var item_value: Variant = items[index]
 		if not item_value is Dictionary:
 			push_warning("[Dungeon3D] Ignored non-dictionary loot entry at index %d" % index)
 			continue
+		if chest_arc and index >= chest_positions.size():
+			# 宝箱专用落点没有合法候选时保留该奖励在 pending，不能回缩到箱心。
+			break
 		var item: Dictionary = (item_value as Dictionary).duplicate(true)
 		# 堆叠数量是物品真实数量；尤其弹药必须以“发”为单位落地和拾取。
 		item["count"] = maxi(1, int(item.get("count", 1)))
@@ -7110,22 +7170,170 @@ func _spawn_loot_items(
 		if narrative_auto_equip and str(item.get("type", "")) == "weapon":
 			pickup.item_data["narrative_auto_equip"] = true
 		pickup.set_pickup_grace_seconds(pickup_grace_seconds)
+		var landing_position := world_position
+		if chest_arc:
+			landing_position = (chest_positions[index] as Dictionary).get("position", world_position)
+		elif spread:
+			landing_position += _loot_scatter_offset(index, items.size(), scatter_max_radius)
 		room.add_child(pickup)
-		var requested_position := world_position
-		if spread:
-			requested_position += _loot_scatter_offset(index, items.size(), scatter_max_radius)
-		pickup.global_position = _resolve_loot_spawn_position(
-			requested_position,
+		# 宝箱候选已是严格支撑点；普通来源仍复用原有贴地/净空和兼容回缩。
+		pickup.global_position = landing_position if chest_arc else _resolve_loot_spawn_position(
+			landing_position,
 			world_position
 		)
 		# 锁必须在 `begin_spawn_animation()` **之前**挂上：动画结束时会读这个字段
 		# 把保护期往后推。顺序反了就变成「动画放完才设锁」，落地那一帧仍可被吸走。
 		pickup.lock_pickup_after_spawn(pickup_delay_after_spawn)
-		# 怪物掉落、搜索产出和主动落地都先经过“抛高→落地→两次弹跳”；
-		# 存档恢复不走这里，避免读档时把已经稳定的物品再次弹起。
-		pickup.begin_spawn_animation()
+		if chest_arc:
+			var chest_config := (chest_positions[index] as Dictionary).duplicate(true)
+			chest_config["mode"] = "chest_arc"
+			chest_config["origin"] = world_position
+			pickup.begin_spawn_animation(chest_config)
+		else:
+			# 怪物掉落、搜索产出和主动落地都先经过“抛高→落地→两次弹跳”；
+			# 存档恢复不走这里，避免读档时把已经稳定的物品再次弹起。
+			pickup.begin_spawn_animation()
 		spawned += 1
 	return spawned
+
+
+## 宝箱外围落点的确定性随机化。随机只影响候选顺序和角度扰动，不消费全局 RNG.
+## 候选不足时返回短数组，让 RewardSink 只确认成功前缀，余下 grants 留在 pending.
+func _build_chest_spawn_positions(
+	room: DungeonRoom3D, origin: Vector3, item_count: int, chest_id: String
+) -> Array:
+	var result: Array = []
+	if room == null or item_count <= 0:
+		return result
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash("chest_scatter|%d|%s|%s|%d" % [run_seed, room.room_id, chest_id, item_count])
+	var accepted: Array[Vector3] = []
+	for index in range(item_count):
+		var found := false
+		var base_offset := _chest_scatter_offset(index, item_count)
+		var base_angle := atan2(base_offset.z, base_offset.x)
+		var base_radius := base_offset.length()
+		for attempt in range(CHEST_SCATTER_MAX_CANDIDATE_ATTEMPTS):
+			var angle := base_angle + rng.randf_range(-0.42, 0.42) + float(attempt) * 0.73
+			var radius := clampf(
+				base_radius + rng.randf_range(-0.48, 0.48),
+				CHEST_SCATTER_INNER_RADIUS_M,
+				CHEST_SCATTER_OUTER_RADIUS_M
+			)
+			var local_origin := room.to_local(origin)
+			var requested_local := local_origin + Vector3(cos(angle), 0.0, sin(angle)) * radius
+			requested_local.y = local_origin.y
+			if absf(requested_local.x) > room.get_dimensions().x * 0.5 - 1.10:
+				continue
+			if absf(requested_local.z) > room.get_dimensions().y * 0.5 - 1.10:
+				continue
+			var report := _find_strict_supported_spawn_position(room.to_global(requested_local))
+			if not bool(report.get("supported", false)):
+				continue
+			var landing := report.get("position", origin) as Vector3
+			var planar_offset := landing - origin
+			planar_offset.y = 0.0
+			if planar_offset.length() < CHEST_SCATTER_INNER_RADIUS_M:
+				continue
+			if not _is_chest_landing_clear(room, landing, accepted):
+				continue
+			accepted.append(landing)
+			result.append({
+				"position": landing,
+				"roll_vector": _chest_roll_vector(chest_id, index),
+			})
+			found = true
+			break
+		if not found:
+			break
+	return result
+
+
+## 环带上的**基准**落点（确定性，不掷骰）：黄金角定方向 + 按件数从内到外分档半径。
+##
+## 只作为上一步随机扰动的起点 —— 真正的落点由 `_build_chest_spawn_positions` 在它附近
+## 抖动后逐条过支撑/净空/间距校验。确定性让"同一只箱子同一次开箱"逐位可复现，
+## 件数少时贴内圈（看着像从箱子里蹦出来），件数多时向外铺开。
+func _chest_scatter_offset(index: int, item_count: int) -> Vector3:
+	var inner := CHEST_SCATTER_INNER_RADIUS_M + CHEST_SCATTER_MIN_PAIR_DISTANCE_M * 0.5
+	var outer := maxf(inner, CHEST_SCATTER_OUTER_RADIUS_M)
+	var angle := float(index) * LOOT_SCATTER_GOLDEN_ANGLE + CHEST_SPAWN_ROLL_VECTOR.z
+	var step := (
+		0.0 if item_count <= 1
+		else float(index) / float(maxi(1, item_count - 1))
+	)
+	return Vector3(cos(angle), 0.0, sin(angle)) * lerpf(inner, outer, step)
+
+
+func _chest_roll_vector(chest_id: String, index: int) -> Vector3:
+	var value := absi(hash("chest_roll|%s|%d" % [chest_id, index]))
+	var sign_x := -1.0 if value % 2 == 0 else 1.0
+	var sign_y := -1.0 if value % 3 == 0 else 1.0
+	var sign_z := -1.0 if value % 5 == 0 else 1.0
+	return Vector3(1.15 + float(value % 31) / 100.0, 0.55, 0.75 + float(value % 23) / 100.0) * Vector3(sign_x, sign_y, sign_z)
+
+
+func _find_strict_supported_spawn_position(requested_world_position: Vector3) -> Dictionary:
+	var world := get_world_3d()
+	if world == null:
+		return {"supported": false, "position": requested_world_position}
+	var query := PhysicsRayQueryParameters3D.create(
+		requested_world_position + Vector3.UP * 3.0,
+		requested_world_position + Vector3.DOWN * 4.0,
+		1
+	)
+	query.collide_with_areas = false
+	query.hit_back_faces = true
+	if player != null and is_instance_valid(player):
+		query.exclude = [player.get_rid()]
+	var hit := world.direct_space_state.intersect_ray(query)
+	if hit.is_empty() or (hit.get("normal", Vector3.ZERO) as Vector3).y < 0.55:
+		return {"supported": false, "position": requested_world_position}
+	return {
+		"supported": true,
+		"position": (hit.get("position", requested_world_position) as Vector3) + Vector3.UP * 0.05,
+	}
+
+
+func _is_chest_landing_clear(
+	room: DungeonRoom3D, landing: Vector3, accepted: Array[Vector3]
+) -> bool:
+	var local := room.to_local(landing)
+	var dimensions := room.get_dimensions()
+	if absf(local.x) > dimensions.x * 0.5 - 1.10 or absf(local.z) > dimensions.y * 0.5 - 1.10:
+		return false
+	var world := get_world_3d()
+	if world != null:
+		var shape := SphereShape3D.new()
+		shape.radius = CHEST_SCATTER_CLEARANCE_RADIUS_M
+		var query := PhysicsShapeQueryParameters3D.new()
+		query.shape = shape
+		query.collision_mask = 1
+		query.collide_with_bodies = true
+		query.collide_with_areas = false
+		query.transform = Transform3D(
+			Basis.IDENTITY,
+			landing + Vector3.UP * CHEST_SCATTER_CLEARANCE_HEIGHT_M
+		)
+		if player != null and is_instance_valid(player):
+			query.exclude = [player.get_rid()]
+		if not world.direct_space_state.intersect_shape(query, 1).is_empty():
+			return false
+	for other in accepted:
+		var offset := landing - other
+		offset.y = 0.0
+		if offset.length() < CHEST_SCATTER_MIN_PAIR_DISTANCE_M:
+			return false
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if not value is GroundLootPickup3D or not room.is_ancestor_of(value):
+			continue
+		if (value as GroundLootPickup3D).is_queued_for_deletion():
+			continue
+		var existing_offset := landing - (value as GroundLootPickup3D).global_position
+		existing_offset.y = 0.0
+		if existing_offset.length() < CHEST_SCATTER_MIN_PAIR_DISTANCE_M:
+			return false
+	return true
 
 
 ## 本次掉落的散布半边长：件数越多越接近 2m × 2m，但受房间尺寸夹紧。
@@ -11641,6 +11849,11 @@ func _finish_run(success: bool) -> void:
 	extraction_panel.visible = false
 	_run_loot = _collect_extracted_items(success)
 	var settlement: Dictionary = {}
+	# 战败救援：**必须在 `process_death_settlement` 之前抽**（它会把未保险物资按比例清掉）。
+	# 只有远征关卡会抽出内容；塔楼死亡返回空表，请求里也就不带这个键。
+	var rescue_items: Array = []
+	if not success:
+		rescue_items = _plan_rescue_items(inventory_before)
 	if success:
 		_death_settlement.process_extraction_settlement(_inventory, _insurance, _quick_inventory)
 	else:
@@ -11662,7 +11875,7 @@ func _finish_run(success: bool) -> void:
 		if success:
 			pity_result = _plan_synthesis_pity_drop()
 		var transaction_id := _get_run_settlement_transaction_id(success)
-		var commit := BaseManager.commit_run_settlement({
+		var settlement_request := {
 			"transaction_id": transaction_id,
 			"success": success,
 			"kills": _kills,
@@ -11670,7 +11883,12 @@ func _finish_run(success: bool) -> void:
 			"extraction_loot": _run_loot if success else [],
 			"insurance_saved": settlement.get("insurance_saved", []) if not success else [],
 			"return_checkpoint": _build_settlement_return_checkpoint(),
-		}) as Dictionary
+		}
+		# 塔楼死亡不带这个键：`commit_run_settlement` 只有在键存在时才替换救援暂存，
+		# 这样一次还没开箱的远征救援不会被塔楼死亡顺手清空。
+		if not success and has_method("is_expedition") and bool(call("is_expedition")):
+			settlement_request["rescue_items"] = rescue_items
+		var commit := BaseManager.commit_run_settlement(settlement_request) as Dictionary
 		if _absorb_duplicate_settlement(commit):
 			# 本次行动已经结算过：内存里刚做的那套改动必须整体撤销，
 			# 否则玩家会看到「行动失败」而档案其实是上一套结果。
@@ -11813,6 +12031,188 @@ func _hold_player_after_settlement() -> void:
 
 func _build_settlement_return_checkpoint() -> Dictionary:
 	return {}
+
+
+# —— 战败归航救援暂存（BASE-RESCUE，2026-11-08 业主设计）——
+#
+# 业主口径：「这个宝箱打开后会掉落随机 1-2 个你在上个战局内的物品
+# （包括装备和包裹的，不包含保险箱里的），然后 1-2 个随机的补给物品」。
+#
+# 为什么在**结算这一刻**抽、随同一个存档事务落盘：
+#   - 结算之后场景就卸载了，那一局的背包/装备只剩这一刻读得到；
+#   - 抽完再单独存一次，会让「战绩已落盘、救援物没落盘」变成一个真实存在的中间态，
+#     玩家退出重进就白丢一次（等于替他把损失翻倍）。
+#
+# 口径：只作用于**远征关卡**死亡（塔楼死亡不演救援箱），见 `is_expedition()`。
+
+## 最多捞回几件本局物品 / 几件补给。
+const RESCUE_MAX_RUN_ITEMS := 2
+const RESCUE_MAX_SUPPLIES := 2
+## 补给候选 → 每件的数量。四个 ID 都是正式物品（手雷走 `SpecialItemCatalog`，
+## 其余走 `ItemRegistry`），不做新的内容定义。
+const RESCUE_SUPPLY_COUNTS := {
+	"item_health_potion": 1,
+	"item_ammo_pack": 20,
+	"item_battery_s": 1,
+	"special_grenade": 1,
+}
+## 救援抽签的独立随机流。与主 RNG 分家：救援抽到哪几件，不该因为本局多开了
+## 两只宝箱而变。`run_seed` 决定它是可复现的（同种子同结果）。
+const RESCUE_RNG_SALT := 0x5F3A91
+
+
+## 组出这一局的救援物资清单（`RewardSink` 的 grant 形状）。
+##
+## `inventory_snapshot` 必须是**死亡结算之前**的背包快照（`get_slots_snapshot()`）——
+## 结算会把未保险物资按比例清掉，之后再读只会剩下一半。
+func _plan_rescue_items(inventory_snapshot: Array) -> Array:
+	var grants: Array = []
+	if not (has_method("is_expedition") and bool(call("is_expedition"))):
+		return grants
+	var insured := _insured_item_keys()
+	var candidates: Array = []
+	var seen := {}
+	for slot_value in inventory_snapshot:
+		if not slot_value is Dictionary:
+			continue
+		var slot := slot_value as Dictionary
+		var item := (slot.get("item", {}) as Dictionary).duplicate(true)
+		if item.is_empty() or _is_insured_item(item, insured):
+			continue
+		var identity := _rescue_item_identity(item)
+		if not identity.is_empty():
+			if seen.has(identity):
+				continue
+			seen[identity] = true
+		candidates.append({"item": item, "count": maxi(1, int(slot.get("count", 1)))})
+	if player != null and is_instance_valid(player):
+		for slot_index in range(2):
+			if not player.has_method("get_equipped_weapon_item_for_slot"):
+				break
+			var weapon: Dictionary = player.call("get_equipped_weapon_item_for_slot", slot_index) as Dictionary
+			if weapon.is_empty() or _is_insured_item(weapon, insured):
+				continue
+			var weapon_identity := _rescue_item_identity(weapon)
+			if not weapon_identity.is_empty():
+				if seen.has(weapon_identity):
+					continue
+				seen[weapon_identity] = true
+			candidates.append({"item": weapon, "count": 1})
+		if player.has_method("get_equipped_backpack_item"):
+			var backpack: Dictionary = player.call("get_equipped_backpack_item") as Dictionary
+			if not backpack.is_empty() and not _is_insured_item(backpack, insured):
+				var backpack_identity := _rescue_item_identity(backpack)
+				if backpack_identity.is_empty() or not seen.has(backpack_identity):
+					if not backpack_identity.is_empty():
+						seen[backpack_identity] = true
+					candidates.append({"item": backpack, "count": 1})
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(run_seed) ^ RESCUE_RNG_SALT
+	# 洗牌用 Fisher-Yates：抽「随机 1–2 件」而不重复同一件。
+	for index in range(candidates.size() - 1, 0, -1):
+		var swap_index := rng.randi_range(0, index)
+		var held: Variant = candidates[index]
+		candidates[index] = candidates[swap_index]
+		candidates[swap_index] = held
+	if not candidates.is_empty():
+		var run_pick := mini(candidates.size(), rng.randi_range(1, RESCUE_MAX_RUN_ITEMS))
+		for index in range(run_pick):
+			var picked := candidates[index] as Dictionary
+			grants.append(_make_rescue_grant(
+				picked.get("item", {}) as Dictionary, int(picked.get("count", 1)), "run"
+			))
+	var supply_pick := rng.randi_range(1, RESCUE_MAX_SUPPLIES)
+	var supply_ids: Array = RESCUE_SUPPLY_COUNTS.keys()
+	for _index in range(supply_pick):
+		var supply_id := str(supply_ids[rng.randi_range(0, supply_ids.size() - 1)])
+		var supply_item := _resolve_rescue_supply_item(supply_id)
+		if supply_item.is_empty():
+			continue
+		grants.append(_make_rescue_grant(
+			supply_item, int(RESCUE_SUPPLY_COUNTS.get(supply_id, 1)), "supply"
+		))
+	return grants
+
+
+func _make_rescue_grant(item: Dictionary, count: int, source: String) -> Dictionary:
+	var payload := item.duplicate(true)
+	var stack := maxi(1, count)
+	payload["count"] = stack
+	return {
+		"kind": "item",
+		"item_id": str(payload.get("id", "")),
+		"item": payload,
+		"count": stack,
+		"rescue_source": source,
+	}
+
+
+func _resolve_rescue_supply_item(item_id: String) -> Dictionary:
+	var special := SpecialItemCatalog.get_item(item_id)
+	if not special.is_empty():
+		return special
+	return ItemRegistry.get_instance().get_item(item_id)
+
+
+## 保险格里的物品：按**实例**识别（`item_instance_id` / `weapon_instance_id`）。
+##
+## 不按物品 ID 识别：只按 `id` 判会把「保险了一把 pistol」变成「所有 pistol 都不算救援物」，
+## 而业主的口径是"保险箱里的那些"不安全，不是"这一种枪"不安全。
+func _insured_item_keys() -> Dictionary:
+	var keys := {}
+	if _insurance == null:
+		return keys
+	for entry_value in _insurance.get_all_insured_items():
+		if not entry_value is Dictionary:
+			continue
+		var item := ((entry_value as Dictionary).get("item", {}) as Dictionary)
+		for field in ["item_instance_id", "weapon_instance_id"]:
+			var key := str(item.get(field, ""))
+			if not key.is_empty():
+				keys[key] = true
+	return keys
+
+
+func _is_insured_item(item: Dictionary, insured: Dictionary) -> bool:
+	if insured.is_empty():
+		return false
+	for field in ["item_instance_id", "weapon_instance_id"]:
+		var key := str(item.get(field, ""))
+		if not key.is_empty() and insured.has(key):
+			return true
+	return false
+
+
+func _rescue_item_identity(item: Dictionary) -> String:
+	for field in ["item_instance_id", "weapon_instance_id"]:
+		var key := str(item.get(field, ""))
+		if not key.is_empty():
+			return key
+	return ""
+
+
+## 救援箱落地后要交给箱子的一批 grants：把暂存条目（存档格式）翻回 `RewardSink`
+## 认识的样子（`item_id` 必须与 `item.id` 同值，见 `BaseManager.commit_run_settlement`）。
+static func build_rescue_chest_grants(cache: Array) -> Array:
+	var grants: Array = []
+	for value in cache:
+		if not value is Dictionary:
+			continue
+		var entry := value as Dictionary
+		var item := (entry.get("item", {}) as Dictionary).duplicate(true)
+		if item.is_empty():
+			continue
+		var stack := maxi(1, int(entry.get("count", item.get("count", 1))))
+		item["count"] = stack
+		grants.append({
+			"kind": "item",
+			"item_id": str(item.get("id", "")),
+			"item": item,
+			"count": stack,
+			"sink": "ground",
+		})
+	return grants
 
 
 func _request_return_entry_context(success: bool) -> int:

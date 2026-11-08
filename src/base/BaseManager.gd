@@ -771,6 +771,9 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	var extraction_points := maxi(0, int(request.get("extraction_points", 0))) if success else 0
 	var extraction_loot := request.get("extraction_loot", []) as Array
 	var insurance_saved := request.get("insurance_saved", []) as Array
+	# 战败归航的救援暂存：与本次结算**同一事务**落盘，写失败一起回滚。
+	# 不放第二个事务的理由：结算已经成功、救援箱却没写进去，玩家会看到"救了但没救"。
+	var rescue_items := request.get("rescue_items", []) as Array
 	var transaction_data := data
 	var old_expedition_02_unlocked := data.expedition_02_unlocked
 	var old_unlocked_levels := data.expedition_unlocked_levels.duplicate()
@@ -780,6 +783,8 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 	var old_points := data.extraction_points
 	var old_loot := data.extraction_loot.duplicate(true)
 	var old_insurance := data.pending_insurance_slots.duplicate(true)
+	var old_rescue := data.rescue_cache.duplicate(true)
+	var old_streak := data.rescue_defeat_streak
 	var old_checkpoint := data.active_run_snapshot.duplicate(true)
 	var old_transactions := data.completed_transaction_ids.duplicate()
 	# 保底是「先记账、后提交」：`plan_synthesis_pity` 已经在内存里改过计数，
@@ -824,7 +829,37 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 				"insurance_slot": maxi(0, int(entry.get("insurance_slot", data.pending_insurance_slots.size()))),
 				"insured_at": int(entry.get("insured_at", Time.get_unix_time_from_system())),
 			})
+	# 救援暂存：整批替换（不是追加）。一次死亡只对应一箱，
+	# 上一次没开就再死一次时，玩家拿到的应该是最新这次捞回来的东西。
+	#
+	# **只有请求里显式带 `rescue_items` 才动这份数据**：塔楼死亡不走救援箱，
+	# 它不该顺手把一次还没开箱的远征救援清成空。
+	if request.has("rescue_items"):
+		data.rescue_cache.clear()
+		for raw_entry in rescue_items:
+			if not raw_entry is Dictionary:
+				continue
+			var entry := raw_entry as Dictionary
+			var item := (entry.get("item", entry) as Dictionary).duplicate(true)
+			if item.is_empty():
+				continue
+			var normalized := ShopService.ensure_item_instance(item)
+			data.rescue_cache.append({
+				"kind": "item",
+				# `item_id` 必须与 `item.id` 同值：`RewardSink.materialize_ground_items`
+				# 拿这两个字段做一致性校验，缺一个整批退回（表现为"箱子开了但地上什么都没有"）。
+				"item_id": str(normalized.get("id", "")),
+				"item": normalized,
+				"count": maxi(1, int(entry.get("count", item.get("count", 1)))),
+				"rescue_source": str(entry.get("rescue_source", "run")),
+			})
 	data.active_run_snapshot = (request.get("return_checkpoint", {}) as Dictionary).duplicate(true)
+	# 连续战败计数：成功撤离清零，远征战败 +1（塔楼死亡不动它 —— 那套没有救援演出）。
+	# 与救援暂存同一个事务：台词说的「这是第几次」必须和箱子里装的东西是同一次死亡。
+	if success:
+		data.rescue_defeat_streak = 0
+	elif request.has("rescue_items"):
+		data.rescue_defeat_streak = maxi(0, data.rescue_defeat_streak) + 1
 	ShopService.append_completed(data.completed_transaction_ids, transaction_id)
 	if save_base("run_settlement:%s" % ("success" if success else "death")):
 		# 记账已落盘，暂存快照随之作废；下一次结算重新开始一轮记账。
@@ -847,6 +882,8 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 		data.extraction_points = old_points
 		data.extraction_loot = old_loot
 		data.pending_insurance_slots = old_insurance
+		data.rescue_cache = old_rescue
+		data.rescue_defeat_streak = old_streak
 		data.active_run_snapshot = old_checkpoint
 		data.completed_transaction_ids.assign(old_transactions)
 		data.synthesis_pity = old_synthesis_pity
@@ -1618,6 +1655,73 @@ func get_extraction_loot() -> Array[Dictionary]:
 		if item is Dictionary:
 			result.append(item.duplicate(true))
 	return result
+
+
+## — 战败救援暂存（99F 浅灰救援箱的内容）—
+
+## 当前待开箱的救援物资（副本，`[{kind, item, rescue_source}]`）。空 = 没有待开箱。
+##
+## 只读：不写盘、不消耗。开箱那一刻才由 `clear_rescue_cache()` 清空。
+func get_rescue_cache() -> Array[Dictionary]:
+	_ensure_data()
+	var result: Array[Dictionary] = []
+	if data == null:
+		return result
+	for entry in data.rescue_cache:
+		if entry is Dictionary:
+			result.append((entry as Dictionary).duplicate(true))
+	return result
+
+
+func has_rescue_cache() -> bool:
+	_ensure_data()
+	return data != null and not data.rescue_cache.is_empty()
+
+
+## 清空救援暂存并落盘。返回是否**成功落盘**。
+##
+## 失败语义：内存里已经清掉（本局不再发第二遍），但磁盘上还是旧内容 ⇒
+## 重启后会再开一次箱，等于白送。所以失败必须如实返回 false 并留 warning，
+## 由调用方（救援箱）在日志里留痕，而不是静默当成功。
+func clear_rescue_cache(reason: String = "rescue_chest_opened") -> bool:
+	_ensure_data()
+	if data == null:
+		return false
+	if data.rescue_cache.is_empty():
+		return true
+	var previous := data.rescue_cache.duplicate(true)
+	data.rescue_cache.clear()
+	if save_base(reason):
+		return true
+	data.rescue_cache = previous
+	push_warning("[BaseManager] 救援暂存清空失败（%s），重启后可能重复开箱。" % reason)
+	return false
+
+
+## 连续战败次数（只读）。绿苔按它换台词，不参与任何数值。
+func get_rescue_defeat_streak() -> int:
+	_ensure_data()
+	if data == null:
+		return 0
+	return maxi(0, data.rescue_defeat_streak)
+
+
+## 验收/复位用：只改内存投影，不写盘（与 `replace_narrative_history_for_test` 同规格）。
+func replace_rescue_cache_for_test(entries: Array) -> void:
+	_ensure_data()
+	if data == null:
+		return
+	data.rescue_cache.clear()
+	for value in entries:
+		if value is Dictionary:
+			data.rescue_cache.append((value as Dictionary).duplicate(true))
+
+
+func replace_rescue_defeat_streak_for_test(streak: int) -> void:
+	_ensure_data()
+	if data != null:
+		data.rescue_defeat_streak = maxi(0, streak)
+
 
 func store_insurance_return_items(entries: Array, transaction_id: String = "") -> Dictionary:
 	_ensure_data()

@@ -26,8 +26,21 @@ var _collection_elapsed := 0.0
 var _collection_start_scale := Vector3.ONE
 var _nearby_player: Node3D
 var _pickup_collision_shape: CollisionShape3D
+## 宝箱专用空间抛射状态。普通掉落仍走下方的旧两次弹跳动画。
+var _chest_spawn_mode := false
+var _chest_spawn_start_global := Vector3.ZERO
+var _chest_spawn_landing_global := Vector3.ZERO
+var _chest_spawn_start_rotation := Vector3.ZERO
+var _chest_spawn_roll_vector := Vector3.ZERO
+var _chest_spawn_elapsed := 0.0
+var _chest_spawn_tween: Tween
+var _chest_label_was_visible := false
 
 const PICKUP_ANIMATION_DURATION := 0.32
+const CHEST_SPAWN_DURATION_S := 1.35
+## 相对箱口到最终落点连线的抛物线峰值；0.5 进度处达到最高点。
+const CHEST_SPAWN_ARC_HEIGHT_M := 2.5
+const CHEST_SPAWN_DEFAULT_ROLL_VECTOR := Vector3(1.45, 0.72, 0.90)
 const SPAWN_LAUNCH_HEIGHT_M := 1.65
 const SPAWN_FIRST_LANDING_S := 0.30
 const SPAWN_RISE_S := 0.12
@@ -164,6 +177,10 @@ func _process(delta: float) -> void:
 	if _collecting:
 		_process_collection(delta)
 		return
+	if _chest_spawn_mode:
+		_process_chest_spawn(delta)
+		_update_player_distance()
+		return
 	if not _accepted and _visual != null and not _spawn_animating:
 		_visual.rotation.y += delta * 1.35
 		_visual.position.y = 0.46 + sin(Time.get_ticks_msec() * 0.0035 + float(get_instance_id() % 13)) * 0.07
@@ -173,10 +190,14 @@ func _process(delta: float) -> void:
 		pickup_requested.emit(self, item_data.duplicate(true))
 
 
-## 生成后的真实掉落表现：先抛高，落地后连续弹两下；第二次落地前不允许拾取。
+## 生成后的真实掉落表现：默认先抛高，落地后连续弹两下；第二次落地前不允许拾取。
+## 宝箱专用模式则从箱口沿空间抛物线飞到已经校验过的外围落点。
 ## 落点由 Dungeon3D 先做贴地与净空校验，动画只负责表现，不改变存档坐标。
-func begin_spawn_animation() -> void:
+func begin_spawn_animation(spawn_config: Dictionary = {}) -> void:
 	if _spawn_animating or _accepted:
+		return
+	if str(spawn_config.get("mode", "")) == "chest_arc":
+		_begin_chest_spawn_animation(spawn_config)
 		return
 	if _visual == null:
 		# 没有视觉就没有动画可等：锁立刻起算。
@@ -195,6 +216,64 @@ func begin_spawn_animation() -> void:
 		tween.tween_property(_visual, "position:y", 0.46 + height, duration * 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		tween.tween_property(_visual, "position:y", 0.46, duration * 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.tween_callback(_finish_spawn_animation)
+
+
+func _begin_chest_spawn_animation(spawn_config: Dictionary) -> void:
+	if _visual == null:
+		_apply_post_spawn_lockout()
+		return
+	_spawn_animating = true
+	_pickup_unlocked = false
+	_chest_spawn_mode = true
+	_chest_spawn_elapsed = 0.0
+	_chest_spawn_start_global = spawn_config.get(
+		"origin", global_position + Vector3.UP * 0.4
+	) as Vector3
+	_chest_spawn_landing_global = global_position + Vector3.UP * 0.46
+	_chest_spawn_start_rotation = _visual.rotation
+	_chest_spawn_roll_vector = spawn_config.get(
+		"roll_vector", CHEST_SPAWN_DEFAULT_ROLL_VECTOR
+	) as Vector3
+	_visual.global_position = _chest_spawn_start_global
+	if _label != null:
+		_chest_label_was_visible = _label.transparency < 1.0
+		_label.transparency = 1.0
+	if _chest_spawn_tween != null and _chest_spawn_tween.is_valid():
+		_chest_spawn_tween.kill()
+	_chest_spawn_tween = create_tween()
+	_chest_spawn_tween.tween_method(_update_chest_spawn_visual, 0.0, 1.0, CHEST_SPAWN_DURATION_S)
+	_chest_spawn_tween.tween_callback(_finish_chest_spawn_animation)
+
+
+func _update_chest_spawn_visual(progress: float) -> void:
+	if _visual == null or _accepted:
+		return
+	_chest_spawn_elapsed = progress * CHEST_SPAWN_DURATION_S
+	var curved := _chest_spawn_start_global.lerp(_chest_spawn_landing_global, progress)
+	curved.y += CHEST_SPAWN_ARC_HEIGHT_M * 4.0 * progress * (1.0 - progress)
+	_visual.global_position = curved
+	_visual.rotation = _chest_spawn_start_rotation + _chest_spawn_roll_vector * progress
+
+
+func _process_chest_spawn(_delta: float) -> void:
+	# 宝箱轨迹由 Tween 驱动，而不是依赖当前房间节点仍在 process。
+	# 这里保留分支只为兼容暂停/旧场景手动推进，不再重复更新位置。
+	pass
+
+
+func _finish_chest_spawn_animation() -> void:
+	_chest_spawn_mode = false
+	_spawn_animating = false
+	_pickup_unlocked = true
+	_visual.global_position = _chest_spawn_landing_global
+	_visual.rotation = _chest_spawn_start_rotation + _chest_spawn_roll_vector
+	if _label != null and _chest_label_was_visible:
+		_label.transparency = 0.0
+	# 落地稳定之后才起算「看得见但暂时捡不了」的窗口。
+	# 起算点必须在这里，不能在生成侧写 `动画时长 + T` —— 那是第二处真源。
+	_apply_post_spawn_lockout()
+	if _player_in_range and not _accepted:
+		_pickup_request_cooldown_until_msec = 0
 
 
 func _finish_spawn_animation() -> void:
@@ -443,6 +522,8 @@ func get_model_snapshot() -> Dictionary:
 		"pickup_distance_m": pickup_distance_m,
 		"pickup_distance_dynamic": true,
 		"spawn_animating": _spawn_animating,
+		"spawn_mode": "chest_arc" if _chest_spawn_mode else "default",
+		"chest_spawn_elapsed_s": _chest_spawn_elapsed,
 		"pickup_unlocked": _pickup_unlocked,
 		"collecting": _collecting,
 		"collection_target_valid": _collection_target != null and is_instance_valid(_collection_target),
@@ -458,6 +539,7 @@ func get_model_snapshot() -> Dictionary:
 		"base_size_multiplier": CURRENT_BASE_SIZE_MULTIPLIER,
 		"visual_scale": _visual.scale if _visual != null else Vector3.ZERO,
 		"visual_world_position": _visual.global_position if _visual != null and _visual.is_inside_tree() else Vector3.ZERO,
+		"visual_world_rotation": _visual.global_rotation if _visual != null and _visual.is_inside_tree() else Vector3.ZERO,
 		# 名牌朝向：与 `Enemy3D.overhead_health_camera_billboard` 同一口径，
 		# 让门禁能直接断言「俯视镜头读得到名字」，而不是只靠肉眼。
 		# 注意：`label_shown == false`（如货币）时，下面三项一律为 false/""，

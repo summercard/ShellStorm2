@@ -114,6 +114,17 @@ var fate_card_per_open: int:
 var mimic := false
 ## 拟态变什么怪。同 `chest_placements.mimic_monster_kind`，缺省 `egt_mimic`。
 var mimic_monster_kind := "egt_mimic"
+## 明确奖励清单（`[{kind:"item", item:{...}}]`，与 `RewardSink` 同一形状）。
+##
+## 非空时**不再走 `ChestRewardService` 的池子解析**（见 `Dungeon3D._resolve_chest_grants`）：
+## 箱子里装什么由调用方给定。用途只有一个——基地救援箱要把「上一局捞回来的东西」
+## 原样还回去，那不是任何一张掉落表能表达的内容。
+## 走的是同一条开箱链（认领 → 冻结 → 砰 → 落地 → 房间账），只是奖励来源换成这份清单。
+var explicit_grants: Array = []
+## 平涂配色。alpha = 0 表示不染，用模型自带色盘（普通/高级箱的现行观感）。
+## 非 0 时按 `body_tint` 给身板、`trim_tint` 给箱边，见 `RewardChestVisual3D.apply_flat_tint`。
+var body_tint := Color(0, 0, 0, 0)
+var trim_tint := Color(0, 0, 0, 0)
 
 var _opened := false
 var _open_phase: int = OpenPhase.CLOSED
@@ -144,6 +155,16 @@ func configure(config: Dictionary) -> void:
 	drop_count = maxi(1, int(config.get("drop_count", drop_count)))
 	mimic = bool(config.get("mimic", mimic))
 	mimic_monster_kind = str(config.get("mimic_monster_kind", mimic_monster_kind))
+	explicit_grants = (config.get("grants", explicit_grants) as Array).duplicate(true)
+	var tint_value: Variant = config.get("body_tint", null)
+	if tint_value is Array and (tint_value as Array).size() >= 3:
+		var tint: Array = tint_value
+		body_tint = Color(float(tint[0]), float(tint[1]), float(tint[2]))
+		trim_tint = body_tint.darkened(0.28)
+	var trim_value: Variant = config.get("trim_tint", null)
+	if trim_value is Array and (trim_value as Array).size() >= 3:
+		var trim: Array = trim_value
+		trim_tint = Color(float(trim[0]), float(trim[1]), float(trim[2]))
 
 
 ## 返回给奖励调度层的最小宝箱配置；不暴露节点状态，也不直接解析奖励。
@@ -157,6 +178,15 @@ func get_reward_config() -> Dictionary:
 		"mimic": mimic,
 		"mimic_monster_kind": mimic_monster_kind,
 	}
+
+
+## 箱内**明确装什么**（副本）。空数组 = 走池子解析。
+func get_explicit_grants() -> Array:
+	return explicit_grants.duplicate(true)
+
+
+func has_explicit_grants() -> bool:
+	return not explicit_grants.is_empty()
 
 
 func _ready() -> void:
@@ -533,6 +563,17 @@ func restore_mimic_state() -> void:
 	_vanish_for_mimic()
 
 
+## 演出用：整只消失（视觉、碰撞、交互一起收掉），不重播任何动画。
+##
+## 与拟态终态是同一套收尾（`_vanish_for_mimic`）：只藏视觉不关碰撞，会在场上留一块
+## 看不见的挡路石头。调用方负责在同帧播离场特效 —— 箱子本身不认识 VFX。
+func despawn() -> void:
+	_opened = true
+	_open_phase = OpenPhase.OPENED
+	_player_in_range = false
+	_vanish_for_mimic()
+
+
 ## 品质 → 掉落品质加成档数。`Dungeon3D._apply_fate_item_quality()` 吃这个值。
 ## 宝箱品质在原作里是「棕/蓝/绿/红/黑」五档，我们映射到 4 档品质加成（0~3）。
 func quality_tier() -> int:
@@ -564,6 +605,18 @@ func get_chest_snapshot() -> Dictionary:
 		"prompt": _prompt.text if _prompt != null else "",
 		"dot_visible": is_interaction_dot_visible(),
 		"lid_open_deg": rad_to_deg(_lid_pivot.rotation.x) if _lid_pivot != null else 0.0,
+		# 明确奖励清单：箱子里装的是调用方给的那几件，不是池子抽的。
+		"has_explicit_grants": has_explicit_grants(),
+		"explicit_grant_count": explicit_grants.size(),
+		# 外观：浅灰箱的判据是「身板材质真的没绑色盘贴图、albedo 就是那个灰」，
+		# 只比配置值会放过"配置写了但没生效"的情况。
+		"body_tint": body_tint,
+		"body_has_palette_texture": (
+			_body_material != null and _body_material.albedo_texture != null
+		),
+		"body_albedo_color": (
+			_body_material.albedo_color if _body_material != null else Color.BLACK
+		),
 	}
 
 
@@ -590,6 +643,9 @@ func _build_visual() -> void:
 		_visual_root = visual.get_node_or_null("ImportedModel") as Node3D
 	_visual_base_y = _visual_root.position.y if _visual_root != null else 0.0
 	visual.set_quality_accent(trim_color)
+	# 平涂配色放在品质光之后：它会把箱边自发光关掉，浅灰箱不该带任何品质色。
+	if body_tint.a > 0.0:
+		visual.apply_flat_tint(body_tint, trim_tint if trim_tint.a > 0.0 else body_tint.darkened(0.28))
 	if _glow != null:
 		_glow.visible = false
 
@@ -610,7 +666,9 @@ func _build_visual() -> void:
 	_prompt.font_size = 32
 	_prompt.pixel_size = 0.010
 	_prompt.outline_size = 0
-	_prompt.modulate = trim_color.lightened(0.3)
+	_prompt.modulate = (
+		body_tint.lightened(0.55) if body_tint.a > 0.0 else trim_color.lightened(0.3)
+	)
 	_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_prompt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_prompt.billboard = BaseMaterial3D.BILLBOARD_ENABLED

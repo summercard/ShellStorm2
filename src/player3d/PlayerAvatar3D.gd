@@ -528,6 +528,20 @@ func has_narrative_pose() -> bool:
 	return _narrative_pose_active
 
 
+## 叙事姿态快照（验收/调试用）：验的是"这一帧真的钉在那段剪辑的哪个相位"，
+## 不是"调用过 set_narrative_pose"。
+func get_narrative_pose_snapshot() -> Dictionary:
+	return {
+		"active": _narrative_pose_active,
+		"clip": _narrative_pose_clip,
+		"phase": _narrative_pose_phase,
+		"frozen": _narrative_pose_frozen,
+		# 姿态锁真的生效时，骨骼采样走的是 lock 通道 —— 只报 active 会放过
+		# "标了 active 但 pose_lock 没开"的假趴下。
+		"pose_lock_enabled": _authored_motion.pose_lock_enabled,
+	}
+
+
 func _process(delta: float) -> void:
 	_elapsed += delta
 	_apply_bunny_attachment_scale()

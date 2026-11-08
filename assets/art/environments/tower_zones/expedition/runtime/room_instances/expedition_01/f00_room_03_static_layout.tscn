@@ -18,11 +18,6 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn" id="16_8mijh"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn" id="17_fvajq"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_deck_5m/ceiling_deck_5m_root_top3d.tscn" id="18_orr6q"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_lighting/ceiling_lighting_root_top3d.tscn" id="19_if2ks"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_ring_beam/ceiling_ring_beam_root_top3d.tscn" id="20_efrqa"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_cable_tray/ceiling_service_cable_tray_root_top3d.tscn" id="21_dvg3r"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_duct/ceiling_service_duct_root_top3d.tscn" id="22_wxb33"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_pipe_run/ceiling_service_pipe_run_root_top3d.tscn" id="23_k4cne"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/corner_guard/corner_guard_root_top3d.tscn" id="24_oxt5l"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_service/floor_service_root_top3d.tscn" id="25_qwgjm"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_top_service/wall_top_service_root_top3d.tscn" id="26_wnk7m"]
@@ -731,31 +726,6 @@ metadata/authored_slot_role = "room_type_component"
 [node name="ceiling_deck_3" parent="." unique_id=1855812219 instance=ExtResource("18_orr6q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5298986e-06, 11.4775, -17.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_lighting" parent="." unique_id=798142773 instance=ExtResource("19_if2ks")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.495, 0)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_ring_beam" parent="." unique_id=1540940005 instance=ExtResource("20_efrqa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.15, 0)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_service_cable_tray" parent="." unique_id=1766093954 instance=ExtResource("21_dvg3r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.465, 0)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_service_duct" parent="." unique_id=1408494211 instance=ExtResource("22_wxb33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.4425, 0)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_service_pipe_run" parent="." unique_id=192204986 instance=ExtResource("23_k4cne")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 9.9306, 1.7484555e-09)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="corner_guard" parent="." unique_id=1083550094 instance=ExtResource("24_oxt5l")]

@@ -89,6 +89,23 @@ var extraction_loot: Array = []
 # 这一条边界；基地运行态检查点成功接管后会原子清空，不能混入撤离战利品。
 var pending_insurance_slots: Array = []
 
+# 战败归航的「救援暂存」。格式：[{kind:"item", item:{...}, rescue_source:"run"|"supply"}]
+#
+# 由远征死亡结算在**同一个事务里**写入（`commit_run_settlement` 的 `rescue_items`），
+# 由 99F 那只浅灰救援箱在开箱那一刻清空。语义是「绿苔从战局里捞回来的东西」：
+#   ① 上局携带的 1–2 件物品（背包 + 装备，**不含保险格**）；
+#   ② 1–2 件补给（血瓶 / 弹药 / 手雷 / 电池）。
+# 为什么必须落档而不是只放内存：结算已经把战绩写盘了，玩家在这次开箱前退出，
+# 那份「捞回来的东西」不能凭一次进程重启就消失 —— 那等于让玩家的损失翻倍。
+var rescue_cache: Array = []
+
+# 连续战败次数（远征死亡 +1，成功撤离清零）。
+#
+# 用途只有一个：绿苔在救援演出里按「这是第几次把你这具身体捡回来」换台词
+# （业主 2026-11-08：「对话可以多做几套」，2 次 / 3 次各有专属说法）。
+# 不参与任何数值、掉落或解锁 —— 它是一个**语气**，不是进度。
+var rescue_defeat_streak: int = 0
+
 # 合成目录的硬保底计数（跨局持久）。键 = 被保底的钥匙物品 ID，值 = `{misses:int}`。
 # 语义与判据见 SynthesisCatalog.resolve_settlement：**只在击败过首领的局里记账**，
 # 没打首领的局既不累加也不清零，否则「进图→撤离」可以无限刷计数。
@@ -161,6 +178,8 @@ func _to_dict() -> Dictionary:
 		"pending_loadout_items": pending_loadout_items,
 		"extraction_loot": extraction_loot,
 		"pending_insurance_slots": pending_insurance_slots,
+		"rescue_cache": rescue_cache,
+		"rescue_defeat_streak": rescue_defeat_streak,
 		"synthesis_pity": synthesis_pity,
 		"save_revision": save_revision,
 		"last_saved_at_unix": last_saved_at_unix,
@@ -245,6 +264,13 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("pending_loadout_items") and d["pending_loadout_items"] is Array: data.pending_loadout_items = Array(d["pending_loadout_items"])
 	if d.has("extraction_loot") and d["extraction_loot"] is Array: data.extraction_loot = Array(d["extraction_loot"])
 	if d.has("pending_insurance_slots") and d["pending_insurance_slots"] is Array: data.pending_insurance_slots = Array(d["pending_insurance_slots"])
+	# 旧档没有这个字段 = 没有待开箱的救援物资（不是错误，也不是"已开过"）。
+	if d.has("rescue_cache") and d["rescue_cache"] is Array:
+		for value in d["rescue_cache"]:
+			if value is Dictionary:
+				data.rescue_cache.append((value as Dictionary).duplicate(true))
+	if d.has("rescue_defeat_streak"):
+		data.rescue_defeat_streak = maxi(0, int(d["rescue_defeat_streak"]))
 	# 保底计数只接受「键 → 字典」的形状。坏形状视为没记过账，而不是把整个计数清成 0
 	# 后照常跑 —— 后者会让一个被写坏的值变成"差 3 次"的既成事实。
 	if d.has("synthesis_pity") and d["synthesis_pity"] is Dictionary:

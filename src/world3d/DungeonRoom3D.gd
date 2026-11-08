@@ -6355,7 +6355,27 @@ func spawn_runtime_chest(
 	return chest
 
 
-## 按 `chest_id` 找本房在册的箱子（含数据摆位与运行期掉落两种）。
+## 生成一只**不记账**的临时宝箱（剧情/基地演出用）。
+##
+## 与 `spawn_runtime_chest()` 的唯一区别是**不写房间账**：这种箱子由剧情所有者
+## 掌管生命周期（例如"开完 10 秒后连同特效一起消失"），进了房间账反而会被
+## `_rebuild_runtime_chests()` 在走远回来时重新立起来 —— 表现是"消失的箱子又出现了"。
+##
+## 开箱链完全复用：仍由 `_instantiate_chest_node()` 接 `open_requested`，
+## 于是奖励解析、冻结、砰的时机、落地、镜头冲击全部走 `Dungeon3D` 那一套。
+func spawn_transient_chest(
+	config: Dictionary, offset: Vector2, rotation_deg := 0.0
+) -> TreasureChest3D:
+	var chest_id := str(config.get("id", ""))
+	if chest_id.is_empty():
+		push_error("[DungeonRoom3D] 临时宝箱缺少 id，已丢弃（房间 %s）" % room_id)
+		return null
+	return _instantiate_chest_node(
+		config, offset, rotation_deg, "TransientChest_%s" % chest_id
+	)
+
+
+## 按 `chest_id` 找本房在册的箱子（含数据摆位、运行期掉落与临时箱三种）。
 func find_chest_by_id(chest_id: String) -> TreasureChest3D:
 	if chest_id.is_empty():
 		return null

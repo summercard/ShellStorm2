@@ -130,8 +130,8 @@ func _build_chest_lineup() -> void:
 
 func _build_fate_card_lineup() -> void:
 	var card_data := [
-		{"id": "render_card_a", "position": Vector3(-1.28, 0.0, 1.28), "label": "FateCardDropPickup3D\n扫描流光"},
-		{"id": "render_card_b", "position": Vector3(1.28, 0.0, 1.28), "label": "悬浮 · 慢转\n0.55 rad/s"},
+		{"id": "render_card_a", "position": Vector3(-1.55, 0.0, 1.72), "label": "命运卡 · 扫描流光"},
+		{"id": "render_card_b", "position": Vector3(1.55, 0.0, 1.72), "label": "命运卡 · 方块上升"},
 	]
 	for data in card_data:
 		var card := FateCardDropPickup3D.new()
@@ -143,7 +143,6 @@ func _build_fate_card_lineup() -> void:
 			"card_source": "chest_render_evidence",
 		})
 		card.position = data["position"]
-		card.scale = Vector3.ONE * 1.55
 		_vp.add_child(card)
 		card.remove_from_group("interaction_provider_3d")
 		card.remove_from_group("interaction_providers_3d")

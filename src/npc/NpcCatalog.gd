@@ -86,6 +86,47 @@ const STORY_BEATS := {
 	},
 }
 
+# —— 战败归航救援台词（2026-11-08 业主原话） ——
+#
+# 为什么不放进 `STORY_BEATS`：`STORY_BEATS` 的语义是「跨存档只播一次」，
+# 而这段是**每次战败归航都要播**。放进去会被 `_session_played` 与
+# `npc_beat:` 历史压住，第二次战败就变成哑巴。
+#
+# 内容仍然只存在本文件：演出方（`Base99Rescue3D`）不写任何台词字面量。
+# 拆句口径见 `NpcCharacter3D.BUBBLE_WRAP_PX`：两句各占一个气泡，
+# 第二句较长，由演出方临时放宽换行宽度让它仍是两行（不抬高气泡、不改字号）。
+const RESCUE_LINES := {
+	NPC_BASE99_GREEN: [
+		"啧啧，太危险了，看我把你捞回来了。",
+		"感谢我吧，我还帮你捞回了点东西，下次去可要小心了。",
+	],
+}
+
+## 连败专属台词：键 = 连续战败次数。
+##
+## 业主 2026-11-08：「对话可以多做几套」，并给了三档语气：
+##   2 次 —— 开始拿你打趣；3 次 —— 已经无话可说；其余次数走随机池。
+##
+## 放在这里而不是写进 `Base99Rescue3D`：台词只有一处来源（与 `STORY_BEATS` 同规格），
+## 演出方只认「第几次」这个整数，换文案不动代码。
+const RESCUE_STREAK_LINES := {
+	2: [
+		"看见那只僵尸了吗？接下来换你咬它了！",
+		"但是你首先得先长上牙齿，啧啧。",
+	],
+	3: [
+		"…………，你……",
+	],
+}
+
+## 其余次数的随机池（业主原话三条）。1 次与 4 次以上都从这里抽一句，
+## 不至于让玩家第 5 次死亡还听同一句。
+const RESCUE_POOL_LINES := [
+	"别泄气，这点小问题难不住你。",
+	"世上无难事，只要肯攀登，以前一个很伟大的人说的。",
+	"这次还不错，零件一个没少。",
+]
+
 
 static func has_npc(npc_id: String) -> bool:
 	return DEFINITIONS.has(npc_id)
@@ -192,3 +233,55 @@ static func get_story_beat_requirement(npc_id: String, beat_id: String) -> Strin
 
 static func get_story_beat_archive_facility(npc_id: String, beat_id: String) -> String:
 	return str(get_story_beat(npc_id, beat_id).get("archive_facility_id", ""))
+
+
+# —— 战败归航救援台词 ——
+
+## 该 NPC 的战败救援台词（逐句，每句一个气泡）。没登记 ⇒ 空数组（演出方跳过演出）。
+static func get_rescue_lines(npc_id: String) -> Array[String]:
+	var lines: Array[String] = []
+	for line: Variant in (RESCUE_LINES.get(npc_id, []) as Array):
+		var text := str(line).strip_edges()
+		if not text.is_empty():
+			lines.append(text)
+	return lines
+
+
+## 救援台词全文（逐句首尾相接）。用于日志与"台词被悄悄改过"的比对。
+static func get_rescue_full_text(npc_id: String) -> String:
+	return "".join(get_rescue_lines(npc_id))
+
+
+## 按**连续战败次数**挑这段演出额外要说的话（0 句=不说 / 1–2 句=追加在固定两句之后）。
+##
+## `pick_index >= 0` 时从随机池确定性取第几条（验收用）；缺省 -1 = 真随机。
+## 随机池只在本函数里取，实体与演出方都不掷骰 —— 与 `BarkCatalog.pick_random` 同口径。
+static func get_rescue_streak_lines(
+	npc_id: String, streak: int, pick_index := -1
+) -> Array[String]:
+	var lines: Array[String] = []
+	var streak_value := maxi(0, streak)
+	var fixed := RESCUE_STREAK_LINES.get(streak_value, []) as Array
+	if not fixed.is_empty():
+		for line: Variant in fixed:
+			var text := str(line).strip_edges()
+			if not text.is_empty():
+				lines.append(text)
+		return lines
+	# 1 次与 4 次以上共用一个池子：不把"没专门写过"的档位变成沉默。
+	var pool := get_rescue_pool_lines(npc_id)
+	if pool.is_empty():
+		return lines
+	var index := pick_index if pick_index >= 0 else randi() % pool.size()
+	lines.append(pool[posmod(index, pool.size())])
+	return lines
+
+
+## 随机池原文（逐条，供验收比对与调试）。空数组 = 该 NPC 没有随机池。
+static func get_rescue_pool_lines(_npc_id: String) -> Array[String]:
+	var lines: Array[String] = []
+	for line: Variant in RESCUE_POOL_LINES:
+		var text := str(line).strip_edges()
+		if not text.is_empty():
+			lines.append(text)
+	return lines

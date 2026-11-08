@@ -219,6 +219,18 @@ var _story_player: Node3D = null
 ## "装配方没给迎宾站位"的警告只打一次。
 var _standby_warned := false
 
+# —— 脚本化演出（不走时间轴剧本的短演出，2026-11-08 基地战败救援）——
+#
+# 与剧情节拍的区别：节拍是**一次性**的（`npc_beat:` 落盘），演出是**每次成立就播一次**
+# （玩家每死一次回基地都要被捞一次）。所以不能复用节拍的历史判定，
+# 但可以复用同一套表现：停巡、站定、转头看人、气泡逐句。
+#
+# 演出期间节拍让位（`_apply_story_state` 直接 return）：两套东西同时想摆这个人，
+# 只会互相拽位置。
+var _scripted_active := false
+var _scripted_point := Vector3.ZERO
+var _scripted_look := Vector3.ZERO
+
 
 func _ready() -> void:
 	add_to_group(INTERACTION_GROUP)
@@ -288,6 +300,80 @@ func get_story_beat_id() -> String:
 ## 是否正"站在边上等玩家"。
 func is_story_standby() -> bool:
 	return _story_standby
+
+
+# —— 脚本化演出 ——
+
+## 钉到指定世界点、面朝目标点，等演出方喂台词。**不进节拍历史、不写盘。**
+##
+## 调用即停巡；`end_scripted_appearance()` 之前不会自己走开，也不会被
+## `refresh_story_state()` 拽去迎宾点位。
+func begin_scripted_appearance(point: Vector3, look_point: Vector3) -> void:
+	_scripted_active = true
+	_scripted_point = point
+	_scripted_look = look_point
+	# 演出优先：把待播节拍让出来（不落盘、也不消耗），演出结束后重新求值。
+	_pending_beat = {}
+	_story_standby = false
+	_story_beat_delivered = false
+	_story_lines.clear()
+	_story_line_index = 0
+	global_position = Vector3(point.x, global_position.y, point.z)
+	_moving = false
+	_dwelling = false
+	_dwell_left = 0.0
+	_face_point_immediate(look_point)
+	_refresh_prompt_visibility()
+
+
+func end_scripted_appearance() -> void:
+	if not _scripted_active:
+		return
+	_scripted_active = false
+	hide_dialogue()
+	# 演出结束后才重新求值节拍：装备好锚点、玩家已能操作，这时站过去才看得见。
+	refresh_story_state()
+
+
+func is_scripted_appearance() -> bool:
+	return _scripted_active
+
+
+## 演出用：直接说一句（不推进循环台词、不写节拍历史）。
+func say_scripted_line(text: String, hold := 3.2) -> bool:
+	var clean := text.strip_edges()
+	if clean.is_empty() or _bark == null:
+		return false
+	_dialogue_visible = true
+	_bark.say_text(clean, maxf(0.6, hold))
+	_refresh_prompt_visibility()
+	interaction_changed.emit(true, clean)
+	return true
+
+
+## 演出用：临时放宽气泡换行宽度。`px <= 0` 恢复默认。
+##
+## 为什么需要它：挂高 3.40m 是按**两行**气泡定的口径（见 `BARK_HEIGHT` 的注释），
+## 26 字的长句在默认 560px（≈11 汉字/行）下会排成三行、把气泡顶出画面上缘。
+## 抬高挂点会离开视线中心，改字号会和别的台词观感不一致 ⇒ 只放宽换行。
+func set_bubble_wrap_width(px: int) -> void:
+	if _bark == null:
+		return
+	var bubble := _bark.get_bubble()
+	if bubble == null:
+		return
+	bubble.wrap_width_px = BUBBLE_WRAP_PX if px <= 0 else px
+
+
+## 立刻朝向某点（不插值）。与 `_engage_talk()` 同一口径：这一帧就该看到脸。
+func _face_point_immediate(point: Vector3) -> void:
+	var to_point := point - global_position
+	to_point.y = 0.0
+	if to_point.length() <= 0.01:
+		return
+	_yaw_target = atan2(-to_point.x, -to_point.z)
+	_yaw = _yaw_target
+	rotation.y = _yaw
 
 
 # —— 构建 ——
@@ -551,6 +637,9 @@ func refresh_story_state() -> void:
 
 
 func _apply_story_state() -> void:
+	# 脚本化演出期间节拍让位：位置归演出方，节拍等人走了再重新求值。
+	if _scripted_active:
+		return
 	# 正在处理中的节拍不重算。
 	#
 	# 玩家走进基地会触发一次 `refresh_story_state()`，而那一刻节拍可能**刚好**已经
@@ -743,6 +832,10 @@ func _tick_patrol(delta: float) -> void:
 	if _story_standby:
 		_moving = false
 		return
+	# 脚本化演出（基地战败救援）：位置由演出方钉住，这里一步都不许挪。
+	if _scripted_active:
+		_moving = false
+		return
 	if not patrol_enabled or _patrol_world.size() < 2:
 		_moving = false
 		return
@@ -770,7 +863,9 @@ func _tick_patrol(delta: float) -> void:
 func _tick_pose(delta: float) -> void:
 	var turn_speed := TURN_SPEED
 	# 搭话中、以及迎宾站定时都持续对准玩家：玩家绕着走，它跟着转。
-	var facing_player := face_player_when_talking and (_talk_engaged or _story_standby)
+	var facing_player := face_player_when_talking and (
+		_talk_engaged or _story_standby or _scripted_active
+	)
 	if facing_player:
 		var target := _resolve_hail_player()
 		if target != null:
@@ -980,6 +1075,10 @@ func get_snapshot() -> Dictionary:
 		"story_standby": _story_standby,
 		"standby_world": _standby_world,
 		"hail_radius": HAIL_RADIUS,
+		# 脚本化演出（基地战败救援）。验收靠这两条判断"钉住了没有、正在说第几句"。
+		"scripted_appearance": _scripted_active,
+		"scripted_point": _scripted_point,
+		"scripted_look": _scripted_look,
 	}
 
 

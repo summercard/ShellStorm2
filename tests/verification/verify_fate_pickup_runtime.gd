@@ -203,6 +203,17 @@ func _verify_fate_pickup_matrix(room: DungeonRoom3D) -> void:
 	var candidate := pickup.get_interaction_candidate(_dungeon.player)
 	_check(not candidate.is_empty(), "落地后没有合法命运卡候选")
 	_check(not pickup.is_pickup_accepted(), "玩家靠近后命运卡凭据自动拾取")
+	var fate_visual_snapshot := pickup.get_model_snapshot()
+	var expected_fate_scale := GroundLootPickup3D.LEGACY_ITEM_VISUAL_SCALE \
+		* GroundLootPickup3D.CURRENT_BASE_SIZE_MULTIPLIER \
+		* FateCardDropPickup3D.FATE_CARD_VISUAL_SCALE_MULTIPLIER
+	_check(
+		(fate_visual_snapshot.get("visual_scale", Vector3.ZERO) as Vector3).is_equal_approx(Vector3.ONE * expected_fate_scale),
+		"命运卡没有应用专用世界视觉放大倍率"
+	)
+	_check(bool(fate_visual_snapshot.get("fate_particles_present", false)), "命运卡没有创建专用上升方块粒子")
+	_check(bool(fate_visual_snapshot.get("fate_particles_emitting", false)), "命运卡落地后上升方块粒子没有发射")
+	_check(bool(fate_visual_snapshot.get("fate_glow_light_visible", false)), "命运卡落地后专用紫色局部光没有开启")
 
 	# 故障注入：空 fate_pickup_id 不能由正式构造口生成。
 	var empty_item := _fate_item(room.room_id, "")
@@ -248,6 +259,9 @@ func _verify_fate_pickup_matrix(room: DungeonRoom3D) -> void:
 	_check(pickup.perform_interaction(_dungeon.player, candidate), "合法命运卡 perform_interaction 未打开 offer")
 	_check(bool((_dungeon.get("_fate_pickup_claimed") as Dictionary).get(before_id, false)), "成功后 claim 账未写入")
 	_check(pickup.is_pickup_accepted(), "成功交互后凭据未 accept")
+	var accepted_visual_snapshot := pickup.get_model_snapshot()
+	_check(not bool(accepted_visual_snapshot.get("fate_particles_emitting", true)), "成功认领后命运卡方块粒子仍在发射")
+	_check(not bool(accepted_visual_snapshot.get("fate_glow_light_visible", true)), "成功认领后命运卡局部光仍然开启")
 	_check(not pickup.perform_interaction(_dungeon.player, candidate), "claim 后重复交互未拒绝")
 	await get_tree().process_frame
 	_check(bool(_dungeon.get("_door_fate_active")), "合法命运卡交互未打开 offer")

@@ -385,6 +385,7 @@ core_scenes=(
   verify_base99_loft_guardrail_collision
   verify_base99_loft_layout_v021
   verify_base99_optimized_packages_v021
+  verify_base99_rescue
   verify_base99_stair_walkable_v021
   verify_base99_wall_visual_replacement
   verify_base_facility_interaction_zones

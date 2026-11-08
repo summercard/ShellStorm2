@@ -79,6 +79,29 @@ func _find_named_node(root: Node, target_name: String) -> Node3D:
 	return null
 
 
+## 盖一层**平涂颜色**，不走公共色盘贴图。
+##
+## 用途：同一个宝箱模型换肤色（2026-11-08 业主：战败归航的救援箱用「浅灰色的宝箱」）。
+## 为什么不能只改 `albedo_color`：身板/箱边材质的贴图是 512² 色盘，
+## `albedo_color` 是**乘法**——乘 0.8 只会把原色整体压暗，仍然是彩色的木箱。
+## 想真的变灰必须把 `albedo_texture` 摘掉，让 `albedo_color` 直接成为表面色。
+##
+## 只作用于身板与箱边两件；内部发光面（`glow`）跟着换成冷白，
+## 否则浅灰箱开箱时仍会喷一圈品质橙光，比不换色更违和。
+func apply_flat_tint(body: Color, trim: Color) -> void:
+	for entry in [[body_material, body], [trim_material, trim]]:
+		var material := entry[0] as StandardMaterial3D
+		if material == null:
+			continue
+		material.albedo_texture = null
+		material.albedo_color = entry[1] as Color
+		material.emission_enabled = false
+	if glow_material != null:
+		glow_material.emission_enabled = true
+		glow_material.emission = body.lightened(0.35)
+		glow_material.emission_energy_multiplier = 3.2
+
+
 func set_quality_accent(accent: Color) -> void:
 	if trim_material != null:
 		trim_material.emission_enabled = true

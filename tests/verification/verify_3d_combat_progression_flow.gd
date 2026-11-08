@@ -13,6 +13,7 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	await _verify_room_light_key_recovery_and_pickups(dungeon, failures)
 	await _verify_ground_loot_scatter(dungeon, failures)
+	await _verify_chest_loot_arc(dungeon, failures)
 	dungeon.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
@@ -249,6 +250,96 @@ func _verify_ground_loot_scatter(dungeon: Dungeon3D, failures: Array[String]) ->
 		failures.append("Ground loot batch exceeded the 2m x 2m scatter area (max_abs=(%.3f, %.3f))" % [landing_max_abs_x, landing_max_abs_z])
 	if landing_max_abs_x < 0.85 or landing_max_abs_z < 0.65:
 		failures.append("Ground loot batch did not visibly use the expanded scatter area (max_abs=(%.3f, %.3f))" % [landing_max_abs_x, landing_max_abs_z])
+
+
+func _verify_chest_loot_arc(dungeon: Dungeon3D, failures: Array[String]) -> void:
+	var rooms_by_id := dungeon.get("_room_by_id") as Dictionary
+	var room := _find_eligible_room(dungeon, rooms_by_id, true)
+	if room == null:
+		failures.append("Generated dungeon has no eligible room for chest arc acceptance")
+		return
+	dungeon.set("_current_room_id", room.room_id)
+	dungeon.call("_update_room_streaming", room.room_id)
+	room.ensure_detail_built()
+	await get_tree().process_frame
+	# 清掉前一段通用散布留下的实体，避免把普通掉落混入本专项的环带统计。
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if value is GroundLootPickup3D and room.is_ancestor_of(value):
+			(value as GroundLootPickup3D).queue_free()
+	await get_tree().process_frame
+	room.cleared = true
+	var origin := room.to_global(Vector3.ZERO)
+	var burst_origin := origin + Vector3.UP * 0.4
+	var item_count := 5
+	var items: Array[Dictionary] = []
+	for index in range(item_count):
+		var item := (ItemRegistry.get_instance().get_item("item_health_potion") as Dictionary).duplicate(true)
+		item["count"] = 1
+		items.append(item)
+	var spawned := int(dungeon.call(
+		"_spawn_loot_items",
+		room,
+		items,
+		burst_origin,
+		0.0,
+		true,
+		0.0,
+		{"mode": "chest_arc", "origin": burst_origin, "chest_id": "verify_chest_arc"}
+	))
+	if spawned != item_count:
+		failures.append("Chest arc spawn returned %d/%d legal positions" % [spawned, item_count])
+		return
+	await get_tree().process_frame
+	var pickups: Array[GroundLootPickup3D] = []
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if value is GroundLootPickup3D and room.is_ancestor_of(value) and not (value as GroundLootPickup3D).is_queued_for_deletion():
+			pickups.append(value as GroundLootPickup3D)
+	if pickups.size() < item_count:
+		failures.append("Chest arc did not leave %d ground pickups (got %d)" % [item_count, pickups.size()])
+		return
+	var min_pair_distance := INF
+	var min_origin_distance := INF
+	for index in range(pickups.size()):
+		var pickup := pickups[index]
+		var offset := pickup.global_position - origin
+		offset.y = 0.0
+		min_origin_distance = minf(min_origin_distance, offset.length())
+		if offset.length() < Dungeon3D.CHEST_SCATTER_INNER_RADIUS_M:
+			failures.append("Chest arc landed inside chest exclusion radius (%.3f m)" % offset.length())
+		if not bool(dungeon.call("_is_loot_landing_clear", pickup.global_position)):
+			failures.append("Chest arc landed inside a static blocker")
+		for other_index in range(index):
+			var other_offset := pickup.global_position - pickups[other_index].global_position
+			other_offset.y = 0.0
+			min_pair_distance = minf(min_pair_distance, other_offset.length())
+	if min_pair_distance < Dungeon3D.CHEST_SCATTER_MIN_PAIR_DISTANCE_M:
+		failures.append("Chest arc pickups are too close (%.3f m)" % min_pair_distance)
+	if min_origin_distance < Dungeon3D.CHEST_SCATTER_INNER_RADIUS_M:
+		failures.append("Chest arc did not stay outside the chest center")
+	var animated := pickups[0]
+	var launch_snapshot := animated.get_model_snapshot()
+	if launch_snapshot.get("spawn_mode", "") != "chest_arc" or not bool(launch_snapshot.get("spawn_animating", false)):
+		failures.append("Chest arc pickup did not enter the dedicated spawn mode")
+	var launch_position := launch_snapshot.get("visual_world_position", Vector3.ZERO) as Vector3
+	if launch_position.distance_to(burst_origin) > 0.35:
+		failures.append("Chest arc visual did not start from the chest burst origin (distance=%.3f)" % launch_position.distance_to(burst_origin))
+	await get_tree().create_timer(GroundLootPickup3D.CHEST_SPAWN_DURATION_S * 0.48).timeout
+	await get_tree().process_frame
+	var apex_snapshot := animated.get_model_snapshot()
+	var apex_position := apex_snapshot.get("visual_world_position", Vector3.ZERO) as Vector3
+	if apex_position.y < animated.global_position.y + 1.9:
+		failures.append("Chest arc apex is below the requested 2m minimum")
+	if apex_position.distance_to(origin) < 0.8:
+		failures.append("Chest arc has no visible horizontal travel")
+	await get_tree().create_timer(GroundLootPickup3D.CHEST_SPAWN_DURATION_S * 0.60).timeout
+	await get_tree().process_frame
+	var settled_snapshot := animated.get_model_snapshot()
+	if str(settled_snapshot.get("spawn_mode", "")) != "default" or bool(settled_snapshot.get("spawn_animating", true)) or not bool(settled_snapshot.get("pickup_unlocked", false)):
+		failures.append("Chest arc did not settle and unlock after its 1-2 second flight")
+	for pickup in pickups:
+		if is_instance_valid(pickup):
+			pickup.queue_free()
+	await get_tree().process_frame
 
 
 func _find_eligible_room(dungeon: Dungeon3D, rooms_by_id: Dictionary, prefer_large: bool) -> DungeonRoom3D:

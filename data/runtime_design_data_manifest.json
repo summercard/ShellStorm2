@@ -199,7 +199,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/level_plan.json",
       "runtime": "data/level_plans/expedition_03/level_plan.json",
-      "sha256": "563a74b145d26c2d72870f898ea5d561720b833f673cd55124188b91dd71d7b4"
+      "sha256": "36eeeb6e0f0fcadd6d68c7c8342641a183ac2adb543d5a16d987cbff0a9dba04"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/room_templates/reward_15x15.json",

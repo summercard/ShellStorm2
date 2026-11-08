@@ -16,6 +16,8 @@ const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
 ## 99F 常驻 NPC 的场景（内容与表现全在 `src/npc/`，见 20 号文档）。
 ## 只在正式 99F 基地装一个；远征关卡不装。
 const BASE_NPC_SCENE: PackedScene = preload("res://scenes/BaseNpc3D.tscn")
+## 战败归航救援演出的脚本（不是场景：全部由代码建，唯一的美术件是那只现成宝箱）。
+const BASE_RESCUE_SCRIPT = preload("res://src/base3d/Base99Rescue3D.gd")
 const BASE_NPC_ID := "npc_base99_green"
 ## 布置层里的两个巡逻锚点。**代码不写死坐标** —— 美术挪锚点即换位置。
 const BASE_NPC_ANCHOR_START := "99层基地NPC起点锚点"
@@ -278,6 +280,9 @@ var _facility_art_layout: Node3D
 var _base_rooftop_transit_door: RoomDoor3D
 ## 99F 常驻 NPC。与设施同父级（`Art`），房间流送/隐藏时一起走。
 var _base_npc: NpcCharacter3D
+## 战败归航救援演出（2026-11-08）。只在 99F 基地、且当次归航带着救援暂存时才装配；
+## 生命周期归 TowerDescent3D，内容/时间轴归 `Base99Rescue3D`。
+var _base_rescue: Base99Rescue3D
 var _simple_transit_door_components: Array[Node] = []
 var _descent_side_sequence: Array[String] = []
 var _edge_side_by_key: Dictionary = {}
@@ -797,6 +802,9 @@ func _ready() -> void:
 	_refresh_tower_hud()
 	_refresh_facility_runtime()
 	_install_main_entry_screen()
+	# 救援演出排在装配末尾：它会把玩家按回归航点并锁输入，必须等出生点/房间事务
+	# 都已经落定，否则会被后面的 `_on_room_entered` 之类的复位顶掉。
+	_install_base_rescue()
 	_defer_gameplay_started()
 	_announce_floor_arrival(_current_floor_number())
 	var first_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
@@ -7556,6 +7564,48 @@ func find_npc(npc_id: String) -> NpcCharacter3D:
 		var npc := value as NpcCharacter3D
 		if npc != null and is_ancestor_of(npc) and npc.npc_id == npc_id:
 			return npc
+	return null
+
+
+# —— 战败归航救援（2026-11-08 业主设计，见 20 号文档 §14）——
+
+## 归航点世界坐标（99F 基地）。救援演出按它算站位：
+## 「玩家在哪醒来，绿苔就站哪边」，两处必须是同一个点。
+func get_facility_spawn_point() -> Vector3:
+	return FACILITY_LOGOUT_SPAWN
+
+
+## 装配救援演出。**判定不在这里**：要不要演、演什么全在 `Base99Rescue3D` 里，
+## 这里只负责把房间/玩家/NPC 三个引用交出去，并让它在装配完成后开始。
+func _install_base_rescue() -> void:
+	if is_expedition():
+		return
+	if _base_rescue != null:
+		return
+	var room := _room_by_id.get("facility") as DungeonRoom3D
+	if room == null or player == null:
+		return
+	_base_rescue = BASE_RESCUE_SCRIPT.new() as Base99Rescue3D
+	if _base_rescue == null:
+		push_error("[TowerDescent3D] 救援演出脚本实例化失败")
+		return
+	_base_rescue.name = "Base99Rescue"
+	add_child(_base_rescue)
+	_base_rescue.setup(self, room, player, _base_npc)
+	# 延到下一帧：`_ready()` 末尾还有楼层可见性/物理归属/播报要跑，
+	# 立刻锁人可能与它们抢玩家位置。
+	call_deferred("_start_base_rescue")
+
+
+func _start_base_rescue() -> void:
+	if _base_rescue != null and is_instance_valid(_base_rescue):
+		_base_rescue.begin()
+
+
+## 只读投影：验收与调试要拿阶段、箱子引用、是否还锁着人。
+func find_base_rescue() -> Base99Rescue3D:
+	if _base_rescue != null and is_instance_valid(_base_rescue):
+		return _base_rescue
 	return null
 
 
