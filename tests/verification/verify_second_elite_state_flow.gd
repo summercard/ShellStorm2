@@ -194,7 +194,7 @@ func verify_action() -> void:
 	var enemy := make_enemy()
 	bind_target(enemy,target)
 	check(enemy.arms_taker_combat != null,"Formal enemy has no authoritative action controller")
-	check(enemy.scale.is_equal_approx(Vector3.ONE * Enemy3D.DEFAULT_BASE_SIZE_MULTIPLIER * 1.16 * 2.5), "Elite root did not scale model and collision together")
+	check(enemy.scale.is_equal_approx(Vector3.ONE * Enemy3D.DEFAULT_BASE_SIZE_MULTIPLIER * 1.0), "Elite root did not scale model and collision together")
 	check(not enemy.avatar.get_component_snapshot().procedural_pose,"Skeletal elite still receives outer procedural pose")
 	check(not enemy.uses_no_corpse_death() and not enemy.uses_goo_death_burst(),"Independent elite still inherits zombie death")
 	var footprint := enemy.collision_shape.shape as CylinderShape3D

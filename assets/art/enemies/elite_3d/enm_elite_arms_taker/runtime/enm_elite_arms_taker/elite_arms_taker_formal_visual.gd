@@ -50,6 +50,7 @@ var _skeleton: Skeleton3D
 @onready var _model_root: Node3D = $VisualGLB
 var _state := "idle"
 var _clip := "idle"
+var _reported_clip := "idle"
 var _sample := 0.0
 var _clock := 0.0
 var _phase := 0.0
@@ -67,10 +68,14 @@ var _head_index := -1
 var _signal_active := false
 var _screen_charge := 0.0
 var _glitch := 0.0
+var _defeat_kneel_active := false
+var _kneel_rest_poses: Dictionary = {}
 var _foot_samples: Dictionary[String, FootSamples] = {}
 var _sole_bind_bones: PackedInt32Array
 var _sole_bind_poses: Array[Transform3D] = []
 var _used_sole_binds: Dictionary[int, bool] = {}
+@onready var _weapon_mount_left: Marker3D = $WeaponMountLeft
+@onready var _weapon_mount_right: Marker3D = $WeaponMountRight
 
 func _ready() -> void:
 	_player = find_child("AnimationPlayer", true, false) as AnimationPlayer
@@ -155,6 +160,7 @@ func sync_context(context: Dictionary, blend := true) -> void:
 	if _player == null:
 		return
 	_state = str(context.get("state", "idle"))
+	_defeat_kneel_active = str(context.get("action_id", "")) == "defeat_kneel"
 	_speed = maxf(0.0, float(context.get("speed", 0.0)))
 	_base_speed = maxf(0.01, float(context.get("base_speed", 1.0)))
 	_actor_scale = maxf(0.01, float(context.get("actor_scale", 1.0)))
@@ -162,8 +168,13 @@ func sync_context(context: Dictionary, blend := true) -> void:
 	var next_clip := str(context.get("action_id", "idle"))
 	if next_clip == "locomotion":
 		next_clip = _locomotion_clip()
+	_reported_clip = next_clip
 	if not _player.has_animation(next_clip):
-		push_warning("elite_arms_taker: missing clip '%s', using idle" % next_clip)
+		# 战败 kneel 是由正式骨骼姿态覆盖驱动的表现动作；当前 GLB 没有
+		# 同名动画片段时，底层采样回退到 idle，但对外快照必须保留真实动作身份。
+		if next_clip != "defeat_kneel":
+			push_warning("elite_arms_taker: missing clip '%s', using idle" % next_clip)
+		_reported_clip = next_clip if next_clip == "defeat_kneel" else "idle"
 		next_clip = "idle"
 	if next_clip != _clip:
 		_previous_pose.clear()
@@ -192,6 +203,8 @@ func sync_context(context: Dictionary, blend := true) -> void:
 			_skeleton.set_bone_pose_scale(bone, pose.basis.get_scale())
 	else:
 		_previous_pose.clear()
+	if _defeat_kneel_active:
+		_apply_kneel_pose(clampf(float(context.get("time", 0.0)) / 2.6, 0.0, 1.0))
 	if bool(context.get("grounded", false)):
 		var soles := _sample_foot_bottoms()
 		if soles.size() == 2:
@@ -199,6 +212,35 @@ func sync_context(context: Dictionary, blend := true) -> void:
 			var target_height := float(context["floor_height"]) - float(context["foot_inset"])
 			_model_root.position.y += (target_height - lowest) / global_basis.y.length()
 	_update_signal_material(float(context.get("glitch", 0.0)), float(context.get("screen_charge", 0.0)))
+
+func _apply_kneel_pose(progress: float) -> void:
+	if _skeleton == null:
+		return
+	if _kneel_rest_poses.is_empty():
+		for bone_name in ["Hip", "Spine01", "Spine02", "L_Thigh", "R_Thigh", "L_Calf", "R_Calf"]:
+			var bone_index := _skeleton.find_bone(bone_name)
+			if bone_index >= 0:
+				_kneel_rest_poses[bone_index] = _skeleton.get_bone_pose(bone_index)
+	var bend := smoothstep(0.0, 1.0, progress)
+	for bone_name in ["Hip", "Spine01", "Spine02"]:
+		var bone_index := _skeleton.find_bone(bone_name)
+		if bone_index < 0 or not _kneel_rest_poses.has(bone_index):
+			continue
+		var rest: Transform3D = _kneel_rest_poses[bone_index]
+		_skeleton.set_bone_pose_rotation(bone_index, rest.basis.get_rotation_quaternion() * Quaternion(Vector3.RIGHT, deg_to_rad(-24.0 * bend)))
+	for bone_name in ["L_Thigh", "R_Thigh"]:
+		var bone_index := _skeleton.find_bone(bone_name)
+		if bone_index < 0 or not _kneel_rest_poses.has(bone_index):
+			continue
+		var rest: Transform3D = _kneel_rest_poses[bone_index]
+		_skeleton.set_bone_pose_rotation(bone_index, rest.basis.get_rotation_quaternion() * Quaternion(Vector3.RIGHT, deg_to_rad(58.0 * bend)))
+	for bone_name in ["L_Calf", "R_Calf"]:
+		var bone_index := _skeleton.find_bone(bone_name)
+		if bone_index < 0 or not _kneel_rest_poses.has(bone_index):
+			continue
+		var rest: Transform3D = _kneel_rest_poses[bone_index]
+		_skeleton.set_bone_pose_rotation(bone_index, rest.basis.get_rotation_quaternion() * Quaternion(Vector3.RIGHT, deg_to_rad(-72.0 * bend)))
+
 
 func _update_signal_material(glitch: float, charge: float) -> void:
 	_glitch = glitch
@@ -215,6 +257,21 @@ func _update_signal_material(glitch: float, charge: float) -> void:
 		if enabled != _signal_active:
 			mesh.set_surface_override_material(entry["surface"], material if enabled else entry["base"])
 	_signal_active = enabled
+
+func get_weapon_mount_points() -> Array[Node3D]:
+	return [_weapon_mount_left, _weapon_mount_right]
+
+
+func get_weapon_presentation_snapshot() -> Dictionary:
+	return {
+		"mount_count": 2,
+		"mounts": [
+			{"name": "WeaponMountLeft", "position": _weapon_mount_left.position if _weapon_mount_left != null else Vector3.ZERO},
+			{"name": "WeaponMountRight", "position": _weapon_mount_right.position if _weapon_mount_right != null else Vector3.ZERO},
+		],
+		"mount_contract": "two_explicit_marker3d",
+	}
+
 
 func get_screen_emitter_position() -> Vector3:
 	if _head_index < 0:
@@ -261,7 +318,7 @@ func get_presentation_snapshot() -> Dictionary:
 	if STRIDE_PROFILES.has(_clip):
 		playback_speed = _gait_phase_rate() * _player.get_animation(_clip).length
 	return {"asset_id":"ENM-ELITE-ARMS-TAKER-3D", "version":get_meta("asset_version", ""), "content_id":"elite_arms_taker",
-		"state":_state, "clip":_clip, "clip_time":_sample, "phase":_phase,
+		"state":_state, "clip":_reported_clip, "clip_time":_sample, "phase":_phase,
 		"looping":_clip in LOOP_CLIPS, "playback_speed":playback_speed,
 		"clip_count":_player.get_animation_list().size() if _player != null else 0,
 		"bone_count":_skeleton.get_bone_count() if _skeleton != null else 0,

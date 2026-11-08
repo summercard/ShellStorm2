@@ -157,27 +157,33 @@ func _run() -> void:
 	hit(100)
 	check(player.current_hp == 0 and GameManager.currency == 49 and player.get_character_fate_snapshot()["last_stand_charges"] == 1, "不足金币不白送救助不消费牌")
 	reset()
-	var trigger := MapFateTriggers.new()
-	add_child(trigger)
+	var character_requests: Array = []
 	for index in range(20):
-		trigger._on_kill_recorded()
+		character_requests.append_array(player.on_fate_kill_recorded())
 	check(FateCardGameBridge.get_card_count() == 0, "没有愚者不白送命运")
 	apply("fate_mark_enemy", true)
 	check(FateCardGameBridge.get_card_count() == 1, "愚者应用不立即发牌")
 	for index in range(9):
-		trigger._on_kill_recorded()
+		character_requests.append_array(player.on_fate_kill_recorded())
 	check(FateCardGameBridge.get_card_count() == 1, "愚者从抽卡后计数")
 	# 固定已抽定卡验证正式身份/刻印/记录事务，随后仍由十杀正式消费者驱动随机奖励。
 	FateCardGameBridge._pending_character_rewards.append({"card": card("fate_armor_pierce", true), "currency_cost": 30})
 	var slots_before := player.get_equipped_weapon_instance().fate_upgrades.size()
 	var money_before := GameManager.currency
+	var pending_before := FateCardGameBridge.get_pending_character_rewards().duplicate(true)
 	var granted := FateCardGameBridge.retry_pending_character_reward()
-	check(bool(granted.get("success", false)), "愚者奖励正式Bridge成功")
-	check(player.get_equipped_weapon_instance().fate_upgrades.size() == slots_before + 1 and GameManager.currency == money_before - 30, "愚者真实占槽扣金币")
+	check(not bool(granted.get("success", true)) and bool(granted.get("pending", false)), "旧角色pending直接领取被拒绝")
+	check(
+		player.get_equipped_weapon_instance().fate_upgrades.size() == slots_before
+		and GameManager.currency == money_before
+		and FateCardGameBridge.get_pending_character_rewards() == pending_before,
+		"旧角色pending拒绝不占槽、不扣金币且原样保留"
+	)
 	for index in range(11):
-		trigger._on_kill_recorded()
+		character_requests.append_array(player.on_fate_kill_recorded())
 	check(int((player.get_character_fate_snapshot()["kill_rules"] as Array)[0]["kills"]) == 20, "愚者每十杀持续计数")
-	check(FateCardGameBridge.get_card_count() + FateCardGameBridge.get_pending_character_rewards().size() >= 4, "两轮十杀真实应用或明确待领取")
+	check(character_requests.size() >= 2, "角色二级击杀达到阈值却没有生成请求")
+	check(str(character_requests[0].get("kind", "")) == "fate_pickup", "角色请求未使用专用命运凭据类型")
 	reset()
 	apply("fate_mark_enemy")
 	check(is_equal_approx(float(player.get_character_fate_snapshot()["kill_rules"][0]["grant_probability"]), 0.5), "愚者正位50%规则")
@@ -190,8 +196,15 @@ func _run() -> void:
 	check(not bool(blocked.get("success", false)) and player.get_equipped_weapon_instance().fate_upgrades.size() == source_slots + 1, "失败不消耗命运槽")
 	var previous_currency := GameManager.currency
 	FateCardGameBridge._pending_character_rewards.append({"card": card("fate_gun_on_gun"), "currency_cost": 30})
+	var pending_count_before := FateCardGameBridge.get_pending_character_rewards().size()
 	var failed_reward := FateCardGameBridge.retry_pending_character_reward()
-	check(not bool(failed_reward["success"]) and GameManager.currency == previous_currency and FateCardGameBridge.get_pending_character_rewards().size() == 1, "愚者来源缺失保留固定牌且退金币")
+	check(
+		not bool(failed_reward["success"])
+		and bool(failed_reward.get("migration_pending", false))
+		and GameManager.currency == previous_currency
+		and FateCardGameBridge.get_pending_character_rewards().size() == pending_count_before,
+		"旧角色pending统一拒绝、无扣钱无应用且保留待迁移"
+	)
 	reset()
 	apply("fate_moon_power", true)
 	var first_tree := player.weapon_tree
@@ -222,7 +235,6 @@ func _run() -> void:
 	reset()
 	check(first_tree.growth_stacks == 0 and first_tree.get("_overheat_shots") == 0 and first_tree.get("_crit_damage_shots") == 0, "新局清理武器临时命运状态")
 	check(player.max_hp == 100 and player.get_fate_critical_chance_bonus() == 0.0 and player.get_character_fate_snapshot()["kill_rules"].is_empty(), "新局重置角色状态")
-	trigger.queue_free()
 	player.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame

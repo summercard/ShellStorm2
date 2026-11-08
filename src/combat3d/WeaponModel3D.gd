@@ -274,6 +274,10 @@ var _charge_elapsed := 0.0
 var _charge_aim := Vector3.FORWARD
 var _charge_shooter: Node3D
 var _visual_root: Node3D
+var _firing_shooter: Node3D
+var _firing_hostile := false
+var _firing_target_group := "enemy_3d"
+var _firing_projectile_collision_mask := 5
 var _muzzle: Marker3D
 var _ejection: Marker3D
 var _fate_visual_multiplier := DEFAULT_FATE_VISUAL_MULTIPLIER
@@ -676,6 +680,12 @@ func clear_weapon() -> void:
 	ammo_changed.emit(0, 0)
 
 
+func configure_firing_context(hostile: bool, target_group: String, projectile_collision_mask: int) -> void:
+	_firing_hostile = hostile
+	_firing_target_group = target_group
+	_firing_projectile_collision_mask = projectile_collision_mask
+
+
 func try_fire(aim_direction: Vector3, shooter: Node3D) -> bool:
 	if is_melee_weapon() or display_only or gun_id.is_empty() or _cooldown > 0.0 or _reload_remaining > 0.0:
 		return false
@@ -714,6 +724,7 @@ func cancel_charge() -> void:
 
 
 func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: float) -> bool:
+	_firing_shooter = shooter
 	if display_only or gun_id.is_empty() or _cooldown > 0.0 or _reload_remaining > 0.0 or current_ammo <= 0:
 		return false
 	var world := get_tree().current_scene
@@ -734,6 +745,8 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 	behavior["owner_damage_multiplier"] = damage_multiplier
 	behavior["owner_critical_chance"] = _critical_chance + _character_critical_bonus(shooter)
 	behavior["owner_critical_multiplier"] = _critical_damage_multiplier
+	behavior["target_group"] = _firing_target_group
+	behavior["projectile_collision_mask"] = _firing_projectile_collision_mask
 	if is_instance_valid(_source_tree):
 		shot_damage_multiplier *= _source_tree.consume_shot_damage_bonus()
 	var nth := int(behavior.get("every_nth_fire", 0))
@@ -762,7 +775,9 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			"speed": bullet_speed,
 			"damage": projectile_damage,
 			"critical": is_critical,
-			"hostile": false,
+			"hostile": _firing_hostile,
+			"target_group": _firing_target_group,
+			"projectile_collision_mask": _firing_projectile_collision_mask,
 			"tags": bullet_tags,
 			"color": bullet_color,
 			# 弹种专属弹体视觉路由（04 §6.2 visual_id）：Projectile3D 按此查表选 Prefab。
@@ -949,7 +964,10 @@ func _fire_copy_wave(
 			"speed": bullet_speed,
 			"damage": maxi(1, int(damage * damage_scale * (_critical_damage_multiplier / 1.5 if is_critical else 1.0))),
 			"critical": is_critical,
-			"hostile": false, "tags": bullet_tags.duplicate(),
+			"hostile": _firing_hostile,
+			"target_group": _firing_target_group,
+			"projectile_collision_mask": _firing_projectile_collision_mask,
+			"tags": bullet_tags.duplicate(),
 			"color": bullet_color, "visual_id": bullet_id,
 			"gun_bullet_geometry": bullet_geometry,
 			"shooter": shooter, "behavior": behavior.duplicate(true),
@@ -1091,6 +1109,35 @@ func get_reload_snapshot() -> Dictionary:
 	}
 
 
+func get_runtime_state() -> Dictionary:
+	return {
+		"current_ammo": current_ammo,
+		"cooldown": _cooldown,
+		"reload_remaining": _reload_remaining,
+		"active_reload_duration": _active_reload_duration,
+		"charge_active": _charge_active,
+		"charge_elapsed": _charge_elapsed,
+		"charge_aim": _charge_aim,
+		"fire_sequence": _fire_sequence,
+	}
+
+
+func restore_runtime_state(state: Dictionary) -> void:
+	if state.is_empty():
+		return
+	current_ammo = clampi(int(state.get("current_ammo", current_ammo)), 0, magazine_size)
+	_cooldown = maxf(0.0, float(state.get("cooldown", 0.0)))
+	_reload_remaining = maxf(0.0, float(state.get("reload_remaining", 0.0)))
+	_active_reload_duration = maxf(0.0, float(state.get("active_reload_duration", 0.0)))
+	_charge_active = bool(state.get("charge_active", false))
+	_charge_elapsed = maxf(0.0, float(state.get("charge_elapsed", 0.0)))
+	_charge_aim = state.get("charge_aim", Vector3.FORWARD) as Vector3
+	_fire_sequence = maxi(0, int(state.get("fire_sequence", _fire_sequence)))
+	if _reload_remaining > 0.0 or _charge_active:
+		set_process(true)
+	ammo_changed.emit(current_ammo, magazine_size)
+
+
 func get_snapshot() -> Dictionary:
 	return {
 		"gun_id": gun_id,
@@ -1159,40 +1206,53 @@ func _finish_reload() -> void:
 
 
 func _trigger_reload_attachment(attachment: Dictionary) -> void:
-	var player := _find_owner_player()
-	if player == null:
+	var shooter := _firing_shooter if is_instance_valid(_firing_shooter) else _find_owner_player()
+	if shooter == null:
 		return
 	if attachment.has("pull_strength"):
-		for target in get_tree().get_nodes_in_group("enemy_3d"):
-			if target is Enemy3D and player.global_position.distance_to(target.global_position) <= 12.0:
-				target.apply_pull(player.global_position, float(attachment["pull_strength"]))
+		for target in get_tree().get_nodes_in_group(_firing_target_group):
+			if target is Node3D and target != shooter and shooter.global_position.distance_to(target.global_position) <= 12.0:
+				if target.has_method("apply_pull"):
+					target.call("apply_pull", shooter.global_position, float(attachment["pull_strength"]))
 	var count := int(attachment.get("bullet_count", 0))
 	if randf() < float(attachment.get("copy_chance", 0.0)):
 		count += 1
 	if count > 0:
 		var stats := {"damage": _base_damage, "bullet_damage": 0, "bullet_count": count, "spread": attachment.get("spread", spread)}
-		_fire_secondary_gun(get_tree().current_scene, player, -global_basis.z, stats)
+		_fire_secondary_gun(get_tree().current_scene, shooter, -global_basis.z, stats)
 
 
 func _perform_reload_explosion() -> void:
 	if not bool(_projectile_behavior.get("explode_on_reload", false)):
 		return
-	var player := _find_owner_player()
-	if player == null:
+	var shooter := _firing_shooter if is_instance_valid(_firing_shooter) else _find_owner_player()
+	if shooter == null:
 		return
 	var radius := maxf(1.0, float(_projectile_behavior.get("explosion_radius", 150.0)) / 30.0)
 	var damage_scale := float(_projectile_behavior.get("explosion_damage_scale", 0.8))
-	for value in get_tree().get_nodes_in_group("enemy_3d"):
-		var enemy := value as Enemy3D
-		if enemy == null or enemy.ai_state == "dead" or player.global_position.distance_to(enemy.global_position) > radius:
+	var origin := shooter.global_position
+	for value in get_tree().get_nodes_in_group(_firing_target_group):
+		if not value is Node3D or value == shooter:
 			continue
-		enemy.notify_attacked_by(player)
-		enemy.take_projectile_damage(maxi(1, int(damage * damage_scale)), false, (enemy.global_position - player.global_position).normalized(), [], {"source_weapon_tree": _source_tree}, player)
-		if bool(_projectile_behavior.get("attract_enemies", false)):
-			enemy.apply_pull(player.global_position, radius)
+		var target := value as Node3D
+		if target.has_method("is_dead") and bool(target.call("is_dead")):
+			continue
+		var distance := origin.distance_to(target.global_position)
+		if distance > radius:
+			continue
+		var hit_direction := (target.global_position - origin).normalized()
+		var hit_damage := maxi(1, int(damage * damage_scale))
+		if target.has_method("notify_attacked_by"):
+			target.call("notify_attacked_by", shooter)
+		if target.has_method("take_projectile_damage"):
+			target.call("take_projectile_damage", hit_damage, false, hit_direction, [], {"source_weapon_tree": _source_tree}, shooter)
+		elif target.has_method("take_damage"):
+			target.call("take_damage", hit_damage, false, hit_direction)
+		if bool(_projectile_behavior.get("attract_enemies", false)) and target.has_method("apply_pull"):
+			target.call("apply_pull", origin, radius)
 	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
 	if not pools.is_empty() and pools[0] is CombatEffectPool3D:
-		(pools[0] as CombatEffectPool3D).acquire("explosion", bullet_color, radius * 0.35, player.global_position)
+		(pools[0] as CombatEffectPool3D).acquire("explosion", bullet_color, radius * 0.35, origin)
 
 
 func _find_owner_player() -> Player3D:
@@ -1547,6 +1607,7 @@ func _rebuild_fate_mounts() -> void:
 		var mounted := create_mounted(stats.get("assembly_snapshot", {}), point)
 		if mounted == null:
 			continue
+		mounted.configure_firing_context(_firing_hostile, _firing_target_group, _firing_projectile_collision_mask)
 		mounted.render_layers = render_layers
 		mounted._apply_render_layers_recursive(mounted)
 		mounted.projectile_spawned.connect(func(projectile: Projectile3D): projectile_spawned.emit(projectile))

@@ -12322,6 +12322,44 @@
         20
       ],
       "sha256": "20e0859f25af60694c19c81bc49251c636aedc171d945a178f46069abf226a48"
+    },
+    {
+      "path": "art_source/items_weapons/props/reward_chests/source/prp_reward_chest_normal_source_v001.blend",
+      "bytes": 155618,
+      "family": "art_source/items_weapons/props/reward_chests/source/prp_reward_chest_normal_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "sha256": "b0c39951cd1e0e0e4e5b90b3e849399cb51a07f296009355de020c3fbf67f146"
+    },
+    {
+      "path": "art_source/items_weapons/props/reward_chests/source/export/v001/prp_reward_chest_normal_optimized_v001.blend",
+      "bytes": 155618,
+      "family": "art_source/items_weapons/props/reward_chests/source/export/_VERSION/prp_reward_chest_normal_optimized_VERSION.blend",
+      "version": [
+        1,
+        1
+      ],
+      "sha256": "7d92a6d4b203ce098b117f6ec3f71493586d1960579b2d93988b68a1176bf183"
+    },
+    {
+      "path": "art_source/items_weapons/props/reward_chests/source/prp_reward_chest_advanced_source_v001.blend",
+      "bytes": 155426,
+      "family": "art_source/items_weapons/props/reward_chests/source/prp_reward_chest_advanced_source_VERSION.blend",
+      "version": [
+        1
+      ],
+      "sha256": "a0c58eeb8c1a94263f3191f47968e615e7774fb5535c5f51297a68110fcc4658"
+    },
+    {
+      "path": "art_source/items_weapons/props/reward_chests/source/export/v001/prp_reward_chest_advanced_optimized_v001.blend",
+      "bytes": 155427,
+      "family": "art_source/items_weapons/props/reward_chests/source/export/_VERSION/prp_reward_chest_advanced_optimized_VERSION.blend",
+      "version": [
+        1,
+        1
+      ],
+      "sha256": "cf4fdd53b6d9a533ab6e40cad02ae038f6f5f5e636e6631c9af2f3863b9b0ac1"
     }
   ],
   "authoring_root": "art_source",

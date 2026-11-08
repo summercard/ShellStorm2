@@ -4,6 +4,7 @@ extends CharacterBody3D
 
 signal killed(enemy: Enemy3D, loot: Dictionary)
 signal escaped(enemy: Enemy3D, context: Dictionary)
+signal defeated(enemy: Enemy3D, context: Dictionary)
 signal summon_requested(enemy: Enemy3D, count: int)
 ## 死亡分裂（远征03 布洛布三阶）。与 `summon_requested` 分开是因为二者语义不同：
 ## 召唤是「活着请求增援」，分裂是「死亡时留下子代」，且**必须指定子代怪种**——
@@ -85,7 +86,7 @@ const GOO_DEATH_EFFECT_SIZE := 1.0
 const FAT_DEATH_EFFECT_SIZE := 2.0
 const VALID_STATES := [
 	"dormant", "idle", "patrol", "alert", "chase", "search", "return",
-	"telegraph", "attack", "recovery", "stagger", "dead",
+	"telegraph", "attack", "recovery", "stagger", "defeated", "dead",
 ]
 const NORMAL_HP_MULTIPLIER := 3.0
 const BOSS_HP_MULTIPLIER := 10.0
@@ -884,8 +885,28 @@ var _elite_growth_profile: Dictionary = {}
 var _elite_escape_active := false
 var _elite_escape_elapsed := 0.0
 var _elite_escape_origin := Vector3.ZERO
+var _elite_escape_door_position := Vector3.ZERO
+var _elite_escape_door_normal := Vector3.ZERO
+var _elite_escape_target_valid := false
+var _elite_escape_arrived := false
+var _elite_escape_vfx: VfxEffectBase3D
+var _elite_escape_vfx_finished := false
+var _elite_escape_retry_elapsed := 0.0
 var _elite_encounter_damage_taken := 0
 var _elite_confiscation_serial := 0
+var _elite_event_serial := 0
+var _elite_xp_retry_elapsed := 0.0
+var _elite_healing_serial := 0
+var _elite_healing_cooldown := 0.0
+var _elite_pending_xp_events: Array[Dictionary] = []
+var _last_damage_source: Node3D
+var _elite_defeat_active := false
+var _elite_defeat_elapsed := 0.0
+var _elite_defeat_retry_elapsed := 0.0
+var _elite_defeat_committed := false
+var _elite_defeat_context: Dictionary = {}
+var elite_equipment: EliteArmsTakerEquipment
+var _elite_attack_frequency_multiplier := 1.0
 var _elite_attack_counter := 0
 var _elite_behavior_trigger_count := 0
 var _absorb_cooldown := 0.0
@@ -929,6 +950,13 @@ var _active_profile: Dictionary = {}
 ## 解析统一走 `_effective_projectile_visual_scale()`，不要在开火处直接读本字段。
 ## ⚠ 只放大看得见的弹体，**不动判定半径**（判定仍是 `Projectile3D` 的 0.12 基准球）。
 var _projectile_visual_scale := 1.0
+## 敌弹**敌我通吃**的怪种白名单：本怪的子弹除了打玩家，也能命中其它敌对怪（不含发射者自己）。
+## 来源 = 关卡 `monster_rules.projectile.hit_allies_kinds`（怪种 id 数组），经 `MonsterInjector` 下发。
+## **空数组 = 不生效**，未配置本键的关卡逐字不变。
+## 业主 2026-11-08 口径：只有「打死会散射子弹」的那一只（远征01 = `exploder` 炸弹果）
+## 才让子弹打自己人，其余怪不许敌我通吃。
+## 判定层由 `Projectile3D.hits_allies` 在 mask 上追加敌人层实现，不改弹速/伤害/判定半径。
+var _projectile_hit_allies_kinds: Array[String] = []
 ## 逃跑型的方向粘性状态（见 `_tick_egt_flee`）：朝向、朝向剩余保持时间、顶墙累计、上次采样位置。
 var _flee_heading := Vector3.ZERO
 var _flee_heading_timer := 0.0
@@ -1373,7 +1401,7 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 			current_hp = max_hp
 			move_speed *= float(modifier_data.get("speed_mult", 0.8))
 			_variant_scale_multiplier *= float(modifier_data.get("scale_mult", 1.5))
-		else:
+		elif elite_id != EliteArmsTakerCombat.ID:
 			_variant_scale_multiplier *= 1.16
 		max_hp = maxi(1, int(round(float(max_hp) * float(data.get("elite_growth_hp_mult", 1.0)))))
 		current_hp = max_hp
@@ -1387,8 +1415,16 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 				str(data.get("presentation_scene", ""))
 			)
 		if elite_id == EliteArmsTakerCombat.ID:
-			_variant_scale_multiplier *= EliteArmsTakerCombat.BODY_SCALE_MULTIPLIER
+			var growth_level := maxi(1, elite_level)
+			var body_base := float(_elite_growth_profile.get("body_scale_base", 1.0))
+			var body_step := float(_elite_growth_profile.get("body_scale_per_level", 0.06))
+			_variant_scale_multiplier *= body_base + float(growth_level - 1) * body_step
+			_elite_attack_frequency_multiplier = 1.0 + float(growth_level - 1) * float(_elite_growth_profile.get("attack_frequency_per_level", 0.025))
 			arms_taker_combat = EliteArmsTakerCombat.new(self)
+			elite_equipment = EliteArmsTakerEquipment.new(self)
+			var equipped_weapons: Variant = data.get("elite_equipped_weapons", [])
+			if equipped_weapons is Array:
+				elite_equipment.configure(equipped_weapons as Array)
 	if enemy_kind == "boss":
 		_variant_scale_multiplier *= float(data.get("boss_scale", 1.0))
 		if avatar != null:
@@ -1409,11 +1445,17 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 	if data.has("override_speed"):
 		move_speed = maxf(0.05, float(data["override_speed"]))
 	if arms_taker_combat != null:
-		max_hp *= EliteArmsTakerCombat.INITIAL_HP_MULTIPLIER
-		current_hp *= EliteArmsTakerCombat.INITIAL_HP_MULTIPLIER
+		var initial_hp_multiplier := float(_elite_growth_profile.get("initial_hp_multiplier", EliteArmsTakerCombat.INITIAL_HP_MULTIPLIER))
+		max_hp = maxi(1, int(round(float(max_hp) * initial_hp_multiplier)))
+		current_hp = clampi(int(round(float(current_hp) * initial_hp_multiplier)), 1, max_hp)
 	# —— 关卡级「敌弹观感」覆盖（远征03 `monster_rules.projectile.visual_scale`）——
 	# 只改弹体视觉尺寸，不改弹速 / 伤害 / 判定。未配置本键的关卡保持 1.0。
 	_projectile_visual_scale = maxf(0.05, float(data.get("projectile_visual_scale", 1.0)))
+	_projectile_hit_allies_kinds.clear()
+	var hit_allies_kinds: Variant = data.get("projectile_hit_allies_kinds", [])
+	if hit_allies_kinds is Array:
+		for kind_value in hit_allies_kinds as Array:
+			_projectile_hit_allies_kinds.append(str(kind_value))
 	_apply_presentation_scale()
 	if arms_taker_combat != null and avatar != null:
 		avatar.sync_elite_presentation(arms_taker_combat.presentation_context())
@@ -1679,6 +1721,22 @@ func export_runtime_state() -> Dictionary:
 		"elite_encounter_damage_taken": _elite_encounter_damage_taken,
 		"elite_confiscation_serial": _elite_confiscation_serial,
 		"elite_escape_origin": [_elite_escape_origin.x, _elite_escape_origin.y, _elite_escape_origin.z],
+		"elite_escape_door_position": [_elite_escape_door_position.x, _elite_escape_door_position.y, _elite_escape_door_position.z],
+		"elite_escape_door_normal": [_elite_escape_door_normal.x, _elite_escape_door_normal.y, _elite_escape_door_normal.z],
+		"elite_escape_arrived": _elite_escape_arrived,
+		"elite_escape_target_valid": _elite_escape_target_valid,
+		"elite_defeat_active": _elite_defeat_active,
+		"elite_defeat_elapsed": _elite_defeat_elapsed,
+		"elite_defeat_retry_elapsed": _elite_defeat_retry_elapsed,
+		"elite_defeat_committed": _elite_defeat_committed,
+		"elite_event_serial": _elite_event_serial,
+		"elite_xp_retry_elapsed": _elite_xp_retry_elapsed,
+		"elite_healing_serial": _elite_healing_serial,
+		"elite_pending_xp_events": _elite_pending_xp_events.duplicate(true),
+		"elite_equipment": elite_equipment.export_state() if elite_equipment != null else {},
+		"elite_equipment_presentation": elite_equipment.get_presentation_snapshot() if elite_equipment != null else {},
+		"elite_weapon_mounts": avatar.get_animated_elite_root().get_weapon_presentation_snapshot() if arms_taker_combat != null and avatar != null and avatar.get_animated_elite_root() != null and avatar.get_animated_elite_root().has_method("get_weapon_presentation_snapshot") else {},
+		"elite_growth_profile": _elite_growth_profile.duplicate(true),
 		"attack_timer": _attack_timer,
 		"slow_factor": _slow_factor,
 		"slow_timer": _slow_timer,
@@ -1729,6 +1787,29 @@ func import_runtime_state(state: Dictionary) -> bool:
 			float((saved_escape_origin as Array)[1]),
 			float((saved_escape_origin as Array)[2])
 		)
+	var saved_door_position: Variant = state.get("elite_escape_door_position", [])
+	if saved_door_position is Array and (saved_door_position as Array).size() >= 3:
+		_elite_escape_door_position = Vector3(float(saved_door_position[0]), float(saved_door_position[1]), float(saved_door_position[2]))
+	var saved_door_normal: Variant = state.get("elite_escape_door_normal", [])
+	if saved_door_normal is Array and (saved_door_normal as Array).size() >= 3:
+		_elite_escape_door_normal = Vector3(float(saved_door_normal[0]), float(saved_door_normal[1]), float(saved_door_normal[2]))
+	_elite_escape_target_valid = bool(state.get("elite_escape_target_valid", _elite_escape_door_normal.length_squared() > 0.0))
+	_elite_escape_arrived = bool(state.get("elite_escape_arrived", false)) and _elite_escape_target_valid
+	_elite_defeat_active = bool(state.get("elite_defeat_active", false))
+	_elite_defeat_elapsed = maxf(0.0, float(state.get("elite_defeat_elapsed", 0.0)))
+	_elite_defeat_retry_elapsed = maxf(0.0, float(state.get("elite_defeat_retry_elapsed", 0.0)))
+	_elite_defeat_committed = bool(state.get("elite_defeat_committed", false))
+	_elite_event_serial = maxi(0, int(state.get("elite_event_serial", 0)))
+	_elite_xp_retry_elapsed = maxf(0.0, float(state.get("elite_xp_retry_elapsed", 0.0)))
+	_elite_healing_serial = maxi(0, int(state.get("elite_healing_serial", 0)))
+	_elite_pending_xp_events.clear()
+	var pending_events: Variant = state.get("elite_pending_xp_events", [])
+	if pending_events is Array:
+		for event in pending_events as Array:
+			if event is Dictionary:
+				_elite_pending_xp_events.append((event as Dictionary).duplicate(true))
+	if elite_equipment != null:
+		elite_equipment.import_state(state.get("elite_equipment", {}) as Dictionary)
 	_attack_timer = maxf(0.0, float(state.get("attack_timer", _attack_timer)))
 	_slow_factor = clampf(float(state.get("slow_factor", _slow_factor)), 0.25, 1.0)
 	_slow_timer = maxf(0.0, float(state.get("slow_timer", _slow_timer)))
@@ -1927,6 +2008,23 @@ func activate_from_stimulus(stimulus_position: Vector3, _stimulus_kind := "inter
 	return true
 
 
+## 收租人装备的唯一 tick 闸门。
+##
+## 装备控制器不能只看 Enemy3D 的 ai_state：相位前摇和隐身期仍分别处于
+## telegraph/attack，测试与实际状态机也可能在同一帧更新 action。因此这里同时
+## 检查生命周期旗标、相位事实和待执行动作，Enemy3D 与验收共用同一口径。
+func _can_tick_elite_equipment() -> bool:
+	if elite_equipment == null or not is_instance_valid(elite_equipment):
+		return false
+	if arms_taker_combat != null and arms_taker_combat.blocks_equipment_tick():
+		return false
+	if _elite_defeat_active or _elite_escape_active:
+		return false
+	if ai_state in ["dead", "defeated", "dormant"]:
+		return false
+	return true
+
+
 func _physics_process(delta: float) -> void:
 	_tick_fate_statuses(delta)
 	_sync_fate_visuals()
@@ -1970,10 +2068,18 @@ func _physics_process(delta: float) -> void:
 	if _external_timer <= 0.0:
 		_external_velocity = Vector3.ZERO
 	_tick_damage_over_time(delta)
+	_elite_xp_retry_elapsed += delta
+	if _elite_xp_retry_elapsed >= 0.25:
+		_elite_xp_retry_elapsed = 0.0
+		_retry_elite_xp_events()
+	_elite_healing_cooldown = maxf(0.0, _elite_healing_cooldown - delta)
 	if _slow_timer <= 0.0:
 		_slow_factor = 1.0
-	if ai_state == "dead":
+	if ai_state in ["dead", "defeated"]:
 		velocity = Vector3.ZERO
+		return
+	if _elite_defeat_active:
+		_tick_elite_defeat(delta)
 		return
 	if _melee_stagger_remaining > 0.0:
 		_melee_stagger_remaining = maxf(0.0, _melee_stagger_remaining - delta)
@@ -1983,6 +2089,22 @@ func _physics_process(delta: float) -> void:
 	if _elite_escape_active:
 		_tick_elite_escape(delta)
 		return
+	var arms_taker_phase_active := arms_taker_combat != null and (
+		arms_taker_combat.phase_intangible
+		or (arms_taker_combat.active and arms_taker_combat.action == EliteArmsTakerCombat.PHASE)
+	)
+	if (
+		elite_id == EliteArmsTakerCombat.ID
+		and _runtime_ai_active
+		and ai_state != "dormant"
+		and current_hp > 0 and current_hp < max_hp
+		and not arms_taker_phase_active
+		and _elite_healing_cooldown <= 0.0
+	):
+		_elite_healing_cooldown = 1.25
+		var scene := get_tree().current_scene
+		if scene != null and scene.has_method("try_use_arms_taker_health_potion"):
+			scene.call("try_use_arms_taker_health_potion", self)
 	if bool(enemy_data.get("narrative_stationary", false)):
 		_target = null
 		if MonsterAIManager != null:
@@ -2015,8 +2137,18 @@ func _physics_process(delta: float) -> void:
 			_startup_armed = true
 	else:
 		_disengage_elapsed = 0.0
-	if monitor_combat != null and monitor_combat.tick(delta):return
-	if arms_taker_combat != null and arms_taker_combat.tick(delta):return
+	if monitor_combat != null and monitor_combat.tick(delta):
+		return
+	if arms_taker_combat != null and arms_taker_combat.tick(delta):
+		return
+	# combat 先同步 phase/动作状态；装备 tick 放在后面，避免同一帧读到上一帧的
+	# action/phase_intangible，导致 phase 前摇、隐身期错误开火。
+	var equipment_target := _target if is_instance_valid(_target) else null
+	if _can_tick_elite_equipment():
+		elite_equipment.tick(delta, equipment_target)
+	if _elite_defeat_active:
+		_tick_elite_defeat(delta)
+		return
 	if enemy_kind == "ambusher" and _ambush_triggered:
 		var target_distance := global_position.distance_to(_target.global_position) if _target != null and is_instance_valid(_target) else INF
 		if not bool(_ai_decision.get("target_visible", false)) and target_distance > 5.0:
@@ -2650,6 +2782,22 @@ func _effective_projectile_visual_scale() -> float:
 	return maxf(0.05, _projectile_visual_scale)
 
 
+## 这一发是否**敌我通吃**（打得死自己人）。只认关卡白名单
+## `monster_rules.projectile.hit_allies_kinds`，且必须命中本怪的怪种 id。
+##
+## 为什么按「怪种」而不是按「关卡」：业主 2026-11-08 明确「只有那一只（打死会散射子弹的）
+## 才敌我通吃」，全关放开会让警察僵尸也顺手打死队友，玩法完全变味。
+## 白名单里写的是**内容 id**（远征01 为 `exploder`），因此强变异体、借模型的复刻怪
+## 一律按基础怪种比对（走 `_asset_kind()`），不会因为换了外壳就漏判。
+## 空数组 ⇒ 全关不生效，其余关卡/旧内容行为逐字不变。
+func _projectile_hits_allies_now() -> bool:
+	if _projectile_hit_allies_kinds.is_empty():
+		return false
+	if _projectile_hit_allies_kinds.has(enemy_kind):
+		return true
+	return _projectile_hit_allies_kinds.has(_asset_kind())
+
+
 ## 发一颗子弹。
 ##
 ## `behavior` 是**子弹自身的附加行为**（追踪 / 反弹 / 寿命），`speed_override` 覆盖弹速，
@@ -2675,9 +2823,15 @@ func _fire_projectile(
 		"range": float(_active_profile.get("projectile_range", 0.0)),
 		"damage": amount,
 		"hostile": true, "critical": false, "tags": ["explosive"] if explosive else [],
+		"target_group": str(behavior.get("target_group", "player_3d")),
+		"projectile_collision_mask": int(behavior.get("projectile_collision_mask", 1)),
 		"color": color, "shooter": self,
 		# 纯视觉尺寸：逐只档 → 关卡缺省档 → 1.0。缺省 1.0 ⇒ 其余关卡/旧内容不变。
 		"visual_scale": _effective_projectile_visual_scale(),
+		# 敌我通吃（关卡 `monster_rules.projectile.hit_allies_kinds` 白名单）：
+		# 只对本关点名的那几只怪生效，子弹因此也能打到其它怪；
+		# 发射者自己由 `Projectile3D` 的碰撞例外排除。
+		"hit_allies": _projectile_hits_allies_now(),
 	}
 	if not behavior.is_empty():
 		config["behavior"] = behavior
@@ -4024,12 +4178,16 @@ func _vanish() -> void:
 func receive_healing(amount: int) -> void:
 	if ai_state == "dead" or current_hp >= max_hp:
 		return
-	current_hp = mini(max_hp, current_hp + maxi(0, amount))
+	var requested_healing := maxi(0, amount)
+	var hp_before := current_hp
+	current_hp = mini(max_hp, current_hp + requested_healing)
+	var actual_healing := current_hp - hp_before
+	if actual_healing <= 0:
+		return
 	health_changed.emit(self, current_hp, max_hp)
-	# 治疗必须走**治疗**飘字（FX02-02）。历史上这里借的是 VFX-DAMAGE-NUMBER-3D 且不带
-	# context.text_value ⇒ 回血时会飘一个**红字 "0"**，而 VFX-HEAL-NUMBER-3D 全工程零调用方
-	# （2026-09-21 特效审计 P0-1 同源问题）。
-	_spawn_heal_number(amount)
+	# 治疗必须走**治疗**飘字（FX02-02），且只显示实际恢复量。
+	# 例如距离满血只差 7 点时，使用 23 点血瓶也只能显示 "+7"，不能显示请求值。
+	_spawn_heal_number(actual_healing)
 
 
 func _explode() -> void:
@@ -4152,7 +4310,7 @@ func _spawn_ground_blast_zone(radius: float) -> void:
 
 
 func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, hit_knockback := 0.0, interrupt_movement := true) -> void:
-	if ai_state == "dead" or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
+	if ai_state == "dead" or _elite_defeat_active or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
 		return
 	# 拟态怪：伪装状态下**不吃伤害**，但挨打就现形（原作"被射击才现形"）。
 	# 顺序很重要：先现形、再照常结算这一发 —— 否则玩家打中箱子会读成"打空"。
@@ -4179,9 +4337,12 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 		applied = maxi(1, int(applied * 0.32))
 	if critical:
 		applied = maxi(1, int(applied * 1.5))
+	var previous_hp := current_hp
 	_elite_encounter_damage_taken += mini(current_hp, applied)
 	current_hp = maxi(0, current_hp - applied)
 	health_changed.emit(self, current_hp, max_hp)
+	if is_in_group("enemy_3d") and is_instance_valid(_last_damage_source) and _last_damage_source.has_method("record_elite_damage_result"):
+		_last_damage_source.call("record_elite_damage_result", self, previous_hp - current_hp, current_hp <= 0)
 	_update_boss_phase()
 	_last_hit_direction = hit_direction
 	_hit_knockback = maxf(0.0, hit_knockback)
@@ -4189,7 +4350,10 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 	# 只留一处飘字。历史上这里还有一行 `_spawn_effect("VFX-DAMAGE-NUMBER-3D", 0.72)`
 	# 与下一行双发：它不带 context.text_value ⇒ 飘出一个 "0"（2026-09-21 审计 P0-1）。
 	_spawn_damage_number(applied, critical, _damage_element)
-	if current_hp <= 0:
+	if arms_taker_combat != null and not _elite_defeat_active and float(current_hp) / float(maxi(1, max_hp)) <= float(_elite_growth_profile.get("defeat_health_ratio", 0.20)):
+		current_hp = maxi(1, current_hp)
+		_begin_elite_defeat()
+	elif current_hp <= 0:
 		_die()
 	else:
 		if AudioManager != null:
@@ -4214,7 +4378,7 @@ func take_projectile_damage(
 	attacker: Node3D = null,
 	hit_knockback := 0.0
 ) -> void:
-	if ai_state == "dead" or amount <= 0 or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
+	if ai_state == "dead" or _elite_defeat_active or amount <= 0 or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
 		return
 	# 伪装 / 无敌同样在这一层先拦：子弹通道与近战通道必须给出**一致的结果**，
 	# 否则会出现"枪打不动、近战能砍"（或被反过来）的诡异判定。
@@ -4225,6 +4389,7 @@ func take_projectile_damage(
 		_spawn_effect("VFX-IMPACT-3D", 0.82)
 		return
 	if is_instance_valid(attacker):
+		_last_damage_source = attacker
 		notify_attacked_by(attacker)
 	_bypass_shield_once = bool(behavior.get("pierce_shield", "armor" in tags or "piercing" in tags))
 	if enemy_kind == "shielded" and not _bypass_shield_once and hit_direction.dot(-global_basis.z) < -0.15:
@@ -4247,6 +4412,8 @@ func take_projectile_damage(
 func notify_attacked_by(attacker: Node3D) -> void:
 	if bool(enemy_data.get("narrative_stationary", false)):
 		return
+	if is_instance_valid(attacker):
+		_last_damage_source = attacker
 	if MonsterAIManager == null or attacker == null:
 		return
 	if not _runtime_ai_active:
@@ -4699,11 +4866,12 @@ func get_effective_move_speed() -> float:
 
 
 func get_attack_frequency_multiplier() -> float:
-	return (
+	var illumination_multiplier := (
 		ARTIFICIAL_LIGHT_ATTACK_FREQUENCY_MULTIPLIER
 		if get_illumination_state() == EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT
 		else 1.0
 	)
+	return illumination_multiplier * _elite_attack_frequency_multiplier
 
 
 func _tick_illumination_effects(delta: float) -> void:
@@ -4994,6 +5162,10 @@ func _compute_separation_push() -> Vector3:
 ## 记在 `move_and_slide()` **之后**（用位置差）而不是之前用 `velocity`：
 ## 撞墙时 `velocity` 指墙外、实际位移为零或沿墙，两者差得远。
 func _commit_motion(delta: float) -> void:
+	if not is_inside_tree() or get_world_3d() == null:
+		_last_move_speed = 0.0
+		_last_move_age = 0.0
+		return
 	var planar := _apply_separation(Vector3(velocity.x, 0.0, velocity.z))
 	velocity.x = planar.x
 	velocity.z = planar.z
@@ -5271,7 +5443,7 @@ func _egt_recovery_seconds() -> float:
 
 
 func _die() -> void:
-	if ai_state == "dead":
+	if ai_state in ["dead", "defeated"] or _elite_defeat_active:
 		return
 	# —— 「消失」不是「死亡」（逃跑超时的钥匙小子 / 运气小子）——
 	# 仍然必须走完清房记账（`killed.emit`），但**不喷死亡特效、不掉掉落**：
@@ -5674,6 +5846,79 @@ func _retire_goo_death_visual() -> void:
 	queue_free()
 
 
+func _begin_elite_defeat() -> void:
+	_elite_defeat_active = true
+	_elite_defeat_elapsed = 0.0
+	_elite_defeat_retry_elapsed = 0.0
+	_elite_defeat_committed = false
+	_elite_defeat_context = {"room_id": room_id}
+	_elite_escape_active = false
+	_elite_escape_arrived = false
+	_elite_escape_vfx_finished = false
+	if is_instance_valid(_elite_escape_vfx):
+		_elite_escape_vfx.finish()
+		_elite_escape_vfx = null
+	if arms_taker_combat != null:
+		arms_taker_combat.cancel()
+	_melee_stagger_remaining = 0.0
+	velocity = Vector3.ZERO
+	_external_velocity = Vector3.ZERO
+	if MonsterAIManager != null:
+		MonsterAIManager.release_attack_token(self)
+	transition_to("return", "arms_taker_defeated_kneel")
+
+
+func _tick_elite_defeat(delta: float) -> void:
+	_elite_defeat_elapsed += delta
+	_elite_defeat_retry_elapsed += delta
+	velocity = Vector3.ZERO
+	if not _elite_defeat_committed and _elite_defeat_elapsed >= float(_elite_growth_profile.get("defeat_drop_delay", 0.35)) and _elite_defeat_retry_elapsed >= 0.25:
+		_elite_defeat_retry_elapsed = 0.0
+		var scene := get_tree().current_scene
+		if scene != null and scene.has_method("commit_arms_taker_defeat"):
+			_elite_defeat_committed = bool(scene.call("commit_arms_taker_defeat", self, _elite_defeat_context))
+	if _elite_defeat_elapsed < float(_elite_growth_profile.get("kneel_duration", 2.6)) or not _elite_defeat_committed:
+		return
+	_elite_defeat_active = false
+	transition_to("defeated", "arms_taker_defeated")
+	collision_layer = 0
+	collision_mask = 0
+	defeated.emit(self, _elite_defeat_context.duplicate(true))
+	queue_free()
+
+
+func queue_elite_xp_event(reason: String) -> void:
+	if elite_id != EliteArmsTakerCombat.ID or reason not in ["player_attack", "player_kill", "enemy_kill", "escape"]:
+		return
+	_elite_event_serial += 1
+	_elite_pending_xp_events.append({
+		"event_id": "%s:%s:xp:%d" % [elite_encounter_instance_id, get_persistent_id(), _elite_event_serial],
+		"reason": reason,
+	})
+	_retry_elite_xp_events()
+
+
+func record_elite_damage_result(target: Node3D, actual_damage: int, killed: bool) -> void:
+	if elite_id != EliteArmsTakerCombat.ID or actual_damage <= 0 or not is_instance_valid(target):
+		return
+	if target.is_in_group("player_3d"):
+		queue_elite_xp_event("player_attack")
+		if killed:
+			queue_elite_xp_event("player_kill")
+	elif target.is_in_group("enemy_3d") and killed:
+		queue_elite_xp_event("enemy_kill")
+
+
+func _retry_elite_xp_events() -> void:
+	if EliteRosterService == null:
+		return
+	while not _elite_pending_xp_events.is_empty():
+		var event := _elite_pending_xp_events[0]
+		if not EliteRosterService.award_xp(elite_id, str(event.event_id), str(event.reason)):
+			return
+		_elite_pending_xp_events.pop_front()
+
+
 func _should_begin_elite_escape() -> bool:
 	if arms_taker_combat != null:
 		return not _elite_escape_active and current_hp > 0 and _elite_encounter_damage_taken >= ceili(max_hp * EliteArmsTakerCombat.RETREAT_DAMAGE_RATIO)
@@ -5689,7 +5934,11 @@ func _should_begin_elite_escape() -> bool:
 func _begin_elite_escape() -> void:
 	_elite_escape_active = true
 	_elite_escape_elapsed = 0.0
+	_elite_escape_retry_elapsed = 0.0
+	_elite_escape_arrived = false
+	_elite_escape_vfx_finished = false
 	_elite_escape_origin = global_position
+	_resolve_elite_escape_door()
 	if MonsterAIManager != null:
 		MonsterAIManager.release_attack_token(self)
 	transition_to("return", "unique_elite_escape")
@@ -5697,24 +5946,126 @@ func _begin_elite_escape() -> void:
 		_elite_name_label.text = "%s · 撤离中" % str(_elite_health_bar_profile.get("display_name", enemy_data.get("name", "唯一精英")))
 
 
+func _resolve_elite_escape_door() -> void:
+	_elite_escape_door_position = Vector3.ZERO
+	_elite_escape_door_normal = Vector3.ZERO
+	_elite_escape_target_valid = false
+	var scene := get_tree().current_scene
+	var room: DungeonRoom3D
+	if scene != null and scene.has_method("get"):
+		var rooms: Variant = scene.get("_room_by_id")
+		if rooms is Dictionary:
+			room = (rooms as Dictionary).get(room_id) as DungeonRoom3D
+	if room == null:
+		return
+	var nearest_distance := INF
+	if not room.connection_ports.is_empty():
+		for raw_port in room.connection_ports:
+			if not raw_port is Dictionary:
+				continue
+			var port := raw_port as Dictionary
+			if str(port.get("target_room_id", "")).is_empty():
+				continue
+			var raw_position: Variant = port.get("position_m", [])
+			var raw_outward: Variant = port.get("outward", [])
+			if not raw_position is Array or not raw_outward is Array or (raw_position as Array).size() < 2 or (raw_outward as Array).size() < 2:
+				continue
+			var local_position := Vector3(float(raw_position[0]), 0.0, float(raw_position[1]))
+			var local_normal := Vector3(float(raw_outward[0]), 0.0, float(raw_outward[1])).normalized()
+			if local_normal.length_squared() <= 0.001:
+				continue
+			var port_position := room.to_global(local_position)
+			var port_normal := (room.global_basis * local_normal).normalized()
+			var distance := global_position.distance_to(port_position)
+			if distance < nearest_distance:
+				nearest_distance = distance
+				_elite_escape_door_position = port_position
+				_elite_escape_door_normal = port_normal
+				_elite_escape_target_valid = true
+	if not _elite_escape_target_valid:
+		for direction_value in room.door_targets.keys():
+			var direction := str(direction_value)
+			var target_room := str(room.door_targets.get(direction, ""))
+			if target_room.is_empty():
+				continue
+			var door := room.get_door_node(direction)
+			if door == null and room.has_method("get_door_node_towards"):
+				door = room.get_door_node_towards(target_room)
+			if door == null:
+				continue
+			var distance := global_position.distance_to(door.global_position)
+			if distance < nearest_distance:
+				nearest_distance = distance
+				_elite_escape_door_position = door.global_position
+				_elite_escape_door_normal = (door.global_basis * Vector3(0.0, 0.0, 1.0)).normalized()
+				if _elite_escape_door_normal.length_squared() <= 0.001:
+					_elite_escape_door_normal = _room_side_normal(direction)
+				_elite_escape_target_valid = _elite_escape_door_normal.length_squared() > 0.0
+	if _elite_escape_target_valid:
+		_elite_escape_door_position -= _elite_escape_door_normal * 1.15
+
+
+func _room_side_normal(side: String) -> Vector3:
+	return {
+		"north": Vector3(0.0, 0.0, -1.0), "south": Vector3(0.0, 0.0, 1.0),
+		"east": Vector3(1.0, 0.0, 0.0), "west": Vector3(-1.0, 0.0, 0.0),
+	}.get(side, Vector3.ZERO) as Vector3
+
+
 func _tick_elite_escape(delta: float) -> void:
 	_elite_escape_elapsed += delta
-	var escape_direction := Vector3.FORWARD.rotated(Vector3.UP, rotation.y)
-	if _target != null and is_instance_valid(_target):
-		escape_direction = global_position - _target.global_position
-		escape_direction.y = 0.0
-	if escape_direction.length_squared() <= 0.01:
-		escape_direction = Vector3.FORWARD
-	escape_direction = escape_direction.normalized()
-	var speed_multiplier := maxf(1.0, float(_elite_growth_profile.get("escape_speed_multiplier", 1.55)))
-	_steer_planar(
-		escape_direction * get_effective_move_speed() * speed_multiplier,
-		minf(1.0, delta * 7.0)
-	)
-	_commit_motion(delta)
-	rotation.y = lerp_angle(rotation.y, atan2(-escape_direction.x, -escape_direction.z), minf(1.0, delta * 10.0))
-	if _elite_escape_elapsed >= maxf(0.5, float(_elite_growth_profile.get("escape_duration", 4.2))):
+	_elite_escape_retry_elapsed += delta
+	if not _elite_escape_target_valid:
+		if _elite_escape_retry_elapsed >= 0.25:
+			_elite_escape_retry_elapsed = 0.0
+			_resolve_elite_escape_door()
+		if not _elite_escape_target_valid:
+			velocity = Vector3.ZERO
+			return
+	if not _elite_escape_arrived:
+		var offset := _elite_escape_door_position - global_position
+		offset.y = 0.0
+		if offset.length() <= maxf(0.35, float(_elite_growth_profile.get("retreat_arrival_distance", 1.0))):
+			_elite_escape_arrived = true
+			velocity = Vector3.ZERO
+			if _elite_escape_vfx == null:
+				_elite_escape_vfx = _spawn_elite_escape_vfx()
+			if _elite_escape_vfx == null:
+				return
+			return
+		var direction := offset.normalized() if offset.length_squared() > 0.01 else Vector3.FORWARD
+		direction = _navigation_direction(_elite_escape_door_position, offset)
+		var speed_multiplier := maxf(1.0, float(_elite_growth_profile.get("escape_speed_multiplier", 1.55)))
+		var intended_velocity := direction * get_effective_move_speed() * speed_multiplier
+		intended_velocity = _apply_local_avoidance(intended_velocity, offset)
+		_track_stuck_recovery(delta, intended_velocity)
+		_steer_planar(intended_velocity, minf(1.0, delta * 7.0))
+		_commit_motion(delta)
+		rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), minf(1.0, delta * 10.0))
+		return
+	if _elite_escape_vfx_finished:
 		_complete_elite_escape()
+
+
+func _spawn_elite_escape_vfx() -> VfxEffectBase3D:
+	var effect: VfxEffectBase3D
+	var pools := get_tree().get_nodes_in_group("vfx_pool_3d")
+	if not pools.is_empty() and pools[0] is VfxPool3D:
+		effect = (pools[0] as VfxPool3D).acquire(VfxPool3D.FX01_TELEPORT_OUT, global_position + Vector3.UP * EFFECT_SPAWN_LIFT, Color.WHITE, 1.0, {"duration": float(_elite_growth_profile.get("retreat_teleport_duration", 0.75))})
+	else:
+		effect = VfxPool3D.create_unpooled(VfxPool3D.FX01_TELEPORT_OUT)
+	if effect != null:
+		effect.retired.connect(_on_elite_escape_vfx_retired, CONNECT_ONE_SHOT)
+	if effect != null and not effect.is_inside_tree():
+		get_tree().current_scene.add_child(effect)
+	if effect != null and not effect._active:
+		effect.activate(global_position + Vector3.UP * EFFECT_SPAWN_LIFT, Color.WHITE, 1.0, {"duration": float(_elite_growth_profile.get("retreat_teleport_duration", 0.75))})
+	return effect
+
+
+func _on_elite_escape_vfx_retired(effect: VfxEffectBase3D) -> void:
+	if effect == _elite_escape_vfx:
+		_elite_escape_vfx_finished = true
 
 
 func _complete_elite_escape() -> void:
@@ -5922,11 +6273,17 @@ func _spawn_heal_number(amount: int) -> void:
 			_damage_number_context(amount, false, HEAL_NUMBER_PREFIX + str(amount))
 		)
 		return
-	# 池不可用时退化为兜底脚本 —— 它画不出治疗绿，但至少把数值显示出来（不静默）。
-	var heal_number := DAMAGE_NUMBER_SCRIPT.new() as Node3D
+	# 无池时仍实例化正式的 VFX-HEAL-NUMBER-3D，不能退化到伤害数字脚本。
+	var heal_number := VfxPool3D.create_unpooled(VfxPool3D.FX02_HEAL_NUMBER)
+	if heal_number == null:
+		return
 	get_tree().current_scene.add_child(heal_number)
-	heal_number.global_position = spawn_position
-	heal_number.call("configure", amount, false)
+	heal_number.activate(
+		spawn_position,
+		VfxHealNumber3D.HEAL_COLOR,
+		1.0,
+		_damage_number_context(amount, false, HEAL_NUMBER_PREFIX + str(amount))
+	)
 
 
 ## 飘字出生点：怪物头顶。按体型轮廓高度 × 当前根缩放换算，与血条/吼叫图标同一口径。
@@ -6004,4 +6361,7 @@ func _clear_fate_visuals() -> void:
 func _exit_tree() -> void:
 	if arms_taker_combat != null:
 		arms_taker_combat.cancel()
+	if elite_equipment != null:
+		elite_equipment.dispose()
+		elite_equipment = null
 	_clear_fate_visuals()

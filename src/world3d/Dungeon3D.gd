@@ -41,6 +41,9 @@ const SECRET_BRANCH_SCRIPT := preload("res://src/world3d/SecretBranch3D.gd")
 ## 子图房型表走 L3 加载器（与生成器/校验器同一份读取口径，不另写文件解析）。
 const LEVEL_PLAN_LOADER := preload("res://src/map/LevelPlanLoader.gd")
 const GROUND_LOOT_SCRIPT := preload("res://src/world3d/GroundLootPickup3D.gd")
+const FATE_CARD_DROP_SCRIPT := preload("res://src/world3d/FateCardDropPickup3D.gd")
+const CHEST_REWARD_SERVICE_SCRIPT := preload("res://src/rewards/ChestRewardService.gd")
+const ELITE_RENT_TRANSFER_SCRIPT := preload("res://src/world3d/EliteRentTransfer3D.gd")
 const WORKBENCH_SCENE: PackedScene = preload("res://scenes/WorkbenchPanel.tscn")
 const WEAPON_PRESENTATION_SCENE: PackedScene = preload("res://scenes/WeaponAssemblyTreePanel.tscn")
 const CORRIDOR_FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_floor_segment.tscn")
@@ -149,6 +152,9 @@ var _fate_door_offer_id := 0
 ## 拿报价次数当门序号会让 room_09 的箱子按 room_02 的价格卖卡。
 var _fate_offer_price_index := 0
 var _fate_door_snapshot_to_restore: Dictionary = {}
+## 已被主动交互事务认领的命运卡世界凭据。只记录稳定 ID，避免同一物体重复开报价。
+var _fate_pickup_claimed: Dictionary = {}
+## 拟态/动画期间已冻结但尚未落地的箱内奖励，所有者是房间 detail 账。
 
 ## 清房掉落纯服务（2026-11-06）。未配置 ⇒ 不发宝箱、不发补给，房间清理逐字走原路径。
 var _clear_drop_service = CLEAR_DROP_SERVICE_SCRIPT.new()
@@ -293,6 +299,7 @@ var _rooms: Array[DungeonRoom3D] = []
 var _room_by_id: Dictionary = {}
 var _records: Array[Dictionary] = []
 var _alive_by_room: Dictionary = {}
+var _arms_taker_defeat_commits: Dictionary = {}
 ## 本房首领**已被击杀**的登记（房 id → true）。只由 `_on_enemy_killed` 里的
 ## `enemy_kind == "boss"` 分支写入，且**只在真死时**写 —— 与 `room.cleared`
 ## （还要求增援/波次全清）是两条独立事实，门控按需各取其一。
@@ -405,6 +412,8 @@ var _door_fate_purchased: Array[bool] = []
 var _fate_exit_button: Button = null
 var _pending_fate_door_from_id := ""
 var _pending_fate_door_target_id := ""
+var _fate_offer_source := "door"
+var _fate_offer_pickup_id := ""
 var _fate_overlay: Control
 var _fate_overlay_closing := false
 var _fate_choice_buttons: Array[Button] = []
@@ -526,6 +535,9 @@ var _runtime_checkpoint_guard_reordering := false
 var _pending_run_settlement_transaction_id := ""
 var _pending_insurance_return_restore := false
 var _segment_runtime_state: Dictionary = {}
+## 角色二级命运凭据投递账：唯一 fate_pickup_id → {request, room_id, currency_cost, status}。
+## status=pending 表示尚未落地；status=landed 表示已由 RewardSink 正式生成地面实体。
+var _character_fate_delivery: Dictionary = {}
 ## Boss 房持续增援状态：room_id → {armed, elapsed, round, cursor, stopped}。
 ## 轮次与倒计时随房间段快照保存；不使用裸 Timer，切房/续局不会重复启动或遗留回调。
 var _boss_reinforcement_states: Dictionary = {}
@@ -856,6 +868,7 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"bridge": FateCardGameBridge.export_fate_snapshot(),
 		"economy": _fate_economy.export_snapshot(),
 		"door": _export_door_fate_snapshot(),
+		"character_delivery": _export_character_fate_delivery_snapshot(),
 	}
 	return RUN_PERSISTENCE_SERVICE.finalize_runtime_snapshot(snapshot)
 
@@ -1023,9 +1036,11 @@ func _export_door_fate_snapshot() -> Dictionary:
 			"price": int(_fate_door_quote.get(card.get_stable_card_id(), _fate_price(card))),
 		})
 	return {
-		"schema_version": 1,
+		"schema_version": 2,
 		"policy": _fate_offer_policy_snapshot.duplicate(true),
 		"active": _door_fate_active,
+		"source": _fate_offer_source,
+		"pickup_id": _fate_offer_pickup_id,
 		"offer_id": _fate_door_offer_id,
 		"price_index": _fate_offer_price_index,
 		"from_id": _pending_fate_door_from_id,
@@ -1033,6 +1048,7 @@ func _export_door_fate_snapshot() -> Dictionary:
 		"closing": false,
 		"cards": cards,
 		"quotes": _fate_door_quote.duplicate(true),
+		"claimed_pickups": _fate_pickup_claimed.duplicate(true),
 	}
 
 
@@ -1040,7 +1056,8 @@ func _import_door_fate_snapshot(value: Variant) -> bool:
 	if not value is Dictionary:
 		return false
 	var snapshot: Dictionary = value as Dictionary
-	if int(snapshot.get("schema_version", 0)) != 1:
+	var schema_version := int(snapshot.get("schema_version", 0))
+	if schema_version not in [1, 2]:
 		return false
 	var restored_cards: Array[FateCard] = []
 	var restored_purchased: Array[bool] = []
@@ -1061,12 +1078,18 @@ func _import_door_fate_snapshot(value: Variant) -> bool:
 		restored_cards.append(card)
 		restored_purchased.append(bool(row.get("purchased", false)))
 	_fate_offer_policy_snapshot = (snapshot.get("policy", {}) as Dictionary).duplicate(true)
+	_fate_offer_source = str(snapshot.get("source", "door"))
+	_fate_offer_pickup_id = str(snapshot.get("pickup_id", ""))
 	_door_fate_choices.assign(restored_cards)
 	_door_fate_purchased.assign(restored_purchased)
 	_fate_door_offer_id = maxi(0, int(snapshot.get("offer_id", 0)))
 	# 旧档没有这一项 ⇒ 0 ⇒ 报价序号退回「用门序号」（历史口径，报价本身仍是冻结值）。
 	_fate_offer_price_index = maxi(0, int(snapshot.get("price_index", 0)))
 	_fate_door_quote = (snapshot.get("quotes", {}) as Dictionary).duplicate(true)
+	_fate_pickup_claimed = (snapshot.get("claimed_pickups", {}) as Dictionary).duplicate(true)
+	# 过渡档可能已有 pickup offer 而尚未写 claimed_pickups；冻结候选就是已认领证据。
+	if _fate_offer_source == "pickup" and not _fate_offer_pickup_id.is_empty() and not restored_cards.is_empty():
+		_fate_pickup_claimed[_fate_offer_pickup_id] = true
 	_pending_fate_door_from_id = str(snapshot.get("from_id", ""))
 	_pending_fate_door_target_id = str(snapshot.get("target_id", ""))
 	_door_fate_active = bool(snapshot.get("active", false)) and not restored_cards.is_empty()
@@ -1081,8 +1104,8 @@ func _restore_pending_door_fate_overlay() -> void:
 		return
 	_fate_door_snapshot_to_restore = {}
 	if not _door_fate_active:
-		if not _pending_fate_door_target_id.is_empty():
-			_show_door_fate_choices()
+		# 旧档只有门目标但没有冻结候选时，只完成流送，不补抽新卡。
+		_commit_pending_fate_door_streaming()
 		return
 	_build_door_fate_overlay()
 	for index in range(_door_fate_purchased.size()):
@@ -1105,6 +1128,7 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 		import_world_fate_snapshot(fate.get("world"))
 		_fate_economy.import_snapshot(fate.get("economy", {}))
 		_import_door_fate_snapshot(fate.get("door", {}))
+		_import_character_fate_delivery_snapshot(fate.get("character_delivery", {}))
 	else:
 		import_world_fate_snapshot({})
 	var backpack := snapshot.get("equipped_backpack_item", {}) as Dictionary
@@ -2794,6 +2818,39 @@ func _generate_layout_for_loading() -> void:
 		if not await _build_room_shell_for_loading(room):
 			return
 	_finish_layout_connections()
+	await _prebuild_entry_room_details()
+
+
+## 加载期把「开局第一眼就要走进去的房间」的细节一起建好。
+##
+## 为什么只建 start 与其开门邻房、而不是全部：
+## `DungeonRoom3D.set_stream_state()` 在 `STREAM_DATA_ONLY` 分支会
+## `_unload_runtime_detail()` 把细节整棵 `queue_free()` 并复位 `_detail_built`。
+## 装配收尾的 `_update_room_streaming()` 会把「非当前房、非开门邻房」全部降到
+## DATA_ONLY ⇒ 那些房间此刻建了也会立刻被卸掉，白付一次实例化 + 一次释放。
+## 而 start 是 ACTIVE、开门邻房是 SHELL_READY，两者都不触发卸载，建了就留得住。
+##
+## 实测（2026-11-08，真渲染 1280x720，RTX 3060）：单间 detail 114~507 ms，
+## 进战斗房那一帧合计 195 ms，`_refresh_physical_location_authority()` 同帧 263 ms
+## ——玩家感知就是「推门进来一顿」。挪到加载页只多 0.2~0.6 s。
+##
+## 注意：这一步**不建敌人、不刷波次、不动 `_spawned_rooms`**，只补房间陈设，
+## 所以不改变任何"怪什么时候出现"的时序。
+func _prebuild_entry_room_details() -> void:
+	var start_room := _room_by_id.get("start") as DungeonRoom3D
+	if start_room == null:
+		return
+	var prebuilt: Array[DungeonRoom3D] = [start_room]
+	for neighbor_value in (_room_neighbors.get(start_room.room_id, []) as Array):
+		var neighbor_id := str(neighbor_value)
+		if not bool(_open_edges.get(_edge_key(start_room.room_id, neighbor_id), false)):
+			continue
+		var neighbor := _room_by_id.get(neighbor_id) as DungeonRoom3D
+		if neighbor != null:
+			prebuilt.append(neighbor)
+	for room in prebuilt:
+		room.ensure_detail_built()
+		await get_tree().process_frame
 
 
 func _prepare_layout_rooms() -> void:
@@ -3640,6 +3697,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	_current_room_id = room.room_id
 	_last_main_room_id = room.room_id
 	_observe_roaming_elite_room(room)
+	call_deferred("_retry_pending_character_fate_pickups", room.room_id)
 	room_entered.emit(room)
 	if _runtime_persistence_active and BaseManager != null:
 		BaseManager.flush_runtime_checkpoint("room_transition")
@@ -4757,7 +4815,7 @@ func _elite_encounter_id(room: DungeonRoom3D) -> String:
 
 
 func _counts_for_room_clear(config: Dictionary) -> bool:
-	return not bool(config.get("is_elite", false))
+	return bool(config.get("counts_for_room_clear", true)) and not bool(config.get("is_elite", false))
 
 
 func _combat_config_count(configs: Array) -> int:
@@ -4787,8 +4845,12 @@ func _ensure_roaming_elite() -> void:
 		if record.get("type", "") in rules.get("room_types", []) and not bool(record.get("authored_layout_peaceful", false)):
 			budget += 1
 	_roaming_elite.configure(rules, run_seed, _run_id, budget)
-	if not _roaming_elite.state.is_empty() and EliteRosterService.get_record(str(rules.elite_id)).get("state", "") == "Killed":
-		_roaming_elite.state.status = "killed"
+	if not _roaming_elite.state.is_empty():
+		var archive_state := str(EliteRosterService.get_record(str(rules.elite_id)).get("state", ""))
+		if archive_state == "Killed":
+			_roaming_elite.state.status = "killed"
+		elif archive_state == "Defeated":
+			_roaming_elite.state.status = "defeated"
 
 
 func _observe_roaming_elite_room(room: DungeonRoom3D) -> void:
@@ -4851,21 +4913,217 @@ func commit_roaming_elite_escape(enemy: Enemy3D, context: Dictionary) -> bool:
 	_roaming_elite.stage_escape(enemy)
 	if bool(context.get("killed_player", false)):
 		_roaming_elite.state.status = "finished"
+	var appearance_stable_id := enemy.get_persistent_id()
 	context = context.duplicate(true)
+	context["xp_event_id"] = appearance_stable_id
 	context["roaming_encounter"] = _roaming_elite.export_snapshot()
 	var snapshot := build_runtime_save_snapshot()
 	var committed: bool
 	if _roaming_elite.state.status == "finished":
 		committed = EliteRosterService.settle(enemy.elite_id, enemy.elite_encounter_instance_id, "escaped", context, snapshot)
 	else:
-		committed = EliteRosterService.commit_run_record(enemy.elite_id, _roaming_elite.export_snapshot(), snapshot)
+		committed = EliteRosterService.commit_run_record(
+			enemy.elite_id,
+			_roaming_elite.export_snapshot(),
+			snapshot,
+			{
+				"kind": "escape",
+				"receipt_id": appearance_stable_id,
+				"xp_event_id": appearance_stable_id,
+			}
+		)
 	if not committed:
 		_roaming_elite.state = previous
 	return committed
 
 
+func commit_arms_taker_defeat(enemy: Enemy3D, context: Dictionary) -> bool:
+	if enemy == null or not is_instance_valid(enemy) or enemy.elite_id != "elite_arms_taker":
+		return false
+	var commit_key := enemy.get_persistent_id()
+	if _arms_taker_defeat_commits.has(commit_key):
+		return bool(_arms_taker_defeat_commits[commit_key])
+	var room := _room_by_id.get(enemy.room_id) as DungeonRoom3D
+	if room == null:
+		room = _secret_branch_room_ids.get(enemy.room_id) as DungeonRoom3D
+	if room == null:
+		return false
+	var record := EliteRosterService.get_record(enemy.elite_id) if EliteRosterService != null else {}
+	var stolen_items: Variant = record.get("stolen_items", []) if record is Dictionary else []
+	var drops: Array = []
+	var remaining_inventory: Array = []
+	var receipts: Array = []
+	var normalized_inventory: Array[Dictionary] = []
+	var total_inventory_count := 0
+	if stolen_items is Array:
+		for raw_entry in stolen_items as Array:
+			if not raw_entry is Dictionary:
+				continue
+			var entry := raw_entry as Dictionary
+			var item: Variant = entry.get("item", {})
+			if not item is Dictionary or (item as Dictionary).is_empty():
+				continue
+			var count := maxi(0, int(entry.get("count", 1)))
+			if count == 0:
+				continue
+			var normalized_entry := entry.duplicate(true)
+			normalized_entry["count"] = count
+			normalized_inventory.append(normalized_entry)
+			total_inventory_count += count
+			if not str(entry.get("receipt_id", "")).is_empty():
+				receipts.append(str(entry.get("receipt_id")))
+	var drop_total := ceili(float(total_inventory_count) / 2.0)
+	for entry in normalized_inventory:
+		if drop_total <= 0:
+			remaining_inventory.append(entry.duplicate(true))
+			continue
+		var count := int(entry["count"])
+		var drop_count := mini(count, drop_total)
+		if drop_count > 0:
+			var drop_item := (entry["item"] as Dictionary).duplicate(true)
+			drop_item["count"] = drop_count
+			drops.append({"item": drop_item, "count": drop_count})
+			drop_total -= drop_count
+		var remaining_count := count - drop_count
+		if remaining_count > 0:
+			var remaining_entry := entry.duplicate(true)
+			remaining_entry["count"] = remaining_count
+			remaining_inventory.append(remaining_entry)
+	var pending_pickups: Array[GroundLootPickup3D] = []
+	var before_pickups := get_tree().get_nodes_in_group("ground_loot_3d")
+	var drop_items: Array = []
+	for drop in drops:
+		var drop_item := (drop["item"] as Dictionary).duplicate(true)
+		drop_item["count"] = int(drop["count"])
+		drop_items.append(drop_item)
+	var spawned_drop_count := _spawn_loot_items(room, drop_items, enemy.global_position) if not drop_items.is_empty() else 0
+	if spawned_drop_count != drop_items.size():
+		for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+			if value is GroundLootPickup3D and not before_pickups.has(value) and room.is_ancestor_of(value):
+				value.remove_from_group("ground_loot_3d")
+				value.queue_free()
+		return false
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if value is GroundLootPickup3D and not before_pickups.has(value) and room.is_ancestor_of(value):
+			var pickup := value as GroundLootPickup3D
+			pending_pickups.append(pickup)
+			# 暂时保留 ground_loot_3d：runtime checkpoint 必须能看到这批尚未对玩家开放的掉落。
+			# 隐藏、关闭监测和 process 足以阻止交互；事务失败时才移出并释放。
+			pickup.visible = false
+			pickup.monitoring = false
+			pickup.set_process(false)
+	var previous_roaming := _roaming_elite.export_snapshot()
+	var previous_runtime_rooms := _segment_runtime_state.duplicate(true)
+	var member_list := _enemy_nodes_by_room.get(enemy.room_id, []) as Array
+	var previous_member_index := member_list.find(enemy)
+	var was_member := previous_member_index >= 0
+	var previous_alive := int(_alive_by_room.get(enemy.room_id, 0))
+	if was_member:
+		member_list.remove_at(previous_member_index)
+		if _counts_for_room_clear(enemy.enemy_data):
+			_alive_by_room[enemy.room_id] = maxi(0, previous_alive - 1)
+	var settlement_context := context.duplicate(true)
+	settlement_context["defeat_inventory_remaining"] = remaining_inventory.duplicate(true)
+	settlement_context["defeat_drop_receipts"] = receipts.duplicate(true)
+	if _roaming_elite.owns(enemy.enemy_data):
+		_roaming_elite.stage_defeat(enemy)
+		settlement_context["roaming_encounter"] = _roaming_elite.export_snapshot()
+	var committed := EliteRosterService != null and EliteRosterService.settle(
+		enemy.elite_id, enemy.elite_encounter_instance_id, "defeated",
+		settlement_context, build_runtime_save_snapshot()
+	)
+	if not committed:
+		_roaming_elite.state = previous_roaming
+		_segment_runtime_state = previous_runtime_rooms
+		if was_member:
+			var restored_members := _enemy_nodes_by_room.get(enemy.room_id, []) as Array
+			var insert_index := clampi(previous_member_index, 0, restored_members.size())
+			restored_members.insert(insert_index, enemy)
+			_alive_by_room[enemy.room_id] = previous_alive
+		for pickup in pending_pickups:
+			if is_instance_valid(pickup):
+				pickup.remove_from_group("ground_loot_3d")
+				pickup.queue_free()
+		return false
+	if _roaming_elite.owns(enemy.enemy_data):
+		_roaming_elite.state.hp = 0
+		_roaming_elite.state.status = "defeated"
+		_roaming_elite.state.room_id = enemy.room_id
+	for pickup in pending_pickups:
+		if not is_instance_valid(pickup):
+			continue
+		pickup.visible = true
+		pickup.monitoring = true
+		pickup.set_process(true)
+	_arms_taker_defeat_commits[commit_key] = true
+	return true
+
+
+func try_use_arms_taker_health_potion(enemy: Enemy3D) -> bool:
+	if enemy == null or not is_instance_valid(enemy) or enemy.elite_id != "elite_arms_taker":
+		return false
+	if enemy.current_hp <= 0 or enemy.ai_state in ["dead", "defeated", "dormant"]:
+		return false
+	if enemy._elite_defeat_active or enemy._elite_escape_active or enemy.arms_taker_combat == null:
+		return false
+	if enemy.arms_taker_combat.phase_intangible or (enemy.arms_taker_combat.active and enemy.arms_taker_combat.action == EliteArmsTakerCombat.PHASE):
+		return false
+	if enemy.current_hp >= enemy.max_hp or EliteRosterService == null or not EliteRosterService.has_method("consume_elite_item"):
+		return false
+	var record := EliteRosterService.get_record(enemy.elite_id)
+	var potion_count := 0
+	var stolen_items: Variant = record.get("stolen_items", []) if record is Dictionary else []
+	if stolen_items is Array:
+		for raw_entry in stolen_items as Array:
+			if not raw_entry is Dictionary:
+				continue
+			var entry := raw_entry as Dictionary
+			var item := entry.get("item", {}) as Dictionary
+			if str(item.get("id", "")) == "item_health_potion":
+				potion_count += maxi(0, int(entry.get("count", 0)))
+	if potion_count <= 0:
+		return false
+	var potion := ItemRegistry.get_instance().get_item("item_health_potion")
+	var heal_amount := maxi(0, int(potion.get("heal_amount", 0)))
+	var actual_heal := mini(maxi(0, enemy.max_hp - enemy.current_hp), heal_amount)
+	if actual_heal <= 0:
+		return false
+	var previous_hp := enemy.current_hp
+	var previous_serial := enemy._elite_healing_serial
+	var previous_roaming := _roaming_elite.export_snapshot()
+	var previous_runtime_rooms := _segment_runtime_state.duplicate(true)
+	enemy._elite_healing_serial += 1
+	enemy.current_hp = previous_hp + actual_heal
+	if _roaming_elite.owns(enemy.enemy_data):
+		_roaming_elite.capture_actor(enemy)
+	var snapshot := build_runtime_save_snapshot()
+	var transaction_id := "%s:healing:%d" % [enemy.get_persistent_id(), enemy._elite_healing_serial]
+	var result_variant: Variant = EliteRosterService.call(
+		"consume_elite_item",
+		enemy.elite_id,
+		enemy.elite_encounter_instance_id,
+		"item_health_potion",
+		1,
+		transaction_id,
+		snapshot
+	)
+	var result := result_variant as Dictionary if result_variant is Dictionary else {}
+	var committed := bool(result.get("success", false)) or bool(result.get("already_committed", false))
+	if not committed:
+		enemy.current_hp = previous_hp
+		enemy._elite_healing_serial = previous_serial
+		_roaming_elite.state = previous_roaming
+		_segment_runtime_state = previous_runtime_rooms
+		return false
+	enemy.health_changed.emit(enemy, enemy.current_hp, enemy.max_hp)
+	enemy._spawn_heal_number(actual_heal)
+	return true
+
+
 func commit_roaming_elite_death(enemy: Enemy3D, context: Dictionary) -> void:
 	if not _roaming_elite.owns(enemy.enemy_data):
+		return
+	if _roaming_elite.state.status == "defeated":
 		return
 	_roaming_elite.stage_death(enemy)
 	_roaming_elite.state["pending_outcome"] = context.duplicate(true)
@@ -4993,6 +5251,20 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		if enemy == null:
 			continue
 		enemy.room_id = room.room_id
+		# ⚠ 不要在这里「入树前预置 enemy_kind」。
+		#
+		# 2026-11-07 试过：`enemy.enemy_kind = enemy_type` 再 `add_child()`，想省掉
+		# `_ready()` 按默认 `melee_chaser` 建一套再拆掉重建的开销。
+		# 2026-11-08 真渲染对照实测**这是错的**：
+		#   · 开着预置：进战斗房刷怪后稳定 12 条
+		#     `ERROR: Parameter "material" is null`（material_casts_shadows /
+		#     material_is_animated / material_get_instance_shader_parameters /
+		#     material_update_dependency 各 3 次）；
+		#   · `--no-preset` 关掉预置：同样场景 0 条。
+		# 原因是 `_ready()` 里 `apply_profile()` → `avatar.configure(egt_*)` 走的是
+		# 复刻怪的代理资产路径，那条路径要等 `configure_from_enemy_data()` 补齐的
+		# 字段才成立；提前到入树前就走，表现层会挂上空的 surface override。
+		# 省下的那一次重建换成渲染服务器报错 + 材质残缺，不划算，已回退。
 		$ActiveEnemies.add_child(enemy)
 		var spawn_data := enemy_configs[index].duplicate(true)
 		# 房间级 AI 覆盖（`encounter.monster_ai`）：与关卡级同键合并，**房间级优先**。
@@ -5054,6 +5326,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 			enemy.global_rotation.y = PI
 		enemy.killed.connect(_on_enemy_killed)
 		enemy.escaped.connect(_on_enemy_escaped)
+		enemy.defeated.connect(_on_enemy_defeated)
 		enemy.summon_requested.connect(_on_summon_requested)
 		enemy.split_requested.connect(_on_split_requested)
 		enemy.boss_phase_changed.connect(_on_boss_phase_changed)
@@ -5652,7 +5925,7 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 		loot_room = _secret_branch_room_ids.get(enemy.room_id) as DungeonRoom3D
 	# 宝箱拟态：箱内的东西不在开箱时给，在**它肚子里**。放在击杀结算之前发 ——
 	# 击杀掉落可能因为掉落表为空而返回 0 条，箱内物资不该被一起吞掉。
-	if enemy.get_meta("chest_mimic", false) and loot_room != null:
+	if bool(enemy.enemy_data.get("chest_mimic", enemy.get_meta("chest_mimic", false))) and loot_room != null:
 		_deliver_chest_mimic_loot(loot_room, enemy)
 	var reward_report := _reward_coordinator.resolve_kill(
 		loot_room.reward_plan if loot_room != null else {},
@@ -5710,6 +5983,23 @@ func _on_enemy_escaped(enemy: Enemy3D, _context: Dictionary) -> void:
 			_encounter_owner_id(enemy.get_enemy_data()), "escaped"
 		)
 	_resolve_room_enemy_departure(enemy, true, enemy.get_enemy_data())
+
+
+func _on_enemy_defeated(enemy: Enemy3D, context: Dictionary) -> void:
+	if enemy == null or not is_instance_valid(enemy):
+		return
+	# commit_arms_taker_defeat 通常已先移除成员；这里再做一次幂等清理，
+	# 覆盖测试恢复、旧存档或外部触发导致的信号时序差异。
+	var members := _enemy_nodes_by_room.get(enemy.room_id, []) as Array
+	if members.has(enemy):
+		members.erase(enemy)
+		if _counts_for_room_clear(enemy.enemy_data):
+			_alive_by_room[enemy.room_id] = maxi(0, int(_alive_by_room.get(enemy.room_id, 0)) - 1)
+	if _encounter_event_director != null:
+		_encounter_event_director.notify_enemy_departed(
+			_encounter_owner_id(enemy.get_enemy_data()), "defeated"
+		)
+	_resolve_room_enemy_departure(enemy, false, enemy.get_enemy_data())
 
 
 func _encounter_owner_id(enemy_data: Dictionary) -> String:
@@ -6190,31 +6480,9 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 	)
 
 
-## 宝箱开箱（2026-10-29；2026-11-05 改为免钥匙直开 + 弹命运卡购买 + 前置/后置过渡）。
-##
-## 业主 2026-11-05：「开启方式是直接开启……不需要使用钥匙」；
-## 同日追加：「需要有前置动画，点击之后宝箱会抖两下，然后箱子砰的一下打开，
-## 然后才会弹出命运卡界面。整个过程中需要有前置和后置，不要突然打开完全没有过渡。」
-##
-## **时间轴（总长 ≈1.1s，全部由箱子自己演，本函数只对齐结算点）**
-## ```
-## 0.00 按下 E ── 立刻认领 + 记账（`commit_opened`）→ 状态栏「开启中…」
-## 0.00 ▸ 0.42  箱子抖两下
-## 0.42 ▸ 0.54  蓄力下压
-## 0.54         ◆ 砰 —— 盖子弹开、箱体上跳、内部光爆、音效  ← **本函数在这里落地掉落**
-## 0.54 ▸ 0.92  余韵（盖子回稳、箱子落回）
-## 0.84         ◆ 购买界面开始淡入（≈0.18s 淡入 + 卡片翻牌进场）  ← 后置过渡
-## ```
-##
-## **为什么掉落要等「砰」**：在关着的箱子里先冒出物品，是最容易读出"程序在糊弄"的一种错。
-## 掉落物必须从箱口飞出，所以结算点绑在 `chest.get_open_burst_delay()` 上，
-## 而不是按下 E 的那一帧。
-##
-## **为什么抽奖不等**：`_resolve_chest_grants()` 是纯数据（读池、掷权重），
-## 提前抽好可以保证「动画期间箱子被流送卸载 → 奖励不会跟着丢」。
-##
-## **为什么命运卡不再自动发**：`fate_card_per_open` 配 0，一切命运卡走购买，
-## 否则同一个箱子里同时有「送」和「卖」两套口径。
+## 宝箱只散落奖励，不直接购卡。奖励先冻结进房间账，再认领箱子；
+## 抖动、回正、蓄力后，在 get_open_burst_delay() 的爆点统一落地。
+## 动画中切房/保存保留 pending，重入补发；命运卡必须主动交互专用掉落物。
 func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
 	if room == null or chest == null or not is_instance_valid(chest):
 		return
@@ -6226,14 +6494,23 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 		_reveal_chest_mimic(room, chest)
 		return
 
-	# —— 按下 E 的当帧：先认领 + 抽奖 + 给一句"正在开"的即时回应 ——
-	# 抽奖、坐标、文案全部先快照下来：await 期间箱子可能被流送卸载，届时读 `chest.xxx` 会崩。
+	# —— 按下 E 的当帧：先认领 + 冻结奖励 + 给一句"正在开"的即时回应 ——
+	# 抽奖、坐标、文案全部先记入房间 detail 账：await 期间箱子可能被流送卸载，
+	# 奖励仍能从房间账补发，且不会重新抽表。
 	var grants := _resolve_chest_grants(room, chest)
-	var fate_cards := chest.fate_card_per_open
 	var chest_id := chest.chest_id
 	var burst_origin := chest.global_position + Vector3(0, 0.4, 0)
 	var burst_delay := chest.get_open_burst_delay()
+	if grants.is_empty():
+		status_label.text = "宝箱奖励暂不可用 · 宝箱保留"
+		return
+	room.set_pending_chest_grants(chest_id, {
+		"grants": grants.duplicate(true),
+		"position": [burst_origin.x, burst_origin.y, burst_origin.z],
+		"status": "frozen",
+	})
 	chest.commit_opened()
+	_queue_runtime_autosave("chest_rewards_frozen")
 	if _map_fate_triggers != null:
 		# 宝箱算一次"容器开启"。给独立的 size_class 值，方便将来按箱/罐分别计数：
 		# 传 "crate" 会让宝箱与普通箱子混在一起，统计再也分不开。
@@ -6254,12 +6531,10 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 		)
 		return
 
-	var delivered := 0
-	if not grants.is_empty():
-		var delivery := _deliver_ground_rewards(
-			room, grants, burst_origin, "chest:%s:%s" % [room.room_id, chest_id]
-		)
-		delivered = (delivery.get("granted", []) as Array).size()
+	var delivered := _deliver_pending_chest_grants(room, chest_id, grants, burst_origin)
+	if delivered < grants.size():
+		status_label.text = "宝箱开启中 · 奖励已记账，稍后补发"
+		return
 	# 「砰」的触觉：音效之外再给一次短促的镜头冲击。
 	# 时长取 `TreasureChest3D.BURST_SECONDS`，**不传 0.5**：弹开只有 0.14s，
 	# 拖 0.5s 会读成"地震"而不是"箱子弹开"。
@@ -6274,33 +6549,39 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 			CHEST_BURST_CAMERA_STRENGTH, TreasureChest3D.BURST_SECONDS
 		)
 
-	# 保留代码路径供其它关卡配置：本关 `fate_card_per_open = 0` ⇒ 这里不抽卡。
-	var fate := _grant_chest_fate_cards(fate_cards)
-	var parts: Array[String] = []
-	parts.append("宝箱开启 · %d 件物资" % delivered if delivered > 0 else "宝箱开启 · 箱内为空")
-	if not (fate.get("applied", []) as Array).is_empty():
-		parts.append("命运卡「%s」" % str((fate["applied"] as Array)[0]))
-	elif int(fate.get("pending", 0)) > 0:
-		# 卡没能当场生效（枪械命运槽满 / 需要选来源）——它已经被桥上记账，
-		# 玩家可以从 HUD 的待领取按钮处理。**不能静默**：那等于宝箱少给了一样东西。
-		parts.append("命运卡已暂存（槽位或来源不可用，见待领取）")
-	elif int(fate.get("drawn", 0)) == 0 and fate_cards > 0:
-		parts.append("命运卡发放失败")
-	# 弹窗文案由 `_show_door_fate_choices()` 自己写：这里若也写「可购买命运卡」，
-	# 一旦抽不出报价（offer 为空）就会出现「说有得买、界面上什么都没有」。
-	status_label.text = " · ".join(parts)
-
-	# —— 后置：先让玩家看清东西落在哪，再让购买界面淡入 ——
-	# 不等这 0.3s 的话，「砰」的下一帧整屏就被暗化层压住，掉落物等于没露过面。
-	await get_tree().create_timer(CHEST_BURST_TO_OVERLAY_SECONDS, false).timeout
-	if not is_inside_tree():
-		return
-	_show_door_fate_choices("chest")
+	status_label.text = "宝箱开启 · %d 件物资散落，命运卡需主动交互" % delivered
+	_queue_runtime_autosave("chest_rewards_landed")
 
 
-## 「砰」到购买界面开始淡入之间的间隔。0.30s 刚好够看清 2 件掉落物落地并读一眼名字，
-## 再长会让「开箱」和「买卡」被玩家当成两件事。
-const CHEST_BURST_TO_OVERLAY_SECONDS := 0.30
+func _deliver_pending_chest_grants(
+	room: DungeonRoom3D, chest_id: String, grants: Array, origin: Vector3
+) -> int:
+	if room == null or chest_id.is_empty():
+		return 0
+	var pending := room.get_pending_chest_grants()
+	var state := (pending.get(chest_id, {}) as Dictionary).duplicate(true)
+	# 已清账即已交付；旧协程/重复回调不能用参数里的副本重新发奖。
+	if state.is_empty() or str(state.get("status", "frozen")) == "mimic_alive":
+		return 0
+	if room.room_id != _current_room_id:
+		return 0
+	var remaining := (state.get("grants", []) as Array).duplicate(true)
+	if remaining.is_empty():
+		room.clear_pending_chest_grants(chest_id)
+		return 0
+	var delivery := _deliver_ground_rewards(
+		room, remaining, origin, "chest:%s:%s" % [room.room_id, chest_id]
+	)
+	var rejected := (delivery.get("rejected", []) as Array).duplicate(true)
+	if rejected.is_empty():
+		room.clear_pending_chest_grants(chest_id)
+	else:
+		state["grants"] = rejected
+		room.set_pending_chest_grants(chest_id, state)
+	return (delivery.get("granted", []) as Array).size()
+
+
+## 开箱不再安排购卡弹窗；后续由专用掉落物主动请求。
 ## 开箱「砰」的镜头冲击强度（0~1，`PlayerCameraFeedback3D` 会乘 0.035 得到米数）。
 ## 0.62 ⇒ 约 2.2cm 位移：够让画面"顿"一下，又不至于让人以为在挨打（挨打是 11~19cm）。
 const CHEST_BURST_CAMERA_STRENGTH := 0.62
@@ -6320,10 +6601,10 @@ const CHEST_MIMIC_MIN_SPAWN_DISTANCE_M := 3.0
 func _reveal_chest_mimic(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
 	if room == null or chest == null:
 		return
-	chest.commit_mimic_reveal()
-	if _map_fate_triggers != null:
-		# 对命运卡系统来说「箱子被打开过」这件事仍然成立，统计口径保持一致。
-		_map_fate_triggers.on_container_opened("treasure_chest")
+	var grants := _resolve_chest_grants(room, chest)
+	if grants.is_empty():
+		status_label.text = "宝箱奖励暂不可用 · 宝箱保留"
+		return
 	var kind := str(chest.mimic_monster_kind)
 	var base_type: Dictionary = MonsterInjector.BASE_ENEMY_TYPES.get(kind, {})
 	if base_type.is_empty():
@@ -6345,6 +6626,9 @@ func _reveal_chest_mimic(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
 		"damage": int(base_type.get("damage_base", 5)),
 		"speed": float(base_type.get("speed", 60.0)),
 		"persistent_id": "chest_mimic:%s:%s" % [room.room_id, chest.chest_id],
+		"chest_mimic": true,
+		"chest_id": chest.chest_id,
+		"counts_for_room_clear": false,
 	}
 	var before: Array = (_enemy_nodes_by_room.get(room.room_id, []) as Array).duplicate()
 	var spawned := _spawn_enemy_batch(
@@ -6364,12 +6648,19 @@ func _reveal_chest_mimic(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
 		)
 		status_label.text = "宝箱开启 · 箱内为空"
 		return
-	# 打两个标记：`chest_mimic` 用于「它死了不算清房」，`chest_mimic_loot` 是
-	# **开箱那一刻就抽好的**箱内物资 —— 击杀时直接落地，不再抽第二次（重抽会让
-	# 「拟态箱」的实际收益和普通箱不同，品质加成也就对不上了）。
+	# 先成功生成，再认领箱子。冻结奖励由房间持有，敌人存档只需稳定 chest_id。
+	var origin := chest.global_position + Vector3.UP * 0.4
+	room.set_pending_chest_grants(chest.chest_id, {
+		"grants": grants.duplicate(true),
+		"position": [origin.x, origin.y, origin.z],
+		"status": "mimic_alive",
+	})
+	chest.commit_mimic_reveal()
+	if _map_fate_triggers != null:
+		_map_fate_triggers.on_container_opened("treasure_chest")
 	mimicked.set_meta("chest_mimic", true)
-	mimicked.set_meta("chest_mimic_loot", _resolve_chest_grants(room, chest))
-	mimicked.set_meta("chest_mimic_fate_cards", chest.fate_card_per_open)
+	mimicked.set_meta("chest_id", chest.chest_id)
+	_queue_runtime_autosave("chest_mimic_revealed")
 	# 出生即现形。`egt_mimic` 的 profile 里带 `disguise`（伪装态静止 / 不攻击 / **不吃伤害**），
 	# 那是给它「在房间里蹲着装箱子」用的；而这里它已经当着玩家的面从箱子里咬出来了，
 	# 再伪装就等于刷出一只打不动的假箱子。
@@ -6399,94 +6690,69 @@ func _chest_mimic_spawn_position(room: DungeonRoom3D, chest: TreasureChest3D) ->
 	return resolved
 
 
-## 拟态被击杀：把开箱时抽好的那份物资（与配置了的命运卡）补给玩家。
+## 兼容只保留 persistent_id 的旧拟态快照；不重新抽奖，奖励仍以房间 pending 账为准。
+func _restore_chest_mimic_identity(config: Dictionary, persistent_id: String, room_id: String) -> void:
+	var prefix := "chest_mimic:%s:" % room_id
+	if not bool(config.get("chest_mimic", false)) and not persistent_id.begins_with(prefix):
+		return
+	config["chest_mimic"] = true
+	config["counts_for_room_clear"] = false
+	config["persistent_id"] = persistent_id
+	if str(config.get("chest_id", "")).is_empty() and persistent_id.begins_with(prefix):
+		config["chest_id"] = persistent_id.trim_prefix(prefix)
+	if str(config.get("enemy_type", "")).is_empty():
+		config["enemy_type"] = "egt_mimic"
+
+
+## 拟态被击杀：把开箱时抽好的那份物资（含命运卡凭据）散落到世界。
 ##
 ## 为什么不在开箱时就给：那样「箱子是拟态」就只是多打一只怪，风险与回报无关。
 ## 现在的结构是「物资在那只怪肚子里」—— 它跑掉/被卡掉，这一箱就真的没了。
 func _deliver_chest_mimic_loot(room: DungeonRoom3D, enemy: Enemy3D) -> void:
-	var grants: Array = (enemy.get_meta("chest_mimic_loot", []) as Array).duplicate(true)
-	var delivered := 0
-	if not grants.is_empty():
-		var delivery := _deliver_ground_rewards(
-			room, grants,
-			enemy.global_position + Vector3(0, 0.4, 0),
-			"chest_mimic:%s:%s" % [room.room_id, enemy.get_persistent_id()]
-		)
-		delivered = (delivery.get("granted", []) as Array).size()
-	var fate := _grant_chest_fate_cards(int(enemy.get_meta("chest_mimic_fate_cards", 0)))
-	# 清掉标记：`_on_enemy_killed` 与 `escaped` 理论上只来一次，但这里不做幂等假设 ——
-	# 一份物资发两遍是最难被玩家原谅的那类 bug。
-	enemy.set_meta("chest_mimic_loot", [])
-	enemy.set_meta("chest_mimic_fate_cards", 0)
-	var parts: Array[String] = []
-	parts.append("拟态击破 · %d 件物资" % delivered if delivered > 0 else "拟态击破 · 腹中空空")
-	if not (fate.get("applied", []) as Array).is_empty():
-		parts.append("命运卡「%s」" % str((fate["applied"] as Array)[0]))
-	elif int(fate.get("pending", 0)) > 0:
-		parts.append("命运卡已暂存（见待领取）")
-	status_label.text = " · ".join(parts)
+	var chest_id := str(enemy.enemy_data.get("chest_id", enemy.get_meta("chest_id", "")))
+	if chest_id.is_empty():
+		return
+	var state := (room.get_pending_chest_grants().get(chest_id, {}) as Dictionary).duplicate(true)
+	if state.is_empty():
+		return
+	var origin := enemy.global_position + Vector3.UP * 0.4
+	state["status"] = "frozen"
+	state["position"] = [origin.x, origin.y, origin.z]
+	room.set_pending_chest_grants(chest_id, state)
+	var delivered := _deliver_pending_chest_grants(room, chest_id, state.get("grants", []), origin)
+	status_label.text = "拟态击破 · %d 件物资落地，命运卡需主动交互" % delivered
+	_queue_runtime_autosave("chest_mimic_rewards_landed")
 
 
-## 抽这一箱的掉落。**每件独立抽一次**（`drop_count` 次 `resolve_search`），
-## 而不是抽一次再复制 —— 复制会让"开一箱得两件同样的东西"，读起来像 bug。
+## 两档规则只由独立服务解析，品质加成不作用于命运卡世界凭据。
 func _resolve_chest_grants(room: DungeonRoom3D, chest: TreasureChest3D) -> Array:
-	var floor_level := maxi(1, visual_theme.difficulty_rank)
-	var pool_id := str(chest.reward_pool_id)
-	if pool_id.is_empty():
-		pool_id = "loot_floor_1_2"
-	var grants: Array = []
-	for index in range(chest.drop_count):
-		var event_id := "chest:%s:%s:%d" % [room.room_id, chest.chest_id, index]
-		var report := _reward_coordinator.resolve_search(
-			room.reward_plan, pool_id, floor_level, event_id
-		)
-		if not bool(report.get("ok", false)):
-			push_warning("[Dungeon3D] Chest reward resolution failed (%s): %s" % [
-				event_id, str(report.get("errors", []))
-			])
-			continue
-		var candidates := _ground_reward_candidates(report.get("grants", []))
-		if candidates.is_empty():
-			continue
-		var grant := (candidates[0].get("grant", {}) as Dictionary).duplicate(true)
-		if str(grant.get("kind", "")) == "currency":
-			# 货币单件化：箱子里滚一堆小钱球没有意义，一个球就够表达"里面有钱"。
-			grant["amount"] = 1
-		else:
-			grant["count"] = 1
-			var item := grant.get("item", {}) as Dictionary
-			# 品质加成：箱子越好，抽出来的东西品质越高。**这是箱子品质唯一的作用**，
-			# 它不改变掉落数量（数量由 `drop_count` 决定，玩家读得懂）。
+	var report := CHEST_REWARD_SERVICE_SCRIPT.resolve(
+		chest.get_reward_config(), run_seed, room.room_id, maxi(1, visual_theme.difficulty_rank)
+	)
+	if not bool(report.get("ok", false)):
+		push_warning("[Dungeon3D] Chest reward resolution failed: %s" % str(report.get("errors", [])))
+		return []
+	var grants := (report.get("grants", []) as Array).duplicate(true)
+	for grant: Dictionary in grants:
+		var item := grant.get("item", {}) as Dictionary
+		if not FATE_CARD_DROP_SCRIPT.is_fate_pickup_data(item):
 			_apply_fate_item_quality(item, chest.quality_tier(), "")
-		grants.append(grant)
 	return grants
 
 
-## 开箱给命运卡。走 `FateCardGameBridge.grant_random_card_from_character()` ——
-## 而不是自己 `draw_offer` + `apply_card_instance`，因为那个函数已经处理了两件麻烦事：
-##   ① 用不了（枪械命运槽满 / 需要选来源）时把卡**留在待领取**而不是丢弃；
-##   ② 扣费与回滚。
-## 自己实现一遍就等于把这两条重新写错一次。
-func _grant_chest_fate_cards(count: int) -> Dictionary:
-	var result := {"drawn": 0, "applied": [], "pending": 0}
-	if count <= 0:
-		return result
-	var bridge := get_node_or_null("/root/FateCardGameBridge")
-	if bridge == null:
-		push_warning("[Dungeon3D] 宝箱命运卡失败：FateCardGameBridge 未注册")
-		return result
-	for _index in range(count):
-		result["drawn"] = int(result["drawn"]) + 1
-		var single: Dictionary = bridge.call("grant_random_card_from_character", 0)
-		if bool(single.get("success", false)):
-			var cards: Array = bridge.call("get_cards")
-			if not cards.is_empty():
-				var card := cards[cards.size() - 1] as FateCard
-				if card != null:
-					(result["applied"] as Array).append(card.card_name)
-		elif bool(single.get("pending", false)):
-			result["pending"] = int(result["pending"]) + 1
-	return result
+## 只补发账里尚未落地的奖励；活着的拟态仍持有自己的奖励，不因进房提前兑现。
+func _resume_pending_chest_grants(room: DungeonRoom3D) -> void:
+	if room == null or room.room_id != _current_room_id:
+		return
+	for chest_id: String in room.get_pending_chest_grants():
+		var state := room.get_pending_chest_grants()[chest_id] as Dictionary
+		if str(state.get("status", "frozen")) == "mimic_alive":
+			continue
+		var point: Array = state.get("position", [])
+		var origin := room.global_position
+		if point.size() >= 3:
+			origin = Vector3(float(point[0]), float(point[1]), float(point[2]))
+		_deliver_pending_chest_grants(room, chest_id, state.get("grants", []), origin)
 
 
 const FATE_RARITIES := ["common", "uncommon", "rare", "epic", "legendary"]
@@ -6643,6 +6909,168 @@ func _deliver_ground_rewards(
 	return delivery
 
 
+## 已持有角色牌的二级奖励也只产出世界凭据，不扣钱、不抽卡、不打开模态。
+func spawn_character_fate_pickups(requests: Array) -> Dictionary:
+	var report := {"granted": [], "deferred": [], "rejected": [], "duplicate": []}
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null:
+		room = _secret_branch_room_ids.get(_current_room_id) as DungeonRoom3D
+	for value in requests:
+		if not value is Dictionary:
+			report["rejected"].append(value)
+			continue
+		var request := (value as Dictionary).duplicate(true)
+		var reward_id := str(request.get("reward_id", ""))
+		var request_id := str(request.get("request_id", reward_id))
+		if str(request.get("kind", "")) != "fate_pickup" or reward_id.is_empty() or request_id.is_empty():
+			report["rejected"].append(request)
+			continue
+		if room == null or not is_instance_valid(player):
+			var unavailable_id := "pending:%s" % request_id
+			if _character_fate_delivery.has(unavailable_id):
+				report["duplicate"].append(request)
+				continue
+			_character_fate_delivery[unavailable_id] = {
+				"request": request,
+				"room_id": _current_room_id,
+				"currency_cost": int(request.get("currency_cost", 0)),
+				"status": "pending",
+			}
+			report["deferred"].append(request)
+			continue
+		var pickup_id := "character:%s:%s" % [room.room_id, request_id]
+		if _character_fate_delivery.has(pickup_id):
+			report["duplicate"].append(request)
+			continue
+		var pending_id := "pending:%s" % request_id
+		if _character_fate_delivery.has(pending_id):
+			var pending_record := (_character_fate_delivery[pending_id] as Dictionary).duplicate(true)
+			pending_record["room_id"] = room.room_id
+			_character_fate_delivery.erase(pending_id)
+			_character_fate_delivery[pickup_id] = pending_record
+			var pending_delivery := _deliver_character_fate_request(pickup_id, room)
+			for key in ["granted", "deferred", "rejected"]:
+				(report[key] as Array).append_array(pending_delivery.get(key, []))
+			continue
+		_character_fate_delivery[pickup_id] = {
+			"request": request,
+			"room_id": room.room_id,
+			"currency_cost": int(request.get("currency_cost", 0)),
+			"status": "pending",
+		}
+		var delivery := _deliver_character_fate_request(pickup_id, room)
+		for key in ["granted", "deferred", "rejected"]:
+			(report[key] as Array).append_array(delivery.get(key, []))
+	return report
+
+
+func _deliver_character_fate_request(pickup_id: String, room: DungeonRoom3D) -> Dictionary:
+	var report := {"granted": [], "deferred": [], "rejected": []}
+	if not _character_fate_delivery.has(pickup_id) or room == null or not is_instance_valid(player):
+		return {"deferred": [_character_fate_delivery.get(pickup_id, {}).get("request", {})]}
+	var record := _character_fate_delivery[pickup_id] as Dictionary
+	if str(record.get("status", "pending")) != "pending":
+		return report
+	var request := record.get("request", {}) as Dictionary
+	var item := ItemRegistry.get_instance().get_item("item_fate_card_drop").duplicate(true)
+	item["fate_pickup_id"] = pickup_id
+	item["fate_source"] = "character_reward"
+	item["source_room_id"] = room.room_id
+	item["currency_cost"] = int(record.get("currency_cost", 0))
+	item["fate_source_metadata"] = {
+		"request_id": str(request.get("request_id", request.get("reward_id", ""))),
+		"reward_id": str(request.get("reward_id", "")),
+		"currency_cost": int(record.get("currency_cost", 0)),
+		"source_room_id": room.room_id,
+	}
+	var grant := {"kind": "item", "item_id": "item_fate_card_drop", "item": item, "count": 1}
+	var delivery := _deliver_ground_rewards(room, [grant], player.global_position, "character_fate_pickup")
+	if (delivery.get("granted", []) as Array).size() == 1:
+		record["status"] = "landed"
+		_character_fate_delivery[pickup_id] = record
+		report["granted"].append(request)
+	else:
+		report["deferred"].append(request)
+	return report
+
+
+func _retry_pending_character_fate_pickups(room_id: String) -> void:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null:
+		room = _secret_branch_room_ids.get(room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(player):
+		return
+	for pickup_id in _character_fate_delivery.keys().duplicate():
+		var record := _character_fate_delivery[pickup_id] as Dictionary
+		if str(record.get("room_id", "")) != room_id or str(record.get("status", "pending")) != "pending":
+			continue
+		_deliver_character_fate_request(str(pickup_id), room)
+	_queue_runtime_autosave("character_fate_pickup_retry")
+
+
+func _export_character_fate_delivery_snapshot() -> Dictionary:
+	return {"version": 1, "entries": _character_fate_delivery.duplicate(true)}
+
+
+func _import_character_fate_delivery_snapshot(value: Variant) -> bool:
+	if not value is Dictionary or int((value as Dictionary).get("version", 0)) != 1:
+		return false
+	var entries: Variant = (value as Dictionary).get("entries", {})
+	if not entries is Dictionary:
+		return false
+	_character_fate_delivery = (entries as Dictionary).duplicate(true)
+	return true
+
+
+## 世界掉落唯一构造口；生成和恢复共用，防止命运凭据读档后降级为自动拾取物。
+func _create_ground_pickup(item: Dictionary) -> GroundLootPickup3D:
+	var pickup: GroundLootPickup3D
+	if FATE_CARD_DROP_SCRIPT.is_fate_pickup_data(item):
+		if str(item.get("fate_pickup_id", "")).is_empty():
+			return null
+		pickup = FATE_CARD_DROP_SCRIPT.new() as GroundLootPickup3D
+		pickup.set("interaction_handler", Callable(self, "_on_fate_pickup_interacted"))
+	else:
+		pickup = GROUND_LOOT_SCRIPT.new() as GroundLootPickup3D
+		pickup.pickup_requested.connect(_on_ground_loot_requested)
+	pickup.configure(item, ItemModelFactory3D.get_item_color(item))
+	return pickup
+
+
+func _on_fate_pickup_interacted(pickup: GroundLootPickup3D) -> bool:
+	if pickup == null or not is_instance_valid(pickup) or not pickup.is_inside_tree():
+		return false
+	if not FATE_CARD_DROP_SCRIPT.is_fate_pickup_data(pickup.item_data) or not pickup.requires_manual_interaction():
+		return false
+	if not pickup.is_pickup_available() or pickup.is_queued_for_deletion():
+		return false
+	if player == null or not is_instance_valid(player) or player.current_hp <= 0:
+		return false
+	if get_tree().paused or player.input_locked or _has_exclusive_modal() or _fate_overlay_closing:
+		return false
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null:
+		room = _secret_branch_room_ids.get(_current_room_id) as DungeonRoom3D
+	if room == null or not room.is_ancestor_of(pickup):
+		return false
+	if str(pickup.item_data.get("source_room_id", "")) != room.room_id:
+		return false
+	var offset := player.global_position - pickup.global_position
+	offset.y = 0.0
+	if offset.length() > pickup.get_pickup_distance_m():
+		return false
+	var pickup_id := str(pickup.item_data.get("fate_pickup_id", ""))
+	if pickup_id.is_empty() or _fate_pickup_claimed.has(pickup_id):
+		return false
+	# 创建成功后才认领，整个过程不 await；存档不能落在凭据/offer半交接状态。
+	if not _show_door_fate_choices("pickup", pickup_id):
+		return false
+	_fate_pickup_claimed[pickup_id] = true
+	pickup.accept_pickup(player)
+	_queue_runtime_autosave("fate_pickup_offer_opened")
+	return true
+
+
 ## `spread`：是否按「第几件」做确定性散布（多件掉落才需要，避免叠在一起）。
 ## 单件、且落点要被别处（如剧本的朝向目标点）精确引用时传 `false` ——
 ## 散布在 index=0 时也至少有 `LOOT_SCATTER_MIN_RADIUS_M` 的偏移，
@@ -6672,10 +7100,11 @@ func _spawn_loot_items(
 		var item: Dictionary = (item_value as Dictionary).duplicate(true)
 		# 堆叠数量是物品真实数量；尤其弹药必须以“发”为单位落地和拾取。
 		item["count"] = maxi(1, int(item.get("count", 1)))
-		var pickup := GROUND_LOOT_SCRIPT.new() as GroundLootPickup3D
-		var color := ItemModelFactory3D.get_item_color(item)
+		var pickup := _create_ground_pickup(item)
+		if pickup == null:
+			# Sink以成功前缀记账；失败就停，不能跳过中间项而误记后续成功。
+			break
 		var narrative_auto_equip := bool(item.get("narrative_auto_equip", false))
-		pickup.configure(item, color)
 		# `GroundLootPickup3D.configure()` 会规范化武器实例；剧情标记必须显式
 		# 回写到规范化字典，确保它随地面实体和运行时快照继续存在。
 		if narrative_auto_equip and str(item.get("type", "")) == "weapon":
@@ -6689,7 +7118,6 @@ func _spawn_loot_items(
 			requested_position,
 			world_position
 		)
-		pickup.pickup_requested.connect(_on_ground_loot_requested)
 		# 锁必须在 `begin_spawn_animation()` **之前**挂上：动画结束时会读这个字段
 		# 把保护期往后推。顺序反了就变成「动画放完才设锁」，落地那一帧仍可被吸走。
 		pickup.lock_pickup_after_spawn(pickup_delay_after_spawn)
@@ -6771,6 +7199,8 @@ func _is_loot_landing_clear(landing_world_position: Vector3) -> bool:
 
 func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> void:
 	if not is_instance_valid(pickup) or not pickup.is_pickup_available() or not is_instance_valid(player):
+		return
+	if pickup.requires_manual_interaction() or FATE_CARD_DROP_SCRIPT.is_fate_pickup_data(item):
 		return
 	var pickup_offset := player.global_position - pickup.global_position
 	pickup_offset.y = 0.0
@@ -7687,6 +8117,11 @@ func _ensure_room_clear_drop(room: DungeonRoom3D) -> void:
 		return
 	if room.room_type == "BOSS" or not _is_content_room(room):
 		return
+	# 设计期已声明固定宝箱的奖励房不是“清房后再掉一只箱子”的房型。
+	# 这些房在 enemyless 路径进房即清，会进入本函数；若不排除，固定箱之外
+	# 还会被 clear_drops 追加一只运行期箱，形成 declared=1 / built=2。
+	if not room.chest_placements.is_empty():
+		return
 	if _clear_drop_settled.has(room.room_id):
 		return
 	_clear_drop_settled[room.room_id] = true
@@ -7720,7 +8155,7 @@ func _apply_clear_drop(room: DungeonRoom3D, drop: Dictionary, context: String) -
 		if chest == null:
 			push_warning("[Dungeon3D] 清房宝箱建立失败（%s），本房只剩补给" % context)
 			return
-		status_label.text = "房间肃清 · 掉落宝箱 · 开启即购买命运卡"
+		status_label.text = "房间肃清 · 掉落宝箱，命运卡需主动交互"
 		return
 	if kind == "item":
 		var item := drop.get("item", {}) as Dictionary
@@ -7830,14 +8265,8 @@ func _try_open_room_door(target_room_id: String) -> bool:
 		else "通行门已开启 · 未消耗钥匙"
 	)
 	_refresh_loot_label()
-	if bool(policy.get("triggers_fate", true)):
-		# 目标房敌人必须在选卡后生成，否则“下一个房间”类世界命运会错过
-		# 刚开启的房间，实际落到再下一间。
-		_pending_fate_door_from_id = _current_room_id
-		_pending_fate_door_target_id = target_room_id
-		call_deferred("_show_door_fate_choices")
-	else:
-		_update_room_streaming(_current_room_id)
+	# 门只负责通行；旧 triggers_fate 配置不再创建新购卡事务。
+	_update_room_streaming(_current_room_id)
 	return true
 
 
@@ -7845,35 +8274,26 @@ func try_open_room_door(target_room_id: String) -> bool:
 	return _try_open_room_door(target_room_id)
 
 
-## `source` 只影响状态栏文案与归属说明：两家入口（门后 / 宝箱）用的是**同一套**
-## 三选一购买界面、同一份报价与同一套购买事务 —— 不允许为宝箱抄第二套弹窗。
-func _show_door_fate_choices(source := "door") -> void:
-	if _door_fate_active:
-		return
+## 保留旧内部命名供存档/UI共用；新 offer 只接受主动交互的世界凭据。
+func _show_door_fate_choices(source := "", pickup_id := "") -> bool:
+	if source != "pickup" or pickup_id.is_empty() or _door_fate_active:
+		return false
+	var offer_rng := RandomNumberGenerator.new()
+	offer_rng.seed = hash("%d|%s|fate_offer" % [run_seed, pickup_id])
 	var offer: Array[FateCard] = (
 		_gate_expedition_fate_offer()
 		if uses_dynamic_fate_economy()
-		else FateCardPresets.draw_offer(3, _rng, get_runtime_map_id())
+		else FateCardPresets.draw_offer(3, offer_rng, get_runtime_map_id())
 	)
 	if offer.is_empty():
-		_commit_pending_fate_door_streaming()
-		return
+		return false
+	_fate_offer_source = source
+	_fate_offer_pickup_id = pickup_id
 	_door_fate_choices.clear()
 	_door_fate_purchased.clear()
 	_fate_door_offer_id += 1
-	# 报价基准取「进度序号」，不是「第几次报价」。
-	# 门后入口两者恒等（每开门一次 = 前进一间）；**由清房掉落的宝箱**不等 ——
-	# 它出现在第几间房与它是本局第几次报价无关，用报价次数当门序号会让
-	# room_09 的箱子按 room_02 的收益基准卖卡（实测会便宜一半以上）。
-	#
-	# 只在「本关配置了 `clear_drops`」时启用：那种关卡的箱子是**按房间进度掉**的。
-	# 远征03 的箱子是数据摆位（每关固定几只），它的报价次数本身就等于进度，
-	# 保持历史口径不动 —— 不把一次未请求的定价改动带进另一关。
-	_fate_offer_price_index = (
-		maxi(1, _count_cleared_content_rooms())
-		if source == "chest" and _clear_drop_service.is_configured()
-		else _fate_door_offer_id
-	)
+	# 掉落物出现位置/交互次数不等于房间进度；报价仍沿用已清内容房数。
+	_fate_offer_price_index = maxi(1, _count_cleared_content_rooms())
 	_fate_door_quote.clear()
 	for card_value in offer:
 		var offered_card := card_value as FateCard
@@ -7899,12 +8319,8 @@ func _show_door_fate_choices(source := "door") -> void:
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	_build_door_fate_overlay()
-	_queue_runtime_autosave("fate_door_offer_opened")
-	status_label.text = (
-		"宝箱已开启 · 用本局金币购买命运卡，买好后退出"
-		if source == "chest"
-		else "门已开启 · 用本局金币购买命运卡，买好后退出"
-	)
+	status_label.text = "命运卡已交互 · 用本局金币购买，退出后放弃未购候选"
+	return true
 
 
 func _build_door_fate_overlay() -> void:
@@ -9382,6 +9798,8 @@ func _capture_room_runtime_state(room_id: String) -> void:
 	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
 		if value is GroundLootPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion() and not (value as GroundLootPickup3D).is_pickup_accepted():
 			var pickup := value as GroundLootPickup3D
+			if FATE_CARD_DROP_SCRIPT.is_fate_pickup_data(pickup.item_data) and _fate_pickup_claimed.has(str(pickup.item_data.get("fate_pickup_id", ""))):
+				continue
 			ground_items.append({
 				"item_data": pickup.item_data.duplicate(true),
 				"position": [pickup.global_position.x, pickup.global_position.y, pickup.global_position.z],
@@ -9413,6 +9831,7 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		"room_keys": room_keys,
 		"containers": container_states,
 		"treasure_chests": room.get_persistent_detail_state("treasure_chests"),
+		"pending_chest_grants": room.get_pending_chest_grants(),
 		"breakable_clutter": room.get_persistent_detail_state("breakable_clutter"),
 		"reactive_props": room.get_persistent_detail_state("reactive_props"),
 		"alive_count": int(_alive_by_room.get(room_id, enemy_states.size())),
@@ -9519,7 +9938,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 	# Missing legacy fields are not commands to turn off the room's default lights.
 	if state.has("room_light_on"):
 		detail_state["room_light_on"] = bool(state["room_light_on"])
-	for optional_key in ["treasure_chests", "breakable_clutter", "reactive_props"]:
+	for optional_key in ["treasure_chests", "pending_chest_grants", "breakable_clutter", "reactive_props"]:
 		if state.has(optional_key):
 			detail_state[optional_key] = (state[optional_key] as Dictionary).duplicate(true)
 	room.apply_runtime_detail_state(detail_state)
@@ -9539,6 +9958,10 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			for runtime_value in state.get("enemies", []):
 				var enemy_state := runtime_value as Dictionary
 				if str(enemy_state.get("persistent_id", "")) == persistent_id:
+					_restore_chest_mimic_identity((value as Enemy3D).enemy_data, persistent_id, room_id)
+					if bool((value as Enemy3D).enemy_data.get("chest_mimic", false)):
+						value.set_meta("chest_mimic", true)
+						value.set_meta("chest_id", (value as Enemy3D).enemy_data.get("chest_id", ""))
 					_normalize_narrative_02_stationary_data((value as Enemy3D).enemy_data, room_id)
 					(value as Enemy3D).import_runtime_state(enemy_state)
 					_roaming_elite.bind_actor(value as Enemy3D)
@@ -9546,12 +9969,14 @@ func _restore_room_runtime_state(room_id: String) -> void:
 					break
 	# A live roamer does not mean the ordinary roster has already been restored,
 	# and a freshly spawned normal wave does not replace a saved roamer.
-	if live_partitions.size() < 2:
+	if live_partitions.size() < 2 or not room.get_pending_chest_grants().is_empty():
 		for runtime_value in state.get("enemies", []):
 			var enemy_state := runtime_value as Dictionary
 			var enemy_data := (enemy_state.get("enemy_data", {}) as Dictionary).duplicate(true)
 			var saved_id := str(enemy_state.get("persistent_id", ""))
-			if restored_ids.has(saved_id) or live_partitions.has(_counts_for_room_clear(enemy_data)):
+			_restore_chest_mimic_identity(enemy_data, saved_id, room_id)
+			# 拟态逐个按稳定ID恢复，不能被同分区另一只怪替代。
+			if restored_ids.has(saved_id) or (not bool(enemy_data.get("chest_mimic", false)) and live_partitions.has(_counts_for_room_clear(enemy_data))):
 				continue
 			_normalize_narrative_02_stationary_data(enemy_data, room_id)
 			if room.cleared and _counts_for_room_clear(enemy_data) and not bool(enemy_data.get("narrative_spawned", false)):
@@ -9576,12 +10001,16 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			var restore_half := room.get_dimensions() * 0.5
 			enemy.set_room_bounds(room.global_transform, restore_half)
 			enemy.configure_from_enemy_data(enemy_data)
+			if bool(enemy_data.get("chest_mimic", false)):
+				enemy.set_meta("chest_mimic", true)
+				enemy.set_meta("chest_id", enemy_data.get("chest_id", ""))
 			if bool(enemy_data.get("narrative_spawned", false)):
 				enemy.set_meta("narrative_spawned", true)
 			enemy.set_meta("fate_kill_currency", int(enemy_data.get("fate_kill_currency", 0)))
 			enemy.state_changed.connect(_on_fate_enemy_state_changed.bind(enemy))
 			enemy.killed.connect(_on_enemy_killed)
 			enemy.escaped.connect(_on_enemy_escaped)
+			enemy.defeated.connect(_on_enemy_defeated)
 			enemy.summon_requested.connect(_on_summon_requested)
 			enemy.split_requested.connect(_on_split_requested)
 			enemy.boss_phase_changed.connect(_on_boss_phase_changed)
@@ -9642,8 +10071,11 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			var item_data := (item_state.get("item_data", {}) as Dictionary).duplicate(true)
 			if item_data.is_empty():
 				continue
-			var pickup := GROUND_LOOT_SCRIPT.new() as GroundLootPickup3D
-			pickup.configure(item_data, ItemModelFactory3D.get_item_color(item_data))
+			if FATE_CARD_DROP_SCRIPT.is_fate_pickup_data(item_data) and _fate_pickup_claimed.has(str(item_data.get("fate_pickup_id", ""))):
+				continue
+			var pickup := _create_ground_pickup(item_data)
+			if pickup == null:
+				continue
 			room.add_child(pickup)
 			var saved_position: Variant = item_state.get("position", room.global_position)
 			if saved_position is Vector3:
@@ -9654,7 +10086,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 					float((saved_position as Array)[1]),
 					float((saved_position as Array)[2])
 				)
-			pickup.pickup_requested.connect(_on_ground_loot_requested)
+	_resume_pending_chest_grants(room)
 	var has_live_room_key := false
 	if not _room_produces_room_key(room):
 		for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
@@ -10607,7 +11039,7 @@ func confiscate_player_carried_item(target: Node3D) -> Dictionary:
 
 
 func collect_elite_rent(enemy: Enemy3D, target: Node3D, forced_kind := "") -> bool:
-	if target != player or not is_instance_valid(player) or enemy.elite_id.is_empty():
+	if target != player or not is_instance_valid(player) or enemy == null or enemy.elite_id.is_empty():
 		return false
 	var branches: Array[String] = []
 	if (_inventory != null and not _inventory.get_occupied_slots().is_empty()) or (_quick_inventory != null and not _quick_inventory.get_occupied_slots().is_empty()):
@@ -10622,21 +11054,45 @@ func collect_elite_rent(enemy: Enemy3D, target: Node3D, forced_kind := "") -> bo
 	var old_currency := GameManager.currency
 	var old_serial := enemy._elite_confiscation_serial
 	var old_status := status_label.text
+	var old_roaming := _roaming_elite.export_snapshot()
+	var transfer_item: Dictionary = {}
 	var receipt := {"kind": kind}
+	# 这是给档案端的完整武器实例，不是只含 gun_id 的战斗 HUD 快照。
+	# `get_equipped_weapon_item()` 返回 WeaponInstance.to_item_dictionary()，保留
+	# weapon_instance_id、assembly_snapshot、fate_upgrades、current_ammo 等字段。
+	receipt["weapon_snapshot"] = player.get_equipped_weapon_item().duplicate(true)
+	receipt["weapon_runtime_snapshot"] = player.get_weapon_snapshot().duplicate(true)
+	receipt["source_run_id"] = _run_id
+	receipt["source_encounter_id"] = enemy.elite_encounter_instance_id
+	if str(receipt["source_encounter_id"]).is_empty() and _roaming_elite.owns(enemy.enemy_data):
+		receipt["source_encounter_id"] = str(_roaming_elite.state.get("session_id", ""))
+	var source_room := _room_by_id.get(_runtime_current_room_id_for_save()) as DungeonRoom3D
+	receipt["source_floor_number"] = int(enemy.enemy_data.get(
+		"floor_number", _elite_floor_number(source_room) if source_room != null else maxi(1, visual_theme.difficulty_rank)
+	))
 	if kind == "item":
-		var item := confiscate_player_carried_item(target)
-		if item.is_empty():
+		transfer_item = confiscate_player_carried_item(target)
+		if transfer_item.is_empty():
 			return false
-		receipt["item"] = item
+		receipt["item"] = transfer_item.duplicate(true)
 	else:
 		var amount := maxi(1, int(floor(float(old_currency) * 0.1)))
 		if not GameManager.spend_currency(amount):
 			return false
 		receipt["amount"] = amount
+		transfer_item = {
+			"id": "__currency__",
+			"type": "currency",
+			"name": "金币",
+			"is_currency": true,
+			"count": amount,
+			"stack_max": 9999,
+		}
 	enemy._elite_confiscation_serial += 1
 	receipt["receipt_id"] = "%s:%s:%d:rent:%d" % [_run_id, enemy.get_persistent_id(), int(enemy.enemy_data.get("roaming_appearance", 0)), enemy._elite_confiscation_serial]
 	_roaming_elite.capture_actor(enemy)
 	var journal: Dictionary = _roaming_elite.export_snapshot() if _roaming_elite.owns(enemy.enemy_data) else {}
+	# 视觉转移必须在这次档案 + 运行时快照成功落盘后才创建。
 	if not EliteRosterService.commit_run_record(enemy.elite_id, journal, build_runtime_save_snapshot(), receipt):
 		if _inventory != null:
 			_inventory.restore_slots_snapshot(old_slots)
@@ -10645,14 +11101,31 @@ func collect_elite_rent(enemy: Enemy3D, target: Node3D, forced_kind := "") -> bo
 		GameManager.currency = old_currency
 		GameManager.currency_changed.emit(old_currency)
 		enemy._elite_confiscation_serial = old_serial
+		_roaming_elite.state = old_roaming
 		status_label.text = old_status
 		_sync_quick_item_state()
+		_refresh_loot_label()
 		return false
 	if kind == "currency":
 		status_label.text = "收租人夺走了 %d 货币" % int(receipt.amount)
+	else:
+		status_label.text = "收租人夺走了 1 件%s" % transfer_item.get("name", "物品")
 	_sync_quick_item_state()
 	_refresh_loot_label()
+	_spawn_elite_rent_transfer(transfer_item, player.global_position + Vector3.UP * 0.72, enemy.global_position + Vector3.UP * 1.75)
 	return true
+
+
+func _spawn_elite_rent_transfer(item: Dictionary, source_position: Vector3, collector_position: Vector3) -> void:
+	if item.is_empty() or not is_inside_tree():
+		return
+	var transfer := ELITE_RENT_TRANSFER_SCRIPT.new() as Node3D
+	if transfer == null:
+		return
+	transfer.name = "EliteRentTransfer_%s" % str(item.get("id", "item"))
+	add_child(transfer)
+	transfer.call("configure", item, source_position, collector_position)
+	transfer.call("begin")
 
 
 func get_insurance_module() -> InsuranceModule:

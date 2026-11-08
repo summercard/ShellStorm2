@@ -211,6 +211,12 @@ func has_pending_prewarm() -> bool:
 	return not _prewarm_queue.is_empty()
 
 
+## 队列里还剩几件。只用于加载页的完成度报告与回归断言 ——
+## 「还剩 0 件」和「还剩 9 件」在只有 bool 时是同一个 `true`，看不出差多少。
+func pending_prewarm_count() -> int:
+	return _prewarm_queue.size()
+
+
 ## 进关卡后第一批战斗反馈会用到的那批。顺序按"最先被撞上"的概率排。
 ##
 ## 只暖这 11 个，不暖全表：全表里另一半是低频事件件（暗门碎片、命运元素、收音机音符），

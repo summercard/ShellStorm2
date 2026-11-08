@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-11-06T08:58:12",
+ "captured_at": "2026-11-07T00:00:00",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1440,
+ "asset_count": 1441,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -7203,9 +7203,14 @@
    "d": "audio"
   },
   "ENM-ELITE-ARMS-TAKER-3D": {
-   "v": "c27e2378e01e10aea8f27ab8ebda659092b146a58683c69ea8baf3b2cac6e597",
+   "v": "5b63de8d11ff2f9ded71d00ce12253092e51f2fc14273369257c848838d9fe69",
    "c": "敌人",
    "d": "enemies"
+  },
+  "VFX-ELITE-RENT-TRANSFER-TRAIL-3D": {
+   "v": "1bafa7b431aa50d92b9c0af144ed28cdd55360e4438dbeb39822f0ae1331d2bc",
+   "c": "特效",
+   "d": "vfx"
   },
   "VFX-BULLET-ELECTRIC-3D": {
    "v": "e1f1113040cb0a6f4fe0ee3cf60bbe69a717e9623693e995e7ea7f91dd33c9b7",

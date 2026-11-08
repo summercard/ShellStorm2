@@ -202,6 +202,7 @@ func verify_live_encounter() -> void:
 				check(bool(door.get("openable")), "Elite kept a cleared mansion door locked")
 		if appearances == 1:
 			verify_rent(elite)
+			verify_health_potion(elite)
 			await verify_independent_queues(room)
 			# Real streaming rebuild of an elite in an already cleared room.
 			elite.take_damage(1)
@@ -228,13 +229,25 @@ func verify_live_encounter() -> void:
 		check(elite._elite_escape_active, "Elite did not retreat at 10 percent damage")
 		last_hp = elite.current_hp
 		var journal: Dictionary = tower._roaming_elite.export_snapshot()
+		var archive_before_escape := EliteRosterService.get_record(ID)
+		var appearance_id := elite.get_persistent_id()
+		var escape_xp := int((EliteRosterService.get_definition(ID).growth_profile.xp_rewards as Dictionary).get("escape", 0))
 		BaseManager.force_save_failure_for_test = true
 		check(not tower.commit_roaming_elite_escape(elite, {"room_id": room.room_id}), "Failed save accepted retreat")
 		check(tower._roaming_elite.state == journal and members(room).has(elite), "Failed retreat save lost actor or journal")
+		check(EliteRosterService.get_record(ID) == archive_before_escape, "撤退保存失败改变 XP 或 receipt")
 		BaseManager.force_save_failure_for_test = false
 		elite._complete_elite_escape()
 		check(not members(room).has(elite), "Durable retreat retained old room actor")
 		check(int(EliteRosterService.get_record(ID).escape_count) == (1 if appearances == expected_limit else 0), "Intermediate retreat grew cross-run archive")
+		var escaped_record := EliteRosterService.get_record(ID)
+		check(int(escaped_record.get("xp", 0)) == int(archive_before_escape.get("xp", 0)) + escape_xp, "每次 appearance 撤退未恰好增加一次 escape XP")
+		check((escaped_record.get("xp_event_ids", []) as Array).has(appearance_id), "撤退 XP 未使用 appearance 稳定 ID")
+		if appearances < expected_limit:
+			EliteRosterService.commit_run_record(ID, tower._roaming_elite.export_snapshot(), tower.build_runtime_save_snapshot(), {
+				"kind": "escape", "receipt_id": appearance_id, "xp_event_id": appearance_id,
+			})
+			check(EliteRosterService.get_record(ID) == escaped_record, "相同 escape receipt 重试重复计 XP 或改变档案")
 		var stored := BaseManager.get_active_run_checkpoint()
 		check((stored.get("world_state", {}) as Dictionary).get("roaming_elite", {}) == tower._roaming_elite.state, "Profile checkpoint lost encounter journal")
 		await get_tree().process_frame
@@ -285,21 +298,67 @@ func verify_death_outcome() -> void:
 	check(elite != null, "Death retry fixture did not spawn")
 	if elite == null:
 		return
+	var inventory: Array = []
+	for index in 5:
+		var item := ItemRegistry.get_instance().get_item("weapon_pistol").duplicate(true)
+		item["weapon_instance_id"] = "defeat_weapon_%d" % index
+		item["custom_marker"] = "defeat_half_probe"
+		item["current_ammo"] = 3 + index
+		item["durability"] = 41 + index
+		item["attachments"] = {"probe": index}
+		inventory.append({"item": item, "count": 1, "receipt_id": "defeat_receipt_%d" % index})
+	var fixture_record := BaseManager.get_elite_archive_record(ID)
+	fixture_record["stolen_items"] = inventory.duplicate(true)
+	check(BaseManager.commit_elite_archive_record(ID, fixture_record, "defeat_inventory_fixture"), "战败库存 fixture 写入失败")
 	var killed_before := tower._kills
+	var pickups_before := get_tree().get_nodes_in_group("ground_loot_3d")
+	var journal_before := tower._roaming_elite.export_snapshot()
+	var archive_before := EliteRosterService.get_record(ID)
+	var checkpoint_before := BaseManager.get_active_run_checkpoint()
 	BaseManager.force_save_failure_for_test = true
 	elite.take_damage(elite.current_hp + 1)
-	check(elite.ai_state == "dead" and tower._roaming_elite.state.status == "killed", "Lethal damage incorrectly started retreat")
-	check(tower._roaming_elite.state.has("pending_outcome") and EliteRosterService.get_record(ID).state != "Killed", "Failed death save lost retry intent")
+	check(elite._elite_defeat_active and elite.ai_state != "dead", "低血致死大伤害未优先进入战败 kneel")
+	check(tower._roaming_elite.state.status == "active", "战败 kneel 前提前改变 roaming 状态")
+	for _frame in 180:
+		elite._physics_process(1.0 / 60.0)
+	check(is_instance_valid(elite) and elite._elite_defeat_active, "保存失败时战败实体提前消失")
+	check(get_tree().get_nodes_in_group("ground_loot_3d") == pickups_before, "失败掉落仍留在 group，污染同帧重试")
+	check(EliteRosterService.get_record(ID) == archive_before and BaseManager.get_active_run_checkpoint() == checkpoint_before, "战败失败改变库存或持久 checkpoint")
+	check(tower._roaming_elite.state.status == journal_before.status and members(room).has(elite), "战败失败未恢复 journal 或房间成员")
 	BaseManager.force_save_failure_for_test = false
-	var saved := tower.build_runtime_save_snapshot()
-	check(tower._roaming_elite.import_snapshot(saved.world_state.roaming_elite), "Pending death did not round-trip")
-	tower._commit_roaming_outcome()
-	tower._commit_roaming_outcome()
+	for _frame in 180:
+		if not is_instance_valid(elite):
+			break
+		elite._physics_process(1.0 / 60.0)
+	await get_tree().process_frame
 	var record := EliteRosterService.get_record(ID)
-	check(record.state == "Killed" and int(record.death_count) == 1 and not tower._roaming_elite.state.has("pending_outcome"), "Death retry did not settle once")
-	check(tower._kills == killed_before + 1 and room.cleared, "Elite death duplicated kill or changed cleared room")
+	check(record.state == "Defeated" and int(record.defeat_count) == 1, "战败重试未完成唯一结算")
+	check(tower._roaming_elite.state.status == "defeated", "战败未写入独立 defeated roaming 状态")
+	check(tower._kills == killed_before and room.cleared, "战败错误增加普通击杀归属或未清房")
+	var dropped_items: Array = []
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if value is GroundLootPickup3D and not pickups_before.has(value) and value.item_data.get("custom_marker", "") == "defeat_half_probe":
+			dropped_items.append(value.item_data.duplicate(true))
+			check(value.visible and value.monitoring and value.is_processing(), "成功掉落未重新开放交互")
+	check(dropped_items.size() == 3, "五条单件库存未按总量 ceil(5/2) 掉落三件")
+	for index in mini(3, dropped_items.size()):
+		var dropped := dropped_items[index] as Dictionary
+		var original := inventory[index].item as Dictionary
+		for key in ["weapon_instance_id", "current_ammo", "durability", "attachments"]:
+			check(dropped.get(key) == original.get(key), "掉落顺序或武器 metadata 丢失：%s" % key)
+	var expected_remaining := inventory.slice(3).duplicate(true)
+	check(record.get("stolen_items", []) == expected_remaining, "未掉落库存未保持顺序及完整武器实例")
+	var checkpoint := BaseManager.get_active_run_checkpoint()
+	var segments := (checkpoint.get("world_state", {}) as Dictionary).get("segment_runtime_state", {}) as Dictionary
+	var saved_items := (segments.get(room.room_id, {}) as Dictionary).get("ground_items", []) as Array
+	var saved_drops := 0
+	for value in saved_items:
+		if (value.get("item_data", {}) as Dictionary).get("custom_marker", "") == "defeat_half_probe":
+			saved_drops += 1
+	check(saved_drops == 3, "事务 checkpoint 漏掉尚未开放的 pending pickups")
+	await get_tree().process_frame
 	tower._retry_roaming_elite()
-	check(find_roamer(room) == null, "Killed elite reappeared")
+	check(find_roamer(room) == null, "已战败收租人重新出现")
 
 
 func verify_independent_queues(room: DungeonRoom3D) -> void:
@@ -317,6 +376,79 @@ func verify_independent_queues(room: DungeonRoom3D) -> void:
 			check(tower._claim_enemy_departure(enemy) and int(tower._alive_by_room[room.room_id]) == 0, "Independent elite departure decremented combat count")
 			enemy.free()
 	check(found and room.cleared, "Delayed unique elite did not spawn independently")
+
+
+func potion_count(record: Dictionary) -> int:
+	var count := 0
+	for entry in record.get("stolen_items", []):
+		if (entry.get("item", {}) as Dictionary).get("id", "") == "item_health_potion":
+			count += int(entry.get("count", 0))
+	return count
+
+
+func verify_health_potion(elite: Enemy3D) -> void:
+	check(EliteRosterService.has_method("consume_elite_item"), "外部接口缺失：consume_elite_item，血瓶事务未验证")
+	if not EliteRosterService.has_method("consume_elite_item"):
+		return
+	var original_hp := elite.current_hp
+	var original_serial := elite._elite_healing_serial
+	var original_record := BaseManager.get_elite_archive_record(ID)
+	var potion := ItemRegistry.get_instance().get_item("item_health_potion")
+	var heal_amount := int(potion.get("heal_amount", 0))
+	check(heal_amount > 0, "ItemRegistry 血瓶未提供正治疗量")
+	var fixture := original_record.duplicate(true)
+	fixture["stolen_items"] = [{"item": potion.duplicate(true), "count": 3, "receipt_id": "healing_fixture"}]
+	check(BaseManager.commit_elite_archive_record(ID, fixture, "healing_fixture"), "血瓶 fixture 写入失败")
+	elite.current_hp = elite.max_hp
+	var before := EliteRosterService.get_record(ID)
+	check(not tower.try_use_arms_taker_health_potion(elite) and EliteRosterService.get_record(ID) == before, "满血消耗血瓶")
+	elite.current_hp = elite.max_hp - 3
+	for blocked in ["defeat", "escape", "phase"]:
+		elite._elite_defeat_active = blocked == "defeat"
+		elite._elite_escape_active = blocked == "escape"
+		elite.arms_taker_combat.phase_intangible = blocked == "phase"
+		check(not tower.try_use_arms_taker_health_potion(elite) and elite.current_hp == elite.max_hp - 3, "禁止状态仍使用血瓶：%s" % blocked)
+	elite._elite_defeat_active = false
+	elite._elite_escape_active = false
+	elite.arms_taker_combat.phase_intangible = false
+	var journal := tower._roaming_elite.export_snapshot()
+	var runtime_rooms := tower._segment_runtime_state.duplicate(true)
+	var checkpoint := BaseManager.get_active_run_checkpoint()
+	BaseManager.force_save_failure_for_test = true
+	check(not tower.try_use_arms_taker_health_potion(elite), "保存失败接受血瓶事务")
+	check(elite.current_hp == elite.max_hp - 3 and elite._elite_healing_serial == original_serial, "血瓶失败未恢复 HP/serial")
+	check(tower._roaming_elite.state == journal and tower._segment_runtime_state == runtime_rooms, "血瓶失败未恢复 journal/房间快照缓存")
+	check(EliteRosterService.get_record(ID) == before and BaseManager.get_active_run_checkpoint() == checkpoint, "血瓶失败改变库存或 checkpoint")
+	BaseManager.force_save_failure_for_test = false
+	check(tower.try_use_arms_taker_health_potion(elite), "受伤收租人未成功使用血瓶")
+	check(elite.current_hp == elite.max_hp and elite._elite_healing_serial == original_serial + 1, "血瓶未按实际缺血量治疗或 serial 错误")
+	check(potion_count(EliteRosterService.get_record(ID)) == 2, "治疗未恰好消耗一瓶")
+	var committed_checkpoint := BaseManager.get_active_run_checkpoint()
+	var saved_journal := (committed_checkpoint.get("world_state", {}) as Dictionary).get("roaming_elite", {}) as Dictionary
+	check(int(saved_journal.get("hp", -1)) == elite.current_hp, "治疗后 HP 未与消费原子写入 checkpoint")
+	var transaction_id := "%s:healing:%d" % [elite.get_persistent_id(), elite._elite_healing_serial]
+	var retry: Dictionary = EliteRosterService.call("consume_elite_item", ID, elite.elite_encounter_instance_id, "item_health_potion", 1, transaction_id, committed_checkpoint)
+	check(bool(retry.get("already_committed", false)) and potion_count(EliteRosterService.get_record(ID)) == 2, "相同血瓶事务未幂等返回或重复消费")
+	elite.current_hp = elite.max_hp - heal_amount * 2
+	elite._elite_healing_cooldown = 0.0
+	var original_disable_mode := elite.disable_mode
+	elite.disable_mode = CollisionObject3D.DISABLE_MODE_KEEP_ACTIVE
+	check(PhysicsServer3D.body_get_space(elite.get_rid()).is_valid(), "血瓶自动消费 tick 前 body 未进入物理空间")
+	elite._physics_process(1.0 / 60.0)
+	check(elite.current_hp == elite.max_hp - heal_amount and potion_count(EliteRosterService.get_record(ID)) == 1, "Enemy tick 未自动消费血瓶")
+	var healed_hp := elite.current_hp
+	check(PhysicsServer3D.body_get_space(elite.get_rid()).is_valid(), "血瓶节流 tick 前 body 未进入物理空间")
+	elite._physics_process(1.0 / 60.0)
+	elite.disable_mode = original_disable_mode
+	check(elite.current_hp == healed_hp and elite._elite_healing_cooldown > 1.0 and potion_count(EliteRosterService.get_record(ID)) == 1, "治疗节流未阻止剩余血瓶连续消费")
+	check(tower.try_use_arms_taker_health_potion(elite) and potion_count(EliteRosterService.get_record(ID)) == 0, "最后一瓶未消费")
+	elite.current_hp -= 1
+	check(not tower.try_use_arms_taker_health_potion(elite), "空血瓶库存仍可治疗")
+	elite.current_hp = original_hp
+	elite._elite_healing_serial = original_serial
+	elite._elite_healing_cooldown = 0.0
+	tower._roaming_elite.capture_actor(elite)
+	check(BaseManager.commit_elite_and_runtime_checkpoint(ID, original_record, tower.build_runtime_save_snapshot(), "healing_fixture_restore"), "血瓶 fixture 恢复失败")
 
 
 func verify_rent(elite: Enemy3D) -> void:

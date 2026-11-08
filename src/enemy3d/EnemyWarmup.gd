@@ -30,11 +30,19 @@ extends RefCounted
 ##
 ## 实测：预热 3 个基类（398 ms）之后，33 个 `egt_*` 怪种连续生成从 **1038 ms → 603 ms**。
 ##
-## ## 只预热 3 个基类就够
+## ## 只预热 3 个基类就够（对所有关卡成立）
 ##
-## 远征03 的 33 只复刻怪**全部借用**三种正式 GLB（见 `EnemyAvatar3D.PROXY_ASSET_KIND`），
+## 有**正式 GLB** 的普通怪基类只有三个（见 `EnemyAvatar3D.FORMAL_NORMAL_SCENES`）：
+## `melee_chaser` / `ranged_caster` / `fat_zombie03`。其余基类（`summoner` / `shielded` /
+## `exploder` / `ambusher` / `boss`）是程序化外壳，没有读盘成本。
+##
+## 而远征03 的 33 只复刻怪**全部借用**这三种正式 GLB（见 `EnemyAvatar3D.PROXY_ASSET_KIND`），
 ## 材质变体族也只有这三族 ⇒ 预热基类等于覆盖全场。逐只预热 33 个只会把加载时间拖到 15 秒，
 ## 而收益为 0（同一变体第二次是 0.15 ms）。
+##
+## ⚠ 因此这份集合**与关卡无关**：塔楼、远征 01/02/03/99 一律取同一套。
+## 新增一个「有正式 GLB 的普通怪基类」时必须同步加进来，漏加的症状是该怪种第一次
+## 出现时卡 460 ms，而不报错。
 ##
 ## ## 它还剩什么没解决
 ##
@@ -49,8 +57,8 @@ extends RefCounted
 ## 都不可能被看见，同时避免与房间几何/遮挡判断产生任何交互。
 const WARM_OFFSET := Vector3(0.0, -1200.0, 0.0)
 
-## 正式模型的三个基类。远征03 全部 33 只复刻怪借用它们（别名解析见
-## `EnemyAvatar3D.resolve_asset_kind`）。
+## 正式模型的三个基类，也是**全部关卡**的预热集合（见下节「只预热 3 个基类就够」）。
+## 别名解析见 `EnemyAvatar3D.resolve_asset_kind`。
 const BASE_KINDS: Array[String] = ["melee_chaser", "ranged_caster", "fat_zombie03"]
 
 const AVATAR_SCRIPT := preload("res://src/enemy3d/EnemyAvatar3D.gd")

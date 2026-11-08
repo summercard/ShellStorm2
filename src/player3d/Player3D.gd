@@ -28,6 +28,8 @@ signal death_animation_finished()
 signal damage_received(damage: int, maximum: int)
 
 var camera_feedback := preload("res://src/player3d/PlayerCameraFeedback3D.gd").new()
+const VFX_POOL_SCRIPT := preload("res://src/vfx/VfxPool3D.gd")
+const HEAL_VFX_SCRIPT := preload("res://src/vfx/VfxHealNumber3D.gd")
 
 const SPEED := 4.5
 ## 持枪移速惩罚（m/s，对基础速度的减法项）。三类枪械动画族与
@@ -1392,6 +1394,25 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO,
 		_state_machine.transition_to("hurt", true)
 
 
+## 投射物统一伤害入口。与 Enemy3D 保持同一签名，确保敌方枪械、电击和
+## 命运反射都经过玩家的无敌、护盾、命运倍率、受击信号和击退规则。
+func take_projectile_damage(
+	amount: int,
+	critical := false,
+	hit_direction := Vector3.ZERO,
+	tags: Array[String] = [],
+	behavior: Dictionary = {},
+	attacker: Node3D = null,
+	hit_knockback := 0.0
+) -> void:
+	if current_hp <= 0 or amount <= 0:
+		return
+	if is_instance_valid(attacker):
+		notify_attacked_by(attacker)
+	var knockback_enabled := hit_knockback > 0.0
+	take_damage(amount, critical, hit_direction, knockback_enabled, hit_knockback)
+
+
 func notify_attacked_by(source: Node3D) -> void:
 	_fate_damage_source = weakref(source) if is_instance_valid(source) else null
 	_fate_damage_source_frame = Engine.get_process_frames()
@@ -1415,10 +1436,46 @@ func get_last_damage_source_snapshot(max_age_msec := 2500) -> Dictionary:
 
 
 func heal(amount: int) -> void:
-	if current_hp <= 0:
+	if current_hp <= 0 or amount <= 0:
 		return
-	current_hp = mini(max_hp, current_hp + maxi(0, amount))
+	var previous_hp := current_hp
+	current_hp = mini(max_hp, current_hp + amount)
+	var actual_heal := current_hp - previous_hp
+	if actual_heal <= 0:
+		return
 	hp_changed.emit(current_hp, max_hp)
+	_spawn_heal_number(actual_heal)
+
+
+## 玩家与收租人共用正式 VFX-HEAL-NUMBER-3D；只显示实际增加的生命值。
+func _spawn_heal_number(amount: int) -> void:
+	if amount <= 0 or get_tree().current_scene == null:
+		return
+	var spawn_position := global_position + Vector3.UP * 1.55
+	var context := {
+		"text_value": "+%d" % amount,
+		"magnitude": amount,
+		"spawn_offset": Vector3(randf_range(-0.10, 0.10), randf_range(-0.04, 0.04), randf_range(-0.10, 0.10)),
+		"rise_scale": randf_range(0.90, 1.10),
+		"drift": Vector3(randf_range(-0.18, 0.18), 0.0, randf_range(-0.08, 0.08)),
+		"pop_scale": randf_range(1.05, 1.18),
+		"duration_scale": randf_range(0.92, 1.08),
+	}
+	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
+	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
+		(vfx_pools[0] as VfxPool3D).acquire(
+			VfxPool3D.FX02_HEAL_NUMBER,
+			spawn_position,
+			HEAL_VFX_SCRIPT.HEAL_COLOR,
+			1.0,
+			context
+		)
+		return
+	var heal_number := VFX_POOL_SCRIPT.create_unpooled(VfxPool3D.FX02_HEAL_NUMBER)
+	if heal_number == null:
+		return
+	get_tree().current_scene.add_child(heal_number)
+	heal_number.activate(spawn_position, HEAL_VFX_SCRIPT.HEAL_COLOR, 1.0, context)
 
 
 func apply_character_fate_modifier(effect: Dictionary) -> Dictionary:
@@ -1554,19 +1611,28 @@ func update_fate_survival(delta: float) -> void:
 
 func on_fate_kill_recorded() -> Array[Dictionary]:
 	var results: Array[Dictionary] = []
-	var bridge := get_tree().get_first_node_in_group("fate_cards")
+	# 角色只产出奖励请求；世界凭据由当前运行场景发放，不在角色里扣费/直接应用卡。
 	# 固定本次规则列表，新获得的愚者从下一次击杀开始计数。
-	var rules: Array = (_character_fate["kill_rules"] as Array).duplicate()
-	for rule: Dictionary in rules:
+	var rules: Array = _character_fate["kill_rules"] as Array
+	var rule_count := rules.size()
+	for rule_index in range(rule_count):
+		var rule: Dictionary = rules[rule_index]
 		rule["kills"] = int(rule["kills"]) + 1
 		var threshold := maxi(1, int(rule.get("kill_threshold", 10)))
 		if int(rule["kills"]) % threshold != 0:
 			continue
-		var probability := float(rule.get("chance", rule.get("grant_probability", 0.5)))
+		var probability := clampf(float(rule.get("chance", rule.get("grant_probability", 0.5))), 0.0, 1.0)
 		if randf() >= probability:
 			continue
-		if bridge != null:
-			results.append(bridge.call("grant_random_card_from_character", int(rule.get("currency_cost", 0))) as Dictionary)
+		var reward_id := "character:%d:%d" % [rule_index, int(rule["kills"])]
+		results.append({
+			"kind": "fate_pickup",
+			"reward_id": reward_id,
+			"request_id": reward_id,
+			"rule_index": rule_index,
+			"kills": int(rule["kills"]),
+			"currency_cost": int(rule.get("currency_cost", 0)),
+		})
 	return results
 
 

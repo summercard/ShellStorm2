@@ -256,21 +256,33 @@ func _ai_overrides() -> Dictionary:
 	return {"monster_ai": ai.duplicate(true)}
 
 
-## 把关卡级「敌弹观感」参数塞进怪物配置（`monster_rules.projectile`）。
+## 把关卡级「敌弹观感 / 归属」参数塞进怪物配置（`monster_rules.projectile`）。
 ##
-## 目前只有一项：`visual_scale`（弹体纯视觉尺寸倍率，远征03 = 2.0 —— 业主
-## 「怪物的子弹大小也放大一倍」）。**不写弹速**：弹速是怪种级属性，住在 `Enemy3D.PROFILES`，
-## 关层级只放「这一关看起来怎么样」，免得同一只怪在两张表里各有一份速度。
+## 两项：① `visual_scale`（弹体纯视觉尺寸倍率，远征03 = 2.0、远征01 = 1.8 ——
+## 业主「怪物的子弹大小也放大一倍」）；② `hit_allies_kinds`（敌我通吃白名单，怪种 id 数组，
+## 远征01 只点名 `exploder`）。**不写弹速**：弹速是怪种级属性，住在 `Enemy3D.PROFILES`，
+## 关层级只放「这一关看起来怎么样 / 谁能打自己人」，免得同一只怪在两张表里各有一份速度。
 ##
-## 缺省（无本段或本段为空）不写任何键 ⇒ `Enemy3D` 回退 1.0，其余关卡逐字不变。
+## 缺省（无本段或本段为空）不写任何键 ⇒ `Enemy3D` 回退 1.0 / 空数组，其余关卡逐字不变。
 func _projectile_look_overrides() -> Dictionary:
 	var section: Variant = _level_rules.get("projectile", null)
 	if not (section is Dictionary):
 		return {}
 	var cfg := section as Dictionary
-	if not cfg.has("visual_scale"):
-		return {}
-	return {"projectile_visual_scale": maxf(0.05, float(cfg["visual_scale"]))}
+	var result := {}
+	if cfg.has("visual_scale"):
+		result["projectile_visual_scale"] = maxf(0.05, float(cfg["visual_scale"]))
+	# 敌我通吃白名单：只对本关点名的怪种生效（远征01 = `exploder` 炸弹果，
+	# 它死后散射的子弹才打自己人）。缺键 ⇒ 不写这个键 ⇒ `Enemy3D` 保持空数组，
+	# 其余关卡与未点名的怪逐字不变。
+	if cfg.has("hit_allies_kinds"):
+		var kinds_value: Variant = cfg["hit_allies_kinds"]
+		if kinds_value is Array:
+			var kinds: Array[String] = []
+			for kind_value in kinds_value as Array:
+				kinds.append(str(kind_value))
+			result["projectile_hit_allies_kinds"] = kinds
+	return result
 
 
 ## 强化怪升级概率（读 `monster_rules.strong_variant`）。

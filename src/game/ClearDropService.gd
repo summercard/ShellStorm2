@@ -79,7 +79,7 @@ func roll_room_drop(room_id: String, room_kind: String, run_seed: int) -> Dictio
 			return {"kind": "none", "roll": 1.0, "chance": 1.0, "room_id": room_id}
 		return {
 			"kind": "chest",
-			"chest": _build_chest(room_id, run_seed, _boss_min_quality),
+			"chest": _build_chest(room_id, run_seed, _boss_min_quality, "advanced"),
 			"roll": 1.0,
 			"chance": 1.0,
 			"room_id": room_id,
@@ -107,19 +107,22 @@ func roll_room_drop(room_id: String, room_kind: String, run_seed: int) -> Dictio
 
 ## 宝箱配置。`chest_id` 与房号绑定 ⇒ 同一间房无论重建多少次都是同一只箱子，
 ## 房间账（`treasure_chests`）才不会因为 id 漂移而认不出「这只开过了」。
-func _build_chest(room_id: String, run_seed: int, min_quality: String) -> Dictionary:
+func _build_chest(room_id: String, run_seed: int, min_quality: String, tier_override: String = "") -> Dictionary:
 	var weights := (_chest.get("quality_weights", {}) as Dictionary)
 	var quality := _roll_quality(weights, "%d|%s|chest_quality" % [run_seed, room_id], min_quality)
+	# Boss 显式指定高级奖励档，不受普通箱配置或品质下限影响。
+	var chest_tier := tier_override if not tier_override.is_empty() else str(_chest.get("chest_tier", "normal"))
+	if chest_tier != "advanced":
+		chest_tier = "normal"
 	var mimic_cfg := _chest.get("mimic", {}) as Dictionary
 	var mimic_chance := clampf(float(mimic_cfg.get("chance", 0.0)), 0.0, 1.0)
 	var mimic_salt := "%d|%s|chest_mimic" % [run_seed, room_id]
 	return {
 		"id": "drop_%s" % room_id,
 		"quality": quality,
+		"chest_tier": chest_tier,
 		"reward_pool_id": str(_chest.get("reward_pool_id", "loot_floor_1_2")),
 		"drop_count": maxi(1, int(_chest.get("drop_count", 1))),
-		# 0 = 开箱不自动发卡；命运卡改由**同一个购买界面**卖（与远征03 同口径）。
-		"fate_card_per_open": maxi(0, int(_chest.get("fate_card_per_open", 0))),
 		"mimic": _stable_ratio(mimic_salt) < mimic_chance,
 		"mimic_monster_kind": str(mimic_cfg.get("monster_kind", "egt_mimic")),
 	}

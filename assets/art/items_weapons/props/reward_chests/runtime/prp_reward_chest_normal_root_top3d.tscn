@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/world3d/RewardChestVisual3D.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/props/reward_chests/components/prp_reward_chest_normal_visual_top3d.glb" id="2_glb"]
+
+[node name="RewardChestVisual3D" type="Node3D"]
+script = ExtResource("1_script")
+metadata/asset_id = "PRP-3D-REWARD-CHEST-NORMAL"
+metadata/asset_version = "v001"
+metadata/dimensions_m = Vector3(1.45, 1.18, 1.4)
+metadata/root_scale_contract = Vector3(1, 1, 1)
+metadata/front_axis = "+Z"
+metadata/model_kind = "reward_chest_visual"
+
+[node name="ImportedModel" parent="." instance=ExtResource("2_glb")]

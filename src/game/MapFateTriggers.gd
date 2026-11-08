@@ -48,13 +48,10 @@ var _connected: bool = false
 ##   · fate_reinforce  —— KILL_COUNT ≥3 / 冷却 15s / 可重复（房间恒多一波的直接来源）
 ##   · fate_curse_map  —— ENTER_ROOM ≥7 / 冷却 45s
 ##   · fate_bless_dead —— ELITE_KILL ≥1 / 冷却 30s
-## 愚者也必须先抽到角色牌，击杀信号只转发角色规则；这里只保留两条容器事件。
-const DEFAULT_TRIGGERS: Array[Dictionary] = [
-	# 开箱触发：开第5个箱子 → 箱子物品品质提升
-	{"trigger_type": TriggerType.OPEN_CHEST, "threshold": 5, "fate_card_id": "fate_lucky_chest", "cooldown": 30.0, "once_per_run": false},
-	# 开箱触发：开第10个箱子 → 额外掉落
-	{"trigger_type": TriggerType.OPEN_CHEST, "threshold": 10, "fate_card_id": "fate_extra_loot", "cooldown": 30.0, "once_per_run": true},
-]
+## 愚者也必须先抽到角色牌，击杀信号只转发角色规则。
+## 普通容器只记录开启统计；命运卡专用掉落物的主动交互才可创建购卡 offer。
+## 因此这里不配置任何 OPEN_CHEST 自动触发器，避免按 5/10 次白送世界卡。
+const DEFAULT_TRIGGERS: Array[Dictionary] = []
 
 func _ready() -> void:
 	_initialize_triggers()
@@ -75,21 +72,48 @@ func _initialize_triggers() -> void:
 
 ## 连接到当前 3D 局内运行时信号。
 func _connect_signals() -> void:
-	# 延迟连接，等场景树完全加载
+	# 延迟连接，等场景树完全加载；只接受祖先运行时，禁止跨场景全树串线。
 	await get_tree().process_frame
-	_run_runtime = get_tree().get_first_node_in_group("room_game_mode")
-	
-	if _run_runtime != null:
-		if not _run_runtime.kill_recorded.is_connected(_on_kill_recorded):
-			_run_runtime.kill_recorded.connect(_on_kill_recorded)
-		if not _run_runtime.room_cleared.is_connected(_on_room_cleared):
-			_run_runtime.room_cleared.connect(_on_room_cleared)
-		if not _run_runtime.room_entered.is_connected(_on_room_entered):
-			_run_runtime.room_entered.connect(_on_room_entered)
-		_connected = true
-		print("[MapFateTriggers] 已连接到 3D 局内运行时")
-	else:
-		print("[MapFateTriggers] 警告：未找到 3D 局内运行时，触发器仅被动计数")
+	_bind_runtime(_resolve_ancestor_runtime())
+
+func _resolve_ancestor_runtime() -> Node:
+	var node := get_parent()
+	while node != null:
+		if node.has_signal("kill_recorded") and node.has_signal("room_entered") and node.has_method("spawn_character_fate_pickups"):
+			return node
+		node = node.get_parent()
+	return null
+
+func _bind_runtime(runtime: Node) -> void:
+	if _run_runtime == runtime and _connected:
+		return
+	_unbind_runtime()
+	_run_runtime = runtime
+	if _run_runtime == null:
+		print("[MapFateTriggers] 警告：未找到祖先 3D 局内运行时，触发器仅被动计数")
+		return
+	if not _run_runtime.kill_recorded.is_connected(_on_kill_recorded):
+		_run_runtime.kill_recorded.connect(_on_kill_recorded)
+	if _run_runtime.has_signal("room_cleared") and not _run_runtime.room_cleared.is_connected(_on_room_cleared):
+		_run_runtime.room_cleared.connect(_on_room_cleared)
+	if not _run_runtime.room_entered.is_connected(_on_room_entered):
+		_run_runtime.room_entered.connect(_on_room_entered)
+	_connected = true
+	print("[MapFateTriggers] 已连接到祖先 3D 局内运行时")
+
+func _unbind_runtime() -> void:
+	if is_instance_valid(_run_runtime):
+		if _run_runtime.has_signal("kill_recorded") and _run_runtime.kill_recorded.is_connected(_on_kill_recorded):
+			_run_runtime.kill_recorded.disconnect(_on_kill_recorded)
+		if _run_runtime.has_signal("room_cleared") and _run_runtime.room_cleared.is_connected(_on_room_cleared):
+			_run_runtime.room_cleared.disconnect(_on_room_cleared)
+		if _run_runtime.has_signal("room_entered") and _run_runtime.room_entered.is_connected(_on_room_entered):
+			_run_runtime.room_entered.disconnect(_on_room_entered)
+	_run_runtime = null
+	_connected = false
+
+func _exit_tree() -> void:
+	_unbind_runtime()
 
 ## 重置计数器
 func _reset_counters() -> void:
@@ -105,9 +129,17 @@ func _reset_counters() -> void:
 ## ========== 事件处理 ==========
 
 func _on_kill_recorded() -> void:
-	var player := get_tree().get_first_node_in_group("player")
+	var player: Node = null
+	if is_instance_valid(_run_runtime):
+		var candidate: Variant = _run_runtime.get("player")
+		if candidate is Node and is_instance_valid(candidate):
+			player = candidate as Node
 	if player != null and player.has_method("on_fate_kill_recorded"):
-		player.call("on_fate_kill_recorded")
+		var rewards: Array = player.call("on_fate_kill_recorded")
+		if is_instance_valid(_run_runtime) and _run_runtime.has_method("spawn_character_fate_pickups"):
+			for reward: Dictionary in rewards:
+				# 每条请求单独确认，宿主以 request_id 做幂等；失败不从角色账抹掉。
+				_run_runtime.call("spawn_character_fate_pickups", [reward])
 	_increment_counter(TriggerType.KILL_COUNT)
 	var enemy_data = null
 	if _run_runtime != null and _run_runtime.has_method("get_last_killed_enemy"):
@@ -144,6 +176,9 @@ func _increment_counter(trigger_type: TriggerType) -> void:
 	_check_triggers(trigger_type, current)
 
 func _check_triggers(trigger_type: TriggerType, current: int) -> void:
+	# 普通容器只记统计；不得因阈值创建 offer、扣钱或应用任何命运卡。
+	if trigger_type == TriggerType.OPEN_CHEST:
+		return
 	for cfg: TriggerConfig in _triggers:
 		if cfg.trigger_type != trigger_type:
 			continue

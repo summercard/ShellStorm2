@@ -545,53 +545,37 @@
       }
     ]
   },
-  "clear_rewards": {
-    "schema": "shellstorm2.battle.clear_rewards",
+  "clear_drops": {
+    "schema": "shellstorm2.battle.clear_drops",
     "schema_version": 1,
-    "note": "清房结算（2026-10-29）。原作一层有两个**独立**判定：① 20% 概率生成一个拾取物，从权重表抽；② 6% 概率生成弹药（两项分开掷）。两者都挂在「房间清空」上，不是每只怪身上 —— 这是原作与我们旧口径最大的差别。权重取自 enterhegungeon.wiki.gg/Pickups 的取值表，**只保留我们有对应物的类别**，其余（整心 / 护甲 / Blank / Map / Supply Drop / Silver·Gold Shell / Glass Guon Stone）因本工程无对应道具而移除；删掉后按剩余权重归一化。**2026-11-05 业主裁定：本关钥匙全退役** ⇒ 再删掉「普通钥匙」一行（原权重 24.36），剩余 血瓶 40.405 / 货币 6.09 / 弹药 3.045 按相对权重重新归一（权重是相对值，不是百分比，所以只需删行、不必改数值）。只对「有怪的房」结算：走廊与和平区（入口 / 撤离 / 商店 / 宝箱）不进战斗结算。",
-    "applies_to_kinds": [
-      "NORMAL",
-      "HUB"
-    ],
-    "pickup": {
-      "chance": 0.2,
-      "pool": [
-        {
-          "item_id": "item_health_potion",
-          "count": 1,
-          "weight": 40.405
-        },
-        {
-          "currency_id": "extraction_points",
-          "amount": {
-            "base": 8,
-            "per_floor": 1
-          },
-          "weight": 6.09
-        },
-        {
-          "item_id": "item_ammo_pack",
-          "count": {
-            "min": 30,
-            "max": 50
-          },
-          "weight": 3.045
-        }
-      ]
+    "note": "清房掉落（2026-11-07）：与远征01使用同一能力段。普通战斗房清房必掉普通宝箱，不再直接发物品或钥匙；Boss 保底高级宝箱。移除旧 clear_rewards，避免旧拾取物/弹药结算与宝箱双发。",
+    "content_room": {
+      "chest_chance": 1.0
     },
-    "ammo": {
-      "chance": 0.06,
-      "item_id": "item_ammo_pack",
-      "count": {
-        "min": 30,
-        "max": 50
+    "boss": {
+      "chest_count": 1,
+      "min_quality": "rare"
+    },
+    "chest": {
+      "quality_weights": {
+        "common": 62.0,
+        "uncommon": 26.0,
+        "rare": 10.0,
+        "epic": 2.0
+      },
+      "chest_tier": "normal",
+      "reward_pool_id": "loot_floor_1_2",
+      "drop_count": 2,
+      "mimic": {
+        "chance": 0.2,
+        "monster_kind": "egt_mimic"
       }
     }
   },
   "treasure_chests": {
     "schema": "shellstorm2.battle.treasure_chests",
     "schema_version": 1,
-    "note": "宝箱（2026-10-29；2026-11-05 业主改为免钥匙直开 + 弹命运卡购买）。《挺进地牢》一层固定 2 个宝箱房（flow 里的 REWARD 节点），每间 1 只箱子。**开箱不需要钥匙**：业主口径「开启方式是直接开启，开启的同时会弹出命运卡购买界面，同时也掉出掉在地上的物品，不需要使用钥匙」⇒ 箱子本体 `TreasureChest3D` 已删除 `requires_key` 字段；本关钥匙经济整体退役（怪物掉落 / 清房权重池 / 初始钥匙 / 命运卡「太阳钥印」同步移除）。**开箱三件事**：① `drop_count` 件物资落到地面（品质随箱子档位加成）；② 弹出与门后**同一套**三选一命运卡购买界面（本局金币支付，买不买都由退出按钮收尾）；③ **不再自动发卡** —— `fate_card_per_open = 0`，本层命运卡一律靠买。**这是普通怪不掉装备之后本层唯一的稳定装备来源**（见 怪物设计 §T8.5）——不做它，这一层的装备经济是断的。`drop_count = 2` 是业主口径「除了掉落」的下限：开箱至少 2 件，避免出现「开完只拿到 1 个电池」的亏本感。**品质掷骰口径 2026-10-30 修正**：原实现是「按箱序号在权重排序表里轮转」，而 `chest_per_room = 1` ⇒ 序号恒为 0 ⇒ **全层每只箱子都是 common**，`rare`(10)/`epic`(2) 两档永远抽不到，`quality_weights` 整段是死配置；现改为「房间 id + 层种子」的确定性哈希掷骰，同 seed 同房间结果恒定（流送重建/读档不变），权重才真的等于出现概率。**拟态 2026-10-30 接回**：每箱独立掷 20%，`chance` 之下见 `mimic` 段。",
+    "note": "宝箱（2026-10-29；2026-11-05 业主改为免钥匙直开 + 弹命运卡购买）。《挺进地牢》一层固定 2 个宝箱房（flow 里的 REWARD 节点），每间 1 只箱子。**开箱不需要钥匙**：业主口径「开启方式是直接开启，开启的同时会弹出命运卡购买界面，同时也掉出掉在地上的物品，不需要使用钥匙」⇒ 箱子本体 `TreasureChest3D` 已删除 `requires_key` 字段；本关钥匙经济整体退役（怪物掉落 / 清房权重池 / 初始钥匙 / 命运卡「太阳钥印」同步移除）。**开箱三件事**：① `drop_count` 件物资落到地面（品质随箱子档位加成）；② 弹出与门后**同一套**三选一命运卡购买界面（本局金币支付，买不买都由退出按钮收尾）；③ **不再自动发卡** —— `命运卡不在开箱时直接弹出或直接发放，改由掉落物主动交互`，本层命运卡一律靠买。**这是普通怪不掉装备之后本层唯一的稳定装备来源**（见 怪物设计 §T8.5）——不做它，这一层的装备经济是断的。`drop_count = 2` 是业主口径「除了掉落」的下限：开箱至少 2 件，避免出现「开完只拿到 1 个电池」的亏本感。**品质掷骰口径 2026-10-30 修正**：原实现是「按箱序号在权重排序表里轮转」，而 `chest_per_room = 1` ⇒ 序号恒为 0 ⇒ **全层每只箱子都是 common**，`rare`(10)/`epic`(2) 两档永远抽不到，`quality_weights` 整段是死配置；现改为「房间 id + 层种子」的确定性哈希掷骰，同 seed 同房间结果恒定（流送重建/读档不变），权重才真的等于出现概率。**拟态 2026-10-30 接回**：每箱独立掷 20%，`chance` 之下见 `mimic` 段。",
     "chest_per_room": 1,
     "min_spacing_m": 3.2,
     "quality_weights": {
@@ -600,9 +584,9 @@
       "rare": 10.0,
       "epic": 2.0
     },
+    "chest_tier": "advanced",
     "reward_pool_id": "loot_floor_1_2",
     "drop_count": 2,
-    "fate_card_per_open": 0,
     "mimic": {
       "note": "宝箱拟态（2026-10-30）。原型：EGT 里「Mimic」是一只伪装成宝箱的怪，开箱才现形。触发口径：**每箱独立掷一次**，与品质各用各的盐（否则会出现「品质越高越可能是拟态」这种隐性相关）。`chance = 0.2` 的算术：一层 2 只箱子 ⇒ 36% 的局至少遇见 1 只；实际期望 ≈0.4 只/层，约两三局一次——稀有到不会让人不敢开箱，又密到能被记住。**2026-11-05 起开箱不吃钥匙**，所以这条机制的代价从「钥匙白花」变成「白跑一趟」：箱子当场消失、物资改为**击杀后掉**（`_on_enemy_killed` → `_deliver_chest_mimic_loot`），跑掉就真没了；拟态不会弹出命运卡购买界面（否则全屏模态会卡在战斗中间）。拟态死亡**不构成清房**（`_resolve_room_enemy_departure` 里挡掉），否则宝箱房会被记成「已清内容房」、白送清房结算并提前解锁撤离门。数值走 `MonsterInjector.BASE_ENEMY_TYPES.egt_mimic`（150/17 口径之外的单表真源），不在这里另写。",
       "chance": 0.2,

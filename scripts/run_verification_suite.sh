@@ -27,9 +27,22 @@ if command -v cygpath >/dev/null 2>&1; then
   verification_tmp_base="$(cygpath -m "${verification_tmp_base}")"
 fi
 
+# Windows Godot reads APPDATA before Autoload startup. Keep both the native
+# profile roots and the fate-pickup probe's expected user-data root outside the
+# project so a verification run cannot touch the developer profile.
+if [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* || "$(uname -s)" == CYGWIN* ]]; then
+  verification_appdata_root="${verification_tmp_root}/appdata"
+  verification_localappdata_root="${verification_tmp_root}/localappdata"
+  mkdir -p "${verification_appdata_root}" "${verification_localappdata_root}"
+  export APPDATA="${verification_appdata_root}"
+  export LOCALAPPDATA="${verification_localappdata_root}"
+fi
+
 isolated_project_root="${verification_tmp_root}/project"
 verification_log_dir="${verification_tmp_root}/logs"
 verification_user_dir_name="ShellStorm2Verification_$$_$(date +%s)"
+export FATE_PICKUP_APPDATA="${APPDATA:-${verification_tmp_root}/appdata}"
+export FATE_PICKUP_PROBE_DIR="${verification_tmp_root}/fate_pickup"
 verification_user_dir_names=("${verification_user_dir_name}")
 verification_scene_sequence=0
 
@@ -215,6 +228,7 @@ core_scenes=(
   verify_floor_plan_generator
   verify_level_plan_design_source
   verify_reward_service_flow
+  verify_chest_reward_service
   verify_reward_ground_handoff
   verify_run_merchant_transaction
   verify_run_merchant_integration
@@ -314,6 +328,7 @@ core_scenes=(
   verify_celestial_fate_scope_flow
   verify_fate_card_purchase_flow
   verify_fate_economy_service
+  verify_fate_pickup_runtime
   verify_fate_level01_pool
   verify_expedition_fate_surplus
   verify_fate_element_vfx
@@ -386,6 +401,8 @@ core_scenes=(
   verify_first_elite_growth_flow
   verify_second_elite_arms_taker
   verify_second_elite_state_flow
+  verify_arms_taker_equipment
+  verify_elite_rent_transfer
   verify_arms_taker_roaming
   verify_expedition99_pre_boss_elite
   verify_formal_3d_asset_import
@@ -446,6 +463,7 @@ visual_scenes=(
   verify_inventory_experience_visual
   verify_monitor_boss_visual
   verify_second_elite_state_visual
+  verify_arms_taker_revision_visual
   verify_arms_taker_tactics
   verify_base99_radio
   verify_base99_radio_music_notes
@@ -542,7 +560,11 @@ run_scene() {
     printf 'PREFLIGHT_LOG_FAILURE %s\n' "${scene_name}" >&2
     return 3
   fi
-  if is_renderer_scene "${scene_name}"; then
+  if [[ "${scene_name}" == "verify_arms_taker_revision_visual" ]]; then
+    # 本专项拒绝工程内输出；自动套件同样提供独立的工程外代表帧目录。
+    ELITE_QA_DIR="${verification_tmp_root}/evidence/${scene_name}" \
+      "${godot_bin}" --path "${isolated_project_root}" --scene "${scene_path}" >"${scene_log}" 2>&1 &
+  elif is_renderer_scene "${scene_name}"; then
     "${godot_bin}" --path "${isolated_project_root}" --scene "${scene_path}" >"${scene_log}" 2>&1 &
   else
     "${godot_bin}" --headless --path "${isolated_project_root}" --scene "${scene_path}" >"${scene_log}" 2>&1 &

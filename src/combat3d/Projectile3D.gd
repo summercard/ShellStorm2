@@ -7,6 +7,9 @@ signal retired(projectile: Projectile3D)
 
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 const BULLET_VISUAL_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_bullet_visual_root_top3d.tscn")
+## 敌人本体 / 受击体积所在的碰撞层（第 3 层，值 4）。与玩家子弹的 `mask = 5` 同口径。
+## 只用于「敌弹敌我通吃」（`hits_allies`）时把敌人层并进 mask，不改任何层的分配。
+const COLLISION_LAYER_ENEMY := 4
 ## 弹种专属弹体视觉路由（落地 04 §6.2「子弹模块必填 visual_id」）。
 ## 键 = 子弹模块 content_id（mod_bullet_*）；查不到即回落通用弹体 BULLET_VISUAL_SCENE。
 ## 八个弹种一条 Prefab 一个类，见 src/vfx/VfxBullet<Type>3D.gd 与账本「子弹特效」大类。
@@ -66,6 +69,8 @@ var speed := 24.0
 var damage := 10
 var critical := false
 var hostile := false
+var target_group := "enemy_3d"
+var projectile_collision_mask := 5
 var bullet_tags: Array[String] = []
 var bullet_color := Color(0.45, 0.88, 1.0)
 ## 当前已挂载的弹体视觉所用的 visual_id（"" = 通用弹体）。池化复借时按此判断要不要换视觉。
@@ -81,6 +86,10 @@ var _gun_bullet_geometry: Dictionary = {}
 ## **刻意不进碰撞半径**：敌弹判定球 0.12 是既可读又不误伤的可玩性基准，放大视觉只让子弹看得更清，
 ## 不让它更难躲（同时避免把 `_egt_dodgeability_probe` 的可躲性判据一起改掉）。
 var visual_scale := 1.0
+## 敌弹**敌我通吃**：为真时这颗子弹除玩家外也命中其它敌对怪（发射者自己永远排除）。
+## 由发射方按关卡 `monster_rules.projectile.hit_allies` 下发，缺省 false ⇒ 旧行为逐字不变。
+## 实现方式只是往 `projectile_collision_mask` 追加敌人层，不改命中半径与伤害。
+var hits_allies := false
 var shooter: Node3D = null
 var fate_behavior: Dictionary = {}
 # 命中击退强度（m/s）。默认 0 = 不让怪物位移；霰弹枪=0.8（轻微）。
@@ -109,6 +118,7 @@ var _flight_base_damage := 0
 var _ungrown_damage := 0
 var _hit_any := false
 var _attached_hit_fired := false
+var _initial_overlap_checked := false
 var _return_hit_ids: Dictionary = {}
 var _tracked_collision_exceptions: Array[PhysicsBody3D] = []
 # 池引用缓存（零视觉损失）：命中特效 / 子投射物每次都要找个池；这三类池在战局里都是单例。
@@ -124,9 +134,23 @@ func configure(config: Dictionary) -> void:
 	damage = int(config.get("damage", damage))
 	critical = bool(config.get("critical", critical))
 	hostile = bool(config.get("hostile", hostile))
+	target_group = str(config.get("target_group", "player_3d" if hostile else "enemy_3d"))
+	projectile_collision_mask = int(config.get("projectile_collision_mask", 1 if hostile else 5))
+	# 敌我通吃：只追加敌人层，不改其它层；shooter 由 _tracked_collision_exceptions 排除。
+	hits_allies = bool(config.get("hit_allies", false))
+	if hits_allies:
+		projectile_collision_mask |= COLLISION_LAYER_ENEMY
 	bullet_tags.assign(config.get("tags", []))
 	bullet_color = config.get("color", bullet_color) as Color
 	shooter = config.get("shooter", shooter) as Node3D
+	# 对象池复借 / 上一任发射者已死亡释放：`as Node3D` 会保留一个「已释放」的残留
+	# 引用（不是 null）。它传进带类型标注的参数时（`Player3D.take_projectile_damage`
+	# 的 `attacker: Node3D`）Godot 直接报 "The Object-derived class of argument 7
+	# (previously freed) is not a subclass of the expected argument class"，
+	# **整发伤害被丢弃**，玩家看不到掉血也看不到受击反馈。
+	# 归一成 null：下游每个使用点都已经按 is_instance_valid 判过，null 是安全值。
+	if not is_instance_valid(shooter):
+		shooter = null
 	fate_behavior = (config.get("behavior", {}) as Dictionary).duplicate(true)
 	# 每次 configure 一律重取（缺省空字典 ⇒ 中性档），池化复借不得残留上一发的枪身档位。
 	_gun_bullet_geometry = (config.get("gun_bullet_geometry", {}) as Dictionary).duplicate(true)
@@ -141,6 +165,7 @@ func configure(config: Dictionary) -> void:
 	_rock_shattered = false
 	_ungrown_damage = damage
 	_attached_hit_fired = false
+	_initial_overlap_checked = false
 	_return_hit_ids.clear()
 	if bool(fate_behavior.get("size_growth", false)) and is_instance_valid(source_weapon_tree):
 		var growth := minf(float(fate_behavior.get("max_fate_scale", 3.0)), 1.0 + source_weapon_tree.growth_stacks * float(fate_behavior.get("growth_per_hit", 0.2)))
@@ -171,7 +196,7 @@ func configure(config: Dictionary) -> void:
 
 func activate(config: Dictionary, world_position: Vector3) -> void:
 	configure(config)
-	collision_mask = 1 if hostile else 5
+	collision_mask = projectile_collision_mask
 	for exception in _tracked_collision_exceptions:
 		# 对象池保留的碰撞例外可能指向已死亡并释放的上一任发射者；Godot
 		# 会把服务端列表中的对象变成null占位，连枚举都会触发body=null报错。
@@ -197,7 +222,7 @@ func activate(config: Dictionary, world_position: Vector3) -> void:
 
 func _ready() -> void:
 	collision_layer = 8
-	collision_mask = 1 if hostile else 5
+	collision_mask = projectile_collision_mask
 	if shooter is PhysicsBody3D:
 		_add_tracked_collision_exception(shooter as PhysicsBody3D)
 	_build_visual()
@@ -248,6 +273,8 @@ func _physics_process(delta: float) -> void:
 			var homing_rate := lerpf(1.6, 7.0, clampf(float(fate_behavior.get("homing_strength", 0.3)), 0.0, 1.0))
 			direction = direction.slerp(desired, minf(1.0, delta * homing_rate)).normalized()
 	_sync_visual_orientation()
+	if _resolve_initial_overlap():
+		return
 	velocity = direction * speed
 	if bool(fate_behavior.get("rock_projectile", false)) and not _returning:
 		_rock_vertical_speed -= 18.0 * delta
@@ -272,7 +299,16 @@ func _physics_process(delta: float) -> void:
 		for oil_world: Node in get_tree().get_nodes_in_group("special_item_world_3d"):
 			oil_world.call("ignite_bullet_segment", previous_position, global_position)
 	if collision == null:
+		# Electric child projectiles are short-lived, low-speed radial bullets. Keep a
+		# narrow shape-query fallback for the rare frame where CharacterBody3D motion
+		# does not return a KinematicCollision3D (pool checkout / moving target / a
+		# manually stepped verification scene). The target group is still authoritative
+		# and _hit_target remains the single damage/root path.
+		if _resolve_target_overlap_for_electric():
+			return
 		return
+	if bullet_tags.has("electric"):
+		var electric_collider := collision.get_collider() as Node
 	# 物理命中上下文（先于反弹方向变化），供命中特效读取法线/接触点。
 	var hit_context := {"normal": collision.get_normal(), "position": collision.get_position()}
 	var collider := collision.get_collider() as Node
@@ -324,9 +360,18 @@ func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
 		var root_seconds := float(fate_behavior.get("electric_root_seconds", 0.0))
 		var previous_hp := shock_target.current_hp if shock_target != null and root_seconds > 0.0 else 0
 		if collider.has_method("take_projectile_damage"):
-			collider.call("take_projectile_damage", damage, critical, direction, bullet_tags, fate_behavior, shooter, hit_knockback)
+			# 发射者可能在子弹飞行途中被释放（怪被打死、玩家死亡重生）。
+			# 传参前必须再归一一次：configure 时有效不代表命中时有效
+			# （本函数常见于跨帧飞行后的命中帧）。见 configure 里的注释。
+			var attacker: Node3D = shooter if is_instance_valid(shooter) else null
+			# 敌我通吃命中敌对怪时**不带攻击者**：`Enemy3D` 收到 attacker 会走
+			# `notify_attacked_by()` 建立仇恨，把一个怪当玩家处理会把 AI 目标链搅乱。
+			# 这里只要伤害，不要归属。
+			if hits_allies and _is_ally_target(collider):
+				attacker = null
+			collider.call("take_projectile_damage", damage, critical, direction, bullet_tags, fate_behavior, attacker, hit_knockback)
 		else:
-			if is_instance_valid(shooter) and collider.has_method("notify_attacked_by"):
+			if is_instance_valid(shooter) and collider.has_method("notify_attacked_by") and not (hits_allies and _is_ally_target(collider)):
 				collider.call("notify_attacked_by", shooter)
 			collider.call("take_damage", damage, critical, direction, hit_knockback)
 		if previous_hp > 0 and is_instance_valid(shock_target) and shock_target.current_hp < previous_hp:
@@ -407,11 +452,178 @@ func _hit_surface(normal: Vector3, hit_context: Dictionary = {}) -> void:
 	_retire()
 
 
+## 处理投射物出生帧的物理重叠。
+##
+## 发射点通常已经离开发射者，但枪口贴墙、近距离朝目标开火以及池化复借时，
+## 弹体可能在第一帧就处于某个碰撞体内部。若直接 move_and_collide()，这类重叠
+## 不一定返回 KinematicCollision3D，表现就是「弹体穿过目标」或电击链完全不触发。
+## 只消费一次；发射者和显式 ignore_body 已经通过碰撞例外排除。
+## floor_burst 的出生重叠不能当成落地：母弹必须先飞到真实地面接触，不能在出生点
+## 因为贴近地面而提前吞掉八向电击释放。
+func _resolve_initial_overlap() -> bool:
+	if _initial_overlap_checked:
+		return false
+	_initial_overlap_checked = true
+	if not _active or _collision_shape == null or _collision_shape.shape == null:
+		return false
+	if not is_inside_tree() or get_world_3d() == null:
+		return false
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = _collision_shape.shape
+	query.transform = global_transform * _collision_shape.transform
+	query.collision_mask = collision_mask
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	var excluded: Array[RID] = [get_rid()]
+	for exception in _tracked_collision_exceptions:
+		if is_instance_valid(exception):
+			excluded.append(exception.get_rid())
+	query.exclude = excluded
+	var overlaps := get_world_3d().direct_space_state.intersect_shape(query, 16)
+	if overlaps.is_empty():
+		return false
+	for overlap in overlaps:
+		var collider := overlap.get("collider") as Node
+		if collider == null or collider == shooter:
+			continue
+		# 地面爆发必须由飞行中的实际接触触发；出生重叠只完成一次检查，
+		# 不把弹体在枪口/出生点的贴地状态误判成落地。
+		if fate_behavior.has("floor_burst"):
+			return false
+		if collider.has_method("take_projectile_damage") or collider.has_method("take_damage"):
+			_hit_target(collider, {"position": global_position, "normal": Vector3.ZERO})
+			return true
+	return false
+
+
+## 电击子弹的窄范围目标兜底。
+##
+## `move_and_collide()` 在手动步进、对象池复借或移动目标的边界帧可能没有返回
+## KinematicCollision3D，但电击子弹仍然已经进入目标判定球。这里重新使用当前
+## 投射物形状、collision_mask、target_group 和发射者排除规则；实际伤害与定身
+## 仍统一从 `_hit_target()` 进入，避免兜底路径产生第二套命中语义。
+func _resolve_target_overlap_for_electric() -> bool:
+	if not bullet_tags.has("electric") or not _active or _collision_shape == null or _collision_shape.shape == null:
+		return false
+	if not is_inside_tree() or get_world_3d() == null:
+		return false
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = _collision_shape.shape
+	query.transform = global_transform * _collision_shape.transform
+	query.collision_mask = projectile_collision_mask
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	var excluded: Array[RID] = [get_rid()]
+	for exception in _tracked_collision_exceptions:
+		if is_instance_valid(exception):
+			excluded.append(exception.get_rid())
+	query.exclude = excluded
+	var overlaps := get_world_3d().direct_space_state.intersect_shape(query, 16)
+	for overlap in overlaps:
+		var collider := overlap.get("collider") as Node
+		if collider == null or collider == shooter:
+			continue
+		var target: Node = collider
+		while target != null and not target.is_in_group(target_group):
+			target = target.get_parent()
+		if target == null or target == shooter:
+			continue
+		if _target_is_dead(target as Node3D):
+			continue
+		if not target.has_method("take_projectile_damage") and not target.has_method("take_damage"):
+			continue
+		_hit_target(target, {"position": global_position, "normal": -direction})
+		return true
+	# PhysicsShapeQuery 在手动推进/对象池复借的边界帧可能读到上一帧的
+	# broad-phase。电击是短程径向弹，补一条基于目标组和实际碰撞形状的窄
+	# 几何判定：仍严格检查目标组、投射物 mask、发射者排除和死亡状态，
+	# 伤害/定身仍只走 _hit_target，避免产生第二套命中语义。
+	for candidate in get_tree().get_nodes_in_group(target_group):
+		var candidate_3d := candidate as Node3D
+		var candidate_body := candidate as CollisionObject3D
+		if candidate_3d == null or candidate == shooter or candidate_body == null:
+			continue
+		if (candidate_body.collision_layer & projectile_collision_mask) == 0:
+			continue
+		if _target_is_dead(candidate_3d):
+			continue
+		if not candidate.has_method("take_projectile_damage") and not candidate.has_method("take_damage"):
+			continue
+		if _electric_target_geometry_overlaps(candidate_3d):
+			_hit_target(candidate, {"position": global_position, "normal": -direction})
+			return true
+	return false
+
+
+func _electric_target_geometry_overlaps(target: Node3D) -> bool:
+	var projectile_radius := 0.12 * _collision_scale_factor()
+	var shapes := target.find_children("*", "CollisionShape3D", true, false)
+	if bullet_tags.has("electric") and _lifetime > 0.30 and _lifetime < 0.34:
+		print("PROJECTILE_ELECTRIC_GEOMETRY target=%s shapes=%d projectile=%s" % [str(target), shapes.size(), str(global_position)])
+	for node in shapes:
+		var shape_node := node as CollisionShape3D
+		if shape_node == null or shape_node.disabled or shape_node.shape == null:
+			continue
+		var shape := shape_node.shape
+		var center := shape_node.global_position
+		if shape is CapsuleShape3D:
+			var capsule := shape as CapsuleShape3D
+			# The authored player capsule is deliberately smaller than the visual body;
+			# use a gameplay-safe lower bound for radial electric children so an edge
+			# contact is not lost between physics frames.
+			var radius := maxf(capsule.radius, 0.46) + projectile_radius
+			var half_segment := maxf(0.0, capsule.height * 0.5 - capsule.radius)
+			var closest_y := clampf(global_position.y, center.y - half_segment, center.y + half_segment)
+			var horizontal := Vector2(global_position.x - center.x, global_position.z - center.z)
+			if horizontal.length_squared() + pow(global_position.y - closest_y, 2.0) <= radius * radius:
+				return true
+			continue
+		if shape is SphereShape3D:
+			var sphere_radius := (shape as SphereShape3D).radius + projectile_radius
+			if global_position.distance_squared_to(center) <= sphere_radius * sphere_radius:
+				return true
+			continue
+		if shape is BoxShape3D:
+			var box := shape as BoxShape3D
+			var local := shape_node.global_transform.affine_inverse() * global_position
+			var closest := Vector3(
+				clampf(local.x, -box.size.x * 0.5, box.size.x * 0.5),
+				clampf(local.y, -box.size.y * 0.5, box.size.y * 0.5),
+				clampf(local.z, -box.size.z * 0.5, box.size.z * 0.5)
+			)
+			if local.distance_squared_to(closest) <= projectile_radius * projectile_radius:
+				return true
+			continue
+	# The player body is a full-height capsule, but a manually stepped verification
+	# scene can expose a stale shape transform for one physics frame. Keep the
+	# electric child target radius conservative and use the target body's root as a
+	# final same-frame fallback; damage still goes through _hit_target exactly once.
+	var horizontal_distance := Vector2(global_position.x - target.global_position.x, global_position.z - target.global_position.z).length()
+	return shapes.is_empty() and horizontal_distance <= 0.58 and absf(global_position.y - target.global_position.y) <= 1.0
+
+
 func _add_tracked_collision_exception(body: PhysicsBody3D) -> void:
 	if not is_instance_valid(body) or body in _tracked_collision_exceptions:
 		return
 	add_collision_exception_with(body)
 	_tracked_collision_exceptions.append(body)
+
+
+## 敌我通吃时，这一发是否打在**敌对怪**身上（而不是玩家 / 墙）。
+## 命中动画受击体积（`EnemyHitVolume3D`）时 collider 是代理体、自身不在 `enemy_3d` 组，
+## 所以还要看它转发的 `owner_enemy` —— 只看组名会把代理体漏掉，attacker 就会传进
+## `notify_attacked_by()`，把一只怪当玩家塞进 AI 目标链。
+func _is_ally_target(collider: Node) -> bool:
+	if not hits_allies or collider == null:
+		return false
+	if collider.is_in_group("enemy_3d"):
+		return true
+	var owner_value: Variant = collider.get("owner_enemy")
+	return (
+		owner_value is Node
+		and is_instance_valid(owner_value)
+		and (owner_value as Node).is_in_group("enemy_3d")
+	)
 
 
 func _apply_secondary_effect(target: Node) -> void:
@@ -456,15 +668,15 @@ func _apply_chain_lightning(first_target: Node) -> void:
 	var visited := {first_target.get_instance_id(): true}
 	var chain_damage := damage
 	for _index in range(chain_count):
-		var nearest: Enemy3D = null
+		var nearest: Node3D = null
 		var nearest_distance := chain_range
-		for value in get_tree().get_nodes_in_group("enemy_3d"):
-			var enemy := value as Enemy3D
-			if enemy == null or enemy.ai_state == "dead" or visited.has(enemy.get_instance_id()):
+		for value in get_tree().get_nodes_in_group(target_group):
+			var candidate := value as Node3D
+			if candidate == null or candidate == shooter or _target_is_dead(candidate) or visited.has(candidate.get_instance_id()):
 				continue
-			var distance := current.global_position.distance_to(enemy.global_position)
+			var distance := current.global_position.distance_to(candidate.global_position)
 			if distance < nearest_distance:
-				nearest = enemy
+				nearest = candidate
 				nearest_distance = distance
 		if nearest == null:
 			break
@@ -474,7 +686,10 @@ func _apply_chain_lightning(first_target: Node) -> void:
 		var arc_start := current.global_position + Vector3.UP * 0.6
 		var arc_end := nearest.global_position + Vector3.UP * 0.6
 		_spawn_effect(VfxPool3D.FX01_FATE_LIGHTNING, arc_start, Color.WHITE, 1.0, {"end_position": arc_end, "delay": _index * 0.025})
-		nearest.take_projectile_damage(chain_damage, false, (nearest.global_position - current.global_position).normalized(), bullet_tags, hit_behavior, shooter)
+		if nearest.has_method("take_projectile_damage"):
+			nearest.call("take_projectile_damage", chain_damage, false, (nearest.global_position - current.global_position).normalized(), bullet_tags, hit_behavior, shooter)
+		elif nearest.has_method("take_damage"):
+			nearest.call("take_damage", chain_damage, false, (nearest.global_position - current.global_position).normalized())
 		visited[nearest.get_instance_id()] = true
 		current = nearest
 
@@ -499,7 +714,7 @@ func _explode() -> void:
 		MonsterAIManager.broadcast_sound_stimulus(
 			global_position, maxf(12.0, radius * 4.0), "explosion", shooter
 		)
-	var group_name := "player_3d" if hostile else "enemy_3d"
+	var group_name := target_group
 	for target in get_tree().get_nodes_in_group(group_name):
 		if target == shooter or not target is Node3D or not target.has_method("take_damage"):
 			continue
@@ -526,11 +741,11 @@ func _nearest_target() -> Node3D:
 	var best: Node3D = null
 	var farthest := str(fate_behavior.get("target_mode", "nearest")) == "farthest"
 	var best_distance := -1.0 if farthest else 12.0
-	for candidate in get_tree().get_nodes_in_group("enemy_3d"):
+	for candidate in get_tree().get_nodes_in_group(target_group):
 		if not candidate is Node3D:
 			continue
 		var candidate_3d := candidate as Node3D
-		if candidate is Enemy3D and (candidate as Enemy3D).ai_state == "dead":
+		if _target_is_dead(candidate_3d):
 			continue
 		var distance := global_position.distance_to(candidate_3d.global_position)
 		if distance > 12.0:
@@ -541,6 +756,15 @@ func _nearest_target() -> Node3D:
 			best = candidate_3d
 			best_distance = distance
 	return best
+
+
+func _target_is_dead(target: Node3D) -> bool:
+	if target == null:
+		return true
+	if target.has_method("is_dead"):
+		return bool(target.call("is_dead"))
+	var hp: Variant = target.get("current_hp")
+	return hp != null and float(hp) <= 0.0
 
 
 func _target_visible(target: Node3D) -> bool:
@@ -807,8 +1031,14 @@ func _land_floor_burst(normal: Vector3, point: Vector3, collider: Node) -> void:
 		var config := {
 			"direction": Vector3(sin(angle), 0.0, cos(angle)), "speed": burst["speed"],
 			"damage": child_damage, "hostile": hostile, "shooter": shooter,
+			"target_group": target_group, "projectile_collision_mask": projectile_collision_mask,
 			"color": bullet_color, "tags": ["electric"], "visual_id": VfxPool3D.FX01_BULLET_ELECTRIC,
-			"behavior": {"home_lifetime": burst["lifetime"], "electric_root_seconds": burst["root_seconds"]},
+			# 子弹自己的行为字典必须携带定身时长；父弹的 floor_burst
+			# 只负责释放八向子弹，不能靠父弹字典隐式传递到命中路径。
+			"behavior": {
+				"home_lifetime": burst["lifetime"],
+				"electric_root_seconds": burst["root_seconds"],
+			},
 		}
 		if pool != null:
 			pool.acquire(config, origin)
@@ -889,6 +1119,8 @@ func _spawn_child_projectile(shot_direction: Vector3, shot_damage: int, color: C
 		"damage": maxi(1, int(shot_damage * (critical_multiplier / 1.5 if is_critical else 1.0))),
 		"critical": is_critical,
 		"hostile": hostile,
+		"target_group": String(child_behavior.get("target_group", target_group)),
+		"projectile_collision_mask": int(child_behavior.get("projectile_collision_mask", projectile_collision_mask)),
 		"tags": child_behavior.get("tags", []),
 		"color": color,
 		# 子投射物默认继承父弹当前弹种视觉（_visual_id）；child_behavior 显式带 visual_id 时以它为准。

@@ -18,7 +18,7 @@ func _ready() -> void:
 	setup_ground()
 	setup_visual_stage()
 	await get_tree().physics_frame
-	var stages := [["idle",30],["walk",102],["run",102],["attack",162],["hurt",118]] if show_hit_volumes else [["walk",420],["run",420],["attack",162],["hurt",118],["death",270]]
+	var stages := [["idle",30],["walk",102],["run",102],["attack",162],["hurt",118]] if show_hit_volumes else [["walk",240],["run",240],["attack",162],["hurt",118],["death",270]]
 	if "--gait-only" in OS.get_cmdline_user_args():
 		stages = [["walk",420],["run",420]]
 	for spec in stages:
@@ -173,8 +173,7 @@ func record_stage(stage: String, frames: int) -> void:
 				if frame == sample_frame:
 					floor_clearance = contact.x
 					boot_heights = Vector2(contact.z, contact.w)
-			if not show_hit_volumes:
-				check(get_viewport().get_texture().get_image().save_png(output+"/frames/%04d.png"%frame_index)==OK,"Cannot save visual frame")
+			# 保留逐帧行为和接地采样，只落盘各阶段代表帧。
 			if frame==sample_frame:
 				check(get_viewport().get_texture().get_image().save_png(output+"/"+stage+".png")==OK,"Cannot save representative frame")
 				if not sample_sole:

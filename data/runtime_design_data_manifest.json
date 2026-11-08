@@ -4,7 +4,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/floors/floor_00.json",
       "runtime": "data/level_plans/99/floors/floor_00.json",
-      "sha256": "7b091c242791f2af451a9396106a22fd0e66eceffa3d798ea5ba2415933baf24"
+      "sha256": "4a80e416a594a9b6865f92bc3771f37288bc035eddd1ce7c8a6c33cc5430d006"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/level_plan.json",
@@ -14,7 +14,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/room_templates/boss_45x45.json",
       "runtime": "data/level_plans/99/room_templates/boss_45x45.json",
-      "sha256": "bbffac007ff6dc2a0e10195ed392853d6f2b132b2af3a8a91da224beab9451d7"
+      "sha256": "1104579672af7468d7bd58f6cd6419f44e40452c0f399fe5e1f56c77b62cbeb8"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/99/v001/data/room_templates/boss_deep_shaft_80x100.json",
@@ -99,7 +99,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
       "runtime": "data/level_plans/expedition_01/level_plan.json",
-      "sha256": "4470e43417cac2d83be057d7eacbabef970d9bc247cce30b5e7e15b44559752a"
+      "sha256": "6e58f13d706431ad1679f3a77d4abd37fdf0893d6475e088b69d4912c0ae89d1"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_01/v001/data/room_templates/boss_50x40.json",
@@ -199,7 +199,7 @@
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/level_plan.json",
       "runtime": "data/level_plans/expedition_03/level_plan.json",
-      "sha256": "ab53f9bded500c1b5c050f32caad532d9a3f687d3e401af87ffd42d9352c1262"
+      "sha256": "563a74b145d26c2d72870f898ea5d561720b833f673cd55124188b91dd71d7b4"
     },
     {
       "source": "art_source/design/whitebox/tower_zones/expedition_03/v001/data/room_templates/reward_15x15.json",

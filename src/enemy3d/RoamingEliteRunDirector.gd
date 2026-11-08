@@ -92,6 +92,14 @@ func stage_death(enemy: Enemy3D) -> void:
 	state.status = "killed"
 
 
+func stage_defeat(enemy: Enemy3D) -> void:
+	capture_actor(enemy)
+	if str(state.get("room_id", "")).is_empty():
+		state.room_id = enemy.room_id
+	state.hp = 0
+	state.status = "defeated"
+
+
 func export_snapshot() -> Dictionary:
 	return state.duplicate(true)
 
@@ -101,7 +109,7 @@ func import_snapshot(saved: Dictionary) -> bool:
 		return false
 	if saved.get("session_id", "") != state.session_id or int(saved.get("schema_version", 0)) != 1:
 		return false
-	if saved.get("status", "") not in ["waiting", "pending", "active", "finished", "killed"]:
+	if saved.get("status", "") not in ["waiting", "pending", "active", "finished", "killed", "defeated"]:
 		return false
 	if not saved.get("visited_rooms", null) is Array:
 		return false
@@ -118,7 +126,7 @@ func import_snapshot(saved: Dictionary) -> bool:
 		if not room_id is String or room_id.is_empty() or room_id in visited:
 			return false
 		visited.append(room_id)
-	if saved.status in ["active", "pending"] and str(saved.get("room_id", "")).is_empty():
+	if saved.status in ["active", "pending", "defeated"] and str(saved.get("room_id", "")).is_empty():
 		return false
 	if int(saved.get("max_hp", 0)) < 0 or int(saved.get("hp", 0)) < 0 or int(saved.get("hp", 0)) > int(saved.get("max_hp", 0)):
 		return false

@@ -86,7 +86,7 @@ func run() -> void:
   return
  var boss := bosses[0]
  boss.set_physics_process(false)
- check(boss.max_hp == 32000, "same current 01 HP 32000")
+ check(boss.max_hp == 32000, "03 boss HP still 32000 (01 lowered to 18000 on 2026-11-08, not synced)")
  check(boss.monitor_combat != null and boss.avatar._formal_boss_root is MonitorBossPresentation, "formal model and combat controller")
  check(boss.global_position.distance_to(room.boss_spawn_position_world()) < 0.2, "boss at translated arena center")
  check(boss.boss_phase_changed.is_connected(tower._on_boss_phase_changed), "phase events connected")

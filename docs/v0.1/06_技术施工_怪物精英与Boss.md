@@ -301,14 +301,14 @@ enemy_data["encounter_instance_id"]        # 精英的预约号，用于结算�
 
 ## 5. 12 只唯一精英
 
-2026-11-04 用户修订后，唯一精英独立于房间清怪与开门计数。普通敌群清空即可推进波次或完成房间，精英继续作为独立实体运行。收租人在无限公馆的重复现身、生命与夺取档案规则以[收租人契约 r5](design/精英02收租人状态与动作契约.md)为准。
+2026-11-07 文档同步后，唯一精英仍独立于房间清怪与开门计数。普通敌群清空即可推进波次或完成房间，精英继续作为独立实体运行。收租人的目标规则、等级成长、独立库存、转移提交、武器实例保留、战败与回滚语义以[收租人契约 r13](design/精英02收租人状态与动作契约.md)为目标口径；本施工页只记录接入边界与当前证据，不宣称收租人整体完成。
 
 ### 5.1 已冻结规则
 
 - <span style="color:#1565C0">**[用户设计]** 全游戏固定 12 只，每只有稳定 ID、独立名字、功能与档案。</span>
 - <span style="color:#1565C0">**[用户设计]** 精英可随机出现、成长、逃脱、获取玩家枪械；同一时间最多存在一只同名精英。</span>
 - <span style="color:#2E7D32">**[已实装｜代码核对至2026-08-27]** `EliteRosterService` 以当前 `BaseData 2.0` 的 `elite_archive_records` 为唯一持久化事实源，固定12个稳定ID；预约、确认、死亡/逃脱/反生成结算均原子保存，同一名册成员不能同时进入两个遭遇，加载时会释放不属于有效行动的陈旧预约。</span>
-- <span style="color:#2E7D32">**[系统骨架已实装]** 12 只精英各有独立行为挂点。“背枪的裂口爬虫”与夺械者“收租人”已正式投放。收租人的独立战术使用 `arms_taker_tactics`，由 `EliteArmsTakerCombat` 持有。其余 10 只为设计保留或行为雏形。</span>
+- <span style="color:#EF6C00">**[当前接入为 partial/development]** 12 只精英各有独立行为挂点；“背枪的裂口爬虫”与夺械者“收租人”已有正式投放入口。收租人的等级 XP、独立库存、完整 `WeaponInstance` 转移、下一关真实装备、转移完成门禁、kneel 战败与原子回滚已接入并有专项/真实渲染证据；但战败最终提交事务仍未由真实渲染专项覆盖，且漫游场景仍有 imported UID、材质为空和 physics space 为空警告，因此当前名册仍保持 partial/development。其余 10 只为设计保留或行为雏形。</span>
 - <span style="color:#2E7D32">**[首只正式投放｜2026-08-27]** `elite_rift_boar_armed / 背枪的裂口爬虫` 是当前唯一 `deployed` 精英；每次行动以稳定 `run_seed` 从98F、97F、96F中确定一个目标层，再出现在该层随地图种子随机排布出的首个合法 `ELITE` 房。同一行动不会在三层各刷一只。95F及更深楼层不会从未完成名册生成通用外壳；无可投放精英的精英房降级为普通战斗，Boss房保持Boss单独生成。</span>
 
 ### 5.2 精英定义与档案分离
@@ -409,11 +409,15 @@ Enemy3D._process → presentation_context() → EnemyAvatar3D.sync_elite_present
 路径不含版本号（版本号只记在清单、Prefab 根 `metadata/asset_version` 与账本版本列）。
 表现场景无碰撞，`Enemy3D` 继续持有 `melee_chaser` 的碰撞、AI、生命、伤害与掉落。
 
-**验收**：`tests/verification/verify_second_elite_arms_taker.gd` —— 目录布局（含"路径不得带版本号"）、
+**既有验收入口**：`tests/verification/verify_second_elite_arms_taker.gd` —— 目录布局（含"路径不得带版本号"）、
 18 剪辑动画母版（**时长逐条硬编码对源清单**，不是与自己自洽）、41 骨、
 **12 态逐态驱动且每态都落到一条真实存在的剪辑**、94—92F 窗口与 98—96F 不重叠、95F 不侵入、
 每局三选一覆盖三层、表现场景零碰撞、玩法碰撞半径仍是 `melee_chaser` 基线。
-另由 `verify_second_elite_state_flow` 验证真实行动时钟、命中、中断、朝向、循环连续性与回收；`verify_second_elite_state_visual` 使用真实渲染录制移动/攻击/受击/死亡。实测记录见[状态接线r2](development/2026-11-04_arms_taker_state_binding.md)。
+另由 `verify_second_elite_state_flow` 验证真实行动时钟、命中、中断、朝向、循环连续性与回收；`verify_second_elite_state_visual` 使用真实渲染录制移动/攻击/受击/死亡。上述记录只代表相应时点证据，不替代本次新增目标契约。收租人独立库存、提交后转移实体、拖尾完成门禁、XP 四来源、阵营目标、完整 `WeaponInstance` 恢复、跨关真实装备、kneel 战败和整体回滚仍列为待补专项。实测记录见[状态接线r2](development/2026-11-04_arms_taker_state_binding.md)。
+
+**2026-11-08 最终收口状态**：早期 43 项真实渲染与 tactics 257 / roaming 1927 项为当时证据。后续 `verify_arms_taker_revision_visual` 已使用正式远征03场景作为 `current_scene`，经真实生成、受伤和自然物理回调覆盖 `Dungeon3D.commit_arms_taker_defeat`，最终 `checks=472 failures=0`。四例覆盖正常、保存失败回滚重试、堆叠及单件；失败超过跪地时长仍留场，成员按原下标恢复，档案与含完整掉落的 checkpoint 原子提交，成功后自然消失且不走普通击杀。正常/堆叠/单件另验活体重复提交幂等；重试例成功后立即自然释放，不扩大该例的幂等覆盖。最终报告为 `F:/wxgame/ShellStorm2-work/qa/arms_taker_closeout/visual_final_20261108_143029/run/evidence/report.json`（Windows / RTX 3060 / Forward+ / 1280×720）。原双枪命中、双方实际治疗 `+7`、租物拖尾、门边 teleport-out 与跪姿表现同步回归。
+
+最终 roaming `ARMS_TAKER_ROAMING_OK checks=1929`，与上述视觉专项的三类目标警告、脚本错误和泄漏摘要均为 0：共享色盘源 UID/契约统一并完成789消费者重导；入树前预置 `enemy_kind` 的初始化顺序优化已回退；漫游血瓶手调 tick 的 body-space fixture 局部设置 KEEP_ACTIVE 后恢复，不改生产 Enemy3D 的物理规则。观察机位仅冻结玩家并暂停其视野裁剪，敌人/掉落/保存仍自然执行。测试已登记 core/visual，`ELITE-ROSTER` 总体仍 partial；全仓文档历史断链及无关资产命名红项不在本轮完成范围。细节、证据与账本边界见[最终收口记录](development/2026-11-08_arms_taker_defeat_transaction_closeout.md)。
 
 r9 的 `EliteArmsTakerCombat` 在追击中按距离与节奏选择轻扫、重击和屏幕放电，满 6 秒未启动攻击时尝试失联。该控制器管理碰撞暂时关闭、相机外安全落点和显形，并在显形完成帧检查是否衔接屏幕放电。`Projectile3D` 处理母弹落地后的八向电弹，`Player3D` 持有短时定身。实体房间快照保存 8 秒放电冷却的余量，未完成行动恢复到警戒。验收入口为 `verify_arms_taker_tactics`。时序与落点规则见[收租人状态与动作契约](design/精英02收租人状态与动作契约.md)。
 

@@ -34,17 +34,25 @@ const TOTAL_DURATION_S := 1.35
 ## 真实运行时读取页的最低可见时长。即使资源与地图装配提前完成，
 ## 也要让黑底、兔子、进度条和完整开圈过场至少稳定展示 2 秒。
 const MIN_LOADING_SCREEN_SECONDS := 2.0
-## 战斗特效预热的最多等待帧数。见 `_drain_vfx_prewarm()`：队列只有 8 个，
-## 这个上限只是防止队列异常把玩家锁在加载页里。
-## 预热的最多等待帧数。见 `_drain_warmup()`：VFX 11 件 + 怪 3 种，正常 11 帧排空。
-## 这个上限只是防止某个队列异常把玩家锁在加载页里。
+## 预热的最多等待帧数。见 `_drain_warmup()`：VFX 11 件 + 怪 3 种，正常 12 帧排空
+## （2026-11-07 真渲染实测 12 帧 / 661 ms）。这个上限只是防止某个队列异常把玩家锁在加载页里。
 const WARMUP_MAX_FRAMES := 48
-## 允许预热把加载页延长多少毫秒（在 `MIN_LOADING_SCREEN_SECONDS` 之外）。
+## 允许预热把加载页延长多少毫秒。**从预热第一帧结束之后起算**（见 `_drain_warmup`），
+## 且起点不是读取页出现的时刻。
 ##
-## 实测预热总耗时约 0.85 s（怪 3 基类 0.40 + VFX 11 件 0.13 + 逐帧开销），
-## 而它换掉的是「进门第一只怪 460 ms 的一顿」。这里给 700 ms 是取舍上限：
-## 加载本身已经超过最短时长时，最多再多等 0.7 s，超了就少预热几个 —— 剩余的留给场景内。
-const WARMUP_EXTRA_BUDGET_MS := 700
+## 🔴 2026-11-07 修正两处口径错误，它们是同一个现象的两个原因：
+##
+## ① 原写成 `_loading_started_msec + MIN_LOADING_SCREEN_SECONDS + 700`，而预热是在
+##    「装配完成 → 全黑覆盖」之后才启动。实测两局加载分别 12.2 s / 24.8 s，
+##    预热开始时这个期限**早已过去**，循环第二帧就 break。
+## ② 预热**第一帧必然很贵**：`_restore_world_render()` 之后是关卡画面的第一次真实渲染，
+##    SDFGI/管线初始化实测 2.44 s。这笔钱原本也要在 `_wait_for_basic_scene_ready`
+##    的收尾帧里付掉，把它算进预热预算就等于"预热永远超时"。
+##    ⇒ 预算从首帧结束那一刻才开始计时，首帧不参与判定。
+##
+## 首帧之后的真实预热量：VFX 11 件 + 怪 3 基类，实测约 1.0~1.3 s。
+## 给 2500 ms 是留一倍余量；正常跑不到，只在队列异常时截断并留警告。
+const WARMUP_EXTRA_BUDGET_MS := 2500
 const STEP_TEXTS: Array[String] = [
 	"正在同步远征情报…",
 	"正在规划房间序列…",
@@ -440,7 +448,8 @@ func _wait_for_basic_scene_ready(target: Node) -> void:
 ## 1. **战斗特效**：`VfxPool3D.prewarm()` —— 首次装配 20~65 ms / 件，共 11 件 134 ms。
 ## 2. **怪物的正式模型与材质变体**：`EnemyWarmup` —— 每个怪种**本局第一次**生成要 460 ms
 ##    （读盘 + 变体编译），而它必然落在"玩家刚进门、正要开打"那一帧。
-##    远征03 的 33 只复刻怪全部借用三种正式 GLB，所以预热三个基类就等于覆盖全场。
+##    只有三个基类有正式 GLB，且全部 `egt_*` 复刻怪都借用它们 ⇒ 预热三个基类即覆盖全场，
+##    **这份集合与关卡无关**：塔楼、远征 01/02/03/99 取同一套。
 ## 3. 两者交错推进：`VfxPool3D` 自己每帧排空一件，本函数每帧再挂一个影子怪，
 ##    总等待 ≈ max(11 帧 VFX, 3 帧怪) 而不是两者相加。
 ##
@@ -451,30 +460,60 @@ func _wait_for_basic_scene_ready(target: Node) -> void:
 ## 怪的刷新时机、数量、位置一个字节都没动，材质与模型也是同一套 —— 只是提前被画过一次。
 ##
 ## `WARMUP_MAX_FRAMES` 是硬保险：一旦某个队列异常，绝不能把玩家锁在加载页里等死循环。
-func _drain_warmup(target: Node) -> void:
+##
+## 返回一份完成度报告（`completed` / `vfx_pending` / `kinds_done` / `elapsed_ms`）。
+## **调用方必须 `await` 本函数**，否则预热会在"玩家已经能操作、甚至读取页已经销毁"之后
+## 继续跑 —— 那样它换来的不是"进门不顿"，只是把同一笔冷启动挪到了玩家眼前。
+func _drain_warmup(target: Node) -> Dictionary:
+	var report := {
+		"skipped": false,
+		"completed": true,
+		"vfx_pending": 0,
+		"vfx_total": 0,
+		"kinds_done": 0,
+		"kinds_total": 0,
+		"frames": 0,
+		"first_frame_ms": 0,
+		"elapsed_ms": 0,
+		"warmup_ms": 0,
+		"truncated": "",
+	}
 	# headless 里没有渲染管线可预热，而测试会断言特效池的**绝对**计数
 	# （`verify_3d_melee_feedback_flow` 就查 `active_count(...) != 1`）——
-	# 在那边插预热实例只会制造假红。
+	# 在那边插预热实例只会制造假红。此时不适用 ⇒ 报告为已完成。
 	if _should_skip_delay():
-		return
+		report["skipped"] = true
+		return report
 	var stage := target as Node3D
 	var kinds: Array = ENEMY_WARMUP.BASE_KINDS.duplicate()
+	report["kinds_total"] = kinds.size()
 	var kind_index := 0
 	var probe: Node3D = null
 	var vfx_enabled := VfxPool != null and VfxPool.has_method("prewarm") and VfxPool.has_method("has_pending_prewarm")
+	# 预算从**首帧结束之后**计时，不是从预热开始计时 —— 见 `WARMUP_EXTRA_BUDGET_MS`。
+	var started_msec := Time.get_ticks_msec()
+	var deadline := 0
+	var first_frame_ms := 0
 	if vfx_enabled:
 		VfxPool.prewarm(VfxPool3D.COMBAT_PREWARM)
+		if VfxPool.has_method("pending_prewarm_count"):
+			report["vfx_total"] = int(VfxPool.pending_prewarm_count())
 	var frames := 0
-	var deadline := _loading_started_msec + int(MIN_LOADING_SCREEN_SECONDS * 1000.0) + WARMUP_EXTRA_BUDGET_MS
 	while frames < WARMUP_MAX_FRAMES:
 		var vfx_pending: bool = vfx_enabled and VfxPool.has_pending_prewarm()
 		if not vfx_pending and kind_index >= kinds.size() and probe == null:
 			break
 		# 超时保护：加载本身已经很慢时，宁可少预热一点，也不要把玩家按在加载页里。
-		# `frames == 0` 不检查 —— 最贵的那一项（第一个基类，~330 ms）必须让它跑完，
-		# 否则这次预热就白做了。
-		if frames > 0 and Time.get_ticks_msec() > deadline:
-			break
+		#
+		# `frames == 0` 不参与判定：首帧包含"全黑后第一次真实渲染"，实测 2.44 s，
+		# 这笔账跟预热无关、但在这一帧结算 —— 拿它判超时会让预热永远只做第一项。
+		# 首帧正常结束后才建立 deadline，此后才按真实预热量计时。
+		if frames > 0:
+			if deadline <= 0:
+				deadline = Time.get_ticks_msec() + WARMUP_EXTRA_BUDGET_MS
+			elif Time.get_ticks_msec() > deadline:
+				report["truncated"] = "budget"
+				break
 		if probe != null:
 			if is_instance_valid(probe):
 				probe.free()
@@ -484,8 +523,23 @@ func _drain_warmup(target: Node) -> void:
 			kind_index += 1
 		await get_tree().process_frame
 		frames += 1
+		if frames == 1:
+			first_frame_ms = Time.get_ticks_msec() - started_msec
 	if probe != null and is_instance_valid(probe):
 		probe.free()
+	if frames >= WARMUP_MAX_FRAMES:
+		report["truncated"] = "frames"
+	report["frames"] = frames
+	report["kinds_done"] = kind_index
+	report["first_frame_ms"] = first_frame_ms
+	report["elapsed_ms"] = Time.get_ticks_msec() - started_msec
+	report["warmup_ms"] = maxi(0, Time.get_ticks_msec() - started_msec - first_frame_ms)
+	report["vfx_pending"] = int(VfxPool.pending_prewarm_count()) if (vfx_enabled and VfxPool.has_method("pending_prewarm_count")) else 0
+	report["completed"] = (
+		kind_index >= kinds.size()
+		and (not vfx_enabled or not VfxPool.has_pending_prewarm())
+	)
+	return report
 
 
 func _finish_loaded_scene(target: Node) -> void:
@@ -533,7 +587,16 @@ func _finish_loaded_scene(target: Node) -> void:
 		target.call("prepare_loading_render")
 	_restore_world_render()
 	# 把「进关卡后第一时间要付的冷启动」全部挪到这里编译掉 —— 详见 `_drain_warmup()`。
-	_drain_warmup(target)
+	# 🔴 必须 `await`：不 await 的话预热协程会在恢复操作之后继续跑，
+	#    玩家进门那一帧照样撞上没编译完的材质与特效（2026-11-07 实测漏 9 件 VFX）。
+	var warmup_report: Dictionary = await _drain_warmup(target)
+	target.set_meta("loading_warmup_report", warmup_report)
+	target.set_meta("loading_warmup_completed", bool(warmup_report.get("completed", true)))
+	if not bool(warmup_report.get("completed", true)):
+		push_warning("[ExpeditionLoadingScreen] 预热未完成即开圈：%s" % str(warmup_report))
+	if tree.current_scene != target or not _target_is_ready(target):
+		_finalizing = false
+		return
 	await _wait_for_basic_scene_ready(target)
 	if tree.current_scene != target or not _target_is_ready(target):
 		_finalizing = false

@@ -27,9 +27,9 @@ extends VfxEffectBase3D
 ##   C. `Puddle0..3` —— **地上的液体**：落在**飞溅粒子真实落点**上的贴地面片（2026-11-05 起
 ##      由「纯色扁方块」换成卡通黏液贴图，见 `PUDDLE_TEXTURE`），出现 → **严格停留 0.50s** →
 ##      慢慢下沉 0.30m 并淡出。四块错峰出现 ⇒ 有节奏。
-##      尺寸（2026-11-06）：`side = size × 0.72 × 2.0 × roll`，`roll ∈ [1.5, 2.0]` 由出生点
-##      确定性哈希派生 ⇒ size=1.0 时每块 **2.16 ~ 2.88m**，四块大小不齐（业主「放大到 2 倍 +
-##      1.5-2 之间随机缩放」）。
+##      尺寸（2026-11-08）：`side = size × 0.72 × 2.0 × roll`，`roll ∈ [0.6, 1.2]` 由出生点
+##      确定性哈希派生 ⇒ size=1.0 时每块 **0.864 ~ 1.728m**，四块大小不齐（业主「放大到 2 倍 +
+##      随机缩放」；随机区间当日两次收窄：1.5-2 → 1-1.5 → 0.6-1.2）。
 ##   D. `Shockwave0..2` —— **绿色冲击波**（**仅 `_shockwave_enabled()` 为真的子类**）：
 ##      贴地平铺、向外扫的 3 层错峰环，0.45s 后收、0.60s 收干净。
 ##
@@ -137,7 +137,9 @@ const PUDDLE_SINK_SEC := 0.36
 const PUDDLE_SIDE_BASE := 0.72
 ## 业主 2026-11-06「贴图太小了，放大到现在的 2 倍」⇒ 基准整体 ×2（0.72 → 等效 1.44）。
 const PUDDLE_SIDE_SCALE := 2.0
-## 业主 2026-11-06「在 1.5-2 之间做随机值缩放」⇒ 每块再乘一个 1.5~2.0 的系数。
+## 业主 2026-11-06「在 1.5-2 之间做随机值缩放」⇒ 每块再乘一个随机系数；
+## 2026-11-08 业主两次追加：先「放大倍数变成 1-1.5」，再「大小缩放到 0.6-1.2」
+## ⇒ 现状区间 `[0.6, 1.2]`（**小于 1 也是允许的**：0.72 基准本来就比贴图设计尺寸大）。
 ##
 ## ⚠ 「随机」在这里是**确定性伪随机**，不是 `randf()`，原因有三条，都是硬约束：
 ##   ① 本件走 `VfxPool3D` 复借；`_tick_puddle` 的停留段要求 `scale` 是 `elapsed` 的纯函数
@@ -148,9 +150,9 @@ const PUDDLE_SIDE_SCALE := 2.0
 ##      达成，不需要「同一次播放内部每次重算都变」。
 ## ⇒ 用「出生点 + 下标」整数哈希派生，见 `_hash01`。同一位置永远同一形状，换位置就换形状。
 ##
-## 最终世界边长 = size × 0.72 × 2.0 × [1.5, 2.0] ⇒ size=1.0 时 **2.16 ~ 2.88m**。
-const PUDDLE_SIZE_ROLL_MIN := 1.5
-const PUDDLE_SIZE_ROLL_MAX := 2.0
+## 最终世界边长 = size × 0.72 × 2.0 × [0.6, 1.2] ⇒ size=1.0 时 **0.864 ~ 1.728m**。
+const PUDDLE_SIZE_ROLL_MIN := 0.6
+const PUDDLE_SIZE_ROLL_MAX := 1.2
 const PUDDLE_LIFT := 0.035
 const PUDDLE_SINK_DEPTH := 0.30
 
@@ -158,12 +160,12 @@ const PUDDLE_SINK_DEPTH := 0.30
 ## 这张贴图**替代原先的纯色扁方块**：一张俯视的卡通黏液摊，粗深绿描边 + 平涂中绿 +
 ## 几粒浅色高光与气泡 + 外圈离散小飞点。选择这套风格的三个理由（业主原话
 ## 「不要是那种太写实的，轮廓感强一些」）：
-##   · 描边是**单色硬边**，缩到贴地面片上仍然读得出轮廓（2026-11-06 起贴地面片边长
-##     2.16~2.88m，描边占屏更宽，比 0.7m 那版更好认）；
+##   · 描边是**单色硬边**，缩到贴地面片上仍然读得出轮廓（2026-11-08 起贴地面片边长
+##     0.864~1.728m，描边占屏仍够宽，比 0.7m 那版更好认）；
 ##   · 平涂不渐变 ⇒ 与 A/B 两段的 unshaded 纯色方块同族，不会变成两块风格；
 ##   · 飞溅小点让「一摊液体」自带边缘破碎感，不必再叠第二层粒子。
 ## 原图留 `art_source/vfx/combat_3d/vfx_zombie_goo_puddle/source/v001/`（`gpt-image-2` 绘制，
-## 生成器实际输出**白底 RGB**，由同目录 `build_puddle_texture.py` 本地抠白 + 裁方 + 压到 512²）。
+## 生成器实际输出**白底 RGB**，由同目录 `build_puddle_texture.py` 本地抠白 + 裁方 + 压到 128²）。
 const PUDDLE_TEXTURE: Texture2D = preload("res://assets/art/vfx/textures/vfx_zombie_goo_puddle_floor.png")
 ## 贴图染色：贴图自带配色，所以 albedo 只做很轻的偏绿乘色。
 ## 保留 `_reset_state` 里「调用方本色 25% 偏移」这条口径的**可见痕迹**（四块液体仍会随
@@ -511,7 +513,8 @@ func _tick_splat(elapsed: float, size: float) -> void:
 			)
 
 
-## 算定四块液体的随机尺寸系数（业主 2026-11-06「在 1.5-2 之间做随机值缩放」）。
+## 算定四块液体的随机尺寸系数（业主 2026-11-06「在 1.5-2 之间做随机值缩放」，
+## 2026-11-08 两次收窄，现为 0.6-1.2）。
 ##
 ## **不消费 `size`**：`_check_size_linearity` 要求同一个出生点上 size=1.0 与 0.8 的
 ## `puddle_scale_x` 比值恰为 1.25。若把 size 混进哈希，两个实例会取到不同 roll，
@@ -563,7 +566,7 @@ func _tick_puddle(elapsed: float, size: float) -> void:
 		# 边长 = size × 基准 × 整体放大 × 这块自己的随机系数。
 		# 原来的「(0.86 + 0.30 × i/span) 逐块递增」**删掉**了：它和随机系数是两套干同一件事的
 		# 机制（都是「四块别一样大」），叠在一起会把最大块推到 1.16 × 2.0 × 2.0 = 4.64 倍。
-		# 现在只留随机，语义单一：业主说的「1.5-2 之间随机」就是这四块的尺寸分布。
+		# 现在只留随机，语义单一：业主说的「0.6-1.2 之间随机」就是这四块的尺寸分布。
 		var roll: float = _puddle_size_roll[index] if index < _puddle_size_roll.size() else 1.0
 		var side: float = size * PUDDLE_SIDE_BASE * PUDDLE_SIDE_SCALE * roll
 		var lift := PUDDLE_LIFT
@@ -585,8 +588,8 @@ func _tick_puddle(elapsed: float, size: float) -> void:
 		# Y 不缩放：平面片没有厚度，只有 XZ 边长有意义（保留 `puddle_scale_x` 这条验收口径）
 		plate.scale = Vector3(side * scale_mul, 1.0, side * scale_mul)
 		# 落点仍是飞溅粒子落点原值，没有第二份散布口径。
-		# ⚠ 放大 2 倍后四块**会互相重叠**（中心距 1.17~1.95m，边长 2.16~2.88m ⇒ 相邻两块重叠
-		# 近一半）。业主 2026-11-06 明确「可以接受两块贴图有重叠」⇒ 刻意**不**把落点推开：
+		# ⚠ 四块仍可能**互相重叠**（中心距 1.17~1.95m，边长 0.864~1.728m）。业主 2026-11-06
+		# 明确「可以接受两块贴图有重叠」⇒ 刻意**不**把落点推开：
 		# 推开等于顺手改了飞溅的落点关系，而业主这次只要求改尺寸。
 		plate.position = Vector3(source.x, _floor_local_y + lift, source.z)
 		plate.rotation = Vector3(0.0, float(index) * 0.62 + 0.18, 0.0)
@@ -696,7 +699,7 @@ func get_presentation_snapshot() -> Dictionary:
 		"puddle_scale_x": _puddle[0].scale.x if not _puddle.is_empty() else 0.0,
 		"puddle_pos_y": _puddle[0].position.y if not _puddle.is_empty() else 0.0,
 		"puddle_positions": puddle_positions,
-		# 每块液体的随机尺寸系数（1.5~2.0）。验收靠它证明「随机值缩放」真的生效且落在范围内，
+		# 每块液体的随机尺寸系数（0.6~1.2）。验收靠它证明「随机值缩放」真的生效且落在范围内，
 		# 而不是只看 `puddle_scale_x`（那只量到第 0 块，四块取同一个值也能蒙过去）。
 		"puddle_size_rolls": _puddle_size_roll.duplicate(),
 		"puddle_side_base": PUDDLE_SIDE_BASE,

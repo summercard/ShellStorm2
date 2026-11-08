@@ -15,3 +15,11 @@ metadata/godot_forward = "-Z"
 
 [node name="VisualGLB" parent="." instance=ExtResource("2_glb")]
 rotation = Vector3(0, 3.1415927, 0)
+
+[node name="WeaponMountLeft" type="Marker3D" parent="."]
+position = Vector3(-0.92, 2.18, 0.12)
+metadata/mount_role = "floating_weapon_left"
+
+[node name="WeaponMountRight" type="Marker3D" parent="."]
+position = Vector3(0.92, 2.18, 0.12)
+metadata/mount_role = "floating_weapon_right"

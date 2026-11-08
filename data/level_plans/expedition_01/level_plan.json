@@ -95,21 +95,21 @@
     "stats": {
       "per_kind": {
         "melee_chaser": {
-          "hp": 350,
+          "hp": 180,
           "damage": 18,
           "speed": 3.5
         },
         "fat_zombie03": {
-          "hp": 800,
+          "hp": 500,
           "damage": 35,
           "speed": 1.5
         },
         "ranged_caster": {
-          "hp": 250,
+          "hp": 150,
           "damage": 30
         },
         "boss": {
-          "hp": 32000
+          "hp": 18000
         }
       }
     },
@@ -140,6 +140,12 @@
           "tick_interval_sec": 0.5
         }
       }
+    },
+    "projectile": {
+      "visual_scale": 1.8,
+      "hit_allies_kinds": [
+        "exploder"
+      ]
     },
     "currency": {
       "note": "货币（金币 `extraction_points`）**独立掉落通道**：所有被击败的怪 100% 必掉，**不属于物品掉落**，故不受 monster_drop_table.empty_chance 影响（业主 2026-10-14）。数量按「怪种 + 楼层」分档：优先 per_tier（精英/Boss）> per_kind > default；实际数量 = round(base + per_floor × floor)。**数量越多，地面货币模型越大**（分档常量在 GroundLootPickup3D.CURRENCY_SCALE_TIERS）。",
@@ -290,10 +296,10 @@
   "clear_drops": {
     "schema": "shellstorm2.battle.clear_drops",
     "schema_version": 1,
-    "note": "清房掉落（2026-11-06），取代原来的「清房掉一把房间钥匙」。掷骰是 (run_seed, room_id) 的稳定哈希，不是运行时 RNG —— 同一局同一间房读档/流送重建前后结果恒定。两档结果：宝箱 或 一件清房补给，二者互斥且必有其一。",
+    "note": "清房掉落（2026-11-07）：普通战斗房清房必掉普通宝箱，不再直接发物品或钥匙；Boss 保底高级宝箱。品质与拟态仍由 (run_seed, room_id) 的独立稳定哈希决定，读档/流送重建不重掷。",
     "content_room": {
-      "chest_chance": 0.45,
-      "note": "0.45 的算术：10 间内容房 × 0.45 = 期望 4.5 只，加 Boss 保底 1 只 ⇒ 5.5 次/局购买机会（改前是 10~11 次门后三选一）。取一半而不是等量：宝箱还额外给 2 件物资，单次价值高于门后三选一；等量会让命运构筑强度原地不动、等于这次改动只改了入口形态。要调就只改这一个数。"
+      "chest_chance": 1.0,
+      "note": "普通战斗房清房必掉1只普通宝箱；不走 fallback_pool 的物品补给分支。"
     },
     "boss": {
       "chest_count": 1,
@@ -301,16 +307,16 @@
       "note": "Boss 箱是保底，不掷概率，挂在「首领阵亡」而不是「房间肃清」上（倒下后增援可能还在跑）。min_quality=rare 只提下限、不改权重：同一份权重下 common+uncommon 占 88%，打了 Boss 却开出一只普通箱和体感不符；剔除后按 rare 10 / epic 2 归一 ⇒ 83% / 17%。不想要这层保底就把 min_quality 设为空串。"
     },
     "chest": {
-      "note": "与远征03 的宝箱完全同一口径（业主：「和远征03的宝箱一致」）。开箱三件事：drop_count 件物资落地、弹出与门后同一套三选一命运卡购买界面、不自动发卡（fate_card_per_open=0）。mimic 的期望需要留意：本关清房箱 + Boss 箱共 5.5 只/局，chance 0.2 ⇒ 期望 1.1 只拟态；远征03 只有 2 只箱（期望 0.4）。要压回 0.4 就把 chance 设 0.07。",
+      "note": "清房箱显式使用普通奖励档；Boss 箱由 ClearDropService 显式覆盖为高级档，品质不决定奖励档位。奖励由 ChestRewardService 解析并散落，命运卡专用掉落物须主动交互才进入购买界面。拟态概率保持0.2，与品质使用独立稳定哈希。",
       "quality_weights": {
         "common": 62.0,
         "uncommon": 26.0,
         "rare": 10.0,
         "epic": 2.0
       },
+      "chest_tier": "normal",
       "reward_pool_id": "loot_floor_1_2",
       "drop_count": 2,
-      "fate_card_per_open": 0,
       "mimic": {
         "chance": 0.2,
         "monster_kind": "egt_mimic"

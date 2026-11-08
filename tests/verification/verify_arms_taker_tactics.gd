@@ -6,6 +6,13 @@ var camera: Camera3D
 var projectile_pool: ProjectilePool3D
 var rendered := false
 
+class EquipmentTickProbe extends EliteArmsTakerEquipment:
+	var calls := 0
+	func _init(enemy: Node3D) -> void:
+		super(enemy)
+	func tick(_delta: float, _target: Node3D) -> void:
+		calls += 1
+
 
 func _ready() -> void:
 	BaseManager.save_path = "user://arms_taker_tactics_verification.json"
@@ -16,10 +23,13 @@ func _ready() -> void:
 	_build_stage()
 	await get_tree().physics_frame
 	await _verify_melee()
+	await _verify_enemy_melee()
 	await _verify_electric()
 	await _verify_electric_effect_lifecycle()
 	await _verify_electric_range_and_cooldown()
 	await _verify_phase()
+	await _verify_equipment_tick_guards()
+	_verify_unpooled_healing()
 	for child in get_children():
 		child.free()
 	await _verify_mansion()
@@ -103,6 +113,30 @@ func _verify_melee() -> void:
 		enemy.transition_to("chase")
 	check(kinds == ["swipe", "swipe", "heavy"], "Melee selection did not vary")
 	check(hp - target.current_hp == enemy.contact_damage * 2 + roundi(enemy.contact_damage * 1.35), "Heavy damage used the wrong scale")
+	enemy.free()
+	target.free()
+	await get_tree().physics_frame
+
+
+func _verify_enemy_melee() -> void:
+	var enemy := make_enemy()
+	var target := make_enemy_target(Vector3(0, 0.05, -1.6), enemy.contact_damage + 1)
+	enemy._target = target
+	enemy.rotation.y = 0.0
+	var selected := MonsterAIManager._select_visible_target(enemy, MonsterAIManager._records[enemy.get_instance_id()], 8.5)
+	check(selected.get("target") == target, "收租人未选择普通怪近战目标")
+	var combat := enemy.arms_taker_combat
+	combat.cast_direction = Vector3.FORWARD
+	combat._next_action = "swipe"
+	check(combat.try_chase_action(Vector3(0, 0, -1.6), 1.6, 0.0), "收租人未进入普通怪近战动作")
+	combat.active = true
+	combat.action = "swipe"
+	combat.elapsed = EliteArmsTakerCombat.HIT_TIME
+	combat.committed = false
+	combat.commit_attack()
+	check(target.current_hp < enemy.contact_damage + 1, "收租人近战未对普通怪造成真实伤害")
+	check(target.last_damage_source == enemy, "普通怪未记录收租人真实受击来源")
+	check(not target.is_in_group("player_3d"), "普通怪误带玩家目标组")
 	enemy.free()
 	target.free()
 	await get_tree().physics_frame
@@ -395,6 +429,64 @@ func _verify_phase() -> void:
 	enemy.free()
 	target.free()
 	await get_tree().physics_frame
+
+
+func _verify_equipment_tick_guards() -> void:
+	var enemy := make_enemy()
+	var target := make_target(Vector3(0, 0.05, -8.0))
+	bind_target(enemy, target)
+	enemy.transition_to("chase")
+	var probe := EquipmentTickProbe.new(enemy)
+	enemy.elite_equipment = probe
+	step(enemy)
+	check(probe.calls == 1, "装备 tick 探针未经过正式 Enemy tick")
+	probe.calls = 0
+	var combat := enemy.arms_taker_combat
+	combat._next_action = EliteArmsTakerCombat.PHASE
+	enemy.transition_to("telegraph")
+	step(enemy)
+	check(probe.calls == 0, "phase 前摇仍执行装备 tick")
+	combat.phase_intangible = true
+	step(enemy)
+	check(probe.calls == 0, "phase 无实体期仍执行装备 tick")
+	enemy.transition_to("chase")
+	enemy._elite_escape_active = true
+	step(enemy)
+	check(probe.calls == 0, "撤退期间仍执行装备 tick")
+	enemy._elite_escape_active = false
+	enemy._elite_defeat_active = true
+	step(enemy)
+	check(probe.calls == 0, "跪地期间仍执行装备 tick")
+	enemy.free()
+	target.free()
+	await get_tree().physics_frame
+
+
+func _verify_unpooled_healing() -> void:
+	# 工程 autoload 会常驻 VfxPool3D；这里验证正式 pooled 路径，不再把全局池
+	# 的存在误报成 fallback 场景错误。独立无池分支由 VfxPool3D.create_unpooled
+	# 直接验收，确保两条路径都产出同一正式 AssetID 和绿色实际数值。
+	var pools := get_tree().get_nodes_in_group("vfx_pool_3d")
+	check(not pools.is_empty(), "正式治疗验收缺少全局 VFX pool")
+	var enemy := make_enemy()
+	var pool := pools[0] as VfxPool3D
+	if pool != null:
+		pool.clear_all()
+		var pooled := pool.acquire(VfxPool3D.FX02_HEAL_NUMBER, enemy.global_position + Vector3.UP * 1.55, VfxHealNumber3D.HEAL_COLOR, 1.0, {"text_value": "+7", "magnitude": 7})
+		check(pooled is VfxHealNumber3D, "池化治疗未生成正式 VfxHealNumber3D")
+		if pooled is VfxHealNumber3D:
+			var pooled_label := pooled.get_node("HealLabel") as Label3D
+			check(pooled_label.text == "+7" and pooled_label.modulate.is_equal_approx(VfxHealNumber3D.HEAL_COLOR), "池化治疗未使用正式绿色 +N 飘字")
+		pool.clear_all()
+	var unpooled := VfxPool3D.create_unpooled(VfxPool3D.FX02_HEAL_NUMBER)
+	check(unpooled is VfxHealNumber3D, "无池治疗未生成正式 VfxHealNumber3D")
+	if unpooled is VfxHealNumber3D:
+		add_child(unpooled)
+		unpooled.activate(enemy.global_position + Vector3.UP * 1.55, VfxHealNumber3D.HEAL_COLOR, 1.0, {"text_value": "+7", "magnitude": 7})
+		var label := unpooled.get_node("HealLabel") as Label3D
+		check(label.text == "+7" and label.modulate.is_equal_approx(VfxHealNumber3D.HEAL_COLOR), "无池治疗未使用正式绿色 +N 飘字")
+		unpooled.free()
+	enemy.free()
 
 
 func _verify_phase_followup_rejections(enemy: Enemy3D, target: Node3D) -> void:

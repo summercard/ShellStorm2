@@ -130,8 +130,8 @@
 - **链路**：设计文档出关卡表 → 白盒（`scenes/ExpeditionLevel01_3D.tscn` 等）→ 组件化装配 → 光照/氛围（`TowerAtmosphere3D`）→ 门/波次/撤离接线 → 探针取证
 - **工具**：`tests/verification/probe_expedition*`（30+ 个）、`cam`/`shot` 系列截图探针、`F12` 截图
 - **实用逻辑**：
-  - `Dungeon3D.gd`（9,482 行）是门后全部流程的唯一执行者：三选命运卡、购买、波次、撤离、自动存档
-  - 门后三选：`_show_door_fate_choices()` → 冻结报价 → 记录 policy 快照 → 逐张独立购买态 → 余额兜底
+  - `Dungeon3D.gd`（9,482 行）仍持有历史门后流程、购买、波次、撤离和自动存档逻辑；命运卡入口收口后，门后流程不再是当前远征01/03的购卡入口
+  - 历史门后三选：`_show_door_fate_choices()` → 冻结报价 → 记录 policy 快照 → 逐张独立购买态 → 余额兜底；当前专用掉落物应复用同一购买事务，不能复制第二套扣费 Owner
   - 房间层 `DungeonRoom3D` 管单房间内容，`SecretBranch3D` 管支线
 - **评判**：走行空间无卡死｜门表现与锚点一致｜光照分层（雾/体积雾）｜**性能是历史挂点**：云海场景 P95 曾达 54–64 ms（2026-10-04），动 world3d 必须带帧时对比
 
@@ -144,7 +144,8 @@
 
 ### 3.8 命运卡（跨 `weapons` / `game` / `ui` / `data`）
 
-- **链路**：`TarotFateCatalog` 定义 → `FateCardPresets` 卡池 → `FateOfferPolicy` 关卡投放 → `Dungeon3D` 门后三选 → `FateEconomyService` 报价 → `FateCardGameBridge` 应用效果 → UI 呈现
+- **链路**：`TarotFateCatalog` 定义 → `FateCardPresets` 卡池 → `FateOfferPolicy` 关卡投放 → 统一三选一事务 → `FateEconomyService` 报价 → `FateCardGameBridge` 应用效果 → UI 呈现
+- **当前入口**：占卜屋局间预选，或命运卡专用掉落物主动点击/按键交互；宝箱只负责按档位解析并散落奖励，不直接打开购买界面。`FateCardDropPickup3D`、`ChestRewardService`、普通/高级宝箱 pending/散落/恢复和角色正式击杀生产链已通过专项；六关投放、完整远征回归、完整存档往返和全工程门禁仍为 `partial`。
 - **工具**：`DivinationMenu.tscn`、`FateCardCollectionMenu.tscn`、`TrainingFateBenchPanel`（训练场试卡）、`data/fate/level_pools.json`
 - **实用逻辑**：
   - 六关累计投放 **21 / 33 / 45 / 57 / 69 / 78** 个 `stable_card_id`；01、02 仅正位，03 起少量逆位，06 全开
@@ -155,10 +156,10 @@
 
 ### 3.9 奖励与物品流转 `src/rewards` + `src/game/InventoryModule`（18 文件 / 4,815 行）
 
-- **链路**：掉落表 `MonsterDropTable` → `RewardPoolRegistry` 奖池 → `RewardService` 结算 → `RuntimeRewardCoordinator` 派发 → 背包/仓库
-- **工具**：`probe_monster_drops.gd`、`probe_weapon_drop_rates.gd`、`capture_run_loot_readout.gd`
-- **实用逻辑**：掉落按档位分池（common/uncommon/rare/epic/legendary 五档），奖池权重在 `RewardPoolRegistry` 集中定义，`RewardSpec` 描述单条奖励
-- **评判**：权重和归 1｜固定种子可复现｜背包满时的不丢失策略明确｜局内→撤离→基地三段不丢件
+- **链路**：掉落表 `MonsterDropTable` → `RewardPoolRegistry` 奖池 → `RewardService` 结算 → `RuntimeRewardCoordinator` 派发 → 背包/仓库；宝箱另由 `ChestRewardService` 按档位解析标准 grants，命运卡凭据再经主动交互进入统一购卡事务
+- **工具**：`probe_monster_drops.gd`、`probe_weapon_drop_rates.gd`、`capture_run_loot_readout.gd`、`verify_chest_reward_service`
+- **实用逻辑**：掉落按档位分池（common/uncommon/rare/epic/legendary 五档），奖池权重在 `RewardPoolRegistry` 集中定义，`RewardSpec` 描述单条奖励；`ChestRewardService` 使用宝箱/房间稳定ID派生独立随机流，不消费刷怪主RNG
+- **评判**：权重和归 1｜固定种子可复现｜宝箱普通/高级规则及命运卡凭据元数据正确｜背包满时的不丢失策略明确｜局内→撤离→基地三段不丢件；完整远征与真实渲染仍单独核签
 
 ### 3.10 UI / HUD `src/ui`（51 文件 / 16,274 行）
 

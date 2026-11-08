@@ -3,7 +3,7 @@ extends RefCounted
 ## Enemy3D owns the action timeline; the visual prefab only consumes its context.
 
 const ID := "elite_arms_taker"
-const BODY_SCALE_MULTIPLIER := 2.5
+const BODY_SCALE_MULTIPLIER := 1.0
 const FOOT_INSET_M := 0.001
 const CONFISCATION_CHANCE := 0.50
 const INITIAL_HP_MULTIPLIER := 20
@@ -157,7 +157,27 @@ func _finish_floor_marker() -> void:
 		_reticle.finish()
 	_reticle = null
 
+## 只读状态闸门：装备系统在本帧 combat tick 前后都使用同一口径。
+## 尤其覆盖测试/回放直接写入 _next_action 的 phase 前摇，避免只依赖 active/action
+## 在状态同步前的一帧漏开火。
+func blocks_equipment_tick() -> bool:
+	if owner_enemy == null or not is_instance_valid(owner_enemy):
+		return true
+	if owner_enemy._elite_defeat_active or owner_enemy._elite_escape_active:
+		return true
+	if owner_enemy.ai_state in ["dead", "defeated", "dormant"]:
+		return true
+	if phase_intangible or phased_out:
+		return true
+	if active and action == PHASE:
+		return true
+	return owner_enemy.ai_state == "telegraph" and _next_action == PHASE
+
+
 func tick(delta: float) -> bool:
+	if owner_enemy._elite_defeat_active or owner_enemy._elite_escape_active or owner_enemy.ai_state in ["dead", "defeated", "dormant"]:
+		cancel()
+		return false
 	electric_cooldown = maxf(0.0, electric_cooldown - delta)
 	if is_zero_approx(electric_cooldown):
 		electric_cooldown = 0.0
@@ -394,8 +414,9 @@ func commit_attack() -> void:
 		var damage := roundi(owner_enemy.contact_damage * 1.35) if heavy else owner_enemy.contact_damage
 		target.call("take_damage", damage, false, direction)
 		damage_events += 1
-		owner_enemy._last_attack_result = "hit"
-		if is_instance_valid(target) and int(target.get("current_hp")) < previous_hp and randf() < CONFISCATION_CHANCE:
+		var actual_damage := maxi(0, previous_hp - int(target.get("current_hp"))) if is_instance_valid(target) else 0
+		owner_enemy._last_attack_result = "hit" if actual_damage > 0 else "blocked"
+		if actual_damage and is_instance_valid(target) and int(target.get("current_hp")) < previous_hp and randf() < CONFISCATION_CHANCE:
 			var scene := owner_enemy.get_tree().current_scene
 			if scene != null and scene.has_method("collect_elite_rent"):
 				scene.call("collect_elite_rent", owner_enemy, target)
@@ -414,6 +435,8 @@ func _commit_electric() -> void:
 		"floor_burst": {"floor_y": _cast_floor.y, "count": 8, "speed": 4.4, "damage_ratio": 0.50, "lifetime": 2.1, "root_seconds": 1.0},
 		"visual_id": VfxPool3D.FX01_BULLET_ELECTRIC,
 		"home_lifetime": 1.6,
+		"target_group": "enemy_3d" if _electric_target != null and _electric_target.get_ref() is Enemy3D else "player_3d",
+		"projectile_collision_mask": Enemy3D.ENEMY_BULLET_LAYER if _electric_target != null and _electric_target.get_ref() is Enemy3D else 1,
 		"ignore_body": _electric_target.get_ref() if _electric_target != null else null,
 	}, 14.0, origin + direction * 0.15)
 	owner_enemy._last_attack_result = "fired"
@@ -425,6 +448,17 @@ func presentation_context() -> Dictionary:
 	var glitch := 0.0
 	var charge := 0.0
 	var timing: Vector3 = ACTION_TIMING.get(action, Vector3.ZERO)
+	if owner_enemy._elite_defeat_active:
+		return {
+			"schema": 1, "state": state, "action_id": "defeat_kneel", "time": owner_enemy._elite_defeat_elapsed,
+			"tactic": "defeat", "glitch": 0.0, "screen_charge": 0.0, "phased_out": false,
+			"chase_elapsed": chase_elapsed, "speed": 0.0, "base_speed": owner_enemy.get_effective_move_speed(),
+			"actor_scale": owner_enemy.scale.x, "grounded": owner_enemy.is_on_floor(),
+			"floor_height": owner_enemy.global_position.y, "foot_inset": FOOT_INSET_M,
+			"floor_offset": 0.0, "action_active": false, "action_elapsed": owner_enemy._elite_defeat_elapsed,
+			"committed": false, "hit_time": 0.0, "recovery_time": 0.0, "action_duration": 0.0,
+			"attack_attempts": attack_attempts, "damage_events": damage_events,
+		}
 	if active and state in ACTION_STATES:
 		match action:
 			SWIPE:

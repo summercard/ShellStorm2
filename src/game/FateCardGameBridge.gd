@@ -524,27 +524,14 @@ func _process(_delta: float) -> void:
 		_reward_status.add_theme_constant_override("outline_size", 5)
 		layer.add_child(_reward_status)
 	_reward_button.visible = not _pending_character_rewards.is_empty() and is_instance_valid(_player)
-	_reward_button.text = "待领命运（%d）· 点击领取" % _pending_character_rewards.size()
+	_reward_button.text = "待迁移命运（%d）· 需走专用掉落物" % _pending_character_rewards.size()
 	_reward_button.disabled = _source_selection_busy
 
 
 func _open_pending_rewards() -> void:
-	var entries: Array[Dictionary] = []
-	for reward in _pending_character_rewards:
-		var card: FateCard = reward["card"]
-		entries.append({"reward": reward, "label": "%s · %s · %d金币" % [card.card_name, card.orientation_name(), int(reward["currency_cost"])]})
-	var choice := await _choose_entry("待领命运：失败与取消均保留原牌、原方位", entries, _player)
-	if not bool(choice.get("success", false)):
-		return
-	var reward: Dictionary = choice["entry"]["reward"]
-	var card: FateCard = reward["card"]
-	var selection := await select_card_source(card, _player)
-	if not bool(selection.get("success", false)):
-		_reward_status.text = str(selection.get("message", "未领取"))
-		return
-	var index := _pending_character_rewards.find(reward)
-	var result := retry_pending_character_reward(index, selection.get("source") as AssemblyNode)
-	_reward_status.text = str(result.get("message", ""))
+	# 迁移协议尚未冻结：旧 pending 只读保留，UI 不再提供直接选源、扣款或应用旁路。
+	if is_instance_valid(_reward_status):
+		_reward_status.text = "旧角色命运待迁移：请通过专用命运卡掉落物处理"
 
 
 func get_target_summary(card: FateCard = null) -> Dictionary:
@@ -576,25 +563,15 @@ static func apply_card(card: FateCard, source: AssemblyNode = null) -> Dictionar
 
 	return instance.apply_card_instance(card, source)
 
-## 供 MapFateTriggers 环境自动层调用。
-## 战斗类命运必须由玩家抽卡后经 apply_card() 生效；即使未来误把这些 ID 重新塞回
-## MapFateTriggers 配置，本桥也必须拒绝，避免恢复「卡没抽却自动生效」的旁路。
+## 供旧环境触发调用方保留的拒绝入口。
+## 正式命运卡入口只有占卜屋预选和专用掉落物主动交互；任何环境事件都不能
+## 通过这里构造预设、扣费、创建 offer 或直接应用卡片。明确的训练/已购卡路径
+## 仍使用 apply_card_instance（或其来源选择包装），不经过本函数。
 static func apply_fate_card_from_trigger(fate_card_id: String) -> Dictionary:
-	match fate_card_id:
-		"fate_reinforce", "fate_curse_map", "fate_bless_dead", "fate_mark_enemy":
-			return {
-				"success": false,
-				"message": "Combat fate requires a drawn card: " + fate_card_id,
-			}
-
-	var card: FateCard = null
-	match fate_card_id:
-		"fate_mark_enemy": card = FateCardPresets.fate_mark_enemy()
-		"fate_lucky_chest": card = FateCardPresets.fate_lucky_chest()
-		"fate_extra_loot": card = FateCardPresets.fate_extra_loot()
-	if card == null:
-		return {"success": false, "message": "Unknown fate_card_id: " + fate_card_id}
-	return apply_card(card)
+	return {
+		"success": false,
+		"message": "Environment fate requires an active pickup/offer or a drawn card: " + fate_card_id,
+	}
 
 
 ## 获取单例实例（通过组查找，比节点路径更稳定）
@@ -654,29 +631,26 @@ func get_latest_applied_card(stable_card_id: String) -> FateCard:
 var _pending_character_rewards: Array[Dictionary] = []
 
 
-func grant_random_card_from_character(currency_cost: int = 0) -> Dictionary:
-	var offer := FateCardPresets.draw_offer(1, null, get_offer_level_id())
-	if offer.is_empty():
-		return {"success": false, "message": "运行牌池为空"}
-	_pending_character_rewards.append({"card": offer[0], "currency_cost": maxi(0, currency_cost)})
-	return retry_pending_character_reward(_pending_character_rewards.size() - 1)
+## 兼容旧调用名，但不再从角色击杀/宝箱等环境事件直接抽卡或应用。
+## Player3D 应改为生成 item_fate_card_drop，再由专用掉落物主动交互创建正式 offer。
+func grant_random_card_from_character(_currency_cost: int = 0) -> Dictionary:
+	return {
+		"success": false,
+		"pending": false,
+		"message": "角色二级奖励必须先生成命运卡专用掉落物并主动交互；旧直授调用已拒绝",
+	}
 
 
 func retry_pending_character_reward(index: int = 0, source: AssemblyNode = null) -> Dictionary:
+	# 迁移协议尚未定义：旧牌、原方位和原费用原样保留，拒绝所有直接领取旁路。
 	if index < 0 or index >= _pending_character_rewards.size():
-		return {"success": false, "message": "没有该待领取角色命运奖励"}
-	var reward: Dictionary = _pending_character_rewards[index]
-	var cost := int(reward["currency_cost"])
-	if cost > 0 and not GameManager.spend_currency(cost):
-		return {"success": false, "pending": true, "message": "金币不足；保留已抽定的命运奖励"}
-	var result := apply_card_instance(reward["card"] as FateCard, source)
-	if bool(result.get("success", false)):
-		_pending_character_rewards.remove_at(index)
-	else:
-		if cost > 0:
-			GameManager.add_currency(cost)
-		result["pending"] = true
-	return result
+		return {"success": false, "pending": false, "message": "没有该待迁移角色命运奖励"}
+	return {
+		"success": false,
+		"pending": true,
+		"migration_pending": true,
+		"message": "旧角色命运领取路径已关闭；请等待迁移协议或通过专用命运卡掉落物购卡事务",
+	}
 
 
 func get_pending_character_rewards() -> Array[Dictionary]:

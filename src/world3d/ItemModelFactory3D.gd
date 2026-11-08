@@ -6,6 +6,36 @@ const MODEL_ROLE_PREVIEW := &"preview"
 const MODEL_ROLE_GROUND := &"ground"
 const MODEL_ROLE_ICON := &"icon"
 const GROUND_DISPLAY_SCALE := {"item_battery_l": 1.30, "item_health_potion": 1.30}
+const FATE_CARD_VIEW_SCRIPT := preload("res://src/weapons/FateCardView.gd")
+const FATE_CARD_SHADER_CODE := """
+shader_type spatial;
+render_mode diffuse_burley, specular_schlick_ggx;
+
+uniform sampler2D albedo_texture : source_color;
+uniform bool use_albedo_texture = false;
+uniform vec4 tint_color : source_color = vec4(1.0);
+uniform vec4 scan_color : source_color = vec4(0.18, 0.72, 1.0, 1.0);
+uniform float scan_speed = 0.22;
+
+void fragment() {
+\tvec4 texel = vec4(1.0);
+\tif (use_albedo_texture) {
+\t\ttexel = texture(albedo_texture, UV);
+\t}
+\tvec3 base_color = texel.rgb * tint_color.rgb;
+\tfloat edge_distance = min(min(UV.x, 1.0 - UV.x), min(UV.y, 1.0 - UV.y));
+\tfloat edge_light = 1.0 - smoothstep(0.0, 0.075, edge_distance);
+\tfloat scan_phase = fract(UV.y * 0.85 + UV.x * 0.35 - TIME * scan_speed);
+\tfloat scan = smoothstep(0.0, 0.10, scan_phase) * (1.0 - smoothstep(0.10, 0.24, scan_phase));
+\tALBEDO = base_color + scan_color.rgb * (scan * 0.28 + edge_light * 0.08);
+\tEMISSION = scan_color.rgb * (scan * 1.25 + edge_light * 0.22);
+\tMETALLIC = 0.64;
+\tROUGHNESS = 0.25;
+}
+"""
+static var _fate_card_shader: Shader
+static var _fate_card_back_material: ShaderMaterial
+static var _fate_card_gold_material: ShaderMaterial
 ## 同一AssetID的地面派生模型；新批次预览高模由PREVIEW_SCENES独立路由。
 const GROUND_SCENES := {
 	"special_grenade": preload("res://assets/art/items_weapons/props/special_grenade/runtime/itm_special_grenade_ground_root_top3d.tscn"),
@@ -75,6 +105,10 @@ static func create_model(item: Dictionary, _tint := Color(0.38, 0.88, 0.72), mod
 	var kind := get_model_kind(item)
 	root.set_meta("model_role", model_role)
 	var item_id := str(item.get("id", ""))
+	if is_fate_card_drop_data(item):
+		_build_fate_card_drop(root)
+		root.set_meta("model_kind", "fate_pickup")
+		return root
 	var visual_key := "__blueprint__" if str(item.get("type", "")) == "blueprint" else item_id
 	var variants: Dictionary = GROUND_SCENES if model_role in [MODEL_ROLE_GROUND, MODEL_ROLE_ICON] else PREVIEW_SCENES
 	if variants.has(visual_key):
@@ -125,6 +159,11 @@ static func create_model(item: Dictionary, _tint := Color(0.38, 0.88, 0.72), mod
 	return root
 
 
+static func is_fate_card_drop_data(item: Dictionary) -> bool:
+	return str(item.get("type", "")) == "fate_pickup" \
+		and str(item.get("id", "")) == "item_fate_card_drop"
+
+
 static func get_item_color(item: Dictionary) -> Color:
 	var kind := get_model_kind(item)
 	var type_color := {
@@ -155,6 +194,8 @@ static func get_model_kind(item: Dictionary) -> String:
 	var item_id := str(item.get("id", ""))
 	var item_type := str(item.get("type", ""))
 	var subtype := str(item.get("subtype", ""))
+	if is_fate_card_drop_data(item):
+		return "fate_pickup"
 	if bool(item.get("is_currency", false)) or item_id == "__currency__":
 		return "currency"
 	if item_id == "item_room_key" or subtype == "key":
@@ -275,6 +316,36 @@ static func _build_beacon(root: Node3D) -> void:
 	ring.position.y = 0.58
 	ring.mesh = ring_mesh
 	root.add_child(ring)
+
+
+static func _build_fate_card_drop(root: Node3D) -> void:
+	if _fate_card_back_material == null:
+		var back_texture: Texture2D = FATE_CARD_VIEW_SCRIPT.back_texture()
+		_fate_card_back_material = _create_fate_card_material(
+			Color(0.20, 0.06, 0.34),
+			back_texture
+		)
+	if _fate_card_gold_material == null:
+		_fate_card_gold_material = _create_fate_card_material(Color(1.0, 0.68, 0.16))
+	_add_box(root, "FateCardBack", Vector3.ZERO, Vector3(0.74, 1.08, 0.055), _fate_card_back_material)
+	_add_box(root, "FateCardGoldEdge", Vector3(0, -0.555, 0), Vector3(0.82, 0.06, 0.08), _fate_card_gold_material)
+	_add_box(root, "FateCardGoldEdgeTop", Vector3(0, 0.555, 0), Vector3(0.82, 0.06, 0.08), _fate_card_gold_material)
+	_add_box(root, "FateCardGoldEdgeLeft", Vector3(-0.405, 0, 0), Vector3(0.06, 1.06, 0.08), _fate_card_gold_material)
+	_add_box(root, "FateCardGoldEdgeRight", Vector3(0.405, 0, 0), Vector3(0.06, 1.06, 0.08), _fate_card_gold_material)
+	root.rotation_degrees = Vector3(-8.0, 12.0, -5.0)
+
+
+static func _create_fate_card_material(color: Color, albedo_texture: Texture2D = null) -> ShaderMaterial:
+	if _fate_card_shader == null:
+		_fate_card_shader = Shader.new()
+		_fate_card_shader.code = FATE_CARD_SHADER_CODE
+	var material := ShaderMaterial.new()
+	material.shader = _fate_card_shader
+	material.set_shader_parameter("tint_color", color)
+	material.set_shader_parameter("use_albedo_texture", albedo_texture != null)
+	if albedo_texture != null:
+		material.set_shader_parameter("albedo_texture", albedo_texture)
+	return material
 
 
 static func _build_blueprint(root: Node3D) -> void:

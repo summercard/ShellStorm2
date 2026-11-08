@@ -1,0 +1,146 @@
+{
+  "asset_family": "reward_chests",
+  "version": "v001",
+  "category": "props/道具/可交互容器",
+  "reference_note": "原图无法取回；按已记录的Q版科技宝箱特征制作，不宣称与原图高还原。",
+  "palette_cells": {
+    "metal": [
+      2,
+      3
+    ],
+    "matte_pink": [
+      4,
+      2
+    ],
+    "matte_orange": [
+      4,
+      7
+    ],
+    "clear_purple": [
+      3,
+      3
+    ],
+    "emissive_orange": [
+      5,
+      7
+    ]
+  },
+  "variants": [
+    {
+      "asset_id": "PRP-3D-REWARD-CHEST-NORMAL",
+      "slug": "prp_reward_chest_normal",
+      "display_name": "普通科技宝箱",
+      "version": "v001",
+      "category": "props/道具/可交互容器",
+      "source_blend": "art_source\\items_weapons\\props\\reward_chests\\source\\prp_reward_chest_normal_source_v001.blend",
+      "source_sha256_before": "b0c39951cd1e0e0e4e5b90b3e849399cb51a07f296009355de020c3fbf67f146",
+      "source_sha256_after": "b0c39951cd1e0e0e4e5b90b3e849399cb51a07f296009355de020c3fbf67f146",
+      "source_hash_unchanged": true,
+      "optimized_blend": "art_source\\items_weapons\\props\\reward_chests\\source\\export\\v001\\prp_reward_chest_normal_optimized_v001.blend",
+      "optimized_sha256": "7d92a6d4b203ce098b117f6ec3f71493586d1960579b2d93988b68a1176bf183",
+      "glb": "assets\\art\\items_weapons\\props\\reward_chests\\components\\prp_reward_chest_normal_visual_top3d.glb",
+      "glb_sha256": "b8f47dc23b46e061d70f3ba508839b8f08546b1eb6b97b159ebe7b20f6743480",
+      "runtime_scene": "assets\\art\\items_weapons\\props\\reward_chests\\runtime\\prp_reward_chest_normal_root_top3d.tscn",
+      "triangles_before": 3940,
+      "triangles_after": 3940,
+      "reduction_ratio": 0.0,
+      "dimensions_m": [
+        1.45,
+        1.18,
+        1.4
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "geometry_baked_scale": 1.0,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "material_role_count": 4,
+      "clips": {
+        "land": 0.4,
+        "open": 1.05
+      },
+      "open_burst_delay_seconds": 0.59,
+      "front_axis": "+Z",
+      "palette": "assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+      "palette_external_only": true,
+      "glb_export_image_format": "NONE",
+      "optimization": {
+        "operations": [
+          "独立另存优化文件",
+          "重开优化文件",
+          "保留轮廓与PaletteUV",
+          "三角化统计"
+        ],
+        "removed_triangles": 0,
+        "zero_change_reason": "Q版轮廓与动画结构已是低模，继续减面会损害拱框/问号/宝石轮廓"
+      },
+      "status": "godot_validated_runtime_recolored"
+    },
+    {
+      "asset_id": "PRP-3D-REWARD-CHEST-ADVANCED",
+      "slug": "prp_reward_chest_advanced",
+      "display_name": "高级科技宝箱",
+      "version": "v001",
+      "category": "props/道具/可交互容器",
+      "source_blend": "art_source\\items_weapons\\props\\reward_chests\\source\\prp_reward_chest_advanced_source_v001.blend",
+      "source_sha256_before": "a0c58eeb8c1a94263f3191f47968e615e7774fb5535c5f51297a68110fcc4658",
+      "source_sha256_after": "a0c58eeb8c1a94263f3191f47968e615e7774fb5535c5f51297a68110fcc4658",
+      "source_hash_unchanged": true,
+      "optimized_blend": "art_source\\items_weapons\\props\\reward_chests\\source\\export\\v001\\prp_reward_chest_advanced_optimized_v001.blend",
+      "optimized_sha256": "cf4fdd53b6d9a533ab6e40cad02ae038f6f5f5e636e6631c9af2f3863b9b0ac1",
+      "glb": "assets\\art\\items_weapons\\props\\reward_chests\\components\\prp_reward_chest_advanced_visual_top3d.glb",
+      "glb_sha256": "eece446d04f2dcc65e548293c1029d14730254adfc0391cc234260aba45c08f1",
+      "runtime_scene": "assets\\art\\items_weapons\\props\\reward_chests\\runtime\\prp_reward_chest_advanced_root_top3d.tscn",
+      "triangles_before": 3940,
+      "triangles_after": 3940,
+      "reduction_ratio": 0.0,
+      "dimensions_m": [
+        1.74,
+        1.416,
+        1.68
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "geometry_baked_scale": 1.2,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "material_role_count": 4,
+      "clips": {
+        "land": 0.4,
+        "open": 1.05
+      },
+      "open_burst_delay_seconds": 0.59,
+      "front_axis": "+Z",
+      "palette": "assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+      "palette_external_only": true,
+      "glb_export_image_format": "NONE",
+      "optimization": {
+        "operations": [
+          "独立另存优化文件",
+          "重开优化文件",
+          "保留轮廓与PaletteUV",
+          "三角化统计"
+        ],
+        "removed_triangles": 0,
+        "zero_change_reason": "Q版轮廓与动画结构已是低模，继续减面会损害拱框/问号/宝石轮廓"
+      },
+      "status": "godot_validated_runtime_recolored"
+    }
+  ],
+  "source_and_export_manifest": "本清单同时记录源/优化/GLB/运行路径、SHA、三角数、动画和状态。",
+  "generated_by": "scripts/blender/build_reward_chests.py"
+}

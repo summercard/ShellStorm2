@@ -172,6 +172,17 @@ func notify_enemy_attacked(enemy: CharacterBody3D, attacker: Node3D) -> void:
 	if enemy == null or attacker == null or not is_instance_valid(enemy) or not is_instance_valid(attacker):
 		return
 	if not attacker.is_in_group("player_3d"):
+		if _is_arms_taker(attacker) and enemy.is_in_group("enemy_3d"):
+			var enemy_id := enemy.get_instance_id()
+			if not _records.has(enemy_id):
+				register_enemy(enemy)
+			var enemy_record := _records[enemy_id] as Dictionary
+			_append_stimulus(
+				enemy_record, "enemy_damage_contact", attacker.global_position,
+				attacker.get_instance_id(), 1.0, DAMAGE_AGGRO_DURATION_MSEC, true,
+				"arms_taker_actual_damage"
+			)
+			_records[enemy_id] = enemy_record
 		return
 	var instance_id := enemy.get_instance_id()
 	if not _records.has(instance_id):
@@ -622,16 +633,22 @@ func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Di
 func _select_visible_target(enemy: CharacterBody3D, record: Dictionary, vision_range: float) -> Dictionary:
 	var candidates: Array[Dictionary] = []
 	var current_id := int(record.get("selected_target_instance_id", 0))
-	for value in enemy.get_tree().get_nodes_in_group("player_3d"):
-		var player := value as Node3D
-		if not _target_is_legal(enemy, player):
+	var values: Array[Node] = []
+	values.append_array(enemy.get_tree().get_nodes_in_group("player_3d"))
+	if _is_arms_taker(enemy):
+		values.append_array(enemy.get_tree().get_nodes_in_group("enemy_3d"))
+	for value in values:
+		var target := value as Node3D
+		if not _target_is_legal(enemy, target):
 			continue
-		var vision := _vision.evaluate_target(enemy, player, vision_range)
+		var vision := _vision.evaluate_target(enemy, target, vision_range)
 		if not bool(vision.get("visible", false)):
 			continue
 		var distance := float(vision.get("distance", vision_range))
 		var score := 500.0 + maxf(0.0, vision_range - distance) * 8.0
-		candidates.append({"target": player, "score": score, "distance": distance})
+		if target.is_in_group("enemy_3d"):
+			score -= 1.0
+		candidates.append({"target": target, "score": score, "distance": distance})
 	if candidates.is_empty():
 		return {}
 	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
@@ -656,10 +673,22 @@ func _select_visible_target(enemy: CharacterBody3D, record: Dictionary, vision_r
 	return best
 
 
+func _is_arms_taker(node: Node3D) -> bool:
+	return node != null and is_instance_valid(node) and str(node.get("elite_id")) == "elite_arms_taker"
+
+
 func _target_is_legal(enemy: CharacterBody3D, target: Node3D) -> bool:
 	if target == null or not is_instance_valid(target) or target.is_queued_for_deletion():
 		return false
-	if not target.is_in_group("player_3d") or float(target.get("current_hp")) <= 0.0:
+	var player_target := target.is_in_group("player_3d")
+	var enemy_target := target.is_in_group("enemy_3d")
+	if not player_target and not enemy_target:
+		return false
+	if enemy_target and not _is_arms_taker(enemy):
+		return false
+	if enemy_target and target == enemy:
+		return false
+	if float(target.get("current_hp")) <= 0.0:
 		return false
 	if absf(target.global_position.y - enemy.global_position.y) > 4.5:
 		return false

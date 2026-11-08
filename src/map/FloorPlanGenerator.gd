@@ -1176,7 +1176,9 @@ static func _chest_placements_for(size: Vector2, cfg: Dictionary, salt := "") ->
 	# 掉落参数逐箱抄下去：箱子自己不读 level_plan（见 TreasureChest3D 同名字段注释）。
 	var pool_id := str(cfg.get("reward_pool_id", "loot_floor_1_2"))
 	var drop_count := maxi(1, int(cfg.get("drop_count", 1)))
-	var fate_count := maxi(0, int(cfg.get("fate_card_per_open", 0)))
+	var default_tier := str(cfg.get("chest_tier", "normal"))
+	if default_tier != "advanced":
+		default_tier = "normal"
 	var mimic_cfg := cfg.get("mimic", {}) as Dictionary
 	var mimic_chance := clampf(float(mimic_cfg.get("chance", 0.0)), 0.0, 1.0)
 	var out: Array = []
@@ -1188,9 +1190,9 @@ static func _chest_placements_for(size: Vector2, cfg: Dictionary, salt := "") ->
 		out.append({
 			"id": "chest_%02d" % index,
 			"quality": _chest_quality_for_salt(qualities, chest_salt),
+			"chest_tier": default_tier,
 			"reward_pool_id": pool_id,
 			"drop_count": drop_count,
-			"fate_card_per_open": fate_count,
 			# 拟态：开箱瞬间变怪。**只掷一次、写进数据**，运行时不重掷 ——
 			# 运行时掷骰会让同一只箱子「读档后再开就不是拟态了」。
 			"mimic": _roll_ratio(chest_salt + ":mimic") < mimic_chance,

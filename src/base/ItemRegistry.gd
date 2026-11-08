@@ -20,6 +20,7 @@ func _init() -> void:
 
 ## 注册所有内置物品
 func _register_all_items() -> void:
+	_register_fate_card_drop_item()
 	_register_beacon_item()
 	_register_room_key_item()
 	_register_backpack_equipment()
@@ -147,6 +148,20 @@ func _apply_base_shop_catalog() -> void:
 		definition["base_stock_rule"] = "unlimited"
 		definition["base_shelf_order"] = int(values[2])
 		definition["base_shop_entry_id"] = str(values[3])
+
+## 命运卡专用世界凭据：不进入普通背包，只由主动交互交给 Dungeon3D 认领。
+func _register_fate_card_drop_item() -> void:
+	_items["item_fate_card_drop"] = {
+		"id": "item_fate_card_drop",
+		"name": "命运卡",
+		"description": "命运卡专用世界交互凭据，不进入普通背包。",
+		"type": "fate_pickup",
+		"stack_max": 1,
+		"tags": ["fate_pickup", "world_credential_only"],
+		"inventory_allowed": false,
+		"world_credential_only": true,
+	}
+
 
 ## 注册信标道具
 func _register_beacon_item() -> void:

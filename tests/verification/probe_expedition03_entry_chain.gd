@@ -78,6 +78,22 @@ func _run() -> void:
 			break
 		await tree.process_frame
 	print("ENTRY03_CHAIN ready=%s" % str(tower.get_meta("loading_scene_ready", false)))
+
+	# 预热必须在**恢复玩家操作之前**做完，否则进门第一只怪、第一次开火照样现编管线。
+	# 判据用加载页写出的完成度报告，而不是"有没有调用过预热"：
+	# 只有 `completed=true` 才说明 VFX 队列排空、三个怪基类都过了一遍。
+	#
+	# headless 没有渲染管线可预热，加载页会按"不适用"报 `skipped=true, completed=true`。
+	# ⇒ 这一条只在真渲染（不带 `--headless`）下是有效门禁，无头跑过不代表验证过。
+	var warmup_deadline := Time.get_ticks_msec() + 30000
+	while not tower.has_meta("loading_warmup_report") and Time.get_ticks_msec() < warmup_deadline:
+		await tree.process_frame
+	var warmup_report: Variant = tower.get_meta("loading_warmup_report", null)
+	print("ENTRY03_CHAIN warmup=%s" % str(warmup_report))
+	_check(warmup_report is Dictionary, "加载页没有写出预热完成度报告")
+	if warmup_report is Dictionary:
+		_check(bool((warmup_report as Dictionary).get("completed", false)),
+			"开圈前预热没做完：%s" % str(warmup_report))
 	# 再让物理跑几帧，碰撞体启用与玩家落地稳定下来。
 	for i in range(20):
 		await tree.physics_frame

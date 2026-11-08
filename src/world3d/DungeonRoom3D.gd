@@ -544,6 +544,9 @@ var _central_light: WastelandLight3D
 var _room_lights: Array[WastelandLight3D] = []
 ## 显式登记的作者Light3D/室内补光；能量只缓存作者基线，开关事实仍归原灯组。
 var _supplemental_room_lights: Dictionary = {}
+## 补充灯进入零能量之前的 `shadow_enabled` 真值，用于恢复时还原。见
+## `_apply_supplemental_shadow_state()`。
+const SUPPLEMENTAL_SHADOW_INTENT_META := "supplemental_shadow_intent"
 var _light_switch: RoomLightSwitch3D
 # 99F基地的常驻开关全集（西墙→100F、东墙→98F）。其他房型本数组为空，
 # 只走 _light_switch 单开关路径。见 FACILITY_SWITCH_SIDES 与
@@ -910,10 +913,49 @@ func _sync_supplemental_room_lights() -> void:
 		if is_instance_valid(light) and bool(light.get_meta("reactive_light_disabled", false)):
 			light.visible = false
 			light.light_energy = 0.0
+			_apply_supplemental_shadow_state(light)
 			continue
 		if is_instance_valid(light):
 			# 不翻visible，保留作者可见性且避免Compatibility重开灯丢渲染实例。
 			light.light_energy = float(_supplemental_room_lights[light]) if enabled and active else 0.0
+			_apply_supplemental_shadow_state(light)
+
+
+## 能量为 0 的补充灯必须同时关掉阴影投射。
+##
+## ## 为什么（2026-11-08 实测，远征03 / 真渲染 720p / RTX 3060）
+##
+## `light_energy = 0` 只让灯**不发光**，不阻止渲染器为它渲染一遍完整的阴影贴图。
+## 而 `Expedition03IndoorLightEnvelope._add_room_bounce()` 给**每间房**都挂了一盏
+## `IndoorEnvelopeBounce`（`shadow_enabled = true`），非 ACTIVE 房的能量走本函数被
+## 归零，阴影却留着 —— 于是 24 间房里 23 间的阴影每帧照渲染，玩家一间都看不见。
+##
+## 实测对照（同一入口、同一帧数）：
+##
+## | 状态 | GPU p50 | Draw Call | 图元 |
+## |---|---:|---:|---:|
+## | 原样 | 19.18 ms | 3831 | 1301 万 |
+## | 只关 24 盏 energy==0 的阴影 | **12.43 ms** | 1731 | 709 万 |
+##
+## 27 盏 `shadow_enabled` 的灯里只有 3 盏真的在发光（太阳 / 手电 / 当前房主灯），
+## 与《13 技术施工 性能优化与热管理》§3.6「阴影只允许太阳、手电主光、当前房主灯
+## 三者竞争预算」一致；多出来的 24 盏是纯浪费，且画面差异为 0（它们本来不发光）。
+##
+## ## 恢复时按登记意图还原，不能一律写 true
+##
+## `IndoorEnvelopeDarkFill` 这类底光本来就 `shadow_enabled = false`，恢复时写 true
+## 会给它凭空加一套假影子。用 meta 记住**进入零能量之前**的真实值。
+func _apply_supplemental_shadow_state(light: Light3D) -> void:
+	if not is_instance_valid(light):
+		return
+	if light.light_energy > 0.0001:
+		if light.has_meta(SUPPLEMENTAL_SHADOW_INTENT_META):
+			light.shadow_enabled = bool(light.get_meta(SUPPLEMENTAL_SHADOW_INTENT_META))
+			light.remove_meta(SUPPLEMENTAL_SHADOW_INTENT_META)
+		return
+	if not light.has_meta(SUPPLEMENTAL_SHADOW_INTENT_META):
+		light.set_meta(SUPPLEMENTAL_SHADOW_INTENT_META, light.shadow_enabled)
+	light.shadow_enabled = false
 
 
 ## 统一控制房间灯光。FACILITY 的两个开关已通过 link_switch 并联，
@@ -1225,6 +1267,29 @@ func _apply_pending_detail_runtime_state() -> void:
 func get_persistent_detail_state(key: String) -> Dictionary:
 	var value: Variant = _pending_detail_runtime_state.get(key, {})
 	return (value as Dictionary).duplicate(true) if value is Dictionary else {}
+
+
+func get_pending_chest_grants() -> Dictionary:
+	return get_persistent_detail_state("pending_chest_grants")
+
+
+func set_pending_chest_grants(chest_id: String, state: Dictionary) -> void:
+	if chest_id.is_empty():
+		return
+	var grants := get_pending_chest_grants()
+	grants[chest_id] = state.duplicate(true)
+	_pending_detail_runtime_state["pending_chest_grants"] = grants
+
+
+func clear_pending_chest_grants(chest_id: String) -> void:
+	if chest_id.is_empty():
+		return
+	var grants := get_pending_chest_grants()
+	grants.erase(chest_id)
+	if grants.is_empty():
+		_pending_detail_runtime_state.erase("pending_chest_grants")
+	else:
+		_pending_detail_runtime_state["pending_chest_grants"] = grants
 
 
 ## 已开宝箱回灌。`TreasureChest3D.restore_opened_state()` 早就写好了，
@@ -6197,7 +6262,9 @@ func _build_treasure_chests() -> void:
 	var art := get_node_or_null("AuthoredLayoutArtRoot")
 	if art != null:
 		for marker in art.find_children("*", "Marker3D", true, false):
-			var config: Variant = marker.get_meta("treasure_chest_config", null)
+			if not marker.has_meta("treasure_chest_config"):
+				continue
+			var config: Variant = marker.get_meta("treasure_chest_config")
 			if not config is Dictionary or str(config.get("id", "")).is_empty():
 				continue
 			var entry := (config as Dictionary).duplicate(true)

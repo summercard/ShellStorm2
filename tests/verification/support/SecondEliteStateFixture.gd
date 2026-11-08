@@ -7,9 +7,12 @@ var serial := 0
 class Target extends CharacterBody3D:
 	var current_hp := 100000
 	var damage_events := 0
+	var last_damage_source: Node3D
 	func take_damage(amount: int, _critical := false, _direction := Vector3.ZERO) -> void:
 		current_hp -= amount
 		damage_events += 1
+	func notify_attacked_by(attacker: Node3D) -> void:
+		last_damage_source = attacker
 
 func check(ok: bool, message: String) -> void:
 	checks += 1
@@ -33,16 +36,37 @@ func make_target(position_value: Vector3) -> Target:
 	add_child(target)
 	return target
 
-func make_enemy() -> Enemy3D:
+func make_enemy_target(position_value: Vector3, hp := 100000) -> Target:
+	var target := Target.new()
+	target.position = position_value
+	target.current_hp = hp
+	target.add_to_group("enemy_3d")
+	var collision := CollisionShape3D.new()
+	var shape := SphereShape3D.new()
+	shape.radius = 0.35
+	collision.shape = shape
+	collision.position.y = 0.72
+	target.add_child(collision)
+	add_child(target)
+	return target
+
+func make_enemy(armed := false) -> Enemy3D:
 	var definition := EliteContentCatalog.get_by_id("elite_arms_taker")
 	var enemy := ENEMY.instantiate() as Enemy3D
 	add_child(enemy)
 	serial += 1
-	enemy.configure_from_enemy_data({"enemy_type":"melee_chaser", "is_elite":true,
+	var config := {"enemy_type":"melee_chaser", "is_elite":true,
 		"elite_id":"elite_arms_taker", "elite_behavior_id":definition.behavior_id, "elite_level":1,
 		"modifier_id_en":"Elite.WeaponParasite", "persistent_id":"arms_qa_%d"%serial,
 		"presentation_asset_id":definition.presentation_asset_id, "presentation_scene":definition.presentation_scene,
-		"elite_health_bar_profile":definition.health_bar_profile})
+		"elite_health_bar_profile":definition.health_bar_profile}
+	if armed:
+		var pistol := ItemRegistry.get_instance().get_item("weapon_pistol").duplicate(true)
+		pistol["bullet_module_id"] = "mod_bullet_standard"
+		pistol["current_ammo"] = 12
+		pistol["reserve_ammo"] = 0
+		config["elite_equipped_weapons"] = [pistol.duplicate(true), pistol.duplicate(true)]
+	enemy.configure_from_enemy_data(config)
 	enemy.position = Vector3(0,0.05,0)
 	enemy.set_physics_process(false)
 	enemy.set_process(false)

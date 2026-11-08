@@ -4,15 +4,15 @@ extends Area3D
 ##
 ## **本类只做表现与交互协议，绝不自己发奖励。**
 ## 开箱后发 `open_requested` 信号，由 `Dungeon3D._on_chest_open_requested()` 统一处理
-## 「抽掉落 → 落地上 → 弹出命运卡购买界面」。理由：
-##   · 掉落与命运卡都依赖 `RewardService` / `FateCardGameBridge` 这类**单例**，
-##     让箱子自己去调会把「谁发奖」这件事散到房间层的子节点上；
-##   · 探针要能在不建整个地牢的前提下验证开箱结果，信号 + 单一处理点更容易测。
+## 宝箱只提供开箱表现与配置；奖励由 `ChestRewardService` 解析，命运卡掉落物由
+## 后续统一拾取交互处理。箱子本身不直接发放奖励，也不直接弹出购买界面：
+##   · 奖励解析与命运卡事务保持在各自的单一所有者内；
+##   · 探针可以在不建整个地牢的前提下验证开箱配置与结果。
 ##
 ## 与 `RoomFurniture3D`（搜索容器）的区别：
 ##   · 家具是「搜索」，可以搜索多次无关紧要；宝箱是「开启」，**只能开一次**；
 ##   · 家具掉落走 `scavenge_*` 池，宝箱走品质池且必定多件；
-##   · 宝箱开箱会弹出**命运卡购买界面**（业主 2026-11-05），家具不会。
+##   · 宝箱开箱会生成由统一掉落链处理的物品与命运卡掉落物，家具不会。
 ## 因此不复用家具类，避免给它塞一堆 `if is_chest` 分支。
 ##
 ## **宝箱不再需要房间钥匙**（业主 2026-11-05：「开启方式是直接开启，不需要使用钥匙」）。
@@ -21,7 +21,7 @@ extends Area3D
 ## 「关卡数据 + 生成器 + 本类 + 交互文案」四处一起加，并留下会失败的断言；
 ## 只在本类塞一个字段会得到「提示要钥匙、开箱却不扣」的假锁。
 
-## 开箱成功时发。`Dungeon3D` 接这个信号做结算（掉落 / 命运卡购买界面）。
+## 开箱成功时发。`Dungeon3D` 接这个信号做表现与结算；命运卡掉落物由拾取交互认领。
 signal open_requested(chest: TreasureChest3D)
 
 ## 箱子被**认领**（状态已开、已记进房间账）时发，**不是**动画播完时。
@@ -86,20 +86,28 @@ const MIMIC_SHAKE_SECONDS := 0.40
 ## 品质 → 描边色。与 `Dungeon3D.FATE_RARITIES` 同序（common/uncommon/rare/epic/legendary），
 ## 但只用到前四档：宝箱品质在原作里是「棕/蓝/绿/红/黑」，不是五档品质。
 const QUALITY_COLORS := {
-	"common": Color(0.62, 0.46, 0.24),
-	"uncommon": Color(0.30, 0.62, 0.92),
-	"rare": Color(0.36, 0.84, 0.46),
-	"epic": Color(0.78, 0.34, 0.86),
+	"common": Color(0.96, 0.28, 0.12),
+	"uncommon": Color(0.98, 0.34, 0.10),
+	"rare": Color(0.82, 0.20, 0.86),
+	"epic": Color(1.00, 0.48, 0.08),
 }
+const NORMAL_VISUAL_SCENE: PackedScene = preload(
+	"res://assets/art/items_weapons/props/reward_chests/runtime/prp_reward_chest_normal_root_top3d.tscn"
+)
+const ADVANCED_VISUAL_SCENE: PackedScene = preload(
+	"res://assets/art/items_weapons/props/reward_chests/runtime/prp_reward_chest_advanced_root_top3d.tscn"
+)
 
 var chest_id := ""
 var quality := "common"
-## 开箱掉落用哪个池、抽几件、给几张命运卡。
-## **由生成器从 `treasure_chests` 配置里逐箱抄下来**，箱子不自己去读 level_plan ——
-## 那样 `Dungeon3D` 就得为了一个数字去解析整份关卡数据，且解耦检查会判它关卡分支。
+## 奖励档位由生成器从 `treasure_chests` 配置逐箱抄下；品质只用于视觉和品质加成。
+var chest_tier := "normal"
 var reward_pool_id := "loot_floor_1_2"
 var drop_count := 1
-var fate_card_per_open := 0
+## 旧 Dungeon3D 读取该属性仅作为兼容探针；新奖励链不再使用它，也不会从配置读取。
+var fate_card_per_open: int:
+	get:
+		return 0
 ## 这只箱子是不是**拟态**（开箱变怪）。由生成器掷骰后写进 `chest_placements`。
 ## **箱子自己不知道也管不着结算** —— 它只负责「开箱时表现成被咬了一口再消失」，
 ## 刷什么怪、掉什么全在 `Dungeon3D`。
@@ -130,11 +138,25 @@ var _charge_tween: Tween
 func configure(config: Dictionary) -> void:
 	chest_id = str(config.get("id", chest_id))
 	quality = str(config.get("quality", quality))
+	var configured_tier := str(config.get("chest_tier", chest_tier)).to_lower()
+	chest_tier = configured_tier if configured_tier in ["normal", "advanced"] else ("advanced" if quality in ["rare", "epic"] else "normal")
 	reward_pool_id = str(config.get("reward_pool_id", reward_pool_id))
 	drop_count = maxi(1, int(config.get("drop_count", drop_count)))
-	fate_card_per_open = maxi(0, int(config.get("fate_card_per_open", fate_card_per_open)))
 	mimic = bool(config.get("mimic", mimic))
 	mimic_monster_kind = str(config.get("mimic_monster_kind", mimic_monster_kind))
+
+
+## 返回给奖励调度层的最小宝箱配置；不暴露节点状态，也不直接解析奖励。
+func get_reward_config() -> Dictionary:
+	return {
+		"id": chest_id,
+		"chest_tier": chest_tier,
+		"quality": quality,
+		"reward_pool_id": reward_pool_id,
+		"drop_count": drop_count,
+		"mimic": mimic,
+		"mimic_monster_kind": mimic_monster_kind,
+	}
 
 
 func _ready() -> void:
@@ -185,7 +207,7 @@ func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 	if _opened or not _player_in_range:
 		return false
-	# ⚠ **这里不置 `_opened`**。开箱结算（掉落 / 命运卡购买界面）由 `Dungeon3D` 负责，
+	# ⚠ **这里不置 `_opened`**。开箱结算由 `Dungeon3D` 负责，
 	# 由它回调 `commit_opened()` 收口状态。先置位再结算，一旦结算抛错就会出现
 	# 「箱子已经开了、地上什么也没有」的假成功。
 	open_requested.emit(self)
@@ -551,97 +573,39 @@ func get_chest_snapshot() -> Dictionary:
 
 func _build_visual() -> void:
 	var trim_color: Color = QUALITY_COLORS.get(quality, QUALITY_COLORS["common"])
+	var visual_scene := ADVANCED_VISUAL_SCENE if quality in ["rare", "epic"] else NORMAL_VISUAL_SCENE
+	var visual := visual_scene.instantiate() as RewardChestVisual3D
+	if visual == null:
+		push_error("奖励宝箱视觉 Prefab 实例化失败")
+		return
+	add_child(visual)
+	visual.refresh_handles()
+	_visual_root = visual.visual_root
+	_lid_pivot = visual.lid_pivot
+	_glow = visual.glow
+	_glow_material = visual.glow_material
+	_body_material = visual.body_material
+	_trim_material = visual.trim_material
+	if _visual_root == null:
+		_visual_root = visual.get_node_or_null("ImportedModel") as Node3D
+	_visual_base_y = _visual_root.position.y if _visual_root != null else 0.0
+	visual.set_quality_accent(trim_color)
+	if _glow != null:
+		_glow.visible = false
 
-	_body_material = StandardMaterial3D.new()
-	_body_material.albedo_color = Color(0.24, 0.17, 0.12)
-	_body_material.metallic = 0.15
-	_body_material.roughness = 0.72
-
-	_trim_material = StandardMaterial3D.new()
-	_trim_material.albedo_color = trim_color
-	_trim_material.metallic = 0.72
-	_trim_material.roughness = 0.26
-	_trim_material.emission_enabled = true
-	_trim_material.emission = trim_color
-	# 品质越高的箱子越「亮」—— 这是玩家在房间门口就能读出「这一箱值不值得绕路」的唯一线索。
-	_trim_material.emission_energy_multiplier = 0.75
-
-	_visual_root = Node3D.new()
-	_visual_root.name = "ChestVisual"
-	add_child(_visual_root)
-	_visual_base_y = _visual_root.position.y
-
-	var half := CHEST_DIMENSIONS * 0.5
-	# 箱体（下半）
-	_add_box(
-		_visual_root, Vector3(CHEST_DIMENSIONS.x, CHEST_DIMENSIONS.y * 0.62, CHEST_DIMENSIONS.z),
-		Vector3(0, CHEST_DIMENSIONS.y * 0.31, 0), _body_material
-	)
-	# 四条竖包边
-	for sx in [-1.0, 1.0]:
-		for sz in [-1.0, 1.0]:
-			_add_box(
-				_visual_root, Vector3(0.10, CHEST_DIMENSIONS.y * 0.64, 0.10),
-				Vector3(sx * (half.x - 0.05), CHEST_DIMENSIONS.y * 0.31, sz * (half.z - 0.05)),
-				_trim_material
-			)
-	# 腰线
-	_add_box(
-		_visual_root, Vector3(CHEST_DIMENSIONS.x + 0.02, 0.08, CHEST_DIMENSIONS.z + 0.02),
-		Vector3(0, CHEST_DIMENSIONS.y * 0.62, 0), _trim_material
-	)
-
-	# 盖子：pivot 在后缘
-	_lid_pivot = Node3D.new()
-	_lid_pivot.name = "LidPivot"
-	_lid_pivot.position = Vector3(0, CHEST_DIMENSIONS.y * 0.62, -half.z)
-	_visual_root.add_child(_lid_pivot)
-	var lid_depth := CHEST_DIMENSIONS.z
-	var lid_height := CHEST_DIMENSIONS.y * 0.30
-	_add_box(
-		_lid_pivot, Vector3(CHEST_DIMENSIONS.x, lid_height, lid_depth),
-		Vector3(0, lid_height * 0.5, half.z), _body_material
-	)
-	# 盖上的两条金属带 + 锁扣
-	for sx in [-1.0, 1.0]:
-		_add_box(
-			_lid_pivot, Vector3(0.10, lid_height + 0.02, lid_depth + 0.02),
-			Vector3(sx * (half.x - 0.05), lid_height * 0.5, half.z), _trim_material
-		)
-	_add_box(
-		_lid_pivot, Vector3(0.26, 0.24, 0.12),
-		Vector3(0, lid_height * 0.18, lid_depth - 0.04), _trim_material
-	)
-
-	# 内部发光面：开箱后才可见（盖子抬起时从缝里透出光）
-	var glow_mesh := BoxMesh.new()
-	glow_mesh.size = Vector3(CHEST_DIMENSIONS.x * 0.82, 0.04, CHEST_DIMENSIONS.z * 0.78)
-	var glow_material := StandardMaterial3D.new()
-	glow_material.albedo_color = trim_color
-	glow_material.emission_enabled = true
-	glow_material.emission = trim_color.lightened(0.35)
-	glow_material.emission_energy_multiplier = GLOW_IDLE_ENERGY
-	glow_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	glow_mesh.material = glow_material
-	_glow_material = glow_material
-	_glow = MeshInstance3D.new()
-	_glow.name = "ChestGlow"
-	_glow.mesh = glow_mesh
-	_glow.position = Vector3(0, CHEST_DIMENSIONS.y * 0.60, 0)
-	_glow.visible = false
-	_visual_root.add_child(_glow)
-
+	var dimensions := Vector3(1.45, 1.18, 1.40)
+	if quality in ["rare", "epic"]:
+		dimensions *= 1.2
 	var shape := BoxShape3D.new()
-	shape.size = Vector3(CHEST_DIMENSIONS.x + 0.3, CHEST_DIMENSIONS.y + 0.3, CHEST_DIMENSIONS.z + 0.3)
+	shape.size = dimensions + Vector3(0.30, 0.30, 0.30)
 	_collision = CollisionShape3D.new()
-	_collision.position.y = CHEST_DIMENSIONS.y * 0.5
+	_collision.position.y = dimensions.y * 0.5
 	_collision.shape = shape
 	add_child(_collision)
 
-	# 提示文案。同家具/钥匙口径：不画描边（outline 8 相对 34 号字太粗），正对镜头。
 	_prompt = Label3D.new()
 	_prompt.name = "ChestPrompt"
-	_prompt.position = Vector3(0, CHEST_DIMENSIONS.y + 0.62, 0)
+	_prompt.position = Vector3(0, dimensions.y + 0.62, 0)
 	_prompt.text = _prompt_text()
 	_prompt.font_size = 32
 	_prompt.pixel_size = 0.010
@@ -652,13 +616,3 @@ func _build_visual() -> void:
 	_prompt.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_prompt.no_depth_test = true
 	add_child(_prompt)
-
-
-func _add_box(parent: Node3D, size: Vector3, offset: Vector3, material: Material) -> void:
-	var mesh := BoxMesh.new()
-	mesh.size = size
-	mesh.material = material
-	var instance := MeshInstance3D.new()
-	instance.mesh = mesh
-	instance.position = offset
-	parent.add_child(instance)

@@ -2,6 +2,7 @@ extends Node
 
 const SERVICE := preload("res://src/game/FateEconomyService.gd")
 const BOXES := preload("res://src/map/SpawnBoxCatalog.gd")
+const FATE_PICKUP := preload("res://src/world3d/FateCardDropPickup3D.gd")
 const EXPEDITION := preload("res://scenes/ExpeditionLevel01_3D.tscn")
 const SEED := 515151
 var failures: Array[String] = []
@@ -182,9 +183,12 @@ func _check_formal_expedition() -> void:
 	_expect(main_rng.state == rng_before, "抽牌污染主随机流")
 	print("FATE_FORMAL_RANDOM offers=40 identity_sets=%d reversed=%d slots=80" % [signatures.size(), reversed_count])
 	dungeon.set("_fate_door_offer_id", sample_offer_id)
-	dungeon.call("_show_door_fate_choices")
+	var zero_pickup := await _spawn_fate_pickup(dungeon, "fate:economy:zero")
+	_expect(not zero_pickup.get_interaction_candidate(dungeon.player).is_empty(), "专用命运卡掉落物未提供主动交互候选")
+	_expect(zero_pickup.perform_interaction(dungeon.player, zero_pickup.get_interaction_candidate(dungeon.player)), "专用命运卡掉落物主动交互未打开报价")
 	var zero_offer: Dictionary = dungeon.call("_export_door_fate_snapshot")
 	dungeon.call("_close_door_fate_overlay")
+	zero_pickup.queue_free()
 	_expect(dungeon.try_open_room_door("room_01"), "正式入口门未开启")
 	dungeon.force_enter_room_for_test("room_01")
 	dungeon.player.global_position = ((dungeon.get("_room_by_id") as Dictionary)["room_01"] as DungeonRoom3D).global_position + Vector3.UP * 0.1
@@ -230,12 +234,15 @@ func _check_formal_expedition() -> void:
 	dungeon.set("_room_key_count", 10)
 	_expect(dungeon.try_open_room_door("room_02"), "真实清房后第二门未开启")
 	await get_tree().process_frame
-	# 2026-11-06：远征01 的开门不再弹命运卡，报价入口只剩宝箱。
-	# 本段直接走宝箱入口（`source="chest"`），并反向验证「开门确实不再弹卡」。
+	# 2026-11-07：远征01 的门与宝箱都不直接弹命运卡；只由专用掉落物主动交互开启统一事务。
+	# 先反向验证开门不弹卡，再通过合法 `item_fate_card_drop` / `fate_pickup_id` 主动交互进入报价。
 	_expect(not bool(dungeon.get("_door_fate_active")), "开门仍弹出了命运卡")
-	dungeon.call("_show_door_fate_choices", "chest")
+	var earned_pickup := await _spawn_fate_pickup(dungeon, "fate:economy:room_02")
+	var earned_candidate := earned_pickup.get_interaction_candidate(dungeon.player)
+	_expect(not earned_candidate.is_empty(), "房间清理后的命运卡掉落物没有主动交互候选")
+	_expect(earned_pickup.perform_interaction(dungeon.player, earned_candidate), "命运卡专用掉落物主动交互未显示报价")
 	await get_tree().process_frame
-	_expect(bool(dungeon.get("_door_fate_active")), "宝箱入口未显示报价")
+	_expect(bool(dungeon.get("_door_fate_active")), "主动交互后未显示报价")
 	var earned_offer: Dictionary = dungeon.call("_export_door_fate_snapshot")
 	_expect(earned_offer["offer_id"] == sample_offer_id + 2, "门序号未顺序推进")
 	print("FATE_FORMAL_OFFER phase=early actual=%d wallet=%d cards=%s" % [economy.actual_kill_income(), GameManager.currency, JSON.stringify(earned_offer["cards"])])
@@ -311,6 +318,8 @@ func _check_formal_expedition() -> void:
 	_expect((dungeon.get("_door_fate_purchased") as Array).count(true) == resumed_choices.size(), "后续购买被强制限张数")
 	print("FATE_FORMAL_ALL_BOUGHT count=%d wallet=%d" % [resumed_choices.size(), GameManager.currency])
 	dungeon.call("_close_door_fate_overlay")
+	if is_instance_valid(earned_pickup):
+		earned_pickup.queue_free()
 	var closed_offer_id := int(dungeon.get("_fate_door_offer_id"))
 	var closed: Dictionary = dungeon.build_runtime_save_snapshot()
 	_expect(int(closed["fate_run_state"]["door"]["offer_id"]) == closed_offer_id, "关闭报价后丢失门序号")
@@ -323,13 +332,33 @@ func _check_formal_expedition() -> void:
 		await get_tree().process_frame
 	dungeon = await _spawn_expedition()
 	dungeon.set("_fate_door_offer_id", sample_offer_id)
-	dungeon.call("_show_door_fate_choices")
+	var repeat_pickup := await _spawn_fate_pickup(dungeon, "fate:economy:zero")
+	_expect(repeat_pickup.perform_interaction(dungeon.player, repeat_pickup.get_interaction_candidate(dungeon.player)), "同种子重启的专用掉落物主动交互失败")
 	_expect((dungeon.call("_export_door_fate_snapshot") as Dictionary) == repeat, "同种子重启第一次候选/正逆/报价不同")
 	dungeon.call("_close_door_fate_overlay")
+	repeat_pickup.queue_free()
 	dungeon.queue_free()
 	for frame in range(3):
 		await get_tree().process_frame
 	print("FATE_FORMAL_PATH_COMPLETED")
+
+
+func _spawn_fate_pickup(dungeon: TowerDescent3D, pickup_id: String) -> FateCardDropPickup3D:
+	var room := (dungeon.get("_room_by_id") as Dictionary).get(str(dungeon.get("_current_room_id"))) as DungeonRoom3D
+	var pickup := FATE_PICKUP.new() as FateCardDropPickup3D
+	pickup.interaction_handler = Callable(dungeon, "_on_fate_pickup_interacted")
+	pickup.configure({
+		"type": "fate_pickup",
+		"id": "item_fate_card_drop",
+		"name": "命运卡",
+		"fate_pickup_id": pickup_id,
+		"fate_source": "verification",
+		"source_room_id": room.room_id,
+		"source_chest_id": "verification_chest",
+	}, Color(0.72, 0.34, 1.0))
+	room.add_child(pickup)
+	pickup.global_position = dungeon.player.global_position
+	return pickup
 
 
 func _collect_room_currency(dungeon: TowerDescent3D, room: DungeonRoom3D) -> void:
@@ -360,9 +389,11 @@ func _quote_phase_with_reward_fixture(dungeon: TowerDescent3D, phase: String, ta
 			break
 	await get_tree().process_frame
 	_expect(economy.actual_kill_income() >= target_income, "测试赏金未通过真实击杀grants记入actual")
-	dungeon.call("_show_door_fate_choices")
+	var fate_pickup := await _spawn_fate_pickup(dungeon, "fate:economy:fixture:%s" % phase)
+	var candidate := fate_pickup.get_interaction_candidate(dungeon.player)
+	_expect(fate_pickup.perform_interaction(dungeon.player, candidate), "%s阶段命运卡专用掉落物主动交互失败" % phase)
 	var state: Dictionary = dungeon.call("_export_door_fate_snapshot")
-	print("FATE_FORMAL_OFFER phase=%s source=kill_grants_bounty_fixture actual=%d max_rarity=%d cards=%s" % [phase, economy.actual_kill_income(), economy.max_unlocked_rarity(), JSON.stringify(state["cards"])])
+	print("FATE_FORMAL_OFFER phase=%s source=pickup_fixture actual=%d max_rarity=%d cards=%s" % [phase, economy.actual_kill_income(), economy.max_unlocked_rarity(), JSON.stringify(state["cards"])])
 	var high_seen := false
 	var saved_id := int(dungeon.get("_fate_door_offer_id"))
 	for probe_id in range(saved_id, saved_id + 40):

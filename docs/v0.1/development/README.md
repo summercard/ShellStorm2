@@ -1,3 +1,5 @@
+- [收租人最终战败事务与警告收口](2026-11-08_arms_taker_defeat_transaction_closeout.md)：正式远征03自然回调覆盖四类战败事务，真实渲染472项、漫游1929项通过，三类目标警告清零；局部fixture与整体partial边界分列。
+
 - [远征03工坊布局返修与交互恢复](2026-11-06_expedition03_workshop_layouts.md)：按正式房型完成C环形、D田字、B通道和双围挡；保留原陈设，命令行与离屏验证。
 
 - [公共色盘无Mipmap修复](2026-11-06_shared_palette_no_mipmap.md)：恢复无损、无Mipmap；实际像素一致、118 GLB/915材质与4项反向测试通过，历史全量红项单列。

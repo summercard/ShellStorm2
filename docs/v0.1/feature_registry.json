@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-11-06",
+  "updated_at": "2026-11-08",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -158,7 +158,8 @@
         "docs/v0.1/development/2026-10-08_fate_persistence_completion.md",
         "docs/v0.1/development/2026-10-18_fate_progression.md",
         "docs/v0.1/development/2026-10-18_fate_elements.md",
-        "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md"
+        "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
+        "docs/v0.1/development/2026-11-08_fate_pickup_chest_closure.md"
       ],
       "verification": [
         {
@@ -204,6 +205,10 @@
         {
           "kind": "scene",
           "id": "verify_fate_level01_pool"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_fate_pickup_runtime"
         }
       ],
       "status": "partial"
@@ -291,13 +296,15 @@
         "docs/v0.1/09_技术施工_存档结算与复活.md",
         "docs/v0.1/design/远征全息城市交互设计.md",
         "docs/v0.1/design/rooftop_cross_tower_route.md",
-        "docs/v0.1/design/远征关卡01设计.md"
+        "docs/v0.1/design/远征关卡01设计.md",
+        "docs/v0.1/design/关卡进入与冷启动预热设计.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-09-18_level_teleport_entry_and_standalone_map.md",
         "docs/v0.1/development/2026-09-19_expedition_level01_buildout.md",
         "docs/v0.1/development/2026-09-29_expedition_hologram_city.md",
-        "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md"
+        "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md",
+        "docs/v0.1/development/2026-11-07_loading_warmup_gate.md"
       ],
       "verification": [
         {
@@ -439,12 +446,17 @@
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
         "docs/v0.1/development/2026-09-24_combat_economy_handoff.md",
         "docs/v0.1/development/2026-10-30_expedition03_shop_and_currency.md",
-        "docs/v0.1/development/2026-10-30_expedition03_chest_mimic.md"
+        "docs/v0.1/development/2026-10-30_expedition03_chest_mimic.md",
+        "docs/v0.1/development/2026-11-08_fate_pickup_chest_closure.md"
       ],
       "verification": [
         {
           "kind": "scene",
           "id": "verify_reward_service_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_chest_reward_service"
         },
         {
           "kind": "scene",
@@ -552,7 +564,9 @@
         "docs/v0.1/development/2026-11-04_arms_taker_tactics.md",
         "docs/v0.1/development/2026-11-04_arms_taker_electric_followup.md",
         "docs/v0.1/development/2026-11-04_elite_archive_preview.md",
-        "docs/v0.1/development/2026-11-04_arms_taker_scale_250.md"
+        "docs/v0.1/development/2026-11-04_arms_taker_scale_250.md",
+        "docs/v0.1/development/2026-11-07_arms_taker_contract_ledger_sync.md",
+        "docs/v0.1/development/2026-11-08_arms_taker_defeat_transaction_closeout.md"
       ],
       "verification": [
         {
@@ -578,6 +592,18 @@
         {
           "kind": "scene",
           "id": "verify_arms_taker_tactics"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_arms_taker_equipment"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_elite_rent_transfer"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_arms_taker_revision_visual"
         },
         {
           "kind": "scene",
@@ -1087,7 +1113,8 @@
         "docs/v0.1/development/2026-09-30_outdoor_cloud_sea_v002.md",
         "docs/v0.1/development/2026-09-30_outdoor_cloud_placement_fix.md",
         "docs/v0.1/development/2026-10-13_bullet_vfx_production.md",
-        "docs/v0.1/development/2026-10-18_fate_elements.md"
+        "docs/v0.1/development/2026-10-18_fate_elements.md",
+        "docs/v0.1/development/2026-11-07_arms_taker_contract_ledger_sync.md"
       ],
       "verification": [
         {
@@ -1199,7 +1226,8 @@
         "docs/v0.1/11_测试与发布.md"
       ],
       "development_records": [
-        "docs/v0.1/development/history/13_性能优化与热管理_历史记录.md"
+        "docs/v0.1/development/history/13_性能优化与热管理_历史记录.md",
+        "docs/v0.1/development/2026-11-08_expedition03_frame_budget.md"
       ],
       "verification": [
         {

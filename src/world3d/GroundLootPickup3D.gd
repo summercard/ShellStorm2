@@ -97,6 +97,12 @@ func configure(data: Dictionary, color := Color(0.38, 0.88, 0.72)) -> void:
 	_build_visual(color)
 
 
+## 子类可关闭普通地面物的自动拾取请求，保留落地/回收动画和距离判定。
+## 手动交互物必须同时挡住 process 与 body_entered 两条自动请求路径。
+func requires_manual_interaction() -> bool:
+	return false
+
+
 func _ready() -> void:
 	add_to_group("ground_loot_3d")
 	collision_layer = 0
@@ -162,7 +168,7 @@ func _process(delta: float) -> void:
 		_visual.rotation.y += delta * 1.35
 		_visual.position.y = 0.46 + sin(Time.get_ticks_msec() * 0.0035 + float(get_instance_id() % 13)) * 0.07
 	_update_player_distance()
-	if _player_in_range and is_pickup_available() and Time.get_ticks_msec() >= _pickup_request_cooldown_until_msec:
+	if not requires_manual_interaction() and _player_in_range and is_pickup_available() and Time.get_ticks_msec() >= _pickup_request_cooldown_until_msec:
 		_pickup_request_cooldown_until_msec = Time.get_ticks_msec() + int(PICKUP_REQUEST_RETRY_S * 1000.0)
 		pickup_requested.emit(self, item_data.duplicate(true))
 
@@ -308,7 +314,7 @@ func _on_body_entered(body: Node3D) -> void:
 		return
 	_nearby_player = body
 	_update_player_distance()
-	if not _player_in_range or not is_pickup_available():
+	if requires_manual_interaction() or not _player_in_range or not is_pickup_available():
 		return
 	_pickup_request_cooldown_until_msec = Time.get_ticks_msec() + int(PICKUP_REQUEST_RETRY_S * 1000.0)
 	pickup_requested.emit(self, item_data.duplicate(true))

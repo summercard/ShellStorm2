@@ -108,4 +108,4 @@ FeatureID：BOSS-STAGES / ENEMY-AI / ASSET-PIPELINE；游戏版本0.1.0；设计
 
 ### 远征03复用（2026-11-02）
 
-用户要求复用01显示器Boss及战斗阶段。03同样指派`boss_monitor002`、引用同一Prefab与MonitorBossCombat；三个阶段与首波/后两波、出场后递增增援沿01现行配置。03局部出生锚点统一平移到50×40竞技场中心，生命覆盖取01当前32000，不沿用本页历史初始52000。清房仍保留03无钥匙感应门策略，终点STANDARD撤离；部署与验收见[独立记录](../development/2026-11-02_expedition03_monitor_boss.md)。
+用户要求复用01显示器Boss及战斗阶段。03同样指派`boss_monitor002`、引用同一Prefab与MonitorBossCombat；三个阶段与首波/后两波、出场后递增增援沿01现行配置。03局部出生锚点统一平移到50×40竞技场中心，生命覆盖取01同口径绝对值（01 自 2026-11-08 起为 18000，原 32000；03 的 `level_plan.json` 尚未同步、仍写 32000），不沿用本页历史初始52000。清房仍保留03无钥匙感应门策略，终点STANDARD撤离；部署与验收见[独立记录](../development/2026-11-02_expedition03_monitor_boss.md)。

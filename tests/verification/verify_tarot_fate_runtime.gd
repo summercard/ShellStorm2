@@ -69,32 +69,47 @@ func _run() -> void:
 		_check(card.orientation_name() in ["正位", "逆位"], "offer card has no readable orientation", failures)
 	_check(offer_ids.size() == 3, "draw_offer contains duplicate card ids", failures)
 
-	# —— 战斗命运单一真源（主人 2026-10-08，A 方案）——
-	# 会改战斗的命运（敌增援 / 房间诅咒 / 亡者祝福）只走抽卡（塔罗三选一 / 占卜屋 /
-	# 工作台），MapFateTriggers 环境自动层不再白送：自动表里不得再出现这三条，
-	# 否则就是「卡没抽却在生效」，并让远征 room_01 恒多刷一波（设计 1 波 + 命运 1 波）。
-	var auto_ids := {}
-	for entry in MapFateTriggers.DEFAULT_TRIGGERS:
-		auto_ids[str(entry.get("fate_card_id", ""))] = true
-	for reward_fate in ["fate_lucky_chest", "fate_extra_loot"]:
-		_check(
-			auto_ids.has(reward_fate),
-			"%s 奖励类环境触发被误删" % reward_fate,
-			failures
-		)
-	for combat_fate in ["fate_mark_enemy", "fate_reinforce", "fate_curse_map", "fate_bless_dead"]:
-		_check(
-			not auto_ids.has(combat_fate),
-			"%s 仍由 MapFateTriggers 自动层点燃（战斗命运应只走抽卡）" % combat_fate,
-			failures
-		)
-		var trigger_result: Dictionary = FateCardGameBridge.apply_fate_card_from_trigger(combat_fate)
+	# —— 正式入口收口（设计 §8.1）——
+	# 普通容器只记统计，不能按 5/10 次自动授予奖励卡、创建 offer 或扣钱；
+	# 命运卡专用掉落物主动交互才进入统一购卡事务。
+	_check(
+		MapFateTriggers.DEFAULT_TRIGGERS.is_empty(),
+		"普通容器仍配置了自动命运卡阈值触发",
+		failures
+	)
+	var container_trigger := MapFateTriggers.new()
+	add_child(container_trigger)
+	await get_tree().process_frame
+	for _index in range(10):
+		container_trigger.on_container_opened("treasure_chest")
+	var container_auto_triggered := false
+	for value in container_trigger._triggered_this_run.values():
+		container_auto_triggered = container_auto_triggered or bool(value)
+	_check(
+		int(container_trigger._counters.get(MapFateTriggers.TriggerType.OPEN_CHEST, 0)) == 10
+		and not container_auto_triggered,
+		"普通容器统计未保留或意外触发命运效果",
+		failures
+	)
+	for environment_fate in ["fate_lucky_chest", "fate_extra_loot", "fate_mark_enemy", "fate_reinforce", "fate_curse_map", "fate_bless_dead"]:
+		var trigger_result: Dictionary = FateCardGameBridge.apply_fate_card_from_trigger(environment_fate)
 		_check(
 			not bool(trigger_result.get("success", true))
-			and str(trigger_result.get("message", "")).begins_with("Combat fate requires a drawn card:"),
-			"%s 仍可绕过抽卡从环境触发桥生效" % combat_fate,
+			and str(trigger_result.get("message", "")).contains("active pickup/offer"),
+			"%s 仍可从环境触发桥直接生效" % environment_fate,
 			failures
 		)
+	var cards_before := FateCardGameBridge.get_card_count()
+	var pending_before := FateCardGameBridge.get_pending_character_rewards().size()
+	var character_reward := FateCardGameBridge.grant_random_card_from_character()
+	_check(
+		not bool(character_reward.get("success", true))
+		and FateCardGameBridge.get_card_count() == cards_before
+		and FateCardGameBridge.get_pending_character_rewards().size() == pending_before,
+		"角色二级奖励旧API仍可免费抽取或应用命运卡",
+		failures
+	)
+	container_trigger.queue_free()
 	# 抽卡路径仍是敌增援唯一真源：预设必须保留 REINFORCE_WAVE 执行动作。
 	var reinforce := FateCardPresets.fate_reinforce()
 	_check(
