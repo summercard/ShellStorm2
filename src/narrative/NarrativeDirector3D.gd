@@ -21,6 +21,7 @@ signal narrative_finished(narrative_id: String, reason: String)
 const POINT_POLL_INTERVAL := 0.1
 ## 手动判定（arm 的 check）的轮询间隔。
 const MANUAL_CHECK_INTERVAL := 0.2
+const MAIN_STORY_BARRIER_TIMEOUT := 60.0
 
 ## 归还优先级：数字越小越先归还。输入与相机不还 = 卡死玩家，必须最先行（08 文档 §6.2）。
 const RELEASE_PRIORITY := {
@@ -404,6 +405,14 @@ func is_camera_override_active() -> bool:
 	return _adapter.is_camera_override_active()
 
 
+func restore_main_story_camera(seconds: float) -> void:
+	_adapter.call_instruction("camera.restore", {"duration": seconds})
+
+
+func release_main_story_control() -> void:
+	_adapter.release_main_story_control()
+
+
 ## 演出是否正在独占玩家输入。Dungeon3D 每帧的 _sync_player_input_lock() 必须问这里，
 ## 否则演出的"停住"会被逐帧顶掉（运行时零报错，只表现为角色照常能动）。
 func is_player_input_locked() -> bool:
@@ -439,6 +448,8 @@ func _process(delta: float) -> void:
 		_tick_triggers(delta)
 		return
 	_adapter.tick(delta)
+	if _active.is_empty() or _main_story_barrier_blocks(delta):
+		return
 	var script := _active.get("script") as NarrativeScript3D
 	if script == null:
 		_finish("aborted")
@@ -453,13 +464,41 @@ func _process(delta: float) -> void:
 		var cue := script.cues[index]
 		index += 1
 		var finished_early := _dispatch_cue(cue)
+		# 关键指令失败会在派发内部收口，不能向空字典写 index 制造假 active。
+		if _active.is_empty():
+			return
+		_active["index"] = index
 		if finished_early:
-			_active["index"] = index
 			_finish("flow.end")
+			return
+		if _main_story_barrier_blocks(0.0):
+			if not _active.is_empty():
+				_active["t"] = float(cue["at"])
 			return
 	_active["index"] = index
 	if now >= script.duration:
-		_finish("duration")
+		if _adapter.should_end_narrative(script.narrative_id):
+			_finish("duration")
+		else:
+			_diagnose("剧情『%s』关键业务条件未完成，已中止而非写入历史。" % script.narrative_id)
+			_finish("abort:main_story_contract")
+
+
+func _main_story_barrier_blocks(delta: float) -> bool:
+	if not active_id().begins_with("nar_main_"):
+		return false
+	var can_advance := _adapter.should_advance_narrative()
+	if _active.is_empty():
+		return true
+	if can_advance:
+		_active["blocked_seconds"] = 0.0
+		return false
+	var blocked := float(_active.get("blocked_seconds", 0.0)) + delta
+	_active["blocked_seconds"] = blocked
+	if blocked >= MAIN_STORY_BARRIER_TIMEOUT:
+		_diagnose("剧情『%s』实体屏障等待超过60秒，已中止。" % active_id())
+		abort("main_story_barrier_timeout")
+	return true
 
 
 func _tick_triggers(delta: float) -> void:
@@ -481,6 +520,10 @@ func _dispatch_cue(cue: Dictionary) -> bool:
 	params.erase("at")
 	params.erase("do")
 	if verb == "flow.end":
+		if not _adapter.should_end_narrative(str(_active.get("id", ""))):
+			_diagnose("剧情『%s』关键业务条件未完成，已中止而非写入历史。" % str(_active.get("id", "")))
+			_finish("abort:main_story_contract")
+			return true
 		_dispatch_log.append("%.2f flow.end" % float(cue.get("at", 0.0)))
 		return true
 	if verb == "flow.mark":
@@ -505,8 +548,12 @@ func _dispatch_cue(cue: Dictionary) -> bool:
 		if verb == "player.lock_input" and bool(params.get("locked", true)):
 			_apply_auto_invulnerability()
 		return false
+	if verb.begins_with("story."):
+		_diagnose("关键cue『%s』执行失败（degraded=%s）：%s" % [verb, str(result.get("degraded", false)), str(result.get("reason", ""))])
+		_finish("abort:story_cue_failed")
+		return true
 	if bool(result.get("degraded", false)):
-		# 降级不停摆（08 文档 §5.3）：告警 + 跳过，时间轴照走。
+		# 非业务表现指令允许降级跳过，关键story指令已在上方中止。
 		_warn("cue『%s』降级跳过：%s" % [verb, str(result.get("reason", ""))])
 	else:
 		_diagnose("cue『%s』执行失败：%s" % [verb, str(result.get("reason", ""))])
@@ -568,6 +615,12 @@ func _finish(reason: String) -> void:
 	var narrative_id := str(_active.get("id", ""))
 	# 先落历史再归还：拿到 id 最保险的时机，且写盘失败也不影响归还路径。
 	_commit_history_if_completed(narrative_id, reason)
+	if narrative_id.begins_with("nar_main_") and not _history_has(narrative_id):
+		var entry: Dictionary = _armed.get(narrative_id, {})
+		entry["fired_count"] = 0
+		entry["last_fired_msec"] = -10_000_000
+		if _armed.has(narrative_id):
+			_armed[narrative_id] = entry
 	_release_all(reason)
 	_active = {}
 	_dispatch_log.append("finish:%s" % reason)
@@ -587,6 +640,9 @@ const COMPLETABLE_RESULTS: Array[String] = ["duration", "flow.end", "skip"]
 ## 下次仍会触发"的实现点。只对 `run` 档写：`forever` 不消耗，写它只是白增 IO。
 func _commit_history_if_completed(narrative_id: String, reason: String) -> void:
 	if narrative_id.is_empty() or BaseManager == null:
+		return
+	if not _adapter.can_commit_narrative(narrative_id, reason):
+		_warn("剧情『%s』关键业务条件未完成，拒绝写入历史。" % narrative_id)
 		return
 	var entry: Dictionary = _armed.get(narrative_id, {}) as Dictionary
 	if str(entry.get("once", NarrativeScript3D.ONCE_RUN)) != NarrativeScript3D.ONCE_RUN:

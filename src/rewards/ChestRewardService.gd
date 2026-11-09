@@ -116,13 +116,76 @@ static func resolve(
 			else:
 				grants.append_array(gun_report.get("grants", []))
 
+	# 关卡保底（2026-11-09）：由 `clear_drops.room_guarantees` 在配置宝箱时写进 `guaranteed_items`。
+	# 与上面的档位分支**互相独立**：不是「替换掉落」，而是「额外保证」。
+	# 用**无类型** Array 接：`RewardService.resolve()` 返回的 grants 是普通 Array，
+	# 强转 `Array[Dictionary]` 在「无保底条目」的空数组上会失败并中断解析。
+	var guaranteed_grants: Array = []
+	var guaranteed_report := _resolve_guaranteed_items(
+		chest_config, run_seed, room_id, chest_id, floor
+	)
+	branch_reports.append(guaranteed_report)
+	if not bool(guaranteed_report.get("ok", false)):
+		errors.append_array(guaranteed_report.get("errors", []))
+	else:
+		guaranteed_grants = guaranteed_report.get("grants", []) as Array
+
 	result["ok"] = errors.is_empty()
-	result["grants"] = _stabilize_grants(_unit_grants(grants), room_id, chest_id)
+	# ⚠ 顺序：先 `_unit_grants` 把普通奖励拍成单件，**之后**再接保底。
+	# 保底条目自带数量（如 100 发弹药），绝不能过 `_unit_grants`（那会把 100 拍成 1）。
+	var stabilized := _stabilize_grants(_unit_grants(grants), room_id, chest_id)
+	for grant in guaranteed_grants:
+		stabilized.append(grant)
+	result["grants"] = stabilized
 	result["errors"] = errors
 	result["tier"] = tier
 	result["quality"] = str(chest_config.get("quality", "common"))
 	result["branch_reports"] = branch_reports
 	return result
+
+
+## 关卡保底条目解析（2026-11-09）。`chest_config.guaranteed_items` 是**已定好物与数量**的列表，
+## 由 `ClearDropService` 在配置宝箱时按本局种子算好（含「两个候选房随机挑一间」「两把枪随机挑一把」）。
+##
+## 本函数只负责翻译成标准 grants，不做任何掷骰 —— 「抽哪一间 / 抽哪把枪」的确定性必须在
+## 上游一次算清，否则同一只箱子读档重开时可能换内容。
+static func _resolve_guaranteed_items(
+	chest_config: Dictionary,
+	run_seed: int,
+	room_id: String,
+	chest_id: String,
+	floor_level: int
+) -> Dictionary:
+	var items := chest_config.get("guaranteed_items", []) as Array
+	if items.is_empty():
+		return {"ok": true, "grants": []}
+	var entries: Array = []
+	for raw in items:
+		var guaranteed := raw as Dictionary
+		var item_id := str(guaranteed.get("item_id", ""))
+		if item_id.is_empty():
+			continue
+		var entry := {
+			"kind": _SPEC.KIND_ITEM,
+			"item_id": item_id,
+			"count": maxi(1, int(guaranteed.get("count", 1))),
+			"merge_same_item": false,
+		}
+		# 保底枪的品质是**定值**（例如远征01 要求最低品质 = 蓝），不参与随机品质分布。
+		var grade := str(guaranteed.get("grade", ""))
+		if not grade.is_empty():
+			entry["forced_grade"] = grade
+		entries.append(entry)
+	if entries.is_empty():
+		return {"ok": true, "grants": []}
+	return _REWARD_SERVICE.resolve({
+		"spec_id": "chest:%s:%s:guaranteed" % [room_id, chest_id],
+		"entries": entries,
+	}, {
+		"seed": run_seed,
+		"floor": maxi(1, floor_level),
+		"salt": _salt(room_id, chest_id, "guaranteed"),
+	})
 
 
 static func _tier_for(config: Dictionary) -> String:

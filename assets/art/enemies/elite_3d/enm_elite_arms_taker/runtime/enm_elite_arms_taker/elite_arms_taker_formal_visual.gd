@@ -45,6 +45,37 @@ const HIT_VOLUMES := [
 	{"bone": "R_Foot", "center": Vector3(0.007, 0.044, 0.005), "size": Vector3(0.058, 0.143, 0.049)},
 ]
 
+## 躯干补底柱：把躯干判定一路补到支撑面，填掉两腿之间那道竖缝。
+##
+## 为什么不是为了"更宽松"而加：1 级实例的世界身高只有 3.5×0.70=2.45 m，
+## 大腿盒顶在 1.35 m、腰盒底在 1.18 m，而玩家枪口大致就在这条高度带上 ——
+## 子弹经常从两腿之间的空档整条穿过去，读作"明明打中了却没掉血"。
+##
+## 几何：横截面**比 `Waist` 盒更宽**（x 0.21 vs 腰盒 0.111，z 仍 0.119），顶边接腰盒顶边，
+## 底边每帧取当前姿态**最低的靴底** ⇒ 与地面齐平，不会浮空也不会插进地板。
+## 朝向固定为世界轴：倾斜的长柱会在前倾/跪地时把判定甩到空气里。
+## `size.y` 是 1.0 个单位高，真实柱高由变换的 Y 缩放携带（Godot 4 的
+## BoxShape3D 吃非均匀 basis，已实测），这样柱子能随蹲伏/起跳逐帧伸缩。
+## 由 `hit_volume_transforms()` 单独按世界空间生成，不走骨骼盒那条路径。
+##
+## ## 为什么 x 要比腰盒宽（2026-11-09 随 12 级体型 3 倍一起改）
+## 补底柱只盖住两腿**正中间**，柱侧到小腿内缘还剩两条侧缝。缝在骨骼单位里是
+## 0.0261 / 0.0457，世界值 = 缝 × 3.5（Armature）× 0.70（全局）× λ —— **随体型线性放大**，
+## 而弹体直径固定 0.24 m。于是：
+##   λ = 1.5（1 级）0.096 / 0.168 m  ok
+##   λ = 2.14        0.137 / 0.240 m  临界
+##   λ = 3.0（12 级）0.192 / 0.336 m  最宽那条已大于弹径 ⇒ 又从侧面漏弹
+## 把 x 加宽到 0.21 骨骼单位（半宽 0.105）后，任何等级的半宽都 ≥ 0.0457 + 0.0555，
+## 侧缝在物理上被吃掉。代价是躯干判定比腰略宽（λ=1.5 时世界宽 0.772 m），
+## 但这比"打中却不掉血"便宜得多，且收租人整体含腿宽约 1.5 m，仍落在躯干投影内。
+const GROUND_COLUMN := {
+	"label": "TorsoColumn",
+	"bone": "Waist",
+	"ground_locked": true,
+	"top_edge": 0.072,
+	"size": Vector3(0.21, 1.0, 0.119),
+}
+
 var _player: AnimationPlayer
 var _skeleton: Skeleton3D
 @onready var _model_root: Node3D = $VisualGLB
@@ -328,7 +359,9 @@ func get_presentation_snapshot() -> Dictionary:
 
 
 func get_hit_volume_spec() -> Array:
-	return HIT_VOLUMES
+	var spec: Array = HIT_VOLUMES.duplicate()
+	spec.append(GROUND_COLUMN)
+	return spec
 
 
 func hit_volume_transforms() -> Array[Transform3D]:
@@ -347,7 +380,32 @@ func hit_volume_transforms() -> Array[Transform3D]:
 			var half_height := Vector3(absf(basis.x.y), absf(basis.y.y), absf(basis.z.y)).dot(spec["size"]) * 0.5
 			hit_transform.origin.y = foot_bottoms[spec["bone"]] + half_height
 		transforms.append(hit_transform)
+	transforms.append(_ground_column_transform(foot_bottoms))
 	return transforms
+
+
+## 补底柱的**世界空间**变换：竖直、轴对齐，底边贴最低靴底，顶边接腰盒顶边。
+## 柱高写进 basis 的 Y 缩放（单位高的盒子 × Y 缩放 = 实际柱高），横截面仍按
+## 骨骼单位 × 实例倍率换算，与骨骼盒共用同一套"局部尺寸 × 倍率"口径。
+func _ground_column_transform(foot_bottoms: Dictionary) -> Transform3D:
+	var index := _skeleton.find_bone(str(GROUND_COLUMN["bone"]))
+	if index < 0 or foot_bottoms.is_empty():
+		# 没有靴底采样就没有"地面"可贴。宁可把盒子沉到地板下面，也不能让它留在
+		# 世界原点变成一发能打中空气的幽灵判定（骨骼盒仍各自跟骨，不受影响）。
+		return Transform3D(Basis(), Vector3(0.0, -1000.0, 0.0))
+	var anchor := _skeleton.global_transform * _skeleton.get_bone_global_pose(index)
+	var top := (anchor * Vector3(0.0, float(GROUND_COLUMN["top_edge"]), 0.0)).y
+	var ground := INF
+	for height in foot_bottoms.values():
+		ground = minf(ground, float(height))
+	if not is_finite(ground) or not is_finite(top):
+		return Transform3D(Basis(), Vector3(0.0, -1000.0, 0.0))
+	var world_scale := _skeleton.global_basis.get_scale()
+	var column_height := maxf(0.05, top - ground)
+	return Transform3D(
+		Basis.from_scale(Vector3(world_scale.x, column_height, world_scale.z)),
+		Vector3(anchor.origin.x, ground + column_height * 0.5, anchor.origin.z)
+	)
 
 
 ## Cache the actual boot vertices and their skin weights. The toe joint can

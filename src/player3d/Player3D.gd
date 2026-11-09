@@ -31,11 +31,12 @@ var camera_feedback := preload("res://src/player3d/PlayerCameraFeedback3D.gd").n
 const VFX_POOL_SCRIPT := preload("res://src/vfx/VfxPool3D.gd")
 const HEAL_VFX_SCRIPT := preload("res://src/vfx/VfxHealNumber3D.gd")
 
-const SPEED := 4.5
+## 基础移速（空手 / 收枪，m/s）。2026-11-09 业主「所有的数值增加 1.2」：4.5 → 5.7。
+const SPEED := 5.7
 ## 持枪移速惩罚（m/s，对基础速度的减法项）。三类枪械动画族与
 ## 16.1 §移动四方向与持枪姿态设计冻结 的 sidearm / longgun / machinegun 同口径。
 ## 生效顺序：v = (SPEED - 惩罚) × 命运/词条移速倍率 —— 先扣武器重量，再乘百分比加成。
-## 当前梯度 4.0 / 3.7 / 3.4 全部高于表现层慢走阈值 3.2，三类枪都播正常移动动画。
+## 当前梯度 5.2 / 4.9 / 4.6 全部高于表现层慢走阈值 3.2，三类枪都播正常移动动画。
 const WEAPON_FAMILY_MOVE_PENALTY := {
 	"sidearm": 0.5,
 	"longgun": 0.8,
@@ -89,6 +90,50 @@ const VIRTUAL_INPUT_SOURCES := ["MobileInput", "GamepadInput"]
 
 ## 敌人分组名（Enemy3D._ready 里 add_to_group 的那个）。瞄准辅助按它收集候选。
 const ENEMY_GROUP := "enemy_3d"
+
+## ── 准星 = 弹道落点（2026-11-09 业主）────────────────────────────────────────
+## 业主原话：「子弹的飞行轨迹和准星不对，会偏差。可能是因为准星在地上的原因」。
+##
+## 旧口径：准星贴在**角色脚底平面 +0.035m**（几乎贴地），而子弹恒从枪口（实测
+## 基准体型手枪枪口离地 **0.749m**）沿**水平**方向飞行 ⇒ 两者永远不共线。
+## 1080p、43° FOV、相机 (0,17.5,13) 俯 52° 下实测：同一水平距离处，子弹在屏幕上
+## 比准星高 **44px** —— 约等于半个僵尸的高度，正是「打不准」的来源。
+##
+## 新口径：准星抬到**枪口高度平面**，开火方向由「枪口 → 准星点」求出。
+## 由于两点同高，弹道仍是水平的（不改变任何命中几何），但屏幕上准星在哪、
+## 子弹就从哪穿过去。
+##
+## 0.75 不是拍脑袋：它是基准体型（完整高 1.20m）持手枪时 `MuzzleSocket` 的世界
+## 高度实测值 0.749m，取整到 0.75。换枪只改枪口 x/z，不改这个高度量级。
+## 改这个常量必须同步 `tests/verification/verify_bullet_aim_alignment.gd` 的断言。
+const AIM_TARGET_HEIGHT := 0.75
+
+## ── 准星图标朝向与屏幕尺寸（2026-11-09 主人：「准星重新设计，设计成准星的图标，
+## 一直面对摄像机的公告板」）──────────────────────────────────────────────
+##
+## 朝向：**手写基向量 = 相机 basis**，不用 `BaseMaterial3D.billboard_mode`。
+## 理由是项目里已经踩过的坑（见 `PlayerAvatar3D.RELOAD_RING_*` 与 `SpeechBubble3D._face_camera`）：
+## Godot 的 billboard 只绕 **Y 轴**转，本作相机俯视约 52° ⇒ 面片会被压成
+## sin(52°) ≈ 0.79 的竖椭圆，正是「平躺在屏幕里」的观感。
+##
+## 尺寸：**恒定屏幕占比**，不随瞄准距离缩放。准星位置是鼠标射线与瞄准平面的交点，
+## 2m 处与 20m 处距离差近 10 倍 —— 若给固定世界尺寸，远处准星会缩成一个小点。
+## 换算：`world_m_per_px = 2 · d · tan(fov/2) / viewport_h`。
+##
+## 占比而不是绝对像素：1080p 下 **6.2% × 1080 ≈ 67px 面片**，其中图标墨迹
+## （最外刻度到 0.355 UV）约占 71% ⇒ 屏幕上可见直径 ≈ **48px**；
+## 720p 下同样占 6.2%（可见 ≈32px）。换分辨率不需要改常量。
+##
+## 0.062 的来历：原 Torus（外径 0.42m）在这个机位可见直径只有约 25px，
+## 环和点的分界已经糊在一起；带刻度的图标细节更多，需要更大的像素预算。
+const AIM_CURSOR_SCREEN_RATIO := 0.062
+## 世界尺寸钳制。**下限**是「太近时别糊满屏幕」；**上限**是「远距离别让面片无节制长大」。
+##
+## 上限 2.5m 而不是更小：准星的相机距离约 22~26m（相机在角色后上方 17.5m 高），
+## 恒定占比在这个距离上需要 1.1~1.3m 左右的面片。取 1.10 会在 16m 外把图标截成
+## 32.8px（目标 44.6px）—— 恒定像素就失效了。深度测试已关，面片穿墙不是顾虑。
+const AIM_CURSOR_MIN_WORLD_M := 0.12
+const AIM_CURSOR_MAX_WORLD_M := 2.50
 
 @export var max_hp := 100
 @export var combat_enabled := false
@@ -2994,7 +3039,7 @@ func _update_combat_input() -> void:
 			if auto_fire_on and not shoot_pressed_here and weapon.charge_time > 0.0 and weapon.is_charge_active():
 				weapon.cancel_charge()
 			if shoot_pressed_here:
-				weapon.try_fire(aim_direction, self)
+				weapon.try_fire(_ballistic_direction(aim_direction, aim_cursor.global_position), self)
 		else:
 			# 弹道指向选中的那只敌人（水平），但**不改** aim_direction / 面朝向 /
 			# 准星 —— 自动射击只管开火，不许替玩家转视角。
@@ -3084,14 +3129,39 @@ func _has_clear_shot_at(enemy: Enemy3D) -> bool:
 	return space.intersect_ray(query).is_empty()
 
 
-## 自动射击的弹道方向：水平指向目标。玩家位置而非枪口作为起点，
-## 与 aim_direction 的口径一致（准星本身就是以角色为圆心算的）。
+## 自动射击的弹道方向：先取敌人所在的瞄准点，再走与手动射击同一套「枪口 → 准星」解算。
+## 否则两套口径会漂：手动打准星、自动打枪管延长线，近距离自动射击会偏一侧。
 func _auto_fire_shot_direction(enemy: Enemy3D) -> Vector3:
 	var to_enemy := enemy.global_position - global_position
 	to_enemy.y = 0.0
 	if to_enemy.length_squared() <= 0.000001:
 		return aim_direction
-	return to_enemy.normalized()
+	var target_point := enemy.global_position
+	target_point.y = global_position.y + AIM_TARGET_HEIGHT
+	return _ballistic_direction(to_enemy.normalized(), target_point)
+
+
+## 把玩法层的水平瞄准方向解成真正的弹道方向：**枪口 → 目标点**。
+##
+## 为什么起点必须是枪口：准星已经抬到枪口高度（`AIM_TARGET_HEIGHT`），
+## 但枪口在角色右前方约 0.7m，若子弹仍从枪口沿 `aim_direction` 平行飞，
+## 屏幕上会留下「子弹在准星旁边 X 像素处擦过」的横向残差（实测 7m 处 15px）。
+## 从枪口直接连到目标点，屏幕上就是「准星在哪、子弹穿哪」。
+##
+## 近身保护：枪口与目标点距离 < 0.6m 时，`normalized()` 会把毫米级噪声放大成
+## 大幅偏转，这时退回水平方向 —— 贴脸开火本来就该按朝向打，不该被几何抖到侧面。
+func _ballistic_direction(flat_direction: Vector3, target_point: Vector3) -> Vector3:
+	var muzzle := weapon.muzzle_global_position() if is_instance_valid(weapon) else global_position
+	var to_target := target_point - muzzle
+	var length := to_target.length()
+	if length <= 0.000001:
+		return flat_direction
+	if length < 0.6:
+		var flat := Vector3(to_target.x, 0.0, to_target.z)
+		if flat.length_squared() <= 0.000001:
+			return flat_direction
+		return flat.normalized()
+	return to_target / length
 
 
 func _tick_dash_input_buffer(delta: float) -> void:
@@ -3303,8 +3373,14 @@ func _update_aim_from_mouse() -> void:
 			aim_dir_3d = AimAssist3D.solve(aim_dir_3d, _collect_aim_assist_candidates(aim_dir_3d))
 			aim_direction = aim_dir_3d
 			aim_yaw = atan2(-aim_dir_3d.x, -aim_dir_3d.z)
+			# 摇杆没有屏幕落点，用一个固定前伸距离的虚拟准星；高度与鼠标路径共用
+			# `AIM_TARGET_HEIGHT`，否则键鼠/手柄两种输入的准星会在两个高度上跳。
 			var aim_cursor_distance := 3.2
-			aim_cursor.global_position = global_position + aim_dir_3d * aim_cursor_distance + Vector3.UP * 0.035
+			_place_aim_cursor(
+				global_position
+				+ aim_dir_3d * aim_cursor_distance
+				+ Vector3.UP * AIM_TARGET_HEIGHT
+			)
 			return
 	var viewport := get_viewport()
 	if viewport == null:
@@ -3336,7 +3412,9 @@ func _update_aim_from_mouse() -> void:
 		return
 	# 塔楼使用真实层高和连续楼梯坡面。瞄准平面必须跟随角色当前物理高度，
 	# 不能固定在世界 Y=0，否则下楼后光标会一直悬在楼顶。
-	var intersection = Plane(Vector3.UP, global_position.y).intersects_ray(ray_origin, ray_direction)
+	# 平面高度 = 角色脚底 + `AIM_TARGET_HEIGHT`（枪口高度）：准星与弹道共面，
+	# 见文件顶部该常量的注释 —— 这条是「准星贴地 ⇒ 子弹在屏幕上偏 44px」的修复点。
+	var intersection = Plane(Vector3.UP, global_position.y + AIM_TARGET_HEIGHT).intersects_ray(ray_origin, ray_direction)
 	if not intersection is Vector3:
 		return
 	var target := intersection as Vector3
@@ -3348,7 +3426,9 @@ func _update_aim_from_mouse() -> void:
 		return
 	var next_aim_direction := flat_direction.normalized()
 	var next_aim_yaw := atan2(-next_aim_direction.x, -next_aim_direction.z)
-	var next_cursor_position := target + Vector3(0, 0.035, 0)
+	# 准星就画在瞄准平面上，不再 +0.035 贴地。加一点抬高只为避开地面 z-fighting，
+	# 但那个「贴地」偏移正是本次要消除的东西 —— 所以这里保持 0 偏移。
+	var next_cursor_position := target
 	if (
 		not next_aim_direction.is_finite()
 		or not is_finite(next_aim_yaw)
@@ -3357,7 +3437,51 @@ func _update_aim_from_mouse() -> void:
 		return
 	aim_direction = next_aim_direction
 	aim_yaw = next_aim_yaw
-	aim_cursor.global_position = next_cursor_position
+	_place_aim_cursor(next_cursor_position)
+
+
+## 把准星图标摆到 `world_pos`，同时刷新**朝向**与**屏幕尺寸**。
+##
+## 三件事必须一起做：位置 / 朝向 / 大小。分开做会出现「新位置配旧朝向」的中间帧，
+## 高速甩枪时看得见图标歪一下。
+##
+## 朝向不用 `BaseMaterial3D.billboard_mode`：Godot 的 billboard 只绕 Y 轴转，
+## 本作相机俯视约 52°，面片会被压成 sin(52°) ≈ 0.79 的椭圆（就是「准星平躺在屏幕里」
+## 的观感来源）。这里直接把基向量设成相机基 —— 面片法线 (+Z) 因此正对镜头。
+##
+## 尺寸按距离补偿成**恒定屏幕像素**：准星位置是鼠标射线与瞄准平面的交点，
+## 近处 2m、远处 20m 差 10 倍；固定世界尺寸会让远处准星缩成一个点。
+func _place_aim_cursor(world_pos: Vector3) -> void:
+	if aim_cursor == null or not world_pos.is_finite():
+		return
+	aim_cursor.global_position = world_pos
+	if camera == null or not camera.is_inside_tree():
+		return
+	# ⚠ 用**沿光轴的深度**，不是 `distance_to()` 的欧氏距离。
+	# 透视投影的比例由深度决定；准星偏出画面中心时欧氏距离会大于深度，
+	# 按欧氏算会把远处准星算大（实测 16m 处多 8%，48px vs 目标 44.6px）。
+	var camera_axis := -camera.global_transform.basis.z
+	var distance := (world_pos - camera.global_position).dot(camera_axis)
+	if distance <= 0.01:
+		return
+	var viewport := get_viewport()
+	var viewport_height := 1.0
+	if viewport != null:
+		viewport_height = maxf(1.0, viewport.get_visible_rect().size.y)
+	# 该距离上「1 个屏幕像素 = 多少世界米」。
+	var world_per_px := 2.0 * distance * tan(deg_to_rad(camera.fov) * 0.5) / viewport_height
+	# 目标屏幕边长（像素）= 屏高 × 占比；再换成世界米。
+	var target_px := viewport_height * AIM_CURSOR_SCREEN_RATIO
+	# 钳制：太近防糊满屏幕，太远防图标大到穿进墙里（有深度测试会被墙切掉一角）。
+	var world_size := clampf(
+		target_px * world_per_px,
+		AIM_CURSOR_MIN_WORLD_M,
+		AIM_CURSOR_MAX_WORLD_M
+	)
+	aim_cursor.global_transform = Transform3D(
+		camera.global_transform.basis.orthonormalized() * world_size,
+		world_pos
+	)
 
 
 ## 叙事是否正在接管角色朝向（见 NarrativeDirector.is_actor_facing_overridden）。

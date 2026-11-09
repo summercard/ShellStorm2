@@ -407,10 +407,13 @@ static func _resolve_item_entry(entry: Dictionary, state: Dictionary, path: Stri
 	# 掉落品质（蓝/紫/金）在**这里**逐把掷骰 —— 这是"枪械掉落"的唯一出口，
 	# 两把同名枪会各自滚出各自的品质（业主 2026-10-18）。
 	if str(definition.get("type", "")) == "weapon":
+		# `forced_grade`（2026-11-09）：保底条目要指定品质时不掷骰，直接落地。
+		# 只给「关卡保底」这类**确定性**需求用；普通掉落一律留空走随机。
+		var forced_grade := str(entry.get("forced_grade", ""))
 		for index in range(count):
 			_append_grant(state, {
 				"kind": _SPEC.KIND_ITEM, "item_id": item_id, "count": 1,
-				"item": _roll_dropped_weapon(definition, state),
+				"item": _roll_dropped_weapon(definition, state, forced_grade),
 				"sink": str(entry.get("sink", "ground")), "pool_id": "",
 				"slot": "%s:%d" % [path, index], "merged": false,
 			}, false)
@@ -677,11 +680,15 @@ static func _eval_amount(raw, state: Dictionary, _path: String) -> int:
 ##
 ## 非枪械（模块 / 配件 / 弹药 / 消耗品）原样返回，绝不写 `drop_grade`
 ## —— 那会让背包里的每个零件都长出一个没有效果文的品质标签。
-static func _roll_dropped_weapon(item: Dictionary, state: Dictionary) -> Dictionary:
+static func _roll_dropped_weapon(item: Dictionary, state: Dictionary, forced_grade := "") -> Dictionary:
 	if str(item.get("type", "")) != "weapon":
 		return _WEAPON_INSTANCE.ensure_weapon_item(item)
 	var rng: RandomNumberGenerator = state["rng"]
-	var grade := WeaponDropGrade.roll(rng.randf())
+	# **先抽后判**：即使品质被保底指定，也照常消耗一次 `randf()`。
+	# 否则同一条奖励里「强制品质」的条目会让后面的随机流整体位移，
+	# 同一 run_seed 的其它掉落跟着变 —— 确定性口径（同 seed 可复现）比省一次抽样重要。
+	var grade_roll := rng.randf()
+	var grade := forced_grade if WeaponDropGrade.is_valid(forced_grade) else WeaponDropGrade.roll(grade_roll)
 	var prepared := item.duplicate(true)
 	if not WeaponBulletDrop.is_melee_weapon(prepared):
 		# 必须先写 `bullet_module_id` 再 ensure：ensure 会立刻按它生成装配快照，

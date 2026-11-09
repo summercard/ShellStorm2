@@ -128,6 +128,19 @@ var _trail_material: StandardMaterial3D
 var _base_scale := 1.0
 var _pulse_phase := 0.0
 var _profile: Dictionary = {}
+
+# ── 敌方子弹 billboard 图标（2026-11-09 主人：「敌方子弹也一样 —— 一直面对摄像机的公告板」）
+#
+# 为什么单独做一套面片而不是改 3D 弹体：俯视 52° 下 3D 棱柱在屏幕上是「一根短棍的顶面」，
+# 弹体沿飞行方向转，屏幕投影就只剩一个点，暗场景里读不出来。面向相机的图标形状恒定。
+#
+# 为什么只在 `hostile` 上启用：玩家子弹是「看自己的弹道」，3D 弹体 + 尾迹能表达方向和速度；
+# 敌方子弹是「看威胁」，要的是形状和颜色一眼可辨。两者的读法不同，视觉也不该共用一套。
+#
+# 实现放在共用节点 `BulletBillboardIcon3D`：敌方子弹还有一条「通用弹体」路由
+# （`VfxBulletVisual3D`），两处必须同源，否则朝向/尺寸算法会各写一遍然后漂移。
+var _billboard := false
+var _icon: BulletBillboardIcon3D
 ## 枪身维度的弹体几何修饰（2026-10-14 业主：每把枪的子弹大小要做出区分）。
 ## 由调用方经 `activate(..., context)` 下发；缺省一律中性（不改观感）。
 ##   - `axial_scale`  ：沿飞行轴（local Z）拉长的倍率 —— 狙击枪用（弹体变长）。
@@ -158,6 +171,8 @@ func _build_visual() -> void:
 	_body_root = Node3D.new()
 	_body_root.name = "BulletRoot"
 	add_child(_body_root)
+
+	_build_icon()
 
 	# 外壳：弹色半透明（略大），先建以便弹芯叠在其内。
 	_shell_material = StandardMaterial3D.new()
@@ -213,6 +228,37 @@ func _make_body_piece(piece_name: String, material: StandardMaterial3D) -> MeshI
 
 func _shell_default_color() -> Color:
 	return _profile.get("shell_color", Color(0.45, 0.88, 1.0)) as Color
+
+
+## 敌方子弹的 billboard 图标：交给共用节点 `BulletBillboardIcon3D` 建。
+##
+## **恒建**、按 `_billboard` 切可见性，而不是按需 add_child —— 池化复借时重建节点会让
+## 持有引用的一方全部失效；隐藏/显示没有这个风险，代价只是每发一个隐藏的 12 面网格。
+func _build_icon() -> void:
+	_icon = BulletBillboardIcon3D.new()
+	_icon.name = "BillboardIcon"
+	add_child(_icon)
+	_icon.ensure_built()
+
+
+## 切换 3D 弹体与 billboard 图标的可见性。两者互斥，绝不叠着画。
+func _apply_billboard_mode() -> void:
+	if _body_root != null:
+		_body_root.visible = not _billboard and _active
+	if _icon != null:
+		_icon.visible = _billboard and _active
+	if _billboard and _trail_root != null:
+		# billboard 模式下 3D 尾迹没有意义：它挂在会被 `look_at` 旋转的宿主上，
+		# 而图标始终正对相机，两者方向永远不一致 —— 会看到「图标 + 一根斜插的锥」。
+		_trail_root.visible = false
+
+
+## 图标世界尺寸：核心直径 **严格等于判定球直径**（上一轮「所见即所中」的延伸）。
+## 面片边长由 `BulletBillboardIcon3D.set_hit_diameter()` 反算，这里只给判定球直径。
+func _apply_icon_scale() -> void:
+	if _icon == null:
+		return
+	_icon.set_hit_diameter(BulletBillboardIcon3D.HIT_RADIUS_M * 2.0 * _base_scale)
 
 
 func _build_light() -> void:
@@ -325,8 +371,12 @@ func configure(color: Color, size: float = 1.0, context: Dictionary = {}) -> voi
 	_grow_from = clampf(float(context.get("grow_from", 1.0)), 0.05, 1.0)
 	_grow_duration = maxf(0.0, float(context.get("grow_duration", 0.0)))
 	_flight_time = 0.0
+	_billboard = bool(context.get("billboard", false))
 	_apply_geometry_scale()
-	# 复借复色：外壳/尾迹/灯用子弹色；亮芯保持自身亮色。
+	_apply_billboard_mode()
+	# 复借复色：外壳/尾迹/灯用子弹色；亮芯保持自身亮色。图标同理逐发染色。
+	if _icon != null:
+		_icon.set_tint(color)
 	if _shell_material != null:
 		_shell_material.albedo_color = color
 		_shell_material.emission = color
@@ -350,8 +400,9 @@ func activate(world_position: Vector3, color: Color, size: float, context: Dicti
 	if _light != null:
 		_light.visible = true
 		_light.light_energy = float(_profile.get("light_energy", 1.2))
-	if _body_root != null:
-		_body_root.visible = true
+	# 弹体 / 图标的可见性由 billboard 模式统一决定，不在这里硬写 `_body_root.visible = true`
+	# —— 否则敌方子弹会同时露出 3D 棱柱和图标。
+	_apply_billboard_mode()
 	# 复借按总开关复位：关着的时候不得被重新点亮（否则池化复借会把尾巴带回来）。
 	set_trail_visible(GameDesignConfig.BULLET_TRAIL_VISIBLE)
 
@@ -370,8 +421,8 @@ func deactivate() -> void:
 	if _light != null:
 		_light.light_energy = 0.0
 		_light.visible = false
-	if _body_root != null:
-		_body_root.visible = false
+	_billboard = false
+	_apply_billboard_mode()
 
 
 func _process(delta: float) -> void:
@@ -385,6 +436,10 @@ func _process(delta: float) -> void:
 	var pulse := 1.0 + sin(_pulse_phase * rate) * ampl
 	if _body_root != null:
 		_body_root.scale = Vector3.ONE * _base_scale * pulse * _growth_factor()
+	# billboard 图标：脉动**不进尺寸**，否则「核心直径 = 判定球直径」会被 ±5% 破掉。
+	# 每帧只校朝向；尺寸由 `_apply_icon_scale()` 在 configure / growth 时算一次。
+	if _billboard and _icon != null:
+		_icon.pose()
 	_animate_trail()
 
 
@@ -413,8 +468,11 @@ func _animate_trail() -> void:
 
 ## 纯视觉：切换尾迹可见性（炮台形态等玩法调用）。
 func set_trail_visible(visible_state: bool) -> void:
-	if _trail_root != null:
-		_trail_root.visible = visible_state
+	if _trail_root == null:
+		return
+	# billboard 模式下尾迹恒隐藏：图标始终正对相机，而尾迹挂在被 `look_at` 旋转的宿主上，
+	# 两者方向永远对不上。总开关和调用方都不能把它放出来。
+	_trail_root.visible = visible_state and not _billboard
 
 
 ## 纯视觉：按倍率增长几何（命运 growth 等玩法调用）。不改变碰撞/伤害。
@@ -435,6 +493,7 @@ func _growth_factor() -> float:
 
 
 func _apply_geometry_scale() -> void:
+	_apply_icon_scale()
 	if _body_root == null:
 		return
 	# 各向同性部分落 _body_root；轴向拉伸落在各件自己的局部长轴上 —— 这样不会与
@@ -503,5 +562,17 @@ func get_presentation_snapshot() -> Dictionary:
 		"grow_duration": _grow_duration,
 		"flight_time": _flight_time,
 		"growth_factor": _growth_factor(),
+		# billboard 图标（敌方子弹）：供验收读「图标是否真的在、朝向是否与相机一致、
+		# 核心直径是否等于判定球直径」。玩家子弹这几项恒为 false / 0。
+		"billboard": _billboard,
+		"body_visible": _body_root.visible if _body_root != null else false,
+		"icon_visible": _icon.visible if _icon != null else false,
+		"icon_world_side": _icon.get_snapshot()["icon_world_side"] if _icon != null else 0.0,
+		"icon_core_diameter": (
+			_icon.get_snapshot()["icon_core_diameter"] if _icon != null else 0.0
+		),
+		"icon_camera_alignment": (
+			_icon.get_snapshot()["icon_camera_alignment"] if _icon != null else -1.0
+		),
 		"node_count": get_child_count(),
 	}

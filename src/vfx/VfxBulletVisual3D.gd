@@ -74,6 +74,15 @@ var _shell_material: StandardMaterial3D
 var _trail_material: StandardMaterial3D
 var _base_scale := 1.0
 var _pulse_phase := 0.0
+## 敌方子弹的 billboard 图标（2026-11-09 主人：「敌方子弹也一样」）。
+##
+## 这个类就是**敌方子弹实际走的那条路由**：`WeaponModel3D` 只给玩家子弹填 `visual_id`，
+## 敌人 `Enemy3D._launch_projectile()` 不填 ⇒ `Projectile3D._visual_scene_for("")` 落到
+## 通用弹体 Prefab，脚本即本类。八弹种的 `VfxBulletBody3D` 只在关卡点名 `visual_id` 时才走。
+##
+## 所以「敌方子弹改成公告板」的主战场在这里 —— 只改 `VfxBulletBody3D` 是改错了地方。
+var _billboard := false
+var _icon: BulletBillboardIcon3D
 
 
 func _ready() -> void:
@@ -163,12 +172,42 @@ func _build_visual() -> void:
 	_light.distance_fade_length = _LIGHT_FADE_LENGTH
 	add_child(_light)
 
+	# billboard 图标：恒建、默认隐藏，按 `_billboard` 切可见性。
+	# 恒建而不是按需 add_child —— 池化复借时重建节点会让持有引用的一方全部失效。
+	_icon = BulletBillboardIcon3D.new()
+	_icon.name = "BillboardIcon"
+	add_child(_icon)
+	_icon.ensure_built()
+
+
+## 切换 3D 弹体与 billboard 图标的可见性。两者互斥，绝不叠着画。
+func _apply_billboard_mode() -> void:
+	if _root != null:
+		_root.visible = not _billboard and _active
+	if _icon != null:
+		_icon.visible = _billboard and _active
+	if _billboard and _trail != null:
+		# billboard 模式下 3D 尾迹没有意义：它挂在会被 `look_at` 旋转的宿主上，
+		# 而图标始终正对相机，两者方向永远不一致 —— 会看到「图标 + 一根斜插的锥」。
+		_trail.visible = false
+
+
+## 图标世界尺寸：核心直径 **严格等于判定球直径**（上一轮「所见即所中」的延伸）。
+func _apply_icon_scale() -> void:
+	if _icon == null:
+		return
+	_icon.set_hit_diameter(BulletBillboardIcon3D.HIT_RADIUS_M * 2.0 * _base_scale)
+
 
 func configure(color: Color, size: float = 1.0, context: Dictionary = {}) -> void:
 	super.configure(color, size, context)
 	_base_scale = size
+	_billboard = bool(context.get("billboard", false))
 	_apply_geometry_scale()
-	# 复借复色：外壳/拖尾用子弹色；亮芯保持白金；灯色跟随子弹色。
+	_apply_billboard_mode()
+	# 复借复色：外壳/拖尾用子弹色；亮芯保持白金；灯色跟随子弹色。图标同理逐发染色。
+	if _icon != null:
+		_icon.set_tint(color)
 	if _core_material != null:
 		_core_material.albedo_color = _CORE_COLOR
 		_core_material.emission = _CORE_COLOR
@@ -195,8 +234,9 @@ func activate(world_position: Vector3, color: Color, size: float, context: Dicti
 	if _light != null:
 		_light.visible = true
 		_light.light_energy = _LIGHT_ENERGY
-	if _root != null:
-		_root.visible = true
+	# 弹体 / 图标的可见性由 billboard 模式统一决定，不在这里硬写 `_root.visible = true`
+	# —— 否则敌方子弹会同时露出 3D 棱柱和图标。
+	_apply_billboard_mode()
 	# 复借按总开关复位：关着的时候不得被重新点亮。
 	set_trail_visible(GameDesignConfig.BULLET_TRAIL_VISIBLE)
 
@@ -209,8 +249,8 @@ func deactivate() -> void:
 	if _light != null:
 		_light.light_energy = 0.0
 		_light.visible = false
-	if _root != null:
-		_root.visible = false
+	_billboard = false
+	_apply_billboard_mode()
 
 
 func _process(delta: float) -> void:
@@ -221,12 +261,19 @@ func _process(delta: float) -> void:
 	var pulse := 1.0 + sin(_pulse_phase * 8.5) * 0.05
 	if _root != null:
 		_root.scale = Vector3.ONE * _base_scale * pulse
+	# billboard 图标：脉动**不进尺寸**，否则「核心直径 = 判定球直径」会被 ±5% 破掉。
+	# 每帧只校朝向；尺寸由 `_apply_icon_scale()` 在 configure / growth 时算一次。
+	if _billboard and _icon != null:
+		_icon.pose()
 
 
 ## 纯视觉：切换拖尾可见性（炮台形态隐藏拖尾）。
 func set_trail_visible(visible_state: bool) -> void:
-	if _trail != null:
-		_trail.visible = visible_state
+	if _trail == null:
+		return
+	# billboard 模式下尾迹恒隐藏：图标始终正对相机，而尾迹挂在被 `look_at` 旋转的宿主上，
+	# 两者方向永远对不上。总开关和调用方都不能把它放出来。
+	_trail.visible = visible_state and not _billboard
 
 
 ## 纯视觉：按倍率增长几何（命运 growth 等玩法调用）。不改变碰撞/伤害。
@@ -238,6 +285,7 @@ func apply_growth(factor: float) -> void:
 
 
 func _apply_geometry_scale() -> void:
+	_apply_icon_scale()
 	if _root != null:
 		_root.scale = Vector3.ONE * _base_scale
 
@@ -269,5 +317,18 @@ func get_presentation_snapshot() -> Dictionary:
 		"trail_visible": _trail.visible if _trail != null else false,
 		"forward": (-global_basis.z) if is_inside_tree() else Vector3(0.0, 0.0, -1.0),
 		"base_scale": _base_scale,
+		"body_scale": _root.scale.x if _root != null else 0.0,
+		# billboard 图标（敌方子弹）：供验收读「图标在不在、朝向对不对、核心多大」。
+		# 玩家子弹走同一条路由但 `billboard=false`，这几项恒为 false / 0。
+		"billboard": _billboard,
+		"body_visible": _root.visible if _root != null else false,
+		"icon_visible": _icon.visible if _icon != null else false,
+		"icon_world_side": _icon.get_snapshot()["icon_world_side"] if _icon != null else 0.0,
+		"icon_core_diameter": (
+			_icon.get_snapshot()["icon_core_diameter"] if _icon != null else 0.0
+		),
+		"icon_camera_alignment": (
+			_icon.get_snapshot()["icon_camera_alignment"] if _icon != null else -1.0
+		),
 		"node_count": get_child_count(),
 	}

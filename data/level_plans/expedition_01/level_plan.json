@@ -339,6 +339,28 @@
         "note": "备弹·数量区间与怪物掉落表同口径"
       }
     ],
-    "fallback_pool_note": "**刻意不含货币**：本关金币由击杀收益单独决定，FateEconomyService 的报价基准就是按这个收益算的；清房再掺货币会把基准抬高，卡价整体上浮。远征01 的金币口径不动。"
+    "fallback_pool_note": "**刻意不含货币**：本关金币由击杀收益单独决定，FateEconomyService 的报价基准就是按这个收益算的；清房再掺货币会把基准抬高，卡价整体上浮。远征01 的金币口径不动。",
+    "room_guarantees": [
+      {
+        "id": "exp01_opening_weapon_or_ammo",
+        "note": "业主 2026-11-09：「第一个房间的宝箱 / 第二个房间的宝箱，随机一个房间掉落」一把最低品质的霰弹枪或步枪，并且再掉一组 100 发普通弹药。候选房只放主路前两间，按 run_seed 稳定哈希挑一间 ⇒ 同一局读档不换房。「最低品质」= drop_grade blue（蓝 = 基础数值、无加成），由 ClearDropService.guaranteed_items_for_room() 定，ChestRewardService 写进箱子奖励；这是**额外追加**，不替换该箱原有的 2—3 件消耗品与 30% 命运卡掉落物。",
+        "candidate_rooms": [
+          "f00_room_01",
+          "f00_room_02"
+        ],
+        "weapon_choices": [
+          "weapon_shotgun",
+          "weapon_rifle"
+        ],
+        "weapon_grade": "blue",
+        "weapon_count": 1,
+        "items": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 100
+          }
+        ]
+      }
+    ]
   }
 }

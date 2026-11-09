@@ -5,6 +5,17 @@
 
 ## 执行历史
 
+### 2026-11-09 05:00 — **内容已上线，线上校验不通过（第十天同一卡点：需登录门禁）**
+- 全流程一次过：导出 402.0 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（**CHANGELOG 12 条**）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。耗时 3m57s，无重试。
+- 包：**421,564,008 B / 402.0 MiB**，SHA256 `a7f6ff40a0bbf52e2ae7e6059cd45dcce4fb54e2729c34e8c5988e31f4d1b8cd`，比 11-08 版 **−17,945,240 B（−17.1 MiB）**。exe mtime 今日 05:04。工作区开工/收工均 **2 项**（`_check_console.txt`、`_probe_loop.txt`），HEAD `3c0de099`（11-09 04:03，5 files）。
+- 线上已被本版覆盖：发布输出 `Bytes: 421595177` ＝ 本地三件（exe 421,564,008 + index 17,543 + md 13,626）**逐字节相等**；`/api/v1/sites` 报 `files=3 / bytes=421595177`，`created_at` 仍 `2026-10-12T19:05:19` ⇒ 未新建站点。全站仍 6 个资源，本站阅览 2 人 / 2 次。
+- **卡点不变**：直链 / 更新页 / `更新日志_2026-11-09.md` 三条均 302 → `/oauth/feishu?…&src=site`。未改策略、未删校验、未再试 `--public`。因 302 无法做整包重下载 SHA256，闭环依据＝字节总和 + 站点记录不变。
+- 12 条＝**11-09 新增 2 条**（加载页逐房渲染预热 `warm_room_materials()` 跨门 p95 368→257 / 游戏宣传片 120s 成片）+ **11-08 首次发布 10 条**（昨日那轮 CHANGELOG 为 0，这批全在窗口内）。提交 7 条（页面列 5 + 折叠 2），未提交 3 项（两个探针 txt + `tools/promo_trailer_capture.gd.uid`）。页面 12 个 `<h3>`、`<h1>弹壳风暴2</h1>`、按钮 `href="ShellStorm2.exe"`；最长行 1,152 字符。
+- **包体 −17.1 MiB 已归因尝试**：窗口内 `assets/`/`src/` **无任何已提交删除**，功能面也是新增；今日体积几乎回到 11-07 的 421,704,664 B（差 140,656 B）⇒ 更可能是 11-08 那版携带了重复/过期导入产物（当时主角换 maid01，两变体可能同时进包），非今日缺东西。**建议：重建前把上一版 exe 备份到 `_logs`，才能做 PCK 清单对比定量归因。**
+- 合规：`config/name="弹壳风暴2"` 未动；未 commit/push；未新建站点；`scripts/web_release.py` 不存在、未跑；发布目录仅 3 件；真实存档 `base_save.json` mtime 仍 11-09 01:39。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-09.md`；日志 `_logs\daily_release_2026-11-09.log`。
+- **待业主（连续第十天）**：请管理员把本站 `access` 改 `public`。
+
 ### 2026-11-08 05:01 — **内容已上线，线上校验不通过（第九天同一卡点：需登录门禁）**
 - 全流程一次过：导出 419.1 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（**CHANGELOG 0 条**）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。耗时 5m04s，无重试。
 - 包：**439,509,248 B / 419.1 MiB**，SHA256 `7b99e498c44b7eda042c1e6c1e41468e1131c4a58eea23912a955bc99357e7bb`，比 11-07 版 **+17,804,584 B（+16.98 MiB）**。exe mtime 今日 05:05。工作区开工/收工均 **1 项**（`_check_console.txt` 未跟踪），HEAD `2ce6cf19`（11-08 04:04，45 files）。

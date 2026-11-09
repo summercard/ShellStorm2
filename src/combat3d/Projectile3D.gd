@@ -77,14 +77,15 @@ var bullet_color := Color(0.45, 0.88, 1.0)
 var _visual_id := ""
 ## 枪身维度的弹体几何档位（2026-10-14）。由 WeaponModel3D 随 projectile_config 下发，
 ## 键见 WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG；空字典 = 中性档（不改观感）。
-## 只影响弹体纯视觉的尺寸/拉伸/生长包络，不影响碰撞半径、伤害与射程。
+## 决定弹体纯视觉的尺寸/拉伸/生长包络，并**同步决定碰撞半径**（2026-11-09 起，
+## 见 `_collision_scale_factor`）；不影响伤害与射程。
 var _gun_bullet_geometry: Dictionary = {}
-## 调用方直给的**纯视觉**尺寸倍率（2026-10-30，敌弹用）。
+## 调用方直给的**尺寸**倍率（2026-10-30，敌弹用）。
 ##
 ## 敌弹没有「枪身档位」这一层，尺寸只能由发射方声明；远征03 的业主指令是「怪物子弹放大一倍」
 ## ⇒ 关卡 `monster_rules.projectile.visual_scale = 2.0` 由 `Enemy3D` 随 config 下发。
-## **刻意不进碰撞半径**：敌弹判定球 0.12 是既可读又不误伤的可玩性基准，放大视觉只让子弹看得更清，
-## 不让它更难躲（同时避免把 `_egt_dodgeability_probe` 的可躲性判据一起改掉）。
+## 2026-11-09 起**同时作用于碰撞半径**（业主：「视觉放大了，碰撞检测没放大 ⇒ 容易穿过去」），
+## 即判定球与弹体一样大 —— 玩家看到多大就能打中多大。
 var visual_scale := 1.0
 ## 敌弹**敌我通吃**：为真时这颗子弹除玩家外也命中其它敌对怪（发射者自己永远排除）。
 ## 由发射方按关卡 `monster_rules.projectile.hit_allies` 下发，缺省 false ⇒ 旧行为逐字不变。
@@ -825,12 +826,18 @@ func _visual_scale_factor() -> float:
 	)
 
 
-## 碰撞半径倍率 = 弹种/命运倍率 —— **刻意不含枪身档位**。
-## 枪族档位是纯视觉契约（14.6 §3.7）：`0.12` 基准球本身已是为可玩性放大的判定体，
-## 再叠枪身倍率等于顺手改命中率（霰弹 ×2 会让 5 发弹丸的判定面膨胀到 4 倍）。
-## 与 `WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG` 的分离由验收的正面断言钉住。
+## 碰撞半径倍率 = **与视觉同源**（弹种 / 命运 / 枪身档位 / 敌弹倍率全部并入）。
+##
+## 2026-11-09 业主：「我的很多子弹的视觉被我放大了，有些是 1.5 倍，有些是两倍，但是它的
+## 这个碰撞检测没有放大，所以会导致子弹容易穿过去 / 打不到。不是把子弹视觉缩小，而是把
+## 子弹的碰撞体也一起放大了。」
+##
+## 历史口径（2026-10-14）刻意把枪身档位排除在碰撞之外，理由是「纯视觉」；但那让
+## 霰弹 ×2 的弹体只有 0.12m 判定球（≈视觉直径的 40%），玩家看到子弹擦过怪却没伤害。
+## 现在统一：**视觉多大，判定球就多大**，`0.12 × _visual_scale_factor()`。
+## 与视觉仍共用同一个出口，不允许再拆出第二份倍率表。
 func _collision_scale_factor() -> float:
-	return _base_scale_factor()
+	return _visual_scale_factor()
 
 
 ## 弹种 × 命运：视觉与碰撞共用的底座倍率。
@@ -847,6 +854,10 @@ func _bullet_visual_context() -> Dictionary:
 		"grow_from": float(_gun_bullet_geometry.get("grow_from", 1.0)),
 		"grow_duration": float(_gun_bullet_geometry.get("grow_duration", 0.0)),
 		"projectile": true,
+		# 敌方子弹改用面向相机的 billboard 图标（2026-11-09 主人：「敌方子弹也一样」）。
+		# 玩家子弹保持 3D 弹体 + 尾迹：它要表达「我的弹道往哪飞」，方向感是信息本身；
+		# 敌方子弹要表达「这里有个威胁」，形状与颜色恒定才读得快。
+		"billboard": hostile,
 	}
 
 func _apply_visual_configuration() -> void:
@@ -1172,6 +1183,14 @@ func get_orientation_snapshot() -> Dictionary:
 		snapshot["visual_body_scale"] = presentation.get("body_scale", 0.0)
 		snapshot["visual_axial_scale"] = presentation.get("axial_scale", 1.0)
 		snapshot["visual_growth_factor"] = presentation.get("growth_factor", 1.0)
+		# billboard 图标（敌方子弹）：转出给验收读「图标在不在、朝向对不对、核心多大」。
+		snapshot["billboard"] = presentation.get("billboard", false)
+		snapshot["body_visible"] = presentation.get("body_visible", true)
+		snapshot["icon_visible"] = presentation.get("icon_visible", false)
+		snapshot["icon_world_side"] = presentation.get("icon_world_side", 0.0)
+		snapshot["icon_core_diameter"] = presentation.get("icon_core_diameter", 0.0)
+		snapshot["icon_camera_alignment"] = presentation.get("icon_camera_alignment", -1.0)
+		snapshot["trail_visible"] = presentation.get("trail_visible", false)
 	return snapshot
 
 

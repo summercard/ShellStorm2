@@ -4,6 +4,7 @@ func _ready() -> void:
 	verify_confiscation()
 	setup_ground()
 	await get_tree().physics_frame
+	verify_body_scale_curve()
 	verify_health_contract()
 	await verify_action()
 	await verify_interrupts()
@@ -23,24 +24,45 @@ func verify_bullet_hit_volumes() -> void:
 	present(enemy)
 	var proxy := enemy.get_animated_hit_volume_body()
 	var volumes := enemy.get_animated_hit_volumes()
-	check(proxy != null and volumes.size() == 16, "Elite did not assemble its animated bullet volumes")
-	if proxy == null or volumes.size() != 16:
+	check(proxy != null and volumes.size() == 17, "Elite did not assemble its animated bullet volumes")
+	if proxy == null or volumes.size() != 17:
 		enemy.free()
 		return
 	check(enemy.collision_layer == 0 and enemy.collision_mask == 1, "Elite movement cylinder still intercepts bullets or lost its movement mask")
 	check(proxy.collision_layer == Enemy3D.ENEMY_BULLET_LAYER and proxy.collision_mask == 0, "Bullet proxy can participate in movement")
+	var column := proxy.get_node_or_null("Volume_TorsoColumn") as CollisionShape3D
+	check(column != null, "Elite did not assemble the ground-locked torso column")
+	if column != null:
+		var column_box := column.shape as BoxShape3D
+		var column_bounds := column.global_transform * AABB(-column_box.size * 0.5, column_box.size)
+		var sole := INF
+		for bone in ["L_Foot", "R_Foot"]:
+			var foot := proxy.get_node("Volume_" + bone) as CollisionShape3D
+			var foot_box := foot.shape as BoxShape3D
+			sole = minf(sole, (foot.global_transform * AABB(-foot_box.size * 0.5, foot_box.size)).position.y)
+		var waist := proxy.get_node("Volume_Waist") as CollisionShape3D
+		var waist_box := waist.shape as BoxShape3D
+		var waist_top := (waist.global_transform * AABB(-waist_box.size * 0.5, waist_box.size)).end.y
+		check(absf(column_bounds.position.y - sole) <= 0.01,
+			"Torso column bottom (%.3f) is not flush with the supporting sole (%.3f)" % [column_bounds.position.y, sole])
+		check(absf(column_bounds.end.y - waist_top) <= 0.06,
+			"Torso column top (%.3f) does not meet the waist volume (%.3f)" % [column_bounds.end.y, waist_top])
+		check(column_bounds.size.x > 0.15 and column_bounds.size.z > 0.15,
+			"Torso column cross section collapsed to %.2f x %.2f m" % [column_bounds.size.x, column_bounds.size.z])
+	# 两腿之间原本是空的；补底柱之后这条弹道必须掉血（业主 2026-11-09 改）。
 	var gap := enemy.global_position + Vector3(0, 0.8, 0)
 	var hp := enemy.current_hp
-	var passed := await fire_at_elite(gap + Vector3.FORWARD * 2.0, Vector3.BACK)
-	check(passed > gap.z + 1.1 and enemy.current_hp == hp, "A real bullet through the space between the legs did not clear the movement cylinder")
+	await fire_at_elite(gap + Vector3.FORWARD * 2.0, Vector3.BACK)
+	check(enemy.current_hp == hp - 1, "A real bullet through the space between the legs still passed the elite")
 	var boot := proxy.get_node("Volume_L_Foot") as CollisionShape3D
 	var outside := boot.global_position
 	var foot_size := (boot.shape as BoxShape3D).size
 	var foot_bounds := boot.global_transform * AABB(-foot_size * 0.5, foot_size)
 	var side := signf(outside.x - enemy.global_position.x)
 	outside.x = (foot_bounds.end.x if side > 0.0 else foot_bounds.position.x) + side * 0.18
-	passed = await fire_at_elite(outside + Vector3.FORWARD * 2.0, Vector3.BACK)
-	check(passed > outside.z + 1.1 and enemy.current_hp == hp, "A projectile outside the boot outline was stopped")
+	hp = enemy.current_hp
+	var passed := await fire_at_elite(outside + Vector3.FORWARD * 2.0, Vector3.BACK)
+	check(passed > outside.z + 1.1 and enemy.current_hp == hp, "A projectile outside the boot outline was stopped by the torso column")
 	for bone in ["L_Hand", "R_Hand", "L_Foot", "R_Foot", "Spine01", "Head"]:
 		var volume := proxy.get_node_or_null("Volume_" + bone) as CollisionShape3D
 		check(volume != null, "Missing bullet volume for %s" % bone)
@@ -99,12 +121,13 @@ func verify_player_pistol(enemy: Enemy3D, proxy: EnemyHitVolume3D) -> void:
 	var muzzle := player.weapon._muzzle
 	player.position.x += enemy.global_position.x - muzzle.global_position.x
 	var hp := enemy.current_hp
-	check(player.weapon.try_fire(Vector3.BACK, player), "Pistol did not fire toward the gap")
+	check(player.weapon.try_fire(Vector3.BACK, player), "Pistol did not fire toward the gap between the legs")
 	await get_tree().create_timer(0.5).timeout
-	check(enemy.current_hp == hp, "The player pistol damaged the elite through the gap")
+	check(enemy.current_hp < hp, "The player pistol passed the gap between the legs without damaging the torso column")
 	var calf := proxy.get_node("Volume_L_Calf") as CollisionShape3D
 	player.position.x += calf.global_position.x - muzzle.global_position.x
 	player.weapon._cooldown = 0.0
+	hp = enemy.current_hp
 	check(player.weapon.try_fire(Vector3.BACK, player), "Pistol did not fire toward the calf")
 	await get_tree().create_timer(0.5).timeout
 	check(enemy.current_hp < hp, "The player pistol did not damage the calf at its normal muzzle height")
@@ -135,8 +158,24 @@ func verify_hit_volume_pose(enemy: Enemy3D, stage: String) -> void:
 		check(false, "Missing hit proxy during %s" % stage)
 		return
 	for spec in visual.call("get_hit_volume_spec"):
+		var volume := proxy.get_node_or_null("Volume_" + str(spec.get("label", spec["bone"]))) as CollisionShape3D
+		if bool(spec.get("ground_locked", false)):
+			# 补底柱刻意不跟骨骼旋转，只要求它的底边始终贴着当前姿态的支撑面。
+			if volume == null:
+				check(false, "Missing torso column during %s" % stage)
+				continue
+			var column_box := volume.shape as BoxShape3D
+			var column_bounds := volume.global_transform * AABB(-column_box.size * 0.5, column_box.size)
+			var sole := INF
+			for foot in ["L_Foot", "R_Foot"]:
+				var foot_shape := proxy.get_node_or_null("Volume_" + foot) as CollisionShape3D
+				if foot_shape == null:
+					continue
+				var foot_box := foot_shape.shape as BoxShape3D
+				sole = minf(sole, (foot_shape.global_transform * AABB(-foot_box.size * 0.5, foot_box.size)).position.y)
+			check(absf(column_bounds.position.y - sole) <= 0.02, "Torso column left the supporting surface during %s" % stage)
+			continue
 		var bone_name: String = spec["bone"]
-		var volume := proxy.get_node_or_null("Volume_" + bone_name) as CollisionShape3D
 		var bone := skeleton.find_bone(bone_name)
 		var expected := skeleton.global_transform * skeleton.get_bone_global_pose(bone)
 		expected = expected.translated_local(spec["center"])
@@ -164,6 +203,138 @@ func verify_confiscation() -> void:
 	dungeon.free()
 	player.free()
 	label.free()
+
+
+## 体型曲线横跨三处真源：`EliteContentCatalog`（系数）、`Enemy3D.DEFAULT_BASE_SIZE_MULTIPLIER`
+## （全局 0.70）、`Enemy3D.MAX_COLLISION_RADIUS_M`（门洞硬上限）。任一处单独改动都会让这里变红。
+## 业主 2026-11-09：1 级 1.5 倍（3.675 m），12 级 3 倍（7.350 m）。
+func verify_body_scale_curve() -> void:
+	var definition := EliteContentCatalog.get_by_id("elite_arms_taker")
+	var growth: Dictionary = definition["growth_profile"]
+	var base := float(growth.get("body_scale_base", 1.0))
+	var step := float(growth.get("body_scale_per_level", 0.06))
+	var cap := int(growth.get("level_cap", 12))
+	var model_height := float(definition["health_bar_profile"]["visual_height"])
+	var global_scale := Enemy3D.DEFAULT_BASE_SIZE_MULTIPLIER
+	check(is_equal_approx(base, 1.5), "Level 1 body scale is %.3f, expected 1.5" % base)
+	var cap_scale := base + float(cap - 1) * step
+	check(is_equal_approx(cap_scale, 3.0),
+		"Level %d body scale is %.4f, expected exactly 3.0" % [cap, cap_scale])
+	var level_one := model_height * global_scale * base
+	var level_cap := model_height * global_scale * cap_scale
+	check(absf(level_one - 3.675) < 0.01,
+		"Level 1 height %.3f m is not 3.675 m (3.5 x 0.70 x 1.5)" % level_one)
+	check(absf(level_cap - 7.35) < 0.02,
+		"Level %d height %.3f m is not 7.35 m (3.5 x 0.70 x 3.0)" % [cap, level_cap])
+	var small := make_enemy(false, 1, growth)
+	var large := make_enemy(false, cap, growth)
+	check(is_equal_approx(small.scale.y, global_scale * base),
+		"Level 1 instance scale %.4f is not 0.70 x 1.5" % small.scale.y)
+	check(is_equal_approx(large.scale.y, global_scale * 3.0),
+		"Level %d instance scale %.4f is not 0.70 x 3.0" % [cap, large.scale.y])
+	# 3 倍把碰撞柱顶到 1.714 m（超门洞上限 83%）。`_apply_presentation_scale()` 必须把它
+	# 钳回上限，否则满级收租人"看得见、走不过门"。这里钉的是**钳制后**的世界半径。
+	var cap_radius := large.get_world_body_radius()
+	check(cap_radius <= Enemy3D.MAX_COLLISION_RADIUS_M + 0.0005,
+		"Level %d collision radius %.3f m exceeds the walkable doorway limit %.3f m" % [
+			cap, cap_radius, Enemy3D.MAX_COLLISION_RADIUS_M])
+	check(cap_radius > Enemy3D.MAX_COLLISION_RADIUS_M * 0.9,
+		"Level %d collision radius %.3f m is over-clamped; the cylinder should stay as wide as the doorway allows" % [
+			cap, cap_radius])
+	check(small.get_world_body_radius() < Enemy3D.MAX_COLLISION_RADIUS_M,
+		"Level 1 collision radius %.3f m should stay below the doorway limit and unclamped" % small.get_world_body_radius())
+	present(small)
+	present(large)
+	var small_top := _head_volume_top(small)
+	var large_top := _head_volume_top(large)
+	check(small_top > 2.5, "Level 1 head hit volume tops out at %.3f m, expected about 2.9 m" % small_top)
+	check(large_top > 5.5, "Level %d head hit volume tops out at %.3f m, expected about 5.8 m" % [cap, large_top])
+	# 受击盒侧缝随体型线性放大，而弹径固定 0.24 m。补底柱横截面已为 3 倍预设加宽，
+	# 这里逐等级钉住"任何高度的横向覆盖都没有大于弹径的空洞"。
+	for level in [1, 6, cap]:
+		var probe := make_enemy(false, level, growth)
+		present(probe)
+		for height in [0.75, 0.8, 1.2, 2.0]:
+			var widest := _widest_horizontal_gap(probe, height)
+			check(widest < 0.24,
+				"Level %d has a %.3f m bullet gap at y=%.2f m; the torso column no longer covers the gap between the legs" % [
+					level, widest, height])
+		probe.free()
+		clean_effects()
+	check(
+		large._overhead_health_root.global_position.y - large.global_position.y
+		> small._overhead_health_root.global_position.y - small.global_position.y,
+		"Overhead health bar did not follow the taller body"
+	)
+	# 上面几条用的是夹具手传的 growth_profile，测的是"数值本身"。
+	# 这一段走真实链路：内容库 → EliteRosterService.get_record() →
+	# apply_archive_to_enemy_config() → Enemy3D，测的是"玩家真的会变这么大"。
+	# 2026-11-09 发现夹具从不传 growth_profile 而让专项一直测 fallback，
+	# 所以这条链路必须单独钉住，否则改了内容库也可能没人发现。
+	var snapshot := EliteRosterService.get_record("elite_arms_taker")
+	check(not snapshot.is_empty(), "EliteRosterService returned no archive record for elite_arms_taker")
+	var routed := EliteRosterService.apply_archive_to_enemy_config({}, snapshot)
+	var routed_growth: Dictionary = routed.get("elite_growth_profile", {})
+	check(
+		is_equal_approx(float(routed_growth.get("body_scale_base", 0.0)), 1.5),
+		"Real roster→config path dropped body_scale_base (got %s)" % str(routed_growth.get("body_scale_base", "missing"))
+	)
+	var routed_enemy := make_enemy(false, 1, routed_growth)
+	present(routed_enemy)
+	check(
+		is_equal_approx(routed_enemy.scale.y, global_scale * 1.5),
+		"Real roster path produced instance scale %.4f, expected %.4f" % [
+			routed_enemy.scale.y, global_scale * 1.5]
+	)
+	check(
+		not routed_enemy.export_runtime_state().get("elite_growth_profile", {}).has("body_scale_base")
+		or is_equal_approx(float(routed_enemy.export_runtime_state()["elite_growth_profile"]["body_scale_base"]), 1.5),
+		"Runtime snapshot pinned a stale body_scale_base"
+	)
+	routed_enemy.free()
+	small.free()
+	large.free()
+	clean_effects()
+
+
+func _head_volume_top(enemy: Enemy3D) -> float:
+	var body := enemy.get_animated_hit_volume_body()
+	if body == null:
+		return 0.0
+	var shape := body.get_node_or_null("Volume_Head") as CollisionShape3D
+	if shape == null:
+		return 0.0
+	var box := shape.shape as BoxShape3D
+	return (shape.global_transform * AABB(-box.size * 0.5, box.size)).end.y
+
+
+## 给定世界高度上，所有受击盒的 x 向覆盖之间最宽的一段空洞（米）。
+## 弹体是半径 0.12 的球（直径 0.24），空洞 > 0.24 就意味着子弹能整条穿过去。
+func _widest_horizontal_gap(enemy: Enemy3D, height: float) -> float:
+	var body := enemy.get_animated_hit_volume_body()
+	if body == null:
+		return INF
+	var spans: Array = []
+	for node in body.get_children():
+		var shape := node as CollisionShape3D
+		if shape == null or shape.shape == null:
+			continue
+		var box := shape.shape as BoxShape3D
+		if box == null:
+			continue
+		var aabb: AABB = shape.global_transform * AABB(-box.size * 0.5, box.size)
+		if height >= aabb.position.y and height <= aabb.end.y:
+			spans.append([aabb.position.x, aabb.end.x])
+	if spans.is_empty():
+		return INF
+	spans.sort_custom(func(a: Array, b: Array) -> bool: return a[0] < b[0])
+	var widest := 0.0
+	var cursor: float = spans[0][1]
+	for index in range(1, spans.size()):
+		if float(spans[index][0]) > cursor:
+			widest = maxf(widest, float(spans[index][0]) - cursor)
+		cursor = maxf(cursor, float(spans[index][1]))
+	return widest
 
 
 func verify_health_contract() -> void:

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/narrative/MainStoryPedestal3D.gd" id="1_pedestal"]
+
+[node name="MainStoryPedestal" type="Node3D"]
+script = ExtResource("1_pedestal")
+metadata/asset_id = "ENV-MAIN-STORY-KEY-PEDESTAL"
+metadata/asset_version = "v001"
+metadata/production_status = "程序制作原型"
+metadata/source_kind = "procedural_gdscript"
+metadata/art_master_complete = false
+metadata/state_owner = "BaseManager.main_story"
+metadata/prefab = "res://assets/art/props/main_story/runtime/main_story_pedestal.tscn"

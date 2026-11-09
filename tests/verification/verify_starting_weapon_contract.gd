@@ -35,9 +35,13 @@ const EXPECTED_DAMAGE := 25
 ## 2026-11-01 业主：「射速帮我调快一点」→ **1.8 发/秒**（0.556 s 一发）。业主口径里说的
 ## 「现在 1.5」是换弹时间的旧值，改前射速实际是 1.6；这里按点名目标值 1.8 钉死。
 ## 2026-11-02 业主：「改成1.7」→ **1.7 发/秒**（0.588 s 一发），从 1.8 往回退一档。
-const EXPECTED_FIRE_RATE := 1.7
+## 2026-11-09 业主：「改成 2.3 发每秒」→ **2.3 发/秒**（0.435 s 一发）。
+const EXPECTED_FIRE_RATE := 2.3
 ## 2026-10-31 业主：「换弹改成 1.8 秒」。原 1.5 s。
-const EXPECTED_RELOAD_TIME := 1.8
+## 2026-11-09 业主：「换弹速度改成 1.4 秒」→ **1.4 s**。
+const EXPECTED_RELOAD_TIME := 1.4
+## 2026-11-09 上午业主：「装弹量为 12 发」；同日晚上业主改口「弹夹保持 10 发，打完后备弹无限」⇒ **回到 10**。
+## 弹匣 10 是这把枪的固定节奏（10 发 × 0.435 s + 1.4 s 换弹）；「无限」体现在备弹侧，不在弹匣。
 const EXPECTED_MAGAZINE := 10
 ## 出厂树挂的子弹必须是标准弹。
 ##
@@ -90,8 +94,11 @@ const EXPECTED_RANGES := {
 ##     ⇒ 1 单位 ≈ 0.6923 m），换算成 **17.31 m/s**（倍率 0.7525）。
 ##   · 2026-10-31：业主直接点名 **15 m/s**（倍率 15/23 ≈ 0.6522），不再走跨作换算。
 ## 换弹 1.8 s 在 2026-10-31 定；射速 1.6（10-31）→ **1.8 发/秒**（2026-11-01 业主「调快一点」）。
+## 2026-11-09 业主「改成 2.3 发每秒 / 装弹量 12 发 / 换弹 1.4 秒」⇒ 射速 2.3、换弹 1.4；
+## 弹匣当天晚上又改回 **10**（「弹夹保持 10 发，打完后备弹无限」）。
 const PISTOL_ASSEMBLY_ID := "bp_pistol"
-const PISTOL_MAGAZINE := 10
+## 弹匣数**不另设一份**：直接复用上面的 `EXPECTED_MAGAZINE`，避免同一数值出现两个真源。
+const PISTOL_MAGAZINE := EXPECTED_MAGAZINE
 const BULLET_SPEED_BASE_MPS := 23.0
 const PISTOL_BULLET_SPEED_MPS := 15.0
 const PISTOL_BULLET_SPEED_MULTIPLIER := PISTOL_BULLET_SPEED_MPS / BULLET_SPEED_BASE_MPS
@@ -372,13 +379,13 @@ func _check_pistol_egt_baseline(failures: Array[String]) -> void:
 	var stats := node.get_base_stats()
 	if int(stats.get("magazine_size", -1)) != PISTOL_MAGAZINE:
 		failures.append(
-			"豌豆手枪的弹匣是 %d，期望 %d（对标《挺进地牢》军用佩枪 Magazine 10）"
+			"豌豆手枪的弹匣是 %d，期望 %d（2026-11-09 业主定值；原作 Marine Sidearm 是 10，本作已不走对齐）"
 			% [int(stats.get("magazine_size", -1)), PISTOL_MAGAZINE]
 		)
 	var reload := float(stats.get("reload_time", -1.0))
 	if absf(reload - EXPECTED_RELOAD_TIME) > 0.001:
 		failures.append(
-			"豌豆手枪的换弹是 %.2f s，期望 %.2f s（2026-10-31 业主定值）"
+			"豌豆手枪的换弹是 %.2f s，期望 %.2f s（2026-11-09 业主定值）"
 			% [reload, EXPECTED_RELOAD_TIME]
 		)
 	var multiplier := float(stats.get("bullet_speed", 1.0))

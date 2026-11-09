@@ -3,6 +3,9 @@ extends RefCounted
 ## Enemy3D owns the action timeline; the visual prefab only consumes its context.
 
 const ID := "elite_arms_taker"
+## ⚠ 未使用的历史常量，**不是体型的真源**。改它不会改变收租人大小 ——
+## 体型唯一来源是 `EliteContentCatalog` 的 `body_scale_base` / `body_scale_per_level`
+## （2026-11-09：1 级 1.5 倍、12 级封顶约 4.00 m）。
 const BODY_SCALE_MULTIPLIER := 1.0
 const FOOT_INSET_M := 0.001
 const CONFISCATION_CHANCE := 0.50

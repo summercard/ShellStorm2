@@ -87,7 +87,10 @@ func _ready() -> void:
 	# 必须**在 add_child 之前**注入：城市在 `_ready` 里就把牌面标签建好了，
 	# 之后再给 provider 就改不到已经建出来的文字。
 	_city.entry_hint_provider = _entry_hint_text
+	_city.entry_state_provider = entry_state
 	get_parent().add_child(_city)
+	if BaseManager.has_signal("main_story_changed"):
+		BaseManager.main_story_changed.connect(_on_main_story_changed)
 	var anchor := _facility.global_position + Vector3.UP * 1.7
 	if _facility.has_method("get_hologram_anchor"):
 		anchor = _facility.call("get_hologram_anchor")
@@ -142,6 +145,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not is_instance_valid(_city) or not is_instance_valid(_camera):
 		return
+	if _state == "active":
+		_city.refresh_entry_states()
+		_city.set_installed_count(_main_story_deposited_count())
 	if _state == "opening":
 		_progress = minf(1.0, _progress + delta / OPENING_SECONDS)
 		_apply_transition()
@@ -159,6 +165,7 @@ func _process(delta: float) -> void:
 			_commit_departure()
 	_city.entries_ready = _state in ["active", "entering", "departing"]
 	_city.focus = _focus
+	_city.set_installed_count(_main_story_deposited_count())
 	_city.face_markers(_camera)
 	_facility.name_label.hide()
 	_facility.prompt_label.hide()
@@ -239,6 +246,13 @@ func _input(event: InputEvent) -> void:
 		elif event is InputEventKey and event.pressed and not event.echo:
 			if event.physical_keycode in [KEY_A, KEY_W, KEY_D, KEY_S]:
 				_shift_selection(posmod(_selection + (-1 if event.physical_keycode in [KEY_A, KEY_W] else 1), LEVEL_IDS.size()))
+		elif event is InputEventJoypadButton and event.pressed:
+			if event.button_index in [JOY_BUTTON_A, JOY_BUTTON_START]:
+				confirm_selection()
+			elif event.button_index in [JOY_BUTTON_DPAD_LEFT, JOY_BUTTON_DPAD_UP]:
+				_shift_selection(posmod(_selection - 1, LEVEL_IDS.size()))
+			elif event.button_index in [JOY_BUTTON_DPAD_RIGHT, JOY_BUTTON_DPAD_DOWN]:
+				_shift_selection(posmod(_selection + 1, LEVEL_IDS.size()))
 		elif event is InputEventJoypadMotion and event.axis in [JOY_AXIS_LEFT_X, JOY_AXIS_LEFT_Y]:
 			if absf(event.axis_value) < 0.3:
 				_axis_latched = false
@@ -309,8 +323,10 @@ func _refresh_level_ids() -> void:
 		var entry := GameDesignConfig.expedition_level(level_id)
 		if entry.is_empty():
 			continue
-		if str(entry.get("nav_visibility", "always")) == "on_unlock" \
-				and not BaseManager.is_expedition_level_unlocked(level_id):
+		var visibility := str(entry.get("nav_visibility", "always"))
+		if visibility == "hidden":
+			continue
+		if visibility == "on_unlock" and not BaseManager.is_expedition_level_unlocked(level_id):
 			continue
 		LEVEL_IDS.append(level_id)
 
@@ -339,11 +355,48 @@ func entry_state(level_id: String) -> String:
 	var entry := GameDesignConfig.expedition_level(level_id)
 	if entry.is_empty():
 		return ENTRY_COMING_SOON
+	var policy := str(entry.get("unlock_policy", GameDesignConfig.UNLOCK_POLICY_ALWAYS))
+	if policy == GameDesignConfig.UNLOCK_POLICY_MAIN_STORY:
+		# 主线快照是永久事实；旧档显式地图集合仍由 BaseManager 的权限接口兼容。
+		var required_key := str(entry.get("main_story_required_key", ""))
+		if not _main_story_key_deposited(required_key) and not BaseManager.is_expedition_level_unlocked(level_id):
+			return ENTRY_LOCKED
+	elif not BaseManager.is_expedition_level_unlocked(level_id):
+		return ENTRY_LOCKED
 	if not ResourceLoader.exists(str(entry.get("scene_3d", ""))):
 		return ENTRY_COMING_SOON
-	if not BaseManager.is_expedition_level_unlocked(level_id):
-		return ENTRY_LOCKED
 	return ENTRY_OPEN
+
+func _main_story_snapshot() -> Dictionary:
+	if BaseManager.has_method("get_main_story_snapshot"):
+		return BaseManager.get_main_story_snapshot()
+	return {}
+
+func _main_story_key_deposited(key_id: String) -> bool:
+	if key_id.is_empty():
+		return false
+	var snapshot := _main_story_snapshot()
+	var keys: Variant = snapshot.get("keys", {})
+	if keys is Dictionary:
+		var record: Variant = (keys as Dictionary).get(key_id, {})
+		return record is Dictionary and str((record as Dictionary).get("state", "")) == "deposited"
+	return false
+
+func _main_story_deposited_count() -> int:
+	var snapshot := _main_story_snapshot()
+	var keys: Variant = snapshot.get("keys", {})
+	var count := 0
+	if keys is Dictionary:
+		for record_value in (keys as Dictionary).values():
+			if record_value is Dictionary and str((record_value as Dictionary).get("state", "")) == "deposited":
+				count += 1
+	return count
+
+func _on_main_story_changed(_snapshot: Dictionary = {}) -> void:
+	if not is_instance_valid(_city):
+		return
+	_city.refresh_entry_states()
+	_city.set_installed_count(_main_story_deposited_count())
 
 func _entry_hint_text(level_id: String) -> String:
 	match entry_state(level_id):
@@ -355,10 +408,11 @@ func _entry_hint_text(level_id: String) -> String:
 			return "尚未开放"
 
 func _on_alternate_level_pressed(level_id: String) -> void:
+	# 外部设施按钮也走同一权限门禁，不能绕过情报室状态。
 	_enter_level(level_id)
 
 func confirm_selection() -> void:
-	if _state == "active":
+	if _state == "active" and _selection >= 0 and _selection < LEVEL_IDS.size():
 		if is_instance_valid(_city):
 			_city.punch_marker(_selection)
 		_enter_level(LEVEL_IDS[_selection])
@@ -367,9 +421,7 @@ func _enter_level(level_id: String) -> void:
 	if _departing or _state == "closing":
 		return
 	var display_name := GameDesignConfig.expedition_level_display_name(level_id)
-	# 顺序有意为之：先查"到达场景在不在"，再查解锁。
-	# 反过来（先查解锁就 return）会让"未解锁 + 场景没建"的关卡点下去毫无反应 ——
-	# 玩家分不清是没解锁还是没做完，也无从判断该等哪一样。
+	# 入口状态先判权限，再判场景存在：未解锁的未知区域必须保持红锁，不能被 coming_soon 文案吞掉。
 	# 两道门与牌面文案共用 `entry_state()`，因此点下去的提示与牌面永远一致。
 	match entry_state(level_id):
 		ENTRY_COMING_SOON:

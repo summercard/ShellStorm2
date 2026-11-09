@@ -3,6 +3,7 @@ extends Resource
 
 const SAVE_VERSION := "2.0"
 const TimeDomain = preload("res://src/core/WorldTimeDomain.gd")
+const MainStoryProgress = preload("res://src/narrative/MainStoryProgress.gd")
 
 var total_runs: int = 0
 var successful_extractions: int = 0
@@ -131,6 +132,9 @@ var elite_archive_records: Dictionary = {}
 # 本字段是 `once = "run"` 剧本「跨存档只播一次」的唯一依据（08 文档 §9，2026-09-23 落地）。
 var narrative_history: Dictionary = {}
 
+# 主线3.1-3.3永久事实。钥匙状态只允许 acquired/deposited，不进入普通库存。
+var main_story: Dictionary = MainStoryProgress.default_state()
+
 func _to_dict() -> Dictionary:
 	return {
 		"save_version": SAVE_VERSION,
@@ -188,6 +192,7 @@ func _to_dict() -> Dictionary:
 		"active_run_snapshot": active_run_snapshot,
 		"elite_archive_records": elite_archive_records,
 		"narrative_history": narrative_history,
+		"main_story": MainStoryProgress.normalize_state(main_story),
 	}
 
 static func from_dict(d: Dictionary) -> BaseData:
@@ -295,6 +300,7 @@ static func from_dict(d: Dictionary) -> BaseData:
 		data.narrative_history = (d["narrative_history"] as Dictionary).duplicate(true)
 	else:
 		data.narrative_history = {}
+	data.main_story = MainStoryProgress.normalize_state(d.get("main_story", {}))
 	return data
 
 func record_run(success: bool, kills: int) -> void:

@@ -219,13 +219,13 @@
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/enm_elite_arms_taker_root_top3d.tscn",
-      "bytes": 830,
-      "sha256": "92dfd166f5fd36a4322dc089bebd24d13eec21108581e6a3d1dc026a392458c8"
+      "bytes": 1138,
+      "sha256": "5b63de8d11ff2f9ded71d00ce12253092e51f2fc14273369257c848838d9fe69"
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/elite_arms_taker_formal_visual.gd",
-      "bytes": 14753,
-      "sha256": "dfc152dec99b91070d5240da7b9531c9f786a4e49f50dc4111cb6732ad7100d2"
+      "bytes": 23366,
+      "sha256": "fe131e528e03922dfdb37177199b6ba531faa68d289f49d0aa62e77e596bd330"
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb.import",
@@ -249,8 +249,8 @@
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/enm_elite_arms_taker_manifest_v002.json",
-      "bytes": 21351,
-      "sha256": "e0718441552211c37dce38a2424b8887ffb20f20478e18bc48aa0dc297b813f9"
+      "bytes": 22068,
+      "sha256": "67b1b59e66a70ab3428b4f95f54d7a535608f09e3a17c12f4e65b95a9dcad54f"
     }
   ],
   "animations": [
@@ -458,7 +458,7 @@
     }
   },
   "bullet_hit_volumes": {
-    "count": 16,
+    "count": 17,
     "owner": "Enemy3D",
     "proxy": "EnemyHitVolume3D",
     "moving_body": "CylinderShape3D",
@@ -476,7 +476,8 @@
         0.049
       ]
     },
-    "foot_fit_note": "r5: each foot slightly enlarged; dynamic lower edge still aligned to its own mesh sole"
+    "foot_fit_note": "r5: each foot slightly enlarged; dynamic lower edge still aligned to its own mesh sole",
+    "ground_column": "Volume_TorsoColumn：锚 Waist，世界轴竖直，底边贴当前姿态最低靴底，顶边接腰盒顶边（r14，2026-11-09）"
   },
   "gait_timing": {
     "method": "support-foot travel profile",

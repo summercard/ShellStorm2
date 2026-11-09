@@ -13,6 +13,9 @@ signal summon_requested(enemy: Enemy3D, count: int)
 signal split_requested(enemy: Enemy3D, child_kind: String, count: int)
 signal state_changed(previous: String, current: String)
 signal boss_phase_changed(enemy: Enemy3D, phase: int)
+## 显示器 Boss 的剧情窄接口信号；房间玩法不得轮询 MonitorBossCombat 私有状态。
+signal boss_activation_started(enemy: Enemy3D)
+signal boss_activation_release_window(enemy: Enemy3D)
 ## 显示器 Boss 完整播放激活流程后只发一次；房间玩法不得轮询 MonitorBossCombat 私有状态。
 signal boss_activation_completed(enemy: Enemy3D)
 signal health_changed(enemy: Enemy3D, current: int, maximum: int)
@@ -1493,6 +1496,17 @@ func _apply_presentation_scale() -> void:
 	)
 	if arms_taker_combat != null and collision_shape != null:
 		var cylinder := collision_shape.shape as CylinderShape3D
+		# 收租人的移动圆柱必须先压回门洞可通上限（业主 2026-11-09 把 12 级体型拉到 3 倍后
+		# 世界半径 1.714 m，超上限 83%，不压就"看得见、走不过门"）。
+		#
+		# 只压**碰撞柱**，不压表现：收租人的子弹判定走 `EnemyHitVolume3D` 的 17 个跟骨盒代理，
+		# 与这条圆柱无关 ⇒ 钳半径不会让任何一处打击面变小。这正是本文件上方
+		# 「视觉与碰撞的有意解耦」那条取舍的既有口径。
+		#
+		# 每次都从 footprint 基值重算再钳，而不是拿当前值反复 min —— 否则体型调小后回不去。
+		var footprint_radius := float(EnemyAvatar3D.get_footprint_profile(enemy_kind).get("radius", 0.816))
+		var world_scale := maxf(scale.x, 0.001)
+		cylinder.radius = minf(footprint_radius, MAX_COLLISION_RADIUS_M / world_scale)
 		collision_shape.position.y = cylinder.height * 0.5 + EliteArmsTakerCombat.FOOT_INSET_M / scale.y
 	if _overhead_health_root != null:
 		_position_overhead_health_bar()
@@ -1748,6 +1762,8 @@ func export_runtime_state() -> Dictionary:
 		"monitor_activation_completed": monitor_combat.activation_completed if monitor_combat != null else true,
 		"monitor_activation_started": monitor_combat.activation_started if monitor_combat != null else true,
 		"monitor_activation_elapsed": monitor_combat.activation_elapsed if monitor_combat != null else 0.0,
+		"monitor_story_activation_hold": monitor_combat.story_activation_hold if monitor_combat != null else false,
+		"monitor_story_activation_requested": monitor_combat.story_activation_requested if monitor_combat != null else false,
 	}
 
 
@@ -1826,6 +1842,8 @@ func import_runtime_state(state: Dictionary) -> bool:
 		monitor_combat.activation_completed = bool(state.get("monitor_activation_completed",true))
 		monitor_combat.activation_elapsed = clampf(float(state.get("monitor_activation_elapsed",0.0)),0.0,MonitorBossCombat.ACTIVATION_DURATION)
 		monitor_combat.activation_started = bool(state.get("monitor_activation_started",monitor_combat.activation_completed or monitor_combat.activation_elapsed > 0.0))
+		monitor_combat.story_activation_hold = bool(state.get("monitor_story_activation_hold",false)) and not monitor_combat.activation_completed
+		monitor_combat.story_activation_requested = bool(state.get("monitor_story_activation_requested",false)) and not monitor_combat.activation_completed
 	if arms_taker_combat != null:
 		arms_taker_combat.cancel()
 		arms_taker_combat.electric_cooldown = clampf(float(state.get("arms_taker_electric_cooldown", 0.0)), 0.0, EliteArmsTakerCombat.ELECTRIC_COOLDOWN)
@@ -1934,7 +1952,9 @@ func _build_animated_hit_volumes(presentation: Node3D, spec: Array, body_name: S
 		var box := BoxShape3D.new()
 		box.size = entry["size"] as Vector3
 		var shape := CollisionShape3D.new()
-		shape.name = "Volume_%s" % str(entry["bone"]).replace(".", "_")
+		# `label` 可选：同一根骨骼挂两个盒时（例如躯干补底柱与腰盒都锚在 Waist），
+		# 只有骨骼名会撞名，节点名要能分辨。
+		shape.name = "Volume_%s" % str(entry.get("label", entry["bone"])).replace(".", "_")
 		shape.shape = box
 		body.add_child(shape)
 		shape.global_transform = transforms[index]
@@ -1986,6 +2006,29 @@ func _clear_animated_hit_volumes() -> void:
 	_animated_hit_body = null
 	_animated_hit_shapes.clear()
 	_animated_hit_presentation = null
+
+
+func set_story_activation_hold(held: bool) -> void:
+	if monitor_combat != null:
+		monitor_combat.set_story_activation_hold(held)
+
+
+func request_story_activation() -> bool:
+	if monitor_combat == null:
+		return false
+	return monitor_combat.request_story_activation()
+
+
+func get_story_activation_snapshot() -> Dictionary:
+	if monitor_combat == null:
+		return {"held": false, "started": false, "completed": false, "elapsed": 0.0, "duration": MonitorBossCombat.ACTIVATION_DURATION}
+	return {
+		"held": monitor_combat.story_activation_hold,
+		"started": monitor_combat.activation_started,
+		"completed": monitor_combat.activation_completed,
+		"elapsed": monitor_combat.activation_elapsed,
+		"duration": MonitorBossCombat.ACTIVATION_DURATION,
+	}
 
 
 func activate_from_player_proximity(player_node: Node3D, activation_range: float) -> bool:
@@ -2268,14 +2311,12 @@ func _physics_process(delta: float) -> void:
 		"patrol":
 			_tick_patrol(delta)
 		"telegraph":
-			if _is_egt_kind():
-				_tick_egt_windup(delta)
-				# 外部推力（逃跑 / 游荡 / 击退）在前摇期间同样压到 35%，
-				# 否则复刻怪的"踱步"会被外推直接盖掉。
-				_push_planar(_external_velocity * EGT_WINDUP_SPEED_RATIO)
-			else:
-				_brake_planar(delta * 18.0)
-				_push_planar(_external_velocity)
+			# —— 攻击姿态：站住（业主 2026-11-09）——
+			# 前摇 / 出手 / 收招是同一段**承诺动作**：身体不再自主位移，玩家才读得出
+			# "它就在这个位置锁定你"。口径与公式见 `ATTACK_STANCE_BRAKE_MPS2`。
+			# 这里不再区分复刻怪与塔楼老怪 —— 从前"复刻怪保留 35% 步速踱半步、
+			# 老怪 18 m/s² 慢刹"正是"一边攻击一边移动"的两个来源。
+			_tick_attack_stance(delta)
 			_commit_motion(delta)
 			if _state_time >= _telegraph_duration():
 				transition_to("attack")
@@ -2294,7 +2335,13 @@ func _physics_process(delta: float) -> void:
 			else:
 				_brake_planar(delta * 18.0)
 			_commit_motion(delta)
-			if _state_time >= _recovery_duration():
+			# —— 收招结束条件：时长到 **且** 这一轮的攻击真的打完了 ——
+			# 连发怪（老兵小子 4 连发 / 蓝霰弹两段）的后续子弹是**排期**打出的，
+			# 而收招只有 0.08~0.18 s，最后一发可能在 0.36 s、极端到 1.0 s 之后才离膛。
+			# 旧写法只看时长 ⇒ 它已经回到 `chase` 跑起来了，枪口还在吐子弹，
+			# 正是业主说的"一边攻击一边移动"。冷却在出手那一帧就起算，
+			# 所以这里不减攻击频率，只是把"边走边打完"换成"打完再走"。
+			if _state_time >= _recovery_duration() and _pending_volleys.is_empty():
 				if MonsterAIManager != null:
 					MonsterAIManager.release_attack_token(self)
 				transition_to("chase")
@@ -2516,33 +2563,57 @@ func _egt_skips_attack_window() -> bool:
 	return _is_egt_kind() and _egt_attack_style() == "flee"
 
 
-## 复刻怪前摇期间的位移：**不刹死**，只把速度压到 35% 并保持原方向。
+## 攻击姿态（`telegraph` / `attack`）里刹住水平位移的减速度（m/s²）。
 ##
-## ## 为什么不能沿用通用分支的 `_brake_planar(delta * 18.0)`
-## 那是给塔楼近战怪"抡完刹住"用的，18/s 的衰减意味着 0.1 s 内速度归零 ——
-## 视觉上是"滑行急停 → 定住 0.38 s → 开枪 → 再起跑"。33 只复刻怪每 1.4~3 s
-## 来一次，整场读起来就是"一顿一顿地走"。
+## ## 业主 2026-11-09
+## 「怪物在攻击玩家的时候，会一边攻击一边移动，这样看起来非常不舒服。
+##   我需要怪物攻击的时候停下来，攻击后在进行移动……应该是进入攻击范围后，
+##   直接进行攻击，此时是停下的，攻击完成后，继续行动。」
 ##
-## 压到 35% 而不是 0：前摇 0.2 s × 0.35 × 2.5 m/s ≈ 0.18 m 的位移，
-## 既是"边举枪边踱半步"的动感，又不会把玩家已经算好的躲避位置甩掉。
-const EGT_WINDUP_SPEED_RATIO := 0.35
+## ## 这一段原来是**反着设计**的
+## 复刻怪在前摇里刻意保留 35% 步速（注释原话"边举枪边踱半步"），
+## 塔楼老怪则用 18 m/s² 慢刹 —— 两者都让前摇动画期间身体继续平移。
+## 玩家的读数因此变成"它一边滑行一边顺手打了一下"，前摇本该提供的
+## "它在这儿锁定你、接下来打的是这个位置"这层信息就废了。
+##
+## 现在统一成：**进前摇即刹停**，出手帧不提交位移，收招段只收残速与外推，
+## 回到 `chase` 才重新起步。三只一组的怪仍然各自从自己的位置出手，不互相拖。
+##
+## ## 55 这个数不是拍的
+## 要"看见停住"而不是"滑过去"，停车距离必须短到读不出位移：
+##   s = v² / (2a)  ⇒  a = v² / (2s)，取 s = 0.125 m（≈ 四分之一身位）
+##   v = 3.7 m/s（`melee_chaser`）⇒ a = 54.8 ⇒ 取整 **55**
+## 于是 3.7 m/s 用 0.067 s（4 帧 @60 Hz）停住、滑出 0.125 m；
+## 最快的 4.86 m/s（`egt_blobulin`）用 0.088 s、滑出 0.216 m。
+## 两者都短于一个攻击前摇（0.10~1.20 s）里能被读成"移动"的位移量级，
+## 也不会长到像撞墙 —— 是"扎住马步"，不是"急停"。
+const ATTACK_STANCE_BRAKE_MPS2 := 55.0
 
 
-func _tick_egt_windup(delta: float) -> void:
-	var planar := Vector3(velocity.x, 0.0, velocity.z)
-	if planar.length_squared() < 0.0001:
-		# 本来就没在动（`immobile` 的枪坚果 / 刚被击退停住的）⇒ 不硬塞位移，
-		# 否则会变成"原地来回蹭"。
-		_brake_planar(delta * 12.0)
+## 本帧是否处于**攻击姿态**（举枪前摇 / 出手帧）。
+##
+## 单独成函数是为了让"谁该停"只有一处真源：`_physics_process` 的位移分支、
+## 以及会自己往 `_external_velocity` 写移动指令的复刻怪行为
+## （逃跑 / 游荡 / 施法中断）都问它，不各写一遍状态列表。
+## `recovery` 不在内 —— 收招是"打完了"，那一段该由残速与外推自然收尾。
+func _is_attack_stance() -> bool:
+	return ai_state == "telegraph" or ai_state == "attack"
+
+
+## 攻击姿态的位移：**站住**。`attack` 帧不调它（那一帧不提交位移，见 `_physics_process`）。
+##
+## 唯一允许动的是**外部推力**（玩家近战击退 / 牵引 / 本体突进余速）：那是外力、
+## 不是它自己的步速，必须原样生效 —— 否则"一拳打不退正在起手的怪"。
+##
+## ⚠ 但只能**赋值**，不能 `_brake_planar()` + 逐帧 `_push_planar()` 叠加：
+## 那是本仓反复踩过的「稳态放大器」（恒定外推每帧完整体加一次，衰减永远追不上，
+## 实测击退 5.0 m/s 一帧后变成 9.7）。同一条说明见 `recovery` 段。
+func _tick_attack_stance(delta: float) -> void:
+	if _external_timer > 0.0:
+		velocity.x = _external_velocity.x
+		velocity.z = _external_velocity.z
 		return
-	# ⚠ 目标速度必须是一个**独立上限**，不能拿"当前速度"当目标。
-	# 第一版写成 `keep = clampf(planar.length(), floor, max(floor, planar.length()))`
-	# —— 那个 clamp 恒等于当前速度，`_steer_planar` 于是变成"保持原速"，
-	# 再加上调用方每帧 `_push_planar(_external_velocity)` 的 +=，
-	# 速度**每帧加一次外部推力、永远拉不回来**。实测游荡型 6 秒跑出 90 m（≈15 m/s，
-	# 而它的移速只有 4.3 m/s）—— 画面上是"越走越飞快"，而不是踱步。
-	var cap := get_effective_move_speed() * EGT_WINDUP_SPEED_RATIO
-	_steer_planar(planar.normalized() * minf(planar.length(), cap), minf(1.0, delta * 10.0))
+	_brake_planar(delta * ATTACK_STANCE_BRAKE_MPS2)
 
 
 ## 站着不动多久之后转巡逻（秒）。
@@ -3554,6 +3625,10 @@ func _tick_egt_interrupt(delta: float) -> void:
 	away.y = 0.0
 	if away.length_squared() < 0.0001:
 		return
+	# 攻击姿态里不写自主动位移（`_is_attack_stance`）：枪歌者的中断逃跑是"跑路"，
+	# 不是攻击动作的一部分，前摇/出手帧里不该和攻击姿态抢位移。
+	if _is_attack_stance():
+		return
 	var mult := float(_interrupt_spec().get("flee_speed_mult", 1.5))
 	_external_velocity = away.normalized() * get_effective_move_speed() * mult
 	_external_timer = 0.12
@@ -3843,6 +3918,11 @@ func _tick_egt_flee(delta: float) -> void:
 		_flee_heading = away.normalized().rotated(Vector3.UP, side * PI * 0.5)
 		_flee_heading_timer = 0.30
 		_flee_stall_time = 0.0
+	# 攻击姿态里不写自主动位移（`_is_attack_stance`）。逃跑型本来就不占攻击窗口
+	# （`_egt_skips_attack_window`），这一道闸门是给"跨状态驱动"兜底的：
+	# 只要它在某条路径上进过前摇，就不能一边举枪一边往外溜。
+	if _is_attack_stance():
+		return
 	_external_velocity = _flee_heading * speed
 	_external_timer = 0.12
 
@@ -3899,8 +3979,12 @@ func _tick_egt_wander(delta: float) -> void:
 		var offset := _wander_target - global_position
 		offset.y = 0.0
 		if offset.length() > 0.6:
-			_external_velocity = offset.normalized() * get_effective_move_speed() * 0.85
-			_external_timer = 0.12
+			# 攻击姿态（举枪前摇 / 出手帧）里不写自主动位移 —— 枪精灵"边走边放"，
+			# 就是业主 2026-11-09 说的"一边攻击一边移动"。前摇结束它照旧飘过去，
+			# 因为 `_wander_timer` 与目标点都还在，不需要另外补状态。
+			if not _is_attack_stance():
+				_external_velocity = offset.normalized() * get_effective_move_speed() * 0.85
+				_external_timer = 0.12
 			return
 	_wander_timer = float(cfg.get("retarget_sec", 2.2))
 	var radius := float(cfg.get("radius_m", 8.0))
@@ -4312,6 +4396,8 @@ func _spawn_ground_blast_zone(radius: float) -> void:
 func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, hit_knockback := 0.0, interrupt_movement := true) -> void:
 	if ai_state == "dead" or _elite_defeat_active or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
 		return
+	if monitor_combat != null and monitor_combat.is_story_damage_protected():
+		return
 	# 拟态怪：伪装状态下**不吃伤害**，但挨打就现形（原作"被射击才现形"）。
 	# 顺序很重要：先现形、再照常结算这一发 —— 否则玩家打中箱子会读成"打空"。
 	if _disguised:
@@ -4379,6 +4465,8 @@ func take_projectile_damage(
 	hit_knockback := 0.0
 ) -> void:
 	if ai_state == "dead" or _elite_defeat_active or amount <= 0 or (arms_taker_combat != null and arms_taker_combat.phase_intangible):
+		return
+	if monitor_combat != null and monitor_combat.is_story_damage_protected():
 		return
 	# 伪装 / 无敌同样在这一层先拦：子弹通道与近战通道必须给出**一致的结果**，
 	# 否则会出现"枪打不动、近战能砍"（或被反过来）的诡异判定。
@@ -4495,6 +4583,8 @@ func apply_fate_element(element: String, params: Dictionary, weapon_damage: int,
 func _tick_fate_statuses(delta: float) -> void:
 	if ai_state == "dead":
 		return
+	if monitor_combat != null and monitor_combat.is_story_damage_protected():
+		return
 	for key in _fate_statuses.keys():
 		var state: Dictionary = _fate_statuses[key]
 		var active_delta := minf(delta, float(state["remaining"]))
@@ -4534,6 +4624,8 @@ func apply_damage_over_time(total_damage: int, duration: float) -> void:
 func _tick_damage_over_time(delta: float) -> void:
 	if _dot_remaining <= 0.0 or ai_state == "dead":
 		return
+	if monitor_combat != null and monitor_combat.is_story_damage_protected():
+		return
 	_dot_remaining = maxf(0.0, _dot_remaining - delta)
 	_dot_tick -= delta
 	if _dot_tick > 0.0:
@@ -4572,8 +4664,22 @@ func transition_to(state_id: String, reason := "") -> bool:
 	# 不清就会看到「已经被打死的怪在半空中继续打三连发」。
 	# 只清这三种：`recovery → chase` 期间连发本来就要打完，那条不能动。
 	if state_id in ["stagger", "dormant", "dead"]:
+		if monitor_combat != null and state_id in ["dormant", "dead"]:
+			monitor_combat.cancel_story_activation()
 		_pending_volleys.clear()
 		_pending_eggs.clear()
+	# 进入攻击姿态时清掉**自主位移**的残留指令（业主 2026-11-09「攻击时停下来」）。
+	#
+	# 复刻怪的逃跑 / 游荡 / 游荡式中断每帧往 `_external_velocity` 写移动、并把
+	# `_external_timer` 刷成 0.12 s。不清的话，进前摇后的头 0.12 s
+	# `_tick_attack_stance()` 会把这条指令当成"外力"照用 ⇒ 前摇里照样平移，
+	# 而前摇只有 0.10~0.26 s，等于整段都在滑。
+	#
+	# 只清**已经发生**的指令：前摇之后的击退 / 牵引会重新写进 `_external_velocity`
+	# 并刷新计时，届时照常生效 —— 外力不被吞掉这一条没变。
+	if state_id == "telegraph":
+		_external_velocity = Vector3.ZERO
+		_external_timer = 0.0
 	ai_state = state_id
 	if state_id == "dead" and is_instance_valid(_animated_hit_body):
 		_animated_hit_body.collision_layer = 0
@@ -4762,6 +4868,7 @@ func get_state_snapshot() -> Dictionary:
 		"boss_content_id": str(enemy_data.get("boss_content_id", "")),
 		"boss_presentation_asset_id": str(enemy_data.get("presentation_asset_id", "")),
 		"boss_arena_asset_id": str(enemy_data.get("arena_asset_id", "")),
+		"story_activation": get_story_activation_snapshot(),
 		"elite_id": elite_id,
 		"elite_behavior_id": elite_behavior_id,
 		"elite_level": elite_level,
@@ -4876,6 +4983,8 @@ func get_attack_frequency_multiplier() -> float:
 
 func _tick_illumination_effects(delta: float) -> void:
 	if ai_state == "dead":
+		return
+	if monitor_combat != null and monitor_combat.is_story_damage_protected():
 		return
 	if get_illumination_state() != EnemyIllumination3D.STATE_SUNLIGHT:
 		_illumination_damage_accumulator = 0.0
@@ -6359,6 +6468,8 @@ func _clear_fate_visuals() -> void:
 	_fate_visuals.clear()
 
 func _exit_tree() -> void:
+	if monitor_combat != null:
+		monitor_combat.cancel_story_activation()
 	if arms_taker_combat != null:
 		arms_taker_combat.cancel()
 	if elite_equipment != null:

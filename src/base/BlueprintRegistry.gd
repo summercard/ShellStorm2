@@ -518,6 +518,19 @@ func is_unlocked(item_id: String) -> bool:
 ##     两发间隔 0.556 → 0.588 s；换弹仍是 1.8 s，两个 1.7/1.8 是不同的字段别混）
 ##   · 弹体视觉 ×2（业主：「出去那个特效大小，就那个模型帮我放大一倍」；
 ##     落在 `WeaponModel3D.BULLET_GEOMETRY_BY_GUN_TAG["pistol"]`，**判定半径不动**）
+##   · `fire_rate` 1.7 → **2.3 发/秒**、`reload_time` 1.8 → **1.4 s**（2026-11-09）
+##     （业主：「改成 2.3 发每秒，换弹速度改成 1.4 秒」。两发间隔 0.588 → **0.435 s**）
+##   · `magazine_size` 10 → 12（2026-11-09 上午）→ **10**（同日晚业主改口
+##     「弹夹保持 10 发，打完后备弹无限」）
+##   · `infinite_reserve_ammo = true`（2026-11-09 晚）：**备弹无限**，弹匣照常 10 发打空、
+##     照常换弹 1.4 s，只是换弹不扣备弹
+##
+## 当前落地值（2026-11-09 晚）：`damage 25 / fire_rate 2.3 / bullet_count 1 / range 15 /
+## spread 0.03 / reload_time 1.4 / magazine_size 10 / bullet_speed 0.6522 /
+## infinite_reserve_ammo true`。
+##
+## 单匣节奏：打空 `0.435 × 10 = 4.35 s` + 换弹 `1.4 s` ⇒ 周期 **5.75 s**；
+## 因备弹无限，长期 DPS 只受换弹占 24%（1.4/5.75）限制，不再受弹药总量限制。
 ##
 ## 弹速公式：`弹速 = 23 × 枪身倍率 × 弹种倍率 × 命运倍率`，所以枪身只声明**倍率**：
 ## 15 / 23 ≈ **0.6522**，挂上标准弹（倍率 1.0）后仍是 15 m/s。
@@ -528,9 +541,13 @@ func _create_gunbody_pistol() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Pistol")
 	node.tags = ["pistol", "semi_auto", "sidearm"]
 	node.set_base_stats({
-		"damage": 25, "fire_rate": 1.7, "bullet_count": 1, "range": 15,
-		"spread": 0.03, "reload_time": 1.8, "magazine_size": 10,
+		"damage": 25, "fire_rate": 2.3, "bullet_count": 1, "range": 15,
+		"spread": 0.03, "reload_time": 1.4, "magazine_size": 10,
 		"bullet_speed": PISTOL_BULLET_SPEED_MPS / BULLET_SPEED_BASE_MPS,
+		# 备弹无限（2026-11-09 业主最终口径：「弹夹保持 10 发，打完后备弹无限」）。
+		# 语义 = 弹匣照常 10 发打完要换弹、换弹不消耗备弹 ⇒ 每次换弹白拿满匣。
+		# **不是**「开火不扣弹」：弹匣与 1.4 s 换弹节奏都保留。
+		"infinite_reserve_ammo": true,
 	})
 	return node
 

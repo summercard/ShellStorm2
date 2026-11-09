@@ -532,6 +532,12 @@ var _shell_built := false
 var _detail_root: Node3D
 var _building_detail := false
 var _pending_detail_runtime_state: Dictionary = {}
+## 本房间的「宝箱出现」特效是否已经播过。
+## 只挡**流送重建**：走远再回来时 `_build_treasure_chests()` 会把箱子按数据重新建一遍，
+## 不带这个闸每过一次门就会在玩家眼前放一圈金光 —— 那不是"箱子出现了"，是"箱子还在"。
+## 房间节点在流送里是复用的，所以旗标跟着房间走；房间被真正销毁重建时重置，
+## 此时对玩家而言确实是第一次进这间房，播一次是对的。
+var _chest_appear_fx_played := false
 var _stream_state := -1
 var _stream_transition_count := 0
 var _last_stream_transition_msec := 0
@@ -6248,6 +6254,10 @@ func _build_content() -> void:
 	# 所以顺序必须是「宝箱先落地、摆件再避开它」，否则罐子会塞进箱子里。
 	_build_treasure_chests()
 	_build_interactive_clutter()
+	# 家具/设施/易碎件全部落位**之后**才算导航面：`_collect_spawn_blockers()` 量的是
+	# 真实碰撞体，早一步就只有一面空房。这是本函数最后一行，顺序依赖不能挪。
+	# 见 `_refresh_furnishing_navigation()` 头注释（矩形兜底导致的穿墙实测）。
+	_request_furnishing_navigation_refresh()
 
 
 ## 按 `chest_placements` 把宝箱建出来。空数组 ⇒ 什么也不做（绝大多数房）。
@@ -6281,6 +6291,32 @@ func _build_treasure_chests() -> void:
 			entry, _chest_offset_of(entry), float(entry.get("rotation_deg", 0.0)),
 			"TreasureChest_%02d" % index
 		)
+	# 出现特效**不在这里播**：房间 detail 会在加载页与邻房预热时被提前建好
+	# （`Dungeon3D._prebuild_entry_room_details()`），那时玩家还在读条，
+	# 播了等于白播、而且旗标一置就再也不会补。改由 `play_chest_appear_effects()`
+	# 在玩家真正跨进这间房时触发（见 `Dungeon3D._on_room_entered()`）。
+
+
+## 播本房所有**还没开**的宝箱的「出现」特效（业主 2026-11-09：「宝箱出来的时候不要很突兀」）。
+##
+## 由 `Dungeon3D._on_room_entered()` 在玩家跨进本房时调一次，**不是**建箱子时调：
+## 房间 detail 会提前建（加载页预热开局房、流送预热邻房），那时玩家还没看见这块地板，
+## 特效播了也白播，而且旗标一置就没机会补。
+##
+## 旗标只在**真的播出去**之后才置：进房时本房还没箱子（多数房要清完怪才掉）的情形下
+## 不能把旗标吃掉，否则后来由 `spawn_runtime_chest()` 掉的那只就成了唯一没有特效的箱子。
+## 反过来，已开的箱子被 `is_opened()` 挡住 —— 重进旧房间不会在已开的空箱子前面再放一圈光。
+func play_chest_appear_effects() -> void:
+	if _chest_appear_fx_played:
+		return
+	var played := 0
+	for chest in get_treasure_chests():
+		if chest == null or not is_instance_valid(chest) or chest.is_opened():
+			continue
+		chest.play_appear_effect()
+		played += 1
+	if played > 0:
+		_chest_appear_fx_played = true
 
 
 ## 生成一只宝箱节点：贴地、按 `rotation_deg` 转向、接两条信号。**不记账**。
@@ -6343,6 +6379,9 @@ func spawn_runtime_chest(
 	# `keep_global_transform=false`：局部坐标本就相对房间算好，保留局部值。
 	if _detail_root != null and is_instance_valid(_detail_root):
 		chest.reparent(_detail_root, false)
+	# 清房 / 首领阵亡掉的箱子是玩家**亲眼看着出现**的那一类 —— 特效必须在这里播，
+	# 不能指望 `_build_treasure_chests()`：那只箱子不在 `chest_placements` 里。
+	chest.play_appear_effect()
 	var states := get_persistent_detail_state("treasure_chests")
 	states[chest_id] = {
 		"spawned": true,
@@ -6543,12 +6582,31 @@ func _restore_reactive_props() -> void:
 
 
 func _request_furnishing_navigation_refresh() -> void:
-	if not has_meta("furnishing_navigation_polygons") or _furnishing_navigation_refresh_queued:
+	if _furnishing_navigation_refresh_queued:
 		return
 	_furnishing_navigation_refresh_queued = true
 	_refresh_furnishing_navigation.call_deferred()
 
 
+## 用**实际碰撞体**重算这片房的导航面，并挂到唯一那块 `NavigationRegion3D` 上。
+##
+## ## 为什么这必须是**默认路径**，而不是「只有美术声明过的房才有」
+##
+## 旧实现的守卫是 `if not has_meta("furnishing_navigation_polygons"): return` ——
+## 而这份 meta 在本函数自己写出来之前并不存在（只有 `RoomPerimeterFurnishing`
+## 那类带 `perimeter_bay_layout` 的美术壳会预置）。结果是**只有恰好被道具状态变化
+## 撞上的房间**才拿到网格导航面，其余房间一律留在 `_build_runtime_navigation_surface()`
+## 的矩形兜底上：一块覆盖整个包围盒的四边形。
+##
+## 后果（2026-11-09 业主报的「怪在回字型房里贴墙走、不朝我来」）实测：
+## 远征03 同 seed 下 `hub_01/hub_02/boss/boss_foyer/fireplace_room_inj2` 等房
+## `navigation_mesh.get_polygon_count() == 1`，对全部采样点对求 `map_get_path()`，
+## 有 940~1198 段路径直接穿过 `LayoutCollision`（房内的隔墙/结构）。A* 认为墙不存在，
+## 怪物按这条穿墙路径推进，物理上撞墙后只能靠 `move_and_slide` 沿墙滑动 —— 就是
+## 「贴着墙走」。有网格导航面的房（`n02`~`n06`、`room_01`）同一测量穿墙数为 **0**。
+##
+## 所以这里把「按阻塞体重建」变成所有房间的统一能力，矩形只在**一件阻塞体都没有**
+## （空房 / 屋顶）时才作为兜底出现 —— 那时矩形本来就是对的。
 func _refresh_furnishing_navigation() -> void:
 	# Reactive props defer their final collider shape/layer until the physics sync.
 	await get_tree().physics_frame
@@ -6557,11 +6615,25 @@ func _refresh_furnishing_navigation() -> void:
 	if not is_inside_tree() or not _detail_built:
 		return
 	_collect_spawn_blockers()
-	set_meta("furnishing_navigation_polygons", preload("res://src/world3d/RoomFurnishingNavigation.gd").rebuild(get_dimensions(), _spawn_blockers, connection_ports))
+	var build_started_usec := Time.get_ticks_usec()
+	var polygons := preload("res://src/world3d/RoomFurnishingNavigation.gd").rebuild(
+		get_dimensions(), _spawn_blockers, connection_ports
+	)
+	# 空房（一件阻塞体都没有）：保留矩形兜底，不要把 `furnishing_navigation_polygons`
+	# 写成空数组 —— 那会让 `_build_runtime_navigation_surface()` 也走空数组分支、
+	# 直接建出一块**没有任何多边形**的导航面（怪在这间房里彻底没有路径）。
+	if not polygons.is_empty():
+		set_meta("furnishing_navigation_polygons", polygons)
 	_spawn_reach_evaluated = false
 	_spawn_reach_probe_frame = -1
 	_build_runtime_navigation_surface(get_dimensions())
 	set_meta("furnishing_navigation_refresh_count", int(get_meta("furnishing_navigation_refresh_count", 0)) + 1)
+	# 单次重建耗时（毫秒）。detail 是流送时逐房重建的，这个数是**进房卡顿**的直接成本，
+	# 留给探针与验收读，避免以后再靠"感觉有点卡"来判断。
+	set_meta(
+		"furnishing_navigation_build_ms",
+		float(Time.get_ticks_usec() - build_started_usec) / 1000.0
+	)
 
 
 ## 手摆易碎件的平面落点（房间局部）。随机撒点用它避让。
@@ -6842,11 +6914,28 @@ func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
 	if not authored_polygons.is_empty() or has_meta("furnishing_navigation_polygons"):
 		var authored_mesh := NavigationMesh.new()
 		var vertices := PackedVector3Array()
+		# 相邻多边形共享顶点索引（毫米量化去重）。
+		#
+		# `RoomFurnishingNavigation.rebuild()` 产出的是 0.5 m 网格，45×40 的房间约 3000~5000 片；
+		# 逐片 append 四个新顶点的话顶点数是 4N（实测 12668），合并后约 1/4。
+		# 语义上也更正确：同一条边两侧本来就是同一个顶点，让它们共用索引，
+		# 导航图的多边形邻接关系就是数据本身表达的，而不是"碰巧坐标对上了"。
+		var vertex_lookup := {}
 		for polygon_value in authored_polygons:
 			var polygon := PackedInt32Array()
 			for point in polygon_value as Array:
+				var position := Vector3(float(point[0]), float(point[1]), float(point[2]))
+				var key := Vector3i(
+					roundi(position.x * 1000.0),
+					roundi(position.y * 1000.0),
+					roundi(position.z * 1000.0)
+				)
+				if vertex_lookup.has(key):
+					polygon.append(int(vertex_lookup[key]))
+					continue
+				vertex_lookup[key] = vertices.size()
 				polygon.append(vertices.size())
-				vertices.append(Vector3(point[0], point[1], point[2]))
+				vertices.append(position)
 			authored_mesh.vertices = vertices
 			authored_mesh.add_polygon(polygon)
 		var authored_region := get_node_or_null("RuntimeDetail/RuntimeNavigationRegion3D") as NavigationRegion3D

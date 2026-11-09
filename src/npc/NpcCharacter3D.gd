@@ -160,6 +160,8 @@ var _body_joint: Node3D
 var _head_joint: Node3D
 var _foot_l: Node3D
 var _foot_r: Node3D
+var _hand_l: Node3D
+var _hand_r: Node3D
 var _ear_l: Node3D
 var _ear_r: Node3D
 
@@ -167,6 +169,8 @@ var _base_body := Vector3.ZERO
 var _base_head := Vector3.ZERO
 var _base_foot_l := Vector3.ZERO
 var _base_foot_r := Vector3.ZERO
+var _base_hand_l := Vector3.ZERO
+var _base_hand_r := Vector3.ZERO
 var _base_ear_l := Vector3.ZERO
 var _base_ear_r := Vector3.ZERO
 
@@ -230,6 +234,11 @@ var _standby_warned := false
 var _scripted_active := false
 var _scripted_point := Vector3.ZERO
 var _scripted_look := Vector3.ZERO
+var _scripted_move_target := Vector3.ZERO
+var _scripted_move_active := false
+var _scripted_gesture := ""
+var _scripted_facing_active := false
+var _walking_speed_override := WALK_SPEED
 
 
 func _ready() -> void:
@@ -330,6 +339,9 @@ func end_scripted_appearance() -> void:
 	if not _scripted_active:
 		return
 	_scripted_active = false
+	_scripted_move_active = false
+	_scripted_gesture = ""
+	_scripted_facing_active = false
 	hide_dialogue()
 	# 演出结束后才重新求值节拍：装备好锚点、玩家已能操作，这时站过去才看得见。
 	refresh_story_state()
@@ -337,6 +349,35 @@ func end_scripted_appearance() -> void:
 
 func is_scripted_appearance() -> bool:
 	return _scripted_active
+
+
+## 主线演出用移动：位置和步态仍由 NPC 实体自己驱动，适配器不摆骨骼。
+func scripted_move_to(target: Vector3, speed := WALK_SPEED) -> bool:
+	if not _scripted_active:
+		return false
+	_scripted_move_target = Vector3(target.x, global_position.y, target.z)
+	_scripted_move_active = true
+	_moving = true
+	_walking_speed_override = maxf(0.05, speed)
+	return true
+
+
+func scripted_gesture(name: String) -> bool:
+	if not _scripted_active:
+		return false
+	_scripted_gesture = name
+	return true
+
+
+func set_scripted_facing(yaw: float) -> void:
+	_scripted_facing_active = true
+	_yaw = yaw
+	_yaw_target = yaw
+	rotation.y = yaw
+
+
+func clear_scripted_facing() -> void:
+	_scripted_facing_active = false
 
 
 ## 演出用：直接说一句（不推进循环台词、不写节拍历史）。
@@ -504,6 +545,8 @@ func _capture_joints() -> void:
 	_head_joint = _visual_root.get_node_or_null("BunnyRig/HeadJoint") as Node3D
 	_foot_l = _visual_root.get_node_or_null("BunnyRig/FeetRoot/FootJointL") as Node3D
 	_foot_r = _visual_root.get_node_or_null("BunnyRig/FeetRoot/FootJointR") as Node3D
+	_hand_l = _visual_root.get_node_or_null("BunnyRig/HandRoot/HandJointL") as Node3D
+	_hand_r = _visual_root.get_node_or_null("BunnyRig/HandRoot/HandJointR") as Node3D
 	_ear_l = _visual_root.get_node_or_null("BunnyRig/HeadJoint/Ears/EarSocketL") as Node3D
 	_ear_r = _visual_root.get_node_or_null("BunnyRig/HeadJoint/Ears/EarSocketR") as Node3D
 	if _body_joint != null:
@@ -514,6 +557,10 @@ func _capture_joints() -> void:
 		_base_foot_l = _foot_l.position
 	if _foot_r != null:
 		_base_foot_r = _foot_r.position
+	if _hand_l != null:
+		_base_hand_l = _hand_l.position
+	if _hand_r != null:
+		_base_hand_r = _hand_r.position
 	if _ear_l != null:
 		_base_ear_l = _ear_l.rotation
 	if _ear_r != null:
@@ -824,6 +871,18 @@ func _process(delta: float) -> void:
 
 
 func _tick_patrol(delta: float) -> void:
+	if _scripted_move_active:
+		var scripted_offset := _scripted_move_target - global_position
+		scripted_offset.y = 0.0
+		if scripted_offset.length() <= ARRIVE_EPSILON:
+			_scripted_move_active = false
+			_moving = false
+			return
+		var scripted_direction := scripted_offset.normalized()
+		_moving = true
+		global_position += scripted_direction * _walking_speed_override * delta
+		_yaw_target = atan2(-scripted_direction.x, -scripted_direction.z)
+		return
 	# 搭话中一律钉住：位置不动，也不消耗停留计时（谈完继续从原地走）。
 	if _talk_engaged:
 		_moving = false
@@ -902,6 +961,21 @@ func _tick_pose(delta: float) -> void:
 		_foot_l.position = _base_foot_l + (Vector3(0.0, maxf(0.0, wave) * 0.055, wave * 0.115) if _moving else Vector3.ZERO)
 	if _foot_r != null:
 		_foot_r.position = _base_foot_r + (Vector3(0.0, maxf(0.0, -wave) * 0.055, -wave * 0.115) if _moving else Vector3.ZERO)
+	var gesture_phase := clampf(sin(_elapsed * 3.2) * 0.5 + 0.5, 0.0, 1.0)
+	if _hand_l != null:
+		_hand_l.position = _base_hand_l
+	if _hand_r != null:
+		_hand_r.position = _base_hand_r
+	if _scripted_gesture == "receive_key":
+		if _hand_l != null:
+			_hand_l.position += Vector3(0.0, 0.10 + gesture_phase * 0.04, -0.12)
+		if _hand_r != null:
+			_hand_r.position += Vector3(0.0, 0.10 + gesture_phase * 0.04, -0.12)
+	elif _scripted_gesture == "insert_key":
+		if _hand_r != null:
+			_hand_r.position += Vector3(0.0, 0.18, -0.22)
+		if _hand_l != null:
+			_hand_l.position += Vector3(0.0, 0.12, -0.16)
 	if _ear_l != null:
 		_ear_l.rotation = _base_ear_l + Vector3(0.0, 0.0, sin(_elapsed * 2.2) * 0.06)
 	if _ear_r != null:

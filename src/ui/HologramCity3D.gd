@@ -7,6 +7,9 @@ const FRAME_SHADER = preload("res://assets/art/ui/expedition_city/hologram_frame
 const CITY_LAYER := 1 << 18
 const CYAN := Color(0.02, 0.72, 1.0)
 const PINK := Color(1.0, 0.025, 0.55)
+const LOCK_RED := Color(1.0, 0.035, 0.045)
+const LOCK_RED_DIM := Color(0.36, 0.008, 0.012)
+const LOCK_SCAN_SPEED := 2.4
 # 入口标记的世界比例与交互反馈强度。悬停倍率由 1.09 提到 1.32，让"放大感"一眼可辨；
 # 倍率与响应率都写在这里，方便按手感调，不散落在 face_markers 里。
 const MARKER_SCALE := 0.09
@@ -38,7 +41,8 @@ const SITE_ANCHORS := {
 	"expedition_03": {"position": Vector3(-5, 2.7, 2), "clear_radius": 2.8, "marker_x": 0.0, "marker_scale": 1.0, "clear_stage": "grid"},
 	"expedition_01": {"position": Vector3(5, 2.9, 1), "clear_radius": 2.8, "marker_x": 0.0, "marker_scale": 1.0, "clear_stage": "grid"},
 	"expedition_02": {"position": Vector3(-4, 2.7, -5), "clear_radius": 2.5, "marker_x": -0.6, "marker_scale": 0.78, "clear_stage": "post"},
-	"99": {"position": Vector3(4.4, 2.8, -5.2), "clear_radius": 2.5, "marker_x": -0.6, "marker_scale": 0.78, "clear_stage": "post", "sightline": 1.9},
+	"expedition_04": {"position": Vector3(4.4, 2.8, -5.2), "clear_radius": 2.5, "marker_x": -0.6, "marker_scale": 0.78, "clear_stage": "post", "sightline": 1.9},
+	"99": {"position": Vector3(7.0, 2.8, -4.5), "clear_radius": 1.8, "marker_x": -0.6, "marker_scale": 0.62, "clear_stage": "post", "sightline": 1.3},
 }
 ## 情报室近景镜头在**全息城局部坐标**里的位置。
 ##
@@ -67,6 +71,13 @@ var sites: Array[Node3D] = []
 var markers: Array[Node3D] = []
 var labels: Array[Label3D] = []
 var entry_hints: Array[Label3D] = []
+var lock_nodes: Array[Node3D] = []
+var lock_materials: Array[StandardMaterial3D] = []
+var lock_scan_materials: Array[StandardMaterial3D] = []
+var entry_states: Array[String] = []
+var installed_count := 0
+var installed_label: Label3D
+var entry_state_provider := Callable()
 var materials: Array[ShaderMaterial] = []
 var border_materials: Array[Array] = []
 var _hover: Array[float] = []
@@ -329,12 +340,16 @@ func _build() -> void:
 		# 关卡已登记但场景还没建：入口保留在城里（让"这里有一关"可见），
 		# 但牌面直接写清楚进不去 —— 不能等玩家点了才说，也不能假装能进。
 		entry_hints.append(_label(marker, _entry_hint_text(id), Vector3(0, -0.48, 0.11), 30, 0.0065, color))
+		var lock := _build_lock(marker)
+		lock_nodes.append(lock)
+		entry_states.append("")
 	_stage_delay = 0.68
 	var points := [Vector3(-5, 2.75, 2), Vector3(-2.5, 2.75, 2), Vector3(0, 2.75, -0.5), Vector3(3, 2.75, -0.5), Vector3(5, 2.75, 1)]
 	for i in range(points.size() - 1):
 		_line(self, points[i], points[i + 1], CYAN if i < 2 else PINK, 0.07)
 	_stage_delay = 0.07
 	_box(self, Vector3(0, 5.5, -3.4), Vector3(3.5, 3.9, 0.15), Color(0.012, 0.016, 0.065), 0.2)
+	installed_label = _label(self, "已安装 %d/4" % installed_count, Vector3(0, 3.45, -3.28), 34, 0.0065, CYAN)
 	_label(self, "SHELLSTORM", Vector3(0, 4.8, -3.29), 90, 0.007, Color(0.52, 0.39, 1))
 	_label(self, "BASE 99F", Vector3(0, 4.1, -3.28), 40, 0.007, CYAN)
 	_box(self, Vector3(0, 6, -3.27), Vector3(0.75, 0.65, 0.12), Color(0.7, 0.25, 1), 1.6)
@@ -364,6 +379,7 @@ func _build() -> void:
 	add_child(particles)
 	_staged.append({"node": particles, "position": particles.position, "delay": 0.32})
 	_build_transition_particles()
+	refresh_entry_states()
 	_process(0.0)
 
 func _append_stepped_building(batch: Array, base: Vector3, width: float, height: float, delay: float) -> void:
@@ -394,12 +410,20 @@ func _process(delta: float) -> void:
 		markers[i].visible = entries_ready
 		markers[i].position.y = 1.3 + sin(elapsed * 1.6 + i) * 0.09
 		labels[i].modulate = Color.WHITE if i == focus else Color(0.65, 0.78, 0.9)
+		if i < lock_nodes.size():
+			lock_nodes[i].visible = entries_ready and i < entry_states.size() and entry_states[i] == "locked"
+			if i < lock_materials.size():
+				lock_materials[i].emission_energy_multiplier = 1.8 + 0.8 * (0.5 + 0.5 * sin(elapsed * LOCK_SCAN_SPEED))
+			if i < lock_scan_materials.size():
+				lock_scan_materials[i].albedo_color = LOCK_RED * (0.55 + 0.45 * (0.5 + 0.5 * sin(elapsed * LOCK_SCAN_SPEED)))
 		# 悬停强度平滑收敛到焦点：焦点为 -1 时全部回落到静止尺寸，即"光标移开就复原"。
 		_hover[i] = lerpf(_hover[i], 1.0 if i == focus else 0.0, 1.0 - exp(-HOVER_RESPONSE * delta))
 		_punch[i] = maxf(0.0, _punch[i] - PUNCH_DECAY * delta)
 		for flow in border_materials[i]:
 			flow.set_shader_parameter("clock", elapsed)
 			flow.set_shader_parameter("hover", _hover[i])
+	if is_instance_valid(installed_label):
+		installed_label.text = "已安装 %d/4" % installed_count
 
 func face_markers(camera: Camera3D) -> void:
 	for i in markers.size():
@@ -408,9 +432,40 @@ func face_markers(camera: Camera3D) -> void:
 		markers[i].global_basis = camera.global_basis.scaled(Vector3.ONE * MARKER_SCALE * anchor_scale * maxf(0.001, site_reveal(i)) * emphasis)
 
 func punch_marker(index: int) -> void:
-	# 点击弹性反馈：脉冲置满后由 _process 逐帧衰减回落，形成放大再回弹的手感。
+	# 锁定入口也允许播放点击反馈，但不代表获得出发权限。
 	if index >= 0 and index < _punch.size():
 		_punch[index] = 1.0
+
+func set_installed_count(value: int) -> void:
+	installed_count = clampi(value, 0, 4)
+	if is_instance_valid(installed_label):
+		installed_label.text = "已安装 %d/4" % installed_count
+
+func refresh_entry_states() -> void:
+	if not entry_state_provider.is_valid():
+		return
+	for i in level_ids.size():
+		var state := str(entry_state_provider.call(level_ids[i]))
+		if i >= entry_states.size():
+			entry_states.append(state)
+		else:
+			entry_states[i] = state
+		if i < entry_hints.size():
+			entry_hints[i].text = _entry_hint_text(level_ids[i])
+
+func get_entry_visual_snapshot() -> Dictionary:
+	var locked_ids: Array[String] = []
+	for i in level_ids.size():
+		if i < entry_states.size() and entry_states[i] == "locked":
+			locked_ids.append(level_ids[i])
+	return {
+		"installed_count": installed_count,
+		"entry_states": entry_states.duplicate(),
+		"locked_ids": locked_ids,
+		"lock_geometry": lock_nodes.size(),
+		"lock_red": LOCK_RED,
+		"lock_scan_speed": LOCK_SCAN_SPEED,
+	}
 
 func site_reveal(index: int) -> float:
 	return entry_deployment if index >= 0 and index < sites.size() else 0.0
@@ -438,6 +493,23 @@ func _entry_hint_text(level_id: String) -> String:
 	if entry_hint_provider.is_valid():
 		return str(entry_hint_provider.call(level_id))
 	return "点击进入  ·  ENTER" if entry_available(level_id) else "尚未开放"
+
+func _build_lock(parent: Node3D) -> Node3D:
+	var lock := Node3D.new()
+	lock.name = "RedElectronicLock"
+	# 标记牌前表面约为 z=0.06；锁头整体前移，保证同 CITY_LAYER 下不被牌面遮住。
+	lock.position = Vector3(0, 0.02, 0.15)
+	parent.add_child(lock)
+	var body := _box(lock, Vector3(0, -0.12, -0.035), Vector3(0.42, 0.32, 0.06), LOCK_RED_DIM, 1.8)
+	var body_material := body.material_override as StandardMaterial3D
+	lock_materials.append(body_material)
+	var shackle := _line(lock, Vector3(-0.16, 0.04, -0.04), Vector3(-0.16, 0.25, -0.04), LOCK_RED, 0.055)
+	_line(lock, Vector3(-0.16, 0.25, -0.04), Vector3(0.16, 0.25, -0.04), LOCK_RED, 0.055)
+	_line(lock, Vector3(0.16, 0.25, -0.04), Vector3(0.16, 0.04, -0.04), LOCK_RED, 0.055)
+	var scan := _line(lock, Vector3(-0.26, -0.32, -0.06), Vector3(0.26, -0.32, -0.06), LOCK_RED, 0.018)
+	lock_scan_materials.append(scan.material_override as StandardMaterial3D)
+	_line(lock, Vector3(-0.26, -0.39, -0.06), Vector3(0.26, -0.39, -0.06), LOCK_RED, 0.012)
+	return lock
 
 func _update_staging() -> void:
 	for item in _staged:

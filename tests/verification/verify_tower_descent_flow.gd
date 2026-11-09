@@ -772,8 +772,10 @@ func _ready() -> void:
 		)
 	tower.player.call("_update_aim_from_mouse")
 	var aim_cursor := tower.player.get_node("AimCursor") as Node3D
+	# 准星平面 = 角色脚底 + `AIM_TARGET_HEIGHT`（枪口高度）。2026-11-09 起不再是
+	# 贴地的 +0.035：贴地会让弹道在屏幕上比准星高 44px（见 Player3D 该常量注释）。
 	_expect(
-		absf(aim_cursor.global_position.y - (tower.player.global_position.y + 0.035)) < 0.02,
+		absf(aim_cursor.global_position.y - (tower.player.global_position.y + tower.player.AIM_TARGET_HEIGHT)) < 0.02,
 		"鼠标光标仍停留在最上层平面",
 		failures
 	)

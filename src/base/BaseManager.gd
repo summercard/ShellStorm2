@@ -3,6 +3,7 @@ extends Node
 signal base_power_changed(enabled: bool)
 signal game_save_reset_completed(result: Dictionary)
 signal blueprint_tier_changed(category_id: String, tier: int, transaction_id: String)
+signal main_story_changed(snapshot: Dictionary)
 
 const SAVE_PATH := "user://base_save.json"
 const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
@@ -11,6 +12,7 @@ const EnergyService = preload("res://src/base/BaseEnergyService.gd")
 const SaveService = preload("res://src/base/ProfileSaveService.gd")
 const ShopService = preload("res://src/base/BaseShopService.gd")
 const BlueprintService = preload("res://src/base/BlueprintUpgradeService.gd")
+const MainStoryProgress = preload("res://src/narrative/MainStoryProgress.gd")
 const BASE_LOADOUT_CAPACITY := 40
 const BASE_VAULT_CAPACITY := 20
 const RUNTIME_SAVE_DEBOUNCE_SECONDS := 0.45
@@ -218,6 +220,98 @@ func replace_elite_archive_records_for_test(records: Dictionary) -> void:
 	if data != null:
 		data.elite_archive_records = records.duplicate(true)
 
+
+# =========================================================================
+# 主线3.1-3.3永久事实
+# =========================================================================
+
+func get_main_story_snapshot() -> Dictionary:
+	_ensure_data()
+	return MainStoryProgress.normalize_state(data.main_story).duplicate(true) if data != null else MainStoryProgress.default_state()
+
+func accept_main_story() -> Dictionary:
+	_ensure_data()
+	if data == null:
+		return {"success": false, "reason": "主线档案不可用"}
+	if bool(data.main_story.get("accepted", false)):
+		return {"success": true, "duplicate": true, "snapshot": get_main_story_snapshot()}
+	var transaction_data := data
+	var previous := data.main_story.duplicate(true)
+	data.main_story["accepted"] = true
+	if save_base("main_story_accept"):
+		var snapshot := get_main_story_snapshot()
+		main_story_changed.emit(snapshot.duplicate(true))
+		return {"success": true, "duplicate": false, "snapshot": snapshot}
+	if data == transaction_data:
+		data.main_story = previous
+	return {"success": false, "reason": "存档失败，主线接受状态已回滚"}
+
+func claim_main_story_key(key_id: String, source: Dictionary, checkpoint: Dictionary = {}) -> Dictionary:
+	_ensure_data()
+	if data == null:
+		return {"success": false, "reason": "主线档案不可用"}
+	if key_id not in MainStoryProgress.KEY_IDS:
+		return {"success": false, "reason": "未知主线钥匙"}
+	var expected_key := MainStoryProgress.key_for_level(str(source.get("level_id", "")))
+	if expected_key != key_id:
+		return {"success": false, "reason": "钥匙与来源关卡不匹配"}
+	var source_result := MainStoryProgress.validate_key_source(source)
+	if not bool(source_result.get("success", false)):
+		return source_result
+	if not checkpoint.is_empty():
+		if not bool(checkpoint.get("valid", false)) or str(checkpoint.get("checkpoint_id", checkpoint.get("layout_id", ""))).is_empty():
+			return {"success": false, "reason": "传入行动检查点不合法"}
+	var current_state := MainStoryProgress.normalize_state(data.main_story)
+	var current_key_state := MainStoryProgress.key_state(current_state, key_id)
+	if current_key_state in [MainStoryProgress.STATE_ACQUIRED, MainStoryProgress.STATE_DEPOSITED]:
+		return {"success": true, "duplicate": true, "snapshot": current_state}
+	var transaction_data := data
+	var previous_story := data.main_story.duplicate(true)
+	var previous_checkpoint := data.active_run_snapshot.duplicate(true)
+	var record := {
+		"state": MainStoryProgress.STATE_ACQUIRED,
+		"acquired_at_unix": int(Time.get_unix_time_from_system()),
+		"acquired_source": source.duplicate(true),
+	}
+	data.main_story["schema_version"] = MainStoryProgress.SCHEMA_VERSION
+	data.main_story["keys"] = (data.main_story.get("keys", {}) as Dictionary).duplicate(true)
+	data.main_story["keys"][key_id] = record
+	if not checkpoint.is_empty():
+		data.active_run_snapshot = checkpoint.duplicate(true)
+	if save_base("main_story_key_acquired:%s" % key_id):
+		var snapshot := get_main_story_snapshot()
+		main_story_changed.emit(snapshot.duplicate(true))
+		return {"success": true, "duplicate": false, "key_id": key_id, "snapshot": snapshot}
+	if data == transaction_data:
+		data.main_story = previous_story
+		data.active_run_snapshot = previous_checkpoint
+	return {"success": false, "reason": "存档失败，主线钥匙领取已整体回滚"}
+
+func deposit_main_story_key(key_id: String) -> Dictionary:
+	_ensure_data()
+	if data == null:
+		return {"success": false, "reason": "主线档案不可用"}
+	if key_id not in MainStoryProgress.KEY_IDS:
+		return {"success": false, "reason": "未知主线钥匙"}
+	var current_state := MainStoryProgress.normalize_state(data.main_story)
+	var current_key_state := MainStoryProgress.key_state(current_state, key_id)
+	if current_key_state == MainStoryProgress.STATE_DEPOSITED:
+		return {"success": true, "duplicate": true, "snapshot": current_state}
+	if current_key_state != MainStoryProgress.STATE_ACQUIRED:
+		return {"success": false, "reason": "主线钥匙尚未领取"}
+	var transaction_data := data
+	var previous_story := data.main_story.duplicate(true)
+	var record := ((data.main_story.get("keys", {}) as Dictionary).get(key_id, {}) as Dictionary).duplicate(true)
+	record["state"] = MainStoryProgress.STATE_DEPOSITED
+	record["deposited_at_unix"] = int(Time.get_unix_time_from_system())
+	data.main_story["keys"][key_id] = record
+	if save_base("main_story_key_deposited:%s" % key_id):
+		var snapshot := get_main_story_snapshot()
+		main_story_changed.emit(snapshot.duplicate(true))
+		return {"success": true, "duplicate": false, "key_id": key_id, "snapshot": snapshot}
+	if data == transaction_data:
+		data.main_story = previous_story
+	return {"success": false, "reason": "存档失败，主线钥匙安装已回滚"}
 
 # =========================================================================
 # 跨局剧情历史（2026-09-23 落地；08 文档 §9 预留的 `BaseData.narrative_history`）
@@ -1882,9 +1976,15 @@ func is_expedition_level_unlocked(level_id: String) -> bool:
 	# 新增的远征03 不在白名单里，于是情报室的牌面写着「点击进入」，
 	# 按下去却被判「尚未解锁」，玩家完全看不出该改哪。加一张关卡要改两处，
 	# 就是这类"静默进不去"的固定来源。
-	if GameDesignConfig.expedition_unlock_policy(level_id) == GameDesignConfig.UNLOCK_POLICY_ALWAYS:
-		return true
+	var expedition_entry := GameDesignConfig.expedition_level(level_id)
+	# 既有存档明确授予的权限优先保留；主线规则不能回收旧权限。
 	if level_id in data.expedition_unlocked_levels:
+		return true
+	var unlock_policy := str(expedition_entry.get("unlock_policy", GameDesignConfig.UNLOCK_POLICY_ALWAYS))
+	if unlock_policy == "main_story":
+		var required_key := str(expedition_entry.get("main_story_required_key", ""))
+		return not required_key.is_empty() and MainStoryProgress.key_state(data.main_story, required_key) == MainStoryProgress.STATE_DEPOSITED
+	if unlock_policy == GameDesignConfig.UNLOCK_POLICY_ALWAYS:
 		return true
 	# 旧档兼容：远征02 的历史专用布尔。`BaseData.from_dict()` 已做过一次迁移，
 	# 这里再兜一次 —— 同项目其它实例可能按旧结构回写存档，把它冲回只带旧字段的形态。

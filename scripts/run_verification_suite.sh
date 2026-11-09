@@ -229,6 +229,7 @@ core_scenes=(
   verify_level_plan_design_source
   verify_reward_service_flow
   verify_chest_reward_service
+  verify_expedition01_room_guarantee
   verify_reward_ground_handoff
   verify_run_merchant_transaction
   verify_run_merchant_integration
@@ -244,6 +245,10 @@ core_scenes=(
   verify_speech_bubble_3d
   verify_dialogue_ui_flow
   verify_narrative_timeline
+  # 主线规则/权限/首领门闩：不要求专用主线用户目录。
+  verify_main_story_progress
+  verify_main_story_navigation
+  verify_main_story_boss_gate
   verify_narrative_opening_02_05
   verify_opening_script_runtime
   verify_new_save_handoff
@@ -292,6 +297,8 @@ core_scenes=(
   verify_vfx_pool_lifecycle
   verify_combat_vfx_toon_v002
   verify_bullet_vfx_profiles
+  verify_bullet_aim_alignment
+  verify_crosshair_billboard
   verify_monster_startup_roar
   verify_strong_variant_monsters
   verify_strong_variant_eye_glow
@@ -378,6 +385,7 @@ core_scenes=(
   verify_expedition03_monitor_boss_flow
   verify_expedition03_special_room_relayout
   verify_expedition03_room_interactions
+  verify_expedition03_clear_drop_rooms
   verify_expedition03_workshop_layouts
   verify_3d_parity_core
   verify_3d_reload_state_flow
@@ -451,6 +459,14 @@ core_scenes=(
   # 2026-11-06：远征02 门策略 / 钥匙经济。判据全在 level_plan.json 的两段数据上，
   # 抹掉它们时运行时**静默**回退到「门要钥匙 + 开门弹命运卡」，没有任何日志。
   verify_expedition02_door_policy
+  # 2026-11-09：攻击姿态要站住（业主「一边攻击一边移动」）。判据是 `velocity`
+  # 的刹车帧数、刹停后不再起速，以及"停下不许变成走不过来"。
+  verify_enemy_attack_stance
+  # 2026-11-09：宝箱出现反馈三件套（出现特效 / 自带地面光 / 头顶提示让位）。
+  # 判据是特效 AssetID 必须是 TELEPORT-**IN**（OUT 的环向内收拢读作被吸走）、
+  # 尺寸 2.0 与暖金、进房只播一次且已开箱不播、灯挂视觉根且不投影、
+  # 聚焦时头顶提示收起、开箱后恒不恢复。
+  verify_chest_appear_fx_prompt
 )
 
 # These scenes read the viewport texture and therefore require a real renderer.
@@ -504,6 +520,13 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  # 必须由隔离外部 runner 在 Autoload 前设置 SHELLSTORM_MAIN_STORY_ISOLATED=1。
+  # integration 的 user:// 含 main_story_integration；其余三项含 main_story_performance。
+  # narrative 最新版已含真实场景，不再是纯规则；捕捉还须真渲染和工程外输出目录。
+  verify_main_story_narrative
+  verify_main_story_integration
+  verify_main_story_performance
+  capture_main_story_chapter
   # Requires LAMP_QA_DIR and isolated APPDATA before Autoload; includes a 5s burn.
   verify_lamp_furniture_chain
   # Requires REACTIVE_PROP_QA_DIR and an isolated APPDATA before Autoload.
@@ -521,6 +544,12 @@ retired_scenes=(
 renderer_scenes=(
   "${visual_scenes[@]}"
   verify_world_environment_audio_flow
+  # full/aggregate full 通过此排除表选场景；以下归属仍唯一为 manual，
+  # 不能让目录扫描把缺专用隔离环境的主线验收混进无头自动套件。
+  verify_main_story_narrative
+  verify_main_story_integration
+  verify_main_story_performance
+  capture_main_story_chapter
 )
 
 is_renderer_scene() {
@@ -733,26 +762,4 @@ case "${suite}" in
     ;;
 esac
 
-# 静态门禁：Label3D 的淡出必须走 transparency（业主 2026-10-10「物品拾取后残留黑字」）。
-# Godot 的 Label3D 把描边与正文当两条独立着色路径，`modulate.a` 只作用于正文，
-# 只淡正文会让描边原地留下。退出码 1 = 存在违规。
-case "${suite}" in
-  core|aggregate|full)
-    fade_status=0
-    python3 "${project_root}/scripts/check_label3d_fade.py" --quiet || fade_status=$?
-    if (( fade_status != 0 )); then
-      printf '\nVERIFICATION_SUITE_FAILED suite=%s reason=label3d_fade_modulate_alpha\n' \
-        "${suite}" >&2
-      exit 1
-    fi
-    ;;
-esac
-
-# Runtime texture budgets and external shared image references are export contracts.
-case "${suite}" in
-  core|aggregate|full)
-    python3 "${project_root}/scripts/check_runtime_texture_policy.py" || exit 1
-    ;;
-esac
-
-printf '\nVERIFICATION_SUITE_OK suite=%s count=%d\n' "${suite}" "${#scenes[@]}"
+# 静态门禁：Label3D �

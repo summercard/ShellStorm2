@@ -91,6 +91,44 @@ const QUALITY_COLORS := {
 	"rare": Color(0.82, 0.20, 0.86),
 	"epic": Color(1.00, 0.48, 0.08),
 }
+## —— 「出现」特效（业主 2026-11-09：「宝箱出来的时候不要很突兀」）——
+#
+# 用 FX01-35 `VFX-TELEPORT-IN-3D`（环 0.15 → 1.50 向外炸开、7 根竖丝向上冒出、0.26s），
+# **不是**救援箱消失用的那一件 FX01-34 OUT。两者是同一个脚本（`VfxTeleport3D`，
+# `mode = out|in`）的配对：OUT 的环向内收拢，播在「凭空出现」上读作「被吸走」，
+# 语义正好反了 —— 复用它的颜色和几何可以，复用它的曲线不行。
+const APPEAR_FX_ASSET := VfxPool3D.FX01_TELEPORT_IN
+## 尺寸 2.0 = 救援箱消失那档 1.6 × 1.25。
+## 1.6 只是「把箱子包住」（箱体宽 1.28 m、碰撞 1.45 m）；出现时环要超出箱子一圈，
+## 才能先把视线拽过去。再大（≥2.6）会盖到隔壁家具的交互圆点。
+const APPEAR_FX_SIZE := 2.0
+## 暖金色。不按品质分色：出现特效回答「这里有只箱子」，品质由箱边描边色回答，
+## 两件事挤同一束光会让高级箱在远处也读不出档次。
+const APPEAR_FX_COLOR := Color(1.00, 0.78, 0.32)
+## 贴地抬 0.05 m。IN 的地面环本来就躺在地板上，贴零会和地板 z-fighting 出锯齿边。
+const APPEAR_FX_LIFT_M := 0.05
+
+## —— 宝箱自带地面光（业主 2026-11-09：「宝箱在里头根本看不见」）——
+#
+# 挂在 `_visual_root` 下面，**跟着模型走**，不是场景里另摆一盏固定灯：
+# 同一只箱子的视觉、碰撞、开箱动画都在本节点上，灯跑到别处就会出现
+# 「光在箱子外一米」这种一眼假的画面。
+#
+# 参照 `FateCardDropPickup3D.FateCardGlow`（同类"地上掉落物局部光"）：OmniLight3D、
+# `shadow_enabled = false`、低能量小半径。**阴影必须关** —— 2026-11-08 帧时归因那条教训：
+# 27 盏灯里 24 盏 `light_energy == 0` 却仍每帧渲一张完整阴影贴图，纯浪费 35% 帧时。
+const LOOT_LIGHT_COLOR := Color(1.00, 0.87, 0.64)
+## 1.1 略低于命运卡的 1.25：那只卡是**唯一**要抢注意力的东西，宝箱房里可能同时有 1~3 只，
+## 逐只都按 1.25 打会在房间中央堆出一块过曝的白斑。
+const LOOT_LIGHT_ENERGY := 1.1
+## range 3.0 的推导：灯高 = 箱体 1.02 + 0.45 = 1.47 m，斜照到 1.0 m 外的地板边缘
+## 距离 √(1.47² + 1.0²) ≈ 1.78 m；3.0 给出约 2.6 m 半径的地面光斑 ——
+## 暗处能认出"那儿有东西"，又不越过 5 m 房间网格去打亮隔壁家具。
+const LOOT_LIGHT_RANGE := 3.0
+## 灯高偏移（在箱体高之上再抬 0.45）。低于 0.3 会把箱盖木纹打爆成一片白，
+## 高于 0.6 又够不到地面 —— 光斑会缩到只剩箱子脚下一点点。
+const LOOT_LIGHT_LIFT := 0.45
+
 const NORMAL_VISUAL_SCENE: PackedScene = preload(
 	"res://assets/art/items_weapons/props/reward_chests/runtime/prp_reward_chest_normal_root_top3d.tscn"
 )
@@ -121,6 +159,12 @@ var mimic_monster_kind := "egt_mimic"
 ## 原样还回去，那不是任何一张掉落表能表达的内容。
 ## 走的是同一条开箱链（认领 → 冻结 → 砰 → 落地 → 房间账），只是奖励来源换成这份清单。
 var explicit_grants: Array = []
+## 关卡保底条目（`[{item_id, count, grade?}]`），**在池子掉落之外额外另给**。
+##
+## 与上面 `explicit_grants` 的区别：`explicit_grants` 会**取代**整只箱子的解析，
+## 这里只是往正常奖励后面追加几条确定性的东西。用途（2026-11-09 业主）：
+## 远征01 第一或第二个房间里那只箱子，必掉一把最低品质的霰弹枪/步枪 + 100 发通用弹药。
+var guaranteed_items: Array = []
 ## 平涂配色。alpha = 0 表示不染，用模型自带色盘（普通/高级箱的现行观感）。
 ## 非 0 时按 `body_tint` 给身板、`trim_tint` 给箱边，见 `RewardChestVisual3D.apply_flat_tint`。
 var body_tint := Color(0, 0, 0, 0)
@@ -137,6 +181,9 @@ var _body_material: StandardMaterial3D
 var _trim_material: StandardMaterial3D
 var _glow: MeshInstance3D
 var _glow_material: StandardMaterial3D
+## 宝箱自带的地面光。挂在 `_visual_root` 下 ⇒ 视觉隐藏（拟态消失 / 演出 despawn）时
+## 它跟着一起灭，不需要在三条消失路径上各写一次。
+var _loot_light: OmniLight3D
 var _collision: CollisionShape3D
 ## `_visual_root` 的静止高度。爆点的上跳/落回都相对它算，
 ## 不写死 0 —— 将来给箱子加底座偏移时动画不会把它拽回地面。
@@ -144,6 +191,9 @@ var _visual_base_y := 0.0
 ## 蓄力段那条 tween。`_fire_burst()` 必须先把它 kill 掉再弹盖，
 ## 否则两条 tween 抢同一组属性（见 `_begin_charge()` 的注释）。
 var _charge_tween: Tween
+## 头顶提示牌的淡入淡出句柄。聚焦让位与开箱淡出共用一条 —— 两条 tween 同时写
+## `transparency` 时后创建的赢，表现为「牌淡出一半又亮回来」。
+var _prompt_tween: Tween
 
 
 func configure(config: Dictionary) -> void:
@@ -156,6 +206,7 @@ func configure(config: Dictionary) -> void:
 	mimic = bool(config.get("mimic", mimic))
 	mimic_monster_kind = str(config.get("mimic_monster_kind", mimic_monster_kind))
 	explicit_grants = (config.get("grants", explicit_grants) as Array).duplicate(true)
+	guaranteed_items = (config.get("guaranteed_items", guaranteed_items) as Array).duplicate(true)
 	var tint_value: Variant = config.get("body_tint", null)
 	if tint_value is Array and (tint_value as Array).size() >= 3:
 		var tint: Array = tint_value
@@ -177,6 +228,7 @@ func get_reward_config() -> Dictionary:
 		"drop_count": drop_count,
 		"mimic": mimic,
 		"mimic_monster_kind": mimic_monster_kind,
+		"guaranteed_items": guaranteed_items.duplicate(true),
 	}
 
 
@@ -229,9 +281,58 @@ func get_interaction_candidate(_player: Player3D) -> Dictionary:
 	}
 
 
-## 提示牌是纯文案载体（同 `RoomFurniture3D`）：可见反馈交给 InteractionDot3D。
-func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
-	pass
+## 聚焦时把头顶提示牌**让位**给交互圆点。
+##
+## 业主 2026-11-09：「宝箱上面的『E 开启宝箱』和靠近后的白字重复了」。
+## 那是同一句文案的两个载体：箱子头顶的 `Label3D`，与交互圆点下方的功能词
+## （`InteractionDot3D.extract_action_verb()` 从本类的 `prompt` 抽出来的）。
+## 处理成**让位**而不是删掉头顶牌：没靠近时圆点还没聚焦、功能词不显示，
+## 玩家仍需要远远就看得出「那是个能开的箱子」；一旦聚焦，近处交给圆点，
+## 远处交给牌子，同一时刻场上只有一句。
+##
+## 判定条件是「有没有被聚焦」而不是「距离多少」：聚焦由交互控制器统一算，
+## 它和圆点功能词的显示条件**本来就是同一个**（`provider == _focused_provider`）。
+## 本类自己再算一条距离阈值，两条口径迟早漂开 —— 会出现「牌没了、白字也没出来」的空档。
+func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
+	_set_prompt_shown(not focused)
+
+
+## 提示牌的显示/收起。开箱后恒为收起：`_opened` 一旦置真，之后任何一次
+## 失焦回调都不许把牌子亮回来（玩家会看到一只已开的箱子头顶又冒出「开启宝箱」）。
+func _set_prompt_shown(shown: bool) -> void:
+	if _prompt == null:
+		return
+	if _opened:
+		shown = false
+	if _prompt_tween != null and _prompt_tween.is_valid():
+		_prompt_tween.kill()
+	_prompt_tween = null
+	if shown:
+		_prompt.visible = true
+	var fade := create_tween()
+	fade.tween_property(_prompt, "transparency", 0.0 if shown else 1.0, 0.10)
+	if not shown:
+		fade.tween_callback(func() -> void:
+			if _prompt != null:
+				_prompt.visible = false
+		)
+	_prompt_tween = fade
+
+
+## 播一次「宝箱出现」特效。**由生成方决定播不播**，箱子自己不判断该不该出现：
+##   · 关卡里数据摆位的箱子首次装配 ⇒ 播（`DungeonRoom3D._build_treasure_chests()`）；
+##   · 清房 / Boss 阵亡掉的那只        ⇒ 播（`DungeonRoom3D.spawn_runtime_chest()`）；
+##   · 流送走远再回来按账重建          ⇒ 不播（那不是"出现"，是"还在"）；
+##   · 基地救援箱                      ⇒ 不播（那时玩家正趴着听绿苔说话，金光会抢戏）。
+func play_appear_effect() -> void:
+	if _opened or not is_inside_tree():
+		return
+	VfxPool.acquire(
+		StringName(APPEAR_FX_ASSET),
+		global_position + Vector3.UP * APPEAR_FX_LIFT_M,
+		APPEAR_FX_COLOR,
+		APPEAR_FX_SIZE
+	)
 
 
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
@@ -453,6 +554,12 @@ func _apply_opened_visual_state() -> void:
 		return
 	_opened_visual_applied = true
 	if _prompt != null:
+		# 读档恢复/裸箱子降级不走 `_fade_prompt_out()`，但可能有一条聚焦让位的 tween
+		# 还在跑（`transparency` 0 → 1 的淡出）。不掐掉它，之后任何一次重播都会闪一下。
+		if _prompt_tween != null and _prompt_tween.is_valid():
+			_prompt_tween.kill()
+		_prompt_tween = null
+		_prompt.transparency = 1.0
 		_prompt.visible = false
 	if _body_material != null:
 		_body_material.albedo_color = _body_material.albedo_color.darkened(0.22)
@@ -474,12 +581,17 @@ func _fade_prompt_out() -> void:
 	if _prompt == null:
 		return
 	# Label3D 只能靠 `transparency` 淡出（同 GroundLootPickup3D 的口径）：描边不吃 modulate 的 alpha。
+	# 句柄与 `_set_prompt_shown()` 共用：聚焦让位的淡入还没走完就按了 E，
+	# 这里必须先掐掉它，否则牌子会在淡出途中被另一条 tween 拉回透明（闪一下）。
+	if _prompt_tween != null and _prompt_tween.is_valid():
+		_prompt_tween.kill()
 	var fade := create_tween()
 	fade.tween_property(_prompt, "transparency", 1.0, 0.12)
 	fade.tween_callback(func() -> void:
 		if _prompt != null:
 			_prompt.visible = false
 	)
+	_prompt_tween = fade
 
 
 ## 存档恢复 / 探针构造已开状态的箱子。不做动画，直接落到终态。
@@ -649,6 +761,8 @@ func _build_visual() -> void:
 	if _glow != null:
 		_glow.visible = false
 
+	_build_loot_light()
+
 	var dimensions := Vector3(1.45, 1.18, 1.40)
 	if quality in ["rare", "epic"]:
 		dimensions *= 1.2
@@ -674,3 +788,30 @@ func _build_visual() -> void:
 	_prompt.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_prompt.no_depth_test = true
 	add_child(_prompt)
+
+
+## 宝箱自带的地面光。**故意不按品质换色**：品质已经由箱边 emission 与箱体模型的
+## 普通/高级两档回答，再给光染色会让浅灰救援箱变回一只彩箱 —— 业主 2026-11-08
+## 专门要求过它"是浅灰色的"。平涂箱是唯一例外：身板色就是它的全部外观，
+## 光沿用身板色提亮才不会出现"灰箱配一团黄光"。
+##
+## 幂等：`_build_visual()` 在探针里可能被重复走到（读档重建），重复建灯会让光叠一倍。
+func _build_loot_light() -> void:
+	if _loot_light != null and is_instance_valid(_loot_light):
+		return
+	var light := OmniLight3D.new()
+	light.name = "ChestLootLight"
+	light.light_color = (
+		body_tint.lightened(0.5) if body_tint.a > 0.0 else LOOT_LIGHT_COLOR
+	)
+	light.light_energy = LOOT_LIGHT_ENERGY
+	light.omni_range = LOOT_LIGHT_RANGE
+	# 阴影一律关。本作的阴影只给真正改变空间明暗的顶灯/路灯；
+	# 掉落物的光只负责"让东西看得见"，不参与照明结构，也不该为它多渲一张阴影贴图。
+	light.shadow_enabled = false
+	light.position = Vector3(0.0, CHEST_DIMENSIONS.y + LOOT_LIGHT_LIFT, 0.0)
+	# 绑在视觉根下（= 宝箱模型）而不是 `self`：模型抖动/上跳时光跟着走，
+	# 否则会出现"箱子跳了一下、地上的光没动"的错位感。
+	var host: Node3D = _visual_root if _visual_root != null else self
+	host.add_child(light)
+	_loot_light = light

@@ -21,7 +21,7 @@ extends Node3D
 ## 探针不判手感，只判「有没有解」。
 
 ## 玩家参数（与 Player3D 同源，改那边要同步这里）
-const PLAYER_SPEED := 4.5       ## Player3D.SPEED
+const PLAYER_SPEED := 5.7       ## Player3D.SPEED（2026-11-09 由 4.5 上调 1.2）
 const REACTION_SEC := 0.25      ## 人类视觉反应下限
 const ROLL_DURATION := 0.204    ## Player3D.DASH_DURATION
 

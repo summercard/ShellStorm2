@@ -54,7 +54,22 @@ const DEFINITIONS: Array[Dictionary] = [
 			"retreat_requires_door":true,
 			"defeat_health_ratio":0.20, "kneel_duration":2.6,
 			"hp_per_level":0.08, "damage_per_level":0.045,
-			"body_scale_base":1.0, "body_scale_per_level":0.06,
+			# —— 体型（业主 2026-11-09 改：1 级 1.5 倍，12 级 3 倍）——
+			# 系数 λ 直接乘在实例 `scale` 上，最终世界身高 = 3.5 m（模型 bind）× 0.70（全局）× λ：
+			#   λ = 1.5 → 3.675 m（1 级）   λ = 3.0 → 7.350 m（12 级）
+			# per_level 写成表达式，让「12 级正好 3.0」在源码里一眼可验：
+			#   per_level = (3.0 − 1.5) / (12 − 1) = 0.136363…
+			#
+			# ⚠ 两条被 3 倍顶破的硬约束，**代码侧已各自兜住**，改这个数前必须一起复核：
+			#
+			# ① 移动圆柱：世界半径 = 0.816 × 0.70 × λ ⇒ 1 级 0.857 m、12 级 1.714 m，
+			#    而门洞可通上限只有 `Enemy3D.MAX_COLLISION_RADIUS_M = 0.935`。12 级超出 83%，
+			#    会直接"看得见、走不过门"。故 `Enemy3D._apply_presentation_scale()` 现在对收租人
+			#    也做半径钳制（钳的是**碰撞柱**，子弹判定走独立代理，打击面不受影响）。
+			# ② 子弹受击盒侧缝：骨骼单位缝 0.0261 / 0.0457，世界缝 = 缝 × 3.5 × 0.70 × λ。
+			#    λ > 2.14 时最宽那条就超过弹体直径 0.24 m ⇒ 又从侧面漏弹。
+			#    故贴地补底柱的横截面已由 0.111 加宽到 0.21 骨骼单位（见 GROUND_COLUMN）。
+			"body_scale_base":1.5, "body_scale_per_level":(3.0 - 1.5) / 11.0,
 			"attack_frequency_per_level":0.025,
 			"initial_hp_multiplier":20.0,
 			"weapon_equip_next_encounter":true,

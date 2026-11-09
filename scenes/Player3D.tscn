@@ -6,38 +6,28 @@
 [ext_resource type="PackedScene" path="res://assets/art/vfx/visibility_3d/vfx_player_flashlight_root_top3d.tscn" id="4_flashlight"]
 [ext_resource type="Resource" path="res://assets/world3d/cam_attrs_player3d_practical_v001.tres" id="5_cam_attrs"]
 [ext_resource type="Script" path="res://src/player3d/FlashlightColorTweaker.gd" id="6_tweaker"]
+[ext_resource type="Shader" path="res://assets/art/ui/crosshair/crosshair_icon.gdshader" id="7_crosshair"]
 
 [sub_resource type="CapsuleShape3D" id="ShapePlayer"]
 radius = 0.34
 height = 1.5
 
-[sub_resource type="StandardMaterial3D" id="MatCursor"]
-transparency = 1
-albedo_color = Color(0.28, 0.88, 1, 0.72)
-emission_enabled = true
-emission = Color(0.12, 0.72, 1, 1)
-emission_energy_multiplier = 1.8
-shading_mode = 0
+[sub_resource type="QuadMesh" id="MeshCursor"]
+size = Vector2(1, 1)
 
-[sub_resource type="TorusMesh" id="MeshCursor"]
-material = SubResource("MatCursor")
-inner_radius = 0.16
-outer_radius = 0.21
-rings = 20
-ring_segments = 6
-
-[sub_resource type="StandardMaterial3D" id="MatCursorDot"]
-albedo_color = Color(0.72, 0.96, 1, 1)
-emission_enabled = true
-emission = Color(0.32, 0.86, 1, 1)
-emission_energy_multiplier = 1.6
-
-[sub_resource type="CylinderMesh" id="MeshCursorDot"]
-material = SubResource("MatCursorDot")
-top_radius = 0.035
-bottom_radius = 0.035
-height = 0.025
-radial_segments = 12
+[sub_resource type="ShaderMaterial" id="MatCursor"]
+shader = ExtResource("7_crosshair")
+shader_parameter/ring_color = Color(0.24, 0.86, 1, 0.86)
+shader_parameter/tick_color = Color(0.62, 0.96, 1, 0.96)
+shader_parameter/dot_color = Color(0.92, 0.99, 1, 1)
+shader_parameter/ring_radius = 0.205
+shader_parameter/ring_half_width = 0.016
+shader_parameter/tick_inner = 0.255
+shader_parameter/tick_outer = 0.355
+shader_parameter/tick_half_width = 0.014
+shader_parameter/dot_radius = 0.04
+shader_parameter/edge_softness = 1.0
+shader_parameter/glow = 1.35
 
 [node name="Player3D" type="CharacterBody3D"]
 collision_layer = 1
@@ -72,13 +62,11 @@ far = 130.0
 
 [node name="AimCursor" type="Node3D" parent="."]
 top_level = true
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0.75, 0)
 
-[node name="Ring" type="MeshInstance3D" parent="AimCursor"]
+[node name="Icon" type="MeshInstance3D" parent="AimCursor"]
 mesh = SubResource("MeshCursor")
-cast_shadow = 0
-
-[node name="Dot" type="MeshInstance3D" parent="AimCursor"]
-mesh = SubResource("MeshCursorDot")
+material_override = SubResource("MatCursor")
 cast_shadow = 0
 
 [node name="FlashlightTweakerLayer" type="CanvasLayer" parent="."]

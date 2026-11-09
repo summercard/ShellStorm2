@@ -33,9 +33,55 @@ var _phase_at_cast := 1
 var activation_completed := false
 var activation_started := false
 var activation_elapsed := 0.0
+var story_activation_hold := false
+var story_activation_requested := false
+var activation_release_window_emitted := false
+
+func set_story_activation_hold(held: bool) -> void:
+	story_activation_hold = held and not activation_completed
+	if story_activation_hold:
+		cancel()
+		story_activation_requested = false
+		activation_started = false
+		activation_elapsed = 0.0
+		activation_release_window_emitted = false
+		if owner_enemy.ai_state not in ["dead", "dormant", "idle", "alert"]:
+			owner_enemy.transition_to("idle", "story_activation_hold")
+
+func request_story_activation() -> bool:
+	if owner_enemy.ai_state == "dead":
+		return false
+	if activation_completed:
+		story_activation_hold = false
+		return true
+	story_activation_requested = true
+	story_activation_hold = false
+	if not activation_started:
+		activation_started = true
+		activation_elapsed = 0.0
+		activation_release_window_emitted = false
+		owner_enemy.boss_activation_started.emit(owner_enemy)
+	return true
+
+func is_story_damage_protected() -> bool:
+	return story_activation_hold or (story_activation_requested and not activation_completed)
+
+func cancel_story_activation() -> void:
+	if not story_activation_hold and not story_activation_requested:
+		return
+	cancel()
+	story_activation_hold = false
+	story_activation_requested = false
+	activation_started = false
+	activation_elapsed = 0.0
+	activation_release_window_emitted = false
 
 func tick_activation(delta: float) -> bool:
 	if activation_completed or owner_enemy.ai_state == "dead":return false
+	if story_activation_hold:
+		owner_enemy.velocity = Vector3.ZERO
+		cancel()
+		return true
 	if not owner_enemy._runtime_ai_active or owner_enemy.ai_state == "dormant":return true
 	if not activation_started:
 		for candidate in owner_enemy.get_tree().get_nodes_in_group("player_3d"):
@@ -44,6 +90,7 @@ func tick_activation(delta: float) -> bool:
 			if "current_hp" in player and int(player.get("current_hp")) <= 0:continue
 			if owner_enemy.global_position.distance_squared_to(player.global_position) <= ACTIVATION_DISTANCE*ACTIVATION_DISTANCE:
 				activation_started = true
+				owner_enemy.boss_activation_started.emit(owner_enemy)
 				break
 		if not activation_started:
 			owner_enemy.velocity = Vector3.ZERO
@@ -51,7 +98,11 @@ func tick_activation(delta: float) -> bool:
 	owner_enemy.transition_to("alert", "monitor_activation")
 	owner_enemy.velocity.x = 0.0;owner_enemy.velocity.z = 0.0
 	owner_enemy._commit_motion(delta)
+	var previous_elapsed := activation_elapsed
 	activation_elapsed = minf(ACTIVATION_DURATION, activation_elapsed + delta)
+	if not activation_release_window_emitted and previous_elapsed < 5.4 and activation_elapsed >= 5.4:
+		activation_release_window_emitted = true
+		owner_enemy.boss_activation_release_window.emit(owner_enemy)
 	if activation_elapsed >= ACTIVATION_DURATION:
 		activation_completed = true
 		owner_enemy._attack_timer = 0.65

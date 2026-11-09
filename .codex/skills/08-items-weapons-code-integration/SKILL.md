@@ -112,7 +112,7 @@ BlueprintRegistry.DEFAULT_STARTING_GUN_ID
 - 命运卡槽容量走物品定义的 `fate_slot_capacity`（默认 8）。白送枪想限制成长就在这里降；
   链路是 `ItemRegistry` → `WeaponInstance.from_item()` → `to_item_dictionary()`，
   **必须验证存档往返不丢这个字段**。
-- 出厂枪只给枪不给弹；配套备弹来自 `Dungeon3D.GUARANTEED_LOADOUT_AMMO_ROUNDS`。
+- 出厂枪（豌豆手枪）：弹匣 **10 发**照常打空、换弹 1.4 s 照常走，但**备弹无限**（枪身 `base_stats.infinite_reserve_ammo = true` ⇒ 换弹不扣备弹、每轮白拿满匣）。开场保底备弹已于 2026-11-09 取消，`Dungeon3D.get_guaranteed_loadout_ammo_rounds()` 恒返回 0。
   改弹匣容量不用动这个常量，但要确认「满匣 + 备弹」的开局口径仍然成立。
 - 留意伤害口径：`WeaponModel3D` 显示的是 `枪身 damage + 子弹模块 bullet_damage` 的合计值，
   不是 `base_stats.damage`。设计给一个数、实机看到另一个数时先查这里。

@@ -269,10 +269,10 @@ const FATE_OVERLAY_Z_INDEX := 900
 const FATE_COIN_READOUT_Z_ABOVE_VEIL := 900
 
 const BASE_INVENTORY_CAPACITY := 40
-## 保底武装配套弹药：入场即给 `item_ammo_pack` 的发数（每单位 = 1 发真实备弹）。
-## 白送手枪由 `Player3D.start_with_weapon` 负责，那条链路只给枪不给弹；
-## 没有这份备弹时，弹匣打空且没捡到掉落 = 保底武装彻底哑火。数值是设计输入，不要就地写数字。
-const GUARANTEED_LOADOUT_AMMO_ROUNDS := 300
+## 开场保底备弹已于 2026-11-09 由业主**取消**（原 `GUARANTEED_LOADOUT_AMMO_ROUNDS = 300`）。
+## 原因是豌豆手枪改为**备弹无限**（`infinite_reserve_ammo`），备弹对它没有意义；
+## 其它枪要么从掉落/宝箱获得、要么由关卡保底发放（见远征01 `clear_drops.room_guarantees`）。
+## **不要恢复这个发放**：它会与「入场背包应当干净」的口径冲突，也会掩盖弹药经济设计。
 ## 玩家头顶气泡的挂高（米）。玩家是 1.5m 级小机器人，气泡放在头顶正上方；
 ## 偏移**只含垂直分量**，角色绕 Y 轴转身不会带动气泡横向位移。
 ## 2026-09-21 主人反馈"太低、挡住角色"：1.95 → 2.55。俯视角下原高度让气泡底边
@@ -1870,11 +1870,8 @@ func _setup_run_modules() -> void:
 			if added < requested:
 				item["count"] = requested - added
 				BaseManager.add_vault_item(item)
-	# 保底武装配套：白送手枪每次装配场景都会给，弹药按同一生命周期补一份，
-	# 否则「返城时手上有一把枪」实际是枪 + 0 发备弹，弹匣打空就再也打不响。
-	# 与 consume_pending_loadout 同一条边界，不读开发者真实档案的测试路径不受影响。
-	if not test_mode:
-		_grant_guaranteed_loadout_ammo()
+	# 开场**不再**发放保底备弹（2026-11-09 业主取消，原 GUARANTEED_LOADOUT_AMMO_ROUNDS=300）。
+	# 豌豆手枪已改为弹匣无限，备弹对它无意义；这里保持「入场背包只有基地带上来的东西」。
 	_inventory.inventory_changed.connect(_refresh_loot_label)
 	GameManager.currency_changed.connect(_on_run_currency_changed)
 	player.get_special_item_controller().configure(player, _inventory, _can_use_special_item)
@@ -1912,35 +1909,17 @@ func _setup_run_modules() -> void:
 	_sync_quick_item_state()
 
 
-## 保底武装配套弹药：把入场即得的通用备弹放进主背包。
-## 与白送手枪同一条生命周期（每次装配战局/基地场景都会重新给），因此续档恢复
-## 会在 `_restore_runtime_save_snapshot()` 里被存档快照整格覆盖，不会重复累计。
-## 返回实际入包发数；背包格位被占满时可能少于 `GUARANTEED_LOADOUT_AMMO_ROUNDS`。
-
+## 开场保底备弹的发放已由业主于 2026-11-09 取消（原常量 `GUARANTEED_LOADOUT_AMMO_ROUNDS = 300`）。
+##
+## 保留这两个只读查询**只为让门禁能验证「确实没发」**：`get_guaranteed_loadout_ammo_rounds()`
+## 恒返回 0，`_grant_guaranteed_loadout_ammo()` 恒返回 0 且不改背包。测试读它们而不是自己写死
+## 数字，这样将来若有人把发放加回来，反向门禁会立刻判红。**不要**用它们反向恢复功能。
 func _grant_guaranteed_loadout_ammo() -> int:
-	if _inventory == null or GUARANTEED_LOADOUT_AMMO_ROUNDS <= 0:
-		return 0
-	var report := _reward_coordinator.resolve_fixed_item(
-		"item_ammo_pack", GUARANTEED_LOADOUT_AMMO_ROUNDS, "guaranteed_loadout_ammo"
-	)
-	if not bool(report.get("ok", false)):
-		return 0
-	var grants := report.get("grants", []) as Array
-	var ammo_grant := grants[0] as Dictionary if not grants.is_empty() else {}
-	var ammo := (ammo_grant.get("item", {}) as Dictionary).duplicate(true)
-	if ammo.is_empty():
-		return 0
-	var ammo_count := int(ammo_grant.get("count", GUARANTEED_LOADOUT_AMMO_ROUNDS))
-	ammo["count"] = ammo_count
-	var added := _inventory.add_item(ammo, ammo_count)
-	if added > 0:
-		_refresh_loot_label()
-	return added
+	return 0
 
 
-## 供验收读取的保底备弹发数；内容数值的唯一出口，禁止在测试里重复写死数字。
 func get_guaranteed_loadout_ammo_rounds() -> int:
-	return GUARANTEED_LOADOUT_AMMO_ROUNDS
+	return 0
 
 
 ## 武器表现页只在玩家首次按 K 时创建。隐藏的完整树面板无需常驻 HUD，
@@ -3825,6 +3804,11 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		BaseManager.flush_runtime_checkpoint("room_transition")
 	minimap.set_current_room(room.room_id)
 	_update_room_streaming(room.room_id)
+	# 宝箱"出现"特效的触发点（业主 2026-11-09）。放在流送之后：
+	# `_update_room_streaming` 把本房置 ACTIVE 后 detail 才建、箱子才在册。
+	# 重进已探索房间也走这里，房间侧的旗标与 `is_opened()` 会挡掉重播。
+	room.ensure_detail_built()
+	room.play_chest_appear_effects()
 	room_label.text = "%s · %s/%s" % [room.room_id, room.room_type, room.size_class.to_upper()]
 	_update_wave_hud(room.room_id)
 	if _spawned_rooms.has(room.room_id):
@@ -5417,6 +5401,8 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 				index,
 			]
 		enemy.configure_from_enemy_data(spawn_data)
+		# configure 会创建 Boss 策略；同一同步块内设门闩，早于首个 AI/物理帧。
+		_configure_story_enemy(enemy)
 		enemy.set_meta("fate_kill_currency", int(spawn_data.get("fate_kill_currency", 0)))
 		enemy.state_changed.connect(_on_fate_enemy_state_changed.bind(enemy))
 		# 剧情生成的怪打标记，剧情撤怪只认自己生成的那些。
@@ -5460,6 +5446,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 			spawned_combat += 1
 		var room_visible := room.is_streamed()
 		enemy.set_runtime_active(room.room_id == _current_room_id, room_visible)
+		_configure_story_enemy(enemy)
 		if enemy.enemy_kind == "boss":
 			_show_boss_hud(enemy)
 	# 🔴 存活账口径必须**统一**：`_alive_by_room` = 已实例化敌人 ＋ **在途预约**
@@ -6602,14 +6589,29 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 	)
 
 
+## 关卡装配器的窄接缝；通用层不识别剧情、地图 ID 或永久钥匙。
+func _configure_story_enemy(_enemy: Enemy3D) -> void:
+	pass
+
+
+func _story_chest_claim(_room: DungeonRoom3D, _chest: TreasureChest3D) -> Dictionary:
+	return {"success": true, "applicable": false}
+
+
+func _prepare_story_boss_chest_config(_room: DungeonRoom3D, config: Dictionary) -> Dictionary:
+	return config
+
+
 ## 宝箱只散落奖励，不直接购卡。奖励先冻结进房间账，再认领箱子；
 ## 抖动、回正、蓄力后，在 get_open_burst_delay() 的爆点统一落地。
 ## 动画中切房/保存保留 pending，重入补发；命运卡必须主动交互专用掉落物。
 func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> void:
 	if room == null or chest == null or not is_instance_valid(chest):
 		return
-	if chest.is_opened():
+	if chest.is_opened() or _completed or _is_player_dead():
 		return
+	var prepared := _prepare_story_boss_chest_config(room, chest.get_reward_config())
+	chest.mimic = bool(prepared.get("mimic", chest.mimic))
 	if chest.mimic:
 		# 拟态：箱子变怪，物资挂在那只怪肚子里（击杀才掉）。**不要在这里弹购买界面** ——
 		# 玩家正要打怪，全屏模态会把战斗直接卡在背后。
@@ -6626,12 +6628,24 @@ func _on_chest_open_requested(room: DungeonRoom3D, chest: TreasureChest3D) -> vo
 	if grants.is_empty():
 		status_label.text = "宝箱奖励暂不可用 · 宝箱保留"
 		return
+	var previous_pending := room.get_pending_chest_grants()
 	room.set_pending_chest_grants(chest_id, {
 		"grants": grants.duplicate(true),
 		"position": [burst_origin.x, burst_origin.y, burst_origin.z],
 		"status": "frozen",
 	})
+	# 剧情领取用「已开 + pending」预览账原子写盘，成功才开动画/发 opened。
+	# 失败时箱体尚未提交，只撤销刚冻结的 pending，不会消耗箱子或发出普通物资。
+	var story_claim := _story_chest_claim(room, chest)
+	if not bool(story_claim.get("success", false)):
+		room.apply_runtime_detail_state({"pending_chest_grants": previous_pending})
+		_capture_room_runtime_state(room.room_id)
+		status_label.text = "主线领取保存失败 · 宝箱与奖励保留，请重试"
+		return
 	chest.commit_opened()
+	var after_commit: Callable = story_claim.get("after_commit", Callable())
+	if after_commit.is_valid():
+		after_commit.call()
 	_queue_runtime_autosave("chest_rewards_frozen")
 	if _map_fate_triggers != null:
 		# 宝箱算一次"容器开启"。给独立的 size_class 值，方便将来按箱/罐分别计数：
@@ -8409,15 +8423,29 @@ func _on_room_key_collected(_room_id: String) -> void:
 
 ## 清房掉落（2026-11-06）：本房清完，按 `clear_drops` 掷一次 —— 宝箱或补给。
 ##
-## 三个判据，缺一条都会出错：
+## 四个判据，缺一条都会出错：
 ##   · 服务未配置 ⇒ 什么都不做（塔楼 / 未声明该段的关卡逐字不变）；
 ##   · **Boss 房不走这里**：首领箱挂在 `_mark_room_boss_defeated` 上（见那条注释），
 ##     否则「Boss 阵亡但增援未清」时会先不发，等杂兵清完才补一只，位置也在那时才定；
-##   · 非内容房（入口 / 撤离 / 走廊）不结算 —— 那些房没有「怪物清空」这件事。
+##   · **无怪房不走这里**（见下）；
+##   · 非内容房（入口 / 撤离）不结算 —— 那些房没有「怪物清空」这件事。
 func _ensure_room_clear_drop(room: DungeonRoom3D) -> void:
 	if not _clear_drop_service.is_configured():
 		return
 	if room == null or not is_instance_valid(room) or not room.cleared:
+		return
+	# **无怪房（`authored_layout_peaceful`）不清房结算**（2026-11-09 业主报障）。
+	#
+	# 这些房进房走 `_spawn_room_enemies()` 的和平区分支，直接 `_mark_room_cleared()`
+	# ⇒ `was_cleared` 为假 ⇒ 清房掉落被 deferred 触发一次。它们**从来没有怪**，
+	# 「清空敌人」这件事从未发生，给奖励就是把宝箱白送。
+	#
+	# 为什么不能用房型排除：flow 关卡的走廊运行时 `room_type` 是**空串**、商店是
+	# `MERCHANT`、Boss 前厅是 `UPGRADE`、宝箱房是 `STORAGE` —— 四个都不在
+	# `NON_CONTENT_ROOM_TYPES` 里，按房型排除必然漏（远征03 实测：每间通道房固定
+	# 刷一只 `drop_<room_id>` 宝箱，业主截图就是这条）。`authored_layout_peaceful`
+	# 才是「本房没有敌群」的唯一事实所有者，与 `_room_produces_room_key()` 同判据。
+	if room.authored_layout_peaceful:
 		return
 	if room.room_type == "BOSS" or not _is_content_room(room):
 		return
@@ -8455,6 +8483,7 @@ func _apply_clear_drop(room: DungeonRoom3D, drop: Dictionary, context: String) -
 		var chest_config := (drop.get("chest", {}) as Dictionary).duplicate(true)
 		if chest_config.is_empty():
 			return
+		chest_config = _prepare_story_boss_chest_config(room, chest_config)
 		var chest := room.spawn_runtime_chest(chest_config, _clear_drop_offset(room))
 		if chest == null:
 			push_warning("[Dungeon3D] 清房宝箱建立失败（%s），本房只剩补给" % context)
@@ -10056,6 +10085,7 @@ func _update_room_streaming(current_id: String) -> void:
 					and enemy_room.is_streamed()
 				)
 				enemy.set_runtime_active(str(room_id) == current_id, room_visible)
+				_configure_story_enemy(enemy)
 		_enemy_nodes_by_room[room_id] = live_references
 
 
@@ -10129,6 +10159,7 @@ func _capture_room_runtime_state(room_id: String) -> void:
 	_segment_runtime_state[room_id] = {
 		"visited": room.visited,
 		"cleared": room.cleared,
+		"boss_defeated": is_room_boss_defeated(room_id),
 		"room_light_on": room.is_room_light_on(),
 		"enemies": enemy_states,
 		"ground_items": ground_items,
@@ -10199,6 +10230,9 @@ func _restore_room_runtime_state(room_id: String) -> void:
 		return
 	_cancel_room_wave_intermission(room_id)
 	var state := _segment_runtime_state[room_id] as Dictionary
+	if bool(state.get("boss_defeated", false)):
+		# 只回灌事实，不重发首领死亡信号和首领箱。
+		_boss_defeated_rooms[room_id] = true
 	if bool(state.get("spawn_blocked", false)):
 		_room_spawn_blocked[room_id] = true
 	if bool(state.get("fate_wave_queued", false)):
@@ -10268,6 +10302,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 						value.set_meta("chest_id", (value as Enemy3D).enemy_data.get("chest_id", ""))
 					_normalize_narrative_02_stationary_data((value as Enemy3D).enemy_data, room_id)
 					(value as Enemy3D).import_runtime_state(enemy_state)
+					_configure_story_enemy(value as Enemy3D)
 					_roaming_elite.bind_actor(value as Enemy3D)
 					repaired_enemy_position = _repair_restored_enemy_room_position(value as Enemy3D, room) or repaired_enemy_position
 					break
@@ -10321,6 +10356,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			enemy.boss_activation_completed.connect(_on_boss_activation_completed)
 			enemy.health_changed.connect(_on_enemy_health_changed)
 			enemy.import_runtime_state(enemy_state)
+			_configure_story_enemy(enemy)
 			_roaming_elite.bind_actor(enemy)
 			repaired_enemy_position = _repair_restored_enemy_room_position(enemy, room) or repaired_enemy_position
 			live_enemies.append(enemy)
@@ -11724,9 +11760,15 @@ func _apply_weapon_hud_command(command: Dictionary) -> void:
 		else:
 			# 2026-09-28 主人要求：不再显示弹匣容量（原「子弹 / 总弹药 · N备弹」），
 			# 只留「当前子弹数 · N备弹」。当前值走结构化字段 ammo_current，不解析字符串。
+			# 2026-11-09：无限**备弹**武器（豌豆手枪）当前弹数照常显示真实值（弹匣仍会打空），
+			# 只在备弹段显示 `∞` —— 语义是「换弹不用愁」，不是「弹匣用不完」。
 			var ammo_display := "%d" % int(command.get("ammo_current", 0))
 			if _inventory != null:
-				ammo_display += " · %d备弹" % _get_reserve_ammo_count()
+				ammo_display += (
+					" · ∞备弹"
+					if bool(command.get("ammo_reserve_infinite", false))
+					else " · %d备弹" % _get_reserve_ammo_count()
+				)
 			ammo_label.text = ammo_display
 	if _hud_weapon_meta_label != null:
 		# 面板上已不显示（visible=false），但仍按只读投影契约逐字接收文本。
@@ -12168,6 +12210,31 @@ func _plan_rescue_items(inventory_snapshot: Array) -> Array:
 	var insured := _insured_item_keys()
 	var candidates: Array = []
 	var seen := {}
+	# —— 装备槽是运行态的第一权威，先收集 ——
+	#
+	# 业主口径（2026-11-09）：「回收物品里如果是武器，应该是原来那把」。
+	# 一把枪的"原来那把"= 死亡那一刻**手上那个实例**：`weapon_instance_id`、
+	# `fate_upgrades`（星命运刻印）、`assembly_snapshot`（配件/弹种）都在它的物品字典里。
+	#
+	# 为什么必须先装备槽、再背包：背包里可能留着一份同实例的**旧字典**
+	# （读档/回滚/交易事务在别处失败后还原过快照，槽位字典与运行实例会短暂不同步）。
+	# 按"先到先得"去重的话，那份旧字典会把装备槽的权威版本顶掉 ——
+	# 表现成"箱子里是同一把枪，但命运卡没了"。先收装备槽，旧副本自然被去重挡掉。
+	var live_weapons := {}
+	var equipped_items: Array = []
+	if player != null and is_instance_valid(player) and player.has_method("get_equipped_weapon_item_for_slot"):
+		for slot_index in range(2):
+			var weapon: Dictionary = player.call("get_equipped_weapon_item_for_slot", slot_index) as Dictionary
+			if weapon.is_empty() or _is_insured_item(weapon, insured):
+				continue
+			var weapon_identity := _rescue_item_identity(weapon)
+			if not weapon_identity.is_empty():
+				live_weapons[weapon_identity] = weapon
+				if seen.has(weapon_identity):
+					continue
+				seen[weapon_identity] = true
+			equipped_items.append({"item": weapon, "count": 1})
+	candidates.append_array(equipped_items)
 	for slot_value in inventory_snapshot:
 		if not slot_value is Dictionary:
 			continue
@@ -12180,20 +12247,11 @@ func _plan_rescue_items(inventory_snapshot: Array) -> Array:
 			if seen.has(identity):
 				continue
 			seen[identity] = true
+			# 背包里的字典如果是已装备实例的陈旧副本，换成装备槽那份。
+			if live_weapons.has(identity):
+				item = (live_weapons[identity] as Dictionary).duplicate(true)
 		candidates.append({"item": item, "count": maxi(1, int(slot.get("count", 1)))})
 	if player != null and is_instance_valid(player):
-		for slot_index in range(2):
-			if not player.has_method("get_equipped_weapon_item_for_slot"):
-				break
-			var weapon: Dictionary = player.call("get_equipped_weapon_item_for_slot", slot_index) as Dictionary
-			if weapon.is_empty() or _is_insured_item(weapon, insured):
-				continue
-			var weapon_identity := _rescue_item_identity(weapon)
-			if not weapon_identity.is_empty():
-				if seen.has(weapon_identity):
-					continue
-				seen[weapon_identity] = true
-			candidates.append({"item": weapon, "count": 1})
 		if player.has_method("get_equipped_backpack_item"):
 			var backpack: Dictionary = player.call("get_equipped_backpack_item") as Dictionary
 			if not backpack.is_empty() and not _is_insured_item(backpack, insured):

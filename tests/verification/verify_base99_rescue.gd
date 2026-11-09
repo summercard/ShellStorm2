@@ -7,6 +7,8 @@ extends Node
 ##   R03 没有救援暂存时**不演、不放箱子**；
 ##   R04 抽签规则（远征场景真实实例）：1–2 件携带物（背包 + 装备）＋ 1–2 件补给，
 ##        保险格里的那件**不入选**、同一实例不重复；
+##   R16 武器必须是**原来那把**：实例 ID / 星命运刻印 / 装配快照穿过
+##        抽签 → 落档 → 箱内清单 三跳不变；背包里的同实例陈旧副本不能顶掉装备槽；
 ##   R05 塔楼死亡（非远征）不产生救援清单；
 ##   R06 有暂存 + 死亡归航入口：玩家趴着（`dead` 终点帧、姿态锁生效）、输入被独占、
 ##        绿苔钉在归航点边上、浅灰宝箱放在它旁边且装的就是暂存清单；
@@ -319,6 +321,9 @@ func _check_sampling(failures: Array[String]) -> void:
 	if supply_count < 1 or supply_count > 2:
 		failures.append("R04 补给件数应为 1–2，实际 %d" % supply_count)
 
+	# —— R16 武器必须是"原来那把"（业主 2026-11-09）——
+	await _check_rescued_weapon_payload(failures, tower)
+
 	# —— R05 塔楼（非远征）死亡不产生救援清单 ——
 	await _free_node(tower)
 	var base_tower := await _load_base_tower(failures, GameEntryFlow.REASON_DEATH_RETURN_99F)
@@ -327,6 +332,131 @@ func _check_sampling(failures: Array[String]) -> void:
 		if not base_grants.is_empty():
 			failures.append("R05 塔楼死亡不该抽出救援物资，实际 %d 件" % base_grants.size())
 		await _free_node(base_tower)
+
+
+## R16：救援箱里的武器必须是**死亡那一刻手上那个实例**。
+##
+## 业主 2026-11-09 口径：回收物品里如果是武器，应该是原来那把 ——
+## 带进来的步枪刻了 2 张星命运，开出来的必须还是那 2 张，不是一把同型号的新枪。
+##
+## 断言三样一起走完 `抽签 → 落档 → 转成箱内 grants`：
+##   `weapon_instance_id`（是不是同一把）、`fate_upgrades`（刻印）、`assembly_snapshot`（配件/弹种）。
+##
+## 额外钉一条**权威顺序**：背包里放一份同实例、无卡的陈旧副本，
+## 抽签仍必须给装备槽那份带卡的。旧实现按"先到先得"去重，正好会被这份副本顶掉。
+func _check_rescued_weapon_payload(failures: Array[String], tower: TowerDescent3D) -> void:
+	var inventory := tower.get("_inventory") as InventoryModule
+	var player := tower.player
+	if inventory == null or player == null:
+		failures.append("R16 远征场景缺少背包或玩家实例")
+		return
+	# 只留装备槽当候选：补给是另一条支路，不会被这里的清空影响。
+	inventory.clear_all()
+	if player.has_method("clear_equipped_backpack"):
+		player.call("clear_equipped_backpack")
+	FateCardGameBridge.set_player(player)
+	for _index in 2:
+		var applied: Dictionary = FateCardGameBridge.apply_card(FateCardPresets.overclock())
+		if not bool(applied.get("success", false)):
+			failures.append(
+				"R16 无法给装备枪刻卡：%s" % str(applied.get("message", applied.get("reason", "")))
+			)
+			return
+	var live := player.get_equipped_weapon_item_for_slot(0)
+	var live_id := str(live.get("weapon_instance_id", ""))
+	var live_cards := (live.get("fate_upgrades", []) as Array).size()
+	if live_id.is_empty() or live_cards != 2:
+		failures.append("R16 装备枪本身没有拿到 2 张刻印（实例=%s，卡=%d）" % [live_id, live_cards])
+		return
+
+	# 陈旧副本：同实例、无卡，塞进背包。抽签必须给装备槽那份。
+	var stale := live.duplicate(true)
+	stale["fate_upgrades"] = []
+	stale["count"] = 1
+	if inventory.add_item(stale, 1) != 1:
+		failures.append("R16 无法把同实例的陈旧副本放进背包（这条断言会失效）")
+
+	var grants: Array = tower.call("_plan_rescue_items", inventory.get_slots_snapshot())
+	var picked: Dictionary = {}
+	for value in grants:
+		var grant := value as Dictionary
+		var item := grant.get("item", {}) as Dictionary
+		if str(grant.get("rescue_source", "")) == "run" \
+				and str(item.get("weapon_instance_id", "")) == live_id:
+			picked = grant
+			break
+	if picked.is_empty():
+		failures.append("R16 抽签没有抽出装备中的枪，无法验证实例完整性")
+		_clear_rescue_probe(inventory, tower)
+		return
+	_check_weapon_payload(failures, "抽签", picked.get("item", {}) as Dictionary, live, live_id, live_cards)
+
+	# 落档：`commit_run_settlement` 是救援暂存的唯一写入口。
+	var request := {
+		"transaction_id": "verify_rescue_payload:%d" % Time.get_ticks_usec(),
+		"success": false,
+		"kills": 0,
+		"extraction_points": 0,
+		"extraction_loot": [],
+		"insurance_saved": [],
+		"return_checkpoint": {},
+		"rescue_items": [picked],
+	}
+	var commit: Dictionary = BaseManager.commit_run_settlement(request)
+	if not bool(commit.get("success", false)):
+		failures.append("R16 救援暂存落档失败：%s" % str(commit.get("reason", commit)))
+		_clear_rescue_probe(inventory, tower)
+		return
+	var cache: Array = BaseManager.get_rescue_cache()
+	if cache.is_empty():
+		failures.append("R16 落档后救援暂存为空")
+		_clear_rescue_probe(inventory, tower)
+		return
+	var cached_item := ((cache[0] as Dictionary).get("item", {}) as Dictionary)
+	_check_weapon_payload(failures, "落档", cached_item, live, live_id, live_cards)
+
+	# 转成箱内 grants：`RewardSink.materialize_ground_items` 只认 item/item_id 同值。
+	var chest_grants: Array = Dungeon3D.build_rescue_chest_grants(cache)
+	var chest_item: Dictionary = {}
+	for value in chest_grants:
+		var grant := value as Dictionary
+		var item := grant.get("item", {}) as Dictionary
+		if str(item.get("weapon_instance_id", "")) == live_id:
+			chest_item = item
+			break
+	if chest_item.is_empty():
+		failures.append("R16 箱内 grants 里找不到那把枪（实例被换掉了）")
+	else:
+		_check_weapon_payload(failures, "箱内清单", chest_item, live, live_id, live_cards)
+	_clear_rescue_probe(inventory, tower)
+
+
+func _check_weapon_payload(
+	failures: Array[String], stage: String, item: Dictionary, live: Dictionary,
+	live_id: String, live_cards: int
+) -> void:
+	if item.is_empty():
+		failures.append("R16 [%s] 物品字典为空" % stage)
+		return
+	if str(item.get("weapon_instance_id", "")) != live_id:
+		failures.append(
+			"R16 [%s] 实例 ID 变了：%s → %s"
+				% [stage, live_id, str(item.get("weapon_instance_id", ""))]
+		)
+	var cards := (item.get("fate_upgrades", []) as Array).size()
+	if cards != live_cards:
+		failures.append("R16 [%s] 星命运刻印从 %d 张变成 %d 张" % [stage, live_cards, cards])
+	if (item.get("assembly_snapshot", {}) as Dictionary) != (live.get("assembly_snapshot", {}) as Dictionary):
+		failures.append("R16 [%s] 装配快照变了（配件/弹种丢失）" % stage)
+
+
+func _clear_rescue_probe(inventory: InventoryModule, tower: TowerDescent3D) -> void:
+	if inventory != null:
+		inventory.clear_all()
+	BaseManager.replace_rescue_cache_for_test([])
+	BaseManager.replace_rescue_defeat_streak_for_test(0)
+	if tower != null and tower.player != null and tower.player.has_method("clear_all_equipped_weapons"):
+		tower.player.call("clear_all_equipped_weapons")
 
 
 # —— R06 趴下与站位 ——

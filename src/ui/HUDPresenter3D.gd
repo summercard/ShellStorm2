@@ -29,6 +29,10 @@ func present_weapon(
 	# （verify_hud_presenter_3d 逐字断言 `17 / 30`、`[2] 突击步枪 · 副武器`、`命运 2/5`），
 	# 保持逐字不变；显示层要用的原始数值改为**随命令一起下发**，由 Dungeon3D 决定怎么排。
 	var melee_weapon := bool(runtime_weapon.get("melee", false))
+	# 无限备弹（豌豆手枪，2026-11-09）：只作为**结构化字段**下发，`ammo_text` 仍按
+	# 「当前 / 容量」逐字输出 —— 那条是既有只读投影契约，验收逐字断言，不能因显示需求改。
+	# 注意语义是**备弹**无限、弹匣照常消耗，所以当前弹数仍要真实显示。
+	var infinite_reserve := bool(runtime_weapon.get("infinite_reserve_ammo", false))
 	var command := {
 		"ammo_text": (
 			"近战 · 三段"
@@ -38,6 +42,7 @@ func present_weapon(
 		"ammo_current": current_ammo,
 		"ammo_capacity": maximum_ammo,
 		"ammo_is_melee": melee_weapon,
+		"ammo_reserve_infinite": infinite_reserve,
 		"weapon_meta_text": "[%d] %s · %s" % [
 			active_slot + 1,
 			presentation.get("display_name", "未装备武器"),

@@ -50,16 +50,21 @@ func make_enemy_target(position_value: Vector3, hp := 100000) -> Target:
 	add_child(target)
 	return target
 
-func make_enemy(armed := false) -> Enemy3D:
+## `growth_profile` 留空 ⇒ 沿用既有行为（只靠 `Enemy3D` 里的 fallback 默认值）。
+## ⚠ 真实链路是 `EliteRosterService.apply_archive_to_enemy_config()` 把内容库的
+## `growth_profile` 原样注入；不传就测不到真实体型/成长数值，只能测到 fallback。
+func make_enemy(armed := false, level := 1, growth_profile: Dictionary = {}) -> Enemy3D:
 	var definition := EliteContentCatalog.get_by_id("elite_arms_taker")
 	var enemy := ENEMY.instantiate() as Enemy3D
 	add_child(enemy)
 	serial += 1
 	var config := {"enemy_type":"melee_chaser", "is_elite":true,
-		"elite_id":"elite_arms_taker", "elite_behavior_id":definition.behavior_id, "elite_level":1,
+		"elite_id":"elite_arms_taker", "elite_behavior_id":definition.behavior_id, "elite_level":level,
 		"modifier_id_en":"Elite.WeaponParasite", "persistent_id":"arms_qa_%d"%serial,
 		"presentation_asset_id":definition.presentation_asset_id, "presentation_scene":definition.presentation_scene,
 		"elite_health_bar_profile":definition.health_bar_profile}
+	if not growth_profile.is_empty():
+		config["elite_growth_profile"] = growth_profile.duplicate(true)
 	if armed:
 		var pistol := ItemRegistry.get_instance().get_item("weapon_pistol").duplicate(true)
 		pistol["bullet_module_id"] = "mod_bullet_standard"

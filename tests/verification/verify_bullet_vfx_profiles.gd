@@ -60,17 +60,21 @@ const EXPECTED_MIN_SAMPLES := 65
 ## 上限 = 业主给定的外部需求；逐弹种实测值**硬编码**在此（值取自探针
 ## `_scratch/probe_bullet_mesh_stats`），不引用被测代码的任何常量 —— 否则改坏分段参数时
 ## 期望跟着变、断言永远绿（skill §6.9 的自印证反例）。
+##
+## ⚠ 2026-11-09 全表 **+2**：每个弹体新增 1 个 billboard 图标面片（QuadMesh = 2 三角面），
+## 供敌方子弹使用（`BulletBillboardIcon3D`）。玩家子弹不显示它，但节点恒建（池化安全），
+## 面数照算 —— 这是真实的几何增量，不是统计口径变化。
 const EXPECTED_MAX_TRIS_PER_BULLET := 100
 const EXPECTED_TRIS := {
-	"shared": 44,
-	"standard": 44,
-	"sticky": 80,
-	"bounce": 68,
-	"piercing": 56,
-	"explosive": 80,
-	"homing": 68,
-	"blackhole": 68,
-	"balloon": 44,
+	"shared": 46,
+	"standard": 46,
+	"sticky": 82,
+	"bounce": 70,
+	"piercing": 58,
+	"explosive": 82,
+	"homing": 70,
+	"blackhole": 70,
+	"balloon": 46,
 }
 
 ## 枪身弹体几何档位的期望值（2026-10-14 业主：「每把枪的子弹大小要做出区分」）。
@@ -389,18 +393,30 @@ func _check_gun_size_differentiation() -> void:
 		_expect(absf(pistol_ratio - 1.8) < 0.02,
 			"豌豆手枪弹体应为中性基准的 1.8 倍（应 ≈1.80，实测 " + str(pistol_ratio) + "）")
 
-	# 枪族档位是**纯视觉**：霰弹 ×2 不得把碰撞半径一起放大（18 发/秒级的命中率会被悄悄改掉）。
-	# 期望值硬编码 0.12（基准球半径）—— standard 弹无 balloon tag、无命运缩放 ⇒ 倍率恒为 1.0。
+	# 碰撞体**跟随视觉放大**（2026-11-09 业主反转了 2026-10-14 的「纯视觉」口径）：
+	# 「我的很多子弹的视觉被我放大了，有些是 1.5 倍，有些是两倍，但是它的这个碰撞检测
+	#   没有放大，所以会导致子弹容易穿过去 / 打不到。不是把子弹视觉缩小，而是把子弹的
+	#   碰撞体也一起放大了。」
+	# ⇒ 判定球半径 = 0.12 × 视觉倍率。霰弹 ×2 ⇒ 0.24；手枪 ×1.8 ⇒ 0.216。
+	# 期望值仍硬编码基准 0.12，避免「引用被测常量」式的假绿。
 	var shot_snap := _fire_once("bp_shotgun")
 	_samples += 1
 	if shot_snap.is_empty():
-		_failures.append("纯视觉边界：霰弹枪开火后没有投射物")
+		_failures.append("碰撞跟随视觉：霰弹枪开火后没有投射物")
 	else:
 		var hit_radius := float(shot_snap.get("collision_radius", -1.0))
-		_expect(absf(hit_radius - 0.12) < 0.0001,
-			"枪族档位不得改碰撞半径（应恒为基准球 0.12，实测 " + str(hit_radius) + "）")
+		_expect(absf(hit_radius - 0.24) < 0.0001,
+			"霰弹枪碰撞半径应随 ×2 视觉放大到 0.24，实测 " + str(hit_radius))
 		_expect(absf(float(shot_snap.get("visual_base_scale", 0.0)) - 2.0) < 0.01,
-			"纯视觉边界：同一发的视觉尺寸应仍为 2.0，实测 " + str(shot_snap.get("visual_base_scale", 0.0)))
+			"碰撞跟随视觉：同一发的视觉尺寸应仍为 2.0，实测 " + str(shot_snap.get("visual_base_scale", 0.0)))
+	var pistol_snap := _fire_once("bp_pistol")
+	_samples += 1
+	if pistol_snap.is_empty():
+		_failures.append("碰撞跟随视觉：手枪开火后没有投射物")
+	else:
+		var pistol_radius := float(pistol_snap.get("collision_radius", -1.0))
+		_expect(absf(pistol_radius - 0.12 * 1.8) < 0.0001,
+			"手枪碰撞半径应随 ×1.8 视觉放大到 0.216，实测 " + str(pistol_radius))
 
 	# 轴向的几何真值：核心件的局部长轴真的被拉伸（不是只写了个字段）。
 	var effect := _instantiate(STANDARD_SCENE)

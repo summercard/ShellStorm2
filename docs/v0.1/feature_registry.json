@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-11-08",
+  "updated_at": "2026-11-09",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -74,7 +74,8 @@
       "development_records": [
         "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md",
         "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
-        "docs/v0.1/development/2026-10-19_bullet_module_manual_swap_lock.md"
+        "docs/v0.1/development/2026-10-19_bullet_module_manual_swap_lock.md",
+        "docs/v0.1/development/2026-11-09_aim_ballistic_alignment.md"
       ],
       "verification": [
         {
@@ -88,6 +89,14 @@
         {
           "kind": "scene",
           "id": "verify_bullet_module_equipment_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_bullet_aim_alignment"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_crosshair_billboard"
         }
       ],
       "status": "partial"
@@ -402,7 +411,8 @@
         "docs/v0.1/development/2026-09-24_combat_economy_handoff.md",
         "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md",
         "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
-        "docs/v0.1/development/2026-11-06_expedition02_no_key_doors.md"
+        "docs/v0.1/development/2026-11-06_expedition02_no_key_doors.md",
+        "docs/v0.1/development/2026-11-09_chest_appear_fx_light_prompt.md"
       ],
       "verification": [
         {
@@ -428,6 +438,10 @@
         {
           "kind": "scene",
           "id": "verify_expedition_level01_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_chest_appear_fx_prompt"
         }
       ],
       "status": "partial",
@@ -447,7 +461,9 @@
         "docs/v0.1/development/2026-09-24_combat_economy_handoff.md",
         "docs/v0.1/development/2026-10-30_expedition03_shop_and_currency.md",
         "docs/v0.1/development/2026-10-30_expedition03_chest_mimic.md",
-        "docs/v0.1/development/2026-11-08_fate_pickup_chest_closure.md"
+        "docs/v0.1/development/2026-11-08_fate_pickup_chest_closure.md",
+        "docs/v0.1/development/2026-11-09_opening_ammo_infinite_pistol_room_guarantee.md",
+        "docs/v0.1/development/2026-11-09_pistol_infinite_reserve_ammo.md"
       ],
       "verification": [
         {
@@ -457,6 +473,10 @@
         {
           "kind": "scene",
           "id": "verify_chest_reward_service"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_expedition01_room_guarantee"
         },
         {
           "kind": "scene",
@@ -716,7 +736,8 @@
         "docs/v0.1/20_技术施工_基地NPC.md"
       ],
       "development_records": [
-        "docs/v0.1/development/2026-11-08_base99_defeat_rescue.md"
+        "docs/v0.1/development/2026-11-08_base99_defeat_rescue.md",
+        "docs/v0.1/development/2026-11-09_rescue_weapon_instance_fate.md"
       ],
       "verification": [
         {

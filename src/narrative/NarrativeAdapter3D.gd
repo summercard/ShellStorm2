@@ -41,7 +41,8 @@ var _camera_rest_elevation_deg := 0.0  # 接管前那套俯角（度），elevat
 
 # —— 运镜枢轴（2026-09-21）：默认钉在玩家身上，可脱开去拍别处 ——
 var _camera_pivot_channel := {}   # 枢轴通道（Vector3）{from, to, t, duration, value}
-var _camera_pivot_mode := "player"  # player / last_spawn / room_center / light_switch / point
+var _camera_pivot_mode := "player"  # player / last_spawn / room_center / light_switch / point / anchor
+var _camera_pivot_anchor := ""
 var _camera_pivot_point := Vector3.ZERO  # mode=point（pivot_m）时的显式坐标
 var _camera_pivot_room_id := ""  # mode=room_center / light_switch 时用哪个房间
 var _camera_pivot_preferred_entry := "east"
@@ -50,6 +51,8 @@ var _last_spawn_origin := Vector3.ZERO  # 最近一次剧情刷怪的队列中�
 
 # —— 逐帧持续生效的接管项（朝向） ——
 var _facing_active := false
+var _facing_generation := 0
+var _facing_actor: Node3D = null
 var _facing_channel := {}          # {from, to, t, duration}
 var _facing_yaw := 0.0
 var _facing_base_yaw := 0.0        # 本条 face 序列的基准朝向（进入序列时抓一次，见 _actor_face）
@@ -83,10 +86,18 @@ func bind(tree: SceneTree) -> void:
 ## 导演每帧调用：推进相机与朝向的过渡并落到场景上。
 func tick(delta: float) -> void:
 	_tick_camera_shake(delta)
+	var controller := _main_story_controller()
+	if controller != null and controller.has_method("_sync_activation_control"):
+		# 手动导演 step 也复用控制器的真实激活时钟，不另造定时器。
+		controller.call("_sync_activation_control")
 	if _camera_override_active:
 		_advance_channel(_camera_channel, delta)
 		_advance_channel(_camera_yaw_channel, delta)
 		_advance_channel(_camera_elev_channel, delta)
+		if _camera_pivot_mode == "anchor" and not _camera_pivot_channel.is_empty():
+			var anchor: Variant = scene_anchor(_camera_pivot_anchor)
+			if anchor is Vector3:
+				_camera_pivot_channel["to"] = anchor
 		var pivot_done := _advance_vector_channel(_camera_pivot_channel, delta)
 		# 枢轴平滑落回玩家后清空通道 ⇒ 焦点重新「实时跟随玩家」，与接管前一字不差
 		# （否则会钉在那一刻的玩家位置快照上）。
@@ -180,7 +191,12 @@ func dungeon_node() -> Node:
 func scene_anchor(anchor_id: String) -> Variant:
 	var dungeon := dungeon_node()
 	if dungeon != null and dungeon.has_method("narrative_anchor"):
-		return dungeon.call("narrative_anchor", anchor_id)
+		var anchor: Variant = dungeon.call("narrative_anchor", anchor_id)
+		if anchor != null:
+			return anchor
+	var controller := _main_story_controller()
+	if controller != null and controller.has_method("resolve_anchor"):
+		return controller.call("resolve_anchor", anchor_id)
 	return null
 
 
@@ -268,6 +284,8 @@ func call_instruction(verb: String, params: Dictionary) -> Dictionary:
 
 func dispatch(domain: String, action: String, params: Dictionary) -> Dictionary:
 	match domain:
+		"story":
+			return _story_instruction(action, params)
 		"player":
 			return _player_instruction(action, params)
 		"camera":
@@ -283,6 +301,28 @@ func dispatch(domain: String, action: String, params: Dictionary) -> Dictionary:
 		"grant":
 			return _grant_instruction(action, params)
 	return _failed("未知指令域『%s』。" % domain)
+
+
+# -------------------------------------------------------------------------
+# story
+# -------------------------------------------------------------------------
+
+func _story_instruction(action: String, params: Dictionary) -> Dictionary:
+	var controller := _main_story_controller()
+	if controller == null or not controller.has_method("call_instruction"):
+		return _degraded("story.%s：主线控制器不可用。" % action)
+	return controller.call("call_instruction", action, params) as Dictionary
+
+
+func _main_story_controller() -> Node:
+	var root := dungeon_node()
+	if root != null and root.has_method("get_main_story_controller"):
+		return root.call("get_main_story_controller") as Node
+	if _tree != null:
+		var scene := _tree.current_scene
+		if scene != null and scene.has_method("get_main_story_controller"):
+			return scene.call("get_main_story_controller") as Node
+	return null
 
 
 # -------------------------------------------------------------------------
@@ -624,8 +664,9 @@ func _apply_camera_pivot_params(params: Dictionary, duration: float) -> void:
 	if params.has("pivot_anchor"):
 		var anchor: Variant = scene_anchor(str(params["pivot_anchor"]))
 		if anchor is Vector3:
+			_camera_pivot_anchor = str(params["pivot_anchor"])
 			_camera_pivot_point = anchor
-			_camera_pivot_mode = "point"
+			_camera_pivot_mode = "anchor" if bool(params.get("follow_anchor", false)) else "point"
 			_start_camera_pivot_move(player, duration)
 		else:
 			_warn("camera.pivot_anchor 不可用，保持原枢轴。")
@@ -679,6 +720,9 @@ func _current_camera_pivot(player: Node3D) -> Vector3:
 ## 按 `_camera_pivot_mode` 解析枢轴目标点。拿不到就**告警并退回玩家**（不静默）。
 func _resolve_camera_pivot(player: Node3D) -> Vector3:
 	match _camera_pivot_mode:
+		"anchor":
+			var anchor: Variant = scene_anchor(_camera_pivot_anchor)
+			return anchor as Vector3 if anchor is Vector3 else _camera_pivot_point
 		"point":
 			return _camera_pivot_point
 		"last_spawn":
@@ -790,6 +834,9 @@ func _resolve_actor(params: Dictionary) -> Node3D:
 	var who := str(params.get("who", "player"))
 	if who == "player" or who.is_empty():
 		return player_node()
+	var controller := _main_story_controller()
+	if controller != null and controller.has_method("resolve_actor"):
+		return controller.call("resolve_actor", who) as Node3D
 	return null
 
 
@@ -801,7 +848,18 @@ func _actor_say(params: Dictionary) -> Dictionary:
 	if text.strip_edges().is_empty():
 		return _failed("actor.say 缺少 text。")
 	var hold := float(params.get("hold", -1.0))
-	# 头顶气泡是角色系统自己的能力（CharacterBark3D），剧情只投喂文本。
+	# 只有 player 允许走 Dungeon3D 的底栏/主角气泡入口；NPC 必须由实体自己说。
+	var who := str(params.get("who", "player"))
+	if who != "player" and who != "":
+		if actor.has_method("say_scripted_line"):
+			if not bool(actor.call("say_scripted_line", text, hold)):
+				return _failed("actor.say：演员『%s』拒绝脚本台词。" % who)
+			return _ok()
+		var attached_npc: Variant = CharacterBark3D.attach_to(actor)
+		if attached_npc != null and (attached_npc as Object).has_method("say_text"):
+			(attached_npc as Object).call("say_text", text, hold)
+			return _ok()
+		return _degraded("actor.say：NPC 气泡挂载点不可用，本句被跳过。")
 	var dungeon := dungeon_node()
 	if dungeon != null and dungeon.has_method("narrative_player_bark"):
 		var bark: Variant = dungeon.call("narrative_player_bark")
@@ -859,9 +917,10 @@ func _actor_face(params: Dictionary) -> Dictionary:
 	var actor := _resolve_actor(params)
 	if actor == null:
 		return _degraded("actor.face：演员不可用。")
-	# 先解除输入锁定的朝向占用：朝向由 aim_yaw 与视觉根共同表达，
-	# 与 MainEntryScreen3D 的既有无接管写法一致（存 _saved_aim_yaw → 写 → 还原）。
-	var before_yaw := float(actor.get("aim_yaw"))
+	# 玩家用 aim_yaw，NPC 用自身公开脚本化朝向入口；两者都由适配器登记归还。
+	var before_yaw := actor.rotation.y
+	if actor == player_node():
+		before_yaw = float(actor.get("aim_yaw"))
 	var duration := maxf(0.0, float(params.get("duration", 0.35)))
 	# 序列基准：一条 face 序列（`actor.facing` 占用期间）只认**进入序列那一刻**的朝向。
 	# 若按"当前值"逐条累加，+32/−32 这种来回摆动会退化成单向漂移
@@ -878,39 +937,42 @@ func _actor_face(params: Dictionary) -> Dictionary:
 	elif bool(params.get("relative", false)):
 		target_yaw += _facing_base_yaw
 	_facing_active = true
+	_facing_actor = actor
 	_facing_channel = {
 		"from": before_yaw, "to": target_yaw,
 		"t": 0.0, "duration": duration, "value": before_yaw,
 	}
-	return _done(Callable(self, "_restore_facing").bind({"yaw": before_yaw}))
+	return _done(Callable(self, "_restore_facing").bind({"actor": actor, "yaw": before_yaw, "generation": _facing_generation}))
 
 
 func _apply_facing() -> void:
-	var player := player_node()
-	if player == null:
+	var actor := _facing_actor
+	if actor == null or not is_instance_valid(actor):
 		return
 	_facing_yaw = float(_facing_channel.get("value", _facing_yaw))
-	player.set("aim_yaw", _facing_yaw)
-	var avatar: Variant = player.get("avatar")
-	if avatar is Node3D:
-		var visual_root: Variant = (avatar as Node3D).get("visual_root")
-		if visual_root is Node3D:
-			(visual_root as Node3D).rotation.y = _facing_yaw
+	if actor.has_method("set_scripted_facing"):
+		actor.call("set_scripted_facing", _facing_yaw)
+	elif actor.get("aim_yaw") != null:
+		actor.set("aim_yaw", _facing_yaw)
+	else:
+		actor.rotation.y = _facing_yaw
 
 
 func _restore_facing(argument: Dictionary) -> void:
+	if int(argument.get("generation", _facing_generation)) != _facing_generation:
+		return
 	_facing_active = false
 	_facing_channel = {}
 	_facing_yaw = float(argument.get("yaw", 0.0))
-	var player := player_node()
-	if player == null:
-		return
-	player.set("aim_yaw", _facing_yaw)
-	var avatar: Variant = player.get("avatar")
-	if avatar is Node3D:
-		var visual_root: Variant = (avatar as Node3D).get("visual_root")
-		if visual_root is Node3D:
-			(visual_root as Node3D).rotation.y = _facing_yaw
+	var actor: Variant = argument.get("actor", _facing_actor)
+	_facing_actor = null
+	if actor is Node3D and is_instance_valid(actor):
+		if (actor as Node3D).has_method("clear_scripted_facing"):
+			(actor as Node3D).call("clear_scripted_facing")
+		elif (actor as Node3D).get("aim_yaw") != null:
+			(actor as Node3D).set("aim_yaw", _facing_yaw)
+		else:
+			(actor as Node3D).rotation.y = _facing_yaw
 
 
 func _actor_visibility(params: Dictionary, visible: bool) -> Dictionary:
@@ -1033,6 +1095,48 @@ func _fx_vfx(params: Dictionary) -> Dictionary:
 		color = Color(float(channels[0]), float(channels[1]), float(channels[2]))
 	VfxPool.acquire(asset_id, origin, color, float(params.get("size", 1.0)), params.get("context", {}))
 	return _ok()
+
+
+func can_commit_narrative(narrative_id: String, reason: String) -> bool:
+	if not narrative_id.begins_with("nar_main_"):
+		return true
+	var controller := _main_story_controller()
+	if controller != null and controller.has_method("can_commit_narrative"):
+		return bool(controller.call("can_commit_narrative", narrative_id, reason))
+	return false
+
+
+func should_end_narrative(narrative_id: String) -> bool:
+	if not narrative_id.begins_with("nar_main_"):
+		return true
+	var controller := _main_story_controller()
+	if controller != null and controller.has_method("should_end_narrative"):
+		return bool(controller.call("should_end_narrative", narrative_id))
+	return false
+
+
+func should_advance_narrative() -> bool:
+	var controller := _main_story_controller()
+	if controller != null and controller.has_method("should_advance_narrative"):
+		return bool(controller.call("should_advance_narrative"))
+	return true
+
+
+## 只归还适配器与 host 的占用；控制器自行标记完成，绝不反向调用其 release 指令。
+func release_main_story_control() -> void:
+	var actor := _facing_actor
+	if actor != null and is_instance_valid(actor) and actor.has_method("clear_scripted_facing"):
+		actor.call("clear_scripted_facing")
+	_facing_active = false
+	_facing_actor = null
+	_facing_channel = {}
+	_facing_generation += 1
+	_stop_camera_shake()
+	release_camera_override()
+	var host := dungeon_node()
+	if host != null and host.has_method("set_scripted_input_hold"):
+		host.call("set_scripted_input_hold", false, true)
+	_release_player_input()
 
 
 func _anchor_position(params: Dictionary) -> Variant:

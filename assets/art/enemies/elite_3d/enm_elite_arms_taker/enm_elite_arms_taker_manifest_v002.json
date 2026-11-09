@@ -144,13 +144,13 @@
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/enm_elite_arms_taker_root_top3d.tscn",
-      "bytes": 830,
-      "sha256": "92dfd166f5fd36a4322dc089bebd24d13eec21108581e6a3d1dc026a392458c8"
+      "bytes": 1138,
+      "sha256": "5b63de8d11ff2f9ded71d00ce12253092e51f2fc14273369257c848838d9fe69"
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/runtime/enm_elite_arms_taker/elite_arms_taker_formal_visual.gd",
-      "bytes": 14753,
-      "sha256": "dfc152dec99b91070d5240da7b9531c9f786a4e49f50dc4111cb6732ad7100d2"
+      "bytes": 23366,
+      "sha256": "fe131e528e03922dfdb37177199b6ba531faa68d289f49d0aa62e77e596bd330"
     },
     {
       "res_path": "res://assets/art/enemies/elite_3d/enm_elite_arms_taker/components/enm_elite_arms_taker/enm_elite_arms_taker_visual_top3d.glb.import",
@@ -604,7 +604,7 @@
     }
   },
   "bullet_hit_volumes": {
-    "count": 16,
+    "count": 17,
     "owner": "Enemy3D",
     "proxy": "EnemyHitVolume3D",
     "moving_body": "CylinderShape3D",
@@ -622,7 +622,22 @@
         0.049
       ]
     },
-    "foot_fit_note": "r5: each foot slightly enlarged; dynamic lower edge still aligned to its own mesh sole"
+    "foot_fit_note": "r5: each foot slightly enlarged; dynamic lower edge still aligned to its own mesh sole",
+    "ground_column": {
+      "node": "Volume_TorsoColumn",
+      "anchor_bone": "Waist",
+      "ground_locked": true,
+      "cross_section_bone_local": [
+        0.21,
+        0.119
+      ],
+      "top": "waist box top edge (bone-local y 0.072)",
+      "bottom": "lowest sampled boot sole of the current pose",
+      "world_axis_aligned": true,
+      "note": "r14: 填掉两腿之间的竖缝，业主 2026-11-09 要求子弹打身体中间必须掉血",
+      "why_wider_than_waist": "腿间侧缝随体型线性放大，M>2.14 时超过弹径 0.24m；x 加宽到 0.21 后 1/6/12 级侧缝均为 0"
+    },
+    "r14_note": "16 bone boxes + 1 ground-locked torso column; count 16 -> 17 on 2026-11-09"
   },
   "gait_timing": {
     "method": "support-foot travel profile",

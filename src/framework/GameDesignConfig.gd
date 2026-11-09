@@ -24,14 +24,15 @@ const TRAINING_SCENE_3D := "res://scenes/TrainingRange3D.tscn"
 ## 全息城站位是**视觉布局**，两者不该互相绑死（早期就是靠两张硬编码数组各写一份，加关就错位）。
 ##
 ## `nav_visibility` 决定它**要不要出现在情报室里**，缺省 `"always"`：
-## - `"always"`：恒列出。适用于"玩家随时该看到"的关卡。远征03 从 2026-10-28 起
-##   归这一档 —— 它此前是"占位未开放"，现在场景、设计源、生成链路都已就位，可真进。
-## - `"on_unlock"`：玩家解锁后才列出（远征02 的口径：没过 01 之前它不该出现在城里）。
-## 注意这与"能不能真的出发"是两件事 —— 后者由 `unlock_policy` + 到达场景是否存在决定。
+## - `"always"`：恒列出。适用于"玩家随时该看到"的关卡。
+## - `"on_unlock"`：玩家解锁后才列出（仅保留给旧式可见性策略）。
+## - `"hidden"`：保留在清单和开发接口，但不进入正式情报室导航（测试99）。
+## 注意这与"能不能真的出发"是两件事 —— 后者由 `unlock_policy` + 到达场景是否存在共同决定。
 ##
 ## `unlock_policy` 决定**能不能真的出发**，缺省 `"always"`：
 ## - `"always"`：恒可进（远征01 / 99 / 目前的远征03）。
-## - `"on_clear"`：通关 `unlock_required_clear` 指定关卡后解锁（远征02 ← 通关远征01）。
+## - `"on_clear"`：通关 `unlock_required_clear` 指定关卡后解锁（旧式权限）。
+## - `"main_story"`：由 BaseManager 根据主线快照中的 deposited key 判定。
 ##
 ## 为什么把解锁规则写在这里，而不是继续写死在 `BaseManager` 里：
 ## 那一处原本是 `return level_id in ["expedition_01", "99"]` 的**硬编码白名单**，
@@ -47,23 +48,26 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"subtitle": "单层独立行动 · 入口安全屋 → 01—10 号房 → 撤离点",
 		"objective_line": "肃清 01—10 号房，开启宝箱构筑命运，抵达终点撤离点。",
 		"scene_3d": "res://scenes/ExpeditionLevel01_3D.tscn",
+		"main_story_order": 1,
 		"nav_order": 10,
 		"nav_badge": "01  /  EXPEDITION",
+		"nav_visibility": "always",
 		"unlock_policy": "always",
 	},
 	{
 		"level_id": "expedition_02",
 		"run_id": "expedition_02",
-		"display_name": "远征关卡02",
+		"display_name": "破败旅馆",
 		"setting_name": "破败旅馆",
 		"subtitle": "单层独立行动 · 阳台安全屋 → 挑高前厅 → 旅馆长廊 → T 字路口 → 两条支廊（第 1 层）",
 		"objective_line": "穿过坍塌门洞进入旅馆长廊，沿主轴北进，在 T 字路口选择一条支廊深入。",
 		"scene_3d": "res://scenes/ExpeditionLevel02_3D.tscn",
+		"main_story_order": 3,
 		"nav_order": 30,
-		"nav_badge": "02  /  EXPEDITION",
-		"nav_visibility": "on_unlock",
-		"unlock_policy": "on_clear",
-		"unlock_required_clear": "expedition_01",
+		"nav_badge": "03  /  EXPEDITION",
+		"nav_visibility": "always",
+		"unlock_policy": "main_story",
+		"main_story_required_key": "mq_key_manor",
 	},
 	{
 		"level_id": "expedition_03",
@@ -73,13 +77,27 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"subtitle": "单层独立行动 · 六张 flow 骨架每局抽一张 · 16~18 间房 + 0~3 间注入房",
 		"objective_line": "沿本局抽中的骨架推进，肃清战斗房，取走两处宝箱，穿过命运之门抵达撤离点。",
 		"scene_3d": "res://scenes/ExpeditionLevel03_3D.tscn",
+		"main_story_order": 2,
+		"nav_order": 20,
+		"nav_badge": "02  /  EXPEDITION",
+		"nav_visibility": "always",
+		"unlock_policy": "main_story",
+		"main_story_required_key": "mq_key_rare_earth",
+	},
+	{
+		"level_id": "expedition_04",
+		"run_id": "expedition_04",
+		"display_name": "未知区域",
+		"setting_name": "未知区域",
+		"subtitle": "主线远征目标 · 场景尚未制作",
+		"objective_line": "收集旅馆钥匙后解锁此区域。",
+		"scene_3d": "res://scenes/ExpeditionLevel04_3D.tscn",
+		"main_story_order": 4,
 		"nav_order": 40,
-		"nav_badge": "03  /  EXPEDITION",
-		# 白盒阶段暂时恒可进：现在要的是「能进去走一遍、看卡不卡墙」。
-		# 等内容（刷怪 / 门扇 / 灯光）补齐、验收定稿后，改成
-		# `"unlock_policy": "on_clear", "unlock_required_clear": "expedition_02"` 即可 ——
-		# 只改这一行数据，不动任何代码。
-		"unlock_policy": "always",
+		"nav_badge": "04  /  EXPEDITION",
+		"nav_visibility": "always",
+		"unlock_policy": "main_story",
+		"main_story_required_key": "mq_key_hotel",
 	},
 	{
 		"level_id": "99",
@@ -89,8 +107,9 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"subtitle": "单层独立行动 · 入口安全屋 → 2 间内容房 → 撤离点",
 		"objective_line": "肃清两间内容房，穿过命运之门，抵达终点撤离点。",
 		"scene_3d": "res://scenes/ExpeditionLevel99_3D.tscn",
-		"nav_order": 20,
+		"nav_order": 90,
 		"nav_badge": "99  /  TEST SECTOR",
+		"nav_visibility": "hidden",
 		"unlock_policy": "always",
 	},
 ]
@@ -168,6 +187,7 @@ static func expedition_level_scene(level_id: String) -> String:
 ## 关卡 id → 解锁规则。缺字段或未登记一律按 `"always"`（宁可多开放，也不要静默进不去）。
 const UNLOCK_POLICY_ALWAYS := "always"
 const UNLOCK_POLICY_ON_CLEAR := "on_clear"
+const UNLOCK_POLICY_MAIN_STORY := "main_story"
 
 static func expedition_unlock_policy(level_id: String) -> String:
 	var entry := expedition_level(level_id)

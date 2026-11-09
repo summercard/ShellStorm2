@@ -33,6 +33,17 @@ func _ready() -> void:
 
 	var inventory := dungeon.get("_inventory") as InventoryModule
 	var ammo := ItemRegistry.get_instance().get_item("item_ammo_pack")
+	# 2026-11-09：出厂豌豆手枪改**弹匣无限**（开火不扣弹、换弹不吃备弹），
+	# 它已经验不了「有限备弹按缺口装填」这条规则。规则的样本枪换成步枪 ——
+	# **规则本身没变**，只是不能再拿无限弹匣的枪当反例。
+	if not bool(dungeon.player.weapon.get("infinite_reserve_ammo")):
+		failures.append("出场手枪应为无限备弹（2026-11-09 业主口径）")
+	var finite_gun := ItemRegistry.get_instance().get_item("weapon_rifle")
+	var equip_finite := dungeon.player.equip_weapon_item_to_slot(finite_gun, 0)
+	if not bool(equip_finite.get("success", false)):
+		failures.append("cannot equip rifle for the finite-reserve reload check")
+	elif bool(dungeon.player.weapon.get("infinite_reserve_ammo")):
+		failures.append("rifle must not be flagged as infinite ammo")
 	if inventory == null or inventory.add_item(ammo, 5) != 5:
 		failures.append("cannot stage five reserve rounds in the backpack")
 	else:

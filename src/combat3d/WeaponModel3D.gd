@@ -226,6 +226,17 @@ var reload_time := 1.5
 var character_authored_reload := false
 var magazine_size := 12
 var current_ammo := 12
+## 无限**备弹**（2026-11-09 业主两轮口径的最终版：「豌豆手枪应该是弹夹保持 10 发，打完后备弹无限」）。
+## 由枪身 `base_stats.infinite_reserve_ammo = true` 声明，**唯一真源在内容侧**，
+## 不在这里写枪名判断。
+##
+## 语义严格限定为「**备弹不消耗**」，弹匣本身照常消耗：
+##   · 开火**照常**扣 `current_ammo`（弹匣 10 发打空就得换）；
+##   · 换弹**照常需要**、照常占 `reload_time`；只是完成时**不向备弹提供者扣数** ⇒ 每次换弹都白拿满匣；
+##   · 满匣时 `request_reload()` 依旧返回 false（没有缺口可填）。
+## 不做「跳过换弹」、也不做「开火不扣弹」：前者会废掉换弹动作/音效/换弹构筑，
+## 后者会让「10 发弹匣 + 1.4 s 换弹」这套节奏失去意义。
+var infinite_reserve_ammo := false
 var bullet_speed := 24.0
 ## 射程上限（米），来自枪身 base_stats 的 `range`。与 `bullet_speed` 独立：
 ## 弹速只决定飞行时间，射程决定弹体最远能飞多远、到点消失（爆炸弹则自动引爆）。
@@ -614,6 +625,7 @@ func _configure_common_stats(stats: Dictionary, melee: bool) -> void:
 		current_ammo = 0
 		bullet_speed = 0.0
 		range_m = 0.0
+		infinite_reserve_ammo = false
 		charge_time = 0.0
 		_melee_profile = _build_melee_profile(stats)
 		return
@@ -627,6 +639,8 @@ func _configure_common_stats(stats: Dictionary, melee: bool) -> void:
 	magazine_size = maxi(1, int(float(stats.get("magazine_size", 12)) * float(stats.get("fate_magazine_multiplier", 1.0))))
 	current_ammo = magazine_size
 	bullet_speed = 23.0 * float(stats.get("bullet_speed", 1.0)) * float(stats.get("fate_speed_multiplier", 1.0))
+	# 无限备弹由枪身声明；必须在这里读，才能让 `configure()` / 装配树两条路径口径一致。
+	infinite_reserve_ammo = bool(stats.get("infinite_reserve_ammo", false))
 	# 射程与弹速解耦：这里只读枪身声明的 `range`，不再由弹种速度倍率推导。
 	range_m = maxf(0.0, float(stats.get("range", 0.0)))
 	charge_time = maxf(0.0, float(stats.get("charge_time", 0.0)))
@@ -684,6 +698,17 @@ func configure_firing_context(hostile: bool, target_group: String, projectile_co
 	_firing_hostile = hostile
 	_firing_target_group = target_group
 	_firing_projectile_collision_mask = projectile_collision_mask
+
+
+## 枪口世界坐标（弹道起点）。没有 Muzzle 挂点时回落到武器根。
+##
+## 2026-11-09：`Player3D._ballistic_direction()` 用它作为弹道起点 ——
+## 准星与枪口同高，屏幕上弹道才会穿过准星。不要让调用方直接摸 `_muzzle`：
+## 那个字段在视觉重建期间可能为空，这里是唯一的安全入口。
+func muzzle_global_position() -> Vector3:
+	if is_instance_valid(_muzzle):
+		return _muzzle.global_position
+	return global_position
 
 
 func try_fire(aim_direction: Vector3, shooter: Node3D) -> bool:
@@ -1017,7 +1042,8 @@ func request_reload() -> bool:
 	if is_melee_weapon() or display_only or gun_id.is_empty() or _reload_remaining > 0.0 or current_ammo >= magazine_size:
 		return false
 	# 正式战局注入备弹提供者；无提供者的训练场/表现测试维持无限备弹。
-	if _reload_ammo_provider.is_valid() and int(_reload_ammo_provider.call(0)) <= 0:
+	# 无限**备弹**武器不查备弹余量（换弹照常走 1.4 s，完成时白拿满匣）。
+	if not infinite_reserve_ammo and _reload_ammo_provider.is_valid() and int(_reload_ammo_provider.call(0)) <= 0:
 		return false
 	_active_reload_duration = maxf(0.01, reload_time)
 	_reload_remaining = _active_reload_duration
@@ -1152,6 +1178,7 @@ func get_snapshot() -> Dictionary:
 		"projectile_count": projectile_count,
 		"magazine_size": magazine_size,
 		"current_ammo": current_ammo,
+		"infinite_reserve_ammo": infinite_reserve_ammo,
 		"reloading": is_reloading(),
 		"reload_progress": get_reload_progress(),
 		"reload_remaining": _reload_remaining,
@@ -1188,7 +1215,8 @@ func get_snapshot() -> Dictionary:
 func _finish_reload() -> void:
 	var missing := maxi(0, magazine_size - current_ammo)
 	var loaded := missing
-	if _reload_ammo_provider.is_valid():
+	# 无限备弹不向备弹提供者扣数：`loaded` 保持 = 缺口，但 `_provide_reload_ammo` 不会被调。
+	if not infinite_reserve_ammo and _reload_ammo_provider.is_valid():
 		loaded = clampi(int(_reload_ammo_provider.call(missing)), 0, missing)
 	current_ammo = mini(magazine_size, current_ammo + loaded)
 	_reload_remaining = 0.0

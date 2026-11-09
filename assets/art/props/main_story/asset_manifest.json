@@ -1,0 +1,63 @@
+{
+ "schema_version": 1,
+ "registered_at": "2026-11-10",
+ "scope": "主线3.1—3.3账本登记；非运行配置",
+ "production_status": "原型已接入",
+ "art_master_complete": false,
+ "state_owner": "BaseManager.main_story",
+ "key_id": "mq_key_rare_earth",
+ "ordinary_inventory_item": false,
+ "claim_owner": "BaseManager.claim_main_story_key",
+ "deposit_owner": "BaseManager.deposit_main_story_key",
+ "assets": [
+  {
+   "asset_id": "ITM-MAIN-STORY-RARE-EARTH-KEY",
+   "asset_ledger": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx#资产主表",
+   "prefab": "assets/art/props/main_story/runtime/rare_earth_key.tscn",
+   "sha256": "1928673f816240e6d0775744a26d9f124100c398a74c8732e29f94635877590c",
+   "source_kind": "procedural_tscn",
+   "program_source": "src/narrative/MainStoryKeyVisual3D.gd",
+   "blender_source": null,
+   "glb": null,
+   "collision": "无新增碰撞"
+  },
+  {
+   "asset_id": "PRP-BASE99-MAIN-STORY-KEY-PEDESTAL",
+   "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+   "prefab": "assets/art/props/main_story/runtime/main_story_pedestal.tscn",
+   "sha256": "99107c0a14fd449225d9c7c0d693d224cf4cad99686cb4af8e00b64dd2d41367",
+   "source_kind": "procedural_gdscript",
+   "program_source": "src/narrative/MainStoryPedestal3D.gd",
+   "blender_source": null,
+   "glb": null,
+   "collision": "无新增碰撞"
+  }
+ ],
+ "metadata_discrepancy": {
+  "prefab": "assets/art/props/main_story/runtime/main_story_pedestal.tscn",
+  "runtime_metadata_asset_id": "ENV-MAIN-STORY-KEY-PEDESTAL",
+  "ledger_asset_id": "PRP-BASE99-MAIN-STORY-KEY-PEDESTAL",
+  "reason": "权威场景道具/facility使用PRP；ENV-BASE99建议不满足前缀×大类契约；不改游戏资产元数据，不重复登记"
+ },
+ "reused_assets": [
+  "CHR-PLY-BUNNY01-NPC-GREEN",
+  "ENM-BOSS-MONITOR002-3D",
+  "UI-SCREEN-LEVEL-SELECT"
+ ],
+ "reuse_asset_primary_sha_policy": "保留原账本T列；脚本证据不冒充scene/model哈希",
+ "evidence_files": {
+  "assets/art/props/main_story/runtime/rare_earth_key.tscn": "1928673f816240e6d0775744a26d9f124100c398a74c8732e29f94635877590c",
+  "assets/art/props/main_story/runtime/main_story_pedestal.tscn": "99107c0a14fd449225d9c7c0d693d224cf4cad99686cb4af8e00b64dd2d41367",
+  "src/narrative/MainStoryKeyVisual3D.gd": "0382cac94ca511811790f45b514ece5d93d87fce007716703e6e86866700ffee",
+  "src/narrative/MainStoryPedestal3D.gd": "54a2b5539495115f3357f99f66020badf6a6f6f539b7a58f90963b98832b2319",
+  "src/narrative/MainStoryChapter3D.gd": "706ede4fd9adfa25356a2c91de907bc757b7aec0bc98202c383164ae8753c075",
+  "src/base/BaseManager.gd": "eb84af17f7f9c9d8f2a3d394db81f0e3f7442a9f96669fe40b65e196369d933f",
+  "src/npc/NpcCharacter3D.gd": "85bc10d23c720b1978cfb886f8fbb7b0ea49e8cd425f9054d07705bf5e1df32a",
+  "src/ui/HologramCity3D.gd": "71725dac71e5b74084e86b4d94dfd8312cffb9039bb74187e5147d6d6c9ef9db",
+  "scenes/RogueMapSelectMenu.gd": "60f4b063bbcda918947c825b495d94f145296e00e554a21661387b6128308ee7",
+  "src/enemy3d/Enemy3D.gd": "d27c6a3edf44afcbdc4543022da31e410953ced5572f1468e5f9abd64568eb91",
+  "src/enemy3d/MonitorBossCombat.gd": "dbdc58784916444cb4b55d0127c2de524346124da308ad18648bb5e8918138f9",
+  "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md": "f9a7d25fb2620574beba22ed6474d83fae8dd848bd8261ec5b19bf5a1f584f36"
+ },
+ "validation": "本事务仅登记已有实现；不冒充新增Godot运行或真实渲染验收通过；门禁与差异见工程外session报告"
+}

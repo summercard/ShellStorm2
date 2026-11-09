@@ -1,3 +1,9 @@
+- [宝箱出现反馈·自带地面光·头顶提示让位](2026-11-09_chest_appear_fx_light_prompt.md)：业主三条（宝箱出来不突兀 / 头顶 E 提示与靠近白字重复 / 暗处看不见箱子）。出现特效复用 FX01-35 **IN**（不是 OUT —— 环向内收拢读作被吸走）、暖金尺寸 2.0；触发点从装配期改到 `Dungeon3D._on_room_entered()`（装配期会在加载页预热时白播且旗标补不回）；提示牌聚焦让位；`OmniLight3D` 挂视觉根、不投影、平涂箱灯色跟身板。新增 `verify_chest_appear_fx_prompt`（8 组反向对照，其中"房间不过滤已开箱"由箱子守卫兜住故另加箱子侧用例）。
+
+- [远征03通道房清房宝箱修复](2026-11-09_expedition03_corridor_clear_drop_chest.md)：业主报通道房里仍刷宝箱。根因不是作者标记，而是 `_ensure_room_clear_drop()` 只按房型排除、把 `authored_layout_peaceful` 的无怪房（走廊空 `room_type` / `MERCHANT` / `UPGRADE`）当成内容房，`chest_chance=1.0` 下每间白送一只。判据改按和平区标志早退；新增 `verify_expedition03_clear_drop_rooms`（31 检查，反向对照 18 条精准变红）。
+
+- [怪物攻击姿态站住：进前摇即刹停，打完再走](2026-11-09_enemy_attack_stance_hold.md)：业主报「一边攻击一边移动」。删掉复刻怪 35% 前摇踱步与老怪 18 m/s² 慢刹，统一 `ATTACK_STANCE_BRAKE_MPS2 = 55`；连发未清空不退出收招；外力不被吞。新增 `verify_enemy_attack_stance`（35 检查），反向重跑 11 条精准变红。
+
 - [收租人最终战败事务与警告收口](2026-11-08_arms_taker_defeat_transaction_closeout.md)：正式远征03自然回调覆盖四类战败事务，真实渲染472项、漫游1929项通过，三类目标警告清零；局部fixture与整体partial边界分列。
 
 - [远征03工坊布局返修与交互恢复](2026-11-06_expedition03_workshop_layouts.md)：按正式房型完成C环形、D田字、B通道和双围挡；保留原陈设，命令行与离屏验证。

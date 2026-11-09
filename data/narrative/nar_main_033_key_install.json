@@ -1,0 +1,31 @@
+{
+  "narrative_id": "nar_main_033_key_install",
+  "schema_version": 1,
+  "priority": 30,
+  "trigger": { "kind": "manual", "once": "run" },
+  "duration": 18.5,
+  "cues": [
+    { "at": 0.0, "do": "story.deposit.prepare" },
+    { "at": 0.0, "do": "player.lock_input", "locked": true },
+    { "at": 0.0, "do": "camera.focus", "pivot_anchor": "npc_tracking", "follow_anchor": true, "distance": 7.0, "duration": 0.7 },
+    { "at": 0.2, "do": "story.deposit.move_to_player" },
+    { "at": 0.4, "do": "actor.face", "who": "player", "to_anchor": "npc_tracking", "duration": 0.4 },
+    { "at": 0.4, "do": "camera.focus", "pivot_anchor": "duo", "distance": 4.8, "duration": 0.7 },
+    { "at": 1.2, "do": "actor.say", "who": "npc_base99_green", "text": "啧啧，真被你拿到了，给我吧", "hold": 2.567 },
+    { "at": 4.452, "do": "story.deposit.key_present" },
+    { "at": 4.652, "do": "story.deposit.key_handoff" },
+    { "at": 4.852, "do": "camera.focus", "pivot_anchor": "npc_tracking", "follow_anchor": true, "distance": 6.5, "duration": 0.8 },
+    { "at": 4.852, "do": "story.deposit.move_to_slot" },
+    { "at": 5.052, "do": "camera.focus", "pivot_anchor": "pedestal_focus", "distance": 4.5, "duration": 0.9 },
+    { "at": 6.052, "do": "actor.say", "who": "npc_base99_green", "text": "第一把。接上了。", "hold": 2.734 },
+    { "at": 9.304, "do": "story.deposit.key_insert" },
+    { "at": 9.504, "do": "story.deposit.commit" },
+    { "at": 9.604, "do": "ui.subtitle", "speaker": "系统", "text": "钥匙接入 1/4 · 无限公馆已解锁", "auto": 2.772 },
+    { "at": 13.514, "do": "actor.say", "who": "npc_base99_green", "text": "下一把，在无限公馆。", "hold": 2.667 },
+    { "at": 16.766, "do": "camera.restore", "duration": 1.0 },
+    { "at": 17.966, "do": "story.deposit.release" },
+    { "at": 18.066, "do": "player.lock_input", "locked": false },
+    { "at": 18.166, "do": "story.deposit.complete" },
+    { "at": 18.5, "do": "flow.end" }
+  ]
+}

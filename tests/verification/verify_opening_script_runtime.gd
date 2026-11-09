@@ -643,28 +643,29 @@ func _phase_i_opening_loadout() -> void:
 		"开场玩家身上没有枪（实际 %s）" % ("空" if equipped_empty else str(equipped)),
 	)
 
-	# ② 备弹照给。⚠️ 探针是 `test_mode`，真机那条自动发放（`if not test_mode:`）被挡住，
-	# 所以这里**显式调一次**发放函数：要验的是「**把枪收回之后**备弹照样能进包」这条关系
-	# —— 保底备弹与「有没有枪」必须解耦，否则玩家就变成「有 300 发、但打不出去」。
+	# ② 备弹**不再发放**（2026-11-09 业主取消保底备弹，出厂枪改弹匣无限）。
+	# 判据走 `get_guaranteed_loadout_ammo_rounds()` 这个唯一出口 —— 它恒返回 0；
+	# 若有人把发放加回来，这条会立刻判红，不会静默恢复。
 	var expected_ammo := int(_tower.call("get_guaranteed_loadout_ammo_rounds"))
+	_check(expected_ammo == 0, "保底备弹设计值应为 0（实际 %d）" % expected_ammo)
 	var ammo_before := int(_tower.call("_get_reserve_ammo_count"))
 	var ammo_added := int(_tower.call("_grant_guaranteed_loadout_ammo"))
 	var ammo_after := int(_tower.call("_get_reserve_ammo_count"))
 	_check(
-		ammo_added == expected_ammo and ammo_after == ammo_before + ammo_added,
-		"无枪状态下保底备弹 %d 发真的入包（入包 %d 发：%d → %d）"
-		% [expected_ammo, ammo_added, ammo_before, ammo_after],
+		ammo_added == 0 and ammo_after == ammo_before,
+		"无枪状态下备弹不应入包（入包 %d 发：%d → %d）"
+		% [ammo_added, ammo_before, ammo_after],
 	)
-	_note("I 保底备弹 = %d 发（显式发放后 %d → %d）" % [expected_ammo, ammo_before, ammo_after])
-	# 源码守卫：这条发放的**唯一**条件必须是「非 test_mode」，不能被「有没有枪」挟持。
+	_note("I 保底备弹 = 0 发（已取消；显式调用发放后仍为 %d）" % ammo_after)
+	# 源码守卫：`_setup_run_modules()` 里**不得**再出现发放调用。
 	# ⚠️ 先把 CRLF 归一：本仓源码是 CRLF，用 `\n` 搜跨行片段会**永远搜不到** ——
 	# 守卫自己就成了「永远红」（2026-09-22 实测踩过这一脚）。
 	var d3_source := FileAccess.get_file_as_string(
 		"res://src/world3d/Dungeon3D.gd"
 	).replace("\r\n", "\n")
 	_check(
-		d3_source.contains("\tif not test_mode:\n\t\t_grant_guaranteed_loadout_ammo()"),
-		"保底备弹的发放条件只有『非 test_mode』，与有没有枪无关",
+		not d3_source.contains("\t\t_grant_guaranteed_loadout_ammo()"),
+		"入场流程里不得再调用保底备弹发放",
 	)
 
 	# ③ 地上那把枪：在办公室里、靠近东门

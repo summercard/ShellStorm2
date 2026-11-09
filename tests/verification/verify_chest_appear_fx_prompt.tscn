@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_chest_appear_fx_prompt.gd" id="1_chest_appear"]
+
+[node name="VerifyChestAppearFxPrompt" type="Node"]
+script = ExtResource("1_chest_appear")

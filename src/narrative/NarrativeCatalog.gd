@@ -37,6 +37,12 @@ const ENTRIES := {
 	"nar_tower_opening_04_stair_zombies": ROOT + "nar_tower_opening_04_stair_zombies.json",
 	"nar_tower_opening_05_rooftop_crowd": ROOT + "nar_tower_opening_05_rooftop_crowd.json",
 	"nar_tower_opening_05_bridge_fat": ROOT + "nar_tower_opening_05_bridge_fat.json",
+	# 主线 3.1：99F 绿苔 briefing 与情报室指向。
+	"nar_main_031_green_briefing": ROOT + "nar_main_031_green_briefing.json",
+	# 主线 3.2：数据库显示器首领 audience / activation。
+	"nar_main_032_monitor_audience": ROOT + "nar_main_032_monitor_audience.json",
+	# 主线 3.3：稀土钥匙交接与安装。
+	"nar_main_033_key_install": ROOT + "nar_main_033_key_install.json",
 }
 
 

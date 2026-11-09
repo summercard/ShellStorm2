@@ -23,6 +23,12 @@ var _boss_chest_count := 0
 var _boss_min_quality := ""
 var _chest: Dictionary = {}
 var _fallback_pool: Array = []
+## 关卡保底段 `room_guarantees`（2026-11-09）。
+##
+## 每条的语义：在 `candidate_rooms` 里**按本局种子稳定随机挑一间**，那一间的宝箱
+## 额外必掉 `items`（可含一把从 `weapon_choices` 里随机挑的枪，品质写 `weapon_grade`）。
+## 「随机一间」用稳定哈希而不是运行时 RNG：同一局读档/流送重建后，宝箱还落在那间房。
+var _room_guarantees: Array = []
 
 
 ## 配置整段 `clear_drops`。返回 `{ok, errors}`，与其余关卡段配置同形 ——
@@ -34,6 +40,7 @@ func configure(config: Dictionary) -> Dictionary:
 	_boss_min_quality = ""
 	_chest = {}
 	_fallback_pool = []
+	_room_guarantees = []
 	if config.is_empty():
 		return {"ok": true, "errors": []}
 	var errors: Array[String] = []
@@ -50,8 +57,39 @@ func configure(config: Dictionary) -> Dictionary:
 	if not errors.is_empty():
 		return {"ok": false, "errors": errors}
 	_fallback_pool = (config.get("fallback_pool", []) as Array).duplicate(true)
+	_room_guarantees = _parse_room_guarantees(config.get("room_guarantees", []), errors)
+	if not errors.is_empty():
+		return {"ok": false, "errors": errors}
 	_configured = true
 	return {"ok": true, "errors": []}
+
+
+## 保底段校验。**只挡结构性错误**（没房号 / 没条目），不挡「条目写了不存在的房号」——
+## 那属于关卡数据与房间表的漂移，由关卡专项门禁去抓，这里静默不命中即可。
+func _parse_room_guarantees(raw: Variant, errors: Array[String]) -> Array:
+	if raw == null:
+		return []
+	if not raw is Array:
+		errors.append("clear_drops.room_guarantees 必须是数组")
+		return []
+	var out: Array = []
+	for index in range((raw as Array).size()):
+		var entry := (raw as Array)[index] as Dictionary
+		if entry.is_empty():
+			continue
+		var rooms := entry.get("candidate_rooms", []) as Array
+		if rooms.is_empty():
+			errors.append("clear_drops.room_guarantees[%d].candidate_rooms 为空" % index)
+			continue
+		var items := entry.get("items", []) as Array
+		var choices := entry.get("weapon_choices", []) as Array
+		if items.is_empty() and choices.is_empty():
+			errors.append("clear_drops.room_guarantees[%d] 既没有 items 也没有 weapon_choices" % index)
+			continue
+		var parsed := entry.duplicate(true)
+		parsed["id"] = str(entry.get("id", "guarantee_%d" % index))
+		out.append(parsed)
+	return out
 
 
 func is_configured() -> bool:
@@ -117,7 +155,7 @@ func _build_chest(room_id: String, run_seed: int, min_quality: String, tier_over
 	var mimic_cfg := _chest.get("mimic", {}) as Dictionary
 	var mimic_chance := clampf(float(mimic_cfg.get("chance", 0.0)), 0.0, 1.0)
 	var mimic_salt := "%d|%s|chest_mimic" % [run_seed, room_id]
-	return {
+	var out := {
 		"id": "drop_%s" % room_id,
 		"quality": quality,
 		"chest_tier": chest_tier,
@@ -126,6 +164,57 @@ func _build_chest(room_id: String, run_seed: int, min_quality: String, tier_over
 		"mimic": _stable_ratio(mimic_salt) < mimic_chance,
 		"mimic_monster_kind": str(mimic_cfg.get("monster_kind", "egt_mimic")),
 	}
+	# 关卡保底条目：只有「本局被抽中的那间房」才拿到，其余房间为空数组。
+	var guaranteed := guaranteed_items_for_room(room_id, run_seed)
+	if not guaranteed.is_empty():
+		out["guaranteed_items"] = guaranteed
+	return out
+
+
+## 本房在这一局应当额外必掉什么（空数组 = 没有保底）。
+##
+## 「从候选房里随机挑一间」和「从 `weapon_choices` 里随机挑一把」都用**稳定哈希**，
+## 与 `roll_room_drop` 同一套口径 ⇒ 同 seed 同房恒得同一结果，读档不换内容。
+func guaranteed_items_for_room(room_id: String, run_seed: int) -> Array:
+	if room_id.is_empty() or _room_guarantees.is_empty():
+		return []
+	var out: Array = []
+	for entry_value in _room_guarantees:
+		var entry := entry_value as Dictionary
+		var rooms := entry.get("candidate_rooms", []) as Array
+		if rooms.is_empty():
+			continue
+		var picked_room := _pick_from(rooms, "%d|%s|guarantee_room" % [run_seed, str(entry.get("id", ""))])
+		if picked_room != room_id:
+			continue
+		var choices := entry.get("weapon_choices", []) as Array
+		if not choices.is_empty():
+			var gun_id := _pick_from(choices, "%d|%s|guarantee_weapon" % [run_seed, str(entry.get("id", ""))])
+			var grade := str(entry.get("weapon_grade", ""))
+			out.append({
+				"item_id": gun_id,
+				"count": maxi(1, int(entry.get("weapon_count", 1))),
+				"grade": grade,
+				"guarantee_id": str(entry.get("id", "")),
+			})
+		for item_value in entry.get("items", []):
+			var item := item_value as Dictionary
+			var item_id := str(item.get("item_id", ""))
+			if item_id.is_empty():
+				continue
+			out.append({
+				"item_id": item_id,
+				"count": maxi(1, int(item.get("count", 1))),
+				"guarantee_id": str(entry.get("id", "")),
+			})
+	return out
+
+
+## 从数组里按稳定哈希挑一个（返回元素本身的字符串化值）。
+func _pick_from(options: Array, salt: String) -> String:
+	var index := int(_stable_ratio(salt) * float(options.size()))
+	index = clampi(index, 0, maxi(0, options.size() - 1))
+	return str(options[index])
 
 
 ## 按权重掷品质。`min_quality` 非空时先按 `QUALITY_ORDER` 把低于下限的档整段剔除，

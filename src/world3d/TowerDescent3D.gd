@@ -140,11 +140,12 @@ const NEW_GAME_OPENING_FLOOR_INDEX := 2
 const NEW_GAME_OPENING_SPAWN_OFFSET := Vector3(0.0, 0.05, 0.0)
 
 ## —— 新游戏开场的武装口径（2026-09-22 主人要求；2026-09-23 改由剧情刷枪）——
-## 玩家**开局身上没有枪**，但**保底备弹照给**（300 发由 `GUARANTEED_LOADOUT_AMMO_ROUNDS`
-## 独立发放，与「有没有枪」无关，所以收回武器碰不到它）。地上那把枪**由剧情刷出来**：
-## `nar_tower_opening_01_wake` 的 `scene.spawn_item`（`item_id` = 出厂枪），站位就是下面
-## 这个偏移 —— 起身走过去捡起来，正好是自己该有的那把。代码侧只剩「收回身上的枪」
-## （`_clear_new_game_opening_loadout()`）。
+## 玩家**开局身上没有枪**、**也没有保底备弹**（后者 2026-11-09 业主取消；原先由
+## `GUARANTEED_LOADOUT_AMMO_ROUNDS = 300` 独立发放、与「有没有枪」无关）。地上那把枪
+## **由剧情刷出来**：`nar_tower_opening_01_wake` 的 `scene.spawn_item`（`item_id` = 出厂枪），
+## 站位就是下面这个偏移 —— 起身走过去捡起来，正好是自己该有的那把。代码侧只剩
+## 「收回身上的枪」（`_clear_new_game_opening_loadout()`）。出厂枪已改为弹匣无限，
+## 所以新档没有备弹也能打。
 ##
 ## 落点是**房间局部系**偏移（房间节点原点 = 房中心，见 `DungeonRoom3D` 的 ±dimensions/2 约定）。
 ## 2026-09-22 真机实测：办公室局部尺寸 (15, 20)、东门在局部 **(7.5, 0, -2.5)**，
@@ -534,6 +535,330 @@ const BATTLE_LEVEL_ID := "battle_level01"
 ## 也就无法断言返航落点真的能把携带物装回。写盘目标由验收换成临时路径，
 ## 场景切换仍被 `test_mode` 拦住。默认 false = 既有行为逐字不变。
 @export var force_extraction_settlement_for_test: bool = false
+@export_enum("base", "database", "disabled") var main_story_profile := "base"
+@export var force_main_story_for_test := false
+
+const MAIN_STORY_SCRIPT = preload("res://src/narrative/MainStoryChapter3D.gd")
+const MAIN_STORY_EXTRACTION_KEY := "main_story_auto_extraction"
+const MAIN_STORY_EXTRACTION_SECONDS := 8.0
+var _main_story_controller: MainStoryChapter3D
+var _main_story_pedestal: Node3D
+var _main_story_host_ready := false
+var _main_story_gameplay_started := false
+var _main_story_auto_extraction: Dictionary = {}
+var _main_story_extraction_retry := 0.0
+var _main_story_extraction_committing := false
+var _main_story_return_to_base := false
+var _main_story_extraction_label: Label
+var _main_story_success_committed := false
+var _main_story_success_pity: Dictionary = {}
+
+
+## 地图差异只在装配器这一处归一；其余远征绝不装主线控制器。
+func _main_story_run_profile() -> String:
+	if main_story_profile == "disabled" or (test_mode and not force_main_story_for_test):
+		return "disabled"
+	if is_expedition():
+		return "database" if get_expedition_level_id() == "expedition_01" else "disabled"
+	return "base" if main_story_profile == "base" else "disabled"
+
+
+func _ensure_main_story_controller() -> void:
+	if _main_story_run_profile() == "disabled" or is_instance_valid(_main_story_controller):
+		return
+	_main_story_controller = MAIN_STORY_SCRIPT.new() as MainStoryChapter3D
+	_main_story_controller.name = "MainStoryChapter3D"
+	_main_story_controller.tree_exiting.connect(_on_main_story_controller_exiting)
+	_main_story_controller.set_process(false)
+	add_child(_main_story_controller)
+	_main_story_controller.set_process(false)
+
+
+func _on_main_story_controller_exiting() -> void:
+	if NarrativeDirector.is_playing() and NarrativeDirector.active_id() in [MAIN_STORY_SCRIPT.BRIEFING_ID, MAIN_STORY_SCRIPT.BOSS_ID, MAIN_STORY_SCRIPT.DEPOSIT_ID]:
+		NarrativeDirector.abort("main_story_host_unloaded")
+
+
+func _setup_main_story_host() -> void:
+	if not is_instance_valid(_main_story_controller):
+		return
+	var facility := get_main_story_facility("mission_operations")
+	var pedestal_path := "res://src/narrative/MainStoryPedestal3D.gd"
+	if facility != null and ResourceLoader.exists(pedestal_path):
+		var pedestal_script := load(pedestal_path) as Script
+		_main_story_pedestal = pedestal_script.new() as Node3D
+		if _main_story_pedestal != null:
+			facility.add_child(_main_story_pedestal)
+			_main_story_pedestal.call("setup", facility, self)
+	_main_story_controller.setup(self)
+	_main_story_controller.set_process(false)
+	_main_story_host_ready = true
+
+
+func _sync_main_story_processing() -> void:
+	if not is_instance_valid(_main_story_controller):
+		return
+	_main_story_controller.set_process(
+		_main_story_host_ready and _main_story_gameplay_started
+		and not _expedition_loading_active and not _completed and not _is_player_dead()
+		and not bool(get_meta("loading_bootstrap_pending", false))
+	)
+
+
+func get_main_story_controller() -> MainStoryChapter3D:
+	return _main_story_controller if is_instance_valid(_main_story_controller) else null
+
+
+func get_current_room_id() -> String:
+	return _current_room_id
+
+
+func get_main_story_room(id: String) -> Node3D:
+	return _room_by_id.get(id) as Node3D
+
+
+func get_main_story_facility(id: String) -> Node3D:
+	for facility in _facility_nodes:
+		if is_instance_valid(facility) and facility.facility_id == id:
+			return facility
+	return null
+
+
+func get_main_story_boss() -> Node3D:
+	if _main_story_run_profile() != "database":
+		return null
+	for value in _enemy_nodes_by_room.get("boss", []):
+		if is_instance_valid(value) and value is Enemy3D:
+			var enemy := value as Enemy3D
+			if enemy.current_hp > 0 and enemy.ai_state != "dead" and str(enemy.enemy_data.get("boss_content_id", "")) == "boss_monitor002":
+				return enemy
+	if is_instance_valid(_active_boss) and _active_boss.current_hp > 0 and _active_boss.ai_state != "dead" and _active_boss.room_id == "boss" and str(_active_boss.enemy_data.get("boss_content_id", "")) == "boss_monitor002":
+		return _active_boss
+	return null
+
+
+func resolve_main_story_anchor(id: String) -> Variant:
+	if id == "player_front":
+		var npc := find_npc(BASE_NPC_ID)
+		var room := get_main_story_room("facility") as DungeonRoom3D
+		if player == null or npc == null or room == null:
+			return null
+		var toward := npc.global_position - player.global_position
+		toward.y = 0.0
+		if toward.length_squared() < 0.001:
+			toward = room.global_position - player.global_position
+		var wanted := player.global_position + toward.normalized() * 1.25
+		var safe := room.resolve_narrative_floor_positions([wanted], [player.global_position], 3.0)
+		return safe[0] if not safe.is_empty() else null
+	var facility := get_main_story_facility("mission_operations") as BaseFacility3D
+	if facility == null:
+		return null
+	if is_instance_valid(_main_story_pedestal) and _main_story_pedestal.has_method("get_anchor"):
+		var anchor: Variant = _main_story_pedestal.call("get_anchor", id)
+		if anchor is Vector3:
+			return anchor
+	# 缺装饰资产时只使用真实设施碰撞中心与前侧，不猜模型子路径。
+	var shape := facility._find_primary_body_shape()
+	var center := shape.global_position if shape != null else facility.global_position
+	if id in ["mission_operations", "operations"]:
+		return center + Vector3.UP * 1.5
+	if id == "key_slot_rare_earth":
+		var room := get_main_story_room("facility")
+		var front := room.global_position - center if room != null else -facility.global_basis.z
+		front.y = 0.0
+		var distance := 2.0
+		if shape != null and shape.shape is BoxShape3D:
+			var size := (shape.shape as BoxShape3D).size * shape.global_basis.get_scale().abs()
+			distance += maxf(size.x, size.z) * 0.5
+		var point := center + front.normalized() * distance
+		point.y = facility.global_position.y + 0.05
+		return point
+	return null
+
+
+func _configure_story_enemy(enemy: Enemy3D) -> void:
+	if _main_story_run_profile() != "database" or get_main_story_controller() == null:
+		return
+	if str(enemy.enemy_data.get("boss_content_id", "")) != "boss_monitor002":
+		return
+	var activation := enemy.get_story_activation_snapshot()
+	if BaseManager.has_narrative_completed(MAIN_STORY_SCRIPT.BOSS_ID) or bool(activation.get("completed", false)):
+		enemy.set_story_activation_hold(false)
+		return
+	if not bool(activation.get("started", false)) or not bool(_main_story_controller.get_snapshot().get("activation_requested", false)):
+		if not bool(activation.get("held", false)):
+			_main_story_controller.configure_enemy(enemy)
+
+
+func _main_story_key_pending() -> bool:
+	return MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), MAIN_STORY_SCRIPT.KEY_RARE_EARTH) == MainStoryProgress.STATE_NOT_ACQUIRED
+
+
+func _prepare_story_boss_chest_config(room: DungeonRoom3D, config: Dictionary) -> Dictionary:
+	if _main_story_run_profile() == "database" and room.room_id == "boss" and str(config.get("id", "")) == "drop_boss" and str(config.get("chest_tier", "")) == "advanced" and _main_story_key_pending():
+		config = config.duplicate(true)
+		config["mimic"] = false
+	return config
+
+
+func _story_chest_claim(room: DungeonRoom3D, chest: TreasureChest3D) -> Dictionary:
+	if _main_story_run_profile() != "database" or room.room_id != "boss" or chest.chest_id != "drop_boss" or chest.chest_tier != "advanced":
+		return {"success": true, "applicable": false}
+	if not is_room_boss_defeated(room.room_id):
+		return {"success": false, "applicable": true, "reason": "首领尚未击败"}
+	if not _main_story_key_pending():
+		return {"success": true, "applicable": true, "duplicate": true}
+	if str(room.get_meta("boss_content_id", "")) != "boss_monitor002":
+		return {"success": false, "reason": "运行房间首领身份不匹配"}
+	# validate_key_source 认设计源 ID；legacy_room_id 与真实运行房/箱作双向对应。
+	var source_room: Dictionary = {}
+	var floor := LEVEL_PLAN_LOADER.load_floor_plan(get_expedition_level_id(), 0)
+	for value in floor.get("rooms", []):
+		var row := value as Dictionary
+		if str(row.get("legacy_room_id", row.get("room_id", ""))) == room.room_id and str(row.get("boss_content_id", "")) == "boss_monitor002":
+			source_room = row
+			break
+	if source_room.is_empty():
+		return {"success": false, "reason": "首领设计源映射缺失"}
+	var source := {
+		"level_id": get_expedition_level_id(), "boss_content_id": "boss_monitor002",
+		"room_id": str(source_room.get("room_id", "")),
+		"chest_id": "drop_%s" % str(source_room.get("room_id", "")),
+		"chest_tier": chest.chest_tier, "run_id": get_expedition_run_id(),
+		"runtime_room_id": room.room_id, "runtime_chest_id": chest.chest_id,
+		"runtime_run_id": _run_id,
+	}
+	var checkpoint := build_runtime_save_snapshot()
+	if checkpoint.is_empty():
+		return {"success": false, "reason": "行动快照不可用"}
+	var world := checkpoint.get("world_state", {}) as Dictionary
+	var rooms := world.get("segment_runtime_state", {}) as Dictionary
+	var preview := (rooms.get(room.room_id, {}) as Dictionary).duplicate(true)
+	var chests := room.get_persistent_detail_state("treasure_chests")
+	var entry := (chests.get(chest.chest_id, {}) as Dictionary).duplicate(true)
+	entry["opened"] = true
+	entry["mimic"] = false
+	chests[chest.chest_id] = entry
+	preview["treasure_chests"] = chests
+	preview["pending_chest_grants"] = room.get_pending_chest_grants()
+	preview["boss_defeated"] = true
+	rooms[room.room_id] = preview
+	world["segment_runtime_state"] = rooms
+	checkpoint["world_state"] = world
+	checkpoint[MAIN_STORY_EXTRACTION_KEY] = _new_main_story_extraction_state()
+	var result := BaseManager.claim_main_story_key(MAIN_STORY_SCRIPT.KEY_RARE_EARTH, source, checkpoint)
+	result["applicable"] = true
+	if bool(result.get("success", false)) and not bool(result.get("duplicate", false)):
+		result["after_commit"] = Callable(self, "_on_main_story_key_chest_committed").bind(chest.global_position)
+	return result
+
+
+func _on_main_story_key_chest_committed(origin: Vector3) -> void:
+	_spawn_main_story_key_projection(origin)
+	DialogueUI.show_message("已获得主线道具：稀土钥匙", DialogueUI.SPEAKER_SYSTEM, 4.0)
+	if get_main_story_controller() != null:
+		_main_story_controller.on_key_claimed()
+
+
+func _spawn_main_story_key_projection(origin: Vector3) -> void:
+	if not ResourceLoader.exists(MAIN_STORY_SCRIPT.KEY_SCENE_PATH):
+		push_warning("[TowerDescent3D] 稀土钥匙表现资源尚未就绪；永久领取已保存")
+		return
+	var scene := load(MAIN_STORY_SCRIPT.KEY_SCENE_PATH) as PackedScene
+	var projection := scene.instantiate() as Node3D
+	if projection == null:
+		return
+	add_child(projection)
+	projection.global_position = origin + Vector3.UP * 0.65
+	var tween := projection.create_tween()
+	tween.tween_property(projection, "position:y", projection.position.y + 1.25, 1.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_interval(2.0)
+	tween.tween_callback(projection.queue_free)
+
+
+func _new_main_story_extraction_state() -> Dictionary:
+	return {"active": true, "remaining": MAIN_STORY_EXTRACTION_SECONDS, "duration": MAIN_STORY_EXTRACTION_SECONDS, "key_id": MAIN_STORY_SCRIPT.KEY_RARE_EARTH}
+
+
+func start_main_story_auto_extraction(_seconds: float = MAIN_STORY_EXTRACTION_SECONDS) -> void:
+	if _main_story_run_profile() != "database" or _completed or _is_player_dead() or not _main_story_auto_extraction.is_empty() or _main_story_key_pending():
+		return
+	var checkpoint := BaseManager.get_active_run_checkpoint()
+	if str(checkpoint.get("run_id", "")) != _run_id or not bool((checkpoint.get(MAIN_STORY_EXTRACTION_KEY, {}) as Dictionary).get("active", false)):
+		return
+	_main_story_auto_extraction = _new_main_story_extraction_state()
+	_refresh_main_story_extraction_hud()
+
+
+func _restore_main_story_extraction(snapshot: Dictionary) -> void:
+	_main_story_auto_extraction = {}
+	if _main_story_run_profile() != "database" or not _snapshot_matches_runtime_map(snapshot) or str(snapshot.get("scope", "")) != "combat" or str(snapshot.get("run_id", "")) != _run_id:
+		return
+	var state := snapshot.get(MAIN_STORY_EXTRACTION_KEY, {}) as Dictionary
+	if not bool(state.get("active", false)) or str(state.get("key_id", "")) != MAIN_STORY_SCRIPT.KEY_RARE_EARTH:
+		return
+	if MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), MAIN_STORY_SCRIPT.KEY_RARE_EARTH) != MainStoryProgress.STATE_ACQUIRED:
+		return
+	_main_story_auto_extraction = state.duplicate(true)
+	_main_story_auto_extraction["duration"] = MAIN_STORY_EXTRACTION_SECONDS
+	_main_story_auto_extraction["remaining"] = clampf(float(state.get("remaining", MAIN_STORY_EXTRACTION_SECONDS)), 0.0, MAIN_STORY_EXTRACTION_SECONDS)
+	_main_story_extraction_retry = 0.0
+
+
+func _abort_extraction_on_death() -> void:
+	_cancel_main_story_extraction()
+	if get_main_story_controller() != null and NarrativeDirector.is_playing() and NarrativeDirector.active_id() in [MAIN_STORY_SCRIPT.BRIEFING_ID, MAIN_STORY_SCRIPT.BOSS_ID, MAIN_STORY_SCRIPT.DEPOSIT_ID]:
+		NarrativeDirector.abort("main_story_player_dead")
+	super()
+
+
+func _cancel_main_story_extraction() -> void:
+	if _main_story_auto_extraction.is_empty():
+		return
+	_main_story_auto_extraction["active"] = false
+	if extraction_panel != null:
+		extraction_panel.hide()
+	_queue_runtime_autosave("main_story_extraction_cancelled")
+
+
+func _tick_main_story_auto_extraction(delta: float) -> void:
+	if not bool(_main_story_auto_extraction.get("active", false)):
+		return
+	if _completed or _is_player_dead():
+		_cancel_main_story_extraction()
+		return
+	if not _main_story_host_ready or not _main_story_gameplay_started or _expedition_loading_active or get_tree().paused:
+		return
+	_main_story_auto_extraction["remaining"] = maxf(0.0, float(_main_story_auto_extraction["remaining"]) - delta)
+	_refresh_main_story_extraction_hud()
+	_main_story_extraction_retry = maxf(0.0, _main_story_extraction_retry - delta)
+	if float(_main_story_auto_extraction["remaining"]) > 0.0 or _main_story_extraction_retry > 0.0 or _main_story_extraction_committing:
+		return
+	_main_story_extraction_committing = true
+	# 仅钥匙自动撤离强制回基地；普通信标、阵亡和弃局保留原塔3来源。
+	var previous_source := _expedition_entry_source
+	_main_story_return_to_base = true
+	_expedition_entry_source = ExpeditionEntryContext.BASE
+	_finish_run(true)
+	_main_story_extraction_committing = false
+	if not _completed:
+		_main_story_return_to_base = false
+		_expedition_entry_source = previous_source
+		_main_story_extraction_retry = 2.0
+	else:
+		_main_story_auto_extraction["active"] = false
+
+
+func _refresh_main_story_extraction_hud() -> void:
+	if extraction_panel == null or extraction_bar == null:
+		return
+	if _main_story_extraction_label == null:
+		_main_story_extraction_label = Label.new()
+		_main_story_extraction_label.name = "MainStoryExtractionCountdown"
+		extraction_bar.get_parent().add_child(_main_story_extraction_label)
+	extraction_panel.show()
+	extraction_bar.value = (1.0 - float(_main_story_auto_extraction.get("remaining", 0.0)) / MAIN_STORY_EXTRACTION_SECONDS) * 100.0
+	_main_story_extraction_label.text = "稀土钥匙已保存 · 自动返航99F基地 %d秒 · 可自由行动" % ceili(float(_main_story_auto_extraction.get("remaining", 0.0)))
 
 func is_expedition() -> bool:
 	return expedition_mode
@@ -650,6 +975,8 @@ var _returning_to_tower03 := false
 
 
 func _ready() -> void:
+	# super 与楼层预热均可能生成 Boss；先提供控制器，但装配结束前不轮询剧情。
+	_ensure_main_story_controller()
 	process_physics_priority = 100
 	_begin_expedition_loading_if_active()
 	if is_expedition():
@@ -737,6 +1064,7 @@ func _ready() -> void:
 	_install_player_occlusion_silhouette()
 	_install_facilities()
 	_install_base_npc()
+	_setup_main_story_host()
 	_install_simple_transit_door_components()
 	_install_elevator_facility()
 	_install_tower_hud()
@@ -1324,6 +1652,8 @@ func _process(delta: float) -> void:
 	if _expedition_bootstrap_failed:
 		return
 	super(delta)
+	_sync_main_story_processing()
+	_tick_main_story_auto_extraction(delta)
 	# flow 门感应器的兜底绑定：装配收尾 / 续局回灌分别走不同路径，
 	# 任何一条没跑到都表现为「门怎么走都不开」。这里只做一次，代价是一个 bool。
 	if _flow_rules_active and not _flow_door_proximity_bound:
@@ -1337,6 +1667,8 @@ func _process(delta: float) -> void:
 
 
 func _finish_run(success: bool) -> void:
+	if not success:
+		_cancel_main_story_extraction()
 	# 独立图的死亡与「退出战局」走 Dungeon3D 的标准失败结算；但撤离信号塔的
 	# 成功返航必须带物，不能交给父类的成功路径 —— 父类会把携带物复制进
 	# extraction_loot 并重载场景，而那张待领取栏在 99F 没有任何入口，
@@ -1428,30 +1760,42 @@ func _finish_expedition_successful_extraction() -> void:
 	)
 	# 保底：判定随存档事务落盘，交付在事务提交成功之后、交接快照之前 ——
 	# 顺序错了会出现「快照里没有那件保底物，但它又已经被算作发过了」。
-	var pity_result: Dictionary = {}
+	var pity_result: Dictionary = _main_story_success_pity.duplicate(true)
 	if not test_mode or force_extraction_settlement_for_test:
-		pity_result = _plan_synthesis_pity_carry()
-		var commit := BaseManager.commit_run_settlement({
-			"transaction_id": _get_run_settlement_transaction_id(true),
-			"expedition_level_id": get_expedition_level_id(),
-			"success": true,
-			"kills": _kills,
-			"extraction_points": _run_value,
-			# 成功返航保留同一运行时物品实例，不复制到待领取栏。
-			"extraction_loot": [],
-		}) as Dictionary
+		# 主线返航重试时若统计已提交，只补写携带物交接，不再走第二次结算。
+		if not _main_story_success_committed:
+			pity_result = _plan_synthesis_pity_carry()
+		var commit := {"success": true}
+		if not _main_story_success_committed:
+			commit = BaseManager.commit_run_settlement({
+				"transaction_id": _get_run_settlement_transaction_id(true),
+				"expedition_level_id": get_expedition_level_id(),
+				"success": true,
+				"kills": _kills,
+				"extraction_points": _run_value,
+				# 主线返航把携带物与成功统计同批落盘，消除两次保存之间的丢物窗口。
+				"return_checkpoint": _build_successful_extraction_carry_snapshot() if _main_story_return_to_base else {},
+				"extraction_loot": [],
+			}) as Dictionary
 		if _absorb_duplicate_settlement(commit):
 			return
 		if not bool(commit.get("success", false)):
 			_completed = false
 			status_label.text = "撤离结算保存失败 · 请重试撤离"
+			if _main_story_return_to_base:
+				_sync_player_input_lock()
 			push_error("[TowerDescent3D] Expedition extraction settlement failed: %s" % commit)
 			return
 		# 顺序是契约：先摘掉运行时提供者，防止场景卸载把关卡内的旧状态刷回
 		# 检查点；再写交接快照，保证它就是存档里最后一份所有权。
 		BaseManager.unregister_runtime_checkpoint_provider(self, false)
 		_runtime_persistence_active = false
-		_deliver_synthesis_pity_carry(pity_result)
+		if not _main_story_success_committed:
+			_deliver_synthesis_pity_carry(pity_result)
+			if _main_story_return_to_base:
+				_main_story_success_committed = true
+				_main_story_success_pity = pity_result.duplicate(true)
+				_hold_player_after_settlement()
 		if not _write_successful_extraction_carry_checkpoint():
 			_completed = false
 			status_label.text = "撤离交接保存失败 · 请重试撤离"
@@ -1513,9 +1857,14 @@ func _return_to_scene_after_settlement(entry_request_id: int) -> void:
 func _write_successful_extraction_carry_checkpoint() -> bool:
 	if BaseManager == null:
 		return false
+	var snapshot := _build_successful_extraction_carry_snapshot()
+	return not snapshot.is_empty() and BaseManager.set_active_run_checkpoint(snapshot, "expedition_success_return")
+
+
+func _build_successful_extraction_carry_snapshot() -> Dictionary:
 	var snapshot := build_runtime_save_snapshot()
 	if snapshot.is_empty():
-		return false
+		return {}
 	snapshot["scope"] = "base"
 	snapshot["current_room_id"] = "start" if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else "facility"
 	snapshot["current_floor_index"] = 0 if _expedition_entry_source == ExpeditionEntryContext.TOWER03 else 1
@@ -1526,8 +1875,9 @@ func _write_successful_extraction_carry_checkpoint() -> bool:
 	snapshot["edge_states"] = {}
 	# 返航只带永久装备；已结算局的角色/世界/枪树临时命运不进入下一局。
 	snapshot.erase("fate_run_state")
+	snapshot.erase(MAIN_STORY_EXTRACTION_KEY)
 	snapshot[SUCCESSFUL_EXTRACTION_CARRY_KEY] = true
-	return BaseManager.set_active_run_checkpoint(snapshot, "expedition_success_return")
+	return snapshot
 
 
 func _return_successful_extraction_to_facility() -> void:
@@ -5248,6 +5598,7 @@ func _cancel_expedition_exit() -> void:
 func _confirm_expedition_exit() -> void:
 	if _completed:
 		return
+	_cancel_main_story_extraction()
 	var carry_before := build_runtime_save_snapshot()
 	_completed = true
 	_close_inventory_for_modal()
@@ -8042,6 +8393,8 @@ func _on_entry_transition_finished() -> void:
 
 
 func _emit_gameplay_started() -> void:
+	_main_story_gameplay_started = true
+	_sync_main_story_processing()
 	gameplay_started.emit(str(_current_room_id))
 
 
@@ -8624,6 +8977,7 @@ func _base_runtime_restore_position(_room: DungeonRoom3D) -> Vector3:
 
 func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 	super(snapshot)
+	_restore_main_story_extraction(snapshot)
 	# 兼容旧档中尚未开启的start|facility edge。西侧楼梯现为永久建筑，
 	# 旧路线状态不得继续隐藏楼梯或让东侧普通门承担“授权”副作用。
 	var permanent_edge := _edge_key("start", "facility")
@@ -9128,6 +9482,8 @@ func build_runtime_save_snapshot() -> Dictionary:
 		snapshot["scope"] = "base"
 		snapshot["current_room_id"] = "start"
 		snapshot["current_floor_index"] = 0
+	if not _main_story_auto_extraction.is_empty():
+		snapshot[MAIN_STORY_EXTRACTION_KEY] = _main_story_auto_extraction.duplicate(true)
 	return snapshot
 
 
