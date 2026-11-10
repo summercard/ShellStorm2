@@ -157,8 +157,14 @@ func _make_host(scene_path: String) -> TowerDescent3D:
 	host.test_mode = true
 	host.force_main_story_for_test = true
 	host.run_seed_override = 77001199
+	var mounted := {"generated": false, "started": false}
+	host.generation_completed.connect(func(_snapshot: Dictionary) -> void: mounted.generated = true, CONNECT_ONE_SHOT)
+	host.gameplay_started.connect(func(_room_id: String) -> void: mounted.started = true, CONNECT_ONE_SHOT)
 	add_child(host)
-	await get_tree().process_frame
+	if not mounted.generated:
+		await host.generation_completed
+	if not mounted.started:
+		await host.gameplay_started
 	await get_tree().physics_frame
 	host.set_process(false)
 	host.player.set_physics_process(false)
@@ -187,8 +193,16 @@ func _check_base_runtime() -> void:
 	NarrativeDirector.skip()
 	_assert(not BaseManager.has_narrative_completed(MainStoryChapter3D.BRIEFING_ID), "accept前skip不写3.1历史")
 	_assert(NarrativeDirector.play(MainStoryChapter3D.BRIEFING_ID), "3.1同会话可重试")
+	host.player.set_physics_process(true)
 	NarrativeDirector.call("_process", 100.0)
+	var briefing_deadline := Time.get_ticks_msec() + 30000
+	while NarrativeDirector.is_playing() and Time.get_ticks_msec() < briefing_deadline:
+		await get_tree().physics_frame
+		NarrativeDirector.call("_process", 0.5 if controller.should_advance_narrative() else get_physics_process_delta_time())
+	host.player.set_physics_process(false)
 	_assert(not NarrativeDirector.is_playing() and BaseManager.has_narrative_completed(MainStoryChapter3D.BRIEFING_ID), "3.1完整JSON收口并写真实历史")
+	var briefing_finish: Vector3 = controller.resolve_anchor("briefing_finish")
+	_assert(Vector2(host.player.global_position.x - briefing_finish.x, host.player.global_position.z - briefing_finish.z).length() < 0.25, "3.1真实步行到中央安全通道后收口")
 	_assert(not npc.call("is_scripted_appearance"), "3.1收口释放NPC")
 	BaseManager.data.main_story = {"schema_version": 1, "accepted": true, "keys": {MainStoryChapter3D.KEY_RARE_EARTH: {"state": "acquired"}}}
 	_assert(NarrativeDirector.play(MainStoryChapter3D.DEPOSIT_ID), "3.3可启动")
@@ -319,10 +333,26 @@ func _check_boss_runtime() -> void:
 	NarrativeDirector.skip()
 	_assert(not BaseManager.has_narrative_completed(MainStoryChapter3D.BOSS_ID), "激活前skip不写3.2假历史")
 	_assert(NarrativeDirector.play(MainStoryChapter3D.BOSS_ID), "3.2被中断后同会话可重试")
-	NarrativeDirector.call("_process", 42.0)
-	_assert(not bool(boss.get_story_activation_snapshot()["started"]) and NarrativeDirector.is_player_input_locked(), "静态42秒仍处于对白hold而非提前激活")
+	var boss_script: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(NARRATIVE_FILES[MainStoryChapter3D.BOSS_ID]))
+	var activate_at := -1.0
+	var last_walk_end := 0.0
+	for cue: Dictionary in boss_script.get("cues", []):
+		if cue.get("do", "") == "story.boss.activate":
+			activate_at = float(cue.at)
+		if cue.get("do", "") == "player.walk_to":
+			last_walk_end = maxf(last_walk_end, float(cue.at) + float(cue.get("duration", 0.0)))
+	_assert(activate_at > last_walk_end, "正式JSON激活cue晚于沿坡道步行")
+	host.player.set_physics_process(true)
+	var walk_deadline := Time.get_ticks_msec() + 45000
+	while NarrativeDirector.is_playing() and NarrativeDirector.active_time() < last_walk_end + 0.1 and Time.get_ticks_msec() < walk_deadline:
+		await get_tree().physics_frame
+		NarrativeDirector.call("_process", get_physics_process_delta_time())
+	host.player.set_physics_process(false)
+	_assert(NarrativeDirector.active_time() >= last_walk_end, "完整执行正式JSON前置步行而非跳过")
+	NarrativeDirector.call("_process", maxf(0.0, activate_at - 0.253 - NarrativeDirector.active_time()))
+	_assert(not bool(boss.get_story_activation_snapshot()["started"]) and NarrativeDirector.is_player_input_locked(), "真实activate前仍处于对白hold而非提前激活")
 	NarrativeDirector.call("_process", 1.0)
-	_assert(NarrativeDirector.is_playing() and is_equal_approx(NarrativeDirector.active_time(), 42.253), "43秒低帧停在真实activate cue，不伪造flow.end")
+	_assert(NarrativeDirector.is_playing() and is_equal_approx(NarrativeDirector.active_time(), activate_at), "低帧停在正式JSON实际activate cue，不伪造flow.end")
 	_assert(not BaseManager.has_narrative_completed(MainStoryChapter3D.BOSS_ID), "activation未完成不写3.2历史")
 	var adapter: NarrativeAdapter3D = NarrativeDirector.get("_adapter")
 	adapter.call_instruction("actor.face", {"who": "player", "yaw_deg": 35.0})

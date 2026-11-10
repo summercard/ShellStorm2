@@ -574,5 +574,7 @@ func get_presentation_snapshot() -> Dictionary:
 		"icon_camera_alignment": (
 			_icon.get_snapshot()["icon_camera_alignment"] if _icon != null else -1.0
 		),
+		# 图标核心相对判定球的倍率（2026-11-10 起 0.70）。
+		"icon_size_scale": _icon.get_snapshot()["icon_size_scale"] if _icon != null else -1.0,
 		"node_count": get_child_count(),
 	}

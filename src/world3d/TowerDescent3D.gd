@@ -242,6 +242,9 @@ const CAMERA_LOWER_WALL_MIN_TRAILING_M := 0.15
 # 而相机在玩家后方 trailing 处，于是 distance − trailing = 相机到墙的距离。令阈值 =
 # trailing，触发点恰好落在「相机一碰到墙」上；若冻结旧值，相机得先穿墙 1.21m 才收镜。
 const CAMERA_LOWER_WALL_RETRACT_TRIGGER_M := CAMERA_DEFAULT_TRAILING_M
+const CAMERA_LOWER_WALL_RETRACT_EXIT_MARGIN_M := 0.20
+const CAMERA_WALL_LOOK_RELEASE_TRAILING_EPSILON_M := 0.05
+const CAMERA_WALL_LOOK_RELEASE_LIFT_EPSILON_M := 0.01
 const CAMERA_LOWER_WALL_RETRACT_RATE := 10.0
 const CAMERA_LOWER_WALL_EXTEND_RATE := 4.5
 const CAMERA_LOWER_WALL_MAX_RAY_HITS := 8
@@ -451,6 +454,8 @@ var _camera_probe_accumulator := CAMERA_PROBE_IDLE_INTERVAL
 var _camera_probe_refresh_count := 0
 var _camera_probe_interval_s := CAMERA_PROBE_IDLE_INTERVAL
 var _camera_lower_wall_detected := false
+var _camera_lower_wall_retract_active := false
+var _camera_wall_look_direction := Vector3.ZERO
 var _camera_lower_wall_distance_m := -1.0
 var _camera_lift_target_m := 0.0
 var _camera_lift_current_m := 0.0
@@ -2198,6 +2203,8 @@ func _physics_process(delta: float) -> void:
 	player.camera_feedback.suspended = _has_camera_presentation_override()
 	if _has_camera_presentation_override():
 		player.camera_feedback.reset()
+		_camera_lower_wall_retract_active = false
+		_camera_wall_look_direction = Vector3.ZERO
 		return
 	var planar_velocity := Vector2(player.velocity.x, player.velocity.z)
 	var player_is_moving := planar_velocity.length_squared() > 0.01
@@ -2619,6 +2626,8 @@ func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) ->
 	if _flow_rules_active:
 		_camera_lower_wall_detected = false
 		_camera_lower_wall_distance_m = -1.0
+		_camera_lower_wall_retract_active = false
+		_camera_wall_look_direction = Vector3.ZERO
 		player.camera_feedback.set_look_blocked_direction(Vector3.ZERO)
 		_camera_lift_target_m = 0.0
 		_camera_trailing_target_m = _camera_profile_trailing_current_m
@@ -2653,17 +2662,19 @@ func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) ->
 		)
 		lift_ratio = smoothstep(0.0, 1.0, lift_ratio)
 		_camera_lift_target_m = CAMERA_LOWER_WALL_LIFT_MAX_M * lift_ratio
-		# 只退到墙内侧仍会让窄楼梯间的墙占满视锥。墙进入默认镜头通道后，
-		# 直接沿固定后方轴收至角色正上方附近，保证整个视锥也回到墙内侧。
-		if _camera_lower_wall_distance_m < CAMERA_LOWER_WALL_RETRACT_TRIGGER_M:
-			_camera_trailing_target_m = CAMERA_LOWER_WALL_MIN_TRAILING_M
-	# Wall retraction wins over looking toward that wall. Detection is anchored to
-	# the player, so the mouse cannot move its own constraint across the wall.
-	player.camera_feedback.set_look_blocked_direction(
-		_camera_profile_trailing_direction()
-		if _camera_trailing_target_m < _camera_profile_trailing_current_m
-		else Vector3.ZERO
+	# 只退到墙内侧仍会让窄楼梯间的墙占满视锥。墙进入默认镜头通道后，
+	# 沿固定后方轴收至角色正上方附近，保证整个视锥也回到墙内侧。
+	# Enter at the original distance; exit farther away so tiny position/probe
+	# fluctuations cannot alternate retract/extend and unlock south look each tick.
+	var retract_threshold := CAMERA_LOWER_WALL_RETRACT_TRIGGER_M
+	if _camera_lower_wall_retract_active:
+		retract_threshold += CAMERA_LOWER_WALL_RETRACT_EXIT_MARGIN_M
+	_camera_lower_wall_retract_active = (
+		_camera_lower_wall_detected and _camera_lower_wall_distance_m < retract_threshold
 	)
+	if _camera_lower_wall_retract_active:
+		_camera_trailing_target_m = CAMERA_LOWER_WALL_MIN_TRAILING_M
+		_camera_wall_look_direction = _camera_profile_trailing_direction()
 	var response_rate := (
 		CAMERA_LOWER_WALL_LIFT_RISE_RATE
 		if _camera_lift_target_m > _camera_lift_current_m
@@ -2693,6 +2704,17 @@ func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) ->
 		<= 0.001
 	):
 		_camera_trailing_current_m = _camera_trailing_target_m
+	# Recovery is part of the wall-camera mode. Do not let the mouse immediately
+	# run toward the wall while the base camera is still extending from overhead.
+	if (
+		not _camera_lower_wall_retract_active
+		and absf(_camera_trailing_current_m - _camera_profile_trailing_current_m)
+			<= CAMERA_WALL_LOOK_RELEASE_TRAILING_EPSILON_M
+		and absf(_camera_lift_current_m - _camera_lift_target_m)
+			<= CAMERA_WALL_LOOK_RELEASE_LIFT_EPSILON_M
+	):
+		_camera_wall_look_direction = Vector3.ZERO
+	player.camera_feedback.set_look_blocked_direction(_camera_wall_look_direction)
 
 
 func _find_lower_camera_wall_distance() -> float:
@@ -9375,6 +9397,9 @@ func get_tower_snapshot() -> Dictionary:
 		"camera_lower_wall_probe_start_m": CAMERA_LOWER_WALL_PROBE_START_M,
 		"camera_lower_wall_probe_length_m": CAMERA_LOWER_WALL_PROBE_LENGTH_M,
 		"camera_lower_wall_retract_trigger_m": CAMERA_LOWER_WALL_RETRACT_TRIGGER_M,
+		"camera_lower_wall_retract_active": _camera_lower_wall_retract_active,
+		"camera_lower_wall_retract_exit_m": CAMERA_LOWER_WALL_RETRACT_TRIGGER_M + CAMERA_LOWER_WALL_RETRACT_EXIT_MARGIN_M,
+		"camera_wall_look_blocked_direction": _camera_wall_look_direction,
 		"camera_collision_mode": "lower_wall_lift_and_retract_arc",
 		"camera_stair_slab_mode": "tagged_upper_lower_flight_vertical_clamp",
 		"camera_stair_slab_detected": _camera_stair_slab_detected,

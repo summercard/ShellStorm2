@@ -25,7 +25,7 @@
    "asset_id": "PRP-BASE99-MAIN-STORY-KEY-PEDESTAL",
    "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
    "prefab": "assets/art/props/main_story/runtime/main_story_pedestal.tscn",
-   "sha256": "99107c0a14fd449225d9c7c0d693d224cf4cad99686cb4af8e00b64dd2d41367",
+   "sha256": "3ff25b99ee90cd04ab58bffceb0803f914c99e9939300dd57eecebcb475ac4e0",
    "source_kind": "procedural_gdscript",
    "program_source": "src/narrative/MainStoryPedestal3D.gd",
    "blender_source": null,
@@ -33,31 +33,45 @@
    "collision": "无新增碰撞"
   }
  ],
- "metadata_discrepancy": {
-  "prefab": "assets/art/props/main_story/runtime/main_story_pedestal.tscn",
-  "runtime_metadata_asset_id": "ENV-MAIN-STORY-KEY-PEDESTAL",
-  "ledger_asset_id": "PRP-BASE99-MAIN-STORY-KEY-PEDESTAL",
-  "reason": "权威场景道具/facility使用PRP；ENV-BASE99建议不满足前缀×大类契约；不改游戏资产元数据，不重复登记"
- },
  "reused_assets": [
   "CHR-PLY-BUNNY01-NPC-GREEN",
   "ENM-BOSS-MONITOR002-3D",
-  "UI-SCREEN-LEVEL-SELECT"
+  "UI-SCREEN-LEVEL-SELECT",
+  "PRP-3D-REWARD-CHEST-ADVANCED"
  ],
+ "embedded_visual_coverage": {
+  "UI-SCREEN-LEVEL-SELECT": [
+   "居中1.30倍红色电子锁",
+   "锁内扫描线与呼吸发光",
+   "后排02/04基础图标倍率0.95，前排1.00"
+  ],
+  "PRP-BASE99-MAIN-STORY-KEY-PEDESTAL": [
+   "四槽及槽灯",
+   "安装线路上扫",
+   "N/4常亮环",
+   "扩散脉冲"
+  ]
+ },
+ "reused_chest_policy": "主线3.2复用既有高级箱，首次指定箱禁拟态、额外领取稀土钥匙并保留普通奖励；不新造箱体。既有箱体SHA及未入基线欠项保持，不冒称已验收补齐。",
  "reuse_asset_primary_sha_policy": "保留原账本T列；脚本证据不冒充scene/model哈希",
  "evidence_files": {
   "assets/art/props/main_story/runtime/rare_earth_key.tscn": "1928673f816240e6d0775744a26d9f124100c398a74c8732e29f94635877590c",
-  "assets/art/props/main_story/runtime/main_story_pedestal.tscn": "99107c0a14fd449225d9c7c0d693d224cf4cad99686cb4af8e00b64dd2d41367",
+  "assets/art/props/main_story/runtime/main_story_pedestal.tscn": "3ff25b99ee90cd04ab58bffceb0803f914c99e9939300dd57eecebcb475ac4e0",
   "src/narrative/MainStoryKeyVisual3D.gd": "0382cac94ca511811790f45b514ece5d93d87fce007716703e6e86866700ffee",
-  "src/narrative/MainStoryPedestal3D.gd": "54a2b5539495115f3357f99f66020badf6a6f6f539b7a58f90963b98832b2319",
-  "src/narrative/MainStoryChapter3D.gd": "706ede4fd9adfa25356a2c91de907bc757b7aec0bc98202c383164ae8753c075",
+  "src/narrative/MainStoryPedestal3D.gd": "aab3bc56c16765857f2bb5487a17ad1eec058b4bda2dc596db13172a973de280",
+  "src/narrative/MainStoryChapter3D.gd": "7dec1d4c7c3beb50cbeb4c0e0196592648c05265a5debfb47195892dfbdd4f9d",
   "src/base/BaseManager.gd": "eb84af17f7f9c9d8f2a3d394db81f0e3f7442a9f96669fe40b65e196369d933f",
   "src/npc/NpcCharacter3D.gd": "85bc10d23c720b1978cfb886f8fbb7b0ea49e8cd425f9054d07705bf5e1df32a",
-  "src/ui/HologramCity3D.gd": "71725dac71e5b74084e86b4d94dfd8312cffb9039bb74187e5147d6d6c9ef9db",
+  "src/ui/HologramCity3D.gd": "20bfaa7ebd0a5c011970d3fa86cc85af563d81b392a838e035ded03e2616f224",
   "scenes/RogueMapSelectMenu.gd": "60f4b063bbcda918947c825b495d94f145296e00e554a21661387b6128308ee7",
   "src/enemy3d/Enemy3D.gd": "d27c6a3edf44afcbdc4543022da31e410953ced5572f1468e5f9abd64568eb91",
   "src/enemy3d/MonitorBossCombat.gd": "dbdc58784916444cb4b55d0127c2de524346124da308ad18648bb5e8918138f9",
-  "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md": "f9a7d25fb2620574beba22ed6474d83fae8dd848bd8261ec5b19bf5a1f584f36"
+  "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md": "90ece1d50ec6478451b7019b8f7a9672aeda54a82e962eb28dd4700920d80be5",
+  "data/narrative/nar_main_031_green_briefing.json": "e02527d6a5598894b3b408f04e0f6c9a3ec2e973cb67b506427ea55181d3a7b4",
+  "data/narrative/nar_main_032_monitor_audience.json": "828968a2145dcb079f56ec302127329b151caebc4e7d30db09f9590e9dbba5ed",
+  "data/narrative/nar_main_033_key_install.json": "e9ebfe7068d7b4c2b378e2c2cb9bb59adb1f76b12286700f5ddafbed1b0c8a6a",
+  "src/narrative/NarrativeAdapter3D.gd": "59ff242763145723be588615aac9313596193e09a20278dcea6b768db58c4307",
+  "docs/v0.1/design/远征全息城市交互设计.md": "1702dc2ef1f60e9d7517fb6e725b93f9534ba37e9de20ec9b502fc5c2029e00f"
  },
  "validation": "本事务仅登记已有实现；不冒充新增Godot运行或真实渲染验收通过；门禁与差异见工程外session报告"
 }

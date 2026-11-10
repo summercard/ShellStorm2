@@ -146,9 +146,10 @@ func _process(delta: float) -> void:
 func _snapshot() -> Dictionary:
 	if not is_inside_tree():
 		return {}
-	var base := get_tree().root.get_node_or_null(NodePath("BaseManager"))
-	if base != null and base.has_method("get_main_story_snapshot"):
-		return base.call("get_main_story_snapshot") as Dictionary
+	# 服务按唯一公开查询能力发现，不把叙事表现绑定到节点路径。
+	for service in get_tree().root.get_children():
+		if service.has_method("get_main_story_snapshot"):
+			return service.call("get_main_story_snapshot") as Dictionary
 	return {}
 
 func refresh_main_story_key_visuals() -> void:

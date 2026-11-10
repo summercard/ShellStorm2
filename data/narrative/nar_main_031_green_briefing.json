@@ -11,7 +11,7 @@
     { "at": 0.9, "do": "actor.say", "who": "npc_base99_green", "text": "好久没人来了呢，啧啧。", "hold": 2.634 },
     { "at": 4.301, "do": "actor.say", "who": "player", "text": "你见过我的主人吗？我在找他。", "hold": 2.534 },
     { "at": 7.552, "do": "actor.say", "who": "npc_base99_green", "text": "见过。我认识你的主人。", "hold": 2.634 },
-    { "at": 10.803, "do": "camera.focus", "pivot_anchor": "npc_front", "distance": 6.0, "duration": 0.7 },
+    { "at": 10.803, "do": "camera.focus", "pivot_anchor": "npc_tracking", "distance": 6.8, "duration": 0.7 },
     { "at": 10.803, "do": "actor.say", "who": "npc_base99_green", "text": "他被困在中心大楼里了。", "hold": 2.634 },
     { "at": 14.204, "do": "camera.focus", "pivot_anchor": "duo", "distance": 6.8, "duration": 0.7 },
     { "at": 14.204, "do": "actor.say", "who": "player", "text": "那我现在就去找他。", "hold": 2.7 },
@@ -28,9 +28,10 @@
     { "at": 47.325, "do": "actor.say", "who": "npc_base99_green", "text": "先拿回来。四把都齐了才行。", "hold": 2.567 },
     { "at": 50.576, "do": "camera.focus", "pivot_anchor": "mission_operations", "distance": 8.0, "duration": 1.2 },
     { "at": 51.8, "do": "ui.subtitle", "speaker": "系统", "text": "远征情报室：选择数据中心", "auto": 2.6 },
-    { "at": 55.05, "do": "camera.restore", "duration": 1.0 },
-    { "at": 56.2, "do": "story.briefing.complete" },
-    { "at": 56.3, "do": "player.lock_input", "locked": false },
+    { "at": 55.05, "do": "player.walk_to", "to_anchor": "briefing_finish", "duration": 4.0, "speed": 3.2 },
+    { "at": 55.15, "do": "camera.restore", "duration": 1.0 },
+    { "at": 56.25, "do": "story.briefing.complete" },
+    { "at": 56.35, "do": "player.lock_input", "locked": false },
     { "at": 56.5, "do": "flow.end" }
   ]
 }

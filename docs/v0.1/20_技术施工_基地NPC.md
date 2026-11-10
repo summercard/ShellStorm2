@@ -1,6 +1,6 @@
 # 技术施工｜基地 NPC v0.1
 
-系统编号：横向（基地域）；功能ID：`BASE-NPC`；工程版本：`0.1.0`；设计修订：r5（2026-11-04）；
+系统编号：横向（基地域）；功能ID：`BASE-NPC`；工程版本：`0.1.0`；设计修订：r7（2026-11-10，主线真实交接）；
 来源：<span style="color:#1565C0">**[用户设计]**</span> 2026-11-02 主人要求「在 99F 基地增加一个 NPC，先用主角的模型换上全绿色的皮肤，放在场景中，会自己移动，可以对话，按照 NPC 的系统制作」；同轮追加「绿色直接从可以更换的衣柜里去找，可以直接用的」⇒ 绿皮必须是衣柜里的一个可选项，不许另存一份色值；并指出第一版拍的是「基地与荒野」兼容场景，不是 99F 室内基地 ⇒ 装配点从 `BaseWorld3D` 移到 `TowerDescent3D.facility`。
 
 r2 同日晚些时候的观感返工（同一批口径，逐条落到本文与验收里）：
@@ -19,6 +19,19 @@ r5（2026-11-04，本轮）<span style="color:#1565C0">**[用户设计]**</span>
 状态：<span style="color:#EF6C00">**[部分完成]**</span> 逻辑链、专项验收与真实渲染对照均已通过；未做的部分是导航避障、对话分支、表情系统接入等扩展能力，见 §12。
 
 上级设计：[游戏设计文档](README.md)；相关系统：[基地设施](07_技术施工_基地设施.md)（同在 99F，但两者所有权互不覆盖）、[UI 与对话系统](18_技术施工_UI与对话系统.md)（气泡载体）、[玩家与操作](03_技术施工_玩家与操作.md)（统一交互仲裁）、[资产与内容规范](10_资产与内容规范.md)（台账）。
+
+## 主线3.1与3.3实体接管（r7）
+
+规则主源：[3.1—3.3与四钥匙设计](design/主线剧情3.1至3.3与四钥匙设计.md)；台词与镜头见[剧本](design/主线剧情剧本.md)，触发/60秒屏障见[08](08_技术施工_剧情触发.md)，永久事务见[09](09_技术施工_存档结算与复活.md)。主线实体表演与章节真渲染fixture已有最终证据，本文旧NPC/节拍证据不替代本轮结果；见[最终开发记录](development/2026-11-10_main_story_031_033.md)。未做纯新档人工全关贯通，旧Boss综合测试三红与全局门禁未闭环，不署整体全通过。
+
+- 仍使用真实 `npc_base99_green`、玩家同源模型与衣柜 `suit_green`，不用复制NPC替身或另一套对白播放器；台词在 `data/narrative/nar_main_*.json`，由Director逐句调 `say_scripted_line()`走头顶气泡，系统底栏独立。
+- `MainStoryChapter3D`判条件与领域结果；`NpcCharacter3D`只负责实体动作。`begin_scripted_appearance()`停巡接管，`scripted_move_to(target, speed)`跑到真实位置、`set_scripted_facing/clear_scripted_facing`管朝向、`scripted_gesture()`执行手势，`end_scripted_appearance()`复位归还。NPC不写main_story，不授权地图。
+- 3.1在03后实际开灯、空闲并接近绿苔时停巡转头，说明四key、传送不了生物而机器人可用，指向真实 `mission_operations`；正式JSON duration56.5，55.05玩家真实走到 `briefing_finish`（duration4、speed3.2），实体屏障等99F中央安全通道到位后55.15还镜1秒，56.25 complete、56.35归还、56.5 end，实际另含等待；完整结束才记 `nar_main_031_green_briefing` history，开灯瞬间错过后须复核。
+- 3.3在持有acquired未deposited的稀土key归来，且读取/出生/携带交接与救援演出结束后，绿苔**从原位真实跑来，不瞬移**。主角保持原站位；“啧啧，真被你拿到了，给我吧”后拿出钥匙，同一临时投影在双方真实手部接触点换父级；绿苔再到 `pedestal_stand`，钥匙轨迹到独立 `key_slot_rare_earth`接触点才提交deposit。
+- `MainStoryKeyVisual3D`负责拿出/交接/插入，`MainStoryPedestal3D`只投影永久key与N/4，不能通过隐藏临时模型冒充业务提交。`deposit_main_story_key()`成功后才亮第一槽、线路与1/4环、发一次扩散脉冲并开放公馆；写盘失败保留待交付、不开锁。
+- Director实体屏障等NPC到位、手部接触与插入完成，连续阻塞60秒abort。玩家死亡、演员/挂点/设施缺失或卸载时释放NPC、临时key、镜头/朝向/操作锁，中断不记history；已领取/安装事实不因演出清理撤销。ESC可暂停。成功或失败归来都能交付永久key，不被救援节拍卡住。
+
+`verify_main_story_performance`验证实体表演而非FPS性能，`verify_main_story_narrative`验证真实导演/激活/屏障；二者及 `capture_main_story_chapter`唯一登记manual_scenes，要求Autoload前专用隔离外部runner（user://含main_story_performance）。当前capture源码支持031/032/033逐帧、必须真渲染与工程外输出；031/032保留真实Player物理步行，3.2已有正式远征坡道/静止/冷场/激活/还镜的Forward+章节fixture证据，033沿用最新polished结果而非本次重跑。章节fixture不等于人工纯新档全关贯通，不以headless或旧NPC截图代验。
 
 ## 1. 目标与范围
 

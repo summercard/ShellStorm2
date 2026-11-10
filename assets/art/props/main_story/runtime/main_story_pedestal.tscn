@@ -4,7 +4,7 @@
 
 [node name="MainStoryPedestal" type="Node3D"]
 script = ExtResource("1_pedestal")
-metadata/asset_id = "ENV-MAIN-STORY-KEY-PEDESTAL"
+metadata/asset_id = "PRP-BASE99-MAIN-STORY-KEY-PEDESTAL"
 metadata/asset_version = "v001"
 metadata/production_status = "程序制作原型"
 metadata/source_kind = "procedural_gdscript"

@@ -1032,6 +1032,11 @@ func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 	return true
 
 
+## 公开现有气泡载体；导演只能操作文字进度，不推进自由对话指针。
+func get_scripted_dialogue_carrier() -> CharacterBark3D:
+	return _bark
+
+
 ## 立刻停步并转向搭话者（业主 2026-11-02「点击交谈后，角色要立刻停下来，面对角色」）。
 ##
 ## "立刻"= 朝向直接吸附到目标角，不等插值：按 E 的那一帧就该看到脸。

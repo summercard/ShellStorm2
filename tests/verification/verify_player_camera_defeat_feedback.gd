@@ -8,6 +8,18 @@ var checks := 0
 var capture_dir := ""
 var _damage_events := 0
 
+# Run the real camera owner without assembling a whole floor or touching saves.
+class CameraWallOwner extends TowerDescent3D:
+	func _ready() -> void:
+		set_physics_process(false)
+		set_process(false)
+
+class CameraWallPlayer extends Player3D:
+	func _ready() -> void:
+		set_physics_process(false)
+		camera_feedback.configure(self)
+		camera_feedback.set_physics_process(false)
+
 
 func _ready() -> void:
 	for arg in OS.get_cmdline_user_args():
@@ -28,6 +40,11 @@ func _run() -> void:
 	_verify_look_model()
 	if "--look-model-only" in OS.get_cmdline_user_args():
 		print("PLAYER_CAMERA_LOOK_MODEL checks=%d failures=%d" % [checks, failures.size()])
+		get_tree().quit(0 if failures.is_empty() else 1)
+		return
+	await _verify_wall_fixture()
+	if "--wall-fixture-only" in OS.get_cmdline_user_args():
+		print("PLAYER_CAMERA_WALL_FIXTURE checks=%d failures=%d" % [checks, failures.size()])
 		get_tree().quit(0 if failures.is_empty() else 1)
 		return
 	var paths := ["res://scenes/TowerDescent3D.tscn", "res://scenes/ExpeditionLevel03_3D.tscn"]
@@ -105,6 +122,183 @@ func _verify_look_model() -> void:
 	flow.free()
 	feedback.free()
 	fast.free()
+
+
+func _verify_wall_fixture() -> void:
+	var expected_root := OS.get_environment("APPDATA").replace("\\", "/")
+	var user_root := OS.get_user_data_dir().replace("\\", "/")
+	check(not expected_root.is_empty() and user_root.begins_with(expected_root + "/"), "isolated user data must be established before Autoload startup")
+	print("ISOLATION_USER_DIR ", user_root)
+	# Keep the required scene nodes, but omit unrelated multi-tower art/streaming.
+	var shell := (load("res://scenes/Dungeon3D.tscn") as PackedScene).instantiate()
+	shell.set_script(CameraWallOwner)
+	var owner := shell as TowerDescent3D
+	owner.test_mode = true
+	var player := owner.get_node("Player3D") as Player3D
+	player.set_script(CameraWallPlayer)
+	add_child(owner)
+	var camera := player.camera
+	camera.fov = TowerDescent3D.CAMERA_FOV_DEG
+	camera.make_current()
+	var wall := StaticBody3D.new()
+	wall.collision_layer = 16
+	wall.collision_mask = 0
+	wall.set_meta("camera_lower_wall", true)
+	var collision := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(30, 14, 0.3)
+	collision.shape = box
+	wall.add_child(collision)
+	wall.position = Vector3(0, 7, 0.5)
+	owner.add_child(wall)
+	await get_tree().physics_frame
+	var feedback: Node = player.camera_feedback
+	var size := get_viewport().get_visible_rect().size
+	var down_pointer := size * Vector2(0.5, 0.95)
+	feedback.look_offset = Vector3.BACK * FEEDBACK.LOOK_MAX_M
+	var distance: float = owner.call("_find_lower_camera_wall_distance")
+	check(absf(distance - 0.35) < 0.001, "fixture must hit real tagged south wall at 0.35m regardless of look offset")
+	var previous_basis := Basis.IDENTITY
+	var max_angle := 0.0
+	var max_step := 0.0
+	var previous_position := Vector3.ZERO
+	for frame in 240:
+		owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, frame % 2 == 0)
+		owner.call("_apply_indoor_camera_pose")
+		var body_screen := camera.unproject_position(player.global_position + Vector3.UP * 0.6)
+		feedback.advance_look(1.0 / 60.0, down_pointer - body_screen, size, camera.global_basis.x, camera.global_basis.y, true)
+		if frame >= 180:
+			max_angle = maxf(max_angle, previous_basis.get_rotation_quaternion().angle_to(camera.global_basis.get_rotation_quaternion()))
+			max_step = maxf(max_step, previous_position.distance_to(camera.global_position))
+		previous_basis = camera.global_basis
+		previous_position = camera.global_position
+	check(feedback.look_offset.is_zero_approx(), "actual camera basis and body projection must block held south pointer")
+	check(max_angle < 0.0001 and max_step < 0.0001, "held south pointer must not oscillate settled camera orientation or position")
+	if not capture_dir.is_empty():
+		await _verify_fixture_pointer(owner)
+	for pointer in [size * Vector2(0.05, 0.5), size * Vector2(0.95, 0.95), size * Vector2(0.5, 0.05)]:
+		for frame in 120:
+			owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, true)
+			owner.call("_apply_indoor_camera_pose")
+			var body_screen := camera.unproject_position(player.global_position + Vector3.UP * 0.6)
+			feedback.advance_look(1.0 / 60.0, pointer - body_screen, size, camera.global_basis.x, camera.global_basis.y, true)
+		check(feedback.look_offset.x < -1.0 if pointer.x < size.x * 0.1 else feedback.look_offset.x > 0.5 if pointer.y > size.y * 0.9 else feedback.look_offset.z < -1.0, "wall preserves west, southeast lateral component and north with live projection")
+	# Small position/physics fluctuations must not toggle the two camera modes.
+	var trigger := TowerDescent3D.CAMERA_LOWER_WALL_RETRACT_TRIGGER_M
+	var retracted_frames := 0
+	feedback.reset()
+	for frame in 120:
+		owner.set("_camera_lower_wall_detected", true)
+		owner.set("_camera_lower_wall_distance_m", trigger + (-0.03 if frame % 2 == 0 else 0.03))
+		owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, false)
+		feedback.advance_look(1.0 / 60.0, Vector2(0, 600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		if float(owner.get("_camera_trailing_target_m")) < 0.2:
+			retracted_frames += 1
+	check(retracted_frames == 120, "south-wall trigger needs exit hysteresis, not alternating retract/extend on 3cm boundary noise")
+	check(feedback.look_offset.z < 0.0001, "south look cannot leak through boundary noise")
+	owner.set("_camera_lower_wall_distance_m", trigger + 0.21)
+	owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, false)
+	check(is_equal_approx(float(owner.get("_camera_trailing_target_m")), TowerDescent3D.CAMERA_DEFAULT_TRAILING_M), "wall camera exits outside the hysteresis band")
+	# Release a retracted camera: look must not run south before the base pose recovers.
+	owner.set("_camera_lower_wall_detected", false)
+	owner.set("_camera_lower_wall_distance_m", -1.0)
+	owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, false)
+	feedback.advance_look(1.0 / 60.0, Vector2(0, 600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+	check(is_zero_approx(feedback.look_offset.z), "south look stays blocked during initial wall-camera recovery")
+	for frame in 180:
+		owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, false)
+		feedback.advance_look(1.0 / 60.0, Vector2(0, 600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+	check(feedback.look_offset.z > 1.6, "south look smoothly returns after wall camera recovery")
+	# The release gate must be time-based, not frame-count dependent.
+	for hz in [30, 60, 144]:
+		feedback.reset()
+		owner.set("_camera_lower_wall_detected", true)
+		owner.set("_camera_lower_wall_distance_m", 0.35)
+		owner.call("_update_camera_lower_wall_lift", 5.0, false)
+		owner.set("_camera_lower_wall_detected", false)
+		owner.set("_camera_lower_wall_distance_m", -1.0)
+		for frame in int(hz * 0.5):
+			owner.call("_update_camera_lower_wall_lift", 1.0 / hz, false)
+			feedback.advance_look(1.0 / hz, Vector2(0, 600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		check(is_zero_approx(feedback.look_offset.z), "recovery gate still active after 0.5s at %dHz" % hz)
+		for frame in hz * 2:
+			owner.call("_update_camera_lower_wall_lift", 1.0 / hz, false)
+			feedback.advance_look(1.0 / hz, Vector2(0, 600), size, Vector3.RIGHT, Vector3.FORWARD, true)
+		check(feedback.look_offset.z > 1.6, "recovery releases naturally at %dHz" % hz)
+	# Rotated camera profiles must constrain their own rear, not hardcoded world Z.
+	player.rotation.y = PI * 0.5
+	feedback.reset()
+	owner.set("_camera_lower_wall_detected", true)
+	owner.set("_camera_lower_wall_distance_m", 0.35)
+	owner.call("_update_camera_lower_wall_lift", 1.0, false)
+	var rear: Vector3 = owner.call("_camera_profile_trailing_direction")
+	feedback.advance_look(1.0, Vector2(0, 600), size, Vector3.FORWARD, -rear, true)
+	check(is_zero_approx(feedback.look_offset.dot(rear)), "rotated owner blocks its rear direction")
+	owner.set("_flow_rules_active", true)
+	owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, false)
+	feedback.advance_look(1.0, Vector2(0, 600), size, Vector3.FORWARD, -rear, true)
+	check(feedback.look_offset.dot(rear) > 1.6 and not bool(owner.get("_camera_lower_wall_retract_active")), "flow mode clears wall state and immediately releases directional constraint")
+	print("CAMERA_WALL_FIXTURE ", {"distance": distance, "settled_angle_span": max_angle, "settled_position_step": max_step, "boundary_retracted_frames": retracted_frames})
+	owner.queue_free()
+	await get_tree().process_frame
+
+
+func _verify_fixture_pointer(owner: TowerDescent3D) -> void:
+	var player := owner.player
+	var feedback: Node = player.camera_feedback
+	var blocks := owner.get_node_or_null("Blocks") as Node3D
+	if blocks != null:
+		blocks.hide()
+	owner.get_node("HUD").hide()
+	var environment := Environment.new()
+	environment.background_mode = Environment.BG_COLOR
+	environment.background_color = Color(0.18, 0.23, 0.28)
+	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	environment.ambient_light_color = Color.WHITE
+	environment.ambient_light_energy = 0.7
+	owner.world_environment.environment = environment
+	var floor_mesh := MeshInstance3D.new()
+	var plane := PlaneMesh.new()
+	plane.size = Vector2(24, 24)
+	floor_mesh.mesh = plane
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.20, 0.29, 0.32)
+	floor_mesh.material_override = material
+	floor_mesh.position = Vector3(0, -0.02, -8)
+	owner.add_child(floor_mesh)
+	for x in range(-10, 11, 2):
+		var marker := MeshInstance3D.new()
+		var mesh := BoxMesh.new()
+		mesh.size = Vector3(0.04, 0.02, 20)
+		marker.mesh = mesh
+		marker.position = Vector3(x, 0, -9)
+		owner.add_child(marker)
+	get_window().grab_focus()
+	InputDevice.force_device(InputDevice.DEVICE_KEYBOARD_MOUSE)
+	await get_tree().create_timer(0.15).timeout
+	check(DisplayServer.window_is_focused() and player.camera.current and player.uses_pointer_camera_aim(), "real mouse fixture must own focused current keyboard/mouse camera")
+	for sample in [{"label": "south_blocked", "point": Vector2(0.5, 0.95)}, {"label": "east_allowed", "point": Vector2(0.95, 0.5)}, {"label": "west_allowed", "point": Vector2(0.05, 0.5)}, {"label": "north_allowed", "point": Vector2(0.5, 0.05)}]:
+		get_window().grab_focus()
+		var viewport_point := get_viewport().get_visible_rect().size * (sample["point"] as Vector2)
+		var window_point := get_viewport().get_final_transform() * viewport_point
+		Input.warp_mouse(window_point)
+		var motion := InputEventMouseMotion.new()
+		motion.position = window_point
+		Input.parse_input_event(motion)
+		Input.flush_buffered_events()
+		await get_tree().process_frame
+		for frame in 90:
+			owner.call("_update_camera_lower_wall_lift", 1.0 / 60.0, frame % 2 == 0)
+			owner.call("_apply_indoor_camera_pose")
+			# Simulate fixed ticks synchronously; desktop pointer/focus changes from
+			# unrelated windows must not splice into a single direction sample.
+			feedback._physics_process(1.0 / 60.0)
+		var offset: Vector3 = feedback.look_offset
+		var label := str(sample["label"])
+		check(DisplayServer.window_is_focused() and get_viewport().get_mouse_position().distance_to(viewport_point) < 6.0, "actual pointer sample must remain focused and inside intended viewport position: " + label)
+		print("CAMERA_POINTER ", {"sample": label, "offset": offset, "pointer": get_viewport().get_mouse_position(), "rect": get_viewport().get_visible_rect(), "window_size": get_window().size, "body": player.camera.unproject_position(player.global_position + Vector3.UP * 0.6), "focus": DisplayServer.window_is_focused(), "current": player.camera.current, "locked": player.input_locked, "suspended": feedback.suspended, "hp": player.current_hp, "device": InputDevice.get_active_device()})
+		check(offset.is_zero_approx() if label == "south_blocked" else offset.x > 1.0 if label == "east_allowed" else offset.x < -1.0 if label == "west_allowed" else offset.z < -1.0, "actual focused mouse: " + label)
+		await _capture("fixture_" + label, "tower")
 
 
 func _verify_runtime(path: String) -> void:

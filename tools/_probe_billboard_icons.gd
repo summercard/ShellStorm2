@@ -63,13 +63,13 @@ func _ready() -> void:
 	print("TARGET_WORLD_FOR_48PX=", 48.0 * 2.0 * dist * tan(deg_to_rad(camera.fov) * 0.5) / vph)
 	print("CURSOR_SCREEN_PX=", p0.distance_to(p1))
 
-	# ── 敌方子弹：hostile 应走 billboard ──
+	# ── 敌方子弹：显式开启 billboard（2026-11-10 起敌弹缺省走 3D 弹体）──
 	var hostile := Projectile3D.new()
 	stage.add_child(hostile)
 	hostile.activate({
 		"direction": Vector3(0, 0, -1), "speed": 12.0, "damage": 5, "hostile": true,
 		"target_group": "player_3d", "projectile_collision_mask": 1,
-		"visual_scale": 2.0, "shooter": player,
+		"visual_scale": 2.0, "shooter": player, "billboard": true,
 	}, Vector3(2.0, 0.75, -3.0))
 	await get_tree().process_frame
 	await get_tree().process_frame

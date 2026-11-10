@@ -85,16 +85,39 @@ func resolve_actor(actor_id: String) -> Node3D:
 func resolve_anchor(anchor_id: String) -> Variant:
 	if _host == null or not is_instance_valid(_host):
 		return null
+	if anchor_id == "briefing_finish" and _host.has_method("get_facility_spawn_point"):
+		# 收尾沿基地中央主通道走近终端；不把玩法镜头还到贴墙吊灯下方。
+		return _host.call("get_facility_spawn_point")
+	if anchor_id in ["boss_listening", "boss_ramp_top"]:
+		var room := _main_story_room(BOSS_ROOM_ID)
+		if room != null:
+			return room.to_global(Vector3(0.0, 0.08, -14.0) if anchor_id == "boss_listening" else Vector3(0.0, 12.08, 40.0))
+	if anchor_id == "boss_duo":
+		var player := _player()
+		var boss := _boss()
+		if player != null and boss != null:
+			return (player.global_position + boss.global_position) * 0.5 + Vector3.UP * 1.4
 	if anchor_id == "player_front" and _player_meet_anchor is Vector3:
 		return _player_meet_anchor
 	if anchor_id == "npc_tracking":
 		var npc := _npc()
-		return npc.global_position + Vector3.UP * 0.9 if npc != null else null
+		return npc.global_position + Vector3.UP * 1.7 if npc != null else null
+	if anchor_id == "duo_dialogue":
+		var player := _player()
+		var npc := _npc()
+		if player != null and npc != null:
+			return (player.global_position + npc.global_position) * 0.5 + Vector3.UP * 1.7
 	if anchor_id == "duo":
 		var player := _player()
 		var npc := _npc()
 		if player != null and npc != null:
 			return (player.global_position + npc.global_position) * 0.5 + Vector3.UP * 0.9
+	if anchor_id == "pedestal_dialogue":
+		var npc := _npc()
+		var pedestal := _pedestal()
+		if npc != null and pedestal != null:
+			var slot: Vector3 = pedestal.call("get_anchor", "key_slot_rare_earth")
+			return (npc.global_position + slot) * 0.5 + Vector3.UP * 1.4
 	if anchor_id in ["pedestal_stand", "key_slot_rare_earth", "pedestal_focus"]:
 		var pedestal := _pedestal()
 		if pedestal != null:
@@ -479,6 +502,10 @@ func _npc_at_anchor(anchor_id: String) -> bool:
 ## 这里只判定；移动、手部动画、钥匙轨迹由各实体表现脚本负责。
 func should_advance_narrative() -> bool:
 	var director := _director()
+	if director != null and str(director.call("active_id")) == BRIEFING_ID:
+		var walking_player := _player()
+		if walking_player != null and float(walking_player.get("_narrative_walk_remaining")) > 0.0:
+			return false
 	if _deposit_npc_started and (_npc() == null or _player() == null or _pedestal() == null or not is_instance_valid(_key_visual)):
 		_abort_performance("安装演出中演员、设施或钥匙丢失")
 		return false

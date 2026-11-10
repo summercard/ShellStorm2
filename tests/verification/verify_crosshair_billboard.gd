@@ -10,8 +10,11 @@ extends Node
 ##      材质是本项目的 SDF shader，而不是 `BaseMaterial3D` 的 billboard（只绕 Y 轴会压扁）。
 ##   B. 准星朝向：基向量 = 相机基（余弦 1.0），摇杆与鼠标两条路径一致。
 ##   C. 准星尺寸：恒定屏幕占比 —— 两个差距很大的瞄准距离下，屏幕像素数必须一样。
-##   D. 敌方子弹：billboard 开启、图标可见、3D 弹体隐藏、朝向余弦 1.0、
-##      核心直径严格等于判定球直径。**两条路由都要测**（通用弹体 / 八弹种）。
+##   D. 敌方子弹（**显式开启 billboard 后**）：图标可见、3D 弹体隐藏、朝向余弦 1.0、
+##      图标核心 = 判定球直径 × `ENEMY_BULLET_ICON_SCALE`。**两条路由都要测**（通用弹体 / 八弹种）。
+##      ⚠ 2026-11-10 起敌弹默认走 3D 弹体（总开关 `ENEMY_BULLET_BILLBOARD = false`），
+##      本用例靠单发 `projectile_config["billboard"] = true` 强制走到公告板分支 ——
+##      否则它验的是一条已经不在主路径上的实现，会绿得毫无意义。
 ##   E. 玩家子弹：保持 3D 弹体，不出现图标。
 ##   F. 防假绿哨兵。
 ##
@@ -30,6 +33,8 @@ const SCREEN_RATIO_TOLERANCE := 0.012
 const ALIGN_TOLERANCE := 0.002
 ## 判定球基准半径。
 const HIT_RADIUS_M := 0.12
+## 公告板图标的期望尺寸倍率（2026-11-10 业主：70%）。硬编码，与快照值比对。
+const EXPECTED_ICON_SCALE := 0.70
 
 var _failures: Array[String] = []
 var _samples := 0
@@ -190,12 +195,40 @@ func _cursor_screen_px(player: Player3D, camera: Camera3D, pos: Vector3) -> floa
 
 ## D. 敌方子弹 billboard（通用弹体路由 —— 绝大多数敌人走这条）。
 func _check_enemy_bullet_billboard(player: Player3D, stage: Node3D) -> void:
+	# D0. **缺省口径**：不传 `billboard` 时必须走 3D 弹体。
+	# 这是 2026-11-10 业主回退后的主路径，必须有断言盯着 —— 否则总开关被谁改回 true
+	# 也不会有任何用例变红（11-10 之前正是这种状态：公告板是唯一路径，没有反向哨兵）。
+	var defaults := Projectile3D.new()
+	stage.add_child(defaults)
+	defaults.activate({
+		"direction": Vector3(0, 0, -1), "speed": 12.0, "damage": 5, "hostile": true,
+		"target_group": "player_3d", "projectile_collision_mask": 1,
+		"visual_scale": 2.0, "shooter": player,
+	}, Vector3(0.0, 0.75, -3.0))
+	await get_tree().process_frame
+	var dsnap := defaults.get_orientation_snapshot()
+	_samples += 3
+	_expect(
+		not bool(dsnap.get("billboard", true)),
+		"敌弹缺省必须走 3D 弹体（`ENEMY_BULLET_BILLBOARD = false`），实测 billboard=true"
+	)
+	_expect(
+		bool(dsnap.get("body_visible", false)),
+		"敌弹缺省时 3D 弹体必须可见（回退后不应只剩一个不可见的图标）"
+	)
+	_expect(
+		not bool(dsnap.get("icon_visible", true)),
+		"敌弹缺省时不得显示公告板图标"
+	)
+	defaults.queue_free()
+
+	# D1. 显式 `billboard = true`：走公告板分支（实现保留，随时可切回）。
 	var projectile := Projectile3D.new()
 	stage.add_child(projectile)
 	projectile.activate({
 		"direction": Vector3(0, 0, -1), "speed": 12.0, "damage": 5, "hostile": true,
 		"target_group": "player_3d", "projectile_collision_mask": 1,
-		"visual_scale": 2.0, "shooter": player,
+		"visual_scale": 2.0, "shooter": player, "billboard": true,
 	}, Vector3(2.0, 0.75, -3.0))
 	# 朝向在 `_process` 里逐帧校 —— 必须等一帧，否则读到的是「还没摆正」的默认基。
 	await get_tree().process_frame
@@ -213,8 +246,8 @@ func _check_bullet_routes(player: Player3D, stage: Node3D) -> void:
 		projectile.activate({
 			"direction": Vector3(0, 0, -1), "speed": 12.0, "damage": 5, "hostile": true,
 			"target_group": "player_3d", "projectile_collision_mask": 1,
-			"visual_id": visual_id, "shooter": player,
-		}, Vector3(-2.0, 0.75, -3.0))
+		"visual_id": visual_id, "shooter": player, "billboard": true,
+	}, Vector3(-2.0, 0.75, -3.0))
 		await get_tree().process_frame
 		await get_tree().process_frame
 		_check_billboard_snapshot(
@@ -253,21 +286,31 @@ func _check_billboard_snapshot(snap: Dictionary, label: String, scale: float) ->
 		align > 1.0 - ALIGN_TOLERANCE,
 		"%s：图标未正对相机（法线与光轴余弦 %.4f）" % [label, align]
 	)
-	# 核心直径 = 判定球直径 = 2 × 0.12 × 视觉倍率。
-	var expected_core := HIT_RADIUS_M * 2.0 * scale
+	# 图标核心直径 = 判定球直径 × 图标尺寸倍率。
+	# 2026-11-10 业主：「公告板的弹丸也太大了，先缩小到 70%」⇒ 核心比判定球小 30%。
+	# 倍率这里**硬编码**，不引用被测常量 —— 常量被改坏时断言必须能变红。
+	var expected_core := HIT_RADIUS_M * 2.0 * scale * EXPECTED_ICON_SCALE
 	var core := float(snap.get("icon_core_diameter", -1.0))
 	var radius := float(snap.get("collision_radius", -1.0))
-	_samples += 2
+	var reported_scale := float(snap.get("icon_size_scale", -1.0))
+	_samples += 3
 	_expect(
 		absf(core - expected_core) < 0.01,
-		"%s：图标核心直径应为 %.3f（判定球 %.3f），实测 %.3f" % [
-			label, expected_core, radius * 2.0, core
+		"%s：图标核心直径应为 %.3f（判定球 %.3f × 倍率 %.2f），实测 %.3f" % [
+			label, expected_core, radius * 2.0, EXPECTED_ICON_SCALE, core
 		]
 	)
 	_expect(
-		absf(core - radius * 2.0) < 0.01,
-		"%s：核心直径与判定球直径不一致（核心 %.3f / 判定 %.3f）—— 所见不等于所中" % [
-			label, core, radius * 2.0
+		absf(reported_scale - EXPECTED_ICON_SCALE) < 0.001,
+		"%s：快照的 icon_size_scale 应为 %.2f，实测 %.3f" % [
+			label, EXPECTED_ICON_SCALE, reported_scale
+		]
+	)
+	# 判定球本身不得被视觉倍率带动：视觉收缩只改图标，不改命中半径。
+	_expect(
+		absf(radius - HIT_RADIUS_M * scale) < 0.005,
+		"%s：判定球半径被图标倍率带偏了（应为 %.3f，实测 %.3f）—— 视觉收缩不得改判定" % [
+			label, HIT_RADIUS_M * scale, radius
 		]
 	)
 

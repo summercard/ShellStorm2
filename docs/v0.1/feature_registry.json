@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-11-09",
+  "updated_at": "2026-11-10",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -15,7 +15,8 @@
         "docs/v0.1/development/history/03_玩家与操作_历史记录.md",
         "docs/v0.1/development/2026-11-02_camera_damage_defeat_feedback.md",
         "docs/v0.1/development/2026-11-02_feedback_revision.md",
-        "docs/v0.1/development/2026-11-06_camera_lower_wall_mouse_look.md"
+        "docs/v0.1/development/2026-11-06_camera_lower_wall_mouse_look.md",
+        "docs/v0.1/development/2026-11-10_camera_wall_stability.md"
       ],
       "verification": [
         {
@@ -75,7 +76,8 @@
         "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md",
         "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
         "docs/v0.1/development/2026-10-19_bullet_module_manual_swap_lock.md",
-        "docs/v0.1/development/2026-11-09_aim_ballistic_alignment.md"
+        "docs/v0.1/development/2026-11-09_aim_ballistic_alignment.md",
+        "docs/v0.1/development/2026-11-10_enemy_bullet_presentation_rollback.md"
       ],
       "verification": [
         {
@@ -298,8 +300,9 @@
     },
     {
       "feature_id": "WORLD-ENTRY",
-      "owner": "TowerDescent3D",
+      "owner": "TowerDescent3D；地图清单GameDesignConfig，永久权限BaseManager",
       "design_docs": [
+        "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md",
         "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
         "docs/v0.1/07_技术施工_基地设施.md",
         "docs/v0.1/09_技术施工_存档结算与复活.md",
@@ -313,9 +316,12 @@
         "docs/v0.1/development/2026-09-19_expedition_level01_buildout.md",
         "docs/v0.1/development/2026-09-29_expedition_hologram_city.md",
         "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md",
-        "docs/v0.1/development/2026-11-07_loading_warmup_gate.md"
+        "docs/v0.1/development/2026-11-07_loading_warmup_gate.md",
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_main_story_navigation", "suite": "core"},
+        {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual", "requires": "Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_integration"},
         {
           "kind": "scene",
           "id": "verify_expedition_level01_flow"
@@ -341,7 +347,7 @@
           "id": "verify_tower03_expedition_entry"
         }
       ],
-      "status": "complete"
+      "status": "partial"
     },
     {
       "feature_id": "WORLD-GATE",
@@ -397,8 +403,9 @@
     },
     {
       "feature_id": "WORLD-LOOT",
-      "owner": "RuntimeRewardCoordinator",
+      "owner": "RuntimeRewardCoordinator；主线永久钥匙仅BaseManager写入",
       "design_docs": [
+        "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md",
         "docs/v0.1/design/战斗奖励与物品流转设计.md",
         "docs/v0.1/04_技术施工_战斗与局内成长.md",
         "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
@@ -412,9 +419,12 @@
         "docs/v0.1/development/2026-10-14_expedition01_monster_rules.md",
         "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
         "docs/v0.1/development/2026-11-06_expedition02_no_key_doors.md",
-        "docs/v0.1/development/2026-11-09_chest_appear_fx_light_prompt.md"
+        "docs/v0.1/development/2026-11-09_chest_appear_fx_light_prompt.md",
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_main_story_progress", "suite": "core"},
+        {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual"},
         {
           "kind": "scene",
           "id": "verify_reward_service_flow"
@@ -634,8 +644,9 @@
     },
     {
       "feature_id": "BOSS-STAGES",
-      "owner": "BossContentCatalog",
+      "owner": "BossContentCatalog；真实激活进度Enemy3D/MonitorBossCombat",
       "design_docs": [
+        "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md",
         "docs/v0.1/06_技术施工_怪物精英与Boss.md",
         "docs/v0.1/design/Boss002显示器技能设计.md",
         "docs/v0.1/design/Boss002显示器动画设计.md"
@@ -649,9 +660,12 @@
         "docs/v0.1/development/2026-10-08_boss002_reduced_lift.md",
         "docs/v0.1/development/2026-10-08_boss002_activation.md",
         "docs/v0.1/development/2026-10-14_boss002_monitor_hit_volume.md",
-        "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md"
+        "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md",
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_main_story_boss_gate", "suite": "core"},
+        {"kind": "scene", "id": "verify_main_story_narrative", "suite": "manual"},
         {
           "kind": "scene",
           "id": "verify_expedition_monitor_boss_flow"
@@ -708,15 +722,18 @@
     },
     {
       "feature_id": "BASE-NPC",
-      "owner": "NpcCharacter3D",
+      "owner": "NpcCharacter3D；主线编排MainStoryChapter3D/Director，永久钥匙BaseManager",
       "design_docs": [
+        "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md",
         "docs/v0.1/20_技术施工_基地NPC.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-11-02_base99_npc_green.md",
-        "docs/v0.1/development/2026-11-04_base_npc_elite_arms_taker_greeting.md"
+        "docs/v0.1/development/2026-11-04_base_npc_elite_arms_taker_greeting.md",
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_main_story_performance", "suite": "manual", "requires": "Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"},
         {
           "kind": "scene",
           "id": "verify_base_npc_flow"
@@ -872,14 +889,17 @@
       "feature_id": "SAVE-PROFILE",
       "owner": "BaseManager",
       "design_docs": [
+        "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md",
         "docs/v0.1/design/基地经济与存档结算设计.md",
         "docs/v0.1/09_技术施工_存档结算与复活.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-09-12_e03_extraction_points_transaction.md",
-        "docs/v0.1/development/2026-09-24_design_contract_backfill.md"
+        "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_main_story_progress", "suite": "core"},
         {
           "kind": "scene",
           "id": "verify_pause_game_save_reset_flow"
@@ -972,8 +992,9 @@
     },
     {
       "feature_id": "NARRATIVE-TRIGGER",
-      "owner": "NarrativeDirector3D",
+      "owner": "NarrativeDirector3D；MainStoryChapter3D只判条件与接线，永久事实BaseManager",
       "design_docs": [
+        "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md",
         "docs/v0.1/design/主线剧情节点表.md",
         "docs/v0.1/design/主线剧情剧本.md",
         "docs/v0.1/08_技术施工_剧情触发.md"
@@ -981,9 +1002,14 @@
       "development_records": [
         "docs/v0.1/development/CHANGELOG.md",
         "docs/v0.1/development/2026-10-12_main_story_documentation.md",
-        "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md"
+        "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md",
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_main_story_narrative", "suite": "manual", "requires": "已含真实运行；Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"},
+        {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual"},
+        {"kind": "scene", "id": "verify_main_story_performance", "suite": "manual"},
+        {"kind": "command", "path": "tests/verification/capture_main_story_chapter.gd", "args": ["--scene", "res://tests/verification/capture_main_story_chapter.tscn"], "suite": "manual", "requires": "隔离外部Godot runner；user://含main_story_performance；SHELLSTORM_MAIN_STORY_ISOLATED=1；真实渲染；SHELLSTORM_MAIN_STORY_CHAPTER=031或033；工程外SHELLSTORM_MAIN_STORY_CAPTURE_DIR"},
         {
           "kind": "scene",
           "id": "verify_narrative_timeline"

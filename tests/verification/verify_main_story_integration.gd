@@ -13,10 +13,12 @@ var failures_emitted := 0
 var original_data: BaseData
 var original_path := ""
 var original_save_failure := false
+var scene_resources: Array[Resource] = []
 
 
 func check(ok: bool, message: String) -> void:
 	checks += 1
+	print("MAIN_STORY_INTEGRATION_CHECK ", checks, " ok=", ok, " ", message, " ms=", Time.get_ticks_msec())
 	if not ok:
 		failures.append(message)
 		print("MAIN_STORY_INTEGRATION_FAIL ", message)
@@ -39,15 +41,21 @@ func _run() -> void:
 	BaseManager.force_save_failure_for_test = false
 	NarrativeDirector.reset_for_test()
 	NarrativeDirector.set_process(false)
+	print("MAIN_STORY_INTEGRATION_BEGIN retain_real_scene_resources ms=", Time.get_ticks_msec())
+	# 同一真实场景要装配两次；保留资源所有权，避免元数据查询后立即卸载并反复重读。
+	_retain_real_scene_resources("res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01")
+	print("MAIN_STORY_INTEGRATION_END retain_real_scene_resources count=", scene_resources.size(), " ms=", Time.get_ticks_msec())
+	print("MAIN_STORY_INTEGRATION_BEGIN base_host")
 	await _verify_base_host()
+	print("MAIN_STORY_INTEGRATION_END base_host checks=", checks)
 	_verify_profiles()
+	print("MAIN_STORY_INTEGRATION_BEGIN expedition_instantiate")
 	tower = SCENE.instantiate() as TowerDescent3D
+	print("MAIN_STORY_INTEGRATION_END expedition_instantiate")
 	tower.test_mode = true
 	tower.force_main_story_for_test = true
 	tower.run_seed_override = 77001199
-	add_child(tower)
-	await get_tree().process_frame
-	await get_tree().physics_frame
+	await _mount_real_scene(tower, "expedition")
 	tower.set_process(false)
 	tower.player.set_physics_process(false)
 	var controller := tower.get_main_story_controller()
@@ -68,15 +76,19 @@ func _run() -> void:
 	if room == null:
 		await _finish()
 		return
+	print("MAIN_STORY_INTEGRATION_BEGIN boss_room_build")
 	room.ensure_shell_built()
 	room.ensure_detail_built()
+	print("MAIN_STORY_INTEGRATION_END boss_room_build")
 	await get_tree().physics_frame
 	tower._current_room_id = room.room_id
 	tower.player.global_position = room.global_position + Vector3(5.0, 0.5, 5.0)
 	tower._spawned_rooms[room.room_id] = true
 	# 与正式进房同样启用 ACTIVE 流送，否则后续存档会按 DATA_ONLY 保留旧缓存。
 	tower._update_room_streaming(room.room_id)
+	print("MAIN_STORY_INTEGRATION_BEGIN enemy_gate")
 	_verify_enemy_gate(room)
+	print("MAIN_STORY_INTEGRATION_END enemy_gate checks=", checks)
 	var config := {"id": "drop_boss", "chest_tier": "advanced", "mimic": true}
 	var prepared := tower._prepare_story_boss_chest_config(room, config)
 	check(not bool(prepared.get("mimic", true)), "首次首领箱禁拟态")
@@ -134,10 +146,44 @@ func _run() -> void:
 	tower._on_chest_open_requested(room, chest)
 	tower._resume_pending_chest_grants(room)
 	check(get_tree().get_nodes_in_group("ground_loot_3d").size() == ground_before, "重复交互/补发不重复普通物资")
+	print("MAIN_STORY_INTEGRATION_BEGIN snapshot_and_death checks=", checks, " ms=", Time.get_ticks_msec())
 	_verify_snapshot_and_death()
+	print("MAIN_STORY_INTEGRATION_END snapshot_and_death checks=", checks, " ms=", Time.get_ticks_msec())
+	print("MAIN_STORY_INTEGRATION_BEGIN real_scene_reload")
 	await _verify_real_scene_reload()
+	print("MAIN_STORY_INTEGRATION_END real_scene_reload checks=", checks, " ms=", Time.get_ticks_msec())
+	print("MAIN_STORY_INTEGRATION_BEGIN unique_settlement")
 	_verify_unique_settlement()
+	print("MAIN_STORY_INTEGRATION_END unique_settlement checks=", checks)
 	await _finish()
+
+
+func _retain_real_scene_resources(directory: String) -> void:
+	for file_name in DirAccess.get_files_at(directory):
+		if file_name.ends_with(".tscn"):
+			var path := directory.path_join(file_name)
+			var resource := load(path) as PackedScene
+			check(resource != null, "真实远征资源可加载：%s" % file_name)
+			if resource != null:
+				scene_resources.append(resource)
+
+
+func _mount_real_scene(scene: TowerDescent3D, stage: String) -> void:
+	var signals := {"generated": false, "gameplay_ready": false}
+	# 信号可能在 add_child 内同步发出；先接线并记状态，不能盲等已发出的信号。
+	scene.generation_completed.connect(func(_snapshot: Dictionary) -> void: signals["generated"] = true, CONNECT_ONE_SHOT)
+	scene.gameplay_started.connect(func(_room_id: String) -> void: signals["gameplay_ready"] = true, CONNECT_ONE_SHOT)
+	print("MAIN_STORY_INTEGRATION_BEGIN ", stage, "_add_child ms=", Time.get_ticks_msec())
+	add_child(scene)
+	print("MAIN_STORY_INTEGRATION_END ", stage, "_add_child ms=", Time.get_ticks_msec())
+	if not signals["generated"]:
+		await scene.generation_completed
+	print("MAIN_STORY_INTEGRATION_END ", stage, "_generation_completed ms=", Time.get_ticks_msec())
+	if not signals["gameplay_ready"]:
+		await scene.gameplay_started
+	check(scene._main_story_host_ready and scene._main_story_gameplay_started, "%s真实装配与玩法释放屏障已完成" % stage)
+	await get_tree().physics_frame
+	print("MAIN_STORY_INTEGRATION_END ", stage, "_scene_ready ms=", Time.get_ticks_msec())
 
 
 func _verify_profiles() -> void:
@@ -168,7 +214,9 @@ func _verify_enemy_gate(room: DungeonRoom3D) -> void:
 	NarrativeDirector.bind_dungeon_for_test(tower)
 	tower.get_main_story_controller()._process(0.0)
 	check(NarrativeDirector.active_id() == MainStoryChapter3D.BOSS_ID, "实际Boss房就绪自动触发3.2而非只提供死接口")
+	print("MAIN_STORY_EXPECTED_FAILURE_BEGIN boss_trigger_abort")
 	NarrativeDirector.abort("integration_trigger_checked")
+	print("MAIN_STORY_EXPECTED_FAILURE_END boss_trigger_abort")
 	tower._configure_story_enemy(boss)
 	boss.monitor_combat.tick_activation(10.0)
 	check(not bool(boss.get_story_activation_snapshot().get("started", true)), "近距离也不能抢先自动激活")
@@ -216,14 +264,17 @@ func _verify_snapshot_and_death() -> void:
 
 func _verify_real_scene_reload() -> void:
 	var snapshot := tower.build_runtime_save_snapshot()
+	check(BaseManager.set_active_run_checkpoint(snapshot, "integration_real_scene_reload"), "真实场景重建前提交磁盘检查点")
+	BaseManager.data = BaseData.new()
+	BaseManager.load_base()
+	snapshot = BaseManager.get_active_run_checkpoint()
+	check(str(snapshot.get("run_id", "")) == tower._run_id and bool(snapshot.get(PHASE, {}).get("active", false)), "丢弃内存存档后从磁盘读取同一行动与撤离阶段")
 	var original_run := tower._run_id
 	var restored := SCENE.instantiate() as TowerDescent3D
 	restored.test_mode = true
 	restored.force_main_story_for_test = true
 	restored.run_seed_override = tower.run_seed
-	add_child(restored)
-	await get_tree().process_frame
-	await get_tree().physics_frame
+	await _mount_real_scene(restored, "reload")
 	restored.set_process(false)
 	restored.player.set_physics_process(false)
 	restored.get_main_story_controller().set_process(false)
@@ -255,9 +306,11 @@ func _verify_unique_settlement() -> void:
 		if success: successes += 1
 		else: failures_emitted += 1)
 	var runs_before := BaseManager.data.total_runs
+	tower._tick_main_story_auto_extraction(5.5)
+	check(not tower._completed and successes == 0 and is_equal_approx(float(tower._main_story_auto_extraction.get("remaining", -1.0)), 0.5), "累计7.5秒尚不结算，8秒倒计时不提前成功")
 	BaseManager.force_save_failure_for_test = true
 	print("MAIN_STORY_EXPECTED_FAILURE_BEGIN settlement_save")
-	tower._tick_main_story_auto_extraction(10.0)
+	tower._tick_main_story_auto_extraction(0.5)
 	print("MAIN_STORY_EXPECTED_FAILURE_END settlement_save")
 	check(not tower._completed and successes == 0 and BaseManager.data.total_runs == runs_before, "成功提交失败可重试，不先发布成功")
 	check(not tower.player.input_locked, "成功提交失败后恢复可行动输入")
@@ -280,13 +333,13 @@ func _verify_unique_settlement() -> void:
 
 
 func _verify_base_host() -> void:
+	print("MAIN_STORY_INTEGRATION_BEGIN base_instantiate")
 	var base := BASE_SCENE.instantiate() as TowerDescent3D
+	print("MAIN_STORY_INTEGRATION_END base_instantiate")
 	base.test_mode = true
 	base.force_main_story_for_test = true
 	base.run_seed_override = 77001199
-	add_child(base)
-	await get_tree().process_frame
-	await get_tree().physics_frame
+	await _mount_real_scene(base, "base")
 	base.set_process(false)
 	base.player.set_physics_process(false)
 	var controller := base.get_main_story_controller()
@@ -311,7 +364,9 @@ func _verify_base_host() -> void:
 		rescue._phase = Base99Rescue3D.Phase.SKIPPED
 		controller._process(0.0)
 		check(NarrativeDirector.active_id() == MainStoryChapter3D.DEPOSIT_ID, "返航有钥匙且救援结束自动触发3.3")
+		print("MAIN_STORY_EXPECTED_FAILURE_BEGIN rescue_gate_abort")
 		NarrativeDirector.abort("integration_rescue_gate_checked")
+		print("MAIN_STORY_EXPECTED_FAILURE_END rescue_gate_abort")
 		BaseManager.data.main_story = previous_story
 		BaseManager.replace_narrative_history_for_test({})
 	base.queue_free()
@@ -325,10 +380,12 @@ func _finish() -> void:
 	await get_tree().process_frame
 	NarrativeDirector.reset_for_test()
 	DialogueUI.close()
+	scene_resources.clear()
+	await get_tree().process_frame
 	BaseManager.force_save_failure_for_test = original_save_failure
 	BaseManager.save_path = original_path
 	BaseManager.data = original_data
-	print("MAIN_STORY_INTEGRATION_REPORT ", JSON.stringify({"checks": checks, "failures": failures, "expected_faults": ["claim_save", "settlement_save"], "rendered_acceptance": false}))
+	print("MAIN_STORY_INTEGRATION_REPORT ", JSON.stringify({"checks": checks, "failures": failures, "expected_faults": ["claim_save", "settlement_save", "boss_trigger_abort", "rescue_gate_abort"], "rendered_acceptance": false}))
 	if failures.is_empty():
 		print("MAIN_STORY_INTEGRATION_OK")
 	get_tree().quit(0 if failures.is_empty() else 1)

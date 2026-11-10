@@ -7,10 +7,8 @@ class RecordingMenu extends RogueMapSelectMenu:
 	func _enter_level(level_id: String) -> void:
 		requests.append(level_id)
 
-## 解锁档开关。支持命令行 `-- --unlocked`，也支持环境变量 ——
-## 后者是因为 `run_verification_suite.sh` 不给单场景传额外参数，
-## 导致"已解锁 ⇒ 多一个入口"这条分支**在套件里从来没被跑过**。
-## 加上环境变量入口后，套件可以这样覆盖：`HOLOGRAM_CITY_UNLOCKED=1 bash scripts/run_verification_suite.sh scene verify_expedition_hologram_city`
+## 旧档明确02权限兼容分支。四入口始终可见，不再因解锁增加入口。
+## 支持 `-- --unlocked` 或 `HOLOGRAM_CITY_UNLOCKED=1`。
 func _is_unlocked_run() -> bool:
 	return "--unlocked" in OS.get_cmdline_user_args() or OS.get_environment("HOLOGRAM_CITY_UNLOCKED") == "1"
 
@@ -19,7 +17,9 @@ func _ready() -> void:
 	if "--tower" in OS.get_cmdline_user_args():
 		await _verify_tower()
 		return
-	BaseManager.data.expedition_02_unlocked = _is_unlocked_run()
+	BaseManager.data = BaseData.from_dict({"expedition_02_unlocked": _is_unlocked_run()})
+	BaseManager._debug_unlock_overrides_loaded = true
+	BaseManager._debug_unlock_overrides.clear()
 	var environment := WorldEnvironment.new()
 	var env := Environment.new()
 	env.background_mode = Environment.BG_COLOR
@@ -53,7 +53,7 @@ func _ready() -> void:
 	await _shot("opening")
 	await get_tree().create_timer(0.6).timeout
 	_expect(menu._city.deployment > 0.25, "main tower stage not reached")
-	_expect(menu._city.site_reveal(1) == 0.0, "99 appeared before its stage")
+	_expect(menu._city.site_reveal(1) == 0.0, "公馆入口在最终阶段前出现")
 	await _shot("main_rising")
 	await get_tree().create_timer(0.7).timeout
 	_expect(menu._city.site_reveal(0) == 0.0 and menu._city.site_reveal(1) == 0.0, "entries appeared before final phase")
@@ -77,37 +77,48 @@ func _ready() -> void:
 		_expect(get_viewport().get_visible_rect().grow(-30).has_point(screen), "entry outside viewport")
 		_expect(menu._pick(screen) == i, "world-space picking wrong")
 		var motion := InputEventMouseMotion.new()
-		motion.position = screen
+		# unproject_position返回视口逻辑坐标，parse_input_event的鼠标事件先经过窗口伸缩。
+		var window_point := get_viewport().get_final_transform() * screen
+		motion.position = window_point
 		Input.parse_input_event(motion)
 		Input.flush_buffered_events()
+		await get_tree().process_frame
+		print("HOLOGRAM_HOVER ", JSON.stringify({"index": i, "pick": menu._pick(screen), "selection": menu._selection, "focus": menu._focus, "state": menu._state, "screen": str(screen)}))
 		_expect(menu._selection == i, "hover input failed")
 		var click := InputEventMouseButton.new()
-		click.position = screen
+		click.position = window_point
 		click.button_index = MOUSE_BUTTON_LEFT
 		click.pressed = true
 		Input.parse_input_event(click)
 		Input.flush_buffered_events()
+		await get_tree().process_frame
+		print("HOLOGRAM_CLICK ", JSON.stringify({"index": i, "requests": menu.requests}))
 	_expect(menu.requests == menu.LEVEL_IDS, "mouse clicks routed to wrong levels")
 	_expect(menu._city.site_reveal(0) == 1.0 and menu._city.site_reveal(1) == 1.0, "staged sites incomplete")
 	# 全息城的入口数必须等于导航列表长度 —— 这才是真正的不变式。
 	# 早期两边各写一份硬编码数组（菜单一份、城市一份），断言又各写死数字，
 	# 结果"多一个入口"这类错误反而被两个数字同时写死给掩盖了。
 	_expect(menu._city.sites.size() == menu.LEVEL_IDS.size(), "city entry count drifted from navigation list")
+	_expect(menu.LEVEL_IDS == ["expedition_01", "expedition_03", "expedition_02", "expedition_04"], "四正式入口顺序错误或99未隐藏")
+	_expect(GameDesignConfig.expedition_level("99").get("nav_visibility", "") == "hidden", "99配置未标记hidden")
+	_expect(menu._city.sites.size() == 4, "四正式入口缺失（锁定项也必须可见）")
+	_expect(menu.entry_state("expedition_01") == menu.ENTRY_OPEN, "新档01未开放")
+	_expect(menu.entry_state("expedition_03") == menu.ENTRY_LOCKED, "未安装稀土钥匙仍开放公馆")
+	_expect(menu.entry_state("expedition_04") == menu.ENTRY_LOCKED, "新档04未锁定")
 	if _is_unlocked_run():
-		_expect(menu._city.sites.size() == 4, "unlocked 02 (plus pending 03) missing")
-		var front: Vector2 = menu._camera.unproject_position(menu._city.markers[menu.LEVEL_IDS.find("expedition_03")].global_position)
-		var rear: Vector2 = menu._camera.unproject_position(menu._city.markers[2].global_position)
-		_expect(rear.y < front.y and rear.x > front.x, "02 not behind left-front slot in reference region")
+		_expect(menu.entry_state("expedition_02") == menu.ENTRY_OPEN, "旧档明确02权限未兼容")
 	else:
-		# 未解锁 02 ⇒ 只剩 01 / 99 / 待开放的 03
-		_expect(menu._city.sites.size() == 3, "locked navigation entry count wrong")
+		_expect(menu.entry_state("expedition_02") == menu.ENTRY_LOCKED, "新档旅馆未锁定")
+	var front: Vector2 = menu._camera.unproject_position(menu._city.markers[menu.LEVEL_IDS.find("expedition_03")].global_position)
+	var rear: Vector2 = menu._camera.unproject_position(menu._city.markers[menu.LEVEL_IDS.find("expedition_02")].global_position)
+	_expect(rear.y < front.y and rear.x > front.x, "02 not behind left-front slot in reference region")
 	# 视廊遮挡：**可见性不能只靠"屏幕坐标在视口内"来证明**。
 	#
 	# `_pick()` 是射线与标记平面求交，不判遮挡；`unproject_position` 也不判。
 	# 于是"牌面被楼群整个挡住"这种缺陷会让上面每条断言都绿 —— 03 首次上线正是如此：
 	# 断言全过，截图里却找不到它。这里直接数"挡在镜头与牌面之间"的方块实例。
 	#
-	# 只约束**声明了 `sightline` 的入口**（当前是 99）。01/99 走主循环挖空的老路径、
+	# 只约束**声明了 `sightline` 的入口**（当前正式入口为04）。01/03走主循环挖空的老路径、
 	# 02 是历史上就有遮挡的既有观感，给它们补硬数量断言等于顺手改既有画面。
 	for i in menu.LEVEL_IDS.size():
 		var sightline := float(menu._city._anchors[i].get("sightline", 0.0))
@@ -142,7 +153,7 @@ func _ready() -> void:
 	pad.pressed = true
 	Input.parse_input_event(pad)
 	Input.flush_buffered_events()
-	_expect(menu.requests.back() == "99", "gamepad confirmation failed")
+	_expect(menu.requests.back() == "expedition_03", "手柄确认未指向第二目标公馆")
 	var cancel := InputEventAction.new()
 	cancel.action = "ui_cancel"
 	cancel.pressed = true
@@ -215,8 +226,11 @@ func _verify_tower() -> void:
 		_expect(tower.player.input_locked, "player not locked")
 		await _shot("tower_active")
 
-		if "--enter-01" in OS.get_cmdline_user_args() or "--enter-99" in OS.get_cmdline_user_args():
-			var index := 1 if "--enter-99" in OS.get_cmdline_user_args() else 0
+		if "--enter-99" in OS.get_cmdline_user_args():
+			_expect(not menu.LEVEL_IDS.has("99"), "测试99仍占正式导航入口")
+			_expect(GameDesignConfig.pending_expedition_level_id.is_empty(), "隐藏99检查改变待出发路由")
+		if "--enter-01" in OS.get_cmdline_user_args():
+			var index: int = menu.LEVEL_IDS.find("expedition_01")
 			var id: String = menu.LEVEL_IDS[index]
 			get_tree().current_scene = tower
 			BaseManager.register_runtime_checkpoint_provider(tower)

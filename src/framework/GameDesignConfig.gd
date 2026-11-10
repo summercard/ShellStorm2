@@ -306,6 +306,21 @@ const COLLISION_LAYER_CAMERA_ONLY := 16
 ## 所以既有验证脚本不需要跟着改。
 const BULLET_TRAIL_VISIBLE := false
 
+## 敌方子弹**呈现方式**总开关（2026-11-10 业主要求回退）。
+##   `false` = 3D 弹体 + 白金亮芯（默认；业主要的是「判定体积 = 被放大的模型体积」，
+##             不是把弹丸换成一张公告板贴图）
+##   `true`  = 面向相机的 billboard 图标（2026-11-09 的形态，实现完整保留，随时可切回）
+## 单发可用 `projectile_config["billboard"]` 显式覆盖（`true`/`false`），
+## 供验收脚本与将来的「按怪物选呈现方式」使用 —— 不必为了测另一条分支改这个常量。
+const ENEMY_BULLET_BILLBOARD := false
+
+## 公告板图标相对**判定球直径**的尺寸倍率。
+## 2026-11-10 业主：「公告板的弹丸也太大了，先缩小到 70%」。
+## ⚠ 与 11-09 的「核心直径 = 判定球直径」不同：0.70 时图标核心比判定球小 30%，
+## 公告板模式下「所见即所中」降级为「所见小于所中」（不会误导成「打得到」，但会低估命中范围）。
+## 只影响 billboard 图标的视觉尺寸，判定球半径与 3D 弹体尺寸一律不动。
+const ENEMY_BULLET_ICON_SCALE := 0.70
+
 const ROOM_TYPES_WITH_HOSTILES: Array[String] = [
 	"COMBAT",
 	"ELITE",

@@ -1,3 +1,11 @@
+- [敌方子弹回退 3D 弹体，公告板保留并缩到 70%](2026-11-10_enemy_bullet_presentation_rollback.md)：业主澄清 11-09 只要求「判定体积=放大后模型体积」，未要求公告板 ⇒ 默认回 3D 弹体；公告板实现一行不删，由 `ENEMY_BULLET_BILLBOARD=false` 与单发 `projectile_config["billboard"]` 切换；图标核心由「= 判定球直径」改为 ×0.70（语义降级为「所见小于所中」，判定球不动）。新增三条缺省哨兵（缺省必须 3D / 弹体可见 / 图标不可见），`verify_crosshair_billboard` 31→37 samples 通过，真机对照 `outputs/bullet_presentation_20261110/compare_3d_vs_billboard70.png`。遗留：公告板「看着大」主因是外晕 1.67 倍核心与不足 1px 的描边，不是尺寸倍率。
+
+- [南墙收镜与鼠标前瞻交接稳定性修复](2026-11-10_camera_wall_stability.md)：退出20cm滞回、恢复期保持南向约束；轻量Owner37项/Forward+窗口鼠标50项与热键通过；完整关卡原位人工手感未验，整体partial。
+
+- [远征关卡牌居中红锁、后排放大与主线资产补记](2026-11-10_centered_expedition_locks.md)：红锁居中1.30倍，后排两牌0.78→0.95且前排1.00不变；锁定文字让位、解锁恢复。稀土key/台座完整登记，补UI/台座内嵌表现和高级箱复用说明；三项隔离导航/Forward+双状态/真实输入回归exit0，资产门禁新增问题0，旧红项保留。
+
+- [主线3.1—3.3制作与最终证据汇总](2026-11-10_main_story_031_033.md)：03→绿苔四钥匙说明→数据库Boss坡道步行/对白/真实激活→高级箱永久稀土key→8秒自动撤离→基地实体交接安装→1/4及公馆解锁。progress/navigation、boss_gate 20、narrative基地328/Boss320、performance43、integration98、031视觉34/032视觉43、沿用033最新polished27及timeline复跑113均exit0；capture已支持031/032/033。章节真渲染fixture与headless业务集成不等于纯新档人工全关贯通；expected注入与非预期错误分列。旧Boss综合三红、文档14断链、资产漂移与UID/ObjectDB告警未闭环，不署整体全通过；后三Boss与主塔最终战未实现。
+
 - [宝箱出现反馈·自带地面光·头顶提示让位](2026-11-09_chest_appear_fx_light_prompt.md)：业主三条（宝箱出来不突兀 / 头顶 E 提示与靠近白字重复 / 暗处看不见箱子）。出现特效复用 FX01-35 **IN**（不是 OUT —— 环向内收拢读作被吸走）、暖金尺寸 2.0；触发点从装配期改到 `Dungeon3D._on_room_entered()`（装配期会在加载页预热时白播且旗标补不回）；提示牌聚焦让位；`OmniLight3D` 挂视觉根、不投影、平涂箱灯色跟身板。新增 `verify_chest_appear_fx_prompt`（8 组反向对照，其中"房间不过滤已开箱"由箱子守卫兜住故另加箱子侧用例）。
 
 - [远征03通道房清房宝箱修复](2026-11-09_expedition03_corridor_clear_drop_chest.md)：业主报通道房里仍刷宝箱。根因不是作者标记，而是 `_ensure_room_clear_drop()` 只按房型排除、把 `authored_layout_peaceful` 的无怪房（走廊空 `room_type` / `MERCHANT` / `UPGRADE`）当成内容房，`chest_chance=1.0` 下每间白送一只。判据改按和平区标志早退；新增 `verify_expedition03_clear_drop_rooms`（31 检查，反向对照 18 条精准变红）。

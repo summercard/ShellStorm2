@@ -54,6 +54,12 @@ const CODE_HUD_GLYPH_SCRIPT := preload("res://src/ui/CodeHUDGlyph.gd")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 const HUD_RELOAD_RING_SCRIPT := preload("res://src/ui/HudReloadRing.gd")
 const ENCOUNTER_COUNTDOWN_RING_SCRIPT := preload("res://src/ui/EncounterCountdownRing.gd")
+## —— 玩家血条反馈三件（2026-11-10 主人要求）——
+## 血条底纹槽（斜杆 + 横向位移）、回血补条、翻滚冷却环。三者都是**只画不收数**的 Control：
+## 生命值仍只由 `Player3D` 拥有，冷却仍只由 `Player3D.dash_cooldown_timer` 拥有。
+const HUD_HEALTH_BAR_TRACK_SCRIPT := preload("res://src/ui/HudHealthBarTrack.gd")
+const HUD_HEALTH_BAR_HEAL_SCRIPT := preload("res://src/ui/HudHealthBarHeal.gd")
+const HUD_DASH_RING_SCRIPT := preload("res://src/ui/HudDashCooldownRing.gd")
 ## —— HUD 遭遇倒计时环（2026-10-16，业主标注放右上角）——
 ## 外径取 108 设计 px（×HUD_UI_SCALE ⇒ 86.4 canvas px）：
 ## 圆心那行 `M:SS` 用的是与右下金币读数**同一个**字号（26×0.8≈21 px），
@@ -148,6 +154,37 @@ const OFFSCREEN_INDICATOR_TARGET_HEIGHT_M := 0.9
 ## 2026-10-15：Boss 屏条与玩家主界面条共用这两个常量（此前只有 Boss 条一个使用者）。
 const HUD_HEALTH_BAR_DELAY_SPEED := Enemy3D.HEALTH_BAR_DELAY_SPEED
 const HUD_HEALTH_BAR_DELAY_COLOR := Enemy3D.HEALTH_BAR_DELAY_COLOR
+## —— 玩家状态块受击震动（2026-11-10 主人要求②）——
+## 主人原话：「受到攻击后，角色血条要有震动动画，很显眼。」
+## 抖的是整个 `PlayerStatusBlock`（血条 + 电芯 + 翻滚环一起晃）：血条自己挂在
+## `VBoxContainer` 里，容器每帧会覆盖子节点的 `position`；而状态块整体是
+## `_reference_hud_root` 下的绝对锚定控件，改 `position` 不会被任何人抢回去。
+const HUD_PLAYER_SHAKE_DURATION := 0.34
+## 峰值位移（设计 px，×HUD_UI_SCALE ⇒ canvas px）。横向比纵向大，读成"被撞了一下"。
+## 2026-11-10 实拍后上调（原 9 / 5）：状态块只有 272×104 canvas px，7 px 的位移
+## 在真渲染里几乎看不出来，而主人要的是「很显眼」。现在 9.6 / 5.2 canvas px，
+## 相对块宽约 3.5%，是"明显被推了一下"但仍不会撞到右侧小地图的量级。
+const HUD_PLAYER_SHAKE_AMPLITUDE_X_DESIGN := 12.0
+const HUD_PLAYER_SHAKE_AMPLITUDE_Y_DESIGN := 6.5
+## 抖动频率（Hz）。两个不互为整数倍的分量叠加，避免看出规律的往复。
+const HUD_PLAYER_SHAKE_FREQUENCY := 26.0
+## 两次震动之间的最小间隔：持续伤害（电击/灼烧）会高频改血，不设间隔会一直抖。
+const HUD_PLAYER_SHAKE_MIN_INTERVAL := 0.16
+## 冲击瞬间的放大峰值（1.0 = 不放大）。只放大不缩小 ⇒ 不构成回弹。
+const HUD_PLAYER_SHAKE_PUNCH_SCALE := 1.06
+## 受击染色（与位移同一条包络）。选暖红而不是纯红：纯红会让血条自己失去层次，
+## 淡淡偏暖就已经把"刚挨打"和"平时"分开了。
+const HUD_PLAYER_SHAKE_TINT := Color(1.0, 0.58, 0.52, 1.0)
+const HUD_PLAYER_SHAKE_TINT_STRENGTH := 0.55
+## —— 翻滚冷却环（2026-11-10 主人要求①）——
+## 外径 28 设计 px（×0.8 ⇒ 22.4 canvas px），与角色身侧换弹环 25 px 同一档。
+## 落点是状态块内容列的左下角（血条 → 电芯行 → 本环），不侵入画面中心。
+## 位置按实测矩形定：设计 y 140..168 ⇒ canvas y 112..134.4，与上方电芯行
+## （实测结束于 106.6）留 5.4 px、与状态块下沿（139.2）留 4.8 px。
+## 首版取 32 设计 px / y 134 起，实测只有 0.6 px 间隙 —— 环顶贴死在电芯格上。
+const HUD_DASH_RING_DIAMETER_DESIGN := 28.0
+const HUD_DASH_RING_LEFT_DESIGN := 30.0
+const HUD_DASH_RING_TOP_DESIGN := 140.0
 ## 非远征门后购卡的历史稀有度基准；远征01改由 FateEconomyService 的真实收益区间冻结报价。
 ## 只由 `GameManager.currency`（本局金币）支付；局外总池 `BaseManager.get_extraction_points()` 永不参与。
 const FATE_PRICE_BY_RARITY := [30, 60, 110, 180, 270]
@@ -490,6 +527,22 @@ var _boss_delayed_value := 1.0
 var _player_delayed_bar: ProgressBar = null
 var _player_delayed_ratio := 1.0
 var _player_health_bar_initialized := false
+## 2026-11-10 三件血条反馈（见 `HUD_HEALTH_BAR_TRACK_SCRIPT` 上方的常量块）。
+## 三者都只吃视觉参数，**不持有生命值** —— 真实血量仍然只有 `hp_bar.value` 一处。
+var _player_hp_track: HudHealthBarTrack = null
+var _player_heal_bar: HudHealthBarHeal = null
+var _hud_dash_ring: HudDashCooldownRing = null
+## 受击震动的运行时状态。`_player_status_base_position` 在首帧布局完成后抓一次，
+## 之后每次振动都以它为原点（绝不累加），震完必须精确复位。
+var _player_status_block: Control = null
+var _player_status_base_position := Vector2.ZERO
+var _player_status_base_captured := false
+var _player_shake_elapsed := 0.0
+var _player_shake_active := false
+var _player_shake_offset := Vector2.ZERO
+## 当前振幅包络（1 → 0）。单独存一份是为了让验收能验"衰减"本身：
+## 位移瞬时值受相位影响（`sin` 可能正好过零），拿它判衰减会误判。
+var _player_shake_decay := 0.0
 var _active_boss: Enemy3D = null
 # 常驻交互圆点（门的锚点）单帧缓存：见 _refresh_interaction_dot_cache。
 var _dot_cache_frame := -1
@@ -651,6 +704,10 @@ func _ready() -> void:
 		FateCardGameBridge.scope_state_changed.connect(_on_fate_scope_state_changed)
 	player.hp_changed.connect(_on_player_hp_changed)
 	player.ammo_changed.connect(_on_ammo_changed)
+	# 翻滚冷却环的驱动源（2026-11-10）：`Player3D` 每物理帧把
+	# `dash_cooldown_timer / get_dash_cooldown_duration()` 作为比例推出来。
+	# HUD 只消费这个比例，**不拥有冷却计时**，也不反向改翻滚时长/无敌帧。
+	player.dash_cooldown_changed.connect(_on_player_dash_cooldown_changed)
 	# 换弹环的驱动源：武器换弹进度 → Player3D 透传 → 本 HUD 环（2026-10-08）。
 	# 只听不写：环的进度与显隐完全由武器换弹计时器决定，HUD 不反向影响换弹时长。
 	player.reload_progress_changed.connect(_on_player_reload_progress_changed)
@@ -1561,6 +1618,7 @@ func _process(delta: float) -> void:
 	_tick_bless_dead(delta)
 	_tick_boss_health_bar_delay(delta)
 	_tick_player_health_bar_delay(delta)
+	_tick_player_vitals_fx(delta)
 	_tick_boss_reinforcements(delta)
 	_tick_battery_blink(delta)
 	_tick_enemy_preactivation(delta)
@@ -2009,6 +2067,9 @@ func _build_reference_main_hud() -> void:
 	# 所以血条 / 电芯 / 文字的落位一像素不动；可读性交给 `_make_hud_label` 自带的描边兜底。
 	player_panel.add_theme_stylebox_override("panel", _make_bare_hud_style())
 	player_panel.name = "PlayerStatusBlock"
+	# 受击震动要改它的 `position`：必须是 `_reference_hud_root` 下的绝对锚定控件，
+	# 不能是任何 `Container` 的子节点（容器每帧会覆盖子节点位置）。
+	_player_status_block = player_panel
 	_anchor_control(player_panel, 0.0, 0.0, 0.0, 0.0, 18, 44, 358, 174)
 	_reference_hud_root.add_child(player_panel)
 	# tap 头像 → 切换背包（键 I / Tab 等效）
@@ -2038,15 +2099,24 @@ func _build_reference_main_hud() -> void:
 	hp_stack.custom_minimum_size = _hud_size(Vector2(220, 26))
 	hp_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stat_vbox.add_child(hp_stack)
+	# 2026-11-10 主人要求③：血条空槽底纹（斜杆 + 横向位移，灰、暗）。
+	# 它是**最底层**（先 add 再让两条 ProgressBar 叠上去），负责把"血条总长"画出来。
+	# 此前这段空槽没有任何图形 —— 掉血后只看到红条变短，读不出总量与扣血量。
+	_player_hp_track = HUD_HEALTH_BAR_TRACK_SCRIPT.new() as HudHealthBarTrack
+	_player_hp_track.name = "PlayerHealthBarTrack"
+	_player_hp_track.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_player_hp_track.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hp_stack.add_child(_player_hp_track)
 	_player_delayed_bar = ProgressBar.new()
 	_player_delayed_bar.name = "PlayerHealthBarDelayed"
 	_player_delayed_bar.custom_minimum_size = _hud_size(Vector2(220, 26))
 	_player_delayed_bar.show_percentage = false
 	_player_delayed_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_player_delayed_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var hp_bg_style := _make_bar_style(UIPalette.PRISM_HP_BG, 1)
-	hp_bg_style.border_color = Color(1.0, 1.0, 1.0, 0.30)
-	hp_bg_style.set_border_width_all(1)
+	# 2026-11-10：本层的 `background` 改为**全透明**，血条槽的唯一所有者让给
+	# `PlayerHealthBarTrack`。此前这里是 `PRISM_HP_BG`（alpha 0.72）的空槽，
+	# 它会把底纹斜杆整片盖掉；两条 ProgressBar 各带一层空槽，视觉上还会互相叠色。
+	var hp_bg_style := _make_bar_style(Color(0.0, 0.0, 0.0, 0.0), 1)
 	_player_delayed_bar.add_theme_stylebox_override("background", hp_bg_style)
 	_player_delayed_bar.add_theme_stylebox_override(
 		"fill", _make_bar_style(HUD_HEALTH_BAR_DELAY_COLOR, 1)
@@ -2064,6 +2134,13 @@ func _build_reference_main_hud() -> void:
 	hp_fill.shadow_size = 0
 	hp_bar.add_theme_stylebox_override("fill", hp_fill)
 	hp_stack.add_child(hp_bar)
+	# 2026-11-10 主人要求④：回血补条。压在红条**之上**、读数之下 ——
+	# 它只在治疗的那一截上把白色前沿推过去，播完自行隐藏。
+	_player_heal_bar = HUD_HEALTH_BAR_HEAL_SCRIPT.new() as HudHealthBarHeal
+	_player_heal_bar.name = "PlayerHealthBarHeal"
+	_player_heal_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_player_heal_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hp_stack.add_child(_player_heal_bar)
 	hp_label = _make_hud_label("230 / 230", 16, Color.WHITE)
 	hp_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -2094,6 +2171,25 @@ func _build_reference_main_hud() -> void:
 	for label in [hp_label, _hud_battery_time_label]:
 		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.88))
 		label.add_theme_constant_override("outline_size", 4)
+
+	# 2026-11-10 主人要求①：翻滚（冲刺）冷却环 —— 不写字，只用环形扫描读数。
+	# 落点 = 状态块内容列的左下角（血条 → 电芯行 → 本环），设计 px (30,134)..(62,166)。
+	# 这一列原本就空着（内容只有血条 + 电芯两行、且垂直居中），且不与塔楼引导卡
+	# `TowerCurrentInfoHUD`（canvas y 176 起）相撞。
+	# 用绝对锚定挂在 `_reference_hud_root` 而不是塞进 `stat_vbox`：塞进去会把状态块
+	# 的最小高度撑过锚框（130 设计 px），内容溢出锚框 —— 而这块的尺寸被
+	# `verify_reference_hud_fate_visual` 的 `size.x <= 280` 盯着。
+	_hud_dash_ring = HUD_DASH_RING_SCRIPT.new() as HudDashCooldownRing
+	_hud_dash_ring.name = "HudDashCooldownRing"
+	_hud_dash_ring.visible = true
+	_anchor_control(
+		_hud_dash_ring, 0.0, 0.0, 0.0, 0.0,
+		HUD_DASH_RING_LEFT_DESIGN,
+		HUD_DASH_RING_TOP_DESIGN,
+		HUD_DASH_RING_LEFT_DESIGN + HUD_DASH_RING_DIAMETER_DESIGN,
+		HUD_DASH_RING_TOP_DESIGN + HUD_DASH_RING_DIAMETER_DESIGN
+	)
+	_reference_hud_root.add_child(_hud_dash_ring)
 
 
 	seed_label = _make_hud_label("SEED", 12, subdued)
@@ -11653,8 +11749,20 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 		Color(1.0, 0.28, 0.22) if hp_ratio <= 0.30 else Color(0.92, 0.95, 1.0),
 	)
 	var took_damage := _last_player_hp >= 0 and current < _last_player_hp
+	var healed := _last_player_hp >= 0 and current > _last_player_hp
+	var previous_hp := _last_player_hp
 	_last_player_hp = current
 	_sync_player_health_bar_delay(hp_ratio, took_damage)
+	# 2026-11-10：受击震动（要求②）+ 回血补条（要求④）。
+	# 两者都只用"这一帧的初/末血量"这一对数据，真实生命值在上面已经写进
+	# `hp_bar.value` 了 —— 视觉层不参与伤害判定、格挡、暗角与存档。
+	if took_damage:
+		_start_player_status_shake()
+	if healed and _player_heal_bar != null and is_instance_valid(_player_heal_bar):
+		var previous_ratio := clampf(
+			float(previous_hp) / float(maxi(1, maximum)), 0.0, 1.0
+		)
+		_player_heal_bar.play(previous_ratio, hp_ratio)
 	# 自由撤离：玩家可以被打但不被中断。
 	# 只要 HP 不归零就读条继续。
 	if current <= 0:
@@ -11706,7 +11814,148 @@ func get_player_vitals_bar_snapshot() -> Dictionary:
 		"delayed_layer_present": _player_delayed_bar != null,
 		"delayed_layer_name": _player_delayed_bar.name if _player_delayed_bar != null else "",
 		"delayed_speed": HUD_HEALTH_BAR_DELAY_SPEED,
+		# —— 2026-11-10 新增三项视觉层读数 ——
+		# 底纹槽 / 回血补条 / 受击震动都只活在视觉侧，同样无法从 `hp_bar.value` 反推。
+		"track_present": _player_hp_track != null,
+		"track_name": _player_hp_track.name if _player_hp_track != null else "",
+		"track_scroll_px": (
+			float(_player_hp_track.get_snapshot().get("scroll_px", 0.0))
+			if _player_hp_track != null else 0.0
+		),
+		"heal_present": _player_heal_bar != null,
+		"heal": _player_heal_bar.get_snapshot() if _player_heal_bar != null else {},
+		"shake_active": _player_shake_active,
+		"shake_elapsed": _player_shake_elapsed,
+		"shake_offset": _player_shake_offset,
+		"shake_decay": _player_shake_decay,
+		"shake_duration": HUD_PLAYER_SHAKE_DURATION,
+		"shake_amplitude_px": Vector2(
+			HUD_PLAYER_SHAKE_AMPLITUDE_X_DESIGN, HUD_PLAYER_SHAKE_AMPLITUDE_Y_DESIGN
+		) * HUD_UI_SCALE,
+		"shake_min_interval": HUD_PLAYER_SHAKE_MIN_INTERVAL,
 	}
+
+
+## 翻滚冷却环快照（2026-11-10）。冷却计时的真源仍是 `Player3D.dash_cooldown_timer`，
+## 这里只是把"环上此刻读到的东西"和"角色的真实计时"并排报出来，供验收比对。
+func get_player_dash_gauge_snapshot() -> Dictionary:
+	var timer := 0.0
+	var duration := 0.0
+	if player != null and is_instance_valid(player):
+		timer = float(player.dash_cooldown_timer)
+		duration = float(player.get_dash_cooldown_duration())
+	return {
+		"present": _hud_dash_ring != null,
+		"name": _hud_dash_ring.name if _hud_dash_ring != null else "",
+		"visible": _hud_dash_ring.visible if _hud_dash_ring != null else false,
+		"cooldown_ratio": _hud_dash_ring.cooldown_ratio if _hud_dash_ring != null else 0.0,
+		"ready": _hud_dash_ring.is_ready() if _hud_dash_ring != null else true,
+		"ring": _hud_dash_ring.get_snapshot() if _hud_dash_ring != null else {},
+		"player_timer": timer,
+		"player_duration": duration,
+		"design_diameter": HUD_DASH_RING_DIAMETER_DESIGN,
+		"expected_size": Vector2(
+			HUD_DASH_RING_DIAMETER_DESIGN, HUD_DASH_RING_DIAMETER_DESIGN
+		) * HUD_UI_SCALE,
+	}
+
+
+## 玩家血条的运行时视觉反馈（2026-11-10）：底纹位移、回血补条、受击震动。
+## 三者统一由场景主循环推进 —— 各自不开 `_process`，这样套件里 `set_process(false)`
+## 冻住场景时它们也一起冻住，截图与断言不会随机器帧率漂。
+func _tick_player_vitals_fx(delta: float) -> void:
+	if _player_hp_track != null and is_instance_valid(_player_hp_track):
+		_player_hp_track.tick(delta)
+	if _player_heal_bar != null and is_instance_valid(_player_heal_bar):
+		_player_heal_bar.tick(delta)
+	if _hud_dash_ring != null and is_instance_valid(_hud_dash_ring):
+		_hud_dash_ring.tick(delta)
+	_tick_player_status_shake(delta)
+
+
+## 受击震动。两个位移分量取不互为整数倍的频率 ⇒ 看不出规律的往复；
+## 振幅随进度衰减，到点**精确复位**到 `_player_status_base_position`（绝不累加，
+## 否则长时间战斗后整块状态会慢慢漂走）。
+func _tick_player_status_shake(delta: float) -> void:
+	if _player_status_block == null or not is_instance_valid(_player_status_block):
+		return
+	if not _player_status_base_captured:
+		# 首帧布局完成后抓一次原点（此时 `_anchor_control` 的偏移已生效）。
+		_player_status_base_position = _player_status_block.position
+		_player_status_base_captured = true
+	if not _player_shake_active:
+		return
+	_player_shake_elapsed = minf(
+		HUD_PLAYER_SHAKE_DURATION, _player_shake_elapsed + maxf(0.0, delta)
+	)
+	var progress := clampf(_player_shake_elapsed / HUD_PLAYER_SHAKE_DURATION, 0.0, 1.0)
+	var decay := pow(1.0 - progress, 1.6)
+	_player_shake_decay = decay
+	var phase := _player_shake_elapsed * TAU * HUD_PLAYER_SHAKE_FREQUENCY
+	var amplitude := Vector2(
+		HUD_PLAYER_SHAKE_AMPLITUDE_X_DESIGN, HUD_PLAYER_SHAKE_AMPLITUDE_Y_DESIGN
+	) * HUD_UI_SCALE
+	_player_shake_offset = Vector2(
+		sin(phase) * amplitude.x, sin(phase * 1.37 + 1.7) * amplitude.y
+	) * decay
+	_player_status_block.position = _player_status_base_position + _player_shake_offset
+	# 冲击放大：只放大、不回弹（棱镜规范 §6 禁止 TRANS_BACK / 弹性）。
+	var punch := 1.0 + (HUD_PLAYER_SHAKE_PUNCH_SCALE - 1.0) * pow(1.0 - progress, 3.0)
+	_player_status_block.pivot_offset = _player_status_block.size * 0.5
+	_player_status_block.scale = Vector2(punch, punch)
+	# 受击染色：位移在暗实景上不够显眼时，颜色是第二层信息（血条与数字一起偏暖红）。
+	# 与位移同一条包络，不额外增加时长，也不引入新的图形元素。
+	_player_status_block.modulate = Color.WHITE.lerp(
+		HUD_PLAYER_SHAKE_TINT, HUD_PLAYER_SHAKE_TINT_STRENGTH * decay
+	)
+	if progress >= 1.0:
+		_end_player_status_shake()
+
+
+func _start_player_status_shake() -> void:
+	if _player_status_block == null or not is_instance_valid(_player_status_block):
+		return
+	# 持续伤害（电击 / 灼烧）会高频改血；两次震动之间留一个最小间隔，
+	# 否则表现是"整场都在抖"，反而看不出哪一下是真挨打。
+	if _player_shake_active and _player_shake_elapsed < HUD_PLAYER_SHAKE_MIN_INTERVAL:
+		return
+	# 无障碍降级：不做位移，只做一次亮度脉冲（信息不减，运动量减）。
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		_flash_player_status_block()
+		return
+	_player_shake_active = true
+	_player_shake_elapsed = 0.0
+	_player_shake_offset = Vector2.ZERO
+	_player_shake_decay = 1.0
+
+
+func _end_player_status_shake() -> void:
+	_player_shake_active = false
+	_player_shake_elapsed = 0.0
+	_player_shake_offset = Vector2.ZERO
+	_player_shake_decay = 0.0
+	if _player_status_block != null and is_instance_valid(_player_status_block):
+		_player_status_block.position = _player_status_base_position
+		_player_status_block.scale = Vector2.ONE
+		_player_status_block.modulate = Color.WHITE
+
+
+## `reduce_motion` 降级路径：不抖，只把状态块整体提亮一下再回落。
+## 只碰 `modulate`，不碰 `position`/`scale` —— 与震动 tick 不可能互相覆盖。
+func _flash_player_status_block() -> void:
+	var block := _player_status_block
+	if block == null or not is_instance_valid(block):
+		return
+	block.modulate = Color(1.45, 1.20, 1.16, 1.0)
+	var tween := create_tween()
+	tween.tween_property(block, "modulate", Color.WHITE, 0.16)
+
+
+## 翻滚冷却环写入。`Player3D` 每物理帧推一次比例（1 = 刚翻滚，0 = 就绪）。
+func _on_player_dash_cooldown_changed(cooldown_ratio: float) -> void:
+	if _hud_dash_ring == null or not is_instance_valid(_hud_dash_ring):
+		return
+	_hud_dash_ring.set_cooldown_ratio(cooldown_ratio)
 
 
 func _on_player_debug_scale_changed(snapshot: Dictionary) -> void:

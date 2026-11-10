@@ -45,6 +45,8 @@ var _elapsed := 0.0
 var _auto_left := 0.0
 var _typing := false
 var _active := false
+var _last_input_frame := -1
+var _advance_input_handler := Callable()
 ## 显式暂停标志。本节点是 PROCESS_MODE_ALWAYS（跨场景系统，改 process_mode
 ## 会波及它自己的独立验收），所以树暂停时它仍会打字并自动推进 ——
 ## 由剧情系统在暂停切换时调用 set_paused() 同步冻结（08 文档 §6.3 / §8.4）。
@@ -68,7 +70,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if _paused:
+	if _paused or get_tree().paused:
 		return
 	if not _active:
 		return
@@ -85,18 +87,36 @@ func _process(delta: float) -> void:
 			_step_next()
 
 
+func _input(event: InputEvent) -> void:
+	consume_advance_input(event)
+
+
 func _unhandled_input(event: InputEvent) -> void:
-	if _paused:
-		return
-	if not _active or _typing:
-		# 打字中按确认键 = 立即全显（仍消费该次输入）
-		if _active and event.is_action_pressed("ui_accept"):
-			get_viewport().set_input_as_handled()
-			_reveal_all()
-		return
-	if event.is_action_pressed("ui_accept"):
-		get_viewport().set_input_as_handled()
-		_step_next()
+	consume_advance_input(event)
+
+
+func consume_advance_input(event: InputEvent) -> bool:
+	if _paused or get_tree().paused or not _active:
+		return false
+	var key := event as InputEventKey
+	var is_space := key != null and (key.keycode == KEY_SPACE or key.physical_keycode == KEY_SPACE)
+	if not is_space and not event.is_action("ui_accept"):
+		return false
+	get_viewport().set_input_as_handled()
+	if not event.is_pressed() or event.is_echo():
+		return true
+	var frame := Engine.get_process_frames()
+	if frame == _last_input_frame:
+		return true
+	_last_input_frame = frame
+	if _advance_input_handler.is_valid() and bool(_advance_input_handler.call()):
+		return true
+	advance()
+	return true
+
+
+func set_advance_input_handler(handler: Callable) -> void:
+	_advance_input_handler = handler
 
 
 ## 播放一组台词。返回 run_id；lines 为空时返回空串。
@@ -153,6 +173,25 @@ func advance() -> bool:
 	if _typing:
 		_reveal_all()
 		return true
+	_step_next()
+	return true
+
+
+func reveal_all() -> void:
+	_reveal_all()
+
+
+func has_next_line() -> bool:
+	return _active and _index + 1 < _lines.size()
+
+
+func current_line_index() -> int:
+	return _index
+
+
+func finish_current_hold() -> bool:
+	if not _active or _typing:
+		return false
 	_step_next()
 	return true
 
@@ -339,7 +378,7 @@ func _build() -> void:
 	_text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(_text_label)
 
-	_hint_label = UIStyleFactory.make_outline_label("[回车] 继续", UIPalette.PRISM_TEXT_FAINT)
+	_hint_label = UIStyleFactory.make_outline_label("[空格/回车] 继续", UIPalette.PRISM_TEXT_FAINT)
 	_hint_label.name = "Hint"
 	UIStyleFactory.apply_prism_label(_hint_label, "faint", 1, 13)
 	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT

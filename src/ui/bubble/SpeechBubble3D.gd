@@ -70,6 +70,7 @@ var _total_chars := 0
 ## 整句原文。`get_bubble_text()` 返回它（不是当前前缀）——
 ## "说的是哪一句"是身份，打字进度另由 `get_visible_char_count()` 表达。
 var _full_text := ""
+var _sentence_id := 0
 ## 整句排版后的像素尺寸与每像素的世界尺寸，用于算垂直补偿。
 var _full_text_px := Vector2.ZERO
 var _layout_unit := 0.0055
@@ -151,6 +152,17 @@ func reveal_all() -> void:
 	_finish_typing()
 
 
+func compress_hold_to_next() -> bool:
+	if not _active or _typing:
+		return false
+	_hold_left = 0.0
+	return true
+
+
+func current_sentence_id() -> int:
+	return _sentence_id
+
+
 func is_typing() -> bool:
 	return _typing
 
@@ -214,6 +226,7 @@ func say(text: String, hold := -1.0) -> void:
 		return
 	if _panel == null or _label == null:
 		_build_nodes()
+	_sentence_id += 1
 	_label.text = clean
 	# 尺寸按**整句**算（`_relayout` 拿的是全文）：底板一次到位，打字过程中不再变宽。
 	# 反过来做（按可见字符算）会让气泡每打一个字就跳一下尺寸，非常晃。

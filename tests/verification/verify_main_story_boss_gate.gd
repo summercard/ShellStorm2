@@ -54,31 +54,30 @@ func _ready() -> void:
 
 	# 显式 request：不依赖 10m 距离，窗口与总时长走同一条生产激活时序。
 	player.global_position = Vector3(100.0, 0.0, 0.0)
-	var started_events := 0
-	var release_events := 0
-	var completed_events := 0
-	monitor.boss_activation_started.connect(func(_enemy: Enemy3D) -> void: started_events += 1)
-	monitor.boss_activation_release_window.connect(func(_enemy: Enemy3D) -> void: release_events += 1)
-	monitor.boss_activation_completed.connect(func(_enemy: Enemy3D) -> void: completed_events += 1)
+	# Lambda captures scalar locals by value; a shared dictionary observes signal delivery.
+	var events := {"started": 0, "release": 0, "completed": 0}
+	monitor.boss_activation_started.connect(func(_enemy: Enemy3D) -> void: events["started"] += 1)
+	monitor.boss_activation_release_window.connect(func(_enemy: Enemy3D) -> void: events["release"] += 1)
+	monitor.boss_activation_completed.connect(func(_enemy: Enemy3D) -> void: events["completed"] += 1)
 	expect(monitor.request_story_activation(), "monitor request 成功")
 	var requested := monitor.get_story_activation_snapshot()
 	expect(not bool(requested["held"]) and bool(requested["started"]) and float(requested["elapsed"]) == 0.0, "request 解除 hold 并从零开始")
-	expect(started_events == 1, "激活开始信号只发一次")
+	expect(int(events["started"]) == 1, "激活开始信号只发一次")
 	monitor._physics_process(5.39)
-	expect(release_events == 0 and not bool(monitor.get_story_activation_snapshot()["completed"]), "5.4 秒前无释放窗口且未完成")
+	expect(int(events["release"]) == 0 and not bool(monitor.get_story_activation_snapshot()["completed"]), "5.4 秒前无释放窗口且未完成")
 	var activation_hp := monitor.current_hp
 	monitor.take_damage(999999)
 	expect(monitor.current_hp == activation_hp, "剧情激活未完成前仍不可受伤")
 	monitor._physics_process(0.02)
 	var release_elapsed := float(monitor.get_story_activation_snapshot()["elapsed"])
-	expect(release_events == 1 and release_elapsed >= RELEASE_WINDOW and release_elapsed < RELEASE_WINDOW + 0.02, "elapsed 穿越 5.4 秒发一次释放窗口")
+	expect(int(events["release"]) == 1 and release_elapsed >= RELEASE_WINDOW and release_elapsed < RELEASE_WINDOW + 0.02, "elapsed 穿越 5.4 秒发一次释放窗口")
 	var retry_before := monitor.get_story_activation_snapshot()
 	expect(monitor.request_story_activation(), "已 started 的重复 request 幂等成功")
 	var retry_after := monitor.get_story_activation_snapshot()
-	expect(float(retry_after["elapsed"]) == float(retry_before["elapsed"]) and started_events == 1, "重复 request 不重置且不重复开始")
+	expect(float(retry_after["elapsed"]) == float(retry_before["elapsed"]) and int(events["started"]) == 1, "重复 request 不重置且不重复开始")
 	monitor._physics_process(1.0)
-	expect(bool(monitor.get_story_activation_snapshot()["completed"]) and completed_events == 1, "6.4 秒完成且 completed 只发一次")
-	expect(monitor.request_story_activation() and completed_events == 1, "completed request 幂等成功")
+	expect(bool(monitor.get_story_activation_snapshot()["completed"]) and int(events["completed"]) == 1, "6.4 秒完成且 completed 只发一次")
+	expect(monitor.request_story_activation() and int(events["completed"]) == 1, "completed request 幂等成功")
 
 	# 完成后才允许伤害；不擅自重置已完成的 Boss。
 	var completed_hp := monitor.current_hp
@@ -132,8 +131,8 @@ func _ready() -> void:
 
 
 func finish() -> void:
-	var report := {"checks": checks, "failures": failures, "exit_code": 0 if failures.is_empty() else 1, "not_executed": ["Godot execution deferred to主agent隔离运行"]}
-	var file := FileAccess.open("res://tests/verification/verify_main_story_boss_gate.report.json", FileAccess.WRITE)
+	var report := {"checks": checks, "failures": failures, "exit_code": 0 if failures.is_empty() else 1, "rendered_acceptance": false}
+	var file := FileAccess.open("user://verify_main_story_boss_gate.report.json", FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "\t"))
 	file.close()
 	for failure in failures:

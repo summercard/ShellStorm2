@@ -210,7 +210,7 @@ func _animate_gate(gate: Node3D, raised: bool, duration: float) -> void:
 	#    表现是「逻辑上闸已开（`sealed=false`）、护栏却还立着挡人」。
 	#    Boss 一死即开闸会让这个竞态更容易撞上（击杀可以发生在封场后任意时刻），
 	#    所以这里显式接管：同一道门永远只有一条在跑的补间。
-	var previous := gate.get_meta("gate_tween", null) as Tween
+	var previous: Tween = gate.get_meta("gate_tween") as Tween if gate.has_meta("gate_tween") else null
 	if previous != null and previous.is_valid():
 		previous.kill()
 	var tween := gate.create_tween()

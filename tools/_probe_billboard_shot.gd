@@ -102,7 +102,7 @@ func _ready() -> void:
 		projectile.activate({
 			"direction": Vector3(0, 0, -1), "speed": 6.0, "damage": 5, "hostile": true,
 			"target_group": "player_3d", "projectile_collision_mask": 1,
-			"color": colors[i], "visual_scale": 1.6, "shooter": player,
+			"color": colors[i], "visual_scale": 1.6, "shooter": player, "billboard": true,
 		}, player.global_position + Vector3(-1.6 + float(i) * 1.5, 0.75, -3.4 - float(i) * 1.6))
 		projectile.set_physics_process(false)
 

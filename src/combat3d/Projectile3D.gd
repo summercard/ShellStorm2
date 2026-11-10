@@ -87,6 +87,10 @@ var _gun_bullet_geometry: Dictionary = {}
 ## 2026-11-09 起**同时作用于碰撞半径**（业主：「视觉放大了，碰撞检测没放大 ⇒ 容易穿过去」），
 ## 即判定球与弹体一样大 —— 玩家看到多大就能打中多大。
 var visual_scale := 1.0
+## 敌方子弹呈现方式：-1 = 跟随 `GameDesignConfig.ENEMY_BULLET_BILLBOARD`（默认），
+## 0 = 强制 3D 弹体，1 = 强制公告板图标。来源是 `projectile_config["billboard"]`。
+## 池化复借必须逐发重取（缺省回 -1），否则上一发的强制档会粘到下一颗弹上。
+var _billboard_override := -1
 ## 敌弹**敌我通吃**：为真时这颗子弹除玩家外也命中其它敌对怪（发射者自己永远排除）。
 ## 由发射方按关卡 `monster_rules.projectile.hit_allies` 下发，缺省 false ⇒ 旧行为逐字不变。
 ## 实现方式只是往 `projectile_collision_mask` 追加敌人层，不改命中半径与伤害。
@@ -157,6 +161,10 @@ func configure(config: Dictionary) -> void:
 	_gun_bullet_geometry = (config.get("gun_bullet_geometry", {}) as Dictionary).duplicate(true)
 	# 同上：敌弹的纯视觉倍率也必须逐发重取，否则池化复借会把上一只怪的放大档带过来。
 	visual_scale = maxf(0.05, float(config.get("visual_scale", 1.0)))
+	# 敌方子弹呈现方式：单发可显式覆盖总开关（验收脚本 / 将来按怪物选）。
+	# 缺省一律回 -1（跟随总开关），不复用上一发的强制档。
+	var billboard_value: Variant = config.get("billboard", null)
+	_billboard_override = -1 if billboard_value == null else (1 if bool(billboard_value) else 0)
 	var source_tree_value: Variant = fate_behavior.get("source_weapon_tree")
 	var source_weapon_value: Variant = fate_behavior.get("source_weapon")
 	source_weapon_tree = source_tree_value as WeaponAssemblyTree if is_instance_valid(source_tree_value) else null
@@ -854,11 +862,30 @@ func _bullet_visual_context() -> Dictionary:
 		"grow_from": float(_gun_bullet_geometry.get("grow_from", 1.0)),
 		"grow_duration": float(_gun_bullet_geometry.get("grow_duration", 0.0)),
 		"projectile": true,
-		# 敌方子弹改用面向相机的 billboard 图标（2026-11-09 主人：「敌方子弹也一样」）。
-		# 玩家子弹保持 3D 弹体 + 尾迹：它要表达「我的弹道往哪飞」，方向感是信息本身；
-		# 敌方子弹要表达「这里有个威胁」，形状与颜色恒定才读得快。
-		"billboard": hostile,
+		# 敌方子弹**默认 3D 弹体**（2026-11-10 业主：「我只要求把接触体积和模型（被放大）的
+		# 体积做成一致，没有要求做成公告板」）。公告板实现完整保留，由
+		# `GameDesignConfig.ENEMY_BULLET_BILLBOARD` 或单发 `projectile_config["billboard"]` 切换。
+		# 玩家子弹恒为 3D 弹体：它要表达「我的弹道往哪飞」，方向感是信息本身；
+		# 敌方子弹若切公告板，要表达的是「这里有个威胁」，形状与颜色恒定才读得快。
+		"billboard": hostile and _hostile_billboard_enabled(),
 	}
+
+
+## 敌弹呈现方式：单发覆盖（`billboard` 配置项）优先，其次总开关。
+## 与 `_bullet_visual_context()` 共用同一出口，不允许在别处再判一次。
+func _hostile_billboard_enabled() -> bool:
+	if _billboard_override >= 0:
+		return _billboard_override == 1
+	return GameDesignConfig.ENEMY_BULLET_BILLBOARD
+
+
+## 子投射物继承母弹的**形态覆盖**：母弹显式指定过 `billboard` 就照抄，否则留空
+## （继续跟随 `GameDesignConfig.ENEMY_BULLET_BILLBOARD`，与母弹同一出口）。
+## 不继承会出「母弹走公告板、炸开的子弹变回 3D 棱柱」的割裂 —— 将来按怪物配置形态时必踩。
+func _inherit_billboard(config: Dictionary) -> Dictionary:
+	if _billboard_override >= 0:
+		config["billboard"] = _billboard_override == 1
+	return config
 
 func _apply_visual_configuration() -> void:
 	if _visual != null:
@@ -1011,18 +1038,19 @@ func _shatter_into_ring() -> void:
 	for index in range(count):
 		var angle := TAU * float(index) / float(count)
 		var dir := Vector3(sin(angle), 0.0, cos(angle))
+		var config := {
+			"direction": dir,
+			"speed": child_speed,
+			"range": maxf(6.0, range_m * 0.6),
+			"damage": child_damage,
+			"hostile": hostile,
+			"critical": false,
+			"tags": [],
+			"color": bullet_color,
+			"shooter": shooter,
+		}
 		pool.acquire(
-			{
-				"direction": dir,
-				"speed": child_speed,
-				"range": maxf(6.0, range_m * 0.6),
-				"damage": child_damage,
-				"hostile": hostile,
-				"critical": false,
-				"tags": [],
-				"color": bullet_color,
-				"shooter": shooter,
-			},
+			_inherit_billboard(config),
 			origin + dir * 0.35
 		)
 
@@ -1052,7 +1080,7 @@ func _land_floor_burst(normal: Vector3, point: Vector3, collider: Node) -> void:
 			},
 		}
 		if pool != null:
-			pool.acquire(config, origin)
+			pool.acquire(_inherit_billboard(config), origin)
 		elif get_tree().current_scene != null:
 			var projectile := Projectile3D.new()
 			get_tree().current_scene.add_child(projectile)
@@ -1141,6 +1169,7 @@ func _spawn_child_projectile(shot_direction: Vector3, shot_damage: int, color: C
 		"shooter": shooter,
 		"behavior": child_behavior,
 	}
+	_inherit_billboard(config)
 	var pool := _resolve_projectile_pool()
 	if pool != null:
 		pool.acquire(config, global_position + shot_direction * 0.32)
@@ -1190,6 +1219,7 @@ func get_orientation_snapshot() -> Dictionary:
 		snapshot["icon_world_side"] = presentation.get("icon_world_side", 0.0)
 		snapshot["icon_core_diameter"] = presentation.get("icon_core_diameter", 0.0)
 		snapshot["icon_camera_alignment"] = presentation.get("icon_camera_alignment", -1.0)
+		snapshot["icon_size_scale"] = presentation.get("icon_size_scale", -1.0)
 		snapshot["trail_visible"] = presentation.get("trail_visible", false)
 	return snapshot
 

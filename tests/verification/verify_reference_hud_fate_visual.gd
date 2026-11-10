@@ -115,6 +115,12 @@ func _ready() -> void:
 		# 留一次可见白段给截图：这一帧之后不再步进，截图里能直接看到白段。
 		dungeon.call("_on_player_hp_changed", int(round(full_hp * 0.72)), full_hp)
 		await get_tree().process_frame
+		# 2026-11-10：血条新增了回血补条与受击震动两个叠加层。上面这几次治疗会让补条
+		# 停在半路，受击又会让状态块停在未复位的位移上 —— 这里把两者的相位推到终点
+		# （`_tick_player_vitals_fx` 只推进视觉层，**不碰** `_tick_player_health_bar_delay`，
+		# 所以截图里那段要给业主看的白段仍然在）。
+		dungeon.call("_tick_player_vitals_fx", 0.5)
+		await get_tree().process_frame
 		_check(
 			delayed_layer.get_global_rect().size.is_equal_approx(
 				player_hp_bar.get_global_rect().size

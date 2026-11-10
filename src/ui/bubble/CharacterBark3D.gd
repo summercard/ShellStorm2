@@ -122,6 +122,14 @@ func reveal_all() -> void:
 		_bubble.reveal_all()
 
 
+## 只压缩当前句的文字停留，不改变气泡内容或全局剧情时钟。
+func compress_hold_to_next() -> bool:
+	return _bubble != null and _bubble.compress_hold_to_next()
+
+
+func current_sentence_id() -> int:
+	return _bubble.current_sentence_id() if _bubble != null else -1
+
 func _ensure_bubble() -> void:
 	if _bubble != null and is_instance_valid(_bubble):
 		return

@@ -44,6 +44,10 @@ var _poll_accumulator := 0.0
 var _check_accumulator := 0.0
 var _paused_dialogue_synced := false
 var _waiting_for_flashlight := false
+var _space_press_frame := -1
+var _dialogue_cue: Dictionary = {}
+var _dialogue_carrier: Dictionary = {}
+var _advance_target := -1
 
 
 func _ready() -> void:
@@ -52,6 +56,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_adapter.bind(get_tree())
 	get_tree().node_added.connect(_on_node_added)
+	DialogueUI.set_advance_input_handler(Callable(self, "_advance_bottom_dialogue"))
 	_arm_catalog_triggers()
 
 	# 复位存档 = 新档：本局内存态（once / 标记）必须归零。BaseManager 是 autoload 且
@@ -359,6 +364,55 @@ func is_playing() -> bool:
 	return not _active.is_empty()
 
 
+func _input(event: InputEvent) -> void:
+	var key := event as InputEventKey
+	if key == null or (key.keycode != KEY_SPACE and key.physical_keycode != KEY_SPACE):
+		return
+	if _active.is_empty() or get_tree().paused:
+		return
+	# 主线/对白优先于场景交互；等待实体期间也消费，但绝不缓存下一次推进。
+	get_viewport().set_input_as_handled()
+	if key.pressed and not key.echo:
+		advance_dialogue()
+
+
+func _advance_bottom_dialogue() -> bool:
+	if str(_dialogue_carrier.get("kind", "")) == "bubble" or not _adapter.is_dialogue_carrier_current(_dialogue_carrier):
+		return not _active.is_empty()
+	return advance_dialogue()
+
+
+func advance_dialogue() -> bool:
+	if _active.is_empty() or get_tree().paused or _paused_dialogue_synced:
+		return false
+	if _advance_target >= 0:
+		return true
+	if _dialogue_cue.is_empty() or not _adapter.is_dialogue_carrier_current(_dialogue_carrier):
+		return true
+	var frame := Engine.get_process_frames()
+	if frame == _space_press_frame:
+		return true
+	_space_press_frame = frame
+	if _adapter.dialogue_is_typing():
+		_adapter.reveal_current_dialogue()
+		return true
+	if _adapter.advance_carrier_line():
+		return true
+	_adapter.finish_dialogue_hold()
+	var script := _active.get("script") as NarrativeScript3D
+	if script != null:
+		for index in range(int(_active.get("index", 0)), script.cues.size()):
+			if _is_dialogue_cue(script.cues[index]):
+				_advance_target = index
+				break
+	_dialogue_cue = {}
+	return true
+
+
+func _is_dialogue_cue(cue: Dictionary) -> bool:
+	return str(cue.get("do", "")) in ["actor.say", "ui.subtitle", "ui.hint", "ui.dialogue"]
+
+
 ## 当前演出已推进的游戏秒数（没有演出时为 0）。用于验收与运行时调试面板。
 func active_time() -> float:
 	return float(_active.get("t", 0.0))
@@ -444,6 +498,8 @@ func complete_flashlight_wait() -> void:
 # =========================================================================
 
 func _process(delta: float) -> void:
+	if get_tree().paused:
+		return
 	if _active.is_empty():
 		_tick_triggers(delta)
 		return
@@ -459,6 +515,8 @@ func _process(delta: float) -> void:
 	_active["t"] = float(_active.get("t", 0.0)) + delta
 	var now := float(_active["t"])
 	var index := int(_active.get("index", 0))
+	if _advance_target >= index and _advance_target < script.cues.size():
+		now = maxf(now, float(script.cues[_advance_target]["at"]))
 	# 同一 at 的多条 cue 在**同一帧内连续执行**（不跨帧），与 08 文档 §3.3 一致。
 	while index < script.cues.size() and float(script.cues[index]["at"]) <= now + 0.0001:
 		var cue := script.cues[index]
@@ -468,12 +526,19 @@ func _process(delta: float) -> void:
 		if _active.is_empty():
 			return
 		_active["index"] = index
+		if _advance_target >= 0:
+			_active["t"] = float(cue["at"])
 		if finished_early:
 			_finish("flow.end")
 			return
+		var target_reached := _advance_target >= 0 and index > _advance_target
+		if target_reached:
+			_advance_target = -1
 		if _main_story_barrier_blocks(0.0):
 			if not _active.is_empty():
 				_active["t"] = float(cue["at"])
+			return
+		if target_reached:
 			return
 	_active["index"] = index
 	if now >= script.duration:
@@ -541,6 +606,10 @@ func _dispatch_cue(cue: Dictionary) -> bool:
 
 	var result := _adapter.call_instruction(verb, params)
 	if bool(result.get("ok", false)):
+		if _is_dialogue_cue(cue):
+			_dialogue_cue = cue.duplicate(true)
+			_dialogue_carrier = _adapter.current_dialogue_carrier()
+			_space_press_frame = Engine.get_process_frames()
 		_dispatch_log.append("%.2f %s" % [float(cue.get("at", 0.0)), verb])
 		var restore: Variant = result.get("restore", null)
 		if restore is Callable and (restore as Callable).is_valid():
@@ -612,6 +681,10 @@ func _finish(reason: String) -> void:
 	if _active.is_empty():
 		return
 	_waiting_for_flashlight = false
+	_dialogue_cue = {}
+	_dialogue_carrier = {}
+	_advance_target = -1
+	_adapter.clear_dialogue_carrier()
 	var narrative_id := str(_active.get("id", ""))
 	# 先落历史再归还：拿到 id 最保险的时机，且写盘失败也不影响归还路径。
 	_commit_history_if_completed(narrative_id, reason)

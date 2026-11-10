@@ -12,8 +12,10 @@ extends Node3D
 ##   - **朝向**：局部基 = 相机基（折掉宿主基）。面片法线 (+Z) 因此正对镜头。
 ##     刻意不用 `BaseMaterial3D.billboard_mode` —— 那个只绕 **Y 轴**转，
 ##     本作相机俯视约 52°，面片会被压成 sin(52°) ≈ 0.79 的椭圆。
-##   - **尺寸**：`hit_diameter` = 判定球直径，白热核心的 UV 直径占 0.6 ⇒
-##     核心直径正好等于判定球直径，延续「所见即所中」。
+##   - **尺寸**：`hit_diameter` = 判定球直径；图标实际边长再乘
+##     `GameDesignConfig.ENEMY_BULLET_ICON_SCALE`（2026-11-10 业主：公告板弹丸太大，先 70%）。
+##     ⇒ 1.0 时核心直径 = 判定球直径（所见即所中）；0.7 时核心比判定球小 30%，
+##     视觉收缩、判定不动。白热核心的 UV 直径占 0.6。
 ##   - **池化安全**：节点恒建、靠 `visible` 切换，绝不重建 —— 重建会让调用方手里的引用失效。
 ##
 ## 为什么挂在 `self` 而不是弹体的 `_body_root`：`_body_root` 会被弹体的脉动 / 轴向拉伸缩放，
@@ -57,12 +59,14 @@ func set_tint(color: Color) -> void:
 	_material.set_shader_parameter("bullet_color", color)
 
 
-## 设定判定球直径（米）。核心亮区会正好铺满这个直径。
+## 设定判定球直径（米）。图标按 `ENEMY_BULLET_ICON_SCALE` 收缩后铺开 ——
+## 1.0 时核心正好等于判定球直径，< 1.0 时核心小于判定球（判定不变）。
 func set_hit_diameter(meters: float) -> void:
 	ensure_built()
 	_hit_diameter = maxf(0.01, meters)
-	# 面片边长 = 核心直径 / 核心占 UV 的直径比例（2 × 0.30 = 0.6）。
-	_icon.scale = Vector3.ONE * (_hit_diameter / (CORE_UV_RADIUS * 2.0))
+	# 面片边长 = 图标核心直径 / 核心占 UV 的直径比例（2 × 0.30 = 0.6）。
+	var icon_core := _hit_diameter * maxf(0.05, GameDesignConfig.ENEMY_BULLET_ICON_SCALE)
+	_icon.scale = Vector3.ONE * (icon_core / (CORE_UV_RADIUS * 2.0))
 
 
 ## 每帧校朝向。折**父节点**基写局部基：宿主 `Projectile3D` 每帧 `look_at()` 飞行方向，
@@ -119,5 +123,7 @@ func get_snapshot() -> Dictionary:
 			_icon.scale.x * CORE_UV_RADIUS * 2.0 if _icon != null else 0.0
 		),
 		"icon_hit_diameter": _hit_diameter,
+		# 图标核心相对判定球直径的倍率（1.0 = 所见即所中）。
+		"icon_size_scale": GameDesignConfig.ENEMY_BULLET_ICON_SCALE,
 		"icon_camera_alignment": camera_alignment(),
 	}

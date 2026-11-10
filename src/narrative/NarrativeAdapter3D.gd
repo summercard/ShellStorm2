@@ -72,6 +72,7 @@ var _player_input_taken := false
 ## 剧情最近一次经 `ui.subtitle` / `ui.hint` / `ui.dialogue` 摆上去的 run_id。
 ## 收口时据此判断「底栏现在这条还是不是我摆的」⇒ 是才关，不是就不动（见 `_restore_dialogue`）。
 var _narrative_dialogue_run := ""
+var _carrier_handle: Dictionary = {}
 var _shake_camera: Camera3D = null
 var _shake_rest := Vector2.ZERO
 var _shake_time := 0.0
@@ -661,13 +662,14 @@ func _apply_camera_pivot_params(params: Dictionary, duration: float) -> void:
 	var player := player_node()
 	if player == null:
 		return
+	var pivot_from := _current_camera_pivot(player)
 	if params.has("pivot_anchor"):
 		var anchor: Variant = scene_anchor(str(params["pivot_anchor"]))
 		if anchor is Vector3:
 			_camera_pivot_anchor = str(params["pivot_anchor"])
 			_camera_pivot_point = anchor
 			_camera_pivot_mode = "anchor" if bool(params.get("follow_anchor", false)) else "point"
-			_start_camera_pivot_move(player, duration)
+			_start_camera_pivot_move(player, duration, pivot_from)
 		else:
 			_warn("camera.pivot_anchor 不可用，保持原枢轴。")
 		return
@@ -678,7 +680,7 @@ func _apply_camera_pivot_params(params: Dictionary, duration: float) -> void:
 				float((raw as Array)[0]), float((raw as Array)[1]), float((raw as Array)[2])
 			)
 			_camera_pivot_mode = "point"
-			_start_camera_pivot_move(player, duration)
+			_start_camera_pivot_move(player, duration, pivot_from)
 		else:
 			_warn("camera.pivot_m 必须是 [x, y, z] 三个数，本镜头枢轴未变。")
 		return
@@ -695,12 +697,11 @@ func _apply_camera_pivot_params(params: Dictionary, duration: float) -> void:
 	if mode in ["room_center", "light_switch"]:
 		_camera_pivot_room_id = str(params.get("room_id", ""))
 		_camera_pivot_preferred_entry = str(params.get("preferred_entry", "east"))
-	_start_camera_pivot_move(player, duration)
+	_start_camera_pivot_move(player, duration, pivot_from)
 
 
 ## 把枢轴从当前位置平滑移到「当前声明」解析出的目标点。
-func _start_camera_pivot_move(player: Node3D, duration: float) -> void:
-	var from := _current_camera_pivot(player)
+func _start_camera_pivot_move(player: Node3D, duration: float, from: Vector3) -> void:
 	var target := _resolve_camera_pivot(player)
 	_camera_pivot_channel = {
 		"from": from, "to": target, "t": 0.0,
@@ -840,6 +841,59 @@ func _resolve_actor(params: Dictionary) -> Node3D:
 	return null
 
 
+func current_dialogue_carrier() -> Dictionary:
+	return _carrier_handle.duplicate()
+
+
+func is_dialogue_carrier_current(handle: Dictionary) -> bool:
+	var carrier: Object = handle.get("carrier")
+	if carrier == null or not is_instance_valid(carrier):
+		return false
+	if str(handle.get("kind", "")) == "bubble":
+		return carrier.has_method("current_sentence_id") and int(carrier.call("current_sentence_id")) == int(handle.get("sentence", -1)) and bool(carrier.call("is_speaking"))
+	return DialogueUI.is_active() and DialogueUI.current_run_id() == str(handle.get("run", ""))
+
+
+func dialogue_is_typing() -> bool:
+	var carrier: Object = _carrier_handle.get("carrier")
+	return carrier != null and is_instance_valid(carrier) and carrier.has_method("is_typing") and bool(carrier.call("is_typing"))
+
+
+func reveal_current_dialogue() -> void:
+	var carrier: Object = _carrier_handle.get("carrier")
+	if carrier != null and is_instance_valid(carrier) and carrier.has_method("reveal_all"):
+		carrier.call("reveal_all")
+
+
+func advance_carrier_line() -> bool:
+	if str(_carrier_handle.get("kind", "")) == "bubble" or not DialogueUI.has_next_line():
+		return false
+	DialogueUI.advance()
+	return true
+
+
+func finish_dialogue_hold() -> void:
+	var carrier: Object = _carrier_handle.get("carrier")
+	if carrier == null or not is_instance_valid(carrier):
+		return
+	if str(_carrier_handle.get("kind", "")) == "bubble":
+		carrier.call("compress_hold_to_next")
+	else:
+		DialogueUI.finish_current_hold()
+
+
+func clear_dialogue_carrier() -> void:
+	_carrier_handle = {}
+
+
+func _bind_dialogue_carrier(carrier: Object, kind: String, text: String) -> void:
+	_carrier_handle = {"carrier": carrier, "kind": kind, "text": text}
+	if kind == "bubble" and carrier != null and carrier.has_method("current_sentence_id"):
+		_carrier_handle["sentence"] = carrier.call("current_sentence_id")
+	else:
+		_carrier_handle["run"] = _narrative_dialogue_run
+
+
 func _actor_say(params: Dictionary) -> Dictionary:
 	var actor := _resolve_actor(params)
 	if actor == null:
@@ -854,10 +908,13 @@ func _actor_say(params: Dictionary) -> Dictionary:
 		if actor.has_method("say_scripted_line"):
 			if not bool(actor.call("say_scripted_line", text, hold)):
 				return _failed("actor.say：演员『%s』拒绝脚本台词。" % who)
+			if actor.has_method("get_scripted_dialogue_carrier"):
+				_bind_dialogue_carrier(actor.call("get_scripted_dialogue_carrier") as Object, "bubble", text)
 			return _ok()
 		var attached_npc: Variant = CharacterBark3D.attach_to(actor)
 		if attached_npc != null and (attached_npc as Object).has_method("say_text"):
 			(attached_npc as Object).call("say_text", text, hold)
+			_bind_dialogue_carrier(attached_npc as Object, "bubble", text)
 			return _ok()
 		return _degraded("actor.say：NPC 气泡挂载点不可用，本句被跳过。")
 	var dungeon := dungeon_node()
@@ -865,10 +922,12 @@ func _actor_say(params: Dictionary) -> Dictionary:
 		var bark: Variant = dungeon.call("narrative_player_bark")
 		if bark != null and (bark as Object).has_method("say_text"):
 			(bark as Object).call("say_text", text, hold)
+			_bind_dialogue_carrier(bark as Object, "bubble", text)
 			return _ok()
 	var attached: Variant = CharacterBark3D.attach_to(actor)
 	if attached != null and (attached as Object).has_method("say_text"):
 		(attached as Object).call("say_text", text, hold)
+		_bind_dialogue_carrier(attached as Object, "bubble", text)
 		return _ok()
 	return _degraded("actor.say：气泡挂载点不可用，本句被跳过。")
 
@@ -1206,6 +1265,7 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 				str(params.get("speaker", DialogueUI.SPEAKER_SYSTEM)),
 				float(params.get("auto", 3.0))
 			)
+			_bind_dialogue_carrier(DialogueUI, "subtitle", text)
 			return _done(Callable(self, "_restore_dialogue"))
 		"hint":
 			var hint := str(params.get("text", ""))
@@ -1215,6 +1275,7 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 			# 必须由收口收掉，否则「按 F 之后那句提示还挂在屏幕上」（08 文档 §5.2 已写明
 			# 「保持到显式交互或剧情收口」，这里补上后半句的实现）。
 			_narrative_dialogue_run = DialogueUI.announce(hint, float(params.get("auto", 3.0)))
+			_bind_dialogue_carrier(DialogueUI, "hint", hint)
 			return _done(Callable(self, "_restore_dialogue"))
 		"dialogue":
 			var lines: Variant = params.get("lines", null)
@@ -1224,6 +1285,7 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 				"lines": lines,
 				"interrupt": bool(params.get("interrupt", true)),
 			})
+			_bind_dialogue_carrier(DialogueUI, "dialogue", str((lines as Array)[0].get("text", "")))
 			return _done(Callable(self, "_restore_dialogue"))
 	return _degraded("ui.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
 
@@ -1239,6 +1301,7 @@ func _restore_dialogue() -> void:
 	_narrative_dialogue_run = ""
 	if still_showing:
 		DialogueUI.close()
+	_carrier_handle = {}
 
 
 # -------------------------------------------------------------------------
