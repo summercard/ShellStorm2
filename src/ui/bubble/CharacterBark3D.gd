@@ -19,6 +19,15 @@ const DEFAULT_HEAD_HEIGHT := 2.15
 @export var hold_seconds := 3.4
 @export var enabled := true
 
+## 示意框的挂高（米）。
+##
+## 为什么不能沿用 `head_height`：那个值是按**两行文字气泡**（高 1.21m）定的，
+## 中心 3.40m 才能让气泡底边离头顶 0.23m。现在示意框只有 0.46m 高，
+## 继续挂在 3.40m 就成了飘在半空的一个孤零零小框。
+## 1.86m ≈ 绿苔头顶 1.215m + 0.25m 间隙 + 半高 0.23m。
+const DEFAULT_INDICATOR_HEIGHT := 1.86
+@export var indicator_head_height := DEFAULT_INDICATOR_HEIGHT
+
 var _bubble: SpeechBubble3D
 var _rng := RandomNumberGenerator.new()
 var _last_index := {}
@@ -61,6 +70,7 @@ func say_bark(bark_id: String, hold := -1.0) -> bool:
 	_ensure_bubble()
 	if _bubble == null:
 		return false
+	_restore_text_height()
 	_bubble.say(str(picked["text"]), hold if hold >= 0.0 else hold_seconds)
 	return true
 
@@ -73,6 +83,7 @@ func say_bark_at(bark_id: String, index: int, hold := -1.0) -> bool:
 	_ensure_bubble()
 	if _bubble == null:
 		return false
+	_restore_text_height()
 	_bubble.say(BarkCatalog.pick_at(bark_id, index), hold if hold >= 0.0 else hold_seconds)
 	return true
 
@@ -82,8 +93,39 @@ func say_text(text: String, hold := -1.0) -> bool:
 	_ensure_bubble()
 	if _bubble == null:
 		return false
+	_restore_text_height()
 	_bubble.say(text, hold if hold >= 0.0 else hold_seconds)
 	return true
+
+
+## ── 说话示意（对话专用）──────────────────────────────────────────────
+##
+## 业主 2026-11-10：头顶只做「正在说话」的示意，文字统一走底栏；
+## 但「开灯这类自言自语」要保留原来的文字气泡。
+## 所以本节点同时提供两个入口，由调用方按语义选，不在这里猜：
+##   · `say_text()`      —— 自言自语，气泡里写字。
+##   · `say_indicator()` —— 对话，只出示意框。
+func say_indicator(hold := -1.0, height := -1.0) -> bool:
+	_ensure_bubble()
+	if _bubble == null:
+		return false
+	var want := height if height >= 0.0 else indicator_head_height
+	position = Vector3(0.0, want, 0.0)
+	_bubble.say_indicator(hold if hold >= 0.0 else hold_seconds)
+	return true
+
+
+func is_indicator_active() -> bool:
+	return _bubble != null and _bubble.is_indicator_only()
+
+
+## 示意框还在，但里面的字不算数 —— 验收用它区分两种形态。
+func is_speaking_any() -> bool:
+	return _bubble != null and _bubble.is_bubble_active()
+
+
+func _restore_text_height() -> void:
+	position = Vector3(0.0, head_height, 0.0)
 
 
 func hide_now() -> void:
@@ -102,7 +144,7 @@ func get_current_text() -> String:
 ## 打字机相关（2026-11-08 业主：对话文字要像打字机一样顺序出现）。
 ## 全都转给 `SpeechBubble3D`，本节点不持有第二份进度。
 
-## 这句话是不是还在逐字往外冒。
+## 这句话是不是还在逐字往外冒。示意框永远不会逐字打，返回 false。
 func is_typing() -> bool:
 	return _bubble != null and _bubble.is_typing()
 

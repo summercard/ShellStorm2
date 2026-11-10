@@ -841,6 +841,20 @@ func _resolve_actor(params: Dictionary) -> Node3D:
 	return null
 
 
+func free_dialogue_actor() -> Node:
+	if _tree == null:
+		return null
+	for actor in _tree.get_nodes_in_group("base_npc_3d"):
+		if actor.has_method("is_free_bark_active") and bool(actor.call("is_free_bark_active")):
+			return actor
+	return null
+
+
+func advance_free_dialogue() -> bool:
+	var actor := free_dialogue_actor()
+	return actor != null and bool(actor.call("advance_free_bark"))
+
+
 func current_dialogue_carrier() -> Dictionary:
 	return _carrier_handle.duplicate()
 
@@ -886,15 +900,49 @@ func clear_dialogue_carrier() -> void:
 	_carrier_handle = {}
 
 
-func _bind_dialogue_carrier(carrier: Object, kind: String, text: String) -> void:
+func _bind_dialogue_carrier(carrier: Object, kind: String, text: String, run_id := "") -> void:
 	_carrier_handle = {"carrier": carrier, "kind": kind, "text": text}
 	if kind == "bubble" and carrier != null and carrier.has_method("current_sentence_id"):
 		_carrier_handle["sentence"] = carrier.call("current_sentence_id")
 	else:
-		_carrier_handle["run"] = _narrative_dialogue_run
+		_carrier_handle["run"] = run_id if not run_id.is_empty() else _narrative_dialogue_run
+
+
+## 实体角色说一句**对话**：头顶只出示意框，文字统一进底栏（业主 2026-11-10）。
+##
+## 返回底栏 run_id（空 = 拒绝/未接管）。示意框自带兜底停留，底栏被顶掉时不会
+## 永久挂在头上；正常路径由底栏 `dialogue_finished` 收。
+func _say_dialogue_on_actor(actor: Node3D, who: String, text: String, hold: float) -> String:
+	var speaker := DialogueUI.SPEAKER_PLAYER
+	if actor.has_method("get_display_name"):
+		var named := str(actor.call("get_display_name")).strip_edges()
+		if not named.is_empty():
+			speaker = named
+	if actor.has_method("get_dialogue_run_id") and actor.has_method("say_scripted_line"):
+		# 正规 NPC：示意、文字、署名都由它自己收口（节拍/自由交谈/救援同一条路）。
+		if not bool(actor.call("say_scripted_line", text, maxf(0.6, hold))):
+			return ""
+		return str(actor.call("get_dialogue_run_id"))
+	# 非玩家 actor 且没有脚本台词接口 ⇒ 不许落到主角 bark 上（那会把 NPC 的话
+	# 挂到玩家头顶）。这正是「非玩家actor不误走主角bark」的硬约束。
+	if who != "player" and not who.is_empty():
+		return ""
+	var bark: Object = null
+	var dungeon := dungeon_node()
+	if dungeon != null and dungeon.has_method("narrative_player_bark"):
+		bark = dungeon.call("narrative_player_bark")
+	if bark == null:
+		bark = CharacterBark3D.attach_to(actor)
+	if bark == null or not (bark as Object).has_method("say_indicator"):
+		return ""
+	var auto := hold if hold > 0.0 else DialogueUI.line_hold_for_text(text)
+	var typing := float(text.length()) / DialogueUI.DEFAULT_CHARS_PER_SEC
+	(bark as Object).call("say_indicator", typing + auto + 0.5, -1.0)
+	return DialogueUI.show_dialogue_line(text, speaker, auto)
 
 
 func _actor_say(params: Dictionary) -> Dictionary:
+	_carrier_handle = {}
 	var actor := _resolve_actor(params)
 	if actor == null:
 		return _degraded("actor.say：演员『%s』当前不可用。" % str(params.get("who", "player")))
@@ -902,34 +950,12 @@ func _actor_say(params: Dictionary) -> Dictionary:
 	if text.strip_edges().is_empty():
 		return _failed("actor.say 缺少 text。")
 	var hold := float(params.get("hold", -1.0))
-	# 只有 player 允许走 Dungeon3D 的底栏/主角气泡入口；NPC 必须由实体自己说。
 	var who := str(params.get("who", "player"))
-	if who != "player" and who != "":
-		if actor.has_method("say_scripted_line"):
-			if not bool(actor.call("say_scripted_line", text, hold)):
-				return _failed("actor.say：演员『%s』拒绝脚本台词。" % who)
-			if actor.has_method("get_scripted_dialogue_carrier"):
-				_bind_dialogue_carrier(actor.call("get_scripted_dialogue_carrier") as Object, "bubble", text)
-			return _ok()
-		var attached_npc: Variant = CharacterBark3D.attach_to(actor)
-		if attached_npc != null and (attached_npc as Object).has_method("say_text"):
-			(attached_npc as Object).call("say_text", text, hold)
-			_bind_dialogue_carrier(attached_npc as Object, "bubble", text)
-			return _ok()
-		return _degraded("actor.say：NPC 气泡挂载点不可用，本句被跳过。")
-	var dungeon := dungeon_node()
-	if dungeon != null and dungeon.has_method("narrative_player_bark"):
-		var bark: Variant = dungeon.call("narrative_player_bark")
-		if bark != null and (bark as Object).has_method("say_text"):
-			(bark as Object).call("say_text", text, hold)
-			_bind_dialogue_carrier(bark as Object, "bubble", text)
-			return _ok()
-	var attached: Variant = CharacterBark3D.attach_to(actor)
-	if attached != null and (attached as Object).has_method("say_text"):
-		(attached as Object).call("say_text", text, hold)
-		_bind_dialogue_carrier(attached as Object, "bubble", text)
-		return _ok()
-	return _degraded("actor.say：气泡挂载点不可用，本句被跳过。")
+	var run_id := _say_dialogue_on_actor(actor, who, text, hold)
+	if run_id.is_empty():
+		return _failed("actor.say：演员『%s』拒绝脚本台词或底栏未接管。" % who)
+	_bind_dialogue_carrier(DialogueUI, "subtitle", text, run_id)
+	return _ok()
 
 
 ## 解析 `actor.face` 的目标点：给了就返回世界坐标 `Vector3`，没给返回 `null`

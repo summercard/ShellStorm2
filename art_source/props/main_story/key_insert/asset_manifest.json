@@ -1,0 +1,1090 @@
+{
+  "asset_id": "PRP-BASE99-MAIN-STORY-KEY-INSERT",
+  "display_name": "主门低柜中央四孔主线钥匙薄型嵌件",
+  "version": "v001",
+  "role": "fixed_attachment",
+  "source": "art_source/props/main_story/key_insert/prp_base99_main_story_key_insert_source_v001.blend",
+  "optimized": "art_source/props/main_story/key_insert/export/v001/prp_base99_main_story_key_insert_optimized_v001.blend",
+  "stable_glb": "assets/art/props/main_story/components/key_insert/prp_base99_main_story_key_insert_visual_top3d.glb",
+  "wrapper": "assets/art/props/main_story/runtime/key_insert/prp_base99_main_story_key_insert_root_top3d.tscn",
+  "source_sha256_before": "3ed4dd44d70012de17d74ad01dc741c0aca99dc75cf0ecaf04acffa75edc99e3",
+  "source_sha256_after": "3ed4dd44d70012de17d74ad01dc741c0aca99dc75cf0ecaf04acffa75edc99e3",
+  "optimized_sha256": "23e0f30ac10b9a5f98730f12aceccb03d09a84d1f1b2add4fdcc99fdd52ad30e",
+  "glb_sha256": "9cfc69067d7aa77e244a35869cb28b335c7d46564b2b523f1a9aaf2df75603f3",
+  "wrapper_sha256": "7ac163c96adcc7d55c013f9f6720181d86d28d601655a2971bf760d6fa20c95a",
+  "source_path_not_optimized_path": true,
+  "optimized_saved_then_reopened_before_export": true,
+  "protected_hashes_before": {
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png.import": "9f5d3ffa5278a85a1f4ecb004d842480ded41b2ebb2b92d659ef89b10b7ed4a8",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\components\\env_base99_remaining_facilities\\main_door_low_storage_cabinet\\main_door_low_storage_cabinet_visual_top3d.glb": "85692e67c09e0cff554026cb4795552248cbb910841eaef3ff3e75d688759a01",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\components\\env_base99_remaining_facilities\\main_door_low_storage_cabinet\\main_door_low_storage_cabinet_visual_top3d.glb.import": "6b8e97e298809e0cca56d8366624e0588c061d29489f3d00549fa33ac440dc16",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_remaining_facilities\\main_door_low_storage_cabinet\\main_door_low_storage_cabinet_root_top3d.tscn": "ba4b4ed41497eb9fa22cc20b2cba0939a67e9434f9861e3ff5af356ae159fbe8",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\tools\\asset_pipeline\\scene_facility_shared_palette_post_import.gd": "341e9c3a820255cac6af6d414784cf549d911aa37d1aa79e497caa57bbe694f9",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v021\\base_facility_runtime_layout_hq-v021-remaining_facilities.blend": "1573c9f69425b41a8f8b884e9285ee0e33c57d54f10f6a655679a0c21840d9c7",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\component_packages\\architecture\\base_corner_l_5m\\base_corner_l_5m_source_v024.blend": "bb01c283be0032378d3f08da008eb78fb49a92aeb507350fe8ed23f4b401f56f",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v017\\base_facility_runtime_layout_hq-v017-structural.blend": "26fe8efd77273a45fc436f07e8512b1e4e94dea756541647ac1c73b4c5820d4f",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v017\\base_facility_runtime_layout_hq-v017-wall_contents.blend": "9563d60916fec57c76333039db92bac19f9187310d91b62b2add5285a72f71bf",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v021\\base_facility_runtime_layout_hq-v021-door_visuals.blend": "9c058f6022cf9330009412ccd69957f6226a808fdcf6fa6e0200a1202e0ae62c",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v021\\base_facility_runtime_layout_hq-v021-floor_visuals.blend": "406ceca928f463bc6b3bd13abc37d8912bbdb1766707aef0390bba9c9de458e9",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v022\\base_facility_runtime_layout_hq-v022-updated_packages.blend": "b1f49fa993d80a7c24356a503314fee1048b9c756832f80a62c7512a450feb10",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v023\\base_facility_runtime_layout_hq-v023-stair_bed.blend": "414c7c0b32ef11337a1bdb77c397d1a328486764ae8276c4cf135f05c2bb04a6",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v024\\base_facility_runtime_layout_hq-v024-corner_l_5m.blend": "99c91d4d952107788fa1935c68658a036e0731f0fa411eb3a3819f5595f8e384",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v024\\base_facility_runtime_layout_hq-v024-rollup_main_door.blend": "cc3bf2a431824eceedf373a2603b303356b2f2bd8ccc3a7516037d6b85922d6c",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v025\\base_facility_runtime_layout_hq-v025-door_wall_palette.blend": "804d5a8e9edc7555cdcb5584752778bba5c83b3911a5053db14e05193210700d",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\source\\base_facility_runtime_layout_hq_v026.blend": "45698d8593473d8955ff08ec12b12a0b1c28cf77b4627846fff90561ed37077e"
+  },
+  "protected_hashes_after": {
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png.import": "9f5d3ffa5278a85a1f4ecb004d842480ded41b2ebb2b92d659ef89b10b7ed4a8",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\components\\env_base99_remaining_facilities\\main_door_low_storage_cabinet\\main_door_low_storage_cabinet_visual_top3d.glb": "85692e67c09e0cff554026cb4795552248cbb910841eaef3ff3e75d688759a01",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\components\\env_base99_remaining_facilities\\main_door_low_storage_cabinet\\main_door_low_storage_cabinet_visual_top3d.glb.import": "6b8e97e298809e0cca56d8366624e0588c061d29489f3d00549fa33ac440dc16",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_remaining_facilities\\main_door_low_storage_cabinet\\main_door_low_storage_cabinet_root_top3d.tscn": "ba4b4ed41497eb9fa22cc20b2cba0939a67e9434f9861e3ff5af356ae159fbe8",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\tools\\asset_pipeline\\scene_facility_shared_palette_post_import.gd": "341e9c3a820255cac6af6d414784cf549d911aa37d1aa79e497caa57bbe694f9",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v021\\base_facility_runtime_layout_hq-v021-remaining_facilities.blend": "1573c9f69425b41a8f8b884e9285ee0e33c57d54f10f6a655679a0c21840d9c7",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\component_packages\\architecture\\base_corner_l_5m\\base_corner_l_5m_source_v024.blend": "bb01c283be0032378d3f08da008eb78fb49a92aeb507350fe8ed23f4b401f56f",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v017\\base_facility_runtime_layout_hq-v017-structural.blend": "26fe8efd77273a45fc436f07e8512b1e4e94dea756541647ac1c73b4c5820d4f",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v017\\base_facility_runtime_layout_hq-v017-wall_contents.blend": "9563d60916fec57c76333039db92bac19f9187310d91b62b2add5285a72f71bf",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v021\\base_facility_runtime_layout_hq-v021-door_visuals.blend": "9c058f6022cf9330009412ccd69957f6226a808fdcf6fa6e0200a1202e0ae62c",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v021\\base_facility_runtime_layout_hq-v021-floor_visuals.blend": "406ceca928f463bc6b3bd13abc37d8912bbdb1766707aef0390bba9c9de458e9",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v022\\base_facility_runtime_layout_hq-v022-updated_packages.blend": "b1f49fa993d80a7c24356a503314fee1048b9c756832f80a62c7512a450feb10",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v023\\base_facility_runtime_layout_hq-v023-stair_bed.blend": "414c7c0b32ef11337a1bdb77c397d1a328486764ae8276c4cf135f05c2bb04a6",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v024\\base_facility_runtime_layout_hq-v024-corner_l_5m.blend": "99c91d4d952107788fa1935c68658a036e0731f0fa411eb3a3819f5595f8e384",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v024\\base_facility_runtime_layout_hq-v024-rollup_main_door.blend": "cc3bf2a431824eceedf373a2603b303356b2f2bd8ccc3a7516037d6b85922d6c",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\export\\v025\\base_facility_runtime_layout_hq-v025-door_wall_palette.blend": "804d5a8e9edc7555cdcb5584752778bba5c83b3911a5053db14e05193210700d",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\design\\blender\\base_facility_layout\\source\\base_facility_runtime_layout_hq_v026.blend": "45698d8593473d8955ff08ec12b12a0b1c28cf77b4627846fff90561ed37077e"
+  },
+  "protected_all_unchanged": true,
+  "coordinates": {
+    "units": "m",
+    "blender_to_godot": "(x,y,z) -> (x,z,-y)",
+    "origin": "Godot XZ中心，底面Y=0",
+    "front_axis_godot": "+Z",
+    "rear_axis_godot": "-Z",
+    "top_slope_degrees": 20,
+    "socket_insertion_axis_godot": [
+      0,
+      -0.9396926207859084,
+      -0.3420201433256687
+    ],
+    "bbox": {
+      "blender_min": [
+        -1.1399999856948853,
+        -0.28999999165534973,
+        0.0
+      ],
+      "blender_max": [
+        1.1399999856948853,
+        0.28999999165534973,
+        0.23999999463558197
+      ],
+      "godot_min": [
+        -1.1399999856948853,
+        0.0,
+        -0.28999999165534973
+      ],
+      "godot_max": [
+        1.1399999856948853,
+        0.23999999463558197,
+        0.28999999165534973
+      ],
+      "godot_size": [
+        2.2799999713897705,
+        0.23999999463558197,
+        0.5799999833106995
+      ]
+    },
+    "recommended_godot_placement": [
+      5,
+      1.38,
+      -3.77
+    ],
+    "socket_spacing_m": 0.46,
+    "socket_centers_x": [
+      -0.69,
+      -0.23,
+      0.23,
+      0.69
+    ],
+    "sockets": [
+      {
+        "index": 0,
+        "mouth_center_godot": [
+          -0.69,
+          0.12844863206280133,
+          0
+        ],
+        "mouth_width_m": 0.16,
+        "mouth_depth_projected_m": 0.28,
+        "axial_blind_depth_m": 0.06,
+        "entry_lip_m": 0.006,
+        "inner_bottom_min_y_godot": 0.02111123874783516
+      },
+      {
+        "index": 1,
+        "mouth_center_godot": [
+          -0.23,
+          0.12844863206280133,
+          0
+        ],
+        "mouth_width_m": 0.16,
+        "mouth_depth_projected_m": 0.28,
+        "axial_blind_depth_m": 0.06,
+        "entry_lip_m": 0.006,
+        "inner_bottom_min_y_godot": 0.02111123874783516
+      },
+      {
+        "index": 2,
+        "mouth_center_godot": [
+          0.23,
+          0.12844863206280133,
+          0
+        ],
+        "mouth_width_m": 0.16,
+        "mouth_depth_projected_m": 0.28,
+        "axial_blind_depth_m": 0.06,
+        "entry_lip_m": 0.006,
+        "inner_bottom_min_y_godot": 0.02111123874783516
+      },
+      {
+        "index": 3,
+        "mouth_center_godot": [
+          0.69,
+          0.12844863206280133,
+          0
+        ],
+        "mouth_width_m": 0.16,
+        "mouth_depth_projected_m": 0.28,
+        "axial_blind_depth_m": 0.06,
+        "entry_lip_m": 0.006,
+        "inner_bottom_min_y_godot": 0.02111123874783516
+      }
+    ]
+  },
+  "geometry": {
+    "body_meshes": 1,
+    "glow_meshes": 4,
+    "glow_node_names": [
+      "SocketGlow_0",
+      "SocketGlow_1",
+      "SocketGlow_2",
+      "SocketGlow_3"
+    ],
+    "key_embedded": false,
+    "table_embedded": false,
+    "standalone_ring": false,
+    "pedestal_or_feet": false,
+    "socket_geometry": "真实倒角矩形孔唇、轴向内壁、60mm下沉暗槽；非实心矩形贴片",
+    "raycast_before": [
+      {
+        "socket": 0,
+        "axis_ray_hits_recess_floor": true,
+        "first_hit_depth_from_mouth_m": 0.059999994933605194,
+        "side_wall_hit": true,
+        "half_width_m": 0.0799999856948852,
+        "no_solid_rectangle_at_mouth": true
+      },
+      {
+        "socket": 1,
+        "axis_ray_hits_recess_floor": true,
+        "first_hit_depth_from_mouth_m": 0.060000003315508366,
+        "side_wall_hit": true,
+        "half_width_m": 0.07999999403953553,
+        "no_solid_rectangle_at_mouth": true
+      },
+      {
+        "socket": 2,
+        "axis_ray_hits_recess_floor": true,
+        "first_hit_depth_from_mouth_m": 0.060000003315508366,
+        "side_wall_hit": true,
+        "half_width_m": 0.08000000238418578,
+        "no_solid_rectangle_at_mouth": true
+      },
+      {
+        "socket": 3,
+        "axis_ray_hits_recess_floor": true,
+        "first_hit_depth_from_mouth_m": 0.059999994933605194,
+        "side_wall_hit": true,
+        "half_width_m": 0.07999998092651373,
+        "no_solid_rectangle_at_mouth": true
+      }
+    ],
+    "raycast_after": [
+      {
+        "socket": 0,
+        "axis_ray_hits_recess_floor": true,
+        "first_hit_depth_from_mouth_m": 0.059999994933605194,
+        "side_wall_hit": true,
+        "half_width_m": 0.0799999856948852,
+        "no_solid_rectangle_at_mouth": true
+      },
+      {
+        "socket": 1,
+        "axis_ray_hits_recess_floor": true,
+        "first_hit_depth_from_mouth_m": 0.060000003315508366,
+        "side_wall_hit": true,
+        "half_width_m": 0.07999999403953553,
+        "no_solid_rectangle_at_mouth": true
+      },
+      {
+        "socket": 2,
+        "axis_ray_hits_recess_floor": true,
+        "first_hit_depth_from_mouth_m": 0.060000003315508366,
+        "side_wall_hit": true,
+        "half_width_m": 0.08000000238418578,
+        "no_solid_rectangle_at_mouth": true
+      },
+      {
+        "socket": 3,
+        "axis_ray_hits_recess_floor": true,
+        "first_hit_depth_from_mouth_m": 0.059999994933605194,
+        "side_wall_hit": true,
+        "half_width_m": 0.07999998092651373,
+        "no_solid_rectangle_at_mouth": true
+      }
+    ]
+  },
+  "optimization": {
+    "triangles_before": 320,
+    "triangles_after": 304,
+    "reduction_ratio": 0.05,
+    "budget": null,
+    "budget_source": "用户未给出面数预算",
+    "operations": [
+      {
+        "object": "SocketGlow_0",
+        "before": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 4
+        },
+        "duplicate_coplanar_faces_removed": 2,
+        "after_remove_doubles": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 2
+        },
+        "after_degenerate": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 2
+        },
+        "loose_edges_removed": 0,
+        "loose_vertices_removed": 0,
+        "safe_dissolve_faces_before": 2,
+        "safe_dissolve_faces_after": 2,
+        "after_triangulation": {
+          "verts": 8,
+          "edges": 10,
+          "faces": 4
+        },
+        "operations": {
+          "remove_doubles_distance_m": 1e-07,
+          "dissolve_degenerate_distance_m": 1e-09,
+          "dissolve_limit_angle_rad": 1e-06,
+          "dissolve_delimit": [
+            "NORMAL",
+            "MATERIAL",
+            "SEAM",
+            "SHARP",
+            "UV"
+          ],
+          "triangulate": "BEAUTY"
+        },
+        "preserved_reason": "孔唇/内壁/槽底/完整外壳均参与可见性或投影；独立PaletteUV岛禁止跨岛溶解。原始直线轮廓无曲面与冗余倒角段。槽灯共面反向片可由双面材质替代，按同材质同色格清理；不改孔口和灯片可见轮廓。"
+      },
+      {
+        "object": "SocketGlow_1",
+        "before": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 4
+        },
+        "duplicate_coplanar_faces_removed": 2,
+        "after_remove_doubles": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 2
+        },
+        "after_degenerate": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 2
+        },
+        "loose_edges_removed": 0,
+        "loose_vertices_removed": 0,
+        "safe_dissolve_faces_before": 2,
+        "safe_dissolve_faces_after": 2,
+        "after_triangulation": {
+          "verts": 8,
+          "edges": 10,
+          "faces": 4
+        },
+        "operations": {
+          "remove_doubles_distance_m": 1e-07,
+          "dissolve_degenerate_distance_m": 1e-09,
+          "dissolve_limit_angle_rad": 1e-06,
+          "dissolve_delimit": [
+            "NORMAL",
+            "MATERIAL",
+            "SEAM",
+            "SHARP",
+            "UV"
+          ],
+          "triangulate": "BEAUTY"
+        },
+        "preserved_reason": "孔唇/内壁/槽底/完整外壳均参与可见性或投影；独立PaletteUV岛禁止跨岛溶解。原始直线轮廓无曲面与冗余倒角段。槽灯共面反向片可由双面材质替代，按同材质同色格清理；不改孔口和灯片可见轮廓。"
+      },
+      {
+        "object": "SocketGlow_2",
+        "before": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 4
+        },
+        "duplicate_coplanar_faces_removed": 2,
+        "after_remove_doubles": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 2
+        },
+        "after_degenerate": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 2
+        },
+        "loose_edges_removed": 0,
+        "loose_vertices_removed": 0,
+        "safe_dissolve_faces_before": 2,
+        "safe_dissolve_faces_after": 2,
+        "after_triangulation": {
+          "verts": 8,
+          "edges": 10,
+          "faces": 4
+        },
+        "operations": {
+          "remove_doubles_distance_m": 1e-07,
+          "dissolve_degenerate_distance_m": 1e-09,
+          "dissolve_limit_angle_rad": 1e-06,
+          "dissolve_delimit": [
+            "NORMAL",
+            "MATERIAL",
+            "SEAM",
+            "SHARP",
+            "UV"
+          ],
+          "triangulate": "BEAUTY"
+        },
+        "preserved_reason": "孔唇/内壁/槽底/完整外壳均参与可见性或投影；独立PaletteUV岛禁止跨岛溶解。原始直线轮廓无曲面与冗余倒角段。槽灯共面反向片可由双面材质替代，按同材质同色格清理；不改孔口和灯片可见轮廓。"
+      },
+      {
+        "object": "SocketGlow_3",
+        "before": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 4
+        },
+        "duplicate_coplanar_faces_removed": 2,
+        "after_remove_doubles": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 2
+        },
+        "after_degenerate": {
+          "verts": 8,
+          "edges": 8,
+          "faces": 2
+        },
+        "loose_edges_removed": 0,
+        "loose_vertices_removed": 0,
+        "safe_dissolve_faces_before": 2,
+        "safe_dissolve_faces_after": 2,
+        "after_triangulation": {
+          "verts": 8,
+          "edges": 10,
+          "faces": 4
+        },
+        "operations": {
+          "remove_doubles_distance_m": 1e-07,
+          "dissolve_degenerate_distance_m": 1e-09,
+          "dissolve_limit_angle_rad": 1e-06,
+          "dissolve_delimit": [
+            "NORMAL",
+            "MATERIAL",
+            "SEAM",
+            "SHARP",
+            "UV"
+          ],
+          "triangulate": "BEAUTY"
+        },
+        "preserved_reason": "孔唇/内壁/槽底/完整外壳均参与可见性或投影；独立PaletteUV岛禁止跨岛溶解。原始直线轮廓无曲面与冗余倒角段。槽灯共面反向片可由双面材质替代，按同材质同色格清理；不改孔口和灯片可见轮廓。"
+      },
+      {
+        "object": "主线钥匙嵌件_主体_金属哑光反光",
+        "before": {
+          "verts": 192,
+          "edges": 322,
+          "faces": 144
+        },
+        "duplicate_coplanar_faces_removed": 0,
+        "after_remove_doubles": {
+          "verts": 192,
+          "edges": 322,
+          "faces": 144
+        },
+        "after_degenerate": {
+          "verts": 192,
+          "edges": 322,
+          "faces": 144
+        },
+        "loose_edges_removed": 0,
+        "loose_vertices_removed": 0,
+        "safe_dissolve_faces_before": 144,
+        "safe_dissolve_faces_after": 144,
+        "after_triangulation": {
+          "verts": 192,
+          "edges": 466,
+          "faces": 288
+        },
+        "operations": {
+          "remove_doubles_distance_m": 1e-07,
+          "dissolve_degenerate_distance_m": 1e-09,
+          "dissolve_limit_angle_rad": 1e-06,
+          "dissolve_delimit": [
+            "NORMAL",
+            "MATERIAL",
+            "SEAM",
+            "SHARP",
+            "UV"
+          ],
+          "triangulate": "BEAUTY"
+        },
+        "preserved_reason": "孔唇/内壁/槽底/完整外壳均参与可见性或投影；独立PaletteUV岛禁止跨岛溶解。原始直线轮廓无曲面与冗余倒角段。槽灯共面反向片可由双面材质替代，按同材质同色格清理；不改孔口和灯片可见轮廓。"
+      }
+    ],
+    "zero_reduction_reason": null,
+    "bottom_faces_retained": true,
+    "reduction_reason": "四个槽灯各移除2个共面反向四边形，共减少16个三角面；双面材质保留两侧可见性。主体各项安全清理零减面：保留孔口/内壁/暗槽/投影底面及独立UV岛。",
+    "mesh_native_validation": [
+      {
+        "object": "SocketGlow_0",
+        "mesh_validate_required_correction": false
+      },
+      {
+        "object": "SocketGlow_1",
+        "mesh_validate_required_correction": false
+      },
+      {
+        "object": "SocketGlow_2",
+        "mesh_validate_required_correction": false
+      },
+      {
+        "object": "SocketGlow_3",
+        "mesh_validate_required_correction": false
+      },
+      {
+        "object": "主线钥匙嵌件_主体_金属哑光反光",
+        "mesh_validate_required_correction": false
+      }
+    ]
+  },
+  "materials_and_uv": {
+    "before_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\before_standard_validation.json",
+    "after_report": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\after_standard_validation.json",
+    "before_passed": true,
+    "after_passed": true,
+    "after_faces": 304,
+    "valid_uv_faces": 304,
+    "materials": {
+      "used_materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "unused_materials": [],
+      "bad_uv_map_nodes": [],
+      "missing_uv_map_nodes": [],
+      "bad_image_interpolation": [],
+      "non_shared_palette_images": [],
+      "packed_palette_images": []
+    },
+    "images": [
+      {
+        "name": "设施低亮多巴胺色盘_10x10_512.png",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+        "packed": false,
+        "size": [
+          512,
+          512
+        ]
+      }
+    ],
+    "palette_sha256_unchanged": true,
+    "glb": {
+      "images": 0,
+      "textures": 0,
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "meshes": 5,
+      "nodes": [
+        "主线钥匙嵌件_主体_金属哑光反光",
+        "SocketGlow_0",
+        "SocketGlow_1",
+        "SocketGlow_2",
+        "SocketGlow_3"
+      ],
+      "triangles": 304,
+      "uv0_and_normals_all_primitives": true,
+      "tangents_all_primitives": true
+    },
+    "glb_roundtrip": {
+      "mesh_count": 5,
+      "triangles": 304,
+      "bbox": {
+        "blender_min": [
+          -1.1399999856948853,
+          -0.28999999165534973,
+          0.0
+        ],
+        "blender_max": [
+          1.1399999856948853,
+          0.28999999165534973,
+          0.23999999463558197
+        ],
+        "godot_min": [
+          -1.1399999856948853,
+          0.0,
+          -0.28999999165534973
+        ],
+        "godot_max": [
+          1.1399999856948853,
+          0.23999999463558197,
+          0.28999999165534973
+        ],
+        "godot_size": [
+          2.2799999713897705,
+          0.23999999463558197,
+          0.5799999833106995
+        ]
+      },
+      "names": [
+        "SocketGlow_0",
+        "SocketGlow_1",
+        "SocketGlow_2",
+        "SocketGlow_3",
+        "主线钥匙嵌件_主体_金属哑光反光"
+      ],
+      "native_mesh_valid": true
+    },
+    "private_image_files": []
+  },
+  "fidelity": {
+    "before": [
+      {
+        "view": "front",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\before_front.png",
+        "camera_location_blender": [
+          0.0,
+          -3.0,
+          1.5499999523162842
+        ],
+        "camera_rotation": [
+          1.1205707788467407,
+          -0.0,
+          0.0
+        ],
+        "ortho_scale": 2.6500000953674316,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "back",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\before_back.png",
+        "camera_location_blender": [
+          0.0,
+          3.0,
+          1.5499999523162842
+        ],
+        "camera_rotation": [
+          1.1205708980560303,
+          7.871099683143257e-08,
+          3.141592502593994
+        ],
+        "ortho_scale": 2.6500000953674316,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "side",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\before_side.png",
+        "camera_location_blender": [
+          3.0,
+          0.0,
+          0.6499999761581421
+        ],
+        "camera_rotation": [
+          1.392703652381897,
+          -0.0,
+          1.5707964897155762
+        ],
+        "ortho_scale": 1.350000023841858,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "game_angle",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\before_game_angle.png",
+        "camera_location_blender": [
+          2.0999999046325684,
+          -3.5,
+          4.5
+        ],
+        "camera_rotation": [
+          0.7490184307098389,
+          -5.445092199352075e-08,
+          0.5404194593429565
+        ],
+        "ortho_scale": 2.799999952316284,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "top",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\before_top.png",
+        "camera_location_blender": [
+          0.0,
+          0.0,
+          4.0
+        ],
+        "camera_rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "ortho_scale": 2.6500000953674316,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "socket_close",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\before_socket_close.png",
+        "camera_location_blender": [
+          0.30000001192092896,
+          -0.800000011920929,
+          0.8500000238418579
+        ],
+        "camera_rotation": [
+          0.8195478916168213,
+          7.690893255585252e-09,
+          0.08727772533893585
+        ],
+        "ortho_scale": 0.7200000286102295,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      }
+    ],
+    "after": [
+      {
+        "view": "front",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\after_front.png",
+        "camera_location_blender": [
+          0.0,
+          -3.0,
+          1.5499999523162842
+        ],
+        "camera_rotation": [
+          1.1205707788467407,
+          -0.0,
+          0.0
+        ],
+        "ortho_scale": 2.6500000953674316,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "back",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\after_back.png",
+        "camera_location_blender": [
+          0.0,
+          3.0,
+          1.5499999523162842
+        ],
+        "camera_rotation": [
+          1.1205708980560303,
+          7.871099683143257e-08,
+          3.141592502593994
+        ],
+        "ortho_scale": 2.6500000953674316,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "side",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\after_side.png",
+        "camera_location_blender": [
+          3.0,
+          0.0,
+          0.6499999761581421
+        ],
+        "camera_rotation": [
+          1.392703652381897,
+          -0.0,
+          1.5707964897155762
+        ],
+        "ortho_scale": 1.350000023841858,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "game_angle",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\after_game_angle.png",
+        "camera_location_blender": [
+          2.0999999046325684,
+          -3.5,
+          4.5
+        ],
+        "camera_rotation": [
+          0.7490184307098389,
+          -5.445092199352075e-08,
+          0.5404194593429565
+        ],
+        "ortho_scale": 2.799999952316284,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "top",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\after_top.png",
+        "camera_location_blender": [
+          0.0,
+          0.0,
+          4.0
+        ],
+        "camera_rotation": [
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "ortho_scale": 2.6500000953674316,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      },
+      {
+        "view": "socket_close",
+        "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\after_socket_close.png",
+        "camera_location_blender": [
+          0.30000001192092896,
+          -0.800000011920929,
+          0.8500000238418579
+        ],
+        "camera_rotation": [
+          0.8195478916168213,
+          7.690893255585252e-09,
+          0.08727772533893585
+        ],
+        "ortho_scale": 0.7200000286102295,
+        "resolution": [
+          1000,
+          700
+        ],
+        "engine": "CYCLES",
+        "samples": 24,
+        "view_transform": "AgX",
+        "look": "AgX - Medium High Contrast"
+      }
+    ],
+    "fixed_camera_settings_equal": true,
+    "bbox_exactly_equal": true,
+    "human_visual_review": {
+      "status": "图像人工式逐图复核通过；非用户签收",
+      "criteria": "已查看正背侧/游戏视角/俯视/孔口特写前后联系表与最终完整侧视、台柜合成。四孔/楔形轮廓/刻线保持，无立柱、地脚或圆环；孔内灯条侧视可辨，游戏角度较克制。",
+      "pixel_difference_note": "并非逐像素一致。正/背/侧/游戏/顶/特写最大8bit通道差分别4/3/83/26/2/18；侧视RGB平均绝对差约0.231/0.164/0.160，轮廓与包围盒不变。源共面双面灯片移除及三角化影响局部着色/投影；无项目像素容差，不宣称自动阈值通过。",
+      "user_art_approval": "pending"
+    },
+    "pixel_comparison": [
+      {
+        "view": "front",
+        "resolution": [
+          1000,
+          700
+        ],
+        "max_absolute_channel_error_8bit": 4,
+        "mean_absolute_channel_error_8bit": [
+          0.005288571428571429,
+          0.006661428571428572,
+          0.00772
+        ],
+        "changed_pixel_count": 12041,
+        "total_pixels": 700000,
+        "identical_pixels": false,
+        "difference_bbox": [
+          0,
+          0,
+          993,
+          697
+        ]
+      },
+      {
+        "view": "back",
+        "resolution": [
+          1000,
+          700
+        ],
+        "max_absolute_channel_error_8bit": 3,
+        "mean_absolute_channel_error_8bit": [
+          0.0013942857142857142,
+          0.0012971428571428572,
+          0.0015142857142857143
+        ],
+        "changed_pixel_count": 2608,
+        "total_pixels": 700000,
+        "identical_pixels": false,
+        "difference_bbox": [
+          0,
+          4,
+          994,
+          697
+        ]
+      },
+      {
+        "view": "side",
+        "resolution": [
+          1000,
+          700
+        ],
+        "max_absolute_channel_error_8bit": 83,
+        "mean_absolute_channel_error_8bit": [
+          0.23055714285714285,
+          0.16392285714285715,
+          0.15951857142857143
+        ],
+        "changed_pixel_count": 21198,
+        "total_pixels": 700000,
+        "identical_pixels": false,
+        "difference_bbox": [
+          0,
+          0,
+          1000,
+          699
+        ]
+      },
+      {
+        "view": "game_angle",
+        "resolution": [
+          1000,
+          700
+        ],
+        "max_absolute_channel_error_8bit": 26,
+        "mean_absolute_channel_error_8bit": [
+          0.022544285714285715,
+          0.026584285714285713,
+          0.026785714285714284
+        ],
+        "changed_pixel_count": 19017,
+        "total_pixels": 700000,
+        "identical_pixels": false,
+        "difference_bbox": [
+          3,
+          0,
+          1000,
+          696
+        ]
+      },
+      {
+        "view": "top",
+        "resolution": [
+          1000,
+          700
+        ],
+        "max_absolute_channel_error_8bit": 2,
+        "mean_absolute_channel_error_8bit": [
+          0.0064,
+          0.007067142857142857,
+          0.007744285714285714
+        ],
+        "changed_pixel_count": 13610,
+        "total_pixels": 700000,
+        "identical_pixels": false,
+        "difference_bbox": [
+          0,
+          2,
+          1000,
+          699
+        ]
+      },
+      {
+        "view": "socket_close",
+        "resolution": [
+          1000,
+          700
+        ],
+        "max_absolute_channel_error_8bit": 18,
+        "mean_absolute_channel_error_8bit": [
+          0.03472714285714286,
+          0.03695857142857143,
+          0.04018142857142857
+        ],
+        "changed_pixel_count": 54674,
+        "total_pixels": 700000,
+        "identical_pixels": false,
+        "difference_bbox": [
+          0,
+          0,
+          1000,
+          700
+        ]
+      }
+    ],
+    "contact_sheet": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\before_after_contact_sheet.png",
+    "side_view_note": "首轮侧镜头裁切已纠正为正侧完整构图；前后均使用同一明确设置。source不回写，镜头持久保存在optimized，前后设置逐项写入清单。"
+  },
+  "table_reference": {
+    "image": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model\\table_composite_placement_reference.png",
+    "temporary_import": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\components\\env_base99_remaining_facilities\\main_door_low_storage_cabinet\\main_door_low_storage_cabinet_visual_top3d.glb",
+    "reference_only": true,
+    "saved_to_blend": false,
+    "included_in_glb": false,
+    "godot_placement": [
+      5,
+      1.38,
+      -3.77
+    ],
+    "insert_world_bbox_godot": {
+      "min": [
+        3.86,
+        1.38,
+        -4.06
+      ],
+      "max": [
+        6.14,
+        1.62,
+        -3.48
+      ]
+    },
+    "table_top_y": 1.38,
+    "table_x_limits": [
+      1.86,
+      8.14
+    ],
+    "table_z_limits": [
+      -4.2,
+      -3.34
+    ],
+    "left_device_center_x": 3,
+    "right_device_center_x": 7.1,
+    "circle_modified": false
+  },
+  "godot_import_handoff": {
+    "path": "assets/art/props/main_story/components/key_insert/prp_base99_main_story_key_insert_visual_top3d.glb.import",
+    "content": "[remap]\n\nimporter=\"scene\"\nimporter_version=1\ntype=\"PackedScene\"\npath=\"res://.godot/imported/prp_base99_main_story_key_insert_visual_top3d.glb-401a789611721bbee2bf90ac21d38739.scn\"\n\n[deps]\n\nsource_file=\"res://assets/art/props/main_story/components/key_insert/prp_base99_main_story_key_insert_visual_top3d.glb\"\ndest_files=[\"res://.godot/imported/prp_base99_main_story_key_insert_visual_top3d.glb-401a789611721bbee2bf90ac21d38739.scn\"]\n\n[params]\n\nnodes/root_type=\"\"\nnodes/root_name=\"\"\nnodes/apply_root_scale=true\nnodes/root_scale=1.0\nnodes/use_name_suffixes=false\nnodes/use_node_type_suffixes=false\nmeshes/ensure_tangents=true\nmeshes/generate_lods=false\nmeshes/create_shadow_meshes=true\nmeshes/light_baking=1\nanimation/import=false\nimport_script/path=\"res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd\"\nmaterials/extract=0\n_subresources={}\ngltf/naming_version=2\ngltf/embedded_image_handling=0\n",
+    "cache_generated": false,
+    "formal_import_executed": false,
+    "post_import": "tools/asset_pipeline/scene_facility_shared_palette_post_import.gd",
+    "post_import_texture_filter": "TEXTURE_FILTER_NEAREST",
+    "palette_compression_mode": 0,
+    "palette_mipmaps_generate": false,
+    "main_agent_actions": [
+      "仅在主agent安全窗口正式导入本GLB；本任务不启动Godot全工程导入。",
+      "核对Visual/SocketGlow_0..3可独立访问；共享发光材质若需逐孔换色，运行方需为目标表面复制材质，不改本资产制作脚本。",
+      "导入后验证每表面公共色盘、Nearest、不重复、自发光MULTIPLY与影子；独立实例化wrapper并进行真实游戏镜头截图。",
+      "本任务不接入房间、不改主线、不登记账本。"
+    ],
+    "local_gitignore": "assets/art/props/main_story/components/key_insert/.gitignore",
+    "local_gitignore_content": "!*.glb.import\n"
+  },
+  "status": {
+    "blender_source_complete": true,
+    "stable_glb_exported": true,
+    "wrapper_authored": true,
+    "godot_formal_import_verified": false,
+    "runtime_integrated": false,
+    "ledger_updated": false,
+    "docs_updated": false,
+    "active_blender_session_touched": false,
+    "full_project_import_run": false
+  },
+  "not_verified": [
+    "Godot正式导入、独立PackedScene实例化、导入后材质与实际游戏截图：按用户要求交接主agent执行。",
+    "未提供红框原图，本次按明确台柜坐标和尺寸制作与合成摆位。"
+  ],
+  "evidence_directory": "I:\\工作项目\\shellstrom2\\ShellStorm2-work\\outputs\\2026-11-10_key_inset\\model",
+  "build_script": "art_source/props/main_story/key_insert/build_key_insert_v001.py",
+  "evidence_check_script": "art_source/props/main_story/key_insert/check_key_insert_evidence_v001.py",
+  "artifact_sizes_bytes": {
+    "source": 617420,
+    "optimized": 583075,
+    "stable_glb": 40300,
+    "wrapper": 1064
+  }
+}

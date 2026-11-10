@@ -14,6 +14,7 @@ extends Node
 
 const PANEL := preload("res://src/ui/WorkbenchPanel.gd")
 const VEIL := preload("res://src/ui/SynthesisGateVeil.gd")
+const MELT := preload("res://src/ui/ForgeMeltVeil.gd")
 const INVENTORY := preload("res://src/game/InventoryModule.gd")
 const FORGE := preload("res://src/weapons/WeaponForge.gd")
 
@@ -199,9 +200,11 @@ func _ready() -> void:
 		"abort 不得发 `finished` —— 它表示'播完了'，不是'收掉了'"
 	)
 
-	# ——— ⑥ 端到端：真的熔炼一次，闸门必须自己起来，台上是那把枪 ———
+	# ——— ⑥ 端到端：真的熔炼一次，投料段先播、闸门随后自己起来，台上是那把枪 ———
 	veil.abort()
 	var panel_veil := panel.find_child("SynthesisGateVeil", true, false) as SynthesisGateVeil
+	var melt_veil := panel.find_child("ForgeMeltVeil", true, false) as ForgeMeltVeil
+	_expect(melt_veil != null, "改造台必须挂上熔炼投料层（ForgeMeltVeil）")
 	panel.call("_tray_append", _item("bp_pistol"), 2, 0, 0)
 	panel.call("_tray_append", _item("mod_bullet_standard"), 4, 2, 0)
 	var plan := FORGE.classify(panel.call("_tray_probe_items"))
@@ -211,13 +214,56 @@ func _ready() -> void:
 	)
 	panel.call("_execute_forge", plan)
 	await get_tree().process_frame
-	_expect(
-		bool(panel_veil.get_snapshot()["playing"]),
-		"端到端：熔炼成功后闸门必须自己开始播放"
-	)
+
+	# 第一段：投料。闸门**此时不得正在播** —— 材料还没被吃掉就先落闸，
+	# 玩家会完全看不到自己投的是什么（这是 2026-11-10 之前的状态）。
 	_expect(
 		bool(panel.get("_busy")),
-		"端到端：闸门播放期间必须保持 busy（否则玩家能对着空盘面再点一次）"
+		"端到端：演出期间必须保持 busy（否则玩家能对着空盘面再点一次）"
+	)
+	if melt_veil != null:
+		var melt_snap := melt_veil.get_snapshot()
+		_expect(bool(melt_snap["visible"]), "端到端：投料层必须可见")
+		_expect(
+			str(melt_snap["phase"]) == "intake" or str(melt_snap["phase"]) == "charge",
+			"端到端：投料层必须进入投料/充能段，实际 '%s'" % str(melt_snap["phase"])
+		)
+		_expect(
+			int(melt_snap["actors"]) > 0,
+			"端到端：投料层必须为盘面上的投入物建出吸入替身（实际 0 个）"
+		)
+		_expect(
+			str(melt_snap["recipe"]) == FORGE.RECIPE_DIRECTED,
+			"端到端：投料层必须知道本次是哪条配方（定向合成），实际 '%s'" % str(melt_snap["recipe"])
+		)
+		_expect(
+			not bool(panel_veil.get_snapshot()["playing"]),
+			"端到端：投料段播完之前闸门**不得**开始播 —— 否则材料还没被吃掉就先落闸"
+		)
+
+	# 手动推完投料段 → 闸门必须自己接着起来。
+	if melt_veil != null:
+		melt_veil.set_process(false)
+		_melt_advance(melt_veil, 0.75 + 0.45 + 0.25 + 0.10)
+		await get_tree().process_frame
+		_expect(
+			not bool(melt_veil.get_snapshot()["playing"]),
+			"投料段必须自己收掉"
+		)
+		_expect(
+			not bool(melt_veil.get_snapshot()["visible"]),
+			"投料段收掉后必须隐藏，否则会一直压着盘面"
+		)
+	_expect(
+		bool(panel_veil.get_snapshot()["playing"]),
+		"端到端：投料段播完后闸门必须自己开始播放"
+	)
+	# 防剧透（第二条）：台面在闸门**落到底之前**不得显示产物。
+	# 之前只堵了页脚与背包，漏了台面本身 —— 而它是最直接的一处剧透。
+	_expect(
+		float(panel_veil.get_snapshot()["stage_alpha"]) <= 0.01,
+		"端到端：闸门还没开到底时台面必须完全透明（实际 alpha=%.2f）—— 否则答案提前亮相"
+		% float(panel_veil.get_snapshot()["stage_alpha"])
 	)
 	# 防剧透：闸门关着时背包里那把枪**已经真的进包了**，必须被封条挡住，
 	# 否则玩家在门旁边就能看到答案，3 秒等待变成空转。
@@ -226,7 +272,7 @@ func _ready() -> void:
 	if bag_seal != null:
 		_expect(bool(bag_seal.visible), "闸门播放期间背包封条必须可见 —— 否则产物提前剧透")
 		_expect(
-			bag_seal.z_index >= int(veil.z_index),
+			bag_seal.z_index >= int(panel_veil.z_index),
 			"封条层级不得低于闸门（否则会被棋盘物品穿透）"
 		)
 	# 状态栏也不能写出结果 —— 那句话本身就是剧透。
@@ -253,7 +299,7 @@ func _ready() -> void:
 	# 必须先 play 再关掉引擎推进，否则手动推进与引擎滴答会叠加，时间轴翻倍。
 	panel_veil.play([_item("weapon_pistol")])
 	panel_veil.set_process(false)
-	_advance(panel_veil, 0.7 + 2.4 + 0.7 + float(VEIL.LINGER_SECONDS))
+	_melt_advance(panel_veil, 0.7 + 2.4 + 0.7 + float(VEIL.LINGER_SECONDS))
 	await get_tree().process_frame
 	_expect(not bool(panel.get("_busy")), "闸门播完后必须放开 busy，否则熔炼按钮从此点不动")
 	if bag_seal != null:
@@ -262,6 +308,67 @@ func _ready() -> void:
 		str((panel.get("_status") as Label).text).contains("熔炼完成"),
 		"揭晓之后状态栏必须写出结果，实际「%s」" % str((panel.get("_status") as Label).text)
 	)
+
+	# ——— ⑦ 两段表现各自的时间轴（手动驱动，不真等 6.5 秒） ———
+	_expect(
+		is_equal_approx(float(MELT.INTAKE_SECONDS) + float(MELT.CHARGE_SECONDS) + float(MELT.FADE_SECONDS), 1.45),
+		"投料段合计必须是 1.45s（%s+%s+%s）" % [
+			MELT.INTAKE_SECONDS, MELT.CHARGE_SECONDS, MELT.FADE_SECONDS,
+		]
+	)
+	_expect(
+		float(MELT.INTAKE_SECONDS) < 1.0,
+		"投料段必须短于 1 秒级 —— 它是过渡，不是演出；太长会让连续熔炼变成负担"
+	)
+	# 四色互不重复：配方配色是玩家辨认"这次熔的是哪一类"的唯一凭据。
+	var accents := {}
+	for recipe_id in [
+		FORGE.RECIPE_REMELT, FORGE.RECIPE_FUSION, FORGE.RECIPE_SYNTHESIS, FORGE.RECIPE_DIRECTED,
+	]:
+		var key := MELT.accent_for(recipe_id).to_html(false)
+		_expect(not accents.has(key), "配方配色不得重复：%s 与 %s 撞色" % [recipe_id, accents.get(key, "")])
+		accents[key] = recipe_id
+	if melt_veil != null:
+		var melt_clock := {"finished": 0}
+		melt_veil.finished.connect(func(): melt_clock["finished"] = int(melt_clock["finished"]) + 1)
+		melt_veil.set_process(false)
+		melt_veil.play({
+			"recipe": FORGE.RECIPE_FUSION,
+			"items": [],
+			"home": Vector2(100, 100),
+		})
+		_expect(
+			bool(melt_veil.get_snapshot()["playing"])
+			and str(melt_veil.get_snapshot()["phase"]) == "intake",
+			"play 之后投料层必须立刻进入投料段"
+		)
+		_melt_advance(melt_veil, 0.40)
+		var mid_melt := melt_veil.get_snapshot()
+		var mid_charge := float(mid_melt["charge"])
+		_expect(
+			mid_charge > 0.0 and mid_charge < 1.0,
+			"投料中炉心必须**正在**充能（0<charge<1），实际 %.2f" % mid_charge
+		)
+		_melt_advance(melt_veil, 0.40)
+		_expect(
+			str(melt_veil.get_snapshot()["phase"]) == "charge",
+			"0.80s 时必须进入充能段，实际 '%s'" % str(melt_veil.get_snapshot()["phase"])
+		)
+		_melt_advance(melt_veil, 0.70)
+		var done_melt := melt_veil.get_snapshot()
+		_expect(str(done_melt["phase"]) == "idle", "投料段结束必须回到 idle")
+		_expect(not bool(done_melt["visible"]), "投料段结束后必须隐藏")
+		_expect(int(melt_clock["finished"]) == 1, "投料段 finished 必须恰好发一次，实际 %d" % int(melt_clock["finished"]))
+		# abort 不得冒充"播完了"。
+		melt_veil.play({"recipe": FORGE.RECIPE_REMELT, "items": [], "home": Vector2.ZERO})
+		_melt_advance(melt_veil, 0.30)
+		melt_veil.abort()
+		_expect(not bool(melt_veil.get_snapshot()["playing"]), "abort 后不得仍在播放")
+		_expect(not bool(melt_veil.get_snapshot()["visible"]), "abort 后必须隐藏")
+		_expect(
+			int(melt_clock["finished"]) == 1,
+			"abort 不得发 finished —— 它表示'播完了'，不是'收掉了'"
+		)
 
 	_panic(panel, stub)
 
@@ -274,8 +381,9 @@ func _panic(panel: Node, stub: Node) -> void:
 		stub.queue_free()
 	if _failures.is_empty():
 		print(
-			"SYNTHESIS_GATE_OK: 闸门只覆盖中间炼炉栏 / 关闸0.60s→落底 → 眼睛全红 → 3.00s 处上升 → 3.60s 升到底 → 停留 1.40s 展示产物；"
-			+ "保持段与停留段可点掉、关闸段不可跳；abort 不冒充播完；播放期背包与状态栏都不剧透；熔炼后台面换成刚产出的那把枪"
+			"SYNTHESIS_GATE_OK: 熔炼演出两段串行 —— ForgeMeltVeil 投料+炉心充能 1.45s（吸入替身与格子逐像素重合、四色配方配色互不重复、"
+			+ "abort 不冒充播完）→ SynthesisGateVeil 兔子闸门关闸0.60s→落底 → 眼睛全红 → 3.00s 处上升 → 3.60s 升到底 → 停留 1.40s 展示产物；"
+			+ "闸门只覆盖中间炼炉栏 / 保持段与停留段可点掉、关闸段不可跳 / 播放期台面、背包封条、状态栏三处都不剧透"
 		)
 		get_tree().quit(0)
 		return
@@ -290,6 +398,12 @@ func _advance(veil: Node, seconds: float) -> void:
 		var step := minf(STEP, remaining)
 		veil.call("_process", step)
 		remaining -= step
+
+
+## 投料层与闸门层共用同一个手动推进器。分开命名只是为了让调用点读得出在推哪一层，
+## 实现完全一致 —— 两层的全部时间来源都是各自的 `_time`。
+func _melt_advance(veil: Node, seconds: float) -> void:
+	_advance(veil, seconds)
 
 
 func _click() -> InputEventMouseButton:

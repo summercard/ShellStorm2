@@ -177,14 +177,18 @@ const HUD_PLAYER_SHAKE_PUNCH_SCALE := 1.06
 const HUD_PLAYER_SHAKE_TINT := Color(1.0, 0.58, 0.52, 1.0)
 const HUD_PLAYER_SHAKE_TINT_STRENGTH := 0.55
 ## —— 翻滚冷却环（2026-11-10 主人要求①）——
-## 外径 28 设计 px（×0.8 ⇒ 22.4 canvas px），与角色身侧换弹环 25 px 同一档。
-## 落点是状态块内容列的左下角（血条 → 电芯行 → 本环），不侵入画面中心。
-## 位置按实测矩形定：设计 y 140..168 ⇒ canvas y 112..134.4，与上方电芯行
-## （实测结束于 106.6）留 5.4 px、与状态块下沿（139.2）留 4.8 px。
-## 首版取 32 设计 px / y 134 起，实测只有 0.6 px 间隙 —— 环顶贴死在电芯格上。
-const HUD_DASH_RING_DIAMETER_DESIGN := 28.0
-const HUD_DASH_RING_LEFT_DESIGN := 30.0
-const HUD_DASH_RING_TOP_DESIGN := 140.0
+## 2026-11-10 第二轮：业主原话「翻滚提示放在那个位置也太难看见了，放到左下角来」。
+## 位置由左上角色状态块**改为屏幕左下角**，直径 28 → **60 设计 px**
+## （×0.8 ⇒ 48 canvas px，是原来的 2.14 倍）—— 尺寸按业主截图上的红框定：
+## 红框在 1242×693 截图里是 (11,627)..(64,676)，换算到 1280×720 canvas 是
+## (11.3,646.2)..(66.0,696.7)，直径约 50 canvas px ⇒ 60 设计 px 正好落在框内。
+## 落点设计 px (18,-86)..(78,-26)：距左 18、距底 26。
+## ⚠ 左下角原本是**遭遇倒计时环**的地盘（设计 (40,-40)..(148,-148)），
+## 两者在 y 646..688 会重叠 30 px —— 倒计时环已同步右移 60 设计 px 让位，
+## 见 `_install_capture_countdown_ring` 的常量注释。
+const HUD_DASH_RING_DIAMETER_DESIGN := 60.0
+const HUD_DASH_RING_LEFT_DESIGN := 18.0
+const HUD_DASH_RING_BOTTOM_DESIGN := 26.0
 ## 非远征门后购卡的历史稀有度基准；远征01改由 FateEconomyService 的真实收益区间冻结报价。
 ## 只由 `GameManager.currency`（本局金币）支付；局外总池 `BaseManager.get_extraction_points()` 永不参与。
 const FATE_PRICE_BY_RARITY := [30, 60, 110, 180, 270]
@@ -2172,23 +2176,28 @@ func _build_reference_main_hud() -> void:
 		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.88))
 		label.add_theme_constant_override("outline_size", 4)
 
-	# 2026-11-10 主人要求①：翻滚（冲刺）冷却环 —— 不写字，只用环形扫描读数。
-	# 落点 = 状态块内容列的左下角（血条 → 电芯行 → 本环），设计 px (30,134)..(62,166)。
-	# 这一列原本就空着（内容只有血条 + 电芯两行、且垂直居中），且不与塔楼引导卡
-	# `TowerCurrentInfoHUD`（canvas y 176 起）相撞。
-	# 用绝对锚定挂在 `_reference_hud_root` 而不是塞进 `stat_vbox`：塞进去会把状态块
-	# 的最小高度撑过锚框（130 设计 px），内容溢出锚框 —— 而这块的尺寸被
-	# `verify_reference_hud_fate_visual` 的 `size.x <= 280` 盯着。
+	# 2026-11-10 主人要求①：翻滚（冲刺）冷却环 —— 不写字，只用环形扫描读数 + 兔子剪影。
+	# 第二轮按业主红框改到**屏幕左下角**并放大到 60 设计 px（详见常量块注释）。
+	# 用绝对锚定挂在 `_reference_hud_root`：它已不再是状态块的一部分，
+	# 塞进 `PlayerStatusBlock` 会撑破那块 130 设计 px 的锚框。
+	var dash_ring_size := HUD_DASH_RING_DIAMETER_DESIGN * HUD_UI_SCALE
 	_hud_dash_ring = HUD_DASH_RING_SCRIPT.new() as HudDashCooldownRing
 	_hud_dash_ring.name = "HudDashCooldownRing"
 	_hud_dash_ring.visible = true
-	_anchor_control(
-		_hud_dash_ring, 0.0, 0.0, 0.0, 0.0,
-		HUD_DASH_RING_LEFT_DESIGN,
-		HUD_DASH_RING_TOP_DESIGN,
-		HUD_DASH_RING_LEFT_DESIGN + HUD_DASH_RING_DIAMETER_DESIGN,
-		HUD_DASH_RING_TOP_DESIGN + HUD_DASH_RING_DIAMETER_DESIGN
+	# 锚 (0,1,0,1) = 相对左下角；y 用负偏移表示「距底边多少」。
+	_hud_dash_ring.anchor_left = 0.0
+	_hud_dash_ring.anchor_top = 1.0
+	_hud_dash_ring.anchor_right = 0.0
+	_hud_dash_ring.anchor_bottom = 1.0
+	_hud_dash_ring.offset_left = HUD_DASH_RING_LEFT_DESIGN * HUD_UI_SCALE
+	_hud_dash_ring.offset_top = -(
+		HUD_DASH_RING_BOTTOM_DESIGN * HUD_UI_SCALE + dash_ring_size
 	)
+	_hud_dash_ring.offset_right = (
+		HUD_DASH_RING_LEFT_DESIGN * HUD_UI_SCALE + dash_ring_size
+	)
+	_hud_dash_ring.offset_bottom = -HUD_DASH_RING_BOTTOM_DESIGN * HUD_UI_SCALE
+	_hud_dash_ring.z_index = 121
 	_reference_hud_root.add_child(_hud_dash_ring)
 
 
@@ -2232,11 +2241,17 @@ func _build_reference_main_hud() -> void:
 	# 落点 40..148 / -148..-40（设计 px）：距左边缘 40、距底边 40。
 	# 同区域核查过不撞：`hint` 是居中锚（x 280..1000），`extraction_panel` 居中（x 390..890），
 	# `weapon_panel` / `loot_label` 在右下，左侧 y 500 以下原本全空。
+	#
+	# 2026-11-10 **右移让位给翻滚冷却环**：业主把翻滚环指到左下角（标注红框换算成
+	# canvas 是 x 11..66、y 646..697）。本环原设计 (40,-148)..(148,-40) ⇒ canvas
+	# x 32..118 / y 602..688，与红框在 x 32..66、y 646..688 重叠 30+ px ——
+	# 而本环是有事件才出现的临时件、翻滚环是常驻件，常驻件优先占角落。
+	# 右移 60 设计 px 后：canvas x 80..166，与翻滚环右缘 62.4 留 17.6 px。
 	_hud_countdown_ring = ENCOUNTER_COUNTDOWN_RING_SCRIPT.new() as EncounterCountdownRing
 	_hud_countdown_ring.name = "EncounterCountdownRing"
 	_hud_countdown_ring.visible = false
 	_hud_countdown_ring.z_index = 120
-	_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 40, -148, 148, -40)
+	_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 100, -148, 208, -40)
 	_reference_hud_root.add_child(_hud_countdown_ring)
 	# 中间那行时间「用下方金币的字体」= 与右下 `RunLootReadout` **同一个** `_make_hud_label`
 	# 口径（同字号 26、同 `RUN_COIN_READOUT_COLOR`、同 `_outline_labels` 描边）。
@@ -4226,7 +4241,22 @@ func _is_current_room(room_id: String) -> bool:
 	return room_id == _current_room_id
 
 
+## 出怪入口。只做一件事：告诉 `MonsterInjector` 当前在给哪间房出怪，
+## 让 `monster_rules.strong_variant.suppressed_rooms` 能按房间禁用强化升级。
+## 本房所有波次的配置（盒子 / 设计源 / 公式 / 增援补差）都在 `_spawn_room_enemies_impl`
+## 内同步生成完毕，所以出口处还原即可，不会漏掉后续波次。
 func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
+	if room == null:
+		return false
+	if _monster_injector != null:
+		_monster_injector.set_active_room_id(room.room_id)
+	var result := _spawn_room_enemies_impl(room)
+	if _monster_injector != null:
+		_monster_injector.set_active_room_id("")
+	return result
+
+
+func _spawn_room_enemies_impl(room: DungeonRoom3D) -> bool:
 	if room == null:
 		return false
 	# —— 踩点触发式遭遇（`encounter.trigger`）——
@@ -7787,8 +7817,14 @@ func _ensure_player_bark() -> CharacterBark3D:
 		return null
 	var existing := player.get_node_or_null("CharacterBark3D") as CharacterBark3D
 	if existing != null:
+		existing.indicator_head_height = PLAYER_BARK_HEIGHT_M
 		return existing
-	return CharacterBark3D.attach_to(player, PLAYER_BARK_HEIGHT_M)
+	var created := CharacterBark3D.attach_to(player, PLAYER_BARK_HEIGHT_M)
+	# 对话示意框比原来两行文字气泡小得多，挂高沿用主角头顶口径即可；
+	# 不设这条会用 `CharacterBark3D` 给小型 NPC 定的 1.86m，框会落到胸口。
+	if created != null:
+		created.indicator_head_height = PLAYER_BARK_HEIGHT_M
+	return created
 
 
 func _open_workbench() -> void:
@@ -8015,10 +8051,13 @@ func trigger_extra_wave(effect: Dictionary = {}) -> Dictionary:
 	if bool(effect.get("spawn_elite", false)):
 		configs = _reserve_fate_elite(room, "reinforce")
 	else:
+		# 命运增援也要带上房间上下文，否则 suppressed_rooms 对它不生效。
+		_monster_injector.set_active_room_id(room.room_id)
 		configs.assign(_monster_injector.generate_enemies({
 			"type": "ambush", "count": int(effect.get("spawn_count", 3)),
 			"floor": maxi(1, visual_theme.difficulty_rank), "floor_level": 0,
 		}))
+		_monster_injector.set_active_room_id("")
 	if configs.is_empty():
 		return {"success": false, "error": "reinforcement_unavailable", "message": "没有可用增援，未消耗命运"}
 	for config in configs:

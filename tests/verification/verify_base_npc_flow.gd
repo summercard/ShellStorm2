@@ -395,7 +395,7 @@ func _run(failures: Array[String]) -> void:
 	var bubble_text := ""
 	var bark := npc.get_node_or_null("CharacterBark3D") as CharacterBark3D
 	if bark != null:
-		bubble_text = bark.get_current_text()
+		bubble_text = DialogueUI.current_text()
 	if bubble_text != str(lines[0]):
 		failures.append("A24 bubble text 『%s』 != catalog line 『%s』" % [bubble_text, str(lines[0])])
 	# —— A24b 气泡字号（业主三轮口径：太小学直看不清楚）——
@@ -413,10 +413,36 @@ func _run(failures: Array[String]) -> void:
 					"A24b bubble pixel_size %.4f != NpcCharacter3D.BUBBLE_PIXEL_SIZE %.4f"
 						% [bubble_label.pixel_size, NpcCharacter3D.BUBBLE_PIXEL_SIZE]
 				)
-			var bubble_width := bubble.get_bubble_width_m()
-			if bubble_width < 3.0:
+			# —— A24b 头顶形态与底栏字号（业主 2026-11-10 改造）——
+			#
+			# ⚠️ 判据已经反转：对话时头顶**不再**是 3m 宽的文字气泡，
+			# 而是固定 0.5~1.3m 的「正在说话」示意框（业主：原来那个太挡角色）；
+			# 文字统一进底栏，所以字号要改成量底栏。
+			if not bark.is_indicator_active():
+				failures.append("A24b 对话开始时头顶没有出现说话示意框")
+			if not bubble.get_bubble_text().is_empty():
 				failures.append(
-					"A24b the bubble is only %.2f m wide — 20 字台词要够大（至少 3 m）" % bubble_width
+					"A24b 对话文字仍写在头顶气泡里：『%s』（应统一到底栏）" % bubble.get_bubble_text()
+				)
+			var bubble_width := bubble.get_bubble_width_m()
+			if bubble_width < 0.5 or bubble_width > 1.3:
+				failures.append(
+					"A24b 头顶示意框宽 %.2f m，超出 0.5~1.3 m 的小框区间" % bubble_width
+				)
+			var panel := DialogueUI.get("_panel") as Control
+			if panel == null:
+				failures.append("A24b 找不到底栏面板")
+			elif not is_equal_approx(panel.anchor_left, 0.15) or not is_equal_approx(panel.anchor_right, 0.85):
+				failures.append(
+					"A24b 底栏宽度不是视口 70%%（实际 %.2f~%.2f）" % [panel.anchor_left, panel.anchor_right]
+				)
+			var text_label := DialogueUI.get("_text_label") as Label
+			if text_label == null:
+				failures.append("A24b 底栏缺少正文 Label")
+			elif text_label.get_theme_font_size("font_size") < 19:
+				failures.append(
+					"A24b 底栏正文字号 %d < 19 —— 收窄宽度后不能顺手把字缩小"
+						% text_label.get_theme_font_size("font_size")
 				)
 			# —— A24c 底板半透明（业主 2026-11-02「黑色背景半透明」）——
 			if bubble.fill_color.a >= 0.9:

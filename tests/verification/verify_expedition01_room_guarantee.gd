@@ -5,24 +5,44 @@ extends Node
 ## 一起掉的还有一组 100 发普通弹药。
 ##
 ## 本用例只验**纯服务层**（配置解析 → 选房 → 箱子配置 → 宝箱奖励解析），
-## 不建世界、不刷怪、不真开箱。判据分四组：
-##   A 结构：`clear_drops.room_guarantees` 存在且能被 `ClearDropService.configure()` 接受；
-##   B 选址：每个 seed 恰好命中 f00_room_01 / f00_room_02 之一，且同 seed 多次调用结果不变；
-##   C 内容：命中房里是「1 把 {散射喷壶, 步枪} 中的一把 + grade=blue」和「item_ammo_pack ×100」；
-##   D 落地：`ChestRewardService.resolve()` 真产出蓝品枪 grant 与 100 发弹药 grant（防 `_unit_grants` 把 100 拍成 1）。
+## 不建世界、不刷怪、不真开箱。判据分五组：
+##   A  结构：`clear_drops.room_guarantees` 存在且能被 `ClearDropService.configure()` 接受；
+##   A2 ID 口径（2026-11-10 新增）：候选房 id 必须出现在**运行时**房间 id 集合里；
+##   B  选址：每个 seed 恰好命中候选房之一，且同 seed 多次调用结果不变；
+##   C  内容：命中房里是「1 把 {散射喷壶, 步枪} 中的一把 + grade=blue」和「item_ammo_pack ×100」；
+##   D  落地：`ChestRewardService.resolve()` 真产出蓝品枪 grant 与 100 发弹药 grant（防 `_unit_grants` 把 100 拍成 1）。
 ## 另加反向对照：抹掉 `room_guarantees` 后必须什么都不保底，证明上面的绿不是恒真。
+##
+## ⚠ **A2 组是一次实测事故的补丁（2026-11-10）**：原用例把候选房硬编码成
+## `["f00_room_01","f00_room_02"]`，直接拿**配置里的字串**去问服务 —— 自己跟自己对答案。
+## 而运行时房间 id 由 `FloorPlanGenerator.room_from_source()` 决定，**优先取
+## `legacy_room_id`**（远征01 是 `room_01` / `room_02`），两个串永远不相等 ⇒
+## `guaranteed_items_for_room()` 恒返回空、两个清房箱都不带保底，
+## 用例却一直全绿（实测 13 间房 RUNTIME_HITS=0）。所以本用例现在必须：
+##   1. 跑一次 `generate_from_level_plan()` 取**真实运行时 id**；
+##   2. 用真实 id 跑 B/C/D 三组；
+##   3. 显式断言「配置里的候选房 ∈ 运行时 id 集合」。
 
 const CLEAR_DROP_SCRIPT := preload("res://src/game/ClearDropService.gd")
+const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const PLAN_PATH := "res://data/level_plans/expedition_01/level_plan.json"
+const LEVEL_ID := "expedition_01"
 const GUARANTEE_ID := "exp01_opening_weapon_or_ammo"
-const CANDIDATE_ROOMS: Array[String] = ["f00_room_01", "f00_room_02"]
 const CANDIDATE_GUNS: Array[String] = ["weapon_shotgun", "weapon_rifle"]
 const AMMO_ITEM_ID := "item_ammo_pack"
 const AMMO_COUNT := 100
 const SAMPLE_SEEDS: Array[int] = [1, 7, 2026, 991217, 20261109, 42, 808, 123456789]
+## 只用来把楼层计划生成一次拿 room id；房间 id 与 seed 无关，固定下来即可。
+const RUNTIME_PROBE_SEED := 2026
+## 远征01 新局用北向（180°）。房间 id 与旋转无关，这里只是让计划校验走真实分支。
+const EXPEDITION_ROTATION_DEG := 180
 
 var _failures: Array[String] = []
 var _probe_completed := false
+## 配置里写的候选房（原样）。
+var _candidate_rooms: Array[String] = []
+## `generate_from_level_plan()` 产出的**运行时**房间 id（这才是 `room.room_id`）。
+var _runtime_room_ids: Array[String] = []
 
 
 func _ready() -> void:
@@ -41,7 +61,9 @@ func _ready() -> void:
 		_finish()
 		return
 
+	_resolve_ids(clear_drops)
 	_check_structure(clear_drops)
+	_check_runtime_id_alignment()
 	_check_room_pick(service)
 	_check_contents(service)
 	_check_chest_grants(service)
@@ -61,6 +83,31 @@ func _load_plan() -> Dictionary:
 	return parsed as Dictionary
 
 
+## 收集两套 id：配置里写的、以及运行时真正会用的。
+func _resolve_ids(clear_drops: Dictionary) -> void:
+	for raw in clear_drops.get("room_guarantees", []):
+		var entry := raw as Dictionary
+		if str(entry.get("id", "")) != GUARANTEE_ID:
+			continue
+		for value in entry.get("candidate_rooms", []):
+			_candidate_rooms.append(str(value))
+	var plan: Dictionary = FLOOR_PLAN_GENERATOR.generate_from_level_plan(
+		LEVEL_ID, 0, RUNTIME_PROBE_SEED, EXPEDITION_ROTATION_DEG
+	)
+	_check(not plan.is_empty(), "generate_from_level_plan 返回空，拿不到运行时房间 id")
+	if plan.is_empty():
+		return
+	_check(
+		bool(plan.get("valid", false)),
+		"远征01 楼层计划校验失败：%s" % str(plan.get("validation_errors", []))
+	)
+	for value in plan.get("rooms", []):
+		var room := value as Dictionary
+		var runtime_id := str(room.get("id", ""))
+		if not runtime_id.is_empty():
+			_runtime_room_ids.append(runtime_id)
+
+
 ## A 组：配置段必须显式存在，且参数与业主口径一致。
 func _check_structure(clear_drops: Dictionary) -> void:
 	var guarantees := clear_drops.get("room_guarantees", []) as Array
@@ -76,10 +123,7 @@ func _check_structure(clear_drops: Dictionary) -> void:
 	if entry.is_empty():
 		return
 	var rooms := entry.get("candidate_rooms", []) as Array
-	_check(
-		rooms.size() == 2 and str(rooms[0]) in CANDIDATE_ROOMS and str(rooms[1]) in CANDIDATE_ROOMS,
-		"候选房必须是 %s（实际 %s）" % [str(CANDIDATE_ROOMS), str(rooms)]
-	)
+	_check(rooms.size() == 2, "候选房必须是 2 间（实际 %d）：%s" % [rooms.size(), str(rooms)])
 	var guns := entry.get("weapon_choices", []) as Array
 	_check(
 		guns.size() == 2 and str(guns[0]) in CANDIDATE_GUNS and str(guns[1]) in CANDIDATE_GUNS,
@@ -98,12 +142,41 @@ func _check_structure(clear_drops: Dictionary) -> void:
 	_check(ammo_ok, "保底条目里没有 %s × %d" % [AMMO_ITEM_ID, AMMO_COUNT])
 
 
+## A2 组（事故补丁）：候选房 id 必须与运行时房间 id **同一套口径**。
+##
+## 判据是「配置里的每个候选房都出现在 generate_from_level_plan() 的 rooms[].id 里」。
+## 写成设计源初值 `f00_room_0N` 会在这里红 —— 这正是 2026-11-10 之前漏掉的那条。
+func _check_runtime_id_alignment() -> void:
+	_check(
+		_candidate_rooms.size() == 2,
+		"从配置里读到 %d 个候选房（应为 2）：%s" % [_candidate_rooms.size(), str(_candidate_rooms)]
+	)
+	_check(
+		not _runtime_room_ids.is_empty(),
+		"运行时房间 id 集合为空，无法校验候选房口径"
+	)
+	if _runtime_room_ids.is_empty():
+		return
+	for room_id in _candidate_rooms:
+		_check(
+			_runtime_room_ids.has(room_id),
+			(
+				"候选房「%s」不在运行时房间 id 集合里 %s —— 配置写成了设计源初值"
+				+ "而不是 legacy_room_id，guaranteed_items_for_room() 会恒不命中"
+			) % [room_id, str(_runtime_room_ids)]
+		)
+	_check(
+		_candidate_rooms.size() < 2 or _candidate_rooms[0] != _candidate_rooms[1],
+		"候选房重复：%s" % str(_candidate_rooms)
+	)
+
+
 ## B 组：每局恰好命中一间，同 seed 恒定，且两间都会被抽到（哈希不能退化成永远同一间）。
 func _check_room_pick(service: RefCounted) -> void:
 	var picked_rooms: Dictionary = {}
 	for seed_value in SAMPLE_SEEDS:
 		var hits: Array[String] = []
-		for room_id in CANDIDATE_ROOMS:
+		for room_id in _candidate_rooms:
 			if not (service.guaranteed_items_for_room(room_id, seed_value) as Array).is_empty():
 				hits.append(room_id)
 		_check(
@@ -115,7 +188,7 @@ func _check_room_pick(service: RefCounted) -> void:
 		picked_rooms[seed_value] = hits[0]
 		# 同 seed 再问一次，必须给同一个答案（读档 / 流送重建不能换房）。
 		var again: Array[String] = []
-		for room_id in CANDIDATE_ROOMS:
+		for room_id in _candidate_rooms:
 			if not (service.guaranteed_items_for_room(room_id, seed_value) as Array).is_empty():
 				again.append(room_id)
 		_check(
@@ -135,7 +208,7 @@ func _check_room_pick(service: RefCounted) -> void:
 ## C 组：命中房里必须是「一把蓝品候选枪 + 100 发弹药」，不多不少。
 func _check_contents(service: RefCounted) -> void:
 	for seed_value in SAMPLE_SEEDS:
-		for room_id in CANDIDATE_ROOMS:
+		for room_id in _candidate_rooms:
 			var items := service.guaranteed_items_for_room(room_id, seed_value) as Array
 			if items.is_empty():
 				continue
@@ -176,7 +249,7 @@ func _check_chest_grants(service: RefCounted) -> void:
 	var ammo_found := 0
 	var tier_seen := {}
 	for seed_value in SAMPLE_SEEDS:
-		for room_id in CANDIDATE_ROOMS:
+		for room_id in _candidate_rooms:
 			var guaranteed := service.guaranteed_items_for_room(room_id, seed_value) as Array
 			if guaranteed.is_empty():
 				continue
@@ -236,7 +309,7 @@ func _check_reverse_control(clear_drops: Dictionary) -> void:
 	_check(bool(report.get("ok", false)), "去掉 room_guarantees 后配置反而失败")
 	var any_hit := false
 	for seed_value in SAMPLE_SEEDS:
-		for room_id in CANDIDATE_ROOMS:
+		for room_id in _candidate_rooms:
 			if not (service.guaranteed_items_for_room(room_id, seed_value) as Array).is_empty():
 				any_hit = true
 	_check(not any_hit, "反向对照失败：去掉 room_guarantees 后仍有保底命中")
@@ -251,8 +324,8 @@ func _finish() -> void:
 	_probe_completed = true
 	if _failures.is_empty():
 		print(
-			"EXPEDITION01_ROOM_GUARANTEE_OK: 第一/第二房恰好随机一间必掉蓝品霰弹枪或步枪 + %d 发通用弹药；同 seed 恒定；清房箱档位未变"
-			% AMMO_COUNT
+			"EXPEDITION01_ROOM_GUARANTEE_OK: 候选房 %s 与运行时 id 对齐；恰好随机一间必掉蓝品霰弹枪或步枪 + %d 发通用弹药；同 seed 恒定；清房箱档位未变"
+			% [str(_candidate_rooms), AMMO_COUNT]
 		)
 		get_tree().quit(0)
 		return

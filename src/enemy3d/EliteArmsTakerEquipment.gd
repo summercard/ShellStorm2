@@ -251,7 +251,9 @@ func _provide_reload_ammo(requested: int, slot: int) -> int:
 	var entry := _entries[slot]
 	var reserve := maxi(0, int(entry.get("reserve_ammo", 0)))
 	if requested <= 0:
-		return 1 if reserve > 0 else 0
+		# 余量查询必须回**真实发数**：武器侧按「一轮 = 弹丸数」折算能装几格
+		# （散射类一轮吃 5 发），旧的 `1/0` 布尔式回答会让精英端着散弹枪永不换弹。
+		return reserve
 	var loaded := mini(reserve, requested)
 	entry["reserve_ammo"] = reserve - loaded
 	return loaded

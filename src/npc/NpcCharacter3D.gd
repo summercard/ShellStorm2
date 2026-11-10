@@ -135,6 +135,13 @@ const HEAD_TOP_HEIGHT := 1.215
 const PROMPT_HEIGHT := 1.44
 const BARK_HEIGHT := 3.40
 
+## 对话示意框的挂高（米）。
+##
+## 业主 2026-11-10：「头顶对话框太挡角色了……只做成说话示意的样子」。
+## `BARK_HEIGHT=3.40` 是给**两行文字气泡**（高 1.21m）定的口径；示意框只有 0.46m 高，
+## 再挂 3.40 就成了飘在半空的小方块。这里按「头顶 1.215 + 间隙 0.25 + 半高 0.23」定。
+const DIALOGUE_INDICATOR_HEIGHT := 1.86
+
 const PROMPT_FONT_SIZE := 50
 const PROMPT_PIXEL_SIZE := 0.005
 ## 与 `BaseFacility3D` 的黄色提示牌同色同字号：场上的"能按 E"只有一种长相。
@@ -152,6 +159,11 @@ var _display_name := ""
 var _role := ""
 var _visual_root: Node3D
 var _bark: CharacterBark3D
+## 当前这句对话在底栏里的 run_id。空 = 没在说话。
+##
+## 文字的唯一载体是 `DialogueUI`（业主 2026-11-10），头顶气泡只出示意；
+## 所以"这句说完了没"要问底栏，而不是问气泡。
+var _dialogue_run := ""
 var _prompt_label: Label3D
 var _interaction_area: Area3D
 var _collision_shape: CollisionShape3D
@@ -255,6 +267,8 @@ func _ready() -> void:
 	_yaw = rotation.y
 	_yaw_target = _yaw
 	_apply_story_state()
+	if not DialogueUI.dialogue_finished.is_connected(_on_dialogue_finished):
+		DialogueUI.dialogue_finished.connect(_on_dialogue_finished)
 
 
 func configure(config: Dictionary) -> void:
@@ -386,9 +400,71 @@ func say_scripted_line(text: String, hold := 3.2) -> bool:
 	if clean.is_empty() or _bark == null:
 		return false
 	_dialogue_visible = true
-	_bark.say_text(clean, maxf(0.6, hold))
+	# 底栏没收下（例如 autoload 不在或文字为空）就当这句没说，别回假成功。
+	if not _present_dialogue(clean, maxf(0.6, hold)):
+		_dialogue_visible = false
+		return false
 	_refresh_prompt_visibility()
 	interaction_changed.emit(true, clean)
+	return true
+
+
+## ── 对话的统一出口（业主 2026-11-10）──────────────────────────────────
+##
+## 「头顶对话框太挡角色了……只做成说话示意的样子，有点点点的动画。但是真实文字
+##   在下方的原来系统对话的那个地方，以后所有对话和系统信息统一在那边。」
+##
+## 所以**对话**（剧情台词、节拍提醒、按 E 聊天、救援演出）走这里：
+##   头顶 → `say_indicator()` 只跳三点，不显示文字
+##   文字 → `DialogueUI.show_dialogue_line()`，署名用 NPC 显示名
+##
+## 为什么收口在 NPC 而不是 Adapter：节拍、自由交谈、救援三条路径都在本文件内部
+## 直接调，只在 Adapter 接会漏掉两条。**自言自语（`say_bark`）不走这里** ——
+## 业主明确「开灯这类自言自语要保留」原来的头顶文字气泡。
+func _present_dialogue(text: String, auto_sec := -1.0) -> bool:
+	var clean := text.strip_edges()
+	if clean.is_empty() or _bark == null:
+		return false
+	var auto := auto_sec if auto_sec > 0.0 else DialogueUI.line_hold_for_text(clean)
+	# 示意框自己也算一个兜底停留：底栏被顶掉时（interrupt 不发旧 run 的 aborted）
+	# 至少会在预计结束时间自行收起，不会永久挂在头上。
+	var typing := float(clean.length()) / DialogueUI.DEFAULT_CHARS_PER_SEC
+	_bark.say_indicator(typing + auto + 0.5, DIALOGUE_INDICATOR_HEIGHT)
+	_dialogue_run = DialogueUI.show_dialogue_line(clean, _display_name, auto)
+	return not _dialogue_run.is_empty()
+
+
+## 底栏这句播完了（自然结束 / 被收起）→ 收掉头顶示意框。
+## 只认自己这条 run：底栏是全局单例，别的系统也可能在上面说话。
+func _on_dialogue_finished(run_id: String, _outcome: String) -> void:
+	if run_id.is_empty() or run_id != _dialogue_run:
+		return
+	_dialogue_run = ""
+	if _bark != null:
+		_bark.hide_now()
+
+
+## 演出用：这一句现在能不能被玩家推进（底栏在打字，或已全显还在停留）。
+##
+## 与 `is_free_bark_active()` 分开：那个只放行**自由交谈**，脚本演出（救援/交接）
+## 一律返回 false，所以救援归航那两句原本点不动。这里只回答\"底栏里有没有我的可
+## 压缩的句子\"，不判断是谁在演、也不启动任何交互。
+func is_scripted_line_progressable() -> bool:
+	return is_speaking()
+
+
+## 演出用：玩家按空格/点左键推一下当前这句（业主 2026-11-10「死亡回到基地后，
+## 绿苔的对话也要能点击快速过」）。
+##
+## 两段语义与自由交谈完全一致：打字中 → 立刻全显；已全显 → 收起这句停留，
+## 由演出方（`Base99Rescue3D`）的等待循环接着播下一句。**不跳句、不跳演出**。
+func advance_scripted_line() -> bool:
+	if not is_speaking():
+		return false
+	if DialogueUI.is_typing():
+		DialogueUI.reveal_all()
+		return true
+	DialogueUI.finish_current_hold()
 	return true
 
 
@@ -807,8 +883,8 @@ func _say_story_line(announce: bool) -> void:
 		if to_player.length() > 0.01:
 			_yaw_target = atan2(-to_player.x, -to_player.z)
 	_dialogue_visible = true
-	if _bark != null:
-		_bark.say_text(text, BUBBLE_HOLD_SECONDS)
+	# 对话：头顶只出示意框，文字进底栏（业主 2026-11-10）。
+	_present_dialogue(text)
 	_refresh_prompt_visibility()
 	interaction_changed.emit(true, text)
 	if announce:
@@ -1024,17 +1100,43 @@ func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 		return false
 	_engage_talk()
 	# 打字机没打完时先按 E = 「跳过这一句的逐字显示」，而不是直接翻到下一句。
-	# 与底栏 `DialogueUI.advance()` 同一套手感（先全显、已全显才推进）。
-	if _bark != null and _bark.is_typing():
-		_bark.reveal_all()
+	# 文字在本轮改造后位于底栏（业主 2026-11-10），所以进度要问底栏。
+	if DialogueUI.is_active() and _dialogue_run == DialogueUI.current_run_id() and DialogueUI.is_typing():
+		DialogueUI.reveal_all()
 		return true
 	advance_dialogue()
 	return true
 
 
-## 公开现有气泡载体；导演只能操作文字进度，不推进自由对话指针。
+## 公开当前对话在底栏里的 run_id。
+##
+## 文字唯一载体是 `DialogueUI`（2026-11-10），头顶气泡只剩示意；
+## 导演/适配层靠这个句柄判断“我说的那句还在不在”，而不是去问气泡。
+func get_dialogue_run_id() -> String:
+	return _dialogue_run
+
+
+## ⚠仅保留给自言自语路径（`say_bark` → 头顶文字气泡）。
+## 对话已不再经气泡承载文字，导演不要再用它当对白载体。
 func get_scripted_dialogue_carrier() -> CharacterBark3D:
 	return _bark
+
+
+## 仅已开始且仍在交互范围内的自由对白可接受鼠标；不启动交互或推进脚本演出。
+func is_free_bark_active() -> bool:
+	return not _scripted_active and _talk_engaged and _player_in_range and _pending_beat.is_empty() and is_speaking()
+
+
+func advance_free_bark() -> bool:
+	if get_tree().paused or not is_free_bark_active():
+		return false
+	if DialogueUI.is_typing():
+		DialogueUI.reveal_all()
+		return true
+	# 已全显：收起这句停留，紧接着播下一句（自由交谈是循环往复，不靠底栏的“播完就关”）。
+	DialogueUI.finish_current_hold()
+	advance_dialogue()
+	return true
 
 
 ## 立刻停步并转向搭话者（业主 2026-11-02「点击交谈后，角色要立刻停下来，面对角色」）。
@@ -1071,8 +1173,7 @@ func advance_dialogue() -> Dictionary:
 	_dialogue_visible = true
 	# 说话即收起黄色提示（不只看 `_talk_engaged`，见 `_refresh_prompt_visibility` 的注释）。
 	_refresh_prompt_visibility()
-	if _bark != null:
-		_bark.say_text(text, BUBBLE_HOLD_SECONDS)
+	_present_dialogue(text)
 	interaction_changed.emit(true, text)
 	npc_spoke.emit(npc_id, _line_index, text, finished_cycle)
 	return {
@@ -1086,6 +1187,11 @@ func advance_dialogue() -> Dictionary:
 func hide_dialogue() -> void:
 	if _bark != null:
 		_bark.hide_now()
+	# 只关自己那条：底栏可能已经换成了别人的消息。
+	if not _dialogue_run.is_empty():
+		if DialogueUI.is_active() and DialogueUI.current_run_id() == _dialogue_run:
+			DialogueUI.close()
+		_dialogue_run = ""
 	if not _dialogue_visible:
 		return
 	_dialogue_visible = false
@@ -1098,7 +1204,14 @@ func is_dialogue_visible() -> bool:
 	return _dialogue_visible
 
 
+## 正在说一句对话。
+##
+## 判据由“气泡还没消失”改为“底栏我这条还在播”（2026-11-10 文字改到底栏）。
+## 节拍逐句轮播与救援演出的等待循环都读这里，所以必须指向真正的文字载体。
+## 自言自语（`say_bark`）仍看气泡。
 func is_speaking() -> bool:
+	if not _dialogue_run.is_empty():
+		return DialogueUI.is_active() and DialogueUI.current_run_id() == _dialogue_run
 	return _bark != null and _bark.is_speaking()
 
 

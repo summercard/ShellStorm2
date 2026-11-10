@@ -134,3 +134,115 @@ play 门槛   to − from > 0.004            # 逐点回血不闪
 - **底纹在纯白场景（天台地砖）上的可读性**未单独取证：alpha 0.34 的冷蓝底在亮背景上会变淡。
   真渲染那两张图都在暗房里拍的。
 - **补条与"超出当前最大血量的过疗"**没有关系：`to_ratio` 已 `clamp(0,1)`，不会画出条外。
+
+---
+
+## 7. 第二轮：左侧放置与兔子剪影（同日）
+
+> 业主原话：「翻滚提示放在那个位置也太难看见了，放到左下角来，图标换成兔子翻滚的其中一帧的白色剪影。」
+
+### 7.1 位置：左上 → 左下角
+
+| 项 | r6（首版） | r6.1（本轮） |
+|---|---|---|
+| 锚点 | 左上 `(0,0,0,0)`，挂在状态块内容列 | **左下 `(0,1,0,1)`** |
+| 设计偏移 | `(30,140)..(58,168)` | `(18,-86)..(78,-26)`（距左 18、距底 26） |
+| 外径 | 28 设计 px ⇒ 22.4 canvas | **60 设计 px ⇒ 48 canvas（2.14 倍）** |
+
+尺寸不是拍的：业主红框在 1242×693 截图里是 `(11,627)..(64,676)`，按
+`1280/1242 = 1.0306` 换算到 canvas 是 `(11.3,646.2)..(66.0,696.7)`，直径约 50 canvas px
+⇒ 60 设计 px × 0.8 = 48 恰好落在框内。
+
+**连带冲突与处理**：左下角原本是遭遇倒计时环的地盘（设计 `(40,-148)..(148,-40)`
+⇒ canvas x 32..118 / y 602..688）。翻滚环是**常驻件**、倒计时环是**事件才出现**的临时件，
+常驻件优先占角落 ⇒ 倒计时环右移 60 设计 px 到 `(100,-148)..(208,-40)`
+（canvas x 80..166），与翻滚环右缘 62.4 留 17.6 px。这条做成了断言：
+
+```
+not dash_ring.get_global_rect().intersects(countdown_ring.get_global_rect())
+```
+
+光靠注释说明"记得别撞"，下一个人调数值时必然撞上；断言会在撞上的那一帧报红。
+
+### 7.2 剪影：从真实角色身上量出来
+
+**链路（不是手画图标）**
+
+| 步 | 工具 | 产出 |
+|---|---|---|
+| 1 | `tools/_capture_dash_glyph.gd` | 玩家摆 `dashing` 姿态、按生产公式写翻滚角、只留角色 layer、白 unshaded、背景压黑，正交相机从 +X 侧拍 |
+| 2 | 同上，18 个相位 | `outputs/verification/dash_glyph_p02..p70.png`（128×128 黑底白剪影）<br>**已清理**（一次跑 24 张、共约 3 MB，重跑工具即再生）；选定帧与其掩码已归档到 `outputs/dash_glyph_20261110/` |
+| 3 | 人眼筛帧（按 HUD 实际图标尺寸看） | 选 `p18`（翻滚 31°） |
+| 4 | `scripts/trace_dash_glyph.py` | 3× 放大 → 边界有向边行走 → RDP(eps 2.4) → 归一化 ⇒ 59 拐点 |
+| 5 | `src/ui/HudDashGlyph.gd` | `static var DASH_GLYPH_POINTS`（`PackedVector2Array` 不是常量表达式，`const` 会解析失败） |
+
+**为什么选 31°，不选更"翻滚"的帧**：把 18 帧在真实图标尺寸（44 px）下排成横向对照表看，
+≥90°（p30 之后）时耳朵会与身体在剪影上并成一块，读数变成"一团白色"；
+≤19° 又几乎是站立姿态，"在翻滚"表达不出来。31° 是唯一同时满足
+"双耳分开 + 身体已收腿离地 + 举起的手可见"的相位。
+
+**为什么是矢量不是位图**：`verify_reference_hud_fate_visual` 第 37 行断言
+HUD 里 `TextureRect` 数量必须等于 3D 投影图标数量 —— 塞一张位图进去会让那条既有门禁报红。
+顺带好处：任意尺寸清晰，换环直径不用重出图。本轮还把"环内不得出现 `TextureRect`"
+写成了新断言，防以后有人图省事换回 PNG。
+
+**抗锯齿**：`draw_colored_polygon` 没有 `antialiased` 参数，只填不描时 48 px 环里的
+剪影边缘是一排明显台阶（首版实拍确认）。补一圈同色 `draw_polyline(..., antialiased = true)`
+后台阶被半透明像素抹平。这是"填充 + 描边"两遍，不是两套形状。
+
+**尺寸约束**：环带内缘半径 = `0.5 × (1 − 0.13) = 0.435` 直径；剪影按最长边铺满
+⇒ 取 `GLYPH_FIT_RATIO = 0.66`，留 8% 余量。断言钉住「剪影尺寸 < 内缘直径」。
+
+**颜色**：业主说的是"**白色**剪影"，所以两种状态都白（冷却 alpha 0.58 / 就绪 0.94）。
+状态色只由外圈那道弧承担（天蓝 → 近白）。首版曾让剪影跟着弧变蓝，与"白色剪影"不符。
+
+### 7.3 本轮踩到的坑
+
+1. **"真冲刺一次再冻住"抓不到翻滚姿态**：冲刺 0.204 s、动画周期 0.265 s，状态机在
+   `progress ≈ 0.77` 就退回 idle，`rotation.x` 被 `_update_state_motion` 末尾那句
+   `else 0.0` 清掉 —— 而 `_dash_animation_progress` 还停在旧值。于是"冻在 0.37"截出来的
+   是**一只站着的兔子**。改成直接钉 `_state = "dashing"` 并按目标相位收敛姿态。
+2. **只保留最大连通块会切掉手**：兔子翻滚帧的两只手/脚在剪影上是分离的小块。
+   首版描边只取最长环 ⇒ 剪影上凭空少一块，看起来像被切掉一角。改成输出全部轮廓
+   （`DASH_GLYPH_POLYGONS` 起，最终因该帧四肢实际连通而仍是单块，但工具已支持多块）。
+3. **`class_name` 依赖全局类缓存**：`HudDashGlyph` 一开始注册了 `class_name`，
+   结果在纯命令行（没跑过编辑器）下报 `Could not find type "HudDashGlyph"` ——
+   那份缓存要编辑器跑一次才更新。改成 `preload` 引用，删掉 `class_name`。
+4. **`PackedVector2Array(...)` 不是常量表达式**：`const` 会直接解析失败，改 `static var`。
+5. **`draw_colored_polygon` 不抗锯齿**：见 7.2，补 `draw_polyline(antialiased)`。
+
+### 7.4 验收（第二轮）
+
+| 用例 | 结果 |
+|---|---|
+| `verify_player_hud_combat_feedback`（断言已改写） | `PLAYER_HUD_COMBAT_FEEDBACK_OK` exit 0 |
+| `verify_reference_hud_fate_visual`（含 HUD 禁裸位图那条） | `REFERENCE_HUD_FATE_VISUAL_OK` exit 0 |
+| `verify_encounter_trigger_room_flow`（倒计时环右移后） | `ENCOUNTER_TRIGGER_ROOM_OK samples=91` exit 0 |
+| `verify_finite_ammo_flow` / `verify_3d_reload_state_flow` | 均 exit 0 |
+| `capture_player_vitals_feedback` | 5 全屏 + 5 张左上 3× + **5 张左下 8×**，全部 err=0 |
+
+新增断言（全部在 `verify_player_hud_combat_feedback`）：
+
+- 环贴屏幕左下角：`rect.x ≤ 屏宽 × 0.08` 且 `rect.end.y ≥ 屏高 × 0.94`；
+- 直径 ≥ 40 canvas px（业主嫌小的回归钉子）；
+- 与 `EncounterCountdownRing` **不相交**；
+- 环内无 `TextureRect`（禁位图）；
+- 剪影拐点 ≥ 12（形状不是退化成的几根线段）；
+- 剪影尺寸 < 环带内缘直径（不压环带）。
+
+### 7.5 取证文件
+
+- `outputs/verification/player_vitals_feedback_4_dash_cd_dash.png` —— 冷却中（40% 已恢复）8× 特写
+- `outputs/verification/player_vitals_feedback_5_dash_ready_dash.png` —— 就绪（满圈 + 闪光）8× 特写
+- `outputs/dash_glyph_20261110/` —— 剪影取材归档：选定帧原始剪影 + 掩码、18 相位横向对照表
+  （`sheet44.png`）、5 帧净空比对（`candidates.png`）
+
+### 7.6 未做 / 风险（第二轮）
+
+- **移动端仍未验**，同上。
+- **剪影小尺寸的极限**：48 canvas px 下认得出兔子；若业主后续要求缩回 30 px 左右，
+  这个形状会退化成"带两只耳朵的团"，届时应换 45°~60° 那一类身体更舒展的帧重做，
+  而不是简单缩小。
+- **倒计时环右移**只做了"两者不相交"的几何断言 + 倒计时行为回归，
+  **没有重出** `capture_encounter_countdown_ring` 的两张对比图 —— 位置变了但外观没变，
+  若要看它现在在左下角长什么样，得重跑那个 capture。

@@ -281,29 +281,22 @@ func _case_prompt_yields_on_focus() -> void:
 	if prompt == null:
 		chest.queue_free()
 		return
-	_expect(prompt.visible, "未靠近时头顶提示牌应可见（远处没有圆点功能词，靠它辨认）")
-	_expect(
-		prompt.text == "[E] 开启宝箱",
-		"头顶提示牌文案被改动：%s（交互圆点的动词从这句抽，改文案等于改两处）" % prompt.text
-	)
+	# 2026-11-10 起与椅子、灯、可搜索组件统一：头顶文字永远不承担画面反馈。
+	_expect(not prompt.visible, "宝箱头顶不应显示任何开启文字，只保留交互圆点")
+	_expect(prompt.text == "[E] 开启宝箱", "隐藏协议文案必须保留，供交互圆点提取动作词：%s" % prompt.text)
 
-	# 聚焦 = 接近到可交互距离，交互圆点此时显示「(e) 开启宝箱」。
 	chest.set_interaction_focus({}, true)
 	await _wait(0.18)
-	_expect(not prompt.visible, "聚焦后头顶提示牌必须收起，否则与交互圆点白字重复")
-
-	# 失焦 = 走开，功能词消失，牌子要回来。
+	_expect(not prompt.visible, "聚焦时头顶文字必须保持隐藏")
 	chest.set_interaction_focus({}, false)
 	await _wait(0.18)
-	_expect(prompt.visible, "失焦后头顶提示牌应淡回可见")
-	_expect(prompt.transparency < 0.01, "失焦后提示牌应完全回实，transparency=%.2f" % prompt.transparency)
+	_expect(not prompt.visible, "失焦后头顶文字仍必须保持隐藏")
 
-	# 开箱之后失焦不许把牌子亮回来：玩家会看到已开的箱子头顶又写「开启宝箱」。
 	chest.commit_opened()
 	await _wait(0.20)
 	chest.set_interaction_focus({}, false)
 	await _wait(0.20)
-	_expect(not prompt.visible, "已开箱后失焦不许恢复「开启宝箱」提示牌")
+	_expect(not prompt.visible, "已开箱后头顶文字必须保持隐藏")
 
 	chest.queue_free()
 	await get_tree().process_frame

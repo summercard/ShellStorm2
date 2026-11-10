@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "registered_at": "2026-11-10",
- "scope": "主线3.1—3.3账本登记；非运行配置",
+ "scope": "主线3.1—3.3账本登记；含2026-11-10四孔嵌件与对白两段推进；非运行配置",
  "production_status": "原型已接入",
  "art_master_complete": false,
  "state_owner": "BaseManager.main_story",
@@ -31,6 +31,18 @@
    "blender_source": null,
    "glb": null,
    "collision": "无新增碰撞"
+  },
+  {
+   "asset_id": "PRP-BASE99-MAIN-STORY-KEY-INSERT",
+   "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表",
+   "prefab": "assets/art/props/main_story/runtime/key_insert/prp_base99_main_story_key_insert_root_top3d.tscn",
+   "sha256": "7ac163c96adcc7d55c013f9f6720181d86d28d601655a2971bf760d6fa20c95a",
+   "source_kind": "blender",
+   "program_source": "src/narrative/MainStoryPedestal3D.gd",
+   "blender_source": "art_source/props/main_story/key_insert/prp_base99_main_story_key_insert_source_v001.blend",
+   "optimized_blend": "art_source/props/main_story/key_insert/export/v001/prp_base99_main_story_key_insert_optimized_v001.blend",
+   "glb": "assets/art/props/main_story/components/key_insert/prp_base99_main_story_key_insert_visual_top3d.glb",
+   "collision": "无新增碰撞；站立由原台柜碰撞盒负责"
   }
  ],
  "reused_assets": [
@@ -50,6 +62,11 @@
    "安装线路上扫",
    "N/4常亮环",
    "扩散脉冲"
+  ],
+  "PRP-BASE99-MAIN-STORY-KEY-INSERT": [
+   "四个真实矩形插孔（孔唇/内壁/暗槽）",
+   "SocketGlow_0..3 四槽灯按 deposited 状态独立换色",
+   "20° 斜插孔轴，钥匙沿轴插入"
   ]
  },
  "reused_chest_policy": "主线3.2复用既有高级箱，首次指定箱禁拟态、额外领取稀土钥匙并保留普通奖励；不新造箱体。既有箱体SHA及未入基线欠项保持，不冒称已验收补齐。",
@@ -57,21 +74,29 @@
  "evidence_files": {
   "assets/art/props/main_story/runtime/rare_earth_key.tscn": "1928673f816240e6d0775744a26d9f124100c398a74c8732e29f94635877590c",
   "assets/art/props/main_story/runtime/main_story_pedestal.tscn": "3ff25b99ee90cd04ab58bffceb0803f914c99e9939300dd57eecebcb475ac4e0",
-  "src/narrative/MainStoryKeyVisual3D.gd": "0382cac94ca511811790f45b514ece5d93d87fce007716703e6e86866700ffee",
-  "src/narrative/MainStoryPedestal3D.gd": "aab3bc56c16765857f2bb5487a17ad1eec058b4bda2dc596db13172a973de280",
-  "src/narrative/MainStoryChapter3D.gd": "7dec1d4c7c3beb50cbeb4c0e0196592648c05265a5debfb47195892dfbdd4f9d",
+  "src/narrative/MainStoryKeyVisual3D.gd": "8ab46f8c896d216af420cfb2102f65caac58bb94f3fa97962375533e42ebdf8a",
+  "src/narrative/MainStoryPedestal3D.gd": "88989df498167006feb8f5f4928e8fe80ee0087d8865cda942a3facdf5b47894",
+  "src/narrative/MainStoryChapter3D.gd": "ffe1c39cd04e7043e5475733a4c16c1375868dadd92707c0aecd522e279e3ad8",
   "src/base/BaseManager.gd": "eb84af17f7f9c9d8f2a3d394db81f0e3f7442a9f96669fe40b65e196369d933f",
-  "src/npc/NpcCharacter3D.gd": "85bc10d23c720b1978cfb886f8fbb7b0ea49e8cd425f9054d07705bf5e1df32a",
+  "src/npc/NpcCharacter3D.gd": "191f7295af384c967ca6fbfb0272a1704a0ce534021669de18675ae731dd82bd",
   "src/ui/HologramCity3D.gd": "20bfaa7ebd0a5c011970d3fa86cc85af563d81b392a838e035ded03e2616f224",
   "scenes/RogueMapSelectMenu.gd": "60f4b063bbcda918947c825b495d94f145296e00e554a21661387b6128308ee7",
   "src/enemy3d/Enemy3D.gd": "d27c6a3edf44afcbdc4543022da31e410953ced5572f1468e5f9abd64568eb91",
   "src/enemy3d/MonitorBossCombat.gd": "dbdc58784916444cb4b55d0127c2de524346124da308ad18648bb5e8918138f9",
-  "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md": "90ece1d50ec6478451b7019b8f7a9672aeda54a82e962eb28dd4700920d80be5",
+  "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md": "bb88b37ef04f05151a17f54f230b4a2945c21eb04da916e2e8db06703722888b",
   "data/narrative/nar_main_031_green_briefing.json": "e02527d6a5598894b3b408f04e0f6c9a3ec2e973cb67b506427ea55181d3a7b4",
   "data/narrative/nar_main_032_monitor_audience.json": "828968a2145dcb079f56ec302127329b151caebc4e7d30db09f9590e9dbba5ed",
   "data/narrative/nar_main_033_key_install.json": "e9ebfe7068d7b4c2b378e2c2cb9bb59adb1f76b12286700f5ddafbed1b0c8a6a",
-  "src/narrative/NarrativeAdapter3D.gd": "59ff242763145723be588615aac9313596193e09a20278dcea6b768db58c4307",
-  "docs/v0.1/design/远征全息城市交互设计.md": "1702dc2ef1f60e9d7517fb6e725b93f9534ba37e9de20ec9b502fc5c2029e00f"
+  "src/narrative/NarrativeAdapter3D.gd": "52f8abac8aff7c4bab3a170c338642ed20bcd117c5543206ab47acab94981d19",
+  "docs/v0.1/design/远征全息城市交互设计.md": "1702dc2ef1f60e9d7517fb6e725b93f9534ba37e9de20ec9b502fc5c2029e00f",
+  "src/world3d/TowerDescent3D.gd": "e3679fb7f7c5a180a6a24bfdc2f7c73d7fbfaa97ef06d6b244c2932046baad3c",
+  "tests/verification/verify_main_story_performance.gd": "a73d5b42e10b572096fa1c9ead4bb0710b0caf678eb91aff9b5950e73b32abc6",
+  "docs/v0.1/design/主线剧情剧本.md": "74343318ea594dfd361571fd8d9deb165c5b91f2578b82463f8719fcb9a22488",
+  "docs/v0.1/design/主线剧情节点表.md": "d0205ed6c9b03157cf1c41e3e469d1ec82eeee082fc00367dcc1180e01990611",
+  "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md": "4ddc807b553417915afbe00d8782629a1702dbd4178d9d26fc8c41324542b085",
+  "tools/asset_pipeline/register_key_insert_asset.py": "0ca61635a5cf5a7c9df23a636ee3b9f6631a975b1575b00bd66b3a5342f0529a",
+  "src/narrative/NarrativeDirector3D.gd": "223469e80af9cd28ea70c5893b3742f5b71e4aa7951e0d2afdc4bb6a507be918",
+  "src/ui/dialogue/DialogueUI.gd": "889a4867e3370c417ceebb370105115932586c712019e5a506230ac79613ca8c"
  },
- "validation": "本事务仅登记已有实现；不冒充新增Godot运行或真实渲染验收通过；门禁与差异见工程外session报告"
+ "validation": "本清单只登记已存在的实现；四孔嵌件与对白的真实结果见 outputs/main_story_031_033/key_insert_v2/ 与 docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md；不冒充全工程门禁通过"
 }

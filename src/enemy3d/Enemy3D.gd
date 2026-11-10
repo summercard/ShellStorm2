@@ -93,7 +93,17 @@ const VALID_STATES := [
 ]
 const NORMAL_HP_MULTIPLIER := 3.0
 const BOSS_HP_MULTIPLIER := 10.0
-const GLOBAL_MOVE_SPEED_MULTIPLIER := 0.70
+## 怪物移速的全局系数。`PROFILES` 里的 `speed` 是"目标 m/s ÷ 本系数"，
+## `MonsterInjector` 的 `speed` 是"目标 m/s ÷ 本系数 × 24"（px/s 口径）。
+##
+## 2026-11-10 业主「整体节奏变慢一点」⇒ 乘全局节奏系数 `GameDesignConfig.PACE_SCALE`
+## （0.85）：0.70 → **0.595**。玩家移动同步 ×0.85，所以「怪比玩家快多少」这条关系不变，
+## 变的只是绝对速度。
+##
+## ⚠️ **改这个值必须同步改内容侧的 `speed` 字面量，或至少知道它们的含义变了**：
+## 两侧都是"除完再乘回来"的口径，所以内容数值不用改也能自动跟着缩放 ——
+## 但注释里那些"目标 m/s"的换算基准会一起变，别拿旧注释去反推。
+const GLOBAL_MOVE_SPEED_MULTIPLIER := 0.70 * GameDesignConfig.PACE_SCALE
 ## 垂直位移只有一个来源：重力加地面。数值与 Player3D.GRAVITY_MPS2 同源，
 ## 怪物因此和角色共用同一套地板/坡面口径 —— 脚下没有地板会掉下去，
 ## 能走上坡下坡，也不会顺着阻挡爬到顶面。
@@ -289,7 +299,9 @@ const PROFILES := {
 	"boss": {"hp": 5200, "speed": 1.72, "damage": 24, "range": 9.5, "cooldown": 1.45},
 	# —— 远征03：《挺进地牢》第一层复刻怪（2026-10-29）——
 	# `hp` 是 §T0.2 幂律换算后的**3D 基线**（运行时还会 ×NORMAL_HP_MULTIPLIER=3）。
-	# `speed` 是「目标 m/s ÷ 0.7」（apply_profile 里会再 ×GLOBAL_MOVE_SPEED_MULTIPLIER）。
+	# `speed` 是「目标 m/s ÷ GLOBAL_MOVE_SPEED_MULTIPLIER」（apply_profile 里会再乘回去）。
+	# 该系数 2026-11-10 起含全局节奏 0.85 ⇒ 现在是"目标 m/s ÷ 0.595"。
+	# 表里的字面量**不用改**：除的数变了、乘的数也变了，绝对值自动跟着缩。
 	#
 	# 【攻击方式全靠参数，不靠新分支】——见本表末尾 `volley` 键与 `_perform_volley_attack()`：
 	#   volley.count      一次攻击发几发（≥2 时按 spread_deg 均匀散开）
@@ -2885,7 +2897,15 @@ func _fire_projectile(
 ) -> void:
 	if get_tree().current_scene == null:
 		return
-	var base_speed := float(_active_profile.get("projectile_speed", DEFAULT_ENEMY_PROJECTILE_SPEED))
+	# 敌弹速度在**出生点**乘全局节奏系数（2026-11-10）。不在 `PROFILES` 里逐条改字面量，
+	# 是因为那里有 30+ 处 `projectile_speed`（5.0 / 6.5 / 3.5 三档 + 若干特例），
+	# 逐条改必然漏，而且会让"档位"这个概念碎成一地魔数。
+	# 在这里乘一次 ⇒ 所有档位同比缩放，档与档之间的比例保持不变。
+	# `speed_override` 是显式覆盖（当前无调用方），不参与缩放、保持调用者原意。
+	var base_speed := (
+		float(_active_profile.get("projectile_speed", DEFAULT_ENEMY_PROJECTILE_SPEED))
+		* GameDesignConfig.PACE_SCALE
+	)
 	if speed_override > 0.0:
 		base_speed = speed_override
 	var config := {

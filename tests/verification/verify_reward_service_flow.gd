@@ -48,6 +48,7 @@ func _ready() -> void:
 	_case_field_conflict()
 	_case_negative_controls()
 	_case_monster_drop_table()
+	_case_monster_drop_empty_table_gold_only()
 	_case_normal_ammo_range()
 	_case_runtime_coordinator()
 	_case_sink_delivery_confirmation()
@@ -112,6 +113,68 @@ func _case_monster_drop_table() -> void:
 	bad_rows.append({"monster_id": "melee_chaser", "item_id": "weapon_rifle", "chance": 0.5, "weight": 1, "quantity": 1})
 	var bad := _MONSTER_DROP_TABLE.compile("bad", bad_table)
 	_expect(not bool(bad.get("ok", false)), "同怪权重组概率不一致必须拒绝整表")
+
+
+func _case_monster_drop_empty_table_gold_only() -> void:
+	_reset()
+	# 2026-11-10 业主调整（远征01）：普通怪只掉金币，强化怪掉落不变。
+	#  - 空 rows + legacy_fallback=false ⇒ 编译通过（以前空表一律报错），普通怪一律不掉物品；
+	#  - variant_legacy_fallback=true ⇒ 强化变种仍回退通用公式；
+	#  - 不开 variant_legacy_fallback（远征03 口径）⇒ 强化变种同样不掉物品，行为不变。
+	var table := {
+		"schema": "shellstorm2.monster_drop_table",
+		"schema_version": 1,
+		"legacy_fallback": false,
+		"variant_legacy_fallback": true,
+		"rows": [],
+		"empty_chance": 0.0,
+	}
+	var compiled := _MONSTER_DROP_TABLE.compile("test_empty_table", table)
+	_expect(bool(compiled.get("ok", false)), "legacy_fallback=false 时空 rows 应编译成功：%s" % str(compiled.get("errors", [])))
+	_expect(bool(compiled.get("variant_legacy", false)), "编译报告应带出 variant_legacy=true")
+	var strict := table.duplicate(true)
+	strict.erase("variant_legacy_fallback")
+	var strict_compiled := _MONSTER_DROP_TABLE.compile("test_empty_strict", strict)
+	_expect(not bool(strict_compiled.get("variant_legacy", true)), "未声明 variant_legacy_fallback 时默认 false（保持远征03 口径）")
+	var legacy_table := table.duplicate(true)
+	legacy_table["legacy_fallback"] = true
+	var legacy_compiled := _MONSTER_DROP_TABLE.compile("test_empty_legacy", legacy_table)
+	_expect(not bool(legacy_compiled.get("ok", false)), "legacy_fallback=true 时空 rows 仍应拒绝（防止误清空）")
+
+	var coordinator := _RUNTIME_COORDINATOR.new()
+	coordinator.configure(20261111)
+	_expect(bool(coordinator.configure_level_drop_table("test_empty_table", table).get("ok", false)), "协调器应装载空清单掉落表")
+	var strong_id := MonsterVariants.variant_of("melee_chaser")
+	var normal_items := 0
+	var strong_items := 0
+	for index in range(400):
+		var normal := coordinator.resolve_kill({}, {
+			"enemy_type": "melee_chaser", "floor": 1, "loot_table": "loot_floor_1_2",
+		}, "drop_table:empty:normal:%d" % index)
+		for value in normal.get("grants", []):
+			if str((value as Dictionary).get("kind", "")) != "currency":
+				normal_items += 1
+		var strong := coordinator.resolve_kill({}, {
+			"enemy_type": strong_id, "floor": 1, "loot_table": "loot_floor_1_2",
+		}, "drop_table:empty:strong:%d" % index)
+		for value in strong.get("grants", []):
+			if str((value as Dictionary).get("kind", "")) != "currency":
+				strong_items += 1
+	_expect(normal_items == 0, "空清单表下普通怪不得掉任何物品，实际 %d 件" % normal_items)
+	_expect(strong_items > 0, "variant_legacy_fallback=true 时强化怪应仍走通用公式掉物品")
+
+	var strict_coordinator := _RUNTIME_COORDINATOR.new()
+	strict_coordinator.configure(20261112)
+	strict_coordinator.configure_level_drop_table("test_empty_strict", strict)
+	var strict_items := 0
+	for index in range(400):
+		var report := strict_coordinator.resolve_kill({}, {
+			"enemy_type": strong_id, "floor": 1, "loot_table": "loot_floor_1_2",
+		}, "drop_table:empty:strict:%d" % index)
+		for value in report.get("grants", []):
+			if str((value as Dictionary).get("kind", "")) != "currency":
+				strict_items += 1
+	_expect(strict_items == 0, "未开 variant_legacy_fallback 时强化怪同样不掉物品，实际 %d 件" % strict_items)
 
 
 func _case_normal_ammo_range() -> void:

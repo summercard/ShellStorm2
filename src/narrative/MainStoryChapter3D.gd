@@ -240,7 +240,13 @@ func call_instruction(action: String, params: Dictionary) -> Dictionary:
 			if not slot is Vector3 or not _npc_at_anchor("pedestal_stand"):
 				return _failed("绿苔未到台座站位或缺少插槽，拒绝插入。")
 			var pedestal := _pedestal()
-			return _key_action("insert", {"slot": slot, "basis": pedestal.global_basis})
+			var insert := {"slot": slot, "basis": pedestal.global_basis}
+			# 嵌件是 20° 斜孔：钥匙沿着孔轴插进去，而不是垂直砸进台面。
+			if pedestal.has_method("get_insert_params"):
+				var insert_params: Variant = pedestal.call("get_insert_params")
+				if insert_params is Dictionary:
+					insert.merge(insert_params as Dictionary, true)
+			return _key_action("insert", insert)
 		"deposit.gesture":
 			return _npc_gesture(str(params.get("name", "present")))
 		"deposit.commit":
@@ -537,6 +543,10 @@ func _abort_performance(reason: String) -> void:
 
 
 func _pedestal() -> Node3D:
+	if _host != null and _host.has_method("get_main_story_pedestal"):
+		var node: Variant = _host.call("get_main_story_pedestal")
+		if node is Node3D and is_instance_valid(node):
+			return node as Node3D
 	var facility := _main_story_facility(FACILITY_ID)
 	if facility != null:
 		for child in facility.get_children():

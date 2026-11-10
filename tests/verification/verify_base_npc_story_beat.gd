@@ -146,7 +146,7 @@ func _run(failures: Array[String]) -> void:
 	if bool(snapshot.get("moving", true)):
 		failures.append("S06 开口时 NPC 仍在走动")
 	var bark := npc.get_node_or_null("CharacterBark3D") as CharacterBark3D
-	var bubble_text := bark.get_current_text() if bark != null else ""
+	var bubble_text := DialogueUI.current_text() if DialogueUI.is_active() else ""
 	if bubble_text != FIRST_LINE:
 		failures.append("S06 第一句气泡不是用户口径：『%s』" % bubble_text)
 	var to_player := player.global_position - npc.global_position
@@ -161,7 +161,7 @@ func _run(failures: Array[String]) -> void:
 	var advanced := false
 	for _i in 100:
 		await get_tree().create_timer(0.1).timeout
-		if bark != null and bark.get_current_text() == second_line:
+		if DialogueUI.current_text() == second_line:
 			advanced = true
 			break
 	if not advanced:
@@ -225,7 +225,7 @@ func _run(failures: Array[String]) -> void:
 	await get_tree().create_timer(0.8).timeout
 	if bool(npc.get_snapshot().get("story_beat_delivered", false)):
 		failures.append("S10 重进基地后节拍又播了一遍")
-	if bark != null and bark.get_current_text() == FIRST_LINE:
+	if DialogueUI.current_text() == FIRST_LINE:
 		failures.append("S10 重进基地后气泡里仍是那条迎宾台词")
 
 	# —— S12 台词指向的二楼档案室真的存在，档案里也能查到收租人 ——

@@ -39,7 +39,7 @@
 | `src/enemy3d/EnemyAvatar3D.gd` | 内部按种分叉改读 `_base_kind`；`get_footprint_profile()` 回退基类；快照暴露 `base_kind` |
 | `src/map/MonsterInjector.gd` | 编成表登记 3 种；`_roll_strong_kind()` 出口升级；`_stat_override()` / `_death_explosion_for()` 派生；**修复 zone 丢失** |
 | `src/map/SpawnBoxCatalog.gd` | `ALLOWED_BOX_TYPES` 加 3 种（允许点名） |
-| `data/level_plans/expedition_01/level_plan.json` + whitebox 源 | `monster_rules.strong_variant = {enabled, chance: 0.15}` |
+| `data/level_plans/expedition_01/level_plan.json` + whitebox 源 | `monster_rules.strong_variant = {enabled, chance: 0.15}`（**2026-11-10 起为 0.075 + `suppressed_rooms: [room_01, room_02]`**，见 2026-11-10 记录） |
 | `scripts/run_verification_suite.sh` | 新用例登记 `core_scenes` |
 
 **倍率（唯一真源 `MonsterVariants`）。**

@@ -12,6 +12,7 @@ var samples: Array[Dictionary] = []
 var _old_data: Resource
 var _old_save_path := ""
 var _capture_dir := ""
+var _shot_camera: Camera3D
 
 func _ready() -> void:
 	if OS.get_environment("SHELLSTORM_MAIN_STORY_ISOLATED") != "1" or not "main_story_performance" in ProjectSettings.globalize_path("user://"):
@@ -85,6 +86,21 @@ func _run() -> void:
 	var stand: Vector3 = controller.call("resolve_anchor", "pedestal_stand")
 	var slot: Vector3 = controller.call("resolve_anchor", "key_slot_rare_earth")
 	check(absf(slot.y - stand.y) > 0.7, "插入点和NPC地面站位不混用")
+	# 本轮业主改造：不再立一块独立台座，四孔嵌件直接嵌在主门下方低矮设备柜台面上。
+	var insert_view: Dictionary = pedestal.call("get_snapshot")
+	check(bool(insert_view.get("insert_loaded", false)), "四孔嵌件真实实例化")
+	check(str(insert_view.get("insert_asset_id", "")) == "PRP-BASE99-MAIN-STORY-KEY-INSERT", "嵌件使用正式资产ID")
+	check(int(insert_view.get("socket_glows", 0)) == 4, "嵌件四个槽灯可独立取到")
+	var insert_origin := pedestal.global_position
+	var art := tower.get("_facility_art_layout") as Node3D
+	check(art != null and pedestal.get_parent() == art, "嵌件挂在 99F 美术布置层下，跟随房间流送")
+	var expected := art.to_global(Vector3(5.0, 1.38, -3.77)) if art != null else Vector3.ZERO
+	check(insert_origin.distance_to(expected) < 0.05, "嵌件落在主门低柜台面中央")
+	check(absf((insert_origin.y - room.global_position.y) - 1.38) < 0.05, "嵌件坐在台面上 y=1.38，不是地面")
+	check(absf(stand.y - room.global_position.y) < 0.05, "绿苔站位回到地面")
+	var insert_params: Dictionary = pedestal.call("get_insert_params")
+	check((insert_params.get("basis", Basis.IDENTITY) as Basis).z.y > 0.3, "插入轴是 20° 斜孔轴而非竖直向下")
+	check(float((insert_params.get("origin_offset", Vector3.ZERO) as Vector3).y) > 0.05, "插到位的钥匙柄抬到孔口上方")
 	if _instruction("deposit.prepare"):
 		check(npc.global_position.distance_to(npc_initial) < 0.01, "prepare没有瞬移绿苔")
 		var too_early: Dictionary = controller.call("call_instruction", "deposit.commit", {})
@@ -152,11 +168,21 @@ func _run() -> void:
 func _capture(label: String, target: Node3D) -> void:
 	if _capture_dir.is_empty() or DisplayServer.get_name() == "headless":
 		return
+	# 玩家相机每帧可能重新 make_current，这里用独立相机并在拍摄前重复夺取。
 	var player := tower.get("player") as Node3D
-	var camera := player.get("camera") as Camera3D
-	var center := target.global_position + Vector3.UP * 0.8
-	camera.global_position = center + Vector3(3.2, 3.4, 4.0)
-	camera.look_at(center)
+	var player_camera := player.get("camera") as Camera3D
+	if player_camera != null:
+		player_camera.current = false
+	if _shot_camera == null or not is_instance_valid(_shot_camera):
+		_shot_camera = Camera3D.new()
+		_shot_camera.fov = 48.0
+		add_child(_shot_camera)
+	var center: Vector3 = target.global_position + Vector3.UP * 0.55
+	_shot_camera.global_position = center + Vector3(1.55, 1.35, 1.75)
+	_shot_camera.look_at(center)
+	_shot_camera.current = true
+	await RenderingServer.frame_post_draw
+	_shot_camera.current = true
 	await RenderingServer.frame_post_draw
 	var image := get_viewport().get_texture().get_image()
 	image.save_png(_capture_dir.path_join(label + ".png"))

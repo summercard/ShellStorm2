@@ -27,9 +27,10 @@ r5（2026-11-04，本轮）<span style="color:#1565C0">**[用户设计]**</span>
 - 仍使用真实 `npc_base99_green`、玩家同源模型与衣柜 `suit_green`，不用复制NPC替身或另一套对白播放器；台词在 `data/narrative/nar_main_*.json`，由Director逐句调 `say_scripted_line()`走头顶气泡，系统底栏独立。
 - `MainStoryChapter3D`判条件与领域结果；`NpcCharacter3D`只负责实体动作。`begin_scripted_appearance()`停巡接管，`scripted_move_to(target, speed)`跑到真实位置、`set_scripted_facing/clear_scripted_facing`管朝向、`scripted_gesture()`执行手势，`end_scripted_appearance()`复位归还。NPC不写main_story，不授权地图。
 - 3.1在03后实际开灯、空闲并接近绿苔时停巡转头，说明四key、传送不了生物而机器人可用，指向真实 `mission_operations`；正式JSON duration56.5，55.05玩家真实走到 `briefing_finish`（duration4、speed3.2），实体屏障等99F中央安全通道到位后55.15还镜1秒，56.25 complete、56.35归还、56.5 end，实际另含等待；完整结束才记 `nar_main_031_green_briefing` history，开灯瞬间错过后须复核。
-- 3.3在持有acquired未deposited的稀土key归来，且读取/出生/携带交接与救援演出结束后，绿苔**从原位真实跑来，不瞬移**。主角保持原站位；“啧啧，真被你拿到了，给我吧”后拿出钥匙，同一临时投影在双方真实手部接触点换父级；绿苔再到 `pedestal_stand`，钥匙轨迹到独立 `key_slot_rare_earth`接触点才提交deposit。
-- `MainStoryKeyVisual3D`负责拿出/交接/插入，`MainStoryPedestal3D`只投影永久key与N/4，不能通过隐藏临时模型冒充业务提交。`deposit_main_story_key()`成功后才亮第一槽、线路与1/4环、发一次扩散脉冲并开放公馆；写盘失败保留待交付、不开锁。
+- 3.3在持有acquired未deposited的稀土key归来，且读取/出生/携带交接与救援演出结束后，绿苔**从原位真实跑来，不瞬移**。主角保持原站位；“啧啧，真被你拿到了，给我吧”后拿出钥匙，同一临时投影在双方真实手部接触点换父级；绿苔再到 `pedestal_stand`（台前地面，不是台面），钥匙沿 `PRP-BASE99-MAIN-STORY-KEY-INSERT` 第一孔的 20° 孔轴斜向内插到 `key_slot_rare_earth` 接触点才提交deposit。
+- `MainStoryKeyVisual3D`负责拿出/交接/插入，`MainStoryPedestal3D`只投影嵌件槽灯、已安装key与N/4环，不能通过隐藏临时模型冒充业务提交。`deposit_main_story_key()`成功后才亮第一孔槽灯与台面 1/4 环、发一次扩散脉冲并开放公馆；写盘失败保留待交付、不开锁。嵌件挂在99F美术布置层下跟随房间流送，承载点由 `TowerDescent3D.get_main_story_insert_transform()` 按布置层真实变换换算，叙事层不写死世界坐标。
 - Director实体屏障等NPC到位、手部接触与插入完成，连续阻塞60秒abort。玩家死亡、演员/挂点/设施缺失或卸载时释放NPC、临时key、镜头/朝向/操作锁，中断不记history；已领取/安装事实不因演出清理撤销。ESC可暂停。成功或失败归来都能交付永久key，不被救援节拍卡住。
+- **死亡归航的救援台词可被玩家推进**（业主 2026-11-10）：「死亡回到基地后，绿苔的对话也要能点击快速过」。`Base99Rescue3D`自己铺那两句、不走时间轴，因此它加入 `rescue_cutscene_3d` 组并公开 `can_advance_rescue_line()/advance_rescue_line()`；`NpcCharacter3D` 提供 `is_scripted_line_progressable()/advance_scripted_line()` 窄接口，打字进度仍只归 `CharacterBark3D`。空格与鼠标左键在演出期间先全显、已全显才收起这句，**不跳句、不跳过整段、不提前起身**，玩家全程趴地且输入仍锁。验收见 `verify_base99_rescue` 的 R17。
 
 `verify_main_story_performance`验证实体表演而非FPS性能，`verify_main_story_narrative`验证真实导演/激活/屏障；二者及 `capture_main_story_chapter`唯一登记manual_scenes，要求Autoload前专用隔离外部runner（user://含main_story_performance）。当前capture源码支持031/032/033逐帧、必须真渲染与工程外输出；031/032保留真实Player物理步行，3.2已有正式远征坡道/静止/冷场/激活/还镜的Forward+章节fixture证据，033沿用最新polished结果而非本次重跑。章节fixture不等于人工纯新档全关贯通，不以headless或旧NPC截图代验。
 

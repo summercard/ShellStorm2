@@ -168,6 +168,12 @@ display_name    = 原怪名 + "-强化怪"
 4. **随机流必须与 `_rng` 分开**（`_strong_rng`，由 `run_seed` 异或常量派生）。
    混进共用流会让既有固定种子的抽取结果整体位移。未配 `strong_variant` 的关卡
    **一次都不掷** ⇒ 未配置关卡行为逐字不变。
+5. **按房间禁用（2026-11-10）**：`strong_variant.suppressed_rooms`（room_id 数组）命中当前房间时
+   `MonsterInjector._strong_variant_chance()` 返回 0.0 ⇒ 该房不掷骰、不耗 `_strong_rng`。当前房间由
+   `MonsterInjector.set_active_room_id()` 注入，`Dungeon3D._spawn_room_enemies()` 是包装函数
+   （设置 → `_spawn_room_enemies_impl` → 还原为 `""`），`trigger_extra_wave` 的普通增援分支同样设置/清除。
+   核心层不含任何关卡 ID，名单全部来自 `level_plan`；远征01 配置为 `["room_01","room_02"]`、
+   `chance = 0.075`（原 0.15 减半）。未配 `suppressed_rooms` 的关卡行为逐字不变。
 
 **弹道下发的两处新旋钮**（原先没有）：
 
@@ -255,6 +261,12 @@ display_name    = 原怪名 + "-强化怪"
 **精英不吃这条通道**：精英的 `is_elite` 是身份指派（`EliteRosterService` 名册 + 词缀），不是随机升级的 `_strong` 变种。精英仍走 `elite_floor_1/2`，但**实际不掉枪**：那唯一一件地面实物被「优先保留备弹」规则占用（见 [04 §22.12 精英遗留](../04_技术施工_战斗与局内成长.md)）。`is_elite` 也不吃强化怪的 25% 通道。
 
 **实测**（`tools/probe_weapon_drop_rates`，20000 次/类）：强化怪浅层 25.52%、深层 25.22%。
+
+**远征01 的关卡表例外（2026-11-10）**：远征01 普通怪改为「只掉金币」——`monster_drop_table` 为空清单 + `legacy_fallback = false`，
+未登记的普通怪不掉物品。强化怪**不变**：表级开关 `variant_legacy_fallback = true`（默认 false）让 `MonsterVariants.is_variant()`
+的怪在 `RewardService._monster_spec_for` 的 full_coverage 早退处放行，继续回退本节的通用公式（含 25% 出枪与 `empty_chance`）。
+远征03 不写该开关，行为逐字不变。数据流：`MonsterDropTable.compile` 报告 `variant_legacy` →
+`RuntimeRewardCoordinator._monster_drop_variant_legacy` → 击杀请求 `monster_drop_variant_legacy`。
 
 ## 4. 遭遇生成接口
 

@@ -158,7 +158,16 @@ func verify_idle_cycle(player: Player3D, camera: Camera3D, clip: String, visual:
 	var high := Vector2(-INF, -INF)
 	var foot_l := player.avatar.foot_l.transform
 	var foot_r := player.avatar.foot_r.transform
-	check(is_equal_approx(motion.playback_rate, 1.25), "user idle multiplier retained " + clip)
+	# 2026-11-10：原来钉死 1.25（2026-10-15 业主「动画调快 25%」那次的口径）。
+	# 业主同日又要求「整体节奏变慢一点」，该倍率改为 `× PACE_SCALE`（0.85）⇒ 1.0625。
+	# 断言改**引用常量**而不是再抄一个新数字：抄数字的话，下次调 PACE 又要连改两处，
+	# 而且"忘了改"的表现是这条断言报红，看起来像功能坏了。
+	check(
+		is_equal_approx(
+			motion.playback_rate, CharacterMotionLibrary3D.ANIMATION_RATE_MULTIPLIER
+		),
+		"user idle multiplier retained " + clip,
+	)
 	check(duration <= 3.0, "shorter idle cycle " + clip)
 	if visual:
 		camera.position = Vector3(0, 3.2, 2.7)

@@ -21,12 +21,19 @@ signal dialogue_finished(run_id: String, outcome: String)
 ## 层级取模态档（与设施菜单同档，低于移动端输入层 128）。
 ## 数值只在这里定义一处，不在场景里另写。
 const LAYER := 100
-const MARGIN_SIDE := 96.0
-const MARGIN_BOTTOM := 34.0
-const PANEL_HEIGHT := 122.0
+## 底栏宽度占视口比例（左右各 15%）。
+##
+## 业主 2026-11-10 给的范围图：1080 宽下红框 x=180→935，即 **70%**、居中偏左一点。
+## 原来是 `MARGIN_SIDE=96` 的“满屏减两边”（1080 下占 82%），看着像一条通栏横幅；
+## 收窄到 70% 后才是“对话框”的比例。字号不动（业主：“就用原来的字体和大小”）。
+const PANEL_SIDE_RATIO := 0.15
+const MARGIN_BOTTOM := 24.0
+const PANEL_HEIGHT := 118.0
 const DEFAULT_CHARS_PER_SEC := 30.0
 const DEFAULT_AUTO_ADVANCE_S := 3.2
 const SPEAKER_SYSTEM := "系统"
+## 玩家自己说话时的署名。剧情里主角是台机器人，没有名字，NPC 也从不呼名。
+const SPEAKER_PLAYER := "主角"
 
 const OUTCOME_COMPLETED := "completed"
 const OUTCOME_SKIPPED := "skipped"
@@ -47,6 +54,15 @@ var _typing := false
 var _active := false
 var _last_input_frame := -1
 var _advance_input_handler := Callable()
+var _mouse_available_handler := Callable()
+var _mouse_advance_handler := Callable()
+var _mouse_left_down := false
+var _mouse_dialogue_hold := false
+var _mouse_poll_observed_down := false
+var _mouse_window_focused := true
+var _mouse_press_event_id := 0
+var _mouse_consumed_frame := -1
+var _mouse_consumed_physics_frame := -1
 ## 显式暂停标志。本节点是 PROCESS_MODE_ALWAYS（跨场景系统，改 process_mode
 ## 会波及它自己的独立验收），所以树暂停时它仍会打字并自动推进 ——
 ## 由剧情系统在暂停切换时调用 set_paused() 同步冻结（08 文档 §6.3 / §8.4）。
@@ -70,6 +86,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_sync_mouse_release()
 	if _paused or get_tree().paused:
 		return
 	if not _active:
@@ -96,6 +113,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func consume_advance_input(event: InputEvent) -> bool:
+	if event is InputEventMouseButton:
+		return _consume_mouse_advance(event as InputEventMouseButton)
 	if _paused or get_tree().paused or not _active:
 		return false
 	var key := event as InputEventKey
@@ -117,6 +136,91 @@ func consume_advance_input(event: InputEvent) -> bool:
 
 func set_advance_input_handler(handler: Callable) -> void:
 	_advance_input_handler = handler
+
+
+func set_mouse_advance_handlers(available: Callable, advance_handler: Callable) -> void:
+	_mouse_available_handler = available
+	_mouse_advance_handler = advance_handler
+
+
+func _has_mouse_dialogue() -> bool:
+	return _active or (_mouse_available_handler.is_valid() and bool(_mouse_available_handler.call()))
+
+
+func _consume_mouse_advance(event: InputEventMouseButton) -> bool:
+	if event.button_index != MOUSE_BUTTON_LEFT:
+		return false
+	var was_down := _mouse_left_down
+	_mouse_left_down = event.pressed
+	if event.pressed and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		_mouse_poll_observed_down = true
+	if _paused or get_tree().paused or not _mouse_window_focused:
+		if not event.pressed:
+			_clear_mouse_hold()
+		return false
+	if not event.pressed:
+		var owned := _mouse_dialogue_hold
+		_clear_mouse_hold()
+		if owned:
+			_mark_mouse_consumed()
+			get_viewport().set_input_as_handled()
+		return owned
+	if not _has_mouse_dialogue() and not _mouse_dialogue_hold:
+		return false
+	_mouse_dialogue_hold = true
+	_mark_mouse_consumed()
+	get_viewport().set_input_as_handled()
+	if was_down or event.is_echo() or event.get_instance_id() == _mouse_press_event_id:
+		return true
+	_mouse_press_event_id = event.get_instance_id()
+	var frame := Engine.get_process_frames()
+	if frame == _last_input_frame:
+		return true
+	_last_input_frame = frame
+	if _mouse_advance_handler.is_valid() and bool(_mouse_advance_handler.call()):
+		return true
+	advance()
+	return true
+
+
+func _mark_mouse_consumed() -> void:
+	_mouse_consumed_frame = Engine.get_process_frames()
+	_mouse_consumed_physics_frame = Engine.get_physics_frames()
+
+
+func _clear_mouse_hold() -> void:
+	if _mouse_dialogue_hold:
+		_mark_mouse_consumed()
+	_mouse_dialogue_hold = false
+	_mouse_left_down = false
+	_mouse_poll_observed_down = false
+
+
+func _sync_mouse_release() -> void:
+	if not _mouse_window_focused:
+		return
+	var physical_down := Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	if _mouse_left_down and physical_down:
+		_mouse_poll_observed_down = true
+	# 仅曾被Input轮询确认的按压允许自动纠偏；Viewport/直接注入未更新Input的测试不误清。
+	if _mouse_dialogue_hold and _mouse_poll_observed_down and not physical_down:
+		_clear_mouse_hold()
+
+
+func _notification(what: int) -> void:
+	if what in [NOTIFICATION_WM_WINDOW_FOCUS_OUT, NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		_mouse_window_focused = false
+		_clear_mouse_hold()
+		_mark_mouse_consumed()
+	elif what in [NOTIFICATION_WM_WINDOW_FOCUS_IN, NOTIFICATION_APPLICATION_FOCUS_IN]:
+		_mouse_window_focused = true
+		_mark_mouse_consumed()
+
+
+## 消费按压持有至release；物理release丢事件时校正，恢复/释放当帧不击发。
+func is_dialogue_mouse_fire_blocked() -> bool:
+	_sync_mouse_release()
+	return not _mouse_window_focused or _mouse_dialogue_hold or _mouse_consumed_frame == Engine.get_process_frames() or _mouse_consumed_physics_frame == Engine.get_physics_frames()
 
 
 ## 播放一组台词。返回 run_id；lines 为空时返回空串。
@@ -164,6 +268,36 @@ func show_message(
 ## 系统提示便捷入口：说话人固定为"系统"，默认自动消失（不打断玩家操作）。
 func announce(text: String, auto_advance_sec := DEFAULT_AUTO_ADVANCE_S) -> String:
 	return show_message(text, SPEAKER_SYSTEM, auto_advance_sec)
+
+
+## 一句**对话**（实体角色说的）。底栏是对话文字的唯一载体（业主 2026-11-10），
+## 头顶气泡只做示意。
+##
+## `auto_advance_sec < 0` 时按字数估算停留，保证“读完再收”；
+## 传具体秒数时按调用方的节奏（剧情时间轴就是这么用的）。
+func show_dialogue_line(text: String, speaker: String, auto_advance_sec := -1.0) -> String:
+	var clean := text.strip_edges()
+	if clean.is_empty():
+		return ""
+	var hold := auto_advance_sec if auto_advance_sec > 0.0 else line_hold_for_text(clean)
+	return show_lines({
+		"lines": [{
+			"line_id": "inline",
+			"speaker": speaker,
+			"text": clean,
+			"chars_per_sec": DEFAULT_CHARS_PER_SEC,
+			"auto_advance_sec": hold,
+		}],
+		"interrupt": true,
+	})
+
+
+## 打完字后该停多久（秒）。
+##
+## 不盘到“总时长”口径：底栏自己还要按 30 字/秒逐字敲，那段已经占掉了。
+## 这里只算**阅读停留**：20 字 → 3.07s，与旧气泡的 `hold_seconds=3.4` 同一个量级。
+static func line_hold_for_text(text: String) -> float:
+	return clampf(1.4 + float(text.strip_edges().length()) / 12.0, 1.8, 5.0)
 
 
 ## 推进：打字中 → 立即全显；已全显 → 下一行。
@@ -351,12 +485,14 @@ func _build() -> void:
 	dialogue_panel_style.content_margin_top = 10.0
 	dialogue_panel_style.content_margin_bottom = 10.0
 	_panel.add_theme_stylebox_override("panel", dialogue_panel_style)
-	_panel.anchor_left = 0.0
-	_panel.anchor_right = 1.0
+	# 按视口比例定宽（不是固定像素边距）：换分辨率时框始终是屏幕的 70%，
+	# 不会在 21:9 上拉成通栏、也不会在 4:3 上挤成方块。
+	_panel.anchor_left = PANEL_SIDE_RATIO
+	_panel.anchor_right = 1.0 - PANEL_SIDE_RATIO
 	_panel.anchor_top = 1.0
 	_panel.anchor_bottom = 1.0
-	_panel.offset_left = MARGIN_SIDE
-	_panel.offset_right = -MARGIN_SIDE
+	_panel.offset_left = 0.0
+	_panel.offset_right = 0.0
 	_panel.offset_top = -(PANEL_HEIGHT + MARGIN_BOTTOM)
 	_panel.offset_bottom = -MARGIN_BOTTOM
 	root.add_child(_panel)
@@ -378,7 +514,7 @@ func _build() -> void:
 	_text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(_text_label)
 
-	_hint_label = UIStyleFactory.make_outline_label("[空格/回车] 继续", UIPalette.PRISM_TEXT_FAINT)
+	_hint_label = UIStyleFactory.make_outline_label("[左键/空格/回车] 继续", UIPalette.PRISM_TEXT_FAINT)
 	_hint_label.name = "Hint"
 	UIStyleFactory.apply_prism_label(_hint_label, "faint", 1, 13)
 	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT

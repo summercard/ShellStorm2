@@ -896,7 +896,7 @@ func _register_consumables() -> void:
 		{
 			"id": "item_ammo_pack",
 			"name": "通用弹药",
-			"description": "每个堆叠单位代表1发备弹；换弹按实际弹匣缺口消耗。",
+			"description": "每个堆叠单位代表1发备弹；换弹按实际弹匣缺口消耗。散射类武器弹匣按「轮」记，装填一轮消耗的备弹数 = 该枪一次扣扳机打出的弹丸数。",
 			"type": "consumable",
 			"rarity": "common",
 			"stack_max": 999,

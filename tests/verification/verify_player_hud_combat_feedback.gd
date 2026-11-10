@@ -16,6 +16,7 @@ extends Node
 ## 本用例不做替代。
 
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
+const HUD_DASH_GLYPH_SCRIPT := preload("res://src/ui/HudDashGlyph.gd")
 
 ## 手动步进的固定步长。换算见各断言：冷却环 `tick` 只衰减就绪闪光，
 ## 血条三类反馈的时长都在 0.34～0.42 s 量级，0.02 一档足够细。
@@ -45,6 +46,7 @@ func _ready() -> void:
 	var track := hud.find_child("PlayerHealthBarTrack", true, false) as HudHealthBarTrack
 	var heal_bar := hud.find_child("PlayerHealthBarHeal", true, false) as HudHealthBarHeal
 	var dash_ring := hud.find_child("HudDashCooldownRing", true, false) as HudDashCooldownRing
+	var countdown_ring := hud.find_child("EncounterCountdownRing", true, false) as Control
 
 	# ── 结构：三层血条 + 冷却环都在，且叠放次序正确 ──────────────────────────
 	_check(status_block != null, "PlayerStatusBlock 缺失", failures)
@@ -126,15 +128,63 @@ func _ready() -> void:
 				Dungeon3D.HUD_DASH_RING_DIAMETER_DESIGN
 			) * Dungeon3D.HUD_UI_SCALE
 		),
-		"翻滚冷却环尺寸不是 32 设计 px × HUD_UI_SCALE：%s" % dash_ring.size,
+		"翻滚冷却环尺寸不是 60 设计 px × HUD_UI_SCALE：%s" % dash_ring.size,
 		failures,
 	)
-	if status_block != null:
+	# 2026-11-10 第二轮：业主「放到左下角来」。判据是**贴左下角**，不是"在状态块里"。
+	var viewport_rect := get_viewport().get_visible_rect()
+	var ring_rect := dash_ring.get_global_rect()
+	_check(
+		ring_rect.position.x <= viewport_rect.size.x * 0.08
+		and ring_rect.end.y >= viewport_rect.size.y * 0.94,
+		"翻滚冷却环没有贴到屏幕左下角：%s（视口 %s）" % [ring_rect, viewport_rect.size],
+		failures,
+	)
+	_check(
+		ring_rect.size.x >= 40.0 and ring_rect.size.y >= 40.0,
+		"翻滚冷却环太小（业主嫌原位置看不清，已放大到 48 canvas px）：%s" % ring_rect.size,
+		failures,
+	)
+	# 与同为左下角的遭遇倒计时环不得重叠（两者都在 (0,1) 锚点附近）。
+	if countdown_ring != null:
 		_check(
-			status_block.get_global_rect().encloses(dash_ring.get_global_rect()),
-			"翻滚冷却环跑到角色状态块之外（会与塔楼引导卡/种子标签撞）",
+			not ring_rect.intersects(countdown_ring.get_global_rect()),
+			"翻滚冷却环与遭遇倒计时环重叠：%s vs %s"
+				% [ring_rect, countdown_ring.get_global_rect()],
 			failures,
 		)
+	# 剪影是矢量多边形，不是位图：环内不得出现任何 TextureRect，
+	# 且形状点数必须够（少于 12 点就不是"从角色身上量出来的剪影"）。
+	_check(
+		dash_ring.find_children("*", "TextureRect", true, false).is_empty(),
+		"翻滚冷却环里出现了位图（工程约定 HUD 内位图只允许 3D 投影）",
+		failures,
+	)
+	var glyph_points := 0
+	for polygon in HUD_DASH_GLYPH_SCRIPT.DASH_GLYPH_POLYGONS:
+		glyph_points += (polygon as PackedVector2Array).size()
+	_check(
+		glyph_points >= 12 and HUD_DASH_GLYPH_SCRIPT.DASH_GLYPH_POLYGONS.size() >= 1,
+		"翻滚剪影拐点过少，形状已不是兔子剪影：%d 点 / %d 块"
+			% [glyph_points, HUD_DASH_GLYPH_SCRIPT.DASH_GLYPH_POLYGONS.size()],
+		failures,
+	)
+	# 剪影必须落在环内净空里：最长边不超过内缘直径（否则会压到环带上）。
+	var glyph_span := (
+		float(Dungeon3D.HUD_DASH_RING_DIAMETER_DESIGN)
+		* HudDashCooldownRing.GLYPH_FIT_RATIO
+		* Dungeon3D.HUD_UI_SCALE
+	)
+	var inner_diameter := (
+		float(Dungeon3D.HUD_DASH_RING_DIAMETER_DESIGN)
+		* (1.0 - HudDashCooldownRing.THICKNESS_RATIO)
+		* Dungeon3D.HUD_UI_SCALE
+	)
+	_check(
+		glyph_span < inner_diameter,
+		"兔子剪影压到环带上：剪影 %.1f ≥ 内缘 %.1f" % [glyph_span, inner_diameter],
+		failures,
+	)
 	# 初始就绪：满圈、且不写字（环内没有任何 Label）。
 	_check(dash_ring.is_ready(), "翻滚冷却环开局不是就绪态", failures)
 	_check(

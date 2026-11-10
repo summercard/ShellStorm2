@@ -544,6 +544,8 @@ const BATTLE_LEVEL_ID := "battle_level01"
 @export var force_main_story_for_test := false
 
 const MAIN_STORY_SCRIPT = preload("res://src/narrative/MainStoryChapter3D.gd")
+## 主线四孔嵌件在 99F 美术布置层里的台面点（主门下方低矮设备柜台面，y=1.38）。
+const MAIN_STORY_INSERT_LOCAL := Vector3(5.0, 1.38, -3.77)
 const MAIN_STORY_EXTRACTION_KEY := "main_story_auto_extraction"
 const MAIN_STORY_EXTRACTION_SECONDS := 8.0
 var _main_story_controller: MainStoryChapter3D
@@ -587,14 +589,15 @@ func _on_main_story_controller_exiting() -> void:
 func _setup_main_story_host() -> void:
 	if not is_instance_valid(_main_story_controller):
 		return
-	var facility := get_main_story_facility("mission_operations")
 	var pedestal_path := "res://src/narrative/MainStoryPedestal3D.gd"
-	if facility != null and ResourceLoader.exists(pedestal_path):
+	# 四孔嵌件贴在主门下方低矮设备柜的台面上，所以挂在**美术布置层**下（跟着房间一起流送），
+	# 不再挂到情报室设施上 —— 业主要求不改原台柜，只把独立嵌件摆上去。
+	if _facility_art_layout != null and ResourceLoader.exists(pedestal_path):
 		var pedestal_script := load(pedestal_path) as Script
 		_main_story_pedestal = pedestal_script.new() as Node3D
 		if _main_story_pedestal != null:
-			facility.add_child(_main_story_pedestal)
-			_main_story_pedestal.call("setup", facility, self)
+			_facility_art_layout.add_child(_main_story_pedestal)
+			_main_story_pedestal.call("setup", self)
 	_main_story_controller.setup(self)
 	_main_story_controller.set_process(false)
 	_main_story_host_ready = true
@@ -627,6 +630,27 @@ func get_main_story_facility(id: String) -> Node3D:
 		if is_instance_valid(facility) and facility.facility_id == id:
 			return facility
 	return null
+
+
+func get_main_story_pedestal() -> Node3D:
+	return _main_story_pedestal if is_instance_valid(_main_story_pedestal) else null
+
+
+## 四孔嵌件的承载面：主门下方低矮设备柜（`main_door_low_storage_cabinet`）的台面。
+## 该柜在美术布置层里是恒等变换的资产包，台面碰撞盒 `SourceObjectBox_000`
+## 中心 (5, 1.3, -3.77)、高 0.16，故台面 y=1.38 —— 所以这里给的是布置层局部坐标，
+## 再由布置层的真实世界变换换算，运行时不写死世界坐标。
+func get_main_story_insert_transform() -> Variant:
+	if _facility_art_layout == null:
+		return null
+	var point := _facility_art_layout.to_global(MAIN_STORY_INSERT_LOCAL)
+	return Transform3D(Basis.IDENTITY, point)
+
+
+## 99F 地面高度。四孔嵌件在台面上，绿苔的站位要落回地面，不能跟着台面抬高。
+func get_main_story_floor_y() -> float:
+	var room := _room_by_id.get("facility") as DungeonRoom3D
+	return room.global_position.y if room != null else 0.0
 
 
 func get_main_story_boss() -> Node3D:

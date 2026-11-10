@@ -77,7 +77,8 @@
         "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
         "docs/v0.1/development/2026-10-19_bullet_module_manual_swap_lock.md",
         "docs/v0.1/development/2026-11-09_aim_ballistic_alignment.md",
-        "docs/v0.1/development/2026-11-10_enemy_bullet_presentation_rollback.md"
+        "docs/v0.1/development/2026-11-10_enemy_bullet_presentation_rollback.md",
+        "docs/v0.1/development/2026-11-10_shotgun_two_shell_mag.md"
       ],
       "verification": [
         {
@@ -99,6 +100,10 @@
         {
           "kind": "scene",
           "id": "verify_crosshair_billboard"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_shotgun_shell_ammo_flow"
         }
       ],
       "status": "partial"
@@ -730,7 +735,10 @@
       "development_records": [
         "docs/v0.1/development/2026-11-02_base99_npc_green.md",
         "docs/v0.1/development/2026-11-04_base_npc_elite_arms_taker_greeting.md",
-        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md",
+        "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md",
+        "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md",
+        "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md"
       ],
       "verification": [
         {"kind": "scene", "id": "verify_main_story_performance", "suite": "manual", "requires": "Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"},
@@ -1003,7 +1011,10 @@
         "docs/v0.1/development/CHANGELOG.md",
         "docs/v0.1/development/2026-10-12_main_story_documentation.md",
         "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md",
-        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md",
+        "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md",
+        "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md",
+        "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md"
       ],
       "verification": [
         {"kind": "scene", "id": "verify_main_story_narrative", "suite": "manual", "requires": "已含真实运行；Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"},
@@ -1034,7 +1045,10 @@
       ],
       "development_records": [
         "docs/v0.1/development/CHANGELOG.md",
-        "docs/v0.1/development/2026-09-24_design_contract_backfill.md"
+        "docs/v0.1/development/2026-09-24_design_contract_backfill.md",
+        "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md",
+        "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md",
+        "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md"
       ],
       "verification": [
         {

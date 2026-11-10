@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1443,
+ "asset_count": 1445,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "d5d9272d4ba1a59a238bf2f8f28c4efc75f51501d66286a245b49362563ee4d1",
@@ -7251,32 +7251,42 @@
    "v": "4732ef44dc018b09539ff4eeb02f4f1deec78704565fbb195abb05e7b0b47286",
    "c": "道具",
    "d": "props"
+  },
+  "PRP-BASE99-MAIN-STORY-KEY-INSERT": {
+   "v": "c5446a887498c95cb7d73757c5495aa3acedd5642a6100bbff99b6120ecafb05",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "UI-SCREEN-DIALOGUE-BAR": {
+   "v": "6cad5bd43f8788f112505c457d1dd199eba6c89a6cbeaa78e7f118de6afa43ad",
+   "c": "UI",
+   "d": "ui"
   }
  },
  "column_digests": {
-  "1": "d8bbd18a66e559aef7430bfad577da779c1d1d4a7466314ed05644e1d0285e7a",
-  "2": "0ef842370711f700f36050612cdf337116080a8eea3566432c737e477b3e06a2",
-  "3": "bee73bc854a8bbaee11e42b6e9709fe9a994f9ab1cf7bc68319e570e74247814",
-  "4": "956e2f47bce676d256982c509375e6f917ab31e76f329992b50562b1fa3d0369",
-  "5": "1752b9c5baa301bdffb850cf5ee86448fe218c041e3113faeaeb1194dfff867f",
-  "6": "82c96a649ba1bfcda26f1c8756c24d66b36e9b1c6bf5324bf9e206986f58c360",
-  "7": "8773b38405fc9ec7cf21f2b72e99b17ed5e4ca1e77c27319bcb919feb732975f",
-  "8": "de39c386229f17163ff6bf740215523a14536c67f88441c3648e1ff05bb19e34",
-  "9": "3c691819095c15454d51702ebd0f270900fd6a4690da332fa1350939e7a920fa",
-  "10": "a25cc987d6e33d8829e3954b4d0bb6e117f577ae59c58834144b193a9fdd9b81",
-  "11": "357cbe3208a677c9d24f6507a4aaccdf62351d29de323a3ff27cfbde188112c0",
-  "12": "80fe9e8dea9f38141c17655e583aac28382c8e99f7023a999eafe748f88fd7dd",
-  "13": "dca6c871bbc57ef987345bb9d4d06591eb32c76436c1a9616b41488757ba8513",
-  "14": "3212a978fdc1956394f74abc6c63c1aa86f7d9be7e73481919d7013d3ff388fe",
-  "15": "87337dc73e021df258dc8b0f7dec8e3b119733af1194329bd8d8801ad0a2eb34",
-  "16": "905438605938286ae8cf57b382b50b6384bc609906ab1471d1265ceb7cf04db0",
-  "17": "034ccdcb730e0cfa39f03fc511c7e71ff825f7a88d5e3c2d76428e9202fb970e",
-  "20": "b8c8c04623a111e8fed444973338e2e5c7aab2a3bb6d661057fd0d9c1646a9c3",
-  "21": "e4cf4dd67c901280f91d5ca47d092107c422dc9e4963ce1af989e442266fd22a",
-  "22": "55949d42d23a8b049dceb44ab5b5fd4416e7cd0d017f84237ac523b6055b921b",
-  "23": "fd574018d98c51a476b89686074d6bfd0ab29c5a1de7a1b4b32f1a38e455a06e",
-  "24": "7729ad437b34b5ec25fc1651e412b79afa9321c6bb51fa3b47105ab6c86f4fbc",
-  "25": "acb19646346a7a2a64dba5b66e0b6e939320730162c8b6784b62269623640dbc"
+  "1": "7b80eb27e19df7cfbb28b2a4870796042a49b54536b965a413b35143d8f00f93",
+  "2": "7b56d1bfb52a124f07fe2e55aa04a9f011114c34535acd29668ba92f94551599",
+  "3": "d2b0945ecbaa5f388b3a5212410cb9d8e9546103891d27d64b1ef30edeee1ebc",
+  "4": "64cdede2ba80a2c2175a57ce9831dcc593839521fe104b29c2a3b04439f168b1",
+  "5": "d9dd1c735b1d2499fa8dbced3fe480c665c5233358ca50806a5a7aa5596b1103",
+  "6": "4d3cac992e1258f17143ecae1a15cd2f08ea92ec8c401cdaba8771610b63663e",
+  "7": "6411e3aa1bef736e043df5160852e86704c210492a2a2d52248c8fa577474dbd",
+  "8": "dfa88d70910df97504f36cfa13b7d329c9c73b125e1deb04fa1e612363c94fc2",
+  "9": "22ae4d456e5e381be94e0f9564947cf1b0830960dd026d725397d4d00b3967be",
+  "10": "396efab37c53e00f1f1fb0e48ebe74af5ac41dc85932a686727d441e45481f6e",
+  "11": "77d3241a04e2baad590715888f84eccb15ee4de2c79f497f10eb2499c6128a97",
+  "12": "e0e8d0d19739365bfb99e5c166bcc803e5bd65429070fe74ec55b6b05429855c",
+  "13": "551c7bd3c580cc51ce5e9cfdb3efb0b9c4a31612865b558fc91db1a7159be1ff",
+  "14": "6eb6554b728385006effd2d7ed621236fe12b4f2ff81d7972664faf6617db74d",
+  "15": "f17f47e968419c3837548301bc55c88858eb1e5a6c5c5e6146b162dd46f3d10e",
+  "16": "a8e06bcece76c9dc2e85b8fec6234d56aa7587523de99d7a64f305db60571874",
+  "17": "9fba2b7a4995f9288af47b0fd706426d07ece5196c5954d585f4cf57e4ba1560",
+  "20": "96c67f6c771e58657200c1b2686e58711c7040b35284d6f9cdccd66e079074f2",
+  "21": "5fbcca9ab15939998ba70faa806e778a18f1b0a0439f11cebecaa485b0663708",
+  "22": "22929be8bbb35fab124842c9bdc647f6ef6eb312e0d68d952f0e46d393acac39",
+  "23": "a8d2e098c87849fc9d3b15260085d45064a0259353744458347b5a174751375c",
+  "24": "9ecfb8c7b546a6bd38bfef468e78473eab63a91c33227ae054cfbc7d721f5a6f",
+  "25": "701adace910636033733403e55b4be738fd26fda49acc1530f051ad9564b042b"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -7287,7 +7297,7 @@
   "敌人动画与状态": "90f97cdc38de06161b3d737f3289b2e199f592ec8ef8ab991e6676a501e7ebcf",
   "3D-敌人": "3d542b37469db52159a67c3c7d24315841e412e8f50b76e5c4b963c44a2b4cd6",
   "3D-场景通用": "9f75b2869954b8b0de5de130a12ef139e834f5b8b09061c1b2e453e6c011cd1b",
-  "3D-设施": "0e69cdf9770140106d3adb6528fbccbdd65fb37cc0422c90f023a4ad3078ad0c",
+  "3D-设施": "676b365b792e9df64ede922284aabcf0d05be70cca0f8bfb66961d3946f050a7",
   "3D-其他": "dcfaaf667850374ed3c56a3cce0fc337734c84a50b9e8502a9170ce020e07743",
   "3D-道具": "25f7d8ed65aa88d7f01ff468c43c35601d5e24d9bb0eab1e2c45d3e183866d40",
   "3D-物品": "b9d3f610d2a77d8d7b4d55872eb3d0e2d57caa9840c144a672c76e6fe599ba4b",
@@ -7298,9 +7308,9 @@
   "关卡名称对照": "1590dd70f6a2890baf8cd327daa25e97670e2baa18e04071894ff8995d1452e5"
  },
  "category_counts": {
-  "UI": 20,
+  "UI": 21,
   "场景": 854,
-  "场景道具": 50,
+  "场景道具": 51,
   "基地资产包": 114,
   "子弹特效": 11,
   "敌人": 50,
@@ -7521,6 +7531,29 @@
    ],
    "record": "docs/v0.1/development/2026-11-03_bookcase_dust_tabletop_scale.md",
    "operation": "Add one 3-puff dust VFX; targeted bookcase/tabletop size registration"
+  },
+  {
+   "date": "2026-11-10",
+   "asset_id": [
+    "PRP-BASE99-MAIN-STORY-KEY-INSERT"
+   ],
+   "operation": "Add one new facility asset row (main table + 3D-设施 page), no other row touched",
+   "sheet": "3D-设施",
+   "previous_recorded_sheet_digest": "0e69cdf9770140106d3adb6528fbccbdd65fb37cc0422c90f023a4ad3078ad0c",
+   "actual_before_sheet_digest": "0e69cdf9770140106d3adb6528fbccbdd65fb37cc0422c90f023a4ad3078ad0c",
+   "after_sheet_digest": "0e69cdf9770140106d3adb6528fbccbdd65fb37cc0422c90f023a4ad3078ad0c",
+   "record": "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md"
+  },
+  {
+   "date": "2026-11-10",
+   "asset_id": [
+    "UI-SCREEN-DIALOGUE-BAR"
+   ],
+   "operation": "Add one UI row (dialogue bar + head indicator); no prefab page for ui domain",
+   "previous_recorded_sheet_digest": null,
+   "actual_before_sheet_digest": null,
+   "after_sheet_digest": null,
+   "record": "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md"
   }
  ],
  "controlled_updates": [

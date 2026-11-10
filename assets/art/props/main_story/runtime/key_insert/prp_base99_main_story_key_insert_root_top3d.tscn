@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/props/main_story/components/key_insert/prp_base99_main_story_key_insert_visual_top3d.glb" id="1_visual"]
+
+[node name="MainStoryKeyInsert" type="Node3D"]
+metadata/asset_id = "PRP-BASE99-MAIN-STORY-KEY-INSERT"
+metadata/asset_version = "v001"
+metadata/source_blend = "res://art_source/props/main_story/key_insert/prp_base99_main_story_key_insert_source_v001.blend"
+metadata/optimized_blend = "res://art_source/props/main_story/key_insert/export/v001/prp_base99_main_story_key_insert_optimized_v001.blend"
+metadata/collision_policy = "none"
+metadata/collision_enabled = false
+metadata/units = "m"
+metadata/local_origin = "XZ centered; bottom Y=0"
+metadata/front_axis = "+Z; rear=-Z"
+metadata/socket_insertion_axis = Vector3(0, -0.939692621, -0.342020143)
+metadata/socket_pitch_degrees = 20.0
+metadata/socket_spacing_m = 0.46
+metadata/key_embedded = false
+metadata/runtime_integrated = false
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

@@ -1043,7 +1043,9 @@ func request_reload() -> bool:
 		return false
 	# 正式战局注入备弹提供者；无提供者的训练场/表现测试维持无限备弹。
 	# 无限**备弹**武器不查备弹余量（换弹照常走 1.4 s，完成时白拿满匣）。
-	if not infinite_reserve_ammo and _reload_ammo_provider.is_valid() and int(_reload_ammo_provider.call(0)) <= 0:
+	# 查询用 `call(0)`（返回当前余量），下限是**一轮**的成本而不是 1 发：
+	# 散弹一轮吃 5 发普通子弹，余量 4 发时开不了这一轮换弹。
+	if not infinite_reserve_ammo and _reload_ammo_provider.is_valid() and int(_reload_ammo_provider.call(0)) < get_reserve_cost_per_round():
 		return false
 	_active_reload_duration = maxf(0.01, reload_time)
 	_reload_remaining = _active_reload_duration
@@ -1069,6 +1071,22 @@ func refill_ammo() -> bool:
 
 func set_reload_ammo_provider(provider: Callable) -> void:
 	_reload_ammo_provider = provider
+
+
+## 每装填「一轮」（弹匣里的一格）要吃掉多少发备弹。
+##
+## 散射类枪身一轮扣扳机打 `projectile_count` 发弹丸，装填一轮自然也吃同样多的
+## 普通子弹 —— 业主 2026-11-10 口径：「每次打出去多少发子弹，每次装弹消耗的
+## 普通子弹数量就是多少个」。单发枪 `projectile_count == 1` ⇒ 成本 1，
+## 与旧版「一发备弹填一格」逐位相同。
+##
+## 读**运行时** `projectile_count` 而不是枪身静态 `bullet_count`：命运 / 配件把
+## 弹丸数加上去时成本跟着涨，否则会出现「打 6 发只花 5 发弹药」的口子。
+## 近战没有换弹，返回 1 只是为了不给调用方留下 0 除法。
+func get_reserve_cost_per_round() -> int:
+	if is_melee_weapon():
+		return 1
+	return maxi(1, projectile_count)
 
 
 func cancel_reload() -> bool:
@@ -1179,6 +1197,8 @@ func get_snapshot() -> Dictionary:
 		"magazine_size": magazine_size,
 		"current_ammo": current_ammo,
 		"infinite_reserve_ammo": infinite_reserve_ammo,
+		# 装填一格要吃多少发备弹（散射类 = 弹丸数）。只读投影，供 HUD/验收读取。
+		"reserve_ammo_per_round": get_reserve_cost_per_round(),
 		"reloading": is_reloading(),
 		"reload_progress": get_reload_progress(),
 		"reload_remaining": _reload_remaining,
@@ -1214,10 +1234,25 @@ func get_snapshot() -> Dictionary:
 
 func _finish_reload() -> void:
 	var missing := maxi(0, magazine_size - current_ammo)
+	# 一格的备弹成本：单发枪 = 1，散射类 = 弹丸数（见 `get_reserve_cost_per_round()`）。
+	var cost_per_round := get_reserve_cost_per_round()
 	var loaded := missing
 	# 无限备弹不向备弹提供者扣数：`loaded` 保持 = 缺口，但 `_provide_reload_ammo` 不会被调。
 	if not infinite_reserve_ammo and _reload_ammo_provider.is_valid():
-		loaded = clampi(int(_reload_ammo_provider.call(missing)), 0, missing)
+		# 先问余量、再按**整格**下单，而不是直接要 `missing × cost_per_round`：
+		# 提供者只扣「它实际给出的量」，零头换不满一格。散弹枪余量 7 发时
+		# 直接要 10 ⇒ 扣走 7 只填 1 格（2 发凭空消失）；按整格下单则扣 5 填 1 格、余 2 发。
+		var available := maxi(0, int(_reload_ammo_provider.call(0)))
+		var affordable := mini(missing, available / cost_per_round)
+		var granted := 0
+		if affordable > 0:
+			granted = clampi(
+				int(_reload_ammo_provider.call(affordable * cost_per_round)),
+				0,
+				affordable * cost_per_round
+			)
+		# 提供者只可能少给（并发取用 / 异常），再折回整格，绝不出现「半格弹匣」。
+		loaded = mini(affordable, granted / cost_per_round)
 	current_ammo = mini(magazine_size, current_ammo + loaded)
 	_reload_remaining = 0.0
 	reload_progress_changed.emit(1.0, 0.0)

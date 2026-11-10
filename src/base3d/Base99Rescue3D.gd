@@ -30,6 +30,14 @@ enum Phase { IDLE, CUTSCENE, CHEST_WAITING, CHEST_OPENED, VANISHED, SKIPPED }
 
 const PHASE_NAMES := ["idle", "cutscene", "chest_waiting", "chest_opened", "vanished", "skipped"]
 
+## 对白推进的公开查询入口所在的组。
+##
+## 这段台词**不经过 NarrativeDirector 的时间轴**（它由本协程按固定停留时间铺开），
+## 所以导演找不到载体；玩家按空格/点左键时由导演按这个组发现本节点，再调本类的
+## `can_advance_rescue_line()` / `advance_rescue_line()`。用组而不是节点路径，
+## 与 `base_npc_3d` 同一口径：塔楼场景换层级也不用改导演。
+const ADVANCE_GROUP := "rescue_cutscene_3d"
+
 ## 宝箱稳定 ID。同一局里重复装配时按它判重（`spawn_transient_chest` 不做幂等，
 ## 判重在这里做：演出是装配期一次性动作，不该由房间账来决定它算不算数）。
 const CHEST_ID := "rescue_chest_99f"
@@ -89,9 +97,35 @@ var _script_lines: Array[String] = []
 var _pinned_world := Vector3.INF
 
 
+func _ready() -> void:
+	add_to_group(ADVANCE_GROUP)
+
+
+## 玩家现在能不能推进当前这句（空格／鼠标左键）。只在演出阶段、且气泡里真有一句时为真。
+##
+## 刻意不看「玩家在不在交互范围」：演出时人趴在地上、输入被锁，本来就走不到旁边去。
+func can_advance_rescue_line() -> bool:
+	if _phase != Phase.CUTSCENE or get_tree().paused:
+		return false
+	if _npc == null or not is_instance_valid(_npc):
+		return false
+	if not _npc.has_method("is_scripted_line_progressable"):
+		return false
+	return bool(_npc.call("is_scripted_line_progressable"))
+
+
+## 推一下：打字中 → 立刻全显；已全显 → 只压缩这一句的停留。
+##
+## 台词指针、句子顺序、起身时机全都不动 —— 下一句由 `_wait_until_line_done()` 的轮询
+## 发现气泡收起后自然接上。这样「快速过」既不跳句，也不会让人物提前站起来。
+func advance_rescue_line() -> bool:
+	if not can_advance_rescue_line():
+		return false
+	return bool(_npc.call("advance_scripted_line"))
+
+
 ## 装配。必须在 `begin()` 之前调用；四个引用缺任何一个都按"不演"处理。
-func setup(
-	tower_node: Node3D, room: DungeonRoom3D, player_node: Player3D, npc_node: NpcCharacter3D
+func setup(	tower_node: Node3D, room: DungeonRoom3D, player_node: Player3D, npc_node: NpcCharacter3D
 ) -> void:
 	_tower = tower_node
 	_room = room

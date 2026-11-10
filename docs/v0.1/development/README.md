@@ -1,10 +1,18 @@
 - [远征01隐藏房间外围封闭与空门洞修订](2026-11-10_secret_branch_wall_closure.md)：`SecretBranch3D` 已在 `ensure_shell_built` 后递归收口正式房壳，按真实地砖边界封外围、保留真实门槽，并移除碰撞净空内 `safe_box_proxy` 半隔断/陈设；新增 A31/A32 与 `probe_secret_branch_wall_gaps`。默认 12 样本、full-flow 无头验收通过，撤离房不开普通门，其余房间覆盖东单/西单/双门；最终版 `final_full_level.log` 输出 `SECRET_BRANCH_WALL_GAPS_OK rooms=7`，exit 0，1900 条 UID 警告，0 `SCRIPT ERROR`/`ERROR`。负向删除撤离房补墙故障，按预期只使 A31 变红、A32 正常；文档门禁 exit 1 的 11 条断链均为既有问题，本事务新增链接 0 条断链。外围与门净空无头验收通过，表现待真机；A12/A13 未实现，不宣称 WORLD-SECRET 完结。
 
+- [对话文字统一底栏 + 头顶说话示意框](2026-11-10_dialogue_bottom_bar.md)：业主「头顶对话框太挡角色了……只做成说话示意的样子，有点点点的动画。真实文字统一到下方系统对话的地方」，追加「开灯这类自言自语要保留」。**对话**改为：头顶固定 0.86×0.46 m 小框 + 三点跳动（无文字），文字进底栏并带说话人署名；**自言自语**（开灯等 bark）不变，仍走原文字气泡。底栏宽度改为视口 70%、贴底 24 px，**字号一个不改**；快进沿用底栏既有两段语义。根因是 `actor.say` 一律写头顶气泡，20 字台词在 1.215 m 高的绿苔头上排两行 ⇒ 气泡 4.7 m 宽压住角色。验收：气泡 98（含 17 条示意断言）、底栏 34（含布局与对话句）、空格 44、鼠标 51、恢复 79、旧时间轴 113、基地救援、基地NPC主流程/节拍全部 exit 0；UI 账本新增 `UI-SCREEN-DIALOGUE-BAR`（主表 26、日志 v0.2.7），登记前做排除性核对防漂移。未做真机两人同框观感确认；UID/ObjectDB 告警与全局旧红项保留。
+
+- [散射喷壶：弹匣 2 轮、装填按弹丸数扣备弹](2026-11-10_shotgun_two_shell_mag.md)：业主「弹夹改成 2 发，一次打出去几发子弹，一次装弹就消耗几发备弹」。`magazine_size 6 → 2`、`bullet_count` 保持 5（弹匣单位 = 一轮扣扳机）；新增 `get_reserve_cost_per_round() = max(1, 运行时 projectile_count)` ⇒ 满匣 `2 × 5 = 10` 发，读运行时值以便命运加弹丸时同步涨价；交易从「缺多少要多少」改为**按整轮下单**（余量 7 ⇒ 扣 5 填 1 轮余 2、余量 4 ⇒ 拒绝且不扣），精英侧余量查询从布尔回 `1` 改为回真实发数（否则散弹枪永不换弹）。单发枪族成本恒 1、行为逐位不变。弹药经济：单匣周期 `8.0 → 4.67 s`、每周期吃弹 `6 → 10` 发（100 发箱 133 s → 47 s）。新增 `verify_shotgun_shell_ammo_flow`（core），反向对照三组。未验真机手感、未做真实渲染。
+
 - [敌方子弹回退 3D 弹体，公告板保留并缩到 70%](2026-11-10_enemy_bullet_presentation_rollback.md)：业主澄清 11-09 只要求「判定体积=放大后模型体积」，未要求公告板 ⇒ 默认回 3D 弹体；公告板实现一行不删，由 `ENEMY_BULLET_BILLBOARD=false` 与单发 `projectile_config["billboard"]` 切换；图标核心由「= 判定球直径」改为 ×0.70（语义降级为「所见小于所中」，判定球不动）。新增三条缺省哨兵（缺省必须 3D / 弹体可见 / 图标不可见），`verify_crosshair_billboard` 31→37 samples 通过，真机对照 `outputs/bullet_presentation_20261110/compare_3d_vs_billboard70.png`。遗留：公告板「看着大」主因是外晕 1.67 倍核心与不足 1px 的描边，不是尺寸倍率。
 
 - [南墙收镜与鼠标前瞻交接稳定性修复](2026-11-10_camera_wall_stability.md)：退出20cm滞回、恢复期保持南向约束；轻量Owner37项/Forward+窗口鼠标50项与热键通过；完整关卡原位人工手感未验，整体partial。
 
 - [远征关卡牌居中红锁、后排放大与主线资产补记](2026-11-10_centered_expedition_locks.md)：红锁居中1.30倍，后排两牌0.78→0.95且前排1.00不变；锁定文字让位、解锁恢复。稀土key/台座完整登记，补UI/台座内嵌表现和高级箱复用说明；三项隔离导航/Forward+双状态/真实输入回归exit0，资产门禁新增问题0，旧红项保留。
+
+- [死亡归航的绿苔台词支持点击/空格快速过](2026-11-10_rescue_dialogue_advance.md)：业主「死亡回到基地后，绿苔的对话也要能点击快速过」。这段台词由 `Base99Rescue3D` 协程铺开、不走时间轴，改前导演无载体 ⇒ 左键不推进还漏给开火、Space 被 `_active.is_empty()` 挡掉。接法：救援节点入 `rescue_cutscene_3d` 组并公开 `can_advance_rescue_line()/advance_rescue_line()`；`NpcCharacter3D` 加 `is_scripted_line_progressable()/advance_scripted_line()` 窄接口；导演按组发现并让 Space/左键共用同一入口、同帧去重。语义仍是先全显再收句，不跳句、不跳过整段、不提前起身。`verify_base99_rescue` 新增 R17（真实鼠标与键盘事件、点击须被底栏认领、推进只前进一句、姿态与输入锁不变、结束态反向对照）；正向 `BASE99_RESCUE_OK` exit 0 且零错误，反向对照 exit 1 精准红 4 条，对照开关已删除。
+
+- [四孔钥匙嵌件与对白两段推进](2026-11-10_key_inset_and_dialogue_advance.md)：业主两条改造。①撤掉独立立式台座，改做 `PRP-BASE99-MAIN-STORY-KEY-INSERT` 四孔斜插嵌件，嵌在主门下方低柜台面 (5,1.38,-3.77)，2.28×0.58×0.24 m、孔距0.46 m、孔轴20°、`SocketGlow_0..3` 四槽灯，原台柜 GLB/TSCN/碰撞零改动；②空格与鼠标左键两段推进（第一下全显、第二下下一句），实体屏障/事务/Boss真实6.4秒激活不可跳过、不改JSON时长。表演专项52项、3.3原生Forward+ 27项、空格44/鼠标51/恢复79/底栏21/气泡81/旧时间轴113均exit 0；账本新增1行（主表1024、3D-设施65、日志v0.1.84/85），其他资产与分页摘要逐项断言不变。未做纯新档人工全关贯通；旧Boss三红、文档14断链、资产全局漂移与UID/ObjectDB告警保留。
 
 - [主线3.1—3.3制作与最终证据汇总](2026-11-10_main_story_031_033.md)：03→绿苔四钥匙说明→数据库Boss坡道步行/对白/真实激活→高级箱永久稀土key→8秒自动撤离→基地实体交接安装→1/4及公馆解锁。progress/navigation、boss_gate 20、narrative基地328/Boss320、performance43、integration98、031视觉34/032视觉43、沿用033最新polished27及timeline复跑113均exit0；capture已支持031/032/033。章节真渲染fixture与headless业务集成不等于纯新档人工全关贯通；expected注入与非预期错误分列。旧Boss综合三红、文档14断链、资产漂移与UID/ObjectDB告警未闭环，不署整体全通过；后三Boss与主塔最终战未实现。
 

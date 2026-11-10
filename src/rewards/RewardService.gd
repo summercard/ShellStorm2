@@ -199,7 +199,15 @@ static func _monster_spec_for(request: Dictionary, context: Dictionary) -> Dicti
 		var level_specs := request.get("monster_drop_specs", {}) as Dictionary
 		if level_specs.has(monster_id):
 			spec = (level_specs[monster_id] as Dictionary).duplicate(true)
-		elif bool(request.get("monster_drop_full_coverage", false)):
+		elif (
+			bool(request.get("monster_drop_full_coverage", false))
+			# 强化怪例外（`variant_legacy_fallback`）：远征01 小怪只掉金币，
+			# 但强化怪「不变」⇒ 继续走通用公式（物品 + 25% 出枪）。
+			and not (
+				bool(request.get("monster_drop_variant_legacy", false))
+				and MonsterVariants.is_variant(monster_id)
+			)
+		):
 			# 本表是全量清单（远征03）：**没写就是不掉**，绝不回退通用公式。
 			# 通用公式会给普通怪 16% 装备 + 34% 备弹，而《挺进地牢》一层普通怪
 			# 只掉铸币 —— 回退等于把整关经济换回另一套规则，而且是静默的。

@@ -344,6 +344,7 @@ core_scenes=(
   verify_expedition_fate_surplus
   verify_fate_element_vfx
   verify_finite_ammo_flow
+  verify_shotgun_shell_ammo_flow
   verify_guaranteed_loadout_ammo_flow
   verify_avatar_return_persistence_flow
   verify_tactical_inventory_minimap_flow

@@ -25,7 +25,10 @@ static func compile(level_id: String, table: Dictionary) -> Dictionary:
 		errors.append(_err("MONSTER_DROP_TABLE_ROWS_NOT_ARRAY", "monster_drop_table.rows", "rows 必须是数组"))
 		return _report({}, errors, 0)
 	var rows := rows_value as Array
-	if rows.is_empty():
+	# 空表仅在「完整清单」模式（legacy_fallback=false）下合法：它的语义是
+	# 「本关普通怪一律不掉物品」（远征01 2026-11-10：小怪只掉金币）。
+	# 旧语义（legacy_fallback=true）下空表仍是错误 —— 那等于一张没登记任何怪的废表。
+	if rows.is_empty() and bool(table.get("legacy_fallback", true)):
 		errors.append(_err("MONSTER_DROP_TABLE_ROWS_EMPTY", "monster_drop_table.rows", "rows 不得为空"))
 		return _report({}, errors, 0)
 
@@ -78,9 +81,13 @@ static func compile(level_id: String, table: Dictionary) -> Dictionary:
 		var compiled := _compile_monster(level_id, monster_id, grouped[monster_id] as Array, errors, empty_chance)
 		if not compiled.is_empty():
 			specs[monster_id] = compiled
+	# 强化怪回退开关（2026-11-10）：仅在 legacy_fallback=false 时有意义。
+	# true ⇒ 强化怪（`*_strong`）**不吃**「未登记即不掉」，仍走通用公式
+	# （含 25% 出枪通道）。默认 false ⇒ 远征03 等既有完整清单逐字不变。
+	var variant_legacy := bool(table.get("variant_legacy_fallback", false))
 	if not errors.is_empty():
-		return _report({}, errors, rows.size(), legacy_fallback)
-	return _report(specs, errors, rows.size(), legacy_fallback)
+		return _report({}, errors, rows.size(), legacy_fallback, variant_legacy)
+	return _report(specs, errors, rows.size(), legacy_fallback, variant_legacy)
 
 
 static func spec_for(compiled: Dictionary, monster_id: String) -> Dictionary:
@@ -244,7 +251,8 @@ static func _parse_quantity(raw: Variant, path: String, errors: Array[Dictionary
 
 
 static func _report(
-	specs: Dictionary, errors: Array[Dictionary], row_count: int, legacy_fallback: bool = true
+	specs: Dictionary, errors: Array[Dictionary], row_count: int, legacy_fallback: bool = true,
+	variant_legacy: bool = false
 ) -> Dictionary:
 	return {
 		"ok": errors.is_empty(),
@@ -254,6 +262,8 @@ static func _report(
 		"monster_count": specs.size(),
 		# `full_coverage = true` ⇒ 调用方**不得**把未列出的普通怪回退到通用公式。
 		"full_coverage": not legacy_fallback,
+		# `variant_legacy = true` ⇒ 上条对强化怪例外：强化怪仍走通用公式。
+		"variant_legacy": variant_legacy,
 	}
 
 

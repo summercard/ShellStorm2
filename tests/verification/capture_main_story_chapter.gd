@@ -208,7 +208,7 @@ func _setup_boss(player: Node3D) -> void:
 func _bark_text(actor: Node3D) -> String:
 	if not is_instance_valid(actor): return ""
 	for bark in actor.find_children("*", "CharacterBark3D", true, false):
-		if bark.is_speaking(): return bark.get_current_text()
+		if DialogueUI.is_active(): return DialogueUI.current_text()
 	return ""
 
 func _save_frame(label: String, player: Node3D) -> void:

@@ -20,10 +20,15 @@ extends Node3D
 ##
 ## 探针不判手感，只判「有没有解」。
 
-## 玩家参数（与 Player3D 同源，改那边要同步这里）
-const PLAYER_SPEED := 5.7       ## Player3D.SPEED（2026-11-09 由 4.5 上调 1.2）
+## 玩家参数（**直接引用生产常量**，不再抄一份裸数）
+## 2026-11-10：原先这里抄死 `5.7`，每次调移速都要手工同步、忘了就让"可躲性"结论静默失准。
+## 现在写 `Player3D.SPEED` / `Player3D.DASH_DURATION`，改 PACE_SCALE 时探针自动跟随。
+const PLAYER_SPEED := Player3D.SPEED
 const REACTION_SEC := 0.25      ## 人类视觉反应下限
-const ROLL_DURATION := 0.204    ## Player3D.DASH_DURATION
+const ROLL_DURATION := Player3D.DASH_DURATION
+## 敌弹速度的全局节奏系数：与 `Enemy3D._fire_projectile` 出生点那一乘**同一口径**。
+## 漏这一条会让探针按"原速弹"算可躲性，而实际游戏里的弹已经慢了 15% ⇒ 结论偏保守。
+const PROJECTILE_PACE := GameDesignConfig.PACE_SCALE
 
 ## 子弹自身半径 + 玩家半径：单发直射时几何宽度为 0，实际判定面约 0.52m
 const PROJECTILE_HIT_HALF_WIDTH := 0.52
@@ -73,6 +78,9 @@ func _analyze(kind: String) -> void:
 	var spec: Dictionary = profile.get("volley", {}) as Dictionary
 	if spec.has("speed"):
 		speed = float(spec["speed"])
+	# 生产链在出生点统一乘全局节奏系数（`Enemy3D._fire_projectile`），探针必须同口径，
+	# 否则算出来的是"原速弹"，可躲性结论会系统性偏保守。
+	speed *= PROJECTILE_PACE
 	if distance < MELEE_DISTANCE:
 		print("%-24s %-6.1f %-6.1f %-6s %-7s %-8s %s" % [kind, speed, distance, "—", "—", "近身型", "跳过"])
 		return

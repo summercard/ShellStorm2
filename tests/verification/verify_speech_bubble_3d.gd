@@ -29,6 +29,7 @@ func _ready() -> void:
 	await _check_follows_parent_motion(stage)
 	_check_catalog()
 	_check_character_bark(stage)
+	_check_indicator(stage)
 	_check_light_switch_wiring()
 	_finish()
 
@@ -361,6 +362,48 @@ func _check_light_switch_wiring() -> void:
 		"Dungeon3D 未把开灯接到玩家说话上")
 	_expect(dungeon_source.contains("CharacterBark3D.attach_to"),
 		"Dungeon3D 未把说话能力挂到玩家身上")
+
+
+## 说话示意框（业主 2026-11-10：头顶只做「正在说话」的示意，文字统一走底栏）。
+##
+## 这组断言守三件事：**真的小**（不再糊住角色）、**真的没有字**（文字不能有第二份）、
+## **三点真的在动**（不是画一个静态胶囊冒充）。
+func _check_indicator(stage: Node3D) -> void:
+	var bubble := _make_bubble(stage, "Indicator")
+	bubble.set_process(false)
+	bubble.say_indicator(5.0)
+	_expect(bubble.is_indicator_only(), "say_indicator() 后没有进入示意态")
+	_expect(bubble.get_bubble_text().is_empty(), "示意框里不该有文字，实际『%s』" % bubble.get_bubble_text())
+	var snapshot := bubble.get_indicator_snapshot()
+	_expect(int(snapshot.get("dot_count", 0)) == 3, "示意框应有 3 个点，实际 %d" % int(snapshot.get("dot_count", 0)))
+	_expect(not bool(snapshot.get("label_visible", true)), "示意态文字节点仍可见")
+	_expect(int(snapshot.get("text_chars", -1)) == 0, "示意态仍保留文本长度")
+	_expect(bool(snapshot.get("has_tail", false)), "示意框缺少指向角色的小尾巴")
+	# 关键：真的比旧文字气泡小。旧的两行气泡约 4.7m 宽，会盖住 1.2m 高的绿苔。
+	var width := bubble.get_bubble_width_m()
+	_expect(absf(width - float(snapshot.get("panel_width_m", 0.0))) < 0.05, "示意框宽度与快照不符")
+	_expect(width > 0.5 and width < 1.3, "示意框宽 %.2fm，不在 0.5~1.3m 的\"小框\"区间" % width)
+	_expect(absf(float(snapshot.get("panel_height_m", 0.0)) - 0.46) < 0.02, "示意框高度不是 0.46m")
+	# 三点必须相位错开：同一时刻三个点的高度不能完全一样（否则是整体上下平移）。
+	bubble.call("_advance_indicator", 0.12)
+	var dots := bubble.get("_dots") as Array
+	_expect(dots.size() == 3, "示意点节点数不是 3")
+	if dots.size() == 3:
+		var y0 := (dots[0] as Node3D).position.y
+		var y1 := (dots[1] as Node3D).position.y
+		var y2 := (dots[2] as Node3D).position.y
+		var spread := maxf(y0, maxf(y1, y2)) - minf(y0, minf(y1, y2))
+		_expect(spread > 0.004, "三点高度差 %.4f，看起来是一起平移而不是依次跳动" % spread)
+		for dot: Node3D in dots:
+			_expect(dot.position.y >= -0.0001 and dot.position.y <= 0.031, "点跳出了 0~0.03m 的跳动区间")
+	# 切回文字形态：Label 要恢复可见、文本要回来（自言自语仍走这条路）。
+	bubble.say("灯亮了。", 5.0)
+	_expect(not bubble.is_indicator_only(), "say() 之后仍停在示意态")
+	_expect(bubble.get_bubble_text() == "灯亮了。", "切回文字气泡后文本不对：『%s』" % bubble.get_bubble_text())
+	var label := bubble.get_node_or_null("Text") as Label3D
+	_expect(label != null and label.visible, "切回文字气泡后 Label3D 仍不可见")
+	bubble.hide_bubble()
+	bubble.queue_free()
 
 
 func _finish() -> void:

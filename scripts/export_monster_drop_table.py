@@ -123,6 +123,16 @@ def main() -> int:
 
     grouped = read_rows()
     plans = discover_level_plans()
+    # 2026-11-10：CSV 里一行都没有、但 plan 的 monster_drop_table 声明了本 CSV 为来源的关卡，
+    # 视为「作者表明确清空」（rows=[]）——例如远征01：普通怪只掉金币，CSV 不再有它的行。
+    # 否则 CSV 删光该关卡后 exporter 根本看不到它，plan 里的旧 rows 会永远漂移而不被发现。
+    for plan_level_id, plan_path in plans.items():
+        if plan_level_id in grouped:
+            continue
+        plan_data = json.loads(plan_path.read_text(encoding="utf-8-sig"))
+        plan_table = plan_data.get("monster_drop_table")
+        if isinstance(plan_table, dict) and plan_table.get("source_csv") == SOURCE_PATH:
+            grouped[plan_level_id] = []
     failures: list[str] = []
     changed = 0
     for level_id, rows in grouped.items():

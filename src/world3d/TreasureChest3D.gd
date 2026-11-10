@@ -129,6 +129,25 @@ const LOOT_LIGHT_RANGE := 3.0
 ## 高于 0.6 又够不到地面 —— 光斑会缩到只剩箱子脚下一点点。
 const LOOT_LIGHT_LIFT := 0.45
 
+## 宝箱沿用主页面的同一套「角色聚光灯」参数，不另造一套光效。
+## 普通箱用鲜亮黄色，高级箱用鲜亮酒红色；颜色只改变光，不改变收灯曲线。
+const CHEST_SPOTLIGHT_HEIGHT_M := 5.2
+const CHEST_SPOTLIGHT_ENERGY := 7.0
+const CHEST_SPOTLIGHT_RANGE_M := 8.0
+const CHEST_SPOTLIGHT_ANGLE := 34.0
+const CHEST_SPOTLIGHT_BEAM_BOTTOM_RADIUS_M := 1.45
+const CHEST_SPOTLIGHT_BEAM_APEX_RADIUS_M := 0.09
+const CHEST_SPOTLIGHT_BEAM_STRENGTH := 0.230
+const CHEST_SPOTLIGHT_POOL_RADIUS_M := 1.75
+const CHEST_SPOTLIGHT_POOL_ALPHA := 0.96
+const CHEST_SPOTLIGHT_DISMISS_DURATION_S := 0.30
+const CHEST_SPOTLIGHT_DISMISS_END_SCALE := 0.04
+const NORMAL_CHEST_SPOTLIGHT_COLOR := Color(1.0, 0.78, 0.08)
+const ADVANCED_CHEST_SPOTLIGHT_COLOR := Color(0.72, 0.08, 0.16)
+
+var _chest_spotlight_stage: Node3D
+var _chest_spotlight_dismiss_tween: Tween
+
 const NORMAL_VISUAL_SCENE: PackedScene = preload(
 	"res://assets/art/items_weapons/props/reward_chests/runtime/prp_reward_chest_normal_root_top3d.tscn"
 )
@@ -277,24 +296,16 @@ func get_interaction_candidate(_player: Player3D) -> Dictionary:
 		"position": global_position,
 		# 60 > 家具的 40：宝箱与家具挨着时优先开箱（玩家一定是冲着箱子来的）。
 		"priority": 60,
+		# prompt 仅作为交互控制器内部动作词来源；可见反馈统一由圆点承担。
 		"prompt": _prompt_text(),
 	}
 
 
-## 聚焦时把头顶提示牌**让位**给交互圆点。
-##
-## 业主 2026-11-09：「宝箱上面的『E 开启宝箱』和靠近后的白字重复了」。
-## 那是同一句文案的两个载体：箱子头顶的 `Label3D`，与交互圆点下方的功能词
-## （`InteractionDot3D.extract_action_verb()` 从本类的 `prompt` 抽出来的）。
-## 处理成**让位**而不是删掉头顶牌：没靠近时圆点还没聚焦、功能词不显示，
-## 玩家仍需要远远就看得出「那是个能开的箱子」；一旦聚焦，近处交给圆点，
-## 远处交给牌子，同一时刻场上只有一句。
-##
-## 判定条件是「有没有被聚焦」而不是「距离多少」：聚焦由交互控制器统一算，
-## 它和圆点功能词的显示条件**本来就是同一个**（`provider == _focused_provider`）。
-## 本类自己再算一条距离阈值，两条口径迟早漂开 —— 会出现「牌没了、白字也没出来」的空档。
-func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
-	_set_prompt_shown(not focused)
+## 宝箱与椅子、灯、可搜索组件统一：只显示交互圆点，不显示头顶文字。
+## `prompt` 仍保留在候选协议里，供交互控制器提取动作词；它不是世界空间文字牌。
+func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
+	# 保留协议入口，避免交互控制器为宝箱分叉。
+	pass
 
 
 ## 提示牌的显示/收起。开箱后恒为收起：`_opened` 一旦置真，之后任何一次
@@ -490,6 +501,7 @@ func _fire_burst() -> void:
 	if _open_phase != OpenPhase.CHARGING:
 		return
 	_open_phase = OpenPhase.BURSTING
+	_dismiss_chest_spotlight()
 	# 先掐掉蓄力那条 tween：它还在把盖子和 scale 拉回"压住"的终点，
 	# 与下面几条抢同一组属性（2026-11-05 实拍实测：不掐的话砰那一帧盖子只挪了 2.5°）。
 	if _charge_tween != null and _charge_tween.is_valid():
@@ -624,6 +636,7 @@ func commit_mimic_reveal() -> void:
 	if _opened:
 		return
 	_opened = true
+	_dismiss_chest_spotlight()
 	# 拟态不走普通箱的「抖动→蓄力→砰」序列（它自己的抖动就是那条序列的对位），
 	# 但阶段仍要落到终态，否则快照会报「已开但还停在抖动段」。
 	_open_phase = OpenPhase.OPENED
@@ -787,14 +800,119 @@ func _build_visual() -> void:
 	_prompt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_prompt.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_prompt.no_depth_test = true
+	# 保留隐藏 Label3D 作为旧探针/动作词协议载体；画面只显示交互圆点。
+	_prompt.visible = false
 	add_child(_prompt)
+	_build_chest_spotlight()
 
 
-## 宝箱自带的地面光。**故意不按品质换色**：品质已经由箱边 emission 与箱体模型的
-## 普通/高级两档回答，再给光染色会让浅灰救援箱变回一只彩箱 —— 业主 2026-11-08
-## 专门要求过它"是浅灰色的"。平涂箱是唯一例外：身板色就是它的全部外观，
-## 光沿用身板色提亮才不会出现"灰箱配一团黄光"。
-##
+## 复用主页面的聚光灯视觉：光柱、地面光斑、真实主光三件套。
+## 这里只换颜色和宿主，不新做另一种光效；开箱时沿用主页面同一条 0.30s 收灯曲线。
+func _build_chest_spotlight() -> void:
+	if _chest_spotlight_stage != null and is_instance_valid(_chest_spotlight_stage):
+		return
+	_chest_spotlight_stage = Node3D.new()
+	_chest_spotlight_stage.name = "ChestSpotlightStage"
+	_chest_spotlight_stage.set_meta("reused_main_entry_spotlight", true)
+	add_child(_chest_spotlight_stage)
+	var color := ADVANCED_CHEST_SPOTLIGHT_COLOR if chest_tier == "advanced" or quality in ["rare", "epic"] else NORMAL_CHEST_SPOTLIGHT_COLOR
+	var beam_mesh := CylinderMesh.new()
+	beam_mesh.top_radius = CHEST_SPOTLIGHT_BEAM_APEX_RADIUS_M
+	beam_mesh.bottom_radius = CHEST_SPOTLIGHT_BEAM_BOTTOM_RADIUS_M
+	beam_mesh.height = CHEST_SPOTLIGHT_HEIGHT_M
+	beam_mesh.radial_segments = 48
+	beam_mesh.cap_top = false
+	beam_mesh.cap_bottom = false
+	var beam := MeshInstance3D.new()
+	beam.name = "ChestSpotlightBeam"
+	beam.mesh = beam_mesh
+	beam.material_override = _make_chest_spotlight_material(color)
+	beam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	beam.position.y = CHEST_SPOTLIGHT_HEIGHT_M * 0.5
+	_chest_spotlight_stage.add_child(beam)
+	var pool_mesh := CylinderMesh.new()
+	pool_mesh.top_radius = CHEST_SPOTLIGHT_POOL_RADIUS_M * 0.92
+	pool_mesh.bottom_radius = CHEST_SPOTLIGHT_POOL_RADIUS_M
+	pool_mesh.height = 0.018
+	pool_mesh.radial_segments = 32
+	var pool_material := StandardMaterial3D.new()
+	pool_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	pool_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	pool_material.albedo_color = Color(color.r, color.g, color.b, CHEST_SPOTLIGHT_POOL_ALPHA)
+	pool_material.emission_enabled = true
+	pool_material.emission = color
+	pool_material.emission_energy_multiplier = 0.72
+	pool_mesh.material = pool_material
+	var pool := MeshInstance3D.new()
+	pool.name = "ChestSpotlightPool"
+	pool.mesh = pool_mesh
+	pool.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	pool.position.y = 0.02
+	_chest_spotlight_stage.add_child(pool)
+	var spot := SpotLight3D.new()
+	spot.name = "ChestSpotlight"
+	spot.light_color = color
+	spot.light_energy = CHEST_SPOTLIGHT_ENERGY
+	spot.spot_range = CHEST_SPOTLIGHT_RANGE_M
+	spot.spot_angle = CHEST_SPOTLIGHT_ANGLE
+	spot.spot_angle_attenuation = 1.4
+	spot.shadow_enabled = false
+	spot.position.y = CHEST_SPOTLIGHT_HEIGHT_M
+	spot.rotation_degrees = Vector3(-90.0, 0.0, 0.0)
+	_chest_spotlight_stage.add_child(spot)
+	var key_light := OmniLight3D.new()
+	key_light.name = "ChestSpotlightKeyLight"
+	key_light.light_color = color
+	key_light.light_energy = 2.0
+	key_light.omni_range = 2.6
+	key_light.shadow_enabled = false
+	_chest_spotlight_stage.add_child(key_light)
+	key_light.position = Vector3(0.0, 0.84, 0.72)
+
+func _make_chest_spotlight_material(color: Color) -> ShaderMaterial:
+	var shader := Shader.new()
+	shader.code = "shader_type spatial; render_mode blend_add, unshaded, cull_disabled, depth_draw_never, shadows_disabled; uniform vec4 beam_color : source_color; uniform float beam_strength = 0.23; varying float h; void vertex(){h=clamp(VERTEX.y/5.2+0.5,0.0,1.0);} void fragment(){float v=smoothstep(0.0,0.78,h)*(1.0-smoothstep(0.82,1.0,h)); float c=pow(clamp(abs(dot(normalize(NORMAL),normalize(VIEW))),0.0,1.0),1.6); ALBEDO=beam_color.rgb; ALPHA=clamp(v*c*beam_strength,0.0,1.0);}"
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	material.set_shader_parameter("beam_color", color)
+	material.set_shader_parameter("beam_strength", CHEST_SPOTLIGHT_BEAM_STRENGTH)
+	return material
+
+func _dismiss_chest_spotlight() -> void:
+	if _chest_spotlight_stage == null or not is_instance_valid(_chest_spotlight_stage):
+		return
+	if _chest_spotlight_dismiss_tween != null and _chest_spotlight_dismiss_tween.is_valid():
+		_chest_spotlight_dismiss_tween.kill()
+	var stage := _chest_spotlight_stage
+	_chest_spotlight_dismiss_tween = create_tween()
+	_chest_spotlight_dismiss_tween.tween_method(func(t: float) -> void:
+		if not is_instance_valid(stage):
+			return
+		var shrink := lerpf(CHEST_SPOTLIGHT_DISMISS_END_SCALE, 1.0, t)
+		stage.scale = Vector3(shrink, 1.0, shrink)
+		var key := stage.get_node_or_null("ChestSpotlightKeyLight") as OmniLight3D
+		if key != null:
+			key.light_energy = CHEST_SPOTLIGHT_ENERGY * t
+		var beam := stage.get_node_or_null("ChestSpotlightBeam") as MeshInstance3D
+		if beam != null:
+			var mat := beam.material_override as ShaderMaterial
+			if mat != null:
+				mat.set_shader_parameter("beam_strength", CHEST_SPOTLIGHT_BEAM_STRENGTH * t)
+		var pool := stage.get_node_or_null("ChestSpotlightPool") as MeshInstance3D
+		if pool != null:
+			var pool_mat := pool.get_active_material(0) as StandardMaterial3D
+			if pool_mat != null:
+				pool_mat.albedo_color.a = CHEST_SPOTLIGHT_POOL_ALPHA * t
+	, 1.0, 0.0, CHEST_SPOTLIGHT_DISMISS_DURATION_S)
+	_chest_spotlight_dismiss_tween.tween_callback(func() -> void:
+		if is_instance_valid(stage):
+			stage.queue_free()
+		if _chest_spotlight_stage == stage:
+			_chest_spotlight_stage = null
+	)
+
+
+## 宝箱自带的地面光。**故意不按品质换色**：它负责近地照明；聚光灯颜色才区分普通/高级。
 ## 幂等：`_build_visual()` 在探针里可能被重复走到（读档重建），重复建灯会让光叠一倍。
 func _build_loot_light() -> void:
 	if _loot_light != null and is_instance_valid(_loot_light):

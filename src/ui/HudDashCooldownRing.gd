@@ -18,15 +18,24 @@ extends Control
 ## 这里改画**两枚折角**（`»`）：与棱镜规范 §3.3 的下折角同一母题，笔画宽度按控件尺寸
 ## 现算，任意尺寸下都干净。
 ##
+## ## 位置（2026-11-10 第二轮修订）
+## 第一版落在左上角角色状态块里（血条下方），业主原话：「翻滚提示放在那个位置也太难看见了，
+## 放到左下角来」。现在锚**屏幕左下角**，直径按业主标注的红框放大到 60 设计 px
+## （×0.8 ⇒ 48 canvas px，原 22.4 ⇒ 是原来的 2.14 倍）。
+##
 ## ## 读数方向与换弹环 / 倒计时环一致
 ## 起点 12 点、顺时针。但本环填的是**已恢复量**（换弹环同口径），不是剩余量 ——
 ## 冷却越接近结束，弧越长；满圈 = 可以翻滚。与倒计时环（画剩余量）刻意相反：
 ## 倒计时的直觉是"这一圈在缩短"，而冷却的直觉是"这一圈在充满"。
 
+## 剪影形状来自真实角色翻滚帧，见该文件头。用 `preload` 而不是 `class_name`：
+## 后者依赖全局类缓存，干净克隆/纯命令行下解析不到。
+const HUD_DASH_GLYPH_SCRIPT := preload("res://src/ui/HudDashGlyph.gd")
+
 ## 环带线宽 ÷ 外半径。与 `HudReloadRing.THICKNESS_RATIO` 同值 —— 同为"操作反馈环"。
 const THICKNESS_RATIO := 0.13
-## 分段数。外径 25 canvas px 级，48 段已足够平滑，也不至于每帧生成过多顶点。
-const SEGMENTS := 48
+## 分段数。外径 48 canvas px 级，64 段足够平滑。
+const SEGMENTS := 64
 ## 屏幕空间起点：12 点方向（屏幕 +Y 向下 ⇒ 12 点是 −90°；顺时针 = 角度递增）。
 const START_ANGLE := -PI * 0.5
 ## 底轨。弱白，只表明"这里有一圈"。
@@ -35,21 +44,20 @@ const TRACK_COLOR := Color(1.0, 1.0, 1.0, 0.13)
 const FILL_COLOR := Color(0.310, 0.659, 1.0, 0.72)
 ## 就绪：近白（`UIPalette.PRISM_TEXT`）。蓝→白的切换本身就是"可用"的信号，
 ## 不需要文字，也不需要第二个图形。
-## alpha 压到 0.78：这是个**常驻**控件，满圈常亮会把视线从血条上拉走。
-const READY_COLOR := Color(0.949, 0.965, 0.984, 0.78)
+const READY_COLOR := Color(0.949, 0.965, 0.984, 0.88)
 const GLOW_COLOR := Color(0.200, 0.520, 0.900, 0.30)
 const GLOW_WIDTH_RATIO := 1.7
 ## 就绪瞬间的一次外环提亮时长（秒）。是"反馈"不是"入场动画"，所以不做缩放与回弹。
 const READY_FLASH_SEC := 0.24
-## 环心图形尺寸（÷ 外半径）。
-## 2026-11-10 实拍定了三版：① 0.44 的两枚折角在 22 px 环里糊成一个桃心斑；
-## ② 1.02 的两枚折角又贴死在环带上。环内净空只有约 14 px（22.4 外径 − 两侧环带），
-## 在里面塞两枚折角不可能干净 —— 现在改成**单枚空心飞镖**（`▶` 的线框版），
-## 与棱镜的"线框语言"同源，且在 14 px 里仍是可辨的空心三角。
-const GLYPH_WIDTH_RATIO := 0.56
-const GLYPH_HEIGHT_RATIO := 0.66
-## 飞镖笔画宽 ÷ 外半径。
-const GLYPH_STROKE_RATIO := 0.115
+## 环心兔子剪影：占**环直径**的比例。
+## 上限由净空决定：环带内缘半径 = 0.5 × (1 − 0.13) = 0.435 直径，
+## 剪影按最长边铺满 ⇒ 半宽最多 0.435 直径才能不碰环带，留 8% 余量取 0.66。
+const GLYPH_FIT_RATIO := 0.66
+## 冷却中剪影的亮度。业主原话是「**白色**剪影」，所以两种状态都白 ——
+## 状态色只由外圈那道弧承担（天蓝 = 冷却中 / 近白 = 就绪）。
+## 冷却时压到 0.58 让"还不能翻滚"读得出来，但形状本身仍是白的。
+const GLYPH_COOL_COLOR := Color(0.949, 0.965, 0.984, 0.58)
+const GLYPH_READY_COLOR := Color(0.949, 0.965, 0.984, 0.94)
 
 ## 冷却比例：1 = 刚翻滚完，0 = 已就绪。由 `Player3D.dash_cooldown_changed` 推入。
 var cooldown_ratio := 0.0:
@@ -142,23 +150,37 @@ func _draw() -> void:
 			Color(READY_COLOR, 0.45 * flash),
 			thickness * GLOW_WIDTH_RATIO * 1.7, true
 		)
-	_draw_dash_glyph(center, outer_radius, Color(ring_color, 0.92 if is_ready() else 0.70))
+	# 兔子剪影用自己那档色：冷却中是天蓝系（与弧同族、压暗，不抢弧的读数），
+	# 就绪转近白。不直接用 `ring_color` —— 弧的 alpha 是给 1.46~3 px 细线调的，
+	# 铺到一整块剪影上会显得过淡。
+	_draw_dash_glyph(
+		center, outer_radius, GLYPH_READY_COLOR if is_ready() else GLYPH_COOL_COLOR
+	)
 
 
-## 环心图形：单枚右向空心飞镖（`▶` 的线框版）。
-## 几何全部按"外半径的比例"解出，且**以环心对称** —— 首版按折角拼，两枚的包围盒
-## 中心落在 −1.75 px，实拍里明显偏左。这里三点的平均值恒为 (0, 0)，不可能偏心。
+## 环心兔子剪影。形状来自真实角色翻滚帧（见 `HudDashGlyph.gd` 的文件头），
+## 不是手画图标；这里是纯多边形填充，不用位图。
+##
+## ## 为什么要「填充 + 再描一圈抗锯齿边」
+## `draw_colored_polygon` 走的是**硬边光栅化**，没有 `antialiased` 参数 ——
+## 48 px 的环里贴一块 30 px 的剪影，边缘会是一排明显的台阶（实拍确认）。
+## 在填充之后再沿同一条轮廓 `draw_polyline(..., antialiased = true)` 补一圈 1 px 的
+## 同色描边，台阶就被半透明像素抹平了；成本是多一遍折线，形状与颜色完全一致。
 func _draw_dash_glyph(center: Vector2, outer_radius: float, color: Color) -> void:
-	var half_w := outer_radius * GLYPH_WIDTH_RATIO * 0.5
-	var half_h := outer_radius * GLYPH_HEIGHT_RATIO * 0.5
-	if half_w <= 1.5 or half_h <= 1.5:
+	var glyph_span := outer_radius * 2.0 * GLYPH_FIT_RATIO
+	if glyph_span <= 3.0:
 		return
-	var stroke := maxf(1.2, outer_radius * GLYPH_STROKE_RATIO)
-	# 闭合三角形：左上 → 右尖 → 左下 → 左上。
-	var points := PackedVector2Array([
-		center + Vector2(-half_w, -half_h),
-		center + Vector2(half_w, 0.0),
-		center + Vector2(-half_w, half_h),
-		center + Vector2(-half_w, -half_h),
-	])
-	draw_polyline(points, color, stroke, true)
+	for polygon in HUD_DASH_GLYPH_SCRIPT.DASH_GLYPH_POLYGONS:
+		var source := polygon as PackedVector2Array
+		if source.size() < 3:
+			continue
+		# 描边要闭合，所以多留一个点放回首点。
+		var points := PackedVector2Array()
+		points.resize(source.size() + 1)
+		for index in range(source.size()):
+			points[index] = center + source[index] * glyph_span
+		points[source.size()] = points[0]
+		# 凹多边形必须走 `draw_colored_polygon`（内部三角剖分）；
+		# `draw_polyline` 只能画线框，填不出剪影。
+		draw_colored_polygon(points, color)
+		draw_polyline(points, color, 1.0, true)

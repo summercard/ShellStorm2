@@ -57,6 +57,7 @@ func _ready() -> void:
 	_adapter.bind(get_tree())
 	get_tree().node_added.connect(_on_node_added)
 	DialogueUI.set_advance_input_handler(Callable(self, "_advance_bottom_dialogue"))
+	DialogueUI.set_mouse_advance_handlers(Callable(self, "can_advance_mouse_dialogue"), Callable(self, "advance_mouse_dialogue"))
 	_arm_catalog_triggers()
 
 	# 复位存档 = 新档：本局内存态（once / 标记）必须归零。BaseManager 是 autoload 且
@@ -368,7 +369,17 @@ func _input(event: InputEvent) -> void:
 	var key := event as InputEventKey
 	if key == null or (key.keycode != KEY_SPACE and key.physical_keycode != KEY_SPACE):
 		return
-	if _active.is_empty() or get_tree().paused:
+	if get_tree().paused:
+		return
+	if _active.is_empty():
+		# 基地救援演出（死亡归航）不走时间轴，但空格要能推进它 ——
+		# 语义与剧情对白完全一致：先全显，已全显才收起这句去说下一句。
+		var rescue := _rescue_cutscene()
+		if rescue == null or not bool(rescue.call("can_advance_rescue_line")):
+			return
+		get_viewport().set_input_as_handled()
+		if key.pressed and not key.echo:
+			_advance_rescue_dialogue()
 		return
 	# 主线/对白优先于场景交互；等待实体期间也消费，但绝不缓存下一次推进。
 	get_viewport().set_input_as_handled()
@@ -376,15 +387,67 @@ func _input(event: InputEvent) -> void:
 		advance_dialogue()
 
 
+## 按组发现基地救援演出节点。没有在演时返回 null。
+##
+## 为什么导演要管它：那两句台词由 `Base99Rescue3D` 的协程铺开，不是时间轴 cue，
+## 所以导演手里没有载体；这里只借它的公开推进接口，不碰阶段、指针与落盘。
+func _rescue_cutscene() -> Node:
+	if not is_inside_tree():
+		return null
+	for node in get_tree().get_nodes_in_group("rescue_cutscene_3d"):
+		if node.has_method("can_advance_rescue_line") and node.has_method("advance_rescue_line"):
+			return node
+	return null
+
+
+## 推进救援台词。同一帧只认一次（空格与左键同帧按下不该直接跳过一整句）。
+func _advance_rescue_dialogue() -> bool:
+	var rescue := _rescue_cutscene()
+	if rescue == null or not bool(rescue.call("can_advance_rescue_line")):
+		return false
+	var frame := Engine.get_process_frames()
+	if frame == _space_press_frame:
+		return true
+	_space_press_frame = frame
+	return bool(rescue.call("advance_rescue_line"))
+
+
 func _advance_bottom_dialogue() -> bool:
-	if str(_dialogue_carrier.get("kind", "")) == "bubble" or not _adapter.is_dialogue_carrier_current(_dialogue_carrier):
-		return not _active.is_empty()
+	# 底栏现在也是**对话**的文字载体（2026-11-10），所以没有时间轴时
+	# 先看救援演出与自由交谈：那两条的“下一句”指针不在底栏手里。
+	if _active.is_empty():
+		if _advance_rescue_dialogue():
+			return true
+		if _adapter.free_dialogue_actor() != null:
+			return _adapter.advance_free_dialogue()
 	return advance_dialogue()
 
 
+func can_advance_mouse_dialogue() -> bool:
+	if not _active.is_empty():
+		return _advance_target >= 0 or _adapter.is_dialogue_carrier_current(_dialogue_carrier)
+	# 救援演出与自由交谈都靠底栏显示文字（2026-11-10），必须在
+	# “底栏只是系统字幕”之前判，否则左键会被漏给开火。
+	var rescue := _rescue_cutscene()
+	if rescue != null and bool(rescue.call("can_advance_rescue_line")):
+		return true
+	return _adapter.free_dialogue_actor() != null
+
+
+func advance_mouse_dialogue() -> bool:
+	if not _active.is_empty():
+		if _advance_target < 0 and not _adapter.is_dialogue_carrier_current(_dialogue_carrier):
+			return false
+		return advance_dialogue()
+	if _advance_rescue_dialogue():
+		return true
+	return _adapter.advance_free_dialogue()
+
+
 func advance_dialogue() -> bool:
-	if _active.is_empty() or get_tree().paused or _paused_dialogue_synced:
+	if _active.is_empty() or get_tree().paused:
 		return false
+	_sync_dialogue_pause(false)
 	if _advance_target >= 0:
 		return true
 	if _dialogue_cue.is_empty() or not _adapter.is_dialogue_carrier_current(_dialogue_carrier):
@@ -538,7 +601,7 @@ func _process(delta: float) -> void:
 			if not _active.is_empty():
 				_active["t"] = float(cue["at"])
 			return
-		if target_reached:
+		if target_reached or (_advance_target >= 0 and _waiting_for_flashlight):
 			return
 	_active["index"] = index
 	if now >= script.duration:

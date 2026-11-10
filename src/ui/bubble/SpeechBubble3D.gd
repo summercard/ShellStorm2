@@ -32,6 +32,29 @@ const FADE_SECONDS := 0.14
 ## 于是"头顶气泡"和"底栏对话"读起来是同一个语速（业主 2026-11-08：对话文字要打字机一样顺序出现）。
 const DEFAULT_CHARS_PER_SEC := 30.0
 
+## ── 说话示意框（业主 2026-11-10）────────────────────────────────────────
+##
+## 业主原话：「头顶对话框太挡角色了……只做成说话示意的样子，就是说话的时候固定
+## 跳出一个对话框的样子，有点点点的动画。但是真实文字在下方的原来系统对话的那个地方。」
+##
+## 所以本类有**两种互斥形态**，由调用方选，不靠猜：
+##   · `say()`           —— 文字气泡。**只留给自言自语**（开灯、拾取这类 bark），
+##                          业主明确「在电灯开关这类自言自语的时候需要保留」。
+##   · `say_indicator()` —— 示意框。**对话**用它：固定小尺寸 + 三点跳动，不显示文字，
+##                          文字由 `DialogueUI` 底栏承担。
+##
+## 尺寸固定、不随字数变化：它没有内容要排版。原来是 4.7m 宽的两行大字气泡，
+## 压在 1.2m 高的 NPC 头上等于糊住半个屏幕 —— 这就是业主说的"挡角色"。
+const INDICATOR_WIDTH_M := 0.86
+const INDICATOR_HEIGHT_M := 0.46
+const INDICATOR_CORNER_M := 0.13
+const INDICATOR_DOT_RADIUS_M := 0.050
+const INDICATOR_DOT_GAP_M := 0.145
+const INDICATOR_DOT_BOB_M := 0.030
+const INDICATOR_BOB_SPEED := 6.4
+const INDICATOR_TAIL_WIDTH_M := 0.18
+const INDICATOR_TAIL_HEIGHT_M := 0.10
+
 @export var bubble_scale := 1.0
 @export var hold_seconds := 3.4
 ## 打字机开关与速度。`chars_per_sec <= 0` 也等于关掉（一次性全出）。
@@ -74,6 +97,15 @@ var _sentence_id := 0
 ## 整句排版后的像素尺寸与每像素的世界尺寸，用于算垂直补偿。
 var _full_text_px := Vector2.ZERO
 var _layout_unit := 0.0055
+## 当前是否为示意模式（无文字）。`false` 时 `_label` 才是可见的。
+var _indicator_only := false
+var _indicator_time := 0.0
+var _indicator_root: Node3D
+var _dots: Array[MeshInstance3D] = []
+var _dot_materials: Array[StandardMaterial3D] = []
+var _tail: MeshInstance3D
+## 整体淡出期间三点也要跟着淡，否则会出现"框没了、点还在"。
+var _indicator_alpha := 1.0
 
 
 func _ready() -> void:
@@ -84,6 +116,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_face_camera()
 	if not _active:
+		return
+	# 示意模式没有打字机：三点一直在跳，停留到点就收起。
+	if _indicator_only:
+		_advance_indicator(delta)
+		_hold_left -= delta
+		if _hold_left <= 0.0:
+			hide_bubble()
 		return
 	# 打字机：边打边停住停留计时 —— 否则长句还没打完就开始倒计时，
 	# 玩家读到一半气泡自己消失。
@@ -145,8 +184,151 @@ func _apply_prefix() -> void:
 	_label.position = Vector3(0.0, shift_px * _layout_unit, 0.0)
 
 
+## ── 示意模式（对话专用）────────────────────────────────────────────────
+##
+## 只表达"这个角色正在说话"，不含任何文字。文字归 `DialogueUI` 底栏。
+## `hold < 0` 用 `hold_seconds`；调用方通常传这句的阅读时长，或传一个很大的值
+## 让下一句来顶掉（节拍/救援是自动接句，不需要自己数）。
+func say_indicator(hold := -1.0) -> void:
+	if _panel == null or _label == null:
+		_build_nodes()
+	_sentence_id += 1
+	_indicator_only = true
+	_typing = false
+	_typed_chars = 0.0
+	_full_text = ""
+	_total_chars = 0
+	_full_text_px = Vector2.ZERO
+	_label.text = ""
+	_label.visible = false
+	_ensure_indicator_nodes()
+	_indicator_root.visible = true
+	_relayout_indicator()
+	_indicator_time = 0.0
+	_advance_indicator(0.0)
+	_hold_left = hold if hold >= 0.0 else hold_seconds
+	if not _active:
+		_active = true
+		_play_pop_in()
+	else:
+		_kill_tween()
+		_apply_alpha(1.0)
+	set_visible_state(true, false)
+	bubble_shown.emit("")
+
+
+## 当前是不是示意框（没有文字）。验收与调用方用它区分两种形态。
+func is_indicator_only() -> bool:
+	return _indicator_only and _active
+
+
+## 示意框的三点/尾巴是否真的建出来了 —— 不是"节点存在"这种假绿判据。
+func get_indicator_snapshot() -> Dictionary:
+	return {
+		"active": _indicator_only and _active,
+		"dot_count": _dots.size(),
+		"dot_radius_m": INDICATOR_DOT_RADIUS_M,
+		"panel_width_m": INDICATOR_WIDTH_M,
+		"panel_height_m": INDICATOR_HEIGHT_M,
+		"has_tail": _tail != null,
+		"label_visible": _label != null and _label.visible,
+		"text_chars": _full_text.length(),
+	}
+
+
+## 三点跳动。三个点相位错开，保证任意时刻高度不同（否则看起来是一起上下平移）。
+func _advance_indicator(delta: float) -> void:
+	_indicator_time += delta
+	for index in _dots.size():
+		var phase := _indicator_time * INDICATOR_BOB_SPEED - float(index) * 0.72
+		var wave := sin(phase)
+		_dots[index].position.y = maxf(0.0, wave) * INDICATOR_DOT_BOB_M
+		var dim := 0.58 + 0.42 * clampf((wave + 1.0) * 0.5, 0.0, 1.0)
+		var tint := border_color
+		tint.a = border_color.a * dim * _indicator_alpha
+		_dot_materials[index].albedo_color = tint
+
+
+func _ensure_indicator_nodes() -> void:
+	if _indicator_root != null:
+		return
+	_indicator_root = Node3D.new()
+	_indicator_root.name = "Indicator"
+	add_child(_indicator_root)
+	var sphere := SphereMesh.new()
+	sphere.radius = 0.5
+	sphere.height = 1.0
+	sphere.radial_segments = 12
+	sphere.rings = 6
+	for index in 3:
+		var dot := MeshInstance3D.new()
+		dot.name = "Dot%d" % index
+		dot.mesh = sphere
+		dot.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		var material := _make_material(border_color, always_on_top, true)
+		material.albedo_color = border_color
+		dot.set_surface_override_material(0, material)
+		_indicator_root.add_child(dot)
+		_dots.append(dot)
+		_dot_materials.append(material)
+	_tail = MeshInstance3D.new()
+	_tail.name = "Tail"
+	_tail.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_tail.mesh = _tail_mesh()
+	_tail.set_surface_override_material(0, _fill_material)
+	_indicator_root.add_child(_tail)
+
+
+## 底板下方的小三角，让这个框读起来像"对话框"而不是一个漂浮的胶囊。
+func _tail_mesh() -> ArrayMesh:
+	var half := INDICATOR_TAIL_WIDTH_M * 0.5
+	var vertices := PackedVector3Array([
+		Vector3(-half, 0.0, 0.0),
+		Vector3(half, 0.0, 0.0),
+		Vector3(0.0, -INDICATOR_TAIL_HEIGHT_M, 0.0),
+	])
+	var indices := PackedInt32Array([0, 1, 2])
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _arrays(vertices, indices))
+	return mesh
+
+
+func _relayout_indicator() -> void:
+	var unit := _label.pixel_size * bubble_scale
+	_layout_unit = unit
+	# 顶点直接按**米**生成（沿用 `_relayout` 的口径：它已经把 px 乘过 unit）。
+	# 这里不能再除 unit —— 除一次会得到 156m 宽的怪物框（实测踩过）。
+	var half := Vector2(INDICATOR_WIDTH_M, INDICATOR_HEIGHT_M) * 0.5
+	var border := BORDER_WIDTH * unit
+	var radius := INDICATOR_CORNER_M
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _border_band_arrays(half, border, radius))
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _fill_arrays(half, radius))
+	_panel.mesh = mesh
+	_panel.set_surface_override_material(0, _panel_material)
+	_panel.set_surface_override_material(1, _fill_material)
+	_panel.scale = Vector3.ONE
+	for index in _dots.size():
+		_dots[index].position = Vector3((float(index) - 1.0) * INDICATOR_DOT_GAP_M, 0.0, -0.006)
+		_dots[index].scale = Vector3.ONE * (INDICATOR_DOT_RADIUS_M * 2.0)
+	if _tail != null:
+		_tail.position = Vector3(0.0, -INDICATOR_HEIGHT_M * 0.5 - INDICATOR_TAIL_HEIGHT_M * 0.5 + 0.012, -0.004)
+
+
+func _set_indicator_off() -> void:
+	_indicator_only = false
+	_indicator_time = 0.0
+	_indicator_alpha = 1.0
+	if _indicator_root != null:
+		_indicator_root.visible = false
+	if _label != null:
+		_label.visible = true
+
+
 ## 立刻显示整句（玩家按 E 跳过、或验收要读全文时用）。
 func reveal_all() -> void:
+	if _indicator_only:
+		return
 	if not _typing:
 		return
 	_finish_typing()
@@ -226,6 +408,7 @@ func say(text: String, hold := -1.0) -> void:
 		return
 	if _panel == null or _label == null:
 		_build_nodes()
+	_set_indicator_off()
 	_sentence_id += 1
 	_label.text = clean
 	# 尺寸按**整句**算（`_relayout` 拿的是全文）：底板一次到位，打字过程中不再变宽。
@@ -265,6 +448,9 @@ func hide_bubble() -> void:
 	_hold_left = 0.0
 	_typing = false
 	_typed_chars = 0.0
+	_indicator_only = false
+	if _indicator_root != null:
+		_indicator_root.visible = false
 	if _label != null:
 		_label.position = Vector3.ZERO
 	_kill_tween()
@@ -286,6 +472,9 @@ func is_bubble_active() -> bool:
 ## 剧情节拍判定和既有验收（`verify_speech_bubble_3d` / `verify_base_npc_*`）
 ## 当作整句比对；打字进度另有 `get_visible_char_count()`。
 func get_bubble_text() -> String:
+	# 示意框里没有文字 —— 返回空串，而不是"上一次那句"，避免被误读成还在说那句。
+	if _indicator_only:
+		return ""
 	if not _full_text.is_empty():
 		return _full_text
 	return _label.text if _label != null else ""
@@ -301,6 +490,8 @@ func get_bubble_width_m() -> float:
 
 func set_visible_state(shown: bool, immediate: bool) -> void:
 	visible = shown
+	if not shown and _indicator_root != null:
+		_indicator_root.visible = false
 	if immediate:
 		_apply_alpha(1.0)
 		scale = Vector3.ONE * bubble_scale
@@ -499,6 +690,7 @@ func _play_pop_in() -> void:
 
 
 func _apply_alpha(value: float) -> void:
+	_indicator_alpha = value
 	if _fill_material != null:
 		var fill := fill_color
 		fill.a = fill_color.a * value

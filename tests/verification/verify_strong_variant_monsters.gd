@@ -52,10 +52,11 @@ const DOC_NAMES := {
 
 const EPS := 0.0001
 const SEED := 20261016
-## 统计样本量。0.15 ± 0.03 的容忍带在 n=4000 下极难被二项噪声击穿（σ ≈ 0.0056）。
+## 统计样本量。0.075 ± 0.025 的容忍带在 n=4000 下极难被二项噪声击穿（σ ≈ 0.0042）。
+## 2026-11-10：远征01 概率从 0.15 减半为 0.075，容忍带随之移到 [0.05, 0.10]。
 const SAMPLE_COUNT := 4000
-const RATE_MIN := 0.12
-const RATE_MAX := 0.18
+const RATE_MIN := 0.05
+const RATE_MAX := 0.10
 
 var _failures: Array[String] = []
 var _samples := 0
@@ -453,7 +454,7 @@ func _check_zone_passthrough_regression() -> void:
 		_samples += 1
 
 
-# ⑪ 15% 概率统计成立。
+# ⑪ 7.5% 概率统计成立（2026-11-10 起；此前 15%）。
 func _check_roll_statistics() -> void:
 	var rules := _expedition_monster_rules()
 	if rules.is_empty():
@@ -469,9 +470,35 @@ func _check_roll_statistics() -> void:
 	var rate := float(strong) / float(SAMPLE_COUNT)
 	_expect(
 		rate > RATE_MIN and rate < RATE_MAX,
-		"强化怪占比 %.4f 落在 [%.2f, %.2f] 之外（期望 0.15）" % [rate, RATE_MIN, RATE_MAX]
+		"强化怪占比 %.4f 落在 [%.2f, %.2f] 之外（期望 0.075）" % [rate, RATE_MIN, RATE_MAX]
 	)
 	_samples += SAMPLE_COUNT
+	# 房间级禁用：suppressed_rooms 命中的房 0 强化；未命中的房仍按概率。
+	var suppressed := MonsterInjector.new()
+	suppressed.set_level_rules(rules)
+	suppressed.set_seed(SEED)
+	var suppressed_rooms: Array = (
+		(rules.get("strong_variant", {}) as Dictionary).get("suppressed_rooms", []) as Array
+	)
+	_expect(
+		suppressed_rooms.has("room_01") and suppressed_rooms.has("room_02"),
+		"远征01 strong_variant.suppressed_rooms 必须含 room_01 与 room_02，实得 %s" % str(suppressed_rooms)
+	)
+	for room_id in ["room_01", "room_02"]:
+		suppressed.set_active_room_id(room_id)
+		var leaked := 0
+		for _index in range(SAMPLE_COUNT):
+			var data := suppressed._generate_basic_enemy("melee_chaser", 1, 0)
+			if MonsterVariants.is_variant(str(data["enemy_type"])):
+				leaked += 1
+		_expect(leaked == 0, "%s 不应刷出强化怪，实得 %d / %d" % [room_id, leaked, SAMPLE_COUNT])
+	suppressed.set_active_room_id("room_03")
+	var open_strong := 0
+	for _index in range(SAMPLE_COUNT):
+		if MonsterVariants.is_variant(str(suppressed._generate_basic_enemy("melee_chaser", 1, 0)["enemy_type"])):
+			open_strong += 1
+	_expect(open_strong > 0, "room_03 不在禁用名单，应仍能刷出强化怪")
+	_samples += SAMPLE_COUNT * 3
 
 
 # ⑫ 同种子可复现。

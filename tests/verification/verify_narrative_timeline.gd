@@ -79,9 +79,21 @@ class FakeBark:
 	extends Node
 	var lines: Array[String] = []
 
+	## 自言自语路径（开灯等）——仍直接写在气泡里。
 	func say_text(text: String, _hold := -1.0) -> bool:
 		lines.append(text)
 		return true
+
+	## 对话路径（2026-11-10 改造）：头顶只出示意框，文字由 DialogueUI 承担。
+	## 本假体只需“接受”这个指令；台词由测试监听 DialogueUI.dialogue_shown 收集。
+	func say_indicator(_hold := -1.0, _height := -1.0) -> bool:
+		return true
+
+	func is_indicator_active() -> bool:
+		return false
+
+	func is_speaking() -> bool:
+		return false
 
 
 class FakeRoom:
@@ -183,6 +195,19 @@ func _build_world() -> void:
 	add_child(_opening_room)
 
 	NarrativeDirector.narrative_finished.connect(_on_finished)
+	# 对话文字现在只在底栏（业主 2026-11-10），所以台词顺序必须从底栏收集：
+	# `actor.say` 不再把字写进头顶气泡，假体也拿不到文本。
+	if not DialogueUI.dialogue_shown.is_connected(_on_dialogue_shown):
+		DialogueUI.dialogue_shown.connect(_on_dialogue_shown)
+
+
+func _on_dialogue_shown(_run_id: String, _line_id: String) -> void:
+	# 只收**角色台词**：底栏现在也承载系统提示（ui.hint/ui.subtitle），
+	# 那不是 FakeBark 的语义。改前 `actor.say` 只把角色台词写进气泡，
+	# 所以这里用同一个过滤口径（系统署名的不算角色台词）。
+	if DialogueUI.current_speaker() == DialogueUI.SPEAKER_SYSTEM:
+		return
+	_bark.lines.append(DialogueUI.current_text())
 
 
 func _on_finished(_narrative_id: String, reason: String) -> void:

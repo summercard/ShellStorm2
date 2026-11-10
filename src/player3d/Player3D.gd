@@ -31,12 +31,17 @@ var camera_feedback := preload("res://src/player3d/PlayerCameraFeedback3D.gd").n
 const VFX_POOL_SCRIPT := preload("res://src/vfx/VfxPool3D.gd")
 const HEAL_VFX_SCRIPT := preload("res://src/vfx/VfxHealNumber3D.gd")
 
-## 基础移速（空手 / 收枪，m/s）。2026-11-09 业主「所有的数值增加 1.2」：4.5 → 5.7。
-const SPEED := 5.7
+## 基础移速（空手 / 收枪，m/s）。
+## 历史：2026-11-09 业主「所有的数值增加 1.2」把 4.5 抬到 5.7；
+## 2026-11-10 业主「整体节奏变慢一点」改为**乘全局节奏系数** `GameDesignConfig.PACE_SCALE`
+## （0.85）⇒ 5.7 × 0.85 = **4.845**。不再直接写裸数：那样下次调快慢就得再猜一次基数，
+## 而且会重演 11-09 那次「改了一个点、另外两条相对关系静默漂移」的事故。
+const SPEED := 5.7 * GameDesignConfig.PACE_SCALE
 ## 持枪移速惩罚（m/s，对基础速度的减法项）。三类枪械动画族与
 ## 16.1 §移动四方向与持枪姿态设计冻结 的 sidearm / longgun / machinegun 同口径。
 ## 生效顺序：v = (SPEED - 惩罚) × 命运/词条移速倍率 —— 先扣武器重量，再乘百分比加成。
-## 当前梯度 5.2 / 4.9 / 4.6 全部高于表现层慢走阈值 3.2，三类枪都播正常移动动画。
+## **惩罚量刻意不乘 PACE_SCALE**：它是四档之间的**差值**，乘上去会把四档压扁成几乎一样快。
+## 当前梯度 4.345 / 4.045 / 3.745，全部高于表现层慢走阈值 3.2，三类枪都播正常移动动画。
 const WEAPON_FAMILY_MOVE_PENALTY := {
 	"sidearm": 0.5,
 	"longgun": 0.8,
@@ -44,7 +49,11 @@ const WEAPON_FAMILY_MOVE_PENALTY := {
 }
 ## 持枪减速后的速度下限，避免后续调大惩罚或叠加减速时速度归零或为负。
 const MIN_MOVE_SPEED_MPS := 0.5
-const DASH_SPEED := 16.5
+## 冲刺（翻滚）瞬时速度。2026-11-10 乘全局节奏系数 ⇒ 16.5 × 0.85 = **14.025 m/s**。
+## 位移随之变成 `14.025 × 0.204 = 2.861 m`（原 3.366 m），因为**时长与冷却刻意不动** ——
+## 它们是无敌帧和闪避窗口的载体，属于"节拍"不属于"速度"。
+## 与常速的相对倍率保持 `14.025 / 4.845 = 2.895×`（未缩放前也是 2.895×）。
+const DASH_SPEED := 16.5 * GameDesignConfig.PACE_SCALE
 const DASH_DURATION := 0.204
 const DASH_COOLDOWN := 2.2
 const INVINCIBLE_DURATION := 0.24
@@ -221,6 +230,7 @@ var _mobile_face_direction := Vector2.ZERO
 var _mobile_face_active := false
 var _mobile_shoot_active := false
 var _mobile_shoot_was_active := false
+var _mouse_charge_input_active := false
 var _mobile_input_available := false
 ## 自动射击（InputSettings.auto_fire）的搜索参数。
 ## 「只打自己面前的那只」= 以下五条全中才开火：
@@ -3002,6 +3012,16 @@ func _update_combat_input() -> void:
 	var shoot_pressed_here: bool = Input.is_action_pressed("shoot")
 	var shoot_just_pressed_here: bool = Input.is_action_just_pressed("shoot")
 	var shoot_released_here: bool = Input.is_action_just_released("shoot")
+	# shoot的键鼠映射目前只有左键；触屏/手柄由下方独立信号通路合并。
+	if DialogueUI.is_dialogue_mouse_fire_blocked():
+		shoot_pressed_here = false
+		shoot_just_pressed_here = false
+		shoot_released_here = false
+		if _mouse_charge_input_active and weapon != null and not (_mobile_input_available and (_mobile_shoot_active or _mobile_shoot_was_active)):
+			weapon.cancel_charge()
+		_mouse_charge_input_active = false
+	elif weapon != null and weapon.charge_time > 0.0 and shoot_pressed_here:
+		_mouse_charge_input_active = true
 	# 移动端：触屏按住优先级高于键盘鼠标
 	if _mobile_input_available:
 		if _mobile_shoot_active and not _mobile_shoot_was_active:
@@ -3013,6 +3033,7 @@ func _update_combat_input() -> void:
 		_mobile_shoot_was_active = _mobile_shoot_active
 	if weapon != null and shoot_released_here:
 		weapon.release_charge()
+		_mouse_charge_input_active = false
 	if input_locked or current_hp <= 0 or weapon == null or _silence_remaining > 0.0 or _active_ladder != null:
 		if weapon != null:
 			weapon.cancel_charge()

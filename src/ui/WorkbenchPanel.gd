@@ -93,10 +93,20 @@ var _confirm_layer: Control = null
 var _confirm_text: Label = null
 ## 合成表现层：兔子闸门。只负责"看起来发生了什么"，事务仍在上面的 `_execute_forge` 里。
 var _gate_veil: SynthesisGateVeil = null
+## 熔炼表现层：投料与炉心充能。**排在闸门之前**（先把材料吃掉，再落闸揭晓）。
+var _melt_veil: ForgeMeltVeil = null
 ## 闸门播放期间暂存的收尾报告（刷新 + 文案 + 信号）。播完或中途收掉时消费一次。
 var _pending_forge_report: Dictionary = {}
 ## 闸门期间盖住背包的封条（避免产物提前剧透）。
 var _bag_seal: Control = null
+## 投料段的盘面布局快照：锚点 + 物品 + 转数。
+##
+## 必须在 `_execute_forge` **清盘之前**取。清盘后 `_tray` 是空的，
+## 投料段就复原不出"刚才那几件东西摆在哪儿"，只能让它们凭空消失。
+## 这是"表现要跟事务解耦"的具体代价 —— 表现层读事务前的事实，而不是事务后的状态。
+var _melt_layout: Array[Dictionary] = []
+## 演出期间暂存的投入解析结果（投料段要用它的配方与投入清单）。
+var _pending_forge_plan: Dictionary = {}
 
 
 func set_player(player: Player3D) -> void:
@@ -635,6 +645,14 @@ func _build_body() -> Control:
 	_gate_veil.finished.connect(_on_gate_finished)
 	body.add_child(_gate_veil)
 
+	# 熔炼表现层：**排在闸门之前**。它要先播完（材料被吸进炉心），再轮到闸门落下。
+	# 两层绝不重叠 —— `_execute_forge` 里是严格串行的，前一层 `finished` 才起后一层。
+	_melt_veil = ForgeMeltVeil.new()
+	_melt_veil.name = "ForgeMeltVeil"
+	_melt_veil.z_index = 32
+	_melt_veil.finished.connect(_on_melt_finished)
+	body.add_child(_melt_veil)
+
 	# 背包封条：闸门开着的那几秒，产物**已经真的进包了**（事务先行），
 	# 不封住就等于在闸门旁边挂一块"答案是它"的牌子，3 秒等待变成空转。
 	# 它不是闸门的一部分（不挡中间），只跟随闸门的时长出现与消失。
@@ -721,10 +739,29 @@ func _layout_body() -> void:
 	if _gate_veil != null:
 		_gate_veil.position = _body_tray_column.position
 		_gate_veil.size = _body_tray_column.size
+	if _melt_veil != null:
+		_melt_veil.position = _body_tray_column.position
+		_melt_veil.size = _body_tray_column.size
 	# 封条贴住背包栏，且**不越过背包左边界**，免得把闸门那栏也压暗。
 	if _bag_seal != null:
 		_bag_seal.position = _body_bag_column.position
 		_bag_seal.size = _body_bag_column.size
+
+
+## 盘面矩形在**炼炉栏局部坐标**里的位置。熔炼表现层挂在炼炉栏上，
+## 吸入物的起点必须与格子里看到的物品**逐像素重合**，否则会看到"影子偏一格"。
+##
+## 盘面挂在 `TrayFrame`（括号框）里、带 8px 内边距，所以不能直接拿 `_tray_board.position`
+## 当答案 —— 必须逐级累加到炼炉栏坐标。
+func _tray_board_rect_in_column() -> Rect2:
+	if _tray_board == null or _body_tray_column == null:
+		return Rect2()
+	var origin := Vector2.ZERO
+	var node: Control = _tray_board
+	while node != null and node != _body_tray_column:
+		origin += node.position
+		node = node.get_parent() as Control
+	return Rect2(origin, _tray_board.size)
 
 
 ## 中栏：炼炉。5×5 正方形盘面，是整个面板的主体。
@@ -1050,7 +1087,19 @@ func _refresh_readout() -> void:
 		_refresh_readout_fuel_short(plan, short_spec)
 		return
 	if recipe == WeaponForge.RECIPE_NONE:
+		# **先给软提示**（"钥匙还差 N 个"），它有优先级 —— 它解释的是"为什么没出
+		# 我想合成的那把枪"，比"为什么不能熔"更贴近玩家的真实疑问。
+		# 顺序反了会让拒绝原因先把状态栏占掉，软提示被自己的 `HINT_TEXT` 判据挡回去。
 		_refresh_status_hint(plan)
+		# 再补拒绝原因：配方不成立时状态栏要写**为什么**不能熔，默认速记答不了。
+		#
+		# 两条排除：
+		#   · 空盘不写 —— 文档 §7 规定的"空白态"，默认速记就是它的正式文案；
+		#   · 状态栏被**别人**占用时不写 —— 拖拽失败、熔炼结果、目录页汇总都往这里写，
+		#     无条件覆盖会把"这个位置放不下：需要 4×2 格"这种即时反馈抹掉。
+		var reason := str(plan["reason"])
+		if reason != WeaponForge.REJECT_EMPTY_TRAY and _is_readout_status():
+			_set_status(_reason_text(reason))
 		_stat_payload.text = "—"
 		_stat_melt.text = "—"
 		_stat_rarity.text = "—"
@@ -1101,7 +1150,43 @@ func _refresh_readout() -> void:
 	var affordable := cost <= _coins()
 	UIStyleFactory.apply_prism_label(_stat_cost, "value" if affordable else "danger", 2, 17)
 	_forge_button.disabled = _busy or not affordable
+	# **买不起必须说出来。** 只把按钮置灰、FEE 转红，玩家只能瞪着灰按钮猜原因 ——
+	# 而 `_execute_forge` 里那句「金币不足：需要 X，持有 Y」是**不可达代码**
+	# （按钮已禁用，玩家永远点不到它）。禁用理由只能在**禁用那一刻**由这里给出。
+	#
+	# 措辞带差额：玩家要的不是"你钱不够"，是"还差多少"。
+	if not affordable and not _busy:
+		_set_status("金币不足：需要 %d，持有 %d，还差 %d。投入物一件未动" % [
+			cost, _coins(), cost - _coins(),
+		])
+	else:
+		_restore_hint_status()
 	_refresh_status_hint(plan)
+
+
+## 状态栏当前是不是"读数自己写的"那一条。
+##
+## 读数刷新是高频的（每次拖动都跑），它只该覆盖自己写过的内容 ——
+## 拖拽失败的提示、熔炼结果文案、目录页汇总都比它更即时或更权威。
+## 认得的自家文案有两种：默认速记、以及一条"钥匙还差 N 个"的软提示。
+##
+## 判据用文本前缀而不是布尔标记：状态栏没有"谁写的"这个字段，
+## 加标记就要同步改所有写入方（拖拽 / 目录页 / 结算），漏一处就静默失效。
+func _is_readout_status() -> bool:
+	if _status == null:
+		return false
+	if str(_status.get_meta("page_hint", "")) == "catalog":
+		return false
+	var text := _status.text
+	return text == HINT_TEXT or text.begins_with("「") or text.begins_with("还差 ")
+
+
+## 把状态栏还回默认速记。只在它确实是读数自己写的、且现在不需要再提示什么时才动。
+func _restore_hint_status() -> void:
+	if _status == null:
+		return
+	if _status.text.begins_with("金币不足："):
+		_set_status(HINT_TEXT)
 
 
 ## 「钥匙差一点」的软提示。
@@ -1442,16 +1527,25 @@ func _execute_forge(plan: Dictionary) -> void:
 		return
 	# 金币先校验再扣：`spend_currency` 是原子布尔返回，但把它排在写背包之前，
 	# 后面的失败路径只需退钱，不必处理"钱扣了枪没进包"的中间态。
+	#
+	# 正常路径上这里**到不了**：`_refresh_readout` 已在买不起时禁用按钮。
+	# 但它必须留着 —— 表单之外的调用方（验收直接调 `_execute_forge`、
+	# 未来的自动化/快捷键）绕过按钮，这条就是最后一道账目保险。
 	var cost := int(plan.get("coin_cost", 0))
 	if cost > 0 and not _spend_coins(cost):
 		_busy = false
 		_refresh_readout()
-		_set_status("金币不足：需要 %d，持有 %d。投入物一件未动" % [cost, _coins()])
+		_set_status("金币不足：需要 %d，持有 %d，还差 %d。投入物一件未动" % [
+			cost, _coins(), cost - _coins(),
+		])
 		return
 
 	# 事务：先快照，再销毁投入、写产出；任一失败全量回滚（含金币）。
 	var inventory_snapshot: Array = _inventory.get_slots_snapshot()
 	var tray_snapshot := _clone_tray(_tray)
+	# 投料表现要用**清盘前**的布局：先把每件东西摆在哪记下来，
+	# 否则后面只能让它们凭空消失（见 `_capture_melt_layout`）。
+	_capture_melt_layout()
 	_tray.clear()
 	var written := 0
 	for output in outputs:
@@ -1487,6 +1581,90 @@ func _execute_forge(plan: Dictionary) -> void:
 		"outputs": outputs,
 		"message": "熔炼完成：%s（消耗 %d 金币）" % ["，".join(lines), cost],
 	}
+	_play_forge_sequence(report, plan)
+
+
+## 熔炼演出的编排入口。两段，**严格串行**：
+##
+## ```
+## _execute_forge（事务已在上面全部落地）
+##   → ForgeMeltVeil   投料 + 炉心充能（1.45s）  → _on_melt_finished
+##   → SynthesisGateVeil 兔子闸门（5.00s）        → _on_gate_finished
+##   → _finish_forge   一次性刷新 + 写文案 + 发信号
+## ```
+##
+## ## 为什么投料段必须**先于**闸门，且用事务**之前**的盘面
+##
+## 事务在进这里之前已经 `_tray.clear()` 了。若投料段直接读当前盘面，它读到的是空的 ——
+## 玩家看不到"我放进去的东西被吃掉"，只看到一块板凭空盖下来。
+##
+## 所以投料段的几何与物品必须由**调用方**从 `plan` 里带进来（`plan["weapons"]` /
+## `plan["materials"]` 是解析期快照，与盘面同步过）。这条串行顺序也是"完整流程"的
+## 关键：**投料 → 关闸 → 揭晓**，缺中间那段就只是"画面被盖住"。
+##
+## `_busy` 全程保持 true：两段表现盖着盘面时再点熔炼只会读到空盘面。
+func _play_forge_sequence(report: Dictionary, plan: Dictionary) -> void:
+	_pending_forge_report = report
+	_pending_forge_plan = plan
+	_busy = true
+	if _melt_veil == null:
+		_on_melt_finished()
+		return
+	_set_status("投料中 · 炉心充能")
+	if _bag_seal != null:
+		_bag_seal.visible = true
+	_melt_veil.play(_melt_spec(plan, str(report.get("recipe", ""))))
+
+
+## 投料段的输入规格。
+##
+## 物品**不是**从盘面读的（事务已清盘），而是按 `plan` 里的投入清单重建：
+## 每一件的矩形用 `GridInventoryBoard.get_item_rect` 按锚点算，与盘面上看到的逐像素一致。
+##
+## 盘面被清空后锚点顺序会丢，所以 `_tray` 快照在事务里就存过一份 —— 这里用
+## `plan` + `_melt_layout` 复原。复原不了时**不建 actor**（宁可没有吸入物，
+## 也不能让替身出现在错误的位置上）。
+func _melt_spec(plan: Dictionary, recipe: String) -> Dictionary:
+	var board_rect := _tray_board_rect_in_column()
+	var items: Array = []
+	if _tray_board != null:
+		for entry in _melt_layout:
+			var anchor := int(entry.get("anchor", -1))
+			var item := entry.get("item", {}) as Dictionary
+			if anchor < 0 or item.is_empty():
+				continue
+			var size := ItemRegistry.grid_size_of(item)
+			if int(entry.get("rotation", 0)) % 2 == 1:
+				size = Vector2i(size.y, size.x)
+			var rect := _tray_board.get_item_rect(anchor, size)
+			items.append({
+				"rect": Rect2(board_rect.position + rect.position, rect.size),
+				"item": item,
+			})
+	return {
+		"recipe": recipe,
+		"weapons": (plan.get("weapons", []) as Array).size(),
+		"materials": _material_count(plan),
+		"items": items,
+		"home": board_rect.position + board_rect.size * 0.5,
+		# 盘面矩形一并给出：铭牌要锚在盘内（盘外那行是说明文字，会被压住）。
+		"board": board_rect,
+	}
+
+
+func _material_count(plan: Dictionary) -> int:
+	var total := 0
+	for value in plan.get("materials", []) as Array:
+		total += maxi(1, int((value as Dictionary).get("count", 1)))
+	return total
+
+
+## 投料播完 → 起闸门。
+func _on_melt_finished() -> void:
+	var report := _pending_forge_report
+	if report.is_empty():
+		_busy = false
+		return
 	_play_synthesis_gate(report)
 
 
@@ -1517,6 +1695,23 @@ func _play_synthesis_gate(report: Dictionary) -> void:
 	_gate_veil.play(outputs)
 
 
+## 投料段的盘面布局快照：锚点 + 物品 + 转数。
+##
+## 必须在 `_execute_forge` **清盘之前**取。清盘后 `_tray` 是空的，
+## 投料段就复原不出"刚才那几件东西摆在哪儿"，只能让它们凭空消失。
+## 这是"表现要跟事务解耦"的具体代价 —— 表现层读事务前的事实，而不是事务后的状态。
+func _capture_melt_layout() -> void:
+	_melt_layout.clear()
+	if _tray_board == null:
+		return
+	for entry in _tray:
+		_melt_layout.append({
+			"anchor": int(entry[TRAY_ENTRY_ANCHOR]),
+			"item": (entry[TRAY_ENTRY_ITEM] as Dictionary).duplicate(true),
+			"rotation": int(entry[TRAY_ENTRY_ROTATION]),
+		})
+
+
 func _on_gate_finished() -> void:
 	_busy = false
 	if _bag_seal != null:
@@ -1540,14 +1735,20 @@ func _finish_forge(report: Dictionary) -> void:
 	forge_completed.emit(report)
 
 
-## 闸门被中途收掉时的兜底：把还欠着的那次收尾补上。
+## 被中途收掉（切页 / 关闭面板）时的兜底：把还欠着的那次收尾补上。
+##
+## 两段表现都可能在这里被腰斩，所以先收投料段再收闸门段 —— 顺序反了会让
+## 已经 abort 的闸门又被投料段的收尾重新拉起来一次。
 func _flush_pending_forge_report() -> void:
+	if _melt_veil != null and _melt_veil.is_playing():
+		_melt_veil.abort()
 	if _bag_seal != null:
 		_bag_seal.visible = false
 	if _pending_forge_report.is_empty():
 		return
 	var report := _pending_forge_report
 	_pending_forge_report = {}
+	_pending_forge_plan = {}
 	_busy = false
 	_finish_forge(report)
 
@@ -1691,11 +1892,16 @@ func _clone_tray(source: Array[Dictionary]) -> Array[Dictionary]:
 ## ————————————————————————————————
 
 func _close() -> void:
-	# 闸门播放中允许直接关：事务已经落盘、盘面已清空，
-	# 拦着不让关只会让玩家对着一个按 ESC 没反应的界面等 3 秒。
+	# 两段表现播放中都允许直接关：事务已经落盘、盘面已清空，
+	# 拦着不让关只会让玩家对着一个按 ESC 没反应的界面干等几秒。
+	#
+	# `_flush_pending_forge_report` 会收掉还在播的投料段并补上欠着的收尾；
+	# 这里只需先把闸门段收掉（它不在那个函数的前置条件里）。
 	if _gate_veil != null and _gate_veil.is_playing():
 		_gate_veil.abort()
+	if _pending_forge_report.is_empty():
 		_busy = false
+	else:
 		_flush_pending_forge_report()
 	if _busy:
 		return

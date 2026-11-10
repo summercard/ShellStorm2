@@ -936,9 +936,68 @@ func _case_panel_tray_and_forge() -> void:
 	)
 	_expect(int(GameManager.currency) == 0, "金币不足时不得扣成负数")
 
-	# ⑦ 按钮在买不起时必须禁用
+	# ⑦ 按钮在买不起时必须禁用，且**必须说出来为什么**。
+	#
+	# 只把按钮变灰、FEE 转红是不够的：玩家只能瞪着灰按钮猜原因，
+	# 而 `_execute_forge` 里那句「金币不足：需要 X，持有 Y」玩家永远点不到
+	# （按钮已禁用）—— 禁用理由只能在**禁用那一刻**由读数刷新给出。
 	panel.call("_refresh_readout")
 	_expect(forge_button != null and forge_button.disabled, "金币不足时熔炼按钮必须禁用")
+	var status := panel.get("_status") as Label
+	_expect(status != null, "状态栏必须存在")
+	if status != null:
+		_expect(
+			status.text.begins_with("金币不足："),
+			"买不起时状态栏必须写出禁用原因，实际「%s」" % status.text
+		)
+		_expect(
+			status.text.contains("还差"),
+			"禁用原因必须给**差额** —— 玩家要的不是「你钱不够」，是「还差多少」，实际「%s」" % status.text
+		)
+		_expect(
+			status.text.contains(str(int(deny_plan["coin_cost"]))),
+			"禁用原因必须写出本次费用 %d，实际「%s」" % [int(deny_plan["coin_cost"]), status.text]
+		)
+	# 钱给够之后必须**回收**那句提示，否则玩家凑够钱回来还看到"金币不足"。
+	GameManager.currency = 1000
+	panel.call("_refresh_readout")
+	_expect(
+		status != null and not status.text.begins_with("金币不足："),
+		"钱够了之后必须撤掉「金币不足」提示，实际「%s」" % (status.text if status != null else "")
+	)
+	if status != null:
+		_expect(
+			status.text == "任意物品可作材料　·　材料越稀有品质越高　·　单枪＝重铸 / 两把＝融合 / 纯材料满 6＝合成"
+			or status.text.contains("还差"),
+			"钱够了之后状态栏应回到默认速记（或钥匙差一点的软提示），实际「%s」" % status.text
+		)
+
+	# ⑦½ 配方不成立时必须写出**可操作的**拒绝原因，而不是只把按钮灰掉。
+	# 空盘除外 —— 那是文档 §7 规定的"空白态"，默认速记就是它的正式文案。
+	GameManager.currency = 1000
+	for entry in (panel.get("_tray") as Array).duplicate():
+		panel.call("_tray_remove_anchor", int(entry["anchor"]))
+	panel.call("_refresh_readout")
+	_expect(
+		status != null and status.text == "任意物品可作材料　·　材料越稀有品质越高　·　单枪＝重铸 / 两把＝融合 / 纯材料满 6＝合成",
+		"空盘必须保持默认速记（那是文档规定的空白态文案），实际「%s」" % (status.text if status != null else "")
+	)
+	# 单枪 + 不足 3 点的燃料 ⇒ `insufficient_fuel`，状态栏必须说出门槛。
+	panel.call("_tray_append", _weapon("weapon_rifle"), 1, 0, 0)
+	panel.call("_tray_append", _module("mod_bullet_standard", 1), 1, 20, 0)
+	panel.call("_refresh_readout")
+	var thin_plan := FORGE.classify(panel.call("_tray_probe_items"))
+	_expect(
+		str(thin_plan["reason"]) == FORGE.REJECT_INSUFFICIENT_FUEL,
+		"1 件白装当燃料必须判 insufficient_fuel，实际 '%s'" % str(thin_plan["reason"])
+	)
+	_expect(
+		status != null and status.text.contains("燃料熔炼值不足"),
+		"燃料不足时状态栏必须写出原因，实际「%s」" % (status.text if status != null else "")
+	)
+	panel.call("_tray_remove_anchor", 20)
+	panel.call("_tray_remove_anchor", 0)
+
 	var cost_label := panel.find_child("Stat_FEE", true, false)
 	if cost_label == null:
 		var stat_fee := panel.get_node_or_null("Panel/Margin/VBox/Readout/Stat_FEE")

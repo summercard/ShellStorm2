@@ -7,14 +7,23 @@ const LIBRARY_PATH := "res://assets/art/characters/player/chr_player_capsule01_3
 const CURRENT_LIBRARY_PATH := "res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.json"
 ## 跑步剪辑（moving / armed_moving）的播放倍率。只缩放采样相位的推进速度，
 ## 不写玩家状态、不改移动速度、不改剪辑数据。走路剪辑（walking）保持 1.0。
-const RUN_CLIP_RATE_SCALE := 1.3
+##
+## 2026-11-10 乘全局节奏系数（0.85）：1.3 → **1.105**。
+## 必须和 `Player3D.SPEED` 一起缩放，否则"脚底打滑"——跑步循环是按"每米走多少相位"
+## 标定的，只降移速不降循环速率，脚就会在原地刨。
+const RUN_CLIP_RATE_SCALE := 1.3 * GameDesignConfig.PACE_SCALE
 ## 角色动画播放速度全局倍率（业主 2026-10-15：「角色动画播放速度调快 25%」）。
 ## 只缩放采样相位的推进速度 —— 也就是下面**唯一**那处 `_time += delta * rate`；
 ## 不改状态机时长、不改移动速度、不改剪辑数据、不写玩家状态。
 ## 覆盖经本库播放的全部剪辑：待机 / 移动 / 走路 / 锁定 / 开火。
 ## 冲刺、受击、落地、死亡由状态机 progress 驱动（`avatar.get("_dash_animation_progress")` 等），
 ## 不受这一项影响 —— 那些同时就是玩法时长（冲刺无敌帧等），不该跟着表现一起缩。
-const ANIMATION_RATE_MULTIPLIER := 1.25
+##
+## 2026-11-10 业主「整体节奏变慢一点」⇒ 乘全局节奏系数（0.85）：1.25 → **1.0625**。
+## 这是"画面看起来快慢"的直接来源之一，所以要跟着移速一起降；
+## 它与 `RUN_CLIP_RATE_SCALE` 的乘积（1.0625 × 1.105 = 1.174）才是跑动剪辑的相对速率，
+## 缩放后仍与移速同比，脚不打滑。
+const ANIMATION_RATE_MULTIPLIER := 1.25 * GameDesignConfig.PACE_SCALE
 ## 最后一发真实射击后继续保持开火剪辑的时间；不拉长后坐/枪口火光脉冲。
 const FIRE_HOLD_DURATION_S := 2.0
 static var _libraries: Dictionary = {}

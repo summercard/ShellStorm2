@@ -24,7 +24,12 @@ const SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
 const OUT_DIR := "res://outputs/verification"
 ## 左上状态块在全屏图里的裁剪盒（1280×720 canvas 基准，留足四周余量）。
 const ZOOM_BOX := Rect2i(8, 30, 400, 150)
+## 左下角翻滚冷却环的裁剪盒。环实际落在 canvas x 14..62 / y 651..699
+## （设计 (18,26) 起、外径 60 ⇒ ×0.8）。
+const DASH_BOX := Rect2i(0, 636, 84, 84)
 const ZOOM_FACTOR := 3
+## 冷却环单独放大的倍数。业主嫌原来"太难看见"，这张图就是给他判"现在够不够大"的。
+const DASH_ZOOM_FACTOR := 8
 
 
 func _ready() -> void:
@@ -122,10 +127,22 @@ func _shoot(tag: String, dungeon: Dungeon3D) -> void:
 	var zoom_error := -1
 	if not box.has_area():
 		print("CAPTURE_PLAYER_VITALS_FEEDBACK_FAIL bad_zoom_box %s" % tag)
-	elif image.get_region(box) != null:
+	else:
 		var zoom := image.get_region(box)
 		zoom.resize(box.size.x * ZOOM_FACTOR, box.size.y * ZOOM_FACTOR, Image.INTERPOLATE_NEAREST)
 		zoom_error = zoom.save_png(zoom_path)
+	# 左下角冷却环放大图（8×）：判"兔子剪影认不认得出""环够不够大"只能靠它。
+	var dash_box := DASH_BOX.intersection(Rect2i(Vector2i.ZERO, image.get_size()))
+	if dash_box.has_area():
+		var dash_zoom := image.get_region(dash_box)
+		dash_zoom.resize(
+			dash_box.size.x * DASH_ZOOM_FACTOR,
+			dash_box.size.y * DASH_ZOOM_FACTOR,
+			Image.INTERPOLATE_NEAREST
+		)
+		var dash_err := dash_zoom.save_png("%s/%s_dash.png" % [OUT_DIR, tag])
+		if dash_err != OK:
+			print("CAPTURE_PLAYER_VITALS_FEEDBACK_FAIL dash_zoom %s err=%d" % [tag, dash_err])
 	var vitals := dungeon.get_player_vitals_bar_snapshot()
 	var heal: Dictionary = vitals.get("heal", {})
 	print(

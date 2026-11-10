@@ -27,7 +27,9 @@ const BASE_ENEMY_TYPES := {
 	# 故与原作**严格等比**（6.67 倍差就是 6.67 倍），不再做幂律压缩。依据见 `怪物设计.md §T0.2`。
 	# `damage_base` = 命中玩家的伤害 = 玩家 100 血的 **1/6 = 17**（对应原作「半颗心」），爆炸类 26。
 	# 原始 EGT 血量记在 `egt_hp` 键里，**只作追溯**，不参与任何计算 —— 避免两份血量被当成两个真源。
-	# `speed` 单位是 px/s（`Enemy3D` 里 ÷24 转 m/s 再 ×0.7），即「目标 m/s ÷ 0.7 × 24」。
+	# `speed` 单位是 px/s（`Enemy3D` 里 ÷24 转 m/s 再 ×`GLOBAL_MOVE_SPEED_MULTIPLIER`），
+	# 即「目标 m/s ÷ 该系数 × 24」。该系数 2026-11-10 起含全局节奏 0.85（0.70 → 0.595），
+	# 所以下面的字面量**不用改**：除的数与乘的数同步变了，绝对值自动跟着缩 15%。
 	"egt_bullet_kin": { "name": "子弹小子", "hp_base": 150, "damage_base": 17, "speed": 69, "egt_hp": 15 },
 	"egt_bandana_kin": { "name": "头巾小子", "hp_base": 150, "damage_base": 17, "speed": 69, "egt_hp": 15 },
 	"egt_veteran_kin": { "name": "老兵小子", "hp_base": 150, "damage_base": 17, "speed": 89, "egt_hp": 15 },
@@ -173,6 +175,8 @@ var _theme_profile: Resource = null
 ## ⇒ 数值与 AI 全部走原常量，未配置的关卡行为逐字不变。唯一写入口是
 ## `set_level_rules`（由 `Dungeon3D._setup_run_modules` 在装配时调）。
 var _level_rules: Dictionary = {}
+## 当前出怪所属房间（见 `set_active_room_id`）。仅供 `strong_variant.suppressed_rooms` 判定。
+var _active_room_id := ""
 
 func _init():
 	_rng = RandomNumberGenerator.new()
@@ -296,7 +300,19 @@ func _strong_variant_chance() -> float:
 	var cfg := section as Dictionary
 	if not bool(cfg.get("enabled", true)):
 		return 0.0
+	# 房间级禁用（`strong_variant.suppressed_rooms`，2026-11-10）：当前正在出怪的房间
+	# 命中名单 ⇒ 本房不升级（远征01 前两间新手房）。判据是数据，不是关卡 ID。
+	if not _active_room_id.is_empty():
+		var suppressed: Variant = cfg.get("suppressed_rooms", [])
+		if suppressed is Array and (suppressed as Array).has(_active_room_id):
+			return 0.0
 	return clampf(float(cfg.get("chance", DEFAULT_STRONG_VARIANT_CHANCE)), 0.0, 1.0)
+
+
+## 声明「接下来生成的怪属于哪个房间」。空串 = 无房间上下文（默认）。
+## 调用方必须成对 set/clear：由 `Dungeon3D` 在出怪入口包一层，出口还原。
+func set_active_room_id(room_id: String) -> void:
+	_active_room_id = room_id
 
 
 ## 按关卡概率把普通怪升级成它的**强化版**（`MonsterVariants`）。

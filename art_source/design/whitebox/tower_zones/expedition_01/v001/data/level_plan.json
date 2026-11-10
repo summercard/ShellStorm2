@@ -125,7 +125,12 @@
     },
     "strong_variant": {
       "enabled": true,
-      "chance": 0.15
+      "chance": 0.075,
+      "suppressed_rooms": [
+        "room_01",
+        "room_02"
+      ],
+      "note": "强化怪概率升级（MonsterInjector._strong_variant_chance）。2026-11-10 业主调整：①chance 0.15→0.075（减半）；②suppressed_rooms 列出的房间不刷强化怪（前两房保证新手段位平稳）——按 room_id 命中，该房任何来源的补刷/增援同样不升级。注意：房间 3 以后另有写死的 strong_random 摆位，不受 chance 与 suppressed_rooms 影响。"
     },
     "death_explosion": {
       "fat_zombie03": {
@@ -195,89 +200,12 @@
     "schema": "shellstorm2.monster_drop_table",
     "schema_version": 1,
     "source_csv": "docs/v0.1/data/怪物掉落表_地图x怪物.csv",
-    "rows_sha256": "587db6fd99a5568ea705f828b0180dddf56fdfe1986f613b30ed0e5c9a4a3cdd",
-    "rows": [
-      {
-        "monster_id": "melee_chaser",
-        "item_id": "weapon_baseball_bat",
-        "chance": 0.26,
-        "weight": 2,
-        "quantity": 1,
-        "note": "近战·权重池（枪械 2026-10-18 移出普通怪）"
-      },
-      {
-        "monster_id": "melee_chaser",
-        "item_id": "mod_bullet_standard",
-        "chance": 0.26,
-        "weight": 2,
-        "quantity": 1,
-        "note": "子弹模块·权重池"
-      },
-      {
-        "monster_id": "melee_chaser",
-        "item_id": "item_ammo_pack",
-        "chance": 0.34,
-        "quantity": "30-50",
-        "note": "备弹·独立判定"
-      },
-      {
-        "monster_id": "ranged_caster",
-        "item_id": "mod_bullet_piercing",
-        "chance": 0.08,
-        "quantity": 1,
-        "note": "独立判定"
-      },
-      {
-        "monster_id": "ranged_caster",
-        "item_id": "mod_bullet_bounce",
-        "chance": 0.06,
-        "quantity": 1,
-        "note": "独立判定"
-      },
-      {
-        "monster_id": "ranged_caster",
-        "item_id": "attach_scope",
-        "chance": 0.03,
-        "quantity": 1,
-        "note": "独立判定"
-      },
-      {
-        "monster_id": "ranged_caster",
-        "item_id": "item_ammo_pack",
-        "chance": 0.8,
-        "quantity": "30-50",
-        "note": "备弹·独立判定（业主 2026-10-14：警察僵尸 80% 掉 1 包）"
-      },
-      {
-        "monster_id": "exploder",
-        "item_id": "mod_bullet_explosive",
-        "weight": 4,
-        "quantity": 1,
-        "note": "权重池·抽1件"
-      },
-      {
-        "monster_id": "exploder",
-        "item_id": "item_battery_s",
-        "weight": 3,
-        "quantity": 1,
-        "note": "权重池·抽1件"
-      },
-      {
-        "monster_id": "exploder",
-        "item_id": "item_battery_l",
-        "weight": 1,
-        "quantity": 1,
-        "note": "权重池·抽1件"
-      },
-      {
-        "monster_id": "exploder",
-        "item_id": "item_ammo_pack",
-        "chance": 0.34,
-        "quantity": "30-50",
-        "note": "备弹·独立判定（枪械 2026-10-18 移出普通怪）"
-      }
-    ],
-    "empty_chance": 0.4
+    "rows_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "rows": [],
+    "legacy_fallback": false,
+    "variant_legacy_fallback": true,
+    "empty_chance": 0.4,
+    "note": "2026-11-10 业主调整：远征01 **普通怪只掉金币、不掉其它物资**。做法：legacy_fallback=false（表即完整清单，未登记的普通怪不掉物品）＋rows 清空；金币走 monster_rules.currency 独立通道（100% 必掉），不受影响。强化怪不变：variant_legacy_fallback=true 让强化变种（MonsterVariants.is_variant）仍回退通用公式（含 25% 枪械保底），empty_chance 对其口径不变。"
   },
   "door_policy": {
     "schema": "shellstorm2.door_policy",
@@ -343,10 +271,10 @@
     "room_guarantees": [
       {
         "id": "exp01_opening_weapon_or_ammo",
-        "note": "业主 2026-11-09：「第一个房间的宝箱 / 第二个房间的宝箱，随机一个房间掉落」一把最低品质的霰弹枪或步枪，并且再掉一组 100 发普通弹药。候选房只放主路前两间，按 run_seed 稳定哈希挑一间 ⇒ 同一局读档不换房。「最低品质」= drop_grade blue（蓝 = 基础数值、无加成），由 ClearDropService.guaranteed_items_for_room() 定，ChestRewardService 写进箱子奖励；这是**额外追加**，不替换该箱原有的 2—3 件消耗品与 30% 命运卡掉落物。",
+        "note": "业主 2026-11-09：「第一个房间的宝箱 / 第二个房间的宝箱，随机一个房间掉落」一把最低品质的霰弹枪或步枪，并且再掉一组 100 发普通弹药。候选房只放主路前两间，按 run_seed 稳定哈希挑一间 ⇒ 同一局读档不换房。「最低品质」= drop_grade blue（蓝 = 基础数值、无加成），由 ClearDropService.guaranteed_items_for_room() 定，ChestRewardService 写进箱子奖励；这是**额外追加**，不替换该箱原有的 2—3 件消耗品与 30% 命运卡掉落物。⚠ 候选房必须写**运行时 room_id**（`room_01` / `room_02`），不能写设计源初值 `f00_room_0N`：`FloorPlanGenerator.room_from_source()` 优先取 `legacy_room_id`，两个串不等会让 `guaranteed_items_for_room()` 恒返回空（2026-11-10 实测 13 间房 RUNTIME_HITS=0，箱内永远没有保底枪）。",
         "candidate_rooms": [
-          "f00_room_01",
-          "f00_room_02"
+          "room_01",
+          "room_02"
         ],
         "weapon_choices": [
           "weapon_shotgun",

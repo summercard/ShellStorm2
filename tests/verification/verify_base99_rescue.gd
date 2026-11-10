@@ -122,6 +122,9 @@ func _run(failures: Array[String]) -> void:
 	# —— R08b 连败 2 次：真实归航时演出方真的消费了专属段（不写死固定台词）——
 	await _check_streak_cutscene(failures)
 
+	# —— R17 死亡归航的台词可以被玩家点掉/按掉（业主 2026-11-10 追加）——
+	await _check_dialogue_advance(failures)
+
 	# —— R12 暂存已开：重进基地不再演、不再放箱子 ——
 	BaseManager.replace_rescue_cache_for_test([])
 	tower = await _load_base_tower(failures, GameEntryFlow.REASON_DEATH_RETURN_99F)
@@ -586,13 +589,13 @@ func _check_lines(
 		var seen := false
 		for _i in 200:
 			await get_tree().create_timer(0.05).timeout
-			if bark.get_current_text() == expected_line:
+			if DialogueUI.current_text() == expected_line:
 				seen = true
 				break
 		if not seen:
 			failures.append(
-				"R08 第 %d 句没按序进气泡：『%s』，当前『%s』"
-					% [index + 1, expected_line, bark.get_current_text()]
+				"R08 第 %d 句没按序进底栏：『%s』，当前『%s』"
+					% [index + 1, expected_line, DialogueUI.current_text()]
 			)
 
 
@@ -622,12 +625,183 @@ func _check_streak_cutscene(failures: Array[String]) -> void:
 	BaseManager.replace_rescue_defeat_streak_for_test(0)
 
 
-# —— R15：演出的气泡接上了打字机 ——
+# —— R17：死亡归航的台词可以被玩家点掉 ——
 
-## 逐字出现的**分档**断言在气泡自己的专项里（`verify_speech_bubble_3d._check_typewriter`，
-## 手动步进 delta，精确到"0.1s 该出几个字"）。这里只验**接线**：
-## 绿苔说一句时气泡真的进入打字状态、并且 `reveal_all()` 能跳过 ——
-## 演出协程的时序在 headless 下不可靠，不适合在这里卡字数。
+## 业主 2026-11-10：「死亡回到基地后，绿苔的对话也要能点击快速过」。
+##
+## 这段台词**不走 NarrativeDirector 的时间轴**（`Base99Rescue3D` 自己按固定停留铺开），
+## 所以导演手里没有载体：改前 `can_advance_mouse_dialogue()` 返回 false ⇒
+## 左键点下去既不全显也不换句，还会漏给开火。这里起**独立一次归航**验证三层，
+## 不动主序列（`_check_lines` 还要按原时序逐句等）。
+func _check_dialogue_advance(failures: Array[String]) -> void:
+	BaseManager.replace_rescue_cache_for_test(_make_cache())
+	BaseManager.replace_rescue_defeat_streak_for_test(1)
+	var tower := await _load_base_tower(failures, GameEntryFlow.REASON_DEATH_RETURN_99F)
+	if tower == null:
+		return
+	var rescue := tower.find_base_rescue()
+	var npc := tower.find_npc(NPC_ID)
+	var player := tower.player
+	if rescue == null or npc == null or player == null:
+		failures.append("R17 无法装配救援演出/绿苔/玩家，点击推进未验证")
+		await _free_node(tower)
+		return
+	var bark := npc.get_node_or_null("CharacterBark3D") as CharacterBark3D
+	if bark == null:
+		failures.append("R17 绿苔没有气泡挂载点")
+		await _free_node(tower)
+		return
+	var ready := false
+	for _i in 80:
+		if rescue.can_advance_rescue_line():
+			ready = true
+			break
+		await get_tree().create_timer(0.05).timeout
+	if not ready:
+		failures.append("R17 演出开始 4 秒内没有任何可推进的台词")
+		await _free_node(tower)
+		return
+	if not NarrativeDirector.can_advance_mouse_dialogue():
+		failures.append("R17 演出期间导演仍报「鼠标不可推进」，左键会被漏给开火")
+	var staged: Array = rescue.get_snapshot().get("script_lines", []) as Array
+	# 2026-11-10 改造：对话文字在底栏，头顶只剩示意框。两边都要断言。
+	if not bark.is_indicator_active():
+		failures.append("R17 对话时头顶没有出现说话示意框")
+	if not bark.get_current_text().is_empty():
+		failures.append("R17 对话文字仍留在头顶气泡里：『%s』" % bark.get_current_text())
+	# 示意框必须真的比旧文字气泡小得多：旧的两行气泡宽约 4.7m，
+	# 压在 1.2m 高的绿苔头上会糊住半个屏幕（业主说的\"挡角色\"）。
+	if bark.get_bubble().get_bubble_width_m() > 1.3:
+		failures.append(
+			"R17 头顶示意框宽 %.2fm，仍然会挡角色" % bark.get_bubble().get_bubble_width_m()
+		)
+	var before_text := DialogueUI.current_text()
+	var before_index := staged.find(before_text)
+	var before_typing := DialogueUI.is_typing()
+	# 保证覆盖「打字中 → 全显」这一段：当前这句若已经打完字，等下一句刚冒头再点。
+	# 整段只剩最后一句且已打完时等不到，退化为只验「第二下收句」，不算失败。
+	if not before_typing:
+		var previous := before_text
+		for _i in 200:
+			await get_tree().create_timer(0.02).timeout
+			if DialogueUI.current_text() != previous and DialogueUI.is_typing():
+				break
+		before_text = DialogueUI.current_text()
+		before_index = staged.find(before_text)
+		before_typing = DialogueUI.is_typing()
+	var locked_before := bool(player.get("input_locked"))
+
+	# ① 真实左键：打字中 → 立刻全显；已全显 → 只收起这句的停留。两种都不许跳句。
+	var fire_blocked := await _click_left()
+	if not fire_blocked:
+		failures.append("R17 这次左键没有被底栏认领（没锁住开火），点一下会顺带打出一枪")
+	if before_typing:
+		if DialogueUI.is_typing():
+			failures.append("R17 打字中点了左键，还在逐字冒（应当立刻全显）")
+		elif DialogueUI.visible_char_count() != DialogueUI.total_char_count():
+			failures.append(
+				"R17 点了左键没有全显：%d/%d"
+					% [DialogueUI.visible_char_count(), DialogueUI.total_char_count()]
+			)
+		if DialogueUI.current_text() != before_text:
+			failures.append(
+				"R17 第一下左键就换句了：『%s』→『%s』" % [before_text, DialogueUI.current_text()]
+			)
+
+	# ② 真实空格：已全显 ⇒ 收起这句、接下一句。
+	await _press_space()
+	var advanced := false
+	for _i in 20:
+		await get_tree().create_timer(0.05).timeout
+		if DialogueUI.current_text() != before_text or not DialogueUI.is_active():
+			advanced = true
+			break
+	if not advanced:
+		failures.append("R17 按空格没有推进到下一句（仍停在『%s』）" % before_text)
+	else:
+		var after_text := DialogueUI.current_text()
+		# 逐句轮播：只允许往后一句，不许跨过任何一句。
+		if after_text != before_text and before_index >= 0:
+			var after_index := staged.find(after_text)
+			if after_index >= 0 and after_index != before_index + 1:
+				failures.append(
+					"R17 推进跳过了句子：第 %d 句 → 第 %d 句" % [before_index + 1, after_index + 1]
+				)
+
+	# ③ 推进台词不是「跳过整段演出」：演出仍在 cutscene、人还趴着、输入还锁着。
+	#
+	# ⚠️ 这里**不比较 pose 相位的具体数值**。相位是演出自己的时间函数：推进让下一句
+	# 更早开始，演出本来就会更早走完（实测 1.00→0.89，跨过旧断言的 0.05 阈值）。
+	# 拿数值当判据会把「正常推进」误判成「提前扶起」；真正要守的是下面三条。
+	if str(rescue.get_snapshot().get("phase", "")) != "cutscene":
+		failures.append(
+			"R17 推进台词把演出整段跳过了：阶段已到『%s』"
+				% str(rescue.get_snapshot().get("phase", ""))
+		)
+	if locked_before and not bool(player.get("input_locked")):
+		failures.append("R17 推进台词时输入锁被提前放开")
+	var pose_after := _pose_snapshot(player)
+	if not bool(pose_after.get("active", true)):
+		failures.append("R17 推进台词时玩家的倒地姿态被提前解除")
+
+	# ④ 反向对照：推进不能把演出卡住；而且演出结束后导演必须报告「不可推进」——
+	# 否则说明 can_advance 是恒真的，前面那条 true 就不值钱。
+	var finished := false
+	for _i in 600:
+		await get_tree().create_timer(0.05).timeout
+		if str(rescue.get_snapshot().get("phase", "")) != "cutscene":
+			finished = true
+			break
+	if not finished:
+		failures.append("R17 推进后演出 30 秒内没有结束（被推进卡死了）")
+	elif NarrativeDirector.can_advance_mouse_dialogue():
+		failures.append("R17 演出结束后导演仍报「可推进」，can_advance 没有真的在判状态")
+	await _free_node(tower)
+	BaseManager.replace_rescue_defeat_streak_for_test(0)
+
+
+## 真实左键按下 + 抬起（走完整输入链：DialogueUI 消费 → 导演推进）。
+## 返回按下那一帧底栏是否锁住了开火（= 这次点击确实被认领，不会漏给武器）。
+func _click_left() -> bool:
+	var point := get_viewport().get_visible_rect().size * 0.5
+	var press := InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.pressed = true
+	press.position = point
+	Input.parse_input_event(press)
+	Input.flush_buffered_events()
+	# 必须同帧读：Fire block 的判据含「消费发生在当前帧」。
+	var blocked := DialogueUI.is_dialogue_mouse_fire_blocked()
+	await get_tree().process_frame
+	var release := InputEventMouseButton.new()
+	release.button_index = MOUSE_BUTTON_LEFT
+	release.pressed = false
+	release.position = point
+	Input.parse_input_event(release)
+	Input.flush_buffered_events()
+	await get_tree().process_frame
+	return blocked
+
+
+## 真实空格按下 + 抬起（导演 `_input` 认 KEY_SPACE）。
+func _press_space() -> void:
+	for pressed in [true, false]:
+		var key := InputEventKey.new()
+		key.keycode = KEY_SPACE
+		key.physical_keycode = KEY_SPACE
+		key.pressed = pressed
+		Input.parse_input_event(key)
+		Input.flush_buffered_events()
+		await get_tree().process_frame
+
+
+# —— R15：演出的台词接上了打字机（文字在底栏，头顶只剩示意框）——
+## 逐字出现的**分档**断言在气泡与底栏各自的专项里；这里只验**接线**：
+## 绿苔说一句时底栏真的进入打字状态、署名正确，头顶出现示意框且**不含文字**，
+## `reveal_all()` 能跳过 —— 演出协程的时序在 headless 下不可靠，不适合在这里卡字数。
+##
+## 2026-11-10 改造：业主把对话文字从头顶气泡挪到底栏，头顶只留「说话示意」。
+## 所以这条从"气泡打字"改为"底栏打字 + 气泡示意"，两边都要断言，不能只看一边。
 func _check_typewriter_wiring(failures: Array[String], npc: NpcCharacter3D) -> void:
 	if npc == null:
 		return
@@ -639,20 +813,29 @@ func _check_typewriter_wiring(failures: Array[String], npc: NpcCharacter3D) -> v
 	if not npc.say_scripted_line(LINE, 3.0):
 		failures.append("R15 绿苔说不出话（say_scripted_line 返回 false）")
 		return
-	if not bark.is_typing():
-		failures.append("R15 气泡没有进入打字机状态（一次全出，不是逐字）")
-	if bark.get_total_char_count() != LINE.length():
+	if not bark.is_indicator_active():
+		failures.append("R15 对话时头顶没有出现说话示意框")
+	if not bark.get_current_text().is_empty():
+		failures.append("R15 对话文字仍写在头顶气泡里：『%s』" % bark.get_current_text())
+	if not DialogueUI.is_typing():
+		failures.append("R15 底栏没有进入打字机状态（一次全出，不是逐字）")
+	if DialogueUI.total_char_count() != LINE.length():
 		failures.append(
-			"R15 气泡总字数与句子不符：%d vs %d" % [bark.get_total_char_count(), LINE.length()]
+			"R15 底栏总字数与句子不符：%d vs %d" % [DialogueUI.total_char_count(), LINE.length()]
 		)
-	if bark.get_visible_char_count() >= LINE.length():
-		failures.append("R15 第一瞬间就已经全显了（可见 %d 字）" % bark.get_visible_char_count())
-	if bark.get_current_text() != LINE:
-		failures.append("R15 气泡身份文本被打字前缀污染：『%s』" % bark.get_current_text())
-	bark.reveal_all()
-	if bark.is_typing():
-		failures.append("R15 reveal_all() 之后仍在打字")
-	if bark.get_visible_char_count() != LINE.length():
+	if DialogueUI.visible_char_count() >= LINE.length():
+		failures.append("R15 第一瞬间就已经全显了（可见 %d 字）" % DialogueUI.visible_char_count())
+	if DialogueUI.current_text() != LINE:
+		failures.append("R15 底栏身份文本被打字前缀污染：『%s』" % DialogueUI.current_text())
+	if DialogueUI.current_speaker() != npc.get_display_name():
+		failures.append(
+			"R15 底栏署名不是说话人：『%s』应为『%s』"
+				% [DialogueUI.current_speaker(), npc.get_display_name()]
+		)
+	DialogueUI.reveal_all()
+	if DialogueUI.is_typing():
+		failures.append("R15 reveal_all() 之后底栏仍在打字")
+	if DialogueUI.visible_char_count() != LINE.length():
 		failures.append("R15 reveal_all() 之后没有全显")
 	npc.hide_dialogue()
 

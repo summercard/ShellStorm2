@@ -208,16 +208,19 @@ func _verify_monster_drop_table_plan_contract(failures: Array[String]) -> void:
 	var second := FloorPlanGenerator.generate_from_level_plan(EXPEDITION_LEVEL_ID, 0, 77001200)
 	var table := first.get("monster_drop_table", {}) as Dictionary
 	var rows := table.get("rows", []) as Array
-	if rows.size() != 13:
-		failures.append("远征01运行时 plan 的怪物掉落表应有 13 行，实际 %d" % rows.size())
-	var monsters: Dictionary = {}
-	for value in rows:
-		var row := value as Dictionary
-		monsters[str(row.get("monster_id", ""))] = true
-	var monster_ids: Array = monsters.keys()
-	monster_ids.sort()
-	if monster_ids != ["exploder", "melee_chaser", "ranged_caster"]:
-		failures.append("远征01怪物掉落表应覆盖 3 种试点怪，实际 %s" % str(monster_ids))
+	# 2026-11-10 业主调整：远征01 普通怪只掉金币。表 = 空清单 + legacy_fallback=false（普通怪不掉物品），
+	# variant_legacy_fallback=true 让强化怪仍走通用公式（强化怪掉落不变）。
+	if not rows.is_empty():
+		failures.append("远征01运行时 plan 的怪物掉落表应为空清单（普通怪只掉金币），实际 %d 行" % rows.size())
+	if bool(table.get("legacy_fallback", true)):
+		failures.append("远征01怪物掉落表应 legacy_fallback=false（未登记的普通怪不掉物品）")
+	if not bool(table.get("variant_legacy_fallback", false)):
+		failures.append("远征01怪物掉落表应 variant_legacy_fallback=true（强化怪仍走通用公式）")
+	var strong_rule := (first.get("monster_rules", {}) as Dictionary).get("strong_variant", {}) as Dictionary
+	if not is_equal_approx(float(strong_rule.get("chance", 0.0)), 0.075):
+		failures.append("远征01强化怪概率应为 0.075（原 0.15 的一半），实际 %s" % str(strong_rule.get("chance")))
+	if (strong_rule.get("suppressed_rooms", []) as Array) != ["room_01", "room_02"]:
+		failures.append("远征01强化怪应在 room_01 / room_02 禁用，实际 %s" % str(strong_rule.get("suppressed_rooms")))
 	if table != second.get("monster_drop_table", {}):
 		failures.append("怪物掉落表不应随版图种子变化")
 	# 掉落表是内容，不是几何：反向读生成器的 layout_id 函数段，防止后续误把字段
@@ -333,8 +336,9 @@ func _verify_expedition_level(failures: Array[String]) -> void:
 	loaded_monster_ids.sort()
 	if str(drop_snapshot.get("level_id", "")) != EXPEDITION_LEVEL_ID:
 		failures.append("奖励协调器没有装载远征01掉落表：%s" % str(drop_snapshot))
-	if loaded_monster_ids != ["exploder", "melee_chaser", "ranged_caster"]:
-		failures.append("奖励协调器装载的关卡怪物集合不正确：%s" % str(loaded_monster_ids))
+	# 2026-11-10：远征01 普通怪只掉金币 ⇒ 作者表是空清单，已编译的怪物规格集合应为空。
+	if not loaded_monster_ids.is_empty():
+		failures.append("奖励协调器装载的关卡怪物集合应为空（普通怪只掉金币）：%s" % str(loaded_monster_ids))
 	if not (drop_snapshot.get("errors", []) as Array).is_empty():
 		failures.append("奖励协调器装载关卡怪物表时报错：%s" % str(drop_snapshot.get("errors", [])))
 

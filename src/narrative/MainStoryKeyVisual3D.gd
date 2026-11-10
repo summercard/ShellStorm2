@@ -12,6 +12,8 @@ var _duration := 0.0
 var _from := Transform3D.IDENTITY
 var _slot := Vector3.ZERO
 var _slot_basis := Basis.IDENTITY
+## 嵌入孔是斜的：孔心只是参照点，真正插到位的钥匙柄沿孔轴抬到台面上方。
+var _slot_origin_offset := Vector3.ZERO
 var _handoff_contact := Vector3.ZERO
 var _handoff_done := false
 var _inserted := false
@@ -72,6 +74,8 @@ func perform(action: String, params: Dictionary) -> bool:
 			_from = global_transform
 			_slot = params["slot"]
 			_slot_basis = params.get("basis", Basis.IDENTITY)
+			# 斜孔：孔心 → 钥匙柄的偏移由嵌件给出，动画不得写死竖直插入。
+			_slot_origin_offset = params.get("origin_offset", Vector3.ZERO)
 			_face_npc(_slot)
 			_npc.call("scripted_gesture", "insert_key")
 		_:
@@ -110,9 +114,16 @@ func _process(delta: float) -> void:
 			_npc_hand.global_position = carry
 			global_position = carry
 		"insert":
-			var approach := _slot + Vector3.UP * (0.18 * (1.0 - weight))
+			var target := _slot + _slot_origin_offset
+			var approach := target + (_slot_basis.z * 0.16) * (1.0 - weight)
 			var position_now := _from.origin.lerp(approach, weight)
-			_npc_hand.global_position = position_now
+			# 手跟着握把抬起来；但绿苔只有 1.2 m 高、孔口在 1.5 m 台面上，
+			# 手臂最多再抬 0.45 m —— 剩下的行程是钥匙被吸进孔里，不是手继续伸长。
+			var hand_target := position_now
+			if is_instance_valid(_npc):
+				var reach_limit: float = _npc.global_position.y + _hand_height + 0.45
+				hand_target.y = minf(position_now.y, reach_limit)
+			_npc_hand.global_position = hand_target
 			global_position = position_now
 			global_basis = _from.basis.orthonormalized().slerp(_slot_basis.orthonormalized(), weight).scaled(Vector3.ONE * lerpf(1.2, 0.72, weight))
 			if weight >= 1.0:

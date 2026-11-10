@@ -84,6 +84,17 @@ func _ready() -> void:
 ## 重复调用先复位：宁可重播，也不能让上一轮的残留产物留在台上。
 func play(entries: Array) -> void:
 	_fill_stage(entries)
+	# **台面必须在闸门落下之前藏起来。**
+	#
+	# 台下是刚刚被清空的炼炉盘面，闸门此刻 `progress = 0`（还在矩形上方）。
+	# 若台面在这里就是 `modulate.a = 1`，它会**先亮 0.60 秒**，然后闸门才盖住它 ——
+	# 玩家在点下熔炼的第一瞬间就看见了答案，之后那 3 秒全是空转。
+	#
+	# 这条是 2026-11-10 补的。之前只堵了页脚与背包两处剧透（见
+	# `2026-10-19_synthesis_gate_veil.md`），漏了台面本身 —— 而它是最直接的一处。
+	# 台面在 `PHASE_OPENING` 才拉到 1（闸门正在升起、露出台面的那一刻）。
+	if _stage != null:
+		_stage.modulate.a = 0.0
 	_phase = PHASE_CLOSING
 	_time = 0.0
 	_progress = 0.0
@@ -92,9 +103,6 @@ func play(entries: Array) -> void:
 	_eye_cue_played = false
 	visible = true
 	set_process(true)
-	# 台面透明度会被上一轮的淡出改过，每次开播都要复位。
-	if _stage != null:
-		_stage.modulate.a = 1.0
 	_sync_shutter()
 	_play_cue("door_close", -3.0, 0.80)
 
@@ -121,6 +129,8 @@ func get_snapshot() -> Dictionary:
 		"playing": is_playing(),
 		"visible": visible,
 		"plates": _plate_names.duplicate(),
+		# 台面不透明度。防剧透的判据就在这里 —— 闸门没开到底之前它必须是 0。
+		"stage_alpha": float(_stage.modulate.a) if _stage != null else 0.0,
 	}
 
 
@@ -156,9 +166,15 @@ func _process(delta: float) -> void:
 			# 开闸用 ease-in：先慢后快，像被卷上去，而不是"弹开"。
 			_progress = 1.0 - p * p
 			_eyes = clampf(1.0 - p * 1.6, 0.0, 1.0)
+			# 台面在**这里**才显形（见 `play` 的注释）。前 35% 仍是 0：
+			# 闸门刚抬起一条缝就摆出产物，等于开门那一瞬直接跳到答案。
+			if _stage != null:
+				_stage.modulate.a = clampf((p - 0.35) / 0.65, 0.0, 1.0)
 			if p >= 1.0:
 				_progress = 0.0
 				_eyes = 0.0
+				if _stage != null:
+					_stage.modulate.a = 1.0
 				# 不在这里收尾：台面还要留着让玩家看清产物（见 LINGER_SECONDS）。
 				_phase = PHASE_LINGER
 				_play_cue("item_pickup", -7.0, 1.05)

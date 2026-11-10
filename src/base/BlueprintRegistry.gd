@@ -567,12 +567,25 @@ func _create_melee_baseball_bat() -> AssemblyNode:
 	})
 	return node
 
+## 散射喷壶 —— 弹匣按「轮」记，一轮扣扳机打 `bullet_count` 发弹丸。
+##
+## 2026-11-10 业主口径：「弹夹改成 2 发，然后每次打出去多少发子弹，每次装弹的时候
+## 消耗的普通子弹数量就是多少个。例如散弹枪一次打出去 5 发，那一次装弹就消耗 10 发备弹。」
+##   · `magazine_size` 6 → **2**（弹匣单位 = 一轮，不是一发弹丸）；
+##   · `bullet_count` 保持 **5**（一次扣扳机 5 发弹丸，判定与伤害都不变）；
+##   · 装填成本**不是常数**：`每轮成本 = 运行时 projectile_count`（= 5），
+##     真源是 `WeaponModel3D.get_reserve_cost_per_round()`，所以命运/配件把弹丸数
+##     加上去时成本同步上涨，不会留下「打 6 发只算 1 发弹药」的白嫖口子。
+##     满匣装填 = 2 轮 × 5 = **10 发通用弹药**；备弹不足 5 发时整轮装不进去（拒绝换弹）。
+##
+## 单匣节奏：`fire_rate 1.2` ⇒ 两轮 `1.67 s` + 换弹 `3.0 s` ⇒ 周期 **4.67 s**，
+## 每周期吃 10 发备弹（≈ 2.14 发/秒），这是本次改动唯一的实质弹药经济变化。
 func _create_gunbody_shotgun() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Shotgun")
 	node.tags = ["shotgun", "close_range", "burst"]
 	node.set_base_stats({
 		"damage": 45, "fire_rate": 1.2, "bullet_count": 5, "range": 7,
-		"spread": 0.35, "reload_time": 3.0, "magazine_size": 6,
+		"spread": 0.35, "reload_time": 3.0, "magazine_size": 2,
 	})
 	return node
 

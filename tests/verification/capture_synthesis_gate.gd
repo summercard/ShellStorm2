@@ -1,10 +1,13 @@
 extends Node
-## 实拍：兔子闸门的三个关键帧（关闸眼睛发红 / 开闸露产物 / 收完）。
+## 实拍：熔炼演出的完整流程关键帧。
+##
+## 两段串行（2026-11-10 起）：**投料**（材料被吸进炉心）→ **闸门**（关下 → 眼睛红 → 开 → 揭晓）。
 ##
 ## 只在窗口模式下产出 PNG —— `--headless` 下 `frame_post_draw` 不触发，截图会被静默跳过。
-## 时间用**手动驱动** `_process`，不真等 3.6 秒：动画的全部时间来源都是 `_time`。
+## 时间用**手动驱动** `_process`，不真等 6.5 秒：动画的全部时间来源都是各层的 `_time`。
 
 const PANEL := preload("res://src/ui/WorkbenchPanel.gd")
+const ALMANAC_MELT := preload("res://src/ui/ForgeMeltVeil.gd")
 const INVENTORY := preload("res://src/game/InventoryModule.gd")
 const FORGE := preload("res://src/weapons/WeaponForge.gd")
 const STEP := 0.05
@@ -39,35 +42,50 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	# 盘面：2 个豌豆手枪碎片 + 4 个标准弹 ⇒ R0 定向合成。
+	# 两条配方各拍一次：定向（翠）用 R0，随机（紫）用融合，方便对比两套配色。
 	panel.call("_tray_append", _item("bp_pistol"), 2, 0, 0)
 	panel.call("_tray_append", _item("mod_bullet_standard"), 4, 2, 0)
 	panel.call("_refresh_all")
 	await get_tree().process_frame
 
+	var melt_veil := panel.find_child("ForgeMeltVeil", true, false) as ForgeMeltVeil
 	var veil := panel.find_child("SynthesisGateVeil", true, false) as SynthesisGateVeil
-	if veil == null:
-		print("CAPTURE_SYNTHESIS_GATE_FAIL 闸门不存在")
+	if melt_veil == null or veil == null:
+		print("CAPTURE_SYNTHESIS_GATE_FAIL 投料层=%s 闸门=%s" % [melt_veil, veil])
 		get_tree().quit(1)
 		return
 
 	var plan := FORGE.classify(panel.call("_tray_probe_items"))
 	panel.call("_execute_forge", plan)
 	await get_tree().process_frame
-	# 手动接管时间轴，取帧才是确定性的。
+	# 手动接管两段的时间轴，取帧才是确定性的。
+	melt_veil.set_process(false)
 	veil.set_process(false)
 
-	# ① 关闸落底 + 眼睛全红（1.0s）
+	# ① 投料中段（0.40s）：材料离开原位、正被拉向炉心，炉心半亮
+	_advance(melt_veil, 0.40)
+	await _capture("forge_melt_intake")
+	# ② 充能满（1.25s）：材料已消失，炉心全亮 —— 这是"东西被吃掉了"的定格
+	var melt_span := float(ALMANAC_MELT.INTAKE_SECONDS) + float(ALMANAC_MELT.CHARGE_SECONDS)
+	_advance(melt_veil, melt_span - 0.40)
+	await _capture("forge_melt_charge")
+	# 推完投料段 → 闸门由面板自己接起来
+	_advance(melt_veil, float(ALMANAC_MELT.FADE_SECONDS) + 0.10)
+	await get_tree().process_frame
+
+	# ③ 关闸落底 + 眼睛全红（闸门 1.0s）。**台面此刻必须还是全透明的** ——
+	# 这条帧就是防剧透判据的可视证据：闸门关着，答案没有露出来。
 	_advance(veil, 1.0)
 	await _capture("synthesis_gate_closed")
-	# ② 开闸中（3.45s，闸门已升起约六成，台上那把枪露出来）
+	# ④ 开闸中（3.45s，闸门已升起约六成，台上那把枪正在显形）
 	# 取 3.45 而不是 3.3：闸门的下沿在 h×闭合度 处，闭合度要掉到 0.5 以下
 	# 才轮到台面（居中）露头。3.45s 时闭合度 0.44，产物正好露出上半身。
 	_advance(veil, 2.45)
 	await _capture("synthesis_gate_revealing")
-	# ③ 停留段（4.3s，闸门已收起，台面完整展示产物 —— 这是给玩家看清的 1.4 秒）
+	# ⑤ 停留段（4.3s，闸门已收起，台面完整展示产物 —— 这是给玩家看清的 1.4 秒）
 	_advance(veil, 0.85)
 	await _capture("synthesis_gate_revealed")
-	# ④ 播完（5.2s，台面淡出，盘面清空、产物已入包）
+	# ⑥ 播完（5.2s，台面淡出，盘面清空、产物已入包）
 	_advance(veil, 0.9)
 	await _capture("synthesis_gate_done")
 
