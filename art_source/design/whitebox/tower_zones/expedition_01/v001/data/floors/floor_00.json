@@ -31,8 +31,30 @@
       "template_rotation_deg": 0,
       "content_type": "",
       "connection_ports": [
-        { "port_id": "A", "target": "", "position_m": [-7.5, 0.0], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "room_01", "position_m": [0.0, 7.5], "outward": [0.0, 1.0] }
+        {
+          "port_id": "A",
+          "target": "",
+          "position_m": [
+            -7.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_01",
+          "position_m": [
+            0.0,
+            7.5
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ]
+        }
       ]
     },
     {
@@ -55,20 +77,94 @@
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
       "connection_ports": [
-        { "port_id": "A", "target": "entry", "position_m": [-22.5, -12.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "room_02", "position_m": [15.0, 20.0], "outward": [0.0, 1.0] },
-        { "port_id": "C", "target": "", "position_m": [-15.0, -20.0], "outward": [0.0, -1.0] },
-        { "port_id": "D", "target": "", "position_m": [15.0, -20.0], "outward": [0.0, -1.0] }
+        {
+          "port_id": "A",
+          "target": "entry",
+          "position_m": [
+            -22.5,
+            -12.5
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_02",
+          "position_m": [
+            15.0,
+            20.0
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "port_id": "C",
+          "target": "",
+          "position_m": [
+            -15.0,
+            -20.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ]
+        },
+        {
+          "port_id": "D",
+          "target": "",
+          "position_m": [
+            15.0,
+            -20.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ]
+        }
       ],
       "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-10.0, -12.5], "count_multiplier": 2 },
-        { "box": "box_corner_ambush", "center_m": [5.0, -12.5], "count_multiplier": 2 },
-        { "box": "box_wall_arc", "center_m": [15.0, 2.5], "rotation_deg": 90.0, "count_multiplier": 2 }
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            -10.0,
+            -12.5
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            5.0,
+            -12.5
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            15.0,
+            2.5
+          ]
+        }
       ],
       "encounter": {
         "stages": [
-          { "boxes": [0, 1, 2] }
-        ]
+          {
+            "boxes": [
+              0,
+              1
+            ]
+          },
+          {
+            "boxes": [
+              2
+            ]
+          }
+        ],
+        "intermission_sec": 2.0,
+        "min_player_distance_m": 6.0
       }
     },
     {
@@ -91,19 +187,73 @@
       "template_rotation_deg": 0,
       "content_type": "SCAVENGE",
       "connection_ports": [
-        { "port_id": "A", "target": "room_01", "position_m": [-20.0, -2.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "room_03", "position_m": [20.0, -2.5], "outward": [1.0, 0.0] }
+        {
+          "port_id": "A",
+          "target": "room_01",
+          "position_m": [
+            -20.0,
+            -2.5
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_03",
+          "position_m": [
+            20.0,
+            -2.5
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ]
+        }
       ],
       "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-12.5, -2.5] },
-        { "box": "box_room_spread", "center_m": [12.5, -2.5] }
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            -12.5,
+            -2.5
+          ]
+        },
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            12.5,
+            -2.5
+          ]
+        },
+        {
+          "box": "box_wall_arc",
+          "center_m": [
+            2.5,
+            2.5
+          ],
+          "delay_sec": 1.0
+        }
       ],
       "encounter": {
         "stages": [
-          { "boxes": [0, 1] }
+          {
+            "boxes": [
+              0
+            ]
+          },
+          {
+            "boxes": [
+              1,
+              2
+            ]
+          }
         ],
+        "intermission_sec": 2.0,
+        "min_player_distance_m": 6.0,
         "monster_ai": {
-          "alert_share_radius_m": 60.0
+          "alert_share_radius_m": 10.0
         }
       }
     },
@@ -127,52 +277,89 @@
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
       "connection_ports": [
-        { "port_id": "A", "target": "room_02", "position_m": [-15.0, -2.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "room_04", "position_m": [15.0, -2.5], "outward": [1.0, 0.0] }
+        {
+          "port_id": "A",
+          "target": "room_02",
+          "position_m": [
+            -15.0,
+            -2.5
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_04",
+          "position_m": [
+            15.0,
+            -2.5
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ]
+        }
       ],
       "spawn_placements": [],
       "encounter": {
-        "trigger": { "radius_m": 6.0, "offset_m": [0.0, 0.0] },
-        "duration_sec": 60.0,
-        "start_delay_sec": 1.0,
+        "trigger": {
+          "radius_m": 6.0,
+          "offset_m": [
+            0.0,
+            0.0
+          ]
+        },
+        "duration_sec": 0.0,
+        "start_delay_sec": 1.5,
+        "completion": "clear",
         "stage_advance": "clear",
+        "intermission_sec": 3.0,
+        "max_alive": 8,
+        "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": true,
+        "hud_countdown": false,
         "stages": [
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 5 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 3 },
-            { "type": "ranged_caster", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 5 },
-            { "type": "strong_random", "count": 1 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 5 },
-            { "type": "ranged_caster", "count": 2 },
-            { "type": "strong_random", "count": 1 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 6 },
-            { "type": "ranged_caster", "count": 3 },
-            { "type": "strong_random", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 6 },
-            { "type": "ranged_caster", "count": 4 },
-            { "type": "strong_random", "count": 2 }
-          ] }
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 1,
+                "min_player_distance_m": 8.0
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser",
+                "count": 6
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 2
+              },
+              {
+                "type": "ranged_caster",
+                "count": 3
+              },
+              {
+                "type": "melee_chaser",
+                "count": 6
+              }
+            ]
+          }
         ]
       },
       "secret_site": {
@@ -204,54 +391,102 @@
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
       "connection_ports": [
-        { "port_id": "A", "target": "room_03", "position_m": [-22.5, -12.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "room_05", "position_m": [15.0, 20.0], "outward": [0.0, 1.0] },
-        { "port_id": "C", "target": "", "position_m": [-15.0, -20.0], "outward": [0.0, -1.0] },
-        { "port_id": "D", "target": "", "position_m": [15.0, -20.0], "outward": [0.0, -1.0] }
+        {
+          "port_id": "A",
+          "target": "room_03",
+          "position_m": [
+            -22.5,
+            -12.5
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_05",
+          "position_m": [
+            15.0,
+            20.0
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "port_id": "C",
+          "target": "",
+          "position_m": [
+            -15.0,
+            -20.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ]
+        },
+        {
+          "port_id": "D",
+          "target": "",
+          "position_m": [
+            15.0,
+            -20.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ]
+        }
       ],
       "spawn_placements": [],
       "encounter": {
-        "trigger": { "shape": "band", "axis": "z", "thickness_m": 6.0, "offset_m": [0.0, 0.0] },
-        "duration_sec": 60.0,
-        "start_delay_sec": 1.0,
+        "trigger": {
+          "shape": "band",
+          "axis": "z",
+          "thickness_m": 6.0,
+          "offset_m": [
+            0,
+            0
+          ]
+        },
+        "duration_sec": 0.0,
+        "start_delay_sec": 1.5,
+        "completion": "clear",
         "stage_advance": "clear",
+        "intermission_sec": 2.5,
+        "max_alive": 6,
+        "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": true,
+        "hud_countdown": false,
         "stages": [
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 5 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 4 },
-            { "type": "ranged_caster", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 5 },
-            { "type": "strong_random", "count": 1 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 5 },
-            { "type": "ranged_caster", "count": 2 },
-            { "type": "strong_random", "count": 1 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 6 },
-            { "type": "ranged_caster", "count": 3 },
-            { "type": "strong_random", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 7 },
-            { "type": "ranged_caster", "count": 4 },
-            { "type": "strong_random", "count": 2 }
-          ] }
+          {
+            "monsters": [
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser",
+                "count": 4
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser",
+                "count": 4
+              }
+            ]
+          }
         ]
       }
     },
@@ -275,20 +510,93 @@
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
       "connection_ports": [
-        { "port_id": "A", "target": "room_04", "position_m": [-2.5, -30.0], "outward": [0.0, -1.0] },
-        { "port_id": "B", "target": "room_06", "position_m": [-2.5, 30.0], "outward": [0.0, 1.0] }
+        {
+          "port_id": "A",
+          "target": "room_04",
+          "position_m": [
+            -2.5,
+            -30.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_06",
+          "position_m": [
+            -2.5,
+            30.0
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ]
+        }
       ],
       "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-7.5, -22.5], "count_bonus": 1 },
-        { "box": "box_corner_ambush", "center_m": [7.5, -22.5] },
-        { "box": "box_center_elite", "center_m": [-7.5, 22.5], "count_bonus": 2 },
-        { "box": "box_room_spread", "center_m": [7.5, 22.5], "count_bonus": 2 },
-        { "box": "box_bridge_center", "center_m": [2.5, 2.5] }
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            -7.5,
+            -22.5
+          ],
+          "count_bonus": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            7.5,
+            -22.5
+          ]
+        },
+        {
+          "box": "box_center_elite",
+          "center_m": [
+            -7.5,
+            22.5
+          ],
+          "count_bonus": 2
+        },
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            7.5,
+            22.5
+          ],
+          "count_bonus": 2
+        },
+        {
+          "box": "box_bridge_center",
+          "center_m": [
+            2.5,
+            2.5
+          ]
+        }
       ],
       "encounter": {
         "stages": [
-          { "boxes": [0, 1, 2, 3, 4] }
-        ]
+          {
+            "boxes": [
+              0,
+              1
+            ]
+          },
+          {
+            "boxes": [
+              4
+            ]
+          },
+          {
+            "boxes": [
+              2,
+              3
+            ]
+          }
+        ],
+        "intermission_sec": 3.0,
+        "min_player_distance_m": 6.0
       }
     },
     {
@@ -311,52 +619,114 @@
       "template_rotation_deg": 0,
       "content_type": "SCAVENGE",
       "connection_ports": [
-        { "port_id": "A", "target": "room_05", "position_m": [-20.0, -2.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "room_07", "position_m": [20.0, -2.5], "outward": [1.0, 0.0] }
+        {
+          "port_id": "A",
+          "target": "room_05",
+          "position_m": [
+            -20.0,
+            -2.5
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_07",
+          "position_m": [
+            20.0,
+            -2.5
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ]
+        }
       ],
       "spawn_placements": [],
       "encounter": {
-        "trigger": { "shape": "band", "axis": "x", "thickness_m": 6.0, "offset_m": [0.0, 0.0] },
-        "duration_sec": 60.0,
-        "start_delay_sec": 1.0,
+        "trigger": {
+          "shape": "band",
+          "axis": "x",
+          "thickness_m": 6.0,
+          "offset_m": [
+            0,
+            0
+          ]
+        },
+        "duration_sec": 0.0,
+        "start_delay_sec": 1.5,
+        "completion": "clear",
         "stage_advance": "clear",
+        "intermission_sec": 2.5,
+        "max_alive": 10,
+        "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": true,
+        "hud_countdown": false,
         "stages": [
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 5 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 4 },
-            { "type": "ranged_caster", "count": 3 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 5 },
-            { "type": "strong_random", "count": 1 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 6 },
-            { "type": "ranged_caster", "count": 3 },
-            { "type": "strong_random", "count": 1 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 6 },
-            { "type": "ranged_caster", "count": 4 },
-            { "type": "strong_random", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 7 },
-            { "type": "ranged_caster", "count": 4 },
-            { "type": "strong_random", "count": 2 }
-          ] }
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser",
+                "count": 5
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 1
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser",
+                "count": 5
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster",
+                "count": 3
+              },
+              {
+                "type": "melee_chaser",
+                "count": 6
+              }
+            ]
+          }
         ]
       },
       "secret_site": {
@@ -388,19 +758,73 @@
       "template_rotation_deg": 0,
       "content_type": "STORAGE",
       "connection_ports": [
-        { "port_id": "A", "target": "room_06", "position_m": [-12.5, 0.0], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "room_08", "position_m": [12.5, 0.0], "outward": [1.0, 0.0] }
+        {
+          "port_id": "A",
+          "target": "room_06",
+          "position_m": [
+            -12.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_08",
+          "position_m": [
+            12.5,
+            0.0
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ]
+        }
       ],
       "spawn_placements": [
-        { "box": "box_center_elite", "center_m": [0.0, 0.0], "count_bonus": 6 },
-        { "box": "box_corner_ambush", "center_m": [-5.0, -5.0], "count_bonus": 2 },
-        { "box": "box_corner_ambush", "center_m": [5.0, 5.0], "count_bonus": 2 }
+        {
+          "box": "box_center_elite",
+          "center_m": [
+            0.0,
+            0.0
+          ],
+          "count_bonus": 2
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            -5.0,
+            -5.0
+          ],
+          "count_bonus": 2
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            5.0,
+            5.0
+          ],
+          "count_bonus": 2
+        }
       ],
       "encounter": {
         "stages": [
-          { "boxes": [0, 1] },
-          { "boxes": [2] }
-        ]
+          {
+            "boxes": [
+              0
+            ]
+          },
+          {
+            "boxes": [
+              1,
+              2
+            ]
+          }
+        ],
+        "intermission_sec": 2.5,
+        "min_player_distance_m": 6.0
       },
       "secret_site": {
         "site_id": "S3",
@@ -431,24 +855,119 @@
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
       "connection_ports": [
-        { "port_id": "A", "target": "room_07", "position_m": [-22.5, -12.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "room_09", "position_m": [15.0, 20.0], "outward": [0.0, 1.0] },
-        { "port_id": "C", "target": "", "position_m": [-15.0, -20.0], "outward": [0.0, -1.0] },
-        { "port_id": "D", "target": "", "position_m": [15.0, -20.0], "outward": [0.0, -1.0] }
+        {
+          "port_id": "A",
+          "target": "room_07",
+          "position_m": [
+            -22.5,
+            -12.5
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_09",
+          "position_m": [
+            15.0,
+            20.0
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "port_id": "C",
+          "target": "",
+          "position_m": [
+            -15.0,
+            -20.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ]
+        },
+        {
+          "port_id": "D",
+          "target": "",
+          "position_m": [
+            15.0,
+            -20.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ]
+        }
       ],
       "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-15.0, -12.5], "count_bonus": 1 },
-        { "box": "box_corner_ambush", "center_m": [0.0, -12.5], "count_bonus": 1 },
-        { "box": "box_wall_arc", "center_m": [15.0, -2.5], "rotation_deg": 90.0, "count_bonus": 1 },
-        { "box": "box_center_elite", "center_m": [15.0, 7.5], "count_bonus": 2 },
-        { "box": "box_room_spread", "center_m": [-5.0, 12.5] }
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            -15.0,
+            -12.5
+          ],
+          "count_bonus": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            0.0,
+            -12.5
+          ],
+          "count_bonus": 1
+        },
+        {
+          "box": "box_wall_arc",
+          "center_m": [
+            15.0,
+            -2.5
+          ],
+          "rotation_deg": 90.0,
+          "count_bonus": 1
+        },
+        {
+          "box": "box_center_elite",
+          "center_m": [
+            15.0,
+            7.5
+          ],
+          "count_bonus": 2
+        },
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            -5.0,
+            12.5
+          ]
+        }
       ],
       "encounter": {
         "stages": [
-          { "boxes": [0, 1] },
-          { "boxes": [2, 3] },
-          { "boxes": [4] }
-        ]
+          {
+            "boxes": [
+              0,
+              1
+            ]
+          },
+          {
+            "boxes": [
+              2,
+              3
+            ]
+          },
+          {
+            "boxes": [
+              4
+            ]
+          }
+        ],
+        "intermission_sec": 2.0,
+        "min_player_distance_m": 6.0
       }
     },
     {
@@ -471,52 +990,138 @@
       "template_rotation_deg": 0,
       "content_type": "EVENT",
       "connection_ports": [
-        { "port_id": "A", "target": "room_08", "position_m": [-15.0, -2.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "room_10", "position_m": [15.0, -2.5], "outward": [1.0, 0.0] }
+        {
+          "port_id": "A",
+          "target": "room_08",
+          "position_m": [
+            -15.0,
+            -2.5
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "room_10",
+          "position_m": [
+            15.0,
+            -2.5
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ]
+        }
       ],
       "spawn_placements": [],
       "encounter": {
-        "trigger": { "shape": "band", "axis": "z", "thickness_m": 6.0, "offset_m": [0.0, 0.0] },
-        "duration_sec": 90.0,
-        "start_delay_sec": 1.0,
+        "trigger": {
+          "shape": "band",
+          "axis": "z",
+          "thickness_m": 6.0,
+          "offset_m": [
+            0,
+            0
+          ]
+        },
+        "duration_sec": 0.0,
+        "start_delay_sec": 1.5,
+        "completion": "clear",
         "stage_advance": "clear",
+        "intermission_sec": 2.5,
+        "max_alive": 12,
+        "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": true,
+        "hud_countdown": false,
         "stages": [
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 5 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 4 },
-            { "type": "ranged_caster", "count": 3 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 6 },
-            { "type": "strong_random", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 6 },
-            { "type": "ranged_caster", "count": 4 },
-            { "type": "strong_random", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 7 },
-            { "type": "ranged_caster", "count": 4 },
-            { "type": "strong_random", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 3 },
-            { "type": "melee_chaser", "count": 7 },
-            { "type": "ranged_caster", "count": 5 },
-            { "type": "strong_random", "count": 3 }
-          ] }
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser",
+                "count": 5
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 1
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster",
+                "count": 3
+              },
+              {
+                "type": "melee_chaser",
+                "count": 6
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster",
+                "count": 3
+              },
+              {
+                "type": "melee_chaser",
+                "count": 6
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 2
+              },
+              {
+                "type": "ranged_caster_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster",
+                "count": 4
+              },
+              {
+                "type": "melee_chaser",
+                "count": 7
+              }
+            ]
+          }
         ]
       }
     },
@@ -540,52 +1145,78 @@
       "template_rotation_deg": 0,
       "content_type": "SCAVENGE",
       "connection_ports": [
-        { "port_id": "A", "target": "room_09", "position_m": [-20.0, -2.5], "outward": [-1.0, 0.0] },
-        { "port_id": "B", "target": "boss", "position_m": [12.5, -15.0], "outward": [0.0, -1.0] }
+        {
+          "port_id": "A",
+          "target": "room_09",
+          "position_m": [
+            -20.0,
+            -2.5
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ]
+        },
+        {
+          "port_id": "B",
+          "target": "boss",
+          "position_m": [
+            12.5,
+            -15.0
+          ],
+          "outward": [
+            0.0,
+            -1.0
+          ]
+        }
       ],
       "spawn_placements": [],
       "encounter": {
-        "trigger": { "shape": "band", "axis": "z", "thickness_m": 6.0, "offset_m": [0.0, 0.0] },
-        "duration_sec": 105.0,
-        "start_delay_sec": 1.0,
+        "trigger": {
+          "shape": "band",
+          "axis": "z",
+          "thickness_m": 6.0,
+          "offset_m": [
+            0,
+            0
+          ]
+        },
+        "duration_sec": 0.0,
+        "start_delay_sec": 1.5,
+        "completion": "clear",
         "stage_advance": "clear",
+        "intermission_sec": 2.0,
+        "max_alive": 5,
+        "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": true,
+        "hud_countdown": false,
         "stages": [
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 1 },
-            { "type": "melee_chaser", "count": 6 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 4 },
-            { "type": "ranged_caster", "count": 3 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 6 },
-            { "type": "strong_random", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 2 },
-            { "type": "melee_chaser", "count": 7 },
-            { "type": "ranged_caster", "count": 4 },
-            { "type": "strong_random", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 3 },
-            { "type": "melee_chaser", "count": 7 },
-            { "type": "ranged_caster", "count": 4 },
-            { "type": "strong_random", "count": 2 }
-          ] },
-          { "monsters": [
-            { "type": "fat_zombie03", "count": 3 },
-            { "type": "melee_chaser", "count": 8 },
-            { "type": "ranged_caster", "count": 5 },
-            { "type": "strong_random", "count": 3 }
-          ] }
+          {
+            "monsters": [
+              {
+                "type": "ranged_caster",
+                "count": 1
+              },
+              {
+                "type": "melee_chaser",
+                "count": 4
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "ranged_caster",
+                "count": 1
+              },
+              {
+                "type": "melee_chaser",
+                "count": 4
+              }
+            ]
+          }
         ]
       },
       "secret_site": {
@@ -624,40 +1255,150 @@
       "authored_layout_room_id": "boss",
       "content_type": "BOSS",
       "connection_ports": [
-        { "port_id": "P1", "target": "room_10", "position_m": [0.0, 50.0], "outward": [0.0, 1.0], "height_m": 12.0, "door_width_m": 2.2, "door_axis": "x", "door_line_m": 50.0, "door_center_m": 0.0 },
-        { "port_id": "P2", "target": "extraction", "position_m": [40.0, -22.5], "outward": [1.0, 0.0], "height_m": 0.0, "door_width_m": 2.2, "door_axis": "z", "door_line_m": 40.0, "door_center_m": -22.5 },
-        { "port_id": "P3", "target": "", "position_m": [-40.0, -22.5], "outward": [-1.0, 0.0], "height_m": 0.0, "door_width_m": 2.2, "door_axis": "z", "door_line_m": -40.0, "door_center_m": -22.5 }
+        {
+          "port_id": "P1",
+          "target": "room_10",
+          "position_m": [
+            0.0,
+            50.0
+          ],
+          "outward": [
+            0.0,
+            1.0
+          ],
+          "height_m": 12.0,
+          "door_width_m": 2.2,
+          "door_axis": "x",
+          "door_line_m": 50.0,
+          "door_center_m": 0.0
+        },
+        {
+          "port_id": "P2",
+          "target": "extraction",
+          "position_m": [
+            40.0,
+            -22.5
+          ],
+          "outward": [
+            1.0,
+            0.0
+          ],
+          "height_m": 0.0,
+          "door_width_m": 2.2,
+          "door_axis": "z",
+          "door_line_m": 40.0,
+          "door_center_m": -22.5
+        },
+        {
+          "port_id": "P3",
+          "target": "",
+          "position_m": [
+            -40.0,
+            -22.5
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "height_m": 0.0,
+          "door_width_m": 2.2,
+          "door_axis": "z",
+          "door_line_m": -40.0,
+          "door_center_m": -22.5
+        }
       ],
       "boss_reinforcement_plan": {
         "enabled": true,
-        "boss_spawn_local_m": [0, -22.5],
-        "activation_delay_sec": 10.0,
+        "boss_spawn_local_m": [
+          0,
+          -22.5
+        ],
+        "activation_delay_sec": 12.0,
         "spawn_rows": [
-          { "side": "west", "x_m": -10, "z_m": [-32.5, -27.5, -22.5, -17.5, -12.5], "height_m": 3.0 },
-          { "side": "east", "x_m": 10, "z_m": [-32.5, -27.5, -22.5, -17.5, -12.5], "height_m": 3.0 }
+          {
+            "side": "west",
+            "x_m": -10,
+            "z_m": [
+              -32.5,
+              -27.5,
+              -22.5,
+              -17.5,
+              -12.5
+            ],
+            "height_m": 3.0
+          },
+          {
+            "side": "east",
+            "x_m": 10,
+            "z_m": [
+              -32.5,
+              -27.5,
+              -22.5,
+              -17.5,
+              -12.5
+            ],
+            "height_m": 3.0
+          }
         ],
         "enemy_request_type": "ambush",
         "initial_count": 3,
-        "count_step": 1,
-        "max_count_per_round": 8,
-        "initial_interval_sec": 6.0,
-        "interval_step_sec": -0.35,
-        "min_interval_sec": 2.5,
-        "max_reinforcement_alive": 18,
+        "count_step": 0,
+        "max_count_per_round": 3,
+        "initial_interval_sec": 9.0,
+        "interval_step_sec": 0.0,
+        "min_interval_sec": 9.0,
+        "max_reinforcement_alive": 6,
         "launch_speed_mps": 8.5,
         "launch_duration_sec": 0.38
       },
       "spawn_placements": [
-        { "box": "box_boss_arena", "center_m": [0.0, -22.5] },
-        { "box": "box_room_spread", "center_m": [-7.5, -15.0] },
-        { "box": "box_corner_ambush", "center_m": [7.5, -22.5] },
-        { "box": "box_wall_arc", "center_m": [0.0, -32.5] }
+        {
+          "box": "box_boss_arena",
+          "center_m": [
+            0.0,
+            -22.5
+          ]
+        },
+        {
+          "box": "box_room_spread",
+          "center_m": [
+            -7.5,
+            -15.0
+          ]
+        },
+        {
+          "box": "box_corner_ambush",
+          "center_m": [
+            7.5,
+            -22.5
+          ]
+        },
+        {
+          "box": "box_wall_arc",
+          "center_m": [
+            0.0,
+            -32.5
+          ]
+        }
       ],
       "encounter": {
         "stages": [
-          { "boxes": [0] },
-          { "boxes": [1, 2] },
-          { "boxes": [3] }
+          {
+            "boxes": [
+              0
+            ]
+          },
+          {
+            "boxes": [
+              1,
+              2
+            ]
+          },
+          {
+            "boxes": [
+              3
+            ]
+          }
         ]
       }
     },
@@ -683,7 +1424,23 @@
       "anchor_policy": "static_port_layout",
       "content_type": "",
       "connection_ports": [
-        { "port_id": "P1", "target": "boss", "position_m": [-12.5, 0.0], "outward": [-1.0, 0.0], "height_m": 0.0, "door_width_m": 2.2, "door_axis": "z", "door_line_m": -12.5, "door_center_m": 0.0 }
+        {
+          "port_id": "P1",
+          "target": "boss",
+          "position_m": [
+            -12.5,
+            0.0
+          ],
+          "outward": [
+            -1.0,
+            0.0
+          ],
+          "height_m": 0.0,
+          "door_width_m": 2.2,
+          "door_axis": "z",
+          "door_line_m": -12.5,
+          "door_center_m": 0.0
+        }
       ]
     }
   ],

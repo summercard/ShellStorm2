@@ -24,6 +24,7 @@ extends Node
 ##   3. 显式断言「配置里的候选房 ∈ 运行时 id 集合」。
 
 const CLEAR_DROP_SCRIPT := preload("res://src/game/ClearDropService.gd")
+const CHEST_REWARD_SERVICE := preload("res://src/rewards/ChestRewardService.gd")
 const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const PLAN_PATH := "res://data/level_plans/expedition_01/level_plan.json"
 const LEVEL_ID := "expedition_01"
@@ -67,6 +68,7 @@ func _ready() -> void:
 	_check_room_pick(service)
 	_check_contents(service)
 	_check_chest_grants(service)
+	_check_room_overrides(service)
 	_check_reverse_control(clear_drops)
 	_finish()
 
@@ -133,6 +135,7 @@ func _check_structure(clear_drops: Dictionary) -> void:
 		str(entry.get("weapon_grade", "")) == "blue",
 		"枪品质下限必须是 blue（最低品质），实际 %s" % str(entry.get("weapon_grade", ""))
 	)
+	_check(str(entry.get("bullet_module_id", "")) == "mod_bullet_standard", "教学保底必须声明标准弹")
 	var items := entry.get("items", []) as Array
 	var ammo_ok := false
 	for raw in items:
@@ -275,6 +278,8 @@ func _check_chest_grants(service: RefCounted) -> void:
 				var item := grant.get("item", {}) as Dictionary
 				var item_id := str(grant.get("item_id", item.get("id", "")))
 				if item_id in CANDIDATE_GUNS:
+					_check(str(item.get("bullet_module_id", "")) == "mod_bullet_standard", "教学保底枪实际弹种必须为标准弹")
+					_check(bool(item.get("bullet_module_locked", false)), "教学保底枪弹种必须锁定")
 					has_gun = true
 					gun_found += 1
 					_check(
@@ -297,6 +302,39 @@ func _check_chest_grants(service: RefCounted) -> void:
 		tier_seen.keys() == ["normal"] or (tier_seen.has("normal") and tier_seen.size() == 1),
 		"清房箱档位被改动：%s" % str(tier_seen.keys())
 	)
+
+
+func _check_room_overrides(service: RefCounted) -> void:
+	var room_02: Dictionary = service.roll_room_drop("room_02", "content", 2026)
+	_check(str(room_02.get("kind", "")) == "chest", "room_02 应产生普通宝箱")
+	var room_02_chest := room_02.get("chest", {}) as Dictionary
+	_check(is_equal_approx(float(room_02_chest.get("fate_card_chance", 0.0)), 1.0), "room_02 命运机会必须冻结为1.0")
+	_check(bool(room_02_chest.get("fate_common_offer", false)), "room_02 必须冻结 fate_common_offer")
+	_check(not bool(room_02_chest.get("mimic", false)), "room_02 关键箱不得拟态")
+	_check((room_02.get("grants", []) as Array).size() == 1, "room_02 应分账输出1个清房小包")
+	var room_07: Dictionary = service.roll_room_drop("room_07", "content", 2026)
+	var room_07_chest := room_07.get("chest", {}) as Dictionary
+	var additional := room_07.get("additional_weapon", {}) as Dictionary
+	_check(not room_07_chest.has("additional_weapon"), "追加武器不得进入宝箱分账")
+	_check(str(additional.get("weapon_id", "")) == "weapon_rifle", "room_07 追加武器必须是步枪")
+	_check(str(additional.get("grade", "")) == "purple", "room_07 追加武器必须是紫品")
+	_check(str(additional.get("bullet_module_id", "")) == "mod_bullet_standard", "room_07 追加武器必须绑定标准弹")
+	_check((room_07.get("grants", []) as Array).size() == 2, "room_07 应分账输出血包与弹药小包")
+	var room_07_result := CHEST_REWARD_SERVICE.resolve_additional_weapon(room_07, 2026, "room_07", "clear_drop:room_07", 1)
+	var room_07_weapon_found := false
+	for grant in room_07_result.get("grants", []) as Array:
+		var item := (grant as Dictionary).get("item", {}) as Dictionary
+		if str((grant as Dictionary).get("item_id", "")) == "weapon_rifle":
+			room_07_weapon_found = true
+			_check(str(item.get("drop_grade", "")) == "purple", "room_07 追加武器必须落地为紫品")
+			_check(str(item.get("bullet_module_id", "")) == "mod_bullet_standard", "room_07 追加武器必须绑定标准弹")
+	_check(room_07_weapon_found, "room_07 独立追加出口必须产出步枪")
+	var normal := CHEST_REWARD_SERVICE.resolve(room_02_chest, 2026, "room_02", 1)
+	var fate_count := 0
+	for grant in normal.get("grants", []) as Array:
+		if str((grant as Dictionary).get("item_id", "")) == "item_fate_card_drop":
+			fate_count += 1
+	_check(fate_count == 1, "room_02 fate_card_chance=1 必须只生成一次命运凭据")
 
 
 ## 反向对照：把 `room_guarantees` 抹掉，必须**什么都不保底**。

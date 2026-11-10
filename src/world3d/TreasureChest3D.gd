@@ -184,6 +184,10 @@ var explicit_grants: Array = []
 ## 这里只是往正常奖励后面追加几条确定性的东西。用途（2026-11-09 业主）：
 ## 远征01 第一或第二个房间里那只箱子，必掉一把最低品质的霰弹枪/步枪 + 100 发通用弹药。
 var guaranteed_items: Array = []
+## 计划阶段冻结的奖励来源与命运报价元数据；随运行期箱账往返，不在读档时重抽。
+var source_room_id := ""
+var fate_card_chance := -1.0
+var fate_common_offer := false
 ## 平涂配色。alpha = 0 表示不染，用模型自带色盘（普通/高级箱的现行观感）。
 ## 非 0 时按 `body_tint` 给身板、`trim_tint` 给箱边，见 `RewardChestVisual3D.apply_flat_tint`。
 var body_tint := Color(0, 0, 0, 0)
@@ -226,20 +230,23 @@ func configure(config: Dictionary) -> void:
 	mimic_monster_kind = str(config.get("mimic_monster_kind", mimic_monster_kind))
 	explicit_grants = (config.get("grants", explicit_grants) as Array).duplicate(true)
 	guaranteed_items = (config.get("guaranteed_items", guaranteed_items) as Array).duplicate(true)
+	source_room_id = str(config.get("source_room_id", source_room_id))
+	fate_card_chance = clampf(float(config["fate_card_chance"]), 0.0, 1.0) if config.has("fate_card_chance") else -1.0
+	fate_common_offer = bool(config.get("fate_common_offer", false))
 	var tint_value: Variant = config.get("body_tint", null)
 	if tint_value is Array and (tint_value as Array).size() >= 3:
 		var tint: Array = tint_value
-		body_tint = Color(float(tint[0]), float(tint[1]), float(tint[2]))
+		body_tint = Color(float(tint[0]), float(tint[1]), float(tint[2]), float(tint[3]) if tint.size() >= 4 else 1.0)
 		trim_tint = body_tint.darkened(0.28)
 	var trim_value: Variant = config.get("trim_tint", null)
 	if trim_value is Array and (trim_value as Array).size() >= 3:
 		var trim: Array = trim_value
-		trim_tint = Color(float(trim[0]), float(trim[1]), float(trim[2]))
+		trim_tint = Color(float(trim[0]), float(trim[1]), float(trim[2]), float(trim[3]) if trim.size() >= 4 else 1.0)
 
 
 ## 返回给奖励调度层的最小宝箱配置；不暴露节点状态，也不直接解析奖励。
 func get_reward_config() -> Dictionary:
-	return {
+	var config := {
 		"id": chest_id,
 		"chest_tier": chest_tier,
 		"quality": quality,
@@ -248,7 +255,12 @@ func get_reward_config() -> Dictionary:
 		"mimic": mimic,
 		"mimic_monster_kind": mimic_monster_kind,
 		"guaranteed_items": guaranteed_items.duplicate(true),
+		"source_room_id": source_room_id,
+		"fate_common_offer": fate_common_offer,
 	}
+	if fate_card_chance >= 0.0:
+		config["fate_card_chance"] = fate_card_chance
+	return config
 
 
 ## 箱内**明确装什么**（副本）。空数组 = 走池子解析。
@@ -713,9 +725,34 @@ func quality_tier() -> int:
 			return 0
 
 
+func get_save_data() -> Dictionary:
+	var snapshot := get_reward_config()
+	snapshot["opened"] = _opened
+	snapshot["grants"] = explicit_grants.duplicate(true)
+	snapshot["body_tint"] = [body_tint.r, body_tint.g, body_tint.b, body_tint.a]
+	snapshot["trim_tint"] = [trim_tint.r, trim_tint.g, trim_tint.b, trim_tint.a]
+	return snapshot
+
+
+func from_snapshot(snapshot: Dictionary) -> void:
+	if snapshot.is_empty():
+		return
+	var config := snapshot.duplicate(true)
+	config["id"] = str(snapshot.get("chest_id", snapshot.get("id", chest_id)))
+	config["source_room_id"] = str(snapshot.get("source_room_id", ""))
+	config["guaranteed_items"] = (snapshot.get("guaranteed_items", []) as Array).duplicate(true)
+	config["grants"] = (snapshot.get("grants", []) as Array).duplicate(true)
+	configure(config)
+	if bool(snapshot.get("mimic", false)) and bool(snapshot.get("opened", false)):
+		restore_mimic_state()
+	elif bool(snapshot.get("opened", false)):
+		restore_opened_state(true)
+
+
 func get_chest_snapshot() -> Dictionary:
 	return {
 		"chest_id": chest_id,
+		"source_room_id": source_room_id,
 		"quality": quality,
 		"opened": _opened,
 		# 动画阶段：0 闭合 / 1 抖动 / 2 蓄力 / 3 砰 / 4 余韵 / 5 已开。
@@ -725,6 +762,9 @@ func get_chest_snapshot() -> Dictionary:
 		"open_animation_done": is_open_animation_done(),
 		"burst_delay_seconds": OPEN_BURST_DELAY_SECONDS,
 		"mimic": mimic,
+		"fate_card_chance": fate_card_chance,
+		"fate_common_offer": fate_common_offer,
+		"guaranteed_items": guaranteed_items.duplicate(true),
 		"visual_visible": _visual_root.visible if _visual_root != null else false,
 		"collision_disabled": _collision.disabled if _collision != null else false,
 		"prompt": _prompt.text if _prompt != null else "",

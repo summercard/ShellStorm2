@@ -7754,10 +7754,8 @@ func spawn_point_for_index(index: int) -> Vector3:
 				distance = minf(distance, point.distance_to(previous))
 			if distance < 0.01:
 				continue
-			var score := distance
-			# 优先真实边缘，但不能为贴边而堆叠；边缘容不下时自动向内部扩展。
-			if _spawn_edge_candidates[i] and distance >= _spawn_clearance() * 2.0 + 0.1:
-				score += separation
+			# 优先真实边缘，但不能为贴边而堆叠；与安全预选共用原评分。
+			var score := _spawn_candidate_score(distance, separation, _spawn_edge_candidates[i])
 			if score > best_score:
 				chosen = i
 				best_score = score
@@ -7767,6 +7765,95 @@ func spawn_point_for_index(index: int) -> Vector3:
 		local_points.append(_spawn_candidates[chosen])
 		enemy_spawn_points.append(to_global(_spawn_candidates[chosen]))
 	return enemy_spawn_points[target]
+
+
+## 世界坐标接口；candidate_world=null 使用原房间池，数组（含空数组）严格限制授权候选域。
+## 只预选、不消耗编成随机流；无几何点为硬失败，距离/占位暂不可用才允许重试。
+func choose_safe_spawn_position(
+	player_world: Vector3 = Vector3.INF, min_player_distance_m: float = 0.0,
+	occupied_world: Array[Vector3] = [], candidate_world: Variant = null
+) -> Dictionary:
+	_prepare_safe_spawn_selection()
+	var pool: Array[Vector3] = []
+	if candidate_world == null:
+		for point in _spawn_candidates:
+			pool.append(to_global(point))
+	else:
+		pool.assign(candidate_world)
+	var has_geometry := false
+	var chosen := Vector3.INF
+	var best_score := -1.0
+	var separation := maxf(_spawn_clearance() * 2.0 + 0.1, get_dimensions().length() * 0.22)
+	for point in pool:
+		if not _safe_spawn_geometry_valid(point):
+			continue
+		has_geometry = true
+		if not _safe_spawn_distances_valid(point, player_world, min_player_distance_m, occupied_world):
+			continue
+		var distance := separation
+		for previous in occupied_world:
+			distance = minf(distance, Vector2(point.x - previous.x, point.z - previous.z).length())
+		var local := to_local(point)
+		local.y = 0.0
+		var edge := not _spawn_floor_contains(local, _spawn_clearance() + 3.0)
+		var score := _spawn_candidate_score(distance, separation, edge)
+		if score > best_score:
+			best_score = score
+			chosen = point
+	if chosen.is_finite():
+		return {"ok": true, "position": chosen}
+	return {
+		"ok": false, "position": Vector3.INF, "retryable": has_geometry,
+		"reason": "spawn_space_occupied" if has_geometry else "spawn_position_failed",
+	}
+
+
+## 校验给定世界点，不修正/吸附/移出盒域；调用方须累计本批已选位置。
+func is_safe_spawn_position_valid(
+	world_point: Vector3, player_world: Vector3 = Vector3.INF,
+	min_player_distance_m: float = 0.0, occupied_world: Array[Vector3] = []
+) -> bool:
+	_prepare_safe_spawn_selection()
+	return _safe_spawn_geometry_valid(world_point) and _safe_spawn_distances_valid(
+		world_point, player_world, min_player_distance_m, occupied_world
+	)
+
+
+func _prepare_safe_spawn_selection() -> void:
+	if _spawn_candidates.is_empty():
+		_build_spawn_points()
+	_ensure_spawn_reach()
+	_collect_spawn_blockers()
+
+
+func _safe_spawn_geometry_valid(world_point: Vector3) -> bool:
+	if not world_point.is_finite():
+		return false
+	var local := to_local(world_point)
+	# 本接口只选原主通行层，不把抬高点或下沉层当作合法地面。
+	if absf(local.y) > SPAWN_GROUND_TOP_MAX_M:
+		return false
+	local.y = 0.0
+	return _spawn_floor_contains(local, _spawn_clearance()) and _spawn_obstacle_free(local)
+
+
+func _safe_spawn_distances_valid(
+	point: Vector3, player_world: Vector3, min_player_distance_m: float,
+	occupied_world: Array[Vector3]
+) -> bool:
+	# 使用世界水平米距；房间局部坐标与 dungeon root 坐标不能直接相减。
+	if min_player_distance_m > 0.0:
+		if not player_world.is_finite() or Vector2(point.x - player_world.x, point.z - player_world.z).length() < min_player_distance_m:
+			return false
+	var spacing := _spawn_clearance() * 2.0 + 0.1
+	for previous in occupied_world:
+		if Vector2(point.x - previous.x, point.z - previous.z).length() < spacing:
+			return false
+	return true
+
+
+func _spawn_candidate_score(distance: float, separation: float, edge: bool) -> float:
+	return distance + (separation if edge and distance >= _spawn_clearance() * 2.0 + 0.1 else 0.0)
 
 
 ## —— 触发盒落点（触发器刷怪设计 §4）——

@@ -32,6 +32,7 @@ var _reference_income_max := 0.0
 var _segment_income_min: Array[float] = []
 var _segment_income_expected: Array[float] = []
 var _segment_income_max: Array[float] = []
+var _room_price_indexes: Dictionary = {}
 var _actual_kill_income := 0
 var _actual_kill_events := 0
 
@@ -52,10 +53,14 @@ func configure_from_runtime(
 	_segment_income_min.clear()
 	_segment_income_expected.clear()
 	_segment_income_max.clear()
+	_room_price_indexes.clear()
 	for room_value in rooms:
 		if not room_value is Dictionary:
 			continue
 		var room: Dictionary = room_value as Dictionary
+		var room_id := str(room.get("id", room.get("room_id", "")))
+		if not room_id.is_empty():
+			_room_price_indexes[room_id] = _segment_income_expected.size()
 		var room_min := _reference_income_min
 		var room_expected := _reference_income_expected
 		var room_max := _reference_income_max
@@ -101,6 +106,38 @@ func max_unlocked_rarity() -> int:
 		if _actual_kill_income >= threshold:
 			unlocked = rarity
 	return unlocked
+
+
+## 凭据的来源房映射到既有报价序号；未知来源返回 -1，不借当前进度静默兜底。
+func price_index_for_room(room_id: String) -> int:
+	return int(_room_price_indexes.get(room_id, -1))
+
+
+## 仅在新 offer 冻结前调用；候选须已由现有关卡白名单过滤。
+static func ensure_common_offer(offer: Array[FateCard], allowed_pool: Array[FateCard], run_seed: int, pickup_id: String) -> Array[FateCard]:
+	var out: Array[FateCard] = []
+	out.assign(offer)
+	if out.is_empty():
+		return out
+	var common_ids := ["fate_scale_node", "fate_bounce_bullet"]
+	for card in out:
+		if card.get_stable_card_id() in common_ids and card.card_rarity == FateCard.CardRarity.COMMON and not card.is_reversed():
+			return out
+	var candidates: Array[FateCard] = []
+	for card in allowed_pool:
+		if card.get_stable_card_id() in common_ids and card.card_rarity == FateCard.CardRarity.COMMON and not card.is_reversed():
+			candidates.append(card)
+	if candidates.is_empty():
+		return []
+	var picked := candidates[absi(hash("%d|%s|common_offer" % [run_seed, pickup_id])) % candidates.size()]
+	# 优先替换同身份卡，避免候选中出现同名正逆两张。
+	var slot := 0
+	for index in range(out.size()):
+		if out[index].get_stable_card_id() == picked.get_stable_card_id():
+			slot = index
+			break
+	out[slot] = picked
+	return out
 
 
 func price_for_rarity(rarity: int, door_index: int = 1) -> int:

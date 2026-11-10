@@ -128,7 +128,11 @@
       "chance": 0.075,
       "suppressed_rooms": [
         "room_01",
-        "room_02"
+        "room_02",
+        "room_03",
+        "room_04",
+        "room_05",
+        "room_10"
       ],
       "note": "强化怪概率升级（MonsterInjector._strong_variant_chance）。2026-11-10 业主调整：①chance 0.15→0.075（减半）；②suppressed_rooms 列出的房间不刷强化怪（前两房保证新手段位平稳）——按 room_id 命中，该房任何来源的补刷/增援同样不升级。注意：房间 3 以后另有写死的 strong_random 摆位，不受 chance 与 suppressed_rooms 影响。"
     },
@@ -287,8 +291,158 @@
             "item_id": "item_ammo_pack",
             "count": 100
           }
-        ]
+        ],
+        "bullet_module_id": "mod_bullet_standard"
       }
-    ]
-  }
+    ],
+    "room_overrides": {
+      "room_01": {
+        "grants": [
+          {
+            "item_id": "item_health_potion",
+            "count": 1
+          }
+        ],
+        "mimic_chance": 0.0
+      },
+      "room_02": {
+        "grants": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 80
+          }
+        ],
+        "mimic_chance": 0.0,
+        "fate_card_chance": 1.0,
+        "fate_common_offer": true
+      },
+      "room_03": {
+        "grants": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 140
+          }
+        ]
+      },
+      "room_04": {
+        "grants": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 200
+          },
+          {
+            "item_id": "item_health_potion",
+            "count": 1
+          }
+        ]
+      },
+      "room_05": {
+        "grants": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 280
+          }
+        ]
+      },
+      "room_06": {
+        "grants": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 220
+          }
+        ]
+      },
+      "room_07": {
+        "grants": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 200
+          },
+          {
+            "item_id": "item_health_potion",
+            "count": 1
+          }
+        ],
+        "mimic_chance": 0.0,
+        "fate_card_chance": 1.0,
+        "additional_weapon": {
+          "weapon_id": "weapon_rifle",
+          "grade": "purple",
+          "bullet_module_id": "mod_bullet_standard"
+        }
+      },
+      "room_08": {
+        "grants": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 180
+          }
+        ]
+      },
+      "room_09": {
+        "grants": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 220
+          }
+        ],
+        "mimic_chance": 0.0
+      },
+      "room_10": {
+        "grants": [
+          {
+            "item_id": "item_ammo_pack",
+            "count": 580
+          },
+          {
+            "item_id": "item_health_potion",
+            "count": 2
+          }
+        ],
+        "mimic_chance": 0.0
+      }
+    }
+  },
+  "flow_barks": [
+    {
+      "id": "exp01_safe_enter",
+      "room_id": "entry",
+      "on": "enter",
+      "text": "备用通道已开。找到核心终端。",
+      "first_run_only": true,
+      "duration_sec": 4.0
+    },
+    {
+      "id": "exp01_room03_encounter_start",
+      "room_id": "room_03",
+      "on": "encounter_start",
+      "text": "胖子倒下还会炸。先拉开，再开火。",
+      "first_run_only": true,
+      "duration_sec": 4.0
+    },
+    {
+      "id": "exp01_room04_clear",
+      "room_id": "room_04",
+      "on": "clear",
+      "text": "备用电源接入，前面的桥能通了。",
+      "first_run_only": true,
+      "duration_sec": 4.0
+    },
+    {
+      "id": "exp01_room09_encounter_start",
+      "room_id": "room_09",
+      "on": "encounter_start",
+      "text": "核心区已发现入侵。最后一道防线启动。",
+      "first_run_only": true,
+      "duration_sec": 4.0
+    },
+    {
+      "id": "exp01_room10_clear",
+      "room_id": "room_10",
+      "on": "clear",
+      "text": "终端就在门后。补好弹药再进去。",
+      "first_run_only": true,
+      "duration_sec": 4.0
+    }
+  ]
 }

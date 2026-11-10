@@ -20,6 +20,8 @@ class FakeHost extends RefCounted:
 	var spawn_log: Array[Dictionary] = []
 	var actions: Array[Dictionary] = []
 	var busy_rooms: Dictionary = {}
+	var retry_next_spawn := false
+	var last_min_player_distance := -1.0
 
 	func encounter_event_current_room_id() -> String:
 		return current_room
@@ -38,6 +40,10 @@ class FakeHost extends RefCounted:
 		}
 
 	func encounter_event_spawn(instance_id: String, room_id: String, spec: Dictionary, count: int) -> Dictionary:
+		last_min_player_distance = float(spec.get("min_player_distance_m", -1.0))
+		if retry_next_spawn:
+			retry_next_spawn = false
+			return {"ok": true, "spawned": 0, "retryable": true}
 		spawn_log.append({"instance_id": instance_id, "room_id": room_id, "type": spec.get("type", ""), "count": count})
 		live_by_instance[instance_id] = int(live_by_instance.get(instance_id, 0)) + count
 		return {"ok": true, "spawned": count}
@@ -191,6 +197,67 @@ func _run_fake_contract() -> void:
 	_check((cancelled_result.get("snapshot", {}) as Dictionary).get("status") == "cancelled", "取消后状态错误")
 	var cancelled_again := cancelled_director.cancel(cancelled_id, "duplicate_cancel", true)
 	_check(bool(cancelled_again.get("already_terminal", false)) and cancelled_host.actions.size() == 1, "重复取消重复执行结果动作")
+
+	var no_deadline_host := FakeHost.new()
+	var no_deadline_director = DIRECTOR_SCRIPT.new(no_deadline_host)
+	var no_deadline_config := {
+		"schema_version": 1,
+		"event_id": "finite_clear_no_deadline",
+		"room_id": "room_a",
+		"duration_sec": 0.0,
+		"completion": "clear",
+		"stage_advance": "clear",
+		"intermission_sec": 2.0,
+		"max_alive": 1,
+		"min_player_distance_m": 6.0,
+		"prereqs": {"player_alive": true, "run_active": true},
+		"stages": [
+			{"at_sec": 0.0, "monsters": [{"type": "melee_chaser", "count": 2}]},
+			{"at_sec": 0.0, "monsters": [{"type": "fat_zombie03", "count": 1, "min_player_distance_m": 8.0}]},
+		],
+		"on_completed": [],
+	}
+	var no_deadline_started := no_deadline_director.start(no_deadline_config)
+	_check(bool(no_deadline_started.get("ok", false)), "duration=0有限stages未启动")
+	var no_deadline_id := str(no_deadline_started.get("instance_id", ""))
+	no_deadline_director.tick(10.0)
+	var no_deadline_first := no_deadline_director.get_snapshot(no_deadline_id)
+	_check(no_deadline_first.get("status") == "active" and no_deadline_first.get("spawned") == 1 and no_deadline_first.get("pending") == 1, "无截止模式错误按duration终止或丢pending")
+	_check(is_equal_approx(no_deadline_host.last_min_player_distance, 6.0), "事件默认最小距离未传给Host")
+	no_deadline_host.live_by_instance[no_deadline_id] = 0
+	no_deadline_director.tick(0.1)
+	_check(no_deadline_director.get_snapshot(no_deadline_id).get("spawned") == 2, "pending队列释放后未补发")
+	no_deadline_host.live_by_instance[no_deadline_id] = 0
+	no_deadline_director.notify_enemy_departed(no_deadline_id, "killed")
+	var saved_no_deadline := no_deadline_director.export_snapshot()
+	var remaining_snapshot := no_deadline_director.get_snapshot(no_deadline_id)
+	_check(is_equal_approx(float(remaining_snapshot.get("intermission_remaining_sec", -1.0)), 2.0), "真实清空后未开始保存间歇")
+	var no_deadline_roundtrip: Variant = JSON.parse_string(JSON.stringify(saved_no_deadline))
+	_check(bool(no_deadline_director.import_snapshot(no_deadline_roundtrip as Dictionary).get("ok", false)), "间歇快照JSON往返失败")
+	no_deadline_director.tick(1.0)
+	_check(no_deadline_director.get_snapshot(no_deadline_id).get("spawned") == 1, "间歇未结束时提前派发下一波")
+	no_deadline_director.tick(1.0)
+	var no_deadline_second := no_deadline_director.get_snapshot(no_deadline_id)
+	_check(no_deadline_second.get("spawned") == 3 and is_equal_approx(no_deadline_host.last_min_player_distance, 8.0), "间歇结束后未派发下一波或未传单条最小距离")
+	no_deadline_host.live_by_instance[no_deadline_id] = 0
+	no_deadline_director.notify_enemy_departed(no_deadline_id, "killed")
+	_check(no_deadline_director.get_snapshot(no_deadline_id).get("status") == "completed", "有限stages最后一波清空后未立即完成")
+
+	var zero_ratio := no_deadline_config.duplicate(true)
+	zero_ratio["event_id"] = "zero_ratio_rejected"
+	(zero_ratio["stages"] as Array)[1] = {"at_ratio": 0.5, "monsters": [{"type": "melee_chaser", "count": 1}]}
+	var zero_ratio_result := DIRECTOR_SCRIPT.validate_config(zero_ratio)
+	_check(not bool(zero_ratio_result.get("ok", false)) and zero_ratio_result.get("error") == "duration_zero_at_ratio_not_allowed", "无截止模式未拒绝at_ratio")
+
+	var retry_host := FakeHost.new()
+	retry_host.retry_next_spawn = true
+	var retry_director = DIRECTOR_SCRIPT.new(retry_host)
+	var retry_started := retry_director.start(no_deadline_config.duplicate(true))
+	var retry_id := str(retry_started.get("instance_id", ""))
+	retry_director.tick(0.1)
+	_check(retry_director.get_snapshot(retry_id).get("status") == "active" and retry_director.get_snapshot(retry_id).get("pending") == 2, "retryable空点未保留pending")
+	retry_director.tick(0.1)
+	_check(retry_director.get_snapshot(retry_id).get("spawned") == 1, "retryable空点未在下一tick重试")
 
 
 func _run_formal_dungeon_contract() -> void:

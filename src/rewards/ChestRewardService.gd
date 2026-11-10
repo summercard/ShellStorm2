@@ -40,6 +40,11 @@ static func resolve(
 		result["errors"] = errors
 		return result
 
+	var source_room_id := str(chest_config.get("source_room_id", room_id))
+	if not source_room_id.is_empty() and source_room_id != room_id:
+		errors.append(_error("SOURCE_ROOM_MISMATCH", "宝箱冻结来源与当前房间不符"))
+		result["errors"] = errors
+		return result
 	var chest_id := str(chest_config.get("id", ""))
 	if chest_id.is_empty():
 		errors.append(_error("INVALID_CHEST_ID", "chest_config.id 不能为空"))
@@ -134,8 +139,9 @@ static func resolve(
 	# ⚠ 顺序：先 `_unit_grants` 把普通奖励拍成单件，**之后**再接保底。
 	# 保底条目自带数量（如 100 发弹药），绝不能过 `_unit_grants`（那会把 100 拍成 1）。
 	var stabilized := _stabilize_grants(_unit_grants(grants), room_id, chest_id)
-	for grant in guaranteed_grants:
-		stabilized.append(grant)
+	var guaranteed_typed: Array[Dictionary] = []
+	guaranteed_typed.assign(guaranteed_grants)
+	stabilized.append_array(_stabilize_grants(guaranteed_typed, room_id, "%s:guaranteed:%d" % [chest_id, run_seed]))
 	result["grants"] = stabilized
 	result["errors"] = errors
 	result["tier"] = tier
@@ -171,6 +177,9 @@ static func _resolve_guaranteed_items(
 			"count": maxi(1, int(guaranteed.get("count", 1))),
 			"merge_same_item": false,
 		}
+		var bullet_module_id := str(guaranteed.get("bullet_module_id", ""))
+		if not bullet_module_id.is_empty():
+			entry["bullet_module_id"] = bullet_module_id
 		# 保底枪的品质是**定值**（例如远征01 要求最低品质 = 蓝），不参与随机品质分布。
 		var grade := str(guaranteed.get("grade", ""))
 		if not grade.is_empty():
@@ -186,6 +195,42 @@ static func _resolve_guaranteed_items(
 		"floor": maxi(1, floor_level),
 		"salt": _salt(room_id, chest_id, "guaranteed"),
 	})
+
+
+## 清房追加武器的独立解析出口，不混入 resolve() 的普通箱奖励。
+static func resolve_additional_weapon(
+	drop_config: Dictionary,
+	run_seed: int,
+	room_id: String,
+	chest_id: String,
+	floor_level: int
+) -> Dictionary:
+	var weapon := drop_config.get("additional_weapon", {}) as Dictionary
+	if weapon.is_empty():
+		return {"ok": true, "grants": []}
+	var item_id := str(weapon.get("weapon_id", ""))
+	if item_id.is_empty():
+		return {"ok": false, "grants": [], "errors": [_error("INVALID_ADDITIONAL_WEAPON", "additional_weapon.weapon_id 不能为空")]}
+	var entry := {
+		"kind": _SPEC.KIND_ITEM,
+		"item_id": item_id,
+		"count": 1,
+		"merge_same_item": false,
+		"forced_grade": str(weapon.get("grade", "")),
+		"bullet_module_id": str(weapon.get("bullet_module_id", "")),
+	}
+	var report := _REWARD_SERVICE.resolve({
+		"spec_id": "chest:%s:%s:additional_weapon" % [room_id, chest_id],
+		"entries": [entry],
+	}, {
+		"seed": run_seed,
+		"floor": maxi(1, floor_level),
+		"salt": _salt(room_id, chest_id, "additional_weapon"),
+	})
+	var grants: Array[Dictionary] = []
+	grants.assign(report.get("grants", []))
+	report["grants"] = _stabilize_grants(grants, room_id, "%s:additional_weapon" % chest_id)
+	return report
 
 
 static func _tier_for(config: Dictionary) -> String:
@@ -208,7 +253,8 @@ static func _resolve_fate(
 	tier: String,
 	floor_level: int
 ) -> Dictionary:
-	var chance := FATE_CHANCE if tier == TIER_NORMAL else 1.0
+	var chance := float(config.get("fate_card_chance", FATE_CHANCE if tier == TIER_NORMAL else 1.0))
+	chance = clampf(chance, 0.0, 1.0)
 	var spec := {
 		"spec_id": "chest:%s:%s:fate" % [room_id, chest_id],
 		"entries": [{
@@ -233,11 +279,13 @@ static func _resolve_fate(
 		grant["fate_source"] = "treasure_chest"
 		grant["source_room_id"] = room_id
 		grant["source_chest_id"] = chest_id
+		grant["fate_common_offer"] = bool(config.get("fate_common_offer", false))
 		var item := grant.get("item", {}) as Dictionary
 		item["fate_pickup_id"] = fate_id
 		item["fate_source"] = "treasure_chest"
 		item["source_room_id"] = room_id
 		item["source_chest_id"] = chest_id
+		item["fate_common_offer"] = bool(config.get("fate_common_offer", false))
 		grant["item"] = item
 	return report
 

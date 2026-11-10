@@ -29,12 +29,13 @@ const PREREQ_KEYS := [
 const ACTION_KEYS := ["type", "key", "value", "room_id", "on", "text"]
 const CONFIG_KEYS := [
 	"schema_version", "event_id", "room_id", "duration_sec", "completion", "stages", "monsters",
-	"count", "interval_sec", "total_count", "max_alive", "prereqs", "on_completed", "on_cancelled",
+	"count", "interval_sec", "total_count", "max_alive", "intermission_sec", "min_player_distance_m",
+	"prereqs", "on_completed", "on_cancelled",
 	"leave_policy", "progress_mode", "follow_current_room", "stage_advance",
 	"hunt_player", "hud_countdown",
 ]
 const STAGE_KEYS := ["at_sec", "at_ratio", "monsters"]
-const MONSTER_KEYS := ["type", "count", "content_id"]
+const MONSTER_KEYS := ["type", "count", "content_id", "min_player_distance_m"]
 
 var _host: Object
 var _instances: Dictionary = {}
@@ -92,6 +93,8 @@ func start(config: Dictionary) -> Dictionary:
 		"pending": 0,
 		"dropped": 0,
 		"escaped": 0,
+		"intermission_remaining_sec": 0.0,
+		"last_clear_elapsed": -1.0,
 		"failed": [],
 		"result_actions": [],
 		"result_applied": false,
@@ -283,8 +286,13 @@ static func validate_config(config: Dictionary) -> Dictionary:
 	var event_id := str(config.get("event_id", ""))
 	if event_id.is_empty():
 		return _reject("event_id_required")
-	var duration := float(config.get("duration_sec", 0.0))
-	if duration <= 0.0:
+	if not config.has("duration_sec"):
+		return _reject("duration_sec_invalid")
+	var duration_value: Variant = config.get("duration_sec", 0.0)
+	if not _finite_number(duration_value):
+		return _reject("duration_sec_invalid")
+	var duration := float(duration_value)
+	if duration < 0.0:
 		return _reject("duration_sec_invalid")
 	var completion := str(config.get("completion", ""))
 	if completion not in COMPLETIONS:
@@ -300,6 +308,19 @@ static func validate_config(config: Dictionary) -> Dictionary:
 		return _reject("stage_advance_invalid")
 	if config.has("follow_current_room") and not (config["follow_current_room"] is bool):
 		return _reject("follow_current_room_invalid")
+	var intermission_value: Variant = config.get("intermission_sec", 0.0)
+	if not _finite_number(intermission_value) or float(intermission_value) < 0.0:
+		return _reject("intermission_sec_invalid")
+	var distance_value: Variant = config.get("min_player_distance_m", 0.0)
+	if not _finite_number(distance_value) or float(distance_value) < 0.0:
+		return _reject("min_player_distance_m_invalid")
+	var no_deadline := duration == 0.0
+	if no_deadline and not (
+		completion == "clear" and stage_advance == "clear" and progress_mode == "tick"
+	):
+		return _reject("duration_zero_combination_invalid")
+	if no_deadline and not config.has("stages"):
+		return _reject("duration_zero_requires_explicit_stages")
 	# `hunt_player`（事件猎杀）与 `hud_countdown`（右上角倒计时环）都是**表现/手感开关**，
 	# 与事件状态机无关：缺省 false ⇒ 既有调用方（撤离防守）逐字不变。
 	for boolean_key in ["hunt_player", "hud_countdown"]:
@@ -319,7 +340,10 @@ static func validate_config(config: Dictionary) -> Dictionary:
 			var stage_result := _validate_stage(value)
 			if not bool(stage_result.get("ok", false)):
 				return stage_result
-			stages.append(stage_result["stage"])
+			var normalized_stage := stage_result["stage"] as Dictionary
+			if no_deadline and normalized_stage.has("at_ratio"):
+				return _reject("duration_zero_at_ratio_not_allowed")
+			stages.append(normalized_stage)
 	else:
 		var compiled := _compile_convenience(config)
 		if not bool(compiled.get("ok", false)):
@@ -341,11 +365,26 @@ static func validate_config(config: Dictionary) -> Dictionary:
 	normalized["prereqs"] = (prereqs as Dictionary).duplicate(true)
 	normalized["on_completed"] = action_result["actions"]
 	normalized["on_cancelled"] = cancelled_action_result["actions"]
+	normalized["intermission_sec"] = float(intermission_value)
+	normalized["min_player_distance_m"] = float(distance_value)
 	if config.has("max_alive"):
-		if int(config["max_alive"]) <= 0:
+		if not (config["max_alive"] is int or config["max_alive"] is float) or int(config["max_alive"]) <= 0 or float(config["max_alive"]) != floor(float(config["max_alive"])):
 			return _reject("max_alive_invalid")
 		normalized["max_alive"] = int(config["max_alive"])
 	return {"ok": true, "config": normalized}
+
+
+static func _finite_number(value: Variant) -> bool:
+	return (value is int or value is float) and is_finite(float(value))
+
+
+static func _is_no_deadline(config: Dictionary) -> bool:
+	return (
+		is_zero_approx(float(config.get("duration_sec", 0.0)))
+		and str(config.get("completion", "")) == "clear"
+		and str(config.get("stage_advance", "")) == "clear"
+		and str(config.get("progress_mode", "")) == "tick"
+	)
 
 
 func _step_instance(instance_id: String, state: Dictionary, delta: float) -> void:
@@ -363,10 +402,17 @@ func _step_instance(instance_id: String, state: Dictionary, delta: float) -> voi
 		_instances[instance_id] = state
 		return
 	state["paused"] = false
-	state["elapsed"] = minf(float(config["duration_sec"]), float(state.get("elapsed", 0.0)) + delta)
+	var no_deadline := _is_no_deadline(config)
+	if no_deadline:
+		# duration_sec=0 是「有限显式 stages、无截止」的模式，不推进时间轴。
+		state["elapsed"] = 0.0
+	else:
+		state["elapsed"] = minf(float(config["duration_sec"]), float(state.get("elapsed", 0.0)) + delta)
+	var remaining_intermission := maxf(0.0, float(state.get("intermission_remaining_sec", 0.0)))
+	state["intermission_remaining_sec"] = maxf(0.0, remaining_intermission - delta)
 	_dispatch_due_stages(instance_id, state)
 	_try_finish_clear(instance_id, state)
-	if bool(state.get("terminal", false)):
+	if bool(state.get("terminal", false)) or no_deadline:
 		return
 	if float(state.get("elapsed", 0.0)) >= float(config["duration_sec"]):
 		# 计时到点 ⇒ **不再开新波**。未开始的阶段整体作废并计入 `dropped`；
@@ -392,24 +438,29 @@ func _dispatch_due_stages(instance_id: String, state: Dictionary) -> void:
 	for index in stages.size():
 		var stage := stages[index] as Dictionary
 		var stage_state := (state["stage_states"] as Array)[index] as Dictionary
-		var threshold := float(stage.get("at_sec", 0.0))
+		var threshold := 0.0 if _is_no_deadline(config) else float(stage.get("at_sec", 0.0))
 		if stage.has("at_ratio"):
 			threshold = float(stage["at_ratio"]) * float(config["duration_sec"])
 		if not bool(stage_state.get("started", false)) and elapsed >= threshold:
-			# `clear` 模式：时间到之外，还要求**上一阶段已派发完且场上清空**。
+			# `clear` 模式：时间到之外，还要求上一阶段已派发完、场上清空且间歇结束。
 			if clear_gated and index > 0:
 				var previous := (state["stage_states"] as Array)[index - 1] as Dictionary
 				if not bool(previous.get("complete", false)):
 					break
-				# ⚠ 每次判门槛都必须**重新问**存活数，绝不能缓存。
-				# 同一帧里前面刚派发完的阶段已经把怪放进场了；若沿用上一阶段算出的 0，
-				# 后面所有阶段会连锁通过 —— 实测表现是「一波出完就把六波全出完」，
-				# 清怪门控彻底失效（`verify_encounter_trigger_room_flow` 抓到的就是这个）。
+				# 每次判门槛都重新问 Host，不能缓存上一阶段的 0。
 				if int(_host_call("encounter_event_live_count", [instance_id], 0)) > 0:
+					break
+				if int(state.get("last_cleared_stage", -1)) != index - 1:
+					state["last_cleared_stage"] = index - 1
+					state["last_clear_elapsed"] = elapsed
+					state["intermission_remaining_sec"] = maxf(0.0, float(config.get("intermission_sec", 0.0)))
+				if float(state.get("intermission_remaining_sec", 0.0)) > 0.0:
 					break
 			stage_state["started"] = true
 			encounter_event_stage_started.emit(get_snapshot(instance_id), index)
 		_spawn_pending_stage(instance_id, state, index)
+		if bool(state.get("terminal", false)):
+			return
 
 
 func _spawn_pending_stage(instance_id: String, state: Dictionary, stage_index: int) -> void:
@@ -439,9 +490,17 @@ func _spawn_pending_stage(instance_id: String, state: Dictionary, stage_index: i
 			instance_id,
 			int(state.get("spawn_serial", 0))
 		]
+		if not monster.has("min_player_distance_m"):
+			monster["min_player_distance_m"] = float(config.get("min_player_distance_m", 0.0))
 		var result := _host_call("encounter_event_spawn", [instance_id, str(state["room_id"]), monster, amount], {}) as Dictionary
 		monster.erase("_persistent_id_base")
 		var spawned := clampi(int(result.get("spawned", 0)), 0, amount)
+		if bool(result.get("retryable", false)) and spawned <= 0:
+			# 临时没有合法落点不是事件失败：保留 pending，停止本轮循环，下一次 tick 重试。
+			pending_total += remaining
+			state["pending"] = _pending_total(state)
+			_instances[instance_id] = state
+			return
 		if not bool(result.get("ok", spawned > 0)) and spawned <= 0:
 			_fail_instance(instance_id, state, str(result.get("reason", "spawn_failed")))
 			return
@@ -465,12 +524,28 @@ func _try_finish_clear(instance_id: String, state: Dictionary) -> void:
 	if int(state.get("pending", 0)) > 0:
 		return
 	var stages: Array = state.get("stage_states", []) as Array
-	for stage_value in stages:
-		if not bool((stage_value as Dictionary).get("complete", false)):
-			return
+	var last_started := -1
+	for index in stages.size():
+		if bool((stages[index] as Dictionary).get("started", false)):
+			last_started = index
 	var live := int(_host_call("encounter_event_live_count", [instance_id], 0))
 	if live > 0:
 		return
+	var intermission := maxf(0.0, float((state.get("config", {}) as Dictionary).get("intermission_sec", 0.0)))
+	var next_stage_exists := last_started >= 0 and last_started + 1 < stages.size()
+	if next_stage_exists and bool((stages[last_started] as Dictionary).get("complete", false)):
+		if int(state.get("last_cleared_stage", -1)) != last_started:
+			state["last_cleared_stage"] = last_started
+			state["last_clear_elapsed"] = float(state.get("elapsed", 0.0))
+			state["intermission_remaining_sec"] = intermission
+			_instances[instance_id] = state
+			return
+		if float(state.get("intermission_remaining_sec", 0.0)) > 0.0:
+			_instances[instance_id] = state
+			return
+	for stage_value in stages:
+		if not bool((stage_value as Dictionary).get("complete", false)):
+			return
 	_finish_instance(instance_id, state, "completed")
 
 
@@ -625,6 +700,10 @@ static func _validate_stage(value: Variant) -> Dictionary:
 		var normalized_monster := monster.duplicate(true)
 		normalized_monster["type"] = type_id
 		normalized_monster["count"] = count
+		if monster.has("min_player_distance_m"):
+			if not _finite_number(monster["min_player_distance_m"]) or float(monster["min_player_distance_m"]) < 0.0:
+				return _reject("monster_min_player_distance_invalid")
+			normalized_monster["min_player_distance_m"] = float(monster["min_player_distance_m"])
 		monsters.append(normalized_monster)
 	var normalized := stage.duplicate(true)
 	normalized["monsters"] = monsters
@@ -654,11 +733,17 @@ static func _compile_convenience(config: Dictionary) -> Dictionary:
 		if count <= 0:
 			return _reject("monster_count_invalid")
 		available_total += count
-		raw_specs.append({
+		var source_distance: Variant = source.get("min_player_distance_m", null)
+		if source_distance != null and (not _finite_number(source_distance) or float(source_distance) < 0.0):
+			return _reject("monster_min_player_distance_invalid")
+		var raw_spec := {
 			"type": type_id,
 			"count": count,
 			"content_id": str(source.get("content_id", "")),
-		})
+		}
+		if source_distance != null:
+			raw_spec["min_player_distance_m"] = float(source_distance)
+		raw_specs.append(raw_spec)
 	var total := available_total if requested_total <= 0 else requested_total
 	if total <= 0 or total > available_total:
 		return _reject("convenience_total_count_invalid")
@@ -669,11 +754,14 @@ static func _compile_convenience(config: Dictionary) -> Dictionary:
 			break
 		var source := source_value as Dictionary
 		var amount := mini(remaining, int(source["count"]))
-		specs.append({
+		var compiled_spec := {
 			"type": source["type"],
 			"count": amount,
 			"content_id": source["content_id"],
-		})
+		}
+		if source.has("min_player_distance_m"):
+			compiled_spec["min_player_distance_m"] = source["min_player_distance_m"]
+		specs.append(compiled_spec)
 		remaining -= amount
 	if remaining > 0:
 		return _reject("convenience_total_count_underfilled")

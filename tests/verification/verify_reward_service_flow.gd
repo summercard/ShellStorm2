@@ -52,6 +52,7 @@ func _ready() -> void:
 	_case_normal_ammo_range()
 	_case_runtime_coordinator()
 	_case_sink_delivery_confirmation()
+	_case_forced_bullet_stream()
 
 	if _failures.is_empty():
 		print("REWARD_SERVICE_FLOW_OK: registry gate, reproducibility, four dispatch sources, override chain, rejection paths, weighted/independent math, normal ammo range, truncation and negative controls pass")
@@ -60,6 +61,26 @@ func _ready() -> void:
 	for failure in _failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _case_forced_bullet_stream() -> void:
+	var spec := {"spec_id": "forced_bullet_stream", "entries": [
+		{"kind": "item", "item_id": "weapon_rifle", "count": 1, "forced_grade": "blue"},
+		{"kind": "item", "item_id": "weapon_shotgun", "count": 1},
+	]}
+	var seen := {}
+	for index in range(32):
+		var random := _SERVICE.resolve(spec, {"seed": index})
+		var fixed_spec := spec.duplicate(true)
+		fixed_spec["entries"][0]["bullet_module_id"] = "mod_bullet_standard"
+		var fixed := _SERVICE.resolve(fixed_spec, {"seed": index})
+		var first: Dictionary = fixed["grants"][0]["item"]
+		var next_random: Dictionary = random["grants"][1]["item"]
+		var next_fixed: Dictionary = fixed["grants"][1]["item"]
+		seen[random["grants"][0]["item"]["bullet_module_id"]] = true
+		_expect(first["bullet_module_id"] == "mod_bullet_standard" and first["bullet_module_locked"], "固定弹种须写入真实武器身份")
+		_expect(next_random["bullet_module_id"] == next_fixed["bullet_module_id"] and next_random["drop_grade"] == next_fixed["drop_grade"], "固定弹种仍消耗同量随机数，不移动后项随机流")
+	_expect(seen.size() > 1, "普通枪不得被全局改成标准弹")
 
 
 func _case_monster_drop_table() -> void:

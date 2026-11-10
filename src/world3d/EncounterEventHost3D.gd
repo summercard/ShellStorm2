@@ -42,8 +42,36 @@ func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: D
 	var room := dungeon._room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or not room.is_streamed():
 		return {"ok": false, "reason": "room_not_streamed"}
-	var configs: Array[Dictionary] = []
+	if dungeon._room_spawn_blocked.has(room_id):
+		return {"ok": false, "reason": "spawn_position_failed", "failed": true}
+	var min_distance := float(monster_spec.get("min_player_distance_m", 0.0))
+	var player_world := dungeon.player.global_position if is_instance_valid(dungeon.player) else Vector3.INF
+	var occupied: Array[Vector3] = []
+	for value in dungeon._enemy_nodes_by_room.get(room_id, []) as Array:
+		var enemy := value as Enemy3D
+		if is_instance_valid(enemy) and not enemy.is_queued_for_deletion() and enemy.ai_state != "dead":
+			occupied.append(enemy.global_position)
 	var positions: Array = []
+	# 整批先预选；任何一只暂时排不下，均不生成配置、不预约精英、不消耗编成 RNG。
+	for _index in count:
+		var selection := room.choose_safe_spawn_position(player_world, min_distance, occupied)
+		if not bool(selection.get("ok", false)):
+			if bool(selection.get("retryable", false)):
+				# 排除玩家与旧怪后仍装不下整批，属恒无解，不能永远假称临时拥挤。
+				var intrinsic: Array[Vector3] = []
+				for _capacity_index in count:
+					var capacity := room.choose_safe_spawn_position(Vector3.INF, 0.0, intrinsic)
+					if not bool(capacity.get("ok", false)):
+						push_error("DungeonRoom3D: 房间 %s 没有可用刷怪落点（count=%d）" % [room_id, count])
+						return {"ok": false, "reason": "spawn_position_failed", "failed": true}
+					intrinsic.append(capacity["position"] as Vector3)
+				return {"ok": true, "spawned": 0, "retryable": true}
+			push_error("DungeonRoom3D: 房间 %s 没有可用刷怪落点" % room_id)
+			return {"ok": false, "reason": "spawn_position_failed", "failed": true}
+		var point: Vector3 = selection["position"]
+		positions.append(point)
+		occupied.append(point)
+	var configs: Array[Dictionary] = []
 	for index in count:
 		_elite_spawn_serial += 1
 		var elite_reservation_id := "%s:elite:%d" % [instance_id, _elite_spawn_serial]
@@ -70,14 +98,36 @@ func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: D
 		if monster_spec.has("content_id"):
 			generated["content_id"] = monster_spec["content_id"]
 		configs.append(generated)
-		positions.append(room.spawn_point_for_index(index))
+	var had_nodes := dungeon._enemy_nodes_by_room.has(room_id)
+	var before_nodes: Array = (dungeon._enemy_nodes_by_room.get(room_id, []) as Array).duplicate()
+	var had_alive := dungeon._alive_by_room.has(room_id)
+	var before_alive := int(dungeon._alive_by_room.get(room_id, 0))
 	var spawned := dungeon._spawn_enemy_batch(room, configs, true, false, positions)
-	if spawned < 0:
+	var delivered := 0
+	for value in dungeon._enemy_nodes_by_room.get(room_id, []) as Array:
+		if value not in before_nodes and is_instance_valid(value) and not value.is_queued_for_deletion():
+			delivered += 1
+	if spawned != count or delivered != count:
+		# 与现有原子刷怪事务一致：撤回本次新增实体及存活账，不撤掉该事件此前成功的批次。
+		for value in dungeon._enemy_nodes_by_room.get(room_id, []) as Array:
+			if value not in before_nodes and is_instance_valid(value):
+				if MonsterAIManager != null:
+					MonsterAIManager.unregister_enemy(value)
+				value.set_process(false)
+				value.queue_free()
+		if had_nodes:
+			dungeon._enemy_nodes_by_room[room_id] = before_nodes
+		else:
+			dungeon._enemy_nodes_by_room.erase(room_id)
+		if had_alive:
+			dungeon._alive_by_room[room_id] = before_alive
+		else:
+			dungeon._alive_by_room.erase(room_id)
 		_settle_unspawned_elites(configs)
-		return {"ok": false, "reason": "spawn_position_failed", "failed": true}
-	if spawned != count:
-		_settle_unspawned_elites(configs, spawned)
-		return {"ok": false, "spawned": spawned, "reason": "spawn_partial", "failed": true}
+		return {
+			"ok": false, "spawned": 0, "failed": true,
+			"reason": "spawn_position_failed" if spawned < 0 else "spawn_partial",
+		}
 	return {"ok": true, "spawned": spawned}
 
 func encounter_event_live_count(instance_id: String) -> int:

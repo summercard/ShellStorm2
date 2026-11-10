@@ -208,9 +208,16 @@ var _fate_pickup_claimed: Dictionary = {}
 
 ## 清房掉落纯服务（2026-11-06）。未配置 ⇒ 不发宝箱、不发补给，房间清理逐字走原路径。
 var _clear_drop_service = CLEAR_DROP_SERVICE_SCRIPT.new()
-## 本局已经结算过掉落的房间（含 Boss）。只防重复，不入存档：
-## 恢复时由「房间已清 + 房间账里有没有这只箱子」重新确定，不依赖这张表。
+## 计划与交付分账随世界存档；缺少计划的旧局不得按新配置补发。
 var _clear_drop_settled: Dictionary = {}
+var _clear_drop_plans: Dictionary = {}
+var _clear_drop_delivery: Dictionary = {}
+var _flow_barks: Array = []
+var _flow_barks_fired: Dictionary = {}
+var _flow_bark_text := ""
+var _flow_bark_first_run := false
+var _room_wave_remaining: Dictionary = {}
+var _room_wave_deadlines: Dictionary = {}
 
 ## 已购买卡的整体缩小倍率（业主 2026-10-14 指定 70%）。
 ## ⚠️ 这一档是**基准缩放**，不是悬停反馈 —— `_tween_fate_card_scale` 收到的所有 target
@@ -1029,6 +1036,7 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 		"schema_version": 1, "next_instance_number": 1, "instances": [],
 	}
 	world_state["roaming_elite"] = _roaming_elite.export_snapshot()
+	_export_flow_integration_state(world_state)
 	return world_state
 
 
@@ -1294,6 +1302,108 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 		_inventory_ui.set_quick_item_module(_quick_inventory)
 	_refresh_quick_item_hud()
 	_refresh_loot_label()
+	# 边状态恢复可能重新推开共享入口；封门事实须在边投影之后再应用。
+	for sealed_room_id in _sealed_rooms.keys():
+		set_room_seal(str(sealed_room_id), true, str(_sealed_rooms[sealed_room_id]))
+
+
+func _export_flow_integration_state(world_state: Dictionary) -> void:
+	world_state["room_encounter_flow"] = {
+		"fired": _room_encounters_fired.duplicate(true),
+		"active": _room_encounter_active.duplicate(true),
+		"sealed": _sealed_rooms.duplicate(true),
+		"completed_history": _encounter_event_completed_history.duplicate(),
+		"event_resolved": _resolved_event_rooms.duplicate(true),
+		"event_combat": _event_combat_rooms.duplicate(true),
+	}
+	world_state["clear_drop_plans"] = _clear_drop_plans.duplicate(true)
+	world_state["clear_drop_delivery"] = _clear_drop_delivery.duplicate(true)
+	world_state["clear_drop_settled"] = _clear_drop_settled.duplicate(true)
+	world_state["flow_barks_fired"] = _flow_barks_fired.duplicate(true)
+	world_state["flow_bark_first_run"] = _flow_bark_first_run
+
+
+func _import_flow_integration_state(world_state: Dictionary) -> void:
+	_clear_drop_plans = (world_state.get("clear_drop_plans", {}) as Dictionary).duplicate(true)
+	_clear_drop_delivery = (world_state.get("clear_drop_delivery", {}) as Dictionary).duplicate(true)
+	_clear_drop_settled = (world_state.get("clear_drop_settled", {}) as Dictionary).duplicate(true)
+	_flow_barks_fired = (world_state.get("flow_barks_fired", {}) as Dictionary).duplicate(true)
+	_flow_bark_first_run = bool(world_state.get("flow_bark_first_run", false))
+	var flow := world_state.get("room_encounter_flow", {}) as Dictionary
+	_room_encounters_fired = (flow.get("fired", {}) as Dictionary).duplicate(true)
+	_room_encounter_active = (flow.get("active", {}) as Dictionary).duplicate(true)
+	_sealed_rooms = (flow.get("sealed", {}) as Dictionary).duplicate(true)
+	_encounter_event_completed_history.assign(flow.get("completed_history", []))
+	if flow.has("event_resolved"):
+		_resolved_event_rooms = (flow["event_resolved"] as Dictionary).duplicate(true)
+	if flow.has("event_combat"):
+		_event_combat_rooms = (flow["event_combat"] as Dictionary).duplicate(true)
+	# 旧档只认冻结 Director，不根据当前关卡重新编译已开始的遭遇。
+	if _encounter_event_director != null:
+		for row in _encounter_event_director.get_snapshot_rows():
+			var room_id := str(row.get("room_id", ""))
+			if str(row.get("event_id", "")) != "room_encounter:%s" % room_id:
+				continue
+			_room_encounters_fired[room_id] = true
+			if not bool(row.get("terminal", false)):
+				_room_encounter_active[room_id] = str(row["instance_id"])
+			else:
+				_room_encounter_active.erase(room_id)
+	for room_id in _room_by_id:
+		var room := _room_by_id[room_id] as DungeonRoom3D
+		var saved := _segment_runtime_state.get(room_id, {}) as Dictionary
+		var progress := (world_state.get("room_progress", {}) as Dictionary).get(room_id, {}) as Dictionary
+		if flow.is_empty() and _room_has_encounter_trigger(room) and (bool(progress.get("spawned", false)) or bool(saved.get("cleared", false)) or not (saved.get("enemies", []) as Array).is_empty()):
+			_room_encounters_fired[room_id] = true
+		if _sealed_rooms.has(room_id):
+			set_room_seal(str(room_id), true, str(_sealed_rooms[room_id]))
+		elif _room_encounter_active.has(room_id) and bool(room.encounter.get("seal_room", true)):
+			set_room_seal(str(room_id), true, "encounter")
+
+
+## JSON 存盘时保留冻结队列中的世界坐标类型，不让 Vector3 变成不可恢复的字符串。
+func _flow_pack(value: Variant) -> Variant:
+	if value is Vector3:
+		return {"flow_vector3": [value.x, value.y, value.z]}
+	if value is Dictionary:
+		var out := {}
+		for key in value:
+			out[key] = _flow_pack(value[key])
+		return out
+	if value is Array:
+		var out: Array = []
+		for entry in value:
+			out.append(_flow_pack(entry))
+		return out
+	return value
+
+
+func _flow_unpack(value: Variant) -> Variant:
+	if value is Dictionary:
+		if value.has("flow_vector3"):
+			var point: Array = value["flow_vector3"]
+			return Vector3(float(point[0]), float(point[1]), float(point[2]))
+		var out := {}
+		for key in value:
+			out[key] = _flow_unpack(value[key])
+		return out
+	if value is Array:
+		var out: Array = []
+		for entry in value:
+			out.append(_flow_unpack(entry))
+		return out
+	return value
+
+
+func _export_delayed_room_spawns(room_id: String) -> Array:
+	var out: Array = []
+	for entry: Dictionary in _pending_delayed_spawns.get(room_id, []):
+		out.append({
+			"config": _flow_pack(entry["config"]),
+			"position": _flow_pack(entry["position"]),
+			"remaining_sec": maxf(0.0, float(int(entry.get("due_msec", 0)) - Time.get_ticks_msec()) / 1000.0),
+		})
+	return out
 
 
 func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
@@ -1305,6 +1415,7 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 		var encounter_state: Variant = encounter_world_state.get("encounter_events", {})
 		if encounter_state is Dictionary:
 			_encounter_event_director.import_snapshot(encounter_state as Dictionary)
+	_import_flow_integration_state(snapshot.get("world_state", {}) as Dictionary)
 	_restore_narrative_spawned_keys(snapshot)
 	return true
 
@@ -1606,6 +1717,8 @@ func _try_settle_encounter_room_clear(room_id: String) -> void:
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or room.cleared:
 		return
+	if room.room_type == "EVENT" and not _resolved_event_rooms.has(room_id):
+		return
 	_mark_room_cleared(room, true)
 	status_label.text = (
 		"遭遇结束 · 房间肃清，钥匙已掉落"
@@ -1618,6 +1731,7 @@ func _process(delta: float) -> void:
 	if _encounter_event_director != null:
 		_encounter_event_director.tick(delta)
 	_tick_room_encounter_triggers(delta)
+	_emit_flow_bark(_current_room_id, "enter")
 	_tick_encounter_countdown_hud()
 	_tick_bless_dead(delta)
 	_tick_boss_health_bar_delay(delta)
@@ -3890,9 +4004,42 @@ func _create_extraction_beacon(room: DungeonRoom3D, type_id: String, countdown: 
 	return beacon
 
 
+func _drop_flow_bark() -> void:
+	if _flow_bark_text.is_empty():
+		return
+	var bark := _ensure_player_bark()
+	if bark != null and bark.get_current_text() == _flow_bark_text:
+		bark.hide_now()
+	_flow_bark_text = ""
+
+
+func _emit_flow_bark(room_id: String, on: String) -> void:
+	if room_id != _current_room_id or not is_instance_valid(player) or player.input_locked or _completed:
+		return
+	for row: Dictionary in _flow_barks:
+		var id := str(row.get("id", ""))
+		var target := str(row.get("room_id", ""))
+		if target == "entry":
+			target = "start"
+		if id.is_empty() or _flow_barks_fired.has(id) or target != room_id or str(row.get("on", "")) != on:
+			continue
+		_flow_barks_fired[id] = true
+		if bool(row.get("first_run_only", false)) and not _flow_bark_first_run:
+			continue
+		var bark := _ensure_player_bark()
+		if bark == null or bark.is_speaking():
+			return
+		_flow_bark_text = str(row.get("text", ""))
+		bark.say_text(_flow_bark_text, float(row.get("duration_sec", 4.0)))
+		return
+
+
 func _on_room_entered(room: DungeonRoom3D) -> void:
 	if room == null:
 		return
+	if _current_room_id != room.room_id:
+		_drop_flow_bark()
+	call_deferred("_emit_flow_bark", room.room_id, "enter")
 	var first_visit := not _fate_visited_rooms.has(room.room_id)
 	if first_visit:
 		_fate_visited_rooms[room.room_id] = true
@@ -3923,6 +4070,9 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	room_label.text = "%s · %s/%s" % [room.room_id, room.room_type, room.size_class.to_upper()]
 	_update_wave_hud(room.room_id)
 	if _spawned_rooms.has(room.room_id):
+		_ensure_room_clear_drop(room)
+		if is_room_boss_defeated(room.room_id):
+			_ensure_boss_chest_drop(room.room_id)
 		_ensure_room_key_reward(room)
 		_repair_room_progress(room)
 		if not _wave_spawn_pending.has(room.room_id):
@@ -4089,6 +4239,9 @@ func _start_room_encounter(room: DungeonRoom3D) -> Dictionary:
 		AudioManager.play_sfx("wave_start", -3.0)
 	if _is_current_room(room.room_id):
 		status_label.text = "遭遇开始 · 击退所有波次才能离开"
+	_drop_flow_bark()
+	_emit_flow_bark(room.room_id, "encounter_start")
+	_queue_runtime_autosave("room_encounter_started")
 	return started
 
 
@@ -4130,8 +4283,8 @@ func _build_room_encounter_config(room: DungeonRoom3D) -> Dictionary:
 		"schema_version": 1,
 		"event_id": "room_encounter:%s" % room.room_id,
 		"room_id": room.room_id,
-		"duration_sec": maxf(1.0, float(encounter.get("duration_sec", 60.0))),
-		"completion": "timer",
+		"duration_sec": float(encounter.get("duration_sec", 60.0)),
+		"completion": str(encounter.get("completion", "timer")),
 		"progress_mode": "tick",
 		# 从数据读，缺省 `clear`。**不能写死**：`stage_advance` 是被
 		# `LevelPlanValidator` 逐值校验的正式键（只许 `time` / `clear`），
@@ -4140,8 +4293,10 @@ func _build_room_encounter_config(room: DungeonRoom3D) -> Dictionary:
 		"stage_advance": str(encounter.get("stage_advance", "clear")),
 		"hunt_player": bool(encounter.get("hunt_player", false)),
 		"hud_countdown": bool(encounter.get("hud_countdown", true)),
-		"leave_policy": "cancel",
-		"max_alive": 2147483647,
+		"leave_policy": str(encounter.get("leave_policy", "pause")),
+		"max_alive": int(encounter.get("max_alive", 2147483647)),
+		"intermission_sec": float(encounter.get("intermission_sec", 0.0)),
+		"min_player_distance_m": float(encounter.get("min_player_distance_m", 0.0)),
 		"prereqs": {"player_alive": true, "run_active": true},
 		"stages": stages,
 		"on_completed": actions,
@@ -4173,7 +4328,11 @@ func _resolve_encounter_stage_monsters(
 		if count <= 0:
 			continue
 		if type_id != "strong_random":
-			monsters.append({"type": type_id, "count": count})
+			var resolved := {"type": type_id, "count": count}
+			for key in ["min_player_distance_m", "content_id"]:
+				if entry.has(key):
+					resolved[key] = entry[key]
+			monsters.append(resolved)
 			continue
 		# 抽成逐只的具体变种，再按怪种归并 —— Director 只认「具体怪种 + 数量」。
 		var tally: Dictionary = {}
@@ -4181,7 +4340,10 @@ func _resolve_encounter_stage_monsters(
 			var picked: String = pool[rng.randi() % pool.size()]
 			tally[picked] = int(tally.get(picked, 0)) + 1
 		for picked_value in tally.keys():
-			monsters.append({"type": str(picked_value), "count": int(tally[picked_value])})
+			var resolved := {"type": str(picked_value), "count": int(tally[picked_value])}
+			if entry.has("min_player_distance_m"):
+				resolved["min_player_distance_m"] = entry["min_player_distance_m"]
+			monsters.append(resolved)
 	return monsters
 
 
@@ -4265,6 +4427,8 @@ func _spawn_room_enemies_impl(room: DungeonRoom3D) -> bool:
 	# 已通、玩家可以直接走到下一房，触发也就没意义了。
 	# 触发本身由 `_tick_room_encounter_triggers()` 逐帧轮询（零新增常驻节点）。
 	if _room_has_encounter_trigger(room):
+		if _room_encounters_fired.has(room.room_id):
+			return true
 		_alive_by_room[room.room_id] = 0
 		_room_wave_queues[room.room_id] = []
 		room.cleared = false
@@ -4290,6 +4454,8 @@ func _spawn_room_enemies_impl(room: DungeonRoom3D) -> bool:
 	# 「只认盒子」层（spawn_boxes_only）里没摆盒子 ⇒ **不刷怪**（业主裁定：没盒子就不刷）：
 	# 房型保持敌对不变（门/小地图/HUD 语义一致），只是没有敌人，立刻清房，绝不留锁门。
 	var box_waves := _spawn_box_waves(room, floor, floor_level)
+	if _room_spawn_blocked.has(room.room_id):
+		return false
 	if not box_waves.is_empty():
 		return _commit_room_waves(room, box_waves)
 	if room.spawn_boxes_only:
@@ -4551,6 +4717,18 @@ func _collect_box_stage_entries(
 		float(box.get("min_spacing_m", 0.0)),
 		int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES))
 	)
+	var safe_candidates: Array[Vector3] = []
+	var min_distance := float(room.encounter.get("min_player_distance_m", 0.0))
+	if min_distance > 0.0:
+		# 授权域只解析一次；重试仅在冻结盒域内重新选位置，不重掷敌群。
+		var center := room.resolve_spawn_box_center_local(
+			placement["box_center"], placement["box_size"], total,
+			float(placement["box_rotation"]), float(box.get("min_spacing_m", 0.0)),
+			int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES))
+		)
+		var angle := deg_to_rad(float(placement["box_rotation"]))
+		for local_point in room._box_sample_points(center, (placement["box_size"] as Vector2) * 0.5, cos(angle), sin(angle), room._spawn_clearance()):
+			safe_candidates.append(room.to_global(local_point))
 	# 盒内排不下（异形房凹口 / 家具占位 / 盒太小）时**只出排得下的那几只**：
 	# `spawn_points_in_box` 尾部补的 `Vector3.INF` 绝不能进 `_spawn_enemy_batch` ——
 	# 后者见到非有限点会整批判「无合法落点」、置 `_room_spawn_blocked` 并把本房锁死，
@@ -4560,6 +4738,14 @@ func _collect_box_stage_entries(
 	for point in points:
 		if point.is_finite():
 			available.append(point)
+	if min_distance > 0.0 and safe_candidates.is_empty():
+		_room_spawn_blocked[room.room_id] = true
+		push_error("[Dungeon3D] 授权盒没有合法候选，拒绝生成且不发奖励：%s:%d" % [room.room_id, instance_index])
+		return
+	if min_distance > 0.0:
+		available.clear()
+		for index in total:
+			available.append(safe_candidates[index % safe_candidates.size()])
 	if available.is_empty():
 		return
 	var cursor := 0
@@ -4578,6 +4764,9 @@ func _collect_box_stage_entries(
 			# `spawn_position` 是落点直通键，`_spawn_enemy_batch` 会取用并在实例化前摘掉；
 			# `spawn_delay_sec` 是延迟键，非 0 的条目会被摘进 `_pending_delayed_spawns`。
 			config["spawn_position"] = point
+			config["spawn_index"] = cursor - 1
+			if not config.has("persistent_id"):
+				config["persistent_id"] = "%s:box_%d:unit_%d" % [room.room_id, instance_index, cursor - 1]
 			# Monitor encounter: center the boss only; retain the authored escort placements.
 			#
 			# 「居中」以**设计源声明的首领中心**为准（`boss_reinforcement_plan.boss_spawn_local_m`
@@ -4593,6 +4782,9 @@ func _collect_box_stage_entries(
 					var boss_center := room.boss_spawn_position_world()
 					config["spawn_position"] = Vector3(boss_center.x, point.y, boss_center.z)
 			config["spawn_delay_sec"] = float(item["delay_sec"])
+			if min_distance > 0.0:
+				config["spawn_safe_candidates"] = safe_candidates.duplicate()
+				config["spawn_min_player_distance_m"] = min_distance
 			entries.append(config)
 
 
@@ -4679,7 +4871,9 @@ func _make_box_enemy(
 	if _monster_injector == null:
 		return {}
 	var encounter_id := elite_encounter_id if not elite_encounter_id.is_empty() else _elite_encounter_id(room)
-	return _monster_injector.generate_box_enemy(type_id, floor, floor_level, {
+	var previous_room_id: String = _monster_injector._active_room_id
+	_monster_injector.set_active_room_id(room.room_id)
+	var generated: Dictionary = _monster_injector.generate_box_enemy(type_id, floor, floor_level, {
 		"floor": floor,
 		"floor_level": floor_level,
 		"floor_number": _elite_floor_number(room),
@@ -4687,6 +4881,8 @@ func _make_box_enemy(
 		"seed": run_seed,
 		"boss_content_id": str(room.get_meta("boss_content_id", "")),
 	})
+	_monster_injector.set_active_room_id(previous_room_id)
+	return generated
 
 
 func _placement_vec2(value: Variant) -> Vector2:
@@ -4713,6 +4909,7 @@ func _queue_delayed_spawn(
 		"serial": serial,
 		"config": payload,
 		"position": position,
+		"due_msec": Time.get_ticks_msec() + int(maxf(0.05, delay_sec) * 1000.0),
 	})
 	get_tree().create_timer(maxf(0.05, delay_sec), false).timeout.connect(
 		_on_delayed_spawn_timeout.bind(room.room_id, serial)
@@ -4730,8 +4927,26 @@ func _on_delayed_spawn_timeout(room_id: String, serial: int) -> void:
 	if found < 0:
 		return
 	var entry := entries[found] as Dictionary
-	entries.remove_at(found)
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if not _completed and _room_spawn_blocked.has(room_id) and (entry.get("config", {}) as Dictionary).has("spawn_safe_candidates"):
+		return
+	if not _completed and is_instance_valid(room) and not _room_spawn_blocked.has(room_id):
+		var payload := entry.get("config", {}) as Dictionary
+		if not room.is_streamed():
+			get_tree().create_timer(0.25, false).timeout.connect(_on_delayed_spawn_timeout.bind(room_id, serial))
+			return
+		if payload.has("spawn_safe_candidates"):
+			var selection := _select_box_spawn_position(room, payload)
+			if not bool(selection.get("ok", false)):
+				if not bool(selection.get("retryable", false)):
+					_room_spawn_blocked[room_id] = true
+					set_room_seal(room_id, false)
+					push_error("[Dungeon3D] 冻结盒域失效，保留队列等待修复：%s" % room_id)
+					return
+				get_tree().create_timer(0.25, false).timeout.connect(_on_delayed_spawn_timeout.bind(room_id, serial))
+				return
+			entry["position"] = selection["position"]
+	entries.remove_at(found)
 	# 只认「确实还没到的」：房间不在了、或在途期间已被判无落点，就丢弃这一条。
 	# 丢弃而不保留，是为了不让待生成计数永远悬着（那是软锁，不是延迟）。
 	if (
@@ -5423,9 +5638,23 @@ func _spawn_starter_weapon_pickup(room: DungeonRoom3D) -> void:
 	status_label.text = "起始补给：拾取霰弹枪后按 I 打开背包并点击装备 · 墙边 E 可开中央灯"
 
 
+func _select_box_spawn_position(room: DungeonRoom3D, config: Dictionary, selected: Array[Vector3] = []) -> Dictionary:
+	var occupied: Array[Vector3] = selected.duplicate()
+	for value in _enemy_nodes_by_room.get(room.room_id, []) as Array:
+		if is_instance_valid(value) and value is Enemy3D and not value.is_queued_for_deletion() and value.ai_state != "dead":
+			occupied.append(value.global_position)
+	return room.choose_safe_spawn_position(
+		player.global_position if is_instance_valid(player) else Vector3.INF,
+		float(config.get("spawn_min_player_distance_m", 0.0)), occupied,
+		config.get("spawn_safe_candidates", [])
+	)
+
+
 func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false, positions: Array = []) -> int:
 	if room == null or enemy_configs.is_empty():
 		return 0
+	if room.room_id == _current_room_id:
+		_drop_flow_bark()
 	if _room_spawn_blocked.has(room.room_id):
 		return -1
 	# 延迟出怪（触发盒 `spawns[].delay_sec`）：整批预检**之前**先摘出来挂定时器。
@@ -5436,9 +5665,17 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 	if not count_reserved:
 		var kept_configs: Array[Dictionary] = []
 		var kept_positions: Array = []
+		var selected: Array[Vector3] = []
 		for index in enemy_configs.size():
 			var candidate := enemy_configs[index]
 			var delay := float(candidate.get("spawn_delay_sec", 0.0))
+			if delay <= 0.0 and candidate.has("spawn_safe_candidates"):
+				var selection := _select_box_spawn_position(room, candidate, selected)
+				if bool(selection.get("ok", false)):
+					candidate["spawn_position"] = selection["position"]
+					selected.append(selection["position"] as Vector3)
+				else:
+					delay = 0.25
 			if delay > 0.0:
 				_queue_delayed_spawn(
 					room, candidate, _resolve_spawn_position(room, candidate, index, positions), delay
@@ -5515,6 +5752,8 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		# 摘掉再喂给 `configure_from_enemy_data`，免得它们漏进存档或敌人快照。
 		spawn_data.erase("spawn_position")
 		spawn_data.erase("spawn_delay_sec")
+		spawn_data.erase("spawn_safe_candidates")
+		spawn_data.erase("spawn_min_player_distance_m")
 		spawn_data.erase("spawn_launch_target")
 		spawn_data.erase("spawn_launch_speed_mps")
 		spawn_data.erase("spawn_launch_duration_sec")
@@ -5595,7 +5834,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 			int(_alive_by_room.get(room.room_id, 0))
 			- (_combat_config_count(enemy_configs) - spawned_combat)
 		)
-	return spawned_count
+	return spawned_count + queued_total
 
 
 ## —— 剧情系统正门（见 docs/v0.1/08_技术施工_剧情触发.md §5.2 / §5.4）——
@@ -5864,6 +6103,12 @@ func _repair_hostile_room_progress(room: DungeonRoom3D, allow_event_combat := fa
 		or (room.room_type not in HOSTILE_ROOM_TYPES and not allow_event_combat)
 	):
 		return
+	if _room_encounter_active.has(room.room_id):
+		return
+	if _room_has_encounter_trigger(room):
+		if _room_encounters_fired.has(room.room_id):
+			_try_settle_encounter_room_clear(room.room_id)
+		return
 	# DATA_ONLY 的空节点表是流送卸载，不是死亡；预约生成也属于本波存活账。
 	if not room.is_streamed() or _room_spawn_blocked.has(room.room_id):
 		return
@@ -5903,6 +6148,10 @@ func _repair_hostile_room_progress(room: DungeonRoom3D, allow_event_combat := fa
 func _room_has_pending_combat(room: DungeonRoom3D) -> bool:
 	if room == null:
 		return false
+	if _room_encounter_active.has(room.room_id):
+		return true
+	if _room_has_encounter_trigger(room) and not _room_encounters_fired.has(room.room_id):
+		return true
 	if int(_alive_by_room.get(room.room_id, 0)) > 0:
 		return true
 	if _reserved_spawn_count(room.room_id) > 0:
@@ -5935,9 +6184,10 @@ func _schedule_room_wave_intermission(room_id: String) -> void:
 	_wave_spawn_pending[room_id] = token
 	var wave_number := int(_room_wave_numbers.get(room_id, 1))
 	var total := int(_room_wave_totals.get(room_id, 1))
-	var intermission := maxf(
-		0.0, float(_room_intermission_seconds.get(room_id, ROOM_WAVE_INTERMISSION_SECONDS))
-	)
+	var intermission := maxf(0.0, float(_room_wave_remaining.get(room_id,
+		_room_intermission_seconds.get(room_id, ROOM_WAVE_INTERMISSION_SECONDS))))
+	_room_wave_remaining.erase(room_id)
+	_room_wave_deadlines[room_id] = Time.get_ticks_msec() + int(intermission * 1000.0)
 	status_label.text = "波次 %d/%d 已清空 · %.0f秒后生成下一整波" % [wave_number, total, intermission]
 	_update_wave_hud(room_id, "间歇中 · %.0f秒后下一波" % intermission)
 	get_tree().create_timer(intermission, false).timeout.connect(
@@ -5945,9 +6195,19 @@ func _schedule_room_wave_intermission(room_id: String) -> void:
 	)
 
 
+func _room_wave_time_remaining(room_id: String) -> float:
+	if _room_wave_deadlines.has(room_id):
+		return maxf(0.0, float(int(_room_wave_deadlines[room_id]) - Time.get_ticks_msec()) / 1000.0)
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	return float(_room_wave_remaining.get(room_id, (room.encounter.get("intermission_sec", ROOM_WAVE_INTERMISSION_SECONDS) if room != null else ROOM_WAVE_INTERMISSION_SECONDS)))
+
+
 func _cancel_room_wave_intermission(room_id: String) -> void:
 	if room_id.is_empty():
 		return
+	if _room_wave_deadlines.has(room_id):
+		_room_wave_remaining[room_id] = _room_wave_time_remaining(room_id)
+		_room_wave_deadlines.erase(room_id)
 	_room_wave_intermission_tokens[room_id] = int(_room_wave_intermission_tokens.get(room_id, 0)) + 1
 	_wave_spawn_pending.erase(room_id)
 
@@ -5986,6 +6246,7 @@ func _spawn_next_room_wave(room_id: String, token := -1) -> void:
 	if token < 0 or int(_wave_spawn_pending.get(room_id, -1)) != token:
 		return
 	_cancel_room_wave_intermission(room_id)
+	_room_wave_remaining.erase(room_id)
 	if not _can_advance_room_wave(room_id) or not _room_wave_queues.has(room_id):
 		return
 	var queue := _room_wave_queues[room_id] as Array
@@ -7343,7 +7604,7 @@ func _on_fate_pickup_interacted(pickup: GroundLootPickup3D) -> bool:
 	if pickup_id.is_empty() or _fate_pickup_claimed.has(pickup_id):
 		return false
 	# 创建成功后才认领，整个过程不 await；存档不能落在凭据/offer半交接状态。
-	if not _show_door_fate_choices("pickup", pickup_id):
+	if not _show_door_fate_choices("pickup", pickup_id, pickup.item_data):
 		return false
 	_fate_pickup_claimed[pickup_id] = true
 	pickup.accept_pickup(player)
@@ -8400,6 +8661,9 @@ func _mark_room_boss_defeated(room_id: String) -> void:
 func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 	if room == null:
 		return
+	if room.room_type == "EVENT" and _event_room_has_authored_combat(room):
+		if not _resolved_event_rooms.has(room.room_id) or _room_has_pending_combat(room):
+			return
 	var was_cleared := room.cleared
 	room.cleared = true
 	# 小地图的绿色弹夹标记（原作"已清 + 可传送"那个图形）只认这一处状态，
@@ -8420,6 +8684,7 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 	if not was_cleared:
 		player.on_fate_room_cleared(room.room_id)
 		room_cleared.emit(room)
+		_emit_flow_bark(room.room_id, "clear")
 		# 传送支线的两道锁都吃「已清内容房数」：
 		#   · 入口木板：入口房清完才可破（设计 §5.2）
 		#   · 撤离门：已清 ≥ ceil(总数×0.4) 解锁（设计 §6.2）
@@ -8591,9 +8856,9 @@ func _ensure_room_clear_drop(room: DungeonRoom3D) -> void:
 		return
 	if _clear_drop_settled.has(room.room_id):
 		return
-	_clear_drop_settled[room.room_id] = true
-	var drop: Dictionary = _clear_drop_service.roll_room_drop(room.room_id, "content", run_seed)
-	_apply_clear_drop(room, drop, "clear_drop:%s" % room.room_id)
+	if not _clear_drop_plans.has(room.room_id):
+		return
+	_apply_clear_drop(room, _clear_drop_plans[room.room_id], "clear_drop:%s" % room.room_id)
 
 
 ## 首领箱：**保底一只**，不掷概率。挂在首领阵亡上，见 `_mark_room_boss_defeated`。
@@ -8603,40 +8868,59 @@ func _ensure_boss_chest_drop(room_id: String) -> void:
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or not is_instance_valid(room):
 		return
-	_clear_drop_settled[room_id] = true
-	var drop: Dictionary = _clear_drop_service.roll_room_drop(room.room_id, "boss", run_seed)
-	_apply_clear_drop(room, drop, "boss_drop:%s" % room_id)
+	if not _clear_drop_plans.has(room_id):
+		return
+	_apply_clear_drop(room, _clear_drop_plans[room_id], "boss_drop:%s" % room_id)
 
 
-## 把一次清房掉落落地。本体只有两件事：**摆一只箱子** 或 **走正常地面掉落通道发一件补给**。
-## 不做第三种：奖励来源越少，验收断言越能穷举。
+## 箱、小包和追加枪独立记账；单件落地避免批量出口的部分失败被误当作前缀成功。
 func _apply_clear_drop(room: DungeonRoom3D, drop: Dictionary, context: String) -> void:
-	if drop.is_empty() or room == null:
+	if drop.is_empty() or room == null or _clear_drop_settled.has(room.room_id):
 		return
+	var ledger := _clear_drop_delivery.get(room.room_id, {}) as Dictionary
+	_clear_drop_delivery[room.room_id] = ledger
 	var kind := str(drop.get("kind", "none"))
-	if kind == "chest":
-		var chest_config := (drop.get("chest", {}) as Dictionary).duplicate(true)
-		if chest_config.is_empty():
-			return
-		chest_config = _prepare_story_boss_chest_config(room, chest_config)
-		var chest := room.spawn_runtime_chest(chest_config, _clear_drop_offset(room))
-		if chest == null:
-			push_warning("[Dungeon3D] 清房宝箱建立失败（%s），本房只剩补给" % context)
-			return
-		status_label.text = "房间肃清 · 掉落宝箱，命运卡需主动交互"
+	if not bool(ledger.get("chest_done", false)):
+		if kind == "chest":
+			var chest_config := _prepare_story_boss_chest_config(room, (drop.get("chest", {}) as Dictionary).duplicate(true))
+			var chest_id := str(chest_config.get("id", ""))
+			var existing := room.get_persistent_detail_state("treasure_chests")
+			ledger["chest_done"] = existing.has(chest_id) or room.spawn_runtime_chest(chest_config, _clear_drop_offset(room)) != null
+		else:
+			ledger["chest_done"] = true
+	for channel in ["grants", "additional_weapon", "item"]:
+		var done_key := "%s_done" % channel
+		if bool(ledger.get(done_key, false)):
+			continue
+		var pending_key := "%s_pending" % channel
+		if not ledger.has(pending_key):
+			var event_id := "%s:%s" % [context, channel]
+			var report: Dictionary
+			if channel == "additional_weapon":
+				report = CHEST_REWARD_SERVICE_SCRIPT.resolve_additional_weapon(drop, run_seed, room.room_id, event_id, maxi(1, visual_theme.difficulty_rank))
+			else:
+				var entries: Array = []
+				var descriptors: Array = drop.get("grants", []) if channel == "grants" else ([drop["item"]] if kind == "item" else [])
+				for descriptor: Dictionary in descriptors:
+					entries.append({"kind": "item", "item_id": str(descriptor.get("item_id", "")), "count": int(descriptor.get("count", 1)), "merge_same_item": false})
+				if entries.is_empty():
+					report = {"ok": true, "grants": []}
+				else:
+					report = RewardService.resolve({"spec_id": event_id, "entries": entries}, {"seed": run_seed, "floor": maxi(1, visual_theme.difficulty_rank), "salt": event_id})
+			if not bool(report.get("ok", false)) or not (report.get("rejected", []) as Array).is_empty():
+				return
+			ledger[pending_key] = (report.get("grants", []) as Array).duplicate(true)
+		var pending := ledger[pending_key] as Array
+		while not pending.is_empty():
+			var delivery := _deliver_ground_rewards(room, [pending[0]], room.global_position, "%s:%s" % [context, channel])
+			if (delivery.get("granted", []) as Array).size() != 1:
+				return
+			pending.pop_front()
+		ledger[done_key] = true
+	if not bool(ledger.get("chest_done", false)):
 		return
-	if kind == "item":
-		var item := drop.get("item", {}) as Dictionary
-		var item_id := str(item.get("item_id", ""))
-		if item_id.is_empty() or _reward_coordinator == null:
-			return
-		var report := _reward_coordinator.resolve_fixed_item(
-			item_id, maxi(1, int(item.get("count", 1))), context, maxi(1, visual_theme.difficulty_rank)
-		)
-		if not bool(report.get("ok", false)):
-			push_error("[Dungeon3D] 清房补给被奖励服务拒绝：%s" % str(report.get("errors", [])))
-			return
-		_deliver_ground_rewards(room, report.get("grants", []) as Array, room.global_position, context)
+	_clear_drop_settled[room.room_id] = true
+	_queue_runtime_autosave("clear_drop_delivered")
 
 
 ## 清房箱子的落点：**玩家身前的房内空位**，与钥匙时代的落点同一套算法。
@@ -8743,8 +9027,11 @@ func try_open_room_door(target_room_id: String) -> bool:
 
 
 ## 保留旧内部命名供存档/UI共用；新 offer 只接受主动交互的世界凭据。
-func _show_door_fate_choices(source := "", pickup_id := "") -> bool:
+func _show_door_fate_choices(source := "", pickup_id := "", metadata: Dictionary = {}) -> bool:
 	if source != "pickup" or pickup_id.is_empty() or _door_fate_active:
+		return false
+	var price_index := _fate_economy.price_index_for_room(str(metadata.get("source_room_id", ""))) if uses_dynamic_fate_economy() else 1
+	if price_index < 0:
 		return false
 	var offer_rng := RandomNumberGenerator.new()
 	offer_rng.seed = hash("%d|%s|fate_offer" % [run_seed, pickup_id])
@@ -8753,6 +9040,12 @@ func _show_door_fate_choices(source := "", pickup_id := "") -> bool:
 		if uses_dynamic_fate_economy()
 		else FateCardPresets.draw_offer(3, offer_rng, get_runtime_map_id())
 	)
+	if bool(metadata.get("fate_common_offer", false)):
+		var allowed: Array[FateCard] = []
+		for card in FateCardPresets.door_reward_presets():
+			if preload("res://src/weapons/FateOfferPolicy.gd").allows(get_runtime_map_id(), card.get_stable_card_id()) and (_room_key_economy_enabled() or not _card_grants_room_key(card)):
+				allowed.append(card)
+		offer = FATE_ECONOMY_SERVICE_SCRIPT.ensure_common_offer(offer, allowed, run_seed, pickup_id)
 	if offer.is_empty():
 		return false
 	_fate_offer_source = source
@@ -8760,8 +9053,8 @@ func _show_door_fate_choices(source := "", pickup_id := "") -> bool:
 	_door_fate_choices.clear()
 	_door_fate_purchased.clear()
 	_fate_door_offer_id += 1
-	# 掉落物出现位置/交互次数不等于房间进度；报价仍沿用已清内容房数。
-	_fate_offer_price_index = maxi(1, _count_cleared_content_rooms())
+	# 报价基准属于凭据来源房，与交互位置、报价次数和当前清房数无关。
+	_fate_offer_price_index = price_index
 	_fate_door_quote.clear()
 	for card_value in offer:
 		var offered_card := card_value as FateCard
@@ -10308,7 +10601,10 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		"spawn_blocked": _room_spawn_blocked.has(room_id),
 		"fate_wave_queued": _room_fate_wave_queued.has(room_id),
 		"reserved_spawns": (_reserved_room_spawns.get(room_id, []) as Array).duplicate(true),
-		"wave_queue": (_room_wave_queues.get(room_id, []) as Array).duplicate(true),
+		"wave_queue": _flow_pack(_room_wave_queues.get(room_id, [])),
+		"pending_delayed_spawns": _export_delayed_room_spawns(room_id),
+		"wave_intermission_remaining_sec": _room_wave_time_remaining(room_id),
+		"clear_drop_plan": (_clear_drop_plans.get(room_id, {}) as Dictionary).duplicate(true),
 		"wave_number": int(_room_wave_numbers.get(room_id, 1)),
 		"wave_total": int(_room_wave_totals.get(room_id, 1)),
 		# 🔴 本房有没有「建立过波次账」的显式标记。见 `_restore_room_runtime_state`
@@ -10365,6 +10661,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 		return
 	_cancel_room_wave_intermission(room_id)
 	var state := _segment_runtime_state[room_id] as Dictionary
+	_room_intermission_seconds[room_id] = float(room.encounter.get("intermission_sec", ROOM_WAVE_INTERMISSION_SECONDS))
 	if bool(state.get("boss_defeated", false)):
 		# 只回灌事实，不重发首领死亡信号和首领箱。
 		_boss_defeated_rooms[room_id] = true
@@ -10395,7 +10692,12 @@ func _restore_room_runtime_state(room_id: String) -> void:
 		_reserved_room_spawns[room_id] = (state.get("reserved_spawns", []) as Array).duplicate(true)
 		room.cleared = bool(state.get("cleared", room.cleared))
 		_alive_by_room[room_id] = maxi(0, int(state.get("alive_count", _alive_by_room.get(room_id, 0))))
-		_room_wave_queues[room_id] = (state.get("wave_queue", []) as Array).duplicate(true)
+		_room_wave_queues[room_id] = _flow_unpack(state.get("wave_queue", []))
+		if state.has("wave_intermission_remaining_sec"):
+			_room_wave_remaining[room_id] = float(state["wave_intermission_remaining_sec"])
+		if state.has("pending_delayed_spawns") and (_pending_delayed_spawns.get(room_id, []) as Array).is_empty():
+			for request: Dictionary in state["pending_delayed_spawns"]:
+				_queue_delayed_spawn(room, _flow_unpack(request["config"]), _flow_unpack(request["position"]), float(request["remaining_sec"]))
 		if snapshot_established_waves:
 			_room_wave_numbers[room_id] = maxi(0, int(state.get("wave_number", 1)))
 			_room_wave_totals[room_id] = maxi(0, int(state.get("wave_total", 1)))

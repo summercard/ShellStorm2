@@ -50,7 +50,8 @@ const SPAWN_BOX_MAX_STAGES := 6
 ## 而不是"配置了但没生效"。后者最坏的形态是 `hunt_player: ture` 拼错了，
 ## 关卡照常能跑、只是那一房的怪全部站原地不动，得靠人肉发现。
 const TRIGGER_ENCOUNTER_KEYS := [
-	"trigger", "duration_sec", "start_delay_sec", "stage_advance",
+	"trigger", "duration_sec", "start_delay_sec", "stage_advance", "completion", "progress_mode",
+	"intermission_sec", "max_alive", "min_player_distance_m",
 	"seal_room", "light_on_finish", "hunt_player", "hud_countdown",
 	"stages", "monster_ai",
 ]
@@ -1396,14 +1397,37 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String) ->
 		var radius := float(trigger.get("radius_m", 6.0))
 		if radius < 1.0 or radius > 60.0:
 			errors.append("encounter_trigger_radius_invalid:%s:%s" % [key, str(radius)])
-	var duration := float(encounter.get("duration_sec", 60.0))
-	if duration <= 0.0:
+	var duration_value: Variant = encounter.get("duration_sec", 60.0)
+	var duration := float(duration_value)
+	if not _finite_number(duration_value) or duration < 0.0:
 		errors.append("encounter_duration_invalid:%s:%s" % [key, str(duration)])
 	if float(encounter.get("start_delay_sec", 1.0)) < 0.0:
 		errors.append("encounter_start_delay_negative:%s" % key)
 	var advance := str(encounter.get("stage_advance", "clear"))
 	if advance not in ["time", "clear"]:
 		errors.append("encounter_stage_advance_invalid:%s:%s" % [key, advance])
+	var completion := str(encounter.get("completion", "clear"))
+	if completion not in ["timer", "clear", "timer_and_clear"]:
+		errors.append("encounter_completion_invalid:%s:%s" % [key, completion])
+	var progress_mode := str(encounter.get("progress_mode", "tick"))
+	if progress_mode not in ["tick", "external"]:
+		errors.append("encounter_progress_mode_invalid:%s:%s" % [key, progress_mode])
+	var intermission_value: Variant = encounter.get("intermission_sec", 0.0)
+	if not _finite_number(intermission_value) or float(intermission_value) < 0.0:
+		errors.append("encounter_intermission_invalid:%s" % key)
+	var max_alive_value: Variant = encounter.get("max_alive", null)
+	if max_alive_value != null and (
+		not (max_alive_value is int or max_alive_value is float)
+		or not is_equal_approx(float(max_alive_value), round(float(max_alive_value)))
+		or int(max_alive_value) <= 0
+	):
+		errors.append("encounter_max_alive_invalid:%s" % key)
+	var default_distance: Variant = encounter.get("min_player_distance_m", 0.0)
+	if not _finite_number(default_distance) or float(default_distance) < 0.0:
+		errors.append("encounter_min_player_distance_invalid:%s" % key)
+	var no_deadline := is_zero_approx(duration)
+	if no_deadline and not (completion == "clear" and advance == "clear" and progress_mode == "tick"):
+		errors.append("encounter_duration_zero_combination_invalid:%s" % key)
 	# 触发式遭遇的房间**不该**再有盒子：两套编成来源同时存在时，
 	# 实际生效的是触发式（进房不刷），盒子会静默作废 —— 这种"写了却没生效"必须报。
 	if not (encounter.get("stages", []) is Array) or (encounter.get("stages", []) as Array).is_empty():
@@ -1422,6 +1446,8 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String) ->
 		var stage := stage_value as Dictionary
 		if not (stage.get("boxes", []) as Array).is_empty():
 			errors.append("encounter_trigger_stage_has_boxes:%s:%d" % [key, stage_index])
+		if no_deadline and stage.has("at_ratio"):
+			errors.append("encounter_duration_zero_at_ratio:%s:%d" % [key, stage_index])
 		var raw_monsters: Variant = stage.get("monsters", [])
 		if not (raw_monsters is Array) or (raw_monsters as Array).is_empty():
 			errors.append("encounter_stage_monsters_empty:%s:%d" % [key, stage_index])
@@ -1432,6 +1458,9 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String) ->
 				continue
 			var monster := monster_value as Dictionary
 			var type_id := str(monster.get("type", ""))
+			var monster_distance: Variant = monster.get("min_player_distance_m", default_distance)
+			if not _finite_number(monster_distance) or float(monster_distance) < 0.0:
+				errors.append("encounter_stage_monster_min_player_distance_invalid:%s:%d:%s" % [key, stage_index, type_id])
 			if int(monster.get("count", 0)) <= 0:
 				errors.append(
 					"encounter_stage_monster_count_invalid:%s:%d:%s" % [key, stage_index, type_id]
@@ -1643,6 +1672,10 @@ static func _is_boss_floor(level_id: String, floor_number: int) -> bool:
 	var level_plan := LOADER.load_level_plan(level_id)
 	var entry := LOADER.floor_entry(level_plan, floor_number)
 	return str(entry.get("rule", "")) == "boss"
+
+
+static func _finite_number(value: Variant) -> bool:
+	return (value is int or value is float) and is_finite(float(value))
 
 
 static func _vec2(value: Variant) -> Vector2:

@@ -23,6 +23,7 @@ var _boss_chest_count := 0
 var _boss_min_quality := ""
 var _chest: Dictionary = {}
 var _fallback_pool: Array = []
+var _room_overrides: Dictionary = {}
 ## 关卡保底段 `room_guarantees`（2026-11-09）。
 ##
 ## 每条的语义：在 `candidate_rooms` 里**按本局种子稳定随机挑一间**，那一间的宝箱
@@ -40,6 +41,7 @@ func configure(config: Dictionary) -> Dictionary:
 	_boss_min_quality = ""
 	_chest = {}
 	_fallback_pool = []
+	_room_overrides = {}
 	_room_guarantees = []
 	if config.is_empty():
 		return {"ok": true, "errors": []}
@@ -57,11 +59,36 @@ func configure(config: Dictionary) -> Dictionary:
 	if not errors.is_empty():
 		return {"ok": false, "errors": errors}
 	_fallback_pool = (config.get("fallback_pool", []) as Array).duplicate(true)
+	_room_overrides = _parse_room_overrides(config.get("room_overrides", {}), errors)
 	_room_guarantees = _parse_room_guarantees(config.get("room_guarantees", []), errors)
 	if not errors.is_empty():
 		return {"ok": false, "errors": errors}
 	_configured = true
 	return {"ok": true, "errors": []}
+
+
+func _parse_room_overrides(raw: Variant, errors: Array[String]) -> Dictionary:
+	if raw == null:
+		return {}
+	if not raw is Dictionary:
+		errors.append("clear_drops.room_overrides 必须是对象")
+		return {}
+	var out: Dictionary = {}
+	for room_key in (raw as Dictionary).keys():
+		var room_id := str(room_key)
+		if room_id.is_empty():
+			errors.append("clear_drops.room_overrides 含空房间 ID")
+			continue
+		var override := (raw as Dictionary)[room_key] as Dictionary
+		if override.is_empty():
+			continue
+		var parsed := override.duplicate(true)
+		if parsed.has("mimic_chance"):
+			parsed["mimic_chance"] = clampf(float(parsed["mimic_chance"]), 0.0, 1.0)
+		if parsed.has("fate_card_chance"):
+			parsed["fate_card_chance"] = clampf(float(parsed["fate_card_chance"]), 0.0, 1.0)
+		out[room_id] = parsed
+	return out
 
 
 ## 保底段校验。**只挡结构性错误**（没房号 / 没条目），不挡「条目写了不存在的房号」——
@@ -103,56 +130,79 @@ func chest_chance() -> float:
 
 ## 掷一次清房掉落。`room_kind`：`content`（清房）/ `boss`（首领阵亡）。
 ##
-## 返回 `{kind, chest?, item?, roll, chance, room_id}`：
+## 新计划生成时调用并冻结完整结果；恢复旧计划不调用它补发覆盖奖励。
+## 返回 `{kind, chest?, item?, grants, additional_weapon, room_override?, roll, chance, room_id}`：
 ##   · `kind == "chest"` —— `chest` 可直接喂 `TreasureChest3D.configure()`；
 ##   · `kind == "item"`  —— `item = {item_id, count}`，走正常地面掉落通道；
-##   · `kind == "none"`  —— 本房什么都不掉（配置为 0 概率或池为空）。
+##   · `kind == "none"`  —— 没有原箱/兜底物；grants 与 additional_weapon 仍独立消费。
 ## 配置未生效 / 房号为空的返回值是**空字典**，调用方必须据此直接返回。
 func roll_room_drop(room_id: String, room_kind: String, run_seed: int) -> Dictionary:
 	if not _configured or room_id.is_empty():
 		return {}
 	if room_kind == "boss":
-		# Boss 箱是**保底**：不走概率，`chest_count <= 0` 才是关掉它的开关。
-		if _boss_chest_count <= 0:
-			return {"kind": "none", "roll": 1.0, "chance": 1.0, "room_id": room_id}
-		return {
-			"kind": "chest",
-			"chest": _build_chest(room_id, run_seed, _boss_min_quality, "advanced"),
-			"roll": 1.0,
-			"chance": 1.0,
-			"room_id": room_id,
-		}
+		return _roll_boss_drop(room_id, run_seed)
+	var override := room_override_for_room(room_id)
+	var chest_chance := _chest_chance
 	var roll := _stable_ratio("%d|%s|clear_drop" % [run_seed, room_id])
-	if roll < _chest_chance:
+	if roll < chest_chance:
+		var chest := _build_chest(room_id, run_seed, "", override)
 		return {
 			"kind": "chest",
-			"chest": _build_chest(room_id, run_seed, ""),
+			"chest": chest,
+			"grants": (override.get("grants", []) as Array).duplicate(true),
+			"additional_weapon": (override.get("additional_weapon", {}) as Dictionary).duplicate(true),
+			"room_override": override.duplicate(true),
 			"roll": roll,
-			"chance": _chest_chance,
+			"chance": chest_chance,
 			"room_id": room_id,
 		}
 	var item := _roll_fallback_item(room_id, run_seed)
 	if item.is_empty():
-		return {"kind": "none", "roll": roll, "chance": _chest_chance, "room_id": room_id}
+		return {"kind": "none", "grants": (override.get("grants", []) as Array).duplicate(true), "additional_weapon": (override.get("additional_weapon", {}) as Dictionary).duplicate(true), "room_override": override.duplicate(true), "roll": roll, "chance": chest_chance, "room_id": room_id}
 	return {
 		"kind": "item",
 		"item": item,
+		"grants": (override.get("grants", []) as Array).duplicate(true),
+		"additional_weapon": (override.get("additional_weapon", {}) as Dictionary).duplicate(true),
+		"room_override": override.duplicate(true),
 		"roll": roll,
-		"chance": _chest_chance,
+		"chance": chest_chance,
 		"room_id": room_id,
 	}
 
 
+func _roll_boss_drop(room_id: String, run_seed: int) -> Dictionary:
+	if _boss_chest_count <= 0:
+		return {"kind": "none", "grants": [], "additional_weapon": {}, "roll": 1.0, "chance": 1.0, "room_id": room_id}
+	return {
+		"kind": "chest",
+		"chest": _build_chest(room_id, run_seed, _boss_min_quality, {}, "advanced"),
+		"grants": [],
+		"additional_weapon": {},
+		"room_override": {},
+		"roll": 1.0,
+		"chance": 1.0,
+		"room_id": room_id,
+	}
+
+
+## 供新计划生成阶段读取房间覆盖；调用方须冻结返回结果，旧局恢复不得补查最新配置。
+func room_override_for_room(room_id: String) -> Dictionary:
+	return (_room_overrides.get(room_id, {}) as Dictionary).duplicate(true)
+
+
 ## 宝箱配置。`chest_id` 与房号绑定 ⇒ 同一间房无论重建多少次都是同一只箱子，
 ## 房间账（`treasure_chests`）才不会因为 id 漂移而认不出「这只开过了」。
-func _build_chest(room_id: String, run_seed: int, min_quality: String, tier_override: String = "") -> Dictionary:
+func _build_chest(room_id: String, run_seed: int, min_quality: String, override: Dictionary = {}, tier_override: String = "") -> Dictionary:
 	var weights := (_chest.get("quality_weights", {}) as Dictionary)
 	var quality := _roll_quality(weights, "%d|%s|chest_quality" % [run_seed, room_id], min_quality)
 	# Boss 显式指定高级奖励档，不受普通箱配置或品质下限影响。
 	var chest_tier := tier_override if not tier_override.is_empty() else str(_chest.get("chest_tier", "normal"))
 	if chest_tier != "advanced":
 		chest_tier = "normal"
-	var mimic_cfg := _chest.get("mimic", {}) as Dictionary
+	var mimic_cfg := (_chest.get("mimic", {}) as Dictionary).duplicate(true)
+	if override.has("mimic_chance"):
+		mimic_cfg["chance"] = float(override.get("mimic_chance", 0.0))
 	var mimic_chance := clampf(float(mimic_cfg.get("chance", 0.0)), 0.0, 1.0)
 	var mimic_salt := "%d|%s|chest_mimic" % [run_seed, room_id]
 	var out := {
@@ -163,6 +213,9 @@ func _build_chest(room_id: String, run_seed: int, min_quality: String, tier_over
 		"drop_count": maxi(1, int(_chest.get("drop_count", 1))),
 		"mimic": _stable_ratio(mimic_salt) < mimic_chance,
 		"mimic_monster_kind": str(mimic_cfg.get("monster_kind", "egt_mimic")),
+		"source_room_id": room_id,
+		"fate_card_chance": clampf(float(override.get("fate_card_chance", 1.0 if chest_tier == "advanced" else 0.30)), 0.0, 1.0),
+		"fate_common_offer": bool(override.get("fate_common_offer", false)),
 	}
 	# 关卡保底条目：只有「本局被抽中的那间房」才拿到，其余房间为空数组。
 	var guaranteed := guaranteed_items_for_room(room_id, run_seed)
@@ -191,12 +244,15 @@ func guaranteed_items_for_room(room_id: String, run_seed: int) -> Array:
 		if not choices.is_empty():
 			var gun_id := _pick_from(choices, "%d|%s|guarantee_weapon" % [run_seed, str(entry.get("id", ""))])
 			var grade := str(entry.get("weapon_grade", ""))
-			out.append({
+			var weapon_entry := {
 				"item_id": gun_id,
 				"count": maxi(1, int(entry.get("weapon_count", 1))),
 				"grade": grade,
 				"guarantee_id": str(entry.get("id", "")),
-			})
+			}
+			if entry.has("bullet_module_id"):
+				weapon_entry["bullet_module_id"] = str(entry.get("bullet_module_id", ""))
+			out.append(weapon_entry)
 		for item_value in entry.get("items", []):
 			var item := item_value as Dictionary
 			var item_id := str(item.get("item_id", ""))

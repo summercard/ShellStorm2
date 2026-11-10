@@ -418,10 +418,14 @@ static func _resolve_item_entry(entry: Dictionary, state: Dictionary, path: Stri
 		# `forced_grade`（2026-11-09）：保底条目要指定品质时不掷骰，直接落地。
 		# 只给「关卡保底」这类**确定性**需求用；普通掉落一律留空走随机。
 		var forced_grade := str(entry.get("forced_grade", ""))
+		var forced_bullet_module_id := str(entry.get("bullet_module_id", ""))
+		if not forced_bullet_module_id.is_empty() and not WeaponBulletDrop.is_valid(forced_bullet_module_id):
+			state["rejected"].append({"code": "INVALID_BULLET_MODULE", "path": path, "detail": forced_bullet_module_id})
+			return
 		for index in range(count):
 			_append_grant(state, {
 				"kind": _SPEC.KIND_ITEM, "item_id": item_id, "count": 1,
-				"item": _roll_dropped_weapon(definition, state, forced_grade),
+				"item": _roll_dropped_weapon(definition, state, forced_grade, forced_bullet_module_id),
 				"sink": str(entry.get("sink", "ground")), "pool_id": "",
 				"slot": "%s:%d" % [path, index], "merged": false,
 			}, false)
@@ -688,7 +692,7 @@ static func _eval_amount(raw, state: Dictionary, _path: String) -> int:
 ##
 ## 非枪械（模块 / 配件 / 弹药 / 消耗品）原样返回，绝不写 `drop_grade`
 ## —— 那会让背包里的每个零件都长出一个没有效果文的品质标签。
-static func _roll_dropped_weapon(item: Dictionary, state: Dictionary, forced_grade := "") -> Dictionary:
+static func _roll_dropped_weapon(item: Dictionary, state: Dictionary, forced_grade := "", forced_bullet_module_id := "") -> Dictionary:
 	if str(item.get("type", "")) != "weapon":
 		return _WEAPON_INSTANCE.ensure_weapon_item(item)
 	var rng: RandomNumberGenerator = state["rng"]
@@ -701,7 +705,8 @@ static func _roll_dropped_weapon(item: Dictionary, state: Dictionary, forced_gra
 	if not WeaponBulletDrop.is_melee_weapon(prepared):
 		# 必须先写 `bullet_module_id` 再 ensure：ensure 会立刻按它生成装配快照，
 		# 晚一步写就等于没写（快照里仍是标准弹，读档再也改不回来）。
-		prepared["bullet_module_id"] = WeaponBulletDrop.roll(rng.randf())
+		var bullet_roll := rng.randf()
+		prepared["bullet_module_id"] = forced_bullet_module_id if not forced_bullet_module_id.is_empty() else WeaponBulletDrop.roll(bullet_roll)
 		prepared["bullet_module_locked"] = true
 	var ensured := _WEAPON_INSTANCE.ensure_weapon_item(prepared)
 	return WeaponDropGrade.apply_to_item(ensured, grade)

@@ -3122,6 +3122,17 @@ func _build_expedition_records() -> void:
 		(plan.get("economy", {}) as Dictionary).get("room_keys_enabled", true)
 	)
 	configure_clear_drops(plan.get("clear_drops", {}) as Dictionary)
+	var source_plan := LevelPlanLoader.load_level_plan(get_expedition_level_id())
+	_flow_barks = (source_plan.get("flow_barks", []) as Array).duplicate(true)
+	var story_key := MainStoryProgress.key_for_level(get_expedition_level_id())
+	_flow_bark_first_run = not story_key.is_empty() and MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), story_key) == MainStoryProgress.STATE_NOT_ACQUIRED
+	_clear_drop_plans.clear()
+	if _runtime_restore_snapshot.is_empty():
+		for spec: Dictionary in plan.get("rooms", []):
+			var room_id := str(spec.get("id", ""))
+			if not room_id.is_empty():
+				spec["clear_drop_plan"] = _clear_drop_service.roll_room_drop(room_id, "boss" if str(spec.get("type", "")) == "BOSS" or str(spec.get("role", "")) == "boss" else "content", run_seed)
+				_clear_drop_plans[room_id] = (spec["clear_drop_plan"] as Dictionary).duplicate(true)
 	# 本层没有钥匙经济 ⇒ 开局也不发初始钥匙（业主 2026-11-05）。
 	# 读档时 `_restore_carried_ownership()` 会按快照覆盖这个值，不会吞掉玩家的携带钥匙。
 	if not _room_key_economy_enabled():
@@ -3505,6 +3516,8 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		spec.get("open_wall_directions", []) as Array
 	)
 	var record := _records.back() as Dictionary
+	if _clear_drop_plans.has(str(spec.get("id", ""))):
+		record["clear_drop_plan"] = (_clear_drop_plans[str(spec["id"])] as Dictionary).duplicate(true)
 	# flow 模式房间走**程序化壳体**，不用 5m 模块壳。
 	#
 	# 原因是两套网格对不上，不是画质取舍：
@@ -9076,6 +9089,7 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 			(_floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary).get("expedition_global_rotation_deg", 0)
 		)
 	world_state["roaming_elite"] = _roaming_elite.export_snapshot()
+	_export_flow_integration_state(world_state)
 	return world_state
 
 
@@ -9156,6 +9170,7 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 		var encounter_state: Variant = world_state.get("encounter_events", {})
 		if encounter_state is Dictionary:
 			_encounter_event_director.import_snapshot(encounter_state as Dictionary)
+	_import_flow_integration_state(world_state)
 	_restore_narrative_spawned_keys(snapshot)
 	# Airlock commits persist their post-unload intent before queue_free starts.
 	# Replaying that intent is required when the process died after the save but

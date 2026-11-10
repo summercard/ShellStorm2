@@ -6,8 +6,8 @@ extends Node
 ##   ② 走到房间中心才启动；启动瞬间入口门扇落下、房间被封
 ##   ③ 落门后**隔 start_delay 秒**才出第一波
 ##   ④ **一波清完才出下一波**（stage_advance=clear）；两波之间房间**不判清**
-##   ⑤ 计时到点后**不再开新波**（剩余阶段作废）
-##   ⑥ 到点自动开灯（结果动作 `light`）
+##   ⑤ 无截止有限波保留全部编成，容量释放后补足，不因旧时限作废
+##   ⑥ 全部清完自动开灯（结果动作 `light`）
 ##   ⑦ 全部打完 ⇒ 房间肃清 + 解除封门
 ##   ⑧ **事件怪主动围向玩家**（`hunt_player`）：不靠视锥、不靠视线，是真的会走过来的
 ##   ⑨ **右上角倒计时环**（`hud_countdown`）：触发即出现、读数与事件 elapsed 同源、
@@ -44,6 +44,10 @@ func _check(ok: bool, message: String) -> void:
 
 
 func _ready() -> void:
+	if not OS.get_environment("APPDATA").contains("flow_integration") or not OS.get_environment("LOCALAPPDATA").contains("flow_integration"):
+		_check(false, "必须通过隔离flow_integration启动器运行")
+		_finish()
+		return
 	tower = SCENE.instantiate() as TowerDescent3D
 	tower.test_mode = true
 	tower.run_seed_override = SEED_VALUE
@@ -141,25 +145,13 @@ func _ready() -> void:
 		"封门期间仍给出门交互候选（玩家能按 E 开门）"
 	)
 
-	# ⑨ 触发瞬间 ⇒ 倒计时环出现，文字 = 总时长（`M:SS`）。
-	#    两次 await 才保证中间跑过一帧 `_process`：`SceneTree.process_frame` 是
-	#    **在** `_process` **之前**发出的，只 await 一次等于"还没刷新就读"。
+	# 无截止有限波不显示旧总倒计时；HUD 开关来自当前数据。
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var ring := tower._hud_countdown_ring
-	var expected_total := maxi(0, int(ceil(float(room.encounter.get("duration_sec", 60.0)))))
-	_check(ring != null and ring.visible, "遭遇已触发但左下角倒计时环没显示")
-	if ring != null:
-		var ring_row := ring.get_snapshot()
-		_check(
-			str(ring_row.get("text", "")) == EncounterCountdownRing.format_time(expected_total),
-			"倒计时环文字 %s ≠ 总时长对应的 %s"
-			% [str(ring_row.get("text", "")), EncounterCountdownRing.format_time(expected_total)]
-		)
-		_check(
-			float(ring_row.get("remaining_ratio", 0.0)) > 0.9,
-			"刚触发时环就不是整圈：%s" % str(ring_row.get("remaining_ratio", 0.0))
-		)
+	_check(float(room.encounter.get("duration_sec", -1.0)) == 0.0, "有限波必须没有总截止")
+	_check(not bool(room.encounter.get("hud_countdown", true)), "有限波数据仍开启总倒计时")
+	_check(ring != null and not ring.visible, "有限波不应显示总倒计时环")
 
 	var instance_id := str(tower._room_encounter_active.get(room.room_id, ""))
 	_check(not instance_id.is_empty(), "事件实例 id 为空，后续断言无法进行")
@@ -202,17 +194,7 @@ func _ready() -> void:
 	_check(stamped == hunters.size(), "事件怪没有被盖上猎杀目标（%d/%d）" % [stamped, hunters.size()])
 	_check(aware == hunters.size(), "事件怪的决策不是 hunt_contact（%d/%d）" % [aware, hunters.size()])
 
-	# ⑨ 环的读数与事件 elapsed **同源**：容差 1 s（测试里手动 tick 过、`_process` 也在走），
-	#    但绝不允许各记一份 —— 两处计时必然会漂，漂了之后没人知道该信哪个。
-	if ring != null:
-		var live := tower.get_encounter_event_snapshot(instance_id)
-		var duration := maxf(0.001, float(room.encounter.get("duration_sec", 60.0)))
-		var expected_remaining := duration - float(live.get("elapsed", 0.0))
-		var showed := float(ring.get_snapshot().get("remaining_sec", -1.0))
-		_check(
-			absf(showed - expected_remaining) <= 1.0,
-			"环上的剩余时间 %.2f 与事件 elapsed 推出来的 %.2f 差超过 1 s" % [showed, expected_remaining]
-		)
+	_check(ring == null or not ring.visible, "无截止有限波期间旧倒计时重新出现")
 
 	# ⑧ 真的会走过来：量「到玩家的距离」在若干物理帧后的变化。
 	# 只要求"至少有一只明显靠近"，不要求全部 —— 已经在攻击距离内的、
@@ -257,8 +239,11 @@ func _ready() -> void:
 
 	# ④ 清完第一波 ⇒ 第二波才出；期间房间**不判清**。
 	_clear_enemies(room)
-	tower._encounter_event_director.tick(0.1)
-	_check(_stage_started(instance_id, 1), "第一波清完后第二波没有开始")
+	tower._encounter_event_director.tick(0.0)
+	_check(not _stage_started(instance_id, 1), "第一波清完跳过间歇")
+	_check(not room.cleared and tower._room_has_pending_combat(room), "有限波间歇提前清房")
+	tower._encounter_event_director.tick(float(room.encounter.get("intermission_sec", 0.0)) + 0.1)
+	_check(_stage_started(instance_id, 1), "完整间歇后第二波没有开始")
 	var wave_2 := _enemy_count(room)
 	_check(wave_2 > 0, "第二波没有真的出怪")
 	# 判「两波确实是不同编成」要**比编成本身，不能比总数**。
@@ -272,51 +257,35 @@ func _ready() -> void:
 	_check(not room.cleared, "波与波之间把房间判成已肃清（后续波次会被跳过）")
 	_check(tower._room_is_sealed(room.room_id), "波与波之间把封门解开了")
 
-	# ⑤ 计时到点：不再开新波，剩余阶段作废。
-	var spawned_before_expiry := _spawned(instance_id)
+	# 有限波没有旧60秒截止；容量未派发完与存活敌人都必须保留。
 	tower._encounter_event_director.tick(120.0)
+	_check(str(tower.get_encounter_event_snapshot(instance_id).get("status", "")) == "active", "有限波被旧截止终结")
+	var expected_count := 0
+	for stage: Dictionary in room.encounter.get("stages", []):
+		for monster: Dictionary in stage.get("monsters", []):
+			expected_count += int(monster.get("count", 0))
+	for _step in 24:
+		var remaining := _enemies(room)
+		_check(remaining.size() <= int(room.encounter.get("max_alive", 2147483647)), "事件容量超限")
+		for enemy: Enemy3D in remaining:
+			# 走真实击杀链；用同步删除避免已死节点污染本轮统计。
+			tower._on_enemy_killed(enemy, enemy.get_enemy_data())
+			enemy.free()
+		tower._enemy_nodes_by_room[room.room_id] = _live_refs(room)
+		tower._encounter_event_director.tick(0.0)
+		tower._encounter_event_director.tick(float(room.encounter.get("intermission_sec", 0.0)) + 0.1)
+		if bool(tower.get_encounter_event_snapshot(instance_id).get("terminal", false)):
+			break
 	var snapshot := tower.get_encounter_event_snapshot(instance_id)
-	_check(str(snapshot.get("status", "")) == "completed", "计时到点后事件状态不是 completed")
-	_check(
-		_spawned(instance_id) == spawned_before_expiry,
-		"计时到点后仍在出怪（新波 %d → %d）" % [spawned_before_expiry, _spawned(instance_id)]
-	)
-	var dropped := int(snapshot.get("dropped", 0))
-	_check(dropped > 0, "计时到点后有未开始的阶段却没记为作废（dropped=%d）" % dropped)
-	_check(
-		not tower._room_encounter_active.has(room.room_id),
-		"事件已终结但 active 记账没清（房间永远判不清）"
-	)
-	# ⑨ 事件终结 ⇒ 环立即消失，不留残影。
-	await get_tree().process_frame
-	await get_tree().process_frame
-	_check(ring == null or not ring.visible, "事件已终结但倒计时环还挂着")
-
-	# ⑥ 到点开灯。
+	_check(str(snapshot.get("status", "")) == "completed", "全部有限波清完未立即完成")
+	_check(_spawned(instance_id) == expected_count, "有限波丢怪或重复生成")
+	_check(int(snapshot.get("dropped", -1)) == 0, "有限波仍把未派发怪作废")
+	_check(not tower._room_encounter_active.has(room.room_id), "终结后active残留")
 	var light_applied := false
-	for row_value in snapshot.get("result_actions", []) as Array:
-		var row := row_value as Dictionary
+	for row: Dictionary in snapshot.get("result_actions", []):
 		if str(row.get("type", "")) == "light" and bool(row.get("ok", false)):
 			light_applied = true
-	_check(light_applied, "到点开灯的 light 结果动作没有成功执行：%s" % str(snapshot.get("result_actions", [])))
-	_check(room.is_room_light_on(), "到点后房间灯没有打开")
-
-	# ⑦ 打完剩余怪 ⇒ 房间肃清 + 解封。
-	var remaining := _enemies(room)
-	_check(not remaining.is_empty(), "此时场上应仍有上一波的敌人")
-	for index in remaining.size():
-		var enemy := remaining[index] as Enemy3D
-		if not is_instance_valid(enemy):
-			continue
-		if index < remaining.size() - 1:
-			enemy.free()
-			tower._enemy_nodes_by_room[room.room_id] = _live_refs(room)
-			tower._alive_by_room[room.room_id] = maxi(
-				0, int(tower._alive_by_room.get(room.room_id, 1)) - 1
-			)
-			continue
-		# 最后一只走**真实击杀链**，让 `_resolve_room_enemy_departure` 真正跑到。
-		tower._on_enemy_killed(enemy, enemy.get_enemy_data())
+	_check(light_applied and room.is_room_light_on(), "全部清完后未开灯")
 	await get_tree().process_frame
 	_check(room.cleared, "清完所有怪后房间仍未肃清")
 	_check(not tower._room_is_sealed(room.room_id), "肃清后封门没有解除（玩家出不去）")
