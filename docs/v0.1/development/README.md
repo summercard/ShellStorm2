@@ -1,3 +1,5 @@
+- [远征01隐藏房间外围封闭与空门洞修订](2026-11-10_secret_branch_wall_closure.md)：`SecretBranch3D` 已在 `ensure_shell_built` 后递归收口正式房壳，按真实地砖边界封外围、保留真实门槽，并移除碰撞净空内 `safe_box_proxy` 半隔断/陈设；新增 A31/A32 与 `probe_secret_branch_wall_gaps`。默认 12 样本、full-flow 无头验收通过，撤离房不开普通门，其余房间覆盖东单/西单/双门；最终版 `final_full_level.log` 输出 `SECRET_BRANCH_WALL_GAPS_OK rooms=7`，exit 0，1900 条 UID 警告，0 `SCRIPT ERROR`/`ERROR`。负向删除撤离房补墙故障，按预期只使 A31 变红、A32 正常；文档门禁 exit 1 的 11 条断链均为既有问题，本事务新增链接 0 条断链。外围与门净空无头验收通过，表现待真机；A12/A13 未实现，不宣称 WORLD-SECRET 完结。
+
 - [敌方子弹回退 3D 弹体，公告板保留并缩到 70%](2026-11-10_enemy_bullet_presentation_rollback.md)：业主澄清 11-09 只要求「判定体积=放大后模型体积」，未要求公告板 ⇒ 默认回 3D 弹体；公告板实现一行不删，由 `ENEMY_BULLET_BILLBOARD=false` 与单发 `projectile_config["billboard"]` 切换；图标核心由「= 判定球直径」改为 ×0.70（语义降级为「所见小于所中」，判定球不动）。新增三条缺省哨兵（缺省必须 3D / 弹体可见 / 图标不可见），`verify_crosshair_billboard` 31→37 samples 通过，真机对照 `outputs/bullet_presentation_20261110/compare_3d_vs_billboard70.png`。遗留：公告板「看着大」主因是外晕 1.67 倍核心与不足 1px 的描边，不是尺寸倍率。
 
 - [南墙收镜与鼠标前瞻交接稳定性修复](2026-11-10_camera_wall_stability.md)：退出20cm滞回、恢复期保持南向约束；轻量Owner37项/Forward+窗口鼠标50项与热键通过；完整关卡原位人工手感未验，整体partial。

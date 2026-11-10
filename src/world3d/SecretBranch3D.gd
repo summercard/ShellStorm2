@@ -1096,6 +1096,7 @@ func _spawn_branch_room(
 	room.position = center
 	root.add_child(room)
 	room.ensure_shell_built()
+	_reconcile_branch_shell(room)
 	# 脚下必须是实的（2026-10-21 业主「支线的装配有问题，会掉下去」），
 	# 且只盖在**真实地砖**上（2026-10-22 业主「角色会跑到房间外面去」）。
 	_ensure_floor_support(root, room)
@@ -1112,6 +1113,165 @@ func _spawn_branch_room(
 	}
 	room.player_entered.connect(_on_branch_room_player_entered)
 	return room
+
+
+## 共享壳是主路房的快照：嵌套层内保留旧门洞，甚至缺整段共享边。
+## 只在子图装配后处理，不改变 DungeonRoom3D 的主路共墙所有权。
+## 先封旧门、再按真门 lane 替换槽位、最后补真实地砖外围的缺墙。
+## 使用正式墙/门墙 prefab（自带碰撞），不铺矩形围栏、不加隐形空气墙。
+func _reconcile_branch_shell(room: DungeonRoom3D) -> void:
+	if bool(room.get_meta("branch_shell_reconciled", false)):
+		return
+	var art := room.get_node_or_null("AuthoredLayoutArtRoot") as Node3D
+	if art == null:
+		push_error("[SecretBranch3D] %s 缺正式房壳，无法修整外围" % room.room_id)
+		return
+	var solid := load("res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn") as PackedScene
+	var portal := load("res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn") as PackedScene
+	if solid == null or portal == null:
+		push_error("[SecretBranch3D] 缺正式封墙组件")
+		return
+	var pieces: Array[Node3D] = []
+	for value in art.find_children("*", "Node3D", true, false):
+		var piece := value as Node3D
+		if DungeonRoom3D._is_door_wall_piece(piece) and piece.scene_file_path.ends_with(".tscn"):
+			pieces.append(piece)
+	for piece in pieces:
+		var position_in_room := room.to_local(piece.global_position)
+		var half := room.get_dimensions() * 0.5
+		var side := DungeonRoom3D._authored_wall_side_from_position(position_in_room, half)
+		if side.is_empty():
+			continue
+		_replace_branch_wall(room, piece, solid, position_in_room, side)
+	# 每扇真门必须把压在 lane 上的烘焙墙换成通透门墙；只建门扇不等于开洞。
+	for side_value in room.doors:
+		var side := str(side_value)
+		var lane := float(room.get_meta("wall_door_lane_%s" % side, 0.0))
+		var half := room.get_dimensions() * 0.5
+		var point := Vector3(half.x if side == "east" else -half.x, 0.0, lane)
+		for value in art.find_children("*", "Node3D", true, false):
+			if not is_instance_valid(value):
+				continue
+			var piece := value as Node3D
+			if not piece.scene_file_path.get_file().begins_with("wall") or not piece.scene_file_path.ends_with(".tscn"):
+				continue
+			var p := room.to_local(piece.global_position)
+			if absf(p.x - point.x) <= 0.8 and absf(p.z - lane) < 2.5 and absf(p.y) < 0.5:
+				piece.get_parent().remove_child(piece)
+				piece.free()
+		_add_branch_wall(room, portal, point, side)
+		_clear_branch_door_obstacles(room, art, point, side)
+	# 地砖边界而不是包围盒边界：桥坑护栏算阻挡，L 形凹口不得铺地。
+	var boxes := _branch_floor_boxes(room)
+	var directions := [Vector3.RIGHT, Vector3.LEFT, Vector3.FORWARD, Vector3.BACK]
+	var sides := ["east", "west", "north", "south"]
+	var patches := 0
+	for box in boxes:
+		var center := box.get_center()
+		center.y = room.global_position.y
+		for index in range(4):
+			var normal: Vector3 = directions[index]
+			var neighbour := center + normal * 5.0
+			if _branch_boxes_contain(boxes, neighbour):
+				continue
+			var edge := center + normal * 2.5
+			var local_edge := room.to_local(edge)
+			var side: String = sides[index]
+			var on_door_plane := absf(absf(local_edge.x) - room.get_dimensions().x * 0.5) < 0.3
+			if side in room.doors and on_door_plane and absf(local_edge.z - float(room.get_meta("wall_door_lane_%s" % side, 0.0))) < 0.2:
+				continue
+			var tangent := Vector3.BACK if index < 2 else Vector3.RIGHT
+			var blocked := true
+			for offset in [-1.7, 0.0, 1.7]:
+				var p := edge + tangent * float(offset) + Vector3.UP * 1.3
+				if not _branch_boundary_blocked(room, p - normal * 1.2, p + normal * 1.0):
+					blocked = false
+					break
+			if not blocked:
+				_add_branch_wall(room, solid, local_edge, side)
+				patches += 1
+	room.set_meta("branch_shell_reconciled", true)
+	room.set_meta("branch_boundary_patch_count", patches)
+
+
+## 烘焙半隔断/家具可能横压新门槽；仅移除实际穿过门净空的非墙组件。
+## 视觉与碰撞一起移除，不能只禁用碰撞留下看得见的堵门件。
+func _clear_branch_door_obstacles(room: DungeonRoom3D, art: Node3D, point: Vector3, side: String) -> void:
+	var normal := Vector3.RIGHT if side == "east" else Vector3.LEFT
+	var remove: Array[Node3D] = []
+	for value in art.find_children("*", "Node3D", true, false):
+		var piece := value as Node3D
+		if not piece.scene_file_path.ends_with(".tscn") or str(piece.get_meta("collision_policy", "")) != "safe_box_proxy":
+			continue
+		for shape_value in piece.find_children("*", "CollisionShape3D", true, false):
+			var collision := shape_value as CollisionShape3D
+			var box := collision.shape as BoxShape3D
+			if box == null or collision.disabled:
+				continue
+			var inv := collision.global_transform.affine_inverse()
+			var p := room.to_global(point + Vector3.UP * 1.3)
+			if AABB(-box.size * 0.5, box.size).intersects_segment(inv * (p - normal * 1.1), inv * (p + normal * 1.1)) != null:
+				remove.append(piece)
+				break
+	for piece in remove:
+		if is_instance_valid(piece):
+			piece.get_parent().remove_child(piece)
+			piece.free()
+
+
+func _branch_boxes_contain(boxes: Array[AABB], point: Vector3) -> bool:
+	for box in boxes:
+		if point.x > box.position.x and point.x < box.end.x and point.z > box.position.z and point.z < box.end.z:
+			return true
+	return false
+
+
+## 尚未进入物理帧也可检查：把线段变换到每个真实结构盒局部再求交。
+func _branch_boundary_blocked(room: DungeonRoom3D, start: Vector3, end: Vector3) -> bool:
+	for value in room.find_children("*", "CollisionShape3D", true, false):
+		var collision := value as CollisionShape3D
+		var body := collision.get_parent() as StaticBody3D
+		var box := collision.shape as BoxShape3D
+		if body == null or box == null or collision.disabled or (body.collision_layer & 1) == 0:
+			continue
+		if body is RoomDoor3D or not _branch_is_structural_collision(collision, room):
+			continue
+		var inv := collision.global_transform.affine_inverse()
+		if AABB(-box.size * 0.5, box.size).intersects_segment(inv * start, inv * end) != null:
+			return true
+	return false
+
+
+func _branch_is_structural_collision(node: Node, room: Node) -> bool:
+	var ancestor := node.get_parent()
+	while ancestor != null and ancestor != room:
+		if ancestor is Node3D:
+			var piece := ancestor as Node3D
+			var source := piece.scene_file_path.get_file()
+			if not source.ends_with(".tscn"):
+				ancestor = ancestor.get_parent()
+				continue
+			return source.begins_with("wall") or source.contains("corner") or source.contains("guardrail") or source.contains("platform_edge")
+		ancestor = ancestor.get_parent()
+	return false
+
+
+func _replace_branch_wall(room: DungeonRoom3D, old: Node3D, packed: PackedScene, point: Vector3, side: String) -> void:
+	old.get_parent().remove_child(old)
+	old.free()
+	_add_branch_wall(room, packed, point, side)
+
+
+func _add_branch_wall(room: DungeonRoom3D, packed: PackedScene, point: Vector3, side: String) -> void:
+	var piece := packed.instantiate() as Node3D
+	piece.name = "BranchWall_%s_%d" % [side, room.get_child_count()]
+	piece.set_meta("branch_reconciled_wall", true)
+	for body in piece.find_children("*", "StaticBody3D", true, false):
+		body.set_meta("camera_lower_wall", true)
+	room.get_node("AuthoredLayoutArtRoot").add_child(piece)
+	point.y = 0.0
+	var angle := {"north": 180.0, "south": 0.0, "east": 90.0, "west": -90.0}
+	piece.global_transform = room.global_transform * Transform3D(Basis(Vector3.UP, deg_to_rad(float(angle[side]))), point)
 
 
 ## 共享房壳的**摆放朝向**（0 / 90 / 180 / 270）。

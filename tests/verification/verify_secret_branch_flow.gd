@@ -315,6 +315,17 @@ func _check_runtime(failures: Array[String], notes: Array[String]) -> void:
 	await _check_room_copy_doors(tower, branch, failures, notes)
 	# A27/A28：子图房**脚下实心** + **壳摆正**（业主 2026-10-21「装配的房间有问题，会掉落」）。
 	await _check_branch_floors(branch, failures, notes)
+	# A31/A32 用物理空间检查真实外围和开门后的门洞，不以装配标志代替几何。
+	var wall_probe := preload("res://tests/verification/probe_secret_branch_wall_gaps.gd").new()
+	for value in branch.find_children("*", "", true, false):
+		var branch_room := value as DungeonRoom3D
+		if branch_room == null:
+			continue
+		if wall_probe._audit_room(branch_room, false) > 0:
+			failures.append("A31 支线房外围漏空：%s" % branch_room.room_id)
+		if wall_probe.audit_door_clearance(branch_room) > 0:
+			failures.append("A32 支线房真门净空堵塞：%s" % branch_room.room_id)
+	wall_probe.free()
 	await _check_branch_shell_fit(branch, failures, notes)
 	var doors: Array = snapshot.get("doors", []) as Array
 	# 77001199 下 pair 1 是否刷出由种子决定；至少 pair 0 的两个位点必须在。
