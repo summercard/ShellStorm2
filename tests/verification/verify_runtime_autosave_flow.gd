@@ -65,6 +65,31 @@ func _ready() -> void:
 	if occupied != 2:
 		failures.append("重启快照没有保留背包的精确格位/堆叠")
 
+	# Submit three transitions without yielding. One write is in flight and the
+	# remaining two coalesce. A critical transaction must follow the last room.
+	for serial in [4, 5, 6]:
+		provider.snapshot_serial = serial
+		manager.queue_room_transition_checkpoint()
+	if int(manager.get_active_run_checkpoint().get("snapshot_serial", 0)) != 6:
+		failures.append("连续跨房后内存镜像不是最新状态")
+	manager.data.total_kills += 1
+	if not manager.save_base("critical_after_rooms") or manager.data.save_revision != 5:
+		failures.append("关键事务未在后台过房写入之后有序提交")
+	restored.load_base()
+	if restored.data.total_kills != manager.data.total_kills or int(restored.get_active_run_checkpoint().get("snapshot_serial", 0)) != 6:
+		failures.append("磁盘回读丢失最近房间或后续关键事务")
+
+	manager.force_save_failure_for_test = true
+	provider.snapshot_serial = 7
+	manager.queue_room_transition_checkpoint()
+	manager._finish_room_writes(true)
+	restored.load_base()
+	if int(restored.get_active_run_checkpoint().get("snapshot_serial", 0)) != 6 or not manager._runtime_checkpoint_dirty:
+		failures.append("后台写失败未保留上一代磁盘文件及重试状态")
+	manager.force_save_failure_for_test = false
+	if not manager.flush_runtime_checkpoint("retry_after_io_failure"):
+		failures.append("注入写失败后的强制检查点重试失败")
+
 	var insurance := InsuranceModule.new(2)
 	insurance.insure_item_direct(ItemRegistry.get_instance().get_item("weapon_pistol"))
 	var insurance_copy := InsuranceModule.new(2)

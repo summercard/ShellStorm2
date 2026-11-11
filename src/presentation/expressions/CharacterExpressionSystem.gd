@@ -5,6 +5,7 @@ extends Node
 signal expression_changed(expression_id: String)
 var current_expression := "neutral"
 var random_enabled := true
+var presentation_held := false
 var random_seed := 0
 var _hold_remaining := 0.0
 var _remaining_to_random := 4.0
@@ -21,6 +22,8 @@ func _process(delta: float) -> void:
 	advance(delta)
 
 func request_expression(expression_id: String, hold_seconds := 2.0) -> bool:
+	if presentation_held:
+		return false
 	if not CharacterExpressionCatalog.has_expression(expression_id) or not is_finite(hold_seconds) or hold_seconds < 0.0:
 		return false
 	_hold_remaining = hold_seconds
@@ -44,7 +47,7 @@ func set_random_enabled(enabled: bool) -> void:
 	random_enabled = enabled
 
 func advance(delta: float) -> void:
-	if not is_finite(delta) or delta <= 0.0:
+	if presentation_held or not is_finite(delta) or delta <= 0.0:
 		return
 	var available := maxf(0.0, delta - _hold_remaining)
 	_hold_remaining = maxf(0.0, _hold_remaining - delta)

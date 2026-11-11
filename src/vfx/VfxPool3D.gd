@@ -53,6 +53,10 @@ const FX01_BOARD_DEBRIS := "VFX-BOARD-DEBRIS-3D"
 ## 只有「消失」会让玩家以为怪跑掉了，只有「出现」会让人以为怪是凭空刷的。
 const FX01_TELEPORT_OUT := "VFX-TELEPORT-OUT-3D"
 const FX01_TELEPORT_IN := "VFX-TELEPORT-IN-3D"
+## 99F 基地出发后的远征入场仪式：扫描成形 + 碎片凝实。
+## 两个 AssetID 保持独立池桶，便于分别统计生命周期与阶段语义。
+const FX01_HOLOGRAM_ENTRY_SCAN := "VFX-HOLOGRAM-ENTRY-SCAN-3D"
+const FX01_HOLOGRAM_ENTRY_MATERIALIZE := "VFX-HOLOGRAM-ENTRY-MATERIALIZE-3D"
 const FX01_BULLET_ELECTRIC := "VFX-BULLET-ELECTRIC-3D"
 const FX01_ARMS_TAKER_FLOOR_CAST := "VFX-ARMS-TAKER-FLOOR-CAST-3D"
 
@@ -85,6 +89,8 @@ const _REGISTRY := {
 	FX01_BOARD_DEBRIS: preload("res://assets/art/vfx/combat_3d/vfx_board_debris_root_top3d.tscn"),
 	FX01_TELEPORT_OUT: preload("res://assets/art/vfx/combat_3d/vfx_teleport_out_root_top3d.tscn"),
 	FX01_TELEPORT_IN: preload("res://assets/art/vfx/combat_3d/vfx_teleport_in_root_top3d.tscn"),
+	FX01_HOLOGRAM_ENTRY_SCAN: preload("res://assets/art/vfx/combat_3d/vfx_hologram_entry_scan_root_top3d.tscn"),
+	FX01_HOLOGRAM_ENTRY_MATERIALIZE: preload("res://assets/art/vfx/combat_3d/vfx_hologram_entry_materialize_root_top3d.tscn"),
 	FX01_BULLET_ELECTRIC: preload("res://assets/art/vfx/combat_3d/vfx_bullet_electric_root_top3d.tscn"),
 	FX01_ARMS_TAKER_FLOOR_CAST: preload("res://assets/art/vfx/combat_3d/vfx_arms_taker_floor_cast_root_top3d.tscn"),
 	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d.tscn"),

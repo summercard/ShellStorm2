@@ -173,6 +173,30 @@ func get_sound_set(sfx_name: String) -> Dictionary:
 	return (_catalog.get("sound_sets", {}) as Dictionary).get(sfx_name, {}) as Dictionary
 
 
+## 读条中准备前几道门和前三次命中实际轮播的声音。只填正式播放缓存，
+## 不移动变体游标、不产生声部；不可用的资源仍由实际播放路径报告。
+func warm_expedition_event_sounds() -> int:
+	var ready_count := 0
+	for sound_set in ["door_open", "enemy_hit"]:
+		for path_value in get_sound_set(sound_set).get("paths", []):
+			var path := str(path_value)
+			if not _stream_cache.has(path):
+				if ResourceLoader.load_threaded_request(path, "AudioStream") != OK:
+					continue
+				var status := ResourceLoader.load_threaded_get_status(path)
+				while status == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+					await get_tree().process_frame
+					status = ResourceLoader.load_threaded_get_status(path)
+				if status != ResourceLoader.THREAD_LOAD_LOADED:
+					continue
+				var stream := ResourceLoader.load_threaded_get(path) as AudioStream
+				if stream == null:
+					continue
+				_stream_cache[path] = stream
+			ready_count += 1
+	return ready_count
+
+
 func _next_path(sfx_name: String) -> String:
 	var sound_set := get_sound_set(sfx_name)
 	var paths: Array = sound_set.get("paths", [])

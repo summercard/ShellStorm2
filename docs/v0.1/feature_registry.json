@@ -329,10 +329,12 @@
         "docs/v0.1/development/2026-09-29_expedition_hologram_city.md",
         "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md",
         "docs/v0.1/development/2026-11-07_loading_warmup_gate.md",
+        "docs/v0.1/development/2026-11-11_expedition_entry_hologram_ceremonies.md",
         "docs/v0.1/development/2026-11-10_main_story_031_033.md",
         "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": [], "suite": "manual", "requires": "Autoload前隔离APPDATA/LOCALAPPDATA/XDG；真实渲染fixture六截图及正式host/test_mode=false接入；不等于基地菜单→读取页→关卡端到端通过"},
         {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "专用外部Runner在Autoload前隔离；真实整关仍在联调"},
         {"kind": "scene", "id": "verify_main_story_navigation", "suite": "core"},
         {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual", "requires": "Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_integration"},
@@ -1021,7 +1023,8 @@
         "docs/v0.1/design/主线剧情3.1至3.3与四钥匙设计.md",
         "docs/v0.1/design/主线剧情节点表.md",
         "docs/v0.1/design/主线剧情剧本.md",
-        "docs/v0.1/08_技术施工_剧情触发.md"
+        "docs/v0.1/08_技术施工_剧情触发.md",
+        "docs/v0.1/design/关卡进入与冷启动预热设计.md"
       ],
       "development_records": [
         "docs/v0.1/development/CHANGELOG.md",
@@ -1031,9 +1034,14 @@
         "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md",
         "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md",
         "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md",
+        "docs/v0.1/development/2026-11-11_expedition_entry_hologram_ceremonies.md",
         "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": [], "suite": "manual", "requires": "Autoload前隔离；只跑两套真实fixture；已验20261112_001831 exit0（A3.15/B3.60，20Mesh）；正式host改走--official-hosts独立进程"},
+        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": ["--official-hosts"], "suite": "manual", "requires": "Autoload前隔离；真实Forward+；四次完整host装配必须独立进程，否则全进程预算被吃穿（20261111_223135/20261112_001044超时）；已验20261112_002015 exit0，base_scan/tower03/base_materialize/resume全OK"},
+        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": ["--base-menu-e2e"], "suite": "manual", "requires": "Autoload前隔离；真实Forward+；真实BaseWorld3D设施交互+菜单鼠标点击；2026-11-12修出发事务后点击已能接上读取页，但装配停在11/13未通过，待机器空闲复跑；不得据此签人工菜单链"},
+        {"kind": "command", "path": "scripts/run_expedition_entry_qa.py", "args": ["--loading-e2e"], "suite": "manual", "requires": "Autoload前隔离；真实Forward+；由已准备99F出发请求经真实ExpeditionLoadingScreen切正式Level01，双seed；已验20261111_222806（exit0/0 engine error/13房预热/20Mesh归还/flow.end后可动），不含人工菜单点击"},
         {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；flow_barks按钥匙未取得的首通前语义，结果pending"},
         {"kind": "scene", "id": "verify_main_story_narrative", "suite": "manual", "requires": "已含真实运行；Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"},
         {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual"},

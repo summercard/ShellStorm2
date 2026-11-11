@@ -3175,6 +3175,23 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 		report["skipped"] = true
 		return report
 
+	var geometry_started := Time.get_ticks_msec()
+	var boxes := 0
+	for room in targets:
+		if room.encounter.get("spawn_mode", "") != "preplaced":
+			continue
+		for index in room.spawn_placements.size():
+			var placement := _box_placement_at(room.spawn_placements, index)
+			if placement.is_empty():
+				continue
+			var box := SpawnBoxCatalog.resolve_placement_box(placement)
+			var center := room.snap_box_center_to_tile(placement["box_center"], int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES)))
+			var radians := deg_to_rad(float(placement["box_rotation"]))
+			room.static_box_candidates(center, (placement["box_size"] as Vector2) * 0.5, cos(radians), sin(radians), room._spawn_clearance(), true)
+			boxes += 1
+		await get_tree().process_frame
+	report["static_boxes"] = boxes
+	report["static_box_ms"] = Time.get_ticks_msec() - geometry_started
 	var viewport := SubViewport.new()
 	viewport.name = "RoomWarmViewport"
 	viewport.size = view_size
@@ -3204,12 +3221,42 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 			report["truncated"] = "budget"
 			break
 		camera.global_position = room.global_position + Vector3(0, 2.6, 0)
+		var pool := get_node_or_null("ProjectilePool3D") as ProjectilePool3D
+		var round_sample: Projectile3D
+		var avatar: Node3D
+		var effects: Array[VfxEffectBase3D] = []
+		if done == 0:
+			var origin := camera.to_global(Vector3(0, 0, -4))
+			if pool != null:
+				round_sample = pool.begin_render_warmup(origin)
+			avatar = EnemyWarmup.spawn_probe(camera, "melee_chaser")
+			if avatar != null:
+				avatar.position = Vector3(1, -0.8, -4)
+				avatar.call("flash_hit", false)
+			effects.append(VfxPool.acquire(VfxPool3D.FX01_GOO_HIT, origin, Color.WHITE, 1.0))
+			effects.append(VfxPool.acquire(VfxPool3D.FX01_METAL_SPARK_HIT, origin, Color.WHITE, 1.0))
+			effects.append(VfxPool.acquire(TreasureChest3D.APPEAR_FX_ASSET, origin, TreasureChest3D.APPEAR_FX_COLOR, TreasureChest3D.APPEAR_FX_SIZE))
 		for _i in maxi(1, frames_per_room):
 			await get_tree().process_frame
 			await RenderingServer.frame_post_draw
 		done += 1
 		if done == 1:
-			reward_visuals.free()
+			if is_instance_valid(round_sample):
+				pool.finish_render_warmup(round_sample)
+			if is_instance_valid(avatar):
+				avatar.free()
+			for effect in effects:
+				if is_instance_valid(effect):
+					effect.finish()
+			report["pooled_round"] = is_instance_valid(round_sample)
+			# Keep the initialized models and their per-instance material RIDs alive.
+			# The first chest of each tier takes its model; scene teardown owns unused ones.
+			if not has_node("RewardChestWarmVisuals"):
+				reward_visuals.visible = false
+				reward_visuals.process_mode = Node.PROCESS_MODE_DISABLED
+				reward_visuals.reparent(self, false)
+			else:
+				reward_visuals.free()
 	report["rooms"] = done
 	report["elapsed_ms"] = Time.get_ticks_msec() - started
 	if is_instance_valid(viewport):
@@ -4130,7 +4177,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	call_deferred("_retry_pending_character_fate_pickups", room.room_id)
 	room_entered.emit(room)
 	if _runtime_persistence_active and BaseManager != null:
-		BaseManager.flush_runtime_checkpoint("room_transition")
+		BaseManager.queue_room_transition_checkpoint()
 	minimap.set_current_room(room.room_id)
 	_update_room_streaming(room.room_id)
 	# 宝箱"出现"特效的触发点（业主 2026-11-09）。放在流送之后：
@@ -4609,7 +4656,7 @@ func _spawn_room_enemies_impl(room: DungeonRoom3D) -> bool:
 	if _room_spawn_blocked.has(room.room_id):
 		return false
 	if not box_waves.is_empty():
-		return _commit_room_waves(room, box_waves)
+		return _commit_room_waves(room, box_waves, room.encounter.get("spawn_mode", "") == "preplaced")
 	if room.spawn_boxes_only:
 		_alive_by_room[room.room_id] = 0
 		_room_wave_queues[room.room_id] = []
@@ -4782,12 +4829,16 @@ func _spawn_box_waves(room: DungeonRoom3D, floor: int, floor_level: int) -> Arra
 	# 种子 = run_seed ^ 房 id 派生 ⇒ 同局同房每次调用恒定、不同局/不同房不同。
 	var rng := RandomNumberGenerator.new()
 	rng.seed = run_seed ^ room.room_id.hash() ^ 0x424f5831
+	# 这里同步编译整房的盒子，循环期间没有实体入树或物理步进。
+	var geometry_prepared: bool = room.encounter.get("spawn_mode", "") == "preplaced" or float(room.encounter.get("min_player_distance_m", 0.0)) > 0.0
+	if geometry_prepared:
+		room._prepare_safe_spawn_selection()
 	var waves: Array = []
 	for stage_value in stages:
 		var entries: Array[Dictionary] = []
 		for instance_value in (stage_value as Array):
 			_collect_box_stage_entries(
-				room, placements, int(instance_value), floor, floor_level, rng, entries
+				room, placements, int(instance_value), floor, floor_level, rng, entries, geometry_prepared
 			)
 		if entries.is_empty():
 			continue
@@ -4818,7 +4869,8 @@ func _collect_box_stage_entries(
 	floor: int,
 	floor_level: int,
 	rng: RandomNumberGenerator,
-	entries: Array[Dictionary]
+	entries: Array[Dictionary],
+	geometry_prepared := false
 ) -> void:
 	var placement := _box_placement_at(placements, instance_index)
 	if placement.is_empty():
@@ -4884,7 +4936,7 @@ func _collect_box_stage_entries(
 		var center := room.resolve_spawn_box_center_local(
 			placement["box_center"], placement["box_size"], total,
 			float(placement["box_rotation"]), float(box.get("min_spacing_m", 0.0)),
-			int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES))
+			int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES)), geometry_prepared
 		)
 		var angle := deg_to_rad(float(placement["box_rotation"]))
 		for local_point in room._box_sample_points(center, (placement["box_size"] as Vector2) * 0.5, cos(angle), sin(angle), room._spawn_clearance()):
@@ -5313,7 +5365,7 @@ func _apply_expedition_surplus(room: DungeonRoom3D, alive: int) -> int:
 ## 把已分好的波次提交为本房的刷怪队列，并立刻刷出第一波。
 ## `waves` 每项是一波的敌人配置数组（公式路径与设计源路径共用此处）。
 ## 返回是否成功出怪；任一步失败都会把房间解锁，防软锁。
-func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
+func _commit_room_waves(room: DungeonRoom3D, waves: Array, geometry_prepared := false) -> bool:
 	if waves.is_empty():
 		return false
 	if not _room_enemy_hp_multipliers.has(room.room_id):
@@ -5376,7 +5428,7 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 			return false
 		var entire_room: Array[Dictionary] = []
 		entire_room.assign(waves[0])
-		var delivered := _spawn_enemy_batch(room, entire_room, false)
+		var delivered := _spawn_enemy_batch(room, entire_room, false, false, [], geometry_prepared)
 		if delivered != entire_room.size():
 			return false
 		_cancel_room_wave_intermission(room.room_id)
@@ -5835,8 +5887,9 @@ func _select_box_spawn_position(room: DungeonRoom3D, config: Dictionary, selecte
 
 
 ## 整房预选不写实体、不挂计时器；任一盒不足即硬拒绝，不能等玩家向前走后补刷。
-func _preselect_preplaced_room(room: DungeonRoom3D, configs: Array[Dictionary]) -> Dictionary:
-	room._prepare_safe_spawn_selection()
+func _preselect_preplaced_room(room: DungeonRoom3D, configs: Array[Dictionary], geometry_prepared := false) -> Dictionary:
+	if not geometry_prepared:
+		room._prepare_safe_spawn_selection()
 	var occupied: Array[Vector3] = []
 	for value in _enemy_nodes_by_room.get(room.room_id, []) as Array:
 		if is_instance_valid(value) and value is Enemy3D and not value.is_queued_for_deletion() and value.ai_state != "dead":
@@ -5873,7 +5926,7 @@ func _preselect_preplaced_room(room: DungeonRoom3D, configs: Array[Dictionary]) 
 	return {"ok": true, "positions": points}
 
 
-func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false, positions: Array = []) -> int:
+func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false, positions: Array = [], compiled_geometry_ready := false) -> int:
 	if room == null or enemy_configs.is_empty():
 		return 0
 	if room.room_id == _current_room_id:
@@ -5890,7 +5943,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 	var preplaced: bool = room.encounter.get("spawn_mode", "") == "preplaced" and not additive and not count_reserved
 	var staged_enemies: Array[Enemy3D] = []
 	if preplaced:
-		var selection := _preselect_preplaced_room(room, enemy_configs)
+		var selection := _preselect_preplaced_room(room, enemy_configs, compiled_geometry_ready)
 		if not bool(selection.get("ok", false)):
 			_room_spawn_blocked[room.room_id] = true
 			push_error("[Dungeon3D] 预置整房拒绝且不发奖励：%s" % selection)

@@ -19,14 +19,36 @@ func acquire(config: Dictionary, world_position: Vector3) -> Projectile3D:
 	if not _inactive.is_empty():
 		projectile = _inactive.pop_back()
 	else:
-		projectile = Projectile3D.new()
-		add_child(projectile)
-		projectile.retired.connect(_on_projectile_retired)
-		_created += 1
+		projectile = _create_projectile()
 	_active += 1
 	_peak_active = maxi(_peak_active, _active)
 	projectile.activate(config, world_position)
 	return projectile
+
+
+func _create_projectile() -> Projectile3D:
+	var projectile := Projectile3D.new()
+	add_child(projectile)
+	projectile.retired.connect(_on_projectile_retired)
+	_created += 1
+	return projectile
+
+
+## Render one real pooled round behind the loading screen without a physics tick.
+func begin_render_warmup(world_position: Vector3) -> Projectile3D:
+	if not _inactive.is_empty() or _active > 0 or max_pool_size < 1:
+		return null
+	var sample := _create_projectile()
+	sample.activate({"projectile_collision_mask":0}, world_position)
+	sample.collision_layer = 0
+	sample.process_mode = Node.PROCESS_MODE_DISABLED
+	_active += 1
+	return sample
+
+
+func finish_render_warmup(sample: Projectile3D) -> void:
+	sample.collision_layer = 8
+	sample._retire()
 
 
 func _on_projectile_retired(projectile: Projectile3D) -> void:

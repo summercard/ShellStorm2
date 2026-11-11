@@ -43,6 +43,10 @@ const ENTRIES := {
 	"nar_main_032_monitor_audience": ROOT + "nar_main_032_monitor_audience.json",
 	# 主线 3.3：稀土钥匙交接与安装。
 	"nar_main_033_key_install": ROOT + "nar_main_033_key_install.json",
+	# 远征入场仪式 A：由脚底扫描带逐层写入角色轮廓。
+	"nar_expedition_entry_hologram_scan": ROOT + "nar_expedition_entry_hologram_scan.json",
+	# 远征入场仪式 B：环场碎片向内收束，最后一拍凝实角色。
+	"nar_expedition_entry_hologram_materialize": ROOT + "nar_expedition_entry_hologram_materialize.json",
 }
 
 

@@ -28,12 +28,15 @@ func _run() -> void:
 		return
 	var start := Time.get_ticks_msec()
 	tree.change_scene_to_file("res://scenes/ExpeditionLoadingScreen.tscn")
-	while Time.get_ticks_msec() - start < 240000:
+	var loading_limit := OS.get_environment("PROFILE_LOADING_TIMEOUT_MS").to_int()
+	if loading_limit <= 0:
+		loading_limit = 240000
+	while Time.get_ticks_msec() - start < loading_limit:
 		await tree.process_frame
 		tower = tree.current_scene as TowerDescent3D
 		if tower and tower.has_meta("loading_room_warm_report") and tower.can_process() and tower.player and tower.player.can_process():
 			break
-	if not tower or not tower.can_process() or not tower.has_meta("loading_room_warm_report") or tower.get_expedition_level_id() != level:
+	if not tower or not tower.can_process() or not tower.player or not tower.player.can_process() or not tower.has_meta("loading_room_warm_report") or tower.get_expedition_level_id() != level:
 		tree.quit(3)
 		return
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
@@ -41,10 +44,12 @@ func _run() -> void:
 	var rid := get_viewport().get_viewport_rid()
 	RenderingServer.viewport_set_measure_render_time(rid, true)
 	report = {"level":level, "seed":tower.run_seed, "loading_ms":Time.get_ticks_msec()-start,
+		"godot":Engine.get_version_info().get("string"), "quality":RuntimePerformanceManager.quality_profile,
 		"warm_a":tower.get_meta("loading_warmup_report"), "warm_b":tower.get_meta("loading_room_warm_report"),
 		"gpu":RenderingServer.get_video_adapter_name(), "renderer":RenderingServer.get_current_rendering_method(),
 		"viewport":str(get_viewport().get_visible_rect().size), "rooms":tower._room_by_id.keys(),
 		"persistent":tower._runtime_persistence_active, "user_dir":actual,
+		"memory_after_loading":_memory_sample(),
 		"columns":["phase","wall_ms","render_cpu_ms","render_gpu_ms","draw_calls","draw_pipelines","mesh_pipelines","surface_pipelines","canvas_pipelines"]}
 	for i in 30:
 		await tree.process_frame
@@ -82,8 +87,10 @@ func _run() -> void:
 		_event(label, begin)
 		await _frames(label, 35)
 		for value in tower._enemy_nodes_by_room.get(next, []):
-			if hit_count >= 3 or not is_instance_valid(value):
+			if hit_count >= 3:
 				break
+			if not is_instance_valid(value):
+				continue
 			var enemy := value as Enemy3D
 			if enemy == null or enemy.current_hp <= 3:
 				continue
@@ -118,9 +125,11 @@ func _run() -> void:
 		if step == 0:
 			for i in 2:
 				label = "chest/" + str(i)
+				var slot := tower.get_node_or_null("RewardChestWarmVisuals/normal")
+				var warm_model: Node = slot.get_child(0) if slot and slot.get_child_count() > 0 else null
 				begin = Time.get_ticks_usec()
 				var chest := room.spawn_runtime_chest({"id":"profile_%d" % i}, Vector2(i*2+1, 1))
-				_event(label, begin, {"created":chest != null})
+				_event(label, begin, {"created":chest != null, "used_warm_model":is_instance_valid(warm_model) and warm_model.get_parent() == chest})
 				await _frames(label, 40)
 	if door_count > 0:
 		var last_room := tower._room_by_id[current] as DungeonRoom3D
@@ -128,8 +137,10 @@ func _run() -> void:
 			_time_call("blockers", last_room._collect_spawn_blockers)
 			_time_call("checkpoint", BaseManager.flush_runtime_checkpoint.bind("profile_sample"))
 			await _frames("component_room", 12)
+		await _sample_controlled_encounter(last_room)
 	report["events"] = events
 	report["samples"] = rows
+	report["memory_after_route"] = _memory_sample()
 	var file := FileAccess.open(OS.get_environment("PROFILE_OUTPUT"), FileAccess.WRITE)
 	if file == null:
 		tree.quit(4)
@@ -139,8 +150,54 @@ func _run() -> void:
 	print("EXPEDITION_PROFILE level=", level, " doors=", door_count, " hits=", hit_count, " frames=", rows.size())
 	tree.quit(0 if door_count > 0 else 5)
 
+func _memory_sample() -> Dictionary:
+	return {"engine_static_bytes":Performance.get_monitor(Performance.MEMORY_STATIC),
+		"video_bytes":Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)}
+
 func _event(label: String, begin: int, extra := {}) -> void:
 	events.append({"phase":label,"sync_ms":(Time.get_ticks_usec()-begin)/1000.0,"details":extra})
+
+## An additional isolated encounter after the measured route, including on peaceful routes.
+func _sample_controlled_encounter(room: DungeonRoom3D) -> void:
+	# Use an explicit supported world anchor even in halls that have no encounter slots.
+	var origin := tower.player.global_position + Vector3(1.8, 2.5, 0)
+	var ground_query := PhysicsRayQueryParameters3D.create(origin, origin + Vector3.DOWN * 8.0, 1)
+	ground_query.exclude = [tower.player.get_rid()]
+	var support := room.get_world_3d().direct_space_state.intersect_ray(ground_query)
+	if support.is_empty():
+		_event("fixture_no_support", Time.get_ticks_usec())
+		return
+	var configs: Array[Dictionary] = [{"enemy_type":"melee_chaser", "persistent_id":"profile_target",
+		"narrative_spawned":true, "spawn_position":support.position + Vector3.UP * 0.05}]
+	var begin := Time.get_ticks_usec()
+	var spawned := tower._spawn_enemy_batch(room, configs, true)
+	_event("fixture_spawn", begin, {"count":spawned,"room":room.room_id})
+	await _frames("fixture_spawn", 24)
+	if spawned != 1:
+		return
+	var enemies: Array = tower._enemy_nodes_by_room.get(room.room_id, [])
+	if enemies.is_empty() or not is_instance_valid(enemies.back()):
+		return
+	var enemy := enemies.back() as Enemy3D
+	var pool := get_tree().get_first_node_in_group("projectile_pool_3d") as ProjectilePool3D
+	if enemy == null or pool == null:
+		return
+	for index in 3:
+		if not is_instance_valid(enemy) or enemy.current_hp <= 1:
+			break
+		var label := "fixture_flight/%d" % index
+		var outcome := {"confirmed":false, "hp_before":enemy.current_hp}
+		var observer := func(target, _damage, _critical): outcome["confirmed"] = target == enemy
+		begin = Time.get_ticks_usec()
+		var shot := pool.acquire({"damage":1, "speed":22.0, "direction":Vector3.FORWARD, "shooter":tower.player},
+			enemy.global_position + Vector3(0, 0.65, 0.85))
+		shot.hit_confirmed.connect(observer)
+		_event(label, begin, outcome)
+		await _frames(label, 24)
+		if is_instance_valid(shot) and shot.hit_confirmed.is_connected(observer):
+			shot.hit_confirmed.disconnect(observer)
+		if is_instance_valid(enemy):
+			outcome["hp_after"] = enemy.current_hp
 
 func _time_call(label: String, operation: Callable) -> void:
 	var begin := Time.get_ticks_usec()

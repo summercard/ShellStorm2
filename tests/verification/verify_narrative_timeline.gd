@@ -370,6 +370,8 @@ func _dungeon_binding_wired() -> bool:
 	if not wired:
 		_note("绑定失败：bound=%s 期望=%s" % [str(bound), str(candidate)])
 	candidate.queue_free()
+	# 探针卸载前交回当前host，不能让下一条剧本借用即将退出的绑定。
+	NarrativeDirector.bind_dungeon_for_test(self)
 	return wired
 
 

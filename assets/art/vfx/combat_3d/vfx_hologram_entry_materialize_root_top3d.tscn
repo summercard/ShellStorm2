@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b72a43blgyrrn"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxHologramEntry3D.gd" id="1_hologram"]
+
+[node name="VfxHologramEntryMaterialize3D" type="Node3D"]
+script = ExtResource("1_hologram")
+mode = "materialize"
+metadata/asset_id = "VFX-HOLOGRAM-ENTRY-MATERIALIZE-3D"
+metadata/asset_version = "v001"

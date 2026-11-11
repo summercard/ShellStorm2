@@ -7,6 +7,38 @@ const CHECKSUM_ALGORITHM := "canonical_json_v3"
 const LEGACY_CHECKSUM_ALGORITHM := "canonical_json_v2"
 
 
+static func read_profile(path: String) -> Dictionary:
+	var accepted := {}
+	AtomicJsonStore.load_dictionary(path, func(candidate: Dictionary) -> bool:
+		var decoded := unpack(candidate)
+		if not bool(decoded.get("success", false)):
+			return false
+		accepted.assign(decoded)
+		return true
+	)
+	return accepted
+
+
+## Takes ownership of payload. No Node, mutable BaseData or scene-tree access.
+static func write_profile(path: String, payload: Dictionary, baseline: int, reason: String, fail_write: bool) -> Dictionary:
+	var disk_revision := int(read_profile(path).get("revision", -1))
+	if disk_revision > baseline:
+		push_error("[BaseManager] Refusing stale save: memory revision %d < disk revision %d (%s)" % [baseline, disk_revision, reason])
+		return {"success":false, "stale":true}
+	var revision := baseline + 1
+	var timestamp := int(Time.get_unix_time_from_system())
+	payload["save_revision"] = revision
+	payload["last_saved_at_unix"] = timestamp
+	payload["last_save_reason"] = reason
+	var envelope := build_envelope(payload, revision, reason)
+	if fail_write or not AtomicJsonStore.save_dictionary(path, envelope):
+		return {"success":false}
+	if int(read_profile(path).get("revision", -1)) != revision:
+		push_error("[BaseManager] Save write completed but read-back validation failed")
+		return {"success":false}
+	return {"success":true, "revision":revision, "time":timestamp, "reason":reason}
+
+
 static func build_envelope(payload: Dictionary, revision: int, reason: String) -> Dictionary:
 	# JSON只保留字符串对象键。先把运行时Dictionary规范成实际落盘形态，确保
 	# 枚举整数键（例如武器装配槽3）与高精度数值不会在写入后改变校验输入。

@@ -41,11 +41,12 @@ func _ready() -> void:
 	await _case_loot_light()
 	await _case_prompt_yields_on_focus()
 	await _case_spotlight_unfolds()
+	_case_loaded_models()
 	if _failures.is_empty():
 		print(
 			"CHEST_APPEAR_FX_PROMPT_OK: appear fx uses teleport-in / size / gold tint / ground lift; "
 			+ "room entry plays it once; loot light binds to model without shadow; "
-			+ "prompt stays hidden; both tiers unfold over 0.42s; interrupted unfold closes without jumping; restored open chest stays dark"
+			+ "prompt stays hidden; both tiers unfold over 0.84s with beam-before-chest timing; interrupted unfold closes without jumping; restored open chest stays dark"
 		)
 		get_tree().quit(0)
 		return
@@ -324,9 +325,11 @@ func _case_spotlight_unfolds() -> void:
 		await _wait(0.18)
 		_expect(stage.scale.x > 0.04 and stage.scale.x < 1.0, "展开中段应处于初态和终态之间")
 		_expect(spot.light_energy > 0.0 and spot.light_energy < 7.0, "聚光灯亮度应同步渐亮")
-		await _wait(0.34)
-		_expect(is_equal_approx(stage.scale.x, 1.0), "0.42秒后光束应完全展开")
+		_expect(not (chest.get("_visual_root") as Node3D).visible, "光效完成前宝箱模型不能提前出现")
+		await _wait(0.72)
+		_expect(is_equal_approx(stage.scale.x, 1.0), "0.84秒后光束应完全展开")
 		_expect(is_equal_approx(spot.light_energy, 7.0) and is_equal_approx(key.light_energy, 2.0), "开灯终态亮度不正确")
+		_expect((chest.get("_visual_root") as Node3D).visible, "光效完成后宝箱模型才出现")
 		chest.call("_dismiss_chest_spotlight")
 		await _wait(0.40)
 		_expect(not is_instance_valid(stage), "收灯结束必须释放全部光效")
@@ -349,6 +352,27 @@ func _case_spotlight_unfolds() -> void:
 	_expect(restored.get_node_or_null("ChestSpotlightStage") == null, "读档已开箱不得闪亮")
 	restored.queue_free()
 	await get_tree().process_frame
+
+
+func _case_loaded_models() -> void:
+	var host := Node3D.new()
+	add_child(host)
+	var sample := TreasureChest3D.make_render_warmup_sample()
+	host.add_child(sample)
+	sample.hide()
+	sample.process_mode = Node.PROCESS_MODE_DISABLED
+	for tier in ["normal", "advanced"]:
+		var slot := sample.get_node(str(tier))
+		var model := slot.get_child(0) as RewardChestVisual3D
+		var local_transform := model.transform
+		var first := _make_chest({"chest_tier":tier})
+		host.add_child(first)
+		_expect(slot.get_child_count() == 0 and model.get_parent() == first, "首箱应取走本档预热模型")
+		_expect(model.transform.is_equal_approx(local_transform) and model.is_visible_in_tree(), "模型交接后应恢复显示并保留本地定位")
+		var second := _make_chest({"chest_tier":tier})
+		host.add_child(second)
+		_expect(model.get_parent() == first and first._trim_material != second._trim_material, "同档第二箱不得抢用首箱模型或共享可变材质")
+	host.free()
 
 
 func _make_chest(overrides := {}) -> TreasureChest3D:

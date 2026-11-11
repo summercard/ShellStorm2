@@ -29,6 +29,8 @@ var _runtime_checkpoint_provider: WeakRef
 var _runtime_checkpoint_timer: Timer
 var _runtime_checkpoint_dirty := false
 var _pending_runtime_reason := ""
+var _room_writer: Thread
+var _pending_room_payload: Dictionary = {}
 
 ## 合成保底的「待提交记账」。非空 = `plan_synthesis_pity` 已经改过
 ## `data.synthesis_pity` 但还没随 `commit_run_settlement` 落盘。
@@ -38,6 +40,7 @@ var _synthesis_pity_snapshot: Dictionary = {}
 var _synthesis_pity_plan: Dictionary = {}
 
 func _ready() -> void:
+	set_process(false)
 	_runtime_checkpoint_timer = Timer.new()
 	_runtime_checkpoint_timer.name = "RuntimeCheckpointDebounce"
 	_runtime_checkpoint_timer.one_shot = true
@@ -51,6 +54,7 @@ func _notification(what: int) -> void:
 		flush_runtime_checkpoint("application_boundary")
 
 func load_base() -> void:
+	_finish_room_writes(true)
 	call_deferred("_publish_loaded_base_power")
 	var unpacked := _read_validated_profile()
 	if not unpacked.is_empty():
@@ -78,17 +82,8 @@ func _publish_loaded_base_power() -> void:
 
 
 func _read_validated_profile() -> Dictionary:
-	# AtomicJsonStore owns main/backup selection. Keep the result of validating
-	# the accepted candidate for this read only, including on write read-back.
-	var accepted := {}
-	AtomicJsonStore.load_dictionary(save_path, func(candidate: Dictionary) -> bool:
-		var decoded := SaveService.unpack(candidate)
-		if not bool(decoded.get("success", false)):
-			return false
-		accepted.assign(decoded)
-		return true
-	)
-	return accepted
+	return SaveService.read_profile(save_path)
+
 
 func _ensure_data() -> void:
 	if data == null:
@@ -96,33 +91,82 @@ func _ensure_data() -> void:
 
 func save_base(reason: String = "base_mutation") -> bool:
 	_ensure_data()
-	# 多个 Godot 实例（编辑器、游戏窗口、无头验收）可能共享同一 user:// 档案。
-	# 旧实例不能把较低 revision 的内存镜像覆盖到已经更新的正式档。
-	var disk_revision := _read_disk_revision()
-	if disk_revision > data.save_revision:
-		push_error(
-			"[BaseManager] Refusing stale save: memory revision %d < disk revision %d (%s)"
-			% [data.save_revision, disk_revision, reason]
-		)
-		load_base()
+	if not _finish_room_writes(true):
 		return false
-	var old_revision := data.save_revision
-	var old_time := data.last_saved_at_unix
-	var old_reason := data.last_save_reason
-	data.save_revision = old_revision + 1
-	data.last_saved_at_unix = int(Time.get_unix_time_from_system())
-	data.last_save_reason = reason if not reason.is_empty() else "base_mutation"
-	var payload := data._to_dict()
-	var envelope := SaveService.build_envelope(payload, data.save_revision, data.last_save_reason)
-	if not force_save_failure_for_test and AtomicJsonStore.save_dictionary(save_path, envelope):
-		var persisted := _read_validated_profile()
-		if not persisted.is_empty() and int(persisted.get("revision", -1)) == data.save_revision:
-			return true
-		push_error("[BaseManager] Save write completed but read-back validation failed")
-	data.save_revision = old_revision
-	data.last_saved_at_unix = old_time
-	data.last_save_reason = old_reason
-	return false
+	var result := SaveService.write_profile(save_path, data._to_dict(), data.save_revision,
+		reason if not reason.is_empty() else "base_mutation", force_save_failure_for_test)
+	if result.get("stale", false):
+		load_base()
+	return _accept_write(result)
+
+
+func _accept_write(result: Dictionary) -> bool:
+	if not result.get("success", false):
+		return false
+	data.save_revision = int(result["revision"])
+	data.last_saved_at_unix = int(result["time"])
+	data.last_save_reason = str(result["reason"])
+	return true
+
+
+## Only the regular room-entry path is asynchronous. Explicit flush remains a barrier.
+func queue_room_transition_checkpoint() -> void:
+	var snapshot := _capture_runtime_checkpoint()
+	if not bool(snapshot.get("valid", false)) or str(snapshot.get("checkpoint_id", snapshot.get("layout_id", ""))).is_empty():
+		return
+	_ensure_data()
+	_runtime_checkpoint_timer.stop()
+	_runtime_checkpoint_dirty = false
+	_pending_runtime_reason = ""
+	data.active_run_snapshot = snapshot
+	_pending_room_payload = data._to_dict().duplicate(true)
+	if _room_writer == null:
+		_start_room_write()
+
+
+func _start_room_write() -> void:
+	var payload := _pending_room_payload
+	_pending_room_payload = {}
+	var operation := SaveService.write_profile.bind(save_path, payload, data.save_revision,
+		"active_run_checkpoint:room_transition", force_save_failure_for_test)
+	_room_writer = Thread.new()
+	if _room_writer.start(operation) == OK:
+		set_process(true)
+	else:
+		_room_writer = null
+		_complete_room_write(operation.call())
+
+
+func _complete_room_write(result: Dictionary) -> void:
+	if bool(result.get("stale", false)):
+		_pending_room_payload = {}
+		_runtime_checkpoint_timer.stop()
+		_runtime_checkpoint_dirty = false
+		_pending_runtime_reason = ""
+		load_base()
+	elif not _accept_write(result):
+		queue_runtime_checkpoint("room_write_retry")
+
+
+func _finish_room_writes(block: bool) -> bool:
+	var current := true
+	while _room_writer != null and (block or not _room_writer.is_alive()):
+		var result: Dictionary = _room_writer.wait_to_finish()
+		_room_writer = null
+		current = current and not bool(result.get("stale", false))
+		_complete_room_write(result)
+		if not _pending_room_payload.is_empty():
+			_start_room_write()
+	set_process(_room_writer != null)
+	return current
+
+
+func _process(_delta: float) -> void:
+	_finish_room_writes(false)
+
+
+func _exit_tree() -> void:
+	_finish_room_writes(true)
 
 
 ## 只读档案投影。跨域服务不得直接持有或修改 BaseData；需要写入时使用下方
@@ -382,6 +426,7 @@ func _read_disk_revision() -> int:
 ## 成功后才清掉旧 `.bak`；同时断开运行态快照提供者，避免旧场景卸载时
 ## 把刚清空的档案再次覆盖。画面设置使用独立 cfg，不属于本操作。
 func reset_game_save() -> Dictionary:
+	_finish_room_writes(true)
 	_ensure_data()
 	var previous_data := data
 	# “复位”清空的是档案内容，不是并发写保护使用的修订序列。若直接用
@@ -443,11 +488,13 @@ func set_active_run_checkpoint(snapshot: Dictionary, reason: String) -> bool:
 		return false
 	if str(snapshot.get("checkpoint_id", snapshot.get("layout_id", ""))).is_empty():
 		return false
+	var original_data := data
 	var previous := data.active_run_snapshot.duplicate(true)
 	data.active_run_snapshot = snapshot.duplicate(true)
 	if save_base("active_run_checkpoint:%s" % reason):
 		return true
-	data.active_run_snapshot = previous
+	if data == original_data:
+		data.active_run_snapshot = previous
 	return false
 
 
@@ -475,6 +522,14 @@ func clear_active_run_checkpoint(reason: String = "run_finished") -> bool:
 		return true
 	data.active_run_snapshot = previous
 	return false
+
+
+## 只读查询：当前是否有承载背包/装备的场景在册。
+## 99F 基地（`BaseWorld3D`，extends Node3D）不是 `Dungeon3D`，没有 `build_runtime_save_snapshot`，
+## 所以在基地里 `flush_runtime_checkpoint()` 抓不到快照是**正常态**，不是写盘失败。
+## 出发事务必须能区分这两件事，否则基地选关会恒报「保存失败，请重试」。
+func has_runtime_checkpoint_provider() -> bool:
+	return _get_runtime_checkpoint_provider() != null
 
 
 ## 注册当前承载玩家背包和装备的场景。只保存 WeakRef，避免自动加载单例延长场景寿命。

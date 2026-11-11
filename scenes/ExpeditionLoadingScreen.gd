@@ -43,25 +43,11 @@ const WARMUP_MAX_FRAMES := 48
 ## 差在噪声内，但成本差一倍多。每房 1 帧已经能把管线编译掉（第 2 帧只多花时间）。
 const ROOM_WARM_VIEW_SIZE := Vector2i(480, 270)
 const ROOM_WARM_FRAMES_PER_ROOM := 1
-## 逐房渲染预热的时间预算。实测 27 间房合计 1.17 s（VFX/怪物预热已编译掉公共管线）；
-## 给 4 s 是留余量，超了就截断并留警告——绝不能因为某个关卡房间特别多把玩家锁死在加载页里。
-const ROOM_WARM_BUDGET_MS := 4000
-## 允许预热把加载页延长多少毫秒。**从预热第一帧结束之后起算**（见 `_drain_warmup`），
-## 且起点不是读取页出现的时刻。
-##
-## 🔴 2026-11-07 修正两处口径错误，它们是同一个现象的两个原因：
-##
-## ① 原写成 `_loading_started_msec + MIN_LOADING_SCREEN_SECONDS + 700`，而预热是在
-##    「装配完成 → 全黑覆盖」之后才启动。实测两局加载分别 12.2 s / 24.8 s，
-##    预热开始时这个期限**早已过去**，循环第二帧就 break。
-## ② 预热**第一帧必然很贵**：`_restore_world_render()` 之后是关卡画面的第一次真实渲染，
-##    SDFGI/管线初始化实测 2.44 s。这笔钱原本也要在 `_wait_for_basic_scene_ready`
-##    的收尾帧里付掉，把它算进预热预算就等于"预热永远超时"。
-##    ⇒ 预算从首帧结束那一刻才开始计时，首帧不参与判定。
-##
-## 首帧之后的真实预热量：VFX 11 件 + 怪 3 基类，实测约 1.0~1.3 s。
-## 给 2500 ms 是留一倍余量；正常跑不到，只在队列异常时截断并留警告。
-const WARMUP_EXTRA_BUDGET_MS := 2500
+## 逐房实绘完成即结束，低速设备可在读条中继续准备。
+const ROOM_WARM_BUDGET_MS := 30000
+## 队列持续推进时允许慢帧；首帧后另设总时限，停滞时提前退出。
+const WARMUP_STALL_MS := 2500
+const WARMUP_EXTRA_BUDGET_MS := 30000
 const STEP_TEXTS: Array[String] = [
 	"正在同步远征情报…",
 	"正在规划房间序列…",
@@ -158,6 +144,7 @@ var _target_scene := ""
 var _target_name := ""
 var _resource_request_active := false
 var _resource_warmup_active := false
+var _event_audio_streams_ready := 0
 var _warm_resources: Array[Resource] = []
 var _resource_poll_after_frame := 0
 var _scene_change_started: bool = false
@@ -308,6 +295,8 @@ func _start_resource_request() -> void:
 	_resource_warmup_active = true
 	_set_status("正在读取 %s" % _destination_display_name())
 	var warm_error := await RESOURCE_WARMUP.warm(_target_scene, get_tree(), _warm_resources, _report_resource_warmup, _requires_loading_scene_ready_contract)
+	if warm_error == OK and _requires_loading_scene_ready_contract and DisplayServer.get_name() != "headless":
+		_event_audio_streams_ready = await AudioManager.warm_expedition_event_sounds()
 	_resource_warmup_active = false
 	if warm_error != OK:
 		_show_failure("resource", "资源预读取失败：%s" % error_string(warm_error))
@@ -479,6 +468,7 @@ func _drain_warmup(target: Node) -> Dictionary:
 		"completed": true,
 		"vfx_pending": 0,
 		"vfx_total": 0,
+		"event_audio_streams_ready": _event_audio_streams_ready,
 		"kinds_done": 0,
 		"kinds_total": 0,
 		"frames": 0,
@@ -502,6 +492,8 @@ func _drain_warmup(target: Node) -> Dictionary:
 	# 预算从**首帧结束之后**计时，不是从预热开始计时 —— 见 `WARMUP_EXTRA_BUDGET_MS`。
 	var started_msec := Time.get_ticks_msec()
 	var deadline := 0
+	var last_progress_msec := 0
+	var remaining_last_frame := -1
 	var first_frame_ms := 0
 	if vfx_enabled:
 		VfxPool.prewarm(VfxPool3D.COMBAT_PREWARM)
@@ -512,16 +504,18 @@ func _drain_warmup(target: Node) -> Dictionary:
 		var vfx_pending: bool = vfx_enabled and VfxPool.has_pending_prewarm()
 		if not vfx_pending and kind_index >= kinds.size() and probe == null:
 			break
-		# 超时保护：加载本身已经很慢时，宁可少预热一点，也不要把玩家按在加载页里。
-		#
-		# `frames == 0` 不参与判定：首帧包含"全黑后第一次真实渲染"，实测 2.44 s，
-		# 这笔账跟预热无关、但在这一帧结算 —— 拿它判超时会让预热永远只做第一项。
-		# 首帧正常结束后才建立 deadline，此后才按真实预热量计时。
 		if frames > 0:
-			if deadline <= 0:
-				deadline = Time.get_ticks_msec() + WARMUP_EXTRA_BUDGET_MS
-			elif Time.get_ticks_msec() > deadline:
-				report["truncated"] = "budget"
+			var now := Time.get_ticks_msec()
+			var remaining := kinds.size() - kind_index
+			if vfx_enabled:
+				remaining += int(VfxPool.pending_prewarm_count())
+			if deadline == 0:
+				deadline = now + WARMUP_EXTRA_BUDGET_MS
+			if remaining_last_frame < 0 or remaining < remaining_last_frame:
+				last_progress_msec = now
+			remaining_last_frame = remaining
+			if now >= deadline or now - last_progress_msec >= WARMUP_STALL_MS:
+				report["truncated"] = "budget" if now >= deadline else "stalled"
 				break
 		if probe != null:
 			if is_instance_valid(probe):
@@ -658,11 +652,17 @@ func _finish_loaded_scene(target: Node) -> void:
 		IrisTransition.release_loading_scene(target)
 	else:
 		target.process_mode = Node.PROCESS_MODE_INHERIT
+	# 释放读取页保存的旧输入状态之后，才在黑幕仍覆盖时取得本次演出的输入/瞄准/相机所有权。
+	if target.has_method("prepare_expedition_entry_ceremony"):
+		target.call("prepare_expedition_entry_ceremony")
 	_scene_change_started = false
-	if IrisTransition != null:
-		IrisTransition.open_after_scene()
-	# 先把开圈协程交给 autoload，再撤掉持久读取页；不在 free() 后继续执行。
+	# 读取页自己的 Backdrop 必须在开圈前撤掉；否则它仍以 CanvasLayer 220 挡住 Iris 下面的世界。
 	hide()
+	if IrisTransition != null:
+		await IrisTransition.open_after_scene()
+	# 黑幕已经完整打开，现在才允许目标场景触发入场仪式；这一步之后相机和输入由剧情导演接管。
+	if target.has_method("notify_expedition_entry_ceremony_ready"):
+		target.call("notify_expedition_entry_ceremony_ready")
 	queue_free()
 
 

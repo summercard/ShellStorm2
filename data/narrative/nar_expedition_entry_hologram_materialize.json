@@ -1,0 +1,26 @@
+{
+  "narrative_id": "nar_expedition_entry_hologram_materialize",
+  "schema_version": 1,
+  "priority": 20,
+  "presentation": {
+    "mode": "materialize",
+    "rebuild_seconds": 1.75,
+    "solidify_seconds": 0.3,
+    "camera": { "pivot": "player", "distance": 4.6, "elevation_deg": 23.0, "rear_side_deg": -14.0 }
+  },
+  "trigger": {
+    "kind": "event",
+    "on": "expedition_entry_ceremony_materialize_ready",
+    "filter": { "room_id": "start" },
+    "once": "departure"
+  },
+  "duration": 3.6,
+  "cues": [
+    { "at": 0.0, "do": "presentation.start" },
+    { "at": 0.0, "do": "camera.pan", "pivot": "player", "yaw_deg": -8.0, "elevation_deg": 19.0, "duration": 1.75 },
+    { "at": 1.75, "do": "camera.focus", "pivot": "player", "distance": 3.45, "elevation_deg": 12.0, "duration": 0.3 },
+    { "at": 2.4, "do": "camera.restore", "duration": 1.2 },
+    { "at": 3.6, "do": "presentation.restore" },
+    { "at": 3.6, "do": "flow.end" }
+  ]
+}

@@ -35,7 +35,7 @@ def main():
     work = wp.work_path('probes/2026-11-11_encounter_safe_selection/harness/project.godot').parent
     room = (ROOT / 'src/world3d/DungeonRoom3D.gd').read_text(encoding='utf-8')
     host = (ROOT / 'src/world3d/EncounterEventHost3D.gd').read_text(encoding='utf-8')
-    room_names = ['_build_spawn_points', '_spawn_clearance', '_spawn_floor_contains',
+    room_names = ['_build_spawn_points', '_spawn_clearance', '_spawn_floor_contains', '_tile_footprint_covered',
                   '_collect_spawn_blockers', '_spawn_obstacle_free', '_spawn_surface_contains', 'resolve_enemy_spawn_position', 'spawn_point_for_index',
                   '_spawn_reach_key', '_spawn_reach_contains',
                   'choose_safe_spawn_position', 'is_safe_spawn_position_valid',
@@ -43,7 +43,7 @@ def main():
                   '_safe_spawn_distances_valid', '_spawn_candidate_score',
                   '_placement_vec2', 'get_connection_port_by_id', 'match_door_entry_trigger',
                   'get_encounter_spawn_candidates']
-    constants = '\n'.join(re.findall(r'^const (?:SPAWN_CLEARANCE_M|SPAWN_BOSS_CLEARANCE_M|SPAWN_BODY_HEIGHT_M|SPAWN_GROUND_TOP_MAX_M|SPAWN_MAX_POINTS|SPAWN_REACH_GRID_M) := .+$', room, re.M))
+    constants = '\n'.join(re.findall(r'^const (?:SPAWN_CLEARANCE_M|SPAWN_BOSS_CLEARANCE_M|SPAWN_BODY_HEIGHT_M|SPAWN_GROUND_TOP_MAX_M|SPAWN_MAX_POINTS|SPAWN_REACH_GRID_M|SPAWN_BOX_TILE_M) := .+$', room, re.M))
     room_code = 'const TOWER_GEOMETRY = {"DOOR_CLEAR_WIDTH_M":2.2}\n' + constants + '''
 var room_id := "test_room"
 var room_type := "COMBAT"
@@ -53,6 +53,8 @@ var custom_dimensions := Vector2(30, 30)
 var authored_layout_instances: Array = []
 var enemy_spawn_points: Array[Vector3] = []
 var _authored_tile_cells: Array[Vector3] = []
+var _spawn_tile_buckets: Dictionary = {}
+var _box_floor_samples: Dictionary = {}
 var _spawn_candidates: Array[Vector3] = []
 var _spawn_edge_candidates: Array[bool] = []
 var _spawn_available: Array[int] = []
@@ -142,6 +144,14 @@ func run() -> void:
 	dungeon.add_child(room)
 	room.position = Vector3(30, 2, 50)
 	room.rotation.y = -1.2
+	room.authored_layout_instances = [
+		{"slot_role": "floor_tile", "position": Vector3(-3, 0, 1)},
+		{"slot_role": "floor_tile", "position": Vector3(2, 0, 1)},
+		{"slot_role": "floor_tile", "position": Vector3(2, 0, 1)}]
+	room._build_spawn_points()
+	check(room._tile_footprint_covered(Rect2(-1, 0, 2, 2)), "跨地砖接缝和负坐标在相同高度连续承重")
+	check(not room._tile_footprint_covered(Rect2(4, 0, 1, 2)), "重复砖不能填补外边缘缺失的面积")
+	room.authored_layout_instances.clear()
 	room._build_spawn_points()
 	var player := Node3D.new()
 	dungeon.add_child(player)

@@ -22,6 +22,7 @@ const TRIGGER_KIND_POINT := "point"
 const TRIGGER_KIND_MANUAL := "manual"
 
 const ONCE_RUN := "run"
+const ONCE_DEPARTURE := "departure"
 const ONCE_FOREVER := "forever"
 const ONCE_NEVER := "never"
 
@@ -30,6 +31,7 @@ var schema_version := 0
 var duration := 0.0
 var priority := 0
 var trigger: Dictionary = {}
+var presentation: Dictionary = {}
 var cues: Array[Dictionary] = []
 
 var errors: Array[String] = []
@@ -98,6 +100,8 @@ func _ingest(source: Dictionary, source_label: String) -> void:
 		)
 
 	priority = int(source.get("priority", 0))
+	var raw_presentation: Variant = source.get("presentation", {})
+	presentation = raw_presentation.duplicate(true) if raw_presentation is Dictionary else {}
 
 	var raw_cues: Variant = source.get("cues", [])
 	if not (raw_cues is Array) or (raw_cues as Array).is_empty():
@@ -205,9 +209,9 @@ func _ingest_trigger(source: Dictionary, source_label: String) -> void:
 				"%s：未知 trigger.kind『%s』（可选 event / point / manual）。" % [source_label, kind]
 			)
 	var once := str(declared.get("once", ONCE_RUN))
-	if once not in [ONCE_RUN, ONCE_FOREVER, ONCE_NEVER]:
+	if once not in [ONCE_RUN, ONCE_DEPARTURE, ONCE_FOREVER, ONCE_NEVER]:
 		errors.append(
-			"%s：trigger.once『%s』非法（可选 run / forever / never）。" % [source_label, once]
+			"%s：trigger.once『%s』非法（可选 run / departure / forever / never）。" % [source_label, once]
 		)
 		once = ONCE_RUN
 	declared["once"] = once

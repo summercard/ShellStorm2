@@ -1,5 +1,6 @@
 class_name WastelandLight3D
 extends Node3D
+const STREAM_LIGHT_GROUP := &"wasteland_stream_lights"
 ## 可复用废土灯具：支持室外路灯与室内中央顶灯两种装配。
 
 const FORWARD_PLUS_ENERGY_MULTIPLIER := 3.0
@@ -47,6 +48,11 @@ func configure(
 	if _built:
 		_apply_configuration()
 		_refresh_process_state()
+
+
+func _enter_tree() -> void:
+	if not is_in_group(STREAM_LIGHT_GROUP):
+		add_to_group(STREAM_LIGHT_GROUP)
 
 
 func _ready() -> void:

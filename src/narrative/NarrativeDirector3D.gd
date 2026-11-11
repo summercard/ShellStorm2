@@ -48,6 +48,7 @@ var _space_press_frame := -1
 var _dialogue_cue: Dictionary = {}
 var _dialogue_carrier: Dictionary = {}
 var _advance_target := -1
+var _pending_entry: Dictionary = {}
 
 
 func _ready() -> void:
@@ -172,10 +173,24 @@ func _on_node_added(node: Node) -> void:
 	if node.has_signal("gameplay_started"):
 		if not node.gameplay_started.is_connected(_on_dungeon_gameplay_started):
 			node.gameplay_started.connect(_on_dungeon_gameplay_started)
+	if node.has_signal("expedition_entry_ceremony_scan_ready"):
+		if not node.expedition_entry_ceremony_scan_ready.is_connected(_on_expedition_entry_ceremony_scan_ready):
+			node.expedition_entry_ceremony_scan_ready.connect(_on_expedition_entry_ceremony_scan_ready)
+	if node.has_signal("expedition_entry_ceremony_materialize_ready"):
+		if not node.expedition_entry_ceremony_materialize_ready.is_connected(_on_expedition_entry_ceremony_materialize_ready):
+			node.expedition_entry_ceremony_materialize_ready.connect(_on_expedition_entry_ceremony_materialize_ready)
 
 
 func _bind_dungeon(node: Node) -> void:
+	if _dungeon != node and is_instance_valid(_dungeon):
+		abort("host_rebound")
+		for binding in [["room_entered", _on_dungeon_room_entered], ["room_cleared", _on_dungeon_room_cleared], ["run_completed", _on_dungeon_run_completed], ["gameplay_started", _on_dungeon_gameplay_started], ["expedition_entry_ceremony_scan_ready", _on_expedition_entry_ceremony_scan_ready], ["expedition_entry_ceremony_materialize_ready", _on_expedition_entry_ceremony_materialize_ready]]:
+			if _dungeon.has_signal(binding[0]) and _dungeon.is_connected(binding[0], binding[1]):
+				_dungeon.disconnect(binding[0], binding[1])
 	_dungeon = node
+	var exiting := Callable(self, "_on_host_exiting").bind(node)
+	if not node.tree_exiting.is_connected(exiting):
+		node.tree_exiting.connect(exiting, CONNECT_ONE_SHOT)
 	# 同步给适配器：它按这份绑定解析房间与正门。适配器自己猜 `current_scene` 在
 	# 验收环境（场景手动 add_child 进 root）会拿到 null ⇒ 所有 scene.* 指令静默降级。
 	_adapter.bind_dungeon(node)
@@ -187,6 +202,22 @@ func _bind_dungeon(node: Node) -> void:
 		node.run_completed.connect(_on_dungeon_run_completed)
 	if node.has_signal("gameplay_started") and not node.gameplay_started.is_connected(_on_dungeon_gameplay_started):
 		node.gameplay_started.connect(_on_dungeon_gameplay_started)
+	if node.has_signal("expedition_entry_ceremony_scan_ready") and not node.expedition_entry_ceremony_scan_ready.is_connected(_on_expedition_entry_ceremony_scan_ready):
+		node.expedition_entry_ceremony_scan_ready.connect(_on_expedition_entry_ceremony_scan_ready)
+	if node.has_signal("expedition_entry_ceremony_materialize_ready") and not node.expedition_entry_ceremony_materialize_ready.is_connected(_on_expedition_entry_ceremony_materialize_ready):
+		node.expedition_entry_ceremony_materialize_ready.connect(_on_expedition_entry_ceremony_materialize_ready)
+
+
+func _on_host_exiting(host: Node) -> void:
+	if host != _dungeon:
+		return
+	abort("host_unloaded")
+	_adapter.bind_dungeon(null)
+	_dungeon = null
+
+
+func _exit_tree() -> void:
+	abort("director_unloaded")
 
 
 func _on_dungeon_room_entered(room: Variant) -> void:
@@ -210,6 +241,18 @@ func _on_dungeon_run_completed(success: bool, _summary: Dictionary) -> void:
 ## 相机被钉在近景、输入锁被开场页还原、玩家的鼠标还能把剧本摆好的朝向顶掉。
 func _on_dungeon_gameplay_started(room_id: String) -> void:
 	_evaluate_event("gameplay_started", room_id)
+
+
+func _on_expedition_entry_ceremony_scan_ready(room_id: String) -> void:
+	_evaluate_event("expedition_entry_ceremony_scan_ready", room_id)
+	if not _pending_entry.is_empty():
+		_cancel_pending_entry()
+
+
+func _on_expedition_entry_ceremony_materialize_ready(room_id: String) -> void:
+	_evaluate_event("expedition_entry_ceremony_materialize_ready", room_id)
+	if not _pending_entry.is_empty():
+		_cancel_pending_entry()
 
 
 func _evaluate_event(event_name: String, room_id: String) -> void:
@@ -301,6 +344,14 @@ func _try_fire(narrative_id: String, entry: Dictionary, context: Dictionary) -> 
 	if once == NarrativeScript3D.ONCE_RUN:
 		if fired_count > 0 or _history_has(narrative_id):
 			return
+	if once == NarrativeScript3D.ONCE_DEPARTURE:
+		if str(_pending_entry.get("id", "")) != narrative_id:
+			return
+		var departure_id := _expedition_departure_id()
+		if departure_id.is_empty() or str(entry.get("last_departure_id", "")) == departure_id:
+			return
+		if not _is_new_expedition_departure():
+			return
 	if once == NarrativeScript3D.ONCE_NEVER:
 		return
 	var cooldown := float(entry.get("cooldown", 0.0))
@@ -312,6 +363,8 @@ func _try_fire(narrative_id: String, entry: Dictionary, context: Dictionary) -> 
 		return
 	entry["fired_count"] = fired_count + 1
 	entry["last_fired_msec"] = now_msec
+	if once == NarrativeScript3D.ONCE_DEPARTURE:
+		entry["last_departure_id"] = _expedition_departure_id()
 	_armed[narrative_id] = entry
 
 
@@ -321,6 +374,12 @@ func _try_fire(narrative_id: String, entry: Dictionary, context: Dictionary) -> 
 
 ## 请求播放。返回 false = 没播（校验不过 / 被互斥裁决丢弃 / 被更高优先级抢占后仍失败）。
 func play(narrative_id: String, context: Dictionary = {}) -> bool:
+	var entry_ceremony := narrative_id.begins_with("nar_expedition_entry_hologram_")
+	if entry_ceremony and (str(_pending_entry.get("id", "")) != narrative_id or str(_pending_entry.get("departure", "")) != _expedition_departure_id()):
+		_cancel_pending_entry()
+		return false
+	if not entry_ceremony:
+		_cancel_pending_entry()
 	var script := _script_for(narrative_id)
 	if script == null:
 		_warn("请求播放『%s』但剧本校验不过，已丢弃。" % narrative_id)
@@ -348,10 +407,36 @@ func play(narrative_id: String, context: Dictionary = {}) -> bool:
 		"occupancy": [],
 		"auto_invulnerable": not _script_declares_invulnerable(script),
 	}
+	if entry_ceremony:
+		_pending_entry.clear()
+		_occupy("presentation.entry", Callable(_adapter, "restore_expedition_entry"))
 	_dispatch_log.clear()
 	_dispatch_log.append("start:%s" % narrative_id)
 	narrative_started.emit(narrative_id)
 	return true
+
+
+func _expedition_departure_id() -> String:
+	var dungeon := _adapter.dungeon_node()
+	if dungeon == null:
+		return ""
+	var context: Dictionary = dungeon.call("get_entry_context_snapshot") as Dictionary if dungeon.has_method("get_entry_context_snapshot") else {}
+	var run_id := str(dungeon.call("get_expedition_run_id")) if dungeon.has_method("get_expedition_run_id") else ""
+	return "%s:%s:%s" % [str(context.get("request_id", "")), run_id, str(context.get("reason", ""))]
+
+
+func _is_new_expedition_departure() -> bool:
+	var dungeon := _adapter.dungeon_node()
+	if dungeon == null or not dungeon.has_method("get_entry_context_snapshot"):
+		return false
+	var context := dungeon.call("get_entry_context_snapshot") as Dictionary
+	return (
+		dungeon.has_method("is_expedition")
+		and bool(dungeon.call("is_expedition"))
+		and str(context.get("reason", "")) == GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT
+		and dungeon.has_method("get_expedition_entry_source")
+		and str(dungeon.call("get_expedition_entry_source")) == ExpeditionEntryContext.BASE
+	)
 
 
 func _script_declares_invulnerable(script: NarrativeScript3D) -> bool:
@@ -481,6 +566,33 @@ func active_time() -> float:
 	return float(_active.get("t", 0.0))
 
 
+func prepare_expedition_entry(narrative_id: String) -> bool:
+	if not _active.is_empty():
+		return false
+	_cancel_pending_entry()
+	if not narrative_id.begins_with("nar_expedition_entry_hologram_") or not _is_new_expedition_departure():
+		return false
+	var host := _adapter.dungeon_node()
+	if host.has_method("_is_valid_expedition_entry_ceremony") and not bool(host.call("_is_valid_expedition_entry_ceremony")):
+		return false
+	var entry: Dictionary = _armed.get(narrative_id, {})
+	if str(entry.get("last_departure_id", "")) == _expedition_departure_id():
+		return false
+	var script := _script_for(narrative_id)
+	if script == null or script.presentation.is_empty() or not _adapter.prepare_expedition_entry(script.presentation):
+		_adapter.restore_expedition_entry()
+		return false
+	_pending_entry = {"id": narrative_id, "departure": _expedition_departure_id()}
+	return true
+
+
+func _cancel_pending_entry() -> void:
+	if _pending_entry.is_empty():
+		return
+	_adapter.restore_expedition_entry()
+	_pending_entry.clear()
+
+
 ## 仅供验收：把一段内存剧本塞进缓存（不落文件、不进目录、不进存档）。
 ## 与 reset_for_test() 同属测试面，运行时无人调用。
 func register_script_for_test(narrative_id: String, script: NarrativeScript3D) -> void:
@@ -563,6 +675,16 @@ func complete_flashlight_wait() -> void:
 func _process(delta: float) -> void:
 	if get_tree().paused:
 		return
+	if not _pending_entry.is_empty() or active_id().begins_with("nar_expedition_entry_hologram_"):
+		var host := _adapter.dungeon_node()
+		var player := _adapter.player_node()
+		var camera := player.get("camera") as Camera3D if is_instance_valid(player) else null
+		if not is_instance_valid(host) or not is_instance_valid(player) or not is_instance_valid(camera) or not camera.is_inside_tree():
+			abort("entry_target_invalid")
+			return
+		if not _pending_entry.is_empty() and (str(_pending_entry.get("departure", "")) != _expedition_departure_id() or not _is_new_expedition_departure()):
+			abort("entry_context_changed")
+			return
 	if _active.is_empty():
 		_tick_triggers(delta)
 		return
@@ -680,6 +802,9 @@ func _dispatch_cue(cue: Dictionary) -> bool:
 		if verb == "player.lock_input" and bool(params.get("locked", true)):
 			_apply_auto_invulnerability()
 		return false
+	if verb == "presentation.start":
+		_finish("abort:presentation_failed")
+		return true
 	if verb.begins_with("story."):
 		_diagnose("关键cue『%s』执行失败（degraded=%s）：%s" % [verb, str(result.get("degraded", false)), str(result.get("reason", ""))])
 		_finish("abort:story_cue_failed")
@@ -742,6 +867,7 @@ func _apply_auto_invulnerability() -> void:
 ## 正常 / flow.end / 被打断 / abort 全部走这里 —— 一个都不能漏（08 文档 §6.1）。
 func _finish(reason: String) -> void:
 	if _active.is_empty():
+		_cancel_pending_entry()
 		return
 	_waiting_for_flashlight = false
 	_dialogue_cue = {}
@@ -751,6 +877,10 @@ func _finish(reason: String) -> void:
 	var narrative_id := str(_active.get("id", ""))
 	# 先落历史再归还：拿到 id 最保险的时机，且写盘失败也不影响归还路径。
 	_commit_history_if_completed(narrative_id, reason)
+	if narrative_id.begins_with("nar_expedition_entry_hologram_") and reason not in COMPLETABLE_RESULTS and _armed.has(narrative_id):
+		var retry_entry: Dictionary = _armed[narrative_id]
+		retry_entry.erase("last_departure_id")
+		_armed[narrative_id] = retry_entry
 	if narrative_id.begins_with("nar_main_") and not _history_has(narrative_id):
 		var entry: Dictionary = _armed.get(narrative_id, {})
 		entry["fired_count"] = 0
@@ -832,8 +962,6 @@ func skip() -> void:
 
 ## 立刻中止：先解锁输入、先还原相机（08 文档 §6.2），再清理其余占用。
 func abort(reason: String) -> void:
-	if _active.is_empty():
-		return
 	_finish("abort:%s" % reason)
 
 
@@ -887,8 +1015,7 @@ func _on_game_save_reset_completed(result: Dictionary) -> void:
 
 ## 仅供验收与调试：清干净一切（不动场景，场景由归还机制负责）。
 func reset_for_test() -> void:
-	if not _active.is_empty():
-		_finish("test_reset")
+	_finish("test_reset")
 	_flags.clear()
 	_armed.clear()
 	_scripts.clear()

@@ -654,6 +654,8 @@ var authored_room_light_switch := true
 ## 主通行层地砖格心（房间局部 Y=0，与装配吸附规则一致），不含多层坑底砖。
 ## 房间归属仍兼容无清单的旧矩形房；刷怪对 authored_layout_shell 空地板则拒绝回退。
 var _authored_tile_cells: Array[Vector3] = []
+var _spawn_tile_buckets: Dictionary = {}
+var _box_floor_samples: Dictionary = {}
 ## 静态布局里**手摆的**易碎陈设（场景工坊刷进来的 `BreakableClutter3D`）。
 ##
 ## 与随机撒点那一批的区别：这批属于**美术布局**，随壳体常驻、不随 detail 卸载；
@@ -1165,7 +1167,7 @@ func get_stream_state_name() -> String:
 	return str(STREAM_STATE_NAMES.get(_stream_state, "DATA_ONLY"))
 
 
-func ensure_detail_built() -> void:
+func ensure_detail_built(sync_light_state := true) -> void:
 	if _detail_built:
 		return
 	_detail_built = true
@@ -1176,8 +1178,9 @@ func ensure_detail_built() -> void:
 	_build_content()
 	_building_detail = false
 	_apply_pending_detail_runtime_state()
-	_set_room_light_runtime_state(self)
-	_sync_supplemental_room_lights()
+	if sync_light_state:
+		_set_room_light_runtime_state(self)
+		_sync_supplemental_room_lights()
 	if bool(get_meta("authored_collision_navigation", false)):
 		_request_furnishing_navigation_refresh()
 
@@ -1205,7 +1208,8 @@ func set_stream_state(state: int) -> void:
 	if presentation_ready:
 		ensure_shell_built()
 		if _stream_state == STREAM_ACTIVE:
-			ensure_detail_built()
+			# Stream activation synchronizes every lamp below after collision and door updates.
+			ensure_detail_built(false)
 		elif _stream_state == STREAM_PREFETCHING:
 			call_deferred("set_stream_state", STREAM_SHELL_READY)
 	elif _stream_state == STREAM_DATA_ONLY:
@@ -1427,6 +1431,11 @@ func _install_base99_facility_lights() -> void:
 ## 收集节点自身与全部后代里的 WastelandLight3D（前序、树上顺序稳定）。
 func _collect_wasteland_lights(root: Node) -> Array[WastelandLight3D]:
 	var found: Array[WastelandLight3D] = []
+	if root.is_inside_tree():
+		for light: WastelandLight3D in get_tree().get_nodes_in_group(WastelandLight3D.STREAM_LIGHT_GROUP):
+			if light == root or root.is_ancestor_of(light):
+				found.append(light)
+		return found
 	if root is WastelandLight3D:
 		found.append(root)
 	for child in root.get_children():
@@ -1493,8 +1502,9 @@ func _collect_room_light_switches(root: Node) -> Array[RoomLightSwitch3D]:
 	var found: Array[RoomLightSwitch3D] = []
 	if root is RoomLightSwitch3D:
 		found.append(root)
-	for child in root.get_children():
-		found.append_array(_collect_room_light_switches(child))
+	for area in root.find_children("*", "Area3D", true, false):
+		if area is RoomLightSwitch3D:
+			found.append(area)
 	return found
 
 
@@ -1649,6 +1659,12 @@ func _on_light_switch_toggled(is_on: bool) -> void:
 
 
 func _set_room_light_runtime_state(root: Node) -> void:
+	if root.is_inside_tree():
+		for light: WastelandLight3D in get_tree().get_nodes_in_group(WastelandLight3D.STREAM_LIGHT_GROUP):
+			if root.is_ancestor_of(light):
+				light.set_runtime_active(is_streamed() and _stream_state != STREAM_PREFETCHING,
+					_stream_state == STREAM_ACTIVE, _stream_state == STREAM_ACTIVE)
+		return
 	for child in root.get_children():
 		if child is WastelandLight3D:
 			(child as WastelandLight3D).set_runtime_active(
@@ -7414,6 +7430,8 @@ func _build_trigger() -> void:
 ## 坑底保留 -12m 且 slot_role=multi_level_component，不得混入主通行层。
 func _build_spawn_points() -> void:
 	enemy_spawn_points.clear()
+	_box_floor_samples.clear()
+	_spawn_tile_buckets.clear()
 	_authored_tile_cells.clear()
 	_spawn_candidates.clear()
 	_spawn_edge_candidates.clear()
@@ -7423,7 +7441,13 @@ func _build_spawn_points() -> void:
 			continue
 		var cell := instance.get("position", Vector3.ZERO) as Vector3
 		cell.y = 0.0
-		if not _authored_tile_cells.has(cell):
+		var center := Vector2(cell.x, cell.z)
+		var bucket := Vector2i((center / SPAWN_BOX_TILE_M).floor())
+		if not _spawn_tile_buckets.has(bucket):
+			_spawn_tile_buckets[bucket] = []
+		var centers: Array = _spawn_tile_buckets[bucket]
+		if not centers.has(center):
+			centers.append(center)
 			_authored_tile_cells.append(cell)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = room_seed ^ room_id.hash() ^ 0x53504157
@@ -7652,16 +7676,26 @@ func _spawn_floor_contains(point: Vector3, radius: float) -> bool:
 		return false
 	if not _spawn_support_triangles.is_empty():
 		return _spawn_surface_contains(point, radius)
+	return _tile_footprint_covered(footprint)
+
+
+func _tile_footprint_covered(footprint: Rect2) -> bool:
 	# 没有地砖清单 ⇒ 唯一可用的口径就是房间包围盒（与 `_build_spawn_points` 的兜底同源）。
 	# 判据只看「清单是否为空」，**不看是不是授权壳**：授权锚定房（Boss 房深井 / 撤离房）
 	# 的美术由静态场景独占、清单恒空，按旧条件会对**每个点**都返回 false ⇒ 零落点。
 	if _authored_tile_cells.is_empty():
 		return true
 	var covered := 0.0
-	for cell in _authored_tile_cells:
-		var tile := Rect2(Vector2(cell.x - 2.5, cell.z - 2.5), Vector2(5.0, 5.0))
-		if tile.intersects(footprint):
-			covered += tile.intersection(footprint).get_area()
+	var tile_size := Vector2.ONE * SPAWN_BOX_TILE_M
+	var centers := footprint.grow(SPAWN_BOX_TILE_M * 0.5)
+	var first := Vector2i((centers.position / SPAWN_BOX_TILE_M).floor())
+	var last := Vector2i((centers.end / SPAWN_BOX_TILE_M).floor())
+	for x in range(first.x, last.x + 1):
+		for z in range(first.y, last.y + 1):
+			for center: Vector2 in _spawn_tile_buckets.get(Vector2i(x, z), []):
+				var tile := Rect2(center - tile_size * 0.5, tile_size)
+				if tile.intersects(footprint):
+					covered += tile.intersection(footprint).get_area()
 	return covered >= footprint.get_area() - 0.0001
 
 
@@ -8182,7 +8216,29 @@ func _box_pick_seed(box_center_local: Vector2, half: Vector2) -> int:
 func _box_sample_points(
 	box_center_local: Vector2, half: Vector2, cos_r: float, sin_r: float, clearance: float
 ) -> Array[Vector3]:
+	_ensure_spawn_reach()
 	var pool: Array[Vector3] = []
+	var use_tiles := _spawn_support_triangles.is_empty()
+	var check_custom_radius := not use_tiles and not is_equal_approx(clearance, _spawn_clearance())
+	for point in static_box_candidates(box_center_local, half, cos_r, sin_r, clearance, use_tiles):
+		if check_custom_radius and not _spawn_surface_contains(point, clearance):
+			continue
+		if _spawn_reach_contains(point) and _spawn_obstacle_free(point):
+			pool.append(point)
+	return pool
+
+
+## Only immutable room dimensions and authored tiles are memoized. Real obstacles,
+## reachability and supporting triangles are evaluated against the live room.
+func static_box_candidates(
+	box_center_local: Vector2, half: Vector2, cos_r: float, sin_r: float, clearance: float, use_tiles: bool
+) -> Array[Vector3]:
+	var dimensions := get_dimensions()
+	var key := [box_center_local, half, cos_r, sin_r, clearance, dimensions, use_tiles]
+	if _box_floor_samples.has(key):
+		return _box_floor_samples[key]
+	var pool: Array[Vector3] = []
+	var bounds := Rect2(-dimensions * 0.5, dimensions)
 	var step := SPAWN_BOX_SAMPLE_STEP_M
 	var columns := int(floor(half.x / step))
 	var rows := int(floor(half.y / step))
@@ -8194,11 +8250,11 @@ func _box_sample_points(
 			# 盒局部系 → 房间局部系（与 `_box_local_point` 互逆）。
 			var rel := Vector2(local.x * cos_r - local.y * sin_r, local.x * sin_r + local.y * cos_r)
 			var point := Vector3(box_center_local.x + rel.x, 0.0, box_center_local.y + rel.y)
-			if not _spawn_floor_contains(point, clearance):
-				continue
-			if not _spawn_obstacle_free(point):
-				continue
-			pool.append(point)
+			var footprint := Rect2(Vector2(point.x - clearance, point.z - clearance), Vector2.ONE * clearance * 2.0)
+			if bounds.encloses(footprint) and (not use_tiles or _tile_footprint_covered(footprint)):
+				pool.append(point)
+	if _box_floor_samples.size() < 64:
+		_box_floor_samples[key] = pool
 	return pool
 
 
@@ -8278,13 +8334,11 @@ func resolve_spawn_box_center_local(
 	required: int,
 	box_rotation_deg: float = 0.0,
 	min_spacing_m: float = 0.0,
-	wall_recess_tiles: int = SPAWN_BOX_WALL_RECESS_TILES
+	wall_recess_tiles: int = SPAWN_BOX_WALL_RECESS_TILES,
+	geometry_prepared := false
 ) -> Vector2:
-	if _spawn_candidates.is_empty():
-		_build_spawn_points()
-	# 闸门首次生效时会重算候选池 ⇒ 必须赶在 `_spawn_candidates` 被读取之前。
-	_ensure_spawn_reach()
-	_collect_spawn_blockers()
+	if not geometry_prepared:
+		_prepare_safe_spawn_selection()
 	box_center_local = snap_box_center_to_tile(box_center_local, wall_recess_tiles)
 	var size := Vector2(
 		maxf(SPAWN_BOX_MIN_SIZE_M, box_size.x), maxf(SPAWN_BOX_MIN_SIZE_M, box_size.y)
@@ -8326,11 +8380,12 @@ func snap_box_center_to_tile(declared: Vector2, recess_tiles: int) -> Vector2:
 		if distance < nearest_distance:
 			nearest_distance = distance
 			nearest = candidate
+		if distance >= best_distance:
+			continue
 		if want > 0 and not _spawn_floor_contains(Vector3(candidate.x, 0.0, candidate.y), clearance):
 			continue
-		if distance < best_distance:
-			best_distance = distance
-			best = candidate
+		best_distance = distance
+		best = candidate
 	return best if best_distance < INF else nearest
 
 
@@ -8407,12 +8462,9 @@ func _material(color: Color, metallic: float, roughness: float) -> StandardMater
 
 
 func _set_collision_enabled(root: Node, enabled: bool, preserve_support := false) -> void:
-	if root is CollisionShape3D:
-		var collision := root as CollisionShape3D
+	for collision: CollisionShape3D in root.find_children("*", "CollisionShape3D", true, false):
 		var is_support := collision.get_parent() != null and collision.get_parent().name == "FloorBody"
 		collision.set_deferred("disabled", false if preserve_support and is_support else not enabled)
-	for child in root.get_children():
-		_set_collision_enabled(child, enabled, preserve_support)
 
 
 func _keep_structural_physics_active(root: Node) -> void:

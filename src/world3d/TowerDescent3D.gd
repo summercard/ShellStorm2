@@ -8,6 +8,9 @@ extends Dungeon3D
 ## 或没有开场页时 = 本帧末。开场类剧情挂这一发，不能挂 `room_entered` ——
 ## `room_entered` 在 `_ready` 里就发了，那时开场页还没接管完相机与输入。
 signal gameplay_started(room_id: String)
+## 读取页黑幕完整打开后才发。远征入场仪式只订阅其中一套，避免在黑幕下偷跑。
+signal expedition_entry_ceremony_scan_ready(room_id: String)
+signal expedition_entry_ceremony_materialize_ready(room_id: String)
 
 const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_facility_root_top3d.tscn")
 const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
@@ -1011,6 +1014,8 @@ func get_runtime_resume_scene_path(snapshot: Dictionary) -> String:
 
 var _expedition_entry_source := ExpeditionEntryContext.BASE
 var _returning_to_tower03 := false
+var _expedition_entry_ceremony_prepared := false
+var _expedition_entry_ceremony_notified := false
 
 
 func _ready() -> void:
@@ -1583,6 +1588,10 @@ func _accepts_pending_insurance_return_at_spawn() -> bool:
 
 func get_entry_context_snapshot() -> Dictionary:
 	return _entry_context.duplicate(true)
+
+
+func get_expedition_entry_source() -> String:
+	return _expedition_entry_source
 
 
 func _should_start_on_rooftop_for_entry() -> bool:
@@ -8474,6 +8483,47 @@ func _emit_gameplay_started() -> void:
 	_main_story_gameplay_started = true
 	_sync_main_story_processing()
 	gameplay_started.emit(str(_current_room_id))
+
+
+## 读取页交接完成并且 IrisTransition 已经打开后，由 ExpeditionLoadingScreen 调用。
+## 这条边界必须独立于 gameplay_started：后者可能在目标树被禁用前就已排队。
+func prepare_expedition_entry_ceremony() -> void:
+	if not _is_valid_expedition_entry_ceremony():
+		return
+	var narrative_id := _expedition_entry_narrative_id()
+	if NarrativeDirector.is_playing():
+		return
+	_expedition_entry_ceremony_prepared = NarrativeDirector.prepare_expedition_entry(narrative_id)
+	_expedition_entry_ceremony_notified = false
+
+
+func notify_expedition_entry_ceremony_ready() -> void:
+	if _expedition_entry_ceremony_notified or not _expedition_entry_ceremony_prepared or not _is_valid_expedition_entry_ceremony():
+		return
+	_expedition_entry_ceremony_notified = true
+	# 两套演出按本局稳定 seed 轮换：同一局读档不会因为重载随机换片。
+	if posmod(run_seed, 2) == 0:
+		expedition_entry_ceremony_scan_ready.emit("start")
+	else:
+		expedition_entry_ceremony_materialize_ready.emit("start")
+
+
+func _is_valid_expedition_entry_ceremony() -> bool:
+	if not is_expedition() or not is_inside_tree() or _runtime_restore_snapshot.size() > 0:
+		return false
+	if str(_current_room_id) != "start" or _entry_context.is_empty():
+		return false
+	if str(_entry_context.get("reason", "")) != GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT:
+		return false
+	return _expedition_entry_source == ExpeditionEntryContext.BASE
+
+
+func _expedition_entry_narrative_id() -> String:
+	return (
+		"nar_expedition_entry_hologram_scan"
+		if posmod(run_seed, 2) == 0
+		else "nar_expedition_entry_hologram_materialize"
+	)
 
 
 func _refresh_tower_hud() -> void:

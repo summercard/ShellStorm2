@@ -34,6 +34,7 @@ var _camera: Camera3D = null
 var _camera_rest_basis := Basis.IDENTITY
 var _camera_rest_offset := Vector3.ZERO
 var _camera_rest_global := Transform3D.IDENTITY
+var _camera_rest_local := Transform3D.IDENTITY
 var _camera_channel := {}          # 距离通道 {from, to, t, duration}
 var _camera_yaw_channel := {}      # 方位通道（度）{from, to, t, duration}
 var _camera_elev_channel := {}     # 仰角通道（度）{from, to, t, duration}
@@ -67,6 +68,18 @@ var _pose_channel := {}            # {from, to, t, duration, value}（相位 0..
 ## 重算一次 input_locked，它必须问这里（is_player_input_locked），
 ## 否则"角色停住"会被逐帧顶掉，且运行时毫无报错。
 var _player_input_taken := false
+const EXPEDITION_ENTRY_PRESENTATION = preload("res://src/narrative/ExpeditionEntryPresentation3D.gd")
+
+var _expedition_entry_presentation: RefCounted = null
+var _expedition_entry_host: Node
+var _expedition_entry_player: Node3D
+var _expedition_entry_restores: Array[Callable] = []
+var _expedition_entry_camera_yaw := 0.0
+var _expedition_entry_return: Dictionary = {}
+var _expedition_entry_attributes: CameraAttributes
+var _expedition_entry_close_attributes: CameraAttributesPractical
+var _expedition_entry_feedback: Node
+var _expedition_entry_feedback_suspended := false
 
 # —— 底栏文字占用（2026-10-09）——
 ## 剧情最近一次经 `ui.subtitle` / `ui.hint` / `ui.dialogue` 摆上去的 run_id。
@@ -87,6 +100,8 @@ func bind(tree: SceneTree) -> void:
 ## 导演每帧调用：推进相机与朝向的过渡并落到场景上。
 func tick(delta: float) -> void:
 	_tick_camera_shake(delta)
+	if _expedition_entry_presentation != null:
+		_expedition_entry_presentation.tick(delta)
 	var controller := _main_story_controller()
 	if controller != null and controller.has_method("_sync_activation_control"):
 		# 手动导演 step 也复用控制器的真实激活时钟，不另造定时器。
@@ -104,7 +119,18 @@ func tick(delta: float) -> void:
 		# （否则会钉在那一刻的玩家位置快照上）。
 		if pivot_done and _camera_pivot_mode == "player":
 			_camera_pivot_channel = {}
-		_apply_camera_pose()
+		if not _expedition_entry_return.is_empty():
+			_expedition_entry_return["t"] = float(_expedition_entry_return["t"]) + delta
+			var weight := smoothstep(0.0, 1.0, clampf(float(_expedition_entry_return["t"]) / maxf(0.001, float(_expedition_entry_return["duration"])), 0.0, 1.0))
+			if is_instance_valid(_camera):
+				_camera.global_transform = (_expedition_entry_return["from"] as Transform3D).interpolate_with(_camera_rest_global, weight)
+				if _expedition_entry_close_attributes != null and _expedition_entry_attributes is CameraAttributesPractical:
+					var original := _expedition_entry_attributes as CameraAttributesPractical
+					_expedition_entry_close_attributes.dof_blur_near_enabled = original.dof_blur_near_enabled
+					_expedition_entry_close_attributes.dof_blur_far_enabled = original.dof_blur_far_enabled
+					_expedition_entry_close_attributes.dof_blur_amount = original.dof_blur_amount * weight
+		else:
+			_apply_camera_pose()
 	if _facing_active:
 		_advance_channel(_facing_channel, delta)
 		_apply_facing()
@@ -153,6 +179,10 @@ func _advance_channel(channel: Dictionary, delta: float) -> bool:
 func player_node() -> Node3D:
 	if _tree == null:
 		return null
+	if is_instance_valid(_dungeon) and _dungeon.is_inside_tree():
+		var player := _dungeon.get("player") as Node3D
+		if is_instance_valid(player) and player.is_inside_tree():
+			return player
 	return _tree.get_first_node_in_group("player_3d") as Node3D
 
 
@@ -167,19 +197,17 @@ func bind_dungeon(node: Node) -> void:
 		_room_index_scene = null
 		_room_index = {}
 		return
-	# **不抢已有的绑定**：验收会自行把替身（假地牢 / 收集器）注入这里，无条件覆盖会把它
-	# 顶掉 —— 实测症状是首帧两条 `actor.say` 全部丢失（B1「同帧两条按书写顺序执行」变红）。
-	if _dungeon != null and is_instance_valid(_dungeon) and _dungeon != node:
-		return
 	_dungeon = node
 	_room_index_scene = null
+	_room_index = {}
 
 
 func dungeon_node() -> Node:
 	if _tree == null:
 		return null
-	if _dungeon != null and is_instance_valid(_dungeon):
+	if is_instance_valid(_dungeon) and _dungeon.is_inside_tree():
 		return _dungeon
+	_dungeon = null
 	var scene := _tree.current_scene
 	if scene != null and scene.has_signal("room_entered"):
 		_dungeon = scene
@@ -299,6 +327,8 @@ func dispatch(domain: String, action: String, params: Dictionary) -> Dictionary:
 			return _ui_instruction(action, params)
 		"scene":
 			return _scene_instruction(action, params)
+		"presentation":
+			return _presentation_instruction(action, params)
 		"grant":
 			return _grant_instruction(action, params)
 	return _failed("未知指令域『%s』。" % domain)
@@ -537,6 +567,7 @@ func _ensure_camera_override() -> bool:
 		return false
 	_camera = camera
 	_camera_rest_global = camera.global_transform
+	_camera_rest_local = camera.transform
 	_camera_rest_basis = camera.global_basis
 	_camera_rest_offset = camera.global_position - player.global_position
 	# 接管前那套俯角：elevation_deg 不给时沿用它，保证「只改距离」的老行为一字不变。
@@ -578,6 +609,8 @@ func _camera_pan(params: Dictionary) -> Dictionary:
 	if not _ensure_camera_override():
 		return _degraded("camera.pan：拿不到玩家相机，本镜头的运镜被跳过。")
 	var target_yaw := float(params.get("yaw_deg", 0.0))
+	if _expedition_entry_presentation != null:
+		target_yaw += _expedition_entry_camera_yaw
 	var duration := maxf(0.0, float(params.get("duration", 0.6)))
 	_apply_camera_pivot_params(params, duration)
 	_camera_yaw_channel = {
@@ -601,6 +634,9 @@ func _camera_restore(params: Dictionary) -> Dictionary:
 	if not _camera_override_active:
 		return _ok()
 	var duration := maxf(0.0, float(params.get("duration", 0.6)))
+	if _expedition_entry_presentation != null and is_instance_valid(_camera):
+		_expedition_entry_return = {"from": _camera.global_transform, "t": 0.0, "duration": duration}
+		return _done(Callable(self, "release_camera_override"))
 	# 回镜必须把**枢轴**也带回玩家：否则机位会绕着一个远处的点收镜，最后再「跳」回玩家。
 	var restore_player := player_node()
 	if restore_player != null:
@@ -772,6 +808,10 @@ func _apply_camera_pose() -> void:
 		orbit * elev_pivot * _camera_rest_basis,
 		center + offset.normalized() * distance
 	)
+	if _expedition_entry_presentation != null:
+		var snapshot: Dictionary = _expedition_entry_presentation.get_snapshot()
+		var target := player.global_position + Vector3.UP * (float(snapshot["world_min"]) + float(snapshot["world_max"]) - player.global_position.y * 2.0) * 0.5
+		desired = desired.looking_at(target, Vector3.UP)
 	_camera.global_transform = _constrain_camera_pose(desired, center)
 
 
@@ -795,12 +835,17 @@ func _camera_elevation_pivot() -> Basis:
 
 ## 归还相机：先还原到接管前的精确位姿，再放权给玩法镜头。
 func release_camera_override() -> void:
-	if _camera != null and is_instance_valid(_camera) and _camera.is_inside_tree():
-		var player := player_node()
-		if player != null:
-			_camera.global_transform = _constrain_camera_pose(Transform3D(_camera_rest_basis, player.global_position + _camera_rest_offset), player.global_position)
+	if is_instance_valid(_camera):
+		if _expedition_entry_presentation != null:
+			_camera.attributes = _expedition_entry_attributes
+			_camera.transform = _camera_rest_local
 		else:
-			_camera.global_transform = _camera_rest_global
+			var player := player_node()
+			if player != null:
+				_camera.global_transform = _constrain_camera_pose(Transform3D(_camera_rest_basis, player.global_position + _camera_rest_offset), player.global_position)
+			else:
+				_camera.global_transform = _camera_rest_global
+	_expedition_entry_return = {}
 	_camera_override_active = false
 	_camera = null
 	_camera_channel = {}
@@ -1149,6 +1194,95 @@ func _restore_pose(argument: Dictionary) -> void:
 # -------------------------------------------------------------------------
 # fx
 # -------------------------------------------------------------------------
+
+func _presentation_instruction(action: String, params: Dictionary) -> Dictionary:
+	match action:
+		"start":
+			if _expedition_entry_presentation == null:
+				return _degraded("presentation.start：入场表现尚未预热。")
+			return _ok() if _expedition_entry_presentation.start(params) else _degraded("presentation.start：角色全息重建无法开始。")
+		"restore":
+			restore_expedition_entry()
+			return _ok()
+	return _degraded("presentation.%s 尚未接通。" % action)
+
+
+func prepare_expedition_entry(params: Dictionary) -> bool:
+	restore_expedition_entry()
+	var player := player_node()
+	if player == null or _camera_override_active or _player_input_taken:
+		return false
+	_expedition_entry_presentation = EXPEDITION_ENTRY_PRESENTATION.new()
+	if not _expedition_entry_presentation.prepare(player, params):
+		restore_expedition_entry()
+		return false
+	_expedition_entry_player = player
+	_expedition_entry_host = dungeon_node()
+	var lock_result := _player_lock_input({"locked": true})
+	if not bool(lock_result.get("ok", false)):
+		restore_expedition_entry()
+		return false
+	_expedition_entry_restores.append(lock_result["restore"] as Callable)
+	if is_instance_valid(_expedition_entry_host) and _expedition_entry_host.has_method("set_scripted_input_hold"):
+		_expedition_entry_host.call("set_scripted_input_hold", true, true, "expedition_entry")
+	var camera_params: Dictionary = (params.get("camera", {}) as Dictionary).duplicate(true)
+	camera_params["duration"] = 0.0
+	var camera_result := _camera_instruction("focus", camera_params)
+	if not bool(camera_result.get("ok", false)):
+		restore_expedition_entry()
+		return false
+	_expedition_entry_restores.append(camera_result["restore"] as Callable)
+	_expedition_entry_attributes = _camera.attributes
+	if _camera.attributes is CameraAttributesPractical:
+		_expedition_entry_close_attributes = _camera.attributes.duplicate() as CameraAttributesPractical
+		_expedition_entry_close_attributes.dof_blur_near_enabled = false
+		_expedition_entry_close_attributes.dof_blur_far_enabled = false
+		_camera.attributes = _expedition_entry_close_attributes
+	_expedition_entry_feedback = player.get("camera_feedback") as Node
+	if is_instance_valid(_expedition_entry_feedback):
+		_expedition_entry_feedback_suspended = bool(_expedition_entry_feedback.get("suspended"))
+		_expedition_entry_feedback.set("suspended", true)
+	var yaw: Variant = player.get("aim_yaw")
+	var avatar: Variant = player.get("avatar")
+	var root := (avatar as Object).get("visual_root") as Node3D
+	var behind := Vector3.BACK.rotated(Vector3.UP, float(yaw) if yaw != null else root.global_rotation.y)
+	var rest_angle := atan2(_camera_rest_offset.x, _camera_rest_offset.z)
+	_expedition_entry_camera_yaw = rad_to_deg(wrapf(atan2(behind.x, behind.z) - rest_angle, -PI, PI)) + float(camera_params.get("rear_side_deg", 12.0))
+	_camera_yaw_channel = {"value": _expedition_entry_camera_yaw, "to": _expedition_entry_camera_yaw}
+	tick(0.0)
+	return true
+
+
+func start_expedition_entry(params: Dictionary = {}) -> bool:
+	if _expedition_entry_presentation == null:
+		return false
+	return _expedition_entry_presentation.start(params)
+
+
+func restore_expedition_entry() -> void:
+	if _expedition_entry_presentation == null:
+		return
+	if is_instance_valid(_expedition_entry_host) and _expedition_entry_host.has_method("set_scripted_input_hold"):
+		_expedition_entry_host.call("set_scripted_input_hold", false, true, "expedition_entry")
+	if is_instance_valid(_camera):
+		_camera.attributes = _expedition_entry_attributes
+	if is_instance_valid(_expedition_entry_feedback):
+		_expedition_entry_feedback.set("suspended", _expedition_entry_feedback_suspended)
+	_expedition_entry_feedback = null
+	for restore in _expedition_entry_restores:
+		if restore.is_valid():
+			restore.call()
+	_expedition_entry_close_attributes = null
+	_expedition_entry_attributes = null
+	_expedition_entry_restores.clear()
+	if is_instance_valid(_expedition_entry_player) and (not is_instance_valid(_expedition_entry_host) or not _expedition_entry_host.is_inside_tree()):
+		_expedition_entry_player.call("set_input_locked", false)
+	_expedition_entry_presentation.restore()
+	_expedition_entry_presentation = null
+	_expedition_entry_host = null
+	_expedition_entry_player = null
+	_expedition_entry_return = {}
+
 
 func _fx_instruction(action: String, params: Dictionary) -> Dictionary:
 	match action:

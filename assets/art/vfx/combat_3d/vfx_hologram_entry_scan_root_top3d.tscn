@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ds6sslwjflgiv"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxHologramEntry3D.gd" id="1_hologram"]
+
+[node name="VfxHologramEntryScan3D" type="Node3D"]
+script = ExtResource("1_hologram")
+mode = "scan"
+metadata/asset_id = "VFX-HOLOGRAM-ENTRY-SCAN-3D"
+metadata/asset_version = "v001"

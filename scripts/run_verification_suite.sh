@@ -526,6 +526,8 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  # Autoload前隔离APPDATA；专用runner包含真实renderer双套截图与回滚专项。
+  verify_expedition_entry_hologram_ceremonies
   # 2026-11-11：须由 run_expedition01_flow_integration.py 在 Autoload 前隔离；登记不代表通过。
   verify_expedition01_reward_flow
   verify_expedition01_flow_integration
@@ -552,6 +554,7 @@ retired_scenes=(
 )
 
 renderer_scenes=(
+  verify_expedition_entry_hologram_ceremonies
   "${visual_scenes[@]}"
   # 专用隔离Runner专项仅登记，禁止full目录扫描误收进普通无头批跑。
   verify_expedition01_reward_flow
