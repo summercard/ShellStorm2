@@ -29,6 +29,10 @@
 
 `assets/registry/README.md`、`ledger_index.json` 已核对职责与域映射。内容数据库《掉落物品》A18/A20/A28/A34/A35现有 `item_ammo_pack`、`item_health_potion`、`mod_bullet_standard`、`weapon_rifle`、`weapon_shotgun`；《命运卡》A27/A34现有普通 `fate_scale_node`、`fate_bounce_bullet`。仅查相关行，未保存/改写工作簿，不将本轮关卡数值复制为另一套内容真源。
 
+### 设计层补充：十三房心流曲线
+
+同日补写[远征01 §十二](../design/远征关卡01设计.md#十二十三房心流曲线2026-11-11-设计)，为 §11 的机制数据提供节拍依据：五幕结构、逐房 `H`/`P`/`ρ` 读数、Boss 前三拍，以及 12.6 的 A1—D 待裁定项。该章不新增怪物、盒、字段或奖励，也不改变 §11 的冻结口径；12.6-A1（05 入场短句）与 12.6-B（10 房提示时机）**尚未实现**，不并入本轮已通过项。曲线数值由 `monster_rules.stats` + `floor_00.json` 的 `stages`/`spawn_placements` 按 12.1 公式复算，属只读推导，不构成对运行表现的验收。
+
 ## 3. 专项登记与验收边界
 
 - `verify_expedition01_reward_flow`：服务规则/确定性、分账、凭据来源、报价、标准弹绑定、箱快照及溢出边界，归属manual，须Autoload前隔离；不代表实际地面拾取或整关通过。

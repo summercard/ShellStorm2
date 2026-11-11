@@ -1786,6 +1786,74 @@ func get_connection_port_towards(target_room_id: String) -> Dictionary:
 	return {}
 
 
+func _placement_vec2(value: Variant) -> Vector2:
+	if value is Vector2:
+		return value
+	if value is Array and value.size() >= 2:
+		return Vector2(float(value[0]), float(value[1]))
+	return Vector2.ZERO
+
+
+func get_connection_port_by_id(port_id: String) -> Dictionary:
+	for value: Dictionary in connection_ports:
+		if str(value.get("port_id", "")) == port_id:
+			return value.duplicate(true)
+	return {}
+
+
+## 入口条带仅做局部几何命中；不增建 Area，不改房间进入判据。
+func match_door_entry_trigger(trigger: Dictionary, world_position: Vector3) -> Dictionary:
+	var local := to_local(world_position)
+	var point := Vector2(local.x, local.z)
+	var inset := float(trigger.get("inset_m", 0.0))
+	var depth := float(trigger.get("depth_m", 1.0))
+	for port_id: String in trigger.get("port_ids", []):
+		var port := get_connection_port_by_id(port_id)
+		if port.is_empty():
+			continue
+		var position := _placement_vec2(port.get("position_m", []))
+		var inward := -_placement_vec2(port.get("outward", [])).normalized()
+		if inward.is_zero_approx():
+			continue
+		var offset := point - position
+		var along := offset.dot(inward)
+		var across := absf(offset.dot(Vector2(-inward.y, inward.x)))
+		# 旧方向建门的端口宽为0，实际门洞仍使用统一净宽，而非零宽触发线。
+		var width := float(port.get("door_width_m", 0.0))
+		if is_zero_approx(width):
+			width = TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
+		if along >= inset and along <= inset + depth and across <= width * 0.5:
+			return {"hit": true, "port_id": port_id}
+	return {"hit": false, "port_id": ""}
+
+
+## 严格候选域：反入口半区，可叠加指定端口内侧带；空域不回退房心。
+func get_encounter_spawn_candidates(trigger_port_id: String, spawn_origin_port_id: String = "", remote_spawn_policy: String = "") -> Array[Vector3]:
+	_prepare_safe_spawn_selection()
+	var entry := get_connection_port_by_id(trigger_port_id)
+	var origin := get_connection_port_by_id(spawn_origin_port_id)
+	var result: Array[Vector3] = []
+	if remote_spawn_policy == "opposite_entry" and entry.is_empty():
+		return result
+	if not spawn_origin_port_id.is_empty() and origin.is_empty():
+		return result
+	var inward := -_placement_vec2(entry.get("outward", [0.0, 0.0])).normalized()
+	var origin_inward := -_placement_vec2(origin.get("outward", [0.0, 0.0])).normalized()
+	var origin_position := _placement_vec2(origin.get("position_m", [0.0, 0.0]))
+	var dimensions := get_dimensions()
+	var origin_depth := maxf(5.0, (absf(origin_inward.x) * dimensions.x + absf(origin_inward.y) * dimensions.y) * 0.35)
+	for candidate in _spawn_candidates:
+		var point := Vector2(candidate.x, candidate.z)
+		if remote_spawn_policy == "opposite_entry" and (inward.is_zero_approx() or point.dot(inward) < 0.0):
+			continue
+		if not origin.is_empty():
+			var distance := (point - origin_position).dot(origin_inward)
+			if origin_inward.is_zero_approx() or distance < 0.0 or distance > origin_depth:
+				continue
+		result.append(to_global(candidate))
+	return result
+
+
 func _build_connection_port_markers(parent: Node3D) -> void:
 	if parent == null or connection_ports.is_empty():
 		return
@@ -7606,12 +7674,13 @@ func _collect_spawn_blockers() -> void:
 	var dimensions := get_dimensions()
 	var room_bounds := Rect2(-dimensions * 0.5, dimensions).grow(_spawn_clearance())
 	var root: Node = get_parent() if get_parent() != null else self
+	var world_to_room := global_transform.affine_inverse()
 	for value in root.find_children("*", "CollisionShape3D", true, false):
 		var collision := value as CollisionShape3D
 		var body := collision.get_parent() as StaticBody3D
 		if body == null or (body.collision_layer & 1) == 0 or collision.disabled or collision.shape == null:
 			continue
-		var relative := global_transform.affine_inverse() * collision.global_transform
+		var relative := world_to_room * collision.global_transform
 		if collision.shape is ConcavePolygonShape3D:
 			# 三角网格是空心表面；跨高度的整体包围盒绝不能代表身体占用。
 			var surface: Node = collision.get_parent()
@@ -7630,7 +7699,10 @@ func _collect_spawn_blockers() -> void:
 				if triangle_bounds.end.y > SPAWN_GROUND_TOP_MAX_M:
 					_spawn_blockers.append(triangle_bounds)
 			continue
-		var bounds := relative * collision.shape.get_debug_mesh().get_aabb()
+		# BoxShape 的局部包围盒由 size 精确决定，正常游戏无需向渲染器取调试网格。
+		var box := collision.shape as BoxShape3D
+		var local_bounds := AABB(-0.5 * box.size, box.size) if box != null else collision.shape.get_debug_mesh().get_aabb()
+		var bounds := relative * local_bounds
 		if bounds.end.y <= SPAWN_GROUND_TOP_MAX_M or not room_bounds.intersects(Rect2(Vector2(bounds.position.x, bounds.position.z), Vector2(bounds.size.x, bounds.size.z))):
 			continue
 		_spawn_blockers.append(bounds)
@@ -7681,11 +7753,12 @@ func _spawn_surface_contains(point: Vector3, radius: float) -> bool:
 
 
 ## 显式敌人落点：保留合法原位，越界时取既有安全池中最近点；不改请求高度。
-func resolve_enemy_spawn_position(requested_world: Vector3) -> Vector3:
+func resolve_enemy_spawn_position(requested_world: Vector3, geometry_prepared := false) -> Vector3:
 	if not requested_world.is_finite():
 		return Vector3.INF
 	var requested := to_local(requested_world)
-	_collect_spawn_blockers()
+	if not geometry_prepared:
+		_collect_spawn_blockers()
 	var planar := Vector3(requested.x, requested.y if not _spawn_support_triangles.is_empty() else 0.0, requested.z)
 	if _spawn_floor_contains(planar, _spawn_clearance()):
 		return requested_world
@@ -7694,7 +7767,8 @@ func resolve_enemy_spawn_position(requested_world: Vector3) -> Vector3:
 	if _spawn_candidates.is_empty():
 		_build_spawn_points()
 	_ensure_spawn_reach()
-	_collect_spawn_blockers()
+	if not geometry_prepared:
+		_collect_spawn_blockers()
 	var nearest := Vector3.INF
 	var nearest_distance := INF
 	for candidate in _spawn_candidates:
@@ -7832,9 +7906,11 @@ func spawn_point_for_index(index: int) -> Vector3:
 ## 只预选、不消耗编成随机流；无几何点为硬失败，距离/占位暂不可用才允许重试。
 func choose_safe_spawn_position(
 	player_world: Vector3 = Vector3.INF, min_player_distance_m: float = 0.0,
-	occupied_world: Array[Vector3] = [], candidate_world: Variant = null
+	occupied_world: Array[Vector3] = [], candidate_world: Variant = null,
+	geometry_prepared := false
 ) -> Dictionary:
-	_prepare_safe_spawn_selection()
+	if not geometry_prepared:
+		_prepare_safe_spawn_selection()
 	var pool: Array[Vector3] = []
 	if candidate_world == null:
 		for point in _spawn_candidates:
@@ -8034,6 +8110,51 @@ func _box_first_fit_pass(
 		if ok:
 			chosen.append(point)
 	return chosen
+
+
+## 预置房使用冻结盒域；离墙净距只管几何，跨盒占位按真实身体直径，盒内另守声明间距。
+func preplaced_points_in_box(
+	candidates: Array, count: int, min_spacing_m: float, player_world: Vector3,
+	min_player_distance_m: float, occupied: Array[Vector3], seed_value: int
+) -> Array[Vector3]:
+	var pool: Array[Vector3] = []
+	var body_spacing := ENEMY_BODY_RADIUS_M * 2.0 + 0.1
+	for point: Vector3 in candidates:
+		if not _safe_spawn_geometry_valid(point):
+			continue
+		if min_player_distance_m > 0.0 and (not player_world.is_finite() or Vector2(point.x - player_world.x, point.z - player_world.z).length() < min_player_distance_m):
+			continue
+		var free := true
+		for previous in occupied:
+			if point.distance_to(previous) < body_spacing - 0.001:
+				free = false
+				break
+		if free:
+			pool.append(point)
+	var spacing := maxf(body_spacing, min_spacing_m)
+	var best := _scatter_box_pick(pool, spacing, count, seed_value)
+	if best.size() == count:
+		return best
+	# 紧盒随机首适配不足时按四个角扫描，避免中心点占去多个本可共存的边角点。
+	for direction in [Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)]:
+		pool.sort_custom(func(a: Vector3, b: Vector3) -> bool:
+			var la := to_local(a)
+			var lb := to_local(b)
+			return la.x * direction.x < lb.x * direction.x if not is_equal_approx(la.x, lb.x) else la.z * direction.y < lb.z * direction.y)
+		var chosen: Array[Vector3] = []
+		for point in pool:
+			var free := true
+			for previous in chosen:
+				if point.distance_to(previous) < spacing - 0.001:
+					free = false
+					break
+			if free:
+				chosen.append(point)
+			if chosen.size() == count:
+				return chosen
+		if chosen.size() > best.size():
+			best = chosen
+	return best
 
 
 ## 盒内随机取点的**确定性种子**：由「房种子 + 房 id + 盒心 / 尺寸」派生。

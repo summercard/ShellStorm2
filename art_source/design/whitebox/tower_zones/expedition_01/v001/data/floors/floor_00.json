@@ -154,16 +154,13 @@
           {
             "boxes": [
               0,
-              1
-            ]
-          },
-          {
-            "boxes": [
+              1,
               2
             ]
           }
         ],
-        "intermission_sec": 2.0,
+        "intermission_sec": 0.0,
+        "spawn_mode": "preplaced",
         "min_player_distance_m": 6.0
       }
     },
@@ -240,17 +237,14 @@
         "stages": [
           {
             "boxes": [
-              0
-            ]
-          },
-          {
-            "boxes": [
+              0,
               1,
               2
             ]
           }
         ],
-        "intermission_sec": 2.0,
+        "intermission_sec": 0.0,
+        "spawn_mode": "preplaced",
         "min_player_distance_m": 6.0,
         "monster_ai": {
           "alert_share_radius_m": 10.0
@@ -305,14 +299,23 @@
       "spawn_placements": [],
       "encounter": {
         "trigger": {
-          "radius_m": 6.0,
-          "offset_m": [
-            0.0,
-            0.0
-          ]
+          "shape": "door_entries",
+          "port_ids": [
+            "A",
+            "B"
+          ],
+          "inset_m": 2.0,
+          "depth_m": 3.0
         },
         "duration_sec": 0.0,
-        "start_delay_sec": 1.5,
+        "start_delay_sec": 3.0,
+        "preparation_sec": 3.0,
+        "freeze_player_sec": 1.0,
+        "alert_style": "red_eva",
+        "alert_text": "接敌警报",
+        "alert_beep_interval_sec": 0.5,
+        "alert_pulse": true,
+        "remote_spawn_policy": "opposite_entry",
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 3.0,
@@ -321,26 +324,34 @@
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": false,
+        "hud_countdown": true,
         "stages": [
+          {
+            "monsters": [
+              {
+                "type": "ranged_caster",
+                "count": 1
+              },
+              {
+                "type": "melee_chaser",
+                "count": 4
+              }
+            ]
+          },
           {
             "monsters": [
               {
                 "type": "fat_zombie03",
                 "count": 1,
                 "min_player_distance_m": 8.0
-              }
-            ]
-          },
-          {
-            "monsters": [
+              },
               {
                 "type": "ranged_caster",
                 "count": 2
               },
               {
                 "type": "melee_chaser",
-                "count": 6
+                "count": 4
               }
             ]
           },
@@ -352,11 +363,11 @@
               },
               {
                 "type": "ranged_caster",
-                "count": 3
+                "count": 2
               },
               {
                 "type": "melee_chaser",
-                "count": 6
+                "count": 4
               }
             ]
           }
@@ -443,16 +454,23 @@
       "spawn_placements": [],
       "encounter": {
         "trigger": {
-          "shape": "band",
-          "axis": "z",
-          "thickness_m": 6.0,
-          "offset_m": [
-            0,
-            0
-          ]
+          "shape": "door_entries",
+          "port_ids": [
+            "A",
+            "B"
+          ],
+          "inset_m": 2.0,
+          "depth_m": 3.0
         },
         "duration_sec": 0.0,
-        "start_delay_sec": 1.5,
+        "start_delay_sec": 2.0,
+        "preparation_sec": 2.0,
+        "freeze_player_sec": 0.0,
+        "remote_spawn_policy": "opposite_entry",
+        "alert_style": "subtle",
+        "alert_text": "接敌准备",
+        "alert_beep_interval_sec": 1.0,
+        "alert_pulse": false,
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 2.5,
@@ -461,7 +479,7 @@
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": false,
+        "hud_countdown": true,
         "stages": [
           {
             "monsters": [
@@ -576,6 +594,11 @@
           "center_m": [
             2.5,
             2.5
+          ],
+          "spawn_overrides": [
+            { "type": "melee_chaser", "count": 8, "delay_sec": 0.0 },
+            { "type": "fat_zombie03", "count": 4, "delay_sec": 1.0 },
+            { "type": "ranged_caster", "count": 4, "delay_sec": 1.0 }
           ]
         }
       ],
@@ -584,22 +607,15 @@
           {
             "boxes": [
               0,
-              1
-            ]
-          },
-          {
-            "boxes": [
-              4
-            ]
-          },
-          {
-            "boxes": [
+              1,
               2,
-              3
+              3,
+              4
             ]
           }
         ],
-        "intermission_sec": 3.0,
+        "intermission_sec": 0.0,
+        "spawn_mode": "preplaced",
         "min_player_distance_m": 6.0
       }
     },
@@ -651,16 +667,23 @@
       "spawn_placements": [],
       "encounter": {
         "trigger": {
-          "shape": "band",
-          "axis": "x",
-          "thickness_m": 6.0,
-          "offset_m": [
-            0,
-            0
-          ]
+          "shape": "door_entries",
+          "port_ids": [
+            "A",
+            "B"
+          ],
+          "inset_m": 2.0,
+          "depth_m": 3.0
         },
         "duration_sec": 0.0,
-        "start_delay_sec": 1.5,
+        "start_delay_sec": 3.0,
+        "preparation_sec": 3.0,
+        "freeze_player_sec": 0.0,
+        "remote_spawn_policy": "opposite_entry",
+        "alert_style": "red_eva",
+        "alert_text": "警报 · 入侵者逼近",
+        "alert_beep_interval_sec": 0.5,
+        "alert_pulse": true,
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 2.5,
@@ -669,7 +692,7 @@
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": false,
+        "hud_countdown": true,
         "stages": [
           {
             "monsters": [
@@ -821,17 +844,14 @@
         "stages": [
           {
             "boxes": [
-              0
-            ]
-          },
-          {
-            "boxes": [
+              0,
               1,
               2
             ]
           }
         ],
-        "intermission_sec": 2.5,
+        "intermission_sec": 0.0,
+        "spawn_mode": "preplaced",
         "min_player_distance_m": 6.0
       },
       "secret_site": {
@@ -963,22 +983,15 @@
           {
             "boxes": [
               0,
-              1
-            ]
-          },
-          {
-            "boxes": [
+              1,
               2,
-              3
-            ]
-          },
-          {
-            "boxes": [
+              3,
               4
             ]
           }
         ],
-        "intermission_sec": 2.0,
+        "intermission_sec": 0.0,
+        "spawn_mode": "preplaced",
         "min_player_distance_m": 6.0
       }
     },
@@ -1030,16 +1043,23 @@
       "spawn_placements": [],
       "encounter": {
         "trigger": {
-          "shape": "band",
-          "axis": "z",
-          "thickness_m": 6.0,
-          "offset_m": [
-            0,
-            0
-          ]
+          "shape": "door_entries",
+          "port_ids": [
+            "A",
+            "B"
+          ],
+          "inset_m": 2.0,
+          "depth_m": 3.0
         },
         "duration_sec": 0.0,
-        "start_delay_sec": 1.5,
+        "start_delay_sec": 3.0,
+        "preparation_sec": 3.0,
+        "freeze_player_sec": 0.0,
+        "remote_spawn_policy": "opposite_entry",
+        "alert_style": "red_eva",
+        "alert_text": "警报 · 入侵者逼近",
+        "alert_beep_interval_sec": 0.5,
+        "alert_pulse": true,
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 2.5,
@@ -1048,7 +1068,7 @@
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": false,
+        "hud_countdown": true,
         "stages": [
           {
             "monsters": [
@@ -1185,16 +1205,23 @@
       "spawn_placements": [],
       "encounter": {
         "trigger": {
-          "shape": "band",
-          "axis": "z",
-          "thickness_m": 6.0,
-          "offset_m": [
-            0,
-            0
-          ]
+          "shape": "door_entries",
+          "port_ids": [
+            "A",
+            "B"
+          ],
+          "inset_m": 2.0,
+          "depth_m": 3.0
         },
         "duration_sec": 0.0,
-        "start_delay_sec": 1.5,
+        "start_delay_sec": 2.0,
+        "preparation_sec": 2.0,
+        "freeze_player_sec": 0.0,
+        "remote_spawn_policy": "opposite_entry",
+        "alert_style": "subtle",
+        "alert_text": "接敌准备",
+        "alert_beep_interval_sec": 1.0,
+        "alert_pulse": false,
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 2.0,
@@ -1203,7 +1230,7 @@
         "seal_room": true,
         "light_on_finish": true,
         "hunt_player": true,
-        "hud_countdown": false,
+        "hud_countdown": true,
         "stages": [
           {
             "monsters": [

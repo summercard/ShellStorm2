@@ -15,9 +15,9 @@ const EXPECTED_MULTIPLIER := {
 	"room_08": [1, 1, 1, 1, 1], "boss": [1, 1, 1, 1],
 }
 const WAVE_BOUNDS := {
-	"room_01": [[4, 4], [2, 2]], "room_02": [[3, 3], [4, 5]],
-	"room_05": [[6, 6], [16, 16], [9, 9]], "room_07": [[4, 4], [8, 8]],
-	"room_08": [[7, 7], [6, 7], [3, 3]], "boss": [[4, 4], [5, 5], [1, 2]],
+	"room_01": [[6, 6]], "room_02": [[7, 8]],
+	"room_05": [[31, 31]], "room_07": [[12, 12]],
+	"room_08": [[16, 17]], "boss": [[4, 4], [5, 5], [1, 2]],
 }
 # 历史证据：跨高度整体AABB误封平台时的旧测量，不要求修复后继续偏移。
 const LEGACY_DRIFT_EVIDENCE := {"room_08": {4: 20.0}, "boss": {0: 11.07, 3: 4.81}}
@@ -25,20 +25,20 @@ const LEGACY_DRIFT_EVIDENCE := {"room_08": {4: 20.0}, "boss": {0: 11.07, 3: 4.81
 const PINNED_DRIFT := {"room_08": {4: 20.0}}
 const BOSS_LOCAL_SHIFT_LIMIT_M := 5.0
 const TRIGGER_EXPECTED := {
-	"room_03": {"shape": "circle", "entry": "west", "entry_target": "room_02", "exit": "east", "exit_target": "room_04", "intermission": 3.0, "cap": 8, "waves": [
-		{"fat_zombie03": 1}, {"ranged_caster": 2, "melee_chaser": 6}, {"fat_zombie03": 2, "ranged_caster": 3, "melee_chaser": 6}]},
-	"room_04": {"shape": "band", "entry": "west", "entry_target": "room_03", "exit": "north", "exit_target": "room_05", "intermission": 2.5, "cap": 6, "waves": [
+	"room_03": {"shape": "door_entries", "intermission": 3.0, "cap": 8, "waves": [
+		{"ranged_caster": 1, "melee_chaser": 4}, {"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 4}, {"fat_zombie03": 2, "ranged_caster": 2, "melee_chaser": 4}]},
+	"room_04": {"shape": "door_entries", "intermission": 2.5, "cap": 6, "waves": [
 		{"ranged_caster": 2, "melee_chaser": 4}, {"ranged_caster": 2, "melee_chaser": 4}]},
-	"room_06": {"shape": "band", "entry": "south", "entry_target": "room_05", "exit": "north", "exit_target": "room_07", "intermission": 2.5, "cap": 10, "waves": [
+	"room_06": {"shape": "door_entries", "intermission": 2.5, "cap": 10, "waves": [
 		{"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 5},
 		{"fat_zombie03": 1, "melee_chaser_strong": 1, "ranged_caster": 2, "melee_chaser": 5},
 		{"fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster_strong": 1, "ranged_caster": 3, "melee_chaser": 6}]},
-	"room_09": {"shape": "band", "entry": "east", "entry_target": "room_08", "exit": "west", "exit_target": "room_10", "intermission": 2.5, "cap": 12, "waves": [
+	"room_09": {"shape": "door_entries", "intermission": 2.5, "cap": 12, "waves": [
 		{"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 5},
 		{"fat_zombie03": 1, "melee_chaser_strong": 1, "ranged_caster": 3, "melee_chaser": 6},
 		{"fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster_strong": 1, "ranged_caster": 3, "melee_chaser": 6},
 		{"fat_zombie03": 2, "melee_chaser_strong": 2, "ranged_caster_strong": 1, "ranged_caster": 4, "melee_chaser": 7}]},
-	"room_10": {"shape": "band", "entry": "east", "entry_target": "room_09", "exit": "north", "exit_target": "boss", "intermission": 2.0, "cap": 5, "waves": [
+	"room_10": {"shape": "door_entries", "intermission": 2.0, "cap": 5, "waves": [
 		{"ranged_caster": 1, "melee_chaser": 4}, {"ranged_caster": 1, "melee_chaser": 4}]},
 }
 
@@ -72,6 +72,11 @@ func _ready() -> void:
 	if not failures.is_empty():
 		_finish()
 		return
+	if "--preplaced-unit-only" in OS.get_cmdline_user_args():
+		_verify_preplaced_validator()
+		_verify_preplaced_unit()
+		_finish()
+		return
 	BaseManager.data = BaseData.new()
 	BaseManager.save_path = "user://spawn_ramp_%d.json" % OS.get_process_id()
 	tower = SCENE.instantiate() as TowerDescent3D
@@ -91,6 +96,13 @@ func _ready() -> void:
 		return
 	print("SPAWN_RAMP_RUNTIME_READY")
 	tower.set_process(false)
+	if "--preplaced-only" in OS.get_cmdline_user_args():
+		tower.player.set_physics_process(false)
+		tower.get_node("ActiveEnemies").process_mode = Node.PROCESS_MODE_DISABLED
+		_verify_preplaced_validator()
+		await _verify_preplaced_no_kills()
+		_finish()
+		return
 	for value in tower._room_by_id.values():
 		var room := value as DungeonRoom3D
 		room.ensure_shell_built()
@@ -111,6 +123,146 @@ func _ready() -> void:
 	_verify_legacy_trigger_compatibility()
 	_verify_endpoints_and_negative_controls()
 	_finish()
+
+func _verify_preplaced_validator() -> void:
+	var valid := {"spawn_mode": "preplaced", "intermission_sec": 0.0, "min_player_distance_m": 6.0, "stages": [{"boxes": [0]}]}
+	_check(LevelPlanValidator._validate_encounter({"encounter": valid}, "fixture", 1).is_empty(), "预置模式合法数据可通过")
+	for mutation in [{"spawn_mode": "typo"}, {"spawn_mode": true}, {"trigger": {"shape": "circle"}}, {"intermission_sec": 1.0}, {"min_player_distance_m": -1.0}, {"stages": [{"boxes": [0]}, {"boxes": [0]}]}]:
+		var invalid := valid.duplicate(true)
+		invalid.merge(mutation, true)
+		_check(not LevelPlanValidator._validate_encounter({"encounter": invalid}, "fixture", 1).is_empty(), "预置负向数据必须拒绝：%s" % mutation)
+
+
+func _verify_preplaced_unit() -> void:
+	var room := DungeonRoom3D.new()
+	room.room_id = "preplaced_unit"
+	room.room_type = "COMBAT"
+	room.custom_dimensions = Vector2(30, 30)
+	room.encounter = {"spawn_mode": "preplaced", "intermission_sec": 0.0, "min_player_distance_m": 0.0}
+	add_child(room)
+	var compiler := CompilerProbe.new()
+	var raw := {"box": "box_center_elite", "center_m": [2.5, 2.5], "delay_sec": 2.0, "count_bonus": 2, "spawn_overrides": [{"type": "melee_chaser", "count": 1, "delay_sec": 0.5}, {"type": "melee_chaser_strong", "count": 1}]}
+	var entries: Array[Dictionary] = []
+	compiler._collect_box_stage_entries(room, [raw], 0, 1, 0, RandomNumberGenerator.new(), entries)
+	_check(entries.size() == 4, "紧盒编译4只不截断")
+	for entry in entries:
+		_check(entry["spawn_delay_sec"] == 0.0, "预置必须覆盖实例及共享条目延迟")
+	var pick := compiler._preselect_preplaced_room(room, entries)
+	_check(pick.ok and (pick.positions as Array).size() == 4, "4x4盒按2米间距一次排满4只")
+	var pool: Array[Vector3] = []
+	for x in range(-4, 5):
+		for z in range(-6, 7):
+			pool.append(room.to_global(Vector3(x, 0, z)))
+	var dense := room.preplaced_points_in_box(pool, 16, 1.7, Vector3.INF, 0.0, [], 77)
+	_check(dense.size() == 16, "小盒intrinsic按真实身体1.7米排满16，不用2.4米离墙口径")
+	for index in dense.size():
+		for previous in dense.slice(0, index):
+			_check(dense[index].distance_to(previous) >= 1.7 - 0.001, "密集盒身体不重叠")
+	var legacy := room.encounter
+	room.encounter = {}
+	var old: Array[Dictionary] = []
+	compiler._collect_box_stage_entries(room, [raw], 0, 1, 0, RandomNumberGenerator.new(), old)
+	_check(old[0]["spawn_delay_sec"] == 2.5 and not old[0].has("spawn_preplaced_box"), "旧默认模式延迟与能力键不变")
+	room.encounter = legacy
+	var broken := entries.duplicate(true)
+	broken[0].erase("spawn_preplaced_box")
+	_check(not compiler._preselect_preplaced_room(room, broken).ok, "负向缺编译键不走旧延迟")
+	broken = entries.duplicate(true)
+	broken[0]["spawn_delay_sec"] = 0.5
+	_check(not compiler._preselect_preplaced_room(room, broken).ok, "负向延迟编译必须拒绝")
+	broken = entries.duplicate(true)
+	broken[0]["spawn_safe_candidates"] = []
+	var rejected := compiler._preselect_preplaced_room(room, broken)
+	_check(not rejected.ok and rejected.error == "preplaced_capacity_insufficient" and not compiler._pending_delayed_spawns.has(room.room_id), "负向空盒容量显式拒绝，不创建temporal pending")
+	print("SPAWN_RAMP_PREPLACED_UNIT checks=%d failures=%d" % [checks, failures.size()])
+	compiler.free()
+	room.free()
+
+
+func _verify_preplaced_no_kills() -> void:
+	for key in ["room_01", "room_02", "room_05", "room_07", "room_08"]:
+		var room := tower._room_by_id[key] as DungeonRoom3D
+		var original := room.encounter.duplicate(true)
+		_check(room.encounter.get("spawn_mode", "") == "preplaced", "%s正式数据缺preplaced，不允许测试内补键" % key)
+		if room.encounter.get("spawn_mode", "") != "preplaced":
+			continue
+		room.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
+		room.ensure_shell_built()
+		room.ensure_detail_built()
+		await get_tree().physics_frame
+		var port := room.get_connection_port_by_id("A")
+		var position := room._placement_vec2(port["position_m"]) - room._placement_vec2(port["outward"]) * 3.5
+		tower.player.global_position = room.to_global(Vector3(position.x, 0.5, position.y))
+		var waves := tower._spawn_box_waves(room, maxi(1, tower.visual_theme.difficulty_rank), _floor_level(room))
+		_check(waves.size() == 1, "%s编译必须单波" % key)
+		if waves.size() != 1:
+			continue
+		var compiled: Array[Dictionary] = []
+		compiled.assign(waves[0])
+		var bounds: Array = WAVE_BOUNDS[key][0]
+		_check(compiled.size() >= int(bounds[0]) and compiled.size() <= int(bounds[1]), "%s编译数量不符" % key)
+		for entry in compiled:
+			_check(entry.get("spawn_delay_sec", -1.0) == 0.0 and entry.has("spawn_preplaced_box"), "%s共享盒条目及placement延迟均须归零" % key)
+		var missing := compiled.duplicate(true)
+		missing[0].erase("spawn_preplaced_box")
+		_check(not tower._preselect_preplaced_room(room, missing).ok, "%s负向丢编译能力键必须拒绝" % key)
+		var delayed := compiled.duplicate(true)
+		delayed[0]["spawn_delay_sec"] = 0.5
+		_check(not tower._preselect_preplaced_room(room, delayed).ok, "%s负向延迟回归必须拒绝" % key)
+		var impossible := compiled.duplicate(true)
+		impossible[0]["spawn_safe_candidates"] = []
+		_check(not tower._preselect_preplaced_room(room, impossible).ok and (tower._enemy_nodes_by_room.get(key, []) as Array).is_empty(), "%s负向空域不得半房提交" % key)
+		tower.force_enter_room_for_test(key)
+		room.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
+		var members: Array = tower._enemy_nodes_by_room.get(key, [])
+		print("SPAWN_RAMP_PREPLACED_COMMIT room=%s expected=%d actual=%d delayed=%d reserved=%d blocked=%s checks=%d" % [key, compiled.size(), members.size(), tower._pending_delayed_spawn_count(key), tower._reserved_spawn_count(key), tower._room_spawn_blocked.has(key), checks])
+		_check(not tower._room_spawn_blocked.has(key), "%s预置容量不足，见精确生产拒绝日志" % key)
+		if tower._room_spawn_blocked.has(key):
+			continue
+		_check(members.size() == compiled.size(), "%s首波实际全量实到 actual=%d expected=%d" % [key, members.size(), compiled.size()])
+		_check(tower._reserved_spawn_count(key) == 0 and (tower._pending_delayed_spawns.get(key, []) as Array).is_empty(), "%s提交后pending必须立即为空" % key)
+		var snapshot := {}
+		var occupied: Array[Vector3] = []
+		var box_points := {}
+		var configs_by_id := {}
+		for entry in compiled:
+			configs_by_id[entry["persistent_id"]] = entry
+		for enemy: Enemy3D in members:
+			var point := enemy.global_position
+			var config: Dictionary = configs_by_id[enemy.get_persistent_id()]
+			_check((config["spawn_safe_candidates"] as Array).has(point), "%s实体不得越出冻结resolved域" % key)
+			_check(Vector2(point.x - tower.player.global_position.x, point.z - tower.player.global_position.z).length() >= 6.0, "%s初始安全6m" % key)
+			for previous in occupied:
+				_check(point.distance_to(previous) >= 1.7 - 0.001, "%s跨盒身体不重叠" % key)
+			var box_index := int(config["spawn_preplaced_box"])
+			for previous: Vector3 in box_points.get(box_index, []):
+				_check(point.distance_to(previous) >= maxf(1.7, float(config["spawn_box_min_spacing_m"])) - 0.001, "%s盒内声明间距保留" % key)
+			if not box_points.has(box_index):
+				box_points[box_index] = []
+			box_points[box_index].append(point)
+			occupied.append(point)
+			snapshot[enemy.get_instance_id()] = point
+		# 不杀一只怪，保留所有占位；玩家越过初始区后等待真实计时器，而不是释放空间等补刷。
+		tower.player.global_position = room.to_global(Vector3(-position.x, 0.5, -position.y))
+		await get_tree().create_timer(2.1).timeout
+		var after: Array = tower._enemy_nodes_by_room.get(key, [])
+		_check(after.size() == snapshot.size(), "%s前进后不得新增实体" % key)
+		for enemy: Enemy3D in after:
+			_check(snapshot.has(enemy.get_instance_id()) and enemy.global_position.is_equal_approx(snapshot.get(enemy.get_instance_id(), Vector3.INF)), "%s存活怪身份与位置稳定，不追玩家迁移" % key)
+		_check(tower._reserved_spawn_count(key) == 0 and (tower._pending_delayed_spawns.get(key, []) as Array).is_empty(), "%s前进后pending仍空" % key)
+		_check(int(tower._room_wave_totals.get(key, 0)) == 1 and (tower._room_wave_queues.get(key, []) as Array).is_empty() and not room.cleared, "%s不杀怪无第二波且不发清房奖" % key)
+		_check(room.encounter == original, "%s不得覆盖生产encounter" % key)
+		print("SPAWN_RAMP_PREPLACED room=%s expected=%d actual=%d pending=0 no_kills=true stable=true checks=%d" % [key, compiled.size(), after.size(), checks])
+		# 足量、空pending及前进后稳定均验完，才单独驱动击杀出口检查清房，不借击杀腾位补刷。
+		for enemy: Enemy3D in after.duplicate():
+			tower._on_enemy_killed(enemy, enemy.get_enemy_data())
+			enemy.free()
+		await get_tree().create_timer(2.1).timeout
+		_check(room.cleared and int(tower._alive_by_room.get(key, -1)) == 0, "%s整群清完正式清房" % key)
+		_check((tower._enemy_nodes_by_room.get(key, []) as Array).is_empty() and (tower._room_wave_queues.get(key, []) as Array).is_empty() and not tower._wave_spawn_pending.has(key), "%s清完不出现第二波实体或波次预约" % key)
+		_check(tower._reserved_spawn_count(key) == 0 and (tower._pending_delayed_spawns.get(key, []) as Array).is_empty() and int(tower._room_wave_totals.get(key, 0)) == 1, "%s清完仍无延迟或预约且只有一波" % key)
+		print("SPAWN_RAMP_PREPLACED_CLEAR room=%s cleared=%s second_wave=false checks=%d" % [key, room.cleared, checks])
+
 
 func _finish() -> void:
 	for failure in failures:
@@ -168,7 +320,10 @@ func _verify_counts() -> void:
 func _replay_room(room: DungeonRoom3D, key: String) -> void:
 	var stages := tower._resolve_encounter_stages(room.encounter, room.spawn_placements.size())
 	var expected: Array = WAVE_BOUNDS[key]
-	_check(stages.size() == expected.size(), "%s生产波数漂移" % key)
+	_check(stages.size() == expected.size(), "%s生产阶段数漂移" % key)
+	if key != "boss":
+		_check(stages.size() == 1 and stages[0].size() == room.spawn_placements.size(), "%s普通房必须一次完整提交所有盒" % key)
+		_check(float(room.encounter.get("intermission_sec", -1)) == 0.0, "%s普通房间歇必须显式0" % key)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = tower.run_seed ^ room.room_id.hash() ^ 0x424f5831
 	var floor_number := maxi(1, tower.visual_theme.difficulty_rank)
@@ -185,6 +340,9 @@ func _replay_room(room: DungeonRoom3D, key: String) -> void:
 			var bounds := _design_bounds(_expected_box(raw), int(raw.get("count_bonus", 0)), int(raw.get("count_multiplier", 1)))
 			_check(actual.size() >= bounds["lo"] and actual.size() <= bounds["hi"], "%s#%d正式编译%d不在%d..%d，容量/名册/编译缺失" % [key, instance, actual.size(), bounds["lo"], bounds["hi"]])
 			_check(_id_realized(actual) == bounds["id"], "%s#%d正式身份实际%d!=%d，不能以配置占位冒充实到" % [key, instance, _id_realized(actual), bounds["id"]])
+			if key != "boss":
+				for config: Dictionary in actual:
+					_check(float(config.get("spawn_delay_sec", 0.0)) == 0.0, "%s#%d预置编译仍有延迟" % [key, instance])
 			_verify_box_domain(room, raw, actual, int(bounds["hi"]))
 			compiled_boxes += 1
 		counts.append(entries.size())
@@ -211,7 +369,11 @@ func _verify_strong_squad_overrides() -> void:
 				overrides += 1
 			for spawn: Dictionary in _expected_box(raw)["spawns"]:
 				_check(spawn["type"] != "elite", "%s仍声明失效唯一精英槽" % key)
-	_check(overrides == 4, "必须恰好四个实例声明替换")
+	_check(overrides == 5, "四个强化替换加05桥心延迟覆盖共五个实例")
+	var bridge := tower._room_by_id["room_05"] as DungeonRoom3D
+	var bridge_entries: Array[Dictionary] = []
+	tower._collect_box_stage_entries(bridge, bridge.spawn_placements, 4, 1, 0, RandomNumberGenerator.new(), bridge_entries)
+	_check(bridge_entries.size() == 16, "桥心延迟覆盖不得改变16只编成")
 	for item: Array in cases:
 		var room := tower._room_by_id[item[0]] as DungeonRoom3D
 		var index := int(item[1])
@@ -499,7 +661,13 @@ func _verify_trigger_encounters() -> void:
 		for field in ["completion", "stage_advance"]:
 			_check(e.get(field) == "clear" and compiled.get(field) == "clear", "%s:%s不是clear" % [key, field])
 		_check(bool(e.get("seal_room", false)) and bool(e.get("light_on_finish", false)) and bool(e.get("hunt_player", false)), "%s封门/开灯/猎杀开关漂移" % key)
-		_check(not bool(e.get("hud_countdown", true)) and not bool(compiled.get("hud_countdown", true)), "%s无截止遭遇不应显示倒计时" % key)
+		_check(bool(e.get("hud_countdown", false)) and bool(compiled.get("hud_countdown", false)), "%s准备HUD开关未透传" % key)
+		var preparation := 2.0 if key in ["room_04", "room_10"] else 3.0
+		var freeze := 1.0 if key == "room_03" else 0.0
+		_check(compiled.get("preparation_sec") == preparation and compiled.get("freeze_player_sec") == freeze, "%s准备/冻结未透传" % key)
+		_check(compiled.get("remote_spawn_policy") == "opposite_entry" and str(e.get("spawn_origin_port_id", "")).is_empty(), "%s远端必须按实际入口决定" % key)
+		for field in ["alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse"]:
+			_check(compiled.has(field) and compiled[field] == e[field], "%s:%s告警键未透传" % [key, field])
 		_check(compiled.get("max_alive") == expected["cap"] and compiled.get("intermission_sec") == expected["intermission"], "%s容量/间歇透传失败" % key)
 		_check(compiled.get("min_player_distance_m") == 6.0, "%s最小距离透传失败" % key)
 		var stages: Array = compiled.get("stages", [])
@@ -509,9 +677,9 @@ func _verify_trigger_encounters() -> void:
 			for monster: Dictionary in stages[i]["monsters"]:
 				actual[monster["type"]] = int(actual.get(monster["type"], 0)) + int(monster["count"])
 			_check(actual == expected["waves"][i], "%s波%d生产编成%s!=%s" % [key, i, actual, expected["waves"][i]])
-		_check(float(stages[0].get("at_sec", -1)) == 1.5, "%s首波准备未透传" % key)
+		_check(float(stages[0].get("at_sec", -1)) == preparation, "%s首波准备未透传或重复等待" % key)
 		if key == "room_03":
-			_check(stages[0]["monsters"][0].get("min_player_distance_m") == 8.0, "首胖8米丢失")
+			_check(stages[1]["monsters"][0].get("min_player_distance_m") == 8.0, "第二批首胖8米丢失")
 
 func _verify_legacy_trigger_compatibility() -> void:
 	var room := tower._room_by_id["room_03"] as DungeonRoom3D
@@ -531,15 +699,16 @@ func _verify_legacy_trigger_compatibility() -> void:
 func _verify_trigger_shape(key: String, room: DungeonRoom3D, trigger: Dictionary, expected: Dictionary) -> void:
 	var shape := str(trigger.get("shape", "circle"))
 	_check(shape == expected["shape"], "%s触发形状漂移" % key)
-	_check(room.door_targets.get(expected["entry"], "") == expected["entry_target"], "%s入口朝向漂移" % key)
-	_check(room.door_targets.get(expected["exit"], "") == expected["exit_target"], "%s出口朝向漂移" % key)
-	_check(trigger.get("offset_m", []) == [0.0, 0.0], "%s触发偏移漂移" % key)
-	if shape == "band":
-		var span := "z" if str(expected["entry"]) in ["west", "east"] else "x"
-		_check(trigger.get("axis") == span, "%s带轴与入口法线不匹配" % key)
-		var thickness := float(trigger.get("thickness_m", 0))
-		var dim := room.get_dimensions()
-		_check(thickness == 6.0 and thickness < (dim.x if span == "z" else dim.y), "%s触发带退化或厚度漂移" % key)
+	_check(trigger.get("port_ids", []) == ["A", "B"], "%s必须按运行时A/B门位触发" % key)
+	_check(trigger.get("inset_m") == 2.0 and trigger.get("depth_m") == 3.0, "%s入口条带尺寸漂移" % key)
+	for port_id in ["A", "B"]:
+		var port := room.get_connection_port_by_id(port_id)
+		_check(not port.is_empty() and not str(port.get("target", "")).is_empty(), "%s缺有效端口%s" % [key, port_id])
+		var position := room._placement_vec2(port.get("position_m", []))
+		var outward := room._placement_vec2(port.get("outward", []))
+		var local := position - outward * 3.0
+		var match_result := room.match_door_entry_trigger(trigger, room.to_global(Vector3(local.x, 0.5, local.y)))
+		_check(str(match_result.get("port_id", "")) == port_id, "%s端口%s内侧触发失效" % [key, port_id])
 
 func _check(ok: bool, message: String) -> void:
 	checks += 1

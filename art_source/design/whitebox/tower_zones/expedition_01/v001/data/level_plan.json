@@ -275,9 +275,8 @@
     "room_guarantees": [
       {
         "id": "exp01_opening_weapon_or_ammo",
-        "note": "业主 2026-11-09：「第一个房间的宝箱 / 第二个房间的宝箱，随机一个房间掉落」一把最低品质的霰弹枪或步枪，并且再掉一组 100 发普通弹药。候选房只放主路前两间，按 run_seed 稳定哈希挑一间 ⇒ 同一局读档不换房。「最低品质」= drop_grade blue（蓝 = 基础数值、无加成），由 ClearDropService.guaranteed_items_for_room() 定，ChestRewardService 写进箱子奖励；这是**额外追加**，不替换该箱原有的 2—3 件消耗品与 30% 命运卡掉落物。⚠ 候选房必须写**运行时 room_id**（`room_01` / `room_02`），不能写设计源初值 `f00_room_0N`：`FloorPlanGenerator.room_from_source()` 优先取 `legacy_room_id`，两个串不等会让 `guaranteed_items_for_room()` 恒返回空（2026-11-10 实测 13 间房 RUNTIME_HITS=0，箱内永远没有保底枪）。",
+        "note": "2026-11-11 最终冻结：首枪节点固定为room_02普通清房箱，一局一次追加恰好1把蓝色霰弹枪或步枪（稳定哈希二选一、锁定标准弹）和100发普通弹药。保留exp01_opening_weapon_or_ammo原ID；candidate_rooms仅用运行时ID room_02，不用f00_room_02。不再在01/02间随机选房，也不在room_02.additional_weapon重复发枪。保底沿原箱账冻结/恢复，不替换普通消耗品与该房100%命运凭据。",
         "candidate_rooms": [
-          "room_01",
           "room_02"
         ],
         "weapon_choices": [

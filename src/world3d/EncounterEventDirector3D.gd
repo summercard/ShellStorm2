@@ -32,7 +32,9 @@ const CONFIG_KEYS := [
 	"count", "interval_sec", "total_count", "max_alive", "intermission_sec", "min_player_distance_m",
 	"prereqs", "on_completed", "on_cancelled",
 	"leave_policy", "progress_mode", "follow_current_room", "stage_advance",
-	"hunt_player", "hud_countdown",
+	"hunt_player", "hud_countdown", "preparation_sec", "freeze_player_sec",
+	"trigger_port_id", "spawn_origin_port_id", "remote_spawn_policy",
+	"alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse",
 ]
 const STAGE_KEYS := ["at_sec", "at_ratio", "monsters"]
 const MONSTER_KEYS := ["type", "count", "content_id", "min_player_distance_m"]
@@ -80,6 +82,12 @@ func start(config: Dictionary) -> Dictionary:
 		"room_id": room_id,
 		"config": normalized.duplicate(true),
 		"elapsed": 0.0,
+		"stage_elapsed_sec": 0.0,
+		"preparation_total_sec": float(normalized.get("preparation_sec", 0.0)),
+		"preparation_remaining_sec": float(normalized.get("preparation_sec", 0.0)),
+		"preparation_active": float(normalized.get("preparation_sec", 0.0)) > 0.0,
+		"freeze_player_remaining_sec": float(normalized.get("freeze_player_sec", 0.0)),
+		"trigger_port_id": str(normalized.get("trigger_port_id", "")),
 		"paused": false,
 		"terminal": false,
 		"status": "active",
@@ -110,6 +118,7 @@ func start(config: Dictionary) -> Dictionary:
 			(stage_state["pending"] as Array).append(monster)
 		(state["stage_states"] as Array).append(stage_state)
 	_instances[instance_id] = state
+	_sync_input_hold(instance_id, state)
 	encounter_event_started.emit(get_snapshot(instance_id))
 	return {"ok": true, "instance_id": instance_id, "snapshot": get_snapshot(instance_id)}
 
@@ -124,6 +133,7 @@ func cancel(instance_id: String, reason: String = "cancelled", despawn := false)
 		_host_call("encounter_event_despawn", [instance_id, reason], {})
 	state["status"] = "cancelled"
 	state["terminal"] = true
+	_sync_input_hold(instance_id, state)
 	state["cancel_reason"] = reason
 	state["dropped"] = int(state.get("pending", 0))
 	state["pending"] = 0
@@ -139,13 +149,40 @@ func cancel(instance_id: String, reason: String = "cancelled", despawn := false)
 
 
 func get_snapshot(instance_id: String) -> Dictionary:
-	return (_instances.get(instance_id, {}) as Dictionary).duplicate(true)
+	return _presentation_snapshot(_instances.get(instance_id, {}) as Dictionary)
+
+
+func _presentation_snapshot(state: Dictionary) -> Dictionary:
+	var snapshot := state.duplicate(true)
+	if float(state.get("preparation_total_sec", 0.0)) <= 0.0:
+		# 旧HUD按字段存在性判新模式；未声明准备的事件不补造准备字段。
+		for key in ["preparation_total_sec", "preparation_remaining_sec", "preparation_active"]:
+			snapshot.erase(key)
+	else:
+		snapshot["alert_port_id"] = str(state.get("trigger_port_id", ""))
+	var config := state.get("config", {}) as Dictionary
+	# 只对显式选择新表现的事件投影；旧timer/旧准备表现保持原字段语义。
+	if config.has("alert_style") and config["alert_style"] in ["red_eva", "subtle"]:
+		snapshot["alert_phase"] = ""
+		snapshot["alert_remaining_sec"] = 0.0
+		snapshot["alert_total_sec"] = 0.0
+		if not bool(state.get("terminal", false)):
+			if float(state.get("preparation_remaining_sec", 0.0)) > 0.0:
+				snapshot["alert_phase"] = "preparation"
+				snapshot["alert_remaining_sec"] = float(state["preparation_remaining_sec"])
+				snapshot["alert_total_sec"] = float(state.get("preparation_total_sec", 0.0))
+			elif float(state.get("intermission_remaining_sec", 0.0)) > 0.0:
+				snapshot["alert_phase"] = "intermission"
+				snapshot["alert_remaining_sec"] = float(state["intermission_remaining_sec"])
+				snapshot["alert_total_sec"] = float(config.get("intermission_sec", 0.0))
+		snapshot["alert_port_id"] = str(state.get("trigger_port_id", ""))
+	return snapshot
 
 
 func get_snapshot_rows() -> Array:
 	var rows: Array = []
 	for value in _instances.values():
-		rows.append((value as Dictionary).duplicate(true))
+		rows.append(_presentation_snapshot(value as Dictionary))
 	return rows
 
 
@@ -204,7 +241,7 @@ func get_room_countdown_snapshot(room_id: String) -> Dictionary:
 			continue
 		if not bool((state.get("config", {}) as Dictionary).get("hud_countdown", false)):
 			continue
-		return state.duplicate(true)
+		return _presentation_snapshot(state)
 	return {}
 
 
@@ -269,8 +306,23 @@ func import_snapshot(snapshot: Dictionary) -> Dictionary:
 		row["stage_states"] = _normalize_stage_states(row, validation["config"] as Dictionary)
 		row["terminal"] = false
 		row["status"] = "active"
+		# 历史事件缺字段按无准备恢复，不能按新配置补演出或重刷。
+		row["preparation_total_sec"] = maxf(0.0, float(row.get("preparation_total_sec", 0.0)))
+		row["preparation_remaining_sec"] = clampf(float(row.get("preparation_remaining_sec", 0.0)), 0.0, float(row["preparation_total_sec"]))
+		row["preparation_active"] = float(row["preparation_remaining_sec"]) > 0.0
+		row["freeze_player_remaining_sec"] = clampf(float(row.get("freeze_player_remaining_sec", 0.0)), 0.0, float(row["preparation_remaining_sec"]))
+		row["stage_elapsed_sec"] = maxf(0.0, float(row.get("stage_elapsed_sec", row.get("elapsed", 0.0))))
+		if not (value as Dictionary).has("stage_elapsed_sec") and row.has("room_prepare_remaining_sec"):
+			var first_stage := ((validation["config"] as Dictionary).get("stages", []) as Array)[0] as Dictionary
+			row["stage_elapsed_sec"] = maxf(float(row["stage_elapsed_sec"]), float(first_stage.get("at_sec", 0.0)) - float(row["room_prepare_remaining_sec"]))
+		row.erase("room_prepare_remaining_sec")
+		row["trigger_port_id"] = str(row.get("trigger_port_id", config.get("trigger_port_id", "")))
 		imported[instance_id] = row
+	for old_id in _instances:
+		_host_call("encounter_event_input_hold", [str(old_id), false], null)
 	_instances = imported
+	for restored_id in _instances:
+		_sync_input_hold(str(restored_id), _instances[restored_id])
 	_next_instance_number = maxi(_next_instance_number, int(snapshot.get("next_instance_number", 1)))
 	return {"ok": true, "restored": _instances.size()}
 
@@ -314,6 +366,22 @@ static func validate_config(config: Dictionary) -> Dictionary:
 	var distance_value: Variant = config.get("min_player_distance_m", 0.0)
 	if not _finite_number(distance_value) or float(distance_value) < 0.0:
 		return _reject("min_player_distance_m_invalid")
+	for time_key in ["preparation_sec", "freeze_player_sec"]:
+		var time_value: Variant = config.get(time_key, 0.0)
+		if not _finite_number(time_value) or float(time_value) < 0.0:
+			return _reject("%s_invalid" % time_key)
+	if float(config.get("freeze_player_sec", 0.0)) > float(config.get("preparation_sec", 0.0)):
+		return _reject("freeze_exceeds_preparation")
+	if progress_mode == "external" and float(config.get("preparation_sec", 0.0)) > 0.0:
+		return _reject("external_preparation_not_supported")
+	for port_key in ["trigger_port_id", "spawn_origin_port_id"]:
+		if config.has(port_key) and not config[port_key] is String:
+			return _reject("%s_invalid" % port_key)
+	if config.get("remote_spawn_policy", "") not in ["", "opposite_entry"]:
+		return _reject("remote_spawn_policy_invalid")
+	var alert_validation := validate_alert_config(config)
+	if not bool(alert_validation.get("ok", false)):
+		return alert_validation
 	var no_deadline := duration == 0.0
 	if no_deadline and not (
 		completion == "clear" and stage_advance == "clear" and progress_mode == "tick"
@@ -374,6 +442,22 @@ static func validate_config(config: Dictionary) -> Dictionary:
 	return {"ok": true, "config": normalized}
 
 
+## 房间与事件共用四个表现字段校验；缺省值由消费者读取，不补造显式启用标记。
+static func validate_alert_config(config: Dictionary) -> Dictionary:
+	var style: Variant = config.get("alert_style", "subtle")
+	if not style is String or style not in ["red_eva", "subtle", "none"]:
+		return _reject("alert_style_invalid")
+	var text: Variant = config.get("alert_text", "")
+	if not text is String or text.length() > 80:
+		return _reject("alert_text_invalid")
+	var interval: Variant = config.get("alert_beep_interval_sec", 1.0)
+	if not _finite_number(interval) or float(interval) < 0.25 or float(interval) > 2.0:
+		return _reject("alert_beep_interval_sec_invalid")
+	if not config.get("alert_pulse", true) is bool:
+		return _reject("alert_pulse_invalid")
+	return {"ok": true}
+
+
 static func _finite_number(value: Variant) -> bool:
 	return (value is int or value is float) and is_finite(float(value))
 
@@ -391,6 +475,9 @@ func _step_instance(instance_id: String, state: Dictionary, delta: float) -> voi
 	var config := state.get("config", {}) as Dictionary
 	var room_id := str(state.get("room_id", ""))
 	var context := _context(room_id, instance_id)
+	if not bool(context.get("player_alive", true)) or not bool(context.get("run_active", true)):
+		cancel(instance_id, "player_dead" if not bool(context.get("player_alive", true)) else "run_ended", true)
+		return
 	var leave_policy := str(config.get("leave_policy", "pause"))
 	var current_room := str(context.get("current_room_id", ""))
 	var away := current_room != room_id
@@ -399,15 +486,28 @@ func _step_instance(instance_id: String, state: Dictionary, delta: float) -> voi
 		return
 	if leave_policy in ["pause", "follow_current_room"] and away and not bool(config.get("follow_current_room", false)):
 		state["paused"] = true
+		_sync_input_hold(instance_id, state)
 		_instances[instance_id] = state
 		return
 	state["paused"] = false
+	state["stage_elapsed_sec"] = float(state.get("stage_elapsed_sec", state.get("elapsed", 0.0))) + delta
+	var preparation := maxf(0.0, float(state.get("preparation_remaining_sec", 0.0)))
+	var preparation_step := minf(preparation, delta)
+	state["preparation_remaining_sec"] = maxf(0.0, preparation - preparation_step)
+	if is_zero_approx(float(state["preparation_remaining_sec"])):
+		state["preparation_remaining_sec"] = 0.0
+	state["preparation_active"] = float(state["preparation_remaining_sec"]) > 0.0
+	state["freeze_player_remaining_sec"] = maxf(0.0, float(state.get("freeze_player_remaining_sec", 0.0)) - delta)
+	if is_zero_approx(float(state["freeze_player_remaining_sec"])):
+		state["freeze_player_remaining_sec"] = 0.0
+	_sync_input_hold(instance_id, state)
+	if bool(state["preparation_active"]):
+		_instances[instance_id] = state
+		return
+	var battle_delta := delta - preparation_step
 	var no_deadline := _is_no_deadline(config)
-	if no_deadline:
-		# duration_sec=0 是「有限显式 stages、无截止」的模式，不推进时间轴。
-		state["elapsed"] = 0.0
-	else:
-		state["elapsed"] = minf(float(config["duration_sec"]), float(state.get("elapsed", 0.0)) + delta)
+	if not no_deadline:
+		state["elapsed"] = minf(float(config["duration_sec"]), float(state.get("elapsed", 0.0)) + battle_delta)
 	var remaining_intermission := maxf(0.0, float(state.get("intermission_remaining_sec", 0.0)))
 	state["intermission_remaining_sec"] = maxf(0.0, remaining_intermission - delta)
 	_dispatch_due_stages(instance_id, state)
@@ -434,14 +534,18 @@ func _dispatch_due_stages(instance_id: String, state: Dictionary) -> void:
 	var config := state.get("config", {}) as Dictionary
 	var stages: Array = config.get("stages", []) as Array
 	var elapsed := float(state.get("elapsed", 0.0))
+	var stage_elapsed := float(state.get("stage_elapsed_sec", elapsed))
 	var clear_gated := str(config.get("stage_advance", "time")) == "clear"
 	for index in stages.size():
 		var stage := stages[index] as Dictionary
 		var stage_state := (state["stage_states"] as Array)[index] as Dictionary
-		var threshold := 0.0 if _is_no_deadline(config) else float(stage.get("at_sec", 0.0))
+		var threshold := float(stage.get("at_sec", 0.0))
 		if stage.has("at_ratio"):
 			threshold = float(stage["at_ratio"]) * float(config["duration_sec"])
-		if not bool(stage_state.get("started", false)) and elapsed >= threshold:
+		var clock := stage_elapsed if not stage.has("at_ratio") and (_is_no_deadline(config) or float(state.get("preparation_total_sec", 0.0)) > 0.0) else elapsed
+		if clear_gated and not bool(stage_state.get("started", false)) and clock < threshold:
+			break
+		if not bool(stage_state.get("started", false)) and clock >= threshold:
 			# `clear` 模式：时间到之外，还要求上一阶段已派发完、场上清空且间歇结束。
 			if clear_gated and index > 0:
 				var previous := (state["stage_states"] as Array)[index - 1] as Dictionary
@@ -492,7 +596,11 @@ func _spawn_pending_stage(instance_id: String, state: Dictionary, stage_index: i
 		]
 		if not monster.has("min_player_distance_m"):
 			monster["min_player_distance_m"] = float(config.get("min_player_distance_m", 0.0))
-		var result := _host_call("encounter_event_spawn", [instance_id, str(state["room_id"]), monster, amount], {}) as Dictionary
+		var spawn_spec := monster.duplicate(true)
+		spawn_spec["trigger_port_id"] = str(state.get("trigger_port_id", ""))
+		spawn_spec["spawn_origin_port_id"] = str(config.get("spawn_origin_port_id", ""))
+		spawn_spec["remote_spawn_policy"] = str(config.get("remote_spawn_policy", ""))
+		var result := _host_call("encounter_event_spawn", [instance_id, str(state["room_id"]), spawn_spec, amount], {}) as Dictionary
 		monster.erase("_persistent_id_base")
 		var spawned := clampi(int(result.get("spawned", 0)), 0, amount)
 		if bool(result.get("retryable", false)) and spawned <= 0:
@@ -553,6 +661,7 @@ func _finish_instance(instance_id: String, state: Dictionary, status: String) ->
 	if bool(state.get("terminal", false)):
 		return
 	state["terminal"] = true
+	_sync_input_hold(instance_id, state)
 	state["status"] = status
 	state["result"] = {
 		"status": status, "requested": state["requested"], "spawned": state["spawned"],
@@ -856,6 +965,11 @@ static func _stage_pending_total(pending: Array) -> int:
 		var monster := monster_value as Dictionary
 		total += maxi(0, int(monster.get("count", 0)) - int(monster.get("_spawned", 0)))
 	return total
+
+
+func _sync_input_hold(instance_id: String, state: Dictionary) -> void:
+	var held := not bool(state.get("terminal", false)) and not bool(state.get("paused", false)) and float(state.get("freeze_player_remaining_sec", 0.0)) > 0.0
+	_host_call("encounter_event_input_hold", [instance_id, held], null)
 
 
 func _host_call(method: String, args: Array, fallback: Variant) -> Variant:

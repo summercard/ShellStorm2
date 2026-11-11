@@ -40,12 +40,15 @@ def main():
                   '_spawn_reach_key', '_spawn_reach_contains',
                   'choose_safe_spawn_position', 'is_safe_spawn_position_valid',
                   '_prepare_safe_spawn_selection', '_safe_spawn_geometry_valid',
-                  '_safe_spawn_distances_valid', '_spawn_candidate_score']
+                  '_safe_spawn_distances_valid', '_spawn_candidate_score',
+                  '_placement_vec2', 'get_connection_port_by_id', 'match_door_entry_trigger',
+                  'get_encounter_spawn_candidates']
     constants = '\n'.join(re.findall(r'^const (?:SPAWN_CLEARANCE_M|SPAWN_BOSS_CLEARANCE_M|SPAWN_BODY_HEIGHT_M|SPAWN_GROUND_TOP_MAX_M|SPAWN_MAX_POINTS|SPAWN_REACH_GRID_M) := .+$', room, re.M))
-    room_code = constants + '''
+    room_code = 'const TOWER_GEOMETRY = {"DOOR_CLEAR_WIDTH_M":2.2}\n' + constants + '''
 var room_id := "test_room"
 var room_type := "COMBAT"
 var room_seed := 11
+var connection_ports: Array = []
 var custom_dimensions := Vector2(30, 30)
 var authored_layout_instances: Array = []
 var enemy_spawn_points: Array[Vector3] = []
@@ -89,6 +92,8 @@ class FakeDungeon extends Node3D:
 	var _room_spawn_blocked := {}
 	var _enemy_nodes_by_room := {}
 	var _alive_by_room := {}
+	var _reserved_room_spawns := {}
+	var _pending_delayed_spawns := {}
 	var player: Node3D
 	var visual_theme := {"difficulty_rank": 1}
 	var generated := 0
@@ -210,6 +215,36 @@ func run() -> void:
 	bridge.custom_dimensions = Vector2.ONE
 	var impossible: Dictionary = bridge.choose_safe_spawn_position()
 	check(not impossible.ok and not impossible.retryable and impossible.reason == "spawn_position_failed", "恒无合法空间保留硬失败而非无限重试")
+	room.connection_ports = [
+		{"port_id":"west", "position_m":[-15.0,0.0], "outward":[-1.0,0.0], "door_width_m":5.0},
+		{"port_id":"east", "position_m":[15.0,0.0], "outward":[1.0,0.0], "door_width_m":5.0}]
+	var trigger := {"shape":"door_entries", "port_ids":["west","east"], "inset_m":2.0, "depth_m":3.0}
+	check(room.match_door_entry_trigger(trigger, room.to_global(Vector3(-12,0,2.4))).port_id == "west", "旋转根下门宽内命中西入口")
+	check(room.match_door_entry_trigger(trigger, room.to_global(Vector3(12,0,-2.4))).port_id == "east", "另一入口OR命中")
+	check(not room.match_door_entry_trigger(trigger, room.to_global(Vector3(-12,0,2.6))).hit, "门宽外不误命中")
+	check(not room.match_door_entry_trigger(trigger, room.to_global(Vector3(-14,0,0))).hit, "尚未内缩不触发")
+	check(not room.match_door_entry_trigger(trigger, room.to_global(Vector3.ZERO)).hit, "房心不冒充入口")
+	room.connection_ports[0].door_width_m = 0.0
+	check(room.match_door_entry_trigger(trigger, room.to_global(Vector3(-12,0,1.0))).hit and not room.match_door_entry_trigger(trigger, room.to_global(Vector3(-12,0,1.2))).hit, "旧零宽端口沿用真实2.2米门洞净宽")
+	room.connection_ports[0].door_width_m = 5.0
+	for entry in ["west", "east"]:
+		var candidates := room.get_encounter_spawn_candidates(entry, "", "opposite_entry")
+		check(not candidates.is_empty(), "反入口候选域非空:" + entry)
+		for candidate in candidates:
+			check(room.to_local(candidate).x >= -0.001 if entry == "west" else room.to_local(candidate).x <= 0.001, "候选不能漏回入口半区")
+	var remote_candidates := room.get_encounter_spawn_candidates("west", "east", "opposite_entry")
+	check(not remote_candidates.is_empty(), "指定远端端口内侧带有候选")
+	for candidate in remote_candidates:
+		check(room.to_local(candidate).x >= 4.49, "远端带不扩为整房")
+	check(room.get_encounter_spawn_candidates("missing", "", "opposite_entry").is_empty(), "未知入口无候选不回退")
+	dungeon.mode = "ok"
+	var generated_before := dungeon.generated
+	var remote_retry := host.encounter_event_spawn("remote", room.room_id, {"type":"melee_chaser", "trigger_port_id":"west", "remote_spawn_policy":"opposite_entry", "min_player_distance_m":1000}, 8)
+	check(remote_retry.ok and remote_retry.spawned == 0 and remote_retry.retryable and dungeon.generated == generated_before, "远端无合法点pending且不耗随机")
+	var remote_batch := host.encounter_event_spawn("remote", room.room_id, {"type":"melee_chaser", "trigger_port_id":"west", "spawn_origin_port_id":"east", "remote_spawn_policy":"opposite_entry", "min_player_distance_m":6}, 8)
+	check(remote_batch.ok and remote_batch.spawned > 0 and remote_batch.spawned <= 8, "远端安全子批支持容量分批")
+	var empty_remote := host.encounter_event_spawn("remote", room.room_id, {"type":"melee_chaser", "trigger_port_id":"missing", "remote_spawn_policy":"opposite_entry"}, 1)
+	check(empty_remote.ok and empty_remote.spawned == 0 and empty_remote.retryable, "空远端域必须保留pending不回房心")
 	print("ENCOUNTER_SAFE_SELECTION_BASELINE checks=%d failures=%d" % [checks, failures])
 	var multi := Room.new()
 	dungeon.add_child(multi)
@@ -324,7 +359,7 @@ def run_isolated(command, output_dir, marker, timeout):
             process.wait(timeout=5)
     text = log.read_text(encoding='utf-8', errors='replace')
     for line in text.splitlines():
-        if any(token in line for token in ('SAFE_SELECTION', 'BOSS_BOX', 'FAIL:', 'SCRIPT ERROR', 'ERROR:', 'Parse Error')):
+        if any(token in line for token in ('ENCOUNTER_', 'SAFE_SELECTION', 'BOSS_BOX', 'FAIL:', 'SCRIPT ERROR', 'ERROR:', 'Parse Error')):
             print(line)
     print('日志', log, '退出码', code, '子树残留', [p.pid for p in residual])
     return 0 if code == 0 and marker in text and not residual and not any(t in text for t in ('SCRIPT ERROR', 'ERROR:', 'FAIL:')) else 1

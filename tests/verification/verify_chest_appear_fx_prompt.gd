@@ -40,11 +40,12 @@ func _ready() -> void:
 	await _case_room_entry_wiring()
 	await _case_loot_light()
 	await _case_prompt_yields_on_focus()
+	await _case_spotlight_unfolds()
 	if _failures.is_empty():
 		print(
 			"CHEST_APPEAR_FX_PROMPT_OK: appear fx uses teleport-in / size / gold tint / ground lift; "
 			+ "room entry plays it once; loot light binds to model without shadow; "
-			+ "prompt yields to interaction dot on focus and stays hidden after open"
+			+ "prompt stays hidden; both tiers unfold over 0.42s; interrupted unfold closes without jumping; restored open chest stays dark"
 		)
 		get_tree().quit(0)
 		return
@@ -305,6 +306,50 @@ func _case_prompt_yields_on_focus() -> void:
 # ---------------------------------------------------------------------------
 # 工具
 # ---------------------------------------------------------------------------
+
+## 初帧关闭 → 中段展开 → 完整点亮；覆盖两档及开启途中收灯。
+func _case_spotlight_unfolds() -> void:
+	for tier in ["normal", "advanced"]:
+		var chest := _make_chest({"chest_tier": tier})
+		add_child(chest)
+		var stage := chest.get_node_or_null("ChestSpotlightStage") as Node3D
+		_expect(stage != null, "缺少聚光灯容器：%s" % tier)
+		if stage == null:
+			chest.queue_free()
+			continue
+		var spot := stage.get_node("ChestSpotlight") as SpotLight3D
+		var key := stage.get_node("ChestSpotlightKeyLight") as OmniLight3D
+		_expect(is_zero_approx(spot.light_energy) and is_zero_approx(key.light_energy), "聚光灯初帧不能直接全亮")
+		_expect(is_equal_approx(stage.scale.x, 0.04), "聚光灯初帧应收窄至4%")
+		await _wait(0.18)
+		_expect(stage.scale.x > 0.04 and stage.scale.x < 1.0, "展开中段应处于初态和终态之间")
+		_expect(spot.light_energy > 0.0 and spot.light_energy < 7.0, "聚光灯亮度应同步渐亮")
+		await _wait(0.34)
+		_expect(is_equal_approx(stage.scale.x, 1.0), "0.42秒后光束应完全展开")
+		_expect(is_equal_approx(spot.light_energy, 7.0) and is_equal_approx(key.light_energy, 2.0), "开灯终态亮度不正确")
+		chest.call("_dismiss_chest_spotlight")
+		await _wait(0.40)
+		_expect(not is_instance_valid(stage), "收灯结束必须释放全部光效")
+		chest.queue_free()
+		await get_tree().process_frame
+	var interrupted := _make_chest()
+	add_child(interrupted)
+	await _wait(0.12)
+	var interrupted_stage := interrupted.get_node("ChestSpotlightStage") as Node3D
+	var before := interrupted_stage.scale.x
+	interrupted.call("_dismiss_chest_spotlight")
+	_expect(is_equal_approx(interrupted_stage.scale.x, before), "开启中被关闭不能跳到全亮")
+	await _wait(0.40)
+	_expect(not is_instance_valid(interrupted_stage), "中断展开后必须正常收灯")
+	interrupted.queue_free()
+	var restored := _make_chest()
+	add_child(restored)
+	restored.restore_opened_state(true)
+	await _wait(0.10)
+	_expect(restored.get_node_or_null("ChestSpotlightStage") == null, "读档已开箱不得闪亮")
+	restored.queue_free()
+	await get_tree().process_frame
+
 
 func _make_chest(overrides := {}) -> TreasureChest3D:
 	var config := {"id": "probe_appear_fx", "quality": "common", "chest_tier": "normal"}

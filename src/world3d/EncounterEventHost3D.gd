@@ -9,6 +9,11 @@ var _elite_spawn_serial := 0
 func _init(owner: Dungeon3D = null) -> void:
 	dungeon = owner
 
+func encounter_event_input_hold(instance_id: String, held: bool) -> void:
+	if _valid():
+		dungeon.set_scripted_input_hold(held, false, "encounter:%s" % instance_id)
+
+
 func encounter_event_current_room_id() -> String:
 	return dungeon._current_room_id if _valid() else ""
 
@@ -41,8 +46,12 @@ func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: D
 		return {"ok": false, "reason": "host_unavailable"}
 	var room := dungeon._room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or not room.is_streamed():
+		if room != null and (not str(monster_spec.get("remote_spawn_policy", "")).is_empty() or not str(monster_spec.get("spawn_origin_port_id", "")).is_empty()):
+			return {"ok": true, "spawned": 0, "retryable": true}
 		return {"ok": false, "reason": "room_not_streamed"}
 	if dungeon._room_spawn_blocked.has(room_id):
+		if not str(monster_spec.get("remote_spawn_policy", "")).is_empty() or not str(monster_spec.get("spawn_origin_port_id", "")).is_empty():
+			return {"ok": true, "spawned": 0, "retryable": true}
 		return {"ok": false, "reason": "spawn_position_failed", "failed": true}
 	var min_distance := float(monster_spec.get("min_player_distance_m", 0.0))
 	var player_world := dungeon.player.global_position if is_instance_valid(dungeon.player) else Vector3.INF
@@ -51,11 +60,27 @@ func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: D
 		var enemy := value as Enemy3D
 		if is_instance_valid(enemy) and not enemy.is_queued_for_deletion() and enemy.ai_state != "dead":
 			occupied.append(enemy.global_position)
+	for request: Dictionary in dungeon._reserved_room_spawns.get(room_id, []):
+		for point: Vector3 in request.get("positions", []):
+			occupied.append(point)
+	for entry: Dictionary in dungeon._pending_delayed_spawns.get(room_id, []):
+		if entry.get("position") is Vector3:
+			occupied.append(entry["position"])
+	var candidates: Variant = null
+	var remote_policy := str(monster_spec.get("remote_spawn_policy", ""))
+	var origin_port_id := str(monster_spec.get("spawn_origin_port_id", ""))
+	var restricted := not remote_policy.is_empty() or not origin_port_id.is_empty()
+	if restricted:
+		candidates = room.get_encounter_spawn_candidates(str(monster_spec.get("trigger_port_id", "")), origin_port_id, remote_policy)
 	var positions: Array = []
-	# 整批先预选；任何一只暂时排不下，均不生成配置、不预约精英、不消耗编成 RNG。
+	# 远端域可用子批逐步涌入，旧事件保持原整批事务语义。
 	for _index in count:
-		var selection := room.choose_safe_spawn_position(player_world, min_distance, occupied)
+		var selection := room.choose_safe_spawn_position(player_world, min_distance, occupied, candidates)
 		if not bool(selection.get("ok", false)):
+			if restricted:
+				if positions.is_empty():
+					return {"ok": true, "spawned": 0, "retryable": true}
+				break
 			if bool(selection.get("retryable", false)):
 				# 排除玩家与旧怪后仍装不下整批，属恒无解，不能永远假称临时拥挤。
 				var intrinsic: Array[Vector3] = []
@@ -71,6 +96,7 @@ func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: D
 		var point: Vector3 = selection["position"]
 		positions.append(point)
 		occupied.append(point)
+	count = positions.size()
 	var configs: Array[Dictionary] = []
 	for index in count:
 		_elite_spawn_serial += 1

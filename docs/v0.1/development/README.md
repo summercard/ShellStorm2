@@ -1,3 +1,5 @@
+- [宝箱聚光灯出现动画收口](2026-11-11_chest_spotlight_appear.md)：冻结主线程实现口径为0.42秒 SINE EASE_OUT，水平缩放0.04到1，并同步淡入光柱、地面光斑、真实聚光灯与补光；关闭中断开启并从当前进度收灯，已开箱读档不闪亮。只同步普通/advanced两条既有道具账本备注与域日志；不改src或tests，运行时实现与专项验收留给主线程。文档检查本次新增断链0条，仓库既有断链保留。
+
 - [远征01十三房节奏、奖励与框架登记](2026-11-11_expedition01_flow.md)：批准方案沿既有FeatureID接入；服务/接线已实现待验收，真实整关联调pending。奖励与集成专项、Python数据、安全刷点/容量检查已登记；记录§4留主线程补运行结果位置；文档总门禁仅11条旧断链、新增0，Feature追溯/专项登记/解耦静态检查通过，不代签整关。首通提示按主线钥匙未取得判断、失败重试仍提示；Boss8秒返航不改，视听未验。不提交推送。
 
 - [远征01隐藏房间外围封闭与空门洞修订](2026-11-10_secret_branch_wall_closure.md)：`SecretBranch3D` 已在 `ensure_shell_built` 后递归收口正式房壳，按真实地砖边界封外围、保留真实门槽，并移除碰撞净空内 `safe_box_proxy` 半隔断/陈设；新增 A31/A32 与 `probe_secret_branch_wall_gaps`。默认 12 样本、full-flow 无头验收通过，撤离房不开普通门，其余房间覆盖东单/西单/双门；最终版 `final_full_level.log` 输出 `SECRET_BRANCH_WALL_GAPS_OK rooms=7`，exit 0，1900 条 UID 警告，0 `SCRIPT ERROR`/`ERROR`。负向删除撤离房补墙故障，按预期只使 A31 变红、A32 正常；文档门禁 exit 1 的 11 条断链均为既有问题，本事务新增链接 0 条断链。外围与门净空无头验收通过，表现待真机；A12/A13 未实现，不宣称 WORLD-SECRET 完结。

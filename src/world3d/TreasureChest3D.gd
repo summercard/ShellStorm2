@@ -140,13 +140,16 @@ const CHEST_SPOTLIGHT_BEAM_APEX_RADIUS_M := 0.09
 const CHEST_SPOTLIGHT_BEAM_STRENGTH := 0.230
 const CHEST_SPOTLIGHT_POOL_RADIUS_M := 1.75
 const CHEST_SPOTLIGHT_POOL_ALPHA := 0.96
+const CHEST_SPOTLIGHT_APPEAR_DURATION_S := 0.42
 const CHEST_SPOTLIGHT_DISMISS_DURATION_S := 0.30
 const CHEST_SPOTLIGHT_DISMISS_END_SCALE := 0.04
 const NORMAL_CHEST_SPOTLIGHT_COLOR := Color(1.0, 0.78, 0.08)
+const SPOTLIGHT_BEAM_SHADER := preload("res://assets/shaders/chest_spotlight_beam.gdshader")
 const ADVANCED_CHEST_SPOTLIGHT_COLOR := Color(0.72, 0.08, 0.16)
 
 var _chest_spotlight_stage: Node3D
 var _chest_spotlight_dismiss_tween: Tween
+var _chest_spotlight_progress := 0.0
 
 const NORMAL_VISUAL_SCENE: PackedScene = preload(
 	"res://assets/art/items_weapons/props/reward_chests/runtime/prp_reward_chest_normal_root_top3d.tscn"
@@ -317,6 +320,7 @@ func get_interaction_candidate(_player: Player3D) -> Dictionary:
 ## `prompt` 仍保留在候选协议里，供交互控制器提取动作词；它不是世界空间文字牌。
 func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
 	# 保留协议入口，避免交互控制器为宝箱分叉。
+	pass
 	pass
 
 
@@ -790,14 +794,17 @@ func get_chest_snapshot() -> Dictionary:
 # ---------------------------------------------------------------------------
 
 func _build_visual() -> void:
-	var trim_color: Color = QUALITY_COLORS.get(quality, QUALITY_COLORS["common"])
-	var visual_scene := ADVANCED_VISUAL_SCENE if quality in ["rare", "epic"] else NORMAL_VISUAL_SCENE
+	# 宝箱模型档位只由 chest_tier 决定：普通房清怪掉落即使品质掷到 rare/epic，
+	# 仍然是普通黄色箱；只有 Boss 配置显式给 advanced，才使用高级酒红箱。
+	var trim_color: Color = ADVANCED_CHEST_SPOTLIGHT_COLOR if chest_tier == "advanced" else NORMAL_CHEST_SPOTLIGHT_COLOR
+	var visual_scene := ADVANCED_VISUAL_SCENE if chest_tier == "advanced" else NORMAL_VISUAL_SCENE
 	var visual := visual_scene.instantiate() as RewardChestVisual3D
 	if visual == null:
 		push_error("奖励宝箱视觉 Prefab 实例化失败")
 		return
 	add_child(visual)
-	visual.refresh_handles()
+	if not visual.is_node_ready():
+		visual.refresh_handles()
 	_visual_root = visual.visual_root
 	_lid_pivot = visual.lid_pivot
 	_glow = visual.glow
@@ -817,7 +824,7 @@ func _build_visual() -> void:
 	_build_loot_light()
 
 	var dimensions := Vector3(1.45, 1.18, 1.40)
-	if quality in ["rare", "epic"]:
+	if chest_tier == "advanced":
 		dimensions *= 1.2
 	var shape := BoxShape3D.new()
 	shape.size = dimensions + Vector3(0.30, 0.30, 0.30)
@@ -855,21 +862,8 @@ func _build_chest_spotlight() -> void:
 	_chest_spotlight_stage.name = "ChestSpotlightStage"
 	_chest_spotlight_stage.set_meta("reused_main_entry_spotlight", true)
 	add_child(_chest_spotlight_stage)
-	var color := ADVANCED_CHEST_SPOTLIGHT_COLOR if chest_tier == "advanced" or quality in ["rare", "epic"] else NORMAL_CHEST_SPOTLIGHT_COLOR
-	var beam_mesh := CylinderMesh.new()
-	beam_mesh.top_radius = CHEST_SPOTLIGHT_BEAM_APEX_RADIUS_M
-	beam_mesh.bottom_radius = CHEST_SPOTLIGHT_BEAM_BOTTOM_RADIUS_M
-	beam_mesh.height = CHEST_SPOTLIGHT_HEIGHT_M
-	beam_mesh.radial_segments = 48
-	beam_mesh.cap_top = false
-	beam_mesh.cap_bottom = false
-	var beam := MeshInstance3D.new()
-	beam.name = "ChestSpotlightBeam"
-	beam.mesh = beam_mesh
-	beam.material_override = _make_chest_spotlight_material(color)
-	beam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	beam.position.y = CHEST_SPOTLIGHT_HEIGHT_M * 0.5
-	_chest_spotlight_stage.add_child(beam)
+	var color := ADVANCED_CHEST_SPOTLIGHT_COLOR if chest_tier == "advanced" else NORMAL_CHEST_SPOTLIGHT_COLOR
+	_chest_spotlight_stage.add_child(_make_spotlight_beam(color))
 	var pool_mesh := CylinderMesh.new()
 	pool_mesh.top_radius = CHEST_SPOTLIGHT_POOL_RADIUS_M * 0.92
 	pool_mesh.bottom_radius = CHEST_SPOTLIGHT_POOL_RADIUS_M
@@ -908,15 +902,84 @@ func _build_chest_spotlight() -> void:
 	key_light.shadow_enabled = false
 	_chest_spotlight_stage.add_child(key_light)
 	key_light.position = Vector3(0.0, 0.84, 0.72)
+	# 在首个可渲染帧之前置零，避免全亮一帧再开始展开。
+	_apply_chest_spotlight_progress(0.0, _chest_spotlight_stage)
+	call_deferred("_play_chest_spotlight_appear")
 
-func _make_chest_spotlight_material(color: Color) -> ShaderMaterial:
-	var shader := Shader.new()
-	shader.code = "shader_type spatial; render_mode blend_add, unshaded, cull_disabled, depth_draw_never, shadows_disabled; uniform vec4 beam_color : source_color; uniform float beam_strength = 0.23; varying float h; void vertex(){h=clamp(VERTEX.y/5.2+0.5,0.0,1.0);} void fragment(){float v=smoothstep(0.0,0.78,h)*(1.0-smoothstep(0.82,1.0,h)); float c=pow(clamp(abs(dot(normalize(NORMAL),normalize(VIEW))),0.0,1.0),1.6); ALBEDO=beam_color.rgb; ALPHA=clamp(v*c*beam_strength,0.0,1.0);}"
+
+func _play_chest_spotlight_appear() -> void:
+	if not is_instance_valid(_chest_spotlight_stage):
+		return
+	# 恢复已开箱通常发生在 _ready 之后、deferred 之前，不允许旧空箱闪光。
+	if _opened:
+		_chest_spotlight_stage.queue_free()
+		_chest_spotlight_stage = null
+		return
+	if _chest_spotlight_dismiss_tween != null and _chest_spotlight_dismiss_tween.is_valid():
+		_chest_spotlight_dismiss_tween.kill()
+	_chest_spotlight_dismiss_tween = create_tween()
+	_chest_spotlight_dismiss_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_chest_spotlight_dismiss_tween.tween_method(
+		_apply_chest_spotlight_progress.bind(_chest_spotlight_stage),
+		0.0, 1.0, CHEST_SPOTLIGHT_APPEAR_DURATION_S
+	)
+
+
+## 开灯和收灯共用一个进度写者：不能两条动画同时抢缩放、材质与亮度。
+func _apply_chest_spotlight_progress(t: float, stage: Node3D) -> void:
+	if not is_instance_valid(stage):
+		return
+	_chest_spotlight_progress = t
+	var spread := lerpf(CHEST_SPOTLIGHT_DISMISS_END_SCALE, 1.0, t)
+	stage.scale = Vector3(spread, 1.0, spread)
+	var spot := stage.get_node_or_null("ChestSpotlight") as SpotLight3D
+	if spot != null:
+		spot.light_energy = CHEST_SPOTLIGHT_ENERGY * t
+	var key := stage.get_node_or_null("ChestSpotlightKeyLight") as OmniLight3D
+	if key != null:
+		key.light_energy = 2.0 * t
+	var beam := stage.get_node_or_null("ChestSpotlightBeam") as MeshInstance3D
+	if beam != null:
+		var mat := beam.material_override as ShaderMaterial
+		if mat != null:
+			mat.set_shader_parameter("beam_strength", CHEST_SPOTLIGHT_BEAM_STRENGTH * t)
+	var pool := stage.get_node_or_null("ChestSpotlightPool") as MeshInstance3D
+	if pool != null:
+		var pool_mat := pool.get_active_material(0) as StandardMaterial3D
+		if pool_mat != null:
+			pool_mat.albedo_color.a = CHEST_SPOTLIGHT_POOL_ALPHA * t
+
+
+static func _make_spotlight_beam(color: Color) -> MeshInstance3D:
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = CHEST_SPOTLIGHT_BEAM_APEX_RADIUS_M
+	mesh.bottom_radius = CHEST_SPOTLIGHT_BEAM_BOTTOM_RADIUS_M
+	mesh.height = CHEST_SPOTLIGHT_HEIGHT_M
+	mesh.radial_segments = 48
+	mesh.cap_top = false
+	mesh.cap_bottom = false
 	var material := ShaderMaterial.new()
-	material.shader = shader
+	material.shader = SPOTLIGHT_BEAM_SHADER
 	material.set_shader_parameter("beam_color", color)
 	material.set_shader_parameter("beam_strength", CHEST_SPOTLIGHT_BEAM_STRENGTH)
-	return material
+	var beam := MeshInstance3D.new()
+	beam.name = "ChestSpotlightBeam"
+	beam.mesh = mesh
+	beam.material_override = material
+	beam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	beam.position.y = CHEST_SPOTLIGHT_HEIGHT_M * 0.5
+	return beam
+
+
+## 给读条相机看一帧正式材质。样本没有 Area、交互、奖励账或真实灯光。
+static func make_render_warmup_sample() -> Node3D:
+	var sample := Node3D.new()
+	for scene in [NORMAL_VISUAL_SCENE, ADVANCED_VISUAL_SCENE]:
+		var visual := (scene as PackedScene).instantiate() as Node3D
+		visual.position.x = -1.0 if scene == NORMAL_VISUAL_SCENE else 1.0
+		sample.add_child(visual)
+	sample.add_child(_make_spotlight_beam(NORMAL_CHEST_SPOTLIGHT_COLOR))
+	return sample
 
 func _dismiss_chest_spotlight() -> void:
 	if _chest_spotlight_stage == null or not is_instance_valid(_chest_spotlight_stage):
@@ -925,25 +988,10 @@ func _dismiss_chest_spotlight() -> void:
 		_chest_spotlight_dismiss_tween.kill()
 	var stage := _chest_spotlight_stage
 	_chest_spotlight_dismiss_tween = create_tween()
-	_chest_spotlight_dismiss_tween.tween_method(func(t: float) -> void:
-		if not is_instance_valid(stage):
-			return
-		var shrink := lerpf(CHEST_SPOTLIGHT_DISMISS_END_SCALE, 1.0, t)
-		stage.scale = Vector3(shrink, 1.0, shrink)
-		var key := stage.get_node_or_null("ChestSpotlightKeyLight") as OmniLight3D
-		if key != null:
-			key.light_energy = CHEST_SPOTLIGHT_ENERGY * t
-		var beam := stage.get_node_or_null("ChestSpotlightBeam") as MeshInstance3D
-		if beam != null:
-			var mat := beam.material_override as ShaderMaterial
-			if mat != null:
-				mat.set_shader_parameter("beam_strength", CHEST_SPOTLIGHT_BEAM_STRENGTH * t)
-		var pool := stage.get_node_or_null("ChestSpotlightPool") as MeshInstance3D
-		if pool != null:
-			var pool_mat := pool.get_active_material(0) as StandardMaterial3D
-			if pool_mat != null:
-				pool_mat.albedo_color.a = CHEST_SPOTLIGHT_POOL_ALPHA * t
-	, 1.0, 0.0, CHEST_SPOTLIGHT_DISMISS_DURATION_S)
+	_chest_spotlight_dismiss_tween.tween_method(
+		_apply_chest_spotlight_progress.bind(stage),
+		_chest_spotlight_progress, 0.0, CHEST_SPOTLIGHT_DISMISS_DURATION_S
+	)
 	_chest_spotlight_dismiss_tween.tween_callback(func() -> void:
 		if is_instance_valid(stage):
 			stage.queue_free()

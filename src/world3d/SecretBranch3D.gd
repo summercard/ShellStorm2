@@ -469,9 +469,13 @@ func _apply_authored_door(site: Dictionary) -> bool:
 ## 往下递归会把它们当成两扇门。
 func _read_authored_doors() -> void:
 	_authored_doors.clear()
-	for room_id_value in _room_nodes:
-		var room_id := str(room_id_value)
-		var room := _room_nodes[room_id] as Node3D
+	for value in _rooms_source:
+		var record := value as Dictionary
+		var site := record.get("secret_site", {}) as Dictionary
+		if site.is_empty():
+			continue
+		var room_id := str(record.get("id", ""))
+		var room := _room_nodes.get(room_id) as Node3D
 		if room == null:
 			continue
 		var path := str(room.get("static_layout_scene_path"))
@@ -501,7 +505,7 @@ func _read_authored_doors() -> void:
 				if str(state.get_node_property_name(index, property_index)) == "transform":
 					xform = state.get_node_property_value(index, property_index) as Transform3D
 			var site_id := node_name.trim_prefix("SecretDoor_")
-			if site_id == node_name:
+			if site_id == node_name or site_id != str(site.get("site_id", "")):
 				continue
 			_authored_doors[site_id] = {
 				"room_local": root_xform * xform,

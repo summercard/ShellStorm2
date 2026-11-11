@@ -57,7 +57,9 @@ const TRIGGER_ENCOUNTER_KEYS := [
 	"trigger", "duration_sec", "start_delay_sec", "stage_advance", "completion", "progress_mode",
 	"intermission_sec", "max_alive", "min_player_distance_m",
 	"seal_room", "light_on_finish", "hunt_player", "hud_countdown",
-	"stages", "monster_ai",
+	"stages", "monster_ai", "leave_policy", "preparation_sec", "freeze_player_sec",
+	"spawn_origin_port_id", "remote_spawn_policy",
+	"alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse",
 ]
 ## 触发式遭遇里取值必须是 bool 的键。
 const TRIGGER_ENCOUNTER_FLAGS := [
@@ -65,10 +67,10 @@ const TRIGGER_ENCOUNTER_FLAGS := [
 ]
 ## 触发区形状。`circle` = 房心半径（早期写法）；`band` = **满宽带**（沿一根轴铺满房间，
 ## 另一根轴上只有厚度）—— 圆的半径再大也能贴墙绕过去，带子是**不可绕过**的那个。
-const TRIGGER_SHAPES := ["circle", "band"]
+const TRIGGER_SHAPES := ["circle", "band", "door_entries"]
 ## `trigger` 子字典允许的键。**同样不许有未知键**：`from` / `width` 这类"看着像但对不上"的
 ## 拼写会静默退化成默认圆，玩家照样能绕过去。
-const TRIGGER_KEYS := ["shape", "axis", "radius_m", "thickness_m", "offset_m"]
+const TRIGGER_KEYS := ["shape", "axis", "radius_m", "thickness_m", "offset_m", "port_ids", "inset_m", "depth_m"]
 ## 带子厚度上限（米）。厚度大到吃掉半间房，就退化成"进房即触发"，
 ## 与"走到带上才触发"的意图相反 —— 与圆的 60 m 上限同一取舍。
 const TRIGGER_BAND_THICKNESS_MAX_M := 20.0
@@ -1277,7 +1279,10 @@ static func _validate_spawn_boxes(
 		# —— 调用层 ——
 		# 没有 encounter 时全部实例并进一波（运行时口径），故只在写了 encounter 时校验。
 		if not placements.is_empty() or not (room.get("encounter", {}) as Dictionary).is_empty():
-			errors.append_array(_validate_encounter(room, key, placements.size()))
+			var encounter_room := room.duplicate(true)
+			encounter_room["geometry_authoritative"] = geometry_real
+			encounter_room["size"] = size_by_key.get(key, Vector2.ZERO)
+			errors.append_array(_validate_encounter(encounter_room, key, placements.size()))
 	return errors
 
 
@@ -1306,11 +1311,28 @@ static func _validate_encounter(
 		errors.append("encounter_not_object:%s" % key)
 		return errors
 	var encounter := raw as Dictionary
+	var spawn_mode: Variant = encounter.get("spawn_mode", "")
+	if not (spawn_mode is String) or spawn_mode not in ["", "preplaced"]:
+		errors.append("encounter_spawn_mode_invalid:%s" % key)
+		return errors
+	if spawn_mode == "preplaced":
+		if not (encounter.get("trigger", {}) as Dictionary).is_empty():
+			errors.append("encounter_preplaced_trigger_forbidden:%s" % key)
+			return errors
+		var distance: Variant = encounter.get("min_player_distance_m", 0.0)
+		if not (distance is int or distance is float) or not is_finite(float(distance)) or float(distance) < 0.0:
+			errors.append("encounter_preplaced_distance_invalid:%s" % key)
+		var gap: Variant = encounter.get("intermission_sec", 0.0)
+		if not (gap is int or gap is float) or not is_finite(float(gap)) or float(gap) != 0.0:
+			errors.append("encounter_preplaced_intermission_forbidden:%s" % key)
+		var batches: Variant = encounter.get("stages", [])
+		if batches is Array and (batches as Array).size() > 1:
+			errors.append("encounter_preplaced_requires_single_stage:%s" % key)
 	# 踩点触发式遭遇与盒子式共用 `encounter` 这一层，但 `stages` 的语义完全不同：
 	# 那边写盒子下标（`boxes`），这边写显式编成（`monsters`）。两条校验互不走对方的分支。
 	var trigger := encounter.get("trigger", {}) as Dictionary
 	if not trigger.is_empty():
-		return _validate_triggered_encounter(encounter, key)
+		return _validate_triggered_encounter(encounter, key, room)
 	if placement_count <= 0:
 		errors.append("encounter_without_placements:%s" % key)
 		return errors
@@ -1371,7 +1393,7 @@ static func _validate_encounter(
 ##   · 每波必须写 `monsters` 且非空；条目形如 `{type, count}`，`count > 0`。
 ##   · `type` 要么是 `strong_random`（运行期抽成具体 `*_strong`），
 ##     要么必须是**可授权普通怪**；`boss` 一律拒绝（走专属流程）。
-static func _validate_triggered_encounter(encounter: Dictionary, key: String) -> Array[String]:
+static func _validate_triggered_encounter(encounter: Dictionary, key: String, room: Dictionary = {}) -> Array[String]:
 	var errors: Array[String] = []
 	for key_name in encounter.keys():
 		if str(key_name) not in TRIGGER_ENCOUNTER_KEYS:
@@ -1379,6 +1401,9 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String) ->
 	for flag_key in TRIGGER_ENCOUNTER_FLAGS:
 		if encounter.has(flag_key) and not (encounter[flag_key] is bool):
 			errors.append("encounter_trigger_flag_not_bool:%s:%s" % [key, flag_key])
+	var alert_validation := EncounterEventDirector3D.validate_alert_config(encounter)
+	if not bool(alert_validation.get("ok", false)):
+		errors.append("encounter_%s:%s" % [str(alert_validation.get("error", "alert_invalid")), key])
 	if encounter.has("monster_ai") and not (encounter.get("monster_ai") is Dictionary):
 		errors.append("encounter_trigger_monster_ai_not_object:%s" % key)
 	var trigger := encounter.get("trigger", {}) as Dictionary
@@ -1392,7 +1417,9 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String) ->
 		errors.append("encounter_trigger_shape_invalid:%s:%s" % [key, shape])
 	# 两套形状各自只认自己的键：带子上写 `radius_m`、或圆上写 `axis`，
 	# 都是"配了但没生效"—— 报错而不是静默取默认。
-	if shape == "band":
+	if shape == "door_entries":
+		errors.append_array(_validate_door_entry_trigger(trigger, key, room))
+	elif shape == "band":
 		if trigger.has("radius_m"):
 			errors.append("encounter_trigger_radius_on_band:%s" % key)
 		var axis := str(trigger.get("axis", ""))
@@ -1407,6 +1434,28 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String) ->
 		var radius := float(trigger.get("radius_m", 6.0))
 		if radius < 1.0 or radius > 60.0:
 			errors.append("encounter_trigger_radius_invalid:%s:%s" % [key, str(radius)])
+	if shape != "door_entries":
+		for door_key in ["port_ids", "inset_m", "depth_m"]:
+			if trigger.has(door_key):
+				errors.append("encounter_trigger_door_key_on_other_shape:%s:%s" % [key, door_key])
+	for time_key in ["start_delay_sec", "preparation_sec", "freeze_player_sec"]:
+		var time_value: Variant = encounter.get(time_key, 1.0 if time_key == "start_delay_sec" else 0.0)
+		if not _finite_number(time_value) or float(time_value) < 0.0:
+			errors.append("encounter_%s_invalid:%s" % [time_key, key])
+	if float(encounter.get("freeze_player_sec", 0.0)) > float(encounter.get("preparation_sec", 0.0)):
+		errors.append("encounter_freeze_exceeds_preparation:%s" % key)
+	if str(encounter.get("progress_mode", "tick")) == "external" and float(encounter.get("preparation_sec", 0.0)) > 0.0:
+		errors.append("encounter_external_preparation_not_supported:%s" % key)
+	if encounter.get("remote_spawn_policy", "") not in ["", "opposite_entry"]:
+		errors.append("encounter_remote_spawn_policy_invalid:%s" % key)
+	if encounter.has("spawn_origin_port_id") and (not encounter["spawn_origin_port_id"] is String or str(encounter["spawn_origin_port_id"]).is_empty()):
+		errors.append("encounter_spawn_origin_port_id_invalid:%s" % key)
+	if not room.is_empty() and bool(room.get("geometry_authoritative", false)):
+		var origin_id := str(encounter.get("spawn_origin_port_id", ""))
+		if not origin_id.is_empty() and not _encounter_port_exists(room, origin_id):
+			errors.append("encounter_spawn_origin_port_missing:%s:%s" % [key, origin_id])
+	if str(encounter.get("remote_spawn_policy", "")) == "opposite_entry" and shape != "door_entries":
+		errors.append("encounter_opposite_entry_requires_door_entries:%s" % key)
 	var duration_value: Variant = encounter.get("duration_sec", 60.0)
 	var duration := float(duration_value)
 	if not _finite_number(duration_value) or duration < 0.0:
@@ -1484,6 +1533,56 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String) ->
 				errors.append(
 					"encounter_stage_monster_type_unknown:%s:%d:%s" % [key, stage_index, type_id]
 				)
+	return errors
+
+
+static func _encounter_port_exists(room: Dictionary, port_id: String) -> bool:
+	for port: Dictionary in room.get("connection_ports", []):
+		if str(port.get("port_id", "")) == port_id:
+			return true
+	return false
+
+
+static func _validate_door_entry_trigger(trigger: Dictionary, key: String, room: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	for forbidden in ["axis", "radius_m", "thickness_m", "offset_m"]:
+		if trigger.has(forbidden):
+			errors.append("encounter_trigger_foreign_key_on_door_entries:%s:%s" % [key, forbidden])
+	var inset: Variant = trigger.get("inset_m", 0.0)
+	var depth: Variant = trigger.get("depth_m", 1.0)
+	if not _finite_number(inset) or float(inset) < 0.0:
+		errors.append("encounter_trigger_inset_invalid:%s" % key)
+	if not _finite_number(depth) or float(depth) < 1.0 or float(depth) > TRIGGER_BAND_THICKNESS_MAX_M:
+		errors.append("encounter_trigger_depth_invalid:%s" % key)
+	var ids: Variant = trigger.get("port_ids", [])
+	if not ids is Array or ids.is_empty():
+		errors.append("encounter_trigger_port_ids_invalid:%s" % key)
+		return errors
+	var seen: Array[String] = []
+	for id_value in ids:
+		if not id_value is String or str(id_value).is_empty() or str(id_value) in seen:
+			errors.append("encounter_trigger_port_id_invalid:%s" % key)
+			continue
+		var port_id := str(id_value)
+		seen.append(port_id)
+		# 蓝图端口可能尚未生成；只在运行时权威几何执行端口存在与深度校验。
+		if not bool(room.get("geometry_authoritative", false)):
+			continue
+		if not _encounter_port_exists(room, port_id):
+			errors.append("encounter_trigger_port_missing:%s:%s" % [key, port_id])
+			continue
+		for port: Dictionary in room.get("connection_ports", []):
+			if str(port.get("port_id", "")) != port_id:
+				continue
+			var position := _vec2(port.get("position_m", []))
+			var outward := _vec2(port.get("outward", [])).normalized()
+			var size: Vector2 = room.get("size", _vec2(room.get("size_m", [])))
+			var end := position - outward * (float(inset) + float(depth))
+			var width_value: Variant = port.get("door_width_m", 0.0)
+			if not _finite_number(width_value) or float(width_value) < 0.0:
+				errors.append("encounter_trigger_port_width_invalid:%s:%s" % [key, port_id])
+			if not position.is_finite() or not outward.is_finite() or outward.is_zero_approx() or absf(end.x) > size.x * 0.5 or absf(end.y) > size.y * 0.5:
+				errors.append("encounter_trigger_strip_outside_room:%s:%s" % [key, port_id])
 	return errors
 
 

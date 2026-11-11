@@ -366,6 +366,7 @@ core_scenes=(
   verify_death_during_extraction_flow
   verify_encounter_event_flow
   verify_encounter_trigger_room_flow
+  verify_encounter_preparation_hud_integration
   verify_game_entry_flow
   verify_base_world_flow
   verify_dual_weapon_quick_map_fate_flow

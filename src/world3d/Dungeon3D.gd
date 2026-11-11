@@ -17,24 +17,6 @@ const ENCOUNTER_EVENT_DIRECTOR_SCRIPT = preload("res://src/world3d/EncounterEven
 const ENCOUNTER_EVENT_HOST_SCRIPT = preload("res://src/world3d/EncounterEventHost3D.gd")
 
 
-## 无截止事件仍须等待首波 at_sec；其余状态机和刷怪出口保持原 Director。
-class RoomFlowEncounterDirector extends EncounterEventDirector3D:
-	func _step_instance(instance_id: String, state: Dictionary, delta: float) -> void:
-		var config := state.get("config", {}) as Dictionary
-		if _is_no_deadline(config):
-			var stages := state.get("stage_states", []) as Array
-			if not stages.is_empty() and not bool((stages[0] as Dictionary).get("started", false)):
-				var context := _context(str(state["room_id"]), instance_id)
-				if str(context.get("current_room_id", "")) != str(state["room_id"]):
-					super._step_instance(instance_id, state, delta)
-					return
-				var initial := float(((config.get("stages", []) as Array)[0] as Dictionary).get("at_sec", 0.0))
-				var remaining := float(state.get("room_prepare_remaining_sec", initial))
-				state["room_prepare_remaining_sec"] = maxf(0.0, remaining - delta)
-				if remaining > delta:
-					return
-				delta = maxf(0.0, delta - remaining)
-		super._step_instance(instance_id, state, delta)
 const AVATAR_CUSTOMIZATION_PERSISTENCE = preload(
 	"res://src/player3d/customization/AvatarCustomizationPersistence.gd"
 )
@@ -74,6 +56,7 @@ const CODE_HUD_GLYPH_SCRIPT := preload("res://src/ui/CodeHUDGlyph.gd")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 const HUD_RELOAD_RING_SCRIPT := preload("res://src/ui/HudReloadRing.gd")
 const ENCOUNTER_COUNTDOWN_RING_SCRIPT := preload("res://src/ui/EncounterCountdownRing.gd")
+const ENCOUNTER_ALERT_OVERLAY_SCRIPT := preload("res://src/ui/EncounterAlertOverlay.gd")
 ## —— 玩家血条反馈三件（2026-11-10 主人要求）——
 ## 血条底纹槽（斜杆 + 横向位移）、回血补条、翻滚冷却环。三者都是**只画不收数**的 Control：
 ## 生命值仍只由 `Player3D` 拥有，冷却仍只由 `Player3D.dash_cooldown_timer` 拥有。
@@ -396,6 +379,7 @@ var _death_filter_ready := false
 ## 脚本化演出（不走时间轴剧本的短演出，如基地战败救援）是否独占玩家输入。
 ## 与叙事导演的独占同一优先级，见 `_narrative_holds_player_input()`。
 var _scripted_input_hold := false
+var _scripted_input_hold_sources: Dictionary = {}
 var _defeat_transition: CanvasLayer
 ## 行动代际：每次「本次行动已终局结算并把世界复位成新一轮」时 +1。
 ## 死亡动画 1.35s 比成功撤离的 0.8s 返航窗口更长，复位之后才结束的那次死亡
@@ -586,8 +570,10 @@ var _hud_weapon_fate_label: Label = null
 var _hud_weapon_model_icon: ItemModelIcon3D = null
 ## HUD 换弹环（角色右下侧的屏幕投影）。见 HUD_RELOAD_RING_* 一族常量。
 var _hud_reload_ring: HudReloadRing = null
-## 右上角遭遇倒计时环（只在事件声明了 `hud_countdown` 且仍在跑时可见）。
+## 遭遇倒计时环（只在事件声明了 `hud_countdown` 且仍在跑时可见）。
 var _hud_countdown_ring: EncounterCountdownRing = null
+## 准备期边缘警报纯表现层；状态仍由事件快照提供。
+var _hud_encounter_alert: ENCOUNTER_ALERT_OVERLAY_SCRIPT = null
 var _hud_reload_ring_active := false
 ## 图标弹跳的已用时长；< 0 表示没在弹（负数不用 0 是因为 t=0 本身是合法采样点）。
 var _hud_weapon_icon_pop_elapsed := -1.0
@@ -2096,7 +2082,7 @@ func _setup_run_modules() -> void:
 	_monster_injector.set_theme_profile(gameplay_theme)
 	_monster_injector.set_level_rules(_monster_rules)
 	_encounter_event_host = ENCOUNTER_EVENT_HOST_SCRIPT.new(self)
-	_encounter_event_director = RoomFlowEncounterDirector.new(_encounter_event_host)
+	_encounter_event_director = ENCOUNTER_EVENT_DIRECTOR_SCRIPT.new(_encounter_event_host)
 	_encounter_event_director.encounter_event_started.connect(_on_encounter_event_started)
 	_encounter_event_director.encounter_event_stage_started.connect(_on_encounter_event_stage_started)
 	_encounter_event_director.encounter_event_finished.connect(_on_encounter_event_finished)
@@ -2431,13 +2417,24 @@ func _build_reference_main_hud() -> void:
 	_hud_countdown_ring.z_index = 120
 	_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 100, -148, 208, -40)
 	_reference_hud_root.add_child(_hud_countdown_ring)
-	# 中间那行时间「用下方金币的字体」= 与右下 `RunLootReadout` **同一个** `_make_hud_label`
-	# 口径（同字号 26、同 `RUN_COIN_READOUT_COLOR`、同 `_outline_labels` 描边）。
-	# 环本身也取同一色系（见 `EncounterCountdownRing.FILL_COLOR`），
-	# 否则"金币字体"那句话只落实了一半：字是金的、圈是青的。
+	# 中间那行时间「用下方金币的字体」= 与右下 `RunLootReadout` **同一个** `_make_hud_label`。
 	var countdown_label := _make_hud_label("1:00", 26, RUN_COIN_READOUT_COLOR)
 	_outline_labels([countdown_label])
 	_hud_countdown_ring.bind_label(countdown_label)
+	_hud_countdown_ring.presentation_pulse_requested.connect(_on_encounter_countdown_pulse)
+	_hud_encounter_alert = ENCOUNTER_ALERT_OVERLAY_SCRIPT.new()
+	_hud_encounter_alert.name = "EncounterAlertOverlay"
+	_hud_encounter_alert.visible = false
+	_hud_encounter_alert.z_index = 119
+	_hud_encounter_alert.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_hud_encounter_alert.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_reference_hud_root.add_child(_hud_encounter_alert)
+	var alert_warning_label := _make_hud_label("WARNING", 18, Color(1.0, 0.10, 0.08))
+	_outline_labels([alert_warning_label])
+	_hud_encounter_alert.bind_warning_label(alert_warning_label)
+	var reduce_motion := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
+	_hud_countdown_ring.set_reduce_motion(reduce_motion)
+	_hud_encounter_alert.set_reduce_motion(reduce_motion)
 	# 2026-09-28 主人要求：右侧两块「时间」分开处置 —— 下面的本局计时栏（「◷ 00:12 ⏸」）
 	# 整个去掉，上面的世界时间只去背板（见 TowerDescent3D._install_world_time_hud）。
 	# 只隐藏外壳、不删节点：_update_hud_timer 仍每帧写 _hud_timer_label.text，
@@ -2926,16 +2923,21 @@ func _narrative_holds_player_input() -> bool:
 ## `input_locked` 按设计只拦移动/开火/交互，鼠标仍能转身 —— 那是给剧本 `actor.face`
 ## 留的口子。整段演出要求"玩家完全无法操作"时，必须把这条也关掉，否则玩家
 ## 晃一下鼠标就能把趴着的人转过来（2026-11-08 业主反馈）。
-func set_scripted_input_hold(held: bool, force := false) -> void:
-	if _scripted_input_hold == held and not force:
+func set_scripted_input_hold(held: bool, force := false, source: String = "legacy") -> void:
+	if held:
+		_scripted_input_hold_sources[source] = true
+	else:
+		_scripted_input_hold_sources.erase(source)
+	var effective := not _scripted_input_hold_sources.is_empty()
+	if _scripted_input_hold == effective and not force:
 		return
-	_scripted_input_hold = held
+	_scripted_input_hold = effective
 	_sync_player_input_lock()
 	if player == null or not is_instance_valid(player):
 		return
 	if player.has_method("set_aim_locked"):
-		player.call("set_aim_locked", held)
-	if held:
+		player.call("set_aim_locked", effective)
+	if effective:
 		# 锁只拦输入；进锁前那一帧的残余速度仍会把人推走几十厘米。
 		player.velocity = Vector3.ZERO
 
@@ -3192,6 +3194,9 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 
 	var started := Time.get_ticks_msec()
 	var done := 0
+	var reward_visuals := TreasureChest3D.make_render_warmup_sample()
+	reward_visuals.position = Vector3(0.0, -1.0, -5.0)
+	camera.add_child(reward_visuals)
 	for room in targets:
 		if not is_instance_valid(room) or not room.is_inside_tree():
 			continue
@@ -3203,6 +3208,8 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 			await get_tree().process_frame
 			await RenderingServer.frame_post_draw
 		done += 1
+		if done == 1:
+			reward_visuals.free()
 	report["rooms"] = done
 	report["elapsed_ms"] = Time.get_ticks_msec() - started
 	if is_instance_valid(viewport):
@@ -4238,6 +4245,8 @@ func _room_encounter_trigger_contains(room: DungeonRoom3D, world_position: Vecto
 	var trigger := room.encounter.get("trigger", {}) as Dictionary
 	if trigger.is_empty():
 		return false
+	if str(trigger.get("shape", "circle")) == "door_entries":
+		return bool(room.match_door_entry_trigger(trigger, world_position).get("hit", false))
 	var offset := _placement_vec2(trigger.get("offset_m", [0.0, 0.0]))
 	var local := room.to_local(world_position) - Vector3(offset.x, 0.0, offset.y)
 	local.y = 0.0
@@ -4252,26 +4261,72 @@ func _room_encounter_trigger_contains(room: DungeonRoom3D, world_position: Vecto
 	return local.length() <= radius
 
 
-## 右上角遭遇倒计时环：只对「当前房里、仍在跑、且声明了 `hud_countdown` 的事件」显示。
-##
-## 不按事件类型硬编码 —— 撤离防守若哪天也想要环，只需在它的配置里开
-## `hud_countdown`，不必在这里再加一条分支。读数直接取自事件快照，
-## 不另存一份倒计时：两处计时必然会漂，而漂了之后没人知道该信哪个。
+## 遭遇倒计时 HUD：只读事件投影，不在 UI 中创建计时 Owner。
+## 有 `preparation_*` 字段时展示准备期；缺少时逐字保持旧总倒计时行为。
 func _tick_encounter_countdown_hud() -> void:
 	if _hud_countdown_ring == null:
 		return
-	if _encounter_event_director == null or _current_room_id.is_empty():
-		_hud_countdown_ring.visible = false
+	apply_encounter_hud_snapshot(get_encounter_hud_snapshot(_current_room_id))
+
+
+## 装配/专项的窄入口；空快照、离房、终态、行动结束和玩家死亡均立即收掉表现。
+func apply_encounter_hud_snapshot(snapshot: Dictionary) -> void:
+	if _hud_countdown_ring == null:
 		return
-	var snapshot := _encounter_event_director.get_room_countdown_snapshot(_current_room_id)
-	if snapshot.is_empty():
-		# 事件终结（完成 / 取消 / 失败）或玩家离房 ⇒ 环立即消失，不留残影。
-		_hud_countdown_ring.visible = false
+	var current := snapshot
+	if (_completed or _current_room_id.is_empty()
+		or str(snapshot.get("room_id", _current_room_id)) != _current_room_id
+		or (is_instance_valid(player) and player.current_hp <= 0)):
+		current = {}
+	var reduced := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
+	_hud_countdown_ring.set_reduce_motion(reduced)
+	var alert := ENCOUNTER_COUNTDOWN_RING_SCRIPT.project_alert(current)
+	# 新警报为上方横排小字，中心/准星区域保持空白；旧环位置不变。
+	if bool(alert.modern):
+		_anchor_control(_hud_countdown_ring, 0.5, 0.23, 0.5, 0.23, -270, -22, 270, 22)
+	else:
+		_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 100, -148, 208, -40)
+	# 反馈由本次apply集中消费，避免旧信号回调重复蜂鸣，也不改装配或输入链。
+	var old_feedback := Callable(self, "_on_encounter_countdown_pulse")
+	if _hud_countdown_ring.presentation_pulse_requested.is_connected(old_feedback):
+		_hud_countdown_ring.presentation_pulse_requested.disconnect(old_feedback)
+	_hud_countdown_ring.consume_snapshot(current)
+	var presentation := _hud_countdown_ring.get_snapshot()
+	if bool(presentation.get("beep_requested", false)) and AudioManager != null:
+		AudioManager.play_sfx("ui_error", -13.0, 0.82)
+	if (bool(presentation.get("impact_requested", false)) and not reduced
+		and is_instance_valid(player) and player.camera_feedback != null):
+		player.camera_feedback.request_environment_impact(0.20, 0.12)
+	if _hud_encounter_alert != null:
+		_hud_encounter_alert.set_reduce_motion(reduced)
+		_hud_encounter_alert.consume_snapshot(current)
+
+
+## HUD 专用只读投影接口。Director 仍是事件状态 Owner；缺少准备期字段时不补造。
+func get_encounter_hud_snapshot(room_id: String) -> Dictionary:
+	if _encounter_event_director == null:
+		return {}
+	if room_id.is_empty():
+		return {}
+	# 准备期与 hud_countdown（战斗总时长）正交；显式投影优先，不从 at_sec 猜准备期。
+	for row: Dictionary in _encounter_event_director.get_snapshot_rows():
+		var config := row.get("config", {}) as Dictionary
+		if (str(row.get("room_id", "")) == room_id and not bool(row.get("terminal", false))
+			and (config.has("alert_style") or row.has("alert_phase")
+				or (row.has("preparation_remaining_sec") and row.has("preparation_total_sec")))):
+			return row
+	return _encounter_event_director.get_room_countdown_snapshot(room_id)
+
+
+func _on_encounter_countdown_pulse(_alert_port_id: String, preparation_active: bool) -> void:
+	if not preparation_active:
 		return
-	var config := snapshot.get("config", {}) as Dictionary
-	var duration := maxf(0.001, float(config.get("duration_sec", 0.0)))
-	_hud_countdown_ring.visible = true
-	_hud_countdown_ring.set_time(duration - float(snapshot.get("elapsed", 0.0)), duration)
+	if (not bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
+		and is_instance_valid(player) and player.camera_feedback != null):
+		player.camera_feedback.request_environment_impact(0.20, 0.12)
+	if AudioManager != null:
+		# 每事件秒至多一次，复用现有声音；减少动效仅禁位移/脉冲，不把声音也静音。
+		AudioManager.play_sfx("ui_error", -13.0, 0.82)
 
 
 ## 逐帧轮询触发点。**刻意不用 Area3D**：与剧情位置触发同一取舍 ——
@@ -4286,19 +4341,36 @@ func _tick_room_encounter_triggers(_delta: float) -> void:
 		return
 	if not _room_encounter_trigger_contains(room, player.global_position):
 		return
-	_start_room_encounter(room)
+	var trigger_port_id := ""
+	if str((room.encounter.get("trigger", {}) as Dictionary).get("shape", "circle")) == "door_entries":
+		trigger_port_id = str(room.match_door_entry_trigger(room.encounter["trigger"], player.global_position).get("port_id", ""))
+	_start_room_encounter(room, trigger_port_id)
 
 
-func _start_room_encounter(room: DungeonRoom3D) -> Dictionary:
-	# 先记「已触发」再启动：启动失败也**不再重试**，避免玩家站在触发点上反复弹警告。
+func _start_room_encounter(room: DungeonRoom3D, trigger_port_id: String = "") -> Dictionary:
+	if _room_encounters_fired.has(room.room_id):
+		return {"ok": true, "already_fired": true, "instance_id": str(_room_encounter_active.get(room.room_id, ""))}
+	var trigger := room.encounter.get("trigger", {}) as Dictionary
+	if str(trigger.get("shape", "circle")) == "door_entries" and trigger_port_id.is_empty():
+		var hit := room.match_door_entry_trigger(trigger, player.global_position) if is_instance_valid(player) else {}
+		trigger_port_id = str(hit.get("port_id", ""))
+		if trigger_port_id.is_empty():
+			return {"ok": false, "error": "door_entry_not_hit"}
+	# 房间一次性闸拥有两个入口；封门必须早于 Director 的启动信号和准备锁。
 	_room_encounters_fired[room.room_id] = true
-	var started := start_encounter_event(_build_room_encounter_config(room))
-	if not bool(started.get("ok", false)):
-		push_warning("[Dungeon3D] 踩点遭遇启动失败（%s）：%s" % [room.room_id, str(started)])
-		return started
-	_room_encounter_active[room.room_id] = str(started.get("instance_id", ""))
+	var was_sealed := _sealed_rooms.has(room.room_id)
 	if bool(room.encounter.get("seal_room", true)):
 		set_room_seal(room.room_id, true, "encounter")
+	var config := _build_room_encounter_config(room)
+	config["trigger_port_id"] = trigger_port_id
+	var started := start_encounter_event(config)
+	if not bool(started.get("ok", false)):
+		if not was_sealed:
+			set_room_seal(room.room_id, false)
+		push_warning("[Dungeon3D] 踩点遭遇启动失败（%s）：%s" % [room.room_id, str(started)])
+		_queue_runtime_autosave("room_encounter_rejected")
+		return started
+	_room_encounter_active[room.room_id] = str(started.get("instance_id", ""))
 	if AudioManager != null:
 		AudioManager.play_sfx("wave_start", -3.0)
 	if _is_current_room(room.room_id):
@@ -4343,7 +4415,7 @@ func _build_room_encounter_config(room: DungeonRoom3D) -> Dictionary:
 	# 触发式遭遇是"把玩家关进房里打完"，等同竞技场 —— 若还按野外潜行那套
 	# 「要有视锥 + 视线才追」，关灯房里会有一半怪站原地不动。
 	# `hud_countdown`：右上角倒计时环。二者都只是开关，判据全在机制侧。
-	return {
+	var config := {
 		"schema_version": 1,
 		"event_id": "room_encounter:%s" % room.room_id,
 		"room_id": room.room_id,
@@ -4361,10 +4433,19 @@ func _build_room_encounter_config(room: DungeonRoom3D) -> Dictionary:
 		"max_alive": int(encounter.get("max_alive", 2147483647)),
 		"intermission_sec": float(encounter.get("intermission_sec", 0.0)),
 		"min_player_distance_m": float(encounter.get("min_player_distance_m", 0.0)),
+		"preparation_sec": float(encounter.get("preparation_sec", 0.0)),
+		"freeze_player_sec": float(encounter.get("freeze_player_sec", 0.0)),
+		"spawn_origin_port_id": str(encounter.get("spawn_origin_port_id", "")),
+		"remote_spawn_policy": str(encounter.get("remote_spawn_policy", "")),
 		"prereqs": {"player_alive": true, "run_active": true},
 		"stages": stages,
 		"on_completed": actions,
 	}
+	# 保留原始类型交给Director严格校验；缺席style不补造，避免旧事件自动启用新警报。
+	for alert_key in ["alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse"]:
+		if encounter.has(alert_key):
+			config[alert_key] = encounter[alert_key]
+	return config
 
 
 ## 把一波的声明解析成遭遇事件的 `monsters` 数组。
@@ -4485,6 +4566,13 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 func _spawn_room_enemies_impl(room: DungeonRoom3D) -> bool:
 	if room == null:
 		return false
+	if room.encounter.has("spawn_mode"):
+		var mode_errors := LevelPlanValidator._validate_encounter(
+			{"encounter": room.encounter}, room.room_id, room.spawn_placements.size())
+		if not mode_errors.is_empty():
+			_room_spawn_blocked[room.room_id] = true
+			push_error("[Dungeon3D] 拒绝无效刷怪模式且不发奖励：%s" % mode_errors)
+			return false
 	# —— 踩点触发式遭遇（`encounter.trigger`）——
 	# 本房不在进房时刷怪：玩家走到房间里那个触发点才开始。这里**刻意清空**波次账、
 	# 但**绝不 `_mark_room_cleared`** —— 房间要保持「未肃清」，否则去路门会被当成
@@ -4677,6 +4765,12 @@ func _spawn_box_waves(room: DungeonRoom3D, floor: int, floor_level: int) -> Arra
 	var placements := room.spawn_placements
 	if placements.is_empty():
 		return []
+	if room.encounter.get("spawn_mode", "") == "preplaced":
+		var errors := LevelPlanValidator._validate_encounter({"encounter": room.encounter}, room.room_id, placements.size())
+		if not errors.is_empty():
+			_room_spawn_blocked[room.room_id] = true
+			push_error("[Dungeon3D] 预置编译拒绝无效配置：%s" % errors)
+			return []
 	var stages := _resolve_encounter_stages(room.encounter, placements.size())
 	if stages.is_empty():
 		return []
@@ -4710,6 +4804,9 @@ func _spawn_box_waves(room: DungeonRoom3D, floor: int, floor_level: int) -> Arra
 		var batch: Array[Dictionary] = []
 		batch.assign(entries)
 		waves.append(batch)
+	if waves.is_empty() and room.encounter.get("spawn_mode", "") == "preplaced":
+		_room_spawn_blocked[room.room_id] = true
+		push_error("[Dungeon3D] 预置整房编成为空，拒绝生成且不发奖励：%s" % room.room_id)
 	return waves
 
 
@@ -4725,9 +4822,14 @@ func _collect_box_stage_entries(
 ) -> void:
 	var placement := _box_placement_at(placements, instance_index)
 	if placement.is_empty():
+		if room.encounter.get("spawn_mode", "") == "preplaced":
+			_room_spawn_blocked[room.room_id] = true
+			push_error("[Dungeon3D] 预置盒解析失败，整房拒绝且不发奖励：%s:%d" % [room.room_id, instance_index])
 		return
 	var box := SpawnBoxCatalog.resolve_placement_box(placement)
 	if box.is_empty():
+		if room.encounter.get("spawn_mode", "") == "preplaced":
+			_room_spawn_blocked[room.room_id] = true
 		push_error(
 			"[Dungeon3D] 房间 %s 的触发盒实例 %d（%s）解析失败，已跳过"
 			% [room.room_id, instance_index, str(placement.get("box", ""))]
@@ -4766,24 +4868,18 @@ func _collect_box_stage_entries(
 		spec.append({
 			"type": type_id,
 			"count": count,
-			"delay_sec": float(placement.get("box_delay", 0.0)) + float(spawn.get("delay_sec", 0.0)),
+			"delay_sec": 0.0 if room.encounter.get("spawn_mode", "") == "preplaced" else float(placement.get("box_delay", 0.0)) + float(spawn.get("delay_sec", 0.0)),
 		})
 		total += count
 	if total <= 0:
 		return
 	# 一次性取满 total 个盒内落点，再按条目切分 —— 让「同盒内的怪」彼此拉开，
 	# 而不是每条各自从最远点重新起算（那会让第二条压到第一条头上）。
-	var points := room.spawn_points_in_box(
-		placement.get("box_center", Vector2.ZERO) as Vector2,
-		placement.get("box_size", Vector2.ZERO) as Vector2,
-		total,
-		float(placement.get("box_rotation", 0.0)),
-		float(box.get("min_spacing_m", 0.0)),
-		int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES))
-	)
+	var available: Array[Vector3] = []
 	var safe_candidates: Array[Vector3] = []
 	var min_distance := float(room.encounter.get("min_player_distance_m", 0.0))
-	if min_distance > 0.0:
+	var preplaced: bool = room.encounter.get("spawn_mode", "") == "preplaced"
+	if min_distance > 0.0 or preplaced:
 		# 授权域只解析一次；重试仅在冻结盒域内重新选位置，不重掷敌群。
 		var center := room.resolve_spawn_box_center_local(
 			placement["box_center"], placement["box_size"], total,
@@ -4793,23 +4889,22 @@ func _collect_box_stage_entries(
 		var angle := deg_to_rad(float(placement["box_rotation"]))
 		for local_point in room._box_sample_points(center, (placement["box_size"] as Vector2) * 0.5, cos(angle), sin(angle), room._spawn_clearance()):
 			safe_candidates.append(room.to_global(local_point))
-	# 盒内排不下（异形房凹口 / 家具占位 / 盒太小）时**只出排得下的那几只**：
-	# `spawn_points_in_box` 尾部补的 `Vector3.INF` 绝不能进 `_spawn_enemy_batch` ——
-	# 后者见到非有限点会整批判「无合法落点」、置 `_room_spawn_blocked` 并把本房锁死，
-	# 表现是「一只都不出且房间不解锁」（比少出几只严重得多）。降级语义与业主口径
-	# 「没盒子就不刷」同源：宁可少出，不可锁死。
-	var available: Array[Vector3] = []
-	for point in points:
-		if point.is_finite():
-			available.append(point)
-	if min_distance > 0.0 and safe_candidates.is_empty():
-		_room_spawn_blocked[room.room_id] = true
-		push_error("[Dungeon3D] 授权盒没有合法候选，拒绝生成且不发奖励：%s:%d" % [room.room_id, instance_index])
-		return
-	if min_distance > 0.0:
-		available.clear()
+		if safe_candidates.is_empty():
+			_room_spawn_blocked[room.room_id] = true
+			push_error("[Dungeon3D] 授权盒没有合法候选，拒绝生成且不发奖励：%s:%d" % [room.room_id, instance_index])
+			return
 		for index in total:
 			available.append(safe_candidates[index % safe_candidates.size()])
+	else:
+		# 限距盒在实到时才定最终位置。只有普通盒需要现在散点并裁掉排不下的条目。
+		var points := room.spawn_points_in_box(
+			placement["box_center"], placement["box_size"], total,
+			float(placement["box_rotation"]), float(box.get("min_spacing_m", 0.0)),
+			int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES))
+		)
+		for point in points:
+			if point.is_finite():
+				available.append(point)
 	if available.is_empty():
 		return
 	var cursor := 0
@@ -4824,6 +4919,9 @@ func _collect_box_stage_entries(
 			cursor += 1
 			var config := _make_box_enemy(str(item["type"]), floor, floor_level, room)
 			if config.is_empty():
+				if preplaced:
+					_room_spawn_blocked[room.room_id] = true
+					push_error("[Dungeon3D] 预置编成缺失，整房拒绝且不发奖励：%s:%d:%s" % [room.room_id, instance_index, item["type"]])
 				continue
 			# `spawn_position` 是落点直通键，`_spawn_enemy_batch` 会取用并在实例化前摘掉；
 			# `spawn_delay_sec` 是延迟键，非 0 的条目会被摘进 `_pending_delayed_spawns`。
@@ -4846,9 +4944,12 @@ func _collect_box_stage_entries(
 					var boss_center := room.boss_spawn_position_world()
 					config["spawn_position"] = Vector3(boss_center.x, point.y, boss_center.z)
 			config["spawn_delay_sec"] = float(item["delay_sec"])
-			if min_distance > 0.0:
+			if min_distance > 0.0 or preplaced:
 				config["spawn_safe_candidates"] = safe_candidates.duplicate()
 				config["spawn_min_player_distance_m"] = min_distance
+			if preplaced:
+				config["spawn_preplaced_box"] = instance_index
+				config["spawn_box_min_spacing_m"] = float(box.get("min_spacing_m", 0.0))
 			entries.append(config)
 
 
@@ -5048,7 +5149,7 @@ func _pending_delayed_spawn_count(room_id: String) -> int:
 ## 落点解析优先级：**显式 positions 数组** > 配置内嵌 `spawn_position`（触发盒落点）
 ## > 房间级贪心 `spawn_point_for_index`。三者互斥地只走一条，绝不混算。
 func _resolve_spawn_position(
-	room: DungeonRoom3D, config: Dictionary, index: int, positions: Array
+	room: DungeonRoom3D, config: Dictionary, index: int, positions: Array, geometry_prepared := false
 ) -> Vector3:
 	if bool(config.get("boss_reinforcement_spawned", false)) and config.has("spawn_landing_anchor"):
 		var airborne := positions[index] as Vector3 if index < positions.size() else config.get("spawn_position", Vector3.INF) as Vector3
@@ -5056,10 +5157,10 @@ func _resolve_spawn_position(
 	var bound_to_room := _uses_room_bound_spawn(config)
 	if index < positions.size():
 		var point := positions[index] as Vector3
-		return room.resolve_enemy_spawn_position(point) if bound_to_room else point
+		return room.resolve_enemy_spawn_position(point, geometry_prepared) if bound_to_room else point
 	var embedded: Variant = config.get("spawn_position", null)
 	if embedded is Vector3:
-		return room.resolve_enemy_spawn_position(embedded as Vector3) if bound_to_room else embedded as Vector3
+		return room.resolve_enemy_spawn_position(embedded as Vector3, geometry_prepared) if bound_to_room else embedded as Vector3
 	if not _counts_for_room_clear(config):
 		var members := _enemy_nodes_by_room.get(room.room_id, []) as Array
 		for candidate_index in range(members.size() + index, DungeonRoom3D.SPAWN_MAX_POINTS):
@@ -5268,6 +5369,22 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 			)
 		else:
 			(waves[0] as Array).append_array(extra_elite)
+	if room.encounter.get("spawn_mode", "") == "preplaced":
+		if waves.size() != 1:
+			_room_spawn_blocked[room.room_id] = true
+			push_error("[Dungeon3D] 预置房必须整房单次提交：%s" % room.room_id)
+			return false
+		var entire_room: Array[Dictionary] = []
+		entire_room.assign(waves[0])
+		var delivered := _spawn_enemy_batch(room, entire_room, false)
+		if delivered != entire_room.size():
+			return false
+		_cancel_room_wave_intermission(room.room_id)
+		_room_wave_queues[room.room_id] = []
+		_room_wave_numbers[room.room_id] = 1
+		_room_wave_totals[room.room_id] = 1
+		_update_wave_hud(room.room_id)
+		return true
 	# Unique elites are independent actors, never room wave requirements.
 	var independent: Array[Dictionary] = []
 	var combat_waves: Array = []
@@ -5705,7 +5822,7 @@ func _spawn_starter_weapon_pickup(room: DungeonRoom3D) -> void:
 	status_label.text = "起始补给：拾取霰弹枪后按 I 打开背包并点击装备 · 墙边 E 可开中央灯"
 
 
-func _select_box_spawn_position(room: DungeonRoom3D, config: Dictionary, selected: Array[Vector3] = []) -> Dictionary:
+func _select_box_spawn_position(room: DungeonRoom3D, config: Dictionary, selected: Array[Vector3] = [], geometry_prepared := false) -> Dictionary:
 	var occupied: Array[Vector3] = selected.duplicate()
 	for value in _enemy_nodes_by_room.get(room.room_id, []) as Array:
 		if is_instance_valid(value) and value is Enemy3D and not value.is_queued_for_deletion() and value.ai_state != "dead":
@@ -5713,8 +5830,47 @@ func _select_box_spawn_position(room: DungeonRoom3D, config: Dictionary, selecte
 	return room.choose_safe_spawn_position(
 		player.global_position if is_instance_valid(player) else Vector3.INF,
 		float(config.get("spawn_min_player_distance_m", 0.0)), occupied,
-		config.get("spawn_safe_candidates", [])
+		config.get("spawn_safe_candidates", []), geometry_prepared
 	)
+
+
+## 整房预选不写实体、不挂计时器；任一盒不足即硬拒绝，不能等玩家向前走后补刷。
+func _preselect_preplaced_room(room: DungeonRoom3D, configs: Array[Dictionary]) -> Dictionary:
+	room._prepare_safe_spawn_selection()
+	var occupied: Array[Vector3] = []
+	for value in _enemy_nodes_by_room.get(room.room_id, []) as Array:
+		if is_instance_valid(value) and value is Enemy3D and not value.is_queued_for_deletion() and value.ai_state != "dead":
+			occupied.append(value.global_position)
+	var groups: Dictionary = {}
+	for index in configs.size():
+		var config := configs[index]
+		if not config.has("spawn_preplaced_box") or not config.has("spawn_safe_candidates") or not config.has("spawn_box_min_spacing_m") or not config.has("spawn_min_player_distance_m") or float(config.get("spawn_delay_sec", -1.0)) != 0.0:
+			return {"ok": false, "error": "preplaced_compile_contract_missing", "index": index}
+		var box_index := int(config["spawn_preplaced_box"])
+		if not groups.has(box_index):
+			groups[box_index] = []
+		(groups[box_index] as Array).append(index)
+	var order := groups.keys()
+	# 先处理最紧的盒域，避免宽盒抢掉小盒唯一可用的位置。
+	order.sort_custom(func(a: int, b: int) -> bool:
+		var ca: Dictionary = configs[int(groups[a][0])]
+		var cb: Dictionary = configs[int(groups[b][0])]
+		return float((ca["spawn_safe_candidates"] as Array).size()) / (groups[a] as Array).size() < float((cb["spawn_safe_candidates"] as Array).size()) / (groups[b] as Array).size())
+	var points: Array[Vector3] = []
+	points.resize(configs.size())
+	for box_index in order:
+		var indices: Array = groups[box_index]
+		var config := configs[int(indices[0])]
+		var chosen := room.preplaced_points_in_box(
+			config["spawn_safe_candidates"], indices.size(), float(config["spawn_box_min_spacing_m"]),
+			player.global_position if is_instance_valid(player) else Vector3.INF,
+			float(config["spawn_min_player_distance_m"]), occupied, run_seed ^ room.room_id.hash() ^ int(box_index))
+		if chosen.size() != indices.size():
+			return {"ok": false, "error": "preplaced_capacity_insufficient", "room": room.room_id, "box": box_index, "required": indices.size(), "selected": chosen.size(), "candidates": (config["spawn_safe_candidates"] as Array).size(), "spacing_m": maxf(DungeonRoom3D.ENEMY_BODY_RADIUS_M * 2.0 + 0.1, float(config["spawn_box_min_spacing_m"]))}
+		for index in indices.size():
+			points[int(indices[index])] = chosen[index]
+		occupied.append_array(chosen)
+	return {"ok": true, "positions": points}
 
 
 func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false, positions: Array = []) -> int:
@@ -5729,7 +5885,35 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 	# 本波因此不会被提前判清。`positions` 是并行数组，摘的时候必须同步撇掉。
 	var queued_delayed := 0
 	var queued_total := 0
-	if not count_reserved:
+	# 位置预检同步结束后才会挂实体。在这个窗口只收集一次静态几何；
+	# 玩家距离、占位、支持面与每个位置仍逐一校验，延迟回调重新进入本函数。
+	var preplaced: bool = room.encounter.get("spawn_mode", "") == "preplaced" and not additive and not count_reserved
+	var staged_enemies: Array[Enemy3D] = []
+	if preplaced:
+		var selection := _preselect_preplaced_room(room, enemy_configs)
+		if not bool(selection.get("ok", false)):
+			_room_spawn_blocked[room.room_id] = true
+			push_error("[Dungeon3D] 预置整房拒绝且不发奖励：%s" % selection)
+			return -1
+		positions = selection["positions"]
+		# 全部实例离树构造成功后才提交；失败时不留下半房实体。
+		for _index in enemy_configs.size():
+			var staged := ENEMY_SCENE.instantiate() as Enemy3D
+			if staged == null:
+				for previous in staged_enemies:
+					previous.free()
+				_room_spawn_blocked[room.room_id] = true
+				push_error("[Dungeon3D] 预置实体构造失败，整房拒绝：%s" % room.room_id)
+				return -1
+			staged_enemies.append(staged)
+	var geometry_prepared := preplaced
+	for index in enemy_configs.size() if not preplaced else 0:
+		var config := enemy_configs[index]
+		if config.has("spawn_safe_candidates") or (_uses_room_bound_spawn(config) and (config.has("spawn_position") or index < positions.size())):
+			room._prepare_safe_spawn_selection()
+			geometry_prepared = true
+			break
+	if not count_reserved and not preplaced:
 		var kept_configs: Array[Dictionary] = []
 		var kept_positions: Array = []
 		var selected: Array[Vector3] = []
@@ -5737,7 +5921,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 			var candidate := enemy_configs[index]
 			var delay := float(candidate.get("spawn_delay_sec", 0.0))
 			if delay <= 0.0 and candidate.has("spawn_safe_candidates"):
-				var selection := _select_box_spawn_position(room, candidate, selected)
+				var selection := _select_box_spawn_position(room, candidate, selected, geometry_prepared)
 				if bool(selection.get("ok", false)):
 					candidate["spawn_position"] = selection["position"]
 					selected.append(selection["position"] as Vector3)
@@ -5745,7 +5929,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 					delay = 0.25
 			if delay > 0.0:
 				_queue_delayed_spawn(
-					room, candidate, _resolve_spawn_position(room, candidate, index, positions), delay
+					room, candidate, _resolve_spawn_position(room, candidate, index, positions, geometry_prepared), delay
 				)
 				queued_total += 1
 				if _counts_for_room_clear(candidate):
@@ -5764,7 +5948,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 	# 整批预检先于实例化，任何非法点都不能形成半波或写入实体transform。
 	var spawn_positions: Array[Vector3] = []
 	for index in enemy_configs.size():
-		var point := _resolve_spawn_position(room, enemy_configs[index], index, positions)
+		var point: Vector3 = positions[index] if preplaced else _resolve_spawn_position(room, enemy_configs[index], index, positions, geometry_prepared)
 		if not point.is_finite():
 			if _combat_config_count(enemy_configs) == 0:
 				return -1
@@ -5783,7 +5967,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 	var spawned_count := 0
 	var spawned_combat := 0
 	for index in range(enemy_configs.size()):
-		var enemy := ENEMY_SCENE.instantiate() as Enemy3D
+		var enemy := staged_enemies[index] if preplaced else ENEMY_SCENE.instantiate() as Enemy3D
 		if enemy == null:
 			continue
 		enemy.room_id = room.room_id
@@ -5820,6 +6004,8 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		spawn_data.erase("spawn_position")
 		spawn_data.erase("spawn_delay_sec")
 		spawn_data.erase("spawn_safe_candidates")
+		spawn_data.erase("spawn_preplaced_box")
+		spawn_data.erase("spawn_box_min_spacing_m")
 		spawn_data.erase("spawn_min_player_distance_m")
 		spawn_data.erase("spawn_landing_anchor")
 		spawn_data.erase("spawn_launch_target")
@@ -12124,8 +12310,8 @@ func _is_player_dead() -> bool:
 ## 顺序是契约 —— 先清 _active_extraction_beacon 再 abort，让 extraction_cancelled
 ## 回调在「不再是当前信标」处直接返回，不要用「受击中断」文案顶掉死亡文案。
 func _abort_extraction_on_death() -> void:
-	if not _extraction_encounter_instance_id.is_empty() and _encounter_event_director != null:
-		cancel_encounter_event(_extraction_encounter_instance_id, "player_dead", true)
+	if _encounter_event_director != null:
+		_encounter_event_director.cancel_all("player_dead")
 	_extraction_encounter_instance_id = ""
 	var beacon := _active_extraction_beacon
 	_active_extraction_beacon = null

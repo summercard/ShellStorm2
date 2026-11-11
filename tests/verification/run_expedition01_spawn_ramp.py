@@ -16,12 +16,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--negative-bonus", action="store_true")
-    parser.add_argument("--timeout", type=int, default=300)
+    parser.add_argument("--preplaced-only", action="store_true")
+    parser.add_argument("--preplaced-unit-only", action="store_true")
+    parser.add_argument("--timeout", type=int, default=180)
     args = parser.parse_args()
     executable = Path("I:/Godot_v4.6.3-stable_win64.exe/Godot_v4.6.3-stable_win64_console.exe")
     if not executable.is_file():
         raise FileNotFoundError(executable)
-    mode = "parse" if args.check_only else "negative_bonus" if args.negative_bonus else "production"
+    mode = "parse" if args.check_only else "negative_bonus" if args.negative_bonus else "preplaced" if args.preplaced_only else "preplaced_unit" if args.preplaced_unit_only else "production"
     base = f"verification/shellstorm-verification.spawn_ramp/{time.time_ns()}_{mode}"
     env = os.environ.copy()
     for key, folder in (("APPDATA", "appdata"), ("LOCALAPPDATA", "localappdata")):
@@ -35,6 +37,10 @@ def main():
         command += ["res://tests/verification/verify_expedition01_spawn_ramp.tscn"]
     if args.negative_bonus:
         command += ["--", "--negative-bonus"]
+    elif args.preplaced_only:
+        command += ["--", "--preplaced-only"]
+    elif args.preplaced_unit_only:
+        command += ["--", "--preplaced-unit-only"]
     print("隔离目录", env["APPDATA"], env["LOCALAPPDATA"], flush=True)
     print("日志", log, flush=True)
     timed_out = False

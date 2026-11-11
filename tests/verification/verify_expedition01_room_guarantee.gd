@@ -1,8 +1,6 @@
 extends Node
-## 远征01「第一或第二个房间的宝箱必掉一把蓝品霰弹枪/步枪 + 100 发通用弹药」专项。
-##
-## 业主要求（2026-11-09）：那把枪**要么在第一个房间、要么在第二个房间**，随机一间掉；
-## 一起掉的还有一组 100 发普通弹药。
+## 远征01固定02号房宝箱首枪专项：蓝品标准弹霰弹枪/步枪恰好一把+100弹。
+## 2026-11-11最终冻结：候选只room_02，一局一次；01/02随机选房是历史规则。
 ##
 ## 本用例只验**纯服务层**（配置解析 → 选房 → 箱子配置 → 宝箱奖励解析），
 ## 不建世界、不刷怪、不真开箱。判据分五组：
@@ -125,7 +123,8 @@ func _check_structure(clear_drops: Dictionary) -> void:
 	if entry.is_empty():
 		return
 	var rooms := entry.get("candidate_rooms", []) as Array
-	_check(rooms.size() == 2, "候选房必须是 2 间（实际 %d）：%s" % [rooms.size(), str(rooms)])
+	_check(rooms == ["room_02"], "首枪候选必须仅room_02：%s" % str(rooms))
+	_check(int(entry.get("weapon_count", 0)) == 1, "保底必须恰好一把枪")
 	var guns := entry.get("weapon_choices", []) as Array
 	_check(
 		guns.size() == 2 and str(guns[0]) in CANDIDATE_GUNS and str(guns[1]) in CANDIDATE_GUNS,
@@ -151,8 +150,8 @@ func _check_structure(clear_drops: Dictionary) -> void:
 ## 写成设计源初值 `f00_room_0N` 会在这里红 —— 这正是 2026-11-10 之前漏掉的那条。
 func _check_runtime_id_alignment() -> void:
 	_check(
-		_candidate_rooms.size() == 2,
-		"从配置里读到 %d 个候选房（应为 2）：%s" % [_candidate_rooms.size(), str(_candidate_rooms)]
+		_candidate_rooms == ["room_02"],
+		"候选必须是运行时room_02：%s" % str(_candidate_rooms)
 	)
 	_check(
 		not _runtime_room_ids.is_empty(),
@@ -174,12 +173,12 @@ func _check_runtime_id_alignment() -> void:
 	)
 
 
-## B 组：每局恰好命中一间，同 seed 恒定，且两间都会被抽到（哈希不能退化成永远同一间）。
+## B组：遍历真实运行时房间，每局只有02命中；重复查询同一冻结内容。
 func _check_room_pick(service: RefCounted) -> void:
 	var picked_rooms: Dictionary = {}
 	for seed_value in SAMPLE_SEEDS:
 		var hits: Array[String] = []
-		for room_id in _candidate_rooms:
+		for room_id in _runtime_room_ids:
 			if not (service.guaranteed_items_for_room(room_id, seed_value) as Array).is_empty():
 				hits.append(room_id)
 		_check(
@@ -188,23 +187,24 @@ func _check_room_pick(service: RefCounted) -> void:
 		)
 		if hits.size() != 1:
 			continue
+		_check(hits == ["room_02"], "每个seed必须只命中02：%s" % str(hits))
 		picked_rooms[seed_value] = hits[0]
 		# 同 seed 再问一次，必须给同一个答案（读档 / 流送重建不能换房）。
 		var again: Array[String] = []
-		for room_id in _candidate_rooms:
+		for room_id in _runtime_room_ids:
 			if not (service.guaranteed_items_for_room(room_id, seed_value) as Array).is_empty():
 				again.append(room_id)
 		_check(
 			again == hits,
 			"seed %d 两次调用结果不一致：%s vs %s" % [seed_value, str(hits), str(again)]
 		)
-	# 分布检查：样本里两间房都出现过，否则等于「只掉了第一间」。
+	# 固定节点：所有种子都只命中02，不再期待两房随机分布。
 	var distinct := {}
 	for room_id in picked_rooms.values():
 		distinct[room_id] = true
 	_check(
-		distinct.size() == 2,
-		"抽样 %d 个 seed 只命中 %s，随机选房退化成固定房" % [SAMPLE_SEEDS.size(), str(distinct.keys())]
+		distinct.keys() == ["room_02"],
+		"固定首枪节点漂移：%s" % str(distinct.keys())
 	)
 
 
@@ -215,6 +215,8 @@ func _check_contents(service: RefCounted) -> void:
 			var items := service.guaranteed_items_for_room(room_id, seed_value) as Array
 			if items.is_empty():
 				continue
+			_check(items.size() == 2, "保底必须仅1把枪和1组100弹")
+			_check(items == service.guaranteed_items_for_room(room_id, seed_value), "同局重建不得重抽或叠加保底")
 			var guns: Array = []
 			var ammo: Array = []
 			for raw in items:
@@ -296,7 +298,7 @@ func _check_chest_grants(service: RefCounted) -> void:
 				"seed %d / %s 宝箱奖励里没有 %d 发保底弹药（可能被 _unit_grants 拍成 1 发）"
 				% [seed_value, room_id, AMMO_COUNT]
 			)
-	_check(gun_found > 0 and ammo_found > 0, "整轮没有产出任何保底枪或弹药")
+	_check(gun_found == SAMPLE_SEEDS.size() and ammo_found == SAMPLE_SEEDS.size(), "每个seed必须恰好解析一把保底枪和100弹，不能双发")
 	# 清房箱必须仍是普通档：保底不能把它偷偷升成高级箱。
 	_check(
 		tier_seen.keys() == ["normal"] or (tier_seen.has("normal") and tier_seen.size() == 1),
@@ -307,6 +309,9 @@ func _check_chest_grants(service: RefCounted) -> void:
 func _check_room_overrides(service: RefCounted) -> void:
 	var room_02: Dictionary = service.roll_room_drop("room_02", "content", 2026)
 	_check(str(room_02.get("kind", "")) == "chest", "room_02 应产生普通宝箱")
+	_check((room_02.get("additional_weapon", {}) as Dictionary).is_empty(), "02不得再通过追加出口双发首枪")
+	var repeated: Dictionary = service.roll_room_drop("room_02", "content", 2026)
+	_check(room_02 == repeated, "同局重复查询必须恢复同一冻结计划，不叠发")
 	var room_02_chest := room_02.get("chest", {}) as Dictionary
 	_check(is_equal_approx(float(room_02_chest.get("fate_card_chance", 0.0)), 1.0), "room_02 命运机会必须冻结为1.0")
 	_check(bool(room_02_chest.get("fate_common_offer", false)), "room_02 必须冻结 fate_common_offer")
@@ -347,7 +352,7 @@ func _check_reverse_control(clear_drops: Dictionary) -> void:
 	_check(bool(report.get("ok", false)), "去掉 room_guarantees 后配置反而失败")
 	var any_hit := false
 	for seed_value in SAMPLE_SEEDS:
-		for room_id in _candidate_rooms:
+		for room_id in _runtime_room_ids:
 			if not (service.guaranteed_items_for_room(room_id, seed_value) as Array).is_empty():
 				any_hit = true
 	_check(not any_hit, "反向对照失败：去掉 room_guarantees 后仍有保底命中")
@@ -362,7 +367,7 @@ func _finish() -> void:
 	_probe_completed = true
 	if _failures.is_empty():
 		print(
-			"EXPEDITION01_ROOM_GUARANTEE_OK: 候选房 %s 与运行时 id 对齐；恰好随机一间必掉蓝品霰弹枪或步枪 + %d 发通用弹药；同 seed 恒定；清房箱档位未变"
+			"EXPEDITION01_ROOM_GUARANTEE_OK: 候选房 %s 与运行时 id 对齐；固定02恰好一把蓝品标准弹霰弹枪或步枪 + %d 发通用弹药；同 seed 恒定；清房箱档位未变"
 			% [str(_candidate_rooms), AMMO_COUNT]
 		)
 		get_tree().quit(0)

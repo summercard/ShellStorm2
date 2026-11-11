@@ -52,15 +52,8 @@ func _notification(what: int) -> void:
 
 func load_base() -> void:
 	call_deferred("_publish_loaded_base_power")
-	var json: Variant = AtomicJsonStore.load_dictionary(
-		save_path, Callable(self, "_is_supported_save_candidate")
-	)
-	if json is Dictionary:
-		var unpacked := SaveService.unpack(json as Dictionary)
-		if not bool(unpacked.get("success", false)):
-			push_error("[BaseManager] Save envelope validation failed")
-			data = BaseData.new()
-			return
+	var unpacked := _read_validated_profile()
+	if not unpacked.is_empty():
 		var payload := unpacked.get("payload", {}) as Dictionary
 		var save_version := str(payload.get("save_version", "legacy"))
 		if save_version != BaseData.SAVE_VERSION:
@@ -84,9 +77,18 @@ func _publish_loaded_base_power() -> void:
 		base_power_changed.emit(data.base_generator_enabled)
 
 
-func _is_supported_save_candidate(candidate: Dictionary) -> bool:
-	var unpacked := SaveService.unpack(candidate)
-	return bool(unpacked.get("success", false))
+func _read_validated_profile() -> Dictionary:
+	# AtomicJsonStore owns main/backup selection. Keep the result of validating
+	# the accepted candidate for this read only, including on write read-back.
+	var accepted := {}
+	AtomicJsonStore.load_dictionary(save_path, func(candidate: Dictionary) -> bool:
+		var decoded := SaveService.unpack(candidate)
+		if not bool(decoded.get("success", false)):
+			return false
+		accepted.assign(decoded)
+		return true
+	)
+	return accepted
 
 func _ensure_data() -> void:
 	if data == null:
@@ -113,16 +115,9 @@ func save_base(reason: String = "base_mutation") -> bool:
 	var payload := data._to_dict()
 	var envelope := SaveService.build_envelope(payload, data.save_revision, data.last_save_reason)
 	if not force_save_failure_for_test and AtomicJsonStore.save_dictionary(save_path, envelope):
-		var persisted: Variant = AtomicJsonStore.load_dictionary(
-			save_path, Callable(self, "_is_supported_save_candidate")
-		)
-		if persisted is Dictionary:
-			var unpacked := SaveService.unpack(persisted as Dictionary)
-			if (
-				bool(unpacked.get("success", false))
-				and int(unpacked.get("revision", -1)) == data.save_revision
-			):
-				return true
+		var persisted := _read_validated_profile()
+		if not persisted.is_empty() and int(persisted.get("revision", -1)) == data.save_revision:
+			return true
 		push_error("[BaseManager] Save write completed but read-back validation failed")
 	data.save_revision = old_revision
 	data.last_saved_at_unix = old_time
@@ -380,13 +375,7 @@ func replace_narrative_history_for_test(records: Dictionary) -> void:
 
 
 func _read_disk_revision() -> int:
-	var stored: Variant = AtomicJsonStore.load_dictionary(
-		save_path, Callable(self, "_is_supported_save_candidate")
-	)
-	if not stored is Dictionary:
-		return -1
-	var unpacked := SaveService.unpack(stored as Dictionary)
-	return int(unpacked.get("revision", -1)) if bool(unpacked.get("success", false)) else -1
+	return int(_read_validated_profile().get("revision", -1))
 
 
 ## 复位长期档和当前行动的唯一入口。先写入并回读一份合法的全新封套，

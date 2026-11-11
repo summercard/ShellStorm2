@@ -1,5 +1,7 @@
 extends Node
-## 远征01 room_03「踩点触发式遭遇」专项验收。
+## 旧circle/band独立fixture兼容验收，不代表当前远征房间入口配置。
+## 正式A/B入口/准备/远端数据由verify_expedition01_spawn_ramp及door_preparation验收。
+## 本场景仅在测试内覆盖encounter，保留房心/满宽带走位、封门、有限清空与EVENT行为覆盖。
 ##
 ## 盯业主 2026-10-16 那七条要求里**能被机器判死**的部分：
 ##   ① 进房时**没有**刷怪盒、也**不刷怪**（否则玩家没走到触发点房就被判清、门就开了）
@@ -66,6 +68,7 @@ func _ready() -> void:
 		_finish()
 		return
 
+	_install_legacy_shape_fixtures()
 	var room := tower._room_by_id.get(ROOM_KEY) as DungeonRoom3D
 	_check(room != null, "%s 在运行时不存在" % ROOM_KEY)
 	if room == null:
@@ -487,6 +490,24 @@ func _verify_event_room_trigger_combat() -> void:
 		not room.cleared,
 		"%s 进房就被判成已肃清 ⇒ 去路门会立刻解锁，触发也没意义" % EVENT_ROOM_KEY
 	)
+
+
+func _install_legacy_shape_fixtures() -> void:
+	for key in ["room_03", "room_04", "room_06", "room_09", "room_10"]:
+		var room := tower._room_by_id.get(key) as DungeonRoom3D
+		if room == null:
+			continue
+		var fixture := room.encounter.duplicate(true)
+		for field in ["preparation_sec", "freeze_player_sec", "remote_spawn_policy", "spawn_origin_port_id", "alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse"]:
+			fixture.erase(field)
+		fixture["start_delay_sec"] = 1.5
+		fixture["hud_countdown"] = false
+		if key == "room_03":
+			fixture["trigger"] = {"shape": "circle", "radius_m": 6.0, "offset_m": [0.0, 0.0]}
+		else:
+			fixture["trigger"] = {"shape": "band", "axis": "x" if key == "room_06" else "z", "thickness_m": 6.0, "offset_m": [0.0, 0.0]}
+		room.encounter = fixture
+	print("ENCOUNTER_LEGACY_SHAPE_FIXTURES_INSTALLED circle=1 band=4 production_data_unchanged=true")
 
 
 func _finish() -> void:

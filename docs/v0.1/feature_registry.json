@@ -1511,6 +1511,12 @@
           "kind": "scene",
           "id": "verify_encounter_event_flow"
         },
+        {
+          "kind": "scene",
+          "id": "verify_encounter_preparation_hud_integration",
+          "suite": "core",
+          "requires": "Autoload前隔离（APPDATA 须含 shellstorm-verification.）；不生成关卡，只验事件快照到倒计时环/警报浮层的窄接口"
+        },
         {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；有限clear/间歇/pending/封门结果pending"}
       ],
       "status": "partial"
