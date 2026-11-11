@@ -525,6 +525,10 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  # 2026-11-11：须由 run_expedition01_flow_integration.py 在 Autoload 前隔离；登记不代表通过。
+  verify_expedition01_reward_flow
+  verify_expedition01_flow_integration
+  verify_boss_reinforcement_airdrop
   # 必须由隔离外部 runner 在 Autoload 前设置 SHELLSTORM_MAIN_STORY_ISOLATED=1。
   # integration 的 user:// 含 main_story_integration；其余三项含 main_story_performance。
   # narrative 最新版已含真实场景，不再是纯规则；捕捉还须真渲染和工程外输出目录。
@@ -548,6 +552,9 @@ retired_scenes=(
 
 renderer_scenes=(
   "${visual_scenes[@]}"
+  # 专用隔离Runner专项仅登记，禁止full目录扫描误收进普通无头批跑。
+  verify_expedition01_reward_flow
+  verify_expedition01_flow_integration
   verify_world_environment_audio_flow
   # full/aggregate full 通过此排除表选场景；以下归属仍唯一为 manual，
   # 不能让目录扫描把缺专用隔离环境的主线验收混进无头自动套件。

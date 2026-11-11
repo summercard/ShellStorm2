@@ -42,6 +42,10 @@ const BOSS_REINFORCEMENT_REQUEST_TYPES := ["ambush"]
 
 ## 触发器刷怪：盒子资产库（id → 路径 + 解析 + 自检）。见 `docs/v0.1/design/触发器刷怪设计.md`。
 const SPAWN_BOX_CATALOG := preload("res://src/map/SpawnBoxCatalog.gd")
+const SPAWN_PLACEMENT_KEYS := [
+	"box", "center_m", "size_m", "rotation_deg", "delay_sec", "count_bonus", "count_multiplier",
+	"slot", "spawn_overrides",
+]
 ## 调用层波次上限：与 SPAWN_PLAN_MAX_WAVES 同口径（一次遭遇不该超过 6 波）。
 const SPAWN_BOX_MAX_STAGES := 6
 ## 踩点触发式遭遇（`encounter.trigger`）允许出现的键。
@@ -691,10 +695,11 @@ static func _validate_boss_reinforcement_plan(room: Dictionary) -> Array[String]
 		errors.append("boss_reinforcement_interval_step_sec_invalid:%s" % key)
 	for field in ["initial_count", "count_step", "max_count_per_round", "max_reinforcement_alive"]:
 		var value: Variant = plan.get(field, null)
+		var minimum := 0.0 if field == "count_step" else 1.0
 		if (
-			not _boss_reinforcement_number(value)
-			or float(value) <= 0.0
-			or not is_equal_approx(float(value), round(float(value)))
+			not _finite_number(value)
+			or float(value) < minimum
+			or float(value) != floor(float(value))
 		):
 			errors.append("boss_reinforcement_%s_invalid:%s" % [field, key])
 	var initial_count := int(plan.get("initial_count", 0))
@@ -1132,6 +1137,11 @@ static func _validate_spawn_boxes(
 				errors.append("spawn_placement_not_object:%s" % slot)
 				continue
 			var placement := placement_value as Dictionary
+			for placement_key in placement:
+				if placement_key not in SPAWN_PLACEMENT_KEYS:
+					errors.append("spawn_placement_unknown_field:%s:%s" % [slot, str(placement_key)])
+			if placement.has("spawn_overrides"):
+				errors.append_array(SPAWN_BOX_CATALOG.validate_spawn_entries(placement["spawn_overrides"], slot))
 			var box_id := str(placement.get("box", ""))
 			if box_id.is_empty():
 				errors.append("spawn_placement_box_empty:%s" % slot)
@@ -1139,7 +1149,7 @@ static func _validate_spawn_boxes(
 			if not SPAWN_BOX_CATALOG.has_id(box_id):
 				errors.append("spawn_placement_box_unregistered:%s:%s" % [slot, box_id])
 				continue
-			var box := SPAWN_BOX_CATALOG.load_box(box_id)
+			var box := SPAWN_BOX_CATALOG.resolve_placement_box(placement)
 			if box.is_empty():
 				errors.append("spawn_placement_box_invalid:%s:%s" % [slot, box_id])
 				continue

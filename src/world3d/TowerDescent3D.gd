@@ -719,6 +719,16 @@ func _configure_story_enemy(enemy: Enemy3D) -> void:
 			_main_story_controller.configure_enemy(enemy)
 
 
+func _legacy_boss_reward_claimed() -> bool:
+	var key := MainStoryProgress.key_for_level(get_expedition_level_id())
+	var story := BaseManager.get_main_story_snapshot()
+	if key.is_empty() or MainStoryProgress.key_state(story, key) == MainStoryProgress.STATE_NOT_ACQUIRED:
+		return false
+	var source := ((story.get("keys", {}) as Dictionary).get(key, {}) as Dictionary).get("acquired_source", {}) as Dictionary
+	# 前局拿过主线钥匙，不代表本局普通Boss战利品也领过。
+	return not _run_id.is_empty() and str(source.get("runtime_run_id", "")) == _run_id
+
+
 func _main_story_key_pending() -> bool:
 	return MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), MAIN_STORY_SCRIPT.KEY_RARE_EARTH) == MainStoryProgress.STATE_NOT_ACQUIRED
 
@@ -2079,6 +2089,15 @@ func _authored_layout_keep_out_rects(floor_index: int) -> Array[Rect2]:
 
 
 ## Static scene metadata declares floor ownership; no level-specific geometry arrays.
+var _support_metadata_scenes: Dictionary = {}
+
+
+func _support_metadata_scene(path: String) -> PackedScene:
+	if not _support_metadata_scenes.has(path):
+		_support_metadata_scenes[path] = load(path) as PackedScene
+	return _support_metadata_scenes[path] as PackedScene
+
+
 func _component_owned_support_rects(floor_index: int) -> Array[Rect2]:
 	var rects: Array[Rect2] = []
 	for room_id_value in _floor_room_ids.get(floor_index, []):
@@ -2091,7 +2110,7 @@ func _component_owned_support_rects(floor_index: int) -> Array[Rect2]:
 		var path := str(record.get("static_layout_scene_path", ""))
 		if path.is_empty() or not ResourceLoader.exists(path):
 			continue
-		var packed := load(path) as PackedScene
+		var packed := _support_metadata_scene(path)
 		if packed == null:
 			continue
 		var state := packed.get_state()
@@ -2118,7 +2137,7 @@ func _offset_floor_patches(floor_index: int) -> Array[Dictionary]:
 		var own_support := false
 		var path := str(record.get("static_layout_scene_path", ""))
 		if not path.is_empty() and ResourceLoader.exists(path):
-			var state := (load(path) as PackedScene).get_state()
+			var state := _support_metadata_scene(path).get_state()
 			for index in state.get_node_property_count(0):
 				if state.get_node_property_name(0,index) == &"metadata/component_owned_support":
 					own_support = bool(state.get_node_property_value(0,index))

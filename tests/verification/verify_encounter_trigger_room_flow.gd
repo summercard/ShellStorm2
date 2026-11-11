@@ -44,16 +44,27 @@ func _check(ok: bool, message: String) -> void:
 
 
 func _ready() -> void:
-	if not OS.get_environment("APPDATA").contains("flow_integration") or not OS.get_environment("LOCALAPPDATA").contains("flow_integration"):
-		_check(false, "必须通过隔离flow_integration启动器运行")
+	var appdata := OS.get_environment("APPDATA").replace("\\", "/").to_lower()
+	var localappdata := OS.get_environment("LOCALAPPDATA").replace("\\", "/").to_lower()
+	var isolated := appdata != localappdata and appdata.get_base_dir() == localappdata.get_base_dir() and appdata.ends_with("/appdata") and localappdata.ends_with("/localappdata") and (appdata.contains("/flow_integration/") or appdata.contains("/shellstorm-verification."))
+	if not isolated:
+		_check(false, "必须在独立APPDATA/LOCALAPPDATA隔离目录运行")
 		_finish()
 		return
 	tower = SCENE.instantiate() as TowerDescent3D
 	tower.test_mode = true
 	tower.run_seed_override = SEED_VALUE
 	add_child(tower)
-	await get_tree().process_frame
-	await get_tree().physics_frame
+	var deadline := Time.get_ticks_msec() + 120000
+	while Time.get_ticks_msec() < deadline and not tower._expedition_bootstrap_failed:
+		if tower._room_by_id.has("room_10") and tower._main_story_gameplay_started and not tower._expedition_loading_active:
+			break
+		await get_tree().process_frame
+	var runtime_ready := tower._room_by_id.has("room_10") and tower._main_story_gameplay_started and not tower._expedition_bootstrap_failed
+	_check(runtime_ready, "13房初始化未就绪：rooms=%d gameplay=%s" % [tower._room_by_id.size(), tower._main_story_gameplay_started])
+	if not runtime_ready:
+		_finish()
+		return
 
 	var room := tower._room_by_id.get(ROOM_KEY) as DungeonRoom3D
 	_check(room != null, "%s 在运行时不存在" % ROOM_KEY)
@@ -239,7 +250,7 @@ func _ready() -> void:
 
 	# ④ 清完第一波 ⇒ 第二波才出；期间房间**不判清**。
 	_clear_enemies(room)
-	tower._encounter_event_director.tick(0.0)
+	tower._encounter_event_director.notify_enemy_departed(instance_id, "killed")
 	_check(not _stage_started(instance_id, 1), "第一波清完跳过间歇")
 	_check(not room.cleared and tower._room_has_pending_combat(room), "有限波间歇提前清房")
 	tower._encounter_event_director.tick(float(room.encounter.get("intermission_sec", 0.0)) + 0.1)
@@ -458,7 +469,9 @@ func _verify_event_room_trigger_combat() -> void:
 			% EVENT_ROOM_KEY
 	)
 	# 真的走一遍进房：EVENT 分支必须把本房登记成「带战斗的事件房」，且**进房不刷怪**。
-	tower.player.global_position = room.to_global(Vector3(0.0, 0.5, 0.0))
+	var trigger := room.encounter.get("trigger", {}) as Dictionary
+	var outside := float(trigger.get("thickness_m", 6.0)) * 0.5 + 2.0
+	tower.player.global_position = room.to_global(Vector3(outside, 0.5, 0.0)) if str(trigger.get("axis", "z")) == "z" else room.to_global(Vector3(0.0, 0.5, outside))
 	tower.force_enter_room_for_test(EVENT_ROOM_KEY)
 	await get_tree().process_frame
 	await get_tree().process_frame

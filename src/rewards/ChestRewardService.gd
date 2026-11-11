@@ -23,7 +23,8 @@ static func resolve(
 	chest_config: Dictionary,
 	run_seed: int,
 	room_id: String,
-	floor_level: int = 1
+	floor_level: int = 1,
+	run_instance_id: String = ""
 ) -> Dictionary:
 	var result := {
 		"ok": false,
@@ -138,10 +139,10 @@ static func resolve(
 	result["ok"] = errors.is_empty()
 	# ⚠ 顺序：先 `_unit_grants` 把普通奖励拍成单件，**之后**再接保底。
 	# 保底条目自带数量（如 100 发弹药），绝不能过 `_unit_grants`（那会把 100 拍成 1）。
-	var stabilized := _stabilize_grants(_unit_grants(grants), room_id, chest_id)
+	var stabilized := _stabilize_grants(_unit_grants(grants), room_id, chest_id, run_seed, run_instance_id)
 	var guaranteed_typed: Array[Dictionary] = []
 	guaranteed_typed.assign(guaranteed_grants)
-	stabilized.append_array(_stabilize_grants(guaranteed_typed, room_id, "%s:guaranteed:%d" % [chest_id, run_seed]))
+	stabilized.append_array(_stabilize_grants(guaranteed_typed, room_id, "%s:guaranteed" % chest_id, run_seed, run_instance_id))
 	result["grants"] = stabilized
 	result["errors"] = errors
 	result["tier"] = tier
@@ -203,7 +204,8 @@ static func resolve_additional_weapon(
 	run_seed: int,
 	room_id: String,
 	chest_id: String,
-	floor_level: int
+	floor_level: int,
+	run_instance_id: String = ""
 ) -> Dictionary:
 	var weapon := drop_config.get("additional_weapon", {}) as Dictionary
 	if weapon.is_empty():
@@ -229,7 +231,7 @@ static func resolve_additional_weapon(
 	})
 	var grants: Array[Dictionary] = []
 	grants.assign(report.get("grants", []))
-	report["grants"] = _stabilize_grants(grants, room_id, "%s:additional_weapon" % chest_id)
+	report["grants"] = _stabilize_grants(grants, room_id, "%s:additional_weapon" % chest_id, run_seed, run_instance_id)
 	return report
 
 
@@ -423,18 +425,23 @@ static func _unit_grants(grants: Array[Dictionary]) -> Array[Dictionary]:
 	return out
 
 
-static func _stabilize_grants(grants: Array[Dictionary], room_id: String, chest_id: String) -> Array[Dictionary]:
+## 只处理新解析奖励；旧局已冻结的 grants 必须由交付Owner原样恢复，不经过此口。
+## 身份上下文不参与任何随机流，JSON数组编码避免来源字符串分隔歧义。
+static func _stabilize_grants(
+	grants: Array[Dictionary], room_id: String, chest_id: String,
+	run_seed: int, run_instance_id: String
+) -> Array[Dictionary]:
 	var out: Array[Dictionary] = []
 	for index in range(grants.size()):
 		var grant := grants[index].duplicate(true)
 		var item := grant.get("item", {}) as Dictionary
 		if str(item.get("type", "")) == "weapon":
 			var item_id := str(grant.get("item_id", item.get("id", "weapon")))
-			var stable_id := "chest_wpn_%08x_%02d" % [
-				absi(hash("%s|%s|%s|%d" % [room_id, chest_id, item_id, index])), index,
-			]
+			var identity := JSON.stringify([run_seed, run_instance_id, room_id, chest_id, item_id, index])
+			var identity_hash := identity.sha256_text()
+			var stable_id := "chest_wpn_%s_%02d" % [identity_hash, index]
 			item["weapon_instance_id"] = stable_id
-			item["created_transaction_id"] = "chest:%s:%s:%d" % [room_id, chest_id, index]
+			item["created_transaction_id"] = "chest:%s" % identity_hash
 			var nested := item.get("weapon_instance", {}) as Dictionary
 			nested["weapon_instance_id"] = stable_id
 			nested["created_transaction_id"] = item["created_transaction_id"]

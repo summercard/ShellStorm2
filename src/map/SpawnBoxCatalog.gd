@@ -198,6 +198,66 @@ static func load_box(box_id: String) -> Dictionary:
 	return box
 
 
+## 实例清单唯一解析入口。非法覆盖返回空字典，绝不回退共享清单。
+## 不应用 placement 的尺寸、延迟、倍率或 bonus，避免消费端重复应用。
+static func resolve_placement_box(placement: Dictionary) -> Dictionary:
+	var box_value: Variant = placement.get("box", "")
+	if not box_value is String:
+		return {}
+	var box := load_box(str(box_value)).duplicate(true)
+	if box.is_empty() or not placement.has("spawn_overrides"):
+		return box
+	var overrides: Variant = placement["spawn_overrides"]
+	if not validate_spawn_entries(overrides, "spawn_overrides").is_empty():
+		return {}
+	box["spawns"] = _normalize_spawns(overrides as Array)
+	return box
+
+
+## 共享盒与实例覆盖共用的严格清单校验；不输出日志，便于负向验证。
+static func validate_spawn_entries(value: Variant, source: String = "") -> Array[String]:
+	var errors: Array[String] = []
+	if not value is Array or (value as Array).is_empty():
+		errors.append("spawn_box_spawns_empty:%s" % source)
+		return errors
+	for index in (value as Array).size():
+		var entry_value: Variant = value[index]
+		if not entry_value is Dictionary:
+			errors.append("spawn_box_entry_not_object:%s:%d" % [source, index])
+			continue
+		var entry := entry_value as Dictionary
+		for key in entry:
+			if key not in ["type", "count", "delay_sec"]:
+				errors.append("spawn_box_entry_unknown_field:%s:%d:%s" % [source, index, str(key)])
+		var type_value: Variant = entry.get("type", null)
+		if not type_value is String or not ALLOWED_BOX_TYPES.has(str(type_value)):
+			errors.append("spawn_box_entry_type_invalid:%s:%d:%s" % [source, index, str(type_value)])
+		var count: Variant = entry.get("count", null)
+		var valid_count := _positive_integer(count)
+		if count is Dictionary:
+			var range_count := count as Dictionary
+			valid_count = (
+				range_count.size() == 2 and range_count.has("min") and range_count.has("max")
+				and _positive_integer(range_count.get("min")) and _positive_integer(range_count.get("max"))
+			)
+			if valid_count:
+				valid_count = float(range_count["min"]) <= float(range_count["max"])
+		if not valid_count:
+			errors.append("spawn_box_entry_count_invalid:%s:%d:%s" % [source, index, str(count)])
+		var delay: Variant = entry.get("delay_sec", 0.0)
+		if not _finite_number(delay) or float(delay) < 0.0:
+			errors.append("spawn_box_entry_delay_invalid:%s:%d" % [source, index])
+	return errors
+
+
+static func _finite_number(value: Variant) -> bool:
+	return (value is int or value is float) and is_finite(float(value))
+
+
+static func _positive_integer(value: Variant) -> bool:
+	return _finite_number(value) and float(value) > 0.0 and float(value) == floor(float(value))
+
+
 ## 校验一份盒子原始 JSON。返回错误码数组（空 = 合法）。校验器与自检共用。
 static func validate_box(raw: Dictionary, source: String = "") -> Array[String]:
 	var errors: Array[String] = []
@@ -217,27 +277,7 @@ static func validate_box(raw: Dictionary, source: String = "") -> Array[String]:
 	var shape := str(raw.get("shape", "box"))
 	if shape != "box" and shape != "cylinder":
 		errors.append("spawn_box_shape_invalid:%s:%s" % [where, shape])
-	var raw_spawns: Variant = raw.get("spawns", [])
-	if not (raw_spawns is Array) or (raw_spawns as Array).is_empty():
-		errors.append("spawn_box_spawns_empty:%s" % where)
-		return errors
-	for index in range((raw_spawns as Array).size()):
-		var entry_value: Variant = (raw_spawns as Array)[index]
-		if not (entry_value is Dictionary):
-			errors.append("spawn_box_entry_not_object:%s:%d" % [where, index])
-			continue
-		var entry := entry_value as Dictionary
-		var type_id := str(entry.get("type", ""))
-		if not ALLOWED_BOX_TYPES.has(type_id):
-			errors.append("spawn_box_entry_type_invalid:%s:%d:%s" % [where, index, type_id])
-		var range_result := _count_range(entry.get("count", 0))
-		if int(range_result.x) <= 0 or int(range_result.y) < int(range_result.x):
-			errors.append(
-				"spawn_box_entry_count_invalid:%s:%d:%s"
-				% [where, index, str(entry.get("count", 0))]
-			)
-		if float(entry.get("delay_sec", 0.0)) < 0.0:
-			errors.append("spawn_box_entry_delay_negative:%s:%d" % [where, index])
+	errors.append_array(validate_spawn_entries(raw.get("spawns", []), where))
 	var policy: Variant = raw.get("placement_policy", {})
 	if not (policy is Dictionary):
 		errors.append("spawn_box_policy_not_object:%s" % where)
@@ -297,16 +337,7 @@ static func _read_json(path: String) -> Dictionary:
 static func _normalize(raw: Dictionary, box_id: String) -> Dictionary:
 	var size := _vec3_field(raw.get("size_m", []))
 	# 约定 size_m = [width_x, height_y, depth_z]；盒面尺寸取 (x, z)，高度由房子层高决定。
-	var spawns: Array[Dictionary] = []
-	for entry_value in (raw.get("spawns", []) as Array):
-		var entry := entry_value as Dictionary
-		var range_result := _count_range(entry.get("count", 0))
-		spawns.append({
-			"type": str(entry.get("type", "")),
-			"count_min": int(range_result.x),
-			"count_max": int(range_result.y),
-			"delay_sec": float(entry.get("delay_sec", 0.0)),
-		})
+	var spawns := _normalize_spawns(raw.get("spawns", []) as Array)
 	var policy: Dictionary = raw.get("placement_policy", {}) as Dictionary
 	return {
 		"box_id": box_id,
@@ -320,15 +351,20 @@ static func _normalize(raw: Dictionary, box_id: String) -> Dictionary:
 	}
 
 
-## count 支持两种写法：正整数，或 `{min, max}`。返回 Vector2(min, max)。
-static func _count_range(value: Variant) -> Vector2:
-	if value is Dictionary:
-		var dict := value as Dictionary
-		return Vector2(float(dict.get("min", 0)), float(dict.get("max", 0)))
-	if value is float or value is int:
-		var fixed := float(value)
-		return Vector2(fixed, fixed)
-	return Vector2.ZERO
+static func _normalize_spawns(raw_spawns: Array) -> Array[Dictionary]:
+	var spawns: Array[Dictionary] = []
+	for entry_value in raw_spawns:
+		var entry := entry_value as Dictionary
+		var count: Variant = entry["count"]
+		var minimum := int(count["min"]) if count is Dictionary else int(count)
+		var maximum := int(count["max"]) if count is Dictionary else int(count)
+		spawns.append({
+			"type": str(entry["type"]),
+			"count_min": minimum,
+			"count_max": maximum,
+			"delay_sec": float(entry.get("delay_sec", 0.0)),
+		})
+	return spawns
 
 
 static func _vec3_field(value: Variant) -> Vector3:

@@ -3,6 +3,7 @@ extends Node
 ## 使用 preload 取得脚本，避免 class cache 让独立测试误报。
 
 const DIRECTOR_SCRIPT = preload("res://src/world3d/EncounterEventDirector3D.gd")
+const VALIDATOR_SCRIPT = preload("res://src/map/LevelPlanValidator.gd")
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
 
 var failures: Array[String] = []
@@ -61,8 +62,18 @@ class FakeHost extends RefCounted:
 
 
 func _ready() -> void:
+	_run_boss_reinforcement_count_contract()
+	_run_legacy_completion_contract()
+	var fake_samples_before := samples
+	var fake_failures_before := failures.size()
 	await _run_fake_contract()
+	if failures.size() == fake_failures_before:
+		print("ENCOUNTER_EVENT_FAKE_CONTRACT_OK samples=%d" % (samples - fake_samples_before))
+	var formal_samples_before := samples
+	var formal_failures_before := failures.size()
 	await _run_formal_dungeon_contract()
+	if failures.size() == formal_failures_before:
+		print("ENCOUNTER_EVENT_FORMAL_CONTRACT_OK samples=%d" % (samples - formal_samples_before))
 	if failures.is_empty():
 		print("ENCOUNTER_EVENT_FLOW_OK samples=%d" % samples)
 		get_tree().quit(0)
@@ -93,6 +104,84 @@ func _config(event_id := "event_alpha", completion := "clear") -> Dictionary:
 		],
 		"on_completed": [{"type": "flag", "key": "event_alpha_done", "value": true}],
 	}
+
+
+func _run_boss_reinforcement_count_contract() -> void:
+	var samples_before := samples
+	var failures_before := failures.size()
+	var room := {
+		"key": "boss", "role": "boss", "content_type": "BOSS", "size": Vector2(40.0, 80.0),
+		"boss_reinforcement_plan": {
+			"enabled": true, "boss_spawn_local_m": [0.0, 0.0], "activation_delay_sec": 12.0,
+			"spawn_rows": [
+				{"side": "west", "x_m": -10.0, "z_m": [-5.0, 0.0, 5.0], "height_m": 3.0},
+				{"side": "east", "x_m": 10.0, "z_m": [-5.0, 0.0, 5.0], "height_m": 3.0},
+			],
+			"enemy_request_type": "ambush", "initial_count": 3, "count_step": 0,
+			"max_count_per_round": 3, "max_reinforcement_alive": 6,
+			"initial_interval_sec": 9.0, "interval_step_sec": 0.0, "min_interval_sec": 9.0,
+			"launch_speed_mps": 8.5, "launch_duration_sec": 0.38,
+		},
+	}
+	for step in [0, 0.0, 1, 1.0]:
+		var probe := room.duplicate(true)
+		probe["boss_reinforcement_plan"]["count_step"] = step
+		var errors: Array = VALIDATOR_SCRIPT._validate_boss_reinforcement_plan(probe)
+		_check(errors.is_empty(), "合法增援count_step=%s被拒绝：%s" % [str(step), str(errors)])
+	var json_probe: Variant = JSON.parse_string(JSON.stringify(room["boss_reinforcement_plan"]))
+	var restored_room := room.duplicate(true)
+	restored_room["boss_reinforcement_plan"] = json_probe
+	_check(VALIDATOR_SCRIPT._validate_boss_reinforcement_plan(restored_room).is_empty(), "固定3只增援计划JSON往返被拒绝")
+	for step in [-1, -0.5, 0.5, 0.000001, "0", false, true, null, INF, NAN]:
+		var probe := room.duplicate(true)
+		probe["boss_reinforcement_plan"]["count_step"] = step
+		var errors: Array = VALIDATOR_SCRIPT._validate_boss_reinforcement_plan(probe)
+		_check(errors == ["boss_reinforcement_count_step_invalid:boss"], "非法增援count_step=%s未精确拒绝：%s" % [str(step), str(errors)])
+	for field in ["initial_count", "max_count_per_round", "max_reinforcement_alive"]:
+		for invalid_count in [0, -1, 0.5, "3", false, INF, NAN]:
+			var probe := room.duplicate(true)
+			probe["boss_reinforcement_plan"][field] = invalid_count
+			var errors: Array = VALIDATOR_SCRIPT._validate_boss_reinforcement_plan(probe)
+			_check(errors.has("boss_reinforcement_%s_invalid:boss" % field), "%s=%s未保留正整数约束：%s" % [field, str(invalid_count), str(errors)])
+	if failures.size() == failures_before:
+		print("BOSS_REINFORCEMENT_COUNT_CONTRACT_OK samples=%d" % (samples - samples_before))
+
+
+func _run_legacy_completion_contract() -> void:
+	var samples_before := samples
+	var failures_before := failures.size()
+	for completion in ["timer", "timer_and_clear"]:
+		var host := FakeHost.new()
+		var director = DIRECTOR_SCRIPT.new(host)
+		var config := _config("legacy_%s" % completion, completion)
+		config["stages"] = [{"at_sec": 0.0, "monsters": [{"type": "melee_chaser", "count": 1}]}]
+		var result := director.start(config)
+		_check(bool(result.get("ok", false)), "%s旧正duration配置未启动" % completion)
+		var instance_id := str(result.get("instance_id", ""))
+		director.tick(0.1)
+		host.live_by_instance[instance_id] = 0
+		director.notify_enemy_departed(instance_id, "killed")
+		var cleared := director.get_snapshot(instance_id)
+		if completion == "timer":
+			_check(cleared.get("status") == "active" and host.actions.is_empty(), "旧timer清怪时被提前完成")
+			director.tick(9.9)
+			_check(director.get_snapshot(instance_id).get("status") == "completed" and host.actions.size() == 1, "旧timer到点完成行为变化")
+		else:
+			# 锁定现有Owner事实：timer_and_clear目前清空可提前完成，不在本补丁修正旧语义。
+			_check(cleared.get("status") == "completed" and float(cleared.get("elapsed", 0.0)) < 10.0 and host.actions.size() == 1, "旧timer_and_clear提前清空行为变化")
+		var deadline_host := FakeHost.new()
+		var deadline_director = DIRECTOR_SCRIPT.new(deadline_host)
+		var deadline_result := deadline_director.start(config)
+		var deadline_id := str(deadline_result.get("instance_id", ""))
+		deadline_director.tick(0.1)
+		deadline_director.tick(9.9)
+		var expired := deadline_director.get_snapshot(deadline_id)
+		if completion == "timer":
+			_check(expired.get("status") == "completed" and deadline_host.encounter_event_live_count(deadline_id) == 1, "旧timer到点不要求清怪行为变化")
+		else:
+			_check(expired.get("status") == "failed" and (expired.get("failed", []) as Array).has("timer_expired_before_clear") and deadline_host.actions.is_empty(), "旧timer_and_clear到点存活失败行为变化")
+	if failures.size() == failures_before:
+		print("ENCOUNTER_EVENT_LEGACY_COMPLETION_OK samples=%d" % (samples - samples_before))
 
 
 func _run_fake_contract() -> void:
@@ -235,7 +324,20 @@ func _run_fake_contract() -> void:
 	var no_deadline_roundtrip: Variant = JSON.parse_string(JSON.stringify(saved_no_deadline))
 	_check(bool(no_deadline_director.import_snapshot(no_deadline_roundtrip as Dictionary).get("ok", false)), "间歇快照JSON往返失败")
 	no_deadline_director.tick(1.0)
-	_check(no_deadline_director.get_snapshot(no_deadline_id).get("spawned") == 1, "间歇未结束时提前派发下一波")
+	var restored_intermission := no_deadline_director.get_snapshot(no_deadline_id)
+	_check(
+		restored_intermission.get("spawned") == 2
+		and restored_intermission.get("pending") == 0
+		and no_deadline_host.spawn_log.size() == 2
+		and not bool((restored_intermission.get("stage_states", [])[1] as Dictionary).get("started", false))
+		and is_equal_approx(float(restored_intermission.get("intermission_remaining_sec", -1.0)), 1.0),
+		"恢复后累计派发应保持2、下一波未启动且间歇剩1秒：%s" % str(restored_intermission)
+	)
+	print("ENCOUNTER_EVENT_RESTORED_INTERMISSION spawned=%d remaining_sec=%.1f next_stage_started=%s" % [
+		int(restored_intermission.get("spawned", -1)),
+		float(restored_intermission.get("intermission_remaining_sec", -1.0)),
+		str((restored_intermission.get("stage_states", [])[1] as Dictionary).get("started", false)),
+	])
 	no_deadline_director.tick(1.0)
 	var no_deadline_second := no_deadline_director.get_snapshot(no_deadline_id)
 	_check(no_deadline_second.get("spawned") == 3 and is_equal_approx(no_deadline_host.last_min_player_distance, 8.0), "间歇结束后未派发下一波或未传单条最小距离")

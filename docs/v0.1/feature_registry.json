@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-11-10",
+  "updated_at": "2026-11-11",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -175,9 +175,11 @@
         "docs/v0.1/development/2026-10-18_fate_progression.md",
         "docs/v0.1/development/2026-10-18_fate_elements.md",
         "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
-        "docs/v0.1/development/2026-11-08_fate_pickup_chest_closure.md"
+        "docs/v0.1/development/2026-11-08_fate_pickup_chest_closure.md",
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_expedition01_reward_flow", "suite": "manual", "requires": "Autoload前隔离；02普通报价/来源定价结果pending"},
         {
           "kind": "scene",
           "id": "verify_tarot_fate_runtime"
@@ -249,9 +251,14 @@
         "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md",
         "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
         "docs/v0.1/development/2026-11-06_expedition02_no_key_doors.md",
-        "docs/v0.1/development/2026-11-06_expedition03_workshop_layouts.md"
+        "docs/v0.1/development/2026-11-06_expedition03_workshop_layouts.md",
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {"kind": "command", "path": "tests/verification/verify_expedition01_spawn_ramp.py", "args": [], "suite": "manual"},
+        {"kind": "command", "path": "tests/verification/probe_expedition_spawn_safety.gd", "args": ["--headless", "--scene", "res://tests/verification/probe_expedition_spawn_safety.tscn"], "suite": "manual", "requires": "Autoload前隔离APPDATA/LOCALAPPDATA；数据检查不替代运行安全刷点"},
+        {"kind": "command", "path": "tests/verification/probe_expedition01_encounter_spawn_capacity.gd", "args": ["--headless", "--scene", "res://tests/verification/probe_expedition01_encounter_spawn_capacity.tscn"], "suite": "manual", "requires": "Autoload前隔离APPDATA/LOCALAPPDATA；安全距离与容量"},
+        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "run_expedition01_flow_integration.py专用外部Runner；Autoload前隔离；完整模式结果pending"},
         {
           "kind": "scene",
           "id": "verify_enemy_spawn_boundary"
@@ -322,9 +329,11 @@
         "docs/v0.1/development/2026-09-29_expedition_hologram_city.md",
         "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md",
         "docs/v0.1/development/2026-11-07_loading_warmup_gate.md",
-        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md",
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "专用外部Runner在Autoload前隔离；真实整关仍在联调"},
         {"kind": "scene", "id": "verify_main_story_navigation", "suite": "core"},
         {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual", "requires": "Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_integration"},
         {
@@ -425,9 +434,11 @@
         "docs/v0.1/development/2026-11-06_expedition01_no_key_chest_drops.md",
         "docs/v0.1/development/2026-11-06_expedition02_no_key_doors.md",
         "docs/v0.1/development/2026-11-09_chest_appear_fx_light_prompt.md",
-        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md",
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；分账落地/pending/恢复结果pending"},
         {"kind": "scene", "id": "verify_main_story_progress", "suite": "core"},
         {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual"},
         {
@@ -478,9 +489,11 @@
         "docs/v0.1/development/2026-10-30_expedition03_chest_mimic.md",
         "docs/v0.1/development/2026-11-08_fate_pickup_chest_closure.md",
         "docs/v0.1/development/2026-11-09_opening_ammo_infinite_pistol_room_guarantee.md",
-        "docs/v0.1/development/2026-11-09_pistol_infinite_reserve_ammo.md"
+        "docs/v0.1/development/2026-11-09_pistol_infinite_reserve_ammo.md",
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_expedition01_reward_flow", "suite": "manual", "requires": "run_expedition01_flow_integration.py专用外部Runner；Autoload前隔离；服务结果pending，不代表地面整链通过"},
         {
           "kind": "scene",
           "id": "verify_reward_service_flow"
@@ -666,7 +679,8 @@
         "docs/v0.1/development/2026-10-08_boss002_activation.md",
         "docs/v0.1/development/2026-10-14_boss002_monitor_hit_volume.md",
         "docs/v0.1/development/2026-11-02_expedition03_monitor_boss.md",
-        "docs/v0.1/development/2026-11-10_main_story_031_033.md"
+        "docs/v0.1/development/2026-11-10_main_story_031_033.md",
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
         {"kind": "scene", "id": "verify_main_story_boss_gate", "suite": "core"},
@@ -930,9 +944,11 @@
         "docs/v0.1/development/2026-09-12_save_reentry_spawn_policy.md",
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
         "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md",
-        "docs/v0.1/development/2026-10-08_fate_persistence_completion.md"
+        "docs/v0.1/development/2026-10-08_fate_persistence_completion.md",
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；准备期/间歇/奖励交付账恢复结果pending"},
         {
           "kind": "scene",
           "id": "verify_runtime_autosave_flow"
@@ -1014,9 +1030,11 @@
         "docs/v0.1/development/2026-11-10_main_story_031_033.md",
         "docs/v0.1/development/2026-11-10_key_inset_and_dialogue_advance.md",
         "docs/v0.1/development/2026-11-10_dialogue_bottom_bar.md",
-        "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md"
+        "docs/v0.1/development/2026-11-10_rescue_dialogue_advance.md",
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
+        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；flow_barks按钥匙未取得的首通前语义，结果pending"},
         {"kind": "scene", "id": "verify_main_story_narrative", "suite": "manual", "requires": "已含真实运行；Autoload前隔离；SHELLSTORM_MAIN_STORY_ISOLATED=1；user://含main_story_performance"},
         {"kind": "scene", "id": "verify_main_story_integration", "suite": "manual"},
         {"kind": "scene", "id": "verify_main_story_performance", "suite": "manual"},
@@ -1485,13 +1503,15 @@
       ],
       "development_records": [
         "docs/v0.1/development/2026-10-15_encounter_event_mechanism.md",
-        "docs/v0.1/development/CHANGELOG.md"
+        "docs/v0.1/development/CHANGELOG.md",
+        "docs/v0.1/development/2026-11-11_expedition01_flow.md"
       ],
       "verification": [
         {
           "kind": "scene",
           "id": "verify_encounter_event_flow"
-        }
+        },
+        {"kind": "scene", "id": "verify_expedition01_flow_integration", "suite": "manual", "requires": "Autoload前隔离；有限clear/间歇/pending/封门结果pending"}
       ],
       "status": "partial"
     },

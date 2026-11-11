@@ -15,6 +15,7 @@ const MIN_CARD_PRICE := 40
 const RARITY_UNLOCK_INCOME_RATIOS: Array[float] = [0.0, 0.12, 0.30, 0.55, 0.80]
 const MONSTER_VARIANTS := preload("res://src/enemy3d/MonsterVariants.gd")
 const REWARD_SERVICE := preload("res://src/rewards/RewardService.gd")
+const SPAWN_BOX_CATALOG := preload("res://src/map/SpawnBoxCatalog.gd")
 ## 仅限制报价上限，不改星币七现行效果或生命周期。
 const CARD_PRICE_CAPS := {"fate_sun_bounty": 100}
 
@@ -33,12 +34,13 @@ var _segment_income_min: Array[float] = []
 var _segment_income_expected: Array[float] = []
 var _segment_income_max: Array[float] = []
 var _room_price_indexes: Dictionary = {}
+var _configuration_errors: Array[String] = []
 var _actual_kill_income := 0
 var _actual_kill_events := 0
 
 
 func configure_from_runtime(
-	rooms: Array, box_catalog: Dictionary, currency_rules: Dictionary, floor: int, door_count: int,
+	rooms: Array, _box_catalog: Dictionary, currency_rules: Dictionary, floor: int, door_count: int,
 	strong_variant_chance: float = 0.0
 ) -> Dictionary:
 	_configured = false
@@ -54,6 +56,7 @@ func configure_from_runtime(
 	_segment_income_expected.clear()
 	_segment_income_max.clear()
 	_room_price_indexes.clear()
+	_configuration_errors.clear()
 	for room_value in rooms:
 		if not room_value is Dictionary:
 			continue
@@ -69,14 +72,26 @@ func configure_from_runtime(
 			var selected_indexes := _selected_box_indexes(room.get("encounter", {}) as Dictionary, placements.size())
 			for placement_index in selected_indexes:
 				var placement_value: Variant = placements[placement_index]
-				if placement_value is Dictionary:
-					_add_box_reference(placement_value as Dictionary, box_catalog)
+				if not placement_value is Dictionary:
+					_configuration_errors.append("fate_spawn_placement_invalid:%s:%d" % [room_id, placement_index])
+				elif not _add_box_reference(placement_value as Dictionary):
+					_configuration_errors.append("fate_spawn_box_invalid:%s:%d:%s" % [room_id, placement_index, str((placement_value as Dictionary).get("box", ""))])
 		else:
 			_add_encounter_reference(room.get("encounter", {}) as Dictionary)
 		# 单间收益 = 累计差分，保证与整关总额完全同源，不另建一套估算。
 		_segment_income_min.append(maxf(0.0, _reference_income_min - room_min))
 		_segment_income_expected.append(maxf(0.0, _reference_income_expected - room_expected))
 		_segment_income_max.append(maxf(0.0, _reference_income_max - room_max))
+	if not _configuration_errors.is_empty():
+		_reference_counts.clear()
+		_reference_income_min = 0.0
+		_reference_income_expected = 0.0
+		_reference_income_max = 0.0
+		_segment_income_min.clear()
+		_segment_income_expected.clear()
+		_segment_income_max.clear()
+		_room_price_indexes.clear()
+		return get_snapshot()
 	_configured = true
 	return get_snapshot()
 
@@ -249,6 +264,8 @@ func import_snapshot(value: Variant) -> bool:
 
 func get_snapshot() -> Dictionary:
 	return {
+		"ok": _configuration_errors.is_empty(),
+		"errors": _configuration_errors.duplicate(),
 		"schema_version": SCHEMA_VERSION,
 		"configured": _configured,
 		"floor": _floor,
@@ -288,11 +305,10 @@ func _selected_box_indexes(encounter: Dictionary, placement_count: int) -> Array
 	return indexes
 
 
-func _add_box_reference(placement: Dictionary, box_catalog: Dictionary) -> void:
-	var box_id := str(placement.get("box", ""))
-	var box: Dictionary = box_catalog.get(box_id, {}) as Dictionary
+func _add_box_reference(placement: Dictionary) -> bool:
+	var box := SPAWN_BOX_CATALOG.resolve_placement_box(placement)
 	if box.is_empty():
-		return
+		return false
 	var multiplier := maxi(1, int(placement.get("count_multiplier", 1)))
 	var bonus := int(placement.get("count_bonus", 0))
 	var bonus_used := false
@@ -310,6 +326,7 @@ func _add_box_reference(placement: Dictionary, box_catalog: Dictionary) -> void:
 				counts[1] += bonus
 				bonus_used = true
 		_add_type_reference(type_id, counts[0], counts[1])
+	return true
 
 
 func _add_encounter_reference(encounter: Dictionary) -> void:

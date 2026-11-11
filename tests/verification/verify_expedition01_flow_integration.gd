@@ -24,11 +24,16 @@ func check(ok: bool, text: String) -> void:
 		failures.append(text)
 
 func _ready() -> void:
-	check(OS.get_environment("APPDATA").contains("flow_integration"), "必须隔离 APPDATA")
-	check(OS.get_environment("LOCALAPPDATA").contains("flow_integration"), "必须隔离 LOCALAPPDATA")
+	var appdata := OS.get_environment("APPDATA").replace("\\", "/").to_lower()
+	var localappdata := OS.get_environment("LOCALAPPDATA").replace("\\", "/").to_lower()
+	check(appdata != localappdata and appdata.get_base_dir() == localappdata.get_base_dir(), "必须独立隔离 APPDATA/LOCALAPPDATA")
+	check(appdata.ends_with("/appdata") and localappdata.ends_with("/localappdata") and (appdata.contains("/flow_integration/") or appdata.contains("/shellstorm-verification.")), "必须使用专项或标准套件隔离目录")
 	if not failures.is_empty():
 		finish()
 		return
+	BaseManager.data = BaseData.new()
+	BaseManager.save_path = "user://flow_integration_profile_%d_%d.json" % [OS.get_process_id(), Time.get_ticks_usec()]
+	BaseManager.force_save_failure_for_test = false
 	verify_partial_delivery()
 	if "--partial-delivery-only" in OS.get_cmdline_user_args():
 		finish()
@@ -36,14 +41,21 @@ func _ready() -> void:
 	tower = SCENE.instantiate() as TowerDescent3D
 	tower.test_mode = true
 	tower.run_seed_override = 77001199
+	print("FLOW_INTEGRATION_BOOT_BEGIN")
 	add_child(tower)
-	await get_tree().process_frame
-	await get_tree().physics_frame
-	tower.set_process(false)
-	check(tower._room_by_id.has("room_10"), "正式13房未启动，核对Validator")
-	if not tower._room_by_id.has("room_10"):
+	print("FLOW_INTEGRATION_BOOT_ATTACHED rooms=%d" % tower._room_by_id.size())
+	var deadline := Time.get_ticks_msec() + 120000
+	while Time.get_ticks_msec() < deadline and not tower._expedition_bootstrap_failed:
+		if tower._room_by_id.has("room_10") and tower._main_story_gameplay_started and not tower._expedition_loading_active:
+			break
+		await get_tree().process_frame
+	var runtime_ready := tower._room_by_id.has("room_10") and tower._main_story_gameplay_started and not tower._expedition_bootstrap_failed
+	check(runtime_ready, "正式13房初始化未就绪：rooms=%d gameplay=%s" % [tower._room_by_id.size(), tower._main_story_gameplay_started])
+	if not runtime_ready:
 		finish()
 		return
+	print("FLOW_INTEGRATION_RUNTIME_READY")
+	tower.set_process(false)
 	check(tower._clear_drop_plans.size() == 13, "新局没有冻结13房计划")
 	for room_id in ["room_03", "room_04", "room_06", "room_09", "room_10"]:
 		var room := tower._room_by_id[room_id] as DungeonRoom3D
@@ -63,12 +75,16 @@ func _ready() -> void:
 	check(enemies(room03).is_empty(), "准备期提前出怪")
 	var preparation := disk_round_trip(tower.build_runtime_save_snapshot())
 	check(preparation["world_state"]["room_encounter_flow"]["active"].has(room03.room_id), "准备期active未保存")
-	tower._encounter_event_director.tick(0.6)
+	check(tower._restore_runtime_world_save_snapshot(preparation), "准备期正式恢复失败")
+	check(enemies(room03).is_empty(), "准备期读档重刷敌人")
+	tower._encounter_event_director.tick(0.3)
+	check(enemies(room03).is_empty(), "准备期读档未保留剩余时间")
+	tower._encounter_event_director.tick(0.3)
 	check(enemies(room03).size() == 1, "首胖不是单只")
 	for enemy: Enemy3D in enemies(room03):
 		check(Vector2(enemy.global_position.x - tower.player.global_position.x, enemy.global_position.z - tower.player.global_position.z).length() >= 8.0, "首胖贴脸")
 	clear_live(room03)
-	tower._encounter_event_director.tick(0.0)
+	tower._encounter_event_director.notify_enemy_departed(id, "killed")
 	tower._encounter_event_director.tick(0.7)
 	var saved := disk_round_trip(tower.build_runtime_save_snapshot())
 	var before := tower.get_encounter_event_snapshot(id)
@@ -84,34 +100,99 @@ func _ready() -> void:
 	check(enemies(room03).size() == 8, "第二波未按容量派发")
 	var total := 1
 	var peak := 0
+	var capacity_restored := false
+	var persistent_ids := {}
+	print("FLOW_INTEGRATION_FIRST_WAVE_AND_RESTORE_DONE")
 	for _step in 18:
 		peak = maxi(peak, enemies(room03).size())
 		total += enemies(room03).size()
+		for actor: Enemy3D in enemies(room03):
+			check(not persistent_ids.has(actor.get_persistent_id()), "容量补发重用敌人身份")
+			persistent_ids[actor.get_persistent_id()] = true
+		if not capacity_restored and int(tower.get_encounter_event_snapshot(id).get("pending", 0)) > 0:
+			var capacity_save := disk_round_trip(tower.build_runtime_save_snapshot())
+			var spawned_before := int(tower.get_encounter_event_snapshot(id)["spawned"])
+			var live_before := enemies(room03).size()
+			check(tower._restore_runtime_world_save_snapshot(capacity_save), "容量补发期恢复失败")
+			check(int(tower.get_encounter_event_snapshot(id)["spawned"]) == spawned_before and enemies(room03).size() == live_before, "容量补发读档重复生成")
+			capacity_restored = true
 		clear_live(room03)
-		tower._encounter_event_director.tick(0.0)
+		tower._encounter_event_director.notify_enemy_departed(id, "killed")
 		tower._encounter_event_director.tick(3.1)
 		if bool(tower.get_encounter_event_snapshot(id).get("terminal", false)):
 			break
+	check(capacity_restored, "没有实际覆盖容量补发读档")
 	check(int(tower.get_encounter_event_snapshot(id).get("spawned", 0)) == 20, "03有限编成丢怪/重刷")
 	check(peak <= 8, "03超过同屏容量")
+	check(total == 20, "03实际生成实体总数不是20：%d" % total)
+	print("FLOW_INTEGRATION_ROOM03 spawned=%d peak=%d" % [total, peak])
 	check(room03.cleared and not tower._room_is_sealed(room03.room_id), "03清完未立即解封")
 	check(int(tower.get_encounter_event_snapshot(id).get("dropped", -1)) == 0, "无截止clear作废怪物")
-	var room09 := tower._room_by_id["room_09"] as DungeonRoom3D
-	await enter(room09)
-	var event_started := tower._start_room_encounter(room09)
-	tower._resolved_event_rooms[room09.room_id] = true
-	check(tower._room_has_pending_combat(room09), "EVENT准备期没有pending")
-	tower._mark_room_cleared(room09, true)
-	check(not room09.cleared, "EVENT终端提前清房")
-	tower.cancel_encounter_event(str(event_started.get("instance_id", "")), "verification", true)
+	await verify_event_handler_orders()
 	await verify_box_queue()
 	await verify_rewards()
-	var legacy := disk_round_trip(tower.build_runtime_save_snapshot())
-	legacy["world_state"].erase("clear_drop_plans")
-	legacy["world_state"].erase("room_encounter_flow")
-	check(tower._restore_runtime_world_save_snapshot(legacy), "旧档恢复拒绝")
-	check(tower._clear_drop_plans.is_empty(), "旧档按新配置补造计划")
+	verify_production_run_identity()
+	await verify_legacy_reward_migration()
 	finish()
+
+func verify_event_handler_orders() -> void:
+	var room := tower._room_by_id["room_09"] as DungeonRoom3D
+	await enter(room)
+	var outcomes := ["CURSE", "BLESSING", "TRADE", "GAMBLE", "REVEAL", "SUMMON"]
+	for terminal_first in [false, true]:
+		for outcome in outcomes.size():
+			clear_live(room)
+			tower._resolved_event_rooms.erase(room.room_id)
+			tower._room_encounters_fired.erase(room.room_id)
+			tower._room_encounter_active.erase(room.room_id)
+			tower._room_enemy_damage_multipliers.erase(room.room_id)
+			room.cleared = false
+			var started := tower._start_room_encounter(room)
+			var id := str(started.get("instance_id", ""))
+			check(bool(started.get("ok", false)), "六结果遭遇启动失败")
+			var event_seed := 0
+			var probe := RandomNumberGenerator.new()
+			while event_seed < 1000:
+				probe.seed = event_seed
+				if probe.randi_range(0, 5) == outcome:
+					break
+				event_seed += 1
+			if terminal_first:
+				interact_event(room, event_seed)
+				if outcome == 0:
+					check(is_equal_approx(float(tower._room_enemy_damage_multipliers.get(room.room_id, 1.0)), 1.15), "CURSE未保留后续波次15%伤害效果")
+				check(not room.cleared and tower._room_has_pending_combat(room), "先终端提前清房：%s" % outcomes[outcome])
+			var actual := 0
+			for _batch in 24:
+				tower._encounter_event_director.tick(2.6)
+				var batch := enemies(room)
+				actual += batch.size()
+				check(batch.size() <= 12, "EVENT并发超过12")
+				clear_live(room)
+				tower._encounter_event_director.notify_enemy_departed(id, "killed")
+				if bool(tower.get_encounter_event_snapshot(id).get("terminal", false)):
+					break
+			check(actual == 48 and int(tower.get_encounter_event_snapshot(id).get("spawned", 0)) == 48, "六结果改变48只编排：%s" % outcomes[outcome])
+			if not terminal_first:
+				check(not room.cleared and tower._room_is_sealed(room.room_id), "未结算终端就放行")
+				interact_event(room, event_seed)
+			check(room.cleared and not tower._room_is_sealed(room.room_id), "六结果未收口：%s terminal_first=%s" % [outcomes[outcome], terminal_first])
+			check(enemies(room).is_empty(), "终端重刷已完成遭遇")
+			var spawned := int(tower.get_encounter_event_snapshot(id).get("spawned", 0))
+			interact_event(room, event_seed)
+			check(int(tower.get_encounter_event_snapshot(id).get("spawned", 0)) == spawned and room.cleared, "重复交互重刷或撤销清房")
+			print("FLOW_INTEGRATION_EVENT_HANDLER result=%s terminal_first=%s actual=%d" % [outcomes[outcome], terminal_first, actual])
+			await get_tree().process_frame
+
+func interact_event(room: DungeonRoom3D, event_seed: int) -> void:
+	var station := room.ensure_required_service_station()
+	check(station != null, "正式终端缺失")
+	if station == null:
+		return
+	tower._rng.seed = event_seed
+	station._player_in_range = true
+	check(station.perform_interaction(tower.player, {}), "正式终端交互拒绝")
+	check(tower._resolved_event_rooms.has(room.room_id), "正式handler未登记事件结算")
 
 func verify_partial_delivery() -> void:
 	var host := DeliveryProbe.new()
@@ -173,14 +254,21 @@ func verify_box_queue() -> void:
 	await enter(room)
 	clear_live(room)
 	# 两次请求共用冻结配置，玩家占住全部授权盒候选时只能留队列。
-	var candidate := room.choose_safe_spawn_position(Vector3.INF, 0.0)
+	var frozen_waves := tower._spawn_box_waves(room, 1, 0)
+	check(not frozen_waves.is_empty(), "普通盒没有正式冻结编成")
+	if frozen_waves.is_empty():
+		return
+	var config := (frozen_waves[0][0] as Dictionary).duplicate(true)
+	var authorized: Array = config.get("spawn_safe_candidates", [])
+	check(not authorized.is_empty(), "正式盒编成未保留授权候选")
+	var candidate := room.choose_safe_spawn_position(Vector3.INF, 0.0, [], authorized)
 	check(bool(candidate.get("ok", false)), "盒测试没有合法候选")
 	if not bool(candidate.get("ok", false)):
 		return
 	var point: Vector3 = candidate["position"]
 	tower.player.global_position = point
-	var config := tower._make_box_enemy("melee_chaser", 1, 0, room)
 	config["spawn_position"] = point
+	config["spawn_delay_sec"] = 0.0
 	config["spawn_safe_candidates"] = [point]
 	config["spawn_min_player_distance_m"] = 6.0
 	config["persistent_id"] = "flow_integration:box_wait"
@@ -237,8 +325,213 @@ func verify_rewards() -> void:
 			count += 1
 	check(count == pickups.size(), "07重复结算双发")
 	check(room.get_persistent_detail_state("treasure_chests").size() == 1, "07双箱")
+	var reward_save := disk_round_trip(tower.build_runtime_save_snapshot())
+	check(tower._restore_runtime_world_save_snapshot(reward_save), "07实际奖励读档失败")
+	tower._ensure_room_clear_drop(room)
+	var after_restore := 0
+	for pickup in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if room.is_ancestor_of(pickup) and not pickup.is_queued_for_deletion():
+			after_restore += 1
+	check(after_restore == pickups.size() and room.get_persistent_detail_state("treasure_chests").size() == 1, "07读档后双箱/双枪/双小包")
+	print("FLOW_INTEGRATION_ROOM07 ammo=%d potions=%d guns=%d pickups=%d" % [ammo, potions, guns, after_restore])
 	check(tower._fate_economy.price_index_for_room("room_02") == 2, "02来源报价序号不正确")
 	check(not tower._show_door_fate_choices("pickup", "flow_integration:unknown", {"source_room_id": "unknown"}), "未知来源没有拒绝offer")
+
+func verify_production_run_identity() -> void:
+	var room := tower._room_by_id["room_07"] as DungeonRoom3D
+	var original_run := tower._run_id
+	var original_delivery := tower._clear_drop_delivery.duplicate(true)
+	var original_settled := tower._clear_drop_settled.duplicate(true)
+	var inventory_before := tower._inventory.get_slots_snapshot().duplicate(true)
+	var chest := TreasureChest3D.new()
+	chest.configure({"id": "identity_production_chest", "chest_tier": "normal", "source_room_id": room.room_id, "guaranteed_items": [{"item_id": "weapon_rifle", "count": 1, "grade": "blue", "bullet_module_id": "mod_bullet_standard"}]})
+	var drop := {"kind": "none", "additional_weapon": {"weapon_id": "weapon_rifle", "grade": "purple", "bullet_module_id": "mod_bullet_standard"}}
+	var first_chest: Array = []
+	var first_extra: Array = []
+	var identities: Array = []
+	for run_id in ["flow_identity_run_a", "flow_identity_run_b"]:
+		tower._run_id = run_id
+		var grants := tower._resolve_chest_grants(room, chest)
+		check(grants == tower._resolve_chest_grants(room, chest), "生产箱同run重试奖励/身份改变")
+		var chest_ids := weapon_identities(grants)
+		check(chest_ids.size() == 1, "生产箱未生成保底枪")
+		# 仅注入交付失败；解析仍走未覆盖的生产Dungeon._apply_clear_drop。
+		var delivery_host := DeliveryProbe.new()
+		delivery_host.run_seed = tower.run_seed
+		delivery_host._run_id = tower._run_id
+		delivery_host.visual_theme = tower.visual_theme
+		delivery_host.budget = 0
+		var detached := DungeonRoom3D.new()
+		detached.room_id = "identity_production_extra"
+		add_child(detached)
+		delivery_host._apply_clear_drop(detached, drop, "identity_production_event")
+		var ledger := delivery_host._clear_drop_delivery[detached.room_id] as Dictionary
+		var pending := (ledger.get("additional_weapon_pending", []) as Array).duplicate(true)
+		check(pending.size() == 1, "真实追加解析未保留pending")
+		delivery_host._apply_clear_drop(detached, drop, "identity_production_event")
+		check(ledger["additional_weapon_pending"] == pending, "追加枪同run失败重试重解析")
+		var extra_ids := weapon_identities(pending)
+		check(extra_ids.size() == 1, "真实追加解析未生成枪")
+		identities.append([chest_ids, extra_ids])
+		if run_id == "flow_identity_run_a":
+			first_chest = grants.duplicate(true)
+			first_extra = pending.duplicate(true)
+		else:
+			check(without_weapon_identity(first_chest) == without_weapon_identity(grants), "runID改变箱子随机流")
+			check(without_weapon_identity(first_extra) == without_weapon_identity(pending), "runID改变追加枪随机流")
+		# 即便宿主run身份变化，旧冻结pending也必须原样补发。
+		delivery_host._run_id = "different_host_after_freeze"
+		delivery_host._apply_clear_drop(detached, drop, "identity_production_event")
+		check(ledger["additional_weapon_pending"] == pending, "旧追加pending因runID改变被重解析")
+		delivery_host.free()
+		detached.free()
+	check(identities[0][0] != identities[1][0] and identities[0][1] != identities[1][1], "生产调用同seed跨run枪身份碰撞")
+	var frozen_chest := TreasureChest3D.new()
+	frozen_chest.configure({"id": "legacy_identity_explicit", "grants": first_chest})
+	check(tower._resolve_chest_grants(room, frozen_chest) == first_chest, "旧明确grants被按新run解析")
+	frozen_chest.free()
+	var saved_pending := room.get_pending_chest_grants()
+	room.set_pending_chest_grants("identity_old_pending", {"grants": first_chest, "status": "mimic_alive", "position": [0, 0, 0]})
+	var snapshot := disk_round_trip(tower.build_runtime_save_snapshot())
+	var restored := snapshot["world_state"]["segment_runtime_state"][room.room_id]["pending_chest_grants"]["identity_old_pending"]["grants"] as Array
+	check(restored == JSON.parse_string(JSON.stringify(first_chest)), "正式保存旧箱pending被重新解析")
+	check(weapon_identities(restored) == weapon_identities(first_chest), "正式保存旧箱pending换ID")
+	room.apply_runtime_detail_state({"pending_chest_grants": saved_pending})
+	var old_weapon := {}
+	for grant: Dictionary in first_chest:
+		var item := grant.get("item", {}) as Dictionary
+		if str(item.get("type", "")) == "weapon":
+			old_weapon = item
+	check(tower._inventory.add_item(old_weapon, 1) == 1, "旧冻结枪入包失败")
+	var inventory_frozen := disk_round_trip(tower.build_runtime_save_snapshot())["inventory_slots"] as Array
+	var inventory_kept := false
+	for slot_value in inventory_frozen:
+		if slot_value is Dictionary:
+			var item := (slot_value as Dictionary).get("item", {}) as Dictionary
+			if str(item.get("weapon_instance_id", "")) == str(old_weapon.get("weapon_instance_id", "")):
+				inventory_kept = true
+	check(inventory_kept, "正式背包存档丢失旧枪身份")
+	tower._inventory.restore_slots_snapshot(inventory_before)
+	check(tower._inventory.get_slots_snapshot() == inventory_before, "身份接线改动既有背包")
+	tower._run_id = original_run
+	tower._clear_drop_delivery = original_delivery
+	tower._clear_drop_settled = original_settled
+	chest.free()
+	print("FLOW_INTEGRATION_PRODUCTION_RUN_IDENTITY same_run_stable=true cross_run_distinct=true rng_unchanged=true frozen_unchanged=true")
+
+func weapon_identities(grants: Array) -> Array:
+	var ids: Array = []
+	for grant: Dictionary in grants:
+		var item := grant.get("item", {}) as Dictionary
+		if str(item.get("type", "")) == "weapon":
+			ids.append([item["weapon_instance_id"], item["created_transaction_id"]])
+	return ids
+
+func without_weapon_identity(grants: Array) -> Array:
+	var result := grants.duplicate(true)
+	for grant: Dictionary in result:
+		var item := grant.get("item", {}) as Dictionary
+		item.erase("weapon_instance_id")
+		item.erase("created_transaction_id")
+		var nested := item.get("weapon_instance", {}) as Dictionary
+		nested.erase("weapon_instance_id")
+		nested.erase("created_transaction_id")
+	return result
+
+func verify_legacy_reward_migration() -> void:
+	var legacy := disk_round_trip(tower.build_runtime_save_snapshot())
+	var world := legacy["world_state"] as Dictionary
+	world.erase("clear_drop_plans")
+	world.erase("clear_drop_config")
+	world.erase("clear_drop_delivery")
+	world.erase("clear_drop_settled")
+	for room_id in world["segment_runtime_state"]:
+		var saved_room := world["segment_runtime_state"][room_id] as Dictionary
+		saved_room.erase("clear_drop_plan")
+		for saved_chest: Dictionary in (saved_room.get("treasure_chests", {}) as Dictionary).values():
+			var old_config := saved_chest.get("config", {}) as Dictionary
+			old_config.erase("fate_card_chance")
+			old_config.erase("fate_common_offer")
+	for room_id in ["room_01", "room_02", "room_10", "boss"]:
+		(world["segment_runtime_state"] as Dictionary).erase(room_id)
+		world["room_progress"][room_id] = {"visited": false, "cleared": false}
+	check(tower._restore_runtime_world_save_snapshot(legacy), "旧档迁移拒绝")
+	var frozen := JSON.stringify(tower._clear_drop_plans)
+	check(tower._clear_drop_plans.size() == 13, "旧档停发全部奖励")
+	var guarantees := 0
+	for room_id in tower._clear_drop_plans:
+		var drop := tower._clear_drop_plans[room_id] as Dictionary
+		check((drop.get("grants", []) as Array).is_empty() and (drop.get("additional_weapon", {}) as Dictionary).is_empty(), "旧档追加新小包或紫枪")
+		var config := drop.get("chest", {}) as Dictionary
+		check(not bool(config.get("fate_common_offer", false)), "旧档补新普通候选保底")
+		if room_id != "boss":
+			check(float(config.get("fate_card_chance", 0.3)) == 0.3, "旧箱改为必给命运凭据")
+		for item: Dictionary in config.get("guaranteed_items", []):
+			check(not item.has("bullet_module_id"), "旧首枪被强制标准弹")
+			if str(item.get("item_id", "")).begins_with("weapon_"):
+				guarantees += 1
+	check(guarantees == 1, "历史首枪保底丢失")
+	check(tower._restore_runtime_world_save_snapshot(legacy) and JSON.stringify(tower._clear_drop_plans) == frozen, "旧迁移重试重掷结果")
+	var explicit_frozen := legacy.duplicate(true)
+	explicit_frozen["world_state"]["segment_runtime_state"]["room_10"] = {"clear_drop_plan": {"kind": "chest", "chest": {"id": "drop_room_10", "chest_tier": "normal", "mimic": false, "quality": "epic"}, "grants": [], "additional_weapon": {}}}
+	check(tower._restore_runtime_world_save_snapshot(explicit_frozen), "历史冻结计划恢复失败")
+	check(tower._clear_drop_plans["room_10"]["chest"]["quality"] == "epic", "旧冻结箱被新配置覆盖")
+	var settled := legacy.duplicate(true)
+	settled["world_state"]["clear_drop_settled"] = {"room_10": true}
+	check(tower._restore_runtime_world_save_snapshot(settled) and tower._clear_drop_settled.has("room_10"), "旧settled账被清掉")
+	check(tower._restore_runtime_world_save_snapshot(legacy), "迁移矩阵恢复失败")
+	var ordinary := tower._room_by_id["room_10"] as DungeonRoom3D
+	await enter(ordinary)
+	clear_live(ordinary)
+	ordinary.cleared = true
+	tower._ensure_room_clear_drop(ordinary)
+	check(ordinary.find_chest_by_id("drop_room_10") != null, "旧未清普通房原箱缺失")
+	var delivered := tower._clear_drop_delivery.get(ordinary.room_id, {}) as Dictionary
+	check((delivered.get("grants_pending", []) as Array).is_empty() and (delivered.get("additional_weapon_pending", []) as Array).is_empty(), "旧普通房追加新奖励")
+	var boss := tower._room_by_id["boss"] as DungeonRoom3D
+	await enter(boss)
+	tower.force_main_story_for_test = true
+	BaseManager.data.main_story = MainStoryProgress.default_state()
+	var boss_actor: Enemy3D = null
+	for actor: Enemy3D in enemies(boss):
+		if actor.enemy_kind == "boss":
+			boss_actor = actor
+			break
+	check(boss_actor != null, "旧档正式Boss实体未生成")
+	if boss_actor == null:
+		return
+	tower._on_enemy_killed(boss_actor, boss_actor.get_enemy_data())
+	clear_live(boss)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var chest := boss.find_chest_by_id("drop_boss")
+	check(chest != null and chest.chest_tier == "advanced", "旧Boss阵亡不掉高级箱")
+	if chest == null:
+		return
+	check(not chest.mimic, "旧首通Boss箱拟态吞钥匙")
+	var story_before := BaseManager.get_main_story_snapshot()
+	BaseManager.force_save_failure_for_test = true
+	tower._on_chest_open_requested(boss, chest)
+	check(not chest.is_opened() and BaseManager.get_main_story_snapshot() == story_before, "旧Boss领取失败未保留原箱/钥匙")
+	BaseManager.force_save_failure_for_test = false
+	chest._player_in_range = true
+	check(chest.perform_interaction(tower.player, {}), "旧Boss真实开箱交互失败")
+	check(chest.is_opened(), "旧Boss箱未提交已开")
+	check(MainStoryProgress.key_state(BaseManager.get_main_story_snapshot(), MainStoryProgress.KEY_RARE_EARTH) == MainStoryProgress.STATE_ACQUIRED, "旧Boss主线钥匙链丢失")
+	await get_tree().create_timer(chest.get_open_burst_delay() + 0.1, false).timeout
+	var opened := disk_round_trip(tower.build_runtime_save_snapshot())
+	(opened["world_state"] as Dictionary).erase("clear_drop_plans")
+	check(tower._restore_runtime_world_save_snapshot(opened), "已开旧Boss箱恢复失败")
+	tower._ensure_boss_chest_drop(boss.room_id)
+	check(boss.find_chest_by_id("drop_boss") == chest and chest.is_opened() and boss.get_persistent_detail_state("treasure_chests").size() == 1, "旧已开Boss箱重刷")
+	var revision := BaseManager.data.save_revision
+	tower._on_chest_open_requested(boss, chest)
+	check(BaseManager.data.save_revision == revision, "旧已领钥匙重复写盘发奖")
+	check(tower._legacy_boss_reward_claimed(), "本局钥匙来源未识别为已领取")
+	var key_record := BaseManager.data.main_story["keys"][MainStoryProgress.KEY_RARE_EARTH] as Dictionary
+	key_record["acquired_source"]["runtime_run_id"] = "previous_run"
+	check(not tower._legacy_boss_reward_claimed(), "前局已领钥匙错误取消本局Boss战利品")
+	print("FLOW_INTEGRATION_LEGACY normal_chest=true opening_weapon=%d boss_key_acquired=true opened_no_respawn=true" % guarantees)
 
 func finish() -> void:
 	if is_instance_valid(tower):

@@ -64,6 +64,8 @@ func _run() -> void:
 	_case_overflow()
 	_case_old_plan(config)
 	_case_random_stream()
+	_case_weapon_run_identity()
+	_case_placement_economy()
 	for failure in failures: push_error(failure)
 	print("EXPEDITION01_REWARD_FLOW checks=%d failures=%d" % [checks, failures.size()])
 	get_tree().quit(0 if failures.is_empty() else 1)
@@ -149,6 +151,145 @@ func _case_random_stream() -> void:
 		_check(normal["grants"][1]["item"]["bullet_module_id"] == forced["grants"][1]["item"]["bullet_module_id"], "强制弹种不移动后项弹种随机流")
 		_check(normal["grants"][1]["item"]["drop_grade"] == forced["grants"][1]["item"]["drop_grade"], "强制弹种不移动后项品质随机流")
 	_check(seen.size() > 1, "非教学枪仍随机弹种")
+
+func _case_weapon_run_identity() -> void:
+	var drop := {"additional_weapon": {"weapon_id": "weapon_rifle", "grade": "purple", "bullet_module_id": "mod_bullet_standard"}}
+	var teaching := {"id": "drop_room_02", "chest_tier": "normal", "guaranteed_items": [{"item_id": "weapon_rifle", "count": 1, "grade": "blue", "bullet_module_id": "mod_bullet_standard"}, {"item_id": "item_ammo_pack", "count": 100}]}
+	var advanced := {"id": "drop_boss", "chest_tier": "advanced"}
+	var seen_ids := {}
+	var seen_transactions := {}
+	for seed_value in range(16):
+		var old_extra := CHEST.resolve_additional_weapon(drop, seed_value, "room_07", "clear_drop:room_07", 1)
+		var old_teaching := CHEST.resolve(teaching, seed_value, "room_02", 1)
+		var old_advanced := CHEST.resolve(advanced, seed_value, "boss", 1)
+		_check(_weapon_ids(old_extra) == _weapon_ids(CHEST.resolve_additional_weapon(drop, seed_value, "room_07", "clear_drop:room_07", 1)), "兼容空run参数仍按seed稳定")
+		for run_id in ["run_a", "run_b", "run:a|b"]:
+			var extra := CHEST.resolve_additional_weapon(drop, seed_value, "room_07", "clear_drop:room_07", 1, run_id)
+			var guaranteed := CHEST.resolve(teaching, seed_value, "room_02", 1, run_id)
+			var boss := CHEST.resolve(advanced, seed_value, "boss", 1, run_id)
+			_check(_weapon_ids(extra) == _weapon_ids(CHEST.resolve_additional_weapon(drop, seed_value, "room_07", "clear_drop:room_07", 1, run_id)), "追加枪同局重试身份必须不变")
+			_check(_weapon_ids(guaranteed) == _weapon_ids(CHEST.resolve(teaching, seed_value, "room_02", 1, run_id)), "教学枪同局重试身份必须不变")
+			_check(_reward_without_identity(extra) == _reward_without_identity(old_extra), "追加枪run身份不得改变奖励随机流")
+			_check(_reward_without_identity(guaranteed) == _reward_without_identity(old_teaching), "教学枪run身份不得改变卡与消耗品随机流")
+			_check(_reward_without_identity(boss) == _reward_without_identity(old_advanced), "普通箱枪身份不得改变原高级箱随机奖励")
+			for report in [extra, guaranteed, boss]:
+				_check(report["ok"], "run身份解析必须通过")
+				for grant in report["grants"]:
+					var item: Dictionary = grant["item"]
+					if item.get("type", "") != "weapon": continue
+					var id: String = item["weapon_instance_id"]
+					var transaction: String = item["created_transaction_id"]
+					_check(not seen_ids.has(id), "不同seed/run/来源的武器ID不得碰撞")
+					_check(not seen_transactions.has(transaction), "不同seed/run/来源的创建事务不得碰撞")
+					seen_ids[id] = true
+					seen_transactions[transaction] = true
+					_check(item["weapon_instance"]["weapon_instance_id"] == id and item["weapon_instance"]["created_transaction_id"] == transaction, "内外层身份与事务必须一致")
+	_check(seen_ids.size() == 144, "16种子3run3来源全部分离")
+	var legacy: Array = CHEST.resolve_additional_weapon(drop, 1, "room_07", "clear_drop:room_07", 1)["grants"]
+	legacy[0]["item"]["weapon_instance_id"] = "chest_wpn_old_frozen"
+	legacy[0]["item"]["created_transaction_id"] = "chest:old:frozen"
+	legacy[0]["item"]["weapon_instance"]["weapon_instance_id"] = "chest_wpn_old_frozen"
+	legacy[0]["item"]["weapon_instance"]["created_transaction_id"] = "chest:old:frozen"
+	var frozen: Array = JSON.parse_string(JSON.stringify(legacy))
+	var box := TreasureChest3D.new()
+	box.configure({"id": "legacy", "grants": frozen})
+	var restored := TreasureChest3D.new()
+	restored.from_snapshot(JSON.parse_string(JSON.stringify(box.get_save_data())))
+	CHEST.resolve_additional_weapon(drop, 1, "room_07", "clear_drop:room_07", 1, "new_run")
+	_check(restored.get_explicit_grants() == frozen, "冻结旧grants读档必须原样保留旧ID")
+	var inventory := InventoryModule.new(40)
+	_check(inventory.add_item(frozen[0]["item"], 1) == 1, "旧武器应可继续入包")
+	_check(inventory.get_occupied_slots()[0]["item"]["weapon_instance_id"] == "chest_wpn_old_frozen", "旧冻结武器经过现有背包不得换ID")
+	box.free()
+	restored.free()
+	print("WEAPON_RUN_IDENTITY_OK unique_ids=%d unique_transactions=%d" % [seen_ids.size(), seen_transactions.size()])
+
+func _weapon_ids(report: Dictionary) -> Array:
+	var ids: Array = []
+	for grant in report["grants"]:
+		var item: Dictionary = grant["item"]
+		if item.get("type", "") == "weapon": ids.append([item["weapon_instance_id"], item["created_transaction_id"]])
+	return ids
+
+func _reward_without_identity(report: Dictionary) -> Array:
+	var grants: Array = report["grants"].duplicate(true)
+	for grant in grants:
+		var item: Dictionary = grant["item"]
+		item.erase("weapon_instance_id")
+		item.erase("created_transaction_id")
+		var nested: Dictionary = item.get("weapon_instance", {})
+		nested.erase("weapon_instance_id")
+		nested.erase("created_transaction_id")
+	return grants
+
+func _case_placement_economy() -> void:
+	var boxes := preload("res://src/map/SpawnBoxCatalog.gd")
+	var shared := boxes.load_box("box_center_elite")
+	var before := shared.duplicate(true)
+	var placement := {"box": "box_center_elite", "count_multiplier": 2, "count_bonus": 2, "spawn_overrides": [{"type": "melee_chaser", "count": 1, "delay_sec": 0.5}, {"type": "melee_chaser_strong", "count": {"min": 1, "max": 2}}]}
+	var effective := boxes.resolve_placement_box(placement)
+	_check(effective["spawns"].size() == 2 and effective["spawns"][0]["count_min"] == 1, "实例覆盖须完整替换并normalized")
+	_check(effective["spawns"][1]["count_max"] == 2, "normalized区间须保留")
+	var rules := {"per_tier": {"elite": {"base": 70, "per_floor": 0}}, "per_kind": {"melee_chaser": {"base": 5, "per_floor": 0}, "melee_chaser_strong": {"base": 11, "per_floor": 0}}, "default": {"base": 5, "per_floor": 0}}
+	var economy := ECONOMY.new()
+	var snapshot := economy.configure_from_runtime([{"id": "override", "spawn_placements": [placement]}], {"box_center_elite": shared}, rules, 1, 1)
+	_check(snapshot["ok"] and snapshot["configured"], "合法实例经济配置通过")
+	_check(snapshot["reference_income"] == {"min": 42, "expected": 53, "max": 64}, "倍率与bonus仅应用一次：4M+2至4SM=42/53/64")
+	_check(not snapshot["reference_counts"].has("elite"), "失效精英不得残留在覆盖收益里")
+	_check(boxes.load_box("box_center_elite") == before and shared == before, "实例解析不得污染共享盒或调用方字典")
+	var old := ECONOMY.new()
+	var old_snapshot := old.configure_from_runtime([{"id": "old", "spawn_placements": [{"box": "box_center_elite"}]}], {}, rules, 1, 1)
+	_check(old_snapshot["reference_income"] == {"min": 75, "expected": 75, "max": 75}, "无override的旧共享盒仍1E+1M")
+	var invalid: Array = [
+		{"box": "unknown", "spawn_overrides": [{"type": "melee_chaser", "count": 1}]},
+		{"box": "box_center_elite", "spawn_overrides": []},
+		{"box": "box_center_elite", "spawn_overrides": [{"type": "unknown", "count": 1}]},
+		{"box": "box_center_elite", "spawn_overrides": [{"type": "melee_chaser", "count": 0}]},
+		{"box": "box_center_elite", "spawn_overrides": [{"type": "melee_chaser", "count": 1.5}]},
+		{"box": "box_center_elite", "spawn_overrides": [{"type": "melee_chaser", "count": 1, "unknown": 2}]},
+		{"box": "box_center_elite", "spawn_overrides": [{"type": "melee_chaser", "count": 1, "delay_sec": -1}]},
+		{"box": "box_center_elite", "spawn_overrides": [{"type": "melee_chaser", "count": {"min": 2, "max": 1}}]},
+	]
+	for bad in invalid:
+		var rejected := economy.configure_from_runtime([{"id": "valid", "spawn_placements": [{"box": "box_corner_ambush"}]}, {"id": "bad", "spawn_placements": [bad]}], {"unknown": shared}, rules, 1, 1)
+		_check(not rejected["ok"] and not economy.is_configured() and not rejected["errors"].is_empty(), "未知/非法实例必须显式拒绝")
+		_check(rejected["reference_income"] == {"min": 0, "expected": 0, "max": 0} and rejected["reference_counts"].is_empty(), "非法配置不得泄露部分估值或回退共享")
+		_check(economy.price_for_rarity(0) == 0 and economy.price_index_for_room("valid") == -1, "失败后不得沿用旧报价或来源映射")
+	var plan: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PLAN))
+	var floor_data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/level_plans/expedition_01/floors/floor_00.json"))
+	var rooms: Array = []
+	var override_count := 0
+	var base_min := 0
+	var base_max := 0
+	for source in floor_data["rooms"]:
+		var room: Dictionary = source.duplicate(true)
+		room["id"] = room.get("legacy_room_id", room.get("room_id", ""))
+		rooms.append(room)
+		for instance in room.get("spawn_placements", []):
+			if instance.has("spawn_overrides"): override_count += 1
+		if room["id"] not in ["room_01", "room_02"]: continue
+		for instance in room["spawn_placements"]:
+			var box: Dictionary = boxes.resolve_placement_box(instance)
+			for spawn in box["spawns"]:
+				var currency := REWARD.resolve(REWARD.currency_spec_for(spawn["type"], "normal", 1, plan["monster_rules"]["currency"]), {"seed": 0, "floor": 1})
+				for grant in currency["grants"]:
+					base_min += int(grant["amount"]) * int(spawn["count_min"])
+					base_max += int(grant["amount"]) * int(spawn["count_max"])
+	var formal := economy.configure_from_runtime(rooms, {}, plan["monster_rules"]["currency"], 1, 10, 0.0)
+	_check(override_count == 4, "本关恰好四placement覆盖")
+	_check(formal["ok"] and formal["configured"], "正式内容经济有效")
+	_check(base_min == 78 and base_max == 86, "前两房有效清单基础拾币须为78—86")
+	var price_index := economy.price_index_for_room("room_02")
+	_check(is_equal_approx(float(formal["segment_income_expected"][price_index]), 52.0), "room02实际基础清单参考收益应52")
+	var production := ECONOMY.new()
+	var production_snapshot := production.configure_from_runtime(rooms, {}, plan["monster_rules"]["currency"], 1, 10, float(plan["monster_rules"]["strong_variant"]["chance"]))
+	_check(production_snapshot["ok"], "生产概率强化参数下经济有效")
+	for seed_value in range(64):
+		for card_id in ["fate_scale_node", "fate_bounce_bullet"]:
+			for service in [economy, production]:
+				var quote: int = service.frozen_quote_for_card(0, price_index, card_id, seed_value)
+				_check(quote >= 40 and quote <= 50 and quote <= base_min, "room02普通正位正常报价40—50且自然拾币足够")
+	print("FATE_PLACEMENT_ECONOMY_OK overrides=%d room02_reference=52 base_currency=%d-%d normal_quote=40-50" % [override_count, base_min, base_max])
 
 func _check(condition: bool, message: String) -> void:
 	checks += 1

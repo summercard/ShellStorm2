@@ -487,6 +487,7 @@ const SPAWN_BOX_WALL_RECESS_TILES := 1
 var _spawn_candidates: Array[Vector3] = []
 var _spawn_edge_candidates: Array[bool] = []
 var _spawn_blockers: Array[AABB] = []
+var _spawn_support_triangles: Array[PackedVector3Array] = []
 var _narrative_spawn_probe_frame := -1
 var _narrative_spawn_detail_id := 0
 var _spawn_available: Array[int] = []
@@ -7581,6 +7582,8 @@ func _spawn_floor_contains(point: Vector3, radius: float) -> bool:
 	var dimensions := get_dimensions()
 	if not Rect2(-dimensions * 0.5, dimensions).encloses(footprint):
 		return false
+	if not _spawn_support_triangles.is_empty():
+		return _spawn_surface_contains(point, radius)
 	# 没有地砖清单 ⇒ 唯一可用的口径就是房间包围盒（与 `_build_spawn_points` 的兜底同源）。
 	# 判据只看「清单是否为空」，**不看是不是授权壳**：授权锚定房（Boss 房深井 / 撤离房）
 	# 的美术由静态场景独占、清单恒空，按旧条件会对**每个点**都返回 false ⇒ 零落点。
@@ -7598,17 +7601,37 @@ func _spawn_floor_contains(point: Vector3, radius: float) -> bool:
 ## 保守 AABB 也支持家具旋转；不把 Area3D 交互盒、camera-only 或地板当作障碍。
 func _collect_spawn_blockers() -> void:
 	_spawn_blockers.clear()
+	_spawn_support_triangles.clear()
 	# 共墙和 L 角可能由邻房拥有；按空间相交收集，而不是仅查本房子树。
 	var dimensions := get_dimensions()
-	var room_bounds := AABB(Vector3(-dimensions.x * 0.5, 0.05, -dimensions.y * 0.5), Vector3(dimensions.x, SPAWN_BODY_HEIGHT_M, dimensions.y)).grow(_spawn_clearance())
+	var room_bounds := Rect2(-dimensions * 0.5, dimensions).grow(_spawn_clearance())
 	var root: Node = get_parent() if get_parent() != null else self
 	for value in root.find_children("*", "CollisionShape3D", true, false):
 		var collision := value as CollisionShape3D
 		var body := collision.get_parent() as StaticBody3D
 		if body == null or (body.collision_layer & 1) == 0 or collision.disabled or collision.shape == null:
 			continue
-		var bounds := global_transform.affine_inverse() * collision.global_transform * collision.shape.get_debug_mesh().get_aabb()
-		if bounds.end.y <= SPAWN_GROUND_TOP_MAX_M or bounds.position.y >= SPAWN_BODY_HEIGHT_M or not room_bounds.intersects(bounds):
+		var relative := global_transform.affine_inverse() * collision.global_transform
+		if collision.shape is ConcavePolygonShape3D:
+			# 三角网格是空心表面；跨高度的整体包围盒绝不能代表身体占用。
+			var surface: Node = collision.get_parent()
+			while surface != null and surface != self and not surface.has_meta("contiguous_top_surface"):
+				surface = surface.get_parent()
+			var room_surface := surface != null and is_ancestor_of(surface) and bool(surface.get_meta("contiguous_top_surface", false))
+			var faces := (collision.shape as ConcavePolygonShape3D).get_faces()
+			for index in range(0, faces.size(), 3):
+				var triangle := PackedVector3Array([relative * faces[index], relative * faces[index + 1], relative * faces[index + 2]])
+				var normal := (triangle[1] - triangle[0]).cross(triangle[2] - triangle[0]).normalized()
+				if room_surface and normal.y >= cos(deg_to_rad(44.0)):
+					_spawn_support_triangles.append(triangle)
+					continue
+				var triangle_bounds := AABB(triangle[0], Vector3.ZERO).expand(triangle[1]).expand(triangle[2])
+				# 保留真正竖面/顶盖；每面独立包围，不把平台到高台的空隙填实。
+				if triangle_bounds.end.y > SPAWN_GROUND_TOP_MAX_M:
+					_spawn_blockers.append(triangle_bounds)
+			continue
+		var bounds := relative * collision.shape.get_debug_mesh().get_aabb()
+		if bounds.end.y <= SPAWN_GROUND_TOP_MAX_M or not room_bounds.intersects(Rect2(Vector2(bounds.position.x, bounds.position.z), Vector2(bounds.size.x, bounds.size.z))):
 			continue
 		_spawn_blockers.append(bounds)
 
@@ -7616,9 +7639,45 @@ func _collect_spawn_blockers() -> void:
 func _spawn_obstacle_free(point: Vector3) -> bool:
 	var radius := _spawn_clearance()
 	for bounds in _spawn_blockers:
+		if bounds.end.y <= point.y + SPAWN_GROUND_TOP_MAX_M or bounds.position.y >= point.y + SPAWN_BODY_HEIGHT_M:
+			continue
 		if Rect2(Vector2(bounds.position.x, bounds.position.z), Vector2(bounds.size.x, bounds.size.z)).grow(radius).has_point(Vector2(point.x, point.z)):
 			return false
-	return true
+	return _spawn_support_triangles.is_empty() or _spawn_surface_contains(point, radius)
+
+
+## 用实际承重三角形裁剪完整方形足迹；不是只射中心/四角，内部孔洞也必须拒绝。
+## 同一平面可跨多个三角面；不同标高不能互相填补缺失支撑。
+func _spawn_surface_contains(point: Vector3, radius: float) -> bool:
+	var footprint := Rect2(Vector2(point.x - radius, point.z - radius), Vector2.ONE * radius * 2.0)
+	var area := 0.0
+	for triangle in _spawn_support_triangles:
+		var normal := (triangle[1] - triangle[0]).cross(triangle[2] - triangle[0])
+		var height := triangle[0].y - (normal.x * (point.x - triangle[0].x) + normal.z * (point.z - triangle[0].z)) / normal.y
+		if absf(height - point.y) > SPAWN_GROUND_TOP_MAX_M:
+			continue
+		var polygon := PackedVector2Array([
+			Vector2(triangle[0].x, triangle[0].z), Vector2(triangle[1].x, triangle[1].z), Vector2(triangle[2].x, triangle[2].z)
+		])
+		for axis in 2:
+			for side in 2:
+				var boundary: float = footprint.position[axis] if side == 0 else footprint.end[axis]
+				var clipped := PackedVector2Array()
+				for index in polygon.size():
+					var a := polygon[index]
+					var b := polygon[(index + 1) % polygon.size()]
+					var inside_a: bool = a[axis] >= boundary if side == 0 else a[axis] <= boundary
+					var inside_b: bool = b[axis] >= boundary if side == 0 else b[axis] <= boundary
+					if inside_a:
+						clipped.append(a)
+					if inside_a != inside_b:
+						clipped.append(a.lerp(b, (boundary - a[axis]) / (b[axis] - a[axis])))
+				polygon = clipped
+		var signed_area := 0.0
+		for index in polygon.size():
+			signed_area += polygon[index].cross(polygon[(index + 1) % polygon.size()])
+		area += absf(signed_area) * 0.5
+	return area >= footprint.get_area() - 0.0001
 
 
 ## 显式敌人落点：保留合法原位，越界时取既有安全池中最近点；不改请求高度。
@@ -7626,7 +7685,8 @@ func resolve_enemy_spawn_position(requested_world: Vector3) -> Vector3:
 	if not requested_world.is_finite():
 		return Vector3.INF
 	var requested := to_local(requested_world)
-	var planar := Vector3(requested.x, 0.0, requested.z)
+	_collect_spawn_blockers()
+	var planar := Vector3(requested.x, requested.y if not _spawn_support_triangles.is_empty() else 0.0, requested.z)
 	if _spawn_floor_contains(planar, _spawn_clearance()):
 		return requested_world
 	# 显式坐标不等于已校验：分裂/召唤在墙边产生的偏移可直接跨过房墙。
@@ -7637,7 +7697,8 @@ func resolve_enemy_spawn_position(requested_world: Vector3) -> Vector3:
 	_collect_spawn_blockers()
 	var nearest := Vector3.INF
 	var nearest_distance := INF
-	for point in _spawn_candidates:
+	for candidate in _spawn_candidates:
+		var point := Vector3(candidate.x, requested.y, candidate.z) if not _spawn_support_triangles.is_empty() else candidate
 		if not _spawn_floor_contains(point, _spawn_clearance()) or not _spawn_obstacle_free(point):
 			continue
 		var distance := Vector2(point.x - requested.x, point.z - requested.z).length_squared()
@@ -7794,7 +7855,6 @@ func choose_safe_spawn_position(
 		for previous in occupied_world:
 			distance = minf(distance, Vector2(point.x - previous.x, point.z - previous.z).length())
 		var local := to_local(point)
-		local.y = 0.0
 		var edge := not _spawn_floor_contains(local, _spawn_clearance() + 3.0)
 		var score := _spawn_candidate_score(distance, separation, edge)
 		if score > best_score:
@@ -7830,10 +7890,9 @@ func _safe_spawn_geometry_valid(world_point: Vector3) -> bool:
 	if not world_point.is_finite():
 		return false
 	var local := to_local(world_point)
-	# 本接口只选原主通行层，不把抬高点或下沉层当作合法地面。
-	if absf(local.y) > SPAWN_GROUND_TOP_MAX_M:
+	# 普通房仍限主层；一体多标高走面则相对真实承重面校验，不能把高台一律拒绝。
+	if _spawn_support_triangles.is_empty() and absf(local.y) > SPAWN_GROUND_TOP_MAX_M:
 		return false
-	local.y = 0.0
 	return _spawn_floor_contains(local, _spawn_clearance()) and _spawn_obstacle_free(local)
 
 

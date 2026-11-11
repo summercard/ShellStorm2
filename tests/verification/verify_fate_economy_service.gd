@@ -11,7 +11,8 @@ var checks := 0
 
 func _ready() -> void:
 	_check_pure_economy()
-	await _check_formal_expedition()
+	if not "--pure-only" in OS.get_cmdline_user_args():
+		await _check_formal_expedition()
 	for failure in failures:
 		push_error(failure)
 	print("FATE_ECONOMY_SERVICE_%s checks=%d failures=%d" % ["OK" if failures.is_empty() else "FAILED", checks, failures.size()])
@@ -30,12 +31,13 @@ func _check_pure_economy() -> void:
 			"fat_zombie03_strong": {"base": 20, "per_floor": 4},
 		}, "default": {"base": 4, "per_floor": 1},
 	}
-	var boxes := {
-		"normalized": {"spawns": [{"type": "melee_chaser", "count_min": 2, "count_max": 2}, {"type": "elite", "count_min": 1, "count_max": 1}]},
-		"raw": {"spawns": [{"type": "ranged_caster", "count": {"min": 1, "max": 3}}, {"type": "boss", "count": 1}]},
-		"unused": {"spawns": [{"type": "boss", "count": 99}]},
-	}
-	var placements := [{"box": "normalized", "count_multiplier": 2, "count_bonus": 1}, {"box": "raw"}, {"box": "unused"}]
+	# 测试同样走正式实例解析，不另注入一套清单事实源。
+	var boxes := {"box_center_elite": {"spawns": [{"type": "boss", "count": 999}]}}
+	var placements := [
+		{"box": "box_center_elite", "count_multiplier": 2, "count_bonus": 1, "spawn_overrides": [{"type": "melee_chaser", "count": 2}, {"type": "elite", "count": 1}]},
+		{"box": "box_boss_arena", "spawn_overrides": [{"type": "ranged_caster", "count": {"min": 1, "max": 3}}, {"type": "boss", "count": 1}]},
+		{"box": "box_boss_arena", "spawn_overrides": [{"type": "boss", "count": 99}]},
+	]
 	var stages := {"stages": [{"boxes": [0, 0]}, {"boxes": [1]}]}
 	var rooms := [{"spawn_placements": placements, "encounter": stages}, {"encounter": {"stages": [{"monsters": [{"type": "strong_random", "count": 3}]}]}}]
 	var service = SERVICE.new()
@@ -47,8 +49,8 @@ func _check_pure_economy() -> void:
 	_expect(service._selected_box_indexes({"stages": [{"boxes": []}]}, 3).is_empty(), "显式空波次错误回退所有盒")
 	var normalized = SERVICE.new()
 	var raw = SERVICE.new()
-	normalized.configure_from_runtime([{"spawn_placements": [{"box": "x"}]}], {"x": BOXES.load_box("box_wall_arc")}, rules, 1, 1)
-	raw.configure_from_runtime([{"spawn_placements": [{"box": "x"}]}], {"x": {"spawns": [{"type": "ranged_caster", "count": {"min": 1, "max": 2}}]}}, rules, 1, 1)
+	normalized.configure_from_runtime([{"spawn_placements": [{"box": "box_wall_arc"}]}], {}, rules, 1, 1)
+	raw.configure_from_runtime([{"spawn_placements": [{"box": "box_wall_arc", "spawn_overrides": [{"type": "ranged_caster", "count": {"min": 1, "max": 2}}]}]}], {}, rules, 1, 1)
 	_expect(raw.get_snapshot()["reference_income"] == normalized.get_snapshot()["reference_income"], "raw与normalized区间不一致")
 	# 星币七只截断不抬价：封顶后必须等于 min(原报价, 100)，旧 bug 是把低报价抬到 100。
 	var raw_bounds: Dictionary = service.price_bounds_for_rarity(0)

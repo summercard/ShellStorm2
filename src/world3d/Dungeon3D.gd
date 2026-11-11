@@ -15,6 +15,26 @@ const CLEAR_DROP_SERVICE_SCRIPT = preload("res://src/game/ClearDropService.gd")
 const SPAWN_BOX_CATALOG_SCRIPT = preload("res://src/map/SpawnBoxCatalog.gd")
 const ENCOUNTER_EVENT_DIRECTOR_SCRIPT = preload("res://src/world3d/EncounterEventDirector3D.gd")
 const ENCOUNTER_EVENT_HOST_SCRIPT = preload("res://src/world3d/EncounterEventHost3D.gd")
+
+
+## 无截止事件仍须等待首波 at_sec；其余状态机和刷怪出口保持原 Director。
+class RoomFlowEncounterDirector extends EncounterEventDirector3D:
+	func _step_instance(instance_id: String, state: Dictionary, delta: float) -> void:
+		var config := state.get("config", {}) as Dictionary
+		if _is_no_deadline(config):
+			var stages := state.get("stage_states", []) as Array
+			if not stages.is_empty() and not bool((stages[0] as Dictionary).get("started", false)):
+				var context := _context(str(state["room_id"]), instance_id)
+				if str(context.get("current_room_id", "")) != str(state["room_id"]):
+					super._step_instance(instance_id, state, delta)
+					return
+				var initial := float(((config.get("stages", []) as Array)[0] as Dictionary).get("at_sec", 0.0))
+				var remaining := float(state.get("room_prepare_remaining_sec", initial))
+				state["room_prepare_remaining_sec"] = maxf(0.0, remaining - delta)
+				if remaining > delta:
+					return
+				delta = maxf(0.0, delta - remaining)
+		super._step_instance(instance_id, state, delta)
 const AVATAR_CUSTOMIZATION_PERSISTENCE = preload(
 	"res://src/player3d/customization/AvatarCustomizationPersistence.gd"
 )
@@ -211,6 +231,7 @@ var _clear_drop_service = CLEAR_DROP_SERVICE_SCRIPT.new()
 ## 计划与交付分账随世界存档；缺少计划的旧局不得按新配置补发。
 var _clear_drop_settled: Dictionary = {}
 var _clear_drop_plans: Dictionary = {}
+var _clear_drop_config: Dictionary = {}
 var _clear_drop_delivery: Dictionary = {}
 var _flow_barks: Array = []
 var _flow_barks_fired: Dictionary = {}
@@ -1317,6 +1338,7 @@ func _export_flow_integration_state(world_state: Dictionary) -> void:
 		"event_combat": _event_combat_rooms.duplicate(true),
 	}
 	world_state["clear_drop_plans"] = _clear_drop_plans.duplicate(true)
+	world_state["clear_drop_config"] = _clear_drop_config.duplicate(true)
 	world_state["clear_drop_delivery"] = _clear_drop_delivery.duplicate(true)
 	world_state["clear_drop_settled"] = _clear_drop_settled.duplicate(true)
 	world_state["flow_barks_fired"] = _flow_barks_fired.duplicate(true)
@@ -1327,6 +1349,8 @@ func _import_flow_integration_state(world_state: Dictionary) -> void:
 	_clear_drop_plans = (world_state.get("clear_drop_plans", {}) as Dictionary).duplicate(true)
 	_clear_drop_delivery = (world_state.get("clear_drop_delivery", {}) as Dictionary).duplicate(true)
 	_clear_drop_settled = (world_state.get("clear_drop_settled", {}) as Dictionary).duplicate(true)
+	if not world_state.has("clear_drop_plans"):
+		_migrate_legacy_clear_drop_plans(world_state)
 	_flow_barks_fired = (world_state.get("flow_barks_fired", {}) as Dictionary).duplicate(true)
 	_flow_bark_first_run = bool(world_state.get("flow_bark_first_run", false))
 	var flow := world_state.get("room_encounter_flow", {}) as Dictionary
@@ -1359,6 +1383,45 @@ func _import_flow_integration_state(world_state: Dictionary) -> void:
 			set_room_seal(str(room_id), true, str(_sealed_rooms[room_id]))
 		elif _room_encounter_active.has(room_id) and bool(room.encounter.get("seal_room", true)):
 			set_room_seal(str(room_id), true, "encounter")
+
+
+## 缺计划的历史档保留原奖励；仅兼容生成剥离本次新增覆盖和强制弹种。
+func _migrate_legacy_clear_drop_plans(world_state: Dictionary) -> void:
+	var config := (world_state.get("clear_drop_config", _clear_drop_config) as Dictionary).duplicate(true)
+	config.erase("room_overrides")
+	for entry: Dictionary in config.get("room_guarantees", []):
+		entry.erase("bullet_module_id")
+	var legacy_service = CLEAR_DROP_SERVICE_SCRIPT.new()
+	if not bool(legacy_service.configure(config).get("ok", false)) or not legacy_service.is_configured():
+		return
+	var segments := world_state.get("segment_runtime_state", {}) as Dictionary
+	var progress := world_state.get("room_progress", {}) as Dictionary
+	for room_id in _room_by_id:
+		var room := _room_by_id[room_id] as DungeonRoom3D
+		var saved := segments.get(room_id, {}) as Dictionary
+		var state := progress.get(room_id, {}) as Dictionary
+		var chests := saved.get("treasure_chests", {}) as Dictionary
+		var existing := chests.get("drop_%s" % room_id, {}) as Dictionary
+		var frozen := saved.get("clear_drop_plan", {}) as Dictionary
+		if not frozen.is_empty():
+			_clear_drop_plans[room_id] = frozen.duplicate(true)
+		elif not (existing.get("config", {}) as Dictionary).is_empty():
+			_clear_drop_plans[room_id] = {"kind": "chest", "chest": (existing["config"] as Dictionary).duplicate(true), "grants": [], "additional_weapon": {}}
+		else:
+			_clear_drop_plans[room_id] = legacy_service.roll_room_drop(str(room_id), "boss" if room.room_type == "BOSS" else "content", run_seed)
+		# 已落地/已开箱的账本拥有原奖励，不能迁移为第二次产出。
+		var already_delivered := not existing.is_empty() or bool(saved.get("clear_drop_settled", false)) or _clear_drop_settled.has(room_id)
+		if room.room_type == "BOSS":
+			already_delivered = already_delivered or _legacy_boss_reward_claimed()
+		elif frozen.is_empty() and str((_clear_drop_plans[room_id] as Dictionary).get("kind", "none")) != "chest" and bool(saved.get("cleared", state.get("cleared", false))):
+			# 旧item分支无独立交付账；已清房视为原奖励已兑现，避免补发。
+			already_delivered = true
+		if already_delivered:
+			_clear_drop_settled[room_id] = true
+
+
+func _legacy_boss_reward_claimed() -> bool:
+	return false
 
 
 ## JSON 存盘时保留冻结队列中的世界坐标类型，不让 Vector3 变成不可恢复的字符串。
@@ -1958,6 +2021,7 @@ func uses_dynamic_fate_economy() -> bool:
 ## 与命运经济同一口径：只看能力、不看关卡 ID；配什么由关卡计划决定。
 func configure_clear_drops(config: Dictionary) -> Dictionary:
 	_clear_drop_settled.clear()
+	_clear_drop_config = config.duplicate(true)
 	var report := _clear_drop_service.configure(config)
 	if not bool(report.get("ok", false)):
 		push_error("[Dungeon3D] clear_drops 配置失败：%s" % str(report.get("errors", [])))
@@ -2032,7 +2096,7 @@ func _setup_run_modules() -> void:
 	_monster_injector.set_theme_profile(gameplay_theme)
 	_monster_injector.set_level_rules(_monster_rules)
 	_encounter_event_host = ENCOUNTER_EVENT_HOST_SCRIPT.new(self)
-	_encounter_event_director = ENCOUNTER_EVENT_DIRECTOR_SCRIPT.new(_encounter_event_host)
+	_encounter_event_director = RoomFlowEncounterDirector.new(_encounter_event_host)
 	_encounter_event_director.encounter_event_started.connect(_on_encounter_event_started)
 	_encounter_event_director.encounter_event_stage_started.connect(_on_encounter_event_stage_started)
 	_encounter_event_director.encounter_event_finished.connect(_on_encounter_event_finished)
@@ -4662,7 +4726,7 @@ func _collect_box_stage_entries(
 	var placement := _box_placement_at(placements, instance_index)
 	if placement.is_empty():
 		return
-	var box := SpawnBoxCatalog.load_box(str(placement.get("box", "")))
+	var box := SpawnBoxCatalog.resolve_placement_box(placement)
 	if box.is_empty():
 		push_error(
 			"[Dungeon3D] 房间 %s 的触发盒实例 %d（%s）解析失败，已跳过"
@@ -4826,7 +4890,7 @@ func _box_placement_at(placements: Array, index: int) -> Dictionary:
 	var box_id := str(placement.get("box", ""))
 	if box_id.is_empty() or not SpawnBoxCatalog.has_id(box_id):
 		return {}
-	var box := SpawnBoxCatalog.load_box(box_id)
+	var box := SpawnBoxCatalog.resolve_placement_box(placement)
 	if box.is_empty():
 		return {}
 	var size := box.get("size_m", Vector2.ZERO) as Vector2
@@ -4986,6 +5050,9 @@ func _pending_delayed_spawn_count(room_id: String) -> int:
 func _resolve_spawn_position(
 	room: DungeonRoom3D, config: Dictionary, index: int, positions: Array
 ) -> Vector3:
+	if bool(config.get("boss_reinforcement_spawned", false)) and config.has("spawn_landing_anchor"):
+		var airborne := positions[index] as Vector3 if index < positions.size() else config.get("spawn_position", Vector3.INF) as Vector3
+		return airborne if _boss_airdrop_geometry_valid(room, config, airborne) else Vector3.INF
 	var bound_to_room := _uses_room_bound_spawn(config)
 	if index < positions.size():
 		var point := positions[index] as Vector3
@@ -5754,6 +5821,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		spawn_data.erase("spawn_delay_sec")
 		spawn_data.erase("spawn_safe_candidates")
 		spawn_data.erase("spawn_min_player_distance_m")
+		spawn_data.erase("spawn_landing_anchor")
 		spawn_data.erase("spawn_launch_target")
 		spawn_data.erase("spawn_launch_speed_mps")
 		spawn_data.erase("spawn_launch_duration_sec")
@@ -6396,6 +6464,20 @@ func _flush_reserved_room_spawns(room_id: String) -> void:
 		var positions: Array = []
 		for point in request.get("positions", []):
 			positions.append(Vector3(float(point[0]), float(point[1]), float(point[2])))
+		var is_airdrop := not configs.is_empty() and bool(configs[0].get("boss_reinforcement_spawned", false))
+		if is_airdrop:
+			var valid := _boss_reinforcement_boss(room_id) != null
+			for index in configs.size():
+				valid = valid and index < positions.size() and _boss_airdrop_geometry_valid(room, configs[index], positions[index])
+			if not valid:
+				requests.pop_front()
+				_alive_by_room[room_id] = maxi(0, int(_alive_by_room.get(room_id, 0)) - _combat_config_count(configs))
+				var state := _boss_reinforcement_states.get(room_id, {}) as Dictionary
+				state["round"] = maxi(0, int(state.get("round", 0)) - 1)
+				state["elapsed"] = maxf(float(room.boss_reinforcement_plan.get("activation_delay_sec", 12.0)), float(room.boss_reinforcement_plan.get("initial_interval_sec", 9.0)))
+				state["stopped"] = _boss_reinforcement_boss(room_id) == null
+				_boss_reinforcement_states[room_id] = state
+				continue
 		if _spawn_enemy_batch(room, configs, true, true, positions) < 0:
 			return
 		requests.pop_front()
@@ -6758,19 +6840,53 @@ func _spawn_boss_reinforcement_round(room: DungeonRoom3D, state: Dictionary) -> 
 	var positions: Array = []
 	var cursor := maxi(0, int(state.get("cursor", 0)))
 	var center := room.boss_spawn_position_world()
+	var requested: Array[Vector3] = []
 	for index in range(count):
 		var marker := markers[(cursor + index) % markers.size()]
-		positions.append(marker.global_position)
+		requested.append(room.to_global(Vector3(marker.position.x, 0.0, marker.position.z)))
+	var landings: Array[Vector3] = []
+	for requested_world in requested:
+		var landing := room.resolve_enemy_spawn_position(
+			Vector3(requested_world.x, room.global_position.y, requested_world.z)
+		)
+		if not landing.is_finite():
+			return 0
+		landings.append(landing)
+	if landings.size() != count:
+		return 0
+	for index in range(count):
+		var marker := markers[(cursor + index) % markers.size()]
+		var airborne := landings[index] + Vector3.UP * (marker.global_position.y - landings[index].y)
+		positions.append(airborne)
 		configs[index]["boss_reinforcement_spawned"] = true
+		configs[index]["spawn_landing_anchor"] = landings[index]
 		configs[index]["persistent_id"] = "%s:boss_reinforcement:%d:%d" % [
 			room.room_id, round_index + 1, index,
 		]
 		configs[index]["spawn_launch_target"] = center
 		configs[index]["spawn_launch_speed_mps"] = float(plan.get("launch_speed_mps", 8.5))
 		configs[index]["spawn_launch_duration_sec"] = float(plan.get("launch_duration_sec", 0.38))
+	for index in count:
+		if not _boss_airdrop_geometry_valid(room, configs[index], positions[index]):
+			return 0
 	state["cursor"] = (cursor + count) % markers.size()
 	_reserve_room_spawn(room.room_id, configs, positions)
 	return count
+
+
+## 空投实体仍由Enemy原重力/水平击退移动；只在真实支撑地面上方开通高空起点。
+func _boss_airdrop_geometry_valid(room: DungeonRoom3D, config: Dictionary, airborne: Vector3) -> bool:
+	var landing: Variant = config.get("spawn_landing_anchor", null)
+	if not landing is Vector3 or not airborne.is_finite():
+		return false
+	# Room 的正式Enemy落点解析同时校验承重面、房边和障碍；Boss空投只复用它的
+	# 地面锚点，不把3m空中起点再当作普通地面实体解析。
+	var resolved_landing := room.resolve_enemy_spawn_position(landing as Vector3)
+	if not resolved_landing.is_finite() or resolved_landing.distance_to(landing as Vector3) > 0.05:
+		return false
+	if Vector2(airborne.x - resolved_landing.x, airborne.z - resolved_landing.z).length() > 0.01 or airborne.y <= resolved_landing.y:
+		return false
+	return true
 
 
 func _on_enemy_health_changed(enemy: Enemy3D, current: int, maximum: int) -> void:
@@ -7265,7 +7381,7 @@ func _resolve_chest_grants(room: DungeonRoom3D, chest: TreasureChest3D) -> Array
 	if chest.has_explicit_grants():
 		return chest.get_explicit_grants()
 	var report := CHEST_REWARD_SERVICE_SCRIPT.resolve(
-		chest.get_reward_config(), run_seed, room.room_id, maxi(1, visual_theme.difficulty_rank)
+		chest.get_reward_config(), run_seed, room.room_id, maxi(1, visual_theme.difficulty_rank), _run_id
 	)
 	if not bool(report.get("ok", false)):
 		push_warning("[Dungeon3D] Chest reward resolution failed: %s" % str(report.get("errors", [])))
@@ -8239,12 +8355,15 @@ func _resolve_event_room(room: DungeonRoom3D) -> void:
 		"CURSE":
 			room.cleared = false
 			_event_combat_rooms[room.room_id] = true
-			_spawn_room_enemies(room)
+			# 作者遭遇是本房战斗的唯一编排，不重播已 fired 的同轮。
+			if not _event_room_has_authored_combat(room):
+				_spawn_room_enemies(room)
 			for value in _enemy_nodes_by_room.get(room.room_id, []):
 				if is_instance_valid(value) and value is Enemy3D:
 					(value as Enemy3D).contact_damage = int((value as Enemy3D).contact_damage * 1.15)
-			status_label.text = "诅咒降临：额外敌群伤害 +15%，清除后结算"
-			return
+			if _event_room_has_authored_combat(room):
+				_room_enemy_damage_multipliers[room.room_id] = float(_room_enemy_damage_multipliers.get(room.room_id, 1.0)) * 1.15
+			status_label.text = "诅咒降临：本房敌群伤害 +15%，战斗清除后结算"
 		"BLESSING":
 			player.apply_damage_buff("event_blessing", 0.10)
 			get_tree().create_timer(60.0).timeout.connect(player.remove_damage_buff.bind("event_blessing"))
@@ -8274,9 +8393,9 @@ func _resolve_event_room(room: DungeonRoom3D) -> void:
 		"SUMMON":
 			room.cleared = false
 			_event_combat_rooms[room.room_id] = true
-			_spawn_room_enemies(room)
-			status_label.text = "亡者召唤：额外敌群出现，击杀后获得掉落"
-			return
+			if not _event_room_has_authored_combat(room):
+				_spawn_room_enemies(room)
+			status_label.text = "亡者召唤：本房编排敌群清除后结算，击杀收益照常"
 	# 本房若还压着编排战斗（自带触发盒的「事件 + 战斗」双职房），结算事件不足以放行 ——
 	# 必须等敌群清空，由波次链的 `_repair_hostile_room_progress` 负责清房 / 开门。
 	# 纯事件房（`_event_combat_rooms` 为空）此判据恒 false ⇒ 原行为逐字不变。
@@ -8897,7 +9016,7 @@ func _apply_clear_drop(room: DungeonRoom3D, drop: Dictionary, context: String) -
 			var event_id := "%s:%s" % [context, channel]
 			var report: Dictionary
 			if channel == "additional_weapon":
-				report = CHEST_REWARD_SERVICE_SCRIPT.resolve_additional_weapon(drop, run_seed, room.room_id, event_id, maxi(1, visual_theme.difficulty_rank))
+				report = CHEST_REWARD_SERVICE_SCRIPT.resolve_additional_weapon(drop, run_seed, room.room_id, event_id, maxi(1, visual_theme.difficulty_rank), _run_id)
 			else:
 				var entries: Array = []
 				var descriptors: Array = drop.get("grants", []) if channel == "grants" else ([drop["item"]] if kind == "item" else [])

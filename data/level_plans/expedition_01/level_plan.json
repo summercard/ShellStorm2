@@ -134,7 +134,7 @@
         "room_05",
         "room_10"
       ],
-      "note": "强化怪概率升级（MonsterInjector._strong_variant_chance）。2026-11-10 业主调整：①chance 0.15→0.075（减半）；②suppressed_rooms 列出的房间不刷强化怪（前两房保证新手段位平稳）——按 room_id 命中，该房任何来源的补刷/增援同样不升级。注意：房间 3 以后另有写死的 strong_random 摆位，不受 chance 与 suppressed_rooms 影响。"
+      "note": "概率强化保持7.5%；suppressed_rooms中的01—05及10只关闭概率升级，不抑制显式指定强化。05末波通过实例spawn_overrides以1只melee_chaser_strong替换失效精英作强化预告，06系统扩展SM/SR教学，07以SM、08以SR、Boss以SM+SR替换原E占位，不扩唯一名册、不加总数，不再使用本关strong_random摆位。"
     },
     "death_explosion": {
       "fat_zombie03": {

@@ -557,7 +557,11 @@
             -7.5,
             22.5
           ],
-          "count_bonus": 2
+          "count_bonus": 2,
+          "spawn_overrides": [
+            { "type": "melee_chaser", "count": 1, "delay_sec": 0.5 },
+            { "type": "melee_chaser_strong", "count": 1, "delay_sec": 0.0 }
+          ]
         },
         {
           "box": "box_room_spread",
@@ -790,7 +794,11 @@
             0.0,
             0.0
           ],
-          "count_bonus": 2
+          "count_bonus": 2,
+          "spawn_overrides": [
+            { "type": "melee_chaser", "count": 1, "delay_sec": 0.5 },
+            { "type": "melee_chaser_strong", "count": 1, "delay_sec": 0.0 }
+          ]
         },
         {
           "box": "box_corner_ambush",
@@ -936,7 +944,11 @@
             15.0,
             7.5
           ],
-          "count_bonus": 2
+          "count_bonus": 2,
+          "spawn_overrides": [
+            { "type": "melee_chaser", "count": 1, "delay_sec": 0.5 },
+            { "type": "ranged_caster_strong", "count": 1, "delay_sec": 0.0 }
+          ]
         },
         {
           "box": "box_room_spread",
@@ -974,7 +986,7 @@
       "key": "room_09",
       "room_id": "f00_room_09",
       "legacy_room_id": "room_09",
-      "room_type": "EVENT",
+      "room_type": "COMMON_ROOM",
       "role": "main",
       "parent_key": "room_08",
       "template_id": "office_60x70",
@@ -1357,6 +1369,12 @@
           "center_m": [
             0.0,
             -22.5
+          ],
+          "spawn_overrides": [
+            { "type": "boss", "count": 1, "delay_sec": 0.0 },
+            { "type": "melee_chaser_strong", "count": 1, "delay_sec": 1.5 },
+            { "type": "ranged_caster_strong", "count": 1, "delay_sec": 1.5 },
+            { "type": "summoner", "count": 1, "delay_sec": 3.0 }
           ]
         },
         {

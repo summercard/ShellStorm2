@@ -1,5 +1,8 @@
 """抽取生产 Room/Host 函数，在工程外最小 Godot 工程验证空间与派发事务。"""
 import argparse
+import os
+import time
+import psutil
 import re
 import shutil
 import subprocess
@@ -21,12 +24,19 @@ def extract(source, name):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--godot', default=shutil.which('godot'))
+    parser.add_argument('--production-boss', action='store_true')
     args = parser.parse_args()
+    if args.production_boss:
+        output_dir = wp.work_path(f'probes/2026-11-11_boss_walk_surface/production_{time.time_ns()}/marker').parent
+        scene = output_dir / 'probe.tscn'
+        scene.write_text('[gd_scene load_steps=2 format=3]\n[ext_resource type="Script" path="res://tests/verification/probe_boss_walk_surface_spawn.gd" id="1"]\n[node name="Probe" type="Node"]\nscript = ExtResource("1")\n', encoding='utf-8')
+        command = [args.godot, '--headless', '--path', str(ROOT), str(scene)]
+        return run_isolated(command, output_dir, 'BOSS_BOX_PROBE_DONE', 120)
     work = wp.work_path('probes/2026-11-11_encounter_safe_selection/harness/project.godot').parent
     room = (ROOT / 'src/world3d/DungeonRoom3D.gd').read_text(encoding='utf-8')
     host = (ROOT / 'src/world3d/EncounterEventHost3D.gd').read_text(encoding='utf-8')
     room_names = ['_build_spawn_points', '_spawn_clearance', '_spawn_floor_contains',
-                  '_collect_spawn_blockers', '_spawn_obstacle_free', 'spawn_point_for_index',
+                  '_collect_spawn_blockers', '_spawn_obstacle_free', '_spawn_surface_contains', 'resolve_enemy_spawn_position', 'spawn_point_for_index',
                   '_spawn_reach_key', '_spawn_reach_contains',
                   'choose_safe_spawn_position', 'is_safe_spawn_position_valid',
                   '_prepare_safe_spawn_selection', '_safe_spawn_geometry_valid',
@@ -44,6 +54,7 @@ var _spawn_candidates: Array[Vector3] = []
 var _spawn_edge_candidates: Array[bool] = []
 var _spawn_available: Array[int] = []
 var _spawn_blockers: Array[AABB] = []
+var _spawn_support_triangles: Array[PackedVector3Array] = []
 var _spawn_reach_active := false
 var _spawn_reach_cells: Dictionary = {}
 func get_dimensions() -> Vector2:
@@ -110,6 +121,9 @@ func check(ok: bool, label: String) -> void:
 	if not ok:
 		failures += 1
 		printerr("FAIL: " + label)
+
+func add_rectangle(faces: PackedVector3Array, x0: float, x1: float, z0: float, z1: float, y: float) -> void:
+	faces.append_array(PackedVector3Array([Vector3(x0,y,z0), Vector3(x0,y,z1), Vector3(x1,y,z1), Vector3(x0,y,z0), Vector3(x1,y,z1), Vector3(x1,y,z0)]))
 
 func _initialize() -> void:
 	call_deferred("run")
@@ -196,6 +210,56 @@ func run() -> void:
 	bridge.custom_dimensions = Vector2.ONE
 	var impossible: Dictionary = bridge.choose_safe_spawn_position()
 	check(not impossible.ok and not impossible.retryable and impossible.reason == "spawn_position_failed", "恒无合法空间保留硬失败而非无限重试")
+	print("ENCOUNTER_SAFE_SELECTION_BASELINE checks=%d failures=%d" % [checks, failures])
+	var multi := Room.new()
+	dungeon.add_child(multi)
+	multi.custom_dimensions = Vector2(80,100)
+	multi.room_type = "BOSS"
+	multi.position = Vector3(-70,4,0)
+	multi.rotation.y = 0.9
+	var surface := Node3D.new()
+	multi.add_child(surface)
+	surface.set_meta("contiguous_top_surface", true)
+	var support_body := StaticBody3D.new()
+	surface.add_child(support_body)
+	var support_shape := CollisionShape3D.new()
+	support_body.add_child(support_shape)
+	var triangles := PackedVector3Array()
+	# 故意在足迹内部留下小孔：中心与四角射线全有地仍必须拒绝。
+	add_rectangle(triangles, -12, 0.4, -12, 12, 0)
+	add_rectangle(triangles, 0.8, 12, -12, 12, 0)
+	add_rectangle(triangles, 0.4, 0.8, -12, 0.4, 0)
+	add_rectangle(triangles, 0.4, 0.8, 0.8, 12, 0)
+	# 同一个形状中不相连的12米高台，使整体AABB跨高度。
+	add_rectangle(triangles, -8, 8, 20, 36, 12)
+	var concave := ConcavePolygonShape3D.new()
+	concave.set_faces(triangles)
+	support_shape.shape = concave
+	multi._build_spawn_points()
+	check(multi.is_safe_spawn_position_valid(multi.to_global(Vector3(-6,0,0))), "跨高度一体形状不能整体封死低平台")
+	check(not multi.is_safe_spawn_position_valid(multi.to_global(Vector3(0,0,0))), "中心四角均有地但足迹内部孔洞仍拒绝")
+	check(not multi.is_safe_spawn_position_valid(multi.to_global(Vector3(0,0,16))), "同一AABB中的大虚空拒绝")
+	check(multi.is_safe_spawn_position_valid(multi.to_global(Vector3(0,12,28))), "给定高台候选相对真实支持面验证")
+	check(not multi.is_safe_spawn_position_valid(multi.to_global(Vector3(0,0,28))), "不能用12米高台给0米假落点提供支撑")
+	check(not multi.is_safe_spawn_position_valid(multi.to_global(Vector3(0,12.3,28))), "离真实高台超过15厘米拒绝")
+	check(multi.resolve_enemy_spawn_position(multi.to_global(Vector3(0,12,28))).is_equal_approx(multi.to_global(Vector3(0,12,28))), "正式显式落点解析保留合法高台高度")
+	check(not multi.resolve_enemy_spawn_position(multi.to_global(Vector3(0,30,28))).is_finite(), "显式解析不将低层候选抬到无支撑的30米")
+	var wall := StaticBody3D.new()
+	surface.add_child(wall)
+	var wall_shape := CollisionShape3D.new()
+	wall.add_child(wall_shape)
+	var wall_mesh := ConcavePolygonShape3D.new()
+	wall_mesh.set_faces(PackedVector3Array([Vector3(-6,0,-5), Vector3(-6,3,-5), Vector3(-6,3,5), Vector3(-6,0,-5), Vector3(-6,3,5), Vector3(-6,0,5)]))
+	wall_shape.shape = wall_mesh
+	check(not multi.is_safe_spawn_position_valid(multi.to_global(Vector3(-6,0,0))), "真正Concave墙不能被当走面放行")
+	wall.free()
+	var upper_furniture := StaticBody3D.new()
+	multi.add_child(upper_furniture)
+	upper_furniture.position = Vector3(0,13,28)
+	var furniture_shape := CollisionShape3D.new()
+	upper_furniture.add_child(furniture_shape)
+	furniture_shape.shape = BoxShape3D.new()
+	check(not multi.is_safe_spawn_position_valid(multi.to_global(Vector3(0,12,28))), "高台真实家具按候选高度挡住")
 	print("ENCOUNTER_SAFE_SELECTION_OK checks=%d failures=%d" % [checks, failures])
 	dungeon.free()
 	quit(0 if failures == 0 else 1)
@@ -203,15 +267,67 @@ func run() -> void:
     (work / 'project.godot').write_text('config_version=5\n[application]\nconfig/name="安全选点隔离验证"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n', encoding='utf-8')
     (work / 'verify.gd').write_text(script, encoding='utf-8')
     command = [args.godot, '--headless', '--path', str(work), '--script', 'verify.gd']
-    try:
-        result = subprocess.run(command, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=90)
-        output = result.stdout + result.stderr
-        (work.parent / 'result.log').write_text(output, encoding='utf-8')
-        print(output)
-        return result.returncode if 'SCRIPT ERROR' not in output else 1
-    except subprocess.TimeoutExpired:
-        print('最小 harness 超时；不自动重试')
-        return 1
+    return run_isolated(command, work.parent, 'ENCOUNTER_SAFE_SELECTION_OK', 90)
+
+
+def run_isolated(command, output_dir, marker, timeout):
+    env = os.environ.copy()
+    for key in ('APPDATA', 'LOCALAPPDATA', 'HOME', 'USERPROFILE'):
+        folder = output_dir / key.lower()
+        folder.mkdir(parents=True, exist_ok=True)
+        env[key] = str(folder)
+    log = output_dir / 'result.log'
+    tracked = {}
+    code = 124
+    residual = []
+    with log.open('w', encoding='utf-8') as output:
+        process = subprocess.Popen(command, env=env, stdout=output, stderr=subprocess.STDOUT)
+        parent = psutil.Process(process.pid)
+        tracked[parent.pid] = parent
+        deadline = time.monotonic() + timeout
+        try:
+            while time.monotonic() < deadline:
+                for item in list(tracked.values()):
+                    try:
+                        tracked.update({p.pid: p for p in item.children(recursive=True)})
+                    except psutil.NoSuchProcess:
+                        pass
+                alive = [p for p in tracked.values() if p.pid != process.pid and p.is_running()]
+                if process.poll() is not None and not alive:
+                    code = process.returncode
+                    break
+                try:
+                    process.wait(timeout=0.2)
+                except subprocess.TimeoutExpired:
+                    continue
+                if alive:
+                    psutil.wait_procs(alive, timeout=0.2)
+        finally:
+            for item in list(tracked.values()):
+                try:
+                    tracked.update({p.pid: p for p in item.children(recursive=True)})
+                except psutil.NoSuchProcess:
+                    pass
+            targets = [p for p in tracked.values() if p.is_running()]
+            for item in reversed(targets):
+                try:
+                    item.terminate()
+                except psutil.NoSuchProcess:
+                    pass
+            _, alive = psutil.wait_procs(targets, timeout=3)
+            for item in alive:
+                try:
+                    item.kill()
+                except psutil.NoSuchProcess:
+                    pass
+            _, residual = psutil.wait_procs(alive, timeout=3)
+            process.wait(timeout=5)
+    text = log.read_text(encoding='utf-8', errors='replace')
+    for line in text.splitlines():
+        if any(token in line for token in ('SAFE_SELECTION', 'BOSS_BOX', 'FAIL:', 'SCRIPT ERROR', 'ERROR:', 'Parse Error')):
+            print(line)
+    print('日志', log, '退出码', code, '子树残留', [p.pid for p in residual])
+    return 0 if code == 0 and marker in text and not residual and not any(t in text for t in ('SCRIPT ERROR', 'ERROR:', 'FAIL:')) else 1
 
 
 if __name__ == '__main__':
