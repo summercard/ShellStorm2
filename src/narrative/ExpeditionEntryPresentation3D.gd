@@ -45,6 +45,15 @@ var _solidifying := false
 var _solid := false
 var _world_min := 0.0
 var _world_max := 1.0
+## 挡在"近景相机 → 角色"之间、入场期间被临时淡出的场景几何。
+## 角色朝向改成面向第一间房的门之后，近景会落进家具背后（实测起始房一张办公椅
+## 正卡在机位与角色之间，把角色挡掉八成）。这里沿用项目既有的
+## `RogueMapSelectMenu._world_fades` 手法：只改 `transparency`，记录原值，结束精确归还。
+var _occluders: Array[Dictionary] = []
+## 参与遮挡判定的最大单件尺寸。地板/承重底板/墙体/碎屑群都超过它，必须排除。
+const MAX_OCCLUDER_EXTENT_M := 3.0
+## 角色水平半径近似（兔子体型 0.6 m 宽的一半取整）。用于「擦线而过」的判定余量。
+const CHARACTER_RADIUS_M := 0.45
 
 
 func prepare(player: Node3D, params: Dictionary = {}) -> bool:
@@ -151,6 +160,83 @@ func tick(delta: float) -> void:
 		_solid = true
 
 
+## 入场期间临时移出挡在相机与角色之间的场景陈设。
+##
+## 为什么不是淡出：这批家具是 GLB 导入的不透明材质，`GeometryInstance3D.transparency`
+## 只对已开启透明混合的材质生效 —— 实测把它设成 0.12 后画面**完全没变**
+## （诊断打印里 faded=2，截图里椅子照样实心）。要么改共享材质（会波及玩法画面），
+## 要么直接把它移出这一镜。
+##
+## 为什么可以移：调用点在 `prepare()` 里、黑幕仍全覆盖时（见设计 §8.5.2 的交接时序），
+## 观众看不到消失的那一帧；`restore()` 在演出收尾时恢复。代价是这 3 秒内家具不参与
+## 构图与阴影，换来的是角色不被挡住 —— 后者才是这一镜要展示的东西。
+##
+## 判据与阈值（线段命中 or 「擦线而过」的体量近似）见下方注释，两条都必须留着：
+## 只判线段会漏掉椅子这种"体积大、中心偏离中心线"的家具，得到 faded=0 却看不见人的假绿。
+func suppress_occluders(camera: Camera3D) -> int:
+	restore_occluders()
+	if not is_instance_valid(_player) or not is_instance_valid(camera):
+		return 0
+	var host := _player.get_parent()
+	if not is_instance_valid(host):
+		return 0
+	var target := Vector3(
+		_player.global_position.x,
+		(_world_min + _world_max) * 0.5,
+		_player.global_position.z
+	)
+	var from := camera.global_position
+	if from.distance_squared_to(target) <= 0.01:
+		return 0
+	var debug := OS.has_environment("SHELLSTORM_DEBUG_OCCLUDER")
+	var segment := target - from
+	for node in host.find_children("*", "MeshInstance3D", true, false):
+		var mesh := node as MeshInstance3D
+		if mesh == null or mesh.mesh == null:
+			continue
+		if _player.is_ancestor_of(mesh):
+			continue
+		if not mesh.is_visible_in_tree():
+			continue
+		if mesh.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:
+			continue
+		var local_aabb := mesh.get_aabb()
+		if not local_aabb.has_volume():
+			continue
+		var max_dim := maxf(local_aabb.size.x, maxf(local_aabb.size.y, local_aabb.size.z))
+		# 上限 3 m：地板、承重底板、墙体、散落碎屑群的 AABB 都超过它。
+		# 它们必然覆盖任何线段，移掉等于把地面和墙一起抹掉。
+		if max_dim > MAX_OCCLUDER_EXTENT_M:
+			continue
+		var world_center := (mesh.global_transform * local_aabb).get_center()
+		var closest := Geometry3D.get_closest_point_to_segment(world_center, from, target)
+		var along := (closest - from).dot(segment) / maxf(segment.length_squared(), 0.0001)
+		# 端点之外（角色背后/相机背后）不算遮挡。
+		if along <= 0.02 or along >= 1.0:
+			continue
+		var blocking := closest.distance_to(world_center) < CHARACTER_RADIUS_M + max_dim * 0.5
+		if not blocking:
+			var inv := mesh.global_transform.affine_inverse()
+			blocking = local_aabb.intersects_segment(inv * from, inv * target) != null
+		if not blocking:
+			continue
+		if debug:
+			print("DBG_OCC_HIT ", mesh.name, " center=", world_center, " max_dim=", max_dim, " dist=", closest.distance_to(world_center))
+		_occluders.append({"mesh": mesh, "visible": mesh.visible})
+		mesh.visible = false
+	if debug:
+		print("DBG_OCC from=", from, " to=", target, " suppressed=", _occluders.size())
+	return _occluders.size()
+
+
+func restore_occluders() -> void:
+	for entry in _occluders:
+		var mesh: Variant = entry["mesh"]
+		if is_instance_valid(mesh):
+			(mesh as MeshInstance3D).visible = bool(entry["visible"])
+	_occluders.clear()
+
+
 func _begin_solidify() -> void:
 	_solidifying = true
 	# 独立全息副层逐渐消退；真实几何使用原材质和原shader渐入，不近似重建原材质。
@@ -183,6 +269,7 @@ func restore() -> void:
 	if is_instance_valid(_expression):
 		_expression.set("presentation_held", _expression_was_held)
 	_expression = null
+	restore_occluders()
 	_player = null
 	_hologram = null
 	_active = false
@@ -213,4 +300,5 @@ func is_active() -> bool:
 func get_snapshot() -> Dictionary:
 	return {"active": _active, "mode": _mode, "mesh_count": _materials.size(),
 		"progress": clampf(_elapsed / _rebuild_seconds, 0.0, 1.0),
-		"solid": _solid, "solidifying": _solidifying, "world_min": _world_min, "world_max": _world_max}
+		"solid": _solid, "solidifying": _solidifying, "world_min": _world_min, "world_max": _world_max,
+		"suppressed_occluders": _occluders.size()}

@@ -1250,6 +1250,10 @@ func prepare_expedition_entry(params: Dictionary) -> bool:
 	_expedition_entry_camera_yaw = rad_to_deg(wrapf(atan2(behind.x, behind.z) - rest_angle, -PI, PI)) + float(camera_params.get("rear_side_deg", 12.0))
 	_camera_yaw_channel = {"value": _expedition_entry_camera_yaw, "to": _expedition_entry_camera_yaw}
 	tick(0.0)
+	# 相机就位后才能判断"谁挡在镜头和角色之间"。此刻黑幕仍全覆盖，移走的陈设
+	# 观众看不到消失的那一帧；恢复由 presentation.restore() 负责。
+	if is_instance_valid(_camera) and _expedition_entry_presentation.has_method("suppress_occluders"):
+		_expedition_entry_presentation.call("suppress_occluders", _camera)
 	return true
 
 

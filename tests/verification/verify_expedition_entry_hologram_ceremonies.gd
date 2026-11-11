@@ -306,6 +306,13 @@ func _check_official_hosts() -> void:
 		host.notify_expedition_entry_ceremony_ready()
 		if negative.begins_with("base_"):
 			_expect(NarrativeDirector.is_playing(), "正式目标host正向未触发 " + negative)
+			var door_point: Variant = host.forward_door_point_from("start")
+			_expect(door_point != null, "正式host找不到通往第一间房的门 " + negative)
+			if door_point != null:
+				var facing := Vector3(-sin(host.player.aim_yaw), 0.0, -cos(host.player.aim_yaw))
+				var to_door := (door_point as Vector3) - host.player.global_position
+				to_door.y = 0.0
+				_expect(to_door.length_squared() > 0.0001 and facing.normalized().dot(to_door.normalized()) > 0.95, "正式host入场朝向未面向第一间房的门 " + negative)
 			if negative == "base_scan":
 				NarrativeDirector.abort("official_host_retry")
 				host.prepare_expedition_entry_ceremony()
@@ -436,6 +443,17 @@ func _check_loading_e2e(seed: int, via_base_menu := false) -> void:
 			_expect(player.input_locked and NarrativeDirector.is_player_input_locked(), "黑幕下预备未锁实际玩家")
 			_expect(host.run_seed == seed and not host.test_mode and injected.size() == 1, "未使用正式host及指定seed")
 			_expect(host.get_expedition_entry_source() == ExpeditionEntryContext.BASE, "BASE来源未转交")
+			# 入场近景是从背后拍的，所以"朝哪"直接决定玩家第一眼看到什么：
+			# 必须朝主路第一间房的门，而不是出生时的世界 −Z（那会正对入口/出口侧）。
+			var door_point: Variant = host.forward_door_point_from("start")
+			_expect(door_point != null, "远征起始房找不到通往第一间房的门/下一间房")
+			if door_point != null:
+				var facing := Vector3(-sin(player.aim_yaw), 0.0, -cos(player.aim_yaw))
+				var to_door := (door_point as Vector3) - player.global_position
+				to_door.y = 0.0
+				var dot := facing.normalized().dot(to_door.normalized()) if to_door.length_squared() > 0.0001 else -1.0
+				result["door_facing_dot"] = dot
+				_expect(dot > 0.95, "入场朝向未面向第一间房的门: dot=%.3f" % dot)
 			var consumed_request := int(host.get_entry_context_snapshot().get("request_id", -1))
 			result["request_id"] = consumed_request
 			if via_base_menu:

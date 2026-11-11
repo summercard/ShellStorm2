@@ -246,3 +246,72 @@ Godot 4.7.2 进程各占约 1 GB，其中一次站点载入 600 s 未完，所�
 
 关于 `--loading-e2e` 未复证的风险边界：本次对测试文件的改动只涉及该路径的**截图标签前缀**（非基地模式仍是 `loading_`，文件名不变）、`departed` 守卫（读取页路径恒为 true）、`request_id`/carry 断言移入 `if not via_base_menu` 分支（条件与断言内容不变）、总预算 180→420 s。
 脚本能被 fixture 与 official-hosts 两种模式完整解析并跑完，说明没有编译错误；但没有新的运行时证据，就不写成"已复证"。
+
+## 7. 2026-11-12 入场朝向改为「面向第一间房的门」
+
+### 7.1 用户反馈与实测现象
+
+用户要求：角色入场时要**面对通往第一个房间的门**，而不是面对出口位置。
+
+真渲染证据（`verification/expedition_entry/20261112_022533/output/loading_20261110_solid_close.png`）显示两个问题：
+
+1. 角色出生时 `aim_yaw = 0`，即面向世界 −Z。远征01 起始房 `entry_side = east`、主路向西（`exit_side = west`），
+   世界 −Z 恰好是"回去的方向" —— 近景拍到的是身后的虚空/入口侧。
+2. 更糟的是**角色被杀掉的办公椅挡住八成**：椅子正好卡在近景机位与角色之间。
+
+### 7.2 修法
+
+**朝向**（`TowerDescent3D.prepare_expedition_entry_ceremony()` → `_face_player_toward_forward_door()`）：
+
+- 几何真源放在通用层 `Dungeon3D.forward_door_point_from(room_id)`，不认关卡 ID（符合《关卡接入规范》）：
+  1. 主路下一间 = 记录里 `parent == 本房` 的第一个房间（远征01 的 `room_01` 挂在 `entry` 下）；
+  2. 环状图（EGT 骨架）没有 `parent` 时退回开放邻边第一个；
+  3. 门节点优先于房间中心 —— 门在墙上，朝门才有"朝着出口走"的观感。
+- 只写 `player.aim_yaw = atan2(-delta.x, -delta.z)`（与 Player3D 同口径）。**不手动转 avatar**：
+  `PlayerAvatar3D` 每帧朝 `aim_yaw` 插值，手动再转一次会与插值打架。
+- 新增 `DungeonRoom3D.get_door_links_snapshot()` 暴露 `方向 → RoomDoor3D`，避免外部直接读私有 `_door_nodes`
+  （改结构时会静默拿到空字典，表现只是"朝向又不对了"）。
+
+**遮挡**（`ExpeditionEntryPresentation3D.suppress_occluders()`）：
+
+- 在 `NarrativeAdapter3D.prepare_expedition_entry()` 里、相机 `tick(0)` 就位之后调用 —— 此刻黑幕仍全覆盖，
+  移走的陈设观众看不到消失的那一帧；`restore()` 在演出收尾时恢复。
+- 判据两条（任一命中）：线段穿过局部 AABB；或「中心到线段距离 < 0.45 m + 该件半对角」且单件最长边 ≤ 3 m。
+- 两条都必须留：实测椅子中心离中心线 0.61 m，单看线段判定完全不算遮挡，但它 0.75×1.29 的体量把角色挡了大半。
+  → **只判线段会得到 `faded=0`、画面里却看不见人的假绿**。
+- 3 m 上限用来排除地板、承重底板（15×15）、墙体与散落碎屑群：它们必然覆盖任何线段，移掉等于把地面擦掉。
+- **不能用 `transparency` 淡出**：GLB 家具是不透明材质，实例透明度对它无效 —— 实测设 0.12 后画面零变化
+  （诊断打印 `faded=2`，截图里椅子照样实心）。这就是第一版失败的根因。
+
+### 7.3 实测
+
+| 证据 | 结果 |
+|---|---|
+| `20261112_024819/result.json`（正式 Runner，双 seed） | `passed=true`；两 seed `exit 0`、`engine_errors=0`、`door_facing_dot=1.000`、`completed=true` |
+| 同目录 6 张截图 | 两套演出的近景都显示角色**完整可见、背对镜头、正对门洞**；椅/花瓶不再挡人 |
+| `20261112_024819/output/loading_20261110_gameplay.png` | 玩法恢复后椅子、花瓶等陈设照常可见 → 隐藏已精确归还 |
+| `20261112_025300`（`--official-hosts`） | 四条 `OFFICIAL_HOST_OK` 全过，`base_scan`/`base_materialize` 同时断言 `door_facing_dot > 0.95` |
+| `20261112_024705`（默认 fixture） | exit 0，A 3.15 s / B 3.60 s，20 Mesh |
+
+### 7.4 期间撞到的并行改动（如实记录）
+
+这两小时内另一会话正在改 `EncounterEventDirector3D.gd` 与 `LevelPlanValidator.gd`，我先后撞到两次中间状态：
+
+1. `02:41` 编译失败：`Function "_close_dispatch_and_clear()" not found`（调用已写、定义还没写）；
+2. `02:51` 正式 host 装配报 `encounter_duration_invalid:room_03..10:0.0`（校验器正被改）。
+
+两次都不是本次改动引起的；`02:46` 与 `02:52` 对方补齐后，用**同一份正式 Runner** 复跑即全绿。
+中间为了不被对方半成品阻塞，曾在工程外用实拷贝 `src` 的临时 runner 验证过一轮
+（`ShellStorm2-work/tmp_entry_qa_runner/`，只在副本注入 stub，未改仓库文件）；正式结论以上表为准。
+
+### 7.5 本段改动清单
+
+- `src/world3d/Dungeon3D.gd`：新增 `forward_door_point_from()` / `_main_path_next_room_id()`
+- `src/world3d/DungeonRoom3D.gd`：新增 `get_door_links_snapshot()`
+- `src/world3d/TowerDescent3D.gd`：`prepare_expedition_entry_ceremony()` 先转向；新增 `_face_player_toward_forward_door()`
+- `src/narrative/ExpeditionEntryPresentation3D.gd`：新增 `suppress_occluders()` / `restore_occluders()`，`get_snapshot()` 加 `suppressed_occluders`
+- `src/narrative/NarrativeAdapter3D.gd`：相机就位后调用 `suppress_occluders()`
+- `tests/verification/verify_expedition_entry_hologram_ceremonies.gd`：读取页 E2E 与正式 host 均断言 `door_facing_dot`
+- 诊断打印 `DBG_OCC*` 由 `SHELLSTORM_DEBUG_OCCLUDER` 环境变量开关，默认静默
+
+未改账本与基线（不涉及资产登记）。

@@ -3280,6 +3280,54 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 ##
 ## 注意：这一步**不建敌人、不刷波次、不动 `_spawned_rooms`**，只补房间陈设，
 ## 所以不改变任何"怪什么时候出现"的时序。
+## 出生/入场朝向的几何真源：从 `from_room_id` 出发，**主路下一间房**那扇门的世界坐标。
+##
+## 为什么需要它：角色出生时 `aim_yaw` 是 0（面向世界 −Z），这个方位与关卡朝向无关 ——
+## 实测远征01 的起始房入口在东侧（`entry_side = east`）、前进方向在西侧，于是角色
+## 出生时正好背对第一间房、面对入口/出口侧，入场近景也跟着拍到了出口。
+##
+## 判据只用房间图，不认关卡 ID（符合《关卡接入规范》的能力/ID 分离）：
+##   1. 主路下一间 = record 的 `parent` 指向本房的第一个房间（计划用 parent_key 表达树，
+##      远征01 的 room_01 就是这样挂在 entry 下面）；
+##   2. 环状图（EGT 骨架）没有可用 parent 时，退回开放邻边里第一个；
+##   3. 门节点优先于房间中心 —— 门在墙上，朝向门才是"朝着出口走"的观感。
+##
+## 返回 `null` 表示无从判断（没有下一间、也没有门与记录），调用方必须保持原朝向不动。
+func forward_door_point_from(from_room_id: String) -> Variant:
+	var room := _room_by_id.get(from_room_id) as DungeonRoom3D
+	if room == null:
+		return null
+	var next_id := _main_path_next_room_id(from_room_id)
+	if next_id.is_empty():
+		return null
+	var links := room.get_door_links_snapshot()
+	for direction_value in links.keys():
+		var door := links[direction_value] as RoomDoor3D
+		if door == null or not door.is_inside_tree():
+			continue
+		if str(door.target_room_id) == next_id:
+			return door.global_position
+	var next_room := _room_by_id.get(next_id) as DungeonRoom3D
+	if next_room != null:
+		return next_room.global_position
+	return null
+
+
+func _main_path_next_room_id(from_room_id: String) -> String:
+	for record_value in _records:
+		var record := record_value as Dictionary
+		if str(record.get("parent", "")) != from_room_id:
+			continue
+		var candidate := str(record.get("id", ""))
+		if not candidate.is_empty() and candidate != from_room_id:
+			return candidate
+	for neighbor_value in (_room_neighbors.get(from_room_id, []) as Array):
+		var neighbor_id := str(neighbor_value)
+		if not neighbor_id.is_empty() and neighbor_id != from_room_id:
+			return neighbor_id
+	return ""
+
+
 func _prebuild_entry_room_details() -> void:
 	var start_room := _room_by_id.get("start") as DungeonRoom3D
 	if start_room == null:

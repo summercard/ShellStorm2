@@ -8493,8 +8493,34 @@ func prepare_expedition_entry_ceremony() -> void:
 	var narrative_id := _expedition_entry_narrative_id()
 	if NarrativeDirector.is_playing():
 		return
+	# 入场近景是"从角色背后拍过去"的，所以角色的朝向决定了画面里能看见什么。
+	# 必须在 prepare 之前把角色转向主路第一间房的门 —— 否则出生时的 aim_yaw=0（世界−Z）
+	# 会让近景正对入口/出口侧，玩家先看到的是"回去的路"。
+	_face_player_toward_forward_door()
 	_expedition_entry_ceremony_prepared = NarrativeDirector.prepare_expedition_entry(narrative_id)
 	_expedition_entry_ceremony_notified = false
+
+
+## 只改朝向，不碰位置与输入：输入锁由叙事适配器统一持有。
+## 算不出目标点（房间未建/无下一间）就保持原朝向 —— 宁可朝向不变，也不要用随机方位。
+func _face_player_toward_forward_door() -> bool:
+	if player == null or not is_instance_valid(player):
+		return false
+	var from_room_id := str(_current_room_id)
+	if from_room_id.is_empty():
+		from_room_id = "start"
+	var point: Variant = forward_door_point_from(from_room_id)
+	if point == null:
+		return false
+	var delta := (point as Vector3) - player.global_position
+	delta.y = 0.0
+	if delta.length_squared() <= 0.0001:
+		return false
+	# 与 Player3D 同一口径（aim_yaw = atan2(-dir.x, -dir.z)），别另造一套角度约定。
+	# 只写 aim_yaw：avatar 的 visual_root 每帧朝它插值（PlayerAvatar3D），
+	# 这里再手动转一次会和插值打架，还会把换装根节点的旋转语义搅乱。
+	player.aim_yaw = atan2(-delta.x, -delta.z)
+	return true
 
 
 func notify_expedition_entry_ceremony_ready() -> void:

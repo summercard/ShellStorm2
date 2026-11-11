@@ -308,8 +308,8 @@
           "depth_m": 3.0
         },
         "duration_sec": 0.0,
-        "start_delay_sec": 3.0,
-        "preparation_sec": 3.0,
+        "start_delay_sec": 0.0,
+        "preparation_sec": 60.0,
         "freeze_player_sec": 1.0,
         "alert_style": "red_eva",
         "alert_text": "接敌警报",

@@ -1784,6 +1784,16 @@ func get_door_node(direction: String) -> RoomDoor3D:
 	return _door_nodes.get(direction) as RoomDoor3D
 
 
+## 通用查询：本房现有门实例的 `方向 → RoomDoor3D` 拷贝。
+##
+## 外部需要「按目标房找门」时走这里（出生/入场朝向就是这种需求）。
+## 不要直接摸 `_door_nodes`：它是私有表，之后改名或换结构时，外部引用会**静默**
+## 拿到空字典 —— 表现只是"朝向又不对了"，没有任何报错。
+func get_door_links_snapshot() -> Dictionary:
+	return _door_nodes.duplicate()
+
+
+
 func owns_door_endpoint(direction: String) -> bool:
 	return true if not door_endpoint_owners.has(direction) else bool(door_endpoint_owners[direction])
 
