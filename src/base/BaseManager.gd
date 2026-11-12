@@ -264,6 +264,58 @@ func commit_elite_and_runtime_checkpoint(elite_id: String, record: Dictionary, s
 	return false
 
 
+## roaming 出生专用乐观令牌；先收齐旧写者，准备过程不修改档案。
+func prepare_roaming_spawn(elite_id: String) -> Dictionary:
+	_ensure_data()
+	if elite_id.is_empty() or not _finish_room_writes(true):
+		return {}
+	var digest := FileAccess.get_sha256(save_path) if FileAccess.file_exists(save_path) else ""
+	var disk := _read_validated_profile()
+	var revision := int(disk.get("revision", -1))
+	if (not digest.is_empty() and disk.is_empty()) or revision > data.save_revision or (not _verified_file_digest.is_empty() and digest != _verified_file_digest):
+		load_base()
+		_verified_file_digest = digest
+		_verified_file_revision = revision
+		return {}
+	return {
+		"revision": data.save_revision, "digest": digest, "disk_revision": revision, "path": save_path,
+		"record": get_elite_archive_record(elite_id),
+	}
+
+
+## 只在专用边界 patch 两个域；失败时从未改内存，无旧副本回灌。
+func commit_roaming_spawn_checkpoint(elite_id: String, record: Dictionary, snapshot: Dictionary, expected: Dictionary) -> bool:
+	if elite_id.is_empty() or record.is_empty() or expected.is_empty() or not bool(snapshot.get("valid", false)):
+		return false
+	if str(snapshot.get("checkpoint_id", snapshot.get("layout_id", ""))).is_empty():
+		return false
+	if not _finish_room_writes(true) or str(expected.get("path", "")) != save_path:
+		return false
+	var digest := FileAccess.get_sha256(save_path) if FileAccess.file_exists(save_path) else ""
+	if digest != str(expected.get("digest", "")):
+		load_base()
+		return false
+	if data.save_revision != int(expected.get("revision", -1)) or get_elite_archive_record(elite_id) != expected.get("record", {}):
+		return false
+	var payload := data._to_dict().duplicate(true)
+	payload["elite_archive_records"][elite_id] = record.duplicate(true)
+	payload["active_run_snapshot"] = snapshot.duplicate(true)
+	var result := SaveService.write_profile(save_path, payload, data.save_revision,
+		"roaming_elite_spawn:%s" % elite_id, force_save_failure_for_test, digest, int(expected.get("disk_revision", -1)))
+	if bool(result.get("stale", false)):
+		load_base()
+		return false
+	if not bool(result.get("success", false)):
+		return false
+	data.elite_archive_records[elite_id] = record.duplicate(true)
+	data.active_run_snapshot = snapshot.duplicate(true)
+	_accept_write(result)
+	_runtime_checkpoint_timer.stop()
+	_runtime_checkpoint_dirty = false
+	_pending_runtime_reason = ""
+	return true
+
+
 func replace_elite_archive_records_for_test(records: Dictionary) -> void:
 	_ensure_data()
 	if data != null:

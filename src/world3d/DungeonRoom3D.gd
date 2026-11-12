@@ -661,6 +661,9 @@ var authored_room_light_switch := true
 var _authored_tile_cells: Array[Vector3] = []
 var _spawn_tile_buckets: Dictionary = {}
 var _box_floor_samples: Dictionary = {}
+## Shape-local bounds only; transforms/disabled/layers are reread on every scan.
+## Resource changes invalidate the broad phase, including same-frame face edits.
+var _spawn_concave_bounds: Dictionary = {}
 ## 静态布局里**手摆的**易碎陈设（场景工坊刷进来的 `BreakableClutter3D`）。
 ##
 ## 与随机撒点那一批的区别：这批属于**美术布局**，随壳体常驻、不随 detail 卸载；
@@ -7569,7 +7572,14 @@ func _ensure_spawn_reach() -> void:
 	if columns <= 1 or rows <= 1:
 		return
 	# ① 通行性：障碍 AABB 在 XZ 上膨胀玩家半径；头顶构件不算挡路。
-	var blocked := {}
+	# X 主序与旧 Dictionary 插入顺序一致；外围零哨兵避免洪泛跨行。
+	var stride := rows + 2
+	var walkable := PackedByteArray()
+	walkable.resize((columns + 2) * stride)
+	for ix in columns:
+		for iz in rows:
+			walkable[(ix + 1) * stride + iz + 1] = 1
+	var walkable_count := columns * rows
 	for value in _spawn_blockers:
 		var bounds := value as AABB
 		if bounds.position.y >= SPAWN_REACH_PLAYER_HEIGHT_M:
@@ -7580,17 +7590,13 @@ func _ensure_spawn_reach() -> void:
 		var iz1 := clampi(int(floor((bounds.end.z + SPAWN_REACH_PLAYER_RADIUS_M + dimensions.y * 0.5) / SPAWN_REACH_GRID_M)), 0, rows - 1)
 		for ix in range(ix0, ix1 + 1):
 			for iz in range(iz0, iz1 + 1):
-				blocked[Vector2i(ix, iz)] = true
-	var walkable := {}
-	for ix in columns:
-		for iz in rows:
-			var key := Vector2i(ix, iz)
-			if not blocked.has(key):
-				walkable[key] = true
-	if walkable.is_empty():
+				var index := (ix + 1) * stride + iz + 1
+				walkable_count -= walkable[index]
+				walkable[index] = 0
+	if walkable_count == 0:
 		return
 	# ② 种子：每个连接门内侧 2 m。门洞格本身常被门扇占着，向内缩。
-	var queue: Array[Vector2i] = []
+	var queue := PackedInt32Array()
 	for value in connection_ports:
 		var port := value as Dictionary
 		var raw := port.get("position_m", []) as Array
@@ -7602,17 +7608,17 @@ func _ensure_spawn_reach() -> void:
 			inward = Vector2(float(outward_raw[0]), float(outward_raw[1])).normalized()
 		var seed_point := Vector3(float(raw[0]) - inward.x * 2.0, 0.0, float(raw[1]) - inward.y * 2.0)
 		var seed_key := _spawn_reach_key(seed_point)
-		var found := _spawn_reach_nearest(walkable, seed_key, 10)
-		if found.x >= 0 and not queue.has(found):
+		var found := _spawn_reach_nearest_packed(walkable, seed_key, 10, columns, rows)
+		if found >= 0 and not queue.has(found):
 			queue.append(found)
-	var visited := _spawn_reach_flood(walkable, queue)
+	var reached := _spawn_reach_flood_packed(walkable, queue, stride)
 	# ③ 没有任何门能给出种子（深井 Boss 房、撤离房）⇒ 取最大连通分量。
 	#    玩家能进这间房，就一定站在最大那块空地上。
-	if visited.is_empty():
-		visited = _spawn_reach_largest_component(walkable)
-	if visited.is_empty():
+	if reached.is_empty():
+		reached = _spawn_reach_largest_component_packed(walkable, columns, rows)
+	if reached.is_empty():
 		return
-	var coverage := float(visited.size()) / float(walkable.size())
+	var coverage := float(reached.size()) / float(walkable_count)
 	if coverage < SPAWN_REACH_MIN_COVERAGE:
 		# 判负也要落锁：否则每次刷怪都会重算一遍，白烧一次洪泛。
 		_spawn_reach_evaluated = true
@@ -7624,11 +7630,93 @@ func _ensure_spawn_reach() -> void:
 	# 判定成立才落锁。`_spawn_blockers` 为空时**不锁**：那可能是家具细节刚建、
 	# 碰撞还没进树的一帧，下一次刷怪要能重算。
 	_spawn_reach_evaluated = true
+	var visited := {}
+	for index in reached:
+		visited[Vector2i(index / stride - 1, index % stride - 1)] = true
 	_spawn_reach_cells = visited
 	_spawn_reach_active = true
 	# ④ 候选池是在 `_ready()` 生成的（当时家具细节还没建、闸门未启用）⇒ 重算一遍。
 	#    这里是唯一的重算入口：同一 `room_seed`，除被闸门剔掉的点外逐点不变。
 	_build_spawn_points()
+
+
+func _spawn_reach_nearest_packed(walkable: PackedByteArray, key: Vector2i, max_steps: int, columns: int, rows: int) -> int:
+	var stride := rows + 2
+	if key.x >= 0 and key.x < columns and key.y >= 0 and key.y < rows:
+		var index := (key.x + 1) * stride + key.y + 1
+		if walkable[index]:
+			return index
+	for step in range(1, max_steps + 1):
+		for dx in range(-step, step + 1):
+			for dz in range(-step, step + 1):
+				if maxi(absi(dx), absi(dz)) != step:
+					continue
+				var x := key.x + dx
+				var z := key.y + dz
+				if x >= 0 and x < columns and z >= 0 and z < rows:
+					var index := (x + 1) * stride + z + 1
+					if walkable[index]:
+						return index
+	return -1
+
+
+func _spawn_reach_flood_packed(walkable: PackedByteArray, seeds: PackedInt32Array, stride: int) -> PackedInt32Array:
+	var remaining := walkable.duplicate()
+	var reached := PackedInt32Array()
+	var stack := PackedInt32Array()
+	stack.resize(walkable.size())
+	var top := 0
+	for seed in seeds:
+		if remaining[seed]:
+			remaining[seed] = 0
+			reached.append(seed)
+			stack[top] = seed
+			top += 1
+	var neighbours := PackedInt32Array([stride, -stride, 1, -1])
+	while top > 0:
+		top -= 1
+		var current := stack[top]
+		for delta in neighbours:
+			var next := current + delta
+			if not remaining[next]:
+				continue
+			remaining[next] = 0
+			reached.append(next)
+			stack[top] = next
+			top += 1
+	return reached
+
+
+func _spawn_reach_largest_component_packed(walkable: PackedByteArray, columns: int, rows: int) -> PackedInt32Array:
+	var remaining := walkable.duplicate()
+	var best := PackedInt32Array()
+	var stack := PackedInt32Array()
+	stack.resize(walkable.size())
+	var stride := rows + 2
+	var neighbours := PackedInt32Array([stride, -stride, 1, -1])
+	for ix in columns:
+		for iz in rows:
+			var start := (ix + 1) * stride + iz + 1
+			if not remaining[start]:
+				continue
+			var component := PackedInt32Array([start])
+			remaining[start] = 0
+			stack[0] = start
+			var top := 1
+			while top > 0:
+				top -= 1
+				var current := stack[top]
+				for delta in neighbours:
+					var next := current + delta
+					if not remaining[next]:
+						continue
+					remaining[next] = 0
+					component.append(next)
+					stack[top] = next
+					top += 1
+			if component.size() > best.size():
+				best = component
+	return best
 
 
 func _spawn_reach_key(point: Vector3) -> Vector2i:
@@ -7753,7 +7841,9 @@ func _collect_spawn_blockers() -> void:
 	var room_bounds := Rect2(-dimensions * 0.5, dimensions).grow(_spawn_clearance())
 	var root: Node = get_parent() if get_parent() != null else self
 	var world_to_room := global_transform.affine_inverse()
-	for value in root.find_children("*", "CollisionShape3D", true, false):
+	for value in preload("res://src/world3d/RuntimeCollisionIndex.gd").get_sources(root):
+		if not is_instance_valid(value):
+			continue
 		var collision := value as CollisionShape3D
 		var body := collision.get_parent() as StaticBody3D
 		if body == null or (body.collision_layer & 1) == 0 or collision.disabled or collision.shape == null:
@@ -7765,6 +7855,17 @@ func _collect_spawn_blockers() -> void:
 			while surface != null and surface != self and not surface.has_meta("contiguous_top_surface"):
 				surface = surface.get_parent()
 			var room_surface := surface != null and is_ancestor_of(surface) and bool(surface.get_meta("contiguous_top_surface", false))
+			# Reject distant concave geometry BEFORE expanding all triangles. Own support
+			# surfaces retain the exact legacy path, even outside the room rectangle.
+			if not room_surface:
+				var whole := relative * _spawn_concave_local_bounds(collision.shape)
+				var whole_xz := Rect2(Vector2(whole.position.x, whole.position.z), Vector2(whole.size.x, whole.size.z))
+				# Never cull by Y: a large negative minimum can cancel a thin
+				# positive top in float32 AABB.end. Only use a conservative XZ
+				# reject; large transforms grow the guard with their magnitude.
+				var guard := 0.01 + (whole.position.abs().length() + whole.size.length() + relative.origin.abs().length()) * 0.00001
+				if not room_bounds.grow(guard).intersects(whole_xz.grow(guard), true):
+					continue
 			var faces := (collision.shape as ConcavePolygonShape3D).get_faces()
 			for index in range(0, faces.size(), 3):
 				var triangle := PackedVector3Array([relative * faces[index], relative * faces[index + 1], relative * faces[index + 2]])
@@ -7786,6 +7887,20 @@ func _collect_spawn_blockers() -> void:
 		if bounds.end.y <= SPAWN_GROUND_TOP_MAX_M or not room_bounds.intersects(Rect2(Vector2(bounds.position.x, bounds.position.z), Vector2(bounds.size.x, bounds.size.z))):
 			continue
 		_spawn_blockers.append(bounds)
+
+
+func _spawn_concave_local_bounds(shape: Shape3D) -> AABB:
+	var id := shape.get_instance_id()
+	if not _spawn_concave_bounds.has(id):
+		_spawn_concave_bounds[id] = shape.get_debug_mesh().get_aabb()
+		var invalidate := _invalidate_spawn_concave_bounds.bind(id)
+		if not shape.changed.is_connected(invalidate):
+			shape.changed.connect(invalidate)
+	return _spawn_concave_bounds[id]
+
+
+func _invalidate_spawn_concave_bounds(id: int) -> void:
+	_spawn_concave_bounds.erase(id)
 
 
 func _spawn_obstacle_free(point: Vector3) -> bool:

@@ -75,7 +75,8 @@ def main():
                       "assets/shaders/chest_spotlight_pool.gdshader", "tools/expedition_event_profile.gd",
                       "src/core/GraphicsSettingsManager.gd", "src/enemy3d/EliteArmsTakerEquipment.gd",
                       "src/combat3d/WeaponModel3D.gd", "src/map/SpawnBoxCatalog.gd",
-                      "src/enemy3d/MonsterInjector.gd"]
+                      "src/map/MonsterInjector.gd", "src/world3d/RuntimeCollisionIndex.gd",
+                      "src/world3d/RoomFurnishingNavigation.gd"]
     plan_dir = PROJECT_ROOT / "data" / "level_plans" / args.level
     tracked_inputs.extend(p.relative_to(PROJECT_ROOT).as_posix() for p in sorted(plan_dir.rglob("*.json")))
     def source_fingerprints():

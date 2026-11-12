@@ -1337,7 +1337,7 @@ func _reset_egt_state() -> void:
 	floor_snap_length = 0.0 if hovers else 0.32
 
 
-func configure_from_enemy_data(data: Dictionary, prepared_elite_visual: Node3D = null) -> void:
+func configure_from_enemy_data(data: Dictionary, prepared_elite_visual: Node3D = null, skipconfirm: bool = false) -> void:
 	if monitor_combat != null:monitor_combat.cancel()
 	monitor_combat = null
 	if arms_taker_combat != null:
@@ -1421,7 +1421,7 @@ func configure_from_enemy_data(data: Dictionary, prepared_elite_visual: Node3D =
 		max_hp = maxi(1, int(round(float(max_hp) * float(data.get("elite_growth_hp_mult", 1.0)))))
 		current_hp = max_hp
 		contact_damage = maxi(1, int(round(float(contact_damage) * float(data.get("elite_growth_damage_mult", 1.0)))))
-		if not elite_id.is_empty() and EliteRosterService != null:
+		if not skipconfirm and not elite_id.is_empty() and EliteRosterService != null:
 			EliteRosterService.confirm_reservation(elite_id, elite_encounter_instance_id)
 		if avatar != null:
 			avatar.configure_elite_content(

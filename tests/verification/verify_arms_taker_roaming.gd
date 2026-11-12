@@ -16,6 +16,18 @@ func check(ok: bool, message: String) -> void:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if "--atomic-only" in OS.get_cmdline_user_args():
+		if OS.get_environment("SHELLSTORM_ROAMING_ISOLATED") != "1" or not OS.get_environment("APPDATA").contains("roaming_atomic") or not OS.get_environment("LOCALAPPDATA").contains("roaming_atomic"):
+			push_error("roaming 原子专项必须在 Autoload 前隔离 APPDATA/LOCALAPPDATA")
+			get_tree().quit(2)
+			return
+		await get_tree().process_frame
+		verify_atomic_spawn()
+		for failure in failures:
+			push_error(failure)
+		print("ROAMING_ATOMIC_RESULT checks=%d failures=%d user=%s" % [checks, failures.size(), OS.get_user_data_dir()])
+		get_tree().quit(0 if failures.is_empty() else 1)
+		return
 	BaseManager.save_path = "user://roaming_elite_verification.json"
 	BaseManager.data = BaseData.new()
 	EliteRosterService.reset_roster_for_test()
@@ -50,6 +62,152 @@ func _ready() -> void:
 		for failure in failures:
 			push_error(failure)
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+
+## 复用既有登记入口；真实 Enemy3D + 正式 Host helper，省去整关装配。
+class AtomicHost extends Dungeon3D:
+	var before_snapshot: Callable
+	func _ready() -> void:
+		pass
+	func build_runtime_save_snapshot() -> Dictionary:
+		if before_snapshot.is_valid():
+			var action := before_snapshot
+			before_snapshot = Callable()
+			action.call()
+		_capture_room_runtime_state(_current_room_id)
+		return {"valid": true, "checkpoint_id": "atomic_checkpoint", "run_id": _run_id,
+			"world_state": {"roaming_elite": _roaming_elite.export_snapshot(), "segment_runtime_state": _segment_runtime_state.duplicate(true)}}
+
+
+class AtomicRoom extends DungeonRoom3D:
+	func _ready() -> void:
+		_stream_state = STREAM_ACTIVE
+	func spawn_point_for_index(_index: int) -> Vector3:
+		return global_position + Vector3(5, 0.05, 5)
+
+
+func atomic_external_write(same_revision: bool) -> void:
+	var payload := BaseManager.get_profile_snapshot()
+	payload["extraction_points"] = 9182
+	payload["elite_archive_records"][ID]["external_marker"] = "权威档"
+	payload["active_run_snapshot"]["external_checkpoint"] = true
+	var revision := BaseManager.data.save_revision + (0 if same_revision else 7)
+	payload["save_revision"] = revision
+	check(AtomicJsonStore.save_dictionary(BaseManager.save_path, ProfileSaveService.build_envelope(payload, revision, "external_digest_fixture" if same_revision else "external_revision_fixture")), "外部封套 fixture 写入失败")
+
+
+func atomic_config(prepared: Dictionary) -> Array[Dictionary]:
+	var config := MonsterInjector.new().prepare_spawn_config(1, 0, prepared["snapshot"])
+	config["roaming_elite_session_id"] = prepared["encounter_id"]
+	config["roaming_appearance"] = 1
+	config["persistent_id"] = "%s:appearance:1" % prepared["encounter_id"]
+	return [config]
+
+
+func verify_atomic_spawn() -> void:
+	BaseManager.save_path = "user://roaming_atomic_fixture.json"
+	BaseManager.data = BaseData.new()
+	EliteRosterService.reset_roster_for_test()
+	check(BaseManager.save_base("atomic_fixture"), "fixture 基线写入失败")
+	var shell := (load("res://scenes/Dungeon3D.tscn") as PackedScene).instantiate()
+	shell.set_script(AtomicHost)
+	var host := shell as AtomicHost
+	host.test_mode = true
+	host.process_mode = Node.PROCESS_MODE_DISABLED
+	host._run_id = "atomic_run"
+	var active := host.get_node("ActiveEnemies")
+	get_tree().root.add_child(host)
+	var room := AtomicRoom.new()
+	room.room_id = "atomic_room"
+	host.add_child(room)
+	host._room_by_id[room.room_id] = room
+	host._current_room_id = room.room_id
+	host._roaming_elite.configure({"enabled": true, "elite_id": ID}, 12, host._run_id, 12)
+	host._roaming_elite.state.status = "pending"
+	host._roaming_elite.state.room_id = room.room_id
+	host._alive_by_room[room.room_id] = 3
+	host._room_spawn_blocked["other_room"] = true
+	host._segment_runtime_state["other_room"] = {"ground_items": [{"fact": "保留"}]}
+	var session := str(host._roaming_elite.state.session_id)
+	var events: Array = []
+	var on_reserved := func(_id: String, _encounter: String): events.append("reserved")
+	var on_changed := func(_id: String, _record: Dictionary): events.append("changed")
+	EliteRosterService.elite_reserved.connect(on_reserved)
+	EliteRosterService.roster_changed.connect(on_changed)
+	host._runtime_persistence_active = true
+	BaseManager.register_runtime_checkpoint_provider(host)
+	BaseManager.queue_runtime_checkpoint("preexisting_dirty")
+	var before := BaseManager.get_profile_snapshot()
+	var prepared := EliteRosterService.prepare_roaming_record(ID, session, 95)
+	var configs := atomic_config(prepared)
+	check(BaseManager.get_profile_snapshot() == before and events.is_empty(), "prepare 写入预约或发布信号")
+	var journal := host._roaming_elite.export_snapshot()
+	BaseManager.force_save_failure_for_test = true
+	check(host._spawn_enemy_batch(room, configs, true, false, [], false, prepared) == -1, "写盘失败未拒绝出生")
+	BaseManager.force_save_failure_for_test = false
+	check(active.get_child_count() == 0 and not host._enemy_nodes_by_room.has(room.room_id), "失败残留 Actor/成员")
+	check(host._roaming_elite.state == journal and events.is_empty(), "失败未撤销 roaming 或提前发布")
+	check(BaseManager._runtime_checkpoint_dirty and BaseManager._pending_runtime_reason == "preexisting_dirty", "失败破坏此前 checkpoint 脏标志")
+	check(BaseManager.get_profile_snapshot() == before, "失败改变档案或 checkpoint")
+	check(host._alive_by_room[room.room_id] == 3 and host._room_spawn_blocked == {"other_room": true}, "失败破坏 alive/blocked")
+	check(host._segment_runtime_state["other_room"].ground_items.size() == 1, "失败丢其它房事实")
+	check((host._segment_runtime_state[room.room_id].enemies as Array).is_empty(), "失败缓存残留 Actor")
+	for same_revision in [false, true]:
+		prepared = EliteRosterService.prepare_roaming_record(ID, session, 95)
+		configs = atomic_config(prepared)
+		host.before_snapshot = atomic_external_write.bind(same_revision)
+		check(host._spawn_enemy_batch(room, configs, true, false, [], false, prepared) == -1, "外部 revision/digest 冲突未拒绝")
+		check(BaseManager.data.extraction_points == 9182 and BaseManager.get_elite_archive_record(ID).get("external_marker") == "权威档", "stale 回滚覆盖权威档")
+		check(BaseManager.get_active_run_checkpoint().get("external_checkpoint", false), "stale checkpoint 被旧值覆盖")
+		check(active.get_child_count() == 0 and host._roaming_elite.state == journal and events.is_empty(), "stale 留实体/roaming/信号")
+		# 首次准备重新建立已重载档案的 digest 基线，仍不提交。
+		EliteRosterService.prepare_roaming_record(ID, session, 95)
+	prepared = EliteRosterService.prepare_roaming_record(ID, session, 95)
+	configs = atomic_config(prepared)
+	var revision := BaseManager.data.save_revision
+	# 准备后无关域的新事实必须进入最新完整 payload。
+	BaseManager.data.extraction_points = 31415
+	check(host._spawn_enemy_batch(room, configs, true, false, [], false, prepared) == 1, "成功出生提交失败")
+	check(BaseManager.data.save_revision == revision + 1, "reserve+confirm+checkpoint 未合为一次写")
+	check(events == ["reserved", "changed"] and active.get_child_count() == 1, "成功发布次数或 Actor 数错误")
+	check(not BaseManager._runtime_checkpoint_dirty and BaseManager._runtime_checkpoint_timer.is_stopped(), "出生 health 信号排入多余 checkpoint")
+	check(BaseManager.data.extraction_points == 31415 and host._alive_by_room[room.room_id] == 3, "成功丢最新其它域或改普通 alive")
+	var enemy := active.get_child(0) as Enemy3D
+	check(enemy.visible and not enemy.is_blocking_signals(), "成功 Actor 未开放")
+	check(int(EliteRosterService.get_record(ID).encounter_count) == 1, "首次确认 encounter_count 非 1")
+	var checkpoint := BaseManager.get_active_run_checkpoint()
+	var encoded := JSON.stringify(checkpoint)
+	for private_key in ["skipconfirm", "prepared_roaming", "expected", "disk_revision"]:
+		check(not encoded.contains('"%s"' % private_key), "私有事务标志入 snapshot：%s" % private_key)
+	var disk := ProfileSaveService.read_profile(BaseManager.save_path)
+	check(int(disk.revision) == revision + 1 and int(disk.payload.extraction_points) == 31415, "返回前未落盘或完整 payload 丢事实")
+	check((checkpoint.world_state.segment_runtime_state[room.room_id].enemies as Array).size() == 1, "checkpoint 未包含唯一 Actor")
+	prepared = EliteRosterService.prepare_roaming_record(ID, session, 95)
+	host._roaming_elite.state = journal.duplicate(true)
+	check(host._spawn_enemy_batch(room, configs, true, false, [], false, prepared) == -1 and active.get_child_count() == 1, "同 persistent_id 重试复制 Actor")
+	host._roaming_elite.state = (checkpoint.world_state.roaming_elite as Dictionary).duplicate(true)
+	check(EliteRosterService.confirm_and_checkpoint(prepared, host._roaming_elite.export_snapshot(), host.build_runtime_save_snapshot()), "已确认遭遇重复提交失败")
+	check(int(EliteRosterService.get_record(ID).encounter_count) == 1, "重复确认重复累计")
+	check(EliteRosterService.confirm_reservation(ID, session) and int(EliteRosterService.get_record(ID).encounter_count) == 1, "旧 confirm 幂等失效")
+	var runtime := enemy.export_runtime_state()
+	BaseManager.load_base()
+	check(int(EliteRosterService.get_record(ID).encounter_count) == 1, "重载重复累计")
+	host._restore_room_runtime_state(room.room_id)
+	host._restore_room_runtime_state(room.room_id)
+	check(active.get_child_count() == 1, "sameid 连续恢复复制 Actor")
+	host._enemy_nodes_by_room[room.room_id] = []
+	enemy.free()
+	host._restore_room_runtime_state(room.room_id)
+	host._restore_room_runtime_state(room.room_id)
+	check(active.get_child_count() == 1 and (active.get_child(0) as Enemy3D).get_persistent_id() == runtime.persistent_id, "销毁后 sameid 恢复不唯一")
+	check(int(EliteRosterService.get_record(ID).encounter_count) == 1, "恢复旧 confirm 重复累计")
+	EliteRosterService.elite_reserved.disconnect(on_reserved)
+	EliteRosterService.roster_changed.disconnect(on_changed)
+	revision = BaseManager.data.save_revision
+	check(BaseManager.flush_runtime_checkpoint("atomic_force_boundary"), "强制 checkpoint 保存失败")
+	check(int(ProfileSaveService.read_profile(BaseManager.save_path).revision) == revision + 1, "强制 checkpoint 返回前未落盘")
+	BaseManager.unregister_runtime_checkpoint_provider(host, false)
+	host.free()
 
 
 func verify_plans() -> void:

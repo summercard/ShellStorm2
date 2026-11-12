@@ -5839,23 +5839,18 @@ func _retry_roaming_elite() -> void:
 	injector.set_seed(run_seed ^ room.room_id.hash() ^ 0x41524d53)
 	injector.set_theme_profile(gameplay_theme)
 	injector.set_level_rules(_monster_rules)
-	var configs := injector.generate_enemies({
-		"type": "elite", "elite_id": _roaming_elite.state.elite_id,
-		"floor": maxi(1, visual_theme.difficulty_rank), "floor_level": 0,
-		"floor_number": _elite_floor_number(room), "seed": run_seed,
-		"encounter_id": _roaming_elite.state.session_id,
-	})
-	if configs.is_empty():
+	var prepared := EliteRosterService.prepare_roaming_record(
+		str(_roaming_elite.state.elite_id), str(_roaming_elite.state.session_id), _elite_floor_number(room))
+	if prepared.is_empty():
 		_schedule_roaming_retry()
 		return
-	for config: Dictionary in configs:
-		config["roaming_elite_session_id"] = _roaming_elite.state.session_id
-		config["roaming_appearance"] = int(_roaming_elite.state.appearances) + 1
-		config["persistent_id"] = "%s:appearance:%d" % [_roaming_elite.state.session_id, config.roaming_appearance]
-	if _spawn_enemy_batch(room, configs, true) <= 0:
+	var config := injector.prepare_spawn_config(maxi(1, visual_theme.difficulty_rank), 0, prepared["snapshot"])
+	config["roaming_elite_session_id"] = _roaming_elite.state.session_id
+	config["roaming_appearance"] = int(_roaming_elite.state.appearances) + 1
+	config["persistent_id"] = "%s:appearance:%d" % [_roaming_elite.state.session_id, config.roaming_appearance]
+	var configs: Array[Dictionary] = [config]
+	if _spawn_enemy_batch(room, configs, true, false, [], false, prepared) <= 0:
 		_schedule_roaming_retry()
-	elif _runtime_persistence_active:
-		BaseManager.flush_runtime_checkpoint("roaming_elite_spawn")
 
 
 func commit_roaming_elite_escape(enemy: Enemy3D, context: Dictionary) -> bool:
@@ -6207,7 +6202,89 @@ func _enemy_runtime_spawn_data(config: Dictionary) -> Dictionary:
 	return data.duplicate(true)
 
 
-func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false, positions: Array = [], compiled_geometry_ready := false) -> int:
+## 仅单只 roaming 候选使用；不进入普通批量/延迟/波次或 warmup 所有权路径。
+func _spawn_prepared_roaming_actor(room: DungeonRoom3D, configs: Array[Dictionary], prepared: Dictionary) -> int:
+	if room == null or configs.size() != 1 or _room_spawn_blocked.has(room.room_id):
+		return -1
+	var config := configs[0]
+	if not _roaming_elite.pending_in(room.room_id) or not _roaming_elite.owns(config) or _counts_for_room_clear(config):
+		return -1
+	var persistent_id := str(config.get("persistent_id", ""))
+	if persistent_id.is_empty():
+		return -1
+	for value in $ActiveEnemies.get_children():
+		if value is Enemy3D and (value as Enemy3D).get_persistent_id() == persistent_id:
+			return -1
+	var point := _resolve_spawn_position(room, config, 0, [])
+	if not point.is_finite():
+		return -1
+	var enemy := ENEMY_SCENE.instantiate() as Enemy3D
+	if enemy == null:
+		return -1
+	var previous_roaming := _roaming_elite.export_snapshot()
+	var had_members := _enemy_nodes_by_room.has(room.room_id)
+	enemy.room_id = room.room_id
+	enemy.set_block_signals(true)
+	enemy.process_mode = Node.PROCESS_MODE_DISABLED
+	enemy.visible = false
+	$ActiveEnemies.add_child(enemy)
+	var spawn_data := _enemy_runtime_spawn_data(config)
+	var room_ai := room.encounter.get("monster_ai", {}) as Dictionary
+	if not room_ai.is_empty():
+		var merged_ai := (spawn_data.get("monster_ai", {}) as Dictionary).duplicate(true)
+		merged_ai.merge(room_ai, true)
+		spawn_data["monster_ai"] = merged_ai
+	enemy.configure_from_enemy_data(spawn_data, null, true)
+	var hp_multiplier := float(_room_enemy_hp_multipliers.get(room.room_id, 1.0))
+	if not is_equal_approx(hp_multiplier, 1.0):
+		enemy.apply_health_multiplier(hp_multiplier)
+	enemy.contact_damage = maxi(1, int(round(float(enemy.contact_damage) * float(_room_enemy_damage_multipliers.get(room.room_id, 1.0)))))
+	_roaming_elite.bind_actor(enemy)
+	enemy.global_position = point
+	enemy.set_room_bounds(room.global_transform, room.get_dimensions() * 0.5)
+	if not had_members:
+		_enemy_nodes_by_room[room.room_id] = []
+	(_enemy_nodes_by_room[room.room_id] as Array).append(enemy)
+	var snapshot := build_runtime_save_snapshot()
+	if not EliteRosterService.confirm_and_checkpoint(prepared, _roaming_elite.export_snapshot(), snapshot):
+		(_enemy_nodes_by_room[room.room_id] as Array).erase(enemy)
+		if not had_members and (_enemy_nodes_by_room[room.room_id] as Array).is_empty():
+			_enemy_nodes_by_room.erase(room.room_id)
+		if MonsterAIManager != null:
+			MonsterAIManager.unregister_enemy(enemy)
+		enemy.free()
+		_roaming_elite.state = previous_roaming
+		# 只清除本次 Actor 的缓存行；完整采集的其它世界事实不得回滚。
+		var cached := _segment_runtime_state.get(room.room_id, {}) as Dictionary
+		var states := cached.get("enemies", []) as Array
+		for index in range(states.size() - 1, -1, -1):
+			if str((states[index] as Dictionary).get("persistent_id", "")) == persistent_id:
+				states.remove_at(index)
+		return -1
+	enemy.killed.connect(_on_enemy_killed)
+	enemy.escaped.connect(_on_enemy_escaped)
+	enemy.defeated.connect(_on_enemy_defeated)
+	enemy.summon_requested.connect(_on_summon_requested)
+	enemy.split_requested.connect(_on_split_requested)
+	enemy.boss_phase_changed.connect(_on_boss_phase_changed)
+	enemy.boss_activation_completed.connect(_on_boss_activation_completed)
+	enemy.state_changed.connect(_on_fate_enemy_state_changed.bind(enemy))
+	enemy.set_meta("fate_kill_currency", int(spawn_data.get("fate_kill_currency", 0)))
+	enemy.set_runtime_active(room.room_id == _current_room_id, room.is_streamed())
+	_configure_story_enemy(enemy)
+	enemy.set_block_signals(false)
+	# 先刷新自身血条再接 Host，避免出生 health 又排入第二份 checkpoint。
+	enemy.health_changed.emit(enemy, enemy.current_hp, enemy.max_hp)
+	enemy.health_changed.connect(_on_enemy_health_changed)
+	EliteRosterService.publish_roaming_spawn(prepared)
+	return 1
+
+
+func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false, positions: Array = [], compiled_geometry_ready := false, prepared_roaming: Dictionary = {}) -> int:
+	if not prepared_roaming.is_empty():
+		if not additive or count_reserved or not positions.is_empty():
+			return -1
+		return _spawn_prepared_roaming_actor(room, enemy_configs, prepared_roaming)
 	if room == null or enemy_configs.is_empty():
 		return 0
 	if room.room_id == _current_room_id:

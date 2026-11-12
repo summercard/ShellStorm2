@@ -734,6 +734,17 @@ func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> 
 			elite_snapshot = EliteRosterService.get_record(requested_elite_id)
 	if elite_snapshot.is_empty() or bool(elite_snapshot.get("success", true)) == false:
 		return {}
+	return _build_elite_config(floor, floor_level, elite_snapshot)
+
+
+## 显式候选快照装配，不经过普通精英的预约入口。
+func prepare_spawn_config(floor: int, floor_level: int, elite_snapshot: Dictionary) -> Dictionary:
+	if elite_snapshot.is_empty():
+		return {}
+	return _build_elite_config(floor, floor_level, elite_snapshot)
+
+
+func _build_elite_config(floor: int, floor_level: int, elite_snapshot: Dictionary) -> Dictionary:
 	var base_type := str(elite_snapshot.get(
 		"base_enemy_id", _get_theme_fallback_enemy("fat_zombie03")
 	))

@@ -9,6 +9,7 @@ func _ready() -> void:
 	var failures: Array[String] = []
 	_verify_catalog(failures)
 	_verify_save_envelope_and_backup(failures)
+	_verify_serialization_cache(failures)
 	_verify_avatar_save_with_numeric_weapon_slots(failures)
 	_verify_transactions_and_restart(failures)
 	_verify_save_failure_rollback(failures)
@@ -66,6 +67,92 @@ func _verify_save_envelope_and_backup(failures: Array[String]) -> void:
 	var recovered: Variant = AtomicJsonStore.load_dictionary(TEST_PATH, Callable(ProfileSaveService, "is_valid_envelope"))
 	if not recovered is Dictionary or int((recovered as Dictionary).get("revision", 0)) != 1:
 		failures.append("checksum损坏后没有回退到有效备份")
+
+
+class CacheSerializationWorker extends RefCounted:
+	func run(path: String, payload: Dictionary, gate: Semaphore) -> bool:
+		gate.wait()
+		for index in 8:
+			payload["extraction_points"] = index
+			var actual: Dictionary = JSON.parse_string(ProfileSaveService._serialize_for_write(path, payload, index + 1, path))
+			var expected := ProfileSaveService.build_envelope(payload, index + 1, path)
+			if actual.payload != expected.payload or actual.payload_checksum != expected.payload_checksum:
+				return false
+			if not ProfileSaveService.is_valid_envelope(actual) or actual.revision != index + 1 or actual.reason != path:
+				return false
+		return true
+
+
+func _check_cached_envelope(payload: Dictionary, path: String, failures: Array[String]) -> Dictionary:
+	var actual: Dictionary = JSON.parse_string(ProfileSaveService._serialize_for_write(path, payload, 12, "cache_probe"))
+	var expected := ProfileSaveService.build_envelope(payload, 12, "cache_probe")
+	if actual.get("payload") != expected.payload:
+		failures.append("缓存序列化载荷与原build_envelope不一致：%s" % path)
+	if actual.get("payload_checksum") != expected.payload_checksum or actual.get("payload_checksum") != ProfileSaveService.checksum_payload(actual.get("payload", {})):
+		failures.append("缓存序列化未复用公共checksum语义：%s" % path)
+	var decoded := ProfileSaveService.unpack(actual)
+	# saved_at_unix由两次调用分别生成，不比较整个封套。
+	if not ProfileSaveService.is_valid_envelope(actual) or not bool(decoded.get("success", false)) or decoded.get("payload") != expected.payload or actual.get("revision") != 12 or actual.get("reason") != "cache_probe" or actual.get("payload_checksum_algorithm") != ProfileSaveService.CHECKSUM_ALGORITHM:
+		failures.append("缓存序列化封套元数据或旧读取器兼容失败：%s" % path)
+	return actual
+
+
+func _verify_serialization_cache(failures: Array[String]) -> void:
+	_cleanup()
+	var payload := BaseData.new()._to_dict()
+	payload["active_run_snapshot"] = {"world_state": {"segment_runtime_state": {"segment_a": {
+		"room_a": {"opened": false, "loot": [1, 0.123456789012345]},
+		"room_b": {"opened": false, "loot": [2]},
+	}}}}
+	var original := payload.duplicate(true)
+	var first := _check_cached_envelope(payload, TEST_PATH, failures)
+	_check_cached_envelope(payload, TEST_PATH, failures)
+	var rooms: Dictionary = payload.active_run_snapshot.world_state.segment_runtime_state.segment_a
+	rooms.room_a.opened = true
+	var changed_a := _check_cached_envelope(payload, TEST_PATH, failures)
+	if changed_a.payload_checksum == first.payload_checksum or changed_a.payload.active_run_snapshot.world_state.segment_runtime_state.segment_a.room_b != first.payload.active_run_snapshot.world_state.segment_runtime_state.segment_a.room_b:
+		failures.append("首房修改没有更新摘要或污染未修改的第二房")
+	rooms.room_b.loot.append(3)
+	var changed_b := _check_cached_envelope(payload, TEST_PATH, failures)
+	if changed_b.payload_checksum == changed_a.payload_checksum or first.payload.active_run_snapshot.world_state.segment_runtime_state.segment_a.room_a.opened:
+		failures.append("第二房修改未更新摘要或输入mutation污染已序列化输出")
+	_check_cached_envelope(original, TEST_PATH, failures)
+	changed_b.payload.active_run_snapshot.world_state.segment_runtime_state.segment_a.room_a.opened = false
+	if ProfileSaveService.is_valid_envelope(changed_b) or bool(ProfileSaveService.unpack(changed_b).get("success", false)):
+		failures.append("手改序列化输出后旧validator或读取器未拒绝")
+	_check_cached_envelope(payload, TEST_PATH, failures)
+	payload["probe_slots"] = {3: "numeric", "3": "text"}
+	var forward := _check_cached_envelope(payload, TEST_PATH, failures)
+	var reverse := {"3": "text", 3: "numeric"}
+	if payload.probe_slots != reverse:
+		failures.append("同形键测试未建立忽略插入顺序的相等字典")
+	payload["probe_slots"] = reverse
+	var backward := _check_cached_envelope(payload, TEST_PATH, failures)
+	if forward.payload.probe_slots.get("3") != "text" or backward.payload.probe_slots.get("3") != "numeric" or forward.payload_checksum == backward.payload_checksum:
+		failures.append("整数/字符串同形键插入顺序改变后错误命中缓存")
+	_check_cached_envelope(original, TEST_PATH + ".other", failures)
+	var restored := _check_cached_envelope(payload, TEST_PATH, failures)
+	if not AtomicJsonStore.save_json_text(TEST_PATH, JSON.stringify(restored)):
+		failures.append("无法建立新序列化格式的旧读取器测试档")
+	else:
+		var loaded: Variant = AtomicJsonStore.load_dictionary(TEST_PATH, Callable(ProfileSaveService, "is_valid_envelope"))
+		if not loaded is Dictionary or loaded.get("payload") != restored.payload or ProfileSaveService.read_profile(TEST_PATH).get("payload") != restored.payload:
+			failures.append("原AtomicJsonStore或read_profile不能读取新序列化格式")
+	# 主线程保留worker引用直到join；worker只持独占数据，不接触Node或写盘。
+	var workers := [CacheSerializationWorker.new(), CacheSerializationWorker.new()]
+	var threads := [Thread.new(), Thread.new()]
+	var gate := Semaphore.new()
+	for index in threads.size():
+		if threads[index].start(Callable(workers[index], "run").bind(TEST_PATH + ".thread_%d" % index, original.duplicate(true), gate)) != OK:
+			failures.append("无法启动序列化并发worker：%d" % index)
+	for thread in threads:
+		if thread.is_started():
+			gate.post()
+	for index in threads.size():
+		if threads[index].is_started() and threads[index].wait_to_finish() != true:
+			failures.append("不同path并发序列化产生串档或checksum不一致：%d" % index)
+	_check_cached_envelope(payload, TEST_PATH, failures)
+	_cleanup()
 
 
 func _verify_avatar_save_with_numeric_weapon_slots(failures: Array[String]) -> void:

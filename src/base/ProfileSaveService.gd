@@ -6,6 +6,10 @@ const MANIFEST_VERSION := 1
 const CHECKSUM_ALGORITHM := "canonical_json_v3"
 const LEGACY_CHECKSUM_ALGORITHM := "canonical_json_v2"
 
+# 单槽不可变快照供各线程复用；锁只保护整快照引用，不覆盖计算或 IO。
+static var _write_cache_mutex := Mutex.new()
+static var _write_cache_snapshot: Dictionary = {"path": "", "fields": {}}
+
 
 static func read_profile(path: String) -> Dictionary:
 	var accepted := {}
@@ -33,8 +37,7 @@ static func write_profile(path: String, payload: Dictionary, baseline: int, reas
 	payload["save_revision"] = revision
 	payload["last_saved_at_unix"] = timestamp
 	payload["last_save_reason"] = reason
-	var envelope := build_envelope(payload, revision, reason)
-	var serialized := JSON.stringify(envelope, "\t")
+	var serialized := _serialize_for_write(path, payload, revision, reason)
 	if fail_write or not AtomicJsonStore.save_json_text(path, serialized):
 		return {"success":false}
 	var digest := serialized.sha256_text()
@@ -48,6 +51,10 @@ static func build_envelope(payload: Dictionary, revision: int, reason: String) -
 	# JSON只保留字符串对象键。先把运行时Dictionary规范成实际落盘形态，确保
 	# 枚举整数键（例如武器装配槽3）与高精度数值不会在写入后改变校验输入。
 	var stored_payload := _normalize_for_storage(payload)
+	return _stored_envelope(stored_payload, revision, reason, checksum_payload(stored_payload))
+
+
+static func _stored_envelope(stored_payload: Dictionary, revision: int, reason: String, checksum: String) -> Dictionary:
 	return {
 		"manifest_version": MANIFEST_VERSION,
 		"profile_schema": str(stored_payload.get("save_version", BaseData.SAVE_VERSION)),
@@ -55,9 +62,147 @@ static func build_envelope(payload: Dictionary, revision: int, reason: String) -
 		"saved_at_unix": int(Time.get_unix_time_from_system()),
 		"reason": reason if not reason.is_empty() else "unspecified",
 		"payload_checksum_algorithm": CHECKSUM_ALGORITHM,
-		"payload_checksum": checksum_payload(stored_payload),
+		"payload_checksum": checksum,
 		"payload": stored_payload,
 	}
+
+
+# 已发布的快照、字段、原始深副本和规范化子树均不再修改，也不向外部暴露。
+static func _serialize_for_write(path: String, payload: Dictionary, revision: int, reason: String) -> String:
+	_write_cache_mutex.lock()
+	var snapshot := _write_cache_snapshot
+	_write_cache_mutex.unlock()
+	var cached_fields: Dictionary = snapshot.fields if snapshot.path == path else {}
+	for key in payload:
+		if not key is String:
+			return JSON.stringify(build_envelope(payload, revision, reason))
+	var keys: Array = payload.keys()
+	keys.sort()
+	var next_fields: Dictionary = {}
+	var stored_payload: Dictionary = {}
+	var canonical_entries: Array[String] = []
+	var encoded_entries: Array[String] = []
+	for key in keys:
+		var raw: Variant = payload[key]
+		var field: Dictionary = cached_fields.get(key, {})
+		var trail: Array[String] = [key]
+		field = _write_chunk(raw, field, trail, 1 if key == "active_run_snapshot" else 0)
+		if field.is_empty():
+			return JSON.stringify(build_envelope(payload, revision, reason))
+		next_fields[key] = field
+		stored_payload[key] = field.stored
+		var encoded_key := JSON.stringify(key)
+		canonical_entries.append(encoded_key + ":" + str(field.canonical))
+		encoded_entries.append(encoded_key + ":" + str(field.encoded))
+	var checksum := ("{" + ",".join(canonical_entries) + "}").sha256_text()
+	var header := _stored_envelope(stored_payload, revision, reason, checksum)
+	header.erase("payload")
+	var encoded_header := JSON.stringify(header)
+	var serialized := encoded_header.left(-1) + ",\"payload\":{" + ",".join(encoded_entries) + "}}"
+	var next_snapshot := {"path": path, "fields": next_fields}
+	var retired_snapshot: Dictionary
+	_write_cache_mutex.lock()
+	retired_snapshot = _write_cache_snapshot
+	_write_cache_snapshot = next_snapshot
+	_write_cache_mutex.unlock()
+	# 持有被替换快照直到解锁，避免锁内释放整棵旧树。
+	retired_snapshot = {}
+	return serialized
+
+
+# 只拆固定的大字典层级；叶块独立冻结，祖先由子块的冻结引用组装。
+static func _write_chunk(raw: Variant, cached: Dictionary, trail: Array[String], layer: int) -> Dictionary:
+	if not cached.is_empty() and cached.cacheable and typeof(raw) == typeof(cached.raw) and raw == cached.raw:
+		return cached
+	var split := layer > 0 and raw is Dictionary
+	if split:
+		for key in raw:
+			if not key is String:
+				split = false
+				break
+	if not split:
+		var mode := _raw_cache_mode(raw, trail.size() - 1)
+		if mode == 0:
+			return {}
+		# 保持原 JSON 深度；碰撞子树仍由原规范化函数按插入顺序处理。
+		var wrapped: Variant = raw
+		for index in range(trail.size() - 1, -1, -1):
+			wrapped = {trail[index]: wrapped}
+		var normalized: Variant = _normalize_for_storage(wrapped)
+		for key in trail:
+			normalized = normalized[key]
+		return {
+			"raw": _freeze_write_raw(raw) if mode == 2 else null,
+			"cacheable": mode == 2,
+			"stored": normalized,
+			"canonical": _canonical_json(normalized),
+			"encoded": JSON.stringify(normalized),
+		}
+	var keys: Array = raw.keys()
+	keys.sort()
+	var previous_children: Dictionary = cached.get("children", {})
+	var children: Dictionary = {}
+	var frozen: Dictionary = {}
+	var stored: Dictionary = {}
+	var canonical: Array[String] = []
+	var encoded: Array[String] = []
+	var cacheable := true
+	for key in keys:
+		var child_layer := 0
+		if layer == 1 and key == "world_state":
+			child_layer = 2
+		elif layer == 2 and key == "segment_runtime_state":
+			child_layer = 3
+		elif layer == 3:
+			child_layer = 4
+		var child_trail: Array[String] = trail.duplicate()
+		child_trail.append(key)
+		var child := _write_chunk(raw[key], previous_children.get(key, {}), child_trail, child_layer)
+		if child.is_empty():
+			return {}
+		children[key] = child
+		frozen[key] = child.raw
+		stored[key] = child.stored
+		cacheable = cacheable and bool(child.cacheable)
+		var prefix := JSON.stringify(key) + ":"
+		canonical.append(prefix + str(child.canonical))
+		encoded.append(prefix + str(child.encoded))
+	return {"raw": frozen, "cacheable": cacheable, "stored": stored, "canonical": "{" + ",".join(canonical) + "}", "encoded": "{" + ",".join(encoded) + "}", "children": children}
+
+
+# 容器深拷贝；PackedArray显式duplicate，其嵌套副本由原生COW隔离。
+static func _freeze_write_raw(value: Variant) -> Variant:
+	if value is Dictionary or value is Array:
+		return value.duplicate(true)
+	if typeof(value) >= TYPE_PACKED_BYTE_ARRAY and typeof(value) <= TYPE_PACKED_VECTOR4_ARRAY:
+		return value.duplicate()
+	return value
+
+
+# 0：深度超限，整体旧路径；1：碰撞或引用类型，仅该叶块按旧规范化重算。
+# 只缓存字符串键树和无对象引用的builtin值，保持原JSON表示而非转换数值精度。
+static func _raw_cache_mode(value: Variant, depth := 0) -> int:
+	if depth > 64:
+		return 0
+	if value is Dictionary:
+		var mode := 2
+		for key in value:
+			if not key is String:
+				mode = 1
+			var child_mode := _raw_cache_mode(value[key], depth + 1)
+			if child_mode == 0:
+				return 0
+			mode = mini(mode, child_mode)
+		return mode
+	if value is Array:
+		var mode := 2
+		for child in value:
+			var child_mode := _raw_cache_mode(child, depth + 1)
+			if child_mode == 0:
+				return 0
+			mode = mini(mode, child_mode)
+		return mode
+	return 2 if typeof(value) in [TYPE_NIL, TYPE_BOOL, TYPE_INT, TYPE_FLOAT, TYPE_STRING, TYPE_VECTOR2, TYPE_VECTOR2I, TYPE_RECT2, TYPE_RECT2I, TYPE_VECTOR3, TYPE_VECTOR3I, TYPE_TRANSFORM2D, TYPE_VECTOR4, TYPE_VECTOR4I, TYPE_PLANE, TYPE_QUATERNION, TYPE_AABB, TYPE_BASIS, TYPE_TRANSFORM3D, TYPE_PROJECTION, TYPE_COLOR, TYPE_STRING_NAME, TYPE_NODE_PATH, TYPE_PACKED_BYTE_ARRAY, TYPE_PACKED_INT32_ARRAY, TYPE_PACKED_INT64_ARRAY, TYPE_PACKED_FLOAT32_ARRAY, TYPE_PACKED_FLOAT64_ARRAY, TYPE_PACKED_STRING_ARRAY, TYPE_PACKED_VECTOR2_ARRAY, TYPE_PACKED_VECTOR3_ARRAY, TYPE_PACKED_COLOR_ARRAY, TYPE_PACKED_VECTOR4_ARRAY] else 1
 
 
 static func checksum_payload(payload: Dictionary) -> String:

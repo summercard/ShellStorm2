@@ -137,6 +137,55 @@ func confirm_reservation(elite_id: String, encounter_id: String) -> bool:
 	return false
 
 
+## 点名 roaming 只读准备；令牌与配置分离，不进入敌人数据。
+func prepare_roaming_record(elite_id: String, encounter_id: String, floor_number: int) -> Dictionary:
+	if not _definitions_by_id.has(elite_id) or encounter_id.is_empty():
+		return {}
+	var expected := BaseManager.prepare_roaming_spawn(elite_id)
+	if expected.is_empty():
+		return {}
+	var record := _migrate_record(expected.get("record", _default_record(elite_id)) as Dictionary)
+	if str(record.get("state", "Newborn")) in ["Killed", "Defeated"]:
+		return {}
+	var current := str(record.get("reserved_encounter_id", ""))
+	if not current.is_empty() and current != encounter_id:
+		return {}
+	record["reserved_encounter_id"] = encounter_id
+	record["last_floor_number"] = floor_number
+	var snapshot := get_definition(elite_id)
+	snapshot.merge(record, true)
+	return {"elite_id": elite_id, "encounter_id": encounter_id, "expected": expected, "record": record, "snapshot": snapshot}
+
+
+## 返回后由 Host 先开放 Actor 再显式发布，避免信号观察到半出生。
+func confirm_and_checkpoint(prepared: Dictionary, run_state: Dictionary, snapshot: Dictionary) -> bool:
+	if prepared.is_empty():
+		return false
+	var elite_id := str(prepared.get("elite_id", ""))
+	var encounter_id := str(prepared.get("encounter_id", ""))
+	if encounter_id.is_empty() or run_state.get("session_id", "") != encounter_id or str(run_state.get("status", "")) != "active":
+		return false
+	var record := (prepared["record"] as Dictionary).duplicate(true)
+	if not bool(record.get("reservation_confirmed", false)):
+		record["reservation_confirmed"] = true
+		record["encounter_count"] = int(record.get("encounter_count", 0)) + 1
+		record["last_encounter_at_unix"] = int(Time.get_unix_time_from_system())
+	record["last_outcome"] = "active"
+	record["roaming_encounter"] = run_state.duplicate(true)
+	if not BaseManager.commit_roaming_spawn_checkpoint(elite_id, record, snapshot, prepared["expected"]):
+		return false
+	_reservations_by_encounter[encounter_id] = elite_id
+	return true
+
+
+func publish_roaming_spawn(prepared: Dictionary) -> void:
+	var elite_id := str(prepared["elite_id"])
+	var previous := prepared["expected"]["record"] as Dictionary
+	if str(previous.get("reserved_encounter_id", "")) != str(prepared["encounter_id"]):
+		elite_reserved.emit(elite_id, str(prepared["encounter_id"]))
+	roster_changed.emit(elite_id, get_record(elite_id))
+
+
 func settle(elite_id: String, encounter_id: String, outcome: String, context: Dictionary = {}, runtime_snapshot: Dictionary = {}) -> bool:
 	if outcome not in ["killed", "escaped", "despawned", "defeated"]:
 		return false
