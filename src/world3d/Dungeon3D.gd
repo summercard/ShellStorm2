@@ -451,6 +451,7 @@ var _monster_injector: MonsterInjector
 ## 空字典 = 未配置 ⇒ 数值与 AI 全部走原常量，未配置关卡逐字不变。
 var _monster_rules: Dictionary = {}
 var _roaming_elite := preload("res://src/enemy3d/RoamingEliteRunDirector.gd").new()
+var _warm_elite_holders: Dictionary[String, Node3D] = {}
 var _roaming_retry_scheduled := false
 var _inventory: InventoryModule
 var _insurance: InsuranceModule
@@ -3349,7 +3350,10 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 	var geometry_started := Time.get_ticks_msec()
 	var boxes := 0
 	var navigation_meshes := 0
+	var clutter_paths := {}
 	for room in targets:
+		for path in room.get_clutter_warmup_paths():
+			clutter_paths[path] = true
 		if room.prepare_authored_navigation_mesh() != null:
 			navigation_meshes += 1
 			await get_tree().process_frame
@@ -3368,6 +3372,11 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 	report["navigation_meshes"] = navigation_meshes
 	report["static_boxes"] = boxes
 	report["static_box_ms"] = Time.get_ticks_msec() - geometry_started
+	var clutter_scenes := 0
+	for path: String in clutter_paths:
+		if await _load_bootstrap_resource(path, "PackedScene") != null:
+			clutter_scenes += 1
+	report["clutter_scenes"] = clutter_scenes
 	var viewport := SubViewport.new()
 	viewport.name = "RoomWarmViewport"
 	viewport.size = view_size
@@ -3384,6 +3393,10 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 	camera.rotation_degrees = Vector3(-12.0, 35.0, 0.0)
 	camera.current = true
 	viewport.add_child(camera)
+	camera.global_position = targets[0].global_position + Vector3.UP * 2.6
+
+	await _warm_level_elite_visuals(camera, targets)
+	report["elite_visuals"] = _warm_elite_holders.keys()
 
 	var started := Time.get_ticks_msec()
 	var done := 0
@@ -3439,6 +3452,36 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 		viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
 		viewport.queue_free()
 	return report
+
+
+## Read the same identities as the encounter system without generating or reserving an actor.
+func _warm_level_elite_visuals(camera: Camera3D, rooms: Array[DungeonRoom3D]) -> void:
+	var ids: Array[String] = []
+	var roaming := _monster_rules.get("roaming_elite", {}) as Dictionary
+	if bool(roaming.get("enabled", false)) and not str(roaming.get("elite_id", "")).is_empty():
+		ids.append(str(roaming.elite_id))
+	for room in rooms:
+		if not room.elite_id.is_empty() and not room.elite_id in ids:
+			ids.append(room.elite_id)
+	for id in ids:
+		var record := EliteRosterService.get_record(id)
+		var path := str(record.get("presentation_scene", ""))
+		if path.is_empty() or _warm_elite_holders.has(path) or str(record.get("state", "")) == "Killed":
+			continue
+		if await _load_bootstrap_resource(path, "PackedScene") == null:
+			continue
+		var visual := EnemyAvatar3D.instantiate_elite_visual(path)
+		if visual == null:
+			continue
+		var holder := Node3D.new()
+		holder.position = Vector3(-1, -1.3, -6)
+		holder.process_mode = Node.PROCESS_MODE_DISABLED
+		camera.add_child(holder)
+		holder.add_child(visual)
+		await RenderingServer.frame_post_draw
+		holder.visible = false
+		holder.reparent(self, false)
+		_warm_elite_holders[path] = holder
 
 
 ## 加载期把「开局第一眼就要走进去的房间」的细节一起建好。
@@ -4698,6 +4741,8 @@ func _build_room_encounter_config(room: DungeonRoom3D) -> Dictionary:
 		# 硬编码会让 `"time"` 静默失效 —— 数据说"按时间叠加"、
 		# 实际表现却是"清完才出下一波"，这类"配了没生效"最难查。
 		"stage_advance": str(encounter.get("stage_advance", "clear")),
+		"deadline_behavior": encounter.get("deadline_behavior", "fail_if_uncleared"),
+		"repeat_last_stage": encounter.get("repeat_last_stage", false),
 		"hunt_player": bool(encounter.get("hunt_player", false)),
 		"hud_countdown": bool(encounter.get("hud_countdown", true)),
 		"leave_policy": str(encounter.get("leave_policy", "pause")),
@@ -6296,7 +6341,15 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 				int(_room_wave_numbers.get(room.room_id, 1)),
 				index,
 			]
-		enemy.configure_from_enemy_data(spawn_data)
+		var prepared_visual: Node3D
+		var path := str(spawn_data.get("presentation_scene", ""))
+		var holder := _warm_elite_holders.get(path) as Node3D
+		if holder != null and bool(spawn_data.get("is_elite", false)):
+			prepared_visual = holder.get_child(0) as Node3D
+		enemy.configure_from_enemy_data(spawn_data, prepared_visual)
+		if prepared_visual != null and prepared_visual.get_parent() != holder:
+			holder.queue_free()
+			_warm_elite_holders.erase(path)
 		# configure 会创建 Boss 策略；同一同步块内设门闩，早于首个 AI/物理帧。
 		_configure_story_enemy(enemy)
 		enemy.set_meta("fate_kill_currency", int(spawn_data.get("fate_kill_currency", 0)))
@@ -8120,12 +8173,16 @@ func _retry_pending_character_fate_pickups(room_id: String) -> void:
 		room = _secret_branch_room_ids.get(room_id) as DungeonRoom3D
 	if room == null or not is_instance_valid(player):
 		return
-	for pickup_id in _character_fate_delivery.keys().duplicate():
+	var landed := false
+	for pickup_id in _character_fate_delivery.keys():
 		var record := _character_fate_delivery[pickup_id] as Dictionary
 		if str(record.get("room_id", "")) != room_id or str(record.get("status", "pending")) != "pending":
 			continue
-		_deliver_character_fate_request(str(pickup_id), room)
-	_queue_runtime_autosave("character_fate_pickup_retry")
+		var result := _deliver_character_fate_request(str(pickup_id), room)
+		if not (result.get("granted", []) as Array).is_empty():
+			landed = true
+	if landed:
+		_queue_runtime_autosave("character_fate_pickup_retry")
 
 
 func _export_character_fate_delivery_snapshot() -> Dictionary:

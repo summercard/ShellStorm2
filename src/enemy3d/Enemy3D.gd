@@ -1337,7 +1337,7 @@ func _reset_egt_state() -> void:
 	floor_snap_length = 0.0 if hovers else 0.32
 
 
-func configure_from_enemy_data(data: Dictionary) -> void:
+func configure_from_enemy_data(data: Dictionary, prepared_elite_visual: Node3D = null) -> void:
 	if monitor_combat != null:monitor_combat.cancel()
 	monitor_combat = null
 	if arms_taker_combat != null:
@@ -1427,7 +1427,8 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 			avatar.configure_elite_content(
 				elite_id,
 				str(data.get("presentation_asset_id", "")),
-				str(data.get("presentation_scene", ""))
+				str(data.get("presentation_scene", "")),
+				prepared_elite_visual
 			)
 		if elite_id == EliteArmsTakerCombat.ID:
 			var growth_level := maxi(1, elite_level)

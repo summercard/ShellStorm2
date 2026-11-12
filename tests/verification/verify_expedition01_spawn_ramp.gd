@@ -679,7 +679,8 @@ func _verify_trigger_encounters() -> void:
 			for monster: Dictionary in stages[i]["monsters"]:
 				actual[monster["type"]] = int(actual.get(monster["type"], 0)) + int(monster["count"])
 			_check(actual == expected["waves"][i], "%s波%d生产编成%s!=%s" % [key, i, actual, expected["waves"][i]])
-		_check(float(stages[0].get("at_sec", -1)) == preparation, "%s首波准备未透传或重复等待" % key)
+		var start_delay := 0.0 if key == "room_03" else preparation
+		_check(float(stages[0].get("at_sec", -1)) == start_delay, "%s首波延时应为%.1f秒" % [key, start_delay])
 		if key == "room_03":
 			_check(stages[1]["monsters"][0].get("min_player_distance_m") == 8.0, "第二批首胖8米丢失")
 

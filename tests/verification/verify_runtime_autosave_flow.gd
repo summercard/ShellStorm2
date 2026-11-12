@@ -38,7 +38,10 @@ func _ready() -> void:
 	provider.snapshot_serial = 2
 	manager.queue_runtime_checkpoint("second_change", 0.06)
 	await get_tree().create_timer(0.12).timeout
-	if manager.data.save_revision != 1:
+	var deadline := Time.get_ticks_msec() + 2000
+	while manager.data.save_revision == 0 and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	if manager.data.save_revision != 1 or manager.data.last_save_reason != "active_run_checkpoint:second_change":
 		failures.append("合并窗口内两次变化没有合并成一次磁盘提交")
 	var stored := manager.get_active_run_checkpoint()
 	if int(stored.get("snapshot_serial", 0)) != 2:

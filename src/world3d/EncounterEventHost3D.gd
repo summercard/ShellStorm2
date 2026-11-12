@@ -44,6 +44,9 @@ func encounter_event_context(room_id: String, _instance_id: String) -> Dictionar
 func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: Dictionary, count: int) -> Dictionary:
 	if not _valid():
 		return {"ok": false, "reason": "host_unavailable"}
+	# 只查询同一实例的Owner事实；不另存一份关闭状态，也不封禁同event_id的新实例。
+	if dungeon._encounter_event_director != null and bool(dungeon._encounter_event_director.get_snapshot(instance_id).get("dispatch_closed", false)):
+		return {"ok": false, "spawned": 0, "reason": "dispatch_closed"}
 	var room := dungeon._room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or not room.is_streamed():
 		if room != null and (not str(monster_spec.get("remote_spawn_policy", "")).is_empty() or not str(monster_spec.get("spawn_origin_port_id", "")).is_empty()):
@@ -155,6 +158,80 @@ func encounter_event_spawn(instance_id: String, room_id: String, monster_spec: D
 			"reason": "spawn_position_failed" if spawned < 0 else "spawn_partial",
 		}
 	return {"ok": true, "spawned": spawned}
+
+## 截止只撤回尚未实到的配置；实体、休眠敌人及事件终态仍由各自Owner持有。
+func encounter_event_close_dispatch(instance_id: String) -> Dictionary:
+	if not _valid():
+		return {"ok": false, "reason": "host_unavailable"}
+	if instance_id.is_empty():
+		return {"ok": false, "reason": "instance_id_required"}
+	var dropped := 0
+	var cancelled_configs: Array[Dictionary] = []
+	for room_id_value in dungeon._reserved_room_spawns.keys():
+		var room_id := str(room_id_value)
+		var requests := dungeon._reserved_room_spawns[room_id] as Array
+		var removed := _drop_reserved_event_configs(requests, instance_id)
+		cancelled_configs.append_array(removed)
+		dropped += removed.size()
+		if not removed.is_empty():
+			dungeon._alive_by_room[room_id] = maxi(0, int(dungeon._alive_by_room.get(room_id, 0)) - dungeon._combat_config_count(removed))
+		if not removed.is_empty() and requests.is_empty():
+			dungeon._reserved_room_spawns.erase(room_id)
+	for room_id_value in dungeon._pending_delayed_spawns.keys():
+		var room_id := str(room_id_value)
+		var entries := dungeon._pending_delayed_spawns[room_id] as Array
+		var removed := _drop_delayed_event_configs(entries, instance_id)
+		cancelled_configs.append_array(removed)
+		dropped += removed.size()
+		if not removed.is_empty():
+			dungeon._alive_by_room[room_id] = maxi(0, int(dungeon._alive_by_room.get(room_id, 0)) - dungeon._combat_config_count(removed))
+		if not removed.is_empty() and entries.is_empty():
+			dungeon._pending_delayed_spawns.erase(room_id)
+	# 休眠/存盘镜像会被restore重新入队；只过滤队列副本及其计数，不碰enemies。
+	# 镜像不是第二份预约，不能重复增加dropped或重复结算精英。
+	for state_value in dungeon._segment_runtime_state.values():
+		var state := state_value as Dictionary
+		var removed := _drop_reserved_event_configs(state.get("reserved_spawns", []) as Array, instance_id)
+		removed.append_array(_drop_delayed_event_configs(state.get("pending_delayed_spawns", []) as Array, instance_id))
+		if not removed.is_empty() and state.has("alive_count"):
+			state["alive_count"] = maxi(0, int(state["alive_count"]) - dungeon._combat_config_count(removed))
+	# 队列及镜像先同步完，再调用可能发信号/写档的既有精英释放方法。
+	_settle_unspawned_elites(cancelled_configs)
+	return {"ok": true, "dropped": dropped}
+
+
+func _drop_reserved_event_configs(requests: Array, instance_id: String) -> Array[Dictionary]:
+	var removed: Array[Dictionary] = []
+	for request_index in range(requests.size() - 1, -1, -1):
+		var request := requests[request_index] as Dictionary
+		var configs := request.get("configs", []) as Array
+		var positions := request.get("positions", []) as Array
+		var before_count := configs.size()
+		# positions是与configs按下标对应的[x,y,z]前缀，不能重建时错位或造补位。
+		for index in range(configs.size() - 1, -1, -1):
+			var config := configs[index] as Dictionary
+			if _encounter_owner_id(config) != instance_id:
+				continue
+			removed.append(config)
+			configs.remove_at(index)
+			if index < positions.size():
+				positions.remove_at(index)
+		if configs.size() != before_count and configs.is_empty():
+			requests.remove_at(request_index)
+	return removed
+
+
+func _drop_delayed_event_configs(entries: Array, instance_id: String) -> Array[Dictionary]:
+	var removed: Array[Dictionary] = []
+	for index in range(entries.size() - 1, -1, -1):
+		var entry := entries[index] as Dictionary
+		var config := entry.get("config", {}) as Dictionary
+		if _encounter_owner_id(config) == instance_id:
+			removed.append(config)
+			# 整条移除，serial/position/due_msec随配置一起撤销；timeout找不到serial即返回。
+			entries.remove_at(index)
+	return removed
+
 
 func encounter_event_live_count(instance_id: String) -> int:
 	if not _valid():

@@ -177,7 +177,7 @@ static var _scene_cache: Dictionary = {}
 
 
 ## 取一份常驻的 PackedScene。命中缓存时是字典查找（微秒级）。
-func _cached_scene(path: String) -> PackedScene:
+static func _cached_scene(path: String) -> PackedScene:
 	if path.is_empty():
 		return null
 	var cached: Variant = _scene_cache.get(path)
@@ -315,22 +315,28 @@ func configure_boss_content(content_id: String) -> bool:
 	return true
 
 
-func configure_elite_content(content_id: String, asset_id: String, scene_path: String) -> bool:
+static func instantiate_elite_visual(scene_path: String) -> Node3D:
+	var scene := _cached_scene(scene_path)
+	return scene.instantiate() as Node3D if scene != null else null
+
+
+func configure_elite_content(content_id: String, asset_id: String, scene_path: String, prepared: Node3D = null) -> bool:
 	disable_formal_normal()
 	_elite_content_id = content_id
 	_elite_presentation_asset_id = asset_id
 	if content_id.is_empty() or asset_id.is_empty() or scene_path.is_empty() or _root == null:
 		return false
-	var scene := _cached_scene(scene_path)
-	if scene == null:
+	var visual := prepared if is_instance_valid(prepared) and prepared.scene_file_path == scene_path else instantiate_elite_visual(scene_path)
+	if visual == null:
 		return false
 	if _formal_elite_root != null and is_instance_valid(_formal_elite_root):
 		_formal_elite_root.queue_free()
-	_formal_elite_root = scene.instantiate() as Node3D
-	if _formal_elite_root == null:
-		return false
+	_formal_elite_root = visual
 	_formal_elite_root.name = "FormalElite_%s" % content_id
-	_root.add_child(_formal_elite_root)
+	if visual.get_parent() == null:
+		_root.add_child(visual)
+	else:
+		visual.reparent(_root, false)
 	_shell.visible = false
 	_core.visible = false
 	_appendages.visible = false

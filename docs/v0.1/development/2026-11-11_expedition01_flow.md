@@ -91,6 +91,19 @@
 
 整关、真实拾取、溢出留物、旧局续档、提示重试语义、负向故障、视听与设备证据不能因登记完成自动判绿。涉及背包出口不能承接拆栈/留物时，由主线程报告/处理，不在本文件维护者权限内改生产实现。
 
+## 7. 五间封门房统一限时循环（2026-11-12，16:07纠正与18:13扩围）
+
+用户确认最终规则：room03/04/06/09/10全部触发即封门、启动60秒总窗口，第2秒首批，清批后0秒间歇推进，模板耗尽后重复末批；到点先停发并作废全部尚未出现的pending/预约/延迟，保留场上残怪，残怪清零才结算本房宝箱及解除封锁。不是空等60秒后刷怪，也不是固定三/四批。门解除封锁不自动推开门板。旧日志里的“60秒准备期”系本会话误解，已被用户最新要求纠正，不能作为当前设计。
+
+- room03模板5/7/8，cap8；04模板6/6，cap6；06模板8/9/13，cap10；09模板12/16/20/24，cap16；10模板10/12，cap10。模板、容量、怪种、奖励与房型均保留；实际总量取决于60秒内击杀速度，不再是模板总和。
+- `EncounterEventDirector3D` 新增显式 `deadline_behavior=close_dispatch_and_clear` 与 `repeat_last_stage=true`；缺省保留旧行为。窗口总时钟拥有者仍是Director；固定长度末阶段状态循环、唯一spawn_serial、截止先于派发、清场不判失败；schema1新增可选字段，旧活动快照按其原配置恢复，不强制把进行中的旧60秒准备局迁成新规则。
+- Host按实例撤销未出现队列及休眠镜像，返还相应房间存活预约，保留实体/其他事件/精英预约边界；Validator严格检查能力组合；Dungeon仅透传能力，不按关卡ID分支。HUD消费 `battle` 总剩余与 `cleanup` 残怪清理，不自计时，字体和位置不改。
+- 数据从权威floor_00源同步运行投影与manifest，52文件一致；备份分别在工程外 `ShellStorm2-backup/2026-11-12_room03_timed_loop/before_edits/` 与 `2026-11-12_all_timed_encounters/before_edits/`，不覆盖其他协作改动。
+- 五房专项：`ALL_TIMED_PRODUCTION_OK rooms=5 checks=1720 failures=0`；含旧HUD/room03及真实Host撤队列总 `ENCOUNTER_ALERT_CONFIG_INTEGRATION_OK checks=2142 failures=0`，Godot exit0，无SCRIPT ERROR/ERROR。其中正式Loader/Generator/Dungeon配置接入真实，战斗推进使用FakeHost，不冒充五房实机通关；覆盖06/09/10超容量补发及到点pending丢弃、读档不重发、循环不提前完成。
+- 证据：工程外 `ShellStorm2-work/probes/2026-11-12_all_timed_encounters/20261112_182504_883632/run.json` 与godot.log；原room03核心隔离纯测218项通过。最终正式遭遇回归 `ENCOUNTER_EVENT_FLOW_OK samples=261`，Godot exit0、无ERROR；真实远征01场景 `--room03-timed-only` 复验 `FLOW_INTEGRATION_OK checks=124 failures=0`，exit0、无ERROR，真实生成5批36只、peak8，最终cleared=true/sealed=false、chest_count=1/restored_chest_count=1。日志在同一证据根的 `formal_verify_encounter_event_flow/run.log` 与 `formal_verify_expedition01_flow_integration/run.log`。真实场景测试人工推进Director时间与击杀实体，是无头接线验收，不是玩家实机通关。
+- 初次正式类型错误（Validator的bool推断）已修复；首轮五房测试在四房数据未切换时失败，数据投影后重跑全绿。真实room03初测已有实际5批36只、清房true/封锁false/唯一箱1，但exit1两条：按端口索引取不到方向制门、恢复后要求查询已被丢弃的terminal统计。已按真实门邻接接口与完成账恢复契约修正测试，未放宽玩法断言，后续复验单列。
+- 文档门禁exit1为11条既有断链，本轮新增0；解耦0违规、数据投影与补丁空白通过。未做五房逐一真实渲染/人工游玩、冷进程活动实体恢复。旧spawn_ramp与其他全关专项仍有此前有限编排断言漂移，不把未跑的全套测试说成通过。
+
 ## 6. UI-HUD 独立事务：倒计时七段数码风格（2026-11-12）
 
 ### 字体替换修订（10:10 用户反馈后）

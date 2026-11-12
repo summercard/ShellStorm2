@@ -30,7 +30,10 @@ var _runtime_checkpoint_timer: Timer
 var _runtime_checkpoint_dirty := false
 var _pending_runtime_reason := ""
 var _room_writer: Thread
+var _verified_file_digest := ""
+var _verified_file_revision := -1
 var _pending_room_payload: Dictionary = {}
+var _pending_write_reason := ""
 
 ## 合成保底的「待提交记账」。非空 = `plan_synthesis_pity` 已经改过
 ## `data.synthesis_pity` 但还没随 `commit_run_settlement` 落盘。
@@ -94,7 +97,7 @@ func save_base(reason: String = "base_mutation") -> bool:
 	if not _finish_room_writes(true):
 		return false
 	var result := SaveService.write_profile(save_path, data._to_dict(), data.save_revision,
-		reason if not reason.is_empty() else "base_mutation", force_save_failure_for_test)
+		reason if not reason.is_empty() else "base_mutation", force_save_failure_for_test, _verified_file_digest, _verified_file_revision)
 	if result.get("stale", false):
 		load_base()
 	return _accept_write(result)
@@ -103,14 +106,20 @@ func save_base(reason: String = "base_mutation") -> bool:
 func _accept_write(result: Dictionary) -> bool:
 	if not result.get("success", false):
 		return false
+	_verified_file_digest = str(result.file_digest)
+	_verified_file_revision = int(result.revision)
 	data.save_revision = int(result["revision"])
 	data.last_saved_at_unix = int(result["time"])
 	data.last_save_reason = str(result["reason"])
 	return true
 
 
-## Only the regular room-entry path is asynchronous. Explicit flush remains a barrier.
 func queue_room_transition_checkpoint() -> void:
+	_queue_snapshot_write("room_transition")
+
+
+## Room entries and debounced gameplay changes share one writer. Explicit flush is a barrier.
+func _queue_snapshot_write(reason: String) -> void:
 	var snapshot := _capture_runtime_checkpoint()
 	if not bool(snapshot.get("valid", false)) or str(snapshot.get("checkpoint_id", snapshot.get("layout_id", ""))).is_empty():
 		return
@@ -120,6 +129,7 @@ func queue_room_transition_checkpoint() -> void:
 	_pending_runtime_reason = ""
 	data.active_run_snapshot = snapshot
 	_pending_room_payload = data._to_dict().duplicate(true)
+	_pending_write_reason = reason
 	if _room_writer == null:
 		_start_room_write()
 
@@ -128,7 +138,7 @@ func _start_room_write() -> void:
 	var payload := _pending_room_payload
 	_pending_room_payload = {}
 	var operation := SaveService.write_profile.bind(save_path, payload, data.save_revision,
-		"active_run_checkpoint:room_transition", force_save_failure_for_test)
+		"active_run_checkpoint:%s" % _pending_write_reason, force_save_failure_for_test, _verified_file_digest, _verified_file_revision)
 	_room_writer = Thread.new()
 	if _room_writer.start(operation) == OK:
 		set_process(true)
@@ -583,7 +593,7 @@ func flush_runtime_checkpoint(reason: String = "runtime_flush") -> bool:
 
 
 func _on_runtime_checkpoint_timer_timeout() -> void:
-	flush_runtime_checkpoint(
+	_queue_snapshot_write(
 		_pending_runtime_reason if not _pending_runtime_reason.is_empty() else "runtime_changed"
 	)
 

@@ -61,9 +61,22 @@ class FakeHost extends RefCounted:
 		return {"ok": true}
 
 
+class ClosingHost extends FakeHost:
+	var close_calls := 0
+	var reserved := 0
+
+	func encounter_event_close_dispatch(instance_id: String) -> Dictionary:
+		close_calls += 1
+		var dropped := reserved
+		reserved = 0
+		live_by_instance[instance_id] = maxi(0, encounter_event_live_count(instance_id) - dropped)
+		return {"dropped": dropped}
+
+
 func _ready() -> void:
 	_run_boss_reinforcement_count_contract()
 	_run_legacy_completion_contract()
+	_run_timed_loop_contract()
 	var fake_samples_before := samples
 	var fake_failures_before := failures.size()
 	await _run_fake_contract()
@@ -150,7 +163,7 @@ func _run_boss_reinforcement_count_contract() -> void:
 func _run_legacy_completion_contract() -> void:
 	var samples_before := samples
 	var failures_before := failures.size()
-	for completion in ["timer", "timer_and_clear"]:
+	for completion in ["timer", "clear", "timer_and_clear"]:
 		var host := FakeHost.new()
 		var director = DIRECTOR_SCRIPT.new(host)
 		var config := _config("legacy_%s" % completion, completion)
@@ -182,6 +195,240 @@ func _run_legacy_completion_contract() -> void:
 			_check(expired.get("status") == "failed" and (expired.get("failed", []) as Array).has("timer_expired_before_clear") and deadline_host.actions.is_empty(), "旧timer_and_clear到点存活失败行为变化")
 	if failures.size() == failures_before:
 		print("ENCOUNTER_EVENT_LEGACY_COMPLETION_OK samples=%d" % (samples - samples_before))
+
+
+func _timed_config(completion := "clear") -> Dictionary:
+	return {
+		"schema_version": 1, "event_id": "timed_loop", "room_id": "room_a",
+		"duration_sec": 60.0, "completion": completion, "progress_mode": "tick",
+		"deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true,
+		"stage_advance": "clear", "preparation_sec": 0.0, "intermission_sec": 1.0,
+		"alert_style": "red_eva", "hud_countdown": true, "max_alive": 99,
+		"stages": [
+			{"at_sec": 2.0, "monsters": [{"type": "melee_chaser", "count": 1}]},
+			{"at_sec": 2.0, "monsters": [{"type": "fat_zombie03", "count": 2}]},
+			{"at_sec": 2.0, "monsters": [{"type": "melee_chaser", "count": 3}]},
+		],
+		"on_completed": [{"type": "flag", "key": "timed_done", "value": true}],
+	}
+
+
+func _roundtrip(director) -> Dictionary:
+	return director.import_snapshot(JSON.parse_string(JSON.stringify(director.export_snapshot())) as Dictionary)
+
+
+func _run_timed_loop_contract() -> void:
+	var samples_before := samples
+	var failures_before := failures.size()
+	for completion in ["clear", "timer_and_clear"]:
+		var host := FakeHost.new()
+		var director = DIRECTOR_SCRIPT.new(host)
+		var result: Dictionary = director.start(_timed_config(completion))
+		_check(bool(result.get("ok", false)), "定时循环合法配置未启动：" + completion)
+		var id := str(result.get("instance_id", ""))
+		var initial: Dictionary = director.get_room_countdown_snapshot("room_a")
+		_check(initial.get("alert_phase") == "battle" and initial.get("alert_remaining_sec") == 60.0 and not initial.has("preparation_active"), "封门即开始60秒总计时，不得补准备期")
+		director.tick(1.99)
+		_check(host.spawn_log.is_empty() and is_equal_approx(float(director.get_snapshot(id).get("alert_remaining_sec", 0.0)), 58.01), "1.99秒首批提前或总倒计时未推进")
+		_check(bool(_roundtrip(director).get("ok", false)), "首批前读档失败")
+		director.tick(0.01)
+		_check(host.spawn_log.size() == 1 and director.get_snapshot(id).get("spawned") == 1, "第2秒未派首批或越过清波门控")
+		director.tick(0.5)
+		_check(host.spawn_log.size() == 1, "前批存活时派发下一批")
+		for wave in range(7):
+			host.live_by_instance[id] = 0
+			director.notify_enemy_departed(id, "killed")
+			var cleared: Dictionary = director.get_snapshot(id)
+			_check(cleared.get("status") == "active" and host.actions.is_empty(), "时间未到清空提前完成：%s/%d" % [completion, wave])
+			_check(cleared.get("alert_phase") == "battle" and cleared.get("intermission_remaining_sec") == 1.0, "清空后间歇必须重新计1秒且HUD仍battle")
+			var spawn_count := host.spawn_log.size()
+			var serial := int(cleared.get("spawn_serial", 0))
+			var requested := int(cleared.get("requested", 0))
+			_check(bool(_roundtrip(director).get("ok", false)), "循环间歇JSON读档失败")
+			director.notify_enemy_departed(id, "killed")
+			director.tick(0.5)
+			var middle: Dictionary = director.get_snapshot(id)
+			_check(host.spawn_log.size() == spawn_count and middle.get("requested") == requested and middle.get("spawn_serial") == serial and middle.get("intermission_remaining_sec") == 0.5, "循环间歇读档重发、重复入账或重置间歇")
+			director.tick(0.5)
+			var next: Dictionary = director.get_snapshot(id)
+			_check(host.spawn_log.size() == spawn_count + 1 and (next.get("stage_states", []) as Array).size() == 3, "下一批未派发或循环扩张stage_states")
+			var spawned := int(next.get("spawned", 0))
+			_check(bool(_roundtrip(director).get("ok", false)), "末批在场读档失败")
+			director.tick(0.01)
+			_check(director.get_snapshot(id).get("spawned") == spawned and host.spawn_log.size() == spawn_count + 1, "已出生末波读档重新生成")
+		var looping: Dictionary = director.get_snapshot(id)
+		_check(int(looping.get("repeat_stage_sequence", 0)) >= 5 and host.spawn_log.size() == 8, "快清未循环超过原三波")
+		_check(int(looping.get("requested", 0)) == 21 and looping.get("spawned") == 21 and looping.get("spawn_serial") == 21, "循环累计requested/spawn_serial错误")
+		var before_deadline_spawns := host.spawn_log.size()
+		director.tick(59.99 - float(looping.get("elapsed", 0.0)))
+		var almost: Dictionary = director.get_snapshot(id)
+		_check(almost.get("status") == "active" and not bool(almost.get("dispatch_closed", false)) and float(almost.get("alert_remaining_sec", 0.0)) > 0.0, "60秒前错误关闭或完成")
+		director.tick(0.02)
+		var expired: Dictionary = director.get_snapshot(id)
+		_check(expired.get("elapsed") == 60.0 and expired.get("stage_elapsed_sec") == 60.0 and expired.get("dispatch_closed") == true and expired.get("status") == "active", "60秒总时长错误包含额外等待或残怪被判失败")
+		_check(expired.get("alert_phase") == "cleanup" and expired.get("alert_remaining_sec") == 0.0 and expired.get("pending") == 0, "到点未进入cleanup或pending未清")
+		_check(bool(_roundtrip(director).get("ok", false)), "截止JSON读档失败")
+		director.tick(20.0)
+		_check(host.spawn_log.size() == before_deadline_spawns and director.get_snapshot(id).get("status") == "active", "截止恢复后重派发或残怪未清就完成")
+		host.live_by_instance[id] = 0
+		director.notify_enemy_departed(id, "killed")
+		director.notify_enemy_departed(id, "killed")
+		_check(director.get_snapshot(id).get("status") == "completed" and host.actions.size() == 1, "残怪清零未完成或结果动作重放")
+
+	_run_timed_deadline_contract()
+	_run_timed_validation_contract()
+	if failures.size() == failures_before:
+		print("ENCOUNTER_EVENT_TIMED_LOOP_OK samples=%d" % (samples - samples_before))
+
+
+func _run_timed_deadline_contract() -> void:
+	# 首tick跨过整个窗口：截止必须先于任何阶段（包括恰好60秒的阶段）。
+	for delta in [60.0, 600.0]:
+		var host := FakeHost.new()
+		var director = DIRECTOR_SCRIPT.new(host)
+		var config := _timed_config()
+		(config["stages"] as Array)[2]["at_sec"] = 60.0
+		var id := str(director.start(config).get("instance_id", ""))
+		director.tick(delta)
+		var row: Dictionary = director.get_snapshot(id)
+		_check(host.spawn_log.is_empty() and row.get("dropped") == 6 and row.get("requested") == 6 and row.get("pending") == 0 and row.get("status") == "completed", "大delta到点前仍dispatch或未丢所有未开始计划")
+
+	var host := ClosingHost.new()
+	var director = DIRECTOR_SCRIPT.new(host)
+	var config := _timed_config()
+	config["max_alive"] = 2
+	config["stages"] = [
+		{"at_sec": 2.0, "monsters": [{"type": "melee_chaser", "count": 5}]},
+		{"at_sec": 60.0, "monsters": [{"type": "fat_zombie03", "count": 4}]},
+	]
+	var id := str(director.start(config).get("instance_id", ""))
+	director.tick(2.0)
+	host.reserved = 1
+	_check(director.get_snapshot(id).get("pending") == 3, "已开始批容量积压未保留")
+	director.tick(58.0)
+	var row: Dictionary = director.get_snapshot(id)
+	_check(row.get("requested") == 9 and row.get("spawned") == 1 and row.get("spawn_serial") == 2 and row.get("dropped") == 8 and row.get("pending") == 0, "截止未丢已开始批pending/未开始批/Host预约，或重复requested")
+	_check(host.close_calls == 1 and host.encounter_event_live_count(id) == 1 and row.get("status") == "active", "Host关闭派发未调用一次或错误清除已出生怪")
+	for stage_value in row.get("stage_states", []) as Array:
+		var stage := stage_value as Dictionary
+		_check(stage.get("complete") == true and stage.get("dropped") == true and (stage.get("pending", []) as Array).is_empty(), "截止阶段complete/drop/pending标记不完整")
+	_check(bool(_roundtrip(director).get("ok", false)), "截止残怪快照恢复失败")
+	var saved: Dictionary = director.export_snapshot()
+	_check((saved["instances"] as Array)[0].get("dispatch_closed") == true, "dispatch_closed未写快照")
+	director.tick(100.0)
+	row = director.get_snapshot(id)
+	_check(host.close_calls == 1 and row.get("dropped") == 8 and host.spawn_log.size() == 1, "截止读档非幂等或normalize复活dropped")
+	host.live_by_instance[id] = 0
+	director.notify_enemy_departed(id, "killed")
+	_check(director.get_snapshot(id).get("status") == "completed" and host.actions.size() == 1, "积压取消后残怪清空未完成")
+
+	# schema1修复档：elapsed已到点但尚无dispatch_closed，下一tick只关不派。
+	var repair_host := ClosingHost.new()
+	var repair_director = DIRECTOR_SCRIPT.new(repair_host)
+	var repair_id := str(repair_director.start(config).get("instance_id", ""))
+	repair_director.tick(2.0)
+	var repair_save: Dictionary = repair_director.export_snapshot()
+	var repair_row := (repair_save["instances"] as Array)[0] as Dictionary
+	repair_row["elapsed"] = 60.0
+	repair_row.erase("dispatch_closed")
+	repair_host.live_by_instance[repair_id] = 0
+	_check(bool(repair_director.import_snapshot(repair_save).get("ok", false)), "截止缺字段schema1修复档未恢复")
+	repair_director.notify_enemy_departed(repair_id, "killed")
+	repair_director.tick(0.1)
+	var repaired: Dictionary = repair_director.get_snapshot(repair_id)
+	_check(repair_host.spawn_log.size() == 1 and repair_host.close_calls == 1 and repaired.get("dispatch_closed") == true and repaired.get("dropped") == 7 and repaired.get("status") == "completed", "修复档下一tick未先关闭派发")
+
+	var retry_host := FakeHost.new()
+	retry_host.retry_next_spawn = true
+	var retry_director = DIRECTOR_SCRIPT.new(retry_host)
+	var retry_id := str(retry_director.start(config).get("instance_id", ""))
+	retry_director.tick(2.0)
+	retry_director.tick(58.0)
+	var retry_row: Dictionary = retry_director.get_snapshot(retry_id)
+	_check(retry_host.spawn_log.is_empty() and retry_row.get("dropped") == 9 and retry_row.get("status") == "completed", "retryable积压到点仍补发")
+
+	# 单模板循环在末次清空后原地复用，间歇跨截止只丢未实到的下一批。
+	var single_host := FakeHost.new()
+	var single_director = DIRECTOR_SCRIPT.new(single_host)
+	var single := _timed_config()
+	single["stages"] = [{"at_sec": 2.0, "monsters": [{"type": "melee_chaser", "count": 2}]}]
+	var single_id := str(single_director.start(single).get("instance_id", ""))
+	single_director.tick(2.0)
+	single_host.live_by_instance[single_id] = 0
+	single_director.notify_enemy_departed(single_id, "killed")
+	_check(bool(_roundtrip(single_director).get("ok", false)), "单模板循环间歇未恢复")
+	single_director.tick(1.0)
+	_check(single_host.spawn_log.size() == 2 and single_director.get_snapshot(single_id).get("spawn_serial") == 4, "单模板末波未循环")
+	single_director.tick(56.5)
+	single_host.live_by_instance[single_id] = 0
+	single_director.notify_enemy_departed(single_id, "killed")
+	var waiting: Dictionary = single_director.get_snapshot(single_id)
+	_check(waiting.get("requested") == 6 and waiting.get("pending") == 2 and waiting.get("repeat_stage_sequence") == 2, "循环待发未累计或末波状态不正确")
+	_check(bool(_roundtrip(single_director).get("ok", false)), "循环跨截止间歇未恢复")
+	single_director.tick(0.5)
+	var single_closed: Dictionary = single_director.get_snapshot(single_id)
+	_check(single_host.spawn_log.size() == 2 and single_closed.get("dropped") == 2 and single_closed.get("requested") == 6 and single_closed.get("spawned") == 4 and single_closed.get("status") == "completed", "循环间歇到点仍派发、漏丢pending或等待无意义间歇")
+
+	var partial_host := FakeHost.new()
+	var partial_director = DIRECTOR_SCRIPT.new(partial_host)
+	var partial := single.duplicate(true)
+	partial["max_alive"] = 1
+	partial["intermission_sec"] = 0.0
+	var partial_id := str(partial_director.start(partial).get("instance_id", ""))
+	partial_director.tick(2.0)
+	_check(bool(_roundtrip(partial_director).get("ok", false)), "分批pending读档失败")
+	partial_director.tick(0.1)
+	_check(partial_director.get_snapshot(partial_id).get("spawned") == 1 and partial_host.spawn_log.size() == 1, "分批pending读档重发已出生怪")
+	partial_host.live_by_instance[partial_id] = 0
+	partial_director.tick(0.1)
+	partial_host.live_by_instance[partial_id] = 0
+	partial_director.notify_enemy_departed(partial_id, "killed")
+	partial_director.tick(0.1)
+	_check(partial_director.get_snapshot(partial_id).get("spawned") == 3 and partial_director.get_snapshot(partial_id).get("pending") == 1, "零间歇循环未按容量分批")
+	_check(bool(_roundtrip(partial_director).get("ok", false)), "循环末批部分派发状态未恢复")
+	partial_director.tick(0.1)
+	_check(partial_host.spawn_log.size() == 3 and partial_director.get_snapshot(partial_id).get("spawn_serial") == 3, "循环末批pending恢复后重复生成")
+	partial_host.live_by_instance[partial_id] = 0
+	partial_director.tick(60.0)
+	var partial_closed: Dictionary = partial_director.get_snapshot(partial_id)
+	_check(partial_host.spawn_log.size() == 3 and partial_closed.get("requested") == 4 and partial_closed.get("dropped") == 1 and partial_closed.get("status") == "completed", "末波部分pending跨截止未丢弃")
+
+	# 未要求循环的固定窗口也不能提前完成；默认repeat=false。
+	var finite_host := FakeHost.new()
+	var finite_director = DIRECTOR_SCRIPT.new(finite_host)
+	var finite := _timed_config()
+	finite.erase("repeat_last_stage")
+	finite["stages"] = [{"at_sec": 2.0, "monsters": [{"type": "melee_chaser", "count": 1}]}]
+	var finite_id := str(finite_director.start(finite).get("instance_id", ""))
+	finite_director.tick(2.0)
+	finite_host.live_by_instance[finite_id] = 0
+	finite_director.notify_enemy_departed(finite_id, "killed")
+	_check(finite_director.get_snapshot(finite_id).get("status") == "active" and finite_host.actions.is_empty(), "非循环固定窗口清空时提前完成")
+	finite_director.tick(58.0)
+	_check(finite_director.get_snapshot(finite_id).get("status") == "completed" and finite_host.spawn_log.size() == 1, "repeat默认false或固定窗口完成错误")
+
+
+func _run_timed_validation_contract() -> void:
+	for patch in [
+		{"duration_sec": 0.0}, {"duration_sec": -1.0}, {"duration_sec": INF},
+		{"progress_mode": "external"}, {"completion": "timer"}, {"stage_advance": "time"},
+		{"preparation_sec": 1.0}, {"preparation_sec": "0"}, {"preparation_sec": false},
+		{"stages": []}, {"stages": null}, {"stages": {}},
+		{"deadline_behavior": "typo"}, {"deadline_behavior": null},
+		{"repeat_last_stage": "true"}, {"repeat_last_stage": 1},
+	]:
+		var config := _timed_config()
+		config.merge(patch, true)
+		_check(not bool(DIRECTOR_SCRIPT.validate_config(config).get("ok", false)), "无效定时循环组合未拒绝：" + str(patch))
+	var convenience := _timed_config()
+	convenience.erase("stages")
+	convenience["monsters"] = [{"type": "melee_chaser", "count": 1}]
+	_check(not bool(DIRECTOR_SCRIPT.validate_config(convenience).get("ok", false)), "定时循环允许了非显式stages便利编排")
+	for feature in ["deadline_behavior", "repeat_last_stage"]:
+		var config := _timed_config()
+		config.erase("repeat_last_stage" if feature == "deadline_behavior" else "deadline_behavior")
+		config["preparation_sec"] = 1.0
+		_check(not bool(DIRECTOR_SCRIPT.validate_config(config).get("ok", false)), "单独启用%s绕过组合限制" % feature)
 
 
 func _run_fake_contract() -> void:

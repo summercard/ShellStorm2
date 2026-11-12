@@ -7,6 +7,9 @@ var rows: Array = []
 var events: Array = []
 var report := {}
 var previous := 0
+var pre_draw_usec := 0
+var post_draw_usec := 0
+var last_physics_usec := 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -33,7 +36,8 @@ func _run() -> void:
 			if entrance.entrance_id == level:
 				destination = entrance.target_scene_path
 				entrance.activated.emit(entrance)
-				# Portal selection rolls a new seed before the loading screen starts.
+				# BaseWorld handles the signal deferred and rolls a seed before scene change.
+				await tree.scene_changed
 				LevelSelect.selected_seed = requested_seed
 				break
 		if destination.is_empty():
@@ -82,7 +86,10 @@ func _run() -> void:
 		"destination":destination, "combat_enabled":tower.player.combat_enabled, "input_locked":tower.player.input_locked,
 		"persistent":tower._runtime_persistence_active, "user_dir":actual,
 		"memory_after_loading":_memory_sample(),
-		"columns":["phase","wall_ms","render_cpu_ms","render_gpu_ms","draw_calls","draw_pipelines","mesh_pipelines","surface_pipelines","canvas_pipelines","nodes","resources","physics_ms"]}
+		"columns":["phase","wall_ms","render_cpu_ms","render_gpu_ms","draw_calls","draw_pipelines","mesh_pipelines","surface_pipelines","canvas_pipelines","nodes","resources","physics_ms","to_pre_draw_ms","draw_signal_span_ms","after_draw_ms","last_physics_offset_ms","navigation_ms"]}
+	RenderingServer.frame_pre_draw.connect(func(): pre_draw_usec = Time.get_ticks_usec())
+	RenderingServer.frame_post_draw.connect(func(): post_draw_usec = Time.get_ticks_usec())
+	tree.physics_frame.connect(func(): last_physics_usec = Time.get_ticks_usec())
 	for i in 30:
 		await tree.process_frame
 	previous = Time.get_ticks_usec()
@@ -196,6 +203,7 @@ func _run() -> void:
 		await _frames("component_fixture_setup", 20)
 		await _sample_controlled_encounter(start_room)
 	report["visited"] = visited
+	report["unused_elite_visuals"] = tower._warm_elite_holders.keys()
 	report["events"] = events
 	report["samples"] = rows
 	report["memory_after_route"] = _memory_sample()
@@ -245,10 +253,26 @@ func _sample_controlled_encounter(room: DungeonRoom3D) -> void:
 			break
 		var label := "fixture_flight/%d" % index
 		var outcome := {"confirmed":false, "hp_before":enemy.current_hp}
+		var center := enemy.collision_shape.global_position
+		var shot_origin := Vector3.ZERO
+		var clear := false
+		for angle_index in 8:
+			var offset := Vector3.BACK.rotated(Vector3.UP, angle_index * TAU / 8.0) * 1.25
+			var query := PhysicsRayQueryParameters3D.create(center + offset, center, 5)
+			query.exclude = [tower.player.get_rid()]
+			if room.get_world_3d().direct_space_state.intersect_ray(query).get("collider") == enemy:
+				shot_origin = center + offset
+				clear = true
+				break
+		outcome["clear_lane"] = clear
+		if not clear:
+			_event("fixture_no_shot_lane", Time.get_ticks_usec(), {"room":room.room_id, "enemy_layer":enemy.collision_layer, "position":str(center)})
+			break
 		var observer := func(target, _damage, _critical): outcome["confirmed"] = target == enemy
 		begin = Time.get_ticks_usec()
-		var shot := pool.acquire({"damage":1, "speed":22.0, "direction":Vector3.FORWARD, "shooter":tower.player},
-			enemy.global_position + Vector3(0, 0.65, 0.85))
+		var shot := pool.acquire({"damage":1, "speed":22.0, "hostile":false, "critical":false,
+			"target_group":"enemy_3d", "projectile_collision_mask":5,
+			"direction":(center-shot_origin).normalized(), "shooter":tower.player}, shot_origin)
 		shot.hit_confirmed.connect(observer)
 		_event(label, begin, outcome)
 		await _frames(label, 24)
@@ -276,5 +300,10 @@ func _frames(label: String, count: int, minimum_game_seconds := 0.0) -> void:
 			Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_DRAW), Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_MESH),
 			Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_SURFACE), Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_CANVAS),
 			Performance.get_monitor(Performance.OBJECT_NODE_COUNT), Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT),
-			Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0])
+			Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0,
+			(pre_draw_usec-previous)/1000.0 if pre_draw_usec >= previous else -1.0,
+			(post_draw_usec-pre_draw_usec)/1000.0 if post_draw_usec >= pre_draw_usec and pre_draw_usec >= previous else -1.0,
+			(now-post_draw_usec)/1000.0 if post_draw_usec >= previous else -1.0,
+			(last_physics_usec-previous)/1000.0 if last_physics_usec >= previous else -1.0,
+			Performance.get_monitor(Performance.TIME_NAVIGATION_PROCESS) * 1000.0])
 		previous = now

@@ -33,7 +33,8 @@ def summarize_run(data):
                 and not warm["skipped"] and warm["rooms"] == warm["total"] and warm["rooms"] > 0)
     confirmed = any(e["phase"].startswith("fixture_flight/")
                     and e["details"].get("confirmed")
-                    and e["details"].get("hp_after", 0) < e["details"]["hp_before"]
+                    and "hp_after" in e["details"]
+                    and e["details"]["hp_after"] < e["details"]["hp_before"]
                     for e in data["events"])
     chest = events.get("chest/0", {}).get("details", {}).get("created", False)
     violations = [label for label, values in summary.items()
@@ -66,9 +67,10 @@ def main():
     tracked_inputs = ["project.godot", "src/base3d/BaseWorld3D.gd", "src/world3d/RunPersistenceService.gd",
                       "scripts/profile_expedition_events.py", "src/world3d/Dungeon3D.gd", "src/world3d/DungeonRoom3D.gd",
                       "src/world3d/TowerDescent3D.gd", "src/world3d/TreasureChest3D.gd",
-                      "src/base/BaseManager.gd", "src/base/ProfileSaveService.gd", "src/world3d/WastelandLight3D.gd",
+                      "src/base/BaseManager.gd", "src/base/ProfileSaveService.gd", "src/core/AtomicJsonStore.gd", "src/world3d/WastelandLight3D.gd",
                       "src/combat3d/ProjectilePool3D.gd", "src/vfx/VfxPool3D.gd", "scenes/ExpeditionLoadingScreen.gd",
                       "src/core/AudioManager.gd", "src/combat3d/Projectile3D.gd", "src/enemy3d/Enemy3D.gd",
+                      "src/enemy3d/EnemyAvatar3D.gd", "src/enemy3d/EliteContentCatalog.gd",
                       "src/world3d/SecretBranch3D.gd", "assets/shaders/chest_spotlight_beam.gdshader",
                       "assets/shaders/chest_spotlight_pool.gdshader", "tools/expedition_event_profile.gd"]
     def source_fingerprints():

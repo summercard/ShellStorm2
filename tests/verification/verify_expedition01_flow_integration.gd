@@ -57,77 +57,152 @@ func _ready() -> void:
 	print("FLOW_INTEGRATION_RUNTIME_READY")
 	tower.set_process(false)
 	check(tower._clear_drop_plans.size() == 13, "新局没有冻结13房计划")
-	for room_id in ["room_03", "room_04", "room_06", "room_09", "room_10"]:
+	for room_id in ["room_04", "room_06", "room_09", "room_10"]:
 		var room := tower._room_by_id[room_id] as DungeonRoom3D
 		var config := tower._build_room_encounter_config(room)
-		check(config["duration_sec"] == 0.0 and config["completion"] == "clear", "%s 未接有限clear" % room_id)
+		check(config["duration_sec"] == 60.0 and config["completion"] == "clear" and config.get("deadline_behavior") == "close_dispatch_and_clear" and config.get("repeat_last_stage") == true, "%s 未接60秒循环clear" % room_id)
+		check(config["preparation_sec"] == 0.0 and config["freeze_player_sec"] == 0.0 and config["stages"][0]["at_sec"] == 2.0, "%s 首批必须第2秒且不设准备/冻结" % room_id)
 		check(config["max_alive"] == room.encounter["max_alive"], "%s 容量未透传" % room_id)
 		check(config["intermission_sec"] == room.encounter["intermission_sec"], "%s 间歇未透传" % room_id)
 		check(config["min_player_distance_m"] == 6.0, "%s 安全距离未透传" % room_id)
 	var room03 := tower._room_by_id["room_03"] as DungeonRoom3D
 	var compiled := tower._build_room_encounter_config(room03)
-	check(compiled["stages"][0]["monsters"][0]["min_player_distance_m"] == 8.0, "首胖8m丢失")
+	for key in {"duration_sec": 60.0, "completion": "clear", "stage_advance": "clear", "preparation_sec": 0.0, "freeze_player_sec": 0.0, "intermission_sec": 0.0, "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true}:
+		check(compiled.get(key) == room03.encounter.get(key), "03真实配置透传丢失：%s" % key)
+	check(compiled["duration_sec"] == 60.0 and compiled["stages"][0]["at_sec"] == 2.0 and compiled["preparation_sec"] == 0.0 and compiled["freeze_player_sec"] == 0.0, "03必须fixed60、首批2秒且无准备/冻结")
+	check(compiled["deadline_behavior"] == "close_dispatch_and_clear" and compiled["repeat_last_stage"] == true and compiled["intermission_sec"] == 0.0, "03截止/循环/零间歇配置错误")
+	var second_fat_distance := 0.0
+	for spec: Dictionary in compiled["stages"][1]["monsters"]:
+		if spec.get("type") == "fat_zombie03":
+			second_fat_distance = float(spec.get("min_player_distance_m", 0.0))
+	check(second_fat_distance == 8.0, "03第二批胖子8m字段丢失")
+	# 仅冻结自动处理；仍使用真实场景、Host、实体、存档、门与清房奖励链。
+	tower.process_mode = Node.PROCESS_MODE_DISABLED
 	await enter(room03)
-	var started := tower._start_room_encounter(room03)
-	var id := str(started.get("instance_id", ""))
-	check(bool(started.get("ok", false)), "03遭遇启动失败")
-	tower._encounter_event_director.tick(1.0)
-	check(enemies(room03).is_empty(), "准备期提前出怪")
-	var preparation := disk_round_trip(tower.build_runtime_save_snapshot())
-	check(preparation["world_state"]["room_encounter_flow"]["active"].has(room03.room_id), "准备期active未保存")
-	check(tower._restore_runtime_world_save_snapshot(preparation), "准备期正式恢复失败")
-	check(enemies(room03).is_empty(), "准备期读档重刷敌人")
-	tower._encounter_event_director.tick(0.3)
-	check(enemies(room03).is_empty(), "准备期读档未保留剩余时间")
-	tower._encounter_event_director.tick(0.3)
-	check(enemies(room03).size() == 1, "首胖不是单只")
-	for enemy: Enemy3D in enemies(room03):
-		check(Vector2(enemy.global_position.x - tower.player.global_position.x, enemy.global_position.z - tower.player.global_position.z).length() >= 8.0, "首胖贴脸")
-	clear_live(room03)
-	tower._encounter_event_director.notify_enemy_departed(id, "killed")
-	tower._encounter_event_director.tick(0.7)
-	var saved := disk_round_trip(tower.build_runtime_save_snapshot())
-	var before := tower.get_encounter_event_snapshot(id)
-	var remaining := float(before.get("intermission_remaining_sec", -1.0))
-	check(remaining > 0.0, "间歇剩余未建立")
-	check(tower._restore_runtime_world_save_snapshot(saved), "正式Tower恢复失败")
-	check(tower._room_encounter_active.get(room03.room_id, "") == id, "恢复active丢失")
-	check(tower._room_is_sealed(room03.room_id), "恢复封门丢失")
-	check(is_equal_approx(float(tower.get_encounter_event_snapshot(id).get("intermission_remaining_sec", 0.0)), remaining), "恢复间歇重置")
-	tower._encounter_event_director.tick(maxf(0.0, remaining - 0.1))
-	check(enemies(room03).is_empty(), "恢复跳过间歇")
-	tower._encounter_event_director.tick(0.2)
-	check(enemies(room03).size() == 8, "第二波未按容量派发")
-	var total := 1
+	tower.force_open_edge_for_test("room_02", room03.room_id)
+	var entry_leaf := room03.get_door_node_towards("room_02")
+	check(entry_leaf != null and entry_leaf.is_open, "03封门前真实入口门必须已开")
+	check(enemies(room03).is_empty() and not room03.cleared and not tower._room_is_sealed(room03.room_id), "03踩入口前不应刷怪/清房/封门")
+	var port := room03.get_connection_port_by_id("A")
+	var point: Array = port.get("position_m", [0.0, 0.0])
+	var outward: Array = port.get("outward", [0.0, 0.0])
+	var trigger := room03.encounter["trigger"] as Dictionary
+	var inset := float(trigger["inset_m"]) + float(trigger["depth_m"]) * 0.5
+	tower.player.global_position = room03.to_global(Vector3(float(point[0]) - float(outward[0]) * inset, 0.5, float(point[1]) - float(outward[1]) * inset))
+	check(room03.match_door_entry_trigger(trigger, tower.player.global_position).get("port_id") == "A", "03真实入口A几何未命中")
+	tower._tick_room_encounter_triggers(0.0)
+	var id := str(tower._room_encounter_active.get(room03.room_id, ""))
+	check(not id.is_empty() and tower._room_is_sealed(room03.room_id), "03入口触发未启动或封门")
+	if id.is_empty():
+		finish()
+		return
+	for target in room03.door_targets.values():
+		var leaf := room03.get_door_node_towards(str(target))
+		check(leaf != null and not leaf.is_open, "03封门未实际关闭门扇：%s" % str(target))
+	tower._encounter_event_director.tick(0.0)
+	check(enemies(room03).is_empty() and tower.get_encounter_event_snapshot(id).get("alert_remaining_sec") == 60.0, "03起点应无怪且总剩余60")
+	tower._encounter_event_director.tick(1.99)
+	check(enemies(room03).is_empty(), "03真实首批在1.99秒提前生成")
+	var before_first := disk_round_trip(tower.build_runtime_save_snapshot())
+	check(before_first["world_state"]["room_encounter_flow"]["active"].get(room03.room_id) == id, "03首批前active未保存")
+	check(tower._restore_runtime_world_save_snapshot(before_first), "03首批前正式恢复失败")
+	check(enemies(room03).is_empty() and is_equal_approx(float(tower.get_encounter_event_snapshot(id).get("elapsed", -1.0)), 1.99), "03首批前恢复重刷或重置时钟")
+	tower._encounter_event_director.tick(0.01)
+	check(enemies(room03).size() == 5, "03第2秒真实首批必须5只")
+	var total := 0
 	var peak := 0
-	var capacity_restored := false
 	var persistent_ids := {}
-	print("FLOW_INTEGRATION_FIRST_WAVE_AND_RESTORE_DONE")
-	for _step in 18:
-		peak = maxi(peak, enemies(room03).size())
-		total += enemies(room03).size()
-		for actor: Enemy3D in enemies(room03):
-			check(not persistent_ids.has(actor.get_persistent_id()), "容量补发重用敌人身份")
+	var kills_before := tower._kills
+	for wave in 5:
+		var batch := enemies(room03)
+		var expected: int = [5, 7, 8, 8, 8][wave]
+		check(batch.size() == expected, "03真实第%d批应%d只，实际%d" % [wave + 1, expected, batch.size()])
+		total += batch.size()
+		peak = maxi(peak, batch.size())
+		for actor: Enemy3D in batch:
+			check(not persistent_ids.has(actor.get_persistent_id()), "03末批循环重用真实实体身份")
 			persistent_ids[actor.get_persistent_id()] = true
-		if not capacity_restored and int(tower.get_encounter_event_snapshot(id).get("pending", 0)) > 0:
-			var capacity_save := disk_round_trip(tower.build_runtime_save_snapshot())
-			var spawned_before := int(tower.get_encounter_event_snapshot(id)["spawned"])
-			var live_before := enemies(room03).size()
-			check(tower._restore_runtime_world_save_snapshot(capacity_save), "容量补发期恢复失败")
-			check(int(tower.get_encounter_event_snapshot(id)["spawned"]) == spawned_before and enemies(room03).size() == live_before, "容量补发读档重复生成")
-			capacity_restored = true
-		clear_live(room03)
-		tower._encounter_event_director.notify_enemy_departed(id, "killed")
-		tower._encounter_event_director.tick(3.1)
-		if bool(tower.get_encounter_event_snapshot(id).get("terminal", false)):
+		if wave == 1:
+			var fat_count := 0
+			for actor: Enemy3D in batch:
+				if actor.enemy_kind == "fat_zombie03":
+					fat_count += 1
+					check(Vector2(actor.global_position.x - tower.player.global_position.x, actor.global_position.z - tower.player.global_position.z).length() >= second_fat_distance, "03第二批胖子真实落点不足8m")
+			check(fat_count == 1, "03第二批必须真实生成1只胖子")
+		if wave in [1, 3]:
+			var elapsed := float(tower.get_encounter_event_snapshot(id).get("elapsed", -1.0))
+			var spawned := int(tower.get_encounter_event_snapshot(id).get("spawned", -1))
+			var identities: Array = []
+			for actor: Enemy3D in batch:
+				identities.append(actor.get_persistent_id())
+			identities.sort()
+			var saved := disk_round_trip(tower.build_runtime_save_snapshot())
+			check(tower._restore_runtime_world_save_snapshot(saved), "03在场/重复末批正式恢复失败")
+			tower._encounter_event_director.tick(0.0)
+			var restored_ids: Array = []
+			for actor: Enemy3D in enemies(room03):
+				restored_ids.append(actor.get_persistent_id())
+			restored_ids.sort()
+			check(restored_ids == identities and int(tower.get_encounter_event_snapshot(id).get("spawned", -1)) == spawned, "03恢复在场批次重发/换身份")
+			check(is_equal_approx(float(tower.get_encounter_event_snapshot(id).get("elapsed", -1.0)), elapsed) and tower._room_encounter_active.get(room03.room_id) == id and tower._room_is_sealed(room03.room_id), "03恢复丢时钟/active/封门")
+		print("FLOW_INTEGRATION_ROOM03_BATCH wave=%d live=%d total=%d" % [wave + 1, enemies(room03).size(), total])
+		if wave == 4:
 			break
-	check(capacity_restored, "没有实际覆盖容量补发读档")
-	check(int(tower.get_encounter_event_snapshot(id).get("spawned", 0)) == 20, "03有限编成丢怪/重刷")
-	check(peak <= 8, "03超过同屏容量")
-	check(total == 20, "03实际生成实体总数不是20：%d" % total)
-	print("FLOW_INTEGRATION_ROOM03 spawned=%d peak=%d" % [total, peak])
-	check(room03.cleared and not tower._room_is_sealed(room03.room_id), "03清完未立即解封")
-	check(int(tower.get_encounter_event_snapshot(id).get("dropped", -1)) == 0, "无截止clear作废怪物")
+		# clear_live只释放节点、不通知生产；此处每实体走一次正式击杀，不能再手动notify。
+		var killed := enemies(room03)
+		var kill_count := tower._kills
+		for actor: Enemy3D in killed:
+			tower._on_enemy_killed(actor, actor.get_enemy_data())
+			actor.free()
+		check(tower._kills == kill_count + killed.size() and enemies(room03).is_empty(), "03真实清批重复/漏记击杀")
+		check(not room03.cleared and tower._room_is_sealed(room03.room_id), "03截止前清空不得清房解封")
+		tower._encounter_event_director.tick(0.01)
+	check(total == 36 and total > 20 and peak <= 8, "03真实循环应5/7/8/8/8累计36且峰值不超过8：%d/%d" % [total, peak])
+	var pre_deadline := tower.get_encounter_event_snapshot(id)
+	tower._encounter_event_director.tick(59.99 - float(pre_deadline.get("elapsed", 0.0)))
+	check(not bool(tower.get_encounter_event_snapshot(id).get("dispatch_closed", true)), "03截止前不应关派发")
+	tower._encounter_event_director.tick(0.01)
+	var expired := tower.get_encounter_event_snapshot(id)
+	check(expired.get("elapsed") == 60.0 and expired.get("dispatch_closed") == true and expired.get("alert_phase") == "cleanup", "03真实60秒未关闭派发进入cleanup")
+	check(expired.get("status") == "active" and enemies(room03).size() == 8 and not room03.cleared and tower._room_is_sealed(room03.room_id), "03截止残怪未清不得完成/解封/删除实体")
+	var cleanup := disk_round_trip(tower.build_runtime_save_snapshot())
+	check(tower._restore_runtime_world_save_snapshot(cleanup), "03真实cleanup恢复失败")
+	tower._encounter_event_director.tick(10.0)
+	check(enemies(room03).size() == 8 and tower.get_encounter_event_snapshot(id).get("spawned") == total and tower.get_encounter_event_snapshot(id).get("status") == "active", "03截止恢复后重发或提前完成")
+	for actor: Enemy3D in enemies(room03):
+		tower._on_enemy_killed(actor, actor.get_enemy_data())
+		actor.free()
+	check(tower._kills == kills_before + total, "03总击杀数必须等于实际36实体且不重复")
+	check(tower.get_encounter_event_snapshot(id).get("status") == "completed" and room03.cleared and not tower._room_is_sealed(room03.room_id), "03截止残怪清零后必须completed、真实清房并解封")
+	check(int(tower._alive_by_room.get(room03.room_id, -1)) == 0 and enemies(room03).is_empty(), "03清房实体/存活账未归零")
+	check(int(tower.get_encounter_event_snapshot(id).get("dropped", -1)) == 0, "03全部已实到批次不得被截止作废")
+	await get_tree().process_frame
+	tower._ensure_room_clear_drop(room03)
+	var chest := room03.find_chest_by_id("drop_room_03")
+	var chest_count := 0
+	for candidate in get_tree().get_nodes_in_group("treasure_chest_3d"):
+		if room03.is_ancestor_of(candidate) and not candidate.is_queued_for_deletion():
+			chest_count += 1
+	check(chest != null and chest_count == 1 and room03.get_persistent_detail_state("treasure_chests").size() == 1, "03清房必须真实实例化唯一奖励宝箱：%d" % chest_count)
+	check(tower._clear_drop_settled.has(room03.room_id), "03清房奖励未结算")
+	var settled := disk_round_trip(tower.build_runtime_save_snapshot())
+	check(tower._restore_runtime_world_save_snapshot(settled), "03清房及箱子正式恢复失败")
+	tower._encounter_event_director.tick(60.0)
+	for _retry in 3:
+		tower._ensure_room_clear_drop(room03)
+	await get_tree().process_frame
+	var restored_chest_count := 0
+	for candidate in get_tree().get_nodes_in_group("treasure_chest_3d"):
+		if room03.is_ancestor_of(candidate) and not candidate.is_queued_for_deletion():
+			restored_chest_count += 1
+	check(restored_chest_count == 1 and room03.find_chest_by_id("drop_room_03") != null and room03.get_persistent_detail_state("treasure_chests").size() == 1, "03恢复重复结算导致双箱或丢箱：%d" % restored_chest_count)
+	check(room03.cleared and not tower._room_is_sealed(room03.room_id) and enemies(room03).is_empty(), "03终态恢复重封门/重刷")
+	# Director恢复只保留active实例；完成事实归房间进度与fired账，不要求旧终态统计实例重建。
+	check(tower.get_encounter_event_snapshot(id).is_empty() and not tower._room_encounter_active.has(room03.room_id) and tower._room_encounters_fired.has(room03.room_id), "03完成账恢复丢失或复活终态实例")
+	print("FLOW_INTEGRATION_ROOM03_TIMED_DONE spawned=%d peak=%d kills=%d cleared=%s sealed=%s chest_count=%d restored_chest_count=%d failures=%d" % [total, peak, tower._kills - kills_before, room03.cleared, tower._room_is_sealed(room03.room_id), chest_count, restored_chest_count, failures.size()])
+	if "--room03-timed-only" in OS.get_cmdline_user_args():
+		finish()
+		return
 	await verify_event_handler_orders()
 	await verify_box_queue()
 	await verify_rewards()

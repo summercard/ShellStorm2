@@ -58,12 +58,12 @@ const TRIGGER_ENCOUNTER_KEYS := [
 	"intermission_sec", "max_alive", "min_player_distance_m",
 	"seal_room", "light_on_finish", "hunt_player", "hud_countdown",
 	"stages", "monster_ai", "leave_policy", "preparation_sec", "freeze_player_sec",
-	"spawn_origin_port_id", "remote_spawn_policy",
+	"spawn_origin_port_id", "remote_spawn_policy", "deadline_behavior", "repeat_last_stage",
 	"alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse",
 ]
 ## 触发式遭遇里取值必须是 bool 的键。
 const TRIGGER_ENCOUNTER_FLAGS := [
-	"seal_room", "light_on_finish", "hunt_player", "hud_countdown",
+	"seal_room", "light_on_finish", "hunt_player", "hud_countdown", "repeat_last_stage",
 ]
 ## 触发区形状。`circle` = 房心半径（早期写法）；`band` = **满宽带**（沿一根轴铺满房间，
 ## 另一根轴上只有厚度）—— 圆的半径再大也能贴墙绕过去，带子是**不可绕过**的那个。
@@ -1442,9 +1442,11 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String, ro
 		var time_value: Variant = encounter.get(time_key, 1.0 if time_key == "start_delay_sec" else 0.0)
 		if not _finite_number(time_value) or float(time_value) < 0.0:
 			errors.append("encounter_%s_invalid:%s" % [time_key, key])
-	if float(encounter.get("freeze_player_sec", 0.0)) > float(encounter.get("preparation_sec", 0.0)):
+	var preparation_value: Variant = encounter.get("preparation_sec", 0.0)
+	var freeze_value: Variant = encounter.get("freeze_player_sec", 0.0)
+	if _finite_number(freeze_value) and _finite_number(preparation_value) and float(freeze_value) > float(preparation_value):
 		errors.append("encounter_freeze_exceeds_preparation:%s" % key)
-	if str(encounter.get("progress_mode", "tick")) == "external" and float(encounter.get("preparation_sec", 0.0)) > 0.0:
+	if str(encounter.get("progress_mode", "tick")) == "external" and _finite_number(preparation_value) and float(preparation_value) > 0.0:
 		errors.append("encounter_external_preparation_not_supported:%s" % key)
 	if encounter.get("remote_spawn_policy", "") not in ["", "opposite_entry"]:
 		errors.append("encounter_remote_spawn_policy_invalid:%s" % key)
@@ -1457,10 +1459,11 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String, ro
 	if str(encounter.get("remote_spawn_policy", "")) == "opposite_entry" and shape != "door_entries":
 		errors.append("encounter_opposite_entry_requires_door_entries:%s" % key)
 	var duration_value: Variant = encounter.get("duration_sec", 60.0)
-	var duration := float(duration_value)
+	var duration := float(duration_value) if _finite_number(duration_value) else -1.0
 	if not _finite_number(duration_value) or duration < 0.0:
-		errors.append("encounter_duration_invalid:%s:%s" % [key, str(duration)])
-	if float(encounter.get("start_delay_sec", 1.0)) < 0.0:
+		errors.append("encounter_duration_invalid:%s:%s" % [key, str(duration_value)])
+	var start_delay_value: Variant = encounter.get("start_delay_sec", 1.0)
+	if _finite_number(start_delay_value) and float(start_delay_value) < 0.0:
 		errors.append("encounter_start_delay_negative:%s" % key)
 	var advance := str(encounter.get("stage_advance", "clear"))
 	if advance not in ["time", "clear"]:
@@ -1471,6 +1474,23 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String, ro
 	var progress_mode := str(encounter.get("progress_mode", "tick"))
 	if progress_mode not in ["tick", "external"]:
 		errors.append("encounter_progress_mode_invalid:%s:%s" % [key, progress_mode])
+	var deadline_behavior: Variant = encounter.get("deadline_behavior", "fail_if_uncleared")
+	if not (deadline_behavior is String) or deadline_behavior not in ["fail_if_uncleared", "close_dispatch_and_clear"]:
+		errors.append("encounter_deadline_behavior_invalid:%s" % key)
+	var repeat_last_stage: bool = encounter.get("repeat_last_stage", false) is bool and encounter.get("repeat_last_stage", false) == true
+	var closes_dispatch: bool = deadline_behavior == "close_dispatch_and_clear"
+	if closes_dispatch and (
+		duration <= 0.0 or completion not in ["clear", "timer_and_clear"]
+		or progress_mode != "tick" or advance != "clear"
+		or not _finite_number(preparation_value) or float(preparation_value) != 0.0
+		or not _finite_number(freeze_value) or float(freeze_value) != 0.0
+	):
+		errors.append("encounter_close_dispatch_combination_invalid:%s" % key)
+	if repeat_last_stage and (
+		not closes_dispatch or not encounter.has("stages")
+		or not (encounter["stages"] is Array) or (encounter["stages"] as Array).is_empty()
+	):
+		errors.append("encounter_repeat_last_stage_combination_invalid:%s" % key)
 	var intermission_value: Variant = encounter.get("intermission_sec", 0.0)
 	if not _finite_number(intermission_value) or float(intermission_value) < 0.0:
 		errors.append("encounter_intermission_invalid:%s" % key)
@@ -1484,7 +1504,7 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String, ro
 	var default_distance: Variant = encounter.get("min_player_distance_m", 0.0)
 	if not _finite_number(default_distance) or float(default_distance) < 0.0:
 		errors.append("encounter_min_player_distance_invalid:%s" % key)
-	var no_deadline := is_zero_approx(duration)
+	var no_deadline := duration == 0.0
 	if no_deadline and not (completion == "clear" and advance == "clear" and progress_mode == "tick"):
 		errors.append("encounter_duration_zero_combination_invalid:%s" % key)
 	# 触发式遭遇的房间**不该**再有盒子：两套编成来源同时存在时，

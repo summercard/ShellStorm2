@@ -20,8 +20,11 @@ static func read_profile(path: String) -> Dictionary:
 
 
 ## Takes ownership of payload. No Node, mutable BaseData or scene-tree access.
-static func write_profile(path: String, payload: Dictionary, baseline: int, reason: String, fail_write: bool) -> Dictionary:
-	var disk_revision := int(read_profile(path).get("revision", -1))
+static func write_profile(path: String, payload: Dictionary, baseline: int, reason: String, fail_write: bool, previous_digest := "", previous_revision := -1) -> Dictionary:
+	var disk_revision := previous_revision
+	# Only identical bytes can reuse the revision confirmed by our last successful read-back.
+	if previous_digest.is_empty() or not FileAccess.file_exists(path) or FileAccess.get_sha256(path) != previous_digest:
+		disk_revision = int(read_profile(path).get("revision", -1))
 	if disk_revision > baseline:
 		push_error("[BaseManager] Refusing stale save: memory revision %d < disk revision %d (%s)" % [baseline, disk_revision, reason])
 		return {"success":false, "stale":true}
@@ -31,12 +34,14 @@ static func write_profile(path: String, payload: Dictionary, baseline: int, reas
 	payload["last_saved_at_unix"] = timestamp
 	payload["last_save_reason"] = reason
 	var envelope := build_envelope(payload, revision, reason)
-	if fail_write or not AtomicJsonStore.save_dictionary(path, envelope):
+	var serialized := JSON.stringify(envelope, "\t")
+	if fail_write or not AtomicJsonStore.save_json_text(path, serialized):
 		return {"success":false}
-	if int(read_profile(path).get("revision", -1)) != revision:
+	var digest := serialized.sha256_text()
+	if FileAccess.get_sha256(path) != digest:
 		push_error("[BaseManager] Save write completed but read-back validation failed")
 		return {"success":false}
-	return {"success":true, "revision":revision, "time":timestamp, "reason":reason}
+	return {"success":true, "revision":revision, "time":timestamp, "reason":reason, "file_digest":digest}
 
 
 static func build_envelope(payload: Dictionary, revision: int, reason: String) -> Dictionary:

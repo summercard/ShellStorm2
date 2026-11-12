@@ -307,10 +307,12 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 0.0,
-        "start_delay_sec": 0.0,
-        "preparation_sec": 60.0,
-        "freeze_player_sec": 1.0,
+        "duration_sec": 60.0,
+        "start_delay_sec": 2.0,
+        "preparation_sec": 0.0,
+        "freeze_player_sec": 0.0,
+        "deadline_behavior": "close_dispatch_and_clear",
+        "repeat_last_stage": true,
         "alert_style": "red_eva",
         "alert_text": "接敌警报",
         "alert_beep_interval_sec": 0.5,
@@ -318,7 +320,7 @@
         "remote_spawn_policy": "opposite_entry",
         "completion": "clear",
         "stage_advance": "clear",
-        "intermission_sec": 3.0,
+        "intermission_sec": 0.0,
         "max_alive": 8,
         "min_player_distance_m": 6.0,
         "seal_room": true,
@@ -462,9 +464,9 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 0.0,
+        "duration_sec": 60.0,
         "start_delay_sec": 2.0,
-        "preparation_sec": 2.0,
+        "preparation_sec": 0.0,
         "freeze_player_sec": 0.0,
         "remote_spawn_policy": "opposite_entry",
         "alert_style": "subtle",
@@ -473,7 +475,7 @@
         "alert_pulse": false,
         "completion": "clear",
         "stage_advance": "clear",
-        "intermission_sec": 2.5,
+        "intermission_sec": 0.0,
         "max_alive": 6,
         "min_player_distance_m": 6.0,
         "seal_room": true,
@@ -505,7 +507,9 @@
               }
             ]
           }
-        ]
+        ],
+        "deadline_behavior": "close_dispatch_and_clear",
+        "repeat_last_stage": true
       }
     },
     {
@@ -695,9 +699,9 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 0.0,
-        "start_delay_sec": 3.0,
-        "preparation_sec": 3.0,
+        "duration_sec": 60.0,
+        "start_delay_sec": 2.0,
+        "preparation_sec": 0.0,
         "freeze_player_sec": 0.0,
         "remote_spawn_policy": "opposite_entry",
         "alert_style": "red_eva",
@@ -706,7 +710,7 @@
         "alert_pulse": true,
         "completion": "clear",
         "stage_advance": "clear",
-        "intermission_sec": 2.5,
+        "intermission_sec": 0.0,
         "max_alive": 10,
         "min_player_distance_m": 6.0,
         "seal_room": true,
@@ -774,7 +778,9 @@
               }
             ]
           }
-        ]
+        ],
+        "deadline_behavior": "close_dispatch_and_clear",
+        "repeat_last_stage": true
       },
       "secret_site": {
         "site_id": "S2",
@@ -1087,9 +1093,9 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 0.0,
-        "start_delay_sec": 0.0,
-        "preparation_sec": 60.0,
+        "duration_sec": 60.0,
+        "start_delay_sec": 2.0,
+        "preparation_sec": 0.0,
         "freeze_player_sec": 0.0,
         "remote_spawn_policy": "opposite_entry",
         "alert_style": "red_eva",
@@ -1098,7 +1104,7 @@
         "alert_pulse": true,
         "completion": "clear",
         "stage_advance": "clear",
-        "intermission_sec": 2.5,
+        "intermission_sec": 0.0,
         "max_alive": 16,
         "min_player_distance_m": 6.0,
         "seal_room": true,
@@ -1190,7 +1196,9 @@
               }
             ]
           }
-        ]
+        ],
+        "deadline_behavior": "close_dispatch_and_clear",
+        "repeat_last_stage": true
       }
     },
     {
@@ -1249,9 +1257,9 @@
           "inset_m": 2.0,
           "depth_m": 3.0
         },
-        "duration_sec": 0.0,
-        "start_delay_sec": 0.0,
-        "preparation_sec": 60.0,
+        "duration_sec": 60.0,
+        "start_delay_sec": 2.0,
+        "preparation_sec": 0.0,
         "freeze_player_sec": 0.0,
         "remote_spawn_policy": "opposite_entry",
         "alert_style": "subtle",
@@ -1260,7 +1268,7 @@
         "alert_pulse": false,
         "completion": "clear",
         "stage_advance": "clear",
-        "intermission_sec": 2.0,
+        "intermission_sec": 0.0,
         "max_alive": 10,
         "min_player_distance_m": 6.0,
         "seal_room": true,
@@ -1296,7 +1304,9 @@
               }
             ]
           }
-        ]
+        ],
+        "deadline_behavior": "close_dispatch_and_clear",
+        "repeat_last_stage": true
       },
       "secret_site": {
         "site_id": "S4",

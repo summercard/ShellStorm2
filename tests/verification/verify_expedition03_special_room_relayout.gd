@@ -326,7 +326,9 @@ func _check_gate(rooms: Dictionary) -> RoomDoor3D:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	for lateral in [-1.25, 0.0, 1.25]:
-		_check(_gate_ray(gate, lateral).is_empty(), "open gate clears x=%.2f m" % lateral)
+		var hit := _gate_ray(gate, lateral)
+		var collider := hit.get("collider") as Node
+		_check(hit.is_empty(), "open gate clears x=%.2f m (collider=%s)" % [lateral, collider.get_path() if collider else "none"])
 	_check(not _gate_ray(gate, 1.65).is_empty(), "pier blocks beside opening")
 	return gate
 

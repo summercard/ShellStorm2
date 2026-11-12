@@ -90,7 +90,7 @@ static func project_alert(snapshot: Dictionary) -> Dictionary:
 	if not snapshot.has("alert_phase") and bool(snapshot.get("preparation_active", remaining > 0.0)) and remaining > 0.0:
 		phase = "preparation"
 	var active := not snapshot.is_empty() and not bool(snapshot.get("terminal", false)) and str(snapshot.get("status", "active")) == "active"
-	var countdown := phase in ["preparation", "intermission"] and is_finite(remaining) and is_finite(total) and remaining > 0.0 and total > 0.0
+	var countdown := phase in ["preparation", "intermission", "battle"] and is_finite(remaining) and is_finite(total) and remaining > 0.0 and total > 0.0
 	return {
 		"modern": modern, "style": style, "phase": phase,
 		"active": active and style in ["red_eva", "subtle"],
@@ -229,7 +229,7 @@ func _draw_digital_countdown() -> void:
 	digit_size = maxi(12, int(floor(digit_size * fit)))
 	metrics = _digital_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, digit_size)
 	var origin := Vector2((size.x - metrics.x) * 0.5, 20.0 + _digital_font.get_ascent(digit_size))
-	var caption := "下一批接敌" if str(_alert.get("phase", "")) == "intermission" else "接敌倒计时"
+	var caption := "限时战斗" if str(_alert.get("phase", "")) == "battle" else ("下一批接敌" if str(_alert.get("phase", "")) == "intermission" else "接敌倒计时")
 	var font := ThemeDB.fallback_font
 	var caption_size := 12
 	var caption_width := font.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, caption_size).x

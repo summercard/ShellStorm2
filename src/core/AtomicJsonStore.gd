@@ -21,13 +21,17 @@ static func load_dictionary(path: String, validator: Callable = Callable()) -> V
 	return null
 
 static func save_dictionary(path: String, data: Dictionary) -> bool:
+	return save_json_text(path, JSON.stringify(data, "\t"))
+
+
+static func save_json_text(path: String, serialized: String) -> bool:
 	var temp_path := path + ".tmp"
 	var backup_path := path + ".bak"
 	var temp_file := FileAccess.open(temp_path, FileAccess.WRITE)
 	if temp_file == null:
 		push_error("[AtomicJsonStore] Cannot open temporary save: %s" % temp_path)
 		return false
-	temp_file.store_string(JSON.stringify(data, "\t"))
+	temp_file.store_string(serialized)
 	temp_file.flush()
 	temp_file.close()
 

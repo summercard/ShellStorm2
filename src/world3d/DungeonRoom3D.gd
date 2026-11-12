@@ -6794,8 +6794,23 @@ func _uses_random_interactive_clutter() -> bool:
 	return not excluded.has(room_type)
 
 
+static func _interactive_clutter_path(slug: String) -> String:
+	return "%s%s/%s_root_top3d.tscn" % [INTERACTIVE_CLUTTER_ROOT, slug, slug]
+
+
+func get_clutter_warmup_paths() -> Array[String]:
+	var paths: Array[String] = []
+	if _uses_random_interactive_clutter():
+		for slug in INTERACTIVE_CLUTTER_SLUGS:
+			paths.append(_interactive_clutter_path(slug))
+	elif room_type == "STAIR_LOBBY" and fixed_lobby_clutter_enabled:
+		for slug in INTERACTIVE_CLUTTER_PLACEMENTS:
+			paths.append(_interactive_clutter_path(slug))
+	return paths
+
+
 func _instantiate_interactive_clutter(slug: String, clutter_id: String) -> BreakableClutter3D:
-	var path := "%s%s/%s_root_top3d.tscn" % [INTERACTIVE_CLUTTER_ROOT, slug, slug]
+	var path := _interactive_clutter_path(slug)
 	if not ResourceLoader.exists(path):
 		push_error("DungeonRoom3D: missing breakable clutter prefab " + path)
 		return null

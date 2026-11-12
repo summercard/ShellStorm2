@@ -6,6 +6,7 @@ extends RefCounted
 ## encounter_event_context(room_id, instance_id) -> Dictionary
 ## encounter_event_spawn(instance_id, room_id, monster_spec, count) -> Dictionary
 ## encounter_event_live_count(instance_id) -> int
+## encounter_event_close_dispatch(instance_id) -> {dropped: int}（可选；只取消未实到预约）
 ## encounter_event_hunt(instance_id) -> Dictionary
 ## encounter_event_apply_result(action) -> Dictionary
 
@@ -17,6 +18,7 @@ const SCHEMA_VERSION := 1
 const COMPLETIONS := ["timer", "clear", "timer_and_clear"]
 const LEAVE_POLICIES := ["pause", "cancel", "follow_current_room"]
 const PROGRESS_MODES := ["tick", "external"]
+const DEADLINE_BEHAVIORS := ["fail_if_uncleared", "close_dispatch_and_clear"]
 ## 阶段推进方式：
 ##   `time`  —— 只看时间阈值（`at_sec` / `at_ratio`）。到达即派发，可能多波同时在场。
 ##   `clear` —— 在时间阈值**之上**再加一道清算门槛：上一阶段必须「已派发完」**且**
@@ -31,7 +33,7 @@ const CONFIG_KEYS := [
 	"schema_version", "event_id", "room_id", "duration_sec", "completion", "stages", "monsters",
 	"count", "interval_sec", "total_count", "max_alive", "intermission_sec", "min_player_distance_m",
 	"prereqs", "on_completed", "on_cancelled",
-	"leave_policy", "progress_mode", "follow_current_room", "stage_advance",
+	"leave_policy", "progress_mode", "follow_current_room", "stage_advance", "deadline_behavior", "repeat_last_stage",
 	"hunt_player", "hud_countdown", "preparation_sec", "freeze_player_sec",
 	"trigger_port_id", "spawn_origin_port_id", "remote_spawn_policy",
 	"alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse",
@@ -92,6 +94,10 @@ func start(config: Dictionary) -> Dictionary:
 		"terminal": false,
 		"status": "active",
 		"completion": str(normalized["completion"]),
+		"deadline_behavior": str(normalized.get("deadline_behavior", "fail_if_uncleared")),
+		"repeat_last_stage": bool(normalized.get("repeat_last_stage", false)),
+		"dispatch_closed": false,
+		"repeat_stage_sequence": 0,
 		"stage_states": [],
 		"requested": 0,
 		"spawned": 0,
@@ -110,7 +116,7 @@ func start(config: Dictionary) -> Dictionary:
 	}
 	for stage_value in stages:
 		var stage := stage_value as Dictionary
-		var stage_state := {"started": false, "complete": false, "pending": []}
+		var stage_state := {"started": false, "complete": false, "dropped": false, "repeat_count": 0, "repeat_pending_start": false, "pending": []}
 		for monster_value in stage.get("monsters", []) as Array:
 			var monster := (monster_value as Dictionary).duplicate(true)
 			var count := int(monster["count"])
@@ -166,7 +172,12 @@ func _presentation_snapshot(state: Dictionary) -> Dictionary:
 		snapshot["alert_phase"] = ""
 		snapshot["alert_remaining_sec"] = 0.0
 		snapshot["alert_total_sec"] = 0.0
-		if not bool(state.get("terminal", false)):
+		if _closes_dispatch_at_deadline(config) and not bool(state.get("terminal", false)):
+			var duration := maxf(0.0, float(config.get("duration_sec", 0.0)))
+			snapshot["alert_total_sec"] = duration
+			snapshot["alert_remaining_sec"] = maxf(0.0, duration - float(state.get("elapsed", 0.0)))
+			snapshot["alert_phase"] = "cleanup" if float(state.get("elapsed", 0.0)) >= duration else "battle"
+		elif not bool(state.get("terminal", false)):
 			if float(state.get("preparation_remaining_sec", 0.0)) > 0.0:
 				snapshot["alert_phase"] = "preparation"
 				snapshot["alert_remaining_sec"] = float(state["preparation_remaining_sec"])
@@ -304,6 +315,17 @@ func import_snapshot(snapshot: Dictionary) -> Dictionary:
 		row["config"] = validation["config"]
 		row["room_id"] = str(row.get("room_id", config.get("room_id", "")))
 		row["stage_states"] = _normalize_stage_states(row, validation["config"] as Dictionary)
+		row["deadline_behavior"] = str(row.get("deadline_behavior", (validation["config"] as Dictionary).get("deadline_behavior", "fail_if_uncleared")))
+		row["repeat_last_stage"] = bool(row.get("repeat_last_stage", (validation["config"] as Dictionary).get("repeat_last_stage", false)))
+		row["dispatch_closed"] = bool(row.get("dispatch_closed", false))
+		row["repeat_stage_sequence"] = maxi(0, int(row.get("repeat_stage_sequence", 0)))
+		if bool(row["dispatch_closed"]):
+			for stage_value in row["stage_states"] as Array:
+				var stage_state := stage_value as Dictionary
+				(stage_state["pending"] as Array).clear()
+				stage_state["complete"] = true
+				stage_state["dropped"] = true
+			row["pending"] = 0
 		row["terminal"] = false
 		row["status"] = "active"
 		# 历史事件缺字段按无准备恢复，不能按新配置补演出或重刷。
@@ -358,6 +380,12 @@ static func validate_config(config: Dictionary) -> Dictionary:
 	var stage_advance := str(config.get("stage_advance", "time"))
 	if stage_advance not in STAGE_ADVANCES:
 		return _reject("stage_advance_invalid")
+	var deadline_behavior := str(config.get("deadline_behavior", "fail_if_uncleared"))
+	if deadline_behavior not in DEADLINE_BEHAVIORS:
+		return _reject("deadline_behavior_invalid")
+	if config.has("repeat_last_stage") and not (config["repeat_last_stage"] is bool):
+		return _reject("repeat_last_stage_invalid")
+	var repeat_last_stage := bool(config.get("repeat_last_stage", false))
 	if config.has("follow_current_room") and not (config["follow_current_room"] is bool):
 		return _reject("follow_current_room_invalid")
 	var intermission_value: Variant = config.get("intermission_sec", 0.0)
@@ -374,6 +402,17 @@ static func validate_config(config: Dictionary) -> Dictionary:
 		return _reject("freeze_exceeds_preparation")
 	if progress_mode == "external" and float(config.get("preparation_sec", 0.0)) > 0.0:
 		return _reject("external_preparation_not_supported")
+	if (deadline_behavior == "close_dispatch_and_clear" or repeat_last_stage) and (
+		duration <= 0.0
+		or progress_mode != "tick"
+		or completion not in ["clear", "timer_and_clear"]
+		or stage_advance != "clear"
+		or float(config.get("preparation_sec", 0.0)) != 0.0
+		or not config.has("stages")
+		or not config["stages"] is Array
+		or (config["stages"] as Array).is_empty()
+	):
+		return _reject("timed_loop_combination_invalid")
 	for port_key in ["trigger_port_id", "spawn_origin_port_id"]:
 		if config.has(port_key) and not config[port_key] is String:
 			return _reject("%s_invalid" % port_key)
@@ -428,6 +467,10 @@ static func validate_config(config: Dictionary) -> Dictionary:
 	normalized["leave_policy"] = leave_policy
 	normalized["progress_mode"] = progress_mode
 	normalized["stage_advance"] = stage_advance
+	if config.has("deadline_behavior"):
+		normalized["deadline_behavior"] = deadline_behavior
+	if config.has("repeat_last_stage"):
+		normalized["repeat_last_stage"] = repeat_last_stage
 	normalized["hunt_player"] = bool(config.get("hunt_player", false))
 	normalized["hud_countdown"] = bool(config.get("hud_countdown", false))
 	normalized["prereqs"] = (prereqs as Dictionary).duplicate(true)
@@ -471,6 +514,13 @@ static func _is_no_deadline(config: Dictionary) -> bool:
 	)
 
 
+func _closes_dispatch_at_deadline(config: Dictionary) -> bool:
+	return (
+		float(config.get("duration_sec", 0.0)) > 0.0
+		and str(config.get("deadline_behavior", "fail_if_uncleared")) == "close_dispatch_and_clear"
+	)
+
+
 func _step_instance(instance_id: String, state: Dictionary, delta: float) -> void:
 	var config := state.get("config", {}) as Dictionary
 	var room_id := str(state.get("room_id", ""))
@@ -508,15 +558,21 @@ func _step_instance(instance_id: String, state: Dictionary, delta: float) -> voi
 	var no_deadline := _is_no_deadline(config)
 	if not no_deadline:
 		state["elapsed"] = minf(float(config["duration_sec"]), float(state.get("elapsed", 0.0)) + battle_delta)
+	if _closes_dispatch_at_deadline(config):
+		state["stage_elapsed_sec"] = float(state["elapsed"])
 	var remaining_intermission := maxf(0.0, float(state.get("intermission_remaining_sec", 0.0)))
 	state["intermission_remaining_sec"] = maxf(0.0, remaining_intermission - delta)
+	var at_deadline := not no_deadline and float(state.get("elapsed", 0.0)) >= float(config["duration_sec"])
+	if at_deadline and str(config.get("deadline_behavior", "fail_if_uncleared")) == "close_dispatch_and_clear":
+		_close_dispatch(instance_id, state)
+		_try_finish_clear(instance_id, state)
+		return
 	_dispatch_due_stages(instance_id, state)
 	_try_finish_clear(instance_id, state)
 	if bool(state.get("terminal", false)) or no_deadline:
 		return
-	if float(state.get("elapsed", 0.0)) >= float(config["duration_sec"]):
-		# 计时到点 ⇒ **不再开新波**。未开始的阶段整体作废并计入 `dropped`；
-		# 已开始的阶段不动（它们的怪还在场上，由清房 / 取消逻辑收尾）。
+	if at_deadline:
+		# 旧模式保持原有到点失败/完成语义。
 		_drop_unstarted_stages(state)
 		if str(config["completion"]) == "clear":
 			_try_finish_clear(instance_id, state)
@@ -531,6 +587,8 @@ func _step_instance(instance_id: String, state: Dictionary, delta: float) -> voi
 
 
 func _dispatch_due_stages(instance_id: String, state: Dictionary) -> void:
+	if bool(state.get("dispatch_closed", false)):
+		return
 	var config := state.get("config", {}) as Dictionary
 	var stages: Array = config.get("stages", []) as Array
 	var elapsed := float(state.get("elapsed", 0.0))
@@ -539,15 +597,21 @@ func _dispatch_due_stages(instance_id: String, state: Dictionary) -> void:
 	for index in stages.size():
 		var stage := stages[index] as Dictionary
 		var stage_state := (state["stage_states"] as Array)[index] as Dictionary
+		var repeating := bool(stage_state.get("repeat_pending_start", false))
 		var threshold := float(stage.get("at_sec", 0.0))
 		if stage.has("at_ratio"):
 			threshold = float(stage["at_ratio"]) * float(config["duration_sec"])
 		var clock := stage_elapsed if not stage.has("at_ratio") and (_is_no_deadline(config) or float(state.get("preparation_total_sec", 0.0)) > 0.0) else elapsed
-		if clear_gated and not bool(stage_state.get("started", false)) and clock < threshold:
+		if repeating and (
+			float(state.get("intermission_remaining_sec", 0.0)) > 0.0
+			or int(_host_call("encounter_event_live_count", [instance_id], 0)) > 0
+		):
+			return
+		if not repeating and clear_gated and not bool(stage_state.get("started", false)) and clock < threshold:
 			break
-		if not bool(stage_state.get("started", false)) and clock >= threshold:
+		if not bool(stage_state.get("started", false)) and (repeating or clock >= threshold):
 			# `clear` 模式：时间到之外，还要求上一阶段已派发完、场上清空且间歇结束。
-			if clear_gated and index > 0:
+			if clear_gated and index > 0 and not repeating:
 				var previous := (state["stage_states"] as Array)[index - 1] as Dictionary
 				if not bool(previous.get("complete", false)):
 					break
@@ -561,6 +625,7 @@ func _dispatch_due_stages(instance_id: String, state: Dictionary) -> void:
 				if float(state.get("intermission_remaining_sec", 0.0)) > 0.0:
 					break
 			stage_state["started"] = true
+			stage_state["repeat_pending_start"] = false
 			encounter_event_stage_started.emit(get_snapshot(instance_id), index)
 		_spawn_pending_stage(instance_id, state, index)
 		if bool(state.get("terminal", false)):
@@ -639,6 +704,9 @@ func _try_finish_clear(instance_id: String, state: Dictionary) -> void:
 	var live := int(_host_call("encounter_event_live_count", [instance_id], 0))
 	if live > 0:
 		return
+	if bool(state.get("dispatch_closed", false)):
+		_finish_instance(instance_id, state, "completed")
+		return
 	var intermission := maxf(0.0, float((state.get("config", {}) as Dictionary).get("intermission_sec", 0.0)))
 	var next_stage_exists := last_started >= 0 and last_started + 1 < stages.size()
 	if next_stage_exists and bool((stages[last_started] as Dictionary).get("complete", false)):
@@ -654,6 +722,33 @@ func _try_finish_clear(instance_id: String, state: Dictionary) -> void:
 	for stage_value in stages:
 		if not bool((stage_value as Dictionary).get("complete", false)):
 			return
+	var config := state.get("config", {}) as Dictionary
+	var before_deadline := float(state.get("elapsed", 0.0)) < float(config.get("duration_sec", 0.0))
+	if _closes_dispatch_at_deadline(config) and not before_deadline:
+		return
+	if bool(config.get("repeat_last_stage", false)) and before_deadline:
+		var last_index := stages.size() - 1
+		var last_stage := (config["stages"] as Array)[last_index] as Dictionary
+		var last_state := stages[last_index] as Dictionary
+		last_state["started"] = false
+		last_state["complete"] = false
+		last_state["dropped"] = false
+		last_state["repeat_count"] = int(last_state.get("repeat_count", 0)) + 1
+		last_state["repeat_pending_start"] = true
+		(last_state["pending"] as Array).clear()
+		for monster_value in last_stage.get("monsters", []) as Array:
+			var monster := (monster_value as Dictionary).duplicate(true)
+			(last_state["pending"] as Array).append(monster)
+			state["requested"] = int(state.get("requested", 0)) + int(monster.get("count", 0))
+		state["repeat_stage_sequence"] = int(state.get("repeat_stage_sequence", 0)) + 1
+		state["last_cleared_stage"] = last_index
+		state["last_clear_elapsed"] = float(state.get("elapsed", 0.0))
+		state["intermission_remaining_sec"] = intermission
+		state["pending"] = _pending_total(state)
+		_instances[instance_id] = state
+		return
+	if _closes_dispatch_at_deadline(config) and before_deadline:
+		return
 	_finish_instance(instance_id, state, "completed")
 
 
@@ -709,9 +804,35 @@ func _apply_result_actions(state: Dictionary, action_key := "on_completed") -> v
 		state["result"]["result_action_error"] = "result_action_failed"
 
 
+func _close_dispatch(instance_id: String, state: Dictionary) -> int:
+	if bool(state.get("dispatch_closed", false)):
+		return 0
+	var dropped := 0
+	for stage_value in state.get("stage_states", []) as Array:
+		var stage_state := stage_value as Dictionary
+		for monster_value in stage_state.get("pending", []) as Array:
+			var monster := monster_value as Dictionary
+			dropped += maxi(0, int(monster.get("count", 0)) - int(monster.get("_spawned", 0)))
+		(stage_state["pending"] as Array).clear()
+		stage_state["complete"] = true
+		stage_state["dropped"] = true
+		stage_state["repeat_pending_start"] = false
+	state["pending"] = 0
+	state["dispatch_closed"] = true
+	state["dropped"] = int(state.get("dropped", 0)) + dropped
+	var close_result: Variant = _host_call("encounter_event_close_dispatch", [instance_id], {})
+	if close_result is Dictionary:
+		var cancelled := maxi(0, int((close_result as Dictionary).get("dropped", 0)))
+		if cancelled > 0:
+			state["spawned"] = maxi(0, int(state.get("spawned", 0)) - cancelled)
+			state["dropped"] = int(state.get("dropped", 0)) + cancelled
+	_instances[instance_id] = state
+	return dropped
+
+
 ## 把**尚未开始**的阶段整体作废，并把其中还没派发的数量计进 `dropped`。
 ## 「时间结束后就不刷怪」这条规则的落点就在这里：计时一到，剩下的波不再有机会开始。
-## 已开始的阶段不动 —— 它们的怪已经在场上，归清房 / 取消逻辑管。
+## 已开始的阶段不动 —— 它们的怪已经在场上，由清房 / 取消逻辑收尾。
 func _drop_unstarted_stages(state: Dictionary) -> int:
 	if bool(state.get("stages_dropped", false)):
 		return 0
@@ -737,7 +858,7 @@ func _pending_total(state: Dictionary) -> int:
 	var total := 0
 	for stage_value in state.get("stage_states", []) as Array:
 		var stage_state := stage_value as Dictionary
-		if not bool(stage_state.get("started", false)):
+		if not bool(stage_state.get("started", false)) and not bool(stage_state.get("repeat_pending_start", false)):
 			continue
 		for monster_value in stage_state.get("pending", []) as Array:
 			var monster := monster_value as Dictionary
@@ -924,6 +1045,15 @@ static func _normalize_stage_states(row: Dictionary, config: Dictionary) -> Arra
 	for index in stages.size():
 		var stage := stages[index] as Dictionary
 		var old := saved[index] as Dictionary if saved is Array and index < (saved as Array).size() and (saved as Array)[index] is Dictionary else {}
+		if bool(old.get("dropped", false)) or bool(row.get("dispatch_closed", false)):
+			var dropped_state := old.duplicate(true)
+			dropped_state["started"] = bool(old.get("started", false))
+			dropped_state["complete"] = true
+			dropped_state["dropped"] = true
+			dropped_state["pending"] = []
+			dropped_state["repeat_pending_start"] = false
+			result.append(dropped_state)
+			continue
 		var old_pending: Array = old.get("pending", []) as Array
 		var consumed: Array[bool] = []
 		consumed.resize(old_pending.size())
@@ -949,11 +1079,11 @@ static func _normalize_stage_states(row: Dictionary, config: Dictionary) -> Arra
 				monster["_spawned"] = 0
 			pending.append(monster)
 		var stage_complete := bool(old.get("complete", false)) and _stage_pending_total(pending) == 0
-		result.append({
-			"started": bool(old.get("started", false)),
-			"complete": stage_complete,
-			"pending": pending,
-		})
+		var restored_state := old.duplicate(true)
+		restored_state["started"] = bool(old.get("started", false))
+		restored_state["complete"] = stage_complete
+		restored_state["pending"] = pending
+		result.append(restored_state)
 	return result
 
 
