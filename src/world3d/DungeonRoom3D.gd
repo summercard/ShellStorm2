@@ -499,6 +499,11 @@ var _spawn_reach_evaluated := false
 ## 未落锁时（家具碰撞还没进树）同一帧只试一次 —— 否则 `_build_spawn_points()` 的
 ## 每个候选点都会触发一次 `_collect_spawn_blockers()`，白扫整棵子树 4800 遍。
 var _spawn_reach_probe_frame := -1
+var _prepared_navigation_mesh: NavigationMesh
+var _prepared_navigation_polygons: Array
+var _navigation_blockers: Array[AABB] = []
+var _navigation_ports: Array = []
+var _navigation_dimensions := Vector2.ZERO
 var _furnishing_navigation_refresh_queued := false
 # 区块壳体地砖格心（5m 模数格）的半宽与命中容差。非矩形房（L / U / 工字桥）的凹口在
 # 摆位阶段就被 `point_in_polygon` 剔掉了砖，「格心集合」因此就是房内可用点的真源；
@@ -6711,16 +6716,19 @@ func _refresh_furnishing_navigation() -> void:
 		return
 	_collect_spawn_blockers()
 	var build_started_usec := Time.get_ticks_usec()
-	var polygons := preload("res://src/world3d/RoomFurnishingNavigation.gd").rebuild(
-		get_dimensions(), _spawn_blockers, connection_ports
-	)
-	# 空房（一件阻塞体都没有）：保留矩形兜底，不要把 `furnishing_navigation_polygons`
-	# 写成空数组 —— 那会让 `_build_runtime_navigation_surface()` 也走空数组分支、
-	# 直接建出一块**没有任何多边形**的导航面（怪在这间房里彻底没有路径）。
-	if not polygons.is_empty():
-		set_meta("furnishing_navigation_polygons", polygons)
-	_spawn_reach_evaluated = false
-	_spawn_reach_probe_frame = -1
+	var dimensions := get_dimensions()
+	var same_inputs := dimensions == _navigation_dimensions and _navigation_blockers == _spawn_blockers and _navigation_ports == connection_ports
+	if not same_inputs:
+		var polygons := preload("res://src/world3d/RoomFurnishingNavigation.gd").rebuild(
+			dimensions, _spawn_blockers, connection_ports
+		)
+		if not polygons.is_empty():
+			set_meta("furnishing_navigation_polygons", polygons)
+		_navigation_dimensions = dimensions
+		_navigation_blockers.assign(_spawn_blockers)
+		_navigation_ports = connection_ports.duplicate(true)
+		_spawn_reach_evaluated = false
+		_spawn_reach_probe_frame = -1
 	_build_runtime_navigation_surface(get_dimensions())
 	set_meta("furnishing_navigation_refresh_count", int(get_meta("furnishing_navigation_refresh_count", 0)) + 1)
 	# 单次重建耗时（毫秒）。detail 是流送时逐房重建的，这个数是**进房卡顿**的直接成本，
@@ -7003,10 +7011,12 @@ func _restore_interactive_clutter() -> void:
 			clutter.restore_broken()
 
 
-func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
-	# Furniture cutouts affect pathfinding; the room's ownership footprint stays intact.
+## Only build the reusable mesh here. The active room owns the navigation region.
+func prepare_authored_navigation_mesh() -> NavigationMesh:
 	var authored_polygons := get_meta("furnishing_navigation_polygons", get_meta("walkable_navigation_polygons", [])) as Array
 	if not authored_polygons.is_empty() or has_meta("furnishing_navigation_polygons"):
+		if _prepared_navigation_mesh != null and is_same(_prepared_navigation_polygons, authored_polygons):
+			return _prepared_navigation_mesh
 		var authored_mesh := NavigationMesh.new()
 		var vertices := PackedVector3Array()
 		# 相邻多边形共享顶点索引（毫米量化去重）。
@@ -7031,8 +7041,17 @@ func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
 				vertex_lookup[key] = vertices.size()
 				polygon.append(vertices.size())
 				vertices.append(position)
-			authored_mesh.vertices = vertices
 			authored_mesh.add_polygon(polygon)
+		authored_mesh.vertices = vertices
+		_prepared_navigation_mesh = authored_mesh
+		_prepared_navigation_polygons = authored_polygons
+		return authored_mesh
+	return null
+
+
+func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
+	var authored_mesh := prepare_authored_navigation_mesh()
+	if authored_mesh != null:
 		var authored_region := get_node_or_null("RuntimeDetail/RuntimeNavigationRegion3D") as NavigationRegion3D
 		if authored_region == null:
 			authored_region = NavigationRegion3D.new()
@@ -7040,7 +7059,7 @@ func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
 			authored_region.use_edge_connections = false
 			authored_region.navigation_mesh = authored_mesh
 			_add_runtime_detail_child(authored_region)
-		else:
+		elif authored_region.navigation_mesh != authored_mesh:
 			authored_region.navigation_mesh = authored_mesh
 		return
 	# 每个 ACTIVE 房只保留一块轻量导航面；正式门/跨房授权仍由房间系统拥有。
@@ -7740,7 +7759,9 @@ func _collect_spawn_blockers() -> void:
 					continue
 				var triangle_bounds := AABB(triangle[0], Vector3.ZERO).expand(triangle[1]).expand(triangle[2])
 				# 保留真正竖面/顶盖；每面独立包围，不把平台到高台的空隙填实。
-				if triangle_bounds.end.y > SPAWN_GROUND_TOP_MAX_M:
+				var footprint := Rect2(Vector2(triangle_bounds.position.x, triangle_bounds.position.z),
+					Vector2(triangle_bounds.size.x, triangle_bounds.size.z))
+				if triangle_bounds.end.y > SPAWN_GROUND_TOP_MAX_M and room_bounds.intersects(footprint, true):
 					_spawn_blockers.append(triangle_bounds)
 			continue
 		# BoxShape 的局部包围盒由 size 精确决定，正常游戏无需向渲染器取调试网格。

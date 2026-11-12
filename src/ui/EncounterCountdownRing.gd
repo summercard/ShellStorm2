@@ -15,6 +15,11 @@ const WARNING_COLOR := Color(1.0, 0.12, 0.10, 0.96)
 const WARNING_TRACK_COLOR := Color(1.0, 0.16, 0.10, 0.22)
 const WARNING_GLOW_COLOR := Color(0.74, 0.02, 0.015, 0.40)
 
+# 作者原版DSEG7 Classic Bold Italic，OFL 1.1；不再用手绘几何模拟字体。
+const DIGITAL_FONT_PATH := "res://assets/ui/fonts/dseg/DSEG7Classic-BoldItalic.ttf"
+const DIGITAL_COLOR := Color(1.0, 0.65, 0.055, 1.0)
+const DIGITAL_OUTLINE := Color(0.12, 0.045, 0.005, 0.96)
+
 var remaining_ratio := 1.0
 var remaining_sec := 0.0
 var preparation_total_sec := 0.0
@@ -23,6 +28,7 @@ var preparation_active := false
 var alert_port_id := ""
 var reduce_motion := false
 var _label: Label
+var _digital_font: FontFile
 var _label_color := Color.WHITE
 var _label_font_size := 21
 var _paused := false
@@ -37,6 +43,17 @@ var _last_impact_bucket := -1
 
 func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# 正式导入与PCK使用资源重映射；无导入缓存的纯表现夹具直接读取同一TTF。
+	if ResourceLoader.exists(DIGITAL_FONT_PATH, "FontFile"):
+		_digital_font = load(DIGITAL_FONT_PATH) as FontFile
+	else:
+		_digital_font = FontFile.new()
+		var font_error := _digital_font.load_dynamic_font(DIGITAL_FONT_PATH)
+		assert(font_error == OK, "DSEG countdown font missing or invalid")
+	assert(_digital_font != null, "DSEG countdown resource must be FontFile")
+	_digital_font.antialiasing = TextServer.FONT_ANTIALIASING_GRAY
+	_digital_font.hinting = TextServer.HINTING_LIGHT
+	_digital_font.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_AUTO
 
 
 func bind_label(label: Label) -> void:
@@ -191,6 +208,37 @@ func _refresh_label() -> void:
 	else:
 		_label.text = format_preparation_time(remaining_sec) if preparation_active and not reduce_motion else format_time(maxi(0, int(ceil(remaining_sec))))
 	_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# 保留原语义文字和节点，避免投影/可访问性及既有探针被视觉变更破坏。
+	_label.visible = not _uses_digital_display()
+
+
+func _uses_digital_display() -> bool:
+	return bool(_alert.get("modern", false)) and bool(_alert.get("active", false)) and preparation_active
+
+
+func _digital_text() -> String:
+	return str(int(ceil(remaining_sec))) if reduce_motion else format_preparation_time(remaining_sec)
+
+
+func _draw_digital_countdown() -> void:
+	var text := _digital_text()
+	var digit_size := 40
+	var metrics := _digital_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, digit_size)
+	var available_height := maxf(16.0, size.y - 22.0)
+	var fit := minf(1.0, minf(available_height / maxf(metrics.y, 1.0), (size.x - 24.0) / maxf(metrics.x, 1.0)))
+	digit_size = maxi(12, int(floor(digit_size * fit)))
+	metrics = _digital_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, digit_size)
+	var origin := Vector2((size.x - metrics.x) * 0.5, 20.0 + _digital_font.get_ascent(digit_size))
+	var caption := "下一批接敌" if str(_alert.get("phase", "")) == "intermission" else "接敌倒计时"
+	var font := ThemeDB.fallback_font
+	var caption_size := 12
+	var caption_width := font.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, caption_size).x
+	var caption_origin := Vector2((size.x - caption_width) * 0.5, 13.0)
+	draw_string_outline(font, caption_origin, caption, HORIZONTAL_ALIGNMENT_LEFT, -1, caption_size, 3, DIGITAL_OUTLINE)
+	draw_string(font, caption_origin, caption, HORIZONTAL_ALIGNMENT_LEFT, -1, caption_size, DIGITAL_COLOR)
+	# 字距、小数点、切角和斜度全部使用字体原始度量，不人工拼接单个数字。
+	draw_string_outline(_digital_font, origin, text, HORIZONTAL_ALIGNMENT_LEFT, -1, digit_size, 1, DIGITAL_OUTLINE)
+	draw_string(_digital_font, origin, text, HORIZONTAL_ALIGNMENT_LEFT, -1, digit_size, DIGITAL_COLOR)
 
 
 static func format_time(total_seconds: int) -> String:
@@ -208,6 +256,9 @@ func get_snapshot() -> Dictionary:
 	var thickness := outer_radius * THICKNESS_RATIO
 	return {
 		"visible": visible, "remaining_ratio": remaining_ratio, "remaining_sec": remaining_sec,
+		"digital_display": _uses_digital_display(), "digital_text": _digital_text(),
+		"digital_color": DIGITAL_COLOR, "digital_style": "dseg7_classic_bold_italic",
+		"digital_font_path": DIGITAL_FONT_PATH, "digital_font_name": _digital_font.get_font_name(),
 		"text": _label.text if _label != null else "", "preparation_active": preparation_active,
 		"preparation_remaining_sec": preparation_remaining_sec, "preparation_total_sec": preparation_total_sec,
 		"alert_port_id": alert_port_id, "reduce_motion": reduce_motion, "paused": _paused,
@@ -225,6 +276,9 @@ func get_snapshot() -> Dictionary:
 
 
 func _draw() -> void:
+	if _uses_digital_display():
+		_draw_digital_countdown()
+		return
 	if bool(_alert.get("modern", false)):
 		return
 	var outer_radius := minf(size.x, size.y) * 0.5

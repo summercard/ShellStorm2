@@ -17,7 +17,7 @@
 本次用户调整已先更新设计主源，尚未改运行数据或生产代码：
 
 - room03 本轮修正为“封门后先停顿60秒，再进入刷怪”：`preparation_sec=60`、`start_delay_sec=0`，准备期绝不刷怪；60秒结束第一波立即派发，随后按清波与间歇推进既有 `5→7→8`。本轮不启用重复末波或固定刷怪截止；其他房间的固定窗口设计仍待独立施工。
-- `ENCOUNTER-EVENT` 需要新增能力语义：配置字段建议为 `deadline_behavior=close_dispatch_and_clear`，固定窗口到点进入 `dispatch_closed`，不走旧的 `timer_expired_before_clear` 失败分支；未声明该能力的事件保持原行为。实现必须按能力判据，不按 `expedition_01` 分支。
+- room03 本轮不启用固定刷怪截止，也不改通用 `ENCOUNTER-EVENT` Director。room03只使用 `preparation_sec=60`、`start_delay_sec=0`：60秒准备期不刷怪，倒计时结束后进入现有有限波次链。其他房间固定时间窗口仍保留为后续独立施工项。
 - `WORLD-SECRET` 允许隐藏子图出现死路；入口传送口在破板后长期保留，子图普通连接门免费双向，玩家可沿原路退回首间并返回主图。末端 `R0/R1` 返程门继续存在。该规则不改主路跳过房数、Boss 边界或撤离阈值。
 
 ## 2. 目标规则与当前状态
@@ -90,3 +90,21 @@
 没有执行运行用例或故障注入，本次静态命令均无非预期stderr错误；Git行尾提示单列。三份协作设计改前/后SHA-256一致，备份逐项校验一致；Python数据与Godot/整关/视听各行继续pending，不从其他线程日志摘绿。文档检查不验证Markdown锚点、玩法语义或运行正确性。
 
 整关、真实拾取、溢出留物、旧局续档、提示重试语义、负向故障、视听与设备证据不能因登记完成自动判绿。涉及背包出口不能承接拆栈/留物时，由主线程报告/处理，不在本文件维护者权限内改生产实现。
+
+## 6. UI-HUD 独立事务：倒计时七段数码风格（2026-11-12）
+
+### 字体替换修订（10:10 用户反馈后）
+
+用户否定手绘七段效果：成熟字体优先，不用工程拼段替代字形设计。已删除 `_draw_digital_character` 与数字段表，引入作者官方 v0.46 发布包的 `DSEG7Classic-BoldItalic.ttf`（23604字节的普通斜体仅为比较候选，正式显示只引用粗斜体）；原始 `DSEG-LICENSE.txt` 随资源保存，SIL OFL 1.1。来源为作者站 `https://www.keshikan.net/fonts-e.html` 指向的官方发行包。字体原始字距、小数点、斜度与切角交给Godot字体排版，橙黄颜色和0.20高度不变。参考图原字体未确认，不宣称完全同款。正式导入/PCK走ResourceLoader，最小无缓存夹具直接读同一TTF；尚未执行PCK导出，不以代码路径等同打包验收。
+
+本轮纯表现 `checks=71 failures=0`、真实控件渲染 `checks=69 failures=0`，均exit0、无SCRIPT ERROR/ERROR；覆盖十个数字/小数点字库、减少动效、旧态恢复与6状态截图。未重跑先前已失败/超时的背包和整体HUD专项，未做实际关卡游玩。文档门禁exit1仍11条旧断链，解耦0违规、补丁空白通过。证据：工程外 `ShellStorm2-work/probes/2026-11-12_countdown_font/`；特写位于 `ShellStorm2-work/outputs/2026-11-12_countdown_font/countdown_font_detail.png`。备份：`ShellStorm2-backup/2026-11-12_countdown_font/before_edits/`。以下原手绘交付记录仅保留过程历史，现行字体规则以本修订与设计r8为准。
+
+
+- 来源：用户橙黄七段数码管截图及“稍微上去一点”；设计主源为[对话与战斗信息呈现 r8](../design/对话与战斗信息呈现设计.md)。仅改显示，不改本记录先前的计时/刷怪数据。
+- 改动：`EncounterCountdownRing.gd` 使用切角、略右倾七段矢量数字，橙黄亮段和暗描边；等宽百分秒与减少动效整秒均读原快照。保留 `CountdownTimeLabel` 语义与节点，仅数码态隐藏Label渲染，战斗提示/旧圆环恢复原字样。
+- `Dungeon3D.apply_encounter_hud_snapshot()` 的modern中心高度0.23→0.20，设计槽540×44→540×88（实际432×70.4 canvas）；`EncounterAlertOverlay`文字高度0.18→0.12，避免与数码小标题重叠。未更改其他协作方在Dungeon内的优化。
+- 修改前备份：`ShellStorm2-backup/2026-11-12_countdown_digital/before_edits/`。
+- 纯表现旧基线55项已通过；真实兼容渲染器生成6张截图，`COUNTDOWN_DIGITAL_RENDER_OK checks=70 failures=0`、exit0、无SCRIPT ERROR/ERROR。样本含60.00、45.56、间歇2.50、subtle、战斗提示、终态隐藏。证据位于工程外 `ShellStorm2-work/probes/2026-11-12_countdown_digital/`。这是**假快照注入真实控件**，不是实际关卡截图。第一次截图探针失败已保留在 `attempt_01_failed/`，修正探针后 `attempt_02_passed/` 通过，未为过测修改生产代码。
+- 最终纯表现：`ENCOUNTER_ALERT_CONFIG_HUD_OK checks=60 failures=0`，exit0、无脚本/引擎错误；正式接线：`ENCOUNTER_ALERT_CONFIG_INTEGRATION_OK checks=23 failures=0`，exit0、无脚本/引擎错误。有限弹药 `FINITE_AMMO_FLOW_OK`，exit0、无脚本/引擎错误。
+- 整体回归未全绿：标准batch两次均被既有远征03布局预检的GBK编码异常阻断（设置UTF-8环境也未解决）；改在Autoload前隔离APPDATA/LOCALAPPDATA直跑四场。`verify_reference_hud_fate_visual` 达360秒超时；`verify_tactical_inventory_minimap_flow` exit1、23条ERROR，涉及6列背包/血条颜色/保险与快捷栏拖放所有权等，未有本轮改前对照，不能认定为已证实的既有问题，也未擅自修复无关玩法。总回归Runner exit1，不将两项未通过混入成功总数。日志位于上述证据目录的 `shellstorm-verification.hud/<场景名>/run.log`。
+- 文档门禁exit1仍11条既有断链，本轮新增0；解耦0违规，补丁空白通过。未做完整关卡人工体验与移动端验证。首次复验纯表现时复制目录尚未同步新增断言，旧55项通过但基线哈希护栏失败；prepare重新复制最新源后60项正式通过。

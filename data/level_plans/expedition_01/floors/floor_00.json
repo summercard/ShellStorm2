@@ -577,8 +577,16 @@
           ],
           "count_bonus": 2,
           "spawn_overrides": [
-            { "type": "melee_chaser", "count": 1, "delay_sec": 0.5 },
-            { "type": "melee_chaser_strong", "count": 1, "delay_sec": 0.0 }
+            {
+              "type": "melee_chaser",
+              "count": 1,
+              "delay_sec": 0.5
+            },
+            {
+              "type": "melee_chaser_strong",
+              "count": 1,
+              "delay_sec": 0.0
+            }
           ]
         },
         {
@@ -596,9 +604,21 @@
             2.5
           ],
           "spawn_overrides": [
-            { "type": "melee_chaser", "count": 8, "delay_sec": 0.0 },
-            { "type": "fat_zombie03", "count": 4, "delay_sec": 1.0 },
-            { "type": "ranged_caster", "count": 4, "delay_sec": 1.0 }
+            {
+              "type": "melee_chaser",
+              "count": 8,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "fat_zombie03",
+              "count": 4,
+              "delay_sec": 1.0
+            },
+            {
+              "type": "ranged_caster",
+              "count": 4,
+              "delay_sec": 1.0
+            }
           ]
         }
       ],
@@ -819,8 +839,16 @@
           ],
           "count_bonus": 2,
           "spawn_overrides": [
-            { "type": "melee_chaser", "count": 1, "delay_sec": 0.5 },
-            { "type": "melee_chaser_strong", "count": 1, "delay_sec": 0.0 }
+            {
+              "type": "melee_chaser",
+              "count": 1,
+              "delay_sec": 0.5
+            },
+            {
+              "type": "melee_chaser_strong",
+              "count": 1,
+              "delay_sec": 0.0
+            }
           ]
         },
         {
@@ -966,8 +994,16 @@
           ],
           "count_bonus": 2,
           "spawn_overrides": [
-            { "type": "melee_chaser", "count": 1, "delay_sec": 0.5 },
-            { "type": "ranged_caster_strong", "count": 1, "delay_sec": 0.0 }
+            {
+              "type": "melee_chaser",
+              "count": 1,
+              "delay_sec": 0.5
+            },
+            {
+              "type": "ranged_caster_strong",
+              "count": 1,
+              "delay_sec": 0.0
+            }
           ]
         },
         {
@@ -1052,8 +1088,8 @@
           "depth_m": 3.0
         },
         "duration_sec": 0.0,
-        "start_delay_sec": 3.0,
-        "preparation_sec": 3.0,
+        "start_delay_sec": 0.0,
+        "preparation_sec": 60.0,
         "freeze_player_sec": 0.0,
         "remote_spawn_policy": "opposite_entry",
         "alert_style": "red_eva",
@@ -1063,7 +1099,7 @@
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 2.5,
-        "max_alive": 12,
+        "max_alive": 16,
         "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
@@ -1078,31 +1114,11 @@
               },
               {
                 "type": "ranged_caster",
-                "count": 2
-              },
-              {
-                "type": "melee_chaser",
-                "count": 5
-              }
-            ]
-          },
-          {
-            "monsters": [
-              {
-                "type": "fat_zombie03",
-                "count": 1
-              },
-              {
-                "type": "melee_chaser_strong",
-                "count": 1
-              },
-              {
-                "type": "ranged_caster",
                 "count": 3
               },
               {
                 "type": "melee_chaser",
-                "count": 6
+                "count": 8
               }
             ]
           },
@@ -1114,34 +1130,6 @@
               },
               {
                 "type": "melee_chaser_strong",
-                "count": 1
-              },
-              {
-                "type": "ranged_caster_strong",
-                "count": 1
-              },
-              {
-                "type": "ranged_caster",
-                "count": 3
-              },
-              {
-                "type": "melee_chaser",
-                "count": 6
-              }
-            ]
-          },
-          {
-            "monsters": [
-              {
-                "type": "fat_zombie03",
-                "count": 2
-              },
-              {
-                "type": "melee_chaser_strong",
-                "count": 2
-              },
-              {
-                "type": "ranged_caster_strong",
                 "count": 1
               },
               {
@@ -1150,7 +1138,55 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 7
+                "count": 9
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 2
+              },
+              {
+                "type": "ranged_caster_strong",
+                "count": 1
+              },
+              {
+                "type": "ranged_caster",
+                "count": 5
+              },
+              {
+                "type": "melee_chaser",
+                "count": 10
+              }
+            ]
+          },
+          {
+            "monsters": [
+              {
+                "type": "fat_zombie03",
+                "count": 3
+              },
+              {
+                "type": "melee_chaser_strong",
+                "count": 3
+              },
+              {
+                "type": "ranged_caster_strong",
+                "count": 2
+              },
+              {
+                "type": "ranged_caster",
+                "count": 6
+              },
+              {
+                "type": "melee_chaser",
+                "count": 10
               }
             ]
           }
@@ -1214,8 +1250,8 @@
           "depth_m": 3.0
         },
         "duration_sec": 0.0,
-        "start_delay_sec": 2.0,
-        "preparation_sec": 2.0,
+        "start_delay_sec": 0.0,
+        "preparation_sec": 60.0,
         "freeze_player_sec": 0.0,
         "remote_spawn_policy": "opposite_entry",
         "alert_style": "subtle",
@@ -1225,7 +1261,7 @@
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 2.0,
-        "max_alive": 5,
+        "max_alive": 10,
         "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
@@ -1236,11 +1272,11 @@
             "monsters": [
               {
                 "type": "ranged_caster",
-                "count": 1
+                "count": 2
               },
               {
                 "type": "melee_chaser",
-                "count": 4
+                "count": 8
               }
             ]
           },
@@ -1248,11 +1284,15 @@
             "monsters": [
               {
                 "type": "ranged_caster",
+                "count": 2
+              },
+              {
+                "type": "melee_chaser_strong",
                 "count": 1
               },
               {
                 "type": "melee_chaser",
-                "count": 4
+                "count": 9
               }
             ]
           }
@@ -1398,10 +1438,26 @@
             -22.5
           ],
           "spawn_overrides": [
-            { "type": "boss", "count": 1, "delay_sec": 0.0 },
-            { "type": "melee_chaser_strong", "count": 1, "delay_sec": 1.5 },
-            { "type": "ranged_caster_strong", "count": 1, "delay_sec": 1.5 },
-            { "type": "summoner", "count": 1, "delay_sec": 3.0 }
+            {
+              "type": "boss",
+              "count": 1,
+              "delay_sec": 0.0
+            },
+            {
+              "type": "melee_chaser_strong",
+              "count": 1,
+              "delay_sec": 1.5
+            },
+            {
+              "type": "ranged_caster_strong",
+              "count": 1,
+              "delay_sec": 1.5
+            },
+            {
+              "type": "summoner",
+              "count": 1,
+              "delay_sec": 3.0
+            }
           ]
         },
         {

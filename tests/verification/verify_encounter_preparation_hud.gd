@@ -38,6 +38,12 @@ func run() -> void:
 	ring.consume_snapshot(row)
 	overlay.consume_snapshot(row)
 	check(label.text == "【接敌】 3.00 秒", "中文接敌/真实两位小数")
+	check(ring.get_snapshot().digital_display and not label.visible, "数码态保留语义Label但隐藏原字形")
+	check(ring.get_snapshot().digital_text == "3.00", "数码管读取同一百分秒")
+	check(ring.get_snapshot().digital_color == RING.DIGITAL_COLOR, "橙黄色数码段")
+	check(ring.get_snapshot().digital_font_name.contains("DSEG7"), "正式DSEG字体而非手绘几何")
+	for character in "0123456789.":
+		check(ring._digital_font.has_char(character.unicode_at(0)), "正式字库覆盖:" + character)
 	check(warning.text == row.config.alert_text and overlay.visible, "实际消费自定义alert_text")
 	check(ring.alert_port_id == "B" and overlay.alert_port_id == "B", "稳定端口透传")
 	check(ring.get_snapshot().beep_requested and pulses.size() == 1, "red_eva首个蜂鸣")
@@ -99,6 +105,7 @@ func run() -> void:
 	overlay.consume_snapshot(row)
 	check(ring.visible and label.text == "【清除入侵者】" and not overlay.visible, "战斗期降级小提示无红边")
 	check(not ring.get_snapshot().beep_requested, "战斗期无蜂鸣")
+	check(not ring.get_snapshot().digital_display and label.visible, "战斗期恢复原文字渲染")
 	for style in ["subtle", "none"]:
 		row.config.alert_style = style
 		row.alert_phase = "preparation"

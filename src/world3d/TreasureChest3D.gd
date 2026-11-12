@@ -872,17 +872,28 @@ func _build_visual() -> void:
 func _build_chest_spotlight() -> void:
 	if _chest_spotlight_stage != null and is_instance_valid(_chest_spotlight_stage):
 		return
-	_chest_spotlight_stage = Node3D.new()
-	_chest_spotlight_stage.name = "ChestSpotlightStage"
-	_chest_spotlight_stage.set_meta("reused_main_entry_spotlight", true)
-	add_child(_chest_spotlight_stage)
-	var color := ADVANCED_CHEST_SPOTLIGHT_COLOR if chest_tier == "advanced" else NORMAL_CHEST_SPOTLIGHT_COLOR
-	_chest_spotlight_stage.add_child(_make_spotlight_beam(color))
-	_chest_spotlight_stage.add_child(_make_spotlight_pool(color))
-	_add_spotlight_lamps(_chest_spotlight_stage, color)
+	var slot := _warmed_tier_slot()
+	if slot != null:
+		_chest_spotlight_stage = slot.get_node_or_null("ChestSpotlightStage") as Node3D
+	if _chest_spotlight_stage == null:
+		var color := ADVANCED_CHEST_SPOTLIGHT_COLOR if chest_tier == "advanced" else NORMAL_CHEST_SPOTLIGHT_COLOR
+		_chest_spotlight_stage = _make_spotlight_stage(color)
+		add_child(_chest_spotlight_stage)
+	else:
+		_chest_spotlight_stage.reparent(self, false)
 	# 在首个可渲染帧之前置零，避免全亮一帧再开始展开。
 	_apply_chest_spotlight_progress(0.0, _chest_spotlight_stage)
 	call_deferred("_play_chest_spotlight_appear")
+
+
+static func _make_spotlight_stage(color: Color) -> Node3D:
+	var stage := Node3D.new()
+	stage.name = "ChestSpotlightStage"
+	stage.set_meta("reused_main_entry_spotlight", true)
+	stage.add_child(_make_spotlight_beam(color))
+	stage.add_child(_make_spotlight_pool(color))
+	_add_spotlight_lamps(stage, color)
+	return stage
 
 
 static func _add_spotlight_lamps(stage: Node3D, color: Color) -> void:
@@ -1017,21 +1028,23 @@ static func make_render_warmup_sample() -> Node3D:
 		var accent := NORMAL_CHEST_SPOTLIGHT_COLOR if scene == NORMAL_VISUAL_SCENE else ADVANCED_CHEST_SPOTLIGHT_COLOR
 		visual.ready.connect(_set_closed_model_appearance.bind(visual, accent), CONNECT_ONE_SHOT)
 		slot.add_child(visual)
-	sample.add_child(_make_spotlight_beam(NORMAL_CHEST_SPOTLIGHT_COLOR))
-	sample.add_child(_make_spotlight_pool(NORMAL_CHEST_SPOTLIGHT_COLOR))
-	_add_spotlight_lamps(sample, NORMAL_CHEST_SPOTLIGHT_COLOR)
+		slot.add_child(_make_spotlight_stage(accent))
 	return sample
 
 
 func _take_warmed_model() -> RewardChestVisual3D:
+	var slot := _warmed_tier_slot()
+	if slot != null and slot.get_child_count() > 0:
+		return slot.get_child(0) as RewardChestVisual3D
+	return null
+
+
+func _warmed_tier_slot() -> Node:
 	var ancestor := get_parent()
 	while ancestor != null:
 		var sample := ancestor.get_node_or_null("RewardChestWarmVisuals")
 		if sample != null:
-			var slot := sample.get_node_or_null("advanced" if chest_tier == "advanced" else "normal")
-			if slot != null and slot.get_child_count() > 0:
-				return slot.get_child(0) as RewardChestVisual3D
-			break
+			return sample.get_node_or_null("advanced" if chest_tier == "advanced" else "normal")
 		ancestor = ancestor.get_parent()
 	return null
 

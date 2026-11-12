@@ -165,7 +165,12 @@ func _load_scene(scene_path: String, floor: int = 0) -> void:
 	if floor > 0:
 		LevelSelect.selected_floor = floor
 		LevelSelect.selection_made = true
-	var change_error := get_tree().change_scene_to_file(scene_path)
+	var destination_name := ""
+	for gate in get_tree().get_nodes_in_group("dungeon_entrance"):
+		if gate is DungeonEntrance3D and gate.target_scene_path == scene_path:
+			destination_name = gate.display_name
+			break
+	var change_error := _load_dungeon(scene_path, destination_name) if not destination_name.is_empty() else get_tree().change_scene_to_file(scene_path)
 	if change_error != OK:
 		_scene_transitioning = false
 		push_error("[BaseWorld3D] Scene transition failed: %s" % error_string(change_error))
@@ -180,10 +185,20 @@ func _on_dungeon_entrance_activated(entrance: DungeonEntrance3D) -> void:
 	_scene_transitioning = true
 	LevelSelect.prepare_dungeon_entry(entrance.target_floor, entrance.entrance_id)
 	status_label.text = "进入 %s……" % entrance.display_name
-	var change_error := get_tree().change_scene_to_file(entrance.target_scene_path)
+	var change_error := _load_dungeon(entrance.target_scene_path, entrance.display_name)
 	if change_error != OK:
 		_scene_transitioning = false
 		push_error("[BaseWorld3D] Dungeon transition failed: %s" % error_string(change_error))
+
+
+func _load_dungeon(destination: String, display_name: String) -> Error:
+	IrisTransition.loading_destination_scene = destination
+	IrisTransition.loading_destination_name = display_name
+	var error := get_tree().change_scene_to_file("res://scenes/ExpeditionLoadingScreen.tscn")
+	if error != OK:
+		IrisTransition.loading_destination_scene = ""
+		IrisTransition.loading_destination_name = ""
+	return error
 
 
 func _restore_world_position() -> void:

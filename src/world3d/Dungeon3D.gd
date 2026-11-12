@@ -634,7 +634,159 @@ const DEFAULT_VISUAL_THEME_PATH := "res://assets/art/environments/dungeon_3d/env
 var _loading_scene_resources: Array[Resource] = []
 
 
+var _expedition_bootstrap_failed: bool = false
+var _expedition_loading_active: bool = false
+var _loading_viewport_modes: Dictionary = {}
+var _loading_render_gate_released := false
+var _expedition_loading_completed: bool = false
+var _expedition_loading_process_modes: Dictionary = {}
+var _expedition_loading_player_input_locked := false
+var _expedition_loading_player_combat_enabled := false
+var _expedition_loading_player_state_saved := false
+var _expedition_loading_previous_visible := true
+
+
+func _begin_expedition_loading_if_active() -> void:
+	if _expedition_loading_active or test_mode or IrisTransition == null:
+		return
+	if not _is_expedition_loading_active() or not IrisTransition.is_loading_scene(self):
+		return
+	_expedition_loading_active = true
+	set_meta("loading_bootstrap_pending", true)
+	_expedition_loading_previous_visible = visible
+	set_meta("loading_previous_visible", visible)
+	# 场景进入读取阶段时先隐藏整个目标世界，避免场景切换后在第一帧
+	# 地图未装配完成前把玩家和空场景暴露在屏幕上；黑圈/读取页负责唯一可见画面。
+	visible = false
+	set_meta("loading_previous_process_mode", process_mode)
+	set_meta("loading_scene_ready", false)
+	set_meta("loading_scene_failed", false)
+	set_meta("loading_status", "正在装配地图…")
+	IrisTransition.set("loading_scene_ready", false)
+	IrisTransition.set("loading_scene_failed", false)
+	IrisTransition.set("loading_status", "正在装配地图…")
+	if player != null and is_instance_valid(player):
+		_expedition_loading_player_input_locked = player.input_locked
+		_expedition_loading_player_combat_enabled = player.combat_enabled
+		_expedition_loading_player_state_saved = true
+		player.velocity = Vector3.ZERO
+		player.set_input_locked(true)
+		player.set_combat_enabled(false)
+	# 同时冻结玩家输入状态，完成后由读取页释放时恢复原值。
+	process_mode = Node.PROCESS_MODE_DISABLED
+	_freeze_expedition_loading_subtree(self)
+	for viewport in find_children("*", "SubViewport", true, false):
+		_loading_viewport_modes[viewport] = viewport.render_target_update_mode
+	hold_loading_render()
+	get_tree().node_added.connect(_on_loading_node_added)
+
+
+func _on_loading_node_added(node: Node) -> void:
+	if node is SubViewport and is_ancestor_of(node) and not _loading_render_gate_released:
+		_loading_viewport_modes[node] = (node as SubViewport).render_target_update_mode
+
+
+func hold_loading_render() -> void:
+	if _loading_render_gate_released:
+		return
+	for node in _loading_viewport_modes.keys():
+		if not is_instance_valid(node):
+			_loading_viewport_modes.erase(node)
+			continue
+		var viewport := node as SubViewport
+		if viewport.render_target_update_mode != SubViewport.UPDATE_DISABLED:
+			_loading_viewport_modes[node] = viewport.render_target_update_mode
+			viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+
+
+func prepare_loading_render() -> void:
+	_loading_render_gate_released = true
+	if get_tree().node_added.is_connected(_on_loading_node_added):
+		get_tree().node_added.disconnect(_on_loading_node_added)
+	for node in _loading_viewport_modes:
+		if is_instance_valid(node):
+			(node as SubViewport).render_target_update_mode = _loading_viewport_modes[node]
+	_loading_viewport_modes.clear()
+
+
+func _is_expedition_loading_active() -> bool:
+	return IrisTransition.has_method("is_loading_active") and IrisTransition.is_loading_active()
+
+
+func _lock_expedition_loading_player() -> void:
+	if player != null and is_instance_valid(player):
+		player.velocity = Vector3.ZERO
+		player.set_input_locked(true)
+		player.set_combat_enabled(false)
+
+
+func _freeze_expedition_loading_subtree(node: Node) -> void:
+	for child in node.get_children():
+		# 显式 ALWAYS/PAUSABLE 等模式会越过根节点的禁用；改成继承，释放时再还原。
+		if child.process_mode not in [Node.PROCESS_MODE_INHERIT, Node.PROCESS_MODE_DISABLED]:
+			_expedition_loading_process_modes[child] = child.process_mode
+			child.process_mode = Node.PROCESS_MODE_INHERIT
+		_freeze_expedition_loading_subtree(child)
+
+
+func _report_expedition_loading(progress: float, status: String) -> void:
+	if not _expedition_loading_active or _expedition_loading_completed or _expedition_bootstrap_failed:
+		return
+	set_meta("loading_status", status)
+	if IrisTransition.has_method("report_loading"):
+		IrisTransition.report_loading(progress, status)
+	else:
+		IrisTransition.set("loading_progress", progress)
+		IrisTransition.set("loading_status", status)
+
+
+func _complete_expedition_loading(failed: bool, status: String) -> void:
+	if not _expedition_loading_active or _expedition_loading_completed:
+		return
+	_expedition_loading_completed = true
+	set_meta("loading_scene_ready", not failed)
+	set_meta("loading_scene_failed", failed)
+	set_meta("loading_status", status)
+	IrisTransition.set("loading_scene_ready", not failed)
+	IrisTransition.set("loading_scene_failed", failed)
+	IrisTransition.set("loading_status", status)
+	if IrisTransition.has_method("complete_loading"):
+		IrisTransition.complete_loading(failed)
+	# 此处绝不恢复 process_mode；读取页开圈前释放根节点才会触发 NOTIFICATION_ENABLED。
+
+
+func release_loading_scene() -> void:
+	# 在根节点仍禁用时恢复子节点；不要在 Godot 传播 ENABLED 通知的中途
+	# 重写后代 process_mode，否则其 process owner 尚未刷新，会触发引擎断言。
+	if not _expedition_loading_active:
+		return
+	if not _expedition_loading_completed or _expedition_bootstrap_failed:
+		return
+	# 兼容读取页只恢复根节点；也兼容 IrisTransition.release_loading_scene(self)。
+	# 先撤销 loading 状态，再恢复子节点模式：恢复过程中 Godot 可能递归派发
+	# NOTIFICATION_ENABLED，必须让重入通知直接返回，避免重复恢复同一节点。
+	_expedition_loading_active = false
+	var saved_process_modes := _expedition_loading_process_modes.duplicate()
+	_expedition_loading_process_modes.clear()
+	for node in saved_process_modes:
+		if is_instance_valid(node):
+			node.process_mode = saved_process_modes[node]
+	var previous_process_mode := int(
+		get_meta("loading_previous_process_mode", Node.PROCESS_MODE_INHERIT)
+	)
+	# 根节点已经因 release_loading_scene() 切回 INHERIT 时，不要再次写同值；
+	# Godot 4.6 会把这次重复写判成 _can_process 断言错误。
+	if process_mode != previous_process_mode:
+		process_mode = previous_process_mode
+	visible = _expedition_loading_previous_visible
+	if _expedition_loading_player_state_saved and player != null and is_instance_valid(player):
+		player.set_input_locked(_expedition_loading_player_input_locked)
+		player.set_combat_enabled(_expedition_loading_player_combat_enabled)
+	_expedition_loading_player_state_saved = false
+
+
 func _ready() -> void:
+	_begin_expedition_loading_if_active()
 	if not _hud_presenter.weapon_hud_command_ready.is_connected(_apply_weapon_hud_command):
 		_hud_presenter.weapon_hud_command_ready.connect(_apply_weapon_hud_command)
 	add_to_group("room_game_mode")
@@ -766,7 +918,7 @@ func _ready() -> void:
 
 ## 子类可在规划失败时阻止出生、生成完成信号与持久化激活。
 func _can_finish_layout_bootstrap() -> bool:
-	return true
+	return not _expedition_bootstrap_failed
 
 
 func _exit_tree() -> void:
@@ -812,6 +964,23 @@ func _on_runtime_checkpoint_guard_exiting() -> void:
 
 
 func _activate_runtime_persistence() -> void:
+	_restore_and_register_runtime_persistence()
+	if _expedition_loading_active:
+		set_meta("loading_bootstrap_pending", false)
+		_finish_loading_after_persistence("地图已就绪")
+
+
+func _finish_loading_after_persistence(status: String) -> void:
+	if _expedition_loading_active:
+		hold_loading_render()
+		_freeze_expedition_loading_subtree(self)
+		_lock_expedition_loading_player()
+		_report_expedition_loading(0.96, status)
+		_complete_expedition_loading(false, status)
+	_loading_scene_resources.clear()
+
+
+func _restore_and_register_runtime_persistence() -> void:
 	if test_mode or BaseManager == null or not is_inside_tree():
 		return
 	if not _runtime_restore_snapshot.is_empty():
@@ -3120,6 +3289,8 @@ func _build_room_shell_for_loading(room: DungeonRoom3D) -> bool:
 
 
 func _on_loading_resource_failed(path: String) -> void:
+	_expedition_bootstrap_failed = true
+	_complete_expedition_loading(true, "地图装配资源不可用：%s" % path)
 	push_error("地图装配资源不可用：%s" % path)
 
 
@@ -3177,7 +3348,11 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 
 	var geometry_started := Time.get_ticks_msec()
 	var boxes := 0
+	var navigation_meshes := 0
 	for room in targets:
+		if room.prepare_authored_navigation_mesh() != null:
+			navigation_meshes += 1
+			await get_tree().process_frame
 		if room.encounter.get("spawn_mode", "") != "preplaced":
 			continue
 		for index in room.spawn_placements.size():
@@ -3190,6 +3365,7 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 			room.static_box_candidates(center, (placement["box_size"] as Vector2) * 0.5, cos(radians), sin(radians), room._spawn_clearance(), true)
 			boxes += 1
 		await get_tree().process_frame
+	report["navigation_meshes"] = navigation_meshes
 	report["static_boxes"] = boxes
 	report["static_box_ms"] = Time.get_ticks_msec() - geometry_started
 	var viewport := SubViewport.new()
@@ -4376,9 +4552,9 @@ func apply_encounter_hud_snapshot(snapshot: Dictionary) -> void:
 	var reduced := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
 	_hud_countdown_ring.set_reduce_motion(reduced)
 	var alert := ENCOUNTER_COUNTDOWN_RING_SCRIPT.project_alert(current)
-	# 新警报为上方横排小字，中心/准星区域保持空白；旧环位置不变。
+	# 数码倒计时上移至20%高度；固定槽位容纳小标题与七段数字，旧环位置不变。
 	if bool(alert.modern):
-		_anchor_control(_hud_countdown_ring, 0.5, 0.23, 0.5, 0.23, -270, -22, 270, 22)
+		_anchor_control(_hud_countdown_ring, 0.5, 0.20, 0.5, 0.20, -270, -44, 270, 44)
 	else:
 		_anchor_control(_hud_countdown_ring, 0.0, 1.0, 0.0, 1.0, 100, -148, 208, -40)
 	# 反馈由本次apply集中消费，避免旧信号回调重复蜂鸣，也不改装配或输入链。
@@ -11329,6 +11505,9 @@ func _update_corridor_streaming(current_id: String) -> void:
 			continue
 		var ids := str(edge).split("|")
 		var active := bool(_open_edges.get(edge, false)) and current_id in ids
+		if corridor.has_meta("stream_active") and bool(corridor.get_meta("stream_active")) == active:
+			continue
+		corridor.set_meta("stream_active", active)
 		corridor.visible = active
 		corridor.process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
 		_set_corridor_collisions_disabled(corridor, not active)

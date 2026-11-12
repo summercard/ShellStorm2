@@ -38,13 +38,13 @@ static func finalize_runtime_snapshot(snapshot: Dictionary) -> Dictionary:
 		str(result.get("checkpoint_id", "")), "checkpoint:%s" % str(result["run_id"])
 	)
 	result["player_position"] = _normalize_position(result.get("player_position", []))
-	result["inventory_slots"] = _array_copy(result.get("inventory_slots", []))
-	result["insurance_slots"] = _array_copy(result.get("insurance_slots", []))
-	result["equipped_weapon_items"] = _array_copy(result.get("equipped_weapon_items", []))
-	result["quick_item_slots"] = _array_copy(result.get("quick_item_slots", []))
-	result["quick_item_ids"] = _array_copy(result.get("quick_item_ids", ["", ""]))
-	result["edge_states"] = (result.get("edge_states", {}) as Dictionary).duplicate(true)
-	result["world_state"] = (result.get("world_state", {}) as Dictionary).duplicate(true)
+	result["inventory_slots"] = _snapshot_array(result.get("inventory_slots", []))
+	result["insurance_slots"] = _snapshot_array(result.get("insurance_slots", []))
+	result["equipped_weapon_items"] = _snapshot_array(result.get("equipped_weapon_items", []))
+	result["quick_item_slots"] = _snapshot_array(result.get("quick_item_slots", []))
+	result["quick_item_ids"] = _snapshot_array(result.get("quick_item_ids", ["", ""]))
+	result["edge_states"] = result.get("edge_states", {}) as Dictionary
+	result["world_state"] = result.get("world_state", {}) as Dictionary
 	# runtime_map_id：独立副本的存档隔离键。旧档缺省为空字符串，仍按旧塔楼/兼容处理。
 	result["runtime_map_id"] = str(result.get("runtime_map_id", ""))
 	return result
@@ -100,5 +100,6 @@ static func _normalize_position(value: Variant) -> Array:
 	return [float((value as Array)[0]), float((value as Array)[1]), float((value as Array)[2])]
 
 
-static func _array_copy(value: Variant) -> Array:
-	return (value as Array).duplicate(true) if value is Array else []
+static func _snapshot_array(value: Variant) -> Array:
+	# finalize_runtime_snapshot already owns a deep copy of this value.
+	return value as Array if value is Array else []

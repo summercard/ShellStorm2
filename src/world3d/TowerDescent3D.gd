@@ -436,6 +436,8 @@ var _flow_view_mask_room_id := ""
 ## 当前这圈幕墙的根节点（`_clear_flow_view_nodes()` 会置空）。
 ## 存引用是为了换房重建时不必全树 `find_child`（幕墙**恒显**，不按镜头显隐）。
 var _flow_view_wall_root: Node3D
+var _legacy_flow_masks_cleared := false
+var _flow_curtain_material: StandardMaterial3D
 ## 允许穿过「刷怪推迟」覆盖的一次性放行（见 `_spawn_room_enemies()`）。
 var _flow_spawn_passthrough: Dictionary = {}
 var _boss_descent_key_count := 0
@@ -487,17 +489,7 @@ var _initial_loop_gate_armed := false
 var _initial_loop_gate_sealed := false
 var _initial_loop_retreat_overlay: Control = null
 var _expedition_exit_overlay: Control = null
-var _expedition_bootstrap_failed: bool = false
-var _expedition_loading_active: bool = false
 var _loading_persistence_waiting := false
-var _loading_viewport_modes: Dictionary = {}
-var _loading_render_gate_released := false
-var _expedition_loading_completed: bool = false
-var _expedition_loading_process_modes: Dictionary = {}
-var _expedition_loading_player_input_locked := false
-var _expedition_loading_player_combat_enabled := false
-var _expedition_loading_player_state_saved := false
-var _expedition_loading_previous_visible := true
 
 # 远征关卡01：独立单层关卡，复用 Dungeon3D 的战斗/命运/掉落/撤离管线，
 # 但不含 100F 天台与 99F 基地，也不生成任何楼梯与电梯。
@@ -1192,100 +1184,6 @@ func _ready() -> void:
 			call_deferred("_activate_runtime_persistence")
 
 
-func _begin_expedition_loading_if_active() -> void:
-	if test_mode or IrisTransition == null:
-		return
-	if not _is_expedition_loading_active() or not IrisTransition.is_loading_scene(self):
-		return
-	_expedition_loading_active = true
-	set_meta("loading_bootstrap_pending", true)
-	_expedition_loading_previous_visible = visible
-	set_meta("loading_previous_visible", visible)
-	# 场景进入读取阶段时先隐藏整个目标世界，避免场景切换后在第一帧
-	# 地图未装配完成前把玩家和空场景暴露在屏幕上；黑圈/读取页负责唯一可见画面。
-	visible = false
-	set_meta("loading_previous_process_mode", process_mode)
-	set_meta("loading_scene_ready", false)
-	set_meta("loading_scene_failed", false)
-	set_meta("loading_status", "正在装配地图…")
-	IrisTransition.set("loading_scene_ready", false)
-	IrisTransition.set("loading_scene_failed", false)
-	IrisTransition.set("loading_status", "正在装配地图…")
-	if player != null and is_instance_valid(player):
-		_expedition_loading_player_input_locked = player.input_locked
-		_expedition_loading_player_combat_enabled = player.combat_enabled
-		_expedition_loading_player_state_saved = true
-		player.velocity = Vector3.ZERO
-		player.set_input_locked(true)
-		player.set_combat_enabled(false)
-	# 同时冻结玩家输入状态，完成后由读取页释放时恢复原值。
-	process_mode = Node.PROCESS_MODE_DISABLED
-	_freeze_expedition_loading_subtree(self)
-	for viewport in find_children("*", "SubViewport", true, false):
-		_loading_viewport_modes[viewport] = viewport.render_target_update_mode
-	hold_loading_render()
-	get_tree().node_added.connect(_on_loading_node_added)
-
-
-func _on_loading_node_added(node: Node) -> void:
-	if node is SubViewport and is_ancestor_of(node) and not _loading_render_gate_released:
-		_loading_viewport_modes[node] = (node as SubViewport).render_target_update_mode
-
-
-func hold_loading_render() -> void:
-	if _loading_render_gate_released:
-		return
-	for node in _loading_viewport_modes.keys():
-		if not is_instance_valid(node):
-			_loading_viewport_modes.erase(node)
-			continue
-		var viewport := node as SubViewport
-		if viewport.render_target_update_mode != SubViewport.UPDATE_DISABLED:
-			_loading_viewport_modes[node] = viewport.render_target_update_mode
-			viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
-
-
-func prepare_loading_render() -> void:
-	_loading_render_gate_released = true
-	if get_tree().node_added.is_connected(_on_loading_node_added):
-		get_tree().node_added.disconnect(_on_loading_node_added)
-	for node in _loading_viewport_modes:
-		if is_instance_valid(node):
-			(node as SubViewport).render_target_update_mode = _loading_viewport_modes[node]
-	_loading_viewport_modes.clear()
-
-
-func _is_expedition_loading_active() -> bool:
-	return IrisTransition.has_method("is_loading_active") and IrisTransition.is_loading_active()
-
-
-func _lock_expedition_loading_player() -> void:
-	if player != null and is_instance_valid(player):
-		player.velocity = Vector3.ZERO
-		player.set_input_locked(true)
-		player.set_combat_enabled(false)
-
-
-func _freeze_expedition_loading_subtree(node: Node) -> void:
-	for child in node.get_children():
-		# 显式 ALWAYS/PAUSABLE 等模式会越过根节点的禁用；改成继承，释放时再还原。
-		if child.process_mode not in [Node.PROCESS_MODE_INHERIT, Node.PROCESS_MODE_DISABLED]:
-			_expedition_loading_process_modes[child] = child.process_mode
-			child.process_mode = Node.PROCESS_MODE_INHERIT
-		_freeze_expedition_loading_subtree(child)
-
-
-func _report_expedition_loading(progress: float, status: String) -> void:
-	if not _expedition_loading_active or _expedition_loading_completed or _expedition_bootstrap_failed:
-		return
-	set_meta("loading_status", status)
-	if IrisTransition.has_method("report_loading"):
-		IrisTransition.report_loading(progress, status)
-	else:
-		IrisTransition.set("loading_progress", progress)
-		IrisTransition.set("loading_status", status)
-
-
 func _complete_expedition_loading(failed: bool, status: String) -> void:
 	if not _expedition_loading_active or _expedition_loading_completed:
 		return
@@ -1304,46 +1202,7 @@ func _complete_expedition_loading(failed: bool, status: String) -> void:
 			_open_all_flow_doors()
 			_refresh_flow_view_mask(true)
 		minimap.configure(_records, _open_edges)
-	_expedition_loading_completed = true
-	set_meta("loading_scene_ready", not failed)
-	set_meta("loading_scene_failed", failed)
-	set_meta("loading_status", status)
-	IrisTransition.set("loading_scene_ready", not failed)
-	IrisTransition.set("loading_scene_failed", failed)
-	IrisTransition.set("loading_status", status)
-	if IrisTransition.has_method("complete_loading"):
-		IrisTransition.complete_loading(failed)
-	# 此处绝不恢复 process_mode；读取页开圈前释放根节点才会触发 NOTIFICATION_ENABLED。
-
-
-func release_loading_scene() -> void:
-	# 在根节点仍禁用时恢复子节点；不要在 Godot 传播 ENABLED 通知的中途
-	# 重写后代 process_mode，否则其 process owner 尚未刷新，会触发引擎断言。
-	if not _expedition_loading_active:
-		return
-	if not _expedition_loading_completed or _expedition_bootstrap_failed:
-		return
-	# 兼容读取页只恢复根节点；也兼容 IrisTransition.release_loading_scene(self)。
-	# 先撤销 loading 状态，再恢复子节点模式：恢复过程中 Godot 可能递归派发
-	# NOTIFICATION_ENABLED，必须让重入通知直接返回，避免重复恢复同一节点。
-	_expedition_loading_active = false
-	var saved_process_modes := _expedition_loading_process_modes.duplicate()
-	_expedition_loading_process_modes.clear()
-	for node in saved_process_modes:
-		if is_instance_valid(node):
-			node.process_mode = saved_process_modes[node]
-	var previous_process_mode := int(
-		get_meta("loading_previous_process_mode", Node.PROCESS_MODE_INHERIT)
-	)
-	# 根节点已经因 release_loading_scene() 切回 INHERIT 时，不要再次写同值；
-	# Godot 4.6 会把这次重复写判成 _can_process 断言错误。
-	if process_mode != previous_process_mode:
-		process_mode = previous_process_mode
-	visible = _expedition_loading_previous_visible
-	if _expedition_loading_player_state_saved and player != null and is_instance_valid(player):
-		player.set_input_locked(_expedition_loading_player_input_locked)
-		player.set_combat_enabled(_expedition_loading_player_combat_enabled)
-	_expedition_loading_player_state_saved = false
+	super(failed, status)
 
 
 func _mark_expedition_bootstrap_failed(reason: String) -> void:
@@ -1393,14 +1252,8 @@ func _activate_runtime_persistence() -> void:
 		return
 	if _expedition_bootstrap_failed:
 		return
-	super()
-	if _expedition_loading_active:
-		hold_loading_render()
-		_freeze_expedition_loading_subtree(self)
-		_lock_expedition_loading_player()
-		_report_expedition_loading(0.96, "远征灯光、敌人与撤离信标初始化已完成")
-		_complete_expedition_loading(false, "远征地图已就绪" if is_expedition() else "基地场景已就绪")
-	_loading_scene_resources.clear()
+	_restore_and_register_runtime_persistence()
+	_finish_loading_after_persistence("远征地图已就绪" if is_expedition() else "基地场景已就绪")
 
 
 func _sync_player_input_lock() -> void:
@@ -7102,6 +6955,16 @@ func _refresh_flow_view_mask(force := false) -> void:
 ##    `@MeshInstance3D@NNN` —— 于是它在树里既搜不到名字、又被当成"塔楼高墙"。
 ##    所以这里先 `remove_child()`（立刻释放名字），再 free。
 func _clear_flow_view_nodes() -> void:
+	if _legacy_flow_masks_cleared:
+		if is_instance_valid(_flow_view_wall_root):
+			var parent := _flow_view_wall_root.get_parent()
+			if parent != null:
+				parent.remove_child(_flow_view_wall_root)
+			_flow_view_wall_root.queue_free()
+			_flow_view_wall_root = null
+		return
+	# Discover historical authored roots once. Subsequent masks have a single owner.
+	_legacy_flow_masks_cleared = true
 	_flow_view_wall_root = null
 	for node in find_children("FlowViewWalls*", "", true, false):
 		var parent := node.get_parent()
@@ -7315,12 +7178,15 @@ func _flow_view_point(along_x: bool, fixed: float, u: float, y: float) -> Vector
 
 
 func _flow_view_mask_material() -> StandardMaterial3D:
+	if _flow_curtain_material != null:
+		return _flow_curtain_material
 	var material := StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.albedo_color = Color(0.0, 0.0, 0.0, 1.0)
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	material.disable_receive_shadows = true
 	material.disable_fog = true
+	_flow_curtain_material = material
 	return material
 
 

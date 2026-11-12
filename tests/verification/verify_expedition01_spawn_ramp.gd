@@ -663,6 +663,8 @@ func _verify_trigger_encounters() -> void:
 		_check(bool(e.get("seal_room", false)) and bool(e.get("light_on_finish", false)) and bool(e.get("hunt_player", false)), "%s封门/开灯/猎杀开关漂移" % key)
 		_check(bool(e.get("hud_countdown", false)) and bool(compiled.get("hud_countdown", false)), "%s准备HUD开关未透传" % key)
 		var preparation := 2.0 if key in ["room_04", "room_10"] else 3.0
+		if key == "room_03":
+			preparation = 60.0  # 正式节奏：完整准备倒计时结束才允许首波派发。
 		var freeze := 1.0 if key == "room_03" else 0.0
 		_check(compiled.get("preparation_sec") == preparation and compiled.get("freeze_player_sec") == freeze, "%s准备/冻结未透传" % key)
 		_check(compiled.get("remote_spawn_policy") == "opposite_entry" and str(e.get("spawn_origin_port_id", "")).is_empty(), "%s远端必须按实际入口决定" % key)

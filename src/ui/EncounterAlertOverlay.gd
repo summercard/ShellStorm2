@@ -30,8 +30,8 @@ func bind_warning_label(label: Label) -> void:
 	_warning_label.name = "EncounterWarningLabel"
 	_warning_label.anchor_left = 0.5
 	_warning_label.anchor_right = 0.5
-	_warning_label.anchor_top = 0.18
-	_warning_label.anchor_bottom = 0.18
+	_warning_label.anchor_top = 0.12
+	_warning_label.anchor_bottom = 0.12
 	_warning_label.offset_left = -280.0
 	_warning_label.offset_right = 280.0
 	_warning_label.offset_top = -26.0
