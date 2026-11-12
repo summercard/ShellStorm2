@@ -14,16 +14,16 @@ import workspace_paths as wp
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--godot", default=os.environ.get("GODOT_BIN", "godot"))
+    parser.add_argument("--payload-only", action="store_true")
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--negative-bonus", action="store_true")
     parser.add_argument("--preplaced-only", action="store_true")
     parser.add_argument("--preplaced-unit-only", action="store_true")
     parser.add_argument("--timeout", type=int, default=180)
     args = parser.parse_args()
-    executable = Path("I:/Godot_v4.6.3-stable_win64.exe/Godot_v4.6.3-stable_win64_console.exe")
-    if not executable.is_file():
-        raise FileNotFoundError(executable)
-    mode = "parse" if args.check_only else "negative_bonus" if args.negative_bonus else "preplaced" if args.preplaced_only else "preplaced_unit" if args.preplaced_unit_only else "production"
+    executable = args.godot
+    mode = "parse" if args.check_only else "payload" if args.payload_only else "negative_bonus" if args.negative_bonus else "preplaced" if args.preplaced_only else "preplaced_unit" if args.preplaced_unit_only else "production"
     base = f"verification/shellstorm-verification.spawn_ramp/{time.time_ns()}_{mode}"
     env = os.environ.copy()
     for key, folder in (("APPDATA", "appdata"), ("LOCALAPPDATA", "localappdata")):
@@ -35,7 +35,9 @@ def main():
         command += ["--script", "res://tests/verification/verify_expedition01_spawn_ramp.gd", "--check-only"]
     else:
         command += ["res://tests/verification/verify_expedition01_spawn_ramp.tscn"]
-    if args.negative_bonus:
+    if args.payload_only:
+        command += ["--", "--payload-only"]
+    elif args.negative_bonus:
         command += ["--", "--negative-bonus"]
     elif args.preplaced_only:
         command += ["--", "--preplaced-only"]

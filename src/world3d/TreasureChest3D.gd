@@ -102,6 +102,7 @@ const APPEAR_FX_ASSET := VfxPool3D.FX01_TELEPORT_IN
 ## 1.6 只是「把箱子包住」（箱体宽 1.28 m、碰撞 1.45 m）；出现时环要超出箱子一圈，
 ## 才能先把视线拽过去。再大（≥2.6）会盖到隔壁家具的交互圆点。
 const APPEAR_FX_SIZE := 2.0
+const CLOSED_PROMPT_TEXT := "[E] 开启宝箱"
 ## 暖金色。不按品质分色：出现特效回答「这里有只箱子」，品质由箱边描边色回答，
 ## 两件事挤同一束光会让高级箱在远处也读不出档次。
 const APPEAR_FX_COLOR := Color(1.00, 0.78, 0.32)
@@ -393,7 +394,7 @@ func get_interaction_progress() -> Dictionary:
 func _prompt_text() -> String:
 	if _opened:
 		return "已开启"
-	return "[E] 开启宝箱"
+	return CLOSED_PROMPT_TEXT
 
 
 # ---------------------------------------------------------------------------
@@ -844,23 +845,19 @@ func _build_visual() -> void:
 	_collision.shape = shape
 	add_child(_collision)
 
-	_prompt = Label3D.new()
-	_prompt.name = "ChestPrompt"
+	var prompt_color := body_tint.lightened(0.55) if body_tint.a > 0.0 else trim_color.lightened(0.3)
+	var slot := _warmed_tier_slot()
+	_prompt = slot.get_node_or_null("ChestPrompt") as Label3D if slot != null else null
+	if _prompt == null:
+		_prompt = _make_hidden_prompt(_prompt_text(), prompt_color)
+		add_child(_prompt)
+	else:
+		_prompt.reparent(self, false)
+		if _prompt.text != _prompt_text():
+			_prompt.text = _prompt_text()
+		if _prompt.modulate != prompt_color:
+			_prompt.modulate = prompt_color
 	_prompt.position = Vector3(0, dimensions.y + 0.62, 0)
-	_prompt.text = _prompt_text()
-	_prompt.font_size = 32
-	_prompt.pixel_size = 0.010
-	_prompt.outline_size = 0
-	_prompt.modulate = (
-		body_tint.lightened(0.55) if body_tint.a > 0.0 else trim_color.lightened(0.3)
-	)
-	_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_prompt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_prompt.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	_prompt.no_depth_test = true
-	# 保留隐藏 Label3D 作为旧探针/动作词协议载体；画面只显示交互圆点。
-	_prompt.visible = false
-	add_child(_prompt)
 	# 先让光落下并完成展开，宝箱模型在光效结束前不显示。
 	_visual_root.visible = false
 	_collision.disabled = true
@@ -1029,7 +1026,24 @@ static func make_render_warmup_sample() -> Node3D:
 		visual.ready.connect(_set_closed_model_appearance.bind(visual, accent), CONNECT_ONE_SHOT)
 		slot.add_child(visual)
 		slot.add_child(_make_spotlight_stage(accent))
+		slot.add_child(_make_hidden_prompt(CLOSED_PROMPT_TEXT, accent.lightened(0.3)))
 	return sample
+
+
+static func _make_hidden_prompt(text: String, color: Color) -> Label3D:
+	var prompt := Label3D.new()
+	prompt.name = "ChestPrompt"
+	prompt.text = text
+	prompt.modulate = color
+	prompt.font_size = 32
+	prompt.pixel_size = 0.010
+	prompt.outline_size = 0
+	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	prompt.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	prompt.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	prompt.no_depth_test = true
+	prompt.visible = false
+	return prompt
 
 
 func _take_warmed_model() -> RewardChestVisual3D:

@@ -25,21 +25,21 @@ const LEGACY_DRIFT_EVIDENCE := {"room_08": {4: 20.0}, "boss": {0: 11.07, 3: 4.81
 const PINNED_DRIFT := {"room_08": {4: 20.0}}
 const BOSS_LOCAL_SHIFT_LIMIT_M := 5.0
 const TRIGGER_EXPECTED := {
-	"room_03": {"shape": "door_entries", "intermission": 3.0, "cap": 8, "waves": [
+	"room_03": {"shape": "door_entries", "cap": 8, "waves": [
 		{"ranged_caster": 1, "melee_chaser": 4}, {"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 4}, {"fat_zombie03": 2, "ranged_caster": 2, "melee_chaser": 4}]},
-	"room_04": {"shape": "door_entries", "intermission": 2.5, "cap": 6, "waves": [
+	"room_04": {"shape": "door_entries", "cap": 6, "waves": [
 		{"ranged_caster": 2, "melee_chaser": 4}, {"ranged_caster": 2, "melee_chaser": 4}]},
-	"room_06": {"shape": "door_entries", "intermission": 2.5, "cap": 10, "waves": [
+	"room_06": {"shape": "door_entries", "cap": 10, "waves": [
 		{"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 5},
 		{"fat_zombie03": 1, "melee_chaser_strong": 1, "ranged_caster": 2, "melee_chaser": 5},
 		{"fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster_strong": 1, "ranged_caster": 3, "melee_chaser": 6}]},
-	"room_09": {"shape": "door_entries", "intermission": 2.5, "cap": 12, "waves": [
-		{"fat_zombie03": 1, "ranged_caster": 2, "melee_chaser": 5},
-		{"fat_zombie03": 1, "melee_chaser_strong": 1, "ranged_caster": 3, "melee_chaser": 6},
-		{"fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster_strong": 1, "ranged_caster": 3, "melee_chaser": 6},
-		{"fat_zombie03": 2, "melee_chaser_strong": 2, "ranged_caster_strong": 1, "ranged_caster": 4, "melee_chaser": 7}]},
-	"room_10": {"shape": "door_entries", "intermission": 2.0, "cap": 5, "waves": [
-		{"ranged_caster": 1, "melee_chaser": 4}, {"ranged_caster": 1, "melee_chaser": 4}]},
+	"room_09": {"shape": "door_entries", "cap": 16, "waves": [
+		{"fat_zombie03": 1, "ranged_caster": 3, "melee_chaser": 8},
+		{"fat_zombie03": 2, "melee_chaser_strong": 1, "ranged_caster": 4, "melee_chaser": 9},
+		{"fat_zombie03": 2, "melee_chaser_strong": 2, "ranged_caster_strong": 1, "ranged_caster": 5, "melee_chaser": 10},
+		{"fat_zombie03": 3, "melee_chaser_strong": 3, "ranged_caster_strong": 2, "ranged_caster": 6, "melee_chaser": 10}]},
+	"room_10": {"shape": "door_entries", "cap": 10, "waves": [
+		{"ranged_caster": 2, "melee_chaser": 8}, {"ranged_caster": 2, "melee_chaser_strong": 1, "melee_chaser": 9}]},
 }
 
 class CompilerProbe extends Dungeon3D:
@@ -70,6 +70,10 @@ func _ready() -> void:
 	_check(app != local and app.get_base_dir() == local.get_base_dir(), "APPDATA/LOCALAPPDATA未独立隔离")
 	_check(app.contains("shellstorm-verification") and local.contains("shellstorm-verification"), "启动前须使用标准shellstorm-verification隔离目录")
 	if not failures.is_empty():
+		_finish()
+		return
+	_verify_spawn_payload_copy()
+	if "--payload-only" in OS.get_cmdline_user_args():
 		_finish()
 		return
 	if "--preplaced-unit-only" in OS.get_cmdline_user_args():
@@ -123,6 +127,45 @@ func _ready() -> void:
 	_verify_legacy_trigger_compatibility()
 	_verify_endpoints_and_negative_controls()
 	_finish()
+
+func _verify_spawn_payload_copy() -> void:
+	var compiler := CompilerProbe.new()
+	var candidates: Array[Vector3] = []
+	for index in 20000:
+		candidates.append(Vector3(index % 200, 0, index / 200))
+	var config := {"type": "melee_chaser", "persistent_id": "copy_fixture",
+		"monster_ai": {"nested": {"speed": 2.0}}, "equipment": [{"ammo": 7}],
+		"spawn_position": Vector3.ONE, "spawn_delay_sec": 0.5,
+		"spawn_safe_candidates": candidates, "spawn_preplaced_box": 2,
+		"spawn_box_min_spacing_m": 2.0, "spawn_min_player_distance_m": 6.0,
+		"spawn_landing_anchor": Vector3.ZERO, "spawn_launch_target": Vector3.UP,
+		"spawn_launch_speed_mps": 3.0, "spawn_launch_duration_sec": 0.2}
+	var source_before := config.duplicate(true)
+	var expected := config.duplicate(true)
+	for key in ["spawn_position", "spawn_delay_sec", "spawn_safe_candidates",
+		"spawn_preplaced_box", "spawn_box_min_spacing_m", "spawn_min_player_distance_m",
+		"spawn_landing_anchor", "spawn_launch_target", "spawn_launch_speed_mps",
+		"spawn_launch_duration_sec"]:
+		expected.erase(key)
+	var actual := compiler._enemy_runtime_spawn_data(config)
+	_check(actual == expected, "敌人数据必须与旧深拷贝后剔除结果逐值一致")
+	_check(config == source_before, "抽取敌人数据不得修改原波次/延迟配置")
+	actual["monster_ai"]["nested"]["speed"] = 99.0
+	actual["equipment"][0]["ammo"] = 0
+	_check(config == source_before, "敌人嵌套运行数据必须与源深隔离")
+	var plain := {"type": "melee_chaser", "persistent_id": "plain"}
+	_check(compiler._enemy_runtime_spawn_data(plain) == plain, "无私有字段的旧编成内容不变")
+	var old_started := Time.get_ticks_usec()
+	for _i in 100:
+		var old := config.duplicate(true)
+		old.erase("spawn_safe_candidates")
+	var old_usec := Time.get_ticks_usec() - old_started
+	var new_started := Time.get_ticks_usec()
+	for _i in 100:
+		compiler._enemy_runtime_spawn_data(config)
+	print("SPAWN_PAYLOAD_COPY_OK old_100_usec=%d new_100_usec=%d candidates=%d" % [old_usec, Time.get_ticks_usec() - new_started, candidates.size()])
+	compiler.free()
+
 
 func _verify_preplaced_validator() -> void:
 	var valid := {"spawn_mode": "preplaced", "intermission_sec": 0.0, "min_player_distance_m": 6.0, "stages": [{"boxes": [0]}]}
@@ -657,20 +700,17 @@ func _verify_trigger_encounters() -> void:
 		_check(room.spawn_placements.is_empty(), "%s触发房残留盒子" % key)
 		_verify_trigger_shape(key, room, e.get("trigger", {}), expected)
 		var compiled := tower._build_room_encounter_config(room)
-		_check(float(e.get("duration_sec", -1)) == 0.0 and compiled.get("duration_sec", -1) == 0.0, "%s无截止时长透传失败" % key)
+		_check(float(e.get("duration_sec", -1)) == 60.0 and compiled.get("duration_sec", -1) == 60.0, "%s60秒总时长透传失败" % key)
+		_check(compiled.get("deadline_behavior") == "close_dispatch_and_clear" and compiled.get("repeat_last_stage") == true, "%s截止/重复末批契约漂移" % key)
 		for field in ["completion", "stage_advance"]:
 			_check(e.get(field) == "clear" and compiled.get(field) == "clear", "%s:%s不是clear" % [key, field])
 		_check(bool(e.get("seal_room", false)) and bool(e.get("light_on_finish", false)) and bool(e.get("hunt_player", false)), "%s封门/开灯/猎杀开关漂移" % key)
 		_check(bool(e.get("hud_countdown", false)) and bool(compiled.get("hud_countdown", false)), "%s准备HUD开关未透传" % key)
-		var preparation := 2.0 if key in ["room_04", "room_10"] else 3.0
-		if key == "room_03":
-			preparation = 60.0  # 正式节奏：完整准备倒计时结束才允许首波派发。
-		var freeze := 1.0 if key == "room_03" else 0.0
-		_check(compiled.get("preparation_sec") == preparation and compiled.get("freeze_player_sec") == freeze, "%s准备/冻结未透传" % key)
+		_check(compiled.get("preparation_sec") == 0.0 and compiled.get("freeze_player_sec") == 0.0, "%s触发后应立即计时并保留玩家输入" % key)
 		_check(compiled.get("remote_spawn_policy") == "opposite_entry" and str(e.get("spawn_origin_port_id", "")).is_empty(), "%s远端必须按实际入口决定" % key)
 		for field in ["alert_style", "alert_text", "alert_beep_interval_sec", "alert_pulse"]:
 			_check(compiled.has(field) and compiled[field] == e[field], "%s:%s告警键未透传" % [key, field])
-		_check(compiled.get("max_alive") == expected["cap"] and compiled.get("intermission_sec") == expected["intermission"], "%s容量/间歇透传失败" % key)
+		_check(compiled.get("max_alive") == expected["cap"] and compiled.get("intermission_sec") == 0.0, "%s容量/间歇透传失败" % key)
 		_check(compiled.get("min_player_distance_m") == 6.0, "%s最小距离透传失败" % key)
 		var stages: Array = compiled.get("stages", [])
 		_check(stages.size() == (expected["waves"] as Array).size(), "%s编译波数漂移" % key)
@@ -679,8 +719,7 @@ func _verify_trigger_encounters() -> void:
 			for monster: Dictionary in stages[i]["monsters"]:
 				actual[monster["type"]] = int(actual.get(monster["type"], 0)) + int(monster["count"])
 			_check(actual == expected["waves"][i], "%s波%d生产编成%s!=%s" % [key, i, actual, expected["waves"][i]])
-		var start_delay := 0.0 if key == "room_03" else preparation
-		_check(float(stages[0].get("at_sec", -1)) == start_delay, "%s首波延时应为%.1f秒" % [key, start_delay])
+		_check(float(stages[0].get("at_sec", -1)) == 2.0, "%s首波延时应为2秒" % key)
 		if key == "room_03":
 			_check(stages[1]["monsters"][0].get("min_player_distance_m") == 8.0, "第二批首胖8米丢失")
 

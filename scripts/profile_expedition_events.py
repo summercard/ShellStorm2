@@ -72,7 +72,12 @@ def main():
                       "src/core/AudioManager.gd", "src/combat3d/Projectile3D.gd", "src/enemy3d/Enemy3D.gd",
                       "src/enemy3d/EnemyAvatar3D.gd", "src/enemy3d/EliteContentCatalog.gd",
                       "src/world3d/SecretBranch3D.gd", "assets/shaders/chest_spotlight_beam.gdshader",
-                      "assets/shaders/chest_spotlight_pool.gdshader", "tools/expedition_event_profile.gd"]
+                      "assets/shaders/chest_spotlight_pool.gdshader", "tools/expedition_event_profile.gd",
+                      "src/core/GraphicsSettingsManager.gd", "src/enemy3d/EliteArmsTakerEquipment.gd",
+                      "src/combat3d/WeaponModel3D.gd", "src/map/SpawnBoxCatalog.gd",
+                      "src/enemy3d/MonsterInjector.gd"]
+    plan_dir = PROJECT_ROOT / "data" / "level_plans" / args.level
+    tracked_inputs.extend(p.relative_to(PROJECT_ROOT).as_posix() for p in sorted(plan_dir.rglob("*.json")))
     def source_fingerprints():
         return {path: hashlib.sha256((PROJECT_ROOT / path).read_bytes()).hexdigest()
                 for path in tracked_inputs if (PROJECT_ROOT / path).is_file()}
@@ -114,7 +119,7 @@ def main():
     if frames_path.is_file():
         summary = summarize_run(json.loads(frames_path.read_text(encoding="utf-8")))
         summary["sources_stable"] = after == metadata["before"]
-        summary["passed"] = summary["passed"] and summary["sources_stable"]
+        summary["passed"] = summary["passed"] and summary["sources_stable"] and not code
         (folder / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
         if args.check_budget and not summary["passed"] and not code:
             code = 7

@@ -6195,6 +6195,18 @@ func _preselect_preplaced_room(room: DungeonRoom3D, configs: Array[Dictionary], 
 	return {"ok": true, "positions": points}
 
 
+## Keep the enemy-owned deep-copy boundary, but never deep-copy the discarded
+## per-box candidate arrays. The wave/pending source dictionary remains untouched.
+func _enemy_runtime_spawn_data(config: Dictionary) -> Dictionary:
+	var data := config.duplicate(false)
+	for key in ["spawn_position", "spawn_delay_sec", "spawn_safe_candidates",
+		"spawn_preplaced_box", "spawn_box_min_spacing_m", "spawn_min_player_distance_m",
+		"spawn_landing_anchor", "spawn_launch_target", "spawn_launch_speed_mps",
+		"spawn_launch_duration_sec"]:
+		data.erase(key)
+	return data.duplicate(true)
+
+
 func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false, positions: Array = [], compiled_geometry_ready := false) -> int:
 	if room == null or enemy_configs.is_empty():
 		return 0
@@ -6308,7 +6320,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		# 字段才成立；提前到入树前就走，表现层会挂上空的 surface override。
 		# 省下的那一次重建换成渲染服务器报错 + 材质残缺，不划算，已回退。
 		$ActiveEnemies.add_child(enemy)
-		var spawn_data := enemy_configs[index].duplicate(true)
+		var spawn_data := _enemy_runtime_spawn_data(enemy_configs[index])
 		# 房间级 AI 覆盖（`encounter.monster_ai`）：与关卡级同键合并，**房间级优先**。
 		# 两层都空 ⇒ 不写这个键 ⇒ `Enemy3D` 全部回退全局常量（塔楼等未配置关卡逐字不变）。
 		var room_ai: Dictionary = room.encounter.get("monster_ai", {}) as Dictionary
@@ -6318,21 +6330,10 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 			).duplicate(true)
 			merged_ai.merge(room_ai, true)
 			spawn_data["monster_ai"] = merged_ai
-		var launch_target: Variant = spawn_data.get("spawn_launch_target", null)
-		var launch_speed := float(spawn_data.get("spawn_launch_speed_mps", 0.0))
-		var launch_duration := float(spawn_data.get("spawn_launch_duration_sec", 0.0))
-		# 落点 / 延迟 / 出生抛射键是**本系统的私有通道**，不是敌人数据的一部分：
-		# 摘掉再喂给 `configure_from_enemy_data`，免得它们漏进存档或敌人快照。
-		spawn_data.erase("spawn_position")
-		spawn_data.erase("spawn_delay_sec")
-		spawn_data.erase("spawn_safe_candidates")
-		spawn_data.erase("spawn_preplaced_box")
-		spawn_data.erase("spawn_box_min_spacing_m")
-		spawn_data.erase("spawn_min_player_distance_m")
-		spawn_data.erase("spawn_landing_anchor")
-		spawn_data.erase("spawn_launch_target")
-		spawn_data.erase("spawn_launch_speed_mps")
-		spawn_data.erase("spawn_launch_duration_sec")
+		# 抛射仍从原配置读取；私有字段不进入独立敌人数据。
+		var launch_target: Variant = enemy_configs[index].get("spawn_launch_target", null)
+		var launch_speed := float(enemy_configs[index].get("spawn_launch_speed_mps", 0.0))
+		var launch_duration := float(enemy_configs[index].get("spawn_launch_duration_sec", 0.0))
 		if not spawn_data.has("spawn_index"):
 			spawn_data["spawn_index"] = index
 		if not spawn_data.has("persistent_id"):
