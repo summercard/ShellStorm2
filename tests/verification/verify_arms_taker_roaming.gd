@@ -104,7 +104,30 @@ func atomic_config(prepared: Dictionary) -> Array[Dictionary]:
 	return [config]
 
 
+func verify_strict_spawn_digest() -> void:
+	var path := "user://roaming_strict_digest_fixture.json"
+	var initial := ProfileSaveService.write_profile(path, BaseData.new()._to_dict(), 0, "strict_initial", false)
+	check(bool(initial.get("success", false)), "strict fixture 基线写入失败")
+	var original_digest := FileAccess.get_sha256(path)
+	var external := BaseData.new()._to_dict()
+	external["extraction_points"] = 2026
+	external["save_revision"] = 1
+	check(AtomicJsonStore.save_dictionary(path, ProfileSaveService.build_envelope(external, 1, "strict_same_revision_external")), "strict 同 revision 外部写入失败")
+	var external_digest := FileAccess.get_sha256(path)
+	for baseline in [1, 100]:
+		var candidate := BaseData.new()._to_dict()
+		var before := candidate.duplicate(true)
+		var rejected := ProfileSaveService.write_profile(path, candidate, baseline, "strict_reject", false, original_digest, 1, original_digest)
+		check(not bool(rejected.get("success", false)) and bool(rejected.get("stale", false)), "strict 未拒绝同 revision 外部字节变更：%d" % baseline)
+		check(FileAccess.get_sha256(path) == external_digest and candidate == before, "strict 拒绝仍修改文件或 payload")
+	var accepted := ProfileSaveService.write_profile(path, external.duplicate(true), 100, "strict_positive", false, external_digest, 1, external_digest)
+	check(bool(accepted.get("success", false)) and int(accepted.get("revision", -1)) == 101, "strict 正确 digest 配合更高 baseline/缓存未放行")
+	check(int(ProfileSaveService.read_profile(path).payload.extraction_points) == 2026, "strict 正向写丢失完整 payload")
+	print("ROAMING_STRICT_DIGEST_OK rejected=2 positive=1")
+
+
 func verify_atomic_spawn() -> void:
+	verify_strict_spawn_digest()
 	BaseManager.save_path = "user://roaming_atomic_fixture.json"
 	BaseManager.data = BaseData.new()
 	EliteRosterService.reset_roster_for_test()
@@ -142,6 +165,19 @@ func verify_atomic_spawn() -> void:
 	var configs := atomic_config(prepared)
 	check(BaseManager.get_profile_snapshot() == before and events.is_empty(), "prepare 写入预约或发布信号")
 	var journal := host._roaming_elite.export_snapshot()
+	var missing_visual := configs.duplicate(true)
+	missing_visual[0]["presentation_scene"] = ""
+	missing_visual[0]["presentation_asset_id"] = ""
+	var cached_before := host._segment_runtime_state.duplicate(true)
+	var digest_before := FileAccess.get_sha256(BaseManager.save_path)
+	var registered_before := get_tree().get_nodes_in_group(Enemy3D.GROUP_ENEMY_3D).size()
+	check(host._spawn_enemy_batch(room, missing_visual, true, false, [], false, prepared) == -1, "正式 visual 缺失仍接受出生")
+	check(active.get_child_count() == 0 and not host._enemy_nodes_by_room.has(room.room_id), "visual 缺失残留 Actor/成员")
+	check(host._roaming_elite.state == journal and events.is_empty(), "visual 缺失改变 roaming 或发布信号")
+	check(BaseManager.get_profile_snapshot() == before and FileAccess.get_sha256(BaseManager.save_path) == digest_before, "visual 缺失仍写入确认或 checkpoint")
+	check(host._segment_runtime_state == cached_before and host._alive_by_room[room.room_id] == 3 and host._room_spawn_blocked == {"other_room": true}, "visual 缺失改变世界缓存/alive/blocked")
+	check(get_tree().get_nodes_in_group(Enemy3D.GROUP_ENEMY_3D).size() == registered_before and BaseManager._pending_runtime_reason == "preexisting_dirty", "visual 缺失残留登记或改变保存脏标志")
+	print("ROAMING_MISSING_VISUAL_OK sameid=%s" % missing_visual[0].persistent_id)
 	BaseManager.force_save_failure_for_test = true
 	check(host._spawn_enemy_batch(room, configs, true, false, [], false, prepared) == -1, "写盘失败未拒绝出生")
 	BaseManager.force_save_failure_for_test = false
@@ -167,6 +203,9 @@ func verify_atomic_spawn() -> void:
 	var revision := BaseManager.data.save_revision
 	# 准备后无关域的新事实必须进入最新完整 payload。
 	BaseManager.data.extraction_points = 31415
+	var empty_holder := Node3D.new()
+	host.add_child(empty_holder)
+	host._warm_elite_holders[str(configs[0].presentation_scene)] = empty_holder
 	check(host._spawn_enemy_batch(room, configs, true, false, [], false, prepared) == 1, "成功出生提交失败")
 	check(BaseManager.data.save_revision == revision + 1, "reserve+confirm+checkpoint 未合为一次写")
 	check(events == ["reserved", "changed"] and active.get_child_count() == 1, "成功发布次数或 Actor 数错误")
@@ -174,10 +213,11 @@ func verify_atomic_spawn() -> void:
 	check(BaseManager.data.extraction_points == 31415 and host._alive_by_room[room.room_id] == 3, "成功丢最新其它域或改普通 alive")
 	var enemy := active.get_child(0) as Enemy3D
 	check(enemy.visible and not enemy.is_blocking_signals(), "成功 Actor 未开放")
+	check(empty_holder.get_child_count() == 0 and enemy.avatar.has_animated_elite() and enemy.avatar.get_animated_elite_root().scene_file_path == str(configs[0].presentation_scene), "空 warm holder 同步实例化正式 visual 被误拒绝")
 	check(int(EliteRosterService.get_record(ID).encounter_count) == 1, "首次确认 encounter_count 非 1")
 	var checkpoint := BaseManager.get_active_run_checkpoint()
 	var encoded := JSON.stringify(checkpoint)
-	for private_key in ["skipconfirm", "prepared_roaming", "expected", "disk_revision"]:
+	for private_key in ["skipconfirm", "prepared_roaming", "expected", "disk_revision", "strict_expected_digest"]:
 		check(not encoded.contains('"%s"' % private_key), "私有事务标志入 snapshot：%s" % private_key)
 	var disk := ProfileSaveService.read_profile(BaseManager.save_path)
 	check(int(disk.revision) == revision + 1 and int(disk.payload.extraction_points) == 31415, "返回前未落盘或完整 payload 丢事实")

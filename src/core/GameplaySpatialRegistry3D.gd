@@ -82,35 +82,78 @@ func query_radius(
 	var bucket_radius := maxi(1, ceili(maxf(0.0, radius) / BUCKET_SIZE_M))
 	var center := _bucket_coords(world_position)
 	var radius_squared := radius * radius
+	var width := bucket_radius * 2 + 1
+	# 小于半个打包周期时，每个桶只有一个偏移；按原 floor/x/z 顺序处理稀疏桶。
+	# 大半径保留原枚举，不能把 hash alias 或重复访问改成无界空间语义。
+	if bucket_radius < BUCKET_KEY_OFFSET and _buckets.size() <= 3 * width * width:
+		for ranked_key in _sparse_radius_bucket_keys(center, bucket_radius):
+			var key := ranked_key & 0x3FFFFFFF
+			var ids := _buckets.get(key, {}) as Dictionary
+			_query_radius_bucket(ids, world_position, radius_squared, kinds, room_ids, seen, result)
+		return result
 	for floor_offset in range(-1, 2):
 		for x_offset in range(-bucket_radius, bucket_radius + 1):
 			for z_offset in range(-bucket_radius, bucket_radius + 1):
 				var key := _coords_key(center + Vector3i(x_offset, floor_offset, z_offset))
 				var ids := _buckets.get(key, {}) as Dictionary
-				# 直接迭代字典取 key；`ids.keys()` 会为每个桶额外新建一个数组。
-				for instance_id_value in ids:
-					var instance_id := int(instance_id_value)
-					if seen.has(instance_id):
-						continue
-					seen[instance_id] = true
-					var node := _resolve(instance_id)
-					if node == null:
-						continue
-					var record := _records.get(instance_id, {}) as Dictionary
-					if not kinds.is_empty() and not kinds.has(record.get("kind", "")):
-						continue
-					if not room_ids.is_empty() and not room_ids.has(record.get("room_id", "")):
-						continue
-					_candidate_count += 1
-					if _spatial_position(node).distance_squared_to(world_position) <= radius_squared:
-						result.append(node)
+				if not ids.is_empty():
+					_query_radius_bucket(ids, world_position, radius_squared, kinds, room_ids, seen, result)
 	return result
+
+
+func _sparse_radius_bucket_keys(center: Vector3i, bucket_radius: int) -> Array[int]:
+	var ranked_keys: Array[int] = []
+	var width := bucket_radius * 2 + 1
+	for key_value in _buckets:
+		var key := int(key_value)
+		# 解码后取 wrapped signed offset，保留远坐标每 1024 桶的既有 alias。
+		var floor_offset := ((((key >> 10) & BUCKET_KEY_MASK) - center.y) & BUCKET_KEY_MASK) - BUCKET_KEY_OFFSET
+		if absi(floor_offset) > 1:
+			continue
+		var x_offset := (((key & BUCKET_KEY_MASK) - center.x) & BUCKET_KEY_MASK) - BUCKET_KEY_OFFSET
+		if absi(x_offset) > bucket_radius:
+			continue
+		var z_offset := ((((key >> 20) & BUCKET_KEY_MASK) - center.z) & BUCKET_KEY_MASK) - BUCKET_KEY_OFFSET
+		if absi(z_offset) > bucket_radius:
+			continue
+		var rank := ((floor_offset + 1) * width + x_offset + bucket_radius) * width + z_offset + bucket_radius
+		ranked_keys.append((rank << 30) | key)
+	ranked_keys.sort()
+	return ranked_keys
+
+
+func _query_radius_bucket(
+	ids: Dictionary,
+	world_position: Vector3,
+	radius_squared: float,
+	kinds: Array[String],
+	room_ids: Array[String],
+	seen: Dictionary,
+	result: Array[Node3D]
+) -> void:
+	# _resolve 会从共享桶删除失效项；快照保留原顺序，避免迭代中删除漏掉有效项。
+	for instance_id_value in ids.keys():
+		var instance_id := int(instance_id_value)
+		if seen.has(instance_id):
+			continue
+		seen[instance_id] = true
+		var node := _resolve(instance_id)
+		if node == null:
+			continue
+		var record := _records.get(instance_id, {}) as Dictionary
+		if not kinds.is_empty() and not kinds.has(record.get("kind", "")):
+			continue
+		if not room_ids.is_empty() and not room_ids.has(record.get("room_id", "")):
+			continue
+		_candidate_count += 1
+		if _spatial_position(node).distance_squared_to(world_position) <= radius_squared:
+			result.append(node)
 
 
 func query_kind(kind: String) -> Array[Node3D]:
 	_query_count += 1
 	var result: Array[Node3D] = []
-	for instance_id_value in _records.keys().duplicate():
+	for instance_id_value in _records.keys():
 		var instance_id := int(instance_id_value)
 		var record := _records.get(instance_id, {}) as Dictionary
 		if str(record.get("kind", "")) != kind:

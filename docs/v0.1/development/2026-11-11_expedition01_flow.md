@@ -91,6 +91,13 @@
 
 整关、真实拾取、溢出留物、旧局续档、提示重试语义、负向故障、视听与设备证据不能因登记完成自动判绿。涉及背包出口不能承接拆栈/留物时，由主线程报告/处理，不在本文件维护者权限内改生产实现。
 
+## 8. 五房触发冻结与远征门开启动画（2026-11-13）
+
+- 用户追加规则：五房进入触发区后先冻结玩家1秒；冻结结束发出接敌警报，玩家恢复活动，随后开始60秒battle倒计时。冻结期间不刷怪、不推进battle时钟；首批仍为battle第2秒。
+- Director新增独立冻结边界与一次性`encounter_event_alarm_started`事件；HUD新增`trigger_freeze`只读阶段，显示接敌警报/红边但不显示battle数字。Validator允许`preparation_sec=0`时使用非负独立`freeze_player_sec`；旧准备期事件仍要求冻结不超过准备期。
+- 远征01普通门点击路径加入0.18秒可读停顿，之后由既有`RoomDoor3D`升降动画开门；边状态、minimap、流送和奖励事务在停顿后提交。没有新建门模型、Prefab或AssetID；`ENV-TOWER-DOOR-LEAF-5M`既有资产备注与场景账本v0.1.86已同步，SHA/源文件不变。
+- 修改前备份：`ShellStorm2-backup/2026-11-13_room_trigger_door_animation/before_edits/`。门动画fixture `ROOM_DOOR_ANIMATION_INTEGRATION_OK` 已通过；冻结/警报专项当前仍有旧间歇夹具与最小Dungeon harness报错，整体Godot exit1，未冒充全绿。资产结构门禁 `ASSET_REGISTRY_CHECK_OK scope=structure assets=1019` 通过；场景账本full仅报2条既有sha_mismatch（ENV-BASE99-REMAINING-FACILITIES-V021、ENV-OPENWORLD-UNDERGROUND-STREET），未改动其资产或哈希。拆分全量门禁仍109条既有公式/基线债务，未由本轮批量修复。文档门禁仍11条既有断链，解耦0违规，运行投影52文件一致。
+
 ## 7. 五间封门房统一限时循环（2026-11-12，16:07纠正与18:13扩围）
 
 用户确认最终规则：room03/04/06/09/10全部触发即封门、启动60秒总窗口，第2秒首批，清批后0秒间歇推进，模板耗尽后重复末批；到点先停发并作废全部尚未出现的pending/预约/延迟，保留场上残怪，残怪清零才结算本房宝箱及解除封锁。不是空等60秒后刷怪，也不是固定三/四批。门解除封锁不自动推开门板。旧日志里的“60秒准备期”系本会话误解，已被用户最新要求纠正，不能作为当前设计。

@@ -1444,7 +1444,7 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String, ro
 			errors.append("encounter_%s_invalid:%s" % [time_key, key])
 	var preparation_value: Variant = encounter.get("preparation_sec", 0.0)
 	var freeze_value: Variant = encounter.get("freeze_player_sec", 0.0)
-	if _finite_number(freeze_value) and _finite_number(preparation_value) and float(freeze_value) > float(preparation_value):
+	if _finite_number(freeze_value) and _finite_number(preparation_value) and float(preparation_value) > 0.0 and float(freeze_value) > float(preparation_value):
 		errors.append("encounter_freeze_exceeds_preparation:%s" % key)
 	if str(encounter.get("progress_mode", "tick")) == "external" and _finite_number(preparation_value) and float(preparation_value) > 0.0:
 		errors.append("encounter_external_preparation_not_supported:%s" % key)
@@ -1483,7 +1483,7 @@ static func _validate_triggered_encounter(encounter: Dictionary, key: String, ro
 		duration <= 0.0 or completion not in ["clear", "timer_and_clear"]
 		or progress_mode != "tick" or advance != "clear"
 		or not _finite_number(preparation_value) or float(preparation_value) != 0.0
-		or not _finite_number(freeze_value) or float(freeze_value) != 0.0
+		or not _finite_number(freeze_value) or float(freeze_value) < 0.0
 	):
 		errors.append("encounter_close_dispatch_combination_invalid:%s" % key)
 	if repeat_last_stage and (

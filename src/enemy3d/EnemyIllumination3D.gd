@@ -13,6 +13,59 @@ const LOCAL_LIGHT_GROUP := &"gameplay_local_light_3d"
 const RECEIVER_GROUP := &"enemy_3d"
 const WORLD_RENDER_LAYER := 1
 
+# 广播发现与装配事务都只覆盖同步调用栈，不跨帧保存。
+static var _broadcast_tree: SceneTree
+static var _broadcast_discovery_valid := false
+static var _state_signal_depth := 0
+static var _assembly_batches: Array[Dictionary] = []
+
+
+static func begin_assembly_batch(tree: SceneTree) -> void:
+	_assembly_batches.append({"tree": tree, "dirty": false})
+
+
+static func end_assembly_batch(tree: SceneTree) -> void:
+	assert(not _assembly_batches.is_empty())
+	assert(_assembly_batches.back()["tree"] == tree)
+	var batch: Dictionary = _assembly_batches.pop_back()
+	if not batch["dirty"]:
+		return
+	if not _assembly_batches.is_empty() and _assembly_batches.back()["tree"] == tree:
+		_assembly_batches.back()["dirty"] = true
+	else:
+		# 先关闭作用域，提交信号中的开关必须当场采样。
+		refresh_light_receivers(tree)
+
+
+static func notify_light_changed(tree: SceneTree) -> void:
+	if _state_signal_depth == 0 and not _assembly_batches.is_empty() and _assembly_batches.back()["tree"] == tree:
+		_assembly_batches.back()["dirty"] = true
+		return
+	refresh_light_receivers(tree)
+
+
+static func refresh_light_receivers(tree: SceneTree) -> void:
+	var previous_tree := _broadcast_tree
+	_broadcast_tree = tree
+	_broadcast_discovery_valid = false
+	# 保留原 group 调用顺序和 Enemy3D 的 AI 失效入口。
+	tree.call_group(RECEIVER_GROUP, "force_refresh_illumination", true)
+	_broadcast_tree = previous_tree
+	# 嵌套广播可能改变灯集合或空间桶，外层下一只敌人必须重新发现。
+	_broadcast_discovery_valid = false
+
+
+static func _discover_group_lights(tree: SceneTree) -> void:
+	if GameplaySpatialRegistry3D == null:
+		return
+	for node in tree.get_nodes_in_group(SUN_GROUP):
+		if node is DirectionalLight3D:
+			GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_SUN)
+	for node in tree.get_nodes_in_group(LOCAL_LIGHT_GROUP):
+		if node is Light3D and not node is DirectionalLight3D:
+			GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT)
+
+
 var sample_interval := 0.12
 var sunlight_ray_length := 1000.0
 var minimum_light_contribution := 0.035
@@ -59,7 +112,12 @@ func tick(delta: float) -> void:
 func force_refresh(commit_immediately := true) -> void:
 	if not is_instance_valid(_enemy) or not _enemy.is_inside_tree():
 		return
-	_refresh_light_cache(true)
+	var tree := _enemy.get_tree()
+	var in_broadcast := tree == _broadcast_tree and _state_signal_depth == 0
+	if in_broadcast and not _broadcast_discovery_valid:
+		_discover_group_lights(tree)
+		_broadcast_discovery_valid = true
+	_refresh_light_cache(not in_broadcast, in_broadcast and _broadcast_discovery_valid)
 	_sample_and_submit(commit_immediately)
 
 
@@ -333,21 +391,20 @@ func _commit_state(next_state: String) -> void:
 		return
 	var previous := illumination_state
 	illumination_state = next_state
+	# 同步订阅者可新增/移动灯或再次开关；下一次刷新不可复用回调前的发现。
+	_broadcast_discovery_valid = false
+	_state_signal_depth += 1
 	illumination_state_changed.emit(previous, next_state, get_snapshot())
+	_state_signal_depth -= 1
+	_broadcast_discovery_valid = false
 
 
-func _refresh_light_cache(discover_group_lights := false) -> void:
+func _refresh_light_cache(discover_group_lights := false, group_discovery_already_done := false) -> void:
 	_sun_lights.clear()
 	_local_lights.clear()
-	# 事件驱动的强制刷新兼容测试节点和第三方关卡：把新加入旧 group 的灯
-	# 一次迁入空间注册表。周期 tick 只查注册表，不再按怪物全场扫描。
-	if discover_group_lights and GameplaySpatialRegistry3D != null:
-		for node in _enemy.get_tree().get_nodes_in_group(SUN_GROUP):
-			if node is DirectionalLight3D:
-				GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_SUN)
-		for node in _enemy.get_tree().get_nodes_in_group(LOCAL_LIGHT_GROUP):
-			if node is Light3D and not node is DirectionalLight3D:
-				GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT)
+	# 单敌公开强刷仍重新发现；广播内只复用当前同步调用栈的发现结果。
+	if discover_group_lights:
+		_discover_group_lights(_enemy.get_tree())
 	var sun_candidates: Array = (
 		GameplaySpatialRegistry3D.query_kind(GameplaySpatialRegistry3D.KIND_SUN)
 		if GameplaySpatialRegistry3D != null
@@ -365,13 +422,13 @@ func _refresh_light_cache(discover_group_lights := false) -> void:
 	# 无注册表的降级路径仍支持单文件场景。
 	if sun_candidates.is_empty():
 		sun_candidates = _enemy.get_tree().get_nodes_in_group(SUN_GROUP)
-		if GameplaySpatialRegistry3D != null:
+		if GameplaySpatialRegistry3D != null and not group_discovery_already_done:
 			for node in sun_candidates:
 				if node is DirectionalLight3D:
 					GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_SUN)
 	if local_candidates.is_empty():
 		local_candidates = _enemy.get_tree().get_nodes_in_group(LOCAL_LIGHT_GROUP)
-		if GameplaySpatialRegistry3D != null:
+		if GameplaySpatialRegistry3D != null and not group_discovery_already_done:
 			for node in local_candidates:
 				if node is Light3D and not node is DirectionalLight3D:
 					GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT)

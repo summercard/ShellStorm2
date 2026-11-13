@@ -55,7 +55,7 @@ func consume_snapshot(snapshot: Dictionary) -> void:
 	_alert = PROJECTION.project_alert(snapshot)
 	preparation_remaining_sec = float(_alert.remaining)
 	preparation_total_sec = float(_alert.total)
-	alert_active = bool(_alert.active) and bool(_alert.countdown) and _alert.style == "red_eva"
+	alert_active = bool(_alert.active) and _alert.style == "red_eva" and (bool(_alert.countdown) or _alert.phase == "trigger_freeze")
 	alert_port_id = str(_alert.port_id) if alert_active else ""
 	_refresh_visual()
 

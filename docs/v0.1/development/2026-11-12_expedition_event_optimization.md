@@ -127,6 +127,56 @@ Windows，Godot 4.7.2、Vulkan Forward+、RTX 4060 Ti，1280×720。正式读取
 - 宝箱0.84秒展开、隐藏提示/中断/恢复与双路命中特效（31 samples）重跑各exit0、引擎错误0，结果在 `batch_20261112/shellstorm-verification-9e2msgrl/results.json`。同一批Boss用例因通用Runner目录名不满足其严格隔离断言而拒绝（exit1），不算产品失败；改用 `.boss/appdata`、`.boss/localappdata` 的合规独立目录复跑exit0、引擎错误0，真实3只3米空投、落地、cap6、失败释放与死亡停止均通过，见 `sessions/2026-11-12_expedition_resume/shellstorm-verification.boss/result.json`。
 - 最终门禁保存到 `sessions/2026-11-12_expedition_resume/final_checks.json`：文档exit1、仍为改前同组11条既有断链（新增0）；关卡解耦exit0、0违规；运行资产命名exit0但存量欠账未清；`git diff --check` exit0。结束时测试Godot残留0，仅保留接手前的用户Godot进程。未执行全量core/full、移动端、全部种子、人工通关、长期浸泡与完整存档中断矩阵。保留旧UID与退出期ObjectDB警告，整体partial不提升。
 
+### 11月13日续作：冷构件、受光与重复入房
+
+状态：部分完成，未放行。沿用0.1.0及原性能门槛，不降低画质、光源数、阴影、怪物数或安全距离，不改变吼叫/出生时机，不触碰正式档。工作基线含同日自动提交 `895f7419`；相对HEAD的差异不是全部由本次追加产生。备份和一次性探针均在工程外，不覆盖旧证据。
+
+#### 已实施及收益边界
+
+| 实施 | 验证事实 | 边界 |
+|---|---|---|
+| 存档按固定快照层级冻结、规范化及序列化复用，Mutex仅保护不可变快照引用；支持真实运行时Vector/Packed值 | 旧读取器、输入变更、校验、线程、碰撞键及拒写专项；正式商店回归通过 | 不改变checksum/schema、原子替换和写后摘要；跨进程检查至rename仍无全局锁，不能宣称关闭所有TOCTOU |
+| roaming专用准备、正式Actor暂存、档案与世界检查点一次确认后发布；失败撤销本次Actor | 最终专项59 checks、0 failures；同revision摘要冲突2次拒绝及1次放行；缺正式表现不确认 | 普通reserve/confirm路径保留，重要提交仍同步；不是异步放过交易 |
+| 同步装配事务合并中间灯态，广播内发现一次；空间桶边删边遍历改keys快照 | 非batch229次逐状态比较；真实dirty边界82次最终快照oracle；独立stale172项 | 装配中间信号历史明确变化，不能称全部旧信号全等；手动开关和重入仍即时，见两份独立照明记录 |
+| 稀疏半径查询按旧floor/x/z rank访问现存桶；大半径/密集fallback | 320 cases、5119检查，真实03两轮各4024检查严格同序同末态；72m热查询下降35.2%–38.3% | 保留10bit远坐标alias、旧候选与计数，不将局部查询收益换算整关帧收益 |
+| 碰撞来源索引只缓存节点及顺序，成员增删实时失效，无关UI/VFX变更只复核顺序 | 来源、同帧重排/重挂与几何专项；几何属性仍每次读取 | 不是永久静态阻挡缓存；不能漏共享墙或动态shape |
+| 怪物正常生成与恢复复用stage-configure，避免入树默认表现后立即重建；encounter_id不再只为run_id构造整份快照 | 六类恢复12组、run_id40组；同固定states03回访ABBA均值34.684→32.727ms | 保留外部默认Enemy3D及重新configure行为；小样本不称统计显著 |
+| 原吼叫Sprite在读取页alpha1/0.5各实绘3帧，隐藏保活；正式逐怪实例不共享 | 01/03禁建、加载实绘与恢复控制组闭合+2管线原因；原吼叫229 samples通过 | 不修改图标、动画或吼叫时机；headless报告未实绘 |
+| 原玩家几何挂同一青色轮廓材质，在加载相机实绘3帧后逐项恢复 | 03 n08控制组surface244→252、draw59.352ms；两次生产实现252→252，draw19.933/19.360ms；同RID及全部状态恢复通过 | 原遮挡射线及正式轮廓开关不变；无能力关卡not_applicable，不能把短路线当全关放行 |
+
+性能Runner新增上述实际Owner源码指纹，并要求 `roar_icon.completed/retained` 及适用时 `occlusion_overlay.completed/restored/same_material`，否则不算完整预热。未放宽max50ms/P99 33.3ms。较早headless首门 `_cached_scene` 21ms源于绕过正式加载的样本；最新正式renderer中该方法6次仅0.013ms，未据此前样本盲加normal预热。
+
+#### 最近一次完整三关实机批次（最后两项修改之前）
+
+Godot4.7.2、Forward+、RTX4060Ti、High、1280×720、seed41021，01/02各4新房，03为12新房加折返。独立隔离进程串行运行，三关源码指纹稳定、引擎错误0、完整预热、真实池化弹扣血及首箱均通过。该批次包含吼叫/轮廓预热、稀疏查询和恢复stage，**不包含随后追加的入房去重及CPU faces缓存**。
+
+| 关卡 / RunID | 初入房最慢帧ms | 重点窗口 | >50ms帧 | 预算exit |
+|---|---:|---|---:|---:|
+| 01 `expedition_01_qa9329sz` | 49.581 | 首门186.196ms（sync152.103）；二门46.438ms，仍超P99；首箱38.629ms | 1 | 7 |
+| 02 `expedition_02_7_o6v4qo` | 14.852 | 首门18.087ms；回访13.247ms；首箱3.921ms | 0 | 0 |
+| 03 `expedition_03_7qqdnr98` | 106.546 | n08 37.625ms、n02 35.129ms；n05 106.546ms（sync13.607）；回访cr05 100.417ms；首箱28.212ms | 9 | 7 |
+
+01接手时同种子初入房峰值127.704ms，此批初入房均低于50ms，但首门仍有明显波动和长尾，不称01通过。03接手时n05 280.647ms，此批降至106.546ms，但仍有9帧超50ms，多处P99违规，不能用单窗口改善签署整关。03对应的9帧还含受控命中窗口一次52.603ms。02只签署本种子受测路线通过，非所有种子或设备。
+
+完整退出码批次在 `sessions/2026-11-13_expedition_final/batch_results.json`，单轮逐帧、P95/P99、源码指纹及日志在 `probes/expedition_events/<RunID>/`。不能用包装命令的末个exit0替代逐关7/7/0。
+
+#### 最后追加的两项修改：尚缺最终合并实机复测
+
+1. **入房通知同帧幂等。** 真实Area延迟通知与force-enter在同frame同room对象汇合，改前对外事件2次、完整checkpoint采集2次，非Tower调用super的计数叠加。现在仅去重连续同process-frame同room对象通知；A→B→A、同ID新对象和下一帧显式修复保留。Tower先保留锁楼梯与严格物理进入检查，再拒绝重复，避免基类早退但子类仍继续副作用。受测入口各12项、清房掉落31项、自动保存及延迟落门专项通过。**该agent使用4.6.3无头而非本轮目标4.7.2，必须在4.7.2合并复验；完整塔楼位置回归exit124未完成。** 当前initial-loop封门常量为false，未验收重新启用后的实际封门和保存闭环。不得把guard推广为同房永久早退。证据在 `probes/room_entry_idempotency/`。
+2. **Concave局部faces/bounds纯CPU缓存。** 首门窄计时1385来源中1226 Box、49 Concave，49个均在XZ广相退出，三角展开0；旧Concave冷debug bounds路径6.988ms。改为原faces逐点展开局部AABB，不向渲染器取debug mesh；WeakRef核验身份、changed同步失效、死亡资源清理，实时变换/层/disabled/来源仍每scan读取。旧新逐序逐分量exact共116组通过。真实01 headless ABBA collect均值10.185→8.799ms、完整首门40.426→39.064ms；合成热扫描单近shape回退1.58%、33shape回退12.62%，并非全面加速。额外GPU对照旧A3异常首门1513.736ms、新B3在loading超时124，**GPU收益未验证**。证据在 `probes/spawn_collect_20261113_095609/`。
+
+最新正式renderer窄trace另证明：01首门blockers为主要CPU候选，normal资源已命中；03 n05同帧集中roaming生成、几何准备、旧writer屏障和一次原子提交，回访有重复入口/快照与后续导航。窄trace自身含额外开销，不能代替无插桩预算。`spawn_point_for_index()`中reach内部collect及紧随其后的collect确有同同步栈重复，另一次导航collect已在下一处理/物理帧；本次未实施跨帧或同帧代号几何缓存，公开边界动态变更仍fresh。该诊断不能冒充消除了扫描。
+
+#### 回归、失败与本次停止点
+
+- 六项串行headless回归全部exit0、unexpected ERROR0：商店存档、敌人三态受光、启动吼叫229 samples、双路命中31 samples、首箱0.84秒表现、roaming原子事务59 checks。商店主动旧revision拒写1条expected ERROR；原子摘要测试2次拒写没有打印ERROR，不混淆错误数。285条旧UID WARNING保留。结果在 `sessions/2026-11-13_expedition_final/regression/regression_results.json`。此回归早于上述最后两项，不伪称覆盖最新全部源。
+- 01种子77001199 room07/08的容量拒绝进一步证实：玩家6m安全圈过滤后最多3只，要求4只确无解。撤回无收益的DFS扩展；不减怪、不降低距离、不改盒域。设计/内容阻断仍保留。
+- 各专项中解析、夹具数组类型、超时或有ERROR的中间尝试均保留日志、排除通过统计；局部源验证与GPU验证分列。旧UID与退出残留警告未清，全工程core/full、多设备、人工整关和长时浸泡未执行。
+- 最后一次计划对最新去重/faces合并源重跑01/03/02时，预检执行被用户拒绝。遵守拒绝，不重试或换工具绕过；该最终批次**0/3轮，未产生RunID、预算exit或final_after_dedupe.json**。不能用此前三关数值补作最终验收。需重新明确授权后，先跑4.7.2入口/塔楼回归，再跑三关无插桩门禁。
+- 最新全工程文档/解耦/命名门禁尚未在合并源重跑；此前文档11断链仍非全绿。未主动提交或推送，正式档未作为测试输入；原有用户Godot不终止。
+
+主要追加证据目录：`sessions/2026-11-13_render_cold_source/`、`sessions/2026-11-13_roar_production_n08/`、`sessions/2026-11-13_occlusion_production/`、`sessions/20261113_083923_registry_sparse/`、`sessions/2026-11-13_restore_stage_083844_036164/`、`sessions/2026-11-13_render_cpu_093207_599564/`。完整原始结果都在 `ShellStorm2-work/`；本节是事实汇总，不提升模块partial状态。
+
 ### 复现命令
 
 ```powershell

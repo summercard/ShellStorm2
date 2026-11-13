@@ -661,8 +661,8 @@ var authored_room_light_switch := true
 var _authored_tile_cells: Array[Vector3] = []
 var _spawn_tile_buckets: Dictionary = {}
 var _box_floor_samples: Dictionary = {}
-## Shape-local bounds only; transforms/disabled/layers are reread on every scan.
-## Resource changes invalidate the broad phase, including same-frame face edits.
+## 仅缓存资源局部faces/bounds；弱身份引用防止卸载保活和instance id复用。
+## changed同步失效，每次扫描仍实时读取所有碰撞状态与变换。
 var _spawn_concave_bounds: Dictionary = {}
 ## 静态布局里**手摆的**易碎陈设（场景工坊刷进来的 `BreakableClutter3D`）。
 ##
@@ -731,6 +731,9 @@ var fixed_lobby_clutter_enabled := true
 ## 非空 = 本房按 `room_seed` 确定性撒点：同一房间流送卸载重建后位置逐格不变。
 ## 数据来源：关卡 plan 顶层 `interactive_clutter` 段 → 房间记录 → 本字段。
 var interactive_clutter_plan: Dictionary = {}
+# 只保留本房最近一组纯候选；键内数组为快照，不能随实时输入一起变化。
+var _interactive_clutter_candidate_key: Array = []
+var _interactive_clutter_candidate_cache: Array[Vector3] = []
 
 
 func configure(config: Dictionary) -> void:
@@ -1178,6 +1181,7 @@ func get_stream_state_name() -> String:
 func ensure_detail_built(sync_light_state := true) -> void:
 	if _detail_built:
 		return
+	EnemyIllumination3D.begin_assembly_batch(get_tree())
 	_detail_built = true
 	_detail_root = Node3D.new()
 	_detail_root.name = "RuntimeDetail"
@@ -1191,6 +1195,7 @@ func ensure_detail_built(sync_light_state := true) -> void:
 		_sync_supplemental_room_lights()
 	if bool(get_meta("authored_collision_navigation", false)):
 		_request_furnishing_navigation_refresh()
+	EnemyIllumination3D.end_assembly_batch(get_tree())
 
 
 func ensure_shell_built() -> void:
@@ -6892,19 +6897,64 @@ func _interactive_clutter_candidates(
 	# 美术里手摆的易碎件占着位置：候选点就要排掉，否则同一处会叠出第二件
 	# （视觉上像"罐子穿模"，账上则是两条 id 抢同一个落点）。
 	var authored_points := _authored_clutter_planar_points()
+	var key: Array = [
+		dimensions, margin, clearance, spacing,
+		blocked_centers, authored_points, _authored_tile_cells,
+	]
+	if key == _interactive_clutter_candidate_key:
+		return _interactive_clutter_candidate_cache.duplicate()
 	var x := -usable_x
 	while x <= usable_x + 0.001:
+		# 同列所有点的 x 相同；保留原比较式，只复用地砖的 x 轴筛选。
+		var column_cells: Array[Vector3] = []
+		var column_x := Vector3(x, 0.0, 0.0).x
+		var column_blocked := _interactive_clutter_column_centers(blocked_centers, column_x, clearance)
+		var column_authored := _interactive_clutter_column_centers(authored_points, column_x, spacing)
+		for cell in _authored_tile_cells:
+			if absf(column_x - cell.x) <= AUTHORED_TILE_HALF_M + AUTHORED_TILE_HIT_TOLERANCE_M:
+				column_cells.append(cell)
 		var z := -usable_z
 		while z <= usable_z + 0.001:
 			var point := Vector3(x, 0.0, z)
 			if (
-				_interactive_clutter_point_is_free(point, blocked_centers, clearance)
-				and not _interactive_clutter_near_point(point, authored_points, spacing)
+				_interactive_clutter_column_point_is_free(point, column_blocked, clearance, column_cells)
+				and not _interactive_clutter_near_point(point, column_authored, spacing)
 			):
 				result.append(point)
 			z += step
 		x += step
+	_interactive_clutter_candidate_key = key.duplicate(true)
+	_interactive_clutter_candidate_cache = result
+	# 调用方会原地 Fisher–Yates 洗牌，首次与命中时都不能暴露缓存数组。
+	return result.duplicate()
+
+
+# x 轴距离已超阈值的中心不可能命中本列；最终仍用原 Vector2.length 比较。
+func _interactive_clutter_column_centers(
+	centers: Array[Vector3], column_x: float, distance: float
+) -> Array[Vector3]:
+	var result: Array[Vector3] = []
+	for center in centers:
+		if Vector2(column_x - center.x, 0.0).length() <= distance:
+			result.append(center)
 	return result
+
+
+func _interactive_clutter_column_point_is_free(
+	point: Vector3, blocked: Array[Vector3], clearance: float, column_cells: Array[Vector3]
+) -> bool:
+	if not _authored_tile_cells.is_empty():
+		var inside := false
+		for cell in column_cells:
+			if absf(point.z - cell.z) <= AUTHORED_TILE_HALF_M + AUTHORED_TILE_HIT_TOLERANCE_M:
+				inside = true
+				break
+		if not inside:
+			return false
+	for center in blocked:
+		if Vector2(point.x - center.x, point.z - center.z).length() < clearance:
+			return false
+	return true
 
 
 ## 候选点是否贴着某个已有落点（手摆件）。
@@ -7834,6 +7884,10 @@ func _tile_footprint_covered(footprint: Rect2) -> bool:
 ## 同帧 ensure_detail_built 后物理空间可能尚未同步，直接读取实体碰撞形状的变换。
 ## 保守 AABB 也支持家具旋转；不把 Area3D 交互盒、camera-only 或地板当作障碍。
 func _collect_spawn_blockers() -> void:
+	# 每次都读取成员、启用状态、层、归属和精确相对变换；仅缓存资源局部数据。
+	for id in _spawn_concave_bounds.keys():
+		if _spawn_concave_bounds[id].resource.get_ref() == null:
+			_spawn_concave_bounds.erase(id)
 	_spawn_blockers.clear()
 	_spawn_support_triangles.clear()
 	# 共墙和 L 角可能由邻房拥有；按空间相交收集，而不是仅查本房子树。
@@ -7866,7 +7920,7 @@ func _collect_spawn_blockers() -> void:
 				var guard := 0.01 + (whole.position.abs().length() + whole.size.length() + relative.origin.abs().length()) * 0.00001
 				if not room_bounds.grow(guard).intersects(whole_xz.grow(guard), true):
 					continue
-			var faces := (collision.shape as ConcavePolygonShape3D).get_faces()
+			var faces: PackedVector3Array = _spawn_concave_local_data(collision.shape).faces
 			for index in range(0, faces.size(), 3):
 				var triangle := PackedVector3Array([relative * faces[index], relative * faces[index + 1], relative * faces[index + 2]])
 				var normal := (triangle[1] - triangle[0]).cross(triangle[2] - triangle[0]).normalized()
@@ -7890,13 +7944,27 @@ func _collect_spawn_blockers() -> void:
 
 
 func _spawn_concave_local_bounds(shape: Shape3D) -> AABB:
+	return _spawn_concave_local_data(shape).bounds
+
+
+func _spawn_concave_local_data(shape: Shape3D) -> Dictionary:
 	var id := shape.get_instance_id()
-	if not _spawn_concave_bounds.has(id):
-		_spawn_concave_bounds[id] = shape.get_debug_mesh().get_aabb()
-		var invalidate := _invalidate_spawn_concave_bounds.bind(id)
-		if not shape.changed.is_connected(invalidate):
-			shape.changed.connect(invalidate)
-	return _spawn_concave_bounds[id]
+	var cached: Dictionary = _spawn_concave_bounds.get(id, {})
+	# WeakRef核对身份，既不保活已卸载资源，也不接受复用的instance id。
+	if not cached.is_empty() and cached.resource.get_ref() == shape:
+		return cached
+	var faces := (shape as ConcavePolygonShape3D).get_faces()
+	var bounds := AABB()
+	if not faces.is_empty():
+		bounds = AABB(faces[0], Vector3.ZERO)
+		for index in range(1, faces.size()):
+			bounds = bounds.expand(faces[index])
+	cached = {"resource": weakref(shape), "bounds": bounds, "faces": faces}
+	_spawn_concave_bounds[id] = cached
+	var invalidate := _invalidate_spawn_concave_bounds.bind(id)
+	if not shape.changed.is_connected(invalidate):
+		shape.changed.connect(invalidate)
+	return cached
 
 
 func _invalidate_spawn_concave_bounds(id: int) -> void:

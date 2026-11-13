@@ -25,6 +25,16 @@ var _failures := 0
 var _tower: TowerDescent3D
 
 
+class EntrySnapshotProbe extends Node:
+	var tower: TowerDescent3D
+	var captures: Array[Dictionary] = []
+
+	func build_runtime_save_snapshot() -> Dictionary:
+		var snapshot := tower.build_runtime_save_snapshot()
+		captures.append({"room": snapshot.get("current_room_id"), "frame": Engine.get_process_frames()})
+		return snapshot
+
+
 func _ready() -> void:
 	RuntimePerformanceManager.set_verification_frame_budget_override(60)
 	await _run()
@@ -41,6 +51,12 @@ func _run() -> void:
 	add_child(_tower)
 	await _settle(20)
 	_tower.set_process(false)
+	if "--entry-only" in OS.get_cmdline_user_args():
+		await _verify_entry_idempotency()
+		_tower.call("_unregister_runtime_persistence", false)
+		_tower.queue_free()
+		await _settle(2)
+		return
 
 	var service: RefCounted = _tower.get("_clear_drop_service") as RefCounted
 	if service == null or not bool(service.call("is_configured")):
@@ -121,6 +137,148 @@ func _run() -> void:
 		"宝箱房数量应为 %d，实际 %d：%s"
 		% [EXPECTED_REWARD_ROOMS, declared_rooms.size(), str(declared_rooms)]
 	)
+
+
+func _verify_entry_idempotency() -> void:
+	# 外层必须先隔离 Autoload；这里的 false 样本真实调用过房快照入口。
+	if OS.get_environment("SHELLSTORM_ENTRY_ISOLATED") != "1" or not "room_entry_idempotency" in OS.get_environment("APPDATA"):
+		_fail("正式过房样本未在启动前隔离")
+		return
+	_tower.set_physics_process(false)
+	_tower.player.set_physics_process(false)
+	var rooms := _tower.get("_room_by_id") as Dictionary
+	var target: DungeonRoom3D
+	for value in rooms.values():
+		var candidate := value as DungeonRoom3D
+		if candidate.room_id != "start" and candidate.authored_layout_peaceful and candidate.chest_placements.is_empty():
+			target = candidate
+			break
+	if not _check(target != null, "有可用于真实 Area 回调的和平房"):
+		return
+	target.set_stream_state(DungeonRoom3D.STREAM_ACTIVE)
+	await _settle(2)
+	var events: Array[Dictionary] = []
+	_tower.room_entered.connect(func(room): events.append({"room": room.room_id, "node": room.get_instance_id(), "frame": Engine.get_process_frames()}))
+	var probe := EntrySnapshotProbe.new()
+	probe.tower = _tower
+	add_child(probe)
+	BaseManager.register_runtime_checkpoint_provider(probe)
+	_tower.test_mode = false
+	_tower.set("_runtime_persistence_active", true)
+	var bodies: Array[int] = []
+	var notices: Array[int] = []
+	target.player_entered.connect(func(_room): notices.append(Engine.get_process_frames()))
+	var area := target.get_node("RoomTrigger") as Area3D
+	var area_callback := func(body):
+		if body == _tower.player:
+			bodies.append(Engine.get_process_frames())
+			if "--entry-natural" in OS.get_cmdline_user_args():
+				_tower.call("_refresh_physical_location_authority")
+			else:
+				_tower.force_enter_room_for_test(target.room_id)
+	area.body_entered.connect(area_callback)
+	_tower.player.global_position = target.global_position + Vector3(0.0, 0.05, 0.0)
+	await _settle(5)
+	print("ENTRY_REAL_TRACE bodies=%s notices=%s events=%s captures=%s test_mode=%s" % [bodies, notices, events, probe.captures, _tower.test_mode])
+	var baseline := "--entry-baseline" in OS.get_cmdline_user_args()
+	var expected := 2 if baseline else 1
+	_check(bodies.size() == 1 and notices.size() == 1, "真实 Area 进入与延迟通知各一次")
+	_check(events.size() == expected and probe.captures.size() == expected, "双入口事件/快照次数符合预期 %d" % expected)
+	if events.size() == 2:
+		_check(events[0].frame == events[1].frame, "基线确为同 process frame 两次完整通知，不是继承叠计")
+	area.body_entered.disconnect(area_callback)
+	if not baseline:
+		await _verify_entry_boundaries(target, events, probe)
+	BaseManager.unregister_runtime_checkpoint_provider(probe, false)
+	BaseManager.call("_finish_room_writes", true)
+	_tower.test_mode = true
+	_tower.set("_runtime_persistence_active", false)
+	probe.queue_free()
+
+
+func _verify_entry_boundaries(target: DungeonRoom3D, events: Array[Dictionary], probe: EntrySnapshotProbe) -> void:
+	# 真实 Area 样本已单独取证；以下受控显式调用不混入流送重新启用 Area 的通知。
+	for value in (_tower.get("_room_by_id") as Dictionary).values():
+		var room := value as DungeonRoom3D
+		room.player_entered.disconnect(_tower._on_room_entered)
+	await _settle(2)
+	events.clear()
+	probe.captures.clear()
+	var start := (_tower.get("_room_by_id") as Dictionary).get("start") as DungeonRoom3D
+	# 真实楼梯锁判据：拒绝不能认领，解锁后同帧重试必须成功。
+	var connector := Node3D.new()
+	connector.set_meta("from_room_id", "start")
+	connector.set_meta("to_room_id", target.room_id)
+	_tower.add_child(connector)
+	var edge := "entry_guard_probe"
+	(_tower.get("_corridor_by_edge") as Dictionary)[edge] = connector
+	(_tower.get("_open_edges") as Dictionary)[edge] = true
+	(_tower.get("_vertical_arrival_open") as Dictionary)[edge] = false
+	_tower.set("_current_room_id", "start")
+	_tower.call("_on_room_entered", target)
+	_check(events.is_empty() and probe.captures.is_empty(), "锁楼梯拒绝没有事件或检查点")
+	(_tower.get("_vertical_arrival_open") as Dictionary)[edge] = true
+	_tower.call("_on_room_entered", target)
+	_tower.call("_on_room_entered", target)
+	(_tower.get("_corridor_by_edge") as Dictionary).erase(edge)
+	(_tower.get("_open_edges") as Dictionary).erase(edge)
+	(_tower.get("_vertical_arrival_open") as Dictionary).erase(edge)
+	connector.queue_free()
+	_check(events.size() == 1 and probe.captures.size() == 1, "同帧同对象只发一次事件和检查点")
+	_tower.call("_on_room_entered", start)
+	_tower.call("_on_room_entered", target)
+	_check(events.size() == 3 and probe.captures.size() == 3, "同帧 A→B→A 三次合法入房")
+	var replacement := DungeonRoom3D.new()
+	replacement.room_id = target.room_id
+	replacement.room_type = target.room_type
+	replacement.size_class = target.size_class
+	replacement.authored_layout_peaceful = true
+	# 不建第二套几何；基类入口仍必须认同 ID 的新对象。
+	_tower.get_node("GeneratedRooms").add_child(replacement)
+	_tower.call("_on_room_entered", replacement)
+	_check(events.size() == 4 and probe.captures.size() == 4, "同 ID 新 room node 不被吞")
+	_tower.call("_on_room_entered", target)
+	var previous_frame := Engine.get_process_frames()
+	while Engine.get_process_frames() == previous_frame:
+		await get_tree().process_frame
+	var before := events.size()
+	_tower.call("_on_room_entered", target)
+	_check(events.size() == before + 1, "下一帧同房显式重试仍进入完整修复链")
+	replacement.queue_free()
+	await _verify_reward_repair()
+
+
+func _verify_reward_repair() -> void:
+	var plans := _tower.get("_clear_drop_plans") as Dictionary
+	var rooms := _tower.get("_room_by_id") as Dictionary
+	var room: DungeonRoom3D
+	for value in rooms.values():
+		var candidate := value as DungeonRoom3D
+		var plan := plans.get(candidate.room_id, {}) as Dictionary
+		if not candidate.authored_layout_peaceful and candidate.room_type != "BOSS" and candidate.chest_placements.is_empty() and str(plan.get("kind", "")) == "chest":
+			room = candidate
+			break
+	if not _check(room != null, "有正式清房宝箱计划用于同房修复"):
+		return
+	room.cleared = true
+	(_tower.get("_spawned_rooms") as Dictionary)[room.room_id] = true
+	var plan := (plans[room.room_id] as Dictionary).duplicate(true)
+	plans.erase(room.room_id)
+	_tower.call("_on_room_entered", room)
+	var count := room.get_treasure_chests().size()
+	plans[room.room_id] = plan
+	_tower.call("_on_room_entered", room)
+	_check(room.get_treasure_chests().size() == count, "同帧重复通知不二次交付奖励")
+	var frame := Engine.get_process_frames()
+	while Engine.get_process_frames() == frame:
+		await get_tree().process_frame
+	_tower.call("_on_room_entered", room)
+	_check(room.get_treasure_chests().size() == count + 1, "下一帧显式同房重试补齐缺失清房箱")
+	var delivery := (_tower.get("_clear_drop_delivery") as Dictionary).duplicate(true)
+	_tower.call("_on_room_entered", room)
+	await _settle(2)
+	_tower.call("_on_room_entered", room)
+	_check(room.get_treasure_chests().size() == count + 1 and delivery == _tower.get("_clear_drop_delivery"), "同帧及跨帧修复不重复掉箱/掉落账")
 
 
 func _settle(frames := 3) -> void:

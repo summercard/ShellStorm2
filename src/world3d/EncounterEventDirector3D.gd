@@ -12,6 +12,7 @@ extends RefCounted
 
 signal encounter_event_started(snapshot: Dictionary)
 signal encounter_event_stage_started(snapshot: Dictionary, stage_index: int)
+signal encounter_event_alarm_started(snapshot: Dictionary)
 signal encounter_event_finished(snapshot: Dictionary)
 
 const SCHEMA_VERSION := 1
@@ -88,6 +89,7 @@ func start(config: Dictionary) -> Dictionary:
 		"preparation_total_sec": float(normalized.get("preparation_sec", 0.0)),
 		"preparation_remaining_sec": float(normalized.get("preparation_sec", 0.0)),
 		"preparation_active": float(normalized.get("preparation_sec", 0.0)) > 0.0,
+		# 计时型遭遇的触发冻结独立于60秒窗口：先锁1秒，再发警报并启动battle时钟。
 		"freeze_player_remaining_sec": float(normalized.get("freeze_player_sec", 0.0)),
 		"trigger_port_id": str(normalized.get("trigger_port_id", "")),
 		"paused": false,
@@ -97,6 +99,7 @@ func start(config: Dictionary) -> Dictionary:
 		"deadline_behavior": str(normalized.get("deadline_behavior", "fail_if_uncleared")),
 		"repeat_last_stage": bool(normalized.get("repeat_last_stage", false)),
 		"dispatch_closed": false,
+		"alarm_emitted": false,
 		"repeat_stage_sequence": 0,
 		"stage_states": [],
 		"requested": 0,
@@ -176,7 +179,12 @@ func _presentation_snapshot(state: Dictionary) -> Dictionary:
 			var duration := maxf(0.0, float(config.get("duration_sec", 0.0)))
 			snapshot["alert_total_sec"] = duration
 			snapshot["alert_remaining_sec"] = maxf(0.0, duration - float(state.get("elapsed", 0.0)))
-			snapshot["alert_phase"] = "cleanup" if float(state.get("elapsed", 0.0)) >= duration else "battle"
+			if float(state.get("freeze_player_remaining_sec", 0.0)) > 0.0:
+				snapshot["alert_phase"] = "trigger_freeze"
+				snapshot["alert_total_sec"] = 0.0
+				snapshot["alert_remaining_sec"] = 0.0
+			else:
+				snapshot["alert_phase"] = "cleanup" if float(state.get("elapsed", 0.0)) >= duration else "battle"
 		elif not bool(state.get("terminal", false)):
 			if float(state.get("preparation_remaining_sec", 0.0)) > 0.0:
 				snapshot["alert_phase"] = "preparation"
@@ -318,6 +326,7 @@ func import_snapshot(snapshot: Dictionary) -> Dictionary:
 		row["deadline_behavior"] = str(row.get("deadline_behavior", (validation["config"] as Dictionary).get("deadline_behavior", "fail_if_uncleared")))
 		row["repeat_last_stage"] = bool(row.get("repeat_last_stage", (validation["config"] as Dictionary).get("repeat_last_stage", false)))
 		row["dispatch_closed"] = bool(row.get("dispatch_closed", false))
+		row["alarm_emitted"] = bool(row.get("alarm_emitted", float(row.get("freeze_player_remaining_sec", 0.0)) <= 0.0))
 		row["repeat_stage_sequence"] = maxi(0, int(row.get("repeat_stage_sequence", 0)))
 		if bool(row["dispatch_closed"]):
 			for stage_value in row["stage_states"] as Array:
@@ -332,7 +341,8 @@ func import_snapshot(snapshot: Dictionary) -> Dictionary:
 		row["preparation_total_sec"] = maxf(0.0, float(row.get("preparation_total_sec", 0.0)))
 		row["preparation_remaining_sec"] = clampf(float(row.get("preparation_remaining_sec", 0.0)), 0.0, float(row["preparation_total_sec"]))
 		row["preparation_active"] = float(row["preparation_remaining_sec"]) > 0.0
-		row["freeze_player_remaining_sec"] = clampf(float(row.get("freeze_player_remaining_sec", 0.0)), 0.0, float(row["preparation_remaining_sec"]))
+		var freeze_limit := maxf(float(row.get("preparation_total_sec", 0.0)), float(config.get("freeze_player_sec", 0.0)))
+		row["freeze_player_remaining_sec"] = clampf(float(row.get("freeze_player_remaining_sec", 0.0)), 0.0, freeze_limit)
 		row["stage_elapsed_sec"] = maxf(0.0, float(row.get("stage_elapsed_sec", row.get("elapsed", 0.0))))
 		if not (value as Dictionary).has("stage_elapsed_sec") and row.has("room_prepare_remaining_sec"):
 			var first_stage := ((validation["config"] as Dictionary).get("stages", []) as Array)[0] as Dictionary
@@ -398,7 +408,7 @@ static func validate_config(config: Dictionary) -> Dictionary:
 		var time_value: Variant = config.get(time_key, 0.0)
 		if not _finite_number(time_value) or float(time_value) < 0.0:
 			return _reject("%s_invalid" % time_key)
-	if float(config.get("freeze_player_sec", 0.0)) > float(config.get("preparation_sec", 0.0)):
+	if float(config.get("preparation_sec", 0.0)) > 0.0 and float(config.get("freeze_player_sec", 0.0)) > float(config.get("preparation_sec", 0.0)):
 		return _reject("freeze_exceeds_preparation")
 	if progress_mode == "external" and float(config.get("preparation_sec", 0.0)) > 0.0:
 		return _reject("external_preparation_not_supported")
@@ -408,6 +418,7 @@ static func validate_config(config: Dictionary) -> Dictionary:
 		or completion not in ["clear", "timer_and_clear"]
 		or stage_advance != "clear"
 		or float(config.get("preparation_sec", 0.0)) != 0.0
+		or float(config.get("freeze_player_sec", 0.0)) < 0.0
 		or not config.has("stages")
 		or not config["stages"] is Array
 		or (config["stages"] as Array).is_empty()
@@ -547,10 +558,24 @@ func _step_instance(instance_id: String, state: Dictionary, delta: float) -> voi
 	if is_zero_approx(float(state["preparation_remaining_sec"])):
 		state["preparation_remaining_sec"] = 0.0
 	state["preparation_active"] = float(state["preparation_remaining_sec"]) > 0.0
-	state["freeze_player_remaining_sec"] = maxf(0.0, float(state.get("freeze_player_remaining_sec", 0.0)) - delta)
-	if is_zero_approx(float(state["freeze_player_remaining_sec"])):
+	var freeze_before := float(state.get("freeze_player_remaining_sec", 0.0))
+	state["freeze_player_remaining_sec"] = maxf(0.0, freeze_before - delta)
+	# 秒边界按epsilon收口，避免0.99+0.01的float残差让alarm晚一帧。
+	if freeze_before <= delta + 0.00001 or is_zero_approx(float(state["freeze_player_remaining_sec"])):
 		state["freeze_player_remaining_sec"] = 0.0
+	var alarm_now := freeze_before > 0.0 and float(state["freeze_player_remaining_sec"]) <= 0.0 and not bool(state.get("alarm_emitted", false))
+	if alarm_now:
+		state["alarm_emitted"] = true
 	_sync_input_hold(instance_id, state)
+	if alarm_now:
+		_instances[instance_id] = state
+		encounter_event_alarm_started.emit(get_snapshot(instance_id))
+		# 警报这一帧只完成解锁，不把delta计入battle；下一帧启动60秒窗口。
+		return
+	# 触发冻结独立于准备期：冻结期间不推进60秒、不派发、仅保持输入锁。
+	if freeze_before > 0.0:
+		_instances[instance_id] = state
+		return
 	if bool(state["preparation_active"]):
 		_instances[instance_id] = state
 		return

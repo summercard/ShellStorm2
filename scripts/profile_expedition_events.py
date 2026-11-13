@@ -12,7 +12,7 @@ from pathlib import Path
 from workspace_paths import PROJECT_ROOT, work_path
 
 
-def summarize_run(data):
+def summarize_run(data, requested_rooms):
     phases = {}
     events = {event["phase"]: event for event in data["events"]}
     for label, wall_ms, *_ in data["samples"]:
@@ -29,19 +29,32 @@ def summarize_run(data):
             "sync_ms": events.get(label, {}).get("sync_ms"),
         }
     warm = data["warm_b"]
+    roar_warm = warm.get("roar_icon", {})
+    overlay_warm = warm.get("occlusion_overlay", {})
     complete = (data["warm_a"]["completed"] and not data["warm_a"]["skipped"]
-                and not warm["skipped"] and warm["rooms"] == warm["total"] and warm["rooms"] > 0)
+                and not warm["skipped"] and warm["rooms"] == warm["total"] and warm["rooms"] > 0
+                and roar_warm.get("completed", False) and roar_warm.get("retained", False)
+                and bool(overlay_warm)
+                and (not overlay_warm.get("applicable", True)
+                     or (overlay_warm.get("completed", False) and overlay_warm.get("restored", False)
+                         and overlay_warm.get("same_material", False))))
     confirmed = any(e["phase"].startswith("fixture_flight/")
                     and e["details"].get("confirmed")
                     and "hp_after" in e["details"]
                     and e["details"]["hp_after"] < e["details"]["hp_before"]
                     for e in data["events"])
     chest = events.get("chest/0", {}).get("details", {}).get("created", False)
+    entries = [event["details"] for event in data["events"]
+               if event["phase"].startswith(("enter/", "return_enter/"))]
+    visited = {entry["room"] for entry in entries}
+    visited.discard(data["visited"][0])
+    route_complete = (len(visited) == min(requested_rooms, len(data["rooms"]) - 1)
+                      and all(entry.get("current_room") == entry["room"] for entry in entries))
     violations = [label for label, values in summary.items()
                   if values["max_ms"] > 50 or values["p99_ms"] > 33.3]
     return {"phases": summary, "warm_complete": complete, "confirmed_pooled_hit": confirmed,
-            "chest_created": chest, "violations": violations,
-            "passed": bool(summary and complete and confirmed and chest and not violations)}
+            "chest_created": chest, "route_complete": route_complete, "violations": violations,
+            "passed": bool(summary and complete and confirmed and chest and route_complete and not violations)}
 
 
 def main():
@@ -76,7 +89,10 @@ def main():
                       "src/core/GraphicsSettingsManager.gd", "src/enemy3d/EliteArmsTakerEquipment.gd",
                       "src/combat3d/WeaponModel3D.gd", "src/map/SpawnBoxCatalog.gd",
                       "src/map/MonsterInjector.gd", "src/world3d/RuntimeCollisionIndex.gd",
-                      "src/world3d/RoomFurnishingNavigation.gd"]
+                      "src/world3d/RoomFurnishingNavigation.gd", "src/core/GameplaySpatialRegistry3D.gd",
+                      "src/enemy3d/EnemyIllumination3D.gd", "src/vfx/VfxMonsterRoarIcon3D.gd",
+                      "src/enemy3d/EliteRosterService.gd", "src/enemy3d/RoamingEliteRunDirector.gd",
+                      "src/enemy3d/EnemyWarmup.gd"]
     plan_dir = PROJECT_ROOT / "data" / "level_plans" / args.level
     tracked_inputs.extend(p.relative_to(PROJECT_ROOT).as_posix() for p in sorted(plan_dir.rglob("*.json")))
     def source_fingerprints():
@@ -118,7 +134,7 @@ def main():
     frames_path = folder / "frames.json"
     after = source_fingerprints()
     if frames_path.is_file():
-        summary = summarize_run(json.loads(frames_path.read_text(encoding="utf-8")))
+        summary = summarize_run(json.loads(frames_path.read_text(encoding="utf-8")), args.rooms)
         summary["sources_stable"] = after == metadata["before"]
         summary["passed"] = summary["passed"] and summary["sources_stable"] and not code
         (folder / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")

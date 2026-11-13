@@ -104,8 +104,35 @@ const BAR_TRACK_COLOR := Color(1.0, 1.0, 1.0, 0.16)
 ## 判定"够不够黄"要分开看两个量：增量 G/R=0.81、B/R=0.07 决定黄不黄；
 ## 成品 G/R=0.87、B/R=0.25（B 被底色抬起）。上一版增量 B/R=0.33，所以读成橄榄。
 ## 实测回填：单灯区 (118, 103, 30)、交叠区 (229, 191, 38)。
+##
+## —— 逐关灯色（2026-11-13）——
+## 灯色不再是全流程一个常数，而是按「这次要去哪一关」换色：
+##   01 灰蓝 / 02 淡黄 / 03 玫红；基地往返、测试99、未登记关卡沿用上面的金色兜底。
+##
+## 推导方式与上面同一条公式，只是反过来算：先定**单灯成品色** T（人对颜色的直觉在成品上，
+## 不在加色量上），再反解 light_color = T − INK：
+##   底色 INK = (0.031, 0.055, 0.086) = rgb(8, 14, 22)
+##   单灯成品 = INK + light_color
+##   交叠成品 = INK + 2×light_color      （两枚圆各加一次，add 模式的数学结果）
+##
+##   | 关卡 | 单灯成品 T         | light_color = T − INK      | 交叠（2×）        |
+##   |------|--------------------|----------------------------|-------------------|
+##   | 01   | rgb(110, 127, 150) | (0.400, 0.443, 0.502) 灰蓝 | rgb(212, 240, 255) |
+##   | 02   | rgb(196, 185, 110) | (0.738, 0.670, 0.345) 淡黄 | rgb(255, 255, 198) |
+##   | 03   | rgb(199,  92, 122) | (0.749, 0.306, 0.392) 玫红 | rgb(255, 170, 222) |
+##   | 兜底 | rgb(118, 103,  30) | (0.435, 0.349, 0.031) 金   | rgb(229, 191,  38) |
+##
+## 两种颜色只差 1 个通道时要在**增量**上判色相（G/R、B/R），别用成品比值：
+## 01 增量 G/R=1.11、B/R=1.25（冷，蓝在最后一位也最高）；
+## 02 增量 G/R=0.91、B/R=0.47（暖，蓝最低）；03 增量 G/R=0.41、B/R=0.52（红高、绿最低）。
+##
+## 02/03 的交叠会顶到 255：加色在亮通道上天然饱和。这是"更亮的同族色"，不是换了颜色 ——
+## 若为了不溢出去把单灯压暗，单灯就不再是「淡黄 / 玫红」，而会退成橄榄 / 暗红，得不偿失。
 const CIRCLE_SHADER := preload("res://assets/shaders/loading_circle.gdshader")
 const CIRCLE_COLOR := Color(0.435, 0.349, 0.031, 1.0)
+const CIRCLE_COLOR_LEVEL_01 := Color(0.400, 0.443, 0.502, 1.0)
+const CIRCLE_COLOR_LEVEL_02 := Color(0.738, 0.670, 0.345, 1.0)
+const CIRCLE_COLOR_LEVEL_03 := Color(0.749, 0.306, 0.392, 1.0)
 ## 承载圆的方形控件边长。圆心对准兔子剪影的身体中心（见 _build_circle）。
 const CIRCLE_SIZE := 360.0
 ## 圆半径占控件边长的比例：0.25 ⇒ 直径 180px。
@@ -757,6 +784,31 @@ func _destination_display_name() -> String:
 	return display_name
 
 
+## 关卡 id → 灯光加色量。空串 / 未登记（含测试99、未来新增但要另配色前的关卡）回到金色兜底。
+## 刻意做成**静态纯函数**：探针不必把读取页入树、也不必跑一遍真实读取流程就能断言这张表 ——
+## 否则"换了关卡忘了换灯色"只有等到真机截图才看得出来。
+static func light_color_for_level(level_id: String) -> Color:
+	match level_id:
+		"expedition_01":
+			return CIRCLE_COLOR_LEVEL_01
+		"expedition_02":
+			return CIRCLE_COLOR_LEVEL_02
+		"expedition_03":
+			return CIRCLE_COLOR_LEVEL_03
+		_:
+			return CIRCLE_COLOR
+
+
+## 本次读取页该用哪一盏灯色。
+## 基地 / 塔楼往返不是关卡（`_level_id` 为空、终点是基地场景），用金色兜底；
+## 不能在这里调 `_destination_level_id()` —— 它会把空 id 悄悄收敛成 01，
+## 于是"回基地"也会被染成 01 的灰蓝，而玩家并没有走进任何一关。
+func _circle_light_color() -> Color:
+	if _is_base_destination(_target_scene):
+		return CIRCLE_COLOR
+	return light_color_for_level(_level_id)
+
+
 func _play_intro() -> void:
 	if _content == null:
 		return
@@ -920,7 +972,7 @@ func _build_circle(content: Control) -> void:
 
 	_circle_mat = ShaderMaterial.new()
 	_circle_mat.shader = CIRCLE_SHADER
-	_circle_mat.set_shader_parameter("light_color", CIRCLE_COLOR)
+	_circle_mat.set_shader_parameter("light_color", _circle_light_color())
 	_circle_mat.set_shader_parameter("intensity", CIRCLE_INTENSITY_BASE)
 	_circle_mat.set_shader_parameter("radius", CIRCLE_RADIUS_UV)
 	_circle_mat.set_shader_parameter("edge", CIRCLE_EDGE)

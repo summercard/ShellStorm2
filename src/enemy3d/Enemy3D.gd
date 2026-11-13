@@ -1032,9 +1032,17 @@ var _death_explosion: Dictionary = {}
 ## 当前生效的分离推力速度，以及重算相位（-1 = 尚未初始化）。
 var _separation_push := Vector3.ZERO
 var _separation_phase := -1
+## Host 承诺入树后在同一同步块完整 configure；只省掉首次默认 Avatar 的构建。
+var _configure_after_ready := false
 
 @onready var avatar: EnemyAvatar3D = $Avatar
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
+
+
+## 仅离树声明，不预置怪种、不配置资源；未提交的实例可直接释放。
+func stage_configure_after_ready() -> void:
+	if not is_inside_tree():
+		_configure_after_ready = true
 
 
 func _ready() -> void:
@@ -1055,7 +1063,8 @@ func _ready() -> void:
 	illumination_sensor.configure(self)
 	illumination_sensor.illumination_state_changed.connect(_on_illumination_state_changed)
 	_startup_rng.randomize()
-	apply_profile(enemy_kind)
+	apply_profile(enemy_kind, not _configure_after_ready)
+	_configure_after_ready = false
 	illumination_sensor.force_refresh(true)
 	if MonsterAIManager != null:
 		MonsterAIManager.register_enemy(self)
@@ -1240,7 +1249,7 @@ static func profile_for(kind: String) -> Dictionary:
 	return out
 
 
-func apply_profile(kind: String) -> void:
+func apply_profile(kind: String, build_visual := true) -> void:
 	var known := PROFILES.has(kind) or MonsterVariants.is_variant(kind)
 	enemy_kind = kind if known else "melee_chaser"
 	_active_profile = profile_for(enemy_kind)
@@ -1271,7 +1280,7 @@ func apply_profile(kind: String) -> void:
 		shape.height = float(footprint.get("height", 1.2))
 		collision_shape.shape = shape
 		collision_shape.position.y = shape.height * 0.5
-	if avatar != null:
+	if build_visual and avatar != null:
 		avatar.configure(enemy_kind)
 		avatar.set_ambush_revealed(enemy_kind != "ambusher" or _ambush_triggered)
 	_apply_presentation_scale()

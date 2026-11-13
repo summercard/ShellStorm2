@@ -275,7 +275,7 @@ func _update_lens_state() -> void:
 
 func _notify_illumination_sensors() -> void:
 	if is_inside_tree():
-		get_tree().call_group(EnemyIllumination3D.RECEIVER_GROUP, "force_refresh_illumination", true)
+		EnemyIllumination3D.notify_light_changed(get_tree())
 
 
 func _find_room_id() -> String:

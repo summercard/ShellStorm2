@@ -48,6 +48,10 @@ class ProductionTimedHost extends TimedHost:
 	func encounter_event_context(_room_id: String, _instance_id: String) -> Dictionary:
 		return {"player_alive": true, "run_active": true, "current_room_id": room_id}
 
+class DoorDungeonHarness extends DUNGEON:
+	func _ready() -> void:
+		pass
+
 func _ready() -> void:
 	call_deferred("run")
 
@@ -165,10 +169,11 @@ func run() -> void:
 		verify_timed_loop(dungeon, ring, overlay, compiled, "PRODUCTION")
 	else:
 		print("ROOM03_TIMED_PRODUCTION_BLOCKED compilation_or_data_invalid=true")
-	var timed_fixture := {"schema_version": 1, "event_id": "room03_timed_fixture", "room_id": "room_03", "duration_sec": 60.0, "preparation_sec": 0.0, "freeze_player_sec": 0.0, "completion": "clear", "stage_advance": "clear", "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true, "intermission_sec": 0.0, "hud_countdown": true, "alert_style": "red_eva", "max_alive": 8, "stages": [{"at_sec": 2.0, "monsters": [{"type": "melee_chaser", "count": 5}]}, {"at_sec": 0.0, "monsters": [{"type": "melee_chaser", "count": 7}]}, {"at_sec": 0.0, "monsters": [{"type": "melee_chaser", "count": 8}]}]}
+	var timed_fixture := {"schema_version": 1, "event_id": "room03_timed_fixture", "room_id": "room_03", "duration_sec": 60.0, "preparation_sec": 0.0, "freeze_player_sec": 1.0, "completion": "clear", "stage_advance": "clear", "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true, "intermission_sec": 0.0, "hud_countdown": true, "alert_style": "red_eva", "max_alive": 8, "stages": [{"at_sec": 2.0, "monsters": [{"type": "melee_chaser", "count": 5}]}, {"at_sec": 0.0, "monsters": [{"type": "melee_chaser", "count": 7}]}, {"at_sec": 0.0, "monsters": [{"type": "melee_chaser", "count": 8}]}]}
 	verify_timed_loop(dungeon, ring, overlay, timed_fixture, "FIXTURE")
 	verify_host_close_dispatch()
 	verify_all_timed_production(dungeon, ring, overlay)
+	await verify_room_door_animation()
 	ProjectSettings.set_setting("accessibility/reduce_motion",old_reduced)
 	actor.camera_feedback.free()
 	actor.free()
@@ -187,7 +192,7 @@ func verify_room03_compilation(dungeon: Dungeon3D) -> Dictionary:
 	check(not floor_source.is_empty(), "正式LevelPlanLoader未读取远征01")
 	var authored := find_room03(floor_source.get("rooms", []) as Array)
 	check(not authored.is_empty(), "正式L2缺少room03")
-	var expected := {"duration_sec": 60.0, "preparation_sec": 0.0, "freeze_player_sec": 0.0, "start_delay_sec": 2.0, "stage_advance": "clear", "completion": "clear", "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true, "intermission_sec": 0.0}
+	var expected := {"duration_sec": 60.0, "preparation_sec": 0.0, "freeze_player_sec": 1.0, "start_delay_sec": 2.0, "stage_advance": "clear", "completion": "clear", "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true, "intermission_sec": 0.0}
 	var raw := authored.get("encounter", {}) as Dictionary
 	for key in expected:
 		check(raw.has(key) and raw[key] == expected[key], "room03正式字段%s应为%s，实际%s" % [key, str(expected[key]), str(raw.get(key))])
@@ -236,11 +241,30 @@ func verify_timed_loop(dungeon: Dungeon3D, ring: Control, overlay: Control, conf
 		return
 	var id := str(started.get("instance_id", ""))
 	director.tick(0.0)
-	check(host.emitted == 0 and not host.held, "起点不得出怪或冻结玩家")
-	check_timed_hud(dungeon, ring, "60.00", 60.0, "起点")
-	check(bool(round_trip(director).get("ok", false)), "起点JSON恢复失败")
+	var freeze := float(config.get("freeze_player_sec", 0.0))
+	var alarm_count := [0]
+	director.encounter_event_alarm_started.connect(func(_snapshot: Dictionary): alarm_count[0] += 1)
+	if freeze > 0.0:
+		var initial := director.get_snapshot(id)
+		check(host.emitted == 0 and host.live == 0 and host.held and float(initial.get("elapsed", -1.0)) == 0.0, "起点必须held=true、无怪且elapsed=0")
+		check(initial.get("alert_phase") == "trigger_freeze" and is_equal_approx(float(initial.get("freeze_player_remaining_sec", -1.0)), freeze), "起点必须投影独立冻结期")
+		check_timed_trigger_freeze_hud(dungeon, ring, overlay, id, "起点")
+		director.tick(freeze - 0.01)
+		var frozen := director.get_snapshot(id)
+		check(host.emitted == 0 and host.live == 0 and host.held and float(frozen.get("elapsed", -1.0)) == 0.0, "冻结结束前不得出怪或推进elapsed")
+		check(frozen.get("alert_phase") == "trigger_freeze" and is_equal_approx(float(frozen.get("freeze_player_remaining_sec", -1.0)), 0.01), "冻结结束前仍须保持trigger_freeze")
+		check_timed_trigger_freeze_hud(dungeon, ring, overlay, id, "冻结结束前")
+		director.tick(0.01)
+		var alarmed := director.get_snapshot(id)
+		check(bool(alarmed.get("alarm_emitted", false)) and host.emitted == 0 and host.live == 0 and not host.held and float(alarmed.get("elapsed", -1.0)) == 0.0, "冻结结束必须发alarm、解除held且elapsed仍为0")
+		check(alarmed.get("alert_phase") == "battle" and float(alarmed.get("alert_total_sec", -1.0)) == 60.0 and float(alarmed.get("alert_remaining_sec", -1.0)) == 60.0, "alarm后必须从60秒battle窗口起算")
+	else:
+		check(host.emitted == 0 and not host.held, "起点不得出怪或冻结")
+		check_timed_hud(dungeon, ring, "60.00", 60.0, "起点")
+	check(bool(round_trip(director).get("ok", false)), "起点/冻结结束JSON恢复失败")
 	director.tick(1.99)
-	check(host.emitted == 0, "1.99秒不得派首批")
+	var before_first := director.get_snapshot(id)
+	check(host.emitted == 0 and not host.held and is_equal_approx(float(before_first.get("elapsed", -1.0)), 1.99), "首批前1.99秒不得出怪，且battle elapsed应为1.99")
 	check_timed_hud(dungeon, ring, "58.01", 58.01, "首批前")
 	check(bool(round_trip(director).get("ok", false)), "1.99秒JSON恢复失败")
 	director.tick(0.01)
@@ -297,7 +321,7 @@ func verify_timed_loop(dungeon: Dungeon3D, ring: Control, overlay: Control, conf
 	check(bool(round_trip(director).get("ok", false)), "终态JSON恢复失败")
 	director.tick(60.0)
 	check(director.get_snapshot_rows().is_empty() and host.emitted == expected_total, "终态恢复不得重新建立事件或派发")
-	print("ROOM03_TIMED_%s_%s checks=%d failures=%d batches=8 emitted=%d close_calls=%d" % [source, "OK" if failures.size() == failures_before else "FAIL", checks - checks_before, failures.size() - failures_before, host.emitted, host.close_calls])
+	print("ROOM03_TIMED_%s_%s checks=%d failures=%d batches=8 emitted=%d close_calls=%d " % [source, "OK" if failures.size() == failures_before else "FAIL", checks - checks_before, failures.size() - failures_before, host.emitted, host.close_calls])
 
 func verify_all_timed_production(dungeon: Dungeon3D, ring: Control, overlay: Control) -> void:
 	var checks_before := checks
@@ -306,7 +330,7 @@ func verify_all_timed_production(dungeon: Dungeon3D, ring: Control, overlay: Con
 	var plan: Dictionary = GENERATOR.generate_from_level_plan("expedition_01", 0, 77001199)
 	check(not source.is_empty(), "五房正式Loader不能为空")
 	check(bool(plan.get("valid", false)), "五房正式Generator校验失败：%s" % str(plan.get("validation_errors", [])))
-	var expected := {"duration_sec": 60.0, "start_delay_sec": 2.0, "preparation_sec": 0.0, "freeze_player_sec": 0.0, "intermission_sec": 0.0, "completion": "clear", "stage_advance": "clear", "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true, "hud_countdown": true}
+	var expected := {"duration_sec": 60.0, "start_delay_sec": 2.0, "preparation_sec": 0.0, "freeze_player_sec": 1.0, "intermission_sec": 0.0, "completion": "clear", "stage_advance": "clear", "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": true, "hud_countdown": true}
 	var templates := {"room_03": {"max_alive": 8, "counts": [5, 7, 8]}, "room_04": {"max_alive": 6, "counts": [6, 6]}, "room_06": {"max_alive": 10, "counts": [8, 9, 13]}, "room_09": {"max_alive": 16, "counts": [12, 16, 20, 24]}, "room_10": {"max_alive": 10, "counts": [10, 12]}}
 	dungeon.visual_theme = DungeonTheme3D.new()
 	dungeon.run_seed = 77001199
@@ -383,6 +407,14 @@ func timed_contract_equal(actual: Variant, expected: Variant) -> bool:
 		return true
 	return actual == expected
 
+func is_expected_freeze_validator_compat(errors: Variant) -> bool:
+	if not errors is Array or (errors as Array).is_empty():
+		return false
+	for error_value in errors as Array:
+		if not str(error_value).begins_with("encounter_close_dispatch_combination_invalid:"):
+			return false
+	return true
+
 func find_timed_room(rows: Array, room_id: String) -> Dictionary:
 	for row: Dictionary in rows:
 		if str(row.get("key", row.get("id", ""))) == room_id:
@@ -414,15 +446,29 @@ func verify_production_timed_loop(dungeon: Dungeon3D, ring: Control, overlay: Co
 		check(normalized.has(key) and normalized[key] == config[key], "%s Director规范化不得改写编译字段%s" % [room_id, key])
 	var stages := config.stages as Array
 	var cap := int(config.max_alive)
-	check(host.live == 0 and host.emitted == 0 and not host.held, "%s启动不得出怪或冻结" % room_id)
-	check_production_timed_state(dungeon, ring, id, normalized, "%s起点" % room_id)
-	check(bool(round_trip(director).get("ok", false)), "%s起点JSON恢复失败" % room_id)
+	var alarm_count := [0]
+	director.encounter_event_alarm_started.connect(func(_snapshot: Dictionary): alarm_count[0] += 1)
+	var initial := director.get_snapshot(id)
+	check(host.live == 0 and host.emitted == 0 and host.held and float(initial.get("elapsed", -1.0)) == 0.0, "%s启动必须冻结、无怪且elapsed=0" % room_id)
+	check(initial.get("alert_phase") == "trigger_freeze" and float(initial.get("freeze_player_remaining_sec", -1.0)) == 1.0, "%s启动必须投影独立1秒trigger_freeze" % room_id)
+	check_production_trigger_freeze_hud(dungeon, ring, overlay, id, "%s冻结起点" % room_id)
+	director.tick(0.99)
+	var frozen := director.get_snapshot(id)
+	check(host.emitted == 0 and host.live == 0 and host.held and float(frozen.get("elapsed", -1.0)) == 0.0, "%s冻结0.99秒不得出怪、不得推进battle elapsed" % room_id)
+	check(frozen.get("alert_phase") == "trigger_freeze" and is_equal_approx(float(frozen.get("freeze_player_remaining_sec", -1.0)), 0.01), "%s冻结0.99秒仍须保持trigger_freeze" % room_id)
+	check_production_trigger_freeze_hud(dungeon, ring, overlay, id, "%s冻结0.99秒" % room_id)
+	director.tick(0.01)
+	var alarmed := director.get_snapshot(id)
+	check(bool(alarmed.get("alarm_emitted", false)) and host.emitted == 0 and host.live == 0 and not host.held and float(alarmed.get("elapsed", -1.0)) == 0.0, "%s冻结结束必须只发一次alarm、解除held且elapsed仍为0" % room_id)
+	check(alarmed.get("alert_phase") == "battle" and float(alarmed.get("alert_total_sec", -1.0)) == 60.0 and float(alarmed.get("alert_remaining_sec", -1.0)) == 60.0, "%s alarm后必须从60秒battle窗口起算" % room_id)
+	check(bool(round_trip(director).get("ok", false)), "%s alarm边界JSON恢复失败" % room_id)
 	director.tick(1.99)
-	check(host.emitted == 0 and not host.held, "%s首批前1.99秒不得出怪或冻结" % room_id)
+	var before_first := director.get_snapshot(id)
+	check(host.emitted == 0 and host.live == 0 and is_equal_approx(float(before_first.get("elapsed", -1.0)), 1.99), "%s alarm后1.99秒不得派首批" % room_id)
 	check_production_timed_state(dungeon, ring, id, normalized, "%s首批前" % room_id)
 	director.tick(0.01)
 	var first_count := timed_stage_count(stages[0])
-	check(host.emitted == mini(first_count, cap) and host.live == mini(first_count, cap), "%s第2秒首批应按min(count,max_alive)派发" % room_id)
+	check(host.emitted == mini(first_count, cap) and host.live == mini(first_count, cap), "%s alarm后第2秒首批应按min(count,max_alive)派发" % room_id)
 	check(int(director.get_snapshot(id).get("pending", -1)) == maxi(0, first_count - cap), "%s首批容量不足必须保留pending" % room_id)
 	var expected_total := 0
 	var partial_kills := 0
@@ -492,7 +538,7 @@ func verify_production_timed_loop(dungeon: Dungeon3D, ring: Control, overlay: Co
 	check(bool(round_trip(director).get("ok", false)), "%s终态JSON恢复失败" % room_id)
 	director.tick(60.0)
 	check(director.get_snapshot_rows().is_empty() and host.emitted == expected_total and host.close_calls == 1, "%s终态恢复不得重建或派发" % room_id)
-	print("ALL_TIMED_LOOP room=%s result=%s templates=%d batches=%d cap=%d partial_kills=%d emitted=%d deadline_pending=%d close_calls=%d checks=%d failures=%d" % [room_id, "OK" if failures.size() == failures_before else "FAIL", stages.size(), batches, cap, partial_kills, host.emitted, pending_before, host.close_calls, checks - checks_before, failures.size() - failures_before])
+	print("ALL_TIMED_LOOP room=%s result=%s templates=%d batches=%d cap=%d partial_kills=%d emitted=%d deadline_pending=%d close_calls=%d checks=%d failures=%d " % [room_id, "OK" if failures.size() == failures_before else "FAIL", stages.size(), batches, cap, partial_kills, host.emitted, pending_before, host.close_calls, checks - checks_before, failures.size() - failures_before])
 
 func sum_timed_stages(stages: Array) -> int:
 	var total := 0
@@ -512,6 +558,18 @@ func clear_production_timed_live(director: RefCounted, host: ProductionTimedHost
 	check(int(director.get_snapshot(id).get("requested", 0)) == requested, "%s重复清空通知不得重复预约" % room_id)
 	director.tick(0.01)
 
+func check_production_trigger_freeze_hud(dungeon: Dungeon3D, ring: Control, overlay: Control, id: String, context: String) -> void:
+	var state := dungeon._encounter_event_director.get_snapshot(id)
+	dungeon._tick_encounter_countdown_hud()
+	var presentation: Dictionary = ring.get_snapshot()
+	var alert: Dictionary = overlay.get_snapshot()
+	check(state.get("alert_phase") == "trigger_freeze", "%s Director阶段必须是trigger_freeze" % context)
+	check(presentation.get("text") == "【接敌警报】" and not bool(presentation.get("digital_display", false)), "%s HUD冻结期必须提示接敌警报" % context)
+	var expected_text := str((state.get("config", {}) as Dictionary).get("alert_text", "WARNING"))
+	var red_overlay_expected := str((state.get("config", {}) as Dictionary).get("alert_style", "")) == "red_eva"
+	check((overlay.visible == red_overlay_expected) and (not red_overlay_expected or (bool(alert.get("alert_active", false)) and alert.get("warning_text") == expected_text)), "%s HUD冻结期Overlay表现必须符合alert_style" % context)
+
+
 func check_production_timed_state(dungeon: Dungeon3D, ring: Control, id: String, config: Dictionary, context: String) -> void:
 	var director = dungeon._encounter_event_director
 	var before: Dictionary = director.export_snapshot()
@@ -527,6 +585,74 @@ func check_production_timed_state(dungeon: Dungeon3D, ring: Control, id: String,
 	check(ring.visible and bool(presentation.get("digital_display", false)) and presentation.get("digital_text") == RING.format_preparation_time(remaining) and is_equal_approx(float(presentation.get("remaining_sec", -1.0)), remaining), "%s HUD必须显示正式Owner总剩余%s" % [context, RING.format_preparation_time(remaining)])
 	check(director.export_snapshot() == before, "%s HUD消费不得反写Owner" % context)
 
+func verify_room_door_animation() -> void:
+	var door_dungeon := DoorDungeonHarness.new()
+	var hud := Control.new()
+	hud.name = "HUD"
+	var status_panel := Control.new()
+	status_panel.name = "StatusPanel"
+	var margin := Control.new()
+	margin.name = "Margin"
+	var status := Label.new()
+	status.name = "StatusLabel"
+	margin.add_child(status)
+	status_panel.add_child(margin)
+	hud.add_child(status_panel)
+	var minimap := preload("res://src/ui/DungeonMinimap3D.gd").new()
+	minimap.name = "DungeonMinimap3D"
+	hud.add_child(minimap)
+	door_dungeon.add_child(hud)
+	add_child(door_dungeon)
+	door_dungeon.set_process(false)
+	door_dungeon.set_physics_process(false)
+	var room_a := DungeonRoom3D.new()
+	var room_b := DungeonRoom3D.new()
+	room_a.room_id = "door_fixture_a"
+	room_b.room_id = "door_fixture_b"
+	room_a.global_position = Vector3.ZERO
+	room_b.global_position = Vector3(10.0, 0.0, 0.0)
+	room_a.door_targets = {"east": room_b.room_id}
+	room_b.door_targets = {"west": room_a.room_id}
+	room_a.door_policies = {"east": {"requires_key": false, "requires_clear": false, "triggers_fate": false}}
+	room_b.door_policies = {"west": {"requires_key": false, "requires_clear": false, "triggers_fate": false}}
+	room_a.cleared = true
+	room_b.cleared = true
+	door_dungeon.add_child(room_a)
+	door_dungeon.add_child(room_b)
+	var door_a := RoomDoor3D.new()
+	var door_b := RoomDoor3D.new()
+	door_a.configure("east", room_b.room_id, Color.WHITE)
+	door_b.configure("west", room_a.room_id, Color.WHITE)
+	room_a.add_child(door_a)
+	room_b.add_child(door_b)
+	room_a._door_nodes["east"] = door_a
+	room_b._door_nodes["west"] = door_b
+	door_dungeon._room_by_id = {room_a.room_id: room_a, room_b.room_id: room_b}
+	door_dungeon._current_room_id = room_a.room_id
+	var edge := door_dungeon._edge_key(room_a.room_id, room_b.room_id)
+	door_dungeon._open_edges = {edge: false}
+	door_dungeon._pending_room_door_open_edges.clear()
+	door_dungeon._door_fate_active = false
+	door_dungeon._completed = false
+	var door_failures_before := failures.size()
+	var first_result := door_dungeon._try_open_room_door(room_b.room_id)
+	var duplicate_result := door_dungeon._try_open_room_door(room_b.room_id)
+	check(first_result and duplicate_result, "门动画fixture首次/重复点击都应接受请求")
+	check(not bool(door_dungeon._open_edges.get(edge, false)) and door_dungeon._pending_room_door_open_edges.size() == 1, "0.18秒前边不得提交且重复点击不得重复挂起")
+	check(not door_a.is_open and not door_b.is_open and (door_a.is_in_motion() or door_b.is_in_motion() or door_dungeon._pending_room_door_open_edges.has(edge)), "0.18秒前门必须保持关闭并处于pending或过渡态")
+	await get_tree().create_timer(0.10, false).timeout
+	check(not bool(door_dungeon._open_edges.get(edge, false)) and door_dungeon._pending_room_door_open_edges.has(edge), "0.10秒时边仍不得open")
+	await get_tree().create_timer(0.14, false).timeout
+	check(bool(door_dungeon._open_edges.get(edge, false)) and door_dungeon._pending_room_door_open_edges.is_empty(), "0.18秒后才提交_open_edges并清pending")
+	check(door_a.is_open and door_b.is_open and (door_a.is_in_motion() or door_b.is_in_motion() or bool(door_a.get_snapshot().get("target_open", false)) and bool(door_b.get_snapshot().get("target_open", false))), "边提交后必须调用RoomDoor3D升降动画")
+	var pending_after_commit := door_dungeon._pending_room_door_open_edges.duplicate(true)
+	var edge_after_commit := door_dungeon._open_edges.duplicate(true)
+	var third_result := door_dungeon._try_open_room_door(room_b.room_id)
+	check(third_result and door_dungeon._pending_room_door_open_edges == pending_after_commit and door_dungeon._open_edges == edge_after_commit, "动画已提交后重复点击不得二次提交")
+	print("ROOM_DOOR_ANIMATION_INTEGRATION_%s edge=%s transitioning_a=%s transitioning_b=%s checks_failures=%d" % ["OK" if failures.size() == door_failures_before else "FAIL", edge, door_a.is_in_motion(), door_b.is_in_motion(), failures.size() - door_failures_before])
+	door_dungeon.free()
+
+
 func find_room03(rows: Array) -> Dictionary:
 	for row: Dictionary in rows:
 		if str(row.get("key", row.get("id", ""))) == "room_03":
@@ -535,6 +661,18 @@ func find_room03(rows: Array) -> Dictionary:
 
 func round_trip(director: RefCounted) -> Dictionary:
 	return director.import_snapshot(JSON.parse_string(JSON.stringify(director.export_snapshot())) as Dictionary)
+
+func check_timed_trigger_freeze_hud(dungeon: Dungeon3D, ring: Control, overlay: Control, id: String, context: String) -> void:
+	var state := dungeon._encounter_event_director.get_snapshot(id)
+	dungeon._tick_encounter_countdown_hud()
+	var presentation: Dictionary = ring.get_snapshot()
+	var alert: Dictionary = overlay.get_snapshot()
+	check(state.get("alert_phase") == "trigger_freeze", "%s Director阶段必须是trigger_freeze" % context)
+	check(presentation.get("text") == "【接敌警报】" and not bool(presentation.get("digital_display", false)), "%s HUD冻结期必须提示接敌警报" % context)
+	var expected_text := str((state.get("config", {}) as Dictionary).get("alert_text", "WARNING"))
+	var red_overlay_expected := str((state.get("config", {}) as Dictionary).get("alert_style", "")) == "red_eva"
+	check((overlay.visible == red_overlay_expected) and (not red_overlay_expected or (bool(alert.get("alert_active", false)) and alert.get("warning_text") == expected_text)), "%s HUD冻结期Overlay表现必须符合alert_style" % context)
+
 
 func check_timed_hud(dungeon: Dungeon3D, ring: Control, text: String, remaining: float, context: String) -> void:
 	var owner_before: Dictionary = dungeon._encounter_event_director.export_snapshot()
@@ -556,10 +694,18 @@ func verify_timed_intermission(dungeon: Dungeon3D, ring: Control, compiled: Dict
 	if not bool(started.get("ok", false)):
 		return
 	var id := str(started.get("instance_id", ""))
+	var alarm_count := [0]
+	director.encounter_event_alarm_started.connect(func(_snapshot: Dictionary): alarm_count[0] += 1)
+	var initial := director.get_snapshot(id)
+	check(host.held and host.emitted == 0 and float(initial.get("elapsed", -1.0)) == 0.0, "间歇变体启动必须先处于1秒freeze且battle elapsed=0")
+	director.tick(1.0)
+	var alarmed := director.get_snapshot(id)
+	check(bool(alarmed.get("alarm_emitted", false)) and not host.held and host.emitted == 0 and float(alarmed.get("elapsed", -1.0)) == 0.0 and alarmed.get("alert_phase") == "battle", "间歇变体必须先消耗freeze并同步发alarm")
 	director.tick(2.0)
 	host.live = 0
 	director.notify_enemy_departed(id, "killed")
 	check(director.get_snapshot(id).get("intermission_remaining_sec") == 1.0, "变体未建立真实间歇")
+	check(is_equal_approx(float(director.get_snapshot(id).get("elapsed", -1.0)), 2.0), "alarm后首批前battle elapsed必须为2.0")
 	check_timed_hud(dungeon, ring, "58.00", 58.0, "间歇起点")
 	check(bool(round_trip(director).get("ok", false)), "间歇变体JSON恢复失败")
 	director.tick(0.5)

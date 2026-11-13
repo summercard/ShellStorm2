@@ -413,6 +413,7 @@ var _encounter_event_host: EncounterEventHost3D
 var _encounter_event_completed_history: Array[String] = []
 var _room_neighbors: Dictionary = {}
 var _open_edges: Dictionary = {}
+var _pending_room_door_open_edges: Dictionary = {}
 var _corridor_by_edge: Dictionary = {}
 var _spawned_key_rooms: Dictionary = {}
 var _room_key_count := 1
@@ -1906,6 +1907,14 @@ func _on_encounter_event_stage_started(snapshot: Dictionary, stage_index: int) -
 	encounter_event_stage_started.emit(snapshot, stage_index)
 
 
+func _on_encounter_event_alarm_started(snapshot: Dictionary) -> void:
+	# 警报只在触发冻结结束时发一次；倒计时/刷怪仍由Director快照驱动。
+	if AudioManager != null:
+		AudioManager.play_sfx("wave_start", -3.0)
+	if _is_current_room(str(snapshot.get("room_id", ""))):
+		status_label.text = "接敌警报 · 倒计时开始"
+
+
 func _on_encounter_event_finished(snapshot: Dictionary) -> void:
 	var event_id := str(snapshot.get("event_id", ""))
 	var status := str(snapshot.get("status", ""))
@@ -2255,6 +2264,7 @@ func _setup_run_modules() -> void:
 	_encounter_event_director = ENCOUNTER_EVENT_DIRECTOR_SCRIPT.new(_encounter_event_host)
 	_encounter_event_director.encounter_event_started.connect(_on_encounter_event_started)
 	_encounter_event_director.encounter_event_stage_started.connect(_on_encounter_event_stage_started)
+	_encounter_event_director.encounter_event_alarm_started.connect(_on_encounter_event_alarm_started)
 	_encounter_event_director.encounter_event_finished.connect(_on_encounter_event_finished)
 	if not test_mode and BaseManager != null:
 		for staged in BaseManager.consume_pending_loadout():
@@ -2269,6 +2279,15 @@ func _setup_run_modules() -> void:
 	# 开场**不再**发放保底备弹（2026-11-09 业主取消，原 GUARANTEED_LOADOUT_AMMO_ROUNDS=300）。
 	# 豌豆手枪已改为弹匣无限，备弹对它无意义；这里保持「入场背包只有基地带上来的东西」。
 	_inventory.inventory_changed.connect(_refresh_loot_label)
+	# 2026-11-13：右下武器栏的 `N备弹` 必须跟背包**同帧**刷新。
+	# 拾取/丢弃/装填消耗备弹只改背包计数，**不产生 `ammo_changed`**（弹匣当前数没变），
+	# 而 `_apply_weapon_hud_command()` 里的备弹数是当帧现算的 —— 少了这一推，
+	# HUD 会一直停在拾取前的旧数字（本次报障就是这个）。备弹池 = 主背包 + 快捷栏，
+	# 与 `_get_reserve_ammo_count()` 的求和口径一致，所以两个信号都要接。
+	if not _inventory.inventory_changed.is_connected(_on_reserve_ammo_pool_changed):
+		_inventory.inventory_changed.connect(_on_reserve_ammo_pool_changed)
+	if _quick_inventory != null and not _quick_inventory.inventory_changed.is_connected(_on_reserve_ammo_pool_changed):
+		_quick_inventory.inventory_changed.connect(_on_reserve_ammo_pool_changed)
 	GameManager.currency_changed.connect(_on_run_currency_changed)
 	player.get_special_item_controller().configure(player, _inventory, _can_use_special_item)
 	_inventory_ui = InventoryUI.new()
@@ -3340,7 +3359,9 @@ func get_room_warmup_targets() -> Array[DungeonRoom3D]:
 ## 相机走独立 `SubViewport`（继承根视口的 `World3D`）⇒ 不动玩家、不触发房间切换、
 ## 不建 `RuntimeDetail`、不刷怪，玩法时序一个字节都没改。
 func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int, budget_ms: int) -> Dictionary:
-	var report := {"skipped": false, "rooms": 0, "total": 0, "elapsed_ms": 0, "truncated": ""}
+	var report := {"skipped": false, "rooms": 0, "total": 0, "elapsed_ms": 0, "truncated": "",
+		"roar_icon": {"completed": false, "reason": "not_started", "rendered_frames": 0, "alpha_states": [], "retained": false},
+		"occlusion_overlay": {"applicable": false, "completed": false, "reason": "not_applicable", "frames": 0}}
 	var targets := get_room_warmup_targets()
 	report["total"] = targets.size()
 	if parent == null or not is_instance_valid(parent) or not parent.is_inside_tree() or targets.is_empty():
@@ -3397,6 +3418,7 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 
 	await _warm_level_elite_visuals(camera, targets)
 	report["elite_visuals"] = _warm_elite_holders.keys()
+	report["roar_icon"] = await _warm_monster_roar_icon(camera)
 
 	var started := Time.get_ticks_msec()
 	var done := 0
@@ -3446,11 +3468,56 @@ func warm_room_materials(parent: Node, view_size: Vector2i, frames_per_room: int
 				reward_visuals.reparent(self, false)
 			else:
 				reward_visuals.free()
+	report["occlusion_overlay"] = await _warm_loading_occlusion_overlay(camera)
 	report["rooms"] = done
 	report["elapsed_ms"] = Time.get_ticks_msec() - started
 	if is_instance_valid(viewport):
 		viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
 		viewport.queue_free()
+	return report
+
+
+## 无遮挡轮廓能力的关卡正常跳过；子类复用既有预热相机完成实绘。
+func _warm_loading_occlusion_overlay(_camera: Camera3D) -> Dictionary:
+	return {"applicable": false, "completed": false, "reason": "not_applicable", "frames": 0}
+
+
+## 保留原 Sprite 与纹理，避免首次起吼才付管线编译；不借用正式怪物的图标。
+func _warm_monster_roar_icon(camera: Camera3D) -> Dictionary:
+	var report := {"completed": false, "reason": "not_started", "rendered_frames": 0,
+		"alpha_states": [], "retained": false, "elapsed_ms": 0}
+	if DisplayServer.get_name() == "headless":
+		report["reason"] = "headless_no_render"
+		return report
+	if has_node("MonsterRoarWarmVisual"):
+		return get_node("MonsterRoarWarmVisual").get_meta("render_warmup_report").duplicate(true)
+	var started := Time.get_ticks_msec()
+	var scene := load("res://assets/art/vfx/combat_3d/vfx_monster_roar_icon_root_top3d.tscn") as PackedScene
+	var sample := scene.instantiate() as VfxMonsterRoarIcon3D
+	camera.add_child(sample)
+	sample.activate(camera.to_global(Vector3(0, 0, -3)), Color.WHITE, 0.7, {})
+	sample.process_mode = Node.PROCESS_MODE_DISABLED
+	for alpha: float in [1.0, 0.5]:
+		sample.set_render_warmup_alpha(alpha)
+		var state := {"alpha": alpha, "rendered_frames": 0, "frames_drawn_before": Engine.get_frames_drawn()}
+		for _i in 3:
+			await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+			state["rendered_frames"] += 1
+			report["rendered_frames"] += 1
+		state["frames_drawn_after"] = Engine.get_frames_drawn()
+		report["alpha_states"].append(state)
+	sample.visible = false
+	sample.reparent(self, false)
+	sample.name = "MonsterRoarWarmVisual"
+	report["retained"] = sample.get_parent() == self
+	report["completed"] = report["retained"] and report["rendered_frames"] == 6
+	for state: Dictionary in report["alpha_states"]:
+		if state["frames_drawn_after"] <= state["frames_drawn_before"]:
+			report["completed"] = false
+	report["reason"] = "" if report["completed"] else "draw_not_confirmed"
+	report["elapsed_ms"] = Time.get_ticks_msec() - started
+	sample.set_meta("render_warmup_report", report.duplicate(true))
 	return report
 
 
@@ -4419,9 +4486,26 @@ func _emit_flow_bark(room_id: String, on: String) -> void:
 		return
 
 
+var _last_room_entry_ref: WeakRef
+var _last_room_entry_frame := -1
+
+
+## 只合并连续的帧内重复通知；换房、重建节点、下一帧修复仍走完整入口。
+func _is_duplicate_room_entry(room: DungeonRoom3D) -> bool:
+	return (
+		room != null
+		and _current_room_id == room.room_id
+		and _last_room_entry_frame == Engine.get_process_frames()
+		and _last_room_entry_ref != null
+		and _last_room_entry_ref.get_ref() == room
+	)
+
+
 func _on_room_entered(room: DungeonRoom3D) -> void:
-	if room == null:
+	if room == null or _is_duplicate_room_entry(room):
 		return
+	_last_room_entry_ref = weakref(room)
+	_last_room_entry_frame = Engine.get_process_frames()
 	if _current_room_id != room.room_id:
 		_drop_flow_bark()
 	call_deferred("_emit_flow_bark", room.room_id, "enter")
@@ -4685,10 +4769,8 @@ func _start_room_encounter(room: DungeonRoom3D, trigger_port_id: String = "") ->
 		_queue_runtime_autosave("room_encounter_rejected")
 		return started
 	_room_encounter_active[room.room_id] = str(started.get("instance_id", ""))
-	if AudioManager != null:
-		AudioManager.play_sfx("wave_start", -3.0)
 	if _is_current_room(room.room_id):
-		status_label.text = "遭遇开始 · 击退所有波次才能离开"
+		status_label.text = "接敌准备 · 警报即将响起"
 	_drop_flow_bark()
 	_emit_flow_bark(room.room_id, "encounter_start")
 	_queue_runtime_autosave("room_encounter_started")
@@ -5762,7 +5844,9 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array, geometry_prepared := 
 
 
 func _elite_encounter_id(room: DungeonRoom3D) -> String:
-	var run_id := str(build_runtime_save_snapshot().get("run_id", "run:%d" % run_seed))
+	var run_id := "run:%d" % run_seed
+	if player != null and _inventory != null and _insurance != null:
+		run_id = RUN_PERSISTENCE_SERVICE._runtime_instance_id(_run_id, run_id)
 	return "%s:%s:elite" % [run_id, room.room_id]
 
 
@@ -6227,6 +6311,7 @@ func _spawn_prepared_roaming_actor(room: DungeonRoom3D, configs: Array[Dictionar
 	enemy.set_block_signals(true)
 	enemy.process_mode = Node.PROCESS_MODE_DISABLED
 	enemy.visible = false
+	enemy.stage_configure_after_ready()
 	$ActiveEnemies.add_child(enemy)
 	var spawn_data := _enemy_runtime_spawn_data(config)
 	var room_ai := room.encounter.get("monster_ai", {}) as Dictionary
@@ -6234,7 +6319,26 @@ func _spawn_prepared_roaming_actor(room: DungeonRoom3D, configs: Array[Dictionar
 		var merged_ai := (spawn_data.get("monster_ai", {}) as Dictionary).duplicate(true)
 		merged_ai.merge(room_ai, true)
 		spawn_data["monster_ai"] = merged_ai
-	enemy.configure_from_enemy_data(spawn_data, null, true)
+	# The atomic path must retain the same loading-screen visual ownership handoff.
+	var path := str(spawn_data.get("presentation_scene", ""))
+	var holder := _warm_elite_holders.get(path) as Node3D
+	var prepared_visual: Node3D
+	if is_instance_valid(holder) and holder.get_child_count() > 0:
+		prepared_visual = holder.get_child(0) as Node3D
+	enemy.configure_from_enemy_data(spawn_data, prepared_visual, true)
+	if is_instance_valid(prepared_visual) and prepared_visual.get_parent() != holder:
+		holder.queue_free()
+		_warm_elite_holders.erase(path)
+	var expected_id := str(prepared.get("elite_id", ""))
+	var expected_scene := str((prepared.get("snapshot", {}) as Dictionary).get("presentation_scene", ""))
+	var visual_root := enemy.avatar.get_animated_elite_root() if is_instance_valid(enemy.avatar) else null
+	if expected_scene.is_empty() or path != expected_scene or not is_instance_valid(visual_root) or enemy.elite_id != expected_id or str(enemy.avatar.get("_elite_content_id")) != expected_id or visual_root.scene_file_path != expected_scene:
+		# configure 的 void 接口不保证正式表现成功；bind/确认前拒绝占位外壳。
+		if MonsterAIManager != null:
+			MonsterAIManager.unregister_enemy(enemy)
+		enemy.free()
+		_roaming_elite.state = previous_roaming
+		return -1
 	var hp_multiplier := float(_room_enemy_hp_multipliers.get(room.room_id, 1.0))
 	if not is_equal_approx(hp_multiplier, 1.0):
 		enemy.apply_health_multiplier(hp_multiplier)
@@ -6396,6 +6500,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		# 复刻怪的代理资产路径，那条路径要等 `configure_from_enemy_data()` 补齐的
 		# 字段才成立；提前到入树前就走，表现层会挂上空的 surface override。
 		# 省下的那一次重建换成渲染服务器报错 + 材质残缺，不划算，已回退。
+		enemy.stage_configure_after_ready()
 		$ActiveEnemies.add_child(enemy)
 		var spawn_data := _enemy_runtime_spawn_data(enemy_configs[index])
 		# 房间级 AI 覆盖（`encounter.monster_ai`）：与关卡级同键合并，**房间级优先**。
@@ -9692,6 +9797,9 @@ func _try_open_room_door(target_room_id: String) -> bool:
 		status_label.text = "先选择当前命运卡片，再开启下一扇门"
 		return false
 	var edge := _edge_key(_current_room_id, target_room_id)
+	if _pending_room_door_open_edges.has(edge):
+		status_label.text = "门扇开启中…"
+		return true
 	# 门策略优先读**房间按方向声明的** `door_policies` —— 和平区（区块00）就是靠它把
 	# 「清房 / 钥匙 / 命运卡」三项全部关掉的。只有房间没声明该方向时才回落到默认策略。
 	# ⛔ 老实现直接调 `_door_policy_for_edge()`（硬编码三项全 true），于是和平区那句
@@ -9723,11 +9831,23 @@ func _try_open_room_door(target_room_id: String) -> bool:
 		return false
 	if requires_key:
 		_consume_room_key()
+	_pending_room_door_open_edges[edge] = true
+	status_label.text = "门扇开启中…"
+	_open_room_edge_after_pause(_current_room_id, target_room_id, edge, requires_key)
+	return true
+
+
+func _open_room_edge_after_pause(from_room_id: String, target_room_id: String, edge: String, requires_key: bool) -> void:
+	# 点击后先留出可读停顿，再让RoomDoor3D执行升降动画；边状态在动画完成前不提交。
+	await get_tree().create_timer(0.18, false).timeout
+	if not _pending_room_door_open_edges.has(edge) or _completed:
+		return
+	_pending_room_door_open_edges.erase(edge)
 	_open_edges[edge] = true
 	if MonsterAIManager != null and player != null:
 		MonsterAIManager.broadcast_sound_stimulus(player.global_position, 6.5, "door_open", player)
-	minimap.set_edge_open(_current_room_id, target_room_id, true)
-	_refresh_edge_visuals(_current_room_id, target_room_id, true)
+	minimap.set_edge_open(from_room_id, target_room_id, true)
+	_refresh_edge_visuals(from_room_id, target_room_id, true)
 	status_label.text = (
 		"房门已开启 · 剩余钥匙 %d" % _get_total_room_keys()
 		if requires_key
@@ -9735,8 +9855,7 @@ func _try_open_room_door(target_room_id: String) -> bool:
 	)
 	_refresh_loot_label()
 	# 门只负责通行；旧 triggers_fate 配置不再创建新购卡事务。
-	_update_room_streaming(_current_room_id)
-	return true
+	_update_room_streaming(from_room_id)
 
 
 func try_open_room_door(target_room_id: String) -> bool:
@@ -11187,6 +11306,7 @@ func _refresh_edge_visuals(a: String, b: String, opened: bool) -> void:
 
 
 func _update_room_streaming(current_id: String) -> void:
+	EnemyIllumination3D.begin_assembly_batch(get_tree())
 	_room_graph_runtime.configure(_records, _room_neighbors, _open_edges)
 	for room in _rooms:
 		var state := _room_graph_runtime.resolve_stream_state(
@@ -11232,6 +11352,7 @@ func _update_room_streaming(current_id: String) -> void:
 				enemy.set_runtime_active(str(room_id) == current_id, room_visible)
 				_configure_story_enemy(enemy)
 		_enemy_nodes_by_room[room_id] = live_references
+	EnemyIllumination3D.end_assembly_batch(get_tree())
 
 
 func _hibernate_room_entities(room_id: String) -> void:
@@ -11486,6 +11607,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			if enemy == null:
 				continue
 			enemy.room_id = room_id
+			enemy.stage_configure_after_ready()
 			$ActiveEnemies.add_child(enemy)
 			# 与 `_spawn_enemy_batch()` **同一条注入**（2026-10-30）。
 			# 漏了它的话：读档恢复出来的怪 `_has_room_bounds` 恒为 false ⇒
@@ -13059,6 +13181,15 @@ func _refresh_hud_weapon_model(force := false) -> void:
 		item,
 		force
 	)
+
+
+## 备弹池（主背包 + 快捷栏）变化 ⇒ 立即重推武器栏。
+## 为什么需要单独一条：备弹是**独立物品**（`item_ammo_pack`），拾取它不改弹匣当前数，
+## 因此 `player.ammo_changed` 不会发；而 `_apply_weapon_hud_command()` 的 `N备弹`
+## 是**写文本时现算**的，没有这一推就永远停在拾取前的数字。
+## 只重推投影、不碰模型图标（`force=false`，避免每次拾取重建 3D 图标）。
+func _on_reserve_ammo_pool_changed() -> void:
+	_refresh_hud_weapon_model()
 
 
 func _apply_weapon_hud_command(command: Dictionary) -> void:

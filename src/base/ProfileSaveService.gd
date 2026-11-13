@@ -24,7 +24,13 @@ static func read_profile(path: String) -> Dictionary:
 
 
 ## Takes ownership of payload. No Node, mutable BaseData or scene-tree access.
-static func write_profile(path: String, payload: Dictionary, baseline: int, reason: String, fail_write: bool, previous_digest := "", previous_revision := -1) -> Dictionary:
+static func write_profile(path: String, payload: Dictionary, baseline: int, reason: String, fail_write: bool, previous_digest := "", previous_revision := -1, strict_expected_digest: Variant = null) -> Dictionary:
+	# 专用调用先比较实际字节；同 revision 或更高 baseline 都不能绕过。
+	# 此检查不提供跨进程锁，检查后至原子 rename 仍有经典竞争窗口。
+	if strict_expected_digest != null:
+		var current_digest := FileAccess.get_sha256(path) if FileAccess.file_exists(path) else ""
+		if current_digest != str(strict_expected_digest):
+			return {"success": false, "stale": true}
 	var disk_revision := previous_revision
 	# Only identical bytes can reuse the revision confirmed by our last successful read-back.
 	if previous_digest.is_empty() or not FileAccess.file_exists(path) or FileAccess.get_sha256(path) != previous_digest:

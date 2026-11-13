@@ -270,9 +270,12 @@ func prepare_roaming_spawn(elite_id: String) -> Dictionary:
 	if elite_id.is_empty() or not _finish_room_writes(true):
 		return {}
 	var digest := FileAccess.get_sha256(save_path) if FileAccess.file_exists(save_path) else ""
-	var disk := _read_validated_profile()
-	var revision := int(disk.get("revision", -1))
-	if (not digest.is_empty() and disk.is_empty()) or revision > data.save_revision or (not _verified_file_digest.is_empty() and digest != _verified_file_digest):
+	# Identical bytes already passed full envelope validation on the last write.
+	# Keep the strict digest token without reparsing the entire world checkpoint.
+	var verified := not digest.is_empty() and digest == _verified_file_digest
+	var disk := {} if verified else _read_validated_profile()
+	var revision := _verified_file_revision if verified else int(disk.get("revision", -1))
+	if (not digest.is_empty() and not verified and disk.is_empty()) or revision > data.save_revision or (not _verified_file_digest.is_empty() and digest != _verified_file_digest):
 		load_base()
 		_verified_file_digest = digest
 		_verified_file_revision = revision
@@ -301,7 +304,7 @@ func commit_roaming_spawn_checkpoint(elite_id: String, record: Dictionary, snaps
 	payload["elite_archive_records"][elite_id] = record.duplicate(true)
 	payload["active_run_snapshot"] = snapshot.duplicate(true)
 	var result := SaveService.write_profile(save_path, payload, data.save_revision,
-		"roaming_elite_spawn:%s" % elite_id, force_save_failure_for_test, digest, int(expected.get("disk_revision", -1)))
+		"roaming_elite_spawn:%s" % elite_id, force_save_failure_for_test, digest, int(expected.get("disk_revision", -1)), expected["digest"])
 	if bool(result.get("stale", false)):
 		load_base()
 		return false

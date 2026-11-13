@@ -47,6 +47,14 @@ func _ready() -> void:
 	if inventory == null or inventory.add_item(ammo, 5) != 5:
 		failures.append("cannot stage five reserve rounds in the backpack")
 	else:
+		# 2026-11-13 回归（报障：拾取后右下角备弹不更新）：备弹是独立物品，
+		# 拾取只改背包计数、**不发 `player.ammo_changed`**（弹匣当前数没变），
+		# 所以 HUD 必须靠 `inventory_changed` 立刻重推。这条断言盯的就是那条连线。
+		if dungeon.ammo_label == null or not dungeon.ammo_label.text.ends_with("· 5备弹"):
+			failures.append(
+				"picking up five reserve rounds did not refresh the weapon HUD: %s"
+				% ("<null>" if dungeon.ammo_label == null else dungeon.ammo_label.text)
+			)
 		var weapon := dungeon.player.weapon
 		var before := maxi(0, weapon.magazine_size - 8)
 		weapon.current_ammo = before
@@ -59,6 +67,11 @@ func _ready() -> void:
 				failures.append("partial reload did not load exactly the five available rounds")
 			if inventory.get_item_count("item_ammo_pack") != 0:
 				failures.append("reload did not consume the exact reserve count")
+			if dungeon.ammo_label == null or not dungeon.ammo_label.text.ends_with("· 0备弹"):
+				failures.append(
+					"weapon HUD still showed spent reserve ammo after reload: %s"
+					% ("<null>" if dungeon.ammo_label == null else dungeon.ammo_label.text)
+				)
 		if dungeon.player.request_reload():
 			failures.append("reload started with an empty reserve")
 

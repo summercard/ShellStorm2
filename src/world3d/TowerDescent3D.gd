@@ -2856,22 +2856,91 @@ func _is_camera_lower_wall(collider: Node) -> bool:
 func _install_player_occlusion_silhouette() -> void:
 	if player == null or player.avatar == null:
 		return
-	_player_occlusion_material = StandardMaterial3D.new()
-	_player_occlusion_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	_player_occlusion_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	_player_occlusion_material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	_player_occlusion_material.albedo_color = Color(0.10, 0.88, 1.0, 0.52)
-	_player_occlusion_material.emission_enabled = true
-	_player_occlusion_material.emission = Color(0.04, 0.72, 1.0)
-	_player_occlusion_material.emission_energy_multiplier = 1.8
-	_player_occlusion_material.no_depth_test = true
-	_player_occlusion_material.render_priority = 120
+	_player_occlusion_material = _make_player_occlusion_material()
 	for node in player.avatar.find_children("*", "GeometryInstance3D", true, false):
 		var geometry := node as GeometryInstance3D
 		if geometry == null:
 			continue
 		_player_occlusion_meshes.append(geometry)
 		_player_original_overlays[geometry] = geometry.material_overlay
+
+
+func _make_player_occlusion_material() -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.albedo_color = Color(0.10, 0.88, 1.0, 0.52)
+	material.emission_enabled = true
+	material.emission = Color(0.04, 0.72, 1.0)
+	material.emission_energy_multiplier = 1.8
+	material.no_depth_test = true
+	material.render_priority = 120
+	return material
+
+
+func _warm_loading_occlusion_overlay(camera: Camera3D) -> Dictionary:
+	var report := {"applicable": true, "completed": false, "reason": "not_started", "frames": 0,
+		"restored": false, "same_material": false}
+	if DisplayServer.get_name() == "headless":
+		report["reason"] = "headless_no_render"
+		return report
+	if player == null or camera == null or _player_occlusion_material == null or _player_occlusion_meshes.is_empty():
+		report["reason"] = "missing_visuals"
+		return report
+	var camera_transform := camera.transform
+	var player_transform := player.transform
+	var player_visible := player.visible
+	var player_mode := player.process_mode
+	var player_velocity := player.velocity
+	var saved_nodes: Array = []
+	var stack: Array[Node] = [player]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		stack.append_array(node.get_children())
+		saved_nodes.append([node, node.process_mode, node.transform if node is Node3D else null,
+			node.visible if node is Node3D else null])
+		node.process_mode = Node.PROCESS_MODE_DISABLED
+	var saved_overlays: Array = []
+	for geometry in _player_occlusion_meshes:
+		if is_instance_valid(geometry):
+			saved_overlays.append([geometry, geometry.material_overlay])
+			geometry.material_overlay = _player_occlusion_material
+	var material_rid := _player_occlusion_material.get_rid()
+	player.visible = true
+	camera.global_position = player.global_position + Vector3(0, 2, 4)
+	camera.look_at(player.global_position + Vector3.UP * 0.8)
+	var frames_before := Engine.get_frames_drawn()
+	for _i in 3:
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		report["frames"] += 1
+	for entry: Array in saved_overlays:
+		(entry[0] as GeometryInstance3D).material_overlay = entry[1]
+	camera.transform = camera_transform
+	player.transform = player_transform
+	player.visible = player_visible
+	player.velocity = player_velocity
+	for entry: Array in saved_nodes:
+		if entry[0] is Node3D:
+			(entry[0] as Node3D).transform = entry[2]
+			(entry[0] as Node3D).visible = entry[3]
+		(entry[0] as Node).process_mode = entry[1]
+	report["same_material"] = _player_occlusion_material.get_rid() == material_rid
+	report["restored"] = camera.transform == camera_transform and player.transform == player_transform and player.visible == player_visible and player.process_mode == player_mode and player.velocity == player_velocity
+	for entry: Array in saved_overlays:
+		if (entry[0] as GeometryInstance3D).material_overlay != entry[1]:
+			report["restored"] = false
+	for entry: Array in saved_nodes:
+		if (entry[0] as Node).process_mode != entry[1]:
+			report["restored"] = false
+		if entry[0] is Node3D and ((entry[0] as Node3D).transform != entry[2] or (entry[0] as Node3D).visible != entry[3]):
+			report["restored"] = false
+	report["frames_drawn_before"] = frames_before
+	report["frames_drawn_after"] = Engine.get_frames_drawn()
+	report["completed"] = report["frames"] == 3 and Engine.get_frames_drawn() > frames_before and report["same_material"] and report["restored"]
+	report["reason"] = "" if report["completed"] else "draw_or_restore_not_confirmed"
+	return report
 
 
 func _update_camera_occlusion_silhouette() -> void:
@@ -6143,9 +6212,10 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	var physically_inside := room != null and _is_player_inside_room(room)
 	if physically_inside:
 		_on_initial_loop_entry_physically_entered(room)
-	super(room)
-	if room == null:
+	# 物理跨界允许重试；重复通知不能在基类早退后继续执行塔楼副作用。
+	if room == null or _is_duplicate_room_entry(room):
 		return
+	super(room)
 	# 换房 ⇒ 黑幕的洞跟着换（Gungeon 的"一次只有一间房是舞台"）。
 	# 必须在 `super()` 之后：`_current_room_id` 由基类更新，早读会拿到上一间。
 	_refresh_flow_view_mask()

@@ -203,6 +203,8 @@ func _refresh_label() -> void:
 		if preparation_active:
 			var caption := "【下一批接敌】" if _alert.phase == "intermission" else "【接敌】"
 			_label.text = "%s %s 秒" % [caption, str(int(ceil(remaining_sec))) if reduce_motion else format_preparation_time(remaining_sec)]
+		elif _alert.phase == "trigger_freeze":
+			_label.text = "【接敌警报】"
 		else:
 			_label.text = "【清除入侵者】"
 	else:

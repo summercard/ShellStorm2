@@ -137,7 +137,7 @@ func _run() -> void:
 		tower.player.global_position = (hit.get("position", room.global_position) as Vector3) + Vector3.UP * 0.15
 		tower.player.velocity = Vector3.ZERO
 		tower.force_enter_room_for_test(next)
-		var encounter := {"room":next, "room_type":room.room_type, "alive_at_entry":tower._alive_by_room.get(next, 0)}
+		var encounter := {"room":next, "current_room":tower._current_room_id, "room_type":room.room_type, "alive_at_entry":tower._alive_by_room.get(next, 0)}
 		_event(label, begin, encounter)
 		var observe_wave := not backtrack and not room.authored_layout_peaceful and room.room_type in Dungeon3D.HOSTILE_ROOM_TYPES
 		await _frames(label, 35, 1.85 if observe_wave else 0.0)

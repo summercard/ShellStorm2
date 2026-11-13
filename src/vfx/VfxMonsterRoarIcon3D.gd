@@ -84,6 +84,11 @@ func _on_tick(elapsed: float, _total: float) -> void:
 		_apply_alpha(1.0 - (elapsed - hold_seconds) / fade_seconds)
 
 
+## 加载页样本暂停动画后，复用正式透明度路径实绘完整与淡出状态。
+func set_render_warmup_alpha(alpha: float) -> void:
+	_apply_alpha(alpha)
+
+
 func _on_lifetime_expired() -> void:
 	roar_icon_dismissed.emit(false)
 
