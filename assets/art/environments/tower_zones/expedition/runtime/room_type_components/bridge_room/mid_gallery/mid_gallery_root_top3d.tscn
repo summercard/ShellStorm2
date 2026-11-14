@@ -6,7 +6,9 @@
 
 [node name="RoomTypeComponentMidGallery" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY"
-metadata/asset_version = "v010"
+metadata/asset_version = "v029"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/mid_gallery/export/v029/mid_gallery_optimized_v029.blend"
+metadata/glb_sha256 = "9de7172aec18abd9e2e5064bd5211eed42cb2d39225c0e6c27bcc4eed04156cc"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "mid_gallery"
 metadata/display_name_zh = "错层钢格栅检修平台 2.78×27.82×9.21m"

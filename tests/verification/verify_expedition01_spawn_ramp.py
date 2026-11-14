@@ -161,6 +161,16 @@ def main() -> None:
                 {"type": "fat_zombie03", "count": 4, "delay_sec": 1.0},
                 {"type": "ranged_caster", "count": 4, "delay_sec": 1.0},
             ]
+        if room_id == "room_07":
+            wanted_placements[0]["count_bonus"] = 4
+            wanted_placements[1]["count_bonus"] = 3
+            wanted_placements[2]["count_bonus"] = 3
+        if room_id == "room_08":
+            wanted_placements[0]["count_bonus"] = 2
+            wanted_placements[1]["count_bonus"] = 2
+            wanted_placements[3]["count_bonus"] = 2
+            wanted_placements[4]["count_bonus"] = 2
+            wanted_placements[2].pop("count_bonus", None)
         if room.get("spawn_placements", []) != wanted_placements:
             fail(f"盒子实例/位置/数量变化或非授权延迟改动: {room_id}")
         if room_id not in ordinary_rooms + trigger_rooms and room != baseline_rooms[room_id]:
@@ -183,10 +193,11 @@ def main() -> None:
     wanted03 = dict(baseline_rooms["room_03"]["encounter"])
     wanted03.update({
         "trigger": {"shape": "door_entries", "port_ids": ["A", "B"], "inset_m": 2.0, "depth_m": 3.0},
-        "start_delay_sec": 3.0, "preparation_sec": 3.0, "freeze_player_sec": 1.0,
+        "duration_sec": 60.0, "start_delay_sec": 2.0, "preparation_sec": 0.0, "freeze_player_sec": 1.0,
         "remote_spawn_policy": "opposite_entry", "hud_countdown": True,
         "alert_style": "red_eva", "alert_text": "接敌警报",
         "alert_beep_interval_sec": 0.5, "alert_pulse": True,
+        "intermission_sec": 0.0, "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": True,
         "stages": [
             {"monsters": [{"type": "ranged_caster", "count": 1}, {"type": "melee_chaser", "count": 4}]},
             {"monsters": [{"type": "fat_zombie03", "count": 1, "min_player_distance_m": 8.0},
@@ -201,16 +212,19 @@ def main() -> None:
         if room_id == "room_03":
             continue
         wanted = json.loads(json.dumps(baseline_rooms[room_id]["encounter"]))
-        preparation = 2.0 if room_id in ("room_04", "room_10") else 3.0
         red = room_id in ("room_06", "room_09")
         wanted.update({
             "trigger": {"shape": "door_entries", "port_ids": ["A", "B"], "inset_m": 2.0, "depth_m": 3.0},
-            "preparation_sec": preparation, "start_delay_sec": preparation, "freeze_player_sec": 0.0,
+            "duration_sec": 60.0, "preparation_sec": 0.0, "start_delay_sec": 2.0, "freeze_player_sec": 1.0,
             "remote_spawn_policy": "opposite_entry", "hud_countdown": True,
             "alert_style": "red_eva" if red else "subtle",
             "alert_text": "警报 · 入侵者逼近" if red else "接敌准备",
             "alert_beep_interval_sec": 0.5 if red else 1.0, "alert_pulse": red,
+            "intermission_sec": 0.0, "deadline_behavior": "close_dispatch_and_clear", "repeat_last_stage": True,
         })
+        if room_id in ("room_06", "room_09", "room_10"):
+            wanted["max_alive"] = rooms[room_id]["encounter"]["max_alive"]
+            wanted["stages"] = rooms[room_id]["encounter"]["stages"]
         if rooms[room_id]["encounter"] != wanted:
             fail(f"{room_id} 入口/准备/冻结/告警配置不符或编成被改变")
     for room_id in trigger_rooms:
@@ -228,11 +242,11 @@ def main() -> None:
         "room_03": [5, 7, 8],
         "room_04": [6, 6],
         "room_05": [31],
-        "room_06": [8, 9, 13],
-        "room_07": [12],
-        "room_08": [(16, 17)],
-        "room_09": [8, 11, 13, 16],
-        "room_10": [5, 5],
+        "room_06": [10, 11, 15],
+        "room_07": [16],
+        "room_08": [(19, 20)],
+        "room_09": [15, 19, 23, 27],
+        "room_10": [13, 15],
     }
     expected_total = {
         "room_01": (6, 6),
@@ -240,11 +254,11 @@ def main() -> None:
         "room_03": (20, 20),
         "room_04": (12, 12),
         "room_05": (31, 31),
-        "room_06": (30, 30),
-        "room_07": (12, 12),
-        "room_08": (16, 17),
-        "room_09": (48, 48),
-        "room_10": (10, 10),
+        "room_06": (36, 36),
+        "room_07": (16, 16),
+        "room_08": (19, 20),
+        "room_09": (84, 84),
+        "room_10": (28, 28),
     }
     box_root = ROOT / "data/spawn_boxes"
     expected_overrides = {
@@ -296,13 +310,16 @@ def main() -> None:
         for stage in room.get("encounter", {}).get("stages", []):
             for spawn in stage.get("monsters", []):
                 target[spawn["type"]] = target.get(spawn["type"], 0) + spawn["count"]
-    if content_kinds != {"melee_chaser": 120, "ranged_caster": 39, "fat_zombie03": 17,
-                         "exploder": 6, "melee_chaser_strong": 8, "ranged_caster_strong": 4}:
+    if content_kinds != {"melee_chaser": 174, "ranged_caster": 46, "fat_zombie03": 19,
+                         "exploder": 6, "melee_chaser_strong": 11, "ranged_caster_strong": 5}:
         fail(f"十内容房逐怪种上界漂移: {content_kinds}")
     if boss_kinds != {"boss": 1, "melee_chaser_strong": 1, "ranged_caster_strong": 1,
                       "summoner": 1, "melee_chaser": 4, "exploder": 1, "ranged_caster": 2}:
         fail(f"Boss本体/强化/召唤者编成漂移: {boss_kinds}")
-    print(f"EXPEDITION01_STRONG_SQUAD_OK overrides=5 content_max={content_kinds} boss_max={boss_kinds}")
+    speed = source_level["monster_rules"]["stats"]["per_kind"]["melee_chaser"]["speed"]
+    if speed != 2.45:
+        fail(f"小僵尸速度必须为2.45m/s，当前={speed}")
+    print(f"EXPEDITION01_STRONG_SQUAD_OK overrides=5 content_max={content_kinds} boss_max={boss_kinds} melee_speed=2.45 strong_inherits=true")
     content_totals = [0, 0]
     for room_id, expected in expected_stages.items():
         room = rooms[room_id]
@@ -331,7 +348,7 @@ def main() -> None:
         content_totals[0] += total[0]
         content_totals[1] += total[1]
         print(f"EXPEDITION01_WAVES {room_id} waves={actual_stage_bounds} total={total}")
-    if content_totals != [192, 194]:
+    if content_totals != [259, 261]:
         fail(f"十内容房总怪数上下界错误: {content_totals}")
     boss_room = rooms["boss"]
     boss_bounds = [tuple(
@@ -345,10 +362,10 @@ def main() -> None:
 
     for room_id in ("room_03", "room_04", "room_06", "room_09", "room_10"):
         encounter = rooms[room_id]["encounter"]
-        for key, wanted in (("duration_sec", 0.0), ("completion", "clear"), ("stage_advance", "clear"), ("min_player_distance_m", 6.0)):
+        for key, wanted in (("duration_sec", 60.0), ("completion", "clear"), ("stage_advance", "clear"), ("min_player_distance_m", 6.0)):
             if encounter.get(key) != wanted:
                 fail(f"{room_id} {key} != {wanted}")
-    expected_trigger = {"room_03": (3.0, 8), "room_04": (2.5, 6), "room_06": (2.5, 10), "room_09": (2.5, 12), "room_10": (2.0, 5)}
+    expected_trigger = {"room_03": (0.0, 8), "room_04": (0.0, 6), "room_06": (0.0, 13), "room_09": (0.0, 21), "room_10": (0.0, 13)}
     for room_id, (intermission, max_alive) in expected_trigger.items():
         encounter = rooms[room_id]["encounter"]
         if encounter["intermission_sec"] != intermission or encounter["max_alive"] != max_alive:
@@ -362,6 +379,8 @@ def main() -> None:
 
     baseline_level = baseline_data("level_plan.json")
     wanted_level = json.loads(json.dumps(baseline_level))
+    wanted_level["monster_rules"]["stats"]["per_kind"]["melee_chaser"]["speed"] = 2.45
+    wanted_level["monster_rules"]["note"] = source_level["monster_rules"]["note"]
     wanted_guarantee = wanted_level["clear_drops"]["room_guarantees"][0]
     wanted_guarantee["candidate_rooms"] = ["room_02"]
     wanted_guarantee["note"] = source_level["clear_drops"]["room_guarantees"][0]["note"]

@@ -35,5 +35,39 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY_-1",
-  "source_library": "v005"
+  "source_library": "v005",
+  "optimization_v029": {
+    "role": "optimized",
+    "version": "v029",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/mid_gallery/mid_gallery.blend",
+    "source_sha256_before": "a3be900456a63a9d015ed372045108740a8ac6e5469335f535cd3eb1c20f8a9d",
+    "source_sha256_after": "a3be900456a63a9d015ed372045108740a8ac6e5469335f535cd3eb1c20f8a9d",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/mid_gallery/export/v029/mid_gallery_optimized_v029.blend",
+    "optimized_sha256": "8faa5fe3d88065c78e3275be2f784d2881e9946ae9ea369b6b43e6daa84db2ee",
+    "triangles_before": 19516,
+    "triangles_after": 3900,
+    "reduction_ratio": 0.8001639680262349,
+    "operations": [
+      "v029 inherited: 1 degree limited dissolve then collapse decimation and source-nearest/material PaletteUV repair",
+      "Saved optimized file reopened before exporting; GLB Y-up mapping once; images/textures excluded"
+    ],
+    "budget": 3903,
+    "budget_source": "User target single-component triangles <= original 20%, import authorization 2026-11-14",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/mid_gallery/mid_gallery_visual_top3d.glb",
+    "glb_sha256": "9de7172aec18abd9e2e5064bd5211eed42cb2d39225c0e6c27bcc4eed04156cc",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/mid_gallery/mid_gallery_root_top3d.tscn",
+    "prefab_sha256": "6c3a6a6b7010c9a31f6b670f039c5362d9dc4f314204f51b45e4423597b3260e",
+    "runtime_component_verified": true,
+    "whole_level_verified": false,
+    "verification_report": "../ShellStorm2-work/outputs/expedition01_optimization/import_20261114/godot_verification.json",
+    "visual_fidelity": "Comparison images supplied; no pixel-identical claim. Original authorized simplification retains minor visual differences."
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/mid_gallery/export/v029/mid_gallery_optimized_v029.blend",
+  "optimized_sha256": "8faa5fe3d88065c78e3275be2f784d2881e9946ae9ea369b6b43e6daa84db2ee",
+  "triangle_count": 3900,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/mid_gallery/mid_gallery_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/mid_gallery/mid_gallery_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v029",
+  "optimized_asset_version": "v029"
 }

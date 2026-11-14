@@ -6,7 +6,9 @@
 
 [node name="RoomTypeComponentFloorDetailB" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B"
-metadata/asset_version = "v014"
+metadata/asset_version = "v029"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/floor_detail_b/export/v029/floor_detail_b_optimized_v029.blend"
+metadata/glb_sha256 = "de8a8eb4d6cec7d4107a9b011232b47069c73fad67aad7b3661502d7dddae334"
 metadata/room_type = "DB_ROOM"
 metadata/component_slug = "floor_detail_b"
 metadata/display_name_zh = "floor_detail_b"

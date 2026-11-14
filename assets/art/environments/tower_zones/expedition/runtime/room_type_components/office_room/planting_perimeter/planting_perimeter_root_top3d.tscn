@@ -6,7 +6,9 @@
 
 [node name="RoomTypeComponentPlantingPerimeter" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER"
-metadata/asset_version = "v009"
+metadata/asset_version = "v029"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/planting_perimeter/export/v029/planting_perimeter_optimized_v029.blend"
+metadata/glb_sha256 = "bbf742bc4a9cf73a76a54bf473db5bcfc5f3e12974c494b801015a0762e64850"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "planting_perimeter"
 metadata/display_name_zh = "周圈绿植"

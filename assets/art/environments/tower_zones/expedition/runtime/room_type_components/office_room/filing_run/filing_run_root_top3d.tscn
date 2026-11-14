@@ -13,7 +13,9 @@ size = Vector3(0.765, 2.832, 4.53)
 
 [node name="RoomTypeComponentFilingRun" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-FILING_RUN"
-metadata/asset_version = "v009"
+metadata/asset_version = "v029"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/filing_run/export/v029/filing_run_optimized_v029.blend"
+metadata/glb_sha256 = "7e2bf0e53f510f8b189506a1e6f046c0ba373bda5402ecc28dbf77968cd7c9bc"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "filing_run"
 metadata/display_name_zh = "档案柜带"

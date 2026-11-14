@@ -64,9 +64,37 @@
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "7165b1b4524dfecacab94daaaccda7f34c260dc3679965ce80233faa602a60a9",
-  "triangle_count": 30672,
+  "triangle_count": 6132,
   "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/matrix_bay_5m/env_boss_room02_matrix_bay_5m_root_top3d.tscn",
   "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/matrix_bay_5m/env_boss_room02_matrix_bay_5m_visual_top3d.glb",
-  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_bay_5m/export/v027/env_boss_room02_matrix_bay_5m_optimized_v027.blend",
-  "optimized_sha256": "4c54b851d7217b95fe9a99f2b03dcb20c00006515dd5ac687f26baa624805a9f"
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_bay_5m/export/v029/matrix_bay_5m_optimized_v029.blend",
+  "optimized_sha256": "dc4c79e24469b9b76d50d848ef60900a6e502166e0b98e8162c44b40ca9524ae",
+  "optimization_v029": {
+    "role": "optimized",
+    "version": "v029",
+    "source_path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_bay_5m/matrix_bay_5m.blend",
+    "source_sha256_before": "9dc060d128fd8464ab3c1208d3b0675441fcbe4cfa8afa7d93c596471f0d9cd9",
+    "source_sha256_after": "9dc060d128fd8464ab3c1208d3b0675441fcbe4cfa8afa7d93c596471f0d9cd9",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/matrix_bay_5m/export/v029/matrix_bay_5m_optimized_v029.blend",
+    "optimized_sha256": "dc4c79e24469b9b76d50d848ef60900a6e502166e0b98e8162c44b40ca9524ae",
+    "triangles_before": 30672,
+    "triangles_after": 6132,
+    "reduction_ratio": 0.8000782472613458,
+    "operations": [
+      "v029 inherited: 1 degree limited dissolve then collapse decimation and source-nearest/material PaletteUV repair",
+      "Saved optimized file reopened before exporting; GLB Y-up mapping once; images/textures excluded"
+    ],
+    "budget": 6134,
+    "budget_source": "User target single-component triangles <= original 20%, import authorization 2026-11-14",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/matrix_bay_5m/env_boss_room02_matrix_bay_5m_visual_top3d.glb",
+    "glb_sha256": "a91d19244548b6b4c034645edf9e1df35a82223f8469c9b573af3dc440817898",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/matrix_bay_5m/env_boss_room02_matrix_bay_5m_root_top3d.tscn",
+    "prefab_sha256": "9a511776add3ccdf02c82e324e83696b2192e7eb2916ad61c536c3634f204774",
+    "runtime_component_verified": true,
+    "whole_level_verified": false,
+    "verification_report": "../ShellStorm2-work/outputs/expedition01_optimization/import_20261114/godot_verification.json",
+    "visual_fidelity": "Comparison images supplied; no pixel-identical claim. Original authorized simplification retains minor visual differences."
+  },
+  "runtime_asset_version": "v029",
+  "optimized_asset_version": "v029"
 }

@@ -9,7 +9,9 @@ size = Vector3(1.515, 5.45, 2.63)
 
 [node name="RoomTypeComponentUpperBankZ5450" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z5450"
-metadata/asset_version = "v010"
+metadata/asset_version = "v029"
+metadata/optimized_path = "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/upper_bank_z5450/export/v029/upper_bank_z5450_optimized_v029.blend"
+metadata/glb_sha256 = "2920d23998ba6501ef7808cf16d1d891fb31a3f60ffbda0d938f353ba5a2bf28"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "upper_bank_z5450"
 metadata/display_name_zh = "机房设备 1.51×2.63×5.45m"

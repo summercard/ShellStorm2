@@ -33,5 +33,39 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN_WEST",
-  "source_library": "v004"
+  "source_library": "v004",
+  "optimization_v029": {
+    "role": "optimized",
+    "version": "v029",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/filing_run/filing_run.blend",
+    "source_sha256_before": "6adca10c15683510cde141d187b5016d359519533bc7f3a525a1f1cced975c37",
+    "source_sha256_after": "6adca10c15683510cde141d187b5016d359519533bc7f3a525a1f1cced975c37",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/filing_run/export/v029/filing_run_optimized_v029.blend",
+    "optimized_sha256": "46bf676adc1eed1116b160a2330394903c0f7fa0bf602bb5560f4076101fe13a",
+    "triangles_before": 16104,
+    "triangles_after": 3218,
+    "reduction_ratio": 0.800173869846001,
+    "operations": [
+      "v029 inherited: 1 degree limited dissolve then collapse decimation and source-nearest/material PaletteUV repair",
+      "Saved optimized file reopened before exporting; GLB Y-up mapping once; images/textures excluded"
+    ],
+    "budget": 3220,
+    "budget_source": "User target single-component triangles <= original 20%, import authorization 2026-11-14",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/filing_run/filing_run_visual_top3d.glb",
+    "glb_sha256": "7e2bf0e53f510f8b189506a1e6f046c0ba373bda5402ecc28dbf77968cd7c9bc",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/filing_run/filing_run_root_top3d.tscn",
+    "prefab_sha256": "0a9bda7d159fa507caf8024a3e31439f2eb28cef306df67c82d8c9a8ae9df3c1",
+    "runtime_component_verified": true,
+    "whole_level_verified": false,
+    "verification_report": "../ShellStorm2-work/outputs/expedition01_optimization/import_20261114/godot_verification.json",
+    "visual_fidelity": "Comparison images supplied; no pixel-identical claim. Original authorized simplification retains minor visual differences."
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/filing_run/export/v029/filing_run_optimized_v029.blend",
+  "optimized_sha256": "46bf676adc1eed1116b160a2330394903c0f7fa0bf602bb5560f4076101fe13a",
+  "triangle_count": 3218,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/filing_run/filing_run_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/filing_run/filing_run_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v029",
+  "optimized_asset_version": "v029"
 }

@@ -32,5 +32,39 @@
     "03_清漆反光_紫粉点缀"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
-  "source_library": "v004"
+  "source_library": "v004",
+  "optimization_v029": {
+    "role": "optimized",
+    "version": "v029",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/planting_perimeter/planting_perimeter.blend",
+    "source_sha256_before": "2c57ab05808d843f2b97394deda6b4cda4ea75eed4e70eedd017605b28ea34fc",
+    "source_sha256_after": "2c57ab05808d843f2b97394deda6b4cda4ea75eed4e70eedd017605b28ea34fc",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/planting_perimeter/export/v029/planting_perimeter_optimized_v029.blend",
+    "optimized_sha256": "f4a1fb97194ba24df5fa26c07fea5ce8abac6417b208f07cb3d0b51e934782ae",
+    "triangles_before": 13240,
+    "triangles_after": 2648,
+    "reduction_ratio": 0.8,
+    "operations": [
+      "v029 inherited: 1 degree limited dissolve then collapse decimation and source-nearest/material PaletteUV repair",
+      "Saved optimized file reopened before exporting; GLB Y-up mapping once; images/textures excluded"
+    ],
+    "budget": 2648,
+    "budget_source": "User target single-component triangles <= original 20%, import authorization 2026-11-14",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/planting_perimeter/planting_perimeter_visual_top3d.glb",
+    "glb_sha256": "bbf742bc4a9cf73a76a54bf473db5bcfc5f3e12974c494b801015a0762e64850",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/planting_perimeter/planting_perimeter_root_top3d.tscn",
+    "prefab_sha256": "c484d53bee4c77d9a862f5572ee8440a270e44cb961a724fb725eb1d32d38c71",
+    "runtime_component_verified": true,
+    "whole_level_verified": false,
+    "verification_report": "../ShellStorm2-work/outputs/expedition01_optimization/import_20261114/godot_verification.json",
+    "visual_fidelity": "Comparison images supplied; no pixel-identical claim. Original authorized simplification retains minor visual differences."
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v009/component_packages/planting_perimeter/export/v029/planting_perimeter_optimized_v029.blend",
+  "optimized_sha256": "f4a1fb97194ba24df5fa26c07fea5ce8abac6417b208f07cb3d0b51e934782ae",
+  "triangle_count": 2648,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/planting_perimeter/planting_perimeter_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/planting_perimeter/planting_perimeter_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v029",
+  "optimized_asset_version": "v029"
 }

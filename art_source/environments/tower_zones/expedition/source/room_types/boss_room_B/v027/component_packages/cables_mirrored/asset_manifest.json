@@ -62,9 +62,37 @@
   "palette_uv_layer": "PaletteUV",
   "animation": null,
   "geometry_fingerprint": "a5148259da4912f5d68b5af89addc5cfa37dd9cccf31097246b8ffed83d38580",
-  "triangle_count": 19456,
+  "triangle_count": 3890,
   "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/cables_mirrored/env_boss_room02_cables_mirrored_root_top3d.tscn",
   "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/cables_mirrored/env_boss_room02_cables_mirrored_visual_top3d.glb",
-  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_mirrored/export/v027/env_boss_room02_cables_mirrored_optimized_v027.blend",
-  "optimized_sha256": "279c5f9a320159ee99d1ba649c496e404c37ba8773c4e232552cb7d88d5d35f6"
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_mirrored/export/v029/cables_mirrored_optimized_v029.blend",
+  "optimized_sha256": "b78c8d9c944f98df1800f5d1b05d70e2201c581d8c82ec37b56fc01fa2bd0466",
+  "optimization_v029": {
+    "role": "optimized",
+    "version": "v029",
+    "source_path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_mirrored/cables_mirrored.blend",
+    "source_sha256_before": "3bd954ec4795cc421b158620d50dd6c80b92230ae8dd12f8e95524de879feb07",
+    "source_sha256_after": "3bd954ec4795cc421b158620d50dd6c80b92230ae8dd12f8e95524de879feb07",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/room_types/boss_room_B/v027/component_packages/cables_mirrored/export/v029/cables_mirrored_optimized_v029.blend",
+    "optimized_sha256": "b78c8d9c944f98df1800f5d1b05d70e2201c581d8c82ec37b56fc01fa2bd0466",
+    "triangles_before": 19456,
+    "triangles_after": 3890,
+    "reduction_ratio": 0.800061677631579,
+    "operations": [
+      "v029 inherited: 1 degree limited dissolve then collapse decimation and source-nearest/material PaletteUV repair",
+      "Saved optimized file reopened before exporting; GLB Y-up mapping once; images/textures excluded"
+    ],
+    "budget": 3891,
+    "budget_source": "User target single-component triangles <= original 20%, import authorization 2026-11-14",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room_02/cables_mirrored/env_boss_room02_cables_mirrored_visual_top3d.glb",
+    "glb_sha256": "36a03712739f4dc33613e441388ef137672e6013a045f0dc216c4ac214767cb7",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room_02/cables_mirrored/env_boss_room02_cables_mirrored_root_top3d.tscn",
+    "prefab_sha256": "95479d690cd1678f9d78a2318d24543bffff25dedd3758c3dca02c622cf43376",
+    "runtime_component_verified": true,
+    "whole_level_verified": false,
+    "verification_report": "../ShellStorm2-work/outputs/expedition01_optimization/import_20261114/godot_verification.json",
+    "visual_fidelity": "Comparison images supplied; no pixel-identical claim. Original authorized simplification retains minor visual differences."
+  },
+  "runtime_asset_version": "v029",
+  "optimized_asset_version": "v029"
 }

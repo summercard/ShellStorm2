@@ -711,7 +711,7 @@
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 0.0,
-        "max_alive": 10,
+        "max_alive": 13,
         "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
@@ -730,7 +730,7 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 5
+                "count": 7
               }
             ]
           },
@@ -750,7 +750,7 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 5
+                "count": 7
               }
             ]
           },
@@ -774,7 +774,7 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 6
+                "count": 8
               }
             ]
           }
@@ -843,7 +843,7 @@
             0.0,
             0.0
           ],
-          "count_bonus": 2,
+          "count_bonus": 4,
           "spawn_overrides": [
             {
               "type": "melee_chaser",
@@ -863,7 +863,7 @@
             -5.0,
             -5.0
           ],
-          "count_bonus": 2
+          "count_bonus": 3
         },
         {
           "box": "box_corner_ambush",
@@ -871,7 +871,7 @@
             5.0,
             5.0
           ],
-          "count_bonus": 2
+          "count_bonus": 3
         }
       ],
       "encounter": {
@@ -973,7 +973,7 @@
             -15.0,
             -12.5
           ],
-          "count_bonus": 1
+          "count_bonus": 2
         },
         {
           "box": "box_corner_ambush",
@@ -981,7 +981,7 @@
             0.0,
             -12.5
           ],
-          "count_bonus": 1
+          "count_bonus": 2
         },
         {
           "box": "box_wall_arc",
@@ -989,8 +989,7 @@
             15.0,
             -2.5
           ],
-          "rotation_deg": 90.0,
-          "count_bonus": 1
+          "rotation_deg": 90.0
         },
         {
           "box": "box_center_elite",
@@ -1017,7 +1016,8 @@
           "center_m": [
             -5.0,
             12.5
-          ]
+          ],
+          "count_bonus": 2
         }
       ],
       "encounter": {
@@ -1105,7 +1105,7 @@
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 0.0,
-        "max_alive": 16,
+        "max_alive": 21,
         "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
@@ -1124,7 +1124,7 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 8
+                "count": 11
               }
             ]
           },
@@ -1144,7 +1144,7 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 9
+                "count": 12
               }
             ]
           },
@@ -1168,7 +1168,7 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 10
+                "count": 13
               }
             ]
           },
@@ -1192,7 +1192,7 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 10
+                "count": 13
               }
             ]
           }
@@ -1269,7 +1269,7 @@
         "completion": "clear",
         "stage_advance": "clear",
         "intermission_sec": 0.0,
-        "max_alive": 10,
+        "max_alive": 13,
         "min_player_distance_m": 6.0,
         "seal_room": true,
         "light_on_finish": true,
@@ -1284,7 +1284,7 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 8
+                "count": 11
               }
             ]
           },
@@ -1300,7 +1300,7 @@
               },
               {
                 "type": "melee_chaser",
-                "count": 9
+                "count": 12
               }
             ]
           }

@@ -1,0 +1,42 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B",
+  "slug": "floor_detail_b",
+  "collection": "floor_detail_b_输出包",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\art_source\\environments\\tower_zones\\expedition\\source\\common_components\\v014\\component_packages\\floor_detail_b\\floor_detail_b.blend",
+  "version": "v014",
+  "registration_note": "Legacy component ID retained; traceable through room-type ledger row, no independent asset row.",
+  "optimization_v029": {
+    "role": "optimized",
+    "version": "v029",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/floor_detail_b/floor_detail_b.blend",
+    "source_sha256_before": "17e1c379b38a9f9f4a76dea0b54f0c6f805cca72ea62cb37e507556de3aceb3b",
+    "source_sha256_after": "17e1c379b38a9f9f4a76dea0b54f0c6f805cca72ea62cb37e507556de3aceb3b",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/floor_detail_b/export/v029/floor_detail_b_optimized_v029.blend",
+    "optimized_sha256": "a4abd50fcae03b67ef17743f8c7b5119c4bb1af0b7bed665b72077461d96c326",
+    "triangles_before": 22788,
+    "triangles_after": 4556,
+    "reduction_ratio": 0.8000702123924873,
+    "operations": [
+      "v029 inherited: 1 degree limited dissolve then collapse decimation and source-nearest/material PaletteUV repair",
+      "Saved optimized file reopened before exporting; GLB Y-up mapping once; images/textures excluded"
+    ],
+    "budget": 4557,
+    "budget_source": "User target single-component triangles <= original 20%, import authorization 2026-11-14",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/floor_detail_b/floor_detail_b_visual_top3d.glb",
+    "glb_sha256": "de8a8eb4d6cec7d4107a9b011232b47069c73fad67aad7b3661502d7dddae334",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_detail_b/floor_detail_b_root_top3d.tscn",
+    "prefab_sha256": "c9143f2dd167f2d207acb04aa97aab672cb22b6cd1e0440122918ab469d1bad9",
+    "runtime_component_verified": true,
+    "whole_level_verified": false,
+    "verification_report": "../ShellStorm2-work/outputs/expedition01_optimization/import_20261114/godot_verification.json",
+    "visual_fidelity": "Comparison images supplied; no pixel-identical claim. Original authorized simplification retains minor visual differences."
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v014/component_packages/floor_detail_b/export/v029/floor_detail_b_optimized_v029.blend",
+  "optimized_sha256": "a4abd50fcae03b67ef17743f8c7b5119c4bb1af0b7bed665b72077461d96c326",
+  "triangle_count": 4556,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/floor_detail_b/floor_detail_b_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_detail_b/floor_detail_b_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v029",
+  "optimized_asset_version": "v029"
+}

@@ -37,5 +37,39 @@
     "04_柔和自发光_UI灯光"
   ],
   "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_1",
-  "source_library": "v005"
+  "source_library": "v005",
+  "optimization_v029": {
+    "role": "optimized",
+    "version": "v029",
+    "source_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/upper_bank_z5450/upper_bank_z5450.blend",
+    "source_sha256_before": "cf37ebd568403cb2a62ab17145fef4cdcc561d7d1625ecc03d2f9aa7fff39e0f",
+    "source_sha256_after": "cf37ebd568403cb2a62ab17145fef4cdcc561d7d1625ecc03d2f9aa7fff39e0f",
+    "optimized_path": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/upper_bank_z5450/export/v029/upper_bank_z5450_optimized_v029.blend",
+    "optimized_sha256": "ea3320ae1d160bf05a75f376159f9221680d8dd9ecf5e063e55e2bf4f0ee7c5f",
+    "triangles_before": 14040,
+    "triangles_after": 2806,
+    "reduction_ratio": 0.8001424501424501,
+    "operations": [
+      "v029 inherited: 1 degree limited dissolve then collapse decimation and source-nearest/material PaletteUV repair",
+      "Saved optimized file reopened before exporting; GLB Y-up mapping once; images/textures excluded"
+    ],
+    "budget": 2808,
+    "budget_source": "User target single-component triangles <= original 20%, import authorization 2026-11-14",
+    "glb_path": "assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/upper_bank_z5450/upper_bank_z5450_visual_top3d.glb",
+    "glb_sha256": "2920d23998ba6501ef7808cf16d1d891fb31a3f60ffbda0d938f353ba5a2bf28",
+    "prefab_path": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_bank_z5450/upper_bank_z5450_root_top3d.tscn",
+    "prefab_sha256": "c8f1cae03a773166bd92ad358e71863d2f28069cb01833b427dbca0563c5d0d3",
+    "runtime_component_verified": true,
+    "whole_level_verified": false,
+    "verification_report": "../ShellStorm2-work/outputs/expedition01_optimization/import_20261114/godot_verification.json",
+    "visual_fidelity": "Comparison images supplied; no pixel-identical claim. Original authorized simplification retains minor visual differences."
+  },
+  "optimized_source": "art_source/environments/tower_zones/expedition/source/common_components/v010/component_packages/upper_bank_z5450/export/v029/upper_bank_z5450_optimized_v029.blend",
+  "optimized_sha256": "ea3320ae1d160bf05a75f376159f9221680d8dd9ecf5e063e55e2bf4f0ee7c5f",
+  "triangle_count": 2806,
+  "runtime_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/upper_bank_z5450/upper_bank_z5450_visual_top3d.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_bank_z5450/upper_bank_z5450_root_top3d.tscn",
+  "runtime_connected": true,
+  "runtime_asset_version": "v029",
+  "optimized_asset_version": "v029"
 }

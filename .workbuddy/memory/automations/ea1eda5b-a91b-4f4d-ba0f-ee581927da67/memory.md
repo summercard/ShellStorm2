@@ -5,6 +5,18 @@
 
 ## 执行历史
 
+### 2026-11-14 05:00 — **内容已上线，线上校验不通过（第十五天同一卡点：需登录门禁）**
+- 全流程一次过：导出 402.4 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（**CHANGELOG 3 条**）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。5m39s，无重试。
+- 包：**421,962,976 B / 402.4 MiB**，SHA256 `38710ffbb9e386bf3de81bb78331f711c9fb0f0180b57409beb59a6c56186fc1`，比 11-13 版 **+45,024 B（+44.0 KiB）**。exe mtime 05:05:44。工作区开工/收工均 3 项（`_probe_loop.txt`、`override.cfg.disabled_20261109`、`verify_main_story_boss_gate.report.json`），HEAD `172d32de`（11-13 17:46，1 条提交）。
+- 线上已被本版覆盖：发布输出 `Bytes: 421,975,051` ＝ 本地三件（exe 421,962,976 + index 7,395 + md 4,680）**逐字节相等**；`server-sites` 本站仍 `402.4 MiB / 需登录 / 私有`，全站仍 6 个资源、Site ID 不变 ⇒ 未新建。
+- **卡点不变**：直链 / 更新页 / index.html / 新 md / 旧 11-13 md 共 5 条全部 302 → `/oauth/feishu`。旧文件也应 404 却 302 ⇒ 门禁在站点层。未改策略、未删校验。
+- 3 条＝**11-13 三条全为真新增**（备弹 HUD 拾取不刷新修复、读取页灯色逐关化 01灰蓝/02淡黄/03玫红、远征卡顿续作仍未放行）。昨日那轮发的是 11-12 条目，无重叠。
+- 采集器缺陷复现：第 2 条标题在 `**…**` 内中文冒号处被切开（`<h3>` 变半截）；第 1 条 `[独立记录](…)` 链接被压成纯文本。页面 3 个 `<h3>`、`<h1>弹壳风暴2</h1>`、按钮 `href="ShellStorm2.exe"`；最长行 1,743 字符。
+- 合规：`config/name="弹壳风暴2"` 未动；未 commit/push；未新建站点；`scripts/web_release.py` 不存在、未跑；发布目录仅 3 件；真实存档 `base_save.json` mtime 11-13 11:29:19（早于流水线）。
+- 环境变化：daemon 已由 1.9.7 升 **1.9.8**（`/api/v1/health` 的 version），`/api/v1/sites` 无 token 报「token 无效或缺失」，改走 `publish.py server-sites` 读站点表。
+- 报告：`ShellStorm2-work\_logs\发布报告_2026-11-14.md`；日志 `_logs\daily_release_2026-11-14.log`。
+- **待业主（连续第十五天）**：请管理员把本站 `access` 改 `public`；99F 基地菜单链仍停在 11/13 未签；采集器标题切分/链接丢失待修。
+
 ### 2026-11-13 05:00 — **内容已上线，线上校验不通过（第十四天同一卡点：需登录门禁）**
 - 全流程一次过：导出 402.4 MiB → 三道门禁全绿（`EXPORT_RUNTIME_REFS_OK` / `FIXTURE_SHADOW_CASTING_OK` / `SMOKE_OK`）→ 生成文档（**CHANGELOG 3 条**）→ 覆盖发布 3 files → **`verify_online` 判 302 失败，退出码 1**。5m44s，无重试。
 - 包：**421,917,952 B / 402.4 MiB**，SHA256 `8224536aeec18be30ae123b400868ef14802ca63df23593f523b5b4deac365e5`，比 11-12 版 **+52,656 B（+51.4 KiB）**。exe mtime 05:05:52。工作区开工 4 项 / 收工 5 项（冒烟新增 `verify_main_story_boss_gate.report.json`），HEAD `895f7419`（11-13 04:08，13 项）。
